@@ -1,0 +1,27 @@
+{
+  "packet_id": "frank-workspace-causal-reachability",
+  "title": "FRANK Workspace Causal Reachability and Delivery Semantics",
+  "status": "OPEN",
+  "domains": ["frank-gwt", "systems-architecture", "scheduling-concurrency", "observability-recovery"],
+  "system_layers": ["cognitive-runtime", "workspace-selection", "event-delivery", "verification-plane"],
+  "summary": "Second FRANK trigger delta: current GlobalWorkspace is code-grounded as a synchronous broadcast primitive, but active multi-producer reachability and coalition competition are not statically demonstrated. Priority shifts from premature async optimization to causal wiring/selection instrumentation, followed by typed delivery semantics for future slow or side-effect subscribers.",
+  "micro_packets": [
+    "KMP-FRANK-20260808-GWS-STATIC-REACHABILITY",
+    "KMP-FRANK-20260808-GWS-NO-COMPETITION",
+    "KMP-FRANK-20260808-GWS-DELIVERY-CLASSES"
+  ],
+  "depends_on_topic_packets": ["frank-integrated-semantic-runtime"],
+  "open_questions": [
+    "Does a representative live FRANK session produce any GlobalWorkspace broadcasts?",
+    "Where, if anywhere, does candidate competition/selection occur before publish()?",
+    "Which state changes demonstrably depend on a selected workspace event?",
+    "Which event classes are non-droppable versus coalescible or best-effort?",
+    "What callback p99 budget is justified on the target host?"
+  ],
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent_revision": 2,
+  "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "run_id": "20260808T0551+0700-chatgpt-secondary-r2"
+}

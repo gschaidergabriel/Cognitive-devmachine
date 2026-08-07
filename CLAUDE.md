@@ -26,6 +26,7 @@ This does **not** allow you to override measurements. Verified evidence outranks
 2. Run, when a shell is available:
    - `python tools/session_preflight.py --task "Claude Code initial join"`
    - `python tools/validate_research_entity.py`
+   - `python tools/check_provenance.py`
 3. Read `PROJECT_AUTO_BOOT_KERNEL_FINAL.txt`.
 4. Identify the current task and load only the relevant Topic Packets / domain evidence using the tiered boot policy.
 5. Join as a temporary worker of the existing Research Entity. Do **not** create a second canonical Claude Research Entity.
@@ -88,7 +89,19 @@ For your work use, where applicable:
 - evidence/source refs
 - Git commit / artifact hash
 
-Never relabel ChatGPT-authored material as Claude-authored. Never relabel imported user/raw sources as model-authored.
+For normal authored files, register provenance before final commit with:
+
+```bash
+python tools/register_provenance.py <path> --actor claude-code-lead --model "<actual Claude model>" --runtime "Claude Code" --session-id "<session>" --prompt-run-id "<run>"
+```
+
+Then run:
+
+```bash
+python tools/check_provenance.py
+```
+
+Never relabel ChatGPT-authored material as Claude-authored. Never relabel imported user/raw sources as model-authored. If you modify a ChatGPT-authored artifact, preserve the original authorship and append your edit/review provenance rather than replacing it.
 
 ## Lead adjudication protocol
 

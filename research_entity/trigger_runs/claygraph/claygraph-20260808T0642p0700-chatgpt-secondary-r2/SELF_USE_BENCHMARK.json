@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "benchmark_class":"RAE_SELF_USE_ENGINEERING_PROXY",
+  "run_id":"claygraph-20260808T0642p0700-chatgpt-secondary-r2",
+  "purpose":"Compare lexical retrieval, parent-like unconstrained two-hop graph activation and candidate conservative qualified one-hop activation on current-run ClayGraph questions.",
+  "corpus":{"items":16,"construction":"Small manually assembled evidence mini-corpus from already read current branch artifacts and FRANK runtime source. Gold targets were defined from explicit source statements before candidate scoring.","independence_boundary":"Gold is source-grounded, but graph edges were manually encoded from explicit interconnect/dependency relations; structural bias remains possible."},
+  "questions":[
+    {"id":"workspace_bridge","query":"What store is the process crossing workspace bridge read by Core into INNER_STATE?","gold":["consciousness_store","workspace_bridge"]},
+    {"id":"authority","query":"Which architecture rule prevents active associative memory from becoming execution authority?","gold":["capability_gateway","cc7","claygraph_foundation"]},
+    {"id":"alternatives","query":"Which research requires incompatible alternatives and semantic topology to be preserved rather than flattened into physical storage?","gold":["claygraph_foundation","frank_c4","hyperposition"]},
+    {"id":"memory_frame","query":"What should supply bounded memory candidates to FRANK without replacing exact CognitiveFrame truth?","gold":["claygraph_foundation","cognitive_frame","memory_fabric"]},
+    {"id":"db_semantics","query":"Why should 71 database files not map one to one to semantic organs?","gold":["frank_c4","hyperposition"]}
+  ],
+  "modes":{
+    "lexical":{"mean_recall_at_5":0.6333,"mean_precision_at_5":0.33,"median_returned_chars":1238,"median_estimated_tokens_chars_div_4":310,"latency_ms":{"median":0.010186,"p95":0.011765}},
+    "parent_like_2hop":{"mean_recall_at_5":0.6333,"mean_precision_at_5":0.32,"median_returned_chars":1253,"median_estimated_tokens_chars_div_4":314,"latency_ms":{"median":0.022782,"p95":0.027861}},
+    "candidate_qualified_1hop":{"mean_recall_at_5":0.8,"mean_precision_at_5":0.4,"median_returned_chars":1217,"median_estimated_tokens_chars_div_4":305,"latency_ms":{"median":0.019298,"p95":0.026208}}
+  },
+  "case_results":{
+    "lexical":{"workspace_bridge":{"recall":1.0,"precision":0.4},"authority":{"recall":0.3333,"precision":0.25},"alternatives":{"recall":0.6667,"precision":0.4},"memory_frame":{"recall":0.6667,"precision":0.4},"db_semantics":{"recall":0.5,"precision":0.2}},
+    "parent_like_2hop":{"workspace_bridge":{"recall":1.0,"precision":0.4},"authority":{"recall":0.3333,"precision":0.2},"alternatives":{"recall":1.0,"precision":0.6},"memory_frame":{"recall":0.3333,"precision":0.2},"db_semantics":{"recall":0.5,"precision":0.2}},
+    "candidate_qualified_1hop":{"workspace_bridge":{"recall":1.0,"precision":0.4},"authority":{"recall":0.6667,"precision":0.4},"alternatives":{"recall":0.6667,"precision":0.4},"memory_frame":{"recall":0.6667,"precision":0.4},"db_semantics":{"recall":1.0,"precision":0.4}}
+  },
+  "result":{"parent_vs_lexical":"NO_RECALL_GAIN_AND_SLIGHT_PRECISION_LOSS","candidate_vs_lexical":"RECALL_PLUS_0.1667; PRECISION_PLUS_0.07; slightly smaller returned context; roughly 2x lexical execution time in this tiny Python environment","candidate_vs_parent":"RECALL_PLUS_0.1667; PRECISION_PLUS_0.08; slightly lower latency/context","decision_effect":"Supports further testing of qualified conservative expansion; does not justify promotion."},
+  "limitations":["Not tools/claygraph_benchmark.py output and not a live FRANK benchmark.","Tiny corpus and five questions; metrics are unstable and non-generalizable.","Graph edges were manually encoded from explicit source relationships; candidate policy can benefit from topology choice.","Character/4 token estimates are rough.","Microsecond-scale Python timings are environment-specific and not meaningful for live FRANK latency.","No vector retrieval, full SQLite FTS corpus, memory-footprint or update-amplification measurement."]
+}

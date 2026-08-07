@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.7",
+  "schema_version": "1.8",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -13,6 +13,8 @@
     "web research",
     "artifact generation",
     "owner-authorized private repository credential persistence when connector policy permits",
+    "quota-aware research provider planning and manifest validation via tools/research_provider_router.py",
+    "visible status footer structure checking via tools/status_footer_check.py",
     "OpenAlex API via tools/openalex_search.py (runtime verified)",
     "arXiv API via tools/arxiv_search.py (runtime verified, credential-free)",
     "Tavily Search API via tools/tavily_search.py (runtime verified)",
@@ -27,6 +29,21 @@
     "read": true,
     "write": true,
     "purpose": "canonical Research Entity state backend"
+  },
+  "research_orchestration": {
+    "policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
+    "router": "tools/research_provider_router.py",
+    "quota_state": "research_entity/runtime/TOOL_QUOTA_STATE.json",
+    "required_run_artifact": "TOOL_EXECUTION_MANIFEST.json",
+    "fallback_behavior": "Automatically continue with the legacy research path when quota/provider/runtime/credential limitations prevent a planned provider call.",
+    "promotion_behavior": "Missing required provider attempts without an allowed recorded fallback reason block strong promotion."
+  },
+  "visible_response": {
+    "protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
+    "checker": "tools/status_footer_check.py",
+    "boot_level": "T0_ALWAYS",
+    "rendering": "final fenced text code block",
+    "completion_rule": "A substantive answer missing the required footer is not 100% complete."
   },
   "external_research": {
     "tool_registry": "research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json",

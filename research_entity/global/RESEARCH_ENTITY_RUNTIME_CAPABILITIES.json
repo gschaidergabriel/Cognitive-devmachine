@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "observed_at": "2026-08-08",
+  "scope": "operational capability overlay; does not mutate research revision 2",
+  "capabilities_observed": [
+    "authenticated GitHub connector",
+    "read accessible public and private repositories",
+    "create/update repository files",
+    "read commits, issues, pull requests and workflow data",
+    "local sandbox/container file inspection",
+    "Python execution and simulation",
+    "File Library/project file search",
+    "web research",
+    "artifact generation"
+  ],
+  "github_backend": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "read": true,
+    "write": true,
+    "purpose": "canonical Research Entity state backend"
+  },
+  "limitations": [
+    "no automatic background research between turns unless an explicit automation exists",
+    "no assumption of direct shell access to live FRANK host",
+    "provider/model-specific telemetry only when actually exposed",
+    "remote writes must be verified by reread"
+  ],
+  "rule": "This file describes current tool availability. Canonical research self-model remains historical revision-2 state until a justified research-state promotion occurs."
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.1",
+  "run_id": "gwt-20260808T0549p0700-chatgpt-secondary",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "classes": ["scholarly","bibliographic","current_web","implementation","executable","model_experiment"],
+  "provider_health_observation": "tools/provider_health_audit.py and its GitHub workflow were added after the preceding GWT run, but research_entity/runtime/PROVIDER_HEALTH.json was absent when checked in this session. Runtime health is therefore not inferred from the workflow definition.",
+  "planned_tools": [
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"crossref_lookup","mode":"MUST_ATTEMPT","class":"bibliographic","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"huggingface_inference","mode":"MUST_ATTEMPT","class":"model_experiment","availability_blocker":null}
+  ],
+  "attempts": [
+    {"tool":"openalex_search","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered repository adapter is not exposed as an invokable surface to this ChatGPT worker."},
+    {"tool":"arxiv_search","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered repository adapter is not exposed; arXiv primary records were retrieved through native scholarly web search."},
+    {"tool":"tavily_search","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered repository adapter is not exposed to this worker surface."},
+    {"tool":"exa_search","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered repository adapter is not exposed to this worker surface."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Reverified canonical state/actor, read GWT packet and active experiments, inspected post-run provider-audit commits, and persisted run artifacts."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Executed selective-multicast/pull-rescue Monte Carlo and AR(1) re-entry freshness sweeps with paired bootstrap boundary checks."},
+    {"tool":"huggingface_inference","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"No Hugging Face model-inference action is exposed in this ChatGPT worker surface; no Qwen/J-space cross-lesion is claimed."}
+  ],
+  "fallback_attempts": [
+    {"tool":"native_web","status":"SUCCESS","covers":["openalex_search","arxiv_search","semantic_scholar_search","crossref_lookup","tavily_search","exa_search"],"note":"Retrieved primary/authoritative Transformer Circuits/arXiv/OpenReview/PubMed/Frontiers sources and Age-of-Information-at-Query literature."},
+    {"tool":"reddit","status":"SUCCESS_ANECDOTAL_ONLY","note":"Community reaction to J-space was sampled only to identify interpretation/consciousness overclaim patterns; not used as scientific evidence."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Used for RAE and implementation-state evidence."},
+    {"tool":"local_sandbox","status":"SUCCESS","covers":["e2b_sandbox"],"note":"Synthetic experiments only; target/runtime transfer remains open."}
+  ],
+  "validation": {
+    "router_semantics": "PASS_BY_REPRODUCED_VALIDATOR_LOGIC",
+    "strong_promotion": "NOT_ATTEMPTED",
+    "unresolved_required_tool_violation": false,
+    "note": "All available MUST_ATTEMPT capabilities have an attempt entry; failures use allowed CONNECTOR_BLOCKED fallback with successful legacy fallback. Blocked providers carry explicit blockers."
+  },
+  "sanitized_usage": {"secrets_recorded": false, "provider_cost_claimed": false}
+}

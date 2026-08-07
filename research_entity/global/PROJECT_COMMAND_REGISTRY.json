@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.3",
+  "schema_version": "2.4",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
@@ -8,6 +8,7 @@
   "research_tool_router": "tools/research_provider_router.py",
   "interconnection_protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
   "interconnection_preflight": "tools/research_interconnect_preflight.py",
+  "frank_architecture_contract": "tools/frank_architecture_contract.py",
   "commands": {
     "dump": {
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
@@ -31,7 +32,12 @@
       "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
       "kind": "domain_research",
       "requires_interconnect_manifest": true,
-      "primary_foundation": "clay"
+      "primary_foundation": "clay",
+      "primary_architecture_language": "ClayCode semantic IR",
+      "deep_secondary_foundation": "claycode",
+      "required_architecture_artifact": "FRANK_ARCHITECTURE.claycode.json",
+      "required_human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md",
+      "architecture_validator": "tools/frank_architecture_contract.py"
     },
     "emergenz": {
       "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
@@ -49,5 +55,5 @@
       "requires_interconnect_manifest": true
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then loads the tool orchestration policy/router and records mandatory attempts or explicit quota/runtime fallback reasons. FRANK additionally treats the newest Clay research/architecture as its primary foundation. Every substantive visible response ends with STATUS_FOOTER_PROTOCOL.md and should be structure-checked when runtime execution is available."
+  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode as the second foundation, authors the new architecture in ClayCode semantic IR, materializes FRANK_ARCHITECTURE.claycode.json plus CLAYCODE_ARCHITECTURE_MAPPING.md, and must pass tools/frank_architecture_contract.py before strong architecture promotion/completion. Every substantive visible response ends with the required status footer including short commands."
 }

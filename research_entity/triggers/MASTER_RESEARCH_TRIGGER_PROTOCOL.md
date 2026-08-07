@@ -29,7 +29,7 @@ and select declared providers through:
 
 `research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json`
 
-Credential values must come only from the runtime environment/local ignored `.env`/secret store and must never be written into canonical research artifacts.
+Credential lookup order is process environment -> runtime secret store -> the owner-authorized private repository store `research_entity/private/API_TOKENS.env`. Credential values may be read only for provider execution and must never be copied into canonical state, claims, packets, run reports, logs or public artifacts.
 
 ## Research cycle
 

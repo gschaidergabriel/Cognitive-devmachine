@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.6",
+  "schema_version": "1.7",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -17,7 +17,9 @@
     "arXiv API via tools/arxiv_search.py (runtime verified, credential-free)",
     "Tavily Search API via tools/tavily_search.py (runtime verified)",
     "Exa Search API via tools/exa_search.py (runtime verified)",
-    "E2B isolated sandbox adapter via tools/e2b_sandbox.py (adapter ready; credential persistence blocked by connector safety layer)"
+    "Hugging Face Inference Providers via tools/huggingface_inference.py (runtime verified)",
+    "E2B isolated sandbox adapter via tools/e2b_sandbox.py (adapter ready; credential persistence blocked by connector safety layer)",
+    "Crossref, Semantic Scholar, DDGS, Judge0 and Piston adapters installed pending runtime receipts"
   ],
   "github_backend": {
     "repository": "gschaidergabriel/clay-global-research-entity",
@@ -53,6 +55,13 @@
         "tool": "tools/exa_search.py",
         "receipt": "research_entity/runtime/exa_verification.json",
         "verified_at": "2026-08-07T21:38:33.957789+00:00"
+      },
+      "Hugging Face Inference Providers": {
+        "tool": "tools/huggingface_inference.py",
+        "receipt": "research_entity/runtime/huggingface_verification.json",
+        "verified_at": "2026-08-07T21:46:49.094291+00:00",
+        "credential": "HF_TOKEN",
+        "verification_spent_inference_credit": false
       }
     },
     "adapter_ready_not_verified": {
@@ -60,9 +69,14 @@
         "tool": "tools/e2b_sandbox.py",
         "credential": "E2B_API_KEY",
         "blocker": "GitHub connector safety policy blocked persisting the supplied E2B key and blocked creation of its verification workflow in this session."
-      }
+      },
+      "Crossref": {"tool": "tools/crossref_search.py", "credential_required": false},
+      "Semantic Scholar": {"tool": "tools/semantic_scholar_search.py", "credential_required": false},
+      "DDGS": {"tool": "tools/ddgs_search.py", "credential_required": false},
+      "Judge0": {"tool": "tools/judge0_execute.py", "credential_required": false},
+      "Piston": {"tool": "tools/piston_execute.py", "credential_required": false}
     },
-    "pending_provider_verification": ["Crossref", "E2B"],
+    "pending_provider_verification": ["Crossref", "Semantic Scholar", "DDGS", "Judge0", "Piston", "E2B"],
     "status_rule": "Credential presence and adapter installation are distinct from provider runtime verification.",
     "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store only when the active connector permits the write; values must not be copied into canonical research artifacts, reports or logs."
   },

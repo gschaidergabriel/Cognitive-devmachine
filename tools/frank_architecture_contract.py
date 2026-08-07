@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Validate that a FRANK research run expresses its architecture in ClayCode semantic IR.
 
-ClayCode's durable meaning is currently a semantic IR with reader-specific projections;
-therefore the required architecture source is a deterministic JSON projection named
-FRANK_ARCHITECTURE.claycode.json rather than an prematurely frozen surface syntax.
+FRANK is derived from Clay, authored in ClayCode and must incorporate the current
+ClayGraph memory/state/database-substrate research. The deterministic host authority
+remains outside model self-authorization.
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ def _load(path: Path) -> dict[str, Any]:
 
 def template(run_id: str) -> dict[str, Any]:
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "language": "ClayCode",
         "representation": "canonical_semantic_ir_json_projection",
         "ir_version": "OPEN",
@@ -42,6 +42,7 @@ def template(run_id: str) -> dict[str, Any]:
         "source_research": {
             "clay": [],
             "claycode": [],
+            "claygraph": [],
             "gwt": [],
             "hyperposition": [],
             "emergenz": [],
@@ -51,34 +52,34 @@ def template(run_id: str) -> dict[str, Any]:
             "canonical_truth_is_not_activation": True,
             "model_output_is_proposal_not_authority": True,
             "semantic_identity_independent_of_wire_projection": True,
-            "unknown_conflict_revoked_are_explicit": True
+            "unknown_conflict_revoked_are_explicit": True,
+            "claygraph_activation_is_derived_not_canonical_truth": True
         },
-        "modules": [
-            {
-                "module_id": "REPLACE_ME",
-                "kind": "organ_or_runtime_boundary",
-                "state_contract_refs": [],
-                "dependencies": [],
-                "invariants": []
-            }
-        ],
-        "transitions": [
-            {
-                "op_id": "REPLACE_ME",
-                "proposal_class": "PURE_TRANSFORM",
-                "reads": [],
-                "writes": [],
-                "invariant_scope": [],
-                "effects": [],
-                "capability_refs": [],
-                "causal_links": [],
-                "gwt_links": []
-            }
-        ],
+        "modules": [{
+            "module_id": "REPLACE_ME",
+            "kind": "organ_or_runtime_boundary",
+            "state_contract_refs": [],
+            "dependencies": [],
+            "invariants": [],
+            "claygraph_refs": []
+        }],
+        "transitions": [{
+            "op_id": "REPLACE_ME",
+            "proposal_class": "PURE_TRANSFORM",
+            "reads": [],
+            "writes": [],
+            "invariant_scope": [],
+            "effects": [],
+            "capability_refs": [],
+            "causal_links": [],
+            "gwt_links": [],
+            "claygraph_links": []
+        }],
         "persistence_replay": {
             "event_identity": "REPLACE_ME",
             "replay_semantics": "REPLACE_ME",
-            "recovery_boundary": "REPLACE_ME"
+            "recovery_boundary": "REPLACE_ME",
+            "graph_projection_rebuildable": True
         },
         "authority_boundary": {
             "model_output_is_authority": False,
@@ -104,13 +105,18 @@ def validate(run_dir: Path) -> dict[str, Any]:
     violations: list[str] = []
 
     priority = inter.get("branch_priority") or []
-    if len(priority) < 2 or priority[0] != "clay" or priority[1] != "claycode":
-        violations.append("INTERCONNECT_MANIFEST must prioritize clay then claycode for FRANK")
+    if priority[:3] != ["clay", "claycode", "claygraph"]:
+        violations.append("INTERCONNECT_MANIFEST must prioritize clay, claycode, then claygraph for FRANK")
+    registered = set(inter.get("registry_scientific_branches") or [])
+    if "claygraph" not in registered:
+        violations.append("FRANK interconnect must use the seven-branch registry including claygraph")
     special = inter.get("special_rules") or {}
     if special.get("frank_requires_latest_clay_architecture_as_primary_foundation") is not True:
         violations.append("FRANK interconnect must require latest Clay architecture foundation")
     if special.get("frank_requires_deep_claycode_architecture_input") is not True:
         violations.append("FRANK interconnect must require deep ClayCode architecture input")
+    if special.get("frank_requires_deep_claygraph_substrate_input") is not True:
+        violations.append("FRANK interconnect must require deep ClayGraph substrate input")
     if special.get("frank_architecture_source_language") != "ClayCode semantic IR":
         violations.append("FRANK architecture source language must be ClayCode semantic IR")
 
@@ -122,16 +128,19 @@ def validate(run_dir: Path) -> dict[str, Any]:
         violations.append("architecture_id is required")
 
     source = arch.get("source_research") or {}
-    if not isinstance(source.get("clay"), list) or not source.get("clay"):
-        violations.append("source_research.clay must cite at least one Clay input")
-    if not isinstance(source.get("claycode"), list) or not source.get("claycode"):
-        violations.append("source_research.claycode must cite at least one ClayCode input")
+    for required in ("clay", "claycode", "claygraph"):
+        if not isinstance(source.get(required), list) or not source.get(required):
+            violations.append(f"source_research.{required} must cite at least one {required} input")
 
     semantic = arch.get("semantic_contract") or {}
     if semantic.get("model_output_is_proposal_not_authority") is not True:
         violations.append("semantic contract must preserve proposal != authority")
     if semantic.get("semantic_identity_independent_of_wire_projection") is not True:
         violations.append("semantic identity must be independent of reader/wire projection")
+    if semantic.get("canonical_truth_is_not_activation") is not True:
+        violations.append("canonical truth must remain distinct from activation")
+    if semantic.get("claygraph_activation_is_derived_not_canonical_truth") is not True:
+        violations.append("ClayGraph activation must be explicitly derived, not canonical truth")
 
     modules = arch.get("modules")
     if not isinstance(modules, list) or not modules:
@@ -164,6 +173,10 @@ def validate(run_dir: Path) -> dict[str, Any]:
         if len(ids) != len(set(ids)):
             violations.append("op_id values must be unique")
 
+    replay = arch.get("persistence_replay") or {}
+    if replay.get("graph_projection_rebuildable") is not True:
+        violations.append("ClayGraph projection must be explicitly rebuildable from authoritative state until separately promoted")
+
     authority = arch.get("authority_boundary") or {}
     if authority.get("model_output_is_authority") is not False:
         violations.append("authority_boundary.model_output_is_authority must be false")
@@ -179,12 +192,7 @@ def validate(run_dir: Path) -> dict[str, Any]:
     if not (run_dir / MAPPING_NAME).exists():
         violations.append(f"missing required human mapping: {MAPPING_NAME}")
 
-    return {
-        "ok": not violations,
-        "run_dir": str(run_dir),
-        "architecture_file": str(run_dir / ARCH_NAME),
-        "violations": violations,
-    }
+    return {"ok": not violations, "run_dir": str(run_dir), "architecture_file": str(run_dir / ARCH_NAME), "violations": violations}
 
 
 def main() -> None:
@@ -198,8 +206,7 @@ def main() -> None:
     args = ap.parse_args()
 
     if args.cmd == "template":
-        out = template(args.run_id)
-        text = json.dumps(out, ensure_ascii=False, indent=2) + "\n"
+        text = json.dumps(template(args.run_id), ensure_ascii=False, indent=2) + "\n"
         if args.output:
             p = Path(args.output)
             p.parent.mkdir(parents=True, exist_ok=True)

@@ -58,9 +58,26 @@ jobs:
           python rae.py query 'Transactional writer append materialize' --status REFUTED --limit 5 >/tmp/writer-query.json
           python -c "import json; x=json.load(open('/tmp/writer-query.json')); assert any(c['claim_id']=='C-CI-WRITER-001' and c['status']=='REFUTED' for c in x['claims']), x"
           python rae.py event RESULT_OBSERVED --actor chatgpt-secondary --summary 'CI isolated event writer works.' --capture-level L1 --status LOCAL_ONLY --domain research_infrastructure
+      - name: Test dump freeze verify and archive in isolated copy
+        run: |
+          rm -rf /tmp/rae-dump-test
+          cp -a . /tmp/rae-dump-test
+          cd /tmp/rae-dump-test
+          printf 'CI dump payload\nmechanism=test\n' > dump/ci_payload.txt
+          python tools/dump_queue.py prepare --actor chatgpt-secondary --session-id ci-dump >/tmp/dump-prepare.json
+          BATCH=$(python -c "import json; print(json.load(open('/tmp/dump-prepare.json'))['batch_id'])")
+          python tools/dump_queue.py verify "$BATCH"
+          python -c "import json,os; b=os.environ['BATCH']; json.dump({'batch_id':b,'pipeline_complete':True,'ci_only':True},open('/tmp/DUMP_RESULT.json','w'))" 
+          printf '# CI Research Delta\n\nIsolated dump lifecycle smoke test.\n' >/tmp/RESEARCH_DELTA.md
+          python tools/dump_queue.py finalize "$BATCH" --result /tmp/DUMP_RESULT.json --delta /tmp/RESEARCH_DELTA.md >/tmp/dump-finalize.json
+          test ! -e dump/ci_payload.txt
+          test -e "dump archive/$BATCH/original/ci_payload.txt"
+          python -c "import json; x=json.load(open('/tmp/dump-finalize.json')); assert x['ok'] and x['inbox_payload_remaining']==0, x"
+        env:
+          BATCH: ${{ env.BATCH }}
       - name: Validate canonical/bootstrap agreement
         run: >-
-          python -c "import json,pathlib; c=json.loads(pathlib.Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json').read_text()); b=json.loads(pathlib.Path('research_entity/continuity/BOOTSTRAP_MINIMAL.json').read_text()); assert c['revision']==b['expected_revision']; assert c['state_hash']==b['expected_state_hash']; assert c['entity_version']==b['expected_entity_version']; assert b['research_team']['lead_researcher']=='claude-code-lead'; assert b['research_team']['secondary_researcher']=='chatgpt-secondary'; print('canonical/bootstrap/research-team agreement ok',c['revision'],c['state_hash'])"
+          python -c "import json,pathlib; c=json.loads(pathlib.Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json').read_text()); b=json.loads(pathlib.Path('research_entity/continuity/BOOTSTRAP_MINIMAL.json').read_text()); assert c['revision']==b['expected_revision']; assert c['state_hash']==b['expected_state_hash']; assert c['entity_version']==b['expected_entity_version']; assert b['research_team']['lead_researcher']=='claude-code-lead'; assert b['research_team']['secondary_researcher']=='chatgpt-secondary'; assert 'dump' in b['reserved_commands']; print('canonical/bootstrap/research-team/command agreement ok',c['revision'],c['state_hash'])"
       - name: Ensure derived indexes are reproducible
         run: git diff --exit-code -- research_entity/continuity/BOOTSTRAP_MINIMAL.json research_sources/status research_sources/topics || (echo 'Derived indexes/views are stale; regenerate and commit them.' && exit 1)
       - name: Archive runtime diagnostics
@@ -73,3 +90,5 @@ jobs:
             /tmp/query.json
             /tmp/benchmark.json
             /tmp/writer-query.json
+            /tmp/dump-prepare.json
+            /tmp/dump-finalize.json

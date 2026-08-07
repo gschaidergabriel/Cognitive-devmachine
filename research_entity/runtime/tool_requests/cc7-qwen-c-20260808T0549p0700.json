@@ -1,0 +1,9 @@
+{
+  "request_id":"cc7-qwen-c-20260808T0549p0700",
+  "tool":"huggingface_inference",
+  "query":"ClayCode reader key: each record is id:type,activationPercent,status,version; types T=task S=sensor M=memory L=tool; status O=open C=closed U=unknown R=revoked. Answer the 10 queries in order using ONLY a JSON array of node ids, no explanation.\nRecords:\nn0:L,16,O,1; n1:T,14,U,4; n2:T,8,O,6; n3:L,62,C,2; n4:S,71,O,9; n5:L,87,C,2; n6:L,11,O,9; n7:T,30,O,5; n8:L,84,U,4; n9:S,47,O,9; n10:T,6,C,8; n11:L,21,O,8; n12:S,12,C,3; n13:T,92,O,9; n14:S,67,R,1; n15:L,31,O,3; n16:M,19,C,8; n17:T,57,U,8;\nQueries:\n1. open task with highest activation\n2. open sensor with highest activation\n3. open tool with lowest activation\n4. unknown item with highest activation\n5. revoked sensor\n6. closed memory\n7. open item with version 5\n8. task with version >= 8 and highest activation\n9. open tool with version 8\n10. open tool with activation between 0.25 and 0.35",
+  "options":{"mode":"chat","model":"Qwen/Qwen3-4B-Instruct-2507","max_tokens":128,"temperature":0.0},
+  "allow_cost":true,
+  "origin_actor":"chatgpt-secondary",
+  "run_id":"claycode-20260808T0549p0700-chatgpt-secondary"
+}

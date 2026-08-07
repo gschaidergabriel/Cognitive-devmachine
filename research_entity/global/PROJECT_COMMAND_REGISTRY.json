@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "commands": {
+    "dump": {
+      "match": "trimmed_case_insensitive_exact",
+      "protocol": "research_entity/global/DUMP_PROTOCOL.md",
+      "description": "Freeze and analyze the dump intake queue, fuse it with current RAE knowledge, generate hypotheses, research hypothesis domains on arXiv/GitHub/Reddit, refusion/pattern-match, materialize surgical/topic packets, weave justified OPEN knowledge into RAE, validate, then archive verified originals.",
+      "input_paths": ["dump/", "current-session attachments explicitly supplied as dump input"],
+      "archive_path_template": "dump archive/<batch_id>/original/",
+      "default_epistemic_class": "DUMP_DERIVED_PREPROCESSED_HYPOTHESIS",
+      "default_claim_status": "OPEN",
+      "requires_independent_support_for_promotion": true,
+      "failure_policy": "leave affected originals in dump and record failure/SYNC_PENDING"
+    }
+  }
+}

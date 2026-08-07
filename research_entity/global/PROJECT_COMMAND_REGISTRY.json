@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.7",
+  "schema_version": "2.8",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
@@ -11,6 +11,7 @@
   "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
   "goodman_filter_checker": "tools/goodman_filter_check.py",
   "frank_architecture_contract": "tools/frank_architecture_contract.py",
+  "fusion_research_contract": "tools/fusion_research_contract.py",
   "commands": {
     "dump": {
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
@@ -26,7 +27,9 @@
       "requires_interconnect_manifest": true,
       "requires_global_coverage_manifest": true,
       "requires_branch_feedback_manifest": true,
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
+      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
+      "completion_validator": "tools/fusion_research_contract.py",
+      "completion_command": "python tools/fusion_research_contract.py research_entity/trigger_runs/fusion/<run_id>"
     },
     "clay": {
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
@@ -72,5 +75,5 @@
       "requires_interconnect_manifest": true
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. The fusion meta-trigger additionally covers the complete current research graph/evidence classes and writes explicit feedback or NO_CHANGE receipts to all six scientific branches. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and must independently verify, refine, refute or leave unresolved each materially imported FRANK assumption through the Goodman anti-echo filter; shared FRANK↔ClayCode ancestry never counts as replication, and ClayCode completion requires a Goodman review bound to the exact run preflight. Every substantive visible response ends with the required status footer including short commands."
+  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. The fusion meta-trigger additionally covers the complete current research graph/evidence classes and writes explicit feedback or NO_CHANGE receipts to all six scientific branches; completion is machine-gated by fusion_research_contract.py. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and must independently verify, refine, refute or leave unresolved each materially imported FRANK assumption through the Goodman anti-echo filter; shared FRANK↔ClayCode ancestry never counts as replication, and ClayCode completion requires a Goodman review bound to the exact run preflight. Every substantive visible response ends with the required status footer including short commands."
 }

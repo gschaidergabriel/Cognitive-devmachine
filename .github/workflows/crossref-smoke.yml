@@ -1,0 +1,54 @@
+name: Crossref API smoke
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/crossref_search.py'
+      - 'tools/rae_secret_loader.py'
+      - 'research_entity/private/API_TOKENS.env'
+      - '.github/workflows/crossref-smoke.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  verify-crossref:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify Crossref provider
+        run: python tools/crossref_search.py --smoke-test > /tmp/crossref-smoke.json
+
+      - name: Write sanitized verification receipt
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src = json.loads(Path('/tmp/crossref-smoke.json').read_text())
+          out = {
+              'schema_version': '1.0',
+              'provider': src.get('provider'),
+              'tool': src.get('tool'),
+              'status': src.get('status'),
+              'checked_at': src.get('checked_at'),
+              'credential_required': False,
+              'mailto_configured': bool(src.get('mailto_configured')),
+              'verification_endpoint_class': src.get('verification_endpoint_class'),
+              'verified_doi': src.get('verified_doi'),
+              'rate_limit': src.get('rate_limit'),
+          }
+          p = Path('research_entity/runtime/crossref_verification.json')
+          p.parent.mkdir(parents=True, exist_ok=True)
+          p.write_text(json.dumps(out, indent=2) + '\n')
+          PY
+
+      - name: Commit verification receipt
+        run: |
+          git config user.name 'rae-runtime-verifier'
+          git config user.email 'rae-runtime-verifier@users.noreply.github.com'
+          git add research_entity/runtime/crossref_verification.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record Crossref runtime verification'
+          git push

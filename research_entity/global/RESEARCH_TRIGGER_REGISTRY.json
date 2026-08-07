@@ -1,12 +1,12 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
   "interconnection_protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
   "interconnection_preflight": "tools/research_interconnect_preflight.py",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches.",
+  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches.",
   "triggers": {
     "dump": {
       "kind": "research_intake",
@@ -31,10 +31,14 @@
     "frank": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
-      "purpose": "Research FRANK as one integrated cognitive/runtime module, including whole-system architecture, Linux-first implementation, portability, Qwen-4B, Android/edge and module-collapse hypotheses, grounded primarily in the newest Synthetic Clay research.",
-      "mesh_role": "architecture_projection_of_clay",
-      "required_foundations": ["clay", "gwt", "claycode", "hyperposition", "emergenz", "frank"],
-      "primary_foundation": "clay"
+      "purpose": "Research FRANK as one integrated cognitive/runtime architecture grounded primarily in newest Synthetic Clay research and authored as ClayCode semantic IR.",
+      "mesh_role": "clay_architecture_projection_authored_in_claycode",
+      "required_foundations": ["clay", "claycode", "gwt", "hyperposition", "emergenz", "frank"],
+      "primary_foundation": "clay",
+      "primary_architecture_language": "ClayCode semantic IR",
+      "architecture_contract": "tools/frank_architecture_contract.py",
+      "required_architecture_artifact": "FRANK_ARCHITECTURE.claycode.json",
+      "required_human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md"
     },
     "emergenz": {
       "kind": "domain_research",
@@ -47,7 +51,7 @@
       "kind": "domain_research",
       "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
       "purpose": "Research ClayCode as the internal language/IR that represents the Clay system in which it runs, including a Clay-written runtime and Qwen-4B simulation/internalization.",
-      "mesh_role": "connected_domain",
+      "mesh_role": "connected_domain_and_frank_architecture_language",
       "required_foundations": ["clay", "frank", "gwt", "hyperposition", "emergenz", "claycode"]
     },
     "hyperposition": {

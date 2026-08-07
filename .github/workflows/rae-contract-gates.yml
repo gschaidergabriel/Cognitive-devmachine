@@ -7,15 +7,18 @@ on:
       - 'tools/research_provider_router.py'
       - 'tools/research_interconnect_preflight.py'
       - 'tools/frank_architecture_contract.py'
+      - 'tools/goodman_filter_check.py'
       - 'tools/status_footer_check.py'
       - 'research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md'
       - 'research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md'
+      - 'research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md'
       - 'research_entity/global/STATUS_FOOTER_PROTOCOL.md'
       - 'research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json'
       - 'research_entity/global/RESEARCH_TRIGGER_REGISTRY.json'
       - 'research_entity/global/PROJECT_COMMAND_REGISTRY.json'
       - 'research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md'
       - 'research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md'
+      - 'research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md'
       - 'research_entity/runtime/TOOL_QUOTA_STATE.json'
       - 'research_entity/runtime/PROVIDER_HEALTH.json'
       - '.github/workflows/rae-contract-gates.yml'
@@ -36,7 +39,7 @@ jobs:
           fetch-depth: 0
 
       - name: Compile gate tools
-        run: python -m py_compile tools/research_provider_router.py tools/research_interconnect_preflight.py tools/frank_architecture_contract.py tools/status_footer_check.py
+        run: python -m py_compile tools/research_provider_router.py tools/research_interconnect_preflight.py tools/frank_architecture_contract.py tools/goodman_filter_check.py tools/status_footer_check.py
 
       - name: Validate interconnected FRANK and ClayCode architecture contracts
         run: |
@@ -99,6 +102,70 @@ jobs:
           PY
           python tools/frank_architecture_contract.py validate /tmp/frank-contract
 
+      - name: Validate ClayCode FRANK feedback and Goodman anti-echo gate
+        run: |
+          mkdir -p /tmp/claycode-contract
+          python tools/research_interconnect_preflight.py \
+            --trigger claycode \
+            --run-id ci-claycode-preflight \
+            --history-per-branch 1 \
+            --output /tmp/claycode-contract/INTERCONNECT_MANIFEST.json > /tmp/claycode-interconnect.stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/claycode-contract/INTERCONNECT_MANIFEST.json').read_text())
+          assert d['branch_priority'][:2] == ['frank','clay']
+          assert d['special_rules']['claycode_requires_latest_frank_research_as_primary_feedback'] is True
+          assert d['special_rules']['claycode_requires_goodman_anti_echo_review'] is True
+          assert 'claycode_latest_frank_architecture_artifact' in d['special_rules']
+          frank=next(x for x in d['branches'] if x['branch']=='frank')
+          clay=next(x for x in d['branches'] if x['branch']=='clay')
+          assert frank['run_history_depth'] >= 4
+          assert clay['run_history_depth'] >= 3
+          PY
+          python tools/goodman_filter_check.py template \
+            --run-id ci-claycode-preflight \
+            --output /tmp/claycode-contract/FRANK_CLAYCODE_GOODMAN_REVIEW.json > /tmp/goodman-template.stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/claycode-contract/FRANK_CLAYCODE_GOODMAN_REVIEW.json')
+          d=json.loads(p.read_text())
+          d['latest_frank_run']='ci-frank-run'
+          d['reviews']=[{
+            'claim_id':'ci.frank.claim',
+            'frank_statement':'Scoped freshness should be preferred when trusted dependency closure is complete.',
+            'frank_source_refs':['ci-frank-report','ci-shared-ancestor'],
+            'ancestry_families':['family:ci-shared-ancestor'],
+            'shared_ancestry_collapsed':True,
+            'counterhypothesis':'Whole-root validation is cheaper or safer at realistic churn.',
+            'falsifier':'Target traces show scoped validation has equal/higher cost or misses conflicts.',
+            'independent_checks':[{'kind':'new_experiment','ref':'ci-independent-scoped-test','result':'supports_bounded_case'}],
+            'adversarial_checks':[{'kind':'hidden_dependency_counterexample','result':'scope_requires_conservative_closure'}],
+            'verdict':'REFINED',
+            'reason':'Independent test supports scoped validation only under complete/conservative closure.',
+            'claycode_action':'integrate_refined_scope',
+            'affected_claycode_artifacts':['CC-RC1.x']
+          }]
+          p.write_text(json.dumps(d,indent=2)+'\n')
+          PY
+          python tools/goodman_filter_check.py validate /tmp/claycode-contract/FRANK_CLAYCODE_GOODMAN_REVIEW.json
+
+          cp /tmp/claycode-contract/FRANK_CLAYCODE_GOODMAN_REVIEW.json /tmp/bad-goodman.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/bad-goodman.json')
+          d=json.loads(p.read_text())
+          d['reviews'][0]['verdict']='SUPPORTED'
+          d['reviews'][0]['independent_checks']=[]
+          p.write_text(json.dumps(d,indent=2)+'\n')
+          PY
+          if python tools/goodman_filter_check.py validate /tmp/bad-goodman.json; then
+            echo 'ERROR: circular support without independent check was accepted'
+            exit 1
+          fi
+
       - name: Build research provider plan
         run: |
           python tools/research_provider_router.py plan \
@@ -160,7 +227,7 @@ jobs:
           from datetime import datetime, timezone
           from pathlib import Path
           d={
-            'schema_version':'1.1',
+            'schema_version':'1.2',
             'status':'RUNTIME_VERIFIED',
             'checked_at':datetime.now(timezone.utc).isoformat(),
             'gates':{
@@ -170,6 +237,9 @@ jobs:
               'frank_clay_primary_foundation':True,
               'frank_claycode_deep_secondary_foundation':True,
               'frank_claycode_architecture_source_contract':True,
+              'claycode_frank_primary_feedback':True,
+              'claycode_goodman_anti_echo_review':True,
+              'goodman_rejects_circular_support_without_independent_check':True,
               'provider_plan':True,
               'covering_fallback_validation':True,
               'status_footer_and_short_commands':True

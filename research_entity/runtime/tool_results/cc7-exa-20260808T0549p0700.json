@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "request_id": "cc7-exa-20260808T0549p0700",
+  "tool": "exa_search",
+  "request_sha256": "e2e2444f6512cdf704a57c40d1a1e9ead9ce9379dbdc62b37fd0d1d5b36753ac",
+  "processed_at": "2026-08-07T22:54:55.447190+00:00",
+  "status": "SUCCESS",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "proof carrying data Merkle state transition witness capability system intermediate representation deterministic replay incremental validation",
+    "results": [
+      {
+        "id": "https://eprint.iacr.org/2020/1522.pdf",
+        "title": "Reducing Participation Costs via  Incremental Verification for Ledger Systems",
+        "url": "https://eprint.iacr.org/2020/1522.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "ture an everlasting computation whose every intermediate state is accompanied by an easy-to-verify proof \nattesting to its correctness relative to the initial state (not the previous state). This capability is achievable \nvia recursive composition of cryptographic proofs, i.e., by producing proofs that (informally) certify both \na state transition and the correctness of the prior proof. The exponential speedup of verification relative to \nexecution ensures that the cost of producing each proof from the previous proof does not depend on the \nnumber of past state transitions. \nIncremental verification can dramatically reduce participation costs in ledger systems. Now, validating \nthe latest state requires downloading only the current state (or a short commitment to it) and a short proof \nthat attests to its correctness relative to the initial state.3\n...\nWe build a system prototype in Rust that realizes our IVLS primitive, contributing the following: (1) incre \nmental verification with a universal (application-independent) setup, based on pairings; (2) an incrementally \nverifiable analogue of Zerocash; and (3) an empirical evaluation that validates the reduction in participation \ncosts via measurements for a ten-year “bare-bones” Bitcoin. \nBefore elaborating on each of these contributions, we first describe our system at high level. In our Rust \nlibrary, the programmer specifies the desired application via a transition function represented as a constraint \nsystem with read/write memory gates (which our implementation realizes for the application). Our imple \nmentation then produces an incrementally verifiable version of that application, creating functionality for \nproducing proofs with each state transition from the prior state and proof, for validating proofs, and so on.\n...\nGiven public parameters pp and a transition function F, MakeSF outputs (vS, vF) where vF is an incremen tally verifiable version of F and vS are functions that manages vF’s state. We describe ea"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://h33.ai/standards/specification/",
+        "title": "HATS Governance Specification v1.0 | H33",
+        "url": "https://h33.ai/standards/specification/",
+        "published_date": "2026-05-17T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "What this document is. This is the normative protocol specification for HATS — the standard that HATS records operational evidence to. Unlike a product datasheet or an audit report, it defines byte-level conformance: node types, receipt schemas, canonical serialization, replay semantics, and the RFC 2119 requirements an implementation MUST satisfy. It standardizes how governance is recorded and verified; it does not itself produce the portable evidence primitive (H33-74 produces that), govern the agent (Agent-008 governs), or render the independent verdict (Verification verifies).\n...\nReplay-Grade: An implementation capable of deterministic governance replay producing identical frame hashes as any other Replay-Grade implementation given identical inputs.\n...\n| Type ID | Name | Description | Min Parents |\n| --- | --- | --- | --- |\n| 1 |\n...\n| Engine selection decision\n...\n0 |\n| 2 | Policy | Policy gate evaluation | 1 (Route) |\n| 3 | Event | Authenticated operation | 0–2 (Route, Policy) |\n| 4 | Result | Computation output | 1–3 (Route, Policy, Event) |\n| 5 | StateTransition | Governed state mutation | 4 (Route, Policy, Result, Event) |\n| 6 | Checkpoint | Integrity snapshot | 0 |\n| 7 | Federation | Multi-node aggregation | 1+ (Checkpoints) |\n| 8 | Anchor | External binding | 1 (Federation) |\n...\nStateTransition nodes\n...\nat least 4 parent references (Route, Policy, Result,\n...\nState Transition Receipt\n...\nHATS-G-007The graph root hash MUST be deterministic: identical logical graphs MUST produce identical root hashes regardless of node insertion order.\n...\n4.3 Merkle Root\n...\nHATS-G-008The graph Merkle root MUST be computed over the sorted`canonical_hash` values using a binary Merkle tree with a domain separator. Non-power-of-two counts MUST be padded with zero hashes.\n...\n--- | --- |\n...\n|\n|\n...\n_V1:` |\n| State\n...\n| `H33\n...\nSTATE_TRANSITION_V1:` |\n| Enforcement Receipt | `H33_ENFORCEMENT_DECISION_V1:` |\n| Integrity Receipt | `H33\n...\nINTEGRITY_RECE\n...\n_V1:` |\n| Chec"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ITCS.2025.23",
+        "title": "Accumulation Without Homomorphism",
+        "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ITCS.2025.23",
+        "published_date": "2025-02-11T00:00:00.000Z",
+        "author": "Benedikt Bünz                      ,",
+        "text": null,
+        "highlights": [
+          "- Proof-carrying data\n- incrementally verifiable computation\n- accumulation schemes\n...\n```\nAccumulation schemes are a simple yet powerful primitive that enable highly efficient constructions of incrementally verifiable computation (IVC). Unfortunately, all prior accumulation schemes rely on homomorphic vector commitments whose security is based on public-key assumptions. It is an interesting open question to construct efficient accumulation schemes that avoid the need for such assumptions.\n...\nIn this paper, we answer this question affirmatively by constructing an accumulation scheme from non-homomorphic vector commitments which can be realized from solely symmetric-key assumptions (e.g., Merkle trees). We overcome the need for homomorphisms by instead performing spot-checks over error-correcting encodings of the committed vectors.\n...\nUnlike prior accumulation schemes, our scheme only supports a bounded number of accumulation steps. We show that such bounded-depth accumulation still suffices to construct proof-carrying data (a generalization of IVC). We also demonstrate several optimizations to our PCD construction which greatly improve concrete efficiency.\n...\n21. Benedikt Bünz, Alessandro Chiesa, William Lin, Pratyush Mishra, and Nicholas Spooner. Proof-carrying data without succinct arguments. In Proceedings of the 41st Annual International Cryptology Conference, CRYPTO '21, pages 681-710, 2021. URL: https://eprint.iacr.org/2020/1618, URL: https://doi.org/10.1007/978-3-030-84242-0_24.\n...\n22. Benedikt Bünz, Alessandro Chiesa, Pratyush Mishra, and Nicholas Spooner. Proof-carrying data from accumulation schemes. In Proceedings of the 18th Theory of Cryptography Conference, TCC '20, 2020. URL: https://eprint.iacr.org/2020/499.\n...\n52. Paul Valiant. Incrementally verifiable computation or proofs of knowledge imply time/space efficiency. In Proceedings of the 5th Theory of Cryptography Conference, TCC '08, pages 1-18, 2008. URL: https://iacr.org/archive/tcc2008/4948"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://eprint.iacr.org/2020/499",
+        "title": "Proof-Carrying Data from Accumulation Schemes",
+        "url": "https://eprint.iacr.org/2020/499",
+        "published_date": "2020-04-30T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Recursive proof composition has been shown to lead to powerful primitives such as incrementally-verifiable computation (IVC) and proof-carrying data (PCD). All existing approaches to recursive composition take a succinct non-interactive argument of knowledge (SNARK) and use it to prove a statement about its own verifier. This technique requires that the verifier run in time sublinear in the size of the statement it is checking, a strong requirement that restricts the class of SNARKs from which PCD can be built. This in turn restricts the efficiency and security properties of the resulting scheme. Bowe, Grigg, and Hopwood (ePrint 2019/1021) outlined a novel approach to recursive composition, and applied it to a particular SNARK construction which does *not* have a sublinear-time verifier. However, they omit details about this approach and do not prove that it satisfies any security property. Nonetheless, schemes based on their ideas have already been implemented in software. In this work we present a collection of results that establish the theoretical foundations for a generalization of the above approach. We define an *accumulation scheme* for a non-interactive argument, and show that this suffices to construct PCD, even if the argument itself does not have a sublinear-time verifier. Moreover we give constructions of accumulation schemes for SNARKs, which yield PCD schemes with novel efficiency and security features."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://docs.zesu.consensys.io/concepts/witness-retrieval",
+        "title": "Witness retrieval | Zesu",
+        "url": "https://docs.zesu.consensys.io/concepts/witness-retrieval",
+        "published_date": "2026-07-07T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "An execution witness Execution witness A record of the chain state a block's transactions access, captured as Merkle proofs against the block's pre-state root. The execution client produces it and Zesu consumes it to re-execute a block without holding chain state. is a record of the chain state that Zesu needs to re-execute a block's transactions. The execution client Execution client A stateful node that holds the full chain state, executes or re-executes blocks, and produces the execution witness Zesu needs to re-execute a block statelessly. For example, Besu. produces the witness; Zesu consumes it. Zesu doesn't hold any chain state of its own, and uses the witness to re-execute each block without access to the broader state.\n...\nAn execution client that holds the full chain state can load whatever a block needs at execution time. Zesu doesn't hold any chain state of its own, and to re-execute a block correctly, it needs a pre-assembled record of exactly the state that block touches. That record is the witness.\n...\nThe connected execution client produces the witness as part of executing each block. It captures the pre-state values of every account, storage slot, and contract code that the block's transactions access, packages them into the witness, and makes the witness available to Zesu.\n...\nThe witness and the execution proof are both forms of proof, so it's worth distinguishing them up front. The witness is a set of Merkle proofs: each entry proves that a supplied state value belongs to the block's pre-state root. The execution proof is the zero-knowledge proof Zesu's execution produces, attesting that the block was executed correctly over that state.\n...\n| | Witness | Execution proof |\n| --- | --- | --- |\n| What it is | Merkle proofs of pre-state | Zero-knowledge proof of execution |\n| Role | Input to Zesu's execution | Output of Zesu's execution |\n| Size | Megabytes | Kilobytes |\n| Consumer | Zesu | Verifiers |\n| Distribution | Local to the prover | Distribut"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://mirprotocol.org/blog/Recursive-proofs-on-Mir",
+        "title": "Recursive proofs on Mir",
+        "url": "https://mirprotocol.org/blog/Recursive-proofs-on-Mir",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "**TLDR**: Every transaction on Mir is verified with a zero-knowledge proof. These proofs can be recursively composed, so a validator can verify a set of transactions with a single proof. We describe how this works and how it enables a more scalable sharded blockchain.\n...\nAn application on Mir is represented as a**record**[1](#recordcommitment): a commitment to the application's state and logic. Records can be created, mutated, consumed, and invoked as functions within a transaction. Transactions encode state transitions applied to Mir's Commitment Log and Liveness Mask,[2](#active)(referred to as the**Commitment Set**and described[here](https://mirprotocol.org/blog/Reducing-state-size-on-Mir)), and consist of a list of operations performed on records and a SNARK proving that these operations are valid.\n...\nFortunately, Mir uses a type of zero-knowledge proof that can be recursively composed, so a single proof can provide a cryptographic guarantee that a set of transaction proofs are valid. A subset of validators can verify a set of transactions and then prove to the rest of the network that those transactions are valid, allowing Mir to scale with the compute available to generate recursive proofs.\n...\nWe want to verify that an updated state of our Commitment Log and Liveness Mask is the result of applying a set of valid transactions. We need a proof that:\n...\n* Verifies that each transaction in the set is valid\n* Ensures that no records are double-spent\n* Applies the state transition encoded in the set of transactions\n...\nOn Mir, validators divide the work of generating this recursive proof. A recursive proof verifying all transaction proofs can be generated in parallel with a recursive proof verifying Commitment Set deletions and insertions.[4](#consensus)\n...\nFor each transaction, we have a proof $\\\\pi\\_T$, a set of consumed record addresses $\\\\{d\\_i\\\\}$, a set of block roots $\\\\{r\\_i\\\\}$, a set of created record commitments $\\\\{c\\_i\\\\}$,[5](#mutatedrecords)and a"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://documentation.pointsav.com/wiki/merkle-proofs-as-substrate-primitive",
+        "title": "Merkle proofs as a substrate primitive — PointSav Documentation",
+        "url": "https://documentation.pointsav.com/wiki/merkle-proofs-as-substrate-primitive",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Merkle proofs are the cryptographic mechanism that lets the platform substrate guarantee — to any third party, without trust — that a specific record is part of an append-only log, and that the log has not been rewritten between two observed points in time.\n...\nThese two guarantees together form the read-side and the replication-safety side of the Capability Ledger Substrate. This article explains what Merkle proofs are, why two distinct flavours exist, how the`system-core` crate implements both per RFC 9162 Certificate Transparency 2.0, and how the`system-ledger` crate uses them to gate write-side validity without degrading the read-side hot path.\n...\nA Merkle inclusion proof for a specific leaf is a list of sibling hashes along the path from that leaf to the root. A verifier who holds the leaf hash and the sibling list can reconstruct the root by hashing upward. If the reconstructed root matches the claimed root, the leaf is in the tree. If not, either the leaf or the root has been tampered with.\n...\nFor a tree of`n` leaves, the proof contains at most ⌈log₂ n⌉ sibling hashes — about 10 hashes for a tree of 1,000 records, 20 hashes for one million records. The cost of proof storage and verification grows logarithmically, not linearly, with log size. This is the property that makes Merkle proofs practical as a substrate primitive at ledger scale.\n...\nThe difference between committing to a log (producing the root) and proving membership in a log (producing a sibling path) is structural: the log operator maintains the full tree and can produce proofs on demand; a verifier needs only the root hash, the leaf hash, and the proof path. The log operator cannot forge a valid proof for a leaf that is not in the tree without breaking SHA-256 collision resistance.\n...\nInclusion proofs (RFC 9162 §2.1.3) answer: \"Is this specific record's hash present in the tree at this root?\" The consumer holds a record hash, the claimed position in the log, and the current root. The proof pro"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://specs.optimism.io/fault-proof/index.html",
+        "title": "Fault Proof - OP Stack Specification",
+        "url": "https://specs.optimism.io/fault-proof/index.html",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "- Fault Proof Interactive Dispute Game\n- Program: given a commitment to all rollup inputs (L1 data) and the dispute, verify the dispute statelessly.\n- VM: given a stateless program and its inputs, trace any instruction step, and prove it on L1.\n- Interactive Dispute Game: bisect a dispute down to a single instruction, and resolve the base-case using the VM.\n...\n\"Stateless execution\" of the program, and its individual instructions, refers to reproducing the exact same computation by authenticating the inputs with a Pre-image Oracle.\n...\nInitial inputs are deterministic, but not necessarily singular or global: there may be multiple different disputes at the same time, each with its own disputed claims and L1 context.\n...\nthe pre-image oracle serves a request, and the request cannot be served from an existing collection of pre-images (e.g. a local pre-image cache) then the VM can execute the hint to retrieve the missing pre-image(s). It is the responsibility of the program to provide sufficient hinting for every pre-image request. Some hints may have to be repeated: the VM only has to execute the last hint when handling a missing pre-image.\n...\nNote that hints may produce multiple pre-images: e.g. a hint for an ethereum block with transaction list may prepare pre-images for the header, each of the transactions, and the intermediate merkle-nodes that form the transactions-list Merkle Patricia Trie.\n...\nThe Fault Proof Program defines the verification of claims of the state-transition outputs of the L2 rollup as a pure function of L1 data.\n...\n- Prologue: load the inputs, given minimal bootstrapping, with possible test-overrides.\n- Main content: process the L2 state-transition, i.e. derive the state changes from the L1 inputs.\n- Epilogue: inspect the state changes to verify the claim.\n...\nTo verify a claim about L2 state, the program first reproduces the L2 state by applying L1 data to prior agreed L2 history.\n...\nThe difference is that rather than retrieving inputs from"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "ce2e9ef8f03fab2e51c528dfab953614",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  }
+}

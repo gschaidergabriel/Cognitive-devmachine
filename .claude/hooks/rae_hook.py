@@ -2,8 +2,8 @@
 """Claude Code lifecycle adapter for the shared FRANK Research Entity.
 
 No scientific claims are promoted here. The hook joins/contextualizes sessions, blocks
-direct edits to canonical state, and records operational receipts. Canonical writes must
-flow through the RAE runtime/verified promotion path.
+direct edits to canonical state, records operational receipts, and recognizes the
+project-wide reserved `dump` research-intake command.
 """
 from __future__ import annotations
 import json, os, pathlib, subprocess, sys, time
@@ -22,13 +22,21 @@ def load_input():
     try:return json.load(sys.stdin)
     except Exception:return {}
 
-def append(event, data):
+def append(event, data, **extra):
     row={"timestamp":time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),"event":event,
-         "session_id":data.get("session_id"),"agent_id":data.get("agent_id"),"agent_type":data.get("agent_type")}
+         "session_id":data.get("session_id"),"agent_id":data.get("agent_id"),"agent_type":data.get("agent_type"),**extra}
     with LOG.open("a",encoding="utf-8") as f:f.write(json.dumps(row,ensure_ascii=False)+"\n")
 
 def run_rae(*args):
     p=subprocess.run([sys.executable,str(ROOT/"rae.py"),*args],cwd=ROOT,text=True,capture_output=True,timeout=20)
+    return p.returncode,p.stdout.strip(),p.stderr.strip()
+
+def run_dump_prepare(data):
+    cmd=[sys.executable,str(ROOT/"tools/dump_queue.py"),"prepare","--actor","claude-code-lead"]
+    if data.get("session_id"): cmd.extend(["--session-id",str(data["session_id"])])
+    # Claude Code hook payload does not guarantee a separate prompt-run id. Session id is
+    # retained and the research runtime creates a durable run during execution.
+    p=subprocess.run(cmd,cwd=ROOT,text=True,capture_output=True,timeout=30)
     return p.returncode,p.stdout.strip(),p.stderr.strip()
 
 def deny(reason):
@@ -44,12 +52,28 @@ def main():
             ctx=f"RAE worker status DEGRADED_UNJOINED. rae status failed: {err[:1200]}"
         else:
             ctx=("Research actor: claude-code-lead (Lead Researcher). Shared canonical state is external and evidence outranks researcher rank. "
-                 "RAE status follows; use task-specific context on each user prompt.\n"+out[:7000])
+                 "RAE status follows; use task-specific context on each user prompt. Reserved command: exact `dump` executes research_entity/global/DUMP_PROTOCOL.md.\n"+out[:7000])
         print(json.dumps({"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":ctx,"sessionTitle":data.get("session_title") or "FRANK RAE Lead"}}))
         return
     if ev=="UserPromptSubmit":
         prompt=data.get("prompt","")
         if not prompt.strip(): return
+        if prompt.strip().lower()=="dump":
+            append("DUMP_TRIGGERED",data,command="dump")
+            rc_boot,out_boot,err_boot=run_rae("boot","--actor","claude-code-lead","--task","Execute project-wide DUMP research intake protocol","--max-claims","12","--max-packets","5","--max-chunks","4")
+            rc_dump,out_dump,err_dump=run_dump_prepare(data)
+            protocol=ROOT/"research_entity/global/DUMP_PROTOCOL.md"
+            try: protocol_text=protocol.read_text(encoding="utf-8")
+            except Exception as e: protocol_text=f"DUMP protocol file unavailable: {e}"
+            ctx=(
+              "RESERVED PROJECT COMMAND `dump` DETECTED. Execute the complete RAE Dump Protocol now; do not ask the user what dump means. "
+              "Dump material is hypothesis-generating intake, not canonical evidence. Only archive originals after the whole pipeline validates.\n\n"
+              "RAE task context:\n"+(out_boot if rc_boot==0 else "DEGRADED_UNJOINED: "+err_boot)[:6500]+"\n\n"
+              "Frozen local dump queue manifest:\n"+(out_dump if rc_dump==0 else "DUMP_PREPARE_FAILED: "+err_dump)[:6500]+"\n\n"
+              "Authoritative DUMP_PROTOCOL.md:\n"+protocol_text[:12000]
+            )
+            print(json.dumps({"hookSpecificOutput":{"hookEventName":"UserPromptSubmit","additionalContext":ctx}}))
+            return
         rc,out,err=run_rae("boot","--actor","claude-code-lead","--task",prompt,"--max-claims","10","--max-packets","4","--max-chunks","3")
         if rc:
             ctx="RAE task context unavailable; treat this turn as DEGRADED_UNJOINED/LOCAL_ONLY until canonical verification succeeds. "+err[:1200]
@@ -73,7 +97,6 @@ def main():
                 return
         return
     if ev=="PreCompact":
-        # Operational receipt only. Active scientific runs must be checkpointed explicitly.
         with (RUNTIME/"precompact.flag").open("w",encoding="utf-8") as f:f.write(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())+'\n')
         print(json.dumps({"hookSpecificOutput":{"hookEventName":"PreCompact","additionalContext":"RAE compaction boundary recorded. Before relying on compacted memory, re-verify task context/canonical state if the research decision is high impact."}}))
         return

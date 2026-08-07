@@ -1,0 +1,17 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"claim.schema.json",
+  "type":"object",
+  "required":["claim_id","scope","proposition","first_status","topic_packets","domains"],
+  "properties":{
+    "claim_id":{"type":"string","minLength":3},
+    "scope":{"type":"string","minLength":1},
+    "proposition":{"type":"string","minLength":1},
+    "first_status":{"enum":["CURRENT","OPEN","SUPERSEDED","REFUTED","NEGATIVE_RESULT","CONTEXT_ONLY"]},
+    "evidence_refs":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "experiment_ref":{"type":"string"},
+    "topic_packets":{"type":"array","items":{"type":"string","minLength":1},"minItems":1,"uniqueItems":true},
+    "domains":{"type":"array","items":{"type":"string","minLength":1},"minItems":1,"uniqueItems":true}
+  },
+  "additionalProperties":true
+}

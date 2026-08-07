@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-GWT-RUN-ADAPTIVE-001",
+  "class": "synthetic_causal_proxy",
+  "question": "Do selective capacity, truthful re-entry, and coupling strength have distinguishable causal utility/noise tradeoffs in a nonstationary modular workspace?",
+  "generator": {
+    "modules": 10,
+    "steps_per_run": 600,
+    "burn_in": 100,
+    "specialist_regime_period": 70,
+    "specialists_per_regime": {"high_quality":3,"medium":3,"noisy":4},
+    "workspace_k_values": [1,2,3,5,8,10],
+    "beta_values": [0.0,0.2,0.4,0.6,0.8,1.0],
+    "reentry_modes": ["truthful","shuffled","removed","delayed"],
+    "corruption_probability": 0.05,
+    "corruption_amplitude": 3.5
+  },
+  "capacity_sweep_beta_0_8_truthful_30_seeds": [
+    {"k":1,"mean_mse":0.0706168125,"sd":0.0116480504},
+    {"k":2,"mean_mse":0.0498106213,"sd":0.0081977650},
+    {"k":3,"mean_mse":0.0432262192,"sd":0.0081111412},
+    {"k":5,"mean_mse":0.0437879210,"sd":0.0076896465},
+    {"k":8,"mean_mse":0.0495759868,"sd":0.0069235369},
+    {"k":10,"mean_mse":0.0506123677,"sd":0.0069610177}
+  ],
+  "reentry_fixed_k3_beta0_8_40_seeds": {
+    "truthful": {"mean_mse":0.0408807636,"sd":0.0079170806},
+    "shuffled": {"mean_mse":0.1810098222,"sd":0.0197314669},
+    "removed": {"mean_mse":0.1716671748,"sd":0.0253682463},
+    "delayed": {"mean_mse":0.0429003267,"sd":0.0080708864},
+    "paired_bootstrap_truthful_minus_shuffled": {"mean":-0.1352301752,"ci95":[-0.1412910202,-0.1287132173]},
+    "paired_bootstrap_truthful_minus_removed": {"mean":-0.1330497068,"ci95":[-0.1455350480,-0.1210124880]},
+    "paired_bootstrap_truthful_minus_delayed": {"mean":-0.0017937826,"ci95":[-0.0024219714,-0.0011751283]}
+  },
+  "corruption_tradeoff": {
+    "paired_seeds": 60,
+    "k": 3,
+    "reentry": "truthful",
+    "beta_0_4_mean_mse": 0.6897502866,
+    "beta_1_0_mean_mse": 0.7118616071,
+    "beta_0_4_minus_beta_1_0": -0.0221113205,
+    "bootstrap95": [-0.0255357722,-0.0186460653],
+    "separate_30_seed_propagation_sweep": [
+      {"beta":0.0,"clean_mse":0.1217894526,"corrupt_mse":0.7199662274,"corruption_penalty":0.5981767749,"mean_change_on_corrupt":0.0},
+      {"beta":0.2,"clean_mse":0.0623801833,"corrupt_mse":0.6760084053,"corruption_penalty":0.6136282220,"mean_change_on_corrupt":0.6952515747},
+      {"beta":0.4,"clean_mse":0.0488507803,"corrupt_mse":0.6685338596,"corruption_penalty":0.6196830792,"mean_change_on_corrupt":1.3827230423},
+      {"beta":0.6,"clean_mse":0.0436317679,"corrupt_mse":0.6711809627,"corruption_penalty":0.6275491948,"mean_change_on_corrupt":2.0663672335},
+      {"beta":0.8,"clean_mse":0.0409630732,"corrupt_mse":0.6779391854,"corruption_penalty":0.6369761122,"mean_change_on_corrupt":2.7517759134},
+      {"beta":1.0,"clean_mse":0.0396675327,"corrupt_mse":0.6867705706,"corruption_penalty":0.6471030379,"mean_change_on_corrupt":3.4376007163}
+    ]
+  },
+  "interpretation": [
+    "The constructed nonstationary specialist proxy has an interior selective-capacity optimum rather than monotonic benefit from maximum k.",
+    "Truth-bound feedback strongly beats shuffled/removed feedback in the tested adaptive regime; one-step delay is only mildly harmful because regime persistence preserves information relevance.",
+    "Higher coupling improves clean performance in this proxy but increases corruption propagation; under 5% corruption moderate beta outperforms maximal beta."
+  ],
+  "boundary": "Synthetic proxy only. Numeric optima do not transfer to FRANK or biological systems without target replication.",
+  "next_falsifier": "Replicate capacity/re-entry/corruption factorial on synchronized FRANK twin/live traces and a pinned open model with independent latent-workspace intervention."
+}

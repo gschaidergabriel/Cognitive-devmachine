@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.1",
+  "run_id":"clay-20260808T0542p0700-chatgpt-secondary",
+  "classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"huggingface_inference","mode":"MUST_ATTEMPT","class":"model_experiment","availability_blocker":"CONNECTOR_BLOCKED"}
+  ],
+  "attempts":[
+    {"tool":"arxiv_search","status":"RUNTIME_ERROR","fallback_reason":"RUNTIME_UNAVAILABLE","detail":"direct export.arxiv.org adapter/runtime path failed temporary DNS resolution; native web arXiv discovery and primary-source retrieval used instead"},
+    {"tool":"github_connector","status":"SUCCESS","detail":"canonical boot, RAE source inspection, public implementation verification and durable research writes"},
+    {"tool":"local_sandbox","status":"SUCCESS","detail":"nine deterministic seeded synthetic/analytic experiments executed; harness and raw result JSON persisted"}
+  ],
+  "fallback_attempts":[
+    {"tool":"native_web","status":"SUCCESS","detail":"current arXiv/primary literature, official docs and practitioner field evidence"},
+    {"tool":"direct_primary_sources","status":"SUCCESS","detail":"J-space/GWT, semi-linearizability/invariant coordination, decode-time/semantic grammars, KV-memory and edge-runtime sources"},
+    {"tool":"github_connector","status":"SUCCESS","detail":"verified Neuronpedia, LazyEviction, SeKV, Qualcomm GenieX and RAE repository state"},
+    {"tool":"archived_rae_sources","status":"SUCCESS","detail":"canonical r2, G6 Topic Packet, negative results, experiments and hypotheses"}
+  ],
+  "manifest_validation":{"method":"equivalent validation against tools/research_provider_router.py rules","ok":true,"violations":[]},
+  "sanitized_cost_metadata":{"paid_external_provider_calls_observed":0},
+  "rule":"Unavailable/unexposed registered providers were not represented as successful; explicit legacy fallbacks preserved evidence class and limitations."
+}

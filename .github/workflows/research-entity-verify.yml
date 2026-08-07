@@ -15,6 +15,8 @@ jobs:
           python-version: '3.12'
       - name: Install validation runtime
         run: python -m pip install --disable-pip-version-check 'jsonschema>=4.23,<5'
+      - name: Refresh minimal bootstrap from canonical
+        run: python tools/materialize_bootstrap.py
       - name: Worker boot preflight
         run: python tools/session_preflight.py --task 'CI verification'
       - name: Strict schema validation
@@ -36,8 +38,8 @@ jobs:
           assert c['entity_version'] == b['expected_entity_version']
           print('canonical/bootstrap agreement ok',c['revision'],c['state_hash'])
           PY
-      - name: Ensure derived views are reproducible
-        run: git diff --exit-code -- research_sources/status research_sources/topics || (echo 'Derived views are stale; regenerate and commit them.' && exit 1)
+      - name: Ensure derived indexes are reproducible
+        run: git diff --exit-code -- research_entity/continuity/BOOTSTRAP_MINIMAL.json research_sources/status research_sources/topics || (echo 'Derived indexes/views are stale; regenerate and commit them.' && exit 1)
       - name: Archive derived source DB for inspection
         uses: actions/upload-artifact@v4
         with:

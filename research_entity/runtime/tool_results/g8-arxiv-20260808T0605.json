@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.1",
+  "request_id": "g8-arxiv-20260808T0605",
+  "tool": "arxiv_search",
+  "request_sha256": "125f8e40384c06d733abe390261a8c220e74c8acef6411ae8d4e5ca54a57f927",
+  "processed_at": "2026-08-07T23:17:16.227163+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-07T23:17:16.426645+00:00",
+    "credential_required": false,
+    "query": "all:\"non-normal transient amplification\" OR all:\"runtime verification uncertainty\" OR all:\"resolution adaptive KV cache\"",
+    "start": 0,
+    "max_results": 10,
+    "total_results": 3,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2604.17744v1",
+        "title": "Input-Side Variance Suppression under Non-Normal Transient Amplification in Continuous-Control Reinforcement Learning",
+        "summary": "Continuous-control reinforcement learning (RL) often exhibits large closed-loop variance, high-frequency control jitter, and sensitivity to disturbance injection. Existing explanations usually emphasize disturbance sources such as action noise, exploration perturbations, or policy nonsmoothness. This letter studies a complementary amplifier-side perspective: in nominally stable yet strongly non-normal closed loops, small input perturbations can undergo transient amplification and lead to disproportionately large state covariance. Motivated by this source--amplifier decomposition, we introduce an input-side variance suppression layer that operates between the learned policy and the plant input to reduce applied-input variance and step-to-step jitter. To separate mechanism from correlation, we use two control-theoretic interventions: one varies only eigenvector geometry under fixed eigenvalues and spectral radius, and the other varies only applied-input statistics under fixed strongly non-normal geometry. We then provide mechanism-consistent external validation on planar quadrotor tasks. Throughout, Koopman/ALE surrogates are used only as analysis and certification tools, not as direct performance paths. Taken together, the results support a narrower claim: in the studied settings, non-normal transient amplification is an important and under-emphasized contributor to execution-time closed-loop variance, and source-side suppression can reduce downstream covariance without changing the structural peak gain.",
+        "published": "2026-04-20T02:58:54Z",
+        "updated": "2026-04-20T02:58:54Z",
+        "authors": [
+          "Wu Yue"
+        ],
+        "categories": [
+          "eess.SY"
+        ],
+        "primary_category": "eess.SY",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "4 figs ,3 tables",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.17744v1",
+          "pdf": "https://arxiv.org/pdf/2604.17744v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.15081v1",
+        "title": "Toward a Geopolitical Crisis Observatory: Diagnosing Systemic Risk in News Flows Using Complex Systems Science",
+        "summary": "Complex-systems science provides media institutions with a rigorous framework to move from reactive reporting to anticipatory diagnosis. Critical events are understood as regime shifts emerging from the interplay between endogenous dynamics and exogenous shocks. Detecting such transitions requires identifying structured precursors, such as changes in correlations, amplification, persistence, and endogeneity, rather than relying on raw signal intensity. Recognizing dragon-king events as regime-generated outliers and incorporating non-normal transient amplification are essential, as is accounting for organizational concealment of risk. A geopolitical crisis observatory would diagnose when systems enter states of heightened susceptibility to cascading disruptions. While state actors are already developing such observatories for strategic purposes, media institutions remain largely reactive. This gap creates a strategic opportunity: leveraging open data and AI embedded within the complex-systems framework developed above, media organizations could transform journalism from reporting to diagnosis, delivering early-warning indicators, scenario-based risk maps, and transparent, data-driven narratives within a new Geopolitical Risk Intelligence Platform.",
+        "published": "2026-06-13T03:24:22Z",
+        "updated": "2026-06-13T03:24:22Z",
+        "authors": [
+          "Didier Sornette"
+        ],
+        "categories": [
+          "physics.soc-ph",
+          "physics.pop-ph"
+        ],
+        "primary_category": "physics.soc-ph",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "9 pages, Published 11 June 2026, Al Jazeera Centre for Studies, https://studies.aljazeera.net/en/reports",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.15081v1",
+          "pdf": "https://arxiv.org/pdf/2606.15081v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.31145v1",
+        "title": "SeKV: Resolution-Adaptive KV Cache with Hierarchical Semantic Memory for Long-Context LLM Inference",
+        "summary": "Large language models increasingly operate over long contexts, where the KV cache becomes a dominant memory bottleneck: its size grows linearly with sequence length and must be retained throughout decoding, making full GPU caching prohibitively expensive without compression. Existing KV cache compression methods struggle to balance efficiency with faithful context preservation. Token eviction discards information, while semantic grouping fixes compression decisions at prefill time; neither can recover token-level detail from a compressed span once it becomes relevant during generation. As a solution, we propose SeKV, a resolution-adaptive semantic KV cache that organizes context into entropy-guided semantic spans and stores them across a GPU-CPU memory hierarchy without discarding information. Each span keeps a lightweight summary vector on GPU for coarse routing and a low-rank SVD basis on CPU for on-demand token-level reconstruction. A trained zoom-in mechanism selectively expands query-relevant spans during decoding, enabling precise retrieval without materializing the full KV cache on GPU. SeKV enables adaptive token-level reconstruction while keeping the base LLM fully frozen and adding fewer than 0.05% trainable parameters. Across four benchmarks, SeKV improves over the strongest semantic compression baseline by 5.9% on average while reducing GPU memory by 53.3% versus full KV caching at 128K context. Code is available on https://github.com/AmirAbaskohi/SeKV.",
+        "published": "2026-06-30T05:18:02Z",
+        "updated": "2026-06-30T05:18:02Z",
+        "authors": [
+          "Amirhossein Abaskohi",
+          "Giuseppe Carenini",
+          "Peter West",
+          "Yuhang He"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.31145v1",
+          "pdf": "https://arxiv.org/pdf/2606.31145v1"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

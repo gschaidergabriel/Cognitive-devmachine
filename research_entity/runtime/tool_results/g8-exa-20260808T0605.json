@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.1",
+  "request_id": "g8-exa-20260808T0605",
+  "tool": "exa_search",
+  "request_sha256": "8c2b09b7ed77f43590bb17e65c4991b31095fe18290a2fd7cb9853484fa7c34e",
+  "processed_at": "2026-08-07T23:17:16.441147+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 non-normal transient amplification event triggered value of information sound invariant synthesis resolution adaptive KV cache",
+    "results": [
+      {
+        "id": "https://arxiv.org/html/2606.31145v1",
+        "title": "SeKV: Resolution-Adaptive KV Cache with Hierarchical Semantic Memory for Long-Context LLM Inference",
+        "url": "https://arxiv.org/html/2606.31145v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "and a low-rank SVD basis on CPU for on-demand token-level reconstruction. A trained zoom-in mechanism selectively expands query-relevant spans during decoding, enabling precise retrieval without materializing the full KV cache on GPU. SeKV enables adaptive token-level reconstruction while keeping the base LLM fully frozen and adding fewer than 0.05% trainable parameters. Across four benchmarks, SeKV improves over the strongest semantic compression baseline by 5.9% on average while reducing GPU memory by 53.3% versus full KV caching at 128K context.111Code is\n...\nWe introduce SeKV (Semantic KV Cache), a resolution-adaptive semantic KV cache for efficient long-context LLM inference. SeKV organizes the KV cache as a hierarchical semantic memory. First, the input context is segmented into semantically coherent spans using token surprisal as a boundary signal, which is available from the model’s prefill forward pass and often peaks at semantic transitions such as topic shifts and entity introductions Zhao et al. (2025). High-surprisal anchor tokens at span boundaries are preserved at full resolution on GPU, as they carry concentrated semantic information useful for later routing and reconstruction. Second, each span is represented by a lightweight summary vector on GPU (used for efficient coarse routing) and a low-rank SVD basis on CPU that compactly encodes the span’s token-level structure for faithful reconstruction. Third, a trained zoom-in mechanism dynamically selects which spans to expand to token-level resolution during decoding, triggering asynchronous CPU-to-GPU fetches of SVD bases for relevant spans while GPU computation proceeds in parallel. Crucially, SeKV avoids irreversible token eviction: each span is represented by GPU-resident summary vectors for coarse routing and CPU-resident low-rank bases that enable approximate token-level reconstruction on demand. Across four long-context understanding benchmarks, SeKV achieves 5.9% improvement over the strongest "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.nature.com/articles/s42005-026-02772-8",
+        "title": "Phase transitions without instability from non-normal dynamics | Communications Physics",
+        "url": "https://www.nature.com/articles/s42005-026-02772-8",
+        "published_date": "2026-07-25T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "It is often assumed that a system must become unstable in order to undergo a transition. This assumption reflects a deeper bias: state changes are usually interpreted as consequences of bifurcations or spectral instabilities. Here we identify a universality class of phase transitions in non-normal systems and show that transitions can occur even when all equilibria remain spectrally stable. The key mechanism is transient amplification by non-orthogonal eigenvectors: fluctuations are enhanced not by lowering energy barriers, but by increasing the effective shear of the flow, which renormalizes them and acts as an emergent temperature. Once the non-normality index κ exceeds a critical threshold κc, stable equilibria lose practical relevance, enabling escapes and abrupt transitions despite preserved spectral stability. This pseudo-criticality generalizes Kramers’ escape beyond potential barriers and offers a fundamentally different route to critical phenomena. Its implications are broad: DNA methylation reconciles long-term epigenetic memory with rapid switching, and abrupt tipping points in climate, ecology, finance, and engineered networks may arise from the same mechanism."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/hvt2vgmq86qpz9fqgp534q23",
+        "title": "Adaptive KV Cache Reuse for Fast Long-Context LLM Serving",
+        "url": "https://arxiv.org/html/2605.24022",
+        "published_date": null,
+        "author": "Fei li, Song Liu, Yan Liu, Jinhua Cui, Shiqiang Nie, Jinyu Wang, et al.",
+        "text": null,
+        "highlights": [
+          "In long-context Large Language Model (LLM) inference, the Time-To-First-Token (TTFT) latency incurred by the prefill stage has become the foremost bottleneck limiting inter active performance and deployment cost. KV Cache reuse offers a direct path to reduce redundant prefill, yet tradi tional prefix caching applies only to strict-prefix scenarios; directly reusing KV Cache in non-prefix settings breaks the cross-chunk global attention relationships and causes signif icant degradation in generation quality. When reusable KV Cache is offloaded to GPU-external cache pools, I/O over heads across heterogeneous hardware tiers further emerge as a new TTFT bottleneck. Efficient non-prefix KV Cache reuse therefore requires both semantic-consistency recovery and compute–I/O co-optimization. This paper presents CacheTune, a frequency-guided and hardware-aware KV Cache reuse system for long-context LLM serving. CacheTune first identifies, offline, the KV pairs most critical to cross-attention recovery through frequency domain analysis, and then selectively recomputes only these semantic-critical tokens online while reusing the remaining KVs. To turn this semantic selection into end-to-end latency reduction, CacheTune further combines sparse KV trans fer, multi-stream asynchronous overlap, deferred positional encoding recovery, and hardware-aware adaptive recomputation ratio tuning to balance computation and data movement across heterogeneous cache pools. Evaluations on main stream LLMs and long-context tasks show that CacheTune achieves 3.72×–4.86× TTFT speedup and 3.93×–6.21× higher throughput while maintaining generation quality close to full recompute. Even when caches are offloaded to I/O-bound SSD/HDD storage, CacheTune sustains 2.34×–2.36× TTFT speedup through adaptive recomputation.\n...\n4 Methodology CacheTune is designed to address the two challenges raised in Section 3: (1) identifying, among all reusable KV Chunks, the key KV pairs whose recomputation can restore the"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://link.aps.org/doi/10.1103/PhysRevE.86.011909",
+        "title": "Non-normal amplification in random balanced neuronal ...",
+        "url": "https://link.aps.org/doi/10.1103/PhysRevE.86.011909",
+        "published_date": "2012-07-11T11:15:37.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "In dynamical models of cortical networks, the recurrent connectivity can amplify the input given to the network in two distinct ways. One is induced by the presence of near-critical eigenvalues in the connectivity matrix 𝑾, producing large but slow activity fluctuations along the corresponding eigenvectors (dynamical slowing). The other relies on 𝑾 not being normal, which allows the network activity to make large but fast excursions along specific directions. Here we investigate the trade-off between non-normal amplification and dynamical slowing in the spontaneous activity of large random neuronal networks composed of excitatory and inhibitory neurons. We use a Schur decomposition of 𝑾 to separate the two amplification mechanisms. Assuming linear stochastic dynamics, we derive an exact expression for the expected amount of purely non-normal amplification. We find that amplification is very limited if dynamical slowing must be kept weak. We conclude that, to achieve strong transient amplification with little slowing, the connectivity must be structured. We show that unidirectional connections between neurons of the same type together with reciprocal connections between neurons of different types, allow for amplification already in the fast dynamical regime. Finally, our results also shed light on the differences between balanced networks in which inhibition exactly cancels excitation and those where inhibition dominates."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/3ld4v266c77mgk8sn8tcg1w2",
+        "title": "MomentKV : Closing the Directional Gap in KV Cache Eviction for Long-Context Inference",
+        "url": "https://arxiv.org/html/2606.01563",
+        "published_date": null,
+        "author": "Yu Li, Binxu Li, Tian Lan",
+        "text": null,
+        "highlights": [
+          "Autoregressive decoding in Transformer-based language models relies on the KV cache, whose memory footprint grows linearly with sequence length and becomes the primary bottleneck for long-context inference. KV cache eviction addresses this by retaining a fixed-size subset of key value pairs and discarding the rest. We identify that a primary source of output degradation is not the residual attention mass on evicted tokens, which existing methods already minimize, but a directional mismatch between the retained and evicted token sets. Specifically, the evicted tokens in practice are often near-orthogonal to the retained ones. Thus, even a small evicted mass could have an oversized impact on the resulting direction distribution and amplify into substantial output error. This reveals a fundamental limit in existing strategies. To address this, we propose MOMENTKV, which maintains compact, small-size moment statistics over the evicted token set, including a count, key mean, value mean, and value key covariance. During eviction, the moment statistics is leveraged to identify tokens already well aligned with and captured by the accumulated summary, keeping the evicted set geometrically regular. During inference, they yield a closed-form first-order approximation of the evicted attention output, forming a mutually reinforcing loop between selective eviction and accurate correction. On LongBench and RULER with LLaMA-3.1-8B Instruct and Qwen3-4B-Instruct, MOMENTKV outperforms all baselines at every cache budget, with the largest gains under aggressive compression.\n...\ncannot resolve (Choromanski et al., 2020; Ruan & Zhang, 2024). As shown in Figure 1b, the retained and evicted sub-outputs are near-orthogonal in practice, so even a small evicted mass produces an oversized impact with substantial relative output error. The near-orthogonality arises because top-k selection concentrates the retained set on tokens whose keys align with recent query\n...\nWe propose MOMENTKV, illust"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/hd7np9v4l8f",
+        "title": "Nonnormal amplification in random balanced neuronal ...",
+        "url": "https://arxiv.org/abs/1204.2945",
+        "published_date": "2012-07-11T00:00:00.000Z",
+        "author": "Guillaume Hennequin, Tim P. Vogels, Wulfram Gerstner",
+        "text": null,
+        "highlights": [
+          "In dynamical models of cortical networks, the recurrent connectivity can amplify the input given to the network in two distinct ways. One is induced by the presence of near-critical eigenvalues in the connectivity matrix W , producing large but slow activity fluctuations along the corresponding eigenvectors (dynamical slowing). The other relies on W not being normal, which allows the network activity to make large but fast excursions along specific directions. Here we investigate the trade-off between non-normal amplification and dynamical slowing in the spontaneous activity of large random neuronal networks composed of excitatory and inhibitory neurons. We use a Schur decomposition of W to separate the two amplification mechanisms. Assuming linear stochastic dynamics, we derive an exact expression for the expected amount of purely non-normal amplification. We find that amplification is very limited if dynamical slowing must be kept weak. We conclude that, to achieve strong transient amplification with little slowing, the connectivity must be structured. We show that unidirectional connections between neurons of the same type together with reciprocal connections between neurons of different types, allow for amplification already in the fast dynamical regime. Finally, our results also shed light on the differences between balanced networks in which inhibition exactly cancels excitation and those where inhibition dominates.\n...\nThe latter situation ( = 0) is the focus of this paper. By substituting W with T in Eq. ( 1 ) and subsequently calculating A(T ) as defined in Eq. ( 2 ), we intend to reveal the fraction of the total amplification A(W ) in the neuronal network that cannot be attributed to dynamical slowing, but only to transient growth. This constitutes a functional measure of non-normality. We carry out this analysis in a statistical sense, by calculating the expected amount of purely non-normal amplification A(T ) where the average • is over the random matrix"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://openreview.net/forum?id=M3CeHnZKNC",
+        "title": "ThinKV: Thought-Adaptive KV Cache Compression for ...",
+        "url": "https://openreview.net/forum?id=M3CeHnZKNC",
+        "published_date": "2025-10-08T19:48:14.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Abstract: The long-output context generation of large reasoning models enables extended chain of thought (CoT) but also drives rapid growth of the key–value (KV) cache, quickly overwhelming GPU memory. To address this challenge, we propose ThinKV, a thought-adaptive KV cache compression framework. ThinKV is based on the observation that attention sparsity reveals distinct thought types with varying importance within the CoT. It applies a hybrid quantization–eviction strategy, assigning token precision by thought importance and progressively evicting tokens from less critical thoughts as reasoning trajectories evolve. Furthermore, to implement ThinKV, we design a kernel that extends PagedAttention to enable efficient reuse of evicted tokens' memory slots, eliminating compaction overheads. Extensive experiments on DeepSeek-R1-Distill, GPT-OSS, and NVIDIA AceReason across mathematics and coding benchmarks show that ThinKV achieves near-lossless accuracy with less than 5% of the original KV cache, while improving performance with up to 5.8x higher inference throughput over SoTA baselines."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://iclr.cc/virtual/2026/oral/10009981",
+        "title": "ThinKV: Thought-Adaptive KV Cache Compression for ...",
+        "url": "https://iclr.cc/virtual/2026/oral/10009981",
+        "published_date": "2026-04-24T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "ICLR Oral ThinKV: Thought-Adaptive KV Cache Compression for Efficient Reasoning Models\n\n Oral Fri, Apr\n...\n4, 2026 • 11:15 AM – 11:25 AM PDT \n\n# ThinKV: Thought-Adaptive KV Cache Compression for Efficient Reasoning Models\n\n Akshat Ramachandran ⋅ Marina Neseem ⋅ Charbel Sakr ⋅ Rangharajan Venkatesan ⋅ Brucek Khailany ⋅ Tushar Krishna \n\n### Abstract \n\nThe long-output context generation of large reasoning models enables extended chain of thought (CoT) but also drives rapid growth of the key–value (KV) cache, quickly overwhelming GPU memory. To address this challenge, we propose ThinKV, a thought-adaptive KV cache compression framework. ThinKV is based on the observation that attention sparsity reveals distinct thought types with varying importance within the CoT. It applies a hybrid quantization–eviction strategy, assigning token precision by thought importance and progressively evicting tokens from less critical thoughts as reasoning trajectories evolve. Furthermore, to implement ThinKV, we design a kernel that extends PagedAttention to enable efficient reuse of evicted tokens' memory slots, eliminating compaction overheads. Extensive experiments on DeepSeek-R1-Distill, GPT-OSS, and NVIDIA AceReason across mathematics and coding benchmarks show that ThinKV achieves near-lossless accuracy with less than 5% of the original KV cache, while improving performance with up to 5.8x higher inference throughput over SoTA baselines."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "adb10bb135283bf344642bb9671d642c",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

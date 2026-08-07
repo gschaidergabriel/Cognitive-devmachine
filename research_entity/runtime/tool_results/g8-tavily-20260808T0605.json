@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.1",
+  "request_id": "g8-tavily-20260808T0605",
+  "tool": "tavily_search",
+  "request_sha256": "d7ddc83b3908f713bb20c1d9c72a8769964bb620836c3752c12ecc98bcd1a376",
+  "processed_at": "2026-08-07T23:17:27.385567+00:00",
+  "result": {
+    "provider": "Tavily",
+    "tool": "tavily_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 non-normal transient amplification event triggered information freshness sound invariant synthesis semantic KV cache",
+    "answer": null,
+    "results": [
+      {
+        "title": "KV Cache Optimization for LLMs 2026: Engineering Guide",
+        "url": "https://www.digitalapplied.com/blog/kv-cache-optimization-techniques-2026-engineering-guide",
+        "content": "The KV cache stores per-layer key and value tensors for every token in the context window so that subsequent tokens can attend to them without recomputing. Memory grows linearly with context length, layer count, and head count — and at frontier scale, the growth is faster than parameter count growth. The result: above 128K tokens, KV memory exceeds parameter memory on most architectures.\n\n#### KV cache size · 1M context across attention variants\n\nSource: vLLM benchmarks · DeepSeek V2 paper · Apr 2026\n\nLlama 70B · 8K context · MHA · FP16Standard short-context baseline\n\n1.0 GB\n\nLlama 70B · 32K context · MHA · FP16Common production context budget\n\n4.3 GB\n\nLlama 70B · 128K context · MHA · FP16Long-context production ceiling\n\n17.3 GB [...] Reference\n\nFP8 KV cache\n\n##### Memory reduction\n\n50%\n\nFP8 (E4M3 or E5M2) at 1 byte per element instead of 2. Quality regression: 0.3-0.7 points on long-context retrieval (NIAH-2 multi-needle), within noise on most application workloads. Default 2026 production setting on H100 and newer.\n\nRight default\n\nINT8 KV cache\n\n##### Memory reduction\n\n50%\n\nINT8 with per-channel scale. Slightly more aggressive quality regression than FP8 (1.5-3 points on long-context tasks) because INT8 has less dynamic range. Useful on hardware without native FP8 support; otherwise prefer FP8.\n\nPre-Hopper hardware [...] Paged attention (introduced by vLLM in 2023) treats KV cache memory like virtual memory in an operating system — divided into fixed-size blocks, allocated on demand, and indirected through a block table. Without it, KV memory fragments rapidly under variable-length batches: a request that ends frees a block in the middle of physical memory, and the unfreed contiguous span cannot host a new long request. Effective utilization drops to 50-65% under typical bursty traffic.",
+        "score": 0.35979196,
+        "raw_content": null
+      },
+      {
+        "title": "NDSS 2026 - Shadow in the Cache: Unveiling and Mitigating Privacy Risks of KV-cache in LLM Inference",
+        "url": "https://www.youtube.com/watch?v=J4yZoU18NXc&vl=en",
+        "content": "with mathematically loose accuracy. Crucially, it introduce less than 1% latency overhead and is natively compatible with mastering inference framework framework like a VRAM. So, yeah, thanks for the listening and you know, I can answer any questions. Yeah. Sorry. So. All right, thank you so much. Appreciate the presentation. Great job. [...] ### Transcript: [...] AUTHORS\nZhifan Luo (State Key Laboratory of Blockchain and Data Security, Zhejiang University), Shuo Shao (State Key Laboratory of Blockchain and Data Security, Zhejiang University), Su Zhang (Huawei Technology), Lijing Zhou (Huawei Technology), Yuke Hu (State Key Laboratory of Blockchain and Data Security, Zhejiang University), Chenxu Zhao (State Key Laboratory of Blockchain and Data Security, Zhejiang University), Zhihao Liu (State Key Laboratory of Blockchain and Data Security, Zhejiang University), Zhan Qin (State Key Laboratory of Blockchain and Data Security, Zhejiang University and Hangzhou High-Tech Zone (Binjiang) Institute of Blockchain and Data Security)\n \nABOUT NDSS Symposium",
+        "score": 0.27940357,
+        "raw_content": null
+      },
+      {
+        "title": "KV Cache Events | LMCache",
+        "url": "https://docs.lmcache.ai/production/kv_cache_events.html",
+        "content": "Received event batch at 1765529395.2132685:      1765529395 - BlockStored(block_hashes=[b'\\x96\\x95[h6\\x1dE$v\\x03\\xe8\\xf0\\xc20\\xcd\\xe8\\xa7#\\x9cS\\xe0\\x16\\xba\\xab7\\xf7z\\x10P]\\xfaT'], parent_block_hash=None, token_ids=[27, 91, 7265, 3575, 4326, 91, 1784, 91, 8948, 91, 397, 2610, 525, 264, 10950, 15235, 17847, 624, 27, 91, 872, 91, 397, 3838, 374, 279, 16158, 1685, 1370, 276, 5267, 27, 91, 77091, 91, 29], block_size=36, lora_id=None, medium='cpu')  (block_hashes =['\\x96\\x95[h6\\x1dE$v\\x03\\xe8\\xf0\\xc20\\xcd\\xe8\\xa7#\\x9cS\\xe0\\x16\\xba\\xab7\\xf7z\\x10P]\\xfaT']  parent_block_hash =  token_ids =[27  91  7265  3575  4326  91  1784  91  8948  91  397  2610  525  264  10950  15235  17847  624  27  91  872  91  397  3838  374  279  16158  1685  1370  276  5267  27  91  77091  91  29]  block_size = 36 [...] This is the event generated after the cache store operation.\n\nBefore starting to generate KV events, you need to be aware of the following:\n\n You need to enable `enable_kv_events` for LMCache as events are not generated by default.\n LMCache sends the events to SGLang for publishing. To enable events to be published, you need to set the SGLang configuration setting `--kv-events-config`.\n\nThe steps that follow give an example of how KV events can be generated, published and consumed:\n\n1. Start SGLang with LMCache and model `Qwen/Qwen3-0.6B` as follows: [...] This is the event generated after the cache store operation.\n\nPerformance Tuning\n\nArchitecture Overview",
+        "score": 0.24990048,
+        "raw_content": null
+      },
+      {
+        "title": "KV Cache in LLMs Explained Visually | How LLMs Generate Tokens Faster",
+        "url": "https://www.youtube.com/watch?v=7OrMFn86PlM",
+        "content": "# KV Cache in LLMs Explained Visually | How LLMs Generate Tokens Faster\n## ExplainingAI\n15300 subscribers\n312 likes\n\n### Description\n12054 views\nPosted: 9 Apr 2026\nKV cache is one of the key techniques that makes modern Large Language Models (LLMs) fast during inference.\n\nIn this video, we break down KV cache in LLMs visually and intuitively, and show exactly how it speeds up token generation. Starting from attention mechanism computations, we first understand why transformers recompute Key and Value representations at every step leading to quadratic computation during generation. [...] newly computed KV values to the cache and then retrieve all cached K and V values so that we can compute attention scores between the newly computed query and keys of all tokens. So for example, if we already have five KV values for previous five tokens in the cache and we are processing one new token then before this step, KV corresponds to one token but after this cache update, KV will now correspond to representations of six tokens. This is what allows us to reuse all previous computations. We also need to slightly modify the causal mask. Earlier this mask was N cross N for full sequence. Now we are only going to be computing attention for the last token. So effectively, we only need one cross N mask. In KV cache mode, the last token is actually going to attend to all previous tokens. [...] so far. And now positional embeddings are going to be created from current sequence length to current sequence length plus T. Just for an example, if we have already processed 100 tokens, so from position zero to 99 is already done and T equals one, then because of this logic, the next token gets a position of 100 ensuring that positional information remains correct across all generation steps. Finally, to close everything in KV cache implementation, let's also look at how the code changes in generate method. Since the same model can be used for multiple generations, we must reset the cash befo",
+        "score": 0.21499655,
+        "raw_content": null
+      },
+      {
+        "title": "Beyond Speedup -- Utilizing KV Cache for Sampling and Reasoning",
+        "url": "https://arxiv.org/pdf/2601.20326",
+        "content": "Published as a conference paper at ICLR 2026 BEYOND SPEEDUP - UTILIZING KV CACHE FOR SAM-PLING AND REASONING Zeyu Xing1, Xing Li2, Hui-Ling Zhen2, Mingxuan Yuan2, Sinno Jialin Pan1 1Department of Computer Science and Engineering, The Chinese University of Hong Kong 2Huawei Technologies Co., Ltd.\nzeyuxing@link.cuhk.edu.hk {li.xing2, zhenhuiling2, yuan.mingxuan}@huawei.com sinnopan@cuhk.edu.hk ABSTRACT KV caches, typically used only to speed up autoregressive decoding, encode con-textual information that can be reused for downstream tasks at no extra cost.\nWe propose treating the KV cache as a lightweight representation, eliminat-ing the need to recompute or store full hidden states. [...] Design implication: token-centric KV-CoE.\nMotivated by the above, we redesign KV-CoE to operate along the token dimension, using token-wise aggregation that matches the semantics of the KV cache. Concretely, KV-CoE forms per-token embeddings from value vectors and aggregates 14 Published as a conference paper at ICLR 2026 them over token positions (and optionally across heads/layers) to produce the trace-level confidence score.\nPooling strategies summary.\nFor clarity, Table 6 summarizes the pooling/aggregation strategies used in this paper (see also L320–322 and L455–456).\nTask Source Head Agg.\nPosition Agg.\nLayer Agg. [...] 5.2 METHODOLOGY Our key innovation is to adapt the CoE framework to use the KV cache, eliminating its primary computational overhead. While vanilla CoE constructs trajectories from hidden states h(t) l , re-quiring expensive activation storage or re-computation, we instead leverage the key-value tensors K(l,t), V (l,t) that are already maintained by autoregressive decoders. This modification preserves the CoE analytical framework while rendering it virtually cost-free.\n5 Published as a conference paper at ICLR 2026 Embedding Construction.",
+        "score": 0.2104582,
+        "raw_content": null
+      },
+      {
+        "title": "TurboQuant and the KV Cache Revolution: Toward Memory-Boundless LLM Inference",
+        "url": "https://medium.com/@comeback01/turboquant-and-the-kv-cache-revolution-toward-memory-boundless-llm-inference-906af7e69370",
+        "content": "## The Era of Memory-Bound Models\n\nAs we write these lines in early 2026, the artificial intelligence industry is going through a major architectural crisis. The explosive expansion of Large Language Model (LLM) context windows — going from a few thousand tokens to several millions for state-of-the-art models — has hit a brutal hardware reality: the “Memory Wall”. [...] ## Economic Shockwaves: The Memory Paradox\n\nThe scope of an architectural innovation capable of artificially multiplying video memory density tenfold does not stop at the benches of research laboratories. During the formal presentation of these results in March 2026, the reaction of financial markets was swift, illustrating the tension surrounding the semiconductor supply chain. [...] Artificial Intelligence\n\nLarge Language Models\n\nData Science\n\nDeep Learning\n\n: A Technical Deep Dive into the Infinite Context Paradigm\n\nImage 8: Stéphane Stéphane\n\nStéphane Stéphane\n\n·\n\nJan 21\n\n## Recursive Language Models (RLMs): A Technical Deep Dive into the Infinite Context Paradigm ### TL;DR: Recursive Language Models (RLMs) solve the “Context Rot” problem by treating context as a programmable variable rather than internal…\n\n1\n\n\n\nImage 10: Stéphane Stéphane\n\nStéphane Stéphane\n\n·\n\nJan 19\n\n## How to Code 4x Faster with Claude in 2026 (Without Blowing Your Anthropic Budget) ### It’s January 2026. Your X (Twitter) feed is flooded with Claude Code demos. Developers are building CRMs in hours, organizing entire Notion…",
+        "score": 0.19001694,
+        "raw_content": null
+      },
+      {
+        "title": "Synthesizing Golden Traces for Realistic KV Cache Evaluation",
+        "url": "https://www.ddn.com/blog/synthesizing-golden-traces-for-realistic-kv-cache-evaluation-in-agentic-inference-workloads",
+        "content": "Share\n\nExplore our Resources\n\nJuly 29, 2026\n\n##### Synthesizing Golden Traces for Realistic KV Cache Evaluation in Agentic Inference Workloads\n\nTechnical Blog\n\nJuly 23, 2026\n\n##### AI Factories Are Becoming the Blueprint for Enterprise AI Infrastructure—Here’s Why That Matters\n\nBlog\n\nJuly 22, 2026\n\n##### Advancing AI for National Security: NVIDIA, DDN, and the Naval Postgraduate School Collaborate to Prepare Tomorrow’s AI Leaders\n\nBlog\n\nMore Resources",
+        "score": 0.18581453,
+        "raw_content": null
+      },
+      {
+        "title": "Caching and Reuse Optimizations",
+        "url": "https://www.aussieai.com/research/caching",
+        "content": "Jiaming Yang, Chenwei Tang, Liangli Zhen, Jiancheng Lv,\n  28 Apr 2026,\n  Rethinking KV Cache Eviction via a Unified Information-Theoretic Objective, [...] ## Semantic KV Caching?\n\nSemantic KV caching is the use of semantically related queries with KV cache data\nfor faster LLM inference.\nThis is somewhat computationally difficult, because semantically similar queries may have\ndifferent token sequences, but there are methods to optimize this.\n\nCan you do semantic caching of the KV cache data?\nShort answer: no.\n\nBut why not?\nAfter all, the generalization of the \"inference cache\" is the \"context cache\" (or \"global KV caching\"),\nwhere the KV cache data is stored and re-used for a repeated query.\nBut the key point here is that the inference cache is storing data for queries with identical text. [...] Luis Gaspar Schroeder, Aditya Desai, Alejandro Cuadron, Kyle Chu, Shu Liu, Mark Zhao, Stephan Krusche, Alfons Kemper, Ion Stoica, Matei Zaharia, Joseph E. Gonzalez,\n  26 Sep 2025,\n  vCache: Verified Semantic Prompt Caching,\n  \n Yuxuan Zhu, Ali Falahati, David H. Yang, Mohammad Mohammadi Amiri,\n  29 Sep 2025,\n  SentenceKV: Efficient LLM Inference via Sentence-Level Semantic KV Caching,\n  \n Sreenivasa Reddy,\n  Hulebeedu Reddy,\n  January 12, 2026,\n  Why your LLM bill is exploding — and how semantic caching can cut it by 73%,\n  \n Allard de Winter,\n  August 12, 2025,\n  Beyond keys: The rise of semantic and prefix caching for LLMs,\n  \n Jen Agarwal,\n  December 09, 2025,\n  Prompt vs semantic caching: Complementary techniques for high-performance AI agents,",
+        "score": 0.17990519,
+        "raw_content": null
+      }
+    ],
+    "response_time": 0.0,
+    "request_id": "fc0539c5-acc3-4ff7-8909-6e0806e93e59",
+    "usage": null
+  },
+  "status": "SUCCESS"
+}

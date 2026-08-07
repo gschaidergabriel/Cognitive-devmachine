@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.1",
+  "run_id":"gwt-20260808T0608p0700-chatgpt-secondary",
+  "classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":null},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":null},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"huggingface_inference","mode":"MUST_ATTEMPT","class":"model_experiment","availability_blocker":"QUOTA_EXHAUSTED_CACHED"}
+  ],
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/gwt3-openalex-ignition-reconstruction-20260808T0608p0700.json"},
+    {"tool":"arxiv_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/gwt3-arxiv-ignition-reconstruction-20260808T0608p0700.json"},
+    {"tool":"semantic_scholar_search","status":"RATE_LIMITED","fallback_reason":"RATE_LIMITED","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/gwt3-semscholar-ignition-reconstruction-20260808T0608p0700.json"},
+    {"tool":"tavily_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/gwt3-tavily-ignition-reconstruction-20260808T0608p0700.json"},
+    {"tool":"exa_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/gwt3-exa-ignition-reconstruction-20260808T0608p0700.json"},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical/packet/current FRANK research state and provider results read; run artifacts persisted."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Executed threshold-shift/hysteresis calibration and receiver reconstruction lesion proxy."}
+  ],
+  "fallback_attempts":[
+    {"tool":"openalex_search+arxiv_search","status":"SUCCESS","covers":["semantic_scholar_search"],"note":"Used successful scholarly providers after Semantic Scholar shared-pool HTTP 429."},
+    {"tool":"native_web_primary_sources","status":"SUCCESS","note":"Verified GNW recurrent ignition literature, Anthropic J-space ignition details and latent-space reconstruction context."},
+    {"tool":"local_sandbox","status":"SUCCESS","covers":["e2b_sandbox","huggingface_inference"],"note":"Only synthetic diagnostics; no target-model inference claim. HF inference is cached quota-exhausted until 2026-09-01."}
+  ],
+  "validation":{"strong_promotion":"NOT_ATTEMPTED","unresolved_required_tool_violation":false,"note":"All available MUST_ATTEMPT providers were attempted; Semantic Scholar rate limit has successful scholarly fallback; E2B credential and HF cached quota blockers are explicit."},
+  "sanitized_usage":{"secrets_recorded":false,"provider_cost_claimed":false}
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "purpose": "Registry of external research, verification and execution capabilities available to FRANK/RAE runtimes. This registry contains no secrets.",
   "secret_policy": {
     "allowed_sources": ["process_environment", "local_dotenv_ignored_by_git", "runtime_secret_store"],
@@ -11,8 +11,9 @@
       "tool_name": "openalex_search",
       "provider": "OpenAlex",
       "class": "scholarly_metadata_and_discovery",
-      "requires_env": ["OPENALEX_EMAIL"],
-      "credential_required": false,
+      "requires_env": ["OPENALEX_API_KEY"],
+      "credential_required": true,
+      "auth_transport": "query_parameter:api_key",
       "preferred_for": ["paper discovery", "citation graph exploration", "author/institution/work metadata"],
       "evidence_class": "external_scholarly_metadata",
       "status": "REGISTERED_NOT_RUNTIME_VERIFIED"

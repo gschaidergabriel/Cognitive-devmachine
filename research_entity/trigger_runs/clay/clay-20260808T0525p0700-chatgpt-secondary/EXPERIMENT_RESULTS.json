@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-20260808T0525p0700-chatgpt-secondary",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "boundary":"synthetic_analytic_proxy_only",
+  "experiments":[
+    {"id":"EXP-G6-INVCONFLUENCE-001","samples":200000,"result":{"effect_only_internal_violation_rate":0.348425,"invariant_aware_coord_fraction":0.348425,"safe_local_fraction":0.651575,"strict_global_coord_fraction":1.0},"interpretation":"effectfulness is not a sufficient coordination classifier"},
+    {"id":"EXP-G6-BUDGET-VECTOR-002","samples":120000,"result":{"fixed_loss":0.1910793659,"scalar_loss":0.1810204043,"vector_loss":0.0286193746,"vector_vs_scalar_loss_reduction":0.8418997312},"interpretation":"one scalar budget is not universal under non-collinear pressures"},
+    {"id":"EXP-G6-STALE-GAMMA-003","proposals":100000,"result":{"grammar_only_invalid_rate":0.63874,"stale_state_aware_invalid_rate":0.11911,"fresh_state_aware_invalid_rate":0.0,"root_validator_catch_rate":0.11911},"interpretation":"state-aware generation requires current root/epoch for correctness"},
+    {"id":"EXP-G6-RDELTA-ESTIMATOR-004","cascades":30000,"result":{"auc_large_cascade":0.9560502078,"corr_early_estimate_log_final_size":0.8829162582,"large_cascade_rate":0.1570333333},"interpretation":"early change propagation is a plausible online tripwire in this proxy"},
+    {"id":"EXP-G6-DUALWS-INTERVENTION-005","samples":100000,"result":{"observational_r2_causal_model":0.7854029317,"observational_r2_proxy_model":0.6780504821,"receipt_lesion_effect_causal_nmad":0.3721975347,"receipt_lesion_effect_proxy_nmad":0.0},"interpretation":"observational workspace predictivity does not imply causal mediation"},
+    {"id":"EXP-G6-THERMAL-GOV-006","steps":1200,"result":{"static_high_mean_tps":16.9195997750,"static_high_mean_temp":46.3669577280,"static_eco_mean_tps":42.0,"static_eco_mean_temp":36.7908334677,"adaptive_mean_tps":46.2266666667,"adaptive_mean_temp":39.3101445553,"adaptive_vs_eco_tps_gain":0.1006349206},"interpretation":"feedback thermal policy can beat fixed peak/eco modes in the constructed sustained-load proxy"},
+    {"id":"EXP-G6-SPEC-GOV-007","requests":50000,"result":{"always_off_normalized_latency":1.0,"always_on_normalized_latency":0.7422621135,"adaptive_normalized_latency":0.7299548329,"adaptive_speculation_fraction":0.75274},"interpretation":"acceptance/task-conditioned speculation beats universal policy in the constructed mix"},
+    {"id":"EXP-G6-HIGHERORDER-008","samples":200000,"result":{"I_X_Z_bits":0.0000004613,"I_Y_Z_bits":0.0000018928,"I_XY_Z_bits":0.9999999766},"interpretation":"pairwise information can be blind to purely synergistic dependence"}
+  ]
+}

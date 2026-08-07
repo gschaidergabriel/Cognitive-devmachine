@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "purpose": "Low-overhead boot index. This file is a derived operational index, not canonical research truth.",
   "canonical_path": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
   "expected_entity_version": "RAE-8.8",
@@ -13,6 +13,15 @@
     "governance": "research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md",
     "provenance_policy": "research_entity/global/PROVENANCE_POLICY.md",
     "rule": "Evidence outranks researcher rank; Claude Code adjudicates unresolved architecture/research decisions after evidence review."
+  },
+  "research_task_routing": {
+    "applies_to": ["reserved_research_trigger", "ordinary_substantive_research_prompt"],
+    "tool_policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
+    "tool_router": "tools/research_provider_router.py",
+    "quota_state": "research_entity/runtime/TOOL_QUOTA_STATE.json",
+    "trigger_runs_require_tool_execution_manifest": true,
+    "ordinary_research_prompts_follow_same_provider_plan_when_runtime_supports_execution": true,
+    "fallback": "If a planned provider cannot be used because of quota, rate limit, runtime, credentials or provider availability, continue with the best legacy research method and record the limitation."
   },
   "reserved_commands": {
     "dump": {
@@ -43,7 +52,7 @@
     "linux_first_is_not_linux_only",
     "synthetic_clay_is_not_the_scope_boundary",
     "substantive_visible_responses_end_with_status_footer",
-    "research_triggers_use_quota_aware_tool_orchestration_with_recorded_fallback"
+    "substantive_research_tasks_use_quota_aware_tool_orchestration_with_recorded_fallback"
   ],
   "boot_tiers": {
     "T0_ALWAYS": [
@@ -57,7 +66,7 @@
       "research_entity/global/DOMAIN_REGISTRY.json",
       "research_entity/global/TOPIC_PACKET_PROTOCOL.md",
       "research_entity/global/PROJECT_COMMAND_REGISTRY.json",
-      "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md for substantive research triggers",
+      "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md for substantive research tasks",
       "tools/research_provider_router.py for research tool planning/validation",
       "research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md when cross-researcher interpretation/adjudication matters",
       "research_entity/global/DUMP_PROTOCOL.md only when reserved command dump is triggered"

@@ -1,111 +1,114 @@
 # Reserved Trigger: `frank`
 
-Research FRANK as one integrated cognitive/runtime architecture, not as a loose list of services. Use the Master Research Trigger Protocol and the mandatory Interconnected Research Mesh Protocol.
+Research FRANK as one integrated cognitive/runtime architecture, not as a loose list of services. Use the Master Research Trigger Protocol and mandatory Interconnected Research Mesh Protocol.
 
 ## Mandatory foundation hierarchy
 
-The `frank` trigger is downstream of the integrated Synthetic Clay research foundry **and** uses ClayCode as the primary architecture/implementation IR.
+The `frank` trigger is downstream of the integrated Synthetic Clay research foundry, uses ClayCode as the primary architecture/implementation IR, and must incorporate the current ClayGraph memory/state/database-substrate research.
 
-The mandatory priority is:
+Mandatory priority:
 
-`clay -> claycode -> gwt -> hyperposition -> emergenz -> frank history`
+`clay -> claycode -> claygraph -> gwt -> hyperposition -> emergenz -> frank history`
 
 ### 1. Clay — scientific/architectural foundation
 
-Before generating FRANK architecture hypotheses, load and synthesize the newest Clay research, including fresh material newer than the latest final report:
+Before generating FRANK architecture hypotheses, load and synthesize newest Clay research including fresh material newer than the latest final report: architecture candidates/deltas, hypothesis matrices, experiments, negative results, Topic Packets, micro-packets, provenance and open questions.
 
-- latest Clay final reports and architecture candidate/delta;
-- hypothesis matrices and transformed hypotheses;
-- experiment results with synthetic/live scope labels;
-- negative results;
-- Topic Packets and surgical micro-packets;
-- source/provenance refs and open questions.
-
-Clay is the primary architecture foundation, not unquestioned truth. A newer FRANK run may revise a Clay result only by explicitly identifying the dependency, presenting contrary evidence/constraints and preserving contradiction/supersession lineage.
+Clay is the primary foundation, not unquestioned truth. Revision requires contrary evidence/constraints and preserved contradiction/supersession lineage.
 
 ### 2. ClayCode — primary FRANK architecture language
 
-FRANK must ingest ClayCode **deeply**, not as a small side branch. Consume at minimum the newest available:
+FRANK must deeply ingest newest completed and in-progress ClayCode research: semantic IR/projections, state/version/provenance/conflict semantics, proposal typing, transition closure, dependency/effect derivation, scoped freshness, GWT/re-entry primitives, authority boundaries, parser/compiler/self-hosting results and target-reader measurements.
 
-- completed ClayCode research runs;
-- newer in-progress run artifacts when present;
-- ClayCode Topic Packets and relevant knowledge micro-packets;
-- semantic IR / projection research;
-- state/version/provenance/unknown/conflict/revocation semantics;
-- proposal typing (`PURE_TRANSFORM`, `STATE_PROPOSAL`, `EFFECT_PROPOSAL`);
-- transition-closure, dependency/effect derivation and scoped freshness research;
-- GWT/assembly/outcome/re-entry primitives;
-- capability/effect authority boundary;
-- parser/validator/compiler/self-hosting results;
-- Qwen-class reader/internalization measurements and negative results.
-
-The new FRANK architecture MUST be authored as **ClayCode semantic IR**. Until ClayCode has a final stable textual surface syntax, the authoritative source artifact is:
+The new FRANK architecture MUST be authored as ClayCode semantic IR. Until stable surface syntax exists, authoritative source artifact is:
 
 `research_entity/trigger_runs/frank/<run_id>/FRANK_ARCHITECTURE.claycode.json`
 
-This is a deterministic JSON projection of the meaning-bearing ClayCode IR, not ordinary application JSON pretending to be the architecture language. Human-readable Markdown diagrams/reports and generated implementation-language code are downstream projections/targets of this IR.
+Human-readable reports and implementation-language code are downstream projections/targets.
 
-A FRANK architecture run is incomplete if it produces only prose, Python/Rust/etc. designs, or diagrams without the ClayCode architecture artifact.
+### 3. ClayGraph — mandatory deep memory/state/database substrate
+
+Every FRANK run MUST deeply ingest the newest ClayGraph completed and in-progress research, including where present:
+
+- accepted/current ClayGraph and newest candidate;
+- `CLAYGRAPH_SCHEMA.claycode.json`;
+- graph evolution parent→candidate decisions;
+- `SELF_USE_BENCHMARK.json` comparing graph use with classical retrieval/search baselines;
+- `DATABASE_INVENTORY.json`;
+- `MIGRATION_PLAN.json`;
+- `FRANK_CLAYGRAPH_FEEDBACK.json`;
+- activation/assembly, typed relation, temporal, provenance, conflict/unknown/revoked and replay semantics;
+- negative results and `KEEP_ISOLATED` decisions.
+
+ClayGraph is a research result, not a mandate to collapse every store. FRANK must decide which logical/physical boundaries become graph state, graph projections, linked isolated stores or remain separate authority/transactional domains.
+
+Any newer ClayGraph feedback affecting FRANK modules/state contracts/transitions must be represented in `FRANK_ARCHITECTURE.claycode.json` or explicitly rejected/deferred with evidence and falsifier. A FRANK run that silently ignores newer ClayGraph substrate evidence is incomplete.
+
+### Architecture source contract
 
 The ClayCode architecture artifact must represent at least:
 
 - IR/dialect version and architecture identity;
 - stable module/organ identities;
 - state contracts and typed values;
-- module dependencies and relation identities;
+- module dependencies/relation identities;
 - operations/transitions and causal parentage;
-- read/write/invariant/effect/capability closure where known;
+- read/write/invariant/effect/capability closure;
 - proposal class for each transition;
-- GWT/assembly/episode/receipt links where applicable;
+- GWT/assembly/episode/receipt links;
+- ClayGraph entities/relations/projections and activation boundaries where applicable;
 - persistence/replay/recovery semantics;
+- database migration/isolation boundaries;
 - authority/effect boundaries;
-- provenance and upstream Clay/ClayCode research dependencies;
-- explicit host-kernel boundaries that ClayCode represents but does not self-authorize.
+- provenance and upstream Clay/ClayCode/ClayGraph research dependencies;
+- explicit host-kernel boundaries ClayCode can represent but not self-authorize.
 
-The minimal deterministic K0 host — parser/validator/canonicalizer/bootstrap trust root and external capability/effect authority — may remain physically implemented outside ClayCode. ClayCode can describe/reference it, but model output or self-representation can never mint its authority.
+The minimal deterministic K0 host — parser/validator/canonicalizer/bootstrap trust root and external capability/effect authority — may remain physically outside ClayCode/ClayGraph. Self-representation cannot mint authority.
 
 Run:
 
 `tools/research_interconnect_preflight.py --trigger frank --run-id <run_id>`
 
-and materialize the result as `INTERCONNECT_MANIFEST.json` before Fusion 1. For FRANK, the preflight deliberately loads more Clay and ClayCode history/material than the other branches. A FRANK report without this foundation manifest and `FRANK_ARCHITECTURE.claycode.json` is incomplete and cannot strongly promote an architecture delta.
+and materialize `INTERCONNECT_MANIFEST.json` before Fusion 1. The preflight deliberately loads deeper Clay, ClayCode and ClayGraph histories. It must cover all seven registered scientific branches.
 
 ## Primary questions
 
-- Given the newest Clay research, what should FRANK's next integrated architecture actually be?
-- How should that architecture be expressed as ClayCode modules, state contracts and transitions?
+- Given newest Clay, ClayCode and ClayGraph research, what should FRANK's next integrated architecture be?
+- How should that architecture be expressed as ClayCode modules/state contracts/transitions over a ClayGraph-capable substrate?
 - Which functions are semantically distinct organs versus accidental process/database boundaries?
-- How can the full FRANK architecture become one coherent module/runtime while preserving multi-rate dynamics, isolation where needed and observability?
-- Which current service/DB boundaries add latency, duplicated state or lost causal traceability?
+- Which current stores should become ClayGraph state/projections/links, and which must remain isolated?
+- Can associative graph state reduce explicit retrieval/context reconstruction without corrupting canonical truth?
 - How should Qwen-class 4B inference, Needle/classifiers, memory, GWT, policy and execution gateways compose?
-- Which portions belong inside Synthetic Clay/ClayCode and which remain deterministic host/runtime infrastructure?
-- What is the Linux-first implementation path and how can the same ClayCode semantic architecture target Android/edge, Windows/macOS and other platforms through adapters/projections?
+- Which portions belong inside Synthetic Clay/ClayCode/ClayGraph and which remain deterministic host/runtime infrastructure?
+- What is the reversible Linux-first implementation and migration path?
 
 ## Mandatory research dimensions
 
 - whole-system state/dataflow graph;
-- explicit mapping from current Clay architecture candidate to ClayCode FRANK modules/interfaces;
-- ClayCode transition/operation registry for FRANK;
+- mapping from current Clay architecture to ClayCode FRANK modules/interfaces;
+- mapping from ClayGraph substrate results to FRANK state contracts and persistence boundaries;
+- ClayCode transition/operation registry;
 - fast/slow loop timing and scheduler design;
 - shared-state versus message/IPC boundaries;
-- persistence and recovery;
+- persistence/recovery/replay;
+- database inventory/migration/rollback;
 - capability/security boundaries;
 - model routing/inference economics;
-- hot-path latency and zero-copy opportunities;
+- hot-path latency/zero-copy opportunities;
 - observability/replay;
-- GWT/ClayCode/Hyperposition/Emergence cross-constraints;
-- mobile Qwen-4B constraints: quantization, RAM/KV cache, CPU/GPU/NPU/Vulkan, thermals, battery, lifecycle and sandboxing.
+- GWT/ClayGraph/ClayCode/Hyperposition/Emergence cross-constraints;
+- mobile Qwen-4B constraints.
 
-Treat older architecture measurements as versioned evidence. Re-ground any claim about current FRANK against current code/runtime when accessible. Never treat repeated use of the same Clay/ClayCode evidence across several branches as independent replication.
+Treat older architecture measurements as versioned evidence. Re-ground claims about current FRANK against current code/runtime when accessible. Reuse across branches is not independent replication.
 
 ## Required outputs
 
 Write at minimum:
 
-- `INTERCONNECT_MANIFEST.json`;
+- `INTERCONNECT_MANIFEST.json` covering all seven branches;
 - `TOOL_EXECUTION_MANIFEST.json`;
 - `FRANK_ARCHITECTURE.claycode.json` — semantic architecture source of truth;
-- `CLAYCODE_ARCHITECTURE_MAPPING.md` — human explanation of how Clay/ClayCode research maps into the IR;
+- `CLAYCODE_ARCHITECTURE_MAPPING.md` — human explanation including ClayGraph substrate mappings;
 - `FINAL_REPORT.md` — architecture analysis, measurable migration steps, rollback conditions and cross-branch synthesis.
 
-The final report must include a `Cross-branch synthesis` section naming the Clay/ClayCode/GWT/Hyperposition/Emergence inputs that changed the proposal and unresolved contradictions. Finish with the mandatory status footer.
+The final report must name the Clay/ClayCode/ClayGraph/GWT/Hyperposition/Emergence inputs that changed the proposal and unresolved contradictions. Finish with the mandatory status footer.

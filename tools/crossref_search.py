@@ -145,10 +145,10 @@ def works_search(query: str, rows: int = 10) -> dict:
 
 
 def smoke_test() -> dict:
-    # DOI used in Crossref's official REST API quick-start documentation.
-    result = doi_lookup("10.1128/mbio.01735-25")
-    if not result.get("work", {}).get("doi"):
-        raise RuntimeError("Crossref smoke test returned no DOI")
+    # Stable Crossref DOI used as a deterministic metadata probe.
+    result = doi_lookup("10.1038/nphys1170")
+    if (result.get("work", {}).get("doi") or "").lower() != "10.1038/nphys1170":
+        raise RuntimeError("Crossref smoke test returned an unexpected DOI")
     return {
         "schema_version": "1.0",
         "provider": "Crossref",

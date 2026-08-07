@@ -1,0 +1,10 @@
+{
+  "request_id": "cc7-judge0-20260808T0549p0700",
+  "tool": "judge0_execute",
+  "query": "",
+  "code": "import random\nrandom.seed(7)\nN=50000\nmiss_decl=0\nmiss_derived=0\nfor _ in range(N):\n    a,b=random.sample(range(2000),2)\n    true={a,b}\n    claimed=set(true)\n    if random.random()<0.30:\n        claimed.remove(random.choice(tuple(claimed)))\n    changed={random.choice(tuple(true))} if random.random()<0.5 else {random.randrange(2000)}\n    conflict=bool(changed & true)\n    if conflict and not (changed & claimed): miss_decl+=1\n    derived={a,b}\n    if conflict and not (changed & derived): miss_derived+=1\nprint({'n':N,'trusted_decl_miss_rate':miss_decl/N,'derived_misses':miss_derived})\n",
+  "options": {"stdin": ""},
+  "allow_cost": false,
+  "origin_actor": "chatgpt-secondary",
+  "run_id": "claycode-20260808T0549p0700-chatgpt-secondary"
+}

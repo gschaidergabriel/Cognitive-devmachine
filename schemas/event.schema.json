@@ -1,0 +1,29 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"event.schema.json",
+  "type":"object",
+  "required":["event_id","event_type"],
+  "properties":{
+    "event_id":{"type":"string","minLength":3},
+    "timestamp":{"type":"string"},
+    "session_id":{"type":"string"},
+    "prompt_id":{"type":"string"},
+    "event_type":{"type":"string","minLength":1},
+    "system_layers":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "domains":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "topic_packet_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "source_refs":{"type":"array","items":{"type":"string"}},
+    "parent_event_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "reasoning_summary":{"type":"string"},
+    "claim_ids_created_or_updated":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "hypothesis_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "experiment_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "result":{},
+    "status":{"enum":["CURRENT","OPEN","SUPERSEDED","REFUTED","NEGATIVE","LOCAL_ONLY","NEGATIVE_RESULT","CONTEXT_ONLY"]},
+    "confidence":{},
+    "falsifier_or_next_test":{"type":"string"},
+    "artifact_refs":{"type":"array","items":{"type":"string"}},
+    "provenance":{"type":"object"}
+  },
+  "additionalProperties":true
+}

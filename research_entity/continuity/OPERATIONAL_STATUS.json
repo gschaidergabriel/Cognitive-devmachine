@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "purpose":"Operational backend status. Not scientific research state and not part of the RAE scientific revision hash.",
   "entity_id":"frank-project-global-research-entity",
   "canonical_revision":2,
@@ -11,8 +11,15 @@
   "tiered_boot_status":"ACTIVE",
   "embedded_materialization":"SQLITE_DERIVED_CACHE",
   "schema_validation":"JSON_SCHEMA_CI_ACTIVE",
+  "provenance_validation":"MULTI_RESEARCHER_PROVENANCE_CI_ACTIVE",
+  "research_actor_registry":"ACTIVE",
+  "lead_researcher":"claude-code-lead",
+  "secondary_researcher":"chatgpt-secondary",
+  "evidence_precedence":"EVIDENCE_OVER_RESEARCHER_RANK",
+  "claude_code_onboarding":"READY_CLAUDE_MD_PLUS_INTRODUCTION",
+  "shared_canonical_rule":"ONE_ENTITY_NO_SPLIT_BRAIN",
   "worker_preflight":"ACTIVE_FOR_RUNNER_BASED_WORKERS",
   "chatgpt_project_membership":"SOURCE_SENTINEL_PLUS_PROJECT_INSTRUCTION_DEPENDENT",
   "scientific_revision_changed_by_these_operational_updates":false,
-  "note":"The canonical field sync_status is historical state from the revision-2 export. Use this operational file for current backend/deployment status; do not create a scientific revision merely to update deployment metadata."
+  "note":"The canonical field sync_status is historical state from the revision-2 export. Use this operational file for current backend/deployment status; do not create a scientific revision merely to update deployment metadata. Claude Code onboarding/governance changes are operational until empirical research changes the scientific state."
 }

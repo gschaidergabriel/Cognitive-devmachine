@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.1",
+  "run_id":"clay-20260808T0605p0700-chatgpt-secondary",
+  "trigger":"clay",
+  "generated_at":"2026-08-08T06:05:00+07:00",
+  "protocol":"research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "actor_id":"chatgpt-secondary",
+  "branch_priority":["clay","frank","gwt","emergenz","claycode","hyperposition"],
+  "branches":[
+    {"branch":"clay","latest_material":"clay-20260808T0542p0700-chatgpt-secondary","complete":true,"status":"OPEN","primary_ref":"research_entity/topic_packets/clay-g7-hierarchical-semantic-causal-kernel/SUMMARY.md","candidate":"HSCK-G7 Hierarchical Semantic Causal Kernel"},
+    {"branch":"frank","latest_material":"20260808T0559+0700-chatgpt-secondary-r2","complete":true,"status":"OPEN","primary_ref":"research_entity/trigger_runs/frank/20260808T0559+0700-chatgpt-secondary-r2/FINAL_REPORT.md","candidate":"Hybrid Freshness and Multi-Timescale Semantic Runtime"},
+    {"branch":"gwt","latest_material":"gwt-20260808T0549p0700-chatgpt-secondary","complete":true,"status":"OPEN","primary_ref":"research_entity/trigger_runs/gwt/gwt-20260808T0549p0700-chatgpt-secondary/FINAL_REPORT.md","candidate":"logical workspace register + selective causal push/pull + causal freshness"},
+    {"branch":"emergenz","latest_material":"KMP-EMERGENCE-CERTIFICATE","complete":false,"status":"CURRENT_METHOD","primary_ref":"research_entity/knowledge_micro_packets/synthetic_clay/emergence-certificate.md","note":"No newer completed emergenz trigger run discovered in current repository commit stream; method head retained without inventing branch evidence."},
+    {"branch":"claycode","latest_material":"claycode-20260808T0549p0700-chatgpt-secondary","complete":true,"status":"OPEN","primary_ref":"research_entity/trigger_runs/claycode/claycode-20260808T0549p0700-chatgpt-secondary/FINAL_REPORT.md","candidate":"CC-RC1.2 Transition Closure Capsule"},
+    {"branch":"hyperposition","latest_material":"hyperposition-20260808T0550p0700-chatgpt-secondary","complete":true,"status":"OPEN","primary_ref":"research_entity/trigger_runs/hyperposition/hyperposition-20260808T0550p0700-chatgpt-secondary/FINAL_REPORT.md","candidate":"HYP-RC2 Three-Topology Scoped Delta Hyperposition"}
+  ],
+  "cross_branch_findings":[
+    {"id":"XG8-001","branches":["frank","gwt","claycode","hyperposition"],"conflict":"Hybrid/on-demand freshness depends on relevant dependency scope, but CC7/H2 show incomplete dependency or invariant scope can silently admit stale/conflicting transitions.","resolution_status":"NARROWED","g8_direction":"coverage-aware causal freshness: scoped fast path only with trusted coverage certificate; uncertainty escalates validation/fanout/coordination."},
+    {"id":"XG8-002","branches":["gwt","frank","clay"],"conflict":"Selective broadcast reduces fanout but GWT proxy still misses causal audiences under imperfect router/rescue.","resolution_status":"OPEN","g8_direction":"confidence/safety-class adaptive fallback to wider or full broadcast; missed-causal-audience rate remains hard shadow metric."},
+    {"id":"XG8-003","branches":["clay","frank","gwt"],"conflict":"Event/dirty-triggered refresh improves semantic freshness but can cause controller chatter or refresh storms under volatile state.","resolution_status":"OPEN","g8_direction":"hysteresis, dwell, coalescing and value-of-information scheduling before recompute/broadcast."},
+    {"id":"XG8-004","branches":["clay","hyperposition"],"conflict":"G7 spectral radius rho(M_delta) captures asymptotic amplification but can miss finite-horizon transient amplification in non-normal typed propagation.","resolution_status":"NARROWED","g8_direction":"retain rho as one diagnostic but add transient-gain/non-normality uncertainty shadows."},
+    {"id":"XG8-005","branches":["hyperposition","clay"],"conflict":"Incremental maintenance is not universally cheaper; H2 measured a rebuild crossover while G7 adaptive materialization was proxy-optimal only under its workload.","resolution_status":"ALIGNED","g8_direction":"unify incremental/partial/full rebuild and arrangement materialization under measured impact-tail economics."},
+    {"id":"XG8-006","branches":["emergenz","gwt","clay"],"conflict":"Self-sustaining recurrence/eigenmodes can look organized without functional causal contribution.","resolution_status":"OPEN","g8_direction":"treat recurrence/amplification as candidate signals only; require prospective lesion/rescue/OOD and multiscale evidence for emergence designation."}
+  ],
+  "shared_ancestry_warning":"Agreement among these branches often reuses the same G4-G7 synthetic experiments and literature. Cross-branch repetition is not independent replication.",
+  "requirements":{"all_connected_branches_ingested":true,"fresh_material_included":true,"evidence_status_preserved":true,"contradictions_scanned":true,"cross_links_required_on_writeback":true},
+  "strong_promotion_gate":"No strong promotion from this run without live/independent evidence beyond shared synthetic ancestry."
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "purpose": "Registry of external research, verification and execution capabilities available to FRANK/RAE runtimes. Credential values live only in the designated private token store, never in this registry.",
   "secret_policy": {
     "canonical_private_store": "research_entity/private/API_TOKENS.env",
@@ -26,12 +26,16 @@
     {
       "tool_name": "arxiv_search",
       "provider": "arXiv",
+      "script": "tools/arxiv_search.py",
       "class": "preprint_search",
       "requires_secret": [],
       "credential_required": false,
+      "auth_transport": "none",
       "preferred_for": ["preprint discovery", "technical paper retrieval"],
       "evidence_class": "external_preprint",
-      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+      "status": "RUNTIME_VERIFIED",
+      "verification_receipt": "research_entity/runtime/arxiv_verification.json",
+      "verified_at": "2026-08-07T21:29:54.774171+00:00"
     },
     {
       "tool_name": "semantic_scholar_search",

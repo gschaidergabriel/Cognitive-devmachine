@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0",
+  "schema_version": "2.1",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -13,6 +13,7 @@
     "automatic quota/rate-limit feedback from bridge results into TOOL_QUOTA_STATE.json",
     "mandatory cross-trigger research mesh preflight including fresh incomplete runs, Topic Packets and micro-packets via tools/research_interconnect_preflight.py",
     "FRANK architecture source contract in ClayCode semantic IR via tools/frank_architecture_contract.py",
+    "Goodman anti-echo FRANK↔ClayCode feedback contract via tools/goodman_filter_check.py",
     "visible status footer structure checking via tools/status_footer_check.py",
     "OpenAlex runtime verified with private-repo credential",
     "arXiv runtime verified credential-free",
@@ -40,7 +41,8 @@
     "branches": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
     "freshness_rule": "Consume newer incomplete run artifacts plus Topic Packets/micro-packets when they supersede the latest final report.",
     "frank_priority": ["clay", "claycode", "gwt", "hyperposition", "emergenz", "frank"],
-    "rule": "Every scientific trigger ingests all connected branches before Fusion 1, scans contradictions and writes cross-links back. Clay is the integrated master foundry. FRANK uses newest Clay research as primary scientific architecture foundation and deeply ingests ClayCode as primary architecture/implementation IR."
+    "claycode_priority": ["frank", "clay", "gwt", "hyperposition", "emergenz", "claycode"],
+    "rule": "Every scientific trigger ingests all connected branches before Fusion 1, scans contradictions and writes cross-links back. Clay is the integrated master foundry. FRANK uses newest Clay research as primary scientific architecture foundation and deeply ingests ClayCode as primary architecture/implementation IR. ClayCode uses newest FRANK research/architecture as primary target feedback and must critically verify it rather than echo it."
   },
   "frank_architecture": {
     "source_language": "ClayCode semantic IR",
@@ -48,6 +50,16 @@
     "human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md",
     "validator": "tools/frank_architecture_contract.py",
     "rule": "A FRANK run that produces only prose/diagrams/host-language code is incomplete. The architecture source of truth is ClayCode semantic IR; the deterministic host/bootstrap/capability authority remains explicitly non-self-authorizing."
+  },
+  "frank_claycode_feedback": {
+    "status": "RUNTIME_VERIFIED",
+    "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+    "validator": "tools/goodman_filter_check.py",
+    "required_claycode_artifact": "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+    "completion_command": "python tools/goodman_filter_check.py validate-run research_entity/trigger_runs/claycode/<run_id>",
+    "verdicts": ["SUPPORTED", "REFINED", "REFUTED", "UNRESOLVED"],
+    "rule": "ClayCode must read the newest FRANK run and latest FRANK_ARCHITECTURE.claycode.json when available, then independently test materially imported assumptions. Shared FRANK↔ClayCode source/experiment ancestry is collapsed into one evidence family and never counts as independent replication. SUPPORTED/REFINED require independent checks; REFUTED writes negative/supersession evidence; UNRESOLVED cannot be silently promoted.",
+    "contract_receipt": "research_entity/runtime/CONTRACT_HEALTH.json"
   },
   "research_orchestration": {
     "policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
@@ -65,7 +77,7 @@
     "request_dir": "research_entity/runtime/tool_requests",
     "result_dir": "research_entity/runtime/tool_results",
     "quota_feedback": "research_entity/runtime/TOOL_QUOTA_STATE.json",
-    "rule": "GitHub-connected workers unable to execute repo-local adapters directly enqueue an allowlisted request; Actions executes it with private credentials, writes a sanitized result, and caches 402/429 states for automatic future fallback."
+    "rule": "GitHub-connected workers unable to execute repo-local provider adapters directly enqueue an allowlisted request; Actions executes it with private credentials, writes a sanitized result, and caches 402/429 states for automatic future fallback."
   },
   "visible_response": {
     "protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
@@ -115,6 +127,10 @@
       "frank_clay_primary_foundation",
       "frank_claycode_deep_secondary_foundation",
       "frank_claycode_architecture_source_contract",
+      "claycode_frank_primary_feedback",
+      "claycode_goodman_anti_echo_review",
+      "claycode_goodman_review_bound_to_exact_preflight",
+      "goodman_rejects_circular_support_without_independent_check",
       "provider_plan",
       "covering_fallback_validation",
       "status_footer_and_short_commands"
@@ -126,6 +142,7 @@
     "hosted Piston cannot be runtime-verified until PISTON_API_TOKEN is configured or a self-hosted PISTON_API_URL is supplied",
     "Semantic Scholar public shared-pool requests may transiently rate-limit; use OpenAlex/arXiv/Crossref fallback",
     "Hugging Face model inference remains automatically bypassed until quota resets or credit is added",
+    "ClayCode runs created before the Goodman contract was introduced are historical/pre-contract unless explicitly retrofitted and validated",
     "remote writes require reread verification"
   ],
   "rule": "This file describes current operational capability. Canonical scientific self-model remains revision 2 until a justified research-state promotion occurs."

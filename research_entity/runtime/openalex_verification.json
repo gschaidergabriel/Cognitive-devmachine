@@ -1,10 +1,43 @@
 {
-  "schema_version": "1.0",
   "provider": "OpenAlex",
   "tool": "openalex_search",
   "status": "RUNTIME_VERIFIED",
-  "checked_at": "2026-08-07T21:36:27.855848+00:00",
+  "checked_at": "2026-08-07T22:49:41.051336+00:00",
   "credential_source": "private_repo_token_store",
-  "credential_value_persisted_here": false,
-  "verification_endpoint_class": "rate-limit"
+  "rate_limit": {
+    "api_key": "[REDACTED]",
+    "is_grandfathered": false,
+    "rate_limit": {
+      "daily_budget_usd": 1,
+      "daily_used_usd": 0.0001,
+      "daily_remaining_usd": 0.9999,
+      "prepaid_balance_usd": 0,
+      "prepaid_remaining_usd": 0,
+      "prepaid_expires_at": null,
+      "resets_at": "2026-08-08T00:00:00.000Z",
+      "resets_in_seconds": 4219,
+      "endpoint_costs_usd": {
+        "singleton": 0,
+        "list": 0.0001,
+        "search": 0.001,
+        "content": 0.01,
+        "semantic": 0.001,
+        "text": 0.01
+      },
+      "credits_limit": 10000,
+      "credits_used": 1,
+      "credits_remaining": 9999,
+      "onetime_credits_balance": 0,
+      "onetime_credits_remaining": 0,
+      "onetime_credits_expires_at": null,
+      "credit_costs": {
+        "singleton": 0,
+        "list": 1,
+        "search": 10,
+        "content": 100,
+        "semantic": 10,
+        "text": 100
+      }
+    }
+  }
 }

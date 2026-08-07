@@ -1,0 +1,200 @@
+{
+  "schema_version": "1.0",
+  "checked_at": "2026-08-07T22:50:00.733921+00:00",
+  "started_at": "2026-08-07T22:49:40.748434+00:00",
+  "scope": "provider credential/runtime smoke health; not worker-surface invocability",
+  "results": [
+    {
+      "tool": "openalex_search",
+      "provider": "OpenAlex",
+      "status": "RUNTIME_VERIFIED",
+      "receipt": {
+        "provider": "OpenAlex",
+        "tool": "openalex_search",
+        "status": "RUNTIME_VERIFIED",
+        "checked_at": "2026-08-07T22:49:41.051336+00:00",
+        "credential_source": "private_repo_token_store",
+        "rate_limit": {
+          "api_key": "[REDACTED]",
+          "is_grandfathered": false,
+          "rate_limit": {
+            "daily_budget_usd": 1,
+            "daily_used_usd": 0.0001,
+            "daily_remaining_usd": 0.9999,
+            "prepaid_balance_usd": 0,
+            "prepaid_remaining_usd": 0,
+            "prepaid_expires_at": null,
+            "resets_at": "2026-08-08T00:00:00.000Z",
+            "resets_in_seconds": 4219,
+            "endpoint_costs_usd": {
+              "singleton": 0,
+              "list": 0.0001,
+              "search": 0.001,
+              "content": 0.01,
+              "semantic": 0.001,
+              "text": 0.01
+            },
+            "credits_limit": 10000,
+            "credits_used": 1,
+            "credits_remaining": 9999,
+            "onetime_credits_balance": 0,
+            "onetime_credits_remaining": 0,
+            "onetime_credits_expires_at": null,
+            "credit_costs": {
+              "singleton": 0,
+              "list": 1,
+              "search": 10,
+              "content": 100,
+              "semantic": 10,
+              "text": 100
+            }
+          }
+        }
+      },
+      "receipt_path": "research_entity/runtime/openalex_verification.json"
+    },
+    {
+      "tool": "arxiv_search",
+      "provider": "arXiv",
+      "status": "RUNTIME_VERIFIED",
+      "receipt": {
+        "provider": "arXiv",
+        "tool": "arxiv_search",
+        "status": "RUNTIME_VERIFIED",
+        "checked_at": "2026-08-07T22:49:41.326954+00:00",
+        "credential_required": false,
+        "verification_endpoint_class": "api_query"
+      },
+      "receipt_path": "research_entity/runtime/arxiv_verification.json"
+    },
+    {
+      "tool": "semantic_scholar_search",
+      "provider": "Semantic Scholar",
+      "status": "RATE_LIMITED",
+      "error_type": "HTTPError",
+      "error": "HTTP Error 429: ",
+      "receipt_path": "research_entity/runtime/semantic_scholar_verification.json"
+    },
+    {
+      "tool": "crossref_lookup",
+      "provider": "Crossref",
+      "status": "HTTP_ERROR",
+      "error_type": "HTTPError",
+      "error": "HTTP Error 406: Not Acceptable",
+      "receipt_path": "research_entity/runtime/crossref_verification.json"
+    },
+    {
+      "tool": "tavily_search",
+      "provider": "Tavily",
+      "status": "RUNTIME_VERIFIED",
+      "receipt": {
+        "schema_version": "1.0",
+        "provider": "Tavily",
+        "tool": "tavily_search",
+        "status": "RUNTIME_VERIFIED",
+        "checked_at": "2026-08-07T22:49:51.410813+00:00",
+        "credential_source": "private_repo_token_store",
+        "credential_value_persisted_here": false,
+        "verification_endpoint_class": "search",
+        "request_id": "5ba4daef-8e77-4338-9bce-1e8cee775653",
+        "usage": null
+      },
+      "receipt_path": "research_entity/runtime/tavily_verification.json"
+    },
+    {
+      "tool": "duckduckgo_search",
+      "provider": "DuckDuckGo/DDGS",
+      "status": "RUNTIME_VERIFIED",
+      "receipt": {
+        "schema_version": "1.0",
+        "provider": "DuckDuckGo/DDGS",
+        "tool": "duckduckgo_search",
+        "status": "RUNTIME_VERIFIED",
+        "checked_at": "2026-08-07T22:49:57.023980+00:00",
+        "credential_required": false,
+        "verification_class": "text_search"
+      },
+      "receipt_path": "research_entity/runtime/ddgs_verification.json"
+    },
+    {
+      "tool": "exa_search",
+      "provider": "Exa",
+      "status": "RUNTIME_VERIFIED",
+      "receipt": {
+        "schema_version": "1.0",
+        "provider": "Exa",
+        "tool": "exa_search",
+        "status": "RUNTIME_VERIFIED",
+        "checked_at": "2026-08-07T22:49:58.082452+00:00",
+        "credential_source": "private_repo_token_store",
+        "credential_value_persisted_here": false,
+        "verification_endpoint_class": "search",
+        "request_id": "6971dc80f145f99d585e6b804202db5e",
+        "cost_dollars": {
+          "total": 0.007,
+          "search": {
+            "neural": 0.007
+          }
+        }
+      },
+      "receipt_path": "research_entity/runtime/exa_verification.json"
+    },
+    {
+      "tool": "e2b_sandbox",
+      "provider": "E2B",
+      "status": "CREDENTIAL_UNAVAILABLE",
+      "error_type": "SecretError",
+      "error": "Credential E2B_API_KEY is not configured",
+      "receipt_path": "research_entity/runtime/e2b_verification.json"
+    },
+    {
+      "tool": "judge0_execute",
+      "provider": "Judge0",
+      "status": "RUNTIME_VERIFIED",
+      "receipt": {
+        "schema_version": "1.0",
+        "provider": "Judge0",
+        "tool": "judge0_execute",
+        "status": "RUNTIME_VERIFIED",
+        "checked_at": "2026-08-07T22:50:00.346525+00:00",
+        "endpoint": "https://ce.judge0.com",
+        "credential_source": null,
+        "verification_class": "remote_python_execution"
+      },
+      "receipt_path": "research_entity/runtime/judge0_verification.json"
+    },
+    {
+      "tool": "piston_execute",
+      "provider": "Piston",
+      "status": "AUTH_FAILED",
+      "error_type": "HTTPError",
+      "error": "HTTP Error 401: Unauthorized",
+      "receipt_path": "research_entity/runtime/piston_verification.json"
+    },
+    {
+      "tool": "huggingface_inference",
+      "provider": "Hugging Face Inference Providers",
+      "status": "RUNTIME_VERIFIED",
+      "receipt": {
+        "schema_version": "1.0",
+        "provider": "Hugging Face Inference Providers",
+        "tool": "huggingface_inference",
+        "status": "RUNTIME_VERIFIED",
+        "checked_at": "2026-08-07T22:50:00.732117+00:00",
+        "credential_source": "private_repo_token_store",
+        "credential_value_persisted_here": false,
+        "verification_endpoint_class": "v1/models",
+        "inference_credit_spent": false
+      },
+      "receipt_path": "research_entity/runtime/huggingface_verification.json"
+    }
+  ],
+  "counts": {
+    "RUNTIME_VERIFIED": 7,
+    "RATE_LIMITED": 1,
+    "HTTP_ERROR": 1,
+    "CREDENTIAL_UNAVAILABLE": 1,
+    "AUTH_FAILED": 1
+  },
+  "worker_invocation_note": "A RUNTIME_VERIFIED provider may still be unavailable to a ChatGPT worker unless an invokable connector or the repo-runner bridge is used."
+}

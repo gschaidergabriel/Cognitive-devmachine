@@ -1,16 +1,38 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "2.0",
+  "matching": "trimmed_full_message_case_insensitive_exact",
+  "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+  "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
   "commands": {
     "dump": {
-      "match": "trimmed_case_insensitive_exact",
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
-      "description": "Freeze and analyze the dump intake queue, fuse it with current RAE knowledge, generate hypotheses, research hypothesis domains on arXiv/GitHub/Reddit, refusion/pattern-match, materialize surgical/topic packets, weave justified OPEN knowledge into RAE, validate, then archive verified originals.",
-      "input_paths": ["dump/", "current-session attachments explicitly supplied as dump input"],
-      "archive_path_template": "dump archive/<batch_id>/original/",
-      "default_epistemic_class": "DUMP_DERIVED_PREPROCESSED_HYPOTHESIS",
-      "default_claim_status": "OPEN",
-      "requires_independent_support_for_promotion": true,
-      "failure_policy": "leave affected originals in dump and record failure/SYNC_PENDING"
+      "kind": "research_intake",
+      "requires_independent_support_for_promotion": true
+    },
+    "clay": {
+      "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
+      "kind": "integrated_research_foundry"
+    },
+    "gwt": {
+      "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
+      "kind": "domain_research"
+    },
+    "frank": {
+      "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
+      "kind": "domain_research"
+    },
+    "emergenz": {
+      "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
+      "kind": "domain_research"
+    },
+    "claycode": {
+      "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
+      "kind": "domain_research"
+    },
+    "hyperposition": {
+      "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
+      "kind": "domain_research"
     }
-  }
+  },
+  "rule": "Reserved commands fire only on exact full-message match. They are handled before ordinary task routing. Every trigger run uses MASTER_RESEARCH_TRIGGER_PROTOCOL.md unless the command is dump, and every substantive visible response ends with STATUS_FOOTER_PROTOCOL.md."
 }

@@ -1,33 +1,50 @@
 #!/usr/bin/env python3
 """Build a machine-readable cross-trigger research foundation manifest.
 
-Every RAE research trigger can use this before Fusion 1 to discover current material
-from all connected branches. The script scans repository-local trigger runs and records
-latest material without changing evidence status.
+Every RAE research trigger uses this before Fusion 1. It discovers both completed runs
+and fresh/in-progress branch material (trigger-run artifacts, Topic Packets and knowledge
+micro-packets) so cross-branch research cannot lag behind a worker that has not yet
+written FINAL_REPORT.md.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 TRIGGER_RUNS = ROOT / "research_entity" / "trigger_runs"
+TOPIC_PACKETS = ROOT / "research_entity" / "topic_packets"
+MICRO_PACKETS = ROOT / "research_entity" / "knowledge_micro_packets"
 BRANCHES = ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
 
 PRIORITY = {
     "clay": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
-    "frank": ["clay", "gwt", "claycode", "hyperposition", "emergenz", "frank"],
+    # FRANK is an architecture projection of Clay and is intended to be implemented /
+    # represented in ClayCode, so ClayCode is deliberately the second-deepest input.
+    "frank": ["clay", "claycode", "gwt", "hyperposition", "emergenz", "frank"],
     "gwt": ["clay", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
     "emergenz": ["clay", "gwt", "hyperposition", "frank", "claycode", "emergenz"],
     "claycode": ["clay", "frank", "gwt", "hyperposition", "emergenz", "claycode"],
     "hyperposition": ["clay", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
 }
 
+ALIASES = {
+    "clay": ["clay", "synthetic-clay", "synthetic_clay"],
+    "frank": ["frank", "frankenstein"],
+    "gwt": ["gwt", "workspace", "global-workspace", "global_workspace"],
+    "emergenz": ["emergenz", "emergence", "causal-emergence", "causal_emergence"],
+    "claycode": ["claycode", "xeno", "xeno-claycode", "xeno_claycode", "cc6", "cc7"],
+    "hyperposition": ["hyperposition", "hypergraph", "codependency", "h1", "h2"],
+}
+
 ARTIFACT_NAMES = [
     "FINAL_REPORT.md",
     "HYPOTHESES.md",
+    "HYPOTHESES.json",
     "EXPERIMENTS.json",
     "EXPERIMENTS.jsonl",
     "NEGATIVE_RESULTS.md",
@@ -35,38 +52,102 @@ ARTIFACT_NAMES = [
     "RUN_MANIFEST.json",
     "TOOL_EXECUTION_MANIFEST.json",
     "INTERCONNECT_MANIFEST.json",
+    "ARCHITECTURE.md",
+    "ARCHITECTURE.json",
+    "FRANK_ARCHITECTURE.claycode.json",
 ]
 
+META_RE = re.compile(r"<!--\s*RAE_META\s*\n(\{.*?\})\s*\nRAE_META\s*-->", re.S)
 
-def _run_score(path: Path) -> tuple[float, str]:
+
+def _rel(path: Path) -> str:
+    return str(path.relative_to(ROOT))
+
+
+def _read_text(path: Path, limit: int = 40000) -> str:
     try:
-        mt = max((p.stat().st_mtime for p in path.rglob("*") if p.is_file()), default=path.stat().st_mtime)
-    except FileNotFoundError:
-        mt = 0.0
-    return mt, path.name
+        return path.read_text(encoding="utf-8", errors="replace")[:limit]
+    except OSError:
+        return ""
 
 
-def _completed_runs(branch: str) -> list[Path]:
+def _meta(path: Path) -> dict[str, Any]:
+    text = _read_text(path)
+    if path.suffix.lower() == ".json":
+        try:
+            obj = json.loads(text)
+            return obj if isinstance(obj, dict) else {}
+        except json.JSONDecodeError:
+            return {}
+    m = META_RE.search(text)
+    if m:
+        try:
+            obj = json.loads(m.group(1))
+            return obj if isinstance(obj, dict) else {}
+        except json.JSONDecodeError:
+            pass
+    return {}
+
+
+def _material_score(path: Path) -> tuple[str, str]:
+    meta = _meta(path)
+    stamp = str(meta.get("updated_at") or meta.get("created_at") or meta.get("run_id") or "")
+    return stamp, _rel(path)
+
+
+def _matches_branch(path: Path, branch: str) -> bool:
+    aliases = ALIASES[branch]
+    hay = (_rel(path) + "\n" + _read_text(path, 12000)).lower()
+    return any(alias.lower() in hay for alias in aliases)
+
+
+def _runs(branch: str, include_incomplete: bool = True) -> list[Path]:
     base = TRIGGER_RUNS / branch
     if not base.exists():
         return []
-    runs = [p for p in base.iterdir() if p.is_dir() and (p / "FINAL_REPORT.md").exists()]
-    return sorted(runs, key=_run_score, reverse=True)
+    runs = [p for p in base.iterdir() if p.is_dir()]
+    if not include_incomplete:
+        runs = [p for p in runs if (p / "FINAL_REPORT.md").exists()]
+    # Run ids are timestamp-rich and therefore a more stable checkout ordering signal
+    # than filesystem mtimes.
+    return sorted(runs, key=lambda p: p.name, reverse=True)
 
 
 def _artifacts(run: Path) -> list[str]:
-    found = []
+    found: list[str] = []
     for name in ARTIFACT_NAMES:
         p = run / name
         if p.exists():
-            found.append(str(p.relative_to(ROOT)))
-    # Include branch-run architecture/evidence files not covered by the canonical names.
+            found.append(_rel(p))
     for p in sorted(run.iterdir()):
         if p.is_file() and p.suffix.lower() in {".md", ".json", ".jsonl"}:
-            rel = str(p.relative_to(ROOT))
+            rel = _rel(p)
             if rel not in found:
                 found.append(rel)
     return found
+
+
+def _matching_material(base: Path, branch: str, limit: int) -> list[str]:
+    if not base.exists():
+        return []
+    candidates = []
+    for p in base.rglob("*"):
+        if not p.is_file() or p.suffix.lower() not in {".md", ".json", ".jsonl"}:
+            continue
+        if _matches_branch(p, branch):
+            candidates.append(p)
+    candidates.sort(key=_material_score, reverse=True)
+    return [_rel(p) for p in candidates[:limit]]
+
+
+def _depth(trigger: str, branch: str, base_depth: int) -> tuple[int, int]:
+    run_depth = max(1, base_depth)
+    packet_limit = 8
+    if trigger == "frank" and branch == "clay":
+        return max(run_depth, 3), 12
+    if trigger == "frank" and branch == "claycode":
+        return max(run_depth, 4), 20
+    return run_depth, packet_limit
 
 
 def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
@@ -74,21 +155,29 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
         raise ValueError(f"unknown connected trigger: {trigger}")
     branches = []
     for rank, branch in enumerate(PRIORITY[trigger], 1):
-        runs = _completed_runs(branch)[:max(1, history_per_branch)]
+        run_depth, packet_limit = _depth(trigger, branch, history_per_branch)
+        all_runs = _runs(branch, include_incomplete=True)[:run_depth]
+        completed = [r for r in all_runs if (r / "FINAL_REPORT.md").exists()]
         branches.append({
             "branch": branch,
             "priority_rank": rank,
-            "latest_completed_run": runs[0].name if runs else None,
+            "run_history_depth": run_depth,
+            "latest_run": all_runs[0].name if all_runs else None,
+            "latest_run_complete": bool(all_runs and (all_runs[0] / "FINAL_REPORT.md").exists()),
+            "latest_completed_run": completed[0].name if completed else None,
             "runs": [
                 {
                     "run_id": r.name,
+                    "complete": (r / "FINAL_REPORT.md").exists(),
                     "artifacts": _artifacts(r),
                 }
-                for r in runs
+                for r in all_runs
             ],
+            "topic_packets": _matching_material(TOPIC_PACKETS, branch, packet_limit),
+            "knowledge_micro_packets": _matching_material(MICRO_PACKETS, branch, packet_limit),
         })
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "trigger": trigger,
         "run_id": run_id,
@@ -97,6 +186,7 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
         "branches": branches,
         "requirements": {
             "must_ingest_all_connected_branches": True,
+            "must_include_fresh_incomplete_material": True,
             "must_preserve_evidence_status": True,
             "must_scan_cross_branch_contradictions": True,
             "must_write_back_cross_links": True,
@@ -104,6 +194,8 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
         },
         "special_rules": {
             "frank_requires_latest_clay_architecture_as_primary_foundation": trigger == "frank",
+            "frank_requires_deep_claycode_architecture_input": trigger == "frank",
+            "frank_architecture_source_language": "ClayCode semantic IR" if trigger == "frank" else None,
             "clay_is_integrated_master_foundry": trigger == "clay",
         },
     }

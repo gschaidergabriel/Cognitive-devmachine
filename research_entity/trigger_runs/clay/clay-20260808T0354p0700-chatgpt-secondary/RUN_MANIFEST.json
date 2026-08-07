@@ -1,0 +1,39 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-20260808T0354p0700-chatgpt-secondary",
+  "trigger":"clay",
+  "status":"COMPLETED_WITH_OPEN_LIVE_FALSIFIERS",
+  "actor_id":"chatgpt-secondary",
+  "actor_role":"SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "started_at":"2026-08-08T03:54:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "active_trigger_protocols":["research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md","research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md"],
+  "context_receipt":{
+    "canonical":true,
+    "g3_evidence_graph":true,
+    "g3_hypothesis_ledger":true,
+    "g3_negative_results":true,
+    "active_experiments":true,
+    "selected_micro_packets":["KMP-GWT-CAUSAL-EPISODE","KMP-HYPERPOSITION-SEMANTICS","KMP-CLAY-MULTIPLANE-WORLD","KMP-CLAY-ACTIVATION-NOT-TRUTH","KMP-CLAY-ADAPTIVE-COUPLING","KMP-EMERGENCE-CERTIFICATE","KMP-CLAY-4B-TRANSFORM-KERNEL","KMP-CLAYCODE-AUTHORITY-BOUNDARY","KMP-CLAY-ANTI-GOODHART-ACTIVE-CONTEXT"],
+    "raw_archive_eager_load":false
+  },
+  "hypothesis_generation":{"generation_1_count":64,"generation_2_count":20,"padding_used":false},
+  "external_research_classes":["peer_reviewed_primary_or_review","recent_preprint","official_documentation","github_implementation","reddit_practitioner_anecdote"],
+  "experiments":[
+    {"id":"EXP-G4-NARY-ROLE-001","class":"synthetic_proxy","samples":20000,"result":"naive_pairwise_exact=0.5011; role_aware_reified_exact=1.0"},
+    {"id":"EXP-G4-INCREMENTAL-002","class":"synthetic_proxy","result":"mean_work_fraction from 0.00237 at indegree1 to 0.21363 at indegree8"},
+    {"id":"EXP-G4-KAPPA-003","class":"synthetic_proxy","result":"best_k spans 0.05..0.95; regime-oracle MSE 54.7% below best global fixed-k MSE"},
+    {"id":"EXP-G4-REENTRY-004","class":"synthetic_proxy","seeds":120,"result":"truthful-vs-shuffled MSE advantage=0.18084; bootstrap95=[0.17329,0.18818]"},
+    {"id":"EXP-G4-GWT-VALIDATOR-005","class":"contract_mutation_test","mutants":6000,"result":"presence rejection=0.32567; causal rejection=1.0; valid acceptance=1.0"},
+    {"id":"EXP-G4-RETRIEVAL-GOODHART-006","class":"synthetic_proxy","tasks":5000,"result":"topk chain complete=0.0002; causal-path chain complete=1.0"},
+    {"id":"EXP-G4-CLAYCODE-GATEWAY-007","class":"independent_reference_harness","auth_attacks":10000,"result":"attack accept rate=0.0; not production certification"},
+    {"id":"EXP-G4-QWEN-MEMORY-008","class":"architecture_analytic","result":"FP16 KV estimate 0.5625GiB@4k,1.125GiB@8k,2.25GiB@16k,4.5GiB@32k"}
+  ],
+  "architecture_candidate":"semantic-causal-kernel",
+  "canonical_promotion":"NOT_PERFORMED",
+  "promotion_reason":"new evidence remains synthetic/analytic/external and live FRANK transfer blockers remain open",
+  "highest_information_next_test":"EXP-LIVE-GWT-LESION truthful-vs-shuffled-vs-delayed-vs-removed reentry factorial",
+  "report":"research_entity/trigger_runs/clay/clay-20260808T0354p0700-chatgpt-secondary/FINAL_REPORT.md"
+}

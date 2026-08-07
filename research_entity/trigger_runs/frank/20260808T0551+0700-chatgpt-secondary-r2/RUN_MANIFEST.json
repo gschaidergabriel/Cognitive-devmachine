@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260808T0551+0700-chatgpt-secondary-r2",
+  "trigger": "frank",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","role":"SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "project_frankenstein_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "parent_research_run": "20260808T0520+0700-chatgpt-secondary-r2",
+  "artifacts": {
+    "final_report": "research_entity/trigger_runs/frank/20260808T0551+0700-chatgpt-secondary-r2/FINAL_REPORT.md",
+    "tool_manifest": "research_entity/trigger_runs/frank/20260808T0551+0700-chatgpt-secondary-r2/TOOL_EXECUTION_MANIFEST.json",
+    "experiment": "research_entity/trigger_runs/frank/20260808T0551+0700-chatgpt-secondary-r2/EXP_GWS_CALLBACK_BACKPRESSURE.json",
+    "topic_packet": "research_entity/topic_packets/frank-workspace-causal-reachability/PACKET.json",
+    "micro_packets": [
+      "research_entity/knowledge_micro_packets/frank_gwt/KMP-FRANK-20260808-GWS-STATIC-REACHABILITY.md",
+      "research_entity/knowledge_micro_packets/frank_gwt/KMP-FRANK-20260808-GWS-NO-COMPETITION.md",
+      "research_entity/knowledge_micro_packets/scheduling_concurrency/KMP-FRANK-20260808-GWS-DELIVERY-CLASSES.md"
+    ]
+  },
+  "research_delta": {
+    "canonical_claim_promotions": 0,
+    "canonical_claim_refutations": 0,
+    "new_open_micro_packets": 3,
+    "new_open_topic_packets": 1,
+    "new_synthetic_experiment_artifacts": 1,
+    "negative_result": "Current indexed code does not support the stronger claim that GlobalWorkspace is already an active multi-producer competition/selection network; its visible publish path is a broadcast primitive and the only statically discovered subscriber is Thalamus.",
+    "revised_priority": "Prove live GWS causal reachability and competition/selection before transport optimization.",
+    "highest_priority_new_test": "EXP-FRANK-GWS-LIVE-REACHABILITY"
+  },
+  "second_generation_hypotheses": [
+    "H-FRANK-R2-01: representative live sessions may produce zero or near-zero GlobalWorkspace broadcasts despite architectural documentation",
+    "H-FRANK-R2-02: current GlobalWorkspace does not itself implement coalition competition/selection",
+    "H-FRANK-R2-03: explicit candidate->winner->broadcast receipts will expose whether GWT is causal or decorative",
+    "H-FRANK-R2-04: current Thalamus GWS callback is too cheap to explain material hot-path latency",
+    "H-FRANK-R2-05: future subscriber scaling needs per-event delivery classes rather than a global async switch",
+    "H-FRANK-R2-06: async delivery without drop/coalesce receipts can improve latency while reducing causal auditability",
+    "H-FRANK-R2-07: competition should remain deterministic/replayable even when side effects execute asynchronously",
+    "H-FRANK-R2-08: the lowest-risk migration is instrumentation-first, then selective callback relocation based on measured p99 and semantic class"
+  ],
+  "next_actions_ranked": [
+    "EXP-FRANK-GWS-LIVE-REACHABILITY",
+    "EXP-FRANK-GWS-COMPETITION-LESION",
+    "instrument per-subscriber callback duration and queue delay",
+    "define MUST_APPLY/LATEST_WINS/BEST_EFFORT event semantics in the causal envelope",
+    "EXP-FRANK-MEMORY-FANOUT",
+    "EXP-FRANK-STATE-SINGLE-WRITER",
+    "EXP-FRANK-ROUTER-BYPASS",
+    "EXP-LIVE-GWT-LESION"
+  ],
+  "status": "COMPLETED_WITH_OPEN_LIVE_VALIDATION",
+  "promotion": "NONE"
+}

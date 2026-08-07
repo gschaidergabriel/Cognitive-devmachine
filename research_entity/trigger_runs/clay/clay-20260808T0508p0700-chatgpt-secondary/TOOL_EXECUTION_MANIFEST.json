@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.1",
+  "run_id":"clay-20260808T0508p0700-chatgpt-secondary",
+  "classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"huggingface_inference","mode":"MUST_ATTEMPT","class":"model_experiment","availability_blocker":"CONNECTOR_BLOCKED"}
+  ],
+  "attempts":[
+    {"tool":"arxiv_search","status":"RUNTIME_ERROR","fallback_reason":"RUNTIME_UNAVAILABLE","detail":"adapter-equivalent HTTPS request from local sandbox failed DNS; user-supplied raw arXiv Atom response parsed successfully and native web arXiv discovery was used"},
+    {"tool":"github_connector","status":"SUCCESS","detail":"canonical boot, RAE reads and durable run writes completed"},
+    {"tool":"local_sandbox","status":"SUCCESS","detail":"six synthetic/analytic discriminating experiments executed"}
+  ],
+  "fallback_attempts":[
+    {"tool":"native_web","status":"SUCCESS","detail":"arXiv pages, Anthropic primary research, GitHub implementations and Reddit practitioner evidence"},
+    {"tool":"direct_primary_sources","status":"SUCCESS","detail":"Anthropic global-workspace research, arXiv papers, Qualcomm/Wasmtime project documentation"},
+    {"tool":"archived_rae_sources","status":"SUCCESS","detail":"canonical r2, G4 topic packet and existing G3/G4 constraints"},
+    {"tool":"user_supplied_arxiv_atom","status":"SUCCESS","sha256":"35cc5ad40fb6010920b88b35e846b8a0760f6b4925cb5191de711cc554b18d23","query":"all:electron","note":"provider/API receipt only; thematically non-applicable to Clay claims"}
+  ],
+  "manifest_validation":{"method":"equivalent local validation against tools/research_provider_router.py rules","ok":true,"violations":[]},
+  "sanitized_cost_metadata":{"paid_external_provider_calls_observed":0},
+  "rule":"Blocked or failed registered providers used explicit legacy fallback; unavailable tools are not represented as successful."
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Low-overhead boot index. This file is a derived operational index, not canonical research truth.",
+  "canonical_path": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+  "expected_entity_version": "RAE-8.8",
+  "expected_revision": 2,
+  "expected_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "mandatory_invariants": [
+    "session_is_temporary_worker_not_entity",
+    "canonical_state_outranks_chat_memory",
+    "raw_evidence_is_immutable",
+    "claim_status_is_atomic_and_scoped",
+    "model_output_is_not_authority",
+    "negative_results_are_preserved",
+    "synthetic_results_do_not_promote_to_live_claims",
+    "linux_first_is_not_linux_only",
+    "synthetic_clay_is_not_the_scope_boundary"
+  ],
+  "boot_tiers": {
+    "T0_ALWAYS": [
+      "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "research_entity/global/SESSION_MEMBERSHIP_PROTOCOL.md"
+    ],
+    "T1_TASK_ROUTING": [
+      "research_entity/global/DOMAIN_REGISTRY.json",
+      "research_entity/global/TOPIC_PACKET_PROTOCOL.md"
+    ],
+    "T2_ONLY_WHEN_RELEVANT": [
+      "research constitution",
+      "semantic anchors",
+      "global self/world model",
+      "global agenda",
+      "relevant domain shards",
+      "relevant topic packets",
+      "critical negative results touching task",
+      "active experiments touching task"
+    ],
+    "T3_AUDIT_OR_STATE_CHANGE": [
+      "full research event protocol",
+      "full claim lifecycle protocol",
+      "full source archive protocol",
+      "historical snapshots/ledgers"
+    ]
+  },
+  "context_budget_defaults": {
+    "T0_max_tokens": 1800,
+    "T1_max_tokens": 2200,
+    "topic_packet_summary_max_tokens_each": 1400,
+    "max_primary_packets": 3,
+    "max_dependency_packets": 4,
+    "max_negative_result_summaries": 8,
+    "max_active_experiment_summaries": 6,
+    "overflow_policy": "load indexes/summaries first; fetch evidence detail only on demand"
+  },
+  "active_experiment_ids": [
+    "EXP-LIVE-GWT-LESION",
+    "EXP-LIVE-XENO-CLAY-FACTORIAL",
+    "EXP-LIVE-HYPERPOSITION-BACKEND",
+    "EXP-FORMAL-RC11"
+  ],
+  "critical_negative_result_ids": [
+    "N-G3-001","N-G3-002","N-G3-003","N-G3-005","N-G3-006","N-G3-007"
+  ],
+  "architecture_frontier": [
+    "CC-RC1.1 causal episode contract",
+    "backend-neutral set-valued hyperposition + faceted active projection",
+    "adaptive selective coupling with overcoupling tripwire",
+    "external capability/commit gateway"
+  ],
+  "new_first_class_research_target": "Android/edge execution of FRANK-compatible runtime with local Qwen-4B-class inference",
+  "fallback": "If canonical or membership verification fails, enter DEGRADED_UNJOINED and never claim canonical writes."
+}

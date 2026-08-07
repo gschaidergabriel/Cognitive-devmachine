@@ -32,12 +32,15 @@ MUST_COVER={
  'research_entity/global/TOPIC_PACKET_PROTOCOL.md',
  'research_entity/continuity/BOOTSTRAP_MINIMAL.json',
  'research_entity/continuity/OPERATIONAL_STATUS.json',
+ 'research_entity/topic_packets/multi-researcher-governance/PACKET.json',
  'schemas/event.schema.json',
  'schemas/claim.schema.json',
  'schemas/provenance.schema.json',
  'tools/build_source_db.py',
+ 'tools/ingest_source.py',
  'tools/validate_research_entity.py',
  'tools/check_provenance.py',
+ 'tools/register_provenance.py',
  '.github/workflows/research-entity-verify.yml'
 }
 

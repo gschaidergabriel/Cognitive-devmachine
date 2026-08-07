@@ -11,15 +11,19 @@ BEFORE substantive project work:
 4. Load:
    - `research_entity/global/RESEARCH_SCOPE_CHARTER.md`
    - `research_entity/global/DOMAIN_REGISTRY.json`
+   - `research_entity/global/RESEARCH_EVENT_CAPTURE_PROTOCOL.md`
+   - `research_entity/global/TOPIC_PACKET_PROTOCOL.md`
+   - `research_entity/global/CLAIM_LIFECYCLE_PROTOCOL.md`
    - Research Constitution
    - Semantic Anchors
    - Global Research Self Model
    - Global Research World Model
    - Global Research Agenda
    - relevant domain shard(s)
+   - relevant Topic Packet(s)
    - relevant critical negative results
    - relevant active experiments
-   - relevant GitHub source-corpus cursors
+   - relevant GitHub/source-archive cursors
 5. Classify the current task by SYSTEM LAYER as well as research domain:
    host substrate/environment;
    portable systems runtime;
@@ -28,11 +32,26 @@ BEFORE substantive project work:
    application substrate;
    interfaces;
    research/verification plane.
-6. Identify primary_domain, secondary_domains and any new_domain_candidate.
-7. Search the connected GitHub account as a project-wide research corpus when relevant.
-   Do NOT load all repositories blindly.
-8. Reconstruct the project-wide Research Entity from canonical state + relevant evidence.
-9. Only then perform substantive work.
+6. Identify primary_domain, secondary_domains, topic packets and any new_domain_candidate.
+7. Search the connected GitHub account and immutable source archive as project-wide research corpora when relevant.
+   Do NOT load all repositories/raw sources blindly.
+8. Detect new/changed source artifacts and register hashes/provenance before interpretation.
+9. Reconstruct the project-wide Research Entity from canonical state + relevant evidence.
+10. Create a `PROMPT_RECEIVED` / prompt-run record and begin a Research Event Stream.
+11. Only then perform substantive work.
+
+DURING substantive research:
+
+1. Capture every scientifically meaningful intermediate step as a Research Event whenever evidence, hypothesis set, favored mechanism, confidence, test result, contradiction or architecture decision changes.
+2. Do NOT attempt to store private hidden chain-of-thought. Store reproducible Reasoning Summaries / Decision Traces instead: evidence used, alternatives, inference/test, result, uncertainty and next falsifier.
+3. Every source-derived claim must have provenance and scope.
+4. Every new durable result is immediately decomposed into one or more Topic Packets.
+5. Maintain claim lifecycle status at atomic-claim level:
+   `CURRENT`, `OPEN`, `SUPERSEDED`, `REFUTED`, `NEGATIVE_RESULT`, `CONTEXT_ONLY`.
+6. Never silently overwrite historical claims. Append status-transition events and preserve the old claim/source.
+7. Raw source data remains immutable; classification is a materialized view over claim/event history.
+8. New contradictions remain explicit until resolved by evidence.
+9. Failed tests, dead ends and tool failures are research data and must be retained.
 
 RESEARCH SCOPE:
 
@@ -47,19 +66,49 @@ RESEARCH SCOPE:
 - For platform-dependent mechanisms separate semantic contract, portable interface,
   platform implementation and target-specific optimization.
 
+SOURCE ARCHIVE RULE:
+
+- All user/project research source artifacts are eligible for immutable archival in the backend, subject to secret/privacy filtering.
+- Keep exact raw bytes or a content-addressed archive when safe to store.
+- Maintain source manifests with SHA-256, filename, origin, MIME/type, ingestion time and extracted topic/domain refs.
+- Status is claim-level, not file-level. A single document may contain current, open, superseded and refuted content simultaneously.
+- Views under `research_sources/status/` are derived indexes, never substitutes for raw history.
+
+PROMPT COMPLETION RULE:
+
+Every substantive prompt result must leave behind:
+- prompt/run record;
+- Research Event Stream entries;
+- source/evidence refs actually used;
+- intermediate analysis summaries worth preserving;
+- hypotheses/counterhypotheses/tests/results;
+- claim status transitions;
+- topic packet updates;
+- artifact references;
+- final response summary;
+- canonical promotion decision;
+- verified Git commit or explicit `SYNC_PENDING`.
+
 AFTER substantive project work:
 
-1. Classify results as thread-local, domain-level or global.
+1. Classify results as thread-local, topic-level, domain-level or global.
 2. Preserve raw evidence and provenance.
-3. Update relevant domain state and cross-domain links.
-4. Run the Global Promotion Gate.
-5. Update method/tool/negative-result memory only when justified.
-6. Re-read the current canonical remote head.
-7. Detect concurrent revision changes.
-8. Append the Research-Entity ledger event and CAS-update Canonical only for a justified research-state change.
-9. Repository/bootstrap/governance changes alone do not create a new research revision/generation.
-10. Re-read and verify the committed state.
-11. If a remote write cannot be verified, set SYNC_PENDING and never claim success.
+3. Update all touched Topic Packets and domain state/cross-links.
+4. Update claim-status materialized views (`current/open/superseded/refuted`).
+5. Run the Global Promotion Gate.
+6. Update method/tool/negative-result memory only when justified.
+7. Append the final prompt/run and `FINAL_RESPONSE_SUMMARY` Research Events.
+8. Re-read the current canonical remote head.
+9. Detect concurrent revision changes.
+10. Append Research-Entity ledger/state changes and CAS-update Canonical only for justified research-state changes.
+11. Repository/bootstrap/governance changes alone do not create a new research revision/generation.
+12. Re-read and verify all committed state relevant to the run.
+13. If a remote write cannot be verified, set `SYNC_PENDING` and never claim success.
+
+AUTONOMY:
+
+- During an active substantive session, this capture/classification/packetization workflow is automatic and should not require user curation.
+- This does NOT mean work continues between turns by itself. Background research requires an explicit automation/runner.
 
 RULES:
 
@@ -67,7 +116,7 @@ RULES:
 - `clay-global-research-entity` is STATE BACKEND, not the only research source.
 - All accessible GitHub repositories are eligible research sources.
 - Source repositories are evidence unless the user separately requests writes.
-- Do not ingest secret values.
+- Do not ingest credentials, tokens, private keys, passwords, cookies or other secret values.
 - Do not trust chat memory over canonical source state.
 - Do not force every session to continue the same topic.
 - Do not force every architecture problem into Clay.

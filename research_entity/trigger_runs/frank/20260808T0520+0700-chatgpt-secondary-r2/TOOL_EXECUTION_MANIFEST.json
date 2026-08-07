@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.1",
+  "run_id": "20260808T0520+0700-chatgpt-secondary-r2",
+  "trigger": "frank",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent_revision": 2,
+  "canonical_parent_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "classes": ["scholarly", "current_web", "implementation", "executable"],
+  "planned_tools": [
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"}
+  ],
+  "attempts": [
+    {"tool":"github_connector","status":"SUCCESS","evidence":"Canonical RAE state, protocols, ledgers and current Project-Frankenstein source inspected through connected GitHub."},
+    {"tool":"local_sandbox","status":"SUCCESS","evidence":"Synthetic local microbenchmark compared direct callback, queue, JSON serialization, loopback HTTP and SQLite WAL commit/batch overhead."}
+  ],
+  "fallback_attempts": [
+    {"tool":"native_web","status":"SUCCESS","covers":["openalex_search","arxiv_search","semantic_scholar_search","tavily_search","exa_search"],"evidence":"Primary/authoritative Android and ExecuTorch documentation, official Qwen model material, arXiv preprints and GitHub implementation evidence were retrieved through the current ChatGPT web research surface."},
+    {"tool":"local_sandbox","status":"SUCCESS","covers":["e2b_sandbox"],"reason":"CREDENTIAL_UNAVAILABLE"}
+  ],
+  "limitations": [
+    "Repository-registered provider adapter scripts are not directly invokable from the current ChatGPT connector surface even when marked RUNTIME_VERIFIED in RAE.",
+    "E2B is explicitly credential-blocked in the current RAE tool registry.",
+    "Local synthetic execution is not target-host FRANK runtime evidence and is not eligible for live claim promotion."
+  ],
+  "validation_note": "Manifest follows the router's allowed fallback vocabulary. Strong claim promotion was intentionally not performed; findings remain code-grounded observations, external synthesis, or open architecture hypotheses pending target-runtime tests."
+}

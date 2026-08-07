@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 """Crossref REST API adapter for FRANK/RAE.
 
-Supports:
-- exact DOI metadata lookup via /works/{doi}
-- bibliographic discovery via /works?query.bibliographic=...
-- optional polite-pool identification via CROSSREF_MAILTO
-- compact JSON output suitable for provenance-aware research ingestion
-
-No Crossref API key is required for the public/polite pools. CROSSREF_MAILTO is
-optional and is treated as configuration, not a credential requirement.
+Supports exact DOI lookup and bibliographic search. No API key is required. Optional
+CROSSREF_MAILTO joins Crossref's polite pool. Output is bibliographic metadata, not
+independent scientific confirmation.
 """
 from __future__ import annotations
 
@@ -27,20 +22,30 @@ sys.path.insert(0, str(ROOT / "tools"))
 from rae_secret_loader import get_secret  # noqa: E402
 
 BASE = "https://api.crossref.org"
-USER_AGENT = "FRANK-RAE/8.8 (Crossref metadata research adapter)"
 DEFAULT_TIMEOUT = 30
 MAX_RETRIES = 4
 
 
-def _request(url: str, *, timeout: int = DEFAULT_TIMEOUT) -> tuple[dict, dict[str, str]]:
-    headers = {
-        "Accept": "application/vnd.crossref-api-message+json",
-        "User-Agent": USER_AGENT,
+def _mailto() -> str | None:
+    return get_secret("CROSSREF_MAILTO", required=False)
+
+
+def _headers() -> dict[str, str]:
+    # Crossref's REST endpoint reliably accepts ordinary JSON. The previous vendor
+    # media type produced HTTP 406 on the current endpoint/runner combination.
+    mailto = _mailto()
+    contact = f"; mailto:{mailto}" if mailto else ""
+    return {
+        "Accept": "application/json",
+        "User-Agent": f"FRANK-RAE/8.8 (Crossref metadata research adapter{contact})",
     }
+
+
+def _request(url: str, *, timeout: int = DEFAULT_TIMEOUT) -> tuple[dict, dict[str, str]]:
     last_error: Exception | None = None
     for attempt in range(MAX_RETRIES):
         try:
-            req = urllib.request.Request(url, headers=headers)
+            req = urllib.request.Request(url, headers=_headers())
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 payload = json.loads(resp.read().decode("utf-8"))
                 response_headers = {k.lower(): v for k, v in resp.headers.items()}
@@ -48,20 +53,17 @@ def _request(url: str, *, timeout: int = DEFAULT_TIMEOUT) -> tuple[dict, dict[st
         except urllib.error.HTTPError as exc:
             last_error = exc
             if exc.code not in {429, 500, 502, 503, 504} or attempt == MAX_RETRIES - 1:
-                raise
+                body = exc.read().decode("utf-8", errors="replace")[:500]
+                raise RuntimeError(f"Crossref HTTP {exc.code}: {body}") from exc
             retry_after = exc.headers.get("Retry-After")
             delay = float(retry_after) if retry_after and retry_after.isdigit() else min(2 ** attempt, 8)
             time.sleep(delay)
         except urllib.error.URLError as exc:
             last_error = exc
             if attempt == MAX_RETRIES - 1:
-                raise
+                raise RuntimeError(f"Crossref network error: {exc.reason}") from exc
             time.sleep(min(2 ** attempt, 8))
     raise RuntimeError(f"Crossref request failed: {last_error}")
-
-
-def _mailto() -> str | None:
-    return get_secret("CROSSREF_MAILTO", required=False)
 
 
 def _params(extra: dict[str, str | int]) -> str:
@@ -145,7 +147,6 @@ def works_search(query: str, rows: int = 10) -> dict:
 
 
 def smoke_test() -> dict:
-    # Stable Crossref DOI used as a deterministic metadata probe.
     result = doi_lookup("10.1038/nphys1170")
     if (result.get("work", {}).get("doi") or "").lower() != "10.1038/nphys1170":
         raise RuntimeError("Crossref smoke test returned an unexpected DOI")
@@ -171,7 +172,6 @@ def main() -> None:
     group.add_argument("--smoke-test", action="store_true", help="verify live Crossref access")
     ap.add_argument("--rows", type=int, default=10, help="search result count (1-100)")
     args = ap.parse_args()
-
     if args.smoke_test:
         out = smoke_test()
     elif args.doi:

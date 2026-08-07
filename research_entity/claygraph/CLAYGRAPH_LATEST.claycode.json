@@ -1,0 +1,108 @@
+{
+  "schema_version": "0.1",
+  "language": "ClayCode",
+  "representation": "canonical_semantic_ir_json_projection",
+  "graph_id": "claygraph-v0-seed",
+  "generation": 0,
+  "status": "SEED_BASELINE",
+  "purpose": "Derived XENO/Synthetic-Clay semantic/evidence graph with a separate activation overlay for RAE self-use and FRANK memory/database research.",
+  "canonicality": {
+    "graph_data_is_derived": true,
+    "canonical_ledgers_and_raw_sources_outrank_graph": true,
+    "activation_is_not_truth": true,
+    "model_output_is_not_authority": true
+  },
+  "layers": [
+    {
+      "layer_id": "semantic_evidence",
+      "role": "typed persistent research/state relations, provenance, versions, conflicts and evidence ancestry",
+      "persistent": true
+    },
+    {
+      "layer_id": "activation_overlay",
+      "role": "transient query/cue-driven relevance propagation and bounded active assembly",
+      "persistent": false
+    }
+  ],
+  "node_types": [
+    "branch",
+    "run",
+    "artifact",
+    "claim",
+    "hypothesis",
+    "experiment",
+    "negative_result",
+    "event",
+    "topic_packet",
+    "source",
+    "architecture",
+    "database_store",
+    "reference"
+  ],
+  "edge_types": [
+    "BELONGS_TO_BRANCH",
+    "HAS_ARTIFACT",
+    "MENTIONS",
+    "SUPPORTS",
+    "CHALLENGES",
+    "CONTRADICTS",
+    "SUPERSEDES",
+    "DEPENDS_ON",
+    "EVIDENCE_FOR",
+    "DERIVED_FROM",
+    "PARENT_OF",
+    "IN_TOPIC",
+    "AFFECTS_BRANCH",
+    "SAME_EVIDENCE_FAMILY",
+    "MIGRATION_CANDIDATE",
+    "RELATED"
+  ],
+  "identity": {
+    "node_id": "stable hash of semantic kind + external identity/path",
+    "source_content_hash": "sha256",
+    "wire_hash_is_not_semantic_hash": true
+  },
+  "activation_policy": {
+    "seed": "lexical/token overlap over labels, ids, paths and bounded text",
+    "propagation": "typed weighted relation propagation",
+    "default_hops": 2,
+    "hop_decay": 0.58,
+    "assembly_limit": 24,
+    "explain_paths": true,
+    "future_research": [
+      "learned edge weighting",
+      "time decay",
+      "goal/self-state modulation",
+      "conflict-preserving assemblies",
+      "incremental update",
+      "hybrid graph/vector retrieval"
+    ]
+  },
+  "migration_policy": {
+    "physical_monolith_required": false,
+    "allowed_dispositions": ["MERGE", "PROJECT", "LINK", "KEEP_ISOLATED", "DEFER", "UNKNOWN"],
+    "required_phases": ["INVENTORY", "SEMANTIC_MAPPING", "SHADOW_GRAPH", "PARITY_AND_REPLAY", "DUAL_READ", "DUAL_WRITE_WHERE_SAFE", "CONTROLLED_CUTOVER", "ROLLBACK_WINDOW", "DEPRECATE_OR_KEEP_ISOLATED"]
+  },
+  "hard_invariants": [
+    "preserve provenance and evidence ancestry",
+    "preserve explicit unknown/conflict/revoked/stale states",
+    "preserve deterministic identity/replay where required",
+    "activation never changes evidence status",
+    "model proposals never mint capability/effect authority",
+    "migration remains rollback-capable",
+    "synthetic/proxy evidence remains synthetic/proxy"
+  ],
+  "builder": {
+    "tool": "tools/claygraph_build.py",
+    "query_tool": "tools/claygraph_query.py",
+    "benchmark_tool": "tools/claygraph_benchmark.py",
+    "runtime_materialization": "research_entity/claygraph/runtime/current"
+  },
+  "provenance": {
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "canonical_parent": "r2",
+    "foundation": "research_entity/global/CLAYGRAPH_RESEARCH_FOUNDATION.md"
+  }
+}

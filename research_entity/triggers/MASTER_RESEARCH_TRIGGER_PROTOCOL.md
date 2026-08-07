@@ -19,6 +19,18 @@ A trigger fires only when the entire trimmed user message equals one registered 
 
 If Canonical cannot be verified: `DEGRADED_UNJOINED`. Research may proceed LOCAL_ONLY but no shared-state promotion may be claimed.
 
+## External capability policy
+
+All trigger runs must follow:
+
+`research_entity/global/EXTERNAL_RESEARCH_VERIFICATION_POLICY.md`
+
+and select declared providers through:
+
+`research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json`
+
+Credential values must come only from the runtime environment/local ignored `.env`/secret store and must never be written into canonical research artifacts.
+
 ## Research cycle
 
 Every full research trigger executes the following closed cycle unless its domain protocol explicitly narrows a phase.
@@ -65,6 +77,10 @@ Mandatory external surfaces when available:
 - Reddit for practitioner failure modes and community observations;
 - authoritative documentation and primary technical sources where relevant.
 
+Use registered scholarly/search capabilities where fit for purpose, including OpenAlex, arXiv, Semantic Scholar, Crossref, Tavily, Exa and credential-free fallbacks when available in the executing runtime. Search-provider output is discovery evidence; prefer the discovered primary or authoritative source for verification.
+
+Before promoting an externally verifiable factual or scholarly claim, perform at least one fit-for-purpose external verification step when technically available and relevant. Do not treat repeated search-index metadata as independent confirmation of the same underlying source.
+
 Reddit is anecdotal evidence unless independently reproduced.
 GitHub code/benchmarks are implementation evidence, not automatically scientific evidence.
 Preprints remain preprints.
@@ -91,6 +107,8 @@ Create transformed second-order hypotheses where the evidence changes the model.
 ### Phase G — Empirical work
 
 Use available software tools to execute the highest-information feasible tests: simulations, parsers, validators, benchmarks, ablations, lesion/rescue, replay, graph reductions, counterfactuals, fuzzing or instrumentation.
+
+For claims materially dependent on executable behavior, make a reproducible execution attempt before strong promotion whenever feasible. Prefer the local sandbox/container when sufficient; use registered isolated/remote execution capabilities such as E2B, Judge0 or Piston when they add required isolation, dependencies or cross-runtime comparison. Record execution failure or unavailability as an evidence limitation.
 
 Synthetic tests remain synthetic until replicated on the target substrate.
 

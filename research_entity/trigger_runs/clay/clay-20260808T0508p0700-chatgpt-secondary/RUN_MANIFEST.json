@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-20260808T0508p0700-chatgpt-secondary",
+  "trigger":"clay",
+  "status":"COMPLETED_WITH_OPEN_LIVE_FALSIFIERS",
+  "actor_id":"chatgpt-secondary",
+  "actor_role":"SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "started_at":"2026-08-08T05:08:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "inputs":[{"class":"user_supplied_arxiv_atom","name":"query(1).atom","sha256":"35cc5ad40fb6010920b88b35e846b8a0760f6b4925cb5191de711cc554b18d23","query":"all:electron","topical_evidence":false}],
+  "hypothesis_generation":{"generation_1_count":56,"generation_2_count":16,"padding_used":false},
+  "experiments":[
+    {"id":"EXP-G5-RDELTA-001","class":"synthetic_proxy","result":"mean affected fraction 0.000345@R=1.0,0.01539@1.2,0.08046@1.4,0.24029@1.8"},
+    {"id":"EXP-G5-CONTEXT-002","class":"synthetic_proxy","result":"budget8 chain-complete recency=0,salience=.002,causal=.881,hybrid=.469"},
+    {"id":"EXP-G5-DUALWS-003","class":"synthetic_proxy","result":"outcome AUC receipt=.623,latent=.658,dual=.681"},
+    {"id":"EXP-G5-SPECULATE-004","class":"synthetic_proxy","result":"10% invalid: serial=73.92ms,speculative=55.95ms,waste=6.08ms/request"},
+    {"id":"EXP-G5-STATEGRAMMAR-005","class":"synthetic_proxy","result":"grammar semantic valid=.200,state-aware=1.0; authority rejects .1918 of state-valid"},
+    {"id":"EXP-G5-DISTCLOSURE-006","class":"synthetic_proxy","result":"strict=50.26ms/3.024% unavailable; selective=6.73ms/.3005% unavailable"}
+  ],
+  "architecture_candidate":"g5-semantic-causal-kernel-with-rdelta-dual-workspace-and-selective-closure",
+  "canonical_promotion":"NOT_PERFORMED",
+  "promotion_reason":"G5 evidence remains synthetic/analytic/external; live FRANK transfers remain open",
+  "highest_information_next_test":"EXP-LIVE-GWT-LESION truthful-vs-shuffled-vs-delayed-vs-removed reentry factorial",
+  "report":"research_entity/trigger_runs/clay/clay-20260808T0508p0700-chatgpt-secondary/FINAL_REPORT.md",
+  "hypotheses":"research_entity/trigger_runs/clay/clay-20260808T0508p0700-chatgpt-secondary/HYPOTHESES.md",
+  "tool_execution_manifest":"research_entity/trigger_runs/clay/clay-20260808T0508p0700-chatgpt-secondary/TOOL_EXECUTION_MANIFEST.json"
+}

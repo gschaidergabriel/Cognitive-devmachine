@@ -122,20 +122,34 @@ def validate_run(run_dir: Path) -> dict[str, Any]:
     if inter.get("trigger") != "claycode":
         violations.append("INTERCONNECT_MANIFEST.trigger must be claycode")
     priority = inter.get("branch_priority") or []
-    if priority[:2] != ["frank", "clay"]:
-        violations.append("ClayCode preflight must prioritize frank then clay")
+    if priority[:3] != ["frank", "clay", "claygraph"]:
+        violations.append("ClayCode preflight must prioritize frank, clay, then claygraph")
+    registered = set(inter.get("registry_scientific_branches") or [])
+    if "claygraph" not in registered or len(registered) < 7:
+        violations.append("ClayCode preflight must use current seven-branch registry including claygraph")
     special = inter.get("special_rules") or {}
     if special.get("claycode_requires_latest_frank_research_as_primary_feedback") is not True:
         violations.append("preflight must require latest FRANK research as primary feedback")
+    if special.get("claycode_requires_deep_claygraph_input") is not True:
+        violations.append("preflight must require deep ClayGraph input")
     if special.get("claycode_requires_goodman_anti_echo_review") is not True:
         violations.append("preflight must require Goodman anti-echo review")
+
+    claygraph = next((x for x in inter.get("branches", []) if x.get("branch") == "claygraph"), None)
+    if not claygraph:
+        violations.append("preflight must contain ClayGraph branch material")
+    elif claygraph.get("run_history_depth") != "ALL_DISCOVERED":
+        try:
+            if int(claygraph.get("run_history_depth", 0)) < 4:
+                violations.append("ClayCode preflight must deeply load ClayGraph history")
+        except (TypeError, ValueError):
+            violations.append("invalid ClayGraph run_history_depth")
 
     frank = next((x for x in inter.get("branches", []) if x.get("branch") == "frank"), None)
     if not frank or not frank.get("latest_run"):
         violations.append("preflight must contain latest FRANK run")
-    else:
-        if review.get("latest_frank_run") != frank.get("latest_run"):
-            violations.append("review.latest_frank_run must match FRANK latest_run captured by preflight")
+    elif review.get("latest_frank_run") != frank.get("latest_run"):
+        violations.append("review.latest_frank_run must match FRANK latest_run captured by preflight")
 
     expected_arch = special.get("claycode_latest_frank_architecture_artifact")
     if review.get("latest_frank_architecture_artifact") != expected_arch:

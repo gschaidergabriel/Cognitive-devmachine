@@ -41,8 +41,13 @@ jobs:
         run: |
           python rae.py query 'hyperposition backend' --experiment EXP-LIVE-HYPERPOSITION-BACKEND --limit 8 >/tmp/query.json
           python -m json.tool /tmp/query.json >/dev/null
-      - name: Run RAE retrieval benchmark skeleton
-        run: python rae.py benchmark --cases benchmarks/rae_vnext/cases.json >/tmp/benchmark.json
+      - name: Run RAE retrieval benchmark
+        run: |
+          python rae.py benchmark --cases benchmarks/rae_vnext/cases.json >/tmp/benchmark.json
+          cat /tmp/benchmark.json
+      - name: Gate retrieval regression
+        run: >-
+          python -c "import json; x=json.load(open('/tmp/benchmark.json')); assert x['mean_recall'] >= 0.95, x; assert x['mean_precision'] >= 0.50, x; print('retrieval gate ok',x['mean_precision'],x['mean_recall'])"
       - name: Validate canonical/bootstrap agreement
         run: >-
           python -c "import json,pathlib; c=json.loads(pathlib.Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json').read_text()); b=json.loads(pathlib.Path('research_entity/continuity/BOOTSTRAP_MINIMAL.json').read_text()); assert c['revision']==b['expected_revision']; assert c['state_hash']==b['expected_state_hash']; assert c['entity_version']==b['expected_entity_version']; assert b['research_team']['lead_researcher']=='claude-code-lead'; assert b['research_team']['secondary_researcher']=='chatgpt-secondary'; print('canonical/bootstrap/research-team agreement ok',c['revision'],c['state_hash'])"

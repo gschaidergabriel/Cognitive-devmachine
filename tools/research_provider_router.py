@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Quota-aware provider planner and manifest validator for RAE research runs."""
+"""Quota/health-aware provider planner and execution-manifest validator for RAE."""
 from __future__ import annotations
 
 import argparse
@@ -10,14 +10,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "research_entity" / "global" / "EXTERNAL_RESEARCH_TOOL_REGISTRY.json"
 QUOTA = ROOT / "research_entity" / "runtime" / "TOOL_QUOTA_STATE.json"
+HEALTH = ROOT / "research_entity" / "runtime" / "PROVIDER_HEALTH.json"
 
 ALLOWED_FALLBACKS = {
     "NOT_APPLICABLE",
     "QUOTA_EXHAUSTED",
     "QUOTA_EXHAUSTED_CACHED",
+    "QUOTA_OR_PLAN_EXHAUSTED",
     "RATE_LIMITED",
     "PROVIDER_UNAVAILABLE",
+    "NETWORK_OR_PROVIDER_UNAVAILABLE",
     "CREDENTIAL_UNAVAILABLE",
+    "CREDENTIAL_BLOCKED",
+    "AUTH_FAILED",
+    "HTTP_ERROR",
+    "DEPENDENCY_MISSING",
     "CONNECTOR_BLOCKED",
     "RUNTIME_UNAVAILABLE",
     "DUPLICATE_EVIDENCE_NO_INFORMATION_GAIN",
@@ -25,10 +32,19 @@ ALLOWED_FALLBACKS = {
 
 FAILURE_STATUSES_REQUIRING_FALLBACK = {
     "QUOTA_EXHAUSTED",
+    "QUOTA_OR_PLAN_EXHAUSTED",
     "RATE_LIMITED",
     "AUTH_FAILED",
+    "HTTP_ERROR",
     "PROVIDER_ERROR",
+    "PROVIDER_UNAVAILABLE",
+    "NETWORK_OR_PROVIDER_UNAVAILABLE",
+    "CREDENTIAL_UNAVAILABLE",
+    "CREDENTIAL_BLOCKED",
+    "DEPENDENCY_MISSING",
     "RUNTIME_ERROR",
+    "RUNTIME_UNAVAILABLE",
+    "CONNECTOR_BLOCKED",
 }
 
 BUNDLES = {
@@ -51,8 +67,8 @@ BUNDLES = {
     "executable": [
         {"tool": "local_sandbox", "mode": "MUST_ATTEMPT"},
         {"tool": "e2b_sandbox", "mode": "MUST_ATTEMPT"},
-        {"tool": "piston_execute", "mode": "FALLBACK"},
         {"tool": "judge0_execute", "mode": "FALLBACK"},
+        {"tool": "piston_execute", "mode": "FALLBACK"},
     ],
     "model_experiment": [
         {"tool": "huggingface_inference", "mode": "MUST_ATTEMPT"},
@@ -65,6 +81,7 @@ LEGACY_FALLBACK = [
     "github_connector",
     "duckduckgo_search",
     "local_sandbox",
+    "judge0_execute",
     "archived_rae_sources",
 ]
 
@@ -72,17 +89,48 @@ LEGACY_FALLBACK = [
 def load_json(path: Path, default):
     try:
         return json.loads(path.read_text(encoding="utf-8"))
-    except FileNotFoundError:
+    except (FileNotFoundError, json.JSONDecodeError):
         return default
 
 
+def registry_state() -> dict:
+    return load_json(REGISTRY, {"tools": []})
+
+
 def tool_statuses() -> dict[str, dict]:
-    registry = load_json(REGISTRY, {"tools": []})
-    return {x["tool_name"]: x for x in registry.get("tools", [])}
+    return {x["tool_name"]: x for x in registry_state().get("tools", [])}
 
 
 def quota_state() -> dict:
     return load_json(QUOTA, {"schema_version": "1.0", "providers": {}})
+
+
+def health_state() -> tuple[datetime | None, dict[str, dict]]:
+    data = load_json(HEALTH, {"results": []})
+    checked = None
+    try:
+        if data.get("checked_at"):
+            checked = datetime.fromisoformat(data["checked_at"].replace("Z", "+00:00"))
+    except ValueError:
+        checked = None
+    return checked, {x.get("tool"): x for x in data.get("results", []) if x.get("tool")}
+
+
+def _health_blocker(tool: str) -> str | None:
+    checked, items = health_state()
+    if checked is None or (datetime.now(timezone.utc) - checked).total_seconds() > 21600:
+        return None
+    item = items.get(tool)
+    if not item:
+        return None
+    st = item.get("status")
+    if st == "RUNTIME_VERIFIED":
+        return None
+    if st in ALLOWED_FALLBACKS:
+        return st
+    if st == "SMOKE_FAILED":
+        return "PROVIDER_UNAVAILABLE"
+    return None
 
 
 def unavailable_reason(tool: str, status: dict[str, dict], quota: dict) -> str | None:
@@ -94,28 +142,46 @@ def unavailable_reason(tool: str, status: dict[str, dict], quota: dict) -> str |
             try:
                 reset = datetime.fromisoformat(reset_at.replace("Z", "+00:00"))
                 if reset <= datetime.now(timezone.utc):
-                    return None
+                    state = None
             except ValueError:
                 pass
-        return state
+        if state:
+            return state
 
     if tool in {"github_connector", "local_sandbox"}:
         return None
+
+    health_blocker = _health_blocker(tool)
+    if health_blocker:
+        return health_blocker
+
     item = status.get(tool)
     if not item:
         return "PROVIDER_UNAVAILABLE"
-    st = item.get("status", "")
-    if st == "RUNTIME_VERIFIED":
+    st = str(item.get("status", ""))
+    if st.startswith("RUNTIME_VERIFIED"):
         return None
-    if "CREDENTIAL_NOT_PERSISTED" in st:
+    if "CREDENTIAL" in st:
         return "CREDENTIAL_UNAVAILABLE"
+    if "RATE_LIMIT" in st:
+        return "RATE_LIMITED"
     if "PENDING_RUNTIME_VERIFICATION" in st or "NOT_RUNTIME_VERIFIED" in st:
         return "RUNTIME_UNAVAILABLE"
     return "PROVIDER_UNAVAILABLE"
 
 
+def invocation_surface(tool: str, registry: dict) -> str:
+    if tool in {"github_connector", "local_sandbox"}:
+        return "DIRECT_RUNTIME"
+    bridge = registry.get("worker_invocation_bridge", {})
+    if bridge.get("status") == "OPERATIONAL":
+        return "DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"
+    return "DIRECT_ADAPTER_IF_AVAILABLE"
+
+
 def plan(classes: list[str]) -> dict:
-    status = tool_statuses()
+    registry = registry_state()
+    status = {x["tool_name"]: x for x in registry.get("tools", [])}
     quota = quota_state()
     selected = []
     seen = set()
@@ -128,23 +194,37 @@ def plan(classes: list[str]) -> dict:
             row = dict(spec)
             row["class"] = cls
             row["availability_blocker"] = unavailable_reason(spec["tool"], status, quota)
+            row["invocation_surface"] = invocation_surface(spec["tool"], registry)
             selected.append(row)
     return {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "classes": classes,
         "planned_tools": selected,
         "legacy_fallback": LEGACY_FALLBACK,
         "allowed_fallback_reasons": sorted(ALLOWED_FALLBACKS),
-        "rule": "MUST_ATTEMPT tools require an attempt while available; blocked or failed attempts require an explicit legacy fallback where applicable.",
+        "bridge": registry.get("worker_invocation_bridge"),
+        "rule": "MUST_ATTEMPT tools require an attempt while healthy. For connector-limited workers, a repo-runner bridge request counts as the provider attempt. Every blocked/failed MUST_ATTEMPT tool must have a successful fallback explicitly covering that tool.",
     }
+
+
+def _fallback_covers(tool: str, attempts: list[dict]) -> bool:
+    for attempt in attempts:
+        if attempt.get("status") != "SUCCESS":
+            continue
+        covers = attempt.get("covers") or []
+        if isinstance(covers, str):
+            covers = [covers]
+        if tool in covers or attempt.get("fallback_for") == tool:
+            return True
+    return False
 
 
 def validate_manifest(path: Path) -> dict:
     manifest = load_json(path, {})
     planned = manifest.get("planned_tools", [])
     attempts = {x.get("tool"): x for x in manifest.get("attempts", [])}
-    fallback_attempts = {x.get("tool"): x for x in manifest.get("fallback_attempts", [])}
+    fallback_attempts = manifest.get("fallback_attempts", [])
     violations = []
 
     for spec in planned:
@@ -158,22 +238,22 @@ def validate_manifest(path: Path) -> dict:
             if blocker not in ALLOWED_FALLBACKS:
                 violations.append({"tool": tool, "reason": blocker})
                 continue
-            if blocker != "NOT_APPLICABLE" and not fallback_attempts:
-                violations.append({"tool": tool, "reason": f"{blocker}_WITHOUT_FALLBACK"})
+            if blocker != "NOT_APPLICABLE" and not _fallback_covers(tool, fallback_attempts):
+                violations.append({"tool": tool, "reason": f"{blocker}_WITHOUT_COVERING_FALLBACK"})
             continue
 
         if not attempt or not attempt.get("status"):
             violations.append({"tool": tool, "reason": "MISSING_ATTEMPT"})
             continue
 
-        status = attempt.get("status")
-        if status in FAILURE_STATUSES_REQUIRING_FALLBACK:
-            reason = attempt.get("fallback_reason")
-            if reason not in ALLOWED_FALLBACKS and status not in ALLOWED_FALLBACKS:
+        attempt_status = attempt.get("status")
+        if attempt_status in FAILURE_STATUSES_REQUIRING_FALLBACK:
+            reason = attempt.get("fallback_reason") or attempt_status
+            if reason not in ALLOWED_FALLBACKS:
                 violations.append({"tool": tool, "reason": "INVALID_FALLBACK_REASON"})
                 continue
-            if not fallback_attempts:
-                violations.append({"tool": tool, "reason": f"{status}_WITHOUT_FALLBACK"})
+            if not _fallback_covers(tool, fallback_attempts):
+                violations.append({"tool": tool, "reason": f"{attempt_status}_WITHOUT_COVERING_FALLBACK"})
 
     return {"ok": not violations, "violations": violations}
 
@@ -194,19 +274,15 @@ def record_quota(tool: str, state: str, reset_at: str | None, note: str | None):
 def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
-
     p = sub.add_parser("plan")
     p.add_argument("--class", dest="classes", action="append", required=True, choices=sorted(BUNDLES))
-
     v = sub.add_parser("validate-manifest")
     v.add_argument("path")
-
     r = sub.add_parser("record-quota")
     r.add_argument("tool")
     r.add_argument("state", choices=["AVAILABLE", "QUOTA_EXHAUSTED", "QUOTA_EXHAUSTED_CACHED", "RATE_LIMITED"])
     r.add_argument("--reset-at")
     r.add_argument("--note")
-
     args = ap.parse_args()
     if args.cmd == "plan":
         out = plan(args.classes)

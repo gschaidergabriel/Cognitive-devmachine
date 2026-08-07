@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
@@ -8,13 +8,22 @@
   "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
   "goodman_filter_checker": "tools/goodman_filter_check.py",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support.",
+  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support. The fusion meta-trigger researches across the complete mesh and must return an explicit feedback receipt to every scientific branch.",
   "triggers": {
     "dump": {
       "kind": "research_intake",
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
       "purpose": "Ingest arbitrary dump material, fuse it with current RAE knowledge, research derived hypotheses, packetize results, then archive the processed originals.",
       "mesh_role": "intake_to_shared_mesh"
+    },
+    "fusion": {
+      "kind": "global_mesh_meta_research",
+      "protocol": "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
+      "purpose": "Research across the complete current RAE knowledge/evidence graph, generate cross-domain hypotheses and experiments, resolve or expose contradictions, and write explicit feedback deltas or NO_CHANGE receipts back to every scientific branch.",
+      "mesh_role": "whole_mesh_research_feedback_loop",
+      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
+      "required_outputs": ["GLOBAL_COVERAGE_MANIFEST.json", "BRANCH_FEEDBACK_MANIFEST.json", "FINAL_REPORT.md"],
+      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
     },
     "clay": {
       "kind": "integrated_research_foundry",

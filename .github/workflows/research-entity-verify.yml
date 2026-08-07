@@ -16,7 +16,7 @@ jobs:
       - name: Install validation runtime
         run: python -m pip install --disable-pip-version-check 'jsonschema>=4.23,<5'
       - name: Compile Python entrypoints
-        run: python -m py_compile rae.py .claude/hooks/rae_hook.py tools/*.py
+        run: python -m py_compile rae.py rae_core/*.py .claude/hooks/rae_hook.py tools/*.py
       - name: Validate Claude hook settings JSON
         run: python -m json.tool .claude/settings.json >/dev/null
       - name: Refresh minimal bootstrap from canonical
@@ -31,7 +31,7 @@ jobs:
         run: python tools/check_provenance.py
       - name: Materialize claim views
         run: python tools/materialize_research_views.py
-      - name: Topicize archived source text
+      - name: Topicize archived source text and derivatives
         run: python tools/topicize_sources.py
       - name: Build embedded research graph database
         run: python tools/build_source_db.py --db research_sources/sources.db
@@ -48,6 +48,16 @@ jobs:
       - name: Gate retrieval regression
         run: >-
           python -c "import json; x=json.load(open('/tmp/benchmark.json')); assert x['mean_recall'] >= 0.95, x; assert x['mean_precision'] >= 0.50, x; print('retrieval gate ok',x['mean_precision'],x['mean_recall'])"
+      - name: Test transactional writer in isolated copy
+        run: |
+          rm -rf /tmp/rae-writer-test
+          cp -a . /tmp/rae-writer-test
+          cd /tmp/rae-writer-test
+          python rae.py claim add C-CI-WRITER-001 --actor chatgpt-secondary --status OPEN --scope 'CI isolated write test' --proposition 'Transactional writer can append and materialize a scoped claim.' --domain research_infrastructure --packet research-entity-backend --reason 'CI only'
+          python rae.py claim transition C-CI-WRITER-001 --actor chatgpt-secondary --to REFUTED --reason 'CI cleanup/falsification test'
+          python rae.py query 'Transactional writer append materialize' --status REFUTED --limit 5 >/tmp/writer-query.json
+          python -c "import json; x=json.load(open('/tmp/writer-query.json')); assert any(c['claim_id']=='C-CI-WRITER-001' and c['status']=='REFUTED' for c in x['claims']), x"
+          python rae.py event RESULT_OBSERVED --actor chatgpt-secondary --summary 'CI isolated event writer works.' --capture-level L1 --status LOCAL_ONLY --domain research_infrastructure
       - name: Validate canonical/bootstrap agreement
         run: >-
           python -c "import json,pathlib; c=json.loads(pathlib.Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json').read_text()); b=json.loads(pathlib.Path('research_entity/continuity/BOOTSTRAP_MINIMAL.json').read_text()); assert c['revision']==b['expected_revision']; assert c['state_hash']==b['expected_state_hash']; assert c['entity_version']==b['expected_entity_version']; assert b['research_team']['lead_researcher']=='claude-code-lead'; assert b['research_team']['secondary_researcher']=='chatgpt-secondary'; print('canonical/bootstrap/research-team agreement ok',c['revision'],c['state_hash'])"
@@ -62,3 +72,4 @@ jobs:
             /tmp/context.json
             /tmp/query.json
             /tmp/benchmark.json
+            /tmp/writer-query.json

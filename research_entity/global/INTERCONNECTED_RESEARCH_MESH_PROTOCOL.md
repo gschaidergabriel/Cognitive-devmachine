@@ -15,6 +15,8 @@ The connected research branches are:
 
 `dump` is an intake/fusion command rather than a peer scientific branch, but its promoted outputs enter the same mesh.
 
+The FRANK↔ClayCode feedback edge additionally uses `research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md` so recursive agreement cannot manufacture evidential confidence.
+
 ## Mandatory preflight
 
 Before Fusion 1, every research trigger MUST:
@@ -62,7 +64,26 @@ Must use Clay system constraints, FRANK runtime realities, Emergence causal test
 Must use Clay architecture, GWT intervention surfaces, Hyperposition higher-order structure, FRANK runtime observability and ClayCode causal/provenance representations.
 
 ### `claycode`
-Must use Clay semantic-state requirements, FRANK execution/runtime boundaries, GWT receipt/re-entry semantics, Hyperposition conflict/unknown representation and Emergence observability requirements.
+ClayCode is both a research branch and the architecture language of FRANK. It therefore treats the newest FRANK architecture/runtime research as its primary target-feedback input, while Clay supplies the broader integrated scientific constraints.
+
+Priority order: `frank -> clay -> gwt -> hyperposition -> emergenz -> claycode history`.
+
+Every ClayCode run MUST:
+
+1. load the newest FRANK completed and in-progress research;
+2. load the latest available `FRANK_ARCHITECTURE.claycode.json` and `CLAYCODE_ARCHITECTURE_MAPPING.md` when present;
+3. identify FRANK-derived assumptions that materially affect ClayCode semantics/runtime;
+4. apply the Goodman Anti-Echo Protocol to those assumptions;
+5. classify each relevant assumption as `SUPPORTED`, `REFINED`, `REFUTED` or `UNRESOLVED`;
+6. materialize `FRANK_CLAYCODE_GOODMAN_REVIEW.json`;
+7. integrate only the supported/refined form, preserve refutations as negative/supersession evidence, and keep unresolved assumptions explicitly open;
+8. write the resulting ClayCode delta back to the mesh for the next FRANK run.
+
+Circular agreement adds no independent support. `ClayCode -> FRANK -> ClayCode`, or any descendant chain with shared source/experiment ancestry, is one evidence family unless genuinely new independent evidence or a new discriminating experiment enters the loop.
+
+If the latest completed FRANK run predates the architecture-artifact requirement and no `FRANK_ARCHITECTURE.claycode.json` exists yet, ClayCode must explicitly record that absence and use the newest FRANK report/contract as provisional requirements; it must never fabricate the missing artifact.
+
+ClayCode must also use GWT receipt/re-entry semantics, Hyperposition conflict/unknown representation and Emergence observability requirements as independent cross-constraints.
 
 ### `hyperposition`
 Must use Clay state semantics, FRANK runtime/dataflow constraints, ClayCode representational forms, GWT activation/workspace behavior and Emergence higher-order causal tests.
@@ -77,7 +98,8 @@ Before final synthesis, every run MUST scan for:
 - identical concepts with incompatible evidence status;
 - a representation claim being mistaken for a mechanism claim;
 - an architecture claim depending on synthetic evidence as though it were live evidence;
-- stale branch conclusions superseded by a newer run.
+- stale branch conclusions superseded by a newer run;
+- apparent multi-branch agreement that collapses to the same evidence ancestry.
 
 Contradictions are retained, not silently averaged away. The final report must state whether each relevant conflict was resolved, narrowed or left open.
 
@@ -89,6 +111,7 @@ Every durable branch result should carry:
 - affected branches;
 - evidence class/status;
 - upstream dependencies;
+- evidence ancestry/family where cross-branch reuse is involved;
 - contradictions or supersessions;
 - downstream architecture/experiment implications.
 

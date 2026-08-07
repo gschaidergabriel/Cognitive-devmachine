@@ -24,13 +24,15 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   contracts:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Compile gate tools
         run: python -m py_compile tools/research_provider_router.py tools/research_interconnect_preflight.py tools/status_footer_check.py
@@ -104,3 +106,41 @@ jobs:
           ```
           EOF
           python tools/status_footer_check.py /tmp/response.txt
+
+      - name: Write successful contract health receipt
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          d={
+            'schema_version':'1.0',
+            'status':'RUNTIME_VERIFIED',
+            'checked_at':datetime.now(timezone.utc).isoformat(),
+            'gates':{
+              'python_compile':True,
+              'interconnected_research_mesh':True,
+              'frank_clay_primary_foundation':True,
+              'provider_plan':True,
+              'covering_fallback_validation':True,
+              'status_footer_and_short_commands':True
+            },
+            'source_workflow':'.github/workflows/rae-contract-gates.yml'
+          }
+          p=Path('research_entity/runtime/CONTRACT_HEALTH.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps(d,indent=2)+'\n')
+          PY
+
+      - name: Commit contract health receipt
+        run: |
+          git config user.name 'rae-contract-verifier'
+          git config user.email 'rae-contract-verifier@users.noreply.github.com'
+          git add research_entity/runtime/CONTRACT_HEALTH.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record RAE contract health verification'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

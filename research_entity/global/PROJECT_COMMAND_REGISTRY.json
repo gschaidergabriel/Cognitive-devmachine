@@ -1,15 +1,18 @@
 {
-  "schema_version": "2.1",
+  "schema_version": "2.2",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
+  "status_footer_checker": "tools/status_footer_check.py",
   "research_tool_orchestration_policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
   "research_tool_router": "tools/research_provider_router.py",
   "commands": {
     "dump": {
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
+      "tool_orchestration_addendum": "research_entity/global/DUMP_TOOL_ORCHESTRATION_ADDENDUM.md",
       "kind": "research_intake",
-      "requires_independent_support_for_promotion": true
+      "requires_independent_support_for_promotion": true,
+      "requires_tool_execution_manifest": true
     },
     "clay": {
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
@@ -36,5 +39,5 @@
       "kind": "domain_research"
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. They are handled before ordinary task routing. Every research trigger run loads the tool orchestration policy/router and records mandatory attempts or explicit quota/runtime fallback reasons. Every trigger run uses MASTER_RESEARCH_TRIGGER_PROTOCOL.md unless the command is dump, and every substantive visible response ends with STATUS_FOOTER_PROTOCOL.md."
+  "rule": "Reserved commands fire only on exact full-message match. Every research trigger loads the tool orchestration policy/router and records mandatory attempts or explicit quota/runtime fallback reasons. Every trigger uses MASTER_RESEARCH_TRIGGER_PROTOCOL.md unless dump, which additionally loads its tool addendum. Every substantive visible response ends with STATUS_FOOTER_PROTOCOL.md and should be structure-checked when runtime execution is available."
 }

@@ -2,8 +2,9 @@
 """Build a machine-readable cross-trigger research foundation manifest.
 
 Every RAE scientific trigger uses this before Fusion 1. The authoritative scientific
-branch set comes from RESEARCH_TRIGGER_REGISTRY.json. Priority order remains explicit per
-trigger so adding a new branch fails closed until its cross-branch placement is designed.
+branch set comes from RESEARCH_TRIGGER_REGISTRY.json. The manifest keeps a deliberately
+rich but bounded active Topic/Micro-Packet envelope while preserving full indexed
+reachability through the RAE stores/ClayGraph.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ TRIGGER_RUNS = ROOT / "research_entity" / "trigger_runs"
 TOPIC_PACKETS = ROOT / "research_entity" / "topic_packets"
 MICRO_PACKETS = ROOT / "research_entity" / "knowledge_micro_packets"
 REGISTRY = ROOT / "research_entity" / "global" / "RESEARCH_TRIGGER_REGISTRY.json"
+ACTIVE_POLICY = "research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md"
 
 
 def _registered_scientific_branches() -> list[str]:
@@ -49,6 +51,28 @@ for trigger, order in PRIORITY.items():
             f"research mesh governance drift: {trigger} priority={order!r} registry_branches={BRANCHES!r}"
         )
 
+# Topic/Micro packet active-envelope ceilings. These are intentionally much richer than
+# the old single 8-item packet cap. Raw evidence remains on-demand.
+BASE_PACKET_BUDGETS: dict[str, tuple[int, int]] = {
+    "clay": (48, 96),
+    "frank": (40, 80),
+    "claycode": (40, 80),
+    "claygraph": (48, 96),
+    "gwt": (32, 64),
+    "hyperposition": (32, 64),
+    "emergenz": (32, 64),
+}
+
+DEEP_PACKET_OVERRIDES: dict[tuple[str, str], tuple[int, int]] = {
+    ("frank", "clay"): (64, 128),
+    ("frank", "claycode"): (64, 128),
+    ("frank", "claygraph"): (64, 128),
+    ("claycode", "frank"): (64, 128),
+    ("claycode", "claygraph"): (64, 128),
+    ("gwt", "claygraph"): (56, 112),
+    ("hyperposition", "claygraph"): (56, 112),
+}
+
 ALIASES = {
     "clay": ["clay", "synthetic-clay", "synthetic_clay"],
     "frank": ["frank", "frankenstein"],
@@ -76,6 +100,8 @@ ARTIFACT_NAMES = [
 ]
 
 META_RE = re.compile(r"<!--\s*RAE_META\s*\n(\{.*?\})\s*\nRAE_META\s*-->", re.S)
+ACTIVE_STATUSES = {"CURRENT", "OPEN", "ACTIVE", "IN_PROGRESS", "PROPOSED"}
+HISTORIC_STATUSES = {"SUPERSEDED", "REFUTED", "ARCHIVED", "STALE", "CLOSED"}
 
 
 def _rel(path: Path) -> str:
@@ -107,10 +133,47 @@ def _meta(path: Path) -> dict[str, Any]:
     return {}
 
 
-def _material_score(path: Path) -> tuple[str, str]:
+def _status(meta: dict[str, Any]) -> str:
+    for key in ("status", "state", "lifecycle", "current_status"):
+        value = meta.get(key)
+        if value is not None:
+            return str(value).upper()
+    return ""
+
+
+def _material_category(path: Path) -> str:
+    hay = (_rel(path) + "\n" + _read_text(path, 5000)).lower()
+    if "negative_result" in hay or "negative result" in hay or "refuted" in hay:
+        return "negative"
+    if "contradiction" in hay or "supersed" in hay:
+        return "contradiction"
+    if "experiment" in hay or "falsifier" in hay:
+        return "experiment"
+    if "architecture" in hay or "migration" in hay or "schema" in hay:
+        return "architecture"
+    if "hypothesis" in hay or "hypothese" in hay:
+        return "hypothesis"
+    if "feedback" in hay or "cross-branch" in hay:
+        return "feedback"
+    return "general"
+
+
+def _material_score(path: Path) -> tuple[int, int, str, str]:
     meta = _meta(path)
+    status = _status(meta)
+    status_score = 4 if status in ACTIVE_STATUSES else (1 if status in HISTORIC_STATUSES else 2)
+    category = _material_category(path)
+    category_score = {
+        "contradiction": 7,
+        "negative": 7,
+        "experiment": 6,
+        "architecture": 5,
+        "feedback": 5,
+        "hypothesis": 4,
+        "general": 2,
+    }[category]
     stamp = str(meta.get("updated_at") or meta.get("created_at") or meta.get("run_id") or "")
-    return stamp, _rel(path)
+    return status_score, category_score, stamp, _rel(path)
 
 
 def _matches_branch(path: Path, branch: str) -> bool:
@@ -143,32 +206,64 @@ def _artifacts(run: Path) -> list[str]:
     return found
 
 
-def _matching_material(base: Path, branch: str, limit: int | None) -> list[str]:
+def _material_candidates(base: Path, branch: str) -> list[Path]:
     if not base.exists():
         return []
-    candidates = []
+    out = []
     for p in base.rglob("*"):
         if not p.is_file() or p.suffix.lower() not in {".md", ".json", ".jsonl"}:
             continue
         if _matches_branch(p, branch):
-            candidates.append(p)
-    candidates.sort(key=_material_score, reverse=True)
-    selected = candidates if limit is None else candidates[:limit]
-    return [_rel(p) for p in selected]
+            out.append(p)
+    out.sort(key=_material_score, reverse=True)
+    return out
 
 
-def _depth(trigger: str, branch: str, base_depth: int) -> tuple[int, int]:
+def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], int, dict[str, int]]:
+    candidates = _material_candidates(base, branch)
+    if not candidates or limit <= 0:
+        return [], len(candidates), {}
+
+    # First reserve a small diversity slice across failure/contradiction/experiment/
+    # architecture/hypothesis/feedback categories, then fill by global priority.
+    selected: list[Path] = []
+    seen: set[Path] = set()
+    category_counts: dict[str, int] = {}
+    for category in ("negative", "contradiction", "experiment", "architecture", "hypothesis", "feedback", "general"):
+        for p in candidates:
+            if len(selected) >= limit:
+                break
+            if p in seen or _material_category(p) != category:
+                continue
+            if category_counts.get(category, 0) >= 3:
+                continue
+            selected.append(p)
+            seen.add(p)
+            category_counts[category] = category_counts.get(category, 0) + 1
+    for p in candidates:
+        if len(selected) >= limit:
+            break
+        if p in seen:
+            continue
+        selected.append(p)
+        seen.add(p)
+        cat = _material_category(p)
+        category_counts[cat] = category_counts.get(cat, 0) + 1
+    return [_rel(p) for p in selected], len(candidates), category_counts
+
+
+def _run_depth(trigger: str, branch: str, base_depth: int) -> int:
     run_depth = max(1, base_depth)
-    packet_limit = 8
     deep = {
-        ("frank", "clay"): (3, 12), ("frank", "claycode"): (4, 20), ("frank", "claygraph"): (4, 20),
-        ("claycode", "frank"): (4, 20), ("claycode", "clay"): (3, 12), ("claycode", "claygraph"): (4, 20),
-        ("hyperposition", "claygraph"): (4, 20), ("gwt", "claygraph"): (4, 20),
+        ("frank", "clay"): 3, ("frank", "claycode"): 4, ("frank", "claygraph"): 4,
+        ("claycode", "frank"): 4, ("claycode", "clay"): 3, ("claycode", "claygraph"): 4,
+        ("hyperposition", "claygraph"): 4, ("gwt", "claygraph"): 4,
     }
-    if (trigger, branch) in deep:
-        d, p = deep[(trigger, branch)]
-        return max(run_depth, d), p
-    return run_depth, packet_limit
+    return max(run_depth, deep.get((trigger, branch), run_depth))
+
+
+def _packet_budget(trigger: str, branch: str) -> tuple[int, int]:
+    return DEEP_PACKET_OVERRIDES.get((trigger, branch), BASE_PACKET_BUDGETS.get(branch, (32, 64)))
 
 
 def _latest_artifact(branches: list[dict[str, Any]], branch: str, suffix: str) -> str | None:
@@ -191,11 +286,14 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
         if coverage_all:
             all_runs = _runs(branch, include_incomplete=True)
             run_depth: int | str = "ALL_DISCOVERED"
-            packet_limit = None
         else:
-            numeric_depth, packet_limit = _depth(trigger, branch, history_per_branch)
+            numeric_depth = _run_depth(trigger, branch, history_per_branch)
             all_runs = _runs(branch, include_incomplete=True)[:numeric_depth]
             run_depth = numeric_depth
+
+        topic_limit, micro_limit = _packet_budget(trigger, branch)
+        topics, topic_total, topic_categories = _select_material(TOPIC_PACKETS, branch, topic_limit)
+        micros, micro_total, micro_categories = _select_material(MICRO_PACKETS, branch, micro_limit)
         completed = [r for r in all_runs if (r / "FINAL_REPORT.md").exists()]
         branches.append({
             "branch": branch,
@@ -205,22 +303,32 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "latest_run_complete": bool(all_runs and (all_runs[0] / "FINAL_REPORT.md").exists()),
             "latest_completed_run": completed[0].name if completed else None,
             "runs": [{"run_id": r.name, "complete": (r / "FINAL_REPORT.md").exists(), "artifacts": _artifacts(r)} for r in all_runs],
-            "topic_packets": _matching_material(TOPIC_PACKETS, branch, packet_limit),
-            "knowledge_micro_packets": _matching_material(MICRO_PACKETS, branch, packet_limit),
+            "active_knowledge": {
+                "topic_packet_limit": topic_limit,
+                "knowledge_micro_packet_limit": micro_limit,
+                "topic_packet_indexed_candidates": topic_total,
+                "knowledge_micro_packet_indexed_candidates": micro_total,
+                "topic_packet_categories": topic_categories,
+                "knowledge_micro_packet_categories": micro_categories,
+                "selection_policy": ACTIVE_POLICY,
+            },
+            "topic_packets": topics,
+            "knowledge_micro_packets": micros,
         })
 
     latest_frank_arch = _latest_artifact(branches, "frank", "/FRANK_ARCHITECTURE.claycode.json")
     latest_claygraph = _latest_artifact(branches, "claygraph", "/CLAYGRAPH_CANDIDATE.claycode.json") or _latest_artifact(branches, "claygraph", "/CLAYGRAPH_SCHEMA.claycode.json")
     return {
-        "schema_version": "1.4",
+        "schema_version": "1.5",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "trigger": trigger,
         "run_id": run_id,
         "registry_scientific_branches": BRANCHES,
         "protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+        "active_knowledge_policy": ACTIVE_POLICY,
         "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md" if trigger in {"claycode", "fusion"} else None,
         "branch_priority": PRIORITY[trigger],
-        "coverage_mode": "ALL_DISCOVERED_INDEXED" if coverage_all else "PRIORITY_BOUNDED",
+        "coverage_mode": "ALL_DISCOVERED_INDEXED_WITH_RICH_ACTIVE_PACKET_ENVELOPE" if coverage_all else "PRIORITY_BOUNDED_WITH_RICH_ACTIVE_PACKET_ENVELOPE",
         "branches": branches,
         "requirements": {
             "must_ingest_all_connected_branches": True,
@@ -228,6 +336,8 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "must_preserve_evidence_status": True,
             "must_scan_cross_branch_contradictions": True,
             "must_write_back_cross_links": True,
+            "must_use_rich_active_packet_envelopes": True,
+            "raw_evidence_expands_on_demand": True,
             "strong_promotion_blocked_if_missing": True,
         },
         "special_rules": {

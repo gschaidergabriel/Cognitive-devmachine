@@ -5,6 +5,13 @@ research_sources/sources.db-shm
 research_sources/sources.db-wal
 research_entity/context_manifests/
 
+# Local credentials / secrets — never commit
+.env
+.env.*
+!.env.example
+secrets/
+*.secret
+
 # Python runtime noise
 __pycache__/
 *.pyc

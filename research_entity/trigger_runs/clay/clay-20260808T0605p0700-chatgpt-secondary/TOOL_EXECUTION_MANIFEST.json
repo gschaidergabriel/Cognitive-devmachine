@@ -1,0 +1,52 @@
+{
+  "schema_version":"1.2",
+  "run_id":"clay-20260808T0605p0700-chatgpt-secondary",
+  "classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "bridge":{"status":"OPERATIONAL","tool":"tools/research_tool_bridge.py","workflow":".github/workflows/research-tool-bridge.yml"},
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null,"invocation_surface":"DIRECT_RUNTIME"},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null,"invocation_surface":"DIRECT_RUNTIME"},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE","invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE","invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"huggingface_inference","mode":"MUST_ATTEMPT","class":"model_experiment","availability_blocker":"QUOTA_EXHAUSTED_CACHED","invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"}
+  ],
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","surface":"repo_runner_bridge","request":"research_entity/runtime/tool_requests/g8-openalex-20260808T0605.json","result":"research_entity/runtime/tool_results/g8-openalex-20260808T0605.json","note":"Provider succeeded; broad query had low topical precision and is treated as discovery/provider receipt only."},
+    {"tool":"arxiv_search","status":"SUCCESS","surface":"repo_runner_bridge","request":"research_entity/runtime/tool_requests/g8-arxiv-20260808T0605.json","result":"research_entity/runtime/tool_results/g8-arxiv-20260808T0605.json","note":"Returned directly relevant non-normal-control and SeKV preprints. A separate local direct Atom request failed DNS before the bridge path was used."},
+    {"tool":"semantic_scholar_search","status":"RATE_LIMITED","fallback_reason":"RATE_LIMITED","surface":"repo_runner_bridge","request":"research_entity/runtime/tool_requests/g8-s2-20260808T0605.json","result":"research_entity/runtime/tool_results/g8-s2-20260808T0605.json","note":"HTTP 429 on shared public pool."},
+    {"tool":"tavily_search","status":"SUCCESS","surface":"repo_runner_bridge","request":"research_entity/runtime/tool_requests/g8-tavily-20260808T0605.json","result":"research_entity/runtime/tool_results/g8-tavily-20260808T0605.json","note":"Discovery evidence only; primary sources preferred for claims."},
+    {"tool":"exa_search","status":"SUCCESS","surface":"repo_runner_bridge","request":"research_entity/runtime/tool_requests/g8-exa-20260808T0605.json","result":"research_entity/runtime/tool_results/g8-exa-20260808T0605.json","note":"Found SeKV, recent non-normal transition work and adaptive KV implementations; primary sources used where available."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical/bootstrap/mesh branch heads, governance, implementation repositories, writes and rereads executed through GitHub connector."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Nine deterministic seeded synthetic/analytic experiments executed; harness and raw JSON persisted."},
+    {"tool":"huggingface_inference","status":"QUOTA_EXHAUSTED_CACHED","fallback_reason":"QUOTA_EXHAUSTED_CACHED","note":"Cached CC7 HTTP 402 state valid until 2026-09-01; repeated paid inference intentionally not attempted."}
+  ],
+  "fallback_attempts":[
+    {"tool":"openalex_arxiv_native_web_bundle","status":"SUCCESS","covers":["semantic_scholar_search"],"note":"Successful OpenAlex/arXiv bridge plus native web/primary-source retrieval covered scholarly discovery after Semantic Scholar 429."},
+    {"tool":"native_web","status":"SUCCESS","covers":["semantic_scholar_search","duckduckgo_search"],"note":"Current primary/source discovery used for non-normal control, event/value freshness, formal soundness, bandits and emergence."},
+    {"tool":"local_sandbox","status":"SUCCESS","covers":["e2b_sandbox","huggingface_inference"],"note":"Executable/model-related hypotheses were tested only as simulation/analytic proxies; no remote-sandbox or model-performance claim is made."},
+    {"tool":"github_connector","status":"SUCCESS","covers":[],"note":"Implementation evidence included SeKV, Feldera and Qualcomm GenieX plus current RAE mesh branches."},
+    {"tool":"direct_primary_sources","status":"SUCCESS","covers":[],"note":"Primary arXiv/ACM/PMLR/official documentation preferred over discovery snippets."},
+    {"tool":"archived_rae_sources","status":"SUCCESS","covers":[],"note":"G7, FRANK Cycle 3, GWT R2, CC7, H2 and Emergence Certificate loaded under mesh protocol."}
+  ],
+  "notable_external_sources":[
+    "arXiv:2604.17744 Input-Side Variance Suppression under Non-Normal Transient Amplification",
+    "arXiv:2606.31145 SeKV",
+    "Communications Physics 2026 Phase transitions without instability from non-normal dynamics",
+    "PACMPL/PLDI 2026 SAIL: Sound Abstract Interpreters with LLMs",
+    "arXiv:2607.27606 LimICE",
+    "Performance Evaluation 2024 hybrid age/deviation-of-information event-triggered systems",
+    "Information Sciences 2025 SCAPA-UCB nonstationary contextual bandits",
+    "arXiv:2605.03267 Partial Effective Information Decomposition",
+    "CLeaR/PMLR 2026 information-theoretic signatures of causality in Bayesian networks and hypergraphs"
+  ],
+  "manifest_validation":{"method":"equivalent validation against current tools/research_provider_router.py v1.2 rules","ok":true,"violations":[]},
+  "sanitized_cost_metadata":{"openalex_provider_reported_cost_usd":0.001,"other_paid_provider_cost_not_reported":true,"huggingface_inference_spend":0},
+  "rule":"Provider metadata/snippets are discovery evidence. Unsuccessful provider attempts are preserved as failures; no provider prestige promotes a claim."
+}

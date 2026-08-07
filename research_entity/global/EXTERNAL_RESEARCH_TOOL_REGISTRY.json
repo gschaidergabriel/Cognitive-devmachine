@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.9",
+  "schema_version": "2.0",
   "purpose": "Registry of external research, verification and execution capabilities available to FRANK/RAE runtimes. Credential values live only in the designated private token store, never in this registry.",
   "secret_policy": {
     "canonical_private_store": "research_entity/private/API_TOKENS.env",
@@ -160,8 +160,10 @@
       "auth_transport": "Authorization: Bearer via router.huggingface.co/v1",
       "preferred_for": ["model experiments", "embedding/classification/inference comparisons", "provider-routed chat inference", "available-model discovery"],
       "evidence_class": "external_model_runtime",
-      "status": "REGISTERED_PENDING_RUNTIME_VERIFICATION",
-      "verification_receipt": "research_entity/runtime/huggingface_verification.json"
+      "status": "RUNTIME_VERIFIED",
+      "verification_receipt": "research_entity/runtime/huggingface_verification.json",
+      "verified_at": "2026-08-07T21:46:49.094291+00:00",
+      "verification_spent_inference_credit": false
     }
   ],
   "selection_rule": "Use the cheapest fit-for-purpose capability that preserves evidence quality. Prefer primary/authoritative sources over search-engine summaries. A tool being registered never makes its output canonical evidence by itself.",

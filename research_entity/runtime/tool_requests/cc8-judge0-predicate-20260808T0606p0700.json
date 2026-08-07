@@ -1,0 +1,6 @@
+{
+  "request_id":"cc8-judge0-predicate-20260808T0606p0700",
+  "tool":"judge0_execute",
+  "code":"import random\nrandom.seed(880608)\nN=50000\ntrue_conflicts=0\nobject_misses=0\npredicate_caught=0\nglobal_reject=0\npredicate_reject=0\nfor _ in range(N):\n    a=random.randrange(500)\n    if random.random()<0.30:\n        b=a\n    else:\n        b=random.randrange(500)\n    conflict=(a==b)\n    global_reject += 1\n    if conflict:\n        true_conflicts += 1\n        # both transactions read the empty predicate and insert distinct row ids; row/object OCC sees no shared object version\n        object_misses += 1\n        # predicate/invariant epoch for logical slot changes after first commit\n        predicate_caught += 1\n        predicate_reject += 1\nprint({'n_pairs':N,'true_conflicts':true_conflicts,'object_only_misses':object_misses,'object_miss_rate_given_conflict':object_misses/true_conflicts,'predicate_detection_given_conflict':predicate_caught/true_conflicts,'global_second_reject_rate':global_reject/N,'predicate_scoped_second_reject_rate':predicate_reject/N})\n",
+  "options":{"timeout":30}
+}

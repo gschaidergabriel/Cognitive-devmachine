@@ -1,0 +1,26 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"provenance.schema.json",
+  "type":"object",
+  "required":["provenance_id","path","origin_actor","attribution_confidence"],
+  "properties":{
+    "provenance_id":{"type":"string","minLength":3},
+    "path":{"type":"string","minLength":1},
+    "content_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "origin_actor":{"type":"string","minLength":1},
+    "actor_role":{"type":"string"},
+    "provider":{"type":"string"},
+    "model":{"type":"string"},
+    "session_id":{"type":"string"},
+    "prompt_run_id":{"type":"string"},
+    "created_at":{"type":"string"},
+    "created_via":{"type":"string"},
+    "ingested_by":{"type":"string"},
+    "adjudicated_by":{"type":"string"},
+    "source_refs":{"type":"array","items":{"type":"string"}},
+    "git_commit":{"type":"string"},
+    "attribution_confidence":{"enum":["VERIFIED","HIGH","LEGACY_INFERRED","UNKNOWN"]},
+    "note":{"type":"string"}
+  },
+  "additionalProperties":true
+}

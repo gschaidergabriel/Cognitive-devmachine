@@ -19,11 +19,26 @@
     "hypothesis_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
     "experiment_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
     "result":{},
-    "status":{"enum":["CURRENT","OPEN","SUPERSEDED","REFUTED","NEGATIVE","LOCAL_ONLY","NEGATIVE_RESULT","CONTEXT_ONLY"]},
+    "status":{"enum":["CURRENT","OPEN","SUPERSEDED","REFUTED","NEGATIVE","LOCAL_ONLY","NEGATIVE_RESULT","CONTEXT_ONLY","NOT_SELECTED"]},
     "confidence":{},
     "falsifier_or_next_test":{"type":"string"},
     "artifact_refs":{"type":"array","items":{"type":"string"}},
-    "provenance":{"type":"object"}
+    "provenance":{
+      "type":"object",
+      "properties":{
+        "origin_actor":{"type":"string"},
+        "actor_role":{"type":"string"},
+        "provider":{"type":"string"},
+        "model":{"type":"string"},
+        "runtime":{"type":"string"},
+        "session_id":{"type":"string"},
+        "prompt_run_id":{"type":"string"},
+        "ingested_by":{"type":"string"},
+        "adjudicated_by":{"type":"string"},
+        "commit":{"type":"string"}
+      },
+      "additionalProperties":true
+    }
   },
   "additionalProperties":true
 }

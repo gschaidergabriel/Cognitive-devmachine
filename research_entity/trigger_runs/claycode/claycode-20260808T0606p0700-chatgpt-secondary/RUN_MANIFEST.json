@@ -1,0 +1,52 @@
+{
+  "schema_version":"1.1",
+  "run_id":"claycode-20260808T0606p0700-chatgpt-secondary",
+  "trigger":"claycode",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","role":"SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "parent_run":"claycode-20260808T0549p0700-chatgpt-secondary",
+  "candidate":"CC-RC1.3 Observed Transition Closure Capsule (OTCC)",
+  "status":"COMPLETED_OPEN_RESEARCH",
+  "canonical_promotion":"NOT_PERFORMED",
+  "interconnect_manifest":"INTERCONNECT_MANIFEST.json",
+  "artifacts":[
+    "FINAL_REPORT.md",
+    "HYPOTHESES.md",
+    "NEGATIVE_RESULTS.md",
+    "EXPERIMENT_RESULTS.json",
+    "CC_RC1_3_REFERENCE.py",
+    "TOOL_EXECUTION_MANIFEST.json",
+    "INTERCONNECT_MANIFEST.json"
+  ],
+  "knowledge_compilation":[
+    "research_entity/knowledge_micro_packets/xeno_claycode/KMP-CC8-TYPED-DEPENDENCY-WITNESSES.md",
+    "research_entity/knowledge_micro_packets/xeno_claycode/KMP-CC8-STATIC-DYNAMIC-CLOSURE.md",
+    "research_entity/knowledge_micro_packets/security_capabilities/KMP-CC8-DURABLE-EFFECT-INTENT.md",
+    "research_entity/topic_packets/claycode-cc8-observed-transition-closure/PACKET.json"
+  ],
+  "provider_results":[
+    "research_entity/runtime/tool_results/cc8-openalex-20260808T0606p0700.json",
+    "research_entity/runtime/tool_results/cc8-arxiv-20260808T0606p0700.json",
+    "research_entity/runtime/tool_results/cc8-tavily-20260808T0606p0700.json",
+    "research_entity/runtime/tool_results/cc8-exa-20260808T0606p0700.json",
+    "research_entity/runtime/tool_results/cc8-judge0-predicate-20260808T0606p0700.json"
+  ],
+  "tool_manifest_validation":{"method":"router-rule-equivalent validation against tools/research_provider_router.py v1.2 logic","ok":true,"violations":[]},
+  "main_findings":[
+    "Existing-object read/write witnesses are not a universal semantic freshness model; negative predicates/phantoms require predicate/range/invariant witnesses.",
+    "Runtime observed dependency traces may narrow a trusted compiler-derived static envelope, but observed-only validation is unsafe if interposition can be escaped.",
+    "Temporal/environment/workspace-regime dependencies must be explicit when they influence operation semantics.",
+    "Irreversible external effects require pre-effect authority interposition and are best staged as durable idempotent effect intents rather than treated as rollbackable speculative calls.",
+    "CC-RC1.3 refines CC-RC1.2; it does not refute the surviving CC7 principles of semantic IR, state-root identity, op semantics hash and external authority."
+  ],
+  "independent_runtime_replication":{"provider":"Judge0","status":"SUCCESS","experiment":"EXP-CC8-PREDICATE-JUDGE0-REPL-001","n_pairs":50000,"true_conflicts":15088,"object_only_miss_rate_given_conflict":1.0,"predicate_detection_given_conflict":1.0},
+  "blocked_live_dependency":{"tool":"huggingface_inference","state":"QUOTA_EXHAUSTED_CACHED","reset_at":"2026-09-01T00:00:00+00:00","effect":"No target Qwen3-4B reader result in CC8; model-performance claims remain OPEN."},
+  "highest_priority_next_tests":[
+    "EXP-CC8-LIVE-OPREGISTRY-FOOTPRINT",
+    "EXP-CC8-PREDICATE-INVARIANT-FUZZ",
+    "EXP-FRANK-GWT-FRESHNESS-FACTORIAL",
+    "EXP-CC8-EFFECT-OUTBOX-FAULT-INJECTION",
+    "EXP-LIVE-XENO-CLAY-FACTORIAL"
+  ],
+  "completion_note":"All trigger-required current-turn research artifacts were materialized. Live target-model and live-FRANK transfer tests remain scientifically open rather than falsely completed."
+}

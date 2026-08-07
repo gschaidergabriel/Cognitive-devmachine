@@ -1,0 +1,50 @@
+{
+  "schema_version":"1.0",
+  "entity_id":"frank-project-global-research-entity",
+  "principle":"One persistent Research Entity, multiple explicitly identified temporary research actors.",
+  "actors":[
+    {
+      "actor_id":"claude-code-lead",
+      "display_name":"Claude Code",
+      "organization":"Anthropic",
+      "role":"LEAD_RESEARCHER_PRIMARY_ADJUDICATOR",
+      "decision_weight":1.0,
+      "authority_scope":["research prioritization","architecture adjudication","FRANK implementation interpretation","promotion recommendation","conflict resolution among non-decisive interpretations"],
+      "special_context":"Lead because Claude Code directly builds/inspects FRANK and therefore has the strongest implementation-grounded context when that evidence is actually available.",
+      "may_override_empirical_evidence":false,
+      "must_record_provenance":true
+    },
+    {
+      "actor_id":"chatgpt-secondary",
+      "display_name":"ChatGPT",
+      "organization":"OpenAI",
+      "role":"SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+      "decision_weight":0.7,
+      "authority_scope":["independent analysis","external research","hypothesis generation","counteranalysis","experiment design","cross-domain synthesis","review and challenge"],
+      "special_context":"Independent second researcher. Its purpose includes producing alternative hypotheses and challenging the lead, not merely agreeing with it.",
+      "may_override_empirical_evidence":false,
+      "must_record_provenance":true
+    },
+    {
+      "actor_id":"user-gabriel",
+      "display_name":"Gabriel / Project Owner",
+      "role":"PROJECT_OWNER_RESEARCH_DIRECTOR",
+      "decision_weight":1.0,
+      "authority_scope":["research goals","project priorities","resource allocation","final user intent"],
+      "may_override_empirical_evidence":false,
+      "must_record_provenance":true
+    }
+  ],
+  "evidence_precedence":[
+    "verified reproducible measurement",
+    "verified primary raw evidence",
+    "replicated experiment",
+    "independent implementation/runtime evidence",
+    "strong literature/code evidence",
+    "lead researcher interpretation",
+    "secondary researcher interpretation",
+    "unverified report/speculation"
+  ],
+  "adjudication_rule":"Claude Code has final researcher adjudication over unresolved interpretation, architecture and prioritization disputes after evidence has been assembled. Researcher authority never converts a contradicted empirical claim into a current fact.",
+  "split_brain_rule":"Do not create separate Claude and ChatGPT canonical research states. Both actors operate against the same canonical backend and append actor-attributed deltas."
+}

@@ -1,0 +1,107 @@
+name: RAE provenance batch register
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/runtime/provenance_requests/*.json'
+      - '.github/workflows/provenance-batch-register.yml'
+
+concurrency:
+  group: rae-provenance-batch-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Rebase to current branch head
+        run: git pull --rebase origin "${GITHUB_REF_NAME}"
+
+      - name: Append pending provenance batches
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+          import hashlib, json, re
+          from pathlib import Path
+
+          root = Path('.')
+          req_dir = root / 'research_entity/runtime/provenance_requests'
+          res_dir = root / 'research_entity/runtime/provenance_results'
+          ledger = root / 'research_entity/provenance/ARTIFACT_PROVENANCE.jsonl'
+          res_dir.mkdir(parents=True, exist_ok=True)
+          ledger.parent.mkdir(parents=True, exist_ok=True)
+          existing_lines = ledger.read_text(encoding='utf-8').splitlines() if ledger.exists() else []
+          existing = [json.loads(x) for x in existing_lines if x.strip()]
+          existing_keys = {(x.get('path'), x.get('prompt_run_id')) for x in existing}
+          max_seq = 0
+          for x in existing:
+              m = re.fullmatch(r'PV-CHATGPT-(\d+)', str(x.get('provenance_id','')))
+              if m:
+                  max_seq = max(max_seq, int(m.group(1)))
+
+          appended = []
+          for req_path in sorted(req_dir.glob('*.json')):
+              req = json.loads(req_path.read_text(encoding='utf-8'))
+              request_id = req.get('request_id') or req_path.stem
+              result_path = res_dir / f'{request_id}.json'
+              if result_path.exists():
+                  continue
+              for art in req.get('artifacts', []):
+                  rel = str(art['path'])
+                  key = (rel, req.get('prompt_run_id'))
+                  if key in existing_keys:
+                      continue
+                  p = root / rel
+                  if not p.is_file():
+                      raise SystemExit(f'missing artifact: {rel}')
+                  max_seq += 1
+                  record = {
+                      'provenance_id': f'PV-CHATGPT-{max_seq:04d}',
+                      'path': rel,
+                      'content_sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
+                      'origin_actor': req['origin_actor'],
+                      'actor_role': req['actor_role'],
+                      'provider': req['provider'],
+                      'model': req['model'],
+                      'session_id': req.get('session_id',''),
+                      'prompt_run_id': req.get('prompt_run_id',''),
+                      'created_at': req.get('created_at',''),
+                      'ingested_by': req.get('ingested_by', req['origin_actor']),
+                      'source_refs': art.get('source_refs', req.get('source_refs', [])),
+                      'git_commit': art.get('git_commit'),
+                      'attribution_confidence': 'VERIFIED'
+                  }
+                  existing_lines.append(json.dumps(record, ensure_ascii=False, separators=(',',':')))
+                  existing_keys.add(key)
+                  appended.append(record)
+              result_path.write_text(json.dumps({
+                  'schema_version':'1.0',
+                  'request_id':request_id,
+                  'status':'SUCCESS',
+                  'appended_count':len(appended),
+                  'last_provenance_id': appended[-1]['provenance_id'] if appended else None,
+                  'records':appended,
+              }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          ledger.write_text('\n'.join(existing_lines) + ('\n' if existing_lines else ''), encoding='utf-8')
+          PY
+
+      - name: Commit provenance ledger and receipts
+        run: |
+          git config user.name 'rae-provenance-bot'
+          git config user.email 'rae-provenance-bot@users.noreply.github.com'
+          git add research_entity/provenance/ARTIFACT_PROVENANCE.jsonl research_entity/runtime/provenance_results/
+          git diff --cached --quiet && exit 0
+          git commit -m 'Register RAE artifact provenance batch'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

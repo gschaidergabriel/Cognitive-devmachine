@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -13,7 +13,8 @@
     "web research",
     "artifact generation",
     "owner-authorized private repository credential persistence",
-    "OpenAlex API via tools/openalex_search.py (runtime verified)"
+    "OpenAlex API via tools/openalex_search.py (runtime verified)",
+    "arXiv API via tools/arxiv_search.py (runtime verified, credential-free)"
   ],
   "github_backend": {
     "repository": "gschaidergabriel/clay-global-research-entity",
@@ -33,6 +34,12 @@
         "tool": "tools/openalex_search.py",
         "receipt": "research_entity/runtime/openalex_verification.json",
         "verified_at": "2026-08-07T21:27:42.562319+00:00"
+      },
+      "arXiv": {
+        "tool": "tools/arxiv_search.py",
+        "receipt": "research_entity/runtime/arxiv_verification.json",
+        "verified_at": "2026-08-07T21:29:54.774171+00:00",
+        "credential_required": false
       }
     },
     "status_rule": "Credential presence and adapter installation are distinct from provider runtime verification.",

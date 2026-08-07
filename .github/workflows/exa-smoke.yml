@@ -1,0 +1,57 @@
+name: Exa credential smoke
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/private/API_TOKENS.env'
+      - 'tools/rae_secret_loader.py'
+      - 'tools/exa_search.py'
+      - '.github/workflows/exa-smoke.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  verify-exa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check credential availability
+        run: python tools/rae_secret_loader.py EXA_API_KEY
+
+      - name: Verify Exa provider
+        run: python tools/exa_search.py --smoke-test > /tmp/exa-smoke.json
+
+      - name: Write sanitized verification receipt
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src = json.loads(Path('/tmp/exa-smoke.json').read_text())
+          out = {
+              'schema_version': '1.0',
+              'provider': src.get('provider'),
+              'tool': src.get('tool'),
+              'status': src.get('status'),
+              'checked_at': src.get('checked_at'),
+              'credential_source': src.get('credential_source'),
+              'credential_value_persisted_here': False,
+              'verification_endpoint_class': src.get('verification_endpoint_class'),
+              'request_id': src.get('request_id'),
+              'cost_dollars': src.get('cost_dollars'),
+          }
+          p = Path('research_entity/runtime/exa_verification.json')
+          p.parent.mkdir(parents=True, exist_ok=True)
+          p.write_text(json.dumps(out, indent=2) + '\n')
+          PY
+
+      - name: Commit verification receipt
+        run: |
+          git config user.name 'rae-runtime-verifier'
+          git config user.email 'rae-runtime-verifier@users.noreply.github.com'
+          git add research_entity/runtime/exa_verification.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record Exa runtime verification'
+          git push

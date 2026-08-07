@@ -18,6 +18,7 @@ SCHEMA=ROOT/'schemas'/'provenance.schema.json'
 
 # These high-value governance/runtime artifacts must always have explicit authorship.
 MUST_COVER={
+ 'README.md',
  'PROJECT_AUTO_BOOT_KERNEL_FINAL.txt',
  'CLAUDE.md',
  'CLAUDE_CODE_INTRODUCTION.md',
@@ -27,10 +28,16 @@ MUST_COVER={
  'research_entity/global/RESEARCH_ACTOR_REGISTRY.json',
  'research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md',
  'research_entity/global/PROVENANCE_POLICY.md',
+ 'research_entity/global/RESEARCH_EVENT_CAPTURE_PROTOCOL.md',
+ 'research_entity/global/TOPIC_PACKET_PROTOCOL.md',
  'research_entity/continuity/BOOTSTRAP_MINIMAL.json',
  'research_entity/continuity/OPERATIONAL_STATUS.json',
+ 'schemas/event.schema.json',
+ 'schemas/claim.schema.json',
+ 'schemas/provenance.schema.json',
  'tools/build_source_db.py',
  'tools/validate_research_entity.py',
+ 'tools/check_provenance.py',
  '.github/workflows/research-entity-verify.yml'
 }
 

@@ -19,6 +19,8 @@ jobs:
         run: python -m py_compile rae.py rae_core/*.py .claude/hooks/rae_hook.py tools/*.py
       - name: Validate Claude hook settings JSON
         run: python -m json.tool .claude/settings.json >/dev/null
+      - name: Validate project research triggers
+        run: python tools/validate_triggers.py
       - name: Refresh minimal bootstrap from canonical
         run: python tools/materialize_bootstrap.py
       - name: Worker boot preflight
@@ -31,10 +33,15 @@ jobs:
         run: python tools/check_provenance.py
       - name: Materialize claim views
         run: python tools/materialize_research_views.py
+      - name: Materialize surgical knowledge micro-packets
+        run: python tools/materialize_micro_packets.py
       - name: Topicize archived source text and derivatives
         run: python tools/topicize_sources.py
       - name: Build embedded research graph database
         run: python tools/build_source_db.py --db research_sources/sources.db
+      - name: Verify micro-packets reached searchable source materialization
+        run: >-
+          python -c "import sqlite3; c=sqlite3.connect('research_sources/sources.db'); n=c.execute(\"select count(*) from sources where path like '%knowledge_micro_packets%'\").fetchone()[0]; assert n>=1,n; print('micro-packet source projection indexed',n)"
       - name: Compile task-specific context
         run: python rae.py boot --actor claude-code-lead --task 'CI verify GWT XENO Clay Android research context' --max-claims 8 --max-packets 4 --max-chunks 2 >/tmp/context.json
       - name: Exercise relational query broker
@@ -73,17 +80,18 @@ jobs:
           test ! -e dump/ci_payload.txt
           test -e "dump archive/$BATCH/original/ci_payload.txt"
           python -c "import json; x=json.load(open('/tmp/dump-finalize.json')); assert x['ok'] and x['inbox_payload_remaining']==0, x"
-      - name: Validate canonical/bootstrap agreement
+      - name: Validate canonical/bootstrap agreement and trigger registry exposure
         run: >-
-          python -c "import json,pathlib; c=json.loads(pathlib.Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json').read_text()); b=json.loads(pathlib.Path('research_entity/continuity/BOOTSTRAP_MINIMAL.json').read_text()); assert c['revision']==b['expected_revision']; assert c['state_hash']==b['expected_state_hash']; assert c['entity_version']==b['expected_entity_version']; assert b['research_team']['lead_researcher']=='claude-code-lead'; assert b['research_team']['secondary_researcher']=='chatgpt-secondary'; assert 'dump' in b['reserved_commands']; print('canonical/bootstrap/research-team/command agreement ok',c['revision'],c['state_hash'])"
+          python -c "import json,pathlib; c=json.loads(pathlib.Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json').read_text()); b=json.loads(pathlib.Path('research_entity/continuity/BOOTSTRAP_MINIMAL.json').read_text()); r=json.loads(pathlib.Path('research_entity/global/RESEARCH_TRIGGER_REGISTRY.json').read_text()); assert c['revision']==b['expected_revision']; assert c['state_hash']==b['expected_state_hash']; assert c['entity_version']==b['expected_entity_version']; assert b['research_team']['lead_researcher']=='claude-code-lead'; assert b['research_team']['secondary_researcher']=='chatgpt-secondary'; assert set(['dump','clay','gwt','frank','emergenz','claycode','hyperposition']) <= set(r['triggers']); print('canonical/bootstrap/research-team/trigger agreement ok',c['revision'],c['state_hash'])"
       - name: Ensure derived indexes are reproducible
-        run: git diff --exit-code -- research_entity/continuity/BOOTSTRAP_MINIMAL.json research_sources/status research_sources/topics || (echo 'Derived indexes/views are stale; regenerate and commit them.' && exit 1)
+        run: git diff --exit-code -- research_entity/continuity/BOOTSTRAP_MINIMAL.json research_sources/status research_sources/topics research_sources/derived/knowledge_micro_packets || (echo 'Derived indexes/views are stale; regenerate and commit them.' && exit 1)
       - name: Archive runtime diagnostics
         uses: actions/upload-artifact@v4
         with:
           name: rae-vnext-diagnostics
           path: |
             research_sources/sources.db
+            research_sources/derived/knowledge_micro_packets/INDEX.json
             /tmp/context.json
             /tmp/query.json
             /tmp/benchmark.json

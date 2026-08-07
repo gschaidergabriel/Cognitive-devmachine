@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "scope": "project-wide systems research",
+  "principle": "Synthetic Clay is one application/runtime substrate; the surrounding environment is researched independently and cross-platform.",
+  "domains": [
+    {"id":"systems_architecture","role":"global system decomposition, interfaces, invariants and architecture tradeoffs"},
+    {"id":"os_runtime_linux","role":"Linux-first host/runtime implementation, systemd, cgroups, namespaces, IPC, kernel interfaces"},
+    {"id":"platform_portability","role":"Windows/macOS/BSD/mobile/embedded portability and semantic adapter contracts"},
+    {"id":"hardware_acceleration","role":"CPU/GPU/NPU/accelerators, drivers, topology, resource/energy constraints"},
+    {"id":"scheduling_concurrency","role":"multi-rate schedulers, threads/processes/async, deterministic and real-time behavior"},
+    {"id":"ipc_distributed_systems","role":"shared memory, buses, RPC, remote execution, federation, partitions and consistency"},
+    {"id":"storage_state_memory","role":"databases, event logs, graphs, indexes, filesystems, memory and recovery"},
+    {"id":"security_capabilities","role":"identity, capability systems, sandboxing, policy, authority and commit gateways"},
+    {"id":"model_runtime","role":"LLM inference, routing, quantization, adapters, training and model lifecycle"},
+    {"id":"agent_orchestration","role":"agent sessions, teams, delegation, state handoff, tools and autonomy"},
+    {"id":"interfaces_io","role":"terminal, browser, computer control, GUI, APIs, sensors, robots and external services"},
+    {"id":"observability_recovery","role":"tracing, metrics, replay, fault injection, crash recovery and causal receipts"},
+    {"id":"formal_methods_testing","role":"fuzzing, property tests, SMT/model checking, verification and independent validators"},
+    {"id":"deployment_packaging","role":"installation, upgrades, migrations, rollback, reproducible builds and distribution"},
+    {"id":"performance_economics","role":"latency, throughput, memory, storage, token/provider cost, energy and reliability"},
+    {"id":"frank_gwt","role":"FRANK cognitive runtime, GWT, reentry, self/world state and multi-timescale coupling"},
+    {"id":"xeno_claycode","role":"machine-native state/transition languages, contracts, projections and direct code"},
+    {"id":"synthetic_clay","role":"adaptive logical state/material substrate, activation and dynamic assemblies"},
+    {"id":"grf","role":"generative/process formalization and information-equivalent comparison framework"},
+    {"id":"research_infrastructure","role":"Research Entity continuity, evidence graphs, GitHub corpus, CAS and provenance"},
+    {"id":"tooling","role":"research/compiler/runtime tool acquisition and toolchain validation"}
+  ],
+  "new_domain_rule": "create a new shard when a recurring mechanism cannot be represented without conflating distinct evidence or invariants"
+}

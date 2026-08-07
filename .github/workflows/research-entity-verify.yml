@@ -1,0 +1,39 @@
+name: Research Entity Verify
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Materialize claim views
+        run: python tools/materialize_research_views.py
+      - name: Topicize archived source text
+        run: python tools/topicize_sources.py
+      - name: Build derived source database
+        run: python tools/build_source_db.py --db /tmp/research_sources.db
+      - name: Validate canonical JSON
+        run: python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json')
+          x=json.loads(p.read_text())
+          assert x['revision'] >= 0
+          assert len(x['state_hash']) == 64
+          assert x['entity_version']=='RAE-8.8'
+          print('canonical ok',x['revision'],x['state_hash'])
+          PY
+      - name: Ensure derived views are reproducible
+        run: git diff --exit-code -- research_sources/status research_sources/topics || (echo 'Derived views are stale; regenerate and commit them.' && exit 1)
+      - name: Archive derived source DB for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-sources-db
+          path: /tmp/research_sources.db

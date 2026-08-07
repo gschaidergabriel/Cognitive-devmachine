@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "run_id": "20260808T0551+0700-chatgpt-secondary-r2",
+  "trigger": "frank",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent_revision": 2,
+  "canonical_parent_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "classes": ["scholarly", "current_web", "implementation", "executable"],
+  "planned_tools": [
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"}
+  ],
+  "attempts": [
+    {"tool":"github_connector","status":"SUCCESS","evidence":"Reverified RAE canonical r2; rechecked Project-Frankenstein HEAD and searched current indexed source for GlobalWorkspace imports, subscriptions, get_workspace and related symbols; fetched exact Thalamus blob for callback inspection."},
+    {"tool":"local_sandbox","status":"SUCCESS","evidence":"Executed synchronous slow-subscriber delay sweep, async bounded/unbounded queue controls and Thalamus-like callback scaling benchmark."}
+  ],
+  "fallback_attempts": [
+    {"tool":"native_web","status":"SUCCESS","covers":["openalex_search","arxiv_search","semantic_scholar_search","tavily_search","exa_search"],"evidence":"Retrieved ROS 2 Executor/callback-group documentation, NATS slow-consumer/backpressure documentation and current arXiv work on event-sourced agents and GWT-inspired LLM architectures."},
+    {"tool":"local_sandbox","status":"SUCCESS","covers":["e2b_sandbox"],"reason":"CREDENTIAL_UNAVAILABLE"}
+  ],
+  "limitations": [
+    "GitHub code search establishes static indexed reachability, not absence of runtime reflection, dynamic imports, plugins or external publishers.",
+    "Synthetic callback benchmarks are not target-host FRANK measurements.",
+    "Repository-registered provider adapters are not directly invokable through the current ChatGPT connector surface; explicit native-web fallback was used."
+  ],
+  "promotion": "NONE",
+  "validation_note": "No strong live claim promotion performed. Findings are scoped as current-code observations, synthetic mechanisms, external implementation parallels, and open hypotheses."
+}

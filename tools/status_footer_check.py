@@ -13,10 +13,21 @@ REQUIRED = [
     "Actor:",
     "Trigger:",
     "Research write:",
+    "Short commands:",
     "LAST PROMPT",
     "Completion:",
     "Done:",
     "Open:",
+]
+
+REQUIRED_COMMANDS = [
+    "dump",
+    "clay",
+    "gwt",
+    "frank",
+    "emergenz",
+    "claycode",
+    "hyperposition",
 ]
 
 
@@ -32,6 +43,12 @@ def validate(text: str) -> list[str]:
     m = re.search(r"Completion:\s*(\d{1,3})%", tail)
     if not m or not 0 <= int(m.group(1)) <= 100:
         errors.append("invalid_completion")
+    cmd_match = re.search(r"Short commands:\s*(.+)", tail)
+    if cmd_match:
+        line = cmd_match.group(1).lower()
+        for command in REQUIRED_COMMANDS:
+            if not re.search(rf"(?<![a-z0-9_-]){re.escape(command)}(?![a-z0-9_-])", line):
+                errors.append(f"missing_command:{command}")
     return errors
 
 

@@ -1,0 +1,10 @@
+{
+  "packet_id":"research-entity-backend",
+  "title":"Global Research Entity Backend",
+  "status":"CURRENT",
+  "system_layers":["research/verification plane"],
+  "domains":["research_infrastructure"],
+  "summary":"GitHub-backed external canonical research state with versioned continuity, append-only events, claim lifecycle, domain shards and topic packets.",
+  "key_invariants":["remote canonical outranks chat memory","research revisions require research progress, not governance-only edits","historical states remain addressable","writes require reread/verification"],
+  "open_questions":["multi-worker atomic CAS hardening","background scheduled ingestion runner","scale/index strategy for event and topic-packet graph"]
+}

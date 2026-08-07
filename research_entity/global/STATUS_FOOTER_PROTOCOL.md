@@ -16,12 +16,15 @@ Canonical: r2 · 04234efdb86c
 Actor: chatgpt-secondary
 Trigger: none
 Research write: NO_RESEARCH_DELTA
+Short commands: dump · clay · gwt · frank · emergenz · claycode · hyperposition
 
 LAST PROMPT
 Completion: 100%
 Done: <short concrete statement>
 Open: none
 ```
+
+`Short commands` is mandatory and must list the currently registered reserved commands from `PROJECT_COMMAND_REGISTRY.json`. Do not silently omit it to shorten the footer. If the command registry changes, update the footer list accordingly.
 
 Allowed status values:
 

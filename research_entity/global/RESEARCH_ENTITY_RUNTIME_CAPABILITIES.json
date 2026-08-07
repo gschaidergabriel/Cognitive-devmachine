@@ -1,27 +1,28 @@
 {
-  "schema_version": "1.8",
+  "schema_version": "1.9",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
-    "authenticated GitHub connector",
-    "read accessible public and private repositories",
-    "create/update repository files",
-    "read commits, issues, pull requests and workflow data",
-    "local sandbox/container file inspection",
-    "Python execution and simulation",
-    "File Library/project file search",
-    "web research",
-    "artifact generation",
+    "authenticated GitHub connector with verified read/write access to the private canonical repository",
+    "local sandbox/Python execution and simulation",
+    "web research and file/project search",
     "owner-authorized private repository credential persistence when connector policy permits",
-    "quota-aware research provider planning and manifest validation via tools/research_provider_router.py",
+    "quota/health-aware research provider planning and covering-fallback validation via tools/research_provider_router.py",
+    "unified provider health audit via tools/provider_health_audit.py",
+    "allowlisted GitHub-runner provider invocation bridge via tools/research_tool_bridge.py",
+    "mandatory cross-trigger research mesh preflight via tools/research_interconnect_preflight.py",
     "visible status footer structure checking via tools/status_footer_check.py",
-    "OpenAlex API via tools/openalex_search.py (runtime verified)",
-    "arXiv API via tools/arxiv_search.py (runtime verified, credential-free)",
-    "Tavily Search API via tools/tavily_search.py (runtime verified)",
-    "Exa Search API via tools/exa_search.py (runtime verified)",
-    "Hugging Face Inference Providers via tools/huggingface_inference.py (runtime verified)",
-    "E2B isolated sandbox adapter via tools/e2b_sandbox.py (adapter ready; credential persistence blocked by connector safety layer)",
-    "Crossref, Semantic Scholar, DDGS, Judge0 and Piston adapters installed pending runtime receipts"
+    "OpenAlex runtime verified with private-repo credential",
+    "arXiv runtime verified credential-free",
+    "Semantic Scholar runtime verified but public shared pool can rate-limit",
+    "Crossref runtime verified credential-free after 406 content-negotiation fix",
+    "Tavily runtime verified with private-repo credential",
+    "DuckDuckGo/DDGS runtime verified credential-free",
+    "Exa runtime verified with private-repo credential",
+    "Judge0 runtime verified credential-free on current CE endpoint",
+    "Hugging Face Inference Providers runtime verified with private-repo credential",
+    "E2B adapter ready but credential unavailable because connector safety blocked persistence",
+    "Piston adapter updated for 2026 hosted authorization requirement; hosted credential/self-host endpoint not configured"
   ],
   "github_backend": {
     "repository": "gschaidergabriel/clay-global-research-entity",
@@ -30,80 +31,75 @@
     "write": true,
     "purpose": "canonical Research Entity state backend"
   },
+  "research_mesh": {
+    "protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+    "preflight": "tools/research_interconnect_preflight.py",
+    "required_run_artifact": "INTERCONNECT_MANIFEST.json",
+    "branches": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
+    "rule": "Every scientific trigger ingests all connected branches before Fusion 1, scans contradictions and writes cross-links back. FRANK treats the newest Clay research/architecture as its primary foundation; Clay is the integrated master foundry."
+  },
   "research_orchestration": {
     "policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
     "router": "tools/research_provider_router.py",
     "quota_state": "research_entity/runtime/TOOL_QUOTA_STATE.json",
+    "provider_health": "research_entity/runtime/PROVIDER_HEALTH.json",
     "required_run_artifact": "TOOL_EXECUTION_MANIFEST.json",
-    "fallback_behavior": "Automatically continue with the legacy research path when quota/provider/runtime/credential limitations prevent a planned provider call.",
-    "promotion_behavior": "Missing required provider attempts without an allowed recorded fallback reason block strong promotion."
+    "fallback_behavior": "Automatically continue with the best legacy/verified fallback when quota/provider/runtime/credential limitations prevent a planned call.",
+    "promotion_behavior": "Each failed/blocked MUST_ATTEMPT tool requires a successful fallback explicitly covering that tool before strong promotion."
+  },
+  "worker_provider_bridge": {
+    "status": "OPERATIONAL",
+    "tool": "tools/research_tool_bridge.py",
+    "workflow": ".github/workflows/research-tool-bridge.yml",
+    "request_dir": "research_entity/runtime/tool_requests",
+    "result_dir": "research_entity/runtime/tool_results",
+    "verified_example": "research_entity/runtime/tool_results/bridge-smoke-openalex.json",
+    "rule": "GitHub-connected workers unable to execute repo-local provider adapters directly enqueue an allowlisted request; Actions executes it with the private credential store and writes a sanitized result."
   },
   "visible_response": {
     "protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
     "checker": "tools/status_footer_check.py",
     "boot_level": "T0_ALWAYS",
     "rendering": "final fenced text code block",
-    "completion_rule": "A substantive answer missing the required footer is not 100% complete."
+    "completion_rule": "A substantive answer missing the required footer or short commands is not 100% complete."
   },
   "external_research": {
     "tool_registry": "research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json",
     "verification_policy": "research_entity/global/EXTERNAL_RESEARCH_VERIFICATION_POLICY.md",
-    "env_template": ".env.example",
+    "health_audit": "tools/provider_health_audit.py",
+    "health_state": "research_entity/runtime/PROVIDER_HEALTH.json",
     "private_token_store": "research_entity/private/API_TOKENS.env",
     "secret_loader": "tools/rae_secret_loader.py",
-    "verified_providers": {
-      "OpenAlex": {
-        "tool": "tools/openalex_search.py",
-        "receipt": "research_entity/runtime/openalex_verification.json",
-        "verified_at": "2026-08-07T21:27:42.562319+00:00"
-      },
-      "arXiv": {
-        "tool": "tools/arxiv_search.py",
-        "receipt": "research_entity/runtime/arxiv_verification.json",
-        "verified_at": "2026-08-07T21:29:54.774171+00:00",
-        "credential_required": false
-      },
-      "Tavily": {
-        "tool": "tools/tavily_search.py",
-        "receipt": "research_entity/runtime/tavily_verification.json",
-        "verified_at": "2026-08-07T21:38:01.039802+00:00"
-      },
-      "Exa": {
-        "tool": "tools/exa_search.py",
-        "receipt": "research_entity/runtime/exa_verification.json",
-        "verified_at": "2026-08-07T21:38:33.957789+00:00"
-      },
-      "Hugging Face Inference Providers": {
-        "tool": "tools/huggingface_inference.py",
-        "receipt": "research_entity/runtime/huggingface_verification.json",
-        "verified_at": "2026-08-07T21:46:49.094291+00:00",
-        "credential": "HF_TOKEN",
-        "verification_spent_inference_credit": false
-      }
+    "provider_status": {
+      "OpenAlex": "RUNTIME_VERIFIED",
+      "arXiv": "RUNTIME_VERIFIED",
+      "Semantic Scholar": "RUNTIME_VERIFIED_DEGRADED_SHARED_RATE_LIMIT",
+      "Crossref": "RUNTIME_VERIFIED",
+      "Tavily": "RUNTIME_VERIFIED",
+      "DuckDuckGo/DDGS": "RUNTIME_VERIFIED",
+      "Exa": "RUNTIME_VERIFIED",
+      "E2B": "ADAPTER_READY_CREDENTIAL_UNAVAILABLE",
+      "Judge0": "RUNTIME_VERIFIED",
+      "Piston": "ADAPTER_READY_HOSTED_CREDENTIAL_UNAVAILABLE",
+      "Hugging Face Inference Providers": "RUNTIME_VERIFIED"
     },
-    "adapter_ready_not_verified": {
-      "E2B": {
-        "tool": "tools/e2b_sandbox.py",
-        "credential": "E2B_API_KEY",
-        "blocker": "GitHub connector safety policy blocked persisting the supplied E2B key and blocked creation of its verification workflow in this session."
-      },
-      "Crossref": {"tool": "tools/crossref_search.py", "credential_required": false},
-      "Semantic Scholar": {"tool": "tools/semantic_scholar_search.py", "credential_required": false},
-      "DDGS": {"tool": "tools/ddgs_search.py", "credential_required": false},
-      "Judge0": {"tool": "tools/judge0_execute.py", "credential_required": false},
-      "Piston": {"tool": "tools/piston_execute.py", "credential_required": false}
+    "credentialed_provider_status": {
+      "OPENALEX_API_KEY": "WORKING_PRIVATE_REPO_STORE",
+      "TAVILY_API_KEY": "WORKING_PRIVATE_REPO_STORE",
+      "EXA_API_KEY": "WORKING_PRIVATE_REPO_STORE",
+      "HF_TOKEN": "WORKING_PRIVATE_REPO_STORE",
+      "E2B_API_KEY": "NOT_PERSISTED_CONNECTOR_BLOCKED",
+      "PISTON_API_TOKEN": "NOT_CONFIGURED",
+      "SEMANTIC_SCHOLAR_API_KEY": "OPTIONAL_NOT_CONFIGURED"
     },
-    "pending_provider_verification": ["Crossref", "Semantic Scholar", "DDGS", "Judge0", "Piston", "E2B"],
-    "status_rule": "Credential presence and adapter installation are distinct from provider runtime verification.",
-    "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store only when the active connector permits the write; values must not be copied into canonical research artifacts, reports or logs."
+    "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store only when the active connector permits the write; values must never be copied into canonical research artifacts, reports, logs or visible responses."
   },
   "limitations": [
-    "no automatic background research between turns unless an explicit automation exists",
-    "no assumption of direct shell access to live FRANK host",
-    "provider/model-specific telemetry only when actually exposed",
-    "unverified providers remain unavailable as verified capabilities until a real call succeeds",
-    "some connector safety controls may block storage of specific credential values or workflow definitions",
-    "remote writes must be verified by reread"
+    "no assumption of direct shell access to the live FRANK host",
+    "E2B cannot be runtime-verified until E2B_API_KEY is stored through a permitted channel",
+    "hosted Piston cannot be runtime-verified until PISTON_API_TOKEN is configured or a self-hosted PISTON_API_URL is supplied",
+    "Semantic Scholar public shared-pool requests may transiently rate-limit; use OpenAlex/arXiv/Crossref fallback",
+    "remote writes require reread verification"
   ],
   "rule": "This file describes current tool availability. Canonical research self-model remains historical revision-2 state until a justified research-state promotion occurs."
 }

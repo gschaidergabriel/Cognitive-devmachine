@@ -1,0 +1,59 @@
+name: RAE provider health audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/private/API_TOKENS.env'
+      - 'tools/rae_secret_loader.py'
+      - 'tools/provider_health_audit.py'
+      - 'tools/openalex_search.py'
+      - 'tools/arxiv_search.py'
+      - 'tools/semantic_scholar_search.py'
+      - 'tools/crossref_search.py'
+      - 'tools/tavily_search.py'
+      - 'tools/ddgs_search.py'
+      - 'tools/exa_search.py'
+      - 'tools/e2b_sandbox.py'
+      - 'tools/judge0_execute.py'
+      - 'tools/piston_execute.py'
+      - 'tools/huggingface_inference.py'
+      - '.github/workflows/provider-health-audit.yml'
+
+concurrency:
+  group: rae-provider-health-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install optional provider SDKs
+        run: python -m pip install --disable-pip-version-check --quiet ddgs e2b
+
+      - name: Run sanitized provider audit
+        run: python tools/provider_health_audit.py --write > /tmp/provider-health-output.json
+
+      - name: Commit provider health and receipts
+        run: |
+          git config user.name 'rae-runtime-verifier'
+          git config user.email 'rae-runtime-verifier@users.noreply.github.com'
+          git add research_entity/runtime/PROVIDER_HEALTH.json research_entity/runtime/*_verification.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record consolidated provider health audit'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

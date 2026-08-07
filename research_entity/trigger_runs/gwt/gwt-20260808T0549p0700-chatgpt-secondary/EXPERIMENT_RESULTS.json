@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "gwt-20260808T0549p0700-chatgpt-secondary",
+  "experiments": [
+    {
+      "experiment_id": "EXP-GWT-MULTICAST-002",
+      "class": "synthetic_routing_proxy",
+      "question": "Can selective push plus pull rescue preserve causal audience access while reducing physical broadcast fanout?",
+      "design": {
+        "audiences": 20,
+        "causally_relevant_per_episode": 5,
+        "push_top_k": 5,
+        "irrelevant_pull_false_positive_rate": 0.02,
+        "main_repetitions": "30 seeds x 5000 episodes"
+      },
+      "results": [
+        {"router_score_separation":1.5,"router_auc":0.8555778168,"pull_sensitivity":0.95,"relevant_coverage_mean":0.981855,"relevant_coverage_sd":0.000980,"communication_reduction_vs_full_mean":0.650815,"communication_reduction_sd":0.000690,"irrelevant_delivery_reduction_vs_full_mean":0.861705,"irrelevant_delivery_reduction_sd":0.000991},
+        {"router_score_separation":2.0,"router_auc":0.9213503965,"pull_sensitivity":0.95,"relevant_coverage_mean":0.987340,"relevant_coverage_sd":0.000887,"communication_reduction_vs_full_mean":0.676411,"communication_reduction_sd":0.000673,"irrelevant_delivery_reduction_vs_full_mean":0.897661,"irrelevant_delivery_reduction_sd":0.000909},
+        {"router_score_separation":2.5,"router_auc":0.9614500641,"pull_sensitivity":0.95,"relevant_coverage_mean":0.991769,"relevant_coverage_sd":0.000744,"communication_reduction_vs_full_mean":0.696969,"communication_reduction_sd":0.000578,"irrelevant_delivery_reduction_vs_full_mean":0.926548,"irrelevant_delivery_reduction_sd":0.000748},
+        {"router_score_separation":2.0,"router_auc":0.9213503965,"pull_sensitivity":0.90,"relevant_coverage_mean":0.974583,"relevant_coverage_sd":0.000917,"communication_reduction_vs_full_mean":0.679600,"irrelevant_delivery_reduction_vs_full_mean":0.897661},
+        {"router_score_separation":2.0,"router_auc":0.9213503965,"pull_sensitivity":0.98,"relevant_coverage_mean":0.994881,"relevant_coverage_sd":0.000459,"communication_reduction_vs_full_mean":0.674526,"irrelevant_delivery_reduction_vs_full_mean":0.897661}
+      ],
+      "boundary": "Synthetic routing/coverage proxy. Does not establish equal task utility or safety to full broadcast.",
+      "next_falsifier": "Run router in shadow mode on real/twin FRANK episodes and label actual causal audiences by reconstruction/effect receipts."
+    },
+    {
+      "experiment_id": "EXP-GWT-FRESHNESS-003",
+      "class": "synthetic_temporal_causal_proxy",
+      "question": "Does truthful re-entry have a useful delay horizon that scales with source/environment persistence?",
+      "design": {
+        "process": "stationary AR(1)",
+        "rho_values": [0.6,0.8,0.9,0.95,0.98],
+        "current_observation_sigma": 0.45,
+        "reentry_observation_sigma": 0.20,
+        "reentry_weight": 0.35,
+        "paired_boundary_seeds": 120,
+        "bootstrap_replicates": 5000
+      },
+      "crossover_results": [
+        {"rho":0.6,"correlation_half_life":1.3569154489,"last_useful_delay":1},
+        {"rho":0.8,"correlation_half_life":3.1062837195,"last_useful_delay":2},
+        {"rho":0.9,"correlation_half_life":6.5788134790,"last_useful_delay":5},
+        {"rho":0.95,"correlation_half_life":13.51340733396,"last_useful_delay":11},
+        {"rho":0.98,"correlation_half_life":34.30961849152,"last_useful_delay":29}
+      ],
+      "descriptive_fit": {"crossover_vs_half_life_slope":0.85789759,"intercept":-0.50003496,"r_squared":0.9996729184,"boundary":"descriptive fit on constructed regimes only"},
+      "paired_bootstrap_examples": [
+        {"rho":0.6,"delay":1,"removed_minus_truthful_mse":0.0140967954,"ci95":[0.01330489,0.01482801]},
+        {"rho":0.6,"delay":2,"removed_minus_truthful_mse":-0.0446737046,"ci95":[-0.04566121,-0.04370196]},
+        {"rho":0.8,"delay":2,"removed_minus_truthful_mse":0.0238572846,"ci95":[0.02316636,0.02455323]},
+        {"rho":0.8,"delay":4,"removed_minus_truthful_mse":-0.0324275764,"ci95":[-0.03352772,-0.03131220]},
+        {"rho":0.9,"delay":4,"removed_minus_truthful_mse":0.0278589475,"ci95":[0.02707093,0.02864359]},
+        {"rho":0.9,"delay":8,"removed_minus_truthful_mse":-0.0272925732,"ci95":[-0.02872664,-0.02590243]},
+        {"rho":0.95,"delay":8,"removed_minus_truthful_mse":0.0296171968,"ci95":[0.02865604,0.03055521]},
+        {"rho":0.95,"delay":16,"removed_minus_truthful_mse":-0.0249323989,"ci95":[-0.02669644,-0.02314885]},
+        {"rho":0.98,"delay":16,"removed_minus_truthful_mse":0.0444068446,"ci95":[0.04342169,0.04539778]},
+        {"rho":0.98,"delay":32,"removed_minus_truthful_mse":-0.0048754039,"ci95":[-0.00675702,-0.00286309]}
+      ],
+      "boundary": "Synthetic scalar process. Numeric TTL values do not transfer to FRANK; only the falsifiable persistence-by-delay interaction is retained.",
+      "next_falsifier": "Replay FRANK under observed regime/state changes and estimate re-entry utility as a function of age-at-use, state compatibility and outcome value."
+    }
+  ]
+}

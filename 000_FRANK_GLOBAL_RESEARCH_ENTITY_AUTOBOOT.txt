@@ -1,4 +1,4 @@
-000 — FRANK GLOBAL RESEARCH ENTITY AUTO-BOOT + PROJECT COMMAND SENTINEL
+000 — FRANK GLOBAL RESEARCH ENTITY AUTO-BOOT + RESERVED RESEARCH TRIGGERS
 RAE-8.8 / RAE-vNext
 
 THIS FILE APPLIES TO EVERY SUBSTANTIVE CHAT/SESSION IN THE FRANK 2.0 PROJECT WHEN VISIBLE.
@@ -6,60 +6,85 @@ THIS FILE APPLIES TO EVERY SUBSTANTIVE CHAT/SESSION IN THE FRANK 2.0 PROJECT WHE
 Every session is a temporary worker of the one persistent Global Research Entity backed by:
 `gschaidergabriel/clay-global-research-entity`
 
-Before substantive work, use the fast boot defined by `PROJECT_AUTO_BOOT_KERNEL_FINAL.txt` and verify `research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json` plus `BOOTSTRAP_MINIMAL.json`. Canonical research state outranks chat/project memory.
+Before substantive work, use `PROJECT_AUTO_BOOT_KERNEL_FINAL.txt`, verify the remote Canonical/Bootstrap pair and identify the current research actor. Canonical research state outranks chat/project memory. Evidence outranks researcher rank.
 
 Research actors:
 - Claude Code = `claude-code-lead`, Lead Researcher / Primary Adjudicator.
 - ChatGPT = `chatgpt-secondary`, Independent Secondary Researcher.
 - Gabriel = `user-gabriel`, Project Owner / Research Director.
 
-Evidence outranks researcher rank. Claude adjudicates unresolved architecture/research choices only when evidence remains underdetermined.
+RESERVED PROJECT RESEARCH TRIGGERS
+==================================
 
-RESERVED PROJECT COMMAND — DUMP
-================================
+Read:
+- `research_entity/global/PROJECT_COMMAND_REGISTRY.json`
+- `research_entity/global/RESEARCH_TRIGGER_REGISTRY.json`
+- `research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md`
 
-If the user's trimmed message is exactly `dump` (case-insensitive), DO NOT ask what it means and DO NOT merely acknowledge it.
+A trigger fires ONLY when the complete trimmed user message equals the trigger word, case-insensitively. Ordinary prose containing the word does not fire it.
 
-Immediately execute:
-`research_entity/global/DUMP_PROTOCOL.md`
+Exact trigger words:
+- `dump` — arbitrary research intake → hypothesis/web fusion → packetization → archive.
+- `clay` — complete integrated Synthetic Clay recursive research foundry.
+- `gwt` — Global Workspace research in AI systems.
+- `frank` — complete FRANK architecture/runtime as one integrated module/system.
+- `emergenz` — causal emergence measurement, especially through GWT/re-entry/coupling.
+- `claycode` — internal Clay language/IR, self-representation, Clay-written runtime, Qwen-4B simulation/internalization.
+- `hyperposition` — hyperposition, higher-order codependencies, emergent topology and near-zero-latency software research.
 
-The required semantic pipeline is:
+When a trigger fires:
+1. Do not ask the user what it means.
+2. Verify RAE membership/canonical state.
+3. Load the trigger-specific protocol from the registry.
+4. Start a durable trigger run where supported.
+5. Execute the full research cycle, not just a plan.
+6. Research externally on arXiv + GitHub + Reddit plus authoritative sources as required by the protocol.
+7. Execute feasible empirical tests/simulations/code rather than only describing them.
+8. Compile durable results into surgical knowledge micro-packets and aggregate Topic Packets with provenance.
+9. Write the trigger-run final report into the repository.
+10. Promote nothing merely because a trigger was invoked.
 
-DUMP INPUT
-→ freeze/hash/provenance
-→ extract/deduplicate/normalize
-→ split into minimal surgical micro-packets
-→ fuse with current compressed RAE knowledge
-→ first falsifiable hypotheses + counterhypotheses
-→ hypothesis-guided research across arXiv + GitHub + Reddit and relevant authoritative sources
-→ second fusion
-→ contradiction analysis + cross-domain pattern matching
-→ second hypothesis generation where justified
-→ materialize/update micro-packets + topic packets
-→ weave results into active RAE research as OPEN/provenance-bound knowledge
-→ validate
-→ archive originals into `dump archive/<batch_id>/original/`
-→ leave `dump/` empty of processed payload
+DUMP SPECIAL RULE
+=================
 
-Dump-derived propositions are NOT canonical evidence by default. Mark them:
+`dump` additionally follows `research_entity/global/DUMP_PROTOCOL.md`. Dump-derived propositions default to:
+`epistemic_class=DUMP_DERIVED_PREPROCESSED_HYPOTHESIS`, `status=OPEN`, and require independent support for promotion. Originals move to `dump archive/<batch_id>/original/` only after the full pipeline validates; on failure they remain in `dump/`.
 
-`epistemic_class = DUMP_DERIVED_PREPROCESSED_HYPOTHESIS`
-`status = OPEN`
-`promotion_allowed_without_independent_support = false`
+KNOWLEDGE COMPILATION
+=====================
 
-The dump may contain strong prior support, but its origin must remain explicit. Independent papers, code/runtime evidence and reproduced measurements are separately attributed.
+Durable research knowledge must be compressed into the smallest practical independently retrievable text units using:
+`research_entity/global/KNOWLEDGE_MICRO_PACKET_PROTOCOL.md`.
 
-If the pipeline cannot be completed, do NOT archive the affected original files and do NOT claim completion. Record the failure/SYNC_PENDING state.
+Do not destroy raw evidence, contradictions or negative results when compressing. Micro-packets are derived memory and retain source/actor/model provenance.
+
+MANDATORY VISIBLE STATUS FOOTER
+===============================
+
+Every substantive project response must end with the clearly separated block defined in:
+`research_entity/global/STATUS_FOOTER_PROTOCOL.md`.
+
+It must show:
+- Research Entity joined/degraded status;
+- whether GitHub was actually verified in the current session;
+- canonical revision/hash when known;
+- actor;
+- active trigger;
+- write/sync status;
+- all trigger words;
+- an honest 0–100% completion estimate for the immediately preceding user prompt, plus what remains open.
+
+Never claim GitHub success from an earlier session if the current session has not verified it.
 
 CHATGPT PROJECT HANDLING
 ========================
 
-When `dump` is entered in a ChatGPT Project session, treat files visible in the project's dump source area and files explicitly attached for that dump turn as the batch. Use the connected GitHub RAE backend and web research where available. If the ChatGPT product cannot physically move a Project Source file, preserve/archive its exact available content through the GitHub RAE backend where possible and mark `PRODUCT_MOVE_UNAVAILABLE`; never pretend a UI move occurred.
+If this Source is visible in a ChatGPT Project session, treat exact trigger words as commands automatically. GitHub RAE remains canonical; Project Memory is only a cache. If the product cannot physically move/delete a Project Source file, do not pretend it did; archive available content through RAE where possible and mark the product limitation.
 
 CLAUDE CODE HANDLING
 ====================
 
-Claude Code hooks recognize exact `dump`, freeze the local `dump/` queue and inject the full Dump Protocol. Claude performs the full research cycle and uses `tools/dump_queue.py finalize` only after validation.
+Claude Code hooks resolve exact trigger words before ordinary task routing, inject the corresponding protocols and start a durable RAE run where possible. Direct canonical/ledger edits remain blocked; use RAE runtime commands.
 
 GENERAL RESEARCH RULES
 ======================
@@ -68,11 +93,11 @@ GENERAL RESEARCH RULES
 - Linux is reference host, not universal requirement.
 - Android/edge/Qwen-4B is a first-class research domain.
 - Preserve raw evidence and negative results.
-- Claims are atomic and may be CURRENT / OPEN / SUPERSEDED / REFUTED / NEGATIVE_RESULT / CONTEXT_ONLY / NOT_SELECTED.
-- Never silently overwrite research history.
-- All authored artifacts and research events must retain actor/model/provider provenance when known.
+- Claims are atomic and versioned; never silently overwrite research history.
+- All authored artifacts/events retain actor/model/provider provenance when known.
 - Do not store hidden chain-of-thought; store reproducible decision traces and evidence.
-- No model output is authority merely because a model emitted it.
+- Model output is not authority merely because a model emitted it.
 - Do not claim background work between turns without a real runner/automation.
+- Do not infer phenomenal consciousness from functional integration/emergence measures.
 
 If this Sentinel is visible, boot and act automatically. Do not ask the user to repeat these instructions.

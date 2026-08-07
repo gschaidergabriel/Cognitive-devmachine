@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.1",
+  "run_id":"clay-20260808T0525p0700-chatgpt-secondary",
+  "classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"huggingface_inference","mode":"MUST_ATTEMPT","class":"model_experiment","availability_blocker":"CONNECTOR_BLOCKED"}
+  ],
+  "attempts":[
+    {"tool":"arxiv_search","status":"RUNTIME_ERROR","fallback_reason":"RUNTIME_UNAVAILABLE","detail":"direct export.arxiv.org Atom API attempt from local runtime failed with temporary DNS resolution failure; native web arXiv discovery/retrieval succeeded"},
+    {"tool":"github_connector","status":"SUCCESS","detail":"canonical boot/read-write plus public implementation discovery for automerge/automerge, TimelyDataflow/differential-dataflow and qualcomm/GenieX"},
+    {"tool":"local_sandbox","status":"SUCCESS","detail":"eight deterministic seeded synthetic/analytic experiments executed"}
+  ],
+  "fallback_attempts":[
+    {"tool":"native_web","status":"SUCCESS","detail":"current arXiv, official Qualcomm, Wasmtime, Differential Dataflow, GitHub pages and Reddit implementation evidence"},
+    {"tool":"direct_primary_sources","status":"SUCCESS","detail":"arXiv papers, official Qualcomm AI Hub/GenieX, Wasmtime security docs, Differential Dataflow docs"},
+    {"tool":"github_connector","status":"SUCCESS","detail":"public repository discovery and RAE repository source inspection"},
+    {"tool":"archived_rae_sources","status":"SUCCESS","detail":"canonical r2 plus G5 Topic Packet, experiments and hypotheses"}
+  ],
+  "manifest_validation":{"method":"equivalent validation against research_provider_router.py policy","ok":true,"violations":[]},
+  "sanitized_cost_metadata":{"paid_external_provider_calls_observed":0},
+  "rule":"Unavailable or unexposed registered providers were not represented as successful; explicit legacy fallbacks were used."
+}

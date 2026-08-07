@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.1",
+  "run_id":"hyperposition-20260808T0550p0700-chatgpt-secondary",
+  "trigger":"hyperposition",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "generated_at":"2026-08-08T05:50:00+07:00",
+  "classes":["scholarly","current_web","implementation","executable"],
+  "provider_router":{"canonical_script":"tools/research_provider_router.py","execution_status":"RUNTIME_UNAVAILABLE_IN_CHATGPT_SANDBOX","plan_materialization":"manual_from_verified_router_logic_and_registry","reason":"Registered provider adapters are repository scripts but are not exposed as invokable ChatGPT connector surfaces in this session."},
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"}
+  ],
+  "attempts":[
+    {"tool":"openalex_search","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered adapter not exposed as invokable connector surface."},
+    {"tool":"arxiv_search","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered adapter not exposed; arXiv sources retrieved through native web fallback."},
+    {"tool":"tavily_search","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"Provider-specific adapter not exposed in this ChatGPT session."},
+    {"tool":"exa_search","status":"RUNTIME_ERROR","fallback_reason":"CONNECTOR_BLOCKED","note":"Provider-specific adapter not exposed in this ChatGPT session."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical state, trigger protocol, predecessor run, tool registry/router and implementation evidence inspected; run artifacts written."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Three reproducible synthetic experiments executed."}
+  ],
+  "fallback_attempts":[
+    {"tool":"native_web","status":"SUCCESS","note":"Scholarly/preprint, current systems and practitioner evidence retrieved."},
+    {"tool":"direct_primary_sources","status":"SUCCESS","note":"USENIX and Feldera primary documentation used where available."},
+    {"tool":"github_connector","status":"SUCCESS"},
+    {"tool":"local_sandbox","status":"SUCCESS"},
+    {"tool":"archived_rae_sources","status":"SUCCESS","note":"Canonical r2 and H1 predecessor run grounded Fusion 1."}
+  ],
+  "validation":{"ok":true,"note":"No strong canonical promotion attempted; recorded MUST_ATTEMPT runtime failures have explicit allowed fallbacks."}
+}

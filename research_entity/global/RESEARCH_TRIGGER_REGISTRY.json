@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
@@ -8,7 +8,7 @@
   "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
   "goodman_filter_checker": "tools/goodman_filter_check.py",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support. The fusion meta-trigger researches across the complete mesh and must return an explicit feedback receipt to every scientific branch.",
+  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support. ClayGraph covers the whole research mesh for XENO/Clay memory/knowledge-graph/database-transcendence research and writes explicit architecture feedback especially to FRANK. The fusion meta-trigger researches across the complete mesh and must return an explicit feedback receipt to every scientific branch.",
   "triggers": {
     "dump": {
       "kind": "research_intake",
@@ -21,32 +21,33 @@
       "protocol": "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
       "purpose": "Research across the complete current RAE knowledge/evidence graph, generate cross-domain hypotheses and experiments, resolve or expose contradictions, and write explicit feedback deltas or NO_CHANGE receipts back to every scientific branch.",
       "mesh_role": "whole_mesh_research_feedback_loop",
-      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
+      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph"],
       "required_outputs": ["GLOBAL_COVERAGE_MANIFEST.json", "BRANCH_FEEDBACK_MANIFEST.json", "FINAL_REPORT.md"],
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
+      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph"]
     },
     "clay": {
       "kind": "integrated_research_foundry",
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
-      "purpose": "Run the complete Synthetic Clay recursive research foundry across GWT, FRANK architecture, emergence measurement, ClayCode/4B internal language, hyperposition/codependency and low-latency emergent software.",
+      "purpose": "Run the complete Synthetic Clay recursive research foundry across GWT, FRANK architecture, emergence measurement, ClayCode/4B internal language, hyperposition/codependency, ClayGraph associative memory/database substrate and low-latency emergent software.",
       "mesh_role": "integrated_master_foundry",
-      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
+      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph"]
     },
     "gwt": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
       "purpose": "Research Global Workspace mechanisms in AI systems: selection, competition, ignition, broadcast, reconstruction, effect, re-entry, multi-timescale coupling and causal validation.",
       "mesh_role": "connected_domain",
-      "required_foundations": ["clay", "frank", "emergenz", "hyperposition", "claycode", "gwt"]
+      "required_foundations": ["clay", "frank", "claygraph", "emergenz", "hyperposition", "claycode", "gwt"]
     },
     "frank": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
-      "purpose": "Research FRANK as one integrated cognitive/runtime architecture grounded primarily in newest Synthetic Clay research and authored as ClayCode semantic IR.",
-      "mesh_role": "clay_architecture_projection_authored_in_claycode",
-      "required_foundations": ["clay", "claycode", "gwt", "hyperposition", "emergenz", "frank"],
+      "purpose": "Research FRANK as one integrated cognitive/runtime architecture grounded primarily in newest Synthetic Clay research, authored as ClayCode semantic IR, and informed by ClayGraph memory/knowledge-graph/database-substrate research.",
+      "mesh_role": "clay_architecture_projection_authored_in_claycode_over_claygraph_substrate",
+      "required_foundations": ["clay", "claycode", "claygraph", "gwt", "hyperposition", "emergenz", "frank"],
       "primary_foundation": "clay",
       "primary_architecture_language": "ClayCode semantic IR",
+      "deep_substrate_foundation": "claygraph",
       "architecture_contract": "tools/frank_architecture_contract.py",
       "required_architecture_artifact": "FRANK_ARCHITECTURE.claycode.json",
       "required_human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md"
@@ -56,14 +57,14 @@
       "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
       "purpose": "Research and measure emergence using GWT-linked causal interventions, lesion/rescue, re-entry, interaction terms, PID/PEID/transfer entropy and multiscale causal tests.",
       "mesh_role": "connected_domain",
-      "required_foundations": ["clay", "gwt", "hyperposition", "frank", "claycode", "emergenz"]
+      "required_foundations": ["clay", "gwt", "hyperposition", "frank", "claygraph", "claycode", "emergenz"]
     },
     "claycode": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
       "purpose": "Research ClayCode as FRANK's internal architecture/runtime language and Synthetic Clay semantic IR, using newest FRANK research as primary target feedback and independently verifying/refining/refuting FRANK-derived assumptions through the Goodman anti-echo filter.",
       "mesh_role": "frank_feedback_validator_and_architecture_language",
-      "required_foundations": ["frank", "clay", "gwt", "hyperposition", "emergenz", "claycode"],
+      "required_foundations": ["frank", "clay", "claygraph", "gwt", "hyperposition", "emergenz", "claycode"],
       "primary_feedback_foundation": "frank",
       "requires_latest_frank_architecture_if_available": true,
       "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
@@ -75,7 +76,18 @@
       "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
       "purpose": "Research emergent systems, contextual hyperposition, higher-order codependencies, dynamic topology and near-zero-latency software via shared/incremental state. 'Entanglement' is an engineering analogy unless physical quantum effects are actually tested.",
       "mesh_role": "connected_domain",
-      "required_foundations": ["clay", "frank", "claycode", "gwt", "emergenz", "hyperposition"]
+      "required_foundations": ["clay", "frank", "claygraph", "claycode", "gwt", "emergenz", "hyperposition"]
+    },
+    "claygraph": {
+      "kind": "domain_research",
+      "protocol": "research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md",
+      "purpose": "Research the XENO/Synthetic-Clay associative knowledge graph, persistent cognitive memory substrate and evidence-driven reversible migration/transcendence of FRANK databases/state stores.",
+      "mesh_role": "whole_mesh_memory_and_database_substrate_research",
+      "required_foundations": ["clay", "frank", "claycode", "hyperposition", "gwt", "emergenz", "claygraph"],
+      "coverage_mode": "ALL_DISCOVERED_INDEXED_DOMAIN_FOCUSED",
+      "primary_feedback_target": "frank",
+      "required_foundation": "research_entity/global/CLAYGRAPH_RESEARCH_FOUNDATION.md",
+      "required_outputs": ["DATABASE_INVENTORY.json", "CLAYGRAPH_SCHEMA.claycode.json", "MIGRATION_PLAN.json", "FRANK_CLAYGRAPH_FEEDBACK.json", "FINAL_REPORT.md"]
     }
   }
 }

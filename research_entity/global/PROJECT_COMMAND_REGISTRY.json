@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.8",
+  "schema_version": "2.9",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
@@ -27,7 +27,7 @@
       "requires_interconnect_manifest": true,
       "requires_global_coverage_manifest": true,
       "requires_branch_feedback_manifest": true,
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
+      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph"],
       "completion_validator": "tools/fusion_research_contract.py",
       "completion_command": "python tools/fusion_research_contract.py research_entity/trigger_runs/fusion/<run_id>"
     },
@@ -48,6 +48,7 @@
       "primary_foundation": "clay",
       "primary_architecture_language": "ClayCode semantic IR",
       "deep_secondary_foundation": "claycode",
+      "deep_substrate_foundation": "claygraph",
       "required_architecture_artifact": "FRANK_ARCHITECTURE.claycode.json",
       "required_human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md",
       "architecture_validator": "tools/frank_architecture_contract.py"
@@ -73,7 +74,23 @@
       "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
       "kind": "domain_research",
       "requires_interconnect_manifest": true
+    },
+    "claygraph": {
+      "protocol": "research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md",
+      "foundation": "research_entity/global/CLAYGRAPH_RESEARCH_FOUNDATION.md",
+      "evolution_protocol": "research_entity/claygraph/CLAYGRAPH_EVOLUTION_PROTOCOL.md",
+      "kind": "domain_research",
+      "requires_interconnect_manifest": true,
+      "coverage_mode": "ALL_DISCOVERED_INDEXED_DOMAIN_FOCUSED",
+      "primary_feedback_target": "frank",
+      "requires_database_inventory": true,
+      "requires_claycode_graph_schema": true,
+      "requires_reversible_migration_plan": true,
+      "requires_frank_feedback": true,
+      "requires_self_use_benchmark": true,
+      "accepted_graph": "research_entity/claygraph/CLAYGRAPH_LATEST.claycode.json",
+      "required_outputs": ["DATABASE_INVENTORY.json", "CLAYGRAPH_SCHEMA.claycode.json", "SELF_USE_BENCHMARK.json", "MIGRATION_PLAN.json", "FRANK_CLAYGRAPH_FEEDBACK.json", "FINAL_REPORT.md"]
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. The fusion meta-trigger additionally covers the complete current research graph/evidence classes and writes explicit feedback or NO_CHANGE receipts to all six scientific branches; completion is machine-gated by fusion_research_contract.py. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and must independently verify, refine, refute or leave unresolved each materially imported FRANK assumption through the Goodman anti-echo filter; shared FRANK↔ClayCode ancestry never counts as replication, and ClayCode completion requires a Goodman review bound to the exact run preflight. Every substantive visible response ends with the required status footer including short commands."
+  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. The fusion meta-trigger covers the complete current research graph/evidence classes and writes explicit feedback or NO_CHANGE receipts to all seven scientific branches. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode and ClayGraph, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and applies the Goodman anti-echo filter. ClayGraph iteratively evolves a real derived graph from the complete current research mesh, self-benchmarks against retrieval baselines, researches database migration, and writes feedback especially to FRANK. Every substantive visible response ends with the required status footer including all registered short commands."
 }

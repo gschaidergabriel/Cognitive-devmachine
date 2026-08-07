@@ -17,21 +17,22 @@ The external capability registry is:
 
 `research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json`
 
-## Secret handling
+## Credential handling
 
-Credential values MUST NOT be committed to GitHub, canonical research state, packets, ledgers or reports.
+By explicit project-owner decision, API credentials for FRANK/RAE may be persisted in the private canonical repository at:
 
-Allowed sources:
-- process environment;
-- local `.env` ignored by Git;
-- runtime secret manager/store.
+`research_entity/private/API_TOKENS.env`
 
-Repository files may contain only:
-- environment variable names;
-- provider/tool metadata;
-- non-secret configuration examples.
+This file is the repository-backed credential fallback for workers that can read the private backend.
 
-If a credential is supplied interactively, do not copy it into durable research artifacts.
+Credential lookup priority:
+1. process environment;
+2. runtime secret manager/store;
+3. `research_entity/private/API_TOKENS.env`.
+
+Credential values MUST NOT be copied into canonical state, claims, knowledge packets, run reports, experiment logs, public artifacts, normal debug output or chat memory. Only credential names, availability status and source class may be recorded there.
+
+Workers should load only the credential required for the active provider and should never print the credential value. If repository visibility changes away from private, repository access is broadened unexpectedly, or a credential is suspected to have leaked, rotate affected credentials.
 
 ## Mandatory tool-selection rule
 
@@ -82,8 +83,7 @@ If a preferred provider is unavailable, rate-limited, unconfigured or returns in
 
 ## Runtime verification
 
-A registry entry marked `REGISTERED_NOT_RUNTIME_VERIFIED` is only a declared capability.
-It becomes operationally verified only after a successful call in the current runtime/host.
+Credential presence is not runtime verification. A provider becomes operationally verified only after a successful provider call from an executing worker/runtime. Verification metadata may record provider, endpoint class, timestamp and success/failure, but never the credential value.
 
 ## Cost / token discipline
 
@@ -93,7 +93,8 @@ Use APIs selectively rather than exhaustively:
 - retrieve metadata/snippets first and full documents only when decision-relevant;
 - deduplicate by DOI/arXiv ID/URL/source hash;
 - reuse cached immutable source material where freshness is not required;
-- do not call multiple providers merely to inflate agreement counts.
+- do not call multiple providers merely to inflate agreement counts;
+- prefer high-result-count/list-filter calls over many small calls when provider pricing rewards batching.
 
 ## Evidence discipline
 

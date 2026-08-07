@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0642p0700-chatgpt-secondary-r2",
+  "parent_generation":0,
+  "candidate_generation":1,
+  "decision":"HOLD",
+  "reasons":[
+    "Local self-use proxy is positive for conservative activation but tiny, hand-anchored and not the repository's actual ClayGraph runtime.",
+    "Current runtime graph materialization/official benchmark could not be executed from this surface.",
+    "Only a subset of the 71 live FRANK database/store identities and schemas is reachable; destructive or physical migration conclusions would be unsafe.",
+    "Pinned Qwen3-4B matched-budget test remains blocked by Hugging Face quota until 2026-09-01 and no local target runtime is exposed.",
+    "p99 memory/update/crash-recovery and privacy/capability regressions are unmeasured."
+  ],
+  "hard_invariant_check":{"provenance":"PASS_DESIGN","unknown_conflict_revoked":"PASS_DESIGN","identity_replay":"UNMEASURED_TARGET","authority_boundary":"PASS_DESIGN","migration_rollback":"PASS_PLAN","synthetic_laundering":"PASS_LABELING"},
+  "promotion_action":"DO_NOT_UPDATE research_entity/claygraph/CLAYGRAPH_LATEST.claycode.json",
+  "next_gate":["execute tools/claygraph_build.py + claygraph_benchmark.py on current repo","independently grounded adversarial gold set >=50 queries including conflicts/staleness","live read-only FRANK store inventory","shadow projection parity/replay + p99","matched-budget Qwen3-4B/target small-model comparison"]
+}

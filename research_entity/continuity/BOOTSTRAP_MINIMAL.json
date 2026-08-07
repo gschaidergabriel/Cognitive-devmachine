@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "purpose": "Low-overhead boot index. This file is a derived operational index, not canonical research truth.",
   "canonical_path": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
   "expected_entity_version": "RAE-8.8",
@@ -33,6 +33,12 @@
       "default_status": "OPEN",
       "promotion_without_independent_support": false,
       "instruction": "Execute the full dump research cycle immediately; do not ask the user what dump means."
+    },
+    "fusion": {
+      "match": "trimmed_case_insensitive_exact",
+      "protocol": "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
+      "kind": "global_mesh_meta_research",
+      "instruction": "Research across the complete current RAE graph/evidence classes and write explicit feedback or NO_CHANGE receipts to clay, frank, gwt, emergenz, claycode and hyperposition."
     }
   },
   "mandatory_invariants": [
@@ -52,7 +58,8 @@
     "linux_first_is_not_linux_only",
     "synthetic_clay_is_not_the_scope_boundary",
     "substantive_visible_responses_end_with_status_footer",
-    "substantive_research_tasks_use_quota_aware_tool_orchestration_with_recorded_fallback"
+    "substantive_research_tasks_use_quota_aware_tool_orchestration_with_recorded_fallback",
+    "fusion_covers_complete_mesh_and_closes_feedback_to_every_scientific_branch"
   ],
   "boot_tiers": {
     "T0_ALWAYS": [
@@ -69,7 +76,8 @@
       "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md for substantive research tasks",
       "tools/research_provider_router.py for research tool planning/validation",
       "research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md when cross-researcher interpretation/adjudication matters",
-      "research_entity/global/DUMP_PROTOCOL.md only when reserved command dump is triggered"
+      "research_entity/global/DUMP_PROTOCOL.md only when reserved command dump is triggered",
+      "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md only when reserved command fusion is triggered"
     ],
     "T2_ONLY_WHEN_RELEVANT": [
       "research constitution",
@@ -97,7 +105,8 @@
     "max_dependency_packets": 4,
     "max_negative_result_summaries": 8,
     "max_active_experiment_summaries": 6,
-    "overflow_policy": "load indexes/summaries first; fetch evidence detail only on demand"
+    "overflow_policy": "load indexes/summaries first; fetch evidence detail only on demand",
+    "fusion_override":"coverage-first traversal may exceed normal branch packet limits via staged/indexed retrieval; do not silently omit a branch or evidence class"
   },
   "active_experiment_ids": [
     "EXP-LIVE-GWT-LESION",

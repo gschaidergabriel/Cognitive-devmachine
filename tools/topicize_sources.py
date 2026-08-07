@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Deterministically project all available source text into cross-domain topic files.
 
-This is a bootstrap retrieval classifier, not an epistemic judge. It consumes both direct
-text sources and text derivatives extracted from PDFs/ZIPs by ingest_source.py. Claim
-status still requires evidence-aware review and the claim lifecycle protocol.
+Consumes both direct text sources and text derivatives extracted from PDFs/ZIPs by
+`ingest_source.py`. This is a retrieval classifier, not an epistemic judge.
 """
 from __future__ import annotations
 import hashlib, json, re
@@ -33,7 +32,6 @@ TEXT_EXTS={'.txt','.md','.json','.jsonl','.csv','.tsv','.py','.sh','.yaml','.yml
 
 
 def source_files():
-    """Yield (stable-ref-root, path), content-deduplicated later."""
     if TEXT.exists():
         for p in sorted(TEXT.rglob('*')):
             if p.is_file(): yield 'text',p
@@ -46,17 +44,14 @@ def source_files():
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
-    rec={k:[] for k in TOPICS}; seen_source_hashes=set(); source_count=0
+    rec={k:[] for k in TOPICS}; seen_source_hashes=set()
     for root_kind,p in source_files():
         data=p.read_bytes(); sh=hashlib.sha256(data).hexdigest()
         if sh in seen_source_hashes: continue
-        seen_source_hashes.add(sh); source_count+=1
+        seen_source_hashes.add(sh)
         txt=data.decode('utf-8',errors='ignore')
         paras=[re.sub(r'\s+',' ',x).strip() for x in re.split(r'\n\s*\n+',txt) if len(re.sub(r'\s+',' ',x).strip())>=40]
-        try:
-            rel=p.relative_to(TEXT if root_kind=='text' else DERIVED).as_posix()
-        except ValueError:
-            rel=p.name
+        rel=p.relative_to(TEXT if root_kind=='text' else DERIVED).as_posix()
         for i,para in enumerate(paras,1):
             low=para.lower(); scores={k:sum(low.count(t) for t in terms) for k,terms in TOPICS.items()}; m=max(scores.values(),default=0)
             if not m: continue
@@ -69,8 +64,8 @@ def main():
         for h,ref,para in arr:
             if h in seen: continue
             seen.add(h); rows.append(f'## {ref} [{h}]\n\n{para}\n')
-        (OUT/f'{k}.md').write_text(f'# Topic Corpus: {k}\n\nSources scanned: {source_count}\nRecords: {len(rows)}\n\n'+"\n".join(rows),encoding='utf-8')
-        idx[k]={'records':len(rows),'sources_scanned':source_count,'path':f'research_sources/topics/{k}.md'}
-    (OUT/'INDEX.json').write_text(json.dumps(idx,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+        (OUT/f'{k}.md').write_text(f'# Topic Corpus: {k}\n\nRecords: {len(rows)}\n\n'+"\n".join(rows),encoding='utf-8')
+        idx[k]={'records':len(rows),'path':f'research_sources/topics/{k}.md'}
+    (OUT/'INDEX.json').write_text(json.dumps(idx,indent=2,ensure_ascii=False),encoding='utf-8')
     print(json.dumps(idx,indent=2,ensure_ascii=False))
 if __name__=='__main__': main()

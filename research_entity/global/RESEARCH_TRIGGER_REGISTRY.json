@@ -1,44 +1,61 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
+  "interconnection_protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+  "interconnection_preflight": "tools/research_interconnect_preflight.py",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
+  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches.",
   "triggers": {
     "dump": {
       "kind": "research_intake",
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
-      "purpose": "Ingest arbitrary dump material, fuse it with current RAE knowledge, research derived hypotheses, packetize results, then archive the processed originals."
+      "purpose": "Ingest arbitrary dump material, fuse it with current RAE knowledge, research derived hypotheses, packetize results, then archive the processed originals.",
+      "mesh_role": "intake_to_shared_mesh"
     },
     "clay": {
       "kind": "integrated_research_foundry",
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
-      "purpose": "Run the complete Synthetic Clay recursive research foundry across GWT, FRANK architecture, emergence measurement, ClayCode/4B internal language, hyperposition/codependency and low-latency emergent software."
+      "purpose": "Run the complete Synthetic Clay recursive research foundry across GWT, FRANK architecture, emergence measurement, ClayCode/4B internal language, hyperposition/codependency and low-latency emergent software.",
+      "mesh_role": "integrated_master_foundry",
+      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
     },
     "gwt": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
-      "purpose": "Research Global Workspace mechanisms in AI systems: selection, competition, ignition, broadcast, reconstruction, effect, re-entry, multi-timescale coupling and causal validation."
+      "purpose": "Research Global Workspace mechanisms in AI systems: selection, competition, ignition, broadcast, reconstruction, effect, re-entry, multi-timescale coupling and causal validation.",
+      "mesh_role": "connected_domain",
+      "required_foundations": ["clay", "frank", "emergenz", "hyperposition", "claycode", "gwt"]
     },
     "frank": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
-      "purpose": "Research FRANK as one integrated cognitive/runtime module, including whole-system architecture, Linux-first implementation, portability, Qwen-4B, Android/edge and module-collapse hypotheses."
+      "purpose": "Research FRANK as one integrated cognitive/runtime module, including whole-system architecture, Linux-first implementation, portability, Qwen-4B, Android/edge and module-collapse hypotheses, grounded primarily in the newest Synthetic Clay research.",
+      "mesh_role": "architecture_projection_of_clay",
+      "required_foundations": ["clay", "gwt", "claycode", "hyperposition", "emergenz", "frank"],
+      "primary_foundation": "clay"
     },
     "emergenz": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
-      "purpose": "Research and measure emergence using GWT-linked causal interventions, lesion/rescue, re-entry, interaction terms, PID/PEID/transfer entropy and multiscale causal tests."
+      "purpose": "Research and measure emergence using GWT-linked causal interventions, lesion/rescue, re-entry, interaction terms, PID/PEID/transfer entropy and multiscale causal tests.",
+      "mesh_role": "connected_domain",
+      "required_foundations": ["clay", "gwt", "hyperposition", "frank", "claycode", "emergenz"]
     },
     "claycode": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
-      "purpose": "Research ClayCode as the internal language/IR that represents the Clay system in which it runs, including a Clay-written runtime and Qwen-4B simulation/internalization."
+      "purpose": "Research ClayCode as the internal language/IR that represents the Clay system in which it runs, including a Clay-written runtime and Qwen-4B simulation/internalization.",
+      "mesh_role": "connected_domain",
+      "required_foundations": ["clay", "frank", "gwt", "hyperposition", "emergenz", "claycode"]
     },
     "hyperposition": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
-      "purpose": "Research emergent systems, contextual hyperposition, higher-order codependencies, dynamic topology and near-zero-latency software via shared/incremental state. 'Entanglement' is an engineering analogy unless physical quantum effects are actually tested."
+      "purpose": "Research emergent systems, contextual hyperposition, higher-order codependencies, dynamic topology and near-zero-latency software via shared/incremental state. 'Entanglement' is an engineering analogy unless physical quantum effects are actually tested.",
+      "mesh_role": "connected_domain",
+      "required_foundations": ["clay", "frank", "claycode", "gwt", "emergenz", "hyperposition"]
     }
   }
 }

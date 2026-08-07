@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.5",
+  "schema_version": "2.6",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
@@ -54,7 +54,9 @@
       "requires_latest_frank_architecture_if_available": true,
       "requires_goodman_anti_echo_review": true,
       "required_goodman_artifact": "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
-      "goodman_validator": "tools/goodman_filter_check.py"
+      "goodman_validator": "tools/goodman_filter_check.py",
+      "goodman_completion_mode": "validate-run",
+      "completion_command": "python tools/goodman_filter_check.py validate-run research_entity/trigger_runs/claycode/<run_id>"
     },
     "hyperposition": {
       "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
@@ -62,5 +64,5 @@
       "requires_interconnect_manifest": true
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and must independently verify, refine, refute or leave unresolved each materially imported FRANK assumption through the Goodman anti-echo filter; shared FRANK↔ClayCode ancestry never counts as replication. Every substantive visible response ends with the required status footer including short commands."
+  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and must independently verify, refine, refute or leave unresolved each materially imported FRANK assumption through the Goodman anti-echo filter; shared FRANK↔ClayCode ancestry never counts as replication, and ClayCode completion requires a Goodman review bound to the exact run preflight. Every substantive visible response ends with the required status footer including short commands."
 }

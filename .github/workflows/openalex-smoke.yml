@@ -1,0 +1,55 @@
+name: OpenAlex credential smoke
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/private/API_TOKENS.env'
+      - 'tools/rae_secret_loader.py'
+      - 'tools/openalex_search.py'
+      - '.github/workflows/openalex-smoke.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  verify-openalex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check credential availability
+        run: python tools/rae_secret_loader.py OPENALEX_API_KEY
+
+      - name: Verify OpenAlex provider
+        run: python tools/openalex_search.py --smoke-test > /tmp/openalex-smoke.json
+
+      - name: Write sanitized verification receipt
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src = json.loads(Path('/tmp/openalex-smoke.json').read_text())
+          out = {
+              'schema_version': '1.0',
+              'provider': src.get('provider'),
+              'tool': src.get('tool'),
+              'status': src.get('status'),
+              'checked_at': src.get('checked_at'),
+              'credential_source': src.get('credential_source'),
+              'credential_value_persisted_here': False,
+              'verification_endpoint_class': 'rate-limit'
+          }
+          p = Path('research_entity/runtime/openalex_verification.json')
+          p.parent.mkdir(parents=True, exist_ok=True)
+          p.write_text(json.dumps(out, indent=2) + '\n')
+          PY
+
+      - name: Commit verification receipt
+        run: |
+          git config user.name 'rae-runtime-verifier'
+          git config user.email 'rae-runtime-verifier@users.noreply.github.com'
+          git add research_entity/runtime/openalex_verification.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record OpenAlex runtime verification'
+          git push

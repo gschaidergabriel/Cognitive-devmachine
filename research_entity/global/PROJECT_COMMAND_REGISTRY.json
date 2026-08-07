@@ -1,8 +1,10 @@
 {
-  "schema_version": "2.0",
+  "schema_version": "2.1",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
+  "research_tool_orchestration_policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
+  "research_tool_router": "tools/research_provider_router.py",
   "commands": {
     "dump": {
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
@@ -34,5 +36,5 @@
       "kind": "domain_research"
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. They are handled before ordinary task routing. Every trigger run uses MASTER_RESEARCH_TRIGGER_PROTOCOL.md unless the command is dump, and every substantive visible response ends with STATUS_FOOTER_PROTOCOL.md."
+  "rule": "Reserved commands fire only on exact full-message match. They are handled before ordinary task routing. Every research trigger run loads the tool orchestration policy/router and records mandatory attempts or explicit quota/runtime fallback reasons. Every trigger run uses MASTER_RESEARCH_TRIGGER_PROTOCOL.md unless the command is dump, and every substantive visible response ends with STATUS_FOOTER_PROTOCOL.md."
 }

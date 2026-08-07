@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0642p0700-chatgpt-secondary-r2",
+  "experiments":[
+    {
+      "experiment_id":"EXP-CG1-SELF-USE-QUALIFIED-ACTIVATION-001",
+      "class":"LOCAL_ENGINEERING_PROXY",
+      "question":"Does unconstrained parent-like two-hop activation improve current-run retrieval, and does a conservative qualified one-hop candidate reduce false association?",
+      "arms":{
+        "lexical":{"recall_at_5":0.6333,"precision_at_5":0.33,"median_returned_chars":1238,"median_latency_ms":0.010186,"p95_latency_ms":0.011765},
+        "parent_like_2hop":{"recall_at_5":0.6333,"precision_at_5":0.32,"median_returned_chars":1253,"median_latency_ms":0.022782,"p95_latency_ms":0.027861},
+        "candidate_qualified_1hop":{"recall_at_5":0.8,"precision_at_5":0.4,"median_returned_chars":1217,"median_latency_ms":0.019298,"p95_latency_ms":0.026208}
+      },
+      "result":"Naive two-hop propagation failed to improve recall and slightly reduced precision. Conservative qualified one-hop activation improved this small goldset, but the test is structurally biased and not sufficient for promotion.",
+      "limitations":["16-item manually assembled evidence corpus","5 questions","manually encoded explicit graph relations","not tools/claygraph_benchmark.py","not live FRANK","no vector arm","latency environment-specific"],
+      "decision":"SUPPORT_FURTHER_TESTING_NOT_PROMOTION"
+    }
+  ]
+}

@@ -22,6 +22,7 @@ REQUIRED = [
 
 REQUIRED_COMMANDS = [
     "dump",
+    "fusion",
     "clay",
     "gwt",
     "frank",

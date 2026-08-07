@@ -13,14 +13,26 @@ A trigger fires only when the entire trimmed user message equals one registered 
 1. Verify remote Canonical revision/hash and actor identity.
 2. Compile task-specific RAE context; do not eagerly read the whole repository.
 3. Load relevant CURRENT/OPEN/SUPERSEDED/REFUTED/NEGATIVE_RESULT claims, active experiments, packets and direct source evidence.
-4. Load `research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md` and build the run's cross-trigger foundation with `tools/research_interconnect_preflight.py`. Every scientific trigger must ingest the current relevant material from `clay`, `frank`, `gwt`, `emergenz`, `claycode` and `hyperposition` before Fusion 1. Materialize `INTERCONNECT_MANIFEST.json` in the run. `frank` treats the newest Clay architecture/research as its primary architecture foundation; `clay` remains the integrated master foundry.
-5. Load the trigger-specific protocol.
-6. Load `research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md` and `tools/research_provider_router.py`.
-7. Record trigger-run manifest with actor/model/runtime provenance and references to the interconnect/tool manifests.
+4. Load `research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md` and `research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md`, then build the run's cross-trigger foundation with `tools/research_interconnect_preflight.py`.
+5. Every scientific trigger must ingest every branch currently registered as `domain_research` or `integrated_research_foundry`. At the current registry revision these are `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`. Branch membership comes from the registry, not a stale hard-coded count.
+6. Materialize `INTERCONNECT_MANIFEST.json`. It must contain a rich active Topic-/Knowledge-Micro-Packet envelope for each branch, while raw evidence remains indexed/reachable and expands on demand.
+7. Load the trigger-specific protocol.
+8. Load `research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md` and `tools/research_provider_router.py`.
+9. Record trigger-run manifest with actor/model/runtime provenance and references to the interconnect/tool manifests.
 
 If Canonical cannot be verified: `DEGRADED_UNJOINED`. Research may proceed LOCAL_ONLY but no shared-state promotion may be claimed.
 
-A scientific trigger run missing its cross-trigger preflight is incomplete and cannot strongly promote architecture/scientific claims.
+A scientific trigger run missing its cross-trigger preflight, a registered branch, or the rich active-knowledge envelope is incomplete and cannot strongly promote architecture/scientific claims.
+
+## Active domain knowledge rule
+
+Domains are persistent research programmes, not thin latest-report wrappers. Topic Packets and Knowledge Micro-Packets are the default active working-memory layer.
+
+The preflight keeps substantially larger branch-specific active envelopes than the legacy 8-packet cap and prioritizes a diverse mixture of current/open material, contradictions, negative results, experiments, architecture constraints, cross-branch feedback and unresolved falsifiers. See `DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md` for budgets and deep-dependency overrides.
+
+Workers MUST NOT blindly concatenate every active packet or raw source into one prompt. Use compact packet summaries/metadata first, then ClayGraph/SQLite/file search to expand only evidence that can change a hypothesis, contradiction, experiment or architecture decision.
+
+Activation/relevance never upgrades truth or evidence status. Shared ancestry remains one evidential family even if several descendant packets are active.
 
 ## Mandatory provider gate
 
@@ -54,12 +66,13 @@ Before strong claim promotion, validate `TOOL_EXECUTION_MANIFEST.json` with `too
 ### Phase A — Evidence grounding + mesh grounding
 
 - Re-read relevant compressed RAE knowledge.
-- Consume `INTERCONNECT_MANIFEST.json` and relevant artifacts from every connected research branch.
+- Consume `INTERCONNECT_MANIFEST.json` and the active Topic-/Micro-Packet envelope from every connected branch.
 - Re-ground high-impact claims against raw/project sources when available.
+- Expand raw evidence only on demand where it can alter the decision.
 - Import current-turn evidence separately from canonical claims.
 - Preserve contradiction and negative-result lineage.
 - Separate measured data, imported claims, user reports, model inference and web evidence.
-- Use `tools/research_query.py` first when the local query plane is available.
+- Use `tools/research_query.py` first when the local query plane is available; ClayGraph may be used as an additional active-assembly/retrieval path when available.
 - Explicitly detect shared ancestry so the same underlying experiment/source reused by several branches is not counted as independent replication.
 
 ### Phase B — Fusion 1
@@ -89,7 +102,8 @@ Also scan all connected branches for:
 - architecture optimizations that violate another branch's hard constraint;
 - duplicated concepts under different names;
 - identical concepts carrying incompatible evidence status;
-- stale branch conclusions superseded by newer evidence.
+- stale branch conclusions superseded by newer evidence;
+- ClayGraph/packet activation being mistaken for evidence strength.
 
 Contradictions are retained and explicitly resolved, narrowed or left open. Never upgrade correlation to causality without intervention or equivalent causal evidence.
 
@@ -109,7 +123,9 @@ Produce what changed, what survived, what was falsified, what remains open, arch
 
 ### Phase I — Knowledge compilation / mesh write-back
 
-Convert durable new knowledge into surgical micro-packets and Topic Packets. Update source/provenance refs, hypotheses, negative results, experiments, justified claim lifecycle, topic links and method memory. Derived summaries never replace raw evidence.
+Convert durable new knowledge into surgical Knowledge Micro-Packets and Topic Packets. Domains should become richer over time: preserve high-value constraints, negative results, falsifiers, interfaces and cross-branch implications in compact packets so later runs do not have to rediscover them from raw files.
+
+Update source/provenance refs, hypotheses, negative results, experiments, justified claim lifecycle, topic links and method memory. Derived summaries never replace raw evidence.
 
 Write cross-links to affected research branches. Preserve originating trigger/run and evidence ancestry so multi-branch reuse is not mistaken for replication.
 
@@ -131,4 +147,4 @@ A trigger does not grant promotion authority. High-impact claims require indepen
 
 ## No false completion
 
-Never claim 100% completion if requested source ingestion, cross-trigger preflight, provider attempts/fallback recording, experiments, GitHub writes, report materialization or required status output were not actually completed and verified.
+Never claim 100% completion if requested source ingestion, cross-trigger preflight, registered-branch coverage, provider attempts/fallback recording, experiments, GitHub writes, report materialization or required status output were not actually completed and verified.

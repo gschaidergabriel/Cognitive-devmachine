@@ -1,0 +1,82 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T0606p0700-chatgpt-secondary",
+  "actor":"chatgpt-secondary",
+  "boundary":"All numeric experiments in this file are constructed/local research proxies unless an external runtime result is explicitly referenced. They do not establish live FRANK performance or production security.",
+  "experiments":[
+    {
+      "experiment_id":"EXP-CC8-PREDICATE-001",
+      "class":"synthetic_concurrency_counterexample",
+      "n_pairs":100000,
+      "true_conflict_rate":0.30019,
+      "object_only_conflict_miss_rate_given_true_conflict":1.0,
+      "predicate_scope_detection_rate_given_true_conflict":1.0,
+      "global_root_second_txn_reject_rate":1.0,
+      "predicate_scoped_second_txn_reject_rate":0.30019,
+      "interpretation":"When the semantic read is a negative predicate such as 'no matching record exists', two transactions can insert distinct row/object IDs and violate uniqueness while ordinary object-version OCC sees no shared object conflict. Predicate/invariant witnesses detect the constructed conflict; a whole-state root is safe but overconservative in this pair model."
+    },
+    {
+      "experiment_id":"EXP-CC8-HYBRID-TRACE-002",
+      "class":"synthetic_dependency_validation",
+      "n":100000,
+      "state_items":10000,
+      "global_reject_rate":1.0,
+      "static_envelope_reject_rate":0.05989,
+      "observed_trace_reject_rate":0.00592,
+      "exact_observed_conflict_misses":0,
+      "mean_validation_width_global":10000.0,
+      "mean_validation_width_static":59.83494,
+      "mean_validation_width_observed":5.98355,
+      "static_vs_observed_width_ratio":9.999906410074287,
+      "injected_monitor_escape_cases":2964,
+      "unsafe_observed_only_misses":3,
+      "interpretation":"A complete observed trace can narrow validation sharply relative to a conservative static upper bound, but observed-only validation becomes unsound when dynamic accesses escape monitoring. Therefore trace must be checked as a subset of a trusted static envelope, with fail-closed escalation on escapes."
+    },
+    {
+      "experiment_id":"EXP-CC8-VOLATILE-003",
+      "class":"synthetic_volatile_dependency_counterexample",
+      "n":100000,
+      "volatile_use_cases":24843,
+      "volatile_change_cases":5041,
+      "object_only_miss_rate_given_volatile_use":0.2029143018154007,
+      "explicit_volatile_receipt_detection":1.0,
+      "interpretation":"Object access traces alone do not represent time/current-regime/random/external-snapshot dependencies. Volatile inputs must become explicit versioned/receipt dependencies when they can affect semantics."
+    },
+    {
+      "experiment_id":"EXP-CC8-EFFECT-ESCAPE-004",
+      "class":"synthetic_authority_interposition",
+      "n":100000,
+      "external_effect_attempts":18039,
+      "unauthorized_attempts":6408,
+      "pre_effect_gateway_irreversible_violations":0,
+      "pre_effect_block_rate":1.0,
+      "posthoc_monitor_irreversible_violations":6408,
+      "interpretation":"Monitoring after an irreversible effect can detect but cannot undo the effect. External side effects require pre-effect interposition plus current capability/freshness checks; post-hoc trace auditing is not an authority boundary."
+    },
+    {
+      "experiment_id":"EXP-CC8-ENVELOPE-FUZZ-005",
+      "class":"local_reference_semantics_fuzz",
+      "n":100000,
+      "legitimate_traces":97128,
+      "legitimate_false_rejects":0,
+      "injected_envelope_escapes":2872,
+      "escapes_detected":2872,
+      "escape_detection_rate":1.0,
+      "reference":"CC_RC1_3_REFERENCE.py",
+      "interpretation":"The research reference's typed class-wise subset check rejected every deliberately undeclared object/predicate/invariant/volatile/effect/capability access in this generated workload. This tests the checker logic only, not completeness of a production compiler/interposer."
+    },
+    {
+      "experiment_id":"EXP-CC8-OUTBOX-006",
+      "class":"synthetic_crash_retry_proxy",
+      "n":100000,
+      "crash_probability":0.02,
+      "relay_duplicate_probability":0.03,
+      "naive_state_then_effect_lost_effect_rate":0.01951,
+      "outbox_lost_intent_rate":0.0,
+      "outbox_duplicate_delivery_rate":0.02939,
+      "idempotent_duplicate_real_effect_rate":0.0,
+      "interpretation":"Under the constructed crash/retry model, atomically persisting state plus effect intent prevents the naive dual-write loss mode, while at-least-once relay introduces duplicates that require idempotency. This is a pattern sanity check, not a production reliability estimate."
+    }
+  ],
+  "planned_independent_replication":"research_entity/runtime/tool_requests/cc8-judge0-predicate-20260808T0606p0700.json"
+}

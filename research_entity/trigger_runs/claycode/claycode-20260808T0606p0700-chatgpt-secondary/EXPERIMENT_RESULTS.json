@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"claycode-20260808T0606p0700-chatgpt-secondary",
   "actor":"chatgpt-secondary",
   "boundary":"All numeric experiments in this file are constructed/local research proxies unless an external runtime result is explicitly referenced. They do not establish live FRANK performance or production security.",
@@ -14,6 +14,20 @@
       "global_root_second_txn_reject_rate":1.0,
       "predicate_scoped_second_txn_reject_rate":0.30019,
       "interpretation":"When the semantic read is a negative predicate such as 'no matching record exists', two transactions can insert distinct row/object IDs and violate uniqueness while ordinary object-version OCC sees no shared object conflict. Predicate/invariant witnesses detect the constructed conflict; a whole-state root is safe but overconservative in this pair model."
+    },
+    {
+      "experiment_id":"EXP-CC8-PREDICATE-JUDGE0-REPL-001",
+      "class":"independent_remote_runtime_replication",
+      "runtime":"Judge0 / Python 3.8.1",
+      "result_ref":"research_entity/runtime/tool_results/cc8-judge0-predicate-20260808T0606p0700.json",
+      "n_pairs":50000,
+      "true_conflicts":15088,
+      "object_only_misses":15088,
+      "object_miss_rate_given_conflict":1.0,
+      "predicate_detection_given_conflict":1.0,
+      "global_second_reject_rate":1.0,
+      "predicate_scoped_second_reject_rate":0.30176,
+      "interpretation":"Independent execution replicated the constructed mechanism: object-only tracking missed every negative-predicate conflict while the predicate witness caught every such conflict. This replicates the mechanism on a separate runtime, not a real FRANK workload frequency."
     },
     {
       "experiment_id":"EXP-CC8-HYBRID-TRACE-002",
@@ -78,5 +92,5 @@
       "interpretation":"Under the constructed crash/retry model, atomically persisting state plus effect intent prevents the naive dual-write loss mode, while at-least-once relay introduces duplicates that require idempotency. This is a pattern sanity check, not a production reliability estimate."
     }
   ],
-  "planned_independent_replication":"research_entity/runtime/tool_requests/cc8-judge0-predicate-20260808T0606p0700.json"
+  "independent_replication":"SUCCESS"
 }

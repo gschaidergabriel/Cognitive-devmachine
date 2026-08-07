@@ -51,4 +51,5 @@ jobs:
           git add research_entity/runtime/crossref_verification.json
           git diff --cached --quiet && exit 0
           git commit -m 'Record Crossref runtime verification'
-          git push
+          git pull --rebase origin main
+          git push origin HEAD:main

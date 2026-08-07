@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode-20260808T0529p0700-chatgpt-secondary",
+  "actor": "chatgpt-secondary",
+  "classes": ["scholarly", "current_web", "implementation", "executable", "model_experiment"],
+  "planned_tools": [
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":"CONNECTOR_BLOCKED"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":"RUNTIME_UNAVAILABLE"},
+    {"tool":"huggingface_inference","mode":"MUST_ATTEMPT","class":"model_experiment","availability_blocker":"CONNECTOR_BLOCKED"}
+  ],
+  "attempts": [
+    {"tool":"openalex_search","status":"BLOCKED","fallback_reason":"CONNECTOR_BLOCKED","note":"Repository adapter is registered but not exposed as an invokable tool in this ChatGPT runtime."},
+    {"tool":"arxiv_search","status":"BLOCKED","fallback_reason":"CONNECTOR_BLOCKED","note":"Repository adapter unavailable to this worker; direct arXiv pages were retrieved through native web fallback."},
+    {"tool":"semantic_scholar_search","status":"BLOCKED","fallback_reason":"RUNTIME_UNAVAILABLE","note":"Registry status is pending runtime verification."},
+    {"tool":"tavily_search","status":"BLOCKED","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered provider adapter not exposed to this worker."},
+    {"tool":"exa_search","status":"BLOCKED","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered provider adapter not exposed to this worker."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical boot, actor/trigger/protocol verification, current micro-packet and commit evidence inspection, and run persistence executed."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Projection roundtrip/size/parser proxy, unknown preservation, explicit-state loss test and capability/root/nonce gateway fuzz executed."},
+    {"tool":"e2b_sandbox","status":"BLOCKED","fallback_reason":"CREDENTIAL_UNAVAILABLE","note":"Registry states credential is not persisted through a permitted runtime channel; local sandbox used."},
+    {"tool":"huggingface_inference","status":"BLOCKED","fallback_reason":"CONNECTOR_BLOCKED","note":"Registered provider is not exposed as an invokable connector to this worker; target Qwen3-4B experiment remains open."}
+  ],
+  "fallback_attempts": [
+    {"tool":"native_web","status":"SUCCESS","for":["openalex_search","arxiv_search","semantic_scholar_search","tavily_search","exa_search"],"evidence":"Primary arXiv pages, MLIR/Protobuf/Wasmtime documentation and reproducible-build sources retrieved."},
+    {"tool":"direct_primary_sources","status":"SUCCESS","for":["scholarly","current_web"],"evidence":"arXiv abstracts and authoritative project documentation used rather than search snippets where possible."},
+    {"tool":"local_sandbox","status":"SUCCESS","for":["e2b_sandbox"],"evidence":"Deterministic local experiments executed; no remote-sandbox claim made."}
+  ],
+  "model_experiment": {
+    "target":"Qwen3-4B",
+    "status":"NOT_EXECUTED",
+    "reason":"CONNECTOR_BLOCKED",
+    "simulation_only":true,
+    "rule":"No target-reader efficacy or token-performance claim promoted."
+  },
+  "validation_note":"All MUST_ATTEMPT entries either have a successful attempt or an allowed blocker with explicit fallback. No strong claim promotion is requested."
+}

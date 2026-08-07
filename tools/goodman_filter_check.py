@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate FRANK↔ClayCode anti-echo review artifacts."""
+"""Validate FRANK↔ClayCode anti-echo review artifacts and full ClayCode run binding."""
 from __future__ import annotations
 
 import argparse
@@ -9,6 +9,7 @@ from typing import Any
 
 ALLOWED = {"SUPPORTED", "REFINED", "REFUTED", "UNRESOLVED"}
 REVIEW_NAME = "FRANK_CLAYCODE_GOODMAN_REVIEW.json"
+INTERCONNECT_NAME = "INTERCONNECT_MANIFEST.json"
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -19,7 +20,7 @@ def _load(path: Path) -> dict[str, Any]:
     except json.JSONDecodeError as exc:
         raise ValueError(f"invalid JSON in {path.name}: {exc}") from exc
     if not isinstance(obj, dict):
-        raise ValueError("review must be a JSON object")
+        raise ValueError(f"{path.name} must be a JSON object")
     return obj
 
 
@@ -31,23 +32,21 @@ def template(run_id: str) -> dict[str, Any]:
         "latest_frank_run": None,
         "latest_frank_architecture_artifact": None,
         "shared_ancestry_is_not_replication": True,
-        "reviews": [
-            {
-                "claim_id": "REPLACE_ME",
-                "frank_statement": "REPLACE_ME",
-                "frank_source_refs": [],
-                "ancestry_families": [],
-                "shared_ancestry_collapsed": True,
-                "counterhypothesis": "REPLACE_ME",
-                "falsifier": "REPLACE_ME",
-                "independent_checks": [],
-                "adversarial_checks": [],
-                "verdict": "UNRESOLVED",
-                "reason": "REPLACE_ME",
-                "claycode_action": "keep_open",
-                "affected_claycode_artifacts": []
-            }
-        ]
+        "reviews": [{
+            "claim_id": "REPLACE_ME",
+            "frank_statement": "REPLACE_ME",
+            "frank_source_refs": [],
+            "ancestry_families": [],
+            "shared_ancestry_collapsed": True,
+            "counterhypothesis": "REPLACE_ME",
+            "falsifier": "REPLACE_ME",
+            "independent_checks": [],
+            "adversarial_checks": [],
+            "verdict": "UNRESOLVED",
+            "reason": "REPLACE_ME",
+            "claycode_action": "keep_open",
+            "affected_claycode_artifacts": []
+        }]
     }
 
 
@@ -114,6 +113,40 @@ def validate(path: Path) -> dict[str, Any]:
     return {"ok": not violations, "review_file": str(path), "violations": violations}
 
 
+def validate_run(run_dir: Path) -> dict[str, Any]:
+    inter = _load(run_dir / INTERCONNECT_NAME)
+    review = _load(run_dir / REVIEW_NAME)
+    base = validate(run_dir / REVIEW_NAME)
+    violations = list(base["violations"])
+
+    if inter.get("trigger") != "claycode":
+        violations.append("INTERCONNECT_MANIFEST.trigger must be claycode")
+    priority = inter.get("branch_priority") or []
+    if priority[:2] != ["frank", "clay"]:
+        violations.append("ClayCode preflight must prioritize frank then clay")
+    special = inter.get("special_rules") or {}
+    if special.get("claycode_requires_latest_frank_research_as_primary_feedback") is not True:
+        violations.append("preflight must require latest FRANK research as primary feedback")
+    if special.get("claycode_requires_goodman_anti_echo_review") is not True:
+        violations.append("preflight must require Goodman anti-echo review")
+
+    frank = next((x for x in inter.get("branches", []) if x.get("branch") == "frank"), None)
+    if not frank or not frank.get("latest_run"):
+        violations.append("preflight must contain latest FRANK run")
+    else:
+        if review.get("latest_frank_run") != frank.get("latest_run"):
+            violations.append("review.latest_frank_run must match FRANK latest_run captured by preflight")
+
+    expected_arch = special.get("claycode_latest_frank_architecture_artifact")
+    if review.get("latest_frank_architecture_artifact") != expected_arch:
+        violations.append("review latest_frank_architecture_artifact must match preflight; use null explicitly when none exists")
+
+    if review.get("claycode_run_id") != inter.get("run_id"):
+        violations.append("review.claycode_run_id must match INTERCONNECT_MANIFEST.run_id")
+
+    return {"ok": not violations, "run_dir": str(run_dir), "violations": violations}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -122,6 +155,8 @@ def main() -> None:
     t.add_argument("--output")
     v = sub.add_parser("validate")
     v.add_argument("path")
+    vr = sub.add_parser("validate-run")
+    vr.add_argument("run_dir")
     args = ap.parse_args()
     if args.cmd == "template":
         text = json.dumps(template(args.run_id), ensure_ascii=False, indent=2) + "\n"
@@ -131,7 +166,7 @@ def main() -> None:
             p.write_text(text, encoding="utf-8")
         print(text, end="")
         return
-    out = validate(Path(args.path))
+    out = validate_run(Path(args.run_dir)) if args.cmd == "validate-run" else validate(Path(args.path))
     print(json.dumps(out, ensure_ascii=False, indent=2))
     if not out["ok"]:
         raise SystemExit(2)

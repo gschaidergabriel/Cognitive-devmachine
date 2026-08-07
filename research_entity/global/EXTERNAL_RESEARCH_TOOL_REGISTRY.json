@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0",
+  "schema_version": "2.1",
   "purpose": "Registry of external research, verification and execution capabilities available to FRANK/RAE runtimes. Credential values live only in the designated private token store, never in this registry.",
   "secret_policy": {
     "canonical_private_store": "research_entity/private/API_TOKENS.env",
@@ -7,6 +7,21 @@
     "source_priority": ["process_environment", "runtime_secret_store", "private_repo_token_store"],
     "forbidden_duplication_targets": ["canonical_state", "research_packets", "claims", "run_reports", "logs", "public_artifacts", "chat_memory"],
     "rule": "By explicit project-owner decision, credential values may be persisted in the designated store of this private repository when the active connector permits it. Load only the needed credential and never duplicate its value into research artifacts or logs."
+  },
+  "runtime_health": {
+    "consolidated_state": "research_entity/runtime/PROVIDER_HEALTH.json",
+    "audit_tool": "tools/provider_health_audit.py",
+    "audit_workflow": ".github/workflows/provider-health-audit.yml",
+    "rule": "Credential validity, provider runtime health and worker-surface invocability are distinct states. Never infer one from another."
+  },
+  "worker_invocation_bridge": {
+    "status": "OPERATIONAL",
+    "tool": "tools/research_tool_bridge.py",
+    "workflow": ".github/workflows/research-tool-bridge.yml",
+    "request_dir": "research_entity/runtime/tool_requests",
+    "result_dir": "research_entity/runtime/tool_results",
+    "purpose": "Allow GitHub-connected workers that cannot directly execute repository adapters to enqueue allowlisted provider requests; GitHub Actions executes them with private-repo credentials and writes sanitized results.",
+    "security": "allowlisted adapters only; no credential output; remote code adapters are Python-only and execute at the remote sandbox/runtime, not in the GitHub runner; Hugging Face chat requires explicit allow_cost=true."
   },
   "tools": [
     {
@@ -21,7 +36,7 @@
       "evidence_class": "external_scholarly_metadata",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/openalex_verification.json",
-      "verified_at": "2026-08-07T21:27:42.562319+00:00"
+      "worker_bridge_verified": true
     },
     {
       "tool_name": "arxiv_search",
@@ -34,8 +49,7 @@
       "preferred_for": ["preprint discovery", "technical paper retrieval"],
       "evidence_class": "external_preprint",
       "status": "RUNTIME_VERIFIED",
-      "verification_receipt": "research_entity/runtime/arxiv_verification.json",
-      "verified_at": "2026-08-07T21:29:54.774171+00:00"
+      "verification_receipt": "research_entity/runtime/arxiv_verification.json"
     },
     {
       "tool_name": "semantic_scholar_search",
@@ -48,8 +62,10 @@
       "auth_transport": "public shared limit; optional x-api-key",
       "preferred_for": ["paper discovery", "citation and reference traversal", "paper metadata"],
       "evidence_class": "external_scholarly_metadata",
-      "status": "ADAPTER_READY_PENDING_RUNTIME_VERIFICATION",
-      "verification_receipt": "research_entity/runtime/semantic_scholar_verification.json"
+      "status": "RUNTIME_VERIFIED_DEGRADED_SHARED_RATE_LIMIT",
+      "verification_receipt": "research_entity/runtime/semantic_scholar_verification.json",
+      "verified_at": "2026-08-07T22:51:26.805435+00:00",
+      "degradation": "Unauthenticated traffic uses a shared public pool and can transiently return HTTP 429. Prefer an individual SEMANTIC_SCHOLAR_API_KEY when available; otherwise fall back to OpenAlex/arXiv/Crossref."
     },
     {
       "tool_name": "crossref_lookup",
@@ -62,8 +78,10 @@
       "auth_transport": "public_or_polite_pool; optional mailto",
       "preferred_for": ["DOI verification", "publisher metadata", "bibliographic normalization", "work metadata search"],
       "evidence_class": "external_bibliographic_metadata",
-      "status": "REGISTERED_PENDING_RUNTIME_VERIFICATION",
-      "verification_receipt": "research_entity/runtime/crossref_verification.json"
+      "status": "RUNTIME_VERIFIED",
+      "verification_receipt": "research_entity/runtime/crossref_verification.json",
+      "verified_at": "2026-08-07T22:51:24.532773+00:00",
+      "fix_note": "Previous HTTP 406 was an adapter content-negotiation bug; Accept was corrected to application/json."
     },
     {
       "tool_name": "tavily_search",
@@ -76,8 +94,7 @@
       "preferred_for": ["web research", "fact checking", "source discovery"],
       "evidence_class": "external_web_discovery",
       "status": "RUNTIME_VERIFIED",
-      "verification_receipt": "research_entity/runtime/tavily_verification.json",
-      "verified_at": "2026-08-07T21:38:01.039802+00:00"
+      "verification_receipt": "research_entity/runtime/tavily_verification.json"
     },
     {
       "tool_name": "duckduckgo_search",
@@ -90,8 +107,9 @@
       "auth_transport": "none",
       "preferred_for": ["fallback web discovery"],
       "evidence_class": "external_web_discovery",
-      "status": "ADAPTER_READY_PENDING_RUNTIME_VERIFICATION",
-      "verification_receipt": "research_entity/runtime/ddgs_verification.json"
+      "status": "RUNTIME_VERIFIED",
+      "verification_receipt": "research_entity/runtime/ddgs_verification.json",
+      "verified_at": "2026-08-07T22:51:27.764427+00:00"
     },
     {
       "tool_name": "exa_search",
@@ -104,8 +122,7 @@
       "preferred_for": ["semantic web discovery", "technical source discovery", "domain-filtered source discovery", "content highlights"],
       "evidence_class": "external_web_discovery",
       "status": "RUNTIME_VERIFIED",
-      "verification_receipt": "research_entity/runtime/exa_verification.json",
-      "verified_at": "2026-08-07T21:38:33.957789+00:00"
+      "verification_receipt": "research_entity/runtime/exa_verification.json"
     },
     {
       "tool_name": "e2b_sandbox",
@@ -118,9 +135,9 @@
       "auth_transport": "E2B_API_KEY process environment for SDK",
       "preferred_for": ["isolated execution", "reproducibility checks", "dependency-heavy experiments", "untrusted code execution"],
       "evidence_class": "runtime_experiment",
-      "status": "ADAPTER_READY_CREDENTIAL_NOT_PERSISTED",
+      "status": "ADAPTER_READY_CREDENTIAL_UNAVAILABLE",
       "verification_receipt": "research_entity/runtime/e2b_verification.json",
-      "blocker": "Current GitHub connector safety layer blocked committing the supplied E2B credential value and blocked creation of the E2B verification workflow; do not claim runtime verification until a permitted secret channel is available."
+      "blocker": "The supplied E2B credential was blocked from repository persistence by the active GitHub connector safety layer. This was not bypassed. Until a permitted secret channel stores E2B_API_KEY, use Judge0/local sandbox fallback."
     },
     {
       "tool_name": "judge0_execute",
@@ -131,24 +148,26 @@
       "optional_config": ["JUDGE0_API_URL", "JUDGE0_API_KEY"],
       "credential_required": false,
       "auth_transport": "public CE endpoint by default; optional X-Auth-Token",
-      "preferred_for": ["small reproducible code tests", "language/runtime comparison"],
+      "preferred_for": ["small reproducible code tests", "language/runtime comparison", "fallback when E2B is unavailable"],
       "evidence_class": "runtime_experiment",
-      "status": "ADAPTER_READY_PENDING_RUNTIME_VERIFICATION",
-      "verification_receipt": "research_entity/runtime/judge0_verification.json"
+      "status": "RUNTIME_VERIFIED",
+      "verification_receipt": "research_entity/runtime/judge0_verification.json",
+      "verified_at": "2026-08-07T22:50:00.346525+00:00"
     },
     {
       "tool_name": "piston_execute",
       "provider": "Piston",
       "script": "tools/piston_execute.py",
       "class": "remote_code_execution",
-      "requires_secret": [],
+      "requires_secret_for_hosted": ["PISTON_API_TOKEN"],
       "optional_config": ["PISTON_API_URL"],
-      "credential_required": false,
-      "auth_transport": "public EMKC v2 endpoint by default",
+      "credential_required": "hosted_emkc_only",
+      "auth_transport": "hosted EMKC: raw token in Authorization header; self-hosted instance may require none",
       "preferred_for": ["small reproducible code tests", "multi-language execution"],
       "evidence_class": "runtime_experiment",
-      "status": "ADAPTER_READY_PENDING_RUNTIME_VERIFICATION",
-      "verification_receipt": "research_entity/runtime/piston_verification.json"
+      "status": "ADAPTER_READY_HOSTED_CREDENTIAL_UNAVAILABLE",
+      "verification_receipt": "research_entity/runtime/piston_verification.json",
+      "blocker": "The EMKC public endpoint stopped being freely available on 2026-02-15 and now requires authorization. No PISTON_API_TOKEN or self-hosted PISTON_API_URL is configured. Use verified Judge0/local sandbox fallback."
     },
     {
       "tool_name": "huggingface_inference",
@@ -162,11 +181,10 @@
       "evidence_class": "external_model_runtime",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/huggingface_verification.json",
-      "verified_at": "2026-08-07T21:46:49.094291+00:00",
       "verification_spent_inference_credit": false
     }
   ],
-  "selection_rule": "Use the cheapest fit-for-purpose capability that preserves evidence quality. Prefer primary/authoritative sources over search-engine summaries. A tool being registered never makes its output canonical evidence by itself.",
-  "fallback_rule": "If a preferred provider is unavailable, rate-limited or lacks credentials, record the failure and use the next suitable capability without silently weakening provenance.",
-  "verification_rule": "Mark a capability RUNTIME_VERIFIED only after an actual successful provider call; credential presence alone is not verification."
+  "selection_rule": "Use the cheapest fit-for-purpose capability that preserves evidence quality. Prefer primary/authoritative sources over search-engine summaries. GitHub-connected workers that cannot invoke repository scripts directly MUST use the repo-runner bridge before declaring an otherwise healthy provider unavailable.",
+  "fallback_rule": "If a preferred provider is unavailable, rate-limited, quota-exhausted or lacks credentials, record the reason and use the next suitable capability without silently weakening provenance. Current practical fallbacks: Semantic Scholar -> OpenAlex/arXiv/Crossref; E2B -> Judge0/local sandbox; Piston -> Judge0/local sandbox; Tavily/Exa -> DDGS/native web.",
+  "verification_rule": "Mark a capability RUNTIME_VERIFIED only after an actual successful provider call; credential presence alone is not verification. Preserve transient degradation separately from credential validity."
 }

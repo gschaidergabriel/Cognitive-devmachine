@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Registry of external research, verification and execution capabilities available to FRANK/RAE runtimes. This registry contains no secrets.",
+  "secret_policy": {
+    "allowed_sources": ["process_environment", "local_dotenv_ignored_by_git", "runtime_secret_store"],
+    "forbidden": ["committed_repository_files", "canonical_state", "research_packets", "run_reports", "chat_memory"],
+    "rule": "Persist credential names and capability metadata only; never persist credential values in RAE research state."
+  },
+  "tools": [
+    {
+      "tool_name": "openalex_search",
+      "provider": "OpenAlex",
+      "class": "scholarly_metadata_and_discovery",
+      "requires_env": ["OPENALEX_EMAIL"],
+      "credential_required": false,
+      "preferred_for": ["paper discovery", "citation graph exploration", "author/institution/work metadata"],
+      "evidence_class": "external_scholarly_metadata",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "arxiv_search",
+      "provider": "arXiv",
+      "class": "preprint_search",
+      "requires_env": [],
+      "credential_required": false,
+      "preferred_for": ["preprint discovery", "technical paper retrieval"],
+      "evidence_class": "external_preprint",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "semantic_scholar_search",
+      "provider": "Semantic Scholar",
+      "class": "scholarly_metadata_and_discovery",
+      "requires_env": ["SEMANTIC_SCHOLAR_API_KEY"],
+      "credential_required": "DEPENDS_ON_ENDPOINT_AND_RATE_LIMIT",
+      "preferred_for": ["paper discovery", "citation and reference traversal", "paper metadata"],
+      "evidence_class": "external_scholarly_metadata",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "crossref_lookup",
+      "provider": "Crossref",
+      "class": "doi_and_publication_metadata",
+      "requires_env": ["CROSSREF_MAILTO"],
+      "credential_required": false,
+      "preferred_for": ["DOI verification", "publisher metadata", "bibliographic normalization"],
+      "evidence_class": "external_bibliographic_metadata",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "tavily_search",
+      "provider": "Tavily",
+      "class": "agentic_web_search",
+      "requires_env": ["TAVILY_API_KEY"],
+      "credential_required": true,
+      "preferred_for": ["web research", "fact checking", "source discovery"],
+      "evidence_class": "external_web_discovery",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "duckduckgo_search",
+      "provider": "DuckDuckGo-compatible Python search client",
+      "class": "web_search_fallback",
+      "requires_env": [],
+      "credential_required": false,
+      "preferred_for": ["fallback web discovery"],
+      "evidence_class": "external_web_discovery",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "exa_search",
+      "provider": "Exa",
+      "class": "semantic_web_search",
+      "requires_env": ["EXA_API_KEY"],
+      "credential_required": true,
+      "preferred_for": ["semantic web discovery", "technical source discovery"],
+      "evidence_class": "external_web_discovery",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "e2b_sandbox",
+      "provider": "E2B",
+      "class": "remote_code_sandbox",
+      "requires_env": ["E2B_API_KEY"],
+      "credential_required": true,
+      "preferred_for": ["isolated execution", "reproducibility checks", "dependency-heavy experiments"],
+      "evidence_class": "runtime_experiment",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "judge0_execute",
+      "provider": "Judge0",
+      "class": "remote_code_execution",
+      "requires_env": ["JUDGE0_API_URL", "JUDGE0_API_KEY"],
+      "credential_required": "DEPENDS_ON_DEPLOYMENT",
+      "preferred_for": ["small reproducible code tests", "language/runtime comparison"],
+      "evidence_class": "runtime_experiment",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "piston_execute",
+      "provider": "Piston",
+      "class": "remote_code_execution",
+      "requires_env": ["PISTON_API_URL"],
+      "credential_required": "DEPENDS_ON_DEPLOYMENT",
+      "preferred_for": ["small reproducible code tests", "multi-language execution"],
+      "evidence_class": "runtime_experiment",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "tool_name": "huggingface_inference",
+      "provider": "Hugging Face",
+      "class": "model_inference",
+      "requires_env": ["HUGGINGFACE_TOKEN"],
+      "credential_required": true,
+      "preferred_for": ["model experiments", "embedding/classification/inference comparisons"],
+      "evidence_class": "external_model_runtime",
+      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+    }
+  ],
+  "selection_rule": "Use the cheapest fit-for-purpose capability that preserves evidence quality. Prefer primary/authoritative sources over search-engine summaries. A tool being registered never makes its output canonical evidence by itself.",
+  "fallback_rule": "If a preferred provider is unavailable, rate-limited or lacks credentials, record the failure and use the next suitable capability without silently weakening provenance.",
+  "verification_rule": "Mark a capability RUNTIME_VERIFIED only after an actual successful call in the executing runtime."
+}

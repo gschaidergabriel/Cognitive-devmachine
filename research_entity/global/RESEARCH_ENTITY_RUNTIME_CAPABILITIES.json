@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -19,10 +19,18 @@
     "write": true,
     "purpose": "canonical Research Entity state backend"
   },
+  "external_research": {
+    "tool_registry": "research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json",
+    "verification_policy": "research_entity/global/EXTERNAL_RESEARCH_VERIFICATION_POLICY.md",
+    "env_template": ".env.example",
+    "status_rule": "Declared external providers remain REGISTERED_NOT_RUNTIME_VERIFIED until the executing runtime successfully calls them.",
+    "secret_rule": "Credential values are runtime-only and must never be committed to GitHub or persisted in canonical research artifacts."
+  },
   "limitations": [
     "no automatic background research between turns unless an explicit automation exists",
     "no assumption of direct shell access to live FRANK host",
     "provider/model-specific telemetry only when actually exposed",
+    "registered external providers are not considered available until successfully called in the executing runtime",
     "remote writes must be verified by reread"
   ],
   "rule": "This file describes current tool availability. Canonical research self-model remains historical revision-2 state until a justified research-state promotion occurs."

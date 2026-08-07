@@ -10,6 +10,7 @@ on:
       - 'research_entity/global/STATUS_FOOTER_PROTOCOL.md'
       - 'research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json'
       - 'research_entity/runtime/TOOL_QUOTA_STATE.json'
+      - 'research_entity/runtime/PROVIDER_HEALTH.json'
       - '.github/workflows/rae-contract-gates.yml'
 
 concurrency:
@@ -43,12 +44,18 @@ jobs:
           from pathlib import Path
           plan = json.loads(Path('/tmp/plan.json').read_text())
           attempts=[]
+          fallbacks=[]
           for spec in plan['planned_tools']:
-              if spec['mode'] == 'MUST_ATTEMPT' and not spec.get('availability_blocker'):
+              if spec['mode'] != 'MUST_ATTEMPT':
+                  continue
+              if not spec.get('availability_blocker'):
                   attempts.append({'tool':spec['tool'],'status':'SUCCESS'})
+              else:
+                  fallback_tool = 'local_sandbox' if spec.get('class') == 'executable' else 'native_web'
+                  fallbacks.append({'tool':fallback_tool,'status':'SUCCESS','covers':[spec['tool']]})
           manifest=dict(plan)
           manifest['attempts']=attempts
-          manifest['fallback_attempts']=[{'tool':'native_web','status':'SUCCESS'}]
+          manifest['fallback_attempts']=fallbacks
           Path('/tmp/tool_manifest.json').write_text(json.dumps(manifest, indent=2))
           PY
           python tools/research_provider_router.py validate-manifest /tmp/tool_manifest.json

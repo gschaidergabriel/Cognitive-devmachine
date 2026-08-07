@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.6",
+  "schema_version": "1.7",
   "purpose": "Registry of external research, verification and execution capabilities available to FRANK/RAE runtimes. Credential values live only in the designated private token store, never in this registry.",
   "secret_policy": {
     "canonical_private_store": "research_entity/private/API_TOKENS.env",
@@ -71,8 +71,9 @@
       "auth_transport": "authorization_bearer",
       "preferred_for": ["web research", "fact checking", "source discovery"],
       "evidence_class": "external_web_discovery",
-      "status": "REGISTERED_PENDING_RUNTIME_VERIFICATION",
-      "verification_receipt": "research_entity/runtime/tavily_verification.json"
+      "status": "RUNTIME_VERIFIED",
+      "verification_receipt": "research_entity/runtime/tavily_verification.json",
+      "verified_at": "2026-08-07T21:38:01.039802+00:00"
     },
     {
       "tool_name": "duckduckgo_search",
@@ -87,12 +88,16 @@
     {
       "tool_name": "exa_search",
       "provider": "Exa",
+      "script": "tools/exa_search.py",
       "class": "semantic_web_search",
       "requires_secret": ["EXA_API_KEY"],
       "credential_required": true,
-      "preferred_for": ["semantic web discovery", "technical source discovery"],
+      "auth_transport": "x-api-key header",
+      "preferred_for": ["semantic web discovery", "technical source discovery", "domain-filtered source discovery", "content highlights"],
       "evidence_class": "external_web_discovery",
-      "status": "REGISTERED_NOT_RUNTIME_VERIFIED"
+      "status": "RUNTIME_VERIFIED",
+      "verification_receipt": "research_entity/runtime/exa_verification.json",
+      "verified_at": "2026-08-07T21:38:33.957789+00:00"
     },
     {
       "tool_name": "e2b_sandbox",

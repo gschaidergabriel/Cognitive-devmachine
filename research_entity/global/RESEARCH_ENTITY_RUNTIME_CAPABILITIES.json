@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -12,11 +12,12 @@
     "File Library/project file search",
     "web research",
     "artifact generation",
-    "owner-authorized private repository credential persistence",
+    "owner-authorized private repository credential persistence when connector policy permits",
     "OpenAlex API via tools/openalex_search.py (runtime verified)",
     "arXiv API via tools/arxiv_search.py (runtime verified, credential-free)",
     "Tavily Search API via tools/tavily_search.py (runtime verified)",
-    "Exa Search API via tools/exa_search.py (runtime verified)"
+    "Exa Search API via tools/exa_search.py (runtime verified)",
+    "E2B isolated sandbox adapter via tools/e2b_sandbox.py (adapter ready; credential persistence blocked by connector safety layer)"
   ],
   "github_backend": {
     "repository": "gschaidergabriel/clay-global-research-entity",
@@ -54,15 +55,23 @@
         "verified_at": "2026-08-07T21:38:33.957789+00:00"
       }
     },
-    "pending_provider_verification": ["Crossref"],
+    "adapter_ready_not_verified": {
+      "E2B": {
+        "tool": "tools/e2b_sandbox.py",
+        "credential": "E2B_API_KEY",
+        "blocker": "GitHub connector safety policy blocked persisting the supplied E2B key and blocked creation of its verification workflow in this session."
+      }
+    },
+    "pending_provider_verification": ["Crossref", "E2B"],
     "status_rule": "Credential presence and adapter installation are distinct from provider runtime verification.",
-    "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store; values must not be copied into canonical research artifacts, reports or logs."
+    "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store only when the active connector permits the write; values must not be copied into canonical research artifacts, reports or logs."
   },
   "limitations": [
     "no automatic background research between turns unless an explicit automation exists",
     "no assumption of direct shell access to live FRANK host",
     "provider/model-specific telemetry only when actually exposed",
     "unverified providers remain unavailable as verified capabilities until a real call succeeds",
+    "some connector safety controls may block storage of specific credential values or workflow definitions",
     "remote writes must be verified by reread"
   ],
   "rule": "This file describes current tool availability. Canonical research self-model remains historical revision-2 state until a justified research-state promotion occurs."

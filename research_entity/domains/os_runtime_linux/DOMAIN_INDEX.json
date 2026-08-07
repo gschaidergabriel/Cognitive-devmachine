@@ -1,0 +1,9 @@
+{
+  "schema_version":"1.0",
+  "domain":"os_runtime_linux",
+  "role":"first reference host/runtime environment",
+  "tags":["Linux","systemd","cgroups","namespaces","eBPF","process supervision","IPC","resource control","filesystem","kernel interfaces"],
+  "research_questions":["which Linux primitives should remain platform-native?","which semantics must be lifted into the portable runtime?","how are failure/recovery and authority represented?","what is the measurable overhead of abstraction?"],
+  "cross_links":["platform_portability","security_capabilities","scheduling_concurrency","ipc_distributed_systems","observability_recovery"],
+  "rule":"Linux-first is an implementation priority, not a universal ontology claim."
+}

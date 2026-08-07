@@ -1,0 +1,323 @@
+{
+  "schema_version": "1.0",
+  "request_id": "bridge-smoke-openalex",
+  "tool": "openalex_search",
+  "request_sha256": "8a4c8b3090d7671462576bc74f4a85f3649388a04f2a360e469f502df73583ba",
+  "processed_at": "2026-08-07T22:50:46.118510+00:00",
+  "status": "SUCCESS",
+  "result": {
+    "provider": "OpenAlex",
+    "tool": "openalex_search",
+    "retrieved_at": "2026-08-07T22:50:47.204879+00:00",
+    "credential_source": "private_repo_token_store",
+    "query": "global workspace theory",
+    "filter": null,
+    "meta": {
+      "count": 55253,
+      "db_response_time_ms": 138,
+      "page": 1,
+      "per_page": 2,
+      "groups_count": null,
+      "x_query": {
+        "oql": "works where full text has (global workspace theory)",
+        "oqo": {
+          "get_rows": "works",
+          "filter_rows": [
+            {
+              "column_id": "fulltext.search",
+              "value": "global workspace theory",
+              "operator": "has"
+            }
+          ]
+        },
+        "url": "/works?filter=fulltext.search:global workspace theory&per_page=2"
+      },
+      "cost_usd": 0.001
+    },
+    "results": [
+      {
+        "id": "https://openalex.org/W1586767291",
+        "doi": "https://doi.org/10.1016/s0079-6123(05)50004-9",
+        "display_name": "Global workspace theory of consciousness: toward a cognitive neuroscience of human experience",
+        "publication_year": 2005,
+        "publication_date": "2005-01-01",
+        "type": "book-chapter",
+        "cited_by_count": 879,
+        "primary_location": {
+          "id": "doi:10.1016/s0079-6123(05)50004-9",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.1016/s0079-6123(05)50004-9",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S170217976",
+            "display_name": "Progress in brain research",
+            "issn_l": "0079-6123",
+            "issn": [
+              "0079-6123",
+              "1875-7855"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "book series"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Progress in Brain Research",
+          "raw_type": "book-chapter"
+        },
+        "open_access": {
+          "is_oa": false,
+          "oa_status": "closed",
+          "oa_url": null,
+          "any_repository_has_fulltext": false
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5059485790",
+              "display_name": "Bernard J. Baars",
+              "orcid": "https://orcid.org/0000-0002-9497-6746"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I186667990",
+                "display_name": "Neurosciences Institute",
+                "ror": "https://ror.org/0460vf117",
+                "country_code": "US",
+                "type": "nonprofit",
+                "lineage": [
+                  "https://openalex.org/I186667990"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I92507152",
+                "display_name": "John Jay College of Criminal Justice",
+                "ror": "https://ror.org/01p9rc392",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I92507152"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": true,
+            "raw_author_name": "Bernard J. Baars",
+            "raw_affiliation_strings": [
+              "The Neurosciences Institute, 10640 John Jay Hopkins Dv., San Diego, CA 92121, USA. baars@nsi.edu",
+              "The Neurosciences Institute, 10640 John Jay Hopkins Dv., San Diego, CA 92121, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "The Neurosciences Institute, 10640 John Jay Hopkins Dv., San Diego, CA 92121, USA. baars@nsi.edu",
+                "institution_ids": [
+                  "https://openalex.org/I186667990"
+                ]
+              },
+              {
+                "raw_affiliation_string": "The Neurosciences Institute, 10640 John Jay Hopkins Dv., San Diego, CA 92121, USA",
+                "institution_ids": [
+                  "https://openalex.org/I186667990",
+                  "https://openalex.org/I92507152"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10581",
+            "display_name": "Neural dynamics and brain function",
+            "score": 0.9987999796867371,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2805",
+              "display_name": "Cognitive Neuroscience"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/28",
+              "display_name": "Neuroscience"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10241",
+            "display_name": "Functional Brain Connectivity Studies",
+            "score": 0.9969000220298767,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2805",
+              "display_name": "Cognitive Neuroscience"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/28",
+              "display_name": "Neuroscience"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10429",
+            "display_name": "EEG and Brain-Computer Interfaces",
+            "score": 0.995199978351593,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2805",
+              "display_name": "Cognitive Neuroscience"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/28",
+              "display_name": "Neuroscience"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W2311923914",
+        "doi": null,
+        "display_name": "IN THE THEATRE OF CONSCIOUSNESS Global Workspace Theory, A Rigorous Scientific Theory of Consciousness.",
+        "publication_year": 1997,
+        "publication_date": "1997-01-01",
+        "type": "article",
+        "cited_by_count": 351,
+        "primary_location": {
+          "id": "mag:2311923914",
+          "is_oa": false,
+          "landing_page_url": "http://bernardbaars.pbworks.com/f/BaarsJCS1997.pdf",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S187383566",
+            "display_name": "Journal of Consciousness Studies",
+            "issn_l": "1355-8250",
+            "issn": [
+              "1355-8250",
+              "2051-2201"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310319847",
+            "host_organization_name": "Routledge",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310319847"
+            ],
+            "host_organization_lineage_names": [
+              "Routledge"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": null,
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "Journal of Consciousness Studies",
+          "raw_type": null
+        },
+        "open_access": {
+          "is_oa": false,
+          "oa_status": "closed",
+          "oa_url": null,
+          "any_repository_has_fulltext": false
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5059485790",
+              "display_name": "Bernard J. Baars",
+              "orcid": "https://orcid.org/0000-0002-9497-6746"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I33943759",
+                "display_name": "Wright Institute",
+                "ror": "https://ror.org/017t4sb47",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I33943759"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": true,
+            "raw_author_name": "Bernard J. Baars",
+            "raw_affiliation_strings": [
+              "The Wright Institute, Berkeley, CA, US"
+            ],
+            "raw_orcid": "https://orcid.org/0000-0002-9497-6746",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "The Wright Institute, Berkeley, CA, US",
+                "institution_ids": [
+                  "https://openalex.org/I33943759"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T11883",
+            "display_name": "Embodied and Extended Cognition",
+            "score": 0.989799976348877,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2805",
+              "display_name": "Cognitive Neuroscience"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/28",
+              "display_name": "Neuroscience"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T14394",
+            "display_name": "Cognitive Science and Education Research",
+            "score": 0.9811000227928162,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2805",
+              "display_name": "Cognitive Neuroscience"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/28",
+              "display_name": "Neuroscience"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

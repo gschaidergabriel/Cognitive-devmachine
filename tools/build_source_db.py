@@ -97,7 +97,18 @@ def chunks(text, max_chars=5000):
 
 
 def reset(con):
-    for t in ['sources','source_alias','chunks','chunk_fts','claims','claim_fts','claim_status_events','claim_current_status','claim_evidence','claim_topic','claim_domain','events','event_parent','event_source','event_topic','event_domain','packets','packet_domain']:
+    # Delete dependent/materialized rows before parent rows. `chunks.source_id`
+    # references `sources.source_id`; deleting sources first fails on a rebuilt DB
+    # when PRAGMA foreign_keys=ON. Keep this order child-first so repeated builds are
+    # idempotent and CI can exercise the transactional writer against an existing DB.
+    for t in [
+        'chunk_fts','claim_fts',
+        'chunks','source_alias',
+        'claim_current_status','claim_status_events','claim_evidence','claim_topic','claim_domain',
+        'event_parent','event_source','event_topic','event_domain',
+        'packet_domain',
+        'events','packets','claims','sources',
+    ]:
         con.execute(f'DELETE FROM {t}')
 
 

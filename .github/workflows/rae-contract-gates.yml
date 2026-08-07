@@ -6,6 +6,7 @@ on:
     paths:
       - 'tools/research_provider_router.py'
       - 'tools/research_interconnect_preflight.py'
+      - 'tools/frank_architecture_contract.py'
       - 'tools/status_footer_check.py'
       - 'research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md'
       - 'research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md'
@@ -35,23 +36,68 @@ jobs:
           fetch-depth: 0
 
       - name: Compile gate tools
-        run: python -m py_compile tools/research_provider_router.py tools/research_interconnect_preflight.py tools/status_footer_check.py
+        run: python -m py_compile tools/research_provider_router.py tools/research_interconnect_preflight.py tools/frank_architecture_contract.py tools/status_footer_check.py
 
-      - name: Validate interconnected FRANK foundation preflight
+      - name: Validate interconnected FRANK and ClayCode architecture contracts
         run: |
+          mkdir -p /tmp/frank-contract
           python tools/research_interconnect_preflight.py \
             --trigger frank \
             --run-id ci-frank-preflight \
-            --history-per-branch 1 > /tmp/interconnect.json
+            --history-per-branch 1 \
+            --output /tmp/frank-contract/INTERCONNECT_MANIFEST.json > /tmp/interconnect.stdout.json
           python - <<'PY'
           import json
           from pathlib import Path
-          d=json.loads(Path('/tmp/interconnect.json').read_text())
+          p=Path('/tmp/frank-contract/INTERCONNECT_MANIFEST.json')
+          d=json.loads(p.read_text())
           assert d['special_rules']['frank_requires_latest_clay_architecture_as_primary_foundation'] is True
-          assert d['branch_priority'][0] == 'clay'
+          assert d['special_rules']['frank_requires_deep_claycode_architecture_input'] is True
+          assert d['special_rules']['frank_architecture_source_language'] == 'ClayCode semantic IR'
+          assert d['branch_priority'][:2] == ['clay','claycode']
           assert {x['branch'] for x in d['branches']} == {'clay','frank','gwt','emergenz','claycode','hyperposition'}
           assert d['requirements']['must_ingest_all_connected_branches'] is True
+          assert d['requirements']['must_include_fresh_incomplete_material'] is True
+          claycode=next(x for x in d['branches'] if x['branch']=='claycode')
+          clay=next(x for x in d['branches'] if x['branch']=='clay')
+          assert claycode['run_history_depth'] >= 4
+          assert clay['run_history_depth'] >= 3
           PY
+          python tools/frank_architecture_contract.py template \
+            --run-id ci-frank-preflight \
+            --output /tmp/frank-contract/FRANK_ARCHITECTURE.claycode.json > /tmp/frank-template.stdout.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/frank-contract/FRANK_ARCHITECTURE.claycode.json')
+          d=json.loads(p.read_text())
+          d['ir_version']='CC-RC1.x-CI'
+          d['source_research']['clay']=['ci-clay-foundation']
+          d['source_research']['claycode']=['ci-claycode-foundation']
+          d['modules']=[{
+            'module_id':'ci.semantic-runtime',
+            'kind':'organ_or_runtime_boundary',
+            'state_contract_refs':['ci.state'],
+            'dependencies':[],
+            'invariants':['proposal_not_authority']
+          }]
+          d['transitions']=[{
+            'op_id':'ci.transition',
+            'proposal_class':'STATE_PROPOSAL',
+            'reads':['ci.state'],
+            'writes':['ci.state'],
+            'invariant_scope':['proposal_not_authority'],
+            'effects':[],
+            'capability_refs':[],
+            'causal_links':[],
+            'gwt_links':[]
+          }]
+          d['persistence_replay']={'event_identity':'episode_id','replay_semantics':'deterministic','recovery_boundary':'single_writer'}
+          d['provenance']={'actor':'ci','provider':'ci','model':'ci','canonical_parent':'r2'}
+          p.write_text(json.dumps(d,indent=2)+'\n')
+          Path('/tmp/frank-contract/CLAYCODE_ARCHITECTURE_MAPPING.md').write_text('# CI mapping\n\nClay -> ClayCode -> FRANK.\n')
+          PY
+          python tools/frank_architecture_contract.py validate /tmp/frank-contract
 
       - name: Build research provider plan
         run: |
@@ -114,13 +160,16 @@ jobs:
           from datetime import datetime, timezone
           from pathlib import Path
           d={
-            'schema_version':'1.0',
+            'schema_version':'1.1',
             'status':'RUNTIME_VERIFIED',
             'checked_at':datetime.now(timezone.utc).isoformat(),
             'gates':{
               'python_compile':True,
               'interconnected_research_mesh':True,
+              'fresh_incomplete_branch_material':True,
               'frank_clay_primary_foundation':True,
+              'frank_claycode_deep_secondary_foundation':True,
+              'frank_claycode_architecture_source_contract':True,
               'provider_plan':True,
               'covering_fallback_validation':True,
               'status_footer_and_short_commands':True

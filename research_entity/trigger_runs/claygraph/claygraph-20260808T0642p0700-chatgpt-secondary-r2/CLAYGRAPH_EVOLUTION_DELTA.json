@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0642p0700-chatgpt-secondary-r2",
+  "parent_generation":0,
+  "candidate_generation":1,
+  "changes":[
+    {"area":"layers","change":"Add explicit exact_anchor_index between authoritative stores and semantic graph; anchors point to truth but do not become authority.","expected_benefit":"Prevents associative projection from laundering approximate/derived memory into exact state."},
+    {"area":"relations","change":"Reify meaning-bearing statements with temporal/provenance/epistemic envelope and conflict sets.","expected_benefit":"Preserve source stance, stale/revoked/superseded alternatives and temporal validity."},
+    {"area":"activation","change":"Default two-hop broad propagation to conservative qualified one-hop expansion; weak edges require target lexical/vector support or query intent.","expected_benefit":"Reduce irrelevant activation/false association while retaining relation recovery."},
+    {"area":"retrieval","change":"Classify exact/current vs associative queries; require exact-anchor fetch for authority/current-state decisions.","expected_benefit":"Combine semantic recall with deterministic current truth."},
+    {"area":"maintenance","change":"Adaptive incremental projection with deterministic rebuild fallback on unknown/wide dependency closure.","expected_benefit":"Exploit incremental view maintenance when beneficial without assuming incremental always wins."},
+    {"area":"frank","change":"Map ClayGraph primarily into M.MEMORY_FABRIC while keeping M.DURABLE_EVENT_STATE, CognitiveFrame and CapabilityGateway exact and authoritative.","expected_benefit":"Integrate associative memory without changing core safety/causal contracts."}
+  ],
+  "predicted_regressions":["More assertion/provenance metadata increases storage and update cost.","Qualified one-hop expansion can miss useful longer paths.","Exact-anchor fetches can add latency vs graph-only answers.","Reification can make simple relations more expensive.","Hybrid lexical/vector/graph paths increase operational complexity."],
+  "contradictions":[
+    {"issue":"database transcendence vs physical monolith","resolution":"semantic unification only; physical merge is store-specific and evidence-gated"},
+    {"issue":"broad spreading activation vs false association","resolution":"candidate narrows default propagation; longer expansion is explicit/query-scoped"},
+    {"issue":"current graph protocol asks complete current corpus but runtime materialization is unavailable","resolution":"HOLD; seven-branch coverage/manual proxy performed, no claim of full runtime benchmark"}
+  ],
+  "shared_ancestry_warning":"FRANK C4, Clay G7, ClayCode CC7 and ClayGraph seed share RAE ancestry; their agreement is architectural convergence, not independent replication."
+}

@@ -32,8 +32,6 @@ For every FRANK-derived assumption that materially changes ClayCode semantics, r
 
 `FRANK_CLAYCODE_GOODMAN_REVIEW.json`
 
-Use `tools/goodman_filter_check.py` to validate the review.
-
 Each relevant FRANK assumption must receive one verdict:
 
 - `SUPPORTED` — independently supported; retain with original evidence status;
@@ -93,7 +91,7 @@ The result is a falsifiable feedback loop, not a consensus loop.
 - Qwen-4B simulation or live tests, explicitly labeled `simulation_only` when no target model is actually run;
 - bootstrapping/self-hosting path: host runtime -> ClayCode runtime -> Clay-represented FRANK/Synthetic Clay system.
 
-## Required outputs
+## Required outputs and completion gate
 
 Every completed ClayCode run must include at minimum:
 
@@ -103,7 +101,13 @@ Every completed ClayCode run must include at minimum:
 - hypotheses/experiments/negative results appropriate to the run;
 - `FINAL_REPORT.md` with a dedicated `FRANK feedback / Goodman review` section.
 
-A ClayCode run that materially consumes FRANK but omits the Goodman review is incomplete and cannot strongly promote FRANK-derived ClayCode semantics.
+Before a ClayCode run is considered complete or strongly promotable, run:
+
+`python tools/goodman_filter_check.py validate-run research_entity/trigger_runs/claycode/<run_id>`
+
+This binds the review to the same run id, the FRANK `latest_run` captured by its `INTERCONNECT_MANIFEST.json`, and the exact latest FRANK ClayCode architecture artifact captured by that preflight (including explicit `null` when none existed). A detached/stale Goodman review does not satisfy the contract.
+
+A ClayCode run that materially consumes FRANK but omits or fails this Goodman review is incomplete and cannot strongly promote FRANK-derived ClayCode semantics.
 
 A language candidate is not promoted because it looks compact, alien, or agrees with FRANK. Promotion requires semantic preservation, bounded repair cost, target-reader performance, safety/authority invariants and non-circular evidential support.
 

@@ -1,11 +1,12 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "scope": "project-wide systems research",
   "principle": "Synthetic Clay is one application/runtime substrate; the surrounding environment is researched independently and cross-platform.",
   "domains": [
     {"id":"systems_architecture","role":"global system decomposition, interfaces, invariants and architecture tradeoffs"},
     {"id":"os_runtime_linux","role":"Linux-first host/runtime implementation, systemd, cgroups, namespaces, IPC, kernel interfaces"},
     {"id":"platform_portability","role":"Windows/macOS/BSD/mobile/embedded portability and semantic adapter contracts"},
+    {"id":"android_edge_runtime","role":"Android/edge execution of FRANK-compatible runtimes and local Qwen-class models: model formats, quantization, RAM/KV cache, CPU/GPU/NPU backends, Vulkan/NNAPI/vendor acceleration, thermal and battery budgets, Android process/background limits, sandboxing, packaging, offline operation and parity with the portable semantic runtime"},
     {"id":"hardware_acceleration","role":"CPU/GPU/NPU/accelerators, drivers, topology, resource/energy constraints"},
     {"id":"scheduling_concurrency","role":"multi-rate schedulers, threads/processes/async, deterministic and real-time behavior"},
     {"id":"ipc_distributed_systems","role":"shared memory, buses, RPC, remote execution, federation, partitions and consistency"},

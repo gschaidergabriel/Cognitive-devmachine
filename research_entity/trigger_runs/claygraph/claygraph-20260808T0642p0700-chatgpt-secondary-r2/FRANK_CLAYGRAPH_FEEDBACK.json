@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0642p0700-chatgpt-secondary-r2",
+  "target":"frank",
+  "feedback_type":"ARCHITECTURE_REVISION_AND_EXPERIMENT_PLAN",
+  "evidence_status":"OPEN_HOLD_CANDIDATE",
+  "source_refs":["CLAYGRAPH_SCHEMA.claycode.json","DATABASE_INVENTORY.json","SELF_USE_BENCHMARK.json","MIGRATION_PLAN.json","research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json"],
+  "core_delta":"Integrate ClayGraph as a derived associative projection inside M.MEMORY_FABRIC, backed by exact anchors from M.DURABLE_EVENT_STATE/current stores. Do not replace S.COGNITIVE_FRAME, M.CAPABILITY_GATEWAY/K0, or latency-critical exact reflex state with associative graph truth.",
+  "proposed_state_contract":{"state_id":"S.ACTIVE_ASSEMBLY","status":"PROPOSED","typed_values":{"assembly_id":"id","graph_revision":"version","basis_frame_id":"id","seed_refs":"list[id]","activated_assertion_refs":"list[id]","exact_anchor_refs":"list[id]","conflict_set_refs":"list[id]","activation_reasons":"list[path+weight]","freshness_scope":"typed","token_budget":"int","generated_at":"time","no_authority":"true"},"invariant":"Every model-visible graph memory item is provenance/path explainable; current/authority-sensitive propositions require exact-anchor validation; conflicts are preserved rather than averaged."},
+  "proposed_module_deltas":[
+    {"module":"M.MEMORY_FABRIC","change":"Add ClayGraph semantic projector/query assembler and exact-anchor resolver; retain direct-store fallback.","effect":"Primary integration point."},
+    {"module":"M.DURABLE_EVENT_STATE","change":"Expose revisioned read-only projection/changefeed/outbox contract for graph builder where safe.","effect":"Single exact authority remains unchanged."},
+    {"module":"M.COGNITIVE_FRAME_ASSEMBLER","change":"Pass frame id/revision witnesses/freshness scope into assembly queries; graph cannot validate its own frame.","effect":"Prevents semantic activation from overriding causal consistency."},
+    {"module":"M.WORKSPACE_ARBITER","change":"Memory channel may consume validated S.ACTIVE_ASSEMBLY candidates; workspace selection/ignition remains separate.","effect":"Associative memory feeds GWT without conflating activation with ignition or truth."},
+    {"module":"M.GOAL_GOVERNOR","change":"May use graph relation/recurrence as proposal evidence only, with source/novelty refs.","effect":"Supports testable goal revision without authority escalation."},
+    {"module":"M.CAPABILITY_GATEWAY","change":"No authority change; graph contains opaque capability refs/receipts only and never secrets.","effect":"Hard trust boundary preserved."}
+  ],
+  "proposed_transition_deltas":[
+    {"op_id":"OP.MEMORY_ASSEMBLE","proposal_class":"PURE_TRANSFORM","reads":["S.COGNITIVE_FRAME","M.MEMORY_FABRIC semantic projection"],"writes":[],"output":"S.ACTIVE_ASSEMBLY transient projection","invariants":["qualified bounded expansion","conflict preservation","exact-anchor requirement classes","token budget"]},
+    {"op_id":"OP.MEMORY_EXACT_VALIDATE","proposal_class":"PURE_TRANSFORM","reads":["S.ACTIVE_ASSEMBLY","authoritative exact anchors","S.COGNITIVE_FRAME"],"writes":[],"invariants":["stale/revoked/current checks","frame compatibility","unknown escalates"]}
+  ],
+  "store_boundaries":{"project_now_after_shadow_tests":["consciousness.db","world_experience.db"],"defer_or_isolate":["thalamus runtime store","titan/Ego store","safety/invariant authority stores","all currently unenumerated stores"],"physical_merge_now":[]},
+  "cross_branch_effects":{"clay":"REFINE adaptive semantic resolution into exact-anchor/semantic/activation three-layer substrate","claycode":"REFINE assertion envelope + exact witness contracts; no authority drift","gwt":"REFINE memory candidate source but preserve EVENT_WS receipts and ignition distinction","hyperposition":"SUPPORT three-topology separation and n-ary/conflict representation","emergenz":"NO_CLAIM_CHANGE; S.ACTIVE_ASSEMBLY becomes lesion/rescue testable candidate","claygraph":"HOLD generation 1 pending target replication"},
+  "required_next_frank_tests":["EXP-LIVE-FRANK-DB-INVENTORY: enumerate/read-write/authority/recovery map all 71 stores.","EXP-FRANK-CLAYGRAPH-SHADOW-PARITY: legacy direct queries vs derived graph on exact/history/conflict/multi-hop workloads.","EXP-FRANK-CLAYGRAPH-FRAME-STALE: inject stale/conflicting graph relations against fresh CognitiveFrame and verify exact-anchor rejection/refresh.","EXP-FRANK-CLAYGRAPH-GWT-LESION: legacy memory vs graph assembly vs shuffled graph assembly at matched token budget.","EXP-FRANK-CLAYGRAPH-P99-RECOVERY: update/retrieval p99 plus crash/restart/rebuild/rollback.","EXP-FRANK-CLAYGRAPH-QWEN4B: matched-budget small-model task accuracy when target inference is available."],
+  "rollback":"All proposed runtime integration is feature-gated; authoritative SQLite/event state remains readable and graph is rebuildable until per-store cutover evidence exists."
+}

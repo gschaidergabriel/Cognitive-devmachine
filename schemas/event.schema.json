@@ -6,8 +6,8 @@
   "properties":{
     "event_id":{"type":"string","minLength":3},
     "timestamp":{"type":"string"},
-    "session_id":{"type":"string"},
-    "prompt_id":{"type":"string"},
+    "session_id":{"type":["string","null"]},
+    "prompt_id":{"type":["string","null"]},
     "event_type":{"type":"string","minLength":1},
     "system_layers":{"type":"array","items":{"type":"string"},"uniqueItems":true},
     "domains":{"type":"array","items":{"type":"string"},"uniqueItems":true},

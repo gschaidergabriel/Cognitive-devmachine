@@ -1,0 +1,10 @@
+{
+  "packet_id":"claim-lifecycle",
+  "title":"Claim Lifecycle and Evidence Status",
+  "status":"CURRENT",
+  "system_layers":["research/verification plane"],
+  "domains":["research_infrastructure"],
+  "summary":"Atomic claims are continuously classified by scope as CURRENT, OPEN, SUPERSEDED, REFUTED, NEGATIVE_RESULT or CONTEXT_ONLY. Raw sources and old claims remain immutable; status transitions are append-only.",
+  "key_distinction":"SUPERSEDED means replaced without necessarily being false; REFUTED means contradicted in the stated scope.",
+  "open_questions":["automated contradiction detection thresholds","confidence calibration across evidence classes","cross-scope status propagation"]
+}

@@ -1,0 +1,38 @@
+{
+  "packet_id":"claycode-cc8-observed-transition-closure",
+  "title":"ClayCode CC8 Observed Transition Closure",
+  "status":"OPEN",
+  "domains":["xeno-claycode","systems-architecture","security-capabilities","storage-state-memory","formal-methods-testing","frank-gwt"],
+  "system_layers":["semantic-ir","transition-validation","freshness","coordination","authority","effect-release","observability"],
+  "summary":"CC8 refines CC-RC1.2 into an OPEN CC-RC1.3 Observed Transition Closure Capsule: trusted compiler-derived static semantic envelope; runtime observed dependency/effect trace checked as a subset; typed object/predicate/invariant/temporal/capability witnesses; fail-closed escalation for unknown dynamic effects; and durable idempotent effect intent before external release.",
+  "architecture_candidate":"canonical semantic op -> trusted static dependency/effect envelope -> model/reader projection + Gamma -> fully interposed observed trace -> trace-subset proof -> typed freshness/invariant/capability validation -> internal commit or durable effect-intent commit -> external capability-gated idempotent release -> effect/outcome/reentry receipts",
+  "cross_branch_links":{
+    "clay":"HSCK-G7 asymmetric coordination consumes trusted predicate/invariant/dependency witnesses; unknown coverage fails closed.",
+    "frank":"Cycle-3 hybrid workspace freshness can encode channel revisions/regime dependencies as OTCC witnesses instead of global age/root alone.",
+    "gwt":"Causal freshness/re-entry metadata maps to temporal/episode witnesses; receipt presence remains measurement plumbing rather than evidence strength.",
+    "hyperposition":"ADD/RETRACT/REPLACE/COMPENSATE remain delta semantics independent of invariant-interference coordination topology and external authority.",
+    "emergenz":"OTCC receipts may make interventions/replay measurable, but do not by themselves prove emergence or consciousness."
+  },
+  "open_questions":[
+    "Can a real FRANK/Python operation registry derive sound conservative envelopes around reflection, subprocesses, native extensions and tools?",
+    "Which predicate/range/invariant witness abstractions are sufficient for FRANK without degenerating to whole-root validation?",
+    "How much validation work does observed-trace narrowing save under real mutation distributions?",
+    "Can workspace channel revisions and regime tags predict causal freshness better than age/root alone?",
+    "What effect classes need durable outbox semantics versus ordinary reversible state commit?",
+    "Does hiding compiler-derived safety metadata improve Qwen3-4B token/reader performance without reducing task accuracy?"
+  ],
+  "highest_priority_next_tests":[
+    "EXP-CC8-LIVE-OPREGISTRY-FOOTPRINT",
+    "EXP-CC8-PREDICATE-INVARIANT-FUZZ",
+    "EXP-FRANK-GWT-FRESHNESS-FACTORIAL",
+    "EXP-CC8-EFFECT-OUTBOX-FAULT-INJECTION",
+    "EXP-LIVE-XENO-CLAY-FACTORIAL"
+  ],
+  "origin_actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "canonical_parent_revision":2,
+  "canonical_parent_state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "run_id":"claycode-20260808T0606p0700-chatgpt-secondary",
+  "predecessor_packet_ids":["claycode-cc7-scoped-transition-closure","clay-g7-hierarchical-semantic-causal-kernel","frank-hybrid-freshness-semantic-runtime","hyperposition-h2-three-topology-scoped-delta"]
+}

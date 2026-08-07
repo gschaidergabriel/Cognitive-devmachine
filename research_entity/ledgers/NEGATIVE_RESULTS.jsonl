@@ -1,0 +1,7 @@
+{"id":"N-G3-001","status":"new","claim":"Hyperposition requires one specific graph/hypergraph storage form.","result":"not supported: temporal log and faceted index both exact on tested semantic queries","scope":"synthetic"}
+{"id":"N-G3-002","status":"new","claim":"Temporal-log scan cost is generically ~341x faceted projection.","result":"not replicated in independent workload; ID scan ratio temporal/faceted=3.55x, OOD=4.25x","scope":"synthetic proxy"}
+{"id":"N-G3-003","status":"new","claim":"A fixed coupling kappa transfers across tasks.","result":"contradicted: prior G2 proxy kappa=0.9 vs current G3 independent toy kappa=0.5","scope":"cross-simulation"}
+{"id":"N-G3-004","status":"new","claim":"Outcome/reentry flag alone yields gain.","result":"no effect in arms lacking usable coupling; information path matters","scope":"synthetic"}
+{"id":"N-G3-005","status":"new","claim":"Presence of GWT stages is sufficient episode validation.","result":"presence baseline rejected only 13.33% of 9000 causal mutants","scope":"sandbox"}
+{"id":"N-G3-006","status":"new","claim":"RAE-8.8 package self-test is internally consistent as shipped.","result":"false: original test requires absent RAE-8.6 master; compatibility self-test passes RAE-8.8 package","scope":"bootstrap infrastructure"}
+{"id":"N-G3-007","status":"new","claim":"Hypothesis/Z3 were installed for this run.","result":"false: isolated pip acquisition failed on runtime mirror; fallback tools only","scope":"toolchain"}

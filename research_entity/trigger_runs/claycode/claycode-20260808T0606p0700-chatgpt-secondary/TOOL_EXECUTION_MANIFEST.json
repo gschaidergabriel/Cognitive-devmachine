@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.2",
+  "run_id":"claycode-20260808T0606p0700-chatgpt-secondary",
+  "actor":"chatgpt-secondary",
+  "classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly","availability_blocker":"RATE_LIMITED","invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation","availability_blocker":null,"invocation_surface":"DIRECT_RUNTIME"},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":null,"invocation_surface":"DIRECT_RUNTIME"},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE","invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable","availability_blocker":null,"invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE","invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"},
+    {"tool":"huggingface_inference","mode":"MUST_ATTEMPT","class":"model_experiment","availability_blocker":"QUOTA_EXHAUSTED_CACHED","invocation_surface":"DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"}
+  ],
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","request":"research_entity/runtime/tool_requests/cc8-openalex-20260808T0606p0700.json","result":"research_entity/runtime/tool_results/cc8-openalex-20260808T0606p0700.json"},
+    {"tool":"arxiv_search","status":"SUCCESS","request":"research_entity/runtime/tool_requests/cc8-arxiv-20260808T0606p0700.json","result":"research_entity/runtime/tool_results/cc8-arxiv-20260808T0606p0700.json"},
+    {"tool":"tavily_search","status":"SUCCESS","request":"research_entity/runtime/tool_requests/cc8-tavily-20260808T0606p0700.json","result":"research_entity/runtime/tool_results/cc8-tavily-20260808T0606p0700.json"},
+    {"tool":"exa_search","status":"SUCCESS","request":"research_entity/runtime/tool_requests/cc8-exa-20260808T0606p0700.json","result":"research_entity/runtime/tool_results/cc8-exa-20260808T0606p0700.json"},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical, trigger protocols, cross-branch reports/current in-progress FRANK artifacts, provider results and persistent writes were read/written through the GitHub connector."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Executed CC8 predicate, hybrid-trace, volatile-dependency, pre-effect, envelope-fuzz and outbox synthetic experiments in the local Python sandbox."},
+    {"tool":"judge0_execute","status":"SUCCESS","request":"research_entity/runtime/tool_requests/cc8-judge0-predicate-20260808T0606p0700.json","result":"research_entity/runtime/tool_results/cc8-judge0-predicate-20260808T0606p0700.json"}
+  ],
+  "fallback_attempts":[
+    {"tool":"scholarly_openalex_arxiv_fallback","status":"SUCCESS","covers":["semantic_scholar_search"],"note":"Semantic Scholar is health-cached RATE_LIMITED; OpenAlex + arXiv provider results and direct primary PostgreSQL documentation cover the relevant scholarly cluster."},
+    {"tool":"judge0_execute","status":"SUCCESS","covers":["e2b_sandbox"],"note":"E2B credential is unavailable; Judge0 independently replicated the predicate-dependency experiment."},
+    {"tool":"simulation_only_local","status":"SUCCESS","covers":["huggingface_inference"],"note":"HF model inference is QUOTA_EXHAUSTED_CACHED until 2026-09-01 UTC. CC8 continued with local semantic/runtime proxy experiments only; this fallback is explicitly not target-model evidence and the Qwen reader factorial remains OPEN."}
+  ],
+  "web_fallback_sources":[
+    "PostgreSQL 18 Transaction Isolation / Serializable documentation",
+    "Koka effect typing documentation",
+    "WebAssembly Component Model WIT/resources documentation",
+    "Azure/AWS transactional outbox guidance",
+    "CMU self-adjusting computation dynamic dependence graph",
+    "arXiv:2607.27074 temporal dependency type-and-effect system"
+  ],
+  "quota_state_ref":"research_entity/runtime/TOOL_QUOTA_STATE.json",
+  "provider_health_ref":"research_entity/runtime/PROVIDER_HEALTH.json",
+  "rule":"Blocked MUST_ATTEMPT providers have explicit successful covering fallbacks. Fallback evidence never upgrades to the blocked provider's evidence class; live Qwen evidence remains absent.",
+  "validation_expected":{"ok":true,"violations":[]}
+}

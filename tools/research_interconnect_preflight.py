@@ -28,7 +28,9 @@ PRIORITY = {
     "frank": ["clay", "claycode", "gwt", "hyperposition", "emergenz", "frank"],
     "gwt": ["clay", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
     "emergenz": ["clay", "gwt", "hyperposition", "frank", "claycode", "emergenz"],
-    "claycode": ["clay", "frank", "gwt", "hyperposition", "emergenz", "claycode"],
+    # ClayCode is FRANK's architecture language, so newest FRANK research/architecture
+    # is the primary target-feedback input. Clay remains the broader integrated basis.
+    "claycode": ["frank", "clay", "gwt", "hyperposition", "emergenz", "claycode"],
     "hyperposition": ["clay", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
 }
 
@@ -37,7 +39,7 @@ ALIASES = {
     "frank": ["frank", "frankenstein"],
     "gwt": ["gwt", "workspace", "global-workspace", "global_workspace"],
     "emergenz": ["emergenz", "emergence", "causal-emergence", "causal_emergence"],
-    "claycode": ["claycode", "xeno", "xeno-claycode", "xeno_claycode", "cc6", "cc7"],
+    "claycode": ["claycode", "xeno", "xeno-claycode", "xeno_claycode", "cc6", "cc7", "cc8"],
     "hyperposition": ["hyperposition", "hypergraph", "codependency", "h1", "h2"],
 }
 
@@ -55,6 +57,8 @@ ARTIFACT_NAMES = [
     "ARCHITECTURE.md",
     "ARCHITECTURE.json",
     "FRANK_ARCHITECTURE.claycode.json",
+    "CLAYCODE_ARCHITECTURE_MAPPING.md",
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
 ]
 
 META_RE = re.compile(r"<!--\s*RAE_META\s*\n(\{.*?\})\s*\nRAE_META\s*-->", re.S)
@@ -108,8 +112,6 @@ def _runs(branch: str, include_incomplete: bool = True) -> list[Path]:
     runs = [p for p in base.iterdir() if p.is_dir()]
     if not include_incomplete:
         runs = [p for p in runs if (p / "FINAL_REPORT.md").exists()]
-    # Run ids are timestamp-rich and therefore a more stable checkout ordering signal
-    # than filesystem mtimes.
     return sorted(runs, key=lambda p: p.name, reverse=True)
 
 
@@ -147,7 +149,22 @@ def _depth(trigger: str, branch: str, base_depth: int) -> tuple[int, int]:
         return max(run_depth, 3), 12
     if trigger == "frank" and branch == "claycode":
         return max(run_depth, 4), 20
+    if trigger == "claycode" and branch == "frank":
+        return max(run_depth, 4), 20
+    if trigger == "claycode" and branch == "clay":
+        return max(run_depth, 3), 12
     return run_depth, packet_limit
+
+
+def _latest_frank_architecture(branches: list[dict[str, Any]]) -> str | None:
+    for b in branches:
+        if b.get("branch") != "frank":
+            continue
+        for run in b.get("runs", []):
+            for artifact in run.get("artifacts", []):
+                if artifact.endswith("/FRANK_ARCHITECTURE.claycode.json"):
+                    return artifact
+    return None
 
 
 def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
@@ -176,12 +193,14 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "topic_packets": _matching_material(TOPIC_PACKETS, branch, packet_limit),
             "knowledge_micro_packets": _matching_material(MICRO_PACKETS, branch, packet_limit),
         })
+    latest_frank_arch = _latest_frank_architecture(branches)
     return {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "trigger": trigger,
         "run_id": run_id,
         "protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+        "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md" if trigger == "claycode" else None,
         "branch_priority": PRIORITY[trigger],
         "branches": branches,
         "requirements": {
@@ -196,6 +215,10 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "frank_requires_latest_clay_architecture_as_primary_foundation": trigger == "frank",
             "frank_requires_deep_claycode_architecture_input": trigger == "frank",
             "frank_architecture_source_language": "ClayCode semantic IR" if trigger == "frank" else None,
+            "claycode_requires_latest_frank_research_as_primary_feedback": trigger == "claycode",
+            "claycode_requires_goodman_anti_echo_review": trigger == "claycode",
+            "claycode_latest_frank_architecture_artifact": latest_frank_arch if trigger == "claycode" else None,
+            "claycode_frank_architecture_artifact_missing_must_be_explicit": trigger == "claycode" and latest_frank_arch is None,
             "clay_is_integrated_master_foundry": trigger == "clay",
         },
     }

@@ -7,11 +7,27 @@
     "claim_id":{"type":"string","minLength":3},
     "scope":{"type":"string","minLength":1},
     "proposition":{"type":"string","minLength":1},
-    "first_status":{"enum":["CURRENT","OPEN","SUPERSEDED","REFUTED","NEGATIVE_RESULT","CONTEXT_ONLY"]},
+    "first_status":{"enum":["CURRENT","OPEN","SUPERSEDED","REFUTED","NEGATIVE_RESULT","CONTEXT_ONLY","NOT_SELECTED"]},
     "evidence_refs":{"type":"array","items":{"type":"string"},"uniqueItems":true},
     "experiment_ref":{"type":"string"},
     "topic_packets":{"type":"array","items":{"type":"string","minLength":1},"minItems":1,"uniqueItems":true},
-    "domains":{"type":"array","items":{"type":"string","minLength":1},"minItems":1,"uniqueItems":true}
+    "domains":{"type":"array","items":{"type":"string","minLength":1},"minItems":1,"uniqueItems":true},
+    "provenance":{
+      "type":"object",
+      "properties":{
+        "origin_actor":{"type":"string"},
+        "actor_role":{"type":"string"},
+        "provider":{"type":"string"},
+        "model":{"type":"string"},
+        "runtime":{"type":"string"},
+        "session_id":{"type":"string"},
+        "prompt_run_id":{"type":"string"},
+        "ingested_by":{"type":"string"},
+        "adjudicated_by":{"type":"string"},
+        "commit":{"type":"string"}
+      },
+      "additionalProperties":true
+    }
   },
   "additionalProperties":true
 }

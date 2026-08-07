@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260808T0549p0700-chatgpt-secondary",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "experiments": [
+    {
+      "id": "EXP-CC7-SCOPED-FRESHNESS-001",
+      "class": "synthetic_local",
+      "description": "Compare whole-state root freshness rejection with complete dependency-scoped freshness under unrelated state churn.",
+      "n_per_regime": 100000,
+      "results": [
+        {"mean_changed_keys":0.1,"global_root_reject_rate":0.09502,"scoped_reject_rate":0.00201,"actual_conflict_rate":0.00201,"avoided_false_reject_rate":0.09301},
+        {"mean_changed_keys":0.5,"global_root_reject_rate":0.39527,"scoped_reject_rate":0.00896,"actual_conflict_rate":0.00896,"avoided_false_reject_rate":0.38631},
+        {"mean_changed_keys":1.0,"global_root_reject_rate":0.63051,"scoped_reject_rate":0.01417,"actual_conflict_rate":0.01417,"avoided_false_reject_rate":0.61634},
+        {"mean_changed_keys":3.0,"global_root_reject_rate":0.95040,"scoped_reject_rate":0.02204,"actual_conflict_rate":0.02204,"avoided_false_reject_rate":0.92836},
+        {"mean_changed_keys":10.0,"global_root_reject_rate":0.99994,"scoped_reject_rate":0.03011,"actual_conflict_rate":0.03011,"avoided_false_reject_rate":0.96983}
+      ],
+      "boundary": "Constructed sparse-key workload with complete dependency knowledge; not a FRANK benchmark."
+    },
+    {
+      "id": "EXP-CC7-HIDDEN-DEP-002",
+      "class": "synthetic_local_counterexample",
+      "description": "Inject hidden dependencies into dependency-scoped freshness validation.",
+      "n": 200000,
+      "results": [
+        {"hidden_dependency_rate":0.0,"missed_accepted_conflict_rate":0.0},
+        {"hidden_dependency_rate":0.001,"missed_accepted_conflict_rate":0.00004983},
+        {"hidden_dependency_rate":0.01,"missed_accepted_conflict_rate":0.00033234},
+        {"hidden_dependency_rate":0.05,"missed_accepted_conflict_rate":0.00176880},
+        {"hidden_dependency_rate":0.10,"missed_accepted_conflict_rate":0.00344224},
+        {"hidden_dependency_rate":0.25,"missed_accepted_conflict_rate":0.00891749}
+      ],
+      "result": "Scoped freshness is unsafe when its dependency closure is incomplete; unknown/dynamic effects require conservative escalation."
+    },
+    {
+      "id": "EXP-CC7-DERIVED-EFFECT-003",
+      "class": "synthetic_local",
+      "description": "Compare model-claimed dependency footprints with footprints deterministically derived from typed operation semantics.",
+      "n": 100000,
+      "malicious_or_incomplete_claims": 29929,
+      "trusted_claimed_footprint_miss_rate": 0.10748,
+      "compiler_derived_footprint_misses": 0,
+      "boundary": "Constructed typed operations; establishes a safety design counterexample, not production completeness of a compiler."
+    },
+    {
+      "id": "EXP-CC7-DERIVED-EFFECT-JUDGE0-004",
+      "class": "independent_remote_runtime_replication",
+      "provider": "Judge0",
+      "n": 50000,
+      "trusted_claimed_footprint_miss_rate": 0.07398,
+      "compiler_derived_footprint_misses": 0,
+      "provider_result_ref": "research_entity/runtime/tool_results/cc7-judge0-20260808T0549p0700.json",
+      "result": "Independent execution replicated the direction of the local result; absolute miss rate is workload-dependent."
+    },
+    {
+      "id": "EXP-CC7-MERKLE-COST-005",
+      "class": "synthetic_local_microbenchmark",
+      "description": "Pure-Python SHA-256 Merkle tree with 16,384 leaves; compare full root reconstruction with verifying eight inclusion proofs.",
+      "tree_depth": 14,
+      "full_recompute_seconds_mean": 0.0074579,
+      "verify_8_proofs_seconds_mean": 0.0000577121,
+      "ratio_full_to_targeted": 129.23,
+      "boundary": "Microbenchmark only; targeted witness validation does not by itself prove current-state freshness or semantic correctness."
+    },
+    {
+      "id": "EXP-CC7-QWEN4B-READER-006",
+      "class": "live_external_model_attempt",
+      "model": "Qwen/Qwen3-4B-Instruct-2507",
+      "arms": ["verbose_json","positional_json","readable_claycode","aggressive_numeric_compact"],
+      "status": "BLOCKED_QUOTA",
+      "evidence": "Hugging Face model discovery succeeded and exposed the target model, but chat inference returned HTTP 402 monthly included credits depleted before a response was produced.",
+      "promotion_effect": "No reader-performance or token-efficiency claim is promoted from this attempt."
+    }
+  ]
+}

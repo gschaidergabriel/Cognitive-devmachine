@@ -29,6 +29,7 @@ REQUIRED_COMMANDS = [
     "emergenz",
     "claycode",
     "hyperposition",
+    "claygraph",
 ]
 
 

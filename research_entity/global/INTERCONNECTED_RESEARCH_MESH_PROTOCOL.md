@@ -15,6 +15,8 @@ The connected research branches are:
 
 `dump` is an intake/fusion command rather than a peer scientific branch, but its promoted outputs enter the same mesh.
 
+`fusion` is a **global meta-research feedback loop**, not a seventh scientific silo. It must cover the complete current research graph/evidence classes, perform cross-domain research, and return an explicit feedback delta or `NO_CHANGE` receipt to every scientific branch. Its protocol is `research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md`.
+
 The FRANK↔ClayCode feedback edge additionally uses `research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md` so recursive agreement cannot manufacture evidential confidence.
 
 ## Mandatory preflight
@@ -30,9 +32,19 @@ Before Fusion 1, every research trigger MUST:
 
 A run that omits this preflight is incomplete and cannot strongly promote architecture/scientific claims.
 
+`fusion` has a stronger coverage gate: it must additionally materialize `GLOBAL_COVERAGE_MANIFEST.json`, explicitly cover every research class and scientific branch, and record `MISSING/BLOCKED/STALE` regions rather than silently skipping them.
+
 ## Branch dependency priorities
 
 All branches ingest all other branches, but attention is weighted by mechanism relevance:
+
+### `fusion`
+
+Fusion is coverage-driven rather than branch-priority-driven. It must traverse the whole current mesh using indexes/manifests first and fetch raw evidence on demand where it can affect a claim, contradiction or experiment. It must then write `BRANCH_FEEDBACK_MANIFEST.json` with one receipt for each of `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`.
+
+A substantive fusion delta must be written into branch-discoverable Topic/Micro-Packets or equivalent cross-links. If no substantive delta exists for a branch, write an explicit `NO_CHANGE` receipt. This closes the research feedback loop and ensures future domain triggers ingest the result.
+
+Fusion does not gain special evidential authority from breadth. Shared ancestry remains one evidence family, and canonical promotion still follows normal claim-lifecycle rules.
 
 ### `clay`
 Clay is the integrated master foundry. It must jointly fuse all branches and is responsible for detecting incompatible local optimizations between them.
@@ -116,6 +128,8 @@ Every durable branch result should carry:
 - downstream architecture/experiment implications.
 
 Create cross-links in Topic Packets/micro-packets where practical. A branch-specific result may remain local in confidence, but it must remain discoverable by the other branches.
+
+For `fusion`, write-back is mandatory for all six scientific branches. Branch-specific feedback must reference the originating fusion run and preserve whether the result is support, challenge, revision, supersession, new experiment, or no change.
 
 ## Scientific boundaries
 

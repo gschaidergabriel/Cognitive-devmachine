@@ -4,7 +4,7 @@
 
 Every substantive result produced during project research becomes durable research state, not disposable chat text. The protocol must preserve scientific continuity **without turning every small task into a bureaucratic full audit**.
 
-This includes intermediate findings, failed attempts, corrections, hypotheses, tests, source discoveries, architecture alternatives, contradictions, artifacts and final answers.
+This includes intermediate findings, failed attempts, corrections, hypotheses, tests, source discoveries, architecture alternatives, contradictions, artifacts, researcher disagreements, adjudications and final answers.
 
 ## Important boundary
 
@@ -13,6 +13,24 @@ Private model chain-of-thought / hidden scratch reasoning is **not** stored or r
 Instead each preserved research step emits a reproducible **Reasoning Summary / Decision Trace** containing the evidence used, alternatives considered, test or inference performed, result, uncertainty, falsifier and downstream consequence.
 
 The scientific objective is reproducibility and provenance, not verbatim hidden cognition.
+
+## Researcher provenance
+
+Every durable event created after multi-researcher governance adoption must identify the actual actor when known.
+
+Principal actors are defined in `RESEARCH_ACTOR_REGISTRY.json`:
+
+- `claude-code-lead`
+- `chatgpt-secondary`
+- `user-gabriel`
+
+Keep these concepts distinct:
+
+- `origin_actor` — who produced the analysis/result/artifact;
+- `ingested_by` — who imported pre-existing material;
+- `adjudicated_by` — who later selected/promoted a position.
+
+Do not use ambiguous author labels when the actual actor is known.
 
 ## Capture levels
 
@@ -23,6 +41,7 @@ Use for ordinary Q&A, formatting, trivial edits or operational actions that crea
 
 Persist at most:
 - prompt/run identity;
+- actor identity;
 - task classification;
 - `NO_RESEARCH_DELTA` / final summary if a durable runner is active.
 
@@ -71,14 +90,17 @@ Research-capable runs may emit these event types:
 - `RESULT_OBSERVED`
 - `NEGATIVE_RESULT`
 - `CONTRADICTION_FOUND`
+- `DISSENT_RECORDED`
 - `CLAIM_REFUTED`
 - `CLAIM_SUPERSEDED`
 - `CLAIM_PROMOTED`
 - `ARCHITECTURE_CANDIDATE`
 - `ARCHITECTURE_DECISION`
+- `ADJUDICATION`
 - `TOOL_ACQUIRED`
 - `TOOL_FAILED`
 - `ARTIFACT_CREATED`
+- `ARTIFACT_REVIEWED`
 - `TOPIC_PACKET_UPDATED`
 - `DOMAIN_CROSS_LINK_CREATED`
 - `FINAL_RESPONSE_SUMMARY`
@@ -108,14 +130,49 @@ Every durable event gets, where applicable:
   "hypothesis_ids": ["..."],
   "experiment_ids": ["..."],
   "result": "...",
-  "status": "CURRENT|OPEN|SUPERSEDED|REFUTED|NEGATIVE|LOCAL_ONLY",
+  "status": "CURRENT|OPEN|SUPERSEDED|REFUTED|NEGATIVE|LOCAL_ONLY|NOT_SELECTED",
   "confidence": "...",
   "falsifier_or_next_test": "...",
   "artifact_refs": ["..."],
   "context_receipt": {"packet_ids":[],"source_refs":[]},
-  "provenance": {"actor":"...","tool":"...","commit":"..."}
+  "provenance": {
+    "origin_actor":"chatgpt-secondary|claude-code-lead|...",
+    "actor_role":"...",
+    "provider":"OpenAI|Anthropic|human|external",
+    "model":"...",
+    "runtime":"...",
+    "session_id":"...",
+    "prompt_run_id":"...",
+    "ingested_by":"...",
+    "adjudicated_by":"...",
+    "commit":"..."
+  }
 }
 ```
+
+## Researcher disagreement events
+
+When ChatGPT and Claude Code disagree materially, do not collapse their positions into one blended summary.
+
+Create separate attributed events/claims and link them.
+
+Recommended sequence:
+
+```text
+ANALYSIS / CLAIM by actor A
+        ↓
+DISSENT_RECORDED by actor B
+        ↓
+EXPERIMENT_DESIGNED / evidence comparison
+        ↓
+RESULT_OBSERVED
+        ↓
+ADJUDICATION by claude-code-lead if evidence remains underdetermined
+```
+
+An adjudication chooses the current working direction. It does not automatically refute the non-selected hypothesis.
+
+Use `NOT_SELECTED` when an alternative loses a design decision without being empirically refuted.
 
 ## Prompt result capture
 
@@ -123,6 +180,7 @@ For L1-L3 substantive prompts, create a prompt-run record containing:
 
 - exact user request or a privacy-safe exact reference to it;
 - resolved task interpretation;
+- origin actor/model/runtime;
 - capture level;
 - system-layer/domain classification;
 - source set actually used;
@@ -131,12 +189,13 @@ For L1-L3 substantive prompts, create a prompt-run record containing:
 - outputs/artifacts produced;
 - claims created/changed;
 - hypotheses/tests/results when present;
+- researcher disagreement/adjudication when present;
 - final answer summary;
 - topic packets touched;
 - canonical promotion decision;
 - Git commit/ledger references.
 
-A research result is not considered fully archived until its required event stream and topic-packet updates are committed or explicitly marked `SYNC_PENDING`.
+A research result is not considered fully archived until its required event stream, attribution and topic-packet updates are committed or explicitly marked `SYNC_PENDING`.
 
 ## Intermediate capture granularity
 
@@ -149,6 +208,8 @@ For L2/L3, capture an intermediate event whenever one of these changes materiall
 - an alternative is eliminated;
 - a test produces data;
 - a contradiction appears;
+- a researcher records a material dissent;
+- a lead adjudication changes the selected direction;
 - a tool or implementation changes the feasible design space;
 - a new cross-domain pattern is discovered.
 

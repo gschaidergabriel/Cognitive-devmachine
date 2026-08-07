@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Strict runtime validation for RAE-8.8 canonical JSON, JSONL ledgers and Topic Packets.
-
-Git/raw ledgers remain canonical. This validator fails CI on malformed structured state.
-Schemas deliberately permit forward-compatible extra fields while enforcing required
-identity/status/provenance structure and value domains.
-"""
+"""Strict runtime validation for RAE canonical JSON, ledgers, Topic Packets and micro-packets."""
 from __future__ import annotations
 import json
 from pathlib import Path
@@ -42,6 +37,7 @@ def main() -> int:
     claim_schema = load_schema("claim.schema.json")
     event_schema = load_schema("event.schema.json")
     packet_schema = load_schema("topic_packet.schema.json")
+    micro_schema = load_schema("micro_packet.schema.json")
 
     canonical_path = ROOT / "research_entity" / "continuity" / "RESEARCH_ENTITY_CANONICAL.json"
     try:
@@ -95,6 +91,22 @@ def main() -> int:
             if pid in pids:
                 errors.append(f"{label}: duplicate packet_id {pid}")
             pids.add(pid)
+
+    micro_root = ROOT / "research_sources" / "micro_packets"
+    if micro_root.exists():
+        mids = set()
+        for path in sorted(micro_root.rglob("*.json")):
+            label = str(path.relative_to(ROOT))
+            try:
+                item = json.loads(path.read_text(encoding="utf-8"))
+            except Exception as e:
+                errors.append(f"{label}: invalid JSON: {e}")
+                continue
+            validate_obj(item, micro_schema, label, errors)
+            mid = item.get("packet_id")
+            if mid in mids:
+                errors.append(f"{label}: duplicate micro packet_id {mid}")
+            mids.add(mid)
 
     if errors:
         print("RAE schema validation FAILED")

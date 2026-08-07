@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 """Build a machine-readable cross-trigger research foundation manifest.
 
-Every RAE research trigger uses this before Fusion 1. It discovers both completed runs
-and fresh/in-progress branch material (trigger-run artifacts, Topic Packets and knowledge
-micro-packets) so cross-branch research cannot lag behind a worker that has not yet
-written FINAL_REPORT.md.
-
-The `fusion` meta-trigger is coverage-first: it indexes all currently discoverable run
-history and branch packets rather than using the normal per-branch depth cap.
+Every RAE scientific trigger uses this before Fusion 1. The authoritative scientific
+branch set comes from RESEARCH_TRIGGER_REGISTRY.json. Priority order remains explicit per
+trigger so adding a new branch fails closed until its cross-branch placement is designed.
 """
 from __future__ import annotations
 
@@ -22,21 +18,36 @@ ROOT = Path(__file__).resolve().parents[1]
 TRIGGER_RUNS = ROOT / "research_entity" / "trigger_runs"
 TOPIC_PACKETS = ROOT / "research_entity" / "topic_packets"
 MICRO_PACKETS = ROOT / "research_entity" / "knowledge_micro_packets"
-BRANCHES = ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
+REGISTRY = ROOT / "research_entity" / "global" / "RESEARCH_TRIGGER_REGISTRY.json"
+
+
+def _registered_scientific_branches() -> list[str]:
+    data = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    out = []
+    for name, spec in (data.get("triggers") or {}).items():
+        if (spec or {}).get("kind") in {"domain_research", "integrated_research_foundry"}:
+            out.append(name)
+    return out
+
+
+BRANCHES = _registered_scientific_branches()
 
 PRIORITY = {
-    "fusion": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
-    "clay": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
-    # FRANK is an architecture projection of Clay and is intended to be implemented /
-    # represented in ClayCode, so ClayCode is deliberately the second-deepest input.
-    "frank": ["clay", "claycode", "gwt", "hyperposition", "emergenz", "frank"],
-    "gwt": ["clay", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
-    "emergenz": ["clay", "gwt", "hyperposition", "frank", "claycode", "emergenz"],
-    # ClayCode is FRANK's architecture language, so newest FRANK research/architecture
-    # is the primary target-feedback input. Clay remains the broader integrated basis.
-    "claycode": ["frank", "clay", "gwt", "hyperposition", "emergenz", "claycode"],
-    "hyperposition": ["clay", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
+    "fusion": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph"],
+    "clay": ["clay", "frank", "claycode", "claygraph", "gwt", "emergenz", "hyperposition"],
+    "frank": ["clay", "claycode", "claygraph", "gwt", "hyperposition", "emergenz", "frank"],
+    "gwt": ["clay", "claygraph", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
+    "emergenz": ["clay", "gwt", "claygraph", "hyperposition", "frank", "claycode", "emergenz"],
+    "claycode": ["frank", "clay", "claygraph", "gwt", "hyperposition", "emergenz", "claycode"],
+    "hyperposition": ["clay", "claygraph", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
+    "claygraph": ["clay", "frank", "claycode", "hyperposition", "gwt", "emergenz", "claygraph"],
 }
+
+for trigger, order in PRIORITY.items():
+    if set(order) != set(BRANCHES) or len(order) != len(BRANCHES):
+        raise RuntimeError(
+            f"research mesh governance drift: {trigger} priority={order!r} registry_branches={BRANCHES!r}"
+        )
 
 ALIASES = {
     "clay": ["clay", "synthetic-clay", "synthetic_clay"],
@@ -45,31 +56,23 @@ ALIASES = {
     "emergenz": ["emergenz", "emergence", "causal-emergence", "causal_emergence"],
     "claycode": ["claycode", "xeno", "xeno-claycode", "xeno_claycode", "cc6", "cc7", "cc8"],
     "hyperposition": ["hyperposition", "hypergraph", "codependency", "h1", "h2"],
+    "claygraph": ["claygraph", "clay graph", "knowledge graph", "associative memory", "database migration", "database transcendence"],
 }
 
 ARTIFACT_NAMES = [
-    "FINAL_REPORT.md",
-    "HYPOTHESES.md",
-    "HYPOTHESES.json",
-    "GLOBAL_HYPOTHESIS_MATRIX.md",
-    "GLOBAL_HYPOTHESIS_MATRIX.json",
-    "EXPERIMENTS.json",
-    "EXPERIMENTS.jsonl",
-    "EXPERIMENT_RESULTS.json",
-    "NEGATIVE_RESULTS.md",
-    "NEGATIVE_RESULTS.jsonl",
-    "CONTRADICTION_MAP.md",
-    "CONTRADICTION_MAP.json",
-    "BRANCH_FEEDBACK_MANIFEST.json",
-    "GLOBAL_COVERAGE_MANIFEST.json",
-    "RUN_MANIFEST.json",
-    "TOOL_EXECUTION_MANIFEST.json",
-    "INTERCONNECT_MANIFEST.json",
-    "ARCHITECTURE.md",
-    "ARCHITECTURE.json",
-    "FRANK_ARCHITECTURE.claycode.json",
-    "CLAYCODE_ARCHITECTURE_MAPPING.md",
+    "FINAL_REPORT.md", "HYPOTHESES.md", "HYPOTHESES.json",
+    "GLOBAL_HYPOTHESIS_MATRIX.md", "GLOBAL_HYPOTHESIS_MATRIX.json",
+    "EXPERIMENTS.json", "EXPERIMENTS.jsonl", "EXPERIMENT_RESULTS.json",
+    "NEGATIVE_RESULTS.md", "NEGATIVE_RESULTS.jsonl",
+    "CONTRADICTION_MAP.md", "CONTRADICTION_MAP.json",
+    "BRANCH_FEEDBACK_MANIFEST.json", "GLOBAL_COVERAGE_MANIFEST.json",
+    "RUN_MANIFEST.json", "TOOL_EXECUTION_MANIFEST.json", "INTERCONNECT_MANIFEST.json",
+    "ARCHITECTURE.md", "ARCHITECTURE.json",
+    "FRANK_ARCHITECTURE.claycode.json", "CLAYCODE_ARCHITECTURE_MAPPING.md",
     "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+    "DATABASE_INVENTORY.json", "CLAYGRAPH_SCHEMA.claycode.json", "CLAYGRAPH_CANDIDATE.claycode.json",
+    "SELF_USE_BENCHMARK.json", "MIGRATION_PLAN.json", "FRANK_CLAYGRAPH_FEEDBACK.json",
+    "GRAPH_EVOLUTION_DECISION.json",
 ]
 
 META_RE = re.compile(r"<!--\s*RAE_META\s*\n(\{.*?\})\s*\nRAE_META\s*-->", re.S)
@@ -111,7 +114,7 @@ def _material_score(path: Path) -> tuple[str, str]:
 
 
 def _matches_branch(path: Path, branch: str) -> bool:
-    aliases = ALIASES[branch]
+    aliases = ALIASES.get(branch, [branch])
     hay = (_rel(path) + "\n" + _read_text(path, 12000)).lower()
     return any(alias.lower() in hay for alias in aliases)
 
@@ -157,24 +160,24 @@ def _matching_material(base: Path, branch: str, limit: int | None) -> list[str]:
 def _depth(trigger: str, branch: str, base_depth: int) -> tuple[int, int]:
     run_depth = max(1, base_depth)
     packet_limit = 8
-    if trigger == "frank" and branch == "clay":
-        return max(run_depth, 3), 12
-    if trigger == "frank" and branch == "claycode":
-        return max(run_depth, 4), 20
-    if trigger == "claycode" and branch == "frank":
-        return max(run_depth, 4), 20
-    if trigger == "claycode" and branch == "clay":
-        return max(run_depth, 3), 12
+    deep = {
+        ("frank", "clay"): (3, 12), ("frank", "claycode"): (4, 20), ("frank", "claygraph"): (4, 20),
+        ("claycode", "frank"): (4, 20), ("claycode", "clay"): (3, 12), ("claycode", "claygraph"): (4, 20),
+        ("hyperposition", "claygraph"): (4, 20), ("gwt", "claygraph"): (4, 20),
+    }
+    if (trigger, branch) in deep:
+        d, p = deep[(trigger, branch)]
+        return max(run_depth, d), p
     return run_depth, packet_limit
 
 
-def _latest_frank_architecture(branches: list[dict[str, Any]]) -> str | None:
+def _latest_artifact(branches: list[dict[str, Any]], branch: str, suffix: str) -> str | None:
     for b in branches:
-        if b.get("branch") != "frank":
+        if b.get("branch") != branch:
             continue
         for run in b.get("runs", []):
             for artifact in run.get("artifacts", []):
-                if artifact.endswith("/FRANK_ARCHITECTURE.claycode.json"):
+                if artifact.endswith(suffix):
                     return artifact
     return None
 
@@ -183,8 +186,9 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
     if trigger not in PRIORITY:
         raise ValueError(f"unknown connected trigger: {trigger}")
     branches = []
+    coverage_all = trigger in {"fusion", "claygraph"}
     for rank, branch in enumerate(PRIORITY[trigger], 1):
-        if trigger == "fusion":
+        if coverage_all:
             all_runs = _runs(branch, include_incomplete=True)
             run_depth: int | str = "ALL_DISCOVERED"
             packet_limit = None
@@ -200,27 +204,23 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "latest_run": all_runs[0].name if all_runs else None,
             "latest_run_complete": bool(all_runs and (all_runs[0] / "FINAL_REPORT.md").exists()),
             "latest_completed_run": completed[0].name if completed else None,
-            "runs": [
-                {
-                    "run_id": r.name,
-                    "complete": (r / "FINAL_REPORT.md").exists(),
-                    "artifacts": _artifacts(r),
-                }
-                for r in all_runs
-            ],
+            "runs": [{"run_id": r.name, "complete": (r / "FINAL_REPORT.md").exists(), "artifacts": _artifacts(r)} for r in all_runs],
             "topic_packets": _matching_material(TOPIC_PACKETS, branch, packet_limit),
             "knowledge_micro_packets": _matching_material(MICRO_PACKETS, branch, packet_limit),
         })
-    latest_frank_arch = _latest_frank_architecture(branches)
+
+    latest_frank_arch = _latest_artifact(branches, "frank", "/FRANK_ARCHITECTURE.claycode.json")
+    latest_claygraph = _latest_artifact(branches, "claygraph", "/CLAYGRAPH_CANDIDATE.claycode.json") or _latest_artifact(branches, "claygraph", "/CLAYGRAPH_SCHEMA.claycode.json")
     return {
-        "schema_version": "1.3",
+        "schema_version": "1.4",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "trigger": trigger,
         "run_id": run_id,
+        "registry_scientific_branches": BRANCHES,
         "protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
         "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md" if trigger in {"claycode", "fusion"} else None,
         "branch_priority": PRIORITY[trigger],
-        "coverage_mode": "ALL_DISCOVERED_INDEXED" if trigger == "fusion" else "PRIORITY_BOUNDED",
+        "coverage_mode": "ALL_DISCOVERED_INDEXED" if coverage_all else "PRIORITY_BOUNDED",
         "branches": branches,
         "requirements": {
             "must_ingest_all_connected_branches": True,
@@ -235,11 +235,18 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "fusion_requires_feedback_receipt_for_every_branch": trigger == "fusion",
             "frank_requires_latest_clay_architecture_as_primary_foundation": trigger == "frank",
             "frank_requires_deep_claycode_architecture_input": trigger == "frank",
+            "frank_requires_deep_claygraph_substrate_input": trigger == "frank",
             "frank_architecture_source_language": "ClayCode semantic IR" if trigger == "frank" else None,
             "claycode_requires_latest_frank_research_as_primary_feedback": trigger == "claycode",
+            "claycode_requires_deep_claygraph_input": trigger == "claycode",
             "claycode_requires_goodman_anti_echo_review": trigger == "claycode",
             "claycode_latest_frank_architecture_artifact": latest_frank_arch if trigger == "claycode" else None,
             "claycode_frank_architecture_artifact_missing_must_be_explicit": trigger == "claycode" and latest_frank_arch is None,
+            "hyperposition_requires_deep_claygraph_input": trigger == "hyperposition",
+            "gwt_requires_deep_claygraph_input": trigger == "gwt",
+            "latest_claygraph_artifact": latest_claygraph if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clay"} else None,
+            "claygraph_requires_full_mesh_coverage": trigger == "claygraph",
+            "claygraph_requires_iterative_parent_candidate_selection": trigger == "claygraph",
             "clay_is_integrated_master_foundry": trigger == "clay",
         },
     }

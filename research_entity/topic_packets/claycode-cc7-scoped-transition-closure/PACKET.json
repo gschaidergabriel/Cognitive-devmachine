@@ -1,0 +1,37 @@
+{
+  "packet_id": "claycode-cc7-scoped-transition-closure",
+  "title": "ClayCode CC7 Scoped Transition Closure",
+  "status": "OPEN",
+  "domains": ["xeno-claycode","security-capabilities","storage-state-memory","formal-methods-testing","ipc-distributed-systems"],
+  "system_layers": ["semantic-ir","projection","validation","authority-gateway","state-persistence"],
+  "summary": "CC7 refines CC6/G6 into an OPEN CC-RC1.2 Transition Closure Capsule: the global root identifies the basis snapshot; trusted operation semantics derive dependency/effect/capability closure; commit-time freshness checks relevant versions/invariant epochs and escalates conservatively for unknown effects. Wire/projection identity remains separate from semantic identity.",
+  "key_deltas": [
+    "global state root is snapshot identity, not necessarily sole commit freshness predicate",
+    "model-declared dependency/effect footprints are non-authoritative",
+    "trusted op semantics derive read/write/invariant/effect/capability requirements",
+    "unknown/dynamic effects escalate to broader closure",
+    "semantic hashes are independent from incidental wire serialization",
+    "Qwen3-4B projection factorial remains blocked by provider inference-credit exhaustion"
+  ],
+  "related_micro_packets": [
+    "KMP-CC7-SCOPED-FRESHNESS",
+    "KMP-CC7-DERIVED-EFFECTS",
+    "KMP-CC7-SEMANTIC-IDENTITY",
+    "KMP-G6-FRESHNESS-BOUND-GAMMA",
+    "KMP-CLAYCODE-AUTHORITY-BOUNDARY"
+  ],
+  "open_questions": [
+    "Can a real Clay/FRANK operation registry derive conservative useful dependency/effect closures?",
+    "What granularity of object version and invariant epoch minimizes retries without excessive metadata?",
+    "When should scoped validation escalate to whole-root or coordinated closure?",
+    "Does Qwen3-4B read compact ClayCode more accurately per token than positional JSON?",
+    "Should cryptographic/Merkle witnesses be used only across trust boundaries or also for local replay/audit?"
+  ],
+  "highest_information_next_test": "Implement 10-20 pinned ClayCode operations with deterministic footprint derivation, instrument their dynamic access traces, then benchmark whole-root vs scoped validation under realistic concurrent state churn; separately rerun the pinned Qwen3-4B reader factorial when model inference quota is available.",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent_revision": 2,
+  "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "run_id": "claycode-20260808T0549p0700-chatgpt-secondary"
+}

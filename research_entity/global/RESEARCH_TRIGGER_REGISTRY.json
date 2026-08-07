@@ -1,12 +1,14 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
   "interconnection_protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
   "interconnection_preflight": "tools/research_interconnect_preflight.py",
+  "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "goodman_filter_checker": "tools/goodman_filter_check.py",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches.",
+  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support.",
   "triggers": {
     "dump": {
       "kind": "research_intake",
@@ -50,9 +52,14 @@
     "claycode": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
-      "purpose": "Research ClayCode as the internal language/IR that represents the Clay system in which it runs, including a Clay-written runtime and Qwen-4B simulation/internalization.",
-      "mesh_role": "connected_domain_and_frank_architecture_language",
-      "required_foundations": ["clay", "frank", "gwt", "hyperposition", "emergenz", "claycode"]
+      "purpose": "Research ClayCode as FRANK's internal architecture/runtime language and Synthetic Clay semantic IR, using newest FRANK research as primary target feedback and independently verifying/refining/refuting FRANK-derived assumptions through the Goodman anti-echo filter.",
+      "mesh_role": "frank_feedback_validator_and_architecture_language",
+      "required_foundations": ["frank", "clay", "gwt", "hyperposition", "emergenz", "claycode"],
+      "primary_feedback_foundation": "frank",
+      "requires_latest_frank_architecture_if_available": true,
+      "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+      "goodman_validator": "tools/goodman_filter_check.py",
+      "required_goodman_artifact": "FRANK_CLAYCODE_GOODMAN_REVIEW.json"
     },
     "hyperposition": {
       "kind": "domain_research",

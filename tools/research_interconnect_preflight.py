@@ -5,6 +5,9 @@ Every RAE research trigger uses this before Fusion 1. It discovers both complete
 and fresh/in-progress branch material (trigger-run artifacts, Topic Packets and knowledge
 micro-packets) so cross-branch research cannot lag behind a worker that has not yet
 written FINAL_REPORT.md.
+
+The `fusion` meta-trigger is coverage-first: it indexes all currently discoverable run
+history and branch packets rather than using the normal per-branch depth cap.
 """
 from __future__ import annotations
 
@@ -22,6 +25,7 @@ MICRO_PACKETS = ROOT / "research_entity" / "knowledge_micro_packets"
 BRANCHES = ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
 
 PRIORITY = {
+    "fusion": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
     "clay": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
     # FRANK is an architecture projection of Clay and is intended to be implemented /
     # represented in ClayCode, so ClayCode is deliberately the second-deepest input.
@@ -47,10 +51,17 @@ ARTIFACT_NAMES = [
     "FINAL_REPORT.md",
     "HYPOTHESES.md",
     "HYPOTHESES.json",
+    "GLOBAL_HYPOTHESIS_MATRIX.md",
+    "GLOBAL_HYPOTHESIS_MATRIX.json",
     "EXPERIMENTS.json",
     "EXPERIMENTS.jsonl",
+    "EXPERIMENT_RESULTS.json",
     "NEGATIVE_RESULTS.md",
     "NEGATIVE_RESULTS.jsonl",
+    "CONTRADICTION_MAP.md",
+    "CONTRADICTION_MAP.json",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "GLOBAL_COVERAGE_MANIFEST.json",
     "RUN_MANIFEST.json",
     "TOOL_EXECUTION_MANIFEST.json",
     "INTERCONNECT_MANIFEST.json",
@@ -129,7 +140,7 @@ def _artifacts(run: Path) -> list[str]:
     return found
 
 
-def _matching_material(base: Path, branch: str, limit: int) -> list[str]:
+def _matching_material(base: Path, branch: str, limit: int | None) -> list[str]:
     if not base.exists():
         return []
     candidates = []
@@ -139,7 +150,8 @@ def _matching_material(base: Path, branch: str, limit: int) -> list[str]:
         if _matches_branch(p, branch):
             candidates.append(p)
     candidates.sort(key=_material_score, reverse=True)
-    return [_rel(p) for p in candidates[:limit]]
+    selected = candidates if limit is None else candidates[:limit]
+    return [_rel(p) for p in selected]
 
 
 def _depth(trigger: str, branch: str, base_depth: int) -> tuple[int, int]:
@@ -168,12 +180,18 @@ def _latest_frank_architecture(branches: list[dict[str, Any]]) -> str | None:
 
 
 def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
-    if trigger not in BRANCHES:
+    if trigger not in PRIORITY:
         raise ValueError(f"unknown connected trigger: {trigger}")
     branches = []
     for rank, branch in enumerate(PRIORITY[trigger], 1):
-        run_depth, packet_limit = _depth(trigger, branch, history_per_branch)
-        all_runs = _runs(branch, include_incomplete=True)[:run_depth]
+        if trigger == "fusion":
+            all_runs = _runs(branch, include_incomplete=True)
+            run_depth: int | str = "ALL_DISCOVERED"
+            packet_limit = None
+        else:
+            numeric_depth, packet_limit = _depth(trigger, branch, history_per_branch)
+            all_runs = _runs(branch, include_incomplete=True)[:numeric_depth]
+            run_depth = numeric_depth
         completed = [r for r in all_runs if (r / "FINAL_REPORT.md").exists()]
         branches.append({
             "branch": branch,
@@ -195,13 +213,14 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
         })
     latest_frank_arch = _latest_frank_architecture(branches)
     return {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "trigger": trigger,
         "run_id": run_id,
         "protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
-        "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md" if trigger == "claycode" else None,
+        "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md" if trigger in {"claycode", "fusion"} else None,
         "branch_priority": PRIORITY[trigger],
+        "coverage_mode": "ALL_DISCOVERED_INDEXED" if trigger == "fusion" else "PRIORITY_BOUNDED",
         "branches": branches,
         "requirements": {
             "must_ingest_all_connected_branches": True,
@@ -212,6 +231,8 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "strong_promotion_blocked_if_missing": True,
         },
         "special_rules": {
+            "fusion_requires_global_coverage_manifest": trigger == "fusion",
+            "fusion_requires_feedback_receipt_for_every_branch": trigger == "fusion",
             "frank_requires_latest_clay_architecture_as_primary_foundation": trigger == "frank",
             "frank_requires_deep_claycode_architecture_input": trigger == "frank",
             "frank_architecture_source_language": "ClayCode semantic IR" if trigger == "frank" else None,
@@ -226,7 +247,7 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--trigger", required=True, choices=BRANCHES)
+    ap.add_argument("--trigger", required=True, choices=list(PRIORITY))
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--history-per-branch", type=int, default=2)
     ap.add_argument("--output")

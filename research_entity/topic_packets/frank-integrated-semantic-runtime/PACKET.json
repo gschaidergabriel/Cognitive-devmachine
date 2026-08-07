@@ -1,0 +1,26 @@
+{
+  "packet_id": "frank-integrated-semantic-runtime",
+  "title": "FRANK Integrated Semantic Runtime",
+  "status": "OPEN",
+  "domains": ["systems-architecture", "frank-gwt", "storage-state-memory", "scheduling-concurrency", "model-runtime", "security-capabilities", "android-edge-runtime", "observability-recovery"],
+  "system_layers": ["cognitive-runtime", "active-state", "persistent-state", "inference-runtime", "capability-boundary", "portable-runtime", "verification-plane"],
+  "summary": "Open FRANK architecture delta: integrate deterministic hot-path cognition into one causally traceable semantic runtime while preserving explicit inference resource isolation, capability authority and a single-writer durable event boundary.",
+  "micro_packets": [
+    "KMP-FRANK-20260808-SEMANTIC-RUNTIME",
+    "KMP-FRANK-20260808-GWS-SYNC-CALLBACK",
+    "KMP-FRANK-20260808-SINGLE-WRITER-CAUSAL-EVENTS",
+    "KMP-FRANK-20260808-THERMAL-LIFECYCLE-SCHEDULER"
+  ],
+  "open_questions": [
+    "What are current target-host p50/p95/p99 costs of Core→Router, memory fan-out and durable writes?",
+    "Which GlobalWorkspace subscribers currently violate a bounded hot-lane execution budget?",
+    "Can CC-RC1.1 become the runtime event envelope without another translation layer?",
+    "Which Android backend maximizes sustained useful work per joule under thermal constraints?"
+  ],
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent_revision": 2,
+  "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "run_id": "20260808T0520+0700-chatgpt-secondary-r2"
+}

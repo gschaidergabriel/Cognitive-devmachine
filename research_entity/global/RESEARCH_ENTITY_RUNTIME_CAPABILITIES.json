@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -14,7 +14,9 @@
     "artifact generation",
     "owner-authorized private repository credential persistence",
     "OpenAlex API via tools/openalex_search.py (runtime verified)",
-    "arXiv API via tools/arxiv_search.py (runtime verified, credential-free)"
+    "arXiv API via tools/arxiv_search.py (runtime verified, credential-free)",
+    "Tavily Search API via tools/tavily_search.py (runtime verified)",
+    "Exa Search API via tools/exa_search.py (runtime verified)"
   ],
   "github_backend": {
     "repository": "gschaidergabriel/clay-global-research-entity",
@@ -40,8 +42,19 @@
         "receipt": "research_entity/runtime/arxiv_verification.json",
         "verified_at": "2026-08-07T21:29:54.774171+00:00",
         "credential_required": false
+      },
+      "Tavily": {
+        "tool": "tools/tavily_search.py",
+        "receipt": "research_entity/runtime/tavily_verification.json",
+        "verified_at": "2026-08-07T21:38:01.039802+00:00"
+      },
+      "Exa": {
+        "tool": "tools/exa_search.py",
+        "receipt": "research_entity/runtime/exa_verification.json",
+        "verified_at": "2026-08-07T21:38:33.957789+00:00"
       }
     },
+    "pending_provider_verification": ["Crossref"],
     "status_rule": "Credential presence and adapter installation are distinct from provider runtime verification.",
     "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store; values must not be copied into canonical research artifacts, reports or logs."
   },

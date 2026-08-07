@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-FRANK-C4-COGNITIVE-FRAME-TEARING-SYNTH-001",
+  "run_id":"20260808T0610+0700-chatgpt-secondary-r2",
+  "class":"synthetic_local_consistency_sanity_check",
+  "question":"Can a workspace assembled from independently updated sources be chronologically fresh yet contain mixed logical epochs?",
+  "construction":{"sources":6,"coupled_underlying_updates":"Poisson process; each conceptual state update should be seen as one epoch by all six sources","per_source_propagation_delay":"independent uniform [0,2] ms","workspace_sequential_read_span_ms":0.6,"reads_per_rate":200000,"rates_hz":[1,10,50,100],"validation_arm":"accept only if all six source epoch witnesses agree; otherwise retry/escalate"},
+  "results":[
+    {"rate_hz":1,"n_reads":200000,"sources":6,"prop_delay_ms_max":2.0,"sequential_read_span_ms":0.6,"mixed_frame_rate_no_validation":0.001435,"retry_rate_with_epoch_validation":0.001435,"accepted_mixed_rate_with_validation":0.0},
+    {"rate_hz":10,"n_reads":200000,"sources":6,"prop_delay_ms_max":2.0,"sequential_read_span_ms":0.6,"mixed_frame_rate_no_validation":0.01531,"retry_rate_with_epoch_validation":0.01531,"accepted_mixed_rate_with_validation":0.0},
+    {"rate_hz":50,"n_reads":200000,"sources":6,"prop_delay_ms_max":2.0,"sequential_read_span_ms":0.6,"mixed_frame_rate_no_validation":0.07395,"retry_rate_with_epoch_validation":0.07395,"accepted_mixed_rate_with_validation":0.0},
+    {"rate_hz":100,"n_reads":200000,"sources":6,"prop_delay_ms_max":2.0,"sequential_read_span_ms":0.6,"mixed_frame_rate_no_validation":0.14312,"retry_rate_with_epoch_validation":0.14312,"accepted_mixed_rate_with_validation":0.0}
+  ],
+  "interpretation":"Freshness and consistency are distinct. In the constructed coupled-update workload, a low-latency sequential read can still combine source epochs. Version witnesses reject such mixed frames at a retry cost equal to their occurrence rate.",
+  "boundary":"Not a FRANK runtime measurement. Update rates, propagation delays and the assumption of coupled source epochs are constructed. The current architecture source does not specify whether baue_broadcast(q) already receives an atomic snapshot; this experiment motivates live instrumentation rather than claiming a production bug.",
+  "falsifier_or_next_test":"Instrument current FRANK q/workspace inputs with per-channel source revisions. If live frames are already atomically assembled or no incompatible mixed revisions occur, the proposed CognitiveFrame consistency gate may be unnecessary or reducible."
+}

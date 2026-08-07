@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -12,7 +12,8 @@
     "File Library/project file search",
     "web research",
     "artifact generation",
-    "owner-authorized private repository credential persistence"
+    "owner-authorized private repository credential persistence",
+    "OpenAlex API via tools/openalex_search.py (runtime verified)"
   ],
   "github_backend": {
     "repository": "gschaidergabriel/clay-global-research-entity",
@@ -27,6 +28,13 @@
     "env_template": ".env.example",
     "private_token_store": "research_entity/private/API_TOKENS.env",
     "secret_loader": "tools/rae_secret_loader.py",
+    "verified_providers": {
+      "OpenAlex": {
+        "tool": "tools/openalex_search.py",
+        "receipt": "research_entity/runtime/openalex_verification.json",
+        "verified_at": "2026-08-07T21:27:42.562319+00:00"
+      }
+    },
     "status_rule": "Credential presence and adapter installation are distinct from provider runtime verification.",
     "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store; values must not be copied into canonical research artifacts, reports or logs."
   },
@@ -34,7 +42,7 @@
     "no automatic background research between turns unless an explicit automation exists",
     "no assumption of direct shell access to live FRANK host",
     "provider/model-specific telemetry only when actually exposed",
-    "provider availability must be verified by a real call, not inferred from stored credentials",
+    "unverified providers remain unavailable as verified capabilities until a real call succeeds",
     "remote writes must be verified by reread"
   ],
   "rule": "This file describes current tool availability. Canonical research self-model remains historical revision-2 state until a justified research-state promotion occurs."

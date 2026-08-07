@@ -12,6 +12,13 @@ on:
       - 'research_entity/runtime/TOOL_QUOTA_STATE.json'
       - '.github/workflows/rae-contract-gates.yml'
 
+concurrency:
+  group: rae-contract-gates-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   contracts:
     runs-on: ubuntu-latest

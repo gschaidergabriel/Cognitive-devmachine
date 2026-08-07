@@ -2,8 +2,39 @@ name: Research Entity Verify
 on:
   push:
     branches: [main, rae-vnext-runtime]
+    paths:
+      - 'rae.py'
+      - 'rae_core/**'
+      - 'tools/**'
+      - '.claude/**'
+      - 'research_entity/continuity/**'
+      - 'research_entity/global/**'
+      - 'research_entity/ledgers/**'
+      - 'research_entity/events/**'
+      - 'research_entity/schemas/**'
+      - 'benchmarks/**'
+      - '.github/workflows/research-entity-verify.yml'
   pull_request:
+    paths:
+      - 'rae.py'
+      - 'rae_core/**'
+      - 'tools/**'
+      - '.claude/**'
+      - 'research_entity/continuity/**'
+      - 'research_entity/global/**'
+      - 'research_entity/ledgers/**'
+      - 'research_entity/events/**'
+      - 'research_entity/schemas/**'
+      - 'benchmarks/**'
+      - '.github/workflows/research-entity-verify.yml'
   workflow_dispatch:
+
+concurrency:
+  group: research-entity-verify-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   verify:

@@ -1,7 +1,7 @@
 name: Research Entity Verify
 on:
   push:
-    branches: [main]
+    branches: [main, rae-vnext-runtime]
   pull_request:
   workflow_dispatch:
 
@@ -15,10 +15,16 @@ jobs:
           python-version: '3.12'
       - name: Install validation runtime
         run: python -m pip install --disable-pip-version-check 'jsonschema>=4.23,<5'
+      - name: Compile Python entrypoints
+        run: python -m py_compile rae.py .claude/hooks/rae_hook.py tools/*.py
+      - name: Validate Claude hook settings JSON
+        run: python -m json.tool .claude/settings.json >/dev/null
       - name: Refresh minimal bootstrap from canonical
         run: python tools/materialize_bootstrap.py
       - name: Worker boot preflight
         run: python tools/session_preflight.py --task 'CI verification'
+      - name: Unified RAE status
+        run: python rae.py status
       - name: Strict schema validation
         run: python tools/validate_research_entity.py
       - name: Multi-researcher provenance validation
@@ -28,7 +34,15 @@ jobs:
       - name: Topicize archived source text
         run: python tools/topicize_sources.py
       - name: Build embedded research graph database
-        run: python tools/build_source_db.py --db /tmp/research_sources.db
+        run: python tools/build_source_db.py --db research_sources/sources.db
+      - name: Compile task-specific context
+        run: python rae.py boot --actor claude-code-lead --task 'CI verify GWT XENO Clay Android research context' --max-claims 8 --max-packets 4 --max-chunks 2 >/tmp/context.json
+      - name: Exercise relational query broker
+        run: |
+          python rae.py query 'hyperposition backend' --experiment EXP-LIVE-HYPERPOSITION-BACKEND --limit 8 >/tmp/query.json
+          python -m json.tool /tmp/query.json >/dev/null
+      - name: Run RAE retrieval benchmark skeleton
+        run: python rae.py benchmark --cases benchmarks/rae_vnext/cases.json >/tmp/benchmark.json
       - name: Validate canonical/bootstrap agreement
         run: python - <<'PY'
           import json
@@ -44,8 +58,12 @@ jobs:
           PY
       - name: Ensure derived indexes are reproducible
         run: git diff --exit-code -- research_entity/continuity/BOOTSTRAP_MINIMAL.json research_sources/status research_sources/topics || (echo 'Derived indexes/views are stale; regenerate and commit them.' && exit 1)
-      - name: Archive derived source DB for inspection
+      - name: Archive runtime diagnostics
         uses: actions/upload-artifact@v4
         with:
-          name: research-sources-db
-          path: /tmp/research_sources.db
+          name: rae-vnext-diagnostics
+          path: |
+            research_sources/sources.db
+            /tmp/context.json
+            /tmp/query.json
+            /tmp/benchmark.json

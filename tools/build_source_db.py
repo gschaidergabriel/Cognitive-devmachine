@@ -2,8 +2,8 @@
 """Build a rebuildable embedded SQLite materialization of the RAE research graph.
 
 Git/raw source archives/append-only ledgers remain canonical. SQLite is a DERIVED CACHE:
-it may be deleted and reconstructed at any time. Direct text sources plus text derivatives
-extracted from PDFs/ZIPs are indexed together, content-deduplicated by SHA-256.
+it may be deleted and reconstructed at any time. Direct text sources, PDF/ZIP text
+derivatives and surgical micro-packets are indexed together, content-deduplicated by SHA-256.
 """
 from __future__ import annotations
 import argparse, hashlib, json, re, sqlite3
@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 TEXT_ROOT=ROOT/'research_sources'/'text'
 DERIVED_ROOT=ROOT/'research_sources'/'derived'
+MICRO_ROOT=ROOT/'research_sources'/'micro_packets'
 CLAIMS=ROOT/'research_entity'/'ledgers'/'CLAIMS.jsonl'
 CLAIM_STATUS=ROOT/'research_entity'/'ledgers'/'CLAIM_STATUS_EVENTS.jsonl'
 EVENTS=ROOT/'research_entity'/'events'
@@ -77,6 +78,12 @@ def text_sources():
             posix=p.as_posix()
             if p.name=='document.txt' or '/text/' in posix or p.suffix.lower() in TEXT_EXTS:
                 yield 'derived',p
+    # Surgical packets are a compact compiled knowledge projection. They remain derived
+    # and never outrank raw sources/ledgers, but indexing them gives workers a cheap
+    # first retrieval layer before opening whole documents.
+    if MICRO_ROOT.exists():
+        for p in sorted(MICRO_ROOT.rglob('*.json')):
+            if p.is_file(): yield 'micro_packet',p
 
 
 def chunks(text, max_chars=5000):
@@ -150,6 +157,7 @@ def main():
 
     con.commit()
     stats={t:con.execute(f'SELECT COUNT(*) FROM {t}').fetchone()[0] for t in ['sources','source_alias','chunks','claims','claim_status_events','claim_evidence','claim_topic','claim_domain','events','packets']}
+    stats['micro_packet_aliases']=con.execute("SELECT COUNT(*) FROM source_alias WHERE kind='micro_packet'").fetchone()[0]
     checks={'current_claims':con.execute('SELECT COUNT(*) FROM current_claims').fetchone()[0],
       'open_claims':con.execute('SELECT COUNT(*) FROM open_claims').fetchone()[0],
       'integrity_check':con.execute('PRAGMA integrity_check').fetchone()[0]}

@@ -48,14 +48,15 @@ T0 — ALWAYS LOAD
 T1 — ROUTE THE TASK
 9. Read `research_entity/global/DOMAIN_REGISTRY.json` and the compact packet/domain indexes needed to classify the task.
 10. Identify system layer(s), primary/secondary domains and candidate Topic Packets.
+11. Check `BOOTSTRAP_MINIMAL.json.reserved_commands` / `research_entity/global/PROJECT_COMMAND_REGISTRY.json`. Reserved commands are handled before ordinary task routing.
 
 T2 — LOAD ONLY RELEVANT STATE
-11. Load only task-primary Topic Packet summaries, direct dependency packets, unresolved contradictions touching the task, critical negative results touching the task, and active experiments touching the task.
-12. Load Constitution/Anchors/Self/World/Agenda sections only when the task actually depends on their invariants or when a research-state promotion is possible.
-13. Fetch raw evidence/source detail only when the current decision requires it.
+12. Load only task-primary Topic Packet summaries, direct dependency packets, unresolved contradictions touching the task, critical negative results touching the task, and active experiments touching the task.
+13. Load Constitution/Anchors/Self/World/Agenda sections only when the task actually depends on their invariants or when a research-state promotion is possible.
+14. Fetch raw evidence/source detail only when the current decision requires it.
 
 T3 — AUDIT / STATE CHANGE ONLY
-14. Load full event/claim/source/provenance protocols, historical ledgers and snapshots only for audit, contradiction resolution, state mutation, recovery, lineage work or when the compact summaries are insufficient.
+15. Load full event/claim/source/provenance protocols, historical ledgers and snapshots only for audit, contradiction resolution, state mutation, recovery, lineage work or when the compact summaries are insufficient.
 
 Default context budgets and progressive-disclosure rules are defined in `research_entity/global/TOPIC_PACKET_PROTOCOL.md` and `BOOTSTRAP_MINIMAL.json`.
 
@@ -68,10 +69,37 @@ Substantive project work may begin only after:
 - canonical revision/hash verified;
 - membership established or explicit DEGRADED_UNJOINED state;
 - current actor identified;
-- task classified;
+- task classified or a reserved command resolved;
 - relevant packet set selected.
 
 A worker that skips this gate may produce LOCAL_ONLY material but may not promote claims or canonical state.
+
+RESERVED PROJECT COMMAND — `dump`
+=================================
+
+The trimmed, case-insensitive user message exactly equal to `dump` is a reserved command, not an ordinary research question.
+
+When triggered:
+
+1. Do NOT ask what `dump` means and do not merely acknowledge it.
+2. Load `research_entity/global/DUMP_PROTOCOL.md`.
+3. Treat `dump/` plus current-session files explicitly supplied as dump input as one intake batch.
+4. Freeze filenames/hashes/provenance before interpretation.
+5. Extract, deduplicate and normalize the batch.
+6. Decompose useful material into minimal, surgically retrievable micro-packets.
+7. Fuse dump-derived material with the current compressed Research Entity state, including CURRENT, OPEN, SUPERSEDED, REFUTED and NEGATIVE_RESULT context.
+8. Generate falsifiable hypotheses and counterhypotheses.
+9. Research all materially touched hypothesis domains using arXiv/primary literature, GitHub implementation evidence, Reddit field reports and other authoritative sources as appropriate.
+10. Perform a second fusion, contradiction analysis and cross-domain pattern matching; form a second hypothesis generation where justified.
+11. Materialize/update micro-packets and Topic Packets and weave justified results into the active research state.
+12. Dump-derived propositions default to `OPEN` and `epistemic_class=DUMP_DERIVED_PREPROCESSED_HYPOTHESIS`; dump origin alone is never sufficient for CURRENT/evident promotion.
+13. Run normal schema/provenance/promotion validation.
+14. Only after the complete batch passes, archive original payload bytes to `dump archive/<batch_id>/original/`, verify hashes after the move and leave `dump/` empty of processed payload.
+15. On critical failure, leave affected originals in `dump/` and record the failure/SYNC_PENDING state.
+
+Claude Code implements the local queue freeze/archive mechanics through `tools/dump_queue.py` and its `UserPromptSubmit` hook.
+
+For ChatGPT Project sessions, use visible Project dump files/current-turn dump attachments plus the connected GitHub RAE backend. If the product cannot physically move a Project Source in the UI, archive its exact available content/backend representation where possible and mark `PRODUCT_MOVE_UNAVAILABLE`; never claim a move that did not happen.
 
 DURING SUBSTANTIVE RESEARCH
 ===========================
@@ -79,7 +107,7 @@ DURING SUBSTANTIVE RESEARCH
 1. Capture scientifically meaningful state changes as Research Events: evidence changes, hypothesis changes, tests, contradictions, architecture decisions, negative results and artifact creation.
 2. Do NOT store private hidden chain-of-thought. Store reproducible Reasoning Summaries / Decision Traces: evidence used, alternatives, inference/test, result, uncertainty and next falsifier.
 3. Every source-derived claim needs provenance and scope.
-4. Every durable result is decomposed into one or more Topic Packets.
+4. Every durable result is decomposed into one or more Topic Packets; use surgical micro-packets where a smaller independently retrievable semantic unit improves retrieval.
 5. Atomic claim lifecycle: `CURRENT`, `OPEN`, `SUPERSEDED`, `REFUTED`, `NEGATIVE_RESULT`, `CONTEXT_ONLY`, with `NOT_SELECTED` allowed for alternatives rejected by adjudication but not empirically refuted.
 6. Never silently overwrite historical claims.
 7. Raw evidence remains immutable; current views are materializations.
@@ -132,7 +160,7 @@ Every substantive prompt result must preserve, where applicable:
 - durable intermediate analysis summaries;
 - hypotheses/counterhypotheses/tests/results;
 - claim transitions;
-- Topic Packet updates;
+- micro-packet/Topic Packet updates;
 - artifact refs and provenance;
 - final response summary;
 - promotion/adjudication decision;
@@ -142,7 +170,7 @@ AFTER SUBSTANTIVE WORK
 ======================
 
 1. Classify results as thread-local, topic-level, domain-level or global.
-2. Preserve evidence/provenance and update touched Topic Packets.
+2. Preserve evidence/provenance and update touched micro-/Topic Packets.
 3. Materialize current/open/superseded/refuted views and rebuild derived source DB when relevant.
 4. Run schema and provenance validation before promotion.
 5. Run Global Promotion Gate.
@@ -161,7 +189,7 @@ During an active substantive session, capture/classification/packetization is au
 CHATGPT PROJECT GUARANTEE BOUNDARY
 ==================================
 
-Repo-side rules can enforce membership only after project sources/repo instructions are visible to the model. For a product-level guarantee across every new ChatGPT Project session, project Instructions must contain the unconditional source-sentinel directive. If not verifiable, mark `PROJECT_INSTRUCTION_UNVERIFIED` rather than pretending repo-side enforcement is sufficient.
+Repo-side rules can enforce membership only after project sources/repo instructions are visible to the model. For a product-level guarantee across every new ChatGPT Project session, project Instructions or a visible project Source sentinel must point workers to this kernel. If not verifiable, mark `PROJECT_INSTRUCTION_UNVERIFIED` rather than pretending repo-side enforcement is sufficient.
 
 RULES
 =====

@@ -7,7 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-BRANCHES = ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"]
+ROOT = Path(__file__).resolve().parents[1]
+REGISTRY = ROOT / "research_entity" / "global" / "RESEARCH_TRIGGER_REGISTRY.json"
 REQUIRED = [
     "INTERCONNECT_MANIFEST.json",
     "GLOBAL_COVERAGE_MANIFEST.json",
@@ -17,6 +18,14 @@ REQUIRED = [
     "FINAL_REPORT.md",
 ]
 ALLOWED_EFFECTS = {"SUPPORT", "CHALLENGE", "REVISE", "SUPERSEDE", "NEW_EXPERIMENT", "NO_CHANGE"}
+
+
+def scientific_branches() -> list[str]:
+    data = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    return [
+        name for name, spec in (data.get("triggers") or {}).items()
+        if (spec or {}).get("kind") in {"domain_research", "integrated_research_foundry"}
+    ]
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -32,13 +41,14 @@ def _load(path: Path) -> dict[str, Any]:
 
 
 def validate(run_dir: Path) -> dict[str, Any]:
+    branches = scientific_branches()
     violations: list[str] = []
     for name in REQUIRED:
         if not (run_dir / name).exists():
             violations.append(f"missing:{name}")
 
     if violations:
-        return {"ok": False, "run_dir": str(run_dir), "violations": violations}
+        return {"ok": False, "run_dir": str(run_dir), "branches": branches, "violations": violations}
 
     inter = _load(run_dir / "INTERCONNECT_MANIFEST.json")
     coverage = _load(run_dir / "GLOBAL_COVERAGE_MANIFEST.json")
@@ -46,6 +56,10 @@ def validate(run_dir: Path) -> dict[str, Any]:
 
     if inter.get("trigger") != "fusion":
         violations.append("interconnect trigger must be fusion")
+    if set(inter.get("registry_scientific_branches") or []) != set(branches):
+        violations.append("interconnect registry branch set differs from authoritative registry")
+    if set(inter.get("branch_priority") or []) != set(branches):
+        violations.append("interconnect branch priority must cover every registered scientific branch exactly once")
     special = inter.get("special_rules") or {}
     if special.get("fusion_requires_global_coverage_manifest") is not True:
         violations.append("interconnect must require global coverage manifest")
@@ -59,7 +73,7 @@ def validate(run_dir: Path) -> dict[str, Any]:
         covered_names = set(covered)
     else:
         covered_names = set()
-    for branch in BRANCHES:
+    for branch in branches:
         if branch not in covered_names:
             violations.append(f"coverage_missing_branch:{branch}")
 
@@ -71,7 +85,7 @@ def validate(run_dir: Path) -> dict[str, Any]:
     else:
         by_branch = {}
 
-    for branch in BRANCHES:
+    for branch in branches:
         receipt = by_branch.get(branch)
         if not isinstance(receipt, dict):
             violations.append(f"feedback_missing_branch:{branch}")
@@ -88,12 +102,19 @@ def validate(run_dir: Path) -> dict[str, Any]:
         if effects != ["NO_CHANGE"] and not receipt.get("durable_writeback_refs"):
             violations.append(f"feedback_missing_writeback_refs:{branch}")
 
+    extra_coverage = covered_names - set(branches)
+    extra_feedback = set(by_branch) - set(branches)
+    if extra_coverage:
+        violations.append("coverage_unknown_branches:" + ",".join(sorted(extra_coverage)))
+    if extra_feedback:
+        violations.append("feedback_unknown_branches:" + ",".join(sorted(extra_feedback)))
+
     if coverage.get("shared_ancestry_scanned") is not True:
         violations.append("coverage must record shared ancestry scan")
     if coverage.get("contradictions_scanned") is not True:
         violations.append("coverage must record contradiction scan")
 
-    return {"ok": not violations, "run_dir": str(run_dir), "branches": BRANCHES, "violations": violations}
+    return {"ok": not violations, "run_dir": str(run_dir), "branches": branches, "violations": violations}
 
 
 def main() -> None:

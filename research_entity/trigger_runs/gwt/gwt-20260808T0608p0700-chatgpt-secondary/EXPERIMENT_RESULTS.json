@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "run_id": "gwt-20260808T0608p0700-chatgpt-secondary",
+  "experiments": [
+    {
+      "experiment_id": "EXP-GWT-IGNITION-IDENT-004",
+      "class": "synthetic_diagnostic_calibration",
+      "question": "Can a configured hard gate be distinguished from an endogenous nonlinear ignition mechanism?",
+      "design": {"input_range":[0.35,0.75],"configured_thresholds":[0.45,0.50,0.55,0.60,0.65],"noisy_replications":100,"diagnostic":"transition location as configured threshold changes"},
+      "results": {"configured_gate_post_threshold_anchoring_slope_mean":0.99817,"configured_gate_post_threshold_anchoring_slope_sd":0.01116,"independent_pre_gate_endogenous_transition_anchoring_slope_mean":1.12e-15,"interpretation":"A gate-generated discontinuity tracks the configured threshold nearly one-for-one; an independently observed endogenous transition can remain threshold-invariant."},
+      "hysteresis_calibration": {"feedback_0_area":0.0,"feedback_0_5_area":0.0007305,"feedback_1_0_area":0.2486925,"feedback_1_5_area":0.6433232,"feedback_2_0_area":0.9321812},
+      "boundary": "Diagnostic toy only. It does not show that current FRANK has endogenous ignition or hysteresis.",
+      "next_falsifier": "Replay current FRANK candidate traces with configurable shadow thresholds while logging pre-gate dynamics; lesion feedback/re-entry and test whether transition sharpness/hysteresis survives."
+    },
+    {
+      "experiment_id": "EXP-GWT-RECONSTRUCTION-LESION-005",
+      "class": "synthetic_receiver_representation_proxy",
+      "question": "Can transport succeed while receiver-specific reconstruction fails causally?",
+      "design": {"audiences":6,"latent_dimension":10,"samples_per_seed":5000,"seeds":120,"lesion":"one target audience receives identical canonical payload but its receiver-specific reconstruction transform is removed"},
+      "results": {"transport_receipt_success_rate":1.0,"lesioned_target_semantic_action_accuracy_mean":0.433735,"lesioned_target_accuracy_sd":0.090740,"unlesioned_other_audiences_accuracy_mean":1.0,"transport_only_validator_lesion_detection_rate":0.0,"reconstruction_aware_validator_lesion_detection_rate":1.0},
+      "boundary": "Constructed latent-coordinate proxy. It validates the lesion/receipt test design, not current FRANK receiver semantics.",
+      "next_falsifier": "On current FRANK, hold workspace row transport constant while perturbing semantic projection/receiver uptake; measure Core/Qwen representation and downstream effect selectively."
+    }
+  ],
+  "promotion": "NONE"
+}

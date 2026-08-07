@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.9",
+  "schema_version": "2.0",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -10,19 +10,21 @@
     "quota/health-aware research provider planning and covering-fallback validation via tools/research_provider_router.py",
     "unified provider health audit via tools/provider_health_audit.py",
     "allowlisted GitHub-runner provider invocation bridge via tools/research_tool_bridge.py",
-    "mandatory cross-trigger research mesh preflight via tools/research_interconnect_preflight.py",
+    "automatic quota/rate-limit feedback from bridge results into TOOL_QUOTA_STATE.json",
+    "mandatory cross-trigger research mesh preflight including fresh incomplete runs, Topic Packets and micro-packets via tools/research_interconnect_preflight.py",
+    "FRANK architecture source contract in ClayCode semantic IR via tools/frank_architecture_contract.py",
     "visible status footer structure checking via tools/status_footer_check.py",
     "OpenAlex runtime verified with private-repo credential",
     "arXiv runtime verified credential-free",
     "Semantic Scholar runtime verified but public shared pool can rate-limit",
     "Crossref runtime verified credential-free after 406 content-negotiation fix",
-    "Tavily runtime verified with private-repo credential",
+    "Tavily runtime verified with private-repo credential and worker bridge usage",
     "DuckDuckGo/DDGS runtime verified credential-free",
-    "Exa runtime verified with private-repo credential",
+    "Exa runtime verified with private-repo credential and worker bridge usage",
     "Judge0 runtime verified credential-free on current CE endpoint",
-    "Hugging Face Inference Providers runtime verified with private-repo credential",
+    "Hugging Face credential/auth/model listing runtime verified; paid/model inference currently quota-exhausted and cached for fallback",
     "E2B adapter ready but credential unavailable because connector safety blocked persistence",
-    "Piston adapter updated for 2026 hosted authorization requirement; hosted credential/self-host endpoint not configured"
+    "Piston adapter updated for hosted authorization requirement; hosted credential/self-host endpoint not configured"
   ],
   "github_backend": {
     "repository": "gschaidergabriel/clay-global-research-entity",
@@ -36,7 +38,16 @@
     "preflight": "tools/research_interconnect_preflight.py",
     "required_run_artifact": "INTERCONNECT_MANIFEST.json",
     "branches": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
-    "rule": "Every scientific trigger ingests all connected branches before Fusion 1, scans contradictions and writes cross-links back. FRANK treats the newest Clay research/architecture as its primary foundation; Clay is the integrated master foundry."
+    "freshness_rule": "Consume newer incomplete run artifacts plus Topic Packets/micro-packets when they supersede the latest final report.",
+    "frank_priority": ["clay", "claycode", "gwt", "hyperposition", "emergenz", "frank"],
+    "rule": "Every scientific trigger ingests all connected branches before Fusion 1, scans contradictions and writes cross-links back. Clay is the integrated master foundry. FRANK uses newest Clay research as primary scientific architecture foundation and deeply ingests ClayCode as primary architecture/implementation IR."
+  },
+  "frank_architecture": {
+    "source_language": "ClayCode semantic IR",
+    "source_projection": "FRANK_ARCHITECTURE.claycode.json",
+    "human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md",
+    "validator": "tools/frank_architecture_contract.py",
+    "rule": "A FRANK run that produces only prose/diagrams/host-language code is incomplete. The architecture source of truth is ClayCode semantic IR; the deterministic host/bootstrap/capability authority remains explicitly non-self-authorizing."
   },
   "research_orchestration": {
     "policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
@@ -53,8 +64,8 @@
     "workflow": ".github/workflows/research-tool-bridge.yml",
     "request_dir": "research_entity/runtime/tool_requests",
     "result_dir": "research_entity/runtime/tool_results",
-    "verified_example": "research_entity/runtime/tool_results/bridge-smoke-openalex.json",
-    "rule": "GitHub-connected workers unable to execute repo-local provider adapters directly enqueue an allowlisted request; Actions executes it with the private credential store and writes a sanitized result."
+    "quota_feedback": "research_entity/runtime/TOOL_QUOTA_STATE.json",
+    "rule": "GitHub-connected workers unable to execute repo-local adapters directly enqueue an allowlisted request; Actions executes it with private credentials, writes a sanitized result, and caches 402/429 states for automatic future fallback."
   },
   "visible_response": {
     "protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
@@ -68,6 +79,7 @@
     "verification_policy": "research_entity/global/EXTERNAL_RESEARCH_VERIFICATION_POLICY.md",
     "health_audit": "tools/provider_health_audit.py",
     "health_state": "research_entity/runtime/PROVIDER_HEALTH.json",
+    "quota_state": "research_entity/runtime/TOOL_QUOTA_STATE.json",
     "private_token_store": "research_entity/private/API_TOKENS.env",
     "secret_loader": "tools/rae_secret_loader.py",
     "provider_status": {
@@ -81,25 +93,40 @@
       "E2B": "ADAPTER_READY_CREDENTIAL_UNAVAILABLE",
       "Judge0": "RUNTIME_VERIFIED",
       "Piston": "ADAPTER_READY_HOSTED_CREDENTIAL_UNAVAILABLE",
-      "Hugging Face Inference Providers": "RUNTIME_VERIFIED"
+      "Hugging Face auth/model discovery": "RUNTIME_VERIFIED",
+      "Hugging Face model inference": "QUOTA_EXHAUSTED_CACHED"
     },
     "credentialed_provider_status": {
       "OPENALEX_API_KEY": "WORKING_PRIVATE_REPO_STORE",
       "TAVILY_API_KEY": "WORKING_PRIVATE_REPO_STORE",
       "EXA_API_KEY": "WORKING_PRIVATE_REPO_STORE",
-      "HF_TOKEN": "WORKING_PRIVATE_REPO_STORE",
+      "HF_TOKEN": "VALID_AUTH_BUT_CURRENT_INFERENCE_QUOTA_EXHAUSTED",
       "E2B_API_KEY": "NOT_PERSISTED_CONNECTOR_BLOCKED",
       "PISTON_API_TOKEN": "NOT_CONFIGURED",
       "SEMANTIC_SCHOLAR_API_KEY": "OPTIONAL_NOT_CONFIGURED"
     },
     "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store only when the active connector permits the write; values must never be copied into canonical research artifacts, reports, logs or visible responses."
   },
+  "contract_health": {
+    "receipt": "research_entity/runtime/CONTRACT_HEALTH.json",
+    "required_gates": [
+      "interconnected_research_mesh",
+      "fresh_incomplete_branch_material",
+      "frank_clay_primary_foundation",
+      "frank_claycode_deep_secondary_foundation",
+      "frank_claycode_architecture_source_contract",
+      "provider_plan",
+      "covering_fallback_validation",
+      "status_footer_and_short_commands"
+    ]
+  },
   "limitations": [
     "no assumption of direct shell access to the live FRANK host",
     "E2B cannot be runtime-verified until E2B_API_KEY is stored through a permitted channel",
     "hosted Piston cannot be runtime-verified until PISTON_API_TOKEN is configured or a self-hosted PISTON_API_URL is supplied",
     "Semantic Scholar public shared-pool requests may transiently rate-limit; use OpenAlex/arXiv/Crossref fallback",
+    "Hugging Face model inference remains automatically bypassed until quota resets or credit is added",
     "remote writes require reread verification"
   ],
-  "rule": "This file describes current tool availability. Canonical research self-model remains historical revision-2 state until a justified research-state promotion occurs."
+  "rule": "This file describes current operational capability. Canonical scientific self-model remains revision 2 until a justified research-state promotion occurs."
 }

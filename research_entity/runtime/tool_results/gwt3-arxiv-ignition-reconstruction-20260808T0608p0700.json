@@ -1,0 +1,231 @@
+{
+  "schema_version": "1.1",
+  "request_id": "gwt3-arxiv-ignition-reconstruction-20260808T0608p0700",
+  "tool": "arxiv_search",
+  "request_sha256": "e0b07c1c9924c7f4247284cfa3888bab6b3828ed5035f3b3217e76158bbd81ab",
+  "processed_at": "2026-08-07T23:12:48.305722+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-07T23:12:48.334902+00:00",
+    "credential_required": false,
+    "query": "all:\"global workspace\" AND (all:ignition OR all:reconstruction OR all:broadcast)",
+    "start": 0,
+    "max_results": 8,
+    "total_results": 17,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2608.05160v1",
+        "title": "The Ignition Index: Measuring Global Workspace Dynamics in Language Models",
+        "summary": "We introduce the Ignition Index (I), a validated scalar metric that operationalizes Global Workspace Theory's (GWT) all-or-none ignition prediction in transformer language models. The metric fits a four-parameter sigmoid to per-layer linear probe accuracy as a function of input signal strength, extracting steepness parameter beta-hat: high values indicate abrupt, ignition-like transitions; low values indicate graded build-up. Across 11 models spanning five architecture families, shuffled-label controls demonstrate 9.6-fold selectivity for genuine linguistic structure over spurious probe capacity (p < 0.001, Mann-Whitney U-test). We find: (1) Feedforward transformers exceed SSMs by 89% in aggregate beta-hat (p < 1e-13, Cohen's d = 0.52), with Mamba exhibiting near-linear profiles consistent with absent global broadcast. (2) Huginn-3.5B exhibits 2.12-fold higher ignition along its iteration axis than its depth axis, demonstrating that recurrent architectures manifest workspace-like transitions along the recurrence dimension. (3) Pythia-410M shows a PELT-detected phase transition at training step 256 (+67%), preceding induction-head formation. (4) Hypotheses linking ignition to model scale and signal strength were not confirmed, suggesting transformer architectures may saturate available ignition mechanisms. The Ignition Index provides the first validated quantitative bridge between GWT's dynamical predictions and mechanistic interpretability, with 9.6-fold measurement selectivity and architecture-level discriminability not previously characterized in the scaling literature. Code: https://github.com/saman-rahbar/ignition-index",
+        "published": "2026-05-26T05:58:11Z",
+        "updated": "2026-05-26T05:58:11Z",
+        "authors": [
+          "Saman Rahbar"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CL",
+          "cs.LG"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "26 pages, 10 figures. Code: https://github.com/saman-rahbar/ignition-index",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2608.05160v1",
+          "pdf": "https://arxiv.org/pdf/2608.05160v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2505.13969v1",
+        "title": "Hypothesis on the Functional Advantages of the Selection-Broadcast Cycle Structure: Global Workspace Theory and Dealing with a Real-Time World",
+        "summary": "This paper discusses the functional advantages of the Selection-Broadcast Cycle structure proposed by Global Workspace Theory (GWT), inspired by human consciousness, particularly focusing on its applicability to artificial intelligence and robotics in dynamic, real-time scenarios. While previous studies often examined the Selection and Broadcast processes independently, this research emphasizes their combined cyclic structure and the resulting benefits for real-time cognitive systems. Specifically, the paper identifies three primary benefits: Dynamic Thinking Adaptation, Experience-Based Adaptation, and Immediate Real-Time Adaptation. This work highlights GWT's potential as a cognitive architecture suitable for sophisticated decision-making and adaptive performance in unsupervised, dynamic environments. It suggests new directions for the development and implementation of robust, general-purpose AI and robotics systems capable of managing complex, real-world tasks.",
+        "published": "2025-05-20T06:07:21Z",
+        "updated": "2025-05-20T06:07:21Z",
+        "authors": [
+          "Junya Nakanishi",
+          "Jun Baba",
+          "Yuichiro Yoshikawa",
+          "Hiroko Kamide",
+          "Hiroshi Ishiguro"
+        ],
+        "categories": [
+          "cs.RO",
+          "cs.AI"
+        ],
+        "primary_category": "cs.RO",
+        "doi": "10.3389/frobt.2025.1607190",
+        "journal_ref": "Frontiers in Robotics and AI, 2025, Vol. 12, Article 1607190",
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2505.13969v1",
+          "pdf": "https://arxiv.org/pdf/2505.13969v1",
+          "doi": "https://doi.org/10.3389/frobt.2025.1607190"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2503.01906v2",
+        "title": "Learning to Chain Operations by Routing Information Through a Global Workspace",
+        "summary": "We present a model inspired by the Global Workspace Theory that integrates specialized modules to perform a sequential reasoning task. A controller selectively routes information between modules through the workspace using a gating mechanism. This approach allows the model to chain operations by iteratively broadcasting information between specialized domains, mimicking System-2 reasoning. We evaluate the model's performance on a simple addition task, where two addends must be summed. The task can be solved by routing information sequentially through an Input module, an Increment module (multiple times), and finally an Output module. We consider two implementations of this system with increasing complexity. First, using hand-designed modules operating on one-hot digit representations, the controller (a LSTM recurrent network) learns to select the appropriate modules (input, increment, output) in the appropriate sequence. Second, we replace the hand-designed modules with learned representation modules for MNIST images and an increment module trained on the task objectives; here again, the controller learns the appropriate sequential module selection to solve the task. Finally, we show that the Global Workspace model, while having fewer parameters, outperforms LSTMs and Transformers when tested on unseen addition operations (both interpolations and extrapolations of addition operations seen during training). Our results highlight the potential of architectures inspired by the Global Workspace Theory to enhance deep learning's reasoning capabilities.",
+        "published": "2025-02-28T15:30:55Z",
+        "updated": "2025-03-06T21:37:23Z",
+        "authors": [
+          "Hugo Chateau-Laurent",
+          "Rufin VanRullen"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CV",
+          "q-bio.NC"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "12 pages, 14 figures, submitted to a conference",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2503.01906v2",
+          "pdf": "https://arxiv.org/pdf/2503.01906v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2403.04588v2",
+        "title": "Zero-shot cross-modal transfer of Reinforcement Learning policies through a Global Workspace",
+        "summary": "Humans perceive the world through multiple senses, enabling them to create a comprehensive representation of their surroundings and to generalize information across domains. For instance, when a textual description of a scene is given, humans can mentally visualize it. In fields like robotics and Reinforcement Learning (RL), agents can also access information about the environment through multiple sensors; yet redundancy and complementarity between sensors is difficult to exploit as a source of robustness (e.g. against sensor failure) or generalization (e.g. transfer across domains). Prior research demonstrated that a robust and flexible multimodal representation can be efficiently constructed based on the cognitive science notion of a 'Global Workspace': a unique representation trained to combine information across modalities, and to broadcast its signal back to each modality. Here, we explore whether such a brain-inspired multimodal representation could be advantageous for RL agents. First, we train a 'Global Workspace' to exploit information collected about the environment via two input modalities (a visual input, or an attribute vector representing the state of the agent and/or its environment). Then, we train a RL agent policy using this frozen Global Workspace. In two distinct environments and tasks, our results reveal the model's ability to perform zero-shot cross-modal transfer between input modalities, i.e. to apply to image inputs a policy previously trained on attribute vectors (and vice-versa), without additional training or fine-tuning. Variants and ablations of the full Global Workspace (including a CLIP-like multimodal representation trained via contrastive learning) did not display the same generalization abilities.",
+        "published": "2024-03-07T15:35:29Z",
+        "updated": "2025-06-04T15:52:00Z",
+        "authors": [
+          "Léopold Maytié",
+          "Benjamin Devillers",
+          "Alexandre Arnold",
+          "Rufin VanRullen"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": "Reinforcement Learning Journal, Vol. 3, 2024, pp. 1410-1426",
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2403.04588v2",
+          "pdf": "https://arxiv.org/pdf/2403.04588v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.08206v1",
+        "title": "\"Theater of Mind\" for LLMs: A Cognitive Architecture Based on Global Workspace Theory",
+        "summary": "Modern Large Language Models (LLMs) operate fundamentally as Bounded-Input Bounded-Output (BIBO) systems. They remain in a passive state until explicitly prompted, computing localized responses without intrinsic temporal continuity. While effective for isolated tasks, this reactive paradigm presents a critical bottleneck for engineering autonomous artificial intelligence. Current multi-agent frameworks attempt to distribute cognitive load but frequently rely on static memory pools and passive message passing, which inevitably leads to cognitive stagnation and homogeneous deadlocks during extended execution. To address this structural limitation, we propose Global Workspace Agents (GWA), a cognitive architecture inspired by Global Workspace Theory. GWA transitions multi-agent coordination from a passive data structure to an active, event-driven discrete dynamical system. By coupling a central broadcast hub with a heterogeneous swarm of functionally constrained agents, the system maintains a continuous cognitive cycle. Furthermore, we introduce an entropy-based intrinsic drive mechanism that mathematically quantifies semantic diversity, dynamically regulating generation temperature to autonomously break reasoning deadlocks. Coupled with a dual-layer memory bifurcation strategy to ensure long-term cognitive continuity, GWA provides a robust, reproducible engineering framework for sustained, self-directed LLM agency.",
+        "published": "2026-04-09T13:06:43Z",
+        "updated": "2026-04-09T13:06:43Z",
+        "authors": [
+          "Wenlong Shang"
+        ],
+        "categories": [
+          "cs.MA"
+        ],
+        "primary_category": "cs.MA",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.08206v1",
+          "pdf": "https://arxiv.org/pdf/2604.08206v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2406.12375v1",
+        "title": "GW-MoE: Resolving Uncertainty in MoE Router with Global Workspace Theory",
+        "summary": "Mixture-of-Experts (MoE) has been demonstrated as an efficient method to scale up models. By dynamically and sparsely selecting activated experts, MoE can effectively reduce computational costs. Despite the success, we observe that many tokens in the MoE models have uncertain routing results. These tokens have nearly equal scores for choosing each expert, and we demonstrate that this uncertainty can lead to incorrect selections. Inspired by the Global Workspace Theory (GWT), we propose a new fine-tuning method, GW-MoE, to address this issue. The core idea is to broadcast the uncertain tokens across experts during fine-tuning. Therefore, these tokens can acquire the necessary knowledge from any expert during inference and become less sensitive to the choice. GW-MoE does not introduce additional inference overhead. We validate that GW can mitigate the uncertain problem and consistently improve in different tasks (text classification, question answering, summarization, code generation, and mathematical problem solving) and model sizes (650M and 8B parameters).",
+        "published": "2024-06-18T08:03:51Z",
+        "updated": "2024-06-18T08:03:51Z",
+        "authors": [
+          "Haoze Wu",
+          "Zihan Qiu",
+          "Zili Wang",
+          "Hang Zhao",
+          "Jie Fu"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2406.12375v1",
+          "pdf": "https://arxiv.org/pdf/2406.12375v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2607.15495v1",
+        "title": "Verbalizable Representations Form a Global Workspace in Language Models",
+        "summary": "Out of everything the human brain processes, only a small fraction is consciously accessible, in the sense of being available for verbal report, deliberate control, and flexible reasoning. In this paper, we present evidence that an analogous functional distinction has emerged in large language models. Using a new interpretability technique, the Jacobian lens, we identify the representations a model is poised to verbalize at any point in its processing. These representations, which we collectively call the J-space, exhibit the functional properties characteristic of a global workspace: their contents can be reported, deliberately summoned and held, used to carry the intermediate steps of silent reasoning, and passed as arguments to arbitrary downstream computations, while automatic processing such as text parsing and routine inference proceeds without them. The J-space also has structural signatures that global workspace theory associates with conscious access: it carries coherent content only in an intermediate band of layers, holds on the order of tens of concepts at a time, and is broadcast by the model's weights more widely than other representations. These properties make it a practical window into a model's unspoken thinking. In alignment audits, it reveals strategic deliberation, evaluation awareness, and trained-in misaligned dispositions that never appear in the model's outputs. We find that post-training installs the Assistant's point of view in the workspace, and we introduce counterfactual reflection training, which improves behavior by training only what a model would say if interrupted and asked to reflect. These results indicate that language models maintain a small, privileged set of representations bearing some of the functional hallmarks of conscious access, and that decoding these representations sheds light on ongoing cognitive processes.",
+        "published": "2026-07-16T22:54:30Z",
+        "updated": "2026-07-16T22:54:30Z",
+        "authors": [
+          "Wes Gurnee",
+          "Nicholas Sofroniew",
+          "Adam Pearce",
+          "Mateusz Piotrowski",
+          "Isaac Kauvar",
+          "Runjin Chen",
+          "Anna Soligo",
+          "Paul Bogdan",
+          "Euan Ong",
+          "Rowan Wang",
+          "Ben Thompson",
+          "David Abrahams",
+          "Subhash Kantamneni",
+          "Emmanuel Ameisen",
+          "Joshua Batson",
+          "Jack Lindsey"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.LG"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2607.15495v1",
+          "pdf": "https://arxiv.org/pdf/2607.15495v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2508.08677v2",
+        "title": "Multi-level Collaborative Distillation Meets Global Workspace Model: A Unified Framework for OCIL",
+        "summary": "Online Class-Incremental Learning (OCIL) enables models to learn continuously from non-i.i.d. data streams. Since samples of the data streams can be seen only once, it is more suitable for real-world scenarios compared to offline learning. However, this constraint intensifies the challenge for OCIL in maintaining an appropriate balance between stability and plasticity. Moreover, under stricter memory buffer constraints in real world, current replay-based methods are less effective. While ensemble methods improve plasticity, they often struggle with stability. Inspired by the Global Workspace Theory (GWT), we propose a novel approach that enhances ensemble learning through a Global Workspace Model (GWM)-a shared, implicit memory that guides the learning of multiple student models. The GWM is formed by fusing the parameters of all students within each training batch, capturing the historical learning trajectory and serving as a dynamic anchor for knowledge consolidation. Like the broadcasting mechanism of GWT, the GWM is redistributed periodically to students, stabilizing learning and promoting cross-task consistency. In addition, we introduce a multi-level collaborative distillation mechanism. It enforces peer-to-peer consistency among students and preserves historical knowledge by aligning each student with the GWM. As a result, student models remain adaptable to new tasks while maintaining previously learned knowledge, striking a better balance between stability and plasticity. Extensive experiments on three standard OCIL benchmarks show that our method delivers significant performance improvement for several OCIL models across various memory budgets. The code is available at https://github.com/susususushi/GWM.",
+        "published": "2025-08-12T06:52:33Z",
+        "updated": "2026-05-28T01:40:35Z",
+        "authors": [
+          "Shibin Su",
+          "Guoqiang Liang",
+          "De Cheng",
+          "Shizhou Zhang",
+          "Lingyan Ran"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.CV"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "15 pages, 8 figures",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2508.08677v2",
+          "pdf": "https://arxiv.org/pdf/2508.08677v2"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

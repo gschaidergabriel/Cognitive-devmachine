@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.1",
+  "request_id": "cc8-exa-20260808T0606p0700",
+  "tool": "exa_search",
+  "request_sha256": "03af81206f65d186f4f9cffe32336b6a2fff747e9c151d9805ed4b1f171d7d35",
+  "processed_at": "2026-08-07T23:12:42.637481+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "sound effect inference dynamic access trace predicate dependency serializability transactional outbox capability systems",
+    "results": [
+      {
+        "id": "https://dl.acm.org/doi/10.1145/1835698.1835703",
+        "title": "Transactional predication | Proceedings of the 29th ACM SIGACT-SIGOPS symposium on Principles of distributed computing",
+        "url": "https://dl.acm.org/doi/10.1145/1835698.1835703",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Concurrent collection classes are widely used in multi-threaded programming, but they provide atomicity only for a fixed set of operations. Software transactional memory (STM) provides a convenient and powerful programming model for composing atomic operations, but concurrent collection algorithms that allow their operations to be composed using STM are significantly slower than their non-composable alternatives.\n...\nWe introduce transactional predication, a method for building transactional maps and sets on top of an underlying non-composable concurrent map. We factor the work of most collection operations into two parts: a portion that does not need atomicity or isolation, and a single transactional memory access. The result approximates semantic conflict detection using the STM's structural conflict detection mechanism. The separation also allows extra optimizations when the collection is used outside a transaction. We perform an experimental evaluation that shows that predication has better performance than existing transactional collection algorithms across a range of workloads.\n...\nTransactional predication: high-performance concurrent sets and maps for STM\n...\nTransactional memory (TM) is an emerging concurrency control mechanism that provides a simple and composable programming model. Unfortunately, transactions violate the semantics of mutual exclusion locks when they execute concurrently. Due to the ...\n...\nTo improve the performance of transactional memory (TM), researchers have found many eager and lazy optimizations for conflict detection, the process of determining if transactions can commit. Despite these optimizations, nearly all TMs perform one ..."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.vldb.org/pvldb/vol14/p268-alvaro.pdf",
+        "title": "Elle: Inferring Isolation Anomalies from Experimental Observations",
+        "url": "https://www.vldb.org/pvldb/vol14/p268-alvaro.pdf",
+        "published_date": null,
+        "author": "Kyle Kingsbury and Peter Alvaro",
+        "text": null,
+        "highlights": [
+          "Users who care about their data store it in databases, which (at least in principle) guarantee some form of transactional isolation. However, experience shows that many databases do not provide the isolation guarantees they claim. With the recent proliferation of new distributed databases, demand has grown for checkers that can, by generating client workloads and injecting faults, produce anomalies that witness a violation of a stated guarantee. An ideal checker would be sound (no false positives), efficient (polynomial in history length and concurrency), effective (finding violations in real databases), general (analyzing many patterns of transactions), and informative (justifying the presence of an anomaly with un derstandable counterexamples). Sadly, we are aware of no checkers that satisfy these goals. We present Elle: a novel checker which infers an Adya-style dependency graph between client-observed transactions. It does so by carefully selecting database objects and operations when generating histories, so as to ensure that the results of database reads reveal information about their version history. Elle can detect every anomaly in Adya et al’s formalism (except for predicates), discriminate between them, and provide concise explanations of each. This paper makes the following contributions: we present Elle, demonstrate its soundness over specific datatypes, measure its efficiency against the current state of the art, and give evidence of its effectiveness via a case study of four real databases.\n...\nchecking is also (in general) NP-complete [30]Ð and unlike linearizability, one cannot use real-time constraints to reduce the search space. Following the abstract execution formal ism of Cerone, Bernardi, and Gotsman [12], Kingsbury\n...\nWhat would an ideal checker for transaction isolation look like? Such a checker would accept many patterns of transactions, rather than specific, hand-coded examples. It would distinguish between different types of anomalies, al"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.soundandcomplete.org/papers/ECOOP2020/ECOOP2020-Transactions.pdf",
+        "title": "Data Consistency in Transactional Storage Systems: A Centralised Semantics",
+        "url": "https://www.soundandcomplete.org/papers/ECOOP2020/ECOOP2020-Transactions.pdf",
+        "published_date": null,
+        "author": "Shale Xiong, Andrea Cerone, Azalea Raad, Philippa Gardner",
+        "text": null,
+        "highlights": [
+          "48 The declarative approach for defining consistency models using execution graphs has \n49 been substantially studied [1, 9, 11, 12, 14]. In such graphs, nodes describe the read-write \n50 sets of atomic transactions and edges describe the known dependencies between transactions. \n51 They capture different consistency models by: (1) constructing candidate executions of the \n52 whole program comprising transactions in which reads may contain arbitrary values; and \n53 (2) applying the consistency-model axioms to rule out candidate executions deemed invalid \n54 by the axioms. Such axioms may state, for example, that every read is validated by a write \n55 that has written the read value. The most well-known execution graphs are dependency \n56 graphs [1] and abstract executions [9, 11]. Dependency graphs tend to be used to analyse \n57 client programs, e.g. Fekete et al. [23] derived a static analysis checker for a particular \n58 weak consistency model called snapshot isolation; Bernardi and Gotsman [7] developed a \n59 static analysis checker for several weak consistency models assuming the so-called snapshot\n...\n106 causal consistency (CC) [9, 33, 40], parallel snapshot isolation (PSI) [3, 42], snapshot isolation\n...\n107 (SI) [6] and serialisability (SER) [37]. The work in [35] is as expressive as our work here; by\n...\n132 Crooks et al. [16] proposed a state-based trace semantics for describing weak consistency \n133 models that employs concepts similar to our client views and execution tests, called read states \n134 and commit tests respectively. In their semantics, a one-step trace reduction is determined \n135 by the entire previous history of the trace. By contrast, our reduction step only depends on \n136 the current kv-store and client view. They capture more consistency models than us, e.g.\n...\nthe dependency graphs. We have two concerns \n148 with this approach. First, despite assuming atomic visibility of transactions, they present a \n149 fine-grained semantics at th"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.lix.polytechnique.fr/~cenea/papers/pldi23.pdf",
+        "title": "Dynamic Partial Order Reduction for Checking Correctness Against Transaction Isolation Levels",
+        "url": "https://www.lix.polytechnique.fr/~cenea/papers/pldi23.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "[Akkoorath and Bieniusa 2016; Lamport 1978; Lloyd et al. 2011], Snapshot Isolation [Berenson et al. 1995], Read Committed [Berenson et al. 1995], etc. for better performance. In a recent survey of database administrators [Pavlo 2017], 86% of the\n...\nDynamic Partial Order Reduction for Checking Correctness Against Transaction Isolation Levels 129:3 optimality while preserving the other properties, e.g., completeness and polynomial memory complexity, is very challenging. Next, we explain the main steps and features of our work. Formalizing Isolation Levels. Our algorithms rely on the axiomatic definitions of isolation levels introduced by Biswas and Enea [2019]. These definitions use logical constraints called axioms to characterize the set of executions of a database (e.g., key-value store) that conform to a particular isolation level (extensible to SQL queries [Biswas et al. 2021]). These constraints refer to a specific set of relations between events/transactions in an execution that describe control-flow or data-flow dependencies: a program order po between events in the same transaction, a session order so between transactions in the same session1, and a write-read wr (read-from) relation that associates each read event with a transaction that writes the value returned by the read. These relations along with the events in an execution are called a history. A history describes only the interaction with the database, omitting application-side events (e.g., computing values written to the database). Execution Equivalence. DPOR algorithms are parametrized by an equivalence relation on exe cutions, most often, Mazurkiewicz equivalence [Mazurkiewicz 1986]. In this work, we consider a weaker equivalence relation, also known as read-from equivalence [Abdulla et al. 2019, 2018; Chalupa et al. 2018; Kokologiannakis et al. 2022, 2019; Kokologiannakis and Vafeiadis 2020], which considers that two executions are equivalent when their histories are precisely the same (they con"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.soundandcomplete.org/papers/ESOP2018/PSI-ESOP-2018.pdf",
+        "title": "{ azalea,viktor}",
+        "url": "https://www.soundandcomplete.org/papers/ESOP2018/PSI-ESOP-2018.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "One might expect that if the annotated behaviour is allowed in (SB+txs), it should also be allowed in (SB+txs+chop). This indeed is the case for PSI, but not for SI! In fact, in the extreme case where every transaction contains a single access, SI provides serialisability. Nevertheless, PSI currently has two significant drawbacks, preventing its widespread adoption. We aim to address these here. The first PSI drawback is that its formal semantics can be rather daunting for the uninitiated as it is defined declaratively in terms of acyclicity constraints. What is missing is perhaps a simple lock-based reference implementation of PSI, similar to the lock-based implementations of GLA and DLA, that the programmers can readily understand and reason about. As an added benefit, such an implementation can be viewed as an operational model, forming the basis for developing program logics for reasoning about PSI programs. Although Cerone et al. [15] proved their declarative PSI specification equiva lent to an implementation strategy of PSI in a distributed system with replicated storage over causal consistency, their implementation is not suitable for reasoning about shared-memory programs. In particular, it cannot help the programmers determine how transactional and non-transactional accesses may interact. As our first contribution, in § 4 we address this PSI drawback by providing a simple lock-based reference implementation that we prove equivalent to its declarative specification. Typically, one proves that an implementation is sound with respect to a declarative specification—i.e. every behaviour observable in the implementation is accounted for in the declarative specification. Here, we also want the other direction, known as completeness, namely that every behaviour allowed by the specification is actually possible in the implementation. Having a (simple) complete implementation is very useful for programmers, as it may be easier to understand and experiment with than t"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.cs.purdue.edu/homes/suresh/papers/popl18.pdf",
+        "title": "Alone Together: Compositional Reasoning and Inference for Weak Isolation",
+        "url": "https://www.cs.purdue.edu/homes/suresh/papers/popl18.pdf",
+        "published_date": null,
+        "author": "Gowtham Kaki, Kartik Nagar, Mahsa Najafzadeh, and Suresh Jagannathan",
+        "text": null,
+        "highlights": [
+          "To address this issue, we present a novel program logic that enables compositional reasoning about the\n...\nbehavior of concurrently executing weakly-isolated transactions. Recognizing that the proof burden necessary \nto use this logic may dissuade application developers, we also describe an inference procedure based on this \nfoundation that ascertains the weakest isolation level that still guarantees the safety of high-level consistency \ninvariants associated with such transactions. The key to effective inference is the observation that weakly \nisolated transactions can be viewed as functional (monadic) computations over an abstract database state, \nallowing us to treat their operations as state transformers over the database. This interpretation enables \nautomated verification using off-the-shelf SMT solvers. \nOur development is parametric over a transaction’s specific isolation semantics, allowing it to be applicable \nover a range of weak isolation mechanisms. Case studies and experiments on real-world applications (written \nin an embedded DSL in OCaml) demonstrate the utility of our approach, and provide strong evidence that \nautomated verification of weakly-isolated transactions can be placed on the same formal footing as their \nstrongly-isolated serializable counterparts. \nCCS Concepts: • Software and its engineering→Formal software verification;\n...\nby off-the-shelf SMT \nsolvers. The paper makes the following contributions: \n(1) We\n...\n(2) We develop an operational semantics and a compositional rely-guarantee style proof system for this language capable of relating high-level application invariants to database state, parameterized by a weak isolation semantics that selectively exposes the visibility of these operations to other transactions. (3) We devise an inference algorithm capable of discovering the weakest isolation level that is sound with respect to a transaction’s high-level consistency requirements. The algorithm interprets database operations as sta"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.vldb.org/pvldb/vol14/p1467-gaffney.pdf",
+        "title": "Database Isolation By Scheduling",
+        "url": "https://www.vldb.org/pvldb/vol14/p1467-gaffney.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "used a global database lock to serialize modifications to the database [32]. In this paper, we propose a new approach to extract transaction isolation functionality from the other components of the transac tional storage manager. Our approach provides isolation guarantees as a modular service that is agnostic to the contents of the database and the implementation of the other data processing components. This design reduces the complexity of transactional storage manage ment and facilitates adding transactional support to new systems. We refer to this design as isolation by scheduling. In this paradigm, a transactional request is allowed to proceed only if it is guaranteed not to conflict with a concurrent request, regardless of the state of the database. The database system may then execute these re quests without additional isolation mechanisms, such as locking and versioning. To modularize isolation, we build on predicate locking [14], an often overlooked isolation mechanism. Under the predicate locking protocol, each lock is associated with a predicate. Predicates are then analyzed to determine whether locks conflict. Each lock then refers to a logical subset of the database. Contrast this to conven tional isolation mechanisms, which deal with physical items in a database such as tables and rows. The distinction between logical and physical isolation allows predicate locking to be implemented as a modular component, while other isolation mechanisms are usually intertwined with other components in the transactional storage manager. Unfortunately, general predicate locking is NP complete as it can be reduced to the boolean satisfiability problem. Consequently, it has received relatively little attention in the data base community. To the best of our knowledge, general predicate locking is not used as the sole isolation mechanism in any main stream database system. However, in this paper, we present several predicate locking optimizations that substantially improve "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.vldb.org/pvldb/vol18/p1362-ghasemirad.pdf",
+        "title": "VerIso: Verifiable Isolation Guarantees for Database Transactions",
+        "url": "https://www.vldb.org/pvldb/vol18/p1362-ghasemirad.pdf",
+        "published_date": null,
+        "author": "Shabnam Ghasemirad, Si Liu, Christoph Sprenger, Luca Multazzu, and David Basin",
+        "text": null,
+        "highlights": [
+          "system performance. In addition to the gold standard Serializabil ity (SER) as well as the widely adopted Snapshot Isolation (SI) [23, 27, 44], many weaker isolation levels have emerged to cater for real world applications. These include Read Atomicity (RA), supported by [5, 33, 35] and recently layered atop Facebook’s TAO [12]; Trans actional Causal Consistency (TCC), supported by [3, 9, 17, 35, 38, 39, 42, 51], and recently adopted by commercial databases [19, 43, 45]. Unfortunately, isolation bugs have repeatedly manifested them selves in carefully designed and heavily tested databases [8, 18, 24– 26]. In particular, all these isolation bugs stemmed from design-level defects, rather than implementation errors. For example, Yugabyte DB was found to violate SER as its conflict-detection mechanism failed to account for read conflicts [28], MariaDB’s Galera cluster incorrectly claimed SI support [24, 31], and Lu et al. [40] recently reported violations of the claimed Strict SER (SSER) in TAPIR [58] and DrTM [55]. Eliminating such bugs, which requires costly re designs, and achieving strong correctness guarantees is a crucial, challenging task for developers. Here, the formal verification of database designs is highly desirable, preferably in an early design stage. Indeed, the industrial adoption of formal methods in the wider area of production databases [4, 16, 46, 53] has become increasingly prevalent as a proactive approach to address such design errors. The formal verification of concurrency control protocols neces sitates a formal semantics for isolation guarantees. Many seman tics have been proposed [2, 7, 8, 11, 15, 37, 56], including the first characterization of SER via dependency graphs [7], an axiomatic framework based on abstract executions [11], and the recent opera tional semantics for isolation guarantees [56]. Nonetheless, protocol verification based on these semantics relies on either (i) manual pen-and-paper proofs, which are error-prone for complex"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "d6034b7d371fe2688fd161a926ac42ab",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

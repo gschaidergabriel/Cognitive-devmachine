@@ -1,0 +1,390 @@
+{
+  "schema_version": "1.1",
+  "request_id": "cc8-arxiv-20260808T0606p0700",
+  "tool": "arxiv_search",
+  "request_sha256": "da91a433aba4c3542e632fa84f15b17734163df7dfb6563c784ed90fc618e9eb",
+  "processed_at": "2026-08-07T23:12:41.588567+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-07T23:12:42.579209+00:00",
+    "credential_required": false,
+    "query": "all:(effect system OR dynamic dependency tracking OR serializable snapshot isolation OR predicate locking OR temporal dependency)",
+    "start": 0,
+    "max_results": 15,
+    "total_results": 1647621,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/1208.4179v1",
+        "title": "Serializable Snapshot Isolation in PostgreSQL",
+        "summary": "This paper describes our experience implementing PostgreSQL's new serializable isolation level. It is based on the recently-developed Serializable Snapshot Isolation (SSI) technique. This is the first implementation of SSI in a production database release as well as the first in a database that did not previously have a lock-based serializable isolation level. We reflect on our experience and describe how we overcame some of the resulting challenges, including the implementation of a new lock manager, a technique for ensuring memory usage is bounded, and integration with other PostgreSQL features. We also introduce an extension to SSI that improves performance for read-only transactions. We evaluate PostgreSQL's serializable isolation level using several benchmarks and show that it achieves performance only slightly below that of snapshot isolation, and significantly outperforms the traditional two-phase locking approach on read-intensive workloads.",
+        "published": "2012-08-21T02:56:46Z",
+        "updated": "2012-08-21T02:56:46Z",
+        "authors": [
+          "Dan R. K. Ports",
+          "Kevin Grittner"
+        ],
+        "categories": [
+          "cs.DB"
+        ],
+        "primary_category": "cs.DB",
+        "doi": null,
+        "journal_ref": "Proceedings of the VLDB Endowment (PVLDB), Vol. 5, No. 12, pp. 1850-1861 (2012)",
+        "comment": "VLDB2012",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1208.4179v1",
+          "pdf": "https://arxiv.org/pdf/1208.4179v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2010.14573v2",
+        "title": "Dependency Smells in JavaScript Projects",
+        "summary": "Dependency management in modern software development poses many challenges for developers who wish to stay up to date with the latest features and fixes whilst ensuring backwards compatibility. Project maintainers have opted for varied, and sometimes conflicting, approaches for maintaining their dependencies. Opting for unsuitable approaches can introduce bugs and vulnerabilities into the project, introduce breaking changes, cause extraneous installations, and reduce dependency understandability, making it harder for others to contribute effectively. In this paper, we empirically examine evidence of recurring dependency management issues (dependency smells). We look at the commit data for a dataset of 1,146 active JavaScript repositories to catalog, quantify and understand dependency smells. Through a series of surveys with practitioners, we identify and quantify seven dependency smells with varying degrees of popularity and investigate why they are introduced throughout project history. Our findings indicate that dependency smells are prevalent in JavaScript projects with two or more distinct smells appearing in 80% of the projects, but they generally infect a minority of a project's dependencies. Our observations show that the number of dependency smells tend to increase over time. Practitioners agree that dependency smells bring about many problems including security threats, bugs, dependency breakage, runtime errors, and other maintenance issues. These smells are generally introduced as developers react to dependency misbehaviour and the shortcomings of the npm ecosystem.",
+        "published": "2020-10-27T19:31:02Z",
+        "updated": "2021-08-18T20:06:49Z",
+        "authors": [
+          "Abbas Javan Jafari",
+          "Diego Elias Costa",
+          "Rabe Abdalkareem",
+          "Emad Shihab",
+          "Nikolaos Tsantalis"
+        ],
+        "categories": [
+          "cs.SE"
+        ],
+        "primary_category": "cs.SE",
+        "doi": "10.1109/TSE.2021.3106247",
+        "journal_ref": "IEEE Transactions on Software Engineering (TSE), 2021",
+        "comment": "Keywords: Dependency smells, Software ecosystems, Dependency management, npm",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2010.14573v2",
+          "pdf": "https://arxiv.org/pdf/2010.14573v2",
+          "doi": "https://doi.org/10.1109/TSE.2021.3106247"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2204.05972v1",
+        "title": "S-DABT: Schedule and Dependency-Aware Bug Triage in Open-Source Bug Tracking Systems",
+        "summary": "Fixing bugs in a timely manner lowers various potential costs in software maintenance. However, manual bug fixing scheduling can be time-consuming, cumbersome, and error-prone. In this paper, we propose the Schedule and Dependency-aware Bug Triage (S-DABT), a bug triaging method that utilizes integer programming and machine learning techniques to assign bugs to suitable developers. Unlike prior works that largely focus on a single component of the bug reports, our approach takes into account the textual data, bug fixing costs, and bug dependencies. We further incorporate the schedule of developers in our formulation to have a more comprehensive model for this multifaceted problem. As a result, this complete formulation considers developers' schedules and the blocking effects of the bugs while covering the most significant aspects of the previously proposed methods. Our numerical study on four open-source software systems, namely, EclipseJDT, LibreOffice, GCC, and Mozilla, shows that taking into account the schedules of the developers decreases the average bug fixing times. We find that S-DABT leads to a high level of developer utilization through a fair distribution of the tasks among the developers and efficient use of the free spots in their schedules. Via the simulation of the issue tracking system, we also show how incorporating the schedule in the model formulation reduces the bug fixing time, improves the assignment accuracy, and utilizes the capability of each developer without much comprising in the model run times. We find that S-DABT decreases the complexity of the bug dependency graph by prioritizing blocking bugs and effectively reduces the infeasible assignment ratio due to bug dependencies. Consequently, we recommend considering developers' schedules while automating bug triage.",
+        "published": "2022-04-12T17:36:43Z",
+        "updated": "2022-04-12T17:36:43Z",
+        "authors": [
+          "Hadi Jahanshahi",
+          "Mucahit Cevik"
+        ],
+        "categories": [
+          "cs.SE",
+          "cs.LG"
+        ],
+        "primary_category": "cs.SE",
+        "doi": "10.1016/j.infsof.2022.107025",
+        "journal_ref": "Information and Software Technology, 28 July 2022, 107025",
+        "comment": "An extension of \"DABT: A Dependency-aware Bug Triaging Method\" arXiv:2104.12744",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2204.05972v1",
+          "pdf": "https://arxiv.org/pdf/2204.05972v1",
+          "doi": "https://doi.org/10.1016/j.infsof.2022.107025"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1605.05025v6",
+        "title": "The Hourglass Effect in Hierarchical Dependency Networks",
+        "summary": "Many hierarchically modular systems are structured in a way that resembles an hourglass. This \"hourglass effect\" means that the system generates many outputs from many inputs through a relatively small number of intermediate modules that are critical for the operation of the entire system, referred to as the waist of the hourglass. We investigate the hourglass effect in general, not necessarily layered, hierarchical dependency networks. Our analysis focuses on the number of source-to-target dependency paths that traverse each vertex, and it identifies the core of a dependency network as the smallest set of vertices that collectively cover almost all dependency paths. We then examine if a given network exhibits the hourglass property or not, comparing its core size with a \"flat\" (i.e., non-hierarchical) network that preserves the source dependencies of each target in the original network. As a possible explanation for the hourglass effect, we propose the Reuse Preference (RP) model that captures the bias of new modules to reuse intermediate modules of similar complexity instead of connecting directly to sources or low complexity modules. We have applied the proposed framework in a diverse set of dependency networks from technological, natural and information systems, showing that all these networks exhibit the general hourglass property but to a varying degree and with different waist characteristics.",
+        "published": "2016-05-17T05:54:27Z",
+        "updated": "2018-04-22T15:41:52Z",
+        "authors": [
+          "Kaeser M Sabrin",
+          "Constantine Dovrolis"
+        ],
+        "categories": [
+          "cs.SI",
+          "physics.soc-ph"
+        ],
+        "primary_category": "cs.SI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Keywords: Modularity, Hierarchy, Evolvability, Robustness, Complexity, Centrality, Core-Periphery Networks, Hourglass Networks, Bow-Tie Networks, Dependency Networks",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1605.05025v6",
+          "pdf": "https://arxiv.org/pdf/1605.05025v6"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2201.07993v2",
+        "title": "Serializable HTAP with Abort-/Wait-free Snapshot Read",
+        "summary": "Concurrency Control (CC) ensuring consistency of updated data is an essential element of OLTP systems. Recently, hybrid transactional/analytical processing (HTAP) systems developed for executing OLTP and OLAP have attracted much attention. The OLAP side CC domain has been isolated from OLTP's CC and in many cases has been achieved by snapshot isolation (SI) to establish HTAP systems. Although higher isolation level is ideal, considering OLAP read-only transactions in the context of OLTP scheduling achieving serializability forces aborts/waits and would be a potential performance problem. Furthermore, executing OLAP without affecting OLTP as much as possible is needed for HTAP systems. The aim of this study was serializability without additional aborts/waits. We propose read safe snapshot (RSS) using multiversion CC (MVCC) theory and introduce the RSS construction algorithm utilizing serializable snapshot isolation (SSI). For serializability of HTAP systems, our model makes use of multiversion and allows more schedules with read operations whose corresponding write operations do not participate in the dependency cycles. Furthermore, we implemented the algorithm practically in an open-source database system that offers SSI. Our algorithm was integrated into two types of architecture as HTAP systems called as unified (single-node) or decoupled (multinode) storage architecture. We evaluate the performance and abort rate of the single-node architecture where SSI is applicable. The multi-node architecture was investigated for examining the performance overhead applying our algorithm.",
+        "published": "2022-01-20T04:18:07Z",
+        "updated": "2022-04-21T10:01:29Z",
+        "authors": [
+          "Takamitsu Shioi",
+          "Takashi Kambayashi",
+          "Suguru Arakawa",
+          "Ryoji Kurosawa",
+          "Satoshi Hikida",
+          "Haruo Yokota"
+        ],
+        "categories": [
+          "cs.DB"
+        ],
+        "primary_category": "cs.DB",
+        "doi": "10.1016/j.is.2024.102385",
+        "journal_ref": "Infomation.Systems.124(2014)102385",
+        "comment": "13pages",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2201.07993v2",
+          "pdf": "https://arxiv.org/pdf/2201.07993v2",
+          "doi": "https://doi.org/10.1016/j.is.2024.102385"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2405.18393v1",
+        "title": "A Critique of Snapshot Isolation",
+        "summary": "The support for transactions is an essential part of a database management system (DBMS). Without this support, the developers are burdened with ensuring atomic execution of a transaction despite failures as well as concurrent accesses to the database by other transactions. Ideally, a transactional system provides serializability, which means that the outcome of concurrent transactions is equivalent to a serial execution of them. Based on experiences on lock-based implementations, nevertheless, serializability is known as an expensive feature that comes with high overhead and low concurrency. Commercial systems, hence, compromise serializability by implementing weaker guarantees such as snapshot isolation. The developers, therefore, are still burdened with the anomalies that could arise due to the lack of serializability. There have been recent attempts to enrich large-scale data stores, such as HBase and BigTable, with transactional support. Not surprisingly, inspired by traditional database management systems, serializability is usually compromised for the benefit of efficiency. For example, Google Percolator, implements lock-based snapshot isolation on top of BigTable. We show in this paper that this compromise is not necessary in lock-free implementations of transactional support. We introduce write-snapshot isolation, a novel isolation level that has a performance comparable with that of snapshot isolation, and yet provides serializability. The main insight in write-snapshot isolation is to prevent read-write conflicts in contrast to write-write conflicts that are prevented by snapshot isolation.",
+        "published": "2024-05-28T17:33:57Z",
+        "updated": "2024-05-28T17:33:57Z",
+        "authors": [
+          "Daniel Gómez Ferro",
+          "Maysam Yabandeh"
+        ],
+        "categories": [
+          "cs.DB"
+        ],
+        "primary_category": "cs.DB",
+        "doi": "10.1145/2168836.2168853",
+        "journal_ref": "EuroSys 2012",
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2405.18393v1",
+          "pdf": "https://arxiv.org/pdf/2405.18393v1",
+          "doi": "https://doi.org/10.1145/2168836.2168853"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1801.06613v2",
+        "title": "Building an Ellipsis-aware Chinese Dependency Treebank for Web Text",
+        "summary": "Web 2.0 has brought with it numerous user-produced data revealing one's thoughts, experiences, and knowledge, which are a great source for many tasks, such as information extraction, and knowledge base construction. However, the colloquial nature of the texts poses new challenges for current natural language processing techniques, which are more adapt to the formal form of the language. Ellipsis is a common linguistic phenomenon that some words are left out as they are understood from the context, especially in oral utterance, hindering the improvement of dependency parsing, which is of great importance for tasks relied on the meaning of the sentence. In order to promote research in this area, we are releasing a Chinese dependency treebank of 319 weibos, containing 572 sentences with omissions restored and contexts reserved.",
+        "published": "2018-01-20T01:59:21Z",
+        "updated": "2018-01-23T04:35:30Z",
+        "authors": [
+          "Xuancheng Ren",
+          "Xu Sun",
+          "Ji Wen",
+          "Bingzhen Wei",
+          "Weidong Zhan",
+          "Zhiyuan Zhang"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "The treebank is available at https://github.com/lancopku/Chinese-Dependency-Treebank-with-Ellipsis",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1801.06613v2",
+          "pdf": "https://arxiv.org/pdf/1801.06613v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2006.07082v5",
+        "title": "Resource dependency and survivability in complex networks",
+        "summary": "Components in many real-world complex systems depend on each other for the resources required for survival, and may die of a shortage. These patterns of dependencies often take the form of a complex network whose structure potentially affects how the resources produced in the system are efficiently shared among its components, which in turn decides a network's survivability. Here we present a simple threshold model that provides insight into this relationship between the network structure and survivability. We show that, as a combined effect of local sharing and finite lifetime of resources, many components in a complex system may die of lack of resources even when sufficient amount is available in the system. We also obtain a surprising result that although the scale-free networks exhibit a significantly higher survivability compared to their homogeneous counterparts, a vertex in the later survives longer on average. Finally, we demonstrate that the system's survivability can be substantially improved by changing the way vertices distribute resources among the neighbours. Our work is a step towards understanding the relationship between intricate resource dependencies present in many real-world complex systems and their survivability.",
+        "published": "2020-06-12T11:09:19Z",
+        "updated": "2022-02-03T05:21:16Z",
+        "authors": [
+          "Madhusudan Ingale",
+          "Snehal M. Shekatkar"
+        ],
+        "categories": [
+          "physics.soc-ph",
+          "cs.SI",
+          "nlin.AO"
+        ],
+        "primary_category": "physics.soc-ph",
+        "doi": "10.1103/PhysRevE.102.062304",
+        "journal_ref": "Phys. Rev. E 102, 062304 (2020)",
+        "comment": "8 pages, 9 figures. Code is freely available at https://gitlab.com/snehalshekatkar/dependency-networks",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2006.07082v5",
+          "pdf": "https://arxiv.org/pdf/2006.07082v5",
+          "doi": "https://doi.org/10.1103/PhysRevE.102.062304"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1703.06686v5",
+        "title": "Copula Index for Detecting Dependence and Monotonicity between Stochastic Signals",
+        "summary": "This paper introduces a nonparametric copula-based index for detecting the strength and monotonicity structure of linear and nonlinear statistical dependence between pairs of random variables or stochastic signals. Our index, termed Copula Index for Detecting Dependence and Monotonicity (CIM), satisfies several desirable properties of measures of association, including Renyi's properties, the data processing inequality (DPI), and consequently self-equitability. Synthetic data simulations reveal that the statistical power of CIM compares favorably to other state-of-the-art measures of association that are proven to satisfy the DPI. Simulation results with real-world data reveal the CIM's unique ability to detect the monotonicity structure among stochastic signals to find interesting dependencies in large datasets. Additionally, simulations show that the CIM shows favorable performance to estimators of mutual information when discovering Markov network structure.",
+        "published": "2017-03-20T11:26:04Z",
+        "updated": "2018-10-06T06:09:04Z",
+        "authors": [
+          "Kiran Karra",
+          "Lamine Mili"
+        ],
+        "categories": [
+          "stat.ML",
+          "q-bio.QM"
+        ],
+        "primary_category": "stat.ML",
+        "doi": "10.1016/j.ins.2019.02.007",
+        "journal_ref": null,
+        "comment": "Keywords: copula, statistical dependency, monotonic, equitability, discrete 40 pages",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1703.06686v5",
+          "pdf": "https://arxiv.org/pdf/1703.06686v5",
+          "doi": "https://doi.org/10.1016/j.ins.2019.02.007"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1908.02895v1",
+        "title": "Neural Network based Deep Transfer Learning for Cross-domain Dependency Parsing",
+        "summary": "In this paper, we describe the details of the neural dependency parser sub-mitted by our team to the NLPCC 2019 Shared Task of Semi-supervised do-main adaptation subtask on Cross-domain Dependency Parsing. Our system is based on the stack-pointer networks(STACKPTR). Considering the im-portance of context, we utilize self-attention mechanism for the representa-tion vectors to capture the meaning of words. In addition, to adapt three dif-ferent domains, we utilize neural network based deep transfer learning which transfers the pre-trained partial network in the source domain to be a part of deep neural network in the three target domains (product comments, product blogs and web fiction) respectively. Results on the three target domains demonstrate that our model performs competitively.",
+        "published": "2019-08-08T01:16:34Z",
+        "updated": "2019-08-08T01:16:34Z",
+        "authors": [
+          "Zhentao Xia",
+          "Likai Wang",
+          "Weiguang Qu",
+          "Junsheng Zhou",
+          "Yanhui Gu"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "paper for NLPCC 2019 Shared Task of Semi-supervised domain adaptation subtask on Cross-domain Dependency Parsing",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1908.02895v1",
+          "pdf": "https://arxiv.org/pdf/1908.02895v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2103.13615v1",
+        "title": "A map of approaches to temporal networks",
+        "summary": "The study of temporal networks is motivated by the simple and important observation that just as network structure can affect dynamics, so can structure in time. Just as network topology can teach us about the system in question, so can its temporal characteristics. In many cases, leaving out either one of these components would lead to an incomplete understanding of the system or poor predictions. We argue that including time into network modeling inevitably leads researchers away from the trodden paths of network science. Temporal network theory requires something different -- new methods, new concepts, new questions -- compared to static networks. In this introductory chapter, we overview the ideas that the field of temporal networks has brought forward in the last decade. We also place the contributions to the current volume on this map of temporal-network approaches.",
+        "published": "2021-03-25T05:46:48Z",
+        "updated": "2021-03-25T05:46:48Z",
+        "authors": [
+          "Petter Holme",
+          "Jari Saramäki"
+        ],
+        "categories": [
+          "physics.soc-ph"
+        ],
+        "primary_category": "physics.soc-ph",
+        "doi": null,
+        "journal_ref": "In: Holme, Saramäki, Temporal Network Theory (Springer, Cham, 2019), pp. 1-24",
+        "comment": "Introductory chapter to the book: Holme, Saramäki, Temporal Network Theory (Springer, Cham, 2019)",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2103.13615v1",
+          "pdf": "https://arxiv.org/pdf/2103.13615v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1605.04292v5",
+        "title": "Efficiently making (almost) any concurrency control mechanism serializable",
+        "summary": "Concurrency control (CC) algorithms must trade off strictness for performance. Serializable CC schemes generally pay higher cost to prevent anomalies, both in runtime overhead and in efforts wasted by aborting transactions. We propose the serial safety net (SSN), a serializability-enforcing certifier which can be applied with minimal overhead on top of various CC schemes that offer higher performance but admit anomalies, such as snapshot isolation and read committed. The underlying CC retains control of scheduling and transactional accesses, while SSN tracks the resulting dependencies. At commit time, SSN performs an efficient validation test by examining only direct dependencies of the committing transaction to determine whether it can commit safely or must abort to avoid a potential dependency cycle. SSN performs robustly for various workloads. It maintains the characteristics of the underlying CC without biasing toward certain types of transactions, though the underlying CC might. Besides traditional OLTP workloads, SSN also allows efficient handling of heterogeneous workloads with long, read-mostly transactions. SSN can avoid tracking the majority of reads (thus reducing the overhead of serializability certification) and still produce serializable executions with little overhead. The dependency tracking and validation tests can be done efficiently, fully parallel and latch-free, for multi-version systems on modern hardware with substantial core count and large main memory. We demonstrate the efficiency, accuracy and robustness of SSN using extensive simulations and an implementation that overlays snapshot isolation in ERMIA, a memory-optimized OLTP engine that is capable of running different CC schemes. Evaluation results confirm that SSN is a promising approach to serializability with robust performance and low overhead for various workloads.",
+        "published": "2016-05-13T19:14:52Z",
+        "updated": "2017-05-04T14:54:53Z",
+        "authors": [
+          "Tianzheng Wang",
+          "Ryan Johnson",
+          "Alan Fekete",
+          "Ippokratis Pandis"
+        ],
+        "categories": [
+          "cs.DB"
+        ],
+        "primary_category": "cs.DB",
+        "doi": "10.1007/s00778-017-0463-8",
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/1605.04292v5",
+          "pdf": "https://arxiv.org/pdf/1605.04292v5",
+          "doi": "https://doi.org/10.1007/s00778-017-0463-8"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2502.00991v1",
+        "title": "TxnSails: Achieving Serializable Transaction Scheduling with Self-Adaptive Isolation Level Selection",
+        "summary": "Achieving the serializable isolation level, regarded as the gold standard for transaction processing, is costly. Recent studies reveal that adjusting specific query patterns within a workload can still achieve serializability even at lower isolation levels. Nevertheless, these studies typically overlook the trade-off between the performance advantages of lower isolation levels and the overhead required to maintain serializability, potentially leading to suboptimal isolation level choices that fail to maximize performance. In this paper, we present TxnSails, a middle-tier solution designed to achieve serializable scheduling with self-adaptive isolation level selection. First, TxnSails incorporates a unified concurrency control algorithm that achieves serializability at lower isolation levels with minimal additional overhead. Second, TxnSails employs a deep learning method to characterize the trade-off between the performance benefits and overhead associated with lower isolation levels, thus predicting the optimal isolation level. Finally, TxnSails implements a cross-isolation validation mechanism to ensure serializability during real-time isolation level transitions. Extensive experiments demonstrate that TxnSails outperforms state-of-the-art solutions by up to 26.7x and PostgreSQL's serializable isolation level by up to 4.8x.",
+        "published": "2025-02-03T02:17:44Z",
+        "updated": "2025-02-03T02:17:44Z",
+        "authors": [
+          "Qiyu Zhuang",
+          "Wei Lu",
+          "Shuang Liu",
+          "Yuxing Chen",
+          "Xinyue Shi",
+          "Zhanhao Zhao",
+          "Yipeng Sun",
+          "Anqun Pan",
+          "Xiaoyong Du"
+        ],
+        "categories": [
+          "cs.DB"
+        ],
+        "primary_category": "cs.DB",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2502.00991v1",
+          "pdf": "https://arxiv.org/pdf/2502.00991v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1406.7762v1",
+        "title": "Comparison between illumination model and hydrodynamic simulation for a Direct Drive laser irradiated target",
+        "summary": "A spherical target irradiated by laser beams located at 49o and 131o with respect to the polar axis has been considered. The illumination model has been used to evaluate the irradiation non-uniformity assuming circular and elliptical super-gaussian laser intensity profiles and the irradiation scheme has been optimized by means of the Polar Direct Drive technique. A parametric study has been performed providing the irradiation non-uniformity as a function of the Polar Direct Drive displacement and of the laser intensity profile parameters. Moreover, two-dimensional axis-symmetric hydrodynamic simulations have been performed for a plastic sphere irradiated by laser beams characterized by a constant flat temporal power pulse. In these simulations the front of the inward shock wave has been tracked providing the time-evolution of any non-uniformity. The results provided by the two methods - illumination model and hydrodynamic data - have been compared and it is found that the illumination model reproduces the main behaviour exhibited by the hydrodynamic data. The two models provide compatible values for the optimum Polar Direct Drive parameter and similar optimal super-gaussian profiles.",
+        "published": "2014-06-30T14:52:09Z",
+        "updated": "2014-06-30T14:52:09Z",
+        "authors": [
+          "M. Temporal",
+          "B. Canaud",
+          "W. J. Garbett",
+          "R. Ramis"
+        ],
+        "categories": [
+          "physics.plasm-ph"
+        ],
+        "primary_category": "physics.plasm-ph",
+        "doi": "10.1017/S0263034614000500",
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/1406.7762v1",
+          "pdf": "https://arxiv.org/pdf/1406.7762v1",
+          "doi": "https://doi.org/10.1017/S0263034614000500"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1905.08406v2",
+        "title": "Checking Robustness Against Snapshot Isolation",
+        "summary": "Transactional access to databases is an important abstraction allowing programmers to consider blocks of actions (transactions) as executing in isolation. The strongest consistency model is {\\em serializability}, which ensures the atomicity abstraction of transactions executing over a sequentially consistent memory. Since ensuring serializability carries a significant penalty on availability, modern databases provide weaker consistency models, one of the most prominent being \\emph{snapshot isolation}. In general, the correctness of a program relying on serializable transactions may be broken when using weaker models. However, certain programs may also be insensitive to consistency relaxations, i.e., all their properties holding under serializability are preserved even when they are executed over a weak consistent database and without additional synchronization. In this paper, we address the issue of verifying if a given program is {\\em robust against snapshot isolation}, i.e., all its behaviors are serializable even if it is executed over a database ensuring snapshot isolation. We show that this verification problem is polynomial time reducible to a state reachability problem in transactional programs over a sequentially consistent shared memory. This reduction opens the door to the reuse of the classic verification technology for reasoning about weakly-consistent programs. In particular, we show that it can be used to derive a proof technique based on Lipton's reduction theory that allows to prove programs robust.",
+        "published": "2019-05-21T02:12:09Z",
+        "updated": "2019-05-22T15:29:00Z",
+        "authors": [
+          "Sidi Mohamed Beillahi",
+          "Ahmed Bouajjani",
+          "Constantin Enea"
+        ],
+        "categories": [
+          "cs.LO"
+        ],
+        "primary_category": "cs.LO",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "CAV 2019: 31st International Conference on Computer-Aided Verification",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1905.08406v2",
+          "pdf": "https://arxiv.org/pdf/1905.08406v2"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

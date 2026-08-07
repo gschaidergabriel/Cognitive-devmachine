@@ -1,0 +1,69 @@
+name: RAE contract gates
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/research_provider_router.py'
+      - 'tools/status_footer_check.py'
+      - 'research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md'
+      - 'research_entity/global/STATUS_FOOTER_PROTOCOL.md'
+      - 'research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json'
+      - 'research_entity/runtime/TOOL_QUOTA_STATE.json'
+      - '.github/workflows/rae-contract-gates.yml'
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile gate tools
+        run: python -m py_compile tools/research_provider_router.py tools/status_footer_check.py
+
+      - name: Build research provider plan
+        run: |
+          python tools/research_provider_router.py plan \
+            --class scholarly \
+            --class current_web \
+            --class executable \
+            --class model_experiment > /tmp/plan.json
+
+      - name: Validate synthetic execution manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          plan = json.loads(Path('/tmp/plan.json').read_text())
+          attempts=[]
+          for spec in plan['planned_tools']:
+              if spec['mode'] == 'MUST_ATTEMPT' and not spec.get('availability_blocker'):
+                  attempts.append({'tool':spec['tool'],'status':'SUCCESS'})
+          manifest=dict(plan)
+          manifest['attempts']=attempts
+          manifest['fallback_attempts']=[{'tool':'native_web','status':'SUCCESS'}]
+          Path('/tmp/tool_manifest.json').write_text(json.dumps(manifest, indent=2))
+          PY
+          python tools/research_provider_router.py validate-manifest /tmp/tool_manifest.json
+
+      - name: Validate visible status footer
+        run: |
+          cat > /tmp/response.txt <<'EOF'
+          Example substantive result.
+
+          ```text
+          RAE STATUS
+          Entity: JOINED
+          GitHub: VERIFIED_RW
+          Canonical: r2 · 04234efdb86c
+          Actor: chatgpt-secondary
+          Trigger: none
+          Research write: NO_RESEARCH_DELTA
+
+          LAST PROMPT
+          Completion: 100%
+          Done: contract smoke test
+          Open: none
+          ```
+          EOF
+          python tools/status_footer_check.py /tmp/response.txt

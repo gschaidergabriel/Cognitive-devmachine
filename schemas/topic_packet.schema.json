@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"topic_packet.schema.json",
+  "type":"object",
+  "required":["packet_id","title","status","domains","summary"],
+  "properties":{
+    "packet_id":{"type":"string","minLength":1},
+    "title":{"type":"string","minLength":1},
+    "status":{"enum":["CURRENT","OPEN","SUPERSEDED","REFUTED","ARCHIVED","CONTEXT_ONLY"]},
+    "system_layers":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "domains":{"type":"array","items":{"type":"string"},"minItems":1,"uniqueItems":true},
+    "summary":{"type":"string","minLength":1},
+    "open_questions":{"type":"array","items":{"type":"string"}}
+  },
+  "additionalProperties":true
+}

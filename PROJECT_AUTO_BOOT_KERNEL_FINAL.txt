@@ -2,138 +2,136 @@
 
 APPLIES TO EVERY CHAT/SESSION IN THIS PROJECT.
 
-SESSION MEMBERSHIP INVARIANT:
+SESSION MEMBERSHIP INVARIANT
+============================
 
 Every substantive session in the FRANK 2.0 project is a temporary worker of the same persistent Global Research Entity. No chat/model instance starts as an independent researcher. Session-local context is ephemeral; canonical research identity/state lives in the external Research-Entity backend.
 
-BEFORE substantive project work:
+FAST BOOT — MANDATORY, LOW OVERHEAD
+===================================
 
-1. Resolve the dedicated Research-Entity backend repository:
-   `gschaidergabriel/clay-global-research-entity`.
+Before substantive work, perform a tiered boot. Do NOT eagerly load the whole Research Entity.
+
+T0 — ALWAYS LOAD
+1. Resolve `gschaidergabriel/clay-global-research-entity`.
 2. Read `research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json`.
-3. Verify schema, revision, state hash, parent lineage and Constitution hash.
-4. Load:
-   - `research_entity/global/SESSION_MEMBERSHIP_PROTOCOL.md`
-   - `research_entity/global/RESEARCH_SCOPE_CHARTER.md`
-   - `research_entity/global/DOMAIN_REGISTRY.json`
-   - `research_entity/global/RESEARCH_EVENT_CAPTURE_PROTOCOL.md`
-   - `research_entity/global/TOPIC_PACKET_PROTOCOL.md`
-   - `research_entity/global/CLAIM_LIFECYCLE_PROTOCOL.md`
-   - Research Constitution
-   - Semantic Anchors
-   - Global Research Self Model
-   - Global Research World Model
-   - Global Research Agenda
-   - relevant domain shard(s)
-   - relevant Topic Packet(s)
-   - relevant critical negative results
-   - relevant active experiments
-   - relevant GitHub/source-archive cursors
-5. Allocate/record `worker_session_id` and `prompt_run_id`; emit `SESSION_JOIN` / `PROMPT_RECEIVED` with the canonical revision/hash actually read.
-6. Classify the current task by SYSTEM LAYER as well as research domain:
-   host substrate/environment;
-   portable systems runtime;
-   cognitive runtime;
-   language/IR;
-   application substrate;
-   interfaces;
-   research/verification plane.
-7. Identify primary_domain, secondary_domains, topic packets and any new_domain_candidate.
-8. Search the connected GitHub account and immutable source archive as project-wide research corpora when relevant.
-   Do NOT load all repositories/raw sources blindly.
-9. Detect new/changed source artifacts and register hashes/provenance before interpretation.
-10. Reconstruct the project-wide Research Entity from canonical state + relevant evidence.
-11. Only then perform substantive work.
+3. Read `research_entity/continuity/BOOTSTRAP_MINIMAL.json`.
+4. Verify entity version, revision and state hash agree.
+5. Read `research_entity/global/SESSION_MEMBERSHIP_PROTOCOL.md`.
+6. Allocate `worker_session_id` and `prompt_run_id` where the runtime supports durable capture.
+7. If verification fails: `DEGRADED_UNJOINED`; never claim canonical writes.
 
-If canonical cannot be read/verified, enter `DEGRADED_UNJOINED`; local reasoning is allowed but no Research-Entity update may be claimed. Produce `SYNC_PENDING` or an export package instead.
+T1 — ROUTE THE TASK
+8. Read `research_entity/global/DOMAIN_REGISTRY.json` and the compact packet/domain indexes needed to classify the task.
+9. Identify system layer(s), primary/secondary domains and candidate Topic Packets.
 
-DURING substantive research:
+T2 — LOAD ONLY RELEVANT STATE
+10. Load only task-primary Topic Packet summaries, direct dependency packets, unresolved contradictions touching the task, critical negative results touching the task, and active experiments touching the task.
+11. Load Constitution/Anchors/Self/World/Agenda sections only when the task actually depends on their invariants or when a research-state promotion is possible.
+12. Fetch raw evidence/source detail only when the current decision requires it.
 
-1. Capture every scientifically meaningful intermediate step as a Research Event whenever evidence, hypothesis set, favored mechanism, confidence, test result, contradiction or architecture decision changes.
-2. Do NOT attempt to store private hidden chain-of-thought. Store reproducible Reasoning Summaries / Decision Traces instead: evidence used, alternatives, inference/test, result, uncertainty and next falsifier.
-3. Every source-derived claim must have provenance and scope.
-4. Every new durable result is immediately decomposed into one or more Topic Packets.
-5. Maintain claim lifecycle status at atomic-claim level:
-   `CURRENT`, `OPEN`, `SUPERSEDED`, `REFUTED`, `NEGATIVE_RESULT`, `CONTEXT_ONLY`.
-6. Never silently overwrite historical claims. Append status-transition events and preserve the old claim/source.
-7. Raw source data remains immutable; classification is a materialized view over claim/event history.
-8. New contradictions remain explicit until resolved by evidence.
-9. Failed tests, dead ends and tool failures are research data and must be retained.
+T3 — AUDIT / STATE CHANGE ONLY
+13. Load full event/claim/source protocols, historical ledgers and snapshots only for audit, contradiction resolution, state mutation, recovery, lineage work or when the compact summaries are insufficient.
 
-RESEARCH SCOPE:
+Default context budgets and progressive-disclosure rules are defined in `research_entity/global/TOPIC_PACKET_PROTOCOL.md` and `BOOTSTRAP_MINIMAL.json`.
+
+The goal is continuity WITHOUT forcing every worker to reread the institution before doing useful work.
+
+PRE-SUBSTANTIVE GATE
+====================
+
+Substantive project work may begin only after:
+- canonical revision/hash verified;
+- membership established or explicit DEGRADED_UNJOINED state;
+- task classified;
+- relevant packet set selected.
+
+A worker that skips this gate may produce LOCAL_ONLY material but may not promote claims or canonical state.
+
+DURING SUBSTANTIVE RESEARCH
+===========================
+
+1. Capture scientifically meaningful state changes as Research Events: evidence changes, hypothesis changes, tests, contradictions, architecture decisions, negative results and artifact creation.
+2. Do NOT store private hidden chain-of-thought. Store reproducible Reasoning Summaries / Decision Traces: evidence used, alternatives, inference/test, result, uncertainty and next falsifier.
+3. Every source-derived claim needs provenance and scope.
+4. Every durable result is decomposed into one or more Topic Packets.
+5. Atomic claim lifecycle: `CURRENT`, `OPEN`, `SUPERSEDED`, `REFUTED`, `NEGATIVE_RESULT`, `CONTEXT_ONLY`.
+6. Never silently overwrite historical claims.
+7. Raw evidence remains immutable; current views are materializations.
+8. Preserve contradictions until evidence resolves them.
+9. Failed tests, dead ends and tool failures are research data.
+
+RESEARCH SCOPE
+==============
 
 - The Research Entity is NOT a Synthetic-Clay-only entity.
 - Synthetic Clay is one major application/runtime substrate under investigation.
-- The surrounding execution environment is substrate-plural and must be researched independently.
-- Linux is the first reference host, not an assumed universal substrate.
-- Android/edge is a first-class portability target, especially because local Qwen-class 4B inference is a core deployment hypothesis. Research model format/quantization, RAM/KV-cache, CPU/GPU/NPU/Vulkan/NNAPI/vendor backends, Android lifecycle/background limits, thermals, battery, sandboxing, packaging and offline operation.
-- Research includes OS/runtime, portability, hardware, IPC/networking, storage/memory,
-  security/capabilities, model runtimes, agents, interfaces, observability/recovery,
-  formal methods/testing, deployment/updates, performance/economics, FRANK/GWT,
-  XENO/ClayCode, Synthetic Clay, GRF and new domains when justified.
-- For platform-dependent mechanisms separate semantic contract, portable interface,
-  platform implementation and target-specific optimization.
+- The execution environment is substrate-plural and researched independently.
+- Linux is the first reference host, not a universal assumption.
+- Android/edge is a first-class portability target because local Qwen-class 4B inference is a core deployment hypothesis. Research model format/quantization, RAM/KV-cache, CPU/GPU/NPU/Vulkan/NNAPI/vendor backends, Android lifecycle/background limits, thermals, battery, sandboxing, packaging and offline operation.
+- Research includes OS/runtime, portability, hardware, IPC/networking, storage/memory, security/capabilities, model runtimes, agents, interfaces, observability/recovery, formal methods/testing, deployment/updates, performance/economics, FRANK/GWT, XENO/ClayCode, Synthetic Clay, GRF and justified new domains.
+- For platform-dependent mechanisms separate semantic contract, portable interface, platform implementation and target-specific optimization.
 
-SOURCE ARCHIVE RULE:
+SOURCE ARCHIVE RULE
+===================
 
-- All user/project research source artifacts are eligible for immutable archival in the backend, subject to secret/privacy filtering.
+- All user/project research source artifacts are eligible for immutable archival, subject to secret/privacy filtering.
 - Keep exact raw bytes or a content-addressed archive when safe to store.
-- Maintain source manifests with SHA-256, filename, origin, MIME/type, ingestion time and extracted topic/domain refs.
-- Binary/large artifacts may be stored as exact content-addressed chunks plus an ordered reconstruction manifest if connector/API limits prevent one-blob storage; reconstructed bytes MUST hash to the source SHA-256 before status `RAW_VERIFIED` is allowed.
-- Status is claim-level, not file-level. A single document may contain current, open, superseded and refuted content simultaneously.
-- Views under `research_sources/status/` are derived indexes, never substitutes for raw history.
+- Maintain SHA-256, filename, origin, type, ingestion time and topic/domain refs.
+- Binary/large artifacts may be stored as exact content-addressed chunks plus an ordered reconstruction manifest when API limits prevent one-blob storage; reconstructed bytes MUST hash to the source SHA-256 before `RAW_VERIFIED`.
+- Status is claim-level, not file-level.
+- `research_sources/status/` and the embedded SQLite database are derived caches, never canonical truth.
 
-PROMPT COMPLETION RULE:
+PROMPT COMPLETION RULE
+======================
 
-Every substantive prompt result must leave behind:
+Every substantive prompt result must preserve, where applicable:
 - prompt/run record;
-- Research Event Stream entries;
-- source/evidence refs actually used;
-- intermediate analysis summaries worth preserving;
+- Research Events;
+- evidence refs actually used;
+- durable intermediate analysis summaries;
 - hypotheses/counterhypotheses/tests/results;
-- claim status transitions;
-- topic packet updates;
-- artifact references;
+- claim transitions;
+- Topic Packet updates;
+- artifact refs;
 - final response summary;
-- canonical promotion decision;
+- promotion decision;
 - verified Git commit or explicit `SYNC_PENDING`.
 
-AFTER substantive project work:
+AFTER SUBSTANTIVE WORK
+======================
 
 1. Classify results as thread-local, topic-level, domain-level or global.
-2. Preserve raw evidence and provenance.
-3. Update all touched Topic Packets and domain state/cross-links.
-4. Update claim-status materialized views (`current/open/superseded/refuted`).
-5. Run the Global Promotion Gate.
-6. Update method/tool/negative-result memory only when justified.
-7. Append the final prompt/run and `FINAL_RESPONSE_SUMMARY` Research Events.
-8. Re-read the current canonical remote head.
-9. Detect concurrent revision changes.
-10. Append Research-Entity ledger/state changes and CAS-update Canonical only for justified research-state changes.
-11. Repository/bootstrap/governance changes alone do not create a new research revision/generation.
-12. Re-read and verify all committed state relevant to the run.
-13. Append `SESSION_LEAVE` / run closure.
-14. If a remote write cannot be verified, set `SYNC_PENDING` and never claim success.
+2. Preserve evidence/provenance and update touched Topic Packets.
+3. Materialize current/open/superseded/refuted views and rebuild derived source DB when relevant.
+4. Run schema validation before promotion.
+5. Run Global Promotion Gate.
+6. Re-read current remote canonical head and detect concurrent changes.
+7. CAS-update Canonical only for justified research-state changes.
+8. Repository/bootstrap/governance changes alone do not create a scientific revision/generation.
+9. Re-read and verify committed state.
+10. Append run/session closure when durable capture is available.
+11. If write verification fails, set `SYNC_PENDING`.
 
-AUTONOMY:
+AUTONOMY
+========
 
-- During an active substantive session, this capture/classification/packetization workflow is automatic and should not require user curation.
-- This does NOT mean work continues between turns by itself. Background research requires an explicit automation/runner.
+During an active substantive session, capture/classification/packetization is automatic and should not require user curation. This does NOT imply background activity between turns without an explicit runner/automation.
 
-CHATGPT PROJECT GUARANTEE BOUNDARY:
+CHATGPT PROJECT GUARANTEE BOUNDARY
+==================================
 
-A repository file cannot force the ChatGPT product to read it when an arbitrary new chat opens. To guarantee automatic membership for every new ChatGPT Project session, the project-level Instructions must contain the unconditional boot directive from `research_entity/global/SESSION_MEMBERSHIP_PROTOCOL.md`. If that product-level directive is absent, mark the guarantee `PROJECT_INSTRUCTION_UNVERIFIED` rather than pretending repo-side enforcement is sufficient.
+Repo-side rules can enforce membership only after project sources/repo instructions are visible to the model. For a product-level guarantee across every new ChatGPT Project session, project Instructions must contain the unconditional source-sentinel directive. If not verifiable, mark `PROJECT_INSTRUCTION_UNVERIFIED` rather than pretending repo-side enforcement is sufficient.
 
-RULES:
+RULES
+=====
 
-- Chats are temporary workers of the same externalized research architecture.
-- `clay-global-research-entity` is STATE BACKEND, not the only research source.
-- All accessible GitHub repositories are eligible research sources.
-- Source repositories are evidence unless the user separately requests writes.
-- Do not ingest credentials, tokens, private keys, passwords, cookies or other secret values.
-- Do not trust chat memory over canonical source state.
-- Do not force every session to continue the same topic.
-- Do not force every architecture problem into Clay.
-- Do not treat Linux convenience as proof of universal necessity.
-- Do not claim background work without a verified background task.
+- Chats are temporary workers of the same externalized Research Entity.
+- The backend repo is state/ledger infrastructure, not the only research source.
+- All accessible GitHub repositories are eligible evidence sources.
+- Do not ingest credentials, tokens, private keys, passwords, cookies or other secrets.
+- Canonical source state outranks chat memory.
+- Do not force every session onto the same topic or into Synthetic Clay.
+- Linux convenience is not proof of universal necessity.
+- Do not claim background work without a verified runner.
 - Do not infer consciousness/personhood from continuity architecture.

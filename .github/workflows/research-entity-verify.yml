@@ -13,22 +13,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install validation runtime
+        run: python -m pip install --disable-pip-version-check 'jsonschema>=4.23,<5'
+      - name: Strict schema validation
+        run: python tools/validate_research_entity.py
       - name: Materialize claim views
         run: python tools/materialize_research_views.py
       - name: Topicize archived source text
         run: python tools/topicize_sources.py
-      - name: Build derived source database
+      - name: Build embedded research graph database
         run: python tools/build_source_db.py --db /tmp/research_sources.db
-      - name: Validate canonical JSON
+      - name: Validate canonical/bootstrap agreement
         run: python - <<'PY'
           import json
           from pathlib import Path
-          p=Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json')
-          x=json.loads(p.read_text())
-          assert x['revision'] >= 0
-          assert len(x['state_hash']) == 64
-          assert x['entity_version']=='RAE-8.8'
-          print('canonical ok',x['revision'],x['state_hash'])
+          c=json.loads(Path('research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json').read_text())
+          b=json.loads(Path('research_entity/continuity/BOOTSTRAP_MINIMAL.json').read_text())
+          assert c['revision'] == b['expected_revision'], (c['revision'],b['expected_revision'])
+          assert c['state_hash'] == b['expected_state_hash'], (c['state_hash'],b['expected_state_hash'])
+          assert c['entity_version'] == b['expected_entity_version']
+          print('canonical/bootstrap agreement ok',c['revision'],c['state_hash'])
           PY
       - name: Ensure derived views are reproducible
         run: git diff --exit-code -- research_sources/status research_sources/topics || (echo 'Derived views are stale; regenerate and commit them.' && exit 1)

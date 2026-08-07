@@ -1,43 +1,53 @@
 {
-  "schema_version": "2.2",
+  "schema_version": "2.3",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
   "status_footer_checker": "tools/status_footer_check.py",
   "research_tool_orchestration_policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
   "research_tool_router": "tools/research_provider_router.py",
+  "interconnection_protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+  "interconnection_preflight": "tools/research_interconnect_preflight.py",
   "commands": {
     "dump": {
       "protocol": "research_entity/global/DUMP_PROTOCOL.md",
       "tool_orchestration_addendum": "research_entity/global/DUMP_TOOL_ORCHESTRATION_ADDENDUM.md",
       "kind": "research_intake",
       "requires_independent_support_for_promotion": true,
-      "requires_tool_execution_manifest": true
+      "requires_tool_execution_manifest": true,
+      "mesh_role": "intake_to_shared_mesh"
     },
     "clay": {
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
-      "kind": "integrated_research_foundry"
+      "kind": "integrated_research_foundry",
+      "requires_interconnect_manifest": true
     },
     "gwt": {
       "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research"
+      "kind": "domain_research",
+      "requires_interconnect_manifest": true
     },
     "frank": {
       "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research"
+      "kind": "domain_research",
+      "requires_interconnect_manifest": true,
+      "primary_foundation": "clay"
     },
     "emergenz": {
       "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research"
+      "kind": "domain_research",
+      "requires_interconnect_manifest": true
     },
     "claycode": {
       "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research"
+      "kind": "domain_research",
+      "requires_interconnect_manifest": true
     },
     "hyperposition": {
       "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
-      "kind": "domain_research"
+      "kind": "domain_research",
+      "requires_interconnect_manifest": true
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every research trigger loads the tool orchestration policy/router and records mandatory attempts or explicit quota/runtime fallback reasons. Every trigger uses MASTER_RESEARCH_TRIGGER_PROTOCOL.md unless dump, which additionally loads its tool addendum. Every substantive visible response ends with STATUS_FOOTER_PROTOCOL.md and should be structure-checked when runtime execution is available."
+  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then loads the tool orchestration policy/router and records mandatory attempts or explicit quota/runtime fallback reasons. FRANK additionally treats the newest Clay research/architecture as its primary foundation. Every substantive visible response ends with STATUS_FOOTER_PROTOCOL.md and should be structure-checked when runtime execution is available."
 }

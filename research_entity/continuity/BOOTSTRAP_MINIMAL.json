@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "purpose": "Low-overhead boot index. This file is a derived operational index, not canonical research truth.",
   "canonical_path": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
   "expected_entity_version": "RAE-8.8",
@@ -14,6 +14,18 @@
     "provenance_policy": "research_entity/global/PROVENANCE_POLICY.md",
     "rule": "Evidence outranks researcher rank; Claude Code adjudicates unresolved architecture/research decisions after evidence review."
   },
+  "reserved_commands": {
+    "dump": {
+      "match": "trimmed_case_insensitive_exact",
+      "protocol": "research_entity/global/DUMP_PROTOCOL.md",
+      "input": "dump/",
+      "archive": "dump archive/",
+      "default_epistemic_class": "DUMP_DERIVED_PREPROCESSED_HYPOTHESIS",
+      "default_status": "OPEN",
+      "promotion_without_independent_support": false,
+      "instruction": "Execute the full dump research cycle immediately; do not ask the user what dump means."
+    }
+  },
   "mandatory_invariants": [
     "session_is_temporary_worker_not_entity",
     "actor_identity_is_explicit",
@@ -27,6 +39,7 @@
     "negative_results_are_preserved",
     "authorship_ingestion_and_adjudication_are_distinct",
     "synthetic_results_do_not_promote_to_live_claims",
+    "dump_material_is_hypothesis_intake_not_evidence_by_default",
     "linux_first_is_not_linux_only",
     "synthetic_clay_is_not_the_scope_boundary"
   ],
@@ -40,7 +53,8 @@
     "T1_TASK_ROUTING": [
       "research_entity/global/DOMAIN_REGISTRY.json",
       "research_entity/global/TOPIC_PACKET_PROTOCOL.md",
-      "research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md when cross-researcher interpretation/adjudication matters"
+      "research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md when cross-researcher interpretation/adjudication matters",
+      "research_entity/global/DUMP_PROTOCOL.md only when reserved command dump is triggered"
     ],
     "T2_ONLY_WHEN_RELEVANT": [
       "research constitution",

@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0642p0700-chatgpt-secondary-r2",
+  "actor_id":"chatgpt-secondary",
+  "policy":"research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
+  "executions":[
+    {"class":"implementation+canonical","tool":"GitHub connector","status":"SUCCESS_RW_IN_PROGRESS","purpose":"canonical boot; current registries/protocols; branch artifacts; current ClayGraph code/history; run persistence"},
+    {"class":"live_runtime_source","tool":"ChatGPT File Library","status":"SUCCESS","source":"Frank-Architektur.md","measured_date":"2026-08-05","purpose":"FRANK live DB count, table roles, workspace bridge and latency evidence"},
+    {"class":"scholarly","tool":"native web/arXiv fallback","status":"SUCCESS","reason":"registered OpenAlex/arXiv bridge not directly invokable from this ChatGPT surface","sources":[{"id":"arXiv:2501.13956","title":"Zep: A Temporal Knowledge Graph Architecture for Agent Memory","evidence_class":"PREPRINT_AUTHOR_SYSTEM"},{"id":"arXiv:2508.01680","title":"T-GRAG: A Dynamic GraphRAG Framework for Resolving Temporal Conflicts and Redundancy in Knowledge Retrieval","evidence_class":"PREPRINT"},{"id":"arXiv:2606.15246","title":"Provenance-Enhanced Statements in Knowledge Graphs","evidence_class":"PREPRINT"},{"id":"arXiv:1806.07344","title":"Reducing Property Graph Queries to Relational Algebra for Incremental View Maintenance","evidence_class":"RESEARCH_PREPRINT"},{"id":"arXiv:2603.27775","title":"Enzyme: Incremental View Maintenance for Data Engineering","evidence_class":"INDUSTRIAL_SYSTEM_PREPRINT"},{"id":"arXiv:2006.09823","title":"Verifying Strong Eventual Consistency in delta-CRDTs","evidence_class":"FORMAL_PREPRINT"}]},
+    {"class":"authoritative_docs","tool":"native web","status":"SUCCESS","sources":[{"title":"W3C PROV-O Recommendation","evidence_class":"STANDARD"},{"title":"Microsoft Event Sourcing Pattern","evidence_class":"AUTHORITATIVE_ARCHITECTURE_GUIDANCE"},{"title":"Neo4j GraphRAG for Python current documentation","evidence_class":"IMPLEMENTATION_DOCUMENTATION"}]},
+    {"class":"executable","tool":"local Python sandbox","status":"SUCCESS","purpose":"five-question self-use engineering proxy comparing lexical retrieval, generation-0-like unconstrained 2-hop graph activation and conservative generation-1-like qualified 1-hop activation"},
+    {"class":"model_experiment","tool":"Hugging Face inference","status":"SKIPPED_CACHED_QUOTA","reason":"TOOL_QUOTA_STATE says QUOTA_EXHAUSTED_CACHED until 2026-09-01; prior pinned Qwen3-4B request returned HTTP 402. No local target-model runtime exposed in this session."},
+    {"class":"repository_execution","tool":"research_interconnect_preflight.py / claygraph_build.py / claygraph_benchmark.py","status":"BLOCKED_SURFACE","reason":"GitHub connector can inspect/write files but cannot execute arbitrary repository scripts; runtime/current manifest is not committed."}
+  ],
+  "sanitized_cost":"No paid external calls initiated by this run.",
+  "fallback_rule":"Native web + GitHub + local Python used; no strong promotion depends on unavailable providers."
+}

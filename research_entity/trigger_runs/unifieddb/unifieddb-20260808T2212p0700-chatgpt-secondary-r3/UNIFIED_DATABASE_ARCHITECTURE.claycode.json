@@ -1,0 +1,69 @@
+{
+  "schema":"claycode.unifieddb.architecture.v2",
+  "run_id":"unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
+  "candidate_id":"UD-RC2-CPPF",
+  "candidate_name":"Causal Polyglot Placement Fabric",
+  "status":"OPEN_HOLD",
+  "parent":"UD-RC1",
+  "core_laws":[
+    "one_semantic_world != one_physical_store",
+    "one_logical_query != one_physical_plan",
+    "query_compute_placement != data_placement != index_placement != transaction_domain",
+    "record_provenance != selection_integrity",
+    "semantic_identity != exact_emitted_representation_identity",
+    "derived_or_approximate_result != authoritative_fact",
+    "unknown_dependency_closure != known_valid",
+    "database_integration != cognitive_utility != emergence"
+  ],
+  "planes":[
+    {"id":"P0","name":"Canonical Commit Spine","contents":["event","state","effect","outcome","reentry"],"role":"authoritative replay and effect-critical commit identity"},
+    {"id":"P1","name":"Typed Semantic and Query Contract","contents":["Clay IDs","valid/transaction time","provenance","TCQS collection algebra","operation closure","result admissibility"],"role":"backend-independent meaning"},
+    {"id":"P2","name":"Causal Planner","contents":["query IR","required source epochs","consistency/admission policy","authorized search space","selection semantics","placement constraints"],"role":"enumerate semantically valid subplans before cost optimization"},
+    {"id":"P3","name":"Polyglot Physical Fabric","contents":["relational","graph","vector payload","ANN index","FTS","activation","materialized views"],"role":"replaceable specialized execution/storage components"},
+    {"id":"P4","name":"Cognitive Availability","contents":["ClayGraph field","Assembly","system WorkspaceEpisode","reader projection","model-internal uptake receipt"],"role":"non-authoritative cognition-facing state"},
+    {"id":"P5","name":"Outcome and Utility Loop","contents":["canonical outcome append","derived update","utility/salience receipt"],"role":"adapt accessibility without silently changing canonical fact identity"}
+  ],
+  "placement_vector_schema":{
+    "transaction_domain":"which operations require one atomic commit domain",
+    "data_placement":"where canonical or derived payload bytes reside",
+    "index_placement":"where graph/vector/FTS auxiliary structures reside",
+    "compute_placement":"where a query subplan executes",
+    "process_domain":"same address space vs IPC boundary",
+    "fault_domain":"which failures can corrupt or stall which state",
+    "rebuild_policy":"whether and from what lineage state can be reconstructed"
+  },
+  "result_admission_schema":{
+    "AUTHORITATIVE_EXACT":"may support exact fact/effect decisions subject to current operation checks",
+    "EXACT_DERIVED":"deterministically derived and source-epoch bound; exact for declared transform",
+    "APPROXIMATE_CANDIDATE":"retrieval candidate only; cannot become fact merely by rank",
+    "SALIENCE_ONLY":"accessibility/prior only; neither truth nor workspace selection authority",
+    "MODEL_INTERNAL_ONLY":"reader runtime state; not database truth",
+    "EXTERNAL_EVIDENCE":"source material with preserved provenance",
+    "PROTECTED_EXTERNAL_RESOURCE":"reference to resource released only through separate current-policy boundary"
+  },
+  "derived_view_contract":["source_ids","source_epochs","derivation_program_hash","schema_or_model_version","collection_semantics","query_or_selection_plan_hash","lag_bound","rebuild_recipe","result_admissibility"],
+  "query_receipt":["query_ir_hash","operation_id","closure_state","required_epochs","collection_semantics","authorized_search_space_hash","physical_subplan_hash","placement_vector_hash","candidate_set_hash","selection_hash","result_admissibility","reader_handoff_hash_if_model_facing"],
+  "closure_states":{
+    "KNOWN_VALID":"required dependencies identified and compatible",
+    "KNOWN_INVALID":"required dependency changed; recompute or reject",
+    "UNKNOWN":"dependency set may be incomplete; broaden, instrument, recompute or defer"
+  },
+  "default_flow":[
+    "external_intent_or_internal_operation",
+    "typed_query_compile",
+    "closure_and_admission_requirements",
+    "semantic_plan_enumeration",
+    "hard_constraint_pruning",
+    "cost_risk_placement_selection",
+    "polyglot_subplan_execution",
+    "selection_and_result_receipt",
+    "exact_validation_if_required",
+    "Assembly_or_direct_exact_result",
+    "GWT_and_reader_pipeline_if_cognitive",
+    "effect_time_revalidation_if_consequential",
+    "outcome_and_canonical_append",
+    "incremental_derived_view_maintenance",
+    "utility_receipt_to_salience_policy_only"
+  ],
+  "promotion_boundary":"No physical placement is promoted from U2. Target FRANK traces, real crash/restart, cross-engine equivalence, migration rollback and Linux/Android sustained evidence remain required."
+}

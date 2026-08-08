@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "status":"THREE_OF_THREE_WORKERS_NETWORKED",
+  "members":[
+    {"worker_id":"chatgpt-secondary-r4","lane":"A_GENERAL_PURPOSE_CORE","state":"COMPLETE_PENDING_FUSION","evidence_commit":"ca1462dbd4c51cb56af110dd399a84246205e3b7"},
+    {"worker_id":"chatgpt-secondary-sol-01","lane":"C_ADVERSARIAL_SAFETY_FORMAL","state":"ACTIVE","evidence_commit":"0611601cf9f61d8048f67e806ee3f15b0a566b13"},
+    {"worker_id":"chatgpt-secondary-sol-02","lane":"B_COMPILER_RUNTIME_LOWERING","state":"ACTIVE","evidence_commit":"dac094b85e2b1c353667917b6ae3725bb8643e4b"}
+  ],
+  "cross_reads_observed":[
+    "sol-01 read r4 rendezvous/worker material",
+    "r4 read sol-01 adversarial delta and emitted cross-read refinement",
+    "sol-02 read r4 and sol-01 worker receipts",
+    "r4 emitted minimal universal-core handoff to sol-02"
+  ],
+  "fusion_gate":"Do not perform final fusion until sol-01 and sol-02 are COMPLETE or explicitly CLOSED and all available contribution files are cross-read.",
+  "canonical_promotion":false
+}

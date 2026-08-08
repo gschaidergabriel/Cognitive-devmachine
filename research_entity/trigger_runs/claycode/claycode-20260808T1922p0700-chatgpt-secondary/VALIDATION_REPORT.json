@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T1922p0700-chatgpt-secondary",
+  "validator":"tools/goodman_filter_check.py",
+  "validator_source_sha":"01607dccdfffdc86d1d4c50d640cf9d4196ea9ed",
+  "execution_surface":"LOCAL_MIRROR_OF_CURRENT_REPO_VALIDATOR_LOGIC",
+  "result":{"ok":true,"violations":[]},
+  "checked":{"trigger":"claycode","priority_prefix":["frank","clay","claygraph"],"registered_branches":7,"deep_claygraph":"ALL_DISCOVERED","latest_frank_run_match":true,"latest_frank_architecture_match":true,"review_count":5,"supported_or_refined_have_independent_checks":true,"unresolved_not_promoted":true},
+  "official_repo_process_execution":false,
+  "reason":"Current connector can read/write repository files but cannot directly execute arbitrary repository scripts. The current checker source was reread and its validation logic was mirrored locally over the committed CC10 manifest/review fields; no GitHub Actions execution is claimed.",
+  "promotion_effect":"NONE"
+}

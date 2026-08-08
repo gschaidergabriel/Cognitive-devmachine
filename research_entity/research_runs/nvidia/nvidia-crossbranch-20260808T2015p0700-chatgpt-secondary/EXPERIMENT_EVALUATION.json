@@ -1,0 +1,65 @@
+{
+  "schema_version":"1.0",
+  "run_id":"nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary",
+  "boundary":"All model results are hosted NVIDIA behavior. Nemotron-Mini-4B is direct generic-4B evidence, not Qwen3-4B, not full-model Clay adaptation and not local-device evidence. Embeddings are retrieval/semantic-geometry evidence only.",
+  "experiments":[
+    {
+      "id":"NV-XB-COVE-4B-001",
+      "question":"Does deterministic operation-specific compilation improve basis-validity decisions on a real 4B reader?",
+      "model":"nvidia/nemotron-mini-4b-instruct",
+      "gold":["VALID","INVALID","VALID","INVALID","INVALID","VALID","INVALID","VALID","INVALID","VALID","VALID","VALID"],
+      "raw":{"correct":4,"total":12,"accuracy":0.3333333333,"prompt_tokens":458,"total_tokens":538,"result_ref":"research_entity/runtime/tool_results/nvidia-nemotron-mini-4b-cove-raw-20260808T1954p0700.json"},
+      "compiled":{"correct":11,"total":12,"accuracy":0.9166666667,"prompt_tokens":289,"total_tokens":368,"result_ref":"research_entity/runtime/tool_results/nvidia-nemotron-mini-4b-cove-compiled-20260808T1954p0700.json"},
+      "delta":{"accuracy_points":58.33333334,"prompt_token_reduction":0.3689956332,"total_token_reduction":0.3159851301},
+      "interpretation":"Strong direct generic-4B support for deterministic-before-generative COVE/CBCC projection. One compiled error remains, so the model is still not an authority oracle."
+    },
+    {
+      "id":"NV-XB-CC10-4B-002",
+      "question":"How do raw intent, typed canonical intent and compact model-like symbols behave on an actual untrained 4B reader?",
+      "model":"nvidia/nemotron-mini-4b-instruct",
+      "gold":{"q1":"ALLOW","q2":"ALLOW","q3":"DENY","q4":"ASK","q5":"DENY","q6":"ALLOW","q7":"ALLOW","q8":"ASK","q9":"DENY","q10":"ASK","q11":"ALLOW","q12":"ALLOW","q13":"DENY","q14":"ALLOW","q15":"ALLOW","q16":"DENY"},
+      "raw":{"correct":12,"total":16,"accuracy":0.75,"prompt_tokens":405,"errors":["q2","q7","q8","q13"],"result_ref":"research_entity/runtime/tool_results/nvidia-nemotron-mini-4b-cc10-raw-20260808T2000p0700.json"},
+      "typed":{"correct":13,"total":16,"accuracy":0.8125,"prompt_tokens":733,"errors":["q6","q10","q14"],"result_ref":"research_entity/runtime/tool_results/nvidia-nemotron-mini-4b-cc10-typed-20260808T2000p0700.json"},
+      "compact":{"scorable":false,"format_failure":true,"content":"D / Q only for a 16-item task","prompt_tokens":344,"result_ref":"research_entity/runtime/tool_results/nvidia-nemotron-mini-4b-cc10-compact-20260808T2000p0700.json"},
+      "delta":{"typed_vs_raw_accuracy_points":6.25,"typed_vs_raw_prompt_token_increase":0.8098765432},
+      "interpretation":"On this actual 4B, typed L1 slightly improves exact policy decisions but is much more token-expensive; aggressive compact symbols collapse the output contract. Canonical semantics and model-native compact representation are distinct optimization/training problems."
+    },
+    {
+      "id":"NV-XB-LATENT-PRIOR-003",
+      "question":"Does a relevance prior alter a 4B reader under matched visible facts, and does shuffled prior provide a necessary negative control?",
+      "model":"nvidia/nemotron-mini-4b-instruct",
+      "gold":["K7","45d","F9","-12","V3","P9","38","9d"],
+      "v1":{"neutral":"FORMAT_FAILURE","truthful":"FORMAT_FAILURE","shuffled":"FORMAT_FAILURE","note":"All three arms returned only question labels."},
+      "v2":{"neutral":{"scorable":false,"reason":"returned 9 values for 8 questions; first two match gold but output then drifts","result_ref":"research_entity/runtime/tool_results/nvidia-nemotron-mini-4b-latent-neutral-v2-20260808T2007p0700.json"},"truthful":{"scorable":false,"reason":"returned intermediate fact-chain values and hit max token length instead of 8 answers","result_ref":"research_entity/runtime/tool_results/nvidia-nemotron-mini-4b-latent-truth-v2-20260808T2007p0700.json"},"shuffled":{"correct":0,"total":8,"accuracy":0.0,"output":["K2","K7","K2","K2","K3","K2","K2","K2"],"result_ref":"research_entity/runtime/tool_results/nvidia-nemotron-mini-4b-latent-shuffled-v2-20260808T2007p0700.json"}},
+      "interpretation":"The prior is behaviorally influential, but this protocol does not establish beneficial truthful-field effect because neutral/truthful output contracts failed. The shuffled arm catastrophically steers answers despite authoritative facts remaining present. ClayGraph G1d benefit remains OPEN; provenance, strength calibration and shuffled/no-field controls become more important."
+    },
+    {
+      "id":"NV-XB-EMBED-ROLE-004",
+      "question":"Can embedding similarity safely stand in for directed relation identity or semantic class identity?",
+      "model":"nvidia/nv-embedqa-e5-v5",
+      "dimensions":1024,
+      "results":{"alpha_same_role_paraphrase":0.9362262039,"alpha_role_reversal":0.9917970644,"alpha_fact_vs_activation_prior_same_surface":0.8811560701,"alpha_fact_vs_proposal_same_surface":0.8706966812,"alpha_fact_vs_authority_same_surface":0.8388142772,"gamma_same_role_paraphrase":0.9684795685,"gamma_role_reversal":0.9859736949},
+      "result_ref":"research_entity/runtime/tool_results/nvidia-role-class-embedding-similarity-20260808T2010p0700.json",
+      "interpretation":"Role reversal is more similar than same-role paraphrase in both constructed relation pairs. Semantic-class labels reduce similarity but remain highly similar. Dense similarity therefore cannot define canonical directed relation identity, role binding, authority or emergence recurrence."
+    },
+    {
+      "id":"NV-XB-RERANK-ROUTE-005",
+      "question":"Is NVIDIA hosted reranking currently executable with this credential through registered routes?",
+      "result":"NEGATIVE_RUNTIME_RESULT",
+      "attempts":["generic /v1/ranking -> HTTP 404","model-bound rerank route -> HTTP 404"],
+      "refs":["research_entity/runtime/tool_results/nvidia-rerank-smoke-20260808T1950p0700.json","research_entity/runtime/tool_results/nvidia-rerank-mistral4b-smoke-20260808T1954p0700.json"],
+      "interpretation":"Reranking remains registered but unavailable on the currently verified hosted route. Do not silently substitute embedding similarity for reranking."
+    },
+    {
+      "id":"NV-XB-CATALOG-006",
+      "question":"Which NVIDIA capabilities/models are actually credential-visible and executable?",
+      "catalog_visible":100,
+      "verified":{"catalog":true,"embeddings":true,"nemotron_mini_4b_chat":true},
+      "catalog_visible_but_chat_failed":"google/gemma-3-4b-it",
+      "exact_qwen3_4b_visible":false,
+      "result_ref":"research_entity/runtime/tool_results/nvidia-catalog-20260808T1950p0700.json",
+      "interpretation":"Model catalog visibility is not equivalent to executable account entitlement; actual invocation receipts are required."
+    }
+  ],
+  "promotion":"NONE"
+}

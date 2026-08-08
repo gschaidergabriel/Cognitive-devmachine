@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "origin_run":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
+  "consumed_frank":"research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json",
+  "status":"NEW_EXPERIMENT_AND_REVISE_CANDIDATE_ONLY",
+  "architecture_effects":[
+    {"effect":"REVISE","target":"M.MEMORY_FABRIC","proposal":"Add a non-authoritative AssemblyPlanner before memory projection: classify query requirement, choose exact/direct/packet/graph routes, allocate hop/context budget, emit replayable assembly certificate."},
+    {"effect":"SUPPORT","target":"M.DURABLE_EVENT_STATE","proposal":"Remain exact authority/source of anchors; no change."},
+    {"effect":"SUPPORT","target":"S.COGNITIVE_FRAME","proposal":"Remain exact causal frame. ClayGraph assembly may be bound to frame_id/revision but cannot define frame truth."},
+    {"effect":"SUPPORT","target":"M.WORKSPACE_ARBITER","proposal":"Memory assembly may produce candidates; graph propagation must remain distinct from GWT competition/ignition."},
+    {"effect":"SUPPORT","target":"M.CAPABILITY_GATEWAY / M.K0_HOST_KERNEL","proposal":"No graph/model authority; capability secrets excluded."}
+  ],
+  "candidate_state_contract":{"state_id":"S.ACTIVE_ASSEMBLY","new_fields":["plan_id","query_class","selected_refs","exact_anchor_refs","activation_paths","epistemic_statuses","evidence_families","conflict_sets","stop_reason","token_cost_proxy"],"invariant":"no_authority; current/exact subclaims revalidate against exact anchor"},
+  "candidate_transitions":[
+    {"op_id":"OP.MEMORY_PLAN","proposal_class":"PURE_TRANSFORM","reads":["S.USER_EVENT","S.COGNITIVE_FRAME"],"writes":[],"purpose":"classify retrieval requirement and budget"},
+    {"op_id":"OP.MEMORY_ASSEMBLE","proposal_class":"PURE_TRANSFORM","reads":["S.COGNITIVE_FRAME","ClayGraph derived projection","active packet envelope"],"writes":[],"purpose":"hybrid seed + bounded qualified traversal + conflict/ancestry preservation"},
+    {"op_id":"OP.MEMORY_EXACT_VALIDATE","proposal_class":"PURE_TRANSFORM","reads":["S.ACTIVE_ASSEMBLY","M.DURABLE_EVENT_STATE exact anchors"],"writes":[],"purpose":"validate exact/current claims or force direct fallback"}
+  ],
+  "evidence":{"local":"mixed designed proxy: stale suppression/family coverage/error-edge robustness improved; held-out recall no gain","external":"adaptive traversal/plan-guided fusion/projection-aware grounding converge as patterns; not FRANK proof"},
+  "migration_effect":"NO_CHANGE_TO_PHYSICAL_STORE_DISPOSITIONS",
+  "highest_information_next_frank_tests":["S.ACTIVE_ASSEMBLY stale-vs-fresh CognitiveFrame injection","legacy M.MEMORY_FABRIC vs deterministic packet envelope vs G1b at matched token/order budget","graph relation shuffle and temporal shuffle lesion before GWT arbitration","trace exact-anchor fallback and capability isolation"],
+  "promotion":"NONE"
+}

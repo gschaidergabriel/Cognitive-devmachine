@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-08-08T00:25:57.467833+00:00",
-  "started_at": "2026-08-08T00:24:35.601621+00:00",
+  "checked_at": "2026-08-08T00:27:36.135415+00:00",
+  "started_at": "2026-08-08T00:27:29.636775+00:00",
   "scope": "provider credential/runtime smoke health; not worker-surface invocability",
   "results": [
     {
@@ -12,7 +12,7 @@
         "provider": "OpenAlex",
         "tool": "openalex_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:35.892764+00:00",
+        "checked_at": "2026-08-08T00:27:31.168318+00:00",
         "credential_source": "private_repo_store:API_TOKENS.env",
         "rate_limit": {
           "api_key": "[REDACTED]",
@@ -25,7 +25,7 @@
             "prepaid_remaining_usd": 0,
             "prepaid_expires_at": null,
             "resets_at": "2026-08-09T00:00:00.000Z",
-            "resets_in_seconds": 84925,
+            "resets_in_seconds": 84749,
             "endpoint_costs_usd": {
               "singleton": 0,
               "list": 0.0001,
@@ -61,7 +61,7 @@
         "provider": "arXiv",
         "tool": "arxiv_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:35.984611+00:00",
+        "checked_at": "2026-08-08T00:27:31.345534+00:00",
         "credential_required": false,
         "verification_endpoint_class": "api_query"
       },
@@ -76,7 +76,7 @@
         "provider": "Semantic Scholar",
         "tool": "semantic_scholar_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:39.869548+00:00",
+        "checked_at": "2026-08-08T00:27:32.043483+00:00",
         "credential_required": false,
         "credential_source": null,
         "verification_endpoint_class": "graph/paper/search"
@@ -92,7 +92,7 @@
         "provider": "Crossref",
         "tool": "crossref_lookup",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:40.008109+00:00",
+        "checked_at": "2026-08-08T00:27:32.197106+00:00",
         "credential_required": false,
         "mailto_configured": false,
         "verification_endpoint_class": "works/{doi}",
@@ -115,11 +115,11 @@
         "provider": "Tavily",
         "tool": "tavily_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:40.150079+00:00",
+        "checked_at": "2026-08-08T00:27:32.461700+00:00",
         "credential_source": "private_repo_store:API_TOKENS.env",
         "credential_value_persisted_here": false,
         "verification_endpoint_class": "search",
-        "request_id": "2f478a6a-b971-4b59-b984-689e830f4e16",
+        "request_id": "22e07fe0-12e7-4476-975d-4f64454fdd6a",
         "usage": null
       },
       "receipt_path": "research_entity/runtime/tavily_verification.json"
@@ -133,7 +133,7 @@
         "provider": "DuckDuckGo/DDGS",
         "tool": "duckduckgo_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:42.200754+00:00",
+        "checked_at": "2026-08-08T00:27:33.354612+00:00",
         "credential_required": false,
         "verification_class": "text_search"
       },
@@ -148,11 +148,11 @@
         "provider": "Exa",
         "tool": "exa_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:42.324707+00:00",
+        "checked_at": "2026-08-08T00:27:34.183339+00:00",
         "credential_source": "private_repo_store:API_TOKENS.env",
         "credential_value_persisted_here": false,
         "verification_endpoint_class": "search",
-        "request_id": "ff69fc1d0bf73f42a84384b9d57026ed",
+        "request_id": "fcf055146f940dc050a1e987790f6e8c",
         "cost_dollars": {
           "total": 0.007,
           "search": {
@@ -179,7 +179,7 @@
         "provider": "Judge0",
         "tool": "judge0_execute",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:44.532700+00:00",
+        "checked_at": "2026-08-08T00:27:35.545005+00:00",
         "endpoint": "https://ce.judge0.com",
         "credential_source": null,
         "verification_class": "remote_python_execution"
@@ -203,7 +203,7 @@
         "provider": "Hugging Face Inference Providers",
         "tool": "huggingface_inference",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:24:44.607140+00:00",
+        "checked_at": "2026-08-08T00:27:35.695896+00:00",
         "credential_source": "private_repo_store:API_TOKENS.env",
         "credential_value_persisted_here": false,
         "verification_endpoint_class": "v1/models",
@@ -217,14 +217,14 @@
       "status": "RUNTIME_VERIFIED",
       "receipt": {
         "status": "RUNTIME_VERIFIED",
-        "verified_at": "2026-08-08T00:25:57.467233+00:00",
+        "verified_at": "2026-08-08T00:27:36.135195+00:00",
         "provider": "Groq",
         "model": "llama-3.1-8b-instant",
         "parameter_class": "8B",
         "test_role": "8b_proxy_for_4b",
         "credential_value_exposed": false,
         "inference_call_succeeded": true,
-        "transport_note": "explicit User-Agent required to avoid Cloudflare urllib error 1010"
+        "transport_note": "explicit User-Agent avoids Cloudflare urllib error 1010; HTTP 429 uses provider-cooldown retry"
       },
       "receipt_path": "research_entity/runtime/groq_verification.json"
     }

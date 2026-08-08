@@ -43,3 +43,17 @@ jobs:
           print('content=', r.get('content'))
           if d.get('status')!='SUCCESS': raise SystemExit(1)
           PY
+      - name: Execute deterministic-normalized typed reader arm
+        run: |
+          python tools/nvidia_nim.py --request research_entity/runtime/nvidia_requests/gwt-r6-nvidia-rcwc-normalized-reader-20260809T0158p0700.json >/tmp/nvidia-summary-c.json
+          python - <<'PY'
+          import json
+          p='research_entity/runtime/tool_results/gwt-r6-nvidia-rcwc-normalized-reader-20260809T0158p0700.json'
+          d=json.load(open(p,encoding='utf-8'))
+          print('NVIDIA_GWT_R6_ARM_C_STATUS', d.get('status'))
+          r=d.get('result') or {}
+          print('model=', r.get('model'))
+          print('usage=', r.get('usage'))
+          print('content=', r.get('content'))
+          if d.get('status')!='SUCCESS': raise SystemExit(1)
+          PY

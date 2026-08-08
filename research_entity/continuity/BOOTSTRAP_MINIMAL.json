@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "purpose": "Low-overhead boot index. This file is a derived operational index, not canonical research truth.",
   "canonical_path": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
   "expected_entity_version": "RAE-8.8",
@@ -22,6 +22,15 @@
     "trigger_runs_require_tool_execution_manifest": true,
     "ordinary_research_prompts_follow_same_provider_plan_when_runtime_supports_execution": true,
     "fallback": "If a planned provider cannot be used because of quota, rate limit, runtime, credentials or provider availability, continue with the best legacy research method and record the limitation."
+  },
+  "status_footer_rendering": {
+    "protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
+    "checker": "tools/status_footer_check.py",
+    "canonical_fence_opener": "```text",
+    "fence_attributes_allowed": false,
+    "unicode_box_drawing_allowed": false,
+    "must_be_final_visible_block": true,
+    "rule": "For every substantive visible response, render exactly one final plain fenced text footer. Never use ```text id=... or Unicode box/table layouts. GitHub STATUS_FOOTER_PROTOCOL.md overrides older Project Source rendering examples."
   },
   "reserved_commands": {
     "dump": {
@@ -58,6 +67,7 @@
     "linux_first_is_not_linux_only",
     "synthetic_clay_is_not_the_scope_boundary",
     "substantive_visible_responses_end_with_status_footer",
+    "status_footer_is_exact_plain_fenced_text_without_attributes_or_unicode_box_layout",
     "substantive_research_tasks_use_quota_aware_tool_orchestration_with_recorded_fallback",
     "fusion_covers_complete_mesh_and_closes_feedback_to_every_scientific_branch"
   ],

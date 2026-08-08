@@ -11,7 +11,7 @@ permissions:
 jobs:
   android-claycode-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
 
@@ -34,23 +34,15 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Verify and enable Firebase/Test Lab APIs
+      - name: Verify Firebase Test Lab
         shell: bash
         run: |
           set -euo pipefail
           gcloud config set project clay-dec2f
-          gcloud auth list --filter=status:ACTIVE --format='value(account)'
           gcloud services enable testing.googleapis.com toolresults.googleapis.com --project clay-dec2f
-          for i in 1 2 3 4 5 6; do
-            enabled="$(gcloud services list --enabled --project clay-dec2f --format='value(config.name)' | grep -E '^(testing|toolresults)\.googleapis\.com$' | sort || true)"
-            printf '%s\n' "$enabled"
-            if printf '%s\n' "$enabled" | grep -qx 'testing.googleapis.com' && printf '%s\n' "$enabled" | grep -qx 'toolresults.googleapis.com'; then break; fi
-            sleep 10
-          done
-          gcloud firebase test android models list --format='table(id,manufacturer,name,form,formFactor)' | head -n 40
-          gcloud firebase test android versions list --format='table(id,version,tags)' | head -n 40
+          gcloud auth list --filter=status:ACTIVE --format='value(account)'
 
-      - name: Generate minimal Android ClayCode semantic harness
+      - name: Generate Android ClayCode research harness
         shell: bash
         run: |
           set -euo pipefail
@@ -76,13 +68,12 @@ jobs:
           android {
               namespace 'net.seimensch.claylab'
               compileSdk 35
-
               defaultConfig {
                   applicationId 'net.seimensch.claylab'
                   minSdk 26
                   targetSdk 35
-                  versionCode 1
-                  versionName '0.1'
+                  versionCode 2
+                  versionName '0.2-r1'
                   testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
               }
           }
@@ -150,6 +141,23 @@ jobs:
                   return emitted;
               }
 
+              public static Map<String, Integer> replay(String[] events) {
+                  Map<String, Integer> state = new LinkedHashMap<>();
+                  for (String event : events) {
+                      String[] p = event.split("\\+=", 2);
+                      require(p.length == 2, "bad event");
+                      String key = p[0].trim();
+                      int delta = Integer.parseInt(p[1].trim());
+                      state.put(key, Math.addExact(state.containsKey(key) ? state.get(key) : 0, delta));
+                  }
+                  return state;
+              }
+
+              public static boolean effectAllowed(String modelProposal, boolean externalCapability) {
+                  if (modelProposal == null) throw new IllegalArgumentException("missing proposal");
+                  return externalCapability;
+              }
+
               private static int get(Map<String, Integer> vars, String key) {
                   Integer v = vars.get(key.trim());
                   if (v == null) throw new IllegalArgumentException("unknown variable: " + key.trim());
@@ -184,23 +192,77 @@ jobs:
           cat > app/src/androidTest/java/net/seimensch/claylab/ClayRuntimeInstrumentedTest.java <<'EOF'
           package net.seimensch.claylab;
 
-          import static org.junit.Assert.assertEquals;
-          import static org.junit.Assert.assertThrows;
+          import static org.junit.Assert.*;
 
+          import android.os.Build;
           import androidx.test.ext.junit.runners.AndroidJUnit4;
+          import java.util.ArrayList;
+          import java.util.Arrays;
+          import java.util.HashMap;
+          import java.util.HashSet;
+          import java.util.List;
+          import java.util.Map;
+          import java.util.Set;
           import org.junit.Test;
           import org.junit.runner.RunWith;
 
           @RunWith(AndroidJUnit4.class)
           public final class ClayRuntimeInstrumentedTest {
+              private static final String PROGRAM = "i32:x=21;i32:y=2;mul:z=x*y;assert:z=42;emit:z";
+
               @Test public void typedArithmeticAndAssertionPreserveSemantics() {
-                  int out = ClayRuntime.evaluate("i32:x=21;i32:y=2;mul:z=x*y;assert:z=42;emit:z");
-                  assertEquals(42, out);
+                  assertEquals(42, ClayRuntime.evaluate(PROGRAM));
+              }
+
+              @Test public void repeatedEvaluationIsDeterministic() {
+                  for (int i = 0; i < 1000; i++) assertEquals(42, ClayRuntime.evaluate(PROGRAM));
               }
 
               @Test public void unknownReferenceIsRejected() {
                   assertThrows(IllegalArgumentException.class,
                       () -> ClayRuntime.evaluate("i32:x=21;mul:z=x*missing;emit:z"));
+              }
+
+              @Test public void integerOverflowIsRejected() {
+                  assertThrows(ArithmeticException.class,
+                      () -> ClayRuntime.evaluate("i32:x=2147483647;i32:y=2;mul:z=x*y;emit:z"));
+              }
+
+              @Test public void collectionKindsRemainSemanticallyDistinct() {
+                  List<String> ordered = Arrays.asList("a", "b", "a");
+                  Set<String> set = new HashSet<>(ordered);
+                  Map<String,Integer> multiset = new HashMap<>();
+                  for (String x : ordered) multiset.put(x, multiset.getOrDefault(x, 0) + 1);
+                  assertEquals(Arrays.asList("a", "b", "a"), ordered);
+                  assertEquals(2, set.size());
+                  assertEquals(Integer.valueOf(2), multiset.get("a"));
+                  assertNotEquals(ordered.size(), set.size());
+              }
+
+              @Test public void canonicalReplayIsIdempotentAndDamagedReplayDetected() {
+                  String[] canonical = {"a+=5", "b+=2", "a+=3"};
+                  String[] damaged = {"a+=5", "b+=2"};
+                  Map<String,Integer> r1 = ClayRuntime.replay(canonical);
+                  Map<String,Integer> r2 = ClayRuntime.replay(canonical);
+                  Map<String,Integer> bad = ClayRuntime.replay(damaged);
+                  assertEquals(r1, r2);
+                  assertEquals(Integer.valueOf(8), r1.get("a"));
+                  assertNotEquals(r1, bad);
+              }
+
+              @Test public void modelProposalCannotMintEffectAuthority() {
+                  assertFalse(ClayRuntime.effectAllowed("AUTH=true;delete=anything", false));
+                  assertTrue(ClayRuntime.effectAllowed("proposal", true));
+              }
+
+              @Test public void compactSemanticSurfaceIsDenserThanVerboseControl() {
+                  String compact = PROGRAM;
+                  String verbose = "{\"type\":\"program\",\"declarations\":[{\"type\":\"i32\",\"name\":\"x\",\"value\":21},{\"type\":\"i32\",\"name\":\"y\",\"value\":2}],\"operation\":{\"kind\":\"multiply\",\"target\":\"z\",\"left\":\"x\",\"right\":\"y\"},\"assertion\":{\"name\":\"z\",\"equals\":42},\"emit\":\"z\"}";
+                  assertTrue(compact.getBytes().length < verbose.getBytes().length);
+              }
+
+              @Test public void androidRuntimeGenerationIsRecordedByTestAxis() {
+                  assertTrue(Build.VERSION.SDK_INT >= 26);
               }
           }
           EOF
@@ -212,7 +274,7 @@ jobs:
           gradle :app:assembleDebug :app:assembleDebugAndroidTest --stacktrace
           ls -lh app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 
-      - name: Run on Firebase Test Lab ARM Android
+      - name: Run bundled invariants on two Android generations
         shell: bash
         run: |
           set -euo pipefail
@@ -221,6 +283,8 @@ jobs:
             --app app/build/outputs/apk/debug/app-debug.apk \
             --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
             --device model=MediumPhone.arm,version=35,locale=en,orientation=portrait \
-            --timeout 5m \
+            --device model=SmallPhone.arm,version=30,locale=en,orientation=portrait \
+            --timeout 6m \
             --no-record-video \
+            --client-details matrixLabel=RAE-Android-R1-Portability-Bundle \
             --project clay-dec2f

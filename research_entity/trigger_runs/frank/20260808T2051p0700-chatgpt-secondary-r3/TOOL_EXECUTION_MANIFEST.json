@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260808T2051p0700-chatgpt-secondary-r3",
+  "trigger":"frank",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "tools":[
+    {"tool":"GitHub connector","status":"SUCCESS_RW","uses":["canonical boot","registry/protocol/contract read","eight-branch artifact read","run artifact writes","remote reread planned"],"evidence_class":"CURRENT_REPOSITORY_PRIMARY"},
+    {"tool":"native web research","status":"SUCCESS","sources":[
+      {"title":"Qwen/Qwen3-4B model card/config","class":"PRIMARY_MODEL_CONFIG","url":"https://huggingface.co/Qwen/Qwen3-4B"},
+      {"title":"Qualcomm Qwen3-4B device model page","class":"VENDOR_DEVICE_BENCHMARK","url":"https://huggingface.co/qualcomm/Qwen3-4B"},
+      {"title":"MLC LLM Android SDK","class":"PRIMARY_RUNTIME_DOCUMENTATION","url":"https://llm.mlc.ai/docs/deploy/android.html"},
+      {"title":"llama.cpp Android documentation","class":"PRIMARY_RUNTIME_DOCUMENTATION","url":"https://github.com/ggml-org/llama.cpp/blob/master/docs/android.md"},
+      {"title":"Apache Arrow C Data Interface","class":"PRIMARY_FORMAT_DOCUMENTATION","url":"https://arrow.apache.org/docs/format/CDataInterface.html"},
+      {"title":"Feldera / DBSP incremental view maintenance","class":"PRIMARY_SYSTEM_DOCUMENTATION_AND_PUBLICATION_INDEX","url":"https://www.feldera.com/overview"},
+      {"title":"AAFLOW: Scalable Patterns for Agentic AI Workflows","class":"PREPRINT_SYSTEMS_EVIDENCE","url":"https://arxiv.org/abs/2605.02162"},
+      {"title":"Mitigating Catastrophic Forgetting in Target Language Adaptation of LLMs via Source-Shielded Updates","class":"ACL_2026_PEER_REVIEWED","url":"https://aclanthology.org/2026.acl-long.865/"},
+      {"title":"Teaching Old Tokenizers New Words","class":"EACL_2026_PEER_REVIEWED","url":"https://aclanthology.org/2026.findings-eacl.341/"},
+      {"title":"TokAlign++","class":"2026_PREPRINT","url":"https://arxiv.org/abs/2605.13429"},
+      {"title":"Fine-Tuning Without Forgetting via Loss-Adaptive Learning Rates","class":"2026_PREPRINT","url":"https://arxiv.org/abs/2605.20005"},
+      {"title":"Wasmtime security and Component/WASI documentation","class":"PRIMARY_SANDBOX_DOCUMENTATION","url":"https://docs.wasmtime.dev/security.html"}
+    ]},
+    {"tool":"local Python","status":"SUCCESS","uses":["serialization microbenchmark","synthetic process/fault partition model","post-proposal scoped revalidation fuzz","Qwen KV/weight memory arithmetic"],"evidence_class":"LOCAL_SYNTHETIC_OR_ANALYTICAL_PROXY"},
+    {"tool":"E2B sandbox","status":"NOT_INVOKED_THIS_RUN","reason":"Verified runtime evidence from the immediately preceding ClayCode compiler loop was ingested from repository receipts; this worker does not expose E2B as a direct connector action.","repo_evidence":"research_entity/runtime/e2b_verification.json"}
+  ],
+  "provider_limitations":["No live FRANK/twin runtime connector","No exact abliterated/full-FT Clay Qwen checkpoint","No hidden-state/KV intervention interface","No target Android device attached","No repository-side Python execution through GitHub connector"],
+  "promotion_implication":"Architecture remains OPEN; target/runtime claims are not promoted from local proxies or vendor benchmarks."
+}

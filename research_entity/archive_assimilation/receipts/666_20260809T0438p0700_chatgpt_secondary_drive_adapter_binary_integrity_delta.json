@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0438+0700-chatgpt-secondary-drive-adapter-binary-integrity-delta",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "lane": "DRIVE_ADAPTER_BINARY_INTEGRITY_NONOVERLAP",
+  "status": "ANALYZED_INTEGRATED_ZERO_DUPLICATE_EARNED_WORK",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "crossread": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0434p0700_chatgpt_secondary_drive_training_lineage_v14_v26.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_ADAPTER_SICHERUNG_MANIFEST.json"
+  ],
+  "non_overlap_rule": "IdentityForge semantics, Genesis sandbox negative result and v14-v26 training/evaluation lineage were already covered by peer receipts. This receipt adds only directly inspected Safetensors binary-integrity evidence plus a connector-enumeration completeness correction.",
+  "source_scope": {
+    "drive_root_folder": "1GRcwMEZYhpvehTnpQJlVN004WhoKOSOo:frank-adapter-sicherung",
+    "root_adapter_file": {"id":"1VyYsni9GsIT5R--2J6m5u0dWIHUYjuyc","reported_size_bytes":53713920},
+    "root_adapter_config": {"id":"1Y1l83tJToo_AwKIgQ-HW6g5v-VJowKop","size_bytes":1114},
+    "v25_final_folder": "1aewX72BzUJUW74eL06O_RLW9Yxrqqo5P",
+    "v25_final_adapter_file": {"id":"1hmh3A1Vpaye1VGfTdFEWKRtumxAlRL1x","reported_size_bytes":169903320},
+    "v25_final_adapter_config": {"id":"1CcqKeoCLXKe5sN5FCmJKGsSjBToE5Dfa","size_bytes":1114},
+    "v25_model_card": "1yg0Hb3fNOKBNzsI6iZt8dctYecPc-YYY"
+  },
+  "direct_binary_observation": {
+    "downloaded_file": "root adapter_model.safetensors",
+    "downloaded_bytes": 53713920,
+    "downloaded_sha256": "cc4d5d8e15db95139c220e7b6172249619e3ee8bb1d2870def670dec498506a6",
+    "safetensors_header_bytes": 34000,
+    "header_metadata": {"format":"pt"},
+    "declared_tensor_count": 256,
+    "declared_dtype": "F32 for all 256 tensors",
+    "declared_total_elements": 42467328,
+    "declared_data_extent_bytes": 169869312,
+    "declared_complete_file_size_bytes": 169903320,
+    "available_data_bytes_after_header": 53679912,
+    "fully_present_tensors": 79,
+    "partially_present_tensors": 1,
+    "completely_missing_tensors": 176,
+    "first_partial_tensor": "base_model.model.model.layers.18.mlp.gate_proj.lora_B.weight",
+    "integrity_verdict": "STRUCTURALLY_TRUNCATED_SAFETENSORS_COPY",
+    "key_reason": "The header is internally self-consistent and requires exactly 169903320 total bytes, but the downloaded object contains only 53713920 bytes. The required total exactly equals the Drive-reported size of v25_final/adapter_model.safetensors."
+  },
+  "adapter_identity": {
+    "config_sha256": "0b028e00c1da0d9b8e5b51e087b641ffa90b3d8e770c92a0557020c42a43b38e",
+    "base_model": "huihui-ai/Huihui-Qwen3.5-4B-abliterated",
+    "peft_type": "LORA",
+    "peft_version": "0.18.1",
+    "rank": 32,
+    "alpha": 64,
+    "dropout": 0.1,
+    "task_type": "CAUSAL_LM",
+    "target_modules": ["up_proj","gate_proj","k_proj","o_proj","v_proj","down_proj","q_proj"],
+    "constraint": "The v25_final 169903320-byte object could not be raw-downloaded through the current connector because it exceeds the 104857600-byte per-file limit. Its Drive-reported size matching the truncated object's declared Safetensors extent is strong identity/integrity evidence but not a full content hash of the complete v25 binary."
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-ADAPTER-INTEGRITY-001",
+      "epistemic_class": "DIRECT_BINARY_HEADER_AND_LENGTH_EVIDENCE",
+      "status": "SUPPORTED",
+      "claim": "The 53.7 MB root adapter object is not a second complete LoRA candidate. It is a truncated Safetensors object whose own header declares the exact 169.903320 MB extent reported for v25_final.",
+      "targets": ["frank","harness","training_data","clay","q12_index"],
+      "implication": "Mark the root 53.7 MB object CORRUPT/TRUNCATED and never load, evaluate, export or count it as an independent model artifact. Treat v25_final as the only complete-size candidate pending full hash verification."
+    },
+    {
+      "finding_id": "DRIVE-ADAPTER-INTEGRITY-002",
+      "epistemic_class": "CONNECTOR_ENUMERATION_DIFFERENTIAL",
+      "status": "SUPPORTED",
+      "claim": "A prior connector-visible manifest observed only README.md under v25_final, while direct folder fetch exposed README.md, adapter_config.json and adapter_model.safetensors; root folder fetch also exposed a config and truncated binary. Connector search/list methods can therefore under-enumerate this Drive tree.",
+      "targets": ["harness","unifieddb","claygraph","q12_index"],
+      "implication": "Level-0 Drive manifest freeze must use recursive folder-id traversal plus cross-method reconciliation. A single search/list response cannot certify subtree completeness."
+    },
+    {
+      "finding_id": "DRIVE-ADAPTER-INTEGRITY-003",
+      "epistemic_class": "CROSSREAD_SUPERSESSION",
+      "status": "SUPERSEDED_BUT_INFORMATIVE",
+      "claim": "Project-reported A/B evaluation already shows v25 as an inferior historical baseline versus v26.1 for exact required tool naming (20.9% vs 79.9% over 134 tool-required cases). The newly verified v25 binary should therefore be preserved as a reproducible historical baseline, not promoted as the current training target.",
+      "targets": ["training_data","harness","frank"],
+      "implication": "Retain v25 for regression/A-B archaeology only; current Clay 0.1 training must use current architecture/Needle/Clay semantics and fresh held-out validation."
+    }
+  ],
+  "branch_feedback": {
+    "harness": "Add artifact-integrity preflight: parse Safetensors header, verify declared data extent == actual file length, validate tensor ranges/dtypes, hash complete artifact before any model load/eval. Add a fixture based on the 53.7 MB truncated v25 copy.",
+    "unifieddb": "Model artifact identity must include content hash, declared tensor manifest, byte length, base/config identity and supersession status; human version labels and Drive folder presence are insufficient.",
+    "claygraph": "Represent CORRUPT/TRUNCATED artifact nodes and derives-from/superseded-by relations explicitly; do not collapse the truncated root copy with the complete candidate without preserving corruption provenance.",
+    "training_data": "Do not use the root 53.7 MB adapter. Preserve v25 only as historical A/B baseline; final training/eval/export receipts require full artifact hashes and exact runtime-format identity.",
+    "frank": "No current architecture decision should be based on the truncated root adapter. Keep v25 as historical behavior evidence only.",
+    "q12_index": "Correct adapter-backup inventory: direct folder traversal reveals binary/config objects hidden from the earlier bounded search listing; one root binary is directly proven truncated."
+  },
+  "earned_work": {
+    "additional_avoided_future_hours_low": 0.0,
+    "additional_avoided_future_hours_center": 0.0,
+    "additional_avoided_future_hours_high": 0.0,
+    "reason": "Training/recovery methodology is already credited by peer receipts. This is an integrity correction/regression fixture and must not double-count historical work."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Whole-Drive denominator remains unfrozen; this receipt closes a bounded binary-integrity question only."
+  },
+  "completed_at": "2026-08-09T04:38:00+07:00"
+}

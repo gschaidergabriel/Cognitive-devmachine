@@ -1,0 +1,36 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T2015p0700-chatgpt-secondary-r2",
+  "experiments":[
+    {
+      "id":"EXP-CC11-DUAL-BIND-FUZZ-001",
+      "class":"LOCAL_PROPERTY_FUZZ_REFERENCE_MECHANISM",
+      "n":100000,
+      "seed":42,
+      "attacks":["role_swap","class_cast","stale_epoch","semantic_substitution","projected_value_change"],
+      "baseline_naive_short_handle":{"unsafe_accepts":79888,"unsafe_accept_rate":0.79888},
+      "source_bound_receipt_v1":{"unsafe_accepts":20112,"unsafe_accept_rate":0.20112,"failure":"all projected_value_change cases passed because receipt bound source semantics but not the exact emitted view"},
+      "dual_bound_receipt_v2":{"unsafe_accepts":0,"detected":100000,"detected_rate":1.0,"added_obligation":"projected_view_hash plus explicit projected-value/role/class/epoch validation"},
+      "interpretation":"A source-bound projection receipt is insufficient. The actual reader-visible projection/wire form must also be cryptographically/structurally bound and semantically validated. Zero unsafe accepts is only for the constructed mutation family, not a production guarantee."
+    },
+    {
+      "id":"EXP-CC11-RAIL-PARETO-002",
+      "class":"DERIVED_ANALYSIS_OF_EXISTING_NVIDIA_HOSTED_4B_MEASUREMENTS",
+      "source_run":"nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary",
+      "cove_task":{"raw":{"correct":4,"total":12,"accuracy":0.3333333333,"prompt_tokens":458},"compiled":{"correct":11,"total":12,"accuracy":0.9166666667,"prompt_tokens":289},"result":"compiled view Pareto-dominates raw on measured accuracy and prompt tokens"},
+      "intent_task":{"raw":{"correct":12,"total":16,"accuracy":0.75,"prompt_tokens":405},"typed":{"correct":13,"total":16,"accuracy":0.8125,"prompt_tokens":733},"compact":{"contract_ok":false,"prompt_tokens":344,"note":"failed required 16-output contract"}},
+      "derived_tradeoff":{"typed_accuracy_gain_pp":6.25,"typed_prompt_token_cost":328,"tokens_per_accuracy_percentage_point":52.48,"utility_definition":"U=accuracy-lambda*(prompt_tokens/1000)","typed_beats_raw_when_lambda_less_than":0.1905487805},
+      "interpretation":"The best representation is task/reader/cost dependent. Operation-specific compiled COVE dominates raw on one task, while typed intent trades modest accuracy gain for substantial token cost on another. Compactness is infeasible when output contract fails."
+    },
+    {
+      "id":"EXP-CC11-LOSS-BUDGET-003",
+      "class":"LOCAL_SYNTHETIC_SEMANTIC_SLICE_CALIBRATION",
+      "n":100000,
+      "seed":123,
+      "setup":"20 semantic fields; each operation requires uniformly 2..6 fields; compare arbitrary fixed five-field compact view with operation-compiled required-only view",
+      "random_fixed_compact":{"fields":5,"required_slice_fully_preserved_rate":0.0132},
+      "compiled_required_only":{"mean_fields":4.00196,"required_slice_fully_preserved_rate":1.0},
+      "interpretation":"Visual or fixed compactness is a poor proxy for semantic sufficiency. Operation-specific loss budgets can be smaller while retaining the constructed required slice. The 100% compiled result is by construction and is not empirical FRANK performance evidence."
+    }
+  ]
+}

@@ -37,12 +37,14 @@ import judge0_execute  # noqa: E402
 import piston_execute  # noqa: E402
 import huggingface_inference  # noqa: E402
 import groq_inference  # noqa: E402
+import sandboxapi_sandbox  # noqa: E402
 from rae_secret_loader import get_secret  # noqa: E402
 
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$")
 SECRET_NAMES = [
     "OPENALEX_API_KEY", "TAVILY_API_KEY", "EXA_API_KEY", "E2B_API_KEY", "HF_TOKEN",
     "GROQ_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "JUDGE0_API_KEY", "PISTON_API_TOKEN",
+    "RAPIDAPI_KEY",
 ]
 
 
@@ -211,6 +213,18 @@ def _execute(req: dict[str, Any]) -> Any:
             max_tokens=_int(options.get("max_tokens"), 256, 1, 2048),
             temperature=float(options.get("temperature", 0.0)),
             system=str(options.get("system")) if options.get("system") else None,
+        )
+
+    if tool == "sandboxapi_sandbox":
+        code = str(req.get("code") or "")
+        if not code or len(code.encode("utf-8")) > 200000:
+            raise ValueError("bounded sandbox code required (1..200000 bytes)")
+        language = str(options.get("language") or "python3")
+        return sandboxapi_sandbox.execute_code(
+            code,
+            language=language,
+            timeout=_int(options.get("timeout"), 10, 1, 30),
+            stdin=str(options.get("stdin") or ""),
         )
 
     if tool in {"e2b_sandbox", "judge0_execute", "piston_execute"}:

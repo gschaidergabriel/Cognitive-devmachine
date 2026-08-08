@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "status": "ACTIVE",
+  "effective_from": "2026-08-09",
+  "next_expected_change": "2026-08-11",
+  "ai_workers": {
+    "chatgpt": {
+      "research_status": "PRIMARY_AVAILABLE",
+      "current_scope": "FRANK/Clay/ClayCode research, implementation, center coordination and Q12 work",
+      "dispatchable_by_go": true
+    },
+    "claude": {
+      "research_status": "TEMPORARILY_UNAVAILABLE_TOKEN_LIMIT",
+      "expected_research_return": "2026-08-11",
+      "dispatchable_by_go": false,
+      "current_external_lane": {
+        "task": "Finish Claude Code Harness for Andreas",
+        "status": "ACTIVE_SEPARATE_LANE",
+        "non_overlap_rule": "Do not assign overlapping FRANK/Clay research work until the lane is complete and/or Claude research capacity returns."
+      }
+    }
+  },
+  "compute": {
+    "available_now": [
+      "Minisforum 790 Pro",
+      "additional computer connected through Tailscale; capabilities require verification before scheduling specialized workloads"
+    ],
+    "expected_not_yet_available": [
+      "VPS expected around 2026-08-16 with RTX 3090, 24 GB VRAM and about 5 TB storage; verify before use"
+    ]
+  },
+  "routing_rule": "Dispatch only against verified currently available capacity. Planned resources and temporarily unavailable AI workers may receive future queues but not current execution assignments.",
+  "handoff_rule": "When Claude research capacity returns, first ingest canonical deltas/tests/artifacts produced during the ChatGPT-first window, plus the completion receipt/status of the Andreas Harness lane, before assigning new work.",
+  "source": "PROJECT_OWNER_STATEMENT_2026-08-09"
+}

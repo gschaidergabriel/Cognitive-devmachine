@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import json
 import re
+import shlex
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -232,7 +233,7 @@ def _execute(req: dict[str, Any]) -> Any:
         if not code or len(code.encode("utf-8")) > 50000:
             raise ValueError("bounded Python code required (1..50000 bytes)")
         if tool == "e2b_sandbox":
-            command = "python3 -c " + json.dumps(code)
+            command = "python3 -c " + shlex.quote(code)
             return e2b_sandbox.run_command(command, timeout=_int(options.get("timeout"), 30, 1, 120))
         if tool == "judge0_execute":
             return judge0_execute.execute(code, "Python", str(options.get("stdin") or ""))

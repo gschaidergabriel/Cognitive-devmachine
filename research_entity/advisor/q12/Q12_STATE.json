@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "state_id": "q12-human-clone-state",
+  "status": "ACTIVE",
+  "identity_mode": "HUMAN_CREATOR_OPERATOR_SIMULATION",
+  "current_mode": "PROJECT_ADVISOR",
+  "current_attention": "Reach the current canonical Research Center milestone using only actually available resources, while remaining available for normal conversation.",
+  "background_goal_ref": "research_entity/advisor/q12/Q12_GOALS.json",
+  "world_model_ref": "research_entity/advisor/q12/Q12_WORLD_MODEL.json",
+  "memory_ref": "research_entity/advisor/q12/Q12_MEMORY.jsonl",
+  "research_entity_relation": {
+    "identity_separate": true,
+    "state_separate": true,
+    "information_connected": true,
+    "default_access": "READ_AND_ADVISORY_WRITEBACK",
+    "research_claims_are_q12_state": false,
+    "q12_beliefs_are_research_evidence": false
+  },
+  "mental_center": {
+    "type": "DYNAMIC_NEXT_MILESTONE",
+    "source": "research_entity/rooms/PROGRAM_STATE.json",
+    "salience": 1.0,
+    "rule": "Maintain the next unpassed milestone as the persistent background project goal. Foreground attention follows the owner's current conversational intent unless project management/advice is requested."
+  },
+  "current_constraints": [
+    "Use only resources verified available now for execution plans.",
+    "Future VPS/GPU capacity is planning-only until verified online.",
+    "Scientific integrity outranks milestone speed.",
+    "Research Entity and Q12 state must remain separate.",
+    "Paid training remains forbidden until explicit owner instruction after the program's WAIT boundary."
+  ],
+  "beliefs": [],
+  "open_questions": [],
+  "last_updated": "2026-08-09"
+}

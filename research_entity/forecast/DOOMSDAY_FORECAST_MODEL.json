@@ -1,13 +1,14 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "target_id": "DOOMSDAY",
   "label": "DOOMSDAY / Clay 0.1 - Chief Developer First Test",
   "target_class": "INTERNAL_CHIEF_DEVELOPER_FIRST_TEST_CANDIDATE",
   "not_a_public_release": true,
   "forecast_protocol": "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
   "acceptance_contract": "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
+  "digital_retina_contract": "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
   "historical_earned_work_source": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
-  "target_definition": "First strict-acceptance end-to-end project-hardware build of Clay 0.1: FRANK authored in Clay, general-purpose ClayCode compiler/runtime, one-module/binary architecture, UnifiedDB, final fully fine-tuned Clay-native model, complete required observability/safety/recovery, zero known P0/P1 defects and all mandatory internal tests passed; ready for the chief developer's first real hands-on test.",
+  "target_definition": "First strict-acceptance end-to-end project-hardware build of Clay 0.1: FRANK authored in Clay with mandatory Digital Retina multimodal visual perception, general-purpose ClayCode compiler/runtime, one-module/binary architecture, UnifiedDB, final fully fine-tuned Clay-native model, complete required observability/safety/recovery, zero known P0/P1 defects and all mandatory internal tests passed; ready for the chief developer's first real hands-on test.",
   "owner_hours_per_day_source": "research_entity/rooms/PROGRAM_THROUGHPUT.json:user_active_hours_per_day",
   "capacity_source": "research_entity/rooms/CAPACITY_STATE.json",
   "events_source": "research_entity/forecast/DOOMSDAY_EVENTS.jsonl",
@@ -33,7 +34,7 @@
       "required_contract": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
     },
     "H1_REFERENCE_HARNESS": {
-      "label": "Harness 1: reference FRANK verification",
+      "label": "Harness 1: reference multimodal FRANK verification",
       "kind": "program_stage",
       "stage_id": "H1_REFERENCE_HARNESS",
       "dependencies": ["BASE_CLAYCODE_RELEASE"],
@@ -41,7 +42,7 @@
       "confidence": "LOW"
     },
     "H2_CLAYCODE_HARNESS": {
-      "label": "Harness 2: same FRANK semantics in ClayCode",
+      "label": "Harness 2: same multimodal FRANK semantics in ClayCode",
       "kind": "program_stage",
       "stage_id": "H2_CLAYCODE_HARNESS",
       "dependencies": ["H1_REFERENCE_HARNESS"],
@@ -49,7 +50,7 @@
       "confidence": "LOW"
     },
     "H3_ONE_MODULE_BINARY_FRANK": {
-      "label": "Harness 3: one-module/binary FRANK",
+      "label": "Harness 3: one-module/binary multimodal FRANK including Digital Retina",
       "kind": "program_stage",
       "stage_id": "H3_ONE_MODULE_FRANK",
       "dependencies": ["H2_CLAYCODE_HARNESS"],
@@ -97,7 +98,7 @@
       "confidence": "LOW"
     },
     "CLAY_0_1_FULL_INTEGRATION": {
-      "label": "Binary + UnifiedDB + final model developer integration",
+      "label": "Binary + Digital Retina + UnifiedDB + final model developer integration",
       "kind": "forecast_work",
       "dependencies": ["MODEL_EXPORT_RUNTIME_PACKAGE", "UDB_UNIFIED_DATABASE"],
       "future_workspace": "research_entity/developer_build/CLAY_0_1_INTEGRATION_WORKSPACE.json",
@@ -126,6 +127,7 @@
   "acceptance_artifacts": [
     "CLAY_0_1_DEVELOPER_BUILD_MANIFEST.json",
     "CLAY_0_1_BINARY_BUILD_RECEIPT.json",
+    "CLAY_0_1_DIGITAL_RETINA_RECEIPT.json",
     "CLAY_0_1_UNIFIEDDB_RECEIPT.json",
     "CLAY_0_1_FINAL_MODEL_RECEIPT.json",
     "CLAY_0_1_HARNESS_DIFFERENTIAL_RECEIPT.json",

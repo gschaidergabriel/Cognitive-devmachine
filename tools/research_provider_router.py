@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "research_entity" / "global" / "EXTERNAL_RESEARCH_TOOL_REGISTRY.json"
 QUOTA = ROOT / "research_entity" / "runtime" / "TOOL_QUOTA_STATE.json"
 HEALTH = ROOT / "research_entity" / "runtime" / "PROVIDER_HEALTH.json"
+GROQ_VERIFY = ROOT / "research_entity" / "runtime" / "groq_verification.json"
 
 ALLOWED_FALLBACKS = {
     "NOT_APPLICABLE",
@@ -71,7 +72,12 @@ BUNDLES = {
         {"tool": "piston_execute", "mode": "FALLBACK"},
     ],
     "model_experiment": [
-        {"tool": "huggingface_inference", "mode": "MUST_ATTEMPT"},
+        {"tool": "groq_inference", "mode": "MUST_ATTEMPT"},
+        {"tool": "huggingface_inference", "mode": "FALLBACK"},
+    ],
+    "small_model_experiment": [
+        {"tool": "groq_inference", "mode": "MUST_ATTEMPT"},
+        {"tool": "huggingface_inference", "mode": "FALLBACK"},
     ],
 }
 
@@ -117,6 +123,11 @@ def health_state() -> tuple[datetime | None, dict[str, dict]]:
 
 
 def _health_blocker(tool: str) -> str | None:
+    if tool == "groq_inference":
+        receipt = load_json(GROQ_VERIFY, {})
+        if receipt.get("status") == "RUNTIME_VERIFIED" and receipt.get("model") == "llama-3.1-8b-instant":
+            return None
+        return "RUNTIME_UNAVAILABLE"
     checked, items = health_state()
     if checked is None or (datetime.now(timezone.utc) - checked).total_seconds() > 21600:
         return None
@@ -154,6 +165,8 @@ def unavailable_reason(tool: str, status: dict[str, dict], quota: dict) -> str |
     health_blocker = _health_blocker(tool)
     if health_blocker:
         return health_blocker
+    if tool == "groq_inference":
+        return None
 
     item = status.get(tool)
     if not item:
@@ -173,6 +186,8 @@ def unavailable_reason(tool: str, status: dict[str, dict], quota: dict) -> str |
 def invocation_surface(tool: str, registry: dict) -> str:
     if tool in {"github_connector", "local_sandbox"}:
         return "DIRECT_RUNTIME"
+    if tool == "groq_inference":
+        return "DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"
     bridge = registry.get("worker_invocation_bridge", {})
     if bridge.get("status") == "OPERATIONAL":
         return "DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"
@@ -195,16 +210,20 @@ def plan(classes: list[str]) -> dict:
             row["class"] = cls
             row["availability_blocker"] = unavailable_reason(spec["tool"], status, quota)
             row["invocation_surface"] = invocation_surface(spec["tool"], registry)
+            if spec["tool"] == "groq_inference":
+                row["default_model"] = "llama-3.1-8b-instant"
+                row["evidence_role"] = "8b_proxy_for_4b"
+                row["proxy_policy"] = "research_entity/global/SMALL_MODEL_PROXY_POLICY.md"
             selected.append(row)
     return {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "classes": classes,
         "planned_tools": selected,
         "legacy_fallback": LEGACY_FALLBACK,
         "allowed_fallback_reasons": sorted(ALLOWED_FALLBACKS),
         "bridge": registry.get("worker_invocation_bridge"),
-        "rule": "MUST_ATTEMPT tools require an attempt while healthy. For connector-limited workers, a repo-runner bridge request counts as the provider attempt. Every blocked/failed MUST_ATTEMPT tool must have a successful fallback explicitly covering that tool.",
+        "rule": "MUST_ATTEMPT tools require an attempt while healthy. Groq llama-3.1-8b-instant is the current small-model proxy and must remain labeled 8b_proxy_for_4b; it never closes target-specific 4B/hardware tests. Every blocked/failed MUST_ATTEMPT tool requires a successful covering fallback.",
     }
 
 

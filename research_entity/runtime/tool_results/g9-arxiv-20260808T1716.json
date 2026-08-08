@@ -1,0 +1,197 @@
+{
+  "schema_version": "1.1",
+  "request_id": "g9-arxiv-20260808T1716",
+  "tool": "arxiv_search",
+  "request_sha256": "8472e64585dc221c235a107bb1cfb8dea3fcc4e691c97b7deece4cc26623ecc8",
+  "processed_at": "2026-08-08T10:21:54.690046+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-08T10:21:54.876600+00:00",
+    "credential_required": false,
+    "query": "all:\"agent memory\" AND (all:\"incremental retrieval\" OR all:\"graph memory\" OR all:\"workspace learning\" OR all:\"event-driven\")",
+    "start": 0,
+    "max_results": 12,
+    "total_results": 7,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2605.09033v3",
+        "title": "ShadowMerge: A Novel Poisoning Attack on Graph-Based Agent Memory via Relation-Channel Conflicts",
+        "summary": "Graph-based agent memory is increasingly used in LLM agents to support structured long-term recall and multi-hop reasoning, but it also creates a new poisoning surface: an attacker can inject a crafted relation into graph memory so that it is later retrieved and influences agent behavior. Existing agent-memory poisoning attacks mainly target flat textual records and are ineffective in graph-based memory because malicious relations often fail to be extracted, merged into the target anchor neighborhood, or retrieved for the victim query. We present SHADOWMERGE, a poisoning attack against graph-based agent memory that exploits relation-channel conflicts. Its key insight is that a poisoned relation can share the same query-activated anchor and canonicalized relation channel as benign evidence while carrying a conflicting value. To realize this, we design AIR, a pipeline that converts the conflict into an ordinary interaction that can be extracted, merged, and retrieved by the graph-memory system. We evaluate SHADOWMERGE on Mem0 and three public real-world datasets: PubMedQA, WebShop, and ToolEmu. SHADOWMERGE achieves 93.8% average attack success rate, improving the best baseline by 50.3 absolute points, while having negligible impact on unrelated benign tasks. Mechanism studies show that SHADOWMERGE overcomes the three key limitations of existing agent-memory poisoning attacks, and defense analysis shows that representative input-side defenses are insufficient to mitigate it. We have responsibly disclosed our findings to affected graph-memory vendors and open sourced SHADOWMERGE.",
+        "published": "2026-05-09T16:16:41Z",
+        "updated": "2026-05-15T08:27:09Z",
+        "authors": [
+          "Yang Luo",
+          "Zifeng Kang",
+          "Tiantian Ji",
+          "Xinran Liu",
+          "Yong Liu",
+          "Shuyu Li",
+          "Lingyun Peng"
+        ],
+        "categories": [
+          "cs.CR",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Preprint. Corresponding authors: Zifeng Kang and Tiantian Ji. Code is available at https://anonymous.4open.science/status/ShadowMerge-033C",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2605.09033v3",
+          "pdf": "https://arxiv.org/pdf/2605.09033v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2605.12061v1",
+        "title": "SAGE: A Self-Evolving Agentic Graph-Memory Engine for Structure-Aware Associative Memory",
+        "summary": "Long-term memory is becoming a central bottleneck for language agents. Exsting RAG and GraphRAG systems largely treat memory graphs as static retrieval middleware, which limits their ability to recover complete evidence chains from partial cues, exploit reusable graph-structrual roles, and improve the memory itself through downstream feedback. We introduce SAGE, a Self-evolving Agentic Graph-memory Engine that models graph memory as a dynamic long-term memory substrate. SAGE couples two roles: a memory writer that incrementally constucts structured graph memory from interaction histories, and a Graph Foundation Model-based memory reader to perform retrieval and provide feedback to the memory writer. We provide rigorooous theoretical annalyses supporting the framework. Across multi-hop QA, open-domain retireval, domain-specific review QA, and long-term agent-memory benchmarks, SAGE improves evidence recovery, answer grounding, and retrieval efficiency: after two self-evolution rounds, it achieves the best average rank on multi-hop QA; in zero-shot open-domain transfer, it reaches 82.5/91.6 Recall@2/5 on NQ. Further results on LongMemEval and HaluMem show that traning and reader-writer feedback improve multiple long-term memory and hallucination-diagnostic metrics, suggesting that self-evolving, structure-aware graph memory is a promising foundation for robust long-horizon language agents.",
+        "published": "2026-05-12T12:47:43Z",
+        "updated": "2026-05-12T12:47:43Z",
+        "authors": [
+          "Juntong Wang",
+          "Haoyue Zhao",
+          "guanghui Pan",
+          "Xiyuan Wang",
+          "Yanbo Wang",
+          "Qiyan Deng",
+          "Muhan Zhang"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2605.12061v1",
+          "pdf": "https://arxiv.org/pdf/2605.12061v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.12290v1",
+        "title": "Selection Integrity for LLM Graph Memory: An Accumulability Criterion for Information-Flow-Blind Retrieval",
+        "summary": "Agent memory is moving to graphs, and the provenance defenses now being built for it all check one thing: the provenance of the records an agent retrieves. We show that this entire class of defense is blind by construction. A long-term graph memory runs a global selection step over writable graph structure, so structure that an untrusted principal writes changes \\emph{which} authenticated facts are selected while the cited evidence stays fully authenticated; faithful information-flow control (IFC), checking the provenance of what the reader uses (all of it authenticated), makes the byte-identical decision to no defense at all, across document-QA substrates and real multi-session agent memory. In the most consequential instance, a no-source structural write silently misdirects $28$ irreversible ledger transfers over $499$ live actions: faithful IFC permits every one, and \\authselect\\ prevents every one. We then characterize exactly which memories are exposed: a selector admits the channel when its structural term can reallocate an $Ω(1)$ share of top-$k$ membership past a selected fact's margin. Personalized PageRank can, since a sourceless write reroutes conserved random-walk mass; a content-fixed reranker cannot, and Graphiti's node-distance, which leans on structure \\emph{more} than PageRank does, stays immune. Reallocatability, not reliance, is the predictor. We prove the immune case in general and the open case under a chokepoint condition we verify. Closing the channel forces any provenance defense to recompute selection on the authenticated subgraph, which is what \\authselect\\ does, at zero over-block and $2$--$3\\%$ latency.",
+        "published": "2026-06-10T16:26:46Z",
+        "updated": "2026-06-10T16:26:46Z",
+        "authors": [
+          "Zeming Fei",
+          "Hongming Fei",
+          "Xiaoyang Wang",
+          "Yang yang",
+          "Prosanta Gope",
+          "Biplab Sikdar",
+          "Ying Zhang"
+        ],
+        "categories": [
+          "cs.CR"
+        ],
+        "primary_category": "cs.CR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.12290v1",
+          "pdf": "https://arxiv.org/pdf/2606.12290v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2605.09942v1",
+        "title": "HAGE: Harnessing Agentic Memory via RL-Driven Weighted Graph Evolution",
+        "summary": "Memory retrieval in agentic large language model (LLM) systems is often treated as a static lookup problem, relying on flat vector search or fixed binary relational graphs. However, fixed graph structures cannot capture the varying strength, confidence, and query-dependent relevance of relationships between events. In this paper, we propose HAGE, a weighted multi-relational memory framework that reconceptualizes retrieval as sequential, query-conditioned traversal over a unified relational memory graph. Memory is organized as relation-specific graph views over shared memory nodes, where each edge is associated with a trainable relation feature vector encoding multiple relational signals. Given a query, an LLM-based classifier identifies the relational intent, and a routing network dynamically modulates the corresponding dimensions of the edge embedding. Traversal scores are computed via a learned combination of semantic similarity and these query-conditioned edge representations. This allows memory traversal to prioritize high-utility relational paths while softly suppressing noisy or weakly relevant connections. Beyond adaptive traversal, HAGE further introduces a reinforcement learning-based training framework that jointly optimizes routing behavior and edge representations using downstream tasks. Finally, empirical results demonstrate improved long-horizon reasoning accuracy and a favorable accuracy-efficiency trade-off compared to state-of-the-art agentic memory systems. Our code is available at https://github.com/FredJiang0324/HAGE_MVPReview.",
+        "published": "2026-05-11T03:41:18Z",
+        "updated": "2026-05-11T03:41:18Z",
+        "authors": [
+          "Dongming Jiang",
+          "Yi Li",
+          "Guanpeng Li",
+          "Qiannan Li",
+          "Bingzhe Li"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2605.09942v1",
+          "pdf": "https://arxiv.org/pdf/2605.09942v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2603.02240v1",
+        "title": "SuperLocalMemory: Privacy-Preserving Multi-Agent Memory with Bayesian Trust Defense Against Memory Poisoning",
+        "summary": "We present SuperLocalMemory, a local-first memory system for multi-agent AI that defends against OWASP ASI06 memory poisoning through architectural isolation and Bayesian trust scoring, while personalizing retrieval through adaptive learning-to-rank -- all without cloud dependencies or LLM inference calls. As AI agents increasingly rely on persistent memory, cloud-based memory systems create centralized attack surfaces where poisoned memories propagate across sessions and users -- a threat demonstrated in documented attacks against production systems. Our architecture combines SQLite-backed storage with FTS5 full-text search, Leiden-based knowledge graph clustering, an event-driven coordination layer with per-agent provenance, and an adaptive re-ranking framework that learns user preferences through three-layer behavioral analysis (cross-project technology preferences, project context detection, and workflow pattern mining). Evaluation across seven benchmark dimensions demonstrates 10.6ms median search latency, zero concurrency errors under 10 simultaneous agents, trust separation (gap =0.90) with 72% trust degradation for sleeper attacks, and 104% improvement in NDCG@5 when adaptive re-ranking is enabled. Behavioral data is isolated in a separate database with GDPR Article 17 erasure support. SuperLocalMemory is open-source (MIT) and integrates with 17+ development tools via Model Context Protocol.",
+        "published": "2026-02-17T12:35:23Z",
+        "updated": "2026-02-17T12:35:23Z",
+        "authors": [
+          "Varun Pratap Bhardwaj"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CR"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "11 pages, 5 tables, 1 figure. Code: https://github.com/varun369/SuperLocalMemoryV2",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2603.02240v1",
+          "pdf": "https://arxiv.org/pdf/2603.02240v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2603.17244v1",
+        "title": "Graph-Native Cognitive Memory for AI Agents: Formal Belief Revision Semantics for Versioned Memory Architectures",
+        "summary": "While individual components for AI agent memory exist in prior systems, their architectural synthesis and formal grounding remain underexplored. We present Kumiho, a graph-native cognitive memory architecture grounded in formal belief revision semantics. The structural primitives required for cognitive memory -- immutable revisions, mutable tag pointers, typed dependency edges, URI-based addressing -- are identical to those required for managing agent-produced work as versionable assets, enabling a unified graph-native architecture that serves both purposes. The central formal contribution is a correspondence between the AGM belief revision framework and the operational semantics of a property graph memory system, proving satisfaction of the basic AGM postulates (K*2--K*6) and Hansson's belief base postulates (Relevance, Core-Retainment). The architecture implements a dual-store model (Redis working memory, Neo4j long-term graph) with hybrid fulltext and vector retrieval. On LoCoMo (token-level F1), Kumiho achieves 0.565 overall F1 (n=1,986) including 97.5% adversarial refusal accuracy. On LoCoMo-Plus, a Level-2 cognitive memory benchmark testing implicit constraint recall, Kumiho achieves 93.3% judge accuracy (n=401); independent reproduction by the benchmark authors yielded results in the mid-80% range, still substantially outperforming all published baselines (best: Gemini 2.5 Pro, 45.7%). Three architectural innovations drive the results: prospective indexing (LLM-generated future-scenario implications indexed at write time), event extraction (structured causal events preserved in summaries), and client-side LLM reranking. The architecture is model-decoupled: switching the answer model from GPT-4o-mini (~88%) to GPT-4o (93.3%) improves end-to-end accuracy without pipeline changes, at a total evaluation cost of ~$14 for 401 entries.",
+        "published": "2026-03-18T00:59:49Z",
+        "updated": "2026-03-18T00:59:49Z",
+        "authors": [
+          "Young Bin Park"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.IR",
+          "cs.LO"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "56 pages, 1 figure",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2603.17244v1",
+          "pdf": "https://arxiv.org/pdf/2603.17244v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2408.05861v4",
+        "title": "Temporal Knowledge-Graph Memory in a Partially Observable Environment",
+        "summary": "Agents in partially observable environments require persistent memory to integrate observations over time. While KGs (knowledge graphs) provide a natural representation for such evolving state, existing benchmarks rarely expose agents to environments where both the world dynamics and the agent's memory are explicitly graph-shaped. We introduce the Room Environment v3, a configurable environment whose hidden state is an RDF KG and whose observations are RDF triples. The agent may extend these observations into a temporal KG when storing them in long-term memory. The environment is easily adjustable in terms of grid size, number of rooms, inner walls, and moving objects. We define a lightweight temporal KG memory for agents, based on RDF-star-style qualifiers (time_added, last_accessed, num_recalled), and evaluate several symbolic baselines that maintain and query this memory under different capacity constraints. Two neural sequence models (LSTM and Transformer) serve as contrasting baselines without explicit KG structure. Agents train on one layout and are evaluated on a held-out layout with the same dynamics but a different query order, exposing train-test generalization gaps. In this setting, temporal qualifiers lead to more stable performance, and the symbolic TKG (temporal knowledge graph) agent achieves roughly fourfold higher test QA (question-answer) accuracy than the neural baselines under the same environment and query conditions. The environment, agent implementations, and experimental scripts are released for reproducible research at https://github.com/humemai/agent-room-env-v3 and https://github.com/humemai/room-env.",
+        "published": "2024-08-11T21:04:14Z",
+        "updated": "2026-02-25T14:21:54Z",
+        "authors": [
+          "Taewoon Kim",
+          "Vincent François-Lavet",
+          "Michael Cochez"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.LG"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2408.05861v4",
+          "pdf": "https://arxiv.org/pdf/2408.05861v4"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

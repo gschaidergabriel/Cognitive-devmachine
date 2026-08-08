@@ -20,10 +20,17 @@ New GWT4 evidence reports a constructed identifiability calibration where bundle
 
 **Effect on H3:** upgrades `TopologyBasis` from replay witness to **experimental orthogonality witness**. Hyperposition, GWT, projection and activation must be separately lesionable; bundled interventions cannot identify which causal stage produced an effect.
 
+## FRANK Cycle 5 Cognitive Epoch Capsule
+
+FRANK C5 appeared during H3 closure with a new `S.COGNITIVE_EPOCH_CAPSULE` and `M.COGNITIVE_EPOCH_COORDINATOR`. Its state contract seals frame identity, exact-state root, memory/Assembly reference, operation semantics, semantic-graph schema and reader contract before workspace competition. It also keeps graph activation non-authoritative and reader projection separately receipted.
+
+**Effect on H3:** this is strong cross-branch convergence but not independent replication because both workers share RAE ancestry and current upstream material. H3 will **not invent a competing FRANK state object**. `TopologyBasis` remains the abstract Hyperposition semantic contract; FRANK's `CognitiveEpochCapsule` is the current implementation envelope that should realize it. Hyperposition tests should therefore target capsule/basis invariants rather than introduce parallel schemas.
+
 ## Decision after intra-run feedback
 
 - `HYP-RC3`: RETAIN / STRENGTHEN, still OPEN.
+- `TopologyBasis`: abstract semantic/replay/orthogonality contract; map to FRANK `CognitiveEpochCapsule` for implementation.
 - Add rematerialization tail/debt objectives.
 - Add deterministic-before-generative reader projection rule.
-- Add orthogonal intervention identity to `TopologyBasis` receipts.
+- Add orthogonal intervention identity to basis/projection receipts.
 - No canonical promotion; no target/live claims.

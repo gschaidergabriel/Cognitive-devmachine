@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "workspace_id": "666-frank-archive-assimilation",
   "program_stage": "L0_ARCHIVE_ASSIMILATION",
   "status": "ACTIVE",
@@ -57,12 +57,13 @@
     "exact_coverage_percent": 0.0,
     "analyzed_units": 0,
     "integrated_units": 0,
-    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
     "provisional_semantic_shards": [
       "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
       "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
       "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
-      "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json"
+      "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json"
     ],
     "history_manifest_constraint": "Material deleted/superseded artifacts exist in commit history but not at frozen head; exact Level-0 Project-Frankenstein coverage must be history-aware rather than head-only."
   },
@@ -87,14 +88,16 @@
     "mapping_path": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
     "temporary_doomsday_calibration_band_percent": [67.2, 76.6],
     "temporary_doomsday_center_percent": 72.7,
-    "partial_mapped_avoided_future_hours_low": 15.0,
-    "partial_mapped_avoided_future_hours_center": 38.0,
-    "partial_mapped_avoided_future_hours_high": 76.0,
+    "partial_mapped_avoided_future_hours_low": 20.0,
+    "partial_mapped_avoided_future_hours_center": 53.0,
+    "partial_mapped_avoided_future_hours_high": 106.0,
     "partial_mapping_receipts": [
       "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
-      "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json"
+      "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json"
     ],
     "global_completion_credit_applied": false,
+    "aggregation_warning": "53 center hours is a provisional gross mechanism-deduped mapping, not strict completion credit; row-level overlap still requires final reconciliation.",
     "rule": "Replace this temporary retention prior with evidence-mapped reusable/avoided current-work equivalents only after sufficient Level-0 coverage; partial mappings do not change exact completion."
   },
   "eta": {
@@ -142,6 +145,16 @@
         "earned_work_mappings": 1,
         "provisional_avoided_future_hours_center": 9.0,
         "branch_event": "research_entity/rooms/center_events/20260809T0420p0700_666_safety_authority_cross_room_delta.json"
+      },
+      {
+        "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+        "kind": "crossread-deduped-lcme-soma-autonomy-history-semantic-shard",
+        "exact_coverage_credit": 0.0,
+        "material_deltas": 5,
+        "earned_work_mappings": 3,
+        "provisional_unique_avoided_future_hours_center": 15.0,
+        "branch_event": "research_entity/rooms/center_events/20260809T0421p0700_666_lcme_soma_autonomy_crossroom_delta.json",
+        "crossread_peer_receipts": 4
       }
     ]
   },
@@ -160,7 +173,8 @@
     "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
     "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
     "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
-    "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json"
+    "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json"
   ],
-  "last_updated": "2026-08-09T04:21:00+07:00"
+  "last_updated": "2026-08-09T04:22:00+07:00"
 }

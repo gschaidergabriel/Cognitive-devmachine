@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"gwt-20260808T2140p0700-chatgpt-secondary-r5",
+  "actor":"chatgpt-secondary",
+  "classes":{
+    "implementation":{"status":"EXECUTED","tools":["GitHub connector","Anthropic jacobian-lens public repository inspection"],"evidence":["anthropics/jacobian-lens README: Qwen examples and HuggingFace decoder adaptation"]},
+    "scholarly":{"status":"EXECUTED_WITH_NATIVE_WEB_FALLBACK","sources":["Anthropic/Transformer Circuits 2026 global-workspace paper","ACL Findings 2026 prompt-order study","Nature 2025 adversarial GNWT/IIT test","arXiv 2026 Ignition Index"],"provider_router":"NOT_EXECUTABLE_IN_CURRENT_CHATGPT_CONNECTOR_SURFACE"},
+    "current_web":{"status":"EXECUTED","sources":["Anthropic official research summary Jul 6 2026"]},
+    "executable":{"status":"EXECUTED_LOCAL_AND_E2B_ATTEMPTED","local":"EXP-GWT-R5-NESTED-IDENTIFIABILITY-001, seeded Python simulation, N=300000","e2b_request":"research_entity/runtime/tool_requests/gwt-r5-e2b-jlens-smoke-20260808T2140p0700.json","e2b_result_at_manifest_time":"NOT_YET_OBSERVED"},
+    "model_experiment":{"status":"OPEN","reason":"No direct hidden-state access to target FRANK/Qwen-4B runtime in this ChatGPT worker; Qwen Jacobian-lens experiment specified as next discriminating test."}
+  },
+  "promotion_gate":{"strong_promotion":false,"reasons":["repository provider-router validation not executable in current ChatGPT connector surface","target Qwen-4B internal-workspace intervention not yet executed","current-run quantitative nested-workspace experiment is synthetic calibration"]}
+}

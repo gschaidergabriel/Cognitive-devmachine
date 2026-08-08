@@ -16,13 +16,13 @@ Each room remains loyal to its own domain:
 - `frank` researches the whole FRANK architecture;
 - `gwt` researches workspace mathematics and causal closure;
 - `emergenz` researches causal emergence measurements;
-- `claycode` researches/builds the native language/runtime;
+- `claycode` researches and builds the native language/runtime;
 - `hyperposition` researches higher-order coupling/topology;
 - `claygraph` researches graph/memory/topology representation;
 - `unifieddb` researches persistence/query/transaction unification;
-- `harness` builds/executes/falsifies the architecture.
+- `harness` builds, executes and falsifies the architecture.
 
-But every room must ask:
+Every room additionally asks:
 
 > What does my domain need to discover, build, falsify or validate for the **current program stage**?
 
@@ -33,10 +33,10 @@ A room must not abandon its domain merely to work directly on another stage's im
 Across every stage, all rooms must preserve and use:
 
 1. current RAE mesh knowledge;
-2. repo-native research-center room state/live deltas;
+2. repo-native research-center room state and live deltas;
 3. FRANK architecture archaeology from `gschaidergabriel/Project-Frankenstein`;
-4. first-principles/emergent-coupling analysis;
-5. current ClayCode/ClayGraph/UnifiedDB/GWT/FRANK research;
+4. first-principles and emergent-coupling analysis;
+5. current ClayCode, ClayGraph, UnifiedDB, GWT and FRANK research;
 6. negative results, historical bugs, boot/order/state failures and superseded mechanisms;
 7. exact evidence/provenance/ancestry status.
 
@@ -52,7 +52,8 @@ The Project-Frankenstein history is not legacy clutter. It is an active inventio
 
 The shared program proceeds in this order only:
 
-`H1 Reference Harness`
+`BASE ClayCode Release`
+`-> H1 Reference Harness`
 `-> H2 ClayCode Harness`
 `-> H3 One-Module FRANK`
 `-> Unified Database`
@@ -63,13 +64,64 @@ Stage advancement requires explicit machine-readable gate evidence. A later stag
 
 ---
 
+# STAGE BASE — Finish ClayCode
+
+## Goal
+
+Finish ClayCode as a real executable language/runtime before the staged FRANK implementations advance.
+
+"Finished" does not mean a candidate memo, schema sketch or research consensus. It means a frozen executable language that the research workers can themselves use to express, validate, execute, mutate, debug and repair FRANK-relevant programs and state transitions.
+
+Required capabilities include at least:
+
+- frozen syntax/model-facing representation;
+- parser;
+- deterministic canonicalizer;
+- typed canonical semantic IR;
+- deterministic semantic identity/hash;
+- validator;
+- type/effect checker;
+- executable/reference evaluator for the defined core;
+- general-purpose control/data structures;
+- TCQS/collection semantics;
+- explicit UNKNOWN/CONFLICT/REVOKED/error states;
+- effect-intent representation without confusing expressibility with authority;
+- lowering/foreign-runtime interface with translation-validation receipts;
+- property, fuzz, mutation, round-trip and conformance tests;
+- broad nontrivial application/program corpus;
+- semantics-derived training corpus generator;
+- separately frozen held-out generator/evaluation corpus;
+- exact release manifest and executed test manifest.
+
+ClayCode must also be able to represent FRANK as a multi-timescale recurrent dynamical system: typed state, causal/dependency edges, feedback/re-entry, competition/gating, persistence/epochs, resource/authority boundaries and intervention points.
+
+## Domain duties during BASE
+
+- `claycode`: primary builder; finish language/runtime, compiler/lowering contracts and test corpus.
+- `harness`: build only architecture-generic host foundations that help test ClayCode and expose missing language semantics; do not declare H1 complete before BASE passes.
+- `frank`: provide exact state/transition requirements ClayCode must express.
+- `gwt`: provide exact mathematical/state requirements for workspace competition, broadcast, receiver closure and re-entry.
+- `claygraph`: provide graph/topology/memory/admissibility semantics ClayCode must encode and later emit.
+- `unifieddb`: provide typed query/result/transaction/replay requirements relevant to ClayCode representation without prematurely performing final UDB consolidation.
+- `hyperposition`: stress-test higher-order coupling, timing and shared-state expressibility.
+- `emergenz`: define intervention/measurement constructs the language must be able to represent without confusing representation with evidence.
+- `clay`: integrate constraints and search for a smaller, more coherent semantic basis without deleting necessary expressivity.
+
+BASE completion artifact: `CLAYCODE_RELEASE_MANIFEST.json` with `CLAYCODE_RELEASE_GATE = PASS`.
+
+---
+
 # STAGE H1 — Reference Harness
+
+## Prerequisite
+
+`CLAYCODE_RELEASE_GATE = PASS`.
 
 ## Goal
 
 Build a **normal host-language Reference Harness** (primarily Python/ordinary deterministic host code) that executes/simulates the complete current FRANK architecture faithfully enough to serve as the reference oracle for all later implementations.
 
-H1 is not a mega-prompt and not a thin mock. The repo must execute the architecture around the model boundary.
+H1 is not a mega-prompt and not a thin mock. The repository executes the architecture around the model boundary.
 
 Every H1 release includes its own ClayGraph:
 
@@ -100,16 +152,16 @@ At minimum:
 ## Domain duties during H1
 
 - `harness`: build and execute Reference Harness.
-- `frank`: resolve architecture ambiguities exposed by implementation; publish exact state/transition contracts.
-- `claycode`: finish the language/runtime in parallel because H2 depends on it; use H1 counterexamples as semantic requirements.
+- `frank`: resolve architecture ambiguities exposed by implementation and publish exact state/transition contracts.
+- `claycode`: maintain/fix the released language when H1 exposes a genuine semantic defect; otherwise do not churn the frozen release.
 - `gwt`: provide exact computable workspace equations, receiver semantics, ablations and causal metrics H1 can execute.
-- `claygraph`: define/validate H1 static + dynamic topology, memory/admissibility/Assembly graph semantics.
+- `claygraph`: define/validate H1 static and dynamic topology plus memory/admissibility/Assembly graph semantics.
 - `unifieddb`: support H1 logical state/query/replay requirements but do not jump to final UnifiedDB consolidation stage.
-- `hyperposition`: identify higher-order coupling/state/topology relations that H1 must expose/intervene on.
-- `emergenz`: define measurement/intervention surfaces; do not promote emergence claims from mere Harness complexity.
+- `hyperposition`: identify higher-order coupling/state/topology relations H1 must expose and intervene on.
+- `emergenz`: define measurement/intervention surfaces; do not promote emergence claims from Harness complexity alone.
 - `clay`: integrate cross-domain constraints, especially emergent coupling and Safe-Effect research.
 
-H1 completion artifact: `REFERENCE_HARNESS_RELEASE_MANIFEST.json` with `PASS`.
+H1 completion artifact: `REFERENCE_HARNESS_RELEASE_MANIFEST.json` with `REFERENCE_HARNESS_RELEASE_GATE = PASS`.
 
 ---
 
@@ -141,21 +193,21 @@ Use H1 as a differential oracle:
 - same Golden Traces;
 - compare every architecture-relevant state transition, epoch, receipt and dynamic ClayGraph.
 
-Unexplained semantic/topological divergence reopens the responsible stage. If ClayCode cannot express required FRANK semantics, ClayCode is not finished.
+Unexplained semantic/topological divergence reopens the responsible stage. If ClayCode cannot express required FRANK semantics, BASE is reopened.
 
 ## Domain duties during H2
 
-- `claycode`: own executable Clay implementation and repair semantic gaps.
+- `claycode`: own executable Clay implementation and repair genuine semantic gaps.
 - `harness`: differential runner, Golden Trace execution and failure localization.
 - `claygraph`: compare Reference-vs-Clay static/dynamic graph equivalence.
-- `frank`: arbitrate intended architecture semantics when the two implementations expose ambiguity.
+- `frank`: arbitrate intended architecture semantics when implementations expose ambiguity.
 - `gwt`: verify identical workspace math/receiver closure under both implementations.
 - `unifieddb`: verify query/state/replay semantics are representation-independent.
-- `hyperposition`: compare coupling topology/timing across implementations.
-- `emergenz`: use differential implementations to test whether observed system-level effects survive implementation changes.
-- `clay`: synthesize language/architecture/coupling deltas without allowing shared ancestry to masquerade as replication.
+- `hyperposition`: compare coupling topology and timing across implementations.
+- `emergenz`: test whether system-level effects survive implementation changes.
+- `clay`: synthesize language/architecture/coupling deltas without treating shared ancestry as independent replication.
 
-H2 completion artifacts include `CLAY_HARNESS_RELEASE_MANIFEST.json` and `HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json`, both PASS.
+H2 completion artifacts: `CLAY_HARNESS_RELEASE_MANIFEST.json` and `HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json`, both PASS.
 
 ---
 
@@ -169,9 +221,9 @@ H1 and H2 PASS with unexplained differential divergence = 0 for required semanti
 
 Build a **radically consolidated one-module FRANK implementation** while preserving the same proven architecture semantics, state transitions, emergent couplings, safety/authority boundaries, GWT mathematics, memory behavior and observability.
 
-"One module" means architectural/runtime consolidation, not deleting the functional distinctions that produce FRANK behavior.
+"One module" means architectural/runtime consolidation, not deleting functional distinctions that produce FRANK behavior.
 
-The H1/H2 pair is the semantic oracle. H3 must demonstrate that a much more unified implementation realizes the same required organism-level behavior with lower coupling overhead/latency/complexity where possible.
+The H1/H2 pair is the semantic oracle. H3 must demonstrate that a much more unified implementation realizes the same required organism-level behavior with lower boundary overhead, latency or complexity where possible.
 
 H3 gets its own static/dynamic ClayGraph:
 
@@ -181,18 +233,18 @@ H3 gets its own static/dynamic ClayGraph:
 
 > Which current module boundaries are implementation accidents, and which are causally necessary functional boundaries?
 
-H3 uses differential tests, edge lesions, timing perturbations and state equivalence to answer that rather than assuming "fewer modules = better".
+H3 uses differential tests, edge lesions, timing perturbations and state equivalence rather than assuming fewer modules are automatically better.
 
 ## Domain duties during H3
 
 - `harness`: build one-module implementation and differential oracle against H1/H2.
-- `frank`: distinguish conceptual/causal modules from deploy-time process/module boundaries.
+- `frank`: distinguish conceptual/causal modules from deploy-time process boundaries.
 - `claycode`: express the consolidated system cleanly without opaque host escape hatches.
 - `claygraph`: preserve functional substructure/coupling even when deploy-time module count becomes one.
 - `gwt`: ensure consolidation does not collapse receiver/candidate/workspace distinctions needed for causal tests.
 - `hyperposition`: optimize shared/incremental state and coupling topology while measuring semantics/latency.
-- `unifieddb`: observe H3 access/state patterns to inform the *next* database stage; no premature irreversible merge.
-- `emergenz`: test whether behavior depends on genuine coupling structure rather than service/process boundaries.
+- `unifieddb`: observe H3 access/state patterns to inform the next database stage; do not prematurely merge.
+- `emergenz`: test whether behavior depends on coupling structure rather than service/process boundaries.
 - `clay`: integrate performance, safety, dynamics and architecture trade-offs.
 
 H3 completion artifact: `ONE_MODULE_HARNESS_RELEASE_MANIFEST.json` with PASS.
@@ -207,23 +259,21 @@ H3 PASS.
 
 ## Goal
 
-Only after the three Harness stages have exposed the real state/query/access/replay topology, build the final **UnifiedDB architecture** from measured needs rather than from abstract database aesthetics.
+Only after the three Harness stages expose the real state/query/access/replay topology, build the final **UnifiedDB architecture** from measured needs rather than abstract database aesthetics.
 
 The target remains logical/semantic unification first. Physical consolidation is evidence-driven and may retain specialized sidecars/stores where benchmarks, authority isolation, crash domains or query semantics justify them.
 
-## Required comparisons
+Required comparisons:
 
 - current specialized baseline;
 - logically unified semantic/query interface;
-- canonical-store + derived sidecars;
+- canonical-store plus derived sidecars;
 - selective physical consolidation;
 - one-store designs where technically plausible.
 
 Measure correctness, snapshot/replay consistency, query equivalence, selection integrity, latency, amplification, concurrency, crash recovery, migration rollback and authority-domain separation.
 
-All Harnesses become validation clients of UDB and must rerun relevant Golden Traces after migration candidates.
-
-UDB completion requires its normal UnifiedDB release/decision artifacts plus explicit Harness compatibility evidence.
+All Harnesses become validation clients of UDB and rerun relevant Golden Traces after migration candidates.
 
 ---
 
@@ -231,7 +281,7 @@ UDB completion requires its normal UnifiedDB release/decision artifacts plus exp
 
 ## Prerequisite
 
-H1, H2, H3 and final UDB stage gates PASS; ClayCode release remains PASS.
+BASE, H1, H2, H3 and final UDB stage gates PASS.
 
 ## Goal
 
@@ -253,17 +303,17 @@ The corpus must teach the target 4B:
 
 The external Harness architecture must not be collapsed into memorized prompt imitation.
 
-## Dataset rules
+Dataset rules:
 
-- derive examples from frozen executable semantics/Harness traces where possible;
-- separate training vs held-out generators/corpora by construction;
+- derive examples from frozen executable semantics and Harness traces where possible;
+- separate training and held-out generators/corpora by construction;
 - include positive, negative, repair, counterfactual and adversarial examples;
-- include historical Project-Frankenstein lessons where they define personality/cognitive concepts, but do not train obsolete bugs as desired behavior;
+- include historical Project-Frankenstein lessons where they define target cognitive concepts, but do not train obsolete bugs as desired behavior;
 - preserve provenance and generator version/hash;
 - build target-model-independent eval suites before training;
 - freeze exact corpus and manifests.
 
-Completion artifact: a training-data release manifest with hashes and a separately frozen held-out evaluation manifest.
+Completion artifact: training-data release manifest plus separately frozen held-out evaluation manifest.
 
 ---
 
@@ -282,11 +332,11 @@ No worker may automatically:
 
 Further training starts only after a new explicit project-owner instruction after the data build is complete.
 
-This WAIT rule supersedes any earlier conditional wording that could be interpreted as automatic LoRA start after prior gates.
+This WAIT rule supersedes any earlier conditional wording that could be interpreted as automatic LoRA start after earlier gates.
 
 ## 3. Stage-sensitive room behavior
 
-At JOIN and every mandatory PULSE, workers should read:
+At JOIN and every mandatory PULSE, workers must read:
 
 - `research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md`
 - `research_entity/rooms/PROGRAM_STATE.json`
@@ -306,10 +356,10 @@ Cross-room relevance is strongly boosted when a result can:
 
 No persistent global chief decides truth. Stage advancement is a **gate state**, not a personality role.
 
-A stage can advance when its required machine-readable release evidence is PASS and no current `INTERRUPT_NEXT_SAFE_POINT` blocker invalidates that evidence.
+A stage advances only when its required machine-readable release evidence is PASS and no current `INTERRUPT_NEXT_SAFE_POINT` blocker invalidates that evidence.
 
-`fusion`/`hypofusion` may audit stage readiness across all rooms. They do not manufacture PASS by consensus.
+`fusion` and `hypofusion` may audit stage readiness across all rooms. They do not manufacture PASS by consensus.
 
 ## 5. Shared success criterion
 
-The research center succeeds when many independent sessions can work simultaneously in their specialist rooms while all contributions converge on the same staged build program, without the user manually dispatching them and without erasing disagreement, provenance or invention history.
+The research center succeeds when many independent sessions work simultaneously in specialist rooms while all contributions converge on the same staged build program, without the user manually dispatching them and without erasing disagreement, provenance, invention history or domain specialization.

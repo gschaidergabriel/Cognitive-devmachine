@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.1",
+  "coordination_id": "claycode-multiworker-20260809T0128p0700",
+  "receipt_type": "CONCURRENT_FINALIZATION_REFRESH",
+  "worker_id": "chatgpt-secondary-sol-crossreader-d7f2",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "status": "SYNCED_AFTER_CONCURRENT_FRANK_AND_LOWERING_FINALIZATION",
+  "counts_as_required_worker": false,
+  "lane_claimed": null,
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_concurrent_sources": [
+    {"branch":"frank","artifact":"FRANK C9 final report","commit":"ba0ab9ebadf62596b54bcd3f7e6c262ed3ca39dc","status":"COMPLETE_OPEN_HOLD_NO_CANONICAL_PROMOTION"},
+    {"branch":"frank","artifact":"FRANK C9 closed after remote reread/provenance","commit":"3eb05485d6491d3c6e7d96205ec44a2ab8e5dcff","status":"RUN_CLOSED"},
+    {"branch":"claycode","artifact":"CC-RC1.9 Lane-B executable lowering receipt","commit":"5a41834463b06907f55654b832f5c1d67326722d","status":"OPEN_HOLD_MECHANISM_EVIDENCE"},
+    {"branch":"claycode","artifact":"FRANK C9 Goodman anti-echo review","commit":"ecef4543c4f00b2e0ed69aa3b2e9681beeeec1da","status":"REVIEW_COMPLETE"}
+  ],
+  "new_executable_evidence_received": {
+    "local_differential": {
+      "mixed_cases": 100000,
+      "reference_lowering_mismatches": 0,
+      "targeted_invalid_cases": 40000,
+      "targeted_full_checker_denies": 40000,
+      "benign_cases": 10000,
+      "benign_allows": 10000,
+      "mutation_result": "Dropping any one of signature/scope/revocation/expiry/basis/selection/closure/intent caused 5000/5000 targeted false accepts for that axis."
+    },
+    "e2b_isolated": {
+      "mixed_cases": 30000,
+      "reference_lowering_mismatches": 0,
+      "mixed_false_accepts": 0,
+      "targeted_invalid_cases": 20000,
+      "targeted_full_checker_denies": 20000,
+      "benign_cases": 10000,
+      "benign_allows": 10000,
+      "mutation_result": "Dropping each of eight tested bindings caused 2500/2500 targeted false accepts."
+    },
+    "e2b_cross_boundary": {
+      "boundaries": ["C shared-library FFI", "JSON subprocess IPC"],
+      "cases_per_boundary": 12000,
+      "c_ffi_mismatches": 0,
+      "json_ipc_child_mismatches": 0,
+      "mutation_result": "For each of eight bindings, a C lowerer with exactly that check removed falsely accepted 1000/1000 targeted invalid cases."
+    },
+    "maintenance_gc_simulation": {
+      "trials": 20000,
+      "safe_maintenance_protected_losses": 0,
+      "naive_model_candidate_deletion_trials_with_protected_loss": 19854
+    }
+  },
+  "goodman_anti_echo_import": [
+    {
+      "claim":"model output is not authority; host mints opaque permit",
+      "verdict":"SUPPORTED",
+      "claycode_action":"retain_host_only_authority_boundary"
+    },
+    {
+      "claim":"release-time bound tuple remains semantically relevant across lowering",
+      "verdict":"REFINED",
+      "claycode_action":"bind authority-relevant lowering fields but keep universal minimality open"
+    },
+    {
+      "claim":"semantic identity differs from physical/wire/ABI representation while obligations survive lowering",
+      "verdict":"SUPPORTED",
+      "claycode_action":"retain separate semantic and lowering identity with translation validation"
+    },
+    {
+      "claim":"UNKNOWN causal/dependency closure cannot silently cast to VALID for consequential effects",
+      "verdict":"REFINED",
+      "claycode_action":"forbid implicit UNKNOWN-to-VALID cast; keep risk-specific broaden/recompute/defer/deny policy open"
+    },
+    {
+      "claim":"destructive/admin/raw effects remain expressible while FRANK-untrusted lacks ambient matching authority",
+      "verdict":"REFINED",
+      "claycode_action":"typed EffectIntent plus external authority profile supersedes language-level word/operation ban"
+    }
+  ],
+  "still_open_before_strong_promotion": [
+    "origin/integrity ancestry preservation across real lowering boundaries",
+    "monotone aggregate budget consumption across nested calls/processes",
+    "narrowing-only delegation under real capability objects",
+    "real WASI/Wasmtime capability-resource handles",
+    "Rust/C++ FFI",
+    "dynamic plugin/library boundaries",
+    "JIT executable-memory authority",
+    "GPU/device handles",
+    "freestanding/boot authority",
+    "production FRANK and target-Qwen behavior"
+  ],
+  "updated_shared_interpretation": "The strongest current ClayCode direction is a general-purpose language whose semantic expressivity includes destructive/system effects, while authority is an external non-forgeable use-time fact. The compiler/runtime must prove or differentially validate preservation of authority-relevant semantics across representation and process boundaries. FRANK C9 now provides a complete OPEN/HOLD causal architecture target for that contract, but neither C9 nor CC-RC1.9 is canonically promoted.",
+  "coordination_action": "Append this late-arrival receipt to the active multiworker rendezvous. Sibling workers and any final fusion must treat the new C9 final report, executable lowering evidence and Goodman verdicts as fresh inputs while preserving OPEN/HOLD and shared-ancestry evidence boundaries.",
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "actor_role": "SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "session_id": "chatgpt-secondary-sol-crossreader-d7f2",
+    "prompt_run_id": "claycode-concurrent-finalization-refresh-0149",
+    "created_at": "2026-08-09T01:49:00+07:00"
+  }
+}

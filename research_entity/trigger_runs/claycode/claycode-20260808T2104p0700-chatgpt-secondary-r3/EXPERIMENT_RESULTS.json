@@ -1,0 +1,37 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T2104p0700-chatgpt-secondary-r3",
+  "experiments":[
+    {
+      "id":"EXP-CC12-TYPED-COLLECTION-IDENTITY-001",
+      "evidence_class":"remote_executable_mechanism_test",
+      "runtime":"E2B isolated Linux / Python",
+      "artifact":"tools/claycode_collection_semantics_lab.py",
+      "result_ref":"research_entity/runtime/tool_results/cc12-e2b-typed-collections-20260808T2104p0700.json",
+      "status":"PASS",
+      "results":{"fuzz_iterations":100000,"failure_count":0,"set_reorder_invariant":true,"set_duplicate_idempotent":true,"ordered_reorder_changes":true,"multiset_reorder_invariant":true,"multiset_duplicate_changes":true,"weighted_decimal_normalization":true,"weighted_value_changes":true,"weighted_duplicate_key_reject":true,"cross_kind_distinct":true,"view_mutation_rejected":true,"semantic_equivalent_source_contract_instances_distinct":true,"cold_us_per_round":15.34091146,"hot_us_per_round":3.36849006,"dual_receipt_json_bytes":163,"triple_receipt_json_bytes":332,"triple_extra_json_bytes":169},
+      "boundary":"CPython/E2B performance is a proxy; zero fuzz failures cover the constructed families only."
+    },
+    {
+      "id":"EXP-CC12-UNIFIEDDB-COLLECTION-LOWERING-002",
+      "evidence_class":"remote_executable_differential_lowering_test",
+      "runtime":"E2B isolated Linux / SQLite/Python",
+      "artifact":"tools/claycode_query_semantics_lab.py",
+      "result_ref":"research_entity/runtime/tool_results/cc12-e2b-query-semantics-20260808T2104p0700.json",
+      "status":"PASS",
+      "results":{"operations":30000,"typed_lowering_mismatches":0,"type_erased_distinct_mismatches":16947,"type_erased_bag_mismatches":16609,"multiset_n":10010,"multiset_distinct_mismatches":9086,"ordered_n":10174,"ordered_distinct_mismatches":7861,"set_n":9816,"set_bag_mismatches":7523,"weighted_duplicate_key_rejected":true,"elapsed_s":0.80346473},
+      "boundary":"SQLite is one backend and the corpus is synthetic; result establishes semantic mechanism risk, not target UnifiedDB performance."
+    },
+    {
+      "id":"EXP-CC12-CROSS-KIND-ALIAS-003",
+      "evidence_class":"remote_executable_identity_negative_control",
+      "runtime":"E2B isolated Linux / Python",
+      "artifact":"tools/claycode_cross_kind_alias_lab.py",
+      "result_ref":"research_entity/runtime/tool_results/cc12-e2b-cross-kind-alias-20260808T2104p0700.json",
+      "status":"PASS",
+      "results":{"iterations":100000,"untyped_cross_kind_aliases":27155,"untyped_alias_rate":0.27155,"nontrivial_aliases":5038,"typed_cross_kind_aliases":0},
+      "boundary":"Alias rate depends on the constructed distribution; the strong conclusion is category distinction, not the numerical rate."
+    }
+  ],
+  "aggregate_inference":"Collection kind is semantic and must be preserved by canonical identity, query/result contracts, legal rewrites, physical lowering and projection receipts."
+}

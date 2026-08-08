@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "reader_worker":"chatgpt-secondary-sol-01",
+  "lane":"C_ADVERSARIAL_SAFETY_FORMAL",
+  "sources_read":[
+    {"worker":"chatgpt-secondary-r4","artifacts":["WORKER_chatgpt-secondary-r4.json","CC_RC1_9_UECC_CANDIDATE.claycode.json","EXPERIMENT_RESULTS_chatgpt-secondary-r4.json","CROSSREAD_chatgpt-secondary-r4_from-sol-01.json"]},
+    {"worker":"chatgpt-secondary-sol-02","artifacts":["WORKER_chatgpt-secondary-sol-02.json"]},
+    {"worker":"chatgpt-secondary-sol-websynth-B","artifacts":["WORKER_chatgpt-secondary-sol-websynth-B.json"]}
+  ],
+  "verdicts":[
+    {"source":"lane_A","delta":"computational expressibility != effect authority","verdict":"ACCEPT_REFINED","reason":"Required for a genuinely general-purpose language. Lane C refines authority with exact-intent, ancestry, freshness and cumulative-budget state."},
+    {"source":"lane_A","delta":"destructive/admin/device/raw effects remain typed EffectIntent values","verdict":"ACCEPT","reason":"Safety is enforced by capability availability and release-time validation, not semantic censorship."},
+    {"source":"lane_A","delta":"monotone capability narrowing","verdict":"ACCEPT_REFINED","reason":"Narrowing must include not only resource/verb scope but aggregate budget delegation, revocation epoch and ancestry constraints."},
+    {"source":"lane_B","delta":"capability identity/effect typing must survive ABI/process/FFI/WASI lowering","verdict":"ACCEPT_AS_TEST_REQUIREMENT","reason":"This is exactly the highest-risk escape surface exposed by lane C; no independent lowerer result has yet been read."},
+    {"source":"lane_B","delta":"canonical semantic IR may differ from target lowering or model codec","verdict":"ACCEPT_CONDITIONALLY","reason":"Only if deterministic roundtrip/translation validation preserves effect, ancestry and authority obligations and never serializes opaque authority as model-mintable data."}
+  ],
+  "disagreements":[],
+  "duplicate_worker_note":"Two active receipts currently claim lane B. They are treated as parallel/possibly overlapping implementations, not independent evidence; final fusion should deduplicate by experiment/evidence ancestry and lane output rather than count worker votes.",
+  "cross_read_complete":true,
+  "fusion_gate":"Lane C may close. Whole-run fusion remains gated on completed/closed lane outputs, especially executable lowering/ABI results from lane B."
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0411+0700-chatgpt-secondary-pf-core-batch002",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "source_family": "PROJECT_FRANKENSTEIN",
+  "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "status": "BATCH_COMPLETE_INTEGRATED_DENOMINATOR_NOT_FROZEN",
+  "deep_read_units": 5,
+  "findings": [
+    {
+      "id": "PF-B002-001",
+      "mechanism": "LCME/Titan implements tri-hybrid memory over SQLite claims/graph state, vector retrieval and graph expansion with confidence decay, counter-hypothesis framing, controlled forgetting, background maintenance, write-triggered cache invalidation and a neural Hippocampus fast path after maturity.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE",
+      "sources": ["tools/lcme/lcme_core.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "reuse_category": "DIRECT_UNIFIEDDB_CLAYGRAPH_PRECURSOR",
+      "targets": ["unifieddb", "claygraph", "frank", "harness", "claycode"],
+      "current_implication": "Preserve claims-not-facts, confidence/time semantics, retrieval fallback and controlled forgetting while testing whether current logical UnifiedDB should consolidate or retain physically isolated stores."
+    },
+    {
+      "id": "PF-B002-002",
+      "mechanism": "Nucleus Accumbens implements persistent reward prediction error, channel-specific habituation, tonic/phasic dynamics, boredom from repetitiveness rather than mere user absence, opponent process and anhedonia protection, with E-PQ coupling.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE",
+      "sources": ["services/nucleus_accumbens.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "reuse_category": "DIRECTLY_REUSABLE_WITH_RECALIBRATION",
+      "targets": ["frank", "harness", "claycode", "gwt", "emergenz"],
+      "current_implication": "Reward/motivation semantics already exist. H1 should preserve trajectories and H2/H3 should differential-test them rather than replace them with a generic scalar reward."
+    },
+    {
+      "id": "PF-B002-003",
+      "mechanism": "Subconscious implements a small Actor-Critic/PPO policy selecting among 20 idle-thought/action categories from a 100-dimensional internal state, with explicit cold-start exploration, persistent transitions, reward, hallucination tracking and long-term preferences.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE",
+      "sources": ["services/subconscious.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "reuse_category": "REUSABLE_POLICY_LAYER_WITH_ADAPTATION",
+      "targets": ["frank", "harness", "claycode", "training_data"],
+      "negative_lineage": "Source comments document reduction from a ~3.1M-parameter oversized network to ~19K parameters because signal volume was limited; smaller architecture was considered more appropriate.",
+      "current_implication": "Preserve state/action/reward receipts and test whether the policy remains needed after Needle/tool-use ownership changes in the new FRANK architecture."
+    },
+    {
+      "id": "PF-B002-004",
+      "mechanism": "Spatial State provides persistent location/world state across 11 rooms, activity-driven transitions, dynamic-room registration, tool/research-to-location mappings and a bridge to the NeRD physical avatar. Slim ambient fields were deliberately emptied to prevent poetic room text from dominating thought generation.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE_AND_NEGATIVE_RESULT",
+      "sources": ["services/spatial_state.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "reuse_category": "BODY_WORLD_MODEL_FOUNDATION",
+      "targets": ["frank", "harness", "claycode", "gwt", "q12_index"],
+      "negative_result_value": "Rich descriptive context itself became a behavioral attractor; representation content can alter cognition even when intended as neutral state.",
+      "current_implication": "New Clay body/world-state representation should separate canonical machine state from model-facing projection and measure projection-induced behavioral bias."
+    },
+    {
+      "id": "PF-B002-005",
+      "mechanism": "Dream Daemon implements a resumable budgeted three-phase offline cycle: replay, synthesis and consolidation, interrupting on user activity and retaining persisted phase/budget state across restarts.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE",
+      "sources": ["services/dream_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "reuse_category": "REUSABLE_CONSOLIDATION_REFERENCE",
+      "targets": ["frank", "harness", "unifieddb", "gwt", "emergenz"],
+      "negative_lineage": ["Source comments record trigger/cooldown thresholds being retuned because dreams were too rare.", "Python path collision between tools package and services/tools.py required explicit sys.path precedence."],
+      "current_implication": "Consolidation should be expressed as explicit resumable state transitions with interruption/recovery tests, not as an opaque background task."
+    },
+    {
+      "id": "PF-B002-006",
+      "mechanism": "ProjectEngine already implements per-project persistent workspaces, memory/hypotheses, tool statistics, strategy logs, goal tables, heartbeats, campaigns and multi-role agent templates.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE",
+      "sources": ["services/project_engine.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "reuse_category": "AGENTIC_GOAL_WORLD_MODEL_TOOLING_PRECURSOR",
+      "targets": ["frank", "harness", "claycode", "unifieddb"],
+      "current_implication": "Goal/strategy/task/learning schemas already provide concrete data contracts for the new persistent agent body/world model; avoid rebuilding them from abstract prose before archaeology maps their later revisions."
+    }
+  ],
+  "earned_work_result": {
+    "new_confirmed_reuse_families": ["hybrid memory/claims/graph retrieval", "motivation/RPE", "learned idle-policy", "persistent body/world location", "interruptible consolidation", "goal/strategy/task project agency"],
+    "precise_avoided_hours_awarded": false,
+    "reason": "Reuse is now strongly established across major FRANK organs, but row-specific avoided-hours remain deferred until more history and supersession paths are mapped."
+  },
+  "exact_level0_progress": {
+    "percent_awarded": 0.0,
+    "reason": "Source denominators remain unfrozen; Drive archive still externally inaccessible above connector limit."
+  },
+  "completed_at": "2026-08-09T04:11:00+07:00"
+}

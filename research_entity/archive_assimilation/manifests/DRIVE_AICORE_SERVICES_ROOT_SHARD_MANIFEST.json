@@ -1,0 +1,32 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-SERVICES-ROOT-SHARD-20260809",
+  "status":"EXACT_FOLDER_DENOMINATOR_FILE_DENOMINATOR_LOWER_BOUND",
+  "trigger":"666",
+  "source":{"title":"aicore/services","drive_id":"1tVCchrYmiQnPizAoP64JFif5Q7QzzK1-"},
+  "enumeration":{
+    "direct_folders_exact":13,
+    "direct_folder_names":["pip_agent","genesis","hypothesis_engine","room_content","asrs","invariants","news_intel","nerd_physics","neural_immune","art","sanctum_rl","context_gate","quantum_reflector"],
+    "direct_folder_ids":{"pip_agent":"1PWZvwBJwmi1f024bIDslHEjkPH-XmZsW","genesis":"1_qbNA8qDcp0wLLNG1TRn4ZG3Xoo4hUO3","hypothesis_engine":"1uKvinlh6FBn2y0Gj_RkZ8ljk832EieO9","room_content":"1yCYrxGvBTHPQTke1IgDsG6UGGiGf8ujb","asrs":"1qTUdO7w0wYyE4OsqXyQfW8Sv0KEFDMzi","invariants":"1isfpj60TKqaVZGtmhuKCWfkGUtCo7CjJ","news_intel":"1QFkvbiCYVuEXyoWqRrqTjfpsx6RF0Ip1","nerd_physics":"1wJ0GmXBQm9jeryLhl9uKCNtstDs0ZVYM","neural_immune":"1hjpygk1eZyotnEmfXCbIfpQMZGcZ6GNd","art":"143kIx_lVteNhn7QGfBowIlWvca2lmh3t","sanctum_rl":"1jJRhk-3jGsOMg40d_WKAqpUiB7RN4VN2","context_gate":"1O3r8SihGsRqFoT_WszcPWD8jDjy51D5E","quantum_reflector":"1bORMovICQ3RfUibtXbIYZGUQZJsSFWvQ"},
+    "normal_folder_fetch_object_cap_observed":100,
+    "direct_files_visible_in_capped_fetch_lower_bound":87,
+    "direct_files_exact":null,
+    "direct_entries_exact":null,
+    "reason_exact_file_denominator_open":"Normal folder fetch returned 100 child objects and is capped/truncated; folder-only parent query independently resolves all 13 direct folders. The remaining 87 visible objects establish only a file lower bound. No pagination primitive is exposed in the active Drive connector."
+  },
+  "mechanistic_subshards":[
+    {"shard_id":"SERVICES-AUTONOMY-RESEARCH","folders":["pip_agent","genesis","hypothesis_engine","news_intel"],"goal":"Autonomous proposal/research/learning/agent lineage; dedupe against existing Genesis/autonomy/PF research shards; recover executable tests and failure modes."},
+    {"shard_id":"SERVICES-SAFETY-RECOVERY","folders":["asrs","invariants","neural_immune","context_gate"],"goal":"Rollback/invariants/anomaly/context-admission lineage; map exact authority/recovery oracles into Harness without duplicate safety credit."},
+    {"shard_id":"SERVICES-WORLD-EMBODIMENT","folders":["room_content","nerd_physics","art","sanctum_rl","quantum_reflector"],"goal":"World/room/physics/embodiment/simulation/reflector lineage; classify superseded metaphors vs reusable transition/measurement mechanisms."},
+    {"shard_id":"SERVICES-ROOT-MODULES","folders":[],"goal":"Partition the >=87 visible direct root files into deterministic filename/hash families before semantic analysis; preserve exact file denominator as OPEN until pagination/partition reconciliation proves completeness."}
+  ],
+  "hard_rules":[
+    "Do not infer an exact services child count from the 100-object normal fetch.",
+    "Do not count folder names as mechanisms; each folder requires recursive identity and semantic classification.",
+    "Do not double-credit Project-Frankenstein/Drive mechanisms already mapped; newer Drive code can add supersession or execution evidence without independent ancestry credit.",
+    "Root .py files and folder packages may implement the same subsystem; reconcile duplicates/version lineage before branch promotion."
+  ],
+  "coverage":{"folder_denominator_percent":100.0,"file_denominator_percent":null,"recursive_services_percent":null,"exact_level0_global_credit_percent":0.0},
+  "frozen_by":"chatgpt-secondary-666-20260809-aicore-services-sharder",
+  "frozen_at":"2026-08-09"
+}

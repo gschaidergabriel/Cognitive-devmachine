@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.3",
+  "schema_version": "3.4",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
@@ -32,7 +32,7 @@
       "requires_interconnect_manifest": true,
       "requires_global_coverage_manifest": true,
       "requires_branch_feedback_manifest": true,
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"],
+      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
       "completion_validator": "tools/fusion_research_contract.py",
       "completion_command": "python tools/fusion_research_contract.py research_entity/trigger_runs/fusion/<run_id>"
     },
@@ -45,7 +45,7 @@
       "requires_external_source_class_diversity": true,
       "requires_live_worker_reread": true,
       "requires_branch_feedback_manifest": true,
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"],
+      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
       "required_outputs": ["INTERCONNECT_MANIFEST.json", "HYPOTHESIS_COVERAGE_MATRIX.json", "EXTERNAL_EVIDENCE_LEDGER.md", "COUNTERHYPOTHESIS_MATRIX.json", "FUSION2_HYPOTHESES.json", "CONTRADICTION_MAP.md", "BRANCH_FEEDBACK_MANIFEST.json", "RUN_MANIFEST.json", "FINAL_REPORT.md"]
     },
     "clay": {
@@ -76,6 +76,7 @@
       "deep_secondary_foundation": "claycode",
       "deep_substrate_foundation": "claygraph",
       "deep_persistence_foundation": "unifieddb",
+      "execution_validation_foundation": "harness",
       "required_architecture_artifact": "FRANK_ARCHITECTURE.claycode.json",
       "required_human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md",
       "architecture_validator": "tools/frank_architecture_contract.py"
@@ -92,6 +93,7 @@
       "requires_interconnect_manifest": true,
       "must_treat_frank_clay_native_contract_as_fixed": true,
       "primary_feedback_foundation": "frank",
+      "execution_feedback_foundation": "harness",
       "requires_latest_frank_architecture_if_available": true,
       "requires_goodman_anti_echo_review": true,
       "required_goodman_artifact": "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
@@ -129,14 +131,26 @@
       "requires_interconnect_manifest": true,
       "must_treat_frank_clay_native_contract_as_fixed": true,
       "coverage_mode": "ALL_DISCOVERED_INDEXED_DOMAIN_FOCUSED",
-      "primary_feedback_targets": ["frank", "claycode", "claygraph"],
+      "primary_feedback_targets": ["frank", "claycode", "claygraph", "harness"],
       "requires_store_role_matrix": true,
       "requires_logical_vs_physical_unification_analysis": true,
       "requires_reversible_migration_plan": true,
       "requires_query_routing_plan": true,
       "requires_selection_integrity_analysis": true,
       "required_outputs": ["STORE_ROLE_MATRIX.json", "UNIFIED_DATABASE_ARCHITECTURE.claycode.json", "QUERY_ROUTING_PLAN.json", "EXPERIMENT_RESULTS.json", "MIGRATION_PLAN.json", "BRANCH_FEEDBACK_MANIFEST.json", "FRANK_UNIFIEDDB_FEEDBACK.json", "FINAL_REPORT.md"]
+    },
+    "harness": {
+      "protocol": "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+      "kind": "domain_research",
+      "requires_interconnect_manifest": true,
+      "must_treat_frank_clay_native_contract_as_fixed": true,
+      "coverage_mode": "ALL_REGISTERED_BRANCHES_PLUS_LIVE_WORKERS",
+      "requires_live_worker_reread": true,
+      "must_build_and_execute": true,
+      "primary_target_contract": "research_entity/experiments/FRANK_TEST1_CLAY_NATIVE_FULL_SIMULATION_CONTRACT.md",
+      "required_release_outputs": ["HARNESS_RELEASE_MANIFEST.json", "ARCHITECTURE_COVERAGE.json", "STATE_SCHEMA_MANIFEST.json", "GOLDEN_TRACE_INDEX.json", "REPLAY_VALIDATION.json", "ABLATION_CAPABILITY_MATRIX.json", "TEST_EXECUTION_MANIFEST.json", "OPEN_LIMITATIONS.md"],
+      "primary_feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"]
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. All eight scientific branches treat the FRANK Clay-native contract as a project-owner fixed target rather than a yes/no hypothesis. Clay additionally carries Safe-Effect Geometry/NDSAS as a project-owner-mandated permanent research axis; every substantive Clay run must return a Safe-Effect delta or explicit NO_CHANGE while preserving the hypotheses as falsifiable. The fusion meta-trigger covers the complete current research graph/evidence classes and writes explicit feedback or NO_CHANGE receipts to all eight scientific branches. The hypofusion meta-trigger screens the complete reachable current/open hypothesis set against broad external evidence and deliberate counterhypotheses, rereads live workers before final fusion, and returns discriminating tests plus feedback to all eight branches. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, ClayGraph and UnifiedDB, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and applies the Goodman anti-echo filter. ClayGraph specializes in associative memory/graph evolution; UnifiedDB specializes in the broader unified persistence/query/transaction substrate and must never equate semantic unification with mandatory physical merge. Every substantive visible response ends with the required status footer including all registered short commands."
+  "rule": "Reserved commands fire only on exact full-message match. Every scientific/research-center trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. The nine peer scientific/research-center branches are clay, frank, gwt, emergenz, claycode, hyperposition, claygraph, unifieddb and harness. Harness is the executable convergence/integration/falsification branch: it must ingest all branches and live workers, implement the current architecture, execute tests/experiments, and return counterexamples or NO_CHANGE feedback to affected branches. All branches treat the FRANK Clay-native contract as a project-owner fixed target rather than a yes/no hypothesis. Clay additionally carries Safe-Effect Geometry/NDSAS as a project-owner-mandated permanent research axis; every substantive Clay run must return a Safe-Effect delta or explicit NO_CHANGE while preserving the hypotheses as falsifiable. Fusion and hypofusion cover the complete nine-branch mesh and write explicit feedback or NO_CHANGE receipts to all nine peer branches. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, ClayGraph, UnifiedDB and Harness evidence, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and applies the Goodman anti-echo filter while incorporating Harness compiler/runtime evidence. ClayGraph specializes in associative memory/graph evolution; UnifiedDB specializes in the broader unified persistence/query/transaction substrate and must never equate semantic unification with mandatory physical merge. Every substantive visible response ends with the required status footer including all registered short commands."
 }

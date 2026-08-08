@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0513+0700-chatgpt-secondary-drive-aicore-modeld-instancing-shard",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"MODELD_SUBTREE_FROZEN_POST_HEAD_INSTANCE_NAMESPACE_REPRODUCED",
+  "observed_at":"2026-08-09T05:13:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_MODELD_SUBMANIFEST.json",
+  "oracle_set":"research_entity/archive_assimilation/oracles/DRIVE_AICORE_INSTANCE_NAMESPACE_ORACLES.json",
+  "source_scope":{"modeld_recursive_files":2,"config_dependency_files_analyzed":["config/instanz.py","config/ports.py"],"historical_live_handoff":"drive:1US0Amm2DHHX7Bouijfmvos_nOCbuoNfN:UEBERGABE-P2.md","reference_head":"abba90a5767d85abc8a1ac340bae92842dab35c1"},
+  "findings":[
+    {"finding_id":"DRIVE-INST-001","epistemic_class":"EXACT_POST_HEAD_SOURCE_DIFF","status":"VERIFIED","claim":"Drive modeld/app.py differs from frozen Project-Frankenstein modeld/app.py by exactly one semantic replacement: static `PORT = 8090` became an import of `config.instanz` plus `_inst.port(\"modeld\")`. Inverting only those two Drive lines reconstructs the exact frozen Git blob cb89e922f3442b0c699f39b8b63a81d316104ae8.","targets":["frank","claycode","harness","unifieddb","claygraph"]},
+    {"finding_id":"DRIVE-INST-002","epistemic_class":"DRIVE_ONLY_EXECUTABLE_ARCHITECTURE","status":"POST_HEAD_LINEAGE","claim":"config/ports.py and config/instanz.py are present in the extracted AICORE Drive tree, modified Aug 4, but absent from frozen Project-Frankenstein head. They establish instance identity, a canonical logical service->port map, a global port displacement, root/path/environment injection, dead-port declarations and prime-vs-twin classification.","targets":["frank","claycode","unifieddb","claygraph","harness"],"reuse_category":"REUSABLE_WITH_ADAPTATION"},
+    {"finding_id":"DRIVE-INST-003","epistemic_class":"HISTORICAL_LIVE_MEASUREMENT_WITH_EXPLICIT_SCOPE","status":"SUPPORTED_CORE_LEVEL_ONLY","claim":"UEBERGABE-P2 reports a corrected offset-semantics live test: Prime core 8088 and twin core 8200 ran concurrently for 46 seconds with repeated health checks, separated data root, 15 resolved ports per instance and zero resolved collisions; Prime PID remained stable. The same source explicitly says only the twin core was started and therefore full two-FRANK coexistence was not demonstrated.","targets":["frank","harness","clay"],"reuse_category":"MEASUREMENT_FOUNDATION"},
+    {"finding_id":"DRIVE-INST-004","epistemic_class":"THIS_SESSION_EXECUTABLE_NEGATIVE_RESULT","status":"REPRODUCED","claim":"With FRANK_INSTANCE_ID=zwilling and malformed FRANK_PORT_BASE=abc, exact Drive ports.py silently falls back to offset 0; modeld resolves to 8090. A malformed twin namespace can therefore collide with Prime resource numbers instead of failing closed.","targets":["harness","claycode","unifieddb","frank"],"reuse_category":"NEGATIVE_RESULT_VALUE"},
+    {"finding_id":"DRIVE-INST-005","epistemic_class":"THIS_SESSION_EXECUTABLE_NEGATIVE_RESULT","status":"REPRODUCED","claim":"With twin offset=100 and legacy AICORE_ROUTER_PORT pre-set to 8091, instanz.port(router) resolves 8191 while the preserved environment remains 8091. The compatibility rule 'never overwrite existing variables' can create two simultaneously authoritative addresses for the same logical resource.","targets":["harness","claycode","unifieddb","frank","claygraph"],"reuse_category":"NEGATIVE_RESULT_VALUE"},
+    {"finding_id":"DRIVE-INST-006","epistemic_class":"HISTORICAL_SUPERSESSION_SELF_CORRECTION","status":"PRESERVE_BOTH_WITH_VERSION_EDGE","claim":"The handoff preserves an earlier executable example that used FRANK_PORT_BASE=8200 as if absolute, then later marks it false after the U1 fusion and corrects the semantics to offset 112 for core port 8200. The architecture itself therefore contains a concrete stale-configuration-semantic failure example.","targets":["claygraph","unifieddb","harness","q12_index"]},
+    {"finding_id":"DRIVE-INST-007","epistemic_class":"THIS_SESSION_EXECUTABLE_POSITIVE_CONTROL","status":"REPRODUCED","claim":"Default configuration preserves modeld=8090 and IST_PRIME=True; offset=100 gives modeld=8190 and IST_PRIME=False; FRANK_ROOT shifts AICORE_DATA/runtime path and service URLs; dead-port access via ports.port(nerd_physics) raises ValueError. These are useful compatibility and namespace-positive controls.","targets":["harness","frank","claycode"]}
+  ],
+  "current_architecture_implications":{
+    "frank":"Multi-instance identity is a real historical mechanism, but H3/full FRANK must prove all service/data/model/effect namespaces, not just core ports.",
+    "claycode":"Represent resource identity as typed logical service + instance/episode namespace, validated once; malformed namespace config must fail closed.",
+    "unifieddb":"Instance ID and resource/DB namespace must be first-class identity fields so twin state cannot alias Prime state.",
+    "claygraph":"Preserve the absolute-vs-offset correction as a supersession edge and model one logical service identity separately from its resolved endpoint.",
+    "harness":"Add malformed-offset, legacy-env split-brain and full-instance collision/cross-talk differentials; keep core-only evidence scoped to core-only claim.",
+    "clay":"Compatibility overrides must not create competing semantic truths. Normalize overrides into one canonical resource map before model/runtime execution."
+  },
+  "earned_work_candidate":{"mapping_id":"HEW-DRIVE-INSTANCE-NAMESPACE-014","current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","UDB_UNIFIED_DATABASE","PROJECT_HARDWARE_DEPLOYMENT"],"mechanism_or_result":"Executable multi-instance namespace/port/root architecture, historical core-level twin measurement and two newly reproduced namespace split-brain oracles.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":1.0,"avoided_future_hours_center":2.0,"avoided_future_hours_high":4.0,"confidence":"MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"H3/project-hardware harness must demonstrate full multi-service namespace isolation, fail-closed malformed configuration and no legacy-override split brain; otherwise reuse credit remains only historical measurement foundation."},
+  "progress_accounting":{"modeld_subtree_exact":"2/2 files complete","whole_drive_exact_level0_coverage_awarded_percent":0.0,"historical_earned_work_credit_applied":false,"reason":"Whole Drive and Project-Frankenstein history denominators remain open; candidate awaits crossread and central aggregation."}
+}

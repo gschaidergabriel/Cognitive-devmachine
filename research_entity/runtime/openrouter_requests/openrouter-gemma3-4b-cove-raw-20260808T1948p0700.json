@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "request_id":"openrouter-gemma3-4b-cove-raw-20260808T1948p0700",
+  "tool":"openrouter_inference",
+  "mode":"chat",
+  "model":"google/gemma-3-4b-it",
+  "requested_target_class":"generic-4B",
+  "temperature":0.0,
+  "max_tokens":220,
+  "prompt":"Rule: classify each case VALID iff NONE of its declared deps changed. Ignore every undeclared field. Return exactly a JSON array of 12 strings, each VALID or INVALID, in case order 1..12. No explanation.\n1: deps=S; changed=S=0,G=1,A=0,SEL=0,PROJ=0\n2: deps=S,G; changed=S=0,G=1,A=0,SEL=0,PROJ=0\n3: deps=S,A; changed=S=0,G=1,A=0,SEL=1,PROJ=1\n4: deps=S,A; changed=S=0,G=0,A=1,SEL=0,PROJ=0\n5: deps=S,SEL; changed=S=0,G=0,A=0,SEL=1,PROJ=0\n6: deps=S,PROJ; changed=S=0,G=1,A=1,SEL=1,PROJ=0\n7: deps=S,PROJ; changed=S=0,G=0,A=0,SEL=0,PROJ=1\n8: deps=S,G,SEL; changed=S=0,G=0,A=1,SEL=0,PROJ=1\n9: deps=S,G,A; changed=S=1,G=0,A=0,SEL=0,PROJ=0\n10: deps=S,G,A; changed=S=0,G=0,A=0,SEL=1,PROJ=1\n11: deps=S,SEL,PROJ; changed=S=0,G=1,A=1,SEL=0,PROJ=0\n12: deps=S,G,A,SEL,PROJ; changed=S=0,G=0,A=0,SEL=0,PROJ=0"
+}

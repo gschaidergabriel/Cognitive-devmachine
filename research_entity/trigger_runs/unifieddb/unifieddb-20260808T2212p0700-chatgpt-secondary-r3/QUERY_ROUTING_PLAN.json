@@ -1,0 +1,57 @@
+{
+  "schema_version":"2.0",
+  "run_id":"unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
+  "planner":"CPPF UnifiedQueryIR planner",
+  "compile_inputs":[
+    "operation semantic contract",
+    "result collection type: SET/ORDERED/MULTISET/WEIGHTED/other explicit type",
+    "result admissibility requirement",
+    "required source/epoch/temporal constraints",
+    "dependency closure state",
+    "selection-integrity requirement",
+    "latency/resource target",
+    "platform profile",
+    "recovery/fault constraints"
+  ],
+  "stages":[
+    {"stage":1,"name":"semantic_compile","rule":"Produce backend-independent typed query semantics before physical planning."},
+    {"stage":2,"name":"closure_check","rule":"KNOWN_INVALID recomputes/rejects; UNKNOWN broadens, instruments, recomputes or defers consequential operations."},
+    {"stage":3,"name":"admission_class","rule":"Declare whether result must be authoritative exact, exact derived, approximate candidate, salience-only or model-internal."},
+    {"stage":4,"name":"logical_subplan_enumeration","rule":"Enumerate exact, relational, graph, vector, FTS, activation and hybrid routes preserving TCQS semantics."},
+    {"stage":5,"name":"hard_constraint_prune","rule":"Remove plans violating required transaction domain, source epochs, result type, selection integrity, rebuild or protected-resource boundaries."},
+    {"stage":6,"name":"placement_optimize","rule":"Choose transaction/data/index/compute/process/fault placement independently; cost optimization may not weaken semantic or recovery requirements."},
+    {"stage":7,"name":"execute","rule":"Execute selected polyglot subplans; record exact physical plan and source/index epochs."},
+    {"stage":8,"name":"selection_receipt","rule":"Bind authorized search space, predicates, collection algebra, ranking/truncation/tie policy, candidate set and selector identity."},
+    {"stage":9,"name":"result_admission","rule":"Approximate or salience results remain candidates/priors; consequential exact claims require declared validation rather than implicit lifting."},
+    {"stage":10,"name":"cognitive_handoff","rule":"If model-facing, bind system WorkspaceEpisode and exact reader projection separately from model-internal uptake."},
+    {"stage":11,"name":"effect_time_check","rule":"Revalidate operation-relevant basis and current release conditions before consequential external effect."},
+    {"stage":12,"name":"outcome_append_and_derive","rule":"Append canonical outcome/re-entry, then incrementally update graph/vector/FTS/activation views with derivation receipts."}
+  ],
+  "routing_defaults":{
+    "exact_address":"canonical/relational exact route first",
+    "temporal_provenance":"canonical event/time index; no ANN substitution",
+    "graph_relation":"ClayGraph or typed graph-relational lowering with source-epoch receipt",
+    "vector_similarity":"ANN candidate route plus exact metadata/source validation when consequential",
+    "full_text":"FTS candidate route; tokenizer/analyzer version bound",
+    "background_activation":"non-authoritative salience route",
+    "mixed_query":"compose in one logical plan; physical compute may fuse while data/index storage remains separate",
+    "protected_external_resource":"reference only; current release handled outside cognitive data stores"
+  },
+  "physical_placement_policy":{
+    "prefer_same_process_compute_when":"measured cross-modal query affinity and boundary cost dominate without increasing unacceptable fault coupling",
+    "prefer_decoupled_index_or_data_when":"specialized layout/compression/update behavior materially reduces overhead or preserves replaceability",
+    "prefer_single_transaction_domain_when":"multiple writes are jointly authoritative for one effect-critical state transition",
+    "prefer_durable_derivation_log_when":"heterogeneous non-authoritative views can tolerate explicit lag and must be replayable",
+    "never_infer":"semantic unification alone never decides physical colocation"
+  },
+  "validation_hooks":[
+    "typed collection/query equivalence",
+    "source epoch and derivation program version",
+    "selection-integrity replay for exposed selectors",
+    "query-result differential across adapters",
+    "crash/restart/rebuild",
+    "representation-vs-semantic identity roundtrip",
+    "latency p50/p95/p99 and write amplification",
+    "common-mode failure radius"
+  ]
+}

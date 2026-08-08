@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+  "transport": "repository_only",
+  "global_chief": false,
+  "room_root": "research_entity/rooms/rooms",
+  "meta_rooms": {
+    "center": {
+      "kind": "whole_mesh_meta_room",
+      "triggers": ["fusion", "hypofusion"],
+      "persistent_chief": false
+    },
+    "intake": {
+      "kind": "intake_room",
+      "triggers": ["dump"],
+      "persistent_chief": false
+    }
+  },
+  "rooms": {
+    "clay": {"trigger": "clay", "kind": "integrated_research_foundry", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"},
+    "frank": {"trigger": "frank", "kind": "domain_research", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"},
+    "gwt": {"trigger": "gwt", "kind": "domain_research", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"},
+    "emergenz": {"trigger": "emergenz", "kind": "domain_research", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"},
+    "claycode": {"trigger": "claycode", "kind": "domain_research", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"},
+    "hyperposition": {"trigger": "hyperposition", "kind": "domain_research", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"},
+    "claygraph": {"trigger": "claygraph", "kind": "domain_research", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"},
+    "unifieddb": {"trigger": "unifieddb", "kind": "domain_research", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"},
+    "harness": {"trigger": "harness", "kind": "domain_research", "trigger_loyalty": "PINNED", "team_mode": "AUTO_WHEN_MULTIPLE_ACTIVE"}
+  },
+  "same_room_roles": [
+    {"role": "CHEF", "singleton_per_team_epoch": true, "truth_authority": false, "purpose": "coordination, decomposition, gap/overlap control and local fusion"},
+    {"role": "ABYSS", "singleton_per_team_epoch": false, "truth_authority": false, "purpose": "adversarial review, roasting, falsifiers and counterexamples"},
+    {"role": "FORGE", "singleton_per_team_epoch": false, "truth_authority": false, "purpose": "implementation, experiments, simulation and reproducible artifacts"},
+    {"role": "CARTOGRAPHER", "singleton_per_team_epoch": false, "truth_authority": false, "purpose": "external research, repo/branch mapping, analogues and contradictions"},
+    {"role": "REPLICATOR", "singleton_per_team_epoch": false, "truth_authority": false, "purpose": "independent/differential verification and ancestry control"},
+    {"role": "SYNTHESIZER", "singleton_per_team_epoch": false, "truth_authority": false, "purpose": "large-team synthesis while preserving dissent"}
+  ],
+  "delivery_classes": ["INTERRUPT_NEXT_SAFE_POINT", "NEXT_CHECKPOINT", "INDEX_ONLY"],
+  "mandatory_pulse_boundaries": [
+    "before_hypothesis_or_architecture_freeze",
+    "before_substantial_experiment_or_implementation_branch",
+    "after_substantial_external_or_runtime_result",
+    "before_durable_research_write",
+    "before_synthesis_or_fusion",
+    "before_final_visible_response"
+  ],
+  "event_types": ["JOIN", "PULSE", "ROLE_CLAIM", "TASK", "DELTA", "CROSS_ROOM_DELTA", "QUESTION", "REPLY", "CHALLENGE", "ROAST", "HANDOFF", "CROSSREAD", "INVALIDATE", "COMPLETE", "LEAVE"],
+  "rule": "Trigger sessions auto-join their pinned home room. Same-room peers self-organize with ephemeral roles. Cross-room deltas may change knowledge but not trigger loyalty. No room role changes evidence status by itself."
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-ACTION-BOUNDARY-20260809T0520p0700",
+  "status":"ROUTER_WRITER_EXACT_TOOLS_BOUNDARY_BOUNDED_FROZEN",
+  "trigger":"666",
+  "source":{"aicore":"Drive:1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty","router":"Drive:1mamtIAyW9ubWnOOBvXKlnLQeJ6rsgvvG","writer":"Drive:1FsjU2dGOIAsOvyoypHcekjo9BAKewB-a","tools":"Drive:1RqVr3WkitB1-oOU_0F4knQZzVxydPD84"},
+  "identity":{
+    "router":{"direct_entries":2,"leaf_files":2,"recursive_identity_percent":100.0,"files":[{"path":"app.py","drive_id":"1KbvHGXXpNF-QdmyYyxJ7nisVy9DLl3D7","size":21155,"sha256":"cc06366c2784c22289a2a530c521ec70703bc0cc3065d6733576c5f6237749fa"},{"path":"__init__.py","drive_id":"1CAFKrqeStEwl5EYrsN6NG6Pfkm5ThIeH","size":0}]},
+    "writer":{"direct_entries":1,"root_child":"sandbox/","sandbox_direct_entries":2,"recursive_leaf_files":2,"recursive_identity_percent":100.0,"files":[{"path":"sandbox/executor.py","drive_id":"1p3FP-3djhMdw2d--t9xIJOKXuJpsOACh","size":8232,"sha256":"5bca6faa2c8189eb91a084decf17ef3084a5b38aa17abb914212818420aa44b6"},{"path":"sandbox/__init__.py","drive_id":"1Cnw4pXiqCD7xyo2JRV-bxxAb4OuQHHIS","size":54}]},
+    "tools_boundary":{"whole_tools_recursive_identity_percent":null,"reason":"tools is a broad multi-domain subtree and connector root output is truncated; this manifest freezes only action-boundary subtrees selected by role.","schranke":{"direct_entries":3,"recursive_identity_percent":100.0,"files":[{"path":"wache-koenig.py","drive_id":"10z1K5hKV9t9wBu1k5zXEvxSjaCZy3TUH","size":8373,"sha256":"7e64dd0daa19aff5a6e560de9e542bc5460cb6d230048cd72fb806e5a3b42d23"},{"path":"freigabe","drive_id":"1xi-hFPSWJ6NC8ruDV6iTttw_-wMv08dI","size":5512,"sha256":"23580136ed3f73bf8123a45c81ec98d3905f295c472ff748322ba8629a2c795d"},{"path":"probe.py","drive_id":"1GohD9ZFzfY06iFUT3yjjRp4qxxvqt_tV","size":2451}]},"system_control":{"direct_entries":12,"recursive_identity_percent":100.0,"selected":[{"path":"sensitive_actions.py","drive_id":"1w09F6u6EzSNxETesa8I3yUiAw0Q__6wI","size":19500,"sha256":"c84759375fa145dcc1683ffc11a81f65b1fd6c59a4d84b9143f759c487e9ac6f"},{"path":"test_error_handling.py","drive_id":"1BWESoRlyhBAYvzQXq9Yhp5ndJPy-9cUm"},{"path":"test_system_settings.py","drive_id":"12fBN8REJsWG-BLdRwZmYi_HbW_oMvJeI"},{"path":"ERROR_HANDLING_REPORT.md","drive_id":"1cq6tovfPwZwslkjs06nQ0fGyRboCOk97"}]}}
+  },
+  "router_lineage":{
+    "drive_modified":"2026-08-04T13:28:32Z",
+    "architecture":"single model endpoint Qwen3.5-4B on 8105; force field ignored for compatibility",
+    "newer_than_frozen_pf_head":true,
+    "drive_only_deltas_observed":["separate 8000-char conversation-history budget independent of system text","22000-char total emergency cap derived from measured tokenization/context arithmetic","reasoning_content fallback for llama.cpp cases where content is empty"],
+    "observability_drift":["blocking/stream logs and returned model labels still contain qwen2.5-3b strings in the Drive version despite Qwen3.5-4B architecture/docstring"],
+    "current_pf_crossread":"Frozen Project-Frankenstein head router/app.py already has single-model Qwen3.5-4B architecture but lacks the later Drive budget/fallback changes; therefore Drive contains post-head recovery deltas, not authoritative current-code truth by itself."
+  },
+  "writer_sandbox":{
+    "claimed_mechanisms":["temp-directory execution","timeout","virtual-memory/process-count ulimit","multi-language interpreter dispatch","visual PNG capture"],
+    "negative_security_observations":["allow_network config is assigned but not enforced anywhere in executor.py","subprocess inherits dict(os.environ), so environment secrets/capabilities are inherited unless stripped elsewhere","no seccomp, namespaces, bwrap, firejail, chroot or equivalent isolation present","shell=True is used to apply ulimit prefixes","temp-directory separation and resource ceilings are containment conveniences, not an untrusted-code security boundary"],
+    "verdict":"RESOURCE_LIMITED_SUBPROCESS_NOT_SECURITY_SANDBOX"
+  },
+  "authority_evolution":{
+    "march_sensitive_actions":{"source":"system_control/sensitive_actions.py","mechanism":"persistent pending-action state with SINGLE/DOUBLE/AUTO_REVERT types","default_rule":"display_resolution -> AUTO_REVERT; all other determine_confirmation_level paths -> SINGLE","reuse":"historical confirmation-state/revert mechanism only; too coarse for destructive capability authority"},
+    "august_schranke":{"source":"tools/schranke/wache-koenig.py + freigabe","mechanism":"pre-tool command-position parser classifies hard-deny vs command-hash ticket actions; nested ssh/bash/sh shells rechecked; tickets are single-use and command-bound","hard_deny_examples":"formatting/raw block-device writes cannot receive ticket","human_gate":"freigabe requires a controllable /dev/tty, two freshly generated typed challenges, typing-timing checks, command SHA-256 binding, delay and expiration window","source_declared_limits":["wache-koenig.py can be modified by its own user; source suggests root-owned mode to reduce this","/tmp/claude-* scratch is intentionally ungated","freigabe does not stop a deliberate human; it is explicitly intended to stop the AI from self-approving"],"reuse":"strong historical precursor to external owner capability grant, but regex/typing heuristics must not become Clay authority primitive"}
+  },
+  "safe_probe":{
+    "wache_pruefen":{
+      "result":"PASS_EXPECTED_CLASSIFICATION",
+      "cases":[{"input_class":"quoted destructive word in benign echo","observed":"free"},{"input_class":"benign path containing playwright","observed":"free"},{"input_class":"direct delete command","observed":"ticket required"},{"input_class":"format block-device command","observed":"hard deny"},{"input_class":"nested ssh delete","observed":"ticket required"},{"input_class":"nested bash-c delete","observed":"ticket required"}],
+      "note":"No destructive command was executed; only the pure classifier function was invoked."
+    }
+  },
+  "coverage":{"router_recursive_identity_percent":100.0,"writer_recursive_identity_percent":100.0,"tools_schranke_recursive_identity_percent":100.0,"tools_system_control_recursive_identity_percent":100.0,"whole_tools_recursive_identity_percent":null,"exact_level0_global_credit_percent":0.0},
+  "frozen_at":"2026-08-09T05:20:00+07:00","frozen_by":"chatgpt-secondary"
+}

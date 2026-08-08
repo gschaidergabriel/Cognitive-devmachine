@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T0130p0700-chatgpt-secondary-r5",
+  "hypotheses": [
+    {
+      "id": "H-C9-001",
+      "status": "OPEN_SUPPORTED_BY_MECHANISM_TEST",
+      "claim": "Effect safety requires typed release-time admission over authority, closure, epochs, selection, revocation and recovery rather than a destructive-syntax ban alone.",
+      "counterhypothesis": "A sufficiently restrictive non-destructive model IR plus static capabilities is enough.",
+      "falsifier": "Real sandbox/OS tests show omitted release-time dimensions add no failures after controlling capability scope."
+    },
+    {
+      "id": "H-C9-002",
+      "status": "OPEN",
+      "claim": "EffectIntent and EffectPermit should be different types; permits must be opaque host-minted handles bound to exact intent/scope/epoch.",
+      "counterhypothesis": "A signed or validated model-serializable authorization object is equally safe and simpler.",
+      "falsifier": "Adversarial confused-deputy/replay/substitution tests show no measurable security benefit from opacity/non-constructibility."
+    },
+    {
+      "id": "H-C9-003",
+      "status": "OPEN",
+      "claim": "Required context is an operation-scoped causal-closure obligation, not a global permanent prompt pin.",
+      "counterhypothesis": "Global mandatory pins are simpler and have negligible cognitive/resource cost.",
+      "falsifier": "Target Qwen traces show global pins cause no measurable context, latency, attention or task-quality penalty over operation-scoped inclusion."
+    },
+    {
+      "id": "H-C9-004",
+      "status": "OPEN",
+      "claim": "Required-context inclusion should guarantee candidate availability but must not guarantee GWT victory or model-internal uptake.",
+      "counterhypothesis": "Critical evidence should bypass competition and be forced into the workspace.",
+      "falsifier": "Forced critical-evidence workspace inclusion outperforms competitive inclusion without increasing stale/context-invalid errors under matched budgets."
+    },
+    {
+      "id": "H-C9-005",
+      "status": "OPEN",
+      "claim": "CASAR route choice and MCAAT admissibility must be separate: a memory can be retrievable yet inadmissible for a consequential path.",
+      "counterhypothesis": "Retrieval confidence/provenance can directly determine admissibility.",
+      "falsifier": "Real workloads show a single retrieval score matches typed admissibility decisions across exact, approximate, salience and external-evidence roles."
+    },
+    {
+      "id": "H-C9-006",
+      "status": "OPEN",
+      "claim": "Utility credit needs ITEM/PATH/ASSEMBLY/UNKNOWN scope; UNKNOWN credit must not reinforce all surfaced memories.",
+      "counterhypothesis": "One downstream reward can safely train a shared salience field with enough decay/regularization.",
+      "falsifier": "Oracle-free target tests show scalar reward matches scoped credit on rare-case retention, false attractors and poisoned-memory resistance."
+    },
+    {
+      "id": "H-C9-007",
+      "status": "OPEN",
+      "claim": "Record authenticity and selection integrity are independent; both must be receipted before consequential use.",
+      "counterhypothesis": "Authenticated records are sufficient because selector manipulation is detectable downstream.",
+      "falsifier": "Live ClayGraph/UnifiedDB selection attacks cannot change consequential candidate sets while all records remain authentic."
+    },
+    {
+      "id": "H-C9-008",
+      "status": "OPEN",
+      "claim": "Persistent memory defense must include use-time/context-sensitive admission because write-time filtering misses compositional and dormant-trigger harms.",
+      "counterhypothesis": "Strong enough write-time sanitation makes use-time admission redundant.",
+      "falsifier": "Independent reproduction shows modern write-time defenses close L2/L3 composition/trigger attacks without use-time context checks."
+    },
+    {
+      "id": "H-C9-009",
+      "status": "OPEN",
+      "claim": "FRANK physical architecture should optimize a PlacementVector after semantic/authority constraints rather than choose one database/process topology globally.",
+      "counterhypothesis": "A single colocated runtime/database is globally simpler and faster without meaningful fault/security loss.",
+      "falsifier": "Real FRANK traces show one fixed placement Pareto-dominates adaptive placements across latency, recovery, memory, energy and fault radius."
+    },
+    {
+      "id": "H-C9-010",
+      "status": "OPEN",
+      "claim": "A WASI-style no-ambient-authority sandbox is a strong candidate lowering for generated foreign code under Clay effect closure.",
+      "counterhypothesis": "Conventional process isolation plus filesystem permissions is sufficient and less complex.",
+      "falsifier": "Matched escape/utility tests show no containment advantage from capability imports or unacceptable utility/performance loss."
+    },
+    {
+      "id": "H-C9-011",
+      "status": "OPEN",
+      "claim": "Constructive-only Clay primitives can reduce reachable damage only if foreign-code/tool descendants obey EffectiveEffects(child) subseteq Effects(parent).",
+      "counterhypothesis": "Host validation at the top-level effect call alone is sufficient.",
+      "falsifier": "Adversarial child-language tests find no authority amplification even without compositional effect closure."
+    },
+    {
+      "id": "H-C9-012",
+      "status": "OPEN",
+      "claim": "System WorkspaceEpisode, internal Qwen workspace uptake and effect authority are three separable causal stages.",
+      "counterhypothesis": "A model-internal privileged representation fully mediates system workspace effects and can be treated as the same stage.",
+      "falsifier": "Target Qwen interventions cannot dissociate system selection, internal uptake and effect release under fixed projections/capabilities."
+    },
+    {
+      "id": "H-C9-013",
+      "status": "OPEN",
+      "claim": "Android should be a semantic/resource conformance target, not a source of general FRANK performance claims without matched Linux replication.",
+      "counterhypothesis": "ARM Android measurements generalize adequately to the Linux reference runtime for architectural tuning.",
+      "falsifier": "Repeated matched experiments show stable ordering/effect sizes across Linux and Android for the proposed optimizations."
+    },
+    {
+      "id": "H-C9-014",
+      "status": "OPEN",
+      "claim": "The next Android experiment should gate scarce device runs behind CI proof that the quantized Qwen-class package builds and loads.",
+      "counterhypothesis": "Direct device iteration yields more information despite quota cost.",
+      "falsifier": "CI preflight fails to predict device integration failures and adds more delay than saved device invocations."
+    },
+    {
+      "id": "H-C9-015",
+      "status": "OPEN",
+      "claim": "Full-model Clay adaptation must train authority/admissibility distinctions, not merely compact syntax, or the runtime will carry nearly all safety burden.",
+      "counterhypothesis": "Language semantics can remain external; model training only needs efficient Clay token production.",
+      "falsifier": "Matched target-model experiments show no benefit in semantic execution, destructive-proposal rate or authority-negative behavior from typed-admission training."
+    },
+    {
+      "id": "H-C9-016",
+      "status": "OPEN",
+      "claim": "No FRANK emergence claim should use recurrence/persistence until salience-attractor and selection-confound controls are negative.",
+      "counterhypothesis": "Stable recurrent multi-scale patterns remain emergence evidence even when adaptive salience contributes strongly.",
+      "falsifier": "Prospective E-CERT2 analysis identifies macro causal contribution that survives frozen/shuffled/anti-attractor controls and mechanistic rescue."
+    }
+  ]
+}

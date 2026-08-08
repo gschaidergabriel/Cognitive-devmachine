@@ -1,0 +1,176 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809-chatgpt-secondary-pf-xeno-claycode-precursor-delta",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "lane": "xeno_claycode_precursor_and_measurement_history",
+  "status": "PARTIAL_EXECUTED_NOT_COUNTED_UNTIL_MANIFEST_FREEZE",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "ancestry": {
+    "task": "research_entity/rooms/rooms/center/tasks/666-l0-gwt-xeno-history-20260808T2117Z.json",
+    "lease": "research_entity/rooms/rooms/center/leases/tasks/666-l0-gwt-xeno-history-20260808T2117Z.json",
+    "crossread": "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+    "non_overlap": "GWT/runtime/coupling findings were explicitly dropped after a live crossread showed a concurrent worker had already published that shard. This receipt covers only language/tool representation, parser/repair, context-efficiency and ClayCode-precursor history."
+  },
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "files_read": [
+      "agentic/tools.py",
+      "services/tools.py",
+      "papers/IAPT_METHOD.md",
+      "BENCHMARK.md"
+    ],
+    "history_refs": [
+      "commit:c848bec5b5eed38c10a5e1b32d1285330054e0bf",
+      "commit:c88c9e340427a439a98c9e6178086a619779e89e",
+      "commit:294e62a065d0250745952b95f65d2dff1cc244b1",
+      "commit:6d680d3bd3822ed9cf8928f63794e15b9e1372b5",
+      "commit:4995e08f2e1e5251ceeb41388c167bb6a629ada8",
+      "commit:dbf69e5b2376cf95f3db1bae060352dbe8739489",
+      "commit:1c5c682aa84c13eadbf47fbc54e4219230ce5ee6",
+      "commit:af1666adcb60c91dc9e4dfc9e7f4a127ac802484"
+    ]
+  },
+  "findings": [
+    {
+      "finding_id": "PF-XENO-001",
+      "epistemic_class": "CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "CURRENT_AT_FROZEN_HEAD",
+      "claim": "Project-Frankenstein's agentic tool layer defines typed tool metadata and JSON-Schema parameters and instructs the model to emit a JSON object with action plus action_input; risk level and approval requirements remain host-side metadata rather than model authority.",
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["claycode","frank","harness"],
+      "implication": "ClayCode should preserve typed arguments and external effect/approval authority while replacing JSON surface verbosity with a canonical semantic IR plus reader-specific projections where evidence supports it."
+    },
+    {
+      "finding_id": "PF-XENO-002",
+      "epistemic_class": "HISTORICAL_RUNTIME_FAILURE_EVIDENCE",
+      "status": "NEGATIVE_RESULT_VALUE",
+      "claim": "Early agentic execution repeatedly required JSON-format reminders, duplicate-tool-call detection, higher parse-failure tolerance and model routing chosen specifically for JSON reliability. This shows that generic JSON correctness was a material small-model orchestration cost rather than a free interface property.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["claycode","harness","frank"],
+      "next_test": "Benchmark current Qwen-class readers on canonical ClayCode projections versus JSON and key/value baselines for parse success, repair turns, token cost and semantic preservation."
+    },
+    {
+      "finding_id": "PF-XENO-003",
+      "epistemic_class": "CURRENT_HEAD_CODE_PLUS_HISTORY",
+      "status": "CURRENT_AT_FROZEN_HEAD",
+      "claim": "The direct Frank tool path later uses a LoRA-learned compact <tool>name|param1|param2</tool> wire format, dynamically generates the available-tool prompt, and parses primarily with string operations; however the same parser retains multiple hybrid/square-bracket fallbacks, alias repair and fuzzy matching for recurrent model misformats.",
+      "reuse_class": "DIRECTLY_REUSABLE",
+      "targets": ["claycode","frank","harness"],
+      "implication": "This is a strong historical precursor to ClayCode's machine-oriented compact representation, but it is not yet a semantic IR: syntax repair and fuzzy aliases demonstrate that surface compactness alone does not provide canonical identity."
+    },
+    {
+      "finding_id": "PF-XENO-004",
+      "epistemic_class": "HISTORICAL_IMPLEMENTATION_EVIDENCE",
+      "status": "SUPPORTED_BY_COMMIT_HISTORY",
+      "claim": "The March Deep-Agents integration filtered 44 tools down to at most 15 task-relevant tools, offloaded tool results above about 1500 characters to a scratchpad, and added plan recitation to keep a 3B model on task. Later project context compaction reduced old tool/text blocks once estimated context exceeded about 40K tokens.",
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["claycode","claygraph","frank","harness"],
+      "implication": "Small-model reliability depended on selective projection and externalized state, supporting ClayCode/ClayGraph designs where canonical semantics are rich but each reader receives only the relevant bounded projection."
+    },
+    {
+      "finding_id": "PF-XENO-005",
+      "epistemic_class": "CURRENT_HEAD_ARCHITECTURE_EVIDENCE",
+      "status": "NEGATIVE_RESULT_VALUE",
+      "claim": "At the frozen head, Project-Frankenstein contains two materially different tool-call dialects: JSON action/action_input in the agentic registry and compact pipe-delimited <tool> tags in the direct Frank registry. A compatibility parser bridges some paths, but the semantic identity of a call is not defined by one shared canonical representation.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["claycode","frank","unifieddb","harness"],
+      "implication": "ClayCode should explicitly separate canonical semantic identity from wire syntax and canonicalize equivalent reader projections before effect validation/execution."
+    },
+    {
+      "finding_id": "PF-XENO-006",
+      "epistemic_class": "HISTORICAL_SECURITY_AND_FORMAT_FAILURE_EVIDENCE",
+      "status": "NEGATIVE_RESULT_VALUE",
+      "claim": "V15 and later fixes had to strip leaked <tool> markup from user-visible text, cap stray tool calls and strip an additional pipe-delimited tool-tag variant. Tool syntax therefore leaked across presentation/execution boundaries in real historical operation.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["claycode","harness","frank"],
+      "implication": "Model-emitted representation must never itself confer execution authority; parser, validator, capability gateway, commit/effect gateway and presentation renderer require explicit typed boundaries and adversarial regression tests."
+    },
+    {
+      "finding_id": "PF-XENO-007",
+      "epistemic_class": "HISTORICAL_SELF_REPORTED_EXPERIMENTAL_OBSERVATION",
+      "status": "OPEN_REPLICATION_REQUIRED",
+      "claim": "IAPT_METHOD.md reports that regex-based output filtering acted as an invisible co-author of model language and that replacing those filters with structured tool tags improved observed authenticity. The same report records tool-selection accuracy increasing from 45% to 78% across seven training iterations, but these measurements are project-authored and not independent replication.",
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "targets": ["claycode","frank","harness"],
+      "next_test": "Re-run format/parser ablations with fixed model checkpoints and blinded scoring, separating training effects from parser effects and measuring exact format adherence plus task success."
+    },
+    {
+      "finding_id": "PF-XENO-008",
+      "epistemic_class": "HISTORICAL_PERFORMANCE_EVIDENCE",
+      "status": "MIXED_POSITIVE_NEGATIVE",
+      "claim": "Historical FRANK repeatedly changed output/token budgets and model/tool context to manage latency and small-model reliability; the February architecture benchmark also recorded reasoning timeouts caused by router/workspace overhead despite identical underlying model weights. This directly establishes context/interface overhead as a first-class system cost.",
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "targets": ["claycode","frank","clay","harness"],
+      "implication": "ClayCode evaluation must score semantic correctness together with context tokens, repair turns, latency and downstream effect success; compactness without preserved semantics or lower total repair cost is not progress."
+    }
+  ],
+  "architecture_lineage": [
+    "regex/natural-language routing and JSON agent actions",
+    "-> explicit typed tool registry + JSON Schema",
+    "-> LoRA-learned compact <tool>name|args</tool> projection",
+    "-> compatibility/fallback repair for malformed projections",
+    "-> selective tool/context projection and scratch offload",
+    "-> current ClayCode target: canonical semantic IR + deterministic canonicalization + reader projections + external capability/effect authority"
+  ],
+  "branch_feedback": {
+    "claycode": "Treat the Project-Frankenstein compact tool-tag language as a historical precursor, not as the target language. Preserve typed arguments, deterministic semantic identity and external authority; test JSON/key-value/tag/ClayCode projections against parse, repair, token and semantic-preservation baselines.",
+    "frank": "Do not reintroduce multiple semantic tool dialects. Needle/external deterministic machinery should translate human/model surface forms into one Clay semantic representation before capability/effect validation.",
+    "harness": "Add regression fixtures for malformed JSON, hybrid tags, square-bracket tags, alias/fuzzy repair, duplicate calls, leaked tool markup, overlong tool results, context compaction and semantic-equivalence canonicalization.",
+    "claygraph": "Historical task-selective tool projection supports bounded reader-specific views over a richer canonical substrate; reader omission must not mutate truth/provenance.",
+    "unifieddb": "The dual-dialect history is evidence for one semantic identity across multiple physical/wire representations, not for forcing all stores or readers into one syntax.",
+    "clay": "Carry forward selective projection and compact state transport, but score total repair/effect cost rather than surface token count alone."
+  },
+  "earned_work_candidates": [
+    {
+      "candidate_id": "HEW-PF-LANG-005",
+      "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK"],
+      "mechanism_or_result": "Typed tool schema + compact LoRA tool projection + known repair/failure corpus provide direct parser/canonicalizer/harness design inheritance.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 6.0,
+      "avoided_future_hours_high": 12.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "ClayCode baseline benchmark must demonstrate that these inherited tests/design constraints actually reduce implementation/search effort or prevent regressions."
+    },
+    {
+      "candidate_id": "HEW-PF-CTX-006",
+      "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS"],
+      "mechanism_or_result": "Historical selective tool projection, scratch offload and context compaction establish implemented patterns for bounded small-model context.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 5.0,
+      "avoided_future_hours_high": 10.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Current 4B reader benchmarks must show task-equivalent or better performance under bounded projection versus full-context baseline."
+    },
+    {
+      "candidate_id": "HEW-PF-FMTFAIL-007",
+      "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE","H2_CLAYCODE_HARNESS","CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "JSON parse failures, tool-tag misformats, output-tag leaks and duplicate call history form an executable negative-regression corpus.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 5.0,
+      "avoided_future_hours_high": 10.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Harness must reproduce representative historical failures against compatibility projections and prove current gateway prevents unauthorized/leaked effects."
+    }
+  ],
+  "progress_accounting": {
+    "combined_denominator_state": "NOT_FROZEN",
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "historical_earned_work_credit_applied": false,
+    "reason": "This receipt is a provisional semantic shard; the exact Project-Frankenstein tree obligations and Drive archive-internal manifest remain unfrozen."
+  },
+  "blockers": [
+    {
+      "class": "EXTERNAL_ACCESS_BLOCKER",
+      "source": "Drive clay archive",
+      "detail": "The folder contains one 663552000-byte all frank data 1.tar.xz object; the current Drive connector rejects raw downloads above 104857600 bytes. No archive-internal inventory or semantic coverage is claimed."
+    }
+  ]
+}

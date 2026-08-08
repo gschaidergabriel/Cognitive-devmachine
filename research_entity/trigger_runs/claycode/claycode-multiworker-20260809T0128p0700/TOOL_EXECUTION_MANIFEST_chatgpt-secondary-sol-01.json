@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-multiworker-20260809T0128p0700",
+  "worker_id":"chatgpt-secondary-sol-01",
+  "tools":[
+    {"provider":"GitHub","class":"canonical/repository evidence + shared-state coordination","status":"EXECUTED_RW","uses":["T0 canonical verification","protocol/FRANK/ClayGraph/UnifiedDB/ClayCode retrieval","recent-commit live worker scans","append-only coordination/results/contribution/cross-read writes"],"limitations":["GitHub code search indexing lag observed; known paths/commit search used as fallback"]},
+    {"provider":"web research","class":"external literature/docs/community evidence","status":"EXECUTED","uses":["capability systems/WASI","information-flow control","confused deputy/tool routing","verify-before-commit agent security","origin-bound memory authority","memory poisoning"],"evidence_policy":"primary/peer-reviewed/preprint/docs/community classes kept separate; shared RAE reuse not counted as replication"},
+    {"provider":"local Python","class":"executable mechanism test fallback","status":"EXECUTED","uses":["authority-binding mutation fuzz","independent guard oracle","cumulative budget sessions","origin-laundering chains"],"receipt":"EXPERIMENT_RESULTS_chatgpt-secondary-sol-01_verify.json","limitations":["finite synthetic mechanism tests only"]},
+    {"provider":"e2b_sandbox","class":"preferred external ClayCode execution surface","status":"NOT_DIRECTLY_INVOKABLE_IN_THIS_CHATGPT_TOOL_CONTEXT","fallback":"local Python per CLAYCODE_RESEARCH_PROTOCOL","claim_boundary":"No E2B evidence claimed by lane C"},
+    {"provider":"sandboxapi_sandbox","class":"secondary external execution","status":"NOT_USED","reason":"protocol records backend as blocked/not subscribed and no runtime-verified action exposed"}
+  ],
+  "tool_failures":[
+    {"event":"GitHub create_file 409 during concurrent branch movement","response":"no overwrite attempted; unique append-only verification artifact created after re-read attempt","scientific_impact":"none on experiment result; useful concurrency/coordination receipt"}
+  ],
+  "completion":"Lane C tool execution complete; whole-run lane B external/lowering tools remain sibling responsibility."
+}

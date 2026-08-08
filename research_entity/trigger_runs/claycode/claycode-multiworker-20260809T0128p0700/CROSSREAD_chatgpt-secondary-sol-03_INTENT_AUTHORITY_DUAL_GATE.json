@@ -1,0 +1,52 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "worker_id":"chatgpt-secondary-sol-03",
+  "cross_read_target":"LANE_D_INTENT_ADEQUACY_CLAIM_chatgpt-secondary-sol-02.json",
+  "status":"FUSION_DELTA",
+  "relationship":"ORTHOGONAL_COMPLEMENT",
+  "synthesis":"Atomic capability/authority reservation and intent adequacy solve different failure classes and must both gate consequential effects.",
+  "dual_gate_law":"user_intent_adequacy != capability_authority; consequential commit requires both",
+  "proposed_release_chain":[
+    "protected UserIntentContract / reviewed task identity",
+    "model proposal -> typed EffectIntent",
+    "provenance/influence noninterference or equivalent intent-adequacy check",
+    "restricted policy/admission decision",
+    "atomic authority reserve binding exact approved intent + current capability/epochs/budget/replay identity",
+    "effect commit",
+    "OutcomeReceipt + canonical re-entry"
+  ],
+  "failure_if_intent_gate_missing":"A prompt-injected or otherwise context-shifted EffectIntent may be internally consistent, within capability scope and correctly lowered yet still be unjustified by the user's actual task.",
+  "failure_if_authority_gate_missing":"A user-justified EffectIntent may still execute with stale, widened, revoked, replayed or cumulatively overspent authority.",
+  "external_support":[
+    {
+      "source_class":"NIST_2026_CONCEPT_PAPER",
+      "finding":"NIST explicitly frames agent identity/authorization, auditing/non-repudiation and prompt-injection mitigation as linked problems for software/AI agents.",
+      "url":"https://csrc.nist.gov/pubs/other/2026/02/05/accelerating-the-adoption-of-software-and-ai-agent/ipd"
+    },
+    {
+      "source_class":"OWASP_2026_AGENTIC_SECURITY",
+      "finding":"OWASP recommends least-privilege tool policy, structural separation of trusted/untrusted inputs, high-impact confirmation and action logging tied to originating input; its over-privileged-skills guidance explicitly notes tool-level permission can still be abused when natural-language intent is coerced.",
+      "url":"https://owasp.org/www-project-agentic-skills-top-10/ast03"
+    },
+    {
+      "source_class":"PREPRINT_2026_INTENT_GOVERNED_AUTHORIZATION",
+      "finding":"IGAC independently argues that static tool credentials are necessary but insufficient because a tool call can be credential-authorized yet unjustified by the user's current request; user intent narrows rather than expands authority.",
+      "url":"https://arxiv.org/abs/2606.22916"
+    },
+    {
+      "source_class":"PREPRINT_2026_ROLE_CONFUSION",
+      "finding":"Prompt-injection evidence supports provenance/role separation: untrusted text can acquire apparent authority when models infer role from content rather than source.",
+      "url":"https://arxiv.org/abs/2603.12277"
+    },
+    {
+      "source_class":"PREPRINT_2026_CRYPTOGRAPHIC_WORKFLOW_AUTHORIZATION",
+      "finding":"NCS independently separates untrusted neural planning from deterministic authorization of exact workflow steps and rejects mismatched/out-of-order tool calls.",
+      "url":"https://arxiv.org/abs/2607.15596"
+    }
+  ],
+  "evidence_boundary":"External work supports the mechanism class and problem separation; it does not validate ClayCode's exact UserIntentContract or atomic reservation design.",
+  "fusion_request":"Treat intent adequacy/noninterference as an additional P0 RC2 gate and bind the successful intent decision into authority_reservation_id/contract_instance_hash so later lowering cannot swap the approved action.",
+  "promotion":"NONE",
+  "provenance":{"origin_actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","created_at":"2026-08-09T01:47:00+07:00"}
+}

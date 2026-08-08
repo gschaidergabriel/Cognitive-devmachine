@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0451p0700-drive-upload-quiescence-epoch",
+  "actor_id":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"SOURCE_EPOCH_WATERMARK_FROZEN_FOR_THIS_RUN",
+  "observed_at":"2026-08-09T04:51:00+07:00",
+  "drive_root":"drive:1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+  "observation": {
+    "latest_positive_creation_seen_utc":"2026-08-08T21:43:33.450Z",
+    "latest_positive_creation_seen_local":"2026-08-09T04:43:33.450+07:00",
+    "quiescence_checks":[
+      {"filter":"createdTime > 2026-08-08T21:44:00Z and non-folder","result":"NO_RESULTS"},
+      {"filter":"createdTime > 2026-08-08T21:49:00Z and non-folder","result":"NO_RESULTS"}
+    ],
+    "epoch_watermark_utc":"2026-08-08T21:44:00Z",
+    "rule":"This freezes only the source-arrival epoch for the current 666 run. Any later-created Drive item opens a new epoch and must not silently mutate the frozen denominator."
+  },
+  "progress_accounting":{"exact_level0_coverage_awarded_percent":0.0,"reason":"Quiescence stabilizes enumeration but does not itself freeze all recursive atomic obligations."}
+}

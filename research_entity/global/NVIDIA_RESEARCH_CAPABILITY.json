@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "tool_name":"nvidia_nim",
   "provider":"NVIDIA Hosted NIM / API Catalog",
   "base_url":"https://integrate.api.nvidia.com/v1",
@@ -12,38 +12,14 @@
   "credential_store":"research_entity/private/API_TOKENS.env",
   "credential_value_must_not_appear_in_artifacts":true,
   "functions":[
-    {
-      "name":"models",
-      "mode":"list_models",
-      "endpoint":"GET /v1/models",
-      "evidence_class":"provider_model_catalog",
-      "purpose":"Discover credential-visible hosted models before selecting an inference target."
-    },
-    {
-      "name":"chat",
-      "mode":"chat",
-      "endpoint":"POST /v1/chat/completions",
-      "evidence_class":"external_model_runtime",
-      "purpose":"Run explicit hosted-model inference experiments with exact provider/model identity."
-    },
-    {
-      "name":"embeddings",
-      "mode":"embeddings",
-      "endpoint":"POST /v1/embeddings",
-      "default_model":"nvidia/nv-embedqa-e5-v5",
-      "evidence_class":"external_embedding_runtime",
-      "purpose":"Generate query/passage embeddings for ClayGraph retrieval, clustering and retrieval benchmarks."
-    },
-    {
-      "name":"rerank",
-      "mode":"rerank",
-      "endpoint":"POST /v1/ranking",
-      "default_model":"nvidia/llama-nemotron-rerank-1b-v2",
-      "evidence_class":"external_reranker_runtime",
-      "purpose":"Rerank candidate evidence/passages and test structured retrieval quality independently from the LLM reader."
-    }
+    {"name":"models","mode":"list_models","endpoint":"GET /v1/models","status":"RUNTIME_VERIFIED","verification_receipt":"research_entity/runtime/tool_results/nvidia-catalog-20260808T1950p0700.json","observed_model_count":100,"evidence_class":"provider_model_catalog"},
+    {"name":"chat","mode":"chat","endpoint":"POST /v1/chat/completions","status":"RUNTIME_VERIFIED","verified_model":"nvidia/nemotron-mini-4b-instruct","evidence_class":"external_model_runtime","note":"Catalog membership and account-executable function availability are distinct; google/gemma-3-4b-it was catalog-visible but returned function-not-found for this account."},
+    {"name":"embeddings","mode":"embeddings","endpoint":"POST /v1/embeddings","status":"RUNTIME_VERIFIED","verified_model":"nvidia/nv-embedqa-e5-v5","dimensions":1024,"verification_receipt":"research_entity/runtime/tool_results/nvidia-embed-smoke-20260808T1950p0700.json","evidence_class":"external_embedding_runtime"},
+    {"name":"embedding_similarity","mode":"embedding_similarity","endpoint":"derived from POST /v1/embeddings","status":"RUNTIME_VERIFIED","verified_model":"nvidia/nv-embedqa-e5-v5","verification_receipt":"research_entity/runtime/tool_results/nvidia-role-class-embedding-similarity-20260808T2010p0700.json","evidence_class":"external_embedding_runtime_proxy_for_semantic_geometry","boundary":"Similarity is not canonical relation identity, role identity, authority, causal identity or hidden-state equivalence."},
+    {"name":"rerank","mode":"rerank","endpoint":"provider/model-specific hosted reranking route or /v1/ranking on deployed NIM","status":"HOSTED_ROUTE_UNRESOLVED","attempt_receipts":["research_entity/runtime/tool_results/nvidia-rerank-smoke-20260808T1950p0700.json","research_entity/runtime/tool_results/nvidia-rerank-mistral4b-smoke-20260808T1954p0700.json"],"evidence_class":"external_reranker_runtime","note":"Two hosted-route attempts returned HTTP 404. Do not claim reranking runtime availability until a credential-valid hosted function route is verified."}
   ],
-  "status":"PENDING_RUNTIME_VERIFICATION",
+  "model_routing":{"verified_real_4b":"nvidia/nemotron-mini-4b-instruct","catalog_visible_but_not_executable_in_test":"google/gemma-3-4b-it","qwen3_4b":"NOT_EXPOSED_IN_NVIDIA_CATALOG_OBSERVED_2026-08-08"},
+  "status":"RUNTIME_VERIFIED_PARTIAL",
   "security_rule":"Load NVIDIA_API_KEY only at runtime through rae_secret_loader; never copy credential values into requests, results, logs, packets, claims or reports.",
-  "routing_rule":"Use model catalog before selecting a named hosted model. Prefer NVIDIA embeddings/reranking when retrieval quality is a variable; keep reader-model effects separate from retriever/reranker effects. Hosted NVIDIA results do not substitute for local hardware latency, memory, energy or thermal evidence."
+  "routing_rule":"Use model catalog before selecting a named hosted model, then verify actual execution because catalog visibility does not guarantee account function entitlement. Prefer the verified Nemotron-Mini-4B for direct generic-4B model-behavior experiments, NVIDIA embeddings for ClayGraph/semantic-geometry experiments, and keep reranking blocked until its hosted route is verified. Hosted NVIDIA results do not substitute for Qwen-specific, local hardware, latency, memory, energy, thermal, LoRA/full-model adaptation or live-FRANK evidence."
 }

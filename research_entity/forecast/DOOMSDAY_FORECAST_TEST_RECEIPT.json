@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "tested_at": "2026-08-09",
+  "evidence_class": "local_deterministic_fixture_test",
+  "tool_under_test": "tools/doomsday_forecast.py",
+  "integration_tools": ["tools/program_progress.py", "tools/status_footer_check.py"],
+  "result": "PASS",
+  "scenario_tests_passed": 20,
+  "status_integration_tests_passed": 1,
+  "total_checks_passed": 21,
+  "important_bug_found_and_fixed": {
+    "bug": "An early capability-impact implementation could have applied a calibrated-looking multiplier even when the capability itself was not runtime verified.",
+    "fix": "Capability row multipliers now enter the forecast only when both the capability runtime status and the impact receipt are verified.",
+    "regression_test": "Unverified capability with a fake VERIFIED impact object must leave FINAL_MODEL_FINE_TUNE capability_factor at 1.0 and must not move the forecast."
+  },
+  "covered_invariants": [
+    "baseline forecast resolves",
+    "owner-training conditional is explicit",
+    "partial stage progress moves progress forward and shortens forecast",
+    "verified accelerator shortens affected critical-path work",
+    "unverified accelerator is rejected and has zero forecast effect",
+    "new runtime-verified API/capability is auto-discovered",
+    "runtime-verified but uncalibrated API does not receive fictional ETA bonus",
+    "unverified API cannot alter ETA even when its file contains a fake calibrated impact",
+    "verified calibrated API changes only mapped rows",
+    "multiple provider accelerators do not blindly multiply; strongest single verified row factor wins",
+    "verified blocker/rework can move forecast later",
+    "hardware fallback date is parsed from the dated hardware entry rather than an unrelated capacity-state date",
+    "owner authorization toggles conditional state",
+    "completed future workspace advances forecast progress",
+    "verified elimination removes remaining effort and shortens scope",
+    "measured stage throughput outranks the engineering prior",
+    "capability-extension metadata can override stale registry status",
+    "irrelevant API remains visible but has no critical-path effect",
+    "new required scope can lower project-progress percentage and delay forecast",
+    "dependency cycle fails closed",
+    "status footer resolves both NEXT LEVEL and DOOMSDAY from the same dynamic state"
+  ],
+  "test_environment": {
+    "runtime": "local isolated container",
+    "method": "temporary repository fixtures with controlled program/capacity/capability/event mutations",
+    "internet_required": false,
+    "paid_api_calls": false
+  },
+  "limitations": [
+    "These tests validate forecast logic, invariants and integration behavior, not the accuracy of current engineering priors.",
+    "Current stage priors remain low-confidence until real completion/throughput data accumulates.",
+    "Provider speedup factors remain 1.0 unless a real benchmark receipt verifies otherwise.",
+    "The GitHub Actions workflow is installed for ongoing regression execution; this receipt records the local deterministic test run performed during implementation."
+  ],
+  "continuous_regression": ".github/workflows/doomsday-forecast-tests.yml"
+}

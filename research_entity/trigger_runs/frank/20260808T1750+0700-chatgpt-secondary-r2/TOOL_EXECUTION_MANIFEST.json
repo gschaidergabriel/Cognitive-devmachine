@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260808T1750+0700-chatgpt-secondary-r2",
+  "research_classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/c6-claynative-openalex-20260808T1750.json","evidence_class":"external_scholarly_metadata","credential":"loaded from private store; value not logged"},
+    {"tool":"arxiv_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/c6-claynative-arxiv-20260808T1750.json","evidence_class":"external_preprint"},
+    {"tool":"semantic_scholar_search","status":"FAILED_COVERED","reason":"RATE_LIMITED","result_ref":"research_entity/runtime/tool_results/c6-claynative-s2-20260808T1750.json","covers":["openalex_search","arxiv_search","direct_primary_sources"],"note":"HTTP 429 on public shared pool; no research blockage."},
+    {"tool":"tavily_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/c6-claynative-tavily-20260808T1750.json","evidence_class":"external_web_discovery","credential":"loaded from private store; value not logged"},
+    {"tool":"exa_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/c6-claynative-exa-20260808T1750.json","evidence_class":"external_web_discovery","credential":"loaded from private store; value not logged"},
+    {"tool":"github_connector","status":"SUCCESS","scope":"canonical boot; current FRANK/Clay/ClayCode/ClayGraph/GWT/Hyperposition evidence; persistent writeback"},
+    {"tool":"local_sandbox","status":"SUCCESS","scope":"8 C6 analytic/reference/synthetic experiments and deterministic size/fault calculations","source":"tools/frank_c6_claynative_experiments.py"},
+    {"tool":"judge0_execute","status":"NOT_REEXECUTED_DUPLICATE_EVIDENCE_NO_INFORMATION_GAIN","reason":"C6 reference mechanisms are deterministic and prior CC9/H3/GWT4 constructed mechanisms already have Judge0 directional replications; target-model/full-training evidence is the missing discriminator, not another Python runtime."},
+    {"tool":"e2b_sandbox","status":"FALLBACK","reason":"CREDENTIAL_UNAVAILABLE","covers":["local_sandbox","judge0_execute"],"note":"Existing connector blocker preserved; not bypassed."},
+    {"tool":"piston_execute","status":"FALLBACK","reason":"CREDENTIAL_UNAVAILABLE","covers":["local_sandbox","judge0_execute"],"note":"Hosted EMKC endpoint requires token; verified Judge0/local alternatives exist."},
+    {"tool":"huggingface_inference","status":"FALLBACK","reason":"QUOTA_EXHAUSTED_CACHED","covers":["groq_inference"],"note":"HF token is valid but monthly inference credits are cached exhausted until 2026-09-01."},
+    {"tool":"groq_inference","status":"SUCCESS","model":"llama-3.1-8b-instant","evidence_role":"8b_proxy_for_4b","result_refs":["research_entity/runtime/tool_results/c6-groq-claylearn-zero-correct-20260808T1750.json","research_entity/runtime/tool_results/c6-groq-claylearn-fewshot-20260808T1750.json","research_entity/runtime/tool_results/c6-groq-claylearn-compiled-20260808T1750.json","research_entity/runtime/tool_results/c6-groq-homoiconic-untyped-20260808T1750.json","research_entity/runtime/tool_results/c6-groq-homoiconic-typed-20260808T1750.json"],"note":"Untrained 8B failed Mini-Clay protocol; simple memory-instruction sanity test was non-discriminating. Neither substitutes for target Qwen full-model Clay training."}
+  ],
+  "external_primary_validation":"The synthesis additionally checked primary/authoritative ACL/arXiv/Qwen/MLIR sources where discovery results materially affected architecture conclusions.",
+  "policy_boundary":"Search/discovery output is never automatically canonical evidence. Provider reuse and shared ancestry are not independent replication.",
+  "completion":"PASS_WITH_RECORDED_FALLBACKS"
+}

@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the dynamic visible RAE status footer.
-
-The final status block must reflect the next unpassed milestone resolved from
-PROGRAM_STATE.json, not an estimate of the immediately preceding prompt.
-"""
+"""Validate the dynamic RAE footer: NEXT LEVEL + DOOMSDAY / Clay 0.1."""
 from __future__ import annotations
 
 import argparse
@@ -23,11 +19,16 @@ REQUIRED = [
     "Trigger:",
     "Research write:",
     "Short commands:",
-    "NEXT MILESTONE",
+    "NEXT LEVEL",
     "Stage:",
-    "Progress:",
     "ETA @ 10h/day:",
     "ETA confidence:",
+    "DOOMSDAY / Clay 0.1",
+    "Forecast:",
+    "Center:",
+    "Confidence:",
+    "Conditional on immediate training authorization when data is ready:",
+    "Forecast basis:",
 ]
 
 FORBIDDEN_BOX_CHARS = set("╔═║╚╗╝┌─│└┐┘├┤┬┴┼")
@@ -47,8 +48,7 @@ def _tail_block(text: str) -> tuple[str, list[str]]:
     errors: list[str] = []
     stripped = text.rstrip()
     if not stripped.endswith("```"):
-        errors.append("footer_not_final_fenced_block")
-        return "", errors
+        return "", ["footer_not_final_fenced_block"]
     start = stripped.rfind("```text\n")
     if start < 0:
         if re.search(r"(?m)^```text\S|^```text\s+.+$", stripped):
@@ -68,8 +68,6 @@ def _tail_block(text: str) -> tuple[str, list[str]]:
 
 
 def _expected_program_lines() -> list[str]:
-    # Import from sibling tools/program_progress.py. When this file is executed
-    # directly, its directory is already sys.path[0].
     from program_progress import resolve, render_text
     return render_text(resolve()).splitlines()
 
@@ -79,29 +77,36 @@ def validate(text: str) -> list[str]:
     if not tail:
         return errors
 
-    opener_line = tail.splitlines()[0] if tail.splitlines() else ""
-    if opener_line != "```text":
+    if tail.splitlines()[0] != "```text":
         errors.append("invalid_fence_opener_attributes")
-
     if any(ch in FORBIDDEN_BOX_CHARS for ch in tail):
         errors.append("forbidden_box_drawing_character")
-
     for label in REQUIRED:
         if label not in tail:
             errors.append(f"missing:{label}")
 
     if re.search(r"(?m)^Completion:\s*\d+%", tail):
         errors.append("legacy_prompt_completion_forbidden")
-    if "LAST PROMPT" in tail:
-        errors.append("legacy_last_prompt_section_forbidden")
+    if "LAST PROMPT" in tail or "NEXT MILESTONE" in tail:
+        errors.append("legacy_status_section_forbidden")
 
-    progress_match = re.search(r"(?m)^Progress:\s*(\[[#.]+\])\s+(\d{1,3})%\s*$", tail)
-    if not progress_match:
-        errors.append("invalid_progress_line")
-    else:
-        percent = int(progress_match.group(2))
+    progress_lines = re.findall(r"(?m)^Progress:\s*(\[[#.]+\])\s+(\d{1,3}(?:\.\d+)?)%\s*$", tail)
+    if len(progress_lines) != 2:
+        errors.append(f"expected_two_progress_lines_got:{len(progress_lines)}")
+    for _, percent_text in progress_lines:
+        percent = float(percent_text)
         if not 0 <= percent <= 100:
             errors.append("invalid_progress_percent")
+
+    forecast_match = re.search(r"(?m)^Forecast:\s*(\d{4}-\d{2}-\d{2})\s+-\s+(\d{4}-\d{2}-\d{2})\s*$", tail)
+    if not forecast_match:
+        errors.append("invalid_doomsday_forecast_range")
+    elif forecast_match.group(2) < forecast_match.group(1):
+        errors.append("doomsday_forecast_range_reversed")
+
+    conditional_match = re.search(r"(?m)^Conditional on immediate training authorization when data is ready:\s*(yes|no)\s*$", tail)
+    if not conditional_match:
+        errors.append("invalid_training_conditional_line")
 
     cmd_match = re.search(r"(?m)^Short commands:\s*(.+)$", tail)
     if cmd_match:
@@ -110,16 +115,13 @@ def validate(text: str) -> list[str]:
             if not re.search(rf"(?<![a-z0-9_-]){re.escape(command)}(?![a-z0-9_-])", line):
                 errors.append(f"missing_command:{command}")
 
-    # Strong invariant: milestone lines must exactly match the current canonical
-    # resolver so changing PROGRAM_STATE changes footer validation automatically.
     try:
         expected = _expected_program_lines()
         for line in expected:
             if line not in tail:
                 errors.append(f"program_progress_mismatch:{line}")
-    except Exception as exc:  # fail closed: stale/unreadable program state is a bug
+    except Exception as exc:
         errors.append(f"program_progress_resolution_failed:{type(exc).__name__}")
-
     return errors
 
 
@@ -136,36 +138,30 @@ def _self_test() -> list[str]:
         "Trigger: none\n"
         "Research write: NO_RESEARCH_DELTA\n"
         f"Short commands: {commands}\n\n"
-        "NEXT MILESTONE\n"
         + "\n".join(expected)
         + "\n```"
     )
     bad_attr = good.replace("```text\n", "```text id=\"broken\"\n", 1)
     bad_box = good.replace("RAE STATUS", "╔ RAE STATUS ═╗")
     bad_after = good + "\nvisible trailing prose"
-    bad_legacy = good.replace("NEXT MILESTONE", "LAST PROMPT\nCompletion: 100%\n\nNEXT MILESTONE")
+    bad_legacy = good.replace("NEXT LEVEL", "LAST PROMPT\nCompletion: 100%\n\nNEXT LEVEL")
+    bad_forecast = re.sub(r"Forecast: \d{4}-\d{2}-\d{2} - \d{4}-\d{2}-\d{2}", "Forecast: 2099-01-02 - 2099-01-01", good)
 
     failures: list[str] = []
-    if validate(good):
-        failures.append("selftest_good_rejected")
-    if "invalid_fence_opener_attributes" not in validate(bad_attr):
-        failures.append("selftest_attribute_fence_not_rejected")
-    if "forbidden_box_drawing_character" not in validate(bad_box):
-        failures.append("selftest_box_chars_not_rejected")
-    if "footer_not_final_fenced_block" not in validate(bad_after):
-        failures.append("selftest_trailing_prose_not_rejected")
-    legacy_errors = validate(bad_legacy)
-    if "legacy_prompt_completion_forbidden" not in legacy_errors:
-        failures.append("selftest_legacy_completion_not_rejected")
+    if validate(good): failures.append("selftest_good_rejected")
+    if "invalid_fence_opener_attributes" not in validate(bad_attr): failures.append("selftest_attribute_fence_not_rejected")
+    if "forbidden_box_drawing_character" not in validate(bad_box): failures.append("selftest_box_chars_not_rejected")
+    if "footer_not_final_fenced_block" not in validate(bad_after): failures.append("selftest_trailing_prose_not_rejected")
+    if "legacy_prompt_completion_forbidden" not in validate(bad_legacy): failures.append("selftest_legacy_completion_not_rejected")
+    if "doomsday_forecast_range_reversed" not in validate(bad_forecast): failures.append("selftest_reversed_forecast_not_rejected")
     return failures
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("file", nargs="?")
-    ap.add_argument("--self-test", action="store_true")
-    args = ap.parse_args()
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", nargs="?")
+    parser.add_argument("--self-test", action="store_true")
+    args = parser.parse_args()
     if args.self_test:
         failures = _self_test()
         if failures:
@@ -173,7 +169,6 @@ def main() -> None:
             raise SystemExit(2)
         print("SELF_TEST_VALID")
         return
-
     text = Path(args.file).read_text(encoding="utf-8") if args.file else __import__("sys").stdin.read()
     errors = validate(text)
     if errors:

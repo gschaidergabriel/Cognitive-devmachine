@@ -1,0 +1,62 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260808T2051p0700-chatgpt-secondary-r3",
+  "evidence_boundary":"All experiments except the Qwen configuration arithmetic are local CPython/synthetic mechanism proxies. They are not live FRANK, Linux target, Android target, Qwen fine-tune or production-security measurements.",
+  "experiments":[
+    {
+      "id":"EXP-C7-HANDOFF-001",
+      "class":"LOCAL_CPYTHON_SERIALIZATION_MICROBENCH",
+      "setup":{"payload_json_bytes":6983,"payload_pickle_bytes":5390,"iterations":{"direct":20000,"json":5000,"pickle":5000,"memoryview":20000,"byte_copy":10000}},
+      "results":{
+        "direct_dict_read":{"median_us":0.080,"p95_us":0.090,"p99_us":0.101},
+        "json_roundtrip":{"median_us":74.080,"p95_us":83.524,"p99_us":103.304},
+        "pickle_roundtrip":{"median_us":35.713,"p95_us":38.427,"p99_us":65.628},
+        "memoryview_existing_blob":{"median_us":0.121,"p95_us":0.140,"p99_us":0.160},
+        "byte_copy_existing_blob":{"median_us":0.511,"p95_us":0.581,"p99_us":0.681}
+      },
+      "interpretation":"For this representative ~7KB nested Clay/MOSAIC-shaped payload in CPython, repeated object serialization is orders of magnitude more expensive than borrowing an already packed immutable buffer. This supports testing a compact typed/borrowed hot-path ABI. It does not estimate actual Rust/C/Arrow/shared-memory IPC cost.",
+      "falsifier":"Target Linux/Android profiling shows serialization/reconstruction contributes negligibly to end-to-end latency/energy or packed/borrowed handoffs do not improve p95/p99."
+    },
+    {
+      "id":"EXP-C7-PARTITION-002",
+      "class":"SYNTHETIC_PROCESS_PARTITION_AND_RECOVERY_MODEL",
+      "setup":{"organs":12,"modeled_transition_weight_per_episode":15.2,"layouts":["monolith","microservices","hybrid"],"hybrid":"cognitive core + separate model + effect/capability broker + observability","fault_probabilities":"constructed rare per-organ hazards","restart_costs":"constructed organ-specific milliseconds"},
+      "results":{
+        "weighted_cross_process_transitions":{"monolith":0.0,"microservices":15.2,"hybrid":6.9},
+        "expected_recovery_penalty_us_per_episode_proxy":{"monolith":47.4525,"microservices":8.9700,"hybrid":15.1775},
+        "combined_proxy_if_each_crossing_5us":{"monolith":47.4525,"microservices":84.9700,"hybrid":49.6775},
+        "combined_proxy_if_each_crossing_25us":{"monolith":47.4525,"microservices":388.9700,"hybrid":187.6775},
+        "combined_proxy_if_each_crossing_75us":{"monolith":47.4525,"microservices":1148.9700,"hybrid":532.6775}
+      },
+      "interpretation":"The construction exposes the trade-off rather than proving a winner: monolith minimizes handoffs but maximizes common restart blast radius; full microservices minimize blast radius but pay many boundaries; hybrid retains isolation for model/effects/observability while collapsing the cognition-hot path. Because the authority/secrets boundary is a hard safety constraint, the unconstrained monolith is not the default C7 candidate despite low modeled latency.",
+      "falsifier":"Real target traces show a different partition Pareto frontier after measured IPC, restart, GPU/runtime faults, storage failures and security constraints."
+    },
+    {
+      "id":"EXP-C7-EFFECT-SCOPE-003",
+      "class":"SYNTHETIC_POST_PROPOSAL_REVALIDATION_FUZZ",
+      "setup":{"episodes":200000,"consistency_domains":8,"required_domains_per_operation":"uniform 2..4","mutation_classes":["required_or_irrelevant_domain","selection","view","capability","contract","none"]},
+      "results":{
+        "global_all_change_reject_rate":0.940095,
+        "mosaic_scoped_reject_rate":0.628090,
+        "global_false_reject_rate":0.312005,
+        "scoped_unsafe_accepts":0
+      },
+      "interpretation":"In this constructed closure-aware model, rejecting on any domain change produced 31.2005% false rejects, while revalidating only operation-required domains plus selection/view/capability/contract changes rejected every constructed effect-relevant mutation. Zero unsafe accepts are by construction because the trusted dependency set is known; unknown dynamic scope must broaden/escalate in the real system.",
+      "falsifier":"Target property/stateful fuzzing finds effect-changing dependencies outside compiled MOSAIC/COVE closure or shows global validation cost/false-reject rate is negligible."
+    },
+    {
+      "id":"EXP-C7-QWEN-KV-004",
+      "class":"ANALYTICAL_MEMORY_BUDGET_FROM_OFFICIAL_QWEN3_4B_CONFIG",
+      "setup":{"layers":36,"kv_heads":8,"head_dim":128,"kv_tensors_per_layer":2,"formula":"layers * 2(K,V) * kv_heads * head_dim * bytes_per_element * tokens","weight_parameters":4000000000},
+      "results":{
+        "kv_cache_gib_16bit":{"4096":0.5625,"8192":1.125,"16384":2.25,"32768":4.5},
+        "kv_cache_gib_8bit_theoretical":{"4096":0.28125,"8192":0.5625,"16384":1.125,"32768":2.25},
+        "kv_cache_gib_4bit_theoretical":{"4096":0.140625,"8192":0.28125,"16384":0.5625,"32768":1.125},
+        "weight_payload_lower_bound_gib":{"4bit":1.8626451492,"8bit":3.7252902985,"16bit":7.4505805969}
+      },
+      "interpretation":"Even before runtime scratch/allocator/index/activation overhead, long context can consume memory comparable to quantized 4B weights. Bounded COVE/MOSAIC Assemblies are therefore an edge-memory primitive, not only a token-cost optimization. Quantized-KV rows are arithmetic scenarios, not claims that a specific target backend supports or preserves quality at those precisions.",
+      "source_boundary":"Qwen/Qwen3-4B official config reports 36 layers, 8 KV heads, head_dim 128 and 4.0B parameters; runtime/device memory must be measured independently.",
+      "falsifier":"Sustained target Android/Linux traces show maximum context fits memory/thermal/latency budgets and bounded Assemblies do not materially improve system behavior."
+    }
+  ]
+}

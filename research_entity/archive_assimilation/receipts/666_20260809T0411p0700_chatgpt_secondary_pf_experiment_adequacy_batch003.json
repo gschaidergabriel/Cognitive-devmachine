@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0411+0700-chatgpt-secondary-pf-experiment-adequacy-batch003",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "source_family": "PROJECT_FRANKENSTEIN",
+  "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "status": "NARROW_NONOVERLAPPING_ARCHITECTURE_DELTA_INTEGRATED",
+  "non_overlap": "A concurrent worker owns broad experiment/benchmark lineage. This shard is limited to hypothesis-to-test adequacy/identity and does not claim benchmark chronology or earned-work hours.",
+  "source_refs": [
+    "services/hypothesis_engine/service.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/hypothesis_engine/lab_connector.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/experiment_lab.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/hypothesis_engine/evaluator.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+  ],
+  "findings": [
+    {
+      "finding_id": "PF-TESTADEQ-001",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE",
+      "status": "CURRENTLY_RELEVANT_RESEARCH_METHOD_FOUNDATION",
+      "claim": "Project-Frankenstein implemented a persistent empirical lifecycle Observe -> Hypothesize -> Predict -> Test -> Revise, including novelty/dedup limits, experiment budgets, passive/active tests, refutation-triggered revision and bounded revision depth.",
+      "reuse_category": "RESEARCH_CENTER_AND_HARNESS_PRECURSOR",
+      "targets": ["harness", "emergenz", "gwt", "frank", "clay"],
+      "current_implication": "The current Research Entity is not inventing empirical agent research from scratch; preserve the lifecycle while upgrading identity/provenance, independent evidence and test adequacy."
+    },
+    {
+      "finding_id": "PF-TESTADEQ-002",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE_NEGATIVE_METHOD_RESULT",
+      "status": "CURRENTLY_RELEVANT_HARD_TESTING_CONSTRAINT",
+      "claim": "LabConnector used a three-tier translation path from hypothesis to experiment. If generated-description detection and station parsing both failed, it could run randomized default parameters for the selected station instead of parameters entailed by the original hypothesis/prediction.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "claycode", "emergenz", "gwt", "frank"],
+      "law": "TEST_EXECUTION != TEST_ADEQUACY",
+      "current_implication": "A passing executable experiment cannot support a hypothesis unless the test contract proves that executed parameters/interventions discriminate the stated hypothesis from its counterhypothesis."
+    },
+    {
+      "finding_id": "PF-TESTADEQ-003",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE_NEGATIVE_METHOD_RESULT",
+      "status": "CURRENTLY_RELEVANT_ORACLE_CONSTRAINT",
+      "claim": "Experiment verdict interpretation could depend on natural-language narration markers such as '[confirmed]' or 'prediction confirmed', introducing a text interpretation layer between structured simulation output and hypothesis status.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "unifieddb", "claycode", "emergenz"],
+      "current_implication": "Current experiments should store typed/raw outcomes and deterministic oracle logic separately from human/model narration. Narration is a projection, not the scientific result."
+    },
+    {
+      "finding_id": "PF-TESTADEQ-004",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE_POSITIVE_METHOD_FOUNDATION",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "Experiment Lab itself is deterministic for fixed parameters, persists parameters/results/narration/hypothesis links, has time/output/budget limits and rejects obvious imagination-leak inputs. These are useful reference-Harness properties even though hypothesis-to-parameter adequacy was not guaranteed.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "targets": ["harness", "emergenz", "gwt", "hyperposition"],
+      "current_implication": "Reuse deterministic station/oracle patterns and explicit resource limits while replacing heuristic hypothesis binding with typed intervention contracts."
+    },
+    {
+      "finding_id": "PF-TESTADEQ-005",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_CLUSTER_VISIBLE_IN_CODE",
+      "status": "CURRENTLY_RELEVANT_ANTI_CONTAMINATION_CONSTRAINT",
+      "claim": "The hypothesis/evaluator path already contains defenses added against topical cross-contamination, substring false matches, confirmation bias, repeated experiment failures and fictional-world leakage, showing these failure modes occurred often enough to require explicit guards.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "emergenz", "gwt", "unifieddb", "claygraph"],
+      "current_implication": "Current evidence graphs must bind observation/test/outcome identity and preserve null/inconclusive status rather than forcing weakly related evidence into confirmation/refutation."
+    }
+  ],
+  "derived_current_contract": {
+    "name": "Hypothesis-Test Adequacy Chain",
+    "chain": "hypothesis_id -> counterhypothesis_id -> prediction_id -> intervention/test_contract_hash -> exact_parameters_hash -> execution_receipt -> raw_outcome_hash -> oracle_version -> verdict -> claim_transition",
+    "required_invariants": [
+      "Executed parameters are derivable from and bound to the frozen test contract.",
+      "Fallback/default parameters may only yield INCONCLUSIVE unless the same frozen contract explicitly authorizes them as a valid discriminating design.",
+      "Raw structured outcome is immutable/provenance-bound before narration.",
+      "Narration cannot directly mutate scientific verdict.",
+      "Oracle/version identity is recorded.",
+      "A test must specify the counterhypothesis or alternative mechanism it can discriminate against.",
+      "Execution failure, parser failure and test inadequacy remain distinct states."
+    ]
+  },
+  "cross_domain_pattern": {
+    "analogy": "This is structurally parallel to ClayCode intent adequacy: syntactic validity/execution success does not prove that the user's/model's intended semantic operation was adequately captured.",
+    "general_law": "representation validity != intent/test adequacy != execution success != evidential support"
+  },
+  "earned_work": {
+    "hours_added": 0,
+    "reason": "Broad experiment/benchmark lineage is owned by a concurrent worker and historical source ancestry overlaps existing failure mappings. This receipt contributes a new invariant/architecture delta only."
+  },
+  "exact_level0_progress": {
+    "percent_awarded": 0.0,
+    "reason": "Project-Frankenstein and Drive source denominators remain unfrozen."
+  },
+  "completed_at": "2026-08-09T04:28:00+07:00"
+}

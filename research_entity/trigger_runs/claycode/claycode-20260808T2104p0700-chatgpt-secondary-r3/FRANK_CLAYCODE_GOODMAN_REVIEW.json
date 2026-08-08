@@ -1,0 +1,50 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T2104p0700-chatgpt-secondary-r3",
+  "primary_frank_input":"FRANK C7 — Clay Organ Runtime Fabric",
+  "ancestry_rule":"C7, G11, U1 and CC11 share substantial RAE ancestry and are not counted as independent replication. Verdicts rely on independent literature and/or new discriminating CC12 executions.",
+  "items":[
+    {
+      "assumption":"FRANK C7 runtime ABI should preserve typed collection semantics such as SET, ORDERED, MULTISET and weighted/priority candidates.",
+      "verdict":"SUPPORTED",
+      "independent_support":["CC12 E2B 100k typed-collection property test","CC12 E2B 30k typed-vs-type-erased SQLite lowering differential","set/bag semantics literature treating Set and Multiset as distinct collection types"],
+      "counterhypothesis":"One universal container/row semantics is sufficient and backend defaults can be normalized after execution.",
+      "adversarial_result":"Type-erased DISTINCT mismatched 16947/30000 and raw bag/order mismatched 16609/30000; universal semantics rejected in constructed family.",
+      "falsifier":"A type-erased compiler preserves declared semantics across adversarial duplicate/order/multiplicity workloads and target backends."
+    },
+    {
+      "assumption":"C7/MOSAIC semantic identity and exact provenance/contract-instance identity should remain separate.",
+      "verdict":"SUPPORTED",
+      "independent_support":["CC12 E2B reordered/duplicate SET cases preserve semantic hash while contract instances remain distinct","OR-Set/CRDT design independently separates visible set semantics from causal add-tag history"],
+      "counterhypothesis":"One canonical identity is sufficient for both equivalence and replay ancestry.",
+      "adversarial_result":"Previous E2B v0.1 produced false semantic inequality when one provenance-bound hash served both roles; v0.2/CC12 separated them.",
+      "falsifier":"A single identity can simultaneously preserve semantic equivalence and exact ancestry without false equality/inequality across target operations."
+    },
+    {
+      "assumption":"C7/MRSC critical reader handoffs need exact reader-view binding in addition to canonical identity.",
+      "verdict":"SUPPORTED",
+      "independent_support":["CC11 100k discriminating mutation fuzz","CC12 triple-bound view-mutation rejection","translation-validation/equality-checking compiler literature"],
+      "counterhypothesis":"Binding only canonical source/contract is enough because the compiler is trusted.",
+      "adversarial_result":"CC11 source-only binding left 20112 unsafe projected mutations in its constructed family; exact emitted-view binding removed them there.",
+      "falsifier":"Source-bound receipts detect all emitted-view mutations or target compiler proof makes concrete view binding redundant."
+    },
+    {
+      "assumption":"C7 should avoid mandatory verbose JSON on cognition-hot internal ABI paths and use compact typed handles/borrowed buffers where sound.",
+      "verdict":"UNRESOLVED",
+      "independent_support":["C7 CPython microbenchmark","CC12 E2B cached-identity proxy"],
+      "counterhypothesis":"Target serialization/IPC overhead is dominated by other costs, making a packed ABI unnecessary or harmful.",
+      "adversarial_result":"CC12 hot cached path was ~3.37 us/round versus ~15.34 us cold identity recomputation, but this is CPython/E2B and not target Rust/C/Android ABI evidence.",
+      "falsifier":"Target runtime benchmark shows no material latency/memory/energy benefit or reveals unacceptable invalidation/safety costs."
+    },
+    {
+      "assumption":"UnifiedDB logical query unification can coexist with specialized physical stores if ClayCode preserves result semantics and plan identity.",
+      "verdict":"REFINED",
+      "independent_support":["CC12 typed SQLite lowering preserves result semantics in 30000 generated cases","polystore/cross-model query systems and typed IR/compiler evidence"],
+      "counterhypothesis":"Logical unification necessarily erases backend-specific semantics or requires physical consolidation.",
+      "adversarial_result":"Type-aware lowering achieved zero mismatches in the synthetic SQLite corpus while type-erased lowerers failed widely; this supports logical unification only when semantic types survive lowering.",
+      "falsifier":"Cross-engine target traces show unavoidable semantic loss or unacceptable overhead despite explicit collection/result contracts."
+    }
+  ],
+  "summary":{"SUPPORTED":3,"REFINED":1,"REFUTED":0,"UNRESOLVED":1},
+  "promotion":"NONE"
+}

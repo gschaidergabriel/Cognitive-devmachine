@@ -1,0 +1,70 @@
+{
+  "schema_version":"1.0",
+  "protocol":"research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id":"claycode-20260808T1723p0700-chatgpt-secondary",
+  "latest_frank_run":"20260808T0610+0700-chatgpt-secondary-r2",
+  "latest_frank_architecture_artifact":"research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json",
+  "shared_ancestry_is_not_replication":true,
+  "reviews":[
+    {
+      "claim_id":"CC9-GOODMAN-CFRAME",
+      "frank_statement":"A validated CognitiveFrame should be the causal consistency boundary for one workspace/model turn, using a basis root plus scoped revision witnesses and escalation for unknown closure.",
+      "frank_source_refs":["research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json"],
+      "ancestry_families":["CC7/CC8 scoped freshness and OTCC returned through FRANK C4","FRANK C4 synthetic frame-tearing experiment"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"One atomic global snapshot/root is sufficient, or independent latest reads are harmless because components are semantically decoupled.",
+      "falsifier":"On representative live FRANK/ClayGraph traces, independent latest reads never create incompatible model-visible combinations, or one atomic root completely determines graph, activation, frame and projection compatibility without extra witnesses.",
+      "independent_checks":["CC9 new local multi-epoch counterexample: 8.9555% constructed mixed tuples; exact required tuple accepted 0 mixed.","CC9 independent Judge0 replication: 8.736% constructed mixed tuples; 0 mixed passed tuple validation.","Distributed causal/snapshot literature independently requires explicit causal metadata or snapshot handles when multiple state locations must be observed consistently."],
+      "adversarial_checks":["Changed an unrelated telemetry epoch while required frame/graph/activation witnesses remained valid; CC-RC1.4 reference allowed the operation, showing the refined rule is operation-specific rather than universal tuple equality.","Made activation epoch stale while frame/graph matched; reference rejected."],
+      "verdict":"REFINED",
+      "reason":"The consistency-boundary idea survives, but ClayCode should represent a typed operation-specific Causal Basis vector/compatibility certificate rather than treating CognitiveFrame or a single state root as the universal basis. ClayGraph graph/activation epochs are first-class basis dimensions when an operation actually depends on them.",
+      "claycode_action":"integrate_refined_typed_basis",
+      "affected_claycode_artifacts":["CC_RC1_4_REFERENCE.py","FINAL_REPORT.md","HYPOTHESES.md"]
+    },
+    {
+      "claim_id":"CC9-GOODMAN-AUTHORITY",
+      "frank_statement":"Model/Qwen/Needle output is proposal, not authority; external capability gateway/K0 remains the sole authority for external effects.",
+      "frank_source_refs":["research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json"],
+      "ancestry_families":["CC-RC1.1/CC8 authority boundary returned through FRANK","external capability/effect-system literature"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A sufficiently constrained small model can safely interpret compact capability/freshness semantics and authorize effects directly.",
+      "falsifier":"A preregistered target Qwen3-4B authority corpus plus adversarial/OOD cases yields zero unsafe ACCEPTs and equivalent policy enforcement to the deterministic gateway under all tested dynamic/alias/epoch cases.",
+      "independent_checks":["CC9 new Groq 8B raw semantic arm achieved only 1/10 exact classifications, while deterministic precompilation + model relay achieved 10/10.","Current Koka documentation independently demonstrates static tracking/composition of effects; WebAssembly component/resource boundaries independently separate host-provided external functionality from component computation.","2026 Proof-Carrying Agent Actions proposes runtime-neutral action certificates and external governance checkpoints rather than model self-authorization."],
+      "adversarial_checks":["Raw 8B reader collapsed many distinct failure reasons into EFFECT, demonstrating that compact/small-model semantic reading can fail systematically rather than randomly.","CC9 dynamic-dispatch and alias tests show that even a correct textual proposal can omit hidden authority-relevant resource identities."],
+      "verdict":"SUPPORTED",
+      "reason":"Independent current proxy/model and systems evidence support keeping authority outside the generative reader. This preserves the original evidence status: architectural/safety support, not production-security proof.",
+      "claycode_action":"retain_external_gateway",
+      "affected_claycode_artifacts":["CC_RC1_4_REFERENCE.py","FINAL_REPORT.md"]
+    },
+    {
+      "claim_id":"CC9-GOODMAN-PROJECTION",
+      "frank_statement":"Semantic workspace state and the model-facing Word/text projection are distinct; projection should be deterministic/versioned rather than defining canonical truth.",
+      "frank_source_refs":["research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json","research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FINAL_REPORT.md"],
+      "ancestry_families":["CC6/CC8 semantic-IR/projection separation returned through FRANK","GWT reconstruction-vs-transport proxy family"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A single compact wire/text surface can serve simultaneously as canonical semantic identity and optimal small-model reader representation.",
+      "falsifier":"Target-model and roundtrip tests show one surface preserves semantic identity across schema/wire changes, achieves equal/better reader accuracy/cost, and requires no independent projection integrity receipt.",
+      "independent_checks":["CC9 new 100k projection mutation reference test separated semantic corruption detection from wire-only mutation detection with 100% detection in the constructed checker.","CC9 new Groq raw-vs-certified projection test: 1/10 vs 10/10 exact and 327 vs 152 prompt tokens.","Contemporaneous Clay G9 raw-vs-compiled proxy: 5/10 vs 9/10 exact and 487 vs 324 prompt tokens; same provider/worker family, therefore supporting but not independent replication."],
+      "adversarial_checks":["Changed only wire whitespace: semantic hash stayed stable while projection hash changed.","Changed projection semantics/value: semantic identity check changed, preventing a transport-level success from being mistaken for semantic reconstruction."],
+      "verdict":"REFINED",
+      "reason":"Separation is retained and strengthened: model-facing projections need a projection-schema/semantic receipt, and high-stakes decisions should be precompiled by the deterministic kernel rather than re-derived from compact text by the model.",
+      "claycode_action":"integrate_projection_receipt_and_compiled_reader_surface",
+      "affected_claycode_artifacts":["CC_RC1_4_REFERENCE.py","FINAL_REPORT.md","NEGATIVE_RESULTS.md"]
+    },
+    {
+      "claim_id":"CC9-GOODMAN-FIXED-GWT-CONFIG",
+      "frank_statement":"The current candidate uses six workspace channels and a default ignition threshold of 0.55.",
+      "frank_source_refs":["research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json"],
+      "ancestry_families":["current FRANK runtime/config observation"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Channel cardinality and ignition threshold are runtime/configuration parameters that may vary by architecture/version and should not be ClayCode language constants.",
+      "falsifier":"Independent mechanistic/live evidence establishes exactly six channels and 0.55 as invariant semantic necessities across supported FRANK architectures rather than current configuration values.",
+      "independent_checks":[],
+      "adversarial_checks":["Represented the same workspace schema with alternate channel counts/threshold values; no ClayCode core primitive or authority rule requires six or 0.55."],
+      "verdict":"UNRESOLVED",
+      "reason":"ClayCode must represent these values and version them, but current evidence does not justify baking them into language semantics.",
+      "claycode_action":"keep_as_versioned_frank_configuration",
+      "affected_claycode_artifacts":["FINAL_REPORT.md"]
+    }
+  ]
+}

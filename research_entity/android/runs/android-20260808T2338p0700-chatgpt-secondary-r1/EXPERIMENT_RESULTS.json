@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "run_id": "android-20260808T2338p0700-chatgpt-secondary-r1",
+  "evidence_class": "LIVE_REMOTE_ANDROID_VIRTUAL_DEVICE_PLUS_CI",
+  "results": [
+    {
+      "id": "NEG-ANDROID-R1-BUILD-001",
+      "kind": "implementation_negative",
+      "device_allocated": false,
+      "result": "FAIL_THEN_FIXED",
+      "observation": "Instrumentation build failed because AndroidX dependencies were present while android.useAndroidX was not enabled.",
+      "repair": "Added android.useAndroidX=true to gradle.properties.",
+      "scientific_scope": "Pipeline implementation diagnostic only."
+    },
+    {
+      "id": "NEG-ANDROID-R1-TOOLRESULTS-002",
+      "kind": "infrastructure_negative",
+      "device_allocated": false,
+      "result": "FAIL_THEN_FIXED",
+      "observation": "Firebase Test Lab submission was blocked because toolresults.googleapis.com was disabled in project clay-dec2f.",
+      "repair": "Workflow enabled testing.googleapis.com and toolresults.googleapis.com through the authenticated service account.",
+      "scientific_scope": "Cloud research-lane configuration evidence only."
+    },
+    {
+      "id": "EXP-ANDROID-R1-INFRA-001",
+      "kind": "live_virtual_android",
+      "matrix_id": "matrix-3mqon98nc2zsk",
+      "device": "MediumPhone.arm",
+      "android": 35,
+      "result": "PASS",
+      "tests": {
+        "passed": 2,
+        "total": 2,
+        "cases": [
+          "typed arithmetic/assertion produced 42",
+          "unknown reference was deterministically rejected"
+        ]
+      },
+      "supports": [
+        "GitHub Actions -> Google service-account auth -> APK build -> Firebase Test Lab ARM Android -> instrumentation result is operational",
+        "A constructed typed ClayCode-like semantic subset can execute on the tested Android virtual runtime"
+      ],
+      "does_not_support": [
+        "full ClayCode conformance",
+        "complete FRANK Android feasibility",
+        "Qwen 4B Android feasibility",
+        "Linux equivalence"
+      ]
+    },
+    {
+      "id": "EXP-ANDROID-R1-PORTABILITY-BUNDLE-002",
+      "kind": "live_virtual_android_cross_version",
+      "matrix_id": "matrix-322nxfmnphtz2",
+      "devices": [
+        {"model": "MediumPhone.arm", "android": 35, "passed": 9, "total": 9},
+        {"model": "SmallPhone.arm", "android": 30, "passed": 9, "total": 9}
+      ],
+      "result": "PASS_18_OF_18",
+      "cases": [
+        {
+          "name": "typed_arithmetic_assertion",
+          "result": "PASS_BOTH",
+          "meaning": "Constructed i32 declarations/multiply/assert/emit path preserved value 42."
+        },
+        {
+          "name": "repeated_evaluation_determinism",
+          "result": "PASS_BOTH",
+          "meaning": "1000 repeated evaluations returned the same value on each tested Android runtime."
+        },
+        {
+          "name": "unknown_reference_rejection",
+          "result": "PASS_BOTH",
+          "meaning": "Unknown variable access was rejected instead of silently defaulted."
+        },
+        {
+          "name": "integer_overflow_rejection",
+          "result": "PASS_BOTH",
+          "meaning": "Math.multiplyExact overflow path rejected arithmetic overflow."
+        },
+        {
+          "name": "collection_kind_distinction",
+          "result": "PASS_BOTH",
+          "meaning": "Constructed ORDERED, SET and MULTISET controls remained observably distinct."
+        },
+        {
+          "name": "canonical_replay_vs_damaged_replay",
+          "result": "PASS_BOTH",
+          "meaning": "Repeated replay of the same canonical event sequence was equal; a missing-tail damaged sequence differed and was detected."
+        },
+        {
+          "name": "proposal_authority_separation",
+          "result": "PASS_BOTH",
+          "meaning": "A model-like proposal string could not make an effect allowed when the external capability boolean was false."
+        },
+        {
+          "name": "constructed_compact_surface_density",
+          "result": "PASS_BOTH",
+          "meaning": "The compact Clay-like test program occupied fewer bytes than the verbose JSON-like control used in the harness."
+        },
+        {
+          "name": "android_runtime_axis_receipt",
+          "result": "PASS_BOTH",
+          "meaning": "Both selected Android runtime generations satisfied the declared minimum SDK axis and were recorded separately."
+        }
+      ],
+      "supports": [
+        "Selected constructed semantic invariants were stable across Android 30 and Android 35 virtual ARM environments",
+        "Android is usable as a real constrained cross-version research substrate for future Clay/FRANK differential tests",
+        "Bundling orthogonal instrumentation assertions can increase information per Test Lab device invocation"
+      ],
+      "does_not_support": [
+        "full compiler/runtime cross-platform equivalence",
+        "real persistent database crash recovery",
+        "real capability security under adversarial Android APIs",
+        "model inference performance",
+        "physical-device memory, power or thermal behavior"
+      ]
+    }
+  ],
+  "quota": {
+    "virtual_device_invocations_consumed": 3,
+    "physical_device_invocations_consumed": 0,
+    "cycle_device_testing_stopped_intentionally": true,
+    "reason": "Preserve shared daily Test Lab quota for other research workers."
+  },
+  "promotion": "NONE_OPEN_GENERALIZABLE_CANDIDATES_ONLY"
+}

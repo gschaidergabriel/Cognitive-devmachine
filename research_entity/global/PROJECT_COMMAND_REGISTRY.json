@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.2",
+  "schema_version": "3.3",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
@@ -11,6 +11,8 @@
   "frank_clay_native_contract": "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
   "frank_clay_native_contract_status": "PROJECT_OWNER_FIXED_TARGET_NOT_HYPOTHESIS",
   "frank_sole_intentional_non_clay_semantic_subsystem": "Needle",
+  "clay_safe_effect_geometry_research_foundation": "research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md",
+  "clay_safe_effect_geometry_status": "PROJECT_OWNER_MANDATED_PERMANENT_RESEARCH_AXIS_HYPOTHESES_REMAIN_FALSIFIABLE",
   "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
   "goodman_filter_checker": "tools/goodman_filter_check.py",
   "frank_architecture_contract": "tools/frank_architecture_contract.py",
@@ -50,7 +52,11 @@
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
       "kind": "integrated_research_foundry",
       "requires_interconnect_manifest": true,
-      "must_treat_frank_clay_native_contract_as_fixed": true
+      "must_treat_frank_clay_native_contract_as_fixed": true,
+      "permanent_research_foundations": ["research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"],
+      "requires_safe_effect_geometry_research": true,
+      "required_safe_effect_artifact": "SAFE_EFFECT_GEOMETRY_DELTA.md",
+      "safe_effect_research_rule": "The Safe-Effect/NDSAS research axis is mandatory and persistent, but its alignment/safety hypotheses remain falsifiable and may not be promoted without evidence."
     },
     "gwt": {
       "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
@@ -132,5 +138,5 @@
       "required_outputs": ["STORE_ROLE_MATRIX.json", "UNIFIED_DATABASE_ARCHITECTURE.claycode.json", "QUERY_ROUTING_PLAN.json", "EXPERIMENT_RESULTS.json", "MIGRATION_PLAN.json", "BRANCH_FEEDBACK_MANIFEST.json", "FRANK_UNIFIEDDB_FEEDBACK.json", "FINAL_REPORT.md"]
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. All eight scientific branches treat the FRANK Clay-native contract as a project-owner fixed target rather than a yes/no hypothesis. The fusion meta-trigger covers the complete current research graph/evidence classes and writes explicit feedback or NO_CHANGE receipts to all eight scientific branches. The hypofusion meta-trigger screens the complete reachable current/open hypothesis set against broad external evidence and deliberate counterhypotheses, rereads live workers before final fusion, and returns discriminating tests plus feedback to all eight branches. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, ClayGraph and UnifiedDB, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and applies the Goodman anti-echo filter. ClayGraph specializes in associative memory/graph evolution; UnifiedDB specializes in the broader unified persistence/query/transaction substrate and must never equate semantic unification with mandatory physical merge. Every substantive visible response ends with the required status footer including all registered short commands."
+  "rule": "Reserved commands fire only on exact full-message match. Every scientific research trigger loads the interconnected research mesh including fresh in-progress material and materializes INTERCONNECT_MANIFEST.json before Fusion 1, then executes the quota/health-aware research-tool plan or explicit covering fallbacks. All eight scientific branches treat the FRANK Clay-native contract as a project-owner fixed target rather than a yes/no hypothesis. Clay additionally carries Safe-Effect Geometry/NDSAS as a project-owner-mandated permanent research axis; every substantive Clay run must return a Safe-Effect delta or explicit NO_CHANGE while preserving the hypotheses as falsifiable. The fusion meta-trigger covers the complete current research graph/evidence classes and writes explicit feedback or NO_CHANGE receipts to all eight scientific branches. The hypofusion meta-trigger screens the complete reachable current/open hypothesis set against broad external evidence and deliberate counterhypotheses, rereads live workers before final fusion, and returns discriminating tests plus feedback to all eight branches. FRANK treats newest Clay research as primary architecture foundation, deeply ingests ClayCode, ClayGraph and UnifiedDB, and authors FRANK_ARCHITECTURE.claycode.json. ClayCode treats newest FRANK research/architecture as primary target feedback and applies the Goodman anti-echo filter. ClayGraph specializes in associative memory/graph evolution; UnifiedDB specializes in the broader unified persistence/query/transaction substrate and must never equate semantic unification with mandatory physical merge. Every substantive visible response ends with the required status footer including all registered short commands."
 }

@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
+  "task_classes":["scholarly","current_web","implementation","executable"],
+  "planner_status":"CONNECTOR_SURFACE_EQUIVALENT_PLAN; repository research_provider_router.py not directly invoked from this ChatGPT connector session",
+  "attempts":[
+    {"class":"scholarly","surface":"native web search","status":"SUCCESS","sources":["arXiv 2606.12290 Selection Integrity","CIDR 2026 PostgreSQL-V","arXiv 2604.09173 DecoupleVS","SIGMOD 2026 AkasicDB demo","CIDR 2025 Cephalopod","arXiv 2507.16089 graph-relational model","arXiv 2504.03182 Graphiti query equivalence","arXiv 2605.00676 Living Databases","DBSP publication lineage"]},
+    {"class":"current_web","surface":"native web search","status":"SUCCESS","note":"current 2026 database systems, official docs and practitioner implementation evidence searched; primary/authoritative sources preferred"},
+    {"class":"implementation","surface":"web/GitHub source discovery","status":"SUCCESS","sources":["purduedb/PostgreSQL-V","Feldera/DBSP documentation/source lineage","Apache Arrow official specification"]},
+    {"class":"executable","surface":"E2B repository tool bridge","status":"SUCCESS","requests":["unifieddb-u2-e2b-placement-20260808T2212p0700","unifieddb-u2-e2b-validation-20260808T2212p0700"],"experiments":["EXP-U2-PLACEMENT-001","EXP-U2-RECOVERY-002","EXP-U2-SELECTION-INTEGRITY-003","EXP-U2-PLACEMENT-LATTICE-004","EXP-U2-BOUNDARY-TYPE-005","EXP-U2-WRITE-006","EXP-U2-EPOCH-ADMISSION-007"]}
+  ],
+  "provider_boundaries":[
+    "No exact target FRANK/Android storage trace was available; E2B numbers remain mechanism-local.",
+    "No model experiment was necessary to answer the primary database-placement questions in this run.",
+    "Provider snippets were used for discovery; high-impact conclusions were anchored in papers, conference pages, official documentation or repository evidence.",
+    "Strong canonical promotion remains blocked by missing target/live placement, crash and migration evidence even though required research surfaces were materially covered."
+  ],
+  "credential_values_exposed":false
+}

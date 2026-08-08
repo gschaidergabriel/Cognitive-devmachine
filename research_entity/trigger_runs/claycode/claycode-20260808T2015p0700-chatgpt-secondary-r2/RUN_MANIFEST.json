@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T2015p0700-chatgpt-secondary-r2",
+  "trigger":"claycode",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "parent_candidate":"CC-RC1.5-ICSL",
+  "candidate":{"id":"CC-RC1.6-MRSC","name":"Certified Multi-Rail Semantic Compiler","status":"OPEN_RESEARCH_CANDIDATE","promotion":"NONE"},
+  "primary_frank_run":"20260808T1750+0700-chatgpt-secondary-r2",
+  "deep_claygraph_run":"claygraph-20260808T1712p0700-chatgpt-secondary-r2",
+  "fresh_inputs":["fusion-20260808T1945p0700-chatgpt-secondary-r4","nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary","claycode-20260808T1922p0700-chatgpt-secondary"],
+  "required_outputs":{
+    "INTERCONNECT_MANIFEST.json":"COMMITTED",
+    "TOOL_EXECUTION_MANIFEST.json":"COMMITTED",
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json":"COMMITTED",
+    "HYPOTHESES.md":"COMMITTED",
+    "EXPERIMENT_RESULTS.json":"COMMITTED",
+    "NEGATIVE_RESULTS.md":"COMMITTED",
+    "CC_RC1_6_MRSC.claycode.json":"COMMITTED",
+    "CC_RC1_6_MRSC_REFERENCE.py":"COMMITTED",
+    "BRANCH_FEEDBACK_MANIFEST.json":"COMMITTED",
+    "FINAL_REPORT.md":"COMMITTED"
+  },
+  "cross_branch_writeback":{"frank":"COMMITTED","clay":"COMMITTED","claygraph":"COMMITTED","gwt":"COMMITTED","hyperposition":"COMMITTED","emergenz":"COMMITTED","claycode":"COMMITTED"},
+  "experiments":["EXP-CC11-DUAL-BIND-FUZZ-001","EXP-CC11-RAIL-PARETO-002","EXP-CC11-LOSS-BUDGET-003"],
+  "key_delta":"One canonical Clay semantic spine compiles into operation/reader-specific canonical-direct, discrete-native, latent-native or hybrid rails. Discrete critical views require dual source/output binding and translation validation; latent channels require provenance/alignment receipts and canonical reconciliation rather than semantic-equivalence-by-hash.",
+  "goodman_validation":"STRUCTURAL_EQUIVALENT_PENDING_REMOTE_REREAD; repository Python execution not exposed via GitHub connector",
+  "known_blocks":["exact target Qwen full-model Clay checkpoint not exposed","hidden-state/KV intervention interface not exposed","live FRANK/twin runtime not exposed","repository goodman_filter_check.py not executable through GitHub connector","registered SandboxAPI bridge exists in repo but is not exposed as an invokable connector to this worker"],
+  "canonical_revision_change":false,
+  "status":"RESEARCH_COMPLETE_REMOTE_REREAD_PENDING"
+}

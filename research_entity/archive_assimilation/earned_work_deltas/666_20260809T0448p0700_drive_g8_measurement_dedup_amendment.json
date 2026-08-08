@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "amendment_id": "666-20260809T0448+0700-drive-g8-measurement-dedup-amendment",
+  "actor_id": "chatgpt-secondary",
+  "supersedes_for_aggregation": "research_entity/archive_assimilation/earned_work_deltas/666_20260809T0444p0700_drive_g8_measurement_delta.json",
+  "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0444p0700_chatgpt_secondary_drive_g8_measurement_repro_shard.json",
+  "live_crossread": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_drive_xeno_g8_executable_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json"
+  ],
+  "decisions": {
+    "HEW-DRIVE-G8-EXEC-011": {
+      "status": "WITHDRAWN_DUPLICATE",
+      "hours": {"low":0.0,"center":0.0,"high":0.0},
+      "reason": "Sibling G8 receipt already reran 11/11 tests and 4x256 proof and intentionally assigned zero additional earned-work hours. This run's 10k fuzzer pass is corroborative only."
+    },
+    "HEW-DRIVE-INSTRUMENT-012": {
+      "status": "RETAIN_REDUCED_UNIQUE_SLICE",
+      "hours": {"low":1.0,"center":2.0,"high":4.0},
+      "reason": "Synteq already covers bounded-run throughput measurement and token/context-unit confusion; audit-oracles covers other instrumentation/runtime failures. Unique remainder is the explicit eight-instrument failure atlas, positive-control degradation requirement, raw-token-savings falsification and two-slot-vs-hardware saturation supersession lineage."
+    }
+  },
+  "effective_pending_unique_sum": {"low":1.0,"center":2.0,"high":4.0},
+  "latest_observed_central_mapping": {"low":32.0,"center":84.0,"high":168.0},
+  "would_be_gross_if_still_unique_after_final_merge": {"low":33.0,"center":86.0,"high":172.0},
+  "global_completion_credit_applied": false,
+  "aggregation_rule": "Central aggregator MUST apply this amendment instead of the superseded 3/7/14-hour delta and must still deduplicate against any newer receipt before adding 1/2/4 hours.",
+  "created_at": "2026-08-09T04:48:00+07:00"
+}

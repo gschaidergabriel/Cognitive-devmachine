@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.1",
+  "request_id": "fusion1755-exa-memory-integrity",
+  "tool": "exa_search",
+  "request_sha256": "6fd36bd6c855765622020aa182c6ce8511ba250036222fad1d312e2d7443aba3",
+  "processed_at": "2026-08-08T11:00:29.940155+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "agent memory poisoning selection integrity provenance graph retrieval versioned snapshot compiler projection 2026",
+    "results": [
+      {
+        "id": "https://exa.ai/library/publication/l12y9ptycgpbvp54mv9szy5f",
+        "title": "Selection Integrity for LLM Graph Memory: An Accumulability Criterion for Information-Flow-Blind Retrieval",
+        "url": "https://arxiv.org/html/2606.12290",
+        "published_date": null,
+        "author": "zeming fei, Hongming Fei, Xiaoyang Wang (137806), Yang yang, Prosanta Gope, Biplab Sikdar, et al.",
+        "text": null,
+        "highlights": [
+          "Abstract—Agent memory is moving to graphs, and the prove nance defenses now being built for it all check one thing: the provenance of the records an agent retrieves. We show that this entire class of defense is blind by construction. A long term graph memory runs a global selection step over writable graph structure, so structure that an untrusted principal writes changes which authenticated facts are selected while the cited evidence stays fully authenticated; faithful information-flow control (IFC), checking the provenance of what the reader uses (all of it authenticated), makes the byte-identical decision to no defense at all, across document-QA substrates and real multi session agent memory. In the most consequential instance, a no-source structural write silently misdirects 28 irreversible ledger transfers over 499 live actions: faithful IFC permits every one, and AUTHSELECT prevents every one. We then characterize exactly which memories are exposed: a selector admits the channel when its structural term can reallocate an Ω(1) share of top-k membership past a selected fact’s margin. Personalized PageRank can, since a sourceless write reroutes conserved random-walk mass; a content-fixed reranker can not, and Graphiti’s node-distance, which leans on structure more than PageRank does, stays immune. Reallocatability, not reliance, is the predictor. We prove the immune case in general and the open case under a chokepoint condition we verify. Closing the channel forces any provenance defense to recompute selection on the authenticated subgraph, which is what AUTHSELECT does, at zero over-block and 2–3% latency.\n...\n. C3: The defense. AUTHSELECT is, to our knowledge, the first principled defense for graph-memory selection integrity. It assigns integrity by source channel, removes unauthenticated structural writes to form an authenticated subgraph, reruns the native selector, and compares the in duced result (Section 5). It drives harm to zero on every dataset (includi"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/vyxtsc8lhsbvjq23lzsg01lg",
+        "title": "Securing LLM-Agent Long-Term Memory Against Poisoning: Non-Malleable, Origin-Bound Authority with Machine-Checked Guarantees",
+        "url": "https://arxiv.org/html/2606.24322",
+        "published_date": null,
+        "author": "Yedidel Louck",
+        "text": null,
+        "highlights": [
+          "Abstract—LLM agents increasingly rely on persistent long term memory, which creates a critical vulnerability that we study here: memory poisoning. An adversary can store untrusted con tent in one session that later steers a consequential action, such as a payment, a setting change, or data exfiltration, in a future session. Existing defenses base a memory item’s authority to act on either its content (detection or trust-scoring) or its derivation history (lineage). We show that both signals are malleable. An attacker can launder an untrusted origin through three channels specific to LLM agents: the agent’s own summarization, a trusted-tool echo, and manufactured corroboration. Each makes the content look benign and breaks or flips its derivation edge to “trusted.” We formalize malleability for the memory write retrieve-act pipeline and prove a machine-checked separation theorem. No content- or lineage-based defense is sound under laundering (T1), write-time origin binding is necessary (T2), and non-malleable origin-bound authority with Sybil-resistant corroboration-gated elevation is sufficient (T3). Our construction, TMA-NM (Tamper-evident Memory Authority, Non-Malleable), instantiates non-malleable information-flow control (IFC) for LLM-agent memory. A cross-defense, cross-attack, and cross model benchmark over eight frontier models shows that existing defenses fail exactly where the theory predicts (up to 68% laundering attack-success), while TMA-NM reaches 0% attack success on both direct and laundering attacks across all models and channels, at full legitimate utility. We release the bench mark, harness, and machine-checked TLA + models to support reproducibility. Index Terms—LLM agents, long-term memory, memory poi soning, information-flow control, capability security, prompt injection, formal verification, benchmark.\n...\nin Fig. 1. The first, write-time origin binding (M1), sets act class = f(origin) at the moment of writing, so\n...\ncontent / trust-scoring [1"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://qarinah.io/docs/architecture/",
+        "title": "Architecture - Qarinah",
+        "url": "https://qarinah.io/docs/architecture/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "One authoritative event chain. Deterministic projections. Small, cited context at task time.\n...\nQarinah is a governance-native context compiler. It preserves permitted agent activity, explicit decisions, source evidence, and bounded project structure in a verified local record, then compiles only the context relevant to a later task.\n...\n| Authority | Canonical JSONL events bind the previous hash, content hash, record hash, provenance, confidence, retention, and typed relations. | A valid chain proves continuity relative to the checkpoint, not the factual truth of every claim. |\n...\n| Derivation | Graph, index, Markdown, project structure, and OKF are disposable deterministic projections. | Derived state never replaces the event chain. |\n...\n| Retrieval | Hybrid retrieval applies time, retention, authority, conflict, supersession, coverage, and complete-output budgets. | Coverage describes retained evidence, not model-answer correctness. |\n...\n1. A user or governed workflow submits a permitted lifecycle event through a strict adapter.\n2. The trusted capture policy validates the workspace, capture mode, and bounds.\n3. The ledger appends the canonical event under a renewable write lock and binds the previous hash.\n4. The caller receives the event ID and record hash.\n5. A build or explicit query verifies the complete authoritative chain.\n6. Deterministic graph and index projections feed the context compiler.\n7. The caller receives a cited pack that fits the complete-output budget.\n...\nAn append and every security-sensitive read reload the trusted workspace from its root. Caller-supplied workspace objects are locators, not proof of trust. Explicit builds can repair stale derived views only after the event chain and machine checkpoint verify successfully. Read-only MCP diagnostics never repair or advance\n...\nEach event identifies its workspace, optional session and turn, actor, timestamp, kind, provenance, confidence class, typed relations, previous hash, and record has"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2606.12703v1",
+        "title": "SMSR: Certified Defence Against Runtime Memory Poisoning in Persistent LLM Agent Systems",
+        "url": "https://arxiv.org/html/2606.12703v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Retrieval-Augmented Generation (RAG) systems underpin an increasing fraction of enterprise AI deployments. When an agent’s memory store persists across user sessions, an adversary who can interact with the system can inject carefully crafted memories that, once retrieved, redirect the agent’s behaviour on future queries—without ever modifying model weights or application code. We call this the Multi-Session Memory Poisoning (MSMP) threat and observe that no existing defence provides a formal security certificate against it. Static-corpus defences (RobustRAG, ReliabilityRAG) assume a fixed knowledge base; heuristic filters are bypassable by fluent enterprise-style text.\n...\nWe present Signed Memory with Smoothed Retrieval (SMSR), a two-component defence that is the first to provide a certified robustness bound for the MSMP setting. Component 1 applies HMAC-SHA256 provenance tagging at write time, creating a cryptographically hard boundary against unsigned injection. Component 2 applies randomised memory ablation at query time with a verdict-based majority aggregator, bounding the influence of authenticated adversaries.\n...\nWe prove an impossibility result showing that no provenance-free retrieval-time filter can certify against adaptive injection, and derive a hypergeometric certificate for Component 2. We also formalise and quantify the Consistent Minority Effect in the memory-poisoning setting: string-based majority vote is gamed by adversaries who generate consistent responses, and verdict-based aggregation removes the effect.\n...\nWhy existing defences are insufficient. The two most rigorous existing defences, RobustRAG [16] and ReliabilityRAG [11], assume a static document corpus that the adversary poisons externally before queries are made. They provide no security guarantee when poisoned entries are injected at runtime through the agent’s normal memory write path. Heuristic defences such as A-MemGuard [14] use consensus validation across multiple reasoning path"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://datatracker.ietf.org/doc/draft-infantado-agent-memory-architecture/",
+        "title": "draft-infantado-agent-memory-architecture-00 - Architecture and Data Model for Persistent Memory in Agentic Systems",
+        "url": "https://datatracker.ietf.org/doc/draft-infantado-agent-memory-architecture/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Abstract\n\n   Memory in current agentic systems is often fragmented across model-\n   provider features, application databases, session histories,\n   framework-specific stores, unstructured files, and retrieval indexes.\n   This document distinguishes temporary context supplied to an\n   inference request from persistent memory that remains addressable,\n   machine-readable, and governed beyond a single request.  It specifies\n   a provider-independent architecture and data model for persistent\n   memory in agentic systems based on Memory Scope isolation, typed and\n   versioned Memory Objects, machine-readable provenance, append-only\n   Event Ledger history, separate lifecycle, availability, retention,\n   and validation state, and isolated Derived Indexes and Embedding\n   Spaces.  The architecture separates a transient Compute Plane from an\n   authoritative Persistent State Plane and treats embeddings, lexical\n   indexes, graph projections, generated retrieval summaries, ranking\n   caches, and retrieval caches as non-authoritative derived state.  The\n   architecture is independent of model provider, storage engine, and\n   protocol transport while allowing future bindings and multiple\n   independent implementations.  It does not claim that related systems\n   or standards do not exist; rather, it defines a common architectural\n   vocabulary and interoperability target for persistent agentic memory.\n...\n15.5.  Injection and Memory Poisoning . . . . . . . . . . . . .  35\n...\n4.6.  Derived-Index Incompatibility\n\n   Embeddings, lexical indexes, graph projections, generated summaries,\n   ranking caches, and retrieval caches are derived from authoritative\n   memory.  They are valuable for retrieval, but they are not canonical\n   memory.  Vectors from incompatible Embedding Spaces are not directly\n   comparable.  Failure to identify embedding spaces can produce non-\n   portable retrieval behavior and weak deterministic evaluation.\n...\n7.4.  Persistent State Plane\n\n   The Persisten"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2604.16548v2",
+        "title": "A Survey on Long-Term Memory Security in LLM Agents: Attacks, Defenses, and Governance Across the Memory Lifecycle",
+        "url": "https://arxiv.org/html/2604.16548v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "The emergence of writable, cross-session persistent memory in LLM agents introduces a qualitatively different threat landscape from conventional input-centric security concerns, characterized by three properties: persistence, statefulness, and propagation. To systematically characterize this landscape, we propose a Memory Lifecycle Framework that organizes attacks, defenses, and their cross-phase dependencies along two axes: six lifecycle phases (Write, Store, Retrieve, Execute, Share & Propagate, Forget & Rollback) and four security objectives (Integrity, Confidentiality, Availability, Governance). This analysis in turn exposes the need for formal security guarantees at the system level, motivating Verifiable Memory Governance (VMG), a framework of five architectural primitives that specifies what verifiable mechanisms a long-term-memory system must provide to maintain auditable, recoverable control over its memory state. Our analysis indicates that robust Long-Term Memory (LTM) security cannot be retrofitted at retrieval or execution time alone, but must be anchored in storage-time provenance, versioning, and policy-aware retention from the outset.\n...\nAs shown in Figure 2, we decompose the memory lifecycle into six phases: Write, Store, Retrieve, Execute, Share & Propagate, Forget & Rollback. ❶ Write. It commits content to long-term memory through explicit user instruction, implicit dialogue summarization, environmental observation, or cross-agent memory sharing. The central security question is whether memory writes are subject to explicit source authentication and authorization, rather than allowing untrusted external content to enter memory as if it were user-endorsed Dong et al. (2025); Zou et al. (2026); Tian et al. (2026); Greshake et al. (2023). ❷ Store. This phase indexes, compresses, merges, decays, and evicts written content Packer et al. (2023); Zhong et al. (2024); Xu et al. (2025); Chhikara et al. (2025); Li et al. (2025b). It determines whether pois"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2605.09033v1",
+        "title": "ShadowMerge: A Novel Poisoning Attack on Graph-Based Agent Memory via Relation-Channel Conflicts",
+        "url": "https://arxiv.org/html/2605.09033v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Graph-based agent memory is increasingly adopted in LLM agents for its advantages in structured long-term recall and multi-hop reasoning. Despite these advantages, graph-based agent memory also introduces a new attack surface in which an attacker can craft a poisoned relation that is extracted into graph memory and later retrieved to influence subsequent agent behavior. However, this attack surface remains unexplored in existing security research on agent-memory poisoning, as existing attacks mainly target flat textual records and are ineffective in graph-based agent memory because malicious relations often fail to be extracted, merged into the target anchor neighborhood, or retrieved for the victim query.\n...\nIn this paper, we present ShadowMerge, a novel poisoning attack against graph-based agent memory that exploits relation-channel conflicts. The core insight is that a poisoned relation can share the same anchor and relation channel as benign evidence while carrying a conflicting value. Here, the anchor is the query-activated entity, and the relation channel is the canonicalized relation type through which graph evidence is merged and retrieved. To realize this insight, we design AIR, a pipeline that converts the conflict into an ordinary interaction that can be extracted, merged, and retrieved by the graph-memory system. We evaluate ShadowMerge on the widely-used memory framework called Mem0 and three public real-world datasets, including PubMedQA, WebShop, and ToolEmu. ShadowMerge achieves 93.8% average ASR, a 50.3 absolute ASR gain over the best baseline, while having negligible impact on unrelated benign tasks. A further mechanism study proves that ShadowMerge overcomes all three limitations of existing agent-memory poisoning attacks. Defense analysis further shows that existing representative input-side defenses are insufficient to mitigate ShadowMerge. We have responsibly disclosed our findings to affected graph-memory vendors and open sourced SHADOWMERGE "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.llm-hacking.com/hacks/graph-memory-selection-integrity.md/",
+        "title": "Provenance defenses for agent graph memory are blind by construction — LLM-Hacking",
+        "url": "https://www.llm-hacking.com/hacks/graph-memory-selection-integrity.md/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "An arXiv paper dated June 10, 2026 shows provenance checks on LLM graph memory can be bypassed without forging a single source: untrusted structure reroutes which authenticated facts get selected, and information-flow control never sees it.\n...\nOn June 10, 2026, a paper titled Selection Integrity for LLM Graph Memory (arXiv:2606.12290, cs.CR) made a sharp claim about a defense pattern that has quietly become standard: as agent memory moves from flat document stores to graphs, teams add provenance defenses that check where retrieved records came from. The paper argues this entire class of defense is blind by construction — it can be defeated without forging, spoofing, or tampering with a single authenticated source.\n...\nThe result matters because graph memory and memory poisoning are now central to agent security, and provenance/information-flow control (IFC) is the defense most people reach for. The finding says: against this specific channel, faithful IFC makes the byte-identical decision to having no defense at all.\n...\nThe attack targets selection, not content. A long-term graph memory runs a global selection step (a ranker or retriever) over writable graph structure to decide which records reach the model’s context. Provenance defenses then check the provenance of the records the agent retrieves — and every retrieved record is legitimately authenticated.\n...\nThe gap: an untrusted principal who can write structure — edges, nodes, links — does not need to inject a fake fact. The structural write changes which authenticated facts win the top-k selection, while the cited evidence stays fully authenticated. Because faithful IFC checks the provenance of what the reader actually uses (all of it authenticated), it permits the rerouted result exactly as it would permit the honest one.\n...\nThe paper characterizes exactly which selectors are exposed: a selector admits the channel when its structural term can reallocate an Ω(1) share of top-k membership past a selected fact"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "48cea5992debcf23d815e77a365ebb87",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

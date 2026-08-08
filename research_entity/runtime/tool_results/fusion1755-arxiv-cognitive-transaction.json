@@ -1,0 +1,315 @@
+{
+  "schema_version": "1.1",
+  "request_id": "fusion1755-arxiv-cognitive-transaction",
+  "tool": "arxiv_search",
+  "request_sha256": "eb5aa724700d1de7488f8b67874f1351d73842a401596153a867b4b7b3f27b88",
+  "processed_at": "2026-08-08T11:00:29.698356+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-08T11:00:29.895643+00:00",
+    "credential_required": false,
+    "query": "(all:\"snapshot consistency\" OR all:\"causal consistency\" OR all:\"query provenance\" OR all:\"selection integrity\") AND (all:agent OR all:memory OR all:retrieval OR all:compiler)",
+    "start": 0,
+    "max_results": 12,
+    "total_results": 74,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/1603.04199v1",
+        "title": "Causal Consistency: Beyond Memory",
+        "summary": "In distributed systems where strong consistency is costly when not impossible, causal consistency provides a valuable abstraction to represent program executions as partial orders. In addition to the sequential program order of each computing entity, causal order also contains the semantic links between the events that affect the shared objects -- messages emission and reception in a communication channel , reads and writes on a shared register. Usual approaches based on semantic links are very difficult to adapt to other data types such as queues or counters because they require a specific analysis of causal dependencies for each data type. This paper presents a new approach to define causal consistency for any abstract data type based on sequential specifications. It explores, formalizes and studies the differences between three variations of causal consistency and highlights them in the light of PRAM, eventual consistency and sequential consistency: weak causal consistency, that captures the notion of causality preservation when focusing on convergence ; causal convergence that mixes weak causal consistency and convergence; and causal consistency, that coincides with causal memory when applied to shared memory.",
+        "published": "2016-03-14T10:43:01Z",
+        "updated": "2016-03-14T10:43:01Z",
+        "authors": [
+          "Matthieu Perrin",
+          "Achour Mostefaoui",
+          "Claude Jard"
+        ],
+        "categories": [
+          "cs.DC"
+        ],
+        "primary_category": "cs.DC",
+        "doi": "10.1145/2851141.2851170",
+        "journal_ref": null,
+        "comment": "21st ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming, Mar 2016, Barcelone, Spain",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1603.04199v1",
+          "pdf": "https://arxiv.org/pdf/1603.04199v1",
+          "doi": "https://doi.org/10.1145/2851141.2851170"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1703.05424v3",
+        "title": "Partially Replicated Causally Consistent Shared Memory: Lower Bounds and An Algorithm",
+        "summary": "The focus of this paper is on causal consistency in a {\\em partially replicated} distributed shared memory (DSM) system that provides the abstraction of shared read/write registers. Maintaining causal consistency in distributed shared memory systems has received significant attention in the past, mostly on {\\em full replication} wherein each replica stores a copy of all the registers in the shared memory. To ensure causal consistency, all causally preceding updates must be performed before an update is performed at any given replica. Therefore, some mechanism for tracking causal dependencies is required, such as vector timestamps with the number of vector elements being equal to the number of replicas in the context of full replication. In this paper, we investigate causal consistency in {\\em partially replicated systems}, wherein each replica may store only a subset of the shared registers. Building on the past work, this paper makes three key contributions: 1. We present a necessary condition on the metadata (which we refer as a {\\em timestamp}) that must be maintained by each replica to be able to track causality accurately. The necessary condition identifies a set of directed edges in a {\\em share graph} that a replica's timestamp must keep track of. 2. We present an algorithm for achieving causal consistency using a timestamp that matches the above necessary condition, thus showing that the condition is necessary and sufficient. 3. We define a measurement of timestamp space size and present a lower bound (in bits) on the size of the timestamps. The lower bound matches our algorithm in several special cases.",
+        "published": "2017-03-15T23:34:24Z",
+        "updated": "2019-05-29T05:33:50Z",
+        "authors": [
+          "Zhuolun Xiang",
+          "Nitin H. Vaidya"
+        ],
+        "categories": [
+          "cs.DC"
+        ],
+        "primary_category": "cs.DC",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/1703.05424v3",
+          "pdf": "https://arxiv.org/pdf/1703.05424v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1906.12095v5",
+        "title": "Robustness Against Transactional Causal Consistency",
+        "summary": "Distributed storage systems and databases are widely used by various types of applications. Transactional access to these storage systems is an important abstraction allowing application programmers to consider blocks of actions (i.e., transactions) as executing atomically. For performance reasons, the consistency models implemented by modern databases are weaker than the standard serializability model, which corresponds to the atomicity abstraction of transactions executing over a sequentially consistent memory. Causal consistency for instance is one such model that is widely used in practice. In this paper, we investigate application-specific relationships between several variations of causal consistency and we address the issue of verifying automatically if a given transactional program is robust against causal consistency, i.e., all its behaviors when executed over an arbitrary causally consistent database are serializable. We show that programs without write-write races have the same set of behaviors under all these variations, and we show that checking robustness is polynomial time reducible to a state reachability problem in transactional programs over a sequentially consistent shared memory. A surprising corollary of the latter result is that causal consistency variations which admit incomparable sets of behaviors admit comparable sets of robust programs. This reduction also opens the door to leveraging existing methods and tools for the verification of concurrent programs (assuming sequential consistency) for reasoning about programs running over causally consistent databases. Furthermore, it allows to establish that the problem of checking robustness is decidable when the programs executed at different sites are finite-state.",
+        "published": "2019-06-28T08:44:47Z",
+        "updated": "2021-02-02T18:47:09Z",
+        "authors": [
+          "Sidi Mohamed Beillahi",
+          "Ahmed Bouajjani",
+          "Constantin Enea"
+        ],
+        "categories": [
+          "cs.PL"
+        ],
+        "primary_category": "cs.PL",
+        "doi": "10.23638/LMCS-17(1:12)2021",
+        "journal_ref": "Logical Methods in Computer Science, Volume 17, Issue 1 (February 3, 2021) lmcs:5987",
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/1906.12095v5",
+          "pdf": "https://arxiv.org/pdf/1906.12095v5",
+          "doi": "https://doi.org/10.23638/LMCS-17(1:12)2021"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1611.00580v2",
+        "title": "On Verifying Causal Consistency",
+        "summary": "Causal consistency is one of the most adopted consistency criteria for distributed implementations of data structures. It ensures that operations are executed at all sites according to their causal precedence. We address the issue of verifying automatically whether the executions of an implementation of a data structure are causally consistent. We consider two problems: (1) checking whether one single execution is causally consistent, which is relevant for developing testing and bug finding algorithms, and (2) verifying whether all the executions of an implementation are causally consistent. We show that the first problem is NP-complete. This holds even for the read-write memory abstraction, which is a building block of many modern distributed systems. Indeed, such systems often store data in key-value stores, which are instances of the read-write memory abstraction. Moreover, we prove that, surprisingly, the second problem is undecidable, and again this holds even for the read-write memory abstraction. However, we show that for the read-write memory abstraction, these negative results can be circumvented if the implementations are data independent, i.e., their behaviors do not depend on the data values that are written or read at each moment, which is a realistic assumption.",
+        "published": "2016-11-02T13:01:50Z",
+        "updated": "2016-11-15T11:50:13Z",
+        "authors": [
+          "Ahmed Bouajjani",
+          "Constantin Enea",
+          "Rachid Guerraoui",
+          "Jad Hamza"
+        ],
+        "categories": [
+          "cs.LO"
+        ],
+        "primary_category": "cs.LO",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "extended version of POPL 2017",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1611.00580v2",
+          "pdf": "https://arxiv.org/pdf/1611.00580v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2305.08486v3",
+        "title": "Rely-Guarantee Reasoning for Causally Consistent Shared Memory (Extended Version)",
+        "summary": "Rely-guarantee (RG) is a highly influential compositional proof technique for concurrent programs, which was originally developed assuming a sequentially consistent shared memory. In this paper, we first generalize RG to make it parametric with respect to the underlying memory model by introducing an RG framework that is applicable to any model axiomatically characterized by Hoare triples. Second, we instantiate this framework for reasoning about concurrent programs under causally consistent memory, which is formulated using a recently proposed potential-based operational semantics, thereby providing the first reasoning technique for such semantics. The proposed program logic, which we call Piccolo, employs a novel assertion language allowing one to specify ordered sequences of states that each thread may reach. We employ Piccolo for multiple litmus tests, as well as for an adaptation of Peterson's algorithm for mutual exclusion to causally consistent memory.",
+        "published": "2023-05-15T09:43:11Z",
+        "updated": "2026-05-07T09:02:11Z",
+        "authors": [
+          "Ori Lahav",
+          "Brijesh Dongol",
+          "Heike Wehrheim"
+        ],
+        "categories": [
+          "cs.PL",
+          "cs.LO"
+        ],
+        "primary_category": "cs.PL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Extended version of paper to appear in CAV 2023",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2305.08486v3",
+          "pdf": "https://arxiv.org/pdf/2305.08486v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.12290v1",
+        "title": "Selection Integrity for LLM Graph Memory: An Accumulability Criterion for Information-Flow-Blind Retrieval",
+        "summary": "Agent memory is moving to graphs, and the provenance defenses now being built for it all check one thing: the provenance of the records an agent retrieves. We show that this entire class of defense is blind by construction. A long-term graph memory runs a global selection step over writable graph structure, so structure that an untrusted principal writes changes \\emph{which} authenticated facts are selected while the cited evidence stays fully authenticated; faithful information-flow control (IFC), checking the provenance of what the reader uses (all of it authenticated), makes the byte-identical decision to no defense at all, across document-QA substrates and real multi-session agent memory. In the most consequential instance, a no-source structural write silently misdirects $28$ irreversible ledger transfers over $499$ live actions: faithful IFC permits every one, and \\authselect\\ prevents every one. We then characterize exactly which memories are exposed: a selector admits the channel when its structural term can reallocate an $Ω(1)$ share of top-$k$ membership past a selected fact's margin. Personalized PageRank can, since a sourceless write reroutes conserved random-walk mass; a content-fixed reranker cannot, and Graphiti's node-distance, which leans on structure \\emph{more} than PageRank does, stays immune. Reallocatability, not reliance, is the predictor. We prove the immune case in general and the open case under a chokepoint condition we verify. Closing the channel forces any provenance defense to recompute selection on the authenticated subgraph, which is what \\authselect\\ does, at zero over-block and $2$--$3\\%$ latency.",
+        "published": "2026-06-10T16:26:46Z",
+        "updated": "2026-06-10T16:26:46Z",
+        "authors": [
+          "Zeming Fei",
+          "Hongming Fei",
+          "Xiaoyang Wang",
+          "Yang yang",
+          "Prosanta Gope",
+          "Biplab Sikdar",
+          "Ying Zhang"
+        ],
+        "categories": [
+          "cs.CR"
+        ],
+        "primary_category": "cs.CR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.12290v1",
+          "pdf": "https://arxiv.org/pdf/2606.12290v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2308.11914v4",
+        "title": "Towards CausalGPT: A Multi-Agent Approach for Faithful Knowledge Reasoning via Promoting Causal Consistency in LLMs",
+        "summary": "Despite the progress of foundation models, knowledge-based reasoning remains a persistent challenge due to their limited capacity for knowledge recall and inference. Existing methods primarily focus on encouraging these models to plan and solve problems or extensively sample reasoning chains independently. However, these methods often overlook conceptual errors and inferential fallacies, inevitably leading to a series of notorious issues such as misleading conclusions, cognitive biases, and reduced decision quality. While explicit modeling of causality is argued to hold promise in addressing these issues, contemporary research efforts have thus far fallen short in achieving causality-based foundation models. Drawing inspiration from the orchestration of diverse specialized agents collaborating to tackle intricate tasks, we propose a framework named Causal-Consistency Chain-of-Thought (CaCo-CoT) that harnesses multi-agent collaboration to bolster the faithfulness and causality of foundation models, involving a set of reasoners and evaluators. These agents collaboratively work within a reasoning-and-consensus paradigm to improve faithfulness. The reasoners are tasked with generating reasoning chains for knowledge-intensive problems by mimicking human causal reasoning. Meanwhile, the evaluator scrutinizes the causal consistency of a reasoner's reasoning chain from a non-causal and a counterfactual perspective. Our framework demonstrates significant superiority over state-of-the-art methods through extensive and comprehensive evaluations across text-based and multi-modal knowledge reasoning tasks (e.g., science question answering and commonsense reasoning).",
+        "published": "2023-08-23T04:59:21Z",
+        "updated": "2025-02-12T08:28:49Z",
+        "authors": [
+          "Ziyi Tang",
+          "Ruilin Wang",
+          "Weixing Chen",
+          "Yongsen Zheng",
+          "Zechuan Chen",
+          "Yang Liu",
+          "Keze Wang",
+          "Tianshui Chen",
+          "Liang Lin"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.MA"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "12 pages, 9 figures. 3 tables",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2308.11914v4",
+          "pdf": "https://arxiv.org/pdf/2308.11914v4"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1805.08804v2",
+        "title": "Optimal Record and Replay under Causal Consistency",
+        "summary": "We investigate the minimum record needed to replay executions of processes that share causally consistent memory. For a version of causal consistency, we identify optimal records under both offline and online recording setting. Under the offline setting, a central authority has information about every process' view of the execution and can decide what information to record for each process. Under the online setting, each process has to decide on the record at runtime as the operations are observed.",
+        "published": "2018-05-22T18:16:08Z",
+        "updated": "2018-10-29T19:48:55Z",
+        "authors": [
+          "Russell L. Jones",
+          "Muhammad S. Khan",
+          "Nitin H. Vaidya"
+        ],
+        "categories": [
+          "cs.DC"
+        ],
+        "primary_category": "cs.DC",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Added a new RnR model and results for that model. Also added some text for better reading and some references",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1805.08804v2",
+          "pdf": "https://arxiv.org/pdf/1805.08804v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2110.12697v1",
+        "title": "Causal Consistent Replication in Reversible Concurrent Calculi",
+        "summary": "Reversible computation is key in developing new, energy-efficient paradigms, but also in providing forward-only concepts with broader definitions and finer frames of study.Among other fields, the algebraic specification and representation of networks of agents have been greatly impacted by the study of reversible phenomena: reversible declensions of the calculus of communicating systems (CCSK and RCCS) offer new semantic models, finer congruence relations, original properties, and revisits existing theories and results in a finer light.However, much remains to be done: concurrency, a central notion in establishing causal consistency--a crucial property for reversibly systems--, was never given a clear and syntactical definition in CCSK.While recursion was mentioned as a possible mechanism to inject infinite behaviors into the systems, replication was never studied.This work offers a solution to both problems, by leveraging a definition of concurrency developed for forward-only calculi using proved transition systems, by endowing CCSK with a replication operator, and by studying the interplay of both notions.The system we obtain is the first reversible system capable of representing infinite behaviors that enjoys causal consistency, for our simple and purely syntactical notion of reversible concurrency.",
+        "published": "2021-10-25T07:21:46Z",
+        "updated": "2021-10-25T07:21:46Z",
+        "authors": [
+          "Clément Aubert"
+        ],
+        "categories": [
+          "cs.DC",
+          "cs.LO"
+        ],
+        "primary_category": "cs.DC",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2110.12697v1",
+          "pdf": "https://arxiv.org/pdf/2110.12697v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2601.19306v1",
+        "title": "Curiosity Driven Knowledge Retrieval for Mobile Agents",
+        "summary": "Mobile agents have made progress toward reliable smartphone automation, yet performance in complex applications remains limited by incomplete knowledge and weak generalization to unseen environments. We introduce a curiosity driven knowledge retrieval framework that formalizes uncertainty during execution as a curiosity score. When this score exceeds a threshold, the system retrieves external information from documentation, code repositories, and historical trajectories. Retrieved content is organized into structured AppCards, which encode functional semantics, parameter conventions, interface mappings, and interaction patterns. During execution, an enhanced agent selectively integrates relevant AppCards into its reasoning process, thereby compensating for knowledge blind spots and improving planning reliability. Evaluation on the AndroidWorld benchmark shows consistent improvements across backbones, with an average gain of six percentage points and a new state of the art success rate of 88.8\\% when combined with GPT-5. Analysis indicates that AppCards are particularly effective for multi step and cross application tasks, while improvements depend on the backbone model. Case studies further confirm that AppCards reduce ambiguity, shorten exploration, and support stable execution trajectories. Task trajectories are publicly available at https://lisalsj.github.io/Droidrun-appcard/.",
+        "published": "2026-01-27T07:46:05Z",
+        "updated": "2026-01-27T07:46:05Z",
+        "authors": [
+          "Sijia Li",
+          "Xiaoyu Tan",
+          "Shahir Ali",
+          "Niels Schmidt",
+          "Gengchen Ma",
+          "Xihe Qiu"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2601.19306v1",
+          "pdf": "https://arxiv.org/pdf/2601.19306v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1703.06021v7",
+        "title": "Causal Consistency for Reversible Multiparty Protocols",
+        "summary": "In programming models with a reversible semantics, computational steps can be undone. This paper addresses the integration of reversible semantics into process languages for communication-centric systems equipped with behavioral types. In prior work, we introduced a monitors-as-memories approach to seamlessly integrate reversible semantics into a process model in which concurrency is governed by session types (a class of behavioral types), covering binary (two-party) protocols with synchronous communication. The applicability and expressiveness of the binary setting, however, is limited. Here we extend our approach, and use it to define reversible semantics for an expressive process model that accounts for multiparty (n-party) protocols, asynchronous communication, decoupled rollbacks, and abstraction passing. As main result, we prove that our reversible semantics for multiparty protocols is causally-consistent. A key technical ingredient in our developments is an alternative reversible semantics with atomic rollbacks, which is conceptually simple and is shown to characterize decoupled rollbacks.",
+        "published": "2017-03-17T14:12:01Z",
+        "updated": "2021-09-30T10:04:44Z",
+        "authors": [
+          "Claudio Antares Mezzina",
+          "Jorge A. Pérez"
+        ],
+        "categories": [
+          "cs.LO"
+        ],
+        "primary_category": "cs.LO",
+        "doi": "10.46298/lmcs-17(4:1)2021",
+        "journal_ref": "Logical Methods in Computer Science, Volume 17, Issue 4 (October 1, 2021) lmcs:6997",
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/1703.06021v7",
+          "pdf": "https://arxiv.org/pdf/1703.06021v7",
+          "doi": "https://doi.org/10.46298/lmcs-17(4:1)2021"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2506.05939v1",
+        "title": "Respecting Temporal-Causal Consistency: Entity-Event Knowledge Graphs for Retrieval-Augmented Generation",
+        "summary": "Retrieval-augmented generation (RAG) based on large language models often falters on narrative documents with inherent temporal structures. Standard unstructured RAG methods rely solely on embedding-similarity matching and lack any general mechanism to encode or exploit chronological information, while knowledge graph RAG (KG-RAG) frameworks collapse every mention of an entity into a single node, erasing the evolving context that drives many queries. To formalize this challenge and draw the community's attention, we construct ChronoQA, a robust and discriminative QA benchmark that measures temporal, causal, and character consistency understanding in narrative documents (e.g., novels) under the RAG setting. We then introduce Entity-Event RAG (E^2RAG), a dual-graph framework that keeps separate entity and event subgraphs linked by a bipartite mapping, thereby preserving the temporal and causal facets needed for fine-grained reasoning. Across ChronoQA, our approach outperforms state-of-the-art unstructured and KG-based RAG baselines, with notable gains on causal and character consistency queries. E^2RAG therefore offers a practical path to more context-aware retrieval for tasks that require precise answers grounded in chronological information.",
+        "published": "2025-06-06T10:07:21Z",
+        "updated": "2025-06-06T10:07:21Z",
+        "authors": [
+          "Ze Yu Zhang",
+          "Zitao Li",
+          "Yaliang Li",
+          "Bolin Ding",
+          "Bryan Kian Hsiang Low"
+        ],
+        "categories": [
+          "cs.IR"
+        ],
+        "primary_category": "cs.IR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "24 pages, 4 figures",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2506.05939v1",
+          "pdf": "https://arxiv.org/pdf/2506.05939v1"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

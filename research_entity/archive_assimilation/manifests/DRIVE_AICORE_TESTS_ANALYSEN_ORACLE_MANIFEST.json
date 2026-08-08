@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-TESTS-ANALYSEN-20260809T0510p0700",
+  "status":"BOUNDED_ORACLE_MANIFEST_ANALYSEN_EXACT_SELECTED_TEST_FAMILIES_FROZEN",
+  "trigger":"666",
+  "source":{"aicore":"Drive:1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty","tests":"Drive:1g23VZuaK3CMziWmC2SQFEaqsRB7Ik-qN","analysen":"Drive:1qlnJzokH47hxcU5NdLSrAdNH1aHOj0B0"},
+  "analysen_exact":{"direct_folders":2,"folders":[{"title":"2026-08-04","id":"1JnaYyojDg6-Cau5R4ezRpFOEoFasfyaR","direct_files":2,"files":["AB-v25-gegen-v26.1.txt","BEFUNDE.md"]},{"title":"verhalten","id":"1C9CwbxUIHLrAm8H9Z-EzwHemF-EYc0mM","direct_files":5,"files":["delta.json","detail.py","befunde.json","ergebnis.json","vergleich.py"]}],"leaf_files_total":7,"recursive_identity_percent":100.0},
+  "tests_bounded":{"direct_root_exact_count":null,"reason":"Direct folder fetch exposed many root test files but connector output was truncated; search/list methods under-enumerate this Drive tree and are not used to invent an exact root count.","observed_families":["thalamus module unit tests","ACC/Intent Queue module tests","functional live API tests","English fuzz live API tests","comparative/bare-LLM benchmarks","consciousness batteries/live benchmark","stress 100 hard/rounds/chat","edge cases","UI test framework"],"ui_test_subtree":{"id":"1STcmoh3ep5XqXflu48x1oGmX92zXvYGJ","direct_leaf_files":17,"identity_percent":100.0,"files":["ai_tester.py","cli_runner.py","concrete_suggestions.py","design_analyzer.py","heatmap_analyzer.py","one_click_test.py","simple_launcher.py","test_cases.py","test_engine.py","ui_test_runner.py","visual_regression.py","workflow_analyzer.py","README.md","run_ui_tests.sh","start_ai_test.sh","start_test.sh","ui-test-icon.svg"]}},
+  "selected_test_sources":[
+    {"title":"test_thalamus.py","drive_id":"1Xowffp-2Efd6Fsk28n7XaASg9d_l4Q4H","sha256":"8d07838a68c3fcb51cd17c0d43ce826726b04c30dc3cd7b18106cc3f2747578d","ast":{"functions":97,"test_functions":57},"execution_class":"OFFLINE_MODULE_TEST_REQUIRES_PROJECT_SOURCE_TREE"},
+    {"title":"test_functional.py","drive_id":"1EnNdF7tTprbgLNsaP6lg1uSyVinBpNm-","sha256":"f200ed7cb46f36f1ab717ce000dfd45f6fb42ec7dc62ec0f8b8c2d8f8127f158","execution_class":"LIVE_CORE_API_127.0.0.1_8088"},
+    {"title":"test_english_fuzz.py","drive_id":"1ZM0NC14viFy0urDqn0MyKbYqx9Gi0Q6o","sha256":"789c63f2a36f30d2398e6a1d753c1613177f2bf0c5218d8f6bfcce66b29be49b","execution_class":"LIVE_CORE_API_127.0.0.1_8088"},
+    {"title":"live_benchmark_results.md","drive_id":"1xLohfIMfMUoxiqYFXjg60fzZL8f4Ecpd","execution_class":"HISTORICAL_OBSERVATIONAL_REPORT_AI_EVALUATED"}
+  ],
+  "syntax_and_execution_probes":[
+    {"probe":"PY_COMPILE_SELECTED_3","result":"PASS","sources":["test_thalamus.py","test_functional.py","test_english_fuzz.py"]},
+    {"probe":"THALAMUS_PYTEST_AGAINST_FROZEN_GITHUB_HEAD","result":"BLOCKED_BEFORE_TEST_START","blocker":"execution container cannot resolve github.com, so Project-Frankenstein source tree could not be cloned; this is not a test failure"},
+    {"probe":"LIVE_FUNCTIONAL_ENGLISH_FUZZ","result":"NOT_RUN_ENVIRONMENT_DEPENDENT","blocker":"historical tests require a running Frank Core API at 127.0.0.1:8088 and target system services; no equivalent runtime is mounted in this execution environment"}
+  ],
+  "fresh_eval_oracles":{
+    "ergebnis_json":{"drive_id":"1ZY1mdBTaBbDVkD-A_WEs8H8HgK5ByWae","sha256":"5e169322ac363d82d3f32ead3e41a7c88584e3435ec4dc84fd28771b37843ead","cases_each":328,"v25_full_hit":132,"v25_quote":0.4024390243902439,"v26_1_full_hit":246,"v26_1_quote":0.75,"delta_percentage_points":34.76,"format_valid_v25":"236/328","format_valid_v26_1":"323/328","invented_tool_v25":92,"invented_tool_v26_1":5,"tool_missing_v25":73,"tool_missing_v26_1":37,"wrong_tool_v25":70,"wrong_tool_v26_1":25,"unneeded_tool_v25":66,"unneeded_tool_v26_1":17,"tool_missing_entirely_v25":33,"tool_missing_entirely_v26_1":5,"prose_missing_v25":95,"prose_missing_v26_1":3},
+    "delta_json":{"drive_id":"1sUd-4CCn5f3EOSgkVrDSEQQt2aV-hMQL","sha256":"34d966cae6e13588acf19ea8b222fccc5cc66fadaf670ed0306cfd954fffb131","progress_indices_count":120,"regression_indices_count":6,"regression_indices":[10,82,209,267,294,326]},
+    "befunde_md":{"drive_id":"1q35l2XHCBtmDC00ZP9dFUjlZGaBG2MAt","critical_constraints":["v26.1 max_len 1408 truncated 2907/3785 examples (76.8%) and discarded 1,023,224 system-text tokens from the left/front","KRAFTAUSDRUECKE runtime prompt block existed in 0/3785 training and 0/328 eval examples before repair","v26.1 training had no eval_dataset/eval_loss despite 328 held-out examples","Qwen3.5-4B has 8 full_attention + 24 linear_attention layers; standard q/k/v/o LoRA projections touch only the 8 full-attention layers","part of v25->v26.1 A/B advantage is format advantage; the report explicitly forbids attributing the full gap to better data","some apparent eval errors are reference-label errors/ambiguities"]}
+  },
+  "historical_benchmark_guard":{"live_consciousness_run8":"Preserve concrete measurement rows and longitudinal variability only. Do not promote the report's strong consciousness interpretation as independent proof; evaluator is AI, score rubric is composite, states are correlated, and source reports saturation/confounds."},
+  "reuse_classes":{"test_thalamus":"MEASUREMENT_FOUNDATION_AND_REGRESSION_FIXTURE","functional_and_english_fuzz":"ENVIRONMENT_DEPENDENT_HISTORICAL_E2E_FIXTURES","fresh_behavior_eval":"DIRECT_HELDOUT_FAILURE_TAXONOMY_WITH_REPORTED_FORMAT_CONFOUND","consciousness_live_benchmark":"HISTORICAL_OBSERVATIONAL_MEASUREMENT_NOT_CONSCIOUSNESS_PROOF","ui_test":"UI_REGRESSION_TOOLING_REFERENCE"},
+  "coverage":{"analysen_recursive_identity_percent":100.0,"ui_test_recursive_identity_percent":100.0,"tests_root_recursive_identity_percent":null,"exact_level0_global_credit_percent":0.0},
+  "frozen_at":"2026-08-09T05:10:00+07:00","frozen_by":"chatgpt-secondary"
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"fusion-20260808T1755p0700-chatgpt-secondary-r2",
   "trigger":"fusion",
   "kind":"global_mesh_meta_research",
@@ -7,6 +7,7 @@
   "provider":"OpenAI",
   "model":"GPT-5.6 Sol",
   "started_at":"2026-08-08T17:55:00+07:00",
+  "completed_at":"2026-08-08T18:09:00+07:00",
   "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
   "branch_coverage":{"registered":7,"covered":7,"feedback_receipts":7},
   "fresh_in_progress_checked":[{"branch":"frank","run":"20260808T1750+0700-chatgpt-secondary-r2","candidate":"CNUCS","latest_observed":"Mini-Clay zero-shot/few-shot/compiled proxy requests queued through 18:07+07; no completed result appropriated"}],
@@ -19,11 +20,12 @@
     "EXPERIMENT_RESULTS.json":"WRITTEN",
     "BRANCH_FEEDBACK_MANIFEST.json":"WRITTEN",
     "RUN_MANIFEST.json":"WRITTEN",
-    "FINAL_REPORT.md":"PENDING_WRITE"
+    "FINAL_REPORT.md":"WRITTEN",
+    "VALIDATION_REPORT.json":"WRITTEN"
   },
   "durable_feedback_packets":7,
   "main_candidate":"CTC-FUS1 — Authority-Aware Cognitive Transaction Capsule",
   "promotion":{"canonical_revision_change":false,"claim_promotion":false,"reason":"central new experiment is synthetic/Judge0; external security sources are current preprints; live FRANK/Qwen target evidence absent; C6 remains in progress"},
-  "validation":{"fusion_contract":"PENDING_LOCAL_EXACT_SCRIPT_MIRROR","provider_manifest":"WRITTEN","reread":"PENDING"},
-  "status":"FINALIZING"
+  "validation":{"fusion_contract":"PASS_LOCAL_MIRROR_EXACT_REPO_LOGIC","violations":[],"official_github_actions_execution":false,"provider_manifest":"WRITTEN","reread":"PENDING_FINAL_REREAD"},
+  "status":"COMPLETE_PENDING_FINAL_REREAD"
 }

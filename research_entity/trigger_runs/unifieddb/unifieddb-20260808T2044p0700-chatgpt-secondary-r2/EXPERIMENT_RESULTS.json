@@ -1,0 +1,49 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260808T2044p0700-chatgpt-secondary-r2",
+  "evidence_boundary":"Current-run measurements are local CPython/SQLite synthetic microbenchmarks and injected-failure mechanism tests. They are not live-FRANK, Android, target-Qwen, distributed, production-security or production-database estimates.",
+  "dataset":{"entities":8000,"graph_edges":24000,"vector_dimensions":32,"text_index":"SQLite FTS5","vector_scoring":"in-process exact scoring over FTS candidate subset"},
+  "experiments":[
+    {
+      "id":"EXP-UDB-U1-FOUR-BASELINE-READ-001",
+      "class":"LOCAL_SQLITE_CPYTHON_MICROBENCHMARK",
+      "n":500,
+      "workload":"Each operation performed exact state read + graph neighbors + FTS candidates + vector top-5 ranking. Query-result identity was checked equal on 20 random samples before timing.",
+      "results_us":{"specialized_inprocess":{"p50":133.166,"p95":205.2582,"p99":379.8324,"mean":151.4065},"logical_unified_api":{"p50":135.7495,"p95":206.8435,"p99":416.1297,"mean":144.9097},"hybrid_canonical_sqlite_vector_sidecar":{"p50":138.3605,"p95":307.4091,"p99":529.4029,"mean":183.3315},"physical_sqlite_monolith_vector_blobs":{"p50":267.3405,"p95":546.3027,"p99":767.2661,"mean":317.1417}},
+      "interpretation":"In this embedded cache-hot workload, physical consolidation was roughly 2x slower at p50 than the specialized path. A single physical database is therefore not an automatic latency win."
+    },
+    {
+      "id":"EXP-UDB-U1-SERVICE-BOUNDARY-002",
+      "class":"LOCAL_SYNTHETIC_SERIALIZATION_BOUNDARY",
+      "n":300,
+      "workload":"Same logical read, but the specialized arm crossed separate JSON serialization/deserialization boundaries while the unified logical API emitted one combined boundary.",
+      "results_us":{"specialized_separate_json":{"p50":256.028,"p95":374.7930,"p99":564.0063,"mean":274.1364},"logical_unified_single_json":{"p50":230.0445,"p95":330.9775,"p99":488.6322,"mean":248.7199}},
+      "derived":{"p50_reduction_fraction":0.1015},
+      "interpretation":"Logical unification reduced p50 by about 10.15% in this constructed service-boundary workload by removing explicit serialization crossings. This supports unifying the API/plan before forcing storage consolidation."
+    },
+    {
+      "id":"EXP-UDB-U1-WRITE-003",
+      "class":"LOCAL_SQLITE_CPYTHON_WRITE_MICROBENCHMARK",
+      "n_per_architecture":200,
+      "results_us":{"specialized":{"p50":408.3955,"p95":763.0422,"p99":1079.0560,"mean":697.8920},"logical_durable_outbox_sync_consume":{"p50":446.765,"p95":971.8139,"p99":18847.5005,"mean":1156.0985},"hybrid":{"p50":387.4335,"p95":586.6804,"p99":1778.9717,"mean":983.9753},"physical_monolith":{"p50":270.942,"p95":529.3755,"p99":13300.1509,"mean":581.2736}},
+      "interpretation":"The monolith had the lowest p50 write here, but tail spikes were large/noisy and the outbox arm paid synchronous-consumption overhead. The result is a placement tradeoff signal, not a universal winner."
+    },
+    {
+      "id":"EXP-UDB-U1-CRASH-REPLAY-004",
+      "class":"LOCAL_INJECTED_FAILURE_SEMANTICS",
+      "cases":[
+        {"architecture":"specialized_separate_stores","fault":"fail after authoritative state commit before graph commit","post_fault":{"state":"(1,2)","graph_count":0},"result":"PARTIAL_CROSS_STORE_STATE"},
+        {"architecture":"canonical_plus_durable_outbox","fault":"fail after canonical state+outbox commit before graph derivation","post_fault":{"state":"(1,2)","graph_count":0,"pending_outbox":1},"after_replay":{"graph_count":1,"pending_outbox":0},"result":"EXPLICIT_RECOVERABLE_DERIVED_LAG"},
+        {"architecture":"physical_monolith","fault":"fail before transaction commit","post_fault":{"state":"(0,1)","graph_count":0},"result":"ATOMIC_ROLLBACK"}
+      ],
+      "interpretation":"A single transaction gives clean atomic rollback when all required data lives in one engine. When derived planes remain heterogeneous, a canonical authoritative commit plus durable outbox/derivation receipt makes lag explicit and replayable instead of pretending arbitrary cross-engine atomicity."
+    }
+  ],
+  "reused_fresh_G11_calibration":[
+    {"id":"EXP-G11-SCOPED-SNAPSHOT-002","result":"Scoped validation rejected all 16,101 required-basis-invalid cases while global validation added 41,630 false rejects (13.8767% of 300,000) due unrelated domain changes in the synthetic workload."},
+    {"id":"EXP-G11-PHYSICAL-UNIFICATION-SWEEP-003","result":"Latency-winner fractions in synthetic cost surface: specialized 12.232%, logical API 5.811%, hybrid 54.170%, monolith 27.787%; no universal winner."},
+    {"id":"EXP-G11-QUERY-PLAN-IDENTITY-005","result":"Top-5 candidate set changed in 54.224% of 50,000 plan perturbations while record bytes stayed unchanged."},
+    {"id":"EXP-G11-TRANSPORT-MICROBENCH-006","result":"JSON roundtrip 153.499 us/op versus compact handle creation 0.1067 us/op; operations were not semantically equivalent end-to-end."}
+  ],
+  "conclusion":"Current evidence supports semantic/logical unification plus an authoritative event/state commit spine and replayable derived sidecars as the default candidate. Physical consolidation should remain subplan/workload-specific and benchmark-gated."
+}

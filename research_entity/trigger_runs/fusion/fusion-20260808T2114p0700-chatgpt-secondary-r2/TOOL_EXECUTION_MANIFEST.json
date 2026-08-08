@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260808T2114p0700-chatgpt-secondary-r2",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "tools":[
+    {"tool":"GitHub connector","status":"PASS_RW","work":"canonical/registry/protocol reads, latest commit scan, branch report reads, artifact writes"},
+    {"tool":"web research","status":"PASS","sources":[
+      {"title":"Synapse: Empowering LLM Agents with Episodic-Semantic Memory via Spreading Activation","class":"peer_reviewed_acl_2026","url":"https://aclanthology.org/2026.findings-acl.1108/","transfer":"independent support for dynamic graph memory with spreading activation, inhibition and decay; not FRANK validation"},
+      {"title":"Enabling Agents to Communicate Entirely in Latent Space (Interlat)","class":"peer_reviewed_acl_2026","url":"https://aclanthology.org/2026.acl-long.1248/","transfer":"independent feasibility evidence for latent communication rails; latent state remains non-canonical/non-authoritative"},
+      {"title":"Securing Agents With Tracked Capabilities","class":"peer_reviewed_acm_cais_2026","url":"https://doi.org/10.1145/3786335.3813127","transfer":"independent support for structurally tracked capability boundaries around agent actions"},
+      {"title":"Apache Arrow C Data Interface","class":"authoritative_project_documentation","url":"https://arrow.apache.org/docs/format/CDataInterface.html","transfer":"same-process zero-copy ABI candidate; explicitly not cross-process or persistence protocol"},
+      {"title":"FoundationDB Transaction interface","class":"authoritative_project_documentation","url":"https://apple.github.io/foundationdb/javadoc/com/apple/foundationdb/Transaction.html","transfer":"explicit mutable snapshot and atomic/isolation/durability transaction domain precedent"},
+      {"title":"AAFLOW: Scalable Patterns for Agentic AI Workflows","class":"2026_preprint","url":"https://arxiv.org/abs/2605.02162","transfer":"independent implementation evidence that reducing serialization/data movement can speed agentic pipelines; not C7/UnifiedDB validation"}
+    ]},
+    {"tool":"local CPython + SQLite","status":"PASS","experiments":["EXP-FUSION-F5-COLLECTION-LOWERING-001","EXP-FUSION-F5-ACTIVATION-INTEGRITY-002"]},
+    {"tool":"E2B","status":"NOT_EXECUTED_CURRENT_WORKER","note":"Fresh repository CC12 material queued an E2B typed-collection experiment, but no completed E2B result existed at fusion snapshot. Fusion includes it as in-progress evidence only."},
+    {"tool":"fusion_research_contract.py","status":"REREAD","note":"Contract requirements were reread before artifact creation; final structural validation performed against the same rules after writes."}
+  ],
+  "evidence_boundary":"Current fusion experiments are local synthetic/mechanism tests. External sources validate component directions only. No live FRANK, target Qwen3-4B, Android, production database, production security or phenomenal-consciousness claim is made."
+}

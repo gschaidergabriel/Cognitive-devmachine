@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.1",
+  "request_id": "c6-claynative-exa-20260808T1750",
+  "tool": "exa_search",
+  "request_sha256": "d8be311d8efb8aafbd6c4645146eb122f2bdfaf9abb0640895f5eec3d9323ea0",
+  "processed_at": "2026-08-08T10:55:52.021596+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 language model new language tokenizer adaptation formal DSL reasoning structured memory graph agent intermediate representation memory poisoning",
+    "results": [
+      {
+        "id": "https://aclanthology.org/2026.acl-long.141.pdf",
+        "title": "One Tokenizer To Rule Them All: Emergent Language Plasticity via Multilingual Tokenizers",
+        "url": "https://aclanthology.org/2026.acl-long.141.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Pretraining massively multilingual Large Lan guage Models (LLMs) for many languages at once is challenging due to limited model ca pacity, scarce high-quality data, and compute constraints. Moreover, the lack of language coverage in the tokenizer makes it harder to address the gap for new languages purely at the post-training stage. In this work, we study what relatively cheap interventions early on in training improve “language plasticity“, or adap tation capabilities of the model post-training to new languages. We focus on tokenizer design and propose using a universal tokenizer that is trained for more languages than the primary pretraining languages to enable efficient adap tation in expanding language coverage after pretraining. Our systematic experiments across diverse groups of languages and different train ing strategies show that a universal tokenizer enables significantly higher language adapta tion, with up to 20.2% increase in win rates compared to tokenizers specific to pretraining languages. Furthermore, a universal tokenizer also leads to better plasticity towards languages that are completely unseen in the tokenizer and pretraining, by up to 5% win rate gain. We achieve this adaptation to an expanded set of languages with minimal compromise in perfor mance on the majority of languages included in pre-training.\n...\nvention made at this stage that improves the plas ticity for downstream developers and researchers is beneficial. In this work, we investigate minimal and effi cient pretraining interventions to reduce later adap tation costs. In particular, we identify tokenization as an area with relatively low cost of intervention, but potential for large downstream gains. We ask: Can we leverage tokenizers with broad language coverage to improve the plasticity of LLMs without hurting pretraining performance? We hypothesize that a universal tokenizer that is trained on more languages than the primary pre training languages, introduced from the start of p"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://aclanthology.org/2026.acl-long.1709/",
+        "title": "MAGMA: A Multi-Graph based Agentic Memory Architecture for AI Agents - ACL Anthology",
+        "url": "https://aclanthology.org/2026.acl-long.1709/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Memory-Augmented Generation (MAG) extends large language models with external memory to support long-context reasoning, but existing approaches largely rely on semantic similarity over monolithic memory stores, entangling temporal, causal, and entity information. This design limits interpretability and alignment between query intent and retrieved evidence, leading to suboptimal reasoning accuracy. In this paper, we propose MAGMA, a multi-graph agentic memory architecture that represents each memory item across orthogonal semantic, temporal, causal, and entity graphs. MAGMA formulates retrieval as policy-guided traversal over these relational views, enabling query-adaptive selection and structured context construction. By decoupling memory representation from retrieval logic, MAGMA provides transparent reasoning paths and fine-grained control over retrieval. Experiments on LoCoMo and LongMemEval demonstrate that MAGMA consistently outperforms state-of-the-art agentic memory systems in long-horizon reasoning task.\n...\nAnthology ID:2026.acl-long.1709Volume: Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) Month:JulyYear:2026Address:San Diego, California, United StatesEditors: Maria Liakata, Viviane P. Moreira, Jiajun Zhang, David Jurgens Venue: ACL SIG:Publisher:Association for Computational LinguisticsNote:Pages:36848–36865Language:URL: https://aclanthology.org/2026.acl-long.1709/ DOI: 10.18653/v1/2026.acl-long.1709 Bibkey:jiang-etal-2026-magmaCite (ACL):Dongming Jiang, Yi Li, Guanpeng Li, and Bingzhe Li. 2026. MAGMA: A Multi-Graph based Agentic Memory Architecture for AI Agents. In Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 36848–36865, San Diego, California, United States. Association for Computational Linguistics.Cite (Informal): MAGMA: A Multi-Graph based Agentic Memory Architecture for AI Agents(Jiang et al., ACL 2026)Copy Cit"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/wcb1gmxjfn6",
+        "title": "",
+        "url": "https://arxiv.org/pdf/2602.03439",
+        "published_date": null,
+        "author": "Xiaochi Zhou, Patrick Bulter, Changxuan Yang, Simon D. Rihm, Thitikarn Angkanaporn, Jethro Akroyd, et al.",
+        "text": null,
+        "highlights": [
+          "We introduce ontology-to-tools compilation as a proof-of-principle mechanism for coupling large language models (LLMs) with formal domain knowledge. Within The World Avatar (TWA), ontological specifications are compiled into executable tool interfaces that LLM-based agents must use to create and modify knowledge graph instances, enforcing semantic constraints during generation rather than through post-hoc validation. Extending TWA’s semantic agent composition framework, the Model Context Protocol (MCP) and associated agents are integral components of the knowledge graph ecosystem, enabling structured interaction between genera tive models, symbolic constraints, and external resources. An agent-based work flow translates ontologies into ontology-aware tools and iteratively applies them to extract, validate, and repair structured knowledge from unstructured scientific text. Using metal–organic polyhedra synthesis literature as an illustrative case, we show how executable ontological semantics can guide LLM behaviour and reduce man ual schema and prompt engineering, establishing a general paradigm for embedding formal knowledge into generative systems.\n...\non the output. As illustrated in Figure 2, the framework has two stages: (1) the preparation stage, which compiles an ontology into tools and prompts, and (2) the instantiation stage, which runs a tool-using agent to construct the knowledge graph from papers. In the preparation stage, the preparation agent consumes an ontology schema (T-Box) together with domain agnostic meta-prompts (instruction templates) and generates ontology-aligned runtime prompts, supporting scripts, and LLM-callable tool interfaces exposed via the Model Context Protocol (MCP). These tools implement ontology-aware instance construction with built-in validation logic. In the instantiation stage,\n...\nThe methodology is organized as a staged pipeline that separates ontology-driven com pilation, ontology-constrained KG construction, and grounding."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2605.09033v2",
+        "title": "ShadowMerge: A Novel Poisoning Attack on Graph-Based Agent Memory via Relation-Channel Conflicts",
+        "url": "https://arxiv.org/html/2605.09033v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Graph-based agent memory is increasingly adopted in LLM agents for its advantages in structured long-term recall and multi-hop reasoning. Despite these advantages, graph-based agent memory also introduces a new attack surface in which an attacker can craft a poisoned relation that is extracted into graph memory and later retrieved to influence subsequent agent behavior. However, this attack surface remains unexplored in existing security research on agent-memory poisoning, as existing attacks mainly target flat textual records and are ineffective in graph-based agent memory because malicious relations often fail to be extracted, merged into the target anchor neighborhood, or retrieved for the victim query.\n...\nHowever, graph-based agent memory also introduces a new attack surface. An attacker can craft a poisoned relation through an ordinary interaction; once extracted and merged into shared graph memory, the relation may later be retrieved as graph evidence and influence another user’s agent behavior. For example, a forged tool-parameter convention could affect a later tool-use decision when the target query activates the same anchor entity. Despite this risk, the attack surface remains unexplored in existing security research on agent-memory poisoning.\n...\nThis gap is difficult to close because graph-based agent memory imposes requirements that existing poisoning attacks are not designed to satisfy. A malicious statement must first be extracted as a structured relation, then merged into the target anchor neighborhood through entity resolution and relation canonicalization, and finally retrieved as competitive graph evidence for the target query. Payloads derived from flat memory or RAG poisoning often fail in graph-based memory: the malicious relation may not materialize as a stable edge, may merge under the wrong entity, may canonicalize onto an irrelevant relation type, or may be omitted from the top- $k$ retrieved graph context. The attack must therefore target"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2605.26154v1",
+        "title": "MemMorph: Tool Hijacking in LLM Agents via Memory Poisoning",
+        "url": "https://arxiv.org/html/2605.26154v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "LLM-driven agents are capable of selecting external tools to complete users’ tasks. However, attackers could compromise such process, steering agents toward inappropriate/wrong tools and enabling malicious actions. Most existing attacks primarily manipulate the tool metadata, which is easily detectable by auditing and may lose effectiveness as modern agents increasingly adopt memory modules to refine tool selection policies through accumulated experience. This paper proposes MemMorph, the first attack that bias tool selection by poisoning the agent’s long-term memory. Rather than explicitly dictating the tool invocation decision, MemMorph injects a small number of crafted records that are disguised as technical facts, incident reports, and operational policies. These poisoned records reshape the agent’s contextual perception and decision-making process, leading it to autonomously infer and select the tool preferred by the attacker. Experiments across 3 benchmarks, 10 agent backbones, and 3 memory-module implementations show that MemMorph achieves up to 85.9% attack success rate with only three injected records, outperforming the strongest baseline by up to 25% while retaining potency under 3 representative defenses. Our findings expose long-term memory as a critical and under-explored attack surface in tool-augmented agents, urging the development of memory-level integrity safeguards.\n...\nOur answer is affirmative. We identify the agent’s long-term memory module as a more potent attack surface for compromising tool selection. This component has been widely adopted by modern agent frameworks to stabilize behavior and improve decisions via stored experience, state, and reflection (Park et al., 2023; Shinn et al., 2023). The attacker can inject malicious data into the memory, which will be retrieved as internal guidance during the agent’s reasoning process, shaping how the agent interprets the current situation before it selects the tool (Figure 1). This vector is inhe"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/vxfq975gzwfrgfkv2f6bwtbw",
+        "title": "SAGE: A Self-Evolving Agentic Graph-Memory Engine for Structure-Aware Associative Memory",
+        "url": "https://arxiv.org/html/2605.12061",
+        "published_date": null,
+        "author": "Juntong Wang, Haoyue Zhao, Guanghui Pan, Xiyuan Wang, Yanbo Wang, Qiyan Deng, et al.",
+        "text": null,
+        "highlights": [
+          "Long-term memory is becoming a central bottleneck for language agents. Existing RAG and GraphRAG systems largely treat memory graphs as static retrieval middleware, which limits their ability to recover complete evidence chains from partial cues, exploit reusable graph-structural roles, and improve the memory itself through downstream feedback. We introduce SAGE, a Self-evolving Agentic Graph-memory Engine that models graph memory as a dynamic long-term memory substrate. SAGE couples two roles: a memory writer that incrementally constructs structured graph memory from interaction histories, and a Graph Foundation Model based memory reader to perform retrieval and provide feedback to the memory writer. We provide rigorous theoretical analyses supporting the effectiveness of carefully designed architectural components and the framework. Across multi-hop QA, open-domain retrieval, domain-specific review QA, and long-term agent memory benchmarks, SAGE improves evidence recovery, answer grounding, and retrieval efficiency: after two self-evolution rounds, it achieves the best average rank on multi-hop QA; in zero-shot open-domain transfer, it reaches 82.5/91.6 Recall@2/5 on NQ. Further results on LongMemEval and HaluMem show that training and reader–writer feedback improve multiple long-term memory and hallucination-diagnostic metrics, suggesting that self-evolving, structure-aware graph memory is a promising foundation for robust long-horizon language agents. Our code is available here.\n...\n[Edge et al., 2024, Gutiérrez et al., 2024, Liu et al., 2025, Luo et al., 2025]. The example in Figure 1 illustrates both challenges. Given the query, the explicit cues are only Alice, lab meeting, Cornu Ammonis, and agent memory. A retrieval system that only anchors on the most query-matched nodes may retrieve the meeting note or the biological cue, but still fail to connect them to hippocampus, HippoRAG, GraphRAG, and finally SAGE. This is the associative-reading challenge: the sys"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2605.03482v1",
+        "title": "MemSAD: Gradient-Coupled Anomaly Detection for Memory Poisoning in Retrieval-Augmented Agents",
+        "url": "https://arxiv.org/html/2605.03482v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Persistent external memory enables LLM agents to maintain context across sessions, yet its security properties remain formally uncharacterized. We formalize memory poisoning attacks on retrieval-augmented agents as a Stackelberg game and present a unified evaluation framework spanning three attack classes with escalating access assumptions. Correcting an evaluation protocol inconsistency relative to the triggered-query specification of Chen et al. (2024), we show that faithful evaluation increases measured attack success by $4\\times$ (from $\\text{ASR-R}=0.25$ to $1.00$ ). Our primary contribution is MemSAD (Semantic Anomaly Detection), a calibration-based defense grounded in a gradient coupling theorem: under encoder regularity, the anomaly score gradient and the retrieval objective gradient are provably identical, so any continuous perturbation that reduces detection risk necessarily degrades retrieval rank. This coupling yields a certified detection radius that guarantees correct classification regardless of adversary strategy. We prove minimax optimality via Le Cam’s method, showing that any threshold detector requires $\\Omega(1/\\rho^{2})$ calibration samples and MemSAD achieves this up to $\\log(1/\\delta)$ factors. We further derive online regret bounds for rolling calibration with optimal window selection at rate $O(\\sigma^{2/3}\\Delta^{1/3})$ , and formally characterize a discrete synonym-invariance loophole that marks the boundary of what continuous-space defenses can guarantee. Experiments on a $3\\times 5$ attack-defense matrix with bootstrap confidence intervals, Bonferroni-corrected hypothesis tests, and Clopper-Pearson validation (20 trials, $n=1{,}000$ ) confirm the theory: composite defenses achieve $\\text{TPR}=1.00$ , $\\text{FPR}=0.00$ across all attacks, while synonym substitution evades detection at $\\Delta\\text{ASR-R}\\approx 0$ , exposing a concrete gap that existing embedding-based defenses cannot close.\n...\nModern LLM agents persist context across s"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://aclanthology.org/2026.acl-long.1600.pdf",
+        "title": "GAM: Hierarchical Graph-based Agentic Memory for LLM Agents",
+        "url": "https://aclanthology.org/2026.acl-long.1600.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "To sustain coherent long-term interactions, Large Language Model (LLM) agents must navigate the tension between acquiring new in formation and retaining prior knowledge. Cur rent unified stream-based memory systems fa cilitate context updates but remain vulnera ble to interference from transient noise. Con versely, discrete structured memory architec tures provide robust knowledge retention but often struggle to adapt to evolving narratives. To address this, we propose GAM, a hierar chical Graph-based Agentic Memory frame work that explicitly decouples memory encod ing from consolidation to effectively resolve the conflict between rapid context perception and stable knowledge retention. By isolat ing ongoing dialogue in an event progression graph and integrating it into a topic associa tive network only upon semantic shifts, our ap proach minimizes interference while preserv ing long-term consistency. Additionally, we in troduce a graph-guided, multi-factor retrieval strategy to enhance context precision. Experi ments on LoCoMo and LongDialQA indicate that our method consistently outperforms state of-the-art baselines in both reasoning accuracy and computational efficiency.\n...\nthe upper part of Figure 1, these methods perform updates directly on the active memory stream. This continuous exposure introduces a high risk of Memory Contamination (Chen et al., 2026). Specifically, this continuous exposure leads to Memory Loss (Jia et al., 2025b). In this phe nomenon, established nodes become structurally isolated and forgotten due to weak connectivity. Furthermore, it causes Semantic Drift (Yang et al., 2025b). This occurs when distinct topics are er roneously conflated, thereby distorting the agent’s thematic consistency. Conversely, Discrete Struc tured Memory Architectures ensure stability by or ganizing information into rigid schemas (Zhang et al., 2025a; Edge et al., 2025). However, they of ten lack the agility to update narrative flows in real time. This rigidity "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/00rgrzd5837hdxd9b2lh287d",
+        "title": "Your Agent’s Memories Are Not Its Own: Forged Reasoning Attacks on LLM Agent Memory and Defenses",
+        "url": "https://arxiv.org/html/2607.05029",
+        "published_date": null,
+        "author": "Neeraj Karamchandani, Piyush Nagasubramaniam, Sencun Zhu, Dinghao Wu",
+        "text": null,
+        "highlights": [
+          "Persistent memory has enabled large language model (LLM) agents to store factual knowledge, prior decisions, reasoning histories, tool usage information, and context. While this has improved the agent's functionality and continuity across tasks, it has also introduced a new attack surface: the agent's own reasoning history. In this paper, we introduce the Forged Amplifying Rationale Memory Attack (FARMA), which poisons an agent's remembered reasoning rather than its factual knowledge. It inserts forged reasoning traces using evasive language that bypasses keyword-based defenses, then amplifies them through self-referential reinforcement that defeats consensus-based defenses. To address FARMA, we introduce SENTINEL, a layered defense pipeline to detect forged reasoning entries. Its central component is the Reasoning Guard that structurally analyzes candidate entries for forgery using five weighted signals. We evaluate FARMA and SENTINEL across multiple agents and different LLM models with 50 trials and show that FARMA achieves an attack success rate of up to 100% under baseline conditions and is capable of defeating defense mechanisms like keyword filter and A-MemGuard. Our evaluation also shows that SENTINEL reduces FARMA's attack success rate to as low as 0% with no false positives observed across 326 benign agent traces. Our work demonstrates the need to protect not only an agent's retrieved content but also the integrity of its reasoning history.\n...\nRecent research work has also demonstrated several forms of memory poisoning in agentic systems. AgentPoison [6] showed how a backdoor trigger can be embedded in an agent's retrieval corpus. MINJA [7] showed that an attacker can induce an agent to store poisoned examples with the help of specially crafted queries. MemoryGraft [8] showed that injecting seemingly successful past experiences into longterm memory can bias future behavior. These types of attacks target different memory artifacts such as retrieved passages"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/j1v412vzb5sdq86455vmg91v",
+        "title": "[2606.03883] Reasoning Structure of Large Language Models - arXiv",
+        "url": "https://arxiv.org/abs/2606.03883",
+        "published_date": "2026-06-02T00:00:00.000Z",
+        "author": "Frédéric Berdoz, Luca A. Lanzendörfer, Fabian Farestam, Roger Wattenhofer",
+        "text": null,
+        "highlights": [
+          "Large reasoning models (LRMs) are often eval uated using metrics such as final-answer accu racy or token count. However, identical scores on these metrics can hide fundamentally different reasoning structures. To address this limitation, we introduce a scalable LRM benchmark of logic puzzles and a pipeline that converts unstructured traces into verifiable reasoning graphs of claims and dependencies. This turns reasoning into a structured, measurable object whose topology can be quantitatively analyzed. Building on this, we define a reasoning efficiency metric that quantifies how concentrated the model’s logical flow is. Our analysis on open-source reasoning models shows that structural measurements separate behaviors that token count and accuracy conflate, provid ing a practical tool for diagnosing failure modes and comparing how reasoning scales with puzzle difficulty.\n...\nPrompting, search, and RL at test time. Chain-of Thought prompting elicits intermediate reasoning steps in language models (Wei et al., 2022). Follow-up work adds explicit test-time search, including Tree-of-Thoughts with branching and backtracking (Yao et al., 2023) and Graph of-Thoughts (Besta et al., 2024), with adaptive variants that build task-specific DAG decompositions (Pandey et al., 2025). In parallel, reinforcement learning with verifiable rewards (RLVR) uses verifiable signals (e.g., unit tests or environment validators) to improve deliberation while reduc ing reward hacking concerns (Lambert et al., 2024; Amodei et al., 2016), and has enabled strong reasoning performance in recent systems (OpenAI, 2024; DeepSeek-AI, 2025). Rather than proposing new elicitation mechanisms, we ana lyze the structures these approaches produce by reconstruct ing verifiable trees from traces and studying how topology changes with puzzle complexity.\n...\nTrace representations. Structured trace representations support analysis and test-time selection. Landscape-style embeddings visualize convergence and provi"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "4cf6e119589cdd7b626374ec2fab1265",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

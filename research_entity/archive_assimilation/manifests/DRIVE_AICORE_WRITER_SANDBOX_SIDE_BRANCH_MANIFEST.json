@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE_AICORE_WRITER_SANDBOX_SIDE_BRANCH",
+  "created_at": "2026-08-09T06:34:00+07:00",
+  "actor": "chatgpt-secondary",
+  "source": {
+    "drive_root": "aicore/writer",
+    "drive_folder_id": "1FsjU2dGOIAsOvyoypHcekjo9BAKewB-a",
+    "sandbox_folder_id": "1D1WNUBF0HtBlk-3lWGsCCAKJ392hiK7z",
+    "pf_frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1"
+  },
+  "denominator": {
+    "root_files": 0,
+    "root_folders": 1,
+    "sandbox_files": 2,
+    "sandbox_subfolders": 0,
+    "recursive_leaf_files": 2,
+    "complete": true
+  },
+  "identity": {
+    "drive_files": {
+      "writer/sandbox/__init__.py": "1eb04eb5a5087f0116cc492d3251a906f746f829",
+      "writer/sandbox/executor.py": "2a811e9d1453205858684fb4066aa4406b3a8fbd"
+    },
+    "pf_head_matches": 0,
+    "pf_head_missing": 2,
+    "classification": "DRIVE_ONLY_SIDE_BRANCH"
+  },
+  "semantic_findings": [
+    "SandboxExecutor provides timeout, virtual-memory/process-count ulimits, process-group kill and temporary working-directory cleanup, but these are resource controls rather than an isolation boundary.",
+    "The allow_network configuration flag is stored but never enforced; allow_network=false does not disable network access.",
+    "Child processes inherit os.environ, so credentials/tokens/configuration present in the parent environment can be visible to executed code unless separately stripped upstream.",
+    "No filesystem namespace/chroot/container/seccomp/capability boundary is established; code can address normal user-visible filesystem paths despite running from a temporary cwd.",
+    "bash and sh are first-class interpreters, so arbitrary shell effects remain possible under the parent user's permissions.",
+    "The rust path runs rustc on the source but does not execute the resulting binary, violating the executor's language-neutral execute contract."
+  ],
+  "dedup": {
+    "overlap": "Historical Genesis sandbox archaeology already established that timeout/output/resource controls alone are not a security sandbox.",
+    "new_writer_specific_oracles": [
+      "configuration-flag enforcement: allow_network=false must have an observable network-deny effect",
+      "environment-secret noninheritance / explicit allowlist",
+      "filesystem isolation/effect mediation rather than temp-cwd semantics",
+      "compile-success must not be reported as execution-success for compiled languages"
+    ]
+  },
+  "target_law": [
+    "Safe-Effect/Clay authority must mediate effects even inside a code execution sandbox; a sandbox label never grants authority.",
+    "Sandbox configuration must be fail-closed and testable: declared network/filesystem/process restrictions must correspond to enforced runtime behavior.",
+    "Execution receipts must distinguish compile, launch, runtime result, timeout/cancel and effect-denial phases."
+  ],
+  "earned_work_hours_added": 0,
+  "global_level0_exact_credit": 0.0
+}

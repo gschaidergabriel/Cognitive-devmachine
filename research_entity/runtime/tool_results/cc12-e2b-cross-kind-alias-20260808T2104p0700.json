@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "request_id": "cc12-e2b-cross-kind-alias-20260808T2104p0700",
+  "tool": "e2b_sandbox",
+  "request_sha256": "916f560a18a7c10d27dcd23a4371b8799e9af9ea00cca6c59f82fc7e08baaac7",
+  "processed_at": "2026-08-08T14:19:13.384385+00:00",
+  "result": {
+    "provider": "E2B",
+    "tool": "e2b_sandbox",
+    "evidence_class": "runtime_experiment",
+    "command": "python3 -c 'import hashlib,json,random\nSEED=22091;N=100000\ndef h(t,o):return hashlib.sha256((t+'\"'\"':'\"'\"'+json.dumps(o,sort_keys=True,separators=('\"'\"','\"'\"','\"'\"':'\"'\"'))).encode()).hexdigest()\nr=random.Random(SEED);a=list('\"'\"'abcd'\"'\"');alias=nontrivial=typed=0;ex=[]\nfor _ in range(N):\n xs=[r.choice(a) for _ in range(r.randint(0,8))];s=sorted(set(xs));o=list(xs);us=h('\"'\"'untyped'\"'\"',s);uo=h('\"'\"'untyped'\"'\"',o);ts=h('\"'\"'typed'\"'\"',{'\"'\"'kind'\"'\"':'\"'\"'SET'\"'\"','\"'\"'items'\"'\"':s});to=h('\"'\"'typed'\"'\"',{'\"'\"'kind'\"'\"':'\"'\"'ORDERED'\"'\"','\"'\"'items'\"'\"':o})\n if us==uo:\n  alias+=1;nontrivial+=int(len(xs)>1)\n  if len(ex)<8:ex.append({'\"'\"'source'\"'\"':xs,'\"'\"'canonical_set'\"'\"':s,'\"'\"'ordered'\"'\"':o})\n typed+=int(ts==to)\nok=typed==0 and alias>0\nprint(json.dumps({'\"'\"'status'\"'\"':'\"'\"'PASS'\"'\"' if ok else '\"'\"'FAIL'\"'\"','\"'\"'seed'\"'\"':SEED,'\"'\"'iterations'\"'\"':N,'\"'\"'untyped_cross_kind_aliases'\"'\"':alias,'\"'\"'untyped_alias_rate'\"'\"':alias/N,'\"'\"'nontrivial_aliases'\"'\"':nontrivial,'\"'\"'typed_cross_kind_aliases'\"'\"':typed,'\"'\"'examples'\"'\"':ex,'\"'\"'inference'\"'\"':'\"'\"'collection kind must participate in semantic identity/hash'\"'\"'},sort_keys=True))\nraise SystemExit(0 if ok else 1)'",
+    "stdout": "{\"examples\": [{\"canonical_set\": [\"a\", \"c\"], \"ordered\": [\"a\", \"c\"], \"source\": [\"a\", \"c\"]}, {\"canonical_set\": [], \"ordered\": [], \"source\": []}, {\"canonical_set\": [\"b\", \"d\"], \"ordered\": [\"b\", \"d\"], \"source\": [\"b\", \"d\"]}, {\"canonical_set\": [\"d\"], \"ordered\": [\"d\"], \"source\": [\"d\"]}, {\"canonical_set\": [], \"ordered\": [], \"source\": []}, {\"canonical_set\": [], \"ordered\": [], \"source\": []}, {\"canonical_set\": [\"c\"], \"ordered\": [\"c\"], \"source\": [\"c\"]}, {\"canonical_set\": [\"d\"], \"ordered\": [\"d\"], \"source\": [\"d\"]}], \"inference\": \"collection kind must participate in semantic identity/hash\", \"iterations\": 100000, \"nontrivial_aliases\": 5038, \"seed\": 22091, \"status\": \"PASS\", \"typed_cross_kind_aliases\": 0, \"untyped_alias_rate\": 0.27155, \"untyped_cross_kind_aliases\": 27155}\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "status": "SUCCESS"
+}

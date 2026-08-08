@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.1",
+  "request_id": "cc9-exa-20260808T1723p0700",
+  "tool": "exa_search",
+  "request_sha256": "ab0c77984ee5c666e94e0fdf2acd04ee99118525599c1a85b28c30d98de23d58",
+  "processed_at": "2026-08-08T10:30:45.109845+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "compositional effect system alias analysis dynamic dispatch FFI capability handles consistent epoch snapshots semantic projection integrity intermediate representation",
+    "results": [
+      {
+        "id": "https://docs.rs/composition-ir/latest/composition_ir/",
+        "title": "composition_ir - Rust",
+        "url": "https://docs.rs/composition-ir/latest/composition_ir/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Composition IR: one immutable published state per commit, and one exact-base `Delta` describing how two published states differ.\n...\nThe contract this implements is `docs/specs/composition-ir.md`. The two rules everything else follows from are:\n...\n- a `Snapshot` is immutable, self-contained, and shares every unchanged subtree with its predecessor by pointer; and\n- an address is in `Delta::diffs` iff its projection differs between the two snapshots, carrying exactly the parts that differ.\n...\n- Commit\n- What a commit returns: the complete correctness result, and a discardable exact-base description of how it differs from its predecessor.\n...\n- Delta\n- The exact-base difference between two published snapshots.\n...\n- Diff\n- One address whose projection differs, and which parts differ.\n...\n- One published record. Immutable; snapshots share these by pointer.\n...\n- A set of parts. One machine word; a `Diff` is an address plus this.\n...\n- Snapshot\n- One immutable published composition state.\n- Snapshot\n- Builder\n- Accumulates one candidate state. Nothing is published until `commit`.\n...\n- Snapshot\n- Version\n- Which published snapshot. The pair is load-bearing: a bare counter cannot reject a delta from a different lineage that happens to carry the same number.\n...\n- Part\n- One projection of a record. A part exists if and only if a consumer that ignored it would either be wrong, or would pay more than `O(1)`.\n...\n- Resource\n- Role\n- What a referenced resource is for. The role decides which projection the reference participates in, so swapping a font advances shaping rather than structure, and swapping an image advances paint.\n...\n- Space\n- A record space. Each superseded component delta (semantic, frame, source link, interaction, resource) is one space here rather than its own record."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://dl.acm.org/doi/10.1145/3527320",
+        "title": "Effects, capabilities, and boxes: from scope-based reasoning to type-based reasoning and back",
+        "url": "https://dl.acm.org/doi/10.1145/3527320",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Reasoning about the use of external resources is an important aspect of many practical applications. Effect systems enable tracking such information in types, but at the cost of complicating signatures of common functions. Capabilities coupled with escape analysis offer safety and natural signatures, but are often overly coarse grained and restrictive. We present System C, which builds on and generalizes ideas from type-based escape analysis and demonstrates that capabilities and effects can be reconciled harmoniously. By assuming that all functions are second class, we can admit natural signatures for many common programs. By introducing a notion of boxed values, we can lift the restrictions of second-class values at the cost of needing to track degree-of-impurity information in types. The system we present is expressive enough to support effect handlers in full capacity. We practically evaluate System C in an implementation and prove its soundness.\n...\nJonathan Immanuel Brachthäuser, Philipp Schuster, and Klaus Ostermann. 2020. Effects as Capabilities: Effect Handlers and Lightweight Effect Polymorphism. Proc. ACM Program. Lang., 4, OOPSLA (2020), Article 126, Nov., https://doi.org/10.1145/3428194\n...\nJonathan Immanuel Brachthäuser, Philipp Schuster, and Klaus Ostermann. 2020. Effekt: Capability-Passing Style for Type- and Effect-safe, Extensible Effect Handlers in Scala. Journal of Functional Programming, https://doi.org/10.1017/S0956796820000027\n...\n### Effects as capabilities: effect handlers and lightweight effect polymorphism\n...\nEffect handlers have recently gained popularity amongst programming language researchers. Existing type- and effect systems for effect handlers are often complicated and potentially hinder a wide-spread adoption."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://ori-lang.com/proposals/approved/ffi-boundary-safety-proposal/",
+        "title": "FFI Boundary Safety — Deep FFI Part 2 | OriLang",
+        "url": "https://ori-lang.com/proposals/approved/ffi-boundary-safety-proposal/",
+        "published_date": "2024-01-01T00:00:00.000Z",
+        "author": "upstat-io",
+        "text": null,
+        "highlights": [
+          "FFI: `CPtr` (C opaque), `JsValue` (JS handle), `JsPromise` (JS async)\n...\nDispatch: static (monomorphized) — no vtable overhead\n...\n## FFI\n...\nUnsafe:\n...\n`uses Unsafe\n...\nSuspend` — cannot be\n...\n### Deep FFI (opt-in annotations on extern blocks)\n...\nError Protocols: `extern \"c\" from \"lib\" #error(errno) { ... }` — block-level; `#error(none)` per-function opt-out\n...\nOut Params:\n...\nPtr) ->\n...\nparams folded into\n...\nowned` / `borrowed` on params/returns | str returns default to `borrowed` (copy, don't free)\n...\nFree: `#free(fn)` on block or per-function — auto\n...\ngenerates `Drop` impl for\n...\nowned CPtr`\n...\nParametric FFI: `uses FFI(\"sqlite3\")` per-library | `uses FFI` shorthand for all | each `from \"lib\"` is distinct capability\n...\nMocking: `with FFI(\"lib\") = handler { fn: (...) -> T = ..., } in { ... }` — handler-based mock; stateless is sugar for `handler(state: ())`\n...\nStateful Handlers: `with Cap = handler(state: init) { op: (s) -> (s', val), ... } in expr` — state replaces `self`; returns `(S, R)` tuple; frame-local mutable state; `with...in` returns body type only\n...\n(compose via\n...\n(defaults used if omitted); no `self`;\n...\nE1204-E1207\n...\nSuspend` = may suspend; no\n...\n` = sync; concurrency via\n...\nStandard: `Http`, `FileSystem`, `Clock`, `Random`, `Crypto`, `Cache`, `Print` (default), `Logger`, `Env`, `Intrinsics`, `Suspend`, `FFI`\n...\nCapsets: `capset Net = Http, Dns, Tls` — transparent alias, expanded in `uses` before type checking; `@f uses Net` expands to `@f uses Http, Dns, Tls`; capsets can include other capsets; not a trait (no `impl`, no `with`, no `def impl`)\n...\n// Parametric FFI capability\n...\nffi_capability  = \"FFI\" [ \"(\" string_literal \")\" ] .\n...\n--- Handler Expression (Stateful\n...\nHandlers) ---"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://dl.acm.org/doi/10.1016/j.scico.2014.07.011",
+        "title": "Handles | Science of Computer Programming",
+        "url": "https://dl.acm.org/doi/10.1016/j.scico.2014.07.011",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Controlling object graphs and giving specific semantics to references (such as read-only, ownership, scoped sharing) have been the focus of a large body of research in the context of static type systems. Controlling references to single objects and to graphs of objects is essential to build more secure systems, but is notoriously hard to achieve in the absence of static type systems. In this article we embrace this challenge by proposing a solution to the following question: What is an underlying mechanism that can support the definition of properties (such as revocable, read-only, lent) at the reference level in the absence of a static type system? We present handles: first-class references that propagate behavioral change dynamically to the object subgraph during program execution. In this article we describe handles and show how handles support the implementation of read-only references and revocable references. Handles have been fully implemented by modifying an existing virtual machine and we report their costs.\n...\nDavid~G. Clarke, John~M. Potter, James Noble, Ownership types for flexible alias protection, in: Proceedings OOPSLA '98, ACM Press, 1998, pp. 48-64.\n...\nPhilip W.L. Fong, Cheng Zhang, Capabilities as alias control: Secure cooperation in dynamically extensible systems. Technical report, Department of Computer Science, University of Regina, 2004.\n...\nHarri Hakonen, Ville Leppänen, Timo Raita, Tapio Salakoski, Jukka Teuhola, Improving object integrity\n...\npreventing side effects via deeply immutable references, in: Fenno-Ugric Symposium on Software Technology, 199\n...\npp.\n...\nJohn Hogg, Islands: aliasing protection in object-oriented languages, in: Proceedings of the International Conference on Object-Oriented Programming, Systems, Languages, and Applications, OOPSLA'91, in: ACM SIGPLAN Notices, vol.¿26, 1991, pp.¿271-285.\n...\nJames Noble, David Clarke, John Potter, Object ownership for dynamic alias protection, in: Proceedings TOOLS '99, November 1999"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.cs.purdue.edu/homes/rompf/papers/wei-popl24.pdf",
+        "title": "Polymorphic Reachability Types: Tracking Freshness, Aliasing, and Separation in Higher-Order Generic Programs",
+        "url": "https://www.cs.purdue.edu/homes/rompf/papers/wei-popl24.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "2.2 Examples Enabled by Layering an Effect System \nAlthough reachability types offer ways to track usage and lifetimes of capabilities, they are some \ntimes too coarse-grained. For example, two functions attempting to read the same mutable reference \ncell can still be executed in parallel if there are no interfering writes. With an effect system (Sec \ntion 7.2), we can not only discern non-interference with a finer granularity, but also enable move \nsemantics, safe deallocation, etc. \nFlow-Sensitivity and Move Semantics. Bao et al. [2021] have discussed layering a flow-sensitive \neffect system on top of tracking reachability. The basic idea is to track the effect induced by \naliased variables and maintain the aliases and their effects with respect to control-flow structure. \nThis enables not only tracking effects and identifying non-interference more precisely, but also \nexpressing move semantics (ownership transfer) and safe deallocation as destructive effects. \nTo first see a simple example, consider that we have aliased variables x and y. Reading the content \nof y induces a read effect on y, and transitively on x too, as noted in the comment: \nval x = new Ref(42); val y = x \n!y // : Int @read(y) in context [ y: Ref[Int] x, x: Ref[Int]q ]\n...\nA powerful effect supported by Bao et al. is the destructive “kill” effect (terminology borrowed \nfrom data-flow analysis). The kill effect takes execution order into account (i.e., flow-sensitive) \nand applying it to a variable disables any future use via all aliases of this resource. This effectively \nexpresses a wide range of behaviors, such as ownership transfer and uniqueness. For example, the \nlanguage could offer a primitive move for Rust-style ownership transfer, which induces the kill effect \non its argument and yields a fresh value that uniquely holds the underlying resource: \nval x = new Ref(42) \nval y = move(x) // : Ref[Int] y @kill(x) in context [ y: Ref[Int]q, ✭x: Ref[Int] ✭✭✭✭q ] \nAfter the ownership transfer, "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://dl.acm.org/doi/10.1145/3408975",
+        "title": "Compiling effect handlers in capability-passing style",
+        "url": "https://dl.acm.org/doi/10.1145/3408975",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Effect handlers encourage programmers to abstract over repeated patterns of complex control flow. As of today, this abstraction comes at a significant price in performance. In this paper, we aim to achieve abstraction without regret for effect handlers.\n...\nWe present a language for effect handlers in \\_capability-passing style\\_ (λ*Cap*) and an implementation of this language as a translation to simply-typed lambda calculus in \\_iterated continuation-passing style\\_. A suite of benchmarks indicates that the novel combination of capability-passing style and iterated CPS enables significant speedups over existing languages with effect handlers or control operators. Our implementation technique is general and allows us to generate code in any language that supports first-class functions.\n...\nWe then identify a subset of programs for which we can further improve the performance and guarantee full elimination of the effect handler abstraction. To formally capture this subset, we refine λ*Cap*to λλ*Cap*with a more restrictive type system. We present a type-directed translation for λλ*Cap*that inserts staging annotations and prove that no abstractions or applications related to effect handlers occur in the translated program. Using this second translation we observe additional speedups in some of the benchmarks.\n...\nDaan Leijen. 2018. First Class Dynamic Efect Handlers: Or, Polymorphic Heaps with Dynamic Efect Handlers. In Proceedings of the Workshop on Type-Driven Development (St. Louis, Missouri, USA). ACM, New York, NY, USA, 51-64.\n...\n[### A typed continuation-passing translation for lexical effect handlers\n...\nEffect handlers are a\n...\nfeature which enjoys popularity in academia and is also gaining traction in industry. Programs use abstract effect operations and handlers provide meaning to them in a delimited scope. Each effect operation is handled\n...\nway to incorporate effects in a\n...\nSometimes perhaps even \\\n...\n\\_ powerful. In this\n...\nwe define a restriction o"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.cs.purdue.edu/homes/rompf/papers/bao-oopsla21.pdf",
+        "title": "Reachability Types: Tracking Aliasing and Separation in Higher-Order Functional Programs",
+        "url": "https://www.cs.purdue.edu/homes/rompf/papers/bao-oopsla21.pdf",
+        "published_date": null,
+        "author": "Yuyan Bao, Guannan Wei, Oliver Bračevac, Yuxuan Jiang, Qiyang He, Tiark Rompf",
+        "text": null,
+        "highlights": [
+          "With the goal of expanding the applicability of ownership-style reasoning, it bears asking if global heap invariants are really necessary? In the world of low-level verification of imperative programs, a powerful alternative exists: separation logic [Reynolds 2002] enables reasoning about wild pointer-chasing programs using only few well-placed annotations that demand separation of individual heap references, as a binary predicate satisfied by mutual non-reachability, and without imposing global restrictions on the layout of the heap. However, scaling separation logic to higher-order programs comes with nontrivial challenges [Krishnaswami et al. 2009] and type systems that are close cousins of separation logic [O’Hearn 2003; Reynolds 1978] enforce the stricter notion of complete non-interference of computations, rather than separation of individual heap objects. Nevertheless, forms of higher-order concurrent separation logic [Jung et al. 2018b; Krebbers et al. 2017] have been pivotal in establishing formal foundations for Rust [Jung et al. 2018a, 2021], including semantic interpretions of Rust types. Hence, wouldn’t it make sense to build more of this underlying separation substrate into the level of user-facing syntactic types? From Reachability and Separation back to Ownership-Style Reasoning. In this paper, we investigate the possibility of recasting ownership-style reasoning on a foundation inspired by reachability and separation. In a sense, we turn the prevailing model of alias control via type systems upside down: instead of restricting sharing and then selectively re-introducing it through borrowing, we propose a type system that tracks sharing—and its absence, separation—at its core, and then layer additional mechanisms for selectively enforcing uniqueness on top of it. We present a reachability type system, ∗, that introduces a type qualifier to track reachability sets in a straightforward extension of simply-typed lambda calculus with mutable references. "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://people.mpi-sws.org/~dg/papers/oopsla17-obj-full.pdf",
+        "title": "Robust and Compositional Verification of Object Capability Patterns",
+        "url": "https://people.mpi-sws.org/~dg/papers/oopsla17-obj-full.pdf",
+        "published_date": null,
+        "author": "David Swasey, Deepak Garg, and Derek Dreyer",
+        "text": null,
+        "highlights": [
+          ".1In \ncontrast to prior work, OCPL enables one to reason modularly about both OCP implementations \nand user code that depends on them, and to specify a general property on user code that ensures \nsuch code can be safely shared with untrusted code without having its internal invariants violated. \nWe use OCPL to reason about several commonly-used OCPs, including the dynamic sealing (sealer \nunsealer), membrane, and caretaker patterns, and in so doing, provide the first formal explanation \nof what these OCPs achieve.\n...\nSpecifying dynamic sealing. The motivation for dynamic sealing given above was completely \ninformal. Let us now see how OCPL lets us formalize it. \nWe specify dynamic sealing in Fig. 5. Rule MakeSealSpec for allocating a sealer-unsealer pair ties the \ntwo functions it returns to an abstract (logical) name γ and representation invariant ϕ. In particular, \nthe assertions10 issealγ v1 ϕ and isunsealγ v2 ϕ represent knowledge that v1 and v2 are the seal and\n...\nunseal functions associated with the sealer-unsealer pair named γ with representation invariant ϕ. \nSimilarly, the assertion issealedγ v v′ ϕ represents knowledge that v′is a low-integrity proxy for\n...\nvalue v (for the sealer-unsealer pair named γ with representation invariant ϕ). This relation is \nfunctional in v′—i.e., unsealing the same v′twice will produce the same v (SealedAgree)—and implies\n...\nϕ v—i.e., that the unsealed value v must satisfy the representation invariant (SealedInv). Conversely,\n...\nto seal a value v, one is required to prove ϕ v (SealSpec). The progressive triple UnsealSpec is suitable\n...\nfor use when one already knows that v and v′are related; it returns v. The non-progressive triple \nUnsealAnySpec returns the value v related to v′, or gets stuck.\n...\nFinally, the three rules at the bottom of Fig. 5 concern the lowval relation. Rule SealedLow says that all sealed values are low values—indeed, the whole point of using sealing is to produce low-integrity proxy values—while r"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://pm.inf.ethz.ch/publications/GrannanBilyFialaGeerMedeirosMuellerSummers25.pdf",
+        "title": "Place Capability Graphs: A General-Purpose Model of Rust’s Ownership and Borrowing Guarantees",
+        "url": "https://pm.inf.ethz.ch/publications/GrannanBilyFialaGeerMedeirosMuellerSummers25.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "The second type of PCG nodes are lifetime projection nodes. Lifetime projections ↓ ' (in which ' is a lifetime from the type of ) are a novel construct used to represent a set of borrows currently stored in the place and whose borrow extents are defined by the borrow checker’s current interpretation of lifetime ' for . For example, if a variable x has type &'a mut String, then x ↓ 'a denotes the (singleton) set of borrows stored in . Lifetime projection nodes will allow us to mediate between precise reasoning about individual places and borrows, and abstractions over (potentially unbounded) sets of borrows as considered by Rust’s borrow checkers. Rust’s flow sensitive type checking means that the values and sets of borrows considered stored in places depend on the program point: in general we allow our graph nodes to refer e.g. to places as they were at a previous program point by labelling them with a program point label. Definition 3.1 (PCG Preliminaries). We assume a labelling of each (MIR) program point with a distinct program point label, ranged over by . We use to range over places. A generalised place is defined by the cases: : : = | at | origin(); in the second case we call a labelled place; in the third ( is a non-negative integer) the node is called a remote place7. Capability types are defined by: : : = E | W | R | ∅ (called exclusive, write, read and none). A lifetime projection lp is defined by the cases: lp : : = ↓ ˜ | ↓ ˜ at | ↓ ˜ at FUT We assume an infinite set N of node identifiers (node IDs) ranged over by , , , etc., and a (partitioning) predicate placeNode on node IDs, which is true (resp. false) for an infinite subset of N. When placeNode( ) is true, is a place node ID; otherwise, is a lifetime projection node ID. Our PCG edges represent a variety of key notions arising in Rust’s design. Edges from place nodes reflect a current flow of capabilities (that removing the edge would undo) from parent(s) to child(ren): the leaf place nodes of our PCG"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://se.cs.uni-tuebingen.de/publications/brachthaeuser22effects.pdf",
+        "title": "Effects, Capabilities, and Boxes: From Scope-based Reasoning to Type-based Reasoning and Back",
+        "url": "https://se.cs.uni-tuebingen.de/publications/brachthaeuser22effects.pdf",
+        "published_date": null,
+        "author": "Jonathan Immanuel Brachthäuser, Philipp Schuster, Edward Lee, Aleksander Boruch-Gruszecki",
+        "text": null,
+        "highlights": [
+          "Capability sets Based on the work by Osvald et al., we annotate each binding in the typing context with additional information. However, we do not only track whether a bound variable is first- or second-class, but track precisely over which capabilities it closes. That is, we augment bindings (e.g., f :C σ) in the typing context with capability sets (e.g. C). This information is only annotated at the binder and is not part of the type. This is important for ergonomics: the additional information, which is used to guarantee effect safety, is not visible to users unless explicitly requested.\n...\nBoxes While blocks can freely close over capabilities and other blocks, they cannot be \nreturned from a function or stored in a field. To recover these abilities, System C features \nexplicit boxing and unboxing language constructs. They are inspired by equally named modal \nconnectives and by the work of Choudhury and Krishnaswami [12] on comonadic type systems. \nBoxing converts a second-class value to a first-class value, reifying the contextual information \nannotated on the binder into the boxed value’s type (e.g., f :C σ ⊢ box f : σ at C). \nThat is, instead of completely preventing first-class values from closing over capabilities, the \ncapabilities they close over are now faithfully represented in their types. To use a boxed block, \nwe have to unbox it. We make sure to only perform this operation when the capabilities are \nstill in scope, which guarantees effect safety (e.g., x : σ at C ⊢ unbox x : σ C). The \nreader might find the following analogy helpful: \nConceptually, we treat mentioning capabilities as an effect. In the terminology of \ncall-by-push-value [30], boxing corresponds to “thunking” and unboxing corresponds \nto “forcing” the effect of mentioning capabilities1. \nThe box and unbox constructs allow programmers to freely move between tracking capabilities \nimplicitly, via lexical scoping, or explicitly, in the types.\n...\nOne important aspect of System C is that i"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "e27cd7bb9a422e2e73297016893d80c0",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

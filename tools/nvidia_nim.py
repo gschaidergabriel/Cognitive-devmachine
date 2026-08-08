@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """NVIDIA hosted NIM adapter for FRANK/RAE research.
 
-Exposes separated capabilities for model catalog, chat, embeddings and reranking.
-Credentials are loaded only through the RAE secret loader and never emitted.
+Exposes separated capabilities for model catalog, chat, embeddings, embedding
+similarity experiments and reranking. Credentials are loaded only through the RAE
+secret loader and never emitted.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import math
 import re
 import time
 import urllib.error
@@ -150,6 +152,36 @@ def embeddings(inputs: list[str], *, model: str = DEFAULT_EMBED_MODEL, input_typ
     }
 
 
+def _cosine(a: list[float], b: list[float]) -> float:
+    dot = sum(x * y for x, y in zip(a, b))
+    na = math.sqrt(sum(x * x for x in a))
+    nb = math.sqrt(sum(y * y for y in b))
+    return dot / (na * nb) if na and nb else 0.0
+
+
+def embedding_similarity(texts: list[str], pairs: list[list[int]], *, model: str = DEFAULT_EMBED_MODEL) -> dict[str, Any]:
+    embedded = embeddings(texts, model=model, input_type="passage", truncate="END")
+    rows = embedded["data"]
+    vecs = [row["embedding"] for row in rows]
+    out = []
+    for pair in pairs:
+        if len(pair) != 2:
+            raise ValueError("each pair must contain exactly two indices")
+        i, j = int(pair[0]), int(pair[1])
+        if i < 0 or j < 0 or i >= len(vecs) or j >= len(vecs):
+            raise ValueError("pair index out of range")
+        out.append({"i": i, "j": j, "cosine": _cosine(vecs[i], vecs[j]), "text_i": texts[i], "text_j": texts[j]})
+    return {
+        "provider": "NVIDIA Hosted NIM",
+        "capability": "embedding_similarity",
+        "model": model,
+        "dimensions": rows[0]["dimensions"] if rows else 0,
+        "pairs": out,
+        "evidence_role": "external_embedding_runtime_proxy_for_semantic_geometry",
+        "boundary": "Embedding similarity is not causal identity, role identity, canonical truth, authority or latent hidden-state equivalence."
+    }
+
+
 def rerank(query: str, passages: list[str], *, model: str = DEFAULT_RERANK_MODEL, truncate: str = "END") -> dict[str, Any]:
     if not query.strip() or not passages or any(not str(x).strip() for x in passages):
         raise ValueError("query and non-empty passages required")
@@ -215,6 +247,12 @@ def process_request(path: Path) -> dict[str, Any]:
                 model=str(req.get("model") or DEFAULT_EMBED_MODEL),
                 input_type=str(req.get("input_type") or "query"),
                 truncate=str(req.get("truncate") or "END"),
+            )
+        elif mode == "embedding_similarity":
+            envelope["result"] = embedding_similarity(
+                [str(x) for x in (req.get("texts") or [])],
+                [[int(y) for y in x] for x in (req.get("pairs") or [])],
+                model=str(req.get("model") or DEFAULT_EMBED_MODEL),
             )
         elif mode == "rerank":
             envelope["result"] = rerank(

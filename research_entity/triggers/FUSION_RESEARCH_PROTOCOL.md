@@ -7,7 +7,7 @@
 When the complete trimmed user message equals `fusion` (case-insensitive), execute a full cross-branch research cycle using all currently reachable RAE research classes:
 
 - canonical state and active agenda;
-- all currently registered scientific branches — at this revision: `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`;
+- all currently registered scientific branches — at this revision: `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`, `unifieddb`;
 - completed and newer in-progress trigger runs;
 - global/domain claim, hypothesis, experiment and negative-result ledgers;
 - Topic Packets and Knowledge Micro-Packets;
@@ -17,15 +17,18 @@ When the complete trimmed user message equals `fusion` (case-insensitive), execu
 - current runtime/code evidence when accessible;
 - raw/source evidence reached by active claims, contradictions or research questions.
 
-Branch membership is authoritative in `RESEARCH_TRIGGER_REGISTRY.json`; do not hard-code an older six-branch assumption. `tools/fusion_research_contract.py` derives its branch set from the registry.
+Branch membership is authoritative in `RESEARCH_TRIGGER_REGISTRY.json`; do not hard-code an older branch assumption. `tools/fusion_research_contract.py` derives its branch set from the registry.
 
 `all data` means coverage of the complete current research graph/evidence classes, not blindly placing every raw byte into one model context. Use indexes, hashes, manifests and staged retrieval.
 
-## Relationship to Clay and ClayGraph
+## Relationship to Clay, ClayGraph and UnifiedDB
 
 - `clay` is the integrated Synthetic Clay architecture/research foundry.
-- `claygraph` is the iterative memory/knowledge-graph/database-substrate research branch.
-- `fusion` is the global meta-research and feedback cycle over both plus all other branches.
+- `claygraph` is the iterative associative memory/knowledge-graph/topology research branch.
+- `unifieddb` is the iterative whole-system persistence/query/transaction substrate research branch.
+- `fusion` is the global meta-research and feedback cycle over all three plus all other branches.
+
+ClayGraph and UnifiedDB are complementary: graph-memory success does not prove physical database consolidation, and unified logical persistence must not erase graph-specific higher-order semantics.
 
 ## Mandatory phases
 
@@ -41,7 +44,7 @@ A fusion run is incomplete if any registered scientific branch is silently omitt
 
 ### F1 — Whole-mesh graph synthesis
 
-Build a global working graph of active/current claims, open hypotheses, critical negative results, active/proposed experiments, architecture candidates, ClayGraph versions/migration results, cross-branch dependencies, contradictions/supersessions, unknowns and reusable methods.
+Build a global working graph of active/current claims, open hypotheses, critical negative results, active/proposed experiments, architecture candidates, ClayGraph versions/migration results, UnifiedDB store/query/migration results, cross-branch dependencies, contradictions/supersessions, unknowns and reusable methods.
 
 Deduplicate equivalent mechanisms across terminology without deleting local names/provenance.
 
@@ -49,7 +52,7 @@ Deduplicate equivalent mechanisms across terminology without deleting local name
 
 Generate hypotheses arising from branch combinations. For each important synthesis identify upstream branches/evidence, ancestry, counterhypothesis, falsifier, highest-information experiment and affected branches.
 
-Run Goodman anti-echo logic whenever support flows through shared FRANK/ClayCode/Clay/ClayGraph/GWT ancestry. Cross-branch repetition is convergence, not replication.
+Run Goodman anti-echo logic whenever support flows through shared FRANK/ClayCode/Clay/ClayGraph/UnifiedDB/GWT ancestry. Cross-branch repetition is convergence, not replication.
 
 ### F3 — External research and empirical work
 
@@ -72,10 +75,11 @@ At this revision `BRANCH_FEEDBACK_MANIFEST.json` therefore contains one entry ea
 - `claycode`
 - `hyperposition`
 - `claygraph`
+- `unifieddb`
 
 Each entry contains effect (`SUPPORT | CHALLENGE | REVISE | SUPERSEDE | NEW_EXPERIMENT | NO_CHANGE`), source fusion/evidence refs, affected claims/hypotheses/packets, confidence/evidence class, ancestry/contradiction lineage, next experiment/falsifier and durable write-back refs.
 
-Write branch-discoverable feedback packets/micro-packets for substantive deltas. ClayGraph feedback must be discoverable by subsequent `claygraph`, `frank`, `claycode`, `hyperposition` and `gwt` runs when relevant.
+Write branch-discoverable feedback packets/micro-packets for substantive deltas. ClayGraph and UnifiedDB feedback must be discoverable by subsequent `claygraph`, `unifieddb`, `frank`, `claycode`, `hyperposition` and `gwt` runs when relevant.
 
 ### F6 — Global agenda update / promotion gate
 
@@ -110,4 +114,4 @@ A fusion run cannot report 100% completion unless:
 
 ## Scientific boundary
 
-Global synthesis increases coherence and may reveal interactions, but does not manufacture independent evidence. GWT/emergence/self-model/ClayGraph sophistication is not by itself evidence of phenomenal consciousness.
+Global synthesis increases coherence and may reveal interactions, but does not manufacture independent evidence. GWT/emergence/self-model/ClayGraph/UnifiedDB sophistication is not by itself evidence of phenomenal consciousness.

@@ -1,0 +1,94 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0431+0700-chatgpt-secondary-drive-aicore-v27-training-shard",
+  "origin_actor":"chatgpt-secondary",
+  "actor_role":"SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "session_id":"chatgpt-secondary-20260809-666",
+  "prompt_run_id":"666-20260809T0431p0700-chatgpt-secondary",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status":"POST_GITHUB_TRAINING_LINEAGE_ANALYZED_NO_TRAINING_STARTED",
+  "source_scope":{
+    "drive_tree":"aicore/training/v27",
+    "folder_id":"1DzxU5uAezf5gq4DoYECR4RUE7mz-CUXf",
+    "primary_refs":[
+      "drive:1Eh0XHMbI0l8kgiwKJlpQ9b0HthtAVUjM:BERICHT-KLASSENVERTEILUNG.md",
+      "drive:1eed0lAIbLR6NYZs-GI2ORdVgmZnpHBFj:BERICHT-SYSTEMTEXT-TRENNUNG.md",
+      "drive:1SeQy5kQ6bMg-O3-kYx0pWCJL_h-UWc6t:blindpruefung_S1.md",
+      "drive:11zCq4k1Jh8PqxZ5A2rrinurtDH0HYK1L:ANTWORTKLASSEN.md"
+    ],
+    "post_github_evidence":"Files modified 2026-08-05 in Drive aicore training tree; frozen Project-Frankenstein head is 2026-04-era and same-tree Drive runtime divergence is independently proven."
+  },
+  "findings":[
+    {
+      "finding_id":"DRIVE-TRAIN-V27-001",
+      "epistemic_class":"HISTORICAL_TRAINING_DATA_BUILD_MEASUREMENT",
+      "status":"CURRENTLY_RELEVANT_DATASET_LINEAGE",
+      "claim":"The v27 rebuild reports a 3,785-line training set with a 1,449-example recast exactly distributed across seven response classes: goal formation 250, goal revision 200, goal rejection 150, unsolicited action 250, abstention 249, clarification 250 and result formulation 100. It rejected 4,261 generated candidates through explicit gates, with the largest rejection families including action without permission check (832), pattern clone (538), command-following instead of initiative (509), goal without reason (491), generic non-understanding (481) and rejection without reason (453).",
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "targets":["frank","claycode","harness","clay","q12_index"],
+      "implication":"Historical class definitions and rejection reasons are useful seed/negative corpora for future Clay-native model data, but class balance and rule counts do not prove behavioral quality. Preserve exact generation/rejection ancestry and held-out partitions."
+    },
+    {
+      "finding_id":"DRIVE-TRAIN-V27-002",
+      "epistemic_class":"HISTORICAL_TRAIN_RUNTIME_SEMANTIC_BOUNDARY_FINDING",
+      "status":"CURRENTLY_RELEVANT_NEEDLE_MARKER_CONTRACT",
+      "claim":"v27 removed explicit `<tool>` calls from recast ANSWERS (4,180 -> 0) while system texts still contained tool/marker syntax. A later audit corrected the initial interpretation: `intent` and `hypothesis`, absent from the live external tool registry, were not dead tools but internal marker tags consumed by `intent_queue` and `hypothesis_engine` runtime code. Removing them merely because they were not registry actions would have broken live subsystems.",
+      "reuse_category":"REUSABLE_WITH_ADAPTATION",
+      "targets":["claycode","frank","harness","unifieddb"],
+      "implication":"The current architecture must type-separate external effect/tool authority, internal model-to-cognition markers and declarative descriptions. Syntax resemblance must not collapse these namespaces. Needle owns effect authority; internal ClayCode/typed markers may exist without becoming host capabilities."
+    },
+    {
+      "finding_id":"DRIVE-TRAIN-V27-003",
+      "epistemic_class":"HISTORICAL_VALIDATOR_FALSE_POSITIVE_AND_REPAIR",
+      "status":"CURRENTLY_RELEVANT_VALIDATION_ORACLE",
+      "claim":"The prompt-export guard initially blocked rendering/training because it classified `intent` and `hypothesis` as unknown tool calls. Hand analysis showed both had live non-registry consumers, making that check a false positive. The same report found a separate legitimate freshness failure: the registry snapshot predated a `services/tools.py` change.",
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "targets":["harness","claycode","frank","unifieddb"],
+      "implication":"Validators need semantic namespace/type information and dependency freshness hashes. A conservative gate that cannot distinguish marker from authority can be as damaging as a permissive gate; fail-closed checks still require correct semantics."
+    },
+    {
+      "finding_id":"DRIVE-TRAIN-V27-004",
+      "epistemic_class":"HISTORICAL_CLASSIFIER_VALIDATION_RESULT",
+      "status":"MEASUREMENT_FOUNDATION_WITH_KNOWN_ERROR_CLASS",
+      "claim":"The system-text classifier improved from about 15-16/30 manual agreement to 29/30 on a new hand sample after correcting three systematic errors: missing lead-in conditions, overly narrow condition detection and overly broad negation. A remaining error class involved `when` clauses that described completion rather than tool-use conditions.",
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "targets":["harness","claycode","training_data"],
+      "implication":"Preserve the classifier as a historical oracle/example, not truth. Every automatic data gate should retain blind error analysis and named residual failure classes."
+    },
+    {
+      "finding_id":"DRIVE-TRAIN-V27-005",
+      "epistemic_class":"HISTORICAL_BLIND_EVALUATION_PROTOCOL_FAILURE",
+      "status":"CURRENTLY_RELEVANT_DATA_FREEZE_ORACLE",
+      "claim":"The blind sample used for v27 evaluation was initially still growing during review: 57 lines at first access and 140 at the second. The reviewer explicitly froze SHA-256 `e0bd070308f09f08ef7161dec8b9cefeed7783d8c8cd068c6ce66a759669afb2` at 140 lines and marked the review as an intermediate result, not release evidence.",
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "targets":["harness","training_data","unifieddb","claygraph"],
+      "implication":"Held-out/blind datasets must be immutable, content-hashed and generator-stopped before evaluation. A filename is not a dataset identity. Current final training-data gate must bind hashes and prevent evaluation against moving targets."
+    },
+    {
+      "finding_id":"DRIVE-TRAIN-V27-006",
+      "epistemic_class":"HISTORICAL_TRAIN_INFERENCE_PARITY_CONSTRAINT",
+      "status":"CURRENTLY_RELEVANT_MODEL_RUNTIME_CONTRACT",
+      "claim":"The v27 audit explicitly rejected rewriting system instructions only inside the dataset while leaving runtime `services/tools.py` unchanged, because that would recreate train-inference mismatch. It required source/runtime change first, then re-rendered training material.",
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "targets":["frank","claycode","harness","training_data"],
+      "implication":"Final Clay-native model data must be generated from the same versioned semantic/runtime contracts used at inference. Dataset cleanup cannot silently invent a cleaner runtime than the one the model will actually inhabit."
+    }
+  ],
+  "earned_work_candidate":{
+    "mapping_id":"HEW-DRIVE-TRAIN-V27-013",
+    "current_doomsday_rows":["DATA_FINAL_TRAINING_CORPUS","FINAL_MODEL_FINE_TUNE","MODEL_EXPORT_RUNTIME_PACKAGE","CLAY_0_1_ACCEPTANCE_RUN"],
+    "mechanism_or_result":"Post-GitHub training lineage supplies explicit class/rejection corpora, validator failure cases, internal-marker versus external-tool semantics, immutable blind-eval discipline and train-inference parity constraints.",
+    "reuse_category":"MEASUREMENT_FOUNDATION",
+    "avoided_future_hours_low":1.0,
+    "avoided_future_hours_center":4.0,
+    "avoided_future_hours_high":8.0,
+    "confidence":"MEDIUM_FOR_TEST_DATA_REUSE_LOW_FOR_HOUR_ESTIMATE",
+    "falsifier_or_validation_receipt":"Final training-data workspace must recover/hash the underlying v27 datasets/scripts and show that these classes/oracles transfer to the fixed Clay/Needle semantics; otherwise reduce or remove reuse credit."
+  },
+  "training_boundary":{"paid_or_final_training_started":false,"reason":"666 forbids automatic paid/final training and PROGRAM_STATE training_authorized=false."},
+  "progress_accounting":{"exact_level0_coverage_awarded_percent":0.0,"global_completion_credit_applied":false,"provisional_unique_avoided_future_hours_center":4.0}
+}

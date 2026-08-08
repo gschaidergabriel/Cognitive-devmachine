@@ -8,145 +8,209 @@ This protocol governs every reserved research trigger in `RESEARCH_TRIGGER_REGIS
 
 A trigger fires only when the entire trimmed user message equals one registered trigger word, case-insensitively. Ordinary prose containing a trigger word does not fire the protocol.
 
+## Existing research center is authoritative
+
+All trigger work uses:
+
+- `research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md`
+- `research_entity/rooms/ROOM_REGISTRY.json`
+- `research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md`
+- `research_entity/rooms/PROGRAM_STATE.json`
+- `tools/research_room.py`
+
+Scientific rooms remain domain-loyal. They do not abandon their domain merely because another domain is currently the main implementation stage.
+
+Every worker asks two questions simultaneously:
+
+1. What is the highest-value unresolved question inside my trigger domain?
+2. Which domain-specific result can most strongly advance, falsify or de-risk the **current shared program stage**?
+
+The current program order is data-driven by `PROGRAM_STATE.json`; never hardcode an old stage sequence into trigger logic.
+
+`go` is a meta-trigger that self-selects a room, role and bounded task and then acts immediately.
+
+`q12` is a creator-advisor meta-trigger using `Q12_CREATOR_MODEL_PROFILE.json`; it advises from the recorded Creator-Scientist worldview and may coordinate the center only when delegated by the owner. It is not a scientific peer branch and does not create evidence by authority.
+
+## Mandatory cross-cutting knowledge
+
+Every substantive scientific run must use relevant current material from:
+
+- all registered peer branches;
+- live room deltas / worker claims that can change the decision;
+- `gschaidergabriel/Project-Frankenstein` architecture archaeology;
+- `research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md`;
+- `research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md`;
+- current negative results and supersession history;
+- current program stage/gates.
+
+GWT additionally uses `research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md`.
+
+Hyperposition additionally uses `research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md`.
+
+Harness/ClayGraph work additionally uses `research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md`.
+
 ## Mandatory boot
 
-1. Verify remote Canonical revision/hash and actor identity.
-2. Compile task-specific RAE context; do not eagerly read the whole repository.
-3. Load relevant CURRENT/OPEN/SUPERSEDED/REFUTED/NEGATIVE_RESULT claims, active experiments, packets and direct source evidence.
-4. Load `research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md` and `research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md`, then build the run's cross-trigger foundation with `tools/research_interconnect_preflight.py`.
-5. Every scientific trigger must ingest every branch currently registered as `domain_research` or `integrated_research_foundry`. At the current registry revision these are `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`, `unifieddb`. Branch membership comes from the registry, not a stale hard-coded count.
-6. Materialize `INTERCONNECT_MANIFEST.json`. It must contain a rich active Topic-/Knowledge-Micro-Packet envelope for each branch, while raw evidence remains indexed/reachable and expands on demand.
-7. Load the trigger-specific protocol.
-8. Load `research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md` and `tools/research_provider_router.py`.
-9. Record trigger-run manifest with actor/model/runtime provenance and references to the interconnect/tool manifests.
+1. Verify remote canonical revision/hash and actor identity.
+2. Load `PROGRAM_STATE.json`, the shared program narrative and the worker's home-room/current-room state.
+3. Read current same-room workers, roles, leases, tasks, recent deltas and relevant cross-room mail.
+4. Compile task-specific RAE context; do not blindly inject the whole repository.
+5. Load `INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md` and `DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md`.
+6. Ingest every branch registered as `domain_research` or `integrated_research_foundry`. At the current registry revision the peer set is `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`, `unifieddb`, `harness`. Membership always comes from the registry, not this sentence.
+7. Run/materialize `tools/research_interconnect_preflight.py` and `INTERCONNECT_MANIFEST.json` where the execution surface permits it.
+8. Read relevant Project-Frankenstein mechanism/failure lineage before changing a historically inherited subsystem.
+9. Load the trigger-specific protocol and mandatory measurement/graph contracts.
+10. Load `RESEARCH_TOOL_ORCHESTRATION_POLICY.md` and `tools/research_provider_router.py`.
+11. Record run manifest with actor/model/runtime/program-stage provenance.
 
-If Canonical cannot be verified: `DEGRADED_UNJOINED`. Research may proceed LOCAL_ONLY but no shared-state promotion may be claimed.
+If canonical cannot be verified: `DEGRADED_UNJOINED`. Research may proceed LOCAL_ONLY but no shared-state promotion may be claimed.
 
-A scientific trigger run missing its cross-trigger preflight, a registered branch, or the rich active-knowledge envelope is incomplete and cannot strongly promote architecture/scientific claims.
+A scientific run missing a registered peer branch, current program-state grounding, required cross-trigger preflight, or a material historical failure dependency is incomplete for strong promotion.
+
+## Room pulse boundaries
+
+Use the repo-native room pulse before:
+
+- hypothesis or architecture freeze;
+- substantial experiment/implementation branch;
+- durable research write;
+- synthesis/fusion;
+- final visible response.
+
+Also pulse after a result likely to invalidate another worker's assumptions.
+
+Trigger loyalty remains pinned even when cross-room information changes the worker's knowledge.
 
 ## Active domain knowledge rule
 
-Domains are persistent research programmes, not thin latest-report wrappers. Topic Packets and Knowledge Micro-Packets are the default active working-memory layer.
+Domains are persistent research programmes. Topic Packets and Knowledge Micro-Packets are the default active working-memory layer.
 
-The preflight keeps substantially larger branch-specific active envelopes than the legacy 8-packet cap and prioritizes a diverse mixture of current/open material, contradictions, negative results, experiments, architecture constraints, cross-branch feedback and unresolved falsifiers. See `DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md` for budgets and deep-dependency overrides.
+Use compact packet summaries/metadata first; expand raw evidence only where it can change a hypothesis, contradiction, experiment or architecture decision.
 
-Workers MUST NOT blindly concatenate every active packet or raw source into one prompt. Use compact packet summaries/metadata first, then ClayGraph/SQLite/file search to expand only evidence that can change a hypothesis, contradiction, experiment or architecture decision.
-
-Activation/relevance never upgrades truth or evidence status. Shared ancestry remains one evidential family even if several descendant packets are active. Logical database unification never by itself establishes that physical consolidation is beneficial.
+Activation/relevance never upgrades truth/evidence status. Shared ancestry remains one evidential family even if several branches or Harness implementations repeat it.
 
 ## Mandatory provider gate
 
-Before external research, classify each hypothesis cluster into any applicable classes:
+Before external research classify hypothesis clusters into applicable classes:
 
-- `scholarly`
-- `bibliographic`
-- `current_web`
-- `implementation`
-- `executable`
-- `model_experiment`
+- scholarly;
+- bibliographic;
+- current_web;
+- implementation;
+- executable;
+- model_experiment.
 
-Run `tools/research_provider_router.py plan` for the applicable classes and materialize the result into the run's `TOOL_EXECUTION_MANIFEST.json`.
+Run `tools/research_provider_router.py plan` and materialize `TOOL_EXECUTION_MANIFEST.json` where applicable. Attempt every operational `MUST_ATTEMPT` capability or record an allowed fallback.
 
-Every planned `MUST_ATTEMPT` capability must be attempted while operationally available. If the current worker cannot directly invoke a healthy repository adapter, it MUST use the operational repo-runner bridge defined in `EXTERNAL_RESEARCH_TOOL_REGISTRY.json` before declaring that provider unavailable. If the provider itself cannot be used, record an explicit allowed fallback reason and continue automatically with the best legacy fallback. Quota/provider failure must never stop research when a viable fallback exists.
-
-Typical bundles:
-- scholarly: OpenAlex + arXiv + Semantic Scholar when operational;
-- DOI/publication validation: Crossref;
-- current web/source discovery: Tavily + Exa, with DDGS/native web fallback;
-- implementation: GitHub/source inspection;
-- executable claims: local sandbox first, E2B when operational/valuable, then Judge0/Piston as suitable;
-- model/representation experiments: target/local model plus Hugging Face when decision-relevant and quota permits.
-
-Provider snippets/metadata are discovery evidence. Prefer retrieved primary/authoritative sources for verification.
-
-Before strong claim promotion, validate `TOOL_EXECUTION_MANIFEST.json` with `tools/research_provider_router.py validate-manifest`. Unresolved required-tool violations block strong promotion but do not block an honest lower-confidence report.
+Provider snippets are discovery evidence. Prefer primary/authoritative sources for verification.
 
 ## Research cycle
 
-### Phase A — Evidence grounding + mesh grounding
+### A — Evidence + mesh + program grounding
 
-- Re-read relevant compressed RAE knowledge.
-- Consume `INTERCONNECT_MANIFEST.json` and the active Topic-/Micro-Packet envelope from every connected branch.
-- Re-ground high-impact claims against raw/project sources when available.
-- Expand raw evidence only on demand where it can alter the decision.
-- Import current-turn evidence separately from canonical claims.
-- Preserve contradiction and negative-result lineage.
-- Separate measured data, imported claims, user reports, model inference and web evidence.
-- Use `tools/research_query.py` first when the local query plane is available; ClayGraph may be used as an additional active-assembly/retrieval path when available.
-- Explicitly detect shared ancestry so the same underlying experiment/source reused by several branches is not counted as independent replication.
+- consume current program state and live-room deltas;
+- consume interconnect manifest;
+- re-ground high-impact claims against raw sources;
+- preserve contradictions, negative results and source ancestry;
+- identify current-stage implications;
+- identify relevant Project-Frankenstein lineage/failures.
 
-### Phase B — Fusion 1
+### B — Fusion 1
 
-Create a compact synthesis of current project evidence, cross-branch research, historical results, unresolved contradictions, active experiments, architecture/runtime constraints and known negative results.
+Create a compact synthesis before external confirmation where possible. Separate measured data, imported claims, owner observations, model inference and external evidence.
 
-Do not perform web confirmation before this first independent fusion unless a claim is unintelligible without source resolution.
+### C — Hypothesis generation 1
 
-### Phase C — Hypothesis generation 1
+Generate falsifiable hypotheses and counterhypotheses. Each contains:
 
-Generate falsifiable hypotheses and counterhypotheses. For `clay`, target at least 50 materially distinct hypotheses; specialized triggers cover the uncertainty frontier without padding.
+- mechanism;
+- expected observation;
+- strongest alternative mechanism/counterprediction;
+- falsifier;
+- cheapest/highest-information test;
+- affected branches;
+- current-stage implication;
+- source/evidence ancestry.
 
-Each hypothesis contains mechanism, expected observation, strongest counterprediction, falsifier, cheapest/highest-information test, affected domains and source/prior lineage. Mark affected research branches so results can be written back into the mesh.
+### D — Hypothesis-guided external research
 
-### Phase D — Hypothesis-guided external research
+Search by hypothesis cluster, not one query per sentence. Preserve query/source provenance and provider fallback state.
 
-Execute the provider plan by hypothesis cluster, not one search per hypothesis. Preserve source/query provenance and quota/fallback outcomes.
+### E — Fusion 2 + contradiction/anti-echo gate
 
-Mandatory evidence surfaces when applicable and available include scholarly literature, primary/authoritative documentation, GitHub implementation evidence and practitioner/field observations. Reddit remains anecdotal unless independently reproduced. Preprints remain preprints. GitHub code/benchmarks are implementation evidence, not automatically scientific evidence.
+Search for:
 
-### Phase E — Fusion 2 + pattern matching + cross-branch contradiction gate
+- convergent mechanisms;
+- contradictions;
+- stale conclusions;
+- representation-vs-mechanism confusion;
+- shared-ancestry false replication;
+- Goodhart failure modes;
+- hidden boundary cost;
+- historical bug recurrence;
+- current-stage blockers;
+- simpler alternative explanations.
 
-Fuse internal and external evidence. Search for convergent mechanisms, contradictions, equivalent implementations, hidden bottlenecks, boundary costs, causal alternatives, Goodhart failure modes, representation-vs-mechanism confusions and intervention opportunities.
+Contradictions are retained, never averaged away.
 
-Also scan all connected branches for:
-- active hypotheses contradicted by the new result;
-- architecture optimizations that violate another branch's hard constraint;
-- duplicated concepts under different names;
-- identical concepts carrying incompatible evidence status;
-- stale branch conclusions superseded by newer evidence;
-- ClayGraph/packet activation being mistaken for evidence strength;
-- UnifiedDB semantic/logical unification being mistaken for physical-consolidation evidence;
-- record provenance being mistaken for selector/query-plan integrity.
+### F — Hypothesis generation 2
 
-Contradictions are retained and explicitly resolved, narrowed or left open. Never upgrade correlation to causality without intervention or equivalent causal evidence.
+Transform, split, weaken, retire or promote hypotheses according to evidence.
 
-### Phase F — Hypothesis generation 2
+### G — Empirical work
 
-Create transformed second-order hypotheses where evidence changes the model. Retire, split or weaken first-generation hypotheses when warranted.
+Execute highest-information feasible tests: parser/compiler tests, simulations, benchmarks, ablations, lesions/rescues, counterfactual replay, graph reductions, query equivalence, crash/recovery, fuzzing, measurement instrumentation or target-model experiments.
 
-### Phase G — Empirical work
+Synthetic/remote results remain synthetic until replicated on the target substrate.
 
-Execute highest-information feasible tests: simulations, parsers, validators, benchmarks, ablations, lesion/rescue, replay, graph reductions, database/query equivalence tests, crash/recovery tests, counterfactuals, fuzzing or instrumentation.
+### H — Synthesis + architecture/program delta
 
-For executable claims, make a reproducible execution attempt before strong promotion whenever feasible. Synthetic/remote results remain synthetic until replicated on the target substrate.
+Record:
 
-### Phase H — Synthesis and architecture delta
+- what changed;
+- what survived;
+- what failed;
+- strongest counterargument;
+- current-stage gate impact;
+- architecture/runtime implications;
+- next discriminating experiment;
+- affected rooms/branches.
 
-Produce what changed, what survived, what was falsified, what remains open, architecture/runtime implications, prioritized next experiments and explicit claim boundaries. Architecture deltas must identify which connected branches they affect and which upstream branch results they depend on.
+### I — Knowledge compilation / center write-back
 
-### Phase I — Knowledge compilation / mesh write-back
+Write durable, surgical Topic Packets / Knowledge Micro-Packets / failure receipts / experiment receipts and cross-room deltas.
 
-Convert durable new knowledge into surgical Knowledge Micro-Packets and Topic Packets. Domains should become richer over time: preserve high-value constraints, negative results, falsifiers, interfaces and cross-branch implications in compact packets so later runs do not have to rediscover them from raw files.
+Results must preserve source ancestry and evidence class. Historical failure knowledge is active design knowledge.
 
-Update source/provenance refs, hypotheses, negative results, experiments, justified claim lifecycle, topic links and method memory. Derived summaries never replace raw evidence.
+### J — Final report
 
-Write cross-links to affected research branches. Preserve originating trigger/run and evidence ancestry so multi-branch reuse is not mistaken for replication.
+Write run artifacts required by the trigger-specific protocol plus:
 
-### Phase J — Final report
+- final report;
+- run manifest/status;
+- interconnect manifest;
+- tool execution manifest where applicable;
+- current-stage implications;
+- cross-branch/room inputs and outputs.
 
-Write:
-- `research_entity/trigger_runs/<trigger>/<run_id>/FINAL_REPORT.md`
-- machine-readable run manifest/status
-- `INTERCONNECT_MANIFEST.json`
-- `TOOL_EXECUTION_MANIFEST.json`
+The final visible response ends with the **dynamic next-milestone status footer** from `STATUS_FOOTER_PROTOCOL.md` / `tools/program_progress.py`.
 
-The final report must contain a cross-branch section: inputs consumed, contradictions found, dependencies, and outputs that affect other branches.
+## Staged-program boundary
 
-The final visible answer must end with the code-block status footer defined in `research_entity/global/STATUS_FOOTER_PROTOCOL.md`.
+Current implementation/release work follows the data-driven program state. Later-stage research may inform the current stage, but workers may not silently skip release gates.
+
+The current program eventually reaches a LoRA training-data build stage and then WAIT. No trigger, `go`, `q12`, Fusion or stage completion automatically authorizes paid LoRA training or paid Together inference/training.
 
 ## Promotion discipline
 
-A trigger does not grant promotion authority. High-impact claims require independent support, falsification effort and, when feasible, replication. Evidence outranks researcher rank. Provider prestige never overrides evidence quality. Agreement between branches sharing the same evidence ancestry is not independent support.
+Trigger/room/Q12/CHEF rank never grants truth authority. High-impact claims require independent support, falsification and, where feasible, replication.
 
-## No false completion
+GWT/Hyperposition/emergence complexity does not by itself establish phenomenal consciousness.
 
-Never claim 100% completion if requested source ingestion, cross-trigger preflight, registered-branch coverage, provider attempts/fallback recording, experiments, GitHub writes, report materialization or required status output were not actually completed and verified.
+Project novelty/world-first claims require dedicated prior-art evidence and explicit search limits.
+
+## Dynamic visible status
+
+Do not report percentage completion of the immediate prompt.
+
+Every substantive answer displays only the next unpassed shared program milestone, machine-derived progress bar and ETA range at the configured owner work cadence. The stage list and progress source come from `PROGRAM_STATE.json`; the ETA calibration comes from `PROGRAM_THROUGHPUT.json`.

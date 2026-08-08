@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0501+0700-chatgpt-secondary-drive-aicore-updater-recovery-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "SUBTREE_FROZEN_AND_FAILURE_ORACLES_EXTRACTED",
+  "observed_at": "2026-08-09T05:01:00+07:00",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_UPDATER_SUBMANIFEST.json",
+  "oracle_set": "research_entity/archive_assimilation/oracles/DRIVE_AICORE_UPDATER_RECOVERY_ORACLES.json",
+  "source_scope": {
+    "drive_folder": "drive:1g4J8JhgCbaAcP2Y_T3NvHmrchmMBpNYl:aicore/updater",
+    "recursive_files": 8,
+    "recursive_folders": 0,
+    "reference_repository": "gschaidergabriel/Project-Frankenstein",
+    "reference_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "byte_identity": "8/8 Drive files exactly match corresponding frozen-head git blobs"
+  },
+  "static_reproduction": {
+    "method": "Local Python source predicates over exact Drive bytes",
+    "result": "9/9 PASS",
+    "predicates": [
+      "no_dirty_worktree_gate",
+      "stale_lock_unlinks_without_pid_liveness",
+      "stop_failures_warn_but_return_true",
+      "pip_mutates_env",
+      "rollback_git_only_not_dependency_restore",
+      "start_failure_fail_open",
+      "health_failure_returns_true",
+      "run_ignores_health_result_and_completes",
+      "recovery_unconditional_sequence_and_success"
+    ],
+    "boundary": "Static reachability evidence only; destructive failure paths were not executed on a real system."
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-UPD-001",
+      "epistemic_class": "EXACT_CROSS_SOURCE_BYTE_IDENTITY",
+      "status": "VERIFIED",
+      "claim": "Drive aicore/updater is an exact eight-file alias of the frozen Project-Frankenstein updater subtree, including frank_updater.py and frank_recovery.py. It should be provenance-linked and deduplicated rather than treated as independent implementation evidence.",
+      "targets": ["harness","frank","claygraph","unifieddb","clay"]
+    },
+    {
+      "finding_id": "DRIVE-UPD-002",
+      "epistemic_class": "CURRENT_FROZEN_HEAD_CODE_NEGATIVE_RESULT",
+      "status": "REACHABLE_TRANSACTION_GAP",
+      "claim": "Updater preflight has no dirty-worktree preservation gate, while rollback executes `git reset --hard` to the saved SHA. A rollback can therefore erase unrelated tracked local edits.",
+      "targets": ["harness","claycode","unifieddb","clay"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "DRIVE-UPD-003",
+      "epistemic_class": "CURRENT_FROZEN_HEAD_CODE_NEGATIVE_RESULT",
+      "status": "REACHABLE_CONCURRENCY_GAP",
+      "claim": "Update lock reclamation uses mtime >600s and unlinks the lock without validating the stored PID/process liveness. A legitimate long-running update can therefore lose exclusion to a second updater.",
+      "targets": ["harness","unifieddb","claycode"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "DRIVE-UPD-004",
+      "epistemic_class": "CURRENT_FROZEN_HEAD_CODE_NEGATIVE_RESULT",
+      "status": "REACHABLE_QUIESCENCE_GAP",
+      "claim": "Failed affected-service stops are warnings and do not block the update transaction, so source/dependency mutation can proceed without proving all required stateful writers are quiescent.",
+      "targets": ["harness","unifieddb","frank","clay"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "DRIVE-UPD-005",
+      "epistemic_class": "CURRENT_FROZEN_HEAD_CODE_NEGATIVE_RESULT",
+      "status": "REACHABLE_MIXED_VERSION_ROLLBACK",
+      "claim": "Rollback restores only Git source state plus service starts. Because pip dependency synchronization happens inside the rollback-gated region but is not reversed, a later failure can leave old source with new dependencies. The historical transaction is not version-atomic across source and runtime package state.",
+      "targets": ["harness","claycode","unifieddb","frank"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "DRIVE-UPD-006",
+      "epistemic_class": "CURRENT_FROZEN_HEAD_CODE_NEGATIVE_RESULT",
+      "status": "REACHABLE_FALSE_SUCCESS",
+      "claim": "Service start failures are warnings; health check records failure but returns True; main run ignores start/health/model readiness results and still prints UPDATE COMPLETE. A degraded runtime can therefore receive a success outcome.",
+      "targets": ["harness","frank","claycode","clay"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "DRIVE-UPD-007",
+      "epistemic_class": "CURRENT_FROZEN_HEAD_CODE_NEGATIVE_RESULT",
+      "status": "ROLLBACK_BOUNDARY_GAP",
+      "claim": "Post-update overlay repair can mutate the installed systemd user service outside the Git repository after the rollback-gated steps, without an inverse receipt bound to the update transaction.",
+      "targets": ["harness","claycode","clay"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "DRIVE-REC-008",
+      "epistemic_class": "CURRENT_FROZEN_HEAD_CODE_NEGATIVE_RESULT",
+      "status": "REACHABLE_DESTRUCTIVE_RECOVERY_GAP",
+      "claim": "Database recovery continues to backup, wipe and reference-copy after individual service stop failures; it does not prove all authoritative DB writers are quiescent before destructive replacement.",
+      "targets": ["harness","unifieddb","frank"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "DRIVE-REC-009",
+      "epistemic_class": "CURRENT_FROZEN_HEAD_CODE_NEGATIVE_RESULT",
+      "status": "REACHABLE_FALSE_RECOVERY_SUCCESS",
+      "claim": "Recovery performs no post-copy SQLite integrity/schema/version compatibility gate and returns Recovery Complete even when one or more service starts fail. Recovery success is therefore not equivalent to restored semantic readiness.",
+      "targets": ["harness","unifieddb","frank","clay"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    }
+  ],
+  "current_architecture_implications": {
+    "harness": "Add all nine updater/recovery oracles as mandatory differential tests for H1/H2/H3 and the final Recovery receipt.",
+    "claycode": "Model update/recovery as typed multi-resource transactions with explicit commit/abort/effect/inverse semantics; Git SHA alone is not transaction identity.",
+    "unifieddb": "Require writer quiescence/lease release plus DB version/schema/integrity receipts around recovery; data restoration and runtime readiness are distinct gates.",
+    "frank": "A successful update/recovery must mean semantic readiness, not merely source checkout or process start.",
+    "clay": "Use the historical failure family as direct evidence for Safe-Effect geometry: authority/effect scope must include source, dependencies, machine config, models, DBs and runtime readiness together."
+  },
+  "earned_work_candidate": {
+    "mapping_id": "HEW-DRIVE-UPDATER-RECOVERY-013",
+    "current_doomsday_rows": ["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","UDB_UNIFIED_DATABASE","CLAY_0_1_ACCEPTANCE_RUN"],
+    "mechanism_or_result": "Exact historical updater/recovery implementation plus nine code-derived fail-open/mixed-version/destructive-recovery oracles eliminate rediscovery and define concrete recovery acceptance tests.",
+    "reuse_category": "NEGATIVE_RESULT_VALUE",
+    "avoided_future_hours_low": 2.0,
+    "avoided_future_hours_center": 4.0,
+    "avoided_future_hours_high": 8.0,
+    "confidence": "MEDIUM_FOR_ORACLE_REUSE_LOW_FOR_HOUR_ESTIMATE",
+    "falsifier_or_validation_receipt": "H1/H2/H3/final recovery harness must instantiate these failure conditions and show the current mediated transaction either fails closed or restores the complete resource-version set before success."
+  },
+  "progress_accounting": {
+    "subtree_exact_identity_coverage": "8/8 files complete",
+    "whole_drive_exact_level0_coverage_awarded_percent": 0.0,
+    "historical_earned_work_credit_applied": false,
+    "reason": "Whole recursive Drive plus full Project-Frankenstein history denominator is still not fully frozen; candidate awaits live crossread and central CAS aggregation."
+  }
+}

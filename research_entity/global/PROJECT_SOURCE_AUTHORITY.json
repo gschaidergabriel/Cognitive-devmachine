@@ -1,11 +1,12 @@
 {
-  "schema_version": "1.0",
-  "authoritative_chatgpt_project_source": "PROJECT_SOURCE_SINGLE_BOOTSTRAP.txt",
-  "policy": "This is the only ChatGPT Project Source file required. All other research state, protocols, trigger definitions, micro-packets, topic packets, claims, experiments, reports and provenance remain in GitHub and are loaded on demand.",
+  "schema_version": "1.1",
+  "authoritative_chatgpt_project_source": "PROJECT_SOURCE_SINGLE_BOOTSTRAP_V2.txt",
+  "policy": "This is the only ChatGPT Project Source file required. All other research state, protocols, trigger definitions, micro-packets, topic packets, claims, experiments, reports and provenance remain in GitHub and are loaded on demand. Command/status membership is always resolved from PROJECT_COMMAND_REGISTRY.json and STATUS_FOOTER_PROTOCOL.md so the visible status box cannot silently retain a stale trigger list.",
   "legacy_source_sentinels": [
+    "PROJECT_SOURCE_SINGLE_BOOTSTRAP.txt",
     "000_FRANK_GLOBAL_RESEARCH_ENTITY_AUTOBOOT.txt"
   ],
-  "legacy_policy": "Legacy sentinels may remain in GitHub for history/recovery but must not outrank PROJECT_SOURCE_SINGLE_BOOTSTRAP.txt when both are visible.",
+  "legacy_policy": "Legacy sentinels may remain in GitHub for history/recovery but must not outrank PROJECT_SOURCE_SINGLE_BOOTSTRAP_V2.txt when both are visible.",
   "canonical_backend": "gschaidergabriel/clay-global-research-entity",
   "updated_by": "chatgpt-secondary",
   "provider": "OpenAI",

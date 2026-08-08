@@ -1,7 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "manifest_id": "DRIVE_AICORE_UI_PARTIAL_RECURSIVE_DENOMINATOR",
   "created_at": "2026-08-09T06:25:00+07:00",
+  "updated_at": "2026-08-09T06:31:00+07:00",
   "actor": "chatgpt-secondary",
   "drive_root": {
     "path": "aicore/ui",
@@ -57,6 +58,24 @@
         "direct_subfolders": 7,
         "direct_file_names": ["index.html","test-waveform.html","test-sprite.html"],
         "subfolders": ["assets","img","sprites","synteq","js","fonts","css"],
+        "assets": {
+          "direct_files": 4,
+          "direct_folders": 1,
+          "files": ["herz-leer.png","herz-voll.png","avatar-lokal.png","avatar-master.png"],
+          "fonts": {"files": 1, "subfolders": 0, "file": "PressStart2P.ttf"},
+          "recursive_leaf_files": 5,
+          "class": "UI_MEDIA_FONT_SUPPORT",
+          "denominator_status": "EXACT_RECURSIVE_ENUMERATION_CLOSED_IDENTITY_PENDING"
+        },
+        "img": {
+          "direct_files": 5,
+          "direct_folders": 1,
+          "direct_files_class": "UI_EMOTE_MEDIA_SUPPORT",
+          "faces": {
+            "status": "RECURSION_OPEN",
+            "observed": "multiple Jul/Aug face PNGs plus nested _orig/; do not infer a final count from the truncated connector render"
+          }
+        },
         "important_boundary": "static/synteq is the separate Aug-6 web/UI Synteq tree (Drive folder 15X9JGa5v09TbVYWJ_3aX9adFQEIDgjWs), not the aicore/synteq runtime subtree. It must be recursively inventoried independently rather than conflated with the runtime Synteq branch."
       },
       "identity_status": "PENDING_RECURSIVE_STATIC"
@@ -66,6 +85,7 @@
   "known_identity_closed_outside_webui_static": 5,
   "recursive_global_status": "PARTIAL_STATIC_RECURSION_OPEN",
   "source_class_rule": "UI code, tests, styles and media are distinct source classes. Media/build/support artifacts do not receive semantic implementation credit merely by existing.",
+  "counting_guard": "Never infer exact child count from a connector display that is visibly truncated; recurse or shard first.",
   "earned_work_hours_added": 0,
   "global_level0_exact_credit": 0.0
 }

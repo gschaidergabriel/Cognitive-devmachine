@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
   "transport": "repository_only",
   "global_chief": false,
@@ -10,9 +10,11 @@
   "meta_rooms": {
     "center": {
       "kind": "whole_mesh_meta_room",
-      "triggers": ["fusion", "hypofusion", "go", "q12"],
+      "triggers": ["fusion", "hypofusion", "666", "q12"],
       "persistent_chief": false,
-      "go_protocol": "research_entity/triggers/GO_AUTODISPATCH_PROTOCOL.md",
+      "autonomous_protocol": "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
+      "level0_protocol": "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
+      "post_level0_field_protocol": "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
       "q12_protocol": "research_entity/triggers/Q12_CREATOR_ADVISOR_PROTOCOL.md",
       "q12_profile": "research_entity/advisor/Q12_CREATOR_MODEL_PROFILE.json",
       "q12_state_protocol": "research_entity/advisor/q12/Q12_STATE_MODEL_PROTOCOL.md",
@@ -59,5 +61,5 @@
     "before_final_visible_response"
   ],
   "event_types": ["JOIN", "PULSE", "ROLE_CLAIM", "TASK", "DELTA", "CROSS_ROOM_DELTA", "QUESTION", "REPLY", "CHALLENGE", "ROAST", "HANDOFF", "CROSSREAD", "INVALIDATE", "COMPLETE", "LEAVE"],
-  "rule": "Trigger sessions auto-join their pinned home room. Same-room peers self-organize with ephemeral roles. All dispatch must honor CAPACITY_STATE.json so unavailable AI workers or future compute are not scheduled as current capacity. Cross-room deltas may change knowledge but not trigger loyalty. The go meta-trigger joins center for discovery, self-selects one specialist room/role/task and acts immediately. The q12 meta-trigger joins center as the human creator-advisor simulation, loads its separate persistent state/world/goals/memory, reads the Research Entity only through the information bridge, and may coordinate rooms only when delegated by the owner. No room or advisor role changes evidence status by itself."
+  "rule": "Trigger sessions auto-join their pinned home room. Same-room peers self-organize with ephemeral roles. All dispatch must honor CAPACITY_STATE.json so unavailable AI workers or future compute are not scheduled as current capacity. Cross-room deltas may change knowledge but not trigger loyalty. The 666 meta-trigger joins center; before Level-0 PASS it resumes archive assimilation, and after Level-0 PASS it spawns a seeded diverse research field that cross-connects and feeds results into specialist rooms. The q12 meta-trigger joins center as the human creator-advisor simulation, loads its separate persistent state/world/goals/memory, reads the Research Entity only through the information bridge, and may coordinate rooms only when delegated by the owner. No room or advisor role changes evidence status by itself."
 }

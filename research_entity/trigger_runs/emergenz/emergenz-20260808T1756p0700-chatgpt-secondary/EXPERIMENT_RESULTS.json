@@ -1,0 +1,52 @@
+{
+  "schema_version":"1.0",
+  "run_id":"emergenz-20260808T1756p0700-chatgpt-secondary",
+  "evidence_boundary":"All EM1 numeric experiments are local synthetic mechanism/null-control tests with fixed seeds. They are not live FRANK rates, not target-Qwen evidence and not evidence of phenomenal consciousness.",
+  "experiments":[
+    {
+      "experiment_id":"EXP-EM1-MECHANISTIC-RESCUE-001",
+      "seed":88081756,
+      "n":200000,
+      "design":"Construct a nonlinear mediator M=A*B that causally contributes to current output and future re-entry state. Lesion M; compare true mechanism restoration with a fake endpoint patch that directly restores current output but leaves M absent.",
+      "results":{"lesion_current_mse":0.8192553588619071,"true_rescue_current_mse":0.0,"fake_output_rescue_current_mse":0.0,"future_reentry_mse_after_fake_rescue":0.277443626926555,"future_reentry_mse_after_true_rescue":0.0},
+      "inference":"Endpoint behavioral rescue can be perfect while the causal mechanism and next-state/re-entry remain broken. Rescue evidence must verify mechanism/path restoration and downstream trajectory, not only current score."
+    },
+    {
+      "experiment_id":"EXP-EM1-PARTITION-SEARCH-NULL-002",
+      "seed":88081756,
+      "train_n":4000,
+      "heldout_n":100000,
+      "candidate_partitions":2000,
+      "design":"Null dynamics: current and next microstate are independent uniform 16-state variables, so true causal information is zero for every fixed macro partition. Search 2,000 random partitions on finite training data and evaluate the selected partition on a large held-out sample.",
+      "results":{"best_train_macro_mi_bits":0.007736702958740727,"same_partition_heldout_mi_bits":0.00012059290811413726,"mean_top50_train_mi_bits":0.006117350211607599,"mean_top50_heldout_mi_bits":0.00014380561332358113,"best_partition_groups":6},
+      "inference":"Post-hoc partition search can manufacture a finite-sample emergence-looking score under a true null. Macro/assembly discovery needs preregistration, nested holdout/cross-validation or a partition-search null distribution."
+    },
+    {
+      "experiment_id":"EXP-EM1-ROLE-RECURRENCE-003",
+      "seed":88081756,
+      "n":50000,
+      "design":"Four-member assemblies recur with identical roles in about half the trials; otherwise the exact same members are permuted across source/target/constraint/context roles. Compare bag-of-members identity with role-aware relation identity.",
+      "results":{"true_same_count":25134,"bag_false_recurrence_count":24866,"bag_false_recurrence_rate_all":0.49732,"role_aware_false_recurrence_count":0,"role_aware_true_recurrence_recall":1.0},
+      "inference":"Member overlap alone can label role-swapped systems as recurrent. Emergent assembly recurrence must preserve causal-role/relation identity."
+    },
+    {
+      "experiment_id":"EXP-EM1-TE-COMMON-DRIVER-004",
+      "seed":88081756,
+      "n":250000,
+      "design":"Common driver Z_t causes noisy proxy X_t and target Y_{t+1}; X has no direct causal edge to Y. Estimate bivariate transfer-entropy proxy I(X_t;Y_{t+1}|Y_t), then condition additionally on the true driver Z_t.",
+      "results":{"bivariate_te_bits":0.2537671974058939,"conditional_te_given_driver_bits":0.000011620273645404583},
+      "inference":"Large directed-prediction information can arise from a common driver. TE is a discovery/diagnostic surface, not direct-causality proof without confounder control or intervention."
+    },
+    {
+      "experiment_id":"EXP-EM1-STAGE-ORTHOGONAL-SYNERGY-005",
+      "seed_family":[8801,8802,8803],
+      "design":"Construct graph-prior G, workspace-selection W and re-entry R factors. In the null, stages are additive and W has no causal effect; in the synergy condition add a true G*W*R term of 0.35. Separately construct a bundled all-on/off contrast where projection also changes.",
+      "results":{"null_three_way_omega":-0.0014368586671017786,"true_synergy_three_way_omega":0.353306397673682,"bundled_null_all_on_vs_off":0.650228313177,"bundled_true_synergy_all_on_vs_off":1.001005400141691},
+      "inference":"A bundled pipeline contrast can look strongly emergent under an additive null. Stage-orthogonal factorial interaction recovered approximately zero under the null and the configured three-way synergy when present."
+    }
+  ],
+  "imported_prior_not_counted_as_new_replication":[
+    {"source":"Clay G9 EXP matched-persistence control","result":"functional AR(1) and echo AR(1) had similar persistence, but only functional lesion changed MSE","role":"supports recurrence-is-not-emergence boundary; shared mesh ancestry"},
+    {"source":"GWT R4 CSOC","result":"bundled graph+workspace+projection contrast produced ~0.2396 apparent effect under a constructed zero direct workspace effect, clean workspace intervention recovered zero","role":"supports stage-orthogonal measurement; not independent of mesh ancestry"}
+  ]
+}

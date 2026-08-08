@@ -1,0 +1,20 @@
+{
+  "packet_id":"claycode-cc9-certified-basis-compositional-closure",
+  "title":"CC-RC1.4 Certified Basis & Compositional Closure",
+  "status":"OPEN",
+  "origin_trigger":"claycode",
+  "origin_run":"claycode-20260808T1723p0700-chatgpt-secondary",
+  "origin_actor":"chatgpt-secondary",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "candidate":"CC-RC1.4 Certified Basis & Compositional Closure (CBCC)",
+  "summary":"Refine CC8 OTCC with operation-specific multi-epoch causal basis witnesses, transitive/dispatch-conservative effect closure, canonical resource identity and projection receipts. Runtime observation may narrow a trusted static closure but not silently expand it. High-stakes freshness/authority decisions are deterministically compiled before small-model consumption.",
+  "affected_branches":["frank","clay","claygraph","gwt","hyperposition","emergenz","claycode"],
+  "upstream_dependencies":["CC-RC1.3 OTCC","FRANK C4 CognitiveFrame","Clay G8 coverage-aware fast path","ClayGraph G1d epoch-pinned Assembly","GWT reconstruction/uptake separation","Hyperposition H2 scope-soundness"],
+  "key_fields":["state_root","basis_witnesses[]","op_semantics_hash","canonical_resources[]","predicate_witnesses[]","invariant_witnesses[]","volatile_witnesses[]","required_caps[]","closure_complete","observed_trace_ref","semantic_hash","projection_schema_hash","projection_hash","effect_intent/receipt"],
+  "hard_rules":["model output never mints authority","unknown dynamic target/alias/FFI scope escalates","activation is not truth or GWT ignition","state_root remains snapshot identity but not universal validity predicate","cross-branch agreement with shared ancestry is not replication"],
+  "evidence_refs":["research_entity/trigger_runs/claycode/claycode-20260808T1723p0700-chatgpt-secondary/EXPERIMENT_RESULTS.json","research_entity/runtime/tool_results/cc9-judge0-closure-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-groq-raw-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-groq-compiled-20260808T1723p0700.json"],
+  "knowledge_micro_packets":["KMP-CC9-CERTIFIED-CAUSAL-BASIS","KMP-CC9-COMPOSITIONAL-EFFECT-CLOSURE","KMP-CC9-COMPILED-READER-SURFACE"],
+  "open_questions":["Can real FRANK operations be analyzed with complete enough closure across Python callbacks/DB/tool/plugin boundaries?","Which basis dimensions need exact equality versus causal/lineage compatibility?","What canonical resource identity should span DB rows, files, tool capabilities, URLs and external accounts?","Does a pinned Qwen3-4B gain accuracy/tokens from compiled projections without losing useful reasoning flexibility?","Can a Clay-written compiler reproduce closure semantics independently of K0?"],
+  "highest_information_next_tests":["EXP-CC9-LIVE-OPREGISTRY-CLOSURE","EXP-CC9-FRANK-CLAYGRAPH-BASIS-TRACE","EXP-CC9-ALIAS-FFI-FUZZ","EXP-LIVE-XENO-CLAY-FACTORIAL","EXP-CC9-SELFHOST-CLOSURE-EQUIVALENCE"],
+  "promotion":"NONE"
+}

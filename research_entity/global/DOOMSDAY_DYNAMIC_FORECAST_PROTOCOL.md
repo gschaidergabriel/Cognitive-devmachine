@@ -1,35 +1,86 @@
-# DOOMSDAY Dynamic Forecast Protocol — Clay 0.1
+# DOOMSDAY Dynamic Forecast Protocol — Clay 0.1 Chief-Developer First Test
 
 **Status:** PROJECT_OWNER_FIXED_FORECAST_METHOD
 **Target:** `Clay 0.1`
 **Display name:** `DOOMSDAY` (internal joke)
+**Acceptance contract:** `research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md`
 
 ## 0. Target definition
 
-DOOMSDAY is the first successful end-to-end run on project-controlled hardware of:
+DOOMSDAY is **not a public or production release**.
+
+It is the moment when the first complete Clay 0.1 system is good enough that the chief developer may begin the first real internal hands-on test under the strict acceptance contract.
+
+Required system identity:
 
 `Clay-programmed FRANK architecture`
-`+ one-module/binary distilled runtime`
+`+ frozen ClayCode semantics/runtime`
+`+ one-module/binary distilled executable architecture`
 `+ UnifiedDB`
-`+ fully fine-tuned final Clay-native model`
-`+ reproducible local/project-hardware boot`
-`= Clay 0.1`
+`+ final fully fine-tuned Clay-native model`
+`+ real project-controlled hardware boot`
+`+ complete required observability/replay/recovery/safety instrumentation`
+`+ strict internal acceptance suite PASS`
+`= Clay 0.1 ready for chief-developer first test`
 
-A Reference Harness, a Clay Harness, a binary without the final model, or a fine-tuned model without the integrated binary/UnifiedDB runtime is **not** DOOMSDAY.
+A Reference Harness, Clay Harness, binary without the final model, fine-tuned model without the real architecture, or integrated system with skipped mandatory tests is not DOOMSDAY.
 
-## 1. No fixed DOOMSDAY date
+## 1. "Perfect" means contract-perfect for first internal test
 
-The repository must never store one authoritative fixed DOOMSDAY date.
+Absolute absence of every possible future bug cannot be proven. Therefore "perfect" for DOOMSDAY is operationally defined by the Chief Developer Acceptance Contract:
 
-Every status calculation recomputes the forecast from current evidence.
+- zero known P0/P1 defects;
+- zero unresolved architecture-contract violations;
+- zero skipped mandatory tests;
+- no fake/mock path on defining Clay 0.1 behavior;
+- required H1/H2/H3 differential continuity passes;
+- UnifiedDB/state/replay/recovery invariants pass;
+- effect-authority/safety invariants pass;
+- required GWT/Hyperposition observability exists and is self-consistent;
+- required fuzz/property/adversarial/race/concurrency/crash/recovery thresholds pass;
+- final fully fine-tuned model is really integrated;
+- exact accepted identity boots reproducibly on project-controlled hardware.
 
-Required underlying form is a critical-path table:
+This is an internal developer acceptance milestone, not a shipping milestone.
 
-| Workstream | Current evidence/progress | Dependency | Capacity basis | Remaining effort | Acceleration/change | Forecast confidence |
+## 2. No fixed DOOMSDAY date
 
-The date/range is a conclusion of the table, not an input.
+The repository never stores one authoritative fixed DOOMSDAY date.
 
-## 2. Required critical-path workstreams
+Every status calculation recomputes it from a current critical-path table, current evidence, measured throughput, capabilities/APIs, hardware availability, verified jumps/blockers and historical earned work.
+
+## 3. Historical earned work is first-class
+
+The project did not begin when the current release workspaces were created.
+
+Owner-reported historical investment:
+
+`~8 months * 4 active days/week * 10 h/day ~= 1,390 h`
+
+That history includes FRANK architecture development, XENO, ClayCode, GWT/emergence work, experiments, measurements, failed approaches and negative results.
+
+Therefore DOOMSDAY progress has two layers:
+
+1. **historical earned work** — prior work that demonstrably eliminates, implements or de-risks current Clay 0.1 work;
+2. **current remaining scope progress** — progress through the present critical-path workstreams.
+
+Canonical historical mapping:
+
+`research_entity/forecast/HISTORICAL_EARNED_WORK.json`
+
+During Level 0, while exact mapping is incomplete, a clearly labeled temporary calibration prior may be used. It must never be called exact. Once Level 0 finishes, evidence-mapped reusable/avoided current-work equivalents replace that prior.
+
+Historical hours with no demonstrated connection to current Clay 0.1 remain valuable history but do not inflate completion.
+
+## 4. Level 0 is a 3-hour calibration/assimilation sprint
+
+Level 0 has a hard active wall-clock ceiling of **3 hours**.
+
+Its purpose is not to redo eight months of work. It rapidly inventories/deduplicates/extracts the 400 MB Drive archive plus Project-Frankenstein, reconstructs lineage, integrates missing knowledge and maps historical earned work onto the current Clay 0.1 path.
+
+The 3-hour SLA changes throughput architecture, not evidence standards.
+
+## 5. Required critical-path workstreams
 
 At minimum every forecast evaluates:
 
@@ -47,241 +98,142 @@ At minimum every forecast evaluates:
 12. `PROJECT_HARDWARE_DEPLOYMENT`
 13. `CLAY_0_1_ACCEPTANCE_RUN`
 
-Rows may be split/merged when evidence shows the real work structure changed. New necessary rows must be added. Proven-obsolete rows are retired with a receipt rather than silently deleted.
+These names are implementation workstreams, not public-release stages. Rows may change when evidence proves the real critical path changed.
 
 Canonical row model:
-
 `research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json`
 
-## 3. Dynamic evidence inputs
+## 6. Dynamic evidence inputs
 
-The forecast reads current state from:
+Read each forecast from current state including:
 
-- `research_entity/rooms/PROGRAM_STATE.json`;
-- exact stage workspaces/release manifests;
-- `research_entity/archive_assimilation/666_WORKSPACE.json`;
-- `research_entity/rooms/PROGRAM_THROUGHPUT.json`;
-- `research_entity/rooms/CAPACITY_STATE.json`;
-- Harness/ClayCode/UnifiedDB workspaces and test receipts;
-- training-data workspace when created;
-- actual fine-tuning job receipts after owner authorization;
-- actual model export/inference benchmarks;
-- actual project-hardware validation receipts;
-- `research_entity/forecast/DOOMSDAY_EVENTS.jsonl` for verified shocks/accelerators/blockers;
-- `research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json`;
-- every `research_entity/global/*_RESEARCH_CAPABILITY.json` extension;
-- `research_entity/forecast/DOOMSDAY_CAPABILITY_RULES.json`.
+- `PROGRAM_STATE.json`;
+- current workspaces/test receipts;
+- `666_WORKSPACE.json`;
+- `HISTORICAL_EARNED_WORK.json`;
+- throughput state;
+- capacity/hardware state;
+- ClayCode/Harness/UnifiedDB evidence;
+- final training/eval/model evidence when available;
+- developer-acceptance evidence;
+- `DOOMSDAY_EVENTS.jsonl`;
+- external tool registry;
+- every `*_RESEARCH_CAPABILITY.json` extension;
+- capability-impact rules.
 
-## 4. Remaining-effort derivation
+## 7. Remaining-effort derivation
 
-For each row derive a low/high remaining-effort estimate.
+Priority order per row:
 
-Priority order:
+1. measured same-row remaining effort/throughput;
+2. evidence-mapped historical work that eliminates/de-risks this row;
+3. measured analogous project throughput;
+4. calibrated current-stage ETA;
+5. explicit engineering prior.
 
-1. measured same-row throughput from completed work/receipts;
-2. measured analogous project throughput;
-3. current-stage calibrated ETA;
-4. explicit engineering prior from `DOOMSDAY_FORECAST_MODEL.json`.
+Never prefer an old prior over newer measured evidence.
 
-Never prefer an old prior over a newer measured rate.
+The row priors represent **remaining work from the current state**, not total lifetime project effort.
 
-A row's remaining effort may be changed by a verified event or a verified capability benchmark. Unverified claims never change the date.
+## 8. APIs/tools and technological jumps
 
-## 5. APIs / tools are dynamic forecast inputs
+Every forecast automatically scans the external tool registry and capability-extension files.
 
-Every forecast automatically scans the external tool registry plus all capability-extension files.
+A new API is immediately visible but forecast-neutral until runtime verification and a relevant benchmark/receipt exist.
 
-This is deliberately future-proof: a newly added API/tool does not require manual hardcoding into the forecast engine merely to appear in the capability table.
+States:
 
-Each capability is classified as one of:
+- `ACTIVE_CALIBRATED`
+- `ACTIVE_UNCALIBRATED`
+- `POTENTIAL_UNVERIFIED`
+- `NO_DIRECT_PATH_IMPACT`
 
-- `ACTIVE_CALIBRATED` — runtime verified and has a verified DOOMSDAY impact benchmark;
-- `ACTIVE_UNCALIBRATED` — runtime verified and relevant, but no trustworthy time multiplier yet;
-- `POTENTIAL_UNVERIFIED` — relevant but not runtime verified;
-- `NO_DIRECT_PATH_IMPACT` — currently no plausible critical-path relationship.
+Same-row provider speedups do not blindly multiply. By default use the strongest single verified factor unless a joint benchmark proves a combined factor.
 
-### Availability is not acceleration
+Verified discontinuous jumps may accelerate or eliminate work; verified blockers/rework may push the date later. All must preserve receipts and affected rows.
 
-A new API counts immediately in the table, but does **not** automatically move DOOMSDAY earlier.
+## 9. Capacity and hardware
 
-A capability changes ETA only when:
+Capacity is time-dependent.
 
-1. its runtime status is verified;
-2. the affected DOOMSDAY row(s) are explicit;
-3. a benchmark/receipt is attached;
-4. the multiplier is mechanically valid;
-5. the effect is not double-counted with equivalent providers.
+- only currently verified available resources count as current throughput;
+- future hardware is an explicit forecast assumption until active;
+- effective parallelism comes from completed independent work, not raw worker count;
+- owner cadence defaults to 10 active collaboration hours/day.
 
-Default same-row provider rule:
+The chief-developer target requires a final acceptance boot on project-controlled hardware, but the forecast may account for future verified capacity when its date is known.
 
-> Choose the strongest single verified capability multiplier. Do not blindly multiply several API accelerators together.
+## 10. Dependency / critical path
 
-A combined multiplier is allowed only if a later joint benchmark explicitly measures the combined stack.
+Compute earliest finish through the precedence graph rather than blindly summing all work.
 
-This prevents provider proliferation from creating fictional exponential speedups.
+Independent preparatory work may overlap. Cycles fail closed.
 
-### Existing Together capability
+The terminal row remains the strict `CLAY_0_1_ACCEPTANCE_RUN` defined by the Chief Developer Acceptance Contract.
 
-Together AI is registered as a relevant future model-training/inference capability. It counts in the capability table immediately, but remains forecast-neutral until runtime/training behavior is actually verified and benchmarked. Paid/final training remains blocked until explicit owner authorization.
+## 11. Training authorization
 
-## 6. Verified jumps / new technology
+Final paid/model training never starts automatically.
 
-The model explicitly supports discontinuous progress.
+Before owner authorization the forecast is explicitly conditional on immediate authorization when the frozen data/eval gate becomes ready. Unknown human waiting time is not invented.
 
-Examples:
+## 12. Fine-tuning method neutrality
 
-- a new compiler eliminates a lowering stage;
-- a better model needs much less fine-tuning;
-- a Clay primitive collapses multiple architecture modules cleanly;
-- a new inference/runtime engine makes binary deployment simpler;
-- a stronger external training system accelerates model tuning;
-- a discovered bug reveals that apparently complete work needs rework.
+Clay 0.1 requires the final validated fully fine-tuned Clay-native model. The exact method may be LoRA/QLoRA, adapter merge, staged tuning, full fine-tuning, distillation+tuning or a future method if it passes the frozen acceptance/eval contract.
 
-A non-capability jump changes the forecast only through a verified `DOOMSDAY_EVENT` containing:
+## 13. Dynamic DOOMSDAY progress
 
-- event id/date;
-- affected rows;
-- type `ACCELERATOR | ELIMINATION | BLOCKER | REWORK | CAPACITY_CHANGE | NEW_DEPENDENCY`;
-- evidence/receipt refs;
-- old assumption;
-- new assumption;
-- multiplier or eliminated work;
-- confidence.
+DOOMSDAY progress is **earned-work + remaining-scope progress**, not a simple count of current workspaces.
 
-Examples:
+During historical calibration:
 
-`verified compiler shortcut -> H3 factor 0.55`
+`overall = historical_calibration + (1 - historical_calibration) * current_remaining_scope_progress`
 
-`new model natively understands Clay eval suite -> FINAL_MODEL_FINE_TUNE factor 0.45`
+After Level 0:
 
-`UnifiedDB semantic mismatch -> UDB factor 1.6`
+`historical_calibration` is replaced with evidence-mapped earned work.
 
-No hype-based multiplier is allowed.
+Display a calibration band while mapping is incomplete. Scope discovery may move progress backward. Verified jumps may move it forward discontinuously.
 
-## 7. Capacity model
+NEXT LEVEL remains a separate strict local gate percentage.
 
-Capacity is time-dependent and is read from `CAPACITY_STATE.json` every time.
+## 14. Forecast outputs
 
-Rules:
+Compact output includes:
 
-- only `available_now` resources count as current execution capacity;
-- future hardware does not count as active before verification;
-- dated expected hardware may constrain the conservative/high forecast bound as a fallback;
-- temporarily unavailable AI workers do not contribute current parallel throughput;
-- effective parallelism comes from completed independent work, never raw worker count;
-- the owner cadence defaults to 10 active collaboration hours/day unless throughput state changes it.
-
-The hardware parser uses dates attached to hardware entries rather than confusing unrelated events such as an AI-worker quota reset with the expected GPU-server date.
-
-## 8. Dependency / critical-path model
-
-Do not blindly sum every row.
-
-Each row declares dependencies. Compute earliest finish through the precedence graph:
-
-`row_start = max(forecast_epoch, finish(dependencies), required_capacity_available_date)`
-
-`row_finish = row_start + remaining_duration`
-
-Independent preparatory work may overlap. Dependency cycles are invalid and make the forecast fail closed.
-
-The DOOMSDAY range is the low/high finish of `CLAY_0_1_ACCEPTANCE_RUN`.
-
-## 9. Owner training gate
-
-The current program intentionally stops after training-data freeze and waits for explicit owner authorization before final/paid training.
-
-For forecasting only:
-
-- if authorization exists, use the actual authorization state/time;
-- if not, the forecast is explicitly conditional on immediate authorization when DATA becomes ready.
-
-Unknown human waiting time is never guessed.
-
-## 10. Fine-tuning method neutrality
-
-Clay 0.1 requires the final validated fully fine-tuned model, but the forecast does not hardcode LoRA as the only future method.
-
-The selected method may become LoRA/QLoRA, merged adapter, staged tuning, full-parameter tuning, distillation plus tuning, or a future method. A newer method may accelerate DOOMSDAY when its actual benchmark demonstrates the impact.
-
-## 11. Dynamic DOOMSDAY progress percentage
-
-The DOOMSDAY bar is an effort-weighted dynamic project forecast, not a simple stage count:
-
-`progress = completed_expected_effort / current_expected_scope`
-
-Verified eliminations reduce future scope. New required dependencies can increase scope and therefore move the percentage backward. That is scientifically correct behavior.
-
-NEXT LEVEL remains the stricter local gate progress and is displayed separately.
-
-## 12. Forecast outputs
-
-Compact status output:
-
-`DOOMSDAY / Clay 0.1`
+`DOOMSDAY / Clay 0.1 — chief-developer first test`
 `Progress: [........] N%`
+`Calibration band: X-Y%` when applicable
 `Forecast: YYYY-MM-DD - YYYY-MM-DD`
 `Center: YYYY-MM-DD`
 `Confidence: ...`
-`Conditional on immediate training authorization when data is ready: yes|no`
-`Forecast basis: N-row dynamic critical path + live capabilities/APIs`
+`Conditional on training authorization: yes|no`
+`Basis: dynamic critical path + historical earned work + live APIs/capacity`
 
-Q12 can expand the same resolver result into the full workstream/capability table when useful.
+## 15. Mandatory regression tests
 
-## 13. Mandatory regression tests
+Forecast changes must test at minimum:
 
-Forecast changes must be tested against scenarios including at least:
-
-- normal baseline;
-- partial stage progress;
+- baseline;
+- historical earned-work calibration is reflected and not labeled exact;
+- partial current progress increases overall progress from the earned-work baseline;
 - verified accelerator;
 - unverified accelerator rejection;
-- verified blocker/rework;
-- new API discovered automatically;
-- runtime-verified but uncalibrated API does not alter ETA;
-- unverified API cannot alter ETA even with a fake impact object;
-- calibrated API shortens the correct workstream;
-- multiple APIs do not blindly multiply;
-- capability-extension status overrides stale registry metadata;
-- future hardware date is parsed from the hardware entry rather than an unrelated capacity date;
-- owner authorization conditional toggles correctly;
-- completed future workspace advances progress;
-- verified elimination shortens scope;
-- measured throughput outranks prior;
-- irrelevant API has no path effect;
-- new dependency can increase ETA / lower progress;
-- dependency cycle fails closed;
-- malformed forecast event does not silently affect the date.
-
-Canonical test tool:
-
-`tools/test_doomsday_forecast.py`
-
-A future forecast-engine change is not accepted solely because it produces a date. It must preserve these invariants or explicitly update the contract with evidence.
-
-## 14. Recalculation triggers
-
-Recompute whenever any of these changes:
-
-- stage/work-package progress;
-- completed archive obligations;
-- measured throughput;
-- worker availability;
-- hardware availability;
-- API/tool registry or capability file;
-- provider runtime verification;
-- model/training benchmark;
-- architecture change;
-- new dependency;
-- accelerator/blocker event;
+- blocker/rework;
+- auto-discovered APIs;
+- calibrated vs uncalibrated API effect;
+- no blind API multiplier multiplication;
+- future hardware parsing;
 - owner authorization;
-- failed acceptance test;
-- newly selected external technology.
+- completed future workspace;
+- verified elimination;
+- measured throughput outranks prior;
+- new dependency can lower progress/delay forecast;
+- dependency cycles fail closed;
+- acceptance target remains internal chief-developer test, not public release.
 
-The status resolver recalculates every time it runs; no manual refresh is required.
+## 16. Epistemic rule
 
-## 15. Epistemic rule
+DOOMSDAY is a dynamic engineering forecast, not a promise.
 
-DOOMSDAY is a forecast, not a promise.
-
-Its purpose is to become more accurate as the project learns — including when learning produces sudden jumps forward or backward.
+The project is in an endgame/consolidation phase only to the extent supported by the historical earned-work mapping and current test evidence. The forecast must become more accurate as Level 0 and subsequent Harness work turn that history into executable evidence.

@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "status": "BOOTSTRAP_CALIBRATION",
+  "user_active_hours_per_day": 10,
+  "purpose": "Calibrate next-milestone ETA from real repository production. Explicit token/work-package telemetry outranks priors; priors shrink as measured data accumulates.",
+  "token_telemetry": {
+    "canonical_24h_total_available": false,
+    "note": "Project-Frankenstein contains per-call/project trace infrastructure with tokens_in/tokens_out and session aggregation, but an explicit current 24h token total for this RAE program has not yet been located/materialized in the canonical repository. Do not invent one.",
+    "historical_schema_source": "gschaidergabriel/Project-Frankenstein: services/project_engine.py project_traces / _track_usage",
+    "preferred_future_receipt": "research_entity/rooms/throughput/YYYY-MM-DD.json",
+    "preferred_fields": [
+      "window_start",
+      "window_end",
+      "tokens_in",
+      "tokens_out",
+      "generated_repo_text_tokens",
+      "completed_weight",
+      "tests_executed",
+      "commits",
+      "active_worker_hours_or_sessions",
+      "source_refs"
+    ]
+  },
+  "eta_model": {
+    "method_order": [
+      "measured_completed_weight_per_10h_user_day",
+      "measured_completed_weight_per_million_output_tokens",
+      "measured_stage_velocity",
+      "bootstrap_stage_priors"
+    ],
+    "uncertainty_rule": "Show a range. Never present a point estimate as a deadline. Widen the range for first-of-kind stages, unresolved architecture blockers or missing telemetry.",
+    "parallelism_rule": "Observed multiworker throughput may reduce wall-clock ETA only when tasks are actually independent and completion receipts prove parallel progress. Never multiply throughput simply by worker count.",
+    "rework_rule": "Failed/falsified work increases observed cost and must remain in the calibration history rather than being hidden."
+  },
+  "bootstrap_stage_priors": {
+    "BASE_CLAYCODE_RELEASE": {
+      "serial_hours_per_open_weight_low": 2.0,
+      "serial_hours_per_open_weight_high": 5.0,
+      "effective_parallelism_low": 1.5,
+      "effective_parallelism_high": 2.5,
+      "confidence": "LOW_UNTIL_FIRST_RELEASE_PACKAGES_CLOSE"
+    },
+    "H1_REFERENCE_HARNESS": {
+      "serial_hours_per_open_weight_low": 3.0,
+      "serial_hours_per_open_weight_high": 7.0,
+      "effective_parallelism_low": 1.8,
+      "effective_parallelism_high": 3.5,
+      "confidence": "LOW"
+    },
+    "H2_CLAYCODE_HARNESS": {
+      "serial_hours_per_open_weight_low": 5.0,
+      "serial_hours_per_open_weight_high": 12.0,
+      "effective_parallelism_low": 1.5,
+      "effective_parallelism_high": 3.0,
+      "confidence": "LOW"
+    },
+    "H3_ONE_MODULE_FRANK": {
+      "serial_hours_per_open_weight_low": 5.0,
+      "serial_hours_per_open_weight_high": 14.0,
+      "effective_parallelism_low": 1.5,
+      "effective_parallelism_high": 3.0,
+      "confidence": "VERY_LOW_FIRST_OF_KIND"
+    },
+    "UDB_UNIFIED_DATABASE": {
+      "serial_hours_per_open_weight_low": 4.0,
+      "serial_hours_per_open_weight_high": 10.0,
+      "effective_parallelism_low": 1.5,
+      "effective_parallelism_high": 3.0,
+      "confidence": "LOW"
+    },
+    "DATA_LORA_TRAINING_DATA": {
+      "serial_hours_per_open_weight_low": 3.0,
+      "serial_hours_per_open_weight_high": 8.0,
+      "effective_parallelism_low": 1.8,
+      "effective_parallelism_high": 4.0,
+      "confidence": "LOW"
+    }
+  },
+  "observations": [],
+  "last_updated": "2026-08-09"
+}

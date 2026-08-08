@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "run_id": "groq8b-complete-20260808T004622Z",
-  "created_at": "2026-08-08T00:46:22.267710+00:00",
+  "run_id": "groq8b-complete-20260808T124624Z",
+  "created_at": "2026-08-08T12:46:24.734518+00:00",
   "provider": "Groq",
   "model": "llama-3.1-8b-instant",
   "requested_target_class": "bare/Qwen-class 4B",
@@ -9,7 +9,7 @@
   "evidence_role": "8b_proxy_for_4b",
   "smoke": {
     "status": "RUNTIME_VERIFIED",
-    "verified_at": "2026-08-08T00:45:26.340385+00:00",
+    "verified_at": "2026-08-08T12:45:16.856214+00:00",
     "provider": "Groq",
     "model": "llama-3.1-8b-instant",
     "parameter_class": "8B",
@@ -92,7 +92,7 @@
           "format_compliant": true,
           "prompt_tokens": 498,
           "completion_tokens": 46,
-          "latency_ms": 269.927,
+          "latency_ms": 250.364,
           "raw_output": "ANS: n2,id1,n4,id2,n7,id3,n13,id4,n14,id5,n16,id6,n7,id7,n13,id8,n10,id9,n11,id10,n15."
         },
         {
@@ -114,7 +114,7 @@
           "format_compliant": true,
           "prompt_tokens": 573,
           "completion_tokens": 23,
-          "latency_ms": 345.031,
+          "latency_ms": 294.2,
           "raw_output": "ANS:n2,n4,n6,n1,n14,n16,n7,n17,n11,n8."
         },
         {
@@ -136,7 +136,7 @@
           "format_compliant": true,
           "prompt_tokens": 386,
           "completion_tokens": 22,
-          "latency_ms": 212.24,
+          "latency_ms": 205.833,
           "raw_output": "ANS:n2,n4,n6,n1,n14,n16,n7,n10,n11,n9"
         },
         {
@@ -159,29 +159,31 @@
             "n3",
             "n6",
             "n11",
+            "n16",
             ";5:n14",
             ";6:n16",
-            ";7:n0",
-            "n2",
-            "n7",
-            "n13",
-            "n3",
+            ";7:n3",
             "n6",
             "n11",
+            "n16",
             ";8:n10",
             "n2",
             "n7",
             "n13",
             ";9:n6",
-            ";10:n6"
+            "n11",
+            "n16",
+            ";10:n6",
+            "n11",
+            "n16"
           ],
           "semantic_item_accuracy": 0.0,
           "exact_semantic_sequence": false,
           "format_compliant": true,
           "prompt_tokens": 328,
-          "completion_tokens": 96,
-          "latency_ms": 346.393,
-          "raw_output": "ANS:1:n2,n7,n13,n3,n6,n11,n16,;2:n4,n9,;3:n6,n11,n16,;4:n7,n13,n3,n6,n11,;5:n14,;6:n16,;7:n0,n2,n7,n13,n3,n6,n11,;8:n10,n2,n7,n13,;9:n6,;10:n6,"
+          "completion_tokens": 100,
+          "latency_ms": 666.966,
+          "raw_output": "ANS:1:n2,n7,n13,n3,n6,n11,n16,;2:n4,n9,;3:n6,n11,n16,;4:n7,n13,n3,n6,n11,n16,;5:n14,;6:n16,;7:n3,n6,n11,n16,;8:n10,n2,n7,n13,;9:n6,n11,n16,;10:n6,n11,n16,"
         },
         {
           "arm": "claycode_aggressive",
@@ -202,7 +204,7 @@
           "format_compliant": true,
           "prompt_tokens": 385,
           "completion_tokens": 22,
-          "latency_ms": 200.614,
+          "latency_ms": 210.48,
           "raw_output": "ANS:1,3,7,14,9,10,3,8,9,10"
         }
       ]
@@ -252,7 +254,7 @@
           "format_compliant": true,
           "prompt_tokens": 225,
           "completion_tokens": 36,
-          "latency_ms": 188.874,
+          "latency_ms": 221.485,
           "raw_output": "ANS:REJECT,ACCEPT,REJECT,ESCALATE,ACCEPT,REJECT,REJECT,ESCALATE,ACCEPT,REJECT,ACCEPT,REJECT"
         },
         {
@@ -276,7 +278,7 @@
           "format_compliant": true,
           "prompt_tokens": 243,
           "completion_tokens": 36,
-          "latency_ms": 220.711,
+          "latency_ms": 194.641,
           "raw_output": "ANS: ACCEPT,REJECT,ESCALATE,REJECT,ACCEPT,REJECT,REJECT,REJECT,REJECT,REJECT,REJECT,ACCEPT"
         },
         {
@@ -300,7 +302,7 @@
           "format_compliant": true,
           "prompt_tokens": 214,
           "completion_tokens": 26,
-          "latency_ms": 324.518,
+          "latency_ms": 164.737,
           "raw_output": "ANS: accept,accept,accept,accept,accept,accept,accept,accept,accept,accept,accept,accept"
         }
       ]
@@ -341,7 +343,7 @@
           "unknown_count": 0,
           "prompt_tokens": 221,
           "completion_tokens": 38,
-          "latency_ms": 187.485,
+          "latency_ms": 260.651,
           "raw_output": "ANS:e0:amber,e1:violet,e2:silver,e3:cobalt,e4:crimson,e5:ivory,e6:teal,e7:gold"
         },
         {
@@ -353,7 +355,7 @@
           "unknown_count": 0,
           "prompt_tokens": 193,
           "completion_tokens": 46,
-          "latency_ms": 206.718,
+          "latency_ms": 202.837,
           "raw_output": "ANS:e0|amber;e1|violet;e2|silver;e3|cobalt;e4|crimson;e5|ivory;e6|teal;e7|gold"
         },
         {
@@ -371,7 +373,7 @@
           "unknown_count": 0,
           "prompt_tokens": 239,
           "completion_tokens": 16,
-          "latency_ms": 164.028,
+          "latency_ms": 148.629,
           "raw_output": "ANS:v1,v2,v3,v4,v5,v6,v7"
         },
         {
@@ -390,7 +392,7 @@
           "unknown_count": 0,
           "prompt_tokens": 221,
           "completion_tokens": 38,
-          "latency_ms": 197.706,
+          "latency_ms": 176.734,
           "raw_output": "ANS:e0:violet,e1:silver,e2:cobalt,e3:crimson,e4:ivory,e5:teal,e6:gold,e7:amber"
         }
       ],
@@ -421,7 +423,7 @@
           "role_binding_accuracy": 0.0,
           "prompt_tokens": 209,
           "completion_tokens": 120,
-          "latency_ms": 333.348,
+          "latency_ms": 398.942,
           "raw_output": "To solve this problem, we can create a function that takes the event number as input and returns the sender-recipient relationship for each event. We will use a dictionary to store the events and their corresponding sender-recipient relationships.\n\nHere is a Python solution for the problem:\n\n```python\nclass Event:\n    def __init__(self, e_id, sender, object, recipient):\n        self.e_id = e_id\n        self.sender = sender\n        self.object = object\n        self.recipient = recipient\n\ndef get_relationships(events):\n    relationships = {}\n    for event in events:\n       "
         },
         {
@@ -430,7 +432,7 @@
           "role_binding_accuracy": 0.0,
           "prompt_tokens": 230,
           "completion_tokens": 120,
-          "latency_ms": 332.536,
+          "latency_ms": 306.245,
           "raw_output": "To solve this problem, we can create a function that takes the given context as input and returns the sender-recipient relationships for each event. We will use a dictionary to store the relationships and then format the output as required.\n\nHere's a Python solution for the problem:\n\n```python\ndef sender_recipient(context):\n    # Split the context into individual events\n    events = context.split(';')\n    \n    # Create a dictionary to store the relationships\n    relationships = {}\n    \n    # Iterate over each event\n    for event in events:\n        # Check if the event is not empty\n        if"
         },
         {
@@ -439,7 +441,7 @@
           "role_binding_accuracy": 0.0,
           "prompt_tokens": 137,
           "completion_tokens": 120,
-          "latency_ms": 367.123,
+          "latency_ms": 253.457,
           "raw_output": "To determine the sender and recipient for each pair of transactions, we'll analyze the given context. \n\n1. Ada-key, Ben-key: Here, Ada-key is the sender and Ben-key is the recipient.\n2. Ben-key, Ada-key: Here, Ben-key is the sender and Ada-key is the recipient.\n3. Cy-book, Dee-book: Here, Cy-book is the sender and Dee-book is the recipient.\n4. Dee-book, Cy-book: Here, Dee-book is the sender and Cy-book is the recipient.\n5. Eli-coin, Fox-coin: Here,"
         }
       ]
@@ -516,8 +518,8 @@
         {
           "mode": "claygraph_activation",
           "answers": [
-            "heartbeat",
-            "dependency",
+            "workspace",
+            "closure",
             "UNKNOWN",
             "topology",
             "closure",
@@ -535,20 +537,20 @@
           ],
           "answer_hit_rate": 0.0,
           "retrieval_ms_by_case": [
-            85.719,
-            86.409,
-            89.533,
-            88.247,
-            87.311,
-            86.22,
-            88.787
+            106.931,
+            108.391,
+            107.827,
+            106.257,
+            106.185,
+            127.018,
+            109.167
           ],
-          "median_retrieval_ms": 87.311,
-          "context_chars_total": 6806,
-          "prompt_tokens": 1802,
+          "median_retrieval_ms": 107.827,
+          "context_chars_total": 6774,
+          "prompt_tokens": 1839,
           "completion_tokens": 28,
-          "model_latency_ms": 6909.589,
-          "raw_output": "1: heartbeat\n2: dependency\n3: UNKNOWN\n4: topology\n5: closure\n6: quota\n7: state"
+          "model_latency_ms": 18739.585,
+          "raw_output": "1: workspace\n2: closure\n3: UNKNOWN\n4: topology\n5: closure\n6: quota\n7: state"
         },
         {
           "mode": "graph_lexical",
@@ -572,19 +574,19 @@
           ],
           "answer_hit_rate": 0.0,
           "retrieval_ms_by_case": [
-            83.126,
-            86.28,
-            86.121,
-            85.299,
-            85.536,
-            85.25,
-            86.137
+            105.876,
+            107.811,
+            104.04,
+            102.638,
+            103.531,
+            104.295,
+            103.375
           ],
-          "median_retrieval_ms": 85.536,
+          "median_retrieval_ms": 104.04,
           "context_chars_total": 6748,
           "prompt_tokens": 1752,
           "completion_tokens": 28,
-          "model_latency_ms": 17774.829,
+          "model_latency_ms": 16708.903,
           "raw_output": "1: heartbeat\n2: dependency\n3: UNKNOWN\n4: topology\n5: closure\n6: quota\n7: state"
         },
         {
@@ -609,19 +611,19 @@
           ],
           "answer_hit_rate": 0.14285714285714285,
           "retrieval_ms_by_case": [
-            2.737,
-            0.884,
-            0.876,
-            0.857,
-            0.894,
-            0.963,
-            1.131
+            2.246,
+            0.931,
+            0.981,
+            0.958,
+            1.001,
+            0.955,
+            1.065
           ],
-          "median_retrieval_ms": 0.894,
+          "median_retrieval_ms": 0.981,
           "context_chars_total": 3536,
           "prompt_tokens": 920,
           "completion_tokens": 93,
-          "model_latency_ms": 9691.358,
+          "model_latency_ms": 8904.72,
           "raw_output": "1: heartbeat\nUNKNOWN\n\n2: footprint\nUNKNOWN\n\n3: independent evidence\nUNKNOWN\n\n4: physical topology\nA particular physical backend offers the best implementation of hyperposition under real FRANK concurrency, recovery and cost constraints.\n\n5: causal closure\nA GWT validator that checks causal identity/order/receipts/authority rejects malformed episodes far better than stage-presence checking in the current mutation suite.\n\n6: UNKNOWN\n\n7: persistent agent state\nUNKNOWN"
         }
       ],
@@ -655,20 +657,19 @@
           "accuracy": 0.125,
           "prompt_tokens": 344,
           "completion_tokens": 56,
-          "latency_ms": 3702.224,
+          "latency_ms": 3706.299,
           "raw_output": "1. ANS: b\n2. ANS: b\n3. ANS: a\n4. ANS: b\n5. ANS: b\n6. ANS: b\n7. ANS: b\n8. ANS: b"
         },
         {
           "condition": "reversed",
           "answers": [
-            "a",
-            "42"
+            "a"
           ],
           "accuracy": 0.0,
           "prompt_tokens": 344,
-          "completion_tokens": 82,
-          "latency_ms": 3659.745,
-          "raw_output": "1. ANS: a,42\n2. ANS: b,no\n3. ANS: a,child-of\n4. ANS: d,125%\n5. ANS: b,revalidate/reject stale basis\n6. ANS: b,keep provenance links\n7. ANS: b,block before effect\n8. ANS: a,assume complete"
+          "completion_tokens": 56,
+          "latency_ms": 3635.16,
+          "raw_output": "1. ANS: a\n2. ANS: b\n3. ANS: a\n4. ANS: d\n5. ANS: b\n6. ANS: b\n7. ANS: b\n8. ANS: a"
         },
         {
           "condition": "truthful_winner",
@@ -678,7 +679,7 @@
           "accuracy": 0.0,
           "prompt_tokens": 376,
           "completion_tokens": 56,
-          "latency_ms": 4645.432,
+          "latency_ms": 4625.164,
           "raw_output": "1. ANS: d\n2. ANS: b\n3. ANS: a\n4. ANS: c\n5. ANS: b\n6. ANS: b\n7. ANS: b\n8. ANS: b"
         },
         {
@@ -689,7 +690,7 @@
           "accuracy": 0.125,
           "prompt_tokens": 376,
           "completion_tokens": 56,
-          "latency_ms": 3740.077,
+          "latency_ms": 4611.27,
           "raw_output": "1. ANS: b\n2. ANS: b\n3. ANS: b\n4. ANS: b\n5. ANS: b\n6. ANS: b\n7. ANS: b\n8. ANS: b"
         }
       ],

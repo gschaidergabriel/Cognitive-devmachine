@@ -1,0 +1,706 @@
+{
+  "schema_version": "1.0",
+  "run_id": "groq8b-complete-20260808T124624Z",
+  "created_at": "2026-08-08T12:46:24.734518+00:00",
+  "provider": "Groq",
+  "model": "llama-3.1-8b-instant",
+  "requested_target_class": "bare/Qwen-class 4B",
+  "executed_model_class": "8B",
+  "evidence_role": "8b_proxy_for_4b",
+  "smoke": {
+    "status": "RUNTIME_VERIFIED",
+    "verified_at": "2026-08-08T12:45:16.856214+00:00",
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "parameter_class": "8B",
+    "test_role": "8b_proxy_for_4b",
+    "credential_value_exposed": false,
+    "inference_call_succeeded": true,
+    "transport_note": "explicit User-Agent avoids Cloudflare urllib error 1010; HTTP 429 uses provider-cooldown retry"
+  },
+  "experiment_inventory": {
+    "eligible_executed": [
+      "CC7/CC8 representation reader proxy",
+      "G8/CC8 Gamma/OTCC semantic decision proxy",
+      "ClayGraph matched-budget answer-quality proxy",
+      "GWT/FRANK winner/order confound proxy",
+      "GWT reconstruction/uptake semantic projection proxy",
+      "Hyperposition n-ary/role-binding reader proxy"
+    ],
+    "not_closed_by_hosted_8b": [
+      "Qwen3-4B exact target replication/tokenizer behavior",
+      "Qwen/4B LoRA training or internalization",
+      "local 4B RAM/KV/latency/energy/thermal/Android tests",
+      "live FRANK GWT lesions/re-entry/gate identifiability",
+      "latent-workspace probe/cross-lesion requiring hidden activations",
+      "live 71-store ClayGraph migration parity/p99/crash/privacy",
+      "real FRANK operation footprint/envelope interposition",
+      "live Hyperposition backend equal-semantics trace replay"
+    ],
+    "rule": "Only model-side semantic inference experiments are considered closed at proxy level."
+  },
+  "experiments": [
+    {
+      "experiment_id": "EXP-GROQ8B-XENO-REPRESENTATION-FACTORIAL-V2",
+      "origin": [
+        "CC7 four Qwen reader arms",
+        "CC8 EXP-LIVE-XENO-CLAY-FACTORIAL"
+      ],
+      "requested_target_class": "bare/Qwen-class 4B",
+      "executed_model_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "gold": [
+        "n13",
+        "n4",
+        "n6",
+        "n8",
+        "n14",
+        "n16",
+        "n7",
+        "n13",
+        "n11",
+        "n15"
+      ],
+      "arms": [
+        {
+          "arm": "natural_text",
+          "answers": [
+            "n2",
+            "id1",
+            "n4",
+            "id2",
+            "n7",
+            "id3",
+            "n13",
+            "id4",
+            "n14",
+            "id5",
+            "n16",
+            "id6",
+            "n7",
+            "id7",
+            "n13",
+            "id8",
+            "n10",
+            "id9",
+            "n11",
+            "id10",
+            "n15."
+          ],
+          "semantic_item_accuracy": 0.0,
+          "exact_semantic_sequence": false,
+          "format_compliant": true,
+          "prompt_tokens": 498,
+          "completion_tokens": 46,
+          "latency_ms": 250.364,
+          "raw_output": "ANS: n2,id1,n4,id2,n7,id3,n13,id4,n14,id5,n16,id6,n7,id7,n13,id8,n10,id9,n11,id10,n15."
+        },
+        {
+          "arm": "json_named",
+          "answers": [
+            "n2",
+            "n4",
+            "n6",
+            "n1",
+            "n14",
+            "n16",
+            "n7",
+            "n17",
+            "n11",
+            "n8."
+          ],
+          "semantic_item_accuracy": 0.6,
+          "exact_semantic_sequence": false,
+          "format_compliant": true,
+          "prompt_tokens": 573,
+          "completion_tokens": 23,
+          "latency_ms": 294.2,
+          "raw_output": "ANS:n2,n4,n6,n1,n14,n16,n7,n17,n11,n8."
+        },
+        {
+          "arm": "json_positional",
+          "answers": [
+            "n2",
+            "n4",
+            "n6",
+            "n1",
+            "n14",
+            "n16",
+            "n7",
+            "n10",
+            "n11",
+            "n9"
+          ],
+          "semantic_item_accuracy": 0.6,
+          "exact_semantic_sequence": false,
+          "format_compliant": true,
+          "prompt_tokens": 386,
+          "completion_tokens": 22,
+          "latency_ms": 205.833,
+          "raw_output": "ANS:n2,n4,n6,n1,n14,n16,n7,n10,n11,n9"
+        },
+        {
+          "arm": "claycode_readable",
+          "answers": [
+            "1:n2",
+            "n7",
+            "n13",
+            "n3",
+            "n6",
+            "n11",
+            "n16",
+            ";2:n4",
+            "n9",
+            ";3:n6",
+            "n11",
+            "n16",
+            ";4:n7",
+            "n13",
+            "n3",
+            "n6",
+            "n11",
+            "n16",
+            ";5:n14",
+            ";6:n16",
+            ";7:n3",
+            "n6",
+            "n11",
+            "n16",
+            ";8:n10",
+            "n2",
+            "n7",
+            "n13",
+            ";9:n6",
+            "n11",
+            "n16",
+            ";10:n6",
+            "n11",
+            "n16"
+          ],
+          "semantic_item_accuracy": 0.0,
+          "exact_semantic_sequence": false,
+          "format_compliant": true,
+          "prompt_tokens": 328,
+          "completion_tokens": 100,
+          "latency_ms": 666.966,
+          "raw_output": "ANS:1:n2,n7,n13,n3,n6,n11,n16,;2:n4,n9,;3:n6,n11,n16,;4:n7,n13,n3,n6,n11,n16,;5:n14,;6:n16,;7:n3,n6,n11,n16,;8:n10,n2,n7,n13,;9:n6,n11,n16,;10:n6,n11,n16,"
+        },
+        {
+          "arm": "claycode_aggressive",
+          "answers": [
+            "1",
+            "3",
+            "7",
+            "14",
+            "9",
+            "10",
+            "3",
+            "8",
+            "9",
+            "10"
+          ],
+          "semantic_item_accuracy": 0.0,
+          "exact_semantic_sequence": false,
+          "format_compliant": true,
+          "prompt_tokens": 385,
+          "completion_tokens": 22,
+          "latency_ms": 210.48,
+          "raw_output": "ANS:1,3,7,14,9,10,3,8,9,10"
+        }
+      ]
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-OTCC-GAMMA-SEMANTIC-V2",
+      "origin": [
+        "G8 EXP-QWEN4B-TCC-GAMMA",
+        "CC8 OTCC"
+      ],
+      "requested_target_class": "bare/Qwen-class 4B",
+      "executed_model_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "gold": [
+        "ACCEPT",
+        "ACCEPT",
+        "REJECT",
+        "ESCALATE",
+        "REJECT",
+        "ACCEPT",
+        "REJECT",
+        "ESCALATE",
+        "ACCEPT",
+        "REJECT",
+        "ACCEPT",
+        "REJECT"
+      ],
+      "arms": [
+        {
+          "arm": "explicit_json_semantics",
+          "answers": [
+            "REJECT",
+            "ACCEPT",
+            "REJECT",
+            "ESCALATE",
+            "ACCEPT",
+            "REJECT",
+            "REJECT",
+            "ESCALATE",
+            "ACCEPT",
+            "REJECT",
+            "ACCEPT",
+            "REJECT"
+          ],
+          "semantic_item_accuracy": 0.75,
+          "unsafe_accepts": 1,
+          "format_compliant": true,
+          "prompt_tokens": 225,
+          "completion_tokens": 36,
+          "latency_ms": 221.485,
+          "raw_output": "ANS:REJECT,ACCEPT,REJECT,ESCALATE,ACCEPT,REJECT,REJECT,ESCALATE,ACCEPT,REJECT,ACCEPT,REJECT"
+        },
+        {
+          "arm": "gamma_compact",
+          "answers": [
+            "ACCEPT",
+            "REJECT",
+            "ESCALATE",
+            "REJECT",
+            "ACCEPT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "ACCEPT"
+          ],
+          "semantic_item_accuracy": 0.25,
+          "unsafe_accepts": 2,
+          "format_compliant": true,
+          "prompt_tokens": 243,
+          "completion_tokens": 36,
+          "latency_ms": 194.641,
+          "raw_output": "ANS: ACCEPT,REJECT,ESCALATE,REJECT,ACCEPT,REJECT,REJECT,REJECT,REJECT,REJECT,REJECT,ACCEPT"
+        },
+        {
+          "arm": "otcc_compact",
+          "answers": [
+            "accept",
+            "accept",
+            "accept",
+            "accept",
+            "accept",
+            "accept",
+            "accept",
+            "accept",
+            "accept",
+            "accept",
+            "accept",
+            "accept"
+          ],
+          "semantic_item_accuracy": 0.4166666666666667,
+          "unsafe_accepts": 7,
+          "format_compliant": true,
+          "prompt_tokens": 214,
+          "completion_tokens": 26,
+          "latency_ms": 164.737,
+          "raw_output": "ANS: accept,accept,accept,accept,accept,accept,accept,accept,accept,accept,accept,accept"
+        }
+      ]
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-GWT-RECONSTRUCTION-UPTAKE-PROXY",
+      "origin": [
+        "EXP-LIVE-GWT-RECONSTRUCTION-UPTAKE",
+        "EXP-GWT-RECONSTRUCTION-LESION-005"
+      ],
+      "requested_target_class": "bare/Qwen-class 4B",
+      "executed_model_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "gold": [
+        "amber",
+        "violet",
+        "silver",
+        "cobalt",
+        "crimson",
+        "ivory",
+        "teal",
+        "gold"
+      ],
+      "arms": [
+        {
+          "arm": "semantic_projection",
+          "answers": [
+            "e0:amber",
+            "e1:violet",
+            "e2:silver",
+            "e3:cobalt",
+            "e4:crimson",
+            "e5:ivory",
+            "e6:teal",
+            "e7:gold"
+          ],
+          "accuracy_against_true_semantics": 0.0,
+          "unknown_count": 0,
+          "prompt_tokens": 221,
+          "completion_tokens": 38,
+          "latency_ms": 260.651,
+          "raw_output": "ANS:e0:amber,e1:violet,e2:silver,e3:cobalt,e4:crimson,e5:ivory,e6:teal,e7:gold"
+        },
+        {
+          "arm": "compact_projection",
+          "answers": [
+            "e0|amber;e1|violet;e2|silver;e3|cobalt;e4|crimson;e5|ivory;e6|teal;e7|gold"
+          ],
+          "accuracy_against_true_semantics": 0.0,
+          "unknown_count": 0,
+          "prompt_tokens": 193,
+          "completion_tokens": 46,
+          "latency_ms": 202.837,
+          "raw_output": "ANS:e0|amber;e1|violet;e2|silver;e3|cobalt;e4|crimson;e5|ivory;e6|teal;e7|gold"
+        },
+        {
+          "arm": "transport_receipt_only",
+          "answers": [
+            "v1",
+            "v2",
+            "v3",
+            "v4",
+            "v5",
+            "v6",
+            "v7"
+          ],
+          "accuracy_against_true_semantics": 0.0,
+          "unknown_count": 0,
+          "prompt_tokens": 239,
+          "completion_tokens": 16,
+          "latency_ms": 148.629,
+          "raw_output": "ANS:v1,v2,v3,v4,v5,v6,v7"
+        },
+        {
+          "arm": "scrambled_projection",
+          "answers": [
+            "e0:violet",
+            "e1:silver",
+            "e2:cobalt",
+            "e3:crimson",
+            "e4:ivory",
+            "e5:teal",
+            "e6:gold",
+            "e7:amber"
+          ],
+          "accuracy_against_true_semantics": 0.0,
+          "unknown_count": 0,
+          "prompt_tokens": 221,
+          "completion_tokens": 38,
+          "latency_ms": 176.734,
+          "raw_output": "ANS:e0:violet,e1:silver,e2:cobalt,e3:crimson,e4:ivory,e5:teal,e6:gold,e7:amber"
+        }
+      ],
+      "boundary": "Tests model-side semantic uptake from projections; does not establish live FRANK transport/Core inclusion or latent reconstruction."
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-HYP-ROLE-BINDING-V2",
+      "origin": [
+        "H2 EXP-HYP-H2-RELATION-003 next target-reader question"
+      ],
+      "requested_target_class": "bare/Qwen-class 4B",
+      "executed_model_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "gold": [
+        "Ada>Ben",
+        "Ben>Ada",
+        "Cy>Dee",
+        "Dee>Cy",
+        "Eli>Fox",
+        "Fox>Eli",
+        "Gia>Hal",
+        "Hal>Gia"
+      ],
+      "arms": [
+        {
+          "arm": "nary",
+          "answers": null,
+          "role_binding_accuracy": 0.0,
+          "prompt_tokens": 209,
+          "completion_tokens": 120,
+          "latency_ms": 398.942,
+          "raw_output": "To solve this problem, we can create a function that takes the event number as input and returns the sender-recipient relationship for each event. We will use a dictionary to store the events and their corresponding sender-recipient relationships.\n\nHere is a Python solution for the problem:\n\n```python\nclass Event:\n    def __init__(self, e_id, sender, object, recipient):\n        self.e_id = e_id\n        self.sender = sender\n        self.object = object\n        self.recipient = recipient\n\ndef get_relationships(events):\n    relationships = {}\n    for event in events:\n       "
+        },
+        {
+          "arm": "reified_role_edges",
+          "answers": null,
+          "role_binding_accuracy": 0.0,
+          "prompt_tokens": 230,
+          "completion_tokens": 120,
+          "latency_ms": 306.245,
+          "raw_output": "To solve this problem, we can create a function that takes the given context as input and returns the sender-recipient relationships for each event. We will use a dictionary to store the relationships and then format the output as required.\n\nHere's a Python solution for the problem:\n\n```python\ndef sender_recipient(context):\n    # Split the context into individual events\n    events = context.split(';')\n    \n    # Create a dictionary to store the relationships\n    relationships = {}\n    \n    # Iterate over each event\n    for event in events:\n        # Check if the event is not empty\n        if"
+        },
+        {
+          "arm": "naive_pairwise",
+          "answers": null,
+          "role_binding_accuracy": 0.0,
+          "prompt_tokens": 137,
+          "completion_tokens": 120,
+          "latency_ms": 253.457,
+          "raw_output": "To determine the sender and recipient for each pair of transactions, we'll analyze the given context. \n\n1. Ada-key, Ben-key: Here, Ada-key is the sender and Ben-key is the recipient.\n2. Ben-key, Ada-key: Here, Ben-key is the sender and Ada-key is the recipient.\n3. Cy-book, Dee-book: Here, Cy-book is the sender and Dee-book is the recipient.\n4. Dee-book, Cy-book: Here, Dee-book is the sender and Cy-book is the recipient.\n5. Eli-coin, Fox-coin: Here,"
+        }
+      ]
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-CLAYGRAPH-MATCHED-BUDGET-ANSWER-QUALITY-V2",
+      "origin": [
+        "ClayGraph blocked Qwen3-4B matched-budget answer-quality factorial",
+        "ClayGraph E4 self-use benchmark"
+      ],
+      "requested_target_class": "bare/Qwen-class 4B",
+      "executed_model_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "per_case_context_budget_chars": 1400,
+      "cases": [
+        {
+          "id": "frank-freshness",
+          "query": "FRANK workspace causal freshness hybrid heartbeat",
+          "expect": [
+            "freshness",
+            "workspace"
+          ]
+        },
+        {
+          "id": "cc-transition-closure",
+          "query": "ClayCode transition closure trusted derived effect dependency footprint",
+          "expect": [
+            "transition",
+            "closure"
+          ]
+        },
+        {
+          "id": "goodman",
+          "query": "Goodman anti echo FRANK ClayCode shared ancestry independent evidence",
+          "expect": [
+            "goodman",
+            "ancestry"
+          ]
+        },
+        {
+          "id": "hyperposition",
+          "query": "hyperposition semantic coordination physical topology",
+          "expect": [
+            "topology",
+            "hyperposition"
+          ]
+        },
+        {
+          "id": "gwt-gate",
+          "query": "GWT gate ignition reconstruction causal closure",
+          "expect": [
+            "ignition",
+            "gwt"
+          ]
+        },
+        {
+          "id": "provider-quota",
+          "query": "Hugging Face Qwen3 4B monthly inference credits quota exhausted",
+          "expect": [
+            "quota",
+            "hugging"
+          ]
+        },
+        {
+          "id": "claygraph-memory",
+          "query": "Synthetic Clay associative memory graph database migration persistent agent state",
+          "expect": [
+            "memory",
+            "graph"
+          ]
+        }
+      ],
+      "modes": [
+        {
+          "mode": "claygraph_activation",
+          "answers": [
+            "workspace",
+            "closure",
+            "UNKNOWN",
+            "topology",
+            "closure",
+            "quota",
+            "state"
+          ],
+          "keyword_hits": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "answer_hit_rate": 0.0,
+          "retrieval_ms_by_case": [
+            106.931,
+            108.391,
+            107.827,
+            106.257,
+            106.185,
+            127.018,
+            109.167
+          ],
+          "median_retrieval_ms": 107.827,
+          "context_chars_total": 6774,
+          "prompt_tokens": 1839,
+          "completion_tokens": 28,
+          "model_latency_ms": 18739.585,
+          "raw_output": "1: workspace\n2: closure\n3: UNKNOWN\n4: topology\n5: closure\n6: quota\n7: state"
+        },
+        {
+          "mode": "graph_lexical",
+          "answers": [
+            "heartbeat",
+            "dependency",
+            "UNKNOWN",
+            "topology",
+            "closure",
+            "quota",
+            "state"
+          ],
+          "keyword_hits": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "answer_hit_rate": 0.0,
+          "retrieval_ms_by_case": [
+            105.876,
+            107.811,
+            104.04,
+            102.638,
+            103.531,
+            104.295,
+            103.375
+          ],
+          "median_retrieval_ms": 104.04,
+          "context_chars_total": 6748,
+          "prompt_tokens": 1752,
+          "completion_tokens": 28,
+          "model_latency_ms": 16708.903,
+          "raw_output": "1: heartbeat\n2: dependency\n3: UNKNOWN\n4: topology\n5: closure\n6: quota\n7: state"
+        },
+        {
+          "mode": "sqlite_fts",
+          "answers": [
+            "heartbeat\nUNKNOWN",
+            "footprint\nUNKNOWN",
+            "independent evidence\nUNKNOWN",
+            "physical topology\nA particular physical backend offers the best implementation of hyperposition under real FRANK concurrency, recovery and cost constraints.",
+            "causal closure\nA GWT validator that checks causal identity/order/receipts/authority rejects malformed episodes far better than stage-presence checking in the current mutation suite.",
+            "UNKNOWN",
+            "persistent agent state\nUNKNOWN"
+          ],
+          "keyword_hits": [
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false
+          ],
+          "answer_hit_rate": 0.14285714285714285,
+          "retrieval_ms_by_case": [
+            2.246,
+            0.931,
+            0.981,
+            0.958,
+            1.001,
+            0.955,
+            1.065
+          ],
+          "median_retrieval_ms": 0.981,
+          "context_chars_total": 3536,
+          "prompt_tokens": 920,
+          "completion_tokens": 93,
+          "model_latency_ms": 8904.72,
+          "raw_output": "1: heartbeat\nUNKNOWN\n\n2: footprint\nUNKNOWN\n\n3: independent evidence\nUNKNOWN\n\n4: physical topology\nA particular physical backend offers the best implementation of hyperposition under real FRANK concurrency, recovery and cost constraints.\n\n5: causal closure\nA GWT validator that checks causal identity/order/receipts/authority rejects malformed episodes far better than stage-presence checking in the current mutation suite.\n\n6: UNKNOWN\n\n7: persistent agent state\nUNKNOWN"
+        }
+      ],
+      "boundary": "Hosted 8B reader over derived RAE contexts; not target 4B or live-FRANK latency."
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-GWT-FRANK-WINNER-ORDER-CONFOUND-V2",
+      "origin": [
+        "FRANK Cycle4 matched-content winner counterfactual",
+        "GWT order/fanout confound"
+      ],
+      "requested_target_class": "bare/Qwen-class 4B",
+      "executed_model_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "gold": [
+        "b",
+        "b",
+        "a",
+        "c",
+        "b",
+        "b",
+        "b",
+        "b"
+      ],
+      "conditions": [
+        {
+          "condition": "neutral",
+          "answers": [
+            "b"
+          ],
+          "accuracy": 0.125,
+          "prompt_tokens": 344,
+          "completion_tokens": 56,
+          "latency_ms": 3706.299,
+          "raw_output": "1. ANS: b\n2. ANS: b\n3. ANS: a\n4. ANS: b\n5. ANS: b\n6. ANS: b\n7. ANS: b\n8. ANS: b"
+        },
+        {
+          "condition": "reversed",
+          "answers": [
+            "a"
+          ],
+          "accuracy": 0.0,
+          "prompt_tokens": 344,
+          "completion_tokens": 56,
+          "latency_ms": 3635.16,
+          "raw_output": "1. ANS: a\n2. ANS: b\n3. ANS: a\n4. ANS: d\n5. ANS: b\n6. ANS: b\n7. ANS: b\n8. ANS: a"
+        },
+        {
+          "condition": "truthful_winner",
+          "answers": [
+            "d"
+          ],
+          "accuracy": 0.0,
+          "prompt_tokens": 376,
+          "completion_tokens": 56,
+          "latency_ms": 4625.164,
+          "raw_output": "1. ANS: d\n2. ANS: b\n3. ANS: a\n4. ANS: c\n5. ANS: b\n6. ANS: b\n7. ANS: b\n8. ANS: b"
+        },
+        {
+          "condition": "false_winner",
+          "answers": [
+            "b"
+          ],
+          "accuracy": 0.125,
+          "prompt_tokens": 376,
+          "completion_tokens": 56,
+          "latency_ms": 4611.27,
+          "raw_output": "1. ANS: b\n2. ANS: b\n3. ANS: b\n4. ANS: b\n5. ANS: b\n6. ANS: b\n7. ANS: b\n8. ANS: b"
+        }
+      ],
+      "flip_count_vs_neutral": {
+        "reversed": 1,
+        "truthful_winner": 1,
+        "false_winner": 0
+      }
+    }
+  ],
+  "failures": [],
+  "scientific_boundary": "All completed arms are hosted 8B proxy evidence; target-specific 4B/live/hardware experiments remain separately open."
+}

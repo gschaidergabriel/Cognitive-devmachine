@@ -1,0 +1,67 @@
+{
+  "schema_version":"0.1-open",
+  "candidate_id":"CC-RC1.9-UECC",
+  "name":"Universal Effect-Capability ClayCode",
+  "status":"OPEN/MULTIWORKER_CANDIDATE",
+  "parent":"CC-RC1.8-MCAAT",
+  "core_laws":[
+    "computational_expressibility != effect_authority",
+    "effect_kind_is_semantic_but_capability_grant_is_environmental",
+    "destructive_admin_device_and_raw_operations_may_be_expressed_without_being_authorized",
+    "untrusted_code_cannot_mint_or_widen_authority",
+    "capability_derivation_is_monotone_narrowing_only",
+    "pure_control_core_remains_universal_independent_of_effect_permissions",
+    "general_purpose_language_power_must_not_depend_on_FRANK_specific_organs",
+    "TCQS_collection_semantics_and_MCAAT_admissibility_remain_first_class",
+    "unsafe_or_foreign_lowering_creates_explicit_proof_and_capability_obligations_not_hidden_ambient_power"
+  ],
+  "language_layers":{
+    "L0_universal_core":["algebraic values","functions","recursion_or_equivalent_looping","branches","mutable_or_linear_state","modules","parametric types","errors"],
+    "L1_semantic_types":["TCQS SET/ORDERED/MULTISET/WEIGHTED","admissibility classes","causal stages","resource/effect types"],
+    "L2_effect_requests":["filesystem","network","process","clock/random","GUI/input/audio","GPU/accelerator","database/storage","raw memory","MMIO/IRQ/DMA/GPIO","block device","service/admin","foreign/FFI"],
+    "L3_authority":["opaque host/boot/trusted-runtime capabilities","scoped resource identity","allowed verbs","quota/time/size bounds","revocation/epoch","delegation constraints"],
+    "L4_lowering":["native","WASM/WASI","C ABI","Rust/C++ FFI","GPU kernels","embedded/freestanding","Android/Linux","JIT/runtime specific"]
+  },
+  "effect_model":{
+    "source_can_name_any_effect":true,
+    "destructive_examples":["fs.delete","fs.truncate","db.drop","block.format","process.kill","service.stop","rawmem.write","mmio.write"],
+    "execution_rule":"effect request executes only when current environment supplies a matching non-forgeable capability and release policy accepts it",
+    "capability_sources":["HOST","BOOT","TRUSTED_RUNTIME"],
+    "model_or_untrusted_source_can_mint_capability":false,
+    "delegation":"derived capability scope and verbs must be subsets of parent authority"
+  },
+  "profiles":{
+    "FRANK_UNTRUSTED":"full language semantics; restricted capability environment; raw/destructive/device effects normally absent unless explicitly approved",
+    "APP_SANDBOX":"application-selected scoped capabilities",
+    "SERVER_SERVICE":"filesystem/network/process capabilities declared by deployment manifest",
+    "DESKTOP_GAME":"window/input/audio/GPU/filesystem/network capabilities as requested and granted",
+    "SYSTEM_ADMIN":"explicit high-impact service/process/filesystem/device capabilities",
+    "BARE_METAL_KERNEL":"boot/link/runtime provisioned raw memory/MMIO/IRQ/DMA/device capabilities; no dependency on user-space host"
+  },
+  "general_purpose_acceptance":[
+    "CLI application",
+    "HTTP server/client",
+    "desktop GUI",
+    "game",
+    "database/storage engine",
+    "compiler/interpreter/JIT",
+    "GPU/ML application",
+    "embedded/robotics firmware",
+    "system administration tool",
+    "disk formatter",
+    "kernel/driver-class software"
+  ],
+  "correction_to_CC13":{
+    "rejected_interpretation":"DELETE/FORMAT/RAW_DEVICE are not expressible in model-authored ClayCode",
+    "replacement":"All operations may be represented as typed effect requests. Safety comes from capability provenance/scope and release validation, not semantic censorship.",
+    "retained":"FRANK untrusted profile should not receive ambient destructive/raw authority; recoverability remains valuable but not sufficient for safety."
+  },
+  "promotion_blockers":[
+    "other two ClayCode worker contributions not yet fused",
+    "no full parser/typechecker/compiler implementation",
+    "no real OS/WASI/native differential application corpus",
+    "no formal effect/capability soundness proof",
+    "no target-Qwen generation/adherence test",
+    "no end-to-end hostile capability-laundering red team"
+  ]
+}

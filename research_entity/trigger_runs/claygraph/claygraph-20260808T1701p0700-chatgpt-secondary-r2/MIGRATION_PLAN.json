@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T1701p0700-chatgpt-secondary-r2",
+  "principle":"Semantic retrieval evolution is independent of physical store consolidation.",
+  "phases":[
+    {"phase":"INVENTORY","status":"PARTIAL_BLOCKED","action":"complete read-only 71-store map"},
+    {"phase":"SEMANTIC_MAPPING","status":"PARTIAL","action":"map verified store entities/events/relations/exact anchors"},
+    {"phase":"RESIDENT_DERIVED_INDEX","status":"NEW_CYCLE3_RESEARCH_TARGET","action":"build rebuildable resident semantic/lexical/id/status/evidence-family/adjacency indexes from current authoritative/repository sources; no authority transfer","rollback":"discard resident index and use deterministic packet/FTS/direct retrieval"},
+    {"phase":"SHADOW_GRAPH","status":"REQUIRED","action":"shadow current queries with G1c without changing production answers"},
+    {"phase":"PARITY_AND_REPLAY","status":"REQUIRED","action":"test exact/history/conflict/stale/revoked/n-ary semantics, current-corpus recall, p50/p95/p99, update amplification, memory and crash rebuild"},
+    {"phase":"DUAL_READ","status":"REQUIRED","action":"baseline retrieval remains primary while graph route runs conditionally and receipts differences"},
+    {"phase":"DUAL_WRITE_WHERE_SAFE","status":"DEFER","action":"authoritative state first/atomically with durable receipt; graph/index is derived and may lag with explicit staleness"},
+    {"phase":"CONTROLLED_CUTOVER","status":"DEFER","action":"only route proven query classes to G1c; retain direct fallback"},
+    {"phase":"ROLLBACK_WINDOW","status":"REQUIRED","action":"retain prior retrieval/store projections and deterministic rebuild"},
+    {"phase":"DEPRECATE_OR_KEEP_ISOLATED","status":"DEFER","action":"store-specific evidence decides; KEEP_ISOLATED remains valid"}
+  ],
+  "hard_rules":["No physical MERGE from retrieval-quality evidence alone.","Resident index is derived/rebuildable and never canonical truth.","Graph route failure falls back to exact/packet/FTS path.","Capability/invariant authority remains outside graph/model context."],
+  "destructive_action_authorized":false
+}

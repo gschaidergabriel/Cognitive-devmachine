@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.1",
+  "run_id":"claygraph-20260808T2212p0700-chatgpt-secondary-r3",
+  "planned_classes":["implementation","current_web","scholarly","executable"],
+  "attempts":[
+    {"tool":"github_connector","status":"SUCCESS","evidence_role":"canonical boot, eight-branch mesh retrieval, artifact writes/rereads, current commit scanning"},
+    {"tool":"native_web","status":"SUCCESS","evidence_role":"current external research on active/temporal graph memory, oversmoothing, bounded context and memory poisoning"},
+    {"tool":"local_sandbox","status":"SUCCESS","evidence_role":"reference implementation for self-use, routing and anti-attractor mechanism tests"},
+    {"tool":"e2b_sandbox","status":"SUCCESS_AFTER_REPAIR","evidence_role":"isolated remote mechanism replication and tooling falsification","receipts":["research_entity/runtime/tool_results/claygraph-g2a-e2b-20260808T2212p0700.json","research_entity/runtime/tool_results/claygraph-g2a-e2b-v02-20260808T2212p0700.json","research_entity/runtime/tool_results/claygraph-g2a-e2b-v04-20260808T2212p0700.json","research_entity/runtime/tool_results/claygraph-g2a-selfuse-e2b-20260808T2212p0700.json"],"first_failure":"NumPy absent from base E2B image","repair":"stdlib-only lab","second_issue":"bridge stdout truncation","repair_2":"compact receipts + split decisive tests"},
+    {"tool":"e2b_sandbox_router_exact_subset","status":"PENDING_NOT_OBSERVED_AT_EVIDENCE_CUTOFF","request":"research_entity/runtime/tool_requests/claygraph-g2a-router-e2b-20260808T2212p0700.json","evidence_role":"exact router replication; not counted as completed evidence"}
+  ],
+  "external_source_classes":["ACL/Findings 2026 papers","arXiv/preprints clearly labeled","current GitHub implementations","technical research reports"],
+  "important_external_sources":["SYNAPSE","MAGMA","GAM","Temporal Semantic Memory","APEX-MEM","LiCoMemory","Hindsight","Graphiti","oversmoothing/consensus work","Context Rot replication","SMSR/MemSecBench/MemPoison and systematic memory-poisoning research","Cognitive Scaffold","STITCH","MemReranker"],
+  "fallbacks":[{"tool":"judge0_execute","status":"NOT_NEEDED","reason":"E2B became operational after stdlib repair; exact router subset remained pending but local reference plus independent compact E2B variant preserved enough evidence for HOLD decision"}],
+  "secrets_persisted_in_artifacts":false,
+  "rule":"Only successful observed provider results count. Pending requests and failed dependencies are preserved as negative/tooling evidence, never upgraded to success."
+}

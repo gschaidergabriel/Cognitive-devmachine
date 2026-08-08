@@ -107,10 +107,20 @@ def main():
     rt=fixture(); writej(rt/"research_entity/global/CALENDAR_RESEARCH_CAPABILITY.json",{"tool_name":"calendar_api","class":"calendar","status":"RUNTIME_VERIFIED"}); r=run(rt)
     assert next(x for x in r["capabilities"] if x["tool"]=="calendar_api")["state"]=="NO_DIRECT_PATH_IMPACT" and r["forecast_high"]==r0["forecast_high"]; tests += 1
 
+    rt=fixture(); w=json.loads((rt/"research_entity/archive_assimilation/666_WORKSPACE.json").read_text()); w["combined_progress"]["exact_coverage_percent"]=100; writej(rt/"research_entity/archive_assimilation/666_WORKSPACE.json",w); before=run(rt); m=json.loads((rt/"research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json").read_text()); m["rows"]["NEW_REQUIRED_SAFETY_GATE"]={"label":"New required safety gate","kind":"forecast_work","dependencies":["CLAY_0_1_FULL_INTEGRATION"],"prior_days":{"low":5,"high":10},"confidence":"LOW"}; m["rows"]["PROJECT_HARDWARE_DEPLOYMENT"]["dependencies"]=["NEW_REQUIRED_SAFETY_GATE"]; writej(rt/"research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json",m); after=run(rt)
+    assert after["progress_percent"] < before["progress_percent"] and after["forecast_high"] > before["forecast_high"]; tests += 1
+
+    rt=fixture(); m=json.loads((rt/"research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json").read_text()); m["rows"]["NEW_CHECK"]={"label":"New check","kind":"forecast_work","dependencies":["FINAL_MODEL_FINE_TUNE"],"prior_days":{"low":2,"high":4},"confidence":"LOW"}; writej(rt/"research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json",m); (rt/"research_entity/forecast/DOOMSDAY_EVENTS.jsonl").write_text(json.dumps({"event_id":"dep","type":"NEW_DEPENDENCY","status":"VERIFIED","affected_rows":["MODEL_EXPORT_RUNTIME_PACKAGE"],"dependency_row":"NEW_CHECK","evidence_refs":["requirement:1"]})+"\n"); r=run(rt)
+    assert "NEW_CHECK" in row(r,"MODEL_EXPORT_RUNTIME_PACKAGE")["dependencies"] and r["forecast_high"] > r0["forecast_high"]; tests += 1
+
+    rt=fixture(); (rt/"research_entity/forecast/DOOMSDAY_EVENTS.jsonl").write_text("{broken json\n"); r=run(rt)
+    assert r["rejected_events"] and r["forecast_high"] == r0["forecast_high"]; tests += 1
+
     rt=fixture(); m=json.loads((rt/"research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json").read_text()); m["rows"]["L0_ARCHIVE_ASSIMILATION"]["dependencies"]=["CLAY_0_1_ACCEPTANCE_RUN"]; writej(rt/"research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json",m)
     try: run(rt); raise AssertionError("cycle not detected")
     except ValueError as exc: assert "dependency_cycle" in str(exc); tests += 1
 
+    assert tests >= 21
     print(f"DOOMSDAY_FORECAST_TESTS_PASS:{tests}")
 
 

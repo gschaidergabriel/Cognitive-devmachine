@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "target_id": "DOOMSDAY",
+  "label": "DOOMSDAY / Clay 0.1",
+  "forecast_protocol": "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
+  "target_definition": "First end-to-end project-hardware run of a Clay-programmed FRANK distilled/compiled into the intended one-module binary/runtime, using UnifiedDB and the final fully fine-tuned Clay-native model.",
+  "owner_hours_per_day_source": "research_entity/rooms/PROGRAM_THROUGHPUT.json:user_active_hours_per_day",
+  "capacity_source": "research_entity/rooms/CAPACITY_STATE.json",
+  "events_source": "research_entity/forecast/DOOMSDAY_EVENTS.jsonl",
+  "progress_method": "effort_weighted_dynamic_scope",
+  "forecast_method": "dependency_graph_low_high_critical_path",
+  "rows": {
+    "L0_ARCHIVE_ASSIMILATION": {
+      "label": "Level 0: FRANK archive assimilation",
+      "kind": "program_stage",
+      "stage_id": "L0_ARCHIVE_ASSIMILATION",
+      "dependencies": [],
+      "prior_days": {"low": 5.0, "high": 12.0},
+      "confidence": "LOW"
+    },
+    "BASE_CLAYCODE_RELEASE": {
+      "label": "ClayCode BASE release",
+      "kind": "program_stage",
+      "stage_id": "BASE_CLAYCODE_RELEASE",
+      "dependencies": ["L0_ARCHIVE_ASSIMILATION"],
+      "prior_days": {"low": 1.0, "high": 4.0},
+      "confidence": "LOW"
+    },
+    "H1_REFERENCE_HARNESS": {
+      "label": "Harness 1: reference FRANK",
+      "kind": "program_stage",
+      "stage_id": "H1_REFERENCE_HARNESS",
+      "dependencies": ["BASE_CLAYCODE_RELEASE"],
+      "prior_days": {"low": 2.0, "high": 8.0},
+      "confidence": "LOW"
+    },
+    "H2_CLAYCODE_HARNESS": {
+      "label": "Harness 2: FRANK in ClayCode",
+      "kind": "program_stage",
+      "stage_id": "H2_CLAYCODE_HARNESS",
+      "dependencies": ["H1_REFERENCE_HARNESS"],
+      "prior_days": {"low": 1.0, "high": 4.0},
+      "confidence": "LOW"
+    },
+    "H3_ONE_MODULE_BINARY_FRANK": {
+      "label": "Harness 3: one-module/binary FRANK",
+      "kind": "program_stage",
+      "stage_id": "H3_ONE_MODULE_FRANK",
+      "dependencies": ["H2_CLAYCODE_HARNESS"],
+      "prior_days": {"low": 3.0, "high": 10.0},
+      "confidence": "VERY_LOW_FIRST_OF_KIND"
+    },
+    "UDB_UNIFIED_DATABASE": {
+      "label": "UnifiedDB final integration",
+      "kind": "program_stage",
+      "stage_id": "UDB_UNIFIED_DATABASE",
+      "dependencies": ["H3_ONE_MODULE_BINARY_FRANK"],
+      "prior_days": {"low": 2.0, "high": 7.0},
+      "confidence": "LOW"
+    },
+    "DATA_FINAL_TRAINING_CORPUS": {
+      "label": "Final Clay 0.1 training + held-out corpus",
+      "kind": "program_stage",
+      "stage_id": "DATA_LORA_TRAINING_DATA",
+      "dependencies": ["UDB_UNIFIED_DATABASE"],
+      "prior_days": {"low": 1.0, "high": 5.0},
+      "confidence": "LOW"
+    },
+    "OWNER_TRAINING_RELEASE_GATE": {
+      "label": "Owner authorization for final paid/model training",
+      "kind": "owner_gate",
+      "dependencies": ["DATA_FINAL_TRAINING_CORPUS"],
+      "prior_days": {"low": 0.0, "high": 0.0},
+      "conditional_assumption": "Forecast assumes immediate owner authorization when the frozen training-data gate is ready; unknown human waiting time is excluded.",
+      "confidence": "CONDITIONAL"
+    },
+    "FINAL_MODEL_FINE_TUNE": {
+      "label": "Final fully fine-tuned Clay-native model",
+      "kind": "forecast_work",
+      "dependencies": ["OWNER_TRAINING_RELEASE_GATE"],
+      "future_workspace": "research_entity/training/FINAL_MODEL_FINE_TUNE_WORKSPACE.json",
+      "prior_days": {"low": 1.0, "high": 5.0},
+      "confidence": "VERY_LOW_METHOD_NOT_FROZEN"
+    },
+    "MODEL_EXPORT_RUNTIME_PACKAGE": {
+      "label": "Model export / runtime packaging",
+      "kind": "forecast_work",
+      "dependencies": ["FINAL_MODEL_FINE_TUNE", "H3_ONE_MODULE_BINARY_FRANK"],
+      "future_workspace": "research_entity/release/CLAY_0_1_MODEL_PACKAGE_WORKSPACE.json",
+      "prior_days": {"low": 0.5, "high": 2.0},
+      "confidence": "LOW"
+    },
+    "CLAY_0_1_FULL_INTEGRATION": {
+      "label": "Binary + UnifiedDB + final model integration",
+      "kind": "forecast_work",
+      "dependencies": ["MODEL_EXPORT_RUNTIME_PACKAGE", "UDB_UNIFIED_DATABASE"],
+      "future_workspace": "research_entity/release/CLAY_0_1_INTEGRATION_WORKSPACE.json",
+      "prior_days": {"low": 1.0, "high": 4.0},
+      "confidence": "VERY_LOW_FIRST_OF_KIND"
+    },
+    "PROJECT_HARDWARE_DEPLOYMENT": {
+      "label": "Deploy on verified project-controlled hardware",
+      "kind": "forecast_work",
+      "dependencies": ["CLAY_0_1_FULL_INTEGRATION"],
+      "future_workspace": "research_entity/release/CLAY_0_1_DEPLOYMENT_WORKSPACE.json",
+      "prior_days": {"low": 0.5, "high": 3.0},
+      "capacity_strategy": "Try currently ACTIVE project-controlled machines first. If they fail the capability benchmark, use the next verified ACTIVE capable resource. Expected resources may appear as forecast assumptions but do not count as active until verified.",
+      "confidence": "LOW_HARDWARE_CAPABILITY_NOT_YET_BENCHMARKED"
+    },
+    "CLAY_0_1_ACCEPTANCE_RUN": {
+      "label": "Clay 0.1 acceptance run",
+      "kind": "forecast_work",
+      "dependencies": ["PROJECT_HARDWARE_DEPLOYMENT"],
+      "future_workspace": "research_entity/release/CLAY_0_1_ACCEPTANCE_WORKSPACE.json",
+      "prior_days": {"low": 0.5, "high": 2.0},
+      "confidence": "LOW"
+    }
+  },
+  "terminal_row": "CLAY_0_1_ACCEPTANCE_RUN",
+  "acceptance_artifacts": [
+    "CLAY_0_1_RELEASE_MANIFEST.json",
+    "CLAY_0_1_BINARY_BUILD_RECEIPT.json",
+    "CLAY_0_1_UNIFIEDDB_RECEIPT.json",
+    "CLAY_0_1_FINAL_MODEL_RECEIPT.json",
+    "CLAY_0_1_PROJECT_HARDWARE_BOOT_RECEIPT.json",
+    "CLAY_0_1_ACCEPTANCE_RECEIPT.json"
+  ],
+  "last_updated": "2026-08-09"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260809T0149p0700-chatgpt-secondary-sol-04",
+  "source_commit":"c09806f449715e009c2b86d861a3bf4dfaf994dc",
+  "source":"ClayCode Lane D EXP-CC-LANE-D-RESOURCE-WITNESS-002",
+  "timing":"arrived after initial G3 live-crossread and before final report",
+  "source_result_boundary":"Constructed namespace/TOCTOU mechanism evidence only; not Linux/openat2 or production proof.",
+  "graph_relevance":"Graph/source/memory identity represented only by lexical names, paths or resolve-once aliases can drift between selection and consequential use. Semantic identity and provenance path are necessary but may need a resolver/object witness at the handoff boundary.",
+  "G3_refinement":[
+    "MemoryUseAdmissibility for consequential paths should bind semantic memory identity + source/instance identity + resolver/namespace epoch where external mutable names are involved.",
+    "MemoryInfluenceReceipt should record the exact resolved source/object identity used, not only a display path or label.",
+    "If a graph edge/reference targets a mutable external namespace, exact validation must use a stable handle/witness or re-resolve and compare exact identity before consequential release.",
+    "This remains a downstream bridge obligation; ClayGraph does not mint ResourceWitness or effect authority."
+  ],
+  "candidate_schema_change":"REFINE_IN_FINAL_REPORT_AND_NEXT_SCHEMA_REVISION; current IBCA-G3 remains OPEN/HOLD and is not silently rewritten after experiment freeze.",
+  "promotion":"NONE"
+}

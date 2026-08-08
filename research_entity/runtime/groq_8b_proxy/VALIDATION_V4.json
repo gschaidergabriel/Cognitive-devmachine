@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "run_id": "groq8b-v4-20260808T004125Z",
+  "created_at": "2026-08-08T00:41:25.851292+00:00",
+  "provider": "Groq",
+  "model": "llama-3.1-8b-instant",
+  "requested_target_class": "bare/Qwen-class 4B",
+  "executed_model_class": "8B",
+  "evidence_role": "8b_proxy_for_4b",
+  "experiments": [
+    {
+      "experiment_id": "EXP-GROQ8B-XENO-REPRESENTATION-FACTORIAL-V4",
+      "gold": {
+        "1": "n13",
+        "2": "n4",
+        "3": "n6",
+        "4": "n8",
+        "5": "n14",
+        "6": "n16",
+        "7": "n7",
+        "8": "n13",
+        "9": "n11",
+        "10": "n15"
+      },
+      "arms": [
+        {
+          "arm": "natural",
+          "answers": {},
+          "accuracy": 0.0,
+          "complete": false,
+          "prompt_tokens": 476,
+          "completion_tokens": 120,
+          "latency_ms": 546.507,
+          "raw_output": "q1=0.92;n2=0.08;n6=0.11;n4=0.71;n8=0.84;n3=0.62;n5=0.87;n11=0.21;n7=0.30;n13=0.92;n17=0.57;n9=0.47;n12=0.12;n14=0.67;n16=0.19;n1=0.14;n10=0.06;n2=0.08;n6=0.11;n4=0.71"
+        },
+        {
+          "arm": "json_named",
+          "answers": {},
+          "accuracy": 0.0,
+          "complete": false,
+          "prompt_tokens": 595,
+          "completion_tokens": 103,
+          "latency_ms": 500.36,
+          "raw_output": "q1=0.3;n2=0.08;n3=0.11;n4=0.71;n5=0.87;n6=0.11;n7=0.3;n8=0.84;n9=0.47;n10=0.06;n11=0.21;n12=0.12;n13=0.92;n14=0.67;n15=0.31;n16=0.19;n17=0.57"
+        },
+        {
+          "arm": "json_positional",
+          "answers": {},
+          "accuracy": 0.0,
+          "complete": false,
+          "prompt_tokens": 407,
+          "completion_tokens": 112,
+          "latency_ms": 400.19,
+          "raw_output": "q1=open task highest activation; n11\nq2=open sensor highest activation; n4\nq3=open tool lowest activation; n6\nq4=unknown item highest activation; n1\nq5=revoked sensor; n14\nq6=closed memory; n12\nq7=open item version 5; n7\nq8=task version>=8 highest activation; n10\nq9=open tool version 8; n11\nq10=open tool activation 0.25..0.35; n0"
+        },
+        {
+          "arm": "claycode_readable",
+          "answers": {},
+          "accuracy": 0.0,
+          "complete": false,
+          "prompt_tokens": 347,
+          "completion_tokens": 120,
+          "latency_ms": 303.327,
+          "raw_output": "q1=open task highest activation; q2=open sensor highest activation; q3=open tool lowest activation; q4=unknown item highest activation; q5=revoked sensor; q6=closed memory; q7=open item version 5; q8=task version>=8 highest activation; q9=open tool version 8; q10=open tool activation 0.25..0.35.\nn0:L,16,O,1;n1:T,14,U,4;n2:T,8,O,6;n3:L,62,C,2;n4:S,71,O"
+        },
+        {
+          "arm": "claycode_aggressive",
+          "answers": {},
+          "accuracy": 0.0,
+          "complete": false,
+          "prompt_tokens": 389,
+          "completion_tokens": 75,
+          "latency_ms": 367.605,
+          "raw_output": "q1=task1; q2=memory; q3=unknown; q4=memory; q5=0,3,16,0,1; q6=6; q7=4,1,71,0,9; q8=task1; q9=; q10=1,0,14,2,4"
+        }
+      ]
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-HYP-ROLE-BINDING-V4",
+      "gold": {
+        "0": "Ada>Ben",
+        "1": "Ben>Ada",
+        "2": "Cy>Dee",
+        "3": "Dee>Cy",
+        "4": "Eli>Fox",
+        "5": "Fox>Eli",
+        "6": "Gia>Hal",
+        "7": "Hal>Gia"
+      },
+      "arms": [
+        {
+          "arm": "nary",
+          "answers": {
+            "0": "Ada>Ben",
+            "1": "Ben>Ada",
+            "2": "UNKNOWN>UNKNOWN",
+            "3": "UNKNOWN>UNKNOWN",
+            "4": "UNKNOWN>UNKNOWN",
+            "5": "UNKNOWN>UNKNOWN",
+            "6": "UNKNOWN>UNKNOWN",
+            "7": "UNKNOWN>UNKNOWN"
+          },
+          "accuracy": 0.25,
+          "unknowns": 0,
+          "complete": true,
+          "prompt_tokens": 231,
+          "completion_tokens": 56,
+          "latency_ms": 331.153,
+          "raw_output": "e0=Ada>Ben;e1=Ben>Ada;e2=UNKNOWN>UNKNOWN;e3=UNKNOWN>UNKNOWN;e4=UNKNOWN>UNKNOWN;e5=UNKNOWN>UNKNOWN;e6=UNKNOWN>UNKNOWN;e7=UNKNOWN>UNKNOWN"
+        },
+        {
+          "arm": "reified_role_edges",
+          "answers": {
+            "2": "UNKNOWN",
+            "3": "UNKNOWN"
+          },
+          "accuracy": 0.0,
+          "unknowns": 2,
+          "complete": false,
+          "prompt_tokens": 252,
+          "completion_tokens": 54,
+          "latency_ms": 327.343,
+          "raw_output": "e0=Ada->Ben;e1=Ben->Ada;e2=UNKNOWN;e3=UNKNOWN;e4=Eli->Fox;e5=Fox->Eli;e6=Gia->Hal;e7=Hal->Gia"
+        },
+        {
+          "arm": "naive_pairwise",
+          "answers": {
+            "2": "UNKNOWN",
+            "3": "UNKNOWN"
+          },
+          "accuracy": 0.0,
+          "unknowns": 2,
+          "complete": false,
+          "prompt_tokens": 159,
+          "completion_tokens": 68,
+          "latency_ms": 241.66,
+          "raw_output": "e0=Ada-key,Ben-key; e1=Ben-key,Ada-key; e2=UNKNOWN; e3=UNKNOWN; e4=Eli-coin,Fox-coin; e5=Fox-coin,Eli-coin; e6=Gia-map,Hal-map; e7=Hal-map,Gia-map"
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "boundary": "Label-stable final replication for representation/role-binding only; still hosted 8B proxy evidence."
+}

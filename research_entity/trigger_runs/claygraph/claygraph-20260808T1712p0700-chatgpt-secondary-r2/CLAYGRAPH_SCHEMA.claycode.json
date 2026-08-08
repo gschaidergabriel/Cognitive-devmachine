@@ -1,0 +1,62 @@
+{
+  "schema_version":"0.4",
+  "language":"ClayCode",
+  "representation":"canonical_semantic_ir_json_projection",
+  "candidate_id":"claygraph-g1d-epochal-latent-field",
+  "generation":1,
+  "parent":{"graph_id":"claygraph-v0-seed","generation":0},
+  "research_predecessor":"claygraph-g1c-resident-adaptive-escalation",
+  "status":"HOLD_CANDIDATE",
+  "purpose":"Preserve exact/event authority while maintaining an immutable versioned resident semantic graph plus bounded event-driven latent activation that can shape the next Assembly before an LLM explicitly requests memory retrieval.",
+  "layers":[
+    {"layer_id":"exact_anchor_index","persistent":true,"authority":"REFERENCE_ONLY","role":"versioned witnesses/pointers into authoritative exact/event stores"},
+    {"layer_id":"semantic_base_epoch","persistent":true,"derived":true,"role":"immutable resident typed semantic/provenance index for a validated source-corpus revision"},
+    {"layer_id":"semantic_delta_overlay","persistent":true,"derived":true,"role":"immutable additions/removals/status changes relative to a base epoch; atomically published after validation"},
+    {"layer_id":"latent_activation_field","persistent":false,"role":"event/cue-driven sparse salience field with lazy decay, local propagation, inhibition and bounded active set; evolves between LLM calls"},
+    {"layer_id":"retrieval_router","persistent":false,"role":"select exact/FTS/packet/local-graph/multihop route and decide whether latent activation is sufficient, supplemental or ignored"},
+    {"layer_id":"assembly_compiler","persistent":false,"role":"freeze a bounded model-visible organ from pinned graph epoch + activation epoch + CognitiveFrame and required exact anchors"},
+    {"layer_id":"assembly_certificate","persistent":false,"role":"explain route, epochs, activation ancestry, semantic paths, conflicts, evidence families, exact witnesses and cost"}
+  ],
+  "epoch_contract":{
+    "fields":["graph_epoch_id","parent_epoch_id","base_epoch_id","source_corpus_hash","delta_hash","created_at","projector_receipt","integrity_receipt"],
+    "publish_rule":"authoritative event/state commit first -> semantic delta preparation -> provenance/status/integrity validation -> immutable epoch publish -> activation may reference/preadapt to published epoch",
+    "reader_rule":"a query/Assembly pins one graph_epoch_id; mixed old/new semantic views are invalid",
+    "reclamation_rule":"old epochs remain readable until no pinned reader/Assembly requires them; concrete RCU/MVCC implementation is an implementation choice, not semantic authority",
+    "failure_rule":"failed/unknown delta validation does not publish; previous epoch remains current and direct authoritative fallback stays available"
+  },
+  "delta_compaction_policy":{
+    "principle":"incremental maintenance is conditional, not universal",
+    "inputs":["changed_node_fraction","changed_edge_fraction","overlay_posting_ratio","expected_reads_before_next_update","overlay_query_tax","rebuild_cost","memory_budget","integrity_risk"],
+    "decision":"keep delta overlay while amortized update savings exceed query+memory+integrity costs; otherwise build a new immutable base epoch",
+    "proxy_observation":"In the Cycle-4 30k-node lexical proxy, 10% changed nodes favored overlay at publish time but rebuild amortized after ~974 queries; at 20% changed nodes full rebuild was already cheaper than overlay construction. Not a production threshold."
+  },
+  "latent_activation_contract":{
+    "inputs":["authoritative/published events","current goals","self-state cues","workspace outcomes","explicit query cues"],
+    "operations":["ACTIVATE","INHIBIT","LAZY_DECAY","LOCAL_PROPAGATE","PRUNE","ASSEMBLY_SEED"],
+    "rules":["activation changes salience only, never epistemic status","default propagation is local/bounded and may be zero-hop for exact cues","decay is timestamp/lazy where possible rather than O(N) global sweep","negative/conflict/revoked facts retain status even when active","activation cannot create a semantic edge or capability","active set has hard node/energy/time budgets","feedback from model outcome can change future salience only through typed receipts"],
+    "epoching":{"activation_epoch_id":"monotonic local field version","basis_graph_epoch_id":"required","basis_frame_id":"optional until Assembly, required for current-state model visibility"}
+  },
+  "assembly_contract":{
+    "required_fields":["assembly_id","graph_epoch_id","activation_epoch_id","basis_frame_id","query_or_trigger_class","root_refs","selected_assertion_refs","exact_anchor_refs","evidence_family_refs","conflict_set_refs","activation_path_refs","staleness_witnesses","budget","ttl","stop_reason","no_authority=true"],
+    "rule":"Assembly membership is temporary and distinct from graph persistence and activation salience. Current/exact claims require exact-anchor validation even if highly active."
+  },
+  "retrieval_classes":{
+    "PREATTENTIVE_EVENT":{"default":"LATENT_FIELD_UPDATE","llm_context":"NONE"},
+    "CURRENT_EXACT":{"default":"EXACT_OR_FTS","graph":"OFF","exact_anchor":"REQUIRED"},
+    "FACTUAL_LOCAL":{"default":"PACKET_FTS_OR_VECTOR","latent_field":"OPTIONAL_RERANK_HINT"},
+    "SEMANTIC_ASSOCIATIVE":{"default":"LATENT_FIELD_PLUS_LOCAL_GRAPH","max_hops":1},
+    "RELATIONAL_MULTIHOP":{"default":"GRAPH_ESCALATION_FROM_LATENT_AND_RETRIEVAL_SEEDS","max_hops":2,"rerank":"REQUIRED"},
+    "AUDIT_CONTRADICTION":{"default":"STATUS_AWARE_PACKET_PLUS_GRAPH","activation_status_filter":"DISABLED_FOR_RELEVANT_NEGATIVE_HISTORY"},
+    "MIXED":{"default":"SPLIT_SUBCLAIMS_AND_PIN_ONE_EPOCH"}
+  },
+  "reader_projection":{"rule":"canonical graph form and small-model projection are separate; explicit relation roles preferred until target reader proves compact equivalence","context_budget":"Assembly exposes only bounded selected state; latent field itself is not dumped into prompt"},
+  "frank_mapping":{
+    "M.DURABLE_EVENT_STATE":"authoritative source/changefeed",
+    "M.MEMORY_FABRIC":"owns semantic epochs, latent activation and Assembly compilation",
+    "M.COGNITIVE_FRAME_ASSEMBLER":"provides frame witness pinned into current-state Assembly",
+    "M.WORKSPACE_ARBITER":"receives Assembly candidates; workspace competition/ignition remains distinct from memory activation",
+    "M.CAPABILITY_GATEWAY":"sole hard external effect authority"
+  },
+  "hard_invariants":["exact/event truth outranks semantic graph","graph epochs are derived/rebuildable","one Assembly cannot mix graph epochs","activation is not truth","Assembly is not persistent truth","model output is not authority","unknown/conflict/revoked/stale are preserved","shared ancestry is not independent evidence","no secrets/bearer capabilities in model-visible graph","rollback/direct-store fallback remains available"],
+  "evidence_boundary":{"historical_recovery":"supports mechanism continuity, not new empirical confidence","cycle4_delta_proxy":"supports adaptive overlay/rebuild policy in synthetic Python structures","cycle4_latent_proxy":"supports feasibility of sparse lazy field updates in synthetic graph","external":"current literature independently studies spreading activation, incremental memory and bitemporal graph memory","decision":"HOLD"}
+}

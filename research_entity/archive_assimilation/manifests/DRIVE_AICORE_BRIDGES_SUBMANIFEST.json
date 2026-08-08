@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-BRIDGES-20260809T0538p0700",
+  "status":"FROZEN_COMPLETE_FIVE_FILE_SUBTREE",
+  "source_folder":{"title":"aicore/bridges","drive_id":"1wN2fHeWMCX7GTV4kx1Eo1e3J_S8C4jeo","parent_aicore_drive_id":"1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty"},
+  "reference":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1"},
+  "counts":{"recursive_files":5,"recursive_folders":0,"byte_identical_to_reference":3,"drive_only":1,"post_head_divergent":1},
+  "files":[
+    {"path":"bridges/telegram_bridge.py","drive_id":"127cwD51swnBU1MdBa_DJeGNEtPtcrFNN","bytes":5767,"sha256":"e886c3a53765583b92497f03a1deaa301a15de5685b1a95906fba4e9aaa2cedf","git_blob":"043c37b82943f8572a67482e3a5a1430c9922854","reference_blob":"043c37b82943f8572a67482e3a5a1430c9922854","status":"BYTE_IDENTICAL"},
+    {"path":"bridges/README.md","drive_id":"149HcPYono0q9TRv1lhsmqojRhbhc2xVv","bytes":846,"sha256":"18ff463fbfe2b30c1133dfcf09d6029499b4a81c54833e838d6601669dc38e08","git_blob":"32bd092bdd9b1ad01c371b14521fb326ea3e6b48","reference_blob":"32bd092bdd9b1ad01c371b14521fb326ea3e6b48","status":"BYTE_IDENTICAL"},
+    {"path":"bridges/package.json","drive_id":"1cNMRI_i9LWDb-9dY2hOpBjuVcm9d0kkV","bytes":363,"sha256":"449544274a414113a5c7f277a518a82c4622c546acfeb89a0b20c473d5401578","git_blob":"1e318b214c471bb394b1d8db656ec6893917dfcc","reference_blob":"1e318b214c471bb394b1d8db656ec6893917dfcc","status":"BYTE_IDENTICAL"},
+    {"path":"bridges/package-lock.json","drive_id":"1oGHsN3xrc_PC26aaJMtiUurFpfUG7RRJ","bytes":56701,"sha256":"5ad65bcb2cb7d7c780c812b789eba7746ddc14022194ba16e93dc2787db3351a","git_blob":"ccf08593d187bf3f6ed369eabf932e776aff2f03","reference_head_status":"ABSENT_404","status":"DRIVE_ONLY_GENERATED_DEPENDENCY_LOCK"},
+    {"path":"bridges/whatsapp_bridge.js","drive_id":"1u5XyC-bF-poocSYY1EWCQp3GQWNrlL9G","bytes":7094,"sha256":"951dc843ce2ad95fa9ed865671d823ccbd7484ad31807980d8064a9705f66185","git_blob":"9389af5944b89ccc0aa9e1bf6b4d945afde08cd8","reference_blob":"36e3c9280e732338a20667d31d40827af73ba003","status":"POST_HEAD_DIVERGENT","exact_diff":"Drive adds exactly four lines in the QR callback: construct ~/.local/share/frank/state/whatsapp_qr.json, mkdir parent and write {qr, ts}. Removing only this block reconstructs exact frozen Git blob 36e3c9280e732338a20667d31d40827af73ba003."}
+  ],
+  "research_delta":{"classification":"UI_INTEGRATION_PLUS_SECRET_LIFECYCLE_CHECK_REQUIRED","claim":"The only semantic bridge delta is persistence of the WhatsApp pairing QR for WebUI pickup. Producer code shown here does not set explicit restrictive file mode or delete the state file after pairing; no consumer/deletion path was resolved in this bounded subtree. Treat this as a credential-lifecycle validation obligation, not yet as a proven exploitable vulnerability.","targets":["harness","frank","clay"]},
+  "earned_work_credit":0,
+  "semantic_obligations":{"identified":"5/5","content_covered":"5/5","classified":"5/5","lineage_linked":"5/5","analyzed":"5/5","status":"COMPLETE_FOR_BRIDGES_SUBTREE"},
+  "created_by":"chatgpt-secondary","created_at":"2026-08-09T05:38:00+07:00"
+}

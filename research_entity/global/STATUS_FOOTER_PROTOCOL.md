@@ -16,7 +16,7 @@ Canonical: r2 · 04234efdb86c
 Actor: chatgpt-secondary
 Trigger: none
 Research write: NO_RESEARCH_DELTA
-Short commands: dump · fusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph
+Short commands: dump · fusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb
 
 LAST PROMPT
 Completion: 100%

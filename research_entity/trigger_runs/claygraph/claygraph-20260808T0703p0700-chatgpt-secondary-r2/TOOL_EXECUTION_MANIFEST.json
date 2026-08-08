@@ -1,9 +1,9 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
   "actor_id":"chatgpt-secondary",
   "executions":[
-    {"class":"canonical+implementation","tool":"GitHub connector","status":"SUCCESS_RW_IN_PROGRESS","purpose":"canonical/actor/trigger verification, accepted graph, runtime packet policy, preflight selector source, prior ClayGraph artifacts, persistence"},
+    {"class":"canonical+implementation","tool":"GitHub connector","status":"SUCCESS_RW_VERIFIED","purpose":"canonical/actor/trigger verification, accepted graph, runtime packet policy, preflight selector source, prior ClayGraph artifacts, persistence and final reread"},
     {"class":"current_runtime_contract","tool":"GitHub current repository evidence","status":"SUCCESS","sources":["research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md","tools/research_interconnect_preflight.py","research_entity/runtime/CONTRACT_HEALTH.json","research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md"]},
     {"class":"scholarly","tool":"native web arXiv fallback","status":"SUCCESS","sources":[
       {"title":"GRASP: Plan-Guided Graph Retrieval with Adaptive Fusion and Reranking on Semi-Structured Knowledge Bases","date":"2026-05-28","evidence_class":"PREPRINT"},
@@ -21,5 +21,6 @@
     {"class":"target_model","tool":"Hugging Face inference","status":"SKIPPED_CACHED_QUOTA","reason":"TOOL_QUOTA_STATE remains QUOTA_EXHAUSTED_CACHED until 2026-09-01; no local target Qwen3-4B runtime exposed."},
     {"class":"repository_execution","tool":"research_interconnect_preflight.py / claygraph_build.py / claygraph_benchmark.py","status":"BLOCKED_SURFACE","reason":"GitHub connector can inspect/write but not execute arbitrary repository scripts in this chat surface; local proxy is not the repository runtime benchmark."}
   ],
+  "write_verification":"VERIFIED_RW_AFTER_REREAD",
   "promotion_boundary":"No strong promotion depends on unavailable target-model or repository-runner execution."
 }

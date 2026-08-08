@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "request_id": "claycode-r5-cbel-tv-e2b-001",
+  "tool": "e2b_sandbox",
+  "request_sha256": "736b746974213100470ba6602eb1356864b781cc09f504ffae6fe562ce943a9e",
+  "processed_at": "2026-08-08T18:38:34.536035+00:00",
+  "result": {
+    "provider": "E2B",
+    "tool": "e2b_sandbox",
+    "evidence_class": "runtime_experiment",
+    "command": "python3 -c '\nimport json, hashlib, hmac, random, time\n\nSECRET=b\"experiment-only-host-key\"\nOPS=[\"READ\",\"WRITE_VERSION\",\"REPOINT\",\"DEPLOY\",\"SEND\",\"PAY\"]\n\ndef enc(o): return json.dumps(o,sort_keys=True,separators=(\",\",\":\")).encode()\ndef H(o): return hashlib.sha256(enc(o)).hexdigest()\ndef sign(p): return hmac.new(SECRET,enc(p),hashlib.sha256).hexdigest()\ndef payload(p):\n    return {k:p[k] for k in (\"intent_hash\",\"basis_hash\",\"selection_hash\",\"revocation_epoch\",\"expires_epoch\",\"capability_scope\",\"nonce\")}\ndef sigok(p): return hmac.compare_digest(sign(payload(p)),p[\"signature\"])\n\ndef ref(c):\n    i,p,s=c[\"intent\"],c[\"permit\"],c[\"current\"]\n    checks=[\n      sigok(p), H(i)==p[\"intent_hash\"], s[\"basis\"]==p[\"basis_hash\"],\n      s[\"selection\"]==p[\"selection_hash\"], s[\"revocation\"]==p[\"revocation_epoch\"],\n      s[\"epoch\"]<=p[\"expires_epoch\"], s[\"closure\"]==\"KNOWN_VALID\",\n      i[\"operation\"] in p[\"capability_scope\"]]\n    return all(checks)\n\ndef lowered(c,drop=None):\n    i,p,s=c[\"intent\"],c[\"permit\"],c[\"current\"]\n    ck={\n      \"signature\":sigok(p),\n      \"intent\":H(i)==p[\"intent_hash\"],\n      \"basis\":s[\"basis\"]==p[\"basis_hash\"],\n      \"selection\":s[\"selection\"]==p[\"selection_hash\"],\n      \"revocation\":s[\"revocation\"]==p[\"revocation_epoch\"],\n      \"expiry\":s[\"epoch\"]<=p[\"expires_epoch\"],\n      \"closure\":s[\"closure\"]==\"KNOWN_VALID\",\n      \"scope\":i[\"operation\"] in p[\"capability_scope\"]}\n    if drop: ck[drop]=True\n    return all(ck.values())\n\ndef valid(seed):\n    r=random.Random(seed); op=r.choice(OPS)\n    b=hashlib.sha256((\"b\"+str(seed)).encode()).hexdigest()\n    s=hashlib.sha256((\"s\"+str(seed)).encode()).hexdigest()\n    i={\"operation\":op,\"args\":{\"target\":\"r\"+str(seed%1000),\"value\":seed%99991},\n       \"semantic_hash\":hashlib.sha256((\"sem\"+str(seed)).encode()).hexdigest(),\n       \"contract_hash\":hashlib.sha256((\"con\"+str(seed)).encode()).hexdigest(),\n       \"basis_hash\":b,\"selection_hash\":s,\"closure_state\":\"KNOWN_VALID\",\n       \"risk_class\":r.choice([\"LOW\",\"MEDIUM\",\"HIGH\"])}\n    c",
+    "stdout": "{\"benign_cases\": 10000, \"claim_boundary\": \"finite constructed runtime experiment; not formal proof or full syscall sandbox red-team\", \"experiment\": \"EXP-CC-RC1.9-CBEL-TV-E2B-001\", \"good_checker_benign_allows\": 10000, \"good_checker_targeted_denies\": 20000, \"mixed_false_accepts\": 0, \"mixed_fuzz_cases\": 30000, \"mixed_reference_vs_lowered_mismatches\": 0, \"mutant_false_accepts_when_one_check_removed\": {\"basis\": 2500, \"closure\": 2500, \"expiry\": 2500, \"intent\": 2500, \"revocation\": 2500, \"scope\": 2500, \"selection\": 2500, \"signature\": 2500}, \"reference_vs_lowered_mismatches\": 0, \"targeted_cases\": 20000}\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "status": "SUCCESS"
+}

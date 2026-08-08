@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "request_id": "claygraph-g2a-router-e2b-20260808T2212p0700",
+  "tool": "e2b_sandbox",
+  "request_sha256": "93261ff5a0b21db36834aa8a28780bc5fb23fe12cf23cfc70185696efc07b5b7",
+  "processed_at": "2026-08-08T18:38:40.511581+00:00",
+  "result": {
+    "provider": "E2B",
+    "tool": "e2b_sandbox",
+    "evidence_class": "runtime_experiment",
+    "command": "python3 -c 'import json,random\nSEED=9917\ndef top_indices(xs,k):return sorted(range(len(xs)),key=lambda i:(xs[i],i),reverse=True)[:k]\ndef route_policy(n=10000):\n rng=random.Random(SEED);T,P=50,16;N=T*P;topic=[i//P for i in range(N)];arms=['\"'\"'explicit'\"'\"','\"'\"'always_blend'\"'\"','\"'\"'adaptive_router'\"'\"','\"'\"'shuffled_blend'\"'\"'];res={a:{k:{'\"'\"'ok'\"'\"':0,'\"'\"'n'\"'\"':0,'\"'\"'rec'\"'\"':0.0,'\"'\"'fp'\"'\"':0.0} for k in ('\"'\"'exact'\"'\"','\"'\"'associative'\"'\"')} for a in arms}\n for _ in range(n):\n  t=rng.randrange(T);kind='\"'\"'exact'\"'\"' if rng.random()<.55 else '\"'\"'associative'\"'\"';gold=set(range(t*P,t*P+5));base=[0.0]*N;field=[0.0]*N;shuf=[0.0]*N\n  if kind=='\"'\"'exact'\"'\"':\n   for i in gold:base[i]=rng.uniform(.65,1.05)\n   for _ in range(7):\n    j=rng.randrange(N)\n    if j not in gold:base[j]=max(base[j],rng.uniform(.05,.3))\n   ft=t if rng.random()<.25 else (t+rng.randrange(1,T))%T\n  else:\n   i=rng.choice(list(gold));base[i]=rng.uniform(.25,.4)\n   for _ in range(12):\n    j=rng.randrange(N)\n    if j not in gold:base[j]=max(base[j],rng.uniform(.18,.5))\n   ft=t if rng.random()<.9 else (t+rng.randrange(1,T))%T\n  for i in range(ft*P,ft*P+5):field[i]=rng.uniform(.45,.9)\n  st=(t+rng.randrange(1,T))%T\n  for i in range(st*P,st*P+5):shuf[i]=rng.uniform(.45,.9)\n  scores={'\"'\"'explicit'\"'\"':base,'\"'\"'always_blend'\"'\"':[base[i]+1.35*field[i] for i in range(N)],'\"'\"'adaptive_router'\"'\"':base if kind=='\"'\"'exact'\"'\"' else [base[i]+1.35*field[i] for i in range(N)],'\"'\"'shuffled_blend'\"'\"':[base[i]+1.35*shuf[i] for i in range(N)]}\n  for a,s in scores.items():\n   top=top_indices(s,8);d=res[a][kind];d['\"'\"'n'\"'\"']+=1;d['\"'\"'ok'\"'\"']+=int(topic[top[0]]==t);d['\"'\"'rec'\"'\"']+=len(gold&set(top))/5;d['\"'\"'fp'\"'\"']+=sum(topic[i]!=t for i in top)/8\n out={}\n for a in arms:\n  tot=sum(res[a][k]['\"'\"'n'\"'\"'] for k in res[a]);out[a]={'\"'\"'overall'\"'\"':[round(sum(res[a][k]['\"'\"'ok'\"'\"'] for k in res[a])/tot,6),round(sum(res[a][k]['\"'\"'rec'\"'\"'] for k in res[a])/tot,6),round(sum(res[a][k]['\"'\"'fp'\"'\"'] f",
+    "stdout": "{\"arms\":{\"adaptive_router\":{\"associative\":[0.88879,0.889502],\"exact\":[1.0,1.0],\"overall\":[0.95,0.95032,0.4007]},\"always_blend\":{\"associative\":[0.88879,0.889502],\"exact\":[0.319041,0.851163],\"overall\":[0.5752,0.8684,0.454263]},\"explicit\":{\"associative\":[0.014457,0.130649],\"exact\":[1.0,1.0],\"overall\":[0.5569,0.60914,0.610375]},\"shuffled_blend\":{\"associative\":[0.0,0.00823],\"exact\":[0.111737,0.803634],\"overall\":[0.0615,0.44602,0.718988]}},\"episodes\":10000,\"seed\":9917,\"status\":\"PASS\"}\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "status": "SUCCESS"
+}

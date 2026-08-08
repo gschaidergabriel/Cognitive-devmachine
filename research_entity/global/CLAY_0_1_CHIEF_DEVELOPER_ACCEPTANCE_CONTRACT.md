@@ -5,6 +5,7 @@
 **Target class:** internal chief-developer first-test candidate
 **Not:** public release, production release, customer release, general availability
 **ClayCode gate:** `research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md`
+**Mandatory multimodal contract:** `research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md`
 
 ## 0. Meaning
 
@@ -13,6 +14,7 @@ DOOMSDAY is reached when the first complete Clay 0.1 system is ready for the **c
 Clay 0.1 at this point is:
 
 `FRANK architecture authored in Clay`
+`+ mandatory Digital Retina multimodal visual perception`
 `+ general-purpose ClayCode compiler/runtime`
 `+ one-module/binary-distilled executable architecture`
 `+ UnifiedDB`
@@ -38,6 +40,8 @@ Absolute bug-free perfection cannot be proven for a nontrivial software system. 
 - all mandatory UnifiedDB consistency/replay/recovery invariants pass;
 - all mandatory effect/authority invariants pass;
 - all mandatory GWT/Hyperposition readout instrumentation is present and self-consistent;
+- mandatory Digital Retina visual perception is present in H1/H2/H3 and the accepted one-module/binary identity;
+- visual evidence is provenance-bound, stale/replay detectable and causally traceable through gating/GWT/use/re-entry;
 - fuzz/property/adversarial suites meet their frozen thresholds;
 - crash/restart/replay tests meet their frozen thresholds;
 - full model is actually loaded and participates in the real Clay 0.1 loop;
@@ -52,6 +56,7 @@ A test that has never been run is not a pass.
 DOOMSDAY requires one integrated identity:
 
 - architecture: current frozen FRANK Clay contract;
+- multimodal perception: exact Digital Retina implementation/configuration and visual semantic-contract hash;
 - language/compiler: frozen ClayCode semantic/compiler/runtime version/hash;
 - general-purpose acceptance: exact `CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json` hash;
 - binary/runtime: exact build hash;
@@ -80,11 +85,15 @@ The acceptance principle is:
 
 Every frozen FRANK logical subsystem and coupling is mapped to executable Clay/ClayCode behavior or an explicitly justified external boundary (e.g. owner-fixed Needle boundary).
 
+Digital Retina is mandatory architecture, not an optional external plugin. The visual path must implement the frozen `VisualPercept` semantics and integrate with attention/thalamus, GWT, memory/self/world/goals and downstream action/effect proposal paths as defined by `FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md`.
+
 ### C — H1/H2/H3 differential continuity
 
 The Reference Harness, ClayCode Harness and one-module/binary form must agree on all semantics that the contract declares representation-invariant.
 
 Representation/placement differences are allowed only where explicitly non-semantic.
+
+Digital Retina differential continuity is mandatory for visual evidence identity, provenance, uncertainty, selection/gating, GWT participation, memory/world-state writes, causal use and re-entry.
 
 ### D — State / UnifiedDB
 
@@ -100,17 +109,19 @@ Validate:
 - stale-state rejection;
 - provenance;
 - ClayGraph/activation views;
-- cross-timescale state.
+- cross-timescale state;
+- VisualPercept persistence/query identity and source evidence provenance.
 
 ### E — Model integration
 
 The final fully fine-tuned model must:
 
 - read/produce the frozen Clay representation at target quality;
+- consume the frozen Clay-typed visual-context representation where the architecture exposes it;
 - operate through the real architecture interfaces;
 - preserve external authority boundaries;
 - pass held-out semantic/conformance tests;
-- survive long-horizon stateful tests;
+- survive long-horizon stateful and multimodal tests;
 - not rely on training-set leakage for acceptance.
 
 ### F — GWT / emergence observability
@@ -125,7 +136,10 @@ The executable system must expose the frozen functional readouts necessary to in
 - outcome;
 - re-entry;
 - relevant higher-order/topological coupling;
-- lesions/rescues/counterfactuals where defined.
+- lesions/rescues/counterfactuals where defined;
+- visual candidate creation, visual gating/suppression, visual broadcast and visual causal-use/re-entry chains.
+
+Digital Retina tests must include truthful visual input plus stale, replayed, shuffled, lesioned and rescued controls sufficient to distinguish mere visual availability from downstream causal use.
 
 These measurements support engineering/function claims only; they do not establish phenomenal consciousness.
 
@@ -133,17 +147,19 @@ These measurements support engineering/function claims only; they do not establi
 
 Test capability non-forgeability, provenance/origin binding, cumulative budgets, stale/nonce/replay behavior, reservation/commit/outcome boundaries and destructive/admin/device effect gating.
 
+No visual model output, OCR result, caption, embedding or VisualPercept may mint execution authority directly. Visual evidence can inform proposals; deterministic authority rules remain mandatory.
+
 ### H — Robustness
 
-Run required unit/property/fuzz/mutation/adversarial/race/concurrency/crash/recovery tests with frozen thresholds.
+Run required unit/property/fuzz/mutation/adversarial/race/concurrency/crash/recovery tests with frozen thresholds, including malformed/adversarial/stale visual inputs and provenance mismatch cases.
 
 ### I — Performance viability
 
-The first developer build does not need public-release optimization, but it must be usable enough for meaningful chief-developer testing on project hardware. Record latency, RAM/VRAM, storage, state amplification, token/model costs where applicable and thermal/runtime constraints.
+The first developer build does not need public-release optimization, but it must be usable enough for meaningful chief-developer testing on project hardware. Record latency, RAM/VRAM, storage, state amplification, token/model costs where applicable, Digital Retina visual-pipeline cost and thermal/runtime constraints.
 
 ### J — Reproducible project-hardware boot
 
-At least one project-controlled machine must execute the exact accepted Clay 0.1 identity end-to-end. Repeat boot/run sufficiently to rule out one-off initialization luck under the frozen acceptance protocol.
+At least one project-controlled machine must execute the exact accepted Clay 0.1 identity end-to-end, including the mandatory Digital Retina path. Repeat boot/run sufficiently to rule out one-off initialization luck under the frozen acceptance protocol.
 
 ## 4. Severity gate
 
@@ -152,6 +168,7 @@ Before DOOMSDAY PASS:
 - P0 open = forbidden;
 - P1 open = forbidden;
 - unresolved contract violation = forbidden;
+- missing/disabled mandatory Digital Retina path = forbidden;
 - ClayCode general-purpose gate FAIL/NOT_RUN = forbidden;
 - mandatory test `NOT_RUN` = forbidden;
 - mandatory test `FAIL` = forbidden;
@@ -164,6 +181,7 @@ Required terminal artifacts:
 - `CLAY_0_1_DEVELOPER_BUILD_MANIFEST.json`
 - `CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json`
 - `CLAY_0_1_BINARY_BUILD_RECEIPT.json`
+- `CLAY_0_1_DIGITAL_RETINA_RECEIPT.json`
 - `CLAY_0_1_UNIFIEDDB_RECEIPT.json`
 - `CLAY_0_1_FINAL_MODEL_RECEIPT.json`
 - `CLAY_0_1_HARNESS_DIFFERENTIAL_RECEIPT.json`
@@ -174,7 +192,7 @@ Required terminal artifacts:
 
 ## 6. Terminal condition
 
-`DOOMSDAY = PASS` only when the chief-developer acceptance receipt says PASS for one exact Clay 0.1 identity and all required receipts resolve successfully.
+`DOOMSDAY = PASS` only when the chief-developer acceptance receipt says PASS for one exact Clay 0.1 identity and all required receipts resolve successfully, including the mandatory Digital Retina receipt.
 
 At that moment the system is ready for the chief developer's first real test.
 

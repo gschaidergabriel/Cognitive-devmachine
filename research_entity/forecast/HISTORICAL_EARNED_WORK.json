@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "status": "CALIBRATING_DURING_LEVEL0",
   "purpose": "Credit substantial FRANK/XENO/ClayCode/GWT research and implementation completed before the current Clay 0.1 internal chief-developer build program, without pretending that all historical effort remains reusable.",
   "owner_reported_effort": {
@@ -68,6 +68,69 @@
     "categories": ["DIRECTLY_REUSABLE", "REUSABLE_WITH_ADAPTATION", "MEASUREMENT_FOUNDATION", "NEGATIVE_RESULT_VALUE", "SUPERSEDED_BUT_INFORMATIVE", "NOT_REUSABLE"],
     "per_mapping_required_fields": ["source_refs", "current_doomsday_rows", "mechanism_or_result", "reuse_category", "avoided_future_hours_low", "avoided_future_hours_center", "avoided_future_hours_high", "confidence", "falsifier_or_validation_receipt"],
     "final_rule": "After Level 0, replace the temporary retention prior with evidence-mapped avoided/reused current-work equivalents plus verified current row completion. Historical hours that cannot be connected to current Clay 0.1 work remain historical effort but do not inflate completion percentage."
+  },
+  "evidence_mappings": [
+    {
+      "mapping_id": "HEW-PF-STATE-001",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "source_refs": ["personality/e_pq.py@abba90a5767d85abc8a1ac340bae92842dab35c1", "services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "UDB_UNIFIED_DATABASE"],
+      "mechanism_or_result": "Persistent personality/state-transition semantics plus the historical cross-process stale-state overwrite failure.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 7.0,
+      "avoided_future_hours_high": 14.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Differential replay/concurrency harness must preserve event ordering and prevent lost updates under concurrent state transitions."
+    },
+    {
+      "mapping_id": "HEW-PF-FAIL-002",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "source_refs": ["commit:c16e5991466e50e059e176c07910ca75293b415c", "commit:4a2c8852742e8d50a9de48cb5cd605b64897ca7a"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "UDB_UNIFIED_DATABASE", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Historical concurrency, persistence, drift-metric, lifecycle, restart-idempotence and resource-cleanup bugs define concrete regression tests and invariants.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 10.0,
+      "avoided_future_hours_high": 20.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Harness coverage matrix must demonstrate each bug family as a failing historical-style test and passing current implementation test."
+    },
+    {
+      "mapping_id": "HEW-PF-BODY-003",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "source_refs": ["services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1", "services/spatial_state.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "CLAY_0_1_FULL_INTEGRATION"],
+      "mechanism_or_result": "Persistent goals, proprioception, self/environment attribution and world/body transition semantics already have executable historical implementations.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 8.0,
+      "avoided_future_hours_high": 16.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Reference Harness must reproduce typed goal/body/proprioception transitions without importing literal historical room metaphors as semantics."
+    },
+    {
+      "mapping_id": "HEW-PF-ABL-004",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "source_refs": ["docs/ABLATION_ANALYSIS.md@49dfa7f367d11b56999ece625e8028c537bf2eec"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Existing 70-turn longitudinal prompt battery and metrics are reusable benchmark scaffolding; original causal interpretation requires factorized controls.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 4.0,
+      "avoided_future_hours_high": 8.0,
+      "confidence": "MEDIUM_FOR_BENCHMARK_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Matched factorized ablation must separate system-prompt, context-management and architecture effects before component-level causal promotion."
+    }
+  ],
+  "partial_mapping_summary": {
+    "state": "PARTIAL_LEVEL0_SHARD_ONLY_DO_NOT_USE_AS_FINAL_PROGRESS",
+    "source_receipts": ["research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json"],
+    "mapped_avoided_future_hours_low": 11.0,
+    "mapped_avoided_future_hours_center": 29.0,
+    "mapped_avoided_future_hours_high": 58.0,
+    "global_completion_credit_applied": false,
+    "reason": "Drive denominator and full Project-Frankenstein history manifest remain unfrozen."
   },
   "last_updated": "2026-08-09"
 }

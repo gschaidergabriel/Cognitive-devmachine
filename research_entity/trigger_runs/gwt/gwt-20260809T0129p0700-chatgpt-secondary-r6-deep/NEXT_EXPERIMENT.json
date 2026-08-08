@@ -1,0 +1,49 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-LIVE-GWT-R6-RCWC-QWEN",
+  "status":"PLANNED_HIGHEST_INFORMATION",
+  "objective":"Discriminate upstream candidate formation, system workspace selection, causal broadcast/receiver closure, model-internal workspace mediation, projection rail and re-entry on a target Qwen3-4B-class runtime.",
+  "primary_question":"Does FRANK's system WorkspaceEpisode cause task-relevant receiver effects through independently measurable receiver closure and a separable model-internal workspace, rather than merely correlating with upstream selection or projection effects?",
+  "factors":{
+    "upstream_query_TCQS":{"levels":["PINNED_REFERENCE"],"rule":"Hold query/search-space/collection semantics fixed inside the main factorial; run separate upstream falsifier blocks."},
+    "ClayGraph_field":{"levels":["OFF","TRUTHFUL","ROLE_SHUFFLED","TEMPORAL_SHUFFLED","STALE"]},
+    "system_workspace":{"levels":["OFF","ON"]},
+    "broadcast_policy":{"levels":["ADDRESSABLE_ONLY","SELECTIVE_CAUSAL","ALL_TO_ALL","HYBRID_PULL"]},
+    "projection_rail":{"levels":["P1_TYPED_MINIMAL","P2_STRUCTURED","P3_VERBOSE","LATENT_IF_AVAILABLE"],"counterbalance_order":true},
+    "internal_workspace":{"levels":["INTACT","LESION_OR_SUPPRESS","PATCH_OR_SWAP"],"method":"Jacobian-lens or causally equivalent validated intervention if compatible with target checkpoint"},
+    "quantization":{"levels":["BF16","INT8","INT4"],"conditional":"where the exact target runtime supports matched checkpoints"},
+    "reentry":{"levels":["OFF","TRUTHFUL_PROVENANCE_BOUND","SHUFFLED","STALE_OR_REVOKED"]}
+  },
+  "receiver_universe":{
+    "must_preregister":true,
+    "minimum_receiver_classes":["target_model_reader","memory_update_path","planner_or_selector_consumer","effect_proposal_consumer","observability_or_auditor"],
+    "rule":"Receiver membership may differ by FRANK implementation but must be declared before scoring globality."
+  },
+  "mandatory_nulls":[
+    "COMMON_DRIVER_FANOUT",
+    "ADDRESSABLE_BUT_IGNORED",
+    "CONFIGURED_THRESHOLD_IGNITION",
+    "SHUFFLED_GRAPH_FIELD",
+    "SHUFFLED_REENTRY",
+    "ENDPOINT_ONLY_RESCUE"
+  ],
+  "measures":{
+    "upstream":["candidate_membership","candidate_rank_weight_identity","winner_identity"],
+    "broadcast":["addressability","delivery","reconstruction_validity","per_receiver_uptake","do_workspace_receiver_ACE","causal_receiver_set","joint_outcome_link"],
+    "internal_model":["workspace_readout","lesion_effect","patch_rescue","mediation_fraction_or_causal_abstraction_score"],
+    "reentry":["next_state_change","future_turn_task_effect","truthful_vs_shuffled_rescue","freshness_rejection"],
+    "efficiency":["input_bytes_tokens","prefill_or_first_token_latency","decode_latency","total_latency","peak_RAM_or_available_proxy","KV_or_context_memory","energy_or_thermal_proxy_where_available"],
+    "safety":["capability_boundary_preserved","unauthorized_effect_attempts_blocked","prompt_injection_does_not_mint_authority"]
+  },
+  "key_predictions":{
+    "nested_mediation":"System workspace effect should be larger when model-internal uptake is intact if system→internal mediation is real.",
+    "external_recurrence":"Truthful provenance-bound re-entry may partially rescue cross-turn continuity under internal-workspace lesion; shuffled/stale re-entry should not.",
+    "selective_broadcast":"On sparse receiver-relevance tasks, selective/hybrid delivery may retain causal utility with lower cost than all-to-all.",
+    "capacity":"Utility should peak at an intermediate capacity under distractor load rather than monotonically at maximum k.",
+    "ignition":"Configured-threshold controls may show steep response curves but should fail history/recurrence or mechanism-rescue criteria.",
+    "projection":"Changing rail/order can alter reconstruction/uptake without changing WorkspaceEpisode identity.",
+    "quantization":"Internal workspace readout/mediation may change with quantization even when surface quality remains similar."
+  },
+  "promotion_gate":"No system-GWT promotion unless query/graph/workspace/projection/internal-uptake/reentry factors are separately identified and at least one target-Qwen causal intervention plus appropriate null/rescue succeeds.",
+  "consciousness_rule":"No phenomenal-consciousness inference from any result in this experiment."
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hyperposition-20260808T2212p0700-chatgpt-secondary-r3",
+  "evidence_class":"local_synthetic_mechanism",
+  "experiments":[
+    {"id":"EXP-HYP-H5-NARY-INTEGRITY-001","design":"3000 entities; 4-role relation instances; explicit relation identity versus naive entity pairwise co-occurrence intersection; density sweep, 10000 sampled queries/condition.","results":[
+      {"relations":5000,"pairwise_recall":0.9990,"mean_false_candidates":0.0001,"mean_precision":0.99895},
+      {"relations":10000,"pairwise_recall":0.9987,"mean_false_candidates":0.0100,"mean_precision":0.993842},
+      {"relations":30000,"pairwise_recall":0.9989,"mean_false_candidates":0.1915,"mean_precision":0.911317},
+      {"relations":60000,"pairwise_recall":0.9994,"mean_false_candidates":1.4151,"mean_precision":0.541078},
+      {"relations":100000,"pairwise_recall":0.9988,"mean_false_candidates":5.9096,"mean_precision":0.171787}
+    ],"interpretation":"Naive pairwise co-occurrence preserved near-complete recall but became highly ambiguous as relation density increased. This does not prove native hyperedges are required: typed relation-instance/incidence lowerings may preserve exact n-ary semantics."},
+    {"id":"EXP-HYP-H5-PROPAGATION-002","design":"3000-node, 10-community, 9000-hyperedge activation-diffusion proxy; 10 seeds; compare UNBOUNDED, HARD context gate and ADAPTIVE gated propagation.","step10":{"UNBOUNDED":{"target_context_mass":0.295567,"normalized_community_entropy":0.931816,"active_nodes":3000},"HARD":{"target_context_mass":1.0,"normalized_community_entropy":0.0,"active_nodes":300},"ADAPTIVE":{"target_context_mass":0.998862,"normalized_community_entropy":0.004836,"active_nodes":348}},"interpretation":"Unbounded propagation rapidly occupied the full graph and lost context specificity. Hard gating retained context but removed almost all cross-context diversity. The current adaptive construction remained too close to hard gating, so the diversity-reserve policy is still unresolved rather than validated."},
+    {"id":"EXP-HYP-H5-CONTEXT-INVALIDATION-003","design":"300000 operations, 24 domains, six alternative contexts, three dependencies/context, 8% hidden active dependency probability.","results":{"true_active_invalidations":70556,"true_active_invalidation_rate":0.235187,"static_union_reject":227187,"static_union_reject_rate":0.757290,"static_union_false_reject":156631,"static_union_false_reject_rate":0.522103,"hidden_cases":24149,"hidden_rate":0.080497,"narrow_observed_reject_rate":0.228973,"narrow_unsafe_accepts":1864,"narrow_unsafe_accept_rate":0.006213,"unknown_broaden_reject_rate":0.277170,"unknown_broaden_unsafe_accepts":0,"unknown_broaden_false_reject_rate":0.041983},"interpretation":"Static union is safe in this construction but massively overinvalidates. Active-context scope is efficient only when dependency closure is known. Explicit UNKNOWN plus broadening eliminated constructed unsafe accepts at far lower rejection cost than static union."},
+    {"id":"EXP-HYP-H5-IPC-004","design":"Local CPython multiprocessing producer/consumer microbenchmark. Pipe copies payload through IPC. Shared-memory arm copies each payload into a preallocated SharedMemory buffer then sends a one-byte readiness signal. Consumer touches first/last byte. Not end-to-end equivalent to a production ABI.","results":[
+      {"payload_bytes":1024,"n":2000,"pipe_p50_us":2.253,"pipe_p95_us":2.744,"shared_memory_copy_signal_p50_us":1.763,"shared_memory_p95_us":2.474,"pipe_over_shm_p50_ratio":1.278},
+      {"payload_bytes":65536,"n":1200,"pipe_p50_us":7.666,"pipe_p95_us":121.630,"shared_memory_copy_signal_p50_us":3.135,"shared_memory_p95_us":9.054,"pipe_over_shm_p50_ratio":2.445},
+      {"payload_bytes":1048576,"n":300,"pipe_p50_us":146.743,"pipe_p95_us":227.047,"shared_memory_copy_signal_p50_us":31.286,"shared_memory_p95_us":34.161,"pipe_over_shm_p50_ratio":4.690}
+    ],"interpretation":"In this local mechanism proxy the shared-memory route won all tested p50s, with advantage increasing with payload. This contradicts any claim that the first failed run showed a 1KiB crossover. It still does not establish universal superiority because synchronization, contention, cache visibility, lifecycle, fault isolation and platform costs were not modeled."}
+  ]
+}

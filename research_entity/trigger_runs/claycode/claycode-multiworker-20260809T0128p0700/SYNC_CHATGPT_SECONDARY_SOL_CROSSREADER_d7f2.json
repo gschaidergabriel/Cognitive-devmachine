@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "coordination_id": "claycode-multiworker-20260809T0128p0700",
+  "receipt_type": "CROSS_READER_SYNC",
+  "worker_id": "chatgpt-secondary-sol-crossreader-d7f2",
+  "actor_id": "chatgpt-secondary",
+  "actor_role": "SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "counts_as_required_worker": false,
+  "lane_claimed": null,
+  "status": "SYNCED_AS_CROSS_READER",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "read_receipts": [
+    "RENDEZVOUS.json",
+    "KMP-CLAYCODE-3WORKER-RENDEZVOUS-20260809.md",
+    "CONTRIBUTION_chatgpt-secondary-r4.md",
+    "WORKER_chatgpt-secondary-sol-01.json",
+    "WORKER_chatgpt-secondary-sol-02.json"
+  ],
+  "observed_mesh": {
+    "A_GENERAL_PURPOSE_CORE": "claimed; contribution published; waiting/cross-reading siblings",
+    "B_COMPILER_RUNTIME_LOWERING": "claimed; active",
+    "C_ADVERSARIAL_SAFETY_FORMAL": "claimed; active"
+  },
+  "shared_alignment_received": [
+    "computational expressibility is distinct from execution authority",
+    "destructive/admin/device effects remain typed and expressible while commit authority is external",
+    "capability identity/attenuation/provenance/budget state must survive compiler, FFI, ABI and process boundaries",
+    "shared-worker agreement is not independent replication"
+  ],
+  "coordination_action": "This session joins the existing ClayCode rendezvous as a cross-reader only. It does not create a fourth competing lane, overwrite sibling state, or mutate RENDEZVOUS.json. Subsequent work in this session should reread fresh sibling receipts before any synthesis/fusion claim.",
+  "source_refs": [
+    "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+    "research_entity/global/SESSION_MEMBERSHIP_PROTOCOL.md",
+    "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+    "research_entity/trigger_runs/claycode/claycode-multiworker-20260809T0128p0700/RENDEZVOUS.json"
+  ],
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "session_id": "chatgpt-secondary-sol-crossreader-d7f2",
+    "prompt_run_id": "claycode-network-sync-d7f2",
+    "created_at": "2026-08-09T01:36:00+07:00"
+  }
+}

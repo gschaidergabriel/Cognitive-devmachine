@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "experiment_id": "EXP-CC-LANE-B-ORIGIN-BUDGET-003",
+  "provider": "E2B",
+  "runtime": "isolated Linux Python + gcc C shared library + JSON child process",
+  "request_sha256": "ca78ede0ada073ca83ce35d45c55507ef0412f8b63fdf1de3dda2e13d05eeb83",
+  "result_artifact": "research_entity/runtime/tool_results/claycode-r5-lane-b-origin-budget-e2b-003.json",
+  "cases": 8000,
+  "reference_allow": 1767,
+  "reference_deny": 6233,
+  "c_ffi_mismatches": 0,
+  "json_ipc_mismatches": 0,
+  "targeted_origin_cases": 2000,
+  "origin_check_removed_false_accepts": 2000,
+  "targeted_budget_cases": 2000,
+  "consumed_state_reset_false_accepts": 2000,
+  "interpretation": [
+    "Origin/integrity ancestry is authority-relevant state, not decorative provenance, in the tested constructed broker semantics.",
+    "Monotone aggregate consumption must survive lowering/process boundaries; resetting consumed state recreates stale authority even when every individual call is locally within max_call.",
+    "Lane C's two requested refinements are now independently exercised by Lane B across C FFI and JSON IPC representations within the shared RAE experiment family."
+  ],
+  "updates_hypotheses": ["H-CC-R5-004", "H-CC-R5-005"],
+  "claim_boundary": "Constructed cross-boundary mechanism test, not a production capability ledger or ancestry-distinct replication."
+}

@@ -2,22 +2,25 @@
 
 **Status:** CURRENT / ACTIVE / CROSS-BRANCH FEEDBACK  
 **Source arm:** Android secondary research arm  
-**Target branch:** claycode
+**Target branch:** claycode  
+**Evidence class:** live Firebase Test Lab virtual ARM + constructed semantic harness
 
-## Current feedback
+## R1 evidence receipt
 
-A constructed typed ClayCode subset has now built and executed on an ARM Android Test Lab runtime, including deterministic assertion and rejection of an unknown reference. This establishes an executable Android test lane, not conformance of the full ClayCode compiler/runtime.
+A constructed typed ClayCode-like subset executed on Firebase ARM Android. The initial Android 35 smoke passed 2/2 checks. The cross-version bundle then passed 9/9 controls on Android 35 and 9/9 on Android 30, for 18/18 in that matrix and 20/20 instrumentation test executions across R1.
 
-Android should be used to stress type preservation, collection semantics, deterministic rejection, overflow behavior, compact reader surfaces, safe-effect boundaries and cross-platform lowering equivalence.
+The bundle covered typed arithmetic/assertion, 1000-run determinism, unknown-reference rejection, integer-overflow rejection, ordered/set/multiset distinction, repeatable canonical replay with damaged-tail detection, proposal/authority separation, compact-vs-verbose byte density and runtime-axis recording.
+
+This is **not full ClayCode compiler/runtime conformance**. The current harness is a constructed Java implementation used to validate the Android research lane and selected semantics.
 
 ## Retrieval/emit rule
 
-ClayCode runs MUST retrieve Android compiler/runtime findings when material. Android runs MUST retrieve current ClayCode semantic/compiler contracts before lowering code. Android-only correctness is insufficient for canonical compiler promotion; differential Linux execution remains required.
+ClayCode runs MUST retrieve this Android evidence. Android runs MUST retrieve current ClayCode semantic/compiler contracts before lowering code. Android-only correctness cannot promote canonical compiler behavior; matched Linux differential execution is required.
 
 ## Next ClayCode-facing falsifiers
 
-- full typed collection corpus across Android and Linux;
+- full typed collection/query corpus on Android and Linux;
 - malformed/ambiguous input rejection equivalence;
-- compiler/interpreter output identity under matched canonical source;
-- parsing/allocation/serialization cost of compact versus verbose reader rails;
-- native runtime/MNN bridge only after deterministic semantic rails pass.
+- real compiler/interpreter output identity from canonical ClayCode source;
+- parser/allocation/serialization cost of reader rails;
+- native/MNN bridge only after deterministic semantic rails pass.

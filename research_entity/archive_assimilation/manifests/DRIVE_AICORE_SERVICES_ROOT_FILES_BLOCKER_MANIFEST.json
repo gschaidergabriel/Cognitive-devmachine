@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-SERVICES-ROOT-FILES-BLOCKER-20260809",
+  "status":"IRREDUCIBLE_CONNECTOR_ENUMERATION_BLOCKER_RECORDED",
+  "trigger":"666",
+  "source":{"title":"aicore/services","drive_id":"1tVCchrYmiQnPizAoP64JFif5Q7QzzK1-"},
+  "proven":{
+    "direct_folders_exact":13,
+    "direct_folder_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SERVICES_ROOT_SHARD_MANIFEST.json",
+    "normal_folder_fetch_cap_observed":100,
+    "visible_direct_files_lower_bound":87,
+    "visible_file_examples":[
+      {"title":"tools.py","drive_id":"1228lCcZztIZDL1DTBv1Pz5wCfOywOnxW","created_time":"2026-08-08T21:18:56.810Z","modified_time":"2026-08-05T02:22:40Z"},
+      {"title":"injection_guard.py","drive_id":"1qss5o1lVfQldB97e6VLI3Cq-QCHe9C-T","created_time":"2026-08-08T21:19:06.790Z","modified_time":"2026-08-05T02:22:33Z"},
+      {"title":"subconscious.py","drive_id":"1bheyeuq5IarbtymYWgY9XEYKrYKT7j1t","created_time":"2026-08-08T21:19:10.421Z","modified_time":"2026-08-04T10:21:55Z"},
+      {"title":"dream_daemon.py","drive_id":"1bx_8XzFz9iZ187oM2yOzWO8y9YQlCUGk","created_time":"2026-08-08T21:19:10.457Z","modified_time":"2026-08-04T10:21:40Z"},
+      {"title":"consciousness_daemon.py","drive_id":"1gODaWxEtcZdkFTtC6sE9nxgVebvlWApp","created_time":"2026-08-08T21:18:59.289Z","modified_time":"2026-08-02T07:13:17Z"},
+      {"title":"frank_rag.py","drive_id":"1fUGtF4LuTWguA0piyB_xEVk0S4DaA3JR","created_time":"2026-08-08T21:18:56.605Z","modified_time":"2026-08-02T07:05:20Z"}
+    ]
+  },
+  "failed_enumeration_methods":[
+    {"method":"normal direct folder fetch","result":"TRUNCATED_AT_100_CHILD_OBJECTS","value":"establishes >=87 direct files after independently resolving 13 folders, but cannot prove no additional files"},
+    {"method":"Drive.search parent + name contains '.py'","result":"EMPTY_DESPITE_KNOWN_VISIBLE_PYTHON_FILES","interpretation":"search index/query behavior is non-exhaustive for this task and cannot be used as exact enumeration"},
+    {"method":"Drive.search parent + createdTime windows","result":"NON_EXHAUSTIVE/INCONSISTENT","counterexample":"known direct files have created_time around 21:18:56-21:19:12, yet matching bounded createdTime searches returned empty while a broad <21:22:45 query surfaced folders only","interpretation":"search is not a pagination substitute"},
+    {"method":"Drive.search parent + mime/name partitions","result":"NO_TRUSTWORTHY_EXHAUSTIVE_FILE_SET","interpretation":"only folder-specific queries produced a demonstrably complete 13-folder set"}
+  ],
+  "exact_file_denominator":null,
+  "blocker":"Active Google Drive connector exposes no pageToken/page-size pagination primitive for folder children and its search endpoint is relevance/index based rather than a guaranteed exhaustive file list for these filters.",
+  "scientific_rule":"Do not infer exact services root file count from visible 87, from duplicated connector response representations, or from semantic search result counts.",
+  "semantic_work_rule":"Visible root modules may still be analyzed in independent filename-specific shards, but root recursive coverage remains unknown until pagination/export/local mirror or another exact enumeration surface is available.",
+  "completion_semantics":"Task completion here means the denominator impossibility is proven and localized; it does not mean the services root file corpus is assimilated.",
+  "global_progress_credit":0.0,
+  "frozen_by":"chatgpt-secondary-666-20260809-services-root-modules",
+  "frozen_at":"2026-08-09"
+}

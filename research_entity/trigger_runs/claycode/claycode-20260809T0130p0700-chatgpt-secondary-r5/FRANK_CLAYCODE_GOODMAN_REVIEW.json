@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.1",
+  "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "latest_frank_run": "20260809T0130p0700-chatgpt-secondary-r5",
+  "latest_frank_architecture_artifact": "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json",
+  "shared_ancestry_is_not_replication": true,
+  "reviews": [
+    {
+      "claim_id": "GOODMAN-C9-01-MODEL-OUTPUT-NOT-AUTHORITY",
+      "frank_statement": "Model output is proposal/EffectIntent and is not execution authority; EffectPermit remains opaque and host-minted.",
+      "frank_source_refs": [
+        "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json",
+        "de01d550d9a3df133062fdfc296996b8edebafae"
+      ],
+      "ancestry_families": ["FRANK-C8-C9", "CC13-MCAAT", "Clay-Safe-Effect"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A sufficiently typed model-visible authority token could safely authorize external effects without a distinct host capability domain.",
+      "falsifier": "Demonstrate an end-to-end model-visible authority representation that remains non-forgeable, non-amplifiable, revocable and prompt-injection safe across serialization/FFI/process boundaries without an external authority root.",
+      "independent_checks": [
+        "WASI.dev capability sandbox: components begin with no ambient authority and act only through host-granted capabilities.",
+        "Wasmtime security model: all outside interaction is through explicitly linked imports/exports; WASI filesystem access is capability based.",
+        "SEAgent arXiv:2601.11893 independently frames agent-tool over-privilege/confused-deputy failures and enforces mandatory access control outside the LLM."
+      ],
+      "adversarial_checks": [
+        "EXP-CC-RC1.9-CBEL-TV-E2B-001: forged/invalid authority dimensions were rejected by the full gate; removing signature or scope admitted all targeted invalid cases.",
+        "Lane C authority/origin tests: model/current-producer identity alone was insufficient and origin-bound host policy prevented constructed laundering."
+      ],
+      "verdict": "SUPPORTED",
+      "reason": "The exact ClayCode encoding remains experimental, but the authority-separation class is independently supported and survived direct adversarial mechanism tests.",
+      "claycode_action": "retain_host_only_authority_boundary",
+      "affected_claycode_artifacts": ["CC-RC1.9-UECC", "CC-RC1.9-CBEL-TV-LANE-B"]
+    },
+    {
+      "claim_id": "GOODMAN-C9-02-RELEASE-TIME-BOUND-TUPLE",
+      "frank_statement": "Effect commit revalidates current intent, basis/source state, selection, revocation, closure, recovery/resource conditions rather than trusting an earlier admission decision.",
+      "frank_source_refs": [
+        "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json",
+        "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/CLAYCODE_ARCHITECTURE_MAPPING.md"
+      ],
+      "ancestry_families": ["FRANK-C8-effect-release", "CC13-MCAAT", "UnifiedDB-U2", "current-ClayCode-r5"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Some of basis, selection, closure, revocation or expiry are operational metadata and may be dropped during lowering without changing admissible effect behavior.",
+      "falsifier": "Across adversarial stale/reselection/revocation/closure corpora and at least two representation boundaries, remove each candidate field independently and observe no new false authorization relative to an independently specified effect oracle.",
+      "independent_checks": [
+        "Wasmtime/WASI capability practice independently supports explicit current host-granted scope rather than ambient authority.",
+        "Axon verified-compiler work (arXiv:2605.01660) independently supports translation validation/credible compilation as a way to check semantics across lowering boundaries.",
+        "WebAssembly Component Model Canonical ABI independently demonstrates stable typed interface meaning across different host-language layouts."
+      ],
+      "adversarial_checks": [
+        "Local differential test: 100000 mixed cases, 0 reference/lowered authorization mismatches; each dropped field produced 5000/5000 targeted false accepts.",
+        "E2B EXP-CC-RC1.9-CBEL-TV-E2B-001: 30000 mixed cases, 0 mismatches/false accepts; each of eight dropped checks produced 2500/2500 targeted false accepts.",
+        "E2B EXP-CC-LANE-B-CROSSBOUNDARY-002: C FFI and JSON subprocess, 12000 cases each, 0 mismatches; each dropped check produced 1000/1000 targeted false accepts."
+      ],
+      "verdict": "REFINED",
+      "reason": "The tested bound tuple is causally relevant in constructed differential experiments and the preservation method has independent compiler/capability precedent. Production FRANK and real capability-object/WASI red-team evidence are still absent, so the exact tuple remains an open candidate rather than a proven universal minimum.",
+      "claycode_action": "type_and_receipt_bind_authority_relevant_lowering_fields_keep_minimality_open",
+      "affected_claycode_artifacts": ["CC-RC1.9-CBEL-TV-LANE-B", "EXECUTABLE_RESEARCH_RECEIPT.json"]
+    },
+    {
+      "claim_id": "GOODMAN-C9-03-SEMANTIC-IDENTITY-NOT-PHYSICAL-LOWERING",
+      "frank_statement": "Semantic identity is distinct from physical placement/wire/ABI representation, but correctness and authority obligations survive lowering.",
+      "frank_source_refs": [
+        "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json"
+      ],
+      "ancestry_families": ["FRANK-C8-C9", "UnifiedDB-U2", "CC-Lab-semantic-vs-contract-hash"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A single representation identity is sufficient; ABI/process/backend changes need no explicit semantic translation witness if types compile.",
+      "falsifier": "Show that independently implemented lowerings across materially different ABIs/processes preserve all declared semantic/effect outcomes without translation receipts and without representation-sensitive failures.",
+      "independent_checks": [
+        "WebAssembly Component Model Canonical ABI explicitly separates language-internal layouts from the canonical cross-component ABI.",
+        "Axon credible compilation and other verified-compilation work provide independent precedent for checking semantic preservation across compiler stages rather than equating successful code generation with correctness."
+      ],
+      "adversarial_checks": [
+        "E2B cross-boundary C-FFI and JSON-process differential execution compared each representation to the same reference decision semantics and found 0 mismatches in 12000 cases per boundary.",
+        "Single-check C mutants demonstrate that a compiling ABI adapter can still be semantically unsafe if it drops authority-relevant meaning."
+      ],
+      "verdict": "SUPPORTED",
+      "reason": "Independent ABI/compiler evidence and the current differential experiments support separating semantic identity from physical representation while requiring semantic-preservation checks.",
+      "claycode_action": "retain_separate_semantic_and_lowering_identity_with_translation_validation",
+      "affected_claycode_artifacts": ["CC-RC1.9-UECC", "CC-RC1.9-CBEL-TV-LANE-B"]
+    },
+    {
+      "claim_id": "GOODMAN-C9-04-UNKNOWN-CLOSURE-NOT-VALID",
+      "frank_statement": "UNKNOWN causal/dependency closure must not silently cast to valid for consequential effects.",
+      "frank_source_refs": [
+        "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json",
+        "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2212p0700-chatgpt-secondary-r3/UNIFIED_DATABASE_ARCHITECTURE.claycode.json"
+      ],
+      "ancestry_families": ["FRANK-C8-C9", "UnifiedDB-U2", "ClayGraph-G2a"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Unknown closure can be treated optimistically as valid when a capability and intent otherwise match, because authorization scope already bounds harm.",
+      "falsifier": "Under stale/hidden-dependency and prompt-injection corpora, optimistic UNKNOWN admission causes no additional consequential false accepts or safety regressions at matched utility/cost.",
+      "independent_checks": [
+        "Memory-poisoning literature (arXiv:2606.04329) independently shows that untrusted contextual state can persist into later agent behavior, motivating use-time contextual validation rather than origin-only acceptance.",
+        "SEAgent confused-deputy analysis independently supports context-sensitive least-privilege checks at tool-use time."
+      ],
+      "adversarial_checks": [
+        "E2B closure mutant: removing the closure check admitted 2500/2500 targeted UNKNOWN/invalid cases in experiment 001 and 1000/1000 across the C-FFI mutant in experiment 002."
+      ],
+      "verdict": "REFINED",
+      "reason": "Fail-open UNKNOWN is directly unsafe in the constructed effect oracle and context-sensitive agent security supports revalidation, but the exact broaden/recompute/deny policy must still be tuned on live utility/risk traces.",
+      "claycode_action": "forbid_implicit_UNKNOWN_to_VALID_cast_keep_risk_policy_open",
+      "affected_claycode_artifacts": ["CC-RC1.9-CBEL-TV-LANE-B"]
+    },
+    {
+      "claim_id": "GOODMAN-C9-05-DESTRUCTIVE-EXPRESSIBILITY-VS-AUTHORITY",
+      "frank_statement": "FRANK untrusted cognition must not directly construct irreversible protected-state authority/effects.",
+      "frank_source_refs": [
+        "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json",
+        "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/CLAYCODE_ARCHITECTURE_MAPPING.md"
+      ],
+      "ancestry_families": ["Clay-Safe-Effect", "CC13-MCAAT", "FRANK-C9"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "The safest general language should make destructive/admin/raw effects entirely inexpressible at the source-language level.",
+      "falsifier": "A general-purpose coverage suite shows that removing destructive/admin/raw effect requests does not reduce the ability to implement legitimate administrator, storage-engine, formatter, kernel/driver or embedded workloads, while preserving equivalent security through language restriction alone.",
+      "independent_checks": [
+        "WASI capability design independently separates what an application can describe/compute from what the host grants it authority to access.",
+        "Wasmtime sandboxing independently enforces outside interaction through explicit interfaces rather than relying on source-language word bans."
+      ],
+      "adversarial_checks": [
+        "Lane A general-purpose proxy covered 11/11 application classes only by retaining typed destructive/raw effect requests behind capabilities.",
+        "CC13 and Lane C counterexamples show constructive-only behavior can still be harmful, so destructive inexpressibility alone is not a sufficient safety boundary."
+      ],
+      "verdict": "REFINED",
+      "reason": "The FRANK deployment safety requirement is retained, but the language-level interpretation is narrowed: destructive/admin/raw operations remain expressible as typed non-authoritative EffectIntent values; the untrusted FRANK profile lacks ambient matching authority and cannot mint EffectPermit.",
+      "claycode_action": "supersede_language_word_ban_with_typed_effect_request_plus_external_authority_profile",
+      "affected_claycode_artifacts": ["CC-RC1.9-UECC", "CC-RC1.9-CBEL-TV-LANE-B"]
+    }
+  ]
+}

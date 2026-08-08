@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "event_id":"666-20260809T0450p0700-archive-sensitive-data-guard",
+  "room_id":"center",
+  "event_type":"SAFETY_INFRA_DELTA",
+  "origin_actor":"chatgpt-secondary",
+  "created_at":"2026-08-09T04:50:00+07:00",
+  "affects_rooms":["harness","unifieddb","claygraph","claycode","frank","clay"],
+  "artifact_refs":["tools/archive_secret_scan.py","tests/test_archive_secret_scan.py","research_entity/archive_assimilation/ARCHIVE_SECRET_HANDLING_PROTOCOL.md"],
+  "payload":{"summary":"Level-0 archival ingestion now has a fail-closed pre-write sensitive-token scanner and handling protocol. Findings persist only category, location metadata, length and one-way fingerprint; matched values are never emitted. Synthetic regression tests passed 2/2. Bulk archive projections must pass this gate before shared write-back.","exact_level0_global_credit_percent":0.0}
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.1",
+  "program_id": "frank-staged-build",
+  "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+  "status": "ACTIVE",
+  "current_stage": "BASE_CLAYCODE_RELEASE",
+  "stage_order": [
+    "BASE_CLAYCODE_RELEASE",
+    "H1_REFERENCE_HARNESS",
+    "H2_CLAYCODE_HARNESS",
+    "H3_ONE_MODULE_FRANK",
+    "UDB_UNIFIED_DATABASE",
+    "DATA_LORA_TRAINING_DATA",
+    "WAIT"
+  ],
+  "current_stage_goal": "Finish ClayCode as an executable, tested, frozen semantic language/runtime release. All research rooms remain domain-loyal but direct current-stage-relevant deltas toward closing the ClayCode release gate.",
+  "stage_gates": {
+    "BASE_CLAYCODE_RELEASE": {
+      "status": "IN_PROGRESS",
+      "required_pass_artifacts": ["CLAYCODE_RELEASE_MANIFEST.json"],
+      "gate_name": "CLAYCODE_RELEASE_GATE"
+    },
+    "H1_REFERENCE_HARNESS": {
+      "status": "BLOCKED",
+      "blocked_by": ["BASE_CLAYCODE_RELEASE"],
+      "required_pass_artifacts": [
+        "REFERENCE_HARNESS_RELEASE_MANIFEST.json",
+        "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json"
+      ]
+    },
+    "H2_CLAYCODE_HARNESS": {
+      "status": "BLOCKED",
+      "blocked_by": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS"],
+      "required_pass_artifacts": [
+        "CLAY_HARNESS_RELEASE_MANIFEST.json",
+        "CLAY_HARNESS_ARCHITECTURE.claygraph.json",
+        "HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json"
+      ]
+    },
+    "H3_ONE_MODULE_FRANK": {
+      "status": "BLOCKED",
+      "blocked_by": ["H2_CLAYCODE_HARNESS"],
+      "required_pass_artifacts": [
+        "ONE_MODULE_HARNESS_RELEASE_MANIFEST.json",
+        "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json"
+      ]
+    },
+    "UDB_UNIFIED_DATABASE": {
+      "status": "BLOCKED",
+      "blocked_by": ["H3_ONE_MODULE_FRANK"]
+    },
+    "DATA_LORA_TRAINING_DATA": {
+      "status": "BLOCKED",
+      "blocked_by": ["UDB_UNIFIED_DATABASE"],
+      "training_authorized": false,
+      "purpose": "Build and freeze training and held-out data only. Do not train."
+    },
+    "WAIT": {
+      "status": "BLOCKED",
+      "meaning": "After training-data artifacts are frozen, stop and wait for explicit project-owner instruction."
+    }
+  },
+  "stage_priority_hints": {
+    "BASE_CLAYCODE_RELEASE": ["claycode", "harness", "frank", "gwt", "claygraph", "hyperposition", "unifieddb", "emergenz", "clay"],
+    "H1_REFERENCE_HARNESS": ["harness", "frank", "gwt", "claygraph", "claycode", "hyperposition", "unifieddb", "emergenz", "clay"],
+    "H2_CLAYCODE_HARNESS": ["harness", "claycode", "claygraph", "frank", "gwt", "hyperposition", "unifieddb", "emergenz", "clay"],
+    "H3_ONE_MODULE_FRANK": ["harness", "frank", "claycode", "hyperposition", "claygraph", "gwt", "unifieddb", "emergenz", "clay"],
+    "UDB_UNIFIED_DATABASE": ["unifieddb", "harness", "claygraph", "frank", "claycode", "hyperposition", "gwt", "emergenz", "clay"],
+    "DATA_LORA_TRAINING_DATA": ["claycode", "frank", "gwt", "hyperposition", "emergenz", "harness", "claygraph", "unifieddb", "clay"]
+  },
+  "global_training_rule": "No paid LoRA training or paid Together inference/training is authorized by program progression. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit new owner instruction before any training.",
+  "mandatory_cross_cutting_refs": [
+    "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+    "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
+    "research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md",
+    "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
+    "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md",
+    "research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md"
+  ],
+  "last_updated": "2026-08-09"
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0431+0700-chatgpt-secondary-drive-synteq-coordination-shard",
+  "origin_actor": "chatgpt-secondary",
+  "actor_role": "SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "session_id": "chatgpt-secondary-20260809-666",
+  "prompt_run_id": "666-20260809T0431p0700-chatgpt-secondary",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status": "HISTORICAL_SYNTEQ_COORDINATION_AND_MEASUREMENT_LINEAGE_ANALYZED",
+  "source_scope": {
+    "drive_folder": "drive:1fWUuy1oxoOAOHEQGZhhF00SUxISV4qzr:synteq-umbau",
+    "primary_files": [
+      "drive:168EtHrlMEtF2X_1vHU3e8iGD4X2znVK_:RAHMEN.md",
+      "drive:1itTQPWXdOSXKg3UkEa6h7SThW9sqeo3H:MELDUNGEN.md",
+      "drive:1VYZk_k56J1Tmhn7fmO2QFA4GajxteNHq:WACHT.md",
+      "drive:1NGjVxJkNzUijWzvl3S-M0lIIisomHV-D:BAUAUFTRAG-APPS.md",
+      "drive:1nf-FSHxRw9F6Nx_hXVQUKNu7rAQD_b63:bausteine.db.sql"
+    ],
+    "bausteine_sql_sha256": "a0aab0a89ef348a035fbaff2220920dd86f81ccc4435c11f7dc44f4c8c76b26c",
+    "bausteine_snapshot_counts": {"baustein_rows":17,"nutzung_rows":231,"stimme_rows":2,"vorschlag_rows":0,"zug_rows":56}
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-SYNTEQ-001",
+      "epistemic_class": "HISTORICAL_RUNTIME_MEASUREMENT_REFUTING_DESIGN_DOCUMENT",
+      "status": "SUPERSEDED_COORDINATION_ASSUMPTION",
+      "claim": "RAHMEN.md specified Claude background agents as directly startable/addressable via `claude --bg -p` and `claude --resume <id> -p`. A later measured MELDUNGEN run reports that `--bg` and `--print` conflict, `--resume` requires the full UUID, and `--resume <uuid> -p` is rejected while that session is running as a background agent; `--fork-session` creates a copy rather than delivering to the running agent.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["research_center","harness","frank","claycode"],
+      "implication": "Do not build shared-state correctness around assumed push-message semantics of a model CLI. The current repo-native event/pulse protocol is historically justified: durable state and handoff events must survive lack of direct live-session addressing."
+    },
+    {
+      "finding_id": "DRIVE-SYNTEQ-002",
+      "epistemic_class": "HISTORICAL_COORDINATION_FAILURE_ORACLE",
+      "status": "CURRENTLY_RELEVANT_CENTER_TEST_ATLAS",
+      "claim": "WACHT.md records periods where all workers were idle and later named workers lacked pulses. MELDUNGEN also records duplicate registries, multiple competing source copies, CORS/source-of-truth ambiguity and work that existed in one served directory but not another.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["research_center","harness","unifieddb","claygraph"],
+      "implication": "Current center needs explicit worker liveness, source revision identity, one writer/lease per hot artifact, canonical source references and stale-worker recovery. Apparent activity or a UI copy cannot define truth."
+    },
+    {
+      "finding_id": "DRIVE-SYNTEQ-003",
+      "epistemic_class": "HISTORICAL_UI_RUNTIME_CONSTRAINT",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "The August-6 app build contract explicitly banned periodic polling for app state and required the event stream `/api/kern/strom`; it also required visible error states instead of silent empty fallbacks and a measured pre-build baseline. The same run measured actual browser behaviors such as no overflow, settled animations and density limits rather than accepting visual intent alone.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "targets": ["frank","harness","claycode"],
+      "implication": "Preserve event-driven state propagation and visible degradation receipts. UI/runtime acceptance should be measurement-backed, but historical DOM/UI details are not semantic architecture requirements for Clay 0.1."
+    },
+    {
+      "finding_id": "DRIVE-SYNTEQ-004",
+      "epistemic_class": "HISTORICAL_MACHINE_LANGUAGE_STATE_SNAPSHOT",
+      "status": "LINEAGE_EVIDENCE",
+      "claim": "The recovered `bausteine.db.sql` snapshot contains persistent versioned XENO prompt/components and usage history rather than only prose: 17 component-version rows, 231 usage rows and 56 recorded moves. Included components encode GWT state, token-saving, byte-stable prompt reuse and display semantics such as leaving unmeasured surfaces empty and marking emergence by ablation difference rather than an invented field.",
+      "reuse_category": "SUPERSEDED_BUT_INFORMATIVE",
+      "targets": ["claycode","gwt","emergenz","claygraph"],
+      "implication": "Preserve version/hash/usage provenance as XENO->ClayCode lineage. Do not promote old fixed numeric GWT settings or display metaphors as current truth; current contracts and experiments outrank them."
+    }
+  ],
+  "dedup_and_credit": {
+    "historical_earned_work_hours_added": 0.0,
+    "reason": "The modern repo-native research-center protocol, anti-echo rules and current XENO/ClayCode research already embody much of this architecture. This shard adds primary historical measurement and contradiction provenance without double-crediting current implementation work."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Synteq branch is analyzed as a semantic/runtime shard, but global Drive atomic denominator remains unfrozen."
+  }
+}

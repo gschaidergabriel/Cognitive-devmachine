@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0424+0700-chatgpt-secondary-pf-memory-persistence-recovery-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_packages": ["666-03-PARALLEL-ANALYZE", "666-04-EARNED-WORK-MAP", "666-06-BRANCH-FEEDBACK"],
+  "status": "SHARD_ANALYZED_AND_INTEGRATION_DELTA_PREPARED",
+  "observed_at": "2026-08-09T04:24:00+07:00",
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "lane": "memory/persistence/retrieval/recovery/migration",
+    "source_refs": [
+      "commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4",
+      "commit:c93873c88f63b3283a582605e9339e709e4b0599",
+      "commit:6d680d3bd3822ed9cf8928f63794e15b9e1372b5",
+      "commit:290d5e2b8640d55eb2a0aa38b99338c8070a0009"
+    ]
+  },
+  "findings": [
+    {
+      "finding_id": "PF-L0-MEM-001",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_FROM_PATCHED_RUNTIME",
+      "status": "CURRENTLY_RELEVANT_COGNITIVE_AVAILABILITY_CONSTRAINT",
+      "claim": "FRANK historically contained 2106 Titan long-term-memory nodes while the agent still reported that it could not access its persistent profile because there was no active memory_recall path. Storage existence did not imply cognitive availability.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank", "gwt", "claygraph", "unifieddb", "harness", "claycode"],
+      "current_implication": "Memory success must be measured end-to-end as query/retrieval -> workspace availability -> decision/effect -> outcome/re-entry, not by stored-node counts or database presence."
+    },
+    {
+      "finding_id": "PF-L0-MEM-002",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_FROM_PATCHED_RUNTIME",
+      "status": "CURRENTLY_RELEVANT_FEDERATION_CONSTRAINT",
+      "claim": "Entity-session conversations were durably stored in their own SQLite databases and transcripts but were not ingested into Titan or meaningful chat_memory records, so they were not recallable across sessions until explicit bridge ingestion was added.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["unifieddb", "claygraph", "frank", "harness"],
+      "current_implication": "Logical memory unification requires explicit ingestion/query visibility and identity/provenance across stores. Physical persistence in isolated databases is insufficient."
+    },
+    {
+      "finding_id": "PF-L0-MEM-003",
+      "epistemic_class": "HISTORICAL_IMPLEMENTATION_AND_REPAIR_EVIDENCE",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "A later MemoryHub provided one logical query across chat, Titan, consciousness, world and preferences while retaining distinct underlying stores, using RRF fusion, recency-aware budget packing, source attribution, retrieval metrics and a consistency daemon.",
+      "reuse_category": "DIRECTLY_REUSABLE",
+      "targets": ["unifieddb", "claygraph", "frank", "harness"],
+      "current_implication": "This is concrete historical support for current UnifiedDB's semantic/logical unification model: one identity/query plane does not require an unconditional physical single-database merge."
+    },
+    {
+      "finding_id": "PF-L0-MEM-004",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_AND_RECOVERY_EVIDENCE",
+      "status": "CURRENTLY_RELEVANT_INTEGRITY_CONSTRAINT",
+      "claim": "Titan graph repair found 6675 orphaned edges with 0 nodes. Recovery introduced foreign-key enforcement, ON DELETE CASCADE, node protection, re-ingestion, crash-safe embedding backfill and periodic consistency checks.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["claygraph", "unifieddb", "harness", "frank"],
+      "current_implication": "ClayGraph/UnifiedDB acceptance needs referential-integrity, orphan detection, crash/restart replay, resumable backfill, consistency audit and repair receipts as first-class invariants."
+    },
+    {
+      "finding_id": "PF-L0-MEM-005",
+      "epistemic_class": "HISTORICAL_MEASUREMENT_AND_TUNING_RESULT",
+      "status": "MEASUREMENT_FOUNDATION",
+      "claim": "The LCME tuning commit reports retrieval P@5 improving from 0.40 to 1.00 after removing 7213 entity vectors, filtering EN/DE stop words, heavily weighting relevance, gating immature neural retrieval components, disabling graph expansion by default and enabling HNSW above 500 vectors.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "targets": ["claygraph", "unifieddb", "harness", "frank"],
+      "current_implication": "More graph expansion/vectors/neural retrieval is not monotonically better. Each retrieval layer should earn activation through held-out precision/recall/latency tests and cold-start gates."
+    },
+    {
+      "finding_id": "PF-L0-MEM-006",
+      "epistemic_class": "HISTORICAL_MIGRATION_EVIDENCE",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "Titan was renamed to LCME across 42 files while durable DB filenames and tool names were deliberately preserved for data safety and LoRA compatibility, with a backwards-compatible redirect.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["claycode", "unifieddb", "claygraph", "harness"],
+      "current_implication": "Semantic/runtime migrations should preserve stable durable identities and learned interfaces or provide explicit reversible versioned migration contracts rather than silently renaming semantic resources."
+    },
+    {
+      "finding_id": "PF-L0-MEM-007",
+      "epistemic_class": "HISTORICAL_RESILIENCE_PATTERN",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "Historical memory recovery used crash-safe cursor state for embedding backfill, automatic DB reconnect, per-query source/latency/injected-size metrics and periodic consistency cleanup.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["unifieddb", "claygraph", "harness", "frank"],
+      "current_implication": "Long-running cognitive persistence should expose resumable jobs, explicit cursors, recovery idempotence and observability instead of best-effort hidden maintenance."
+    }
+  ],
+  "earned_work_mappings": [
+    {
+      "mapping_id": "HEW-PF-MEMORY-006",
+      "source_refs": ["commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4", "commit:c93873c88f63b3283a582605e9339e709e4b0599", "commit:6d680d3bd3822ed9cf8928f63794e15b9e1372b5"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "UDB_UNIFIED_DATABASE", "CLAY_0_1_FULL_INTEGRATION"],
+      "mechanism_or_result": "Logical federated memory query, active recall-path semantics, source attribution and memory-visibility failure modes already have historical implementation evidence.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 10.0,
+      "avoided_future_hours_high": 20.0,
+      "confidence": "MEDIUM_FOR_MECHANISMS_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "UnifiedDB/Harness must demonstrate cross-store identity-preserving recall with source provenance and a causal effect receipt under matched retrieval tests."
+    },
+    {
+      "mapping_id": "HEW-PF-MEMFAIL-007",
+      "source_refs": ["commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4", "commit:c93873c88f63b3283a582605e9339e709e4b0599", "commit:6d680d3bd3822ed9cf8928f63794e15b9e1372b5"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "UDB_UNIFIED_DATABASE", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Orphan graph corruption, inaccessible stored memory, isolated-store recall loss and crash-recovery behavior provide concrete persistence/recovery regression tests.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 9.0,
+      "avoided_future_hours_high": 18.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Harness must reproduce orphaning, restart/backfill interruption, isolated-store memory and unavailable recall-path failures against the new implementation."
+    },
+    {
+      "mapping_id": "HEW-PF-MEMPERF-008",
+      "source_refs": ["commit:290d5e2b8640d55eb2a0aa38b99338c8070a0009"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "UDB_UNIFIED_DATABASE", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Historical precision tuning, cold-start gating, HNSW thresholding, graph-expansion ablation and compatibility-preserving migration form reusable retrieval benchmark/migration scaffolding.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 5.0,
+      "avoided_future_hours_high": 10.0,
+      "confidence": "MEDIUM_FOR_BENCHMARK_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Held-out ClayGraph/UnifiedDB retrieval suite must verify precision/recall/latency and migration compatibility; graph expansion or learned retrieval remains disabled if it does not beat the simpler baseline."
+    }
+  ],
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Combined denominator remains unfrozen; Drive archive internals are inaccessible through the current connector and Project-Frankenstein exact history-aware manifest remains incomplete.",
+    "historical_earned_work_credit_status": "PARTIAL_EVIDENCE_MAPPINGS_RECORDED_NOT_YET_APPLIED_TO_GLOBAL_COMPLETION",
+    "provisional_avoided_future_hours_low_from_this_shard": 10.0,
+    "provisional_avoided_future_hours_center_from_this_shard": 24.0,
+    "provisional_avoided_future_hours_high_from_this_shard": 48.0
+  },
+  "branch_feedback": {
+    "unifieddb": "Historical MemoryHub is direct evidence that one logical query/identity plane can federate multiple physical stores. Require explicit visibility, source provenance, transactions/recovery and cross-store identity; do not equate unification with forced physical merge.",
+    "claygraph": "Graph/vector expansion polluted retrieval historically; keep graph expansion and learned retrieval behind held-out precision/recall gates. Make referential integrity and temporal provenance mandatory.",
+    "harness": "Add regression fixtures for 6675-orphan graph corruption, stored-but-unreachable memory, isolated-store cross-session loss, crash-safe backfill resume, DB reconnect, retrieval-layer ablation and migration compatibility.",
+    "frank": "Memory counts are not cognition. Require end-to-end memory availability receipts from retrieval through workspace effect/outcome/re-entry.",
+    "claycode": "Stable durable resource identity and learned tool-interface compatibility should survive implementation renames through versioned migration contracts.",
+    "gwt": "A memory only becomes globally useful when it is causally available to selection/broadcast/effect; storage presence alone is not workspace availability.",
+    "clay": "Reuse the federation/recovery/measurement principles, not the historical Titan/LCME topology as a mandatory final design."
+  },
+  "next_actions": [
+    "Materialize the memory negative-result family as Harness tests before H1/H2 freeze.",
+    "Search remaining Project-Frankenstein history for retrieval benchmark raw data and recovery logs to validate reported P@5 and corruption counts.",
+    "Cross-source reconcile these mechanisms against the blocked Drive archive once archive bytes become accessible."
+  ]
+}

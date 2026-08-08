@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "packet_id":"TP-UDB-U1-SEMANTIC-PERSISTENCE-FABRIC",
+  "title":"UnifiedDB U1 — Clay Unified Semantic Persistence Fabric",
+  "status":"OPEN",
+  "origin_trigger":"unifieddb",
+  "origin_run":"unifieddb-20260808T2044p0700-chatgpt-secondary-r2",
+  "actor":"chatgpt-secondary",
+  "summary":"The first dedicated UnifiedDB run narrows the target from a possible single database to one Clay semantic identity/query/causal fabric. Default architecture: authoritative transactional event/state/effect spine; operation-specific causal capsule; unified ClayCode query IR; specialized physical adapters; versioned replayable graph/vector/FTS/activation views; selection/derivation receipts; isolated capability authority; Cognitive State Continuity Loop that may update associative activation between model calls.",
+  "key_findings":[
+    "Physical monolith is not a universal performance winner; current local read benchmark favored specialized/logical paths while monolith had best write p50 in the tested run.",
+    "Logical unification can remove serialization crossings without requiring physical consolidation; local service-boundary construction reduced p50 about 10.15%.",
+    "Canonical commit + durable outbox made derived lag explicit and replayable under injected failure; unsynchronized specialized stores silently diverged.",
+    "Selection/query-plan identity belongs in causal provenance when ranked retrieval controls Assembly membership.",
+    "Associative activation may evolve between model calls but remains non-authoritative and exact-anchor validated when consequential."
+  ],
+  "primary_artifacts":[
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/UNIFIED_DATABASE_ARCHITECTURE.claycode.json",
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/STORE_ROLE_MATRIX.json",
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/QUERY_ROUTING_PLAN.json",
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/EXPERIMENT_RESULTS.json",
+    "research_entity/knowledge_micro_packets/unifieddb/KMP-UDB-U1-CANONICAL-SPINE.md",
+    "research_entity/knowledge_micro_packets/unifieddb/KMP-UDB-U1-COGNITIVE-STATE-CONTINUITY.md"
+  ],
+  "open_blockers":["live FRANK/twin comparison","target persistence-engine Pareto benchmark","crash/restart/replay under realistic concurrency","target-Qwen memory continuity factorial","Android/edge transport/energy/thermal trace","adversarial selection/capability tests"]
+}

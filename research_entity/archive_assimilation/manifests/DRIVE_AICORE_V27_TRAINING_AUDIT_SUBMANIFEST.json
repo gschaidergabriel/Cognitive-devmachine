@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-V27-TRAINING-AUDIT-20260809T0502p0700",
+  "manifest_kind":"BOUNDED_HISTORICAL_TRAINING_AND_AUDIT_SHARD",
+  "status":"FROZEN_BOUNDED_SHARD",
+  "source_root":{"title":"aicore/training/v27","id":"1DzxU5uAezf5gq4DoYECR4RUE7mz-CUXf"},
+  "obligations":[
+    {"title":"BERICHT-KLASSENVERTEILUNG.md","id":"1Eh0XHMbI0l8kgiwKJlpQ9b0HthtAVUjM","state":"ANALYZED"},
+    {"title":"BERICHT-SYSTEMTEXT-TRENNUNG.md","id":"1eed0lAIbLR6NYZs-GI2ORdVgmZnpHBFj","state":"ANALYZED"},
+    {"title":"blindpruefung_S1.md","id":"1SeQy5kQ6bMg-O3-kYx0pWCJL_h-UWc6t","state":"ANALYZED_AS_INTERMEDIATE_NOT_RELEASE_PROOF"}
+  ],
+  "measured_summary":{"v27_train_rows":3785,"converted_tool_response_rows":1449,"answer_tool_tags_before":4180,"answer_tool_tags_after":0,"rejected_candidate_examples":4261,"blind_sample_intermediate_rows":140,"blind_sample_hash":"e0bd070308f09f08ef7161dec8b9cefeed7783d8c8cd068c6ce66a759669afb2","systemtext_tool_openings_corrected_count":30358,"systemtext_classifier_validation":"29/30 on second hand sample"},
+  "scope_warning":"This is not the full recursive v27 training directory and does not certify the final dataset. The blind sample was explicitly observed while the source file was still growing and was frozen only as an intermediate hashed snapshot.",
+  "coverage":{"bounded_obligations_percent":100.0,"full_v27_recursive_percent":null,"exact_level0_global_credit_percent":0.0},
+  "frozen_by":"chatgpt-secondary","frozen_at":"2026-08-09T05:02:00+07:00"
+}

@@ -27,6 +27,7 @@ Unless a trigger has a deeper dependency override, target branches keep approxim
 | frank | 40 | 80 |
 | claycode | 40 | 80 |
 | claygraph | 48 | 96 |
+| unifieddb | 48 | 96 |
 | gwt | 32 | 64 |
 | hyperposition | 32 | 64 |
 | emergenz | 32 | 64 |
@@ -40,11 +41,20 @@ The following relationships intentionally maintain still richer envelopes:
 - `frank <- clay`: 64 Topic / 128 Micro
 - `frank <- claycode`: 64 / 128
 - `frank <- claygraph`: 64 / 128
+- `frank <- unifieddb`: 64 / 128
 - `claycode <- frank`: 64 / 128
 - `claycode <- claygraph`: 64 / 128
+- `claycode <- unifieddb`: 56 / 112
 - `gwt <- claygraph`: 56 / 112
+- `gwt <- unifieddb`: 48 / 96
 - `hyperposition <- claygraph`: 56 / 112
+- `hyperposition <- unifieddb`: 48 / 96
+- `claygraph <- unifieddb`: 64 / 128
+- `unifieddb <- claygraph`: 64 / 128
+- `unifieddb <- frank`: 64 / 128
+- `unifieddb <- claycode`: 64 / 128
 - `claygraph`: indexes the complete mesh but still marks a bounded high-priority active envelope for reasoning/self-use.
+- `unifieddb`: indexes the complete mesh but keeps a bounded active envelope for store-role, query, migration, consistency and benchmark reasoning.
 - `fusion`: indexes the complete mesh and uses branch active envelopes as its first reasoning layer before raw-evidence expansion.
 
 ## Selection priority
@@ -63,7 +73,7 @@ Within an envelope, selection is not pure recency. Prefer a balanced mixture of:
 
 ## Diversity invariant
 
-A branch envelope should not collapse to 80 near-duplicate packets from one recent run. Where material exists, preserve representation of:
+A branch envelope should not collapse to near-duplicate packets from one recent run. Where material exists, preserve representation of:
 
 - claims/current model;
 - open hypotheses;
@@ -85,11 +95,15 @@ Shared evidence ancestry is still collapsed for evidential counting even when se
 3. promote newly useful compact findings into Topic/Micro-Packets so later runs benefit without rereading raw corpora;
 4. demote redundant/stale packets from the active envelope without deleting their durable history.
 
-## ClayGraph relationship
+## ClayGraph and UnifiedDB relationship
 
-ClayGraph should eventually become a better selector for this active envelope. Until that is empirically demonstrated, deterministic packet ranking remains a baseline. ClayGraph self-use experiments should compare graph-selected assemblies against this packet-envelope baseline on recall, precision, latency, token cost, multi-hop recovery and false association.
+ClayGraph should eventually become a better selector for active associative memory envelopes. UnifiedDB should eventually provide a better logical persistence/query plane across authoritative and derived data classes. Neither result is assumed in advance.
 
-Activation/relevance never upgrades evidence status.
+ClayGraph self-use experiments should compare graph-selected assemblies against deterministic packet-envelope baselines on recall, precision, latency, token cost, multi-hop recovery and false association.
+
+UnifiedDB self-use experiments should compare specialized-store baselines, logically unified routing, hybrid canonical-store/sidecar layouts and physical consolidation candidates on correctness/replay, snapshot consistency, latency/amplification, storage/memory, crash recovery, migration and selection integrity.
+
+Activation/relevance never upgrades evidence status. Logical database unification never by itself justifies physical merge.
 
 ## Scientific and operational boundary
 

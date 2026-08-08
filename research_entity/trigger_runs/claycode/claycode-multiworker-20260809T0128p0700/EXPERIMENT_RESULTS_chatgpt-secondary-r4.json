@@ -1,0 +1,39 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "worker_id":"chatgpt-secondary-r4",
+  "lane":"A_GENERAL_PURPOSE_CORE",
+  "experiments":[
+    {
+      "id":"EXP-CC14-UNIVERSAL-CORE-001",
+      "method":"independent bounded interpreters for random 2-counter Minsky-machine programs",
+      "cases":20000,
+      "step_budget":200,
+      "result":{"differential_mismatches":0,"halted":9065,"step_limit":10935},
+      "interpretation":"The tested ClayCore control/state instruction shape faithfully implements the chosen universal-machine subset under bounded execution. This is evidence for a viable universal core design, not a formal proof of the eventual ClayCode compiler."
+    },
+    {
+      "id":"EXP-CC14-APPLICATION-COVERAGE-002",
+      "method":"typed effect-request/capability proxy across representative application classes",
+      "application_classes":["cli","http_server","desktop_gui","game","database","jit_compiler","gpu_ml","embedded_robotics","admin_tool","disk_formatter","kernel_driver"],
+      "expressible_with_matching_capabilities":11,
+      "total":11,
+      "result":"PASS_11_OF_11",
+      "interpretation":"Destructive/admin/raw effects did not need to be removed from the language to prevent ambient execution; they were expressible and executable only under matching environment capabilities."
+    },
+    {
+      "id":"EXP-CC14-CAPABILITY-MONOTONICITY-003",
+      "method":"100000 randomized capability-derivation and forged-origin cases",
+      "cases":100000,
+      "result":{"derivation_oracle_mismatches":0,"model_forged_capability_accepts":0},
+      "rules_tested":["resource scope may narrow but not widen","verb set may narrow but not widen","only HOST/BOOT/TRUSTED_RUNTIME origins authorize effects"],
+      "interpretation":"The proxy enforces the intended authority lattice. It does not establish implementation security against parser/runtime/FFI bugs."
+    }
+  ],
+  "negative_result":"CC13's phrase 'destructive operations are not model effects' is too strong for a genuinely general-purpose language if read as inexpressibility. It must become a restricted-authority profile rule, not a language-semantic ban.",
+  "external_method_anchors":[
+    "Koka: general composable effect typing demonstrates that precise effects need not prevent a language from being general-purpose.",
+    "Rust: unsafe/extern operations remain expressible while carrying explicit proof obligations.",
+    "CHERI: unforgeable capabilities with monotonic permission/bounds reduction provide independent precedent for separating expressibility from authority."
+  ]
+}

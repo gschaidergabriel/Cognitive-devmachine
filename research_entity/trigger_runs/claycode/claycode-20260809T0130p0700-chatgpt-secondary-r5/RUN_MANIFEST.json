@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "trigger": "claycode",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "shared_coordination": "claycode-multiworker-20260809T0128p0700",
+  "lane": "B_COMPILER_RUNTIME_LOWERING",
+  "candidate": {
+    "shared": "CC-RC1.9 UECC",
+    "lane_refinement": "CBEL-TV context-bound effect lowering + translation validation",
+    "late_refinement": "atomic linearized aggregate authority reservation/consumption",
+    "status": "OPEN_HOLD"
+  },
+  "scientific_branches_covered": ["frank","clay","claygraph","unifieddb","gwt","hyperposition","emergenz","claycode"],
+  "experiments": [
+    "EXP-CC-RC1.9-CBEL-TV-LOCAL-001",
+    "EXP-CC-RC1.9-CBEL-TV-E2B-001",
+    "EXP-CC-LANE-B-CROSSBOUNDARY-002",
+    "EXP-CC-LANE-B-ORIGIN-BUDGET-003",
+    "EXP-CC-RC1.9-MAINTENANCE-GC-LOCAL-002"
+  ],
+  "required_outputs": {
+    "INTERCONNECT_MANIFEST.json": true,
+    "TOOL_EXECUTION_MANIFEST.json": true,
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json": true,
+    "HYPOTHESIS_MATRIX.json": true,
+    "NEGATIVE_RESULTS.md": true,
+    "EXECUTABLE_RESEARCH_RECEIPT.json": true,
+    "LATE_EXPERIMENT_DELTA.json": true,
+    "EXTERNAL_EVIDENCE_LEDGER.md": true,
+    "FINAL_REPORT.md": true
+  },
+  "multiworker": {
+    "networked": true,
+    "lane_a_crossread": true,
+    "lane_c_crossread": true,
+    "lane_b_shared_close": true,
+    "late_atomic_budget_crossread": true,
+    "active_intent_adequacy_lane_seen_but_not_counted_complete": true
+  },
+  "promotion": {
+    "canonical_revision_change": false,
+    "scientific_generation_promoted": false,
+    "reason": "No formal proof, target-Qwen result, production FRANK broker result, real WASI capability-object test or ancestry-distinct full-stack replication."
+  },
+  "validation": {
+    "artifact_structure_manual_review": "PASS",
+    "goodman_exact_validator": "PENDING_E2B_REQUEST_claycode-r5-goodman-validate-e2b-004",
+    "remote_reread": "PENDING",
+    "canonical_recheck": "PENDING"
+  },
+  "status": "RESEARCH_DELTA_COMMITTED_PENDING_FINAL_VALIDATION_REREAD"
+}

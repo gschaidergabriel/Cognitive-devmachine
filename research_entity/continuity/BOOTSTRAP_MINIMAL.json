@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.6",
+  "schema_version": "1.7",
   "purpose": "Low-overhead boot index. This file is a derived operational index, not canonical research truth.",
   "canonical_path": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
   "expected_entity_version": "RAE-8.8",
@@ -47,7 +47,13 @@
       "match": "trimmed_case_insensitive_exact",
       "protocol": "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
       "kind": "global_mesh_meta_research",
-      "instruction": "Research across the complete current RAE graph/evidence classes and write explicit feedback or NO_CHANGE receipts to clay, frank, gwt, emergenz, claycode and hyperposition."
+      "instruction": "Research across the complete current RAE graph/evidence classes and write explicit feedback or NO_CHANGE receipts to every registered scientific branch."
+    },
+    "hypofusion": {
+      "match": "trimmed_case_insensitive_exact",
+      "protocol": "research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md",
+      "kind": "hypothesis_screening_global_meta_research",
+      "instruction": "Screen all reachable current/open hypotheses plus fresh live-worker material against broad external support, analogues, better mechanisms, nulls, failure modes and counterhypotheses; preserve evidence classes; generate discriminating tests; then execute whole-mesh Fusion 2 and feedback to every registered scientific branch."
     }
   },
   "mandatory_invariants": [
@@ -69,7 +75,8 @@
     "substantive_visible_responses_end_with_status_footer",
     "status_footer_is_exact_plain_fenced_text_without_attributes_or_unicode_box_layout",
     "substantive_research_tasks_use_quota_aware_tool_orchestration_with_recorded_fallback",
-    "fusion_covers_complete_mesh_and_closes_feedback_to_every_scientific_branch"
+    "fusion_covers_complete_mesh_and_closes_feedback_to_every_scientific_branch",
+    "hypofusion_screens_complete_reachable_hypothesis_set_against_external_counterevidence_and_live_worker_state"
   ],
   "boot_tiers": {
     "T0_ALWAYS": [
@@ -87,7 +94,8 @@
       "tools/research_provider_router.py for research tool planning/validation",
       "research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md when cross-researcher interpretation/adjudication matters",
       "research_entity/global/DUMP_PROTOCOL.md only when reserved command dump is triggered",
-      "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md only when reserved command fusion is triggered"
+      "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md only when reserved command fusion is triggered",
+      "research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md only when reserved command hypofusion is triggered"
     ],
     "T2_ONLY_WHEN_RELEVANT": [
       "research constitution",
@@ -116,7 +124,7 @@
     "max_negative_result_summaries": 8,
     "max_active_experiment_summaries": 6,
     "overflow_policy": "load indexes/summaries first; fetch evidence detail only on demand",
-    "fusion_override":"coverage-first traversal may exceed normal branch packet limits via staged/indexed retrieval; do not silently omit a branch or evidence class"
+    "fusion_override": "coverage-first traversal may exceed normal branch packet limits via staged/indexed retrieval; do not silently omit a branch or evidence class"
   },
   "active_experiment_ids": [
     "EXP-LIVE-GWT-LESION",

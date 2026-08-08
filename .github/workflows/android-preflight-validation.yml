@@ -1,0 +1,42 @@
+name: Android Secondary Arm Mesh Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-android-mesh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Android full-mesh interconnect manifest
+        run: |
+          python tools/android_research_preflight.py \
+            --run-id android-20260808T2338p0700-chatgpt-secondary-r1 \
+            --output /tmp/android-interconnect.json
+      - name: Assert all eight branches retrieve Android routing packet
+        run: |
+          python - <<'PY'
+          import json
+          p = '/tmp/android-interconnect.json'
+          data = json.load(open(p, encoding='utf-8'))
+          expected = {'clay','frank','gwt','emergenz','claycode','hyperposition','claygraph','unifieddb'}
+          got = set(data['registry_scientific_branches'])
+          assert got == expected, (got, expected)
+          assert data['secondary_arm']['name'] == 'android'
+          missing = []
+          for branch in data['branches']:
+              packets = branch.get('knowledge_micro_packets', [])
+              ok = any(x.endswith('KMP-ANDROID-SECONDARY-ARM-BIDIRECTIONAL-MESH.md') for x in packets)
+              if not ok:
+                  missing.append(branch['branch'])
+          assert not missing, f'Android routing KMP not retrieved for: {missing}'
+          print('ANDROID_MESH_RETRIEVAL_PASS')
+          print('branches=', sorted(got))
+          for branch in data['branches']:
+              hits=[x for x in branch.get('knowledge_micro_packets',[]) if 'KMP-ANDROID-SECONDARY-ARM-BIDIRECTIONAL-MESH.md' in x]
+              print(branch['branch'], hits)
+          PY

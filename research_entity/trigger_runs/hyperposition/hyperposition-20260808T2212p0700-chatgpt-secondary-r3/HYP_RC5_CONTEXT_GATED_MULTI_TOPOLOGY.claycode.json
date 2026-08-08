@@ -1,0 +1,27 @@
+{
+  "schema":"claycode-research-candidate/1.0",
+  "candidate_id":"HYP-RC5",
+  "name":"Context-Gated Multi-Topology Hyperposition",
+  "status":"OPEN_HOLD",
+  "parent":"HYP-RC4 Clay-Native Typed Semantic Firebreak Hyperposition",
+  "laws":[
+    "one semantic relation != one propagation edge != one invalidation edge != one process link != one authority path",
+    "higher-order identity may remain persistent while propagation is sparse context-gated and operation-specific",
+    "native higher-order representation is not mandatory when a simpler lowering is proven semantically equivalent",
+    "UNKNOWN dependency closure broadens or escalates; it never silently becomes KNOWN_VALID"
+  ],
+  "topologies":[
+    {"id":"T.SEMANTIC_RELATION","role":"persistent exact relation identity","fields":["relation_instance_id","roles","semantic_class","provenance","valid_time","transaction_time","collection_algebra","conflict_status"],"allowed_lowerings":["native_hyperrelation","typed_relation_node_incidence","proven_weighted_pairwise"]},
+    {"id":"T.ACTIVE_PROPAGATION","role":"operation/frame-specific salience movement","fields":["active_relation_subset","gain","depth","decay","inhibition","activation_budget","diversity_reserve","graph_epoch","activation_epoch"],"authority":"NONE"},
+    {"id":"T.DEPENDENCY_INVALIDATION","role":"operation-specific recompute/revocation closure","closure_states":["KNOWN_VALID","KNOWN_INVALID","UNKNOWN"],"unknown_policy":["broaden","instrument","recompute","escalate","deny_or_defer"]},
+    {"id":"T.SELECTION_WORKSPACE","role":"candidate and workspace causal topology","fields":["query_plan_hash","collection_semantics","candidate_set_hash","ranking_weight_policy","WorkspaceEpisode","reader_projection","InternalWorkspaceReceipt"]},
+    {"id":"T.PHYSICAL","role":"runtime locality/transport/storage placement","routes":["same_process_compact_handle","shared_memory","IPC","separate_storage_engine","remote_service"],"selection":"benchmark + contention + recovery + crash_radius + energy + platform"},
+    {"id":"T.AUTHORITY","role":"external effect authority","rule":"selectability, propagation, model uptake and semantic colocation never mint capability authority","boundary":"isolated capability/effect broker"}
+  ],
+  "contextual_alternatives":{"rule":"canonical alternatives may coexist with explicit context predicates/facets; active projection does not overwrite alternatives","compile":"operation context -> active semantic slice -> propagation/dependency/selection topology","ambiguity":"preserve conflict/unknown when unresolved","fallback":"static union/global validation only as conservative broadening"},
+  "reduction_policy":{"pairwise_direct":"use when semantics are intrinsically pairwise","weighted_pairwise":"use only with operation-specific equivalence evidence","relation_node_incidence":"preferred lossless graph lowering for many n-ary relations","native_hyperrelation":"use when simpler/cheaper or when reduction proof unavailable","lossy_projection":"must emit explicit loss/selection receipt and cannot silently justify effect-critical reasoning"},
+  "propagation_policy":{"default":"sparse context-gated bounded","controls":["gain","depth","decay","inhibition","budget","diversity_reserve"],"tripwires":["false_association_rate","target_context_mass","active_set_q95","cross_context_diversity","utility_poison_sensitivity","revocation_coverage","latency","cache_or_page_touches"]},
+  "nested_workspace_boundary":"system WorkspaceEpisode and model-internal privileged uptake are separate causal levels joined by a receipted projection/uptake bridge",
+  "emergence_boundary":"higher-order structure, critical-like dynamics or nested workspaces do not imply emergence or phenomenal consciousness; E-CERT2 remains required",
+  "promotion":false
+}

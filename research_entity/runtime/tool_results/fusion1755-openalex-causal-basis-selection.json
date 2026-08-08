@@ -1,0 +1,2593 @@
+{
+  "schema_version": "1.1",
+  "request_id": "fusion1755-openalex-causal-basis-selection",
+  "tool": "openalex_search",
+  "request_sha256": "31d8c2246faaf3dc91134a3fac2e835dd4b661edd248bf51a29a4158ed0304bd",
+  "processed_at": "2026-08-08T10:59:26.207472+00:00",
+  "result": {
+    "provider": "OpenAlex",
+    "tool": "openalex_search",
+    "retrieved_at": "2026-08-08T10:59:27.275463+00:00",
+    "credential_source": "private_repo_store:API_TOKENS.env",
+    "query": "versioned snapshot provenance selection integrity query plan memory agents causal consistency projection compiler",
+    "filter": null,
+    "meta": {
+      "count": 10,
+      "db_response_time_ms": 342,
+      "page": 1,
+      "per_page": 10,
+      "groups_count": null,
+      "x_query": {
+        "oql": "works where full text has (versioned snapshot provenance selection integrity query plan memory agents causal consistency projection compiler)",
+        "oqo": {
+          "get_rows": "works",
+          "filter_rows": [
+            {
+              "column_id": "fulltext.search",
+              "value": "versioned snapshot provenance selection integrity query plan memory agents causal consistency projection compiler",
+              "operator": "has"
+            }
+          ]
+        },
+        "url": "/works?filter=fulltext.search:versioned snapshot provenance selection integrity query plan memory agents causal consistency projection compiler&per_page=10"
+      },
+      "cost_usd": 0.001
+    },
+    "results": [
+      {
+        "id": "https://openalex.org/W4411156435",
+        "doi": "https://doi.org/10.3390/electronics14122334",
+        "display_name": "Dynamic Vulnerability Knowledge Graph Construction via Multi-Source Data Fusion and Large Language Model Reasoning",
+        "publication_year": 2025,
+        "publication_date": "2025-06-07",
+        "type": "article",
+        "cited_by_count": 5,
+        "primary_location": {
+          "id": "doi:10.3390/electronics14122334",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.3390/electronics14122334",
+          "pdf_url": "https://www.mdpi.com/2079-9292/14/12/2334/pdf?version=1749282341",
+          "source": {
+            "id": "https://openalex.org/S4210202905",
+            "display_name": "Electronics",
+            "issn_l": "2079-9292",
+            "issn": [
+              "2079-9292"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310310987",
+            "host_organization_name": "Multidisciplinary Digital Publishing Institute",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310310987"
+            ],
+            "host_organization_lineage_names": [
+              "Multidisciplinary Digital Publishing Institute"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Electronics",
+          "raw_type": "journal-article"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "gold",
+          "oa_url": "https://www.mdpi.com/2079-9292/14/12/2334/pdf?version=1749282341",
+          "any_repository_has_fulltext": false
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5078119583",
+              "display_name": "Ruitong Liu",
+              "orcid": "https://orcid.org/0000-0002-8621-2594"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I149594827",
+                "display_name": "Xidian University",
+                "ror": "https://ror.org/05s92vm98",
+                "country_code": "CN",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I149594827"
+                ]
+              }
+            ],
+            "countries": [
+              "CN"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Ruitong Liu",
+            "raw_affiliation_strings": [
+              "Key Laboratory of Cyberspace Security, Zhengzhou 450001, China",
+              "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+              "School of Cyber Engineering, Xidian University, Xi'an 710126, China"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Key Laboratory of Cyberspace Security, Zhengzhou 450001, China",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi'an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": null,
+              "display_name": "Yaxuan Xie",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I149594827",
+                "display_name": "Xidian University",
+                "ror": "https://ror.org/05s92vm98",
+                "country_code": "CN",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210130332",
+                "display_name": "Advanced Network and Services (United States)",
+                "ror": "https://ror.org/034qqhd60",
+                "country_code": "US",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210130332"
+                ]
+              }
+            ],
+            "countries": [
+              "CN",
+              "US"
+            ],
+            "is_corresponding": true,
+            "raw_author_name": "Yaxuan Xie",
+            "raw_affiliation_strings": [
+              "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+              "State Key Laboratory of Integrated Services Networks (ISN), Xi’an 710126, China",
+              "School of Cyber Engineering, Xidian University, Xi'an 710126, China",
+              "State Key Laboratory of Integrated Services Networks (ISN), Xi'an 710126, China"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "raw_affiliation_string": "State Key Laboratory of Integrated Services Networks (ISN), Xi’an 710126, China",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi'an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "raw_affiliation_string": "State Key Laboratory of Integrated Services Networks (ISN), Xi'an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I4210130332"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5113732509",
+              "display_name": "Zexu Dang",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I149594827",
+                "display_name": "Xidian University",
+                "ror": "https://ror.org/05s92vm98",
+                "country_code": "CN",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I149594827"
+                ]
+              }
+            ],
+            "countries": [
+              "CN"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Zexu Dang",
+            "raw_affiliation_strings": [
+              "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+              "School of Cyber Engineering, Xidian University, Xi'an 710126, China"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi'an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5069241766",
+              "display_name": "Jinyi Hao",
+              "orcid": "https://orcid.org/0009-0008-2551-7766"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I149594827",
+                "display_name": "Xidian University",
+                "ror": "https://ror.org/05s92vm98",
+                "country_code": "CN",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I149594827"
+                ]
+              }
+            ],
+            "countries": [
+              "CN"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Jinyi Hao",
+            "raw_affiliation_strings": [
+              "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+              "School of Cyber Engineering, Xidian University, Xi'an 710126, China"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi'an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": null,
+              "display_name": "Xiaowen Quan",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Xiaowen Quan",
+            "raw_affiliation_strings": [
+              "Yuanjiang Shengbang Safety Technology Group Co., Beijing 100085, China"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Yuanjiang Shengbang Safety Technology Group Co., Beijing 100085, China",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5114072104",
+              "display_name": "Yongcai Xiao",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Yongcai Xiao",
+            "raw_affiliation_strings": [
+              "State Grid Jiangxi Electric Power Research Institute, Nanchang 330052, China"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "State Grid Jiangxi Electric Power Research Institute, Nanchang 330052, China",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5012655281",
+              "display_name": "Chunlei Peng",
+              "orcid": "https://orcid.org/0000-0003-3448-2514"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I149594827",
+                "display_name": "Xidian University",
+                "ror": "https://ror.org/05s92vm98",
+                "country_code": "CN",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210130332",
+                "display_name": "Advanced Network and Services (United States)",
+                "ror": "https://ror.org/034qqhd60",
+                "country_code": "US",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210130332"
+                ]
+              }
+            ],
+            "countries": [
+              "CN",
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Chunlei Peng",
+            "raw_affiliation_strings": [
+              "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+              "State Key Laboratory of Integrated Services Networks (ISN), Xi’an 710126, China",
+              "School of Cyber Engineering, Xidian University, Xi'an 710126, China",
+              "State Key Laboratory of Integrated Services Networks (ISN), Xi'an 710126, China"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi’an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "raw_affiliation_string": "State Key Laboratory of Integrated Services Networks (ISN), Xi’an 710126, China",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "School of Cyber Engineering, Xidian University, Xi'an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I149594827"
+                ]
+              },
+              {
+                "raw_affiliation_string": "State Key Laboratory of Integrated Services Networks (ISN), Xi'an 710126, China",
+                "institution_ids": [
+                  "https://openalex.org/I4210130332"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10028",
+            "display_name": "Topic Modeling",
+            "score": 0.9936000108718872,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11719",
+            "display_name": "Data Quality and Management",
+            "score": 0.9876000285148621,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1803",
+              "display_name": "Management Science and Operations Research"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/18",
+              "display_name": "Decision Sciences"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11273",
+            "display_name": "Advanced Graph Neural Networks",
+            "score": 0.9793000221252441,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W4234111198",
+        "doi": "https://doi.org/10.17760/d20261862",
+        "display_name": "Conversational concurrency",
+        "publication_year": 2017,
+        "publication_date": "2017-01-01",
+        "type": "dissertation",
+        "cited_by_count": 2,
+        "primary_location": {
+          "id": "doi:10.17760/d20261862",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.17760/d20261862",
+          "pdf_url": "https://repository.library.northeastern.edu/files/neu:cj82qs441/fulltext.pdf",
+          "source": null,
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Northeastern University",
+          "raw_type": "dissertation"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "gold",
+          "oa_url": "https://repository.library.northeastern.edu/files/neu:cj82qs441/fulltext.pdf",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5052170635",
+              "display_name": "Garnock-Jones",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": true,
+            "raw_author_name": "Garnock-Jones",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10126",
+            "display_name": "Logic, programming, and type systems",
+            "score": 0.9970999956130981,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10639",
+            "display_name": "Advanced Software Engineering Methodologies",
+            "score": 0.9740999937057495,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11010",
+            "display_name": "Logic, Reasoning, and Knowledge",
+            "score": 0.9732999801635742,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W7171655309",
+        "doi": "https://doi.org/10.2139/ssrn.7016202",
+        "display_name": "ArgorixLang: Compiled Governance, Sovereign Agent Metadata, and Offline-Verifiable Runtime Evidence",
+        "publication_year": 2026,
+        "publication_date": "2026-01-01",
+        "type": "preprint",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "doi:10.2139/ssrn.7016202",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.2139/ssrn.7016202",
+          "pdf_url": "https://doi.org/10.2139/ssrn.7016202",
+          "source": {
+            "id": "https://openalex.org/S4210172589",
+            "display_name": "SSRN Electronic Journal",
+            "issn_l": "1556-5068",
+            "issn": [
+              "1556-5068"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I1318003438",
+            "host_organization_name": "RELX Group (Netherlands)",
+            "host_organization_lineage": [
+              "https://openalex.org/I1318003438"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "acceptedVersion",
+          "is_accepted": true,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "posted-content"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://doi.org/10.2139/ssrn.7016202",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5128559569",
+              "display_name": "Gustavo Venegas",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Gustavo Venegas",
+            "raw_affiliation_strings": [],
+            "raw_orcid": "https://orcid.org/0009-0003-0914-5759",
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5143904720",
+              "display_name": "Edison Vazquez",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Edison Vazquez",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5139538789",
+              "display_name": "Danilo Naranjo",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Danilo Naranjo",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5034275053",
+              "display_name": "Benjamín González",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Benjamin Gonzalez",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10456",
+            "display_name": "Multi-Agent Systems and Negotiation",
+            "score": 0.5425999760627747,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T12203",
+            "display_name": "Mobile Agent-Based Network Management",
+            "score": 0.13979999721050262,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1705",
+              "display_name": "Computer Networks and Communications"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10927",
+            "display_name": "Access Control and Trust",
+            "score": 0.05040000006556511,
+            "subfield": {
+              "id": "https://openalex.org/subfields/3312",
+              "display_name": "Sociology and Political Science"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/33",
+              "display_name": "Social Sciences"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W7134993116",
+        "doi": null,
+        "display_name": "Security Considerations for Multi-agent Systems",
+        "publication_year": 2026,
+        "publication_date": "2026-03-09",
+        "type": "preprint",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "pmh:oai:arXiv.org:2603.09002",
+          "is_oa": true,
+          "landing_page_url": "https://arxiv.org/abs/2603.09002",
+          "pdf_url": "https://arxiv.org/pdf/2603.09002",
+          "source": {
+            "id": "https://openalex.org/S4306400194",
+            "display_name": "arXiv (Cornell University)",
+            "issn_l": "2331-8422",
+            "issn": [
+              "2331-8422"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I205783295",
+            "host_organization_name": "Cornell University",
+            "host_organization_lineage": [
+              "https://openalex.org/I205783295"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "text"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://arxiv.org/pdf/2603.09002",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5128750145",
+              "display_name": "Tam Nguyen",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": true,
+            "raw_author_name": "Nguyen, Tam",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5128736934",
+              "display_name": "Moses Ndebugre",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210134752",
+                "display_name": "Center for Whale Research",
+                "ror": "https://ror.org/03pesqc02",
+                "country_code": "US",
+                "type": "nonprofit",
+                "lineage": [
+                  "https://openalex.org/I4210134752"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Ndebugre, Moses",
+            "raw_affiliation_strings": [
+              "Crew Scaler US Senior Researcher @ Crew Scaler North Carolina A&T State University Crew Scaler AI Technical Solution Architect"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Crew Scaler US Senior Researcher @ Crew Scaler North Carolina A&T State University Crew Scaler AI Technical Solution Architect",
+                "institution_ids": [
+                  "https://openalex.org/I4210134752"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5119597114",
+              "display_name": "Dheeraj Arremsetty",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Arremsetty, Dheeraj",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10734",
+            "display_name": "Information and Cyber Security",
+            "score": 0.24879999458789825,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1710",
+              "display_name": "Information Systems"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11689",
+            "display_name": "Adversarial Robustness in Machine Learning",
+            "score": 0.20280000567436218,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11241",
+            "display_name": "Advanced Malware Detection Techniques",
+            "score": 0.04839999973773956,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1711",
+              "display_name": "Signal Processing"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W4416964856",
+        "doi": "https://doi.org/10.48550/arxiv.2512.01453",
+        "display_name": "Reinventing Clinical Dialogue: Agentic Paradigms for LLM Enabled Healthcare Communication",
+        "publication_year": 2025,
+        "publication_date": "2025-12-01",
+        "type": "preprint",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "pmh:oai:arXiv.org:2512.01453",
+          "is_oa": true,
+          "landing_page_url": "http://arxiv.org/abs/2512.01453",
+          "pdf_url": "https://arxiv.org/pdf/2512.01453",
+          "source": {
+            "id": "https://openalex.org/S4306400194",
+            "display_name": "arXiv (Cornell University)",
+            "issn_l": "2331-8422",
+            "issn": [
+              "2331-8422"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I205783295",
+            "host_organization_name": "Cornell University",
+            "host_organization_lineage": [
+              "https://openalex.org/I205783295"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "text"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://arxiv.org/pdf/2512.01453",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5120582624",
+              "display_name": "Xiaoquan Zhi",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Zhi, Xiaoquan",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5017692278",
+              "display_name": "Hongke Zhao",
+              "orcid": "https://orcid.org/0000-0003-3099-4803"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Zhao, Hongke",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5052639977",
+              "display_name": "Likang Wu",
+              "orcid": "https://orcid.org/0000-0002-4929-8587"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Wu, Likang",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5103029917",
+              "display_name": "Chuang Zhao",
+              "orcid": "https://orcid.org/0000-0002-9969-7287"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Zhao, Chuang",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5049015446",
+              "display_name": "Hengshu Zhu",
+              "orcid": "https://orcid.org/0000-0003-4570-643X"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Zhu, Hengshu",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T11636",
+            "display_name": "Artificial Intelligence in Healthcare and Education",
+            "score": 0.2624000012874603,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2718",
+              "display_name": "Health Informatics"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/27",
+              "display_name": "Medicine"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/4",
+              "display_name": "Health Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T13702",
+            "display_name": "Machine Learning in Healthcare",
+            "score": 0.15940000116825104,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11710",
+            "display_name": "Biomedical Text Mining and Ontologies",
+            "score": 0.048900000751018524,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1312",
+              "display_name": "Molecular Biology"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/13",
+              "display_name": "Biochemistry, Genetics and Molecular Biology"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W7153670365",
+        "doi": null,
+        "display_name": "AgentCity: Constitutional Governance for Autonomous Agent Economies via Separation of Power",
+        "publication_year": 2026,
+        "publication_date": "2026-04-08",
+        "type": "preprint",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "pmh:oai:arXiv.org:2604.07007",
+          "is_oa": true,
+          "landing_page_url": "http://arxiv.org/abs/2604.07007",
+          "pdf_url": "https://arxiv.org/pdf/2604.07007",
+          "source": {
+            "id": "https://openalex.org/S4306400194",
+            "display_name": "arXiv (Cornell University)",
+            "issn_l": "2331-8422",
+            "issn": [
+              "2331-8422"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I205783295",
+            "host_organization_name": "Cornell University",
+            "host_organization_lineage": [
+              "https://openalex.org/I205783295"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "text"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://arxiv.org/pdf/2604.07007",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5133420937",
+              "display_name": "Anbang Ruan",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I869089601",
+                "display_name": "Netflix (United States)",
+                "ror": "https://ror.org/0197qw696",
+                "country_code": "US",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I869089601"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Ruan, Anbang",
+            "raw_affiliation_strings": [
+              "NetX Foundation"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "NetX Foundation",
+                "institution_ids": [
+                  "https://openalex.org/I869089601"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5133427762",
+              "display_name": "Xing Zhang",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I869089601",
+                "display_name": "Netflix (United States)",
+                "ror": "https://ror.org/0197qw696",
+                "country_code": "US",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I869089601"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Zhang, Xing",
+            "raw_affiliation_strings": [
+              "NetX Foundation"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "NetX Foundation",
+                "institution_ids": [
+                  "https://openalex.org/I869089601"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10270",
+            "display_name": "Blockchain Technology Applications and Security",
+            "score": 0.38999998569488525,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1710",
+              "display_name": "Information Systems"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10456",
+            "display_name": "Multi-Agent Systems and Negotiation",
+            "score": 0.2711000144481659,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T13643",
+            "display_name": "Artificial Intelligence in Law",
+            "score": 0.04729999974370003,
+            "subfield": {
+              "id": "https://openalex.org/subfields/3320",
+              "display_name": "Political Science and International Relations"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/33",
+              "display_name": "Social Sciences"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W7197053711",
+        "doi": null,
+        "display_name": "Towards a new paradigm of scientific discovery with socialized artificial intelligence",
+        "publication_year": 2026,
+        "publication_date": "2026-08-03",
+        "type": "preprint",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "pmh:oai:arXiv.org:2608.02775",
+          "is_oa": true,
+          "landing_page_url": "https://arxiv.org/abs/2608.02775",
+          "pdf_url": "https://arxiv.org/pdf/2608.02775",
+          "source": {
+            "id": "https://openalex.org/S4306400194",
+            "display_name": "arXiv (Cornell University)",
+            "issn_l": "2331-8422",
+            "issn": [
+              "2331-8422"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I205783295",
+            "host_organization_name": "Cornell University",
+            "host_organization_lineage": [
+              "https://openalex.org/I205783295"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "text"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://arxiv.org/pdf/2608.02775",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5144406534",
+              "display_name": "Xinjie Yao",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Yao, Xinjie",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5013097958",
+              "display_name": "Xingxin Xu",
+              "orcid": "https://orcid.org/0000-0001-8968-9331"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Xu, Xingxin",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5023774971",
+              "display_name": "Xiyuan Gao",
+              "orcid": "https://orcid.org/0000-0002-7406-5021"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Gao, Xiyuan",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5111272002",
+              "display_name": "Zhoupeng Guo",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210090971",
+                "display_name": "Southeast University",
+                "ror": "https://ror.org/00cf0ab87",
+                "country_code": "BD",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ],
+            "countries": [
+              "BD"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Guo, Zhoupeng",
+            "raw_affiliation_strings": [
+              "School of Automation , Southeast University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Automation , Southeast University",
+                "institution_ids": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5144418371",
+              "display_name": "Kunlong Yang",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I125839683",
+                "display_name": "Beijing Institute of Technology",
+                "ror": "https://ror.org/01skt4w74",
+                "country_code": "CN",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I125839683",
+                  "https://openalex.org/I890469752"
+                ]
+              }
+            ],
+            "countries": [
+              "CN"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Yang, Kunlong",
+            "raw_affiliation_strings": [
+              "School of Computer Science and Technology , Beijing Institute of Technology"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Computer Science and Technology , Beijing Institute of Technology",
+                "institution_ids": [
+                  "https://openalex.org/I125839683"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5144452113",
+              "display_name": "Dengyu Zhao",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Zhao, Dengyu",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5144438933",
+              "display_name": "Siqi Zhao",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Zhao, Siqi",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5144443821",
+              "display_name": "Zhihe Fan",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Fan, Zhihe",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5121340084",
+              "display_name": "Yichen Dong",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Dong, Yichen",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5100353925",
+              "display_name": "Xin Li",
+              "orcid": "https://orcid.org/0000-0002-6734-9034"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210090971",
+                "display_name": "Southeast University",
+                "ror": "https://ror.org/00cf0ab87",
+                "country_code": "BD",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ],
+            "countries": [
+              "BD"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Li, Xin",
+            "raw_affiliation_strings": [
+              "School of Automation , Southeast University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Automation , Southeast University",
+                "institution_ids": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5055169166",
+              "display_name": "Jiekang Feng",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Feng, Jiekang",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5124965919",
+              "display_name": "Jiahe Wu",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Wu, Jiahe",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5115602108",
+              "display_name": "Sen Wang",
+              "orcid": "https://orcid.org/0009-0005-2988-4510"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210090971",
+                "display_name": "Southeast University",
+                "ror": "https://ror.org/00cf0ab87",
+                "country_code": "BD",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ],
+            "countries": [
+              "BD"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Wang, Sen",
+            "raw_affiliation_strings": [
+              "School of Automation , Southeast University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Automation , Southeast University",
+                "institution_ids": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5144393469",
+              "display_name": "Beiming Yu",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Yu, Beiming",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5044423965",
+              "display_name": "Kejia Zhao",
+              "orcid": "https://orcid.org/0000-0002-9950-2638"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210090971",
+                "display_name": "Southeast University",
+                "ror": "https://ror.org/00cf0ab87",
+                "country_code": "BD",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ],
+            "countries": [
+              "BD"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Zhao, Kejia",
+            "raw_affiliation_strings": [
+              "School of Automation , Southeast University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Automation , Southeast University",
+                "institution_ids": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5136537538",
+              "display_name": "Ruipu Zhao",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Zhao, Ruipu",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5025793064",
+              "display_name": "Jiaqi Zhou",
+              "orcid": "https://orcid.org/0000-0003-1375-8702"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Zhou, Jiaqi",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5145388679",
+              "display_name": "Heyang Li",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Li, Heyang",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5145781004",
+              "display_name": "Jianjun Chen",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Chen, Jianjun",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5111037105",
+              "display_name": "Anbo Dai",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210144487",
+                "display_name": "Cloud Computing Center",
+                "ror": "https://ror.org/04aa0zm65",
+                "country_code": "CN",
+                "type": "facility",
+                "lineage": [
+                  "https://openalex.org/I4210144487"
+                ]
+              }
+            ],
+            "countries": [
+              "CN"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Dai, Anbo",
+            "raw_affiliation_strings": [
+              "SeetaCloud Technology"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "SeetaCloud Technology",
+                "institution_ids": [
+                  "https://openalex.org/I4210144487"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5144943242",
+              "display_name": "Xin Liu",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Liu, Xin",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5145449579",
+              "display_name": "Zhengtao Yu",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I10660446",
+                "display_name": "Kunming University of Science and Technology",
+                "ror": "https://ror.org/00xyeez13",
+                "country_code": "CN",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I10660446"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I189210763",
+                "display_name": "Yunnan University",
+                "ror": "https://ror.org/0040axw97",
+                "country_code": "CN",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I189210763"
+                ]
+              }
+            ],
+            "countries": [
+              "CN"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Yu, Zhengtao",
+            "raw_affiliation_strings": [
+              "Faculty of Information Engineering and Automation , Kunming University of Science and Technology",
+              "Yunnan Key Laboratory of Artificial Intelligence , Kunming University of Science and Technology"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Faculty of Information Engineering and Automation , Kunming University of Science and Technology",
+                "institution_ids": [
+                  "https://openalex.org/I10660446"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Yunnan Key Laboratory of Artificial Intelligence , Kunming University of Science and Technology",
+                "institution_ids": [
+                  "https://openalex.org/I10660446",
+                  "https://openalex.org/I189210763"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5129745854",
+              "display_name": "Qinghua Hu",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Hu, Qinghua",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5129688204",
+              "display_name": "Pengfei Zhu",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210090971",
+                "display_name": "Southeast University",
+                "ror": "https://ror.org/00cf0ab87",
+                "country_code": "BD",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4210090971"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210164862",
+                "display_name": "Artificial Intelligence in Medicine (Canada)",
+                "ror": "https://ror.org/05p590m36",
+                "country_code": "CA",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210164862"
+                ]
+              }
+            ],
+            "countries": [
+              "BD",
+              "CA"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Zhu, Pengfei",
+            "raw_affiliation_strings": [
+              "School of Artificial Intelligence , Tianjin University",
+              "School of Automation , Southeast University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Artificial Intelligence , Tianjin University",
+                "institution_ids": [
+                  "https://openalex.org/I4210164862"
+                ]
+              },
+              {
+                "raw_affiliation_string": "School of Automation , Southeast University",
+                "institution_ids": [
+                  "https://openalex.org/I4210090971"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T11986",
+            "display_name": "Scientific Computing and Data Management",
+            "score": 0.08669999986886978,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1802",
+              "display_name": "Information Systems and Management"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/18",
+              "display_name": "Decision Sciences"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11883",
+            "display_name": "Embodied and Extended Cognition",
+            "score": 0.05559999868273735,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2805",
+              "display_name": "Cognitive Neuroscience"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/28",
+              "display_name": "Neuroscience"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11710",
+            "display_name": "Biomedical Text Mining and Ontologies",
+            "score": 0.03530000150203705,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1312",
+              "display_name": "Molecular Biology"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/13",
+              "display_name": "Biochemistry, Genetics and Molecular Biology"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W7165433450",
+        "doi": null,
+        "display_name": "Humanist: a compositional entity-component architecture for local-first personal knowledge management",
+        "publication_year": 2026,
+        "publication_date": "2026-05-22",
+        "type": "dissertation",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "pmh:oai:upcommons.upc.edu:2117/464555",
+          "is_oa": true,
+          "landing_page_url": "https://hdl.handle.net/2117/464555",
+          "pdf_url": "https://upcommons.upc.edu/bitstreams/071dca16-2c8b-4b15-ab2e-37eec2721e72/download",
+          "source": {
+            "id": "https://openalex.org/S4377196262",
+            "display_name": "UPCommons institutional repository (Universitat Politècnica de Catalunya)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I9617848",
+            "host_organization_name": "Universitat Politècnica de Catalunya",
+            "host_organization_lineage": [
+              "https://openalex.org/I9617848"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by-nc-nd",
+          "license_id": "https://openalex.org/licenses/cc-by-nc-nd",
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "Master thesis"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://upcommons.upc.edu/bitstreams/071dca16-2c8b-4b15-ab2e-37eec2721e72/download",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5139004203",
+              "display_name": "Mateu Magem Ribas",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": true,
+            "raw_author_name": "Magem Ribas, Mateu",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T12607",
+            "display_name": "Personal Information Management and User Behavior",
+            "score": 0.9086999893188477,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1802",
+              "display_name": "Information Systems and Management"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/18",
+              "display_name": "Decision Sciences"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10470",
+            "display_name": "Usability and User Interface Design",
+            "score": 0.009700000286102295,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1709",
+              "display_name": "Human-Computer Interaction"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T14074",
+            "display_name": "Persona Design and Applications",
+            "score": 0.004699999932199717,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1709",
+              "display_name": "Human-Computer Interaction"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W7169224346",
+        "doi": "https://doi.org/10.62311/nesx/rb1j-978-81-688520-9-9",
+        "display_name": "Harmonic Analysis and Signal Processing for Music Technology, Film Analytics and Digital Consumer Systems",
+        "publication_year": 2026,
+        "publication_date": "2026-06-30",
+        "type": "reference-entry",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "doi:10.62311/nesx/rb1j-978-81-688520-9-9",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.62311/nesx/rb1j-978-81-688520-9-9",
+          "pdf_url": "https://www.nationaleducationservices.org/file-download/1710214/Download Full-Text Research Book PDF Pp 1-73JB1.pdf",
+          "source": null,
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": null,
+          "raw_type": "reference-book"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "gold",
+          "oa_url": "https://www.nationaleducationservices.org/file-download/1710214/Download Full-Text Research Book PDF Pp 1-73JB1.pdf",
+          "any_repository_has_fulltext": null
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5019613463",
+              "display_name": "Murali Krishna Pasupuleti",
+              "orcid": "https://orcid.org/0009-0007-1023-7035"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": true,
+            "raw_author_name": "Murali Krishna Pasupuleti",
+            "raw_affiliation_strings": [
+              "National Education Services"
+            ],
+            "raw_orcid": "https://orcid.org/0009-0007-1023-7035",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "National Education Services",
+                "institution_ids": []
+              }
+            ]
+          }
+        ],
+        "topics": []
+      },
+      {
+        "id": "https://openalex.org/W7165972806",
+        "doi": null,
+        "display_name": "Agon: An Autonomous Large-Scale Omnidisciplinary Research System Built on Prompt Economy",
+        "publication_year": 2026,
+        "publication_date": "2026-06-23",
+        "type": "preprint",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "pmh:oai:arXiv.org:2606.24177",
+          "is_oa": true,
+          "landing_page_url": "https://arxiv.org/abs/2606.24177",
+          "pdf_url": "https://arxiv.org/pdf/2606.24177",
+          "source": {
+            "id": "https://openalex.org/S4306400194",
+            "display_name": "arXiv (Cornell University)",
+            "issn_l": "2331-8422",
+            "issn": [
+              "2331-8422"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I205783295",
+            "host_organization_name": "Cornell University",
+            "host_organization_lineage": [
+              "https://openalex.org/I205783295"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "text"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://arxiv.org/pdf/2606.24177",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5138965212",
+              "display_name": "Youran Sun",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Sun, Youran",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5138995315",
+              "display_name": "Xingyu Ren",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Ren, Xingyu",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5139007140",
+              "display_name": "Chugang Yi",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Yi, Chugang",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5138998255",
+              "display_name": "Jiaxuan Guo",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Guo, Jiaxuan",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5138984450",
+              "display_name": "Kejia Zhang",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Zhang, Kejia",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5060142897",
+              "display_name": "Jianda Du",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Du, Jianda",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5138990982",
+              "display_name": "Haizhao Yang",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Yang, Haizhao",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T12090",
+            "display_name": "Language and cultural evolution",
+            "score": 0.44209998846054077,
+            "subfield": {
+              "id": "https://openalex.org/subfields/3316",
+              "display_name": "Cultural Studies"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/33",
+              "display_name": "Social Sciences"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T13629",
+            "display_name": "Text Readability and Simplification",
+            "score": 0.04639999940991402,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T14350",
+            "display_name": "Innovation, Sustainability, Human-Machine Systems",
+            "score": 0.040300000458955765,
+            "subfield": {
+              "id": "https://openalex.org/subfields/3312",
+              "display_name": "Sociology and Political Science"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/33",
+              "display_name": "Social Sciences"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

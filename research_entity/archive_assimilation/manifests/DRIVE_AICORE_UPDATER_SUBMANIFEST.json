@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE-AICORE-UPDATER-20260809T0458p0700",
+  "status": "FROZEN_COMPLETE_BYTE_IDENTITY_MATCHED_TO_PF_HEAD",
+  "source_folder": {
+    "title": "aicore/updater",
+    "drive_id": "1g4J8JhgCbaAcP2Y_T3NvHmrchmMBpNYl",
+    "parent_aicore_drive_id": "1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty"
+  },
+  "reference": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "comparison_method": "Drive raw bytes -> canonical git blob SHA1 compared with GitHub content blob SHA"
+  },
+  "counts": {
+    "direct_files": 8,
+    "direct_folders": 0,
+    "recursive_files": 8,
+    "byte_identical_to_reference": 8,
+    "divergent": 0,
+    "drive_only": 0,
+    "reference_only_within_subtree": 0
+  },
+  "files": [
+    {"path":"updater/__init__.py","drive_id":"1js3-ITcCXdIkzPuU9yYo_p9kbIo3Fnja","bytes":55,"sha256":"c02fbd97648bf88084176a7b552ffa85d51231a7bf55aff9f15444918736ad9b","git_blob":"4bd70f7f7411431746bf200e7fef2b8628d7cb65","reference_blob":"4bd70f7f7411431746bf200e7fef2b8628d7cb65","class":"package_marker"},
+    {"path":"updater/frank_recovery_entry.py","drive_id":"1-euzwcloI483kwiuouzq3bT3hWEFbM6A","bytes":3505,"sha256":"6a9835927c25286f10679120453c361eb8cf69ff3f320b0615189c4de514bfd3","git_blob":"574d9c6175c7b5daa32a03d94a8f0cf57c73084c","reference_blob":"574d9c6175c7b5daa32a03d94a8f0cf57c73084c","class":"launcher_install_wrapper"},
+    {"path":"updater/frank_recovery.py","drive_id":"1EkiKHLMy6JR2JfJhNeZzhy54AuGqxpf7","bytes":15817,"sha256":"02a08e2e49d57998d690d0dc104e2485a4a418311b6dd4db98c36f8e6066207a","git_blob":"c40dfe8e9cbe40523d1e83d7095be4654f3b4ba2","reference_blob":"c40dfe8e9cbe40523d1e83d7095be4654f3b4ba2","class":"database_recovery_runtime"},
+    {"path":"updater/frank_updater_entry.py","drive_id":"1yMDEUG8aqk9kaS7a8nJHMtNZliYs99yO","bytes":5887,"sha256":"6ef67eda227d51ab23632f4a2dc37434a98b124e8d8cf44f970752268ff9c888","git_blob":"5b5ca422eebe09dc893ebf90711b7ab4e0baed2c","reference_blob":"5b5ca422eebe09dc893ebf90711b7ab4e0baed2c","class":"launcher_install_wrapper"},
+    {"path":"updater/frank_updater_tray.py","drive_id":"1oUolY4HDO7l91y1kOiq0U_7jLDtNoaZF","bytes":12235,"sha256":"c772937562e39d8c79ad9d4a17f6e46cf02f3dd85dfad2e0c7790e8146d5a355","git_blob":"712cb32c842d6b3e2e8e5fbc80a9c20be59a2dab","reference_blob":"712cb32c842d6b3e2e8e5fbc80a9c20be59a2dab","class":"update_scheduler_ui"},
+    {"path":"updater/frank_updater.py","drive_id":"1lXC1y_giODNP-OsIqQAaPOkqkf_BmUb4","bytes":52667,"sha256":"4bab6e817aff3c46009d9231e97850b6502b166d17e4a00f2df45b0fd6a670f5","git_blob":"5f8a2a0850c0b485a78b930550b011e6e603d27c","reference_blob":"5f8a2a0850c0b485a78b930550b011e6e603d27c","class":"update_transaction_runtime"},
+    {"path":"updater/frank-recovery.spec","drive_id":"1pm2yDOQJr3Cy6XGJDUSn1DkgEmtPUHUY","bytes":1124,"sha256":"a0f1d4c536bc72245d1f4d4cc90c4ae700ed9be38e18cb2cc15ec229f4ad0e9c","git_blob":"7c7d3c4ddb89e91b46a0a846e408cae2b59a9ae1","reference_blob":"7c7d3c4ddb89e91b46a0a846e408cae2b59a9ae1","class":"packaging_spec"},
+    {"path":"updater/frank-updater.spec","drive_id":"14V7rt-WORwEip_sxYnsRq9KFQC9EQm51","bytes":1342,"sha256":"eb91151da7108594cd058010249b404149804c516dbc353f3585fa42780de0fe","git_blob":"28fa7534b014db6064a4ac66a3cb7d97fb270b76","reference_blob":"28fa7534b014db6064a4ac66a3cb7d97fb270b76","class":"packaging_spec"}
+  ],
+  "semantic_obligations": {
+    "identified": "8/8",
+    "content_covered": "8/8",
+    "classified": "8/8",
+    "lineage_linked": "8/8",
+    "duplicate_clustered": "8/8 against frozen PF head",
+    "research_delta": "update/recovery failure-oracle receipt",
+    "status": "COMPLETE_FOR_THIS_SUBTREE"
+  },
+  "dedup_rule": "Do not separately re-analyze the Drive copies as an independent implementation. They are exact aliases of the frozen Project-Frankenstein updater subtree. Preserve Drive provenance and the shared failure-oracle analysis once.",
+  "created_by": "chatgpt-secondary",
+  "created_at": "2026-08-09T04:58:00+07:00"
+}

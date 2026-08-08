@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.1",
+  "request_id": "g9-exa-20260808T1716",
+  "tool": "exa_search",
+  "request_sha256": "c5acd7141076fdf044361f7608b73b72ccb4c00b251b4678d857bb7c177ebebe",
+  "processed_at": "2026-08-08T10:23:06.582595+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 agent memory incremental graph retrieval sparse activation event-driven workspace memory compaction role binding",
+    "results": [
+      {
+        "id": "https://aclanthology.org/2026.acl-long.1600/",
+        "title": "GAM: Hierarchical Graph-based Agentic Memory for LLM Agents - ACL Anthology",
+        "url": "https://aclanthology.org/2026.acl-long.1600/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "To sustain coherent long-term interactions, Large Language Model (LLM) agents must navigate the tension between acquiring new information and retaining prior knowledge. Current unified stream-based memory systems facilitate context updates but remain vulnerable to interference from transient noise. Conversely, discrete structured memory architectures provide robust knowledge retention but often struggle to adapt to fluid narrative evolution. To address this, we propose GAM, a hierarchical Graph-based Agentic Memory framework that explicitly decouples memory encoding from consolidation to effectively resolve the conflict between rapid context perception and stable knowledge retention. By isolating ongoing dialogue in a event progression graph and integrating it into a topic associative network only upon semantic shifts, our approach minimizes interference while preserving long-term consistency. Additionally, we introduce a Graph-guided, Multi-factor Retrieval strategy to enhance context precision. Experiments on LoCoMo and LongDialQA benchmarks indicate that our method consistently outperforms state-of-the-art baselines in both reasoning accuracy and computational efficiency.\n...\nAnthology ID:2026.acl-long.1600Volume: Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) Month:JulyYear:2026Address:San Diego, California, United StatesEditors: Maria Liakata, Viviane P. Moreira, Jiajun Zhang, David Jurgens Venue: ACL SIG:Publisher:Association for Computational LinguisticsNote:Pages:34647–34664Language:URL: https://aclanthology.org/2026.acl-long.1600/ DOI: 10.18653/v1/2026.acl-long.1600 Bibkey:wu-etal-2026-gamCite (ACL):Zhaofen Wu, Hanrong Zhang, Fulin Lin, Wujiang Xu, Xinran Xu, Yankai Chen, Henry Peng Zou, Shaowen Chen, Weizhi Zhang, Xue Liu, Philip S. Yu, and Hongwei Wang. 2026. GAM: Hierarchical Graph-based Agentic Memory for LLM Agents. In Proceedings of the 64th Annual Meeting of the Association for Computat"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2608.02113",
+        "title": "MemArbiter: Decision-Time Memory Arbitration for Long-Horizon LLM Agents",
+        "url": "https://arxiv.org/html/2608.02113",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "the memory-management-induced component of this gap. MemArbiter decomposes interaction histories into atomic items, organizes them into five functional Memory Banks, and combines bank-level demand, item-level relevance, focal–ambient representations, and a temporal presentation gate to dynamically control memory salience. We evaluate MemArbiter on ALFWorld against Flat Retrieval and Flat Recency under unified per-step memory budgets. With an open-weight action-generation model, MemArbiter achieves success rates of 82.8% and 92.5% under 500- and 750-token budgets, outperforming the strongest baseline by 20.9 and 25.4 percentage points,\n...\nTo address this problem, we propose MemArbiter, a function-aware dynamic memory arbitration framework for long-horizon LLM agents. MemArbiter decomposes interaction histories into atomic memory items and organizes them into five functional Memory Banks: Goal, Task State, Constraint, Episodic, and Reference. Each item can be rendered in either a detailed focal form or a compact ambient form. At each decision step, bank-level demand and item-level relevance signals estimate which memory roles and items are most useful for the current decision. A temporal presentation gate then updates each item’s presentation state through promotion, demotion, retention, or hiding. The resulting focal and ambient memories are assembled into a structured prompt under the available memory budget.\n...\nBased on $c_{t}$ , MemArbiter performs five operations. It first decomposes interaction information into atomic memory candidates and updates the corresponding memory banks, while generating focal and ambient representations for each memory item. It then estimates bank-level demand and item-level relevance. Based on these signals, the Temporal Presentation Gate then combines these signals with the previous presentation state and relevance history to update each memory item’s presentation state. Finally, Prompt Assembly organizes the resulting focal and amb"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://aclanthology.org/2026.findings-acl.1123/",
+        "title": "Memory Matters More: Event-Centric Memory as a Logic Map for Agent Searching and Reasoning - ACL Anthology",
+        "url": "https://aclanthology.org/2026.findings-acl.1123/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Large language models (LLMs) are increasingly deployed as intelligent agents that reason, plan, and interact with their environments. To effectively scale to long-horizon scenarios, a key capability for such agents is a memory mechanism that can retain, organize, and retrieve past experiences to support downstream decision-making. However, most existing approaches organize and store memories in a flat manner and rely on simple similarity-based retrieval techniques. Even when structured memory is introduced, existing methods often struggle to explicitly capture the logical relationships among experiences or memory units. Moreover, memory access is largely detached from the constructed structure and still depends on shallow semantic retrieval, preventing agents from reasoning logically over long-horizon dependencies. In this work, we propose CompassMem, an event-centric memory framework inspired by Event Segmentation Theory. CompassMem organizes memory as an Event Graph by incrementally segmenting experiences into events and linking them through explicit logical relations. This graph serves as a logic map, enabling agents to perform structured and goal-directed navigation over memory beyond superficial retrieval, progressively gathering valuable memories to support long-horizon reasoning. Experiments on LoCoMo and NarrativeQA demonstrate that CompassMem consistently improves both retrieval and reasoning performance across multiple backbone models.\n...\nAnthology ID:2026.findings-acl.1123Volume: Findings of the Association for Computational Linguistics: ACL 2026 Month:JulyYear:2026Address:San Diego, California, United StatesEditors: Maria Liakata, Viviane P. Moreira, Jiajun Zhang, David Jurgens Venue: Findings SIG:Publisher:Association for Computational LinguisticsNote:Pages:22389–22407Language:URL: https://aclanthology.org/2026.findings-acl.1123/ DOI: 10.18653/v1/2026.findings-acl.1123 Bibkey:hu-etal-2026-memoryCite (ACL):Yuyang Hu, Jiongnan Liu, Jiejun Tan, Yutao Zhu,"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/abs/2602.05665v1",
+        "title": "[2602.05665v1] Graph-based Agent Memory: Taxonomy, Techniques, and Applications",
+        "url": "https://arxiv.org/abs/2602.05665v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Memory emerges as the core module in the Large Language Model (LLM)-based agents for long-horizon complex tasks (e.g., multi-turn dialogue, game playing, scientific discovery), where memory can enable knowledge accumulation, iterative reasoning and self-evolution. Among diverse paradigms, graph stands out as a powerful structure for agent memory due to the intrinsic capabilities to model relational dependencies, organize hierarchical information, and support efficient retrieval. This survey presents a comprehensive review of agent memory from the graph-based perspective. First, we introduce a taxonomy of agent memory, including short-term vs. long-term memory, knowledge vs. experience memory, non-structural vs. structural memory, with an implementation view of graph-based memory. Second, according to the life cycle of agent memory, we systematically analyze the key techniques in graph-based agent memory, covering memory extraction for transforming the data into the contents, storage for organizing the data efficiently, retrieval for retrieving the relevant contents from memory to support reasoning, and evolution for updating the contents in the memory. Third, we summarize the open-sourced libraries and benchmarks that support the development and evaluation of self-evolving agent memory. We also explore diverse application scenarios. Finally, we identify critical challenges and future research directions. This survey aims to offer actionable insights to advance the development of more efficient and reliable graph-based agent memory systems. All the related resources, including research papers, open-source data, and projects, are collected for the community in https://github.com/DEEP-PolyU/Awesome-GraphMemory.\n...\nTraditional implementations of agent memory primarily adopt linear, unstructured, or simple key-value storage paradigms, such as fixed-length token sequences, vector databases, and log-based buffers [13, 14]. While these frameworks enable basic information s"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2605.12260v2",
+        "title": "PRISM: Pareto-Efficient Retrieval over Intent-Aware Structured Memory for Long-Horizon Agents",
+        "url": "https://arxiv.org/html/2605.12260v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Long-horizon language agents accumulate conversation history far faster than any fixed context window can hold, making memory management critical to both answer accuracy and serving cost. Existing approaches either expand the context window without addressing what is retrieved, perform heavy ingestion-time fact extraction at substantial token cost, or rely on heuristic graph traversal that leaves both accuracy and efficiency on the table. We present PRISM, a training-free retrieval-side framework that treats long-horizon memory as a joint retrieval-and-compression problem over a graph-structured memory. PRISM combines four orthogonal inference-time components: Hierarchical Bundle Search over typed relation paths, Query-Sensitive Edge Costing that aligns traversal with detected query intent, Evidence Compression that compresses the candidate bundle into a compact answer-side context, and Adaptive Intent Routing that routes most queries through zero-LLM tiers. By formulating retrieval as min-cost selection over typed path templates and pairing it with an LLM-side compression step, PRISM surfaces the right evidence under a strict context budget without any fine-tuning or modification to the upstream ingestion pipeline. Experiments on the LoCoMo benchmark show that PRISM delivers substantially higher LLM-judge accuracy than every same-protocol baseline at an order-of-magnitude smaller context budget, occupying a previously empty corner of the accuracy–context-cost frontier and demonstrating a superior balance between answer quality and retrieval efficiency.\n...\nHowever, existing research has largely advanced these two quantities along separate axes. Ingestion- and representation-centric systems such as MemoryBank, A-Mem, Mem0, Zep, and MemoryOS (Zhong et al., 2024; Xu et al., 2025; Chhikara et al., 2025; Rasmussen et al., 2025; Kang et al., 2025) focus on what to store, update, and structure at write time, building richer memory units or hierarchies that downstream retr"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.25066",
+        "title": "Addressable Recall Compaction for Long Context-Window Control in AI Agents",
+        "url": "https://arxiv.org/html/2607.25066",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Long-horizon LLM agents accumulate reasoning traces, actions, and tool observations that can eventually exceed a model’s fixed context window. Existing compaction methods address this limitation by discarding, summarizing, or retrieving earlier information, but they may remove task-critical details or fail to recover them reliably. We propose ARC (Addressable Recall Compaction), a context-management framework that separates archival storage from active-context presentation. ARC stores tool observations in an append-only, ID-addressable log and replaces older observations with compact citations when compaction is required. The agent can subsequently use these identifiers to request stored content without re-executing the corresponding tools or depending solely on similarity-based retrieval. We evaluate ARC using Qwen3-8B with a 16k context window and Qwen3-32B with a 32k context window. On the Needle-in-a-Haystack evaluation, ARC achieves an average exact-answer accuracy of 99.40%, compared with 88.12% for the best-performing baseline in our evaluation. ARC also reduces estimated serving time and HBM traffic under our hardware-cost model. On the LongBench-v2 Hard subset, ARC obtains an average accuracy of 29.97%, compared with 28.25% for the best-performing baseline. These results indicate that explicit, address-based recall can improve information retention and serving efficiency relative to the evaluated context-management baselines under the tested settings.\n...\nWe address this limitation by asking whether transcript compaction can remain strictly lossless while keeping the active prompt bounded. We introduce ARC (Addressable Recall Compaction) (Fig. 1), which decouples archival storage from in-context representation. ARC maintains (1) an append-only Addressable Store that preserves historical turns and tool outputs verbatim, and (2) a Bounded-Size Active View that replaces older content with explicit pointers into that store. With recall tools that resolve these "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2604.12285v1",
+        "title": "GAM: Hierarchical Graph-based Agentic Memory for LLM Agents",
+        "url": "https://arxiv.org/html/2604.12285v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "To sustain coherent long-term interactions, Large Language Model (LLM) agents must navigate the tension between acquiring new information and retaining prior knowledge. Current unified stream-based memory systems facilitate context updates but remain vulnerable to interference from transient noise. Conversely, discrete structured memory architectures provide robust knowledge retention but often struggle to adapt to evolving narratives. To address this, we propose GAM, a hierarchical Graph-based Agentic Memory framework that explicitly decouples memory encoding from consolidation to effectively resolve the conflict between rapid context perception and stable knowledge retention. By isolating ongoing dialogue in an event progression graph and integrating it into a topic associative network only upon semantic shifts, our approach minimizes interference while preserving long-term consistency. Additionally, we introduce a graph-guided, multi-factor retrieval strategy to enhance context precision. Experiments on LoCoMo and LongDialQA indicate that our method consistently outperforms state-of-the-art baselines in both reasoning accuracy and efficiency.\n...\nTo address these challenges, we propose the Hierarchical Graph-based Agentic Memory (GAM) Framework which utilizes a Semantic-Event-Triggered mechanism to decouple encoding from consolidation. Drawing inspiration from sleep-dependent memory consolidation Chang et al. (2025), our architecture separates the agent memory lifecycle into two phases as illustrated in the lower part of Figure 1. An Episodic Buffering Phase constructs a local graph to capture real-time dependencies and strictly isolate transient context, while an event-driven Semantic Consolidation Phase integrates these details into the global network only upon semantic shifts. This ensures the agent global memory is updated solely with semantically complete units unlike prior stream-based methods. Finally, a Graph-Guided Multi-Factor Retrieval paradigm leverag"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/vxfq975gzwfrgfkv2f6bwtbw",
+        "title": "SAGE: A Self-Evolving Agentic Graph-Memory Engine for Structure-Aware Associative Memory",
+        "url": "https://arxiv.org/html/2605.12061",
+        "published_date": null,
+        "author": "Juntong Wang, Haoyue Zhao, Guanghui Pan, Xiyuan Wang, Yanbo Wang, Qiyan Deng, et al.",
+        "text": null,
+        "highlights": [
+          "Long-term memory is becoming a central bottleneck for language agents. Existing RAG and GraphRAG systems largely treat memory graphs as static retrieval middleware, which limits their ability to recover complete evidence chains from partial cues, exploit reusable graph-structural roles, and improve the memory itself through downstream feedback. We introduce SAGE, a Self-evolving Agentic Graph-memory Engine that models graph memory as a dynamic long-term memory substrate. SAGE couples two roles: a memory writer that incrementally constructs structured graph memory from interaction histories, and a Graph Foundation Model based memory reader to perform retrieval and provide feedback to the memory writer. We provide rigorous theoretical analyses supporting the effectiveness of carefully designed architectural components and the framework. Across multi-hop QA, open-domain retrieval, domain-specific review QA, and long-term agent memory benchmarks, SAGE improves evidence recovery, answer grounding, and retrieval efficiency: after two self-evolution rounds, it achieves the best average rank on multi-hop QA; in zero-shot open-domain transfer, it reaches 82.5/91.6 Recall@2/5 on NQ. Further results on LongMemEval and HaluMem show that training and reader–writer feedback improve multiple long-term memory and hallucination-diagnostic metrics, suggesting that self-evolving, structure-aware graph memory is a promising foundation for robust long-horizon language agents. Our code is available here.\n...\nFigure 1: Overview of the three core challenges in agent graph memory, illustrated with a concrete example. Given the query, “Alice mentioned a work in last week’s lab meeting that seemed to be inspired by the Cornu Ammonis. Among works in the same field as that work, are there any that can also help with agent memory? Give one example,” the memory reader must address associative and selective reading by expanding sparse partial cues into the correct evidence chain while avoiding noi"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/s7j8g7s0p6lfq7lddccr1ps1",
+        "title": "What to Keep, What to Forget: A Rate–Distortion View of Memory Compaction in LLMs and Agents",
+        "url": "https://arxiv.org/html/2607.08032",
+        "published_date": null,
+        "author": "Ashwin Gerard Colaco, Nada Lahjouji",
+        "text": null,
+        "highlights": [
+          "At every layer the signal that decides what to keep is attention magnitude or recency, and it fails in the same way everywhere, by discarding, before the query is known and with no way to undo it,\n...\nshowing that, below a task's information requirement, every layer must err at a rate set by the same expression, and that query-agnostic compaction pays a quantifiable penalty (Section 2). • We give a seven-axis taxonomy (Section 3) that classifies methods from all four layers uniformly, and a master table. • We survey each layer through the formalism: KV cache (Section 4), prompt/context (Section 5), architectural (Section 6), agent/semantic (Section 7), the trainable sparse-attention frontier (Section 8), and multimodal/multi-agent settings (Section 9). • We make the inference↔agent-memory bridge explicit (Section 10), porting concrete mechanisms across layers and deriving five compaction-aware design principles. • We propose COMPACT-Bench and run a small reference experiment on commodity hardware that places KV eviction, quantization, prompt compression, and summarization on one budget axis and measures error accumulation under repeated compaction (Sections 13-14). • We consolidate the open problems into a prioritized agenda (Section 15).\n...\nEM-LLM collapses the distance between this layer and the KV layer of Section 4 [35] . It segments the token stream into events by surprise, stores each event's KV block as an episodic memory unit, and at decode time retrieves relevant events by similarity and temporal contiguity, a retrieval over a memory store whose items happen to be KV blocks rather than text notes. It is at once a KVcache method (the substrate is on-device key-value tensors) and an agent-memory method (the operator is event segmentation plus salience retrieval), which is why it tests the bridge thesis empirically: the same reversible, retrieval-backed design that keeps an agent's note store from collapsing keeps an episodic KV memory from collapsing, becaus"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://aclanthology.org/2026.acl-long.749/",
+        "title": "APEX-MEM: Agentic Semi-Structured Memory with Temporal Reasoning for Long-Term Conversational AI - ACL Anthology",
+        "url": "https://aclanthology.org/2026.acl-long.749/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Large language models still struggle with reliable long-term conversational memory: simply enlarging context windows or applying naïve retrieval often introduces noise and destabilizes responses. We present APEX-MEM, a conversational memory system that combines three key innovations: (1) a property graph which use domain-agnostic ontology to structure conversations as temporally grounded events in an entity-centric framework, (2) append-only storage that preserves the full temporal evolution of information, and (3) a multi-tool retrieval agent that understands and resolves conflicting or evolving information at query time, producing a compact and contextually relevant memory summary. This retrieval-time resolution preserves the full interaction history while suppressing irrelevant details. APEX-MEM achieves 88.88% accuracy on LOCOMO and 86.2% on LongMemEval, outperforming state-of-the-art session-aware approaches and demonstrating that structured property graphs enable more temporally coherent long-term conversational reasoning.\n...\nAnthology ID:2026.acl-long.749Volume: Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) Month:JulyYear:2026Address:San Diego, California, United StatesEditors: Maria Liakata, Viviane P. Moreira, Jiajun Zhang, David Jurgens Venue: ACL SIG:Publisher:Association for Computational LinguisticsNote:Pages:16470–16489Language:URL: https://aclanthology.org/2026.acl-long.749/ DOI: 10.18653/v1/2026.acl-long.749 Bibkey:banerjee-etal-2026-apexCite (ACL):Pratyay Banerjee, Masud Moshtaghi, Shivashankar Subramanian, Amita Misra, and Ankit Chadha. 2026. APEX-MEM: Agentic Semi-Structured Memory with Temporal Reasoning for Long-Term Conversational AI. In Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 16470–16489, San Diego, California, United States. Association for Computational Linguistics.Cite (Informal): APEX-MEM: Agenti"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "cbe4cc8cb8d8d7d9acfe1dbfde6f4394",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

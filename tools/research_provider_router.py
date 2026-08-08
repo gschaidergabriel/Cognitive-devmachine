@@ -12,6 +12,7 @@ REGISTRY = ROOT / "research_entity" / "global" / "EXTERNAL_RESEARCH_TOOL_REGISTR
 CAPABILITY_FILES = [
     ROOT / "research_entity" / "global" / "NVIDIA_RESEARCH_CAPABILITY.json",
     ROOT / "research_entity" / "global" / "OPENROUTER_RESEARCH_CAPABILITY.json",
+    ROOT / "research_entity" / "global" / "E2B_RESEARCH_CAPABILITY.json",
     ROOT / "research_entity" / "global" / "SANDBOXAPI_RESEARCH_CAPABILITY.json",
 ]
 QUOTA = ROOT / "research_entity" / "runtime" / "TOOL_QUOTA_STATE.json"
@@ -53,7 +54,8 @@ BUNDLES = {
         {"tool": "piston_execute", "mode": "FALLBACK"},
     ],
     "claycode_executable": [
-        {"tool": "sandboxapi_sandbox", "mode": "MUST_ATTEMPT"},
+        {"tool": "e2b_sandbox", "mode": "MUST_ATTEMPT"},
+        {"tool": "sandboxapi_sandbox", "mode": "FALLBACK"},
         {"tool": "local_sandbox", "mode": "FALLBACK"},
         {"tool": "judge0_execute", "mode": "FALLBACK"},
     ],
@@ -90,12 +92,21 @@ def load_json(path: Path, default):
 def registry_state() -> dict:
     data = load_json(REGISTRY, {"tools": []})
     tools = list(data.get("tools", []))
-    known = {x.get("tool_name") for x in tools}
+    by_name = {x.get("tool_name"): i for i, x in enumerate(tools) if x.get("tool_name")}
+    # Dedicated capability files are live extensions and may override stale registry
+    # status/metadata for the same tool after a fresh runtime verification.
     for path in CAPABILITY_FILES:
         item = load_json(path, {})
-        if item.get("tool_name") and item.get("tool_name") not in known:
+        name = item.get("tool_name")
+        if not name:
+            continue
+        if name in by_name:
+            merged = dict(tools[by_name[name]])
+            merged.update(item)
+            tools[by_name[name]] = merged
+        else:
+            by_name[name] = len(tools)
             tools.append(item)
-            known.add(item.get("tool_name"))
     data["tools"] = tools
     data["capability_extensions"] = [str(p.relative_to(ROOT)) for p in CAPABILITY_FILES if p.exists()]
     return data
@@ -126,7 +137,7 @@ def _health_blocker(tool: str) -> str | None:
         if receipt.get("status") == "RUNTIME_VERIFIED" and receipt.get("model") == "llama-3.1-8b-instant":
             return None
         return "RUNTIME_UNAVAILABLE"
-    if tool in {"nvidia_nim", "openrouter_inference", "sandboxapi_sandbox"}:
+    if tool in {"nvidia_nim", "openrouter_inference", "e2b_sandbox", "sandboxapi_sandbox"}:
         return None
     checked, items = health_state()
     if checked is None or (datetime.now(timezone.utc) - checked).total_seconds() > 21600:
@@ -226,20 +237,24 @@ def plan(classes: list[str]) -> dict:
                 row["default_model"] = "llama-3.1-8b-instant"
                 row["evidence_role"] = "8b_proxy_for_4b"
                 row["proxy_policy"] = "research_entity/global/SMALL_MODEL_PROXY_POLICY.md"
-            elif spec["tool"] == "sandboxapi_sandbox":
-                row["capability"] = "research_entity/global/SANDBOXAPI_RESEARCH_CAPABILITY.json"
+            elif spec["tool"] == "e2b_sandbox":
+                row["capability"] = "research_entity/global/E2B_RESEARCH_CAPABILITY.json"
                 row["evidence_role"] = "isolated_runtime_experiment"
                 row["preferred_for"] = "real ClayCode compiler/parser/typechecker/interpreter/fuzz execution"
+            elif spec["tool"] == "sandboxapi_sandbox":
+                row["capability"] = "research_entity/global/SANDBOXAPI_RESEARCH_CAPABILITY.json"
+                row["evidence_role"] = "independent_secondary_isolated_runtime_experiment"
+                row["preferred_for"] = "multi-language/differential ClayCode runtime replication once subscribed"
             selected.append(row)
     return {
-        "schema_version": "1.5",
+        "schema_version": "1.6",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "classes": classes,
         "planned_tools": selected,
         "legacy_fallback": LEGACY_FALLBACK,
         "allowed_fallback_reasons": sorted(ALLOWED_FALLBACKS),
         "bridge": registry.get("worker_invocation_bridge"),
-        "rule": "MUST_ATTEMPT tools require an attempt while healthy. ClayCode executable research prefers SandboxAPI once runtime-verified and records SUBSCRIPTION_UNAVAILABLE separately from runtime failure; local/Judge0 cover the blocked path. Verified NVIDIA Nemotron-Mini-4B is direct generic-4B hosted evidence but never Qwen-specific evidence. OpenRouter Gemma-3-4B is an independent generic-4B fallback. Groq remains an explicitly labeled 8B proxy. Target/local hardware/training/live-system questions remain open unless the executed capability actually matches them. Every blocked/failed MUST_ATTEMPT tool requires a successful covering fallback.",
+        "rule": "MUST_ATTEMPT tools require an attempt while healthy. ClayCode executable research uses verified E2B as the primary external sandbox; SandboxAPI is an independent secondary backend only after its own runtime verification. Local/Judge0 are fallback/differential surfaces. Verified NVIDIA Nemotron-Mini-4B is direct generic-4B hosted evidence but never Qwen-specific evidence. OpenRouter Gemma-3-4B is an independent generic-4B fallback. Groq remains an explicitly labeled 8B proxy. Every blocked/failed MUST_ATTEMPT tool requires a successful covering fallback.",
     }
 
 

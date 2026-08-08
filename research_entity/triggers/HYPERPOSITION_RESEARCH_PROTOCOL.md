@@ -8,9 +8,9 @@ Terminology rule: "Verschränkung/entanglement" is an engineering analogy for ti
 
 Every `hyperposition` run MUST ingest all registered scientific branches. Priority is:
 
-`clay -> claygraph -> frank -> claycode -> gwt -> emergenz -> hyperposition history`
+`clay -> claygraph -> unifieddb -> frank -> claycode -> gwt -> emergenz -> hyperposition history`
 
-Run `tools/research_interconnect_preflight.py --trigger hyperposition --run-id <run_id>` before Fusion 1. The manifest must include all seven current scientific branches and deep ClayGraph history/material.
+Run `tools/research_interconnect_preflight.py --trigger hyperposition --run-id <run_id>` before Fusion 1 when the execution surface permits it. The manifest must cover the current authoritative scientific branch set from `RESEARCH_TRIGGER_REGISTRY.json`, including deep ClayGraph history/material and current UnifiedDB persistence/query/transaction substrate evidence. If the repository Python cannot be executed through the current connector, materialize a structurally equivalent preflight from the authoritative registry, record the execution limitation, and block strong promotion.
 
 ### ClayGraph — mandatory topology/substrate input
 
@@ -23,11 +23,25 @@ Hyperposition must explicitly research:
 - how unknown/conflict/revoked/stale states propagate through graph activation;
 - whether spreading activation preserves useful higher-order structure or creates false associations/noise;
 - which graph dependencies support incremental recomputation and which create cascading invalidation;
-- how semantic topology differs from coordination/invariant topology and physical execution locality;
+- how semantic topology differs from active propagation topology, coordination/invariant topology and physical execution locality;
 - how graph locality/cache layout affects latency independently of semantic benefit;
 - when a conventional isolated store/process boundary is safer than graph unification.
 
 A Hyperposition result that improves, narrows or falsifies ClayGraph topology/activation assumptions must be written back as a ClayGraph-discoverable delta. Agreement with ClayGraph does not increase evidence strength unless new evidence/experiments are added.
+
+### UnifiedDB — mandatory persistence/query/transaction input
+
+Every run MUST distinguish logical/semantic topology from physical storage placement. Hyperposition must inspect current UnifiedDB store roles, query/selection identity, collection semantics, consistency/transaction boundaries, replay/derived-view behavior and placement experiments.
+
+Hyperposition must explicitly research:
+
+- whether higher-order relation identity survives UnifiedDB lowering and cross-engine routing;
+- whether query/result collection semantics alter candidate topology;
+- which dependency closures can be incrementally invalidated and which must broaden when closure is UNKNOWN;
+- when semantic colocation is beneficial versus when physical monolithization increases contention/common-mode failure;
+- how shared-memory/zero-copy transport changes physical topology without changing semantic or authority identity.
+
+Logical unification is not evidence for one physical database, one process or one fault domain.
 
 ## Primary questions
 
@@ -37,7 +51,7 @@ A Hyperposition result that improves, narrows or falsifies ClayGraph topology/ac
 - Can active topology/assemblies replace repeated serialization, retrieval and reconstruction?
 - Which boundaries can approach near-zero software overhead through in-process state, zero-copy/shared memory, incremental materialization or data-oriented hot layouts?
 - Where do tighter coupling and shared state increase contention, cascading failure, noise or recovery cost?
-- Which of those mechanisms improve the real ClayGraph rather than only a synthetic graph benchmark?
+- Which of those mechanisms improve the real ClayGraph/UnifiedDB/FRANK path rather than only a synthetic graph benchmark?
 
 ## Mandatory research areas where relevant
 
@@ -57,6 +71,7 @@ A Hyperposition result that improves, narrows or falsifies ClayGraph topology/ac
 Required experiments should separate:
 
 - semantic benefit vs storage form;
+- representation order vs propagation strength/depth;
 - representation locality vs end-to-end latency;
 - pairwise vs n-ary information equivalence;
 - incremental vs batch/full recomputation;

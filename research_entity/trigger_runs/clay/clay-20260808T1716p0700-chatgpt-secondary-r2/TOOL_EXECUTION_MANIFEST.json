@@ -1,0 +1,39 @@
+{
+  "schema_version":"1.3",
+  "run_id":"clay-20260808T1716p0700-chatgpt-secondary-r2",
+  "classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation"},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable"},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable"},
+    {"tool":"groq_inference","mode":"MUST_ATTEMPT","class":"model_experiment"},
+    {"tool":"huggingface_inference","mode":"FALLBACK","class":"model_experiment","availability_blocker":"QUOTA_EXHAUSTED_CACHED"}
+  ],
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","surface":"repo_runner_bridge","result":"research_entity/runtime/tool_results/g9-openalex-20260808T1716.json","note":"Provider worked; broad result set had low topical precision and is discovery/provider receipt only."},
+    {"tool":"arxiv_search","status":"SUCCESS","surface":"repo_runner_bridge","result":"research_entity/runtime/tool_results/g9-arxiv-20260808T1716.json","note":"Returned directly relevant 2026 graph-memory, selection-integrity, poisoning, self-evolving memory and local-memory sources."},
+    {"tool":"semantic_scholar_search","status":"RATE_LIMITED","fallback_reason":"RATE_LIMITED","surface":"repo_runner_bridge","result":"research_entity/runtime/tool_results/g9-s2-20260808T1716.json","note":"HTTP 429 shared pool."},
+    {"tool":"tavily_search","status":"SUCCESS","surface":"repo_runner_bridge","result":"research_entity/runtime/tool_results/g9-tavily-20260808T1716.json","note":"Discovery evidence only; vendor/blog claims not promoted."},
+    {"tool":"exa_search","status":"SUCCESS","surface":"repo_runner_bridge","result":"research_entity/runtime/tool_results/g9-exa-20260808T1716.json","note":"Surfaced ACL 2026 GAM/CompassMem and current PRISM/MemArbiter/ARC memory work."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical, all seven branches, current ClayGraph/GWT/ClayCode concurrent runs, implementation docs and durable writes inspected."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Nine seeded synthetic/analytic discriminating experiments executed; reproducible harness/results persisted in this run."},
+    {"tool":"groq_inference","status":"SUCCESS","surface":"repo_runner_bridge","model":"llama-3.1-8b-instant","evidence_role":"8b_proxy_for_4b","results":["research_entity/runtime/tool_results/g9-groq-rawprojection-20260808T1716.json","research_entity/runtime/tool_results/g9-groq-compiledprojection-20260808T1716.json"],"note":"New raw-state vs deterministic candidate-projection reader comparison."},
+    {"tool":"native_web","status":"SUCCESS","note":"Primary RocksDB compaction documentation, arXiv selection-integrity source, SQLite/WAL/snapshot material and 2026 implementation searches used; Reddit searches produced practitioner examples only and no promotion-grade evidence."},
+    {"tool":"reddit_search","status":"SUCCESS_DISCOVERY_ONLY","note":"Found local-first SQLite/FTS+graph and local Qwen4B memory practitioner reports; anecdotal/community evidence only."}
+  ],
+  "fallback_attempts":[
+    {"tool":"arxiv_openalex_native_web","status":"SUCCESS","covers":["semantic_scholar_search"],"note":"Relevant scholarly discovery remained available despite Semantic Scholar 429."},
+    {"tool":"local_sandbox","status":"SUCCESS","covers":["e2b_sandbox"],"note":"No remote-sandbox claim made."},
+    {"tool":"groq_inference","status":"SUCCESS","covers":["huggingface_inference"],"note":"Only 8B proxy model-side arm; does not close target Qwen3-4B identity/tokenizer/LoRA/hardware tests."}
+  ],
+  "quota_boundaries":{"semantic_scholar":"RATE_LIMITED","huggingface_inference":"QUOTA_EXHAUSTED_CACHED","e2b":"CREDENTIAL_UNAVAILABLE"},
+  "sanitized_cost_metadata":{"openalex_reported_usd":0.001,"credential_values_exposed":false},
+  "validation_intent":"All MUST_ATTEMPT providers either succeeded or have explicit covering fallback; discovery prestige never promotes claims."
+}

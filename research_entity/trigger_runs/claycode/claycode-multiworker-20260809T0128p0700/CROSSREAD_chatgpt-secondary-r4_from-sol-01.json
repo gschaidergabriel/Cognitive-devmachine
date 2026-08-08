@@ -1,0 +1,32 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "reader_worker":"chatgpt-secondary-r4",
+  "source_worker":"chatgpt-secondary-sol-01",
+  "source_commit":"0611601cf9f61d8048f67e806ee3f15b0a566b13",
+  "verdicts":[
+    {
+      "delta":"per-call capability validity != cumulative admissibility",
+      "verdict":"ACCEPT_REFINEMENT",
+      "reason":"General-purpose expressibility remains unchanged while aggregate harm/resource use needs host-side monotone accounting."
+    },
+    {
+      "delta":"EffectPermit binds exact intent semantic hash, canonical target, operation class, origin ancestry, epoch/freshness, expiry/revocation and aggregate budget",
+      "verdict":"ACCEPT_REFINEMENT",
+      "reason":"This strengthens authority identity without making any effect semantically inexpressible."
+    },
+    {
+      "delta":"origin/integrity ancestry must survive summarization/tool echo/corroboration",
+      "verdict":"ACCEPT_REFINEMENT",
+      "reason":"Current producer identity is insufficient because authority/integrity laundering is a separate failure mode."
+    }
+  ],
+  "uecc_additions":[
+    "Capability state includes monotone aggregate budget ledger or equivalent non-forgeable consumption receipt.",
+    "Authority release carries origin/integrity ancestry that cannot be upgraded by model summarization or trusted-tool echo.",
+    "Intent-to-permit binding includes semantic hash + target + operation + basis/epoch + expiry/revocation + budget state.",
+    "These are runtime/authority refinements; universal source-language effect expressibility remains intact."
+  ],
+  "disagreements":[],
+  "cross_read_complete":true
+}

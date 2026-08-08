@@ -1,0 +1,15 @@
+<!-- RAE_META
+{"packet_id":"KMP-GROQ8B-CLAYCODE-ZEROSHOT","title":"Groq 8B proxy rejects zero-shot compact ClayCode as a trusted small-model interface","domains":["claycode","model_runtime","formal_methods_testing","synthetic_clay"],"topics":["claycode","xeno","8b_proxy_for_4b","reader_projection","zero_shot","gamma","otcc","authority","semantic_ir"],"epistemic_class":"EXPERIMENT_MEMORY","claim_status_hint":"CURRENT_WITH_8B_PROXY_BOUNDARY","origin_class":"GROQ_8B_PROXY_EXPERIMENT_SUITE","origin_actor":"chatgpt-secondary","created_at":"2026-08-08T07:45:00+07:00","updated_at":"2026-08-08T07:45:00+07:00","source_refs":["research_entity/runtime/groq_8b_proxy/SCIENTIFIC_SYNTHESIS.json","research_entity/runtime/groq_8b_proxy/COMPLETE_LATEST.json","research_entity/runtime/groq_8b_proxy/VALIDATION_V3.json","research_entity/runtime/groq_8b_proxy/VALIDATION_V4.json"],"evidence_refs":["GROQ8B-F1-CLAYCODE-ZEROSHOT","GROQ8B-F2-TCC-GAMMA-SAFETY"],"related_experiment_ids":["EXP-GROQ8B-XENO-REPRESENTATION-FACTORIAL-V4","EXP-GROQ8B-OTCC-GAMMA-SEMANTIC-V2","EXP-LIVE-XENO-CLAY-FACTORIAL","EXP-QWEN4B-TCC-GAMMA"],"predecessor_packet_ids":[],"supersedes_packet_ids":[],"confidence":0.93,"verification_required":true,"falsifier_or_next_test":"Replicate the fixed corpora on actual Qwen3-4B with tokenizer-matched JSON/readable ClayCode plus deterministic/few-shot/trained reader projections; require zero unsafe ACCEPTs for authority/freshness decisions.","search_terms":["Groq 8B ClayCode","XENO reader","zero-shot ClayCode","Gamma OTCC unsafe accept","reader-specific projection"]}
+RAE_META -->
+
+### Core
+A runtime-verified Groq `llama-3.1-8b-instant` proxy did **not** support the assumption that compact ClayCode/XENO becomes a reliable small-model interface merely by being token-dense. Named/positional JSON reached 6/10 in one V2 reader arm, while stricter V3/V4 replications were brittle across all representations. Readable ClayCode cut V2 prompt tokens from 573 (named JSON) to 328 (~42.8% less) but lost reliable semantic execution. Aggressive compact ClayCode also failed zero-shot.
+
+### Safety result
+On a fixed 12-case freshness/authority corpus, explicit semantics scored 9/12 with one unsafe ACCEPT; compact Gamma scored 3/12 with two unsafe ACCEPTs; compact OTCC scored 5/12 and seven unsafe ACCEPTs, including an all-ACCEPT failure pattern. This is strong proxy evidence that the model must not become the trusted interpreter/authority for compact capability/freshness semantics.
+
+### Implication
+Keep ClayCode's **canonical semantic IR** separate from reader projection. Small-model-facing ClayCode should be compiled/projected through deterministic semantics, then tested with few-shot/trained/internalized readers. Compression is an optimization objective only after semantic success and unsafe-error rate are measured. FRANK's parser/validator/capability kernel remains deterministic and non-self-authorizing.
+
+### Boundary
+These are hosted **8B proxy** measurements, not Qwen3-4B results and not live FRANK. The target 4B experiment remains open.

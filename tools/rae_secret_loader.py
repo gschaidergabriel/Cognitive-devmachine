@@ -3,10 +3,10 @@
 
 Lookup priority:
 1. process environment
-2. designated private repository token store
+2. designated private repository credential stores
 
 The loader never prints secret values. Runtime secret managers can inject process
-environment variables and therefore automatically take priority over the repo fallback.
+environment variables and therefore automatically take priority over repo fallbacks.
 """
 from __future__ import annotations
 
@@ -18,7 +18,11 @@ from pathlib import Path
 from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
-PRIVATE_STORE = ROOT / "research_entity" / "private" / "API_TOKENS.env"
+PRIVATE_DIR = ROOT / "research_entity" / "private"
+PRIVATE_STORES = [
+    PRIVATE_DIR / "API_TOKENS.env",
+    PRIVATE_DIR / "GROQ_API.env",
+]
 NAME_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
 
@@ -26,7 +30,7 @@ class SecretError(RuntimeError):
     pass
 
 
-def _parse_store(path: Path = PRIVATE_STORE) -> dict[str, str]:
+def _parse_store(path: Path) -> dict[str, str]:
     if not path.exists():
         return {}
     values: dict[str, str] = {}
@@ -35,13 +39,25 @@ def _parse_store(path: Path = PRIVATE_STORE) -> dict[str, str]:
         if not line or line.startswith("#"):
             continue
         if "=" not in line:
-            raise SecretError(f"Malformed credential-store line {lineno}")
+            raise SecretError(f"Malformed credential-store line {lineno} in {path.name}")
         name, value = line.split("=", 1)
         name = name.strip()
         if not NAME_RE.fullmatch(name):
-            raise SecretError(f"Invalid credential name on line {lineno}")
+            raise SecretError(f"Invalid credential name on line {lineno} in {path.name}")
         values[name] = value.strip()
     return values
+
+
+def _repo_secrets() -> tuple[dict[str, str], dict[str, str]]:
+    merged: dict[str, str] = {}
+    source: dict[str, str] = {}
+    for path in PRIVATE_STORES:
+        for name, value in _parse_store(path).items():
+            if name in merged and merged[name] != value:
+                raise SecretError(f"Credential {name} is defined with conflicting values in private stores")
+            merged[name] = value
+            source[name] = path.name
+    return merged, source
 
 
 def get_secret(name: str, *, required: bool = True) -> str | None:
@@ -50,7 +66,8 @@ def get_secret(name: str, *, required: bool = True) -> str | None:
     env_value = os.environ.get(name)
     if env_value:
         return env_value
-    value = _parse_store().get(name)
+    values, _ = _repo_secrets()
+    value = values.get(name)
     if value:
         return value
     if required:
@@ -61,8 +78,9 @@ def get_secret(name: str, *, required: bool = True) -> str | None:
 def secret_source(name: str) -> str | None:
     if os.environ.get(name):
         return "process_environment"
-    if _parse_store().get(name):
-        return "private_repo_token_store"
+    values, sources = _repo_secrets()
+    if values.get(name):
+        return f"private_repo_store:{sources[name]}"
     return None
 
 

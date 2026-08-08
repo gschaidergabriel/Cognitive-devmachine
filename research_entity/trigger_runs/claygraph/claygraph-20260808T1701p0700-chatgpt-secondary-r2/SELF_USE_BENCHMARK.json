@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T1701p0700-chatgpt-secondary-r2",
+  "benchmark_class":"MIXED_IMPORTED_HOSTED_8B_PLUS_LOCAL_IMPLEMENTATION_PROXY",
+  "questions":[
+    "Does current ClayGraph activation justify FRANK hot-path use?",
+    "Is current latency intrinsic to graph semantics or implementation/indexing?",
+    "When should graph retrieval be used relative to exact/packet/FTS retrieval?"
+  ],
+  "evidence_surfaces":[
+    {"surface":"hosted Groq 8B RAE self-use","finding":"current graph/graph-lexical roughly 84-87ms median/query vs SQLite FTS ~0.8-0.9ms; graph contexts larger; some relational facts surfaced; activation not consistently better than graph lexical"},
+    {"surface":"local 10k-node implementation benchmark","finding":"reload+scan 20.499ms median; resident scan 8.349ms; resident inverted seed index 0.106ms"},
+    {"surface":"current external adaptive GraphRAG literature","finding":"graph benefit is conditional on complexity/scattered evidence; routing simple queries to cheaper retrieval is a current independent research direction"}
+  ],
+  "decision_effect":"Current activation is rejected as already-hot-path-ready. Semantic graph retained. Preferred HOLD candidate becomes G1c resident adaptive escalation.",
+  "answer_change":"Yes. Before the imported 8B test, the main uncertainty was whether G1b selection quality could beat baselines. After the 8B test, hot-path latency/context cost becomes a first-class blocker and the candidate architecture changes from graph-first query planning to baseline-first adaptive graph escalation with resident indexes.",
+  "limitations":["8B proxy is not Qwen4B","runner timing is not live FRANK","local index benchmark is synthetic and excludes full provenance/traversal/update costs","no current-corpus G1c implementation benchmark yet"]
+}

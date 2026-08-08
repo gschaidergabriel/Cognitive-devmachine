@@ -14,7 +14,7 @@ A trigger fires only when the entire trimmed user message equals one registered 
 2. Compile task-specific RAE context; do not eagerly read the whole repository.
 3. Load relevant CURRENT/OPEN/SUPERSEDED/REFUTED/NEGATIVE_RESULT claims, active experiments, packets and direct source evidence.
 4. Load `research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md` and `research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md`, then build the run's cross-trigger foundation with `tools/research_interconnect_preflight.py`.
-5. Every scientific trigger must ingest every branch currently registered as `domain_research` or `integrated_research_foundry`. At the current registry revision these are `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`. Branch membership comes from the registry, not a stale hard-coded count.
+5. Every scientific trigger must ingest every branch currently registered as `domain_research` or `integrated_research_foundry`. At the current registry revision these are `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`, `unifieddb`. Branch membership comes from the registry, not a stale hard-coded count.
 6. Materialize `INTERCONNECT_MANIFEST.json`. It must contain a rich active Topic-/Knowledge-Micro-Packet envelope for each branch, while raw evidence remains indexed/reachable and expands on demand.
 7. Load the trigger-specific protocol.
 8. Load `research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md` and `tools/research_provider_router.py`.
@@ -32,7 +32,7 @@ The preflight keeps substantially larger branch-specific active envelopes than t
 
 Workers MUST NOT blindly concatenate every active packet or raw source into one prompt. Use compact packet summaries/metadata first, then ClayGraph/SQLite/file search to expand only evidence that can change a hypothesis, contradiction, experiment or architecture decision.
 
-Activation/relevance never upgrades truth or evidence status. Shared ancestry remains one evidential family even if several descendant packets are active.
+Activation/relevance never upgrades truth or evidence status. Shared ancestry remains one evidential family even if several descendant packets are active. Logical database unification never by itself establishes that physical consolidation is beneficial.
 
 ## Mandatory provider gate
 
@@ -103,7 +103,9 @@ Also scan all connected branches for:
 - duplicated concepts under different names;
 - identical concepts carrying incompatible evidence status;
 - stale branch conclusions superseded by newer evidence;
-- ClayGraph/packet activation being mistaken for evidence strength.
+- ClayGraph/packet activation being mistaken for evidence strength;
+- UnifiedDB semantic/logical unification being mistaken for physical-consolidation evidence;
+- record provenance being mistaken for selector/query-plan integrity.
 
 Contradictions are retained and explicitly resolved, narrowed or left open. Never upgrade correlation to causality without intervention or equivalent causal evidence.
 
@@ -113,7 +115,7 @@ Create transformed second-order hypotheses where evidence changes the model. Ret
 
 ### Phase G — Empirical work
 
-Execute highest-information feasible tests: simulations, parsers, validators, benchmarks, ablations, lesion/rescue, replay, graph reductions, counterfactuals, fuzzing or instrumentation.
+Execute highest-information feasible tests: simulations, parsers, validators, benchmarks, ablations, lesion/rescue, replay, graph reductions, database/query equivalence tests, crash/recovery tests, counterfactuals, fuzzing or instrumentation.
 
 For executable claims, make a reproducible execution attempt before strong promotion whenever feasible. Synthetic/remote results remain synthetic until replicated on the target substrate.
 

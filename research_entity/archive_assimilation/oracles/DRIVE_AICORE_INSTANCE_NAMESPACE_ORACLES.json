@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "oracle_set_id":"DRIVE-AICORE-INSTANCE-NAMESPACE-ORACLES-20260809",
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_MODELD_SUBMANIFEST.json",
+  "sources":["drive:1nF6axmoV4XsBzjxA4sk9HxU72HMf7dHf:config/instanz.py","drive:12pLV4S8mJoD3JhQsGDDE91uXSmYzH0bc:config/ports.py","drive:1US0Amm2DHHX7Bouijfmvos_nOCbuoNfN:UEBERGABE-P2.md"],
+  "local_reproduction":{
+    "environment":"isolated Python import of exact Drive bytes",
+    "cases":[
+      {"name":"default_prime","result":"modeld=8090, IST_PRIME=True, instance=prime, offset=0","status":"PASS"},
+      {"name":"twin_offset_100","result":"modeld=8190, IST_PRIME=False, instance=zwilling, offset=100","status":"PASS"},
+      {"name":"invalid_offset_fallback","result":"FRANK_PORT_BASE=abc silently becomes offset=0; modeld=8090 while instance=zwilling","status":"NEGATIVE_ORACLE_REPRODUCED"},
+      {"name":"preserved_legacy_override_split","result":"with twin offset=100 plus AICORE_ROUTER_PORT=8091, canonical instanz.port(router)=8191 but preserved environment remains 8091","status":"NEGATIVE_ORACLE_REPRODUCED"},
+      {"name":"root_shift","result":"FRANK_ROOT=/tmp/frank-z yields AICORE_DATA=/tmp/frank-z, FRANK_RUNTIME_DIR=/run/user/<uid>/zwilling, core URL at shifted port","status":"PASS"},
+      {"name":"dead_port_guard","result":"ports.port(nerd_physics) raises ValueError and identifies it as dead","status":"PASS"}
+    ]
+  },
+  "oracles":[
+    {"id":"INST-ORACLE-001-INVALID-OFFSET-COLLISION","historical_mechanism":"ports.py parses FRANK_PORT_BASE with int(); ValueError silently falls back to 0.","adversarial_setup":"Set FRANK_INSTANCE_ID to a non-prime twin and FRANK_PORT_BASE to a malformed value such as abc.","observed_reference_behavior":"Twin identity remains non-prime but all canonical ports fall back to prime numbers, e.g. modeld 8090.","required_current_behavior":"Malformed instance namespace configuration must fail closed before any service bind; it must never silently map a non-prime instance onto prime resource identities.","targets":["harness","claycode","unifieddb","frank"]},
+    {"id":"INST-ORACLE-002-ENV-CANONICAL-SPLIT-BRAIN","historical_mechanism":"instanz._setze intentionally never overwrites pre-existing environment variables while its own port()/url() APIs resolve from config.ports.","adversarial_setup":"Start a twin with offset=100 but pre-set AICORE_ROUTER_PORT=8091.","observed_reference_behavior":"Canonical router=8191 while preserved legacy environment router=8091; different consumers can address different instances.","required_current_behavior":"One typed resolved resource identity must be authoritative for the execution episode. Explicit overrides must be normalized/validated into that identity or rejected; consumers cannot see incompatible authoritative addresses.","targets":["harness","claycode","unifieddb","frank","claygraph"]},
+    {"id":"INST-ORACLE-003-SCOPE-OF-TWIN-PROOF","historical_mechanism":"UEBERGABE-P2 reports two concurrent cores, separated roots and collision-free resolved port sets, and explicitly limits the claim to core-level coexistence; the other 14 twin services were not started.","adversarial_setup":"Attempt to promote core-level twin evidence into a full two-FRANK coexistence claim.","required_current_behavior":"Harness evidence must preserve tested scope. Full-instance namespace PASS requires all required services, DB/runtime roots, model endpoints, external effects and prime-only capabilities to coexist without collision/cross-talk.","targets":["harness","frank","clay"]},
+    {"id":"INST-ORACLE-004-PORT-SEMANTICS-SUPERSESSION","historical_mechanism":"The Aug-4 handoff preserves an earlier example treating FRANK_PORT_BASE=8200 as absolute, then explicitly corrects it: PORT_BASE is a displacement, so core 8200 requires offset 112.","required_current_behavior":"Versioned configuration semantics must carry a schema/version or canonical parser; stale examples must not remain executable authority after semantic change.","targets":["claygraph","unifieddb","harness","claycode"]}
+  ],
+  "epistemic_boundary":"Local tests reproduce the exact Drive module semantics. The historical live test proves two core processes and separated roots, not two complete FRANK deployments.",
+  "created_by":"chatgpt-secondary","created_at":"2026-08-09T05:12:00+07:00"
+}

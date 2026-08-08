@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.1",
+  "request_id": "hyp-h3-1722-exa",
+  "tool": "exa_search",
+  "request_sha256": "3d039e4a0da1bea73c93db4b3f3dd2f95f12ca1773c19a0d887681028788063c",
+  "processed_at": "2026-08-08T10:31:21.413534+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "dynamic graph snapshot incremental hypergraph activation oversmoothing adaptive diffusion 2026",
+    "results": [
+      {
+        "id": "https://icml.cc/virtual/2026/poster/60730",
+        "title": "Adaptive Memory Retention in Dynamic Graphs - ICML 2026",
+        "url": "https://icml.cc/virtual/2026/poster/60730",
+        "published_date": "2026-07-08T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "ICML Poster Adaptive Memory Retention in Dynamic Graphs ICML 2026\n...\n# Adaptive Memory Retention in Dynamic Graphs\n...\nModeling graphs demands a careful balance between long-range propagation of information across nodes and the controlled dissipation of noisy or redundant signals to ensure stable learning and generalization. This challenge is exacerbated in dynamic graphs, where structural and temporal information interact, leading to uncontrolled information accumulation and amplifying noise, thereby affecting generalization. We introduce LAMP, a dynamic graph model for snapshot-based dynamic graphs that incorporates adaptive, learned dissipation within a principled dynamical systems framework. Our architecture combines impulsive neural ODEs with antisymmetric parameterization to model conservative information flow, alongside data-driven dissipative dynamics that regulate information retention over space and time. This formulation yields stable yet expressive representations and enables effective long-range dependency modeling while avoiding pathological information buildup. We provide a theoretical analysis establishing stability guarantees and characterizing the representational power. Extensive experiments on synthetic and real-world benchmarks demonstrate state-of-the-art performance, particularly on tasks requiring extended-range dependency modeling."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2604.10955v1",
+        "title": "Hypergraph Neural Diffusion: A PDE-Inspired Framework for Hypergraph Message Passing",
+        "url": "https://arxiv.org/html/2604.10955v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Hypergraph neural networks (HGNNs) have shown remarkable potential in modeling high-order relationships that naturally arise in many real-world data domains. However, existing HGNNs often suffer from shallow propagation, oversmoothing, and limited adaptability to complex hypergraph structures. In this paper, we propose Hypergraph Neural Diffusion (HND), a novel framework that unifies nonlinear diffusion equations with neural message passing on hypergraphs. HND is grounded in a continuous-time hypergraph diffusion equation, formulated via hypergraph gradient and divergence operators, and modulated by a learnable, structure-aware coefficient matrix over hyperedge–node pairs. This partial differential equation (PDE) based formulation provides a physically interpretable view of hypergraph learning, where feature propagation is understood as an anisotropic diffusion process governed by local inconsistency and adaptive diffusion coefficient. From this perspective, neural message passing becomes a discretized gradient flow that progressively minimizes a diffusion energy functional. We derive rigorous theoretical guarantees, including energy dissipation, solution boundedness via a discrete maximum principle, and stability under explicit and implicit numerical schemes. The HND framework supports a variety of integration strategies such as non-adaptive-step (like Runge–Kutta) and adaptive-step solvers, enabling the construction of deep, stable, and interpretable architectures. Extensive experiments on benchmark datasets demonstrate that HND achieves competitive performance. Our results highlight the power of PDE-inspired design in enhancing the stability, expressivity, and interpretability of hypergraph learning.\n...\nBuilding on these operators, we propose Hypergraph Neural Diffusion (HND), a novel neural framework grounded in a continuous-time nonlinear hypergraph diffusion equation (HDE). This equation governs the evolution of node features as an anisotropic diffusion proce"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/yx5z01xnql9",
+        "title": "Tackling Over-smoothing on Hypergraphs: A Ricci Flow-guided Neural Diffusion Approach",
+        "url": "https://arxiv.org/html/2603.15696",
+        "published_date": null,
+        "author": "Mengyao Zhou, Zhiheng Zhou, Xiao Han, Xingqin Qi, Guanghui Wang, Guiying Yan",
+        "text": null,
+        "highlights": [
+          "This work has been submitted to the IEEE for possible publication. Copyright may be transferred without notice, after which this version may no longer be accessible. Abstract—Hypergraph neural networks (HGNNs) have demonstrated strong capabilities in modeling complex higher order relationships. However, existing HGNNs often suffer from over-smoothing as the number of layers increases and lack effective control over message passing among nodes. Inspired by the theory of Ricci flow in differential geometry, we theoretically establish that introducing discrete Ricci flow into hypergraph structures can effectively regulate node feature evolution and thereby alleviate over-smoothing. Building on this insight, we propose Ricci Flow-guided Hypergraph Neural Diffusion(RFHND), a novel message passing paradigm for hy pergraphs guided by discrete Ricci flow. Specifically, RFHND is based on a PDE system that describes the continuous evolution of node features on hypergraphs and adaptively regulates the rate of information diffusion at the geometric level, preventing feature homogenization and producing high quality node representations. Experimental results show that RFHND significantly outperforms existing methods across mul tiple benchmark datasets and demonstrates strong robustness, while also effectively mitigating over-smoothing. Index Terms—Hypergraph Neural Networks, Over Smoothing, Ricci Flow, Differential Equation\n...\nhave proposed various hypergraph neural network meth ods [10], achieving significant progress in tasks such as node classification [11], link prediction [12], [13], and representation learning [2]. Although existing hypergraph neural networks provide powerful tools for hypergraph learning, the problem of over-smoothing remains a key challenge [14], [15]. As the network deepens, node features tend to converge and become increasingly indistinguishable, which degrades the model’s performance [16]. Current mitigation strategies fall into two main paradigms. T"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://github.com/FabriDeCastelli/LAMP",
+        "title": "FabriDeCastelli/LAMP",
+        "url": "https://github.com/FabriDeCastelli/LAMP",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Official code repository for\n...\nAdaptive Memory Retention in Dynamic Graphs\" accepted at ICML 2026 Spotlight\n...\n# Long-range Adaptive Memory Propagation (LAMP)\n...\n> **Adaptive Memory Retention in Dynamic Graphs.**\n...\nLAMP is a differential-equation-based GNN for discrete-time dynamic graphs\n(D-TDGs). It treats incoming graph snapshots as **impulses** driving a neural\nimpulsive ODE: an antisymmetric (non-dissipative) parameterization propagates\ninformation conservatively across space and time, while a learned, channel-wise\n**adaptive dissipation** term $\\Gamma$ regulates how much information is retained or\nerased. This yields stable long-range spatio-temporal propagation with\ntask-driven filtering of noisy or redundant signals.\n...\nThe model lives in [`src/models/lamp.py`](src/models/lamp.py) (registry key\n`LAMP`), with the core dynamics in\n[`src/layers/convolutions/lamp_conv.py`](src/layers/convolutions/lamp_conv.py).\nBaselines are under `src/models/baseline/`.\n...\nReproducing a table entry is two stages: **model selection** (`main.py`, the\nhyperparameter grid search) followed by **model assessment** (`run_reinit.py`,\nwhich retrains the selected configuration `N_REINIT` times and reports the\nmean ± standard deviation that the paper's tables show).\n...\n`run_reinit.py` reloads the configuration selected in stage 1 and retrains it\n`N_REINIT` times (5 for leaf counting and link prediction, 10 for node\nprediction — set per dataset in `configurations/datasets/`), changing only the\nseed:\n...\nworkers` / `--debug` / `--\n...\ncheckpoint`\n...\n`main.\n...\n`, plus `--runs N` to override `\n...\n_REINIT` and `--trial\n...\nresults go to `experiments/re\n...\naggregate to `scores\n...\n```\nconfig/                  project paths and run\n...\nconfigurations/\n...\nfrozen split files (3 tasks\n...\nsrc/\n  datasets/              tasks (leaf counting, node / link prediction), scalers\n  layers/                LAMP convolution, adaptive dissipation, discretization, readouts\n  models/               "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/rkzk5s7c0kvbvmjhb2tswnww",
+        "title": "From Diffusion to Reaction-Diffusion: A Dynamical-Systems View of Oversmoothing in Hypergraph Neural Networks",
+        "url": "https://arxiv.org/html/2607.15773",
+        "published_date": null,
+        "author": "Zhiheng Zhou, Mengyao Zhou, Yancheng Chen, Dengyi Zhao, Xingqin Qi, Guiying Yan",
+        "text": null,
+        "highlights": [
+          "# From Diffusion to Reaction-Diffusion: A Dynamical-Systems View of Oversmoothing in Hypergraph Neural Networks\n...\narXiv (Cornell University). Published: 2026-07-17. Preprint. 0 citations.\n...\nHigher-order couplings enhance the expressive power of hypergraph neural networks (HGNNs), but they also intensify representation collapse in deep propagation due to strong multi-way feature mixing. This work investigates hypergraph oversmoothing from a dynamical-systems perspective and develops a reaction--diffusion framework for depth-resistant hypergraph learning. By defining hypergraph gradient and divergence operators, we interpret message passing as an incidence-level diffusion process. The analysis of pure diffusion shows that its continuous semiflow exponentially contracts the null-mode-free component of node representations and drives the Dirichlet energy to zero, revealing hypergraph oversmoothing as an intrinsic transverse-energy dissipation phenomenon. Motivated by this analysis, we propose Hypergraph Neural Reaction--Diffusion (HNRD), which introduces a reaction mechanism acting on the transverse component to compensate diffusion-induced dissipation and stabilize discriminative variations. We establish global well-posedness of the proposed dynamics and prove that the null-mode-free Dirichlet energy remains bounded away from zero. A forward-Euler discretization provides a practical HNRD layer with a stability condition for deep propagation. Experiments on benchmark and synthetic heterophilic hypergraphs demonstrate that HNRD consistently improves over representative hypergraph baselines. Depth, robustness, and efficiency analyses further show that HNRD preserves stable performance and nonzero Dirichlet energy under deep propagation and perturbations. These results provide a principled dynamical framework for designing deep hypergraph architectures that maintain higher-order expressiveness without representation collapse."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.sciencedirect.com/science/article/abs/pii/S0893608025011529",
+        "title": "Hypergraph neural diffusion networks - ScienceDirect",
+        "url": "https://www.sciencedirect.com/science/article/abs/pii/S0893608025011529",
+        "published_date": "2026-03-01T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "One promising direction in graph learning is the use of diffusion processes, which model message passing as a continuous-time process governed by diffusion equations. Graph Neural Diffusion Networks (GRAND) [Chamberlain et al., 2021b] and its extensions, such as BLEND [Chamberlain et al., 2021a] and GRAND++ [Thorpe et al., 2022], have shown success in overcoming oversmoothing and depth dilemmas in GNNs by leveraging numerical discretization schemes. These approaches, inspired by Fourier’s heat conduction law, naturally model pairwise relationships in standard graphs where diffusion flows between nodes according to concentration gradients, governed by the graph Laplacian which preserves quantity conservation.\n...\nHowever, translating these diffusion-based methods to hypergraphs presents fundamental challenges due to their higher-order structural properties. The core difficulties stem from the multi-node connectivity inherent in hyperedges, which invalidates several assumptions underlying graph-based diffusion. First, flow dynamics become problematic as hyperedges connect multiple nodes simultaneously, complicating the determination of flow direction and allocation across connected entities. Second, multi-hyperedge relationships introduce complexity when nodes share multiple hyperedge connections, making the quantification of aggregate flow ambiguous and requiring sophisticated weighting mechanisms beyond conventional graph representations. Third, operator redefinition becomes necessary as conservation principles demand reformulating discrete gradient and divergence operators for hypergraphs to accommodate group-wise interactions. These structural differences render hypergraph diffusion substantially more complex than its graph counterpart, requiring novel approaches that preserve the intuitive principles of diffusion while accommodating higher-order relationships.\n...\nIn this paper, we propose a model for hypergraph learning called Hypergraph Neural Diffusion Network"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.07330v1",
+        "title": "Hypergraph Neural Stochastic Diffusion: An SDE Framework for Uncertainty Estimation",
+        "url": "https://arxiv.org/html/2607.07330v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Hypergraph neural networks have shown powerful capability in modeling higher-order relations, yet their predictive uncertainty remains underexplored. Unlike pairwise graphs, uncertainty in hypergraphs arises not only from noisy attributes and ambiguous labels, but also from variations in node–hyperedge incidence structures and complex higher-order dependencies. Existing approaches mainly estimate uncertainty from final predictions or rely on computationally expensive ensembles and Bayesian inference, limiting their ability to capture uncertainty evolution during representation learning. In this paper, we propose Hypergraph Neural Stochastic Diffusion (HyperNSD), a stochastic differential equation framework for uncertainty estimation on hypergraphs. HyperNSD models hypergraph representations as stochastic processes evolving over node–hyperedge incidence structures. A learnable drift function captures deterministic higher-order diffusion dynamics, while a learnable stochastic forcing function characterizes structural ambiguity and representation noise. Predictive uncertainty is directly quantified through the variability of stochastic representation trajectories, providing an intrinsic uncertainty measure beyond post-hoc confidence scores. We formulate HyperNSD with neural drift and diffusion networks, enabling joint learning of prediction and uncertainty propagation. Theoretical analyses establish well-posedness, perturbation stability, permutation equivariance, and numerical convergence of the proposed stochastic dynamics. Experiments on multiple hypergraph benchmarks demonstrate that HyperNSD achieves reliable uncertainty estimation for out-of-distribution and misclassification detection while preserving competitive prediction accuracy. These results provide a principled stochastic-dynamical framework for trustworthy higher-order representation learning.\n...\nIn this paper, we propose Hypergraph Neural Stochastic Diffusion (HyperNSD), a stochastic differential equat"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2601.12347v1",
+        "title": "RIPPLE++: An Incremental Framework for Efficient GNN Inference on Evolving Graphs Extended full-length version of paper that appeared at ICDCS 2025: “RIPPLE: Scalable Incremental GNN Inferencing on Large Streaming Graphs”, Pranjal Naman and Yogesh Simmhan, in International Conference on Distributed Computing Systems (ICDCS), 2025. DOI: https://doi.org/10.1109/icdcs63083.2025.00088",
+        "url": "https://arxiv.org/html/2601.12347v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Real-world graphs are dynamic, with frequent updates to their structure and features due to evolving vertex and edge properties. These continual changes pose significant challenges for efficient inference in graph neural networks (GNNs). Existing vertex-wise and layer-wise inference approaches are ill-suited for dynamic graphs, as they incur redundant computations, large neighborhood traversals, and high communication costs, especially in distributed settings. Additionally, while sampling-based approaches can be adopted to approximate final layer embeddings, these are often not preferred in critical applications due to their non-determinism. These limitations hinder low-latency inference required in real-time applications. To address this, we propose RIPPLE++, a framework for streaming GNN inference that efficiently and accurately updates embeddings in response to changes in the graph structure or features. RIPPLE++ introduces a generalized incremental programming model that captures the semantics of GNN aggregation functions and incrementally propagates updates to affected neighborhoods. RIPPLE++ accommodates all common graph updates, including vertex/edge addition/deletions and vertex feature updates. RIPPLE++ supports both single-machine and distributed deployments. On a single machine, it achieves up to 56​K56\\textsc{K} updates/sec on sparse graphs like Arxiv (169​K169\\textsc{K} vertices, 1.2​M1.2\\textsc{M} edges), and about 7.6​K7.6\\textsc{K} updates/sec on denser graphs like Products (2.5​M2.5\\textsc{M} vertices, 123.7​M123.7\\textsc{M} edges), with latencies of 0.060.06–960960ms, and outperforming state-of-the-art baselines by 2.22.2–24×24\\times on throughput. In distributed settings, RIPPLE++ offers up to ≈25×\\approx 25\\times higher throughput and 20×20\\times lower communication costs compared to recomputing baselines.\n...\nGNN inference becomes even more complex when operating on graphs that evolve continuously in the presence of vertex/edge additions/deletio"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "20752fbd169504b90071446ddba49b9a",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

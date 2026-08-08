@@ -1,0 +1,37 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260808T2217p0700-chatgpt-secondary-r4",
+  "experiments":[
+    {
+      "id":"EXP-C8-RESOURCE-GOVERNOR-001",
+      "execution":"local Python/numpy",
+      "status":"PASS_MECHANISM_CALIBRATION",
+      "design":"12 seeded trials x 100,000 synthetic cognitive requests. Requests require one of four evidence/resource tiers. Compare fixed low, fixed mid, fixed high and a noisy query-aware adaptive router with conservative escalation on uncertain cases.",
+      "results":{
+        "fixed_low":{"accuracy_mean":0.6000575,"coverage_mean":0.3802383,"cost_mean":1.0},
+        "fixed_mid":{"accuracy_mean":0.9125933,"coverage_mean":0.8698442,"cost_mean":3.2},
+        "fixed_high":{"accuracy_mean":0.9699792,"coverage_mean":1.0,"cost_mean":5.8},
+        "adaptive":{"accuracy_mean":0.9626983,"accuracy_range":[0.96161,0.96372],"coverage_mean":0.9830417,"cost_mean":2.39752}
+      },
+      "inference":"In the constructed demand model, operation/query-aware resource allocation can approach the fixed maximum-quality arm at substantially lower average resource cost. This validates the discriminating experiment shape for a FRANK Cognitive Resource Governor; it is not a real accuracy or energy estimate.",
+      "counter":"A learned/adaptive router can itself become a failure source; target traces may favor a simpler fixed policy. Unknown/high-risk demand must therefore conservatively escalate."
+    },
+    {
+      "id":"EXP-C8-SALIENCE-ATTRACTOR-002",
+      "execution":"local Python/numpy",
+      "status":"PASS_COUNTEREXAMPLE_AND_REPAIR_SHAPE",
+      "design":"6 seeded trials x 80,000 episodes over 64 memory candidates. Candidate 0 is genuinely frequent for the first 15,000 episodes and then becomes ordinary. Compare naive exposure+reward reinforcement against bounded gain, faster decay, negative feedback for wrong selection, weak competition and periodic diversity reserve.",
+      "results":{
+        "naive":{"pre_accuracy_mean":0.5549444,"post_shift_accuracy_mean":0.0155385,"post_shift_wrong_stale_hub_mean":0.9844615,"final_old_hub_weight_mean":18.20257},
+        "guarded":{"pre_accuracy_mean":0.8966333,"post_shift_accuracy_mean":0.8881667,"post_shift_wrong_stale_hub_mean":0.0010821,"final_old_hub_weight_mean":0.02725}
+      },
+      "inference":"The constructed regime demonstrates that truth-preserving utility learning can still create a self-reinforcing stale salience attractor. Bounded/adversarially-corrected salience policies can prevent the failure in this family.",
+      "boundary":"Parameters intentionally create a sharp distribution shift to expose the mechanism. Magnitudes are not estimates of live ClayGraph behavior and do not establish the guarded policy as optimal. Diversity/inhibition may also suppress genuinely useful stable habits and needs target trade-off measurement."
+    }
+  ],
+  "negative_results":[
+    "Maximal resource allocation is not justified merely because it yields the highest constructed quality; cost/latency/device shadows matter.",
+    "Utility adaptation that cannot write canonical truth can still create severe cognitive lock-in through salience feedback.",
+    "No current-run experiment measures live FRANK, target Qwen, Android thermal behavior, emergence or phenomenal consciousness."
+  ]
+}

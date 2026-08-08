@@ -1,15 +1,16 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"claygraph-20260808T1712p0700-chatgpt-secondary-r2",
   "trigger":"claygraph",
   "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
   "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
-  "accepted_graph":{"generation":0,"graph_id":"claygraph-v0-seed","unchanged":true},
-  "candidate":{"generation":1,"id":"claygraph-g1d-epochal-latent-field","decision":"HOLD"},
-  "coverage":{"registered_scientific_branches":7,"covered":7,"new_repo_commits_at_start":0,"special_input":"historical project research recovered from File Library"},
-  "required_outputs":{"INTERCONNECT_MANIFEST.json":"WRITTEN","TOOL_EXECUTION_MANIFEST.json":"WRITTEN","DATABASE_INVENTORY.json":"WRITTEN_NO_NEW_LIVE_ENUMERATION","CLAYGRAPH_SCHEMA.claycode.json":"WRITTEN","CLAYGRAPH_CANDIDATE.claycode.json":"WRITTEN","CLAYGRAPH_EVOLUTION_DELTA.json":"WRITTEN","SELF_USE_BENCHMARK.json":"WRITTEN_STAGED","EXPERIMENT_RESULTS.json":"WRITTEN","HYPOTHESES.md":"WRITTEN","NEGATIVE_RESULTS.md":"WRITTEN","MIGRATION_PLAN.json":"WRITTEN","FRANK_CLAYGRAPH_FEEDBACK.json":"WRITTEN","BRANCH_FEEDBACK_MANIFEST.json":"WRITTEN","CLAYGRAPH_EVOLUTION_DECISION.json":"WRITTEN","HISTORICAL_RESEARCH_RECOVERY.md":"WRITTEN","FINAL_REPORT.md":"WRITTEN"},
+  "accepted_graph":{"generation":0,"graph_id":"claygraph-v0-seed","unchanged":true,"reread_verified":true},
+  "candidate":{"generation":1,"id":"claygraph-g1d-epochal-latent-field","decision":"HOLD","reread_verified":true},
+  "coverage":{"registered_scientific_branches":7,"covered":7,"new_repo_commits_at_start":0,"special_input":"historical project research recovered from File Library","concurrent_fresh_incomplete":"Clay G9 provider/model queue commits observed during run; no scientific result available at final preflight, therefore recorded but not counted as evidence"},
+  "required_outputs":{"INTERCONNECT_MANIFEST.json":"WRITTEN_UPDATED_WITH_CONCURRENT_G9","TOOL_EXECUTION_MANIFEST.json":"WRITTEN","DATABASE_INVENTORY.json":"WRITTEN_NO_NEW_LIVE_ENUMERATION","CLAYGRAPH_SCHEMA.claycode.json":"WRITTEN","CLAYGRAPH_CANDIDATE.claycode.json":"WRITTEN","CLAYGRAPH_EVOLUTION_DELTA.json":"WRITTEN","SELF_USE_BENCHMARK.json":"WRITTEN_STAGED","EXPERIMENT_RESULTS.json":"WRITTEN","HYPOTHESES.md":"WRITTEN","NEGATIVE_RESULTS.md":"WRITTEN","MIGRATION_PLAN.json":"WRITTEN","FRANK_CLAYGRAPH_FEEDBACK.json":"WRITTEN","BRANCH_FEEDBACK_MANIFEST.json":"WRITTEN","CLAYGRAPH_EVOLUTION_DECISION.json":"WRITTEN","HISTORICAL_RESEARCH_RECOVERY.md":"WRITTEN","FINAL_REPORT.md":"WRITTEN_REREAD"},
   "topic_packet":"research_entity/topic_packets/claygraph-cg4-epochal-latent-field/PACKET.json",
   "promotion":{"canonical_revision_change":false,"accepted_graph_update":false,"physical_migration":false},
-  "known_blocks":["actual current-corpus G1d implementation unavailable","target Qwen-class 4B unavailable","real concurrent epoch publish/reclamation/crash untested","complete current 71-store inventory unavailable","live/twin FRANK causal memory-field experiment unrun"],
-  "write_verification":"PENDING_FINAL_REREAD"
+  "known_blocks":["actual current-corpus G1d implementation unavailable","target Qwen-class 4B unavailable","real concurrent epoch publish/reclamation/crash untested","complete current 71-store inventory unavailable","live/twin FRANK causal memory-field experiment unrun","Clay G9 remains in progress and must be ingested when scientific outputs appear"],
+  "write_verification":"VERIFIED_RW_FINAL_REREAD",
+  "canonical_reread":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"}
 }

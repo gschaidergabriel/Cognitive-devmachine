@@ -1,7 +1,7 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"emergenz-20260808T1756p0700-chatgpt-secondary",
-  "evidence_boundary":"All EM1 numeric experiments are local synthetic mechanism/null-control tests with fixed seeds. They are not live FRANK rates, not target-Qwen evidence and not evidence of phenomenal consciousness.",
+  "evidence_boundary":"All EM1 numeric experiments are synthetic mechanism/null-control tests. Local Python and Judge0 replication are not live FRANK rates, not target-Qwen evidence and not evidence of phenomenal consciousness.",
   "experiments":[
     {
       "experiment_id":"EXP-EM1-MECHANISTIC-RESCUE-001",
@@ -43,10 +43,19 @@
       "design":"Construct graph-prior G, workspace-selection W and re-entry R factors. In the null, stages are additive and W has no causal effect; in the synergy condition add a true G*W*R term of 0.35. Separately construct a bundled all-on/off contrast where projection also changes.",
       "results":{"null_three_way_omega":-0.0014368586671017786,"true_synergy_three_way_omega":0.353306397673682,"bundled_null_all_on_vs_off":0.650228313177,"bundled_true_synergy_all_on_vs_off":1.001005400141691},
       "inference":"A bundled pipeline contrast can look strongly emergent under an additive null. Stage-orthogonal factorial interaction recovered approximately zero under the null and the configured three-way synergy when present."
+    },
+    {
+      "experiment_id":"EXP-EM1-JUDGE0-REPLICATION-006",
+      "provider":"Judge0 CE",
+      "language":"Python 3.8.1",
+      "status":"SUCCESS",
+      "design":"Independent code/run reproducing role-swap recurrence, common-driver TE, partition-search null and stage-factorial synergy with different seeds/sample sizes.",
+      "results":{"role_bag_false_rate":0.4989,"role_aware_false_rate":0.0,"role_aware_true_recall":1.0,"bivariate_te_bits":0.2504984031682806,"conditional_te_bits":0.000030470714363992112,"partition_best_train_mi":0.014582659865089005,"partition_same_heldout_mi":0.0005763477229109322,"partition_groups":6,"null_three_way_omega":-0.009021895881566776,"true_synergy_three_way_omega":0.34445588137720895},
+      "inference":"Independent runtime replication preserves all four qualitative directions. Numeric magnitudes remain workload/sample artifacts."
     }
   ],
   "imported_prior_not_counted_as_new_replication":[
-    {"source":"Clay G9 EXP matched-persistence control","result":"functional AR(1) and echo AR(1) had similar persistence, but only functional lesion changed MSE","role":"supports recurrence-is-not-emergence boundary; shared mesh ancestry"},
-    {"source":"GWT R4 CSOC","result":"bundled graph+workspace+projection contrast produced ~0.2396 apparent effect under a constructed zero direct workspace effect, clean workspace intervention recovered zero","role":"supports stage-orthogonal measurement; not independent of mesh ancestry"}
+    {"source":"Clay G9 matched-persistence control","result":"functional AR(1) and echo AR(1) had similar persistence, but only functional lesion changed MSE","role":"supports recurrence-is-not-emergence boundary; shared mesh ancestry"},
+    {"source":"GWT R4 CSOC","result":"bundled graph+workspace+projection contrast produced ~0.2396 apparent effect under a constructed zero direct workspace effect, clean workspace intervention recovered zero","role":"supports stage-orthogonal measurement; shared mesh ancestry"}
   ]
 }

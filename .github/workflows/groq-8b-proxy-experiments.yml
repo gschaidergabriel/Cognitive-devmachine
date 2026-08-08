@@ -5,7 +5,7 @@ on:
   push:
     paths:
       - 'tools/groq_inference.py'
-      - 'tools/groq_8b_proxy_experiments.py'
+      - 'tools/groq_8b_proxy_completion.py'
       - 'tools/groq_8b_proxy_supplement.py'
       - 'tools/groq_health_merge.py'
       - 'tools/register_groq_provider.py'
@@ -29,13 +29,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Compile Groq adapters
-        run: python -m py_compile tools/groq_inference.py tools/groq_8b_proxy_experiments.py tools/groq_8b_proxy_supplement.py tools/groq_health_merge.py tools/register_groq_provider.py tools/claygraph_query.py tools/claygraph_benchmark.py tools/claygraph_build.py
+      - name: Compile Groq suite
+        run: python -m py_compile tools/groq_inference.py tools/groq_8b_proxy_completion.py tools/groq_8b_proxy_supplement.py tools/groq_health_merge.py tools/register_groq_provider.py tools/claygraph_query.py tools/claygraph_benchmark.py tools/claygraph_build.py
 
       - name: Verify Groq 8B and merge provider health
         run: python tools/groq_health_merge.py
@@ -43,77 +42,51 @@ jobs:
       - name: Register Groq provider
         run: python tools/register_groq_provider.py
 
-      - name: Run original pending 8B proxy batch
+      - name: Run all currently eligible 8B proxy experiments
         run: |
           mkdir -p research_entity/runtime/groq_8b_proxy
           set +e
-          python tools/groq_8b_proxy_experiments.py --output research_entity/runtime/groq_8b_proxy/LATEST.json > /tmp/groq-batch.stdout 2> /tmp/groq-batch.stderr
+          python tools/groq_8b_proxy_completion.py --output research_entity/runtime/groq_8b_proxy/COMPLETE_LATEST.json > /tmp/groq-complete.stdout 2> /tmp/groq-complete.stderr
           code=$?
           set -e
-          BATCH_EXIT="$code" python - <<'PY'
+          SUITE_EXIT="$code" python - <<'PY'
           import json, os
           from datetime import datetime, timezone
           from pathlib import Path
           def tail(path):
-              try: return Path(path).read_text(encoding='utf-8',errors='replace')[-5000:]
+              try: return Path(path).read_text(encoding='utf-8',errors='replace')[-8000:]
               except Exception: return ''
-          Path('research_entity/runtime/groq_8b_proxy/WORKFLOW_DIAGNOSTIC.json').write_text(json.dumps({
-            'schema_version':'1.1','checked_at':datetime.now(timezone.utc).isoformat(),
-            'exit_code':int(os.environ['BATCH_EXIT']),
-            'latest_result_exists':Path('research_entity/runtime/groq_8b_proxy/LATEST.json').exists(),
-            'stdout_tail':tail('/tmp/groq-batch.stdout'),'stderr_tail':tail('/tmp/groq-batch.stderr'),
-            'credential_value_exposed':False
-          },ensure_ascii=False,indent=2)+'\n')
-          PY
-
-      - name: Run normalized semantic supplement
-        run: |
-          set +e
-          python tools/groq_8b_proxy_supplement.py --output research_entity/runtime/groq_8b_proxy/SUPPLEMENT_LATEST.json > /tmp/groq-supp.stdout 2> /tmp/groq-supp.stderr
-          code=$?
-          set -e
-          SUPP_EXIT="$code" python - <<'PY'
-          import json, os
-          from datetime import datetime, timezone
-          from pathlib import Path
-          def tail(path):
-              try: return Path(path).read_text(encoding='utf-8',errors='replace')[-5000:]
-              except Exception: return ''
-          Path('research_entity/runtime/groq_8b_proxy/SUPPLEMENT_DIAGNOSTIC.json').write_text(json.dumps({
+          Path('research_entity/runtime/groq_8b_proxy/COMPLETE_DIAGNOSTIC.json').write_text(json.dumps({
             'schema_version':'1.0','checked_at':datetime.now(timezone.utc).isoformat(),
-            'exit_code':int(os.environ['SUPP_EXIT']),
-            'result_exists':Path('research_entity/runtime/groq_8b_proxy/SUPPLEMENT_LATEST.json').exists(),
-            'stdout_tail':tail('/tmp/groq-supp.stdout'),'stderr_tail':tail('/tmp/groq-supp.stderr'),
+            'exit_code':int(os.environ['SUITE_EXIT']),
+            'result_exists':Path('research_entity/runtime/groq_8b_proxy/COMPLETE_LATEST.json').exists(),
+            'stdout_tail':tail('/tmp/groq-complete.stdout'),'stderr_tail':tail('/tmp/groq-complete.stderr'),
             'credential_value_exposed':False
           },ensure_ascii=False,indent=2)+'\n')
           PY
 
-      - name: Archive immutable results and extend receipt
+      - name: Archive immutable result and extend verification receipt
         run: |
           python - <<'PY'
           import json, shutil
           from pathlib import Path
-          base=Path('research_entity/runtime/groq_8b_proxy')
-          archived=[]; total_exp=0; total_fail=0
-          for name in ['LATEST.json','SUPPLEMENT_LATEST.json']:
-              p=base/name
-              if not p.exists(): continue
-              d=json.loads(p.read_text())
-              out=base/(d['run_id']+'.json')
-              shutil.copy2(p,out); archived.append(str(out))
-              total_exp += len(d.get('experiments',[])); total_fail += len(d.get('failures',[]))
+          latest=Path('research_entity/runtime/groq_8b_proxy/COMPLETE_LATEST.json')
+          if not latest.exists(): raise SystemExit(0)
+          d=json.loads(latest.read_text())
+          out=latest.parent/(d['run_id']+'.json'); shutil.copy2(latest,out)
           rp=Path('research_entity/runtime/groq_verification.json')
           receipt=json.loads(rp.read_text()) if rp.exists() else {}
           receipt.update({
-            'schema_version':'1.1','status':'RUNTIME_VERIFIED','provider':'Groq','model':'llama-3.1-8b-instant',
+            'schema_version':'1.2','status':'RUNTIME_VERIFIED','provider':'Groq','model':d['model'],
             'executed_model_class':'8B','evidence_role':'8b_proxy_for_4b',
-            'experiment_count':total_exp,'failure_count':total_fail,
-            'credential_value_exposed':False,'result_paths':archived,
+            'run_id':d['run_id'],'experiment_count':len(d.get('experiments',[])),
+            'failure_count':len(d.get('failures',[])),'credential_value_exposed':False,
+            'complete_result_path':str(out)
           })
           rp.write_text(json.dumps(receipt,indent=2)+'\n')
           PY
 
-      - name: Commit sanitized proxy results, diagnostics and provider state
+      - name: Commit sanitized complete suite
         run: |
           git config user.name 'rae-groq-experiment-runner'
           git config user.email 'rae-groq-experiment-runner@users.noreply.github.com'

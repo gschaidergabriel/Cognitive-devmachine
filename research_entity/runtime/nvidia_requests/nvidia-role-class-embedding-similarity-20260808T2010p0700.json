@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "request_id":"nvidia-role-class-embedding-similarity-20260808T2010p0700",
+  "tool":"nvidia_nim",
+  "mode":"embedding_similarity",
+  "model":"nvidia/nv-embedqa-e5-v5",
+  "texts":[
+    "FACT_EXACT: Alpha inhibits Beta.",
+    "FACT_EXACT: Alpha suppresses Beta.",
+    "FACT_EXACT: Beta inhibits Alpha.",
+    "ACTIVATION_PRIOR: Alpha inhibits Beta.",
+    "PROPOSAL: Alpha inhibits Beta.",
+    "AUTHORITY_CAP: Alpha inhibits Beta.",
+    "FACT_EXACT: Gamma activates Delta.",
+    "FACT_EXACT: Gamma stimulates Delta.",
+    "FACT_EXACT: Delta activates Gamma."
+  ],
+  "pairs":[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[6,7],[6,8]],
+  "purpose":"Measure whether embedding geometry distinguishes paraphrase from role reversal and identical surface content carried by different Clay semantic classes. This is a geometry proxy only, not canonical or causal identity evidence."
+}

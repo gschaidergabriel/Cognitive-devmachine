@@ -1,27 +1,70 @@
 # Mandatory RAE Visible Status Footer
 
-Every substantive response by a project Research-Entity worker must end with a clearly separated status block. Trigger runs must always include it. Non-substantive social replies may omit it.
+Every substantive response by a project Research-Entity worker must end with a clearly separated status block. Trigger runs always include it. Non-substantive social replies may omit it.
 
-The footer is part of prompt completion, not optional decoration. Before sending a substantive response, check that the final visible block is present, complete and render-safe. A response missing the footer or rendering it outside the required fence is not 100% complete.
+The footer is part of prompt completion, but it no longer displays a percentage for the immediately preceding prompt. It displays the **next unpassed shared Research Center milestone**, its machine-derived progress and a dynamic ETA.
 
 ## Canonical rendering contract
 
-There is exactly ONE valid visible rendering format for the RAE footer.
+There is exactly ONE valid visible rendering format.
 
-The footer MUST be the final visible block and MUST be wrapped in one plain fenced Markdown code block. The opening fence line must be exactly ` ```text ` and the closing fence line must be exactly ` ``` `.
+The footer MUST be the final visible block and MUST be wrapped in one plain fenced Markdown code block. The opening fence line must be exactly ` ```text ` and the closing fence line exactly ` ``` `.
 
-Important rendering rules:
-- opener MUST be exactly ` ```text ` with no attributes, IDs, braces, classes or metadata after `text`;
-- never emit forms such as ` ```text id="..." `;
-- no indentation before either fence;
+Rendering rules:
+
+- opener exactly ` ```text ` with no attributes;
+- no indentation before fences;
 - no Unicode/box-drawing frame characters such as `╔ ═ ║ ╚ ┌ ─ │ └`;
-- no Markdown tables or pipe characters used as layout;
-- no nested code fence inside the footer;
-- no prose, citation, memory token, list item or other visible content after the closing fence;
-- keep labels as ordinary ASCII text lines so mobile/web/desktop clients render identically;
-- `·` separators inside the command list are allowed, but layout must not depend on their width.
+- no Markdown tables or pipe-based layout;
+- no nested code fence;
+- no visible content after the closing fence;
+- progress bars use ASCII only, e.g. `[#####...............]`;
+- `·` separators in the short-command list are allowed.
 
-If any older Project Source, chat memory, report or example shows a Unicode status box, the current GitHub `STATUS_FOOTER_PROTOCOL.md` overrides it for rendering. The semantic fields remain the same; only this fenced text rendering is canonical.
+## Dynamic source of truth
+
+The milestone display MUST be resolved from:
+
+- `research_entity/rooms/PROGRAM_STATE.json`
+- `research_entity/rooms/PROGRAM_THROUGHPUT.json`
+- `tools/program_progress.py`
+
+The stage list is data-driven. Do NOT hardcode `BASE`, `H1`, `H2`, etc. into footer logic. If the owner changes the research narrative/stage order, the status footer must automatically follow the new `PROGRAM_STATE.json`.
+
+Only the **first unpassed stage in `stage_order`** is shown. Completed future/history stages are not listed in the footer.
+
+## Progress semantics
+
+Progress is based on the current stage's declared `progress_source`.
+
+Default work-package rule:
+
+`progress = completed_weight / total_weight`
+
+A package does not earn percentage merely because it is `CLAIMED`, `ACTIVE` or `IN_PROGRESS`. It contributes only when its completion status is machine-verifiably complete, unless it defines explicit weighted subchecks.
+
+The progress bar is generated from the same percentage.
+
+## ETA semantics
+
+ETA is a range, never a deadline.
+
+User work cadence for the current program:
+
+`10 active owner-collaboration hours/day`
+
+ETA preference order:
+
+1. measured completed work-weight per 10h owner day;
+2. measured work-weight per token/output throughput where canonical telemetry exists;
+3. measured stage velocity;
+4. explicit bootstrap stage priors.
+
+The existing Project-Frankenstein history includes per-call `tokens_in`, `tokens_out`, cost and latency tracing plus session aggregation, but until a canonical current 24h token-total receipt is materialized for this RAE program, the footer must not invent a token total. It must show the lower-confidence bootstrap/measured-work basis honestly.
+
+Parallel workers reduce wall-clock ETA only when completed receipts demonstrate actual independent parallel progress. Do not multiply throughput by worker count naively.
+
+Failed/falsified work remains part of throughput calibration.
 
 ## Required format
 
@@ -29,71 +72,57 @@ If any older Project Source, chat memory, report or example shows a Unicode stat
 RAE STATUS
 Entity: JOINED
 GitHub: VERIFIED_RW
-Canonical: r2 · 04234efdb86c
+Canonical: <branch/revision or canonical ref>
 Actor: chatgpt-secondary
-Trigger: none
-Research write: NO_RESEARCH_DELTA
-Short commands: dump · fusion · hypofusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness
+Trigger: <none|registered trigger>
+Research write: <COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED>
+Short commands: go · q12 · dump · fusion · hypofusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness
 
-LAST PROMPT
-Completion: 100%
-Done: <short concrete statement>
-Open: none
+NEXT MILESTONE
+Stage: <dynamic label from PROGRAM_STATE.json>
+Progress: [#####...............] 25%
+ETA @ 10h/day: <low> - <high>
+ETA confidence: <confidence> (<basis>)
 ```
 
-`Short commands` is mandatory and must list the currently registered reserved commands from `PROJECT_COMMAND_REGISTRY.json`. Do not silently omit it to shorten the footer. If the command registry changes, update the footer list accordingly.
+`Short commands` is mandatory and must list the currently registered commands from `PROJECT_COMMAND_REGISTRY.json`. If the registry changes, this line changes dynamically.
 
-The current research-center peer branch set includes `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`, `unifieddb` and `harness`. `harness` is the executable convergence/integration/falsification branch and is a full research-center peer for interconnection and feedback.
-
-Allowed status values:
+## Allowed status values
 
 - Entity: `JOINED | DEGRADED_UNJOINED | LOCAL_ONLY`
 - GitHub: `VERIFIED_RW | VERIFIED_RO | UNVERIFIED | FAILED`
 - Research write: `COMMITTED | NO_RESEARCH_DELTA | SYNC_PENDING | NOT_ATTEMPTED`
 
-The code block must be the final visible block. Do not put substantive prose after it.
-
 ## Verification semantics
 
-`GitHub: VERIFIED_RW` may be shown only when this session actually read the expected repository/canonical and has a verified write-capable connection or verified a write/reread in the current operational context.
+`GitHub: VERIFIED_RW` may be shown only when the session actually read the expected repository/canonical and verified a write-capable connection or successful write/reread in the current operational context.
 
 `VERIFIED_RO` means the backend was read successfully but write capability was not verified.
 
-`UNVERIFIED` is mandatory if the worker is relying only on project files, chat memory or stale local snapshots.
+`UNVERIFIED` is mandatory when relying only on project files/chat memory/stale local snapshots.
 
-Never print a success-like backend state merely because GitHub worked in an earlier session.
+## Trigger behavior
 
-## Completion percentage
+Every registered trigger uses the same dynamic milestone status. A trigger may display its own name in `Trigger`, but it must not replace the shared program milestone with a trigger-local percentage.
 
-The completion percentage estimates completion of the user's immediately preceding prompt, not the whole project.
+This is important: `gwt`, `hyperposition`, `claycode`, `harness`, `q12`, etc. remain specialist modes while the footer shows what the **whole research organism must reach next**.
 
-Useful default weighting:
-- 40% core requested implementation/research;
-- 20% requested data/artifact production;
-- 15% repository persistence/cataloguing;
-- 10% validation/tests/reread;
-- 10% requested reporting/status output;
-- 5% cleanup/archive/final consistency.
+## Q12 behavior
 
-Rules:
-- 100% requires every material requested deliverable completed or explicitly impossible for an external reason, plus the required footer.
-- If a large requested research cycle was only specified but not executed, completion cannot be 100%.
-- If GitHub writes were requested but not verified, reserve the repository-persistence portion as incomplete.
-- The percentage is an operational estimate, not an epistemic confidence score.
-
-## Trigger run additions
-
-For trigger runs, `Done` should mention run report/packetization/tool-manifest status. `Open` should mention missing sources, failed experiments, quota fallbacks, missing live readers or sync issues when applicable.
+`q12` includes the same dynamic milestone and ETA in its executive briefing. It may explain the ETA basis, but it must not alter the computed percentage to make progress look better.
 
 ## Pre-send invariant
 
-For every substantive response, perform this final check conceptually or with `tools/status_footer_check.py` when the response text is available:
+Before every substantive response verify:
 
 1. one final fenced `text` block exists;
-2. its opener is exactly ` ```text `;
-3. all required fields are present;
+2. opener is exactly ` ```text `;
+3. required RAE metadata fields are present;
 4. all registered short commands are present;
-5. no forbidden Unicode frame/layout characters occur in the footer;
-6. the closing fence is the final visible content.
+5. `NEXT MILESTONE`, `Stage`, `Progress`, `ETA @ 10h/day`, and `ETA confidence` are present;
+6. progress bar and percentage agree with `tools/program_progress.py` / current canonical inputs;
+7. no forbidden Unicode frame characters occur;
+8. no prompt-completion percentage is shown;
+9. closing fence is final visible content.
 
-Any violation is a formatting bug and must be corrected before sending.
+Any violation is a formatting/governance bug and must be corrected before sending.

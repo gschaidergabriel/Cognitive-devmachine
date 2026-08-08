@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809-chatgpt-secondary-pf-gwt-runtime-delta-b4f2",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "lane": "gwt_emergence_runtime_history",
+  "status": "PARTIAL_EXECUTED_NOT_COUNTED_UNTIL_MANIFEST_FREEZE",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "ancestry": {
+    "extends_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
+    "non_overlap": "This receipt adds current-head GWT/thalamus implementation evidence, supersession evidence, and failure-history test oracles not contained in the surface-index receipt."
+  },
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "files_read": [
+      "CONSCIOUSNESS.md",
+      "papers/PARAMETER_ARCHITECTURE.md",
+      "papers/GRF_IMPLEMENTATION_BRIDGE.md",
+      "services/consciousness_daemon.py",
+      "services/global_workspace.py",
+      "services/thalamus.py"
+    ],
+    "history_queries": [
+      "AURA-related commit history including 62149151ba704479f46265a5b8b5865fd38ba99d",
+      "audit/failure commits including 07f8e26a296cf5bdcd4add14ee42ab501d09422b, 91bde413effdf2ecc67829e1088e2ec4b1b19868, 475652157d19b9f27625f07c8b9c125a04267b59, 92791d1cf0c2580688da1666d6e32386beaa5139, a2e611c860b02a906d7a5f80cf99615d66bf5ae7, 3a47fef19027b2677bf96c6d5d6965364251a425"
+    ]
+  },
+  "findings": [
+    {
+      "finding_id": "PF-GWT-001",
+      "epistemic_class": "CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "CURRENT_AT_FROZEN_HEAD",
+      "claim": "services/global_workspace.py implements a thread-safe broadcast bus and history ring; publish() dispatches each published event to all registered subscribers. The module docstring says one coalition wins workspace access, but this file contains no exclusive winner-selection or ignition arbitration mechanism.",
+      "constraint": "Do not infer that no competition exists anywhere in FRANK: the finding is scoped to the global_workspace module itself.",
+      "targets": ["gwt", "frank", "emergenz", "harness"],
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "next_test": "Instrument publisher->workspace->subscriber->effect causal traces, then lesion any upstream selection/gating separately from broadcast to determine whether GWT competition, ignition, broadcast and downstream effect are all independently present."
+    },
+    {
+      "finding_id": "PF-GWT-002",
+      "epistemic_class": "CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "CURRENT_AT_FROZEN_HEAD",
+      "claim": "services/thalamus.py implements real selective sensory gating: per-channel gains, novelty, habituation, mode-dependent attention weights, salience bypass, vigilance modulation, suppression thresholds, persistent baselines and top-down feedback from referenced LLM channels.",
+      "targets": ["gwt", "frank", "emergenz", "harness"],
+      "reuse_class": "DIRECT_MEASUREMENT_FOUNDATION",
+      "next_test": "Run lesion/rescue and truthful-vs-shuffled top-down feedback tests while measuring downstream broadcast/effect/re-entry receipts."
+    },
+    {
+      "finding_id": "PF-GWT-003",
+      "epistemic_class": "CURRENT_HEAD_CODE_PLUS_HISTORY_SUPERSESSION",
+      "status": "SUPERSEDED_BUT_INFORMATIVE",
+      "claim": "Historical documents still describe AURA as a live emergent integration substrate, but current-head consciousness/thalamus code explicitly neutralizes/removes AURA state and uses Swarm; commit history records the AURA-to-Swarm purge and stale prompt-fact cleanup.",
+      "targets": ["frank", "gwt", "emergenz", "clay", "harness"],
+      "reuse_class": "SUPERSEDED_BUT_INFORMATIVE",
+      "implication": "Level-0 must preserve AURA as historical mechanism lineage and negative-result evidence, not promote stale AURA documentation into current FRANK architecture."
+    },
+    {
+      "finding_id": "PF-GWT-004",
+      "epistemic_class": "HISTORICAL_OBSERVATIONAL_REPORT",
+      "status": "OPEN_REPLICATION_REQUIRED",
+      "claim": "CONSCIOUSNESS.md reports a March 4, 2026 intention-to-action-like loop across consciousness, spatial state and NeRD physics through shared state/re-entry, while explicitly acknowledging that the linguistic shift could be an LLM artifact and that the observation is not phenomenal-consciousness proof.",
+      "targets": ["gwt", "emergenz", "frank", "harness"],
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "next_test": "Replay original logs if available; compare truthful shared-state re-entry against shuffled/cut re-entry and quantify action/thought coupling under matched nulls."
+    },
+    {
+      "finding_id": "PF-GWT-005",
+      "epistemic_class": "HISTORICAL_FORMAL_GAP_SELF_REPORTED",
+      "status": "OPEN",
+      "claim": "GRF_IMPLEMENTATION_BRIDGE.md explicitly identifies FRANK's possibility space M as fragmented across independent constraint systems and the realized transition F as a family of partial mappings coupled by side effects rather than a formally unified mapping with a composition proof.",
+      "targets": ["frank", "claycode", "claygraph", "unifieddb", "hyperposition", "harness"],
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "implication": "Current ClayCode/ClayGraph/UnifiedDB work should treat explicit transition identity, shared causal episode contracts and compositional invariants as a direct response to a documented historical architecture gap."
+    },
+    {
+      "finding_id": "PF-GWT-006",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_CLUSTER",
+      "status": "CURRENTLY_RELEVANT_TEST_ORACLES",
+      "claim": "Historical audit commits record repeated failure modes including prompt-context leakage, stale hard-coded semantic facts overriding training, hypothesis cross-contamination, missing negative feedback causing a neural quality gate to rubber-stamp outputs, runtime bugs that blocked idle cognition, AURA queue/endpoint failures, and thalamic gain/relay decoupling.",
+      "targets": ["harness", "frank", "gwt", "claycode", "unifieddb"],
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "implication": "These failures should become regression/adversarial fixtures in H1/H2/H3 rather than being forgotten as obsolete bugs."
+    }
+  ],
+  "branch_feedback": {
+    "gwt": "Separate selection/gating, ignition, broadcast, effect and re-entry in all future claims; current historical code directly supports gating+broadcast but not a single-module exclusive winner claim.",
+    "frank": "Preserve current-code-over-doc precedence; AURA lineage is historical, Swarm is current at frozen head; centralize semantic authority to prevent stale prompt facts.",
+    "emergenz": "Treat historical intention-action observation as an open causal candidate requiring shuffled/cut re-entry nulls, not as consciousness proof.",
+    "harness": "Import historical failures as regression fixtures and require causal receipts across selection->broadcast->effect->re-entry.",
+    "claycode": "Use explicit typed transition/episode contracts to avoid the historically fragmented partial-mapping/side-effect problem.",
+    "claygraph": "Preserve temporal supersession/provenance so stale AURA-era claims cannot masquerade as current architecture.",
+    "unifieddb": "Centralize semantic identity/version authority while retaining physically separable stores if evidence favors it; prevent prompt literals from becoming competing truth stores.",
+    "hyperposition": "Historical fragmented possibility-space formalization is a candidate motivation for explicit higher-order state/relationship semantics, but not evidence that any specific hyperposition backend is correct.",
+    "clay": "Carry forward causal gating/re-entry mechanisms and negative-result regression constraints; do not inherit stale AURA assumptions."
+  },
+  "progress_accounting": {
+    "combined_denominator_state": "NOT_FROZEN",
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "historical_earned_work_credit_awarded": false,
+    "reason": "This is a semantic provisional shard; exact source obligations are not yet frozen."
+  },
+  "blockers": [
+    {
+      "class": "EXTERNAL_ACCESS_BLOCKER",
+      "source": "Drive clay archive",
+      "detail": "663552000-byte tar.xz exceeds current connector 104857600-byte raw-download limit; archive-internal manifest remains unavailable."
+    },
+    {
+      "class": "CONNECTOR_CAPABILITY_GAP",
+      "source": "Project-Frankenstein",
+      "detail": "Current connector surface used in this run does not expose an exact recursive git-tree enumeration primitive, so exact tree obligations remain unfrozen even though file/history shards can be analyzed."
+    }
+  ]
+}

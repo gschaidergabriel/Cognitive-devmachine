@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T1712p0700-chatgpt-secondary-r2",
+  "target":"frank",
+  "effect":["REVISE","NEW_EXPERIMENT"],
+  "primary_module":"M.MEMORY_FABRIC",
+  "proposal":{
+    "components":[
+      {"id":"M.MEMORY_SEMANTIC_EPOCHS","role":"derived immutable resident semantic base/delta epochs with atomic current pointer and exact-source fallback"},
+      {"id":"M.MEMORY_LATENT_FIELD","role":"sparse event-driven activation/inhibition/decay between model calls; no model invocation required"},
+      {"id":"OP.MEMORY_EPOCH_PUBLISH","role":"validate semantic delta then publish one new graph epoch"},
+      {"id":"OP.MEMORY_FIELD_UPDATE","role":"fast local cue/event propagation over published epoch"},
+      {"id":"OP.MEMORY_ASSEMBLY_COMPILE","role":"freeze graph_epoch + activation_epoch + CognitiveFrame into bounded model-facing memory organ"},
+      {"id":"OP.MEMORY_GRAPH_ESCALATE","role":"optional relation discovery when Assembly/baseline is insufficient"},
+      {"id":"OP.MEMORY_EXACT_VALIDATE","role":"validate current/exact assertions against authoritative anchors"}
+    ],
+    "state_delta":{"S.ACTIVE_ASSEMBLY_add":["graph_epoch_id","activation_epoch_id","basis_frame_id","trigger_class","activation_roots","activation_path_refs","latent_field_age","exact_anchor_refs","ttl","no_authority"]},
+    "event_flow":"authoritative event -> semantic projector -> validated graph epoch publish -> cheap latent field update -> later trigger/query -> Assembly compile -> optional graph escalation -> exact validation -> workspace candidate"
+  },
+  "architectural_reason":"Restores the original Synthetic Clay property that memory can influence what becomes thinkable next without forcing every request through expensive graph traversal. Continuous state evolution is handled by cheap fast processes; model-visible reasoning remains bounded and epoch-consistent.",
+  "hard_non_changes":["M.DURABLE_EVENT_STATE remains exact authority","S.COGNITIVE_FRAME remains causal current-state contract","M.WORKSPACE_ARBITER owns GWT selection/ignition","graph activation is not workspace ignition","M.CAPABILITY_GATEWAY/K0 remains sole external effect authority"],
+  "experiments_for_frank":[
+    "event where query-only agent fails to request memory: compare no-field vs truthful-field vs shuffled-field at equal visible Assembly facts",
+    "stale semantic epoch against fresh CognitiveFrame must force exact refresh/reject",
+    "concurrent projector updates while requests pin old/new epochs; no mixed Assembly allowed",
+    "activation saturation/noisy-hub lesion with decay-only vs inhibition",
+    "outcome-conditioned plasticity vs shuffled outcome receipts"
+  ],
+  "implementation_status":"RESEARCH_CANDIDATE_ONLY"
+}

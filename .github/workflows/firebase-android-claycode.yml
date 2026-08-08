@@ -1,0 +1,220 @@
+name: Firebase Android ClayCode Lab
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android-claycode-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Verify Firebase/Test Lab access
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcloud config set project clay-dec2f
+          gcloud auth list --filter=status:ACTIVE --format='value(account)'
+          gcloud services list --enabled --filter='name:(testing.googleapis.com OR toolresults.googleapis.com)' --format='value(name)'
+          gcloud firebase test android models list --format='table(id,manufacturer,name,form,formFactor)' | head -n 40
+          gcloud firebase test android versions list --format='table(id,version,tags)' | head -n 40
+
+      - name: Generate minimal Android ClayCode semantic harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p app/src/main/java/net/seimensch/claylab
+          mkdir -p app/src/androidTest/java/net/seimensch/claylab
+
+          cat > settings.gradle <<'EOF'
+          pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
+          dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }
+          rootProject.name = 'ClayAndroidLab'
+          include ':app'
+          EOF
+
+          cat > build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application' version '8.5.2' apply false
+          }
+          EOF
+
+          cat > app/build.gradle <<'EOF'
+          plugins { id 'com.android.application' }
+
+          android {
+              namespace 'net.seimensch.claylab'
+              compileSdk 35
+
+              defaultConfig {
+                  applicationId 'net.seimensch.claylab'
+                  minSdk 26
+                  targetSdk 35
+                  versionCode 1
+                  versionName '0.1'
+                  testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+              }
+          }
+
+          dependencies {
+              androidTestImplementation 'androidx.test:runner:1.6.2'
+              androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+              androidTestImplementation 'junit:junit:4.13.2'
+          }
+          EOF
+
+          cat > app/src/main/AndroidManifest.xml <<'EOF'
+          <manifest xmlns:android='http://schemas.android.com/apk/res/android'>
+            <application android:theme='@android:style/Theme.Material.Light.NoActionBar' android:label='Clay Android Lab'>
+              <activity android:name='.MainActivity' android:exported='true'>
+                <intent-filter>
+                  <action android:name='android.intent.action.MAIN'/>
+                  <category android:name='android.intent.category.LAUNCHER'/>
+                </intent-filter>
+              </activity>
+            </application>
+          </manifest>
+          EOF
+
+          cat > app/src/main/java/net/seimensch/claylab/ClayRuntime.java <<'EOF'
+          package net.seimensch.claylab;
+
+          import java.util.LinkedHashMap;
+          import java.util.Map;
+
+          public final class ClayRuntime {
+              private ClayRuntime() {}
+
+              public static int evaluate(String source) {
+                  Map<String, Integer> vars = new LinkedHashMap<>();
+                  Integer emitted = null;
+                  for (String raw : source.split(";")) {
+                      String op = raw.trim();
+                      if (op.isEmpty()) continue;
+                      if (op.startsWith("i32:")) {
+                          String[] p = op.substring(4).split("=", 2);
+                          require(p.length == 2, "bad i32 declaration");
+                          vars.put(p[0].trim(), Integer.parseInt(p[1].trim()));
+                      } else if (op.startsWith("mul:")) {
+                          String[] p = op.substring(4).split("=", 2);
+                          require(p.length == 2, "bad mul");
+                          String[] args = p[1].split("\\*", 2);
+                          require(args.length == 2, "bad mul args");
+                          int a = get(vars, args[0]);
+                          int b = get(vars, args[1]);
+                          vars.put(p[0].trim(), Math.multiplyExact(a, b));
+                      } else if (op.startsWith("assert:")) {
+                          String[] p = op.substring(7).split("=", 2);
+                          require(p.length == 2, "bad assert");
+                          int observed = get(vars, p[0]);
+                          int expected = Integer.parseInt(p[1].trim());
+                          require(observed == expected, "assertion failed");
+                      } else if (op.startsWith("emit:")) {
+                          emitted = get(vars, op.substring(5));
+                      } else {
+                          throw new IllegalArgumentException("unknown ClayCode operation");
+                      }
+                  }
+                  if (emitted == null) throw new IllegalArgumentException("missing emit");
+                  return emitted;
+              }
+
+              private static int get(Map<String, Integer> vars, String key) {
+                  Integer v = vars.get(key.trim());
+                  if (v == null) throw new IllegalArgumentException("unknown variable: " + key.trim());
+                  return v;
+              }
+
+              private static void require(boolean ok, String message) {
+                  if (!ok) throw new IllegalArgumentException(message);
+              }
+          }
+          EOF
+
+          cat > app/src/main/java/net/seimensch/claylab/MainActivity.java <<'EOF'
+          package net.seimensch.claylab;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.widget.TextView;
+
+          public final class MainActivity extends Activity {
+              @Override public void onCreate(Bundle state) {
+                  super.onCreate(state);
+                  int out = ClayRuntime.evaluate("i32:x=21;i32:y=2;mul:z=x*y;assert:z=42;emit:z");
+                  TextView view = new TextView(this);
+                  view.setText("CLAYCODE_ANDROID_OK:" + out);
+                  view.setTextSize(24f);
+                  setContentView(view);
+              }
+          }
+          EOF
+
+          cat > app/src/androidTest/java/net/seimensch/claylab/ClayRuntimeInstrumentedTest.java <<'EOF'
+          package net.seimensch.claylab;
+
+          import static org.junit.Assert.assertEquals;
+          import static org.junit.Assert.assertThrows;
+
+          import androidx.test.ext.junit.runners.AndroidJUnit4;
+          import org.junit.Test;
+          import org.junit.runner.RunWith;
+
+          @RunWith(AndroidJUnit4.class)
+          public final class ClayRuntimeInstrumentedTest {
+              @Test public void typedArithmeticAndAssertionPreserveSemantics() {
+                  int out = ClayRuntime.evaluate("i32:x=21;i32:y=2;mul:z=x*y;assert:z=42;emit:z");
+                  assertEquals(42, out);
+              }
+
+              @Test public void unknownReferenceIsRejected() {
+                  assertThrows(IllegalArgumentException.class,
+                      () -> ClayRuntime.evaluate("i32:x=21;mul:z=x*missing;emit:z"));
+              }
+          }
+          EOF
+
+      - name: Build APK and instrumentation APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          gradle :app:assembleDebug :app:assembleDebugAndroidTest --stacktrace
+          ls -lh app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+
+      - name: Run on Firebase Test Lab ARM Android
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcloud firebase test android run \
+            --type instrumentation \
+            --app app/build/outputs/apk/debug/app-debug.apk \
+            --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+            --device model=MediumPhone.arm,version=35,locale=en,orientation=portrait \
+            --timeout 5m \
+            --no-record-video \
+            --project clay-dec2f

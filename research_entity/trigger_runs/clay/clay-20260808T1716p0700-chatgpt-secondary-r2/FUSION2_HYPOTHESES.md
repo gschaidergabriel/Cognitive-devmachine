@@ -1,0 +1,36 @@
+# Clay G9 — Fusion 2 transformed hypotheses
+
+These 24 hypotheses are materially transformed after the seven-branch mesh, fresh ClayGraph C4, external 2026 memory/security research, local experiments, and the new Groq raw-vs-compiled projection arm. They are not promoted claims.
+
+## Tier 1 — highest information value
+
+1. **H-G9-F2-01 — Selection-Integrity Boundary.** For effect-bound cognition, authenticated facts are insufficient if writable/untrusted graph structure can alter candidate membership. Test structural attacks against record-only provenance vs authenticated/authorized selection view.
+2. **H-G9-F2-02 — Deterministic-before-generative compiler.** ClayCode should compile and execute deterministic filters, joins, min/max, uniqueness, version and capability checks before any model call; the model receives only unresolved semantic alternatives. Falsify if end-to-end target utility/cost is worse.
+3. **H-G9-F2-03 — Query-plan-bound OTCC.** OTCC authority envelopes must bind not only op semantics but the query/projection plan that selected model-visible evidence. Falsify with plan-substitution fuzzing showing no authority widening.
+4. **H-G9-F2-04 — Epoch-pinned Cognitive Assembly.** A model decision unit should bind `{state/frame epoch, graph epoch, activation epoch, projection/query-plan id}` so replay can distinguish truth, association, selection and presentation. Falsify if fields are redundant under real replay.
+5. **H-G9-F2-05 — Read-aware compaction governor.** Graph/index compaction should be based on expected future read amplification + update magnitude + recovery debt, not a fixed percentage. Current seeded proxy achieved 2.4% regret vs oracle; falsify on held-out real traces.
+6. **H-G9-F2-06 — Sparse latent field with active/materialized separation.** Lazy activation can be cheap, but materialized decayed state accumulates; active salience and stored lazy entries require separate budgets/GC. Falsify if long-run memory stays bounded without explicit reclamation.
+7. **H-G9-F2-07 — Fast index + graph escalation.** FTS/exact-address retrieval should be default; graph traversal/activation is an escalation for relational intent, uncertainty or evidence-chain gaps. Falsify if always-graph is Pareto-superior on target FRANK tasks.
+8. **H-G9-F2-08 — Exact-addressable semantic zoom.** Append-only exact records with bounded summaries/pointers and uncertainty-triggered zoom should dominate either summary-only or always-full context on useful accuracy/context cost. Falsify on long-horizon target workloads.
+9. **H-G9-F2-09 — Projection integrity is semantic, not only cryptographic.** `{basis, hashes, reader version}` detects stale/mutated projections but not trusted semantic miscompile; property/roundtrip checks are required. Falsify if metadata alone detects all real miscompilation classes.
+10. **H-G9-F2-10 — GRAPH_PRIOR × WORKSPACE_SELECTION × PROJECTION × REENTRY factorial.** These four mechanisms must be independently intervened while frame/epoch/content/order are pinned; otherwise GWT effects remain confounded. Falsify if factors cannot be independently manipulated in FRANK/twin.
+11. **H-G9-F2-11 — Truthful-field causal memory test.** The decisive latent-memory test is `no field vs truthful field vs shuffled field` when explicit retrieval would not trigger, with equal final visible facts/order/token budget. Falsify if truthful field gives no specific task effect.
+12. **H-G9-F2-12 — Selection-safe effect gateway.** Before irreversible effect release, gateway validation should include capability/freshness plus evidence-selection provenance when the action depends on graph-selected memory. Falsify if selection attacks cannot alter effect decisions under record-authenticated inputs.
+
+## Tier 2 — architecture and transfer hypotheses
+
+13. **H-G9-F2-13 — Semantic-shift consolidation.** Rapid episodic writes should consolidate into stable associative graph epochs on semantic/event shifts rather than every interaction. External GAM/ARC-style evidence motivates; target test decides cost/accuracy.
+14. **H-G9-F2-14 — Selector topology Q.** Hyperposition gains an operational selector/accessibility view Q distinct from semantic S, coordination C and physical P; Q may vary without changing truth. Reject Q if it adds no explanatory/predictive value.
+15. **H-G9-F2-15 — Reader-role projection.** Canonical higher-order relations remain n-ary/reified; small-reader projection should use explicit role-labelled relation instances. Falsify on pinned Qwen3-4B with randomized non-leaky baselines.
+16. **H-G9-F2-16 — Multiobjective maintenance debt.** Maintenance has mean, tail, write, memory and recovery components; no one debt scalar should silently optimize all. Current proxy lowered p95 while worsening mean. Falsify if a stable scalar dominates across traces.
+17. **H-G9-F2-17 — Effect-critical selector hardening.** Strict authenticated selection can be concentrated on effect/authority paths; exploratory cognition may use wider associative structure but cannot directly authorize effects. Falsify with cross-boundary attack tests.
+18. **H-G9-F2-18 — Retrieval security metric.** Evaluate `selection reallocation under adversarial structure` alongside Recall/NDCG/latency. Falsify if this metric never predicts effect/answer failures beyond ordinary metrics.
+19. **H-G9-F2-19 — EVI includes representation freshness.** Freshness value should include graph/projection/query-plan epoch drift as well as source/state age. Falsify if representation drift never changes downstream choices with fixed source facts.
+20. **H-G9-F2-20 — Dynamic model role narrowing.** As deterministic compilation improves, small models move from state interpreter toward ambiguity/semantic resolver. Falsify if broad raw-state reasoning remains more accurate/cost-efficient after compiler overhead.
+21. **H-G9-F2-21 — Local-first layered substrate.** Exact SQLite/WAL/FTS plus semantic graph/vector overlays may be sufficient for FRANK before any physical graph-DB migration. Falsify only with target workloads showing required semantics/performance unavailable in layered local storage.
+22. **H-G9-F2-22 — Cross-platform policy learned from shadows, not copied constants.** Compaction/escalation/zoom/speculation thresholds should be calibrated per backend/thermal/KV regime. Falsify if one policy is Pareto-optimal across server and Android sustained traces.
+23. **H-G9-F2-23 — Assembly emergence rather than field persistence.** If a memory mechanism qualifies for an emergence certificate, the candidate unit is the causal epoch-pinned Assembly/function, not salience persistence itself. Falsify if Assembly lesion/rescue has no stable function-specific signature.
+24. **H-G9-F2-24 — Anti-echo self-evolution.** Reader→writer feedback in self-evolving graph memory must keep source ancestry, selector changes and reward-driven structural updates separately auditable; benchmark improvement alone cannot count as independent evidence. Falsify if provenance/selection audits provide no added protection or explanatory power.
+
+## Fusion decision
+The strongest transformed architecture is **EPOCH-G9 — Epoched Projection, Orchestration & Causal-Handoff Kernel**. It is an OPEN candidate layered on CASK-G8, not a canonical generation promotion.

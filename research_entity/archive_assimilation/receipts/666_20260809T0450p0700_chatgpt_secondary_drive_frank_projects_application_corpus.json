@@ -1,0 +1,104 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0450+0700-chatgpt-secondary-drive-frank-projects-application-corpus",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "lane":"DRIVE_FRANK_PROJECTS_GENERAL_PURPOSE_APPLICATION_CORPUS",
+  "status":"ANALYZED_BOUNDED_MANIFEST_AND_RUNTIME_PROBES_COMPLETE",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_FRANK_PROJECTS_APPLICATION_CORPUS_MANIFEST.json",
+  "source_root":{"drive_folder_id":"1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw","direct_project_folders":14},
+  "findings":[
+    {
+      "finding_id":"DRIVE-PROJECTS-001",
+      "epistemic_class":"DIRECT_DRIVE_TREE_AND_SOURCE_EVIDENCE",
+      "status":"SUPPORTED",
+      "claim":"The frank-projects subtree contains 14 project folders but they are not 14 equivalent executable applications. They separate into executable-source/partial pipelines, plan/research-only projects, browser/task scaffolds, a static website, and a trivial stub.",
+      "targets":["claycode","harness","q12_index"],
+      "implication":"ClayCode general-purpose evaluation must classify source maturity before reuse; project-folder count is not executable-application count."
+    },
+    {
+      "finding_id":"DRIVE-PROJECTS-002",
+      "epistemic_class":"DIRECT_SOURCE_PLUS_LOCAL_RUNTIME_EVIDENCE",
+      "status":"SUPPORTED",
+      "claim":"ev-scout-graz provides reusable host-reference behavior for file-backed state, dedupe, deterministic scoring and HTTP-client scanner structure. Selected ev_scorer.py and ev_scanner.py parse successfully; isolated local runtime probes passed deterministic scoring and JSON add/dedupe/save/reload behavior without invoking external network scans.",
+      "targets":["claycode","harness"],
+      "implication":"Use these historical sources as APP-01/HTTP-client/state differential fixtures when implementing ClayCode parser/runtime/stdlib/FFI. The historical Python result is an oracle input, not ClayCode acceptance by itself."
+    },
+    {
+      "finding_id":"DRIVE-PROJECTS-003",
+      "epistemic_class":"DIRECT_SOURCE_EVIDENCE",
+      "status":"SUPPORTED",
+      "claim":"autoscout-e-car-hunter contains a real multi-file process pipeline: autoscout_hunter.py invokes scoring_engine.py and contact_agent.py as subprocesses, consumes JSON artifacts and emits an executive summary; its code subtree also contains scoring/contact modules.",
+      "targets":["claycode","harness"],
+      "implication":"Provides a concrete reference fixture for CLI orchestration, files, subprocess/resource effects and failure propagation under explicit capability authority."
+    },
+    {
+      "finding_id":"DRIVE-PROJECTS-004",
+      "epistemic_class":"DIRECT_SOURCE_NEGATIVE_RESULT",
+      "status":"NEGATIVE_RESULT_VALUE",
+      "claim":"autocarfinder-pro's search agent is syntactically executable but explicitly notes that its HTML extraction is simplified and a real implementation needs an HTML parser; several other project folders are plans or browser traces with little/no executable code.",
+      "targets":["claycode","harness","q12_index"],
+      "implication":"Compiler/application tests must distinguish syntax validity from semantic/application completeness and preserve incomplete-source fixtures as expected-failure/repair cases."
+    },
+    {
+      "finding_id":"DRIVE-PROJECTS-005",
+      "epistemic_class":"DIRECT_STATIC_WEB_SOURCE_PLUS_PROJECT_CONTRACT",
+      "status":"SUPPORTED_WITH_SCOPE_LIMIT",
+      "claim":"video-launch-page contains a concrete responsive HTML/CSS static landing page, but no backend/server path in the inspected source. The fixed ClayCode acceptance contract explicitly states a frontend-only static generator cannot replace APP-02 HTTP server/routing/backend proof.",
+      "targets":["claycode","harness"],
+      "implication":"Reuse the page as frontend/static asset output for APP-02, while building a new ClayCode HTTP server/backend around it rather than claiming the historical page satisfies APP-02."
+    },
+    {
+      "finding_id":"DRIVE-PROJECTS-006",
+      "epistemic_class":"CROSS_CONTRACT_GAP_ANALYSIS",
+      "status":"OPEN_REQUIREMENT_GAPS",
+      "claim":"The sampled historical project corpus supplies useful CLI/files/process/HTTP-client/static-website/state fixtures but does not provide evidence for a real DB-backed service, concurrent service, executable GUI, compiler/tool, GPU/ML backend, FRANK component or full FRANK handoff.",
+      "targets":["claycode","harness"],
+      "implication":"Do not narrow the mandatory ClayCode application suite to what the archive happens to contain; missing APP classes remain new executable obligations."
+    }
+  ],
+  "runtime_evidence":[
+    {"id":"FP-APP-RUN-001","source_sha256":"7533cf1d219739937544ade3b6acd9b556ce8f34413999e628f7b576d11c3c49","source":"ev-scout-graz/ev_scorer.py","result":"PASS","observed":{"criteria_all_ok":true,"total_score":52.8,"kosten_pro_km":0.418},"network_used":false},
+    {"id":"FP-APP-RUN-002","source_sha256":"6f09e2a3c95c720fa8abe7d836feac813a9e2e62b4f0f9e31625e8d2164cf18c","source":"ev-scout-graz/ev_scanner.py","result":"PASS","observed":{"first_add":true,"duplicate_add":false,"persisted_after_reload":1},"network_used":false},
+    {"id":"FP-APP-SYNTAX-003","result":"PASS","sources":[{"path":"ev_scorer.py","sha256":"7533cf1d219739937544ade3b6acd9b556ce8f34413999e628f7b576d11c3c49"},{"path":"ev_scanner.py","sha256":"6f09e2a3c95c720fa8abe7d836feac813a9e2e62b4f0f9e31625e8d2164cf18c"},{"path":"autoscout_hunter.py","sha256":"83165266d203f5694147bba85b16512924c43106424b0f95ba21bee1eabdf985"},{"path":"ioniq5_search_agent.py","sha256":"dc449e42001ba5232d7d53ac485c310caf58b12799cce94960ff75a5620e7cdb"}],"oracle":"Python ast.parse"}
+  ],
+  "claycode_acceptance_feedback":{
+    "APP-01":"Reuse ev-scout-graz/autoscout pipeline behavior as host-reference and mutation corpus; still require Clay compile/lower/execute receipt.",
+    "APP-02":"Reuse video-launch-page HTML as frontend asset fixture; HTTP server/routing/state/backend must be newly executed in ClayCode.",
+    "APP-03":"JSON persistence does not satisfy DB service; real DB adapter/transaction path remains open.",
+    "APP-04":"No historical concurrent-service proof found in bounded corpus; remains new work.",
+    "APP-05":"No executable GUI proof found; remains new work.",
+    "APP-06":"No compiler/interpreter proof found; remains new work.",
+    "APP-07":"No GPU/ML/numerical proof found; remains new work.",
+    "APP-08":"Subprocess orchestration supplies a harmless process-effect reference but not full low-level/admin/device proof.",
+    "APP-09":"No FRANK component in this subtree; use FRANK sources elsewhere.",
+    "APP-10":"No full FRANK handoff evidence in this subtree."
+  },
+  "branch_feedback":{
+    "claycode":"Seed BASE application proof development with the real historical project corpus rather than toy-only examples, but keep acceptance strict: each reused source becomes an oracle/counterexample and must be re-expressed, compiled and executed in ClayCode.",
+    "harness":"Add project-maturity classifier and expected-failure fixtures so plan-only/browser-only/incomplete prototypes cannot be counted as executable evidence. Preserve host reference outputs for differential testing.",
+    "q12_index":"frank-projects direct denominator is 14 projects; bounded application-semantic classification is complete, nested support-artifact semantics remain open."
+  },
+  "earned_work_candidate":{
+    "candidate_id":"HEW-DRIVE-APPCORPUS-012",
+    "current_doomsday_rows":["BASE_CLAYCODE_RELEASE","H2_CLAYCODE_HARNESS","CLAY_0_1_ACCEPTANCE_RUN"],
+    "mechanism_or_result":"Historical real-project corpus plus executable host-reference fixtures reduce application-example design/search effort and provide concrete negative maturity cases for the ClayCode general-purpose gate.",
+    "reuse_category":"MEASUREMENT_FOUNDATION",
+    "avoided_future_hours_low":1.0,
+    "avoided_future_hours_center":3.0,
+    "avoided_future_hours_high":6.0,
+    "confidence":"MEDIUM_FOR_FIXTURE_REUSE_LOW_FOR_HOUR_ESTIMATE",
+    "falsifier_or_validation_receipt":"ClayCode BASE must actually reuse at least two of these host-reference fixtures in differential executable tests; otherwise remove avoided-hours credit."
+  },
+  "progress_accounting":{
+    "direct_project_folder_classification_percent":100.0,
+    "whole_subtree_recursive_semantic_percent":null,
+    "exact_level0_global_credit_percent":0.0,
+    "reason":"This closes the 14-project direct application-classification denominator and selected runtime probes, not all nested support files nor the whole Drive/PF/cross-source denominator."
+  },
+  "completed_at":"2026-08-09T04:50:00+07:00"
+}

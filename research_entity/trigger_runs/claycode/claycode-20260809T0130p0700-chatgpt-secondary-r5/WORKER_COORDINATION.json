@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coordination_mode": "SHARED_GITHUB_MULTIWORKER",
+  "concurrent_claycode_workers_expected": 3,
+  "user_directive": "Two additional instances are also executing claycode; network the workers.",
+  "latest_completed_claycode_seen": {
+    "run_id": "claycode-20260808T1934p0200-chatgpt-secondary-r4",
+    "candidate": "CC-RC1.8-MCAAT",
+    "decision": "OPEN/HOLD",
+    "close_commit": "28e3421171c9ad6f22c21d6eb325d604d7844bf9"
+  },
+  "this_worker_focus": [
+    "avoid duplicating CC-RC1.8 MCAAT finite fuzz work",
+    "test executable semantic-preservation and authority-boundary properties complementary to peers",
+    "seek independent external evidence and counterexamples",
+    "focus on capability-safe lowering, translation validation, replay/rollback identity, and constructive-harm resistance",
+    "reread fresh peer commits before final synthesis"
+  ],
+  "peer_coordination_request": {
+    "rule": "Workers should preserve their independent hypotheses, publish in-progress artifacts early, and reread this beacon plus newest claycode commits before finalization.",
+    "suggested_nonoverlapping_slots_if_not_already_claimed": [
+      "target-Qwen ClayCode semantic/adherence factorial under prompt injection",
+      "ClayGraph/UnifiedDB self-hosting and roundtrip closure",
+      "capability-safe lowering and translation-validation red-team"
+    ],
+    "do_not_treat_peer_agreement_as_independent_evidence": true
+  },
+  "merge_policy": "Evidence and counterexamples merge; interpretations retain actor/run provenance. No worker may infer canonical promotion from consensus alone.",
+  "completion_policy": "Before closing, rescan recent commits for peer deltas and record incorporated or outstanding peer results."
+}

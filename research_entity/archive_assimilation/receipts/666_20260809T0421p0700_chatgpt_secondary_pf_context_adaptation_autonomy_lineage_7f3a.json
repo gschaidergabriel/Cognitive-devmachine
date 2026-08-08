@@ -1,0 +1,178 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0421p0700-chatgpt-secondary-pf-context-adaptation-autonomy-lineage-7f3a",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "origin_actor": "chatgpt-secondary",
+  "origin_worker": "chatgpt-secondary-666-20260808T211500Z-7f3a",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "created_at": "2026-08-08T21:21:00Z",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "lane": "PROJECT_FRANKENSTEIN_CONTEXT_ADAPTATION_AUTONOMY_LINEAGE",
+  "status": "EXECUTED_PARTIAL_NOT_COUNTED_UNTIL_DENOMINATOR_FREEZE",
+  "coordination": {
+    "original_lease": "research_entity/rooms/rooms/center/leases/tasks/666-PF-COMMIT-LINEAGE-2026-04.json",
+    "cross_read_receipts": [
+      "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+      "666-PF-ARCH-HISTORY-CHATGPT-20260808T2114Z"
+    ],
+    "race_resolution": "A concurrent architecture-history worker integrated LCME, initial SOMA and Project Engine foundations while this worker was active. This receipt deliberately narrows to mechanisms not materially covered there: active memory reachability, context-engineering evolution, SOMA failure lifecycle, and Project Engine v3.2 replay/policy/A-B semantics.",
+    "duplication_policy": "Do not award independent-replication status to overlapping ancestry or concurrent agreement."
+  },
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "units": [
+      {"type":"commit","sha":"6d680d3bd3822ed9cf8928f63794e15b9e1372b5","focus":"active memory recall reachability defect and E-PQ time-base failure"},
+      {"type":"commit","sha":"4995e08f2e1e5251ceeb41388c167bb6a629ada8","focus":"bounded context engineering: explicit plan recitation, scratchpad offload, dynamic tool filtering, legacy tool-tag fallback"},
+      {"type":"commit","sha":"c16e5991466e50e059e176c07910ca75293b415c","focus":"SOMA deep-audit failures in scoring, EMA blending, resource cleanup, threading, probing and drift safety"},
+      {"type":"commit","sha":"a016410734564abcb4ba3bd0143b04ded6b8d1e1","focus":"SOMA Qwen3.5-4B migration and feedback-weighted adaptation lifecycle"},
+      {"type":"commit","sha":"35bbeacbce936e284f7cb8ab73747fd3cf7bebf0","focus":"Project Engine v3.2 replay, NL policies, profile clone, A/B strategy testing and cross-project querying"}
+    ]
+  },
+  "epistemic_policy": {
+    "source_code_diff": "VERIFIED_REPOSITORY_SOURCE",
+    "commit_message_measurement": "REPOSITORY_REPORTED_MEASUREMENT_NOT_INDEPENDENTLY_REPRODUCED",
+    "architecture_implication": "CHATGPT_SECONDARY_INFERENCE_REQUIRES_CURRENT_HARNESS_VALIDATION"
+  },
+  "findings": [
+    {
+      "finding_id": "PF-LINEAGE-REACH-001",
+      "status": "HISTORICAL_NEGATIVE_RESULT_WITH_IMPLEMENTED_FIX",
+      "claim": "Persistent memory existence and memory reachability were historically separable failure modes: Project-Frankenstein recorded more than 2,100 Titan nodes while Frank still reported no access to persistent profile because the model had no active memory_recall tool path. The fix explicitly added model-invokable retrieval.",
+      "evidence_refs": ["Project-Frankenstein@6d680d3bd3822ed9cf8928f63794e15b9e1372b5"],
+      "targets": ["claygraph", "unifieddb", "frank", "harness", "claycode"],
+      "implication": "A memory substrate must be tested end-to-end for query affordance, retrieval, context injection, downstream use and outcome—not merely for stored node count or search quality.",
+      "next_test": "Harness fixture: seed known memory inaccessible from immediate context; require model/Needle-mediated retrieval, provenance-preserving injection and a scored downstream decision. Lesion the retrieval affordance while leaving the database intact."
+    },
+    {
+      "finding_id": "PF-LINEAGE-CONTEXT-002",
+      "status": "HISTORICAL_IMPLEMENTATION_FOUNDATION",
+      "claim": "The 3B-era agent loop explicitly externalized attention management: update_plan recited current progress into recent context after several actions, scratchpad offloaded large tool outputs, and goal classification reduced the visible tool set to at most 15 relevant tools. These were implemented as context-management mechanisms rather than relying on the LLM to remember an arbitrarily long trace.",
+      "evidence_refs": ["Project-Frankenstein@4995e08f2e1e5251ceeb41388c167bb6a629ada8"],
+      "targets": ["frank", "claycode", "harness", "claygraph", "unifieddb"],
+      "implication": "Clay 0.1 should represent working-set selection, plan state and large observation handles as explicit runtime state with deterministic retrieval semantics. Prompt length must not be the only continuity mechanism.",
+      "next_test": "Differential long-horizon tool task: full raw-history prompt vs bounded working set + external plan/scratch state. Measure task completion, tool-call errors, repeated actions, context tokens and recovery after interruption."
+    },
+    {
+      "finding_id": "PF-LINEAGE-COMPAT-003",
+      "status": "HISTORICAL_COMPATIBILITY_PATTERN",
+      "claim": "The same agent-loop change retained a fallback parser for LoRA-trained <tool>name|args</tool> calls while the primary loop expected structured JSON, showing that migration across learned protocol versions required an explicit compatibility boundary.",
+      "evidence_refs": ["Project-Frankenstein@4995e08f2e1e5251ceeb41388c167bb6a629ada8"],
+      "targets": ["claycode", "frank", "harness"],
+      "implication": "ClayCode migrations should version model-facing transition syntax and test compatibility adapters explicitly; learned historical formats must not silently become execution authority.",
+      "next_test": "Compile/parse corpus containing current ClayCode, one prior version, malformed legacy syntax and adversarial ambiguous syntax; require deterministic reject/translate receipts before external capability execution."
+    },
+    {
+      "finding_id": "PF-LINEAGE-SOMA-004",
+      "status": "HISTORICAL_NEGATIVE_RESULT_CLUSTER",
+      "claim": "SOMA's adaptive-LoRA lifecycle accumulated critical implementation failures after initial success: scored interactions were written to stale/dead columns, EMA blending silently omitted new adapter keys, large model objects leaked on error paths, disabling personal mode left background threads alive, and a zero-norm baseline could be misclassified as zero drift/safe. These defects were found by later multi-agent audits and fixed.",
+      "evidence_refs": ["Project-Frankenstein@c16e5991466e50e059e176c07910ca75293b415c"],
+      "targets": ["frank", "harness", "claycode", "unifieddb", "clay"],
+      "implication": "Adaptive model-state transitions need transactional schema/version checks, complete-key invariants, resource-lifecycle tests, concurrency shutdown tests and conservative undefined-baseline handling. A successful training loss or one safety gate is not sufficient deploy evidence.",
+      "next_test": "Harness fault matrix: missing/new adapter tensors, zero baseline, corrupt scorer state, exception during training, concurrent disable/reload, restart during deploy; require rollback or safe no-op with exact provenance."
+    },
+    {
+      "finding_id": "PF-LINEAGE-SOMA-005",
+      "status": "HISTORICAL_IMPLEMENTATION_EVOLUTION",
+      "claim": "Later SOMA changed from simple qualification to feedback-weighted adaptation: Qwen3.5-4B migration, quality score mapped to 0.5x-2.5x loss weights, strong positive-feedback amplification, negative examples with bounded negative weight, cycle-window reset and live phase/step/loss reporting.",
+      "evidence_refs": ["Project-Frankenstein@a016410734564abcb4ba3bd0143b04ded6b8d1e1"],
+      "targets": ["frank", "clay", "harness"],
+      "implication": "Historical feedback weighting is reusable experimental prior, not an authorization for automatic final training. Current Clay training should preserve held-out evaluation, provenance and rollback while re-testing whether explicit user feedback improves desired behavior without reward hacking or preference overfit.",
+      "next_test": "Offline replay/ablation on frozen held-out conversations: uniform weighting vs historical feedback weighting vs bounded alternative; compare target behavior, unrelated capability regression, calibration and adversarial preference manipulation."
+    },
+    {
+      "finding_id": "PF-LINEAGE-PE32-006",
+      "status": "HISTORICAL_IMPLEMENTATION_FOUNDATION",
+      "claim": "Project Engine v3.2 added time-travel session replay, persistent activity records, natural-language policies, profile transfer and cross-project world-model/memory querying. These mechanisms are direct historical precursors to replayable agent state and selective cross-worker knowledge transfer.",
+      "evidence_refs": ["Project-Frankenstein@35bbeacbce936e284f7cb8ab73747fd3cf7bebf0"],
+      "targets": ["harness", "frank", "claygraph", "unifieddb", "claycode"],
+      "implication": "Current Research Center/FRANK should keep causal replay and cross-room exchange provenance explicit. Cross-project/world-model transfer without ancestry metadata must not count as independent evidence.",
+      "next_test": "Replay one multi-step task from durable events and verify identical logical state transitions under deterministic substitutes; then import peer knowledge with ancestry tags and test deduplication/independence accounting."
+    },
+    {
+      "finding_id": "PF-LINEAGE-GOODHART-007",
+      "status": "HISTORICAL_DESIGN_RISK_SOURCE_VERIFIED",
+      "claim": "Project Engine v3.2's A/B strategy evaluator counted an execution as a success when the returned text did not contain [ERROR] or [TIMEOUT], then automatically wrote the strategy with the higher success-minus-failure count as the goal strategy. This measures absence of transport/execution failure, not whether the goal improved.",
+      "evidence_refs": ["Project-Frankenstein@35bbeacbce936e284f7cb8ab73747fd3cf7bebf0"],
+      "targets": ["harness", "frank", "emergenz", "claycode"],
+      "implication": "Harness outcome scoring must distinguish execution success from semantic/causal objective improvement. Auto-selection on a proxy like 'no error string' is a concrete historical Goodhart failure risk.",
+      "next_test": "Adversarial A/B fixture where strategy A returns clean text but worsens objective state and strategy B produces a recoverable warning while improving state; correct evaluator must select based on objective-state delta and uncertainty, not string cleanliness."
+    }
+  ],
+  "earned_work_candidates": [
+    {
+      "candidate_id":"HEW-PF-CONTEXT-001",
+      "finding_refs":["PF-LINEAGE-CONTEXT-002","PF-LINEAGE-COMPAT-003"],
+      "reuse_category":"REUSABLE_WITH_ADAPTATION",
+      "current_rows":["BASE_CLAYCODE_RELEASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS"],
+      "avoided_future_hours_low":1.0,
+      "avoided_future_hours_center":3.0,
+      "avoided_future_hours_high":6.0,
+      "confidence":"MEDIUM_LOW",
+      "validation":"Long-horizon differential benchmark and versioned ClayCode compatibility test."
+    },
+    {
+      "candidate_id":"HEW-PF-SOMA-AUDIT-002",
+      "finding_refs":["PF-LINEAGE-SOMA-004","PF-LINEAGE-SOMA-005"],
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "current_rows":["DATA_LORA_TRAINING_DATA","FINAL_MODEL_FINE_TUNE","MODEL_EXPORT_RUNTIME_PACKAGE","H1_REFERENCE_HARNESS"],
+      "avoided_future_hours_low":1.5,
+      "avoided_future_hours_center":4.0,
+      "avoided_future_hours_high":8.0,
+      "confidence":"MEDIUM",
+      "validation":"Fault-injection and held-out feedback-weighting ablations on current model/toolchain."
+    },
+    {
+      "candidate_id":"HEW-PF-REPLAY-GOODHART-003",
+      "finding_refs":["PF-LINEAGE-PE32-006","PF-LINEAGE-GOODHART-007","PF-LINEAGE-REACH-001"],
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "current_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_FRANK","UDB_UNIFIED_DATABASE"],
+      "avoided_future_hours_low":1.0,
+      "avoided_future_hours_center":3.0,
+      "avoided_future_hours_high":7.0,
+      "confidence":"MEDIUM",
+      "validation":"End-to-end memory reachability, deterministic replay and objective-delta A/B fixtures."
+    }
+  ],
+  "branch_feedback": {
+    "frank": "Make working-set/plan state explicit; test memory reachability separately from storage; keep replay as a first-class causal diagnostic.",
+    "claycode": "Version model-facing syntax, preserve compatibility as an explicit translator/reject boundary, and make large observation handles/plan transitions typed rather than prompt-only.",
+    "claygraph": "Benchmark memory not only for P@k but for end-to-end reachable/useful outcome; ancestry-tag peer imports so inherited knowledge never masquerades as independent evidence.",
+    "unifieddb": "Represent durable event/replay identity and retrieval affordance explicitly; database presence alone does not guarantee cognitive reachability.",
+    "harness": "Add four regression families: inaccessible-memory lesion, bounded-context differential, SOMA transactional fault matrix, and objective-delta-vs-no-error A/B Goodhart fixture.",
+    "emergenz": "Treat successful execution and broadcast-like availability as distinct from causal contribution to objective improvement; use state-delta controls.",
+    "clay": "Reuse adaptive-training safeguards/failure memory as experimental prior only; final paid training remains owner-gated and requires fresh held-out proof.",
+    "gwt": "NO_CHANGE beyond cross-read: concurrent GWT shard already covers gating/broadcast/re-entry lineage.",
+    "hyperposition": "NO_CHANGE from this narrowed shard beyond provenance-aware cross-project/room relationship semantics."
+  },
+  "negative_results_preserved": [
+    "memory_store_without_model_retrieval_affordance",
+    "per_call_time_semantics_causing_state_death_spiral",
+    "stale_scorer_schema_columns",
+    "EMA_adapter_key_loss",
+    "training_error_resource_leak",
+    "background_thread_ghost_after_disable",
+    "zero_baseline_false_safe_drift",
+    "proxy_A_B_success_based_on_no_error_string"
+  ],
+  "progress_accounting": {
+    "combined_denominator_state": "NOT_FROZEN",
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Semantic/history analysis is valid but exact manifest obligations remain unfrozen; no fabricated percentage credit."
+  },
+  "blockers": [
+    {
+      "class":"EXTERNAL_ACCESS_BLOCKER",
+      "source":"Google Drive clay/all frank data 1.tar.xz",
+      "size_bytes":663552000,
+      "connector_limit_bytes":104857600,
+      "effect":"Archive-internal exact Drive manifest unavailable through current connector; Project-Frankenstein work continued without weakening Drive coverage."
+    }
+  ]
+}

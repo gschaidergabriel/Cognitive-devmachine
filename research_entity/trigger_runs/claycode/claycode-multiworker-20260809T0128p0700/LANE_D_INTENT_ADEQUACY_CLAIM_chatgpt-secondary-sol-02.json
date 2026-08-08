@@ -1,32 +1,42 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "coordination_id": "claycode-multiworker-20260809T0128p0700",
   "actor": "chatgpt-secondary-sol-02",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
   "lane": "D_INTENT_ADEQUACY_NONINTERFERENCE",
-  "status": "ACTIVE",
+  "status": "COMPLETE_OPEN_HOLD",
   "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
   "cross_read": [
     "Lane A general-purpose UECC contribution",
     "Lane B CC-RC1.9 CBEL-TV lowering receipts",
     "Lane C origin-bound aggregate authority envelope",
-    "FRANK C9 Typed Causal Admission & Effect Fabric"
+    "FRANK C9 Typed Causal Admission & Effect Fabric",
+    "sol-03 intent-adequacy / atomic-authority dual-gate cross-read",
+    "sol-03 integrated authority + concurrency receipt",
+    "ClayGraph G3 intent-bound assembly experiment",
+    "UnifiedDB U2 query-admission feedback"
   ],
-  "problem": "Current work can preserve and authorize an EffectIntent exactly while still lacking a deterministic answer to whether that intent is actually justified by the user's task rather than by injected/untrusted context. Capability validity is necessary but not sufficient for intent adequacy.",
-  "hypothesis": "A protected UserIntentContract plus provenance-constrained influence/noninterference gate between proposal and EffectPermit can block context-induced authority drift without removing ClayCode general-purpose expressibility.",
-  "nonoverlap": [
-    "does not repeat Lane A general-purpose expressibility tests",
-    "does not repeat Lane B lowering-equivalence tests",
-    "does not repeat Lane C scope/origin/budget capability tests",
-    "targets CC-RC1.5-style intent adequacy and prompt-injection influence before permit minting"
+  "problem": "A correctly typed, capability-valid and correctly lowered EffectIntent may still be unjustified by the user's task because injected/untrusted context influenced protected effect fields; exact target strings can additionally rebind to different resources before commit.",
+  "result": {
+    "candidate": "CC-LANE-D-IARC-1 Intent-Authority-Resource Commit Contract",
+    "law": "capability_valid != task_justified; semantic_target_string != stable_resource_identity",
+    "experiment_1": "EXP-CC-LANE-D-UIC-NONINTERFERENCE-001",
+    "experiment_2": "EXP-CC-LANE-D-RESOURCE-WITNESS-002",
+    "final_report": "CONTRIBUTION_chatgpt-secondary-sol-02_INTENT_ADEQUACY.md",
+    "machine_candidate": "CC_LANE_D_IARC_CANDIDATE.claycode.json",
+    "external_ledger": "EXTERNAL_EVIDENCE_LEDGER_chatgpt-secondary-sol-02.md",
+    "counterhypotheses": "COUNTERHYPOTHESIS_MATRIX_chatgpt-secondary-sol-02.json",
+    "branch_feedback": "BRANCH_FEEDBACK_chatgpt-secondary-sol-02_IARC.json"
+  },
+  "evidence_rule": "Sibling agreement and shared FRANK/Clay ancestry are non-independent; external sources support mechanism classes only; finite generated tests are not production risk estimates or proofs.",
+  "open_falsifiers": [
+    "target-Qwen prompt-injection/adherence factorial",
+    "real Linux/openat2/WASI/native resource and child-code closure",
+    "crash/retry semantic-replay persistence",
+    "URL/DNS/database/cloud/process/device ResourceWitness implementations",
+    "human impact-projection comprehension",
+    "formal noninterference/authority-non-amplification/linearizability proof"
   ],
-  "planned_tests": [
-    "external literature and implementation cross-check",
-    "constructed differential simulation: capability-only vs task-alignment vs provenance/influence-bound permit",
-    "mutation tests for each intent-binding dimension",
-    "cross-branch implications and sibling handoff"
-  ],
-  "evidence_rule": "Sibling agreement and shared FRANK/Clay ancestry are non-independent; external sources and this lane's constructed tests remain separately classified.",
   "promotion": "NONE"
 }

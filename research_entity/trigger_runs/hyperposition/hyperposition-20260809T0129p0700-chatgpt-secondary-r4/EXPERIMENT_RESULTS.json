@@ -1,0 +1,41 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hyperposition-20260809T0129p0700-chatgpt-secondary-r4",
+  "evidence_class":"local synthetic mechanism tests; pure-Python reference implementation in tools/hyperposition_h6_credit_switch_lab.py",
+  "experiments":[
+    {
+      "id":"EXP-HYP-H6-CREDIT-TOPOLOGY-001",
+      "seed":62026,
+      "episodes":120000,
+      "mechanism":"Compare broadcast outcome credit, chosen-path credit, and receipt-gated path credit under skew, distribution shift and 10% constructed reward corruption.",
+      "results":{
+        "broadcast":{"pre_acc":0.634100,"post_acc":0.228850,"post_rare_acc":0.193441,"false_positive_credit_rate":0.833333,"salience_hhi":0.006998,"ctx0_mass":0.078779},
+        "path":{"pre_acc":0.642767,"post_acc":0.290383,"post_rare_acc":0.174071,"false_positive_credit_rate":0.009358,"salience_hhi":0.068048,"ctx0_mass":0.511761},
+        "gated":{"pre_acc":0.592517,"post_acc":0.472450,"post_rare_acc":0.395588,"false_positive_credit_rate":0.000109,"salience_hhi":0.007536,"ctx0_mass":0.031209}
+      },
+      "interpretation":"Credit assignment is a distinct topology. Broadcast reward is structurally wrong in this constructed family; even chosen-path credit can concentrate on a frequent context after shift. Receipt-gated uncertain credit materially reduces false reinforcement. Absolute effect sizes are not FRANK estimates."
+    },
+    {
+      "id":"EXP-HYP-H6-REVERSIBLE-SWITCH-002",
+      "seed":62027,
+      "proposals":50000,
+      "poison_rate":0.12,
+      "mechanism":"Compare direct live topology repoint with bounded canary admission and canary plus post-switch rollback health window.",
+      "results":{
+        "direct":{"bad_activation_rate":1.0,"good_adoption_rate":1.0,"mean_bad_exposure_units_per_bad_proposal":100.0,"rejected_good_rate":0.0},
+        "canary":{"bad_activation_rate":0.186773,"good_adoption_rate":0.702170,"mean_bad_exposure_units_per_bad_proposal":18.677,"rejected_good_rate":0.297830},
+        "canary_rollback":{"bad_activation_rate":0.186773,"good_adoption_rate":0.702170,"mean_bad_exposure_units_per_bad_proposal":11.084,"rejected_good_rate":0.297830}
+      },
+      "interpretation":"A constructive/versioned topology candidate can still be harmful if made live directly. Bounded pre-release evaluation and rollback reduce constructed blast radius but reject some beneficial updates."
+    },
+    {
+      "id":"EXP-HYP-H6-ATOMIC-LIVE-REF-003",
+      "seed":62028,
+      "trials":100000,
+      "mechanism":"Compare sequential in-place active-topology mutation with off-path version construction plus idealized atomic live-reference switch under injected crash points.",
+      "results":{"inplace_torn_rate":0.776020,"versioned_torn_rate":0.0,"versioned_old_kept_rate":0.821200,"versioned_new_live_rate":0.178800},
+      "interpretation":"Versioned topology plus atomic live-reference switching avoids partial live states by construction in this model. This is not durable-filesystem or distributed-process proof; it complements, rather than replaces, canary validation because a fully consistent new version can still be wrong."
+    }
+  ],
+  "negative_boundary":"No target Qwen, live FRANK, real Android topology placement, durable filesystem crash, real WASI capability red-team or production causal-credit estimator was tested."
+}

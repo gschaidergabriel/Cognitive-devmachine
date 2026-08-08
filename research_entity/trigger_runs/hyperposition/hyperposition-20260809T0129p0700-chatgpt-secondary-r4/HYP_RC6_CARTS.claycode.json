@@ -1,0 +1,47 @@
+{
+  "schema_version":"claycode-research-ir-1.0",
+  "candidate":{"id":"HYP-RC6","name":"Causal Attribution & Reversible Topology Switching","short":"CARTS","status":"OPEN_HOLD","parent":"HYP-RC5"},
+  "laws":[
+    "one semantic relation != one propagation edge != one invalidation edge != one selection edge != one physical link != one authority path != one learning-credit edge",
+    "what influenced an outcome != what should receive learning credit != what may become live != what may act",
+    "recoverable topology != harmless topology",
+    "consistent switch != cognitively correct switch"
+  ],
+  "topologies":[
+    {"id":"T1","name":"SEMANTIC_RELATION","authoritative_role":"semantic identity/provenance/time/roles/collection semantics"},
+    {"id":"T2","name":"ACTIVE_PROPAGATION","authoritative_role":"none","controls":["gain","depth","decay","inhibition","budget","diversity"]},
+    {"id":"T3","name":"DEPENDENCY_INVALIDATION","closure":["KNOWN_VALID","KNOWN_INVALID","UNKNOWN"]},
+    {"id":"T4","name":"SELECTION_WORKSPACE","binds":["query_plan","candidate_collection","workspace_episode","projection","internal_uptake"]},
+    {"id":"T5","name":"PHYSICAL_PLACEMENT","axes":["transaction","data","index","compute","process","fault_domain","rebuild_policy"]},
+    {"id":"T6","name":"AUTHORITY","rule":"model/activation/workspace/credit cannot mint external authority"},
+    {"id":"T7","name":"CAUSAL_CREDIT","scopes":["ITEM","PATH","ASSEMBLY","ROUTE","UNKNOWN"],"rule":"UNKNOWN positive credit is bounded/non-propagating by default"}
+  ],
+  "switch_contract":{
+    "TopologyCandidate":{"constructible_by_model":true,"live":false,"versioned":true,"rollback_parent_required":true},
+    "TopologyIntent":{"serializable":true,"authoritative":false,"effect":"request live-ref change"},
+    "TopologyPermit":{"constructible_by_model":false,"opaque_host_capability":true,"binds":["candidate_hash","current_live_hash","scope","impact_budget","canary_policy","health_policy","revocation","rollback_target"]},
+    "LiveTopologyRef":{"effect_relevant":true,"switch_requires":"TopologyPermit","atomicity_target":"old-or-new, never partial"},
+    "ActivationUtilityReceipt":{"no_authority":true,"binds":["graph_epoch","activation_epoch","route","candidate_set","paths","workspace","internal_uptake_if_measured","outcome","credit_scope","credit_confidence","control_arm"]}
+  },
+  "promotion_pipeline":[
+    "build candidate off-path",
+    "validate semantic equivalence/admissibility",
+    "evaluate causal-credit confidence",
+    "bounded canary/shadow evaluation when consequential",
+    "host mints topology permit if policy passes",
+    "atomic live reference switch",
+    "post-switch health/causal shadows",
+    "rollback on violation",
+    "learning updates salience/routing only within typed credit scope"
+  ],
+  "hard_boundaries":[
+    "credit != truth",
+    "credit != authority",
+    "salience != truth",
+    "topology candidate != live topology",
+    "live topology != effect authority",
+    "physical colocation != semantic equivalence",
+    "atomicity != cognitive utility",
+    "no emergence/consciousness inference"
+  ]
+}

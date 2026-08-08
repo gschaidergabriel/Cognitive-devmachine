@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T0438p0700-666-drive-adapter-binary-integrity-delta",
+  "room_id": "center",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-666-20260808T2129Z-recovery-adapter",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-08T21:38:00Z",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms": ["frank","harness","unifieddb","claygraph","clay","q12_index"],
+  "affects_claims": ["DRIVE-ADAPTER-INTEGRITY-001","DRIVE-ADAPTER-INTEGRITY-002","DRIVE-ADAPTER-INTEGRITY-003"],
+  "dependencies": ["research_entity/archive_assimilation/receipts/666_20260809T0438p0700_chatgpt_secondary_drive_adapter_binary_integrity_delta.json"],
+  "artifact_refs": ["Drive:1VyYsni9GsIT5R--2J6m5u0dWIHUYjuyc","Drive:1hmh3A1Vpaye1VGfTdFEWKRtumxAlRL1x"],
+  "ancestry_family": "666-l0-drive-recovery-adapter-20260808T2129Z",
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "summary": "Direct binary inspection proves the 53.7 MB root v25 adapter is truncated; its Safetensors header requires exactly 169,903,320 bytes, matching the complete-size v25_final Drive object. Direct folder fetch also disproves completeness of the earlier search-only adapter subtree listing.",
+    "required_actions": [
+      "mark root 53.7 MB adapter CORRUPT/TRUNCATED",
+      "add Safetensors extent/hash preflight to Harness model artifact validation",
+      "freeze Drive manifests via recursive folder-id traversal plus cross-method reconciliation",
+      "preserve v25 as historical regression/A-B baseline only"
+    ],
+    "earned_work_hours_added": 0.0
+  }
+}

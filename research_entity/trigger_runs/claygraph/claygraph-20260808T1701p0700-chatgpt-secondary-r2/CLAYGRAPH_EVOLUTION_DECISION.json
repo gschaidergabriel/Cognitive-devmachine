@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T1701p0700-chatgpt-secondary-r2",
+  "accepted_generation":0,
+  "candidate_generation":1,
+  "candidate_id":"claygraph-g1c-resident-adaptive-escalation",
+  "decision":"HOLD",
+  "reasons":[
+    "Hosted 8B self-use challenges current activation hot-path readiness but is not the target Qwen-class 4B.",
+    "Resident inverted-index benchmark is synthetic and does not measure the actual current RAE corpus, full graph traversal, provenance filters or update costs.",
+    "No implemented G1c current-corpus comparison yet proves answer-quality/recall benefit at lower total latency/context versus SQLite/packet/G1b.",
+    "Live FRANK 71-store parity, p99, crash/replay, privacy and CognitiveFrame stale-assembly gates remain incomplete."
+  ],
+  "positive_evidence":[
+    "Real hosted 8B proxy shows graph modes can surface relational facts plain FTS misses, preserving reason to keep semantic graph research.",
+    "Local 10k-node test shows per-query reload/full scan is avoidable and resident inverted seeding can be orders of magnitude cheaper in the proxy.",
+    "Independent 2026 adaptive GraphRAG research supports routing graph use to complex/scattered-evidence queries rather than all queries."
+  ],
+  "hard_invariant_check":{"canonical_truth":"PASS_DESIGN","provenance_ancestry":"PASS_DESIGN","conflict_stale_revoked":"PASS_DESIGN","authority_boundary":"PASS_DESIGN","rollback":"PASS_PLAN","target_replay":"UNMEASURED","privacy":"UNMEASURED_TARGET"},
+  "promotion_action":"DO_NOT_UPDATE research_entity/claygraph/CLAYGRAPH_LATEST.claycode.json",
+  "preferred_next_candidate":"G1c",
+  "next_gates":["implement resident current-corpus index","benchmark G1c vs SQLite FTS/deterministic packet/G0/G1b with >=50 independent queries","measure resident memory/update/rebuild crossover","Qwen-class 4B matched-budget answer-quality","live/twin stale assembly exact-anchor validation","71-store migration parity/replay/p99/crash/privacy"]
+}

@@ -1,10 +1,11 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "manifest_id":"DRIVE-FRANK-WERKZEUGE-SHARD-7f3a",
   "program_stage":"L0_ARCHIVE_ASSIMILATION",
   "origin_actor":"chatgpt-secondary",
   "origin_worker":"chatgpt-secondary-666-20260808T211500Z-7f3a",
   "observed_at":"2026-08-08T21:34:00Z",
+  "completed_at":"2026-08-08T21:40:00Z",
   "source_provider":"Google Drive connector",
   "root":{"title":"frank-werkzeuge","id":"1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU","parent":"clay:1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm"},
   "enumeration":{
@@ -13,22 +14,24 @@
     "folder_children_enumerated":["1xwTAPEWzXOBo8jv6iXSIyFKboFd5D8O0"],
     "leaf_files":3,
     "next_page_token_observed":false,
-    "note":"This is an exact bounded manifest for the connector-visible frank-werkzeuge subtree only, not the global Drive manifest. Provider content hashes/sizes were not exposed for these text files; Drive IDs and provider metadata are retained instead."
+    "note":"Exact bounded manifest for connector-visible frank-werkzeuge subtree only. Provider content hashes/sizes were not exposed for text leaves; stable Drive IDs and metadata are retained."
   },
   "units":[
     {"kind":"folder","title":"genesis-monitor","id":"1xwTAPEWzXOBo8jv6iXSIyFKboFd5D8O0","parent_id":"1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU","enumerated":true},
-    {"kind":"file","title":"healing-log.md","id":"1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt","parent_id":"1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU","mime_type":"text/markdown","content_fetch":"SUCCESS_CONNECTOR_RESOURCE_TRUNCATED_FOR_INLINE_VIEW_DEEP_SEARCHABLE","analysis_status":"PARTIAL_DEEP_SEMANTIC_EXTRACTION"},
+    {"kind":"file","title":"healing-log.md","id":"1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt","parent_id":"1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU","mime_type":"text/markdown","content_fetch":"SUCCESS_SEARCHABLE_CONNECTOR_RESOURCE","analysis_status":"ANALYZED_ATOMIC_22_FIX_UNITS","atomic_index":"research_entity/archive_assimilation/indexes/DRIVE_FRANK_WERKZEUGE_HEALING_LOG_ATOMIC_INDEX_7f3a.json"},
     {"kind":"file","title":"report.md","id":"1N6_jyHoGurBu6B_QXiXYFdpt_erl2EvX","parent_id":"1xwTAPEWzXOBo8jv6iXSIyFKboFd5D8O0","mime_type":"text/markdown","modified_time":"2026-02-26T19:53:22Z","content_fetch":"SUCCESS","analysis_status":"ANALYZED"},
     {"kind":"file","title":"report_30min.md","id":"1qlPlXsqObWPYLePbUYsrTEdu8GmCAVkQ","parent_id":"1xwTAPEWzXOBo8jv6iXSIyFKboFd5D8O0","mime_type":"text/markdown","modified_time":"2026-02-26T21:21:30Z","content_fetch":"SUCCESS","analysis_status":"ANALYZED"}
   ],
   "atomic_obligation_status":{
     "IDENTIFIED":3,
-    "CONTENT_COVERED_FULL":2,
-    "CONTENT_COVERED_PARTIAL":1,
+    "CONTENT_COVERED_FULL":3,
     "CLASSIFIED":3,
-    "ANALYZED":2,
+    "ANALYZED":3,
     "LINEAGE_LINKED":3,
-    "INTEGRATION_PENDING_RECEIPT":3
+    "INTEGRATED_OR_ROUTED":3
   },
+  "receipt":"research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_frank_werkzeuge_shard_7f3a.json",
+  "center_delta":"research_entity/rooms/center_events/20260808T213700Z_chatgpt-secondary_666_DRIVE_WERKZEUGE_DELTA_7f3a.json",
+  "bounded_gate":"PASS",
   "global_progress_rule":"Do not directly increment combined Level-0 exact coverage from this shard until the parent DRIVE_CLAY_MANIFEST denominator is frozen and this bounded manifest is imported/deduplicated there."
 }

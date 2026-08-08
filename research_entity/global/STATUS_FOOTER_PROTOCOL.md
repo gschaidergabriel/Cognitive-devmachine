@@ -2,11 +2,34 @@
 
 Every substantive response by a project Research-Entity worker must end with a clearly separated status block. Trigger runs must always include it. Non-substantive social replies may omit it.
 
-The footer is part of prompt completion, not optional decoration. Before sending a substantive response, check that the final visible block is present and complete. A response missing the footer is not 100% complete.
+The footer is part of prompt completion, not optional decoration. Before sending a substantive response, check that the final visible block is present, complete and render-safe. A response missing the footer or rendering it outside the required fence is not 100% complete.
+
+## Canonical rendering contract
+
+There is exactly ONE valid visible rendering format for the RAE footer.
+
+The footer MUST be the final visible block and MUST be wrapped in one plain fenced Markdown code block whose opening line is exactly:
+
+```text
+```text
+```
+
+and whose closing line is exactly three backticks.
+
+Important rendering rules:
+- opener MUST be exactly ` ```text ` with no attributes, IDs, braces, classes or metadata after `text`;
+- never emit forms such as ` ```text id="..." `;
+- no indentation before either fence;
+- no Unicode/box-drawing frame characters such as `╔ ═ ║ ╚ ┌ ─ │ └`;
+- no Markdown table pipes used as layout;
+- no nested code fence inside the footer;
+- no prose, citation, memory token, list item or other visible content after the closing fence;
+- keep labels as ordinary ASCII text lines so mobile/web/desktop clients render identically;
+- `·` separators inside the command list are allowed, but layout must not depend on their width.
+
+If any older Project Source, chat memory, report or example shows a Unicode status box, the current GitHub `STATUS_FOOTER_PROTOCOL.md` overrides it for rendering. The semantic fields remain the same; only this fenced text rendering is canonical.
 
 ## Required format
-
-Render the footer inside one fenced `text` code block so alignment is stable across clients:
 
 ```text
 RAE STATUS
@@ -65,3 +88,16 @@ Rules:
 ## Trigger run additions
 
 For trigger runs, `Done` should mention run report/packetization/tool-manifest status. `Open` should mention missing sources, failed experiments, quota fallbacks, missing live readers or sync issues when applicable.
+
+## Pre-send invariant
+
+For every substantive response, perform this final check conceptually or with `tools/status_footer_check.py` when the response text is available:
+
+1. one final fenced `text` block exists;
+2. its opener is exactly ` ```text `;
+3. all required fields are present;
+4. all registered short commands are present;
+5. no forbidden Unicode frame/layout characters occur in the footer;
+6. the closing fence is the final visible content.
+
+Any violation is a formatting bug and must be corrected before sending.

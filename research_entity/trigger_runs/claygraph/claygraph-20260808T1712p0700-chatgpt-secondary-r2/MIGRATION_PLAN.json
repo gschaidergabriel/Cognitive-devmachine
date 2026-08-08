@@ -1,0 +1,32 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T1712p0700-chatgpt-secondary-r2",
+  "physical_monolith_required":false,
+  "store_disposition_change":"NONE",
+  "phases":[
+    "INVENTORY",
+    "SEMANTIC_MAPPING",
+    "SHADOW_BASE_EPOCH",
+    "DELTA_PROJECTOR_SHADOW",
+    "EPOCH_PARITY_AND_REPLAY",
+    "LATENT_FIELD_SHADOW_NO_MODEL_VISIBILITY",
+    "DUAL_READ",
+    "ASSEMBLY_EXPERIMENT",
+    "DUAL_WRITE_WHERE_SAFE",
+    "CONTROLLED_CUTOVER",
+    "ROLLBACK_WINDOW",
+    "DEPRECATE_OR_KEEP_ISOLATED"
+  ],
+  "cycle4_rules":[
+    "authoritative stores/events commit before semantic epoch publication",
+    "failed/unknown projector validation leaves prior epoch current",
+    "old graph epochs remain available for pinned readers/replay until safely reclaimable",
+    "latent activation has no authority and may be reset/rebuilt without altering canonical history",
+    "Assembly must record graph_epoch, activation_epoch and CognitiveFrame witness",
+    "compaction/rebuild decisions use measured update+query+memory workload, not a fixed delta threshold",
+    "retrieval/activation gains never authorize physical store merger"
+  ],
+  "rollback":"switch reader routing to prior known-good semantic epoch or direct authoritative stores; discard/rebuild latent activation; replay authoritative events through projector; verify provenance/status hashes before re-enable",
+  "current_store_actions":{"consciousness.db":"PROJECT_ONLY","world_experience.db":"PROJECT_ONLY","thalamus":"DEFER","titan_ego":"DEFER","safety_invariants_if_current":"KEEP_ISOLATED_PREFERRED","unresolved":"DEFER_UNKNOWN","MERGE":"NONE"},
+  "promotion_gates":["actual current-corpus epoch parity","concurrent reader/update stress","crash during delta build and publish","rebuild equivalence","resident memory/update amplification","stale CognitiveFrame rejection","privacy/capability leakage","target-model matched-budget Assembly effect"]
+}

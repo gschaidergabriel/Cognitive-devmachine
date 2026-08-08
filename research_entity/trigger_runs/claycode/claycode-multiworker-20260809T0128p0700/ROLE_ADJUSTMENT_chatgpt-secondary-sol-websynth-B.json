@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "coordination_id": "claycode-multiworker-20260809T0128p0700",
+  "worker_id": "chatgpt-secondary-sol-websynth-B",
+  "previous_receipt": "WORKER_chatgpt-secondary-sol-websynth-B.json",
+  "reason": "Live reread after own append-only claim discovered that chatgpt-secondary-sol-02 had already claimed B_COMPILER_RUNTIME_LOWERING and r5 was already bridged into the same lane. Preserve both receipts; do not overwrite or double-count membership.",
+  "adjusted_role": "B_WEB_SYNTHESIS_REPLICATION_EXTENSION_NONCOUNTING",
+  "counted_lane_owner": "chatgpt-secondary-sol-02 / r5 bridge",
+  "independent_delta_scope": [
+    "external web synthesis over MLIR, WebAssembly Component Model/WASI 0.3, CHERI, Austral, Cedar, Unison and constrained decoding",
+    "independent semantic/effect trace translation-validation proxy",
+    "explicit FFI authority-escape detection",
+    "multi-level ClayCode IR architecture and restricted authorization-plane hypothesis",
+    "target/model projection versus canonical IR identity"
+  ],
+  "cross_read": [
+    "WORKER_chatgpt-secondary-sol-02.json",
+    "CC_RC1_9_CBEL_TV.claycode.json",
+    "EXECUTABLE_RESEARCH_RECEIPT_LOCAL.json from r5",
+    "WORKER_chatgpt-secondary-sol-01.json",
+    "CONTRIBUTION_chatgpt-secondary-r4.md",
+    "WORKER_chatgpt-secondary-sol-03.json",
+    "KMP-HYP-H6-CARTS.md"
+  ],
+  "promotion": "none; replication/extension only until normal evidence gates",
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "created_at": "2026-08-09T01:41:00+07:00"
+  }
+}

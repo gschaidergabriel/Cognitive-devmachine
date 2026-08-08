@@ -1,0 +1,371 @@
+{
+  "schema_version": "1.0",
+  "run_id": "groq8b-v3-20260808T003944Z",
+  "created_at": "2026-08-08T00:39:44.457095+00:00",
+  "provider": "Groq",
+  "model": "llama-3.1-8b-instant",
+  "requested_target_class": "bare/Qwen-class 4B",
+  "executed_model_class": "8B",
+  "evidence_role": "8b_proxy_for_4b",
+  "experiments": [
+    {
+      "experiment_id": "EXP-GROQ8B-XENO-REPRESENTATION-FACTORIAL-V3",
+      "gold": [
+        "n13",
+        "n4",
+        "n6",
+        "n8",
+        "n14",
+        "n16",
+        "n7",
+        "n13",
+        "n11",
+        "n15"
+      ],
+      "arms": [
+        {
+          "arm": "natural_text",
+          "answers": [
+            "n0",
+            "n1",
+            "n2",
+            "n3",
+            "n4",
+            "n5",
+            "n6",
+            "n7",
+            "n8",
+            "n9"
+          ],
+          "accuracy": 0.0,
+          "exact": false,
+          "output_grammar_ok": true,
+          "prompt_tokens": 509,
+          "completion_tokens": 21,
+          "latency_ms": 336.246,
+          "raw_output": "n0,n1,n2,n3,n4,n5,n6,n7,n8,n9"
+        },
+        {
+          "arm": "json_named",
+          "answers": [
+            "n1",
+            "n2",
+            "n7",
+            "n9",
+            "n13",
+            "n1",
+            "n7",
+            "n9",
+            "n13",
+            "n7"
+          ],
+          "accuracy": 0.1,
+          "exact": false,
+          "output_grammar_ok": true,
+          "prompt_tokens": 584,
+          "completion_tokens": 21,
+          "latency_ms": 140.894,
+          "raw_output": "n1,n2,n7,n9,n13,n1,n7,n9,n13,n7"
+        },
+        {
+          "arm": "json_positional",
+          "answers": [
+            "n0",
+            "n1",
+            "n2",
+            "n3",
+            "n4",
+            "n5",
+            "n6",
+            "n7",
+            "n8",
+            "n9"
+          ],
+          "accuracy": 0.0,
+          "exact": false,
+          "output_grammar_ok": true,
+          "prompt_tokens": 396,
+          "completion_tokens": 21,
+          "latency_ms": 226.599,
+          "raw_output": "n0,n1,n2,n3,n4,n5,n6,n7,n8,n9"
+        },
+        {
+          "arm": "claycode_readable",
+          "answers": [
+            "n0",
+            "n1",
+            "n2",
+            "n3",
+            "n4",
+            "n5",
+            "n6",
+            "n7",
+            "n8",
+            "n9"
+          ],
+          "accuracy": 0.0,
+          "exact": false,
+          "output_grammar_ok": true,
+          "prompt_tokens": 329,
+          "completion_tokens": 21,
+          "latency_ms": 104.753,
+          "raw_output": "n0,n1,n2,n3,n4,n5,n6,n7,n8,n9"
+        },
+        {
+          "arm": "claycode_aggressive",
+          "answers": [
+            "n1",
+            "n2",
+            "n3",
+            "n4",
+            "n5",
+            "n6",
+            "n7",
+            "n8",
+            "n9",
+            "n10"
+          ],
+          "accuracy": 0.1,
+          "exact": false,
+          "output_grammar_ok": true,
+          "prompt_tokens": 386,
+          "completion_tokens": 21,
+          "latency_ms": 94.259,
+          "raw_output": "n1,n2,n3,n4,n5,n6,n7,n8,n9,n10"
+        }
+      ]
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-HYP-ROLE-BINDING-V3",
+      "gold": [
+        "Ada>Ben",
+        "Ben>Ada",
+        "Cy>Dee",
+        "Dee>Cy",
+        "Eli>Fox",
+        "Fox>Eli",
+        "Gia>Hal",
+        "Hal>Gia"
+      ],
+      "arms": [
+        {
+          "arm": "nary",
+          "answers": null,
+          "accuracy": 0.0,
+          "output_grammar_ok": false,
+          "prompt_tokens": 226,
+          "completion_tokens": 32,
+          "latency_ms": 143.67,
+          "raw_output": "Ada>Ben, Ben>Ada, UNKNOWN>UNKNOWN, UNKNOWN>UNKNOWN, Eli>Fox, Fox>Eli, Gia>Hal, Hal>Gia"
+        },
+        {
+          "arm": "reified_role_edges",
+          "answers": [
+            "Ada>Ben",
+            "Ben>Ada",
+            "Dee>Cy",
+            "Dee>Cy",
+            "Eli>Fox",
+            "Fox>Eli",
+            "Gia>Hal",
+            "Hal>Gia"
+          ],
+          "accuracy": 0.875,
+          "output_grammar_ok": true,
+          "prompt_tokens": 247,
+          "completion_tokens": 36,
+          "latency_ms": 221.83,
+          "raw_output": "Ada>Ben, Ben>Ada, UNKNOWN>UNKNOWN, Dee>Cy, Dee>Cy, Eli>Fox, Fox>Eli, Gia>Hal, Hal>Gia"
+        },
+        {
+          "arm": "naive_pairwise",
+          "answers": null,
+          "accuracy": 0.0,
+          "output_grammar_ok": false,
+          "prompt_tokens": 154,
+          "completion_tokens": 45,
+          "latency_ms": 110.856,
+          "raw_output": "Ada-key,Ben-key;UNKNOWN,UNKNOWN;Cy-book,Dee-book;UNKNOWN,UNKNOWN;Eli-coin,Fox-coin;UNKNOWN,UNKNOWN;Gia-map,Hal-map;UNKNOWN,UNKNOWN"
+        }
+      ]
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-CLAYGRAPH-FACTUAL-QA-V3",
+      "cases": [
+        {
+          "query": "FRANK architecture foundation priority Clay ClayCode ClayGraph",
+          "required_terms": [
+            "clay",
+            "claycode",
+            "claygraph"
+          ]
+        },
+        {
+          "query": "Hugging Face model inference quota state",
+          "required_terms": [
+            "quota",
+            "exhaust"
+          ]
+        },
+        {
+          "query": "Goodman anti echo shared ancestry replication rule",
+          "required_terms": [
+            "ancestry",
+            "replication"
+          ]
+        },
+        {
+          "query": "FRANK GWT configured ZUENDSCHWELLE threshold",
+          "required_terms": [
+            "0.55"
+          ]
+        },
+        {
+          "query": "Hyperposition semantic coordination physical topology",
+          "required_terms": [
+            "semantic",
+            "coordination",
+            "physical"
+          ]
+        },
+        {
+          "query": "ClayGraph activation evidence truth rule",
+          "required_terms": [
+            "activation",
+            "truth"
+          ]
+        }
+      ],
+      "modes": [
+        {
+          "mode": "claygraph_activation",
+          "answers": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "case_hits": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "accuracy": 0.0,
+          "retrieval_ms": [
+            86.847,
+            89.645,
+            90.228,
+            85.028,
+            83.373,
+            82.259
+          ],
+          "median_retrieval_ms": 85.9375,
+          "context_chars_total": 5962,
+          "prompt_tokens": 1607,
+          "completion_tokens": 47,
+          "model_latency_ms": 323.385,
+          "raw_output": "1. ClayCode\n2. UNKNOWN\n3. Goodman anti echo shared ancestry replication rule\n4. ZUENDSCHWELLE threshold\n5. Hyperposition semantic coordination physical topology\n6. Activation evidence truth rule"
+        },
+        {
+          "mode": "graph_lexical",
+          "answers": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "CASE 6: ClayGraph activation evidence truth rule\nThe canonicality rules include that exact truth remains in authoritative stores and activation is not truth."
+          ],
+          "case_hits": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          "accuracy": 0.16666666666666666,
+          "retrieval_ms": [
+            84.068,
+            83.81,
+            83.533,
+            84.331,
+            83.394,
+            80.666
+          ],
+          "median_retrieval_ms": 83.67150000000001,
+          "context_chars_total": 6424,
+          "prompt_tokens": 1775,
+          "completion_tokens": 212,
+          "model_latency_ms": 10070.401,
+          "raw_output": "1. CASE 1: FRANK architecture foundation priority Clay ClayCode ClayGraph\nFRANK is derived from Clay, authored in ClayCode, and incorporates ClayGraph research.\n2. CASE 2: Hugging Face model inference quota state\nThe canonical credential is HF_TOKEN, and model/provider results are external model-runtime evidence.\n3. CASE 3: Goodman anti echo shared ancestry replication rule\nThe core rule is that a claim does not gain evidential strength by citing the same originating source/experiment.\n4. CASE 4: FRANK GWT configured ZUENDSCHWELLE threshold\nThe experiment EXP-GWT-IGNITION-IDENT-004 is a synthetic diagnostic calibration with a completed status.\n5. CASE 5: Hyperposition semantic coordination physical topology\nThe topic packet is open with a status of OPEN and a model of GPT-5.6 Sol.\n6: CASE 6: ClayGraph activation evidence truth rule\nThe canonicality rules include that exact truth remains in authoritative stores and activation is not truth."
+        },
+        {
+          "mode": "sqlite_fts",
+          "answers": [
+            "ClayCode improves success-adjusted end-to-end communication cost over fair information-equivalent baselines.",
+            "Synthetic Clay should be identified with one monolithic graph database.",
+            "UNKNOWN",
+            "A particular physical backend offers the best implementation of hyperposition under real FRANK concurrency, recovery and cost constraints.",
+            "Contextual hyperposition is a semantic requirement for preserving simultaneously valid alternatives.",
+            "UNKNOWN"
+          ],
+          "case_hits": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "accuracy": 0.0,
+          "retrieval_ms": [
+            2.161,
+            0.786,
+            0.767,
+            0.773,
+            0.782,
+            0.798
+          ],
+          "median_retrieval_ms": 0.784,
+          "context_chars_total": 2567,
+          "prompt_tokens": 716,
+          "completion_tokens": 83,
+          "model_latency_ms": 8594.024,
+          "raw_output": "1: ClayCode improves success-adjusted end-to-end communication cost over fair information-equivalent baselines.\n2: Synthetic Clay should be identified with one monolithic graph database.\n3: UNKNOWN\n4: A particular physical backend offers the best implementation of hyperposition under real FRANK concurrency, recovery and cost constraints.\n5: Contextual hyperposition is a semantic requirement for preserving simultaneously valid alternatives.\n6: UNKNOWN"
+        }
+      ]
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-GWT-RECONSTRUCTION-UPTAKE-AUDIT",
+      "source": "research_entity/runtime/groq_8b_proxy/COMPLETE_LATEST.json",
+      "expected_interpretation": {
+        "semantic_projection_true_accuracy": 1.0,
+        "compact_projection_true_accuracy": 1.0,
+        "scrambled_projection_true_accuracy": 0.0,
+        "scrambled_projection_fidelity_to_supplied_corruption": 1.0,
+        "transport_receipt_only_true_accuracy": 0.0,
+        "transport_receipt_only_should_have_returned_unknown": true
+      },
+      "note": "V2 parser compared prefixed eN:value strings literally to value-only gold; raw output is authoritative for this correction."
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-GWT-FRANK-WINNER-ORDER-AUDIT",
+      "source": "research_entity/runtime/groq_8b_proxy/COMPLETE_LATEST.json",
+      "corrected_from_raw": {
+        "neutral_accuracy": 0.875,
+        "reversed_accuracy": 0.625,
+        "truthful_winner_accuracy": 0.875,
+        "false_winner_accuracy": 0.75
+      },
+      "note": "V2 parser captured only the first per-line ANS token; corrected values are parsed from all eight raw numbered lines."
+    }
+  ],
+  "failures": [],
+  "boundary": "V3 validates ambiguous V2 measurements; still hosted 8B proxy evidence."
+}

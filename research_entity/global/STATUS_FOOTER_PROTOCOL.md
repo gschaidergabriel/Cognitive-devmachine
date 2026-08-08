@@ -15,7 +15,7 @@ Important rendering rules:
 - never emit forms such as ` ```text id="..." `;
 - no indentation before either fence;
 - no Unicode/box-drawing frame characters such as `╔ ═ ║ ╚ ┌ ─ │ └`;
-- no Markdown table pipes used as layout;
+- no Markdown tables or pipe characters used as layout;
 - no nested code fence inside the footer;
 - no prose, citation, memory token, list item or other visible content after the closing fence;
 - keep labels as ordinary ASCII text lines so mobile/web/desktop clients render identically;
@@ -33,7 +33,7 @@ Canonical: r2 · 04234efdb86c
 Actor: chatgpt-secondary
 Trigger: none
 Research write: NO_RESEARCH_DELTA
-Short commands: dump · fusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb
+Short commands: dump · fusion · hypofusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb
 
 LAST PROMPT
 Completion: 100%

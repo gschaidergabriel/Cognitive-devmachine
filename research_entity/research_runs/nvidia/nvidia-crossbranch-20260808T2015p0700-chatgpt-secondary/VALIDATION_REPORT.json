@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "run_id":"nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary",
+  "status":"PASS_WITH_EXPLICIT_PROVIDER_BOUNDARIES",
+  "checks":{
+    "credential_not_copied_into_research_artifacts":true,
+    "catalog_live_verified":true,
+    "chat_live_verified":true,
+    "direct_generic_4b_live_verified":true,
+    "embeddings_live_verified":true,
+    "embedding_similarity_live_verified":true,
+    "rerank_live_verified":false,
+    "rerank_failure_preserved":true,
+    "exact_qwen3_4b_claimed":false,
+    "hosted_vs_local_boundary_preserved":true,
+    "truthful_latent_field_benefit_claimed":false,
+    "shuffled_prior_negative_preserved":true,
+    "embedding_similarity_as_identity_claimed":false,
+    "all_seven_branch_feedback_written":true,
+    "all_seven_micro_packets_written":true,
+    "canonical_promotion":false
+  },
+  "scoring_rechecks":{"COVE_raw":"4/12","COVE_compiled":"11/12","COVE_prompt_reduction":"36.9%","CC10_raw":"12/16","CC10_typed":"13/16","CC10_compact":"UNSCORABLE_FORMAT_FAILURE","latent_shuffled":"0/8","embedding_role_reversal_warning":"PASS"},
+  "tool_integration":{"nvidia_capability_registration":"research_entity/global/NVIDIA_RESEARCH_CAPABILITY.json","openrouter_capability_registration":"research_entity/global/OPENROUTER_RESEARCH_CAPABILITY.json","orchestration_policy_updated":true,"provider_router_extended_for_capability_files":true,"dedicated_nvidia_runner":true,"dedicated_openrouter_runner":true},
+  "unresolved_external_or_target_specific":["NVIDIA hosted reranker route","exact Qwen3-4B provider route","live/local/training/hardware gates"],
+  "official_repo_runtime_validation":"NOT_EXECUTED_AS_A_LOCAL_PROCESS_ON_THIS_CHATGPT_SURFACE; live GitHub Action provider receipts and rereads used instead"
+}

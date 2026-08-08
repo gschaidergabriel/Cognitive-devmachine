@@ -1,0 +1,57 @@
+{
+  "schema_version":"1.0",
+  "artifact_id":"L0-RESIDUAL-OBLIGATIONS-20260809-reconcile-1",
+  "status":"NON_AUTHORITATIVE_COORDINATION_PROJECTION",
+  "truth_authority":false,
+  "trigger":"666",
+  "purpose":"Prevent duplicate Level-0 work by projecting latest known exact/bounded closures and the smallest remaining blockers. Immutable/source manifests and receipts outrank this working set.",
+  "staleness_warning":"666_WORKSPACE.json and DRIVE_CLAY_MANIFEST.json are hot projections and were observed lagging newer manifests/commits. This working set crossreads later peer and local closures but must itself be refreshed after further commits.",
+  "global_gate":{"level0":"NOT_PASS","exact_global_percent":0.0,"reason":"Whole Drive recursive identity denominator + Project-Frankenstein full history/root/tree denominator + final cross-source reconciliation are not frozen together."},
+  "project_frankenstein":{
+    "frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "head_status":"EXACT_HEAD_FROZEN",
+    "history_interval":{"status":"EXACT_INTERVAL_FROZEN","base":"e1a8812767668091d146ee958bbc2ebb2743031c","head":"abba90a5767d85abc8a1ac340bae92842dab35c1","base_exclusive_head_inclusive_commit_units":544,"evidence":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_INTERVAL_MANIFEST.json"},
+    "open_blockers":["verify whether base e1a881 is absolute parentless root or explicitly define pre-base scope law","obtain/define reproducible obligations for ordered commit identities across the 544-unit interval","enumerate exact frozen-head file tree; compare changed-file summary is not a head-tree listing","merge existing semantic/history shards against frozen history/tree denominator without double-counting"],
+    "semantic_state":"RICH_PARTIAL_ANALYSIS_COMPLETE_ACROSS_MULTIPLE_NONOVERLAPPING_SHARDS_BUT_ZERO_EXACT_REPO_PERCENT"
+  },
+  "drive":{
+    "root":{"status":"EXACT_DIRECT_ROOT_FROZEN","entries":14,"folders":13,"archive_file":1,"arrival_watermark_utc":"2026-08-08T21:44:00Z"},
+    "top_level":{
+      "frank-demo":{"state":"EXACT_CLOSED","evidence":["research_entity/archive_assimilation/manifests/DRIVE_FRANK_DEMO_MANIFEST.json"],"note":"85-file synthetic demo; zero scientific credit; mixed-log provenance guard added"},
+      "frank-library":{"state":"EXACT_CLOSED_EMPTY","evidence":["research_entity/archive_assimilation/manifests/DRIVE_FRANK_LIBRARY_EMPTY_MANIFEST.json"],"note":"0 children"},
+      "frank-werkzeuge":{"state":"EXACT_CLOSED_FULL_LEAF_COVERAGE","evidence_commits":["95bddd81f6e9c82558c51269a12cf1159cea5b54","8d6d07d13a0b610f24ad8ae763ff4e64d7f0a1a2"]},
+      "titan-memory":{"state":"SEMANTIC_CLOSED_IDENTITY_OPEN","evidence":["research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_EXECUTABLE_ORACLE_MANIFEST.json"],"closed":"lcme/tests/benchmarks/docs/examples/root material semantics","open":"recursive identity of .git/.venv/.pytest_cache/assets support/generated trees"},
+      "frank-projects":{"state":"SEMANTIC_DIRECT_PROJECTS_CLOSED_NESTED_IDENTITY_OPEN","evidence":["research_entity/archive_assimilation/manifests/DRIVE_FRANK_PROJECTS_APPLICATION_CORPUS_MANIFEST.json"],"closed":"14/14 direct projects classified + selected runtime probes","open":"nested .browser/.tasks/media/support identities and any unresolved nested code"},
+      "digital-retina":{"state":"BOUNDED","evidence_commits":["cdf2245e08260184681078910fc9cc42f8916932","ba6df6194feb7ad4caf6e1664b78ce46d34c0d1e"],"open":"full code/model/media recursive identity beyond bounded eval/implementation manifests"},
+      "digital-retina-e2e":{"state":"BOUNDED","evidence_commit":"ba6df6194feb7ad4caf6e1664b78ce46d34c0d1e","open":"remaining recursive identity not covered by bounded implementation/E2E manifest"},
+      "frank-adapter-sicherung":{"state":"BOUNDED_WITH_INTEGRITY_CORRECTION","evidence":["research_entity/archive_assimilation/receipts/666_20260809T0438p0700_chatgpt_secondary_drive_adapter_binary_integrity_delta.json"],"open":"full recursive/cross-method identity and complete v25 binary content hash; root 53.7MB object proven truncated"},
+      "synteq-umbau":{"state":"BOUNDED","evidence_commit":"e9f78dace9e37029e44c415eddf3d61b47abfa2e","open":"remainder beyond Aug-6 coordination/measurement lineage"},
+      "xeno":{"state":"BOUNDED_EXECUTABLE_PACKAGE_ASSIMILATED","evidence_commit":"fa5a2525b9fb4e41e2b916a3ad1f44c54dedf706","open":"exact whole-root recursive identity unless separately frozen"},
+      "frank-rettung-2026-07-31":{"state":"PARTIAL_RECOVERY_LINEAGE","open":"remaining recovery tree identity/semantic diff beyond known post-main files and IdentityForge lineage"},
+      "frank-rettung":{"state":"PARTIAL_RECOVERY_LINEAGE","evidence_commit":"63f49fa9a6f9331145a17adb59e509ef31064bc4","open":"remaining unversioned recovery roots beyond frozen services/known Genesis/self-engineering shards"},
+      "aicore":{"state":"ROOT_EXACT_RECURSION_PARTIAL","root_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROOT_SUBMANIFEST.json","direct_children":50,"folders":37,"files":13},
+      "raw_tar_archive":{"state":"INACCESSIBLE_RAW_BUT_SEMANTICALLY_BYPASSED_BY_EXTRACTED_TREE","bytes":663552000,"connector_limit_bytes":104857600,"rule":"do not require raw-download semantic analysis when extracted Drive tree is source-equivalent; identity/hash equivalence to raw tar remains unresolved unless independently proven"}
+    },
+    "aicore_folder_projection":{
+      "known_exact_or_exact_bounded":["webd","updater","desktopd","docker","router","modeld","bridges","common","config","core","ingestd","needle","tests","writer"],
+      "known_partial":["tools (schranke + system_control exact; broad tools remainder open)","analysen (7 leaf exact; semantically integrated)","training (v14-v27 lineage/curriculum bounded, whole folder not closed)","synteq (selected lineage bounded)"],
+      "high_priority_open":["services","personality","agentic","intelligence","gateway","gaming","wissen","ui","assets","ext","papers","konzepte","docs","skills","configs","scripts",".github",".claude"],
+      "derived_or_low_semantic_priority":[".next generated build output"],
+      "rule":"Recheck commit/manifests before claiming any listed open folder; this is a moving coordination projection."
+    }
+  },
+  "cross_source_reconciliation":{
+    "state":"OPEN",
+    "required":["Drive newer-than-April Project-Frankenstein recovery deltas -> supersession chronology","Drive v25-v27 training/eval lineage -> current training gate/oracle map","AICORE port/instance/router/model identity deltas -> frozen PF head chronology","Digital Retina Drive lineage -> current mandatory FRANK/Harness semantics","deduplicate already-mapped PF safety/memory/GWT/LCME earned-work vs corroborative Drive implementations","freeze final branch feedback/NO_CHANGE coverage for all required targets"]
+  },
+  "highest_value_next_shards":[
+    {"rank":1,"scope":"aicore/services","why":"largest remaining runtime/cognitive implementation subtree; likely overlaps PF head and needs supersession/dedup rather than fresh conceptual redesign"},
+    {"rank":2,"scope":"aicore/personality + agentic + intelligence","why":"persistent self/goal/agency and orchestration lineage not yet exact-recursive closed in Drive"},
+    {"rank":3,"scope":"aicore/wissen + docs/papers/konzepte","why":"knowledge/spec root; dedupe against V7 concept index and current canonical to close semantic obligations cheaply"},
+    {"rank":4,"scope":"aicore/ui + assets + ext + remaining deployment/support folders","why":"close recursive identity after semantic-heavy roots; classify generated/vendor/support without independent research credit"},
+    {"rank":5,"scope":"retina/recovery/synteq/xeno residual identity","why":"convert bounded top-level roots into exact-recursive closure or explicit irreducible connector blockers"},
+    {"rank":6,"scope":"PF exact head tree + pre-base/root law","why":"hard blocker to exact global denominator; compare interval count is solved but tree/root still open"}
+  ],
+  "updated_by":"chatgpt-secondary-666-20260809-l0-denominator-reconcile",
+  "updated_at":"2026-08-09"
+}

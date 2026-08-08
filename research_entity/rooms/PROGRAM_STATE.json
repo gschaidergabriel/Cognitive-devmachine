@@ -1,10 +1,10 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "program_id": "frank-staged-build",
   "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "status": "ACTIVE",
   "current_stage": "L0_ARCHIVE_ASSIMILATION",
-  "status_footer_mode": "NEXT_UNPASSED_MILESTONE_ONLY",
+  "status_footer_mode": "NEXT_LEVEL_PLUS_DOOMSDAY",
   "autonomous_stage_advancement": true,
   "autonomous_dispatch_trigger": "666",
   "post_level0_autonomous_mode": "SEEDED_STOCHASTIC_RESEARCH_FIELD_GENESIS",
@@ -18,6 +18,54 @@
     "DATA_LORA_TRAINING_DATA",
     "WAIT"
   ],
+  "program_targets": {
+    "DOOMSDAY": {
+      "label": "DOOMSDAY",
+      "meaning": "First developer-runnable FRANK in the compact one-module/binary architecture with UnifiedDB, reproducible developer boot, persistent state and validated architecture semantics. The name is an internal joke; the gate itself is real.",
+      "target_type": "DEVELOPER_RUNNABLE_SYSTEM",
+      "required_stages": [
+        "L0_ARCHIVE_ASSIMILATION",
+        "BASE_CLAYCODE_RELEASE",
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_FRANK",
+        "UDB_UNIFIED_DATABASE"
+      ],
+      "progress_formula": "arithmetic mean of each required stage's declared machine-verifiable progress fraction; every stage has equal gate weight unless this target is explicitly revised",
+      "stage_weight": 1,
+      "required_final_artifacts": [
+        "ONE_MODULE_HARNESS_RELEASE_MANIFEST.json",
+        "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json",
+        "UNIFIEDDB_RELEASE_MANIFEST.json",
+        "DOOMSDAY_DEVELOPER_BOOT_RECEIPT.json"
+      ],
+      "developer_boot_acceptance": [
+        "one-module/binary FRANK artifact starts from a documented developer command",
+        "UnifiedDB is the active validated persistence/query substrate",
+        "canonical state initializes and persists across a restart test",
+        "GWT/ClayGraph/readout instrumentation remains observable",
+        "Reference/Clay/One-Module semantic validation has no unexplained required divergence",
+        "developer smoke scenario completes end-to-end",
+        "release is reproducible from frozen manifests and hashes"
+      ],
+      "excludes": [
+        "LoRA training data completion",
+        "LoRA training",
+        "paid Together inference/training",
+        "phenomenal-consciousness claims"
+      ],
+      "eta_bootstrap_days_by_stage": {
+        "L0_ARCHIVE_ASSIMILATION": {"low": 5.0, "high": 12.0},
+        "BASE_CLAYCODE_RELEASE": {"low": 1.0, "high": 4.0},
+        "H1_REFERENCE_HARNESS": {"low": 2.0, "high": 8.0},
+        "H2_CLAYCODE_HARNESS": {"low": 1.0, "high": 4.0},
+        "H3_ONE_MODULE_FRANK": {"low": 3.0, "high": 10.0},
+        "UDB_UNIFIED_DATABASE": {"low": 2.0, "high": 7.0}
+      },
+      "eta_confidence": "LOW_UNTIL_LEVEL0_AND_EARLY_RELEASE_THROUGHPUT_CALIBRATE",
+      "eta_rule": "For unfinished stages sum current measured/calibrated stage ETA when available; otherwise use explicit bootstrap ranges. Recalibrate continuously from actual receipts."
+    }
+  },
   "stage_gates": {
     "L0_ARCHIVE_ASSIMILATION": {
       "label": "Level 0 - FRANK Archive Assimilation (666)",
@@ -72,7 +120,7 @@
       "required_pass_artifacts": ["CLAY_HARNESS_RELEASE_MANIFEST.json", "CLAY_HARNESS_ARCHITECTURE.claygraph.json", "HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json"]
     },
     "H3_ONE_MODULE_FRANK": {
-      "label": "Harness 3 - One-Module FRANK",
+      "label": "Harness 3 - One-Module/Binary FRANK",
       "status": "BLOCKED",
       "blocked_by": ["H2_CLAYCODE_HARNESS"],
       "progress_source": {
@@ -81,7 +129,7 @@
         "field": "work_packages",
         "missing_means": 0
       },
-      "required_pass_artifacts": ["ONE_MODULE_HARNESS_RELEASE_MANIFEST.json", "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json"]
+      "required_pass_artifacts": ["ONE_MODULE_HARNESS_RELEASE_MANIFEST.json", "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json", "ONE_MODULE_BINARY_BUILD_RECEIPT.json"]
     },
     "UDB_UNIFIED_DATABASE": {
       "label": "Unified Database",
@@ -92,7 +140,8 @@
         "path": "research_entity/unifieddb/UNIFIEDDB_RELEASE_WORKSPACE.json",
         "field": "work_packages",
         "missing_means": 0
-      }
+      },
+      "required_pass_artifacts": ["UNIFIEDDB_RELEASE_MANIFEST.json", "DOOMSDAY_DEVELOPER_BOOT_RECEIPT.json"]
     },
     "DATA_LORA_TRAINING_DATA": {
       "label": "LoRA Training Data",
@@ -134,7 +183,7 @@
     "UDB_UNIFIED_DATABASE": ["unifieddb", "harness", "claygraph", "frank", "claycode", "hyperposition", "gwt", "emergenz", "clay"],
     "DATA_LORA_TRAINING_DATA": ["claycode", "frank", "gwt", "hyperposition", "emergenz", "harness", "claygraph", "unifieddb", "clay"]
   },
-  "autonomous_progression_rule": "On exact 666 while Level 0 is open, autonomously claim and execute the next non-overlapping archive-assimilation shard. After 666_RELEASE_GATE PASS, exact 666 no longer deterministically dispatches into the first unpassed milestone. It spawns one seeded high-value diverse research field under EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md, performs research immediately, cross-connects it to the mesh, and routes material deltas to specialist branches. The sequential milestones remain the shared attractor and advance only when their specialist machine-readable gates pass. WAIT remains a hard stop.",
+  "autonomous_progression_rule": "On exact 666 while Level 0 is open, autonomously claim and execute the next non-overlapping archive-assimilation shard. After 666_RELEASE_GATE PASS, exact 666 no longer deterministically dispatches into the first unpassed milestone. It spawns one seeded high-value diverse research field under EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md, performs research immediately, cross-connects it to the mesh, and routes material deltas to specialist branches. Sequential milestones remain the shared attractor and advance only when their specialist machine-readable gates pass. WAIT remains a hard stop.",
   "global_training_rule": "No paid LoRA training or paid Together inference/training is authorized by program progression. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit new owner instruction before any training.",
   "mandatory_cross_cutting_refs": [
     "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",

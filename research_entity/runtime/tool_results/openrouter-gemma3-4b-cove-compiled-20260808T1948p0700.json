@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "request_id": "openrouter-gemma3-4b-cove-compiled-20260808T1948p0700",
+  "tool": "openrouter_inference",
+  "request_sha256": "420864c35e396bdeb90731095b2ed2ec38099c2000a8172e2bfc6dd572034094",
+  "processed_at": "2026-08-08T12:49:55.499925+00:00",
+  "result": {
+    "provider": "OpenRouter",
+    "model": "google/gemma-3-4b-it",
+    "model_identity": "Gemma-3-4B-IT",
+    "requested_target_class": "generic-4B",
+    "executed_model_class": "4B",
+    "evidence_role": "direct_4b_external_runtime",
+    "content": "```json\n[\"VALID\", \"INVALID\", \"VALID\", \"INVALID\", \"INVALID\", \"VALID\", \"INVALID\", \"VALID\", \"VALID\", \"VALID\", \"VALID\", \"VALID\"]\n```",
+    "reasoning": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 251,
+      "completion_tokens": 42,
+      "total_tokens": 293,
+      "cost": 1.675e-05,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 1.675e-05,
+        "upstream_inference_prompt_cost": 1.255e-05,
+        "upstream_inference_completions_cost": 4.2e-06
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    },
+    "provider_route": "DeepInfra"
+  },
+  "status": "SUCCESS"
+}

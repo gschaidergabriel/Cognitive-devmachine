@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "policy": "Every registered API/tool plus every *_RESEARCH_CAPABILITY.json extension is re-evaluated on every DOOMSDAY forecast. Availability alone may identify relevant workstreams but does not change ETA. ETA changes require a runtime-verified capability plus a verified doomsday_forecast impact receipt. For the same row calibrated capability multipliers do not stack by default; the strongest single verified factor is used unless a future joint benchmark explicitly defines a combined factor.",
+  "inference_rules": [
+    {
+      "keywords": ["sandbox", "code execution", "runtime_experiment", "remote_code_execution", "compiler"],
+      "rows": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "CLAY_0_1_FULL_INTEGRATION"]
+    },
+    {
+      "keywords": ["model_inference", "small_model_inference", "model experiments", "inference"],
+      "rows": ["DATA_FINAL_TRAINING_CORPUS", "FINAL_MODEL_FINE_TUNE", "MODEL_EXPORT_RUNTIME_PACKAGE", "CLAY_0_1_FULL_INTEGRATION"]
+    },
+    {
+      "keywords": ["fine-tun", "training", "trainer"],
+      "rows": ["DATA_FINAL_TRAINING_CORPUS", "FINAL_MODEL_FINE_TUNE"]
+    },
+    {
+      "keywords": ["embedding", "rerank", "retrieval"],
+      "rows": ["UDB_UNIFIED_DATABASE", "DATA_FINAL_TRAINING_CORPUS", "CLAY_0_1_FULL_INTEGRATION"]
+    },
+    {
+      "keywords": ["web search", "semantic_web_search", "agentic_web_search", "scholarly", "preprint", "bibliographic"],
+      "rows": ["L0_ARCHIVE_ASSIMILATION", "BASE_CLAYCODE_RELEASE"]
+    },
+    {
+      "keywords": ["database", "storage", "vector database", "sql"],
+      "rows": ["UDB_UNIFIED_DATABASE", "CLAY_0_1_FULL_INTEGRATION"]
+    }
+  ],
+  "calibrated_impact_contract": {
+    "location": "A capability file may include doomsday_forecast.impacts[]",
+    "required_fields": ["status=VERIFIED", "rows", "multiplier", "evidence_refs"],
+    "rule": "The capability itself must also be runtime verified. Unverified capabilities cannot accelerate the forecast even if an impact object is present.",
+    "accelerator_multiplier": "0 < multiplier < 1",
+    "blocker_multiplier": "Use DOOMSDAY_EVENTS.jsonl for blockers/rework rather than a capability acceleration field.",
+    "stacking": "Strongest single verified capability multiplier per forecast row by default; no blind multiplication across providers."
+  }
+}

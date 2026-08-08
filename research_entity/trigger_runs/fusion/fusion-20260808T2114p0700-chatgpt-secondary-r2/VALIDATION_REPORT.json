@@ -1,0 +1,32 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260808T2114p0700-chatgpt-secondary-r2",
+  "validator":"tools/fusion_research_contract.py",
+  "execution_class":"STRUCTURAL_MIRROR_VALIDATION_FROM_REMOTE_REREAD",
+  "official_repo_command_executed":false,
+  "reason":"GitHub connector exposes repository read/write but not arbitrary authenticated repository Python execution. The validator source was reread and its conditions were applied to remotely reread artifacts.",
+  "authoritative_branches":["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb"],
+  "checks":{
+    "required_files_present":true,
+    "interconnect_trigger_is_fusion":true,
+    "interconnect_registry_branch_set_matches":true,
+    "interconnect_priority_covers_each_branch_once":true,
+    "requires_global_coverage_manifest":true,
+    "requires_feedback_each_branch":true,
+    "coverage_all_eight_branches":true,
+    "coverage_no_unknown_branches":true,
+    "shared_ancestry_scanned":true,
+    "contradictions_scanned":true,
+    "feedback_all_eight_branches":true,
+    "feedback_effects_valid":true,
+    "all_non_NO_CHANGE_feedback_has_durable_writeback_refs":true,
+    "feedback_no_unknown_branches":true,
+    "fresh_concurrent_CC12_material_ingested":true,
+    "remote_reread_key_manifests":true,
+    "canonical_recheck_unchanged_r2_04234efdb86c":true,
+    "canonical_promotion":false
+  },
+  "violations":[],
+  "status":"PASS_STRUCTURAL_MIRROR",
+  "promotion_boundary":"No canonical or strong scientific promotion; C3F remains OPEN."
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.1",
+  "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
+  "refresh_basis":{"previous_inventory":"research_entity/trigger_runs/claygraph/claygraph-20260808T0642p0700-chatgpt-secondary-r2/DATABASE_INVENTORY.json","live_runtime_measurement_date":"2026-08-05","reported_live_db_count":71,"new_live_store_evidence_since_previous_run":false,"status":"NO_CHANGE_WITH_BLOCKED_GAPS"},
+  "stores":[
+    {"store_id":"frank:consciousness","role":"MIXED_OPERATIONAL_SYSTEM_OF_RECORD_AND_DERIVED_COGNITIVE_PROJECTIONS","known_state":["workspace_broadcast","workspace_state","experience_vectors","predictions","reflections","intent_queue","mood/training material"],"latency":{"workspace_read_median_ms":0.2168,"workspace_read_p95_ms":0.2743,"workspace_write_median_ms":1.0565,"workspace_write_p95_ms":1.1729},"candidate_mapping":"PROJECT exact anchors + temporal semantic assertions; keep authoritative rows/bridge exact during migration","disposition":"PROJECT","rollback":"legacy SQLite read remains authoritative until shadow parity/replay/p99 gates pass"},
+    {"store_id":"frank:world_experience","role":"DURABLE_SLOW_PERSONALITY_STATE","known_state":["precision","risk","empathy","autonomy","vigilance"],"candidate_mapping":"PROJECT exact versioned E-PQ values + semantic trend relations","disposition":"PROJECT","rollback":"retain current state/history store"},
+    {"store_id":"frank:thalamus-runtime-store","path":"UNKNOWN","role":"HOT_EXACT_GATE_STATE","candidate_mapping":"LINK/PROJECT asynchronously; no graph traversal in hot gate path without live p99 evidence","disposition":"DEFER"},
+    {"store_id":"frank:titan-ego-runtime-store","path":"UNKNOWN_CURRENT","role":"EGO_SELF_STATE_UNKNOWN_DETAIL","candidate_mapping":"LINK only after schema/authority verification","disposition":"DEFER"},
+    {"store_id":"frank:invariants-historical","path":"historical:invariants.db","role":"POTENTIAL_SAFETY_INVARIANT_AUTHORITY_IF_CURRENT","candidate_mapping":"opaque references/receipts only; graph never mints authority","disposition":"DEFER","preferred_if_current":"KEEP_ISOLATED"},
+    {"store_id":"frank:dream-historical","path":"historical:dream.db","role":"OFFLINE_SYNTHESIS_MEMORY_UNKNOWN_CURRENT","candidate_mapping":"semantic projection only after live verification","disposition":"DEFER"}
+  ],
+  "unresolved_inventory":{"status":"BLOCKED","reported_total_live_db_files":71,"missing":"complete current filenames, schemas, WAL/journal modes, service ownership, read/write rates, authority/recovery classifications","rule":"No unnamed store is assigned MERGE/PROJECT by inference."},
+  "aggregate":{"MERGE":[],"PROJECT":["frank:consciousness","frank:world_experience"],"KEEP_ISOLATED":[],"DEFER":["frank:thalamus-runtime-store","frank:titan-ego-runtime-store","frank:invariants-historical","frank:dream-historical","all unresolved current stores"]},
+  "cycle2_delta":"NONE_TO_PHYSICAL_MIGRATION. G1b changes retrieval/assembly planning, not store authority or cutover disposition.",
+  "destructive_action_performed":false
+}

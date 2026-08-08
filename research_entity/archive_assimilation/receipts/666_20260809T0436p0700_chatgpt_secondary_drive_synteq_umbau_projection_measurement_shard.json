@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0436+0700-chatgpt-secondary-drive-synteq-umbau-projection-measurement",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_packages": ["666-01-DEDUPE-SHARD", "666-03-PARALLEL-ANALYZE", "666-04-EARNED-WORK-MAP", "666-06-BRANCH-FEEDBACK"],
+  "status": "NON_OVERLAPPING_DRIVE_SHARD_ANALYZED",
+  "observed_at": "2026-08-09T04:36:00+07:00",
+  "source_scope": {
+    "drive_root_folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "folder": "synteq-umbau",
+    "folder_id": "1fWUuy1oxoOAOHEQGZhhF00SUxISV4qzr",
+    "novelty_basis": "Files modified on 2026-08-06 postdate the frozen v7 concept-index source window and were not present in the live peer receipts/commits cross-read before this write.",
+    "primary_source_refs": [
+      "drive:1IK39ctA5ztJGg5vAvCZSgtfKgWOPGS6t:PROMPT-KOPF.xeno",
+      "drive:1LoNRece3X5hc_JSt_RVdc5tBEUiyzthk:.kopf-quelle.jsonl",
+      "drive:1ARG4vbxqo6nutIJbu7EjPVGuJ1zxzdKo:PROMPT-KRONE.xeno",
+      "drive:1nf-FSHxRw9F6Nx_hXVQUKNu7rAQD_b63:bausteine.db.sql",
+      "drive:10_4sIiYikgAJRpopWGr3NhRayaj6ttqg:wache-token",
+      "drive:12uAbzmGCXMYQ39BZDlzjT8iyGKtvlOzN:messen-lauf",
+      "drive:16R3Qu8WmEN822_l-DHnLRxSWIEmzjJin:paket"
+    ],
+    "crossread_noncredit_sources": [
+      "research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0422p0700_drive_unpacked_tree_digital_retina_xeno.json",
+      "recent commits: fa5a2525, 5a47d802, 469fed11, 95bddd81"
+    ]
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-SYN-001",
+      "epistemic_class": "HISTORICAL_EXECUTABLE_REPRESENTATION_ARCHITECTURE",
+      "status": "CURRENTLY_RELEVANT_CANONICAL_PROJECTION_CONSTRAINT",
+      "claim": "PROMPT-KOPF.xeno declares the per-spawn head a byte-stable cache anchor while identity/memory lives in a database; .kopf-quelle.jsonl contains the same head material as structured source records. The historical implementation therefore separated structured source/state from a compact model-facing XENO projection rather than treating prompt prose as canonical memory.",
+      "targets": ["claycode", "unifieddb", "frank", "harness", "claygraph"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "current_implication": "Make canonical typed state/store authoritative and generate deterministic ClayReader/model projections from it. Projection text must be replaceable/cacheable and must not be the sole persistence or authority layer."
+    },
+    {
+      "finding_id": "DRIVE-SYN-002",
+      "epistemic_class": "HISTORICAL_EXECUTABLE_WORK_PROTOCOL",
+      "status": "CURRENTLY_RELEVANT_HARNESS_MEASUREMENT_FOUNDATION",
+      "claim": "The packet CLI encoded work as explicit package state with baseline measurement, method, target, abort criterion, assignment, post-value, completion and a separate judgement/rework step. The head limited a worker to one unjudged package before another was taken.",
+      "targets": ["harness", "claycode", "frank", "claygraph"],
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "current_implication": "Reuse the measured-before/measured-after package contract for Harness work and autonomous execution receipts; separate action completion from independent acceptance/judgement."
+    },
+    {
+      "finding_id": "DRIVE-SYN-003",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_FROM_EXECUTABLE_FIX_COMMENT",
+      "status": "CURRENTLY_RELEVANT_TYPED_TELEMETRY_FALSIFIER",
+      "claim": "wache-token records a concrete unit/field bug: the watchdog previously used cumulative token consumption including cache usage as if it were live context size, terminating Waldo at 2,283,290 accumulated tokens although the history was about 95,000 context tokens; the source describes this as roughly a factor-seven overestimate and was corrected to use the context field with cumulative tokens only as fallback.",
+      "targets": ["harness", "frank", "claycode", "unifieddb"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "current_implication": "Telemetry values that share a numeric representation but differ in semantic units must have distinct typed identities. Add a regression test that accumulated usage can never satisfy a context-window/death predicate without explicit conversion semantics."
+    },
+    {
+      "finding_id": "DRIVE-SYN-004",
+      "epistemic_class": "HISTORICAL_ROLE_MODEL_ORCHESTRATION_MECHANISM",
+      "status": "CURRENTLY_RELEVANT_AUTHORITY_AND_FRESHNESS_CONSTRAINT",
+      "claim": "PROMPT-KRONE.xeno separated the dynamic crown/coordinator role from model identity: all sessions started as Sonnet, crown ownership selected Opus for judgement/coordination and Sonnet for building, and every model switch required rereading the current package and mailbox because state may have changed during the switch. Crown transfer was runtime state and could move to another live role.",
+      "targets": ["frank", "harness", "claycode", "unifieddb"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "current_implication": "Treat coordinator/authority role, model backend and task state as separate typed dimensions. A model/role switch invalidates stale projections and requires an authoritative reread before effectful continuation."
+    },
+    {
+      "finding_id": "DRIVE-SYN-005",
+      "epistemic_class": "HISTORICAL_MEASUREMENT_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_THROUGHPUT_METHOD_CONSTRAINT",
+      "claim": "messen-lauf documents that a prior baseline of 289,885 output tokens was a non-reproducible snapshot of growing conversation files; the same files later measured 697,368 / 510,783 / 323,195. The replacement measured per session/spawn and explicitly states its falsifier: if one session spans multiple packets, session is no longer the packet-run unit and the metric becomes biased high.",
+      "targets": ["harness", "claycode", "q12_index", "clay"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "current_implication": "Program throughput and token-efficiency telemetry must use immutable bounded execution units (packet/run/receipt), never cumulative growing files as denominators. Preserve metric falsifiers alongside the measurement."
+    },
+    {
+      "finding_id": "DRIVE-SYN-006",
+      "epistemic_class": "HISTORICAL_GWT_CONFIGURATION_EVIDENCE",
+      "status": "CORROBORATIVE_NONCOUNTING",
+      "claim": "bausteine.db.sql preserves a GWT prompt block with six channels, salience/ignition thresholds and the explicit historical observation that only 4 of 16 consumers read the stage. This independently supports the distinction between broadcast existence and downstream uptake.",
+      "targets": ["gwt", "frank", "harness", "claygraph"],
+      "reuse_category": "CORROBORATIVE_ONLY",
+      "current_implication": "Current GWT evidence must continue measuring delivery, reconstruction, uptake, causal use and outcome rather than treating workspace publication as functional broadcast.",
+      "earned_work_hours_added": 0.0,
+      "dedup_reason": "Mechanism family already mapped by Project-Frankenstein GWT/runtime and Drive Thalamus shards."
+    },
+    {
+      "finding_id": "DRIVE-SYN-007",
+      "epistemic_class": "HISTORICAL_EXPERIMENT_RULE_IN_EXECUTABLE_PROMPT_STORE",
+      "status": "CURRENTLY_RELEVANT_EMERGENCE_EVIDENCE_BOUNDARY",
+      "claim": "The SQL prompt-block lineage encodes an operational emergence criterion requiring a state/cell to be occupied in the coupled run and empty in the decoupled run, with the explicit rule that no emergent cell is credited without an ablation run.",
+      "targets": ["emergenz", "gwt", "harness", "claygraph", "clay"],
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "current_implication": "Preserve the historical intervention discipline: descriptive novelty alone is not emergence evidence; a matched decoupled/lesioned counterfactual is required for causal promotion."
+    }
+  ],
+  "dedup_and_credit": {
+    "peer_crossread": "Live commit pulse showed XENO-G8, healing-log/frank-werkzeuge, rescue/IdentityForge, adapter-sicherung and concept-index lanes were already claimed or committed by sibling 666 workers. Those mechanisms are intentionally not credited here.",
+    "unique_mapping_candidate": {
+      "mapping_id": "HEW-DRIVE-SYNTEQ-010",
+      "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "UDB_UNIFIED_DATABASE", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Post-index Aug-6 structured-source-to-XENO projection architecture, measured packet lifecycle, typed token/context failure oracle, dynamic role/model freshness rule and bounded-run measurement methodology.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 7.0,
+      "avoided_future_hours_high": 14.0,
+      "confidence": "MEDIUM_FOR_TEST_AND_DESIGN_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Reference/Clay Harness must demonstrate deterministic projection from canonical typed state, reject cumulative-token/context-unit confusion, invalidate stale projections across model/role switch, and use bounded immutable run units for throughput measurement."
+    }
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "This closes a semantic shard but the whole Drive recursive denominator and cross-source atomic obligation denominator remain unfrozen.",
+    "strict_progress_rule_preserved": true
+  },
+  "next_actions": [
+    "Route DRIVE-SYN-001..007 to the affected research rooms and Harness work packages.",
+    "Add HEW-DRIVE-SYNTEQ-010 only after rereading the latest shared earned-work file and confirming no sibling mapping covers the same mechanism family.",
+    "Continue whole-Drive inventory using bounded subtree manifests rather than serially re-reading already indexed concept versions."
+  ]
+}

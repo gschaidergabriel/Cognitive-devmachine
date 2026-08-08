@@ -1,9 +1,9 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"claygraph-20260808T1701p0700-chatgpt-secondary-r2",
   "actor_id":"chatgpt-secondary",
   "executions":[
-    {"class":"canonical+implementation","tool":"GitHub connector","status":"SUCCESS_RW_IN_PROGRESS","purpose":"canonical/actor/trigger verification, newest commits, accepted graph, prior ClayGraph runs, Groq 8B proxy evidence, persistence"},
+    {"class":"canonical+implementation","tool":"GitHub connector","status":"SUCCESS_RW_VERIFIED","purpose":"canonical/actor/trigger verification, newest commits, accepted graph, prior ClayGraph runs, Groq 8B proxy evidence, persistence and reread"},
     {"class":"model_experiment","tool":"existing Groq 8B repository experiment suite","status":"SUCCESS_IMPORTED","evidence_role":"8b_proxy_for_4b","model":"llama-3.1-8b-instant","key_result":"ClayGraph/graph-lexical roughly 84-87 ms median/query vs SQLite FTS ~0.8-0.9 ms on runner; graph sometimes surfaced relational facts FTS missed; activation did not consistently beat graph-lexical."},
     {"class":"scholarly+implementation","tool":"native web fallback","status":"SUCCESS","sources":["RLM-on-KG: Heuristics First, LLMs When Needed (arXiv:2604.17056)","Use Graph When It Needs / EA-GraphRAG (arXiv:2602.03578)","HippoRAG 2 / From RAG to Memory (arXiv:2502.14802)","Microsoft GraphRAG current Local/Global/DRIFT documentation"]},
     {"class":"executable","tool":"local Python sandbox","status":"SUCCESS","purpose":"synthetic 10k-node retrieval implementation benchmark comparing per-query JSONL reload+full scan, resident full scan, and resident inverted seed index","results":{"reload_scan_median_ms":20.499,"reload_scan_p95_ms":23.394,"resident_scan_median_ms":8.349,"resident_scan_p95_ms":9.706,"resident_inverted_median_ms":0.106,"resident_inverted_p95_ms":0.146}},
@@ -11,5 +11,6 @@
     {"class":"live_frank","tool":"live 71-store/p99/crash/privacy tests","status":"BLOCKED_SURFACE","reason":"No direct shell/runtime access to live FRANK host from this worker."},
     {"class":"repository_execution","tool":"claygraph_build.py / claygraph_benchmark.py","status":"BLOCKED_SURFACE","reason":"GitHub connector cannot execute arbitrary repository scripts; current hosted Groq self-use evidence was imported from already executed repository suite."}
   ],
-  "promotion_boundary":"No target-model or live-FRANK claim is promoted from proxy/synthetic evidence."
+  "promotion_boundary":"No target-model or live-FRANK claim is promoted from proxy/synthetic evidence.",
+  "github_write_verification":"VERIFIED_RW_AFTER_REREAD"
 }

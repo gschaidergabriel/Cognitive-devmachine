@@ -1,0 +1,86 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0542+0700-chatgpt-secondary-aicore-services-security-supersession",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"POST_PF_SERVICES_SECURITY_DELTA_FOUND_WITH_REPRODUCED_FAIL_OPEN_ORACLE",
+  "source_scope":{
+    "drive_services_root":"drive:1tVCchrYmiQnPizAoP64JFif5Q7QzzK1-:aicore/services",
+    "pf_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "exact_mirror_subtree":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SERVICES_HYPOTHESIS_ENGINE_CROSSSOURCE_MANIFEST.json",
+    "deep_read_drive_files":[
+      {"path":"aicore/services/tools.py","drive_id":"1228lCcZztIZDL1DTBv1Pz5wCfOywOnxW","bytes":183100,"sha256":"18d01b5680a9e2e007c66bf5c212b0558f0fe79b72875c8f9dcb4265a63644a5","git_blob_sha1":"e4fa0928ad0a708df82e31852beb6b45cd37b875","pf_blob_sha1":"60f888c0b901f69c571da21c0798e54241c8d2d4","relation":"DIVERGENT"},
+      {"path":"aicore/services/injection_guard.py","drive_id":"1qss5o1lVfQldB97e6VLI3Cq-QCHe9C-T","bytes":26206,"sha256":"5f37da986cb6bf4828eb358bb87cc378a0d306bf557fe9dd49deb704e73098ea","git_blob_sha1":"0a411f23f4de27f10519d554fe18a8bb619074a6","pf_relation":"ABSENT_AT_FROZEN_HEAD"},
+      {"path":"aicore/services/subconscious.py","drive_id":"1bheyeuq5IarbtymYWgY9XEYKrYKT7j1t","bytes":51218,"sha256":"0da15788a9ec17924e1df6db7147434a01c00d5d012fbf6187bd7aa01972fb9a","git_blob_sha1":"60890da24fccccb9883766e496f7c81436e35fd3","pf_blob_sha1":"046515218aa57701e7ee4cb1df369406bf7a37a8","relation":"DIVERGENT_NOT_YET_ATOMIZED"},
+      {"path":"aicore/services/dream_daemon.py","drive_id":"1bx_8XzFz9iZ187oM2yOzWO8y9YQlCUGk","bytes":69618,"sha256":"17e5a475efbbe0a97c1b05f887d81a370a51a64767674b6bccdb2bd21d9d77d0","git_blob_sha1":"7fbe1edee49a39bd315d829ba737b7119d96b45c","pf_blob_sha1":"0e5370b8c3a17c6ff4f1ddf9baa2d7b48106e06f","relation":"DIVERGENT_NOT_YET_ATOMIZED"}
+    ]
+  },
+  "findings":[
+    {
+      "finding_id":"AICORE-SERVICES-MIRROR-001",
+      "epistemic_class":"BYTE_IDENTITY_CROSS_SOURCE",
+      "status":"EXACT_CLOSED_ZERO_CREDIT",
+      "claim":"Drive aicore/services/hypothesis_engine is a six-file exact byte-identical mirror of services/hypothesis_engine at the frozen Project-Frankenstein head.",
+      "implication":"Close this Drive subtree as corroborative identity evidence and do not repeat semantic analysis or historical earned-work credit."
+    },
+    {
+      "finding_id":"AICORE-INJECTION-LINEAGE-002",
+      "epistemic_class":"POST_HEAD_DRIVE_SOURCE_DELTA",
+      "status":"UNIQUE_DRIVE_LINEAGE",
+      "claim":"Drive contains services/injection_guard.py while that path is absent at the frozen PF head; the divergent Drive services/tools.py integrates the guard into web-search and document-ingest text paths.",
+      "implication":"GitHub frozen-head history is insufficient for this security lineage; retain the Drive module and integration as a distinct source node in ClayGraph/UnifiedDB provenance."
+    },
+    {
+      "finding_id":"AICORE-INJECTION-FAILOPEN-003",
+      "epistemic_class":"REPRODUCED_HISTORICAL_NEGATIVE_RESULT",
+      "status":"HARNESS_ORACLE_REQUIRED",
+      "claim":"The historical guard deterministically scans the complete document, but its mandatory free-LLM second opinion receives only text[:2000]. An isolated regression run placed a strong ignore-previous-instructions match after character 2000: deterministic scan returned confirmed score 3, the second-opinion prompt did not contain the detected span, the stub verifier returned injection=false, fund became clean, and pruefe_und_neutralisiere returned the original full document unchanged.",
+      "reproduction":{"input_class":"text document >2000 chars with deterministic strong match after verifier window","match_position_gt":2000,"deterministic_verdict":"bestaetigt","deterministic_score":3,"verifier_saw_match":false,"verifier_reply":"injektion=false","final_verdict":"sauber","returned_original":true,"neutralized":false},
+      "implication":"Current Safe-Effect/ingestion boundary must never allow a lower-assurance verifier to clear a deterministic match it was not shown. Verifier input must include every detected span with bounded context (or equivalent complete coverage), and clearance authority must be explicitly typed and tested."
+    },
+    {
+      "finding_id":"AICORE-INJECTION-CONTROL-004",
+      "epistemic_class":"REPRODUCED_CONTROL",
+      "status":"HISTORICAL_GOOD_BEHAVIOR",
+      "claim":"When the free verifier is unavailable, the historical implementation preserves the deterministic finding and neutralizes the text; this no-verifier path is fail-closed.",
+      "implication":"Preserve this property in the current ingestion contract while fixing verifier-window coverage."
+    },
+    {
+      "finding_id":"AICORE-INJECTION-SOURCE-005",
+      "epistemic_class":"REPRODUCED_BOUNDARY_BEHAVIOR",
+      "status":"ALERT_PROVENANCE_RISK_NOT_CONTENT_FAILOPEN",
+      "claim":"A source label containing an internal-test token such as test suppresses verifier/escalation, but a deterministic match is still neutralized. This is not a content fail-open in the tested path, although source labels must not be attacker-controlled if they affect alert provenance.",
+      "implication":"Separate trusted source-class metadata from free-form source display strings."
+    },
+    {
+      "finding_id":"AICORE-TOOLS-SHELL-006",
+      "epistemic_class":"HISTORICAL_SOURCE_NEGATIVE_DESIGN",
+      "status":"CORROBORATIVE_NONCOUNTING",
+      "claim":"The divergent historical tools.py still exposes shell=True command execution guarded by a substring blocklist for selected destructive commands. This is not semantic/effect isolation and must not be inherited as the current ClayCode authority model.",
+      "implication":"Use only as a negative regression fixture; current Clay authority/effect checker must mediate capabilities structurally rather than by command-string denylist.",
+      "dedup":"Overlaps existing PF safety/authority negative-result family; no separate earned-work credit."
+    },
+    {
+      "finding_id":"AICORE-DIVERGENCE-SCOPE-007",
+      "epistemic_class":"CROSS_SOURCE_IDENTITY_CONSTRAINT",
+      "status":"OPEN_ATOMIZATION",
+      "claim":"Drive subconscious.py and dream_daemon.py are byte-divergent from frozen PF head, but major PPO/dream/memory-training mechanisms are already present in PF; modification timestamps alone are insufficient to call the entire files novel.",
+      "implication":"Atomize exact semantic diffs before any new mechanism or earned-work claim."
+    }
+  ],
+  "harness_route":"research_entity/harness/fixtures/AICORE_INJECTION_GUARD_TAIL_CLEARANCE_ORACLE.json",
+  "branch_feedback":{
+    "harness":"Add long-tail injection clearance regression and source-provenance typing tests.",
+    "claycode":"Do not express ingestion safety as text denylist plus verifier override; authority and untrusted-data provenance belong in typed effects/capabilities.",
+    "frank":"Treat external text as typed untrusted evidence; model-facing projection must preserve data/instruction boundary and abstention/neutralization state.",
+    "unifieddb":"Store source trust/provenance as structured immutable metadata rather than inferred from free-form labels.",
+    "claygraph":"Add Drive-only injection_guard lineage node and tools.py divergent edge relative to frozen PF head.",
+    "q12_index":"Historical August security work exists outside frozen PF head; do not describe PF head as complete security lineage."
+  },
+  "earned_work_candidate":{"mapping_id":"HEW-DRIVE-INJECTION-TAIL-NEW","reuse_category":"NEGATIVE_RESULT_VALUE","current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","CLAY_0_1_ACCEPTANCE_RUN"],"avoided_future_hours_low":0.5,"avoided_future_hours_center":2.0,"avoided_future_hours_high":4.0,"confidence":"MEDIUM_FOR_ORACLE_LOW_FOR_HOUR_ESTIMATE","global_credit_applied":false,"reason":"Unique reproduced Drive-only failure oracle, but final row-level safety overlap reconciliation is pending."},
+  "progress_accounting":{"exact_level0_global_percent_added":0.0,"reason":"One services subtree exact-closed and one post-PF security lineage atomized; whole recursive Drive/PF/cross-source denominator still open."},
+  "created_at":"2026-08-09T05:42:00+07:00"
+}

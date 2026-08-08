@@ -1,0 +1,60 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260809T0149p0700-chatgpt-secondary-sol-04",
+  "trigger":"claygraph",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "accepted_graph_at_start_and_end":"research_entity/claygraph/CLAYGRAPH_LATEST.claycode.json / G0 claygraph-v0-seed",
+  "candidate":"IBCA-G3 Intent-Bound Causal Assembly",
+  "decision":"OPEN_HOLD_NO_PROMOTION",
+  "required_outputs":{
+    "INTERCONNECT_MANIFEST.json":"present",
+    "TOOL_EXECUTION_MANIFEST.json":"present",
+    "DATABASE_INVENTORY.json":"present",
+    "CLAYGRAPH_SCHEMA.claycode.json":"present",
+    "HYPOTHESES.json":"present",
+    "EXPERIMENT_RESULTS.json":"present",
+    "NEGATIVE_RESULTS.md":"present",
+    "SELF_USE_BENCHMARK.json":"present",
+    "MIGRATION_PLAN.json":"present",
+    "FRANK_CLAYGRAPH_FEEDBACK.json":"present",
+    "BRANCH_FEEDBACK_MANIFEST.json":"present",
+    "RUN_MANIFEST.json":"present",
+    "FINAL_REPORT.md":"present"
+  },
+  "additional_outputs":["LIVE_WORKER_CROSSREAD.json","LATE_LIVE_DELTA_RESOURCE_IDENTITY.json"],
+  "coverage":{"registered_scientific_branches":8,"covered":8,"fresh_in_progress_checked":true,"live_claycode_crossread":true,"live_gwt_crossread":true},
+  "experiments":["EXP-G3-INTENT-ASSEMBLY-001","EXP-G3-NOISY-CREDIT-002","SELFUSE-G3-CURRENT-RAE-001"],
+  "main_new_laws":[
+    "retrievable != admissible_for_this_task != allowed_to_influence_consequential_proposal",
+    "EMPTY_ADMISSIBLE_SET => ESCALATE_OR_EXACT_VALIDATE",
+    "memory influence receipt != truth != GWT uptake != effect authority",
+    "exact/high-confidence query may BYPASS graph propagation",
+    "mutable external reference identity may require resolver/object witness at consequential handoff"
+  ],
+  "epistemic_boundaries":[
+    "G3 numerical results are constructed local mechanism evidence only",
+    "self-use corpus is small/manual/staged",
+    "imported worker results retain shared RAE ancestry and are not independent replication",
+    "external benchmark gains are not transferred to FRANK",
+    "no E2B execution was performed by this G3 worker",
+    "no target-Qwen/production FRANK/live database experiment",
+    "no formal security/noninterference proof"
+  ],
+  "destructive_actions_performed":false,
+  "accepted_graph_changed":false,
+  "canonical_state_changed":false,
+  "completion_gate":{
+    "eight_branch_coverage":true,
+    "fresh_in_progress_meta_checked":true,
+    "inventory_gaps_explicit":true,
+    "hypotheses_counterhypotheses_falsifiers":true,
+    "tools_experiments_or_fallbacks_recorded":true,
+    "self_use_present":true,
+    "migration_reversible_keep_isolated_valid":true,
+    "frank_and_branch_feedback_present":true,
+    "durable_outputs_written":true,
+    "final_remote_reread_pending":true
+  },
+  "status":"FINALIZING_PENDING_REMOTE_REREAD"
+}

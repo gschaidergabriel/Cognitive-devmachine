@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "event_id":"20260809T0431p0700-666-drive-runtime-inventory-crossroom-delta",
+  "room_id":"center",
+  "event_type":"CROSS_ROOM_DELTA",
+  "origin_worker":"chatgpt-secondary-20260809-666",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"666",
+  "created_at":"2026-08-09T04:31:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms":["frank","harness","claycode","claygraph","unifieddb","clay"],
+  "affects_claims":[],
+  "dependencies":["research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"],
+  "artifact_refs":["research_entity/archive_assimilation/receipts/666_20260809T0431p0700_chatgpt_secondary_drive_runtime_inventory_classification.json"],
+  "ancestry_family":"drive-extracted-runtime-inventory-20260809",
+  "delivery":"INTERRUPT_NEXT_SAFE_POINT",
+  "payload":{
+    "delta_type":"SOURCE_LINEAGE_DIVERGENCE_AND_EXECUTABILITY_CLASSIFICATION",
+    "summary":"Drive `aicore` is proven not to be a byte-identical Project-Frankenstein mirror: same-path router/app.py has Drive git-blob 04c70818... versus frozen GitHub blob 601b4aa0..., with Drive modified 2026-08-04. Therefore whole aicore requires recursive path/hash/version reconciliation. Separately, frank-projects contains 14 application folders but sampled roots are specs/static examples/insufficient code, so they are use-case corpus rather than ClayCode execution evidence until runnable receipts exist.",
+    "actions":[
+      "Level0/Harness: recursively hash Drive aicore and cluster same/changed/new/deleted paths against GitHub and rescue lineage.",
+      "FRANK: current runtime truth must bind exact runtime/source hashes; do not assume repository head equals deployed Drive state.",
+      "ClayCode: mine frank-projects for application requirements but award APP proof only after actual compile/lower/execute receipts.",
+      "ClayGraph/UnifiedDB: preserve cross-source version nodes and supersession instead of flattening divergent copies."
+    ],
+    "exact_level0_progress_delta_percent":0.0,
+    "earned_work_hours_added":0.0
+  }
+}

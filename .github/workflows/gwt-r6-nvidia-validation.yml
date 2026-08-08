@@ -15,20 +15,31 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Execute exact R6 NVIDIA request
+      - name: Execute prose/list reader arm
         run: |
-          python tools/nvidia_nim.py --request research_entity/runtime/nvidia_requests/gwt-r6-nvidia-rcwc-reader-20260809T0142p0700.json >/tmp/nvidia-summary.json
+          python tools/nvidia_nim.py --request research_entity/runtime/nvidia_requests/gwt-r6-nvidia-rcwc-reader-20260809T0142p0700.json >/tmp/nvidia-summary-a.json
           python - <<'PY'
           import json
           p='research_entity/runtime/tool_results/gwt-r6-nvidia-rcwc-reader-20260809T0142p0700.json'
           d=json.load(open(p,encoding='utf-8'))
-          print('NVIDIA_GWT_R6_STATUS', d.get('status'))
+          print('NVIDIA_GWT_R6_ARM_A_STATUS', d.get('status'))
           r=d.get('result') or {}
           print('model=', r.get('model'))
-          print('finish_reason=', r.get('finish_reason'))
           print('usage=', r.get('usage'))
           print('content=', r.get('content'))
-          if d.get('status')!='SUCCESS':
-              print('error=',d.get('error'))
-              raise SystemExit(1)
+          if d.get('status')!='SUCCESS': raise SystemExit(1)
+          PY
+      - name: Execute typed ID-bound reader arm
+        run: |
+          python tools/nvidia_nim.py --request research_entity/runtime/nvidia_requests/gwt-r6-nvidia-rcwc-typed-reader-20260809T0155p0700.json >/tmp/nvidia-summary-b.json
+          python - <<'PY'
+          import json
+          p='research_entity/runtime/tool_results/gwt-r6-nvidia-rcwc-typed-reader-20260809T0155p0700.json'
+          d=json.load(open(p,encoding='utf-8'))
+          print('NVIDIA_GWT_R6_ARM_B_STATUS', d.get('status'))
+          r=d.get('result') or {}
+          print('model=', r.get('model'))
+          print('usage=', r.get('usage'))
+          print('content=', r.get('content'))
+          if d.get('status')!='SUCCESS': raise SystemExit(1)
           PY

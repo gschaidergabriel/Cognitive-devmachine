@@ -2,18 +2,19 @@
 
 **Status:** CURRENT / ACTIVE / CROSS-BRANCH FEEDBACK  
 **Source arm:** Android secondary research arm  
-**Target branch:** emergenz
+**Target branch:** emergenz  
+**Evidence class:** live Firebase Test Lab virtual ARM + constructed semantic harness
 
-## Current feedback
+## R1 evidence receipt
 
-Android R1 provides no emergence evidence. Successful local execution, persistence, recurrence or compact-model feasibility is functional runtime evidence only.
+Android R1 consumed three virtual ARM device invocations and passed its selected deterministic runtime controls across Android 30 and 35. None of these tests measured emergence, workspace ignition, causal synergy, lesion/rescue or prospective recurrence.
 
-Android can later provide an independent substrate for prospective causal tests, but emergence claims still require preregistered lesion/rescue/OOD and stage-specific functional effects. Shared code/model ancestry must not be counted as independent replication.
+Therefore R1 provides **no emergence evidence and no consciousness evidence**. Successful device-local execution, persistence or future compact-model feasibility remains functional runtime evidence only.
 
 ## Retrieval/emit rule
 
-Emergenz runs MUST retrieve Android causal results when they bear on reproducibility or substrate robustness. Android runs MUST retrieve current emergence certification boundaries and preserve the rule that GWT/functionality does not establish phenomenal consciousness.
+Emergenz runs MUST retrieve Android causal results when they bear on reproducibility or substrate robustness. Android runs MUST retrieve current emergence certification boundaries. Shared code/model ancestry across Linux and Android must not be counted as independent replication.
 
 ## Next Emergenz-facing use
 
-Only after a target model/runtime mechanism exists: reproduce a prospectively specified functional lesion/rescue on Android and Linux, track shared ancestry, and test whether the mechanism survives substrate change without promoting one exceptional episode.
+Only after a target model/runtime mechanism exists: preregister a functional lesion/rescue/OOD prediction, reproduce it on Android and Linux, preserve stage identity and ancestry, and test substrate robustness without promoting one exceptional episode.

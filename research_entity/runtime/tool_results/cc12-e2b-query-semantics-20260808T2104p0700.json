@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "request_id": "cc12-e2b-query-semantics-20260808T2104p0700",
+  "tool": "e2b_sandbox",
+  "request_sha256": "7a228809fce548f0bd5e661444d66147718ca8f94ce866b5ea933d95a45c74e9",
+  "processed_at": "2026-08-08T14:15:12.210014+00:00",
+  "result": {
+    "provider": "E2B",
+    "tool": "e2b_sandbox",
+    "evidence_class": "runtime_experiment",
+    "command": "python3 -c 'import json,random,sqlite3,time\nfrom collections import Counter\nSEED=44119;N=30000;K=('\"'\"'SET'\"'\"','\"'\"'ORDERED'\"'\"','\"'\"'MULTISET'\"'\"')\ndef ref(k,x):\n if k=='\"'\"'SET'\"'\"':return sorted(set(x))\n if k=='\"'\"'ORDERED'\"'\"':return list(x)\n c=Counter(x);return [[z,c[z]] for z in sorted(c)]\ndef sql(k):\n if k=='\"'\"'SET'\"'\"':return '\"'\"'select distinct value from t order by value'\"'\"'\n if k=='\"'\"'ORDERED'\"'\"':return '\"'\"'select value from t order by pos'\"'\"'\n return '\"'\"'select value,count(*) from t group by value order by value'\"'\"'\ndef dec(k,r):return [x[0] for x in r] if k in {'\"'\"'SET'\"'\"','\"'\"'ORDERED'\"'\"'} else [[x[0],x[1]] for x in r]\nrng=random.Random(SEED);atoms=list('\"'\"'abcde'\"'\"');con=sqlite3.connect('\"'\"':memory:'\"'\"');con.execute('\"'\"'create table t(pos integer,value text)'\"'\"');mis=wd=wb=0;by={k:{'\"'\"'n'\"'\"':0,'\"'\"'correct_mismatch'\"'\"':0,'\"'\"'distinct_mismatch'\"'\"':0,'\"'\"'bag_mismatch'\"'\"':0} for k in K};t=time.perf_counter()\nfor _ in range(N):\n k=rng.choice(K);xs=[rng.choice(atoms) for _ in range(rng.randint(0,10))];con.execute('\"'\"'delete from t'\"'\"');con.executemany('\"'\"'insert into t values(?,?)'\"'\"',enumerate(xs));e=ref(k,xs);g=dec(k,con.execute(sql(k)).fetchall());bad=g!=e;mis+=bad;by[k]['\"'\"'n'\"'\"']+=1;by[k]['\"'\"'correct_mismatch'\"'\"']+=bad;d=[r[0] for r in con.execute('\"'\"'select distinct value from t order by value'\"'\"')];bad=d!=e;wd+=bad;by[k]['\"'\"'distinct_mismatch'\"'\"']+=bad;b=[r[0] for r in con.execute('\"'\"'select value from t order by pos'\"'\"')];bad=b!=e;wb+=bad;by[k]['\"'\"'bag_mismatch'\"'\"']+=bad\ndef weighted(rows):\n d={}\n for k,w in rows:\n  if k in d:raise ValueError('\"'\"'duplicate weighted key'\"'\"')\n  d[k]=w\n return sorted(d.items())\nwr=False\ntry:weighted([('\"'\"'latency'\"'\"','\"'\"'.7'\"'\"'),('\"'\"'latency'\"'\"','\"'\"'.3'\"'\"')])\nexcept ValueError:wr=True\nprint(json.dumps({'\"'\"'status'\"'\"':'\"'\"'PASS'\"'\"' if mis==0 and wr else '\"'\"'FAIL'\"'\"','\"'\"'seed'\"'\"':SEED,'\"'\"'operations'\"'\"':N,'\"'\"'correct_lowering_mismatches'\"'\"':mis,'\"'\"'type_era",
+    "stdout": "{\"by_kind\": {\"MULTISET\": {\"bag_mismatch\": 9086, \"correct_mismatch\": 0, \"distinct_mismatch\": 9086, \"n\": 10010}, \"ORDERED\": {\"bag_mismatch\": 0, \"correct_mismatch\": 0, \"distinct_mismatch\": 7861, \"n\": 10174}, \"SET\": {\"bag_mismatch\": 7523, \"correct_mismatch\": 0, \"distinct_mismatch\": 0, \"n\": 9816}}, \"correct_lowering_mismatches\": 0, \"elapsed_s\": 0.80346473, \"operations\": 30000, \"seed\": 44119, \"status\": \"PASS\", \"type_erased_bag_mismatches\": 16609, \"type_erased_distinct_mismatches\": 16947, \"weighted_duplicate_key_rejected\": true}\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "status": "SUCCESS"
+}

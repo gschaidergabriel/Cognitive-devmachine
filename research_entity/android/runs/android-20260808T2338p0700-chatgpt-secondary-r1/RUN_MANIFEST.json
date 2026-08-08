@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "run_id": "android-20260808T2338p0700-chatgpt-secondary-r1",
+  "actor": "chatgpt-secondary",
+  "status": "COMPLETE_R1_QUOTA_BOUND",
+  "role": "secondary_cross_cutting_research_arm",
+  "primary_reference_platform": "linux",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash_short": "04234efdb86c",
+    "promoted": false
+  },
+  "device_evidence": {
+    "provider": "Firebase Test Lab",
+    "virtual_invocations": 3,
+    "physical_invocations": 0,
+    "matrices": ["matrix-3mqon98nc2zsk", "matrix-322nxfmnphtz2"],
+    "instrumentation_test_executions_passed": 20,
+    "instrumentation_test_executions_total": 20,
+    "android_versions": [30, 35],
+    "quota_stop_intentional": true,
+    "estimated_virtual_daily_capacity_left_for_other_workers": 7
+  },
+  "ci_history": [
+    {
+      "workflow_run": 31267043144,
+      "result": "FAIL_BUILD_BEFORE_DEVICE",
+      "finding": "android.useAndroidX missing"
+    },
+    {
+      "workflow_run": 31267137212,
+      "result": "FAIL_SUBMISSION_BEFORE_DEVICE",
+      "finding": "Cloud Tool Results API disabled"
+    },
+    {
+      "workflow_run": 31267268335,
+      "result": "PASS_DEVICE_SMOKE",
+      "matrix": "matrix-3mqon98nc2zsk"
+    },
+    {
+      "workflow_run": 31267543592,
+      "result": "PASS_CROSS_VERSION_BUNDLE",
+      "matrix": "matrix-322nxfmnphtz2"
+    }
+  ],
+  "mesh": {
+    "retrieves_all_authoritative_branches": true,
+    "emits_feedback_to_all_authoritative_branches": true,
+    "mandatory_feedback_retrieval_verified": true,
+    "validation_workflow_run": 31267946992,
+    "validation_job": 93129040517,
+    "validation_result": "ANDROID_MESH_RETRIEVAL_PASS",
+    "structural_negative_result": "Ordinary relevance selection did not guarantee cross-branch feedback retrieval; generic mandatory pin support was added while preserving normal evidence status and packet budget."
+  },
+  "artifacts": [
+    "ANDROID_EXPERIMENT_PLAN.json",
+    "INTERCONNECT_MANIFEST.json",
+    "DEVICE_MATRIX.json",
+    "EXPERIMENT_RESULTS.json",
+    "EFFICIENCY_DELTA.md",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "RUN_MANIFEST.json",
+    "FINAL_REPORT.md"
+  ],
+  "promotion": "NONE_OPEN_GENERALIZABLE_CANDIDATES_ONLY",
+  "scientific_boundaries": [
+    "R1 uses a constructed minimal Java ClayCode-like semantic harness, not the full ClayCode compiler/runtime.",
+    "Virtual Android devices are not evidence for physical thermal, power, vendor GPU/NPU or fragmentation behavior.",
+    "Android results routed to multiple branches retain one shared ancestry and are not independent replication.",
+    "General FRANK/Linux claims require matched Linux replication.",
+    "No GWT, emergence or phenomenal-consciousness promotion follows from R1."
+  ],
+  "next_high_information_test": "EXP-ANDROID-R2-QWEN-RUNTIME-003",
+  "next_sequence": [
+    "CI-only package a quantized Qwen-class 4B-capable Android runtime before spending more device quota",
+    "one virtual ARM model-load/inference proof",
+    "bundle bounded Clay view/context/KV/prefill/decode/total-latency conditions",
+    "replicate generalizable deltas on Linux",
+    "reserve physical devices for thermal, memory, battery and hardware-accelerator questions"
+  ]
+}

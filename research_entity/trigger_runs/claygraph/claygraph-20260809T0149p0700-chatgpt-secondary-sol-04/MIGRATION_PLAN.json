@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260809T0149p0700-chatgpt-secondary-sol-04",
+  "candidate":"IBCA-G3",
+  "mode":"SHADOW_FIRST_REVERSIBLE_NO_DESTRUCTIVE_MIGRATION",
+  "phases":[
+    {"phase":"INVENTORY","action":"Read-only enumerate current stores, schemas, writers/readers, transaction/WAL/backup/privacy roles; do not reuse historical count as current evidence.","rollback":"none; observation only"},
+    {"phase":"SEMANTIC_MAPPING","action":"Map exact anchors, relation instances, source/valid epochs, TCQS collection kinds, U2 result-admissibility and intent-contract references into G3 schema.","rollback":"discard mapping overlay"},
+    {"phase":"SHADOW_GRAPH","action":"Build immutable/rebuildable G3 semantic epoch beside G0/current paths; no model-visible behavior change.","rollback":"drop shadow epoch"},
+    {"phase":"PARITY_AND_REPLAY","action":"Replay authoritative source epochs and verify semantic hash, relation roles, unknown/conflict/stale states and deterministic derived identity.","rollback":"G0/direct exact path"},
+    {"phase":"SHADOW_ROUTER","action":"Compute BYPASS/SUPPLEMENT/ESCALATE/QUARANTINE plus MemoryUseAdmissibility without controlling live retrieval.","rollback":"ignore shadow decisions"},
+    {"phase":"SHADOW_SALIENCE_UTILITY","action":"Compute scoped MemoryInfluenceReceipt and utility updates without applying durable salience changes.","rollback":"discard utility overlay"},
+    {"phase":"ADVERSARIAL_ATTRACTOR_POISON_TEST","action":"Run high-salience poison, stale/role/time shuffle, intent shuffle, provenance laundering, frequent-attractor and empty-admissible controls. Require explicit escalation on empty consequential set.","rollback":"retain BYPASS/direct retrieval"},
+    {"phase":"DUAL_READ","action":"Return legacy and G3 candidate sets to evaluator; freeze gold/query class before scoring exact/associative/consequential workloads.","rollback":"legacy-only read"},
+    {"phase":"MODEL_VISIBLE_CANARY","action":"Expose G3 only on low-impact canary tasks with fixed effect authority/policy; record graph exposure separately from GWT uptake/effect.","rollback":"disable G3 projection"},
+    {"phase":"DUAL_WRITE_WHERE_SAFE","action":"Dual-write only derived/rebuildable graph/activation receipts. Never dual-write bearer capabilities or let ClayGraph author UserIntentContract.","rollback":"drop derived writes and rebuild"},
+    {"phase":"CONTROLLED_CUTOVER","action":"Only if target retrieval/cognitive utility, replay, false-association, poisoning, latency and rare/provisional-memory metrics satisfy preregistered gates; exact paths may still BYPASS graph.","rollback":"route classes back individually"},
+    {"phase":"ROLLBACK_WINDOW","action":"Keep previous graph epoch, direct authoritative retrieval and legacy router operational through measured stability window.","rollback":"atomic route/config reversion plus derived-state discard"},
+    {"phase":"DEPRECATE_OR_KEEP_ISOLATED","action":"Retire only derived paths proven redundant; authoritative spine, protected task-intent contracts, capability/effect authority, model runtime and raw source blobs stay isolated according to FRANK/U2 evidence.","rollback":"rebuild retained derived views from authoritative inputs"}
+  ],
+  "rollback_triggers":[
+    "any authoritative/replay mismatch",
+    "consequential unauthorized-memory influence above frozen baseline",
+    "poison/false-association regression",
+    "exact/identity query regression without explicit BYPASS compensation",
+    "rare/provisional useful-memory loss beyond preregistered threshold",
+    "UNKNOWN/empty admissibility silently converted to valid candidate",
+    "MemoryInfluenceReceipt used as truth/authority",
+    "selection/source epoch identity loss",
+    "p95/p99 or memory/update amplification exceeds target budget"
+  ],
+  "hard_isolations":["canonical effect/authority secrets","EffectPermit bearer authority","UserIntentContract authorship/approval root","model KV/latent runtime","raw external source bytes"],
+  "physical_merge_required":false,
+  "destructive_action_authorized":false
+}

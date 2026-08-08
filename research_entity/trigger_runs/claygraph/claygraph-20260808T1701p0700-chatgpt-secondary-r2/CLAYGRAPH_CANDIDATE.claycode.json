@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "candidate_id":"claygraph-g1c-resident-adaptive-escalation",
+  "generation":1,
+  "parent_generation":0,
+  "status":"HOLD",
+  "inherits":["G1 temporal/provenance assertions + exact anchors","G1b query classes + evidence-bounded expansion + assembly certificates"],
+  "changes":[
+    "Make semantic graph/index resident across queries; eliminate mandatory per-query full corpus reload/scan.",
+    "Add inverted lexical/id/status/evidence-family seed indexes and typed adjacency indexes.",
+    "Make FTS/packet/exact retrieval the default for simple/local queries; graph traversal is an escalation path.",
+    "Estimate relational evidence scatter/need before graph escalation; rerank graph discoveries before model visibility.",
+    "Keep explicit reader projection optimized for small-model role binding rather than maximum compactness.",
+    "Attach cost/staleness/ancestry/route receipts to every active assembly."
+  ],
+  "rejected_alternatives":[
+    {"alternative":"always-on current ClayGraph activation","reason":"Hosted 8B self-use shows ~100x retrieval-latency gap versus SQLite FTS on runner and larger contexts; activation did not consistently outperform graph lexical."},
+    {"alternative":"abandon semantic graph and use FTS only","reason":"Audited 8B answers found some cross-branch relational facts graph modes surfaced while FTS missed; external scattered-evidence work also finds conditional graph benefit."},
+    {"alternative":"one fixed graph hop policy","reason":"Query classes differ in exactness, relation need, evidence scatter and audit semantics."},
+    {"alternative":"aggressively compact relation projection","reason":"Groq 8B cross-branch reader tests challenge compact zero-shot representations; explicit role labels are safer until target-model evidence."}
+  ],
+  "promotion_gates":["actual current-corpus resident/indexed benchmark",">=50 independently grounded mixed query gold set","G1c vs SQLite/packet/accepted G0/G1b on recall/precision/family/stale/token/p50/p95/p99","target Qwen-class 4B answer-quality test","resident update amplification/memory/rebuild crossover","live/twin FRANK stale-frame exact-anchor rejection","71-store parity/crash/privacy/rollback"],
+  "decision":"HOLD"
+}

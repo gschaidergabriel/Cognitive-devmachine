@@ -1,0 +1,35 @@
+{
+  "schema_version":"0.3-open",
+  "candidate_id":"IBCA-G3",
+  "name":"Intent-Bound Causal Assembly",
+  "status":"OPEN/HOLD",
+  "accepted_parent":"G0 claygraph-v0-seed",
+  "research_parent":"G2a CASAR",
+  "core_laws":[
+    "exact_truth != semantic_graph != activation != assembly != workspace != proposal != authority",
+    "retrievable != admissible_for_this_task != allowed_to_influence_consequential_proposal",
+    "user_intent_adequacy != capability_authority",
+    "activation_changes_accessibility_not_truth",
+    "empty_admissible_set => ESCALATE_OR_EXACT_VALIDATE, never nearest-neighbor fallback",
+    "positive_durable_salience_credit requires scoped causal credit plus provenance/use admissibility; UNKNOWN cannot freely upweight",
+    "graph/reference to UserIntentContract carries no right to author/widen it",
+    "memory influence receipt is evidence of causal exposure, never a permit"
+  ],
+  "types":{
+    "MemoryNode":{"fields":["semantic_id","instance_id","source_refs","source_epochs","valid_time","transaction_time","role","admissibility_class","provenance_ancestry","poison_state"]},
+    "RelationInstance":{"fields":["relation_type","roles","members<SET|ORDERED|MULTISET|WEIGHTED>","semantic_hash","valid_time","transaction_time","graph_epoch"]},
+    "ActivationState":{"fields":["activation_epoch","weighted_frontier","decay","inhibition","budget","no_authority=true"]},
+    "MemoryUseIntentRef":{"fields":["protected_contract_ref","task_hash","operation_class","allowed_memory_roles","allowed_influence_stages","required_time/source_epochs","policy_version"],"authority":"REFERENCE_ONLY"},
+    "MemoryUseAdmissibility":{"states":["ADMIT","SUPPLEMENT_ONLY","QUARANTINE","ESCALATE","UNKNOWN"],"depends_on":["task/operation","role","validity","source/provenance","poison suspicion","required closure","selection plan"]},
+    "Assembly":{"fields":["graph_epoch","activation_epoch","basis_hash","query_class","collection_kind","members","order_or_weights","admissibility_receipts","bounded_size"]},
+    "MemoryInfluenceReceipt":{"fields":["memory_refs","activation_paths","source_ancestry","intent_ref","admissibility_decision","candidate_hash","selection_plan_hash","workspace_ref","proposal_ref_optional","influence_stage","credit_scope<ITEM|PATH|ASSEMBLY|ROUTE|UNKNOWN>","utility","poison_control","no_authority=true"]},
+    "ExactValidationRequest":{"fields":["missing_or_provisional_memory_refs","required_source_epochs","reason","resume_route"]}
+  },
+  "route_modes":["BYPASS","SUPPLEMENT","ESCALATE","QUARANTINE"],
+  "consequential_path":["cue/query","semantic query class","intent-bound admissibility","CASAR route","bounded activation/assembly","selection receipt","GWT candidate/workspace","proposal","external intent adequacy + authority gates","effect"],
+  "nonconsequential_path":["cue/query","CASAR route","provisional low-trust memories may SUPPLEMENT with explicit labels","bounded Assembly","reader"],
+  "temporal_rule":"structure-guided evidence chains preserve valid-time continuity; stale/conflicting support stays explicit rather than being overwritten",
+  "unifieddb_rule":"source epoch + derivation identity + collection semantics + selection plan stay receipted; physical placement is separate",
+  "migration":"shadow-only; no accepted graph replacement",
+  "promotion_blockers":["synthetic intent/admission tests only","manual staged self-use corpus","no target-Qwen/FRANK cognitive trace","no live database inventory","no formal noninterference proof","no production poisoning benchmark" ]
+}

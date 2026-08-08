@@ -1,0 +1,54 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hyperposition-20260808T1722p0700-chatgpt-secondary-r2",
+  "boundary":"All local numeric experiments are synthetic or hybrid proxies; Judge0 is independent runtime replication of one constructed mechanism, not live FRANK evidence.",
+  "experiments":[
+    {
+      "id":"EXP-HYP-H3-EPOCH-001",
+      "class":"LOCAL_SYNTHETIC_EPOCH_PROXY",
+      "setup":{"relation_instances":20000,"epochs":100,"activation_decay":0.92,"seeds_per_epoch":50,"assembly_topk":500,"replications":12},
+      "results":[
+        {"change_fraction":0.001,"mean_unpinned_stale":0.0056251,"p95_unpinned_stale":0.0103665,"pinned_stale":0.0},
+        {"change_fraction":0.005,"mean_unpinned_stale":0.0257643,"p95_unpinned_stale":0.0365249,"pinned_stale":0.0},
+        {"change_fraction":0.01,"mean_unpinned_stale":0.0512728,"p95_unpinned_stale":0.0677333,"pinned_stale":0.0},
+        {"change_fraction":0.02,"mean_unpinned_stale":0.1011929,"p95_unpinned_stale":0.1245814,"pinned_stale":0.0},
+        {"change_fraction":0.05,"mean_unpinned_stale":0.2315368,"p95_unpinned_stale":0.2649167,"pinned_stale":0.0}
+      ],
+      "interpretation":"Persistent activation can retain support for relations revoked in newer semantic epochs. Epoch validation eliminates stale IDs in this construction but pays filter/rebase cost.",
+      "falsifier_next":"Real ClayGraph/FRANK activation trace with semantic revocations and mixed-epoch instrumentation."
+    },
+    {
+      "id":"EXP-HYP-H3-NARY-ACT-002",
+      "class":"LOCAL_SYNTHETIC_HIGHER_ORDER_PROXY",
+      "setup":{"senders":300,"recipients":500,"assets":150,"queries_per_replication":3000,"replications":8},
+      "results":[
+        {"relations":3000,"pairwise_precision":0.8341313,"mean_false_candidates":0.3840417,"relation_instance_precision":1.0},
+        {"relations":6000,"pairwise_precision":0.5353379,"mean_false_candidates":1.4954583,"relation_instance_precision":1.0},
+        {"relations":12000,"pairwise_precision":0.2059096,"mean_false_candidates":5.619625,"relation_instance_precision":1.0},
+        {"relations":24000,"pairwise_precision":0.0729416,"mean_false_candidates":20.04025,"relation_instance_precision":1.0},
+        {"relations":40000,"pairwise_precision":0.0379974,"mean_false_candidates":47.9382917,"relation_instance_precision":1.0}
+      ],
+      "judge0_replication":{"condition_relations":12000,"runtime":"Judge0 Python 3.8.1","pairwise_precision":0.20656177409192114,"relation_instance_precision":1.0,"status":"SUCCESS"},
+      "interpretation":"Pairwise expansion can turn n-ary information loss into false associative activation; role-aware same-instance matching avoids the constructed mixing error.",
+      "falsifier_next":"Randomized-order target-4B and live ClayGraph activation tests."
+    },
+    {
+      "id":"EXP-HYP-H3-REMAT-003",
+      "class":"HYBRID_PROXY_USING_CLAYGRAPH_C4_MEASURED_COST_SURFACE",
+      "setup":{"cycles":1500,"replications":30,"ewma_alpha":0.15,"regimes":4,"cost_source":"ClayGraph Cycle 4 EXP-CG4-DELTA-EPOCH-001"},
+      "mean_total_cost_ms":{"always_incremental":38352.7712,"always_rebuild":48651.4289,"fixed_10pct":38538.0486,"adaptive_ewma":33411.6032,"oracle":32117.4706},
+      "ratio_to_oracle":{"always_incremental":1.1941405,"always_rebuild":1.5147964,"fixed_10pct":1.1999092,"adaptive_ewma":1.0402937},
+      "interpretation":"Expected reads before next update materially affect the amortized crossover; a simple online estimator approached the hindsight oracle in this constructed nonstationary workload.",
+      "falsifier_next":"Actual current-corpus read/write trace with controller overhead and crash/recovery costs."
+    },
+    {
+      "id":"EXP-HYP-H3-DIFFUSION-004",
+      "class":"LOCAL_SYNTHETIC_ACTIVATION_CONTROL_PROXY",
+      "setup":{"nodes":6000,"communities":20,"nodes_per_community":300,"within_degree_target":8,"cross_degree_target":2,"seed_nodes":10,"steps":30,"restart":0.15,"budget_topk":400,"replications":10},
+      "unbounded":{"final_seed_community_mass":0.4542958,"final_active_nodes":6000,"final_entropy":7.5529319},
+      "budgeted":{"final_seed_community_mass":0.9093266,"final_active_nodes":400,"final_entropy":5.5431461,"min_seed_community_mass":0.7864893},
+      "interpretation":"The deliberately sparse arm resists diffusion into the full graph in this planted workload. This validates only the control mechanism; top-400 is not an optimized cognitive policy.",
+      "falsifier_next":"Ablate decay/inhibition/saturation/budget separately on real memory tasks and measure retrieval quality plus noise/cost."
+    }
+  ]
+}

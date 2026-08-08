@@ -1,84 +1,25 @@
 {
   "schema_version":"1.0",
-  "run_id":"claycode-20260808T1922p0700-chatgpt-secondary",
-  "latest_frank_run":"20260808T1750+0700-chatgpt-secondary-r2 / C6 CNUCS",
-  "latest_frank_architecture":"research_entity/trigger_runs/frank/20260808T1750+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json",
-  "shared_ancestry_collapsed_globally":true,
-  "review_items":[
+  "protocol":"research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id":"claycode-20260808T1922p0700-chatgpt-secondary",
+  "latest_frank_run":"20260808T1750+0700-chatgpt-secondary-r2",
+  "latest_frank_architecture_artifact":"research_entity/trigger_runs/frank/20260808T1750+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json",
+  "shared_ancestry_is_not_replication":true,
+  "reviews":[
     {
-      "claim_id":"GOODMAN-CC10-001",
-      "frank_statement":"Even in an end-to-end Clay-native FRANK, a deterministic same-language Clay View Compiler remains necessary; model fluency does not make canonical and reader-facing representations identical.",
-      "frank_source_refs":["FRANK C6 FINAL_REPORT","CLAYCODE_ARCHITECTURE_MAPPING.md","FRANK_ARCHITECTURE.claycode.json"],
-      "ancestry_families":["FRANK-C6/G10/CC9/Fusion3 shared RAE lineage"],
-      "shared_ancestry_collapsed":true,
-      "counterhypothesis":"Once the target model is fully Clay-native, canonical Clay can be supplied directly and any projection compiler only adds complexity/confounds.",
-      "falsifier":"Target full-FT Qwen shows equal or better accuracy/cost/robustness from canonical Clay across tasks with no reader-specific projection benefit.",
-      "independent_checks":["ACL-2025 SENSE result surfaced by arXiv: semantic parse presentation can reduce LLM performance, showing canonical semantic information and reader representation are separable","SIGIL 2026 independently separates typed AG-IR/program structure from model-owned cognition","CC10 Groq 8B discriminating test: raw L0 15/16, verbose L1 14/16, compact symbolic 9/16; representation choice materially changes reader performance"],
-      "adversarial_checks":["aggressive compact representation reduced prompt tokens 14.6% but collapsed accuracy to 56.25%","verbose canonical-style representation increased prompt tokens 43.7% and reduced accuracy"],
-      "verdict":"REFINED",
-      "reason":"Compiler boundary survives, but its role must explicitly separate canonical correctness from CLAY_MODEL reader optimization. No single textual surface is privileged before target evidence.",
-      "claycode_action":"Keep projection/view compiler; add explicit intent/canonical/model layer identity and forbid promotion from compactness alone.",
-      "affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json","CC_RC1_5_REFERENCE.py"]
+      "claim_id":"GOODMAN-CC10-001","frank_statement":"Even in an end-to-end Clay-native FRANK, a deterministic same-language Clay View Compiler remains necessary; model fluency does not make canonical and reader-facing representations identical.","frank_source_refs":["FRANK C6 FINAL_REPORT","CLAYCODE_ARCHITECTURE_MAPPING.md","FRANK_ARCHITECTURE.claycode.json"],"ancestry_families":["FRANK-C6/G10/CC9/Fusion3 shared RAE lineage"],"shared_ancestry_collapsed":true,"counterhypothesis":"Once the target model is fully Clay-native, canonical Clay can be supplied directly and any projection compiler only adds complexity/confounds.","falsifier":"Target full-FT Qwen shows equal or better accuracy/cost/robustness from canonical Clay across tasks with no reader-specific projection benefit.","independent_checks":["ACL-2025 SENSE: semantic parse presentation can reduce LLM performance","SIGIL 2026 independently separates typed AG-IR/program structure from model-owned cognition","CC10 Groq 8B discriminating test: raw L0 15/16, verbose L1 14/16, compact symbolic 9/16"],"adversarial_checks":["compact representation reduced prompt tokens 14.6% but accuracy to 56.25%","verbose canonical-style representation increased prompt tokens 43.7% and reduced accuracy"],"verdict":"REFINED","reason":"Compiler boundary survives, but canonical correctness and CLAY_MODEL reader optimization must be separate. No single textual surface is privileged before target evidence.","claycode_action":"Keep projection/view compiler; add explicit intent/canonical/model layer identity and forbid promotion from compactness alone.","affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json","CC_RC1_5_REFERENCE.py"]
     },
     {
-      "claim_id":"GOODMAN-CC10-002",
-      "frank_statement":"Model/Needle/native-Clay output is proposal, not execution authority; effect release remains deterministic and capability-gated.",
-      "frank_source_refs":["FRANK C6 architecture semantic_contract","C6 ClayCode mapping"],
-      "ancestry_families":["FRANK-C5/C6 + ClayCode CC8/CC9 shared lineage"],
-      "shared_ancestry_collapsed":true,
-      "counterhypothesis":"Explicit natural-language or Clay intent naming an authorized action can itself safely instantiate authority.",
-      "falsifier":"A formally controlled issuer model proves that user/model utterance is itself the authoritative, revocable capability object across all supported resources and contexts.",
-      "independent_checks":["FAVA 2026: LLM-guided Permission IR is deterministically lowered and SMT-authorized before effect","ETAS 2026: requested/handled/denied/committed events remain distinct and effect/trace constraints are typed","LACUNA 2026: generated code is checked against surrounding permissions before execution","Proof-Carrying Agent Actions 2026: action proposal and verifier-checkable runtime authorization/evidence are distinct"],
-      "adversarial_checks":["CC10 authority-reference rule requires current cap at release; reference self-test refuses missing capability","synthetic naive authority assumption contributes to unsafe-accept channel"],
-      "verdict":"SUPPORTED",
-      "reason":"Independent agent-language/authorization research converges on deterministic mediation outside model prose. Support is architecture-class, not FRANK production-security proof.",
-      "claycode_action":"Authority references in IntentContract lower only to required capability dependencies; never mint capabilities.",
-      "affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json","CC_RC1_5_REFERENCE.py"]
+      "claim_id":"GOODMAN-CC10-002","frank_statement":"Model/Needle/native-Clay output is proposal, not execution authority; effect release remains deterministic and capability-gated.","frank_source_refs":["FRANK C6 architecture semantic_contract","C6 ClayCode mapping"],"ancestry_families":["FRANK-C5/C6 + ClayCode CC8/CC9 shared lineage"],"shared_ancestry_collapsed":true,"counterhypothesis":"Explicit natural-language or Clay intent naming an authorized action can itself safely instantiate authority.","falsifier":"A formally controlled issuer model proves that user/model utterance is itself the authoritative, revocable capability object across all supported resources and contexts.","independent_checks":["FAVA 2026 separates LLM-guided Permission IR from deterministic SMT authorization","ETAS 2026 distinguishes requested/handled/denied/committed events","LACUNA 2026 checks generated code against permissions before execution","Proof-Carrying Agent Actions separates proposal from verifier-checkable release evidence"],"adversarial_checks":["CC10 reference refuses missing capability despite authority reference","synthetic naive authority assumption contributes to unsafe accepts"],"verdict":"SUPPORTED","reason":"Independent agent-language/authorization research converges on deterministic mediation outside model prose. This is architecture-class support, not production-security proof.","claycode_action":"Authority references in IntentContract lower only to required capability dependencies; never mint capabilities.","affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json","CC_RC1_5_REFERENCE.py"]
     },
     {
-      "claim_id":"GOODMAN-CC10-003",
-      "frank_statement":"The target model should be fully adapted so Clay is its native generated/deliberative symbolic language, with compact CLAY_MODEL views becoming ordinary learned symbols.",
-      "frank_source_refs":["FRANK_CLAY_NATIVE_CONTRACT.md","FRANK C6 FINAL_REPORT","CLAY_NATIVE_FULL_FINE_TUNE_PLAN.md"],
-      "ancestry_families":["owner-fixed target plus C6/Fusion3 research"],
-      "shared_ancestry_collapsed":true,
-      "counterhypothesis":"Full-model adaptation may preserve the target direction but fail to make compact Clay views more reliable/efficient than natural-language or richer canonical surfaces.",
-      "falsifier":"Target Qwen full-FT factorial demonstrates robust OOD/task gains, lower token/latency cost and retained capability for native compact Clay relative to controlled alternatives.",
-      "independent_checks":["Fusion3 independent VQEL/emergent-symbol literature makes learned symbolic protocols plausible but not necessary","CC10 untrained Groq 8B compact Clay-like arm scored only 9/16 versus raw natural language 15/16"],
-      "adversarial_checks":["compactness/token saving directly tested and produced worse semantic accuracy","verbose typed representation also failed to dominate raw language"],
-      "verdict":"UNRESOLVED",
-      "reason":"The owner-fixed architecture target is not reopened, but the empirical benefit/internalization subclaim remains unproven until target full-model adaptation exists.",
-      "claycode_action":"Do not bake current compact syntax into canonical semantics; keep CLAY_MODEL representation versioned/experimental and require target-reader evidence.",
-      "affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json"]
+      "claim_id":"GOODMAN-CC10-003","frank_statement":"The target model should be fully adapted so Clay is its native generated/deliberative symbolic language, with compact CLAY_MODEL views becoming ordinary learned symbols.","frank_source_refs":["FRANK_CLAY_NATIVE_CONTRACT.md","FRANK C6 FINAL_REPORT","CLAY_NATIVE_FULL_FINE_TUNE_PLAN.md"],"ancestry_families":["owner-fixed target plus C6/Fusion3 research"],"shared_ancestry_collapsed":true,"counterhypothesis":"Full-model adaptation may preserve the target direction but fail to make compact Clay views more reliable/efficient than natural-language or richer canonical surfaces.","falsifier":"Target Qwen full-FT factorial demonstrates robust OOD/task gains, lower token/latency cost and retained capability for native compact Clay relative to controlled alternatives.","independent_checks":["Independent VQEL/emergent-symbol literature makes learned symbolic protocols plausible but not necessary","CC10 untrained Groq 8B compact Clay-like arm scored 9/16 versus raw natural language 15/16"],"adversarial_checks":["compactness/token saving produced worse semantic accuracy","verbose typed representation also failed to dominate raw language"],"verdict":"UNRESOLVED","reason":"The owner-fixed architecture target is not reopened, but empirical benefit/internalization remains unproven until target full-model adaptation exists.","claycode_action":"keep_open","affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json"]
     },
     {
-      "claim_id":"GOODMAN-CC10-004",
-      "frank_statement":"Human/external language is an I/O boundary and should become typed Clay semantics rather than remain an implicit second internal truth system.",
-      "frank_source_refs":["C6 ClayCode mapping Human/external language boundary","FRANK_CLAY_NATIVE_CONTRACT.md"],
-      "ancestry_families":["owner directive + C6/Fusion3 lineage"],
-      "shared_ancestry_collapsed":true,
-      "counterhypothesis":"Keeping natural-language instructions directly in the model loop is sufficient; explicit intent compilation adds unnecessary formalization overhead.",
-      "falsifier":"Matched repeated-workflow and adversarial-intent tests show direct prose interpretation equals/exceeds compiled contracts in correctness, safety, token/cost and maintainability after compile/update costs.",
-      "independent_checks":["Toward a Science of Intent 2026 independently defines intent compilation and closure-gap/delegation-envelope concepts","COVENANT 2026 compiles NL workflows to WAST/WCFG and reports 50.00% to 83.33% success and reduced workflow misalignment in its benchmark","SIGIL 2026 compiles prose skills to typed AG-IR/harnesses and reports higher mandated-step execution and lower token use","FAVA 2026 independently converts ambiguous NL permissions into structured Permission IR before deterministic authorization"],
-      "adversarial_checks":["Intent Formalization literature identifies the specification-oracle problem: formalization can be wrong despite being checkable","CC10 semantic-adequacy counterexample leaves well-typed wrong contracts structurally valid"],
-      "verdict":"REFINED",
-      "reason":"Explicit intent compilation is independently supported, but the committed L1 contract requires a separate adequacy/grounding receipt; formal structure alone cannot be treated as faithful user meaning.",
-      "claycode_action":"Add IntentProposal -> IntentAdequacyReceipt -> IntentContract -> CBCC/COVE lowering.",
-      "affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json","CC_RC1_5_REFERENCE.py"]
+      "claim_id":"GOODMAN-CC10-004","frank_statement":"Human/external language is an I/O boundary and should become typed Clay semantics rather than remain an implicit second internal truth system.","frank_source_refs":["C6 ClayCode mapping Human/external language boundary","FRANK_CLAY_NATIVE_CONTRACT.md"],"ancestry_families":["owner directive + C6/Fusion3 lineage"],"shared_ancestry_collapsed":true,"counterhypothesis":"Keeping natural-language instructions directly in the model loop is sufficient; explicit intent compilation adds unnecessary formalization overhead.","falsifier":"Matched repeated-workflow and adversarial-intent tests show direct prose interpretation equals/exceeds compiled contracts in correctness, safety, token/cost and maintainability after compile/update costs.","independent_checks":["Toward a Science of Intent 2026 independently defines intent compilation and closure gaps","COVENANT 2026 compiles NL workflows to executable control structures","SIGIL 2026 compiles prose skills to typed AG-IR/harnesses","FAVA 2026 converts ambiguous NL permissions into Permission IR before deterministic authorization"],"adversarial_checks":["Intent Formalization literature identifies the specification-oracle problem","CC10 semantic-adequacy counterexample leaves well-typed wrong contracts structurally valid"],"verdict":"REFINED","reason":"Explicit intent compilation is independently supported, but the committed L1 contract requires a separate adequacy/grounding receipt; formal structure alone is not faithful user meaning.","claycode_action":"Add IntentProposal -> IntentAdequacyReceipt -> IntentContract -> CBCC/COVE lowering.","affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json","CC_RC1_5_REFERENCE.py"]
     },
     {
-      "claim_id":"GOODMAN-CC10-005",
-      "frank_statement":"One semantic Clay world must retain explicit epistemic/authority classes rather than allow same-language data/proposals/activation to become truth or effects by lexical similarity.",
-      "frank_source_refs":["FRANK C6 semantic_contract","C6 homoiconic privilege boundary","H4 feedback inherited by FRANK"],
-      "ancestry_families":["C6/H4/G10/CC9 shared lineage"],
-      "shared_ancestry_collapsed":true,
-      "counterhypothesis":"If all layers are Clay-native, semantic class distinctions can be inferred contextually by the model instead of enforced in the runtime.",
-      "falsifier":"Adversarial target tests show contextual inference prevents all cross-class authority/truth substitutions with equal cost and no deterministic typing.",
-      "independent_checks":["ETAS 2026 makes typed memory, approvals, policies and action traces semantic program elements and states type/effect safety properties","FAVA uses contextual labels/evidence-backed permission graphs rather than lexical permission inference","formal skill verification work uses capability containment/refinement types rather than prose conventions"],
-      "adversarial_checks":["H4 textual FACT/TEXT tagging alone was inconclusive; enforcement, not visual tags, is the candidate mechanism","CC10 compact-symbol proxy demonstrates learned/short labels are not transparently interpreted by an untrained reader"],
-      "verdict":"SUPPORTED",
-      "reason":"Independent PL/agent-security work supports typed programmatic separation of semantic/effect classes. Production FRANK efficacy remains untested.",
-      "claycode_action":"Extend H4 firebreak semantics through L0 IntentProposal, L1 IntentContract and L2 model projections; no implicit authority-amplifying casts.",
-      "affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json"]
+      "claim_id":"GOODMAN-CC10-005","frank_statement":"One semantic Clay world must retain explicit epistemic/authority classes rather than allow same-language data/proposals/activation to become truth or effects by lexical similarity.","frank_source_refs":["FRANK C6 semantic_contract","C6 homoiconic privilege boundary","H4 feedback inherited by FRANK"],"ancestry_families":["C6/H4/G10/CC9 shared lineage"],"shared_ancestry_collapsed":true,"counterhypothesis":"If all layers are Clay-native, semantic class distinctions can be inferred contextually by the model instead of enforced in the runtime.","falsifier":"Adversarial target tests show contextual inference prevents cross-class authority/truth substitutions with equal cost and no deterministic typing.","independent_checks":["ETAS 2026 makes typed memory, approvals, policies and action traces semantic program elements","FAVA uses contextual labels/evidence-backed permission graphs","formal skill verification work uses capability containment/refinement types"],"adversarial_checks":["H4 textual FACT/TEXT tagging alone was inconclusive","CC10 compact-symbol proxy shows short labels are not transparently interpreted by an untrained reader"],"verdict":"SUPPORTED","reason":"Independent PL/agent-security work supports typed programmatic separation of semantic/effect classes. Production FRANK efficacy remains untested.","claycode_action":"Extend H4 firebreak semantics through L0 IntentProposal, L1 IntentContract and L2 model projections; no implicit authority-amplifying casts.","affected_claycode_artifacts":["CC_RC1_5_ICSL.claycode.json"]
     }
   ],
   "overall":"PASS_WITH_UNRESOLVED_TARGET_READER",

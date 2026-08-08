@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-20260808T1751p0700-chatgpt-secondary-r2",
+  "planned_classes":["scholarly","current_web","implementation","executable","model_experiment"],
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","evidence_class":"external_scholarly_metadata","result_ref":"research_entity/runtime/tool_results/clay-g10-1751-openalex.json"},
+    {"tool":"arxiv_search","status":"SUCCESS","evidence_class":"external_preprint","result_ref":"research_entity/runtime/tool_results/clay-g10-1751-arxiv.json"},
+    {"tool":"semantic_scholar_search","status":"RATE_LIMITED","fallback_reason":"RATE_LIMITED","result_ref":"research_entity/runtime/tool_results/clay-g10-1751-semscholar.json"},
+    {"tool":"tavily_search","status":"SUCCESS","evidence_class":"external_web_discovery","result_ref":"research_entity/runtime/tool_results/clay-g10-1751-tavily.json"},
+    {"tool":"exa_search","status":"SUCCESS","evidence_class":"external_web_discovery","result_ref":"research_entity/runtime/tool_results/clay-g10-1751-exa.json"},
+    {"tool":"github_connector","status":"SUCCESS","evidence_class":"implementation_and_internal_repo"},
+    {"tool":"local_sandbox","status":"SUCCESS","evidence_class":"runtime_experiment","covers":["e2b_sandbox"]},
+    {"tool":"e2b_sandbox","status":"CREDENTIAL_UNAVAILABLE","fallback_reason":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"groq_inference","status":"SUCCESS","model":"llama-3.1-8b-instant","evidence_role":"8b_proxy_for_4b","result_refs":["research_entity/runtime/tool_results/clay-g10-1751-groq-raw.json","research_entity/runtime/tool_results/clay-g10-1751-groq-compiled.json"]}
+  ],
+  "fallback_attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","covers":["semantic_scholar_search"]},
+    {"tool":"arxiv_search","status":"SUCCESS","covers":["semantic_scholar_search"]},
+    {"tool":"native_web_primary_sources","status":"SUCCESS","covers":["semantic_scholar_search"]},
+    {"tool":"local_sandbox","status":"SUCCESS","covers":["e2b_sandbox"]}
+  ],
+  "implementation_evidence":["TimelyDataflow/differential-dataflow","current RAE GitHub history"],
+  "validation":{"equivalent_router_contract":"PASS","missing_covering_fallbacks":0,"target_specific_boundary":"Groq 8B proxy does not close Qwen3-4B or Android tests"},
+  "rule":"Evidence classes remain separate; provider success is not scientific promotion."
+}

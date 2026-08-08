@@ -1,11 +1,27 @@
 {
-  "schema_version": "2.1",
+  "schema_version": "2.2",
   "purpose": "Registry of external research, verification and execution capabilities available to FRANK/RAE runtimes. Credential values live only in the designated private token store, never in this registry.",
   "secret_policy": {
     "canonical_private_store": "research_entity/private/API_TOKENS.env",
-    "allowed_sources": ["process_environment", "runtime_secret_store", "private_repo_token_store"],
-    "source_priority": ["process_environment", "runtime_secret_store", "private_repo_token_store"],
-    "forbidden_duplication_targets": ["canonical_state", "research_packets", "claims", "run_reports", "logs", "public_artifacts", "chat_memory"],
+    "allowed_sources": [
+      "process_environment",
+      "runtime_secret_store",
+      "private_repo_token_store"
+    ],
+    "source_priority": [
+      "process_environment",
+      "runtime_secret_store",
+      "private_repo_token_store"
+    ],
+    "forbidden_duplication_targets": [
+      "canonical_state",
+      "research_packets",
+      "claims",
+      "run_reports",
+      "logs",
+      "public_artifacts",
+      "chat_memory"
+    ],
     "rule": "By explicit project-owner decision, credential values may be persisted in the designated store of this private repository when the active connector permits it. Load only the needed credential and never duplicate its value into research artifacts or logs."
   },
   "runtime_health": {
@@ -29,10 +45,16 @@
       "provider": "OpenAlex",
       "script": "tools/openalex_search.py",
       "class": "scholarly_metadata_and_discovery",
-      "requires_secret": ["OPENALEX_API_KEY"],
+      "requires_secret": [
+        "OPENALEX_API_KEY"
+      ],
       "credential_required": true,
       "auth_transport": "query_parameter:api_key",
-      "preferred_for": ["paper discovery", "citation graph exploration", "author/institution/work metadata"],
+      "preferred_for": [
+        "paper discovery",
+        "citation graph exploration",
+        "author/institution/work metadata"
+      ],
       "evidence_class": "external_scholarly_metadata",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/openalex_verification.json",
@@ -46,7 +68,10 @@
       "requires_secret": [],
       "credential_required": false,
       "auth_transport": "none",
-      "preferred_for": ["preprint discovery", "technical paper retrieval"],
+      "preferred_for": [
+        "preprint discovery",
+        "technical paper retrieval"
+      ],
       "evidence_class": "external_preprint",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/arxiv_verification.json"
@@ -57,10 +82,16 @@
       "script": "tools/semantic_scholar_search.py",
       "class": "scholarly_metadata_and_discovery",
       "requires_secret": [],
-      "optional_secret": ["SEMANTIC_SCHOLAR_API_KEY"],
+      "optional_secret": [
+        "SEMANTIC_SCHOLAR_API_KEY"
+      ],
       "credential_required": false,
       "auth_transport": "public shared limit; optional x-api-key",
-      "preferred_for": ["paper discovery", "citation and reference traversal", "paper metadata"],
+      "preferred_for": [
+        "paper discovery",
+        "citation and reference traversal",
+        "paper metadata"
+      ],
       "evidence_class": "external_scholarly_metadata",
       "status": "RUNTIME_VERIFIED_DEGRADED_SHARED_RATE_LIMIT",
       "verification_receipt": "research_entity/runtime/semantic_scholar_verification.json",
@@ -73,10 +104,17 @@
       "script": "tools/crossref_search.py",
       "class": "doi_and_publication_metadata",
       "requires_secret": [],
-      "optional_config": ["CROSSREF_MAILTO"],
+      "optional_config": [
+        "CROSSREF_MAILTO"
+      ],
       "credential_required": false,
       "auth_transport": "public_or_polite_pool; optional mailto",
-      "preferred_for": ["DOI verification", "publisher metadata", "bibliographic normalization", "work metadata search"],
+      "preferred_for": [
+        "DOI verification",
+        "publisher metadata",
+        "bibliographic normalization",
+        "work metadata search"
+      ],
       "evidence_class": "external_bibliographic_metadata",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/crossref_verification.json",
@@ -88,10 +126,16 @@
       "provider": "Tavily",
       "script": "tools/tavily_search.py",
       "class": "agentic_web_search",
-      "requires_secret": ["TAVILY_API_KEY"],
+      "requires_secret": [
+        "TAVILY_API_KEY"
+      ],
       "credential_required": true,
       "auth_transport": "authorization_bearer",
-      "preferred_for": ["web research", "fact checking", "source discovery"],
+      "preferred_for": [
+        "web research",
+        "fact checking",
+        "source discovery"
+      ],
       "evidence_class": "external_web_discovery",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/tavily_verification.json"
@@ -105,7 +149,9 @@
       "requires_secret": [],
       "credential_required": false,
       "auth_transport": "none",
-      "preferred_for": ["fallback web discovery"],
+      "preferred_for": [
+        "fallback web discovery"
+      ],
       "evidence_class": "external_web_discovery",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/ddgs_verification.json",
@@ -116,10 +162,17 @@
       "provider": "Exa",
       "script": "tools/exa_search.py",
       "class": "semantic_web_search",
-      "requires_secret": ["EXA_API_KEY"],
+      "requires_secret": [
+        "EXA_API_KEY"
+      ],
       "credential_required": true,
       "auth_transport": "x-api-key header",
-      "preferred_for": ["semantic web discovery", "technical source discovery", "domain-filtered source discovery", "content highlights"],
+      "preferred_for": [
+        "semantic web discovery",
+        "technical source discovery",
+        "domain-filtered source discovery",
+        "content highlights"
+      ],
       "evidence_class": "external_web_discovery",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/exa_verification.json"
@@ -130,10 +183,17 @@
       "script": "tools/e2b_sandbox.py",
       "sdk": "e2b",
       "class": "remote_code_sandbox",
-      "requires_secret": ["E2B_API_KEY"],
+      "requires_secret": [
+        "E2B_API_KEY"
+      ],
       "credential_required": true,
       "auth_transport": "E2B_API_KEY process environment for SDK",
-      "preferred_for": ["isolated execution", "reproducibility checks", "dependency-heavy experiments", "untrusted code execution"],
+      "preferred_for": [
+        "isolated execution",
+        "reproducibility checks",
+        "dependency-heavy experiments",
+        "untrusted code execution"
+      ],
       "evidence_class": "runtime_experiment",
       "status": "ADAPTER_READY_CREDENTIAL_UNAVAILABLE",
       "verification_receipt": "research_entity/runtime/e2b_verification.json",
@@ -145,10 +205,17 @@
       "script": "tools/judge0_execute.py",
       "class": "remote_code_execution",
       "requires_secret": [],
-      "optional_config": ["JUDGE0_API_URL", "JUDGE0_API_KEY"],
+      "optional_config": [
+        "JUDGE0_API_URL",
+        "JUDGE0_API_KEY"
+      ],
       "credential_required": false,
       "auth_transport": "public CE endpoint by default; optional X-Auth-Token",
-      "preferred_for": ["small reproducible code tests", "language/runtime comparison", "fallback when E2B is unavailable"],
+      "preferred_for": [
+        "small reproducible code tests",
+        "language/runtime comparison",
+        "fallback when E2B is unavailable"
+      ],
       "evidence_class": "runtime_experiment",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/judge0_verification.json",
@@ -159,11 +226,18 @@
       "provider": "Piston",
       "script": "tools/piston_execute.py",
       "class": "remote_code_execution",
-      "requires_secret_for_hosted": ["PISTON_API_TOKEN"],
-      "optional_config": ["PISTON_API_URL"],
+      "requires_secret_for_hosted": [
+        "PISTON_API_TOKEN"
+      ],
+      "optional_config": [
+        "PISTON_API_URL"
+      ],
       "credential_required": "hosted_emkc_only",
       "auth_transport": "hosted EMKC: raw token in Authorization header; self-hosted instance may require none",
-      "preferred_for": ["small reproducible code tests", "multi-language execution"],
+      "preferred_for": [
+        "small reproducible code tests",
+        "multi-language execution"
+      ],
       "evidence_class": "runtime_experiment",
       "status": "ADAPTER_READY_HOSTED_CREDENTIAL_UNAVAILABLE",
       "verification_receipt": "research_entity/runtime/piston_verification.json",
@@ -174,17 +248,57 @@
       "provider": "Hugging Face Inference Providers",
       "script": "tools/huggingface_inference.py",
       "class": "model_inference",
-      "requires_secret": ["HF_TOKEN"],
+      "requires_secret": [
+        "HF_TOKEN"
+      ],
       "credential_required": true,
       "auth_transport": "Authorization: Bearer via router.huggingface.co/v1",
-      "preferred_for": ["model experiments", "embedding/classification/inference comparisons", "provider-routed chat inference", "available-model discovery"],
+      "preferred_for": [
+        "model experiments",
+        "embedding/classification/inference comparisons",
+        "provider-routed chat inference",
+        "available-model discovery"
+      ],
       "evidence_class": "external_model_runtime",
       "status": "RUNTIME_VERIFIED",
       "verification_receipt": "research_entity/runtime/huggingface_verification.json",
       "verification_spent_inference_credit": false
+    },
+    {
+      "tool_name": "groq_inference",
+      "provider": "Groq",
+      "script": "tools/groq_inference.py",
+      "class": "small_model_inference",
+      "requires_secret": [
+        "GROQ_API_KEY"
+      ],
+      "credential_required": true,
+      "auth_transport": "Authorization: Bearer to api.groq.com/openai/v1",
+      "default_model": "llama-3.1-8b-instant",
+      "parameter_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "proxy_policy": "research_entity/global/SMALL_MODEL_PROXY_POLICY.md",
+      "preferred_for": [
+        "small-model semantic reader tests",
+        "ClayCode/XENO representation experiments",
+        "ClayGraph answer-quality proxy",
+        "GWT/FRANK matched-content model sensitivity",
+        "Hyperposition representation tests"
+      ],
+      "not_equivalent_to": [
+        "Qwen3-4B target model",
+        "bare 4B evidence",
+        "local target-hardware latency/memory/energy",
+        "LoRA internalization"
+      ],
+      "evidence_class": "external_model_runtime_proxy",
+      "status": "RUNTIME_VERIFIED",
+      "verification_receipt": "research_entity/runtime/groq_verification.json",
+      "worker_bridge_verified": true
     }
   ],
   "selection_rule": "Use the cheapest fit-for-purpose capability that preserves evidence quality. Prefer primary/authoritative sources over search-engine summaries. GitHub-connected workers that cannot invoke repository scripts directly MUST use the repo-runner bridge before declaring an otherwise healthy provider unavailable.",
-  "fallback_rule": "If a preferred provider is unavailable, rate-limited, quota-exhausted or lacks credentials, record the reason and use the next suitable capability without silently weakening provenance. Current practical fallbacks: Semantic Scholar -> OpenAlex/arXiv/Crossref; E2B -> Judge0/local sandbox; Piston -> Judge0/local sandbox; Tavily/Exa -> DDGS/native web.",
-  "verification_rule": "Mark a capability RUNTIME_VERIFIED only after an actual successful provider call; credential presence alone is not verification. Preserve transient degradation separately from credential validity."
+  "fallback_rule": "If a preferred provider is unavailable, rate-limited, quota-exhausted or lacks credentials, record the reason and use the next suitable capability without silently weakening provenance. Current practical fallbacks: Semantic Scholar -> OpenAlex/arXiv/Crossref; E2B -> Judge0/local sandbox; Piston -> Judge0/local sandbox; Tavily/Exa -> DDGS/native web; Groq 8B small-model proxy -> true target/local 4B when available, otherwise Hugging Face/other model provider under normal quota policy.",
+  "verification_rule": "Mark a capability RUNTIME_VERIFIED only after an actual successful provider call; credential presence alone is not verification. Preserve transient degradation separately from credential validity.",
+  "small_model_proxy_policy": "research_entity/global/SMALL_MODEL_PROXY_POLICY.md"
 }

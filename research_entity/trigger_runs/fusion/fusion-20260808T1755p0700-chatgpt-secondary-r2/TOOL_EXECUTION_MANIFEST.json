@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260808T1755p0700-chatgpt-secondary-r2",
+  "actor":"chatgpt-secondary",
+  "classes":["scholarly","current_web","implementation","executable"],
+  "policy_ref":"research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1755-openalex-causal-basis-selection.json","note":"Scholarly discovery/metadata; broad query returned mixed relevance, so claims rely on source-nearer arXiv/web items where available."},
+    {"tool":"arxiv_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1755-arxiv-cognitive-transaction.json","note":"Returned causal-consistency literature and arXiv:2606.12290 Selection Integrity for LLM Graph Memory."},
+    {"tool":"semantic_scholar_search","status":"FAILED_RATE_LIMITED","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1755-semscholar-memory-integrity.json","reason":"HTTP 429 shared rate limit","fallback":"OpenAlex + arXiv + Exa + native web"},
+    {"tool":"tavily_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1755-tavily-memory-provenance.json","note":"Current-web discovery; mixed practitioner/vendor sources preserved as lower evidence class."},
+    {"tool":"exa_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1755-exa-memory-integrity.json","note":"Surfaced current selection-integrity, origin-bound authority, memory-poisoning and derived-state architecture work."},
+    {"tool":"native_web","status":"SUCCESS","note":"Checked current 2026 selection-integrity, proof-carrying action and structured-output/projection evidence; primary/preprint sources preferred over summaries."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Verified canonical, actor, trigger/fusion contract, all seven branches, latest completed material and fresh FRANK C6 in-progress commits; wrote and reread fusion artifacts."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Executed EXP-FUS-CTC-001 30-seed x 100k operation-specific capsule versus universal-lock synthetic proxy and selector-attack sweep."},
+    {"tool":"judge0_execute","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1755-judge0-cognitive-capsule.json","note":"Independent Python 3.8.1 replication of constructed CTC mechanism."}
+  ],
+  "blocked_or_skipped":[
+    {"tool":"huggingface_inference","reason":"QUOTA_EXHAUSTED_CACHED until 2026-09-01 UTC","state_ref":"research_entity/runtime/TOOL_QUOTA_STATE.json","fallback":"No new model-identity claim required for Fusion; existing branch Groq proxies preserved with 8B boundary."},
+    {"tool":"e2b_sandbox","reason":"CREDENTIAL_UNAVAILABLE in current registry/runtime","fallback":"local sandbox + Judge0"},
+    {"tool":"crossref_lookup","reason":"NON_APPLICABLE: no unresolved DOI normalization was material to this fusion decision."},
+    {"tool":"groq_inference","reason":"NO_NEW_FUSION_MODEL_ARM: Fusion's discriminating question was system validation rather than target reader identity. Fresh C6 Groq Mini-Clay request was observed as branch in-progress evidence but not appropriated as a Fusion result."}
+  ],
+  "evidence_boundaries":[
+    "Provider success does not promote source quality.",
+    "Current external selection-integrity/origin-binding sources are preprints and do not prove FRANK implementation safety.",
+    "Judge0 replicates the constructed mechanism on an independent runtime, not target prevalence.",
+    "Shared RAE branch convergence is ancestry, not replication.",
+    "No live FRANK or target Qwen3-4B evidence was available to this worker."
+  ],
+  "validation":{"strong_promotion":"NOT_ATTEMPTED","unresolved_required_tool_violation":false},
+  "sanitized_usage":{"secrets_recorded":false,"provider_cost_claimed":false}
+}

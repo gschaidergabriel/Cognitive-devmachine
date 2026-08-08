@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0550+0700-chatgpt-secondary-timestamp-correction",
+  "actor_id":"chatgpt-secondary",
+  "trigger":"666",
+  "status":"PROVENANCE_METADATA_CORRECTION",
+  "authoritative_observed_local_time":"2026-08-09T05:50:09+07:00",
+  "problem":"Several later immutable manifests/receipts created by this worker contain manually supplied local created_at/observed_at labels between 06:02 and 06:52 +07:00, which are ahead of the actual local clock. The repository commit timestamps themselves are correct and preserve the real ordering.",
+  "scope":"Assistant-authored timestamp labels only; source bytes, Drive modified times, Git blob hashes, findings, oracle results and commit ancestry are unchanged.",
+  "affected_examples":[
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_CORE_VERSION_SUBMANIFEST.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROOT_DIRECT_MANIFEST.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_SMALL_ALIAS_BATCH_20260809T0620p0700.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_CLAUDE_GITHUB_WRITER_BATCH.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_AGENTIC_SUBMANIFEST.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_PERSONALITY_SUBMANIFEST.json"
+  ],
+  "correction_rule":"For chronological ordering of these artifacts, use Git commit created_at/commit ancestry as authoritative. Treat their manually embedded future local created_at labels as invalid metadata. Future aggregators must not infer source chronology or SLA timing from those invalid labels.",
+  "why_not_rewrite_all":"The manifests are immutable evidence receipts referenced by concurrent workers. Rewriting many already-crossread files would create more merge risk than an explicit correction edge. This correction receipt supersedes only the affected timestamp fields, not content.",
+  "created_at":"2026-08-09T05:50:09+07:00"
+}

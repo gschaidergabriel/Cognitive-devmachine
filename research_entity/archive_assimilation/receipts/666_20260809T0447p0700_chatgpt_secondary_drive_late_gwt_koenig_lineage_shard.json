@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0447+0700-chatgpt-secondary-drive-late-gwt-koenig-lineage",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "PARTIAL_EXECUTED_HISTORY_AWARE_CROSS_SOURCE_DELTA",
+  "lane": "late_drive_gwt_and_research_center_projection_lineage",
+  "sources": [
+    "Drive:frank-gwt-broadcast.txt",
+    "Drive:HYPOTHESE-GWT-KOENIG.txt",
+    "Drive:SPEC-ZIEL-UND-KOENIGSDB.txt",
+    "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json"
+  ],
+  "findings": [
+    {
+      "finding_id": "DRV-LATE-GWT-001",
+      "epistemic_class": "HISTORICAL_PROJECT_NOTE_LATER_THAN_FROZEN_PROJECT_FRANKENSTEIN_HEAD",
+      "claim": "A Drive note dated August 1 describes a later FRANK workspace_broadcast.py lineage with deterministic source aggregation, salience competition, ignition threshold 0.55, one full focus plus compressed remainder, silence as a state, a fixed self-invariant, persistence to consciousness.db and re-entry into core/idle thinking.",
+      "targets": ["gwt", "frank", "harness", "emergenz", "clay"],
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "cross_source_reconciliation": "This does not refute PF-GWT-001, which was scoped to services/global_workspace.py at the frozen April head. It establishes a later Drive branch/lineage in which upstream competition/ignition was implemented outside that module. Level-0 chronology must place this after the frozen GitHub-head evidence rather than treating them as same-version contradictions.",
+      "reported_measurements": ["broadcasts approximately 2/min", "system text reduced to approximately 9.9k chars from 13.6k", "one tool-free state question reportedly reflected workspace signals"],
+      "caveat": "Project-note measurements require raw log/code replay before promotion to current runtime evidence."
+    },
+    {
+      "finding_id": "DRV-LATE-GWT-002",
+      "epistemic_class": "HISTORICAL_HYPOTHESIS_WITH_PREREGISTERED_FAILURE_EXPECTATION",
+      "claim": "The GWT-Koenig hypothesis proposes one full-focus plus stubbed channels as a token-bounded research-center reading policy and explicitly predicts failure on global comparison questions; it defines an effective-price break-even where two additional wrong fields erase the token savings.",
+      "targets": ["gwt", "harness", "claycode", "clay"],
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "implication": "Selection/compression quality must be evaluated separately for decision tasks and exhaustive-state-read tasks. Token reduction alone is not success; focus misses need explicit error cost."
+    },
+    {
+      "finding_id": "DRV-KOENIGDB-003",
+      "epistemic_class": "HISTORICAL_DESIGN_SPEC_NOT_EXECUTION_RESULT",
+      "claim": "The KoenigDB spec proposes an append-only, tiny derived fold with source pointer on every value; current state is latest value per key, historical state is ts<=T, and the database must be rebuildable from the authoritative source so it cannot become a second truth store.",
+      "targets": ["unifieddb", "claygraph", "harness", "claycode"],
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "implication": "This is a useful projection/cache pattern for current UnifiedDB: derived low-token views should be provenance-bound, rebuildable and subordinate to canonical semantic state. Do not import the literal koenig.db architecture as a new primary database."
+    },
+    {
+      "finding_id": "DRV-ZIEL-HYPERPOSITION-004",
+      "epistemic_class": "HISTORICAL_DESIGN_SPEC",
+      "claim": "The same spec treats a compact ziel= marker as a projection of a richer context/world facet: routing context is declared rather than guessed, while full provenance/time/status lives in the canonical layer. It explicitly distinguishes compact transport projection from canonical hyperposition semantics.",
+      "targets": ["hyperposition", "claycode", "claygraph", "unifieddb", "harness"],
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "implication": "Preserve context/world as typed canonical semantics and allow cheap projections at transport boundaries; do not let projection fields become independent truth."
+    }
+  ],
+  "earned_work": {
+    "additional_hours_awarded": 0.0,
+    "reason": "Current RAE already contains GWT competition/re-entry, projection and provenance research. These sources add chronology, concrete historical implementation lineage and test design, but unique avoided-hour value is not yet proven after ancestry deduplication."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "combined_denominator_state": "NOT_FROZEN"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0421+0700-chatgpt-secondary-pf-lcme-soma-autonomy-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "SHARD_ANALYZED_CROSSREAD_DEDUPED_READY_FOR_INTEGRATION",
+  "observed_at": "2026-08-09T04:21:00+07:00",
+  "supersedes_unintegrated_draft": "research_entity/archive_assimilation/receipts/666_PF_ARCH_HISTORY_CHATGPT_20260808T2114Z.json",
+  "supersession_reason": "The draft used finding identifiers that collided with another concurrent Level-0 receipt and predated mandatory crossread. This v2 uses unique identifiers and removes overlapping earned-work credit after peer crossread.",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "lane": "LCME retrieval lineage + SOMA training lifecycle + Project Engine autonomy/recovery lineage",
+    "deep_source_refs": [
+      "commit:290d5e2b8640d55eb2a0aa38b99338c8070a0009",
+      "tools/lcme/lcme_core.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "tools/lcme/retrieval.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "commit:78f31e7f1e4fa7109a90f6e32514923ca7428a87",
+      "commit:cfa7062ba62bc9d83fffada29dcc03a75c4f4050",
+      "commit:ccebdc78f3c08013e08758c7386984cc5e70386f",
+      "commit:f1ea0b47ef74cad16a3aadb9e63f633fd97a4e5d",
+      "commit:07f8e26a296cf5bdcd4add14ee42ab501d09422b"
+    ]
+  },
+  "crossread": {
+    "peer_receipts": [
+      "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json"
+    ],
+    "dedup_decisions": [
+      "Historical GWT/Thalamus/AURA/state-coupling failure material overlaps peer receipts and receives no additional avoided-hours credit here.",
+      "LCME neural-retrieval maturity-gate evidence is materially more specific than the surface receipt and remains this shard's unique memory delta.",
+      "SOMA end-to-end adaptive-LoRA lifecycle is distinct from the peer's SOMA bug-family regression mapping and is retained only for future training/model-package rows.",
+      "Project Engine goal/world-model/checkpoint/heartbeat/action-chain lineage is not covered by the peer receipts and remains a separate autonomy/recovery mapping."
+    ]
+  },
+  "epistemic_policy": {
+    "current_code": "VERIFIED_REPOSITORY_SOURCE",
+    "commit_message_metrics": "REPOSITORY_REPORTED_MEASUREMENT_NOT_INDEPENDENTLY_REPRODUCED",
+    "historical_consciousness_labels": "FUNCTIONAL_ARCHITECTURE_HISTORY_ONLY_NOT_PHENOMENAL_EVIDENCE"
+  },
+  "findings": [
+    {
+      "finding_id": "PF-LCME-001",
+      "epistemic_class": "CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "CURRENT_AT_FROZEN_HEAD",
+      "claim": "LCME retains tri-hybrid persistent memory orchestration with SQLite, vectors and knowledge-graph/FTS retrieval, while Hippocampus neural retrieval is used only when ready and mature; otherwise retrieval falls back to the conventional path.",
+      "targets": ["claygraph", "unifieddb", "frank", "harness"],
+      "reuse_category": "MEASUREMENT_FOUNDATION"
+    },
+    {
+      "finding_id": "PF-LCME-002",
+      "epistemic_class": "CURRENT_HEAD_CODE_NEGATIVE_RESULT_PLUS_REPOSITORY_REPORTED_BENCHMARK",
+      "status": "CURRENTLY_RELEVANT_TEST_ORACLE",
+      "claim": "Current retrieval source explicitly records that immature Neural Cortex weights reduced P@5 from 1.0 to 0.08; the historical redesign commit reports P@5 0.40 to 1.00 after removing 7,213 entity vectors, adding stopword filtering, relevance-dominant scoring and maturity gates.",
+      "targets": ["claygraph", "unifieddb", "harness", "frank"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "next_test": "Any learned ClayGraph/UnifiedDB retrieval layer must beat a frozen non-neural baseline under cold-start, mature, OOD and restart conditions before it can become authoritative."
+    },
+    {
+      "finding_id": "PF-LCME-003",
+      "epistemic_class": "CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "CURRENTLY_RELEVANT_DATA_SEMANTICS",
+      "claim": "LCME ingestion invalidates retrieval caches and deliberately prevents chat-origin turns from flooding the hot fact buffer; retrieval also skips chat-origin records as user memories.",
+      "targets": ["claygraph", "unifieddb", "frank"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "implication": "Unified cognitive storage needs explicit source-class semantics; conversational transcript presence must not automatically imply durable factual memory identity."
+    },
+    {
+      "finding_id": "PF-SOMA-004",
+      "epistemic_class": "HISTORICAL_EXECUTABLE_IMPLEMENTATION_PLUS_REPOSITORY_REPORTED_RUN",
+      "status": "OPEN_FOR_TRAINING_REUSE_MAPPING",
+      "claim": "SOMA implemented an adaptive LoRA lifecycle with interaction scoring, scheduled CPU training, drift/similarity/NaN deploy gates, snapshots, EMA blending, GGUF conversion/hot reload and rollback. The introduction commit reports 104 conversations scored, 80 qualified and a complete 18.7-minute CPU cycle that passed its safety check and deployed an adapter.",
+      "targets": ["claycode", "frank", "harness", "clay"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "constraint": "The reported run is repository evidence, not independent replication; final Clay-native training still needs held-out, leakage-resistant validation."
+    },
+    {
+      "finding_id": "PF-AUTON-005",
+      "epistemic_class": "HISTORICAL_EXECUTABLE_IMPLEMENTATION_PLUS_REPOSITORY_REPORTED_RUNS",
+      "status": "OPEN_FOR_RUNTIME_REUSE_MAPPING",
+      "claim": "Project Engine v3 implemented persistent goals with metrics/decomposition, an entity-relation world model, hard/soft policy state, tool-outcome learning, five-step action chaining, heartbeat scheduling and checkpoint recovery. Its commit reports a 39-second zero-Claude-token autonomy cycle and a 331-second five-step autonomous chain.",
+      "targets": ["frank", "harness", "claycode", "claygraph"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "constraint": "Historical unrestricted-system-access and credential-handling choices are not inherited; only orchestration/state/recovery mechanisms are candidates."
+    }
+  ],
+  "earned_work_mappings": [
+    {
+      "mapping_id": "HEW-PF-LCME-005",
+      "source_refs": ["PF-LCME-001", "PF-LCME-002", "PF-LCME-003"],
+      "current_doomsday_rows": ["UDB_UNIFIED_DATABASE", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS"],
+      "mechanism_or_result": "Hybrid retrieval architecture, explicit source-class semantics, mature-neural fallback and a concrete neural cold-start failure oracle.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 5.0,
+      "avoided_future_hours_high": 10.0,
+      "confidence": "MEDIUM_FOR_MECHANISM_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Current ClayGraph/UnifiedDB differential benchmark shows these retrieval/fallback lessons do not transfer or a simpler current baseline dominates them."
+    },
+    {
+      "mapping_id": "HEW-PF-SOMA-006",
+      "source_refs": ["PF-SOMA-004"],
+      "current_doomsday_rows": ["DATA_FINAL_TRAINING_CORPUS", "FINAL_MODEL_FINE_TUNE", "MODEL_EXPORT_RUNTIME_PACKAGE"],
+      "mechanism_or_result": "Existing adaptive-LoRA train/evaluate/deploy/rollback lifecycle with safety gating and runtime hot-reload concepts.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 6.0,
+      "avoided_future_hours_high": 12.0,
+      "confidence": "MEDIUM_LOW",
+      "falsifier_or_validation_receipt": "Final Clay-native representation/model/toolchain makes the historical lifecycle incompatible or held-out tests fail to show useful transfer."
+    },
+    {
+      "mapping_id": "HEW-PF-AUTON-007",
+      "source_refs": ["PF-AUTON-005"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "CLAY_0_1_FULL_INTEGRATION", "PROJECT_HARDWARE_DEPLOYMENT"],
+      "mechanism_or_result": "Persistent goal/world-model/checkpoint/heartbeat/action-chain orchestration patterns with historical executable use.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 4.0,
+      "avoided_future_hours_high": 8.0,
+      "confidence": "LOW_MEDIUM",
+      "falsifier_or_validation_receipt": "Reference Harness shows these patterns conflict with current Clay authority/state contracts or increase complexity without measurable recovery/autonomy benefit."
+    }
+  ],
+  "overlap_excluded_from_earned_work": {
+    "historical_coupling_failure_atlas": "Covered by peer GWT/state receipts; retained as corroborating ancestry only, additional hours = 0."
+  },
+  "branch_feedback": {
+    "claygraph": "Use LCME as a differential baseline family, especially source-class filtering and neural maturity gates; do not assume learned retrieval wins.",
+    "unifieddb": "Preserve transcript-vs-durable-fact identity and fallback semantics; physical single-store merge remains unproven.",
+    "harness": "Add cold-start/mature neural retrieval differentials and SOMA-style lifecycle/rollback tests where current interfaces exist.",
+    "frank": "Reuse goal/world-model/checkpoint patterns selectively, with current capability/authority boundaries replacing historical unrestricted access.",
+    "claycode": "Ensure goal/state/recovery and training deployment transitions have explicit authority/provenance contracts rather than implicit side effects.",
+    "clay": "Historical implementation substantially de-risks mechanisms, but every transferred mechanism still needs executable Clay-native proof."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Drive archive internals and exact Project-Frankenstein history/tree obligations remain unfrozen.",
+    "historical_earned_work_credit_status": "PARTIAL_EVIDENCE_MAPPINGS_RECORDED_NOT_GLOBAL_COMPLETION",
+    "provisional_unique_avoided_future_hours_low": 5.0,
+    "provisional_unique_avoided_future_hours_center": 15.0,
+    "provisional_unique_avoided_future_hours_high": 30.0
+  },
+  "drive_blocker_crossread": {
+    "file_id": "1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU",
+    "size_bytes": 663552000,
+    "connector_limit_bytes": 104857600,
+    "status": "EXTERNAL_ACCESS_BLOCKER_CONFIRMED_BY_MULTIPLE_WORKERS",
+    "coverage_credit": 0
+  }
+}

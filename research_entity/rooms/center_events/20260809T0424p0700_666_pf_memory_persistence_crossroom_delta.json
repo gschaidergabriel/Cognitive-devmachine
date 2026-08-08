@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T0424p0700-666-pf-memory-persistence-crossroom-delta",
+  "room_id": "center",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-20260809T0415p0700-666",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T04:24:00+07:00",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms": ["unifieddb","claygraph","harness","frank","claycode","gwt","clay"],
+  "affects_claims": [],
+  "dependencies": ["research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json"],
+  "artifact_refs": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0424p0700_chatgpt_secondary_pf_memory_persistence_recovery_shard.json",
+    "research_entity/forecast/earned_work_deltas/666_20260809T0424p0700_pf_memory_persistence_recovery_unique.json"
+  ],
+  "ancestry_family": "project-frankenstein-memory-persistence-recovery-history",
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "delta_type": "DEDUPED_HISTORICAL_MEMORY_PERSISTENCE_NEGATIVE_RESULTS",
+    "dedup_note": "LCME precision/cold-start/source-class findings overlap the 04:21 peer shard and receive zero additional earned-work credit here.",
+    "unique_summary": "Persistent data can exist yet remain cognitively unavailable; isolated stores can preserve bytes while losing cross-session recall; Titan suffered 6675 orphaned edges; MemoryHub later demonstrated logical federation across physical stores; crash-resumable backfill and compatibility-preserving migration are reusable recovery patterns.",
+    "branch_feedback": {
+      "unifieddb": "Treat logical unification as identity/query/provenance/recovery unification, not mandatory physical merge. Require cross-store visibility and causal recall receipts.",
+      "claygraph": "Make referential integrity, orphan detection/repair, provenance and retrieval-layer ablation mandatory. More graph/vector machinery is not automatically better.",
+      "harness": "Add stored-but-unreachable memory, isolated-store cross-session loss, orphan graph, interrupted backfill, reconnect and migration-compatibility regression cases.",
+      "frank": "Count memory as functional only when it can enter cognition and measurably affect decision/outcome/re-entry.",
+      "claycode": "Version stable durable resource identities and learned interfaces across migrations; avoid silent semantic renames.",
+      "gwt": "Storage presence is not global availability; test memory retrieval through selection/broadcast/effect traces.",
+      "clay": "Reuse federation/recovery invariants, not Titan/LCME topology as a fixed final architecture."
+    }
+  }
+}

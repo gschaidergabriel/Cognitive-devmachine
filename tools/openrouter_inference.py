@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """OpenRouter model adapter for FRANK/RAE target small-model experiments.
 
-Default target: qwen/qwen3-4b. Results are recorded as direct Qwen3-4B external
-model-runtime evidence, not as a local-device/runtime substitute. The adapter never
-prints or stores credential values.
+Preferred target is Qwen3-4B when exposed by the credential-specific catalog. If it is
+not exposed, other explicit 4B routes may be used for parameter-class experiments but
+must never be relabeled as Qwen evidence. Credential values are never printed/stored.
 """
 from __future__ import annotations
 
@@ -24,12 +24,17 @@ ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "research_entity" / "runtime" / "tool_results"
 BASE_URL = "https://openrouter.ai/api/v1"
 DEFAULT_MODEL = "qwen/qwen3-4b"
-FREE_MODEL = "qwen/qwen3-4b:free"
-PARAMETER_CLASS = "4B"
-EVIDENCE_ROLE = "direct_qwen3_4b_external_runtime"
+QWEN_FREE_MODEL = "qwen/qwen3-4b:free"
+GEMMA_4B_MODEL = "google/gemma-3-4b-it"
 USER_AGENT = "FRANK-RAE/8.8 research-runtime (+https://github.com/gschaidergabriel/clay-global-research-entity)"
 MAX_RATE_RETRIES = 8
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$")
+
+MODEL_META = {
+    DEFAULT_MODEL: {"class": "4B", "role": "direct_qwen3_4b_external_runtime", "identity": "Qwen3-4B"},
+    QWEN_FREE_MODEL: {"class": "4B", "role": "direct_qwen3_4b_external_runtime", "identity": "Qwen3-4B"},
+    GEMMA_4B_MODEL: {"class": "4B", "role": "direct_4b_external_runtime", "identity": "Gemma-3-4B-IT"},
+}
 
 
 def _retry_seconds(exc: urllib.error.HTTPError, body: str, attempt: int) -> float:
@@ -91,6 +96,7 @@ def chat(
     max_tokens: int = 512,
     temperature: float = 0.0,
     system: str | None = None,
+    requested_target_class: str | None = None,
 ) -> dict[str, Any]:
     if not prompt.strip():
         raise ValueError("prompt required")
@@ -108,12 +114,14 @@ def chat(
     choice = (raw.get("choices") or [{}])[0]
     usage = raw.get("usage") or {}
     message = choice.get("message") or {}
+    meta = MODEL_META.get(model, {"class": "external_model", "role": "external_model_runtime", "identity": model})
     return {
         "provider": "OpenRouter",
         "model": model,
-        "requested_target_class": "Qwen3-4B",
-        "executed_model_class": PARAMETER_CLASS if model.startswith("qwen/qwen3-4b") else "external_model",
-        "evidence_role": EVIDENCE_ROLE if model.startswith("qwen/qwen3-4b") else "external_model_runtime",
+        "model_identity": meta["identity"],
+        "requested_target_class": requested_target_class or meta["identity"],
+        "executed_model_class": meta["class"],
+        "evidence_role": meta["role"],
         "content": message.get("content") or "",
         "reasoning": message.get("reasoning"),
         "finish_reason": choice.get("finish_reason"),
@@ -125,16 +133,19 @@ def chat(
 def smoke_test(model: str = DEFAULT_MODEL) -> dict[str, Any]:
     if not model_available(model):
         raise RuntimeError(f"OpenRouter account/catalog does not expose required model {model}")
-    out = chat("Reply with exactly: OPENROUTER_QWEN3_4B_OK /no_think", model=model, max_tokens=48, temperature=0.0)
-    if "OPENROUTER_QWEN3_4B_OK" not in out.get("content", ""):
-        raise RuntimeError("OpenRouter Qwen3-4B sentinel mismatch")
+    meta = MODEL_META.get(model, {"class": "external_model", "role": "external_model_runtime", "identity": model})
+    sentinel = "OPENROUTER_MODEL_OK"
+    out = chat(f"Reply with exactly: {sentinel}", model=model, max_tokens=32, temperature=0.0)
+    if sentinel not in out.get("content", ""):
+        raise RuntimeError(f"OpenRouter sentinel mismatch for {model}")
     return {
         "status": "RUNTIME_VERIFIED",
         "verified_at": datetime.now(timezone.utc).isoformat(),
         "provider": "OpenRouter",
         "model": model,
-        "parameter_class": PARAMETER_CLASS,
-        "evidence_role": EVIDENCE_ROLE,
+        "model_identity": meta["identity"],
+        "parameter_class": meta["class"],
+        "evidence_role": meta["role"],
         "credential_source": secret_source("OPENROUTER_API_KEY"),
         "credential_value_exposed": False,
         "inference_call_succeeded": True,
@@ -167,6 +178,7 @@ def process_request(path: Path) -> dict[str, Any]:
                 max_tokens=int(req.get("max_tokens") or 512),
                 temperature=float(req.get("temperature") or 0.0),
                 system=str(req.get("system")) if req.get("system") else None,
+                requested_target_class=str(req.get("requested_target_class")) if req.get("requested_target_class") else None,
             )
         else:
             raise ValueError(f"unsupported mode: {mode}")

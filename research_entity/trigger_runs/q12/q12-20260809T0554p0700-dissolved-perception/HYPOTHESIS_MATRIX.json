@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q12-20260809T0554p0700-dissolved-perception",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "topic": "dissolved-perception-sensor-in-module",
+  "hypotheses": [
+    {
+      "id": "DP-H1",
+      "claim": "Replacing the mandatory serial Retina->materialized-VisualPercept boundary with in-module distributed perceptual state updates reduces perception-to-state latency and state movement without materially reducing task accuracy or replayability.",
+      "status": "OPEN",
+      "support": ["owner architecture intuition", "event/change-driven low-latency literature", "persistent scene-state prior art"],
+      "falsifier": "Under matched input and compute, explicit-pipeline baseline has equal-or-lower p95 latency/CPU/state movement, or dissolved mode loses >2 percentage points task accuracy, or cannot reconstruct provenance-complete replay receipts.",
+      "best_test": "A/B explicit pipeline vs dissolved field on identical Digital Retina features and deterministic fixtures."
+    },
+    {
+      "id": "DP-H2",
+      "claim": "Bounded recurrent coupling from world model and memory improves recognition of occluded, ambiguous or context-dependent visual input relative to a feedforward-only perceptual field under matched compute.",
+      "status": "OPEN_SUPPORTED_BY_ANALOGUE_EVIDENCE",
+      "support": ["recurrent occlusion studies", "prior-feedback human studies"],
+      "falsifier": "Feedforward-only field matches or exceeds recurrent condition on difficult perception after controlling parameters/compute, or gains disappear when context information is matched by nonrecurrent post-processing.",
+      "best_test": "Factorial recurrence x world-model feedback with occlusion, ambiguity and context-swap sets."
+    },
+    {
+      "id": "DP-H3",
+      "claim": "High-level visual prediction error/novelty is a better trigger for expensive GWT escalation than fixed-rate full visual reconstruction.",
+      "status": "OPEN",
+      "support": ["high-level surprise evidence", "historical event-triggered Retina proposal"],
+      "falsifier": "Prediction-error trigger misses materially more task-relevant events or costs as much/more than fixed-rate processing at matched downstream utility.",
+      "best_test": "Event-triggered vs periodic attention with matched salient-event recall and end-to-end action utility."
+    },
+    {
+      "id": "DP-H4",
+      "claim": "A hybrid anchor-frame plus change/event fast path dominates both full-frame-only and event-only perception for FRANK's persistent world state.",
+      "status": "OPEN",
+      "support": ["event-camera latency evidence", "known limitation on static/slow content"],
+      "falsifier": "One single-mode baseline Pareto-dominates hybrid mode in accuracy, missed events, latency and compute across representative workloads.",
+      "best_test": "Three-way periodic full frame vs change-only vs hybrid anchor+change benchmark."
+    },
+    {
+      "id": "DP-H5",
+      "claim": "Making perceptual hypotheses first-class Clay state and preserving multiple alternatives until evidence/context settles them reduces premature misclassification on ambiguous scenes.",
+      "status": "OPEN",
+      "support": ["predictive inference literature", "Hyperposition architecture"],
+      "falsifier": "Single-best-label baseline has equal/better calibration and lower error without increased correction cost, or multi-hypothesis state creates unstable/expensive oscillation.",
+      "best_test": "Ambiguous/bistable/occluded benchmark comparing forced early label vs set-valued alternatives."
+    },
+    {
+      "id": "DP-H6",
+      "claim": "World-model feedback must be precision-bounded; otherwise dissolved perception increases prior-induced false positives/hallucination-like errors.",
+      "status": "OPEN_HIGH_RISK_PREDICTION",
+      "support": ["prior-bias predictive-processing literature", "perceptual hysteresis evidence"],
+      "falsifier": "Unbounded/strong top-down feedback does not increase false positives under misleading priors/no-signal conditions relative to bounded precision controls.",
+      "best_test": "Misleading-prior x sensor-quality factorial with no-signal and unknown-object controls."
+    },
+    {
+      "id": "DP-H7",
+      "claim": "If the perceptual field pre-integrates persistent world/memory state, the Clay-native 4B model can achieve equal task utility with less model-visible visual/context payload than caption/image-heavy baselines.",
+      "status": "OPEN",
+      "support": ["project ClayGraph/small-model hypothesis", "persistent scene-state prior art"],
+      "falsifier": "Matched 4B tasks require equal or greater model-visible tokens/bytes/latency for equal accuracy and calibration.",
+      "best_test": "Same 4B fixture across raw/caption, explicit VisualPercept and bounded perceptual-assembly projections."
+    },
+    {
+      "id": "DP-H8",
+      "claim": "Putting sensor ingress and perceptual fast path into the H3 one-module process reduces IPC/serialization overhead enough to improve sensor-to-action latency on project hardware.",
+      "status": "OPEN_ENGINEERING",
+      "support": ["general latency reasoning", "practitioner evidence on buffering/transport"],
+      "falsifier": "External-process and in-process topologies are equivalent within measurement noise or one-module mode worsens p95/p99 latency, crash recovery or resource contention.",
+      "best_test": "Same device/fixtures through out-of-process vs in-process ingestion with trace-level timing."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "DP-C1",
+      "claim": "The explicit Retina module is already a good abstraction; dissolving it mostly removes observability/modularity and yields little performance benefit."
+    },
+    {
+      "id": "DP-C2",
+      "claim": "Benefits attributed to recurrent perception are reproducible by simpler late contextual reranking or post-processing."
+    },
+    {
+      "id": "DP-C3",
+      "claim": "Persistent world-state coupling causes error propagation and stale priors that outweigh context benefits."
+    },
+    {
+      "id": "DP-C4",
+      "claim": "The main bottleneck is the physical vision model/kernel, so process/module consolidation cannot materially change end-to-end latency."
+    },
+    {
+      "id": "DP-C5",
+      "claim": "A distributed PerceptualField is harder to train/debug than a typed VisualPercept boundary and increases implementation complexity without cognitive gain."
+    }
+  ],
+  "promotion_rule": "Owner-fixed architecture target may guide implementation, but performance/cognitive claims remain OPEN until differential Harness evidence exists. Negative results remain first-class."
+}

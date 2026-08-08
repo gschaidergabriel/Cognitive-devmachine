@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "coordination_id": "claycode-multiworker-20260809T0128p0700",
+  "from_worker": "chatgpt-secondary-sol-websynth-B",
+  "role": "B_WEB_SYNTHESIS_REPLICATION_EXTENSION_NONCOUNTING",
+  "status": "COMPLETE_FOR_FUSION",
+  "primary_artifacts": [
+    "CONTRIBUTION_chatgpt-secondary-sol-websynth-B.md",
+    "EXECUTABLE_RESEARCH_RECEIPT_chatgpt-secondary-sol-websynth-B.json",
+    "experiments/WEB_SYNTH_LOWERING_VALIDATION.py",
+    "ROLE_ADJUSTMENT_chatgpt-secondary-sol-websynth-B.json",
+    "CROSSREAD_chatgpt-secondary-sol-websynth-B_from-FRANK-C9.json"
+  ],
+  "fusion_deltas": [
+    "Refine UECC+CBEL-TV with an Effect-Carrying Lowering Contract: effect/type semantics survive all lowering boundaries while live authority does not become serializable program data.",
+    "Keep general-purpose ClayCode computationally universal but make the ultimate authorization/policy plane deliberately restricted and mechanically analyzable; model-authored policy is proposal, not authority.",
+    "Use opaque affine/linear capability handles with monotone attenuation across component/process/FFI boundaries; raw FFI is an explicit trusted boundary.",
+    "Separate model-optimized compact projection from canonical typed Clay IR; allow compression only with deterministic canonicalization and translation-validation.",
+    "Canonical semantic identity includes types/effects/interfaces and observable concurrency/memory/address-space semantics, but excludes run-specific permits and backend-only codegen knobs.",
+    "Transitive child-effect closure is required: generated Python/Bash/C/Rust/WASM/FFI cannot receive broader ambient rights than the parent Clay contract."
+  ],
+  "web_evidence_classes": [
+    "official/compiler: MLIR, LLVM, WebAssembly Component Model/WASI 0.3",
+    "capability systems: CHERI, Austral",
+    "authorization/formal: Cedar and 2026 AutoCedar",
+    "content-addressed code: Unison",
+    "model code generation: type-constrained decoding",
+    "community implementation evidence: r/WebAssembly only as low-weight engineering evidence"
+  ],
+  "experiment_summary": {
+    "differential_programs": 20000,
+    "semantic_mismatches": 0,
+    "effect_trace_mismatches": 0,
+    "boundary_mutations": 40000,
+    "boundary_false_accepts": 0,
+    "identity_cases": 10000,
+    "semantic_mutations_missed": 0
+  },
+  "negative_results": [
+    "An initial process-heavy experiment timed out and was discarded; process startup latency is distinct from semantic preservation.",
+    "WIT resource handles are an interface mechanism, not automatic proof of capability security.",
+    "Content hashing proves canonical identity, not general semantic equivalence.",
+    "No real WASI/native/GPU/FFI red-team or target-Qwen adherence experiment was completed by this worker.",
+    "Policy-plane separation remains an architecture hypothesis until implemented and mutation-tested."
+  ],
+  "requested_fusion_actions": [
+    "Cross-read this contribution before final multiworker synthesis.",
+    "Do not count shared-ancestry agreement from FRANK C9/Hyperposition H6 as independent replication.",
+    "Preserve UECC generality, Lane C aggregate/origin constraints, CBEL-TV release binding and this ECLC/policy-plane refinement as separate evidence contributions.",
+    "Do not promote until real backend, FFI and target-Qwen tests satisfy existing blockers."
+  ],
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "created_at": "2026-08-09T01:47:00+07:00"
+  }
+}

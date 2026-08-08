@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
+  "actor_id":"chatgpt-secondary",
+  "executions":[
+    {"class":"canonical+implementation","tool":"GitHub connector","status":"SUCCESS_RW_IN_PROGRESS","purpose":"canonical/actor/trigger verification, accepted graph, runtime packet policy, preflight selector source, prior ClayGraph artifacts, persistence"},
+    {"class":"current_runtime_contract","tool":"GitHub current repository evidence","status":"SUCCESS","sources":["research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md","tools/research_interconnect_preflight.py","research_entity/runtime/CONTRACT_HEALTH.json","research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md"]},
+    {"class":"scholarly","tool":"native web arXiv fallback","status":"SUCCESS","sources":[
+      {"title":"GRASP: Plan-Guided Graph Retrieval with Adaptive Fusion and Reranking on Semi-Structured Knowledge Bases","date":"2026-05-28","evidence_class":"PREPRINT"},
+      {"title":"PAGE-RAG: Evidence-Grounded Adaptive Graph Retrieval for Long-Document Question Answering","date":"2026-07-21","evidence_class":"PREPRINT"},
+      {"title":"PolyG: Effective and Efficient GraphRAG with Adaptive Graph Traversal","date":"2025-04-02","evidence_class":"PREPRINT"},
+      {"title":"G-Retriever: Retrieval-Augmented Generation for Textual Graph Understanding and Question Answering","evidence_class":"RESEARCH_PREPRINT"}
+    ]},
+    {"class":"implementation+field","tool":"native web GitHub/Reddit fallback","status":"SUCCESS","sources":[
+      {"title":"Graphiti issue #1515 standardized temporal retrieval benchmarks","date":"2026-05-28","evidence_class":"PRACTITIONER_PROPOSAL"},
+      {"title":"Graphiti issue #1166 missing temporal versioning for node attributes","date":"2026-01-21","evidence_class":"IMPLEMENTATION_BUG_REPORT"},
+      {"title":"Graphiti issue #1602 salience-based fact filtering and multi-tier memory","date":"2026-06-20","evidence_class":"PRACTITIONER_RFC"},
+      {"title":"Reddit Graphiti retrieval returns irrelevant relationship despite correct stored data","evidence_class":"ANECDOTAL_PRACTITIONER_REPORT"}
+    ]},
+    {"class":"executable","tool":"local Python sandbox","status":"SUCCESS","purpose":"53-item, 20-query source-grounded designed retrieval proxy; deterministic packet envelope vs lexical/direct staged proxy vs G1 fixed qualified graph vs G1b query-planned hybrid; train/holdout split and 200-run erroneous-qualified-edge stress test"},
+    {"class":"target_model","tool":"Hugging Face inference","status":"SKIPPED_CACHED_QUOTA","reason":"TOOL_QUOTA_STATE remains QUOTA_EXHAUSTED_CACHED until 2026-09-01; no local target Qwen3-4B runtime exposed."},
+    {"class":"repository_execution","tool":"research_interconnect_preflight.py / claygraph_build.py / claygraph_benchmark.py","status":"BLOCKED_SURFACE","reason":"GitHub connector can inspect/write but not execute arbitrary repository scripts in this chat surface; local proxy is not the repository runtime benchmark."}
+  ],
+  "promotion_boundary":"No strong promotion depends on unavailable target-model or repository-runner execution."
+}

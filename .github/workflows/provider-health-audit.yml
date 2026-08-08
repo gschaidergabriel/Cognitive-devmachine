@@ -5,8 +5,11 @@ on:
   push:
     paths:
       - 'research_entity/private/API_TOKENS.env'
+      - 'research_entity/private/GROQ_API.env'
       - 'tools/rae_secret_loader.py'
       - 'tools/provider_health_audit.py'
+      - 'tools/groq_health_merge.py'
+      - 'tools/groq_inference.py'
       - 'tools/openalex_search.py'
       - 'tools/arxiv_search.py'
       - 'tools/semantic_scholar_search.py'
@@ -45,11 +48,17 @@ jobs:
       - name: Run sanitized provider audit
         run: python tools/provider_health_audit.py --write > /tmp/provider-health-output.json
 
+      - name: Merge Groq small-model health
+        run: python tools/groq_health_merge.py > /tmp/groq-health-output.json
+
+      - name: Register Groq provider metadata
+        run: python tools/register_groq_provider.py
+
       - name: Commit provider health and receipts
         run: |
           git config user.name 'rae-runtime-verifier'
           git config user.email 'rae-runtime-verifier@users.noreply.github.com'
-          git add research_entity/runtime/PROVIDER_HEALTH.json research_entity/runtime/*_verification.json
+          git add research_entity/runtime/PROVIDER_HEALTH.json research_entity/runtime/*_verification.json research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json
           git diff --cached --quiet && exit 0
           git commit -m 'Record consolidated provider health audit'
           for attempt in 1 2 3; do

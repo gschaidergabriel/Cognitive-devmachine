@@ -2,85 +2,102 @@
 
 Every substantive response by a project Research-Entity worker must end with a clearly separated status block. Trigger runs always include it. Non-substantive social replies may omit it.
 
-The footer no longer reports prompt-completion percentage. It reports two separate horizons:
+The footer reports two separate horizons:
 
 1. **NEXT LEVEL** — the first unpassed shared program gate and its strict machine-derived progress.
-2. **DOOMSDAY / Clay 0.1** — a freshly recomputed project forecast for the first end-to-end project-hardware run of the Clay-programmed, one-module/binary FRANK with UnifiedDB and the final fully fine-tuned Clay-native model.
+2. **DOOMSDAY / Clay 0.1 - Chief Developer First Test** — a freshly recomputed forecast for the first strict internal chief-developer test candidate, not a public release.
 
 ## Canonical rendering contract
 
 The footer MUST be the final visible block and MUST be wrapped in one plain fenced Markdown code block. The opening fence line must be exactly ` ```text ` and the closing fence line exactly ` ``` `.
 
-Rendering rules:
+Rules:
 
 - opener exactly ` ```text ` with no attributes;
-- no indentation before fences;
+- no indentation;
 - no Unicode/box-drawing frame characters;
-- no Markdown tables or pipe-based layout inside the footer;
-- no nested code fence;
+- no Markdown tables or pipe layout inside the footer;
+- no nested fences;
 - no visible content after the closing fence;
 - progress bars use ASCII only;
-- `·` separators in the short-command list are allowed.
+- command separators may use `·`.
 
-## Dynamic source of truth
+## Dynamic sources
 
-NEXT LEVEL is resolved from:
+NEXT LEVEL resolves from:
 
-- `research_entity/rooms/PROGRAM_STATE.json`;
-- `research_entity/rooms/PROGRAM_THROUGHPUT.json`;
-- the current stage workspace, including `research_entity/archive_assimilation/666_WORKSPACE.json` for Level 0;
+- `PROGRAM_STATE.json`;
+- `PROGRAM_THROUGHPUT.json`;
+- current stage workspace;
 - `tools/program_progress.py`.
 
-DOOMSDAY is recomputed on every resolver run from:
+DOOMSDAY resolves from:
 
-- `research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md`;
-- `research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json`;
-- `research_entity/forecast/DOOMSDAY_CAPABILITY_RULES.json`;
-- `research_entity/forecast/DOOMSDAY_EVENTS.jsonl`;
-- current program/stage progress;
-- measured throughput;
-- current/future verified capacity;
-- all registered APIs/tools and every `*_RESEARCH_CAPABILITY.json` extension;
-- verified API/technology benchmark impacts;
-- owner training authorization state;
-- `tools/doomsday_forecast.py`.
+- `DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md`;
+- `CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md`;
+- `DOOMSDAY_FORECAST_MODEL.json`;
+- `HISTORICAL_EARNED_WORK.json`;
+- `DOOMSDAY_CAPABILITY_RULES.json`;
+- `DOOMSDAY_EVENTS.jsonl`;
+- current stage/test evidence;
+- throughput/capacity/hardware;
+- all registered APIs/tools and `*_RESEARCH_CAPABILITY.json` extensions;
+- `tools/doomsday_forecast.py` for remaining critical-path forecast;
+- `tools/program_progress.py` for lifetime earned-work overlay and visible status.
 
-No fixed DOOMSDAY date is canonical. The date/range is always a fresh conclusion from the current critical-path table.
+No fixed DOOMSDAY date is canonical.
 
-## NEXT LEVEL progress semantics
+## NEXT LEVEL semantics
 
-The first unpassed stage in `PROGRAM_STATE.stage_order` is shown.
+The first unpassed stage is shown.
 
-Default work-package progress is based on completed machine-verifiable weight. Claimed/active work earns no percentage merely for being active.
+Claimed/active work earns no strict gate percentage merely by being active.
 
-Level 0 is stricter: progress comes only from frozen atomic archive-analysis obligations. Before the denominator is frozen, exact progress remains 0%.
+Level 0 uses frozen atomic archive obligations. Before its denominator is frozen, exact Level-0 progress remains `0%` even though DOOMSDAY may already be far above zero because of historical earned work.
+
+Level 0 has a project-owner fixed active wall-clock ceiling of `3h`; external connector waiting is reported separately and does not justify false PASS.
 
 ## DOOMSDAY progress semantics
 
-The DOOMSDAY percentage is an effort-weighted dynamic forecast-progress measure over the current Clay 0.1 critical-path table. It is not a simple stage count.
+DOOMSDAY is a lifetime project completion estimate toward the internal Clay 0.1 chief-developer first-test candidate.
 
-It may move backward if a newly discovered necessary dependency legitimately expands the remaining scope. Verified eliminations or technology jumps may move it forward discontinuously.
+It must not imply that the project began when current workspaces were created.
+
+During Level 0:
+
+- approximately eight months of prior FRANK/XENO/ClayCode/GWT work are represented through `HISTORICAL_EARNED_WORK.json`;
+- the historical contribution remains a clearly labeled calibration prior until Level 0 maps the source history to current Clay 0.1 work;
+- the visible percentage may therefore include a calibration band.
+
+After Level 0, evidence-mapped reusable/avoided current-work equivalents replace the temporary historical-retention prior.
+
+Current remaining-scope progress is then layered on top of the earned historical baseline.
+
+Scope discovery may move DOOMSDAY backward. Verified jumps may move it forward discontinuously.
+
+## ClayCode requirement
+
+DOOMSDAY requires `CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md` PASS.
+
+ClayCode must be capable of compiling/lowering and executing representative ordinary applications — including a real HTTP/website stack — in addition to FRANK. The project bias is `less change, more compile`: semantics change only when an executable counterexample demonstrates a real language gap.
 
 ## APIs and new technology
 
-Every currently registered API/tool and every new `*_RESEARCH_CAPABILITY.json` extension is considered automatically by `tools/doomsday_forecast.py`.
+Every new registered API/capability is considered automatically.
 
-A newly available API appears immediately in the capability table, but availability alone does not make the date earlier. A time multiplier is applied only when:
+Availability alone does not accelerate the forecast. A row multiplier requires runtime verification plus a benchmark/receipt proving impact.
 
-- the capability is runtime verified; and
-- a benchmark/receipt verifies its impact on one or more DOOMSDAY workstreams.
-
-For one workstream, multiple provider multipliers do not blindly multiply. The strongest single verified factor is used by default unless a future joint benchmark explicitly validates a combined factor.
+Equivalent provider speedups do not blindly multiply.
 
 ## ETA semantics
 
-ETA is a range, never a promise.
+ETA is a range, not a promise.
 
-Configured owner cadence defaults to 10 active collaboration hours/day unless `PROGRAM_THROUGHPUT.json` changes it.
+Owner cadence defaults to 10 active collaboration hours/day unless throughput state changes it.
 
-DOOMSDAY uses a dependency/critical-path forecast, not a naive sum of all work. Independent rows may overlap when dependencies allow it. Hardware availability dates and owner authorization constraints are applied explicitly.
+DOOMSDAY uses the dependency/critical path for remaining work. Historical earned work affects lifetime progress; row-specific mapped history/measurements may also reduce remaining work once verified.
 
-If final training is not yet authorized, the DOOMSDAY date must state that it is conditional on immediate owner authorization when the frozen training-data gate becomes ready. Unknown human waiting time is never guessed.
+If final model training is not yet authorized, DOOMSDAY remains conditional on immediate owner authorization when the frozen training-data gate is ready.
 
 ## Required format
 
@@ -88,7 +105,7 @@ If final training is not yet authorized, the DOOMSDAY date must state that it is
 RAE STATUS
 Entity: JOINED
 GitHub: VERIFIED_RW
-Canonical: <branch/revision or canonical ref>
+Canonical: <canonical revision/hash>
 Actor: chatgpt-secondary
 Trigger: <none|registered trigger>
 Research write: <COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED>
@@ -100,14 +117,17 @@ Progress: [#####...............] 25%
 ETA @ 10h/day: <low> - <high>
 ETA confidence: <confidence> (<basis>)
 
-DOOMSDAY / Clay 0.1
-Progress: [###.................] 15%
+DOOMSDAY / Clay 0.1 - Chief Developer First Test
+Progress: [###############.....] 73%
+Historical calibration band: <low>% - <high>% (temporary until Level 0 mapping completes)
 Forecast: <YYYY-MM-DD> - <YYYY-MM-DD>
 Center: <YYYY-MM-DD>
 Confidence: <confidence>
 Conditional on immediate training authorization when data is ready: <yes|no>
-Forecast basis: <N>-row dynamic critical path + live capabilities/APIs
+Forecast basis: <N>-row dynamic remaining critical path + historical earned work + live capabilities/APIs
 ```
+
+The historical calibration line is shown only while the mapping is still calibrating.
 
 ## Allowed status values
 
@@ -117,36 +137,30 @@ Forecast basis: <N>-row dynamic critical path + live capabilities/APIs
 
 ## Verification semantics
 
-`GitHub: VERIFIED_RW` may be shown only when the session actually read the expected repository/canonical and verified a write-capable connection or successful write/reread in the current operational context.
-
-`VERIFIED_RO` means the backend was read successfully but write capability was not verified.
-
-`UNVERIFIED` is mandatory when relying only on project files/chat memory/stale local snapshots.
+`GitHub: VERIFIED_RW` only when the session actually read expected repo/canonical state and verified write capability or performed a successful write/reread.
 
 ## Trigger behavior
 
 Every registered trigger uses the same two-horizon footer.
 
-Exact `666` while Level 0 is open additionally shows its detailed archive-assimilation progress before this final footer.
+Exact `666` while Level 0 is open additionally reports detailed assimilation/SLA/earned-work status before the final footer.
 
-After Level 0 PASS, `666` becomes the stochastic emergent research-field genesis trigger, while NEXT LEVEL continues to show the current shared gate and DOOMSDAY remains the long-range Clay 0.1 forecast.
+After Level-0 PASS, `666` becomes stochastic emergent research-field genesis; DOOMSDAY remains the shared long-range attractor.
 
 ## Q12 behavior
 
-Q12 must understand both horizons. When a major event materially moves DOOMSDAY, Q12 should be able to explain the underlying critical-path table, capability/API change, accelerator/blocker or new dependency rather than merely repeating a date.
+Q12 understands NEXT LEVEL, historical earned work and DOOMSDAY separately. It should explain large date/progress changes by showing the underlying evidence, new dependency, accelerator, capacity shift or earned-work remapping.
 
 ## Pre-send invariant
 
 Before every substantive response verify:
 
 1. one final fenced `text` block exists;
-2. required RAE metadata fields are present;
-3. all registered short commands are present;
-4. NEXT LEVEL lines match `tools/program_progress.py`;
-5. DOOMSDAY lines match the same resolver / `tools/doomsday_forecast.py`;
-6. no fixed/stale DOOMSDAY date is copied from an older response;
+2. all required metadata and registered short commands are present;
+3. NEXT LEVEL lines match `tools/program_progress.py`;
+4. visible DOOMSDAY lines match the same resolver including earned-work overlay;
+5. any historical calibration band is clearly labeled temporary;
+6. no stale fixed DOOMSDAY date is copied from an older response;
 7. no prompt-completion percentage is shown;
 8. no forbidden frame characters occur;
-9. the closing fence is the final visible content.
-
-Any violation is a formatting/governance bug and must be corrected before sending.
+9. closing fence is final visible content.

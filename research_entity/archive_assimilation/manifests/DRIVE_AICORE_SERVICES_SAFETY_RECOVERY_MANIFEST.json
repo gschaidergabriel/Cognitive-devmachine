@@ -1,0 +1,62 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-SERVICES-SAFETY-RECOVERY-20260809",
+  "status":"EXACT_RECURSIVE_FOUR_FOLDER_SEMANTIC_MANIFEST",
+  "trigger":"666",
+  "source_root":{"services":"Drive:1tVCchrYmiQnPizAoP64JFif5Q7QzzK1-"},
+  "folders":{
+    "asrs":{"drive_id":"1qTUdO7w0wYyE4OsqXyQfW8Sv0KEFDMzi","leaf_files":14,"child_folders":0,"recursive_identity_percent":100.0,"selected":{"auto_repair.py":{"drive_id":"1mq1TuPXbgAoo8ikTVweZTpV5AoThXHVq","sha256":"d7e9918480ab187c5a52067ab15ea9af60d33f8cb13dac58d40e00ed7bb92011"}}},
+    "invariants":{"drive_id":"1isfpj60TKqaVZGtmhuKCWfkGUtCo7CjJ","leaf_files":11,"child_folders":0,"recursive_identity_percent":100.0,"selected":{"core_kernel.py":{"drive_id":"1jAWHZw0b7cyd8Ge86ODSVHHz1ubkVuH4","sha256":"ee6126845d9b437972901f2607314b9f48879c20746696aa69d51b5073f021c5"},"triple_reality.py":{"drive_id":"1MckPsfZ6sV2u0apco_uYpW0PRynUVHoJ","sha256":"1b3d907b43d05705191b1af9ee7b00a3659729afb6dde522ccdc71d952e595bd"}}},
+    "neural_immune":{"drive_id":"1hjpygk1eZyotnEmfXCbIfpQMZGcZ6GNd","leaf_files":9,"child_folders":0,"recursive_identity_percent":100.0,"selected":{"supervisor.py":{"sha256":"0c1f11c5606faa4a4d669261b19a99eb663adee445776741373ad31084940503"},"lifecycle.py":{"sha256":"9d444f48db49c1d18b9f11f57e90eb6023df5c804eb13fe01fa9e9d54a08951c"}}},
+    "context_gate":{"drive_id":"1O3r8SihGsRqFoT_WszcPWD8jDjy51D5E","leaf_files":7,"child_folders":0,"recursive_identity_percent":100.0,"selected":{"gate.py":{"drive_id":"1LmNRQWxMlBsix-NH9XC0LQxdvNxUt-qJ","sha256":"aa864c0545b6ccdcd469aa648c5bfe060ab99b8648bf60cdb2e2343660270e7a"}}}
+  },
+  "syntax_probe":{"sources":6,"result":"PASS","files":["auto_repair.py","supervisor.py","lifecycle.py","gate.py","core_kernel.py","triple_reality.py"]},
+  "findings":[
+    {
+      "finding_id":"SERV-SAFE-001",
+      "class":"HISTORICAL_EFFECT_AUTHORITY_FAILURE_ORACLE",
+      "source":"asrs/auto_repair.py",
+      "claim":"RepairActionGenerator interpolates diagnosis.evidence['service'] directly into 'systemctl --user restart {service}'. _classify_risk returns LOW when the safe pattern occurs anywhere in the command, and RepairExecutor runs command with shell=True. A synthetic non-executing classifier replay shows 'systemctl --user restart frank.service; touch /tmp/SHOULD_NOT_RUN' remains LOW.",
+      "current_head_crossread":"Frozen Project-Frankenstein services/asrs/auto_repair.py exposes the same substring risk-classifier and shell execution design; this is not independent/new Drive architecture.",
+      "scope_constraint":"Exploitability depends on whether an attacker can influence crashed_services/service diagnosis data. The source proves unsafe command composition and classification semantics, not a demonstrated external compromise.",
+      "required_oracle":"Effect gateway must tokenize/type resources rather than classify a shell string; service identifiers require strict validation; no shell concatenation for internal restart action."
+    },
+    {
+      "finding_id":"SERV-SAFE-002",
+      "class":"INVARIANT_IMPLEMENTATION_CONTRADICTION",
+      "source":"invariants/core_kernel.py",
+      "claim":"The module declares the core is ALWAYS non-empty / at least min_core_size, yet build_core() returns [] when no Titan nodes exist and also returns [] on exception. Even with candidates, slicing cannot synthesize missing members when candidates < min_core_size.",
+      "required_oracle":"Named invariant must be construction-checkable. Empty/startup/error states need an explicit UNKNOWN/UNAVAILABLE core state or a proven bootstrap seed; a docstring invariant cannot outrank executable state."
+    },
+    {
+      "finding_id":"SERV-SAFE-003",
+      "class":"NONINDEPENDENT_REPLICATION_NEGATIVE_RESULT",
+      "source":"invariants/triple_reality.py",
+      "claim":"Triple Reality describes Primary and Shadow as independent runs with different seeds, but sync_shadow applies the same insert/update/delete operations to a shadow initialized from a database backup. rng_primary/rng_shadow/rng_validator are initialized, while the operational path shown does not use random choices except reseeding after divergence. Convergence distance therefore does not demonstrate independent stochastic replication.",
+      "additional_contradiction":"On divergence the documentation says rollback both to last convergent state; _rollback_to_convergent currently copies Primary -> Shadow and explicitly notes a full implementation would restore both from backup.",
+      "required_oracle":"Goodman/replication logic must distinguish cloned replay, deterministic differential execution and independent replication by ancestry/intervention identity. Never credit clone agreement as independent support."
+    },
+    {
+      "finding_id":"SERV-SAFE-004",
+      "class":"POST_HEAD_RECOVERY_FIX_ORACLE",
+      "source":"neural_immune/supervisor.py + lifecycle.py",
+      "claim":"The Drive copy documents a 2026-08-01 restart-loop failure: snapshot active/inactive collapsed systemd transitional states, causing the supervisor to restart a service while it was already activating/deactivating; the fix queries the real systemd state and skips activating/deactivating/reloading. lifecycle.py also removes rooms/nerd-physics and aura-analyzer from restart waves because 'start all' resurrected disabled/zombie services.",
+      "required_oracle":"Harness recovery suite must model ACTIVATING/DEACTIVATING/RELOADING separately from DOWN and must prove disabled/decommissioned components cannot be resurrected by global restart orchestration."
+    },
+    {
+      "finding_id":"SERV-SAFE-005",
+      "class":"GATE_SCOPE_CLARIFICATION",
+      "source":"context_gate/gate.py",
+      "claim":"ContextGate is described as selecting among 15 context channels but eight named channels are hard-coded ALWAYS_PASS. Therefore those channels are not actually suppressible by the learned relevance gate; the learned/rule threshold applies only to the remaining candidate channels.",
+      "required_oracle":"Evaluate gate causal benefit on the actually gateable channels and report bypass channels explicitly. Never score the module as if it had selection authority over all 15 channels."
+    }
+  ],
+  "safe_replays":[
+    {"id":"ASRS-RISK-CLASSIFIER-001","type":"PURE_CLASSIFIER_NO_COMMAND_EXECUTION","result":"COUNTEREXAMPLE_CONFIRMED","cases":{"safe_restart":"LOW","safe_prefix_plus_shell_suffix":"LOW","safe_text_inside_echo":"LOW","unknown_command":"HIGH"}},
+    {"id":"SELECTED_SOURCE_PYCOMPILE","result":"PASS","sources":6}
+  ],
+  "reuse":{"earned_work":"ZERO_DUPLICATE_CREDIT","reason":"PF safety/authority and recovery history already has mapped earned-work. This shard contributes stronger executable contradictions and post-head recovery oracles."},
+  "coverage":{"four_folder_recursive_identity_percent":100.0,"services_whole_recursive_percent":null,"exact_level0_global_credit_percent":0.0},
+  "frozen_by":"chatgpt-secondary-666-20260809-services-safety-recovery",
+  "frozen_at":"2026-08-09"
+}

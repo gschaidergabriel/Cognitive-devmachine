@@ -1,0 +1,550 @@
+{
+  "schema_version": "1.1",
+  "request_id": "c6-claynative-arxiv-20260808T1750",
+  "tool": "arxiv_search",
+  "request_sha256": "fc4c2971c0828aa768dc7149edc831dc6dad8c507d5695a1cae0b4b1a57d45f9",
+  "processed_at": "2026-08-08T10:54:52.330190+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-08T10:54:53.349168+00:00",
+    "credential_required": false,
+    "query": "(all:\"language adaptation\" OR all:\"continued pretraining\" OR all:\"domain specific language\" OR all:\"formal language\" OR all:\"tokenizer adaptation\") AND (all:\"language model\" OR all:\"LLM\")",
+    "start": 0,
+    "max_results": 20,
+    "total_results": 930,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2506.00288v3",
+        "title": "Emergent Abilities of Large Language Models under Continued Pretraining for Language Adaptation",
+        "summary": "Continued pretraining (CPT) is a popular approach to adapt existing large language models (LLMs) to new languages. When doing so, it is common practice to include a portion of English data in the mixture, but its role has not been carefully studied to date. In this work, we show that including English does not impact validation perplexity, yet it is critical for the emergence of downstream capabilities in the target language. We introduce a language-agnostic benchmark for in-context learning (ICL), which reveals catastrophic forgetting early on CPT when English is not included. This in turn damages the ability of the model to generalize to downstream prompts in the target language as measured by perplexity, even if it does not manifest in terms of accuracy until later in training, and can be tied to a big shift in the model parameters. Based on these insights, we introduce curriculum learning and exponential moving average (EMA) of weights as effective alternatives to mitigate the need for English. All in all, our work sheds light into the dynamics by which emergent abilities arise when doing CPT for language adaptation, and can serve as a foundation to design more effective methods in the future.",
+        "published": "2025-05-30T22:31:59Z",
+        "updated": "2025-09-19T11:27:30Z",
+        "authors": [
+          "Ahmed Elhady",
+          "Eneko Agirre",
+          "Mikel Artetxe"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Published as a Conference Paper at the main track of ACL 2025",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2506.00288v3",
+          "pdf": "https://arxiv.org/pdf/2506.00288v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2304.10447v1",
+        "title": "Domain-specific Continued Pretraining of Language Models for Capturing Long Context in Mental Health",
+        "summary": "Pretrained language models have been used in various natural language processing applications. In the mental health domain, domain-specific language models are pretrained and released, which facilitates the early detection of mental health conditions. Social posts, e.g., on Reddit, are usually long documents. However, there are no domain-specific pretrained models for long-sequence modeling in the mental health domain. This paper conducts domain-specific continued pretraining to capture the long context for mental health. Specifically, we train and release MentalXLNet and MentalLongformer based on XLNet and Longformer. We evaluate the mental health classification performance and the long-range ability of these two domain-specific pretrained models. Our models are released in HuggingFace.",
+        "published": "2023-04-20T16:43:56Z",
+        "updated": "2023-04-20T16:43:56Z",
+        "authors": [
+          "Shaoxiong Ji",
+          "Tianlin Zhang",
+          "Kailai Yang",
+          "Sophia Ananiadou",
+          "Erik Cambria",
+          "Jörg Tiedemann"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2304.10447v1",
+          "pdf": "https://arxiv.org/pdf/2304.10447v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.04790v2",
+        "title": "HUKUKBERT: Domain-Specific Language Model for Turkish Law",
+        "summary": "Natural language processing (NLP) advances have powered a generation of LegalTech systems, but Turkish law remains under-served by domain-specific data and models. English has legal encoders such as LEGAL-BERT; no comparable high-volume Turkish counterpart exists. We introduce HukukBERT, a Turkish legal language model trained on a 19 GB cleaned corpus using a hybrid domain-adaptive pre-training (DAPT) recipe that mixes Whole-Word Masking, Token Span Masking, Word Span Masking, and targeted Keyword Masking. We compared our 48K WordPiece tokenizer and DAPT pipeline against general-purpose and existing domain-specific Turkish models. On the Legal Cloze Test - a masked legal term prediction benchmark over Turkish court decisions - HukukBERT reaches 84.40% Top-1 accuracy and beats every baseline we tested. The Legal Cloze Test is synthetically constructed, so its passages are absent from the pre-training corpus by construction, eliminating train-test contamination. On the downstream task of structural segmentation of official Turkish court decisions, it reaches a 92.8% document pass rate. We release HukukBERT to support Turkish legal NLP work in named entity recognition, judgment prediction, and document classification.",
+        "published": "2026-04-06T15:57:57Z",
+        "updated": "2026-08-04T10:00:43Z",
+        "authors": [
+          "Mehmet Utku Öztürk",
+          "Tansu Türkoğlu",
+          "Buse Buz-Yalug"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.LG"
+        ],
+        "primary_category": "cs.CL",
+        "doi": "10.47852/bonviewJCLLT620210346",
+        "journal_ref": "Öztürk, M. U., Türkoğlu, T., & Buz-Yalug, B. (2026). HukukBERT: Domain-Specific Language Model for Turkish Law. Journal of Computational Law and Legal Technology, 1-15",
+        "comment": "15 pages",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.04790v2",
+          "pdf": "https://arxiv.org/pdf/2604.04790v2",
+          "doi": "https://doi.org/10.47852/bonviewJCLLT620210346"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2407.07263v1",
+        "title": "Reuse, Don't Retrain: A Recipe for Continued Pretraining of Language Models",
+        "summary": "As language models have scaled both their number of parameters and pretraining dataset sizes, the computational cost for pretraining has become intractable except for the most well-resourced teams. This increasing cost makes it ever more important to be able to reuse a model after it has completed pretraining; allowing for a model's abilities to further improve without needing to train from scratch. In this work, we detail a set of guidelines that cover how to design efficacious data distributions and learning rate schedules for continued pretraining of language models. When applying these findings within a continued pretraining run on top of a well-trained 15B parameter model, we show an improvement of 9\\% in average model accuracy compared to the baseline of continued training on the pretraining set. The resulting recipe provides a practical starting point with which to begin developing language models through reuse rather than retraining.",
+        "published": "2024-07-09T22:37:59Z",
+        "updated": "2024-07-09T22:37:59Z",
+        "authors": [
+          "Jupinder Parmar",
+          "Sanjev Satheesh",
+          "Mostofa Patwary",
+          "Mohammad Shoeybi",
+          "Bryan Catanzaro"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Preprint. Under review",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2407.07263v1",
+          "pdf": "https://arxiv.org/pdf/2407.07263v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2409.07431v2",
+        "title": "Synthetic continued pretraining",
+        "summary": "Pretraining on large-scale, unstructured internet text enables language models to acquire a significant amount of world knowledge. However, this knowledge acquisition is data-inefficient--to learn a given fact, models must be trained on hundreds to thousands of diverse representations of it. This poses a challenge when adapting a pretrained model to a small corpus of domain-specific documents, where each fact may appear rarely or only once. We propose to bridge this gap with synthetic continued pretraining: using the small domain-specific corpus to synthesize a large corpus more amenable to learning, and then performing continued pretraining on the synthesized corpus. We instantiate this proposal with EntiGraph, a synthetic data augmentation algorithm that extracts salient entities from the source documents and then generates diverse text by drawing connections between the sampled entities. Synthetic continued pretraining with EntiGraph enables a language model to answer questions and follow generic instructions related to the source documents without access to them. If, instead, the source documents are available at inference time, we show that the knowledge acquired through our approach compounds with retrieval-augmented generation. To better understand these results, we build a simple mathematical model of EntiGraph, and show how synthetic data augmentation can \"rearrange\" knowledge to enable more data-efficient learning.",
+        "published": "2024-09-11T17:21:59Z",
+        "updated": "2024-10-03T13:07:25Z",
+        "authors": [
+          "Zitong Yang",
+          "Neil Band",
+          "Shuangping Li",
+          "Emmanuel Candès",
+          "Tatsunori Hashimoto"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CL",
+          "stat.ML"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Updated organization of experimental results and methods introduction. Released the dataset and model weights artifact",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2409.07431v2",
+          "pdf": "https://arxiv.org/pdf/2409.07431v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2512.10563v3",
+        "title": "NormCode: A Semi-Formal Language for Auditable AI Planning",
+        "summary": "As AI systems move into high stakes domains such as legal reasoning, medical diagnosis, and financial decision making, regulators and practitioners increasingly demand auditability. Auditability means the ability to trace exactly what each step in a multi step workflow saw and did. Current large language model based workflows are fundamentally opaque. Context pollution, defined as the accumulation of information across reasoning steps, causes models to hallucinate and lose track of constraints. At the same time, implicit data flow makes it impossible to reconstruct what any given step actually received as input. We present NormCode, a semi formal language that makes AI workflows auditable by construction. Each inference step operates in enforced data isolation and can access only explicitly passed inputs. This eliminates cross step contamination and ensures that every intermediate state can be inspected. A strict separation between semantic operations, meaning probabilistic language model reasoning, and syntactic operations, meaning deterministic data flow, allows auditors to clearly distinguish inference from mechanical restructuring. The multi format ecosystem, consisting of NCDS, NCD, NCN, and NCDN files, allows developers, domain experts, and auditors to inspect the same plan in formats suited to their individual needs. A four phase compilation pipeline transforms natural language intent into executable JSON repositories. A visual Canvas application provides real time graph visualization and breakpoint debugging. We validate the approach by achieving full accuracy on base X addition and by self hosted execution of the NormCode compiler itself. These results demonstrate that structured intermediate representations can bridge human intuition and machine rigor while maintaining full transparency.",
+        "published": "2025-12-11T11:50:50Z",
+        "updated": "2026-01-02T10:10:28Z",
+        "authors": [
+          "Xin Guan",
+          "Yunshan Li",
+          "Zekun Wu",
+          "Ruibo Zhang"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Archive name: NormCode: A Semi Formal Language for Context Isolated AI Planning",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2512.10563v3",
+          "pdf": "https://arxiv.org/pdf/2512.10563v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2511.14245v1",
+        "title": "MuCPT: Music-related Natural Language Model Continued Pretraining",
+        "summary": "Large language models perform strongly on general tasks but remain constrained in specialized settings such as music, particularly in the music-entertainment domain, where corpus scale, purity, and the match between data and training objectives are critical. We address this by constructing a large, music-related natural language corpus (40B tokens) that combines open source and in-house data, and by implementing a domain-first data pipeline: a lightweight classifier filters and weights in-domain text, followed by multi-stage cleaning, de-duplication, and privacy-preserving masking. We further integrate multi-source music text with associated metadata to form a broader, better-structured foundation of domain knowledge. On the training side, we introduce reference-model (RM)-based token-level soft scoring for quality control: a unified loss-ratio criterion is used both for data selection and for dynamic down-weighting during optimization, reducing noise gradients and amplifying task-aligned signals, thereby enabling more effective music-domain continued pretraining and alignment. To assess factuality, we design the MusicSimpleQA benchmark, which adopts short, single-answer prompts with automated agreement scoring. Beyond the benchmark design, we conduct systematic comparisons along the axes of data composition. Overall, this work advances both the right corpus and the right objective, offering a scalable data-training framework and a reusable evaluation tool for building domain LLMs in the music field.",
+        "published": "2025-11-18T08:33:34Z",
+        "updated": "2025-11-18T08:33:34Z",
+        "authors": [
+          "Kai Tian",
+          "Yirong Mao",
+          "Wendong Bi",
+          "Hanjie Wang",
+          "Que Wenhui"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2511.14245v1",
+          "pdf": "https://arxiv.org/pdf/2511.14245v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2211.11363v2",
+        "title": "AF Adapter: Continual Pretraining for Building Chinese Biomedical Language Model",
+        "summary": "Continual pretraining is a popular way of building a domain-specific pretrained language model from a general-domain language model. In spite of its high efficiency, continual pretraining suffers from catastrophic forgetting, which may harm the model's performance in downstream tasks. To alleviate the issue, in this paper, we propose a continual pretraining method for the BERT-based model, named Attention-FFN Adapter. Its main idea is to introduce a small number of attention heads and hidden units inside each self-attention layer and feed-forward network. Furthermore, we train a domain-specific language model named AF Adapter based RoBERTa for the Chinese biomedical domain. In experiments, models are applied to downstream tasks for evaluation. The results demonstrate that with only about 17% of model parameters trained, AF Adapter achieves 0.6%, 2% gain in performance on average, compared to strong baselines. Further experimental results show that our method alleviates the catastrophic forgetting problem by 11% compared to the fine-tuning method.",
+        "published": "2022-11-21T11:30:13Z",
+        "updated": "2023-10-20T02:32:13Z",
+        "authors": [
+          "Yongyu Yan",
+          "Kui Xue",
+          "Xiaoming Shi",
+          "Qi Ye",
+          "Jingping Liu",
+          "Tong Ruan"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.LG"
+        ],
+        "primary_category": "cs.CL",
+        "doi": "10.1109/BIBM58861.2023.10385733",
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2211.11363v2",
+          "pdf": "https://arxiv.org/pdf/2211.11363v2",
+          "doi": "https://doi.org/10.1109/BIBM58861.2023.10385733"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2505.16998v1",
+        "title": "Do Large Language Models Excel in Complex Logical Reasoning with Formal Language?",
+        "summary": "Large Language Models (LLMs) have been shown to achieve breakthrough performance on complex logical reasoning tasks. Nevertheless, most existing research focuses on employing formal language to guide LLMs to derive reliable reasoning paths, while systematic evaluations of these capabilities are still limited. In this paper, we aim to conduct a comprehensive evaluation of LLMs across various logical reasoning problems utilizing formal languages. From the perspective of three dimensions, i.e., spectrum of LLMs, taxonomy of tasks, and format of trajectories, our key findings are: 1) Thinking models significantly outperform Instruct models, especially when formal language is employed; 2) All LLMs exhibit limitations in inductive reasoning capability, irrespective of whether they use a formal language; 3) Data with PoT format achieves the best generalization performance across other languages. Additionally, we also curate the formal-relative training data to further enhance the small language models, and the experimental results indicate that a simple rejected fine-tuning method can better enable LLMs to generalize across formal languages and achieve the best overall performance. Our codes and reports are available at https://github.com/jiangjin1999/FormalEval.",
+        "published": "2025-05-22T17:57:23Z",
+        "updated": "2025-05-22T17:57:23Z",
+        "authors": [
+          "Jin Jiang",
+          "Jianing Wang",
+          "Yuchen Yan",
+          "Yang Liu",
+          "Jianhua Zhu",
+          "Mengdi Zhang",
+          "Xunliang Cai",
+          "Liangcai Gao"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2505.16998v1",
+          "pdf": "https://arxiv.org/pdf/2505.16998v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2210.10258v2",
+        "title": "Continued Pretraining for Better Zero- and Few-Shot Promptability",
+        "summary": "Recently introduced language model prompting methods can achieve high accuracy in zero- and few-shot settings while requiring few to no learned task-specific parameters. Nevertheless, these methods still often trail behind full model finetuning. In this work, we investigate if a dedicated continued pretraining stage could improve \"promptability\", i.e., zero-shot performance with natural language prompts or few-shot performance with prompt tuning. We reveal settings where existing continued pretraining methods lack promptability. We also identify current methodological gaps, which we fill with thorough large-scale experiments. We demonstrate that a simple recipe, continued pretraining that incorporates a trainable prompt during multi-task learning, leads to improved promptability in both zero- and few-shot settings compared to existing methods, up to 31% relative. On the other hand, we find that continued pretraining using MAML-style meta-learning, a method that directly optimizes few-shot promptability, yields subpar performance. We validate our findings with two prompt tuning methods, and, based on our results, we provide concrete recommendations to optimize promptability for different use cases.",
+        "published": "2022-10-19T02:41:51Z",
+        "updated": "2022-10-21T01:24:29Z",
+        "authors": [
+          "Zhaofeng Wu",
+          "Robert L. Logan",
+          "Pete Walsh",
+          "Akshita Bhagia",
+          "Dirk Groeneveld",
+          "Sameer Singh",
+          "Iz Beltagy"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "EMNLP 2022",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2210.10258v2",
+          "pdf": "https://arxiv.org/pdf/2210.10258v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2603.02041v1",
+        "title": "EstLLM: Enhancing Estonian Capabilities in Multilingual LLMs via Continued Pretraining and Post-Training",
+        "summary": "Large language models (LLMs) are predominantly trained on English-centric data, resulting in uneven performance for smaller languages. We study whether continued pretraining (CPT) can substantially improve Estonian capabilities in a pretrained multilingual LLM while preserving its English and general reasoning performance. Using Llama 3.1 8B as the main base model, we perform CPT on a mixture that increases Estonian exposure while approximating the original training distribution through English replay and the inclusion of code, mathematics, and instruction-like data. We subsequently apply supervised fine-tuning, preference optimization, and chat vector merging to introduce robust instruction-following behavior. Evaluation on a comprehensive suite of Estonian benchmarks shows consistent gains in linguistic competence, knowledge, reasoning, translation quality, and instruction-following compared to the original base model and its instruction-tuned variant, while maintaining competitive performance on English benchmarks. These findings indicate that CPT, with an appropriately balanced data mixture, together with post-training alignment, can substantially improve single-language capabilities in pretrained multilingual LLMs.",
+        "published": "2026-03-02T16:24:36Z",
+        "updated": "2026-03-02T16:24:36Z",
+        "authors": [
+          "Aleksei Dorkin",
+          "Taido Purason",
+          "Emil Kalbaliyev",
+          "Hele-Andra Kuulmets",
+          "Marii Ojastu",
+          "Mark Fišel",
+          "Tanel Alumäe",
+          "Eleri Aedmaa",
+          "Krister Kruusmaa",
+          "Kairit Sirts"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2603.02041v1",
+          "pdf": "https://arxiv.org/pdf/2603.02041v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2512.12770v1",
+        "title": "Curió-Edu 7B: Examining Data Selection Impacts in LLM Continued Pretraining",
+        "summary": "Continued pretraining extends a language model's capabilities by further exposing it to additional data, often tailored to a specific linguistic or domain context. This strategy has emerged as an efficient alternative to full retraining when adapting general-purpose models to new settings. In this work, we investigate this paradigm through Curió 7B, a 7-billion-parameter model derived from LLaMA-2 and trained on 100 billion Portuguese tokens from the ClassiCC-PT corpus - the most extensive Portuguese-specific continued-pretraining effort above the three-billion-parameter scale to date. Beyond scale, we investigate whether quantity alone suffices or whether data quality plays a decisive role in linguistic adaptation. To this end, we introduce Curió-Edu 7B, a variant trained exclusively on the educational and STEM-filtered subset of the same corpus, totaling just 10 billion tokens. Despite using only 10% of the data and 20% of the computation, Curió-Edu 7B surpasses the full-corpus model in our evaluations, demonstrating that data selection can be fundamental even when adapting models with limited prior exposure to the target language. The developed models are available at https://huggingface.co/collections/ClassiCC-Corpus/curio-edu",
+        "published": "2025-12-14T17:19:32Z",
+        "updated": "2025-12-14T17:19:32Z",
+        "authors": [
+          "Thales Sales Almeida",
+          "Rodrigo Nogueira",
+          "Hélio Pedrini"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2512.12770v1",
+          "pdf": "https://arxiv.org/pdf/2512.12770v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2307.15290v1",
+        "title": "ChatHome: Development and Evaluation of a Domain-Specific Language Model for Home Renovation",
+        "summary": "This paper presents the development and evaluation of ChatHome, a domain-specific language model (DSLM) designed for the intricate field of home renovation. Considering the proven competencies of large language models (LLMs) like GPT-4 and the escalating fascination with home renovation, this study endeavors to reconcile these aspects by generating a dedicated model that can yield high-fidelity, precise outputs relevant to the home renovation arena. ChatHome's novelty rests on its methodology, fusing domain-adaptive pretraining and instruction-tuning over an extensive dataset. This dataset includes professional articles, standard documents, and web content pertinent to home renovation. This dual-pronged strategy is designed to ensure that our model can assimilate comprehensive domain knowledge and effectively address user inquiries. Via thorough experimentation on diverse datasets, both universal and domain-specific, including the freshly introduced \"EvalHome\" domain dataset, we substantiate that ChatHome not only amplifies domain-specific functionalities but also preserves its versatility.",
+        "published": "2023-07-28T04:04:43Z",
+        "updated": "2023-07-28T04:04:43Z",
+        "authors": [
+          "Cheng Wen",
+          "Xianghui Sun",
+          "Shuaijiang Zhao",
+          "Xiaoquan Fang",
+          "Liangyu Chen",
+          "Wei Zou"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "ChatHome,DSLM for home renovation",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2307.15290v1",
+          "pdf": "https://arxiv.org/pdf/2307.15290v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2501.09887v1",
+        "title": "FLORA: Formal Language Model Enables Robust Training-free Zero-shot Object Referring Analysis",
+        "summary": "Object Referring Analysis (ORA), commonly known as referring expression comprehension, requires the identification and localization of specific objects in an image based on natural descriptions. Unlike generic object detection, ORA requires both accurate language understanding and precise visual localization, making it inherently more complex. Although recent pre-trained large visual grounding detectors have achieved significant progress, they heavily rely on extensively labeled data and time-consuming learning. To address these, we introduce a novel, training-free framework for zero-shot ORA, termed FLORA (Formal Language for Object Referring and Analysis). FLORA harnesses the inherent reasoning capabilities of large language models (LLMs) and integrates a formal language model - a logical framework that regulates language within structured, rule-based descriptions - to provide effective zero-shot ORA. More specifically, our formal language model (FLM) enables an effective, logic-driven interpretation of object descriptions without necessitating any training processes. Built upon FLM-regulated LLM outputs, we further devise a Bayesian inference framework and employ appropriate off-the-shelf interpretive models to finalize the reasoning, delivering favorable robustness against LLM hallucinations and compelling ORA performance in a training-free manner. In practice, our FLORA boosts the zero-shot performance of existing pretrained grounding detectors by up to around 45%. Our comprehensive evaluation across different challenging datasets also confirms that FLORA consistently surpasses current state-of-the-art zero-shot methods in both detection and segmentation tasks associated with zero-shot ORA. We believe our probabilistic parsing and reasoning of the LLM outputs elevate the reliability and interpretability of zero-shot ORA. We shall release codes upon publication.",
+        "published": "2025-01-17T00:18:34Z",
+        "updated": "2025-01-17T00:18:34Z",
+        "authors": [
+          "Zhe Chen",
+          "Zijing Chen"
+        ],
+        "categories": [
+          "cs.CV"
+        ],
+        "primary_category": "cs.CV",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2501.09887v1",
+          "pdf": "https://arxiv.org/pdf/2501.09887v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2402.00798v4",
+        "title": "Formal-LLM: Integrating Formal Language and Natural Language for Controllable LLM-based Agents",
+        "summary": "Recent advancements on Large Language Models (LLMs) enable AI Agents to automatically generate and execute multi-step plans to solve complex tasks. However, since LLM's content generation process is hardly controllable, current LLM-based agents frequently generate invalid or non-executable plans, which jeopardizes the performance of the generated plans and corrupts users' trust in LLM-based agents. In response, this paper proposes a novel \"Formal-LLM\" framework for LLM-based agents by integrating the expressiveness of natural language and the precision of formal language. Specifically, the framework allows agent developers to express their requirements or constraints for the planning process as an automaton. A stack-based LLM plan generation process is then conducted under the supervision of the automaton to ensure that the generated plan satisfies the constraints, making the planning process controllable. We conduct experiments on both benchmark tasks and practical real-life tasks, and our framework achieves over 50% overall performance increase, which validates the feasibility and effectiveness of employing Formal-LLM to guide the plan generation of agents, preventing the agents from generating invalid and unsuccessful plans. Further, more controllable LLM-based agents can facilitate the broader utilization of LLM in application scenarios where high validity of planning is essential. The source code of this work is available at https://github.com/agiresearch/Formal-LLM.",
+        "published": "2024-02-01T17:30:50Z",
+        "updated": "2024-08-12T17:54:32Z",
+        "authors": [
+          "Zelong Li",
+          "Wenyue Hua",
+          "Hao Wang",
+          "He Zhu",
+          "Yongfeng Zhang"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CL",
+          "cs.FL"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2402.00798v4",
+          "pdf": "https://arxiv.org/pdf/2402.00798v4"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2512.23214v1",
+        "title": "Anka: A Domain-Specific Language for Reliable LLM Code Generation",
+        "summary": "Large Language Models (LLMs) have demonstrated remarkable capabilities in code generation, yet they exhibit systematic errors on complex, multi-step programming tasks. We hypothesize that these errors stem from the flexibility of general-purpose languages, which permits multiple valid approaches and requires implicit state management. To test this hypothesis, we introduce Anka, a domain-specific language (DSL) for data transformation pipelines designed with explicit, constrained syntax that reduces ambiguity in code generation. Despite having zero prior training exposure to Anka, Claude 3.5 Haiku achieves 99.9% parse success and 95.8% overall task accuracy across 100 benchmark problems. Critically, Anka demonstrates a 40 percentage point accuracy advantage over Python on multi-step pipeline tasks (100% vs. 60%), where Python's flexible syntax leads to frequent errors in operation sequencing and variable management. Cross-model validation with GPT-4o-mini confirms this advantage (+26.7 percentage points on multi-step tasks). Our results demonstrate that: (1) LLMs can learn novel DSLs entirely from in-context prompts, achieving near-native accuracy; (2) constrained syntax significantly reduces errors on complex tasks; and (3) domain-specific languages purposefully designed for LLM generation can outperform general-purpose languages on which the LLM has extensive training. We release the complete language implementation, benchmark suite, and evaluation framework to facilitate further research.",
+        "published": "2025-12-29T05:28:17Z",
+        "updated": "2025-12-29T05:28:17Z",
+        "authors": [
+          "Saif Khalfan Saif Al Mazrouei"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.LG",
+          "cs.PL",
+          "cs.SE"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "11 pages, 1 figure, 4 tables. Code and benchmarks available at https://github.com/BleBlo/Anka",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2512.23214v1",
+          "pdf": "https://arxiv.org/pdf/2512.23214v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2504.18080v1",
+        "title": "Stabilizing Reasoning in Medical LLMs with Continued Pretraining and Reasoning Preference Optimization",
+        "summary": "Large Language Models (LLMs) show potential in medicine, yet clinical adoption is hindered by concerns over factual accuracy, language-specific limitations (e.g., Japanese), and critically, their reliability when required to generate reasoning explanations -- a prerequisite for trust. This paper introduces Preferred-MedLLM-Qwen-72B, a 72B-parameter model optimized for the Japanese medical domain to achieve both high accuracy and stable reasoning. We employ a two-stage fine-tuning process on the Qwen2.5-72B base model: first, Continued Pretraining (CPT) on a comprehensive Japanese medical corpus instills deep domain knowledge. Second, Reasoning Preference Optimization (RPO), a preference-based method, enhances the generation of reliable reasoning pathways while preserving high answer accuracy. Evaluations on the Japanese Medical Licensing Exam benchmark (IgakuQA) show Preferred-MedLLM-Qwen-72B achieves state-of-the-art performance (0.868 accuracy), surpassing strong proprietary models like GPT-4o (0.866). Crucially, unlike baseline or CPT-only models which exhibit significant accuracy degradation (up to 11.5\\% and 3.8\\% respectively on IgakuQA) when prompted for explanations, our model maintains its high accuracy (0.868) under such conditions. This highlights RPO's effectiveness in stabilizing reasoning generation. This work underscores the importance of optimizing for reliable explanations alongside accuracy. We release the Preferred-MedLLM-Qwen-72B model weights to foster research into trustworthy LLMs for specialized, high-stakes applications.",
+        "published": "2025-04-25T05:15:31Z",
+        "updated": "2025-04-25T05:15:31Z",
+        "authors": [
+          "Wataru Kawakami",
+          "Keita Suzuki",
+          "Junichiro Iwasawa"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.LG"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2504.18080v1",
+          "pdf": "https://arxiv.org/pdf/2504.18080v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2507.18671v2",
+        "title": "Innovator: Scientific Continued Pretraining with Fine-grained MoE Upcycling",
+        "summary": "A large language model (LLM) with knowledge in both scientific and general tasks is the foundation of science general intelligence. However, directly continued pretraining an LLM using science data usually leads to catastrophic forgetting, which indicates severe degradation in general ability. In this report, we present Innovator, which solves this problem by upcycling a pre-trained dense LLM into a fine-grained Mixtures-of-Experts model during continued pretraining, where different experts are expected to learn science knowledge in different disciplines, and a shared expert is utilized for general tasks. Innovator introduces a four-stage upcycle training paradigm: (1) Scientific Expert Induction on discipline-specific data, (2) Fine-grained Expert Splitting via FFN dimension decomposition, (3) Science-Aware Routing warmup, and (4) Generalist-Scientist Integration training on hybrid datasets. Such a paradigm enables knowledge in the general domain, and different scientific disciplines can be decoupled, avoiding the negative influence among knowledge in different domains. With 53.3B total parameters and 13.3B activated, Innovator extends Qwen2.5-7B using a shared general expert and 64 specialized scientific experts with 8 activated. Trained on 300B tokens with tri-level quality-controlled data, Innovator achieves 25% average improvement across 30 scientific tasks with a win rate as 70%, while retaining 99% performance in general tasks. Furthermore, Innovator-Reason, which is post-trained from Innovator for reasoning boosting, exhibits excellent reasoning performance in solving complex scientific problems with improvements over 30%.",
+        "published": "2025-07-24T08:37:58Z",
+        "updated": "2025-10-16T07:15:27Z",
+        "authors": [
+          "Ning Liao",
+          "Xiaoxing Wang",
+          "Zehao Lin",
+          "Weiyang Guo",
+          "Feng Hong",
+          "Shixiang Song",
+          "Geng Yu",
+          "Zihua Zhao",
+          "Sitao Xie",
+          "Longxuan Wei",
+          "Xiangqi Jin",
+          "Xiaohan Qin",
+          "Jiale Ma",
+          "Kai Chen",
+          "Jiangchao Yao",
+          "Zhouhan Lin",
+          "Junchi Yan",
+          "Zhiyu Li",
+          "Feiyu Xiong",
+          "Yanfeng Wang",
+          "Linfeng Zhang"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Technical Report",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2507.18671v2",
+          "pdf": "https://arxiv.org/pdf/2507.18671v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2308.15118v1",
+        "title": "Large Language Models on the Chessboard: A Study on ChatGPT's Formal Language Comprehension and Complex Reasoning Skills",
+        "summary": "While large language models have made strides in natural language processing, their proficiency in complex reasoning tasks requiring formal language comprehension, such as chess, remains less investigated. This paper probes the performance of ChatGPT, a sophisticated language model by OpenAI in tackling such complex reasoning tasks, using chess as a case study. Through robust metrics examining both the legality and quality of moves, we assess ChatGPT's understanding of the chessboard, adherence to chess rules, and strategic decision-making abilities. Our evaluation identifies limitations within ChatGPT's attention mechanism that affect its formal language comprehension and uncovers the model's underdeveloped self-regulation abilities. Our study also reveals ChatGPT's propensity for a coherent strategy in its gameplay and a noticeable uptick in decision-making assertiveness when the model is presented with a greater volume of natural language or possesses a more lucid understanding of the state of the chessboard. These findings contribute to the growing exploration of language models' abilities beyond natural language processing, providing valuable information for future research towards models demonstrating human-like cognitive abilities.",
+        "published": "2023-08-29T08:36:30Z",
+        "updated": "2023-08-29T08:36:30Z",
+        "authors": [
+          "Mu-Tien Kuo",
+          "Chih-Chung Hsueh",
+          "Richard Tzong-Han Tsai"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2308.15118v1",
+          "pdf": "https://arxiv.org/pdf/2308.15118v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2311.08849v2",
+        "title": "OFA: A Framework of Initializing Unseen Subword Embeddings for Efficient Large-scale Multilingual Continued Pretraining",
+        "summary": "Instead of pretraining multilingual language models from scratch, a more efficient method is to adapt existing pretrained language models (PLMs) to new languages via vocabulary extension and continued pretraining. However, this method usually randomly initializes the embeddings of new subwords and introduces substantially more embedding parameters to the model, thus weakening the efficiency. To address these issues, we propose a novel framework: $\\textbf{O}$ne $\\textbf{F}$or $\\textbf{A}$ll ($\\textbf{OFA}$), which wisely initializes the embeddings of unseen subwords and thus can adapt a PLM to multiple languages efficiently and effectively. OFA takes advantage of external well-aligned multilingual static word vectors and injects the alignment knowledge into the subword embeddings. In addition, OFA applies matrix factorization and replaces the cumbersome embeddings with two lower-dimensional matrices, which largely reduces the number of parameters. We show OFA accelerates the convergence of continued pretraining, which is environmentally friendly as much fewer carbon footprints are generated. Through extensive experiments, we demonstrate OFA can achieve competitive or better performance than default continued pretraining baselines on a wide range of crosslingual downstream tasks. We make our code and models publicly available.",
+        "published": "2023-11-15T10:40:45Z",
+        "updated": "2024-03-25T15:49:53Z",
+        "authors": [
+          "Yihong Liu",
+          "Peiqin Lin",
+          "Mingyang Wang",
+          "Hinrich Schütze"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "NAACL 2024 Findings",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2311.08849v2",
+          "pdf": "https://arxiv.org/pdf/2311.08849v2"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

@@ -1,11 +1,19 @@
 {
-  "schema_version": "1.1",
-  "provider": "E2B",
-  "tool": "e2b_sandbox",
-  "status": "RUNTIME_VERIFIED",
-  "checked_at": "2026-08-08T13:31:09.019025+00:00",
-  "credential_source": "process_environment",
-  "credential_value_persisted_here": false,
-  "verification_class": "isolated_multiline_python_execution",
-  "test": "Python sentinel through run_python"
+  "schema_version":"1.2",
+  "provider":"E2B",
+  "tool":"e2b_sandbox",
+  "status":"RUNTIME_VERIFIED",
+  "checked_at":"2026-08-08T13:31:09.019025+00:00",
+  "credential_source":"process_environment",
+  "credential_value_persisted_here":false,
+  "verification_class":"isolated_multiline_python_and_generated_host_execution",
+  "smoke_receipt":"research_entity/runtime/tool_results/e2b-smoke-20260808T2026p0700.json",
+  "smoke_expected":"RAE_E2B_OK:42",
+  "multiline_bridge_negative_receipt":"research_entity/runtime/tool_results/claycode-e2b-compiler-lab-v01-20260808T2028p0700.json",
+  "multiline_bridge_fix_commit":"e559841d74d5ca0a13a0a58605be5fdc93e22705",
+  "multiline_compiler_pass_receipt":"research_entity/runtime/tool_results/claycode-e2b-compiler-lab-v01-r2-20260808T2031p0700.json",
+  "semantic_identity_fix_commit":"3805a5f178d45d376fa4f3e71d646e985401072c",
+  "compiler_v02_pass_receipt":"research_entity/runtime/tool_results/claycode-e2b-compiler-lab-v02-20260808T2034p0700.json",
+  "generated_host_process_verified":true,
+  "key_learning":"Semantic executable identity must be separated from provenance-bound contract-instance identity; ordering/duplication of fields typed as sets must not change semantic_hash, while exact proposal/adequacy ancestry remains visible in contract_hash."
 }

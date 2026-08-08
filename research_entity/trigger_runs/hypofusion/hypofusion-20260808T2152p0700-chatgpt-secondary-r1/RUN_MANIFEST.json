@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260808T2152p0700-chatgpt-secondary-r1",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status":"COMPLETED_OPEN_NO_PROMOTION",
+  "hypothesis_records_screened":99,
+  "mechanism_clusters":10,
+  "counterhypotheses":13,
+  "transformed_hypotheses":13,
+  "source_lanes_executed":["peer_reviewed_journals_and_proceedings","arxiv_preprints","github_implementations","authoritative_docs_specs","broad_web_indexes","practitioner_community","bridge_popular_science"],
+  "search_boundary":"Search used the broad web/index tools available to this worker. It does not claim literal exhaustive coverage of every search engine or direct Google API access.",
+  "live_worker_rereads":[
+    {"phase":"initial","finding":"Clay G12 was actively writing 64 hypotheses and external evidence."},
+    {"phase":"midrun","finding":"Clay G12 completed CACC-G12; GWT R5 completed Nested Workspace Bridge."},
+    {"phase":"preclose","finding":"GWT R5 added E2B Jacobian-lens smoke evidence: first dependency-install attempt MemoryError; lightweight clone+compileall passed; direct target-Qwen hidden-state intervention remains open."}
+  ],
+  "executed_in_this_run":{"web_research":true,"github_read":true,"github_write":true,"new_model_or_sandbox_experiment":false,"reason":"Highest-information live target-Qwen experiment is not exposed to this ChatGPT worker; late E2B evidence from GWT R5 was ingested with provenance rather than reattributed."},
+  "required_outputs":[
+    "INTERCONNECT_MANIFEST.json",
+    "HYPOTHESIS_COVERAGE_MATRIX.json",
+    "EXTERNAL_EVIDENCE_LEDGER.md",
+    "COUNTERHYPOTHESIS_MATRIX.json",
+    "FUSION2_HYPOTHESES.json",
+    "CONTRADICTION_MAP.md",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "RUN_MANIFEST.json",
+    "FINAL_REPORT.md"
+  ],
+  "all_required_outputs_written":true,
+  "all_registered_scientific_branches_feedback_closed":true,
+  "new_trigger":{"word":"hypofusion","protocol":"research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md","registries_updated":true,"bootstrap_updated":true,"status_footer_updated":true},
+  "promotion":{"canonical_revision_changed":false,"scientific_generation_promoted":false,"reason":"External convergence is substantial but exact Clay-adapted target-Qwen causal replication remains missing."},
+  "next_highest_information_test":"Exact-Qwen CACC x nested-workspace factorial with truthful/stale/role-shuffled/temporal-shuffled continuity, retrieval control, system workspace, internal workspace intervention, truthful/shuffled re-entry and rail counterbalancing."
+}

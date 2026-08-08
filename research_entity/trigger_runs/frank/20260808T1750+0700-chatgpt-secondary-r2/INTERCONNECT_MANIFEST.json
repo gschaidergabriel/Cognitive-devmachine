@@ -1,86 +1,42 @@
 {
-  "schema_version":"1.3",
+  "schema_version":"1.4",
   "run_id":"20260808T1750+0700-chatgpt-secondary-r2",
-  "trigger":"frank-substantive-research",
+  "trigger":"frank",
   "actor":"chatgpt-secondary",
   "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
   "owner_fixed_contract":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
   "fixed_target":"Clay-native FRANK end-to-end; Needle is sole intentional non-Clay semantic subsystem",
+  "registry_scientific_branches":["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph"],
+  "branch_priority":["clay","claycode","claygraph","gwt","hyperposition","emergenz","frank"],
   "priority":["clay","claycode","claygraph","gwt","hyperposition","emergenz","frank"],
+  "special_rules":{
+    "frank_requires_latest_clay_architecture_as_primary_foundation":true,
+    "frank_requires_deep_claycode_architecture_input":true,
+    "frank_requires_deep_claygraph_substrate_input":true,
+    "frank_architecture_source_language":"ClayCode semantic IR",
+    "frank_clay_native_target_owner_fixed":true,
+    "needle_sole_intentional_non_clay_semantic_subsystem":true,
+    "fresh_in_progress_material_required":true,
+    "all_seven_branches_required":true
+  },
   "branches":[
-    {
-      "branch":"clay",
-      "status":"COVERED_DEEP_FRESH",
-      "latest":"clay-20260808T1751p0700-chatgpt-secondary-r2 — COVE-G10 Certified Operation View Envelope",
-      "materials":["research_entity/trigger_runs/clay/clay-20260808T1751p0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/clay/clay-20260808T1751p0700-chatgpt-secondary-r2/COVE_G10.claycode.json","research_entity/trigger_runs/clay/clay-20260808T1716p0700-chatgpt-secondary-r2/FINAL_REPORT.md"],
-      "key_delta":"G10 upgrades operation-specific causal slices, selection closure/receipts, projection proof obligations, stage-orthogonal GWT DAG and scoped activation invalidation. G9 contributes epoch memory and deterministic-before-generative view compilation.",
-      "transfer_to_c6":"C6 treats one Clay semantic universe as fixed, but imports G10's warning that causal dependencies/selection/projection/capability roles remain typed and operation-specific even inside one language."
-    },
-    {
-      "branch":"claycode",
-      "status":"COVERED_DEEP",
-      "latest":"claycode-20260808T1723p0700-chatgpt-secondary — CC-RC1.4 CBCC",
-      "materials":["research_entity/trigger_runs/claycode/claycode-20260808T1723p0700-chatgpt-secondary/FINAL_REPORT.md","research_entity/trigger_runs/claycode/claycode-20260808T1723p0700-chatgpt-secondary/EXPERIMENT_RESULTS.json"],
-      "key_delta":"operation-specific certified basis, canonical resources, compositional/dynamic closure and projection receipts; raw compact language remains unsafe for an untrained small-model interpreter.",
-      "transfer_to_c6":"ClayCode changes from model-facing foreign IR to the target model's native symbolic language/architecture semantics; execution, privilege and closure still require deterministic typed semantics."
-    },
-    {
-      "branch":"claygraph",
-      "status":"COVERED_DEEP",
-      "latest":"claygraph-20260808T1712p0700-chatgpt-secondary-r2 — G1d epochal latent field HOLD",
-      "materials":["research_entity/trigger_runs/claygraph/claygraph-20260808T1712p0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/claygraph/claygraph-20260808T1712p0700-chatgpt-secondary-r2/FRANK_CLAYGRAPH_FEEDBACK.json"],
-      "key_delta":"immutable semantic graph epochs + adaptive overlays + sparse event-driven latent field + epoch-pinned Assembly + exact anchors + conditional graph escalation; accepted graph remains G0.",
-      "transfer_to_c6":"ClayGraph becomes the target persistent explicit symbolic part of the same Clay cognitive substrate the trained 4B consumes. Native alignment increases both potential efficiency and common-mode poisoning/selection risk."
-    },
-    {
-      "branch":"gwt",
-      "status":"COVERED_DEEP",
-      "latest":"gwt-20260808T1721p0700-chatgpt-secondary — Run 4 causal-stage orthogonality",
-      "materials":["research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/FINAL_REPORT.md","research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/EXPERIMENT_RESULTS.json"],
-      "key_delta":"GRAPH_PRIOR x WORKSPACE_SELECTION x PROJECTION x REENTRY must be separated; bundled ablations can manufacture apparent workspace effects; projection/order remain causal model inputs.",
-      "transfer_to_c6":"All stages may use Clay but do not become one causal mechanism. Native Clay can remove language translation without eliminating selection/projection/re-entry mediation."
-    },
-    {
-      "branch":"hyperposition",
-      "status":"COVERED_DEEP",
-      "latest":"hyperposition-20260808T1722p0700-chatgpt-secondary-r2 — HYP-RC3 epoch-pinned adaptive topology",
-      "materials":["research_entity/trigger_runs/hyperposition/hyperposition-20260808T1722p0700-chatgpt-secondary-r2/FINAL_REPORT.md"],
-      "key_delta":"semantic/coordination/physical/task topologies evolve independently; n-ary relation-instance roles prevent false pairwise associations; activation requires semantic-epoch basis; rematerialization is workload-aware.",
-      "transfer_to_c6":"Clay becomes the shared typed language for relation instances/topology bases and semantic vector axes, but topology epochs/roles remain distinct from model language and physical placement."
-    },
-    {
-      "branch":"emergenz",
-      "status":"COVERED_FRESH_DEEP",
-      "latest":"emergenz-20260808T1756p0700-chatgpt-secondary — E-CERT2 Stage-Orthogonal Causal Emergence",
-      "materials":["research_entity/trigger_runs/emergenz/emergenz-20260808T1756p0700-chatgpt-secondary/FINAL_REPORT.md"],
-      "key_delta":"dual-axis causal contribution + persistent role-identifiable organization; stage/basis/identity/null/lesion/mechanistic-rescue/OOD/search-Goodhart/integrity gates; no FRANK emergent organ promoted.",
-      "transfer_to_c6":"Clay-native unification, recurrence and self-reference are not emergence evidence. Native ClayGraph tests require truthful/no-field/shuffled-field and stage-orthogonal causal certificates."
-    },
-    {
-      "branch":"frank",
-      "status":"COVERED_DEEP_PARENT_AND_CURRENT",
-      "latest_parent":"20260808T1722+0700-chatgpt-secondary-r2 — C5 Certified Cognitive Basis, Epoch Memory & Reader ABI",
-      "current":"20260808T1750+0700-chatgpt-secondary-r2 — C6 Clay-Native Unified Cognitive Substrate",
-      "materials":["research_entity/trigger_runs/frank/20260808T1722+0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/frank/20260808T1722+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json","research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"],
-      "key_delta":"C5 already separates exact basis, epoch memory, selection integrity, GWT, reader projection and authority. C6 converts the reader boundary from cross-language ABI into same-language Clay view/lowering compilation and makes Clay semantic source of truth system-wide, except Needle."
-    }
+    {"branch":"clay","status":"COVERED_DEEP_FRESH","latest":"clay-20260808T1751p0700-chatgpt-secondary-r2 — COVE-G10 Certified Operation View Envelope","materials":["research_entity/trigger_runs/clay/clay-20260808T1751p0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/clay/clay-20260808T1751p0700-chatgpt-secondary-r2/COVE_G10.claycode.json","research_entity/trigger_runs/clay/clay-20260808T1716p0700-chatgpt-secondary-r2/FINAL_REPORT.md"],"key_delta":"operation-specific causal slices, selection closure/receipts, projection proof obligations, stage-orthogonal GWT DAG and scoped activation invalidation","transfer_to_c6":"One Clay semantic universe is fixed, while causal dependencies/selection/projection/capability roles remain typed and operation-specific."},
+    {"branch":"claycode","status":"COVERED_DEEP","latest":"claycode-20260808T1723p0700-chatgpt-secondary — CC-RC1.4 CBCC","materials":["research_entity/trigger_runs/claycode/claycode-20260808T1723p0700-chatgpt-secondary/FINAL_REPORT.md","research_entity/trigger_runs/claycode/claycode-20260808T1723p0700-chatgpt-secondary/EXPERIMENT_RESULTS.json"],"key_delta":"operation-specific certified basis, canonical resources, compositional/dynamic closure, projection receipts","transfer_to_c6":"ClayCode becomes target model-native symbolic/architecture language; execution, privilege and closure remain deterministic typed semantics."},
+    {"branch":"claygraph","status":"COVERED_DEEP","latest":"claygraph-20260808T1712p0700-chatgpt-secondary-r2 — G1d epochal latent field HOLD","materials":["research_entity/trigger_runs/claygraph/claygraph-20260808T1712p0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/claygraph/claygraph-20260808T1712p0700-chatgpt-secondary-r2/FRANK_CLAYGRAPH_FEEDBACK.json"],"key_delta":"immutable semantic epochs, adaptive overlays, sparse latent field, epoch-pinned Assembly, exact anchors, conditional graph escalation","transfer_to_c6":"ClayGraph becomes target persistent explicit symbolic portion of same Clay cognitive substrate; native alignment increases potential efficiency and common-mode poisoning/selection risk."},
+    {"branch":"gwt","status":"COVERED_DEEP","latest":"gwt-20260808T1721p0700-chatgpt-secondary — Run 4 causal-stage orthogonality","materials":["research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/FINAL_REPORT.md","research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/EXPERIMENT_RESULTS.json"],"key_delta":"GRAPH_PRIOR x WORKSPACE_SELECTION x PROJECTION x REENTRY separation; bundled ablations can manufacture workspace effects","transfer_to_c6":"All stages may be Clay but remain different causal mechanisms."},
+    {"branch":"hyperposition","status":"COVERED_DEEP","latest":"hyperposition-20260808T1722p0700-chatgpt-secondary-r2 — HYP-RC3 epoch-pinned adaptive topology","materials":["research_entity/trigger_runs/hyperposition/hyperposition-20260808T1722p0700-chatgpt-secondary-r2/FINAL_REPORT.md"],"key_delta":"independent semantic/coordination/physical/task topologies; n-ary role identity; epoch-bounded activation; adaptive rematerialization","transfer_to_c6":"Clay is shared typed language for relations/topology basis/vector axes; physical placement/version remain separate properties."},
+    {"branch":"emergenz","status":"COVERED_FRESH_DEEP","latest":"emergenz-20260808T1756p0700-chatgpt-secondary — E-CERT2 Stage-Orthogonal Causal Emergence","materials":["research_entity/trigger_runs/emergenz/emergenz-20260808T1756p0700-chatgpt-secondary/FINAL_REPORT.md"],"key_delta":"dual-axis causal contribution + persistent role organization with basis/identity/null/stage/lesion/mechanistic-rescue/OOD/search-Goodhart/integrity gates","transfer_to_c6":"Clay-native recurrence/self-reference is not emergence evidence; native ClayGraph needs truthful/no-field/shuffled-field plus stage-orthogonal certificate."},
+    {"branch":"frank","status":"COVERED_DEEP_PARENT_AND_CURRENT","latest_parent":"20260808T1722+0700-chatgpt-secondary-r2 — C5 Certified Cognitive Basis, Epoch Memory & Reader ABI","current":"20260808T1750+0700-chatgpt-secondary-r2 — C6 Clay-Native Unified Cognitive Substrate","materials":["research_entity/trigger_runs/frank/20260808T1722+0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/frank/20260808T1722+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json","research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"],"key_delta":"C5 separation retained; C6 converts cross-language reader boundary to same-language Clay view/lowering compiler and makes Clay semantic source system-wide except Needle."}
   ],
-  "freshness_updates_during_run":[
-    "Clay G10 completed after C6 began and was ingested before C6 architecture finalization.",
-    "Emergenz E1 completed after C6 began and was ingested before C6 architecture finalization."
-  ],
+  "freshness_updates_during_run":["Clay G10 completed after C6 began and was ingested before architecture finalization.","Emergenz E1 completed after C6 began and was ingested before architecture finalization."],
   "cross_branch_contradictions_and_resolutions":[
-    {"issue":"C5 allowed a semantically external K0 host; owner directive requires all target architecture semantics in Clay.","resolution":"K0/capability enforcement may remain native compiled implementation, but its semantic contract is authored in Clay/ClayCode. It is not a second semantic architecture."},
-    {"issue":"'everything Clay' can be misread as textualizing tensors and physically merging databases.","resolution":"Semantic monism / physical pluralism: vectors/tensors/binary pages remain efficient physical payloads under Clay types; stores can remain physically separate while exposing Clay contracts/projections."},
-    {"issue":"One common language appears to collapse Reader ABI/GWT/projection boundaries.","resolution":"Keep distinct causal roles. Reader ABI becomes Clay View Compiler; GWT4 stage orthogonality remains mandatory."},
-    {"issue":"Self-hosting could make model-generated architecture self-authorizing.","resolution":"Owner/authority classes are Clay-semantic but deterministically protected; model output remains proposal only."},
-    {"issue":"All-Clay target seems to eliminate foreign subsystems.","resolution":"Needle is explicitly the sole intentional semantic exception and remains fully used as independent fast classifier/router."},
-    {"issue":"Native ClayGraph/model coupling may be interpreted as proof of richer cognition/emergence.","resolution":"Potential benefit and correlated-risk are both open; E-CERT2 controls required before emergence claims."}
+    {"issue":"C5 allowed semantically external K0; owner directive requires target authority semantics in Clay.","resolution":"K0/capability runtime may remain native compiled implementation, but semantic contract is Clay/ClayCode; not a second semantic architecture."},
+    {"issue":"Everything Clay could imply textual tensors/one DB.","resolution":"Semantic monism / physical pluralism: efficient payloads and physical store isolation remain valid under Clay types/contracts."},
+    {"issue":"Common language could collapse Reader ABI/GWT boundaries.","resolution":"Reader ABI becomes Clay View Compiler; GWT stage orthogonality remains mandatory."},
+    {"issue":"Self-hosting could become self-authority.","resolution":"Owner/authority classes are Clay-semantic but deterministically protected; model output proposal only."},
+    {"issue":"All-Clay could eliminate all foreign subsystems.","resolution":"Needle explicitly remains sole intentional semantic exception and is fully used."},
+    {"issue":"Native graph/model recurrence could be mistaken for emergence.","resolution":"E-CERT2 causal controls required; no emergence promotion."}
   ],
-  "ancestry_collapse":[
-    "G9, G10, C5, CC9, GWT4, H3 and C6 share same-day RAE actor/source ancestry; convergence is not independent replication.",
-    "C6 local tests validate constructed reference mechanisms, not live FRANK prevalence.",
-    "Groq 8B is a proxy baseline and not Qwen3-4B/full-fine-tune evidence."
-  ],
+  "ancestry_collapse":["G9/G10/C5/CC9/GWT4/H3/E1/C6 share same-day RAE ancestry and are not independent replications.","C6 local tests are constructed mechanisms, not live prevalence.","Groq 8B is proxy baseline, not Qwen3-4B/full-fine-tune evidence."],
   "strong_promotion_allowed":false
 }

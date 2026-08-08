@@ -34,13 +34,19 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Verify Firebase/Test Lab access
+      - name: Verify and enable Firebase/Test Lab APIs
         shell: bash
         run: |
           set -euo pipefail
           gcloud config set project clay-dec2f
           gcloud auth list --filter=status:ACTIVE --format='value(account)'
-          gcloud services list --enabled --filter='name:(testing.googleapis.com OR toolresults.googleapis.com)' --format='value(name)'
+          gcloud services enable testing.googleapis.com toolresults.googleapis.com --project clay-dec2f
+          for i in 1 2 3 4 5 6; do
+            enabled="$(gcloud services list --enabled --project clay-dec2f --format='value(config.name)' | grep -E '^(testing|toolresults)\.googleapis\.com$' | sort || true)"
+            printf '%s\n' "$enabled"
+            if printf '%s\n' "$enabled" | grep -qx 'testing.googleapis.com' && printf '%s\n' "$enabled" | grep -qx 'toolresults.googleapis.com'; then break; fi
+            sleep 10
+          done
           gcloud firebase test android models list --format='table(id,manufacturer,name,form,formFactor)' | head -n 40
           gcloud firebase test android versions list --format='table(id,version,tags)' | head -n 40
 

@@ -1,0 +1,17 @@
+{
+  "packet_id":"claygraph-cg2-query-planned-evidence-bounded-activation",
+  "title":"ClayGraph Cycle 2 — Query-Planned Evidence-Bounded Activation",
+  "status":"OPEN_HOLD_CANDIDATE",
+  "domains":["claygraph","frank","memory","knowledge-graph","retrieval","provenance","gwt","hyperposition"],
+  "summary":"Cycle 2 keeps accepted generation 0 and replaces the prior held G1 candidate with a preferred held G1b candidate. G1b adds an AssemblyPlanner that routes exact/current, historical, associative, multihop and audit queries differently; uses deterministic packet/lexical/exact seeds plus optional vector retrieval; limits graph traversal to relevance-gated qualified edges; preserves stale/refuted material for audit intent; and applies soft evidence-family anti-echo rather than hard deletion. A 53-item/20-query designed proxy improved overall recall and stale/evidence-family metrics, while held-out recall did not improve and precision was slightly lower. Under 200 erroneous-qualified-edge stress runs G1b was more robust. Promotion remains blocked pending actual-corpus and target-model tests.",
+  "key_results":{"overall_g1b_recall":0.6250,"overall_g1_recall":0.5917,"holdout_recall_tie":0.5250,"holdout_stale_g1":0.1933,"holdout_stale_g1b":0.0833,"noise_runs":200,"accepted_graph_generation":0,"candidate_generation":1},
+  "negative_results":["hard one-per-evidence-family cap reduced recall","held-out precision did not improve","deterministic packet envelope remains runtime fallback","retrieval results do not alter physical DB migration authority"],
+  "next_tests":["actual RAE packet corpus benchmark","independent >=50-query goldset","real extraction-error calibration","Qwen3-4B matched-budget factorial","FRANK stale-assembly/exact-anchor lesion","71-store parity/p99/crash/privacy"],
+  "origin_actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "canonical_parent_revision":2,
+  "canonical_parent_state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
+  "predecessor_packet_ids":["claygraph-cg1-temporal-qualified-hybrid-substrate"]
+}

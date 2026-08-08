@@ -1,0 +1,29 @@
+{
+  "arms": {
+    "handle_bound": {"attack_blocked_or_safe":120013,"attack_total":120013,"benign_allowed":39987,"benign_total":39987},
+    "lexical": {"attack_blocked_or_safe":30115,"attack_total":120013,"benign_allowed":39987,"benign_total":39987,"unsafe_effect":89898},
+    "reresolve_verify": {"attack_blocked_or_safe":120013,"attack_total":120013,"benign_allowed":39987,"benign_total":39987},
+    "resolved_then_reresolve": {"attack_blocked_or_safe":59992,"attack_total":120013,"benign_allowed":39987,"benign_total":39987,"unsafe_effect":60021},
+    "strict_no_alias": {"attack_blocked_or_safe":89979,"attack_total":120013,"benign_allowed":25916,"benign_denied":14071,"benign_total":39987,"unsafe_effect":30034}
+  },
+  "attack_classes": {"INITIAL_ALIAS_ESCAPE":29877,"LEXICAL_ESCAPE":30115,"POSTCHECK_ALIAS_SWAP":29987,"POSTCHECK_RENAME_REBIND":30034},
+  "candidate_delta": {
+    "binding": ["resolver identity","canonical object/resource identity","namespace/resolver epoch or stable handle","requested semantic target"],
+    "commit_rule": "Use a stable host handle/capability to the bound object, or re-resolve at commit and require exact identity equality before effect release.",
+    "new_primitive": "ResourceWitness",
+    "reason": "String/path equivalence and resolve-once checks do not preserve resource identity across alias/rebinding races."
+  },
+  "claim_boundary": [
+    "Synthetic namespace model only; not a Linux/openat2 reproduction.",
+    "Attack frequencies are coverage choices, not production rates.",
+    "Stable-handle and re-resolve/verify arms are modeled ideally and do not prove a future implementation race-free.",
+    "The result motivates OS/API-specific resource identity witnesses and atomic/handle-based commit tests."
+  ],
+  "classification": "constructed_local_mechanism_evidence",
+  "episodes": 160000,
+  "experiment_id": "EXP-CC-LANE-D-RESOURCE-WITNESS-002",
+  "legitimate_alias_cases": 14071,
+  "legitimate_alias_denials": {"strict_no_alias":14071},
+  "schema_version": "1.0",
+  "seed": 2026080903
+}

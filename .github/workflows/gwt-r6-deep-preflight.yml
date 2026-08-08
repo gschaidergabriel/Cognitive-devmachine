@@ -1,0 +1,57 @@
+name: GWT R6 Deep Preflight Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-gwt-r6:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build full GWT interconnect manifest
+        run: |
+          python tools/research_interconnect_preflight.py \
+            --trigger gwt \
+            --run-id gwt-20260809T0129p0700-chatgpt-secondary-r6-deep \
+            --output /tmp/gwt-r6-interconnect.json \
+            >/tmp/gwt-r6-preflight.stdout
+      - name: Validate mesh and Android feedback retrieval
+        run: |
+          python - <<'PY'
+          import json
+          p='/tmp/gwt-r6-interconnect.json'
+          d=json.load(open(p,encoding='utf-8'))
+          expected={'clay','frank','gwt','emergenz','claycode','hyperposition','claygraph','unifieddb'}
+          got=set(d['registry_scientific_branches'])
+          assert got==expected,(got,expected)
+          print('GWT_R6_MESH_PASS')
+          print('schema=',d.get('schema_version'))
+          print('priority=',d.get('branch_priority'))
+          for b in d['branches']:
+              print('branch',b['branch'],'latest',b.get('latest_run'),'complete',b.get('latest_run_complete'))
+          gwt=next(x for x in d['branches'] if x['branch']=='gwt')
+          hits=[x for x in gwt.get('knowledge_micro_packets',[]) if x.endswith('KMP-ANDROID-R1-FEEDBACK-GWT.md')]
+          assert hits, 'Android->GWT mandatory feedback missing'
+          print('ANDROID_GWT_RETRIEVAL_PASS',hits)
+          print('mandatory_policy=',d.get('mandatory_active_knowledge_policy'))
+          PY
+      - name: Build provider plan
+        run: |
+          python tools/research_provider_router.py plan \
+            --class scholarly \
+            --class current_web \
+            --class implementation \
+            --class executable \
+            --class model_experiment \
+            >/tmp/gwt-r6-provider-plan.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/gwt-r6-provider-plan.json',encoding='utf-8'))
+          print('GWT_R6_PROVIDER_PLAN')
+          for x in d['planned_tools']:
+              print(x['class'],x['mode'],x['tool'],'blocker=',x.get('availability_blocker'),'surface=',x.get('invocation_surface'))
+          PY

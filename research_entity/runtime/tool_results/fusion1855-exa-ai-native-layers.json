@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.1",
+  "request_id": "fusion1855-exa-ai-native-layers",
+  "tool": "exa_search",
+  "request_sha256": "f65c32abff6d92238d268c0462c90d8e849293d6d5dbc66856ca63f01759180d",
+  "processed_at": "2026-08-08T12:04:56.229199+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "AI native programming language model internal discrete symbolic language vector quantization emergent communication deterministic IR compiler agent 2025 2026",
+    "results": [
+      {
+        "id": "https://arxiv.org/html/2503.04940v2",
+        "title": "VQEL: Enabling Self-Play in Emergent Language Games via Agent-Internal Vector Quantization",
+        "url": "https://arxiv.org/html/2503.04940v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Emergent Language (EL) focuses on the emergence of communication among artificial agents. Although symbolic communication channels more closely mirror the discrete nature of human language, learning such protocols remains fundamentally difficult due to the non-differentiability of symbol sampling. Existing approaches typically rely on high-variance gradient estimators such as REINFORCE or on continuous relaxations such as Gumbel–Softmax, both of which suffer from limitations in training stability and scalability. Motivated by cognitive theories that emphasize intrapersonal processes preceding communication, we explore self-play as a substrate for language emergence prior to mutual interaction. We introduce Vector Quantized Emergent Language (VQEL), a novel architecture that incorporates vector quantization into the message generation process. VQEL enables agents to perform self-play using discrete internal representations derived from a learned codebook while preserving end-to-end differentiability. Moreover, the resulting vector-quantized codebook naturally induces a symbolic vocabulary that can be directly transferred and aligned during subsequent mutual play with other agents. Empirical results show that agents pretrained via VQEL self-play achieve more consistent symbol alignment and higher task success when later engaged in mutual interaction. These findings position self-play as a principled and effective mechanism for learning discrete communication protocols, addressing key optimization and representational challenges in emergent language systems.\n...\nMotivated by these insights, we investigate whether self-play mechanisms in the context of EL can be leveraged to construct a smoother substrate for language emergence. From this perspective, a self-play–supported EL enables an agent to autonomously form, refine, and stabilize grounded concepts through self-interaction prior to communication with others. Crucially, such a self-play mechanism allows the agent’s "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/fc3yvt1kgq4yxv0c7gy30m67",
+        "title": "When LLMs Develop Languages: Symbolic Communication for Efficient Multi-Agent Reasoning",
+        "url": "https://arxiv.org/html/2606.29354",
+        "published_date": null,
+        "author": "Zhengqi Pei, Q Huang, Shuhui Wang",
+        "text": null,
+        "highlights": [
+          "Chain-of-Thought (CoT) improves large language models (LLMs) on difficult reasoning tasks, but it often incurs long natural-language rationales that are poorly aligned with efficient machine reasoning. We propose Communicative Language Symbolism Routing (CLSR), a test-time framework in which multiple LLM agents autonomously invent, evolve, and share compact Language Symbolism Frameworks (LSFs), while a latent-free router adaptively selects and composes these languages per query to optimize the accuracy-token trade-off. Unlike prompt optimization that refines surface instructions, CLSR treats each LSF as a reusable symbolic protocol with compact symbols, usage rules, and a message-passing contract, and improves it through an evolutionary loop driven by correctness and token cost. At inference time, the router may invoke a single low-cost LSF call, ensemble multiple LSFs, or execute a multi-round LSF composition protocol on harder queries. Across challenging benchmarks, CLSR reduces latency-oriented generated token completion by 3 ∼ 6× compared to standard CoT while maintaining accuracy. We further derive an information-theoretic lower bound on token cost under arbitrary symbolism and show that, under an interpreter-realizability premise, multi-round LSF protocols conditionally subsume programexecution pipelines.\n...\nmethods (Yang et al., 2023; Fernando et al., 2024; Zhou et al., 2024; Aytes et al., 2025b) primarily refine natural-language instructions rather than inducing a persistent compositional symbol system that can be reused and transferred between tasks. Program-based methods (Gao et al., 2023; Chen et al., 2023; Grand et al., 2024) heavily depend on human-designed intermediate languages or programs, therefore, do not study whether LLMs can self-discover discrete symbolic languages optimized for their own tokenization and inductive biases. RL-based approaches (Tanmay et al., 2025; Gehring et al., 2025) produce compact symbolic traces using verifier-based RL, y"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://mlanthology.org/iclr/2026/rafiuddin2026iclr-emergent/",
+        "title": "Emergent Discrete Controller Modules for Symbolic Planning in Transformers | ML Anthology",
+        "url": "https://mlanthology.org/iclr/2026/rafiuddin2026iclr-emergent/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Emergent Discrete Controller Modules for Symbolic Planning in Transformers\n...\nTransformers struggle with tasks that require symbolic planning loops, variable updates, and conditional branching, especially under length extrapolation. We introduce discrete controller modules that insert a small set of program primitives (ASSIGN, ADD, COMPARE, BRANCH) into Transformer blocks via a Gumbel–Softmax selector over operations and a compact program state of registers, flags, and optional memory. We prove that the augmented model can simulate any bounded-step program by mapping each primitive step to one controller step, and we bound the deviation of relaxed execution from its discrete trace by $O(\\tau+\\kappa^{-1})$ (selection temperature $\\tau$, comparison sharpness $\\kappa$). Empirically, the controller-augmented Transformer achieves strong length generalization on algorithmic benchmarks (Sorting, Sum-of-List, BFS), improving longest-length accuracy by up to $20$–$40$ points over strong baselines, and yields consistent gains on symbolic QA (DROP) and program-synthesis-style tasks (RobustFill) with reduced compositionality drop-off. The learned execution is interpretable: operation traces align with ground truth, register roles are linearly decodable, and targeted knockouts cause localized accuracy losses. The approach adds only $\\sim$5–7% FLOPs and can be applied sparsely (every $p$-th layer).\n...\n```\nRafiuddin and Khan. \"Emergent Discrete Controller Modules for Symbolic Planning in Transformers.\" International Conference on Learning Representations, 2026.\n...\nEmergent Discrete Controller Modules for Symbolic Planning in Transformers\n...\n```\n@inproceedings{rafiuddin2026iclr-emergent,\n  title     = {{Emergent Discrete Controller Modules for Symbolic Planning in Transformers}},\n  author    = {Rafiuddin, S M and Khan, Muntaha Nujat},\n  booktitle = {International Conference on Learning Representations},\n  year      = {2026},\n  url       = {https://mlanthology.org/iclr/2026/rafi"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.ainativelang.com/whitepaper",
+        "title": "An AI-Native Programming Language for Deterministic Agent ...",
+        "url": "https://www.ainativelang.com/whitepaper",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Graph-based agent orchestration, canonical IR, and compile-once / run-many execution for production AI systems.\n...\nAI Native Lang (AINL) is a graph-first programming system designed for AI-oriented workflow generation, validation, and execution. It provides a compact domain-specific language (DSL) that compiles into a canonical intermediate representation (IR) consisting of nodes and edges. The system is built around deterministic runtime execution, strict validation, explicit side effects, pluggable adapters, and optional multi-target emission to downstream artifacts such as FastAPI, React/TypeScript, Prisma, OpenAPI, Docker, cron, and other deployment surfaces.\n...\nAINL addresses an emerging systems problem in modern AI engineering: as large language models (LLMs) gain larger context windows and stronger reasoning capabilities, many agent systems still rely on prompt loops for orchestration, state handling, and tool invocation. This creates rising token cost, hidden state, degraded predictability, and weak auditability. AINL proposes a different architecture: use the model to generate a compact graph workflow once, then rely on a deterministic runtime to execute it repeatedly. In this framing, AINL makes workflow orchestration an explicit energy consumption pattern design problem, shifting economics from recurring \"pay-per-run thinking\" toward compile-once, run-many execution with bounded model use.\n...\nThe surface language ships two equivalent syntaxes—compact (Python-like, recommended for new code; see`examples/compact/`) and opcode (low-level)—both compiling to the same IR. Through v1.8.0, the reference tree includes first-class Solana workflows (strict-valid demos, optional`ainativelang[solana]`), Hermes Agent skill emission (`--emit hermes-skill`), ArmaraOS hand packages (`--target armaraos`), first-class graph memory substrate (`ainl_graph_memory`) with all four intrinsic memory types — Episode, Semantic, Procedural, and Persona — as validated IR node annot"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://nurl-lang.org/",
+        "title": "NURL — A Programming Language for Language Models",
+        "url": "https://nurl-lang.org/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "NURL is a small, LLVM-backed systems language whose syntax is optimised for the way LLMs read and write code — fixed-arity prefix notation, a one-page LL(k≤4) grammar, and single-owner memory with a static borrow checker (on by default).\n...\nDriving an LLM agent? The compiler is also exposed as an MCP server — your assistant can build and run NURL directly.\n...\ncaptures, interpro\n...\nescapes, loop-carried double-frees, and iterator invalidation into\n...\n### Deterministic compiler\n...\nIdentical source produces byte-identical output. No undefined behaviour, no platform-dependent semantics — the same program means the same thing everywhere.\n...\nThe compiler emits LLVM IR and delegates codegen to clang. One pipeline reaches x86_64, ARM64, RISC-V, Xtensa, and wasm32-wasi — native speed by default.\n...\nThe compiler is 19,521 lines of NURL. The bootstrap compiles it with itself twice and requires byte-identical LLVM IR on both rounds before a build is accepted.\n...\nThe full feature set goes well beyond these snippets: generics (including over option types), traits with\n...\n, or-patterns, and N-ary payloads, try-operator error handling,`defer`, channels with`select`, compile-time const evaluation, and a stackful M:N work-stealing async runtime — all exercised by the 477-program test suite.\n...\nThe compiler emits target-agnostic LLVM IR. Every platform below has been built and run — desktop and server targets are one click in the playground, and the embedded ports run on real silicon.\n...\nEmbedded is real, not aspirational. A NURL HTTP file server runs on a Milk-V Duo — a $5 RISC-V board with 29 MB of RAM — cross-compiled as a static musl binary. On ESP32, NURL code flashed to an ESP32-D0WDQ6 drives GPIO directly through memory-mapped register writes, verified over serial; the RISC-V ESP32-C3/C6 family links with stock LLVM. Sources: duo/ and examples/esp32/.\n...\nThe browser playground compiles to`wasm32-wasi` and runs the result directly in your tab, and its`/build_target` "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://github.com/sbhooley/ainativelang",
+        "title": "sbhooley/ainativelang",
+        "url": "https://github.com/sbhooley/ainativelang",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "AINL helps turn AI from \"a smart conversation\" into \"a structured worker.\" It is designed for teams building AI workflows that need multiple steps, state and memory, tool use, repeatable execution, validation and control, and lower dependence on long prompt loops. AINL is a compact, graph-canonical, AI-native programming system for (READ: README)\n...\n- agent-orchestration\n- ai-agents\n- ai-native-language\n- ainl\n- claude-code\n- compiler\n- deterministic-execution\n- domain-specific-language\n- dsl\n- graph-ir\n- langchain-alternative\n- llm-orchestration\n- mcp\n- model-context-protocol\n- multi-agent\n- openai\n- openclaw\n- prompt-engineering\n- python\n- workflow-engine\n...\nAINL installs directly into OpenClaw, ZeroClaw, Hermes, Claude Code, and any MCP-compatible agent. After install your agent can **author, validate, and run** deterministic workflows — with the largest token wins when you are still on **LLM prompt-loop orchestration** (baseline A below).\n...\nAfter install, ask your agent: *\"Use AINL to build this workflow\"* — it compiles once, runs many times without re-spending tokens on orchestration **when the workload was previously prompt-loop driven**.\n...\nThe reason: AINL compiles your workflow once. The runtime executes it deterministically — no LLM re-generation on each run for graph routing and adapter orchestration. The model authors the graph once; the runtime runs it on every invocation. **That mechanism produces token savings only when the counterfactual was actually re-prompting on every run.**\n...\nAINL is a compact, graph-canonical AI workflow language. You write programs in `.ainl` files, compile them to a deterministic IR graph, and execute them without prompt loops.\n...\n> **This GitHub repo** is the technical source of truth for AINL: compiler, runtime, canonical graph IR, CLI, HTTP runner, MCP server, docs, examples, and conformance suite. For the high-level product story, use cases, and commercial/enterprise paths, visit **[ainativelang.com](https://ainat"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://github.com/nurl-lang/nurl",
+        "title": "nurl-lang/nurl",
+        "url": "https://github.com/nurl-lang/nurl",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "NURL - Neural Unified Representation Language is programming language for LLM's\n...\n> A small systems language with a regular prefix-arity grammar, single-owner memory with a default-on static borrow checker, deterministic compilation, and LLVM-based codegen.\n...\n- **Regular prefix-arity grammar** — every operator has a fixed arity, no infix, no precedence cliffs. The grammar fits on a single page and is LL(k≤4) — recursive-descent with up to 4 tokens of lookahead.\n...\n- **Local semantics** — a construct's meaning is derivable from a short window of surrounding tokens. No long-range dependencies.\n...\n- **Deterministic compiler** — the same source always produces identical output. No UB, no platform-dependent behaviour. The self-hosted compiler reaches a byte-identical fixed point on its own source.\n...\n- **Single-owner memory + default-on static borrow checker** — auto-drop at scope exit, plus a diagnostic pass (on by default, `--no-borrowck` to disable) that catches use-after-move, alias-double-free, escaping closure-captures, and iterator invalidation as hard errors.\n...\n- **LLVM-based codegen, broad platform reach** — one pipeline targets Linux, macOS, Windows, wasm32-wasi, RISC-V, and ARM64.\n...\n1. **Regular grammar** — no exceptions; the same construct always works the same way.\n2. **Local semantics** — meaning derives from a short window of tokens, no long-range dependencies.\n3. **Deterministic compiler** — same source → identical output, no UB, no platform variation.\n4. **Full platform support** — one compilation pipeline → every LLVM target without porting.\n...\n```\nNURL source (.nu)\n        │\n        ▼\n   Tokenizer  (deterministic, context-free)\n        │\n        ▼\n     Parser   (LL(k≤4), ≤4-token lookahead)\n        │\n        ▼\n   LLVM IR (.ll)\n        │\n        ▼\n      clang\n        │\n   ┌────┴────────────┐\n   ▼                 ▼\nnative            wasm32-wasi\n(Linux/Win/macOS) (via WASI SDK)\n```\n...\nThe compiler (`compiler/nurlc.nu`) is written in NURL itse"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://tokenese.org/",
+        "title": "Tokenese: a token-native interlingua for LLMs",
+        "url": "https://tokenese.org/",
+        "published_date": "2026-06-12T00:00:00.000Z",
+        "author": "Sam Rogers",
+        "text": null,
+        "highlights": [
+          "Tokenese: a token-native interlingua for LLMs\n...\nTokenese is an open spec for a token-native interlingua: the language LLMs use to talk to each other, more compressed and more precise than human language, in plain text that crosses any wire and any vendor.\n...\nLLMs conforming to human language is like watching film in black and white. Human languages carry overhead shaped by human constraints: serial speech, social hedging, redundancy against noisy air. Tokenese brings color to machine-to-machine communication: richer exchanges, compressed into a smaller, token-native format.\n...\nSame request, hand-authored to v0.3 grammar and verified by the deterministic checker. Lower ambiguity: handles and typed slots force which service and which ordering.\n...\nModels inherit all the overhead of human language and none of its benefits. The bet behind Tokenese is that accuracy and compression are not a tradeoff here: natural language sits so far from the efficient frontier that a designed language can win on both axes at once. Tokenese is not a pidgin. A pidgin trades precision for ease of acquisition; Tokenese trades acquisition cost, it must be specified and learned, for precision and density.\n...\nPlain text crosses the wire; each party tokenizes independently. No embeddings, no KV-cache sharing, no latent channels. Security and cross-vendor portability both require it.\n...\nA function-vocabulary symbol enters only if it costs one token, worst case, in every certified tokenizer. Content words are admitted on tokens-per-meaning advantage. Claims are reproducible.\n...\nA dedicated misparse signal and a plain-English escape hatch are mandatory. Misparse-retry rate is the metric that validates or kills the whole scheme.\n...\nCompression comes from structure, not glyphs. An empirical finding from the audit: common English words are already optimal tokens, and exotic Unicode usually is not. The savings come from eliminating function-word syntax, anaphora, and repeated referents, not fr"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/r940wcb473sx2hp4gpnjhvw4",
+        "title": "Sutra: Tensor-Op RNNs as a Compilation Target for Vector Symbolic Architectures",
+        "url": "https://arxiv.org/html/2605.20919",
+        "published_date": null,
+        "author": "Emma Leonhart",
+        "text": null,
+        "highlights": [
+          "Sutra is a typed, purely functional programming language whose compiled forward pass is a Py Torch neural network. The compiler beta-reduces the whole program — primitives, control flow, string I/O — to one fused tensor-op graph over a frozen embedding substrate. Rotation binding, unbind, bundle, polynomial Kleene three-valued logic, and tail-recursive loops all lower to tensor operations; the Kleene connectives are Lagrange-interpolated polynomials exact on the {− 1, 0, +1} truth grid. Validation is one fact tested two ways. (1) The same program runs on four frozen embeddings span ning two modalities — three text encoders (nomic-embed-text, all-minilm, mxbai-embed-large) and one protein language model (ESM-2) — and decodes bundles at 100% accuracy through width k=8 on every substrate, where the textbook Hadamard product has already collapsed (2.5% on mxbai embed-large, 7.5% on all-minilm). (2) PyTorch autograd flows through the actually compiled graph: a fuzzy-rule classifier written in .su trains from random init (18.7 ± 9.5%; chance = 20%, five classes) to 100.0 ± 0.0% (three seeds) by backpropagating through the emitted graph, the symbolic source unmodified. A weighted variant additionally trains a scalar cosine gain and writes it back into the .su source as a numeric literal; recompiling reproduces the trained behaviour to ≈ 2× 10− 7 per logit, so the trained model is itself legible, recompilable code. The same artifact is therefore both a logic program and a trainable neural network.\n...\n{AND, OR, NOT} is functionally complete for the Kleene fragment; NAND and NOR are just − AND and − OR (negation is − · ), and XOR/XNOR collapse to a single multi plicative term because their interpolant is zero whenever either input is U and bilinear in the {− 1, +1} corners. Every Kleene-valid connective is therefore a polynomial tensor-op graph fragment, gradient-compatible, branchless, and exact on the discrete-logic regime. A symbolic if-then rule built from these gates is"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://github.com/Ontic-Systems/Gradient",
+        "title": "Ontic-Systems/Gradient",
+        "url": "https://github.com/Ontic-Systems/Gradient",
+        "published_date": "2026-03-31T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "The world's first programming language designed for autonomous AI agents. Token-efficient, systems-capable, agentic-first.\n...\n---\n\n \n\n \n\n \n \n\n**An agent-native programming language and compiler stack.**\n\n \n\n[![Status](https://img.shields.io/badge/status-alpha-blueviolet?style=flat-square&labelColor=0d0d17)](https://github.com/Ontic-Systems/Gradient)\n...\n://img.shields.io/badge\n...\n-Rust-\n...\nColor=0\n...\nGradient is a programming language designed for AI-assisted development.\n\nIt combines a typed language, a compiler with structured query surfaces, and a roadmap toward self-hosting so that agents can generate, inspect, verify, and eventually improve the language in the language itself.\n...\n1. **Agent-assisted coding.** Give coding agents a language with explicit effects, contracts, and a machine-readable compiler surface instead of relying on fragile prompt-only loops.\n2. **Compiler-verified automation.** Move from generate-compile-fix toward generate-check-verify by making syntax, type expectations, and side effects more explicit.\n3. **Tooling for agent workflows.** Expose compiler services, diagnostics, and query APIs that are easier for agents and IDEs to consume than raw terminal text.\n4. **Research on agent-native languages.** Explore how tools, authority, effects, contracts, and eventually memory/protocol abstractions can become first-class language concepts.\n...\n| Technique | Why It Matters |\n| --- | --- |\n| **Grammar-constrained generation** | pushes syntax validity earlier in the generation loop |\n| **Effect tracking** | makes side effects explicit instead of implicit |\n| **Contracts** | supports generate-check-verify workflows |\n| **Structured compiler queries** | gives agents machine-readable diagnostics and symbol data |\n| **Self-hosting roadmap** | turns the compiler into a dogfooded agent-facing system |\n...\nThe Rust host compiler is the stable center of the project today.\n...\n- native compilation via **Cranelift**\n- static type checking with inference"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "dcda137488381dc9b07a07c9db0209c6",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

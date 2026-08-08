@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "android-20260808T2338p0700-chatgpt-secondary-r1",
   "role": "secondary_cross_cutting_research_arm",
   "primary_reference_platform": "linux",
@@ -9,8 +9,10 @@
     "firebase_physical_daily_nominal": 5,
     "max_virtual_for_this_cycle": 3,
     "max_physical_for_this_cycle": 0,
-    "virtual_already_consumed": 1,
+    "virtual_consumed": 3,
+    "physical_consumed": 0,
     "virtual_reserved_for_other_workers_after_cycle": 7,
+    "cycle_closed_at_quota_boundary": true,
     "principle": "bundle orthogonal assertions per device invocation and use CI before device quota"
   },
   "priority_experiments": [
@@ -18,27 +20,36 @@
       "id": "EXP-ANDROID-R1-INFRA-001",
       "status": "COMPLETE_PASS",
       "device_cost": 1,
+      "matrix_id": "matrix-3mqon98nc2zsk",
       "question": "Can GitHub Actions build a ClayCode semantic harness, authenticate with Firebase and execute it on an ARM Android Test Lab device?",
       "device": "MediumPhone.arm / Android 35",
-      "tests": ["typed arithmetic + assertion", "unknown-reference deterministic rejection"]
+      "result": "2/2 instrumentation tests passed",
+      "tests": [
+        "typed arithmetic + assertion",
+        "unknown-reference deterministic rejection"
+      ]
     },
     {
       "id": "EXP-ANDROID-R1-PORTABILITY-BUNDLE-002",
-      "status": "PLANNED_NEXT",
+      "status": "COMPLETE_PASS",
       "device_cost": 2,
-      "question": "Do core ClayCode invariants and replay/safe-effect behaviors remain equivalent across two Android runtime generations while exposing basic constrained-device efficiency measurements?",
-      "devices": ["MediumPhone.arm / Android 35", "SmallPhone.arm / Android 30"],
+      "matrix_id": "matrix-322nxfmnphtz2",
+      "question": "Do selected core ClayCode-like invariants and replay/safe-effect controls remain equivalent across two Android runtime generations?",
+      "devices": [
+        "MediumPhone.arm / Android 35",
+        "SmallPhone.arm / Android 30"
+      ],
+      "result": "9/9 tests passed on each device; 18/18 total",
       "bundled_tests": [
-        "typed arithmetic equivalence",
-        "unknown-reference rejection",
-        "integer overflow rejection",
-        "ordered vs set vs multiset semantics remain distinguishable",
-        "canonical event replay is idempotent",
-        "damaged derived-state replay diverges and is detected",
-        "effect proposal cannot self-mint authority",
-        "compact Clay-like source byte density vs verbose JSON-like control",
-        "bounded parse/evaluate loop timing receipt",
-        "cold reconstruction produces identical semantic output"
+        "typed arithmetic/assertion preserves value 42",
+        "1000 repeated evaluations are deterministic",
+        "unknown reference is rejected",
+        "integer overflow is rejected",
+        "ordered/set/multiset semantics remain distinguishable",
+        "canonical replay is repeatable and damaged replay is detected",
+        "model proposal cannot self-mint effect authority",
+        "constructed compact Clay-like source is byte-denser than verbose JSON-like control",
+        "Android SDK/runtime generation axis is recorded and accepted"
       ]
     }
   ],
@@ -46,7 +57,7 @@
     {
       "id": "EXP-ANDROID-R2-QWEN-RUNTIME-003",
       "reason": "requires model/native runtime integration; do CI/native packaging before device quota",
-      "question": "Can a quantized Qwen-class model execute reliably under Android memory/runtime constraints?"
+      "question": "Can a quantized Qwen-class 4B model execute reliably under Android memory/runtime constraints?"
     },
     {
       "id": "EXP-ANDROID-R2-CONTEXT-KV-004",

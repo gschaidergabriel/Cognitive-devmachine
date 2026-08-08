@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "666-20260809T0424+0700-pf-memory-persistence-recovery-unique",
+  "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0424p0700_chatgpt_secondary_pf_memory_persistence_recovery_shard.json",
+  "crossread_against": "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+  "status": "DEDUPED_PENDING_AGGREGATION_INTO_HISTORICAL_EARNED_WORK",
+  "dedup": {
+    "excluded_from_new_credit": [
+      "LCME P@5 0.40->1.00 retrieval tuning",
+      "7213 entity-vector cleanup",
+      "neural retrieval cold-start/maturity gates",
+      "generic source-class filtering"
+    ],
+    "reason": "Already credited by HEW-PF-LCME-006; same repository ancestry is not independent replication."
+  },
+  "unique_mappings": [
+    {
+      "mapping_id": "HEW-PF-MEMFED-009",
+      "source_refs": ["commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4", "commit:c93873c88f63b3283a582605e9339e709e4b0599", "commit:6d680d3bd3822ed9cf8928f63794e15b9e1372b5"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "UDB_UNIFIED_DATABASE", "CLAY_0_1_FULL_INTEGRATION"],
+      "mechanism_or_result": "Unique remainder: federated MemoryHub query across multiple stores plus historical stored-but-unreachable and isolated-store cross-session recall failures.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 9.0,
+      "avoided_future_hours_high": 18.0,
+      "confidence": "MEDIUM_FOR_MECHANISM_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "UnifiedDB/Harness demonstrates a simpler alternative with equal cross-store recall, provenance and causal availability or these patterns fail to transfer."
+    },
+    {
+      "mapping_id": "HEW-PF-MEMREC-010",
+      "source_refs": ["commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4", "commit:c93873c88f63b3283a582605e9339e709e4b0599"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "UDB_UNIFIED_DATABASE", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Unique remainder: 6675-orphan graph corruption, crash-resumable embedding backfill, cross-store recall-loss and recovery/consistency patterns.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 9.0,
+      "avoided_future_hours_high": 18.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Harness reproduces these failure families and current architecture either prevents them or recovers deterministically with receipts."
+    },
+    {
+      "mapping_id": "HEW-PF-MEMMIG-011",
+      "source_refs": ["commit:290d5e2b8640d55eb2a0aa38b99338c8070a0009", "commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4"],
+      "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE", "H2_CLAYCODE_HARNESS", "UDB_UNIFIED_DATABASE", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Unique remainder: compatibility-preserving semantic rename/migration, stable durable DB/tool identities, automatic reconnect and resumable maintenance cursors.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "LOW_MEDIUM",
+      "falsifier_or_validation_receipt": "ClayCode/UnifiedDB migration tests show stable identities are unnecessary or a versioned breaking migration is safer and measurably simpler."
+    }
+  ],
+  "unique_provisional_avoided_future_hours": {"low": 9.0, "center": 21.0, "high": 42.0},
+  "global_completion_credit_applied": false,
+  "aggregation_rule": "Merge only after CAS reread of HISTORICAL_EARNED_WORK.json and re-dedup against all newer Level-0 receipts."
+}

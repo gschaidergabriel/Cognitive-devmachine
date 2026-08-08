@@ -1,0 +1,65 @@
+{
+  "schema_version":"1.0",
+  "language":"ClayCode semantic IR",
+  "candidate_id":"UD-RC1",
+  "name":"Clay Unified Semantic Persistence Fabric",
+  "status":"OPEN_RESEARCH_CANDIDATE",
+  "extends":["MOSAIC-G11","FRANK-C6-CNUCS","CC-RC1.6-MRSC","ClayGraph-G1d-HOLD","HYP-RC4","GWT-CSOC-R4","E-CERT2"],
+  "source_concept":"Persistent Clay organism-state whose associative memory can shape the next Assembly between LLM invocations.",
+  "core_rule":"one semantic world != one physical store; one effect-critical operation gets one certified causal snapshot and authoritative commit domain",
+  "pipeline":[
+    "external/internal event -> P0 AUTHORITATIVE_EVENT_STATE append candidate",
+    "typed Clay semantic identity + valid/transaction time + provenance -> P1",
+    "operation semantics -> MOSAIC/CertifiedBasis closure -> P2 CONSISTENCY_CAPSULE",
+    "logical ClayCode query -> P3 UNIFIED_QUERY_IR",
+    "cost+risk planner -> P4 PHYSICAL_SUBPLANS",
+    "execute exact/relational/ClayGraph/vector/FTS/activation routes",
+    "bind derived-view + selection receipts",
+    "assemble bounded current cognitive frontier -> Assembly/COVE",
+    "GWT competition/selection -> WorkspaceEpisode",
+    "MRSC/View Compiler -> model-facing Clay view",
+    "model proposal -> capability/effect gateway",
+    "effect-relevant basis/selection/capability revalidation",
+    "authoritative state/effect/outcome commit",
+    "durable derivation/outbox events -> incremental graph/vector/FTS/activation maintenance",
+    "new activation frontier remains available between model calls -> next Assembly"
+  ],
+  "planes":[
+    {"id":"P0","name":"AUTHORITATIVE_EVENT_STATE_SPINE","authority":"AUTHORITATIVE","contract":"append/replay exact events, state transitions, effect/outcome receipts; one commit identity per effect-critical operation"},
+    {"id":"P1","name":"SEMANTIC_IDENTITY_TEMPORAL_PROVENANCE","authority":"IDENTITY_EVIDENCE","contract":"canonical Clay IDs, typed relation instances, valid/transaction time, provenance ancestry, conflict/revocation"},
+    {"id":"P2","name":"OPERATION_SPECIFIC_CAUSAL_CAPSULE","authority":"CAUSAL_WITNESS_ONLY","contract":"semantic hash, contract instance, required domains/epochs, negative predicates, selection requirement, capability dependencies; unrelated domain churn does not invalidate"},
+    {"id":"P3","name":"UNIFIED_CLAYCODE_QUERY_IR","authority":"QUERY_INTENT_ONLY","contract":"exact address, relational, temporal, graph-role traversal, vector, FTS, latent-prior and authorized fallback operators share typed semantics"},
+    {"id":"P4","name":"PHYSICAL_PLANNER_ADAPTERS","authority":"NONE","contract":"route subplans to specialized engines using latency, serialization, contention, write amplification, recovery, energy and common-mode risk without changing semantic identity"},
+    {"id":"P5","name":"DERIVED_COGNITIVE_VIEWS","authority":"NONE_OR_DERIVED","contract":"ClayGraph epochs, ANN, FTS, activation and Assembly caches consume canonical deltas, declare bounded lag, source epochs and rebuild recipes"},
+    {"id":"P6","name":"SELECTION_DERIVATION_RECEIPTS","authority":"EVIDENCE_ONLY","contract":"bind query-plan identity, authorized search space, candidate set/ranking, selected anchors, source epochs, derivation version and exact view hash"},
+    {"id":"P7","name":"CAPABILITY_EFFECT_GATEWAY","authority":"EXTERNAL_RELEASE_AUTHORITY","contract":"model/database selection never grants authority; release requires operation closure, canonical resource identity, current capability and effect-relevant revalidation"},
+    {"id":"P8","name":"OUTCOME_REENTRY_CONTINUITY_LOOP","authority":"CAUSAL_HISTORY","contract":"outcome appends canonical event, triggers incremental derived updates and can alter associative activation before the next model call"}
+  ],
+  "cognitive_state_continuity_loop": {
+    "name":"CSCL",
+    "sequence":["canonical event","incremental semantic/graph/vector/FTS derivation","bounded activation propagation with inhibition/decay","Assembly-ready frontier","model invocation only when needed","proposal/effect/outcome","canonical event"],
+    "purpose":"Make persistent memory a continuously evolving substrate that can influence future cognition without forcing explicit memory-tool search as the sole retrieval path.",
+    "fallback":"explicit exact/graph/vector/FTS memory query remains available and is required when automatic activation lacks coverage or confidence"
+  },
+  "query_modes":["EXACT_ADDRESS","RELATIONAL","TEMPORAL","GRAPH_ROLE_TRAVERSAL","VECTOR_ANN","FTS","LATENT_PRIOR","HYBRID_FUSION","FULL_AUTHORIZED_FALLBACK"],
+  "consistency_classes":[
+    {"class":"EFFECT_CRITICAL","rule":"single authoritative commit domain + operation-required snapshot witnesses + release-time revalidation"},
+    {"class":"COGNITION_CRITICAL","rule":"pin required canonical/graph/activation/frame/selection versions; exact-anchor validation for derived associations used as facts"},
+    {"class":"EXPLORATORY_ASSOCIATION","rule":"bounded-stale derived views allowed when lag/provenance is explicit and no direct authority follows"},
+    {"class":"BACKGROUND_DERIVATION","rule":"eventual/replayable update via durable derivation log/outbox is acceptable"}
+  ],
+  "hard_invariants":[
+    "canonical truth != activation != embedding similarity != retrieval rank != workspace ignition != model output != authority",
+    "semantic identity != provenance instance identity != basis identity != selection-plan identity != reader-view identity",
+    "record provenance != selection provenance",
+    "logical unification != physical monolith",
+    "derived view must expose source epoch/version, lag status and rebuild recipe",
+    "unknown scope/alias/consistency/selection integrity broadens or escalates",
+    "capability secrets remain isolated from non-authoritative cognition stores",
+    "physical placement cannot alter semantic identity or authority",
+    "effect-critical atomicity is defined over the required authoritative commit scope, not every derived engine",
+    "migration remains reversible until live target evidence clears correctness/recovery/common-mode gates"
+  ],
+  "physical_default":"HYBRID: canonical transactional event/state spine + specialized derived sidecars and transient cognitive fields",
+  "promotion_boundary":"HOLD/OPEN until live FRANK traces, target persistence engines, crash/replay fault injection, Android/edge measurements and target-Qwen cognition tests validate the architecture."
+}

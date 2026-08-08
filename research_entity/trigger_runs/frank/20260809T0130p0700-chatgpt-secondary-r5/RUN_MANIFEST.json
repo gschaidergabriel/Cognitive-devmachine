@@ -58,13 +58,15 @@
     "FINAL_REPORT.md"
   ],
   "additional_outputs": [
-    "research_entity/knowledge_micro_packets/frank/KMP-FRANK-C9-TYPED-CAUSAL-ADMISSION.md"
+    "research_entity/knowledge_micro_packets/frank/KMP-FRANK-C9-TYPED-CAUSAL-ADMISSION.md",
+    "research_entity/topic_packets/frank-c9-typed-causal-admission/PACKET.json",
+    "research_entity/topic_packets/frank-c9-typed-causal-admission/SUMMARY.md"
   ],
   "all_required_outputs_written": true,
   "branch_feedback_closed": true,
   "architecture_contract_check": {
     "mode": "manual_against_current_tools/frank_architecture_contract.py_due_connector_execution_limit",
-    "status": "PASS_STRUCTURAL_CHECK_PENDING_REMOTE_REREAD",
+    "status": "PASS_STRUCTURAL_CHECK_REMOTE_REREAD",
     "checks": [
       "current eight-branch registry coverage",
       "required FRANK priority prefix clay/claycode/claygraph/unifieddb",
@@ -77,7 +79,13 @@
       "external capability gateway",
       "non-self-authorizing host kernel",
       "human ClayCode mapping present"
-    ]
+    ],
+    "boundary": "Repository validator script could not be executed directly through the current GitHub connector; structural requirements were checked against its current source and key artifacts remotely reread."
+  },
+  "remote_reread": {
+    "status": "PASS",
+    "artifacts": ["FRANK_ARCHITECTURE.claycode.json", "FINAL_REPORT.md", "RUN_MANIFEST.json"],
+    "provenance_result": "SUCCESS; 13 artifacts registered in initial batch PV-CHATGPT-0135..0147"
   },
   "research_delta": {
     "from": "C8 selective cognition and resource/salience control",
@@ -102,6 +110,12 @@
     "Oracle-free anti-attractor/credit-scope test",
     "CI-gated Android quantized Qwen package/load/inference/resource test followed by matched Linux comparison"
   ],
-  "provenance_registration": "REQUEST_TO_BE_COMMITTED_AFTER_FINAL_ARTIFACT_SET",
-  "status": "FINALIZING_OPEN_NO_PROMOTION"
+  "provenance_registration": {
+    "initial_request": "frank-20260809T0130p0700-chatgpt-secondary-r5",
+    "initial_status": "SUCCESS",
+    "initial_appended_count": 13,
+    "initial_last_id": "PV-CHATGPT-0147",
+    "closure_manifest_update_requires_followup_hash_registration": true
+  },
+  "status": "COMPLETED_OPEN_NO_PROMOTION_REMOTE_REREAD_VALIDATED"
 }

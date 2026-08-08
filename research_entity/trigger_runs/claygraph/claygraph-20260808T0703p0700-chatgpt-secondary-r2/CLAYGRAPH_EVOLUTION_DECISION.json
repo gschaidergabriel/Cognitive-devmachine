@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
+  "accepted_generation":0,
+  "candidate_generation":1,
+  "candidate_id":"claygraph-g1b-query-planned-evidence-bounded-activation",
+  "decision":"HOLD",
+  "reasons":["Held-out recall did not improve over G1 and held-out precision was slightly lower.","Positive stale/evidence-family/erroneous-edge results come from a 53-item/20-query designed proxy, not the actual repository runtime.","Full current-corpus ClayGraph/SQLite/packet-envelope benchmark cannot execute from this connector surface.","No Qwen3-4B matched-budget downstream test is available due cached provider quota.","Live 71-store parity/p99/crash/privacy gates remain incomplete."],
+  "hard_invariants":{"provenance_ancestry":"PASS_DESIGN","unknown_conflict_revoked_stale":"PASS_DESIGN","exact_authority_boundary":"PASS_DESIGN","migration_rollback":"PASS_NO_CHANGE","anti_echo":"REFINED_AFTER_NEGATIVE_ABLATION","target_replay":"UNMEASURED"},
+  "promotion_action":"DO_NOT_UPDATE research_entity/claygraph/CLAYGRAPH_LATEST.claycode.json",
+  "next_gates":["actual packet candidate pool: deterministic envelope vs BM25/FTS vs accepted G0 vs G1 vs G1b","independent >=50-query gold set with current/historical/conflict/multihop/exact classes","real extraction-error/edge-confidence benchmark","target Qwen3-4B matched-context answer-quality factorial","live FRANK stale-assembly/CognitiveFrame exact-anchor validation","71-store shadow parity/replay/p99/crash/privacy"]
+}

@@ -1,0 +1,76 @@
+name: RAE Groq 8B proxy experiments
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/groq_inference.py'
+      - 'tools/groq_8b_proxy_experiments.py'
+      - 'tools/rae_secret_loader.py'
+      - 'research_entity/private/GROQ_API.env'
+      - 'research_entity/global/SMALL_MODEL_PROXY_POLICY.md'
+      - '.github/workflows/groq-8b-proxy-experiments.yml'
+
+concurrency:
+  group: rae-groq-8b-proxy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  proxy-experiments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile Groq adapters
+        run: python -m py_compile tools/groq_inference.py tools/groq_8b_proxy_experiments.py tools/claygraph_query.py tools/claygraph_benchmark.py tools/claygraph_build.py
+
+      - name: Run Groq 8B proxy experiment batch
+        run: python tools/groq_8b_proxy_experiments.py --output research_entity/runtime/groq_8b_proxy/LATEST.json
+
+      - name: Archive immutable batch result and verification receipt
+        run: |
+          python - <<'PY'
+          import json, shutil
+          from pathlib import Path
+          latest=Path('research_entity/runtime/groq_8b_proxy/LATEST.json')
+          d=json.loads(latest.read_text())
+          out=latest.parent/(d['run_id']+'.json')
+          shutil.copy2(latest,out)
+          receipt={
+            'schema_version':'1.0',
+            'status':'RUNTIME_VERIFIED',
+            'provider':'Groq',
+            'model':d['model'],
+            'executed_model_class':'8B',
+            'evidence_role':'8b_proxy_for_4b',
+            'run_id':d['run_id'],
+            'experiment_count':len(d.get('experiments',[])),
+            'failure_count':len(d.get('failures',[])),
+            'credential_value_exposed':False,
+            'result_path':str(out),
+          }
+          Path('research_entity/runtime/groq_verification.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+
+      - name: Commit sanitized proxy results
+        run: |
+          git config user.name 'rae-groq-experiment-runner'
+          git config user.email 'rae-groq-experiment-runner@users.noreply.github.com'
+          git add research_entity/runtime/groq_8b_proxy/ research_entity/runtime/groq_verification.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record Groq 8B proxy model experiment batch'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

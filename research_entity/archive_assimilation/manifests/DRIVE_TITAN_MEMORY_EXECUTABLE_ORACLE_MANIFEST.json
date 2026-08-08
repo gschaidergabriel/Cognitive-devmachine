@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-TITAN-MEMORY-EXECUTABLE-ORACLE-20260809T0532p0700",
+  "status":"SEMANTIC_SOURCE_CLASSES_FROZEN_VENDOR_GENERATED_IDENTITY_OPEN",
+  "trigger":"666",
+  "source_root":{"title":"titan-memory","drive_id":"1fnB_uYrxTL5ecjsyof8fIEbn-mnr4x19","direct_entries":14,"direct_folders":9,"direct_files":5},
+  "semantic_identity":{
+    "lcme":{"drive_id":"1zLETazZaQA2AhqN33skFCxTY0bNxXQqP","direct_entries":10,"source_files":9,"generated_cache_folders":1,"source_identity_percent":100.0,"files":["__init__.py","consolidation.py","core.py","hippocampus.py","ingestion.py","maintenance.py","neural_cortex.py","retrieval.py","storage.py"]},
+    "tests":{"drive_id":"1ZYGEAqIkG9R7St0VPeUqnFYSttJzTDSg","direct_entries":2,"semantic_test_files":1,"generated_cache_folders":1,"semantic_identity_percent":100.0,"files":["test_lcme.py"]},
+    "benchmarks":{"drive_id":"1CAo3QHoy9YFJkTPHtDqKffyxTxO6qCTz","direct_files":4,"semantic_identity_percent":100.0,"files":["benchmark.py","extended_benchmark.py","results.json","extended_results.json"]},
+    "docs":{"drive_id":"1nntXA3Xtq-fxQQWawF-goyiifW8bFfIr","direct_files":3,"semantic_identity_percent":100.0,"files":["QUICKSTART.md","BENCHMARK.md","INTEGRATIONS.md"]},
+    "examples":{"drive_id":"1ahKsh6mSaliSu_JO2e14piF-xHkGDcyp","direct_files":4,"semantic_identity_percent":100.0,"files":["basic_usage.py","langchain_memory.py","ollama_chat.py","openai_compatible.py"]},
+    "root_material_files":["README.md","pyproject.toml","openapi_letta.json","LICENSE",".gitignore"]
+  },
+  "support_generated_open_identity":[{"folder":".git","drive_id":"1s5VagzrofdZ39JjV3oPvLCLH0YRJi1wv","class":"VCS_METADATA"},{"folder":".venv","drive_id":"15SDcUJdzzKhoc74cwwh5UCL0W_u74GKi","class":"VENDORED_ENVIRONMENT"},{"folder":".pytest_cache","drive_id":"1lkpRZE39tKQCajCFdxfwi5SjcSh7XSuv","class":"GENERATED_TEST_CACHE"},{"folder":"assets","drive_id":"1WrawSOiFwQsHo_EfdMGbr0AAWLml-w4r","class":"SUPPORT_MEDIA"}],
+  "selected_hashes":{"lcme/__init__.py":"9e1e8ca44326d87a7f6d7d747c17936a87460ba08bda02bec307a7e3d5b6e79a","lcme/consolidation.py":"37b32a311c230f035e4816e2ab3aba8aa93ca82435666dd1c29c1c3e0c9792f4","lcme/core.py":"d931468da77f561a83471ccd6525defea6f552bec8593aaa350ea1a21cab9939","lcme/hippocampus.py":"448b394173b8a031c4bd54a653d1e6588277e11a75bc9bc7d225eac53e4cf48d","lcme/ingestion.py":"bdf3da703c74697f3bdfae6f735e67f40ab846991d8a4906b750ed88623b1926","lcme/maintenance.py":"a297fdb198c34fa399d85fa09a10c9c8abed3e360852f940dca32dfc722523bf","lcme/neural_cortex.py":"b4fe3a3c1b2dab631f4146e0bf9803d38048ad2c542f51f1e5ef8c5380b70203","lcme/retrieval.py":"657cf153b637dbb4ad86acbe48617767ee3f72851bed9ae410cc5022370271f2","lcme/storage.py":"4c0324864b7ed44048d31640c7e9f2773cf15543704ef9f6fb7b399eeb97bb8b","tests/test_lcme.py":"19bb8e9d27859d823dad3af47e5515f2ece5a3bd635f8d1cdd370367c054a357","benchmarks/results.json":"a7d621d06070e3ed17295187639865f383d6bfa969e07be3dbfb7aabfd774d20","benchmarks/extended_results.json":"f24571e1c5f55e71c89a6728f021bc1d755b5640d7c75e868619e9071e789d51","benchmarks/extended_benchmark.py":"f280a2b05c52b3b3f40e3a8132d78a4ff87030aaeb841d38bb1cf953abc864ff","pyproject.toml":"5e3f5f9ac0044a41d97e1e50ef8fac001a41016261cad0f52ffbc60ded98383a"},
+  "declared_dependencies":{"numpy":">=1.24.0","sentence-transformers":">=2.2.0","torch":">=2.0.0","pytest_dev":">=7.0.0"},
+  "archive_test_replay":{
+    "environment":"current isolated Python execution sandbox, archived LCME source assembled byte-for-byte from Drive; no source modifications",
+    "collected":29,"passed":14,"failed":15,"duration_s":4.69,
+    "passed_tests":["test_ingest_empty_text","test_graph_relation_creation","test_graph_traversal","test_claims_extracted_from_text","test_entities_extracted","test_cortex_initializes","test_cortex_score_importance","test_cortex_cold_start_blending","test_hippocampus_initializes","test_hippocampus_not_ready_without_vectors","test_maintenance_runs","test_unprotect_expired_nodes","test_consolidation_engine_stats","test_sqlite_persistence"],
+    "failure_classification":{"primary_blocker":"ModuleNotFoundError: sentence_transformers","direct_or_cascading_failures":15,"interpretation":"environment dependency unavailable; pyproject declares it, therefore these failures do not establish LCME semantic failure","health_check_note":"health false is downstream of unavailable vector embedding backend in this replay"}
+  },
+  "historical_benchmark_results":{
+    "baseline":{"100":{"p50_ms":11.7,"p95_ms":13.9,"precision_at_1":1.0,"precision_at_5":1.0,"mrr":1.0},"500":{"p50_ms":12.4,"p95_ms":15.8,"precision_at_1":0.933,"precision_at_5":1.0,"mrr":0.967},"1000":{"p50_ms":12.4,"p95_ms":15.2,"precision_at_1":1.0,"precision_at_5":1.0,"mrr":1.0}},
+    "extended":{"recall_at_1":1.0,"recall_at_3":1.0,"recall_at_5":0.96,"recall_at_10":0.98,"ndcg_at_5":0.978,"write_avg_ms_per_item":113.4,"write_p95_ms":267.6,"items_per_sec":8.8,"concurrent":{"write_errors":0,"read_errors":0,"write_ops":100,"read_ops":90,"write_avg_ms":62.8,"read_avg_ms":7.0},"contradiction":{"passed":7,"total":10,"rate":0.7},"long_conversation":{"turns":200,"queries":8,"precision_at_1":0.75,"precision_at_5":0.875,"mrr":0.792},"forgetting":{"manual_forget_works":false,"protection_prevents_forget":true}}
+  },
+  "benchmark_oracle_audit":{
+    "manual_forget_result":"INVALID_AS_PRODUCT_FAILURE",
+    "reason":"extended_benchmark.py immediately queries for an unprotected type='memory' node after ingestion. ingestion.py deliberately creates every new memory chunk protected=True with unprotect_after now+24h. Therefore the query normally returns no candidate and forget() is not actually tested.",
+    "corrected_test_requirement":"select/create a known unprotected memory node or advance/unprotect the 24h protection state before asserting manual forget behavior",
+    "contradiction_70pct":"VALID_HISTORICAL_BEHAVIOR_SIGNAL_WITHOUT_CASE_LEVEL_OUTPUT; preserve as weakness/oracle but do not infer exact current failure cases without replay",
+    "long_conversation":"VALID_HISTORICAL_RETRIEVAL_STRESS_SIGNAL; current UnifiedDB/ClayGraph must independently replicate under matched corpus"
+  },
+  "reuse_classification":{"architecture":"ALREADY_MAPPED_LCME_HYBRID_RETRIEVAL_NO_DUPLICATE_CREDIT","benchmarks":"MEASUREMENT_FOUNDATION","test_suite":"REGRESSION_ORACLE","forgetting_benchmark":"NEGATIVE_RESULT_BENCHMARK_BUG","support_vendor":"IDENTITY_ONLY_NOT_SEMANTIC_EVIDENCE"},
+  "coverage":{"semantic_source_classes_percent":100.0,"whole_recursive_identity_percent":null,"open_reason":"support/generated .git/.venv/.pytest_cache/assets are not recursively identity-frozen in this shard","exact_level0_global_credit_percent":0.0},
+  "frozen_at":"2026-08-09T05:32:00+07:00","frozen_by":"chatgpt-secondary"
+}

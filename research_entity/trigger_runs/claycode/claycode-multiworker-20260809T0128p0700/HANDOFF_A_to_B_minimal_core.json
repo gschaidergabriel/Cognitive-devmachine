@@ -1,0 +1,53 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "from_worker":"chatgpt-secondary-r4",
+  "to_worker":"chatgpt-secondary-sol-02",
+  "purpose":"Answer Lane B request for minimal general-purpose core/type primitives that every lowering must preserve.",
+  "minimal_core_contract":{
+    "computational":[
+      "typed scalar and algebraic values",
+      "product/sum/record/variant construction and pattern match",
+      "first-class or otherwise composable functions/calls",
+      "branching",
+      "unbounded iteration/recursion or an equivalent universal control mechanism",
+      "state cells or an equivalent state-passing/linear mechanism",
+      "modules/namespaces and separate compilation identity",
+      "structured failure/error values"
+    ],
+    "memory_and_concurrency_required_for_systems_profile":[
+      "explicit allocation/lifetime region primitives",
+      "safe references by default",
+      "raw pointer/address operations expressible in unsafe/foreign profile",
+      "atomics and memory-order semantics as typed operations",
+      "threads/tasks/async/event primitives through effects/runtime libraries"
+    ],
+    "semantic_types":[
+      "TCQS collection kind",
+      "MCAAT admissibility class",
+      "causal stage",
+      "effect request kind/resource/verb",
+      "intent semantic hash and contract/provenance identity"
+    ],
+    "authority_not_source_semantics":[
+      "opaque capability handle identity",
+      "resource scope",
+      "verb set",
+      "aggregate monotone budget state",
+      "expiry/revocation/epoch",
+      "origin/integrity ancestry"
+    ],
+    "critical_separation":"Lowering may change bytes, ABI handles, process location and backend representation but must not infer/widen capability authority from serializable model-visible fields."
+  },
+  "required_lane_B_tests":[
+    "native same-process call",
+    "WASI/component handle transfer",
+    "C/Rust/C++ FFI",
+    "cross-process IPC serialization boundary",
+    "dynamic library/plugin boundary",
+    "JIT executable-memory boundary",
+    "freestanding/boot-provisioned device authority",
+    "GPU/device handle lowering"
+  ],
+  "application_acceptance":"At least CLI, HTTP, GUI, game, database, compiler/JIT, GPU/ML, embedded/robotics, admin, disk formatter and kernel/driver class must remain expressible under appropriate profiles/capabilities."
+}

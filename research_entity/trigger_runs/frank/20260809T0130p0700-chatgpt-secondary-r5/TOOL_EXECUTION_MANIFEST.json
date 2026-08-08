@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.2",
+  "run_id": "20260809T0130p0700-chatgpt-secondary-r5",
+  "classes": {
+    "canonical_repo": {
+      "status": "EXECUTED",
+      "tools": ["GitHub connector"],
+      "read": [
+        "RESEARCH_ENTITY_CANONICAL.json", "BOOTSTRAP_MINIMAL.json", "RESEARCH_ACTOR_REGISTRY.json",
+        "PROJECT_COMMAND_REGISTRY.json", "RESEARCH_TRIGGER_REGISTRY.json", "FRANK_RESEARCH_PROTOCOL.md",
+        "FRANK_CLAY_NATIVE_CONTRACT.md", "MULTI_RESEARCHER_GOVERNANCE.md", "PROVENANCE_POLICY.md",
+        "RESEARCH_TOOL_ORCHESTRATION_POLICY.md", "frank_architecture_contract.py",
+        "FRANK C8 SCRF architecture/report/mapping", "Clay G12 CACC", "Clay Safe-Effect Geometry",
+        "ClayCode CC13 MCAAT", "ClayGraph G2a CASAR", "UnifiedDB U2 CPPF", "GWT R5 NWB",
+        "Hyperposition H5 HYP-RC5", "Fusion F7", "Android R1 FRANK feedback"
+      ]
+    },
+    "scholarly_and_primary_web": {
+      "status": "EXECUTED_NATIVE_WEB_FALLBACK",
+      "sources": [
+        "WASI.dev Security — capability-based sandbox/no ambient authority",
+        "arXiv 2607.14651 MemPoison — context/composition-triggered persistent-memory threats",
+        "arXiv 2606.24322 Securing LLM-Agent Long-Term Memory Against Poisoning — origin-bound authority/TMA-NM",
+        "Qwen3 official llama.cpp local-runtime documentation",
+        "llama.cpp current Android/Vulkan issue evidence for Qwen-class models"
+      ],
+      "boundary": "External papers and implementation reports are supporting evidence classes, not FRANK target-runtime measurements."
+    },
+    "registered_provider_router": {
+      "status": "NOT_EXECUTABLE_FROM_CURRENT_CHAT_CONNECTOR_SURFACE",
+      "reason": "Repository-side provider-router/E2B bridge is registered and runtime-verified by RAE, but this ChatGPT tool surface does not expose invocation of that bridge.",
+      "fallback": "native web + GitHub + local Python mechanism test"
+    },
+    "local_executable": {
+      "status": "EXECUTED",
+      "runtime": "local Python",
+      "experiments": ["EXP-C9-EFFECT-ADMISSION-001"],
+      "evidence_class": "seeded_constructed_mechanism_property_fuzz",
+      "seed": 20260809,
+      "cases": 500000
+    },
+    "target_qwen": {
+      "status": "OPEN",
+      "reason": "No exact owner-selected Clay-adapted Qwen-class 4B local hidden-state/runtime route is exposed to this worker. Hosted or generic model evidence would not close the target-runtime variable."
+    },
+    "android_device": {
+      "status": "INGESTED_PRIOR_LIVE_R1_ONLY",
+      "reason": "R1 consumed quota-bounded virtual ARM runs; this C9 trigger did not spend a new device invocation.",
+      "next": "CI package/load quantized target Qwen-class 4B before a scarce device inference run."
+    },
+    "architecture_validator": {
+      "status": "MANUAL_CONTRACT_EQUIVALENT_PLANNED_REMOTE_REREAD",
+      "reason": "The GitHub connector cannot directly execute repository Python. C9 artifacts are shaped to the current frank_architecture_contract.py requirements and will be remotely reread."
+    }
+  },
+  "promotion_blockers": [
+    "no exact Clay-adapted target-Qwen causal result",
+    "no real OS/WASI child-effect escape matrix executed in this run",
+    "no target FRANK trace-driven placement/crash benchmark",
+    "no C9 Android Qwen load/inference/resource measurement",
+    "new C9 numeric result is a constructed mechanism/property test",
+    "no ancestry-distinct full-stack replication"
+  ]
+}

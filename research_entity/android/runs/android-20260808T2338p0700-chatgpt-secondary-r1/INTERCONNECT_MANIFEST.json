@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "android-20260808T2338p0700-chatgpt-secondary-r1",
+  "arm": "android-secondary-arm",
+  "primary_reference_platform": "linux",
+  "preflight": "tools/android_research_preflight.py",
+  "coverage_mode": "full_authoritative_eight_branch_mesh",
+  "branches": [
+    {"branch": "clay", "latest_completed_run": "clay-20260808T2132p0700-chatgpt-secondary-r4"},
+    {"branch": "frank", "latest_completed_run": "20260808T2217p0700-chatgpt-secondary-r4"},
+    {"branch": "gwt", "latest_completed_run": "gwt-20260808T2140p0700-chatgpt-secondary-r5"},
+    {"branch": "emergenz", "latest_completed_run": "emergenz-20260808T1756p0700-chatgpt-secondary"},
+    {"branch": "claycode", "latest_completed_run": "claycode-20260808T2104p0700-chatgpt-secondary-r3"},
+    {"branch": "hyperposition", "latest_completed_run": "hyperposition-20260808T2212p0700-chatgpt-secondary-r3"},
+    {"branch": "claygraph", "latest_completed_run": "claygraph-20260808T2212p0700-chatgpt-secondary-r3"},
+    {"branch": "unifieddb", "latest_completed_run": "unifieddb-20260808T2212p0700-chatgpt-secondary-r3"}
+  ],
+  "required_feedback_targets": [
+    "clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"
+  ],
+  "retrieval_validation_history": [
+    {
+      "status": "FAIL_NEGATIVE_RESULT",
+      "finding": "A shared Android routing KMP was not guaranteed to survive bounded active-knowledge selection in high-volume branches."
+    },
+    {
+      "status": "FAIL_NEGATIVE_RESULT",
+      "finding": "Branch-specific Android KMPs alone were still displaced in clay, frank, gwt and claycode by ordinary active-knowledge category/score competition."
+    },
+    {
+      "status": "PENDING_VALIDATION",
+      "fix": "Generic MANDATORY_ACTIVE_KNOWLEDGE pin layer added; pins consume normal budget and do not promote evidence."
+    }
+  ],
+  "evidence_boundary": "Cross-branch retrieval and shared ancestry do not create independent replication. Android evidence retains Android provenance until separately replicated on Linux where relevant."
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version":"1.0",
+  "tool_name":"sandboxapi_sandbox",
+  "provider":"SandboxAPI via RapidAPI",
+  "script":"tools/sandboxapi_sandbox.py",
+  "bridge":"tools/research_tool_bridge.py",
+  "class":"remote_gvisor_code_sandbox",
+  "requires_secret":["RAPIDAPI_KEY"],
+  "credential_required":true,
+  "credential_value_must_not_appear_in_artifacts":true,
+  "rapidapi_listing":"https://rapidapi.com/sandboxapidev/api/sandboxapi",
+  "verified_gateway_host":"sandboxapi.p.rapidapi.com",
+  "supported_languages":["python3","javascript","typescript","bash","java","cpp","c","go"],
+  "provider_documented_isolation":"gVisor-backed isolated execution",
+  "provider_documented_basic_plan":{"executions_per_month":500,"max_timeout_seconds":30,"batch_max":10,"stateful_sessions":false},
+  "provider_documented_pro_features":["stateful sessions","pip/npm package install","async polling","60s timeout"],
+  "evidence_class":"isolated_runtime_experiment",
+  "status":"BLOCKED_NOT_SUBSCRIBED",
+  "verification_attempts":[
+    {
+      "transport":"hosted MCP bearer",
+      "result_ref":"research_entity/runtime/tool_results/sandboxapi-smoke-20260808T2007p0700.json",
+      "result":"FAILED_401_DISTINCT_MCP_AUTH"
+    },
+    {
+      "transport":"RapidAPI REST gateway",
+      "result_ref":"research_entity/runtime/tool_results/sandboxapi-rest-smoke-20260808T2014p0700.json",
+      "result":"FAILED_403_NOT_SUBSCRIBED",
+      "finding":"Gateway hostname and routing are valid; current RapidAPI account/key is not subscribed to SandboxAPI."
+    }
+  ],
+  "runtime_verification_rule":"Do not mark RUNTIME_VERIFIED until an actual remote execute call returns exit_code=0 and expected sentinel output through the RapidAPI gateway.",
+  "claycode_priority_when_verified":"PREFERRED_EXECUTABLE_RESEARCH_SANDBOX",
+  "claycode_uses_when_verified":[
+    "build real ClayCode parsers and compilers",
+    "execute generated host-language lowerings",
+    "parser/typechecker/compiler differential tests",
+    "roundtrip and semantic-preservation tests",
+    "fuzz/property/adversarial compiler tests",
+    "multi-language lowering comparisons",
+    "measure compile/run/repair cost",
+    "capture compiler/runtime failures as research evidence"
+  ],
+  "claycode_learning_rule":"Every nontrivial SandboxAPI ClayCode execution must emit a durable executable-research receipt containing source/semantic hashes, compiler version, sandbox/runtime identity, test cases, stdout/stderr/exit status, timings when returned, failures/counterexamples, interpretation, and affected hypotheses. New compiler/runtime learnings must be fed back into ClayCode hypotheses, negative results and the seven-branch mesh rather than remaining only in logs.",
+  "fallback_until_verified":["local sandbox","Judge0"],
+  "authority_boundary":"Sandbox execution is research evidence only. It cannot promote a ClayCode candidate, change canonical truth, or grant external capabilities without normal RAE evidence/promotion gates."
+}

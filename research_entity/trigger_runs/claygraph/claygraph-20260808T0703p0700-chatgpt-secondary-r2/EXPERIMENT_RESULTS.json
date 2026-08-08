@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
+  "experiments":[
+    {"experiment_id":"EXP-CG2-ACTIVE-ENVELOPE-ROUTER-001","class":"SOURCE_GROUNDED_DESIGNED_ENGINEERING_PROXY","result":"MIXED_POSITIVE_HOLD","key_findings":["overall G1b recall 0.6250 vs G1 0.5917","overall G1b precision 0.3633 vs G1 0.3675","evidence-family recall 0.7083 vs 0.6792","stale leakage 0.0767 vs 0.1650","held-out recall tied 0.5250; held-out precision G1b 0.3050 vs G1 0.3133"],"falsifier":"Actual-corpus replay shows no stale/family advantage or lower answer quality at matched budget."},
+    {"experiment_id":"EXP-CG2-ERRONEOUS-QUALIFIED-EDGE-002","class":"SYNTHETIC_ADVERSARIAL_PROXY","result":"SUPPORTS_RELEVANCE_GATE_DIRECTION","key_findings":["200 runs x 12 random erroneous qualified edges","G1b mean recall 0.62333 vs G1 0.58965","G1b mean precision 0.36220 vs G1 0.35377","G1b stale 0.07831 vs G1 0.17202","G1b recall p05 0.6125 vs G1 0.5750"],"falsifier":"Real graph extraction errors do not resemble this proxy or relevance gating suppresses necessary multi-hop evidence."},
+    {"experiment_id":"EXP-CG2-ANTI-ECHO-CAP-003","class":"NEGATIVE_DESIGN_ABLATION","result":"NEGATIVE_RESULT","key_findings":["Aggressive one-per-evidence-family suppression reduced mean recall to 0.5375 in the same proxy."],"implication":"Shared ancestry should reduce evidence-counting weight and duplicate context, but hard family deletion can remove complementary packet roles."}
+  ],
+  "live_or_target_results":[],
+  "blocked":["full repository ClayGraph runtime benchmark","live 71-store migration parity","Qwen3-4B matched-budget answer-quality factorial","target p99/memory/crash/privacy tests"]
+}

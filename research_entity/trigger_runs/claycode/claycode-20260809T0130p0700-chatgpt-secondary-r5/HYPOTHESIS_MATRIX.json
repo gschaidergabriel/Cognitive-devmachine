@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "hypotheses": [
+    {
+      "id": "H-CC-R5-001",
+      "statement": "Authority-relevant lowering must preserve and revalidate a context-bound tuple including exact intent identity, basis, selection, closure, revocation, expiry, scope and permit authenticity; otherwise representation changes can silently widen effect authority.",
+      "status": "OPEN_STRONGLY_SUPPORTED_CONSTRUCTED",
+      "support": ["local 150k-case differential/targeted corpus", "E2B 60k-case differential/targeted/benign corpus", "E2B C-FFI + JSON IPC 12k cases per boundary", "single-check mutation false accepts"],
+      "counterhypothesis": "One or more tuple fields are redundant metadata and can be dropped without changing admissible effect behavior.",
+      "falsifier": "An ancestry-distinct implementation removes a field while preserving zero false authorizations under targeted stale/reselection/revocation/closure attacks and real capability-object workloads.",
+      "next_test": "Real WASI/Wasmtime resource/capability handles plus Rust/C/C++ boundary tests."
+    },
+    {
+      "id": "H-CC-R5-002",
+      "statement": "ClayCode should remain general-purpose by representing destructive/admin/raw operations as typed EffectIntent values while external host capabilities determine whether the current deployment may execute them.",
+      "status": "OPEN_REFINED_BY_MULTIWORKER",
+      "support": ["Lane A 11/11 application-class coverage proxy", "WASI no-ambient-authority precedent", "CC13 constructive-harm counterexample"],
+      "counterhypothesis": "Language-level inexpressibility of destructive operations is necessary for safety and does not materially reduce legitimate general-purpose coverage.",
+      "falsifier": "A broad systems corpus achieves equivalent legitimate coverage and lower attack surface with destructive/admin/raw effects absent from source semantics, without reintroducing equivalent power through indirect constructs.",
+      "next_test": "Compile real admin/storage/formatter/embedded corpus under capability profiles and compare expressibility, repair cost and safety."
+    },
+    {
+      "id": "H-CC-R5-003",
+      "statement": "Selection identity is a first-class causal input to consequential effects and cannot generally be collapsed into basis identity or provenance.",
+      "status": "OPEN_SUPPORTED_BY_MUTATION_TEST",
+      "support": ["selection-check removal: 5000/5000 local, 2500/2500 E2B, and 1000/1000 C-FFI targeted false accepts", "UnifiedDB U2 selection-integrity distinction", "FRANK C9 release-time current_selection"],
+      "counterhypothesis": "If basis/provenance and intent are valid, current selection can be reconstructed or omitted safely.",
+      "falsifier": "Real workloads with adversarial reselection show no behavioral/authority difference when selection binding is removed at matched basis and intent.",
+      "next_test": "Prompt-injection/retrieval-poisoning corpus that changes selection while holding source records and intent family fixed."
+    },
+    {
+      "id": "H-CC-R5-004",
+      "statement": "Per-call capability scope is insufficient; cumulative effect admissibility and origin/integrity ancestry require host-side monotone state that cannot be reset or upgraded by model-visible transformations.",
+      "status": "OPEN_SUPPORTED_BY_PEER_CONSTRUCTED_EVIDENCE",
+      "support": ["Lane C 20k cumulative-budget sessions", "Lane C 50k origin-laundering chains", "SEAgent/APPA independent permission/flow-control direction"],
+      "counterhypothesis": "Stateless per-call scope/verb checks plus current producer identity are sufficient.",
+      "falsifier": "Adversarial multi-call and summarization/tool-echo workloads produce no aggregate overshoot or authority laundering under stateless policy.",
+      "next_test": "Extend Lane-B cross-boundary checker with monotone budget and origin ancestry across IPC/FFI/restart."
+    },
+    {
+      "id": "H-CC-R5-005",
+      "statement": "Translation validation is the correct promotion boundary for multi-backend ClayCode lowering: compilation success alone is insufficient, but backend-specific bytes/process layout need not share identity if declared semantic/effect behavior is checked.",
+      "status": "OPEN_SUPPORTED",
+      "support": ["0 mismatches across Python/C-FFI/JSON-process representations", "WebAssembly Canonical ABI precedent", "Axon credible-compilation precedent"],
+      "counterhypothesis": "A single canonical implementation/backend is safer and cheaper than repeated translation validation across heterogeneous lowerings.",
+      "falsifier": "Target benchmarks show translation validation cost/complexity dominates portability benefits without detecting additional semantic faults relative to one verified backend.",
+      "next_test": "Two independently implemented lowerers over a frozen UECC corpus with mutation-seeded semantic faults."
+    },
+    {
+      "id": "H-CC-R5-006",
+      "statement": "Destructive physical maintenance such as GC/retention erasure can remain outside model-authored authority while model-side code supplies non-authoritative candidates/hints, preserving general programmability without granting ambient deletion power.",
+      "status": "OPEN_SYNTHETIC_ONLY",
+      "support": ["20k synthetic version-DAG trials: protected losses 0 under host-root filtering vs 19854 trials with protected loss under naive model-candidate deletion"],
+      "counterhypothesis": "Separating model intent from physical maintenance authority creates unacceptable storage leaks/latency or makes correct retention/erasure impossible.",
+      "falsifier": "Real storage lifecycle benchmark cannot meet retention/privacy/storage budgets without exposing destructive authority to the model execution profile.",
+      "next_test": "Nix/OSTree/content-addressed plus database MVCC/GC workload with retention roots and privacy erasure authority."
+    }
+  ],
+  "promotion": "NONE",
+  "reason": "No formal proof, real WASI capability-object red-team, target-Qwen adherence test, production FRANK trace benchmark, or ancestry-distinct full-stack replication."
+}

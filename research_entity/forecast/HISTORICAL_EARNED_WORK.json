@@ -1,7 +1,7 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "CALIBRATING_DURING_LEVEL0",
-  "purpose": "Credit the substantial FRANK/XENO/ClayCode/GWT research and implementation already completed before the current Clay 0.1 release program, without pretending that all historical effort remains reusable.",
+  "purpose": "Credit substantial FRANK/XENO/ClayCode/GWT research and implementation completed before the current Clay 0.1 internal chief-developer build program, without pretending that all historical effort remains reusable.",
   "owner_reported_effort": {
     "development_months": 8,
     "active_days_per_week": 4,
@@ -13,12 +13,12 @@
   },
   "current_remaining_work_prior": {
     "center_active_hours": 339.75,
-    "derivation": "Center points of the current 13-row DOOMSDAY critical-path engineering priors, with Level 0 reset to 2.25h center.",
+    "derivation": "Center points of the current 13-row DOOMSDAY remaining-work priors, with Level 0 reset to 2.25h center. These are current internal-build priors, not total lifetime project work.",
     "status": "LOW_CONFIDENCE_ENGINEERING_PRIOR",
-    "rule": "This value is replaced by measured current work velocity and row-specific receipts as they become available."
+    "rule": "Replace with measured current work velocity, row-specific receipts and verified historical reuse mappings as they become available."
   },
   "pre_level0_calibration": {
-    "reason": "The archive/repository mapping is not yet complete, so the exact fraction of historical effort that eliminates or de-risks current Clay 0.1 work is not yet known.",
+    "reason": "The archive/repository mapping is not yet complete, so the exact fraction of historical effort that eliminates, implements or de-risks current Clay 0.1 work is not yet known.",
     "historical_retention_fraction_low": 0.50,
     "historical_retention_fraction_center": 0.65,
     "historical_retention_fraction_high": 0.80,
@@ -46,7 +46,7 @@
     {
       "family": "ClayCode executable/general-purpose/safety research",
       "evidence_refs": ["recent ClayCode multiworker run receipts and commits"],
-      "current_signal": "Compiler/runtime lowering, intent adequacy, resource identity, authority budget and anti-echo work already exists; formal release workspaces being open does not mean this knowledge is absent.",
+      "current_signal": "Compiler/runtime lowering, intent adequacy, resource identity, authority budget and anti-echo work already exists; a formal compiler workspace being open does not mean this knowledge is absent.",
       "credit_status": "MAPPING_REQUIRED"
     },
     {
@@ -65,26 +65,9 @@
   "mapping_contract": {
     "source_program": "666 Level 0",
     "hard_completion_budget_hours": 3,
-    "categories": [
-      "DIRECTLY_REUSABLE",
-      "REUSABLE_WITH_ADAPTATION",
-      "MEASUREMENT_FOUNDATION",
-      "NEGATIVE_RESULT_VALUE",
-      "SUPERSEDED_BUT_INFORMATIVE",
-      "NOT_REUSABLE"
-    ],
-    "per_mapping_required_fields": [
-      "source_refs",
-      "current_doomsday_rows",
-      "mechanism_or_result",
-      "reuse_category",
-      "avoided_future_hours_low",
-      "avoided_future_hours_center",
-      "avoided_future_hours_high",
-      "confidence",
-      "falsifier_or_validation_receipt"
-    ],
-    "final_rule": "After Level 0, replace the temporary retention prior with the sum of evidence-mapped avoided/reused current-work equivalents plus verified current row completion. Historical hours that cannot be connected to current Clay 0.1 work remain historical effort but do not inflate completion percentage."
+    "categories": ["DIRECTLY_REUSABLE", "REUSABLE_WITH_ADAPTATION", "MEASUREMENT_FOUNDATION", "NEGATIVE_RESULT_VALUE", "SUPERSEDED_BUT_INFORMATIVE", "NOT_REUSABLE"],
+    "per_mapping_required_fields": ["source_refs", "current_doomsday_rows", "mechanism_or_result", "reuse_category", "avoided_future_hours_low", "avoided_future_hours_center", "avoided_future_hours_high", "confidence", "falsifier_or_validation_receipt"],
+    "final_rule": "After Level 0, replace the temporary retention prior with evidence-mapped avoided/reused current-work equivalents plus verified current row completion. Historical hours that cannot be connected to current Clay 0.1 work remain historical effort but do not inflate completion percentage."
   },
   "last_updated": "2026-08-09"
 }

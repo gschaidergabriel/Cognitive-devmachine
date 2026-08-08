@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.8",
+  "schema_version": "1.9",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
@@ -8,7 +8,7 @@
   "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
   "goodman_filter_checker": "tools/goodman_filter_check.py",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support. ClayGraph covers associative memory/knowledge-graph/database-migration research; UnifiedDB covers the broader logically unified persistence/query/transaction substrate and must preserve explicit semantic-vs-physical separation. Clay permanently includes Safe-Effect Geometry / Non-Damaging Semantic Action Space as a mandatory falsifiable research axis; the research requirement is fixed but the claimed safety/alignment benefits are not pre-promoted as true. The fusion meta-trigger researches across the complete mesh and must return an explicit feedback receipt to every scientific branch. The hypofusion meta-trigger additionally screens all reachable current/open hypotheses against broad external supporting, analogous, better-mechanism and counterhypothesis evidence, rereads live workers before final fusion, and returns discriminating tests plus branch feedback.",
+  "mesh_rule": "All scientific/research-center trigger branches are interdependent views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. Harness is the executable convergence/falsification branch and must ingest the complete mesh, implement the current architecture, run tests/experiments, and return counterexamples and implementation evidence to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support. ClayGraph covers associative memory/knowledge-graph/database-migration research; UnifiedDB covers the broader logically unified persistence/query/transaction substrate and must preserve explicit semantic-vs-physical separation. Clay permanently includes Safe-Effect Geometry / Non-Damaging Semantic Action Space as a mandatory falsifiable research axis; the research requirement is fixed but the claimed safety/alignment benefits are not pre-promoted as true. The fusion meta-trigger researches across the complete mesh and must return an explicit feedback receipt to every scientific/research-center branch. The hypofusion meta-trigger additionally screens all reachable current/open hypotheses against broad external supporting, analogous, better-mechanism and counterhypothesis evidence, rereads live workers before final fusion, and returns discriminating tests plus branch feedback.",
   "triggers": {
     "dump": {
       "kind": "research_intake",
@@ -19,29 +19,29 @@
     "fusion": {
       "kind": "global_mesh_meta_research",
       "protocol": "research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
-      "purpose": "Research across the complete current RAE knowledge/evidence graph, generate cross-domain hypotheses and experiments, resolve or expose contradictions, and write explicit feedback deltas or NO_CHANGE receipts back to every scientific branch.",
+      "purpose": "Research across the complete current RAE knowledge/evidence graph, including executable Harness evidence, generate cross-domain hypotheses and experiments, resolve or expose contradictions, and write explicit feedback deltas or NO_CHANGE receipts back to every scientific/research-center branch.",
       "mesh_role": "whole_mesh_research_feedback_loop",
-      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"],
+      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
       "required_outputs": ["GLOBAL_COVERAGE_MANIFEST.json", "BRANCH_FEEDBACK_MANIFEST.json", "FINAL_REPORT.md"],
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"]
+      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"]
     },
     "hypofusion": {
       "kind": "hypothesis_screening_global_meta_research",
       "protocol": "research_entity/triggers/HYPOFUSION_RESEARCH_PROTOCOL.md",
-      "purpose": "Screen all reachable current/open RAE hypotheses, including fresh in-progress worker material, against broad external supporting, analogous, better-mechanism, null, failure-mode and counterhypothesis evidence across scholarly literature, arXiv, GitHub, authoritative technical sources, broad web indexes, practitioner sources and bridge publications, then generate discriminating tests and execute a whole-mesh Fusion 2 with feedback to every scientific branch.",
+      "purpose": "Screen all reachable current/open RAE hypotheses, including fresh in-progress worker and Harness implementation material, against broad external supporting, analogous, better-mechanism, null, failure-mode and counterhypothesis evidence across scholarly literature, arXiv, GitHub, authoritative technical sources, broad web indexes, practitioner sources and bridge publications, then generate discriminating tests and execute a whole-mesh Fusion 2 with feedback to every scientific/research-center branch.",
       "mesh_role": "hypothesis_screening_external_triangulation_fusion_loop",
-      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"],
+      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
       "requires_live_worker_reread": true,
       "requires_counterhypothesis_search": true,
       "required_outputs": ["INTERCONNECT_MANIFEST.json", "HYPOTHESIS_COVERAGE_MATRIX.json", "EXTERNAL_EVIDENCE_LEDGER.md", "COUNTERHYPOTHESIS_MATRIX.json", "FUSION2_HYPOTHESES.json", "CONTRADICTION_MAP.md", "BRANCH_FEEDBACK_MANIFEST.json", "RUN_MANIFEST.json", "FINAL_REPORT.md"],
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"]
+      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"]
     },
     "clay": {
       "kind": "integrated_research_foundry",
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
-      "purpose": "Run the complete Synthetic Clay recursive research foundry across GWT, FRANK architecture, emergence measurement, ClayCode/4B internal language, hyperposition/codependency, ClayGraph associative memory, UnifiedDB persistence/query/transaction substrate, low-latency emergent software and the permanent Safe-Effect Geometry / Non-Damaging Semantic Action Space research axis.",
+      "purpose": "Run the complete Synthetic Clay recursive research foundry across GWT, FRANK architecture, emergence measurement, ClayCode/4B internal language, hyperposition/codependency, ClayGraph associative memory, UnifiedDB persistence/query/transaction substrate, Harness executable integration/falsification, low-latency emergent software and the permanent Safe-Effect Geometry / Non-Damaging Semantic Action Space research axis.",
       "mesh_role": "integrated_master_foundry",
-      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"],
+      "required_foundations": ["clay", "frank", "claycode", "claygraph", "unifieddb", "gwt", "emergenz", "hyperposition", "harness"],
       "required_permanent_research_foundations": ["research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"],
       "requires_safe_effect_geometry_delta": true,
       "required_outputs": ["SAFE_EFFECT_GEOMETRY_DELTA.md"]
@@ -49,20 +49,21 @@
     "gwt": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/GWT_RESEARCH_PROTOCOL.md",
-      "purpose": "Research Global Workspace mechanisms in AI systems: selection, competition, ignition, broadcast, reconstruction, effect, re-entry, multi-timescale coupling and causal validation.",
+      "purpose": "Research Global Workspace mechanisms in AI systems: selection, competition, ignition, broadcast, reconstruction, effect, re-entry, multi-timescale coupling and causal validation, using Harness executable evidence when available.",
       "mesh_role": "connected_domain",
-      "required_foundations": ["clay", "frank", "claygraph", "unifieddb", "emergenz", "hyperposition", "claycode", "gwt"]
+      "required_foundations": ["clay", "frank", "claygraph", "unifieddb", "emergenz", "hyperposition", "claycode", "harness", "gwt"]
     },
     "frank": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md",
-      "purpose": "Research FRANK as one integrated cognitive/runtime architecture grounded primarily in newest Synthetic Clay research, authored as ClayCode semantic IR, and informed by ClayGraph memory plus UnifiedDB persistence/query substrate research.",
-      "mesh_role": "clay_architecture_projection_authored_in_claycode_over_claygraph_and_unifieddb_substrates",
-      "required_foundations": ["clay", "claycode", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "frank"],
+      "purpose": "Research FRANK as one integrated cognitive/runtime architecture grounded primarily in newest Synthetic Clay research, authored as ClayCode semantic IR, informed by ClayGraph memory plus UnifiedDB persistence/query substrate research, and continuously checked against Harness executable integration evidence.",
+      "mesh_role": "clay_architecture_projection_authored_in_claycode_over_claygraph_and_unifieddb_substrates_with_harness_validation",
+      "required_foundations": ["clay", "claycode", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "harness", "frank"],
       "primary_foundation": "clay",
       "primary_architecture_language": "ClayCode semantic IR",
       "deep_substrate_foundation": "claygraph",
       "deep_persistence_foundation": "unifieddb",
+      "execution_validation_foundation": "harness",
       "architecture_contract": "tools/frank_architecture_contract.py",
       "required_architecture_artifact": "FRANK_ARCHITECTURE.claycode.json",
       "required_human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md"
@@ -70,17 +71,18 @@
     "emergenz": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
-      "purpose": "Research and measure emergence using GWT-linked causal interventions, lesion/rescue, re-entry, interaction terms, PID/PEID/transfer entropy and multiscale causal tests.",
+      "purpose": "Research and measure emergence using GWT-linked causal interventions, lesion/rescue, re-entry, interaction terms, PID/PEID/transfer entropy and multiscale causal tests, preferentially using Harness replay/intervention surfaces when available.",
       "mesh_role": "connected_domain",
-      "required_foundations": ["clay", "gwt", "hyperposition", "frank", "claygraph", "unifieddb", "claycode", "emergenz"]
+      "required_foundations": ["clay", "gwt", "hyperposition", "frank", "claygraph", "unifieddb", "claycode", "harness", "emergenz"]
     },
     "claycode": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md",
-      "purpose": "Research ClayCode as FRANK's internal architecture/runtime language and Synthetic Clay semantic IR, using newest FRANK research as primary target feedback and independently verifying/refining/refuting FRANK-derived assumptions through the Goodman anti-echo filter.",
+      "purpose": "Research ClayCode as FRANK's internal architecture/runtime language and Synthetic Clay semantic IR, using newest FRANK research as primary target feedback, Harness compiler/runtime counterexamples as executable feedback, and independently verifying/refining/refuting FRANK-derived assumptions through the Goodman anti-echo filter.",
       "mesh_role": "frank_feedback_validator_and_architecture_language",
-      "required_foundations": ["frank", "clay", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "claycode"],
+      "required_foundations": ["frank", "clay", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "harness", "claycode"],
       "primary_feedback_foundation": "frank",
+      "execution_feedback_foundation": "harness",
       "requires_latest_frank_architecture_if_available": true,
       "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
       "goodman_validator": "tools/goodman_filter_check.py",
@@ -89,16 +91,16 @@
     "hyperposition": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md",
-      "purpose": "Research emergent systems, contextual hyperposition, higher-order codependencies, dynamic topology and near-zero-latency software via shared/incremental state. 'Entanglement' is an engineering analogy unless physical quantum effects are actually tested.",
+      "purpose": "Research emergent systems, contextual hyperposition, higher-order codependencies, dynamic topology and near-zero-latency software via shared/incremental state, including Harness-measured topology/coupling evidence. 'Entanglement' is an engineering analogy unless physical quantum effects are actually tested.",
       "mesh_role": "connected_domain",
-      "required_foundations": ["clay", "frank", "claygraph", "unifieddb", "claycode", "gwt", "emergenz", "hyperposition"]
+      "required_foundations": ["clay", "frank", "claygraph", "unifieddb", "claycode", "gwt", "emergenz", "harness", "hyperposition"]
     },
     "claygraph": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md",
-      "purpose": "Research the XENO/Synthetic-Clay associative knowledge graph, persistent cognitive memory substrate and evidence-driven reversible migration/transcendence of FRANK graph/state stores, while exchanging substrate constraints with UnifiedDB.",
+      "purpose": "Research the XENO/Synthetic-Clay associative knowledge graph, persistent cognitive memory substrate and evidence-driven reversible migration/transcendence of FRANK graph/state stores, while exchanging substrate constraints with UnifiedDB and executable retrieval/Assembly evidence with Harness.",
       "mesh_role": "whole_mesh_memory_and_graph_substrate_research",
-      "required_foundations": ["clay", "frank", "claycode", "hyperposition", "gwt", "emergenz", "unifieddb", "claygraph"],
+      "required_foundations": ["clay", "frank", "claycode", "hyperposition", "gwt", "emergenz", "unifieddb", "harness", "claygraph"],
       "coverage_mode": "ALL_DISCOVERED_INDEXED_DOMAIN_FOCUSED",
       "primary_feedback_target": "frank",
       "required_foundation": "research_entity/global/CLAYGRAPH_RESEARCH_FOUNDATION.md",
@@ -107,13 +109,28 @@
     "unifieddb": {
       "kind": "domain_research",
       "protocol": "research_entity/triggers/UNIFIED_DATABASE_RESEARCH_PROTOCOL.md",
-      "purpose": "Research FRANK's Unified Database / Unified Cognitive Data Substrate: one logically unified Clay-native semantic identity, persistence, query, transaction and retrieval plane across exact state/events, temporal/provenance data, graph memory, vectors, FTS, activation, Assemblies/GWT and effect/outcome state, with physical consolidation only when benchmark-justified.",
+      "purpose": "Research FRANK's Unified Database / Unified Cognitive Data Substrate: one logically unified Clay-native semantic identity, persistence, query, transaction and retrieval plane across exact state/events, temporal/provenance data, graph memory, vectors, FTS, activation, Assemblies/GWT and effect/outcome state, with physical consolidation only when benchmark-justified and Harness replay/consistency evidence included.",
       "mesh_role": "whole_mesh_unified_persistence_query_transaction_substrate_research",
-      "required_foundations": ["clay", "frank", "claycode", "claygraph", "hyperposition", "gwt", "emergenz", "unifieddb"],
+      "required_foundations": ["clay", "frank", "claycode", "claygraph", "hyperposition", "gwt", "emergenz", "harness", "unifieddb"],
       "coverage_mode": "ALL_DISCOVERED_INDEXED_DOMAIN_FOCUSED",
       "required_foundation": "research_entity/global/UNIFIED_DATABASE_RESEARCH_FOUNDATION.md",
-      "primary_feedback_targets": ["frank", "claycode", "claygraph"],
+      "primary_feedback_targets": ["frank", "claycode", "claygraph", "harness"],
       "required_outputs": ["STORE_ROLE_MATRIX.json", "UNIFIED_DATABASE_ARCHITECTURE.claycode.json", "QUERY_ROUTING_PLAN.json", "EXPERIMENT_RESULTS.json", "MIGRATION_PLAN.json", "BRANCH_FEEDBACK_MANIFEST.json", "FRANK_UNIFIEDDB_FEEDBACK.json", "FINAL_REPORT.md"]
+    },
+    "harness": {
+      "kind": "domain_research",
+      "protocol": "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+      "purpose": "Build, execute, validate and scientifically falsify the complete current FRANK Test-1 architecture as a repository-driven Clay-native simulation harness. Ingest every branch and live worker; implement current semantics; run sandbox/CI/property/fuzz/replay/ablation experiments; preserve failures; and return executable evidence/counterexamples to every affected branch.",
+      "mesh_role": "executable_convergence_integration_validation_and_falsification_branch",
+      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+      "coverage_mode": "ALL_REGISTERED_BRANCHES_PLUS_LIVE_WORKERS",
+      "requires_interconnect_manifest": true,
+      "requires_live_worker_reread": true,
+      "must_build_and_execute": true,
+      "primary_target_contract": "research_entity/experiments/FRANK_TEST1_CLAY_NATIVE_FULL_SIMULATION_CONTRACT.md",
+      "required_protocol": "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+      "primary_feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"],
+      "required_release_outputs": ["HARNESS_RELEASE_MANIFEST.json", "ARCHITECTURE_COVERAGE.json", "STATE_SCHEMA_MANIFEST.json", "GOLDEN_TRACE_INDEX.json", "REPLAY_VALIDATION.json", "ABLATION_CAPABILITY_MATRIX.json", "TEST_EXECUTION_MANIFEST.json", "OPEN_LIMITATIONS.md"]
     }
   }
 }

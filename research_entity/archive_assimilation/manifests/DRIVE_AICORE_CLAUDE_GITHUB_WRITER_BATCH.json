@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-CLAUDE-GITHUB-WRITER-BATCH-20260809T0628p0700",
+  "status":"FROZEN_COMPLETE_THREE_SUBTREES",
+  "parent_aicore_drive_id":"1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty",
+  "reference":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1"},
+  "subtrees":[
+    {
+      "name":".claude","drive_id":"1BbdrBEuF_1mv9c8RziqhBbTIUlnrJCJD","status":"DRIVE_ONLY_LOCAL_TOOL_CONFIG_NO_RESEARCH_DELTA","files":1,
+      "entries":[{"path":".claude/settings.local.json","drive_id":"1ew5vT_z0q_QtUQHomvANI-L5m_Nv_9MQ","bytes":99,"sha256":"23cb2d182f83fb6a149234bb1dae81c69669376bf80c82189e117b7160699209","git_blob":"cfb104c16a4bda7b296cbebf54539a51d5c408f7","reference_head_status":"ABSENT_404","classification":"local Claude permission config; permits only Bash(du -sh .git && git count-objects -vH); no FRANK runtime/research mechanism"}],
+      "earned_work_credit":0
+    },
+    {
+      "name":".github","drive_id":"1V4QaR7yLKS33f_5nZzJZTlxscaFW1K9E","status":"EXACT_GIT_ALIAS_NO_RESEARCH_DELTA","files":2,"folders":1,
+      "entries":[
+        {"path":".github/FUNDING.yml","drive_id":"1hooU0whcKF5jjdpS31obbCgDMHt8z4E8","bytes":25,"sha256":"cbe6d97d868fef88216530ebd9f0b592c74f7db23eb026c2ea315a49c4470e1b","git_blob":"2ef24116865213048b08f7e442e4256b11fdcd37","reference_blob":"2ef24116865213048b08f7e442e4256b11fdcd37"},
+        {"path":".github/workflows/docker.yml","drive_id":"1GtrCEDjR1iQ9-b5rfsJQFoYf6qb4uQm2","bytes":3548,"sha256":"7747d0d9126d30e002d6ffa113eb2d7e1eb2199d6f031ae26bc9d986a0e01614","git_blob":"3f712030b63a2c53887e54cca63714396e84fdfe","reference_blob":"3f712030b63a2c53887e54cca63714396e84fdfe"}
+      ],
+      "earned_work_credit":0
+    },
+    {
+      "name":"writer","drive_id":"1FsjU2dGOIAsOvyoypHcekjo9BAKewB-a","status":"DRIVE_ONLY_SANDBOX_EXECUTOR_ANALYZED","files":2,"folders":1,"sandbox_drive_id":"1D1WNUBF0HtBlk-3lWGsCCAKJ392hiK7z",
+      "entries":[
+        {"path":"writer/sandbox/__init__.py","drive_id":"1Cnw4pXiqCD7xyo2JRV-bxxAb4OuQHHIS","bytes":54,"sha256":"a75b0c1fda391cda54a00f9f09e2f016c7dc237abfd1892cf3c5631cc2a5266b","git_blob":"1eb04eb5a5087f0116cc492d3251a906f746f829","reference_head_status":"ABSENT_404"},
+        {"path":"writer/sandbox/executor.py","drive_id":"1p3FP-3djhMdw2d--t9xIJOKXuJpsOACh","bytes":8232,"sha256":"5bca6faa2c8189eb91a084decf17ef3084a5b38aa17abb914212818420aa44b6","git_blob":"2a811e9d1453205858684fb4066aa4406b3a8fbd","reference_head_status":"ABSENT_BY_PATH_AND_NO_EXACT_CODE_SEARCH_MATCH"}
+      ],
+      "semantic_delta":{"classification":"DRIVE_ONLY_EXECUTION_SANDBOX_WITH_CAPABILITY_ENFORCEMENT_GAP","observed_mechanism":"Executor creates a temp directory, writes code there, inherits os.environ, applies ulimit -v and ulimit -u, launches via subprocess.Popen(shell=True,cwd=tempdir,start_new_session=True), enforces timeout/killpg and supports matplotlib output capture.","negative_result":"config.allow_network is read into self.allow_network but never used to constrain execution. The child inherits the full parent environment. No namespace/chroot/seccomp/container/filesystem/capability isolation is implemented in this module. Thus a configured deny-network intent is not an enforced capability boundary.","targets":["harness","claycode","clay","frank"]},
+      "dedup_note":"General weak-sandbox isolation was already captured in the recovery/safety lineage; this subtree adds a concrete writer-specific 'declared allow_network flag is unenforced' oracle but receives no separate earned-work credit.",
+      "earned_work_credit":0
+    }
+  ],
+  "semantic_obligations":{"identified":"5/5 files across three roots","content_covered":"5/5","classified":"5/5","lineage_linked":"5/5","integrated_or_no_delta":"2 no-delta roots + 1 safety oracle root","status":"COMPLETE_FOR_ALL_THREE_SUBTREES"},
+  "created_by":"chatgpt-secondary","created_at":"2026-08-09T06:28:00+07:00"
+}

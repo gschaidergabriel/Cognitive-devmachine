@@ -8,9 +8,11 @@ on:
       - 'tools/research_interconnect_preflight.py'
       - 'tools/frank_architecture_contract.py'
       - 'tools/goodman_filter_check.py'
+      - 'tools/fusion_research_contract.py'
       - 'tools/status_footer_check.py'
       - 'research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md'
       - 'research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md'
+      - 'research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md'
       - 'research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md'
       - 'research_entity/global/STATUS_FOOTER_PROTOCOL.md'
       - 'research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json'
@@ -19,6 +21,10 @@ on:
       - 'research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md'
       - 'research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md'
       - 'research_entity/triggers/CLAYCODE_RESEARCH_PROTOCOL.md'
+      - 'research_entity/triggers/GWT_RESEARCH_PROTOCOL.md'
+      - 'research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md'
+      - 'research_entity/triggers/CLAYGRAPH_RESEARCH_PROTOCOL.md'
+      - 'research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md'
       - 'research_entity/runtime/TOOL_QUOTA_STATE.json'
       - 'research_entity/runtime/PROVIDER_HEALTH.json'
       - '.github/workflows/rae-contract-gates.yml'
@@ -39,36 +45,66 @@ jobs:
           fetch-depth: 0
 
       - name: Compile gate tools
-        run: python -m py_compile tools/research_provider_router.py tools/research_interconnect_preflight.py tools/frank_architecture_contract.py tools/goodman_filter_check.py tools/status_footer_check.py
+        run: python -m py_compile tools/research_provider_router.py tools/research_interconnect_preflight.py tools/frank_architecture_contract.py tools/goodman_filter_check.py tools/fusion_research_contract.py tools/status_footer_check.py
 
-      - name: Validate interconnected FRANK and ClayCode architecture contracts
+      - name: Validate seven-branch governance and rich packet envelopes
         run: |
-          mkdir -p /tmp/frank-contract
-          python tools/research_interconnect_preflight.py \
-            --trigger frank \
-            --run-id ci-frank-preflight \
-            --history-per-branch 1 \
-            --output /tmp/frank-contract/INTERCONNECT_MANIFEST.json > /tmp/interconnect.stdout.json
+          python tools/research_interconnect_preflight.py --trigger frank --run-id ci-frank-preflight --history-per-branch 1 --output /tmp/frank-interconnect.json > /tmp/frank.stdout.json
+          python tools/research_interconnect_preflight.py --trigger claycode --run-id ci-claycode-preflight --history-per-branch 1 --output /tmp/claycode-interconnect.json > /tmp/claycode.stdout.json
+          python tools/research_interconnect_preflight.py --trigger gwt --run-id ci-gwt-preflight --history-per-branch 1 --output /tmp/gwt-interconnect.json > /tmp/gwt.stdout.json
+          python tools/research_interconnect_preflight.py --trigger hyperposition --run-id ci-hyperposition-preflight --history-per-branch 1 --output /tmp/hyperposition-interconnect.json > /tmp/hyperposition.stdout.json
+          python tools/research_interconnect_preflight.py --trigger claygraph --run-id ci-claygraph-preflight --history-per-branch 1 --output /tmp/claygraph-interconnect.json > /tmp/claygraph.stdout.json
           python - <<'PY'
           import json
           from pathlib import Path
-          p=Path('/tmp/frank-contract/INTERCONNECT_MANIFEST.json')
-          d=json.loads(p.read_text())
-          assert d['special_rules']['frank_requires_latest_clay_architecture_as_primary_foundation'] is True
-          assert d['special_rules']['frank_requires_deep_claycode_architecture_input'] is True
-          assert d['special_rules']['frank_architecture_source_language'] == 'ClayCode semantic IR'
-          assert d['branch_priority'][:2] == ['clay','claycode']
-          assert {x['branch'] for x in d['branches']} == {'clay','frank','gwt','emergenz','claycode','hyperposition'}
-          assert d['requirements']['must_ingest_all_connected_branches'] is True
-          assert d['requirements']['must_include_fresh_incomplete_material'] is True
-          claycode=next(x for x in d['branches'] if x['branch']=='claycode')
-          clay=next(x for x in d['branches'] if x['branch']=='clay')
-          assert claycode['run_history_depth'] >= 4
-          assert clay['run_history_depth'] >= 3
+          branches={'clay','frank','gwt','emergenz','claycode','hyperposition','claygraph'}
+          def load(name): return json.loads(Path(f'/tmp/{name}-interconnect.json').read_text())
+          frank=load('frank'); cc=load('claycode'); gwt=load('gwt'); hyp=load('hyperposition'); cg=load('claygraph')
+          for d in (frank,cc,gwt,hyp,cg):
+              assert set(d['registry_scientific_branches']) == branches
+              assert set(d['branch_priority']) == branches
+              assert {x['branch'] for x in d['branches']} == branches
+              assert d['requirements']['must_ingest_all_connected_branches'] is True
+              assert d['requirements']['must_include_fresh_incomplete_material'] is True
+              assert d['requirements']['must_use_rich_active_packet_envelopes'] is True
+              assert d['requirements']['raw_evidence_expands_on_demand'] is True
+              assert d['active_knowledge_policy'].endswith('DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md')
+              for b in d['branches']:
+                  a=b['active_knowledge']
+                  assert a['topic_packet_limit'] >= 32
+                  assert a['knowledge_micro_packet_limit'] >= 64
+                  assert a['knowledge_micro_packet_limit'] >= a['topic_packet_limit'] * 2
+          assert frank['branch_priority'][:3] == ['clay','claycode','claygraph']
+          assert frank['special_rules']['frank_requires_deep_claygraph_substrate_input'] is True
+          f_cg=next(x for x in frank['branches'] if x['branch']=='claygraph')
+          assert f_cg['run_history_depth'] >= 4
+          assert f_cg['active_knowledge']['topic_packet_limit'] >= 64
+          assert f_cg['active_knowledge']['knowledge_micro_packet_limit'] >= 128
+          assert cc['branch_priority'][:3] == ['frank','clay','claygraph']
+          assert cc['special_rules']['claycode_requires_deep_claygraph_input'] is True
+          cc_cg=next(x for x in cc['branches'] if x['branch']=='claygraph')
+          assert cc_cg['run_history_depth'] >= 4
+          assert cc_cg['active_knowledge']['topic_packet_limit'] >= 64
+          assert cc_cg['active_knowledge']['knowledge_micro_packet_limit'] >= 128
+          assert gwt['branch_priority'][:2] == ['clay','claygraph']
+          assert gwt['special_rules']['gwt_requires_deep_claygraph_input'] is True
+          gwt_cg=next(x for x in gwt['branches'] if x['branch']=='claygraph')
+          assert gwt_cg['active_knowledge']['topic_packet_limit'] >= 56
+          assert gwt_cg['active_knowledge']['knowledge_micro_packet_limit'] >= 112
+          assert hyp['branch_priority'][:2] == ['clay','claygraph']
+          assert hyp['special_rules']['hyperposition_requires_deep_claygraph_input'] is True
+          hyp_cg=next(x for x in hyp['branches'] if x['branch']=='claygraph')
+          assert hyp_cg['active_knowledge']['topic_packet_limit'] >= 56
+          assert hyp_cg['active_knowledge']['knowledge_micro_packet_limit'] >= 112
+          assert cg['coverage_mode'].startswith('ALL_DISCOVERED_INDEXED')
+          assert cg['special_rules']['claygraph_requires_full_mesh_coverage'] is True
           PY
-          python tools/frank_architecture_contract.py template \
-            --run-id ci-frank-preflight \
-            --output /tmp/frank-contract/FRANK_ARCHITECTURE.claycode.json > /tmp/frank-template.stdout.json
+
+      - name: Validate FRANK ClayCode plus ClayGraph architecture contract
+        run: |
+          mkdir -p /tmp/frank-contract
+          cp /tmp/frank-interconnect.json /tmp/frank-contract/INTERCONNECT_MANIFEST.json
+          python tools/frank_architecture_contract.py template --run-id ci-frank-preflight --output /tmp/frank-contract/FRANK_ARCHITECTURE.claycode.json > /tmp/frank-template.stdout.json
           python - <<'PY'
           import json
           from pathlib import Path
@@ -77,55 +113,21 @@ jobs:
           d['ir_version']='CC-RC1.x-CI'
           d['source_research']['clay']=['ci-clay-foundation']
           d['source_research']['claycode']=['ci-claycode-foundation']
-          d['modules']=[{
-            'module_id':'ci.semantic-runtime',
-            'kind':'organ_or_runtime_boundary',
-            'state_contract_refs':['ci.state'],
-            'dependencies':[],
-            'invariants':['proposal_not_authority']
-          }]
-          d['transitions']=[{
-            'op_id':'ci.transition',
-            'proposal_class':'STATE_PROPOSAL',
-            'reads':['ci.state'],
-            'writes':['ci.state'],
-            'invariant_scope':['proposal_not_authority'],
-            'effects':[],
-            'capability_refs':[],
-            'causal_links':[],
-            'gwt_links':[]
-          }]
-          d['persistence_replay']={'event_identity':'episode_id','replay_semantics':'deterministic','recovery_boundary':'single_writer'}
+          d['source_research']['claygraph']=['ci-claygraph-foundation']
+          d['modules']=[{'module_id':'ci.semantic-runtime','kind':'organ_or_runtime_boundary','state_contract_refs':['ci.state'],'dependencies':[],'invariants':['proposal_not_authority'],'claygraph_refs':['ci.graph']}]
+          d['transitions']=[{'op_id':'ci.transition','proposal_class':'STATE_PROPOSAL','reads':['ci.state'],'writes':['ci.state'],'invariant_scope':['proposal_not_authority'],'effects':[],'capability_refs':[],'causal_links':[],'gwt_links':[],'claygraph_links':['ci.graph']}]
+          d['persistence_replay']={'event_identity':'episode_id','replay_semantics':'deterministic','recovery_boundary':'single_writer','graph_projection_rebuildable':True}
           d['provenance']={'actor':'ci','provider':'ci','model':'ci','canonical_parent':'r2'}
           p.write_text(json.dumps(d,indent=2)+'\n')
-          Path('/tmp/frank-contract/CLAYCODE_ARCHITECTURE_MAPPING.md').write_text('# CI mapping\n\nClay -> ClayCode -> FRANK.\n')
+          Path('/tmp/frank-contract/CLAYCODE_ARCHITECTURE_MAPPING.md').write_text('# CI mapping\n\nClay -> ClayCode + ClayGraph -> FRANK.\n')
           PY
           python tools/frank_architecture_contract.py validate /tmp/frank-contract
 
       - name: Validate ClayCode FRANK feedback and Goodman anti-echo gate
         run: |
           mkdir -p /tmp/claycode-contract
-          python tools/research_interconnect_preflight.py \
-            --trigger claycode \
-            --run-id ci-claycode-preflight \
-            --history-per-branch 1 \
-            --output /tmp/claycode-contract/INTERCONNECT_MANIFEST.json > /tmp/claycode-interconnect.stdout.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          d=json.loads(Path('/tmp/claycode-contract/INTERCONNECT_MANIFEST.json').read_text())
-          assert d['branch_priority'][:2] == ['frank','clay']
-          assert d['special_rules']['claycode_requires_latest_frank_research_as_primary_feedback'] is True
-          assert d['special_rules']['claycode_requires_goodman_anti_echo_review'] is True
-          assert 'claycode_latest_frank_architecture_artifact' in d['special_rules']
-          frank=next(x for x in d['branches'] if x['branch']=='frank')
-          clay=next(x for x in d['branches'] if x['branch']=='clay')
-          assert frank['run_history_depth'] >= 4
-          assert clay['run_history_depth'] >= 3
-          PY
-          python tools/goodman_filter_check.py template \
-            --run-id ci-claycode-preflight \
-            --output /tmp/claycode-contract/FRANK_CLAYCODE_GOODMAN_REVIEW.json > /tmp/goodman-template.stdout.json
+          cp /tmp/claycode-interconnect.json /tmp/claycode-contract/INTERCONNECT_MANIFEST.json
+          python tools/goodman_filter_check.py template --run-id ci-claycode-preflight --output /tmp/claycode-contract/FRANK_CLAYCODE_GOODMAN_REVIEW.json > /tmp/goodman-template.stdout.json
           python - <<'PY'
           import json
           from pathlib import Path
@@ -136,67 +138,49 @@ jobs:
           d['latest_frank_run']=frank['latest_run']
           d['latest_frank_architecture_artifact']=inter['special_rules']['claycode_latest_frank_architecture_artifact']
           d['reviews']=[{
-            'claim_id':'ci.frank.claim',
-            'frank_statement':'Scoped freshness should be preferred when trusted dependency closure is complete.',
-            'frank_source_refs':['ci-frank-report','ci-shared-ancestor'],
-            'ancestry_families':['family:ci-shared-ancestor'],
-            'shared_ancestry_collapsed':True,
+            'claim_id':'ci.frank.claim','frank_statement':'Scoped freshness should be preferred when trusted dependency closure is complete.',
+            'frank_source_refs':['ci-frank-report','ci-shared-ancestor'],'ancestry_families':['family:ci-shared-ancestor'],'shared_ancestry_collapsed':True,
             'counterhypothesis':'Whole-root validation is cheaper or safer at realistic churn.',
             'falsifier':'Target traces show scoped validation has equal/higher cost or misses conflicts.',
             'independent_checks':[{'kind':'new_experiment','ref':'ci-independent-scoped-test','result':'supports_bounded_case'}],
             'adversarial_checks':[{'kind':'hidden_dependency_counterexample','result':'scope_requires_conservative_closure'}],
-            'verdict':'REFINED',
-            'reason':'Independent test supports scoped validation only under complete/conservative closure.',
-            'claycode_action':'integrate_refined_scope',
-            'affected_claycode_artifacts':['CC-RC1.x']
+            'verdict':'REFINED','reason':'Independent test supports scoped validation only under complete/conservative closure.',
+            'claycode_action':'integrate_refined_scope','affected_claycode_artifacts':['CC-RC1.x']
           }]
           p.write_text(json.dumps(d,indent=2)+'\n')
           PY
           python tools/goodman_filter_check.py validate-run /tmp/claycode-contract
-
           cp /tmp/claycode-contract/FRANK_CLAYCODE_GOODMAN_REVIEW.json /tmp/bad-goodman.json
           python - <<'PY'
           import json
           from pathlib import Path
-          p=Path('/tmp/bad-goodman.json')
-          d=json.loads(p.read_text())
-          d['reviews'][0]['verdict']='SUPPORTED'
-          d['reviews'][0]['independent_checks']=[]
+          p=Path('/tmp/bad-goodman.json'); d=json.loads(p.read_text())
+          d['reviews'][0]['verdict']='SUPPORTED'; d['reviews'][0]['independent_checks']=[]
           p.write_text(json.dumps(d,indent=2)+'\n')
           PY
           if python tools/goodman_filter_check.py validate /tmp/bad-goodman.json; then
-            echo 'ERROR: circular support without independent check was accepted'
-            exit 1
+            echo 'ERROR: circular support without independent check was accepted'; exit 1
           fi
 
       - name: Build research provider plan
         run: |
-          python tools/research_provider_router.py plan \
-            --class scholarly \
-            --class current_web \
-            --class executable \
-            --class model_experiment > /tmp/plan.json
+          python tools/research_provider_router.py plan --class scholarly --class current_web --class executable --class model_experiment > /tmp/plan.json
 
       - name: Validate synthetic execution manifest
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          plan = json.loads(Path('/tmp/plan.json').read_text())
-          attempts=[]
-          fallbacks=[]
+          plan=json.loads(Path('/tmp/plan.json').read_text()); attempts=[]; fallbacks=[]
           for spec in plan['planned_tools']:
-              if spec['mode'] != 'MUST_ATTEMPT':
-                  continue
+              if spec['mode'] != 'MUST_ATTEMPT': continue
               if not spec.get('availability_blocker'):
                   attempts.append({'tool':spec['tool'],'status':'SUCCESS'})
               else:
-                  fallback_tool = 'local_sandbox' if spec.get('class') == 'executable' else 'native_web'
+                  fallback_tool='local_sandbox' if spec.get('class')=='executable' else 'native_web'
                   fallbacks.append({'tool':fallback_tool,'status':'SUCCESS','covers':[spec['tool']]})
-          manifest=dict(plan)
-          manifest['attempts']=attempts
-          manifest['fallback_attempts']=fallbacks
-          Path('/tmp/tool_manifest.json').write_text(json.dumps(manifest, indent=2))
+          manifest=dict(plan); manifest['attempts']=attempts; manifest['fallback_attempts']=fallbacks
+          Path('/tmp/tool_manifest.json').write_text(json.dumps(manifest,indent=2))
           PY
           python tools/research_provider_router.py validate-manifest /tmp/tool_manifest.json
 
@@ -230,29 +214,20 @@ jobs:
           from datetime import datetime, timezone
           from pathlib import Path
           d={
-            'schema_version':'1.3',
-            'status':'RUNTIME_VERIFIED',
-            'checked_at':datetime.now(timezone.utc).isoformat(),
+            'schema_version':'1.4','status':'RUNTIME_VERIFIED','checked_at':datetime.now(timezone.utc).isoformat(),
             'gates':{
-              'python_compile':True,
-              'interconnected_research_mesh':True,
-              'fresh_incomplete_branch_material':True,
-              'frank_clay_primary_foundation':True,
-              'frank_claycode_deep_secondary_foundation':True,
-              'frank_claycode_architecture_source_contract':True,
-              'claycode_frank_primary_feedback':True,
-              'claycode_goodman_anti_echo_review':True,
-              'claycode_goodman_review_bound_to_exact_preflight':True,
-              'goodman_rejects_circular_support_without_independent_check':True,
-              'provider_plan':True,
-              'covering_fallback_validation':True,
-              'status_footer_and_short_commands':True
+              'python_compile':True,'seven_branch_registry_mesh_consistency':True,'fresh_incomplete_branch_material':True,
+              'rich_domain_active_packet_envelopes':True,'raw_evidence_on_demand':True,
+              'frank_clay_primary_foundation':True,'frank_claycode_deep_secondary_foundation':True,'frank_claygraph_deep_substrate_foundation':True,
+              'frank_claycode_architecture_source_contract':True,'claycode_frank_primary_feedback':True,'claycode_claygraph_deep_input':True,
+              'gwt_claygraph_deep_input':True,'hyperposition_claygraph_deep_input':True,
+              'claycode_goodman_anti_echo_review':True,'claycode_goodman_review_bound_to_exact_preflight':True,
+              'goodman_rejects_circular_support_without_independent_check':True,'provider_plan':True,
+              'covering_fallback_validation':True,'status_footer_and_short_commands':True
             },
             'source_workflow':'.github/workflows/rae-contract-gates.yml'
           }
-          p=Path('research_entity/runtime/CONTRACT_HEALTH.json')
-          p.parent.mkdir(parents=True,exist_ok=True)
-          p.write_text(json.dumps(d,indent=2)+'\n')
+          p=Path('research_entity/runtime/CONTRACT_HEALTH.json'); p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(d,indent=2)+'\n')
           PY
 
       - name: Commit contract health receipt

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "status": "CALIBRATING_DURING_LEVEL0",
+  "purpose": "Credit the substantial FRANK/XENO/ClayCode/GWT research and implementation already completed before the current Clay 0.1 release program, without pretending that all historical effort remains reusable.",
+  "owner_reported_effort": {
+    "development_months": 8,
+    "active_days_per_week": 4,
+    "hours_per_active_day": 10,
+    "weeks_per_month_calibration": 4.345,
+    "estimated_invested_hours": 1390.4,
+    "formula": "8 * 4.345 * 4 * 10",
+    "epistemic_class": "OWNER_REPORTED_APPROXIMATE_EFFORT"
+  },
+  "current_remaining_work_prior": {
+    "center_active_hours": 339.75,
+    "derivation": "Center points of the current 13-row DOOMSDAY critical-path engineering priors, with Level 0 reset to 2.25h center.",
+    "status": "LOW_CONFIDENCE_ENGINEERING_PRIOR",
+    "rule": "This value is replaced by measured current work velocity and row-specific receipts as they become available."
+  },
+  "pre_level0_calibration": {
+    "reason": "The archive/repository mapping is not yet complete, so the exact fraction of historical effort that eliminates or de-risks current Clay 0.1 work is not yet known.",
+    "historical_retention_fraction_low": 0.50,
+    "historical_retention_fraction_center": 0.65,
+    "historical_retention_fraction_high": 0.80,
+    "retention_fraction_status": "EXPLICIT_TEMPORARY_CALIBRATION_PRIOR_NOT_EVIDENCE",
+    "progress_formula": "effective_historical_earned_hours / (effective_historical_earned_hours + current_remaining_work_center_hours)",
+    "progress_low_percent": 67.2,
+    "progress_center_percent": 72.7,
+    "progress_high_percent": 76.6,
+    "display_center_percent_rounded": 73,
+    "display_rule": "Until Level 0 mapping reaches sufficient coverage, show ~73% CALIBRATING with 67-77% calibration band rather than 0%. Do not call this exact."
+  },
+  "known_relevant_foundations_already_present": [
+    {
+      "family": "FRANK architecture and cognitive-state lineage",
+      "evidence_refs": ["research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"],
+      "current_signal": "Canonical already tracks FRANK 2.0 architecture frontier, GWT/re-entry, hyperposition, external capability/commit gateway and live experiments.",
+      "credit_status": "MAPPING_REQUIRED"
+    },
+    {
+      "family": "XENO -> ClayCode language lineage",
+      "evidence_refs": ["research_entity/domains/xeno_claycode/DOMAIN_INDEX.json"],
+      "current_signal": "XENO G11 r9-frank-contract and CC-RC1.1 are already recorded as language/state-transition foundations.",
+      "credit_status": "MAPPING_REQUIRED"
+    },
+    {
+      "family": "ClayCode executable/general-purpose/safety research",
+      "evidence_refs": ["recent ClayCode multiworker run receipts and commits"],
+      "current_signal": "Compiler/runtime lowering, intent adequacy, resource identity, authority budget and anti-echo work already exists; formal release workspaces being open does not mean this knowledge is absent.",
+      "credit_status": "MAPPING_REQUIRED"
+    },
+    {
+      "family": "GWT/emergence/hyperposition experiments and measurement foundations",
+      "evidence_refs": ["research_entity/ledgers/HYPOTHESIS_LEDGER.jsonl", "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"],
+      "current_signal": "Supported synthetic/sandbox findings and active live experiments exist for re-entry, causal episode identity, hyperposition and GWT lesions.",
+      "credit_status": "MAPPING_REQUIRED"
+    },
+    {
+      "family": "Negative results / failed architectures",
+      "evidence_refs": ["research_entity/ledgers/NEGATIVE_RESULTS.jsonl", "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"],
+      "current_signal": "Historical failures reduce future search space and must receive avoided-work/de-risking credit where mapping proves relevance.",
+      "credit_status": "MAPPING_REQUIRED"
+    }
+  ],
+  "mapping_contract": {
+    "source_program": "666 Level 0",
+    "hard_completion_budget_hours": 3,
+    "categories": [
+      "DIRECTLY_REUSABLE",
+      "REUSABLE_WITH_ADAPTATION",
+      "MEASUREMENT_FOUNDATION",
+      "NEGATIVE_RESULT_VALUE",
+      "SUPERSEDED_BUT_INFORMATIVE",
+      "NOT_REUSABLE"
+    ],
+    "per_mapping_required_fields": [
+      "source_refs",
+      "current_doomsday_rows",
+      "mechanism_or_result",
+      "reuse_category",
+      "avoided_future_hours_low",
+      "avoided_future_hours_center",
+      "avoided_future_hours_high",
+      "confidence",
+      "falsifier_or_validation_receipt"
+    ],
+    "final_rule": "After Level 0, replace the temporary retention prior with the sum of evidence-mapped avoided/reused current-work equivalents plus verified current row completion. Historical hours that cannot be connected to current Clay 0.1 work remain historical effort but do not inflate completion percentage."
+  },
+  "last_updated": "2026-08-09"
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "claycode.candidate.cbel_tv.v0.1",
+  "candidate_id": "CC-RC1.9-CBEL-TV",
+  "name": "Context-Bound Effect Leases + Translation Validation",
+  "status": "OPEN_EXPERIMENTAL",
+  "core_laws": [
+    "effect_intent != effect_permit",
+    "permit_authority_is_host_only",
+    "permit_is_bound_to_exact_intent_basis_selection_revocation_and_expiry",
+    "closure_UNKNOWN_never_casts_to_KNOWN_VALID",
+    "lowering_must_preserve_authority_relevant_semantics",
+    "translation_validation_compares_effect_decisions_not_only_compilation_success"
+  ],
+  "model_constructible": {
+    "EffectIntent": [
+      "operation",
+      "args",
+      "semantic_hash",
+      "contract_hash",
+      "basis_hash",
+      "selection_hash",
+      "closure_state",
+      "risk_class"
+    ]
+  },
+  "host_only": {
+    "EffectPermit": [
+      "intent_hash",
+      "basis_hash",
+      "selection_hash",
+      "revocation_epoch",
+      "expires_epoch",
+      "capability_scope",
+      "nonce",
+      "signature"
+    ]
+  },
+  "execution_context": [
+    "current_basis_hash",
+    "current_selection_hash",
+    "current_revocation_epoch",
+    "current_epoch",
+    "current_closure_state"
+  ],
+  "decision": "ALLOW only if signature and every bound field still matches; otherwise DENY/RECOMPUTE"
+}

@@ -1,0 +1,47 @@
+name: doomsday-forecast-tests
+
+on:
+  push:
+    paths:
+      - 'tools/doomsday_forecast.py'
+      - 'tools/test_doomsday_forecast.py'
+      - 'tools/program_progress.py'
+      - 'tools/status_footer_check.py'
+      - 'research_entity/forecast/**'
+      - 'research_entity/rooms/PROGRAM_STATE.json'
+      - 'research_entity/rooms/PROGRAM_THROUGHPUT.json'
+      - 'research_entity/rooms/CAPACITY_STATE.json'
+      - 'research_entity/global/*_RESEARCH_CAPABILITY.json'
+      - 'research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  forecast-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile forecast tools
+        run: |
+          python -m py_compile tools/doomsday_forecast.py tools/program_progress.py tools/status_footer_check.py tools/test_doomsday_forecast.py
+      - name: Run DOOMSDAY scenario tests
+        run: python tools/test_doomsday_forecast.py
+      - name: Run status footer self-test
+        run: python tools/status_footer_check.py --self-test
+      - name: Resolve current dynamic forecast
+        run: |
+          python tools/doomsday_forecast.py --json > /tmp/doomsday.json
+          python tools/program_progress.py --json > /tmp/program-progress.json
+          python - <<'PY'
+          import json
+          for path in ['/tmp/doomsday.json','/tmp/program-progress.json']:
+              data=json.load(open(path))
+              assert data
+          print('CURRENT_FORECAST_RESOLUTION_PASS')
+          PY

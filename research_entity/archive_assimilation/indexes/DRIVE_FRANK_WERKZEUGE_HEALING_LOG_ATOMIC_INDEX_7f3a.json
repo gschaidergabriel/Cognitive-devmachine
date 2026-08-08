@@ -1,0 +1,42 @@
+{
+  "schema_version":"1.0",
+  "index_id":"DRIVE-FRANK-WERKZEUGE-HEALING-LOG-ATOMIC-7f3a",
+  "source":{"title":"healing-log.md","drive_id":"1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt","root":"frank-werkzeuge"},
+  "origin_actor":"chatgpt-secondary",
+  "origin_worker":"chatgpt-secondary-666-20260808T211500Z-7f3a",
+  "observed_at":"2026-08-08T21:39:00Z",
+  "atomic_fix_count":22,
+  "coverage":"ALL_NUMBERED_FIX_UNITS_EXTRACTED_AND_CLASSIFIED",
+  "epistemic_class":"HISTORICAL_RUNTIME_REPAIR_LOG_PROJECT_REPORTED_VALIDATION",
+  "units":[
+    {"n":1,"title":"frank-overlay PID-Lock Orphan-Kill","family":"lifecycle_ownership_recovery","key_result":"orphan lock caused repeated systemd starts; orphan termination restored one managed process","dedup":"MECHANISM_OVERLAP_WITH_PF_BOOT_RECOVERY_KEEP_MEASUREMENT"},
+    {"n":2,"title":"frank-overlay StartLimitIntervalSec","family":"bounded_retry_backoff","key_result":"restart limit widened to 60s cooldown after five failures","dedup":"NEW_PARAMETERIZED_RECOVERY_RECEIPT"},
+    {"n":3,"title":"LLM Stop-Timeouts","family":"bounded_shutdown","key_result":"TimeoutStopSec 15s to bound Vulkan cleanup hangs; report observed 0.5s chat-LLM restart","dedup":"NEW_DEPLOYMENT_RECOVERY_RECEIPT"},
+    {"n":4,"title":"Router HTTP 503 bei Total Failure","family":"typed_failure_semantics","key_result":"total two-model failure changed from HTTP 200 ok=false to HTTP 503","dedup":"NEW_PROTOCOL_NEGATIVE_RESULT"},
+    {"n":5,"title":"Router Fallback bei Empty Answer reasoning_content","family":"partial_model_result_semantics","key_result":"reasoning_content salvaged before declaring empty-answer blackout","dedup":"NEW_PROTOCOL_EDGE_CASE"},
+    {"n":6,"title":"LLM-Guard Grace Period Loading vs Dead","family":"warmup_liveness_recovery","key_result":"90s startup grace prevents health checker from repeatedly killing model during 30-60s load","dedup":"EXTENDS_RECOVERY_SELF_TRIGGER_FAMILY"},
+    {"n":7,"title":"toolbox summary route repair","family":"interface_drift","key_result":"wrong GET endpoint caused 61 failures in 64min; corrected proxied POST route and response mapping","dedup":"NEW_INTERFACE_DRIFT_RECEIPT"},
+    {"n":8,"title":"Toolbox polling cache TTL","family":"observability_cost","key_result":"TTL 5s->30s; report states calls fell from ~50 to 5 per 30s (~90% reduction)","dedup":"NEW_PERFORMANCE_MEASUREMENT_FOUNDATION"},
+    {"n":9,"title":"Genesis activation reachability","family":"state_machine_liveness","key_result":"equilibrium ~0.5567 below active threshold 0.65; decay/threshold changes made active state reachable","dedup":"NEW_REACHABILITY_NEGATIVE_RESULT"},
+    {"n":10,"title":"Quantum Reflector E-PQ discretization","family":"numeric_scale_discretization","key_result":"±0.25 thresholds collapsed typical ±0.1 E-PQ values into mid bucket; moved to ±0.10","dedup":"NEW_SIGN_SCALE_MATH_FAMILY"},
+    {"n":11,"title":"Consciousness graceful degradation on LLM outage","family":"degraded_mode","key_result":"router exceptions contained and empty return handled by callers instead of daemon crash loops","dedup":"NEW_DEGRADED_MODE_RECEIPT"},
+    {"n":12,"title":"Autonomous action template-placeholder guard","family":"tool_input_validation","key_result":"literal placeholder web/news queries rejected or category-whitelisted before tool use","dedup":"EXTENDS_CAPABILITY_BOUNDARY_VALIDATION"},
+    {"n":13,"title":"RAM perception events","family":"perception_coverage","key_result":"ram_pressure/ram_release added for >10% RAM changes","dedup":"HISTORICAL_SENSOR_COVERAGE_CONTEXT"},
+    {"n":14,"title":"Mood decay mechanism","family":"state_dynamics_homeostasis","key_result":"idle state previously froze because decay occurred only during process_event; periodic homeostatic decay added","dedup":"EXTENDS_STATE_DYNAMICS_NEGATIVE_RESULT"},
+    {"n":15,"title":"Genesis fusion logging DEBUG","family":"observability_noise","key_result":"per-pair fusion INFO logging generated 51K+ lines/hour; moved routine fusion to DEBUG while keeping rare crystallization INFO","dedup":"NEW_OBSERVABILITY_SIGNAL_TO_NOISE_RECEIPT"},
+    {"n":16,"title":"core_awareness DB auto-init","family":"self_model_bootstrap","key_result":"missing system_core.json left self-knowledge empty; auto full_scan created index of 726 modules","dedup":"NEW_SELF_MODEL_REACHABILITY_RECEIPT"},
+    {"n":17,"title":"Mood decay cumulative state","family":"state_update_semantics","key_result":"re-reading raw E-PQ every cycle made decay non-cumulative; previous mood became explicit evolving state with E-PQ pull","dedup":"EXTENDS_STATE_PERSISTENCE_SEMANTICS"},
+    {"n":18,"title":"QR Coherence Monitor negative-energy math","family":"signed_metric_math","key_result":"energy < moving_average*0.95 becomes trivially true for negative energies; relative signed comparison replaced and false events stopped","dedup":"NEW_SIGNED_METRIC_PROPERTY_TEST"},
+    {"n":19,"title":"Workspace State DB persistence cadence","family":"checkpoint_freshness","key_result":"row-count modulo condition with one row never triggered; update counter fixed seven-day stale workspace persistence","dedup":"NEW_PERSISTENCE_FRESHNESS_NEGATIVE_RESULT"},
+    {"n":20,"title":"Genesis State Hysteresis","family":"dynamic_topology_chatter","key_result":"10s minimum dwell on downgrade paths reduced 150-300+ transitions/5min to 2/5min (>98% reduction) while upgrades/user-return stayed immediate","dedup":"NEW_HYSTERESIS_MEASUREMENT_FOUNDATION"},
+    {"n":21,"title":"GPU Perception Cooldown","family":"self_observation_feedback","key_result":"own LLM inference made 0->85%->0 GPU pulses, 2-3 events/inference and 80%+ GPU attention; 60s cooldown diversified attention","dedup":"NEW_SELF_GENERATED_SENSOR_MONOPOLY_NEGATIVE_RESULT"},
+    {"n":22,"title":"AURA Queue Rate Limiting","family":"workspace_source_monopoly","key_result":"AURA blocks ~100s apart drove 51% of reflections; 300s cooldown reduced to one block/5min in reported validation","dedup":"NEW_WORKSPACE_OCCUPANCY_NEGATIVE_RESULT"}
+  ],
+  "dedup_summary":{
+    "keep_as_new_or_extended_negative_measurement":22,
+    "independent_replication_claimed":false,
+    "rule":"Overlapping mechanism ancestry with Project-Frankenstein receipts is linked as corroborating project history, not independent replication."
+  },
+  "integration_targets":["harness","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","clay","q12_index"],
+  "next_action":"Import this atomic index and the bounded subtree manifest into the eventual frozen DRIVE_CLAY_MANIFEST denominator; current global exact percentage remains unchanged until that parent denominator is frozen."
+}

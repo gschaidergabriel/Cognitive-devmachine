@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260808T1755p0700-chatgpt-secondary-r2",
+  "experiments":[
+    {
+      "experiment_id":"EXP-FUS-CTC-001",
+      "class":"synthetic_cross_branch_identifiability_and_validation_proxy",
+      "question":"Does operation-specific basis + selection + projection + capability validation avoid the false-reject cost of a universal version lock while preserving constructed safety?",
+      "construction":{
+        "basis_dimensions":8,
+        "per_dimension_churn_probabilities":[0.03,0.08,0.12,0.02,0.15,0.05,0.20,0.01],
+        "operation_required_dimensions":"1-4 randomly selected per operation",
+        "effect_bound_fraction":0.30,
+        "selector_corruption_given_effect_bound":0.02,
+        "projection_corruption":0.015,
+        "capability_invalid_given_effect_bound":0.01,
+        "unsafe_definition":"any required basis dimension changed OR selector corrupted OR projection corrupted OR capability invalid"
+      },
+      "local_30_seed_mean":{"n_per_seed":100000,"unsafe_base":0.179772,"universal_accept":0.480538,"universal_false_reject":0.339690,"operation_specific_full_capsule_accept":0.820228,"operation_specific_full_capsule_unsafe_accept":0.0,"operation_specific_no_selector_unsafe_accept":0.004980,"operation_specific_no_selector_unsafe_given_accept":0.006035},
+      "local_30_seed_sd":{"unsafe_base":0.001188,"universal_accept":0.001514,"universal_false_reject":0.001477,"operation_specific_full_capsule_accept":0.001188,"operation_specific_no_selector_unsafe_accept":0.000270,"operation_specific_no_selector_unsafe_given_accept":0.000327},
+      "judge0_replication":{"n":100000,"runtime":"Python 3.8.1 / Judge0","unsafe_base":0.18136,"universal_accept":0.47768,"universal_false_reject":0.34096,"operation_specific_full_capsule_accept":0.81864,"operation_specific_full_capsule_unsafe_accept":0.0,"operation_specific_no_selector_unsafe_accept":0.00512,"result_ref":"research_entity/runtime/tool_results/fusion1755-judge0-cognitive-capsule.json"},
+      "selector_attack_sweep":{"selector_attack_given_effect_bound":[0.0,0.01,0.02,0.05,0.10],"no_selector_unsafe_accept":[0.0,0.00262,0.00483,0.01235,0.024415],"full_capsule_accept":[0.82616,0.822995,0.82108,0.813505,0.80301]},
+      "interpretation":"In this constructed workload, a universal all-dimension lock is safe but rejects substantial harmless unrelated churn. Operation-specific validation preserves constructed safety with much higher acceptance. Omitting selection integrity reopens an unsafe channel that scales with selector corruption. The numeric rates are workload parameters/proxy outcomes, not FRANK prevalence or production safety estimates.",
+      "boundary":"synthetic mechanism + independent runtime replication only; target live/twin FRANK remains required"
+    }
+  ],
+  "promotion":"NONE"
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "campaign_id": "666-level0-exhaustive-swarm",
+  "status": "ACTIVE_UNTIL_LEVEL0_PASS",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "home_room": "center",
+  "owner_fixed": true,
+  "laws": [
+    "research_entity/global/LEVEL0_EXHAUSTIVE_CORPUS_COMPLETION_LAW.md",
+    "research_entity/global/LEVEL0_SWARM_EXECUTION_LAW.md",
+    "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md"
+  ],
+  "source_universes": {
+    "drive": {
+      "root_epoch": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T0650p0700.json",
+      "required_scope": "FULL_RECURSIVE_FROZEN_EPOCH"
+    },
+    "project_frankenstein": {
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "required_scope": "FULL_FROZEN_LEVEL0_HISTORY_TREE_SCOPE",
+      "known_commit_scope_units": 545
+    }
+  },
+  "completion_mode": "EXHAUSTIVE_NOT_SAMPLED",
+  "worker_law": "Every actually available worker joins the same campaign, discovers peers/leases, claims a non-overlapping highest-value obligation, publishes results, releases the lease, pivots on overlap and immediately takes another open obligation while execution capacity remains.",
+  "sampling_rule": "PRIORITIZATION_ONLY_NEVER_COMPLETION",
+  "duplicate_rule": "PROVE_IDENTITY_THEN_ONE_SEMANTIC_ANALYSIS_PLUS_ALL_PROVENANCE_LINKS",
+  "pass_requires": [
+    "FULL_DRIVE_ACCOUNTING",
+    "FULL_PROJECT_FRANKENSTEIN_ACCOUNTING",
+    "CROSS_SOURCE_RECONCILIATION",
+    "BRANCH_FEEDBACK_COMPLETE",
+    "EARNED_WORK_ROW_DEDUP_AUDITED",
+    "RELEASE_MANIFEST_VALID",
+    "EXACT_COVERAGE_100"
+  ],
+  "post_pass_transition": "EXACT_666_SWITCHES_TO_EMERGENT_RESEARCH_FIELD_GENESIS",
+  "training_auto_start_forbidden": true,
+  "created_at": "2026-08-09T06:53:00+07:00",
+  "created_by": "chatgpt-secondary"
+}

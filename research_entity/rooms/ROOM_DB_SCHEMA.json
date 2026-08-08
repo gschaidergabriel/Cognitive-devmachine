@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+  "design": "event_sourced_git_native_database",
+  "concurrency_rule": "immutable unique event files plus CAS-updated owned/materialized records; never concurrently append one hot JSONL file",
+  "paths": {
+    "room": "research_entity/rooms/rooms/<room_id>/ROOM.json",
+    "worker": "research_entity/rooms/rooms/<room_id>/workers/<worker_session_id>.json",
+    "event": "research_entity/rooms/rooms/<room_id>/events/<event_id>.json",
+    "task": "research_entity/rooms/rooms/<room_id>/tasks/<task_id>.json",
+    "role_lease": "research_entity/rooms/rooms/<room_id>/leases/roles/<role>.json",
+    "task_lease": "research_entity/rooms/rooms/<room_id>/leases/tasks/<task_id>.json",
+    "cursor": "research_entity/rooms/rooms/<room_id>/cursors/<worker_session_id>.json",
+    "mailbox": "research_entity/rooms/rooms/<room_id>/mailboxes/<worker_session_id>/<event_id>.json",
+    "challenge": "research_entity/rooms/rooms/<room_id>/challenges/<challenge_id>.json",
+    "team_epoch": "research_entity/rooms/rooms/<room_id>/team_epochs/<team_epoch_id>.json",
+    "materialized_state": "research_entity/rooms/rooms/<room_id>/state/ROOM_STATE.json",
+    "center_event": "research_entity/rooms/center_events/<event_id>.json"
+  },
+  "records": {
+    "worker": {
+      "required": ["schema_version", "room_id", "worker_session_id", "actor_id", "provider", "model", "trigger", "status", "joined_at", "last_pulse_at", "canonical_parent", "focus", "ancestry_family"],
+      "status": ["ACTIVE", "WAITING", "COMPLETE", "LEFT", "STALE"]
+    },
+    "event": {
+      "immutable": true,
+      "required": ["schema_version", "event_id", "room_id", "event_type", "origin_worker", "origin_actor", "trigger", "created_at", "canonical_parent", "affects_rooms", "affects_claims", "dependencies", "artifact_refs", "ancestry_family", "delivery", "payload"]
+    },
+    "task": {
+      "required": ["schema_version", "task_id", "room_id", "title", "goal", "status", "dependencies", "completion_test", "created_by"],
+      "status": ["OPEN", "CLAIMED", "BLOCKED", "COMPLETE", "CLOSED", "STALE"]
+    },
+    "lease": {
+      "required": ["schema_version", "lease_type", "room_id", "subject_id", "holder_worker", "team_epoch_id", "issued_at", "expires_at", "status"],
+      "status": ["ACTIVE", "RELEASED", "EXPIRED", "SUPERSEDED"],
+      "truth_authority": false
+    },
+    "challenge": {
+      "required": ["schema_version", "challenge_id", "room_id", "challenger_worker", "target_claim_or_artifact", "challenge_statement", "discriminating_test_or_falsifier", "ancestry_family", "status"],
+      "status": ["OPEN", "ANSWERED", "TESTED", "SUPPORTED", "REFUTED", "UNRESOLVED", "CLOSED"]
+    },
+    "team_epoch": {
+      "required": ["schema_version", "team_epoch_id", "room_id", "created_at", "status", "member_workers", "role_assignments", "shared_question"],
+      "status": ["ACTIVE", "FUSION_READY", "COMPLETE", "CLOSED"]
+    },
+    "cursor": {
+      "required": ["schema_version", "room_id", "worker_session_id", "last_seen_event_id", "updated_at"]
+    }
+  },
+  "event_delivery": {
+    "INTERRUPT_NEXT_SAFE_POINT": "must be considered before the receiver's next material decision/write",
+    "NEXT_CHECKPOINT": "must be considered at the receiver's next mandatory room pulse",
+    "INDEX_ONLY": "discoverable but not forced into active context"
+  },
+  "derived_state_rule": "ROOM_STATE.json is a cache/projection and never outranks immutable events, leases, task records or canonical RAE evidence.",
+  "large_artifact_rule": "room database stores refs/hashes, not duplicated papers, reports, code, traces or experiment outputs."
+}

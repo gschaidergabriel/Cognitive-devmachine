@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.1",
+  "schema_version": "2.2",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -11,8 +11,9 @@
     "unified provider health audit via tools/provider_health_audit.py",
     "allowlisted GitHub-runner provider invocation bridge via tools/research_tool_bridge.py",
     "automatic quota/rate-limit feedback from bridge results into TOOL_QUOTA_STATE.json",
-    "mandatory cross-trigger research mesh preflight including fresh incomplete runs, Topic Packets and micro-packets via tools/research_interconnect_preflight.py",
-    "FRANK architecture source contract in ClayCode semantic IR via tools/frank_architecture_contract.py",
+    "registry-derived seven-branch cross-trigger research mesh preflight including fresh incomplete runs",
+    "rich per-domain active Topic-Packet and Knowledge-Micro-Packet envelopes with raw evidence expanded on demand",
+    "FRANK architecture source contract in ClayCode semantic IR with ClayGraph substrate input",
     "Goodman anti-echo FRANK↔ClayCode feedback contract via tools/goodman_filter_check.py",
     "visible status footer structure checking via tools/status_footer_check.py",
     "OpenAlex runtime verified with private-repo credential",
@@ -38,28 +39,51 @@
     "protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
     "preflight": "tools/research_interconnect_preflight.py",
     "required_run_artifact": "INTERCONNECT_MANIFEST.json",
-    "branches": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition"],
-    "freshness_rule": "Consume newer incomplete run artifacts plus Topic Packets/micro-packets when they supersede the latest final report.",
-    "frank_priority": ["clay", "claycode", "gwt", "hyperposition", "emergenz", "frank"],
-    "claycode_priority": ["frank", "clay", "gwt", "hyperposition", "emergenz", "claycode"],
-    "rule": "Every scientific trigger ingests all connected branches before Fusion 1, scans contradictions and writes cross-links back. Clay is the integrated master foundry. FRANK uses newest Clay research as primary scientific architecture foundation and deeply ingests ClayCode as primary architecture/implementation IR. ClayCode uses newest FRANK research/architecture as primary target feedback and must critically verify it rather than echo it."
+    "branch_authority": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+    "branches": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph"],
+    "freshness_rule": "Consume newer incomplete run artifacts plus active Topic Packets/micro-packets when they supersede the latest final report.",
+    "frank_priority": ["clay", "claycode", "claygraph", "gwt", "hyperposition", "emergenz", "frank"],
+    "claycode_priority": ["frank", "clay", "claygraph", "gwt", "hyperposition", "emergenz", "claycode"],
+    "gwt_priority": ["clay", "claygraph", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
+    "hyperposition_priority": ["clay", "claygraph", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
+    "claygraph_priority": ["clay", "frank", "claycode", "hyperposition", "gwt", "emergenz", "claygraph"],
+    "governance_rule": "Preflight fails closed if any explicit trigger priority does not cover exactly the scientific branch set registered in RESEARCH_TRIGGER_REGISTRY.json.",
+    "rule": "Every scientific trigger ingests all seven connected branches before Fusion 1, scans contradictions and writes cross-links back. Clay is the integrated master foundry. ClayGraph is a scientific memory/knowledge-graph/database-substrate branch and is mandatory deep input to FRANK, ClayCode, GWT and Hyperposition."
+  },
+  "active_domain_knowledge": {
+    "status": "CONFIGURED_PENDING_FRESH_CI_RECEIPT",
+    "policy": "research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md",
+    "selector": "tools/research_interconnect_preflight.py",
+    "baseline_topic_packet_limits": {"clay": 48, "frank": 40, "claycode": 40, "claygraph": 48, "gwt": 32, "hyperposition": 32, "emergenz": 32},
+    "baseline_micro_packet_limits": {"clay": 96, "frank": 80, "claycode": 80, "claygraph": 96, "gwt": 64, "hyperposition": 64, "emergenz": 64},
+    "deep_overrides": {
+      "frank<-clay": [64, 128],
+      "frank<-claycode": [64, 128],
+      "frank<-claygraph": [64, 128],
+      "claycode<-frank": [64, 128],
+      "claycode<-claygraph": [64, 128],
+      "gwt<-claygraph": [56, 112],
+      "hyperposition<-claygraph": [56, 112]
+    },
+    "selection_rule": "Prefer a diverse active envelope of current/open material, contradictions, negative results, experiments, architecture constraints, cross-branch feedback and unresolved falsifiers; raw evidence expands on demand.",
+    "evidence_rule": "Active/relevant does not mean true or promoted; shared ancestry still counts as one evidence family."
   },
   "frank_architecture": {
     "source_language": "ClayCode semantic IR",
     "source_projection": "FRANK_ARCHITECTURE.claycode.json",
     "human_mapping": "CLAYCODE_ARCHITECTURE_MAPPING.md",
     "validator": "tools/frank_architecture_contract.py",
-    "rule": "A FRANK run that produces only prose/diagrams/host-language code is incomplete. The architecture source of truth is ClayCode semantic IR; the deterministic host/bootstrap/capability authority remains explicitly non-self-authorizing."
+    "required_foundations": ["clay", "claycode", "claygraph"],
+    "rule": "A FRANK run that produces only prose/diagrams/host-language code is incomplete. The architecture source of truth is ClayCode semantic IR and must cite ClayGraph substrate research; the deterministic host/bootstrap/capability authority remains explicitly non-self-authorizing."
   },
   "frank_claycode_feedback": {
-    "status": "RUNTIME_VERIFIED",
+    "status": "RUNTIME_VERIFIED_FOR_GOODMAN_CORE; CLAYGRAPH_BINDING_CONFIGURED_PENDING_FRESH_CI_RECEIPT",
     "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
     "validator": "tools/goodman_filter_check.py",
     "required_claycode_artifact": "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
     "completion_command": "python tools/goodman_filter_check.py validate-run research_entity/trigger_runs/claycode/<run_id>",
     "verdicts": ["SUPPORTED", "REFINED", "REFUTED", "UNRESOLVED"],
-    "rule": "ClayCode must read the newest FRANK run and latest FRANK_ARCHITECTURE.claycode.json when available, then independently test materially imported assumptions. Shared FRANK↔ClayCode source/experiment ancestry is collapsed into one evidence family and never counts as independent replication. SUPPORTED/REFINED require independent checks; REFUTED writes negative/supersession evidence; UNRESOLVED cannot be silently promoted.",
-    "contract_receipt": "research_entity/runtime/CONTRACT_HEALTH.json"
+    "rule": "ClayCode reads newest FRANK plus deep ClayGraph input, then independently tests materially imported FRANK assumptions. Shared source/experiment ancestry never counts as independent replication."
   },
   "research_orchestration": {
     "policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
@@ -121,16 +145,16 @@
   },
   "contract_health": {
     "receipt": "research_entity/runtime/CONTRACT_HEALTH.json",
-    "required_gates": [
-      "interconnected_research_mesh",
-      "fresh_incomplete_branch_material",
-      "frank_clay_primary_foundation",
-      "frank_claycode_deep_secondary_foundation",
-      "frank_claycode_architecture_source_contract",
-      "claycode_frank_primary_feedback",
-      "claycode_goodman_anti_echo_review",
-      "claycode_goodman_review_bound_to_exact_preflight",
-      "goodman_rejects_circular_support_without_independent_check",
+    "latest_observed_receipt_schema": "1.3",
+    "fresh_receipt_for_current_mesh_changes": false,
+    "required_next_gates": [
+      "seven_branch_registry_mesh_consistency",
+      "rich_domain_active_packet_envelopes",
+      "raw_evidence_on_demand",
+      "frank_claygraph_deep_substrate_foundation",
+      "claycode_claygraph_deep_input",
+      "gwt_claygraph_deep_input",
+      "hyperposition_claygraph_deep_input",
       "provider_plan",
       "covering_fallback_validation",
       "status_footer_and_short_commands"
@@ -138,6 +162,7 @@
   },
   "limitations": [
     "no assumption of direct shell access to the live FRANK host",
+    "fresh CI receipt for the seven-branch/rich-packet contract changes has not yet been observed",
     "E2B cannot be runtime-verified until E2B_API_KEY is stored through a permitted channel",
     "hosted Piston cannot be runtime-verified until PISTON_API_TOKEN is configured or a self-hosted PISTON_API_URL is supplied",
     "Semantic Scholar public shared-pool requests may transiently rate-limit; use OpenAlex/arXiv/Crossref fallback",

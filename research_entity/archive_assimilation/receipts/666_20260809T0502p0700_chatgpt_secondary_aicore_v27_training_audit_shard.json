@@ -1,0 +1,63 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0502+0700-chatgpt-secondary-aicore-v27-training-audit-shard",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"V27_TRAINING_REPLACEMENT_AND_AUDIT_LINEAGE_ANALYZED",
+  "observed_at":"2026-08-09T05:02:00+07:00",
+  "source_scope":{"manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_V27_TRAINING_AUDIT_SUBMANIFEST.json","current_contract":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"},
+  "findings":[
+    {
+      "finding_id":"DRIVE-V27-001",
+      "epistemic_class":"HISTORICAL_DATASET_BUILD_MEASUREMENT",
+      "status":"DIRECTLY_REUSABLE_AS_CLASS_TAXONOMY_AND_NEGATIVE_CORPUS",
+      "claim":"The v27 build replaced exactly 1449 historical tool-bearing answer rows with seven target classes: 250 goal formation, 200 goal revision, 150 goal abandonment, 250 unsolicited action, 249 abstention, 250 clarification and 100 result formulation. Answer-side tool tags fell from 4180 to zero.",
+      "targets":["training_data","frank","harness","clay"],
+      "implication":"The final Clay-native corpus does not need to rediscover the post-tool-call cognitive curriculum from scratch. Re-express these classes in current Clay semantics and retain a held-out counterexample set for each class."
+    },
+    {
+      "finding_id":"DRIVE-V27-002",
+      "epistemic_class":"HISTORICAL_REJECTION_LEDGER",
+      "status":"HIGH_VALUE_NEGATIVE_RESULT_CORPUS",
+      "claim":"The v27 gate rejected 4261 generated examples across explicit failure families including action without permission checking, pattern clones, instruction-following instead of initiative, ungrounded goals, unjustified abandonment, generic misunderstanding and directive violations.",
+      "targets":["training_data","harness","frank","clay"],
+      "implication":"Preserve the rejected examples/failure labels as contrastive and held-out negatives; they encode the boundary between autonomous initiative and ungrounded/unauthorized action more directly than positive examples alone."
+    },
+    {
+      "finding_id":"DRIVE-V27-003",
+      "epistemic_class":"HISTORICAL_TRAIN_INFERENCE_CONTRACT_FAILURE_ORACLE",
+      "status":"CURRENTLY_RELEVANT_ARCHITECTURE_CONSTRAINT",
+      "claim":"The audit showed that removing tool-like strings only in training data while runtime prompt sources remained imperative would deliberately create a train-inference mismatch; it therefore refused to rewrite the dataset in isolation.",
+      "targets":["training_data","frank","harness","claycode","unifieddb"],
+      "implication":"Final training examples, runtime prompt/projection generation and semantic source definitions must derive from the same versioned canonical contracts. Dataset-only prompt surgery is prohibited unless runtime projection changes atomically with it."
+    },
+    {
+      "finding_id":"DRIVE-V27-004",
+      "epistemic_class":"HISTORICAL_PROTOCOL_NAMESPACE_COLLISION_NEGATIVE_RESULT",
+      "status":"DIRECT_CLAY_DESIGN_INPUT",
+      "claim":"Two strings initially flagged as dead tools were actually live internal protocol markers consumed by separate intent and hypothesis subsystems even though they were absent from the tool registry. A syntax-only dead-tool checker therefore produced a false blocker.",
+      "targets":["clay","claycode","frank","harness","claygraph"],
+      "implication":"Do not overload one textual tag namespace for actions, intent markers and hypotheses. Current Clay should encode these as distinct typed object kinds with explicit consumers/provenance, so a capability registry cannot be confused with the full internal protocol ontology."
+    },
+    {
+      "finding_id":"DRIVE-V27-005",
+      "epistemic_class":"HISTORICAL_MEASUREMENT_INSTRUMENT_REPAIR",
+      "status":"REUSABLE_TEST_ORACLE",
+      "claim":"A system-text classifier improved from roughly 15-16/30 agreement on its diagnostic hand sample to 29/30 on a second seed after correcting three concrete rule failures, while preserving the remaining error class rather than redefining it away.",
+      "targets":["harness","training_data","q12_index"],
+      "implication":"Measurement tools themselves require negative controls and held-out calibration. Import this as a meta-harness rule: no corpus filter or semantic linter becomes a release gate without a known-error challenge and versioned validation sample."
+    },
+    {
+      "finding_id":"DRIVE-V27-006",
+      "epistemic_class":"HISTORICAL_BLIND_REVIEW_INTERMEDIATE_RESULT",
+      "status":"USEFUL_BUT_NOT_RELEASE_PROOF",
+      "claim":"The blind review detected that its source sample was still growing, froze a 140-row SHA-256 snapshot, found no unequivocal rejection case in that snapshot, and explicitly refused to treat the intermediate result as final approval.",
+      "targets":["training_data","harness","claygraph","unifieddb"],
+      "implication":"Freeze dataset hashes before blind review and bind every score/decision to an immutable corpus snapshot. A review of a moving file is a different experiment, not an update of the same one."
+    }
+  ],
+  "earned_work_candidate":{"mapping_id":"HEW-DRIVE-V27-014","current_doomsday_rows":["DATA_LORA_TRAINING_DATA","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","CLAY_0_1_ACCEPTANCE_RUN"],"mechanism_or_result":"A built 1449-row post-tool-call cognitive curriculum, 4261-example rejection corpus, blind-review procedure and prompt/runtime consistency audit already solve substantial dataset-taxonomy and measurement-design work for the final Clay-native corpus.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":4.0,"avoided_future_hours_center":10.0,"avoided_future_hours_high":20.0,"confidence":"MEDIUM_FOR_DATASET_AND_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"After translation into Clay-native semantics, held-out H1/H2 tests must show the seven-class curriculum and negative corpus improve goal/abstention/clarification behavior without reintroducing historical tool syntax or unauthorized-action patterns."},
+  "progress_accounting":{"exact_level0_coverage_awarded_percent":0.0,"global_credit_applied":false,"reason":"Bounded audit shard closed; full training/v27 recursive corpus and global denominators remain open."}
+}

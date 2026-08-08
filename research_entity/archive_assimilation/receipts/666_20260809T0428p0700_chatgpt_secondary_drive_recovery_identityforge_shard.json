@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0428+0700-chatgpt-secondary-drive-recovery-identityforge-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "DRIVE_RECOVERY_LINEAGE_ANALYZED_CROSS_SOURCE_CLASSIFIED",
+  "observed_at": "2026-08-09T04:28:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_scope": {
+    "drive_root": "drive:1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "recovery_folder": "drive:1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6:frank-rettung",
+    "recovery_manifest_note": "drive:1fk7QhCkJbFE4UioFodgy_dXUBorLjspl:WAS-IST-DAS.md",
+    "may11_folder": "drive:1ssI7xKWxxDM4Z9xP4Ti3A49cn1L4NQDE:vom-11-mai",
+    "unversioned_folder": "drive:1pIDeLx-260g5PDHdNZZL6lI75I7Qjow_:unversioniert",
+    "deep_read_files": [
+      "drive:1PwTPb3QQ1vOyX2vfUVxOPyz2zkWr7OJE:services/identity_forge.py",
+      "drive:1XmEuJNjI40OpywHovNZLIJooSKY1M2nT:services/genesis/sandbox.py",
+      "drive:1Ju22HIZ53Rtk015llzEubvBK4ggh6wBt:services/paper_research.py"
+    ],
+    "may11_files_inventory": [
+      "services/identity_forge.py",
+      "services/consciousness_daemon.py",
+      "tools/toolboxd.py",
+      "personality/e_pq.py",
+      "agentic/tools.py"
+    ],
+    "project_frankenstein_reference_head": "abba90a5767d85abc8a1ac340bae92842dab35c1"
+  },
+  "lineage_observation": {
+    "source_claim": "The recovery note records three local Project-Frankenstein copies and says five files were modified on 2026-05-11 in ~/repo after the authoritative aicore/GitHub head dated 2026-04-05; those five changes were never committed. identity_forge.py is reported absent from aicore entirely.",
+    "verification": "Current GitHub repository search returned no identity_forge match. Other four May files require file-by-file comparison because the recovery note warns they sit on an older 123-commit base.",
+    "epistemic_class": "DRIVE_RECOVERY_MANIFEST_PLUS_GITHUB_ABSENCE_CHECK",
+    "constraint": "Do not treat Drive copy timestamps from the 2026-07-31 rescue as original authoring timestamps; the 2026-05-11 date is asserted by the rescue manifest."
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-RECOVERY-001",
+      "epistemic_class": "CROSS_SOURCE_LINEAGE_EVIDENCE",
+      "status": "CURRENT_LEVEL0_LINEAGE_CONSTRAINT",
+      "claim": "GitHub head alone is not a complete historical denominator: the Drive rescue manifest records later uncommitted May work, including one module absent from GitHub and four modified files whose content cannot be blindly merged because their base is older.",
+      "targets": ["frank", "harness", "claycode", "claygraph", "unifieddb", "q12_index"],
+      "implication": "Level-0 source identity must include uncommitted rescue branches and file-level supersession decisions; repository HEAD chronology is insufficient for exhaustive archaeology."
+    },
+    {
+      "finding_id": "DRIVE-IDFORGE-002",
+      "epistemic_class": "UNCOMMITTED_SOURCE_CODE_EVIDENCE",
+      "status": "OPEN_REUSE_CANDIDATE",
+      "claim": "identity_forge.py implements three identity-continuity mechanisms: reflection-derived relationship observations with dedup/pruning, explicit pacts with deadlines/status and E-PQ feedback, and a slowly EMA-drifted voice fingerprint from the system's own outputs. It also composes these into model-facing [SELF] projections.",
+      "targets": ["frank", "harness", "claycode", "claygraph", "unifieddb"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "implication": "These mechanisms are candidate semantic ancestry for persistent self/world/relationship commitments and self-style state, but require current provenance, concurrency, causal and differential tests before adoption."
+    },
+    {
+      "finding_id": "DRIVE-IDFORGE-003",
+      "epistemic_class": "ARCHITECTURE_CONFLICT_FROM_UNCOMMITTED_SOURCE",
+      "status": "NOT_SELECTED_AS_IMPLEMENTED",
+      "claim": "identity_forge.py deliberately writes a NEVER_BACKUP sentinel and treats loss of relationship/pact/voice state as desired irreversibility. This implementation strategy conflicts with the current Clay 0.1 acceptance contract requiring complete observability/replay/recovery, crash consistency, rebuild/rollback and repeatable boot identity.",
+      "targets": ["frank", "harness", "unifieddb", "claycode", "clay"],
+      "implication": "Preserve the concept of consequential commitments only as recoverable, provenance-bound semantic state. If irreversible consequences are researched, model logical/causal irreversibility explicitly; do not create it by intentionally defeating backup/recovery."
+    },
+    {
+      "finding_id": "DRIVE-GENESIS-004",
+      "epistemic_class": "UNCOMMITTED_CODE_VS_DOCUMENTATION_NEGATIVE_RESULT",
+      "status": "NEGATIVE_RESULT_VALUE_NONCOUNTING_OVERLAP",
+      "claim": "genesis/sandbox.py describes an isolated subprocess with resource limits, but the inspected implementation shows a temporary directory, Python subprocess, 30-second timeout and output truncation while copying the host environment and exposing the AICORE root through PYTHONPATH; no rlimit, namespace, seccomp, Firejail or network isolation is present in the inspected code.",
+      "targets": ["harness", "claycode", "frank", "clay"],
+      "implication": "A successful import/test receipt from this historical sandbox is not evidence of effect isolation. Current harness must verify enforcement, not documentation labels.",
+      "dedup": "Mechanism overlaps the already-integrated Project-Frankenstein safety/authority shard; add evidence, not duplicate avoided-hours credit."
+    },
+    {
+      "finding_id": "DRIVE-RESEARCH-005",
+      "epistemic_class": "UNCOMMITTED_AUTONOMOUS_RESEARCH_IMPLEMENTATION",
+      "status": "SUPERSEDED_BUT_INFORMATIVE",
+      "claim": "paper_research.py implemented bounded autonomous arXiv search/read persistence with a one-paper-per-day budget, PDF/text size limits, no execution of downloaded content, a paper library, and integration into hypothesis generation and consciousness reflections.",
+      "targets": ["frank", "harness", "clay", "q12_index"],
+      "implication": "This is direct ancestry for autonomous research loops and budgeted source intake, but current RAE research orchestration/provenance is more complete; retain the historical mechanism and safety constraints rather than reviving this module wholesale."
+    }
+  ],
+  "cross_source_adjudication": {
+    "current_contract_ref": "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
+    "selected": [
+      "relationship-observation semantics with provenance and dedup",
+      "explicit pact/commitment lifecycle with measurable outcome",
+      "slow self-style/voice state as a candidate measured variable",
+      "bounded research-source intake and explicit non-execution of downloaded content"
+    ],
+    "not_selected": [
+      "intentional non-backup/non-recoverability as a way to manufacture stakes",
+      "calling a subprocess+timeout an isolated/resource-limited sandbox without enforcement",
+      "blindly overwriting current GitHub files with May copies from an older base"
+    ]
+  },
+  "earned_work_candidate": {
+    "mapping_id": "HEW-DRIVE-IDFORGE-010",
+    "source_refs": ["DRIVE-IDFORGE-002", "DRIVE-IDFORGE-003"],
+    "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "UDB_UNIFIED_DATABASE", "CLAY_0_1_FULL_INTEGRATION"],
+    "mechanism_or_result": "Uncommitted executable identity-continuity design supplies concrete relationship/pact/voice semantics while simultaneously eliminating the intentional non-recovery implementation path.",
+    "reuse_category": "REUSABLE_WITH_ADAPTATION",
+    "avoided_future_hours_low": 1.0,
+    "avoided_future_hours_center": 2.0,
+    "avoided_future_hours_high": 4.0,
+    "confidence": "LOW_UNCOMMITTED_UNEXECUTED_IN_CURRENT_LINEAGE",
+    "falsifier_or_validation_receipt": "Reference Harness must show that selected relationship/pact/voice semantics improve required persistent identity behavior under replay/recovery and do not create stale-state, privacy/provenance or feedback-loop regressions."
+  },
+  "branch_feedback": {
+    "frank": "Add the uncommitted May rescue lane to architecture archaeology. Evaluate relationship/pact/voice mechanisms; do not inherit the NEVER_BACKUP strategy.",
+    "harness": "Create recovery-preserving tests for pacts/relationship/voice state and a negative fixture proving historical Genesis subprocess tests do not constitute isolation.",
+    "unifieddb": "Represent recoverability, provenance, retention policy and semantic finality separately. A state can be logically consequential without being physically unrecoverable.",
+    "claygraph": "Model relationship/pact ancestry and supersession explicitly; rescued uncommitted files are source nodes distinct from Git commits.",
+    "claycode": "If commitment/finality primitives are added, their semantics must remain replayable/auditable and execution authority must stay outside model text.",
+    "clay": "The historical attempt to manufacture stakes by deleting recovery is rejected; research causal commitment/finality without sacrificing system recoverability.",
+    "q12_index": "Do not describe GitHub abba90a as the complete final historical FRANK state; Drive contains later uncommitted May work requiring adjudication."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "provisional_unique_avoided_future_hours_low": 1.0,
+    "provisional_unique_avoided_future_hours_center": 2.0,
+    "provisional_unique_avoided_future_hours_high": 4.0,
+    "safety_overlap_hours_added": 0.0,
+    "research_pipeline_hours_added": 0.0,
+    "reason": "This is a bounded recovery/identity semantic shard. Whole-Drive and full Project-Frankenstein denominators remain unfrozen."
+  }
+}

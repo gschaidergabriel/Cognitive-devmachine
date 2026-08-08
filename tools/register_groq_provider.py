@@ -7,6 +7,14 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 P=ROOT/'research_entity'/'global'/'EXTERNAL_RESEARCH_TOOL_REGISTRY.json'
 
+CANONICAL_FALLBACK_RULE=(
+    "If a preferred provider is unavailable, rate-limited, quota-exhausted or lacks credentials, "
+    "record the reason and use the next suitable capability without silently weakening provenance. "
+    "Current practical fallbacks: Semantic Scholar -> OpenAlex/arXiv/Crossref; E2B -> Judge0/local sandbox; "
+    "Piston -> Judge0/local sandbox; Tavily/Exa -> DDGS/native web; Groq 8B small-model proxy -> true "
+    "target/local 4B when available, otherwise Hugging Face/other model provider under normal quota policy."
+)
+
 def main():
     d=json.loads(P.read_text(encoding='utf-8'))
     tools=d.setdefault('tools',[])
@@ -29,15 +37,13 @@ def main():
       'verification_receipt':'research_entity/runtime/groq_verification.json',
       'worker_bridge_verified':True
     }
-    found=False
-    for i,x in enumerate(tools):
-        if x.get('tool_name')=='groq_inference':
-            tools[i]=entry; found=True; break
-    if not found: tools.append(entry)
+    # Replace every stale duplicate Groq entry with exactly one canonical entry.
+    d['tools']=[x for x in tools if x.get('tool_name')!='groq_inference']+[entry]
     d['schema_version']='2.2'
     d['small_model_proxy_policy']='research_entity/global/SMALL_MODEL_PROXY_POLICY.md'
-    d['fallback_rule']=str(d.get('fallback_rule','')).rstrip('.') + '; Groq 8B small-model proxy -> true target/local 4B when available, otherwise Hugging Face/other model provider under normal quota policy.'
+    # Assign, never append: repeated health/proxy runs must be byte-idempotent.
+    d['fallback_rule']=CANONICAL_FALLBACK_RULE
     P.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    print(json.dumps({'ok':True,'registered':'groq_inference','status':entry['status']}))
+    print(json.dumps({'ok':True,'registered':'groq_inference','status':entry['status'],'idempotent':True}))
 
 if __name__=='__main__': main()

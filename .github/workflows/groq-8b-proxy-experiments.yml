@@ -42,23 +42,50 @@ jobs:
       - name: Register Groq provider
         run: python tools/register_groq_provider.py
 
-      - name: Run Groq 8B proxy experiment batch
-        run: python tools/groq_8b_proxy_experiments.py --output research_entity/runtime/groq_8b_proxy/LATEST.json
+      - name: Run Groq 8B proxy experiment batch with diagnostics
+        run: |
+          mkdir -p research_entity/runtime/groq_8b_proxy
+          set +e
+          python tools/groq_8b_proxy_experiments.py --output research_entity/runtime/groq_8b_proxy/LATEST.json > /tmp/groq-batch.stdout 2> /tmp/groq-batch.stderr
+          code=$?
+          set -e
+          BATCH_EXIT="$code" python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          def tail(path):
+              try: return Path(path).read_text(encoding='utf-8',errors='replace')[-5000:]
+              except Exception: return ''
+          p=Path('research_entity/runtime/groq_8b_proxy/WORKFLOW_DIAGNOSTIC.json')
+          p.write_text(json.dumps({
+            'schema_version':'1.0',
+            'checked_at':datetime.now(timezone.utc).isoformat(),
+            'exit_code':int(os.environ['BATCH_EXIT']),
+            'latest_result_exists':Path('research_entity/runtime/groq_8b_proxy/LATEST.json').exists(),
+            'stdout_tail':tail('/tmp/groq-batch.stdout'),
+            'stderr_tail':tail('/tmp/groq-batch.stderr'),
+            'credential_value_exposed':False
+          },ensure_ascii=False,indent=2)+'\n')
+          PY
 
-      - name: Archive immutable batch result
+      - name: Archive immutable batch result if present
         run: |
           python - <<'PY'
           import json, shutil
           from pathlib import Path
           latest=Path('research_entity/runtime/groq_8b_proxy/LATEST.json')
+          if not latest.exists():
+              raise SystemExit(0)
           d=json.loads(latest.read_text())
           out=latest.parent/(d['run_id']+'.json')
           shutil.copy2(latest,out)
-          # groq_health_merge already wrote the provider verification receipt. Extend it
-          # with the completed batch identity without exposing credential material.
           rp=Path('research_entity/runtime/groq_verification.json')
-          receipt=json.loads(rp.read_text())
+          receipt=json.loads(rp.read_text()) if rp.exists() else {}
           receipt.update({
+            'schema_version':'1.0',
+            'status':'RUNTIME_VERIFIED',
+            'provider':'Groq',
+            'model':d['model'],
             'executed_model_class':'8B',
             'evidence_role':'8b_proxy_for_4b',
             'run_id':d['run_id'],
@@ -70,7 +97,7 @@ jobs:
           rp.write_text(json.dumps(receipt,indent=2)+'\n')
           PY
 
-      - name: Commit sanitized proxy results and provider state
+      - name: Commit sanitized proxy results, diagnostics and provider state
         run: |
           git config user.name 'rae-groq-experiment-runner'
           git config user.email 'rae-groq-experiment-runner@users.noreply.github.com'

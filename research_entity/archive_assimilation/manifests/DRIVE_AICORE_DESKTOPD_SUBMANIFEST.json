@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-DESKTOPD-20260809T0528p0700",
+  "status":"FROZEN_COMPLETE_TWO_FILE_SUBTREE_WITH_POST_HEAD_PORT_MIGRATION",
+  "source_folder":{"title":"aicore/desktopd","drive_id":"13X-3x-nri4MM-JRqcQmi-oQM8Kr_zSs_","parent_aicore_drive_id":"1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty"},
+  "reference":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1"},
+  "counts":{"recursive_files":2,"recursive_folders":0,"byte_identical_to_reference":1,"post_head_divergent":1},
+  "files":[
+    {"path":"desktopd/__init__.py","drive_id":"10FawyqREhAou8nkf4rGj5jxg_ACcSRaT","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","git_blob":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","reference_blob":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","status":"BYTE_IDENTICAL"},
+    {"path":"desktopd/app.py","drive_id":"182s1zVIrIlp2DoCyDywF5YXgDW1H7uK4","bytes":11654,"sha256":"d53ae36443d45d77bae4c13871b6655bc7509ed29a9021d146348e6d62e4b4f6","git_blob":"dcea4240fa16113ac5c88e94900b3debcf30c38c","reference_blob":"80b063fd0a3ab83e43462f04ce3bd6a919bfc65c","status":"POST_HEAD_DIVERGENT","exact_diff":"Reference `PORT = 8092` was replaced by `from config import instanz as _inst` + `PORT = _inst.port(\"desktopd\")  # Vorgabe = 8092, wie bisher`; inverse replacement reconstructs exact reference blob 80b063fd0a3ab83e43462f04ce3bd6a919bfc65c."}
+  ],
+  "cluster_relation":"Third confirmed Aug-4 daemon migration onto config.instanz. This expands migration coverage but adds zero separate earned-work credit beyond the shared instance-namespace mechanism.",
+  "semantic_obligations":{"identified":"2/2","content_covered":"2/2","classified":"2/2","lineage_linked":"2/2","analyzed":"2/2","status":"COMPLETE_FOR_DESKTOPD_SUBTREE"},
+  "created_by":"chatgpt-secondary","created_at":"2026-08-09T05:28:00+07:00"
+}

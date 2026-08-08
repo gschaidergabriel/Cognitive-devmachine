@@ -2,6 +2,18 @@
 
 Research FRANK as one integrated cognitive/runtime architecture, not as a loose list of services. Use the Master Research Trigger Protocol and mandatory Interconnected Research Mesh Protocol.
 
+## Fixed target architecture — not a hypothesis
+
+Every `frank` run MUST load and obey `research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md`.
+
+The project-owner-fixed target is a Clay-native FRANK: the abliterated Qwen-class 4B is full-model adapted so Clay becomes its native generated/deliberative symbolic language; memory, values/vector semantics, state, GWT/Assemblies, Hyperposition, inter-module semantic communication and the architecture source itself are Clay-native. Clay/ClayCode is the semantic source of truth and ClayGraph is the target persistent semantic memory/knowledge substrate subject to evidence-driven implementation/migration constraints.
+
+This target itself is NOT an open yes/no research hypothesis. Research evaluates how to realize it, consequences, optimal training/tokenizer/curriculum, representations, safety boundaries, performance, migration and failure modes.
+
+**Needle is the sole intentionally retained non-Clay semantic subsystem.** It remains fully used as the fast classifier/router. Needle output enters Clay as typed provenance-bound input/proposal and never mints authority by itself.
+
+Native code, databases, tensors, vector payloads, KV caches and binary wire formats may implement/encode Clay semantics. They MUST NOT become a second competing semantic architecture. Runtime authority enforcement may be compiled to native code, but its semantic contract is authored in Clay/ClayCode and remains non-self-authorizing.
+
 ## Mandatory foundation hierarchy
 
 The `frank` trigger is downstream of the integrated Synthetic Clay research foundry, uses ClayCode as the primary architecture/implementation IR, and must incorporate the current ClayGraph memory/state/database-substrate research.
@@ -14,7 +26,7 @@ Mandatory priority:
 
 Before generating FRANK architecture hypotheses, load and synthesize newest Clay research including fresh material newer than the latest final report: architecture candidates/deltas, hypothesis matrices, experiments, negative results, Topic Packets, micro-packets, provenance and open questions.
 
-Clay is the primary foundation, not unquestioned truth. Revision requires contrary evidence/constraints and preserved contradiction/supersession lineage.
+Clay is the primary foundation. Individual implementation claims remain falsifiable even though the Clay-native target is owner-fixed.
 
 ### 2. ClayCode — primary FRANK architecture language
 
@@ -40,7 +52,7 @@ Every FRANK run MUST deeply ingest the newest ClayGraph completed and in-progres
 - activation/assembly, typed relation, temporal, provenance, conflict/unknown/revoked and replay semantics;
 - negative results and `KEEP_ISOLATED` decisions.
 
-ClayGraph is a research result, not a mandate to collapse every store. FRANK must decide which logical/physical boundaries become graph state, graph projections, linked isolated stores or remain separate authority/transactional domains.
+ClayGraph is the target Clay-native semantic memory substrate, but this does not imply blindly collapsing all physical stores. Conventional databases may remain physical engines or isolated authority stores while their target semantic contracts/links/projections are Clay-native. Physical merge remains evidence-dependent.
 
 Any newer ClayGraph feedback affecting FRANK modules/state contracts/transitions must be represented in `FRANK_ARCHITECTURE.claycode.json` or explicitly rejected/deferred with evidence and falsifier. A FRANK run that silently ignores newer ClayGraph substrate evidence is incomplete.
 
@@ -61,9 +73,11 @@ The ClayCode architecture artifact must represent at least:
 - database migration/isolation boundaries;
 - authority/effect boundaries;
 - provenance and upstream Clay/ClayCode/ClayGraph research dependencies;
-- explicit host-kernel boundaries ClayCode can represent but not self-authorize.
+- physical execution/lowering boundaries that remain semantically defined by Clay.
 
-The minimal deterministic K0 host — parser/validator/canonicalizer/bootstrap trust root and external capability/effect authority — may remain physically outside ClayCode/ClayGraph. Self-representation cannot mint authority.
+There must be no hidden second semantic architecture in Python/Rust/JSON/SQL. Parser/validator/canonicalizer/bootstrap/capability enforcement may be compiled/native implementations, but their target semantics are Clay/ClayCode, their outputs are receipted, and self-representation/model output cannot mint authority.
+
+Needle alone remains the intentional non-Clay semantic component.
 
 Run:
 
@@ -73,21 +87,27 @@ and materialize `INTERCONNECT_MANIFEST.json` before Fusion 1. The preflight deli
 
 ## Primary questions
 
-- Given newest Clay, ClayCode and ClayGraph research, what should FRANK's next integrated architecture be?
-- How should that architecture be expressed as ClayCode modules/state contracts/transitions over a ClayGraph-capable substrate?
+- Given newest Clay, ClayCode and ClayGraph research, how should the fixed Clay-native FRANK target evolve next?
+- How should the Clay-native 4B be full-model trained so Clay becomes its native generated/deliberative symbolic language without unacceptable capability loss?
+- How should one Clay semantic system span model cognition, ClayGraph memory, typed values/vectors, GWT, Hyperposition, architecture and effects while preserving hard type/authority/provenance distinctions?
+- How should Needle remain fully useful as the sole non-Clay subsystem and bridge into Clay without becoming authority?
+- Which physical stores/engines remain separate implementations while exposing one Clay-native semantic world?
+- Can associative ClayGraph state reduce explicit retrieval/context reconstruction without corrupting canonical truth?
+- How should the architecture be expressed as ClayCode modules/state contracts/transitions over a ClayGraph-capable substrate?
 - Which functions are semantically distinct organs versus accidental process/database boundaries?
-- Which current stores should become ClayGraph state/projections/links, and which must remain isolated?
-- Can associative graph state reduce explicit retrieval/context reconstruction without corrupting canonical truth?
-- How should Qwen-class 4B inference, Needle/classifiers, memory, GWT, policy and execution gateways compose?
-- Which portions belong inside Synthetic Clay/ClayCode/ClayGraph and which remain deterministic host/runtime infrastructure?
 - What is the reversible Linux-first implementation and migration path?
 
 ## Mandatory research dimensions
 
+- full-model Clay internalization curriculum, tokenizer/vocabulary and catastrophic-forgetting controls;
+- Clay-language purity and semantic-execution evaluation;
 - whole-system state/dataflow graph;
 - mapping from current Clay architecture to ClayCode FRANK modules/interfaces;
 - mapping from ClayGraph substrate results to FRANK state contracts and persistence boundaries;
+- Clay-native typed scalar/vector/tensor semantics and physical binary lowering;
 - ClayCode transition/operation registry;
+- Needle→Clay bridge and routing/authority separation;
+- homoiconic code/data/instruction/truth/activation separation;
 - fast/slow loop timing and scheduler design;
 - shared-state versus message/IPC boundaries;
 - persistence/recovery/replay;
@@ -109,6 +129,6 @@ Write at minimum:
 - `TOOL_EXECUTION_MANIFEST.json`;
 - `FRANK_ARCHITECTURE.claycode.json` — semantic architecture source of truth;
 - `CLAYCODE_ARCHITECTURE_MAPPING.md` — human explanation including ClayGraph substrate mappings;
-- `FINAL_REPORT.md` — architecture analysis, measurable migration steps, rollback conditions and cross-branch synthesis.
+- `FINAL_REPORT.md` — architecture analysis, measurable training/migration steps, rollback conditions and cross-branch synthesis.
 
 The final report must name the Clay/ClayCode/ClayGraph/GWT/Hyperposition/Emergence inputs that changed the proposal and unresolved contradictions. Finish with the mandatory status footer.

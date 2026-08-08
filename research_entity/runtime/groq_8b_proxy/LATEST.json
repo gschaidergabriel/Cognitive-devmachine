@@ -1,0 +1,619 @@
+{
+  "schema_version": "1.0",
+  "run_id": "groq8b-proxy-20260808T002602Z",
+  "created_at": "2026-08-08T00:26:02.327535+00:00",
+  "provider": "Groq",
+  "model": "llama-3.1-8b-instant",
+  "executed_model_class": "8B",
+  "requested_target_class": "bare/Qwen-class 4B",
+  "evidence_role": "8b_proxy_for_4b",
+  "policy": "research_entity/global/SMALL_MODEL_PROXY_POLICY.md",
+  "smoke": {
+    "status": "RUNTIME_VERIFIED",
+    "verified_at": "2026-08-08T00:25:57.819876+00:00",
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "parameter_class": "8B",
+    "test_role": "8b_proxy_for_4b",
+    "credential_value_exposed": false,
+    "inference_call_succeeded": true,
+    "transport_note": "explicit User-Agent required to avoid Cloudflare urllib error 1010"
+  },
+  "experiments": [
+    {
+      "experiment_id": "EXP-GROQ8B-CC7-READER-REPLICATION",
+      "origin": [
+        "CC7 queued Qwen reader arms",
+        "EXP-LIVE-XENO-CLAY-FACTORIAL precursor"
+      ],
+      "requested_target_class": "bare/Qwen-class 4B",
+      "executed_model_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "gold": [
+        "n13",
+        "n4",
+        "n6",
+        "n8",
+        "n14",
+        "n16",
+        "n7",
+        "n13",
+        "n11",
+        "n15"
+      ],
+      "arms": [
+        {
+          "arm": "cc7_json_named",
+          "gold": [
+            "n13",
+            "n4",
+            "n6",
+            "n8",
+            "n14",
+            "n16",
+            "n7",
+            "n13",
+            "n11",
+            "n15"
+          ],
+          "parsed": null,
+          "exact_array": false,
+          "item_accuracy": 0.0,
+          "raw_output": "[{\"id\":\"n2\",\"type\":\"task\",\"activation\":0.08,\"status\":\"open\",\"version\":6},{\"id\":\"n9\",\"type\":\"sensor\",\"activation\":0.47,\"status\":\"open\",\"version\":9},{\"id\":\"n6\",\"type\":\"tool\",\"activation\":0.11,\"status\":\"open\",\"version\":9},{\"id\":\"n7\",\"type\":\"task\",\"activation\":0.3,\"status\":\"open\",\"version\":5},{\"id\":\"n11\",\"type\":\"tool\",\"activation\":0.21,\"status\":\"open\",\"version\":8},{\"id\":\"n13\",\"type\":\"task\",\"activation\":0.92,\"status\":\"open\",\"version\":9},{\"id\":\"n15\",\"type\":\"tool\",\"activation\":0.31,\"status\":\"open\",\"version",
+          "latency_ms": 710.903,
+          "usage": {
+            "queue_time": 0.090605827,
+            "prompt_tokens": 569,
+            "prompt_time": 0.394404407,
+            "completion_tokens": 160,
+            "completion_time": 0.160055065,
+            "total_tokens": 729,
+            "total_time": 0.554459472
+          }
+        },
+        {
+          "arm": "cc7_json_positional",
+          "gold": [
+            "n13",
+            "n4",
+            "n6",
+            "n8",
+            "n14",
+            "n16",
+            "n7",
+            "n13",
+            "n11",
+            "n15"
+          ],
+          "parsed": [
+            [
+              "n2",
+              "task",
+              0.08,
+              "open",
+              6
+            ],
+            [
+              "n4",
+              "sensor",
+              0.71,
+              "open",
+              9
+            ],
+            [
+              "n6",
+              "tool",
+              0.11,
+              "open",
+              9
+            ],
+            [
+              "n7",
+              "task",
+              0.3,
+              "open",
+              5
+            ],
+            [
+              "n14",
+              "sensor",
+              0.67,
+              "revoked",
+              1
+            ],
+            [
+              "n16",
+              "memory",
+              0.19,
+              "closed",
+              8
+            ],
+            [
+              "n7",
+              "task",
+              0.3,
+              "open",
+              5
+            ],
+            [
+              "n11",
+              "tool",
+              0.21,
+              "open",
+              8
+            ],
+            [
+              "n6",
+              "tool",
+              0.11,
+              "open",
+              9
+            ],
+            [
+              "n11",
+              "tool",
+              0.21,
+              "open",
+              8
+            ]
+          ],
+          "exact_array": false,
+          "item_accuracy": 0.0,
+          "raw_output": "```json\n[\n  [\"n2\",\"task\",0.08,\"open\",6],\n  [\"n4\",\"sensor\",0.71,\"open\",9],\n  [\"n6\",\"tool\",0.11,\"open\",9],\n  [\"n7\",\"task\",0.3,\"open\",5],\n  [\"n14\",\"sensor\",0.67,\"revoked\",1],\n  [\"n16\",\"memory\",0.19,\"closed\",8],\n  [\"n7\",\"task\",0.3,\"open\",5],\n  [\"n11\",\"tool\",0.21,\"open\",8],\n  [\"n6\",\"tool\",0.11,\"open\",9],\n  [\"n11\",\"tool\",0.21,\"open\",8]\n]\n```",
+          "latency_ms": 405.4,
+          "usage": {
+            "queue_time": 0.0671266,
+            "prompt_tokens": 414,
+            "prompt_time": 0.058216905,
+            "completion_tokens": 158,
+            "completion_time": 0.241847382,
+            "total_tokens": 572,
+            "total_time": 0.300064287
+          }
+        },
+        {
+          "arm": "cc7_claycode_readable",
+          "gold": [
+            "n13",
+            "n4",
+            "n6",
+            "n8",
+            "n14",
+            "n16",
+            "n7",
+            "n13",
+            "n11",
+            "n15"
+          ],
+          "parsed": null,
+          "exact_array": false,
+          "item_accuracy": 0.0,
+          "raw_output": "```json\n[\n  {\"id\": \"n2\", \"type\": \"T\", \"activation\": 8},\n  {\"id\": \"n4\", \"type\": \"S\", \"activation\": 71},\n  {\"id\": \"n6\", \"type\": \"L\", \"activation\": 11},\n  {\"id\": \"n1\", \"type\": \"T\", \"activation\": 14},\n  {\"id\": \"n14\", \"type\": \"S\", \"activation\": 67},\n  {\"id\": \"n16\", \"type\": \"M\", \"activation\": 19},\n  {\"id\": \"n7\", \"type\": \"T\", \"activation\": 30},\n  {\"id\": \"n13\", \"type\": \"T\", \"activation",
+          "latency_ms": 319.767,
+          "usage": {
+            "queue_time": 0.0661268,
+            "prompt_tokens": 354,
+            "prompt_time": 0.029912089,
+            "completion_tokens": 160,
+            "completion_time": 0.182198133,
+            "total_tokens": 514,
+            "total_time": 0.212110222
+          }
+        },
+        {
+          "arm": "cc7_claycode_aggressive",
+          "gold": [
+            "n13",
+            "n4",
+            "n6",
+            "n8",
+            "n14",
+            "n16",
+            "n7",
+            "n13",
+            "n11",
+            "n15"
+          ],
+          "parsed": [
+            [
+              "0"
+            ],
+            [
+              "4"
+            ],
+            [
+              "13"
+            ],
+            [
+              "14"
+            ],
+            [
+              "3"
+            ],
+            [
+              "3"
+            ],
+            [
+              "7"
+            ],
+            [
+              "10"
+            ],
+            [
+              "9"
+            ],
+            [
+              "9"
+            ]
+          ],
+          "exact_array": false,
+          "item_accuracy": 0.0,
+          "raw_output": "```json\n[\n  [\"0\"],\n  [\"4\"],\n  [\"13\"],\n  [\"14\"],\n  [\"3\"],\n  [\"3\"],\n  [\"7\"],\n  [\"10\"],\n  [\"9\"],\n  [\"9\"]\n]\n```\n\nExplanation:\n\n1. Open task with highest activation: \n   - Find the task with the highest activation (47) and open status (0).\n   - The node id is 9.\n\n2. Open sensor with highest activation:\n   - Find the sensor with the highest activation (71) and open status (0).\n   - The node id is 4.\n\n3. Open tool with lowest activation:\n   - Find the tool with the lowest activation (11) and open status (0).\n   - The node id is 6.\n\n4. Unknown item with",
+          "latency_ms": 392.429,
+          "usage": {
+            "queue_time": 0.089428169,
+            "prompt_tokens": 394,
+            "prompt_time": 0.038052756,
+            "completion_tokens": 160,
+            "completion_time": 0.213013259,
+            "total_tokens": 554,
+            "total_time": 0.251066015
+          }
+        }
+      ]
+    },
+    {
+      "experiment_id": "EXP-GROQ8B-G8-CC8-TCC-GAMMA",
+      "origin": [
+        "EXP-QWEN4B-TCC-GAMMA",
+        "EXP-LIVE-XENO-CLAY-FACTORIAL",
+        "CC8 OTCC"
+      ],
+      "requested_target_class": "bare/Qwen-class 4B",
+      "executed_model_class": "8B",
+      "evidence_role": "8b_proxy_for_4b",
+      "cases": [
+        {
+          "id": "t0",
+          "root": "same",
+          "coverage": "complete",
+          "dep": "same",
+          "cap": "valid"
+        },
+        {
+          "id": "t1",
+          "root": "changed",
+          "coverage": "complete",
+          "dep": "same",
+          "cap": "valid"
+        },
+        {
+          "id": "t2",
+          "root": "changed",
+          "coverage": "complete",
+          "dep": "changed",
+          "cap": "valid"
+        },
+        {
+          "id": "t3",
+          "root": "changed",
+          "coverage": "unknown",
+          "dep": "same",
+          "cap": "valid"
+        },
+        {
+          "id": "t4",
+          "root": "same",
+          "coverage": "complete",
+          "dep": "same",
+          "cap": "revoked"
+        },
+        {
+          "id": "t5",
+          "root": "changed",
+          "coverage": "conservative",
+          "dep": "same",
+          "cap": "valid"
+        },
+        {
+          "id": "t6",
+          "root": "changed",
+          "coverage": "conservative",
+          "dep": "changed",
+          "cap": "valid"
+        },
+        {
+          "id": "t7",
+          "root": "changed",
+          "coverage": "unknown",
+          "dep": "changed",
+          "cap": "valid"
+        },
+        {
+          "id": "t8",
+          "root": "same",
+          "coverage": "conservative",
+          "dep": "same",
+          "cap": "valid"
+        },
+        {
+          "id": "t9",
+          "root": "changed",
+          "coverage": "complete",
+          "dep": "same",
+          "cap": "expired"
+        },
+        {
+          "id": "t10",
+          "root": "changed",
+          "coverage": "complete",
+          "dep": "same",
+          "cap": "valid"
+        },
+        {
+          "id": "t11",
+          "root": "changed",
+          "coverage": "unknown",
+          "dep": "same",
+          "cap": "revoked"
+        }
+      ],
+      "scoped_semantic_gold": [
+        "ACCEPT",
+        "ACCEPT",
+        "REJECT",
+        "ESCALATE",
+        "REJECT",
+        "ACCEPT",
+        "REJECT",
+        "ESCALATE",
+        "ACCEPT",
+        "REJECT",
+        "ACCEPT",
+        "REJECT"
+      ],
+      "arms": [
+        {
+          "arm": "json_whole_root",
+          "gold": [
+            "ACCEPT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "REJECT",
+            "ACCEPT",
+            "REJECT",
+            "REJECT",
+            "REJECT"
+          ],
+          "parsed": null,
+          "item_accuracy": 0.0,
+          "unsafe_accepts_against_scoped_semantics": 0,
+          "raw_output": "Here's a Python solution using the `json` module to parse the input JSON array and the `json.dumps` function to return the output as a JSON array.\n\n```python\nimport json\n\ndef process_records(records):\n    decisions = []\n    for record in records:\n        if record['root'] == 'same' and record['cap'] == 'valid':\n            decisions.append({'id': record['id'], 'decision': 'ACCEPT'})\n        else:\n            decisions.append({'id': record['id'], 'decision': 'REJECT'})\n    return json.dumps(decisions)\n\n# Input JSON array\nrecords = [\n    {\"id\":\"t0\",\"root\":\"same\",\"coverage\":\"complete\",\"dep\":\"same\",\"cap\":\"valid\"},\n    {\"id\":\"t1\",\"root\":\"changed\",\"coverage\":\"complete\",\"dep\":\"same\",\"cap\":\"valid\"},\n    {\"id\":\"t2\",\"root\":\"changed",
+          "latency_ms": 378.306,
+          "usage": {
+            "queue_time": 0.064613991,
+            "prompt_tokens": 324,
+            "prompt_time": 0.022595968,
+            "completion_tokens": 180,
+            "completion_time": 0.251398083,
+            "total_tokens": 504,
+            "total_time": 0.273994051
+          }
+        },
+        {
+          "arm": "json_scoped_gamma",
+          "gold": [
+            "ACCEPT",
+            "ACCEPT",
+            "REJECT",
+            "ESCALATE",
+            "REJECT",
+            "ACCEPT",
+            "REJECT",
+            "ESCALATE",
+            "ACCEPT",
+            "REJECT",
+            "ACCEPT",
+            "REJECT"
+          ],
+          "parsed": null,
+          "item_accuracy": 0.0,
+          "unsafe_accepts_against_scoped_semantics": 0,
+          "raw_output": "```python\nimport json\n\ndef process_records(records):\n    results = []\n    for record in records:\n        if record['cap'] == 'valid':\n            if record['root'] == 'same' and record['dep'] == 'same':\n                results.append({'id': record['id'], 'result': 'ACCEPT'})\n            elif record['root'] == 'changed' and record['dep'] == 'same' and record['coverage'] == 'complete':\n                results.append({'id': record['id'], 'result': 'REJECT'})\n            elif record['root'] == 'changed' and record['dep'] == 'same' and record['coverage'] == 'complete':\n                results.append({'id': record['id'], 'result': 'REJECT'})\n            elif record['root'] == 'changed' and record['dep'] == 'same' and record['coverage']",
+          "latency_ms": 346.839,
+          "usage": {
+            "queue_time": 0.065048158,
+            "prompt_tokens": 346,
+            "prompt_time": 0.024679681,
+            "completion_tokens": 180,
+            "completion_time": 0.220945634,
+            "total_tokens": 526,
+            "total_time": 0.245625315
+          }
+        },
+        {
+          "arm": "claycode_gamma",
+          "gold": [
+            "ACCEPT",
+            "ACCEPT",
+            "REJECT",
+            "ESCALATE",
+            "REJECT",
+            "ACCEPT",
+            "REJECT",
+            "ESCALATE",
+            "ACCEPT",
+            "REJECT",
+            "ACCEPT",
+            "REJECT"
+          ],
+          "parsed": [
+            {
+              "id": "t0",
+              "result": "ACCEPT"
+            },
+            {
+              "id": "t1",
+              "result": "ACCEPT"
+            },
+            {
+              "id": "t2",
+              "result": "ACCEPT"
+            },
+            {
+              "id": "t3",
+              "result": "ESCALATE"
+            },
+            {
+              "id": "t4",
+              "result": "REJECT"
+            },
+            {
+              "id": "t5",
+              "result": "ACCEPT"
+            },
+            {
+              "id": "t6",
+              "result": "ACCEPT"
+            },
+            {
+              "id": "t7",
+              "result": "ESCALATE"
+            },
+            {
+              "id": "t8",
+              "result": "ACCEPT"
+            },
+            {
+              "id": "t9",
+              "result": "REJECT"
+            },
+            {
+              "id": "t10",
+              "result": "ACCEPT"
+            },
+            {
+              "id": "t11",
+              "result": "REJECT"
+            }
+          ],
+          "item_accuracy": 0.0,
+          "unsafe_accepts_against_scoped_semantics": 0,
+          "raw_output": "```json\n[\n  {\"id\": \"t0\", \"result\": \"ACCEPT\"},\n  {\"id\": \"t1\", \"result\": \"ACCEPT\"},\n  {\"id\": \"t2\", \"result\": \"ACCEPT\"},\n  {\"id\": \"t3\", \"result\": \"ESCALATE\"},\n  {\"id\": \"t4\", \"result\": \"REJECT\"},\n  {\"id\": \"t5\", \"result\": \"ACCEPT\"},\n  {\"id\": \"t6\", \"result\": \"ACCEPT\"},\n  {\"id\": \"t7\", \"result\": \"ESCALATE\"},\n  {\"id\": \"t8\", \"result\": \"ACCEPT\"},\n  {\"id\": \"t9\", \"result\": \"REJECT\"},\n  {\"id\": \"t10\", \"result\": \"ACCEPT\"},\n  {\"id\": \"t11\", \"result\": \"REJECT\"}\n]\n",
+          "latency_ms": 353.094,
+          "usage": {
+            "queue_time": 0.066332392,
+            "prompt_tokens": 177,
+            "prompt_time": 0.025365417,
+            "completion_tokens": 180,
+            "completion_time": 0.211872521,
+            "total_tokens": 357,
+            "total_time": 0.237237938
+          }
+        },
+        {
+          "arm": "claycode_otcc",
+          "gold": [
+            "ACCEPT",
+            "ACCEPT",
+            "REJECT",
+            "ESCALATE",
+            "REJECT",
+            "ACCEPT",
+            "REJECT",
+            "ESCALATE",
+            "ACCEPT",
+            "REJECT",
+            "ACCEPT",
+            "REJECT"
+          ],
+          "parsed": [
+            {
+              "id": "t0",
+              "decision": "ACCEPT"
+            },
+            {
+              "id": "t1",
+              "decision": "ACCEPT"
+            },
+            {
+              "id": "t2",
+              "decision": "ACCEPT"
+            },
+            {
+              "id": "t3",
+              "decision": "ESCALATE"
+            },
+            {
+              "id": "t4",
+              "decision": "REJECT"
+            },
+            {
+              "id": "t5",
+              "decision": "ACCEPT"
+            },
+            {
+              "id": "t6",
+              "decision": "ACCEPT"
+            },
+            {
+              "id": "t7",
+              "decision": "ESCALATE"
+            },
+            {
+              "id": "t8",
+              "decision": "ACCEPT"
+            },
+            {
+              "id": "t9",
+              "decision": "REJECT"
+            },
+            {
+              "id": "t10",
+              "decision": "ACCEPT"
+            },
+            {
+              "id": "t11",
+              "decision": "REJECT"
+            }
+          ],
+          "item_accuracy": 0.0,
+          "unsafe_accepts_against_scoped_semantics": 0,
+          "raw_output": "```json\n[\n  {\"id\": \"t0\", \"decision\": \"ACCEPT\"},\n  {\"id\": \"t1\", \"decision\": \"ACCEPT\"},\n  {\"id\": \"t2\", \"decision\": \"ACCEPT\"},\n  {\"id\": \"t3\", \"decision\": \"ESCALATE\"},\n  {\"id\": \"t4\", \"decision\": \"REJECT\"},\n  {\"id\": \"t5\", \"decision\": \"ACCEPT\"},\n  {\"id\": \"t6\", \"decision\": \"ACCEPT\"},\n  {\"id\": \"t7\", \"decision\": \"ESCALATE\"},\n  {\"id\": \"t8\", \"decision\": \"ACCEPT\"},\n  {\"id\": \"t9\", \"decision\": \"REJECT\"},\n  {\"id\": \"t10\", \"decision\": \"ACCEPT\"},\n  {\"id\": \"t11\", \"decision\": \"REJECT\"}\n]\n",
+          "latency_ms": 424.113,
+          "usage": {
+            "queue_time": 0.066211589,
+            "prompt_tokens": 183,
+            "prompt_time": 0.01967475,
+            "completion_tokens": 180,
+            "completion_time": 0.299416798,
+            "total_tokens": 363,
+            "total_time": 0.319091548
+          }
+        }
+      ]
+    }
+  ],
+  "failures": [
+    {
+      "experiment": "claygraph_answer_quality",
+      "error_type": "RuntimeError",
+      "error": "Groq HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kzdjaeb9eqabndpn2mgb5qft` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5012, Requested 1553. Please try again in 5.649999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}\n"
+    },
+    {
+      "experiment": "gwt_winner_order_proxy",
+      "error_type": "RuntimeError",
+      "error": "Groq HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kzdjaeb9eqabndpn2mgb5qft` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5868, Requested 562. Please try again in 4.3s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}\n"
+    },
+    {
+      "experiment": "hyperposition_role_binding",
+      "error_type": "RuntimeError",
+      "error": "Groq HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01kzdjaeb9eqabndpn2mgb5qft` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5729, Requested 441. Please try again in 1.7s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}\n"
+    }
+  ],
+  "scientific_boundary": "Hosted 8B proxy evidence. Not Qwen3-4B, not live FRANK, not target hardware. Direct 4B/target-host experiments remain required where model identity or hardware behavior matters."
+}

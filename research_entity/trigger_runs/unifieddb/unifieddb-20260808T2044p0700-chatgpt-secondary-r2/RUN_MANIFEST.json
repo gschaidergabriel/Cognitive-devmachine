@@ -1,0 +1,39 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260808T2044p0700-chatgpt-secondary-r2",
+  "trigger":"unifieddb",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status":"COMPLETED_OPEN_RESEARCH_DELTA",
+  "candidate":"UD-RC1 Clay Unified Semantic Persistence Fabric",
+  "promotion":"NONE",
+  "scientific_revision_changed":false,
+  "required_artifacts":[
+    "INTERCONNECT_MANIFEST.json",
+    "TOOL_EXECUTION_MANIFEST.json",
+    "STORE_ROLE_MATRIX.json",
+    "UNIFIED_DATABASE_ARCHITECTURE.claycode.json",
+    "QUERY_ROUTING_PLAN.json",
+    "EXPERIMENT_RESULTS.json",
+    "MIGRATION_PLAN.json",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "FRANK_UNIFIEDDB_FEEDBACK.json",
+    "RUN_MANIFEST.json",
+    "FINAL_REPORT.md"
+  ],
+  "additional_artifacts":["HYPOTHESES.json","research_entity/knowledge_micro_packets/unifieddb/KMP-UDB-U1-CANONICAL-SPINE.md","research_entity/knowledge_micro_packets/unifieddb/KMP-UDB-U1-COGNITIVE-STATE-CONTINUITY.md","research_entity/topic_packets/unifieddb-u1-semantic-persistence-fabric/PACKET.json"],
+  "fresh_branch_inputs":["clay G11 MOSAIC completed during this run","frank C6","claycode CC11","claygraph G1d HOLD","hyperposition H4","gwt R4","emergenz E1","UnifiedDB foundation/G11 feedback"],
+  "key_deltas":[
+    "UnifiedDB default narrowed from possible physical single DB to semantic/logical fabric with authoritative event-state spine plus specialized replayable derived planes.",
+    "Introduced Cognitive State Continuity Loop so canonical events can update graph/vector/FTS/activation and Assembly-ready frontier between model calls.",
+    "Defined operation-specific consistency classes and UnifiedQueryIR routes with selection/derivation receipts.",
+    "Capability secrets and model latent state remain isolated; activation/vector/FTS remain non-authoritative.",
+    "Local four-baseline read/write/serialization/fault tests reject a universal physical-monolith winner and support reversible hybrid migration."
+  ],
+  "validation":{"artifact_creation":"PASS","query_result_identity_samples":"PASS_20_RANDOM_SAMPLES_LOCAL","fault_replay_mechanism":"PASS_LOCAL","mesh_feedback":"ALL_8_BRANCHES","official_repo_runner":"NOT_EXECUTED_BY_CURRENT_CHATGPT_RUNTIME","strong_promotion":"BLOCKED"},
+  "canonical_mutation":false,
+  "open_blockers":["live FRANK/twin workload","target 4B continuity factorial","production persistence engine benchmark","concurrent crash/replay suite","selection/capability adversarial suite","Linux/Android shared-memory and energy/thermal measurements"],
+  "completion_note":"All trigger-required artifacts were materialized; final reread and canonical recheck follow this manifest write."
+}

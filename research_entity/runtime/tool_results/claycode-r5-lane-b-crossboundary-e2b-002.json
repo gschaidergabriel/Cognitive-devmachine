@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "request_id": "claycode-r5-lane-b-crossboundary-e2b-002",
+  "tool": "e2b_sandbox",
+  "request_sha256": "e013b0f42874742dd4936fd71b8bf1cb91665fce6ad107f76563645d62440c94",
+  "processed_at": "2026-08-08T18:43:13.050065+00:00",
+  "result": {
+    "provider": "E2B",
+    "tool": "e2b_sandbox",
+    "evidence_class": "runtime_experiment",
+    "command": "python3 -c '\nimport os, sys, json, random, tempfile, subprocess, ctypes, shutil\nrnd=random.Random(20260809)\naxes=[\"signature\",\"scope\",\"revocation\",\"expiry\",\"basis\",\"selection\",\"closure\",\"intent\"]\nN=12000\n\ndef make_case(k):\n    vals={a:True for a in axes}\n    if rnd.random()>.45:\n        for a in rnd.sample(axes, rnd.randint(1,3)):\n            vals[a]=False\n    return vals\n\ncases=[make_case(k) for k in range(N)]\nref=[all(c.values()) for c in cases]\n\nwith tempfile.TemporaryDirectory() as td:\n    cpath=os.path.join(td,\"checker.c\"); so=os.path.join(td,\"libchecker.so\")\n    open(cpath,\"w\").write('\"'\"''\"'\"''\"'\"'\n#include <stdint.h>\nint clay_check(uint8_t signature,uint8_t scope,uint8_t revocation,uint8_t expiry,uint8_t basis,uint8_t selection,uint8_t closure,uint8_t intent){\n  return signature && scope && revocation && expiry && basis && selection && closure && intent;\n}\n'\"'\"''\"'\"''\"'\"')\n    gcc=shutil.which(\"gcc\") or shutil.which(\"clang\")\n    if not gcc:\n        print(json.dumps({\"status\":\"NO_C_COMPILER\"})); raise SystemExit\n    cp=subprocess.run([gcc,\"-shared\",\"-fPIC\",\"-O2\",cpath,\"-o\",so],capture_output=True,text=True)\n    if cp.returncode:\n        print(json.dumps({\"status\":\"C_COMPILE_FAIL\",\"stderr\":cp.stderr[:500]})); raise SystemExit\n    lib=ctypes.CDLL(so)\n    f=lib.clay_check; f.argtypes=[ctypes.c_uint8]*8; f.restype=ctypes.c_int\n    ffi=[bool(f(*[1 if c[a] else 0 for a in axes])) for c in cases]\n\n    child_code='\"'\"''\"'\"''\"'\"'import sys,json\naxes=[\"signature\",\"scope\",\"revocation\",\"expiry\",\"basis\",\"selection\",\"closure\",\"intent\"]\nfor line in sys.stdin:\n c=json.loads(line); print(\"1\" if all(bool(c[a]) for a in axes) else \"0\")\n'\"'\"''\"'\"''\"'\"'\n    blob=\"\".join(json.dumps(c,separators=(\",\",\":\"))+\"\\n\" for c in cases)\n    pp=subprocess.run([sys.executable,\"-c\",child_code],input=blob,text=True,capture_output=True,timeout=60)\n    ipc=[x==\"1\" for x in pp.stdout.splitlines()]\n\n    mutant_false={}\n    per=1000\n    for drop in axes:\n        expr=\" && \".join(a for a in axes if a!",
+    "stdout": "{\"c_compiler\": \"/usr/bin/gcc\", \"c_ffi_mismatches\": 0, \"cases\": 12000, \"child_exit\": 0, \"claim_boundary\": \"cross-boundary semantics proxy; C FFI and JSON subprocess tested, not full WASI/FFI capability-object implementation\", \"experiment\": \"EXP-CC-LANE-B-CROSSBOUNDARY-002\", \"json_ipc_child_mismatches\": 0, \"per_mutant_targeted_cases\": 1000, \"reference_allow\": 5397, \"reference_deny\": 6603, \"rustc_present\": false, \"single_check_mutant_false_accepts\": {\"basis\": 1000, \"closure\": 1000, \"expiry\": 1000, \"intent\": 1000, \"revocation\": 1000, \"scope\": 1000, \"selection\": 1000, \"signature\": 1000}, \"wasmtime_present\": false}\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "status": "SUCCESS"
+}

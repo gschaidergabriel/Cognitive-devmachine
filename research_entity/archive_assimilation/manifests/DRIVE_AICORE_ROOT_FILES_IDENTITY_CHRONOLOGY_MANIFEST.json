@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE_AICORE_ROOT_FILES_IDENTITY_CHRONOLOGY",
+  "created_at": "2026-08-09T06:42:00+07:00",
+  "actor": "chatgpt-secondary",
+  "source": {
+    "drive_root": "aicore",
+    "drive_folder_id": "1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty",
+    "pf_frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1"
+  },
+  "denominator": {
+    "direct_root_files": 13,
+    "raw_hash_adjudicated": 13,
+    "complete": true
+  },
+  "identity_summary": {
+    "byte_identical_to_pf_head": 10,
+    "divergent_from_pf_head": 1,
+    "drive_only_pf_missing": 2
+  },
+  "files": [
+    {"path":"requirements.txt","drive_blob":"b2927a9cba6146c76845eb0d668247d51f2d19a6","pf_blob":"b2927a9cba6146c76845eb0d668247d51f2d19a6","class":"EXACT_ALIAS"},
+    {"path":"ARCHITECTURE.md","drive_blob":"1f83325d3ef371eb7e2004ac202a7f75c4e546c4","pf_blob":"1f83325d3ef371eb7e2004ac202a7f75c4e546c4","class":"EXACT_ALIAS"},
+    {"path":"HOW_IT_WORKS.md","drive_blob":"dd997ca488c86521a9cf2ec591daecb630b25a25","pf_blob":"dd997ca488c86521a9cf2ec591daecb630b25a25","class":"EXACT_ALIAS"},
+    {"path":"MANUAL.md","drive_blob":"67764eb6f1e2b7079a6fa64bf4db50c6500a6d73","pf_blob":"67764eb6f1e2b7079a6fa64bf4db50c6500a6d73","class":"EXACT_ALIAS"},
+    {"path":"ABOUT.md","drive_blob":"ab7d25a5a51872451614385da66d5a90569da197","pf_blob":"ab7d25a5a51872451614385da66d5a90569da197","class":"EXACT_ALIAS"},
+    {"path":"CONSCIOUSNESS.md","drive_blob":"16611505ff3351980dacc3fd7ae21a77d1aa71b7","pf_blob":"16611505ff3351980dacc3fd7ae21a77d1aa71b7","class":"EXACT_ALIAS"},
+    {"path":"CONTRIBUTIONS.md","drive_blob":"252ae0a78e1e2394b871163f690c66e1045143e2","pf_blob":"252ae0a78e1e2394b871163f690c66e1045143e2","class":"EXACT_ALIAS"},
+    {"path":"USECASES.md","drive_blob":"2cad0481a28150df821a0d0272ace0cc0e79c781","pf_blob":"2cad0481a28150df821a0d0272ace0cc0e79c781","class":"EXACT_ALIAS"},
+    {"path":"BENCHMARK.md","drive_blob":"964b55df613c0305c0c89740da04a8ee6d5a2423","pf_blob":"964b55df613c0305c0c89740da04a8ee6d5a2423","class":"EXACT_ALIAS"},
+    {"path":"MEMORY&PERSISTENCE-ARCHITECTURE.md","drive_blob":"83fe983320a4d79e43a32f836a1a3bd831a45180","pf_blob":"83fe983320a4d79e43a32f836a1a3bd831a45180","class":"EXACT_ALIAS"},
+    {"path":"README.md","drive_blob":"d42b336a5ca5ce5e2f545767b0b2ed22c641bbca","pf_blob":"efb2d20bed920acd32263e118c7f76fba16baa11","class":"DIVERGENT_LATE_DRIVE_SNAPSHOT","drive_modified":"2026-08-01T20:05:33Z"},
+    {"path":"UEBERGABE-P3-2026-08-04.md","drive_blob":"a5b6a0b4502d90a6db49eac29ddc46a9598f2285","pf_blob":null,"class":"DRIVE_ONLY_HANDOFF","drive_modified":"2026-08-04T12:45:02Z"},
+    {"path":"UEBERGABE-P4-2026-08-04.md","drive_blob":"b482362a98e620e86b6c6ad45b44c88c342e72df","pf_blob":null,"class":"DRIVE_ONLY_HANDOFF","drive_modified":"2026-08-04T13:22:37Z"}
+  ],
+  "chronology": {
+    "readme_aug01": "Historical Drive snapshot still describes Frank as direct tool caller using <tool> tags and LoRA-trained tool use, with 44 tools and 25 skills.",
+    "p3_p4_aug04": "Explicitly replace direct Frank tool calling with Needle -> free model -> Frank reads result; v26.2 not trained; Needle must clear a held-out multi-tool gate first.",
+    "current_resolution": "Current FRANK Clay-native contract is stronger: Needle is semantic router/proposal source only; deterministic typed Clay validation/provenance/Safe-Effect authority follows. The Aug-01 README is therefore superseded on tool-authority semantics, while retained as historical architecture evidence."
+  },
+  "high_value_handoff_evidence": [
+    "P3 reports historical v25->v26.1 tool-hit improvement 20.9% -> 79.9%, hallucinated tools 9 -> 0, locked tools 4 -> 0, but these are historical measurement claims requiring their original eval artifact for current acceptance use.",
+    "P3 measured a compact 51-tool Needle projection at 793 tokens in its then-current setup; current source sandbox proves the 1024-token budget/truncation mechanism but exact retained-tokenizer fit/order bias remains open, so 793 is not promoted to a current invariant.",
+    "P3 records Qwen3.5 hybrid full/linear attention architecture and warns that generic q/k/v/o LoRA target-module assumptions cover only full-attention layers; target modules must be inspected against actual model config before training.",
+    "P3 records live-vs-repo database-path divergence: repository database/ may be stale while live state is under ~/.local/share/frank/db/. This is a source-of-truth/provenance oracle, not a current path mandate.",
+    "P4 records a concrete stale-checkpoint shape fault after NAc STATE_DIM changed 102 -> 100 while an anchor remained shape (64,102); loader reset logic was introduced but independent validation was still open at handoff.",
+    "P4 records 1275 swallow-capable exception sites, 1100 broad catches and 241 in the then-current consciousness_daemon.py, after multiple subsystems had died silently. This is a broad observability/fail-visible regression class.",
+    "P4 proposes a deterministic prompt-snapshot freshness gate because stale prompt extracts had repeatedly caused train/inference mismatch. This is retained as a current Harness/data-pipeline candidate, not treated as already implemented."
+  ],
+  "epistemic_rules": [
+    "Handoff prose is measured historical evidence only where it names the measurement and context; it is not current runtime truth.",
+    "Operational paths, hardware, timers and host state in P3/P4 are historical snapshots and must be remeasured before reuse.",
+    "Later handoff chronology does not override executable/current owner contracts when contradicted by newer evidence.",
+    "No self-certification: P4 itself records that independent reproduction was required and that some fixes were still awaiting review."
+  ],
+  "earned_work": {
+    "new_credit_hours_applied": 0,
+    "candidate": {"low":1,"center":3,"high":6},
+    "candidate_reason": "Potential avoided-work value from silent-death measurement, schema-drift oracle and prompt-freshness gate; keep pending mechanism-level dedup against existing PF failure/audit mappings."
+  },
+  "global_level0_exact_credit": 0.0
+}

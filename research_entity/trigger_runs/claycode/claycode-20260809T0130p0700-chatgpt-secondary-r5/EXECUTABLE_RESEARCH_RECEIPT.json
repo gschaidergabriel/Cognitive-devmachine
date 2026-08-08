@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "candidate": "CC-RC1.9-UECC with Lane-B CBEL-TV refinement",
+  "candidate_status": "OPEN_HOLD",
+  "experiments": [
+    {
+      "experiment_id": "EXP-CC-RC1.9-CBEL-TV-LOCAL-001",
+      "provider": "ChatGPT local Python execution sandbox",
+      "runtime": "Python 3.13.5 separate subprocess",
+      "source_artifact": "cbel_tv_checker.py",
+      "source_sha256": "355a29b89dab30a43125f1d24a89138e307166dd994da91fac6a25e3e1b95c1e",
+      "candidate_sha256": "97e0863c7900f22acc58bbc7b6918c8fbd811fb1253f90095673099702753711",
+      "semantic_oracle": "independently structured reference authorization decision vs lowered conjunction checker",
+      "corpus": {"mixed": 100000, "targeted_single_axis_invalid": 40000, "benign": 10000},
+      "result": {"reference_lowering_mismatches": 0, "targeted_full_checker_denies": 40000, "benign_allows": 10000},
+      "mutation_result": "Dropping any one of signature/scope/revocation/expiry/basis/selection/closure/intent caused 5000/5000 targeted false accepts for that axis.",
+      "exit_status": 0,
+      "classification": "constructed_local_runtime_mechanism_evidence"
+    },
+    {
+      "experiment_id": "EXP-CC-RC1.9-CBEL-TV-E2B-001",
+      "provider": "E2B",
+      "runtime": "isolated Linux Python",
+      "request_sha256": "736b746974213100470ba6602eb1356864b781cc09f504ffae6fe562ce943a9e",
+      "result_artifact": "research_entity/runtime/tool_results/claycode-r5-cbel-tv-e2b-001.json",
+      "corpus": {"mixed": 30000, "targeted_single_axis_invalid": 20000, "benign": 10000},
+      "stdout_summary": {"mixed_reference_vs_lowered_mismatches": 0, "mixed_false_accepts": 0, "targeted_full_checker_denies": 20000, "benign_allows": 10000},
+      "mutation_result": "Dropping each of the eight tested bindings caused 2500/2500 targeted false accepts.",
+      "stderr": "",
+      "exit_status": 0,
+      "classification": "external_isolated_runtime_experiment"
+    },
+    {
+      "experiment_id": "EXP-CC-LANE-B-CROSSBOUNDARY-002",
+      "provider": "E2B",
+      "runtime": "isolated Linux Python + gcc C shared library + ctypes + JSON child process",
+      "request_sha256": "e013b0f42874742dd4936fd71b8bf1cb91665fce6ad107f76563645d62440c94",
+      "result_artifact": "research_entity/runtime/tool_results/claycode-r5-lane-b-crossboundary-e2b-002.json",
+      "lowering_targets": ["C shared-library FFI", "JSON subprocess IPC"],
+      "corpus": {"cases_per_boundary": 12000, "reference_allow": 5397, "reference_deny": 6603},
+      "stdout_summary": {"c_ffi_mismatches": 0, "json_ipc_child_mismatches": 0, "child_exit": 0},
+      "mutation_result": "For each of eight bindings, a C lowerer with exactly that check removed falsely accepted 1000/1000 targeted invalid cases.",
+      "environment": {"c_compiler": "/usr/bin/gcc", "wasmtime_present": false, "rustc_present": false},
+      "stderr": "",
+      "exit_status": 0,
+      "classification": "external_cross_representation_runtime_experiment"
+    },
+    {
+      "experiment_id": "EXP-CC-RC1.9-MAINTENANCE-GC-LOCAL-002",
+      "provider": "ChatGPT local Python simulation",
+      "purpose": "separate model deletion hints from destructive physical GC authority",
+      "trials": 20000,
+      "result": {"safe_maintenance_protected_losses": 0, "naive_model_candidate_deletion_trials_with_protected_loss": 19854},
+      "classification": "synthetic_storage_lifecycle_simulation"
+    }
+  ],
+  "preserved_semantic_property": "Authorization decision remains invariant across tested lowering boundaries only when intent identity, current basis, current selection, closure validity, revocation epoch, expiry, scope and permit authenticity remain bound and revalidated.",
+  "peer_refinements_not_fully_executed_by_lane_b": [
+    "origin/integrity ancestry",
+    "monotone aggregate budget consumption",
+    "narrowing-only delegation"
+  ],
+  "open_runtime_targets": [
+    "real WASI/Wasmtime capability-resource handle transfer",
+    "Rust/C++ FFI",
+    "dynamic library/plugin boundary",
+    "JIT executable-memory boundary",
+    "GPU/device handles",
+    "freestanding/boot authority"
+  ],
+  "claim_boundary": "These finite differential and mutation tests are strong mechanism evidence, not a formal proof, production FRANK safety proof, cryptographic protocol proof, or target-Qwen result.",
+  "affected_branches": ["claycode", "frank", "clay", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz"]
+}

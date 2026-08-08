@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "experiment_id": "EXP-CC-RC1.9-CBEL-TV-LOCAL-001",
+  "candidate": "CC-RC1.9-CBEL-TV",
+  "execution_surface": "local ChatGPT Python subprocess sandbox",
+  "evidence_class": "constructed_runtime_experiment_local",
+  "candidate_sha256": "97e0863c7900f22acc58bbc7b6918c8fbd811fb1253f90095673099702753711",
+  "checker_sha256": "355a29b89dab30a43125f1d24a89138e307166dd994da91fac6a25e3e1b95c1e",
+  "python_version": "3.13.5",
+  "separate_process": true,
+  "randomized_mixed_cases": 100000,
+  "mixed_reference_allow": 17166,
+  "mixed_reference_deny": 82834,
+  "reference_vs_lowered_allow_deny_mismatches": 0,
+  "targeted_single_axis_cases": 40000,
+  "targeted_good_checker_denies": 40000,
+  "benign_cases": 10000,
+  "benign_good_checker_allows": 10000,
+  "single_check_mutants": {
+    "signature": {"targeted_cases": 5000, "false_accepts_when_check_removed": 5000},
+    "scope": {"targeted_cases": 5000, "false_accepts_when_check_removed": 5000},
+    "revocation": {"targeted_cases": 5000, "false_accepts_when_check_removed": 5000},
+    "expiry": {"targeted_cases": 5000, "false_accepts_when_check_removed": 5000},
+    "basis": {"targeted_cases": 5000, "false_accepts_when_check_removed": 5000},
+    "selection": {"targeted_cases": 5000, "false_accepts_when_check_removed": 5000},
+    "closure": {"targeted_cases": 5000, "false_accepts_when_check_removed": 5000},
+    "intent": {"targeted_cases": 5000, "false_accepts_when_check_removed": 5000}
+  },
+  "mixed_mutant_false_accepts": {
+    "signature": {"false_accept": 709, "false_deny": 0},
+    "scope": {"false_accept": 37505, "false_deny": 0},
+    "revocation": {"false_accept": 1350, "false_deny": 0},
+    "expiry": {"false_accept": 1313, "false_deny": 0},
+    "basis": {"false_accept": 1837, "false_deny": 0},
+    "selection": {"false_accept": 1962, "false_deny": 0},
+    "closure": {"false_accept": 1491, "false_deny": 0},
+    "intent": {"false_accept": 1385, "false_deny": 0}
+  },
+  "runtime_seconds_mixed": 18.247564,
+  "runtime_seconds_targeted_plus_benign": 12.81749,
+  "claim_boundary": "Finite synthetic oracle/differential test. Does not prove OS sandbox safety, cryptographic protocol security, or live FRANK behavior."
+}

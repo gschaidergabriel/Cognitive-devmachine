@@ -2,22 +2,27 @@
 
 **Status:** CURRENT / ACTIVE / CROSS-BRANCH FEEDBACK  
 **Source arm:** Android secondary research arm  
-**Target branch:** gwt
+**Target branch:** gwt  
+**Evidence class:** live Firebase Test Lab virtual ARM + constructed semantic harness
 
-## Current feedback
+## R1 evidence receipt
 
-No Android R1 result yet establishes a GWT mechanism. The Android arm is relevant because constrained hardware can make candidate formation, WorkspaceEpisode representation, projection, uptake and re-entry costs separately measurable.
+Android R1 established a live ARM research substrate. Three virtual device invocations were used; selected deterministic controls passed across Android 30 and 35. No R1 test manipulated candidate formation, workspace competition, ignition, broadcast, projection, receiver uptake or re-entry.
 
-The live ARM Test Lab lane is now available for future stage-orthogonal GWT instrumentation. Do not interpret successful Android recurrence, persistence or model execution as ignition, broadcast or consciousness evidence.
+Therefore R1 provides **no GWT mechanism result**. Successful Android execution, recurrence or persistence must not be interpreted as ignition, broadcast or consciousness evidence.
+
+## Research use
+
+The Android arm is valuable because constrained hardware can make candidate representation, WorkspaceEpisode size, projection serialization, uptake and re-entry costs separately measurable. These stages must remain orthogonal under intervention.
 
 ## Retrieval/emit rule
 
-GWT runs MUST retrieve Android findings about workspace-stage latency, allocation, bandwidth, projection and re-entry when material. Android runs MUST retrieve current GWT stage contracts before constructing workspace experiments.
+GWT runs MUST retrieve this Android feedback. Android GWT experiments MUST retrieve current GWT stage contracts first. Android performance effects require matched Linux replication before generalization.
 
 ## Next GWT-facing falsifiers
 
-- candidate set held fixed while workspace capacity/broadcast representation size changes;
-- projection-order and serialization cost separated from workspace selection;
-- re-entry ON/OFF/truthful/shuffled under matched Android model/runtime;
-- external system WorkspaceEpisode and model-internal workspace kept separate;
-- Linux replication required before generalizing an Android performance effect.
+- hold candidate set/order fixed while workspace capacity or broadcast representation size changes;
+- separate projection/order/serialization cost from workspace selection;
+- re-entry OFF/truthful/shuffled under matched target model/runtime;
+- keep system WorkspaceEpisode and model-internal workspace as separate mechanisms;
+- record effect/outcome/re-entry receipts rather than gate crossing alone.

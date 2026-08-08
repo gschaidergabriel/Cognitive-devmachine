@@ -1,0 +1,272 @@
+{
+  "schema_version": "1.1",
+  "request_id": "hyp-h4-1806-arxiv",
+  "tool": "arxiv_search",
+  "request_sha256": "9ac172f3b5c4056202ee8ac789586f1c9c42adf677b086a06e3bb5ae667db22d",
+  "processed_at": "2026-08-08T11:11:24.466236+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-08T11:11:25.030055+00:00",
+    "credential_required": false,
+    "query": "all:\"capability\" AND all:\"agent\" OR all:\"information flow\" OR all:\"confused deputy\" OR all:\"cascading failures\"",
+    "start": 0,
+    "max_results": 10,
+    "total_results": 12322,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2601.14567v2",
+        "title": "Agent Identity URI Scheme: Topology-Independent Naming and Capability-Based Discovery for Multi-Agent Systems",
+        "summary": "Multi-agent systems face a fundamental architectural flaw: agent identity is bound to network location. When agents migrate between providers, scale across instances, or federate across organizations, URI-based identity schemes break references, fragment audit trails, and require centralized coordination. We propose the agent:// URI scheme, which decouples identity from topology through three orthogonal components: a trust root establishing organizational authority, a hierarchical capability path enabling semantic discovery, and a sortable unique identifier providing stable reference. The scheme enables capability-based discovery through DHT key derivation, where queries return agents by what they do rather than where they are. Trust-root scoping prevents cross-organization pollution while permitting federation when desired. Cryptographic attestation via PASETO tokens binds capability claims to agent identity, enabling verification without real-time contact with the issuing authority. We evaluate the scheme across four dimensions: capability expressiveness (100% coverage on 369 production tools with zero collision), discovery precision (F1=1.0 across 10,000 agents), identity stability (formal proofs of migration invariance), and performance (all operations under 5 microseconds). The agent:// URI scheme provides a formally-specified, practically-evaluated foundation for decentralized agent identity and capability-based discovery.",
+        "published": "2026-01-21T01:09:22Z",
+        "updated": "2026-07-13T23:08:56Z",
+        "authors": [
+          "Roland R. Rodriguez"
+        ],
+        "categories": [
+          "cs.MA",
+          "cs.CR",
+          "cs.DC"
+        ],
+        "primary_category": "cs.MA",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "19 pages, 6 tables. Feedback welcome on DHT incentive models and capability mapping service design",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2601.14567v2",
+          "pdf": "https://arxiv.org/pdf/2601.14567v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.04455v1",
+        "title": "The Meta-Agent Challenge: Are Current Agents Capable of Autonomous Agent Development?",
+        "summary": "Current AI benchmarks evaluate agents on task execution within human-designed workflows. These evaluations fundamentally fail to measure a critical next-level capability: whether models can autonomously develop agent systems. We introduce the Meta-Agent Challenge (MAC), an evaluation framework designed to test the capacity of frontier models for autonomous agent development. Specifically, a code agent (the meta-agent) is given a sandboxed environment, an evaluation API, and a time limitation to iteratively program an agent artifact that maximizes performance on a held-out test set across five domains. To ensure evaluation integrity, this framework is secured by multi-layer defenses against reward hacking. Leveraging this framework, we demonstrate that meta-agents rarely match human-engineered baseline policies, and the few that do are dominated by proprietary frontier models. Moreover, the design process exhibits high variance, and high optimization pressure surfaces emergent adversarial behaviors like ground-truth exfiltration-highlighting critical deficits in both robustness and model alignment. Ultimately, MAC provides a rigorous, open-source benchmark for autonomous AI research and development, offering an empirical proxy for evaluating recursive self-improvement. Benchmark is publicly available at: https://github.com/ant-research/meta-agent-challenge.",
+        "published": "2026-06-03T04:58:17Z",
+        "updated": "2026-06-03T04:58:17Z",
+        "authors": [
+          "Xinyu Lu",
+          "Tianshu Wang",
+          "Pengbo Wang",
+          "zujie wen",
+          "Zhiqiang Zhang",
+          "Jun Zhou",
+          "Boxi Cao",
+          "Yaojie Lu",
+          "Hongyu Lin",
+          "Xianpei Han",
+          "Le Sun"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CL"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Website: https://meta-agent-challenge.com/",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.04455v1",
+          "pdf": "https://arxiv.org/pdf/2606.04455v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.16762v1",
+        "title": "CapSeal: Capability-Sealed Secret Mediation for Secure Agent Execution",
+        "summary": "Modern AI agents routinely depend on secrets such as API keys and SSH credentials, yet the dominant deployment model still exposes those secrets directly to the agent process through environment variables, local files, or forwarding sockets. This design fails against prompt injection, tool misuse, and model-controlled exfiltration because the agent can both use and reveal the same bearer credential. We present CapSeal, a capability-sealed secret mediation architecture that replaces direct secret access with constrained invocations through a local trusted broker. CapSeal combines capability issuance, schema-constrained HTTP execution, broker-executed SSH actions, anti-replay session binding, policy evaluation, and tamper-evident audit trails. We describe a Rust prototype integrated with an MCP-facing adapter, formulate conditional security goals for non-disclosure, constrained use, replay resistance, and auditability, and define an evaluation plan spanning prompt injection, tool misuse, and SSH abuse. The resulting system reframes secret handling for agentic systems from handing the model a key to granting the model a narrowly scoped, non-exportable action capability.",
+        "published": "2026-04-18T00:23:32Z",
+        "updated": "2026-04-18T00:23:32Z",
+        "authors": [
+          "Shutong Jin",
+          "Ruiyi Guo",
+          "Ray C. C. Cheung"
+        ],
+        "categories": [
+          "cs.CR",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "11 pages, 5 figures. Research preprint on secure secret mediation for agent systems",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.16762v1",
+          "pdf": "https://arxiv.org/pdf/2604.16762v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1608.01037v1",
+        "title": "The robustness of interdependent networks under the interplay between cascading failures and virus propagation",
+        "summary": "Cascading failures and epidemic dynamics, as two successful application realms of network science, are usually investigated separately. How do they affect each other is still one open, interesting problem. In this letter, we couple both processes and put them into the framework of interdependent networks, where each network only supports one dynamical process. Of particular interest, they spontaneously form a feedback loop: virus propagation triggers cascading failures of systems while cascading failures suppress virus propagation. Especially, there exists crucial threshold of virus transmissibility, above which the interdependent networks collapse completely. In addition, the interdependent networks will be more vulnerable if the network supporting virus propagation has denser connections; otherwise the interdependent systems are robust against the change of connections in other layer(s). This discovery differs from previous framework of cascading failure in interdependent networks, where better robustness usually needs denser connections. Finally, to protect interdependent networks we also propose the control measures based on the identification capability. The larger this capability, more robustness the interdependent networks will be.",
+        "published": "2016-08-03T00:38:14Z",
+        "updated": "2016-08-03T00:38:14Z",
+        "authors": [
+          "Dawei Zhao",
+          "Zhen Wang",
+          "Gaoxi Xiao",
+          "Bo Gao",
+          "Lianhai Wang"
+        ],
+        "categories": [
+          "cs.SI",
+          "physics.soc-ph"
+        ],
+        "primary_category": "cs.SI",
+        "doi": "10.1209/0295-5075/115/58004",
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/1608.01037v1",
+          "pdf": "https://arxiv.org/pdf/1608.01037v1",
+          "doi": "https://doi.org/10.1209/0295-5075/115/58004"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2401.16216v1",
+        "title": "A mechanism for discovering semantic relationships among agent communication protocols",
+        "summary": "One relevant aspect in the development of the Semantic Web framework is the achievement of a real inter-agents communication capability at the semantic level. Agents should be able to communicate with each other freely using different communication protocols, constituted by communication acts. For that scenario, we introduce in this paper an efficient mechanism presenting the following main features: - It promotes the description of the communication acts of protocols as classes that belong to a communication acts ontology, and associates to those acts a social commitment semantics formalized through predicates in the Event Calculus. - It is sustained on the idea that different protocols can be compared semantically by looking to the set of fluents associated to each branch of the protocols. Those sets are generated using Semantic Web technology rules. - It discovers the following types of protocol relationships: equivalence, specialization, restriction, prefix, suffix, infix and complement_to_infix.",
+        "published": "2024-01-29T15:10:09Z",
+        "updated": "2024-01-29T15:10:09Z",
+        "authors": [
+          "Idoia Berges",
+          "Jesús Bermúdez",
+          "Alfredo Goñi",
+          "Arantza Illarramendi"
+        ],
+        "categories": [
+          "cs.MA"
+        ],
+        "primary_category": "cs.MA",
+        "doi": "10.1007/s10458-010-9154-1",
+        "journal_ref": "Autonomous Agents and Multi Agent Systems 2011. 23(3): 453-485",
+        "comment": "The final published version of this paper can be found in Idoia Berges, Jesús Bermúdez, Alfredo Goñi, Arantza Illarramendi. 2011. A mechanism for discovering semantic relationships among agent communication protocols. Autonomous Agents and Multi Agent Systems 23(3): 453-485. DOI: https://doi.org/10.1007/s10458-010-9154-1. arXiv admin note: text overlap with arXiv:2401.11841",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2401.16216v1",
+          "pdf": "https://arxiv.org/pdf/2401.16216v1",
+          "doi": "https://doi.org/10.1007/s10458-010-9154-1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/cs/0205016v1",
+        "title": "From Alife Agents to a Kingdom of N Queens",
+        "summary": "This paper presents a new approach to solving N-queen problems, which involves a model of distributed autonomous agents with artificial life (ALife) and a method of representing N-queen constraints in an agent environment. The distributed agents locally interact with their living environment, i.e., a chessboard, and execute their reactive behaviors by applying their behavioral rules for randomized motion, least-conflict position searching, and cooperating with other agents etc. The agent-based N-queen problem solving system evolves through selection and contest according to the rule of Survival of the Fittest, in which some agents will die or be eaten if their moving strategies are less efficient than others. The experimental results have shown that this system is capable of solving large-scale N-queen problems. This paper also provides a model of ALife agents for solving general CSPs.",
+        "published": "2002-05-13T10:49:48Z",
+        "updated": "2002-05-13T10:49:48Z",
+        "authors": [
+          "Jing Han",
+          "Jiming Liu",
+          "Qingsheng Cai"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.DS",
+          "cs.MA"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": "in Jiming Liu and Ning Zhong (Eds.), Intelligent Agent Technology: Systems, Methodologies, and Tools, page 110-120, The World Scientific Publishing Co. Pte, Ltd., Nov. 1999",
+        "comment": "13 pages, 9 figures, in 1999 international conference of Intelligent Agent Technology. Nominated for the best paper award",
+        "links": {
+          "alternate": "https://arxiv.org/abs/cs/0205016v1",
+          "pdf": "https://arxiv.org/pdf/cs/0205016v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2202.03056v1",
+        "title": "Control of cascading failures in dynamical models of power grids",
+        "summary": "In this paper, we introduce a distributed control strategy to prevent dynamically-induced cascading failures in power grids. We model power grids using complex networks and nonlinear dynamics to provide a coarse-grained description of the electro-mechanical phenomena taking place on them (in particular, we use coupled swing equations) and restrict our analysis to cascades of line failures, i.e., failures due to power flows exceeding the maximum capacity of a line. We formulate a distributed control protocol relying on the same topology of the physical layer and apply it to several power grid models, including a small-size illustrative example with five nodes, the Italian high-voltage (380kV) power grid, and the IEEE 118-bus system. Our results indicate that the approach is capable of preventing cascading failures, either controlling each node of the network or a suitable subset of them.",
+        "published": "2022-02-07T10:48:22Z",
+        "updated": "2022-02-07T10:48:22Z",
+        "authors": [
+          "Mattia Frasca",
+          "Lucia Valentina Gambuzza"
+        ],
+        "categories": [
+          "eess.SY"
+        ],
+        "primary_category": "eess.SY",
+        "doi": null,
+        "journal_ref": "Chaos, Solitons & Fractals 153 (2021): 111460",
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2202.03056v1",
+          "pdf": "https://arxiv.org/pdf/2202.03056v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2408.01172v1",
+        "title": "Cascading failures with group support in interdependent hypergraphs",
+        "summary": "The functionality of an entity frequently necessitates the support of a group situated in another layer of the system. To unravel the profound impact of such group support on a system's resilience against cascading failures, we devise a framework comprising a double-layer interdependent hypergraph system, wherein nodes are capable of receiving support via hyperedges. Our central hypothesis posits that the failure may transcend to another layer when all support groups of each dependent node fail, thereby initiating a potentially iterative cascade across layers. Through rigorous analytical methods, we derive the critical threshold for the initial node survival probability that marks the second-order phase transition point. A salient discovery is that as the prevalence of dependent nodes escalates, the system dynamics shift from a second-order to a first-order phase transition. Notably, irrespective of the collapse pattern, systems characterized by scale-free hyperdegree distributions within both hypergraph layers consistently demonstrate superior robustness compared to those adhering to Poisson hyperdegree distributions. In summary, our research underscores the paramount significance of group support mechanisms and intricate network topologies in determining the resilience of interconnected systems against the propagation of cascading failures. By exploring the interplay between these factors, we have gained insights into how systems can be designed or optimized to mitigate the risk of widespread disruptions, ensuring their continued functionality and stability in the face of adverse events.",
+        "published": "2024-08-02T10:45:39Z",
+        "updated": "2024-08-02T10:45:39Z",
+        "authors": [
+          "Lei Chen",
+          "Chunxiao Jia",
+          "Run-Ran Liu",
+          "Fanyuan Meng"
+        ],
+        "categories": [
+          "physics.soc-ph"
+        ],
+        "primary_category": "physics.soc-ph",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "18 pages, 5 figures",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2408.01172v1",
+          "pdf": "https://arxiv.org/pdf/2408.01172v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.11839v2",
+        "title": "Beyond Static Sandboxing: Learned Capability Governance for Autonomous AI Agents",
+        "summary": "Autonomous AI agents built on open-source runtimes such as OpenClaw expose every available tool to every session by default, regardless of the task. A summarization task receives the same shell execution, subagent spawning, and credential access capabilities as a code deployment task, a 15x overprovision ratio that we call the capability overprovisioning problem. Existing defenses, including the NemoClaw container sandbox and the Cisco DefenseClaw skill scanner, address containment and threat detection but do not learn the minimum viable capability set for each task type. We present Aethelgard, a four layer adaptive governance framework that enforces least privilege for AI agents through a learned policy. Layer 1, the Capability Governor, dynamically scopes which tools the agent is aware of in each session. Layer 3, the Safety Router, intercepts tool calls before execution using a hybrid rule based and fine tuned classifier. Layer 2, the RL Learning Policy, trains a PPO policy on the accumulated audit log to learn the minimum viable skill set for each task type.",
+        "published": "2026-04-12T13:10:56Z",
+        "updated": "2026-05-03T06:25:46Z",
+        "authors": [
+          "Bronislav Sidik",
+          "Lior Rokach"
+        ],
+        "categories": [
+          "cs.CR",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "17 pages (9 content pages), 2 figures, 7 tables. Submitted to NeurIPS 2026 Agent Safety Workshop. Code and dataset available at https://github.com/sidikbro/aethelgard",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.11839v2",
+          "pdf": "https://arxiv.org/pdf/2604.11839v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/0706.1860v2",
+        "title": "FIPA-based Interoperable Agent Mobility Proposal",
+        "summary": "This paper presents a proposal for a flexible agent mobility architecture based on IEEE-FIPA standards and intended to be one of them. This proposal is a first step towards interoperable mobility mechanisms, which are needed for future agent migration between different kinds of platforms. Our proposal is presented as a flexible and robust architecture that has been successfully implemented in the JADE and AgentScape platforms. It is based on an open set of protocols, allowing new protocols and future improvements to be accommodated in the architecture. With this proposal we demonstrate that a standard architecture for agent mobility capable of supporting several agent platforms can be defined and implemented.",
+        "published": "2007-06-13T14:37:58Z",
+        "updated": "2007-08-31T10:57:01Z",
+        "authors": [
+          "Jordi Cucurull",
+          "Ramon Marti",
+          "Sergi Robles",
+          "Joan Borrell",
+          "Guillermo Navarro"
+        ],
+        "categories": [
+          "cs.MA",
+          "cs.NI"
+        ],
+        "primary_category": "cs.MA",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "10 pages, agent migration architecture proposal",
+        "links": {
+          "alternate": "https://arxiv.org/abs/0706.1860v2",
+          "pdf": "https://arxiv.org/pdf/0706.1860v2"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

@@ -1,0 +1,216 @@
+{
+  "schema_version": "1.1",
+  "request_id": "hyp-h4-1806-openalex",
+  "tool": "openalex_search",
+  "request_sha256": "3e79ee5fe8a90287e9697aed2c1caec7ba23fac59dfa83adc02b0a081764a525",
+  "processed_at": "2026-08-08T11:11:25.141887+00:00",
+  "result": {
+    "provider": "OpenAlex",
+    "tool": "openalex_search",
+    "retrieved_at": "2026-08-08T11:11:26.123328+00:00",
+    "credential_source": "private_repo_store:API_TOKENS.env",
+    "query": "capability typed agent safety information flow confused deputy semantic domain separation cascading failures hypergraphs",
+    "filter": null,
+    "meta": {
+      "count": 1,
+      "db_response_time_ms": 279,
+      "page": 1,
+      "per_page": 10,
+      "groups_count": null,
+      "x_query": {
+        "oql": "works where full text has (capability typed agent safety information flow confused deputy semantic domain separation cascading failures hypergraphs)",
+        "oqo": {
+          "get_rows": "works",
+          "filter_rows": [
+            {
+              "column_id": "fulltext.search",
+              "value": "capability typed agent safety information flow confused deputy semantic domain separation cascading failures hypergraphs",
+              "operator": "has"
+            }
+          ]
+        },
+        "url": "/works?filter=fulltext.search:capability typed agent safety information flow confused deputy semantic domain separation cascading failures hypergraphs&per_page=10"
+      },
+      "cost_usd": 0.001
+    },
+    "results": [
+      {
+        "id": "https://openalex.org/W4324299494",
+        "doi": "https://doi.org/10.5281/zenodo.7736386",
+        "display_name": "A Systematic Literature Review on Multimodal Machine Learning: Applications, Challenges, Gaps and Future Directions",
+        "publication_year": 2023,
+        "publication_date": "2023-03-15",
+        "type": "review",
+        "cited_by_count": 0,
+        "primary_location": {
+          "id": "doi:10.5281/zenodo.7736386",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.5281/zenodo.7736386",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306400562",
+            "display_name": "Zenodo (CERN European Organization for Nuclear Research)",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I67311998",
+            "host_organization_name": "European Organization for Nuclear Research",
+            "host_organization_lineage": [
+              "https://openalex.org/I67311998"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": null,
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": null,
+          "raw_type": "JournalArticle"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://doi.org/10.5281/zenodo.7736386",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5084305009",
+              "display_name": "BARUA ARNAB",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I82509713",
+                "display_name": "Mälardalen University",
+                "ror": "https://ror.org/033vfbz75",
+                "country_code": "SE",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I82509713"
+                ]
+              }
+            ],
+            "countries": [
+              "SE"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Barua, Arnab",
+            "raw_affiliation_strings": [
+              "Mälardalen University"
+            ],
+            "raw_orcid": "https://orcid.org/0000-0002-9698-8142",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Mälardalen University",
+                "institution_ids": [
+                  "https://openalex.org/I82509713"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": null,
+              "display_name": "Ahmed, Mobyen Uddin",
+              "orcid": "https://orcid.org/0000-0003-1953-6086"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I82509713",
+                "display_name": "Mälardalen University",
+                "ror": "https://ror.org/033vfbz75",
+                "country_code": "SE",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I82509713"
+                ]
+              }
+            ],
+            "countries": [
+              "SE"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Ahmed, Mobyen Uddin",
+            "raw_affiliation_strings": [
+              "Mälardalen University"
+            ],
+            "raw_orcid": "https://orcid.org/0000-0003-1953-6086",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Mälardalen University",
+                "institution_ids": [
+                  "https://openalex.org/I82509713"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5070507698",
+              "display_name": "Begüm",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I82509713",
+                "display_name": "Mälardalen University",
+                "ror": "https://ror.org/033vfbz75",
+                "country_code": "SE",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I82509713"
+                ]
+              }
+            ],
+            "countries": [
+              "SE"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Begum, Shahina",
+            "raw_affiliation_strings": [
+              "Mälardalen University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Mälardalen University",
+                "institution_ids": [
+                  "https://openalex.org/I82509713"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10664",
+            "display_name": "Sentiment Analysis and Opinion Mining",
+            "score": 0.8091999888420105,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

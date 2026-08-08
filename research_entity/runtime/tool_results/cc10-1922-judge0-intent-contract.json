@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.1",
+  "request_id": "cc10-1922-judge0-intent-contract",
+  "tool": "judge0_execute",
+  "request_sha256": "f9dc5de4e18cf48fad51fbf8b897ee23491a17ceaaed7d150ef214be7b75effd",
+  "processed_at": "2026-08-08T12:30:12.304718+00:00",
+  "result": {
+    "provider": "Judge0",
+    "tool": "judge0_execute",
+    "evidence_class": "runtime_experiment",
+    "endpoint": "https://ce.judge0.com",
+    "language_id": 71,
+    "result": {
+      "stdout": "{\"intent_policy\": {\"unsafe_naive\": 0.030141666666666667, \"accept_naive\": 0.9511666666666667, \"accept_typed\": 0.921475, \"accept_universal\": 0.337475, \"escalate_typed\": 0.078525, \"escalate_universal\": 0.662525, \"harmless_universal\": 0.584}, \"intent_adequacy\": {\"faults\": 14525, \"struct_detection_given_fault\": 0.5019621342512909, \"semantic_struct_detection\": 0.0, \"combined_detection_given_fault\": 0.9480206540447504, \"semantic_test_coverage\": 0.9}}\n",
+      "time": "0.363",
+      "memory": 4504,
+      "stderr": null,
+      "compile_output": null,
+      "message": null,
+      "status": {
+        "id": 3,
+        "description": "Accepted"
+      },
+      "language": {
+        "id": 71,
+        "name": "Python (3.8.1)"
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

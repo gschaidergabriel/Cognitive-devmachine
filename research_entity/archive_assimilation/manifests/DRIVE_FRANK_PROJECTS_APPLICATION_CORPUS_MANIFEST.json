@@ -1,0 +1,62 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-FRANK-PROJECTS-APPLICATION-CORPUS-20260809T0448p0700",
+  "status":"BOUNDED_APPLICATION_SEMANTIC_MANIFEST_FROZEN_NESTED_SUPPORT_ARTIFACTS_OPEN",
+  "trigger":"666",
+  "source_root":{"title":"frank-projects","folder_id":"1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw"},
+  "scope_rule":"Exact for the 14 direct project folders returned by direct folder fetch. Application maturity classifications are evidence-bounded by direct-child probes and selected deep reads/runtime probes. Hidden/nested .browser/.tasks/docs/media support trees are not claimed fully semantically assimilated unless stated.",
+  "direct_project_denominator":{"projects_total":14,"projects_classified":14,"percent":100.0},
+  "projects":[
+    {"title":"grazcamperfinder","id":"15svsxTRgAKWZMDBmk8pZeGqmzNqYREyi","class":"PLAN_ONLY","evidence":["PROJECT.md status Setup & Development","setup_log.md"],"claycode_use":"requirements/counterexample source only"},
+    {"title":"e-auto-graz-finder","id":"1K1Dd5_y1MEc2CZOJHWdWdyhd7wzrDbpd","class":"NESTED_SUPPORT_TREE_NO_TOPLEVEL_EXECUTABLE_OBSERVED","evidence":["dealers","dreams","email_templates","docs",".browser",".tasks"],"claycode_use":"not promoted; nested code status unresolved"},
+    {"title":"autoscout-e-car-hunter","id":"1Ei4tqx1O-rbxRbx0mReRUzv_nG7rnUBK","class":"EXECUTABLE_SOURCE_PRESENT_UNVERIFIED_E2E","evidence":["autoscout_hunter.py","code/contact_agent.py","code/scoring_engine.py","code/ev_scorer.py"],"claycode_use":"APP-01 CLI + files/processes host-reference fixture; APP-08 harmless process-capability fixture"},
+    {"title":"ev-scout-graz","id":"1cww--dt_g7UICmJYXI-mGsNVF94TRi81","class":"PARTIAL_EXECUTABLE_MULTI_FILE_RUNTIME_PROBED","evidence":["ev_scanner.py","ev_scorer.py","ev_database.json","email_templates.py","example_data.py"],"claycode_use":"APP-01 CLI + HTTP-client + file/state persistence reference fixture"},
+    {"title":"ev-camperscout","id":"1_doTplPF7sHkmtkcTOj7ssD82pP3-sX9","class":"PLAN_AND_PROVIDER_SETUP_ONLY","evidence":["PROJECT.md","GROQ_SETUP.md","FREE_API_SETUP.md"],"claycode_use":"requirements only; no executable proof"},
+    {"title":"autoscout-ioniq-5-finder","id":"1caU_VPq6sfv_2iVF-QAivnwHDzQmnTmY","class":"PLAN_ONLY","evidence":["PROJECT.md",".tasks"],"claycode_use":"not executable evidence"},
+    {"title":"autocarfinder-pro","id":"1391rzRVgQBAVL0lsBQHgkrX5QfMcrhXD","class":"PARTIAL_EXECUTABLE_AUTOMATION","evidence":["ioniq5_search_agent.py","ioniq5_scorer.py","search_listings.py","search_ioniq5_multi.py","heartbeat_search_state.json","scraper.sh"],"claycode_use":"APP-01 CLI + HTTP client + periodic/stateful automation reference; incomplete HTML extraction is a negative fixture"},
+    {"title":"e-auto-scout-sterreich","id":"1EURGrNQfTRtZN7OivEFhUBsjw-Qe4glI","class":"RESEARCH_ONLY","evidence":["EV_SERVICE_RESEARCH.md","ev_market_research.md","RESEARCH_FINDINGS.md","PROJECT.md"],"claycode_use":"domain corpus only"},
+    {"title":"ai-research-agent","id":"1Lw6yF8sT1aMUANIzVGF0hKDf-avWSQmv","class":"SCAFFOLD_ONLY","evidence":["code/hello.py 306 bytes","docs",".tasks",".browser"],"claycode_use":"negative fixture for project-metadata != executable-agent maturity"},
+    {"title":"autocar-hunter","id":"1swK6E-e_xiQvolRo2GqzxjTPV0iMPZLp","class":"PLAN_DEMO_ONLY","evidence":["PROJECT.md","screenshot.png",".browser",".tasks"],"claycode_use":"UI/requirements reference only"},
+    {"title":"test-project","id":"12YPc2JdSpr2A7bVYxQxZhBOmuWfZ10Qi","class":"EMPTY_STUB","evidence":["README.md 34 bytes"],"claycode_use":"NOT_REUSABLE except trivial filesystem fixture"},
+    {"title":"autocamp-scout","id":"1onpWcBDGHjZnSRUt2T4lHuQWOwl6p6nW","class":"PLAN_ONLY","evidence":["PROJECT.md",".browser",".tasks"],"claycode_use":"requirements only"},
+    {"title":"video-launch-page","id":"1K7zgswugRw-NcOZrXv-FpEs-7Acoivua","class":"STATIC_WEBSITE_ARTIFACT","evidence":["index.html 6353 bytes","deploy-github-pages.skill.md","browser/screenshots"],"claycode_use":"supplemental APP-02 frontend/static-site fixture only; cannot replace mandatory HTTP server/backend proof"},
+    {"title":"autohunter-ioniq-5-autonomer-autokauf-agent","id":"1HOz6qK1hHCcGqDgpo3VMtU_HDwCg47zR","class":"PLAN_DATA_FIXTURE","evidence":["PROJECT.md","SETUP_SUMMARY.md","sample_cars.json","austrian_dealers.json","empty cars.json/dealers.json"],"claycode_use":"data/schema/test-fixture source only"}
+  ],
+  "selected_source_hashes":[
+    {"file":"ev-scout-graz/ev_scorer.py","sha256":"7533cf1d219739937544ade3b6acd9b556ce8f34413999e628f7b576d11c3c49"},
+    {"file":"ev-scout-graz/ev_scanner.py","sha256":"6f09e2a3c95c720fa8abe7d836feac813a9e2e62b4f0f9e31625e8d2164cf18c"},
+    {"file":"autoscout-e-car-hunter/autoscout_hunter.py","sha256":"83165266d203f5694147bba85b16512924c43106424b0f95ba21bee1eabdf985"},
+    {"file":"autocarfinder-pro/ioniq5_search_agent.py","sha256":"dc449e42001ba5232d7d53ac485c310caf58b12799cce94960ff75a5620e7cdb"}
+  ],
+  "runtime_probes":[
+    {"probe_id":"FP-APP-RUN-001","source":"ev-scout-graz/ev_scorer.py","environment":"local isolated Python host reference","result":"PASS","observed":{"criteria_all_ok":true,"total_score":52.8,"kosten_pro_km":0.418},"scope":"synthetic single-vehicle deterministic scoring path; not full project E2E"},
+    {"probe_id":"FP-APP-RUN-002","source":"ev-scout-graz/ev_scanner.py","environment":"local isolated temp directory; no network scan invoked","result":"PASS","observed":{"first_add":true,"duplicate_add":false,"persisted_count_after_reload":1},"scope":"JSON persistence/dedupe lifecycle only; network scraping not claimed"},
+    {"probe_id":"FP-APP-SYNTAX-003","sources":["ev_scorer.py","ev_scanner.py","autoscout_hunter.py","ioniq5_search_agent.py"],"result":"PASS","observed":"all selected Python sources parse via ast.parse"}
+  ],
+  "general_purpose_acceptance_mapping":{
+    "APP-01_CLI":"STRONG_HOST_REFERENCE_CANDIDATE_NOT_CLAY_PROOF",
+    "APP-02_WEBSITE":"SUPPLEMENTAL_STATIC_FRONTEND_ONLY_BACKEND_MISSING",
+    "APP-03_DB_SERVICE":"NO_REAL_DB_SERVICE; JSON persistence only",
+    "APP-04_CONCURRENT_SERVICE":"NO_EVIDENCE_IN_SAMPLED_CORPUS",
+    "APP-05_GUI_INTERACTIVE":"NO_EXECUTABLE_GUI_EVIDENCE_IN_SAMPLED_CORPUS",
+    "APP-06_COMPILER_TOOL":"NO_EVIDENCE",
+    "APP-07_GPU_ML_NUMERICAL":"NO_EVIDENCE",
+    "APP-08_SYSTEM_EFFECT":"PARTIAL_PROCESS_SUBPROCESS_REFERENCE_ONLY",
+    "APP-09_FRANK_COMPONENT":"OUT_OF_SCOPE_FOR_THIS_CORPUS",
+    "APP-10_FULL_FRANK_HANDOFF":"OUT_OF_SCOPE_FOR_THIS_CORPUS"
+  },
+  "negative_results":[
+    "Project folder existence and rich browser/task traces do not imply executable application maturity.",
+    "Plan documents frequently describe autonomous pipelines that are absent or only partially implemented in code.",
+    "autocarfinder-pro's ioniq5_search_agent.py explicitly contains simplified extraction where real HTML parsing is still missing.",
+    "Static GitHub-Pages HTML is useful frontend evidence but does not satisfy the required ClayCode HTTP/backend website proof.",
+    "JSON files named database are persistence fixtures, not evidence of a transactional database-backed service."
+  ],
+  "open_nested_obligations":[
+    "Nested .browser/.tasks/media traces are inventoried as support classes but not fully semantically read.",
+    "e-auto-graz-finder nested dealers/dreams/email_templates/docs trees remain unproven for executable code.",
+    "No external live scraping was run during this bounded assimilation; source-level network behavior remains historical code evidence."
+  ],
+  "frozen_at":"2026-08-09T04:48:00+07:00",
+  "frozen_by":"chatgpt-secondary"
+}

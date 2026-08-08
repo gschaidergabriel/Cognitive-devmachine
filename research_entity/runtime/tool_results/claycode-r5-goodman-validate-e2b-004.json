@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "request_id": "claycode-r5-goodman-validate-e2b-004",
+  "tool": "e2b_sandbox",
+  "request_sha256": "4c28d23ee0aff41c9fac2794cd36b49f5104c8d7a8ff0ee94ebedb4520d64560",
+  "processed_at": "2026-08-08T18:58:31.903429+00:00",
+  "result": {
+    "provider": "E2B",
+    "tool": "e2b_sandbox",
+    "evidence_class": "runtime_experiment",
+    "command": "python3 -c '\nimport urllib.request,tempfile,subprocess,os,json\nbase='\"'\"'https://raw.githubusercontent.com/gschaidergabriel/clay-global-research-entity/main/'\"'\"'\nrun='\"'\"'research_entity/trigger_runs/claycode/claycode-20260809T0130p0700-chatgpt-secondary-r5/'\"'\"'\nurls={\n '\"'\"'checker'\"'\"':base+'\"'\"'tools/goodman_filter_check.py'\"'\"',\n '\"'\"'inter'\"'\"':base+run+'\"'\"'INTERCONNECT_MANIFEST.json'\"'\"',\n '\"'\"'review'\"'\"':base+run+'\"'\"'FRANK_CLAYCODE_GOODMAN_REVIEW.json'\"'\"'}\nwith tempfile.TemporaryDirectory() as td:\n  rd=os.path.join(td,'\"'\"'run'\"'\"'); os.mkdir(rd)\n  status={}\n  try:\n    for k,u in urls.items():\n      b=urllib.request.urlopen(u,timeout=20).read()\n      status[k]={'\"'\"'bytes'\"'\"':len(b)}\n      out=os.path.join(td,'\"'\"'checker.py'\"'\"') if k=='\"'\"'checker'\"'\"' else os.path.join(rd,'\"'\"'INTERCONNECT_MANIFEST.json'\"'\"' if k=='\"'\"'inter'\"'\"' else '\"'\"'FRANK_CLAYCODE_GOODMAN_REVIEW.json'\"'\"')\n      open(out,'\"'\"'wb'\"'\"').write(b)\n    cp=subprocess.run(['\"'\"'python3'\"'\"',os.path.join(td,'\"'\"'checker.py'\"'\"'),'\"'\"'validate-run'\"'\"',rd],capture_output=True,text=True,timeout=30)\n    print(json.dumps({'\"'\"'download'\"'\"':status,'\"'\"'command'\"'\"':'\"'\"'python3 tools/goodman_filter_check.py validate-run <run_dir>'\"'\"','\"'\"'exit_code'\"'\"':cp.returncode,'\"'\"'stdout'\"'\"':cp.stdout,'\"'\"'stderr'\"'\"':cp.stderr},sort_keys=True))\n  except Exception as e:\n    print(json.dumps({'\"'\"'download'\"'\"':status,'\"'\"'error'\"'\"':type(e).__name__+'\"'\"': '\"'\"'+str(e)},sort_keys=True))\n'",
+    "stdout": "{\"download\": {}, \"error\": \"HTTPError: HTTP Error 404: Not Found\"}\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "status": "SUCCESS"
+}

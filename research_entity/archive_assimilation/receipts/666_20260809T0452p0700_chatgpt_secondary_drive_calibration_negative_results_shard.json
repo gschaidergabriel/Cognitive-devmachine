@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0452+0700-chatgpt-secondary-drive-calibration-negative-results",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "PARTIAL_EXECUTED_MEASUREMENT_AND_NEGATIVE_RESULT_SHARD",
+  "sources": ["Drive:KALIBRIERUNG-2026-08-06.md"],
+  "findings": [
+    {
+      "finding_id": "DRV-CAL-SPRACHE-001",
+      "epistemic_class": "HISTORICAL_MEASUREMENT_CONFOUNDED_CAUSAL_ATTRIBUTION",
+      "claim": "The calibration reports language-format adherence rising from 48/38/75% to 100% across three agents and zero prose lines over 167 subsequent turns, but two interventions occurred four minutes apart, so the causal contribution of fixed prompt-head retrieval versus repeated XENO reminder was not isolated.",
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "targets": ["claycode", "harness", "DATA_FINAL_TRAINING_CORPUS"],
+      "implication": "Preserve the measurement battery and rerun factorized ablations; do not attribute the gain to either intervention without isolation."
+    },
+    {
+      "finding_id": "DRV-CAL-CACHE-002",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT",
+      "claim": "A cache/header effort consumed about 25 minutes, four tools and eleven checks while measured hit rate moved only 98.1% to 98.3%; the report explicitly identifies the mistake as confusing mechanism correctness with useful effect.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "claycode", "clay", "q12_index"],
+      "implication": "Require baseline-before-build and effect-size gates for token/context optimizations; a byte-identical mechanism is not evidence of useful impact."
+    },
+    {
+      "finding_id": "DRV-CAL-OUTPUT-003",
+      "epistemic_class": "HISTORICAL_OPERATIONAL_MEASUREMENT",
+      "claim": "The report identifies output volume as the dominant measured cost, citing about 1.45 million output tokens across three helpers in one day; post-change per-turn output fell 27-52% across three agents but task mix changed, so causal attribution remained open.",
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "targets": ["claycode", "harness", "clay", "q12_index"],
+      "implication": "Track output-token cost and task-matched quality jointly; do not optimize cache/input mechanisms while ignoring output generation cost."
+    },
+    {
+      "finding_id": "DRV-CAL-ENFORCE-004",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_CLUSTER",
+      "claim": "The report says requested rules repeatedly failed while counted/blocked invariants held, and three watcher false alarms came from matching patterns across whole text instead of command position.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "claycode", "frank"],
+      "implication": "Convert critical format/safety constraints into deterministic validators at the correct syntactic boundary and measure false-positive burden; instruction-only compliance is not an invariant."
+    },
+    {
+      "finding_id": "DRV-CAL-RESOURCE-005",
+      "epistemic_class": "HISTORICAL_OPERATIONAL_CORRECTION",
+      "claim": "A high system load initially blamed on FRANK was re-attributed after measurement to two test browsers at 489% and 548% CPU plus FRANK UI at 56%; reported load average fell from 9.49 peak to 1.18 after correction.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "frank", "PROJECT_HARDWARE_DEPLOYMENT"],
+      "implication": "Performance attribution must separate system/self/external-process load before architecture blame or optimization."
+    }
+  ],
+  "earned_work": {"additional_hours_awarded": 0.0, "reason": "High-value measurement/test-oracle lineage, but current RAE already contains overlapping throughput, context and enforcement research; unique avoided-hour credit requires later ancestry deduplication."},
+  "progress_accounting": {"exact_level0_coverage_awarded_percent": 0.0, "combined_denominator_state": "NOT_FROZEN"}
+}

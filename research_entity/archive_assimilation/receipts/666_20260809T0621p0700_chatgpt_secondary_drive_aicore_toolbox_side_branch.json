@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T0621p0700_chatgpt_secondary_drive_aicore_toolbox_side_branch",
+  "actor": "chatgpt-secondary",
+  "trigger": "666",
+  "status": "COMPLETE",
+  "source_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_TOOLS_TOOLBOX_SIDE_BRANCH_MANIFEST.json",
+  "source_units": 1,
+  "findings": [
+    "aicore/tools is exactly one-file recursive denominator and toolboxd.py diverges from PF frozen head.",
+    "The Drive file is a mixed lineage: it resurrects old entity-session retrieval APIs that were later superseded by rooms while also adding later Drive-only Identity Forge mutators.",
+    "Therefore newest-file/mtime restoration is unsound; mechanism-level chronology is required.",
+    "Identity Forge mutation routes are local HTTP handlers without a dedicated authority proof; localhost and Frank-only comments are not authority boundaries.",
+    "Current Clay architecture must type read-only recall separately from identity mutation and require provenance, authority, replay/recovery policy and audit semantics."
+  ],
+  "history_refs": [
+    "Project-Frankenstein:59dfd4534c06f4545633231a434ab42956b803f6",
+    "Project-Frankenstein:b3df2f9885bede8ec38ced0c21763a06699d14b9",
+    "Project-Frankenstein:c9bb3bcb3fcac61a1ae0f1de95d814dda3038302"
+  ],
+  "harness_fixture": "research_entity/harness/fixtures/TOOLBOX_SIDE_BRANCH_CHRONOLOGY_AUTHORITY_ORACLES.json",
+  "targets": ["frank","claycode","harness","unifieddb","claygraph","emergenz"],
+  "earned_work_hours_added": 0,
+  "dedup_reason": "Identity Forge was already mapped by prior recovery receipt; entity-session code exists in PF history. New value is chronology/merge/authority negative evidence.",
+  "exact_level0_credit": 0.0,
+  "training_started": false
+}

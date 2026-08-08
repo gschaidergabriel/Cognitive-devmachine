@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0441+0700-chatgpt-secondary-drive-g8-g9-retina-code",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "PARTIAL_EXECUTED_NOT_COUNTED_UNTIL_FULL_DENOMINATOR_FREEZE",
+  "observed_at": "2026-08-09T04:41:41+07:00",
+  "lane": "drive_xeno_g8_g9_digital_retina_code_and_measurement",
+  "drive_newness_boundary": {
+    "statement": "Several source files/folders became newly visible/created in the connected Drive around 2026-08-08T21:25Z-21:34Z, but their internal modification/research dates are mostly May-August 2026. Connector-new is not treated as research-new.",
+    "rule": "Preserve historical content date separately from Drive exposure date."
+  },
+  "source_scope": {
+    "xeno": [
+      "Drive:SE_XENO_FULL_HANDOFF_2026-08-05.txt",
+      "Drive:SE_XENO_NEUE_INSTANZ_UEBERGABE_G8.txt",
+      "Drive:SE_XENO_G9_FINAL_GRAPH_PROSE_REPORT.txt",
+      "Drive:SE_XENO_800_4B_SWARM_EXPERIMENT.txt",
+      "Drive:G8/implementation/parser/machine_language.py",
+      "Drive:G8/implementation/tests/test_g8.py",
+      "Drive:G8/implementation/tests/final_checks.json",
+      "Drive:G8/directcode/backends/add4_equivalence.c",
+      "Drive:G8/directcode/backends/compile_log.json",
+      "Drive:G8/compiler/README.md"
+    ],
+    "digital_retina": [
+      "Drive:digital-retina-emergent-readout.txt",
+      "Drive:autonomous_vision_training.txt",
+      "Drive:digital-retina/retina/core.py",
+      "Drive:digital-retina/retina/vision/frank_eye.py",
+      "Drive:digital-retina/retina/vision/clip_classifier.py",
+      "Drive:digital-retina/retina/vision/paddle_ocr.py",
+      "Drive:digital-retina/tests/test_smoke.py"
+    ],
+    "training_history": ["Drive:FRANK-v26.1-Fertigstellung.txt"]
+  },
+  "local_reproduction": {
+    "machine_language_sha256": "6a560ff4c59d2e11f1e340272a11229078cd60ffe65e3f3078729b92a8d14133",
+    "machine_language_observed_version": "Machine Language v0.1 r4 / SE-XENO-IR 0.9 candidate",
+    "roundtrip": {"D": true, "O": true, "A": true, "R": true, "P": true},
+    "tamper_test": "payload mutation produced integrity_mismatch",
+    "authority_test": "critical P proof without origin authority produced rights_origin_unverified; same proof with origin_authority=true validated",
+    "add4_source_sha256": "6c21a9cc1b63617ec07ee2f39183a7e7c0c955f967d0c7b3b9544c6ab91aa5b3",
+    "add4_gcc": {"compile": "PASS", "run": "PASS", "sink": 360000000, "all_4bit_inputs_checked_by_program": true},
+    "add4_clang": {"compile": "PASS", "run": "PASS", "sink": 360000000, "all_4bit_inputs_checked_by_program": true},
+    "epistemic_class": "CURRENT_SESSION_REEXECUTION_OF_HISTORICAL_SOURCE",
+    "caveat": "The add4 backend is a bounded equivalence/lowering proof, not evidence of a general-purpose compiler."
+  },
+  "findings": [
+    {
+      "finding_id": "DRV-G8-CODE-001",
+      "epistemic_class": "HISTORICAL_SOURCE_PLUS_CURRENT_SESSION_REEXECUTION",
+      "claim": "The G8 implementation tree contains executable parser/projection, proof, routing, replay, fuzz/test and directcode machinery. The inspected machine_language.py is an r4/IR-0.9 predecessor component inside the G8 lineage and implements deterministic compact codecs over a canonical content-addressed store, integrity checks, critical proof validation and authority-origin gating.",
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["claycode", "harness", "unifieddb", "claygraph", "frank"],
+      "implication": "Do not redesign parser/canonical-store/envelope/proof concepts from zero; port useful invariants into the frozen ClayCode semantics while preserving current authority rules and testing against current counterexamples."
+    },
+    {
+      "finding_id": "DRV-G8-COMPILER-002",
+      "epistemic_class": "HISTORICAL_CODE_AND_BUILD_RECEIPT_PLUS_CURRENT_SESSION_REEXECUTION",
+      "claim": "G8's folder named compiler points to a bounded directcode add4 equivalence C path. Historical artifacts show GCC and Clang returncode 0; final_checks reports 11 pytest passes, 4 candidates x 256 proof cases and 10,000 control mutations. Current-session GCC/Clang recompilation and execution also passed.",
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "targets": ["claycode", "harness"],
+      "negative_constraint": "This must not be counted as a general-purpose ClayCode compiler. BASE GENERAL_PURPOSE_GATE remains open and still requires CLI/HTTP/DB/concurrency/GUI/compiler/GPU/system-effect/FRANK proofs.",
+      "implication": "Reuse equivalence-class generation, multi-backend translation validation and proof-kernel patterns as compiler-lowering scaffolding."
+    },
+    {
+      "finding_id": "DRV-G9-SEMANTICS-003",
+      "epistemic_class": "HISTORICAL_EXPERIMENT_REPORT",
+      "claim": "G9 reports zero deterministic disagreement between full-GRF and an information-equivalent causal-state-machine baseline; GRF labels themselves added no measured effect in that proxy. Explicit admissibility/guards mattered, not metaphysical naming.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["clay", "claycode", "claygraph", "harness", "frank", "emergenz"],
+      "implication": "Preserve executable causal/admissibility semantics; do not add mandatory wire syntax merely to encode framework labels without an executable counterexample or measured gain."
+    },
+    {
+      "finding_id": "DRV-G9-SEMANTIC-PROOF-004",
+      "epistemic_class": "HISTORICAL_EXPERIMENT_REPORT",
+      "claim": "G9 reports parse(render(AST)) equivalence on 2000/2000 transport cases but failure to catch semantically manipulated values; counterfactual/invariance binding detected 1000/1000 constructed semantic manipulations.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["claycode", "harness", "claygraph", "unifieddb"],
+      "implication": "Roundtrip/hash tests prove transport integrity, not semantic equivalence. H1/H2/H3 must add invariant and intervention/counterfactual equivalence tests."
+    },
+    {
+      "finding_id": "DRV-G9-DATA-005",
+      "epistemic_class": "HISTORICAL_GENERATED_DATASET_REPORT",
+      "claim": "G9 reports 18,000 train-ready transitions split 12k/3k/3k train/validation/OOD; in a reversed-surface-correlation OOD split a surface-only proxy scored balanced accuracy 0.112 while the causal-state-machine and semantically identical GRF representation scored 1.000.",
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "targets": ["claycode", "harness", "DATA_FINAL_TRAINING_CORPUS"],
+      "implication": "Treat the 18k corpus as an audit candidate, not accepted training data: verify generation ancestry, leakage, semantic equivalence and relevance to the frozen Clay representation before ingestion."
+    },
+    {
+      "finding_id": "DRV-G8-SWARM-006",
+      "epistemic_class": "HISTORICAL_EXPERIMENT_DESIGN_NOT_RESULT",
+      "claim": "The 800 x 4B swarm document is a factorial experimental design, not an executed 800-independent-agent result. It explicitly warns that 800 logical agents over one checkpoint are not 800 independent samples and proposes pod/cell analysis, effective-sample-size accounting, matched XENO-vs-key=value controls and recurrent-workspace/grounded-state/XENO interaction tests.",
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "targets": ["gwt", "emergenz", "harness", "claycode"],
+      "implication": "Route as future experiment design; award no empirical completion credit until executed with frozen seeds/holds and proper unit-of-analysis."
+    },
+    {
+      "finding_id": "DRV-RETINA-CODE-007",
+      "epistemic_class": "HISTORICAL_CODE_EVIDENCE",
+      "claim": "Digital Retina has a real multi-file CPU vision implementation. retina/core.py exposes structured analysis with description, concepts, objects, OCR, faces, logos, image metadata and elapsed_ms; retina/vision includes frank_eye.py, CLIP, OCR, region/scene/composition and pattern modules. A smoke test requires structured output fields and real model weights/sample image.",
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "harness", "gwt", "claygraph", "unifieddb", "clay"],
+      "implication": "Build the mandatory Clay VisualPercept adapter around this structured substrate instead of reducing vision to a caption-only interface. Current frozen target must preserve provenance/uncertainty and causal-use tracing."
+    },
+    {
+      "finding_id": "DRV-RETINA-MEASURE-008",
+      "epistemic_class": "HISTORICAL_WORKING_PAPER_MEASUREMENT",
+      "claim": "The Digital Retina working paper reports 82.4% held-out phrase coverage on 47 unseen images / 1,196 phrases, 1.5-2.0 s/image on 4-vCPU CPU-only hardware, and at threshold 0.22 a realistic-negative false-positive rate of 13.6%. It explicitly labels itself non-peer-reviewed, n=1 engineering work and notes limited distribution/compositional-binding coverage.",
+      "reuse_class": "MEASUREMENT_FOUNDATION",
+      "targets": ["frank", "harness", "PROJECT_HARDWARE_DEPLOYMENT", "CLAY_0_1_FULL_INTEGRATION"],
+      "implication": "Use as historical baseline and benchmark scaffold, not a frozen acceptance threshold. Reproduce on current project hardware and add compositional/stale/replay/adversarial visual tests."
+    },
+    {
+      "finding_id": "DRV-RETINA-ATTENTION-009",
+      "epistemic_class": "HISTORICAL_DESIGN_PROPOSAL",
+      "claim": "The autonomous vision training design proposes event-triggered visual curiosity rather than periodic capture, with cooldown, daily budget, no-look examples, context-change/post-action triggers and habituation under repeated OCR similarity.",
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "gwt", "harness"],
+      "implication": "Use as a candidate visual attention policy and adversarial fixture; do not claim it was deployed merely from the design document."
+    },
+    {
+      "finding_id": "DRV-TRAIN-SCHEMA-010",
+      "epistemic_class": "HISTORICAL_DEPLOYMENT_TRAINING_INSTRUCTION",
+      "claim": "FRANK v26.1 training instructions document repeated failures from runtime/training-format mismatch and explicitly separate architecture/code truth, runtime prompt state and LoRA behavior. They also require tool-result role compatibility and runtime-shaped state blocks.",
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["DATA_FINAL_TRAINING_CORPUS", "FINAL_MODEL_FINE_TUNE", "harness", "frank"],
+      "implication": "Final Clay training corpus must carry schema-versioned runtime-equivalent contexts and must not bake mutable live facts into target behavior. User-specific historical content is superseded and is not transferred."
+    }
+  ],
+  "earned_work_delta": {
+    "status": "PROVISIONAL_MERGE_READY_NOT_YET_ADDED_TO_GLOBAL_SUMMARY",
+    "reason": "Current HISTORICAL_EARNED_WORK already contains overlapping PF language/context mappings; this delta only proposes unique incremental credit pending mechanism-level deduplication.",
+    "proposed_unique_mappings": [
+      {"mapping":"G8 concrete parser/proof/directcode implementation and current-session reproducibility beyond generic PF tool-format ancestry","low":1.0,"center":2.0,"high":4.0},
+      {"mapping":"G9 semantic-equivalence/roundtrip-negative-result and OOD causal-vs-surface regression oracles","low":1.0,"center":3.0,"high":6.0},
+      {"mapping":"Digital Retina real codebase plus held-out benchmark scaffold for mandatory multimodal FRANK","low":3.0,"center":7.0,"high":14.0},
+      {"mapping":"runtime/training schema-drift failure corpus","low":1.0,"center":3.0,"high":6.0}
+    ],
+    "proposed_total_unique_hours": {"low":6.0,"center":15.0,"high":30.0},
+    "global_completion_credit_applied": false
+  },
+  "progress_accounting": {
+    "combined_denominator_state": "NOT_FROZEN",
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "New high-value source/code shards are covered, but the full Drive and Project-Frankenstein atomic denominators remain unfrozen."
+  }
+}

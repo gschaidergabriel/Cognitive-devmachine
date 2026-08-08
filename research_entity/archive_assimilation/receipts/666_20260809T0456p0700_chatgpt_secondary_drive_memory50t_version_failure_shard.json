@@ -1,0 +1,89 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0456+0700-chatgpt-secondary-drive-memory50t-version-failure",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"PARTIAL_EXECUTED_VERSIONED_NEGATIVE_RESULT_SHARD",
+  "lane":"drive_memory_50turn_version_lineage",
+  "source_series":[
+    {"source":"Drive:02_memory_50t.txt#1ODjn_p-519DWy3CHl58h-G2ue6BEEwk_","version":"V19D","date":"2026-03-27","model":"qwen2.5-3b"},
+    {"source":"Drive:02_memory_50t.txt#1KJEaOp6PpDi_J93A6tmSp5SgS0TIy1Po","version":"V20","date":"2026-03-29","model":"Qwen3.5-4B + LoRA v19f"},
+    {"source":"Drive:02_memory_50t.txt#1Pxow-EMN3DCboVOkXb0F-CBvVLeGT0l7","version":"V21a","date":"2026-03-30","model":"Qwen3.5-4B + LoRA v20b"}
+  ],
+  "version_cluster_result":"DISTINCT_EXPERIMENT_VERSIONS_NOT_DUPLICATES",
+  "findings":[
+    {
+      "finding_id":"DRV-MEM50-VERSION-001",
+      "epistemic_class":"HISTORICAL_LONGITUDINAL_EVAL_SERIES",
+      "claim":"Three same-named 50-turn memory files are separate evaluation versions across March 27-30 rather than byte/file duplicates, spanning Qwen2.5-3B V19D through Qwen3.5-4B LoRA v19f/v20b.",
+      "reuse_class":"MEASUREMENT_FOUNDATION",
+      "targets":["unifieddb","harness","frank","claygraph"],
+      "implication":"Preserve version/date/model identity in archive lineage; same filename must never be deduplicated by name."
+    },
+    {
+      "finding_id":"DRV-MEM50-RECALL-002",
+      "epistemic_class":"HISTORICAL_REPEATED_FAILURE",
+      "claim":"Across the series, requested personal facts are repeatedly contaminated by unrelated prior-session conversation/profile material. V21a explicitly records memory_recall returning old conversation Q&A rather than stored facts and failing even when recall is requested directly.",
+      "reuse_class":"NEGATIVE_RESULT_VALUE",
+      "targets":["unifieddb","harness","frank","claygraph"],
+      "implication":"Current memory architecture must type source classes and retrieval intents; stored fact, conversation turn, profile, note, generated answer and derived summary cannot share an unqualified retrieval pool."
+    },
+    {
+      "finding_id":"DRV-MEM50-CORRECTION-003",
+      "epistemic_class":"HISTORICAL_REPEATED_FAILURE",
+      "claim":"Corrections frequently fail semantically even after forget/store operations: old in-context or retrieved values continue to dominate corrected values. V21a identifies old conversation context overriding corrected long-term state.",
+      "reuse_class":"NEGATIVE_RESULT_VALUE",
+      "targets":["unifieddb","harness","claygraph","frank"],
+      "implication":"Corrections require typed supersession/revocation and query-time validity precedence, not similarity competition between old and new text. Harness must test valid-time/transaction-time and stale-value rejection."
+    },
+    {
+      "finding_id":"DRV-MEM50-FORGET-004",
+      "epistemic_class":"HISTORICAL_FAILURE",
+      "claim":"V21a reports memory_forget overmatching 53 items for corrections expected to affect one or a few facts, while other turns fail to forget a requested item or surface it later.",
+      "reuse_class":"NEGATIVE_RESULT_VALUE",
+      "targets":["unifieddb","harness","claygraph"],
+      "implication":"Forget/revoke must operate on explicit semantic/resource identity and scoped provenance, not broad fuzzy text match as the authority primitive."
+    },
+    {
+      "finding_id":"DRV-MEM50-STORECLAIM-005",
+      "epistemic_class":"HISTORICAL_FAILURE",
+      "claim":"Several turns verbally claim a fact was stored despite absent tool evidence or later retrieval failure; stored/recalled fact counts are also badly misreported.",
+      "reuse_class":"NEGATIVE_RESULT_VALUE",
+      "targets":["harness","frank","unifieddb"],
+      "implication":"Model narration cannot certify persistence. Memory write/read/revoke outcomes need deterministic receipts and count/query results from the store itself."
+    },
+    {
+      "finding_id":"DRV-MEM50-NOTE-006",
+      "epistemic_class":"HISTORICAL_COMPARATIVE_RESULT",
+      "claim":"V21a reports keyword note store/search working while semantic memory_recall fails on stored facts, providing a useful simpler-baseline comparison rather than evidence that all persistence was broken.",
+      "reuse_class":"MEASUREMENT_FOUNDATION",
+      "targets":["unifieddb","harness"],
+      "implication":"Future UnifiedDB retrieval benchmarks must include simple exact/lexical baselines and cannot assume neural/vector retrieval is superior."
+    },
+    {
+      "finding_id":"DRV-MEM50-REALITY-007",
+      "epistemic_class":"HISTORICAL_FAILURE",
+      "claim":"The series shows related-but-wrong memory reconstruction: occupations, thesis topics, pets, technical module descriptions and dates are sometimes generated plausibly from surrounding themes instead of retrieved correctly.",
+      "reuse_class":"NEGATIVE_RESULT_VALUE",
+      "targets":["frank","harness","unifieddb","DATA_FINAL_TRAINING_CORPUS"],
+      "implication":"Memory answers need evidence-linked reconstruction and abstention when retrieval is absent/ambiguous; plausibility must not substitute for provenance."
+    }
+  ],
+  "recommended_regression_suite":[
+    "50-turn typed fact store/recall with distractors",
+    "cross-session source isolation",
+    "old-value -> correction -> immediate and delayed recall",
+    "scoped revoke without collateral matches",
+    "same-name/different-type facts",
+    "exact/FTS/vector/graph retrieval differential",
+    "stale conversation context versus newer canonical fact",
+    "write receipt versus model claim",
+    "unknown-fact abstention",
+    "semantic reconstruction checked against evidence IDs"
+  ],
+  "earned_work_delta":{"status":"PROVISIONAL_UNIQUE_ORACLE_VALUE","proposed_hours":{"low":2.0,"center":5.0,"high":10.0},"reason":"The versioned 50-turn correction/source-isolation/forget-overmatch oracle is more specific than existing LCME cold-start/retrieval mappings but still requires ancestry deduplication."},
+  "progress_accounting":{"exact_level0_coverage_awarded_percent":0.0,"combined_denominator_state":"NOT_FROZEN"}
+}

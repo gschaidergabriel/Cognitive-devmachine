@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE-DIGITAL-RETINA-EVAL-20260809T0445p0700",
+  "manifest_kind": "BOUNDED_DRIVE_RUNTIME_AND_EVAL_SUBMANIFEST",
+  "status": "FROZEN_BOUNDED_SHARD",
+  "trigger_context": "manual 666 protocol invocation from explicit user instruction; full user message was not exact reserved-token match",
+  "source_roots": [
+    {"title":"digital-retina","id":"1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m"},
+    {"title":"digital-retina-e2e","id":"1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja"}
+  ],
+  "bounded_obligations": [
+    {"id":"DR-EVAL-001","source":"drive:140gAB6HX7xBUE_CkSKwmBNGRQRYx3xrG:README.md","kind":"architecture_summary","state":"ANALYZED"},
+    {"id":"DR-EVAL-002","source":"drive:1Bod2qv2fdirkgsfZWl5gGgcpFMWjt-vc:HONEST_REPORT.md","kind":"negative_and_baseline_measurement_report","state":"ANALYZED"},
+    {"id":"DR-EVAL-003","source":"drive:1xC0zrN6odKIvYfpRLpx77pLb5DO9FYVl:FINAL_REPORT.md","kind":"later_measurement_report","state":"ANALYZED_WITH_INTERNAL_CONTRADICTION"},
+    {"id":"DR-EVAL-004","source":"drive:1uRc3_NQTyIrJEIl9L4A5FoTNkP0Yutha:p8_lenient_020_OFFICIAL.json","kind":"raw_eval_result","state":"ANALYZED"},
+    {"id":"DR-EVAL-005","source":"drive:12uAsKpwCXspllndt9tFQ_jbP-Sr0th0j:p12_FINAL.json","kind":"raw_eval_result","state":"ANALYZED"},
+    {"id":"DR-EVAL-006","source":"drive:1e3VGdtYziHp9VT_9ckuJ6VFEntL8Tb8U:freshset_coverage.json","kind":"fresh_holdout_result","state":"ANALYZED"},
+    {"id":"DR-EVAL-007","source":"drive:12baWzxy_NpVQAKaM4lmY1Gx5xjnzfjnS:retina/core.py","kind":"runtime_public_api","state":"ANALYZED"},
+    {"id":"DR-EVAL-008","source":"drive:1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja:digital-retina-e2e-root","kind":"eval_harness_inventory","state":"ANALYZED"}
+  ],
+  "raw_result_summary": {
+    "tier3_honest_report": {"hard_images":12,"hard_strict_text_coverage_pct":35.3,"easy_images":10,"easy_strict_text_coverage_pct":47.5},
+    "p8_same_hardset": {"phrases":279,"strict_pct":44.80286738351254,"clip_lenient_pct":94.6236559139785,"clip_threshold":0.20,"metadata_model":"gemini-2.0-flash"},
+    "p12_same_hardset": {"phrases":279,"strict_pct":87.81362007168458,"clip_lenient_pct":94.6236559139785,"clip_threshold":0.20,"metadata_model":"gemini-2.0-flash"},
+    "freshset": {"images":32,"phrases":681,"strict_pct":72.2466960352423,"clip_lenient_pct":92.51101321585904,"clip_threshold":0.20,"metadata_model":"meta-llama/llama-4-scout-17b-16e-instruct"}
+  },
+  "scope_warning": "This freezes only the listed architecture/evaluation obligations. It is not a recursive manifest of all retina/, api/, frontend/, deploy/, tests/, tools/, images or model assets.",
+  "frozen_by": "chatgpt-secondary",
+  "frozen_at": "2026-08-09T04:45:00+07:00"
+}

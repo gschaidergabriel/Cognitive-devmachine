@@ -3,7 +3,7 @@ from __future__ import annotations
 import json, random, math, re
 from collections import Counter
 
-VERSION='claygraph-g2a-lab-0.2-stdlib'
+VERSION='claygraph-g2a-lab-0.4-bridge-receipt'
 SEED_SELFUSE=314159
 SEED_ROUTE=9917
 SEED_ATTRACTOR=7711
@@ -20,47 +20,12 @@ def matvec(v,A):
     return out
 
 def self_use():
-    nodes={
-      'tcqs':'ClayCode typed collection query semantics SET ORDERED MULTISET WEIGHTED duplicate order multiplicity weight policy',
-      'candidate_topology':'candidate membership ranking topology changes before workspace competition selection',
-      'g1d':'ClayGraph immutable semantic graph epochs sparse latent activation bounded assembly exact anchors',
-      'activation':'sparse salience activation decay inhibition propagation between model calls',
-      'assembly':'bounded epoch pinned active Assembly model visible memory candidate set exact anchors',
-      'u1':'UnifiedDB authoritative event state effect spine specialized replayable graph vector FTS activation derived views',
-      'replay':'canonical append only event history replay crash recovery rebuild derived views',
-      'cacc':'Certified Adaptive Cognitive Continuity integrity utility authority separation adaptive salience',
-      'utility':'cognitive utility receipt may update salience decay inhibition routing but not truth authority',
-      'anti_attractor':'anti attractor bounded salience gain inhibition novelty diversity holdout poisoning resistance',
-      'gwt_r5':'system WorkspaceEpisode distinct from model internal workspace projection uptake effect reentry',
-      'internal_ws':'model internal privileged workspace uptake representation lesion rescue',
-      'projection':'exact reader projection view identity ordering serialization model handoff',
-      'c7':'FRANK Clay Organ Runtime Fabric semantic organ process storage authority boundaries',
-      'broker':'isolated capability effect broker secrets revocation execution authority',
-      'h4':'Hyperposition typed semantic firebreak fact activation proposal authority effect intent higher order roles',
-      'ecert2':'Emergence causal certificate lesion mechanistic rescue recurrence OOD multiscale intervention',
-      'temporal':'bitemporal valid time transaction time stale revoked point in time relation validity',
-      'role':'role aware n ary relation instance actor object direction higher order relation identity',
-      'semantic_hash':'semantic identity distinct from provenance contract instance projected view identity',
-      'selection_plan':'query selection plan provenance candidate space ranking identity',
-      'exact_anchor':'authoritative exact anchor validation truth witness provenance source',
-      'dual_path':'background continuity plus explicit retrieval fallback exact lookup validation broad search recovery'}
+    nodes={'tcqs':'ClayCode typed collection query semantics SET ORDERED MULTISET WEIGHTED duplicate order multiplicity weight policy','candidate_topology':'candidate membership ranking topology changes before workspace competition selection','g1d':'ClayGraph immutable semantic graph epochs sparse latent activation bounded assembly exact anchors','activation':'sparse salience activation decay inhibition propagation between model calls','assembly':'bounded epoch pinned active Assembly model visible memory candidate set exact anchors','u1':'UnifiedDB authoritative event state effect spine specialized replayable graph vector FTS activation derived views','replay':'canonical append only event history replay crash recovery rebuild derived views','cacc':'Certified Adaptive Cognitive Continuity integrity utility authority separation adaptive salience','utility':'cognitive utility receipt may update salience decay inhibition routing but not truth authority','anti_attractor':'anti attractor bounded salience gain inhibition novelty diversity holdout poisoning resistance','gwt_r5':'system WorkspaceEpisode distinct from model internal workspace projection uptake effect reentry','internal_ws':'model internal privileged workspace uptake representation lesion rescue','projection':'exact reader projection view identity ordering serialization model handoff','c7':'FRANK Clay Organ Runtime Fabric semantic organ process storage authority boundaries','broker':'isolated capability effect broker secrets revocation execution authority','h4':'Hyperposition typed semantic firebreak fact activation proposal authority effect intent higher order roles','ecert2':'Emergence causal certificate lesion mechanistic rescue recurrence OOD multiscale intervention','temporal':'bitemporal valid time transaction time stale revoked point in time relation validity','role':'role aware n ary relation instance actor object direction higher order relation identity','semantic_hash':'semantic identity distinct from provenance contract instance projected view identity','selection_plan':'query selection plan provenance candidate space ranking identity','exact_anchor':'authoritative exact anchor validation truth witness provenance source','dual_path':'background continuity plus explicit retrieval fallback exact lookup validation broad search recovery'}
     edges=[('tcqs','candidate_topology',1.0),('candidate_topology','gwt_r5',.9),('g1d','activation',1),('activation','assembly',1),('assembly','candidate_topology',.8),('u1','replay',1),('u1','g1d',.8),('replay','exact_anchor',.8),('cacc','utility',1),('utility','anti_attractor',1),('gwt_r5','internal_ws',1),('gwt_r5','projection',.8),('c7','broker',1),('c7','u1',.7),('c7','gwt_r5',.7),('h4','role',.8),('h4','broker',.7),('ecert2','gwt_r5',.6),('ecert2','cacc',.6),('temporal','g1d',.7),('temporal','u1',.7),('role','g1d',.8),('semantic_hash','tcqs',.8),('selection_plan','candidate_topology',1),('selection_plan','u1',.8),('exact_anchor','g1d',.8),('dual_path','g1d',.8),('dual_path','u1',.6)]
     ids=list(nodes); idx={n:i for i,n in enumerate(ids)}; N=len(ids); A=[[0.0]*N for _ in range(N)]
     for a,b,w in edges:
         A[idx[a]][idx[b]]=max(A[idx[a]][idx[b]],w); A[idx[b]][idx[a]]=max(A[idx[b]][idx[a]],w*.85)
-    queries=[
-      ('What upstream change can alter who competes even when workspace policy is fixed?',['tcqs'],{'tcqs','candidate_topology','selection_plan'}),
-      ('What protects memory after a crash if graph and vector views lag?',['u1'],{'u1','replay','exact_anchor'}),
-      ('How should useful memory feedback change the system without rewriting facts?',['cacc'],{'utility','anti_attractor','cacc'}),
-      ('What must be separated when testing whether a selected workspace item actually affected model reasoning?',['gwt_r5'],{'gwt_r5','internal_ws','projection'}),
-      ('Which boundary must remain hard even if cognitive organs share a process?',['c7'],{'broker','c7'}),
-      ('What state can change between model calls but must never become truth?',['g1d'],{'activation','g1d','exact_anchor'}),
-      ('How do we keep changing facts from becoming stale contradictions?',['temporal'],{'temporal','u1','replay'}),
-      ('Why is direction or participant role part of graph identity?',['h4'],{'role','h4','semantic_hash'}),
-      ('What is the safer memory architecture when automatic association misses something?',['dual_path'],{'dual_path','g1d','u1','exact_anchor'}),
-      ('What should an emergence test do after a continuity effect appears?',['ecert2'],{'ecert2','gwt_r5','cacc'}),
-      ('Which identities must not be collapsed when graph results are projected to a reader?',['semantic_hash'],{'semantic_hash','projection','selection_plan'}),
-      ('What governs which derived store is queried without letting backend defaults redefine meaning?',['selection_plan'],{'selection_plan','tcqs','u1'})]
+    queries=[('What upstream change can alter who competes even when workspace policy is fixed?',['tcqs'],{'tcqs','candidate_topology','selection_plan'}),('What protects memory after a crash if graph and vector views lag?',['u1'],{'u1','replay','exact_anchor'}),('How should useful memory feedback change the system without rewriting facts?',['cacc'],{'utility','anti_attractor','cacc'}),('What must be separated when testing whether a selected workspace item actually affected model reasoning?',['gwt_r5'],{'gwt_r5','internal_ws','projection'}),('Which boundary must remain hard even if cognitive organs share a process?',['c7'],{'broker','c7'}),('What state can change between model calls but must never become truth?',['g1d'],{'activation','g1d','exact_anchor'}),('How do we keep changing facts from becoming stale contradictions?',['temporal'],{'temporal','u1','replay'}),('Why is direction or participant role part of graph identity?',['h4'],{'role','h4','semantic_hash'}),('What is the safer memory architecture when automatic association misses something?',['dual_path'],{'dual_path','g1d','u1','exact_anchor'}),('What should an emergence test do after a continuity effect appears?',['ecert2'],{'ecert2','gwt_r5','cacc'}),('Which identities must not be collapsed when graph results are projected to a reader?',['semantic_hash'],{'semantic_hash','projection','selection_plan'}),('What governs which derived store is queried without letting backend defaults redefine meaning?',['selection_plan'],{'selection_plan','tcqs','u1'})]
     docs={k:words(v) for k,v in nodes.items()}; df=Counter(w for ws in docs.values() for w in ws)
     def lexical(q):
         qw=words(q); return [sum(math.log((N+1)/(df[w]+1))+1 for w in qw & docs[k]) for k in ids]
@@ -71,11 +36,8 @@ def self_use():
             if mode!='off':
                 seeds=[0.0]*N; use=prior if mode=='truthful' else [ids[(idx[p]+7)%N] for p in prior]
                 for p in use: seeds[idx[p]]=1.0
-                one=matvec(seeds,A); two=matvec(one,A)
-                score=[score[i]+.65*(seeds[i]+.75*one[i]+.35*two[i]) for i in range(N)]
-            got=[ids[i] for i in top_indices(score,k)]
-            recalls.append(len(gold & set(got))/len(gold)); ranks=[got.index(z)+1 for z in gold if z in got]; reciprocal.append(1/min(ranks) if ranks else 0)
-            details.append({'q':q,'got':got,'gold':sorted(gold)})
+                one=matvec(seeds,A); two=matvec(one,A); score=[score[i]+.65*(seeds[i]+.75*one[i]+.35*two[i]) for i in range(N)]
+            got=[ids[i] for i in top_indices(score,k)]; recalls.append(len(gold & set(got))/len(gold)); ranks=[got.index(z)+1 for z in gold if z in got]; reciprocal.append(1/min(ranks) if ranks else 0); details.append({'q':q,'got':got,'gold':sorted(gold)})
         return {'recall_at_5':sum(recalls)/len(recalls),'mrr':sum(reciprocal)/len(reciprocal),'queries':len(queries),'details':details}
     return {'arm_explicit_only':arm('off'),'arm_truthful_prior':arm('truthful'),'arm_shuffled_prior':arm('shuffled')}
 
@@ -150,5 +112,11 @@ def anti_attractor(episodes=5000, poison_rates=(0.0,.15,.30)):
         return out
     return {'seed':SEED_ATTRACTOR,'episodes_per_condition':episodes,'conditions':{str(p):one(p) for p in poison_rates},'governor':['context gate: learned salience applies only to currently reachable candidates','itemwise verified utility credit (96% synthetic verifier)','bounded positive/negative salience','topic mass cap','decay']}
 
-def main(): print(json.dumps({'schema_version':'1.0','version':VERSION,'status':'PASS','self_use':self_use(),'route_policy':route_policy(),'anti_attractor':anti_attractor()},sort_keys=True))
+def main():
+    su=self_use(); rp=route_policy(); aa=anti_attractor()
+    def m(p,arm):
+        c=aa['conditions'][p][arm]
+        return {'top1':c['top1_accuracy'],'rare':c['rare_topic_accuracy'],'attractor':c['false_frequent_attractor_top1'],'recall8':c['recall_at_8']}
+    summary={'v':VERSION,'status':'PASS','self':{k:[round(v['recall_at_5'],6),round(v['mrr'],6)] for k,v in su.items()},'route':{k:[round(v['overall']['top1_accuracy'],6),round(v['overall']['recall_at_8'],6),round(v['overall']['off_topic_share'],6)] for k,v in rp['arms'].items()},'route_exact_assoc':{'explicit':[round(rp['arms']['explicit']['exact']['top1_accuracy'],6),round(rp['arms']['explicit']['associative']['top1_accuracy'],6)],'always':[round(rp['arms']['always_blend']['exact']['top1_accuracy'],6),round(rp['arms']['always_blend']['associative']['top1_accuracy'],6)],'adaptive':[round(rp['arms']['adaptive_router']['exact']['top1_accuracy'],6),round(rp['arms']['adaptive_router']['associative']['top1_accuracy'],6)]},'attractor_0':{'naive':m('0.0','naive_scalar'),'governed':m('0.0','governed')},'attractor_015':{'naive':m('0.15','naive_scalar'),'governed':m('0.15','governed')}}
+    print(json.dumps(summary,sort_keys=True,separators=(',',':')))
 if __name__=='__main__': main()

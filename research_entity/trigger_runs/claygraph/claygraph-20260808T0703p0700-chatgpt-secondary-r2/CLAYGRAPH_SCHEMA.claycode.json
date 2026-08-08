@@ -1,0 +1,28 @@
+{
+  "schema_version":"0.3",
+  "language":"ClayCode",
+  "representation":"canonical_semantic_ir_json_projection",
+  "candidate_id":"claygraph-g1b-query-planned-evidence-bounded-activation",
+  "generation":1,
+  "parent":{"graph_id":"claygraph-v0-seed","generation":0,"blob_sha":"15d7a3375e45c1a9f0557c321467d22a91b9b841"},
+  "status":"HOLD_CANDIDATE",
+  "retained_from_g1":["exact_anchor_index","temporal/provenance semantic assertions","conflict-preserving states","transient active assembly","physical-monolith-not-required","authority remains external"],
+  "layers":[
+    {"id":"exact_anchor_index","authority":"REFERENCE_TO_AUTHORITATIVE_STORE","role":"stable exact/current/history witnesses"},
+    {"id":"semantic_evidence_graph","authority":"DERIVED_REBUILDABLE_PROJECTION","role":"typed temporal/provenance/conflict/evidence-family relations"},
+    {"id":"assembly_planner","authority":"NONE","role":"classify retrieval requirement and allocate retrieval/traversal/context budget"},
+    {"id":"activation_overlay","authority":"NONE","role":"transient query/frame-conditioned scores and relation paths"},
+    {"id":"active_assembly","authority":"NONE","role":"bounded model-visible packet/assertion/source set with exact-anchor fallback"}
+  ],
+  "query_classes":["CURRENT_EXACT","HISTORICAL_EXACT","SEMANTIC_ASSOCIATIVE","RELATIONAL_MULTIHOP","AUDIT_CONTRADICTION","MIXED"],
+  "assembly_plan_contract":{"fields":["plan_id","query_class","basis_graph_revision","basis_frame_id_or_none","token_budget","seed_routes","max_hops","qualified_edge_classes","status_policy","evidence_family_policy","exact_anchor_requirement","stop_rule","fallback_route"],"rule":"The planner chooses retrieval behavior but never evidence status or effect authority."},
+  "routing_policy":{"CURRENT_EXACT":{"graph_hops":0,"must_use_exact_anchor":true,"graph_role":"optional navigation only"},"HISTORICAL_EXACT":{"graph_hops":"0_or_1","must_use_exact_anchor":true,"include_historic_status":true},"SEMANTIC_ASSOCIATIVE":{"graph_hops":1,"must_use_exact_anchor":"when answer depends on current/exact truth"},"RELATIONAL_MULTIHOP":{"graph_hops":2,"adaptive":true,"must_explain_bridge_paths":true},"AUDIT_CONTRADICTION":{"graph_hops":"1_or_2","actively_include":["NEGATIVE_RESULT","REFUTED","SUPERSEDED","STALE","CONTRADICTS"]},"MIXED":{"graph_hops":"adaptive","exact_anchor_for_exact_subclaims":true}},
+  "seed_fusion":{"baseline_routes":["deterministic_active_packet_envelope","lexical_or_BM25","exact_ids"],"optional_routes":["vector_dense"],"rule":"Graph selection must be benchmarked against the runtime deterministic packet envelope; the envelope remains fallback until superiority is demonstrated."},
+  "expansion_gate":{"default_hops":1,"multihop_max":2,"qualified_edges":["EVIDENCE_FOR","SUPPORTS","CHALLENGES","CONTRADICTS","SUPERSEDES","DERIVED_FROM","CAUSAL_PARENT","ASSERTED_BY","ANCHORS_TO","IMPLEMENTS","CONSTRAINS","PROJECTS_FROM","DEPENDS_ON"],"weak_edges":["MENTIONS","RELATED","BELONGS_TO_BRANCH"],"target_relevance_rule":"Expansion through a qualified edge still requires independent query relevance or an explicitly requested multihop bridge role.","stop_rule":"Stop when budget is exhausted or marginal qualified evidence gain falls below the configured threshold; fixed K/hops is baseline not doctrine."},
+  "status_policy":{"current_queries":"suppress STALE/REFUTED unless necessary to explain a contradiction","audit_queries":"retrieve negative/refuted/superseded/stale intentionally","rule":"activation/salience never changes epistemic status"},
+  "evidence_family_policy":{"rule":"Shared ancestry reduces independent-evidence weight and duplicate context; do not hard-delete all but one descendant because distinct experiment/negative/architecture roles can be useful.","candidate":"soft_penalty_plus_role_diversity","hard_one_per_family":"NEGATIVE_RESULT_FROM_CYCLE2_ABLATION"},
+  "assembly_certificate":{"fields":["assembly_id","plan_id","query_class","selected_refs","exact_anchor_refs","activation_paths","epistemic_statuses","evidence_families","conflict_sets","omitted_duplicate_refs","stop_reason","token_cost_proxy","generated_at"],"properties":["explainable","replayable_at_same_graph_revision","no_authority"]},
+  "frank_mapping":{"M.MEMORY_FABRIC":"hosts planner/semantic projection/exact-anchor resolver/direct fallback","S.COGNITIVE_FRAME":"may scope current assembly but remains exact causal truth outside graph","M.WORKSPACE_ARBITER":"receives memory candidates; graph activation is not workspace ignition","M.CAPABILITY_GATEWAY":"unchanged external authority"},
+  "hard_invariants":["raw/canonical truth outranks graph","current/exact claims can be revalidated at exact anchor","unknown/conflict/revoked/stale preserved","evidence ancestry preserved","graph activation does not multiply evidence strength","model/graph output does not mint authority","migration rollback remains possible","secrets/bearer capabilities excluded from graph/model context"],
+  "evidence_boundary":{"cycle2_proxy":"mixed positive: better stale suppression/family coverage and erroneous-edge robustness; no held-out recall gain and slightly lower held-out precision","external_convergence":"adaptive traversal, plan-guided fusion, projection-aware source grounding and bounded retrieval are supported as implementation/research patterns, not ClayGraph-specific proof","decision":"HOLD"}
+}

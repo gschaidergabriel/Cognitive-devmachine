@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0",
+  "run_id":"gwt-20260808T1721p0700-chatgpt-secondary",
+  "claims":[
+    {"claim_id":"C-GWT-R4-001","status":"CURRENT_WITH_SYNTHETIC_BOUNDARY","claim":"Bundled GWT on/off ablations can falsely attribute graph-prior and projection effects to workspace selection; stage-orthogonal interventions are required.","evidence_refs":["E-GWT-R4-ORTHO-006"]},
+    {"claim_id":"C-GWT-R4-002","status":"CURRENT_WITH_8B_PROXY_BOUNDARY","claim":"Reader projection/order and contextual metadata can materially alter downstream output independently of upstream semantic truth in the Groq 8B proxy.","evidence_refs":["E-GWT-R4-GROQ-007","E-GWT-R4-PRIOR-GROQ"]},
+    {"claim_id":"C-GWT-R4-003","status":"OPEN","claim":"ClayGraph sparse activation should be treated as candidate-prior/availability, not workspace ignition or authority.","evidence_refs":["E-GWT-R4-CLAYGRAPH","E-GWT-R4-SPREADING"]},
+    {"claim_id":"C-GWT-R4-004","status":"OPEN","claim":"CSOC-GWT-R4 stage witnesses are required to identify current FRANK workspace mechanisms across frame, graph prior, selection, projection, uptake and re-entry.","evidence_refs":["E-GWT-R4-ORTHO-006","E-GWT-R4-GROQ-007"]}
+  ],
+  "negative_results":[
+    {"id":"N-GWT-R4-001","claim":"Bundled GWT on/off identifies workspace-selection effect while graph/projection also change.","result":"Refuted in constructed null: bundled +0.2396 vs clean workspace 0; Judge0 +0.23981 vs 0."},
+    {"id":"N-GWT-R4-002","claim":"Spreading activation is evidence of workspace ignition/broadcast.","result":"Category error; graph activation is separately useful retrieval/candidate-prior machinery and needs independent GWT stages."},
+    {"id":"N-GWT-R4-003","claim":"Winner-first/full-detail projection gain directly evidences upstream workspace selection.","result":"Not supported; current/prior 8B proxies show material order/projection effects."},
+    {"id":"N-GWT-R4-004","claim":"Authentic records guarantee authentic selection.","result":"Not established; structural candidate membership/selection provenance is a distinct surface."},
+    {"id":"N-GWT-R4-005","claim":"Cross-branch convergence is independent replication.","result":"Rejected because branches share ancestry, actors, sources and proxies."}
+  ],
+  "experiments":[
+    {"experiment_id":"EXP-GWT-ORTHOGONAL-CONFOUND-006","status":"COMPLETED","class":"synthetic_identifiability_negative_control","result_ref":"research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/EXPERIMENT_RESULTS.json"},
+    {"experiment_id":"EXP-GWT-GROQ-ORTHO-007","status":"COMPLETED_PROXY","class":"8b_proxy_for_4b","result_ref":"research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/EXPERIMENT_RESULTS.json"},
+    {"experiment_id":"EXP-LIVE-GWT-CSOC-TRACE","status":"PLANNED_PRIORITY","next_action":"instrument frame/graph/candidate/winner/projection/uptake/effect/reentry witnesses without changing behavior"},
+    {"experiment_id":"EXP-LIVE-GWT-GRAPH-WORKSPACE-FACTORIAL","status":"PLANNED_PRIORITY","next_action":"FIELD off/truthful/relation-shuffled/temporal-shuffled x WORKSPACE truthful/shuffled/removed with projection counterbalanced"},
+    {"experiment_id":"EXP-LIVE-GWT-PROJECTION-MEDIATION","status":"PLANNED_PRIORITY","next_action":"hold WorkspaceEpisode semantics fixed; counterbalance neutral/winner-first projection and reader encoding"}
+  ],
+  "architecture":"exact/event state -> CognitiveFrame -> ClayGraph prior/Assembly -> candidate set -> competition/selection -> gate_event -> WorkspaceEpisode -> trusted reader projection -> reconstruction/uptake -> effect -> outcome -> freshness-gated re-entry",
+  "causal_stage_orthogonality_key":["basis_state_root","cognitive_frame_id","graph_epoch","activation_epoch","assembly_id","candidate_set_hash","competition_id","winner_id","gate_policy_version","workspace_episode_hash","projection_hash","projection_order_policy","reader_version","uptake_receipt","effect_receipt","outcome_receipt","reentry_receipt"],
+  "claygraph_interaction":{"supported":"epoched non-authoritative latent activation as candidate prior","challenged":"activation as ignition/broadcast/authority","unresolved":"target next-decision utility and graph-prior x workspace-selection interaction"},
+  "promotion":"NONE"
+}

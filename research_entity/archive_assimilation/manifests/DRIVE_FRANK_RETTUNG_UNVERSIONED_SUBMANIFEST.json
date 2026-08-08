@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "manifest_kind":"DRIVE_FRANK_RETTUNG_UNVERSIONED_SERVICES_SUBMANIFEST",
+  "status":"FROZEN_COMPLETE_FOR_UNVERSIONIERT_SUBTREE",
+  "trigger":"666",
+  "frozen_by":"chatgpt-secondary",
+  "frozen_at":"2026-08-09T05:06:00+07:00",
+  "source":{"root":"drive:1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6:frank-rettung","subtree":"drive:1pIDeLx-260g5PDHdNZZL6lI75I7Qjow_:unversioniert"},
+  "files":[
+    {"title":"services/paper_research.py","drive_id":"1Ju22HIZ53Rtk015llzEubvBK4ggh6wBt","size_bytes":20699,"analysis_state":"ALREADY_DEEP_READ_BY_PEER","peer_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json"},
+    {"title":"services/genesis/sandbox.py","drive_id":"1XmEuJNjI40OpywHovNZLIJooSKY1M2nT","size_bytes":9609,"analysis_state":"ALREADY_DEEP_READ_BY_PEER","peer_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json"},
+    {"title":"services/genesis/sensors/self_engineering.py","drive_id":"1W8hS8cu3s6kmJUnTsCi-9creVXRdWqAX","size_bytes":12776,"sha256":"2e8f737784a2d5e5184ebf9ecee005f4efab8021533f98fb81bb74ac03109eb3","analysis_state":"DEEP_READ_THIS_SHARD"},
+    {"title":"services/room_content/custom_styles/snake_feel.py","drive_id":"1dzbP6nOFsvyggFPS1UKGlvbtgVuEjNT7","size_bytes":1517,"sha256":"99baa180fd9bc4f555bd91a897ab21e71f00e45ecbaa15b4fbff8f07bad52cf7","analysis_state":"DEEP_READ_AND_RUNTIME_SMOKE_TESTED_THIS_SHARD"}
+  ],
+  "totals":{"files":4,"bytes":44601,"deep_read_current":2,"deep_read_peer":2,"recursive_identity_percent":100.0,"semantic_adjudication_percent":100.0},
+  "runtime_failure_fixture":{
+    "file":"services/room_content/custom_styles/snake_feel.py",
+    "test_1":"import module; call render([], [], [0.1,0.2], [0.0,0.0], 0.5, {})",
+    "result_1":"NameError: name 'coherence' is not defined",
+    "test_2":"set module.coherence=0.5; call same render",
+    "result_2":"ValueError: too many values to unpack (expected 3)",
+    "interpretation":"Historical generated/custom code can be syntactically valid yet immediately non-executable; promotion requires runtime smoke/property tests, not import/parse success."
+  },
+  "coverage_boundary":"This closes the unversioniert subtree only. The separate vom-11-mai rescue branch remains governed by its peer recovery/IdentityForge receipt and any still-open file-level supersession comparisons.",
+  "exact_level0_global_credit_percent":0.0
+}

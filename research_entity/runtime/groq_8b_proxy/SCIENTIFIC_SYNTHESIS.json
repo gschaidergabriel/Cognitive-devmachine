@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-08T07:44:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "experiment_provider": "Groq",
+  "experiment_model": "llama-3.1-8b-instant",
+  "requested_target_class": "bare/Qwen-class 4B",
+  "executed_model_class": "8B",
+  "evidence_role": "8b_proxy_for_4b",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash_short": "04234efdb86c"
+  },
+  "source_results": [
+    "research_entity/runtime/groq_8b_proxy/COMPLETE_LATEST.json",
+    "research_entity/runtime/groq_8b_proxy/VALIDATION_V3.json",
+    "research_entity/runtime/groq_8b_proxy/VALIDATION_V4.json",
+    "research_entity/runtime/groq_verification.json"
+  ],
+  "suite_status": {
+    "provider_runtime_verified": true,
+    "complete_suite_experiment_families": 6,
+    "complete_suite_failures": 0,
+    "v3_validation_failures": 0,
+    "v4_validation_failures": 0,
+    "credential_value_exposed": false
+  },
+  "audited_findings": [
+    {
+      "finding_id": "GROQ8B-F1-CLAYCODE-ZEROSHOT",
+      "branches": ["claycode", "frank", "clay", "claygraph"],
+      "effect": ["CHALLENGE", "REVISE", "NEW_EXPERIMENT"],
+      "result": "An untrained hosted 8B reader did not reliably execute the CC7/CC8 state-reading task from natural, JSON, readable ClayCode or aggressive ClayCode projections. One V2 run reached 6/10 on named and positional JSON, while stricter V3/V4 replications remained brittle and frequently copied ids/activations or ignored the requested mapping. Readable ClayCode reduced prompt-token cost versus named JSON in the V2 arm (328 vs 573 prompt tokens, about 42.8% less) but did not preserve reliable task correctness; aggressive compact ClayCode also failed zero-shot.",
+      "interpretation": "Compression alone is not sufficient small-model usability. Preserve canonical semantic IR and develop reader-specific projections, deterministic interpreters/parsers, few-shot adapters or target-model internalization. This does not refute ClayCode; it refutes assuming zero-shot compact syntax is already a safe small-model interface.",
+      "evidence_class": "external_model_runtime_proxy",
+      "confidence_within_8b_proxy": 0.93,
+      "target_replication_required": true,
+      "falsifier_or_next_test": "Repeat the same fixed gold corpus on the actual Qwen3-4B target with tokenizer-matched JSON, readable ClayCode and trained/few-shot reader projections; compare semantic accuracy, repair rate and tokens per correct answer."
+    },
+    {
+      "finding_id": "GROQ8B-F2-TCC-GAMMA-SAFETY",
+      "branches": ["claycode", "frank", "clay", "gwt"],
+      "effect": ["CHALLENGE", "REVISE"],
+      "result": "On the fixed 12-case freshness/authority corpus, the explicit semantic arm scored 9/12 (75%) with 1 unsafe ACCEPT; compact Gamma scored 3/12 (25%) with 2 unsafe ACCEPTs; compact OTCC scored 5/12 (41.7%) and produced 7 unsafe ACCEPTs, including an all-ACCEPT failure pattern.",
+      "interpretation": "Safety-critical freshness/capability/closure decisions must remain deterministic host/runtime semantics. Compact model-readable Gamma/OTCC forms are not safe zero-shot authority surfaces on this proxy. Model outputs remain proposals, never authority.",
+      "evidence_class": "external_model_runtime_proxy",
+      "confidence_within_8b_proxy": 0.97,
+      "target_replication_required": true,
+      "falsifier_or_next_test": "A target 4B reader with a deterministic projection or trained decoder must reach zero unsafe ACCEPTs over adversarial closure/capability cases before any model-mediated safety fast path is considered."
+    },
+    {
+      "finding_id": "GROQ8B-F3-GWT-RECONSTRUCTION",
+      "branches": ["gwt", "frank", "claycode", "clay"],
+      "effect": ["SUPPORT", "REVISE", "NEW_EXPERIMENT"],
+      "result": "Raw-output audit of the GWT reconstruction proxy shows 8/8 semantic recovery from the full semantic projection and 8/8 from the compact projection; a deliberately scrambled projection produced 0/8 truth accuracy while faithfully following the supplied corruption; transport-receipt-only context produced no true semantic recovery and induced placeholder/confabulated output rather than justified UNKNOWN.",
+      "interpretation": "Transport/read success is distinct from semantic reconstruction and uptake. A downstream model can faithfully consume a corrupt projection, so projection identity/integrity/freshness must be verified separately. GWT instrumentation should separate transport receipt -> projection/reconstruction -> uptake -> effect/outcome.",
+      "evidence_class": "external_model_runtime_proxy",
+      "confidence_within_8b_proxy": 0.96,
+      "target_replication_required": true,
+      "falsifier_or_next_test": "Hold FRANK transport constant while lesioning/shuffling semantic projection into the actual Core/Qwen reader and measure inclusion, uptake and effects."
+    },
+    {
+      "finding_id": "GROQ8B-F4-GWT-WINNER-ORDER",
+      "branches": ["gwt", "frank", "clay"],
+      "effect": ["SUPPORT", "REVISE"],
+      "result": "Audited eight-item matched-content proxy: neutral accuracy 7/8 (87.5%), reversed option ordering 5/8 (62.5%), truthful WINNER metadata 7/8 (87.5%), false WINNER metadata 6/8 (75%). Raw-answer comparison shows three flips under reversed order, two under truthful winner labeling and one under false winner labeling relative to neutral.",
+      "interpretation": "Even temperature-zero small-model decisions are materially context/order/metadata sensitive. GWT/FRANK experiments must counterbalance order and independently shuffle/truth-test winner metadata; a workspace winner label cannot be treated as ground truth for downstream uptake/effect attribution.",
+      "evidence_class": "external_model_runtime_proxy",
+      "confidence_within_8b_proxy": 0.84,
+      "target_replication_required": true,
+      "falsifier_or_next_test": "Run larger counterbalanced target-model corpus with randomized option/order/winner metadata and paired seeds; estimate effect sizes and interaction with task difficulty."
+    },
+    {
+      "finding_id": "GROQ8B-F5-HYPERPOSITION-ROLE-PROJECTION",
+      "branches": ["hyperposition", "claygraph", "claycode", "frank"],
+      "effect": ["SUPPORT", "REVISE", "NEW_EXPERIMENT"],
+      "result": "Across V3/V4 reader replications, role-labelled relation-instance edges were more recoverable than function-like n-ary syntax in this hosted 8B reader. V4 raw reified output recovered six of eight sender/recipient relations while function-style n-ary output recovered two of eight before returning UNKNOWN for the rest. The naive pairwise arm is not a valid positive control because input ordering leaked sender/recipient order and must not be interpreted as preserving n-ary semantics.",
+      "interpretation": "Keep n-ary semantics in the canonical graph/IR where needed, but prefer explicit relation-instance + role-labelled edge projections for small-model readers. This aligns with H2's independent synthetic/formal ambiguity result without counting it as independent replication of the same model test.",
+      "evidence_class": "external_model_runtime_proxy",
+      "confidence_within_8b_proxy": 0.78,
+      "target_replication_required": true,
+      "falsifier_or_next_test": "Use randomized role ordering and symmetric pairwise baselines with no positional role leakage, then compare n-ary, reified role-labelled and lossy pairwise representations on the target 4B."
+    },
+    {
+      "finding_id": "GROQ8B-F6-CLAYGRAPH-SELF-USE",
+      "branches": ["claygraph", "frank", "clay", "claycode"],
+      "effect": ["CHALLENGE", "REVISE", "NEW_EXPERIMENT"],
+      "decision": "HOLD",
+      "result": "On GitHub-runner self-use, current ClayGraph activation/lexical retrieval took roughly 84-87 ms median per query versus about 0.8-0.9 ms for SQLite FTS and generally supplied larger contexts. The current graph/lexical modes surfaced some cross-branch relational facts that SQLite FTS missed on the small audited QA set, but activation did not consistently beat graph-lexical selection and sometimes added noise. Automatic answer-hit scoring was too brittle, so promotion is based on the audited engineering pattern rather than that invalid metric.",
+      "interpretation": "Do not place the current Python activation overlay in FRANK's hot path. Keep ClayGraph as a derived semantic/associative research substrate, optimize seed/index/edge weighting and assembly compression, and test whether it can select compact Topic/Micro-Packets better than deterministic envelopes. The current candidate is HOLD, not PROMOTE.",
+      "evidence_class": "external_model_runtime_proxy_plus_runner_retrieval_measurement",
+      "confidence_within_current_runner": 0.88,
+      "target_replication_required": true,
+      "falsifier_or_next_test": "A next ClayGraph generation must beat the deterministic packet-envelope/SQLite baselines on audited multi-hop recall or decision quality without unacceptable latency/context regression, then replicate on live/twin FRANK store traces."
+    }
+  ],
+  "branch_feedback": {
+    "clay": {
+      "effect": ["REVISE"],
+      "summary": "Add reader-specific projection and context-selection cost to Synthetic Clay optimization objectives; do not equate semantic compactness with usable small-model cognition."
+    },
+    "frank": {
+      "effect": ["REVISE", "NEW_EXPERIMENT"],
+      "summary": "Keep deterministic authority/closure semantics outside model self-authorization; require projection integrity and counterbalanced winner/order controls; keep current ClayGraph activation out of hot path pending better evidence."
+    },
+    "gwt": {
+      "effect": ["SUPPORT", "REVISE", "NEW_EXPERIMENT"],
+      "summary": "Strengthens the need to separate transport, reconstruction, uptake and effect; adds direct small-model evidence for order/winner confounds."
+    },
+    "emergenz": {
+      "effect": ["NO_CHANGE"],
+      "summary": "No direct emergence mechanism was tested. Methodologically, future small-model emergence experiments should counterbalance representation/order effects."
+    },
+    "claycode": {
+      "effect": ["CHALLENGE", "REVISE", "NEW_EXPERIMENT"],
+      "summary": "Zero-shot compact/readable projections are not yet reliable; safety-critical compact semantics are unsafe as model authority. Prioritize deterministic semantic IR, reader projection and target-reader training/internalization tests."
+    },
+    "hyperposition": {
+      "effect": ["SUPPORT", "REVISE", "NEW_EXPERIMENT"],
+      "summary": "Supports role-aware relation-instance projection for small-model readers while preserving n-ary semantics in canonical form; pairwise reader test requires non-leaky redesign."
+    },
+    "claygraph": {
+      "effect": ["CHALLENGE", "REVISE", "NEW_EXPERIMENT"],
+      "summary": "Current activation candidate remains HOLD: relational coverage is promising but Python retrieval latency/context/noise currently lose badly to SQLite on hot-path cost."
+    }
+  },
+  "still_open_not_closed_by_hosted_8b": [
+    "Qwen3-4B exact target replication and tokenizer-specific behavior",
+    "Qwen/4B LoRA training or ClayCode internalization",
+    "local 4B RAM/KV-cache/latency/energy/thermal/Android measurements",
+    "live FRANK GWT lesions/re-entry/configured-gate identifiability",
+    "latent workspace cross-lesion requiring hidden activations",
+    "live 71-store ClayGraph migration parity/p99/crash/privacy tests",
+    "real FRANK operation footprint/envelope interposition",
+    "live Hyperposition equal-semantics backend trace replay",
+    "live FRANK Core/Qwen reconstruction/uptake lesion"
+  ],
+  "promotion": {
+    "canonical_scientific_revision_changed": false,
+    "reason": "Proxy/runtime evidence was integrated into branch research memory but does not justify canonical r2 promotion or replacement of target/live experiments."
+  }
+}

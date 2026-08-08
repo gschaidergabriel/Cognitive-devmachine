@@ -1,0 +1,97 @@
+{
+  "schema_version":"1.0",
+  "language":"ClayCode",
+  "representation":"canonical_semantic_ir_json_projection",
+  "candidate_id":"CC-RC1.6-MRSC",
+  "name":"Certified Multi-Rail Semantic Compiler",
+  "status":"OPEN_RESEARCH_CANDIDATE",
+  "extends":["CC-RC1.5-ICSL","CC-RC1.4-CBCC","Clay-G10-COVE","CLAY-L5"],
+  "purpose":"Preserve one exact Clay semantic spine while compiling operation- and reader-specific discrete or latent cognition/communication rails with distinct proof obligations, explicit loss budgets and deterministic re-entry to canonical proposals before authority/effects.",
+  "pipeline":[
+    "P0 external intent/source",
+    "CC-RC1.5 IntentProposal -> IntentAdequacyReceipt -> IntentContract",
+    "P1 canonical Clay + COVE causal slice / CognitiveEpochCapsule",
+    "OP.RAIL_PLAN -> S.RAIL_PLAN",
+    "DISCRETE_NATIVE: OP.PROJECT_DISCRETE -> S.DISCRETE_VIEW + S.PROJECTION_RECEIPT_V2",
+    "LATENT_NATIVE: OP.OPEN_LATENT_CHANNEL -> S.LATENT_CHANNEL_RECEIPT + opaque/continuous payload",
+    "model/agent cognition or communication",
+    "OP.RAIL_RETURN -> S.RAIL_RETURN_PROPOSAL",
+    "OP.RECONCILE_TO_CANONICAL -> S.RECONCILIATION_RECEIPT + S.CLAY_PROPOSAL",
+    "existing CBCC/COVE basis, projection, capability and effect checks",
+    "effect/outcome/re-entry receipts"
+  ],
+  "state_contracts":[
+    {
+      "state_id":"S.RAIL_PLAN",
+      "authority":"NONE",
+      "fields":["plan_id","canonical_input_hash","causal_slice_ref","reader_profile","operation_semantics_hash","effect_class","candidate_rails[]","selected_rail","loss_budget","planner_id","planner_version","plan_hash"],
+      "allowed_rails":["DISCRETE_NATIVE","LATENT_NATIVE","HYBRID","CANONICAL_DIRECT"],
+      "invariant":"rail selection may optimize cost/reader fit but cannot enlarge trusted semantic closure, remove hard requirements or grant authority"
+    },
+    {
+      "state_id":"S.PROJECTION_RECEIPT_V2",
+      "authority":"IDENTITY_AND_TRANSLATION_EVIDENCE_ONLY",
+      "fields":["canonical_input_hash","projected_view_hash","view_schema_hash","rail_plan_hash","compiler_version","reader_profile_hash","semantic_anchor_refs[]","role_binding_hash","basis_epoch_refs[]","loss_declaration","required_semantics_coverage","validation_refs[]"],
+      "invariant":"receipt binds both source semantics and exact emitted view; source hash alone is insufficient; hash identity is still not semantic correctness without validation"
+    },
+    {
+      "state_id":"S.LATENT_CHANNEL_RECEIPT",
+      "authority":"TRANSPORT_PROVENANCE_ONLY",
+      "fields":["channel_id","source_envelope_hash","payload_hash_or_ref","sender_model","sender_layer","receiver_model","receiver_layer","alignment_adapter_hash","compression_hash","fusion_method","basis_epoch_refs[]","semantic_anchor_refs[]","causal_use_test_status","channel_version"],
+      "invariant":"latent payload identity/provenance does not prove semantic equivalence, truth, role identity or authority"
+    },
+    {
+      "state_id":"S.RAIL_RETURN_PROPOSAL",
+      "authority":"NONE",
+      "fields":["rail_id","rail_output_hash","source_plan_hash","basis_refs[]","proposal_payload","uncertainty","provenance_ref"],
+      "invariant":"output from any rail is proposal state only"
+    },
+    {
+      "state_id":"S.RECONCILIATION_RECEIPT",
+      "authority":"SEMANTIC_FIDELITY_EVIDENCE_ONLY",
+      "fields":["rail_output_hash","canonical_proposal_hash","source_anchor_coverage","role_binding_status","semantic_class_status","unknowns[]","contradictions[]","validator_refs[]","status"],
+      "allowed_status":["VERIFIED","PARTIAL","REJECTED"],
+      "invariant":"reconciliation validates return-to-canonical meaning but cannot mint facts or capabilities"
+    }
+  ],
+  "operations":[
+    {"op_id":"OP.RAIL_PLAN","trusted":"NO_OR_PARTLY","executor":"deterministic heuristic, learned optimizer or LLM may rank candidate rails","rule":"hard semantic/effect constraints are supplied by trusted COVE/ICSL and cannot be waived"},
+    {"op_id":"OP.PROJECT_DISCRETE","trusted":"YES_FOR_DEFINED_TRANSFORMS","executor":"compiled Clay runtime","rule":"emit bounded reader view and dual-binding receipt; all effect-critical required semantics must remain covered"},
+    {"op_id":"OP.VALIDATE_DISCRETE_TRANSLATION","trusted":"YES","executor":"deterministic reference/differential/property validator","rule":"validate exact emitted view against canonical required semantics and declared loss budget"},
+    {"op_id":"OP.OPEN_LATENT_CHANNEL","trusted":"PARTLY","executor":"versioned learned adapter/runtime","rule":"record payload/alignment/provenance; never claim semantic equivalence solely from latent identity"},
+    {"op_id":"OP.RAIL_RETURN","trusted":"NO","executor":"model/adapter","rule":"produce proposal with rail provenance"},
+    {"op_id":"OP.RECONCILE_TO_CANONICAL","trusted":"PARTLY","executor":"deterministic checks plus model/domain/oracle evidence as required","rule":"discrete rail may support structural roundtrip; latent rail requires canonical reconstruction plus adequacy/causal controls before consequential use"}
+  ],
+  "rail_proof_obligations":{
+    "DISCRETE_NATIVE":["canonical source bound","exact emitted view bound","schema/compiler/reader identity","role-aware semantic anchors","required-slice coverage","declared loss budget","translation validation"],
+    "LATENT_NATIVE":["source envelope bound","payload/alignment/fusion version bound","exact semantic anchors for any claimed referents","no implicit truth/authority","substitution/lesion or equivalent causal-use control for scientific claims","canonical reconstruction before durable truth/effect"],
+    "HYBRID":"must satisfy obligations of each participating rail and preserve stage identity"
+  },
+  "hard_invariants":[
+    "canonical_semantics != reader_projection",
+    "source_hash_binding != emitted_view_binding",
+    "payload_hash != semantic_equivalence",
+    "latent_similarity != directed_relation_identity",
+    "latent_activation_field != latent_native_channel",
+    "rail_output != fact_truth",
+    "rail_output != execution_authority",
+    "rail_planner != authority",
+    "cross_rail_agreement != independent_replication",
+    "lossy_projection_must_declare_loss",
+    "effect_critical_required_semantics_cannot_be_lossy",
+    "local_handle_requires_scope_map_and_exact_global_anchor",
+    "unknown_dynamic_scope_broadens_or_escalates",
+    "existing_ICSL_CBCC_COVE_selection_projection_capability_and_effect_checks_remain_mandatory"
+  ],
+  "claygraph_mapping":{
+    "canonical_graph":"P1 typed relation-instance/provenance semantics",
+    "latent_activation_field":"memory salience prior only; separate epoch and causal stage from model latent rail",
+    "model_discrete_view":"versioned local handle/codebook projection with exact anchor map",
+    "model_latent_channel":"transient cognition/communication payload; store receipts/anchors, not latent bytes as canonical truth",
+    "reconciliation":"durable memory accepts only typed canonical proposal through ordinary epistemic/authority gates"
+  },
+  "gwt_mapping":"Rail/view identity is an orthogonal causal factor after canonical candidate/workspace semantics and before reader uptake; lesions must pin or independently vary rail plan/projection/alignment.",
+  "hyperposition_mapping":"Semantic class and role identity survive every rail through exact anchors; compact handles are implementation forms, not new authority domains.",
+  "emergence_mapping":"Protocol convergence, latent performance or cross-rail agreement do not establish emergence; E-CERT2 causal identity/lesion/rescue/OOD gates remain required.",
+  "evidence_boundary":"Supported by current RAE C6/G10/CC10/H4/GWT4/E1/ClayGraph C4, direct NVIDIA generic-4B reader measurements, local CC11 fuzz/derived analyses, and independent compiler/agent/latent-communication literature. No target-Qwen full-FT or live-FRANK promotion."
+}

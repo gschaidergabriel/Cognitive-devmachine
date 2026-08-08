@@ -1,0 +1,94 @@
+{
+  "schema_version":"0.5",
+  "language":"ClayCode",
+  "representation":"canonical_semantic_ir_json_projection",
+  "candidate_id":"claygraph-g2a-certified-adaptive-salience-assembly-router",
+  "candidate_name":"CASAR-G2a — Certified Adaptive Salience & Assembly Router",
+  "generation":2,
+  "accepted_graph_parent":{"graph_id":"claygraph-v0-seed","generation":0},
+  "research_parent":"claygraph-g1d-epochal-latent-field",
+  "status":"HOLD_CANDIDATE",
+  "purpose":"Retain G1d immutable semantic epochs and sparse between-call activation, but route activation only where it adds expected cognitive value and govern utility learning against self-reinforcing salience attractors, poisoning and semantic-role/time leakage.",
+  "layers":[
+    {"layer_id":"exact_anchor_index","authority":"REFERENCE_ONLY","persistent":true,"role":"witnesses into canonical event/state/evidence spine"},
+    {"layer_id":"semantic_epoch_fabric","authority":"DERIVED_REBUILDABLE","persistent":true,"role":"immutable typed role/time/provenance graph epochs + validated delta overlays"},
+    {"layer_id":"latent_activation_field","authority":"NONE","persistent":false,"role":"sparse cue/event-driven salience with lazy decay, bounded propagation and inhibition"},
+    {"layer_id":"activation_router","authority":"NONE","persistent":false,"role":"choose BYPASS, SUPPLEMENT, ESCALATE or QUARANTINE before Assembly formation"},
+    {"layer_id":"anti_attractor_governor","authority":"NONE","persistent":false,"role":"constrain learned salience using context reachability, bounded gain, inhibition, diversity/novelty reserve and poisoning/feedback monitors"},
+    {"layer_id":"assembly_compiler","authority":"NONE","persistent":false,"role":"freeze bounded typed candidate collections on graph+activation+basis witnesses"},
+    {"layer_id":"assembly_certificate","authority":"NONE","persistent":false,"role":"receipt for anchors, relation roles, time, query/activation paths, collection semantics, selection plan, utility provenance and cost"}
+  ],
+  "epoch_contract":{
+    "required":["graph_epoch_id","parent_epoch_id","source_corpus_hash","delta_hash","valid_time_policy","projector_receipt","integrity_receipt"],
+    "publish_rule":"canonical event/state commit first -> derive delta -> validate provenance/status/role/time -> immutable publish -> activation may rebase/reference published epoch",
+    "reader_rule":"one Assembly pins one graph epoch; mixed semantic epochs invalid",
+    "failure_rule":"failed or UNKNOWN derivation validation leaves prior epoch current and exact retrieval available"
+  },
+  "typed_relation_identity":{
+    "required":["relation_instance_id","relation_type","role_bindings","semantic_hash","provenance_instance_ref","valid_time","transaction_time","status","exact_anchor_refs"],
+    "rule":"pairwise lexical similarity or vector proximity cannot substitute for role-aware relation identity; n-ary roles remain explicit"
+  },
+  "activation_router":{
+    "modes":{
+      "BYPASS":{"default_for":["CURRENT_EXACT","HIGH_CONFIDENCE_EXACT"],"rule":"use exact/FTS/direct path; background salience cannot demote a known exact route"},
+      "SUPPLEMENT":{"default_for":["SEMANTIC_ASSOCIATIVE","AMBIGUOUS_LOCAL"],"rule":"truthful compatible activation may rerank/seed a bounded candidate set"},
+      "ESCALATE":{"default_for":["RELATIONAL_MULTIHOP","LOW_CONFIDENCE"],"rule":"combine explicit retrieval seeds + activation + bounded graph traversal; exact-anchor validation remains required"},
+      "QUARANTINE":{"default_for":["STALE","REVOKED_SUPPORT","ROLE_INVALID","TEMPORAL_INVALID","POISON_SUSPECT","UNKNOWN_CLOSURE"],"rule":"ignore or isolate learned salience; broaden/retrieve/validate explicitly"}
+    },
+    "route_receipt_fields":["route_id","query_trigger_class","graph_epoch_id","activation_epoch_id","basis_frame_id","mode","reason_codes","confidence","fallback_refs","selection_plan_hash"]
+  },
+  "activation_utility_receipt":{
+    "state_id":"S.ACTIVATION_UTILITY_RECEIPT",
+    "fields":["receipt_id","graph_epoch_id","activation_epoch_id","basis_frame_id","query_trigger_class","candidate_collection_kind","candidate_semantic_hash","candidate_refs","activation_path_refs","selection_plan_hash","workspace_episode_ref","effect_ref","outcome_ref","utility_credit","causal_credit_scope","credit_target_refs","verifier_id","verifier_version","control_status","poison_suspicion","no_authority"],
+    "utility_credit_values":["POSITIVE","NEGATIVE","NEUTRAL","UNKNOWN"],
+    "causal_credit_scope":["ITEM","PATH","ASSEMBLY","UNKNOWN"],
+    "control_status":["UNTESTED","TRUTHFUL_CONTROL","SHUFFLED_CONTROL","ROLE_SHUFFLED_CONTROL","TEMPORAL_SHUFFLED_CONTROL","STALE_REVOKED_CONTROL"],
+    "invariant":"utility receipt may update salience/routing only; it is never a truth/status/authority transition"
+  },
+  "anti_attractor_governor":{
+    "required_mechanisms":["context_reachability_gate","bounded_positive_gain","bounded_negative_gain","lazy_decay","lateral_inhibition_or_equivalent","topic_or_component_mass_cap","novelty_diversity_reserve","rare_route_holdout","role_time_validity_gate","reward_poisoning_monitor","shuffled_holdouts"],
+    "credit_rule":"do not assign one downstream scalar reward indiscriminately to every surfaced memory; prefer item/path causal credit, otherwise mark UNKNOWN and use bounded conservative update",
+    "default_when_credit_unknown":"no positive reinforcement beyond bounded exploration prior",
+    "authority":"NONE"
+  },
+  "tcqs_assembly_contract":{
+    "roots":"SET<AnchorRef>",
+    "selected_assertions":"SET<AssertionRef>",
+    "weighted_frontier":"WEIGHTED<AnchorRef,Salience>",
+    "projection_order":"ORDERED<AnchorRef>",
+    "path_or_evidence_multiplicity":"MULTISET<Ref> only when multiplicity is explicitly semantic",
+    "rule":"collection kind is part of candidate semantic identity; same member bytes under different collection algebra are different candidate states when order/multiplicity/weights affect downstream behavior"
+  },
+  "assembly_contract":{
+    "required":["assembly_id","graph_epoch_id","activation_epoch_id","basis_frame_id","route_receipt_ref","query_trigger_class","root_refs","weighted_frontier","selected_assertion_refs","projection_order","exact_anchor_refs","evidence_family_refs","conflict_set_refs","activation_path_refs","temporal_validity_refs","role_binding_refs","selection_plan_hash","budget","ttl","stop_reason","no_authority"],
+    "rule":"Assembly is temporary candidate state, not persistent truth; current/consequential assertions require exact-anchor validation"
+  },
+  "identity_axes":["semantic_hash","provenance_contract_instance_hash","basis_identity_hash","selection_plan_hash","candidate_collection_semantics_hash","projected_view_hash"],
+  "hard_invariants":[
+    "canonical truth outranks graph and activation",
+    "activation != truth",
+    "utility_receipt != truth_transition",
+    "salience != authority",
+    "Assembly != GWT ignition",
+    "system WorkspaceEpisode != model-internal workspace uptake",
+    "exact routes may bypass learned salience",
+    "shuffled/stale/role-invalid/temporal-invalid fields cannot count as truthful continuity",
+    "same candidate bytes + changed collection semantics can mean changed candidate identity",
+    "record provenance != cognitive utility != selection-plan integrity",
+    "memory authentication does not prove memory usefulness",
+    "model output != execution authority",
+    "capability secrets remain outside ClayGraph",
+    "migration remains rollback-capable",
+    "synthetic/proxy evidence remains synthetic/proxy"
+  ],
+  "frank_mapping":{
+    "M.DURABLE_EVENT_LEDGER":"authoritative source/changefeed and replay root",
+    "M.UNIFIEDDB_LOGICAL_FABRIC":"query/store routing and derivation witnesses",
+    "M.CLAYGRAPH_MEMORY":"semantic epochs + latent field + CASAR router/governor + Assembly compiler",
+    "M.MOSAIC_COMPILER":"basis/selection/candidate identity closure",
+    "M.WORKSPACE_ARBITER":"receives Assembly candidates after ClayGraph routing; competition/ignition remains separate",
+    "M.MRSC":"projects typed Assembly collections to reader rail with view receipt",
+    "M.CAPABILITY_EFFECT_BROKER":"sole effect authority"
+  },
+  "evidence_boundary":{"current_run_local_and_e2b":"synthetic mechanism/self-use proxy only","external":"independent support for active temporal/hybrid graph memory plus independent risks from oversmoothing/context interference/memory poisoning","target_qwen_live_frank":"NOT_TESTED","decision":"HOLD"}
+}

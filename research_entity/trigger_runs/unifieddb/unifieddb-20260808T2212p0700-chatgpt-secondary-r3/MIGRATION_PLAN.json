@@ -1,0 +1,26 @@
+{
+  "schema_version":"2.0",
+  "run_id":"unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
+  "principle":"Migrate semantics and receipts before moving bytes; every physical placement step remains reversible until target evidence closes correctness/recovery gates.",
+  "phases":[
+    {"phase":0,"name":"inventory_and_shadow_identity","changes":"No data movement. Classify current objects/stores by semantic role, transaction domain, derivation lineage and admissibility class.","gate":"complete role matrix and source/rebuild lineage","rollback":"none required"},
+    {"phase":1,"name":"typed_logical_facade","changes":"Put current stores behind UnifiedQueryIR/TCQS contracts without changing physical placement.","gate":"query-result equivalence on representative corpus; no implicit collection-type changes","rollback":"route directly to legacy APIs"},
+    {"phase":2,"name":"causal_receipts","changes":"Add source-epoch, derivation-version, query/selection and representation receipts in shadow mode.","gate":"receipt completeness and replay diagnostics","rollback":"disable receipt enforcement while retaining observations"},
+    {"phase":3,"name":"canonical_derivation_spine","changes":"Route non-authoritative graph/vector/FTS/activation maintenance through durable derivation/outbox semantics where appropriate.","gate":"duplicate/reorder/loss replay; idempotency; rebuild equivalence","rollback":"dual-write to legacy path until replay parity holds"},
+    {"phase":4,"name":"selection_integrity","changes":"For exposed selectors, compare current selection with authenticated-structure or equivalent trusted selection path before consequential use.","gate":"selection mutation suite and measured overhead","rollback":"fall back to exact/validated retrieval path"},
+    {"phase":5,"name":"same_process_compute_fusion","changes":"Move selected high-affinity query computation into one address space while keeping data/index stores physically replaceable.","gate":"semantic equivalence plus p50/p95/p99 improvement and acceptable fault coupling","rollback":"restore IPC/service plan"},
+    {"phase":6,"name":"selective_index_or_data_replacement","changes":"Independently test colocated vs decoupled graph/vector/FTS storage/index layouts per workload.","gate":"matched result/recall, write amplification, storage, rebuild and recovery","rollback":"rebuild prior sidecar from canonical source"},
+    {"phase":7,"name":"selective_transaction_colocation","changes":"Only data proven to require one atomic effect-critical transition is moved into the same transaction domain.","gate":"fault injection, crash/restart and migration rollback","rollback":"restore canonical spine plus derivation log"},
+    {"phase":8,"name":"linux_target_trace","changes":"Replay real FRANK workload traces through competing placement vectors.","gate":"correctness/recovery first; then latency/resource benefit","rollback":"retain shadow comparison path"},
+    {"phase":9,"name":"android_edge_lowering","changes":"Keep the same semantic/query contracts while selecting smaller device-specific physical engines and cache/index policies.","gate":"sustained RAM, storage, battery/energy, thermal, prefill/decode and recovery measurements","rollback":"device adapter switch without semantic migration"}
+  ],
+  "stop_conditions":[
+    "query semantic mismatch",
+    "unreplayable authoritative state",
+    "selection receipt cannot explain candidate origin",
+    "derived view lacks source/derivation identity",
+    "physical optimization increases common-mode failure beyond accepted threshold",
+    "migration cannot be reversed from preserved canonical data"
+  ],
+  "current_decision":"BUILD_LOGICAL_AND_RECEIPT_LAYERS_FIRST; DO_NOT_COMMIT_TO_ONE_PHYSICAL_DATABASE."
+}

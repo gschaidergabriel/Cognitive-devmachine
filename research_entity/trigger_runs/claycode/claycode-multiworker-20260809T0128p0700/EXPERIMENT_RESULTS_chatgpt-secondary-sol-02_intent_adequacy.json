@@ -1,0 +1,52 @@
+{
+  "claim_boundary": [
+    "Generated attack frequencies are coverage choices, not production risk estimates.",
+    "The UIC gate is tested against constructed mutation families, not arbitrary semantic attacks.",
+    "No target Qwen model, OS sandbox, cryptographic signature implementation, or human-comprehension study is executed here.",
+    "Zero observed false accepts is not a formal proof."
+  ],
+  "classification": "constructed_local_mechanism_evidence",
+  "consent_binding": {
+    "boundary": "This proves only structural display/manifest binding in the constructed model; it does not model human comprehension or coercion.",
+    "cases": 40000,
+    "manifest_bound_clean_accepts": 14018,
+    "manifest_bound_confirmation_attack_accepts": 0,
+    "naive_boolean_confirmation_attack_accepts": 25982,
+    "naive_clean_accepts": 14018
+  },
+  "experiment_id": "EXP-CC-LANE-D-UIC-NONINTERFERENCE-001",
+  "main_matrix": {
+    "capability_only": {
+      "attack_accept_by_class": {"AMOUNT_OVERSHOOT":10100,"APPROVAL_SWAP":6363,"INVOCATION_INJECTION":13650,"PAYLOAD_SOURCE_SWAP":10091,"RELEASE_SELECTOR_SWAP":1619,"STALE_EPOCH":10093,"TARGET_DRIFT":9917,"TARGET_PROV_LAUNDER":18226,"TASK_REBIND":10036},
+      "attack_allowed": 90095, "attack_denied": 0, "benign_allowed": 29905, "benign_denied": 0,
+      "dynamic_benign_denied": 0, "dynamic_benign_total": 4732
+    },
+    "static_exact": {
+      "attack_accept_by_class": {"APPROVAL_SWAP":5768,"INVOCATION_INJECTION":10922,"PAYLOAD_SOURCE_SWAP":8525,"TARGET_PROV_LAUNDER":16657},
+      "attack_allowed": 41872, "attack_denied": 48223, "benign_allowed": 25173, "benign_denied": 4732,
+      "dynamic_benign_denied": 4732, "dynamic_benign_total": 4732
+    },
+    "task_only": {
+      "attack_accept_by_class": {"AMOUNT_OVERSHOOT":10100,"APPROVAL_SWAP":6363,"INVOCATION_INJECTION":13650,"PAYLOAD_SOURCE_SWAP":10091,"RELEASE_SELECTOR_SWAP":1619,"STALE_EPOCH":10093,"TARGET_DRIFT":9917,"TARGET_PROV_LAUNDER":18226},
+      "attack_allowed": 80059, "attack_denied": 10036, "benign_allowed": 29905, "benign_denied": 0,
+      "dynamic_benign_denied": 0, "dynamic_benign_total": 4732
+    },
+    "uic_typed_release": {
+      "attack_accept_by_class": {}, "attack_allowed": 0, "attack_denied": 90095, "benign_allowed": 29905, "benign_denied": 0,
+      "dynamic_benign_denied": 0, "dynamic_benign_total": 4732
+    }
+  },
+  "schema_version": "1.0",
+  "seed": 2026080902,
+  "targeted_ablation": {
+    "amount":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000},
+    "approval":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000},
+    "epoch":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000},
+    "invocation":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000},
+    "payload_flow":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000},
+    "release":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000},
+    "target":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000},
+    "target_prov":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000},
+    "task":{"cases":3000,"full_gate_accepts":0,"omit_named_check_accepts":3000}
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE-FRANK-PROJECTS-ROOT-20260809T0448p0700",
+  "manifest_kind": "FROZEN_DIRECT_CHILD_APPLICATION_CORPUS",
+  "status": "ROOT_FROZEN_RECURSIVE_PROJECT_OBLIGATIONS_PARTIAL",
+  "source": {"title":"frank-projects","id":"1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw"},
+  "direct_children_complete": true,
+  "project_roots_total": 14,
+  "project_roots": [
+    "grazcamperfinder",
+    "e-auto-graz-finder",
+    "autoscout-e-car-hunter",
+    "ev-scout-graz",
+    "ev-camperscout",
+    "autoscout-ioniq-5-finder",
+    "autocarfinder-pro",
+    "e-auto-scout-sterreich",
+    "ai-research-agent",
+    "autocar-hunter",
+    "test-project",
+    "autocamp-scout",
+    "video-launch-page",
+    "autohunter-ioniq-5-autonomer-autokauf-agent"
+  ],
+  "dedupe_hypothesis": {
+    "vehicle_or_camper_search_variants": 11,
+    "other_roots": ["ai-research-agent","test-project","video-launch-page"],
+    "rule": "Do not count each named project as independent general-purpose evidence. Promote capability-family evidence only after recursive implementation checks."
+  },
+  "deep_samples": [
+    {"project":"ai-research-agent","observation":"code subtree currently exposes only hello.py in inspected direct code path; folder name alone is not implementation evidence","state":"LOW_IMPLEMENTATION_EVIDENCE"},
+    {"project":"autocarfinder-pro","observation":"inspected root includes scoring/search Python, persistent search logs/results, heartbeat state, templates and data subtrees","state":"MATERIAL_PERSISTENT_AGENT_IMPLEMENTATION"},
+    {"project":"autohunter-ioniq-5-autonomer-autokauf-agent","observation":"inspected root includes project/setup docs, state JSON, dealer/car data and browser/task traces; setup report describes approval-disabled recurring heartbeats","state":"MATERIAL_AGENT_WORKFLOW_WITH_APPROVAL_BOUNDARY"},
+    {"project":"video-launch-page","observation":"inspected root includes an HTML launch artifact, browser screenshots/traces and a GitHub Pages deployment skill","state":"MATERIAL_WEB_ARTIFACT_CLASS"}
+  ],
+  "security_note": "One inspected historical setup document contains credential-like plaintext despite describing credentials as vaulted. Raw values are deliberately excluded from this manifest and must never be propagated into Research Entity artifacts.",
+  "coverage": {"root_project_names_percent":100.0,"recursive_project_content_percent":null,"exact_level0_global_credit_percent":0.0},
+  "frozen_by": "chatgpt-secondary",
+  "frozen_at": "2026-08-09T04:48:00+07:00"
+}

@@ -27,11 +27,12 @@ The milestone display MUST be resolved from:
 
 - `research_entity/rooms/PROGRAM_STATE.json`
 - `research_entity/rooms/PROGRAM_THROUGHPUT.json`
+- stage-specific exact-progress workspaces such as `research_entity/archive_assimilation/666_WORKSPACE.json`;
 - `tools/program_progress.py`
 
-The stage list is data-driven. Do NOT hardcode `BASE`, `H1`, `H2`, etc. into footer logic. If the owner changes the research narrative/stage order, the status footer must automatically follow the new `PROGRAM_STATE.json`.
+The stage list is data-driven. Do NOT hardcode stage names into footer logic. If the owner changes the research narrative/stage order, the footer follows `PROGRAM_STATE.json`.
 
-Only the **first unpassed stage in `stage_order`** is shown. Completed future/history stages are not listed in the footer.
+Only the **first unpassed stage in `stage_order`** is shown.
 
 ## Progress semantics
 
@@ -41,30 +42,21 @@ Default work-package rule:
 
 `progress = completed_weight / total_weight`
 
-A package does not earn percentage merely because it is `CLAIMED`, `ACTIVE` or `IN_PROGRESS`. It contributes only when its completion status is machine-verifiably complete, unless it defines explicit weighted subchecks.
+A package does not earn percentage merely because it is claimed or active.
 
-The progress bar is generated from the same percentage.
+Level 0 is stricter: its percentage comes only from frozen atomic archive-analysis obligations. Before its source denominator is frozen, exact progress remains `0%` and inventory/indexing state is reported separately by an exact `666` run.
 
 ## ETA semantics
 
 ETA is a range, never a deadline.
 
-User work cadence for the current program:
+Configured owner cadence:
 
 `10 active owner-collaboration hours/day`
 
-ETA preference order:
+ETA prefers measured throughput over bootstrap priors. Level 0 additionally uses its archive workspace ETA, initially based on the owner-reported ~400 MB Drive corpus plus GitHub repository metadata size and then recalibrated from real analyzed/integrated obligations.
 
-1. measured completed work-weight per 10h owner day;
-2. measured work-weight per token/output throughput where canonical telemetry exists;
-3. measured stage velocity;
-4. explicit bootstrap stage priors.
-
-The existing Project-Frankenstein history includes per-call `tokens_in`, `tokens_out`, cost and latency tracing plus session aggregation, but until a canonical current 24h token-total receipt is materialized for this RAE program, the footer must not invent a token total. It must show the lower-confidence bootstrap/measured-work basis honestly.
-
-Parallel workers reduce wall-clock ETA only when completed receipts demonstrate actual independent parallel progress. Do not multiply throughput by worker count naively.
-
-Failed/falsified work remains part of throughput calibration.
+Do not invent a token-total value when no canonical 24h receipt exists.
 
 ## Required format
 
@@ -76,7 +68,7 @@ Canonical: <branch/revision or canonical ref>
 Actor: chatgpt-secondary
 Trigger: <none|registered trigger>
 Research write: <COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED>
-Short commands: go · q12 · dump · fusion · hypofusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness
+Short commands: 666 · q12 · dump · fusion · hypofusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness
 
 NEXT MILESTONE
 Stage: <dynamic label from PROGRAM_STATE.json>
@@ -85,7 +77,7 @@ ETA @ 10h/day: <low> - <high>
 ETA confidence: <confidence> (<basis>)
 ```
 
-`Short commands` is mandatory and must list the currently registered commands from `PROJECT_COMMAND_REGISTRY.json`. If the registry changes, this line changes dynamically.
+`Short commands` is mandatory and must list the currently registered commands from `PROJECT_COMMAND_REGISTRY.json`.
 
 ## Allowed status values
 
@@ -105,11 +97,13 @@ ETA confidence: <confidence> (<basis>)
 
 Every registered trigger uses the same dynamic milestone status. A trigger may display its own name in `Trigger`, but it must not replace the shared program milestone with a trigger-local percentage.
 
-This is important: `gwt`, `hyperposition`, `claycode`, `harness`, `q12`, etc. remain specialist modes while the footer shows what the **whole research organism must reach next**.
+Exact `666` while Level 0 is open additionally shows its dedicated detailed archive progress before this final footer.
+
+After Level 0 PASS, `666` becomes the emergent stochastic field-genesis trigger; the footer continues to show the first unpassed shared milestone as the common attractor.
 
 ## Q12 behavior
 
-`q12` includes the same dynamic milestone and ETA in its executive briefing. It may explain the ETA basis, but it must not alter the computed percentage to make progress look better.
+`q12` includes the same dynamic milestone and ETA in its executive briefing. It may explain the ETA basis, but it must not alter computed progress.
 
 ## Pre-send invariant
 
@@ -120,7 +114,7 @@ Before every substantive response verify:
 3. required RAE metadata fields are present;
 4. all registered short commands are present;
 5. `NEXT MILESTONE`, `Stage`, `Progress`, `ETA @ 10h/day`, and `ETA confidence` are present;
-6. progress bar and percentage agree with `tools/program_progress.py` / current canonical inputs;
+6. progress bar and percentage agree with the current canonical progress resolver;
 7. no forbidden Unicode frame characters occur;
 8. no prompt-completion percentage is shown;
 9. closing fence is final visible content.

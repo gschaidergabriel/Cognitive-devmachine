@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0420+0700-chatgpt-secondary-pf-safety-authority-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_packages": ["666-03-PARALLEL-ANALYZE", "666-04-EARNED-WORK-MAP", "666-06-BRANCH-FEEDBACK"],
+  "status": "SHARD_ANALYZED_AND_MESH_DELTA_READY",
+  "observed_at": "2026-08-09T04:20:00+07:00",
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "lane": "execution authority, sandbox/capability boundaries, security failures and safety architecture history",
+    "non_overlap_basis": "Live center crossread showed peer lanes for architecture history, state/identity/failure, GWT and XENO/ClayCode. This shard restricts itself to execution-authority/security-boundary evolution and current Safe-Effect implications.",
+    "source_refs": [
+      "commit:e1a8812767668091d146ee958bbc2ebb2743031c",
+      "commit:c9bb3bcb3fcac61a1ae0f1de95d814dda3038302",
+      "commit:165d7149fb0aa499bb2474c1b85fca3b1367ec8c",
+      "commit:fff1c5ccfdc3829db75cbf7c0da28e88857467e0",
+      "commit:d2c08bacbfd6a7ffae309a190e707582a809a351",
+      "commit:fcc7319a7bcce583a1382404fed66fe849563ea8",
+      "commit:42527f951661353389fcb9ca30cda8632e363c74",
+      "commit:dbf69e5b2376cf95f3db1bae060352dbe8739489",
+      "commit:5c0a17fe7bfa0a6d4b90a71459421d432655bb76",
+      "commit:62a661f51271e8ec024c3557b921eaddda0267d3",
+      "commit:b6d8c17bde2087d88ef4a31c09d6db2756219739",
+      "commit:c1b41e160b1e1029cf538ee106798250d4ea4430"
+    ],
+    "history_warning": "Several material safety commits predate the currently frozen partial recent-window manifest. This is valid history evidence discovered through GitHub commit search, but it does not freeze or complete the repository history denominator."
+  },
+  "findings": [
+    {
+      "finding_id": "PF-L0-SAFE-001",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_FROM_DEVELOPER_REPORTED_INCIDENT_AND_PATCH",
+      "status": "CURRENTLY_RELEVANT_HARD_SAFETY_CONSTRAINT",
+      "claim": "A historical agentic executor used skip_approval=True for high-risk tools; the security-fix commit reports that this bypassed safety checks, allowed arbitrary destructive commands without user consent and caused a full system wipe.",
+      "source_refs": ["commit:c9bb3bcb3fcac61a1ae0f1de95d814dda3038302"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["clay", "claycode", "frank", "harness", "unifieddb"],
+      "current_implication": "Treat model output as untrusted intent, never execution authority. Any Clay capability/commit gateway must fail closed, preserve an external authority boundary and be regression-tested against approval-bypass and equivalent confused-deputy failures."
+    },
+    {
+      "finding_id": "PF-L0-SAFE-002",
+      "epistemic_class": "HISTORICAL_CODE_CHANGE_EVIDENCE",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "The post-incident hardening combined a low-risk auto-approval whitelist, explicit approval for mutating tools, protected-path checks, expanded destructive-command detection and Firejail filesystem restrictions.",
+      "source_refs": ["commit:c9bb3bcb3fcac61a1ae0f1de95d814dda3038302"],
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "targets": ["claycode", "frank", "harness", "clay"],
+      "current_implication": "Reuse the incident tests and defense-in-depth lesson, but move the invariant below string/prompt policy into typed capability/effect mediation."
+    },
+    {
+      "finding_id": "PF-L0-SAFE-003",
+      "epistemic_class": "HISTORICAL_CODE_CHANGE_EVIDENCE",
+      "status": "CURRENTLY_RELEVANT_EFFECT_SYSTEM_PRECURSOR",
+      "claim": "A later hard-delete guardrail removed fs_delete from the agent registry and attempted to block deletion equivalents in bash and Python, explicitly aiming for no delete capability and no approval bypass.",
+      "source_refs": ["commit:fff1c5ccfdc3829db75cbf7c0da28e88857467e0"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["clay", "claycode", "harness"],
+      "current_implication": "This is a direct historical precursor to Safe-Effect Clay, but pattern/tool blocking is not sufficient closure. Clay must prove equivalent destructive effects remain unreachable through subprocesses, FFI, generated code, raw syscalls and alternate encodings."
+    },
+    {
+      "finding_id": "PF-L0-SAFE-004",
+      "epistemic_class": "HISTORICAL_RUNTIME_HARDENING_RESULT",
+      "status": "CURRENTLY_RELEVANT_RISK_BUDGET_MECHANISM",
+      "claim": "Agentic hardening replaced max-step risk with compound risk 1-product(1-risk_i), added EMA-weighted failure scoring and Firejail resource ceilings for code/bash execution.",
+      "source_refs": ["commit:165d7149fb0aa499bb2474c1b85fca3b1367ec8c"],
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "targets": ["harness", "frank", "claycode", "clay"],
+      "current_implication": "Risk and resource damage are compositional. Clay capability budgets should account for cumulative multi-step exposure and include resource/process/network limits, not only per-operation labels."
+    },
+    {
+      "finding_id": "PF-L0-SAFE-005",
+      "epistemic_class": "HISTORICAL_FAIL_OPEN_CONSTRAINT",
+      "status": "CURRENTLY_RELEVANT_FALSIFIER",
+      "claim": "The Firejail implementation explicitly logged a warning and continued unsandboxed when Firejail was unavailable.",
+      "source_refs": ["commit:165d7149fb0aa499bb2474c1b85fca3b1367ec8c"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "claycode", "frank", "clay"],
+      "current_implication": "A current protected-effect runtime must test fail-closed semantics: absence or failure of the enforcement backend cannot silently expand authority."
+    },
+    {
+      "finding_id": "PF-L0-SAFE-006",
+      "epistemic_class": "HISTORICAL_CAPABILITY_SCOPING_EVIDENCE",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "Autonomous research was deliberately given a restricted capability subset, rate/cooldown budgets and sandboxed code; self-authored Genesis proposals followed sandbox validation, destructivity checks and a separate FAS accept/reject path before registration.",
+      "source_refs": ["commit:d2c08bacbfd6a7ffae309a190e707582a809a351", "commit:fcc7319a7bcce583a1382404fed66fe849563ea8"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "claycode", "harness", "clay"],
+      "current_implication": "Per-context capabilities plus proposal/validation/commit separation are historically proven design patterns in FRANK and can inform a deterministic IrreversibleEffectRequest/commit broker."
+    },
+    {
+      "finding_id": "PF-L0-SAFE-007",
+      "epistemic_class": "HISTORICAL_SECURITY_EVAL_NEGATIVE_RESULTS",
+      "status": "CURRENTLY_RELEVANT_CONTENT_SAFETY_LIMITATION",
+      "claim": "V15/V25 evaluations found attack/tool leakage and harmful-query gaps that were repaired with increasingly specific regex/pre-filter and executor blocklists; V25 specifically reported attack-script, stalking-guide and stolen-card-market failures before patching.",
+      "source_refs": ["commit:dbf69e5b2376cf95f3db1bae060352dbe8739489", "commit:5c0a17fe7bfa0a6d4b90a71459421d432655bb76"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["clay", "frank", "harness"],
+      "current_implication": "Reactive string filters are useful defense-in-depth and regression cases but cannot establish authority safety or prompt-injection resistance."
+    },
+    {
+      "finding_id": "PF-L0-SAFE-008",
+      "epistemic_class": "HISTORICAL_ARCHITECTURE_DRIFT_OBSERVATION",
+      "status": "CURRENTLY_RELEVANT_AUTHORITY_DRIFT_CONSTRAINT",
+      "claim": "The separate Projects/Claude coding-agent subsystem first constrained file tools to a project-root sandbox, then deliberately removed that sandbox and granted full-system file/bash/service/package authority while retaining only a tiny destructive-command blocklist.",
+      "source_refs": ["commit:62a661f51271e8ec024c3557b921eaddda0267d3", "commit:b6d8c17bde2087d88ef4a31c09d6db2756219739"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["claycode", "frank", "harness", "clay"],
+      "current_implication": "Authority boundaries can drift when implemented independently per agent/subsystem. Clay should make capability scope a centrally enforced semantic/runtime property that child agents cannot widen by local code changes."
+    },
+    {
+      "finding_id": "PF-L0-SAFE-009",
+      "epistemic_class": "HISTORICAL_MODEL_POLICY_OBSERVATION",
+      "status": "CURRENTLY_RELEVANT_EXTERNAL_ENFORCEMENT_CONSTRAINT",
+      "claim": "Historical design explicitly used an abliterated model with safety layers removed and in another path routed darknet intent through tooling to bypass a model refusal; therefore model refusal behavior was not a stable execution boundary.",
+      "source_refs": ["commit:c1b41e160b1e1029cf538ee106798250d4ea4430", "commit:42527f951661353389fcb9ca30cda8632e363c74"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["clay", "claycode", "frank", "harness"],
+      "current_implication": "Current Safety-Effect claims must be evaluated with compromised/uncooperative model intent; success cannot depend on refusal text."
+    }
+  ],
+  "current_rae_cross_mapping": {
+    "foundation_ref": "research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md",
+    "assessment": "The historical evidence materially supports prioritizing the Safe-Effect research axis, especially authority non-amplification, external irreversible-effect brokerage, resource boundedness and foreign-code closure. It does not prove those candidate invariants sound or complete.",
+    "supported_research_links": [
+      "A(S_t+1) subseteq A(S_t) union ExternalGrant_t",
+      "EffectiveEffects(child_program) subseteq Effects(parent_Clay_contract)",
+      "model -> IrreversibleEffectRequest -> external/deterministic broker -> commit receipt",
+      "Usage(resource_i) <= Budget_i(capability)",
+      "recoverability-preserving/versioned writes instead of ambient destructive mutation"
+    ]
+  },
+  "earned_work_mapping_candidate": {
+    "mapping_id": "HEW-PF-SAFETY-005",
+    "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "CLAY_0_1_ACCEPTANCE_RUN"],
+    "mechanism_or_result": "Historical catastrophic approval-bypass incident plus subsequent delete-capability removal, sandbox/resource hardening, capability scoping and safety-eval regressions provide reusable safety architecture constraints and a concrete adversarial test atlas.",
+    "reuse_category": "NEGATIVE_RESULT_VALUE",
+    "avoided_future_hours_low": 4.0,
+    "avoided_future_hours_center": 9.0,
+    "avoided_future_hours_high": 18.0,
+    "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+    "falsifier_or_validation_receipt": "Safe-Effect/Reference Harness must reproduce approval bypass, sandbox absence, child-process/FFI destructive-equivalent attempts, authority drift and multi-step resource/risk accumulation as failing baseline tests and passing mediated-runtime tests."
+  },
+  "cheap_discriminating_tests": [
+    "Approval-token binding: bind authorization to exact normalized effect, capability set, protected-state hash, expiry and single-use nonce; mutate any field and require rejection.",
+    "Fail-closed enforcement: remove/kill sandbox/effect broker and verify protected effects stop rather than execute ambiently.",
+    "Foreign-code closure matrix: request equivalent protected destruction through Clay, Bash, Python, C/Rust/WASM/FFI and nested tool subprocesses; child effective effects must never exceed parent contract.",
+    "Authority-drift regression: create/modify a secondary agent subsystem and attempt to widen its file/process/network scope without an ExternalGrant; runtime must reject widening independent of local prompt/code claims.",
+    "Compound-risk/resource test: execute long sequences of individually medium-risk reversible actions and verify aggregate budgets/tripwires prevent emergent resource damage while preserving normal build/test utility."
+  ],
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Drive archive internal manifest and full Project-Frankenstein tree/history denominators remain unfrozen.",
+    "historical_earned_work_credit_status": "CANDIDATE_MAPPING_RECORDED_PENDING_SHARED_FILE_INTEGRATION",
+    "warning": "The avoided-hour estimate is a low-confidence engineering mapping prior and must not change strict Level-0 progress."
+  },
+  "drive_blocker": {
+    "file_id": "1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU",
+    "size_bytes": 663552000,
+    "connector_limit_bytes": 104857600,
+    "stream_attempt_result": "HTTP_413_FILE_TOO_LARGE",
+    "blocker_class": "EXTERNAL_ACCESS_BLOCKER"
+  }
+}

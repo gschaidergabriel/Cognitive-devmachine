@@ -1,0 +1,60 @@
+{
+  "schema_version":"1.1",
+  "run_id":"claygraph-20260808T2212p0700-chatgpt-secondary-r3",
+  "candidate":"CASAR-G2a",
+  "experiments":[
+    {
+      "id":"EXP-CG5-SELFUSE-001",
+      "class":"staged_current_RAE_self_use_proxy",
+      "corpus":{"nodes":23,"questions":12,"gold":"manual mechanism sets"},
+      "arms":{"explicit_only":{"recall_at_5":0.583333,"mrr":0.833333},"truthful_prior":{"recall_at_5":0.756944,"mrr":0.902778},"shuffled_prior":{"recall_at_5":0.604167,"mrr":0.736111}},
+      "remote":{"provider":"E2B","receipt":"research_entity/runtime/tool_results/claygraph-g2a-selfuse-e2b-20260808T2212p0700.json","status":"SUCCESS","exit_code":0,"matches_local":true},
+      "result":"Truthful prior improved retrieval on this curated current-RAE proxy and shuffled prior did not reproduce the gain.",
+      "boundary":"Manual/staged corpus; not a production graph-vs-search or target-model benchmark."
+    },
+    {
+      "id":"EXP-CG5-ROUTE-002",
+      "class":"synthetic_mixed_exact_associative_router",
+      "seed":9917,
+      "episodes":10000,
+      "local_reference":{
+        "explicit":{"top1":0.5569,"recall_at_8":0.60914,"off_topic":0.610375,"exact_top1":1.0,"associative_top1":0.014457},
+        "always_blend":{"top1":0.5752,"recall_at_8":0.8684,"off_topic":0.454263,"exact_top1":0.319041,"associative_top1":0.88879},
+        "adaptive_router":{"top1":0.95,"recall_at_8":0.95032,"off_topic":0.4007,"exact_top1":1.0,"associative_top1":0.88879},
+        "shuffled_blend":{"top1":0.0615,"recall_at_8":0.44602,"off_topic":0.718988,"associative_top1":0.0}
+      },
+      "e2b_compact_variant":{"receipt":"research_entity/runtime/tool_results/claygraph-g2a-e2b-v04-20260808T2212p0700.json","status":"SUCCESS","adaptive_top1":0.9535,"always_top1":0.5908,"explicit_top1":0.5577,"shuffled_top1":0.06,"note":"same mechanism class but shortened implementation; directional replication only, not exact replication"},
+      "exact_e2b_subset_request":"research_entity/runtime/tool_requests/claygraph-g2a-router-e2b-20260808T2212p0700.json",
+      "exact_e2b_subset_status":"PENDING_NOT_OBSERVED_AT_EVIDENCE_CUTOFF",
+      "result":"Route-selective BYPASS exact + SUPPLEMENT associative strongly outperformed universal policies in the constructed mixed workload; universal blend harmed exact queries and shuffled field was destructive.",
+      "boundary":"Synthetic workload with engineered query classes; target thresholds open."
+    },
+    {
+      "id":"EXP-CG5-ATTRACTOR-003",
+      "class":"synthetic_online_salience_learning_adversarial",
+      "seed":7711,
+      "episodes_per_condition":5000,
+      "poison_conditions":[0.0,0.15,0.30],
+      "zero_poison":{"fixed":{"top1":1.0,"rare":1.0,"false_frequent_attractor":0.0,"recall_at_8":0.6},"naive_scalar":{"top1":0.286667,"rare":0.016886,"false_frequent_attractor":0.713333,"recall_at_8":0.697333},"governed":{"top1":0.991,"rare":0.976548,"false_frequent_attractor":0.006,"recall_at_8":0.6}},
+      "poison_0_15":{"naive_scalar":{"top1":0.286667,"rare":0.016886,"false_frequent_attractor":0.713333,"recall_at_8":0.594867},"governed":{"top1":0.990333,"rare":0.97561,"false_frequent_attractor":0.006667,"recall_at_8":0.6}},
+      "governor":["context reachability gate","itemwise verified utility credit","bounded positive/negative salience","decay","per-topic mass cap"],
+      "local_status":"PASS",
+      "remote":{"provider":"E2B","receipts":["research_entity/runtime/tool_results/claygraph-g2a-e2b-v02-20260808T2212p0700.json","research_entity/runtime/tool_results/claygraph-g2a-e2b-v04-20260808T2212p0700.json"],"status":"SUCCESS","anti_attractor_metrics_match_local_to_reported_precision":true},
+      "result":"Indiscriminate scalar utility generated an exposure-frequency attractor even with no injected attacker. The constructed governor suppressed it, but relies on a synthetic 96% itemwise verifier.",
+      "boundary":"Mechanism/failure-mode test, not FRANK frequency or production defense efficacy."
+    },
+    {
+      "id":"EXP-CG5-E2B-PORTABILITY-004",
+      "class":"research_tooling_negative_and_repair",
+      "attempt_1":{"receipt":"research_entity/runtime/tool_results/claygraph-g2a-e2b-20260808T2212p0700.json","status":"FAILED","cause":"ModuleNotFoundError: numpy"},
+      "repair":"rewrite lab to Python standard library only",
+      "attempt_2":{"receipt":"research_entity/runtime/tool_results/claygraph-g2a-e2b-v02-20260808T2212p0700.json","status":"SUCCESS","issue":"stdout evidence truncated by bridge bound"},
+      "repair_2":"emit compact receipt and split decisive experiments",
+      "attempt_3":{"receipt":"research_entity/runtime/tool_results/claygraph-g2a-e2b-v04-20260808T2212p0700.json","status":"SUCCESS"},
+      "result":"Portable research artifacts should declare/minimize dependencies and emit bounded evidence receipts; process success alone does not guarantee complete evidence capture."
+    }
+  ],
+  "candidate_decision":"HOLD",
+  "accepted_graph_change":false,
+  "promotion":"NONE"
+}

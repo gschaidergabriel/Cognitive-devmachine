@@ -1,36 +1,41 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "coordination_id":"claycode-multiworker-20260809T0128p0700",
   "worker_id":"chatgpt-secondary-sol-03",
   "actor_id":"chatgpt-secondary",
   "provider":"OpenAI",
   "model":"GPT-5.6 Sol",
-  "lane_claimed":"D_CROSS_BRANCH_GOODMAN_COORDINATION",
-  "status":"ACTIVE_HANDSHAKE",
+  "lane_claimed":"D_CROSS_BRANCH_GOODMAN_COORDINATION_NEXT_STAGE_GATE",
+  "status":"COMPLETE_FOR_FUSION",
   "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
   "joined_at":"2026-08-09T01:36:00+07:00",
-  "user_intent":"Connect this ClayCode worker with the other three parallel workers.",
+  "completed_at":"2026-08-09T01:47:00+07:00",
   "sibling_read_receipts":[
     "KMP-CLAYCODE-3WORKER-RENDEZVOUS-20260809",
     "CONTRIBUTION_chatgpt-secondary-r4.md",
     "WORKER_chatgpt-secondary-r5 / BRIDGE_worker-r5_lane-B.json",
     "WORKER_chatgpt-secondary-sol-01.json",
-    "WORKER_chatgpt-secondary-sol-02.json"
+    "WORKER_chatgpt-secondary-sol-02.json",
+    "CONTRIBUTION_chatgpt-secondary-sol-websynth-B.md",
+    "FRANK C9 Typed Causal Admission & Effect Fabric"
   ],
-  "peer_state_summary":[
-    "Lane A/r4 is complete and waiting for cross-read fusion; core result separates computational expressibility from effect authority.",
-    "Lane C/sol-01 is active; it adds aggregate monotone effect budgets plus origin-bound ancestry against cumulative overshoot and laundering.",
-    "Lane B/r5 is active and has queued an E2B translation-validation experiment for capability-bound lowering.",
-    "sol-02 independently joined Lane B and is stressing FFI/WASI/ABI/process-boundary capability preservation."
+  "primary_outputs":[
+    "CONTRIBUTION_chatgpt-secondary-sol-03_NEXT_STAGE.md",
+    "EXECUTABLE_RESEARCH_RECEIPT_chatgpt-secondary-sol-03_next_stage.json",
+    "HANDOFF_chatgpt-secondary-sol-03_to-fusion.json"
   ],
-  "role_contract":[
-    "Do not overwrite sibling files.",
-    "Continuously reread fresh sibling receipts before synthesis.",
-    "Collapse shared evidence ancestry; sibling agreement is not independent replication.",
-    "Carry contradictions and negative results into final fusion.",
-    "Use newest FRANK/Clay/ClayGraph/UnifiedDB/GWT/Hyperposition/Emergenz material when a ClayCode conclusion crosses branch boundaries."
+  "main_delta":"Refuted sufficiency of non-atomic monotone aggregate budget under concurrency; added atomic authority reservation/consumption as the next-stage release linearization requirement.",
+  "experiment_summary":{"mixed_cases":250000,"reference_lowered_mismatches":0,"targeted_mutations":52000,"full_checker_false_accepts":0,"concurrent_sessions":100000,"naive_budget_overshoots":14315,"atomic_budget_overshoots":0,"naive_replay_double_spends":10407,"atomic_replay_double_spends":0},
+  "next_stage_p0":[
+    "real WASI 0.3/Wasmtime async capability experiment",
+    "transactional broker race/crash experiment",
+    "Rust/C++/plugin FFI experiment",
+    "isolated real destructive-equivalent red team with utility controls",
+    "actual ClayCode parser/type/effect checker/canonicalizer",
+    "target Qwen-class 4B adherence benchmark",
+    "restricted analyzable policy-plane implementation/test"
   ],
-  "next_action":"Serve as cross-branch/Goodman coordinator for the live ClayCode multiworker rendezvous and expose any coordination delta append-only.",
   "scientific_claim_promotion":false,
+  "fusion_required":true,
   "provenance":{"origin_actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"}
 }

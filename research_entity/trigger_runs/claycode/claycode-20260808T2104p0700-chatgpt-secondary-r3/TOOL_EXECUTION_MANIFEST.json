@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T2104p0700-chatgpt-secondary-r3",
+  "task_classes":["implementation","current_web","executable","mesh_research"],
+  "attempts":[
+    {"tool":"GitHub","status":"SUCCESS","role":"T0 boot, eight-branch mesh reads, concurrent C7/U1/G11 discovery, executable artifact persistence and run writes"},
+    {"tool":"native_web_primary_sources","status":"SUCCESS","role":"independent collection/compiler evidence","sources":["Mixing Set and Bag Semantics","compiler equivalence/equality-saturation verification work","OR-Set/CRDT causal-tag design","MLIR typed operation semantics"],"evidence_boundary":"external literature supports mechanism class, not FRANK-specific performance"},
+    {"tool":"local_python_sandbox","status":"SUCCESS","role":"preflight property/differential checks before remote execution","note":"local results used as development checks; central executable claims rely on persisted E2B receipts"},
+    {"tool":"e2b_sandbox","status":"SUCCESS","role":"preferred ClayCode executable research runtime","experiments":["EXP-CC12-TYPED-COLLECTION-IDENTITY-001","EXP-CC12-UNIFIEDDB-COLLECTION-LOWERING-002","EXP-CC12-CROSS-KIND-ALIAS-003"],"result_refs":["research_entity/runtime/tool_results/cc12-e2b-typed-collections-20260808T2104p0700.json","research_entity/runtime/tool_results/cc12-e2b-query-semantics-20260808T2104p0700.json","research_entity/runtime/tool_results/cc12-e2b-cross-kind-alias-20260808T2104p0700.json"]},
+    {"tool":"sandboxapi_sandbox","status":"SUBSCRIPTION_UNAVAILABLE","fallback_reason":"SUBSCRIPTION_UNAVAILABLE","role":"independent secondary sandbox","note":"Previously verified gateway returns RapidAPI 403 not subscribed; not burned again because state is known and E2B is operational."},
+    {"tool":"target_qwen_full_model_runtime","status":"MODEL_IDENTITY_UNAVAILABLE","fallback_reason":"MODEL_IDENTITY_UNAVAILABLE","role":"target reader/internalization evidence","note":"No target full-FT Qwen hidden-state/local FRANK runtime was exposed; no target-model claim made."}
+  ],
+  "fallback_attempts":[
+    {"tool":"e2b_sandbox","status":"SUCCESS","covers":["sandboxapi_sandbox"],"reason":"verified preferred remote compiler sandbox"},
+    {"tool":"current_mesh_runtime_evidence","status":"SUCCESS","covers":["target_qwen_full_model_runtime"],"reason":"covers architecture/mechanism work only; does not close Qwen-specific question"}
+  ],
+  "secret_values_recorded":false,
+  "promotion_allowed":false
+}

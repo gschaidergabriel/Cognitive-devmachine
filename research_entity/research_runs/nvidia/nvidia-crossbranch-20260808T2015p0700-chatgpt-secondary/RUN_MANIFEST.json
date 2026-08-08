@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "run_id":"nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary",
+  "kind":"manual_cross_branch_provider_research",
+  "trigger":"none",
+  "actor":"chatgpt-secondary",
+  "provider":"NVIDIA Hosted NIM",
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status":"COMPLETED_OPEN_RESEARCH_DELTA",
+  "promotion":"NONE",
+  "artifacts":["OPEN_QUESTION_COVERAGE.json","EXPERIMENT_EVALUATION.json","BRANCH_FEEDBACK_MANIFEST.json","TOOL_EXECUTION_MANIFEST.json","FINAL_REPORT.md","VALIDATION_REPORT.json"],
+  "experiments":{"evaluated_families":6,"direct_generic_4b_families":3,"embedding_families":2,"provider_route_negative":1},
+  "capability_state":{"catalog":"RUNTIME_VERIFIED","chat":"RUNTIME_VERIFIED_NEMOTRON_MINI_4B","embeddings":"RUNTIME_VERIFIED_1024D","embedding_similarity":"RUNTIME_VERIFIED","rerank":"HOSTED_ROUTE_UNRESOLVED","exact_qwen3_4b":"UNAVAILABLE"},
+  "knowledge_micro_packets":[
+    "research_entity/knowledge_micro_packets/clay/KMP-NVIDIA-4B-COVE-VIEW.md",
+    "research_entity/knowledge_micro_packets/frank/KMP-NVIDIA-4B-CNUCS-READER-BOUNDARY.md",
+    "research_entity/knowledge_micro_packets/gwt/KMP-NVIDIA-4B-REPRESENTATION-CONFOUND.md",
+    "research_entity/knowledge_micro_packets/emergence/KMP-NVIDIA-EMBEDDING-ROLE-NULL.md",
+    "research_entity/knowledge_micro_packets/claycode/KMP-NVIDIA-4B-ICSL-VIEW.md",
+    "research_entity/knowledge_micro_packets/hyperposition/KMP-NVIDIA-EMBEDDING-FIREBREAK-BOUNDARY.md",
+    "research_entity/knowledge_micro_packets/claygraph/KMP-NVIDIA-4B-LATENT-PRIOR-NEGATIVE.md"
+  ],
+  "branch_feedback":{"clay":true,"frank":true,"gwt":true,"emergenz":true,"claycode":true,"hyperposition":true,"claygraph":true},
+  "key_findings":["Nemotron-Mini-4B COVE raw 4/12 -> compiled 11/12 with -36.9% prompt tokens","CC10 actual 4B raw 12/16 vs typed 13/16; compact arm failed output contract","shuffled relevance prior scored 0/8 while authoritative facts remained visible; truthful benefit unresolved","embedding role reversal more similar than same-role paraphrase in two constructed pairs","NVIDIA reranking hosted route unresolved; no substitution by embedding similarity"],
+  "open_blockers":["exact Qwen3-4B route","full-model Clay adaptation","live FRANK/GWT interventions","actual ClayGraph runtime/crash/privacy","local Android/hardware traces","prospective emergence certification","NVIDIA hosted reranker route"],
+  "canonical_mutation":false
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0457+0700-chatgpt-secondary-aicore-needle-shard",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"NEEDLE_ARCHIVE_SHARD_ANALYZED_AND_CURRENT_CONTRACT_RECONCILED",
+  "observed_at":"2026-08-09T04:57:00+07:00",
+  "source_scope":{"manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_NEEDLE_SUBMANIFEST.json","current_contract":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"},
+  "findings":[
+    {
+      "finding_id":"DRIVE-NEEDLE-001",
+      "epistemic_class":"REGISTRY_SNAPSHOT_DIRECT_EVIDENCE",
+      "status":"VERIFIED_AT_ARCHIVE_SNAPSHOT",
+      "claim":"The archived Needle registry snapshot contains 62 tools: 51 active and 11 locked. Active-tool argument arity is exactly 8 with zero args, 30 with one, 10 with two and 3 with three.",
+      "targets":["frank","harness","claycode","clay"],
+      "implication":"The historical runtime tool surface is compact and shallow enough to be represented as an explicit typed registry projection; locked/unavailable capabilities should be removed before classification rather than offered and rejected after generation."
+    },
+    {
+      "finding_id":"DRIVE-NEEDLE-002",
+      "epistemic_class":"HISTORICAL_SOURCE_INSPECTION_REPORT",
+      "status":"HIGH_VALUE_REPLICATION_REQUIRED",
+      "claim":"The 2026-08-07 Zero-Shot report states that Needle receives the tool list as a runtime generate() argument, with a dedicated TOOLS marker and training-time permutation of tool and parameter order. On that basis it concludes registry changes do not require finetuning.",
+      "targets":["frank","harness","claycode"],
+      "implication":"Treat dynamic registry conditioning as the default integration hypothesis, but reproduce it against the exact retained Needle checkpoint/source before freezing implementation semantics."
+    },
+    {
+      "finding_id":"DRIVE-NEEDLE-003",
+      "epistemic_class":"HISTORICAL_DATASET_MEASUREMENT",
+      "status":"REUSABLE_TRAINING_DATA_CONSTRAINT",
+      "claim":"The 2026-08-04 architecture report says 1449 of 3785 training responses (38.3%) contained tool calls wholly or partly and 559 contained multiple calls, motivating removal of tool-call generation from FRANK's model training path.",
+      "targets":["frank","training_data","harness","clay"],
+      "implication":"When the final Clay-native corpus is built, tool mechanics should not be silently retained as a large target-generation class. Preserve separate observation/result semantics and explicitly test whether reclaimed capacity benefits self/goal/world reasoning."
+    },
+    {
+      "finding_id":"DRIVE-NEEDLE-004",
+      "epistemic_class":"HISTORICAL_MEASUREMENT_LINEAGE_CONFLICT",
+      "status":"SUPERSESSION_OR_EVAL_CHANGE_REQUIRES_PROVENANCE",
+      "claim":"The 2026-08-04 architecture/target documents report v26.1 tool-choice accuracy of 79.9% on 134 mandatory cases and define a >=90% Needle gate, while the later 2026-08-07 Zero-Shot report gives 67.9% (91/134) for its Stage-A baseline and argues the correct Needle success criterion is parity within 3 points on reflex cases plus at least 5x latency reduction and no canary regression.",
+      "targets":["harness","frank","claygraph","q12_index"],
+      "implication":"Do not merge these percentages. Preserve benchmark version/probe definitions and treat the later document as a changed evaluation framing unless raw evaluation lineage proves identical scoring."
+    },
+    {
+      "finding_id":"DRIVE-NEEDLE-005",
+      "epistemic_class":"HISTORICAL_OPEN_GATE",
+      "status":"NOT_YET_PROVEN_IN_ARCHIVE",
+      "claim":"The 2026-08-07 report leaves direct German zero-shot behavior, exact encoder headroom under a 1024-token limit, and whether constrained decoding binds outputs to the supplied tool names as explicit pre-build gates rather than completed results.",
+      "targets":["harness","frank","claycode"],
+      "implication":"These must not be promoted as solved historical facts. The current integration should test exact checkpoint/tokenizer/tool projection behavior or intentionally supersede the old direct-German assumption through an explicit boundary design."
+    },
+    {
+      "finding_id":"DRIVE-NEEDLE-006",
+      "epistemic_class":"CURRENT_PROJECT_CONTRACT_RECONCILIATION",
+      "status":"CURRENT_AUTHORITY_BOUNDARY",
+      "claim":"The current FRANK Clay-Native contract retains Needle as the sole intentional non-Clay semantic subsystem but requires its output to become a typed provenance-bound Clay observation/proposal and explicitly forbids Needle from minting execution authority.",
+      "targets":["frank","clay","claycode","harness","unifieddb","claygraph"],
+      "implication":"Historical Needle routing logic is reusable only behind the current proposal-versus-authority separation. A valid tool classification is never itself permission to execute an effect."
+    },
+    {
+      "finding_id":"DRIVE-NEEDLE-007",
+      "epistemic_class":"HISTORICAL_ROLE_DECOMPOSITION_RESULT",
+      "status":"REUSABLE_WITH_ADAPTATION",
+      "claim":"The later report observes that historical 4B errors concentrate on judgment-heavy/delegation tools while simple reflex tools were already near-perfect, undermining a one-router-for-everything accuracy narrative.",
+      "targets":["frank","harness","claycode"],
+      "implication":"Evaluate routing by function class: fast deterministic/reflex classification, uncertainty/abstention, and escalation for semantic judgment should be measured separately rather than collapsed into one aggregate tool-choice score."
+    }
+  ],
+  "earned_work_candidate":{"mapping_id":"HEW-DRIVE-NEEDLE-013","current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","DATA_LORA_TRAINING_DATA","CLAY_0_1_FULL_INTEGRATION"],"mechanism_or_result":"Historical Needle registry, benchmark lineage, dataset accounting and routing architecture provide a concrete non-greenfield classifier integration/evaluation foundation and expose which gates remain unproven.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":2.0,"avoided_future_hours_center":5.0,"avoided_future_hours_high":10.0,"confidence":"MEDIUM_FOR_ARCHITECTURE_AND_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Exact retained Needle checkpoint/source must pass dynamic-tool-list, constrained-name, latency, canary and uncertainty/escalation tests under the current Clay authority bridge; otherwise the historical integration assumptions do not transfer."},
+  "progress_accounting":{"exact_level0_coverage_awarded_percent":0.0,"global_credit_applied":false,"reason":"Needle direct Drive shard is closed, but external Needle source replication and global recursive denominators remain open."}
+}

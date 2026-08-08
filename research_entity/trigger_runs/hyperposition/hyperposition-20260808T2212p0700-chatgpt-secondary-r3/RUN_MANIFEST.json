@@ -1,12 +1,12 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"hyperposition-20260808T2212p0700-chatgpt-secondary-r3",
   "trigger":"hyperposition",
   "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
   "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
   "candidate":{"id":"HYP-RC5","name":"Context-Gated Multi-Topology Hyperposition","status":"OPEN_HOLD","parent":"HYP-RC4"},
   "scientific_branches_covered":["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb"],
-  "fresh_inputs":{"clay":"CACC-G12","frank":"C8 SCRF","gwt":"NWB-R5","claycode":"CC-RC1.7 TCQS","claygraph":"G1d HOLD","unifieddb":"U2 CPPF","emergenz":"E-CERT2","global_meta":"Hypofusion H1"},
+  "fresh_inputs":{"clay":"CACC-G12","frank":"C8 SCRF","gwt":"NWB-R5","claycode":"CC-RC1.7 TCQS","claygraph":"G1d HOLD + G2a in-progress method input","unifieddb":"U2 CPPF","emergenz":"E-CERT2","global_meta":"Hypofusion H1"},
   "experiments":["EXP-HYP-H5-NARY-INTEGRITY-001","EXP-HYP-H5-PROPAGATION-002","EXP-HYP-H5-CONTEXT-INVALIDATION-003","EXP-HYP-H5-IPC-004"],
   "key_deltas":[
     "One semantic relation is separated from propagation, invalidation, selection/workspace, physical and authority topology.",
@@ -14,13 +14,14 @@
     "Persistent relation identity no longer implies permanent propagation; context-gated bounded activation is the default OPEN direction.",
     "Context-active invalidation is efficient only when closure is known; UNKNOWN broadens/escalates.",
     "FRANK C8 selective active cognition and UnifiedDB U2 multi-axis PlacementVector were ingested during H5 and sharpen the topology compiler.",
+    "ClayGraph G2a started during finalization; its adaptive salience/assembly test design was ingested as in-progress input only.",
     "No emergence or consciousness inference is made."
   ],
-  "required_outputs":{"INTERCONNECT_MANIFEST.json":true,"TOOL_EXECUTION_MANIFEST.json":true,"HYPOTHESES.json":true,"EXPERIMENT_RESULTS.json":true,"HYP_RC5_CONTEXT_GATED_MULTI_TOPOLOGY.claycode.json":true,"NEGATIVE_RESULTS.md":true,"CLAYGRAPH_FEEDBACK.json":true,"BRANCH_FEEDBACK_MANIFEST.json":true,"EVIDENCE_LEDGER.md":true,"VALIDATION_REPORT.json":true,"FINAL_REPORT.md":true},
+  "required_outputs":{"INTERCONNECT_MANIFEST.json":true,"TOOL_EXECUTION_MANIFEST.json":true,"HYPOTHESES.json":true,"EXPERIMENT_RESULTS.json":true,"HYP_RC5_CONTEXT_GATED_MULTI_TOPOLOGY.claycode.json":true,"NEGATIVE_RESULTS.md":true,"CLAYGRAPH_FEEDBACK.json":true,"BRANCH_FEEDBACK_MANIFEST.json":true,"EVIDENCE_LEDGER.md":true,"LATE_WORKER_DELTA.json":true,"VALIDATION_REPORT.json":true,"FINAL_REPORT.md":true},
   "knowledge_outputs":["research_entity/knowledge_micro_packets/hyperposition/KMP-HYP-H5-MULTI-TOPOLOGY.md","research_entity/knowledge_micro_packets/hyperposition/KMP-HYP-H5-NARY-REDUCIBILITY.md","research_entity/knowledge_micro_packets/hyperposition/KMP-HYP-H5-PROPAGATION-GATING.md","research_entity/knowledge_micro_packets/hyperposition/KMP-HYP-H5-IPC-TOPOLOGY.md","research_entity/topic_packets/hyperposition-h5-context-gated-multi-topology/PACKET.json"],
   "governance_delta":"HYPERPOSITION_RESEARCH_PROTOCOL.md updated from stale seven-branch wording to registry-driven eight-branch + UnifiedDB-aware protocol.",
   "promotion":{"canonical_revision_change":false,"scientific_generation_promoted":false,"reason":"No target Clay-adapted Qwen causal benefit, no target physical-placement benchmark, no live ClayGraph cognitive-effect result and no ancestry-distinct full-stack replication."},
-  "validation":{"structural":"PASS","remote_reread":"PENDING","canonical_recheck":"PENDING","final_worker_scan":"PENDING"},
+  "validation":{"structural":"PASS","remote_reread":"PASS","canonical_recheck":"PASS_UNCHANGED_R2_04234efdb86c","final_worker_scan":"PASS_WITH_CLAYGRAPH_G2A_IN_PROGRESS_INGESTED_NO_RESULT_CLAIMED"},
   "next_highest_information_test":"Exact target-Qwen relation-lowering x FIELD x propagation x SYSTEM_WORKSPACE x INTERNAL_WORKSPACE x REENTRY x RAIL factorial with matched facts/model/compute and role/temporal-shuffled controls.",
-  "status":"COMPLETED_OPEN_RESEARCH_DELTA_PENDING_FINAL_REREAD"
+  "status":"COMPLETED_OPEN_RESEARCH_DELTA"
 }

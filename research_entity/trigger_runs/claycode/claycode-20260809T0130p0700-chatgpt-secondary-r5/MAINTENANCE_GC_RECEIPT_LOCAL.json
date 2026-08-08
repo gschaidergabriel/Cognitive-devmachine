@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "experiment_id": "EXP-CC-RC1.9-MAINTENANCE-GC-LOCAL-002",
+  "purpose": "Test whether destructive physical garbage collection can remain outside model-authored ClayCode while model provides only non-authoritative deletion candidates.",
+  "trials": 20000,
+  "safe_maintenance_protected_losses": 0,
+  "naive_model_candidate_deletion_trials_with_protected_loss": 19854,
+  "candidate_sets_touching_protected_state": 19854,
+  "mean_safe_reclaimed_candidate_versions": 13.419,
+  "mean_total_gc_eligible_versions": 54.804,
+  "interpretation": "In this constructed version-DAG model, a host maintenance authority can filter model hints through reachability/retention roots and reclaim storage without exposing destructive authority to the model. This is not a production filesystem proof.",
+  "claim_boundary": "Synthetic simulation only."
+}

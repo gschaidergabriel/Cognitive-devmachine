@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-XENO-G8-ARCHIVE-IDENTITY-20260809T0624p0700",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"drive_root":"xeno","drive_root_id":"1UkkTHX8Xo6EcINOOQ3OtA-LVEHh9Ssis","bundle_manifest_id":"1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g","g8_zip_id":"1MD8y61t2kzy7D6XqtFSaBWghF7yGKRyR","claude_code_zip_id":"1kW2SDS4uN2nKtCQfr742xC5xY7nFeH5G"},
+  "status":"ARCHIVE_PACKAGE_EXACT_HASH_FROZEN_EXTRACTED_DRIVE_RECONCILIATION_PENDING",
+  "root_topology":{"root_files":4,"root_folders":1,"root_files_named":["BUNDLE_MANIFEST.json","MACHINE_LANGUAGE_V0_1_R6_TRI_CLAUDE_CODE.zip","SE_XENO_G8_CAUSAL_TRI_FOUNDRY.zip","machine language v0.1.txt"],"se_xeno_contains_only":"G8","g8_direct_folders":16},
+  "bundle_manifest":{"bytes":37183,"sha256":"88cfe25de061e71621575f94f97fb0b18f6d2ae37658db5e93c9d719d6e256e4","manifested_entries":206,"manifested_payload_bytes":42875631,"unique_paths":206,"duplicate_paths":0},
+  "package_denominator":{"root_manifest_self":1,"manifested_root_artifacts":3,"manifested_g8_files":203,"total_archive_package_leaf_units":207},
+  "g8_folder_counts":{"archive":3,"capability":4,"claude_code":19,"credit":6,"delivery":2,"directcode":12,"evidence":6,"hypotheses":5,"implementation":22,"language":13,"provenance":51,"reports":14,"selective":7,"sources":22,"state":5,"traffic":12},
+  "cryptographic_reverification":{
+    "SE_XENO_G8_CAUSAL_TRI_FOUNDRY.zip":{"bytes":2481622,"sha256":"d5de3d8e4569a6a1df6331118da14575d5819d05ca0be4b372f17f067bf7401d","manifest_sha_match":true,"archive_file_count":201,"all_201_archive_members_match_manifest_path_size_sha256":true},
+    "MACHINE_LANGUAGE_V0_1_R6_TRI_CLAUDE_CODE.zip":{"bytes":18387,"sha256":"b763ba2647aecda6dff2b107a61713d430f1403c9ec99169b12aaeaa3e849e74","manifest_sha_match":true,"archive_file_count":19,"all_19_members_match_corresponding_g8_claude_code_manifest_entries":true},
+    "delivery_outside_main_zip":{"PACKAGE_MANIFEST.json":{"bytes":1199,"sha256":"c7e4d1f2d0538586c4ac67e1a84045a29f52b36aa83f23107808e4d8ab3899fb","manifest_match":true},"ZIP_TEST.txt":{"bytes":130,"sha256":"2e0df240f8136f45b9724c6b427e959fd3ac39dc1a73b203f62d8b822999c1a7","manifest_match":true}},
+    "main_zip_coverage_note":"The main G8 zip contains 201/203 G8 manifest paths. The only two G8 paths intentionally outside it are delivery/PACKAGE_MANIFEST.json and delivery/ZIP_TEST.txt; both were fetched directly from Drive and hash-verified."
+  },
+  "semantic_state":{"existing_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_drive_xeno_g8_executable_shard.json","action":"NO_NEW_SEMANTIC_ANALYSIS_OR_EARNED_WORK_CREDIT","reason":"G8 mechanisms, tests, measurements and limitations are already assimilated and routed; this artifact closes archive-package identity only."},
+  "remaining_obligation":"The extracted Drive se_xeno/G8 folder tree must still be recursively reconciled against the 203-path hash manifest before claiming the extracted Drive copy itself exact-closed. The cryptographically verified archive package is exact; archive identity is not silently substituted for extracted-copy identity.",
+  "earned_work_hours_added":0.0,
+  "level0_effect":{"local_progress":"XENO bounded semantic package -> exact cryptographic archive-package denominator","exact_global_progress_credit":0.0,"reason":"Whole Level-0 denominator remains unfrozen."},
+  "created_at":"2026-08-09T06:24:00+07:00"
+}

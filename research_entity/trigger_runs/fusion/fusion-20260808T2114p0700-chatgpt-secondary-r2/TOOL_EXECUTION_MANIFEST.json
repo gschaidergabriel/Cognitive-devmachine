@@ -5,7 +5,7 @@
   "provider":"OpenAI",
   "model":"GPT-5.6 Sol",
   "tools":[
-    {"tool":"GitHub connector","status":"PASS_RW","work":"canonical/registry/protocol reads, latest commit scan, branch report reads, artifact writes"},
+    {"tool":"GitHub connector","status":"PASS_RW","work":"canonical/registry/protocol reads, latest commit scan, branch report reads, artifact writes and remote rereads"},
     {"tool":"web research","status":"PASS","sources":[
       {"title":"Synapse: Empowering LLM Agents with Episodic-Semantic Memory via Spreading Activation","class":"peer_reviewed_acl_2026","url":"https://aclanthology.org/2026.findings-acl.1108/","transfer":"independent support for dynamic graph memory with spreading activation, inhibition and decay; not FRANK validation"},
       {"title":"Enabling Agents to Communicate Entirely in Latent Space (Interlat)","class":"peer_reviewed_acl_2026","url":"https://aclanthology.org/2026.acl-long.1248/","transfer":"independent feasibility evidence for latent communication rails; latent state remains non-canonical/non-authoritative"},
@@ -15,8 +15,8 @@
       {"title":"AAFLOW: Scalable Patterns for Agentic AI Workflows","class":"2026_preprint","url":"https://arxiv.org/abs/2605.02162","transfer":"independent implementation evidence that reducing serialization/data movement can speed agentic pipelines; not C7/UnifiedDB validation"}
     ]},
     {"tool":"local CPython + SQLite","status":"PASS","experiments":["EXP-FUSION-F5-COLLECTION-LOWERING-001","EXP-FUSION-F5-ACTIVATION-INTEGRITY-002"]},
-    {"tool":"E2B","status":"NOT_EXECUTED_CURRENT_WORKER","note":"Fresh repository CC12 material queued an E2B typed-collection experiment, but no completed E2B result existed at fusion snapshot. Fusion includes it as in-progress evidence only."},
-    {"tool":"fusion_research_contract.py","status":"REREAD","note":"Contract requirements were reread before artifact creation; final structural validation performed against the same rules after writes."}
+    {"tool":"E2B","status":"INGESTED_CONCURRENT_WORKER_RESULTS","executed_by":"concurrent ClayCode CC12 worker, not Fusion F5 worker","results":"CC12 structural validation records three successful E2B experiments: 100,000 typed collection/property cases, 30,000 SQLite query lowerings, 100,000 cross-kind identity cases. Typed query lowering reproduced exactly 0 typed mismatches, 16,947 DISTINCT mismatches and 16,609 bag mismatches; omission of collection kind caused 27,155 cross-kind aliases, typed identity 0.","boundary":"shared mechanism ancestry; not independent conceptual replication"},
+    {"tool":"fusion_research_contract.py","status":"REREAD_AND_STRUCTURALLY_MIRRORED","note":"Current worker cannot execute repository Python through the GitHub connector. The validator source was reread and every required condition was checked against remotely reread manifests; no structural violation found."}
   ],
-  "evidence_boundary":"Current fusion experiments are local synthetic/mechanism tests. External sources validate component directions only. No live FRANK, target Qwen3-4B, Android, production database, production security or phenomenal-consciousness claim is made."
+  "evidence_boundary":"Current Fusion experiments are local synthetic/mechanism tests. Concurrent CC12 E2B evidence is isolated-runtime mechanism evidence. External sources validate component directions only. No live FRANK, target Qwen3-4B, Android, production database, production security or phenomenal-consciousness claim is made."
 }

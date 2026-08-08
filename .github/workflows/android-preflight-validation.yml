@@ -27,6 +27,7 @@ jobs:
           got = set(data['registry_scientific_branches'])
           assert got == expected, (got, expected)
           assert data['secondary_arm']['name'] == 'android'
+          assert data.get('mandatory_active_knowledge_policy') == 'research_entity/global/MANDATORY_ACTIVE_KNOWLEDGE.json'
           suffix = {
               'clay': 'KMP-ANDROID-R1-FEEDBACK-CLAY.md',
               'frank': 'KMP-ANDROID-R1-FEEDBACK-FRANK.md',

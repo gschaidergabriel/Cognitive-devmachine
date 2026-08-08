@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "tool_name": "together_ai",
+  "provider": "Together AI",
+  "class": "model_training_and_inference",
+  "requires_secret": ["TOGETHER_API_KEY"],
+  "credential_required": true,
+  "credential_value_must_not_appear_in_artifacts": true,
+  "preferred_for": [
+    "fine-tuning experiments after explicit owner authorization",
+    "hosted model inference",
+    "final Clay-native model training candidates",
+    "training/runtime benchmarking"
+  ],
+  "evidence_class": "external_model_training_or_runtime",
+  "status": "OWNER_REPORTED_CREDENTIAL_AVAILABLE_NOT_RUNTIME_VERIFIED",
+  "training_authority": "BLOCKED_UNTIL_EXPLICIT_OWNER_AUTHORIZATION_AFTER_DATA_GATE",
+  "doomsday_forecast": {
+    "relevant_rows": [
+      "DATA_FINAL_TRAINING_CORPUS",
+      "FINAL_MODEL_FINE_TUNE",
+      "MODEL_EXPORT_RUNTIME_PACKAGE"
+    ],
+    "impacts": [],
+    "rule": "Together counts in the dynamic capability table immediately, but it receives no ETA acceleration until an actual runtime/training benchmark produces a verified impact receipt."
+  },
+  "note": "A credential was supplied by the owner in project conversation history. Its value must not be copied into this file, reports, logs or forecast artifacts. Runtime verification and paid training remain separate explicit steps."
+}

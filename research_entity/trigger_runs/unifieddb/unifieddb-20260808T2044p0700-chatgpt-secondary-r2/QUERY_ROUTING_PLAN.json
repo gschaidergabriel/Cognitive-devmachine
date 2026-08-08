@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "candidate":"UD-RC1",
+  "planner":"ClayCode UnifiedQueryIR -> cost/risk physical subplans",
+  "planner_invariant":"The planner may optimize placement/order but may not weaken semantic type, consistency, selection, authority or exactness requirements declared by the operation-specific capsule.",
+  "routes":[
+    {"route":"EXACT_ADDRESS","use_when":"canonical ID/key or effect-critical state required","default_engine":"authoritative transactional spine","approximation":"FORBIDDEN","validation":"direct snapshot/version witness"},
+    {"route":"RELATIONAL","use_when":"typed predicates, joins, uniqueness, min/max/filter or exact schema relations dominate","default_engine":"relational projection/canonical tables","approximation":"FORBIDDEN unless explicitly query-declared","validation":"query-plan + source-instance + basis receipt"},
+    {"route":"TEMPORAL","use_when":"valid-time/transaction-time/history/replay constraints dominate","default_engine":"event/state spine + temporal indexes","approximation":"FORBIDDEN for causal reconstruction","validation":"temporal predicate + snapshot identity"},
+    {"route":"GRAPH_ROLE_TRAVERSAL","use_when":"typed multi-hop/n-ary relational neighborhood or causal/associative path needed","default_engine":"ClayGraph epoch","approximation":"structural pruning allowed only within declared coverage","validation":"semantic_epoch + role-instance identity + coverage certificate"},
+    {"route":"VECTOR_ANN","use_when":"semantic similarity/candidate discovery","default_engine":"specialized ANN sidecar","approximation":"ALLOWED for candidate generation","validation":"model/index version + source object versions; exact-anchor validation if selected result becomes fact/effect basis"},
+    {"route":"FTS","use_when":"lexical/name/token/source-text matching","default_engine":"FTS index","approximation":"ranking allowed","validation":"index version/lag + exact source fetch for consequential claims"},
+    {"route":"LATENT_PRIOR","use_when":"persistent activation/salience suggests likely relevant region before explicit search","default_engine":"sparse activation field","approximation":"ALLOWED for accessibility only","validation":"activation_epoch compatible with semantic_epoch; never satisfies fact/authority requirement"},
+    {"route":"HYBRID_FUSION","use_when":"multiple modalities contribute complementary candidates","default_engine":"planner composes exact/graph/vector/FTS/activation subplans","approximation":"per-subplan declared","validation":"selection receipt binds authorized space, route versions, fusion/ranking semantics and candidate set"},
+    {"route":"FULL_AUTHORIZED_FALLBACK","use_when":"coverage/closure/alias/consistency unknown or fast paths disagree","default_engine":"authoritative source expansion + deterministic validation","approximation":"NONE unless user/operation permits","validation":"fail-closed/broaden until requirement is satisfied"}
+  ],
+  "selection_receipt_fields":["operation_capsule_hash","logical_query_hash","query_plan_hash","authorized_space_hash","physical_routes[]","derived_view_receipts[]","ranking_semantics_hash","candidate_set_hash","selected_anchor_refs[]","omitted_margin_or_coverage_witness","basis_identity_hash","receipt_hash"],
+  "placement_objective":"minimize latency + serialization + contention + write amplification + recovery/common-mode + device cost subject to semantic correctness, authority and operation consistency constraints",
+  "adaptive_rule":"Collect per-route p50/p95/p99, cache hit, candidate recall, rebuild tax, write amplification and recovery cost; alter physical placement only by versioned policy and preserve identical logical semantics/receipts.",
+  "memory_behavior":"Automatic latent/graph activation may seed the next Assembly between LLM calls; explicit memory queries remain a fallback and a validation path rather than the sole way memory enters cognition."
+}

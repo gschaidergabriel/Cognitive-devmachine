@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.1",
+  "schema_version": "2.2",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
@@ -12,19 +12,21 @@
   "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
   "goodman_filter_checker": "tools/goodman_filter_check.py",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "shared_program_rule": "Every research-center branch remains loyal to its own scientific domain but must read PROGRAM_STATE.json, current live room deltas and RESEARCH_CENTER_PROGRAM_NARRATIVE.md before major work, and prioritize domain-specific contributions that advance or falsify the current program stage. The current staged sequence is data-driven by PROGRAM_STATE.json. Project-Frankenstein architecture archaeology and first-principles emergent-coupling analysis are mandatory cross-cutting knowledge. GWT and Hyperposition have permanent operational-measurement/readout duties. Harness is the executable convergence/falsification branch. No paid LoRA training is automatically authorized by stage completion.",
+  "shared_program_rule": "Every research-center branch remains loyal to its own scientific domain but must read PROGRAM_STATE.json, current live room deltas and RESEARCH_CENTER_PROGRAM_NARRATIVE.md before major work. Level 0 first assimilates the complete FRANK archive. After Level 0, exact 666 spawns diverse seeded research fields sharing the same narrative and milestone attractor rather than deterministically routing every worker into the obvious implementation task. Project-Frankenstein archaeology and first-principles emergent-coupling analysis remain mandatory cross-cutting knowledge. No paid LoRA training is automatically authorized by stage completion.",
   "triggers": {
-    "go": {
-      "kind": "program_autodispatch",
-      "protocol": "research_entity/triggers/GO_AUTODISPATCH_PROTOCOL.md",
-      "purpose": "Inspect current program stage, rooms, workers, leases, blockers and release gaps; autonomously choose the highest-value non-duplicated specialist room, role and bounded task; then act immediately.",
-      "mesh_role": "self_routing_program_worker",
-      "discovery_room": "center",
+    "666": {
+      "kind": "phase_sensitive_autonomous_research_genesis",
+      "protocol": "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
+      "level0_protocol": "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
+      "post_level0_protocol": "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
+      "purpose": "Before Level-0 PASS, iteratively and exhaustively assimilate the Drive FRANK archive then Project-Frankenstein. After Level-0 PASS, spawn a new seeded/diverse temporary research field on every invocation, perform work immediately and feed evidence-preserving results into the shared research mesh.",
+      "mesh_role": "archive_assimilator_then_emergent_field_genesis",
+      "home_room": "center",
       "requires_program_state": true,
       "requires_room_pulse": true,
-      "must_choose_target_room": true,
-      "must_choose_role": true,
       "must_act_immediately": true,
+      "dedicated_level0_progress": true,
+      "post_level0_stochastic_field_spawn": true,
       "training_auto_start_forbidden": true
     },
     "q12": {

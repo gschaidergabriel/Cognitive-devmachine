@@ -1,0 +1,32 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T2104p0700-chatgpt-secondary-r3",
+  "validator":"tools/goodman_filter_check.py updated in this run to registry-dynamic/UnifiedDB-aware semantics",
+  "execution_class":"STRUCTURAL_MIRROR_VALIDATION",
+  "official_repo_command_executed":false,
+  "reason":"The connected GitHub surface supports repository reads/writes but does not expose arbitrary repository Python execution. E2B executes supplied code in an isolated runtime but does not have authenticated private-repository checkout.",
+  "checks":{
+    "interconnect_trigger_claycode":true,
+    "registered_branch_count":8,
+    "branches_cover_registry_exactly":true,
+    "priority_prefix_frank_clay_claygraph_unifieddb":true,
+    "priority_covers_registry_exactly":true,
+    "latest_frank_primary_feedback":true,
+    "deep_claygraph":true,
+    "deep_unifieddb":true,
+    "goodman_required":true,
+    "goodman_run_id_matches":true,
+    "goodman_latest_frank_matches_preflight":true,
+    "goodman_reviews_nonempty":true,
+    "goodman_shared_ancestry_collapsed":true,
+    "supported_refined_have_independent_checks":true,
+    "unresolved_not_promoted":true,
+    "executable_receipt_present":true,
+    "e2b_three_experiments_success":true,
+    "branch_feedback_count":8,
+    "canonical_promotion":false
+  },
+  "violations":[],
+  "status":"PASS_STRUCTURAL_MIRROR",
+  "promotion_boundary":"No strong/canonical promotion."
+}

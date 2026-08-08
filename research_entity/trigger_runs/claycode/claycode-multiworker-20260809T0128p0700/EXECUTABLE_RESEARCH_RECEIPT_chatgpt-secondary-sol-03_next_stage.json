@@ -1,0 +1,53 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-multiworker-20260809T0128p0700",
+  "worker_id":"chatgpt-secondary-sol-03",
+  "experiment_family":[
+    "EXP-CC-NEXT-INTEGRATED-AUTHORITY-001",
+    "EXP-CC-NEXT-CONCURRENT-RESERVATION-002"
+  ],
+  "candidate_context":"CC-RC1.9-UECC + Lane-C origin/budget envelope + Lane-B CBEL-TV/ECLC + FRANK C9 TCAEF",
+  "sandbox_provider":"ChatGPT local Python runtime",
+  "runtime_language":"Python 3",
+  "integrated_property_test":{
+    "seed":202608090147,
+    "random_mixed_cases":250000,
+    "reference_allows":7643,
+    "reference_denies":242357,
+    "reference_vs_lowered_mismatches":0,
+    "bound_dimensions":[
+      "trusted authority root",
+      "narrowing-only delegation",
+      "operation verb",
+      "canonical resource identity",
+      "exact intent hash",
+      "basis and selection",
+      "causal identity",
+      "revocation epoch",
+      "expiry/commit epoch",
+      "policy version",
+      "policy allow decision",
+      "aggregate budget",
+      "origin/integrity ancestry"
+    ],
+    "targeted_mutation_axes":13,
+    "targeted_cases_per_axis":4000,
+    "targeted_invalid_cases":52000,
+    "full_checker_false_accepts":0,
+    "reference_lowered_mismatches_targeted":0,
+    "removed_check_false_accepts_per_axis":4000
+  },
+  "concurrency_replay_test":{
+    "sessions":100000,
+    "naive_snapshot_budget_overshoot_sessions":14315,
+    "atomic_reservation_budget_overshoot_sessions":0,
+    "naive_replay_double_spend_sessions":10407,
+    "atomic_nonce_ledger_double_spend_sessions":0,
+    "interpretation":"A monotone host budget ledger is insufficient if concurrent effect releases use non-atomic check-then-act. Authority release requires an atomic reservation/consumption linearization point or an equivalent concurrency-safe mechanism."
+  },
+  "repair_or_change":"Refine ClayCode/FRANK authority semantics with an opaque host-created authority_reservation_id bound atomically to exact intent, resource, ancestry, current policy/epochs, aggregate budget and one-shot/replay identity before effect commit.",
+  "new_identity_split":["semantic_hash","contract_instance_hash","authority_reservation_id"],
+  "claim_boundary":"Finite constructed mechanism/property evidence only. Not formal proof, production FRANK safety evidence, real WASI/native/GPU execution or target-Qwen evidence.",
+  "affected_branches":["claycode","frank","clay","unifieddb","claygraph","gwt","hyperposition","emergenz"],
+  "provenance":{"origin_actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","created_at":"2026-08-09T01:47:00+07:00"}
+}

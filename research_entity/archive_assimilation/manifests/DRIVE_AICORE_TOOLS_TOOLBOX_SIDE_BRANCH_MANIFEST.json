@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE_AICORE_TOOLS_TOOLBOX_SIDE_BRANCH",
+  "created_at": "2026-08-09T06:14:00+07:00",
+  "actor": "chatgpt-secondary",
+  "source": {
+    "drive_path": "aicore/tools/toolboxd.py",
+    "drive_file_id": "1iiog19bSTr_kuk3-EgKzJKnKaeIIVarn",
+    "drive_modified_time": "2026-07-31T11:56:27Z",
+    "drive_git_blob_sha": "51d500cd67898168970d7b5490875b018fb7a9b7",
+    "pf_path": "tools/toolboxd.py",
+    "pf_frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "pf_blob_sha": "e17687c8ba66c3e062b1d61cf1ec0ec3348b2c00"
+  },
+  "denominator": {
+    "direct_files": 1,
+    "subfolders": 0,
+    "recursive_leaf_files": 1,
+    "complete": true
+  },
+  "identity_result": "DIVERGENT_MIXED_SIDE_BRANCH",
+  "adjudication": {
+    "stable_shared_core": "Filesystem roots/protected-path model and ordinary Toolbox behavior crossread against PF are substantially shared lineage.",
+    "resurrected_superseded_lineage": {
+      "mechanism": "entity session log helpers and /entity/sessions, /entity/session, /entity/search endpoints",
+      "history_refs": [
+        "Project-Frankenstein commit 59dfd4534c06f4545633231a434ab42956b803f6 (entity session retrieval introduced)",
+        "Project-Frankenstein commit b3df2f9885bede8ec38ced0c21763a06699d14b9 (entity system replaced by rooms)"
+      ],
+      "classification": "SUPERSEDED_BUT_REINTRODUCED_IN_LATER_MTIME_FILE"
+    },
+    "newer_drive_only_lineage": {
+      "mechanism": "Identity Forge mutating endpoints /self/observe_relationship, /self/make_pact, /self/review_pact",
+      "dependency": "services/identity_forge.py",
+      "classification": "DRIVE_ONLY_LATER_UNCOMMITTED_IDENTITY_LINEAGE",
+      "note": "Identity Forge itself was already discovered/credited by an earlier recovery receipt; do not duplicate earned-work credit here."
+    }
+  },
+  "architecture_oracles": [
+    "Filesystem modified time or upload time cannot decide architectural supersession.",
+    "A later side-branch may contain both genuinely newer work and resurrected obsolete mechanisms; merge at mechanism granularity, never whole-file newest-wins.",
+    "Loopback binding is transport locality, not execution or state-mutation authority.",
+    "A comment such as Frank-only is not an enforceable authorization boundary.",
+    "Identity/relationship/pact mutation must be a typed provenance-bound state effect with deterministic authority policy and replay/recovery semantics.",
+    "Read-only historical recall and identity mutation require separate effect classes and authority budgets."
+  ],
+  "earned_work": {
+    "hours_added": 0,
+    "reason": "Identity Forge mechanism is already mapped by earlier recovery work; entity-session retrieval exists in PF history. This receipt adds chronology/merge and authority negative oracles only."
+  },
+  "level0_effect": {
+    "local_denominator_closed": true,
+    "local_files_adjudicated": 1,
+    "global_exact_progress_credit": 0.0
+  }
+}

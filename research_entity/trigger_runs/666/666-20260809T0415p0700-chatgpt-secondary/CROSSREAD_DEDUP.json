@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "run_id": "666-20260809T0415p0700-chatgpt-secondary",
+  "actor_id": "chatgpt-secondary",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "peer_receipts_read": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
+    "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+    "research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/BRANCH_FEEDBACK_MANIFEST.json"
+  ],
+  "dedup_decisions": [
+    {
+      "topic": "GWT/thalamus/AURA historical runtime",
+      "decision": "PEER_OWNS_PRIMARY_CREDIT",
+      "reason": "04:13/GWT peer already covers broadcast/gating/AURA supersession and associated failure lineage; this run only uses it as crossread context."
+    },
+    {
+      "topic": "LCME retrieval P@5/cold-start/source-class semantics",
+      "decision": "PEER_OWNS_PRIMARY_CREDIT",
+      "reason": "04:21 LCME peer has deeper current-head retrieval analysis and already received earned-work mapping; this run excludes duplicate credit."
+    },
+    {
+      "topic": "E-PQ state race/body/goals/SOMA bug atlas",
+      "decision": "THIS_RUN_UNIQUE_OR_MORE_SPECIFIC",
+      "reason": "This run adds stale cross-process overwrite evidence, persistent body/goal semantics and detailed lifecycle/persistence failure families."
+    },
+    {
+      "topic": "MemoryHub federation/stored-but-unreachable/orphan recovery/migration",
+      "decision": "THIS_RUN_UNIQUE_REMAINDER_AFTER_LCME_DEDUP",
+      "reason": "Not covered by peer's primary LCME precision/cold-start mapping; unique earned-work delta recorded separately pending global aggregation."
+    },
+    {
+      "topic": "70-turn bare-vs-Frank benchmark",
+      "decision": "THIS_RUN_MEASUREMENT_FOUNDATION_ONLY",
+      "reason": "Metrics are preserved but causal architecture interpretation is explicitly downgraded due simultaneous prompt/output/memory/subsystem interventions."
+    }
+  ],
+  "anti_echo_rule": "All Project-Frankenstein-derived agreement shares repository ancestry and is not independent replication.",
+  "earned_work_unique_pending_delta": "research_entity/forecast/earned_work_deltas/666_20260809T0424p0700_pf_memory_persistence_recovery_unique.json",
+  "created_at": "2026-08-09T04:27:00+07:00"
+}

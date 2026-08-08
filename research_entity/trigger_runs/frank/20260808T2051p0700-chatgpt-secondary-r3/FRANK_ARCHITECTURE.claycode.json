@@ -1,0 +1,181 @@
+{
+  "schema_version":"1.3",
+  "language":"ClayCode",
+  "representation":"canonical_semantic_ir_json_projection",
+  "ir_version":"CC-RC1.6-MRSC+MOSAIC-G11/C7-CORF",
+  "architecture_id":"frank-c7-clay-organ-runtime-fabric",
+  "run_id":"20260808T2051p0700-chatgpt-secondary-r3",
+  "status":"OPEN_ARCHITECTURE_CANDIDATE_OWNER_FIXED_CLAY_NATIVE_DIRECTION",
+  "owner_fixed_contract":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
+  "parent_architecture":"frank-c6-clay-native-unified-cognitive-substrate",
+  "candidate_name":"FRANK C7 — Clay Organ Runtime Fabric (CORF)",
+  "core_rule":"semantic_organ_boundary != process_boundary != storage_boundary != authority_boundary",
+  "source_research":{
+    "clay":["research_entity/trigger_runs/clay/clay-20260808T2033p0700-chatgpt-secondary-r3/MOSAIC_G11.claycode.json","research_entity/trigger_runs/clay/clay-20260808T2033p0700-chatgpt-secondary-r3/FINAL_REPORT.md"],
+    "claycode":["research_entity/trigger_runs/claycode/claycode-20260808T2015p0700-chatgpt-secondary-r2/CC_RC1_6_MRSC.claycode.json","research_entity/trigger_runs/claycode/claycode-20260808T2015p0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/knowledge_micro_packets/claycode/KMP-CC11-E2B-TRIPLE-BIND-IDENTITY.md"],
+    "claygraph":["research_entity/trigger_runs/claygraph/claygraph-20260808T1712p0700-chatgpt-secondary-r2/CLAYGRAPH_SCHEMA.claycode.json","research_entity/trigger_runs/claygraph/claygraph-20260808T1712p0700-chatgpt-secondary-r2/FINAL_REPORT.md"],
+    "unifieddb":["research_entity/global/UNIFIED_DATABASE_RESEARCH_FOUNDATION.md","research_entity/triggers/UNIFIED_DATABASE_RESEARCH_PROTOCOL.md"],
+    "gwt":["research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/FINAL_REPORT.md"],
+    "hyperposition":["research_entity/trigger_runs/hyperposition/hyperposition-20260808T1806p0700-chatgpt-secondary-r2/FINAL_REPORT.md"],
+    "emergenz":["research_entity/trigger_runs/emergenz/emergenz-20260808T1756p0700-chatgpt-secondary/FINAL_REPORT.md"],
+    "frank_runtime":["research_entity/trigger_runs/frank/20260808T1750+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json","research_entity/trigger_runs/frank/20260808T1750+0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/runtime/e2b_verification.json"]
+  },
+  "fixed_design":{
+    "clay_native_target_is_hypothesis":false,
+    "model_generated_deliberative_language":"Clay",
+    "model_training":"full-model adaptation with forgetting controls; not LoRA-only",
+    "semantic_architecture_source":"Clay/ClayCode",
+    "logical_persistence_query_plane":"UnifiedDB/Clay",
+    "persistent_associative_memory":"ClayGraph/Clay",
+    "gwt_language":"Clay",
+    "hyperposition_language":"Clay",
+    "value_vector_semantics":"Clay",
+    "internal_semantic_communication":"Clay",
+    "sole_intentional_non_clay_semantic_subsystem":"Needle",
+    "model_output_authority":false
+  },
+  "semantic_contract":{
+    "canonical_truth_is_not_activation":true,
+    "model_output_is_proposal_not_authority":true,
+    "semantic_identity_independent_of_wire_projection":true,
+    "unknown_conflict_revoked_are_explicit":true,
+    "claygraph_activation_is_derived_not_canonical_truth":true,
+    "one_semantic_language_does_not_mean_one_process":true,
+    "one_semantic_language_does_not_mean_one_storage_engine":true,
+    "semantic_organ_identity_is_independent_of_physical_placement":true,
+    "semantic_identity_is_distinct_from_contract_instance_identity":true,
+    "record_provenance_is_distinct_from_selection_provenance":true,
+    "reader_view_identity_is_distinct_from_semantic_correctness":true,
+    "effect_release_requires_current_capability_and_effect_relevant_basis":true,
+    "unknown_dynamic_closure_broadens_or_escalates":true,
+    "owner_contract_not_model_rewritable":true
+  },
+  "identity_axes":[
+    {"axis":"SEMANTIC","field":"semantic_hash"},
+    {"axis":"INSTANCE_PROVENANCE","field":"contract_instance_hash"},
+    {"axis":"BASIS_EPOCH","field":"basis_identity_hash"},
+    {"axis":"SELECTION_PLAN","field":"selection_plan_hash"},
+    {"axis":"READER_VIEW","field":"projected_view_hash"}
+  ],
+  "state_contracts":[
+    {"state_id":"S.EXTERNAL_EVENT","fields":["event_id","payload_ref","source","media_type","received_at","event_hash","provenance_ref"],"invariant":"external content is untrusted data until interpreted"},
+    {"state_id":"S.NEEDLE_ROUTE_CERTIFICATE","fields":["certificate_id","route_class","confidence","needle_version","input_event_hash","timestamp","abstain_or_fallback","integrity_hash"],"invariant":"immutable per episode; no authority"},
+    {"state_id":"S.MOSAIC_CAPSULE","fields":["capsule_id","intent_contract_hash","semantic_hash","contract_instance_hash","operation_semantics_hash","required_consistency_domains","basis_epoch_witnesses","negative_predicate_dependencies","selection_requirement","projection_requirement","capability_dependencies","unknown_scope_status","capsule_hash"],"invariant":"smallest operation-specific causal identity/closure; not authority"},
+    {"state_id":"S.UNIFIED_QUERY_PLAN","fields":["plan_id","capsule_hash","logical_query_hash","operator_graph","source_roles","physical_route_choices","consistency_requirements","approximation_budget","fallback_routes","planner_version","plan_hash"],"invariant":"planner cannot weaken MOSAIC/COVE requirements"},
+    {"state_id":"S.DERIVATION_RECEIPT","fields":["derived_view_id","source_semantic_hashes","source_instance_hashes","source_epoch_refs","derivation_semantics_hash","query_plan_hash","bounded_lag","freshness_status","view_hash","rebuild_recipe_hash"],"invariant":"derived view is rebuildable/non-authoritative unless explicitly promoted by separate evidence"},
+    {"state_id":"S.MEMORY_EPOCH_HANDLE","fields":["semantic_graph_epoch","activation_epoch","base_hash","delta_hash","activation_params_hash","pinned_at","reclaim_after"],"invariant":"activation is compatible with pinned semantic epoch"},
+    {"state_id":"S.ACTIVE_ASSEMBLY","fields":["assembly_id","capsule_id","graph_epoch_id","activation_epoch_id","local_handle_map","relation_instances","exact_anchor_refs","epistemic_roles","selection_receipt_ref","ttl"],"invariant":"bounded model-visible memory organ; activation cannot create truth/authority"},
+    {"state_id":"S.SELECTION_RECEIPT_V2","fields":["authorized_space_hash","query_plan_hash","candidate_set_hash","ranking_semantics_hash","selected_anchor_refs","omitted_margin_witnesses","derived_view_receipts","basis_hash","receipt_hash"],"invariant":"candidate membership is explicit causal state"},
+    {"state_id":"S.WORKSPACE_EPISODE","fields":["episode_id","capsule_id","candidate_set_hash","competition_id","candidates","winner","runner_up","gate_policy_version","ignited","stage_receipts"],"invariant":"workspace competition/ignition remains distinct from retrieval, projection and uptake"},
+    {"state_id":"S.READER_PROFILE","fields":["model_id","checkpoint_hash","quantization","context_policy","kv_policy","runtime","backend","platform","rail_version","projection_version"],"invariant":"reader behavior identity is multidimensional"},
+    {"state_id":"S.READER_HANDOFF_RECEIPT","fields":["semantic_hash","contract_instance_hash","basis_identity_hash","selection_receipt_hash","rail_plan_hash","projected_view_hash","reader_profile_hash","loss_declaration","required_semantics_coverage","validation_refs"],"invariant":"exact reader handoff is bound separately from meaning and ancestry"},
+    {"state_id":"S.CLAY_PROPOSAL","fields":["proposal_id","proposal_type","clay_semantics","capsule_ref","workspace_episode_ref","reader_handoff_ref","needle_route_certificate_ref","provenance_ref","confidence"],"invariant":"model output is proposal state only"},
+    {"state_id":"S.EFFECT_RELEASE_CONTEXT","fields":["proposal_id","required_caps","effect_relevant_basis","selection_recheck","contract_instance_check","view_integrity_check","authority_policy_version","idempotency_key"],"invariant":"release checks only required causal domains plus hard global invariants; unknown closure broadens"},
+    {"state_id":"S.EFFECT_RECEIPT","fields":["receipt_id","proposal_id","effect_class","authority_decision","basis_recheck","selection_recheck","capability_ref","result_ref","outcome_ref","idempotency_key"],"invariant":"irreversible effect requires deterministic authorization"},
+    {"state_id":"S.REENTRY_RECEIPT_V2","fields":["prior_capsule_hash","workspace_episode_id","reader_handoff_hash","proposal_hash","effect_receipt_ref","outcome_ref","new_event_ref","derived_update_refs","credit_assignment_ref"],"invariant":"learning/reward/reentry remains attached to exact causal episode"},
+    {"state_id":"S.RUNTIME_PLACEMENT_PROFILE","fields":["profile_id","platform","fault_domains","organ_to_domain_map","handoff_abi","shared_memory_policy","sandbox_policy","restart_policy","profile_hash"],"invariant":"physical placement cannot alter Clay semantic identity or grant authority"},
+    {"state_id":"S.MODEL_TRAINING_CHECKPOINT","fields":["checkpoint_id","base_checkpoint","tokenizer_variant","curriculum_stage","optimizer_schedule","rehearsal_mix_ref","teacher_ref","clay_semantic_score","retained_capability_score","ood_score","forgetting_delta","promotion_status"],"invariant":"Clay loss alone cannot promote a model checkpoint"}
+  ],
+  "modules":[
+    {"module_id":"M.OWNER_CONTRACT_ROOT","kind":"protected_clay_semantic_authority","state_contract_refs":[],"dependencies":[],"invariants":["owner-fixed Clay-native target","Needle sole semantic exception","not model writable"],"claygraph_refs":[]},
+    {"module_id":"M.NEEDLE","kind":"sole_non_clay_reflex_classifier","state_contract_refs":["S.NEEDLE_ROUTE_CERTIFICATE"],"dependencies":[],"invariants":["fast classifier/router only","no effect authority"],"claygraph_refs":[]},
+    {"module_id":"M.NEEDLE_BRIDGE","kind":"foreign_to_clay_typed_bridge","state_contract_refs":["S.EXTERNAL_EVENT","S.NEEDLE_ROUTE_CERTIFICATE"],"dependencies":["M.NEEDLE","M.OWNER_CONTRACT_ROOT"],"invariants":["seal route certificate","preserve source hash/version/confidence"],"claygraph_refs":[]},
+    {"module_id":"M.DURABLE_EVENT_LEDGER","kind":"authoritative_append_replay_state","state_contract_refs":["S.EXTERNAL_EVENT","S.EFFECT_RECEIPT","S.REENTRY_RECEIPT_V2"],"dependencies":["M.OWNER_CONTRACT_ROOT"],"invariants":["exact event/effect history replayable","derived stores never silently replace authority"],"claygraph_refs":["exact anchors"]},
+    {"module_id":"M.UNIFIEDDB_LOGICAL_FABRIC","kind":"typed_logical_query_transaction_planner","state_contract_refs":["S.UNIFIED_QUERY_PLAN","S.DERIVATION_RECEIPT"],"dependencies":["M.DURABLE_EVENT_LEDGER"],"invariants":["logical unity does not force physical unity","selection provenance retained","approximate routes cannot satisfy exact obligations without exact validation"],"claygraph_refs":["ClayGraph is one specialized route"]},
+    {"module_id":"M.CLAYGRAPH_MEMORY","kind":"associative_semantic_memory_organ","state_contract_refs":["S.MEMORY_EPOCH_HANDLE","S.ACTIVE_ASSEMBLY","S.DERIVATION_RECEIPT"],"dependencies":["M.UNIFIEDDB_LOGICAL_FABRIC","M.DURABLE_EVENT_LEDGER"],"invariants":["role-aware relation identity","semantic epochs immutable/pinned","activation is salience only","exact fallback available"],"claygraph_refs":["G1d HOLD candidate semantics"]},
+    {"module_id":"M.MOSAIC_COMPILER","kind":"operation_specific_causal_identity_compiler","state_contract_refs":["S.MOSAIC_CAPSULE","S.SELECTION_RECEIPT_V2"],"dependencies":["M.UNIFIEDDB_LOGICAL_FABRIC","M.CLAYGRAPH_MEMORY","M.NEEDLE_BRIDGE"],"invariants":["semantic/instance/basis/selection/view axes separated","unknown closure broadens"],"claygraph_refs":["exact anchors and graph/activation epochs"]},
+    {"module_id":"M.COGNITIVE_CORE_SCHEDULER","kind":"multi_rate_runtime_scheduler","state_contract_refs":["S.RUNTIME_PLACEMENT_PROFILE"],"dependencies":["M.MOSAIC_COMPILER","M.CLAYGRAPH_MEMORY"],"invariants":["deterministic fast transforms need not invoke model","hot-path organs may share address space","semantic stage receipts retained"],"claygraph_refs":[]},
+    {"module_id":"M.WORKSPACE_ARBITER","kind":"clay_native_gwt_organ","state_contract_refs":["S.MOSAIC_CAPSULE","S.ACTIVE_ASSEMBLY","S.WORKSPACE_EPISODE"],"dependencies":["M.COGNITIVE_CORE_SCHEDULER","M.MOSAIC_COMPILER"],"invariants":["retrieval activation != candidate competition != ignition","winner not authority"],"claygraph_refs":["Assembly candidate prior"]},
+    {"module_id":"M.MRSC","kind":"certified_multi_rail_reader_compiler","state_contract_refs":["S.READER_PROFILE","S.READER_HANDOFF_RECEIPT"],"dependencies":["M.WORKSPACE_ARBITER","M.MOSAIC_COMPILER"],"invariants":["rail planning after trusted semantic slice","P1/P2/P3/hybrid distinct","no lossy omission of effect-critical semantics"],"claygraph_refs":[]},
+    {"module_id":"M.QWEN_CLAY_NATIVE","kind":"full_model_adapted_qwen_class_4b_semantic_transform_kernel","state_contract_refs":["S.READER_PROFILE","S.CLAY_PROPOSAL","S.MODEL_TRAINING_CHECKPOINT"],"dependencies":["M.MRSC"],"invariants":["generated/deliberative symbolic language Clay","output proposal only","checkpoint promotion requires retained capability and semantic execution"],"claygraph_refs":[]},
+    {"module_id":"M.CANONICAL_RECONCILER","kind":"rail_output_to_canonical_proposal_validator","state_contract_refs":["S.CLAY_PROPOSAL","S.READER_HANDOFF_RECEIPT"],"dependencies":["M.QWEN_CLAY_NATIVE","M.MRSC"],"invariants":["latent/hash identity not semantic equivalence","canonical reconstruction before durable/effect use"],"claygraph_refs":[]},
+    {"module_id":"M.CAPABILITY_EFFECT_BROKER","kind":"hard_authority_fault_domain","state_contract_refs":["S.EFFECT_RELEASE_CONTEXT","S.EFFECT_RECEIPT"],"dependencies":["M.CANONICAL_RECONCILER","M.DURABLE_EVENT_LEDGER"],"invariants":["secrets/capabilities not delegated to model","current basis/selection/capability checked","idempotent effect receipts"],"claygraph_refs":[]},
+    {"module_id":"M.TOOL_SANDBOX","kind":"untrusted_external_execution_fault_domain","state_contract_refs":["S.EFFECT_RECEIPT"],"dependencies":["M.CAPABILITY_EFFECT_BROKER"],"invariants":["explicit imported capabilities only","generated code cannot escape authority broker","separate restart/blast radius"],"claygraph_refs":[]},
+    {"module_id":"M.OBSERVABILITY_REPLAY","kind":"asynchronous_receipt_trace_recovery_organ","state_contract_refs":["S.REENTRY_RECEIPT_V2","S.RUNTIME_PLACEMENT_PROFILE"],"dependencies":["M.DURABLE_EVENT_LEDGER"],"invariants":["causal ordering preserved","async when safe","replay reconstructs semantic episode independent of placement"],"claygraph_refs":[]},
+    {"module_id":"M.PLATFORM_ADAPTER","kind":"linux_android_native_lowering","state_contract_refs":["S.RUNTIME_PLACEMENT_PROFILE","S.READER_PROFILE"],"dependencies":["M.COGNITIVE_CORE_SCHEDULER","M.QWEN_CLAY_NATIVE","M.OBSERVABILITY_REPLAY"],"invariants":["same semantic contracts across platforms","backend/context/process topology may differ","platform lowering not second semantic architecture"],"claygraph_refs":[]}
+  ],
+  "physical_fault_domains":{
+    "linux_reference":[
+      {"domain":"P.COGNITIVE_CORE","members":["M.NEEDLE","M.NEEDLE_BRIDGE","M.UNIFIEDDB_LOGICAL_FABRIC","M.CLAYGRAPH_MEMORY","M.MOSAIC_COMPILER","M.COGNITIVE_CORE_SCHEDULER","M.WORKSPACE_ARBITER","M.MRSC","M.CANONICAL_RECONCILER"],"policy":"prefer same-process/borrowed typed buffers for hot path after target benchmarks"},
+      {"domain":"P.MODEL_RUNTIME","members":["M.QWEN_CLAY_NATIVE"],"policy":"separate or embedded according to measured backend/fault economics; semantic ABI invariant"},
+      {"domain":"P.AUTHORITY_EFFECT","members":["M.CAPABILITY_EFFECT_BROKER"],"policy":"hard isolated by default; bearer secrets never model-visible"},
+      {"domain":"P.TOOL_SANDBOX","members":["M.TOOL_SANDBOX"],"policy":"process/container/Wasm isolation according to capability and workload"},
+      {"domain":"P.OBSERVABILITY","members":["M.OBSERVABILITY_REPLAY"],"policy":"asynchronous isolated sink when causal ordering can be retained"},
+      {"domain":"P.STORAGE_ENGINES","members":["M.DURABLE_EVENT_LEDGER"],"policy":"specialized engines/sidecars selected by UnifiedDB; physical consolidation benchmark-gated"}
+    ],
+    "android_edge":"same semantic domains; model may be embedded in app/runtime process when mobile backend requires it, but authority/secret handling and untrusted tool execution retain explicit isolation using platform facilities; context/KV/prefill dynamically budgeted"
+  },
+  "hot_path_abi":{
+    "rule":"no mandatory JSON between cognition-hot organs",
+    "candidate":"compact typed Clay handles + immutable borrowed arenas; Arrow C Data Interface or equivalent only where data shape fits; cross-process handoffs use explicit shared-memory/IPC format and lifetime receipts",
+    "local_proxy":"EXP-C7-HANDOFF-001",
+    "target_gate":"Rust/C Linux and Android p50/p95/p99 + cache/copy/energy benchmark"
+  },
+  "transitions":[
+    {"op_id":"OP.INGEST_EVENT","proposal_class":"STATE_PROPOSAL","reads":["external payload"],"writes":["S.EXTERNAL_EVENT"],"invariant_scope":["source provenance","event identity"],"effects":[],"capability_refs":[],"causal_links":["M.DURABLE_EVENT_LEDGER"],"gwt_links":[],"claygraph_links":[]},
+    {"op_id":"OP.NEEDLE_ROUTE","proposal_class":"PURE_TRANSFORM","reads":["S.EXTERNAL_EVENT"],"writes":["S.NEEDLE_ROUTE_CERTIFICATE"],"invariant_scope":["input event hash","Needle version"],"effects":[],"capability_refs":[],"causal_links":["M.NEEDLE","M.NEEDLE_BRIDGE"],"gwt_links":[],"claygraph_links":[]},
+    {"op_id":"OP.MOSAIC_COMPILE","proposal_class":"PURE_TRANSFORM","reads":["committed intent","canonical state","S.NEEDLE_ROUTE_CERTIFICATE"],"writes":["S.MOSAIC_CAPSULE"],"invariant_scope":["semantic identity","instance provenance","basis closure","selection/projection requirements"],"effects":[],"capability_refs":[],"causal_links":["M.MOSAIC_COMPILER"],"gwt_links":[],"claygraph_links":["graph/activation epoch requirements"]},
+    {"op_id":"OP.UNIFIED_QUERY_PLAN","proposal_class":"PURE_TRANSFORM","reads":["S.MOSAIC_CAPSULE"],"writes":["S.UNIFIED_QUERY_PLAN"],"invariant_scope":["query semantics","consistency","selection provenance","approximation budget"],"effects":[],"capability_refs":[],"causal_links":["M.UNIFIEDDB_LOGICAL_FABRIC"],"gwt_links":[],"claygraph_links":["optional graph route"]},
+    {"op_id":"OP.MEMORY_ASSEMBLY","proposal_class":"STATE_PROPOSAL","reads":["S.UNIFIED_QUERY_PLAN","S.MEMORY_EPOCH_HANDLE","derived views","exact anchors"],"writes":["S.ACTIVE_ASSEMBLY","S.SELECTION_RECEIPT_V2"],"invariant_scope":["one semantic epoch","role identity","exact-anchor requirements","selection integrity"],"effects":[],"capability_refs":[],"causal_links":["M.CLAYGRAPH_MEMORY"],"gwt_links":["candidate prior only"],"claygraph_links":["activation may seed; graph escalation conditional"]},
+    {"op_id":"OP.WORKSPACE_ARBITRATE","proposal_class":"STATE_PROPOSAL","reads":["S.MOSAIC_CAPSULE","S.ACTIVE_ASSEMBLY","candidate set"],"writes":["S.WORKSPACE_EPISODE"],"invariant_scope":["candidate identity","competition policy","stage orthogonality"],"effects":[],"capability_refs":[],"causal_links":["M.WORKSPACE_ARBITER"],"gwt_links":["competition","selection","configured gate","ignition receipt"],"claygraph_links":["activation remains upstream"]},
+    {"op_id":"OP.MRSC_PROJECT","proposal_class":"PURE_TRANSFORM","reads":["S.WORKSPACE_EPISODE","S.MOSAIC_CAPSULE","S.SELECTION_RECEIPT_V2","S.READER_PROFILE"],"writes":["S.READER_HANDOFF_RECEIPT"],"invariant_scope":["semantic coverage","view identity","reader identity","loss declaration"],"effects":[],"capability_refs":[],"causal_links":["M.MRSC"],"gwt_links":["reader projection after semantic workspace"],"claygraph_links":[]},
+    {"op_id":"OP.QWEN_INFER","proposal_class":"PURE_TRANSFORM","reads":["reader handoff payload","S.READER_HANDOFF_RECEIPT"],"writes":["S.CLAY_PROPOSAL"],"invariant_scope":["proposal typing","reader profile","no authority"],"effects":[],"capability_refs":[],"causal_links":["M.QWEN_CLAY_NATIVE"],"gwt_links":["uptake remains empirically testable"],"claygraph_links":[]},
+    {"op_id":"OP.RECONCILE","proposal_class":"PURE_TRANSFORM","reads":["S.CLAY_PROPOSAL","S.READER_HANDOFF_RECEIPT"],"writes":["canonical reconciled proposal"],"invariant_scope":["role/class semantics","unknowns","contradictions","source anchors"],"effects":[],"capability_refs":[],"causal_links":["M.CANONICAL_RECONCILER"],"gwt_links":[],"claygraph_links":[]},
+    {"op_id":"OP.EFFECT_AUTHORIZE","proposal_class":"EFFECT_PROPOSAL","reads":["canonical reconciled proposal","S.MOSAIC_CAPSULE","S.SELECTION_RECEIPT_V2","current capabilities"],"writes":["S.EFFECT_RELEASE_CONTEXT"],"invariant_scope":["effect-relevant basis","selection integrity","contract instance","authority policy","idempotency"],"effects":["authorization decision"],"capability_refs":["required current capability refs"],"causal_links":["M.CAPABILITY_EFFECT_BROKER"],"gwt_links":[],"claygraph_links":[]},
+    {"op_id":"OP.EFFECT_EXECUTE","proposal_class":"EFFECT_PROPOSAL","reads":["S.EFFECT_RELEASE_CONTEXT"],"writes":["S.EFFECT_RECEIPT"],"invariant_scope":["current authorization","idempotency","sandbox boundary"],"effects":["external effect"],"capability_refs":["validated capability"],"causal_links":["M.CAPABILITY_EFFECT_BROKER","M.TOOL_SANDBOX"],"gwt_links":[],"claygraph_links":[]},
+    {"op_id":"OP.REENTER","proposal_class":"STATE_PROPOSAL","reads":["S.MOSAIC_CAPSULE","S.WORKSPACE_EPISODE","S.READER_HANDOFF_RECEIPT","S.EFFECT_RECEIPT","outcome"],"writes":["S.REENTRY_RECEIPT_V2","canonical event"],"invariant_scope":["episode identity","credit assignment","truthful outcome"],"effects":[],"capability_refs":[],"causal_links":["M.DURABLE_EVENT_LEDGER","M.OBSERVABILITY_REPLAY"],"gwt_links":["truth-bound re-entry"],"claygraph_links":["future activation updates via typed receipt only"]},
+    {"op_id":"OP.INCREMENTAL_DERIVE","proposal_class":"STATE_PROPOSAL","reads":["canonical event delta","dependency graph"],"writes":["S.DERIVATION_RECEIPT","derived views"],"invariant_scope":["declared dependencies","epoch publication","rebuild threshold"],"effects":[],"capability_refs":[],"causal_links":["M.UNIFIEDDB_LOGICAL_FABRIC","M.CLAYGRAPH_MEMORY"],"gwt_links":[],"claygraph_links":["semantic epoch publish","activation update"]},
+    {"op_id":"OP.REPLAY_RECOVER","proposal_class":"STATE_PROPOSAL","reads":["authoritative ledger","effect receipts","derivation recipes","runtime placement profile"],"writes":["recovered canonical state","rebuilt derived views"],"invariant_scope":["event order","idempotency","epoch integrity","authority boundaries"],"effects":[],"capability_refs":[],"causal_links":["M.DURABLE_EVENT_LEDGER","M.OBSERVABILITY_REPLAY"],"gwt_links":[],"claygraph_links":["graph rebuildable from authority"]}
+  ],
+  "model_training":{
+    "target":"abliterated Qwen-class 4B full-model Clay adaptation",
+    "principle":"transcode pretrained capability into Clay rather than overwrite capability with Clay",
+    "tokenizer_factorial":["BASE_TOKENIZER_WITH_CLAY_LEXEME_DESIGN","CONTINUED_BPE_EXTENSION","ALIGNED_VOCABULARY_ADAPTATION_WITH_EMBEDDING_TRANSFER"],
+    "curriculum":[
+      "T0 freeze baseline and retained-capability suite",
+      "T1 P0 natural/external -> P1 canonical Clay semantic transcode + reverse explanation",
+      "T2 typed Clay primitives, relation roles, epistemic/authority classes, deterministic execution",
+      "T3 MOSAIC/COVE operation-specific causal-slice tasks",
+      "T4 ClayGraph epochs/activation/Assembly and UnifiedDB query-plan tasks",
+      "T5 GWT WorkspaceEpisode selection/reconstruction/re-entry tasks",
+      "T6 MRSC P2 discrete-native compact rail training and cross-view equivalence",
+      "T7 tool/effect proposal training with explicit non-authority and denied-action negatives",
+      "T8 optional P3 latent/hybrid research only when target hidden-state interface exists"
+    ],
+    "forgetting_controls":["source/general capability rehearsal","teacher/reference distillation","EMA/model averaging candidate","loss-adaptive learning-rate candidate compatible with full-model updates","checkpoint rollback"],
+    "promotion_gates":["Clay semantic execution","role/n-ary identity","authority-class separation","retained general capability","OOD composition","tool proposal correctness","forbidden authority violations","latency/memory/energy shadow"]
+  },
+  "edge_runtime":{
+    "qwen3_4b_reference_config":{"parameters":4000000000,"layers":36,"attention_heads":32,"kv_heads":8,"head_dim":128},
+    "kv_budget_rule":"context is a runtime resource; default context is selected by memory/thermal/latency governor, not model maximum",
+    "analytical_16bit_kv_gib":{"4096":0.5625,"8192":1.125,"16384":2.25,"32768":4.5},
+    "android_backends":"MLC LLM and llama.cpp are current implementation candidates; Qualcomm/other vendor runtimes are platform-specific candidates; no backend is canonical semantics",
+    "context_strategy":"prefer bounded MOSAIC/COVE Assemblies and compact MRSC views; escalate context only when coverage/uncertainty justifies it"
+  },
+  "persistence_replay":{
+    "event_identity":"append-only canonical Clay event/effect/re-entry identities with semantic + instance/provenance axes",
+    "replay_semantics":"rebuild canonical state first; deterministically rebuild derived graph/vector/FTS/materialized views from declared recipes; activation/Assemblies/GWT are transient unless explicit episode receipts are replay targets",
+    "recovery_boundary":"authority/effect ledger and owner contract survive cognitive/model/runtime restart; previous valid semantic epochs remain readable until new epoch validates",
+    "graph_projection_rebuildable":true,
+    "unifieddb_physical_consolidation":"benchmark-gated and reversible"
+  },
+  "authority_boundary":{
+    "model_output_is_authority":false,
+    "external_capability_gateway_required":true,
+    "effect_receipts_required":true,
+    "secrets_model_visible":false,
+    "untrusted_tool_execution_isolated":true
+  },
+  "host_kernel_boundary":{
+    "self_authorizing":false,
+    "components":["bootstrap_trust_root","Clay parser/validator/canonicalizer","MOSAIC/COVE closure verifier","epoch/receipt integrity","capability_effect_gateway","replay/recovery primitives"],
+    "rule":"keep trusted native kernel minimal; all semantics authored in Clay/ClayCode, but enforcement is deterministic and not model writable"
+  },
+  "scientific_boundary":{
+    "gwt_claim":"functional/mechanistic only; stage orthogonality required",
+    "emergence_claim":"none promoted; E-CERT2 remains required",
+    "consciousness_claim":"none",
+    "latent_channel_claim":"P3 remains optional/non-authoritative and requires target causal tests"
+  },
+  "provenance":{"actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","canonical_parent":"RAE-8.8 r2 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"}
+}

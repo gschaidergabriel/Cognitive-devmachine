@@ -6,7 +6,7 @@ Research ClayCode as the internal semantic language/IR for Synthetic Clay and as
 
 Every `claycode` run MUST load all registered scientific branches. Priority is:
 
-`frank -> clay -> claygraph -> gwt -> hyperposition -> emergenz -> claycode history`
+`frank -> clay -> claygraph -> unifieddb -> gwt -> hyperposition -> emergenz -> claycode history`
 
 ### FRANK — primary target feedback
 
@@ -29,7 +29,24 @@ ClayGraph is not treated as a generic external database. ClayCode must research 
 
 If ClayGraph exposes a missing ClayCode primitive, unsafe authority assumption, ambiguous identity rule or transition-closure gap, ClayCode must generate a falsifiable hypothesis and test whether the language should be changed. If ClayCode evidence refutes a ClayGraph assumption, write that contradiction back to ClayGraph rather than conforming the language to a bad graph design.
 
-Run `tools/research_interconnect_preflight.py --trigger claycode --run-id <run_id>` and materialize `INTERCONNECT_MANIFEST.json` before Fusion 1. The preflight must show ClayGraph as a deep input and all seven registered scientific branches.
+### UnifiedDB — mandatory deep persistence/query substrate input
+
+Every ClayCode run MUST deeply ingest the newest UnifiedDB completed and in-progress research, including where present:
+
+- `STORE_ROLE_MATRIX.json`;
+- `UNIFIED_DATABASE_ARCHITECTURE.claycode.json`;
+- `QUERY_ROUTING_PLAN.json`;
+- `EXPERIMENT_RESULTS.json`;
+- `MIGRATION_PLAN.json`;
+- `BRANCH_FEEDBACK_MANIFEST.json` and `FRANK_UNIFIEDDB_FEEDBACK.json`;
+- exact/event/temporal/provenance/graph/vector/FTS/activation/effect/outcome state semantics;
+- negative results that justify `KEEP_ISOLATED`, logical-only unification, or other hybrid storage decisions.
+
+UnifiedDB is not treated as a mandate to physically merge stores. ClayCode must be able to represent one logical semantic identity/query/transaction plane while preserving evidence-based physical isolation where required. Missing language primitives for query routing, transaction boundaries, snapshot/replay consistency, store authority, derived indexes, migration rollback or selection integrity must be tested and integrated/refuted rather than treated as implementation-only details.
+
+If UnifiedDB exposes a missing ClayCode primitive, unsafe authority assumption, ambiguous identity/query rule or transaction-closure gap, ClayCode must generate a falsifiable hypothesis and test whether the language should change. If ClayCode evidence refutes a UnifiedDB assumption, write that contradiction back to UnifiedDB rather than conforming the language to a bad persistence design.
+
+Run `tools/research_interconnect_preflight.py --trigger claycode --run-id <run_id>` and materialize `INTERCONNECT_MANIFEST.json` before Fusion 1. The preflight must show ClayGraph and UnifiedDB as deep inputs and all eight registered scientific branches.
 
 ## Mandatory executable ClayCode loop
 
@@ -66,7 +83,7 @@ Every nontrivial executable experiment must emit an `EXECUTABLE_RESEARCH_RECEIPT
 - failure/counterexample classification;
 - repair/change applied, if any;
 - affected hypothesis/negative-result IDs;
-- whether the learning changed ClayCode, FRANK, ClayGraph, GWT, Hyperposition, Emergenz or Clay.
+- whether the learning changed ClayCode, FRANK, ClayGraph, UnifiedDB, GWT, Hyperposition, Emergenz or Clay.
 
 A successful compilation is not automatically scientific support: differential/reference/oracle tests must establish which semantic property was preserved. A compiler/typechecker accepting a program does not prove the source intent was adequate; CC-RC1.5 intent-adequacy boundaries remain separate.
 
@@ -87,7 +104,7 @@ Stateful sessions/package installation may be used only when the active provider
 
 The long-term self-hosting research path is:
 
-`host bootstrap compiler -> executable ClayCode parser/type/effect system -> ClayCode lowering/interpreter -> ClayGraph/FRANK runtime components generated from Clay semantics -> progressively more of the compiler/runtime specified in ClayCode`
+`host bootstrap compiler -> executable ClayCode parser/type/effect system -> ClayCode lowering/interpreter -> ClayGraph/UnifiedDB/FRANK runtime components generated from Clay semantics -> progressively more of the compiler/runtime specified in ClayCode`
 
 but self-hosting never grants self-modification or effect authority by itself.
 
@@ -104,24 +121,26 @@ Each relevant assumption receives one verdict:
 - `REFUTED` — counterevidence wins, preserve negative/supersession evidence;
 - `UNRESOLVED` — insufficient independent evidence, keep open.
 
-Before `SUPPORTED` or `REFINED`: collapse shared ancestry, seek independent evidence or a genuinely new discriminating experiment, state a counterhypothesis/falsifier, run an adversarial check and preserve evidence class. ClayGraph reuse of the same FRANK/Clay evidence also counts as shared ancestry, not replication.
+Before `SUPPORTED` or `REFINED`: collapse shared ancestry, seek independent evidence or a genuinely new discriminating experiment, state a counterhypothesis/falsifier, run an adversarial check and preserve evidence class. ClayGraph or UnifiedDB reuse of the same FRANK/Clay evidence also counts as shared ancestry, not replication.
 
 ## Bidirectional integration
 
-ClayCode must test both FRANK and ClayGraph demands against the language/runtime design:
+ClayCode must test FRANK, ClayGraph and UnifiedDB demands against the language/runtime design:
 
 - FRANK missing primitive → research/add only if independently justified;
 - ClayGraph missing primitive/identity/relation/activation semantics → research/add only if justified;
-- invalid FRANK or ClayGraph assumption → refute/narrow and write back to the mesh;
-- safer/more efficient ClayCode representation/transition model → write delta so next FRANK and ClayGraph runs reconsider their architectures.
+- UnifiedDB missing primitive/query/transaction/store-role/migration semantics → research/add only if justified;
+- invalid FRANK, ClayGraph or UnifiedDB assumption → refute/narrow and write back to the mesh;
+- safer/more efficient ClayCode representation/transition/query/transaction model → write delta so next FRANK, ClayGraph and UnifiedDB runs reconsider their architectures.
 
 The result is a falsifiable co-evolution loop, not a consensus loop.
 
 ## Core research questions
 
-- Can ClayCode faithfully represent the newest FRANK architecture and newest ClayGraph substrate?
+- Can ClayCode faithfully represent the newest FRANK architecture, newest ClayGraph substrate and newest UnifiedDB persistence/query substrate?
 - Can the same semantic IR express exact canonical state and bounded associative activation without conflating activation with truth?
-- Which graph semantics belong in canonical IR versus reader-specific projection/wire syntax?
+- Can it express logical semantic/query unification without falsely requiring physical store consolidation?
+- Which graph/database semantics belong in canonical IR versus reader-specific projection/wire syntax?
 - Can Clay-written runtimes interpret/transform ClayCode without circular ambiguity or hidden authority escalation?
 - What remains deterministic outside the model: parser, schema, canonicalization, capability checks, commit gateway, rollback and receipts?
 - Can a Qwen-class 4B model operate on the internal state language rather than imitate surface syntax?
@@ -130,6 +149,7 @@ The result is a falsifiable co-evolution loop, not a consensus loop.
 
 - FRANK architecture coverage: modules/organs, state contracts, transitions, dependencies, invariants, causal/GWT links and authority boundaries;
 - ClayGraph coverage: typed entity/relation identity, temporal/provenance/conflict semantics, activation/assembly state, graph mutation, migration and replay;
+- UnifiedDB coverage: store roles, semantic/logical/physical unification boundaries, query routing, transaction/snapshot/replay consistency, derived indexes, selection integrity, migration rollback and KEEP_ISOLATED semantics;
 - Goodman ancestry/independence analysis;
 - self-description/reflection without representation=authority confusion;
 - canonical AST/IR and deterministic roundtrip;
@@ -143,25 +163,25 @@ The result is a falsifiable co-evolution loop, not a consensus loop.
 - context/token/repair cost versus JSON/key=value/natural-language baselines;
 - reader-specific projections and live-reader break-even;
 - Qwen-4B simulation/live tests, explicitly labeled `simulation_only` when no target model is run;
-- bootstrapping/self-hosting path: host runtime -> ClayCode runtime -> ClayGraph/Synthetic-Clay/FRANK system.
+- bootstrapping/self-hosting path: host runtime -> ClayCode runtime -> ClayGraph/UnifiedDB/Synthetic-Clay/FRANK system.
 
 ## Required outputs and completion gate
 
 Every completed ClayCode run must include at minimum:
 
-- `INTERCONNECT_MANIFEST.json` covering all seven branches;
+- `INTERCONNECT_MANIFEST.json` covering all eight registered scientific branches;
 - `TOOL_EXECUTION_MANIFEST.json`;
 - `FRANK_CLAYCODE_GOODMAN_REVIEW.json`;
 - hypotheses/experiments/negative results appropriate to the run;
 - executable-research receipt(s) when an executable experiment was attempted;
-- a final report section explicitly naming the ClayGraph findings that changed, supported or challenged ClayCode.
+- a final report section explicitly naming the ClayGraph and UnifiedDB findings that changed, supported or challenged ClayCode.
 
 Before completion or strong promotion run:
 
 `python tools/goodman_filter_check.py validate-run research_entity/trigger_runs/claycode/<run_id>`
 
-A ClayCode run that omits the current ClayGraph substrate input is incomplete even if its FRANK Goodman review passes.
+A ClayCode run that omits the current ClayGraph or UnifiedDB substrate input is incomplete even if its FRANK Goodman review passes.
 
-A language candidate is not promoted because it looks compact, alien, agrees with FRANK or fits ClayGraph. Promotion requires semantic preservation, bounded repair cost, target-reader performance, safety/authority invariants and non-circular evidential support.
+A language candidate is not promoted because it looks compact, alien, agrees with FRANK or fits ClayGraph/UnifiedDB. Promotion requires semantic preservation, bounded repair cost, target-reader performance, safety/authority invariants and non-circular evidential support.
 
 Write the final report to `research_entity/trigger_runs/claycode/<run_id>/FINAL_REPORT.md` and finish with the mandatory status footer.

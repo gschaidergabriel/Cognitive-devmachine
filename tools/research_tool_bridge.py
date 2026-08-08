@@ -36,12 +36,13 @@ import e2b_sandbox  # noqa: E402
 import judge0_execute  # noqa: E402
 import piston_execute  # noqa: E402
 import huggingface_inference  # noqa: E402
+import groq_inference  # noqa: E402
 from rae_secret_loader import get_secret  # noqa: E402
 
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$")
 SECRET_NAMES = [
     "OPENALEX_API_KEY", "TAVILY_API_KEY", "EXA_API_KEY", "E2B_API_KEY", "HF_TOKEN",
-    "SEMANTIC_SCHOLAR_API_KEY", "JUDGE0_API_KEY", "PISTON_API_TOKEN",
+    "GROQ_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "JUDGE0_API_KEY", "PISTON_API_TOKEN",
 ]
 
 
@@ -89,7 +90,6 @@ def _load_quota() -> dict[str, Any]:
 
 
 def _quota_key(req: dict[str, Any]) -> str:
-    # HF model listing is free/auth-only and must not clear a depleted inference budget.
     if req.get("tool") == "huggingface_inference" and (req.get("options") or {}).get("mode") == "chat":
         return "huggingface_inference"
     return str(req.get("tool") or "")
@@ -132,7 +132,6 @@ def _record_quota(req: dict[str, Any], state: str, note: str, reset_at: str | No
 def _mark_available_after_success(req: dict[str, Any]) -> None:
     tool = str(req.get("tool") or "")
     options = req.get("options") or {}
-    # Auth-only/listing calls do not demonstrate paid inference budget availability.
     if tool == "huggingface_inference" and options.get("mode") != "chat":
         return
     data = _load_quota()
@@ -197,6 +196,22 @@ def _execute(req: dict[str, Any]) -> Any:
             raise ValueError("query required for HF chat")
         model = str(options.get("model") or "openai/gpt-oss-120b:cheapest")
         return huggingface_inference.chat(model, query, max_tokens=_int(options.get("max_tokens"), 128, 1, 512), temperature=float(options.get("temperature", 0.0)))
+    if tool == "groq_inference":
+        mode = str(options.get("mode") or "chat")
+        if mode == "list_models":
+            return {"models": [x.get("id") for x in groq_inference.list_models() if x.get("id")]}
+        if mode != "chat":
+            raise ValueError("Groq mode must be list_models or chat")
+        if not query:
+            raise ValueError("query required for Groq chat")
+        model = str(options.get("model") or groq_inference.DEFAULT_MODEL)
+        return groq_inference.chat(
+            query,
+            model=model,
+            max_tokens=_int(options.get("max_tokens"), 256, 1, 2048),
+            temperature=float(options.get("temperature", 0.0)),
+            system=str(options.get("system")) if options.get("system") else None,
+        )
 
     if tool in {"e2b_sandbox", "judge0_execute", "piston_execute"}:
         code = str(req.get("code") or "")

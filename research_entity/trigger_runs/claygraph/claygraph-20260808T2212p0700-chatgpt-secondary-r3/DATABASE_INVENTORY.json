@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.1",
+  "run_id":"claygraph-20260808T2212p0700-chatgpt-secondary-r3",
+  "status":"NO_NEW_LIVE_ENUMERATION_CURRENT_ARCHITECTURE_RECLASSIFIED",
+  "historical_reported_live_db_count":71,
+  "historical_count_source":"Frank-Architektur.md measurement dated 2026-08-05, inherited through ClayGraph Cycle 4; not re-enumerated in this run",
+  "current_primary_architecture_sources":["FRANK C7 CORF","UnifiedDB U1 STORE_ROLE_MATRIX","ClayGraph G1d"],
+  "store_roles":[
+    {"store_id":"canonical_event_state_effect_spine","authority":"AUTHORITATIVE","candidate_claygraph_mapping":"exact anchors + derivation source only","disposition":"LINK","physical_policy":"COLOCATE effect-critical authoritative commit domain where current FRANK/UnifiedDB design requires","rollback":"authoritative replay remains source of truth"},
+    {"store_id":"semantic_relational_state","authority":"CANONICAL_OR_DERIVED_BY_SCHEMA","candidate_claygraph_mapping":"typed nodes + role-aware relation instances + valid/transaction time","disposition":"PROJECT","physical_policy":"UNIFY_LOGICALLY; physical engine benchmark-gated","rollback":"rebuild from canonical inputs or retain existing relational path"},
+    {"store_id":"claygraph_semantic_epochs","authority":"DERIVED_REBUILDABLE","candidate_claygraph_mapping":"immutable base epoch + validated delta overlays","disposition":"PROJECT","physical_policy":"specialized graph/index representation allowed","rollback":"previous epoch + direct authoritative retrieval"},
+    {"store_id":"vector_ann","authority":"DERIVED_REBUILDABLE","candidate_claygraph_mapping":"candidate/source refs only; similarity never semantic identity","disposition":"LINK","physical_policy":"specialized ANN sidecar","rollback":"rebuild index; exact/graph/FTS fallback"},
+    {"store_id":"fts","authority":"DERIVED_REBUILDABLE","candidate_claygraph_mapping":"lexical candidate route","disposition":"LINK","physical_policy":"specialized FTS sidecar","rollback":"rebuild index; exact fallback"},
+    {"store_id":"activation_salience","authority":"NONE","candidate_claygraph_mapping":"sparse transient activation field + CASAR anti-attractor governor","disposition":"PROJECT","physical_policy":"ephemeral/in-memory or rebuildable sidecar","rollback":"drop field and route to explicit retrieval; never replay as truth"},
+    {"store_id":"assembly_gwt_cache","authority":"NONE","candidate_claygraph_mapping":"epoch/basis-pinned Assembly receipts and candidate collections","disposition":"LINK","physical_policy":"transient runtime/shared memory","rollback":"reconstruct from canonical anchors + receipts"},
+    {"store_id":"model_kv_latent_state","authority":"NONE","candidate_claygraph_mapping":"versioned external handle only","disposition":"KEEP_ISOLATED","physical_policy":"model runtime device memory","rollback":"session/model-runtime recovery"},
+    {"store_id":"capability_secrets","authority":"EXTERNAL_AUTHORITY","candidate_claygraph_mapping":"opaque capability/resource references only; never bearer data","disposition":"KEEP_ISOLATED","physical_policy":"OS/keyring/secret/effect broker","rollback":"authority system independent of ClayGraph"},
+    {"store_id":"raw_external_sources","authority":"EXTERNAL_SOURCE_EVIDENCE","candidate_claygraph_mapping":"immutable source/provenance anchors","disposition":"KEEP_ISOLATED","physical_policy":"source/blob archive","rollback":"source bytes unchanged"}
+  ],
+  "legacy_named_dispositions":{"frank:consciousness":"PROJECT historical mapping only; live current role unresolved","frank:world_experience":"PROJECT historical mapping only; live current role unresolved","frank:thalamus-runtime-store":"DEFER pending live inventory","frank:titan-ego-runtime-store":"DEFER pending live inventory"},
+  "blanket_merge_recommendation":false,
+  "destructive_action_performed":false,
+  "live_inventory_gaps":["current read-only file/schema enumeration","writer/reader map","WAL/transaction settings","backup/recovery map","current authority/privacy classification","p50/p95/p99 under shadow graph/router","actual FRANK workload traces"],
+  "rule":"ClayGraph is a derived cognitive/memory plane inside UnifiedDB logical semantics. No historical store count or old database name is treated as current live evidence without re-enumeration."
+}

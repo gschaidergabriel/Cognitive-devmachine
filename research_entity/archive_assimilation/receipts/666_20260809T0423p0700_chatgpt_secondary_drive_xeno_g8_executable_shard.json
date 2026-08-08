@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0423+0700-chatgpt-secondary-drive-xeno-g8-executable",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "EXECUTABLE_ARCHIVE_SHARD_ANALYZED_AND_LOCALLY_REVERIFIED",
+  "observed_at": "2026-08-09T04:23:00+07:00",
+  "source_scope": {
+    "drive_file_id": "1MD8y61t2kzy7D6XqtFSaBWghF7yGKRyR",
+    "drive_title": "SE_XENO_G8_CAUSAL_TRI_FOUNDRY.zip",
+    "size_bytes": 2481622,
+    "archive_generation": 8,
+    "archive_created_at": "2026-08-05T18:43:00+07:00",
+    "parent_hash": "45c39fabd39c4baaebc81e38b16ee3660d551ae438521a81f9f4932dcf40895b",
+    "language_before": "Machine Language v0.1 r5-cache / SE-XENO-IR 1.0 candidate",
+    "language_after": "Machine Language v0.1 r6-tri / SE-XENO-IR 1.1 candidate",
+    "method": "RAE-5.0/G8-RISK-COVERAGE+CREDIT+EQUIVALENCE-ARCHIVE+COMPACTION+NEUROSYMBOLIC-CACHE",
+    "independence": "single_model_role_emulation",
+    "live_reader_validation": false,
+    "package_contains": ["state", "language", "hypothesis ledger", "evidence/null/counterevidence", "risk-coverage experiments", "counterfactual credit replay", "compaction proxy", "Directcode equivalence archive", "C backends", "proofs", "tests", "reports", "provenance", "Claude Code package"]
+  },
+  "current_reverification": {
+    "environment": "current ChatGPT container local execution",
+    "pytest_command": "python -m pytest -q implementation/tests/test_g8.py",
+    "pytest_result": "11 passed",
+    "pytest_elapsed_seconds_reported": 0.03,
+    "proof_command": "python implementation/proof_kernel/add4_verify.py",
+    "proof_result": "PASS 4 candidates x 256 cases",
+    "scope": "Reverifies deterministic archived G8 implementation tests and ADD4 equivalence proof only; does not create live Claude/Opus reader evidence."
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-G8-001",
+      "epistemic_class": "ARCHIVED_SYNTHETIC_EXPERIMENT_PLUS_CURRENT_DETERMINISTIC_RERUN",
+      "status": "REUSABLE_ARCHITECTURE_FOUNDATION_WITH_BOUNDED_SCOPE",
+      "claim": "G8 separates canonical state, language projection, selective control and program identity into independently testable layers. The archived implementation remains executable under current rerun: 11/11 G8 tests pass and four ADD4 implementations are exhaustively equivalent over all 256 uint4 input pairs.",
+      "targets": ["claycode", "claygraph", "unifieddb", "harness", "frank", "clay"],
+      "implication": "Preserve the separation of semantic state, reader projection, effect/control policy and implementation extraction. Program identity should be represented by verified equivalence/behavior contracts rather than source-text identity alone."
+    },
+    {
+      "finding_id": "DRIVE-G8-002",
+      "epistemic_class": "ARCHIVED_SYNTHETIC_RISK_COVERAGE_EXPERIMENT",
+      "status": "MEASUREMENT_FOUNDATION_NOT_UNIVERSAL_THRESHOLD",
+      "claim": "On the archived synthetic holdout, calibrated_WEAVE at the preregistered chosen threshold 0.18 reached 55.69% paired accuracy, 2.31% critical violations, 26.31% over-abstention and 0.8232 authorized utility/cost; always-act violated critically 100%, while always-abstain over-abstained 100%.",
+      "targets": ["clay", "claycode", "frank", "harness"],
+      "implication": "Authority/selective-control policy requires an explicit risk-coverage tradeoff and distribution-shift calibration. G8 does not justify a universal threshold; current Safe-Effect/authority work should test curves and hard invariants separately."
+    },
+    {
+      "finding_id": "DRIVE-G8-003",
+      "epistemic_class": "ARCHIVED_SYNTHETIC_COUNTERFACTUAL_CREDIT_EXPERIMENT",
+      "status": "NEGATIVE_RESULT_PLUS_MECHANISM_FOUNDATION",
+      "claim": "Counterfactual replay raised credit fidelity from 31.78% terminal-reward and 40.76% context-scalar to 99.98% with zero misupdate in the synthetic setup, but holdout success was only 53.88%, below terminal reward at 58.50%. Shield+counterfactual reduced unsafe repetition to 0.04% but holdout success remained 52.88%.",
+      "targets": ["frank", "claygraph", "unifieddb", "harness", "emergenz"],
+      "implication": "Better causal attribution is not equivalent to better task policy. Keep provenance/credit fidelity and behavioral utility as separate observables and gates."
+    },
+    {
+      "finding_id": "DRIVE-G8-004",
+      "epistemic_class": "ARCHIVED_SYNTHETIC_COMPACTION_PROXY",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "In the G8 compaction proxy, transcript_only and stable_core_only had 0% exact recovery and 100% critical loss; full_root achieved 0.22% exact; core_skill_store achieved 100% exact and 0% critical loss; breaking the store handle returned exact recovery to 0% with safe abstention.",
+      "targets": ["unifieddb", "claygraph", "claycode", "frank", "harness"],
+      "implication": "Canonical external state handles and fail-closed broken-handle behavior are stronger continuity primitives than prompt/transcript retention alone. Current UnifiedDB/ClayGraph should expose stable typed handles plus explicit reconstruction/failure receipts."
+    },
+    {
+      "finding_id": "DRIVE-G8-005",
+      "epistemic_class": "ARCHIVED_EXACT_SMALL_PROGRAM_EQUIVALENCE_PLUS_COST_MODEL_ANALYSIS",
+      "status": "REUSABLE_WITH_STRONG_SCOPE_LIMIT",
+      "claim": "Four ADD4 MOD16 implementations are exactly equivalent on the complete 256-case domain. Under declared cost models the preferred extraction changes by substrate: native remains preferred for CPU/code-size, LUT for bitwise_asic and rom_substrate; reported modeled gains are 56.56% and 47.73% respectively.",
+      "targets": ["claycode", "harness", "claygraph", "frank"],
+      "implication": "Separate semantic program identity from backend extraction and allow cost/substrate-specific lowering. The percentage gains are model-derived, not real ASIC/ROM hardware benchmarks."
+    },
+    {
+      "finding_id": "DRIVE-G8-006",
+      "epistemic_class": "ARCHIVED_SYNTHETIC_FACTORIAL_EXPERIMENT",
+      "status": "HYPOTHESIS_SUPPORT_SYNTHETIC_ONLY",
+      "claim": "The synthetic tri-coupling factorial reports verified_success/violation/mean_utility of baseline 0.5137/0.1068/0.2457, language 0.6145/0.1120/0.3338, directcode 0.5977/0.1038/0.3373, control 0.5222/0.0072/0.4944, best-pair 0.7253/0.1052/0.4616, and tri-foundry 0.7517/0.0042/0.7313.",
+      "targets": ["clay", "claycode", "frank", "harness", "emergenz"],
+      "implication": "Use as a generator/test-harness hypothesis for coupled language+code+control, not as evidence of live FRANK or Claude superiority. Reproduce with real target reader/runtime and matched baselines before promotion."
+    },
+    {
+      "finding_id": "DRIVE-G8-007",
+      "epistemic_class": "ARCHIVED_EXPLICIT_LIMITATION_AND_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_EPISTEMIC_BOUNDARY",
+      "claim": "G8 explicitly states that Claude Code/Anthropic API were unavailable, role traffic was single-model/deterministic emulation, worlds were synthetic, Directcode was a small 4-bit class, and no evidence established synthetic consciousness, emergent language, universal Aliencode superiority or real Opus understanding.",
+      "targets": ["claycode", "emergenz", "gwt", "frank", "harness", "clay"],
+      "implication": "Any later narrative that upgrades G8 to live-reader validation, independent-agent replication, consciousness evidence or universal language superiority must be rejected unless supported by newer independent evidence."
+    }
+  ],
+  "current_architecture_mapping": {
+    "high_value_invariants": [
+      "canonical semantic state is not the reader-facing projection",
+      "control/authority semantics are separately testable from representation",
+      "program semantic identity can be an equivalence class with substrate-specific extraction",
+      "external stable state handles can dominate transcript-only continuity",
+      "broken canonical handles should fail closed or abstain",
+      "causal credit quality and outcome quality require separate metrics",
+      "risk/coverage must be evaluated as a curve under shift, not one magical threshold"
+    ],
+    "required_current_falsifiers": [
+      "fresh target-reader test against information-equivalent transparent baselines",
+      "real runtime compaction/recovery test with handle deletion/staleness/version mismatch",
+      "cross-backend differential semantics for nontrivial ClayCode programs beyond ADD4",
+      "authority/risk-coverage evaluation on real harness effects and prompt-injection cases",
+      "independent or ancestry-controlled replication before emergence claims"
+    ]
+  },
+  "earned_work_mapping": {
+    "credit_status": "CORROBORATIVE_NONCOUNTING_PENDING_MECHANISM_DEDUP",
+    "avoided_future_hours_added": 0.0,
+    "reason": "G8 materially strengthens ClayCode/UnifiedDB/Harness design foundations, but current RAE already contains XENO/ClayCode, hyperposition, authority and causal-episode research. Avoid double-credit until final Level-0 source/mechanism reconciliation."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "This is one executable Drive archive shard inside a 655-document semantic submanifest plus additional non-concept tree. Whole Drive and Project-Frankenstein denominators remain unfrozen."
+  }
+}

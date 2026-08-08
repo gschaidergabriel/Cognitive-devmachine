@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.1",
+  "request_id":"cc12-e2b-cross-kind-alias-20260808T2104p0700",
+  "tool":"e2b_sandbox",
+  "code":"import hashlib,json,random\nSEED=22091;N=100000\ndef h(t,o):return hashlib.sha256((t+':'+json.dumps(o,sort_keys=True,separators=(',',':'))).encode()).hexdigest()\nr=random.Random(SEED);a=list('abcd');alias=nontrivial=typed=0;ex=[]\nfor _ in range(N):\n xs=[r.choice(a) for _ in range(r.randint(0,8))];s=sorted(set(xs));o=list(xs);us=h('untyped',s);uo=h('untyped',o);ts=h('typed',{'kind':'SET','items':s});to=h('typed',{'kind':'ORDERED','items':o})\n if us==uo:\n  alias+=1;nontrivial+=int(len(xs)>1)\n  if len(ex)<8:ex.append({'source':xs,'canonical_set':s,'ordered':o})\n typed+=int(ts==to)\nok=typed==0 and alias>0\nprint(json.dumps({'status':'PASS' if ok else 'FAIL','seed':SEED,'iterations':N,'untyped_cross_kind_aliases':alias,'untyped_alias_rate':alias/N,'nontrivial_aliases':nontrivial,'typed_cross_kind_aliases':typed,'examples':ex,'inference':'collection kind must participate in semantic identity/hash'},sort_keys=True))\nraise SystemExit(0 if ok else 1)",
+  "options":{"timeout":120},
+  "research_context":{"trigger":"claycode","run_id":"claycode-20260808T2104p0700-chatgpt-secondary-r3","experiment":"EXP-CC12-CROSS-KIND-ALIAS-003"}
+}

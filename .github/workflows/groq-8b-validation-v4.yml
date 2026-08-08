@@ -1,0 +1,56 @@
+name: RAE Groq 8B validation V4
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/groq_8b_validation_v4.py'
+      - 'tools/groq_inference.py'
+      - 'research_entity/private/GROQ_API.env'
+      - '.github/workflows/groq-8b-validation-v4.yml'
+
+concurrency:
+  group: rae-groq-validation-v4-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run V4
+        run: |
+          python -m py_compile tools/groq_8b_validation_v4.py tools/groq_inference.py
+          mkdir -p research_entity/runtime/groq_8b_proxy
+          set +e
+          python tools/groq_8b_validation_v4.py --output research_entity/runtime/groq_8b_proxy/VALIDATION_V4.json > /tmp/v4.out 2>/tmp/v4.err
+          code=$?
+          set -e
+          V4_EXIT="$code" python - <<'PY'
+          import json,os
+          from datetime import datetime,timezone
+          from pathlib import Path
+          def tail(p):
+            try:return Path(p).read_text(encoding='utf-8',errors='replace')[-5000:]
+            except:return ''
+          Path('research_entity/runtime/groq_8b_proxy/VALIDATION_V4_DIAGNOSTIC.json').write_text(json.dumps({'schema_version':'1.0','checked_at':datetime.now(timezone.utc).isoformat(),'exit_code':int(os.environ['V4_EXIT']),'result_exists':Path('research_entity/runtime/groq_8b_proxy/VALIDATION_V4.json').exists(),'stdout_tail':tail('/tmp/v4.out'),'stderr_tail':tail('/tmp/v4.err'),'credential_value_exposed':False},indent=2)+'\n')
+          PY
+      - name: Commit V4
+        run: |
+          git config user.name 'rae-groq-experiment-runner'
+          git config user.email 'rae-groq-experiment-runner@users.noreply.github.com'
+          git add research_entity/runtime/groq_8b_proxy/VALIDATION_V4*.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record Groq 8B V4 validation results'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

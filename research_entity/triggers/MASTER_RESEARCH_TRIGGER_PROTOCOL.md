@@ -23,13 +23,15 @@ Scientific rooms remain domain-loyal. They do not abandon their domain merely be
 Every worker asks two questions simultaneously:
 
 1. What is the highest-value unresolved question inside my trigger domain?
-2. Which domain-specific result can most strongly advance, falsify or de-risk the **current shared program stage**?
+2. Which domain-specific result can most strongly advance, falsify or de-risk the current shared program and Clay 0.1 trajectory?
 
 The current program order is data-driven by `PROGRAM_STATE.json`; never hardcode an old stage sequence into trigger logic.
 
-`go` is a meta-trigger that self-selects a room, role and bounded task and then acts immediately.
+`666` is the sole autonomous research meta-trigger. Before Level-0 PASS it resumes exhaustive archive assimilation. After Level-0 PASS it spawns one seeded, high-value, non-duplicate emergent research field, performs work immediately and feeds material deltas back into the shared mesh.
 
-`q12` is a creator-advisor meta-trigger using `Q12_CREATOR_MODEL_PROFILE.json`; it advises from the recorded Creator-Scientist worldview and may coordinate the center only when delegated by the owner. It is not a scientific peer branch and does not create evidence by authority.
+`q12` is the creator-advisor meta-trigger using `Q12_CREATOR_MODEL_PROFILE.json`; it advises from the recorded Creator-Scientist worldview and may coordinate the center only when delegated by the owner. It is not a scientific peer branch and does not create evidence by authority.
+
+Any historical `go` reference is superseded by `research_entity/global/GO_TO_666_MIGRATION.md` and must not be treated as a current command.
 
 ## Mandatory cross-cutting knowledge
 
@@ -41,7 +43,8 @@ Every substantive scientific run must use relevant current material from:
 - `research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md`;
 - `research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md`;
 - current negative results and supersession history;
-- current program stage/gates.
+- current program stage/gates;
+- `research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md` where work may change Clay 0.1 critical-path assumptions.
 
 GWT additionally uses `research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md`.
 
@@ -60,8 +63,9 @@ Harness/ClayGraph work additionally uses `research_entity/global/HARNESS_CLAYGRA
 7. Run/materialize `tools/research_interconnect_preflight.py` and `INTERCONNECT_MANIFEST.json` where the execution surface permits it.
 8. Read relevant Project-Frankenstein mechanism/failure lineage before changing a historically inherited subsystem.
 9. Load the trigger-specific protocol and mandatory measurement/graph contracts.
-10. Load `RESEARCH_TOOL_ORCHESTRATION_POLICY.md` and `tools/research_provider_router.py`.
-11. Record run manifest with actor/model/runtime/program-stage provenance.
+10. Load `RESEARCH_TOOL_ORCHESTRATION_POLICY.md`, `EXTERNAL_RESEARCH_TOOL_REGISTRY.json` and `tools/research_provider_router.py`.
+11. If a new API/tool/capability can plausibly alter a Clay 0.1 critical-path row, ensure it is visible to `DOOMSDAY_CAPABILITY_RULES.json`; runtime availability alone does not create an ETA multiplier.
+12. Record run manifest with actor/model/runtime/program-stage provenance.
 
 If canonical cannot be verified: `DEGRADED_UNJOINED`. Research may proceed LOCAL_ONLY but no shared-state promotion may be claimed.
 
@@ -104,6 +108,8 @@ Run `tools/research_provider_router.py plan` and materialize `TOOL_EXECUTION_MAN
 
 Provider snippets are discovery evidence. Prefer primary/authoritative sources for verification.
 
+A newly registered API/provider is not merely a tool-list change: when relevant, it becomes an input to the dynamic DOOMSDAY capability table. Only verified benchmarked effects may alter the forecast.
+
 ## Research cycle
 
 ### A — Evidence + mesh + program grounding
@@ -113,7 +119,8 @@ Provider snippets are discovery evidence. Prefer primary/authoritative sources f
 - re-ground high-impact claims against raw sources;
 - preserve contradictions, negative results and source ancestry;
 - identify current-stage implications;
-- identify relevant Project-Frankenstein lineage/failures.
+- identify relevant Project-Frankenstein lineage/failures;
+- identify any verified accelerator/blocker/new dependency that should enter the DOOMSDAY forecast ledger.
 
 ### B — Fusion 1
 
@@ -163,6 +170,8 @@ Execute highest-information feasible tests: parser/compiler tests, simulations, 
 
 Synthetic/remote results remain synthetic until replicated on the target substrate.
 
+When an experiment is intended to shorten or lengthen a DOOMSDAY forecast row, measure the actual effect and attach a receipt. Do not hand-wave a speedup factor.
+
 ### H — Synthesis + architecture/program delta
 
 Record:
@@ -174,7 +183,8 @@ Record:
 - current-stage gate impact;
 - architecture/runtime implications;
 - next discriminating experiment;
-- affected rooms/branches.
+- affected rooms/branches;
+- any verified DOOMSDAY critical-path impact.
 
 ### I — Knowledge compilation / center write-back
 
@@ -193,13 +203,15 @@ Write run artifacts required by the trigger-specific protocol plus:
 - current-stage implications;
 - cross-branch/room inputs and outputs.
 
-The final visible response ends with the **dynamic next-milestone status footer** from `STATUS_FOOTER_PROTOCOL.md` / `tools/program_progress.py`.
+The final visible response ends with the mandatory two-horizon status footer generated by `tools/program_progress.py`.
 
 ## Staged-program boundary
 
 Current implementation/release work follows the data-driven program state. Later-stage research may inform the current stage, but workers may not silently skip release gates.
 
-The current program eventually reaches a LoRA training-data build stage and then WAIT. No trigger, `go`, `q12`, Fusion or stage completion automatically authorizes paid LoRA training or paid Together inference/training.
+The execution program reaches the final training-data stage and then WAIT. No trigger, `666`, `q12`, Fusion or stage completion automatically authorizes final/paid model training.
+
+DOOMSDAY forecasting continues beyond WAIT only as a conditional forecast. Clay 0.1 is not achieved until the final fully fine-tuned model is integrated with the Clay-programmed one-module/binary FRANK and UnifiedDB and passes the project-hardware acceptance run.
 
 ## Promotion discipline
 
@@ -213,4 +225,9 @@ Project novelty/world-first claims require dedicated prior-art evidence and expl
 
 Do not report percentage completion of the immediate prompt.
 
-Every substantive answer displays only the next unpassed shared program milestone, machine-derived progress bar and ETA range at the configured owner work cadence. The stage list and progress source come from `PROGRAM_STATE.json`; the ETA calibration comes from `PROGRAM_THROUGHPUT.json`.
+Every substantive answer displays:
+
+1. **NEXT LEVEL** — the first unpassed shared program gate with strict machine-derived progress and ETA;
+2. **DOOMSDAY / Clay 0.1** — an effort-weighted dynamic critical-path progress bar plus a freshly recomputed forecast range/center/confidence.
+
+DOOMSDAY must be recalculated from current progress, throughput, capacity, APIs/capabilities, verified accelerators/blockers/new dependencies and training-authorization state. A stale date copied from an older response is a governance bug.

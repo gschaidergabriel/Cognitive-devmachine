@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.1",
+  "request_id": "cc10-1922-exa-intent-contract",
+  "tool": "exa_search",
+  "request_sha256": "b4dbb245cc586b1a694c3217ad936b3d01ae50778221df7469b0d91041055a79",
+  "processed_at": "2026-08-08T12:27:46.787516+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "LLM agent formal intent compilation typed constraints ambiguity proof carrying action effect system capability deterministic IR compiler 2025 2026",
+    "results": [
+      {
+        "id": "https://arxiv.org/html/2604.25000v2",
+        "title": "Toward a Science of Intent: Closure Gaps and Delegation Envelopes for Open-World AI Agents",
+        "url": "https://arxiv.org/html/2604.25000v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Recent work has framed intelligence in verifiable tasks as reducing time-to-solution through learned structure and test-time search, while systems work has explored learned runtimes in which computation, memory and I/O migrate into model state. These perspectives do not explain why capable models remain difficult to deploy in open institutions. We propose intent compilation: the transformation of partially specified human purpose into inspectable artifacts that bind execution. The relevant deployment distinction is closed-world solver versus open-world agent. In closed worlds, a checker is largely given; in open worlds, verification is distributed across semantic, evidentiary, procedural and institutional dimensions. We formalize this residual openness as a closure-gap vector, define delegation envelopes as pre-authorized regions of action space, distinguish misclosure from undersearch, and outline benchmark metrics for testing when closure interventions outperform additional inference-time search.\n...\nThis paper names the missing object: intent compilation, the externalization of partially specified purpose into artifacts that bind a stochastic runtime: what is asked, what evidence may be used, what procedure may be followed and who is authorized to act. The compiler analogy is disciplined. A classical compiler lowers explicit source code into executable form; intent compilation starts earlier, from goals, assumptions, risk tolerances and institutional roles, and targets a composite runtime of model, evidence substrate, tool harness, monitors and governance shell.\n...\nThe language-model-versus-world-model distinction matters for internal mechanism, but it is insufficient for deployment. The relevant distinction is closed-world solver versus open-world agent. In a closed-world task, the checker is largely given: legal moves, success criteria and admissible evidence are settled in advance. In an open-world task, the checker is distributed across unresolved semantic, "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.27267v1",
+        "title": "FAVA: Formal Authorization for Verified Agents with Evidence-Backed Permission Graphs",
+        "url": "https://arxiv.org/html/2607.27267v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Large language model (LLM) agents autonomously interleave semantic reasoning with complex system operations. In these dynamic environments, static tool-level permissions are fundamentally insufficient; safe authorization is highly context-dependent and heavily reliant on evolving runtime states and data flows. We present FAVA (Formal Authorization for Verified Agents), a permission-carrying authorization framework for agent execution. FAVA utilizes an LLM-guided Permission Intermediate Representation (IR) to translate ambiguous natural-language tasks into structured constraints. A deterministic lowering pass then converts this IR into an evidence-backed permission graph that explicitly tracks data flows, dependencies, and contextual labels. To provide strict security guarantees, a Satisfiability Modulo Theories (SMT) authorizer mathematically verifies the current graph against security policies before any effectful action executes. A runtime gateway then enforces the solver’s result, either authorizing the execution or intercepting it with a precise counterexample. We evaluate FAVA across OpenAgentSafety, OctoBench, and ActPlane scenarios. Our evaluation demonstrates that FAVA achieves a 90.5% Decision Compliance Rate (DCR) over the aggregate dataset, successfully intercepting dynamic violating traces in the evaluated trace-conditioned scenarios.\n...\nTo address these concerns, we propose FAVA, Formal Authorization for Verified Agents. The central philosophy of FAVA is to separate semantic permission extraction from final safety authorization. Rather than trusting an LLM to make opaque “safe/unsafe\" judgments, FAVA utilizes the LLM where it excels: parsing natural language tasks into a structured Permission IR (Intermediate Representation). This IR explicitly maps intents, protected assets, tool-level actions, obligations, scoped allowances, forbidden actions, and evidence spans. A deterministic lowering pass then converts this IR into an evidence-backed permission g"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/qz5z5kr5ry0ct9cl4npyl5td",
+        "title": "Methods for Formal Verification of Agent Skills: Three Layers Toward a Mechanically Checkable Capability-Containment Proof",
+        "url": "https://arxiv.org/html/2605.23951",
+        "published_date": null,
+        "author": "Alfredo Metere",
+        "text": null,
+        "highlights": [
+          "The companion paper [29] introduced a four-level verification lattice on agent-skill manifests — unverified, declared, tested, formal — and explicitly left the top level aspirational: “a formal analysis tool has produced a machine-checkable proof that the skill’s behavior is a subset of its declared capability set under the runtime’s threat model”. This paper closes that gap. We give a precise semantics for “a skill’s behavior” that is faithful to how a skill is actually consumed by a large language model (LLM)-driven runtime (a deterministic script-side reachable through a non-deterministic LLM-side), state the verification problem as a containment property over that semantics, and present three composable methods that together raise a skill from declared or tested to formal: (1) sound static capability-containment analysis of the script-side via abstract interpretation over a small effect lattice; (2) a refinement type system for tool-call envelopes that mechanically rejects any call whose statically-inferred capability is not in M.caps; (3) satisfiability-modulo-theories (SMT)-bounded model checking against the parent paper’s biconditional correctness criterion, with the bound chosen so that any counter-example the LLM-side could realise within the runtime’s transaction-buffer horizon is exhibited as a concrete trace. We characterise what each layer is sound for, what each is incomplete for, and prove that the three layers composed soundly cover the parent paper’s threat model modulo a single residual — the LLM’s freedom to refuse to act — which the parent paper’s runtime biconditional already catches at session boundary. The methods reuse existing well-engineered tools (Z3, Semgrep / CodeQL, refinement-type checkers, mechanized proof assistants) rather than asking operators to build new ones, and the proposed proof-carrying-skill artifact is a small extension to the existing SKILL.md convention. Implementation. All three methods, the proof-carrying skill bundle,"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/1ylqfbmmcg0z7gvlnw1g1hyj",
+        "title": "Etas: An Effect-Typed Language for Agent Systems",
+        "url": "https://arxiv.org/html/2607.17780",
+        "published_date": null,
+        "author": "Huiri TAN, Yikun Wang, Puyang Zhang, Shangyu Li, Jiasi Shen",
+        "text": null,
+        "highlights": [
+          "# ETAS: An Effect-Typed Language for Agent Systems\n...\nETAS is a programming language for agent systems that treats model-backed agents, tool calls, prompts, typed memory, human approvals, policies, and execution traces as semantic program elements rather than library conventions. It separates deterministic computation from agentic nondeterminism and externally visible actions while preserving a direct programming style. We present the core design of ETAS. Its static semantics assigns ordinary types through spec conformance and tracks each computation with two behavioral indices: an escaping effect row and a persistent abstraction of the typed action trace it may request. Specs form a terminating compile-time constraint calculus: type specs provide evidence for polymorphism and resource facts, callable specs constrain function and stage shapes, and trace specs express allow, deny, and temporal constraints. Typing checks requested traces against compiled monitors and emits residual obligations when dynamic resources preclude a complete static proof. The dynamic semantics distinguish requested, handled, denied, and committed events; handlers interpret typed actions without making their requests invisible to authorization or audit. We formalize a core calculus and state preservation, progress, type/effect soundness, handler trace-transparency, and policy safety. We also implement ETAS in Rust with a command-line interface, typed HIR checks, effect and policy diagnostics, handler checks, and trace-aware execution hooks. ETAS provides a programming-language foundation for reasoning about authorization, nondeterminism, recovery, and audit evidence before and during agent execution.\n...\nNegotiation\n- Logic\n...\nKnowledge\n-\n...\nand type systems"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.25400",
+        "title": "COVENANT: Natural-Language Workflow Compilation for Aligned Agent Execution",
+        "url": "https://arxiv.org/html/2607.25400",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Large language model (LLM) agents are increasingly entrusted with natural-language workflow instructions (e.g., retail-payment policies) that specify not only what outcome to achieve, but also which steps, branches, and tool interactions are permitted. When these instructions are supplied as prompt context, however, the model retains control over both procedure selection and step execution. As interactions accumulate, an agent can skip required steps, take unsupported branches, or execute a valid step with unsupported arguments or effects—a failure mode we call workflow misalignment. In this work, we propose COVENANT, a compiler-and-interpreter architecture for workflow-aligned agent execution. Our key insight is to treat workflow instructions as source programs rather than prompts. COVENANT converts the instructions into a workflow abstract syntax tree (WAST) and lowers it to a workflow control-flow graph (WCFG). At runtime, a controller interprets the WCFG one node at a time, checks each proposal against requirements extracted from the instructions before committing controller state or advancing the graph, and returns diagnostic feedback for repair. To evaluate COVENANT, we use 120 cases from three existing benchmarks, spanning seven workflow scenarios. Compared with state-of-the-art LLM agents, COVENANT improves benchmark success from 50.00% to 83.33% and reduces the workflow-misalignment failure rate from 42.50% to 15.83% (62.75% relative). These results show that COVENANT substantially mitigates workflow misalignment, moving LLM-agent alignment beyond isolated prompt following toward reliable execution of complex and multi-step workflows.\n...\nTo address this issue, our key observation is that workflow instructions, although written in free-form natural language, usually encode program-like procedural structure, including ordered steps, branch conditions, and execution requirements. Inspired by traditional compilation (Aho et al. 2006; Lattner and Adve 2004), we"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.27309",
+        "title": "SIGIL: Compiling Agent Skills into Typed Harnesses",
+        "url": "https://arxiv.org/html/2607.27309",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "AI-Integrated agents increasingly acquire capability from skills: prose procedure files loaded into a model’s context and run by a tool-calling loop. A skill is described to the runtime but never encoded in it, so the model re-derives its control flow on every run and may skip mandated verification. Across 30 skills and two model generations, a prose agent performs only 56% of the steps its own skill mandates, while producing artifacts that pass output checks. The remedy is known: write a harness, in which the procedure is program structure. However, hand-writing harnesses is tedious and discards the authoring surface that made skills succeed. To address this limitation, we introduce Skill Compilation, realized in SIGIL, which compiles a prose skill into an executable harness. At its center is AG-IR, a typed agentic intermediate representation separating model-owned cognition from code-owned mechanism. Compiled harnesses perform 86% of mandated steps, complete the full procedure $2.3\\times$ as often, and require $0.58\\times$ the tokens. Notably, the guarantee is model-independent: the harness holds at 86% across two model generations while prose swings from 56% to 68%.\n...\nWe propose Skill Compilation, which translates a prose procedure specification into an executable agent harness. A mandated step then executes because it is represented in the program structure rather than because the model correctly interprets a prose instruction. We realize this approach in SIGIL (Skill Intent Grounding and Intermediate Lowering), a skill compiler with two responsibilities: grounding the extracted procedure in the source skill and lowering the resulting representation without introducing additional model judgment. SIGIL uses one intermediate representation and two compilation stages, as shown in Figure 1.\n...\nThe compiler itself has two stages. Extraction builds an AG-IR specification from the skill under a faithfulness constraint: each admitted rule must be supported by a verba"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.11346v3",
+        "title": "Compile, Then Page: Executable SOP Programs and a Capability-Gated Runtime for Procedural LLM Agents",
+        "url": "https://arxiv.org/html/2607.11346v3",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Enterprise agents must follow long-horizon, conditional, safety-critical standard operating procedures (SOPs). We compile machine-readable SOP constraints into executable pseudo-code and run them with a program-guided (PG) stack machine that pages the active frame while an LLM performs semantic execution. A three-arm SOPBench study across six models separates representation from runtime: compiled text never significantly hurts and gains up to 16.0 points where official prose underperforms. Runtime guidance is capability-gated. Two strong models independently show positive seven-domain PG contrasts (58:19 and 75:31 discordant pairs), whereas weak models are harmed. A full-program cursor ablation—active frame first, complete program retained—recovers much of the strong-model refusal gain; selective visibility adds a smaller improvement. Paired probe and audit measurements track this divide to spontaneous state discipline rather than reconstruction ability. On Bank the three primary arms rise 70.4 $\\rightarrow$ 86.4 $\\rightarrow$ 92.8, with 100% refusal correctness. Practical guidance: compile first; enable active-frame paging only after a model-level discipline check.\n...\nWe treat the SOP as a program rather than a text. An offline, deterministic compiler translates the benchmark’s machine-readable dependency constraints—the same source its verbalizer renders as the baseline prose—into a two-layer pseudo-code program: process functions, one per user goal, and rule subroutines pairing each constraint with its verification recipe and an evidence-bearing return. An online program-guided (PG) runtime executes it as a two-layer virtual machine: a symbolic stack machine does the bookkeeping (stack, cursor, variables, recovery) and pages only the active frame into context, while the LLM converses, calls tools, and judges evidence. Enforcement is deliberately soft—attention, not permissions—at the price that correctness depends on faithful local-frame execution: a design bet "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2606.06523v1",
+        "title": "Lean4Agent: Formal Modeling and Verification for Agent Workflow and Trajectory",
+        "url": "https://arxiv.org/html/2606.06523v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Equipping Large Language Models (LLMs) to execute reliable multi-step workflows has become a central challenge in artificial intelligence. Despite recent advances in LLMs’ agentic capabilities, most agent systems still lack formal methods for specifying, verifying, and debugging their workflow and execution trajectories. This challenge mirrors a long-standing problem in mathematics, where the ambiguity of natural languages (NLs) motivates the development of formal languages (FLs). Inspired by this paradigm, we propose Lean4Agent, to the best of our knowledge, the first framework that uses Lean4, a dependent-type FL to model and verify agent behavior. Lean4Agent launches FormalAgentLib, an extensible Lean4 library for formally modeling and verifying agent workflows’ semantic consistency under explicit assumptions, and enabling localization of execution-time failures revealed by trajectories. Building on FormalAgentLib, we further develop LeanEvolve, which applies results in FormalAgentLib to revise workflows to enhance its capability. Extensive experiments on a hard problem subset of SWE-Bench-Verified (Jimenez et al., 2024) and a subset of ELAIP-Bench (Dai et al., 2025) across 5 leading LLMs indicate that the verification-passing workflows outperform the failing ones by an average of 11.94%, and LeanEvolve further improves SWE performance by 7.47% on average. Furthermore, Lean4Agent establishes a foundation for a new field of using expressive dependent-type FL to formally model and verify agent behavior.\n...\nExisting approaches to verifying LLM-based systems remain fragmented in scope and formats. Early approaches, such as LLM-as-judge (Zheng et al., 2023), evaluate models’ NL outputs but remain vulnerable to hallucination and overconfidence, especially in long-horizon executions (Lin et al., 2025a). Recent work has introduced formal methods, including simple Hoare-style logic contracts for verifying tool calls (Liu et al., 2026), SMT-backed verification of action-l"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2602.16708v2",
+        "title": "Policy Compiler for Secure Agentic Systems",
+        "url": "https://arxiv.org/html/2602.16708v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "LLM-based agents are increasingly being deployed in contexts requiring complex authorization policies: customer service protocols, approval workflows, data access restrictions, and regulatory compliance. Embedding these policies in prompts provides no enforcement guarantees. We present PCAS, a Policy Compiler for Agentic Systems that provides deterministic policy enforcement.\n...\nEnforcing such policies requires tracking information flow across agents, which linear message histories cannot capture. Instead, PCAS models the agentic system state as a dependency graph capturing causal relationships among events such as tool calls, tool results, and messages. Policies are expressed in a Datalog-derived language, as declarative rules that account for transitive information flow and cross-agent provenance. A reference monitor intercepts all actions and blocks violations before execution, providing deterministic enforcement independent of model reasoning.\n...\nTo address these requirements, we introduce the Policy Compiler for Agentic Systems (PCAS), a policy compiler that instruments existing agentic systems to enforce declarative authorization policies over a fine-grained dependency graph capturing causal relationships across system state and actions. Policies are expressed as predicates over this graph using a declarative specification language derived from Datalog. PCAS enforces these policies deterministically at runtime by mediating actions before their execution and blocking any action that violates the specification.\n...\nOur implementation of PCAS operates by compiling any existing agentic system, which we assume is implemented using standard frameworks without native policy enforcement, into an instrumented system with policy-enforcement capabilities. The instrumented system maintains a dynamic dependency graph representing causal relationships among agent actions. A reference monitor intercepts actions before execution, evaluates policy rules against the current g"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://github.com/krakenhavoc/IntentLang",
+        "title": "krakenhavoc/IntentLang",
+        "url": "https://github.com/krakenhavoc/IntentLang",
+        "published_date": "2026-03-07T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "A declarative specification language for human-agent collaboration. Define what and what constraints, not how. Built with Rust + PEG grammar (pest). 🤖 Co-developed with Claude (Anthropic).\n...\nA declarative specification language for human-AI collaboration.\n...\nHumans write **what** the system must do and **what constraints must hold**.\nAgents handle **how** — generating verifiable implementations from specs.\nThe toolchain proves the implementation satisfies the contract.\n...\n. After listening to the [Lex Fridman & Peter Steinberger podcast](https://www.youtube.com/watch?v=ghQ7vCAuijk) on OpenClaw and the idea of programming languages designed specifically for AI, I asked Claude: *\"What would help me help you program better?\"* The answer was clear — don't tell me *how* to write the code; tell me *what* you're trying to accomplish and *what constraints matter*, and let me handle the rest. IntentLang is that idea made concrete: a language where humans own the intent, and agents own the implementation.\n...\nAs AI agents write more code, the bottleneck shifts from *writing* to *verifying*. IntentLang addresses this with four layers:\n...\n1. **Natural Language** — Describe what you want in plain English. An AI agent generates a formal spec from your description. The lowest-barrier entry point.\n2. **Intent Layer** — Write or refine declarative specs directly: entities, actions, pre/postconditions, invariants. Readable by anyone on the team, formally parseable by machines.\n3. **Agent IR** — Agents generate a dense, typed intermediate representation from specs. Optimized for machine generation, not human authoring.\n4. **Audit Bridge** — Tooling maps every IR construct back to a spec requirement. Orphan code (implementation without spec justification) is a first-class error.\n...\n```\nintent check <file>                    Parse, type-check, and validate constraints\nintent render <file>                   Render spec to Markdown\nintent render-html <file>              Render spec "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "c5fa6f3e9eb699b6ecf9156f20c65ca5",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

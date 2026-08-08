@@ -1,0 +1,325 @@
+{
+  "schema_version": "1.1",
+  "request_id": "cc10-1922-arxiv-intent-contract",
+  "tool": "arxiv_search",
+  "request_sha256": "09b404c2983d74420af77a50073855077daedfbe2ed6e02c6419b213db442360",
+  "processed_at": "2026-08-08T12:27:46.600703+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-08T12:27:46.662693+00:00",
+    "credential_required": false,
+    "query": "(all:\"semantic parsing\" OR all:\"formal specification\" OR all:\"structured generation\" OR all:\"proof-carrying\" OR all:\"effect system\") AND (all:LLM OR all:agent OR all:\"language model\")",
+    "start": 0,
+    "max_results": 12,
+    "total_results": 636,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2212.10815v1",
+        "title": "ZEROTOP: Zero-Shot Task-Oriented Semantic Parsing using Large Language Models",
+        "summary": "We explore the use of large language models (LLMs) for zero-shot semantic parsing. Semantic parsing involves mapping natural language utterances to task-specific meaning representations. Language models are generally trained on the publicly available text and code and cannot be expected to directly generalize to domain-specific parsing tasks in a zero-shot setting. In this work, we propose ZEROTOP, a zero-shot task-oriented parsing method that decomposes a semantic parsing problem into a set of abstractive and extractive question-answering (QA) problems, enabling us to leverage the ability of LLMs to zero-shot answer reading comprehension questions. For each utterance, we prompt the LLM with questions corresponding to its top-level intent and a set of slots and use the LLM generations to construct the target meaning representation. We observe that current LLMs fail to detect unanswerable questions; and as a result, cannot handle questions corresponding to missing slots. To address this problem, we fine-tune a language model on public QA datasets using synthetic negative samples. Experimental results show that our QA-based decomposition paired with the fine-tuned LLM can correctly parse ~16% of utterances in the MTOP dataset without requiring any annotated data.",
+        "published": "2022-12-21T07:06:55Z",
+        "updated": "2022-12-21T07:06:55Z",
+        "authors": [
+          "Dheeraj Mekala",
+          "Jason Wolfe",
+          "Subhro Roy"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2212.10815v1",
+          "pdf": "https://arxiv.org/pdf/2212.10815v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2206.10668v2",
+        "title": "BenchCLAMP: A Benchmark for Evaluating Language Models on Syntactic and Semantic Parsing",
+        "summary": "Recent work has shown that generation from a prompted or fine-tuned language model can perform well at semantic parsing when the output is constrained to be a valid semantic representation. We introduce BenchCLAMP, a Benchmark to evaluate Constrained LAnguage Model Parsing, that includes context-free grammars for seven semantic parsing datasets and two syntactic parsing datasets with varied output representations, as well as a constrained decoding interface to generate only valid outputs covered by these grammars. We provide low, medium, and high resource splits for each dataset, allowing accurate comparison of various language models under different data regimes. Our benchmark supports evaluation of language models using prompt-based learning as well as fine-tuning. We benchmark eight language models, including two GPT-3 variants available only through an API. Our experiments show that encoder-decoder pretrained language models can achieve similar performance or surpass state-of-the-art methods for syntactic and semantic parsing when the model output is constrained to be valid.",
+        "published": "2022-06-21T18:34:11Z",
+        "updated": "2024-01-10T06:11:56Z",
+        "authors": [
+          "Subhro Roy",
+          "Sam Thomson",
+          "Tongfei Chen",
+          "Richard Shin",
+          "Adam Pauls",
+          "Jason Eisner",
+          "Benjamin Van Durme"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Neural Information Processing Systems (NeurIPS 2023) Track on Datasets and Benchmarks",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2206.10668v2",
+          "pdf": "https://arxiv.org/pdf/2206.10668v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2409.14469v2",
+        "title": "Rethinking Semantic Parsing for Large Language Models: Enhancing LLM Performance with Semantic Hints",
+        "summary": "Semantic Parsing aims to capture the meaning of a sentence and convert it into a logical, structured form. Previous studies show that semantic parsing enhances the performance of smaller models (e.g., BERT) on downstream tasks. However, it remains unclear whether the improvements extend similarly to LLMs. In this paper, our empirical findings reveal that, unlike smaller models, directly adding semantic parsing results into LLMs reduces their performance. To overcome this, we propose SENSE, a novel prompting approach that embeds semantic hints within the prompt. Experiments show that SENSE consistently improves LLMs' performance across various tasks, highlighting the potential of integrating semantic information to improve LLM capabilities.",
+        "published": "2024-09-22T14:35:09Z",
+        "updated": "2025-05-27T07:25:49Z",
+        "authors": [
+          "Kaikai An",
+          "Shuzheng Si",
+          "Helan Hu",
+          "Haozhe Zhao",
+          "Yuchi Wang",
+          "Qingyan Guo",
+          "Baobao Chang"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Accepted by ACL 2025",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2409.14469v2",
+          "pdf": "https://arxiv.org/pdf/2409.14469v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.21339v1",
+        "title": "KBSpec: LLM-driven Formal Specification Generation with Evolving Domain Knowledge Base",
+        "summary": "Automated formal specification generation is a key step towards program understanding and formal verification. Recently, due to the success of large language models (LLMs) in code generation, researchers have made early attempts to adopt LLMs for generating formal specifications. However, the lack of formal specification language corpora in the wild often makes LLMs fail to generate syntactically correct and semantically verifiable specifications. To mitigate this gap, we propose KBSpec, which augments LLMs with dual-source knowledge of formal specification language: external knowledge from official documentation, and internal knowledge distilled from verifier feedback on LLM-generated specifications. KBSpec maintains a self-evolving knowledge base that is continuously updated from successful generation and repair trajectories, without any LLM parameter tuning or labeled training data. We evaluate KBSpec on Java Modeling Language (JML) specification generation with three LLM backends, and results show that KBSpec improves verification pass rates by 10-25% over state-of-the-art LLM-based approaches, while producing the largest number of high-completeness specifications.",
+        "published": "2026-06-19T11:37:00Z",
+        "updated": "2026-06-19T11:37:00Z",
+        "authors": [
+          "Wenhan Wang",
+          "Zeyu Sun"
+        ],
+        "categories": [
+          "cs.SE",
+          "cs.PL"
+        ],
+        "primary_category": "cs.SE",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.21339v1",
+          "pdf": "https://arxiv.org/pdf/2606.21339v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2404.13074v1",
+        "title": "Towards Compositionally Generalizable Semantic Parsing in Large Language Models: A Survey",
+        "summary": "Compositional generalization is the ability of a model to generalize to complex, previously unseen types of combinations of entities from just having seen the primitives. This type of generalization is particularly relevant to the semantic parsing community for applications such as task-oriented dialogue, text-to-SQL parsing, and information retrieval, as they can harbor infinite complexity. Despite the success of large language models (LLMs) in a wide range of NLP tasks, unlocking perfect compositional generalization still remains one of the few last unsolved frontiers. The past few years has seen a surge of interest in works that explore the limitations of, methods to improve, and evaluation metrics for compositional generalization capabilities of LLMs for semantic parsing tasks. In this work, we present a literature survey geared at synthesizing recent advances in analysis, methods, and evaluation schemes to offer a starting point for both practitioners and researchers in this area.",
+        "published": "2024-04-15T10:44:58Z",
+        "updated": "2024-04-15T10:44:58Z",
+        "authors": [
+          "Amogh Mannekote"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2404.13074v1",
+          "pdf": "https://arxiv.org/pdf/2404.13074v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2209.15003v2",
+        "title": "Compositional Semantic Parsing with Large Language Models",
+        "summary": "Humans can reason compositionally when presented with new tasks. Previous research shows that appropriate prompting techniques enable large language models (LLMs) to solve artificial compositional generalization tasks such as SCAN. In this work, we identify additional challenges in more realistic semantic parsing tasks with larger vocabulary and refine these prompting techniques to address them. Our best method is based on least-to-most prompting: it decomposes the problem using prompting-based syntactic parsing, then uses this decomposition to select appropriate exemplars and to sequentially generate the semantic parse. This method allows us to set a new state of the art for CFQ while requiring only 1% of the training data used by traditional approaches. Due to the general nature of our approach, we expect similar efforts will lead to new results in other tasks and domains, especially for knowledge-intensive applications.",
+        "published": "2022-09-29T17:58:28Z",
+        "updated": "2022-09-30T01:15:10Z",
+        "authors": [
+          "Andrew Drozdov",
+          "Nathanael Schärli",
+          "Ekin Akyürek",
+          "Nathan Scales",
+          "Xinying Song",
+          "Xinyun Chen",
+          "Olivier Bousquet",
+          "Denny Zhou"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Fixed metadata. No other changes",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2209.15003v2",
+          "pdf": "https://arxiv.org/pdf/2209.15003v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2601.04426v4",
+        "title": "XGrammar-2: Dynamic and Efficient Structured Generation Engine for Agentic LLMs",
+        "summary": "Modern LLM agents increasingly rely on dynamic structured generation, such as tool calling and response protocols. Unlike traditional structured generation with static structures, these workloads vary both across requests and within a request, posing new challenges to existing engines. We present XGrammar-2, a structured generation engine for dynamic agentic workloads. Our design is based on two key ideas: first-class support for tag-triggered structure switching, and fine-grained reuse across requests with different output structures. Concretely, XGrammar-2 introduces TagDispatch for dynamic structural dispatching and Cross-Grammar Cache for substructure-level cache reuse across grammars. It further improves efficiency with an Earley-based adaptive token mask cache, just-in-time compilation, and repetition state compression. Experiments show that XGrammar-2 achieves over 6x faster compilation than prior structured generation engines, and incurs near-zero end-to-end overhead in modern LLM serving systems.",
+        "published": "2026-01-07T22:18:51Z",
+        "updated": "2026-08-05T15:35:29Z",
+        "authors": [
+          "Linzhang Li",
+          "Yixin Dong",
+          "Guanjie Wang",
+          "Ziyi Xu",
+          "Alexander Jiang",
+          "Tianqi Chen"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": "10.1145/3786335.3813124",
+        "journal_ref": null,
+        "comment": "9 pages, ACM CAIS 26",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2601.04426v4",
+          "pdf": "https://arxiv.org/pdf/2601.04426v4",
+          "doi": "https://doi.org/10.1145/3786335.3813124"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2112.08696v2",
+        "title": "Few-Shot Semantic Parsing with Language Models Trained On Code",
+        "summary": "Large language models can perform semantic parsing with little training data, when prompted with in-context examples. It has been shown that this can be improved by formulating the problem as paraphrasing into canonical utterances, which casts the underlying meaning representation into a controlled natural language-like representation. Intuitively, such models can more easily output canonical utterances as they are closer to the natural language used for pre-training. Recently, models also pre-trained on code, like OpenAI Codex, have risen in prominence. For semantic parsing tasks where we map natural language into code, such models may prove more adept at it. In this paper, we test this hypothesis and find that Codex performs better on such tasks than equivalent GPT-3 models. We evaluate on Overnight and SMCalFlow and find that unlike GPT-3, Codex performs similarly when targeting meaning representations directly, perhaps because meaning representations are structured similar to code in these datasets.",
+        "published": "2021-12-16T08:34:06Z",
+        "updated": "2022-05-29T15:47:04Z",
+        "authors": [
+          "Richard Shin",
+          "Benjamin Van Durme"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "NAACL 2022",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2112.08696v2",
+          "pdf": "https://arxiv.org/pdf/2112.08696v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2301.12868v3",
+        "title": "On Robustness of Prompt-based Semantic Parsing with Large Pre-trained Language Model: An Empirical Study on Codex",
+        "summary": "Semantic parsing is a technique aimed at constructing a structured representation of the meaning of a natural-language question. Recent advancements in few-shot language models trained on code have demonstrated superior performance in generating these representations compared to traditional unimodal language models, which are trained on downstream tasks. Despite these advancements, existing fine-tuned neural semantic parsers are susceptible to adversarial attacks on natural-language inputs. While it has been established that the robustness of smaller semantic parsers can be enhanced through adversarial training, this approach is not feasible for large language models in real-world scenarios, as it requires both substantial computational resources and expensive human annotation on in-domain semantic parsing data. This paper presents the first empirical study on the adversarial robustness of a large prompt-based language model of code, \\codex. Our results demonstrate that the state-of-the-art (SOTA) code-language models are vulnerable to carefully crafted adversarial examples. To address this challenge, we propose methods for improving robustness without the need for significant amounts of labeled data or heavy computational resources.",
+        "published": "2023-01-30T13:21:00Z",
+        "updated": "2023-03-09T11:01:02Z",
+        "authors": [
+          "Terry Yue Zhuo",
+          "Zhuang Li",
+          "Yujin Huang",
+          "Fatemeh Shiri",
+          "Weiqing Wang",
+          "Gholamreza Haffari",
+          "Yuan-Fang Li"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Accepted at EACL2023 (main)",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2301.12868v3",
+          "pdf": "https://arxiv.org/pdf/2301.12868v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2305.17378v1",
+        "title": "Improving Generalization in Language Model-Based Text-to-SQL Semantic Parsing: Two Simple Semantic Boundary-Based Techniques",
+        "summary": "Compositional and domain generalization present significant challenges in semantic parsing, even for state-of-the-art semantic parsers based on pre-trained language models (LMs). In this study, we empirically investigate improving an LM's generalization in semantic parsing with two simple techniques: at the token level, we introduce a token preprocessing method to preserve the semantic boundaries of tokens produced by LM tokenizers; at the sequence level, we propose to use special tokens to mark the boundaries of components aligned between input and output. Our experimental results on two text-to-SQL semantic parsing datasets show that our token preprocessing, although simple, can substantially improve the LM performance on both types of generalization, and our component boundary marking method is particularly helpful for compositional generalization.",
+        "published": "2023-05-27T06:09:03Z",
+        "updated": "2023-05-27T06:09:03Z",
+        "authors": [
+          "Daking Rai",
+          "Bailin Wang",
+          "Yilun Zhou",
+          "Ziyu Yao"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "9 pages, to be published in ACL2023",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2305.17378v1",
+          "pdf": "https://arxiv.org/pdf/2305.17378v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2412.10207v3",
+        "title": "Retrieval-Augmented Semantic Parsing: Improving Generalization with Lexical Knowledge",
+        "summary": "Open-domain semantic parsing remains a challenging task, as neural models often rely on heuristics and struggle to handle unseen concepts. In this paper, we investigate the potential of large language models (LLMs) for this task and introduce Retrieval-Augmented Semantic Parsing (RASP), a simple yet effective approach that integrates external symbolic knowledge into the parsing process. Our experiments not only show that LLMs outperform previous encoder-decoder baselines for semantic parsing, but that RASP further enhances their ability to predict unseen concepts, nearly doubling the performance of previous models on out-of-distribution concepts. These findings highlight the promise of leveraging large language models and retrieval mechanisms for robust and open-domain semantic parsing.",
+        "published": "2024-12-13T15:30:20Z",
+        "updated": "2025-08-20T13:15:18Z",
+        "authors": [
+          "Xiao Zhang",
+          "Qianru Meng",
+          "Johan Bos"
+        ],
+        "categories": [
+          "cs.CL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Accpted by 16th IWCS",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2412.10207v3",
+          "pdf": "https://arxiv.org/pdf/2412.10207v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2411.15100v3",
+        "title": "XGrammar: Flexible and Efficient Structured Generation Engine for Large Language Models",
+        "summary": "The applications of LLM Agents are becoming increasingly complex and diverse, leading to a high demand for structured outputs that can be parsed into code, structured function calls, and embodied agent commands. These developments bring significant demands for structured generation in LLM inference. Context-free grammar is a flexible approach to enable structured generation via constrained decoding. However, executing context-free grammar requires going through several stack states over all tokens in vocabulary during runtime, bringing non-negligible overhead for structured generation. In this paper, we propose XGrammar, a flexible and efficient structure generation engine for large language models. XGrammar accelerates context-free grammar execution by dividing the vocabulary into context-independent tokens that can be prechecked and context-dependent tokens that need to be interpreted during runtime. We further build transformations to expand the grammar context and reduce the number of context-independent tokens. Additionally, we build an efficient persistent stack to accelerate the context-dependent token checks. Finally, we co-design the grammar engine with LLM inference engine to overlap grammar computation with GPU executions. Evaluation results show that XGrammar can achieve up to 100x speedup over existing solutions. Combined with an LLM inference engine, it can generate near-zero overhead structure generation in end-to-end low-LLM serving.",
+        "published": "2024-11-22T18:01:37Z",
+        "updated": "2025-05-12T08:20:08Z",
+        "authors": [
+          "Yixin Dong",
+          "Charlie F. Ruan",
+          "Yaxing Cai",
+          "Ruihang Lai",
+          "Ziyi Xu",
+          "Yilong Zhao",
+          "Tianqi Chen"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.PL"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "MLSys '25",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2411.15100v3",
+          "pdf": "https://arxiv.org/pdf/2411.15100v3"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "originating_run":"claygraph-20260808T1701p0700-chatgpt-secondary-r2",
+  "consumed_frank_architecture":"research_entity/trigger_runs/frank/20260808T0610+0700-chatgpt-secondary-r2/FRANK_ARCHITECTURE.claycode.json",
+  "effects":["REVISE","NEW_EXPERIMENT"],
+  "primary_delta":"Do not integrate current ClayGraph activation as an always-on FRANK hot path. Integrate a rebuildable resident semantic index and adaptive retrieval router inside M.MEMORY_FABRIC, keeping exact/packet/FTS direct routes as first-class fallbacks.",
+  "module_changes":[
+    {"module":"M.MEMORY_FABRIC","change":"add M/OP-level resident semantic index, query classifier/router, graph escalation gate, reranker and assembly certificate"},
+    {"module":"M.DURABLE_EVENT_STATE","change":"NO_CHANGE; authoritative exact/event truth and source of exact anchors/changefeed"},
+    {"module":"M.COGNITIVE_FRAME_ASSEMBLER","change":"NO_CHANGE in authority; current exact queries/assembly claims validate against frame-compatible exact anchors"},
+    {"module":"M.WORKSPACE_ARBITER","change":"consume completed memory assembly as candidate input only; graph activation remains distinct from GWT selection/ignition"},
+    {"module":"M.CAPABILITY_GATEWAY","change":"NO_CHANGE; graph/model never mint external authority"}
+  ],
+  "proposed_transitions":[
+    {"op":"OP.MEMORY_ROUTE","class":"PURE_TRANSFORM","reads":["S.USER_EVENT","S.COGNITIVE_FRAME"],"outputs":"retrieval plan","authority":false},
+    {"op":"OP.MEMORY_BASELINE_RETRIEVE","class":"PURE_TRANSFORM","route":"exact/packet/FTS/vector as applicable"},
+    {"op":"OP.MEMORY_GRAPH_ESCALATE","class":"PURE_TRANSFORM","precondition":"relation/scatter/uncertainty gate passes","max_hops":"query-class bounded"},
+    {"op":"OP.MEMORY_RERANK_ASSEMBLE","class":"PURE_TRANSFORM","outputs":"S.ACTIVE_ASSEMBLY + certificate"},
+    {"op":"OP.MEMORY_EXACT_VALIDATE","class":"PURE_TRANSFORM","precondition":"current/exact assertion influences answer/action","reads":"authoritative anchor/frame witnesses"}
+  ],
+  "state_contract_delta":{"S.ACTIVE_ASSEMBLY_add":["route","baseline_confidence","graph_escalation_reason","graph_revision","index_revision","selected_evidence_families","staleness_witnesses","stop_reason","retrieval_ms","context_tokens","fallback_available=true","no_authority=true"]},
+  "evidence":[
+    {"class":"EXECUTED_8B_PROXY","result":"current graph/graph-lexical ~84-87ms vs SQLite FTS ~0.8-0.9ms on runner; some relational facts graph surfaced; activation not consistently better than graph lexical"},
+    {"class":"LOCAL_SYNTHETIC_IMPLEMENTATION","result":"10k-node seed lookup median 20.499ms reload+scan, 8.349ms resident scan, 0.106ms resident inverted index"},
+    {"class":"EXTERNAL_RESEARCH","result":"current adaptive GraphRAG work supports conditional graph use for complex/scattered evidence rather than rigid all-query traversal"}
+  ],
+  "database_dispositions":{"MERGE":[],"PROJECT":["consciousness.db","world_experience.db"],"DEFER":"all hot/safety/unresolved stores until live parity"},
+  "highest_information_next_frank_tests":["shadow G1c router on real FRANK queries with baseline answer retention","resident-index p50/p95/p99+memory+update benchmark","stale assembly vs fresh CognitiveFrame exact-anchor rejection","matched projection/order GWT memory lesion","Qwen-class 4B matched-context answer-quality factorial"],
+  "promotion":"NO_CANONICAL_PROMOTION"
+}

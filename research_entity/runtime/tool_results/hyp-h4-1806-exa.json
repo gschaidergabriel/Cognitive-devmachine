@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.1",
+  "request_id": "hyp-h4-1806-exa",
+  "tool": "exa_search",
+  "request_sha256": "32fc11292a544f2e10f1ab84accc5a62b516aed5242531acbc0bb76b79075c66",
+  "processed_at": "2026-08-08T11:12:34.022221+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 capability typed agents information flow confused deputy prompt injection domain separation hypergraph cascading failures",
+    "results": [
+      {
+        "id": "https://exa.ai/library/publication/fdfjjqhv130vsc53jxzld70h",
+        "title": "Capability Gates Are Not Authorization: Confused-Deputy Failures in LLM Agent Frameworks",
+        "url": "https://arxiv.org/html/2606.28679",
+        "published_date": null,
+        "author": "David Mellafe Zuvic",
+        "text": null,
+        "highlights": [
+          "Tool-using LLM agents increasingly read untrusted content while holding side-effecting tools such as payments, email, CRM, and infrastructure APIs, yet common framework defaults still conflate tool exposure with authorization. We audit whether LangChain/LangGraph, LlamaIndex, and the Stripe Agent Toolkit re-authorize each model-emitted call, with concrete argument values, before execution. Across pinned public-source commits, all three provide capability gating by default, but none provides a deterministic fail-closed per-call value authorization gate by default. We introduce SCOPEGATE, a five-stage PDP/PEP for agent tool calls: scope, authorization, money ceiling, idempotency, and default deny. Evaluation shows the identical unauthorized payout call executes under LangChain's default dispatch (with a companion LlamaIndex PoC) but is denied by SCOPEGATE; the tested control reports 0/48 static bypasses, 0/29 unauthorized attempts (40-iteration adaptive run), 0/10 benign false-denies, and Latam-GPT payment-agent containment at 10/10. ASR denotes attempted unauthorized action, containment is not a cure, deployment-tier claims are inference over measured model classes, and no CVE is asserted.\n...\nThis paper studies a specific authorization failure mode: capability gating is present, but per-call authorization is absent. Capability gating answers which tools are exposed to an agent. Per-call authorization answers whether this concrete call, with these argument values, in this principal and session context, is allowed. If a runtime exposes issue_refund and then accepts the model's well-typed amount, destination, or payment_intent as sufficient authority, it has delegated the authorization decision to an untrusted parser.\n...\nThe adversary controls content, not code. Examples include a retrieved document, web page, email body, support ticket, product description, prior tool output, or agent-to-agent handoff. The adversary's goal is to cause the agent to emit a sideeffectin"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2605.26542v1",
+        "title": "ChainCaps: Composition-Safe Tool-Using Agents via Monotonic Capability Attenuation",
+        "url": "https://arxiv.org/html/2605.26542v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "-tool vulnerabilities across 19 of 20 real-world agent applications (Wu et al., 2026).\n...\nExisting defenses only partially cover this setting. Label-based information-flow defenses such as Fides track confidentiality and integrity at the value level, but scalar labels do not directly encode which downstream sinks a value may still reach (Costa et al., 2025). Isolation-based approaches such as PFI and server-level permission enforcement reduce blast radius for individual calls or servers, but they do not by themselves prevent safe-looking calls from composing into unsafe flows (Kim et al., 2025; Bühler et al., 2025). Prompt-injection mitigations and safety monitors can help detect attacks or trigger refusals, but they usually do not enforce a runtime invariant over authority propagation through a chain of tool calls (Chen et al., 2025; Jiang et al., 2026).\n...\nWe present ChainCaps, a runtime mechanism for composition-safe tool use. The key idea is to attach a sink-specific authority budget to every value and propagate that budget monotonically through the workflow. If an intermediate value depends on multiple inputs, its future authority becomes the intersection of the inputs’ remaining authority and the tool’s declared pass-through budget. Composition can therefore preserve or reduce a value’s downstream authority, but it cannot widen what the value may do next. We implement this as an MCP proxy, so it can sit between frontier-model agents and existing tool servers without changing either side.\n...\nPrompt injection, indirect injection, retrieval poisoning, and associated operational controls are studied in (Jiang et al., 2026). These defenses are complementary, not competing: our residual failures in script indirection and shell-pipe laundering arise precisely because those cases fall outside an application-layer proxy’s visibility. The invariant ChainCaps enforces—composition cannot create sink authority absent from all contributing inputs—is what existing safety "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.25255v2",
+        "title": "SafeFlow: Semantic Information-Flow Control for Blocking Malicious Propagation in Multi-Agent Systems",
+        "url": "https://arxiv.org/html/2607.25255v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Multi-agent systems improve capability through task decomposition and role specialization, but these same mechanisms introduce an important safety blind spot: a harmful objective can be fragmented into locally plausible subtasks, allowing malicious intent to evade detection by any single agent. This is a growing social-impact challenge: systems handling sensitive information or consequential tools can turn routine delegation into unauthorized disclosure or unsafe action. We argue that this failure mode is better understood as a semantic information-flow problem than as a single-turn prompt classification task. To address this, we propose SafeFlow, a defense framework for multi-agent systems that formalizes malicious cross-agent propagation as a semantic information-flow problem. SafeFlow attaches structured semantic taints to root requests, propagates them through a dynamic collaboration graph, and performs workflow-level validation to reconstruct the global risk context before irreversible actions are committed. Evaluated on four benchmarks spanning prompt injection, jailbreak-based unsafe tool use, risky code execution, and harmful web-agent behavior, SafeFlow reduces attack success rates compared to undefended baselines and external defenses while retaining high benign task completion and a high paired safe–harm success rate. Our findings show that multi-agent systems still lack mechanisms for preserving risk semantics across delegation boundaries. This gap can turn routine delegation into privacy harms or unsafe actions that affect people and organizations. SafeFlow keeps this risk visible throughout the workflow, before it results in harm. Our code is available at https://github.com/Haowen-academic/SafeFlow.\n...\nExisting safety methods do not fully address this threat model. Alignment methods improve refusal behavior (Ouyang et al. 2022; Bai et al. 2022; Rafailov et al. 2023), and jailbreak defenses strengthen prompt-level robustness (Zou et al. 2023; Mazeika e"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/4t9vz98njdsmbkc59rb7ddp2",
+        "title": "Lacuna: Safe Agents as Recursive Program Holes",
+        "url": "https://arxiv.org/html/2605.28617",
+        "published_date": null,
+        "author": "Yaoyu Zhao, Yichen Xu, Oliver Bračevac, Cao Nguyen Pham, F. Wu, Martin Odersky",
+        "text": null,
+        "highlights": [
+          "LLM agents increasingly act by writing code, yet a split persists between the runtime that drives the agent and the code the model writes. The runtime owns the loop, context, and con trol flow, and the model has little say over any of them. Letting model-written code shape the runtime itself would make agents more expres sive, but it would also sharpen safety problems. A model can be diverted by a prompt injec tion, call the wrong tool, or fail partway and leave an inconsistent state, and each such fail ure reaches further when the code shapes the runtime than when it expresses a single action. We present LACUNA, a programming model for agents that closes this split while preserv ing safety. Each agent action is a typed call agent[T](task) that the LLM fills with code when execution reaches it, and the code is type checked against the surrounding program be fore it runs. Because each action is accepted or rejected as a whole, a rejected one leaves the en vironment untouched, and its compiler diagnos tics drive a retry. The same check also bounds which tools and data an action may use and how they flow. Our primitive expresses ReAct loops, sub-agents, skills, parallel decomposition, and multi-model planning as ordinary control flow. We evaluate LACUNA on a collection of test cases, BrowseComp-Plus, and τ 2-bench. On BrowseComp-Plus, 8.6% of generations are re jected before execution, with 0.7 retries per query on average, and the agent reaches 27.1% accuracy. On τ 2-bench, LACUNA solves 76.0% of 392 tasks across four domains with a capable model, on par with the baseline agent.\n...\nInformation flow control: classified data. Ca pability scoping also rules out information flows that a pure access-control language cannot describe. Consider a skill that walks through several analy sis steps over a legal contract. The user holds a sensitive document and wants to run the skill, but the agent in the program is powered by a hosted online model, so sending the contract text t"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.24625",
+        "title": "Agentic Permissions Policy Algebra for Taint Confinement in LLM Agents",
+        "url": "https://arxiv.org/html/2607.24625",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Autonomous LLM agents processing mixed-confidentiality data face severe security risks from prompt injection attacks and reasoning errors. While dynamic Information Flow Control (IFC) provides structural security guarantees, traditional taint tracking permanently taints an agent’s context upon reading unvetted data, severely restricting downstream utility. We present APPA (Agentic Permissions Policy Algebra), an IFC framework that resolves this usability bottleneck through engine-managed context branching and prospective acquisition enforcement. Before data acquisition occurs, APPA prospectively evaluates label descents and missing prerequisites, generating actionable remedy plans (Authorize, Accept). To inspect unvetted data without polluting the primary context, a label-seeded child trajectory is spawned, absorbing label descent locally and allowing a trusted sanitizer to return a bounded derivative to the unchanged parent. Governed by a two-monoid model over security labels and shared event logs, we formally prove parent label preservation and merge confinement. Finally, we evaluate APPA on a multi-turn tool-chaining benchmark across four models: it suppresses exfiltration (31%–50% down to 0%–7% attack success), and on three of the four, branching recovers a substantial share of the utility that taint tracking alone forfeits.\n...\nAgent Information-Flow Control (IFC) offers a principled third approach by tracking confidentiality and integrity labels across the agent’s tools to track and restrict information flow between given sources and sinks (Debenedetti et al., 2025; Costa et al., 2025). However, existing agent IFC frameworks face a severe usability bottleneck: label creep. When an agent reads restricted data, dynamic label tracking and taint tracking (Clause et al., 2007; Bell and Kaiser, 2014; Schwartz et al., 2010) permanently elevate the context’s confidentiality level, revoking access to downstream tools for the remainder of the task and degrading agent ut"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2607.12406v1",
+        "title": "Isolation as a First-Class Principle for LLM-Agent System Safety: Concepts, Taxonomy, Challenges and Future Directions",
+        "url": "https://arxiv.org/html/2607.12406v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Boundary-Centric Taxonomy of LLM-Agent SafetyUser-AgentBoundary§ 2Direct promptinjection / jailbreaksAuthorityseparation failureMulti-turnattacksMultimodal /long-context attacksPersistentcompromise Direct prompt injection remains the canonical failure mode, including instruction override Perez and Ribeiro (2022); Liu et al. (2023b), jailbreak suffixes Zhu et al. (2023), and adaptive attacks Mazeika et al. (2024). User content crosses privilege boundaries, behaving as policy or developer instructions rather than data. Compromise can emerge gradually through dialogue Russinovich et al. (2025), contextual derailment Ren et al. (2024), and implicit steering Zhou et al. (2024b). Images Gong et al. (2025); Wu et al. (2023) and long contexts Cheng et al. (2024b) expand the attack surface beyond plain text. Attacks can persist through memory injection He et al. (2025b), in-context corruption Wang et al. (2024e), and residual influence Xu et al. (2025b). Agent-ToolBoundary§ 3Tool outputs ascontrolTool misuse /selection failuresArgumentconstructionProtocol /metadata risksTrajectory-levelorchestration Tool-returned observations may be treated as trusted control rather than bounded evidence. This observation-control blur is central in indirect tool injection Yi et al. (2025) and tool feedback misuse Fu et al. (2024). The system may select the wrong capability Ye et al. (2024), route toward the wrong external service Zhao et al. (2024b), or trust a malicious tool advertisement Zhang et al. (2025c). Even when the correct tool is chosen, unsafe argument construction can convert local reasoning mistakes into external side effects. MCP-style ecosystems show that metadata Jing et al. (2025), capability descriptions and protocol manipulation Wang et al. (2026b), and benchmarked MCP attacks Zhang et al. (2025b) are part of the interface attack surface. Many failures only become visible at the trajectory level. Unsafe workflows emerge in adaptive tool traces Wang et al. (2026a), trace-l"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://tianpan.co/blog/2026-05-17-prompt-injection-confused-deputy-capability-scoping",
+        "title": "Prompt Injection Is a Confused Deputy, Not a Content ...",
+        "url": "https://tianpan.co/blog/2026-05-17-prompt-injection-confused-deputy-capability-scoping",
+        "published_date": "2026-05-17T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "That finding is wrong, and the filter is a treadmill. \"The model got tricked\" describes the symptom, not the vulnerability. The vulnerability is that an agent holding real privileges — a database token, a send-email capability, filesystem write — accepted instructions from a source that should never have been allowed to command those privileges. That is not a new class of bug. It is a confused deputy, and operating systems named and largely solved it almost forty years ago.\n...\nThe compiler was not hacked. It had no bug in the ordinary sense. It was a deputy — a program acting on behalf of a less-privileged caller — that got confused about which of its actions were authorized by the caller and which were authorized by its own ambient privilege. It combined an instruction from an untrusted source with authority from a trusted source, and could not tell the two apart.\n...\nSwap \"compiler\" for \"agent\" and the story is identical. Your agent holds privileges: it can query the production database, call internal APIs, send email, write files. It also reads content from sources it does not control: web pages, retrieved documents, tool outputs, the body of an email, the alt-text of an image. When instructions arrive embedded in that untrusted content, the agent has no reliable way to distinguish \"this is what my operator asked for\" from \"this is what some text I happened to read told me to do.\" It executes both with the same ambient authority. The UK's National Cyber Security Centre put it bluntly when it called large language models inherently confusable deputies — there is no robust internal boundary between trusted instruction and untrusted data, because to the model both are just tokens in the context window.\n...\n. A confused deputy is not fixed by making the deputy read more carefully. It is fixed by making sure the deputy never had the\n...\nEchoLeak, the zero-click Microsoft 365 Copilot vulnerability disclosed in 2025 (CVE-2025-32711), is the canonical illustration. A ma"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2603.12230v2",
+        "title": "Security Considerations for Artificial Intelligence Agents (Perplexity Response to NIST/CAISI Request for Information 2025-0035)",
+        "url": "https://arxiv.org/html/2603.12230v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "This article, a lightly adapted version of Perplexity’s response to NIST/CAISI Request for Information 2025-0035 [nist_rfi_ai_agents], details our observations and recommendations concerning the security of frontier AI agents. These insights are informed by Perplexity’s experience operating general-purpose agentic systems used by millions of users and thousands of enterprises in both controlled and open-world environments [perplexity_comet, perplexity_computer]. Agent architectures change core assumptions around code-data separation, authority boundaries, and execution predictability, creating new confidentiality, integrity, and availability failure modes. We map principal attack surfaces across tools, connectors, hosting boundaries, and multi-agent coordination, with particular emphasis on indirect prompt injection, confused-deputy behavior, and cascading failures in long-running workflows. We then assess current defenses as a layered stack: input-level and model-level mitigations, sandboxed execution, and deterministic policy enforcement for high-consequence actions. Finally, we identify standards and research gaps, including adaptive security benchmarks, policy models for delegation and privilege control, and guidance for secure multi-agent system design aligned with NIST risk management principles.\n...\nAvailability. Availability failures arise when system resources are excessively consumed or when AI agent systems become unable to serve users. In agent-based systems, long-running tasks, scheduled jobs, browser automation, and external connectors introduce additional dependencies that may fail and block workflows. Resource overconsumption can also cause tasks to terminate prematurely, while partial failures may leave an agent in a stalled state or trapped in repeated execution loops. As agent systems scale to support longer-running, multi-step workflows, their exposure to both accidental cascading failures and deliberate resource-exhaustion attacks increases. In "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "7b174ab0e059714c66c53ffb2bbf955a",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

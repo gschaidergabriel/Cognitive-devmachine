@@ -1,0 +1,92 @@
+{
+  "schema_version":"1.0",
+  "fixture_id":"NEEDLE-SOURCE-SANDBOX-ORACLES-6fdddb8",
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_EXTERNAL_NEEDLE_SOURCE_SUBMANIFEST.json",
+  "source_commit":"6fdddb874dd6f46dabeea88d0bf239fc4a2474c4",
+  "purpose":"Regression and boundary tests for integrating Needle as FRANK's sole intentional non-Clay semantic subsystem without granting it effect authority.",
+  "tests":[
+    {
+      "id":"NSO-001",
+      "name":"terminal_token_suffix_must_not_escape_constraint",
+      "status":"SOURCE_REPRODUCED_WITH_SYNTHETIC_TOKEN_TABLE_REAL_TOKENIZER_REACHABILITY_OPEN",
+      "source":"needle/model/constrained.py:_check_token_valid + ConstrainedDecoder.constrain_logits",
+      "repro":"Enter IN_NAME at terminal prefix get_weather; provide one synthetic token whose decoded text is \",\\\"arguments\\\":{\\\"evil\". _check_token_valid accepts at the first quote and ignores the suffix; state update reaches IN_ARG_KEY with constrained_buf=evil; next constrain is off-trie and returns unmasked logits.",
+      "expected_current_harness":"FAIL historical source if any real tokenizer token can cross a constrained closing quote and introduce invalid constrained-span suffix; regardless of tokenizer reachability, bridge must post-validate the complete decoded JSON and fail closed.",
+      "falsifier":"Exhaustive exact-tokenizer scan proves no reachable token can cross the closing quote into a constrained successor span and model output is still fully post-validated."
+    },
+    {
+      "id":"NSO-002",
+      "name":"no_valid_token_must_abstain_not_fail_open",
+      "status":"SOURCE_VERIFIED",
+      "source":"needle/model/constrained.py:apply_constraints",
+      "repro":"When constraint mask has no valid token, source returns original logits.",
+      "expected_current_harness":"Adapter/runtime converts constraint exhaustion to typed ABSTAIN/ESCALATE; never unconstrained tool generation."
+    },
+    {
+      "id":"NSO-003",
+      "name":"off_trie_must_abstain_not_fail_open",
+      "status":"SOURCE_VERIFIED",
+      "source":"needle/model/constrained.py:ConstrainedDecoder.constrain_logits",
+      "repro":"If trie.get_node(constrained_buf) is None, source returns original logits.",
+      "expected_current_harness":"Fail closed and emit typed routing uncertainty receipt."
+    },
+    {
+      "id":"NSO-004",
+      "name":"tool_name_normalization_collision",
+      "status":"SANDBOX_REPRODUCED",
+      "source":"needle/dataset/tokenizer.py:to_snake_case + needle/model/run.py:normalize_tools",
+      "repro":"foo-bar, foo.bar, foo bar and foo_bar all normalize to foo_bar; name_map is last-write-wins and param_tries for duplicate normalized names are overwritten.",
+      "historical_registry_observation":"The archived FRANK active registry has 51 already-snake-case tool names and zero observed normalization collisions, so this is a dynamic/future registry hazard rather than a demonstrated historical FRANK failure.",
+      "expected_current_harness":"Projection rejects non-injective normalized identity before Needle inference."
+    },
+    {
+      "id":"NSO-005",
+      "name":"schema_version_mismatch_flat_vs_json_schema",
+      "status":"SANDBOX_REPRODUCED",
+      "source":"needle/model/constrained.py:ToolConstraints",
+      "repro":"Flat Needle parameters {location:{...}} yields param trie [location]. Standard-ish JSON Schema parameters {type:object,properties:{location:{...}},required:[location]} yields param trie [properties]. Full OpenAI wrapper with function.name yields no top-level Needle tool name in this source revision.",
+      "expected_current_harness":"Use an explicit versioned Clay->Needle projection schema for source commit 6fdddb8 and differential-test every registry mutation; never pass arbitrary provider schemas directly."
+    },
+    {
+      "id":"NSO-006",
+      "name":"required_and_value_types_need_postdecode_validation",
+      "status":"SOURCE_VERIFIED_DESIGN_LIMIT",
+      "source":"needle/model/constrained.py module contract",
+      "repro":"Constraints bind tool names and argument keys only; argument values are explicitly unconstrained and required-field/type semantics are not enforced by the decoder.",
+      "expected_current_harness":"Deterministic typed schema validation occurs after decode and before Clay ToolProposal creation. Duplicate JSON keys, missing required values and type/range mismatches are rejected."
+    },
+    {
+      "id":"NSO-007",
+      "name":"encoder_registry_truncation_order_bias",
+      "status":"MECHANISM_REPRODUCED_EXACT_TOKENIZER_QUANTIFICATION_OPEN",
+      "source":"needle/model/run.py:_build_encoder_input",
+      "repro":"Source truncates tools as t_tokens[:remaining] after query under DEFAULT_MAX_ENC_LEN=1024. Historical 51-active-tool projection is 11855 characters; synthetic character-token replay exposes only the earliest tools and truncates mid-schema.",
+      "expected_current_harness":"Run exact SentencePiece coverage audit. If full active projection exceeds budget, use compact canonical projection and/or deterministic category partition + Needle-internal second-stage selection; shuffle/order perturbation must not materially change route result."
+    },
+    {
+      "id":"NSO-008",
+      "name":"checkpoint_must_be_immutable_and_nonexecutable_or_verified",
+      "status":"SOURCE_VERIFIED_SUPPLY_CHAIN_BOUNDARY",
+      "source":"needle/training/finetune.py:_resolve_checkpoint + needle/model/run.py:load_checkpoint",
+      "repro":"finetune source force-downloads needle.pkl from repo_id Cactus-Compute/needle without a pinned revision, then pickle.load executes deserialization; run.py also directly pickle.load()s checkpoints.",
+      "expected_current_harness":"Production FRANK pins source/model revision and content hash and prefers current upstream SafeTensors/Cactus bundle. Any legacy pickle is allowed only after trusted-offline hash verification in an isolated conversion lane and never as an automatically fetched authority-zone artifact."
+    },
+    {
+      "id":"NSO-009",
+      "name":"config_unknown_fields_must_not_silently_drop",
+      "status":"SANDBOX_REPRODUCED_FROM_SOURCE_CLASS",
+      "source":"needle/model/architecture.py:TransformerConfig.__init__",
+      "repro":"Custom __init__ assigns only known kwargs and silently ignores unknown keys; a misspelled/version-skewed field can leave a default value without an immediate schema error.",
+      "expected_current_harness":"Strict config schema/version/hash validation rejects unknown or missing architecture-critical fields before loading weights."
+    },
+    {
+      "id":"NSO-010",
+      "name":"needle_never_mints_effect_authority",
+      "status":"CURRENT_PROJECT_CONTRACT",
+      "source":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
+      "expected_current_harness":"Needle result is converted only to provenance-bound Clay ToolProposal/RouteObservation. Capability validity, owner authorization, risk accumulation and effect commit remain deterministic runtime invariants."
+    }
+  ],
+  "sandbox_execution":{"python_ast_key_sources":"PASS","pure_source_logic_tests":"PASS_WITH_FINDINGS","full_jax_flax_model_inference":"BLOCKED_ENVIRONMENT_FLAX_AND_EXACT_MODEL_TOKENIZER_BUNDLE_NOT_AVAILABLE_LOCALLY","paid_training_started":false,"external_effects_executed":false},
+  "rule":"These oracles test the historical source snapshot. Upstream evolution must be differentially re-run rather than assumed to preserve or fix them."
+}

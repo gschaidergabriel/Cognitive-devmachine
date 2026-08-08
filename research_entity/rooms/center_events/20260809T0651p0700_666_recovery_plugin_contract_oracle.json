@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "event_id":"20260809T0651p0700-666-recovery-plugin-contract-oracle",
+  "room_id":"center",
+  "event_type":"RESEARCH_DELTA",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"666",
+  "created_at":"2026-08-09T06:51:00+07:00",
+  "artifact_refs":["research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_20260731_EXACT_RECURSIVE_MANIFEST.json"],
+  "targets":["harness","claycode","frank"],
+  "payload":{
+    "source":"Drive frank-rettung-2026-07-31/unversioniert/services/room_content/custom_styles/snake_feel.py",
+    "source_sha256":"99baa180fd9bc4f555bd91a897ab21e71f00e45ecbaa15b4fbff8f07bad52cf7",
+    "classification":"BOUNDED_HISTORICAL_NEGATIVE_FIXTURE",
+    "finding":"render(palette,textures,q,qd,mood,epq,**kwargs) reads variable coherence although coherence is neither a declared parameter nor initialized locally. In ordinary isolated execution this is a deterministic NameError; ambient-global injection would instead make the dependency hidden and non-local.",
+    "oracle":"Plugin/module interfaces must declare every state/input dependency. Missing required state must fail visibly at validation/lowering or explicit runtime boundary; implementations may not silently consume undeclared ambient globals.",
+    "tests":["reject or explicitly bind undeclared free-variable state dependencies","same module executed in isolated and integrated contexts must not change validity due only to ambient globals","Clay lowering must preserve explicit state provenance and dependency identity"],
+    "earned_work_hours_added":0.0,
+    "reason_no_credit":"Small historical bug becomes a regression fixture, not an independent current implementation contribution."
+  },
+  "delivery":"INDEX_ONLY"
+}

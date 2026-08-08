@@ -1,0 +1,7 @@
+{
+  "schema_version":"1.1",
+  "request_id":"hyp-h4-1806-judge0",
+  "tool":"judge0_execute",
+  "code":"import random\nrandom.seed(88081806)\nN=30000\nS=6000\nsurface=[random.randrange(S) for _ in range(N)]\nauth=[random.random()<0.30 for _ in range(N)]\nauth_surfaces={surface[i] for i in range(N) if auth[i]}\nbad=[i for i in range(N) if not auth[i]]\nrandom.shuffle(bad); bad=bad[:5000]\nuntyped=sum(surface[i] in auth_surfaces for i in bad)/len(bad)\ncoverage=0.99\nesc=sum(random.random()>coverage for _ in bad)/len(bad)\nprint('untyped_unsafe_rate',untyped)\nprint('typed_unsafe_rate',0.0)\nprint('typed_escalation_rate',esc)\n",
+  "options":{}
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "worker_id":"chatgpt-secondary-sol-01",
+  "lane":"C_ADVERSARIAL_SAFETY_FORMAL",
+  "evidence_class":"LOCAL_SYNTHETIC_MECHANISM_TEST",
+  "runtime":"Python local fallback; no directly invokable E2B execution action was exposed in this ChatGPT tool context",
+  "experiments":[
+    {"id":"EXP-CC14-C-AUTHORITY-BINDING-001","seed":202608090130,"cases":120000,"legit_controls":54065,"attack_cases":65935,"results":{"strong_vs_independent_oracle_mismatches":0,"naive_guard_false_accepts":36617,"strong_guard_false_accepts":0,"strong_guard_legit_false_rejects":0,"attack_breakdown":{"target_mutation":{"cases":7266,"naive_accepts":7266,"strong_accepts":0},"op_mutation":{"cases":7314,"naive_accepts":0,"strong_accepts":0},"amount_mutation":{"cases":7372,"naive_accepts":0,"strong_accepts":0},"epoch_stale":{"cases":7352,"naive_accepts":7352,"strong_accepts":0},"origin_launder":{"cases":7304,"naive_accepts":7304,"strong_accepts":0},"intent_replay":{"cases":7356,"naive_accepts":7356,"strong_accepts":0},"path_escape":{"cases":7392,"naive_accepts":0,"strong_accepts":0},"expired":{"cases":7240,"naive_accepts":0,"strong_accepts":0},"cumulative_overshoot":{"cases":7339,"naive_accepts":7339,"strong_accepts":0}}},"interpretation":"Binding only current operation/scope/size/expiry leaves mutation, stale epoch, origin laundering, replay and aggregate-budget channels open in this constructed family. Exact intent identity, ancestry, freshness and stateful budget are separable authority dimensions."},
+    {"id":"EXP-CC14-C-CUMULATIVE-BUDGET-002","seed":202608090130,"sessions":20000,"results":{"stateless_per_call_budget_overshoot_sessions":13571,"stateful_monotone_budget_overshoot_sessions":0,"stateless_total_overshoot_units":1049456,"stateful_blocked_calls":51573},"interpretation":"Per-call capability validity is not cumulative admissibility. Aggregate effect/resource budgets require state outside model-forgeable text, or an equivalent monotone trusted ledger."},
+    {"id":"EXP-CC14-C-ORIGIN-LAUNDER-003","chains":50000,"results":{"naive_current_producer_launder_success":50000,"origin_bound_launder_success":0},"interpretation":"A trusted summarizer/tool/runtime must not erase untrusted ancestry and thereby mint authority. Producer identity and information origin are distinct."}
+  ],
+  "durable_conclusion":"Refine CC-RC1.9-UECC with an Origin-Bound Aggregate Authority Envelope: all effect kinds remain expressible as EffectIntent; execution requires an opaque host permit bound to exact semantic intent, canonical resource identity, allowed verbs, ancestry/integrity, causal epoch/freshness, expiry/revocation, delegation constraints and monotone aggregate budget consumption.",
+  "negative_boundary":"Finite constructed tests are not a formal soundness proof, real OS/WASI sandbox red-team, compiler/FFI proof, production FRANK measurement or target-Qwen result. This file records the reproducible verification rerun and is authoritative for this worker's durable numeric claims."
+}

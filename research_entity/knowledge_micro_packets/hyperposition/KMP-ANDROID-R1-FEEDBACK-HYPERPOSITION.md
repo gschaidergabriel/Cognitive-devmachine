@@ -2,20 +2,23 @@
 
 **Status:** CURRENT / ACTIVE / CROSS-BRANCH FEEDBACK  
 **Source arm:** Android secondary research arm  
-**Target branch:** hyperposition
+**Target branch:** hyperposition  
+**Evidence class:** live Firebase Test Lab virtual ARM + constructed semantic harness
 
-## Current feedback
+## R1 evidence receipt
 
-Android is a constrained substrate for testing whether physical/process placement assumptions remain beneficial under tight memory and latency budgets. R1 does not yet establish a Hyperposition mechanism; it establishes the executable ARM Android lane.
+Android R1 established a working ARM constrained-runtime substrate and passed selected deterministic semantics across Android 30 and 35. R1 did not manipulate process placement, IPC, rematerialization or Hyperposition topology.
+
+Therefore there is **no Hyperposition mechanism result yet**. The value is experimental: the same semantic corpus can now be used under much tighter memory/latency budgets.
 
 ## Retrieval/emit rule
 
-Hyperposition runs MUST retrieve Android placement/IPC/rematerialization findings when material. Android runs MUST retrieve current Hyperposition topology/firebreak contracts before changing component placement.
+Hyperposition runs MUST retrieve this Android feedback. Android runs MUST retrieve current topology/firebreak contracts before moving components. Resource savings may never justify collapsing authority or semantic firebreaks. General placement claims require matched Linux replication.
 
 ## Next Hyperposition-facing falsifiers
 
 - same-process versus IPC boundary cost on Android;
 - compact typed handles versus copied rich payloads;
 - resident versus rematerialized state under memory pressure;
-- topology changes must preserve authority and semantic firebreaks;
-- general placement claims require matched Linux replication.
+- topology changes preserving authority/firebreak invariants;
+- compare any Android-optimal placement with Linux before general promotion.

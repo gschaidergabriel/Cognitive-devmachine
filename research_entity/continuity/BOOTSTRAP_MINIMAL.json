@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.7",
+  "schema_version": "1.8",
   "purpose": "Low-overhead boot index. This file is a derived operational index, not canonical research truth.",
   "canonical_path": "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
   "expected_entity_version": "RAE-8.8",
@@ -13,6 +13,20 @@
     "governance": "research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md",
     "provenance_policy": "research_entity/global/PROVENANCE_POLICY.md",
     "rule": "Evidence outranks researcher rank; Claude Code adjudicates unresolved architecture/research decisions after evidence review."
+  },
+  "research_center": {
+    "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+    "room_registry": "research_entity/rooms/ROOM_REGISTRY.json",
+    "room_db_schema": "research_entity/rooms/ROOM_DB_SCHEMA.json",
+    "local_helper": "tools/research_room.py",
+    "transport": "repository_only",
+    "ui": "none",
+    "external_room_daemon_required": false,
+    "global_room_chief": false,
+    "trigger_room_rule": "An exact scientific/research-center trigger pins the session to the same-named home room. Meta triggers fusion/hypofusion use center and dump uses intake.",
+    "same_topic_rule": "If multiple useful workers are active in the same home room, they autonomously form an ephemeral tAvern-style team epoch with leased CHEF/ABYSS/FORGE/CARTOGRAPHER/REPLICATOR/SYNTHESIZER roles. CHEF coordinates but has no epistemic authority.",
+    "cross_room_rule": "Workers remain trigger-loyal while selectively consuming and publishing relevant cross-room deltas through the repo.",
+    "pulse_rule": "Active workers reread room/cross-room state at mandatory decision boundaries before major choices or durable writes."
   },
   "research_task_routing": {
     "applies_to": ["reserved_research_trigger", "ordinary_substantive_research_prompt"],
@@ -76,7 +90,13 @@
     "status_footer_is_exact_plain_fenced_text_without_attributes_or_unicode_box_layout",
     "substantive_research_tasks_use_quota_aware_tool_orchestration_with_recorded_fallback",
     "fusion_covers_complete_mesh_and_closes_feedback_to_every_scientific_branch",
-    "hypofusion_screens_complete_reachable_hypothesis_set_against_external_counterevidence_and_live_worker_state"
+    "hypofusion_screens_complete_reachable_hypothesis_set_against_external_counterevidence_and_live_worker_state",
+    "triggerword_pins_home_research_room",
+    "repo_native_room_state_is_shared_coordination_surface",
+    "same_room_multiworker_roles_are_ephemeral_and_non_authoritative",
+    "cross_room_relevance_never_breaks_trigger_loyalty",
+    "active_trigger_workers_auto_join_and_pulse_room_state",
+    "room_agreement_never_upgrades_shared_ancestry_to_independent_replication"
   ],
   "boot_tiers": {
     "T0_ALWAYS": [
@@ -84,12 +104,16 @@
       "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
       "research_entity/global/SESSION_MEMBERSHIP_PROTOCOL.md",
       "research_entity/global/RESEARCH_ACTOR_REGISTRY.json",
-      "research_entity/global/STATUS_FOOTER_PROTOCOL.md"
+      "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
+      "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+      "research_entity/rooms/ROOM_REGISTRY.json"
     ],
     "T1_TASK_ROUTING": [
       "research_entity/global/DOMAIN_REGISTRY.json",
       "research_entity/global/TOPIC_PACKET_PROTOCOL.md",
       "research_entity/global/PROJECT_COMMAND_REGISTRY.json",
+      "research_entity/rooms/ROOM_DB_SCHEMA.json for trigger sessions or cross-worker coordination",
+      "tools/research_room.py when a repository working tree is available",
       "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md for substantive research tasks",
       "tools/research_provider_router.py for research tool planning/validation",
       "research_entity/global/MULTI_RESEARCHER_GOVERNANCE.md when cross-researcher interpretation/adjudication matters",
@@ -105,25 +129,28 @@
       "relevant domain shards",
       "relevant topic packets",
       "critical negative results touching task",
-      "active experiments touching task"
+      "active experiments touching task",
+      "home-room event/task/challenge detail beyond compact pulse"
     ],
     "T3_AUDIT_OR_STATE_CHANGE": [
       "full research event protocol",
       "full claim lifecycle protocol",
       "full provenance policy",
       "full source archive protocol",
-      "historical snapshots/ledgers"
+      "historical snapshots/ledgers",
+      "full room event history when reconstructing a disputed room state"
     ]
   },
   "context_budget_defaults": {
-    "T0_max_tokens": 2500,
-    "T1_max_tokens": 2700,
+    "T0_max_tokens": 3200,
+    "T1_max_tokens": 3000,
     "topic_packet_summary_max_tokens_each": 1400,
     "max_primary_packets": 3,
     "max_dependency_packets": 4,
     "max_negative_result_summaries": 8,
     "max_active_experiment_summaries": 6,
-    "overflow_policy": "load indexes/summaries first; fetch evidence detail only on demand",
+    "room_pulse_summary_max_tokens": 1200,
+    "overflow_policy": "load indexes/summaries/pulses first; fetch evidence detail only on demand",
     "fusion_override": "coverage-first traversal may exceed normal branch packet limits via staged/indexed retrieval; do not silently omit a branch or evidence class"
   },
   "active_experiment_ids": [
@@ -147,5 +174,5 @@
     "external capability/commit gateway"
   ],
   "new_first_class_research_target": "Android/edge execution of FRANK-compatible runtime with local Qwen-4B-class inference",
-  "fallback": "If canonical, membership or actor verification fails, enter DEGRADED_UNJOINED and never claim canonical writes."
+  "fallback": "If canonical, membership or actor verification fails, enter DEGRADED_UNJOINED and never claim canonical writes. If room operations cannot be written, continue trigger research locally but mark room coordination SYNC_PENDING and never claim peer synchronization."
 }

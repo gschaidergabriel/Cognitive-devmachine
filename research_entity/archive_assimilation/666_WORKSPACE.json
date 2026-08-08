@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "workspace_id": "666-frank-archive-assimilation",
   "program_stage": "L0_ARCHIVE_ASSIMILATION",
   "status": "ACTIVE",
@@ -7,7 +7,7 @@
   "gate_status": "NOT_PASS",
   "protocol_ref": "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
   "source_order": ["DRIVE_CLAY", "PROJECT_FRANKENSTEIN", "CROSS_SOURCE_FUSION"],
-  "current_phase": "DUAL_INDEX_AND_MANIFEST_FREEZE",
+  "current_phase": "DUAL_INDEX_AND_PARALLEL_SEMANTIC_SHARDS",
   "sla": {
     "hard_wall_clock_hours": 3.0,
     "target_low_hours": 1.5,
@@ -39,13 +39,14 @@
     "exact_coverage_percent": 0.0,
     "analyzed_units": 0,
     "integrated_units": 0,
-    "cursor": "drive:file:1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU:size=663552000:download_blocked_gt_104857600"
+    "cursor": "drive:file:1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU:size=663552000:download_blocked_gt_104857600",
+    "latest_access_attempt": "2026-08-09T04:15+07:00 streamed raw fetch also rejected HTTP 413 at 104857600-byte connector limit"
   },
   "project_frankenstein": {
     "repository": "gschaidergabriel/Project-Frankenstein",
     "default_branch": "main",
     "github_reported_size_kib": 228899,
-    "inventory_state": "HEAD_FROZEN_PARTIAL_CODE_INDEX_ACTIVE",
+    "inventory_state": "HEAD_FROZEN_PARTIAL_HISTORY_AWARE_SEMANTIC_SHARDS_ACTIVE",
     "manifest_state": "NOT_FROZEN",
     "manifest_path": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
     "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
@@ -56,11 +57,13 @@
     "exact_coverage_percent": 0.0,
     "analyzed_units": 0,
     "integrated_units": 0,
-    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
     "provisional_semantic_shards": [
       "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
-      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json"
-    ]
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json"
+    ],
+    "history_manifest_constraint": "Material deleted/superseded artifacts exist in commit history but not at frozen head; exact Level-0 Project-Frankenstein coverage must be history-aware rather than head-only."
   },
   "cross_source_fusion": {
     "status": "BLOCKED_ON_SOURCE_SHARDS",
@@ -78,12 +81,15 @@
     "rule": "Do not claim >0 exact Level-0 coverage before frozen obligations exist."
   },
   "historical_earned_work": {
-    "mapping_state": "CALIBRATING",
+    "mapping_state": "CALIBRATING_PARTIAL_EVIDENCE_MAPPINGS_PRESENT",
     "mapping_coverage_percent": 0.0,
     "mapping_path": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
     "temporary_doomsday_calibration_band_percent": [67.2, 76.6],
     "temporary_doomsday_center_percent": 72.7,
-    "rule": "Replace this temporary retention prior with evidence-mapped reusable/avoided current-work equivalents during Level 0."
+    "partial_mapped_avoided_future_hours_center": 29.0,
+    "partial_mapping_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+    "global_completion_credit_applied": false,
+    "rule": "Replace this temporary retention prior with evidence-mapped reusable/avoided current-work equivalents only after sufficient Level-0 coverage; partial mappings do not change exact completion."
   },
   "eta": {
     "owner_active_hours_per_day": 10,
@@ -95,8 +101,8 @@
     "bootstrap_high_hours": 3.0,
     "bootstrap_center_hours": 2.25,
     "hard_max_hours": 3.0,
-    "confidence": "OWNER_FIXED_SLA_FEASIBILITY_UNCALIBRATED_UNTIL_FIRST_BATCH",
-    "basis": "Parallel inventory/hash/dedupe/extraction/sharding/analysis/write-back pipeline; <=3h active wall-clock is a hard execution constraint.",
+    "confidence": "EXTERNAL_DRIVE_BLOCKER_PREVENTS_FULL_SLA_VALIDATION",
+    "basis": "Parallel inventory/hash/dedupe/extraction/sharding/analysis/write-back pipeline; <=3h active wall-clock is a hard execution constraint. Drive archive access is externally blocked and excluded from analysis-time claims.",
     "observed_batches": [
       {
         "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
@@ -111,23 +117,34 @@
         "exact_coverage_credit": 0.0,
         "material_deltas": 6,
         "branch_event": "research_entity/rooms/center_events/666_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json"
+      },
+      {
+        "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+        "kind": "non-overlapping-state-identity-body-failure-history-semantic-shard",
+        "exact_coverage_credit": 0.0,
+        "material_deltas": 7,
+        "earned_work_mappings": 4,
+        "provisional_avoided_future_hours_center": 29.0,
+        "branch_event": "research_entity/rooms/center_events/20260809T0415p0700_666_pf_state_failure_crossroom_delta.json",
+        "crossread_event": "research_entity/rooms/center_events/20260809T0415p0700_666_crossread_pf_gwt_runtime_b4f2.json"
       }
     ]
   },
   "work_packages": {
-    "666-00-DUAL-INDEX": {"status":"ACTIVE","goal":"Recursively inventory Drive and Project-Frankenstein in parallel; freeze exact manifests/hashes."},
-    "666-01-DEDUPE-SHARD": {"status":"OPEN","goal":"Hash, duplicate/version cluster, classify and create parallel semantic shards."},
-    "666-02-BULK-EXTRACT": {"status":"BLOCKED_ON_INDEX","goal":"Bulk extract full relevant content by source class instead of serial manual reading."},
+    "666-00-DUAL-INDEX": {"status":"ACTIVE_EXTERNAL_BLOCKER_ON_DRIVE","goal":"Recursively inventory Drive and Project-Frankenstein in parallel; freeze exact manifests/hashes."},
+    "666-01-DEDUPE-SHARD": {"status":"OPEN_PARTIAL_HISTORY_SHARDS_EXIST","goal":"Hash, duplicate/version cluster, classify and create parallel semantic shards."},
+    "666-02-BULK-EXTRACT": {"status":"BLOCKED_ON_DRIVE_INDEX_PARTIAL_ON_GITHUB","goal":"Bulk extract full relevant content by source class instead of serial manual reading."},
     "666-03-PARALLEL-ANALYZE": {"status":"ACTIVE","goal":"Analyze mechanisms, experiments, measurements, successes, failures and lineage across independent shards."},
-    "666-04-EARNED-WORK-MAP": {"status":"OPEN_PARTIAL","goal":"Map historical FRANK/XENO/ClayCode/GWT work to current Clay 0.1 workstreams and avoided/reused current effort."},
-    "666-05-CROSS-SOURCE-RECONCILE": {"status":"BLOCKED_ON_ANALYSIS","goal":"Resolve duplicates, chronology, contradictions, supersession and ancestry across Drive and Project-Frankenstein."},
+    "666-04-EARNED-WORK-MAP": {"status":"ACTIVE_PARTIAL","goal":"Map historical FRANK/XENO/ClayCode/GWT work to current Clay 0.1 workstreams and avoided/reused current effort."},
+    "666-05-CROSS-SOURCE-RECONCILE": {"status":"BLOCKED_ON_DRIVE_ANALYSIS","goal":"Resolve duplicates, chronology, contradictions, supersession and ancestry across Drive and Project-Frankenstein."},
     "666-06-BRANCH-FEEDBACK": {"status":"ACTIVE_PARTIAL","goal":"Return material findings or NO_CHANGE receipts to all research branches and Q12 index."},
     "666-07-AUDIT": {"status":"BLOCKED_ON_ALL","goal":"Verify exact coverage, earned-work mapping, hashes and PASS decision."}
   },
   "live_claims": [],
   "completed_receipts": [
     "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
-    "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json"
+    "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json"
   ],
-  "last_updated": "2026-08-09"
+  "last_updated": "2026-08-09T04:20:00+07:00"
 }

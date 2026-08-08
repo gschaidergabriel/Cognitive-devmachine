@@ -1,9 +1,10 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "program_id": "frank-staged-build",
   "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "status": "ACTIVE",
   "current_stage": "BASE_CLAYCODE_RELEASE",
+  "status_footer_mode": "NEXT_UNPASSED_MILESTONE_ONLY",
   "stage_order": [
     "BASE_CLAYCODE_RELEASE",
     "H1_REFERENCE_HARNESS",
@@ -13,24 +14,43 @@
     "DATA_LORA_TRAINING_DATA",
     "WAIT"
   ],
-  "current_stage_goal": "Finish ClayCode as an executable, tested, frozen semantic language/runtime release. All research rooms remain domain-loyal but direct current-stage-relevant deltas toward closing the ClayCode release gate.",
   "stage_gates": {
     "BASE_CLAYCODE_RELEASE": {
+      "label": "BASE - ClayCode Release",
       "status": "IN_PROGRESS",
-      "required_pass_artifacts": ["CLAYCODE_RELEASE_MANIFEST.json"],
-      "gate_name": "CLAYCODE_RELEASE_GATE"
+      "gate_name": "CLAYCODE_RELEASE_GATE",
+      "progress_source": {
+        "kind": "work_packages",
+        "path": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+        "field": "work_packages"
+      },
+      "required_pass_artifacts": ["CLAYCODE_RELEASE_MANIFEST.json"]
     },
     "H1_REFERENCE_HARNESS": {
+      "label": "Harness 1 - Reference FRANK",
       "status": "BLOCKED",
       "blocked_by": ["BASE_CLAYCODE_RELEASE"],
+      "progress_source": {
+        "kind": "work_packages",
+        "path": "research_entity/harness/HARNESS_WORKSPACE.json",
+        "field": "work_packages",
+        "include_prefixes": ["H-WP-00-", "H-WP-01-", "H-WP-02-", "H-WP-03-", "H-WP-04-", "H-WP-05-", "H-WP-06-", "H-WP-06B-", "H-WP-07-", "H-WP-08-", "H-WP-09-", "H-WP-10-", "H-WP-11-", "H-WP-12-", "H-WP-13-", "H-WP-14-", "H-WP-15-", "H-WP-16-", "H-WP-17-"]
+      },
       "required_pass_artifacts": [
         "REFERENCE_HARNESS_RELEASE_MANIFEST.json",
         "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json"
       ]
     },
     "H2_CLAYCODE_HARNESS": {
+      "label": "Harness 2 - ClayCode FRANK",
       "status": "BLOCKED",
       "blocked_by": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS"],
+      "progress_source": {
+        "kind": "work_packages",
+        "path": "research_entity/harness/HARNESS_WORKSPACE.json",
+        "field": "work_packages",
+        "include_prefixes": ["H-WP-18-", "H-WP-19-", "H-WP-20-", "H-WP-21-"]
+      },
       "required_pass_artifacts": [
         "CLAY_HARNESS_RELEASE_MANIFEST.json",
         "CLAY_HARNESS_ARCHITECTURE.claygraph.json",
@@ -38,27 +58,61 @@
       ]
     },
     "H3_ONE_MODULE_FRANK": {
+      "label": "Harness 3 - One-Module FRANK",
       "status": "BLOCKED",
       "blocked_by": ["H2_CLAYCODE_HARNESS"],
+      "progress_source": {
+        "kind": "stage_workspace",
+        "path": "research_entity/harness/HARNESS3_WORKSPACE.json",
+        "field": "work_packages",
+        "missing_means": 0
+      },
       "required_pass_artifacts": [
         "ONE_MODULE_HARNESS_RELEASE_MANIFEST.json",
         "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json"
       ]
     },
     "UDB_UNIFIED_DATABASE": {
+      "label": "Unified Database",
       "status": "BLOCKED",
-      "blocked_by": ["H3_ONE_MODULE_FRANK"]
+      "blocked_by": ["H3_ONE_MODULE_FRANK"],
+      "progress_source": {
+        "kind": "stage_workspace",
+        "path": "research_entity/unifieddb/UNIFIEDDB_RELEASE_WORKSPACE.json",
+        "field": "work_packages",
+        "missing_means": 0
+      }
     },
     "DATA_LORA_TRAINING_DATA": {
+      "label": "LoRA Training Data",
       "status": "BLOCKED",
       "blocked_by": ["UDB_UNIFIED_DATABASE"],
+      "progress_source": {
+        "kind": "stage_workspace",
+        "path": "research_entity/training_data/LORA1_DATA_WORKSPACE.json",
+        "field": "work_packages",
+        "missing_means": 0
+      },
       "training_authorized": false,
       "purpose": "Build and freeze training and held-out data only. Do not train."
     },
     "WAIT": {
+      "label": "WAIT - Owner Decision",
       "status": "BLOCKED",
+      "progress_source": {"kind": "terminal", "value": 100},
       "meaning": "After training-data artifacts are frozen, stop and wait for explicit project-owner instruction."
     }
+  },
+  "current_stage_goal": "Finish ClayCode as an executable, tested, frozen semantic language/runtime release. All research rooms remain domain-loyal but direct current-stage-relevant deltas toward closing the ClayCode release gate.",
+  "progress_semantics": {
+    "complete_statuses": ["PASS", "COMPLETE", "COMPLETED", "DONE", "CLOSED"],
+    "failed_statuses": ["FAILED", "REFUTED"],
+    "unfinished_statuses": ["OPEN", "CLAIMED", "ACTIVE", "IN_PROGRESS", "BLOCKED", "BLOCKED_ON_CC_RELEASE", "BLOCKED_ON_REFERENCE_AND_CC_RELEASE", "BLOCKED_ON_CLAY_HARNESS", "BLOCKED_ON_BOTH_HARNESSES", "BLOCKED_ON_DIFFERENTIAL", "NOT_PASS"],
+    "formula": "100 * completed_weight / total_weight",
+    "default_work_package_weight": 1,
+    "bar_cells": 20,
+    "rounding": "nearest_integer",
+    "rule": "Do not award percentage merely because work is claimed or in progress. A work package contributes only when its completion receipt/status satisfies a complete status, unless that package explicitly defines machine-verifiable subchecks and weights."
   },
   "stage_priority_hints": {
     "BASE_CLAYCODE_RELEASE": ["claycode", "harness", "frank", "gwt", "claygraph", "hyperposition", "unifieddb", "emergenz", "clay"],

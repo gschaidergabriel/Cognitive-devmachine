@@ -20,7 +20,9 @@ TRIGGER_RUNS = ROOT / "research_entity" / "trigger_runs"
 TOPIC_PACKETS = ROOT / "research_entity" / "topic_packets"
 MICRO_PACKETS = ROOT / "research_entity" / "knowledge_micro_packets"
 REGISTRY = ROOT / "research_entity" / "global" / "RESEARCH_TRIGGER_REGISTRY.json"
+MANDATORY_ACTIVE_KNOWLEDGE = ROOT / "research_entity" / "global" / "MANDATORY_ACTIVE_KNOWLEDGE.json"
 ACTIVE_POLICY = "research_entity/global/DOMAIN_ACTIVE_KNOWLEDGE_POLICY.md"
+MANDATORY_POLICY = "research_entity/global/MANDATORY_ACTIVE_KNOWLEDGE.json"
 
 
 def _registered_scientific_branches() -> list[str]:
@@ -232,6 +234,35 @@ def _material_candidates(base: Path, branch: str) -> list[Path]:
     return out
 
 
+def _mandatory_material(base: Path, branch: str) -> list[Path]:
+    """Return branch-pinned material that belongs to this active-material store.
+
+    Pins guarantee presence only. They do not change evidence status, category,
+    provenance, or active-context budget. Invalid/out-of-store pins are ignored.
+    """
+    if not MANDATORY_ACTIVE_KNOWLEDGE.exists():
+        return []
+    try:
+        data = json.loads(MANDATORY_ACTIVE_KNOWLEDGE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+
+    base_resolved = base.resolve()
+    out: list[Path] = []
+    for rel in ((data.get("branches") or {}).get(branch) or []):
+        p = (ROOT / str(rel)).resolve()
+        try:
+            p.relative_to(base_resolved)
+        except ValueError:
+            continue
+        if not p.is_file() or p.suffix.lower() not in {".md", ".json", ".jsonl"}:
+            continue
+        if not _matches_branch(p, branch):
+            continue
+        out.append(p)
+    return out
+
+
 def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], int, dict[str, int]]:
     candidates = _material_candidates(base, branch)
     if not candidates or limit <= 0:
@@ -240,6 +271,20 @@ def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], in
     selected: list[Path] = []
     seen: set[Path] = set()
     category_counts: dict[str, int] = {}
+    candidate_set = set(candidates)
+
+    # Project-owner-mandated cross-branch receipts survive ordinary relevance
+    # competition, but still consume the same bounded active-context budget.
+    for p in _mandatory_material(base, branch):
+        if len(selected) >= limit:
+            break
+        if p not in candidate_set or p in seen:
+            continue
+        selected.append(p)
+        seen.add(p)
+        cat = _material_category(p)
+        category_counts[cat] = category_counts.get(cat, 0) + 1
+
     for category in ("negative", "contradiction", "experiment", "architecture", "hypothesis", "feedback", "general"):
         for p in candidates:
             if len(selected) >= limit:
@@ -325,6 +370,7 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
                 "topic_packet_categories": topic_categories,
                 "knowledge_micro_packet_categories": micro_categories,
                 "selection_policy": ACTIVE_POLICY,
+                "mandatory_active_knowledge_policy": MANDATORY_POLICY,
             },
             "topic_packets": topics,
             "knowledge_micro_packets": micros,
@@ -334,13 +380,14 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
     latest_claygraph = _latest_artifact(branches, "claygraph", "/CLAYGRAPH_CANDIDATE.claycode.json") or _latest_artifact(branches, "claygraph", "/CLAYGRAPH_SCHEMA.claycode.json")
     latest_unifieddb = _latest_artifact(branches, "unifieddb", "/UNIFIED_DATABASE_ARCHITECTURE.claycode.json")
     return {
-        "schema_version": "1.6",
+        "schema_version": "1.7",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "trigger": trigger,
         "run_id": run_id,
         "registry_scientific_branches": BRANCHES,
         "protocol": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
         "active_knowledge_policy": ACTIVE_POLICY,
+        "mandatory_active_knowledge_policy": MANDATORY_POLICY,
         "goodman_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md" if trigger in {"claycode", "fusion"} else None,
         "branch_priority": PRIORITY[trigger],
         "coverage_mode": "ALL_DISCOVERED_INDEXED_WITH_RICH_ACTIVE_PACKET_ENVELOPE" if coverage_all else "PRIORITY_BOUNDED_WITH_RICH_ACTIVE_PACKET_ENVELOPE",
@@ -352,6 +399,7 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "must_scan_cross_branch_contradictions": True,
             "must_write_back_cross_links": True,
             "must_use_rich_active_packet_envelopes": True,
+            "must_include_mandatory_active_receipts": True,
             "raw_evidence_expands_on_demand": True,
             "strong_promotion_blocked_if_missing": True,
         },

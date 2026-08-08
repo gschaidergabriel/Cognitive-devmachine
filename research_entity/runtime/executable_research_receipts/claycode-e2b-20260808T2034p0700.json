@@ -1,0 +1,68 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"ERR-CLAYCODE-E2B-20260808T2034p0700",
+  "branch":"claycode",
+  "candidate":"CC-RC1.5 Intent-Certified Semantic Lowering",
+  "compiler_artifact":"tools/claycode_compiler_lab.py",
+  "compiler_versions_tested":["claycode-lab-0.1-cc-rc1.5","claycode-lab-0.2-cc-rc1.5"],
+  "sandbox":{"provider":"E2B","tool":"e2b_sandbox","status":"RUNTIME_VERIFIED","verification_ref":"research_entity/runtime/e2b_verification.json"},
+  "execution_chain":[
+    {
+      "stage":"credential/sandbox smoke",
+      "result_ref":"research_entity/runtime/tool_results/e2b-smoke-20260808T2026p0700.json",
+      "expected":"RAE_E2B_OK:42 and exit 0",
+      "observed":"PASS"
+    },
+    {
+      "stage":"multiline compiler first attempt",
+      "result_ref":"research_entity/runtime/tool_results/claycode-e2b-compiler-lab-v01-20260808T2028p0700.json",
+      "observed":"FAIL before compiler semantics due bridge shell quoting",
+      "classification":"RESEARCH_TOOLING_NEGATIVE",
+      "repair":"research_tool_bridge switched from JSON string shell construction to shell-safe quoting; E2B adapter later gained run_python()"
+    },
+    {
+      "stage":"compiler v0.1 after bridge repair",
+      "result_ref":"research_entity/runtime/tool_results/claycode-e2b-compiler-lab-v01-r2-20260808T2031p0700.json",
+      "observed":"PASS; generated Python executed as separate host process; 5 negative programs rejected",
+      "generated_code_hash":"0e4e7e8005b837baadef9e6e4924811aed8806a31147b10dc974e9183e15d955",
+      "contract_hash":"d358e9dee829b76e3c74b90ce4b9a607032d5ffb9b7b1c357d0ad8efdcf48eeb",
+      "counterexamples":["ORDER_SENSITIVE_CANONICAL_CONSTRAINTS","DUPLICATE_CONSTRAINT_CHANGES_IDENTITY"]
+    },
+    {
+      "stage":"compiler v0.2 dual identity",
+      "result_ref":"research_entity/runtime/tool_results/claycode-e2b-compiler-lab-v02-20260808T2034p0700.json",
+      "observed":"PASS; generated host process exit 0; critical unknown blocked",
+      "semantic_hash":"485b2d4d7f8f53f2e1af8df69d5229581a395b05f79bea34f34a8d360f83b552",
+      "contract_hash":"bc02cae54d8eddc5b83ca2d2e8426faf0cefa2a37d18281164aef0dc5ec33616",
+      "generated_code_hash":"01eb99b4c9bc7bf9d10932c88eec98279c7fde57aa6941560f6feb9cc8fc7b6d",
+      "semantic_equivalence":{"comment_whitespace":true,"reordered_set_constraints":true,"duplicate_set_constraints":true},
+      "provenance_instance_identity":{"comment_whitespace_same":true,"reordered_source_distinct":true,"duplicate_source_distinct":true}
+    }
+  ],
+  "new_research_claims":[
+    {
+      "id":"H-CC-EXEC-001",
+      "status":"SUPPORTED_BY_EXECUTABLE_MECHANISM_TEST",
+      "claim":"ClayCode needs distinct semantic identity and provenance-bound contract-instance identity."
+    },
+    {
+      "id":"N-CC-EXEC-001",
+      "status":"NEGATIVE_PRESERVED",
+      "claim":"A monolithic provenance-bound contract hash is unsuitable as the only semantic-equivalence identity when fields have set semantics."
+    },
+    {
+      "id":"N-TOOL-E2B-001",
+      "status":"FIXED_AND_RETESTED",
+      "claim":"The original research bridge could execute single-line E2B Python but corrupted multiline Python through shell quoting."
+    }
+  ],
+  "research_transfer":[
+    "ClayCode: add semantic_hash vs contract_hash separation to compiler research",
+    "ClayGraph: distinguish semantic node/relation identity from provenance/event instance identity where operations are set-equivalent",
+    "FRANK: Reader/intent contracts may compare semantic equality without losing exact ancestry receipts",
+    "Hyperposition: equality/firebreak checks must specify which identity axis is compared",
+    "GWT/Emergenz: causal factorials should pin semantic identity and provenance/view identity separately when relevant"
+  ],
+  "promotion":"NONE",
+  "boundary":"This is executable compiler/runtime evidence in E2B, not live-FRANK or target-Qwen evidence."
+}

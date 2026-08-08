@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "fixture_id": "TOOLBOX_SIDE_BRANCH_CHRONOLOGY_AUTHORITY_ORACLES",
+  "source_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_TOOLS_TOOLBOX_SIDE_BRANCH_MANIFEST.json",
+  "purpose": "Prevent archive restoration, compatibility projection or Clay lowering from promoting newer-mtime mixed side branches wholesale or treating local tool/state endpoints as authority.",
+  "oracles": [
+    {
+      "id": "TBX-CHR-001",
+      "name": "newer_mtime_does_not_imply_newer_semantics",
+      "baseline_failure": "A later toolboxd file contains both later Identity Forge work and entity-session APIs from an architecture that had already been superseded by rooms.",
+      "required_pass": "Reconciliation classifies supersession per mechanism/lineage and never selects whole-file winner by modified/upload time alone."
+    },
+    {
+      "id": "TBX-AUTH-002",
+      "name": "loopback_is_not_authority",
+      "baseline_failure": "Historical Identity Forge mutators are reachable through the local Toolbox handler without a dedicated endpoint-level capability/approval proof; localhost locality is the main implicit boundary.",
+      "required_pass": "Clay/Needle/runtime treats transport locality separately from authority; every identity-mutating operation requires an explicit typed effect and deterministic authority decision."
+    },
+    {
+      "id": "TBX-AUTH-003",
+      "name": "persona_comment_is_not_authority",
+      "baseline_failure": "The historical source labels endpoints Frank-only in a comment but comments cannot enforce caller identity or permissions.",
+      "required_pass": "No comment, persona text, model role or tool name can mint authority; caller/effect/capability evidence must be machine-enforced."
+    },
+    {
+      "id": "TBX-EFFECT-004",
+      "name": "read_recall_vs_identity_mutation_effect_split",
+      "baseline_failure": "Read-only historical session recall and relationship/pact mutation coexist in the same generic local Tools API surface.",
+      "required_pass": "Read-only recall and identity mutation receive distinct Clay effect classes, risk budgets, provenance and audit treatment."
+    },
+    {
+      "id": "TBX-STATE-005",
+      "name": "identity_mutation_replay_and_recovery",
+      "baseline_failure": "Identity Forge lineage intentionally used a non-recoverable identity database while Toolbox exposed direct relationship/pact mutations.",
+      "required_pass": "Target identity-state policy explicitly defines durability, snapshot/replay/recovery and rollback semantics; irreversible loss is never an accidental consequence of a tool endpoint."
+    }
+  ]
+}

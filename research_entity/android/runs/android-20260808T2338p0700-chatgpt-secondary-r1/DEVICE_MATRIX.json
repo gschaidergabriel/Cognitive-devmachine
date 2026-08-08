@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "android-20260808T2338p0700-chatgpt-secondary-r1",
+  "provider": "Firebase Test Lab",
+  "project": "clay-dec2f",
+  "device_invocations": [
+    {
+      "matrix_id": "matrix-3mqon98nc2zsk",
+      "experiment": "EXP-ANDROID-R1-INFRA-001",
+      "model": "MediumPhone.arm",
+      "form": "VIRTUAL",
+      "abi_family": "ARM",
+      "android_version": "35",
+      "locale": "en",
+      "orientation": "portrait",
+      "tests_passed": 2,
+      "tests_total": 2,
+      "result": "PASS"
+    },
+    {
+      "matrix_id": "matrix-322nxfmnphtz2",
+      "experiment": "EXP-ANDROID-R1-PORTABILITY-BUNDLE-002",
+      "model": "MediumPhone.arm",
+      "form": "VIRTUAL",
+      "abi_family": "ARM",
+      "android_version": "35",
+      "locale": "en",
+      "orientation": "portrait",
+      "tests_passed": 9,
+      "tests_total": 9,
+      "result": "PASS"
+    },
+    {
+      "matrix_id": "matrix-322nxfmnphtz2",
+      "experiment": "EXP-ANDROID-R1-PORTABILITY-BUNDLE-002",
+      "model": "SmallPhone.arm",
+      "form": "VIRTUAL",
+      "abi_family": "ARM",
+      "android_version": "30",
+      "locale": "en",
+      "orientation": "portrait",
+      "tests_passed": 9,
+      "tests_total": 9,
+      "result": "PASS"
+    }
+  ],
+  "totals": {
+    "virtual_device_invocations": 3,
+    "physical_device_invocations": 0,
+    "instrumentation_assertions_passed": 20,
+    "instrumentation_assertions_total": 20
+  },
+  "non_device_failures_before_success": [
+    "AndroidX build flag missing; fixed before device allocation",
+    "Cloud Tool Results API disabled; enabled before first scientific device matrix"
+  ],
+  "boundary": "Virtual ARM Test Lab behavior is not physical-device thermal, battery, GPU/NPU or vendor-fragmentation evidence."
+}

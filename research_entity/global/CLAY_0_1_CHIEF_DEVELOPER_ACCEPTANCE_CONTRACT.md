@@ -4,6 +4,7 @@
 **Codename:** `DOOMSDAY`
 **Target class:** internal chief-developer first-test candidate
 **Not:** public release, production release, customer release, general availability
+**ClayCode gate:** `research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md`
 
 ## 0. Meaning
 
@@ -12,7 +13,7 @@ DOOMSDAY is reached when the first complete Clay 0.1 system is ready for the **c
 Clay 0.1 at this point is:
 
 `FRANK architecture authored in Clay`
-`+ ClayCode semantics/runtime`
+`+ general-purpose ClayCode compiler/runtime`
 `+ one-module/binary-distilled executable architecture`
 `+ UnifiedDB`
 `+ final fully fine-tuned Clay-native model`
@@ -24,13 +25,14 @@ This is not a public release milestone. The first chief-developer session begins
 
 ## 1. What "perfect" means operationally
 
-Absolute bug-free perfection cannot be proven for a nontrivial software system. For this project, "perfect before the chief developer's first test" therefore has a strict operational definition:
+Absolute bug-free perfection cannot be proven for a nontrivial software system. For this project, "perfect before the chief developer's first test" has a strict operational definition:
 
 - zero known `P0` or `P1` defects;
 - zero knowingly skipped mandatory acceptance tests;
 - zero unresolved architecture-contract violations;
 - zero fake/mock implementation on a path that defines Clay 0.1 behavior;
 - no silent fallback that changes Clay semantics;
+- ClayCode `GENERAL_PURPOSE_GATE = PASS`;
 - all mandatory differential tests pass;
 - all mandatory state/receipt/provenance invariants pass;
 - all mandatory UnifiedDB consistency/replay/recovery invariants pass;
@@ -50,7 +52,8 @@ A test that has never been run is not a pass.
 DOOMSDAY requires one integrated identity:
 
 - architecture: current frozen FRANK Clay contract;
-- language: frozen ClayCode version/hash;
+- language/compiler: frozen ClayCode semantic/compiler/runtime version/hash;
+- general-purpose acceptance: exact `CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json` hash;
 - binary/runtime: exact build hash;
 - UnifiedDB: exact schema/semantic-contract hash;
 - model: exact base + fine-tune + merge/export hashes;
@@ -63,17 +66,27 @@ Changing a defining component after acceptance invalidates the old acceptance id
 
 ## 3. Required acceptance families
 
-### A — Architecture completeness
+### A — General-purpose ClayCode compiler/runtime
+
+ClayCode must satisfy `CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md` before DOOMSDAY.
+
+This explicitly proves that ClayCode is not merely a FRANK-specific DSL. It must compile/lower and execute representative programs for ordinary application classes such as CLI, HTTP/website/backend, DB-backed service, concurrency, GUI/interactive application, compiler/tooling, GPU/ML/numerical work and safe representative low-level/system effects, in addition to real FRANK components.
+
+The acceptance principle is:
+
+`FRANK supplied most semantic concepts -> freeze/preserve -> compile/lower -> execute real apps -> change semantics only for demonstrated counterexamples`
+
+### B — Architecture completeness
 
 Every frozen FRANK logical subsystem and coupling is mapped to executable Clay/ClayCode behavior or an explicitly justified external boundary (e.g. owner-fixed Needle boundary).
 
-### B — H1/H2/H3 differential continuity
+### C — H1/H2/H3 differential continuity
 
 The Reference Harness, ClayCode Harness and one-module/binary form must agree on all semantics that the contract declares representation-invariant.
 
 Representation/placement differences are allowed only where explicitly non-semantic.
 
-### C — State / UnifiedDB
+### D — State / UnifiedDB
 
 Validate:
 
@@ -89,7 +102,7 @@ Validate:
 - ClayGraph/activation views;
 - cross-timescale state.
 
-### D — Model integration
+### E — Model integration
 
 The final fully fine-tuned model must:
 
@@ -100,7 +113,7 @@ The final fully fine-tuned model must:
 - survive long-horizon stateful tests;
 - not rely on training-set leakage for acceptance.
 
-### E — GWT / emergence observability
+### F — GWT / emergence observability
 
 The executable system must expose the frozen functional readouts necessary to inspect:
 
@@ -116,19 +129,19 @@ The executable system must expose the frozen functional readouts necessary to in
 
 These measurements support engineering/function claims only; they do not establish phenomenal consciousness.
 
-### F — Safety / effect authority
+### G — Safety / effect authority
 
 Test capability non-forgeability, provenance/origin binding, cumulative budgets, stale/nonce/replay behavior, reservation/commit/outcome boundaries and destructive/admin/device effect gating.
 
-### G — Robustness
+### H — Robustness
 
 Run required unit/property/fuzz/mutation/adversarial/race/concurrency/crash/recovery tests with frozen thresholds.
 
-### H — Performance viability
+### I — Performance viability
 
 The first developer build does not need public-release optimization, but it must be usable enough for meaningful chief-developer testing on project hardware. Record latency, RAM/VRAM, storage, state amplification, token/model costs where applicable and thermal/runtime constraints.
 
-### I — Reproducible project-hardware boot
+### J — Reproducible project-hardware boot
 
 At least one project-controlled machine must execute the exact accepted Clay 0.1 identity end-to-end. Repeat boot/run sufficiently to rule out one-off initialization luck under the frozen acceptance protocol.
 
@@ -139,6 +152,7 @@ Before DOOMSDAY PASS:
 - P0 open = forbidden;
 - P1 open = forbidden;
 - unresolved contract violation = forbidden;
+- ClayCode general-purpose gate FAIL/NOT_RUN = forbidden;
 - mandatory test `NOT_RUN` = forbidden;
 - mandatory test `FAIL` = forbidden;
 - P2/P3 may remain only when explicitly documented and demonstrated not to invalidate first chief-developer testing.
@@ -148,6 +162,7 @@ Before DOOMSDAY PASS:
 Required terminal artifacts:
 
 - `CLAY_0_1_DEVELOPER_BUILD_MANIFEST.json`
+- `CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json`
 - `CLAY_0_1_BINARY_BUILD_RECEIPT.json`
 - `CLAY_0_1_UNIFIEDDB_RECEIPT.json`
 - `CLAY_0_1_FINAL_MODEL_RECEIPT.json`

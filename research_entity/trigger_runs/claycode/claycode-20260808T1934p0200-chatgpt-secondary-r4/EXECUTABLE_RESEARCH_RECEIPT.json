@@ -1,0 +1,23 @@
+{
+  "run_id": "claycode-20260808T1934p0200-chatgpt-secondary-r4",
+  "experiment_ids": ["EXP-CC13-MCAAT-TYPEFLOW-001","EXP-CC13-NONDESTRUCTIVE-NOT-HARMLESS-002"],
+  "compiler_version": "CC-RC1.8-MCAAT reference checker 0.1-open",
+  "runtime_identity": "local CPython/container Linux plus separate generated-code subprocess",
+  "corpus": {"policy_random_cases":120000,"injection_fuzz_cases":60000,"immutable_logical_ops":40000,"identity_cases":30000,"constructive_repoint_cases":50000},
+  "observed": {
+    "typed_mismatches_vs_declarative_oracle": 0,
+    "destruction_or_model_authority_injection_accepts": 0,
+    "logical_state_mismatches": 0,
+    "semantic_axis_aliases": 0,
+    "physical_lowering_changed_semantic_hash": 0,
+    "codegen_smoke_exit": 0,
+    "codegen_smoke_stdout": "VERSIONED 1",
+    "constructive_only_bad_repoints": 9901,
+    "constructive_only_bad_repoint_rate": 0.19802,
+    "recoverability_losses": 0,
+    "guarded_bad_repoints": 0
+  },
+  "expected_vs_observed": "Typed reference rules matched the generated oracle/property corpus; the strong no-destruction safety hypothesis failed by constructive counterexample as intentionally tested.",
+  "repair": "Refine destruction-free syntax => safety into recoverability + non-ambient authority + effect-time validation/rollback.",
+  "boundaries": ["finite constructed reference semantics, not formal proof","no target-Qwen cognition test","no real OS syscall sandbox test in this lab","logical HIDE preserves blobs; physical erasure delegated outside model authority","storage growth/GC policy remains external maintenance problem","guarded repoint validator is idealized constructed policy"]
+}

@@ -1,0 +1,163 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0436p0700-chatgpt-secondary-drive-frank-werkzeuge-shard-7f3a",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "origin_actor":"chatgpt-secondary",
+  "origin_worker":"chatgpt-secondary-666-20260808T211500Z-7f3a",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "created_at":"2026-08-08T21:36:00Z",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "lane":"DRIVE_CLAY_FRANK_WERKZEUGE_RECURSIVE_INVENTORY_AND_SEMANTIC_SHARD",
+  "status":"BOUNDED_SUBTREE_MANIFEST_FROZEN_TWO_FULL_LEAVES_ONE_PARTIAL_DEEP_EXTRACTION",
+  "manifest":"research_entity/archive_assimilation/manifests/DRIVE_FRANK_WERKZEUGE_SHARD_7f3a.json",
+  "source_scope":{
+    "root":{"title":"frank-werkzeuge","id":"1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU"},
+    "leaf_files":[
+      {"title":"healing-log.md","id":"1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt","coverage":"PARTIAL_DEEP_SEMANTIC_EXTRACTION_SEARCHABLE_CONNECTOR_RESOURCE"},
+      {"title":"genesis-monitor/report.md","id":"1N6_jyHoGurBu6B_QXiXYFdpt_erl2EvX","coverage":"ANALYZED"},
+      {"title":"genesis-monitor/report_30min.md","id":"1qlPlXsqObWPYLePbUYsrTEdu8GmCAVkQ","coverage":"ANALYZED"}
+    ]
+  },
+  "epistemic_policy":{
+    "drive_reports":"HISTORICAL_RUNTIME_REPORTS_WITH_REPORTED_BEFORE_AFTER_MEASUREMENTS",
+    "fix_validation":"PROJECT_REPORTED_RUNTIME_VALIDATION_NOT_INDEPENDENTLY_REPRODUCED_THIS_RUN",
+    "architecture_transfer":"REUSABLE_NEGATIVE_RESULT_OR_MEASUREMENT_FOUNDATION_REQUIRES_CURRENT_HARNESS_RETEST"
+  },
+  "findings":[
+    {
+      "finding_id":"DRIVE-WERK-001",
+      "status":"HISTORICAL_NEGATIVE_RESULT_CLUSTER",
+      "claim":"FRANK repeatedly suffered self-amplifying recovery loops: an orphan overlay held the singleton lock while systemd started replacements (506 failed starts in 77 minutes); an LLM health guard checked a newly starting model before its 30-60 second load completed and restarted it again; earlier Project-Frankenstein archaeology independently showed ASRS counting its own restart telemetry. These are one mechanism family: recovery intervention creates observations that are misclassified as fresh failure.",
+      "source_refs":["Drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt"],
+      "targets":["harness","frank","claycode","emergenz"],
+      "implication":"Every recovery/liveness signal needs causal origin, startup/warmup state, refractory/grace rules and bounded retry authority. Recovery-generated telemetry must not recursively authorize more recovery without independent failure evidence.",
+      "next_test":"Fault injection with orphan owner + warmup model + delayed health response; verify at most one bounded recovery episode, explicit warmup state and no self-trigger storm."
+    },
+    {
+      "finding_id":"DRIVE-WERK-002",
+      "status":"HISTORICAL_TIMEBASE_NEGATIVE_RESULT",
+      "claim":"Genesis watchdog accounting advanced a counter by the nominal loop interval while a vision sensor could block for 30+ seconds. The logical counter therefore under-represented real elapsed time and watchdog behavior became pathological. Replacing it with monotonic wall-clock checks before/after each tick and explicit watchdog notification removed the observed repeated kills in the later monitor run.",
+      "source_refs":["Drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt","Drive:1N6_jyHoGurBu6B_QXiXYFdpt_erl2EvX"],
+      "targets":["harness","frank","claycode","hyperposition"],
+      "implication":"Clay runtime semantics must distinguish logical ticks, monotonic elapsed time and event time. Timeout/watchdog invariants cannot be derived by summing expected scheduler intervals when work can block.",
+      "next_test":"Insert variable 0-40s blocking sensor/tool delays under the same logical tick sequence and prove watchdog/recovery decisions remain functions of monotonic deadlines, not scheduler cadence."
+    },
+    {
+      "finding_id":"DRIVE-WERK-003",
+      "status":"HISTORICAL_FAILURE_SEMANTICS_NEGATIVE_RESULT",
+      "claim":"The Router historically returned HTTP 200 with ok=false when both LLMs failed, making transport-level success indistinguishable from total service failure for callers. It was changed to HTTP 503 while retaining structured failure payload. Another failure path treated empty content despite reasoning_content as blackout. These show that ambiguous success envelopes directly undermine causal/tool orchestration.",
+      "source_refs":["Drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt"],
+      "targets":["claycode","frank","harness"],
+      "implication":"ClayCode effect contracts should use typed success/degraded/failure states and never encode total failure as nominal success. Empty/partial model outputs require explicit variant semantics before capability execution.",
+      "next_test":"Protocol conformance suite for total model outage, one-model fallback, reasoning-only response, empty response and malformed response; callers must make identical typed decisions independent of transport implementation."
+    },
+    {
+      "finding_id":"DRIVE-WERK-004",
+      "status":"HISTORICAL_REACHABILITY_NEGATIVE_RESULT",
+      "claim":"Genesis activation dynamics converged near 0.5567 while active_threshold was 0.65, making the intended active state effectively unreachable under the current dynamics until decay/threshold parameters changed. Separately the quality-gated forced-active run later produced zero crystals because legacy organisms lacked metadata expected by the new crystal gate. Both are liveness failures caused by constraints that the system dynamics cannot satisfy.",
+      "source_refs":["Drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt","Drive:1qlPlXsqObWPYLePbUYsrTEdu8GmCAVkQ"],
+      "targets":["harness","emergenz","hyperposition","clay","frank"],
+      "implication":"Safety/quality gates must be paired with reachability/liveness proofs or empirical occupancy tests. A perfectly enforced gate that no valid trajectory can cross deadlocks emergence and adaptation.",
+      "next_test":"For each state/gate, estimate reachable state distribution under representative workloads and mutation/legacy cases; fail acceptance if a required state has zero/near-zero reachable measure without explicit intended disablement."
+    },
+    {
+      "finding_id":"DRIVE-WERK-005",
+      "status":"HISTORICAL_SCALE_AND_SIGN_MATH_NEGATIVE_RESULT",
+      "claim":"Quantum Reflector discretization used thresholds ±0.25 while typical E-PQ values were roughly within ±0.1, collapsing changing states into the same mid bucket. A separate coherence test multiplied a negative moving-average energy by 0.95, making the improvement inequality effectively always true and repeatedly firing coherence events. These are concrete examples of domain-scale and signed-metric bugs creating false invariance or false improvement.",
+      "source_refs":["Drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt"],
+      "targets":["harness","hyperposition","emergenz","frank","claycode"],
+      "implication":"Numeric Clay/state contracts need declared domains, sign semantics, sensitivity/entropy checks and property tests around zero/negative values. Discretizers must be calibrated to observed distributions rather than arbitrary thresholds.",
+      "next_test":"Property/fuzz tests over signed energy and E-PQ distributions: monotonic improvement classification, bucket occupancy entropy, perturbation sensitivity and threshold-boundary continuity."
+    },
+    {
+      "finding_id":"DRIVE-WERK-006",
+      "status":"HISTORICAL_PERSISTENCE_NEGATIVE_RESULT",
+      "claim":"Workspace persistence used database row count rather than an update counter for a modulo condition. With one old row, the condition never fired and restart state remained seven days stale until corrected to an explicit update counter. This is distinct from having a database: persistence policy itself can silently stop evolving.",
+      "source_refs":["Drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt"],
+      "targets":["unifieddb","claygraph","frank","harness"],
+      "implication":"Persistence acceptance must check write cadence/freshness and restart reconstruction, not merely schema/table existence. Event/update identities should drive checkpoint policy rather than incidental storage cardinality.",
+      "next_test":"Advance workspace through N updates without changing row cardinality, crash/restart at each checkpoint boundary, and verify restored state freshness and exact event ancestry."
+    },
+    {
+      "finding_id":"DRIVE-WERK-007",
+      "status":"HISTORICAL_DYNAMICS_MEASUREMENT_FOUNDATION",
+      "claim":"Genesis state hysteresis reduced active↔awakening ping-pong from roughly 150-300 transitions per five minutes to two in five minutes. The later 30-minute run also showed wave capping could prevent six-dimensional emotion saturation and restore spread to 0.322 while maintaining 349 births, 348 deaths and 409 mutations with zero watchdog kills. These are useful historical control interventions, not proof that the final dynamics are optimal.",
+      "source_refs":["Drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt","Drive:1qlPlXsqObWPYLePbUYsrTEdu8GmCAVkQ"],
+      "targets":["hyperposition","emergenz","harness","frank","clay"],
+      "implication":"Temporal hysteresis and bounded coupling can suppress pathological chattering/saturation while preserving turnover. Current adaptive coupling should measure occupancy, transition rate, diversity and responsiveness jointly so stabilization does not become frozen behavior.",
+      "next_test":"Factorial hysteresis×coupling-cap sweep with matched inputs; measure transition chatter, saturation time, response latency, diversity, turnover and ability to exit each state."
+    },
+    {
+      "finding_id":"DRIVE-WERK-008",
+      "status":"HISTORICAL_SELF_OBSERVATION_FEEDBACK_NEGATIVE_RESULT",
+      "claim":"FRANK's own inference generated GPU spike/drop events that dominated attention, producing an internal GPU-obsession loop until cooldown was added. AURA blocks arriving around every 100 seconds held priority zero and drove 51% of reflections, displacing other idle thought. These are direct examples where internal instrumentation or a producer becomes its own dominant cognitive stimulus.",
+      "source_refs":["Drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt"],
+      "targets":["gwt","emergenz","frank","hyperposition","harness"],
+      "implication":"Workspace competition needs source-aware rate limits, refractory periods and diversity/anti-monopoly controls. Self-generated telemetry should retain causal ancestry so the system can distinguish world change from its own processing footprint.",
+      "next_test":"Replay identical external world stream with and without self-generated GPU/AURA events; bound any single source's occupancy and verify external salience remains recoverable."
+    },
+    {
+      "finding_id":"DRIVE-WERK-009",
+      "status":"HISTORICAL_SELECTION_GOODHART_NEGATIVE_RESULT",
+      "claim":"The first Genesis monitor found a startup crystal burst followed by stasis and estimated roughly 85% of crystals as useless/generic. After stabilization and a three-gate quality system, the next run swung to zero new crystals because legacy organisms lacked required metadata and a caching approach grew to 51% of the population. This is a concrete precision-diversity-liveness tradeoff rather than a single scalar quality problem.",
+      "source_refs":["Drive:1N6_jyHoGurBu6B_QXiXYFdpt_erl2EvX","Drive:1qlPlXsqObWPYLePbUYsrTEdu8GmCAVkQ"],
+      "targets":["emergenz","clay","harness","hyperposition"],
+      "implication":"Do not optimize proposal quality as one acceptance threshold. Track throughput, precision/actionability, novelty/diversity, lineage, survival/turnover and false-negative rejection. Legacy/migration populations require compatible evidence propagation or explicit quarantine.",
+      "next_test":"Three-way quality-gate ablation with synthetic known-good/known-bad/novel proposals and legacy metadata cases; plot precision, recall, proposal throughput and diversity over time."
+    },
+    {
+      "finding_id":"DRIVE-WERK-010",
+      "status":"BOUNDED_ARCHIVE_INVENTORY_RESULT",
+      "claim":"The connector-visible frank-werkzeuge subtree contains one healing log and one genesis-monitor folder with exactly two report files at the enumerated level. A bounded manifest has been frozen with three leaf file IDs. Two reports were analyzed directly; the large healing log is indexed and partially deep-extracted through searchable connector resources, so it remains an explicit unfinished leaf rather than falsely marked complete.",
+      "source_refs":["Drive folder:1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU","research_entity/archive_assimilation/manifests/DRIVE_FRANK_WERKZEUGE_SHARD_7f3a.json"],
+      "targets":["q12_index","center"],
+      "implication":"This subtree can be imported into the eventual global DRIVE_CLAY_MANIFEST denominator without re-enumeration; healing-log.md still needs complete atomic extraction/classification before this subtree can claim full content coverage.",
+      "next_test":"Complete remaining healing-log atomic-fix extraction, deduplicate each fix against Project-Frankenstein/Git history, then mark subtree integrated or NO_DELTA per atomic obligation."
+    }
+  ],
+  "earned_work_candidates":[
+    {
+      "candidate_id":"HEW-DRIVE-WERK-RECOVERY-001",
+      "finding_refs":["DRIVE-WERK-001","DRIVE-WERK-002","DRIVE-WERK-003","DRIVE-WERK-006"],
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "current_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_FRANK","UDB_UNIFIED_DATABASE","CLAY_0_1_ACCEPTANCE_RUN"],
+      "avoided_future_hours_low":2.0,
+      "avoided_future_hours_center":6.0,
+      "avoided_future_hours_high":12.0,
+      "confidence":"MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "validation":"Current Harness must reproduce recovery self-trigger, blocking-timebase, typed-total-failure and stale-checkpoint failure families."
+    },
+    {
+      "candidate_id":"HEW-DRIVE-WERK-DYNAMICS-002",
+      "finding_refs":["DRIVE-WERK-004","DRIVE-WERK-005","DRIVE-WERK-007","DRIVE-WERK-008","DRIVE-WERK-009"],
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "current_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_FRANK","CLAY_0_1_ACCEPTANCE_RUN"],
+      "avoided_future_hours_low":2.0,
+      "avoided_future_hours_center":7.0,
+      "avoided_future_hours_high":14.0,
+      "confidence":"MEDIUM_LOW",
+      "validation":"Re-run calibrated dynamics, source-monopoly, gate-liveness and signed-metric property tests against current Clay mechanisms."
+    }
+  ],
+  "branch_feedback":{
+    "harness":"Import recovery self-trigger, blocking-timebase, warmup-vs-dead, typed 503 failure, unreachable gate, signed-metric, stale-checkpoint, hysteresis, source-monopoly and precision-diversity-liveness fixtures.",
+    "frank":"Make recovery/warmup ownership, self-generated observation provenance, typed failure and checkpoint freshness explicit runtime semantics. Historical subsystem names are not final topology requirements.",
+    "gwt":"Use source-aware rate/occupancy controls and causal ancestry: GPU/AURA history shows a self-generated source can monopolize workspace-like attention without reflecting external relevance.",
+    "emergenz":"Preserve Genesis intervention runs as dynamics/failure evidence, not emergence proof. Evaluate liveness, diversity, recurrence and causal intervention effects jointly rather than crystal count or one state scalar.",
+    "claycode":"Encode logical time vs monotonic deadlines, typed degraded/failure results, lifecycle ownership and checkpoint receipts. Property-test signed numeric domains and gate reachability.",
+    "hyperposition":"Historical hysteresis/coupling-cap interventions are directly relevant to dynamic topology stability: reduce chatter/saturation while measuring lost responsiveness and diversity.",
+    "claygraph":"Track ancestry of self-generated observations and checkpoints so internally caused signals cannot masquerade as independent external evidence.",
+    "unifieddb":"Persist update/event identity and freshness, not just row existence; support fresh/restore boot with exact checkpoint ancestry.",
+    "clay":"Use the Genesis reports as a concrete anti-Goodhart lesson: quality gates, coupling limits and diversity controls must be optimized as a vector with liveness, not a single score.",
+    "q12_index":"Drive frank-werkzeuge bounded manifest frozen: 3 leaves; 2 reports analyzed, healing-log partial deep extraction remains open. Major transferable families are recovery self-coupling, timebase, reachability, signed math, persistence freshness, hysteresis and source monopoly."
+  },
+  "progress_accounting":{
+    "bounded_subtree_leaf_count":3,
+    "bounded_subtree_full_content_analyzed":2,
+    "bounded_subtree_partial_content_analyzed":1,
+    "global_exact_level0_coverage_awarded_percent":0.0,
+    "reason":"The global Drive denominator is not frozen; this bounded manifest must be imported/deduplicated into DRIVE_CLAY_MANIFEST before exact global credit."
+  }
+}

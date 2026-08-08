@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "workspace_id": "666-frank-archive-assimilation",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "ACTIVE",
+  "gate": "666_RELEASE_GATE",
+  "gate_status": "NOT_PASS",
+  "protocol_ref": "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
+  "source_order": ["DRIVE_CLAY", "PROJECT_FRANKENSTEIN", "CROSS_SOURCE_FUSION"],
+  "current_phase": "DRIVE_INDEX_AND_MANIFEST_FREEZE",
+  "drive": {
+    "folder_title": "clay",
+    "folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "owner_reported_size_mb": 400,
+    "inventory_state": "CONNECTOR_INDEX_PENDING_COMPLETE_RECURSIVE_ENUMERATION",
+    "manifest_state": "NOT_FROZEN",
+    "manifest_path": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_MANIFEST.json",
+    "manifest_epoch": null,
+    "frozen_source_units": 0,
+    "total_atomic_obligations": 0,
+    "completed_atomic_obligations": 0,
+    "exact_coverage_percent": 0.0,
+    "analyzed_units": 0,
+    "integrated_units": 0,
+    "cursor": null,
+    "note": "Exact denominator must be frozen from recursive Drive inventory. Owner-reported ~400 MB is ETA input only, never the exact coverage denominator."
+  },
+  "project_frankenstein": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "default_branch": "main",
+    "github_reported_size_kib": 228899,
+    "inventory_state": "PREPARATION_ALLOWED_DRIVE_DEEP_ANALYSIS_FIRST",
+    "manifest_state": "NOT_FROZEN",
+    "manifest_path": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+    "frozen_head_sha": null,
+    "frozen_source_units": 0,
+    "frozen_commit_units": 0,
+    "total_atomic_obligations": 0,
+    "completed_atomic_obligations": 0,
+    "exact_coverage_percent": 0.0,
+    "analyzed_units": 0,
+    "integrated_units": 0,
+    "cursor": null
+  },
+  "cross_source_fusion": {
+    "status": "BLOCKED_ON_BOTH_SOURCES",
+    "total_atomic_obligations": 0,
+    "completed_atomic_obligations": 0,
+    "exact_coverage_percent": 0.0,
+    "required_targets": ["frank", "claycode", "gwt", "hyperposition", "claygraph", "unifieddb", "harness", "emergenz", "clay", "q12_index"]
+  },
+  "combined_progress": {
+    "denominator_state": "NOT_FROZEN",
+    "formula": "completed_atomic_obligations / frozen_total_atomic_obligations across all source and fusion obligations",
+    "total_atomic_obligations": 0,
+    "completed_atomic_obligations": 0,
+    "exact_coverage_percent": 0.0,
+    "rule": "Do not claim >0 exact assimilation coverage before source obligations are frozen and receipts complete."
+  },
+  "eta": {
+    "owner_active_hours_per_day": 10,
+    "bootstrap_raw_volume_mb_approx": 623.5,
+    "bootstrap_low_days": 5,
+    "bootstrap_high_days": 12,
+    "bootstrap_center_days": 8,
+    "confidence": "LOW_UNTIL_DRIVE_MANIFEST_AND_FIRST_MEASURED_BATCHES",
+    "basis": "~400 MB owner-reported Drive data + 228899 KiB GitHub repository metadata size; assumes structured triage/dedup/extraction plus deep analysis of semantically eligible artifacts. Recalibrate from actual completed obligations and source bytes after each batch.",
+    "observed_batches": []
+  },
+  "work_packages": {
+    "666-00-DRIVE-INDEX": {"status":"ACTIVE","goal":"Wait for/obtain complete recursive Drive index and freeze exact source manifest."},
+    "666-01-DRIVE-ASSIMILATE": {"status":"BLOCKED_ON_666_00","goal":"Fully cover, classify, analyze, lineage-link and integrate every eligible Drive unit."},
+    "666-02-REPO-MANIFEST": {"status":"OPEN_PREPARATION","goal":"Freeze Project-Frankenstein head/tree/history/papers manifest after Drive source scope is stable."},
+    "666-03-REPO-ASSIMILATE": {"status":"BLOCKED_ON_DRIVE","goal":"Fully analyze repository source/history/papers/experiments and integrate findings."},
+    "666-04-CROSS-SOURCE-RECONCILE": {"status":"BLOCKED_ON_BOTH_SOURCES","goal":"Resolve duplicates, chronology, contradictions, supersession and source ancestry across Drive and repository."},
+    "666-05-BRANCH-FEEDBACK": {"status":"BLOCKED_ON_ASSIMILATION","goal":"Return all applicable findings/NO_CHANGE receipts to every current research branch and Q12 knowledge index."},
+    "666-06-RELEASE-AUDIT": {"status":"BLOCKED_ON_ALL","goal":"Verify exact 100% obligation coverage and write 666_RELEASE_MANIFEST.json PASS."}
+  },
+  "live_claims": [],
+  "completed_receipts": [],
+  "last_updated": "2026-08-09"
+}

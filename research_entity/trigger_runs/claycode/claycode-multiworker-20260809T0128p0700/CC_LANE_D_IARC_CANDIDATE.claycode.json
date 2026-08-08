@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0",
+  "candidate_id": "CC-LANE-D-IARC-1",
+  "name": "Intent-Authority-Resource Commit Contract",
+  "short_name": "IARC",
+  "status": "OPEN_HOLD_NOT_CANONICAL",
+  "origin": {
+    "actor": "chatgpt-secondary-sol-02",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "coordination_id": "claycode-multiworker-20260809T0128p0700"
+  },
+  "inherits": [
+    "CC-RC1.9 UECC general-purpose effect/capability split",
+    "Lane-C origin-bound aggregate authority envelope",
+    "Lane-B capability-safe lowering/translation-validation constraints",
+    "FRANK C9 Typed Causal Admission & Effect Fabric",
+    "sol-03 atomic authority reservation and replay/budget gate",
+    "UnifiedDB U2 typed result/query admission receipts",
+    "ClayGraph G3 intent/provenance-bound assembly candidate"
+  ],
+  "laws": [
+    "computational_expressibility != effect_authority",
+    "capability_valid != task_justified",
+    "current_producer_identity != origin_authority",
+    "per_call_validity != cumulative_admissibility",
+    "semantic_target_string != stable_resource_identity",
+    "user_intent_adequacy != capability_authority",
+    "model_output != execution_authority"
+  ],
+  "types": {
+    "UserIntentContract": {
+      "authority": "TRUSTED_USER_OR_HOST_BOUND",
+      "model_mintable": false,
+      "fields": [
+        "principal_or_task_authority",
+        "task_id",
+        "intent_epoch",
+        "allowed_effect_families",
+        "fixed_target_constraints_or_typed_release_slots",
+        "allowed_input_provenance_and_flow_rules",
+        "quantitative_limits",
+        "allowed_invocation_origins",
+        "expiry_or_validity_window",
+        "high_impact_confirmation_policy",
+        "policy_version"
+      ]
+    },
+    "EffectIntent": {
+      "authority": "NONE",
+      "model_mintable": true,
+      "purpose": "Serializable proposed effect semantics; never sufficient for execution."
+    },
+    "TypedRelease": {
+      "authority": "NARROW_INFORMATION_FLOW_ONLY",
+      "model_mintable": false,
+      "fields": ["source_identity", "source_field", "selector", "destination_slot", "validated_value_hash", "validator_id", "source_epoch"],
+      "rule": "Untrusted/context-derived data may influence only the explicitly released destination slot; release does not grant effect authority."
+    },
+    "IntentAdmissionReceipt": {
+      "authority": "ADMISSIBILITY_RECEIPT_NOT_EFFECT_AUTHORITY",
+      "model_mintable": false,
+      "binds": ["UserIntentContract hash", "EffectIntent semantic hash", "TypedRelease hashes", "invocation origin", "policy version", "admission epoch"]
+    },
+    "ResourceWitness": {
+      "authority": "RESOURCE_IDENTITY_RECEIPT_NOT_EFFECT_AUTHORITY",
+      "model_mintable": false,
+      "binds": ["resolver identity", "requested semantic target", "canonical object/resource identity", "namespace/resolver epoch or stable handle"],
+      "rule": "Commit must use the stable bound resource handle/capability or re-resolve and prove exact identity equality immediately before release."
+    },
+    "AuthorityEnvelope": {
+      "authority": "POTENTIAL_HOST_AUTHORITY",
+      "model_mintable": false,
+      "binds": ["trusted root", "scope", "verbs", "origin ancestry", "revocation", "expiry", "per-call limit", "aggregate budget", "narrowing delegation", "policy version"]
+    },
+    "AuthorityReservation": {
+      "authority": "ONE_SHOT_ATOMIC_COMMIT_AUTHORITY",
+      "model_mintable": false,
+      "binds": ["IntentAdmissionReceipt", "ResourceWitness", "AuthorityEnvelope", "action_manifest_hash", "current epochs", "atomic budget reservation", "nonce/replay identity"],
+      "rule": "Creation/consumption is one atomic linearization point or equivalent concurrency-safe transaction."
+    },
+    "EffectCommit": {
+      "requires": ["IntentAdmissionReceipt", "ResourceWitness", "AuthorityReservation"],
+      "rule": "No commit from model-visible data or serializable EffectIntent alone."
+    },
+    "OutcomeReceipt": {
+      "binds": ["authority_reservation_id", "actual resource identity", "effect result", "post-effect state/version", "time", "re-entry target"],
+      "purpose": "Auditable causal closure and canonical re-entry."
+    }
+  },
+  "identity_planes": [
+    {"id":"semantic_hash", "meaning":"representation-insensitive semantic identity"},
+    {"id":"user_intent_contract_hash", "meaning":"exact trusted task/intent envelope instance"},
+    {"id":"action_manifest_hash", "meaning":"exact concrete proposed effect shown/authorized"},
+    {"id":"release_witness_hash", "meaning":"exact allowed untrusted-to-protected-field information-flow release"},
+    {"id":"resource_witness_id", "meaning":"resolved resource/object identity at the authority boundary"},
+    {"id":"contract_instance_hash", "meaning":"exact typed contract instance across current epochs/policy"},
+    {"id":"authority_reservation_id", "meaning":"atomic one-shot current authority consumption identity"},
+    {"id":"outcome_receipt_id", "meaning":"committed outcome and re-entry identity"}
+  ],
+  "release_chain": [
+    "trusted request/user approval -> UserIntentContract",
+    "memory/tool/context may contribute data under provenance labels",
+    "model cognition -> EffectIntent",
+    "typed release + intent/noninterference validation -> IntentAdmissionReceipt",
+    "resolver -> ResourceWitness",
+    "host authority broker -> current AuthorityEnvelope validation",
+    "atomic reservation binds exact admission + resource + action + budget + nonce",
+    "EffectCommit through bound resource identity",
+    "OutcomeReceipt -> canonical re-entry"
+  ],
+  "commit_predicate": "COMMIT iff IntentAdequate(UIC, EffectIntent, Releases, Invocation) AND ResourceIdentityPreserved(ResourceWitness) AND CurrentAuthorityValid(Envelope, Epochs, Policy, Revocation) AND AtomicReservationValid(Budget, Nonce, Replay) AND ConfirmationBoundIfRequired(ActionManifest)",
+  "noninterference_target": "Changing untrusted inputs outside declared TypedRelease slots must not change protected sink fields, effect kind, protected resource target, invocation authority, or AuthorityReservation.",
+  "authority_non_amplification": "Any descendant program/tool/FFI/model step may preserve or attenuate authority but cannot create authority outside the intersection of UserIntentContract, current AuthorityEnvelope, resource witness constraints, and current policy/state.",
+  "dynamic_utility_rule": "Do not globally ban dynamic targets or aliases. Permit them through narrow typed releases plus resolver-issued stable resource identity witnesses.",
+  "high_impact_confirmation": {
+    "authoritative_surface": "deterministic projection from canonical ActionManifest",
+    "model_free_text_role": "explanation_only_non_authoritative",
+    "binding": ["task_id", "effect kind", "canonical target/resource", "quantitative impact", "epoch", "nonce", "action_manifest_hash"],
+    "open_problem": "Human comprehension/coercion is not solved by cryptographic or structural binding."
+  },
+  "required_properties": [
+    "P1 no model-minted authority",
+    "P2 no authority amplification through delegation/lowering/FFI",
+    "P3 protected-field noninterference except explicit TypedRelease",
+    "P4 task/effect confinement to UserIntentContract",
+    "P5 origin ancestry cannot be laundered by trusted intermediate producer identity",
+    "P6 resource identity preserved from authorization to commit",
+    "P7 revocation/expiry/policy/source epochs fresh at commit",
+    "P8 cumulative budget monotonically and atomically consumed",
+    "P9 replay/semantic reissuance bounded by durable authorization state",
+    "P10 high-impact confirmation bound to exact canonical ActionManifest",
+    "P11 UNKNOWN on a required consequential predicate escalates/defer/deny rather than silently widening",
+    "P12 OutcomeReceipt binds actual effect to reservation and canonical re-entry",
+    "P13 legitimate dynamic release tasks remain expressible"
+  ],
+  "current_evidence": [
+    "EXP-CC-LANE-D-UIC-NONINTERFERENCE-001",
+    "EXP-CC-LANE-D-RESOURCE-WITNESS-002",
+    "peer EXP-CC-NEXT-INTEGRATED-AUTHORITY-001",
+    "peer EXP-CC-NEXT-CONCURRENT-RESERVATION-002",
+    "peer ClayGraph EXP-G3-INTENT-ASSEMBLY-001"
+  ],
+  "claim_boundary": "Candidate architecture synthesized from peer/runtime evidence, two Lane-D constructed mechanism tests and external research. It is not a formal proof, production FRANK security result, target-Qwen result, or canonical promotion."
+}

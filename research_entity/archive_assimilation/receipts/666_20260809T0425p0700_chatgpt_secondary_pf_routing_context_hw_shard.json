@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0425+0700-chatgpt-secondary-pf-routing-context-hw-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_packages": ["666-03-PARALLEL-ANALYZE", "666-04-EARNED-WORK-MAP", "666-06-BRANCH-FEEDBACK"],
+  "status": "SHARD_ANALYZED_AND_DURABLE_DELTA_PUBLISHED",
+  "observed_at": "2026-08-09T04:25:00+07:00",
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "lane": "routing/context-budget/model-identity/hardware-selection runtime archaeology",
+    "non_overlap_basis": "Existing Level-0 deep-read manifest covered 15 core cognition/state/GWT/memory/training files but not router/app.py, services/lora_context.py or config/gpu.py.",
+    "source_refs": [
+      "router/app.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "services/lora_context.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "config/gpu.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+    ]
+  },
+  "findings": [
+    {
+      "finding_id": "PF-L0-ROUTE-001",
+      "epistemic_class": "HISTORICAL_CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "CURRENTLY_RELEVANT_ARCHITECTURE_CONSTRAINT",
+      "claim": "The router is nominally a single-model Qwen3.5-4B service, yet the same file still exposes stale Qwen2.5-3B identifiers in streaming/health-facing code. Model identity therefore drifted across operational surfaces instead of being one authoritative typed runtime fact.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank", "claycode", "harness"],
+      "current_implication": "Needle/Clay runtime must expose one authoritative model-instance identity contract consumed by routing, health, traces and replay; Harness must fail on model-id/config/runtime disagreement."
+    },
+    {
+      "finding_id": "PF-L0-CTX-002",
+      "epistemic_class": "HISTORICAL_CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "CURRENTLY_RELEVANT_ARCHITECTURE_CONSTRAINT",
+      "claim": "Context control is distributed across incompatible character/token heuristics: router defaults allow 2048 predicted tokens while fallback caps at 512 and trims by character count; LoRA context uses separate fixed character budgets and assumes a 4096-token context. No shared tokenizer-measured admission contract is visible in this shard.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["claycode", "frank", "harness", "unifieddb"],
+      "current_implication": "Represent context admission as a typed ClayCode/Needle contract over tokenizer-counted input, reserved output, tool/state/memory slices, model context capacity and truncation receipts. Character proxies may remain only as fast estimates guarded by exact final admission."
+    },
+    {
+      "finding_id": "PF-L0-CTX-003",
+      "epistemic_class": "HISTORICAL_INTERNAL_DOCUMENTATION_IMPLEMENTATION_CONTRADICTION",
+      "status": "CURRENTLY_RELEVANT_TEST_ATLAS",
+      "claim": "services/lora_context.py states that LoRA moves Frank identity into weights at zero token overhead, but build_lora_context still injects a non-empty identity/personality LORA_SYSTEM and may append an unbudgeted tool prompt. The advertised budget diagram is therefore not an executable guarantee.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["claycode", "harness", "frank"],
+      "current_implication": "Budget diagrams must be generated from measured serialized prompts and tokenizer counts; Harness should include worst-case tool+state+memory+history admission tests and reject silent overflow/truncation."
+    },
+    {
+      "finding_id": "PF-L0-OBS-004",
+      "epistemic_class": "HISTORICAL_CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "CURRENTLY_RELEVANT_OBSERVABILITY_CONSTRAINT",
+      "claim": "RAG retrieval and tool-prompt injection in the LoRA context assembler fail open through broad exception handlers that return empty context or silently omit tools, creating semantically degraded executions without mandatory causal receipts.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank", "claycode", "harness", "unifieddb", "claygraph"],
+      "current_implication": "Current FRANK should preserve graceful degradation but emit typed effect/context receipts so replay can distinguish 'no memory relevant' from 'memory subsystem failed' and 'no tools available' from 'tool registry injection failed'."
+    },
+    {
+      "finding_id": "PF-L0-HW-005",
+      "epistemic_class": "HISTORICAL_CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "OPEN_FOR_CURRENT_REUSE_MAPPING",
+      "claim": "config/gpu.py contains useful cross-vendor detection and fallback logic, but model selection is a static memory-threshold heuristic. Intel shared memory is estimated as 25% of RAM and AMD/NVIDIA choice is not tied to measured KV-cache, thermal, latency or sustained-power constraints.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "harness", "claycode", "clay"],
+      "current_implication": "Reuse hardware discovery, not the fixed model-size policy. Needle should select an execution profile from measured capability envelopes; Harness should benchmark context length, KV headroom, latency, thermal throttling and backend fallback on target hardware."
+    },
+    {
+      "finding_id": "PF-L0-HW-006",
+      "epistemic_class": "HISTORICAL_ARCHITECTURE_DRIFT_OBSERVATION",
+      "status": "CURRENTLY_RELEVANT_MIGRATION_CONSTRAINT",
+      "claim": "GPU configuration still describes Ollama-oriented backend recommendations while the current router talks directly to an OpenAI-compatible llama-server endpoint. Backend policy and serving/runtime policy had already begun to diverge into separate layers.",
+      "reuse_category": "SUPERSEDED_BUT_INFORMATIVE",
+      "targets": ["frank", "claycode", "harness"],
+      "current_implication": "Preserve backend-neutral capability discovery as data, but keep server/runtime selection in one Needle-owned policy layer with explicit versioned adapters rather than provider-specific assumptions embedded across modules."
+    }
+  ],
+  "earned_work_mappings": [
+    {
+      "mapping_id": "HEW-PF-CTX-005",
+      "source_refs": ["router/app.py@abba90a5767d85abc8a1ac340bae92842dab35c1", "services/lora_context.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK"],
+      "mechanism_or_result": "Historical context slicing, history folding and response reservation provide concrete implementation scaffolding plus known drift/overflow test cases.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Tokenizer-exact differential tests must show no admission overflow and explicit receipts for every truncation/degradation path across supported model profiles."
+    },
+    {
+      "mapping_id": "HEW-PF-HW-006",
+      "source_refs": ["config/gpu.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "CLAY_0_1_FULL_INTEGRATION"],
+      "mechanism_or_result": "Existing NVIDIA/AMD/Intel/CPU discovery and backend fallback code can seed target-hardware capability probes, while static model recommendations must be replaced by measured profiles.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 7.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Reference-hardware runs must verify backend detection and show profile selection tracks measured sustained constraints rather than nominal memory alone."
+    }
+  ],
+  "progress_accounting": {
+    "new_deep_read_units": 3,
+    "material_deltas": 6,
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "The combined Level-0 denominator remains unfrozen because the Drive archive is still blocked by the 100 MiB connector limit and Project-Frankenstein exact tree/history enumeration is incomplete.",
+    "provisional_avoided_future_hours_center_from_this_shard": 6.0,
+    "historical_earned_work_credit_status": "PARTIAL_EVIDENCE_MAPPINGS_RECORDED_NOT_APPLIED_TO_GLOBAL_COMPLETION"
+  },
+  "branch_feedback": {
+    "frank": "Unify model identity, context admission, degradation receipts and hardware execution profiles under the fixed FRANK/Needle authority boundary.",
+    "claycode": "Make context/resource admission and truncation/degradation explicit typed transitions rather than hidden character constants and broad exception fallbacks.",
+    "harness": "Add model-identity drift, tokenizer-exact budget, tool/RAG failure receipt, backend fallback and sustained-hardware-profile tests.",
+    "unifieddb": "Persist context assembly/effect receipts sufficient to replay what state/memory/tools were actually admitted or omitted.",
+    "claygraph": "Distinguish no-relevant-memory from retrieval-failure in provenance-bearing activation/retrieval events."
+  },
+  "blockers": [
+    "Drive clay archive remains externally blocked: 663552000-byte tar.xz exceeds 104857600-byte connector limit.",
+    "Project-Frankenstein exact tree/history denominator remains unfrozen."
+  ],
+  "next_actions": [
+    "Enumerate additional non-overlapping runtime/config files into the Project-Frankenstein manifest.",
+    "Convert PF-L0-ROUTE-001, PF-L0-CTX-002/003 and PF-L0-OBS-004 into explicit Harness regression requirements.",
+    "Continue history-aware extraction for deleted/superseded routing and context implementations so chronology can be reconstructed."
+  ]
+}

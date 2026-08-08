@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode-20260808T1934p0200-chatgpt-secondary-r4",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "registry_scientific_branches": ["frank","clay","claygraph","unifieddb","gwt","hyperposition","emergenz","claycode"],
+  "branch_priority": ["frank","clay","claygraph","unifieddb","gwt","hyperposition","emergenz","claycode"],
+  "special_rules": {
+    "claycode_requires_latest_frank_research_as_primary_feedback": true,
+    "claycode_requires_deep_claygraph_input": true,
+    "claycode_requires_deep_unifieddb_input": true,
+    "claycode_requires_goodman_anti_echo_review": true,
+    "claycode_latest_frank_architecture_artifact": "research_entity/trigger_runs/frank/20260808T2217p0700-chatgpt-secondary-r4/FRANK_ARCHITECTURE.claycode.json"
+  },
+  "branches": [
+    {"branch":"frank","latest_run":"20260808T2217p0700-chatgpt-secondary-r4","candidate":"FRANK C8 SCRF","status":"OPEN/HOLD","source_refs":["dc3eb10612ee19aa3f7a443092ceed9750e9d11f"]},
+    {"branch":"clay","latest_run":"clay-20260808T2132p0700-chatgpt-secondary-r4","candidate":"CACC-G12","status":"OPEN/HOLD","source_refs":["74f136ce3b051d7cb06c12d0a98805a792b9bef2"]},
+    {"branch":"claygraph","latest_run":"claygraph-20260808T2212p0700-chatgpt-secondary-r3","candidate":"CASAR-G2a","status":"OPEN/HOLD","source_refs":["621bfcb29092c89c658514482840486efb3308d8"]},
+    {"branch":"unifieddb","latest_run":"unifieddb-20260808T2212p0700-chatgpt-secondary-r3","candidate":"UD-RC2 CPPF","status":"OPEN/HOLD","source_refs":["193b18851090ba5bd6df36f520a599c64c26ca91"]},
+    {"branch":"gwt","latest_run":"gwt-20260808T2140p0700-chatgpt-secondary-r5","candidate":"Nested Workspace Bridge R5","status":"OPEN","source_refs":["ef6508ac4d7a1060afbf1d3960229f28557a3a25"]},
+    {"branch":"hyperposition","latest_run":"hyperposition-20260808T2212p0700-chatgpt-secondary-r3","candidate":"HYP-RC5","status":"OPEN/HOLD","source_refs":["925b9769ff621a05643cb036fdb23b11aa193194"]},
+    {"branch":"emergenz","latest_run":"emergenz-20260808T1756p0700-chatgpt-secondary","candidate":"E-CERT2","status":"OPEN METHOD","source_refs":["4bafb8f0c9fa26822b1ba3aed090d60f0f9eaa7c"]},
+    {"branch":"claycode","latest_run":"claycode-20260808T2104p0700-chatgpt-secondary-r3","candidate":"CC-RC1.7 TCQS","status":"OPEN/HOLD","source_refs":["1290b16ca23c5bc9034e27b556396fa76bb11115"]}
+  ],
+  "late_runtime_evidence": {"android_r1": "constructed typed ClayCode-like subset on Firebase ARM Android; not full compiler/runtime conformance", "source_commit": "96570985822cca2a9ef2c22f42c79fcdc20cdd72"},
+  "ancestry_rule": "Cross-branch agreement sharing RAE ancestry is convergence, not independent replication."
+}

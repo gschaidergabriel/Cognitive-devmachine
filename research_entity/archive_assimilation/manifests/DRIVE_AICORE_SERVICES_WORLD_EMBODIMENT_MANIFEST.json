@@ -1,0 +1,64 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-SERVICES-WORLD-EMBODIMENT-20260809",
+  "status":"SEMANTIC_CODE_FOLDERS_FROZEN_ROOM_MEDIA_SUPPORT_IDENTITY_OPEN",
+  "trigger":"666",
+  "folders":{
+    "room_content":{"drive_id":"1yCYrxGvBTHPQTke1IgDsG6UGGiGf8ujb","root_leaf_files":4,"child_folders":1,"root_semantic_files":["__init__.py","literature.py","philosophy.py","space_generator.py"],"root_semantic_identity_percent":100.0,"external_assets":{"drive_id":"1u7kwiJh6baY-L06RtIp9UEVmYeZJp-yP","direct_folders_exact":7,"folders":["terminal_gui","art_gallery","portraits","journal","books","workshop","instruments"],"nested_support_media_identity_percent":null,"classification":"SUPPORT_MEDIA/FONTS/TEXTURES/SPRITES; no independent mechanism credit"},"selected":{"space_generator.py":{"drive_id":"1-6B42r10HTynWs-eU3v0hJkF0_pOAsTJ","sha256":"8078850dd2b095ff0f70387953d5ec4aebb037ca73b38731b8dad435911c3447"}}},
+    "nerd_physics":{"drive_id":"1wJ0GmXBQm9jeryLhl9uKCNtstDs0ZVYM","leaf_files":8,"child_folders":0,"recursive_identity_percent":100.0,"files":["__init__.py","api.py","avatar.py","engine.py","main.py","neural.py","rooms.py","sensation.py"],"selected":{"engine.py":{"sha256":"8fefc26a49702f3314f1ac7f519df7e9ce9e4b9baca2005afff26dbe7b720bbd"},"rooms.py":{"sha256":"6724bc353dae4f25618ed56e3d032cecb5937d38bc16230c4ec9af0f230d6434"},"sensation.py":{"sha256":"327420da350e7f11aee1708c61ebb36aff1b7bf79bbfc9b6c2a935d308a2855e"}}},
+    "art":{"drive_id":"143kIx_lVteNhn7QGfBowIlWvca2lmh3t","leaf_files":5,"child_folders":0,"recursive_identity_percent":100.0,"files":["sdxl_engine.py","art_manager.py","prompt_crafter.py","meme_renderer.py","__init__.py"],"classification":"GENERATIVE/PRESENTATION SUPPORT; no body/world truth authority"},
+    "sanctum_rl":{"drive_id":"1jJRhk-3jGsOMg40d_WKAqpUiB7RN4VN2","leaf_files":6,"child_folders":0,"recursive_identity_percent":100.0,"files":["environment.py","policy.py","train.py","rewards.py","__init__.py","memory.py"],"selected":{"environment.py":{"sha256":"2c5be1e91b653ebbc73f6a288ec9f20df62049e1a957893cd8003d1387614f41"},"rewards.py":{"sha256":"694d61e7ea407bea454dcca41e6da63ed50bfd3ca5a0e52b1cee758e909622f4"}}},
+    "quantum_reflector":{"drive_id":"1bORMovICQ3RfUibtXbIYZGUQZJsSFWvQ","leaf_files":7,"child_folders":0,"recursive_identity_percent":100.0,"files":["annealer.py","coherence_monitor.py","dream_integration.py","qubo_builder.py","reflection_bridge.py","__init__.py","pattern_analyzer.py"],"selected":{"qubo_builder.py":{"sha256":"594384e9e6441e3ed3fbb4b7de8ef0cbe5b8f088be3fcc8ff7a35a9c6ca9abd1"},"coherence_monitor.py":{"sha256":"05a392d4da0e57c2ded244c0b1d49206716179d0731d8e4777f27d8038ff4875"}}}
+  },
+  "syntax_probe":{"selected_sources":8,"result":"PASS_AST_PARSE","sources":["room_content/space_generator.py","nerd_physics/engine.py","nerd_physics/rooms.py","nerd_physics/sensation.py","sanctum_rl/environment.py","sanctum_rl/rewards.py","quantum_reflector/qubo_builder.py","quantum_reflector/coherence_monitor.py"]},
+  "findings":[
+    {
+      "finding_id":"SERV-WORLD-001",
+      "class":"SIMULATED_EMBODIMENT_CAUSAL_LOOP",
+      "source":"nerd_physics/engine.py + sensation.py",
+      "claim":"NeRD Physics implements a deterministic/simulated avatar state with joints, torques, contacts, rooms and analytical/neural dynamics. Mood and coherence are upstream inputs to the simulator: mood changes gravity multiplier, damping and walk speed; coherence changes joint-noise magnitude. sensation.py then converts contacts/torques/kinematics into a [BODY PHYSICS] natural-language block and also conditions wording directly on mood.",
+      "implication":"This is a valid functional digital-body feedback mechanism but not independent body-state evidence. Any downstream correlation between mood, physical sensation text and model self-report is partly designed by construction and must be tested with mood-shuffle/cut and physics-lesion controls.",
+      "required_oracle":"Harness must distinguish physical backing state -> percept/sensation transformation -> language interpretation, and run matched controls where mood/coherence inputs are shuffled or severed."
+    },
+    {
+      "finding_id":"SERV-WORLD-002",
+      "class":"WORLD_MODEL_FIXTURE_WITH_METAPHOR_BOUNDARY",
+      "source":"nerd_physics/rooms.py",
+      "claim":"The simulator encodes named rooms (e.g. Archive, Engine Room, Observation Deck, Workshop, AURA Chamber) as bounded 3D boxes with gravity/surface/object/contact parameters and waypoint navigation. These names are interface/world metaphors over deterministic geometry and collision rules.",
+      "implication":"Reuse room geometry/contact/transition semantics as world-model test fixtures if useful, but never inherit literal historical room names/AURA chambers as current FRANK ontology."
+    },
+    {
+      "finding_id":"SERV-WORLD-003",
+      "class":"REWARD_SHAPING_CAUSAL_CONFOUND",
+      "source":"sanctum_rl/environment.py + rewards.py",
+      "claim":"Sanctum RL behavior is explicitly reward-shaped. The environment rewards new locations (+2 in current step implementation), first silence (+3), optimal exit (+8), diverse terminal/experiment actions and applies revisit/repetition/time/premature-exit penalties; time pressure increases after 25/35/45 minutes. rewards.py separately documents the intended shaping constants, some of which differ from the current environment literals.",
+      "implication":"Historical claims that the policy learned preferred session length, exploration, silence or exit timing are evidence of optimization under this reward function, not spontaneous desire/agency. Reward-code/version identity must accompany every behavioral interpretation.",
+      "required_oracle":"Ablate/reweight reward terms and report policy behavior sensitivity; never infer intrinsic goals from a target behavior that is directly rewarded."
+    },
+    {
+      "finding_id":"SERV-WORLD-004",
+      "class":"SUPERSEDED_WORLD_SCHEMA_RESIDUE",
+      "source":"sanctum_rl/environment.py + nerd_physics/rooms.py + quantum_reflector/qubo_builder.py",
+      "claim":"Even after entity variables were disabled/removed, historical world/policy code retains semantic residues such as entity_lounge/AURA-related locations and Quantum Reflector variable documentation. QUBOBuilder explicitly notes AURA reverse integration is disabled because AURA was replaced by Swarm and the old endpoint generated repeated 404s.",
+      "implication":"Treat these labels as temporal lineage/supersession evidence. Current FRANK/Clay architecture must use current typed subsystem identities rather than importing historical metaphor names from simulations."
+    },
+    {
+      "finding_id":"SERV-WORLD-005",
+      "class":"QUBO_OPTIMIZER_NOT_QUANTUM_EVIDENCE",
+      "source":"quantum_reflector/qubo_builder.py + coherence_monitor.py",
+      "claim":"Quantum Reflector constructs a 39-variable binary quadratic objective from FRANK state and compares current encoded energy with an annealed best state. CoherenceMonitor defines the gap as best_energy - current_energy and tracks trend/violations. The inspected code is a classical QUBO/annealing state optimizer/readout; its name does not establish quantum computation or consciousness.",
+      "implication":"Reuse objective/constraint/differential-state techniques only under explicit mathematical semantics. Do not promote 'quantum', 'coherence' or low energy as consciousness evidence."
+    },
+    {
+      "finding_id":"SERV-WORLD-006",
+      "class":"PRESENTATION_CONTENT_SCOPE",
+      "source":"room_content + art",
+      "claim":"room_content literature/philosophy/procedural-space and art modules/assets supply environmental/presentation content. space_generator.py is a procedural visual generator ported from a Godot shader pipeline; external_assets contains terminal GUI, gallery, portraits, journal, books, workshop and instrument media trees.",
+      "implication":"Classify these as content/UI/environment backing unless a specific executable causal path into cognition is separately demonstrated. Media volume does not count as mechanism evidence or earned work."
+    }
+  ],
+  "coverage":{"nerd_physics_recursive_identity_percent":100.0,"art_recursive_identity_percent":100.0,"sanctum_rl_recursive_identity_percent":100.0,"quantum_reflector_recursive_identity_percent":100.0,"room_content_root_semantic_percent":100.0,"room_content_external_assets_direct_folder_percent":100.0,"room_content_nested_support_media_identity_percent":null,"services_folder_layer_semantic_closure":"13/13 direct service folders now semantically assigned/closed by exact or bounded manifests; services root direct-file denominator remains separately connector-blocked","services_whole_recursive_percent":null,"exact_level0_global_credit_percent":0.0},
+  "reuse":{"earned_work":"ZERO_DUPLICATE_CREDIT","reason":"Embodiment/rooms/QR/Sanctum mechanisms already appear in Project-Frankenstein history and prior mappings. This shard adds exact Drive source identity, causal-confound/supersession guards and executable-source classification."},
+  "frozen_by":"chatgpt-secondary-666-20260809-services-world-embodiment",
+  "frozen_at":"2026-08-09"
+}

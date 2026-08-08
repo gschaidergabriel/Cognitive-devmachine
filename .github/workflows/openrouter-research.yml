@@ -1,0 +1,55 @@
+name: RAE OpenRouter research runner
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/runtime/openrouter_requests/*.json'
+      - 'tools/openrouter_inference.py'
+      - 'research_entity/private/API_TOKENS.env'
+      - '.github/workflows/openrouter-research.yml'
+
+concurrency:
+  group: rae-openrouter-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  execute-openrouter-requests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Execute pending OpenRouter requests
+        shell: bash
+        run: |
+          shopt -s nullglob
+          for req in research_entity/runtime/openrouter_requests/*.json; do
+            rid="$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["request_id"])' "$req")"
+            out="research_entity/runtime/tool_results/${rid}.json"
+            if [ -f "$out" ]; then
+              continue
+            fi
+            python tools/openrouter_inference.py --request "$req" >/tmp/openrouter-last.json
+          done
+
+      - name: Commit sanitized OpenRouter results
+        run: |
+          git config user.name 'rae-openrouter-runner'
+          git config user.email 'rae-openrouter-runner@users.noreply.github.com'
+          git add research_entity/runtime/tool_results/
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record OpenRouter research results'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

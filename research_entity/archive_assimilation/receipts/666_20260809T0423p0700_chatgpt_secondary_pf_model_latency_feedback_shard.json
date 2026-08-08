@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0423+0700-chatgpt-secondary-pf-model-latency-feedback-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "SHARD_ANALYZED_READY_FOR_MESH",
+  "observed_at": "2026-08-09T04:23:00+07:00",
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "lane": "model-capacity lineage, latency/interference benchmarks and self-generated feedback contamination",
+    "source_refs": [
+      "BENCHMARK.md@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "README.md@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "commit:5a46230eef19de16467fc9c63afcbf6a582a13ca",
+      "commit:a016410734564abcb4ba3bd0143b04ded6b8d1e1",
+      "commit:1b8615830401b4e6f05d57c83e92068a1b9f1c08"
+    ]
+  },
+  "crossread_dedup": {
+    "peer_overlap": "The existing ablation mapping already credits the historical prompt battery/benchmark scaffold, so this shard awards no additional hours for the benchmark itself.",
+    "unique_delta": "Latency/interference constraints, model-capacity lineage and self-generated-training contamination are retained as separate test constraints."
+  },
+  "findings": [
+    {
+      "finding_id": "PF-PERF-001",
+      "epistemic_class": "HISTORICAL_COMPARATIVE_BENCHMARK_WITH_SCORING_CONFOUNDS",
+      "status": "MEASUREMENT_FOUNDATION_NOT_CAUSAL_PROOF",
+      "claim": "The February 2026 BENCHMARK compared Frank and bare Llama 3.1 8B on the same weights/hardware and reported Frank 61.0% vs bare 51.9%, but the rubric included architecture-specific specificity bonuses and generic-response penalties. It is useful as a probe battery, not clean causal evidence for a global architecture effect.",
+      "targets": ["harness", "frank", "gwt", "emergenz", "clay"],
+      "next_test": "Re-run matched factorial ablations with blinded scoring, equal prompts/context budgets and no architecture-name bonus."
+    },
+    {
+      "finding_id": "PF-PERF-002",
+      "epistemic_class": "HISTORICAL_NEGATIVE_PERFORMANCE_RESULT",
+      "status": "CURRENTLY_RELEVANT_ACCEPTANCE_CONSTRAINT",
+      "claim": "The same benchmark documents a large reasoning penalty caused by Core/router/workspace overhead: multiple Frank reasoning probes timed out while the bare model answered in roughly 20-25 seconds despite identical 8B weights.",
+      "targets": ["harness", "frank", "claycode", "clay"],
+      "implication": "Cognitive functionality that starves interactive inference is a system failure even if the base model can solve the task. H1/H2/H3 need latency distributions and foreground-vs-background interference tests."
+    },
+    {
+      "finding_id": "PF-PERF-003",
+      "epistemic_class": "HISTORICAL_REPOSITORY_REPORTED_CROSS_MODEL_STRESS_TEST",
+      "status": "OPEN_REPLICATION_REQUIRED",
+      "claim": "A March 2026 README revision reported 3B vs prior 8B conversational stress-test totals of 59% vs 93%, with the largest gaps in recall (9% vs 76%) and reasoning (0% vs 90%) while identity/opinions remained 100% on both. This is strong evidence that model capacity and architecture contribution must be separated, but it is not a clean same-version controlled experiment.",
+      "targets": ["frank", "harness", "clay", "claycode"],
+      "next_test": "Run the same frozen architecture/harness with 4B and larger comparison models under matched quantization/context/LoRA conditions."
+    },
+    {
+      "finding_id": "PF-PERF-004",
+      "epistemic_class": "CURRENT_HEAD_ARCHITECTURE_SOURCE_PLUS_HISTORICAL_MODEL_MIGRATION",
+      "status": "CURRENT_AT_FROZEN_HEAD",
+      "claim": "Frozen-head README identifies Qwen 3.5-4B as the current single model and explicitly warns that the custom LoRA is not included; the SOMA migration commit changed Qwen2.5-3B to Qwen3.5-4B and records slower fallback generation (~9 tok/s vs ~25 tok/s) plus higher RAM requirements.",
+      "targets": ["frank", "harness", "claycode", "clay"],
+      "implication": "Historical benchmark numbers are version-bound. Acceptance receipts must bind exact model, quantization, adapter, hardware and runtime hashes."
+    },
+    {
+      "finding_id": "PF-FEEDBACK-005",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_FROM_PATCHED_FEEDBACK_LOOP",
+      "status": "CURRENTLY_RELEVANT_TRAINING_DATA_CONSTRAINT",
+      "claim": "A documented degeneration loop allowed room-description text to contaminate idle thoughts, persist into databases, be re-injected into later context and then train the ThoughtSeedVAE, producing a self-reinforcing quality collapse. The fix required removing the source context, filtering stored/reinjected content and retraining the learned component.",
+      "targets": ["clay", "frank", "claygraph", "unifieddb", "harness", "claycode"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "implication": "Self-generated data needs ancestry labels, contamination controls and trainability policy. Retrieval presence must not imply eligibility for future training."
+    },
+    {
+      "finding_id": "PF-FEEDBACK-006",
+      "epistemic_class": "HISTORICAL_CONTEXT_CONTAMINATION_RESULT_FROM_MODEL_MIGRATION_PATCH",
+      "status": "CURRENTLY_RELEVANT_CONTEXT_POLICY_CONSTRAINT",
+      "claim": "The 4B migration patch adds history sanitization because specific safety-refusal text in assistant history could prime unrelated future refusals through recency bias. This is another case where generated output becomes a causal future-state input.",
+      "targets": ["frank", "claygraph", "unifieddb", "harness"],
+      "implication": "History/re-entry must be typed by provenance and causal role; raw assistant output should not automatically become trusted future control context."
+    }
+  ],
+  "earned_work_mapping_candidate": {
+    "mapping_id": "HEW-PF-FEEDBACK-009",
+    "source_refs": ["PF-FEEDBACK-005", "PF-FEEDBACK-006"],
+    "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "DATA_FINAL_TRAINING_CORPUS", "FINAL_MODEL_FINE_TUNE"],
+    "mechanism_or_result": "Historical self-generated-data/context contamination failures provide concrete ancestry and trainability-policy tests for retrieval, re-entry and final training-data construction.",
+    "reuse_category": "NEGATIVE_RESULT_VALUE",
+    "avoided_future_hours_low": 1.0,
+    "avoided_future_hours_center": 3.0,
+    "avoided_future_hours_high": 6.0,
+    "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+    "falsifier_or_validation_receipt": "Training-data and re-entry harness must prove source/ancestry filtering, non-trainable generated-content classes and contamination-resistant replay under recursive self-generation."
+  },
+  "branch_feedback": {
+    "harness": "Make foreground latency, background interference, exact model identity and recursive generated-data contamination first-class acceptance tests.",
+    "frank": "Do not attribute model-capacity failures to architecture or vice versa; bind every benchmark to model/adapter/runtime identity.",
+    "claycode": "Represent scheduling/resource budgets and source/trainability provenance explicitly enough that background cognition cannot silently starve foreground tasks or poison training corpora.",
+    "claygraph": "Track generated-vs-observed ancestry and whether an item is eligible for retrieval, re-entry or training as separate semantics.",
+    "unifieddb": "One logical substrate must not collapse provenance classes; transcript, generated thought, observation, fact and trainable example require distinct policy states.",
+    "clay": "Preserve continuous cognition only under measurable latency/resource budgets; recursive self-generated data is a known Goodhart/degeneration channel."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "benchmark_scaffold_extra_hours_awarded": 0.0,
+    "provisional_unique_avoided_future_hours_low": 1.0,
+    "provisional_unique_avoided_future_hours_center": 3.0,
+    "provisional_unique_avoided_future_hours_high": 6.0,
+    "reason": "Only the unique feedback-contamination failure family is proposed for additional earned-work mapping; strict denominator remains unfrozen."
+  }
+}

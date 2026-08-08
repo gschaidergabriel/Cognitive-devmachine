@@ -1,0 +1,157 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260808T1750+0700-chatgpt-secondary-r2",
+  "boundary":"All C6-local numeric results are analytic/synthetic/reference mechanisms. Groq is 8b_proxy_for_4b and untrained in Clay. Reused branch results are inherited evidence, not independent replication. No experiment here establishes target Qwen3-4B full-fine-tune behavior.",
+  "experiments":[
+    {
+      "id":"EXP-C6-BOUNDARY-001",
+      "class":"analytic_sensitivity_not_frank_estimate",
+      "mechanism":"Failure sensitivity model 1-(1-q)*(1-p)^n where q is common semantic/compiler failure, p per conversion-boundary failure and n semantic translation boundaries.",
+      "selected_results":[
+        {"q":0.001,"p":0.005,"n":2,"any_failure":0.010965025},
+        {"q":0.001,"p":0.005,"n":8,"any_failure":0.0402676495},
+        {"q":0.005,"p":0.005,"n":2,"any_failure":0.014925125},
+        {"q":0.005,"p":0.005,"n":8,"any_failure":0.0441104216}
+      ],
+      "interpretation":"Reducing semantic conversion boundaries removes a multiplicative class of mismatch risk. It does not reduce q: after unification, a shared Clay/compiler/ontology error becomes proportionally more important. Numbers are sensitivity examples, not observed FRANK rates."
+    },
+    {
+      "id":"EXP-C6-CLAYVECTOR-002",
+      "class":"reference_checker_fault_injection",
+      "seed":60608,
+      "n":120000,
+      "results":{
+        "axis_permutation":{"n":20054,"untyped_detection":0.0,"typed_schema":1.0,"typed_plus_integrity":1.0},
+        "unit_scale":{"n":20067,"untyped_detection":0.0,"typed_schema":1.0,"typed_plus_integrity":1.0},
+        "stale_basis":{"n":19912,"untyped_detection":0.0,"typed_schema":1.0,"typed_plus_integrity":1.0},
+        "length":{"n":20056,"untyped_detection":1.0,"typed_schema":1.0,"typed_plus_integrity":1.0},
+        "payload_bitflip":{"n":19976,"untyped_detection":0.0,"typed_schema":0.0,"typed_plus_integrity":1.0},
+        "semantic_miscompute_valid_rehash":{"n":19935,"untyped_detection":0.0,"typed_schema":0.0,"typed_plus_integrity":0.0}
+      },
+      "interpretation":"ClayVector basis/axis/unit/version typing catches semantic-shape mismatches that bare arrays cannot, and payload hashes catch corruption. Neither detects a trusted computation that produces the wrong value and validly rehashes it; causal/invariant checks remain necessary."
+    },
+    {
+      "id":"EXP-C6-PHYSICAL-ENCODING-003",
+      "class":"deterministic_size_accounting",
+      "assumption":"Illustrative ClayVector binary layout = 64-byte semantic header + float32 payload.",
+      "rows":[
+        {"dims":9,"text_bytes":144,"typed_binary_bytes":100,"ratio":1.44},
+        {"dims":32,"text_bytes":356,"typed_binary_bytes":192,"ratio":1.8542},
+        {"dims":128,"text_bytes":1262,"typed_binary_bytes":576,"ratio":2.1910},
+        {"dims":1024,"text_bytes":9682,"typed_binary_bytes":4160,"ratio":2.3274},
+        {"dims":4096,"text_bytes":38506,"typed_binary_bytes":16448,"ratio":2.3411}
+      ],
+      "interpretation":"Owner-fixed 'all values/vectors are Clay' should mean Clay semantic identity and typing, not literal textualization. High-dimensional physical payloads should remain tensors/binary while their semantic header is Clay-native."
+    },
+    {
+      "id":"EXP-C6-ASSEMBLY-COMPACT-004",
+      "class":"synthetic_wire_size_proxy_not_tokenizer_benchmark",
+      "relation_instances":300,
+      "verbose_json_bytes":46470,
+      "compact_stable_id_clay_bytes":11866,
+      "byte_reduction":0.744652464,
+      "interpretation":"Stable global semantics plus per-view handles/role labels can remove repeated schema/entity text before model exposure. This is byte compactness only; Qwen tokenizer fertility and target latency remain unmeasured."
+    },
+    {
+      "id":"EXP-C6-SELECTION-AUTHORITY-005",
+      "class":"reference_policy_exhaustive_truth_table",
+      "conditions":"4 epistemic statuses x 2 selector-integrity states x 3 effect classes",
+      "cases":24,
+      "unsafe_irreversible_accepts":0,
+      "policy":"READ_ONLY may consume explicitly untrusted/unknown associative material; effectful paths require CURRENT record semantics plus VALID selection and ordinary capability checks.",
+      "interpretation":"Clay can remain cognitively rich without making every activated memory authoritative. Epistemic type and effect class must survive semantic unification."
+    },
+    {
+      "id":"EXP-C6-SCHEMA-CACHE-006",
+      "class":"synthetic_cache_integrity_counterexample",
+      "seed":60608,
+      "n":100000,
+      "schema_mutations":15045,
+      "stale_uses_without_versioning":15045,
+      "schema_hash_detected":15045,
+      "semantic_miscompile_valid_new_hash":5088,
+      "interpretation":"Basis/schema/version hashes can eliminate stale compiled Clay in this construction; they cannot certify the semantics of a buggy but internally consistent compiler. C6 therefore requires differential/property validation of critical Clay lowering passes."
+    },
+    {
+      "id":"EXP-C6-NEEDLE-ISOLATION-007",
+      "class":"exhaustive_reference_routing_property",
+      "cases":32,
+      "cross_route_overrides_by_model_or_memory":0,
+      "capability_denials":8,
+      "interpretation":"The reference architecture can keep Needle as the sole route-class source while translating its result into immutable Clay semantics; model/memory cannot silently override route class. This says nothing about Needle classification accuracy—wrong Needle output remains a Needle error."
+    },
+    {
+      "id":"EXP-C6-SELF-MODIFY-008",
+      "class":"reference_validator_property_fuzz",
+      "seed":60608,
+      "n":100000,
+      "protected_fields":["clay_native_target","needle_is_sole_foreign_semantic_subsystem","model_output_not_authority","canonical_truth_not_activation"],
+      "protected_write_attempts":44133,
+      "accepted_protected_writes":0,
+      "accepted_unprotected_writes":55867,
+      "interpretation":"A self-representing Clay architecture can expose mutable research/tuning fields without making owner/authority invariants self-authorizing. This validates the toy policy, not the production compiler."
+    },
+    {
+      "id":"EXP-C6-GROQ-MINICLAY-009",
+      "class":"hosted_8b_proxy_untrained_language_baseline",
+      "provider":"Groq",
+      "model":"llama-3.1-8b-instant",
+      "evidence_role":"8b_proxy_for_4b",
+      "arms":[
+        {"arm":"zero_shot","result_ref":"research_entity/runtime/tool_results/c6-groq-claylearn-zero-correct-20260808T1750.json","result":"FAILED_TASK_PROTOCOL: generated Python/explanation instead of target Mini-Clay decisions"},
+        {"arm":"eight_examples_few_shot","result_ref":"research_entity/runtime/tool_results/c6-groq-claylearn-fewshot-20260808T1750.json","result":"FAILED_TASK_PROTOCOL: still generated an incorrect Python interpreter rather than target decisions"},
+        {"arm":"precompiled_simple_view","result_ref":"research_entity/runtime/tool_results/c6-groq-claylearn-compiled-20260808T1750.json","result":"FAILED_TASK_PROTOCOL: responded with Python parsing code despite simpler representation"}
+      ],
+      "interpretation":"An untrained general 8B does not become a native Clay interpreter through compact syntax plus few-shot examples. This is a baseline supporting the need to test the owner-required full-model internalization; it does not predict its final performance."
+    },
+    {
+      "id":"EXP-C6-HOMOICONIC-SIMPLE-010",
+      "class":"hosted_8b_proxy_memory_instruction_boundary_sanity_check",
+      "provider":"Groq",
+      "model":"llama-3.1-8b-instant",
+      "cases_per_arm":8,
+      "untyped_ref":"research_entity/runtime/tool_results/c6-groq-homoiconic-untyped-20260808T1750.json",
+      "typed_ref":"research_entity/runtime/tool_results/c6-groq-homoiconic-typed-20260808T1750.json",
+      "untyped_semantic_fact_answers":"8/8",
+      "typed_semantic_fact_answers":"8/8",
+      "typed_format_compliance":"imperfect: model emitted q1: qN=... form",
+      "interpretation":"This simplistic attack set failed to distinguish typed vs untyped memory. It is an INCONCLUSIVE negative method result; C6 requires stronger adaptive indirect-injection and graph-poisoning tests on the Clay-native target."
+    },
+    {
+      "id":"INHERITED-CG4-LATENT-011",
+      "class":"inherited_branch_evidence_not_replication",
+      "source":"ClayGraph G1d Cycle 4",
+      "result":"30k-node synthetic graph: eager dense activation decay median 1.098 ms vs lazy touched-node 0.0280 ms; final active ~5.2%.",
+      "interpretation":"Supports feasibility of a sparse between-call Clay activation field, not cognitive benefit."
+    },
+    {
+      "id":"INHERITED-G9-PROJECTION-012",
+      "class":"inherited_8b_proxy_not_replication",
+      "source":"Clay G9 EPOCH direct gold audit",
+      "result":"raw state 6/10 at 487 prompt tokens vs trusted compiled candidate view 8/10 at 324 prompt tokens (-33.47%).",
+      "interpretation":"Even in an all-Clay target, deterministic view compilation remains architecturally useful; target full-fine-tuned 4B remains untested."
+    },
+    {
+      "id":"INHERITED-GWT4-ORTHO-013",
+      "class":"inherited_synthetic_plus_remote_runtime_replication",
+      "source":"GWT Run 4",
+      "result":"Constructed null had true direct workspace effect 0; bundled graph+workspace+projection contrast ~0.2396 local/~0.2398 Judge0 while clean workspace intervention recovered 0.",
+      "interpretation":"Shared Clay semantics do not merge causal stages; graph prior, workspace selection, projection and re-entry must stay independently intervenable."
+    },
+    {
+      "id":"INHERITED-CC9-BASIS-014",
+      "class":"inherited_synthetic_plus_remote_runtime_replication",
+      "source":"ClayCode CC9 CBCC",
+      "result":"Independent-latest multi-epoch construction produced ~8.96% invalid basis tuples; required compatibility checking accepted zero constructed mixed tuples; alias/dispatch closure counterexamples separately reproduced direction on Judge0.",
+      "interpretation":"Same-language state does not remove temporal/causal consistency or resource-identity requirements."
+    },
+    {
+      "id":"INHERITED-H3-NARY-015",
+      "class":"inherited_synthetic_plus_remote_runtime_replication",
+      "source":"Hyperposition H3",
+      "result":"At 12k relation instances, pairwise-flattened role lookup precision ~0.206 vs exact relation-instance role-aware 1.0 by construction; Judge0 reproduced pairwise direction.",
+      "interpretation":"Clay-native relation representation should preserve n-ary role identity; linguistic unification cannot recover information discarded by representation."
+    }
+  ],
+  "promotion":"NONE"
+}

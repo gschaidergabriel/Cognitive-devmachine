@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"hyperposition-20260808T2212p0700-chatgpt-secondary-r3",
   "execution_class":"STRUCTURAL_CONNECTOR_VALIDATION",
   "checks":{
@@ -13,6 +13,7 @@
     "hypofusion_h1_ingested":true,
     "late_frank_c8_ingested":true,
     "late_unifieddb_u2_ingested":true,
+    "late_claygraph_g2a_in_progress_checked":true,
     "shared_ancestry_not_counted_as_replication":true,
     "external_support_and_counterevidence_recorded":true,
     "local_failed_attempt_excluded_from_evidence":true,
@@ -22,12 +23,15 @@
     "negative_results_preserved":true,
     "candidate_machine_artifact_written":true,
     "topic_and_micro_packets_written":true,
+    "final_report_remote_reread":true,
+    "run_manifest_remote_reread_before_final_update":true,
+    "canonical_recheck_unchanged_r2":true,
     "canonical_promotion":false,
     "phenomenal_consciousness_inference":false
   },
   "official_repo_preflight_executed":false,
   "reason":"Current GitHub connector cannot execute arbitrary repository Python; registry-derived structural preflight used and strong promotion disabled.",
+  "late_worker_boundary":"ClayGraph G2a was still in progress at final scan; its current lab/interconnect were ingested as method/hypothesis input only, with no result or adjudication claimed.",
   "violations":[],
-  "status":"PASS_STRUCTURAL_EPistemic_BOUNDARIES",
-  "pending_before_close":["remote reread of final artifacts","canonical recheck","final concurrent worker scan"]
+  "status":"PASS_REMOTE_REREAD_CANONICAL_UNCHANGED"
 }

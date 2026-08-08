@@ -1,0 +1,161 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-PF-ARCH-HISTORY-CHATGPT-20260808T2114Z",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "origin_actor": "chatgpt-secondary",
+  "origin_worker": "chatgpt-secondary-666-20260808T2114Z",
+  "created_at": "2026-08-08T21:14:00Z",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head_for_this_shard": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "shard_kind": "commit_architecture_history_plus_current_runtime_spotcheck",
+    "scope_note": "This receipt is a bounded non-overlapping history/mechanism shard, not the complete Project-Frankenstein manifest and not Level-0 completion."
+  },
+  "deep_source_units": [
+    {"type":"commit","sha":"ccebdc78f3c08013e08758c7386984cc5e70386f","focus":"Thalamus/NAc/ACC/Amygdala/Neural Cortex/curiosity integration"},
+    {"type":"commit","sha":"f1ea0b47ef74cad16a3aadb9e63f633fd97a4e5d","focus":"Global Workspace Bus, AST/HOT/Active-Inference upgrades, multi-turn and long-term memory"},
+    {"type":"commit","sha":"07f8e26a296cf5bdcd4add14ee42ab501d09422b","focus":"5-hour idle audit, 19 failures/fixes, legacy entity removal"},
+    {"type":"commit","sha":"290d5e2b8640d55eb2a0aa38b99338c8070a0009","focus":"Titan->LCME retrieval redesign, HNSW, cold-start gates, reported P@5 improvement"},
+    {"type":"commit","sha":"78f31e7f1e4fa7109a90f6e32514923ca7428a87","focus":"SOMA adaptive-LoRA training pipeline, deploy safety gates, rollback"},
+    {"type":"commit","sha":"cfa7062ba62bc9d83fffada29dcc03a75c4f4050","focus":"goal-driven autonomous Project Engine, world model, checkpointing, tiered routing"},
+    {"type":"file","path":"tools/lcme/lcme_core.py","ref":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"current LCME orchestration and mature-Hippocampus fallback semantics"},
+    {"type":"file","path":"tools/lcme/retrieval.py","ref":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"current multi-signal retrieval, cold-start negative-result guard, chat-noise exclusion"}
+  ],
+  "epistemic_policy": {
+    "code_and_diff_observations": "VERIFIED_REPOSITORY_SOURCE",
+    "commit_message_measurements": "REPOSITORY_REPORTED_MEASUREMENT_NOT_INDEPENDENTLY_REPRODUCED",
+    "historical_consciousness_language": "HISTORICAL_PROJECT_INTERPRETATION_ONLY_NOT_PHENOMENAL_EVIDENCE"
+  },
+  "material_findings": [
+    {
+      "finding_id":"PF-HIST-001",
+      "mechanism":"FRANK already implemented a multi-timescale cognitive-state architecture with Thalamus sensory gating, NAc reward channels, ACC conflict signals, Amygdala salience/threat signals and E-PQ state coupling.",
+      "evidence_refs":["Project-Frankenstein@ccebdc78f3c08013e08758c7386984cc5e70386f"],
+      "status":"HISTORICAL_IMPLEMENTATION_FOUNDATION",
+      "implication":"Current FRANK/Harness work should preserve behavioral contracts and failure lessons rather than redesign these semantics from zero."
+    },
+    {
+      "finding_id":"PF-HIST-002",
+      "mechanism":"A Global Workspace Bus plus attention-schema/metacognitive/prediction components and explicit multi-turn context existed historically; later audits show that nominal coupling was often insufficient without causal-path validation.",
+      "evidence_refs":["Project-Frankenstein@f1ea0b47ef74cad16a3aadb9e63f633fd97a4e5d","Project-Frankenstein@07f8e26a296cf5bdcd4add14ee42ab501d09422b"],
+      "status":"MEASUREMENT_FOUNDATION_WITH_FAILURE_HISTORY",
+      "implication":"Current GWT acceptance must test broadcast uptake/effect/re-entry rather than count modules or bus messages."
+    },
+    {
+      "finding_id":"PF-HIST-003",
+      "mechanism":"LCME current head retains tri-hybrid persistent memory and mature-neural fallback: Hippocampus is used only when ready/mature; conventional retrieval remains authoritative fallback.",
+      "evidence_refs":["Project-Frankenstein:tools/lcme/lcme_core.py@abba90a5767d85abc8a1ac340bae92842dab35c1","Project-Frankenstein:tools/lcme/retrieval.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "status":"CURRENT_RUNTIME_SOURCE_AT_FROZEN_HEAD",
+      "implication":"UnifiedDB/ClayGraph should inherit proven hybrid retrieval/fallback lessons while testing whether logical unification can preserve exact state/provenance."
+    },
+    {
+      "finding_id":"PF-HIST-004",
+      "mechanism":"Repository history reports retrieval P@5 improvement from 0.40 to 1.00 after deleting 7,213 entity vectors, filtering stopwords, relevance-dominant scoring and cold-start gating; current retrieval source explicitly documents an immature Neural Cortex failure from P@5 1.0 to 0.08.",
+      "evidence_refs":["Project-Frankenstein@290d5e2b8640d55eb2a0aa38b99338c8070a0009","Project-Frankenstein:tools/lcme/retrieval.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "status":"REPORTED_MEASUREMENT_PLUS_SOURCE-CODE_NEGATIVE_RESULT",
+      "implication":"Neural retrieval additions require maturity gates and differential benchmarks against simpler baselines; learned weighting must not be assumed superior."
+    },
+    {
+      "finding_id":"PF-HIST-005",
+      "mechanism":"SOMA implemented adaptive LoRA training with conversation scoring, snapshots, EMA blending, drift/similarity/NaN deploy gates and rollback. History reports a full CPU cycle in 18.7 minutes on 104 scored/80 qualified conversations.",
+      "evidence_refs":["Project-Frankenstein@78f31e7f1e4fa7109a90f6e32514923ca7428a87"],
+      "status":"HISTORICAL_EXECUTABLE_TRAINING_FOUNDATION",
+      "implication":"Final Clay-native training need not start from a blank MLOps design; safety/rollback/probe concepts are reusable but must be revalidated for the final model and Clay representation."
+    },
+    {
+      "finding_id":"PF-HIST-006",
+      "mechanism":"Project Engine v3 already implemented persistent goals, world-model graph, policy engine, tool-outcome learning, action chaining, heartbeat scheduling and checkpoint recovery; history reports a 39s autonomy cycle with zero Claude tokens and a five-step 331s autonomous chain.",
+      "evidence_refs":["Project-Frankenstein@cfa7062ba62bc9d83fffada29dcc03a75c4f4050"],
+      "status":"HISTORICAL_AGENT_RUNTIME_FOUNDATION",
+      "implication":"Harness/FRANK autonomy and recovery can reuse tested orchestration patterns conceptually, but unrestricted system-access/security choices are not automatically reusable."
+    }
+  ],
+  "negative_results": [
+    {"id":"PF-NEG-001","result":"AURA queue reached 79% drop rate under drop-newest behavior.","fix":"drop oldest instead of newest","source":"07f8e26a296cf5bdcd4add14ee42ab501d09422b"},
+    {"id":"PF-NEG-002","result":"NAc habituation semantics were inverted; 9/14 channels were dead.","fix":"semantic correction plus migration","source":"07f8e26a296cf5bdcd4add14ee42ab501d09422b"},
+    {"id":"PF-NEG-003","result":"Thalamus gain and relay paths were decoupled; 91% of Amygdala signals were suppressed.","fix":"coupling repair","source":"07f8e26a296cf5bdcd4add14ee42ab501d09422b"},
+    {"id":"PF-NEG-004","result":"E-PQ autonomy was effectively frozen with observed range 0.012.","fix":"homeostatic spring replaced step-function behavior","source":"07f8e26a296cf5bdcd4add14ee42ab501d09422b"},
+    {"id":"PF-NEG-005","result":"Dream consolidation was effectively nonfunctional and only one session completed; memory consolidation produced zero useful output.","fix":"cooldown/idle detection plus keyword extraction and FTS boost","source":"07f8e26a296cf5bdcd4add14ee42ab501d09422b"},
+    {"id":"PF-NEG-006","result":"Immature neural retrieval weights can destroy retrieval quality; current source records P@5 1.0 -> 0.08 during cold start.","fix":"Neural Cortex and Hippocampus maturity gates before neural path use","source":"tools/lcme/retrieval.py@abba90a5767d85abc8a1ac340bae92842dab35c1"}
+  ],
+  "earned_work_mappings": [
+    {
+      "mapping_id":"HEW-PF-001",
+      "source_refs":["PF-HIST-003","PF-HIST-004","PF-NEG-006"],
+      "current_doomsday_rows":["UDB_UNIFIED_DATABASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS"],
+      "mechanism_or_result":"Hybrid persistent retrieval architecture, mature-neural fallback and a concrete learned-ranking failure mode.",
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low":2.0,
+      "avoided_future_hours_center":5.0,
+      "avoided_future_hours_high":10.0,
+      "confidence":"MEDIUM",
+      "falsifier_or_validation_receipt":"Current ClayGraph/UnifiedDB differential benchmark shows these retrieval/fallback lessons do not transfer or are dominated by a simpler/current alternative."
+    },
+    {
+      "mapping_id":"HEW-PF-002",
+      "source_refs":["PF-HIST-001","PF-HIST-002","PF-NEG-001","PF-NEG-002","PF-NEG-003","PF-NEG-004","PF-NEG-005"],
+      "current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","CLAY_0_1_FULL_INTEGRATION"],
+      "mechanism_or_result":"Implemented cognitive-state coupling plus unusually valuable causal failure atlas from prolonged idle audit.",
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low":3.0,
+      "avoided_future_hours_center":8.0,
+      "avoided_future_hours_high":16.0,
+      "confidence":"MEDIUM",
+      "falsifier_or_validation_receipt":"Current FRANK contract no longer contains analogous channels/couplings or harness lesions show historical failure modes are structurally irrelevant."
+    },
+    {
+      "mapping_id":"HEW-PF-003",
+      "source_refs":["PF-HIST-005"],
+      "current_doomsday_rows":["DATA_FINAL_TRAINING_CORPUS","FINAL_MODEL_FINE_TUNE","MODEL_EXPORT_RUNTIME_PACKAGE"],
+      "mechanism_or_result":"Existing adaptive-LoRA lifecycle with scoring, probes, safety gates, snapshots, GGUF export and rollback.",
+      "reuse_category":"REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low":2.0,
+      "avoided_future_hours_center":6.0,
+      "avoided_future_hours_high":12.0,
+      "confidence":"MEDIUM_LOW",
+      "falsifier_or_validation_receipt":"Final Clay-native model/toolchain makes historical LoRA/export/safety pipeline incompatible or new held-out experiments show no useful transfer."
+    },
+    {
+      "mapping_id":"HEW-PF-004",
+      "source_refs":["PF-HIST-006"],
+      "current_doomsday_rows":["H1_REFERENCE_HARNESS","CLAY_0_1_FULL_INTEGRATION","PROJECT_HARDWARE_DEPLOYMENT"],
+      "mechanism_or_result":"Goal/world-model/checkpoint/heartbeat/action-chain orchestration patterns with repository-reported autonomous executions.",
+      "reuse_category":"REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low":1.0,
+      "avoided_future_hours_center":4.0,
+      "avoided_future_hours_high":8.0,
+      "confidence":"LOW_MEDIUM",
+      "falsifier_or_validation_receipt":"Harness implementation shows these orchestration patterns conflict with current Clay authority/state contracts or add more complexity than they remove."
+    }
+  ],
+  "branch_feedback": {
+    "frank":"Preserve historical coupling semantics only where current contract still maps them; import the causal failure atlas aggressively.",
+    "gwt":"Historical workspace/bus presence is insufficient evidence; convert queue/gain/relay failures into mandatory lesion/uptake/re-entry tests.",
+    "claygraph":"Import LCME hybrid retrieval baselines and cold-start failure as differential benchmark anchors.",
+    "unifieddb":"Use LCME/SQLite/WAL/FTS/vector history as prior art, not as proof that one physical DB is optimal.",
+    "harness":"Encode PF-NEG-001..006 as regression/lesion scenarios where interfaces still exist.",
+    "claycode":"Preserve state/coupling contracts; do not hard-code historical module placement as language semantics.",
+    "hyperposition":"Historical multi-timescale coupling provides implementation ancestry, not evidence for hyperposition claims by itself.",
+    "emergenz":"Treat historical consciousness/GWT labels as functional architecture observations only; do not promote to phenomenal claims.",
+    "clay":"Use history as earned substrate and failure memory; current Clay-native implementation still needs fresh executable proof."
+  },
+  "drive_blocker_observed": {
+    "folder_id":"1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "file_id":"1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU",
+    "title":"all frank data 1.tar.xz",
+    "size_bytes":663552000,
+    "connector_raw_download_limit_bytes":104857600,
+    "status":"EXTERNAL_ACCESS_BLOCKER",
+    "coverage_credit":0
+  },
+  "completion": {
+    "shard_status":"COMPLETE",
+    "level0_gate_status":"NOT_PASS",
+    "exact_level0_coverage_change":"UNAVAILABLE_DENOMINATOR_NOT_FROZEN",
+    "next_high_information_action":"Continue Project-Frankenstein manifest/history sharding in parallel; obtain chunked/range-capable access or split Drive archive below connector limit without weakening exact coverage."
+  }
+}

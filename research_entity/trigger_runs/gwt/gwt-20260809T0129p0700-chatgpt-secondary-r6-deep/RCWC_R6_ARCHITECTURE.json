@@ -1,0 +1,132 @@
+{
+  "schema_version":"1.0",
+  "candidate_id":"RCWC-R6",
+  "name":"Receiver-Causal Workspace Closure",
+  "status":"OPEN_ARCHITECTURE_CANDIDATE",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "core_law":"global_addressability != delivery != reconstruction != uptake != causal_use != outcome != reentry",
+  "nested_workspace_law":"system_WorkspaceEpisode != model_internal_workspace != effect_authority",
+  "credit_law":"broadcast_topology != causal_credit_topology",
+  "stage_chain":[
+    "canonical_basis_and_event_state",
+    "UnifiedDB_query_search_space_TCQS_selection",
+    "ClayGraph_route_activation_Assembly",
+    "CandidateSet",
+    "competition",
+    "winner_and_WorkspaceEpisode",
+    "BroadcastPlan_and_BroadcastEnvelope",
+    "receiver_delivery",
+    "receiver_reconstruction",
+    "receiver_uptake",
+    "receiver_local_causal_effect",
+    "joint_system_outcome",
+    "provenance_bound_reentry",
+    "next_eligible_state"
+  ],
+  "objects":{
+    "BroadcastEnvelope":{
+      "required_fields":[
+        "episode_id",
+        "basis_id",
+        "candidate_set_id",
+        "winner_id",
+        "receiver_universe_id",
+        "receiver_universe_hash",
+        "broadcast_policy",
+        "broadcast_plan_hash",
+        "projection_identity",
+        "capacity_policy",
+        "source_epoch",
+        "provenance_ref"
+      ],
+      "rule":"The envelope declares who could receive what and under which projection/capacity policy; it does not prove uptake or effect."
+    },
+    "ReceiverReceipt":{
+      "required_fields":[
+        "episode_id",
+        "receiver_id",
+        "addressable",
+        "delivered",
+        "delivered_payload_hash",
+        "reconstruction_identity",
+        "reconstruction_valid",
+        "uptake_measurement",
+        "uptake_intervention_ref",
+        "local_effect_receipt",
+        "authority_boundary_receipt"
+      ],
+      "rule":"A receiver is not counted as causally broadcast merely because it was addressable or sent a payload."
+    },
+    "CausalBroadcastMatrix":{
+      "axes":["episode","receiver"],
+      "cell_vector":["addressable","delivered","reconstructed","uptake","local_effect","outcome_contribution","reentry_contribution"],
+      "rule":"Keep the vector/matrix; never collapse it into a single globality scalar for scientific promotion."
+    },
+    "BroadcastClosureReceipt":{
+      "required_fields":[
+        "episode_id",
+        "receiver_universe_id",
+        "causal_receiver_set",
+        "coverage_profile",
+        "common_driver_null_result",
+        "addressable_ignored_null_result",
+        "joint_outcome_link",
+        "reentry_receipt",
+        "closure_status"
+      ],
+      "closure_status_values":["OPEN","PARTIAL","CAUSAL_BROADCAST_CLOSED","REENTRY_CLOSED"]
+    },
+    "IgnitionReceipt":{
+      "required_fields":[
+        "candidate_id",
+        "gate_event",
+        "competition_context",
+        "nonlinearity_measure",
+        "configured_threshold_control",
+        "history_or_recurrence_test",
+        "lesion_result",
+        "mechanism_rescue_result",
+        "receiver_closure_ref"
+      ],
+      "rule":"Sigmoid steepness or gate opening alone is insufficient for ignition certification."
+    }
+  },
+  "broadcast_policies":[
+    {"id":"ALL_TO_ALL","definition":"Deliver to the full declared receiver universe."},
+    {"id":"SELECTIVE_CAUSAL","definition":"Deliver only to predicted causally relevant receivers; preserve audited receiver-universe identity."},
+    {"id":"GLOBAL_ADDRESSABLE_PULL","definition":"Episode remains globally addressable but receivers pull only on demand."},
+    {"id":"HYBRID","definition":"Selective push plus globally auditable pull access for eligible non-pushed receivers."}
+  ],
+  "diagnostic_failure_classes":[
+    "ADDRESSABLE_ONLY",
+    "DELIVERED_NO_RECONSTRUCTION",
+    "RECONSTRUCTED_NO_UPTAKE",
+    "UPTAKE_NO_LOCAL_EFFECT",
+    "COMMON_DRIVER_FANOUT",
+    "PARTIAL_CAUSAL_BROADCAST",
+    "CAUSAL_BROADCAST_NO_REENTRY",
+    "REENTRY_CLOSED_BROADCAST"
+  ],
+  "mandatory_orthogonal_identities":[
+    "query_and_search_space_identity",
+    "TCQS_collection_semantics",
+    "ClayGraph_field_and_route_identity",
+    "CandidateSet_membership_rank_weight_identity",
+    "WorkspaceEpisode_identity",
+    "receiver_universe_identity",
+    "projection_order_and_rail_identity",
+    "model_checkpoint_adaptation_quantization_identity",
+    "effect_capability_identity",
+    "reentry_source_epoch_and_provenance_identity"
+  ],
+  "security_invariants":[
+    "WorkspaceEpisode never grants or widens execution capability.",
+    "Model-internal workspace never grants or widens execution capability.",
+    "Salience, broadcast coverage, uptake, reward and causal credit are not authority.",
+    "Prompt-derived content cannot mint receiver permissions or effect capabilities.",
+    "Reentry requires provenance/freshness validation before it can influence consequential state."
+  ],
+  "efficiency_hypothesis":"FRANK may obtain better quality×cost with global addressability plus selective causal delivery than with literal all-to-all broadcast, but this remains OPEN until matched live tests.",
+  "android_role":"Measure per-stage latency/RAM/serialization/quantization/thermal costs as secondary cross-platform evidence; Android-only observations do not become Linux facts without matched replication.",
+  "phenomenal_consciousness_inference":"PROHIBITED_FROM_THIS_ARCHITECTURE_ALONE"
+}

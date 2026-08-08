@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260808T2152p0700-chatgpt-secondary-r1",
+  "actor":"chatgpt-secondary",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "live_cutoff_local":"2026-08-08T21:52:57+07:00",
+  "scientific_branches":["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb"],
+  "whole_mesh_parent":"fusion-20260808T2114p0700-chatgpt-secondary-r2 / FUSION-F5-C3F",
+  "fresh_inputs":[
+    {"branch":"clay","run":"clay-20260808T2132p0700-chatgpt-secondary-r4","state":"COMPLETED_DURING_HYPOFUSION","candidate":"CACC-G12","evidence":["64 first-generation falsifiable hypotheses","14 transformed Fusion-2 hypotheses","E2B replay test","E2B hidden-dependency test","E2B collection-topology test","external evidence ledger"]},
+    {"branch":"gwt","run":"gwt-20260808T2140p0700-chatgpt-secondary-r5","state":"COMPLETED_DURING_HYPOFUSION","candidate":"Nested Workspace Bridge","evidence":["system-workspace vs model-internal-workspace split","Anthropic J-space/Jacobian-lens external evidence","300k synthetic identifiability factorial","target-Qwen nested-workspace experiment proposal"]},
+    {"branch":"frank","run":"20260808T2051p0700-chatgpt-secondary-r3","state":"COMPLETED","candidate":"CORF-C7"},
+    {"branch":"claycode","run":"claycode-20260808T2104p0700-chatgpt-secondary-r3","state":"COMPLETED","candidate":"CC12/TCQS"},
+    {"branch":"unifieddb","run":"unifieddb-20260808T2044p0700-chatgpt-secondary-r2","state":"COMPLETED","candidate":"UD-RC1"},
+    {"branch":"claygraph","run":"claygraph-20260808T1712p0700-chatgpt-secondary-r2","state":"HOLD","candidate":"G1d"},
+    {"branch":"hyperposition","run":"hyperposition-20260808T1806p0700-chatgpt-secondary-r2","state":"COMPLETED","candidate":"HYP-RC4"},
+    {"branch":"emergenz","run":"emergenz-20260808T1756p0700-chatgpt-secondary","state":"COMPLETED","candidate":"E-CERT2"}
+  ],
+  "hypothesis_sets_screened":[
+    {"source":"canonical r2 active hypotheses","records":4},
+    {"source":"Fusion F5 global hypothesis matrix","records":12},
+    {"source":"Clay G12 first-generation hypotheses","records":64},
+    {"source":"Clay G12 transformed hypotheses","records":14},
+    {"source":"GWT R5 explicit hypotheses","records":5}
+  ],
+  "screened_hypothesis_records":99,
+  "ancestry_warning":"The 99 records are not 99 independent hypotheses; many are refinements/descendants. Screening preserves IDs while clustering shared mechanisms.",
+  "late_worker_policy":"Recent commits must be reread before close. Any materially newer worker evidence is recorded as late_arrival and fused before final report."
+}

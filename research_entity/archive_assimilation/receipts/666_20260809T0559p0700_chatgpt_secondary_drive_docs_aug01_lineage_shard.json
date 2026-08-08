@@ -1,0 +1,58 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0559p0700-chatgpt-secondary-drive-docs-aug01-lineage",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"AUG01_DOC_LINEAGE_CLASSIFIED_NO_DUPLICATE_CREDIT",
+  "source_scope":{"folder":"aicore/docs","denominator":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_DOCS_DIRECT_DENOMINATOR.json","deep_read":["KONZEPT-FRANKENSTEIN-PROTOKOLL-2026-08-01.md","KONZEPT-CLAUDECODE-2026-08-01.md","KONZEPT-2026-08-01.md"]},
+  "findings":[
+    {
+      "id":"DOC-AUG01-001",
+      "class":"REUSABLE_WITH_ADAPTATION_ALREADY_MAPPED_FAMILY",
+      "claim":"The Aug-1 protocol separates normal task-focused operation from bounded daily self-analysis and weekly aggregation, preserving raw logs/idle thoughts plus condensed daily and weekly summaries.",
+      "current_implication":"Treat reflection/consolidation as explicitly budgeted state transitions with raw-evidence provenance and replayable summaries rather than always-on self-analysis.",
+      "targets":["frank","unifieddb","harness"],
+      "credit":0,
+      "dedup":"Overlaps existing autonomy/state/context historical mappings."
+    },
+    {
+      "id":"DOC-AUG01-002",
+      "class":"REUSABLE_WORK_PROTOCOL_ALREADY_CURRENT",
+      "claim":"The protocol says factual questions answerable from filesystem/tools should be looked up rather than repeatedly asked of the owner, while effectful architectural decisions remain explicit owner decisions.",
+      "current_implication":"Preserve environment-first factual resolution and separate factual uncertainty from authority/decision gates.",
+      "targets":["frank","harness","claycode"],
+      "credit":0
+    },
+    {
+      "id":"DOC-AUG01-003",
+      "class":"SUPERSEDED_SAFETY_DESIGN_NEGATIVE_LINEAGE",
+      "claim":"The Aug-1 Claude-Code concept explicitly proposed launching instances with skip permissions while relying on a strict prompt saying no destructive actions, no deletion and no credential leakage.",
+      "current_implication":"This is historical evidence for why prompt-level prohibitions cannot be the execution authority boundary. Current Clay/Needle capability/effect mediation must remain external, typed and fail-closed even when a coding model is highly capable.",
+      "targets":["clay","claycode","harness","frank"],
+      "credit":0,
+      "dedup":"Safety mechanism family already credited by PF safety-authority and current Safe-Effect research; this strengthens lineage only."
+    },
+    {
+      "id":"DOC-AUG01-004",
+      "class":"SUPERSEDED_ORCHESTRATION_MODEL",
+      "claim":"The documents model Frank as local authority and Claude Code as an external employee/advisor invoked in daily/weekly sessions, with research artifacts and Global Workspace handoff.",
+      "current_implication":"Keep useful role separation and persistent handoff semantics, but current architecture must not confuse model role with execution authority or require a single named external model as semantic infrastructure; repo-native research-center events and Needle-owned authority supersede that coupling.",
+      "targets":["frank","harness","unifieddb"],
+      "credit":0
+    },
+    {
+      "id":"DOC-AUG01-005",
+      "class":"HISTORICAL_PROVENANCE_FOUNDATION_ALREADY_MAPPED",
+      "claim":"The Aug-1 overall concept distinguishes self/local/api/api+self provenance and gives local measured state priority over unverified external model output.",
+      "current_implication":"Preserve provenance classes but represent them as typed evidence/authority metadata rather than trust prose or fixed scalar trust labels.",
+      "targets":["claygraph","unifieddb","frank","harness"],
+      "credit":0
+    }
+  ],
+  "earned_work":{"applied_hours":0,"candidate_hours":0,"reason":"All material mechanism families overlap already credited/current research; this shard is chronology, supersession and corroboration."},
+  "progress":{"exact_level0_global_percent_delta":0.0,"docs_priority_aug01_semantic_units_closed":3},
+  "created_at":"2026-08-09T05:59:00+07:00"
+}

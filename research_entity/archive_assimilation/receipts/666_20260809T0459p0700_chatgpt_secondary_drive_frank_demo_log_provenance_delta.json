@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0459+0700-chatgpt-secondary-drive-frank-demo-log-provenance-delta",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"NONOVERLAPPING_PROVENANCE_GUARD_ZERO_CREDIT",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "crossread":["research_entity/archive_assimilation/manifests/DRIVE_FRANK_DEMO_MANIFEST.json","research_entity/archive_assimilation/receipts/666_20260809T0458p0700_chatgpt_secondary_drive_frank_demo_zero_credit.json"],
+  "source_refs":[
+    {"drive_id":"1dD3TR-1ehPUm25DBlmSYS_VwG6cSehS5","title":"static/index.html"},
+    {"drive_id":"1R9bPgFC8KOg96mPLmdbddwJ1xQW0rL68","title":"static/js/pages/logs.js","sha256":"4795171def2a3e98657769546a6e1ab2839034cc86abc5b67ee0a252d76d7558"},
+    {"drive_id":"1RLGgwIwyOqsi9ygbr5G0GJjkyaMf56-R","title":"static/js/frank-responses.js","sha256":"9ec2ffbe42285d4ec68d9902556e278fc0ef9703f850807f8a7ceb96c54df719"}
+  ],
+  "finding":{
+    "finding_id":"DRIVE-DEMO-PROV-003",
+    "epistemic_class":"SOURCE_SELF_DESCRIBED_MIXED_PROVENANCE",
+    "status":"NEGATIVE_RESULT_VALUE_ZERO_CREDIT",
+    "claim":"The demo's index explicitly says no real AI is running, chat responses are pre-made, logs are from real sessions and the Swarm visualization runs in-browser. logs.js itself labels the page as real Frank logs plus a simulated live feed. Therefore embedded log presentation has mixed provenance even when individual REAL_LOGS entries are source-asserted as captured from journald.",
+    "constraint":"No original journald file, source hash, host identity or capture receipt was recovered in this bounded demo shard, so embedded REAL_LOGS entries are historical observational candidates, not independently verified runtime evidence.",
+    "targets":["harness","unifieddb","claygraph","data_final_training_corpus","q12_index"],
+    "implication":"Ingestion must preserve per-record provenance class and never let display-layer labels such as REAL_LOGS upgrade evidence authority. Any reuse in benchmarks/training requires source labels; scientific promotion requires original log/hash ancestry."
+  },
+  "syntax_checks":{"app.js":"PASS","frank-brain.js":"PASS","home.js":"PASS"},
+  "earned_work_hours_added":0.0,
+  "completed_at":"2026-08-09T04:59:00+07:00"
+}

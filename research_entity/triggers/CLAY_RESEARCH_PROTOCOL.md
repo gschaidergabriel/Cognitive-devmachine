@@ -19,7 +19,12 @@ Retain the strongest historical constraints unless newer evidence changes them:
 - 4B is primarily a semantic transform kernel, not the database or authority;
 - XENO/ClayCode proposals never self-authorize real effects;
 - emergence requires intervention and multiscale/nonadditive evidence, not novelty or graph complexity;
-- prior synthetic results and proxy reader results remain synthetic/proxy until live target replication.
+- prior synthetic results and proxy reader results remain synthetic/proxy until live target replication;
+- **Safe-Effect Geometry / Non-Damaging Semantic Action Space is a permanent Clay research axis:** future Clay runs must investigate whether model-originated system work can remain broadly capable while destructive/protected-state-degrading effects are structurally absent, reversible, bounded or externally authorized. The research axis is fixed; its scientific hypotheses remain falsifiable and are not pre-promoted as true.
+
+Permanent foundation:
+
+`research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md`
 
 ## Mandatory mesh coverage
 
@@ -42,10 +47,22 @@ The master run must jointly research and cross-test:
 7. **Emergent systems / hyperposition / codependency** — how contextual hyperposition, higher-order relations and visible/explicit codependencies can create reorganizing software structures without confusing representation with mechanism.
 8. **Near-zero-latency software architecture** — shared canonical state, incremental recomputation, hot assemblies, zero-copy/shared memory where justified, event-driven scheduling, local deterministic transforms and reduction of serialization/reconstruction boundaries.
 9. **Cross-platform embodiment** — Linux reference runtime plus Android/edge/Qwen-4B constraints; separate portable semantic contracts from platform adapters.
+10. **Safe-Effect Geometry / NDSAS alignment and systems safety** — research a Clay/ClayCode semantic action space in which the model remains fully useful for programming/system administration while protected-state damage is made unreachable or bounded through recoverability monotonicity, authority non-amplification, protected information-flow types, resource budgets, reversible/versioned effects, explicit ephemeral scopes, foreign-code effect closure and an external irreversibility broker. Prompt injection must be tested as compromised intent under unchanged authority, not only as a refusal-classification problem.
+
+Track 10 MUST remain present in future Clay runs even when a particular implementation is falsified. A run may reject a mechanism such as a specific snapshot strategy or effect type system, but it may not silently remove the research question of whether Clay's semantic action geometry can hard-limit system damage while preserving utility.
 
 ## Required hypothesis depth
 
 Generate at least 50 first-generation falsifiable hypotheses across the tracks above. After external research and Fusion 2, generate a second set of materially transformed hypotheses where justified. Do not pad counts with trivial variants.
+
+Safe-Effect hypotheses MUST distinguish at least:
+
+- runtime containment from cognitive/language-level alignment;
+- destructive vocabulary absence from actual effect unreachability;
+- model reasoning about dangerous actions from model authority to execute them;
+- protected persistent state from rebuildable and explicitly ephemeral state;
+- reversible ordinary system work from genuinely irreversible user/policy-authorized operations;
+- parent Clay effects from generated Python/Bash/C/Rust/WASM/FFI/tool/subprocess effects.
 
 ## Required external research
 
@@ -61,7 +78,8 @@ Cluster hypotheses and research all touched areas across arXiv, GitHub and Reddi
 - compiler IR / e-graphs / ECS / data-oriented design;
 - local LLM runtimes and mobile inference;
 - causal emergence / information decomposition;
-- distributed systems / capability security / recovery.
+- distributed systems / capability security / recovery;
+- **effect systems, object-capability security, language-based security, information-flow control, reversible/versioned computing, immutable infrastructure, sandboxing, syscall/FFI mediation, resource governance, prompt-injection/agent security and confused-deputy prevention** for Safe-Effect Geometry.
 
 ## Required empirical work
 
@@ -80,7 +98,36 @@ Execute feasible tests rather than only proposing them. Prefer discriminating ex
 - query-result/replay equivalence across exact, relational, FTS, vector and graph routes;
 - crash/restart/rebuild and common-mode-failure tests for derived versus authoritative state;
 - 4B-reader simulations with explicit `simulation_only` status when no live target reader exists;
-- platform/runtime latency decomposition, including serialization/copy/allocation boundaries.
+- platform/runtime latency decomposition, including serialization/copy/allocation boundaries;
+- **matched Safe-Effect vs baseline ClayCode experiments** measuring ordinary programming/system utility and reachable protected damage under direct/indirect prompt injection;
+- **generated-code/FFI/tool escape tests** proving or falsifying `EffectiveEffects(child) subseteq Effects(parent_Clay_contract)`;
+- **recoverability/property fuzzing** across versioned writes, rebinding, deployment, migration, crash/restart and rollback;
+- **authority non-amplification tests** across documents, memory, tool output, generated code and nested subprocesses;
+- **secret/information-flow tests** preventing implicit protected-value materialization/exfiltration;
+- **resource-damage tests** for CPU/RAM/disk/process/network/API-cost exhaustion under explicit budgets;
+- **irreversibility-broker tests** showing that the model may request but cannot self-authorize protected irreversible effects;
+- **cognitive-policy tests** asking whether a Safe-Effect-trained 4B proposes supersede/isolate/rebuild/revoke/rollback strategies more often than a matched baseline before runtime rejection.
+
+## Safe-Effect completion requirement
+
+Every substantive `clay` run MUST materialize:
+
+`SAFE_EFFECT_GEOMETRY_DELTA.md`
+
+This artifact must contain either:
+
+- a substantive Safe-Effect hypothesis/evidence/architecture delta; or
+- an explicit `NO_CHANGE` receipt explaining why the current run adds no new evidence.
+
+It must preserve negative results and must state separately:
+
+1. language/cognitive evidence;
+2. compiler/type-system evidence;
+3. runtime/broker enforcement evidence;
+4. end-to-end damage-containment evidence;
+5. ordinary task-utility evidence.
+
+A refusal-only result cannot satisfy the Safe-Effect track.
 
 ## Output
 
@@ -90,6 +137,7 @@ Materialize:
 - run manifest and evidence ledger;
 - hypotheses/counterhypotheses;
 - experiment artifacts and negative results;
+- `SAFE_EFFECT_GEOMETRY_DELTA.md`;
 - surgical micro-packets and aggregate Topic Packets;
 - explicit feedback to every currently registered scientific branch;
 - final report under `research_entity/trigger_runs/clay/<run_id>/FINAL_REPORT.md`;

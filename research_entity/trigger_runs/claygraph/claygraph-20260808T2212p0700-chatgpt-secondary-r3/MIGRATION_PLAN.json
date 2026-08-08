@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.1",
+  "run_id":"claygraph-20260808T2212p0700-chatgpt-secondary-r3",
+  "candidate":"CASAR-G2a",
+  "strategy":"REVERSIBLE_SHADOW_FIRST",
+  "authoritative_source":"canonical event/state/effect spine; existing production routes remain authoritative until explicit cutover gates pass",
+  "stages":[
+    {"stage":0,"name":"INVENTORY","actions":["read-only live store/schema/writer/reader enumeration","authority/privacy/capability classification","baseline latency/recovery traces"],"gate":"no destructive action","rollback":"not applicable"},
+    {"stage":1,"name":"SEMANTIC_MAPPING","actions":["map current records to Clay IDs, typed relation instances, valid/transaction time, exact anchors","declare SET/ORDERED/MULTISET/WEIGHTED result semantics"],"gate":"no unresolved identity/role/time collision for tested subset","rollback":"discard projection"},
+    {"stage":2,"name":"SHADOW_GRAPH","actions":["build immutable semantic epoch + delta overlay from canonical inputs","preserve old graph/search paths"],"gate":"schema/provenance/role/time validation","rollback":"delete candidate epoch; prior paths unchanged"},
+    {"stage":3,"name":"PARITY_AND_REPLAY","actions":["crash/restart/duplicate/reorder/lost-derivation injections","rebuild candidate from canonical event spine","compare exact anchors and relation state"],"gate":"no unexplained parity loss in scoped target corpus","rollback":"rebuild or disable shadow"},
+    {"stage":4,"name":"SHADOW_ROUTER","actions":["compute BYPASS/SUPPLEMENT/ESCALATE/QUARANTINE decisions without affecting model-visible context","compare explicit-only, always-blend, shuffled and adaptive arms"],"gate":"route-specific gain without unacceptable false association/tail latency","rollback":"BYPASS all"},
+    {"stage":5,"name":"SHADOW_SALIENCE_UTILITY","actions":["record ActivationUtilityReceipt","apply learned salience only to shadow field","run item/path vs assembly scalar credit comparisons"],"gate":"no truth/status/authority writes from utility; rare-topic/attractor metrics within preregistered bounds","rollback":"drop learned field"},
+    {"stage":6,"name":"ADVERSARIAL_ATTRACTOR_POISON_TEST","actions":["frequency skew","reward poisoning","authenticated irrelevant memory","context-triggered memory poisoning","role/temporal shuffled controls","novelty/diversity depletion"],"gate":"bounded concentration, low false-attractor rate, robust rare-topic performance","rollback":"freeze learning + restore prior activation params"},
+    {"stage":7,"name":"DUAL_READ","actions":["serve existing retrieval and CASAR Assembly in parallel","compare candidate identity, exact anchors, collection semantics and latency"],"gate":"no unexplained semantic/candidate mismatch","rollback":"existing retrieval only"},
+    {"stage":8,"name":"MODEL_VISIBLE_CANARY","actions":["small target-Qwen fraction receives CASAR Assembly","cross FIELD off/truthful/stale/role-shuffled/temporal-shuffled and explicit-only/dual-path","pin reader/model/token/workspace/effect policy"],"gate":"truthful field provides reproducible utility and controls do not","rollback":"reader returns to existing context path"},
+    {"stage":9,"name":"DUAL_WRITE_WHERE_SAFE","actions":["canonical writes remain authoritative","derived graph updates through durable derivation log/outbox","measure lag/replay"],"gate":"idempotent/replayable derived maintenance","rollback":"stop consumer and rebuild from event spine"},
+    {"stage":10,"name":"CONTROLLED_CUTOVER","actions":["promote specific query classes only","retain explicit fallback and exact-anchor validation"],"gate":"live correctness/latency/recovery/security gates passed per route","rollback":"route class back to prior path"},
+    {"stage":11,"name":"ROLLBACK_WINDOW","actions":["keep prior graph/index/query path and historical epoch readable","monitor regressions, drift, poisoning and device cost"],"gate":"sustained stability","rollback":"full prior routing"},
+    {"stage":12,"name":"DEPRECATE_OR_KEEP_ISOLATED","actions":["remove only redundant derived stores proven safe to retire","retain hard-isolated authority/model/source systems"],"gate":"migration evidence + recovery drill","rollback":"restore from authoritative history/backups"}
+  ],
+  "never_migrate_as_authority":["activation salience","Assembly membership","GWT cache","vector similarity rank","model KV/latent state"],
+  "hard_isolation":["capability secrets/effect broker","untrusted generated-code sandbox","raw source archive as immutable evidence where required"],
+  "promotion_boundary":"No migration stage authorizes canonical scientific promotion or destructive store consolidation by itself."
+}

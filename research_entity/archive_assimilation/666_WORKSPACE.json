@@ -29,7 +29,7 @@
     "folder_title": "clay",
     "folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
     "owner_reported_size_mb": 400,
-    "inventory_state": "CONNECTOR_INDEX_PENDING_COMPLETE_RECURSIVE_ENUMERATION",
+    "inventory_state": "ROOT_ENUMERATED_SINGLE_ARCHIVE_INTERNAL_ENUMERATION_BLOCKED_CONNECTOR_100MIB_LIMIT",
     "manifest_state": "NOT_FROZEN",
     "manifest_path": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_MANIFEST.json",
     "manifest_epoch": null,
@@ -39,16 +39,16 @@
     "exact_coverage_percent": 0.0,
     "analyzed_units": 0,
     "integrated_units": 0,
-    "cursor": null
+    "cursor": "drive:file:1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU:size=663552000:download_blocked_gt_104857600"
   },
   "project_frankenstein": {
     "repository": "gschaidergabriel/Project-Frankenstein",
     "default_branch": "main",
     "github_reported_size_kib": 228899,
-    "inventory_state": "PARALLEL_PREPARATION_ALLOWED_NOW",
+    "inventory_state": "HEAD_FROZEN_PARTIAL_CODE_INDEX_ACTIVE",
     "manifest_state": "NOT_FROZEN",
     "manifest_path": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
-    "frozen_head_sha": null,
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
     "frozen_source_units": 0,
     "frozen_commit_units": 0,
     "total_atomic_obligations": 0,
@@ -56,7 +56,7 @@
     "exact_coverage_percent": 0.0,
     "analyzed_units": 0,
     "integrated_units": 0,
-    "cursor": null
+    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json"
   },
   "cross_source_fusion": {
     "status": "BLOCKED_ON_SOURCE_SHARDS",
@@ -93,7 +93,15 @@
     "hard_max_hours": 3.0,
     "confidence": "OWNER_FIXED_SLA_FEASIBILITY_UNCALIBRATED_UNTIL_FIRST_BATCH",
     "basis": "Parallel inventory/hash/dedupe/extraction/sharding/analysis/write-back pipeline; <=3h active wall-clock is a hard execution constraint.",
-    "observed_batches": []
+    "observed_batches": [
+      {
+        "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
+        "kind": "surface-index-and-partial-history-analysis",
+        "active_minutes_approx": 3,
+        "exact_coverage_credit": 0.0,
+        "blocker": "Drive archive 663552000 bytes exceeds connector 104857600-byte download limit"
+      }
+    ]
   },
   "work_packages": {
     "666-00-DUAL-INDEX": {"status":"ACTIVE","goal":"Recursively inventory Drive and Project-Frankenstein in parallel; freeze exact manifests/hashes."},
@@ -106,6 +114,8 @@
     "666-07-AUDIT": {"status":"BLOCKED_ON_ALL","goal":"Verify exact coverage, earned-work mapping, hashes and PASS decision."}
   },
   "live_claims": [],
-  "completed_receipts": [],
+  "completed_receipts": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json"
+  ],
   "last_updated": "2026-08-09"
 }

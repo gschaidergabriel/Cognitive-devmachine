@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.6",
+  "schema_version": "1.7",
   "program_id": "frank-staged-build",
   "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "status": "ACTIVE",
@@ -10,14 +10,16 @@
   "post_level0_autonomous_mode": "SEEDED_STOCHASTIC_RESEARCH_FIELD_GENESIS",
   "dynamic_targets": {
     "DOOMSDAY": {
-      "label": "DOOMSDAY / Clay 0.1",
+      "label": "DOOMSDAY / Clay 0.1 - Chief Developer First Test",
       "protocol": "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
+      "acceptance_contract": "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
       "forecast_model": "research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json",
+      "historical_earned_work": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
       "capability_rules": "research_entity/forecast/DOOMSDAY_CAPABILITY_RULES.json",
       "event_ledger": "research_entity/forecast/DOOMSDAY_EVENTS.jsonl",
-      "resolver": "tools/doomsday_forecast.py",
-      "definition": "First end-to-end project-hardware run of FRANK authored in Clay/ClayCode, distilled/compiled into the intended one-module binary/runtime, using UnifiedDB and the final fully fine-tuned Clay-native model. This release is named Clay 0.1.",
-      "forecast_rule": "Never store a fixed target date. Recalculate from the current critical-path table, stage progress, measured throughput, active/future verified capacity, APIs/capabilities, verified accelerators/blockers/new dependencies and owner training authorization state every time the status resolver runs."
+      "resolver": "tools/program_progress.py",
+      "definition": "First strict internal chief-developer test candidate of Clay 0.1: FRANK authored in Clay, general-purpose ClayCode compiler/runtime, one-module/binary architecture, UnifiedDB, final fully fine-tuned Clay-native model, reproducible project-hardware boot and all mandatory internal acceptance tests passed with zero known P0/P1 defects. Not a public release.",
+      "forecast_rule": "Never store a fixed target date. Recalculate from the current critical-path table, historical earned work, stage progress, measured throughput, active/future verified capacity, APIs/capabilities, verified accelerators/blockers/new dependencies and owner training authorization state every time the status resolver runs."
     }
   },
   "stage_order": [
@@ -32,11 +34,12 @@
   ],
   "stage_gates": {
     "L0_ARCHIVE_ASSIMILATION": {
-      "label": "Level 0 - FRANK Archive Assimilation (666)",
+      "label": "Level 0 - FRANK Archive Assimilation + Earned-Work Calibration (666)",
       "status": "IN_PROGRESS",
       "gate_name": "666_RELEASE_GATE",
       "trigger": "666",
       "workspace": "research_entity/archive_assimilation/666_WORKSPACE.json",
+      "hard_active_wall_clock_hours": 3.0,
       "progress_source": {
         "kind": "archive_assimilation",
         "path": "research_entity/archive_assimilation/666_WORKSPACE.json",
@@ -44,20 +47,23 @@
         "denominator_state_field": "combined_progress.denominator_state",
         "fallback_percent": 0
       },
-      "required_pass_artifacts": ["research_entity/archive_assimilation/666_RELEASE_MANIFEST.json"],
-      "completion_law": "Drive clay archive 100% obligation coverage -> Project-Frankenstein 100% obligation coverage -> cross-source reconciliation/branch feedback 100% -> 666_RELEASE_GATE PASS"
+      "required_pass_artifacts": ["research_entity/archive_assimilation/666_RELEASE_MANIFEST.json", "research_entity/forecast/HISTORICAL_EARNED_WORK.json"],
+      "completion_law": "Within <=3h active wall-clock, Drive clay archive exact obligations + Project-Frankenstein exact obligations + cross-source reconciliation/branch feedback + historical earned-work mapping -> 100% -> PASS. External connector waiting is reported separately and never hidden by weakening coverage."
     },
     "BASE_CLAYCODE_RELEASE": {
-      "label": "BASE - ClayCode Release",
+      "label": "BASE - ClayCode General-Purpose Compiler/Runtime",
       "status": "BLOCKED",
       "blocked_by": ["L0_ARCHIVE_ASSIMILATION"],
       "gate_name": "CLAYCODE_RELEASE_GATE",
+      "general_purpose_gate": "GENERAL_PURPOSE_GATE",
+      "acceptance_contract": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
       "progress_source": {
         "kind": "work_packages",
         "path": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
         "field": "work_packages"
       },
-      "required_pass_artifacts": ["CLAYCODE_RELEASE_MANIFEST.json"]
+      "required_pass_artifacts": ["CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json"],
+      "completion_law": "Freeze existing semantics where adequate; build parser/canonical IR/type-effect checker/compiler/lowering/runtime/FFI/stdlib/toolchain; compile and execute the mandatory general-purpose application proof suite including a real HTTP/website stack and real FRANK component; semantics may change only for an executable counterexample."
     },
     "H1_REFERENCE_HARNESS": {
       "label": "Harness 1 - Reference FRANK",
@@ -72,7 +78,7 @@
       "required_pass_artifacts": ["REFERENCE_HARNESS_RELEASE_MANIFEST.json", "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json"]
     },
     "H2_CLAYCODE_HARNESS": {
-      "label": "Harness 2 - ClayCode FRANK",
+      "label": "Harness 2 - FRANK Compiled/Executed in ClayCode",
       "status": "BLOCKED",
       "blocked_by": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS"],
       "progress_source": {
@@ -108,7 +114,7 @@
       "required_pass_artifacts": ["UNIFIEDDB_RELEASE_MANIFEST.json"]
     },
     "DATA_LORA_TRAINING_DATA": {
-      "label": "Final Clay 0.1 Training Data",
+      "label": "Final Clay 0.1 Training + Held-Out Data",
       "status": "BLOCKED",
       "blocked_by": ["UDB_UNIFIED_DATABASE"],
       "progress_source": {
@@ -118,7 +124,7 @@
         "missing_means": 0
       },
       "training_authorized": false,
-      "purpose": "Build and freeze the final training and held-out corpus only. Do not start paid/final training automatically."
+      "purpose": "Build and freeze final training and held-out corpus only. Do not start paid/final training automatically."
     },
     "WAIT": {
       "label": "WAIT - Owner Training Decision",
@@ -127,7 +133,7 @@
       "meaning": "After training-data artifacts are frozen, stop and wait for explicit project-owner authorization. DOOMSDAY forecasting may continue conditionally, but execution of final paid training does not start automatically."
     }
   },
-  "current_stage_goal": "Level 0: exhaustively assimilate the complete Google Drive clay FRANK archive, then the complete Project-Frankenstein repository/history, reconcile both and feed all material knowledge into the Research Entity before ClayCode BASE advances.",
+  "current_stage_goal": "Level 0: in <=3 active hours assimilate the Drive FRANK archive and Project-Frankenstein history, reconcile them, map the ~8-month historical effort onto current Clay 0.1 earned work, and feed all material knowledge into the Research Entity before ClayCode BASE compilation work advances.",
   "progress_semantics": {
     "complete_statuses": ["PASS", "COMPLETE", "COMPLETED", "DONE", "CLOSED"],
     "failed_statuses": ["FAILED", "REFUTED"],
@@ -136,7 +142,7 @@
     "default_work_package_weight": 1,
     "bar_cells": 20,
     "rounding": "nearest_integer",
-    "rule": "Do not award percentage merely because work is claimed or in progress. Level 0 uses frozen atomic analysis obligations; later stages use their declared machine-verifiable completion sources."
+    "rule": "Do not award NEXT LEVEL percentage merely because work is claimed or in progress. DOOMSDAY separately credits historical earned work through its mapped/calibrating model."
   },
   "stage_priority_hints": {
     "L0_ARCHIVE_ASSIMILATION": ["666", "frank", "claycode", "gwt", "hyperposition", "claygraph", "unifieddb", "harness", "emergenz", "clay"],
@@ -147,14 +153,16 @@
     "UDB_UNIFIED_DATABASE": ["unifieddb", "harness", "claygraph", "frank", "claycode", "hyperposition", "gwt", "emergenz", "clay"],
     "DATA_LORA_TRAINING_DATA": ["claycode", "frank", "gwt", "hyperposition", "emergenz", "harness", "claygraph", "unifieddb", "clay"]
   },
-  "autonomous_progression_rule": "On exact 666 while Level 0 is open, autonomously claim and execute the next non-overlapping archive-assimilation shard. After 666_RELEASE_GATE PASS, exact 666 spawns one seeded high-value diverse research field, performs research immediately, cross-connects it to the mesh, and routes material deltas to specialist branches. Sequential release milestones remain the shared attractor and advance only when specialist machine-readable gates pass. WAIT remains a hard execution stop for final training until explicit owner authorization.",
-  "global_training_rule": "No paid or final model training is authorized by program progression alone. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit new owner instruction before final training. The dynamic DOOMSDAY forecast remains conditional on immediate authorization when the data gate is ready until such authorization exists.",
+  "autonomous_progression_rule": "On exact 666 while Level 0 is open, autonomously claim and execute the next non-overlapping assimilation/earned-work shard. After Level-0 PASS, exact 666 spawns one seeded high-value diverse research field, researches it immediately, cross-connects it to the mesh and routes material deltas to specialist branches. Milestone gates remain the shared attractor; 666 exploration does not force every worker to attack the same gate directly.",
+  "global_training_rule": "No paid or final model training is authorized by program progression alone. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit owner instruction before final training. The dynamic DOOMSDAY forecast remains conditional on immediate authorization when the data gate is ready until such authorization exists.",
   "mandatory_cross_cutting_refs": [
     "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
     "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
     "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
     "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
     "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
+    "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
     "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
     "research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md",
     "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",

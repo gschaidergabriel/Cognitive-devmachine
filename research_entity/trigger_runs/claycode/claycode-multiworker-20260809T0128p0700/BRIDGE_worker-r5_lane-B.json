@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "bridge_type":"EXISTING_CONCURRENT_WORKER_TO_RENDEZVOUS",
+  "worker_id":"chatgpt-secondary-r5",
+  "worker_run":"claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "source_coordination_commit":"f1a02aaf1b1ec27f7669ad5f4b87d3b4f3432501",
+  "mapped_lane":"B_COMPILER_RUNTIME_LOWERING",
+  "mapping_reason":"Worker's self-declared focus is capability-safe lowering, translation validation, replay/rollback identity and constructive-harm resistance; this is the rendezvous Lane B scope.",
+  "do_not_overwrite_worker_scope":true,
+  "cross_read_request":[
+    "Read RENDEZVOUS.json and Lane A contribution ca9725df81569f4bd408fee3b6cf2d921113b153.",
+    "Read Lane C worker receipt 0611601cf9f61d8048f67e806ee3f15b0a566b13.",
+    "Test ABI/process/FFI/WASI/native lowering for capability non-forgeability, attenuation, aggregate budget state and origin ancestry.",
+    "Publish an append-only contribution or completion receipt that names this coordination_id before finalization."
+  ],
+  "fusion_policy":"Final fusion waits for r4, sol-01 and r5 complete/closed receipts; shared ancestry is not independent replication."
+}

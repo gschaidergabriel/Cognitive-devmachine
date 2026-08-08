@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-08-08T12:45:16.135681+00:00",
-  "started_at": "2026-08-08T00:27:29.636775+00:00",
+  "checked_at": "2026-08-08T13:31:11.606202+00:00",
+  "started_at": "2026-08-08T13:31:02.143121+00:00",
   "scope": "provider credential/runtime smoke health; not worker-surface invocability",
   "results": [
     {
@@ -12,20 +12,20 @@
         "provider": "OpenAlex",
         "tool": "openalex_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:31.168318+00:00",
+        "checked_at": "2026-08-08T13:31:02.515405+00:00",
         "credential_source": "private_repo_store:API_TOKENS.env",
         "rate_limit": {
           "api_key": "[REDACTED]",
           "is_grandfathered": false,
           "rate_limit": {
             "daily_budget_usd": 1,
-            "daily_used_usd": 0,
-            "daily_remaining_usd": 1,
+            "daily_used_usd": 0.028,
+            "daily_remaining_usd": 0.972,
             "prepaid_balance_usd": 0,
             "prepaid_remaining_usd": 0,
             "prepaid_expires_at": null,
             "resets_at": "2026-08-09T00:00:00.000Z",
-            "resets_in_seconds": 84749,
+            "resets_in_seconds": 37738,
             "endpoint_costs_usd": {
               "singleton": 0,
               "list": 0.0001,
@@ -35,8 +35,8 @@
               "text": 0.01
             },
             "credits_limit": 10000,
-            "credits_used": 0,
-            "credits_remaining": 10000,
+            "credits_used": 280,
+            "credits_remaining": 9720,
             "onetime_credits_balance": 0,
             "onetime_credits_remaining": 0,
             "onetime_credits_expires_at": null,
@@ -61,7 +61,7 @@
         "provider": "arXiv",
         "tool": "arxiv_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:31.345534+00:00",
+        "checked_at": "2026-08-08T13:31:02.772222+00:00",
         "credential_required": false,
         "verification_endpoint_class": "api_query"
       },
@@ -76,7 +76,7 @@
         "provider": "Semantic Scholar",
         "tool": "semantic_scholar_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:32.043483+00:00",
+        "checked_at": "2026-08-08T13:31:04.678143+00:00",
         "credential_required": false,
         "credential_source": null,
         "verification_endpoint_class": "graph/paper/search"
@@ -92,7 +92,7 @@
         "provider": "Crossref",
         "tool": "crossref_lookup",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:32.197106+00:00",
+        "checked_at": "2026-08-08T13:31:04.781133+00:00",
         "credential_required": false,
         "mailto_configured": false,
         "verification_endpoint_class": "works/{doi}",
@@ -115,11 +115,11 @@
         "provider": "Tavily",
         "tool": "tavily_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:32.461700+00:00",
+        "checked_at": "2026-08-08T13:31:04.841737+00:00",
         "credential_source": "private_repo_store:API_TOKENS.env",
         "credential_value_persisted_here": false,
         "verification_endpoint_class": "search",
-        "request_id": "22e07fe0-12e7-4476-975d-4f64454fdd6a",
+        "request_id": "0d9f9f50-ded6-4468-bb9f-50247dfcf796",
         "usage": null
       },
       "receipt_path": "research_entity/runtime/tavily_verification.json"
@@ -133,7 +133,7 @@
         "provider": "DuckDuckGo/DDGS",
         "tool": "duckduckgo_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:33.354612+00:00",
+        "checked_at": "2026-08-08T13:31:06.800405+00:00",
         "credential_required": false,
         "verification_class": "text_search"
       },
@@ -148,11 +148,11 @@
         "provider": "Exa",
         "tool": "exa_search",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:34.183339+00:00",
+        "checked_at": "2026-08-08T13:31:07.975494+00:00",
         "credential_source": "private_repo_store:API_TOKENS.env",
         "credential_value_persisted_here": false,
         "verification_endpoint_class": "search",
-        "request_id": "fcf055146f940dc050a1e987790f6e8c",
+        "request_id": "62dd73053ea2cdc5db5d7d0ed54aec61",
         "cost_dollars": {
           "total": 0.007,
           "search": {
@@ -165,9 +165,18 @@
     {
       "tool": "e2b_sandbox",
       "provider": "E2B",
-      "status": "CREDENTIAL_UNAVAILABLE",
-      "error_type": "SecretError",
-      "error": "Credential E2B_API_KEY is not configured",
+      "status": "RUNTIME_VERIFIED",
+      "receipt": {
+        "schema_version": "1.1",
+        "provider": "E2B",
+        "tool": "e2b_sandbox",
+        "status": "RUNTIME_VERIFIED",
+        "checked_at": "2026-08-08T13:31:09.019025+00:00",
+        "credential_source": "process_environment",
+        "credential_value_persisted_here": false,
+        "verification_class": "isolated_multiline_python_execution",
+        "test": "Python sentinel through run_python"
+      },
       "receipt_path": "research_entity/runtime/e2b_verification.json"
     },
     {
@@ -179,7 +188,7 @@
         "provider": "Judge0",
         "tool": "judge0_execute",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:35.545005+00:00",
+        "checked_at": "2026-08-08T13:31:11.138893+00:00",
         "endpoint": "https://ce.judge0.com",
         "credential_source": null,
         "verification_class": "remote_python_execution"
@@ -203,7 +212,7 @@
         "provider": "Hugging Face Inference Providers",
         "tool": "huggingface_inference",
         "status": "RUNTIME_VERIFIED",
-        "checked_at": "2026-08-08T00:27:35.695896+00:00",
+        "checked_at": "2026-08-08T13:31:11.222288+00:00",
         "credential_source": "private_repo_store:API_TOKENS.env",
         "credential_value_persisted_here": false,
         "verification_endpoint_class": "v1/models",
@@ -217,7 +226,7 @@
       "status": "RUNTIME_VERIFIED",
       "receipt": {
         "status": "RUNTIME_VERIFIED",
-        "verified_at": "2026-08-08T12:45:16.135138+00:00",
+        "verified_at": "2026-08-08T13:31:11.605751+00:00",
         "provider": "Groq",
         "model": "llama-3.1-8b-instant",
         "parameter_class": "8B",
@@ -230,8 +239,8 @@
     }
   ],
   "counts": {
-    "RUNTIME_VERIFIED": 10,
-    "CREDENTIAL_UNAVAILABLE": 2
+    "RUNTIME_VERIFIED": 11,
+    "CREDENTIAL_UNAVAILABLE": 1
   },
   "worker_invocation_note": "A RUNTIME_VERIFIED provider may still be unavailable to a ChatGPT worker unless an invokable connector or the repo-runner bridge is used.",
   "groq_small_model_proxy": "llama-3.1-8b-instant / 8b_proxy_for_4b"

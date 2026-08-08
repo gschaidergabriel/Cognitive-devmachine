@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "artifact_remote_reread": {
+    "FINAL_REPORT.md": {"status":"PASS","blob_sha":"17e63f5a1a3a68a1439e9a836d2bc7de971720f3"},
+    "canonical": {"status":"PASS_UNCHANGED","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+    "command_registry": {"status":"PASS","schema_version":"3.3","commands":["dump","fusion","hypofusion","clay","gwt","frank","emergenz","claycode","hyperposition","claygraph","unifieddb"]}
+  },
+  "required_artifacts": {
+    "INTERCONNECT_MANIFEST.json":"COMMITTED",
+    "TOOL_EXECUTION_MANIFEST.json":"COMMITTED",
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json":"COMMITTED",
+    "HYPOTHESIS_MATRIX.json":"COMMITTED",
+    "NEGATIVE_RESULTS.md":"COMMITTED",
+    "EXECUTABLE_RESEARCH_RECEIPT.json":"COMMITTED",
+    "LATE_EXPERIMENT_DELTA.json":"COMMITTED",
+    "EXTERNAL_EVIDENCE_LEDGER.md":"COMMITTED",
+    "FINAL_REPORT.md":"COMMITTED"
+  },
+  "goodman_validation": {
+    "checker_source_read_from_github": true,
+    "static_contract_review_against_checker_logic": "PASS",
+    "exact_validate_run_execution": "BLOCKED",
+    "attempt": "E2B request claycode-r5-goodman-validate-e2b-004",
+    "blocker": "The external sandbox could not anonymously fetch the private repository raw files and returned HTTP 404 before the checker could execute.",
+    "result_ref": "research_entity/runtime/tool_results/claycode-r5-goodman-validate-e2b-004.json",
+    "claim": "No exact validator PASS is claimed."
+  },
+  "preflight_validation": {
+    "exact_repository_shell_preflight": "NOT_EXECUTED",
+    "reason": "This ChatGPT connector session has GitHub read/write actions but no direct repository shell.",
+    "fallback": "Eight-branch INTERCONNECT_MANIFEST was materialized from verified current GitHub reads."
+  },
+  "multiworker_validation": {
+    "network_membership": "3_OF_3_VISIBLE",
+    "lane_b_close": "COMMITTED",
+    "post_close_atomic_budget_crossread": "COMMITTED",
+    "active_intent_adequacy_lane_at_final_reread": "OPEN_NOT_COUNTED_AS_COMPLETED_EVIDENCE"
+  },
+  "scientific_validation": {
+    "canonical_promotion": false,
+    "reason": "Finite constructed/runtime evidence plus shared-ancestry worker convergence are insufficient for canonical promotion without target-Qwen, production capability-runtime, formal or ancestry-distinct replication evidence.",
+    "status": "PASS_FOR_OPEN_RESEARCH_DELTA_WITH_TECHNICAL_VALIDATION_GAP"
+  }
+}

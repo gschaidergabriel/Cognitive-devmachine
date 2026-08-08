@@ -1,14 +1,15 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"fusion-20260808T2214p0700-chatgpt-secondary-r3",
   "shared_ancestry_scanned":true,
   "contradictions_scanned":true,
   "fresh_in_progress_scanned":true,
-  "branches":{"clay":{"status":"FULL_INDEXED","head":"CACC-G12","completion":"COMPLETE_VERIFIED_REMOTE_REREAD"},"frank":{"status":"FULL_INDEXED","head":"C7 CORF"},"gwt":{"status":"FULL_INDEXED","head":"R5 Nested Workspace Bridge","completion":"REMOTE_AND_CANONICAL_VERIFIED"},"emergenz":{"status":"FULL_INDEXED","head":"E-CERT2"},"claycode":{"status":"FULL_INDEXED","head":"CC12 TCQS","completion":"COMPLETE_VERIFIED_REMOTE_REREAD"},"hyperposition":{"status":"FULL_INDEXED","head":"HYP-RC4"},"claygraph":{"status":"FULL_INDEXED","head":"G1d","decision":"HOLD"},"unifieddb":{"status":"FULL_INDEXED","head":"UD-RC1"}},
+  "branches":{"clay":{"status":"FULL_INDEXED","head":"CACC-G12","completion":"COMPLETE_VERIFIED_REMOTE_REREAD"},"frank":{"status":"STALE_DUE_NEW_ACTIVE_RUN","completed_head":"C7 CORF","active_run":"C8 Selective Cognitive Runtime Fabric"},"gwt":{"status":"FULL_INDEXED","head":"R5 Nested Workspace Bridge","completion":"REMOTE_AND_CANONICAL_VERIFIED"},"emergenz":{"status":"FULL_INDEXED","head":"E-CERT2"},"claycode":{"status":"FULL_INDEXED","head":"CC12 TCQS","completion":"COMPLETE_VERIFIED_REMOTE_REREAD"},"hyperposition":{"status":"FULL_INDEXED","head":"HYP-RC4"},"claygraph":{"status":"FULL_INDEXED","head":"G1d","decision":"HOLD"},"unifieddb":{"status":"STALE_DUE_NEW_ACTIVE_RUN","completed_head":"UD-RC1","active_run":"U2"}},
   "meta_runs":{"fusion_f5":"completed before G12/R5","hypofusion_h1":"COMPLETED_OPEN_NO_PROMOTION after G12/R5"},
-  "completion_scan":{"active":[],"pending":[],"finalizing":[],"started_unclosed":[]},
-  "post_worker_fusion_check":"NO fusion-trigger run after completion of G12/R5/Hypofusion H1 was present at start",
+  "initial_completion_scan":{"active":[],"pending":[],"finalizing":[],"started_unclosed":[]},
+  "final_completion_scan":{"active_or_unclosed":["frank C8","unifieddb U2"],"result":"POST_WORKER_CONDITION_NO_LONGER_TRUE"},
+  "post_worker_fusion_check":"INVALIDATED: new workers started during final reread; this run does not count as successful post-worker fusion",
   "global_classes_covered":["canonical_state","trigger_registry","latest_branch_reports","run_manifests","hypotheses","negative_results","experiments","external_evidence_screening","contradictions","cross_branch_feedback","tool_execution"],
   "ancestry_notes":["G12 descends from F5/C3F and shares MOSAIC/UnifiedDB/CC12 ancestry.","R5 ingests G12 and prior GWT/ClayGraph/FRANK ancestry; agreement is not independent replication.","Hypofusion H1 screened 99 hypothesis records and explicitly collapsed shared ancestry; its external evidence is component-level, not full-stack validation."],
-  "missing_or_blocked":[]
+  "missing_or_blocked":["Wait for FRANK C8 closure","Wait for UnifiedDB U2 closure","Rerun exactly one fusion trigger after all started workers are closed"]
 }

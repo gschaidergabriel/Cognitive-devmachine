@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.7",
+  "schema_version": "1.8",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "rule": "A reserved trigger fires only when the complete trimmed user message equals one registered trigger word. Never trigger on ordinary prose containing the word.",
   "master_protocol": "research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md",
@@ -8,7 +8,7 @@
   "goodman_anti_echo_protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
   "goodman_filter_checker": "tools/goodman_filter_check.py",
   "status_footer_protocol": "research_entity/global/STATUS_FOOTER_PROTOCOL.md",
-  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support. ClayGraph covers associative memory/knowledge-graph/database-migration research; UnifiedDB covers the broader logically unified persistence/query/transaction substrate and must preserve explicit semantic-vs-physical separation. The fusion meta-trigger researches across the complete mesh and must return an explicit feedback receipt to every scientific branch. The hypofusion meta-trigger additionally screens all reachable current/open hypotheses against broad external supporting, analogous, better-mechanism and counterhypothesis evidence, rereads live workers before final fusion, and returns discriminating tests plus branch feedback.",
+  "mesh_rule": "All scientific trigger branches are interdependent research views of one RAE. Every run must ingest all connected branches before Fusion 1, including newer in-progress branch material, preserve evidence ancestry, scan contradictions and write cross-links back to affected branches. FRANK↔ClayCode agreement must pass the Goodman anti-echo filter before it can count as support. ClayGraph covers associative memory/knowledge-graph/database-migration research; UnifiedDB covers the broader logically unified persistence/query/transaction substrate and must preserve explicit semantic-vs-physical separation. Clay permanently includes Safe-Effect Geometry / Non-Damaging Semantic Action Space as a mandatory falsifiable research axis; the research requirement is fixed but the claimed safety/alignment benefits are not pre-promoted as true. The fusion meta-trigger researches across the complete mesh and must return an explicit feedback receipt to every scientific branch. The hypofusion meta-trigger additionally screens all reachable current/open hypotheses against broad external supporting, analogous, better-mechanism and counterhypothesis evidence, rereads live workers before final fusion, and returns discriminating tests plus branch feedback.",
   "triggers": {
     "dump": {
       "kind": "research_intake",
@@ -39,9 +39,12 @@
     "clay": {
       "kind": "integrated_research_foundry",
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
-      "purpose": "Run the complete Synthetic Clay recursive research foundry across GWT, FRANK architecture, emergence measurement, ClayCode/4B internal language, hyperposition/codependency, ClayGraph associative memory, UnifiedDB persistence/query/transaction substrate and low-latency emergent software.",
+      "purpose": "Run the complete Synthetic Clay recursive research foundry across GWT, FRANK architecture, emergence measurement, ClayCode/4B internal language, hyperposition/codependency, ClayGraph associative memory, UnifiedDB persistence/query/transaction substrate, low-latency emergent software and the permanent Safe-Effect Geometry / Non-Damaging Semantic Action Space research axis.",
       "mesh_role": "integrated_master_foundry",
-      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"]
+      "required_foundations": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"],
+      "required_permanent_research_foundations": ["research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"],
+      "requires_safe_effect_geometry_delta": true,
+      "required_outputs": ["SAFE_EFFECT_GEOMETRY_DELTA.md"]
     },
     "gwt": {
       "kind": "domain_research",

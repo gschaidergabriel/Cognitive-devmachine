@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "retina-20260809T0615p0700-deep-foundry",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "seed": 20260809,
+  "epistemic_class": "SYNTHETIC_MECHANISM_SANITY_CHECK_NOT_LIVE_RETINA_EVIDENCE",
+  "promotion_allowed_to_live_claim": false,
+  "purpose": "Stress-test qualitative rule classes before implementing them in H1; these numbers do not measure real Retina/FRANK performance.",
+  "experiments": {
+    "prior_precision_sweep": {
+      "setup": "Six-class synthetic feature evidence degraded by increasing occlusion; context prior correct 82% of trials and deliberately wrong otherwise; compare prior weights with UNKNOWN margin rule.",
+      "finding": "As sensory evidence weakens, stronger priors can improve nominal classification but sharply increase acceptance of deliberately wrong priors. Under heavy occlusion the decision increasingly becomes prior-driven.",
+      "selected_examples": [
+        {"occlusion":0.0,"prior_weight":0.2,"accuracy":0.9339,"wrong_prior_acceptance":0.0540},
+        {"occlusion":0.3,"prior_weight":0.6,"accuracy":0.8137,"wrong_prior_acceptance":0.5078},
+        {"occlusion":0.6,"prior_weight":0.8,"accuracy":0.7515,"wrong_prior_acceptance":0.7570},
+        {"occlusion":0.9,"prior_weight":0.8,"accuracy":0.6738,"wrong_prior_acceptance":0.7664}
+      ],
+      "implication": "Do not optimize recurrence only for accuracy. Track evidence/prior contribution, misleading-prior error and abstention/UNKNOWN."
+    },
+    "temporal_object_continuity": {
+      "setup": "Synthetic object episodes with 22% detector misses and 1.8% absent-frame false detections; compare stateless detector to decaying persistent belief with/without explicit negative evidence.",
+      "stateless": {"precision":0.9684,"recall":0.7800,"f1":0.8641,"false_positive_rate":0.0179},
+      "example_good_persistence": {"decay":0.9,"explicit_negative_multiplier":0.05,"precision":0.9906,"recall":0.9542,"f1":0.9720,"false_positive_rate":0.0064,"ghost_run_p95_frames":2.0},
+      "slow_memory_without_negative_evidence": {"decay":0.94,"explicit_negative_multiplier":1.0,"precision":0.6123,"recall":0.9940,"f1":0.7578,"false_positive_rate":0.4431,"ghost_run_mean_frames":16.21,"ghost_run_p95_frames":30.0},
+      "implication": "Persistence can rescue detector flicker, but explicit absence/non-observation semantics are essential to prevent ghost objects."
+    },
+    "gwt_escalation_tradeoff": {
+      "setup": "Synthetic novelty/mismatch/uncertainty/goal/risk features and a hidden important-event label; sweep a simple weighted ignition threshold.",
+      "examples": [
+        {"threshold":0.25,"workspace_rate":0.1568,"important_recall":0.7994,"important_precision":0.6018},
+        {"threshold":0.30,"workspace_rate":0.0878,"important_recall":0.5631,"important_precision":0.7570},
+        {"threshold":0.40,"workspace_rate":0.0186,"important_recall":0.1433,"important_precision":0.9077}
+      ],
+      "implication": "A high-threshold scalar policy easily becomes precise but blind. Real H1 gating requires cost-aware precision/recall tuning and likely typed conditions rather than importing these thresholds."
+    },
+    "anchor_change_tradeoff": {
+      "setup": "Synthetic stream with sparse dynamic changes and occasional state loss; full anchor costs 10 units, event/change update 1 unit.",
+      "examples": [
+        {"anchor_period_steps":1,"cost_per_step":10.0,"static_state_unavailable_fraction":0.0},
+        {"anchor_period_steps":30,"cost_per_step":0.416,"static_state_unavailable_fraction":0.0233},
+        {"anchor_period_steps":60,"cost_per_step":0.2511,"static_state_unavailable_fraction":0.0467},
+        {"anchor_period_steps":300,"cost_per_step":0.1188,"static_state_unavailable_fraction":0.2045},
+        {"anchor_period_steps":null,"cost_per_step":0.0855,"static_state_unavailable_fraction":0.9972}
+      ],
+      "implication": "Hybrid anchors plausibly trade compute for recovery; event-only cannot recover lost static state in this toy model. Actual anchor policy must be measured on real streams."
+    },
+    "active_sensing": {
+      "setup": "Synthetic confidence-calibrated base observations; expensive second look costs 6 additional units and is requested only inside confidence bands.",
+      "baseline_accuracy":0.59945,
+      "examples": [
+        {"band":[0.2,0.5],"expensive_action_rate":0.2840,"accuracy":0.6629,"relative_cost":2.704},
+        {"band":[0.4,0.7],"expensive_action_rate":0.4716,"accuracy":0.7023,"relative_cost":3.8295},
+        {"band":[0.5,0.8],"expensive_action_rate":0.5085,"accuracy":0.7102,"relative_cost":4.051}
+      ],
+      "implication": "Selective second-look policies can express an accuracy/cost frontier; the real system should optimize expected information/task value rather than always invoking expensive visual stages."
+    }
+  },
+  "overall_conclusion": "The synthetic checks support the plausibility of precision-separated recurrence, explicit negative evidence, hybrid anchors and selective active sensing as mechanisms worth implementing. They also expose failure modes severe enough to make those safeguards release requirements. No numeric threshold or measured performance is promoted to live Retina/FRANK.",
+  "next_live_tests": ["E0","E1","E3","E4","E5","E6","E7"]
+}

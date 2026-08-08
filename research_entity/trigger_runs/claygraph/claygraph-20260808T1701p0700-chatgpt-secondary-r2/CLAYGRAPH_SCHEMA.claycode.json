@@ -1,0 +1,48 @@
+{
+  "schema_version":"0.3",
+  "language":"ClayCode",
+  "representation":"canonical_semantic_ir_json_projection",
+  "candidate_id":"claygraph-g1c-resident-adaptive-escalation",
+  "generation":1,
+  "parent":{"graph_id":"claygraph-v0-seed","generation":0},
+  "status":"HOLD_CANDIDATE",
+  "purpose":"Resident/indexed temporal semantic substrate with evidence-bounded active assemblies and query-adaptive graph escalation; exact/event stores remain authoritative.",
+  "layers":[
+    {"layer_id":"exact_anchor_index","role":"versioned pointers/witnesses to authoritative exact state/events; no duplicate authority"},
+    {"layer_id":"resident_semantic_index","role":"preloaded semantic/provenance graph plus lexical/id/status/evidence-family indexes; no per-query full JSONL reload"},
+    {"layer_id":"retrieval_router","role":"choose direct exact, packet/FTS, graph-local or graph-multihop route from query requirements and uncertainty"},
+    {"layer_id":"activation_overlay","role":"transient bounded graph expansion only when route requires it"},
+    {"layer_id":"assembly_certificate","role":"replayable explanation of route, evidence families, paths, exact anchors, conflicts, stop reason and cost"}
+  ],
+  "retrieval_classes":{
+    "CURRENT_EXACT":{"default_route":"EXACT_OR_FTS","graph":"OFF","exact_anchor":"REQUIRED"},
+    "HISTORICAL_EXACT":{"default_route":"EVENT_OR_FTS","graph":"OPTIONAL_FOR_NAVIGATION","exact_anchor":"REQUIRED_FOR_ASSERTION"},
+    "FACTUAL_LOCAL":{"default_route":"PACKET_FTS_OR_VECTOR","graph":"OFF_UNLESS_LOW_CONFIDENCE"},
+    "SEMANTIC_ASSOCIATIVE":{"default_route":"PACKET_FTS_PLUS_LOCAL_GRAPH","max_hops":1},
+    "RELATIONAL_MULTIHOP":{"default_route":"GRAPH_ESCALATION","max_hops":2,"rerank":"REQUIRED"},
+    "AUDIT_CONTRADICTION":{"default_route":"STATUS_AWARE_PACKET_PLUS_GRAPH","include_states":["NEGATIVE_RESULT","REFUTED","SUPERSEDED","STALE","OPEN","CURRENT"]},
+    "MIXED":{"default_route":"SPLIT_SUBCLAIMS","rule":"exact subclaims validate against anchors; associative subclaims may graph-escalate"}
+  },
+  "resident_index_contract":{
+    "required_indexes":["token_to_node","external_id_to_node","status_to_node","branch_to_node","evidence_family_to_node","edge_adjacency_by_type","exact_anchor_lookup"],
+    "update":"incremental from authoritative changefeed/repository delta when closure is known; deterministic rebuild fallback when unknown or integrity check fails",
+    "hot_path_rule":"query must not parse/reload the complete node/edge corpus",
+    "integrity":"resident index carries source_corpus_hash + graph_revision + rebuild/last_delta receipt"
+  },
+  "graph_escalation_gate":{
+    "inputs":["query_class","seed_confidence","evidence_scatter_estimate","relation_need","baseline_answerability","token_budget","latency_budget"],
+    "rules":["do not graph-escalate a query already answered by exact/packet baseline with sufficient confidence unless audit requires relation tracing","qualified edge type alone never authorizes expansion","target needs query relevance or explicit bridge role","stop when marginal evidence gain falls below cost threshold or budget is reached","preserve conflicting alternatives rather than average them"],
+    "fallback":"return baseline retrieval plus unresolved-relation marker rather than forcing graph traversal"
+  },
+  "reader_projection":{
+    "principle":"semantic canonical form and model-facing form are distinct",
+    "small_model_rule":"prefer explicit role-labelled relation projections over aggressively compact positional encodings until target reader tests prove otherwise",
+    "context_compression":"deduplicate textual descendants while preserving distinct functional roles and evidence-family ancestry",
+    "authority":"projection can influence reasoning but never mint truth/effect authority"
+  },
+  "assembly_contract":{"fields":["assembly_id","plan_id","query_class","route","graph_revision","basis_frame_id","selected_packet_refs","selected_assertion_refs","exact_anchor_refs","evidence_family_refs","conflict_set_refs","activation_paths","omitted_duplicate_refs","staleness_witnesses","stop_reason","retrieval_ms","estimated_context_tokens","no_authority=true"]},
+  "frank_mapping":{"M.MEMORY_FABRIC":"owns retrieval router/resident semantic index/assembly generation","M.DURABLE_EVENT_STATE":"authoritative exact/event source","M.COGNITIVE_FRAME_ASSEMBLER":"supplies exact current frame witnesses","M.WORKSPACE_ARBITER":"consumes memory candidate only after assembly; graph activation is not GWT ignition","M.CAPABILITY_GATEWAY":"remains sole hard external effect authority"},
+  "migration":{"physical_monolith_required":false,"dispositions":["MERGE","PROJECT","LINK","KEEP_ISOLATED","DEFER","UNKNOWN"],"rule":"retrieval performance never authorizes physical migration; store migration still requires shadow parity/replay/p99/crash/privacy/rollback evidence"},
+  "hard_invariants":["activation is not truth","resident cache is derived and rebuildable","exact/current claims validate against authoritative anchors","shared ancestry is not independent replication","negative/conflict/stale/revoked states remain explicit","no secrets/bearer capabilities in graph/model context","graph route is optional and budgeted","model output is not authority","migration remains rollback-capable"],
+  "evidence_boundary":{"imported_8b":"current activation hot-path superiority challenged","local_index_proxy":"resident/inverted seed indexing strongly improves synthetic lookup cost but target transfer unproven","external":"adaptive graph routing independently supported as a current research direction","decision":"HOLD"}
+}

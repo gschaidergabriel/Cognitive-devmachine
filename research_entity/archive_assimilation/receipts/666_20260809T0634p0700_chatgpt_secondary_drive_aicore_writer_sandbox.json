@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T0634p0700_chatgpt_secondary_drive_aicore_writer_sandbox",
+  "actor": "chatgpt-secondary",
+  "trigger": "666",
+  "status": "COMPLETE",
+  "source_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_WRITER_SANDBOX_SIDE_BRANCH_MANIFEST.json",
+  "source_units": 2,
+  "identity_result": "2_DRIVE_ONLY_PF_HEAD_MISSING",
+  "findings": [
+    "Writer contains exactly writer/sandbox/__init__.py and writer/sandbox/executor.py; both are absent from the frozen PF head.",
+    "The executor is resource-limited but not isolated: temporary cwd, timeout and ulimit controls do not prevent ordinary user-level filesystem/network/process effects.",
+    "allow_network=false is a dead configuration flag in this implementation.",
+    "The child inherits the complete parent environment.",
+    "bash/sh execute under parent-user authority.",
+    "The rust path compiles with rustc but does not launch the resulting binary, so compile and execute phases are conflated."
+  ],
+  "dedup": "Generic weak-sandbox lesson overlaps prior Genesis archaeology; only Writer-specific enforcement/phase oracles are new.",
+  "harness_fixture": "research_entity/harness/fixtures/WRITER_SANDBOX_ENFORCEMENT_ORACLES.json",
+  "targets": ["claycode","harness","frank","unifieddb"],
+  "earned_work_hours_added": 0,
+  "exact_level0_credit": 0.0,
+  "training_started": false
+}

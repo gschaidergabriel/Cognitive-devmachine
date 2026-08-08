@@ -8,6 +8,8 @@ The current default is Groq's Llama 3.1 8B Instant. It is used as an
 from __future__ import annotations
 
 import json
+import re
+import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -19,30 +21,48 @@ BASE_URL = "https://api.groq.com/openai/v1"
 DEFAULT_MODEL = "llama-3.1-8b-instant"
 EVIDENCE_ROLE = "8b_proxy_for_4b"
 USER_AGENT = "FRANK-RAE/8.8 research-runtime (+https://github.com/gschaidergabriel/clay-global-research-entity)"
+MAX_RATE_RETRIES = 20
+
+
+def _retry_seconds(exc: urllib.error.HTTPError, body: str, attempt: int) -> float:
+    header = exc.headers.get("Retry-After") if exc.headers else None
+    if header:
+        try:
+            return max(0.5, min(float(header) + 0.35, 65.0))
+        except ValueError:
+            pass
+    m = re.search(r"try again in\s+([0-9.]+)\s*(ms|s)", body, flags=re.I)
+    if m:
+        value = float(m.group(1)) / (1000.0 if m.group(2).lower() == "ms" else 1.0)
+        return max(0.5, min(value + 0.5, 65.0))
+    return min(2.0 + attempt * 2.0, 30.0)
 
 
 def _request(path: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
     key = get_secret("GROQ_API_KEY")
     data = None if payload is None else json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(
-        BASE_URL + path,
-        data=data,
-        headers={
-            "Authorization": f"Bearer {key}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            # Groq's Cloudflare edge can reject Python urllib's default/no User-Agent
-            # with HTTP 403 / Cloudflare error 1010. Keep an explicit, stable agent.
-            "User-Agent": USER_AGENT,
-        },
-        method="GET" if payload is None else "POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")[:1000]
-        raise RuntimeError(f"Groq HTTP {exc.code}: {body}") from exc
+    for attempt in range(MAX_RATE_RETRIES + 1):
+        req = urllib.request.Request(
+            BASE_URL + path,
+            data=data,
+            headers={
+                "Authorization": f"Bearer {key}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": USER_AGENT,
+            },
+            method="GET" if payload is None else "POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")[:2000]
+            if exc.code == 429 and attempt < MAX_RATE_RETRIES:
+                time.sleep(_retry_seconds(exc, body, attempt))
+                continue
+            raise RuntimeError(f"Groq HTTP {exc.code}: {body[:1000]}") from exc
+    raise RuntimeError("Groq request retry loop exhausted")
 
 
 def list_models() -> list[dict[str, Any]]:
@@ -97,7 +117,7 @@ def smoke_test() -> dict[str, Any]:
         "test_role": EVIDENCE_ROLE,
         "credential_value_exposed": False,
         "inference_call_succeeded": True,
-        "transport_note": "explicit User-Agent required to avoid Cloudflare urllib error 1010",
+        "transport_note": "explicit User-Agent avoids Cloudflare urllib error 1010; HTTP 429 uses provider-cooldown retry",
     }
 
 

@@ -1,94 +1,114 @@
 # Reserved Trigger: `666` — FRANK Archive Assimilation / Level 0
 
 **Status:** PROJECT_OWNER_FIXED_PROGRAM_LEVEL_0
-**Kind:** exhaustive historical-source assimilation under hard wall-clock SLA
+**Kind:** exhaustive historical-source assimilation by persistent repo-native swarm under hard wall-clock SLA
 **Program stage:** `L0_ARCHIVE_ASSIMILATION`
 **Home meta-room:** `center`
 **Hard wall-clock budget:** **3 hours maximum**
+**Mandatory exhaustive law:** `research_entity/global/LEVEL0_EXHAUSTIVE_CORPUS_COMPLETION_LAW.md`
+**Mandatory swarm law:** `research_entity/global/LEVEL0_SWARM_EXECUTION_LAW.md`
 
 ## 0. Purpose
 
-While Level 0 is open, exact `666` assimilates the complete historical FRANK corpus into current research knowledge.
+While Level 0 is open, exact `666` resumes the one shared Level-0 swarm campaign and assimilates the complete frozen historical FRANK corpus into current research knowledge.
 
-Source order remains:
+Source order:
 
-`Drive clay archive -> Project-Frankenstein -> cross-source reconciliation -> research write-back -> PASS`
+`complete frozen Drive clay corpus -> complete frozen Project-Frankenstein Level-0 scope -> cross-source reconciliation -> research write-back -> audit -> PASS`
 
-The owner requires Level 0 to finish in **no more than 3 hours of wall-clock execution**. Therefore Level 0 is designed as a massively parallel data/knowledge pipeline, not serial document reading.
+The project owner requires **full evaluation of everything in the frozen Drive corpus and the complete frozen Project-Frankenstein scope**. Sampling or representative-file analysis may prioritize/shard work but can never satisfy completion.
+
+Exact `666` is therefore not a one-worker/one-shard command. It means:
+
+`JOIN/RESUME LEVEL-0 SWARM -> DISCOVER PEERS -> CLAIM NONOVERLAPPING WORK -> PROCESS -> CROSSREAD -> PUBLISH -> PIVOT -> CONTINUE UNTIL PASS OR CURRENT EXECUTION SURFACE IS EXHAUSTED`
+
+All actually available workers coordinate through the repository. The persistent campaign remains ACTIVE until Level 0 PASS; later exact `666` invocations join the same campaign rather than restarting it.
 
 ## 1. Hard 3-hour SLA
 
 `LEVEL0_MAX_WALL_CLOCK = 03:00:00`
 
-The SLA applies to active Level-0 execution after a usable source index is available. Connector/provider waiting that prevents access must be reported separately as an external blocker and must not be disguised as analysis time.
+The owner-fixed target is 1.5 h low / 2.25 h center / 3.0 h hard high of active Level-0 wall-clock execution after usable source indexing.
 
-The system should target completion earlier than the ceiling:
+If projected completion exceeds 3 h, change execution strategy immediately: increase independent sharding, batch extraction, exact dedupe, structured parsing, parallel synthesis and use of additional currently available workers/capabilities.
 
-- target low: 1.5 h;
-- target center: 2.25 h;
-- hard high: 3.0 h.
-
-If projected completion exceeds 3 h, the worker must immediately change execution strategy rather than extend the estimate: increase independent sharding, batch extraction, deduplication, structured parsing, parallel synthesis and/or use additional available workers/capabilities.
-
-The release gate itself is never weakened merely to hit the clock.
+The completeness requirement is never weakened to hit the clock. Connector/provider waiting is reported as an external blocker, not hidden as analysis time.
 
 ## 2. Throughput architecture
 
-The required execution architecture is:
+Required pipeline:
 
 `recursive inventory`
-`-> content hash + exact duplicate/version clustering`
+`-> exact identity/hash + duplicate/version clustering`
 `-> MIME/source-class routing`
 `-> bulk full-content extraction`
-`-> semantic chunking`
+`-> semantic/code/data/binary processing`
 `-> parallel mechanism/evidence/history extraction`
 `-> cross-source lineage reconciliation`
 `-> branch-specific knowledge compilation`
+`-> earned-work reconciliation`
 `-> release audit`
 
-Never process 400 MB by manually reading one file after another.
+Never process the corpus by blindly reading one file after another when deterministic batching/deduplication can preserve exhaustive coverage faster.
 
-### Parallel lanes
+### Parallel swarm lanes
 
-After manifests/shards become available, dispatch independent lanes immediately:
+Workers should immediately split independent obligations such as:
 
-- inventory/hash/dedup;
-- code/module architecture extraction;
-- papers/docs/notes extraction;
-- experiments/logs/measurements extraction;
+- recursive inventory / denominator closure;
+- hash / exact duplicate / alias clustering;
+- code/module architecture;
+- papers/docs/notes;
+- experiments/logs/measurements;
+- databases/snapshots/state;
+- models/binaries/artifacts;
 - GWT/emergence/coupling history;
 - XENO/ClayCode/language history;
 - memory/personality/goals/body history;
-- failures/negative results/boot-order/recovery history;
-- Project-Frankenstein commit/version lineage;
+- failures/negative results/boot-order/recovery;
+- Project-Frankenstein commit/version/deletion/supersession lineage;
 - cross-source duplicate/supersession reconciliation;
 - current-architecture inheritance mapping;
-- branch/Q12 write-back.
+- branch/Q12 feedback;
+- final earned-work dedup and audit.
 
-No worker may duplicate a leased shard except explicit replication.
+Ordinary shards have one active lease. Explicit replication/falsification is a separate task. Workers cross-read peer receipts and pivot at safe points when overlap is discovered.
 
 ## 3. Source scope
 
 ### Drive
 
-Primary folder:
+Primary frozen source universe starts from:
 - title: `clay`
 - folder id: `1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm`
-- owner-reported size: ~400 MB
 
-The ~400 MB figure is planning input only. Exact coverage uses the frozen recursive manifest.
+Use the latest project-owner/frozen root epoch and recurse every root child. New owner-added material before PASS creates a new epoch/delta obligation; prior valid child closures remain reusable where identity proves continuity.
+
+Every file/folder in the frozen universe remains accounted for, including code, text, data, databases, models, binaries, archives, assets, vendor/support/cache/generated material and recovery branches.
 
 ### Project-Frankenstein
 
 Repository: `gschaidergabriel/Project-Frankenstein`
 
-Freeze the exact head/tree/history scope used by Level 0. GitHub metadata size is only a throughput hint.
+Use the frozen Level-0 Git/history/tree scope law. Head-only analysis is insufficient. Process the complete defined commit interval/scope, frozen-head tree, deleted/superseded material visible through history and Drive-only recovery material that reconciles into this lineage.
 
-## 4. Exact coverage
+## 4. Exact exhaustive coverage
 
-Level 0 must remain exact even though it is fast.
+Every frozen source unit receives a deterministic disposition. No unit may silently disappear because it looks unimportant.
 
-For every semantically eligible unique source unit, deterministic obligations are created as applicable:
+Required terminal disposition classes include:
+
+- `SEMANTICALLY_ANALYZED`
+- `CODE_ANALYZED`
+- `DATA_OR_EXPERIMENT_ANALYZED`
+- `MODEL_OR_BINARY_STRUCTURALLY_ANALYZED`
+- `DUPLICATE_OR_ALIAS_PROVEN`
+- `SUPERSEDED_LINEAGE_ANALYZED`
+- `SUPPORT_VENDOR_CACHE_CLASSIFIED_ZERO_SEMANTIC_CREDIT`
+- `CORRUPT_OR_UNREADABLE_WITH_EXPLICIT_BLOCKER`
+- `NO_RESEARCH_DELTA_AFTER_REVIEW`
+
+For semantically eligible unique units, deterministic obligations are created as applicable:
 
 1. `IDENTIFIED`
 2. `CONTENT_COVERED`
@@ -97,27 +117,23 @@ For every semantically eligible unique source unit, deterministic obligations ar
 5. `LINEAGE_LINKED`
 6. `INTEGRATED` or explicit `NO_RESEARCH_DELTA`
 
-Special source classes add appropriate obligations for code, papers, experiments/logs, commits, database/snapshots or non-semantic binary assets.
+Special classes add code/data/model/binary/history/provenance obligations.
 
 Exact coverage is:
 
 `completed_atomic_obligations / frozen_total_atomic_obligations`
 
-Duplicate bytes/files do not create redundant semantic-analysis work after exact identity is proven; their provenance/version relationships still receive receipts.
+Duplicate bytes/files do not create duplicate semantic work once exact identity is proven, but their provenance/version/alias relationship still receives a receipt.
 
-Before the denominator is frozen, exact coverage remains 0.00% and inventory state is shown separately.
+Sampling, representative reading or semantic search may only prioritize and discover families. They never authorize whole-corpus closure. A family may be batch-closed only when an exact deterministic proof establishes duplicate/generated/support/vendor/zero-semantic membership and the proof+denominator are persisted.
 
 ## 5. Historical earned-work mapping
 
-Level 0 has a second mandatory purpose: reconstruct how much of Clay 0.1 has **already been earned by the previous FRANK development history**.
+Level 0 also reconstructs how much of Clay 0.1 has already been earned by prior FRANK development history.
 
-Owner-reported historical effort baseline:
+Owner-reported invested-effort prior remains approximately 1,390 h. It is not automatic reusable-work credit.
 
-`~8 months * 4 active days/week * 10 h/day ~= 1,390 h invested`
-
-This is an approximate invested-effort prior, not automatically 1,390 h of reusable current work.
-
-During assimilation every material historical mechanism/result is mapped to current DOOMSDAY workstreams as:
+Every material historical mechanism/result maps to current DOOMSDAY rows as one of:
 
 - `DIRECTLY_REUSABLE`
 - `REUSABLE_WITH_ADAPTATION`
@@ -126,9 +142,7 @@ During assimilation every material historical mechanism/result is mapped to curr
 - `SUPERSEDED_BUT_INFORMATIVE`
 - `NOT_REUSABLE`
 
-Each reusable mapping records current target row(s), evidence refs, confidence, and the current work it eliminates/de-risks. This feeds `research_entity/forecast/HISTORICAL_EARNED_WORK.json`.
-
-Until that mapping is sufficiently complete, DOOMSDAY progress must be displayed as `CALIBRATING_HISTORICAL_EARNED_WORK` rather than falsely implying the project began at zero.
+Each mapping records source refs, current target rows, mechanism/result, evidence/confidence, avoided/reused work estimate and falsifier/validation receipt. Duplicate mechanisms receive no duplicate credit.
 
 ## 6. Required extraction
 
@@ -142,7 +156,7 @@ Recover, where present:
 - memory/personality/self/body/goals;
 - timing/boot/order dependencies;
 - experiments and measurements;
-- successes and failures;
+- successes, failures, reversions and deletions;
 - negative results and fixes;
 - performance/token/resource measurements;
 - safety/authority implications;
@@ -150,21 +164,23 @@ Recover, where present:
 - current ClayCode/Harness/GWT/Hyperposition/ClayGraph/UDB implications;
 - cheapest current discriminating tests.
 
-Do not normalize project-original mechanisms into familiar terminology before preserving their native functional logic.
+Preserve project-native functional logic before mapping it into familiar terminology.
 
-## 7. Persistent state
+## 7. Persistent swarm state
 
 Workspace:
 `research_entity/archive_assimilation/666_WORKSPACE.json`
 
-Required outputs include:
+Persistent repo-native center state includes workers, tasks, leases, manifests, receipts, rest-obligation matrices and cross-room deltas.
 
-- Drive and Project-Frankenstein manifests;
+Required Level-0 outputs include:
+
+- complete frozen Drive accounting;
+- complete frozen Project-Frankenstein accounting;
 - compact shard receipts;
 - mechanism index;
 - emergent coupling graph;
-- failure atlas;
-- success-pattern atlas;
+- failure and success-pattern atlases;
 - boot/state history;
 - XENO/ClayCode history;
 - GWT/emergence history;
@@ -172,58 +188,76 @@ Required outputs include:
 - current architecture inheritance matrix;
 - `research_entity/forecast/HISTORICAL_EARNED_WORK.json`;
 - branch feedback/NO_CHANGE receipts;
-- `666_RELEASE_MANIFEST.json`.
+- final `666_RELEASE_MANIFEST.json` and audit receipt.
 
-## 8. Per-invocation execution law
+## 8. Exact `666` execution law while Level 0 is open
 
 Each exact `666` invocation:
 
-1. reads current workspace/manifest/leases;
-2. computes the remaining SLA budget;
-3. claims the highest-throughput non-overlapping shard/lane;
-4. uses bulk extraction and dedupe before semantic analysis;
-5. processes and receipts the shard;
-6. publishes material findings immediately to relevant branches/Q12 index;
-7. updates historical earned-work mappings;
-8. updates exact progress and measured throughput;
-9. reforecasts whether the 3-hour ceiling is still achievable;
-10. if not, changes strategy/parallelism immediately;
-11. continues until the execution surface for the current turn is exhausted or Level 0 PASS is reached.
+1. reads PROGRAM_STATE, current Level-0 workspace, latest frozen source epochs/scope laws, center workers/tasks/leases and recent receipts;
+2. joins/resumes the one persistent Level-0 swarm campaign;
+3. computes the current rest-obligation matrix from source/manifests rather than trusting stale workspace summaries;
+4. discovers active peers before choosing work;
+5. claims the highest-value non-overlapping obligation;
+6. publishes task/lease immediately;
+7. processes the obligation exhaustively using the fastest safe deterministic method;
+8. publishes high-value partial findings early when peers depend on them;
+9. consumes peer deltas/crossreads and pivots when overlap or a better dependency is discovered;
+10. writes manifest/receipt/branch feedback and earned-work delta;
+11. releases the lease and marks the worker COMPLETE for the shard;
+12. immediately claims another open non-overlapping obligation while execution capacity remains;
+13. updates exact progress/throughput and the global rest matrix;
+14. continues until PASS or the actual execution surface of the current invocation is exhausted.
 
-No invocation restarts completed work.
+No invocation restarts completed work. No worker may pretend unavailable/unscheduled instances are running; the swarm consists of workers actually active/available, joined by persistent repo state.
 
 ## 9. Completion gate
 
-`666_RELEASE_GATE = PASS` requires:
+`666_RELEASE_GATE = PASS` requires all of the following:
 
-- frozen Drive manifest and all required obligations complete;
-- frozen Project-Frankenstein manifest and all required obligations complete;
-- cross-source duplicates/version/supersession/contradictions reconciled;
-- material findings integrated or explicitly marked no-delta;
-- historical earned-work mapping sufficiently complete to recalibrate DOOMSDAY;
+- complete frozen Drive source universe fully accounted for;
+- complete frozen Project-Frankenstein source universe fully accounted for;
+- all accessible atomic obligations complete;
+- every genuinely inaccessible/corrupt unit explicitly blocker-classified and owner-visible;
+- Drive <-> Project-Frankenstein duplicates, versions, supersession, recovery lineage and contradictions reconciled;
+- material findings integrated or explicitly no-delta;
 - every current research branch receives applicable feedback/NO_CHANGE;
-- exact coverage = 100%;
-- release manifest validates the hashes/counts/receipts.
+- historical earned-work mapping row-level deduplicated and audited;
+- release manifest validates counts/hashes/receipts;
+- exact coverage = 100% under the frozen completion law.
 
-The 3-hour SLA does not authorize a false PASS. If an external connector prevents source access, mark `EXTERNAL_ACCESS_BLOCKER` rather than silently weakening coverage.
+The 3-hour target never authorizes false PASS.
 
 ## 10. Dedicated display
 
 Every exact `666` response while Level 0 is open reports:
 
-- elapsed active Level-0 time;
-- hard remaining wall-clock budget out of 3 h;
-- exact coverage or denominator-not-frozen status;
-- source units/shards processed;
-- measured throughput;
-- projected finish vs SLA;
-- historical earned-work mapping coverage;
-- blockers.
+- active Level-0 campaign state;
+- current frozen source epochs/scopes;
+- exact coverage or the specific denominator blocker;
+- source units/shards completed this invocation;
+- current active peer/lease picture when material;
+- measured throughput if available;
+- historical earned-work mapping state;
+- blockers and next highest-value obligations.
 
 ## 11. After Level 0
 
-After `666_RELEASE_GATE = PASS`, exact `666` no longer performs archive work. It switches to the registered emergent stochastic research-field spawning protocol.
+When PASS is reached:
+
+1. persist final release manifest/audit;
+2. mark authoritative Level-0 gate PASS;
+3. stop archive-assimilation dispatch;
+4. future exact `666` switches to `research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md`.
 
 ## 12. Scientific boundary
 
-Historical claims remain historical claims until their evidence class is verified. Functional/emergence measurements are not phenomenal-consciousness evidence by repetition alone.
+Historical claims remain historical claims until their evidence class is verified. Repeated agreement, self-generated evidence, functional/emergence measurements or worker consensus do not upgrade evidence by themselves.
+
+## Compact invariant
+
+`666 + L0_OPEN = SWARM UNTIL L0_PASS`
+
+`LEVEL0 = FULL FROZEN DRIVE + FULL FROZEN PROJECT-FRANKENSTEIN + FULL RECONCILIATION`
+
+`SAMPLING != COMPLETION`

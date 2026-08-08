@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260808T2044p0700-chatgpt-secondary-r2",
+  "trigger": "unifieddb",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "classes": {
+    "scholarly": {"status":"EXECUTED_WITH_NATIVE_WEB_FALLBACK","sources":["UDBMS unified database management systems vision","BigDAWG polystore","RHEEM cross-platform optimizer","Manu vector database consistency architecture","Samyama unified graph-vector engine preprint","Graph-based Agent Memory survey","SYNAPSE episodic-semantic graph memory","GAM graph associative memory","SAGE self-evolving graph memory"]},
+    "implementation": {"status":"EXECUTED","sources":["PostgreSQL MVCC documentation","SQLite ATTACH/atomic commit documentation","DuckDB ATTACH documentation","pgvector documentation","FoundationDB transaction/read-version documentation","Apache Arrow IPC documentation"]},
+    "executable": {"status":"EXECUTED_LOCAL","runtime":"CPython sqlite3 + SQLite FTS5 + numpy-like pure Python vector scoring","experiments":["four-architecture read microbenchmark","service-boundary serialization comparison","write microbenchmark","injected-failure/replay test"]},
+    "model_experiment": {"status":"NOT_REQUIRED_FOR_CORE_DATABASE_DECISION","reason":"This run tests persistence/query/transaction architecture; target-Qwen reader impact remains a downstream live blocker."}
+  },
+  "limitations": [
+    "Repository provider bridge scripts were not directly executed by this ChatGPT runtime.",
+    "Local benchmarks are cache-hot single-process synthetic workloads, not live FRANK, production database, Android, distributed or thermal measurements.",
+    "Samyama and several 2026 agent-memory works are preprints and are not treated as independently replicated production claims.",
+    "No benchmark result is promoted from synthetic/local evidence to live FRANK evidence."
+  ],
+  "promotion_gate": "PASS_FOR_OPEN_RESEARCH_DELTA_ONLY; BLOCK_STRONG_PROMOTION"
+}

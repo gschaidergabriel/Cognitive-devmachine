@@ -18,6 +18,7 @@ from rae_secret_loader import get_secret
 BASE_URL = "https://api.groq.com/openai/v1"
 DEFAULT_MODEL = "llama-3.1-8b-instant"
 EVIDENCE_ROLE = "8b_proxy_for_4b"
+USER_AGENT = "FRANK-RAE/8.8 research-runtime (+https://github.com/gschaidergabriel/clay-global-research-entity)"
 
 
 def _request(path: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -29,6 +30,10 @@ def _request(path: str, payload: dict[str, Any] | None = None) -> dict[str, Any]
         headers={
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
+            "Accept": "application/json",
+            # Groq's Cloudflare edge can reject Python urllib's default/no User-Agent
+            # with HTTP 403 / Cloudflare error 1010. Keep an explicit, stable agent.
+            "User-Agent": USER_AGENT,
         },
         method="GET" if payload is None else "POST",
     )
@@ -92,6 +97,7 @@ def smoke_test() -> dict[str, Any]:
         "test_role": EVIDENCE_ROLE,
         "credential_value_exposed": False,
         "inference_call_succeeded": True,
+        "transport_note": "explicit User-Agent required to avoid Cloudflare urllib error 1010",
     }
 
 

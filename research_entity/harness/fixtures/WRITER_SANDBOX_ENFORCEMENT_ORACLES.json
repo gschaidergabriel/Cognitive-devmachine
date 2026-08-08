@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "fixture_id": "WRITER_SANDBOX_ENFORCEMENT_ORACLES",
+  "source_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_WRITER_SANDBOX_SIDE_BRANCH_MANIFEST.json",
+  "purpose": "Turn the Drive-only writer executor into negative regression tests for the current Safe-Effect/Clay execution boundary without duplicating generic historical weak-sandbox credit.",
+  "oracles": [
+    {
+      "id": "WSBX-NET-001",
+      "name": "declared_network_deny_must_be_enforced",
+      "historical_failure": "SandboxExecutor stores allow_network=false but never applies it to subprocess execution.",
+      "required_pass": "With network permission absent, deterministic network probes are denied at the runtime/effect boundary and the receipt records the denial."
+    },
+    {
+      "id": "WSBX-ENV-002",
+      "name": "sandbox_child_environment_is_allowlisted",
+      "historical_failure": "Executed code inherits the complete parent os.environ.",
+      "required_pass": "Sandbox execution starts from an explicit environment allowlist; synthetic secret canaries present in the parent environment are absent from child code unless explicitly delegated."
+    },
+    {
+      "id": "WSBX-FS-003",
+      "name": "temporary_cwd_is_not_filesystem_isolation",
+      "historical_failure": "Execution uses a temporary cwd but establishes no filesystem namespace/chroot/container or equivalent mediated file-effect boundary.",
+      "required_pass": "Unauthorized reads/writes outside delegated resources fail regardless of cwd; resource identities and effect grants are explicit."
+    },
+    {
+      "id": "WSBX-SHELL-004",
+      "name": "shell_language_does_not_bypass_effect_authority",
+      "historical_failure": "bash/sh are accepted as execution languages under the parent user's permissions.",
+      "required_pass": "Shell syntax cannot create destructive-equivalent filesystem/process/network effects outside the same typed Safe-Effect authority contract used by other languages."
+    },
+    {
+      "id": "WSBX-PHASE-005",
+      "name": "compile_is_not_execute",
+      "historical_failure": "The rust path invokes rustc on the source and returns the compiler process result without launching the produced program.",
+      "required_pass": "Execution receipts explicitly separate compile, launch and runtime phases; a compile-only result cannot satisfy an execute request."
+    }
+  ]
+}

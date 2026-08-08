@@ -1,14 +1,17 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
   "transport": "repository_only",
   "global_chief": false,
+  "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+  "program_narrative": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "room_root": "research_entity/rooms/rooms",
   "meta_rooms": {
     "center": {
       "kind": "whole_mesh_meta_room",
-      "triggers": ["fusion", "hypofusion"],
-      "persistent_chief": false
+      "triggers": ["fusion", "hypofusion", "go"],
+      "persistent_chief": false,
+      "go_protocol": "research_entity/triggers/GO_AUTODISPATCH_PROTOCOL.md"
     },
     "intake": {
       "kind": "intake_room",
@@ -45,5 +48,5 @@
     "before_final_visible_response"
   ],
   "event_types": ["JOIN", "PULSE", "ROLE_CLAIM", "TASK", "DELTA", "CROSS_ROOM_DELTA", "QUESTION", "REPLY", "CHALLENGE", "ROAST", "HANDOFF", "CROSSREAD", "INVALIDATE", "COMPLETE", "LEAVE"],
-  "rule": "Trigger sessions auto-join their pinned home room. Same-room peers self-organize with ephemeral roles. Cross-room deltas may change knowledge but not trigger loyalty. No room role changes evidence status by itself."
+  "rule": "Trigger sessions auto-join their pinned home room. Same-room peers self-organize with ephemeral roles. Cross-room deltas may change knowledge but not trigger loyalty. The go meta-trigger first joins center for discovery, then self-selects one target specialist room, role and task from current program state and acts immediately. No room role changes evidence status by itself."
 }

@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0422+0700-chatgpt-secondary-drive-index-xeno-thalamus",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_packages": ["666-00-DUAL-INDEX", "666-01-DEDUPE-SHARD", "666-03-PARALLEL-ANALYZE", "666-06-BRANCH-FEEDBACK"],
+  "status": "DRIVE_SUBMANIFEST_FROZEN_AND_MEASUREMENT_SHARD_ANALYZED",
+  "observed_at": "2026-08-09T04:22:00+07:00",
+  "source_scope": {
+    "drive_root_folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "concept_submanifest": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json",
+    "concept_index_version": 7,
+    "concept_documents": 655,
+    "concept_relations": 3762,
+    "concept_characters": 14690477,
+    "primary_drive_files": [
+      "drive:1feQl-jDB42RSG0hnpGwizeONh1ta3tuz:MANIFEST.json",
+      "drive:16Jn1ukwt4YzZJku2T6nnWX8KXA3GAkir:KATALOG.md",
+      "drive:1IEpEGVc8_OP_KcN7SGw8OtMvT4ensIaa:LEBENSZYKLUS.md",
+      "drive:1pdSwxaU1ERkm-0T7sEaHUE1HihlY_DBI:KORRELATIONEN.md",
+      "drive:1-FCwOTEvHRIw6lyvvfXw-vGGTekNel3F:xeno-schwarm-gwt.txt",
+      "drive:1S51dzkOBHdlsdfHuUL6NHSlJNilyhNkC:thalamus-gewoehnung-ohne-rueckweg.txt"
+    ]
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-L0-IDX-001",
+      "epistemic_class": "DRIVE_GENERATED_INDEX_METADATA",
+      "status": "CURRENT_ARCHIVE_INDEX_EVIDENCE",
+      "claim": "The extracted Drive tree contains a generated v7 concept corpus index with 655 documents, 3762 inter-document relations and 14690477 text characters across eight categories; 561 documents are <=30 days old, 28 are 31-90 days old and 66 are 91-240 days old.",
+      "targets": ["claygraph", "unifieddb", "frank", "claycode", "harness"],
+      "implication": "Use the existing index/version/correlation layer as the high-throughput semantic manifest backbone instead of rereading the 663552000-byte tarball serially. Preserve its scope boundary: it is a concept/text submanifest, not automatically the entire Drive denominator."
+    },
+    {
+      "finding_id": "DRIVE-L0-IDX-002",
+      "epistemic_class": "DRIVE_COMPUTED_LINEAGE_METADATA",
+      "status": "CURRENT_ARCHIVE_LINEAGE_EVIDENCE",
+      "claim": "KORRELATIONEN.md records 2922 lexical-similarity relations, 681 explicit mentions and 159 version-follow relations, including long repeated version chains for benchmark, architecture, memory and evaluation documents.",
+      "targets": ["claygraph", "unifieddb", "frank", "harness"],
+      "implication": "Level-0 ingestion must collapse version ancestry and supersession before counting independent evidence; same-name documents are often versions, not replications."
+    },
+    {
+      "finding_id": "DRIVE-L0-XENO-003",
+      "epistemic_class": "HISTORICAL_RUNTIME_MEASUREMENT_RECOUNT",
+      "status": "CORRECTS_PREVIOUS_REPORTED_INTERPRETATION",
+      "claim": "The prior interpretation that NMK/meta-vocabulary emerged in round 3 is contradicted by a direct recount against schwarm.db: xeno1 already contains the seed in round 1 (2/67 document contributions; 4/67 raw responses), then 52/66 and 55/66 document contributions in rounds 2/3; xeno2 contains zero NMK occurrences in all rounds.",
+      "targets": ["emergenz", "gwt", "clay", "claycode", "harness"],
+      "implication": "Treat NMK as a single-agent seed followed by copying cascade, not replicated collective lexical emergence. Shared-document diffusion and ancestry must be separated from independent invention in all multi-agent emergence metrics."
+    },
+    {
+      "finding_id": "DRIVE-L0-XENO-004",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_CONTROL_INVALIDATION",
+      "status": "CURRENTLY_RELEVANT_EXPERIMENT_CONSTRAINT",
+      "claim": "The 'klar' control run is invalid for language-effect inference: 91 of 97 failures were provider rate-limit exhaustion, it ran after xeno1+xeno2 consumed quota, and its control prompt had less structural scaffolding than SPRACHREGEL. Therefore the question whether XENO language changes convergence remained unanswered by those runs.",
+      "targets": ["claycode", "emergenz", "gwt", "harness", "clay"],
+      "implication": "Future language/representation experiments require fresh matched quota pools and structure-matched controls. Provider token-bucket exhaustion is an experimental confound, not a language effect."
+    },
+    {
+      "finding_id": "DRIVE-L0-THAL-005",
+      "epistemic_class": "HISTORICAL_RUNTIME_DATABASE_MEASUREMENT_DUAL_READ",
+      "status": "CURRENTLY_RELEVANT_MEASUREMENT_FOUNDATION",
+      "claim": "A read-only analysis of thalamus.db reports 2263 gating events over 3027 hours, with two independent analysis instances agreeing on the core numbers. Multiple channels reached habituation near/at 1.0 under an update law lacking a recovery counterterm; burst_channels was empty in 2197/2263 events (97.1%) and override=user_presence occurred in 2051/2263 (90.6%).",
+      "targets": ["gwt", "frank", "harness", "claycode", "clay", "unifieddb"],
+      "implication": "Historical Thalamus provides a concrete long-horizon failure oracle: gating dynamics need recovery/decay, mode-conditioned causal analysis and saturation-rescue tests. Instantaneous range checks are insufficient."
+    },
+    {
+      "finding_id": "DRIVE-L0-THAL-006",
+      "epistemic_class": "HISTORICAL_RUNTIME_DATABASE_VS_DOCUMENTATION_CONFLICT",
+      "status": "SUPERSEDED_LINEAGE_CONSTRAINT",
+      "claim": "The historical runtime database contained ten gating channels including aura while contemporary paper/registry descriptions stated nine; later Project-Frankenstein history removed/renamed AURA to Swarm. This demonstrates a real runtime-documentation-schema divergence over time.",
+      "targets": ["frank", "gwt", "claygraph", "unifieddb", "harness"],
+      "implication": "Current architecture truth must be versioned and runtime-grounded. Historical AURA observations remain lineage evidence but cannot be promoted as current architecture facts."
+    }
+  ],
+  "dedup_and_credit": {
+    "crossread_note": "The Thalamus mechanism family overlaps the existing Project-Frankenstein GWT/runtime shard, but this Drive shard adds long-horizon historical database measurements and independent-recount evidence. No additional avoided-hours credit is applied here until final mechanism-level deduplication.",
+    "historical_earned_work_hours_added": 0.0,
+    "reason": "Preserve new evidence without double-crediting previously mapped GWT/state work."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "drive_semantic_submanifest_frozen_documents": 655,
+    "whole_drive_denominator_frozen": false,
+    "reason": "The concept/text submanifest is exact for its generated v7 scope, but code/database/model/binary/non-concept assets under the extracted Drive tree still require reconciliation/classification before the full Drive denominator can be frozen."
+  },
+  "next_actions": [
+    "Use DRIVE_CLAY_CONCEPT_INDEX_V7.json plus category folders to shard the 655-document semantic corpus without overlap.",
+    "Prioritize training/model, architecture, consciousness/psychology, and reports/audits categories for evidence extraction; use version chains to avoid duplicate counting.",
+    "Reconcile Drive XENO/Thalamus findings against current RAE hypotheses/negative-results and branch state.",
+    "Recursively inventory non-concept code/database/model/binary assets so the whole Drive denominator can be frozen."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "request_id": "gwt-r5-e2b-jlens-smoke-20260808T2140p0700",
+  "tool": "e2b_sandbox",
+  "request_sha256": "dc8139f098b8fa957c12ef0a4c2aa298b60dcc7fa715e2c9eaf26b4476c24dc3",
+  "processed_at": "2026-08-08T14:47:29.640705+00:00",
+  "result": {
+    "provider": "E2B",
+    "tool": "e2b_sandbox",
+    "evidence_class": "runtime_experiment",
+    "command": "python3 -c 'import subprocess,sys,json,os,tempfile\ncmd=[sys.executable,'\"'\"'-m'\"'\"','\"'\"'pip'\"'\"','\"'\"'install'\"'\"','\"'\"'-q'\"'\"','\"'\"'git+https://github.com/anthropics/jacobian-lens.git'\"'\"']\np=subprocess.run(cmd,capture_output=True,text=True,timeout=100)\nout={'\"'\"'install_returncode'\"'\"':p.returncode,'\"'\"'install_stderr_tail'\"'\"':p.stderr[-1200:]}\nif p.returncode==0:\n import jlens, inspect\n out['\"'\"'import_ok'\"'\"']=True\n out['\"'\"'module'\"'\"']=getattr(jlens,'\"'\"'__file__'\"'\"',None)\n out['\"'\"'has_fit'\"'\"']=hasattr(jlens,'\"'\"'fit'\"'\"')\n out['\"'\"'has_from_hf'\"'\"']=hasattr(jlens,'\"'\"'from_hf'\"'\"')\n out['\"'\"'has_JacobianLens'\"'\"']=hasattr(jlens,'\"'\"'JacobianLens'\"'\"')\nelse:\n out['\"'\"'import_ok'\"'\"']=False\nprint(json.dumps(out,sort_keys=True))'",
+    "stdout": "{\"import_ok\": false, \"install_returncode\": 2, \"install_stderr_tail\": \"/local/lib/python3.11/site-packages/pip/_vendor/msgpack/__init__.py\\\", line 38, in packb\\n    return Packer(**kwargs).pack(o)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.11/site-packages/pip/_vendor/msgpack/fallback.py\\\", line 883, in pack\\n    self._pack(obj)\\n  File \\\"/usr/local/lib/python3.11/site-packages/pip/_vendor/msgpack/fallback.py\\\", line 862, in _pack\\n    return self._pack_map_pairs(\\n           ^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.11/site-packages/pip/_vendor/msgpack/fallback.py\\\", line 968, in _pack_map_pairs\\n    self._pack(v, nest_limit - 1)\\n  File \\\"/usr/local/lib/python3.11/site-packages/pip/_vendor/msgpack/fallback.py\\\", line 862, in _pack\\n    return self._pack_map_pairs(\\n           ^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.11/site-packages/pip/_vendor/msgpack/fallback.py\\\", line 968, in _pack_map_pairs\\n    self._pack(v, nest_limit - 1)\\n  File \\\"/usr/local/lib/python3.11/site-packages/pip/_vendor/msgpack/fallback.py\\\", line 821, in _pack\\n    return self._buffer.write(obj)\\n           ^^^^^^^^^^^^^^^^^^^^^^^\\nMemoryError\\n\\n[notice] A new release of pip is available: 23.2.1 -> 26.2.1\\n[notice] To update, run: pip install --upgrade pip\\n\"}\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "status": "SUCCESS"
+}

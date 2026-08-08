@@ -1,0 +1,51 @@
+{
+  "schema_version":"1.0",
+  "language":"ClayCode",
+  "representation":"canonical_semantic_ir_json_projection",
+  "candidate_id":"CC-RC1.7-TCQS",
+  "name":"Typed Collection & Query Semantics",
+  "parent":"CC-RC1.6-MRSC",
+  "status":"OPEN_RESEARCH_CANDIDATE",
+  "core_invariant":"collection kind is semantic, not container metadata",
+  "collection_types":{
+    "SET<T>":{"order_semantic":false,"multiplicity_semantic":false,"duplicate_policy":"IDEMPOTENT","canonicalization":"deduplicate + deterministic semantic ordering"},
+    "ORDERED<T>":{"order_semantic":true,"multiplicity_semantic":true,"duplicate_policy":"PRESERVE","canonicalization":"preserve sequence"},
+    "MULTISET<T>":{"order_semantic":false,"multiplicity_semantic":true,"duplicate_policy":"COUNT","canonicalization":"element -> multiplicity, deterministically ordered by element identity"},
+    "WEIGHTED<T,W>":{"order_semantic":false,"multiplicity_semantic":"key uniqueness by default","weight_semantic":true,"duplicate_policy":"REJECT_UNLESS_EXPLICIT_AGGREGATOR","canonicalization":"key -> canonical weight"}
+  },
+  "identity_contract":{
+    "semantic_hash":"includes collection kind, element type, canonical items and collection-specific policies",
+    "contract_instance_hash":"binds semantic_hash to proposal/adequacy/provenance ancestry",
+    "basis_identity_hash":"MOSAIC operation-required causal snapshot identity",
+    "selection_plan_hash":"query/candidate/result semantics including collection/cardinality/order/weight policy",
+    "projected_view_hash":"exact concrete reader handoff",
+    "rule":"equality on one axis never implies equality on another"
+  },
+  "projection_receipt_v3":{
+    "required":["semantic_hash","contract_instance_hash","projected_view_hash","compiler_version","reader_profile","basis_identity_hash","selection_plan_hash"],
+    "authority":"NONE"
+  },
+  "casts":[
+    {"from":"SET<T>","to":"MULTISET<T>","class":"LOSSLESS_EMBEDDING","rule":"multiplicity=1 for every member; type identity changes"},
+    {"from":"MULTISET<T>","to":"SET<T>","class":"LOSSY_EXPLICIT","rule":"distinct/deduplicate; loss declaration required"},
+    {"from":"ORDERED<T>","to":"SET<T>","class":"LOSSY_EXPLICIT","rule":"order and duplicate information discarded"},
+    {"from":"ORDERED<T>","to":"MULTISET<T>","class":"LOSSY_EXPLICIT","rule":"order discarded, multiplicity retained"},
+    {"from":"SET<T>","to":"ORDERED<T>","class":"POLICY_REQUIRED","rule":"explicit comparator/order policy required"},
+    {"from":"MULTISET<T>","to":"ORDERED<T>","class":"POLICY_REQUIRED","rule":"explicit expansion and order policy required"},
+    {"from":"WEIGHTED<T,W>","to":"SET<T>","class":"LOSSY_EXPLICIT","rule":"weights discarded"},
+    {"from":"WEIGHTED<T,W>","to":"ORDERED<T>","class":"POLICY_REQUIRED","rule":"explicit ranking/tie-break policy required"}
+  ],
+  "query_ir":{
+    "required_fields":["query_semantics_hash","result_collection_type","element_type","duplicate_policy","order_policy","weight_policy","basis_requirements","selection_plan_hash"],
+    "lowering_rule":"physical backend defaults cannot redefine Clay collection semantics",
+    "examples":{"SET_SQL":"SELECT DISTINCT ... with deterministic canonical order when materialized","ORDERED_SQL":"explicit ORDER BY semantic key/position","MULTISET_SQL":"preserve/count multiplicity","WEIGHTED":"explicit score/weight semantics and tie/duplicate policy"}
+  },
+  "runtime_abi":{
+    "rule":"compact handles may encode collection kind/type ID; wire layout never implicitly defines semantics",
+    "hot_path":"semantic/contract identities may be cached after commit; emitted view identity is recomputed/bound per projection",
+    "target_benchmark":"Rust/C/Arrow-compatible Linux + Android ABI roundtrip/property/fuzz benchmark"
+  },
+  "unifieddb_boundary":"logical query unification is compatible with specialized physical stores only when collection/result and selection-plan semantics survive lowering",
+  "authority_boundary":"model output, collection membership, query rank, graph activation and projection identity do not grant capability/effect authority",
+  "promotion":"NONE"
+}

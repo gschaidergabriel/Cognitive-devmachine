@@ -2,7 +2,8 @@
 """Resolve next Research Center milestone, progress bar and ETA.
 
 All stage order/labels/progress sources come from PROGRAM_STATE.json.
-ETA prefers measured throughput and otherwise uses explicit priors.
+Level 0 may use a stricter archive-assimilation workspace with exact frozen
+atomic-obligation coverage and its own measured/bootstrap ETA.
 """
 from __future__ import annotations
 
@@ -76,13 +77,39 @@ def _selected_packages(packages: dict[str, Any], source: dict[str, Any]) -> list
 def stage_progress(program: dict[str, Any], stage_id: str, stage: dict[str, Any]) -> dict[str, Any]:
     complete = _complete_set(program)
     if _is_complete(stage.get("status"), complete):
-        return {"percent": 100, "completed_weight": 1.0, "total_weight": 1.0, "open_weight": 0.0, "basis": "stage_status_pass"}
+        return {"percent": 100, "exact_percent": 100.0, "completed_weight": 1.0, "total_weight": 1.0, "open_weight": 0.0, "basis": "stage_status_pass"}
 
     source = stage.get("progress_source") or {}
     kind = source.get("kind", "gate")
+
     if kind == "terminal":
         percent = max(0, min(100, int(source.get("value", 100))))
-        return {"percent": percent, "completed_weight": float(percent), "total_weight": 100.0, "open_weight": float(100-percent), "basis": "terminal"}
+        return {"percent": percent, "exact_percent": float(percent), "completed_weight": float(percent), "total_weight": 100.0, "open_weight": float(100-percent), "basis": "terminal"}
+
+    if kind == "archive_assimilation":
+        rel = source.get("path")
+        if not rel:
+            raise ValueError(f"{stage_id}: archive progress_source.path missing")
+        path = ROOT / str(rel)
+        if not path.exists():
+            fallback = float(source.get("fallback_percent", 0))
+            return {"percent": int(round(fallback)), "exact_percent": fallback, "completed_weight": 0.0, "total_weight": 0.0, "open_weight": 1.0, "basis": f"missing:{rel}", "denominator_state": "MISSING"}
+        workspace = _load(path)
+        exact = float(_nested(workspace, str(source.get("percent_field", "combined_progress.exact_coverage_percent"))))
+        denominator_state = str(_nested(workspace, str(source.get("denominator_state_field", "combined_progress.denominator_state"))))
+        completed = float((workspace.get("combined_progress") or {}).get("completed_atomic_obligations", 0) or 0)
+        total = float((workspace.get("combined_progress") or {}).get("total_atomic_obligations", 0) or 0)
+        open_weight = max(0.0, total - completed) if total > 0 else 1.0
+        return {
+            "percent": max(0, min(100, int(round(exact)))),
+            "exact_percent": max(0.0, min(100.0, exact)),
+            "completed_weight": completed,
+            "total_weight": total,
+            "open_weight": open_weight,
+            "basis": f"{rel}:frozen_atomic_obligations",
+            "denominator_state": denominator_state,
+            "eta_override": workspace.get("eta") if isinstance(workspace.get("eta"), dict) else None,
+        }
 
     if kind in {"work_packages", "stage_workspace"}:
         rel = source.get("path")
@@ -91,7 +118,7 @@ def stage_progress(program: dict[str, Any], stage_id: str, stage: dict[str, Any]
         path = ROOT / str(rel)
         if not path.exists():
             value = int(source.get("missing_means", 0))
-            return {"percent": value, "completed_weight": 0.0, "total_weight": 0.0, "open_weight": 0.0, "basis": f"missing:{rel}"}
+            return {"percent": value, "exact_percent": float(value), "completed_weight": 0.0, "total_weight": 0.0, "open_weight": 0.0, "basis": f"missing:{rel}"}
         workspace = _load(path)
         field = str(source.get("field", "work_packages"))
         packages = _nested(workspace, field)
@@ -107,9 +134,10 @@ def stage_progress(program: dict[str, Any], stage_id: str, stage: dict[str, Any]
             done += weight * fraction
             total += weight
             rows.append({"id": pid, "status": str(payload.get("status", "OPEN")), "weight": weight, "fraction": fraction})
-        percent = int(round(100.0 * done / total)) if total else 0
+        exact = 100.0 * done / total if total else 0.0
         return {
-            "percent": max(0, min(100, percent)),
+            "percent": max(0, min(100, int(round(exact)))),
+            "exact_percent": max(0.0, min(100.0, exact)),
             "completed_weight": done,
             "total_weight": total,
             "open_weight": max(0.0, total-done),
@@ -117,7 +145,7 @@ def stage_progress(program: dict[str, Any], stage_id: str, stage: dict[str, Any]
             "packages": rows,
         }
 
-    return {"percent": 0, "completed_weight": 0.0, "total_weight": 1.0, "open_weight": 1.0, "basis": f"unsupported:{kind}"}
+    return {"percent": 0, "exact_percent": 0.0, "completed_weight": 0.0, "total_weight": 1.0, "open_weight": 1.0, "basis": f"unsupported:{kind}"}
 
 
 def next_unpassed(program: dict[str, Any]) -> tuple[str, dict[str, Any]]:
@@ -155,8 +183,25 @@ def _measured_velocity(throughput: dict[str, Any], stage_id: str) -> tuple[float
 
 
 def estimate_eta(stage_id: str, progress: dict[str, Any], throughput: dict[str, Any]) -> dict[str, Any]:
-    open_weight = float(progress.get("open_weight", 0.0))
     hours_per_day = float(throughput.get("user_active_hours_per_day", 10.0) or 10.0)
+
+    override = progress.get("eta_override")
+    if isinstance(override, dict):
+        low = override.get("bootstrap_low_days")
+        high = override.get("bootstrap_high_days")
+        # Once archive-specific observed batches provide a calibrated range, prefer it.
+        if override.get("calibrated_low_days") is not None and override.get("calibrated_high_days") is not None:
+            low = override.get("calibrated_low_days")
+            high = override.get("calibrated_high_days")
+        return {
+            "low_days": float(low) if low is not None else None,
+            "high_days": float(high) if high is not None else None,
+            "confidence": str(override.get("confidence", "LOW")),
+            "basis": str(override.get("basis", "stage_workspace_eta")),
+            "hours_per_day": float(override.get("owner_active_hours_per_day", hours_per_day) or hours_per_day),
+        }
+
+    open_weight = float(progress.get("open_weight", 0.0))
     if open_weight <= 0:
         return {"low_days": 0.0, "high_days": 0.0, "confidence": "HIGH", "basis": "no_open_weight", "hours_per_day": hours_per_day}
 
@@ -208,8 +253,10 @@ def resolve(program_path: Path = DEFAULT_PROGRAM, throughput_path: Path = DEFAUL
         "label": stage.get("label", stage_id),
         "stage_status": stage.get("status", "UNKNOWN"),
         "percent": progress["percent"],
+        "exact_percent": progress.get("exact_percent", float(progress["percent"])),
         "bar": progress_bar(int(progress["percent"]), cells),
         "progress_basis": progress.get("basis"),
+        "denominator_state": progress.get("denominator_state"),
         "completed_weight": progress.get("completed_weight"),
         "total_weight": progress.get("total_weight"),
         "open_weight": progress.get("open_weight"),

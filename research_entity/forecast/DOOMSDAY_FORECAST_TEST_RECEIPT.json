@@ -1,13 +1,13 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "tested_at": "2026-08-09",
   "evidence_class": "local_deterministic_fixture_test",
   "tool_under_test": "tools/doomsday_forecast.py",
   "integration_tools": ["tools/program_progress.py", "tools/status_footer_check.py"],
   "result": "PASS",
-  "scenario_tests_passed": 20,
+  "scenario_tests_passed": 21,
   "status_integration_tests_passed": 1,
-  "total_checks_passed": 21,
+  "total_checks_passed": 22,
   "important_bug_found_and_fixed": {
     "bug": "An early capability-impact implementation could have applied a calibrated-looking multiplier even when the capability itself was not runtime verified.",
     "fix": "Capability row multipliers now enter the forecast only when both the capability runtime status and the impact receipt are verified.",
@@ -33,6 +33,8 @@
     "capability-extension metadata can override stale registry status",
     "irrelevant API remains visible but has no critical-path effect",
     "new required scope can lower project-progress percentage and delay forecast",
+    "verified NEW_DEPENDENCY can extend the actual critical path",
+    "malformed forecast event is rejected and cannot silently change the date",
     "dependency cycle fails closed",
     "status footer resolves both NEXT LEVEL and DOOMSDAY from the same dynamic state"
   ],
@@ -42,6 +44,12 @@
     "internet_required": false,
     "paid_api_calls": false
   },
+  "last_observed_console_results": [
+    "ALL_TESTS_PASS 14",
+    "EXTRA_TESTS_PASS 6",
+    "MALFORMED_EVENT_PASS",
+    "STATUS_INTEGRATION_PASS"
+  ],
   "limitations": [
     "These tests validate forecast logic, invariants and integration behavior, not the accuracy of current engineering priors.",
     "Current stage priors remain low-confidence until real completion/throughput data accumulates.",

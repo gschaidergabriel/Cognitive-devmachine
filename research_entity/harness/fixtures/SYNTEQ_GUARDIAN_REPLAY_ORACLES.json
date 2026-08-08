@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "fixture_id":"SYNTEQ_GUARDIAN_REPLAY_ORACLES",
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SYNTEQ_RUNTIME_CORE_MANIFEST.json",
+  "historical_source":"Drive aicore/synteq/kern frozen 2026-08-04 lineage",
+  "reproduction":{"historical_handoff_count":19,"frozen_code_replay_count":27,"frozen_code_replay_passed":27,"exit_code":0,"interpretation":"test suite expanded after handoff; use frozen-code replay count as executable oracle and preserve handoff count only as chronology"},
+  "required_oracle_families":[
+    {"id":"SEQ-UNK-001","law":"missing observability is UNKNOWN, never healthy","counterexamples":["missing db","missing table","missing log","missing budget source"]},
+    {"id":"SEQ-STUCK-002","law":"constant/stuck signal is distinguishable from healthy varying signal","countercontrol":"same-size varying sequence"},
+    {"id":"SEQ-EXP-003","law":"declared expected state and observed activity are separate; declared-dead-but-writing is anomalous","countercontrol":"declared-dead-and-silent"},
+    {"id":"SEQ-BUDGET-004","law":"context/system budget changes require end-to-end delivery tests, not constant inspection alone","countercontrols":["history reaches model under sufficient budget","split budgets preserve history when within limits"]},
+    {"id":"SEQ-COUPLING-005","law":"coupling, decoupling and insufficient-evidence are three distinct outcomes","countercontrols":["built coupled channel","built independent channel","too-few samples"]},
+    {"id":"SEQ-INJECT-006","law":"every critical guardian must be demonstrated on an injected known defect and a healthy countercontrol before being trusted"}
+  ],
+  "h1_requirement":"Port these semantics into deterministic Reference Harness fixtures independent of historical German module names.",
+  "h2_requirement":"ClayCode Harness must produce equivalent typed health/unknown/coupling outcomes under the same injected-defect traces.",
+  "h3_requirement":"One-module architecture must preserve logical monitoring independence/fail-visible observability even when physical process boundaries are dissolved."
+}

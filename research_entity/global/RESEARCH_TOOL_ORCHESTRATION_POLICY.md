@@ -14,7 +14,9 @@ Default research bundles:
 - current web: Tavily + Exa, with DDGS/native web fallback;
 - implementation: GitHub/source inspection;
 - executable: local sandbox first, then E2B when operational, Piston/Judge0 as suitable fallbacks;
-- model experiments: local/target model plus Hugging Face when an independent model/embedding/inference comparison is decision-relevant.
+- model experiments: target/local model when available; for pending bare/Qwen-class 4B semantic-reader experiments use Groq `llama-3.1-8b-instant` as the default `8b_proxy_for_4b` under `research_entity/global/SMALL_MODEL_PROXY_POLICY.md`; Hugging Face is a fallback/independent provider when healthy and quota-available.
+
+For an experiment whose scientific variable is specifically the target model identity, tokenizer, local memory/KV behavior, energy/thermal profile, LoRA internalization or live-FRANK integration, the Groq 8B proxy does not close the true 4B/target experiment. It can close the model-side proxy arm only. Every result must preserve `requested_target_class` separately from `executed_model_class`.
 
 A required applicable provider may be skipped only for an explicit recorded reason such as quota exhaustion, rate limiting, provider/runtime/credential unavailability, connector blocking or genuine non-applicability. Strong claim promotion must not silently bypass the tool plan.
 

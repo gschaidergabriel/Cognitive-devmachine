@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "PARTIAL_LEVEL0_ACTIVE",
   "purpose": "Claim-granular index of historically implemented FRANK mechanisms, failures and current Clay 0.1 reuse decisions. This is not a replacement for raw source provenance.",
   "frozen_source_context": {
@@ -62,6 +62,46 @@
       "reuse": "COMPILER_CONFORMANCE_CORPUS",
       "current_targets": ["BASE_CLAYCODE_RELEASE", "harness"],
       "law": "Prefer compiler/runtime/FFI/stdlib implementation over adding new language semantics unless an executable counterexample proves a semantic gap."
+    },
+    "lcme_titan_hybrid_memory": {
+      "historical_sources": ["Project-Frankenstein:tools/lcme/lcme_core.py"],
+      "observed_implementation": ["claims instead of facts", "time-weighted confidence", "counter-hypothesis framing", "SQLite", "vector store", "knowledge graph", "graph-expanded retrieval", "controlled forgetting", "background maintenance", "cache invalidation after write", "mature neural hippocampus fast path"],
+      "reuse": "UNIFIEDDB_CLAYGRAPH_PRECURSOR_REUSE_WITH_MIGRATION_TESTS",
+      "current_targets": ["unifieddb", "claygraph", "frank", "harness", "claycode"]
+    },
+    "nac_reward_prediction_motivation": {
+      "historical_sources": ["Project-Frankenstein:services/nucleus_accumbens.py"],
+      "observed_implementation": ["channel-specific reward", "RPE", "tonic/phasic state", "habituation", "boredom from repetitiveness", "opponent process", "anhedonia protection", "E-PQ coupling", "persistent reward log"],
+      "reuse": "REUSE_WITH_PARAMETER_RECALIBRATION",
+      "current_targets": ["frank", "harness", "claycode", "gwt", "emergenz"]
+    },
+    "subconscious_policy": {
+      "historical_sources": ["Project-Frankenstein:services/subconscious.py"],
+      "observed_implementation": ["100D state", "20 thought/action categories", "small Actor-Critic network", "PPO", "cold-start exploration", "persistent transitions", "hallucination tracking", "prefrontal preference state"],
+      "reuse": "RETEST_ROLE_AFTER_NEEDLE_TOOL_BOUNDARY_CHANGE",
+      "current_targets": ["frank", "harness", "claycode", "training_data"],
+      "negative_result": "Historical implementation records an oversized ~3.1M-parameter policy being reduced to ~19K due limited reward-signal volume."
+    },
+    "persistent_spatial_body_world": {
+      "historical_sources": ["Project-Frankenstein:services/spatial_state.py"],
+      "observed_implementation": ["persistent location", "11 rooms", "activity-to-location mapping", "dynamic room registration", "tool/research location mapping", "NeRD avatar bridge", "system topology/proprioceptive mapping"],
+      "reuse": "BODY_WORLD_MODEL_REFERENCE",
+      "current_targets": ["frank", "harness", "claycode", "gwt"],
+      "negative_result": "Rich ambient room prose was removed from slim projection because it biased/fixated LLM thought generation.",
+      "law": "Canonical state and model-facing projection must remain separable and projection-induced behavioral effects measurable."
+    },
+    "dream_replay_synthesis_consolidation": {
+      "historical_sources": ["Project-Frankenstein:services/dream_daemon.py"],
+      "observed_implementation": ["daily budget", "replay", "synthesis", "consolidation", "user-activity interruption", "resume", "persisted phase state", "memory boost/decay", "E-PQ homeostasis"],
+      "reuse": "CONSOLIDATION_REFERENCE_WITH_RECOVERY_TESTS",
+      "current_targets": ["frank", "harness", "unifieddb", "gwt", "emergenz"],
+      "negative_results": ["trigger/cooldown thresholds required retuning because dream cycles were too rare", "Python package/path shadowing broke LCME import until precedence was fixed"]
+    },
+    "project_goal_strategy_agency": {
+      "historical_sources": ["Project-Frankenstein:services/project_engine.py"],
+      "observed_implementation": ["per-project persistent memory/hypotheses", "heartbeats", "tool statistics", "strategy logs", "goals", "tasks", "campaign/contact/budget state", "crew roles"],
+      "reuse": "AGENTIC_GOAL_WORLD_MODEL_TOOLING_PRECURSOR",
+      "current_targets": ["frank", "harness", "claycode", "unifieddb"]
     }
   },
   "epistemic_rule": "Historical runtime code demonstrates implementation existence at the frozen source version, not correctness under the current Clay 0.1 contract. Historical papers and benchmark claims remain reported evidence until current replication/provenance checks support promotion.",

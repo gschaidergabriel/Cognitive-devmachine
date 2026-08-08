@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0431+0700-chatgpt-secondary-drive-runtime-inventory-classification",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status": "ROOT_TREES_CLASSIFIED_DIVERGENT_RUNTIME_PROVEN",
+  "inventory": {
+    "aicore": {
+      "folder_id":"1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty",
+      "class":"POST_GITHUB_RUNTIME_TREE_REQUIRES_RECURSIVE_HISTORY_RECONCILIATION",
+      "observed_top_level_examples":["webd","updater","papers","desktopd","services","docker","training","router","wissen","modeld","synteq","bridges","common","ui","ext"],
+      "divergence_proof": {
+        "path":"router/app.py",
+        "drive_modified":"2026-08-04T13:28:32Z",
+        "drive_size_bytes":21155,
+        "drive_sha256":"cc06366c2784c22289a2a530c521ec70703bc0cc3065d6733576c5f6237749fa",
+        "drive_git_blob_sha1":"04c70818bb46e525809b7a5c1e08fff4751b3fef",
+        "github_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+        "github_blob_sha1":"601b4aa067a7505bef0f2f5ba91cd0e09e97a713",
+        "byte_identical":false
+      },
+      "consequence":"The extracted Drive aicore tree cannot be deduplicated wholesale against Project-Frankenstein. It is a later divergent runtime lineage and requires recursive path/hash comparison, with changed/new/deleted assets becoming separate Level-0 obligations."
+    },
+    "frank_projects": {
+      "folder_id":"1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw",
+      "direct_project_folder_count":14,
+      "direct_project_folders":["grazcamperfinder","e-auto-graz-finder","autoscout-e-car-hunter","ev-scout-graz","ev-camperscout","autoscout-ioniq-5-finder","e-auto-scout-sterreich","autocarfinder-pro","ai-research-agent","autocar-hunter","test-project","autocamp-scout","video-launch-page","autohunter-ioniq-5-autonomer-autokauf-agent"],
+      "class":"APPLICATION_USE_CASE_CORPUS_EXECUTABILITY_NOT_ASSUMED",
+      "samples":[
+        {"project":"grazcamperfinder","evidence":"PROJECT.md describes autonomous scanner/scoring/email/heartbeat architecture but status is Setup & Development; no execution proof observed in direct root.","classification":"SPEC_OR_PARTIAL_PROJECT_NOT_EXECUTION_RECEIPT"},
+        {"project":"ai-research-agent","evidence":"direct code folder observed with only hello.py in sampled path","classification":"INSUFFICIENT_FOR_GENERAL_PURPOSE_PROOF"},
+        {"project":"video-launch-page","evidence":"static index.html and deployment artifacts observed","classification":"STATIC_WEB_EXAMPLE_ONLY; does not satisfy ClayCode APP-02 real HTTP/backend requirement"}
+      ],
+      "consequence":"Use this corpus to discover ordinary application requirements and future differential exemplars, but do not award ClayCode general-purpose execution credit until exact runnable source, dependencies, execution and expected-vs-observed receipts are recovered."
+    },
+    "frank_library": {"folder_id":"12hFLFtBnmoePzBOuJnvKmvp-3_3YjilZ","direct_state":"EMPTY","classification":"NO_RESEARCH_DELTA_DIRECT_ROOT"},
+    "frank_werkzeuge": {"folder_id":"1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU","direct_children":["genesis-monitor","healing-log.md"],"classification":"RUNTIME_MONITORING_AND_FAILURE_ATLAS","integrated_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0431p0700_chatgpt_secondary_drive_genesis_healing_shard.json"},
+    "synteq_umbau": {"folder_id":"1fWUuy1oxoOAOHEQGZhhF00SUxISV4qzr","classification":"HISTORICAL_MULTIAGENT_XENO_UI_MEASUREMENT_RUNTIME","integrated_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0431p0700_chatgpt_secondary_drive_synteq_coordination_shard.json"}
+  },
+  "findings": [
+    {
+      "finding_id":"DRIVE-INVENTORY-001",
+      "epistemic_class":"HASHED_RUNTIME_LINEAGE_EVIDENCE",
+      "status":"CURRENT_LEVEL0_DENOMINATOR_CONSTRAINT",
+      "claim":"At least one same-path file proves Drive aicore and frozen Project-Frankenstein are divergent lineages, so Level-0 exact coverage requires recursive cross-source path/hash/version reconciliation rather than treating Drive code as a duplicate mirror.",
+      "targets":["frank","harness","claygraph","unifieddb","q12_index"]
+    },
+    {
+      "finding_id":"DRIVE-INVENTORY-002",
+      "epistemic_class":"ARCHIVE_CLASSIFICATION_EVIDENCE",
+      "status":"CURRENT_LEVEL0_DENOMINATOR_CONSTRAINT",
+      "claim":"The 14-folder frank-projects tree is primarily an application/use-case corpus; project existence and specifications are not executable compiler evidence. The ClayCode general-purpose gate requires actual execution receipts.",
+      "targets":["claycode","harness","q12_index"]
+    }
+  ],
+  "earned_work_hours_added":0.0,
+  "reason_no_credit":"This receipt freezes classification and prevents false dedupe/progress. Executable reuse has not yet been established for the project corpus, and the aicore divergence expands reconciliation scope rather than completing it.",
+  "exact_level0_coverage_awarded_percent":0.0,
+  "next_actions":[
+    "Recursively enumerate Drive aicore and compare each semantic/runtime path by content hash against frozen Project-Frankenstein plus later rescue lineage.",
+    "Create changed/new/deleted/version clusters before semantic analysis to prevent duplicate work.",
+    "Sample frank-projects for genuinely runnable ordinary applications and promote only those with execution receipts into ClayCode APP proof-candidate fixtures."
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.2",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "registry_scientific_branches": [
+    "frank",
+    "clay",
+    "claygraph",
+    "unifieddb",
+    "gwt",
+    "hyperposition",
+    "emergenz",
+    "claycode"
+  ],
+  "branch_priority": [
+    "frank",
+    "clay",
+    "claygraph",
+    "unifieddb",
+    "gwt",
+    "hyperposition",
+    "emergenz",
+    "claycode"
+  ],
+  "special_rules": {
+    "claycode_requires_latest_frank_research_as_primary_feedback": true,
+    "claycode_requires_deep_claygraph_input": true,
+    "claycode_requires_deep_unifieddb_input": true,
+    "claycode_requires_goodman_anti_echo_review": true,
+    "claycode_latest_frank_architecture_artifact": "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json"
+  },
+  "branches": [
+    {
+      "branch": "frank",
+      "latest_run": "20260809T0130p0700-chatgpt-secondary-r5",
+      "candidate": "FRANK C9 TCAEF",
+      "status": "OPEN_ARCHITECTURE_CANDIDATE_IN_PROGRESS_AT_SNAPSHOT",
+      "source_refs": ["c1c7de0e26dca8fd58aef409295a696fe52844eb", "de01d550d9a3df133062fdfc296996b8edebafae"]
+    },
+    {
+      "branch": "clay",
+      "latest_run": "clay-20260808T2132p0700-chatgpt-secondary-r4",
+      "candidate": "CACC-G12",
+      "status": "OPEN_HOLD",
+      "source_refs": ["74f136ce3b051d7cb06c12d0a98805a792b9bef2", "d12b1a0bc83d55eca95b27f04a5e7d8d0d80185b"]
+    },
+    {
+      "branch": "claygraph",
+      "latest_run": "claygraph-20260808T2212p0700-chatgpt-secondary-r3",
+      "candidate": "CASAR-G2a",
+      "status": "OPEN_HOLD_WITH_H6_FEEDBACK",
+      "source_refs": ["621bfcb29092c89c658514482840486efb3308d8", "bbe68b192f1e778335d96b8c6a7fd63677e50ea7"]
+    },
+    {
+      "branch": "unifieddb",
+      "latest_run": "unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
+      "candidate": "UD-RC2 CPPF",
+      "status": "OPEN_HOLD_WITH_H6_FEEDBACK",
+      "source_refs": ["193b18851090ba5bd6df36f520a599c64c26ca91", "52abfab311fea974a303d8c889ac8a505e1f204e"]
+    },
+    {
+      "branch": "gwt",
+      "latest_run": "gwt-20260808T2140p0700-chatgpt-secondary-r5",
+      "candidate": "Nested Workspace Bridge R5",
+      "status": "LATEST_COMPLETED_PLUS_R6_IN_PROGRESS",
+      "in_progress": "GWT R6 causal calibration / 4B reader tests queued",
+      "source_refs": ["ef6508ac4d7a1060afbf1d3960229f28557a3a25", "a078034c2ab5b58e12e344b2d4def57e15cbf665", "70f4dd5685035e53ad7ba4fa326995a6dcc684de"]
+    },
+    {
+      "branch": "hyperposition",
+      "latest_run": "hyperposition-20260809T0129p0700-chatgpt-secondary-r4",
+      "candidate": "HYP-RC6 CARTS",
+      "status": "COMPLETED_OPEN_RESEARCH_DELTA",
+      "source_refs": ["5a6f828d356c697fc6440825135b47ab6c34c42e", "17e9e41d150d0cf433f6e6a6800a51e9071d35af"]
+    },
+    {
+      "branch": "emergenz",
+      "latest_run": "emergenz-20260808T1756p0700-chatgpt-secondary",
+      "candidate": "E-CERT2",
+      "status": "OPEN_METHOD_WITH_H6_CONFOUND_FEEDBACK",
+      "source_refs": ["4bafb8f0c9fa26822b1ba3aed090d60f0f9eaa7c", "c3f9dda83ae3ed8fa3b24b636245a2cfcb6e3d10"]
+    },
+    {
+      "branch": "claycode",
+      "latest_run": "claycode-20260808T1934p0200-chatgpt-secondary-r4",
+      "candidate": "CC-RC1.8 MCAAT",
+      "status": "LATEST_COMPLETED_PLUS_THREE_WORKER_CC14_CC_RC1_9_IN_PROGRESS",
+      "in_progress_refs": [
+        "research_entity/trigger_runs/claycode/claycode-multiworker-20260809T0128p0700",
+        "research_entity/trigger_runs/claycode/claycode-20260809T0130p0700-chatgpt-secondary-r5"
+      ],
+      "source_refs": ["28e3421171c9ad6f22c21d6eb325d604d7844bf9", "ca9725df81569f4bd408fee3b6cf2d921113b153", "686c5c2eae9c68d9aefe09437486b36354d4c2f0", "1df6d1e398af645a910ea607c3cb4e7cdeaa2cdf"]
+    }
+  ],
+  "deep_inputs": {
+    "frank_architecture": "C9 TCAEF effect/admission contracts and exact ClayCode architecture artifact",
+    "claygraph": "CASAR-G2a typed relation/epoch/activation/assembly and TCQS identity",
+    "unifieddb": "UD-RC2 result admissibility, closure, selection integrity and placement-vector separation"
+  },
+  "multiworker_coordination": {
+    "coordination_id": "claycode-multiworker-20260809T0128p0700",
+    "network_membership": "3_OF_3_VISIBLE",
+    "this_worker_lane": "B_COMPILER_RUNTIME_LOWERING",
+    "shared_ancestry_is_not_independent_replication": true
+  },
+  "preflight_execution_note": "This ChatGPT worker lacks a direct repository shell for tools/research_interconnect_preflight.py; the same required manifest contract was materialized from verified GitHub reads and live-worker rereads without claiming the unavailable shell execution."
+}

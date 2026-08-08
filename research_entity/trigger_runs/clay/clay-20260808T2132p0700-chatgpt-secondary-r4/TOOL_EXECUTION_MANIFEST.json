@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-20260808T2132p0700-chatgpt-secondary-r4",
+  "attempts":[
+    {"class":"canonical_and_mesh","provider":"GitHub connector","status":"SUCCESS","evidence_role":"authoritative_repository_state","details":"Read canonical, trigger/master/clay/interconnect protocols, fresh Fusion F5, G11, C7, U1, CC12 and GWT R4 artifacts; verified fresh completed-worker Fusion anchor."},
+    {"class":"implementation_research","provider":"GitHub/source inspection","status":"SUCCESS","evidence_role":"implementation_evidence","details":"Inspected Feldera/DBSP source/docs and RAE runtime runners/adapters."},
+    {"class":"external_web_research","provider":"native web search","status":"SUCCESS","evidence_role":"independent_literature_and_primary_docs","details":"ACL 2026 Synapse/MAGMA/Interlat; latent-communication negative preprint; PEID preprint; ACM tracked capabilities; Arrow C Data Interface; Qwen3-4B official config."},
+    {"class":"executable_general","provider":"E2B","status":"SUCCESS","evidence_role":"runtime_experiment","request":"research_entity/runtime/tool_requests/clay-g12-e2b-cacc-20260808T2132p0700.json","result":"research_entity/runtime/tool_results/clay-g12-e2b-cacc-20260808T2132p0700.json","experiments":["EXP-G12-REPLAY-001","EXP-G12-HIDDEN-DEPS-002","EXP-G12-COLLECTION-TOPOLOGY-003"]},
+    {"class":"generic_actual_4b","provider":"NVIDIA Hosted NIM","model":"nvidia/nemotron-mini-4b-instruct","status":"ATTEMPTED_RESULT_NOT_PRESENT_AT_CLOSURE","evidence_role":"NO_RESULT_NO_EVIDENCE","requests":["clay-g12-continuity-off-001","clay-g12-continuity-truthful-001","clay-g12-continuity-shuffled-001"],"note":"Requests were committed to the verified NVIDIA runner. No result artifact existed at run closure, therefore no G12 model-behavior claim uses them."},
+    {"class":"target_qwen3_4b","provider":"OpenRouter","status":"SKIPPED_KNOWN_ACCOUNT_CATALOG_UNAVAILABLE","evidence_role":"provider_capability_state","receipt":"research_entity/global/OPENROUTER_RESEARCH_CAPABILITY.json","note":"Current verified account catalog does not expose executable qwen/qwen3-4b; repeating a known unavailable route would not close the target claim."},
+    {"class":"target_qwen3_4b","provider":"NVIDIA","status":"SKIPPED_KNOWN_CATALOG_UNAVAILABLE","evidence_role":"provider_capability_state","receipt":"research_entity/global/NVIDIA_RESEARCH_CAPABILITY.json","note":"Observed NVIDIA catalog does not expose Qwen3-4B. Nemotron-Mini-4B is generic-4B only."},
+    {"class":"reranking","provider":"NVIDIA","status":"SKIPPED_HOSTED_ROUTE_UNRESOLVED","evidence_role":"capability_limitation","note":"Not required for G12 core tests and hosted rerank route remains unresolved."}
+  ],
+  "security":"No secret values are copied into this manifest or research artifacts.",
+  "promotion_effect":"Exact target-Qwen, live-FRANK and Android claims remain OPEN; pending hosted requests are explicitly excluded from evidence."
+}

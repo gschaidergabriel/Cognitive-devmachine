@@ -1,33 +1,38 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"20260808T2051p0700-chatgpt-secondary-r3",
   "trigger":"frank",
   "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
-  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346","final_reread_verified_unchanged":true},
   "parent_architecture":"FRANK C6 — Clay-Native Unified Cognitive Substrate",
   "candidate":{"id":"FRANK-C7-CORF","name":"Clay Organ Runtime Fabric","status":"OPEN_ARCHITECTURE_CANDIDATE","promotion":"NONE"},
   "scientific_branches":{"registered":8,"covered":8,"names":["clay","claycode","claygraph","unifieddb","gwt","hyperposition","emergenz","frank"]},
   "required_outputs":{
-    "INTERCONNECT_MANIFEST.json":"COMMITTED",
+    "INTERCONNECT_MANIFEST.json":"COMMITTED_REREAD",
     "TOOL_EXECUTION_MANIFEST.json":"COMMITTED",
     "HYPOTHESES.json":"COMMITTED_32",
     "EXPERIMENT_RESULTS.json":"COMMITTED_4",
-    "FRANK_ARCHITECTURE.claycode.json":"COMMITTED",
-    "CLAYCODE_ARCHITECTURE_MAPPING.md":"COMMITTED",
+    "FRANK_ARCHITECTURE.claycode.json":"COMMITTED_REREAD",
+    "CLAYCODE_ARCHITECTURE_MAPPING.md":"COMMITTED_REREAD",
     "NEGATIVE_RESULTS.md":"COMMITTED",
-    "BRANCH_FEEDBACK_MANIFEST.json":"COMMITTED_8_OF_8",
-    "FINAL_REPORT.md":"COMMITTED",
+    "BRANCH_FEEDBACK_MANIFEST.json":"COMMITTED_8_OF_8_REREAD",
+    "FINAL_REPORT.md":"COMMITTED_REREAD",
     "branch_micro_packets":"COMMITTED_8_OF_8"
   },
   "governance_fixes":{
-    "FRANK_RESEARCH_PROTOCOL.md":{"status":"UPDATED_FOR_DYNAMIC_REGISTRY_AND_UNIFIEDDB","commit":"24faa015d44e2be0ef26ae8b9d002a2a095ae69c"},
-    "tools/frank_architecture_contract.py":{"status":"UPDATED_REGISTRY_DYNAMIC_UNIFIEDDB_AWARE_AND_LOCAL_SYNTAX_COMPILED","commit":"5eff30650f1cd54995a2ddbee5369315f1561484"}
+    "FRANK_RESEARCH_PROTOCOL.md":{"status":"UPDATED_REREAD_DYNAMIC_REGISTRY_AND_UNIFIEDDB","commit":"24faa015d44e2be0ef26ae8b9d002a2a095ae69c"},
+    "tools/frank_architecture_contract.py":{"status":"UPDATED_REREAD_REGISTRY_DYNAMIC_UNIFIEDDB_AWARE","commit":"5eff30650f1cd54995a2ddbee5369315f1561484","local_source_syntax_compile":"PASS"}
   },
   "key_delta":"Semantic organ, process, storage and authority boundaries become independent. Current test candidate is a shared cognition-hot Clay core, configurable model runtime, hard-isolated capability/effect broker, sandboxed untrusted tools, asynchronous observability and specialized physical stores behind UnifiedDB. MOSAIC is the per-operation causal identity and MRSC remains the reader/cognition lowering layer.",
   "experiments":["EXP-C7-HANDOFF-001","EXP-C7-PARTITION-002","EXP-C7-EFFECT-SCOPE-003","EXP-C7-QWEN-KV-004"],
   "known_blocks":["no live/twin FRANK C7 runtime","no dedicated completed UnifiedDB trigger benchmark","no exact full-FT Clay Qwen target checkpoint","no target hidden-state/KV intervention interface","no target Rust/C/shared-memory hot-path benchmark","no sustained Android RAM/thermal/battery trace","repository Python validators cannot be executed through the GitHub connector"],
   "canonical_revision_change":false,
-  "validation":{"frank_architecture_contract":"UPDATED_AND_STRUCTURALLY_INSPECTED; official repo execution unavailable","validator_source_syntax":"LOCAL_COMPILE_PASS"},
-  "write_verification":"PENDING_REMOTE_REREAD",
-  "status":"RESEARCH_COMPLETE_REMOTE_REREAD_PENDING"
+  "validation":{
+    "frank_architecture_contract":"STRUCTURAL_PASS_BY_INSPECTION_AGAINST_CURRENT_VALIDATOR; official repository Python execution unavailable through GitHub connector",
+    "structural_checks":["manifest scientific branch set equals current eight-branch registry","FRANK priority prefix is clay,claycode,claygraph,unifieddb","all FRANK preflight special rules including deep UnifiedDB are true","architecture language/representation are ClayCode semantic IR","source_research clay/claycode/claygraph/unifieddb are non-empty","proposal!=authority, semantic!=wire, truth!=activation invariants present","modules and transitions have unique identities by authored spec","transition read/write/invariant/effect/capability lists are explicit","ClayGraph projection remains rebuildable","external capability gateway remains required","host kernel is non-self-authorizing","human mapping exists"],
+    "validator_source_syntax":"LOCAL_COMPILE_PASS"
+  },
+  "remote_reread":["FRANK_ARCHITECTURE.claycode.json","FINAL_REPORT.md","BRANCH_FEEDBACK_MANIFEST.json","CLAYCODE_ARCHITECTURE_MAPPING.md","FRANK_RESEARCH_PROTOCOL.md","tools/frank_architecture_contract.py","RESEARCH_ENTITY_CANONICAL.json","RUN_MANIFEST.json pre-update"],
+  "write_verification":"VERIFIED_RW_FINAL_REREAD",
+  "status":"RESEARCH_COMPLETE_OPEN_TARGET_VALIDATION"
 }

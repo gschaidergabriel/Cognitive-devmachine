@@ -2,8 +2,12 @@
 """Validate the visible RAE status footer structure from stdin or a file."""
 from __future__ import annotations
 import argparse
+import json
 import re
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+COMMAND_REGISTRY = ROOT / "research_entity" / "global" / "PROJECT_COMMAND_REGISTRY.json"
 
 REQUIRED = [
     "RAE STATUS",
@@ -20,17 +24,13 @@ REQUIRED = [
     "Open:",
 ]
 
-REQUIRED_COMMANDS = [
-    "dump",
-    "fusion",
-    "clay",
-    "gwt",
-    "frank",
-    "emergenz",
-    "claycode",
-    "hyperposition",
-    "claygraph",
-]
+
+def _required_commands() -> list[str]:
+    data = json.loads(COMMAND_REGISTRY.read_text(encoding="utf-8"))
+    commands = data.get("commands") or {}
+    if not isinstance(commands, dict) or not commands:
+        raise RuntimeError("PROJECT_COMMAND_REGISTRY.json has no commands")
+    return list(commands)
 
 
 def validate(text: str) -> list[str]:
@@ -48,7 +48,7 @@ def validate(text: str) -> list[str]:
     cmd_match = re.search(r"Short commands:\s*(.+)", tail)
     if cmd_match:
         line = cmd_match.group(1).lower()
-        for command in REQUIRED_COMMANDS:
+        for command in _required_commands():
             if not re.search(rf"(?<![a-z0-9_-]){re.escape(command)}(?![a-z0-9_-])", line):
                 errors.append(f"missing_command:{command}")
     return errors

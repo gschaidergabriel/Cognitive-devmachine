@@ -1,0 +1,45 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260808T2114p0700-chatgpt-secondary-r2",
+  "evidence_boundary":"Both current-run experiments are local mechanism tests. They are not live FRANK, target Qwen3-4B, Android, production database, production security or independent conceptual replications.",
+  "experiments":[
+    {
+      "id":"EXP-FUSION-F5-COLLECTION-LOWERING-001",
+      "class":"LOCAL_CPYTHON_SQLITE_DIFFERENTIAL",
+      "source_relation":"Fresh in-progress CC12 query-semantics lab was discovered in GitHub; fusion executed the same declared semantics locally against SQLite with seed 44119.",
+      "operations":30000,
+      "collection_kinds":["SET","ORDERED","MULTISET"],
+      "results":{
+        "correct_typed_lowering_mismatches":0,
+        "type_erased_distinct_mismatches":16947,
+        "type_erased_bag_mismatches":16609,
+        "weighted_duplicate_key_rejected":true,
+        "elapsed_seconds":1.117564343,
+        "by_kind":{
+          "SET":{"n":9816,"distinct_mismatch":0,"bag_mismatch":7523},
+          "ORDERED":{"n":10174,"distinct_mismatch":7861,"bag_mismatch":0},
+          "MULTISET":{"n":10010,"distinct_mismatch":9086,"bag_mismatch":9086}
+        }
+      },
+      "interpretation":"Collection algebra is not a cosmetic storage detail. A lowerer that erases SET/ORDERED/MULTISET semantics can change multiplicity/order and therefore candidate-set identity. Correct typed lowering matched the reference for all constructed cases. This strengthens MOSAIC selection-plan identity and UnifiedDB query receipts, but does not prove all adapters or WEIGHTED/PRIORITY semantics."
+    },
+    {
+      "id":"EXP-FUSION-F5-ACTIVATION-INTEGRITY-002",
+      "class":"LOCAL_SYNTHETIC_MEMORY_SELECTION_MECHANISM",
+      "seed":90817,
+      "episodes":100000,
+      "candidates_per_episode":20,
+      "setup":"Each episode had one relevant memory target and 19 distractors. Retrieval-only used noisy relevance. Truthful activation boosted the target. Stale/revoked activation boosted a wrong candidate with ancestry detectable as invalid. Role-shuffled activation boosted a wrong but individually authentic candidate. A deterministic ancestry filter removed only the stale/revoked candidate before reselection.",
+      "top1_accuracy":{
+        "retrieval_only":0.19152,
+        "truthful_activation":0.68580,
+        "stale_revoked_activation_naive":0.10633,
+        "stale_revoked_activation_with_ancestry_filter":0.19342,
+        "role_shuffled_authentic_activation_naive":0.10530,
+        "role_shuffled_authentic_activation_with_integrity_checks":0.10530
+      },
+      "interpretation":"In this construction, truthful activation can greatly alter useful availability, stale invalid ancestry can be contained by deterministic receipts, and role-shuffled but authentic misleading activation cannot be fixed by integrity checks alone. Therefore structural integrity and cognitive relevance/causal utility are distinct validation layers. Absolute accuracies are chosen-model synthetic outcomes, not FRANK estimates."
+    }
+  ],
+  "combined_delta":"The whole mesh should distinguish (1) deterministic semantic/integrity certification from (2) empirical cognitive utility. Certification can prove identity, provenance, epoch, collection algebra, selection plan and authority constraints; it cannot prove that an authentic association is the right one for the current task."
+}

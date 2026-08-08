@@ -1,197 +1,136 @@
 # Reserved Trigger: `claygraph`
 
-Research the XENO/Synthetic-Clay knowledge graph, associative memory substrate and migration/transcendence of FRANK's distributed databases/state stores. Use the Master Research Trigger Protocol, Interconnected Research Mesh Protocol, quota/health-aware research-tool orchestration and the scientific boundaries in `research_entity/global/CLAYGRAPH_RESEARCH_FOUNDATION.md`.
+Research the XENO/Synthetic-Clay knowledge graph, associative memory substrate and reversible migration/transcendence of FRANK graph/state stores. Use the Master Research Trigger Protocol, `INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md`, quota/health-aware tool orchestration and `CLAYGRAPH_RESEARCH_FOUNDATION.md`.
 
-## Role in the RAE
+## Role
 
-`claygraph` is a full scientific branch, not a storage-maintenance command.
+`claygraph` is a scientific branch, not a storage-maintenance command. It researches whether FRANK can maintain a persistent relational cognitive substrate in which exact canonical events/state remain replayable while typed semantic relations, temporal validity, activation/salience and bounded Assemblies can influence later cognition without forcing an explicit memory-search decision on every thought.
 
-Its purpose is to discover whether FRANK can move from many explicitly queried stores toward a persistent relational cognitive substrate where:
+Hard boundaries remain:
+- exact/event truth != semantic graph != activation != Assembly != GWT != model proposal != effect authority;
+- graph retrieval success is not truth or GWT evidence;
+- model output never mints authority;
+- physical database consolidation is never implied by semantic graph unification;
+- persistence/self-reference/GWT/continuity do not establish phenomenal consciousness.
 
-- canonical events/state remain exact and replayable;
-- semantic relations remain incrementally available;
-- current cues activate bounded relevant assemblies;
-- self, memory, goals, consequences, conflicts and provenance can participate in one relational state model;
-- a small model reasons over active structure instead of repeatedly reconstructing state from scattered text;
-- existing databases are migrated only when evidence supports semantic and operational equivalence or improvement.
+## Mandatory eight-branch coverage
 
-## Mandatory corpus coverage
+The authoritative branch set is always derived from `RESEARCH_TRIGGER_REGISTRY.json`. At the current registry revision ClayGraph MUST cover all eight scientific branches before Fusion 1, with priority:
 
-A `claygraph` run is coverage-first. Before Fusion 1 it MUST index and synthesize the current research material from **all scientific branches**:
+`clay -> frank -> claycode -> unifieddb -> hyperposition -> gwt -> emergenz -> claygraph history`
 
-`clay -> frank -> claycode -> hyperposition -> gwt -> emergenz -> claygraph history`
+Priority controls depth, never inclusion. The run must also ingest fresher whole-mesh meta-research such as Fusion/Hypofusion when it materially changes the branch inputs.
 
-This means coverage of completed and in-progress trigger runs, hypotheses, experiments, negative results, architecture deltas, Topic Packets, micro-packets, contradiction/supersession lineage and relevant source/provenance references. Use indexes/manifests first; load raw evidence on demand where it can change a claim or experiment. Do not attempt to put every byte into one context.
+Materialize `INTERCONNECT_MANIFEST.json` before Fusion 1. Include completed and fresh/in-progress runs, hypotheses, experiments, negative results, architecture deltas, Topic Packets, micro-packets and relevant provenance. Preserve evidence ancestry so reused RAE material is not counted as independent replication.
 
-The run must materialize `INTERCONNECT_MANIFEST.json` before Fusion 1 and preserve shared evidence ancestry so cross-branch repetition is not counted as replication.
+If this explicit protocol ever disagrees with the authoritative registry or `INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md`, fail closed on the stale list, surface protocol drift and follow the newer registry/mesh until the protocol is repaired.
 
-## Mandatory database/state-store inventory
+## ClayGraph / UnifiedDB boundary
 
-Every serious ClayGraph architecture/migration run must establish or refresh a machine-readable inventory of the reachable FRANK stores. Materialize:
+ClayGraph specializes in associative memory, typed relation topology, graph epochs, activation/spreading, Assemblies, self-use and graph-specific migration. UnifiedDB specializes in the wider logical identity/query/transaction/persistence plane across exact, relational, graph, vector, FTS, activation and effect data.
 
-`DATABASE_INVENTORY.json`
+ClayGraph MUST deeply ingest the newest UnifiedDB store-role/query/migration evidence and return graph-specific requirements to UnifiedDB. `UNIFY_LOGICALLY`, `DERIVED_REBUILDABLE`, `KEEP_ISOLATED` and physical colocation are independent decisions. A successful graph benchmark never proves that all physical stores should merge.
 
-For every database/store/schema where evidence is available record at minimum:
+## CG0 — Boot, mesh, inventory
 
-- stable store id/path/service ownership;
-- evidence/source/version/timestamp;
-- authoritative truth vs derived/cache/projection role;
-- entity/state types;
-- identity/key semantics;
-- temporal/event/replay semantics;
-- read/write patterns and latency sensitivity;
-- transaction/consistency requirements;
-- provenance/causal dependencies;
-- retention/forgetting rules;
-- capability/privacy/safety boundary;
-- failure/recovery behavior;
-- candidate ClayGraph mapping;
-- migration disposition: `MERGE | PROJECT | LINK | KEEP_ISOLATED | DEFER | UNKNOWN`;
-- open falsifier/measurement needed before changing disposition.
+1. Verify canonical RAE state and actor.
+2. Run or faithfully materialize the semantic equivalent of `tools/research_interconnect_preflight.py --trigger claygraph --run-id <run_id>`.
+3. Cover/index the full current eight-branch mesh plus relevant meta-runs.
+4. Build/refresh `DATABASE_INVENTORY.json` from current FRANK + UnifiedDB evidence.
+5. Classify authoritative truth, derived/rebuildable views, transient activation/cache and hard-isolated authority/runtime stores.
 
-Unknown stores or unavailable live data must be recorded as `UNKNOWN/BLOCKED`, never invented.
+For every reachable store where evidence exists record identity, ownership, authority role, temporal/replay semantics, read/write/latency needs, transaction/consistency requirements, provenance dependencies, retention, privacy/capability boundary, failure/recovery, graph mapping and migration disposition `MERGE | PROJECT | LINK | KEEP_ISOLATED | DEFER | UNKNOWN` plus falsifier. Unknown live stores remain `UNKNOWN/BLOCKED`; never invent a current inventory.
 
-## Research phases
+## CG1 — Semantic graph model
 
-### CG0 — Boot, mesh and inventory
-
-1. Verify current RAE state and actor/provenance.
-2. Run `tools/research_interconnect_preflight.py --trigger claygraph --run-id <run_id>`.
-3. Cover the complete current scientific research mesh.
-4. Build/refresh `DATABASE_INVENTORY.json` from current FRANK architecture/code/runtime evidence.
-5. Identify which stores are currently authoritative versus accidental process/storage boundaries.
-
-### CG1 — Semantic graph model
-
-Research a Clay/XENO graph model able to preserve:
-
-- canonical event/state identity;
-- entities and typed relations;
-- time/version/epoch;
-- provenance and causal lineage;
+Produce `CLAYGRAPH_SCHEMA.claycode.json` that can preserve at minimum:
+- canonical anchors and typed entities/relations including n-ary roles;
+- semantic identity distinct from provenance/instance identity;
+- valid time, transaction time, graph epoch and activation epoch;
 - unknown/conflict/revoked/stale states;
-- assemblies/activation and decay;
+- exact evidence/source ancestry;
+- activation/salience, decay/inhibition/budgets and Assembly membership;
 - SELF/goal/memory/consequence relationships;
-- GWT episode/read/effect/outcome/re-entry receipts;
-- ClayCode semantic operation/transition closure;
-- Hyperposition alternatives and incompatible states without premature collapse;
-- capability/effect authority references without embedding bearer secrets.
+- GWT candidate/workspace/effect/outcome/re-entry receipts;
+- ClayCode TCQS collection semantics where candidate membership/order/multiplicity/weights are causal;
+- Hyperposition alternatives without premature collapse;
+- UnifiedDB query/selection-plan identity and derivation receipts;
+- capability references without bearer secrets.
 
-Produce `CLAYGRAPH_SCHEMA.claycode.json` as the semantic design source. It is a ClayCode semantic-IR projection, not merely a generic graph JSON dump.
+Activation changes accessibility only. Utility feedback may alter salience/routing only through typed receipts and must never silently rewrite canonical truth, epistemic status or authority.
 
-### CG2 — Hypothesis generation
+## CG2 — Hypotheses and counterhypotheses
 
-Generate falsifiable first-generation hypotheses and counterhypotheses across at least these families:
+Generate falsifiable hypotheses/counterhypotheses across associative activation vs explicit retrieval, route-selective dual-path memory, false association, temporal/role validity, multi-hop recall, Assembly completeness/token cost, small-model utility, incremental maintenance, replay/crash recovery, SQL/vector/FTS/query parity, typed collection/candidate topology, graph growth/forgetting, salience learning, oversmoothing/attractor collapse, memory poisoning, migration/rollback, privacy/capability boundaries and workloads that should remain isolated.
 
-- associative activation versus explicit retrieval;
-- assembly selection/propagation dynamics;
-- multi-hop recall and false-association control;
-- active/latent memory scaling;
-- small-model reasoning benefit under matched token/compute budget;
-- self-reference/continuity without self-report confounds;
-- incremental graph maintenance versus repeated context reconstruction;
-- exact-state plus semantic-activation separation;
-- graph conflict/unknown/staleness semantics;
-- persistence/replay and crash recovery;
-- SQL/vector/event-store parity;
-- migration/dual-write/cutover safety;
-- query/update latency and memory footprint;
-- write contention and hot-path isolation;
-- graph growth, forgetting and edge decay;
-- privacy/capability boundaries;
-- failure cases where conventional isolated stores should remain.
+Every migration hypothesis requires a rollback condition. Every adaptive salience hypothesis requires negative/shuffled/poisoning controls and an explicit truth/authority boundary.
 
-A migration hypothesis must always include a rollback condition.
+## CG3 — External research and executable tests
 
-### CG3 — External research and executable tests
+Use applicable registered tools with recorded fallbacks. Research temporal/knowledge graphs, active/spreading memory, graph databases, incremental view maintenance, CRDT/conflict models, provenance, event sourcing, hybrid retrieval, cognitive/agent memory, oversmoothing, memory poisoning and migration.
 
-Use mandatory provider tools while quota/health permits, with automatic fallback under the global tool policy. Search relevant work on temporal/knowledge graphs, associative/activation memory, graph databases, event sourcing, incremental view maintenance, CRDT/conflict models, graph neural retrieval where relevant, cognitive architectures, agent memory, provenance and database migration.
+Run executable tests where feasible. Useful arms include:
+- exact/SQL/store-specific retrieval;
+- FTS/vector/RAG retrieval;
+- graph/temporal relation retrieval;
+- truthful ClayGraph activation;
+- shuffled/stale/role-shuffled/temporal-shuffled activation;
+- explicit retrieval only;
+- always-on activation blend;
+- adaptive route-selective dual path;
+- salience learning with and without anti-attractor controls.
 
-Run executable experiments where feasible. Useful baseline arms include:
+Measure relevance/recall, false association, candidate topology, p50/p95/p99 where meaningful, token/context cost, memory/update amplification, replay equivalence, rollback, rare-topic robustness and poisoning/attractor metrics. Synthetic/proxy results remain synthetic/proxy.
 
-- current SQL/store-specific retrieval;
-- vector/RAG retrieval;
-- property/RDF/temporal graph baseline where practical;
-- ClayGraph incremental activation;
-- hybrid graph + explicit retrieval.
+## CG4 — Self-use
 
-Measure accuracy/relevance, false positives, missing dependencies, latency, p95/p99, token/context cost, memory, update amplification, replay equivalence and rollback success. Synthetic/proxy results stay labeled synthetic/proxy.
+Every serious run must self-use or benchmark the candidate against a current RAE retrieval baseline. Materialize `SELF_USE_BENCHMARK.json`. The benchmark must describe corpus curation, gold definition, query count, retrieval arms and limitations. A manually curated project graph is a staged mechanism test, not a production retrieval benchmark.
 
-### CG4 — Migration architecture
+## CG5 — Migration
 
-Materialize `MIGRATION_PLAN.json` containing phased, reversible migration steps:
+Materialize a reversible `MIGRATION_PLAN.json` using at least:
 
-1. `INVENTORY`
-2. `SEMANTIC_MAPPING`
-3. `SHADOW_GRAPH`
-4. `PARITY_AND_REPLAY`
-5. `DUAL_READ`
-6. `DUAL_WRITE_WHERE_SAFE`
-7. `CONTROLLED_CUTOVER`
-8. `ROLLBACK_WINDOW`
-9. `DEPRECATE_OR_KEEP_ISOLATED`
+`INVENTORY -> SEMANTIC_MAPPING -> SHADOW_GRAPH -> PARITY_AND_REPLAY -> SHADOW_ROUTER -> SHADOW_SALIENCE_UTILITY -> ADVERSARIAL_ATTRACTOR_POISON_TEST -> DUAL_READ -> MODEL_VISIBLE_CANARY -> DUAL_WRITE_WHERE_SAFE -> CONTROLLED_CUTOVER -> ROLLBACK_WINDOW -> DEPRECATE_OR_KEEP_ISOLATED`
 
-No destructive migration is authorized merely by running this research trigger. Physical consolidation is evidence-driven; logical organs/timescales/authority boundaries may remain separate.
+No destructive migration is authorized by the trigger. The canonical event/effect spine and external authority stores remain authoritative/isolated according to current UnifiedDB/FRANK evidence unless live benchmarks justify a narrower change.
 
-### CG5 — FRANK feedback closure
+## CG6 — FRANK and mesh feedback
 
-FRANK is the primary downstream architecture consumer. Every completed `claygraph` run MUST materialize:
+Every completed run MUST materialize `FRANK_CLAYGRAPH_FEEDBACK.json` including originating run, newest FRANK architecture consumed, affected modules/state contracts/transitions, ClayCode/schema changes, store dispositions, evidence/ancestry, contradictions/negatives, migration prerequisites/rollback and highest-information live FRANK experiment.
 
-`FRANK_CLAYGRAPH_FEEDBACK.json`
+Also write explicit feedback or `NO_CHANGE` receipts to every registered scientific branch materially affected, including `unifieddb`. ClayGraph must never silently omit UnifiedDB from graph/store/query feedback.
 
-with:
+## CG7 — Promotion boundary
 
-- originating ClayGraph run;
-- newest FRANK run/architecture consumed;
-- architecture effects: `SUPPORT | CHALLENGE | REVISE | SUPERSEDE | NEW_EXPERIMENT | NO_CHANGE`;
-- exact FRANK modules/state contracts/transitions affected;
-- proposed ClayCode architecture changes;
-- database/store boundaries to merge/project/link/keep isolated;
-- evidence class and ancestry;
-- contradictions and negative results;
-- migration prerequisites and rollback conditions;
-- highest-information next live FRANK experiments.
-
-A later `frank` run must ingest the newest ClayGraph feedback before finalizing architecture.
-
-Write substantive deltas back to all affected branches, especially `frank`, `clay`, `claycode`, `hyperposition`, `gwt` and `emergenz`. If there is no substantive branch delta, record explicit `NO_CHANGE` rather than silently omitting feedback.
-
-### CG6 — Promotion boundary
-
-Do not promote the thesis "all databases should become one graph" as a goal in itself. Promote only narrower mechanisms/boundaries supported by evidence. A valid outcome may be a hybrid architecture in which ClayGraph is semantic/cognitive substrate while selected transactional, model-resource, authority or durability stores remain physically isolated.
+The accepted graph is `research_entity/claygraph/CLAYGRAPH_LATEST.claycode.json`. A research candidate does not replace it because it is elegant, faster in a synthetic proxy or supported by related literature. Promotion requires target-relevant retrieval/cognitive utility, replay/integrity, bounded false-association/poisoning risk, regression tests, migration safety and evidence that the candidate does not break authority or other branch constraints.
 
 ## Required outputs
 
 Under `research_entity/trigger_runs/claygraph/<run_id>/` write at minimum:
-
 - `INTERCONNECT_MANIFEST.json`
 - `TOOL_EXECUTION_MANIFEST.json`
 - `DATABASE_INVENTORY.json`
 - `CLAYGRAPH_SCHEMA.claycode.json`
-- `HYPOTHESES.md` or `.json`
-- `EXPERIMENT_RESULTS.json` when experiments are run
+- `HYPOTHESES.json` or `.md`
+- `EXPERIMENT_RESULTS.json` when experiments run
 - `NEGATIVE_RESULTS.md` or `.jsonl` when applicable
+- `SELF_USE_BENCHMARK.json`
 - `MIGRATION_PLAN.json`
 - `FRANK_CLAYGRAPH_FEEDBACK.json`
+- affected-branch feedback/NO_CHANGE receipts, preferably `BRANCH_FEEDBACK_MANIFEST.json`
 - `RUN_MANIFEST.json`
 - `FINAL_REPORT.md`
-
-The final report must distinguish source-derived concepts, current FRANK evidence, external evidence, model inference and synthetic/live experiments.
 
 ## Completion gate
 
 A ClayGraph run cannot report 100% completion unless:
-
-1. all current scientific branches were covered/indexed;
-2. current/in-progress research was checked;
-3. database inventory gaps are explicit;
-4. hypotheses/counterhypotheses/falsifiers were generated;
-5. research tools/experiments were attempted or valid fallbacks recorded;
-6. migration plan is reversible and preserves `KEEP_ISOLATED` as a legitimate outcome;
-7. `FRANK_CLAYGRAPH_FEEDBACK.json` exists;
-8. durable outputs were written/reread;
-9. mandatory RAE status footer is present.
-
-## Scientific boundary
-
-The branch studies functional memory, continuity, activation and agent architecture. Associative memory, persistent self-model, GWT integration or graph continuity do not by themselves establish phenomenal consciousness.
+1. current registered scientific branches are covered/indexed exactly;
+2. fresh/in-progress/meta research is checked;
+3. inventory gaps are explicit;
+4. hypotheses/counterhypotheses/falsifiers exist;
+5. applicable research tools/experiments are attempted or valid fallbacks recorded;
+6. self-use benchmark is present;
+7. migration remains reversible and `KEEP_ISOLATED` legitimate;
+8. FRANK feedback and affected-branch feedback exist;
+9. durable outputs are written and reread;
+10. final visible response ends with the current mandatory RAE status footer.

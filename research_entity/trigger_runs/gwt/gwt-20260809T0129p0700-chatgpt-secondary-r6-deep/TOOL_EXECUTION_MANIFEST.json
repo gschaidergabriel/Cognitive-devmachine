@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "run_id":"gwt-20260809T0129p0700-chatgpt-secondary-r6-deep",
+  "policy":"research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
+  "provider_plan_ci":{"workflow_run":31272336435,"job":93140291084,"status":"SUCCESS"},
+  "executions":[
+    {"class":"internal_mesh_preflight","tool":"research_interconnect_preflight.py","mode":"MUST","status":"SUCCESS","evidence":"GitHub Actions run 31272336435 job 93140291084","notes":"Authoritative eight-branch preflight executed; Android->GWT mandatory receipt retrieved; fresh incomplete workers surfaced."},
+    {"class":"scholarly","tool":"openalex_search","mode":"MUST_ATTEMPT","status":"SUCCESS","result":"research_entity/runtime/tool_results/gwt-r6-openalex-20260809T0140p0700.json","evidence_class":"external_scholarly_metadata"},
+    {"class":"scholarly","tool":"arxiv_search","mode":"MUST_ATTEMPT","status":"SUCCESS","result":"research_entity/runtime/tool_results/gwt-r6-arxiv-20260809T0140p0700.json","evidence_class":"external_preprint"},
+    {"class":"scholarly","tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","status":"FAILED_RATE_LIMIT","result":"research_entity/runtime/tool_results/gwt-r6-semanticscholar-20260809T0140p0700.json","error":"HTTP 429","fallback":"OpenAlex + arXiv + primary web/publisher sources","negative_result_preserved":true},
+    {"class":"current_web","tool":"tavily_search","mode":"MUST_ATTEMPT","status":"SUCCESS","result":"research_entity/runtime/tool_results/gwt-r6-tavily-20260809T0140p0700.json","evidence_class":"external_web_discovery"},
+    {"class":"current_web","tool":"exa_search","mode":"MUST_ATTEMPT","status":"SUCCESS","result":"research_entity/runtime/tool_results/gwt-r6-exa-20260809T0140p0700.json","evidence_class":"external_web_discovery"},
+    {"class":"current_web","tool":"native_web_research","mode":"PARALLEL_PRIMARY_SOURCE_VERIFICATION","status":"SUCCESS","notes":"Primary/publisher/peer-reviewed pages and preprints were opened directly where material claims depended on them."},
+    {"class":"community","tool":"Reddit_web_research","mode":"SUPPLEMENTAL","status":"SUCCESS","evidence_class":"community_implementation_anecdote","notes":"Used only for task-dependent J-space entropy/Qwen practitioner evidence; never promoted to peer-reviewed class."},
+    {"class":"implementation","tool":"github_connector","mode":"MUST_ATTEMPT","status":"SUCCESS","notes":"Repository state, protocols, concurrent worker artifacts, Jacobian-lens implementation references and CI validation accessed through GitHub."},
+    {"class":"executable","tool":"local_python_sandbox","mode":"MUST_ATTEMPT","status":"SUCCESS","experiments":["EXP-GWT-R6-GLOBALITY-CONFOUND-001","EXP-GWT-R6-CONFIGURED-IGNITION-CONFOUND-002","EXP-GWT-R6-CAPACITY-OVERCOUPLING-003"],"evidence_class":"local_seeded_synthetic_mechanism_calibration"},
+    {"class":"executable","tool":"e2b_sandbox","mode":"MUST_ATTEMPT","status":"SUCCESS","result":"research_entity/runtime/tool_results/gwt-r6-e2b-causal-calibration-20260809T0143p0700.json","evidence_class":"runtime_experiment","notes":"Independent remote pure-Python synthetic replication; not target-model effect evidence."},
+    {"class":"model_experiment","tool":"nvidia_nim","mode":"MUST_ATTEMPT","status":"SUCCESS_VIA_READ_ONLY_VALIDATION_CI","model":"nvidia/nemotron-mini-4b-instruct","workflow_run":31273195345,"job":93142504735,"evidence_class":"external_model_runtime_proxy","notes":"Three receiver-rail arms. Latest validation: raw prose 4/12, typed raw 2/12 with omissions, deterministic normalized typed 12/12. Model is generic 4B proxy, not Qwen3-4B."},
+    {"class":"model_experiment","tool":"huggingface_inference","mode":"FALLBACK","status":"NOT_ATTEMPTED_QUOTA_BLOCKED_BY_ROUTER","blocker":"QUOTA_EXHAUSTED_CACHED"},
+    {"class":"executable","tool":"piston_execute","mode":"FALLBACK","status":"NOT_ATTEMPTED_CREDENTIAL_BLOCKED","blocker":"PISTON hosted credential unavailable"},
+    {"class":"android_edge","tool":"Firebase Test Lab","mode":"SECONDARY_ARM","status":"NO_NEW_DEVICE_RUN_THIS_CYCLE","notes":"Android R1 evidence was retrieved; no additional device quota spent because this GWT cycle's highest-information work did not require a new device invocation."}
+  ],
+  "temporary_validation_prs":[
+    {"number":10,"purpose":"authoritative GWT preflight/provider-plan validation","merge_policy":"CLOSE_WITHOUT_MERGE"},
+    {"number":11,"purpose":"read-only NVIDIA generic-4B receiver-rail validation","merge_policy":"CLOSE_WITHOUT_MERGE"}
+  ],
+  "evidence_separation":[
+    "search/discovery metadata is not primary scientific evidence",
+    "preprint is not peer-reviewed evidence",
+    "Reddit/community evidence is not peer-reviewed evidence",
+    "synthetic calibration is not a FRANK/Qwen effect estimate",
+    "generic Nemotron-Mini-4B is not Qwen3-4B target evidence",
+    "Android R1 functional runtime evidence is not GWT mechanism evidence"
+  ]
+}

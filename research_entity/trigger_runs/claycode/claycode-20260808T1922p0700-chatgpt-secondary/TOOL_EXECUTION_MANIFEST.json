@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260808T1922p0700-chatgpt-secondary",
+  "task_classes":["scholarly","current_web","implementation","executable","small_model_proxy"],
+  "attempts":[
+    {"tool":"GitHub","status":"SUCCESS","role":"canonical/branch/runtime/source inspection and durable writes"},
+    {"tool":"local_sandbox","status":"SUCCESS","role":"CC-RC1.5 reference implementation and 30-seed synthetic mechanism tests"},
+    {"tool":"openalex_search","status":"SUCCESS_LOW_PRECISION","result_ref":"research_entity/runtime/tool_results/cc10-1922-openalex-intent-contract.json","note":"broad discovery; not relied on for central claims"},
+    {"tool":"arxiv_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/cc10-1922-arxiv-intent-contract.json","high_value":["KBSpec","XGrammar-2","semantic parsing/constrained generation literature"]},
+    {"tool":"semantic_scholar_search","status":"HTTP_429_RATE_LIMITED","result_ref":"research_entity/runtime/tool_results/cc10-1922-semscholar-intent-contract.json","fallback":["arXiv","OpenAlex","native primary-source web","Exa"]},
+    {"tool":"tavily_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/cc10-1922-tavily-intent-contract.json","high_value":["Compiled AI","Intent Formalization discovery"]},
+    {"tool":"exa_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/cc10-1922-exa-intent-contract.json","high_value":["Toward a Science of Intent","FAVA","ETAS","COVENANT","SIGIL","formal skill verification","Lean4Agent"]},
+    {"tool":"native_web_primary_sources","status":"SUCCESS","high_value":["arXiv:2604.25000 Science of Intent","FAVA","ETAS","COVENANT","SIGIL","LACUNA","Proof-Carrying Agent Actions"]},
+    {"tool":"judge0_execute","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/cc10-1922-judge0-intent-contract.json","role":"independent runtime replication of intent policy and adequacy gap"},
+    {"tool":"groq_inference","status":"SUCCESS","model":"llama-3.1-8b-instant","evidence_role":"8b_proxy_for_4b","arms":["cc10-1922-groq-raw-intent","cc10-1922-groq-compiled-intent","cc10-1922-groq-compact-intent"],"boundary":"does not close target Qwen3-4B/full-FT internalization or target-device tests"},
+    {"tool":"E2B","status":"SKIPPED_CREDENTIAL_UNAVAILABLE","fallback":"local sandbox + Judge0"},
+    {"tool":"Hugging Face Inference","status":"SKIPPED_CACHED_QUOTA_EXHAUSTED","known_until":"2026-09-01T00:00:00Z","fallback":"Groq 8B proxy under SMALL_MODEL_PROXY_POLICY"},
+    {"tool":"Crossref","status":"NOT_APPLICABLE","reason":"DOI normalization was not required for the mechanism decision"}
+  ],
+  "secret_values_recorded":false,
+  "required_tool_violation":false,
+  "strong_promotion_allowed":false
+}

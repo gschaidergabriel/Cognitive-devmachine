@@ -17,7 +17,7 @@ jobs:
           python tools/android_research_preflight.py \
             --run-id android-20260808T2338p0700-chatgpt-secondary-r1 \
             --output /tmp/android-interconnect.json
-      - name: Assert all eight branches retrieve Android routing packet
+      - name: Assert all eight branches retrieve branch-addressed Android feedback
         run: |
           python - <<'PY'
           import json
@@ -27,16 +27,25 @@ jobs:
           got = set(data['registry_scientific_branches'])
           assert got == expected, (got, expected)
           assert data['secondary_arm']['name'] == 'android'
+          suffix = {
+              'clay': 'KMP-ANDROID-R1-FEEDBACK-CLAY.md',
+              'frank': 'KMP-ANDROID-R1-FEEDBACK-FRANK.md',
+              'gwt': 'KMP-ANDROID-R1-FEEDBACK-GWT.md',
+              'emergenz': 'KMP-ANDROID-R1-FEEDBACK-EMERGENZ.md',
+              'claycode': 'KMP-ANDROID-R1-FEEDBACK-CLAYCODE.md',
+              'hyperposition': 'KMP-ANDROID-R1-FEEDBACK-HYPERPOSITION.md',
+              'claygraph': 'KMP-ANDROID-R1-FEEDBACK-CLAYGRAPH.md',
+              'unifieddb': 'KMP-ANDROID-R1-FEEDBACK-UNIFIEDDB.md',
+          }
           missing = []
           for branch in data['branches']:
               packets = branch.get('knowledge_micro_packets', [])
-              ok = any(x.endswith('KMP-ANDROID-SECONDARY-ARM-BIDIRECTIONAL-MESH.md') for x in packets)
-              if not ok:
+              target = suffix[branch['branch']]
+              hits = [x for x in packets if x.endswith(target)]
+              print(branch['branch'], hits)
+              if not hits:
                   missing.append(branch['branch'])
-          assert not missing, f'Android routing KMP not retrieved for: {missing}'
+          assert not missing, f'branch-addressed Android feedback not retrieved for: {missing}'
           print('ANDROID_MESH_RETRIEVAL_PASS')
           print('branches=', sorted(got))
-          for branch in data['branches']:
-              hits=[x for x in branch.get('knowledge_micro_packets',[]) if 'KMP-ANDROID-SECONDARY-ARM-BIDIRECTIONAL-MESH.md' in x]
-              print(branch['branch'], hits)
           PY

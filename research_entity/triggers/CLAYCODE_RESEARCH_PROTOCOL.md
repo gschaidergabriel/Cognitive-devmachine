@@ -31,6 +31,49 @@ If ClayGraph exposes a missing ClayCode primitive, unsafe authority assumption, 
 
 Run `tools/research_interconnect_preflight.py --trigger claycode --run-id <run_id>` and materialize `INTERCONNECT_MANIFEST.json` before Fusion 1. The preflight must show ClayGraph as a deep input and all seven registered scientific branches.
 
+## Mandatory executable ClayCode loop
+
+ClayCode is not researched only as prose or JSON architecture. Every substantive `claycode` run must attempt to turn at least one current language hypothesis into an executable artifact: parser, canonicalizer, type/effect checker, compiler/lowering pass, interpreter/VM fragment, roundtrip checker, fuzz harness, or generated host-language program.
+
+Capability source: `research_entity/global/SANDBOXAPI_RESEARCH_CAPABILITY.json`.
+
+When `sandboxapi_sandbox` is `RUNTIME_VERIFIED`, it is the preferred external execution surface for ClayCode compiler/runtime experiments. The run should, where scientifically relevant:
+
+1. write real ClayCode source examples and counterexamples;
+2. parse them into the current canonical IR;
+3. validate types, semantic classes, basis/closure and authority rules appropriate to the tested candidate;
+4. lower or compile them into an executable host representation;
+5. execute the generated program in the remote sandbox;
+6. run positive, negative, mutation/fuzz and semantic-preservation tests;
+7. capture compile errors, runtime errors, counterexamples, timings and repair iterations;
+8. turn those observations into hypotheses, negative results, compiler revisions and cross-branch feedback.
+
+Every nontrivial executable experiment must emit an `EXECUTABLE_RESEARCH_RECEIPT.json` (or an array/ledger of equivalent receipts) containing at least:
+
+- ClayCode source hash and candidate/compiler version;
+- canonical IR/semantic hash where applicable;
+- lowering/compiler target and generated-code hash;
+- sandbox provider/runtime/language identity;
+- test/fuzz corpus identity;
+- stdout/stderr/exit status and available time/memory data;
+- expected-vs-observed semantic result;
+- failure/counterexample classification;
+- repair/change applied, if any;
+- affected hypothesis/negative-result IDs;
+- whether the learning changed ClayCode, FRANK, ClayGraph, GWT, Hyperposition, Emergenz or Clay.
+
+A successful compilation is not automatically scientific support: differential/reference/oracle tests must establish which semantic property was preserved. A compiler/typechecker accepting a program does not prove the source intent was adequate; CC-RC1.5 intent-adequacy boundaries remain separate.
+
+If SandboxAPI is unavailable, unverified, quota-limited or not subscribed, record the exact blocker and automatically fall back to local sandbox and/or Judge0. The run may proceed, but it must not claim SandboxAPI evidence. When SandboxAPI later becomes operational, rerun the target-sensitive compiler/runtime subset there.
+
+Stateful sessions/package installation may be used only when the active SandboxAPI plan actually exposes them. One-shot Basic executions are sufficient for self-contained compiler+test harnesses and must not be mislabeled as persistent sessions.
+
+The long-term self-hosting research path is:
+
+`host bootstrap compiler -> executable ClayCode parser/type/effect system -> ClayCode lowering/interpreter -> ClayGraph/FRANK runtime components generated from Clay semantics -> progressively more of the compiler/runtime specified in ClayCode`
+
+but self-hosting never grants self-modification or effect authority by itself.
+
 ## Mandatory Goodman anti-echo review
 
 FRANK and ClayCode are a feedback pair. Their agreement is not independent evidence.
@@ -79,6 +122,7 @@ The result is a falsifiable co-evolution loop, not a consensus loop.
 - outcome/re-entry/credit primitives;
 - external capability/commit boundary;
 - parser/validator/compiler fuzzing;
+- executable compiler/interpreter/runtime artifacts and their receipts;
 - context/token/repair cost versus JSON/key=value/natural-language baselines;
 - reader-specific projections and live-reader break-even;
 - Qwen-4B simulation/live tests, explicitly labeled `simulation_only` when no target model is run;
@@ -92,6 +136,7 @@ Every completed ClayCode run must include at minimum:
 - `TOOL_EXECUTION_MANIFEST.json`;
 - `FRANK_CLAYCODE_GOODMAN_REVIEW.json`;
 - hypotheses/experiments/negative results appropriate to the run;
+- executable-research receipt(s) when an executable experiment was attempted;
 - a final report section explicitly naming the ClayGraph findings that changed, supported or challenged ClayCode.
 
 Before completion or strong promotion run:

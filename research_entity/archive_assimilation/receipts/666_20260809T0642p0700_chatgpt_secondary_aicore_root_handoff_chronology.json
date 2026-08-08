@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T0642p0700_chatgpt_secondary_aicore_root_handoff_chronology",
+  "actor":"chatgpt-secondary",
+  "trigger":"666",
+  "status":"COMPLETE",
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROOT_FILES_IDENTITY_CHRONOLOGY_MANIFEST.json",
+  "identity":{"direct_root_files":13,"exact_pf_aliases":10,"divergent":1,"drive_only":2},
+  "semantic_delta":[
+    "Aug-01 README is a later Drive snapshot than PF README but still describes direct Frank <tool> calling and LoRA-trained tool use; Aug-04 P3/P4 explicitly supersede that architecture with Needle-mediated tool selection.",
+    "P3 historical Needle 793-token 51-tool fit is preserved as setup-specific evidence; current exact retained-tokenizer fit/order bias remains open after source-level Needle reproduction.",
+    "P3 warns Qwen3.5 hybrid attention makes generic LoRA target-module lists incomplete without model-structure probing.",
+    "P4 preserves a concrete state/checkpoint shape mismatch (102->100 while anchor stayed 64x102), now converted to schema/version/shape load oracle.",
+    "P4 reports 1275 swallow-capable exception sites / 1100 broad catches / 241 in historical consciousness_daemon and documents silent deaths; converted to fail-visible loop oracle.",
+    "P3/P4 preserve stale-source and train/runtime prompt drift classes; converted to source-of-truth and freshness oracles."
+  ],
+  "harness_fixture":"research_entity/harness/fixtures/HANDOFF_SILENT_DEATH_SCHEMA_DRIFT_ORACLES.json",
+  "targets":["frank","claycode","harness","gwt","unifieddb","claygraph","emergenz"],
+  "earned_work":{"applied_hours":0,"candidate_low":1,"candidate_center":3,"candidate_high":6,"status":"PENDING_MECHANISM_DEDUP"},
+  "exact_level0_credit":0.0,
+  "training_started":false
+}

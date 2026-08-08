@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.1",
+  "request_id": "c6-groq-miniclay-v2-20260808T1750",
+  "tool": "groq_inference",
+  "request_sha256": "3c30be850400b243f537c0249b1f54f033da67b974eaf30133642d3cac4a9338",
+  "processed_at": "2026-08-08T11:03:07.229413+00:00",
+  "result": {
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "evidence_role": "8b_proxy_for_4b",
+    "content": "To solve this problem, we need to implement the rules of the Mini-Clay game. Here's a Python solution:\n\n```python\nclass Candidate:\n    def __init__(self, id, p, e, r, b):\n        self.id = id\n        self.p = p\n        self.e = e\n        self.r = r\n        self.b = b\n        self.score = p + e - r\n\n    def __repr__(self):\n        return f\"@{self.id}[{self.p},{self.e},{self.r},{self.b}]\"\n\ndef update_score(candidates, relation):\n    s, t, w = relation.split(\":\")\n    s_id = int(s[1:])\n    t_id = int(t[1:])\n    w = int(w)\n    for candidate in candidates:\n        if candidate.id == s_id and candidate.b == 0:\n            candidate.score += w\n            if candidate.id == t_id:\n                candidate.score -= w\n\ndef solve_game(candidates, relations):\n    for relation in relations:\n        update_score(candidates, relation)\n\n    eligible_candidates = [candidate for candidate in candidates if candidate.b == 0]\n    eligible_candidates.sort(key=lambda x: (x.score, x.id))\n\n    return",
+    "finish_reason": "length",
+    "usage": {
+      "queue_time": 0.077920133,
+      "prompt_tokens": 1038,
+      "prompt_time": 0.103108104,
+      "completion_tokens": 256,
+      "completion_time": 0.398574353,
+      "total_tokens": 1294,
+      "total_time": 0.501682457
+    }
+  },
+  "status": "SUCCESS"
+}

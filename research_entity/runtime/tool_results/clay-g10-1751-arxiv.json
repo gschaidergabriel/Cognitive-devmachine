@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.1",
+  "request_id": "clay-g10-1751-arxiv",
+  "tool": "arxiv_search",
+  "request_sha256": "5b84cbca5907b7398c09f4311f53963ca06cf939d5fd1779430da5a573462ab7",
+  "processed_at": "2026-08-08T11:03:07.862159+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-08T11:03:08.719500+00:00",
+    "credential_required": false,
+    "query": "agent memory graph retrieval spreading activation causal consistency",
+    "start": 0,
+    "max_results": 10,
+    "total_results": 770460,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2605.27825v1",
+        "title": "MRMMIA: Membership Inference Attacks on Memory in Chat Agents",
+        "summary": "Membership inference attacks (MIAs) test whether a target data record belongs to a system's private data, and have become a standard tool to measure privacy leakage in machine learning systems. Prior work has primarily focused on training corpora or retrieval databases. However, MIAs against agent memory have received less attention, even though such memory can contain sensitive user-agent interactions, retrieved facts, and user preferences. Therefore, in this work, we focus on chat agent memory MIAs, where an adversary infers whether a candidate memory unit belongs to the chat agent's memory store. We propose Multi-Recall Memory MIA (MRMMIA), a unified attack that utilizes multiple recall probes to the agent to extract the membership signal across black-box, gray-box, and white-box settings. Our experiments demonstrate that MRMMIA consistently outperforms baselines. Our results expose the privacy risk in agents and provide an initial evaluation framework for membership leakage in chat-agent memory systems.",
+        "published": "2026-05-27T01:31:40Z",
+        "updated": "2026-05-27T01:31:40Z",
+        "authors": [
+          "Kai Chen",
+          "Yan Pang",
+          "Tianhao Wang"
+        ],
+        "categories": [
+          "cs.CR",
+          "cs.LG"
+        ],
+        "primary_category": "cs.CR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "This work investigates the MIA on chat agent memory",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2605.27825v1",
+          "pdf": "https://arxiv.org/pdf/2605.27825v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2607.13157v1",
+        "title": "Oracle Agent Memory as an Enterprise Memory Substrate for Long-Horizon AI Agents",
+        "summary": "Agent memory is a systems problem for long-horizon agents. Practical deployments require retention of task state across extended conversations, recovery of user-specific facts and preferences across sessions, and accumulation of procedural knowledge from prior outcomes. These requirements extend beyond document retrieval: a memory layer must determine which interactions become durable state, how that state is scoped, how it is retrieved under latency constraints, and how it is revised or removed over time. This report studies Oracle Agent Memory as a database-native memory substrate built on Oracle Database. Three themes organize the discussion: memory as a lifecycle spanning ingestion, extraction, consolidation, retrieval, summarization, and revision or removal; a layered architecture that separates an active memory core from a passive memory-store interface with explicit scope control across users, agents, and threads; and evaluation methodology in which downstream task accuracy is complemented by memory-centric measures such as evidence retrieval, recall, latency, and estimated token use. The report summarizes LongMemEval results, reaching 93.8% accuracy, compares Oracle Agent Memory against flat-history baselines, using about 10.7x fewer tokens, and published or reported external baselines where available, and closes with implementation-oriented appendix material covering setup, thread lifecycle, and search semantics.",
+        "published": "2026-07-14T18:06:53Z",
+        "updated": "2026-07-14T18:06:53Z",
+        "authors": [
+          "Richmond Alake",
+          "Cesare Bernardis",
+          "Paul Cayet",
+          "Luca Engel",
+          "Damien Hilloulin",
+          "Sungpack Hong",
+          "Allen Hosler",
+          "Nickolas Kavantzas",
+          "Ingo Kossyk",
+          "Son Le",
+          "Rhicheek Patra",
+          "Kartik Talamadupula",
+          "Valentin Venzin"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.DB"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "23 pages, 7 figures. Technical report on Oracle Agent Memory",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2607.13157v1",
+          "pdf": "https://arxiv.org/pdf/2607.13157v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.07863v1",
+        "title": "Task-Adaptive Retrieval over Agentic Multi-Modal Web Histories via Learned Graph Memory",
+        "summary": "Retrieving relevant observations from long multi-modal web interaction histories is challenging because relevance depends on the evolving task state, modality (screenshots, HTML text, structured signals), and temporal distance. Prior approaches typically rely on static similarity thresholds or fixed-capacity buffers, which fail to adapt relevance to the current task context. We propose \\textbf{ACGM}, a learned graph-memory retriever that constructs \\emph{task-adaptive} relevance graphs over agent histories using policy-gradient optimization from downstream task success. ACGM captures heterogeneous temporal dynamics with modality-specific decay (visual decays $4.3\\times$ faster than text: $λ_v{=}0.47$ vs.\\ $λ_x{=}0.11$) and learns sparse connectivity (3.2 edges/node), enabling efficient $O(\\log T)$ retrieval. Across WebShop, VisualWebArena, and Mind2Web, ACGM improves retrieval quality to \\textbf{82.7 nDCG@10} (+9.3 over GPT-4o, $p{<}0.001$) and \\textbf{89.2\\% Precision@10} (+7.7), outperforming 19 strong dense, re-ranking, multi-modal, and graph-based baselines. Code to reproduce our results is available at{\\color{blue}\\href{https://github.com/S-Forouzandeh/ACGM-Agentic-Web}{Saman Forouzandeh}}.",
+        "published": "2026-04-09T06:24:16Z",
+        "updated": "2026-04-09T06:24:16Z",
+        "authors": [
+          "Saman Forouzandeh",
+          "Kamal Berahmand",
+          "Mahdi Jalili"
+        ],
+        "categories": [
+          "cs.IR",
+          "cs.AI"
+        ],
+        "primary_category": "cs.IR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "The 49th International ACM SIGIR Conference on Research and Development in Information Retrieval",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.07863v1",
+          "pdf": "https://arxiv.org/pdf/2604.07863v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.24775v1",
+        "title": "Are We Ready For An Agent-Native Memory System?",
+        "summary": "Memory for large language model (LLM) agents has rapidly evolved from simple retrieval-augmented mechanisms into a data management system that supports persistent information storage, retrieval, update, consolidation, and dynamic lifecycle governance throughout agent execution. Despite this evolution, existing evaluations still benchmark agent memory mainly through end-to-end task success metrics (e.g., F1, BLEU), while treating the underlying system as a monolithic black box. As a result, critical system-level concerns, including operational costs, architectural trade-offs across memory modules, and robustness under dynamic knowledge updates, remain insufficiently explored. In this paper, we present a systematic experimental study of agent memory from a data management perspective. We propose an analytical framework that decomposes agent memory into four core modules: memory representation and storage, extraction, retrieval and routing, and maintenance. Under this framework, we evaluate 12 representative memory systems and two reference baselines across five benchmark workloads spanning 11 datasets. Our extensive end-to-end evaluation shows that no single architecture dominates across all scenarios; instead, effectiveness depends heavily on how well the memory structure aligns with the workload bottleneck. Furthermore, through fine-grained ablation studies, we quantify their individual effects on representation fidelity, retrieval precision, update correctness, and long-horizon stability. Finally, we reveal cost-performance trade-offs under realistic workloads, showing localized maintenance is more cost-efficient than global reorganization. Based on these findings, we identify promising directions towards building truly agent-native memory systems. The code is publicly available at https://github.com/OpenDataBox/MemoryData.",
+        "published": "2026-06-23T16:34:55Z",
+        "updated": "2026-06-23T16:34:55Z",
+        "authors": [
+          "Wei Zhou",
+          "Xuanhe Zhou",
+          "Shaokun Han",
+          "Hongming Xu",
+          "Guoliang Li",
+          "Zhiyu Li",
+          "Feiyu Xiong",
+          "Fan Wu"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.DB",
+          "cs.IR"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Paper list available at: https://github.com/OpenDataBox/awesome-agent-memory. Source code available at: https://github.com/OpenDataBox/MemoryData",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.24775v1",
+          "pdf": "https://arxiv.org/pdf/2606.24775v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.08275v1",
+        "title": "Causal Agent Replay: Counterfactual Attribution for LLM-Agent Failures",
+        "summary": "When an LLM agent fails -- issues a refund it should not have, calls the wrong tool, leaks data -- existing tooling answers what happened (observability) or whether it passed (evaluation), but not which step caused the failure. The obvious heuristics are wrong: the step that executes the harmful action is usually not the step that decided on it, and LLM-judge attribution is correlational and unreliable (state-of-the-art step-level accuracy on the Who&When benchmark is about 14%). We present Causal Agent Replay (CAR), which answers the question by intervention: it models an agent run as a structural causal model, applies a do-operation to a step, and re-executes the trajectory forward under the same stochastic policy, measuring the shift in the outcome distribution. We define an intervention algebra over agent steps, a single-step contrastive estimator whose point-of-commitment rule resolves a confound specific to stochastic run-forward, and a budget-bounded Monte-Carlo Shapley estimator that splits credit across interacting steps. Every effect is reported with confidence intervals. We validate against synthetic structural causal models with planted ground truth: the contrastive estimator recovers the pivotal step, and Shapley recovers a two-step interaction (0.44, 0.45, ~0; efficiency sum 0.909 versus the analytic 0.91). CAR is open source and runs on hosted or free local models.",
+        "published": "2026-06-06T17:44:23Z",
+        "updated": "2026-06-06T17:44:23Z",
+        "authors": [
+          "Jaineet Shah"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Open-source: https://github.com/jaineet17/causal-agent-replay",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.08275v1",
+          "pdf": "https://arxiv.org/pdf/2606.08275v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2606.06036v1",
+        "title": "Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents",
+        "summary": "Despite recent progress, LLM agents still struggle with reasoning over long interaction histories. While current memory-augmented agents rely on a static retrieve-then-reason paradigm, this rigid pipeline design prevents them from dynamically adapting memory access to intermediate evidence discovered during inference. To bridge this gap, we propose MRAgent, a framework that combines an associative memory graph with an active reconstruction mechanism. We represent memory as a Cue-Tag-Content graph, where associative tags serve as semantic bridges connecting fine-grained cues to memory contents. Operating on this structure, our active reconstruction mechanism integrates LLM reasoning directly into memory access, allowing the agent to iteratively explore and prune retrieval paths based on accumulated evidence. This ensures that memory retrieval is dynamically adapted to the reasoning context while avoiding combinatorial explosion caused by unconstrained expansion. Experiments on the LoCoMo benchmark and LongMemEval benchmark demonstrate significant improvements over strong baselines (up to 23%), while substantially reducing token and runtime cost, highlighting the effectiveness of active and associative reconstruction for long-horizon memory reasoning.",
+        "published": "2026-06-04T11:29:46Z",
+        "updated": "2026-06-04T11:29:46Z",
+        "authors": [
+          "Shuo Ji",
+          "Yibo Li",
+          "Bryan Hooi"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.IR"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Accepted at ICML 2026",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2606.06036v1",
+          "pdf": "https://arxiv.org/pdf/2606.06036v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.16416v1",
+        "title": "Tensor Manifold-Based Graph-Vector Fusion for AI-Native Academic Literature Retrieval",
+        "summary": "The rapid development of large language models and AI agents has triggered a paradigm shift in academic literature retrieval, putting forward new demands for fine-grained, time-aware, and programmable retrieval. Existing graph-vector fusion methods still face bottlenecks such as matrix dependence, storage explosion, semantic dilution, and lack of AI-native support. This paper proposes a geometry-unified graph-vector fusion framework based on tensor manifold theory, which formally proves that an academic literature graph is a discrete projection of a tensor manifold, realizing the native unification of graph topology and vector geometric embedding. Based on this theoretical conclusion, we design four core modules: matrix-independent temporal diffusion signature update, hierarchical temporal manifold encoding, temporal Riemannian manifold indexing, and AI-agent programmable retrieval. Theoretical analysis and complexity proof show that all core algorithms have linear time and space complexity, which can adapt to large-scale dynamic academic literature graphs. This research provides a new theoretical framework and engineering solution for AI-native academic literature retrieval, promoting the industrial application of graph-vector fusion technology in the academic field.",
+        "published": "2026-04-02T10:14:02Z",
+        "updated": "2026-04-02T10:14:02Z",
+        "authors": [
+          "Xing Wei",
+          "Yang Yu"
+        ],
+        "categories": [
+          "cs.IR"
+        ],
+        "primary_category": "cs.IR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "36 pages, 10 tables, 0 figures; accepted for publication; extended version of graph-vector fusion framework for AI-native academic literature retrieval",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.16416v1",
+          "pdf": "https://arxiv.org/pdf/2604.16416v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2603.02888v1",
+        "title": "LLandMark: A Multi-Agent Framework for Landmark-Aware Multimodal Interactive Video Retrieval",
+        "summary": "The increasing diversity and scale of video data demand retrieval systems capable of multimodal understanding, adaptive reasoning, and domain-specific knowledge integration. This paper presents LLandMark, a modular multi-agent framework for landmark-aware multimodal video retrieval to handle real-world complex queries. The framework features specialized agents that collaborate across four stages: query parsing and planning, landmark reasoning, multimodal retrieval, and reranked answer synthesis. A key component, the Landmark Knowledge Agent, detects cultural or spatial landmarks and reformulates them into descriptive visual prompts, enhancing CLIP-based semantic matching for Vietnamese scenes. To expand capabilities, we introduce an LLM-assisted image-to-image pipeline, where a large language model (Gemini 2.5 Flash) autonomously detects landmarks, generates image search queries, retrieves representative images, and performs CLIP-based visual similarity matching, removing the need for manual image input. In addition, an OCR refinement module leveraging Gemini and LlamaIndex improves Vietnamese text recognition. Experimental results show that LLandMark achieves adaptive, culturally grounded, and explainable retrieval performance.",
+        "published": "2026-03-03T11:36:34Z",
+        "updated": "2026-03-03T11:36:34Z",
+        "authors": [
+          "Minh-Chi Phung",
+          "Thien-Bao Le",
+          "Cam-Tu Tran-Thi",
+          "Thu-Dieu Nguyen-Thi",
+          "Vu-Hung Dao"
+        ],
+        "categories": [
+          "cs.CV"
+        ],
+        "primary_category": "cs.CV",
+        "doi": null,
+        "journal_ref": "AAAI 2026 Workshop on New Frontiers in Information Retrieval",
+        "comment": "Accepted by AAAI 2026 Workshop on New Frontiers in Information Retrieval",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2603.02888v1",
+          "pdf": "https://arxiv.org/pdf/2603.02888v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/1811.08772v1",
+        "title": "Overcoming low-utility facets for complex answer retrieval",
+        "summary": "Many questions cannot be answered simply; their answers must include numerous nuanced details and additional context. Complex Answer Retrieval (CAR) is the retrieval of answers to such questions. In their simplest form, these questions are constructed from a topic entity (e.g., `cheese') and a facet (e.g., `health effects'). While topic matching has been thoroughly explored, we observe that some facets use general language that is unlikely to appear verbatim in answers. We call these low-utility facets. In this work, we present an approach to CAR that identifies and addresses low-utility facets. We propose two estimators of facet utility. These include exploiting the hierarchical structure of CAR queries and using facet frequency information from training data. To improve the retrieval performance on low-utility headings, we also include entity similarity scores using knowledge graph embeddings. We apply our approaches to a leading neural ranking technique, and evaluate using the TREC CAR dataset. We find that our approach perform significantly better than the unmodified neural ranker and other leading CAR techniques. We also provide a detailed analysis of our results, and verify that low-utility facets are indeed more difficult to match, and that our approach improves the performance for these difficult queries.",
+        "published": "2018-11-21T15:09:00Z",
+        "updated": "2018-11-21T15:09:00Z",
+        "authors": [
+          "Sean MacAvaney",
+          "Andrew Yates",
+          "Arman Cohan",
+          "Luca Soldaini",
+          "Kai Hui",
+          "Nazli Goharian",
+          "Ophir Frieder"
+        ],
+        "categories": [
+          "cs.IR"
+        ],
+        "primary_category": "cs.IR",
+        "doi": "10.1007/s10791-018-9343-0",
+        "journal_ref": "Information Retrieval Journal 2018",
+        "comment": "This is a pre-print of an article published in Information Retrieval Journal. The final authenticated version (including additional experimental results, analysis, etc.) is available online at: https://doi.org/10.1007/s10791-018-9343-0",
+        "links": {
+          "alternate": "https://arxiv.org/abs/1811.08772v1",
+          "pdf": "https://arxiv.org/pdf/1811.08772v1",
+          "doi": "https://doi.org/10.1007/s10791-018-9343-0"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2602.07525v1",
+        "title": "IGMiRAG: Intuition-Guided Retrieval-Augmented Generation with Adaptive Mining of In-Depth Memory",
+        "summary": "Retrieval-augmented generation (RAG) equips large language models (LLMs) with reliable knowledge memory. To strengthen cross-text associations, recent research integrates graphs and hypergraphs into RAG to capture pairwise and multi-entity relations as structured links. However, their misaligned memory organization necessitates costly, disjointed retrieval. To address these limitations, we propose IGMiRAG, a framework inspired by human intuition-guided reasoning. It constructs a hierarchical heterogeneous hypergraph to align multi-granular knowledge, incorporating deductive pathways to simulate realistic memory structures. During querying, IGMiRAG distills intuitive strategies via a question parser to control mining depth and memory window, and activates instantaneous memories as anchors using dual-focus retrieval. Mirroring human intuition, the framework guides retrieval resource allocation dynamically. Furthermore, we design a bidirectional diffusion algorithm that navigates deductive paths to mine in-depth memories, emulating human reasoning processes. Extensive evaluations indicate IGMiRAG outperforms the state-of-the-art baseline by 4.8% EM and 5.0% F1 overall, with token costs adapting to task complexity (average 6.3k+, minimum 3.0k+). This work presents a cost-effective RAG paradigm that improves both efficiency and effectiveness.",
+        "published": "2026-02-07T12:42:31Z",
+        "updated": "2026-02-07T12:42:31Z",
+        "authors": [
+          "Xingliang Hou",
+          "Yuyan Liu",
+          "Qi Sun",
+          "haoxiu wang",
+          "Hao Hu",
+          "Shaoyi Du",
+          "Zhiqiang Tian"
+        ],
+        "categories": [
+          "cs.IR"
+        ],
+        "primary_category": "cs.IR",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "29 pages, Information Retrieval",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2602.07525v1",
+          "pdf": "https://arxiv.org/pdf/2602.07525v1"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

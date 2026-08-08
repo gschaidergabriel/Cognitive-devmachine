@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.1",
+  "request_id": "clay-g10-1751-tavily",
+  "tool": "tavily_search",
+  "request_sha256": "b5808b64b1c0706e8b91560506b2a444751d5f5b59abe50c85ce518e5cbcf116",
+  "processed_at": "2026-08-08T11:03:19.547802+00:00",
+  "result": {
+    "provider": "Tavily",
+    "tool": "tavily_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 agent memory poisoning graph retrieval selection integrity causal consistency",
+    "answer": null,
+    "results": [
+      {
+        "title": "Memory poisoning in AI agents: exploits that wait",
+        "url": "https://christian-schneider.net/blog/persistent-memory-poisoning-in-ai-agents",
+        "content": "Memory poisoning plants instructions into an AI agent’s memory that survive across sessions and execute days or weeks later, triggered by unrelated interactions. Unlike prompt injection, which ends when the conversation closes, memory poisoning creates persistent compromise. MINJA research shows over 95% injection success rates against production agents. The Gemini memory attack demonstrated how delayed tool invocation bypasses runtime guardrails using trigger words like ‘yes’ or ‘sure’ that appear in nearly every conversation. OWASP’s ASI06 recognizes this as a top agentic risk for 2026. Defense requires layered controls: input moderation with trust scoring, memory sanitization with provenance tracking, trust-aware retrieval, and behavioral monitoring to detect when an agent starts [...] The attack and its execution are temporally decoupled. The injection happens in February. The damage happens in April. The attacker is long gone. The victim never interacted with the malicious content directly. Traditional monitoring sees nothing suspicious at any single point in time. This changes the threat model in a way that I find genuinely uncomfortable: you can’t scope the blast radius of an incident when you don’t even know the incident started months ago. This is why OWASP added ASI06 (Memory & Context Poisoning) to the Top 10 for Agentic Applications 2026.\n\n#### How memory poisoning works [...] mail@christian-schneider.net\n +49 178 3081340\n\n# Memory poisoning in AI agents: exploits that wait\n\nPersistence across sessions, users, and workflows\n\nChristian Schneider · 26 Feb 2026 · 14 min read\n\n### From session attacks to persistent compromise\n\nThis post is part of my series on securing agentic AI systems, covering attack surfaces, defense patterns, and threat modeling for AI agents.\n\nTL;DR",
+        "score": 0.48952848,
+        "raw_content": null
+      },
+      {
+        "title": "Graph-based Agent Memory: Taxonomy, Techniques, and ... - arXiv",
+        "url": "https://arxiv.org/html/2602.05665v1",
+        "content": "Traditional implementations of agent memory primarily adopt linear, unstructured, or simple key-value storage paradigms, such as fixed-length token sequences, vector databases, and log-based buffers [13, 14].\nWhile these frameworks enable basic information storage and retrieval, agent memory demands more complex functionalities, such as relational modeling, hierarchical organization, and causal dependencies. Graph-based agent memory [15, 16] has emerged as the frontier for 2025–2026 research, transitioning from a passive ‘log’ of facts to a structured topological model of experience that preserves how information is connected over time. [...] Structured retrieval includes rule-based operators, temporal operators and graph-based operators. These operators execute explicit constraints over structured artifacts: knowledge graphs, hierarchies, temporal graphs, and hypergraphs. This enables verifiable and interpretable evidence selection: each retrieval decision is traceable\nthrough the underlying graph structure or rule set. Structured retrieval is particularly central to knowledge memory. For knowledge memory, correctness and consistency are primary concerns. [...] ### VII-A Internal Self-Evolving\n\nInternal self-evolving treats the agent’s memory graph as a closed-loop system capable of introspective refinement. This process is analogous to human memory consolidation during sleep or rest, where the brain organizes recent experiences, abstracts general rules, and forgets trivial details without requiring new external sensory input. In the context of graph-based agent memory, this involves reorganizing the graph topology to enhance retrieval efficiency, logical consistency, and generalization capabilities. Unlike traditional storage that simply appends the logs, internal evolution applies structural transformations to the graph, typically focusing on three key aspects: Memory Consolidation, Graph Reasoning and Graph Reorganization.",
+        "score": 0.47548413,
+        "raw_content": null
+      },
+      {
+        "title": "AI Agent Memory 2026: Progress Benchmark Report ...",
+        "url": "https://mem0.ai/blog/state-of-ai-agent-memory-2026",
+        "content": "In our newopen-source algorithm, we replaced external graph store support with built-in entity linking. During `add()`, Mem0 extracts entities from each memory and stores them in a parallel entity collection named `{collection}_entities`. At search time, entities from the query are matched against that collection. Those matches then boost relevant memories inside the final combined score.\n\nThis is part of the broader multi-signal retrieval redesign: semantic similarity, BM25 keyword matching, and entity matching - all three normalized and fused into one result score. [...] _The tradeoff:_ this is no longer a queryable graph interface. The `relations` field from prior versions is gone. Entity relationships now influence retrieval ranking but cannot be traversed directly. For teams that needed the graph interface for custom reasoning, this is a regression. For teams that needed entity-aware retrieval without the deployment overhead of a Neo4j instance, this is a net improvement.\n\n## Multi-Scope Memory: The API Design That Stuck\n\nOne of the cleaner design decisions in the AI agent memory space has been Mem0's four-scope memory model. Every memory write is associated with at least one of:\n\n   `user_id` for memories that belong to a specific user and persist across all sessions,\n\n   `agent_id` for memories that belong to a specific agent instance, [...] Graph memory in AI agents was largely experimental in 2024. By 2026, the production pattern will have changed. The important shift is not “every agent now needs a graph database.” It is that memory systems are moving beyond pure vector similarity.\n\nImage 7: Side-by-side comparison of vector memory versus graph memory — vector memory uses embedding similarity while graph memory maps entity relationships and connections\n_Fig: Comparing vector memory to graph memory_\n\nVector memory retrieves semantically similar facts. Graph-style memory retrieves facts through entities and relationships. Both are useful; neither is sufficie",
+        "score": 0.468621,
+        "raw_content": null
+      },
+      {
+        "title": "Best AI agent memory tools in 2026 - Articles - Braintrust",
+        "url": "https://www.braintrust.dev/articles/best-ai-agent-memory-tools-2026",
+        "content": "What it is: Zep is a managed context and memory service based on Graphiti, its open-source temporal graph engine. Graphiti converts conversations, documents, and structured business data into entities, relationships, and facts with temporal metadata. When information changes, the graph can invalidate earlier facts while preserving when they were valid and where they came from.\n\nKnown for: Retrieving context that reflects both relationships and time. Zep can distinguish a current fact from an earlier version and preserve the sequence of changes without treating every stored statement as equally current.\n\nCommonly used for: Support, account management, and assistant workflows where customer status, preferences, or business records change over time. [...] What it is: Mem0 is an open-source memory layer that extracts useful information from agent interactions and retrieves it in later conversations. Its current memory algorithm uses single-pass extraction, entity linking, and retrieval signals that combine semantic, keyword, and graph-based context. Mem0 can run through its managed service or inside infrastructure controlled by the development team.\n\nKnown for: Adding persistent, user-level memory to an existing agent without requiring a separate agent runtime. Retrieved memories remain smaller than full conversation histories, which can reduce the amount of context passed to the model. [...] What it is: Cognee is an open-source agent memory system that converts documents and other data into a persistent knowledge graph. It combines graph relationships with vector search, allowing agents to retrieve information by semantic similarity and connected entities. Cognee can run locally, on infrastructure managed by the team, or through Cognee Cloud.\n\nKnown for: Self-hosted graph memory with an MCP interface. Its MCP server allows compatible coding agents and development tools to read from and write to the memory system.\n\nCommonly used for: Giving coding agents durable project",
+        "score": 0.36874714,
+        "raw_content": null
+      },
+      {
+        "title": "Causal AI Decision Intelligence: Why It Will Emerge in 2026",
+        "url": "https://thecuberesearch.com/why-causal-ai-decision-intelligence-2026",
+        "content": "However, data from the Agentic AI Futures Index suggests that 68% of respondents would be more likely to adopt causal AI if it were more broadly integrated into agentic AI tools and platforms. In other words, the market is signaling a clear path forward: reduce the cognitive and engineering burden by integrating causal decision intelligence into the platforms enterprises already use to build and govern agents, and adoption moves from niche capability to mainstream architectural ingredient. [...] Skip to content\n\nFormerly known as Wikibon\n\n. But as agents move from task execution into consequential decisions, that stack lacks a critical capability: Causal AI decision intelligence. [...] Put simply, humans are causal by nature, so AI must become causal by nature: LLMs resemble the limbic brain, optimizing for fluent, memory-like pattern completion and task automation, while causal AI provides the equivalent of cortical reasoning, translating experience into durable know-how and higher-order judgment that supports planning, problem-solving, and decision-making at enterprise standard.\n\nFor these reasons, it’s our view here at theCUBE Research that causal AI decision intelligence is not only a game-changing advancement but also a key driver of trustworthy, higher-ROI agentic AI use cases – and the realization of digital labor transformation strategies.\n\n## The Democratization of Causal AI",
+        "score": 0.27081743,
+        "raw_content": null
+      },
+      {
+        "title": "Awesome-Agent-Memory/papers/2026.md at main · AgentMemoryWorld/Awesome-Agent-Memory · GitHub",
+        "url": "https://github.com/AgentMemoryWorld/Awesome-Agent-Memory/blob/main/papers/2026.md",
+        "content": "{{ message }}\n\n### Uh oh!\n\nThere was an error while loading. Please reload this page.\n\nAgentMemoryWorld \n/\nAwesome-Agent-Memory\nPublic\n\n Notifications You must be signed in to change notification settings\n Fork\n  11\n Star\n   177\n\n## Collapse file tree\n\n## Files\n\nSearch this repository(forward slash) `forward slash/`\n\n/\n\n# 2026.md\n\nCopy path\n\nMore file actions\n\nMore file actions\n\n## Latest commit\n\nJasonyaJasonya\n\nSplit the paper list into per-year files and simplify badge markup\n\nOpen commit details\n\nJul 23, 2026\n\n54da9b4 · Jul 23, 2026\n\n## History\n\nHistory\n\nOpen commit details\n\nHistory\n\n1829 lines (915 loc) · 405 KB\n\n/\n\n# 2026.md\n\nCopy path\n\n## File metadata and controls\n\n1829 lines (915 loc) · 405 KB\n\nYou can’t perform that action at this time.",
+        "score": 0.19323906,
+        "raw_content": null
+      },
+      {
+        "title": "NeurIPS Poster AgentPoison: Red-teaming LLM Agents via Poisoning Memory or Knowledge Bases",
+        "url": "https://neurips.cc/virtual/2024/poster/94715",
+        "content": "## Main Navigation\n\nconference_logo\n\n# AgentPoison: Red-teaming LLM Agents via Poisoning Memory or Knowledge Bases\n\n### Abstract\n\n### Video\n\n| NeurIPS uses cookies for essential functions only. We do not sell your personal information. Our Privacy Policy » | Accept |\n\n###### NeurIPS logo\n\nNeurIPS logo\n\nThe NeurIPS Logo above may be used on presentations. Right-click and choose\ndownload. It is a vector graphic and may be used at any scale.\n\n###### Useful links\n\n###### Contact\n\n1269 Law St, San Diego CA 92109\n\nEmail\n\nNeurIPS Proceedings",
+        "score": 0.18898202,
+        "raw_content": null
+      },
+      {
+        "title": "A Dataset Capturing Decision Processes, Tool Interactions and Provenance Links in Autonomous AI Agents",
+        "url": "https://www.mdpi.com/2306-5729/11/4/66",
+        "content": "option, and (iii) the subsequent tool calls, memory updates, and final response entities that depend on it. Because each relation is materialized as an explicit edge in the directed acyclic graph, it becomes possible to verify whether a final action or response is causally connected to its declared decision basis. This structured representation supports the analysis of potential “leaps in reasoning,” defined as cases where an action appears without a corresponding causal decision node, or where the declared rationale does not propagate to the executed outcome. By preserving both accepted and rejected decision branches as distinct provenance entities, the dataset enables fine-grained inspection of reasoning fidelity and causal consistency. [...] All provenance information is stored explicitly within each session file under a dedicated provenance field, alongside indexed lists of entities and links. This representation allows researchers to reconstruct execution graphs programmatically, compare alternative agent behaviors across scenarios, and evaluate causal consistency at scale. By formalizing provenance at the dataset level, the proposed design enables systematic study of agent reasoning faithfulness and causal accountability without imposing assumptions about the correctness or optimality of the agent’s behavior. [...] In the unfaithful variant, the provenance chain revealed a mismatch between the selected\\_option field and the referenced tool output, resulting in a detectable inconsistency in the causal graph. This simple experiment illustrates how AgentSec enables automated detection of reasoning misalignment through graph traversal and structural verification, thereby supporting research on reasoning fidelity and causal accountability in LLM-based agents.",
+        "score": 0.18844377,
+        "raw_content": null
+      }
+    ],
+    "response_time": 2.26,
+    "request_id": "c1f5d8a6-6918-4dde-8544-6c3538d90acf",
+    "usage": null
+  },
+  "status": "SUCCESS"
+}

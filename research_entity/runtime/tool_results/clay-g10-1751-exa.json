@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.1",
+  "request_id": "clay-g10-1751-exa",
+  "tool": "exa_search",
+  "request_sha256": "089a0f09e3c181a1d0a8d39e2804cc082242ce25176fef44d2c109e4f279a27e",
+  "processed_at": "2026-08-08T11:03:08.808285+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 agent memory poisoning graph retrieval selection integrity causal consistency",
+    "results": [
+      {
+        "id": "https://exa.ai/library/publication/l12y9ptycgpbvp54mv9szy5f",
+        "title": "Selection Integrity for LLM Graph Memory: An Accumulability Criterion for Information-Flow-Blind Retrieval",
+        "url": "https://arxiv.org/html/2606.12290",
+        "published_date": null,
+        "author": "zeming fei, Hongming Fei, Xiaoyang Wang (137806), Yang yang, Prosanta Gope, Biplab Sikdar, et al.",
+        "text": null,
+        "highlights": [
+          "Abstract—Agent memory is moving to graphs, and the prove nance defenses now being built for it all check one thing: the provenance of the records an agent retrieves. We show that this entire class of defense is blind by construction. A long term graph memory runs a global selection step over writable graph structure, so structure that an untrusted principal writes changes which authenticated facts are selected while the cited evidence stays fully authenticated; faithful information-flow control (IFC), checking the provenance of what the reader uses (all of it authenticated), makes the byte-identical decision to no defense at all, across document-QA substrates and real multi session agent memory. In the most consequential instance, a no-source structural write silently misdirects 28 irreversible ledger transfers over 499 live actions: faithful IFC permits every one, and AUTHSELECT prevents every one. We then characterize exactly which memories are exposed: a selector admits the channel when its structural term can reallocate an Ω(1) share of top-k membership past a selected fact’s margin. Personalized PageRank can, since a sourceless write reroutes conserved random-walk mass; a content-fixed reranker can not, and Graphiti’s node-distance, which leans on structure more than PageRank does, stays immune. Reallocatability, not reliance, is the predictor. We prove the immune case in general and the open case under a chokepoint condition we verify. Closing the channel forces any provenance defense to recompute selection on the authenticated subgraph, which is what AUTHSELECT does, at zero over-block and 2–3% latency.\n...\nTheorem 1 says provenance is blind on D whenever D is non-empty. We characterize when it is non-empty within the class of selectors that score an item by an increasing function of a content term and a structural term, s(i) = g(c(i, Q), σ(i; G, Q)) with g strictly increasing in σ. The characterization is two-directional: the immune side is unconditional (Pr"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2605.09033v1",
+        "title": "ShadowMerge: A Novel Poisoning Attack on Graph-Based Agent Memory via Relation-Channel Conflicts",
+        "url": "https://arxiv.org/html/2605.09033v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Graph-based agent memory is increasingly adopted in LLM agents for its advantages in structured long-term recall and multi-hop reasoning. Despite these advantages, graph-based agent memory also introduces a new attack surface in which an attacker can craft a poisoned relation that is extracted into graph memory and later retrieved to influence subsequent agent behavior. However, this attack surface remains unexplored in existing security research on agent-memory poisoning, as existing attacks mainly target flat textual records and are ineffective in graph-based agent memory because malicious relations often fail to be extracted, merged into the target anchor neighborhood, or retrieved for the victim query.\n...\nIn this paper, we present ShadowMerge, a novel poisoning attack against graph-based agent memory that exploits relation-channel conflicts. The core insight is that a poisoned relation can share the same anchor and relation channel as benign evidence while carrying a conflicting value. Here, the anchor is the query-activated entity, and the relation channel is the canonicalized relation type through which graph evidence is merged and retrieved. To realize this insight, we design AIR, a pipeline that converts the conflict into an ordinary interaction that can be extracted, merged, and retrieved by the graph-memory system. We evaluate ShadowMerge on the widely-used memory framework called Mem0 and three public real-world datasets, including PubMedQA, WebShop, and ToolEmu. ShadowMerge achieves 93.8% average ASR, a 50.3 absolute ASR gain over the best baseline, while having negligible impact on unrelated benign tasks. A further mechanism study proves that ShadowMerge overcomes all three limitations of existing agent-memory poisoning attacks. Defense analysis further shows that existing representative input-side defenses are insufficient to mitigate ShadowMerge. We have responsibly disclosed our findings to affected graph-memory vendors and open sourced SHADOWMERGE "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/vyxtsc8lhsbvjq23lzsg01lg",
+        "title": "Securing LLM-Agent Long-Term Memory Against Poisoning: Non-Malleable, Origin-Bound Authority with Machine-Checked Guarantees",
+        "url": "https://arxiv.org/html/2606.24322",
+        "published_date": null,
+        "author": "Yedidel Louck",
+        "text": null,
+        "highlights": [
+          "Abstract—LLM agents increasingly rely on persistent long term memory, which creates a critical vulnerability that we study here: memory poisoning. An adversary can store untrusted con tent in one session that later steers a consequential action, such as a payment, a setting change, or data exfiltration, in a future session. Existing defenses base a memory item’s authority to act on either its content (detection or trust-scoring) or its derivation history (lineage). We show that both signals are malleable. An attacker can launder an untrusted origin through three channels specific to LLM agents: the agent’s own summarization, a trusted-tool echo, and manufactured corroboration. Each makes the content look benign and breaks or flips its derivation edge to “trusted.” We formalize malleability for the memory write retrieve-act pipeline and prove a machine-checked separation theorem. No content- or lineage-based defense is sound under laundering (T1), write-time origin binding is necessary (T2), and non-malleable origin-bound authority with Sybil-resistant corroboration-gated elevation is sufficient (T3). Our construction, TMA-NM (Tamper-evident Memory Authority, Non-Malleable), instantiates non-malleable information-flow control (IFC) for LLM-agent memory. A cross-defense, cross-attack, and cross model benchmark over eight frontier models shows that existing defenses fail exactly where the theory predicts (up to 68% laundering attack-success), while TMA-NM reaches 0% attack success on both direct and laundering attacks across all models and channels, at full legitimate utility. We release the bench mark, harness, and machine-checked TLA + models to support reproducibility. Index Terms—LLM agents, long-term memory, memory poi soning, information-flow control, capability security, prompt injection, formal verification, benchmark.\n...\n⊐ D(x), that is, τ raises the effective authority without consent. D is non-malleable if D(τ (x)) ⊑ D(x)\n...\ncontent / trust-scoring [18] ∼ "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2606.12703v1",
+        "title": "SMSR: Certified Defence Against Runtime Memory Poisoning in Persistent LLM Agent Systems",
+        "url": "https://arxiv.org/html/2606.12703v1",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Retrieval-Augmented Generation (RAG) systems underpin an increasing fraction of enterprise AI deployments. When an agent’s memory store persists across user sessions, an adversary who can interact with the system can inject carefully crafted memories that, once retrieved, redirect the agent’s behaviour on future queries—without ever modifying model weights or application code. We call this the Multi-Session Memory Poisoning (MSMP) threat and observe that no existing defence provides a formal security certificate against it. Static-corpus defences (RobustRAG, ReliabilityRAG) assume a fixed knowledge base; heuristic filters are bypassable by fluent enterprise-style text.\n...\nWe present Signed Memory with Smoothed Retrieval (SMSR), a two-component defence that is the first to provide a certified robustness bound for the MSMP setting. Component 1 applies HMAC-SHA256 provenance tagging at write time, creating a cryptographically hard boundary against unsigned injection. Component 2 applies randomised memory ablation at query time with a verdict-based majority aggregator, bounding the influence of authenticated adversaries.\n...\nWe prove an impossibility result showing that no provenance-free retrieval-time filter can certify against adaptive injection, and derive a hypergeometric certificate for Component 2. We also formalise and quantify the Consistent Minority Effect in the memory-poisoning setting: string-based majority vote is gamed by adversaries who generate consistent responses, and verdict-based aggregation removes the effect.\n...\n-for-like evaluation (Section VII), A-MemGuard attains empirical ASR comparable to SMSR at $t=1$ , but it provides no formal guarantee: SMSR’s\n...\nConsistent Minority Effect (CME): We formalise and characterise the CME — a known self-consistency pitfall [13] — in the memory-poisoning setting: an adversarial response wins string-based majority vote despite being a numerical minority, because it is textually more consistent than the varied"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/6tlkgm27jvhs9n2hj4511hyb",
+        "title": "MemAudit: Post-hoc Auditing of Poisoned Agent Memory via Causal Attribution and Structural Anomaly Detection",
+        "url": "https://arxiv.org/html/2605.23723",
+        "published_date": null,
+        "author": "Zhewen Tan, Yilun Yao, Huiyan Jin, Wenhan Yu, Guoan Wang, Mengyuan Fan, et al.",
+        "text": null,
+        "highlights": [
+          "Large language model agents increasingly rely on persistent memory to store past interactions, retrieve relevant demonstrations, and improve long-horizon task execution. However, this memory mechanism also creates a practical security vulnerability: an adversarial user may inject malicious records into the agent’s memory through ordinary interaction, and these records can later be retrieved to steer the agent’s reasoning and actions. Existing defenses primarily focus on online intervention, such as prompt filtering or output blocking, but they do not address the post-hoc question of which stored memories are responsible after harmful behavior has already been observed. We propose MemAudit, a post-hoc causal memory auditing framework for memory-augmented LLM agents. The framework combines two complementary signals: (1) a counterfactual memory influence score that measures each memory’s causal contribution to harmful outputs, and (2) a memory consistency graph that identifies structurally anomalous memories within the broader memory store. We evaluate MemAudit against MINJA, a query-only memory injection attack in which malicious records are generated and stored through normal agent interactions rather than direct memory-bank modification. Across both QA and reasoning-agent settings, MemAudit substantially reduces attack success rates under realistic post-hoc auditing scenarios. The results show that QA attack success is reduced from 70% to 0%, while RAP attack success drops from 83.3% to 0%.\n...\ncausal contribution through replay-based intervention, and (2) a structural anomaly detector that\n...\nidentifies semantically inconsistent memory patterns within the global memory graph. By fusing\n...\nFigure 1: Overview of MemAudit. Given a harmful event e = (q∗, y∗, R∗), the framework performs post-hoc auditing over the memory store. It combines two complementary signals: CMIS, which measures the causal contribution of retrieved memories through counterfactual replay, and MC"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/tczvlrn05kxq4v4g3lrf5lgm",
+        "title": "MemSAD: Gradient-Coupled Anomaly Detection for Memory Poisoning in Retrieval-Augmented Agents",
+        "url": "https://arxiv.org/html/2605.03482",
+        "published_date": null,
+        "author": "Ishrith Gowda",
+        "text": null,
+        "highlights": [
+          "Persistent external memory enables LLM agents to maintain context across ses sions, yet its security properties remain formally uncharacterized. We formalize memory poisoning attacks on retrieval-augmented agents as a Stackelberg game and present a unified evaluation framework spanning three attack classes with escalating access assumptions. Correcting an evaluation protocol inconsistency relative to the triggered-query specification of Chen et al. [2024], we show that faithful evaluation increases measured attack success by 4× (from ASR-R = 0.25 to 1.00). Our primary contribution is MEMSAD (Semantic Anomaly Detection), a calibration-based defense grounded in a gradient coupling theorem: under en coder regularity, the max-cosine anomaly score gradient is provably identical to the retrieval objective gradient (the deployed combined score retains directional coupling, Corollary 17), so any continuous perturbation that reduces detection risk necessarily degrades retrieval rank. This coupling yields a certified detec tion radius that guarantees correct classification regardless of adversary strategy. We prove minimax optimality via Le Cam’s method, showing that any thresh old detector requires Ω(1/ρ 2) calibration samples and MEMSAD achieves this up to log(1/δ) factors. We further derive online regret bounds for rolling cali bration with optimal window selection at rate O(σ 2/3∆ 1/3), and formally char acterize a discrete synonym-invariance loophole that marks the boundary of what continuous-space defenses can guarantee. Experiments on a 3 × 5 attack-defense matrix with bootstrap confidence intervals, Bonferroni-corrected hypothesis tests, and Clopper-Pearson validation (20 trials, n = 1,000) confirm the theory: com posite defenses achieve TPR = 1.00, FPR = 0.00 across all attacks, while syn onym substitution evades detection at ∆ASR-R ≈ 0, exposing a concrete gap that existing embedding-based defenses cannot close.\n...\n4.2 Gradient coupling theorem The central structur"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/00rgrzd5837hdxd9b2lh287d",
+        "title": "Your Agent’s Memories Are Not Its Own: Forged Reasoning Attacks on LLM Agent Memory and Defenses",
+        "url": "https://arxiv.org/html/2607.05029",
+        "published_date": null,
+        "author": "Neeraj Karamchandani, Piyush Nagasubramaniam, Sencun Zhu, Dinghao Wu",
+        "text": null,
+        "highlights": [
+          "Persistent memory has enabled large language model (LLM) agents to store factual knowledge, prior decisions, reasoning histories, tool usage information, and context. While this has improved the agent's functionality and continuity across tasks, it has also introduced a new attack surface: the agent's own reasoning history. In this paper, we introduce the Forged Amplifying Rationale Memory Attack (FARMA), which poisons an agent's remembered reasoning rather than its factual knowledge. It inserts forged reasoning traces using evasive language that bypasses keyword-based defenses, then amplifies them through self-referential reinforcement that defeats consensus-based defenses. To address FARMA, we introduce SENTINEL, a layered defense pipeline to detect forged reasoning entries. Its central component is the Reasoning Guard that structurally analyzes candidate entries for forgery using five weighted signals. We evaluate FARMA and SENTINEL across multiple agents and different LLM models with 50 trials and show that FARMA achieves an attack success rate of up to 100% under baseline conditions and is capable of defeating defense mechanisms like keyword filter and A-MemGuard. Our evaluation also shows that SENTINEL reduces FARMA's attack success rate to as low as 0% with no false positives observed across 326 benign agent traces. Our work demonstrates the need to protect not only an agent's retrieved content but also the integrity of its reasoning history.\n...\nRecent research work has also demonstrated several forms of memory poisoning in agentic systems. AgentPoison [6] showed how a backdoor trigger can be embedded in an agent's retrieval corpus. MINJA [7] showed that an attacker can induce an agent to store poisoned examples with the help of specially crafted queries. MemoryGraft [8] showed that injecting seemingly successful past experiences into longterm memory can bias future behavior. These types of attacks target different memory artifacts such as retrieved passages"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://aclanthology.org/2026.acl-short.47/",
+        "title": "Defense Against Knowledge Poisoning Attack on GraphRAG - ACL Anthology",
+        "url": "https://aclanthology.org/2026.acl-short.47/",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "GraphRAG augments large language models with structured knowledge graphs, enabling graph-based context selection and a more integrated view of the knowledge space. However, recent work shows that GraphRAG exposes a new attack surface: corpus-level knowledge poisoning can inject spurious entities and relationships during graph construction, corrupting query-specific subgraphs and steering the generator toward incorrect answers. We propose Hop-wise Guard for GraphRAG (HoG-GRAG), a defense layer between retriever and generator that decomposes multi-hop questions into ordered subqueries, monitors hop-wise execution for poisoning-induced inconsistencies, and locally repairs the retrieved subgraph by pruning compromised entities and relationships and adding only minimal missing evidence. Experiments on multi-hop datasets and multiple GraphRAG configurations show that HoG-GRAG recovers a large fraction of the lost performance. The code is available at https://github.com/CyberScienceLab/HoG-GRAG.\n...\nAnthology ID:2026.acl-short.47Volume: Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers) Month:JulyYear:2026Address:San Diego, California, United StatesEditors: Maria Liakata, Viviane P. Moreira, Jiajun Zhang, David Jurgens Venue: ACL SIG:Publisher:Association for Computational LinguisticsNote:Pages:555–563Language:URL: https://aclanthology.org/2026.acl-short.47/ DOI: 10.18653/v1/2026.acl-short.47 Bibkey:noughabi-etal-2026-defenseCite (ACL):Havva Alizadeh Noughabi, Fattane Zarrinkalam, and Ali Dehghantanha. 2026. Defense Against Knowledge Poisoning Attack on GraphRAG. In Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers), pages 555–563, San Diego, California, United States. Association for Computational Linguistics.Cite (Informal): Defense Against Knowledge Poisoning Attack on GraphRAG(Noughabi et al., ACL 2026)Copy Citation:BibTeX Markdown MODS XML Endnot"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "a6c78d8dc1c1077371322a19e27b9ca5",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

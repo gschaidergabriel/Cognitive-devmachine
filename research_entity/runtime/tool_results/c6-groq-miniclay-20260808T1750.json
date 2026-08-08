@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.1",
+  "request_id": "c6-groq-miniclay-20260808T1750",
+  "tool": "groq_inference",
+  "request_sha256": "8e44edb1e4d357ce4f0e2a62a975e46b5afc9e6cf4e046ca1fd89d0dcd97fca2",
+  "processed_at": "2026-08-08T11:03:06.545462+00:00",
+  "result": {
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "evidence_role": "8b_proxy_for_4b",
+    "content": "To solve this problem, we need to implement a function that takes the input strings and returns the desired output. Here's a Python solution:\n\n```python\ndef mini_clay(rules):\n    candidates = []\n    for line in rules.split('\\n'):\n        if line.startswith('@'):\n            id, *scores = line[1:].split()\n            candidates.append((id, [int(score) for score in scores], 0))\n        elif line.startswith('+'):\n            relation, *conditions = line[1:].split()\n            conditions = [condition.split(':') for condition in conditions]\n            for i, (id, scores, blocked) in enumerate(candidates):\n                for condition in conditions:\n                    if condition[0] == id and condition[1] == '1':\n                        blocked += 1\n                        break\n                if blocked == 0:\n                    for j, (other_id, other_scores, other_blocked) in enumerate(candidates):\n                        if other_id == condition[0]:\n                            other_scores[condition[2]] += 1\n                            break\n    eligible_candidates = [candidate for candidate in candidates if candidate[2] == 0]\n    eligible_candidates.sort(key=lambda x: (x[1][0] + x[1][1]",
+    "finish_reason": "length",
+    "usage": {
+      "queue_time": 0.065170338,
+      "prompt_tokens": 1038,
+      "prompt_time": 0.134813599,
+      "completion_tokens": 256,
+      "completion_time": 0.405743162,
+      "total_tokens": 1294,
+      "total_time": 0.540556761
+    }
+  },
+  "status": "SUCCESS"
+}

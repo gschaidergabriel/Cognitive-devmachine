@@ -1,0 +1,3663 @@
+{
+  "schema_version": "1.1",
+  "request_id": "clay-g10-1751-openalex",
+  "tool": "openalex_search",
+  "request_sha256": "1c73d1faeede624481235f8c9419899f50276fb005adf7a1c8616cb7e2745aa1",
+  "processed_at": "2026-08-08T11:03:09.990420+00:00",
+  "result": {
+    "provider": "OpenAlex",
+    "tool": "openalex_search",
+    "retrieved_at": "2026-08-08T11:03:11.415136+00:00",
+    "credential_source": "private_repo_store:API_TOKENS.env",
+    "query": "agent memory graph selection integrity causal consistency language agents",
+    "filter": null,
+    "meta": {
+      "count": 2560,
+      "db_response_time_ms": 337,
+      "page": 1,
+      "per_page": 10,
+      "groups_count": null,
+      "x_query": {
+        "oql": "works where full text has (agent memory graph selection integrity causal consistency language agents)",
+        "oqo": {
+          "get_rows": "works",
+          "filter_rows": [
+            {
+              "column_id": "fulltext.search",
+              "value": "agent memory graph selection integrity causal consistency language agents",
+              "operator": "has"
+            }
+          ]
+        },
+        "url": "/works?filter=fulltext.search:agent memory graph selection integrity causal consistency language agents&per_page=10"
+      },
+      "cost_usd": 0.001
+    },
+    "results": [
+      {
+        "id": "https://openalex.org/W2981731882",
+        "doi": "https://doi.org/10.1016/j.inffus.2019.12.012",
+        "display_name": "Explainable Artificial Intelligence (XAI): Concepts, taxonomies, opportunities and challenges toward responsible AI",
+        "publication_year": 2019,
+        "publication_date": "2019-12-26",
+        "type": "article",
+        "cited_by_count": 9384,
+        "primary_location": {
+          "id": "doi:10.1016/j.inffus.2019.12.012",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.1016/j.inffus.2019.12.012",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S7560371",
+            "display_name": "Information Fusion",
+            "issn_l": "1566-2535",
+            "issn": [
+              "1566-2535",
+              "1872-6305"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Information Fusion",
+          "raw_type": "journal-article"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://arxiv.org/pdf/1910.10045",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5050115521",
+              "display_name": "Alejandro Barredo Arrieta",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210113430",
+                "display_name": "Tecnalia",
+                "ror": "https://ror.org/02fv8hj62",
+                "country_code": "ES",
+                "type": "other",
+                "lineage": [
+                  "https://openalex.org/I4210113430"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Alejandro Barredo Arrieta",
+            "raw_affiliation_strings": [
+              "Tecnalia [Derio] (Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Tecnalia [Derio] (Spain)",
+                "institution_ids": [
+                  "https://openalex.org/I4210113430"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5058176171",
+              "display_name": "Natalia Díaz-Rodríguez",
+              "orcid": "https://orcid.org/0000-0003-3362-9326"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I201181511",
+                "display_name": "École Nationale Supérieure de Techniques Avancées",
+                "ror": "https://ror.org/0309cs235",
+                "country_code": "FR",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I201181511",
+                  "https://openalex.org/I4210145102"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4405258625",
+                "display_name": "École Nationale Supérieure de Techniques Avancées Paris",
+                "ror": "https://ror.org/0106ccb15",
+                "country_code": "FR",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I201181511",
+                  "https://openalex.org/I4210145102",
+                  "https://openalex.org/I4405258625"
+                ]
+              }
+            ],
+            "countries": [
+              "FR"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Natalia Díaz-Rodríguez",
+            "raw_affiliation_strings": [
+              "ENSTA, Institute Polytechnique Paris and INRIA Flowers Team, Palaiseau, France",
+              "ENSTA Paris - École Nationale Supérieure de Techniques Avancées (828, boulevard des Maréchaux 91120 Palaiseau - France)",
+              "Flowers - Flowing Epigenetic Robots and Systems (200, avenue de la Vieille Tour \r\n33405 Talence cedex - France)",
+              "U2IS - Unité d'Informatique et d'Ingénierie des Systèmes (828, boulevard des Maréchaux, 91762 Palaiseau CEDEX - France)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "ENSTA, Institute Polytechnique Paris and INRIA Flowers Team, Palaiseau, France",
+                "institution_ids": [
+                  "https://openalex.org/I201181511"
+                ]
+              },
+              {
+                "raw_affiliation_string": "ENSTA Paris - École Nationale Supérieure de Techniques Avancées (828, boulevard des Maréchaux 91120 Palaiseau - France)",
+                "institution_ids": [
+                  "https://openalex.org/I201181511",
+                  "https://openalex.org/I4405258625"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Flowers - Flowing Epigenetic Robots and Systems (200, avenue de la Vieille Tour \r\n33405 Talence cedex - France)",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "U2IS - Unité d'Informatique et d'Ingénierie des Systèmes (828, boulevard des Maréchaux, 91762 Palaiseau CEDEX - France)",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5017326471",
+              "display_name": "Javier Del Ser",
+              "orcid": "https://orcid.org/0000-0002-1260-9775"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210113430",
+                "display_name": "Tecnalia",
+                "ror": "https://ror.org/02fv8hj62",
+                "country_code": "ES",
+                "type": "other",
+                "lineage": [
+                  "https://openalex.org/I4210113430"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": true,
+            "raw_author_name": "Javier Del Ser",
+            "raw_affiliation_strings": [
+              "Tecnalia [Derio] (Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Tecnalia [Derio] (Spain)",
+                "institution_ids": [
+                  "https://openalex.org/I4210113430"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5023588408",
+              "display_name": "Adrien Bennetot",
+              "orcid": "https://orcid.org/0000-0001-8232-8728"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I201181511",
+                "display_name": "École Nationale Supérieure de Techniques Avancées",
+                "ror": "https://ror.org/0309cs235",
+                "country_code": "FR",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I201181511",
+                  "https://openalex.org/I4210145102"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I39804081",
+                "display_name": "Sorbonne Université",
+                "ror": "https://ror.org/02en5vm52",
+                "country_code": "FR",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I39804081"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210150358",
+                "display_name": "Institut Systèmes Intelligents et de Robotique",
+                "ror": "https://ror.org/05neq8668",
+                "country_code": "FR",
+                "type": "facility",
+                "lineage": [
+                  "https://openalex.org/I1294671590",
+                  "https://openalex.org/I1294671590",
+                  "https://openalex.org/I154526488",
+                  "https://openalex.org/I39804081",
+                  "https://openalex.org/I4210150358",
+                  "https://openalex.org/I4210159245"
+                ]
+              }
+            ],
+            "countries": [
+              "FR"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Adrien Bennetot",
+            "raw_affiliation_strings": [
+              "ENSTA, Institute Polytechnique Paris and INRIA Flowers Team, Palaiseau, France",
+              "Institut des Systèmes Intelligents et de Robotique, Sorbonne Universitè, France",
+              "Segula Technologies, Parc d’activité de Pissaloup, Trappes, France",
+              "Flowers - Flowing Epigenetic Robots and Systems (200, avenue de la Vieille Tour \r\n33405 Talence cedex - France)",
+              "ISIR - Institut des Systèmes Intelligents et de Robotique (Sorbonne-Université, Boite courrier 173 4 Place JUSSIEU 75252 Paris cedex 05 - France)",
+              "SEGULA Technologies [Trappes] (Zone d'activité Pissaloup, 8 Avenue Jean d'Alembert, 78190 Trappes - France)",
+              "U2IS - Unité d'Informatique et d'Ingénierie des Systèmes (828, boulevard des Maréchaux, 91762 Palaiseau CEDEX - France)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "ENSTA, Institute Polytechnique Paris and INRIA Flowers Team, Palaiseau, France",
+                "institution_ids": [
+                  "https://openalex.org/I201181511"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Institut des Systèmes Intelligents et de Robotique, Sorbonne Universitè, France",
+                "institution_ids": [
+                  "https://openalex.org/I39804081",
+                  "https://openalex.org/I4210150358"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Segula Technologies, Parc d’activité de Pissaloup, Trappes, France",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "Flowers - Flowing Epigenetic Robots and Systems (200, avenue de la Vieille Tour \r\n33405 Talence cedex - France)",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "ISIR - Institut des Systèmes Intelligents et de Robotique (Sorbonne-Université, Boite courrier 173 4 Place JUSSIEU 75252 Paris cedex 05 - France)",
+                "institution_ids": [
+                  "https://openalex.org/I39804081",
+                  "https://openalex.org/I4210150358"
+                ]
+              },
+              {
+                "raw_affiliation_string": "SEGULA Technologies [Trappes] (Zone d'activité Pissaloup, 8 Avenue Jean d'Alembert, 78190 Trappes - France)",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "U2IS - Unité d'Informatique et d'Ingénierie des Systèmes (828, boulevard des Maréchaux, 91762 Palaiseau CEDEX - France)",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5057876711",
+              "display_name": "Siham Tabik",
+              "orcid": "https://orcid.org/0000-0003-4093-5356"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I173304897",
+                "display_name": "Universidad de Granada",
+                "ror": "https://ror.org/04njjy449",
+                "country_code": "ES",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I173304897"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210095677",
+                "display_name": "Instituto Andaluz de Ciencias de la Tierra",
+                "ror": "https://ror.org/00v0g9w49",
+                "country_code": "ES",
+                "type": "facility",
+                "lineage": [
+                  "https://openalex.org/I134820265",
+                  "https://openalex.org/I4210095677"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Siham Tabik",
+            "raw_affiliation_strings": [
+              "DaSCI Andalusian Institute of Data Science and Computational Intelligence, University of Granada, Granada 18071, Spain",
+              "DaSCI  - Instituto Andaluz Interuniversitario en Data Science and Computational Intelligence (Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "DaSCI Andalusian Institute of Data Science and Computational Intelligence, University of Granada, Granada 18071, Spain",
+                "institution_ids": [
+                  "https://openalex.org/I173304897",
+                  "https://openalex.org/I4210095677"
+                ]
+              },
+              {
+                "raw_affiliation_string": "DaSCI  - Instituto Andaluz Interuniversitario en Data Science and Computational Intelligence (Spain)",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5064011907",
+              "display_name": "Alberto Barbado",
+              "orcid": "https://orcid.org/0000-0002-5123-5243"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210097190",
+                "display_name": "Telefónica (Spain)",
+                "ror": "https://ror.org/012f7tj07",
+                "country_code": "ES",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210097190"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210134591",
+                "display_name": "Telefonica Research and Development",
+                "ror": "https://ror.org/03qgzzb04",
+                "country_code": "ES",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210097190",
+                  "https://openalex.org/I4210134591"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Alberto Barbado",
+            "raw_affiliation_strings": [
+              "Telefonica, Madrid 28050, Spain",
+              "Telefonica Research and Development [Madrid] (West 1 Building \r\nRonda de la Comunicación S/N, 28050\r\nMadrid - Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Telefonica, Madrid 28050, Spain",
+                "institution_ids": [
+                  "https://openalex.org/I4210097190"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Telefonica Research and Development [Madrid] (West 1 Building \r\nRonda de la Comunicación S/N, 28050\r\nMadrid - Spain)",
+                "institution_ids": [
+                  "https://openalex.org/I4210134591"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5078909305",
+              "display_name": "Salvador García",
+              "orcid": "https://orcid.org/0000-0003-4494-7565"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I173304897",
+                "display_name": "Universidad de Granada",
+                "ror": "https://ror.org/04njjy449",
+                "country_code": "ES",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I173304897"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210095677",
+                "display_name": "Instituto Andaluz de Ciencias de la Tierra",
+                "ror": "https://ror.org/00v0g9w49",
+                "country_code": "ES",
+                "type": "facility",
+                "lineage": [
+                  "https://openalex.org/I134820265",
+                  "https://openalex.org/I4210095677"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Salvador Garcia",
+            "raw_affiliation_strings": [
+              "DaSCI Andalusian Institute of Data Science and Computational Intelligence, University of Granada, Granada 18071, Spain",
+              "DaSCI  - Instituto Andaluz Interuniversitario en Data Science and Computational Intelligence (Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "DaSCI Andalusian Institute of Data Science and Computational Intelligence, University of Granada, Granada 18071, Spain",
+                "institution_ids": [
+                  "https://openalex.org/I173304897",
+                  "https://openalex.org/I4210095677"
+                ]
+              },
+              {
+                "raw_affiliation_string": "DaSCI  - Instituto Andaluz Interuniversitario en Data Science and Computational Intelligence (Spain)",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5019181050",
+              "display_name": "Sergio Gil-López",
+              "orcid": "https://orcid.org/0000-0002-3867-5439"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210113430",
+                "display_name": "Tecnalia",
+                "ror": "https://ror.org/02fv8hj62",
+                "country_code": "ES",
+                "type": "other",
+                "lineage": [
+                  "https://openalex.org/I4210113430"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Sergio Gil-Lopez",
+            "raw_affiliation_strings": [
+              "TECNALIA, Derio 48160, Spain",
+              "Tecnalia [Derio] (Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "TECNALIA, Derio 48160, Spain",
+                "institution_ids": [
+                  "https://openalex.org/I4210113430"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Tecnalia [Derio] (Spain)",
+                "institution_ids": [
+                  "https://openalex.org/I4210113430"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5070068995",
+              "display_name": "Daniel Molina",
+              "orcid": "https://orcid.org/0000-0002-4175-2204"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I173304897",
+                "display_name": "Universidad de Granada",
+                "ror": "https://ror.org/04njjy449",
+                "country_code": "ES",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I173304897"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210095677",
+                "display_name": "Instituto Andaluz de Ciencias de la Tierra",
+                "ror": "https://ror.org/00v0g9w49",
+                "country_code": "ES",
+                "type": "facility",
+                "lineage": [
+                  "https://openalex.org/I134820265",
+                  "https://openalex.org/I4210095677"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Daniel Molina",
+            "raw_affiliation_strings": [
+              "DaSCI Andalusian Institute of Data Science and Computational Intelligence, University of Granada, Granada 18071, Spain",
+              "DaSCI  - Instituto Andaluz Interuniversitario en Data Science and Computational Intelligence (Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "DaSCI Andalusian Institute of Data Science and Computational Intelligence, University of Granada, Granada 18071, Spain",
+                "institution_ids": [
+                  "https://openalex.org/I173304897",
+                  "https://openalex.org/I4210095677"
+                ]
+              },
+              {
+                "raw_affiliation_string": "DaSCI  - Instituto Andaluz Interuniversitario en Data Science and Computational Intelligence (Spain)",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5083664336",
+              "display_name": "Richard Benjamins",
+              "orcid": "https://orcid.org/0000-0002-9412-7082"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210097190",
+                "display_name": "Telefónica (Spain)",
+                "ror": "https://ror.org/012f7tj07",
+                "country_code": "ES",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210097190"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210134591",
+                "display_name": "Telefonica Research and Development",
+                "ror": "https://ror.org/03qgzzb04",
+                "country_code": "ES",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210097190",
+                  "https://openalex.org/I4210134591"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Richard Benjamins",
+            "raw_affiliation_strings": [
+              "Telefonica, Madrid 28050, Spain",
+              "Telefonica Research and Development [Madrid] (West 1 Building \r\nRonda de la Comunicación S/N, 28050\r\nMadrid - Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Telefonica, Madrid 28050, Spain",
+                "institution_ids": [
+                  "https://openalex.org/I4210097190"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Telefonica Research and Development [Madrid] (West 1 Building \r\nRonda de la Comunicación S/N, 28050\r\nMadrid - Spain)",
+                "institution_ids": [
+                  "https://openalex.org/I4210134591"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5114376610",
+              "display_name": "Raja Chatila",
+              "orcid": "https://orcid.org/0000-0001-7822-0634"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I39804081",
+                "display_name": "Sorbonne Université",
+                "ror": "https://ror.org/02en5vm52",
+                "country_code": "FR",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I39804081"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210150358",
+                "display_name": "Institut Systèmes Intelligents et de Robotique",
+                "ror": "https://ror.org/05neq8668",
+                "country_code": "FR",
+                "type": "facility",
+                "lineage": [
+                  "https://openalex.org/I1294671590",
+                  "https://openalex.org/I1294671590",
+                  "https://openalex.org/I154526488",
+                  "https://openalex.org/I39804081",
+                  "https://openalex.org/I4210150358",
+                  "https://openalex.org/I4210159245"
+                ]
+              }
+            ],
+            "countries": [
+              "FR"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Raja Chatila",
+            "raw_affiliation_strings": [
+              "Institut des Systèmes Intelligents et de Robotique, Sorbonne Universitè, France",
+              "ISIR - Institut des Systèmes Intelligents et de Robotique (Sorbonne-Université, Boite courrier 173 4 Place JUSSIEU 75252 Paris cedex 05 - France)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Institut des Systèmes Intelligents et de Robotique, Sorbonne Universitè, France",
+                "institution_ids": [
+                  "https://openalex.org/I39804081",
+                  "https://openalex.org/I4210150358"
+                ]
+              },
+              {
+                "raw_affiliation_string": "ISIR - Institut des Systèmes Intelligents et de Robotique (Sorbonne-Université, Boite courrier 173 4 Place JUSSIEU 75252 Paris cedex 05 - France)",
+                "institution_ids": [
+                  "https://openalex.org/I39804081",
+                  "https://openalex.org/I4210150358"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5045016749",
+              "display_name": "Francisco Herrera",
+              "orcid": "https://orcid.org/0000-0002-7283-312X"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I173304897",
+                "display_name": "Universidad de Granada",
+                "ror": "https://ror.org/04njjy449",
+                "country_code": "ES",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I173304897"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210095677",
+                "display_name": "Instituto Andaluz de Ciencias de la Tierra",
+                "ror": "https://ror.org/00v0g9w49",
+                "country_code": "ES",
+                "type": "facility",
+                "lineage": [
+                  "https://openalex.org/I134820265",
+                  "https://openalex.org/I4210095677"
+                ]
+              }
+            ],
+            "countries": [
+              "ES"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Francisco Herrera",
+            "raw_affiliation_strings": [
+              "DaSCI Andalusian Institute of Data Science and Computational Intelligence, University of Granada, Granada 18071, Spain",
+              "DaSCI  - Instituto Andaluz Interuniversitario en Data Science and Computational Intelligence (Spain)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "DaSCI Andalusian Institute of Data Science and Computational Intelligence, University of Granada, Granada 18071, Spain",
+                "institution_ids": [
+                  "https://openalex.org/I173304897",
+                  "https://openalex.org/I4210095677"
+                ]
+              },
+              {
+                "raw_affiliation_string": "DaSCI  - Instituto Andaluz Interuniversitario en Data Science and Computational Intelligence (Spain)",
+                "institution_ids": []
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T12026",
+            "display_name": "Explainable Artificial Intelligence (XAI)",
+            "score": 0.9998000264167786,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11689",
+            "display_name": "Adversarial Robustness in Machine Learning",
+            "score": 0.9973999857902527,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11636",
+            "display_name": "Artificial Intelligence in Healthcare and Education",
+            "score": 0.9916999936103821,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2718",
+              "display_name": "Health Informatics"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/27",
+              "display_name": "Medicine"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/4",
+              "display_name": "Health Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W4389984066",
+        "doi": "https://doi.org/10.48550/arxiv.2312.10997",
+        "display_name": "Retrieval-Augmented Generation for Large Language Models: A Survey",
+        "publication_year": 2023,
+        "publication_date": "2023-12-18",
+        "type": "preprint",
+        "cited_by_count": 695,
+        "primary_location": {
+          "id": "pmh:oai:arXiv.org:2312.10997",
+          "is_oa": true,
+          "landing_page_url": "http://arxiv.org/abs/2312.10997",
+          "pdf_url": "https://arxiv.org/pdf/2312.10997",
+          "source": {
+            "id": "https://openalex.org/S4306400194",
+            "display_name": "arXiv (Cornell University)",
+            "issn_l": "2331-8422",
+            "issn": [
+              "2331-8422"
+            ],
+            "is_oa": true,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/I205783295",
+            "host_organization_name": "Cornell University",
+            "host_organization_lineage": [
+              "https://openalex.org/I205783295"
+            ],
+            "host_organization_lineage_names": [],
+            "type": "repository"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "submittedVersion",
+          "is_accepted": false,
+          "is_published": false,
+          "raw_source_name": "",
+          "raw_type": "text"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://arxiv.org/pdf/2312.10997",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5102001778",
+              "display_name": "Yunfan Gao",
+              "orcid": "https://orcid.org/0000-0002-7932-2752"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Gao, Yunfan",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5001877137",
+              "display_name": "Yun Xiong",
+              "orcid": "https://orcid.org/0000-0002-8575-5415"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Xiong, Yun",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5101581913",
+              "display_name": "Xinyu Gao",
+              "orcid": "https://orcid.org/0000-0001-7654-3800"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Gao, Xinyu",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5109666673",
+              "display_name": "Kangxiang Jia",
+              "orcid": "https://orcid.org/0009-0001-0054-5049"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Jia, Kangxiang",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5104217086",
+              "display_name": "Jinliu Pan",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Pan, Jinliu",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5104217087",
+              "display_name": "Yuxi Bi",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Bi, Yuxi",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5100647639",
+              "display_name": "Yi Dai",
+              "orcid": "https://orcid.org/0000-0003-1219-2436"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Dai, Yi",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5101598822",
+              "display_name": "Jiawei Sun",
+              "orcid": "https://orcid.org/0000-0003-1332-6758"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Sun, Jiawei",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": null,
+              "display_name": "Wang, Meng",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Wang, Meng",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": null,
+              "display_name": "Wang, Haofen",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Wang, Haofen",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10028",
+            "display_name": "Topic Modeling",
+            "score": 0.9979000091552734,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10181",
+            "display_name": "Natural Language Processing Techniques",
+            "score": 0.9476000070571899,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W2518508064",
+        "doi": "https://doi.org/10.1525/luminos.15",
+        "display_name": "Scale: Discourse and Dimensions of Social Life",
+        "publication_year": 2016,
+        "publication_date": "2016-08-17",
+        "type": "book",
+        "cited_by_count": 616,
+        "primary_location": {
+          "id": "doi:10.1525/luminos.15",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1525/luminos.15",
+          "pdf_url": "https://www.luminosoa.org/site/books/10.1525/luminos.15/download/1047/",
+          "source": null,
+          "license": "cc-by-nc-nd",
+          "license_id": "https://openalex.org/licenses/cc-by-nc-nd",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": null,
+          "raw_type": "edited-book"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "gold",
+          "oa_url": "https://www.luminosoa.org/site/books/10.1525/luminos.15/download/1047/",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5056331829",
+              "display_name": "E. Summerson Carr",
+              "orcid": "https://orcid.org/0000-0001-7015-0758"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I40347166",
+                "display_name": "University of Chicago",
+                "ror": "https://ror.org/024mw5h28",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I40347166"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "E. Summerson Carr",
+            "raw_affiliation_strings": [
+              "University of Chicago"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "University of Chicago",
+                "institution_ids": [
+                  "https://openalex.org/I40347166"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5064652213",
+              "display_name": "Michael Lempert",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I27837315",
+                "display_name": "University of Michigan",
+                "ror": "https://ror.org/00jmfr291",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I27837315"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Michael Lempert",
+            "raw_affiliation_strings": [
+              "University of Michigan"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "University of Michigan",
+                "institution_ids": [
+                  "https://openalex.org/I27837315"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T13155",
+            "display_name": "Digital Communication and Language",
+            "score": 0.1216999962925911,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1709",
+              "display_name": "Human-Computer Interaction"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10366",
+            "display_name": "Discourse Analysis in Language Studies",
+            "score": 0.11289999634027481,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1208",
+              "display_name": "Literature and Literary Theory"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/12",
+              "display_name": "Arts and Humanities"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W2169887110",
+        "doi": "https://doi.org/10.1093/qje/qjt008",
+        "display_name": "Strengthening State Capabilities: The Role of Financial Incentives in the Call to Public Service*",
+        "publication_year": 2013,
+        "publication_date": "2013-04-02",
+        "type": "article",
+        "cited_by_count": 571,
+        "primary_location": {
+          "id": "doi:10.1093/qje/qjt008",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1093/qje/qjt008",
+          "pdf_url": "https://academic.oup.com/qje/article-pdf/128/3/1169/30630860/qjt008.pdf",
+          "source": {
+            "id": "https://openalex.org/S203860005",
+            "display_name": "The Quarterly Journal of Economics",
+            "issn_l": "0033-5533",
+            "issn": [
+              "0033-5533",
+              "1531-4650"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310311648",
+            "host_organization_name": "Oxford University Press",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310311648",
+              "https://openalex.org/P4310311647"
+            ],
+            "host_organization_lineage_names": [
+              "Oxford University Press",
+              "University of Oxford"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "The Quarterly Journal of Economics",
+          "raw_type": "journal-article"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "bronze",
+          "oa_url": "https://academic.oup.com/qje/article-pdf/128/3/1169/30630860/qjt008.pdf",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5001725901",
+              "display_name": "Ernesto Dal Bó",
+              "orcid": "https://orcid.org/0000-0002-1587-9463"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I1321305853",
+                "display_name": "National Bureau of Economic Research",
+                "ror": "https://ror.org/04grmx538",
+                "country_code": "US",
+                "type": "nonprofit",
+                "lineage": [
+                  "https://openalex.org/I1321305853"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4064826",
+                "display_name": "University of San Andrés",
+                "ror": "https://ror.org/04f7h3b65",
+                "country_code": "AR",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4064826"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I95457486",
+                "display_name": "University of California, Berkeley",
+                "ror": "https://ror.org/01an7q238",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I95457486"
+                ]
+              }
+            ],
+            "countries": [
+              "AR",
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Ernesto Dal Bó",
+            "raw_affiliation_strings": [
+              "Department of Economics University of California 508-1 Evans Hall #3880 Berkeley, CA 94720-3880",
+              "NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138",
+              "Universidad de San Andres Vito Dumas 284 Buenos Aires (B1644BID) Argentina",
+              "University of California, Berkeley Haas School of Business 545 Student Services Building #1900 Berkeley, CA 94720-1900"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Economics University of California 508-1 Evans Hall #3880 Berkeley, CA 94720-3880",
+                "institution_ids": [
+                  "https://openalex.org/I95457486"
+                ]
+              },
+              {
+                "raw_affiliation_string": "NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138",
+                "institution_ids": [
+                  "https://openalex.org/I1321305853"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Universidad de San Andres Vito Dumas 284 Buenos Aires (B1644BID) Argentina",
+                "institution_ids": [
+                  "https://openalex.org/I4064826"
+                ]
+              },
+              {
+                "raw_affiliation_string": "University of California, Berkeley Haas School of Business 545 Student Services Building #1900 Berkeley, CA 94720-1900",
+                "institution_ids": [
+                  "https://openalex.org/I95457486"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5108348769",
+              "display_name": "Frederico Finan",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I1321305853",
+                "display_name": "National Bureau of Economic Research",
+                "ror": "https://ror.org/04grmx538",
+                "country_code": "US",
+                "type": "nonprofit",
+                "lineage": [
+                  "https://openalex.org/I1321305853"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4064826",
+                "display_name": "University of San Andrés",
+                "ror": "https://ror.org/04f7h3b65",
+                "country_code": "AR",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4064826"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I95457486",
+                "display_name": "University of California, Berkeley",
+                "ror": "https://ror.org/01an7q238",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I95457486"
+                ]
+              }
+            ],
+            "countries": [
+              "AR",
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Frederico Finan",
+            "raw_affiliation_strings": [
+              "Department of Economics University of California 508-1 Evans Hall #3880 Berkeley, CA 94720-3880",
+              "NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138",
+              "Universidad de San Andres Vito Dumas 284 Buenos Aires (B1644BID) Argentina",
+              "University of California, Berkeley Haas School of Business 545 Student Services Building #1900 Berkeley, CA 94720-1900"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Economics University of California 508-1 Evans Hall #3880 Berkeley, CA 94720-3880",
+                "institution_ids": [
+                  "https://openalex.org/I95457486"
+                ]
+              },
+              {
+                "raw_affiliation_string": "NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138",
+                "institution_ids": [
+                  "https://openalex.org/I1321305853"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Universidad de San Andres Vito Dumas 284 Buenos Aires (B1644BID) Argentina",
+                "institution_ids": [
+                  "https://openalex.org/I4064826"
+                ]
+              },
+              {
+                "raw_affiliation_string": "University of California, Berkeley Haas School of Business 545 Student Services Building #1900 Berkeley, CA 94720-1900",
+                "institution_ids": [
+                  "https://openalex.org/I95457486"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5102130387",
+              "display_name": "Martı́n A. Rossi",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I1321305853",
+                "display_name": "National Bureau of Economic Research",
+                "ror": "https://ror.org/04grmx538",
+                "country_code": "US",
+                "type": "nonprofit",
+                "lineage": [
+                  "https://openalex.org/I1321305853"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4064826",
+                "display_name": "University of San Andrés",
+                "ror": "https://ror.org/04f7h3b65",
+                "country_code": "AR",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4064826"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I95457486",
+                "display_name": "University of California, Berkeley",
+                "ror": "https://ror.org/01an7q238",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I95457486"
+                ]
+              }
+            ],
+            "countries": [
+              "AR",
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Martín A. Rossi",
+            "raw_affiliation_strings": [
+              "Department of Economics University of California 508-1 Evans Hall #3880 Berkeley, CA 94720-3880",
+              "NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138",
+              "Universidad de San Andres Vito Dumas 284 Buenos Aires (B1644BID) Argentina",
+              "University of California, Berkeley Haas School of Business 545 Student Services Building #1900 Berkeley, CA 94720-1900"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Economics University of California 508-1 Evans Hall #3880 Berkeley, CA 94720-3880",
+                "institution_ids": [
+                  "https://openalex.org/I95457486"
+                ]
+              },
+              {
+                "raw_affiliation_string": "NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138",
+                "institution_ids": [
+                  "https://openalex.org/I1321305853"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Universidad de San Andres Vito Dumas 284 Buenos Aires (B1644BID) Argentina",
+                "institution_ids": [
+                  "https://openalex.org/I4064826"
+                ]
+              },
+              {
+                "raw_affiliation_string": "University of California, Berkeley Haas School of Business 545 Student Services Building #1900 Berkeley, CA 94720-1900",
+                "institution_ids": [
+                  "https://openalex.org/I95457486"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T11770",
+            "display_name": "Fiscal Policy and Economic Growth",
+            "score": 0.9983999729156494,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2002",
+              "display_name": "Economics and Econometrics"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/20",
+              "display_name": "Economics, Econometrics and Finance"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T13387",
+            "display_name": "Politics, Economics, and Education Policy",
+            "score": 0.9944000244140625,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2002",
+              "display_name": "Economics and Econometrics"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/20",
+              "display_name": "Economics, Econometrics and Finance"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10646",
+            "display_name": "Experimental Behavioral Economics Studies",
+            "score": 0.9940000176429749,
+            "subfield": {
+              "id": "https://openalex.org/subfields/3311",
+              "display_name": "Safety Research"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/33",
+              "display_name": "Social Sciences"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W3164846705",
+        "doi": "https://doi.org/10.1016/j.inffus.2021.05.009",
+        "display_name": "Notions of explainability and evaluation approaches for explainable artificial intelligence",
+        "publication_year": 2021,
+        "publication_date": "2021-05-24",
+        "type": "article",
+        "cited_by_count": 566,
+        "primary_location": {
+          "id": "doi:10.1016/j.inffus.2021.05.009",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1016/j.inffus.2021.05.009",
+          "pdf_url": "https://www.sciencedirect.com/science/article/pii/S1566253521001093/pdf",
+          "source": {
+            "id": "https://openalex.org/S7560371",
+            "display_name": "Information Fusion",
+            "issn_l": "1566-2535",
+            "issn": [
+              "1566-2535",
+              "1872-6305"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": "cc-by",
+          "license_id": "https://openalex.org/licenses/cc-by",
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Information Fusion",
+          "raw_type": "journal-article"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "hybrid",
+          "oa_url": "https://www.sciencedirect.com/science/article/pii/S1566253521001093/pdf",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5080078268",
+              "display_name": "Giulia Vilone",
+              "orcid": "https://orcid.org/0000-0002-4401-5664"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210144925",
+                "display_name": "Technological University Dublin",
+                "ror": "https://ror.org/04t0qbt32",
+                "country_code": "IE",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4210144925"
+                ]
+              }
+            ],
+            "countries": [
+              "IE"
+            ],
+            "is_corresponding": true,
+            "raw_author_name": "Giulia Vilone",
+            "raw_affiliation_strings": [
+              "School of Computer Science, College of Science and Health, Technological University Dublin, Dublin, Republic of Ireland"
+            ],
+            "raw_orcid": "https://orcid.org/0000-0002-4401-5664",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Computer Science, College of Science and Health, Technological University Dublin, Dublin, Republic of Ireland",
+                "institution_ids": [
+                  "https://openalex.org/I4210144925"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5024458365",
+              "display_name": "Luca Longo",
+              "orcid": "https://orcid.org/0000-0002-2718-5426"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210144925",
+                "display_name": "Technological University Dublin",
+                "ror": "https://ror.org/04t0qbt32",
+                "country_code": "IE",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4210144925"
+                ]
+              }
+            ],
+            "countries": [
+              "IE"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Luca Longo",
+            "raw_affiliation_strings": [
+              "School of Computer Science, College of Science and Health, Technological University Dublin, Dublin, Republic of Ireland"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Computer Science, College of Science and Health, Technological University Dublin, Dublin, Republic of Ireland",
+                "institution_ids": [
+                  "https://openalex.org/I4210144925"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T12026",
+            "display_name": "Explainable Artificial Intelligence (XAI)",
+            "score": 0.9997000098228455,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11689",
+            "display_name": "Adversarial Robustness in Machine Learning",
+            "score": 0.9517999887466431,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11636",
+            "display_name": "Artificial Intelligence in Healthcare and Education",
+            "score": 0.9502999782562256,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2718",
+              "display_name": "Health Informatics"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/27",
+              "display_name": "Medicine"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/4",
+              "display_name": "Health Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W4312045033",
+        "doi": "https://doi.org/10.1038/s41573-022-00612-2",
+        "display_name": "Amyotrophic lateral sclerosis: a neurodegenerative disorder poised for successful therapeutic translation",
+        "publication_year": 2022,
+        "publication_date": "2022-12-21",
+        "type": "article",
+        "cited_by_count": 481,
+        "primary_location": {
+          "id": "doi:10.1038/s41573-022-00612-2",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1038/s41573-022-00612-2",
+          "pdf_url": "https://www.nature.com/articles/s41573-022-00612-2.pdf",
+          "source": {
+            "id": "https://openalex.org/S186543748",
+            "display_name": "Nature Reviews Drug Discovery",
+            "issn_l": "1474-1776",
+            "issn": [
+              "1474-1776",
+              "1474-1784"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310319908",
+            "host_organization_name": "Nature Portfolio",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310319908",
+              "https://openalex.org/P4310319965"
+            ],
+            "host_organization_lineage_names": [
+              "Nature Portfolio",
+              "Springer Nature"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Nature Reviews Drug Discovery",
+          "raw_type": "journal-article"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "bronze",
+          "oa_url": "https://www.nature.com/articles/s41573-022-00612-2.pdf",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5043615781",
+              "display_name": "Richard J. Mead",
+              "orcid": "https://orcid.org/0000-0002-3207-0068"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210120491",
+                "display_name": "e-Therapeutics (United Kingdom)",
+                "ror": "https://ror.org/02ddxrd36",
+                "country_code": "GB",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210120491"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I91136226",
+                "display_name": "University of Sheffield",
+                "ror": "https://ror.org/05krs5044",
+                "country_code": "GB",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I91136226"
+                ]
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Richard J. Mead",
+            "raw_affiliation_strings": [
+              "Keapstone Therapeutics, The Innovation Centre, Broomhall, Sheffield, UK",
+              "Neuroscience Institute, University of Sheffield, Sheffield, UK",
+              "Sheffield Institute for Translational Neuroscience, Faculty of Medicine, Dentistry and Health, University of Sheffield, Sheffield, UK"
+            ],
+            "raw_orcid": "https://orcid.org/0000-0002-3207-0068",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Keapstone Therapeutics, The Innovation Centre, Broomhall, Sheffield, UK",
+                "institution_ids": [
+                  "https://openalex.org/I4210120491"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Neuroscience Institute, University of Sheffield, Sheffield, UK",
+                "institution_ids": [
+                  "https://openalex.org/I91136226"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Sheffield Institute for Translational Neuroscience, Faculty of Medicine, Dentistry and Health, University of Sheffield, Sheffield, UK",
+                "institution_ids": [
+                  "https://openalex.org/I91136226"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5102087773",
+              "display_name": "Ning Shan",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Ning Shan",
+            "raw_affiliation_strings": [
+              "Aclipse Therapeutics, Radnor, PA, US"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Aclipse Therapeutics, Radnor, PA, US",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5018166493",
+              "display_name": "H. Joseph Reiser",
+              "orcid": "https://orcid.org/0000-0001-5728-2879"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "H. Joseph Reiser",
+            "raw_affiliation_strings": [
+              "Aclipse Therapeutics, Radnor, PA, US"
+            ],
+            "raw_orcid": "https://orcid.org/0000-0001-5728-2879",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Aclipse Therapeutics, Radnor, PA, US",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5016565466",
+              "display_name": "Fiona H. Marshall",
+              "orcid": "https://orcid.org/0000-0002-8681-005X"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210087189",
+                "display_name": "MSD (UK) Limited (United Kingdom)",
+                "ror": "https://ror.org/004nn4n27",
+                "country_code": "GB",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I1285764155",
+                  "https://openalex.org/I4210087189"
+                ]
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Fiona Marshall",
+            "raw_affiliation_strings": [
+              "MSD UK Discovery Centre, Merck, Sharp and Dohme (UK) Limited, London, UK"
+            ],
+            "raw_orcid": "https://orcid.org/0000-0002-8681-005X",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "MSD UK Discovery Centre, Merck, Sharp and Dohme (UK) Limited, London, UK",
+                "institution_ids": [
+                  "https://openalex.org/I4210087189"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5087727224",
+              "display_name": "Pamela J. Shaw",
+              "orcid": "https://orcid.org/0000-0002-8925-2567"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210120491",
+                "display_name": "e-Therapeutics (United Kingdom)",
+                "ror": "https://ror.org/02ddxrd36",
+                "country_code": "GB",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210120491"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I91136226",
+                "display_name": "University of Sheffield",
+                "ror": "https://ror.org/05krs5044",
+                "country_code": "GB",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I91136226"
+                ]
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": true,
+            "raw_author_name": "Pamela J. Shaw",
+            "raw_affiliation_strings": [
+              "Keapstone Therapeutics, The Innovation Centre, Broomhall, Sheffield, UK. pamela.shaw@sheffield.ac.uk",
+              "Neuroscience Institute, University of Sheffield, Sheffield, UK. pamela.shaw@sheffield.ac.uk",
+              "Sheffield Institute for Translational Neuroscience, Faculty of Medicine, Dentistry and Health, University of Sheffield, Sheffield, UK. pamela.shaw@sheffield.ac.uk",
+              "Keapstone Therapeutics, The Innovation Centre, Broomhall, Sheffield, UK",
+              "Neuroscience Institute, University of Sheffield, Sheffield, UK",
+              "Sheffield Institute for Translational Neuroscience, Faculty of Medicine, Dentistry and Health, University of Sheffield, Sheffield, UK"
+            ],
+            "raw_orcid": "https://orcid.org/0000-0002-8925-2567",
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Keapstone Therapeutics, The Innovation Centre, Broomhall, Sheffield, UK. pamela.shaw@sheffield.ac.uk",
+                "institution_ids": [
+                  "https://openalex.org/I91136226"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Neuroscience Institute, University of Sheffield, Sheffield, UK. pamela.shaw@sheffield.ac.uk",
+                "institution_ids": [
+                  "https://openalex.org/I91136226"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Sheffield Institute for Translational Neuroscience, Faculty of Medicine, Dentistry and Health, University of Sheffield, Sheffield, UK. pamela.shaw@sheffield.ac.uk",
+                "institution_ids": [
+                  "https://openalex.org/I91136226"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Keapstone Therapeutics, The Innovation Centre, Broomhall, Sheffield, UK",
+                "institution_ids": [
+                  "https://openalex.org/I4210120491"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Neuroscience Institute, University of Sheffield, Sheffield, UK",
+                "institution_ids": [
+                  "https://openalex.org/I91136226"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Sheffield Institute for Translational Neuroscience, Faculty of Medicine, Dentistry and Health, University of Sheffield, Sheffield, UK",
+                "institution_ids": [
+                  "https://openalex.org/I91136226"
+                ]
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10855",
+            "display_name": "Amyotrophic Lateral Sclerosis Research",
+            "score": 0.9998000264167786,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2728",
+              "display_name": "Neurology"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/27",
+              "display_name": "Medicine"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/4",
+              "display_name": "Health Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T12400",
+            "display_name": "Neurogenetic and Muscular Disorders Research",
+            "score": 0.9886999726295471,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2716",
+              "display_name": "Genetics"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/27",
+              "display_name": "Medicine"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/4",
+              "display_name": "Health Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T12023",
+            "display_name": "Cholinesterase and Neurodegenerative Diseases",
+            "score": 0.98089998960495,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2736",
+              "display_name": "Pharmacology"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/27",
+              "display_name": "Medicine"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/4",
+              "display_name": "Health Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W4249565903",
+        "doi": "https://doi.org/10.1016/j.jalz.2011.09.172",
+        "display_name": "The Alzheimer's Disease Neuroimaging Initiative: A review of papers published since its inception",
+        "publication_year": 2011,
+        "publication_date": "2011-11-03",
+        "type": "article",
+        "cited_by_count": 479,
+        "primary_location": {
+          "id": "doi:10.1016/j.jalz.2011.09.172",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.1016/j.jalz.2011.09.172",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S108427512",
+            "display_name": "Alzheimer s & Dementia",
+            "issn_l": "1552-5260",
+            "issn": [
+              "1552-5260",
+              "1552-5279"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310320595",
+            "host_organization_name": "Wiley",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320595"
+            ],
+            "host_organization_lineage_names": [
+              "Wiley"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Alzheimer's &amp; Dementia",
+          "raw_type": "journal-article"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://scholarworks.indianapolis.iu.edu/bitstreams/4325cbf9-c6fa-4673-9037-51f575a02700/download",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5102977342",
+              "display_name": "Michael W. Weiner",
+              "orcid": "https://orcid.org/0000-0002-0144-1954"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I1315708478",
+                "display_name": "San Francisco VA Medical Center",
+                "ror": "https://ror.org/049peqw80",
+                "country_code": "US",
+                "type": "healthcare",
+                "lineage": [
+                  "https://openalex.org/I1315708478",
+                  "https://openalex.org/I1322918889",
+                  "https://openalex.org/I2799886695",
+                  "https://openalex.org/I4210125474",
+                  "https://openalex.org/I4210143381"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I180670191",
+                "display_name": "University of California, San Francisco",
+                "ror": "https://ror.org/043mz5j54",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I180670191"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": true,
+            "raw_author_name": "Michael W. Weiner",
+            "raw_affiliation_strings": [
+              "Department of Medicine University of California San Francisco CA USA",
+              "Department of Neurology University of California San Francisco CA USA",
+              "Department of Psychiatry University of California San Francisco CA USA",
+              "Department of Radiology University of California San Francisco CA USA",
+              "Department of Veterans Affairs Medical Center Center for Imaging of Neurodegenerative Diseases San Francisco CA USA",
+              "Department of Medicine, University of California, San Francisco, CA, USA",
+              "Department of Neurology, University of California, San Francisco, CA, USA",
+              "Department of Psychiatry, University of California, San Francisco, CA, USA",
+              "Department of Radiology, University of California, San Francisco, CA, USA",
+              "Department of Veterans Affairs Medical Center, Center for Imaging of Neurodegenerative Diseases, San Francisco, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Medicine University of California San Francisco CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I180670191"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Neurology University of California San Francisco CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I180670191"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Psychiatry University of California San Francisco CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I180670191"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Radiology University of California San Francisco CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I180670191"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Veterans Affairs Medical Center Center for Imaging of Neurodegenerative Diseases San Francisco CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I1315708478"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Medicine, University of California, San Francisco, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I180670191"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Neurology, University of California, San Francisco, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I180670191"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Psychiatry, University of California, San Francisco, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I180670191"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Radiology, University of California, San Francisco, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I180670191"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Veterans Affairs Medical Center, Center for Imaging of Neurodegenerative Diseases, San Francisco, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I1315708478"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5090855876",
+              "display_name": "Dallas P. Veitch",
+              "orcid": "https://orcid.org/0000-0002-9918-0640"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I1315708478",
+                "display_name": "San Francisco VA Medical Center",
+                "ror": "https://ror.org/049peqw80",
+                "country_code": "US",
+                "type": "healthcare",
+                "lineage": [
+                  "https://openalex.org/I1315708478",
+                  "https://openalex.org/I1322918889",
+                  "https://openalex.org/I2799886695",
+                  "https://openalex.org/I4210125474",
+                  "https://openalex.org/I4210143381"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Dallas P. Veitch",
+            "raw_affiliation_strings": [
+              "Department of Veterans Affairs Medical Center Center for Imaging of Neurodegenerative Diseases San Francisco CA USA",
+              "Department of Veterans Affairs Medical Center, Center for Imaging of Neurodegenerative Diseases, San Francisco, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Veterans Affairs Medical Center Center for Imaging of Neurodegenerative Diseases San Francisco CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I1315708478"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Veterans Affairs Medical Center, Center for Imaging of Neurodegenerative Diseases, San Francisco, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I1315708478"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5108408168",
+              "display_name": "Paul Aisen",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I36258959",
+                "display_name": "University of California San Diego",
+                "ror": "https://ror.org/0168r3w48",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I36258959"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Paul S. Aisen",
+            "raw_affiliation_strings": [
+              "Department of Neurosciences University of California San Diego La Jolla CA USA",
+              "Department of Neurosciences, University of California San Diego, La Jolla, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Neurosciences University of California San Diego La Jolla CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I36258959"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Neurosciences, University of California San Diego, La Jolla, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I36258959"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5059185125",
+              "display_name": "Laurel Beckett",
+              "orcid": "https://orcid.org/0000-0002-2418-9843"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I84218800",
+                "display_name": "University of California, Davis",
+                "ror": "https://ror.org/05rrcem69",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I84218800"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Laurel A. Beckett",
+            "raw_affiliation_strings": [
+              "Division of Biostatistics Department of Public Health Sciences University of California Davis CA USA",
+              "Division of Biostatistics, Department of Public Health Sciences, University of California, Davis, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Division of Biostatistics Department of Public Health Sciences University of California Davis CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I84218800"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Division of Biostatistics, Department of Public Health Sciences, University of California, Davis, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I84218800"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5105890168",
+              "display_name": "Nigel J. Cairns",
+              "orcid": null
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I204465549",
+                "display_name": "Washington University in St. Louis",
+                "ror": "https://ror.org/01yc7t268",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I204465549"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Nigel J. Cairns",
+            "raw_affiliation_strings": [
+              "Department of Neurology Washington University School of Medicine Saint Louis MO USA",
+              "Knight Alzheimer's Disease Research Center Washington University School of Medicine Saint Louis MO USA",
+              "Department of Neurology, Washington University School of Medicine, Saint Louis, MO, USA",
+              "Knight Alzheimer's Disease Research Center, Washington University School of Medicine, Saint Louis, MO, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Neurology Washington University School of Medicine Saint Louis MO USA",
+                "institution_ids": [
+                  "https://openalex.org/I204465549"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Knight Alzheimer's Disease Research Center Washington University School of Medicine Saint Louis MO USA",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "Department of Neurology, Washington University School of Medicine, Saint Louis, MO, USA",
+                "institution_ids": [
+                  "https://openalex.org/I204465549"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Knight Alzheimer's Disease Research Center, Washington University School of Medicine, Saint Louis, MO, USA",
+                "institution_ids": []
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5101916054",
+              "display_name": "Robert C. Green",
+              "orcid": "https://orcid.org/0000-0001-8472-0424"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I1283280774",
+                "display_name": "Brigham and Women's Hospital",
+                "ror": "https://ror.org/04b6nzv94",
+                "country_code": "US",
+                "type": "healthcare",
+                "lineage": [
+                  "https://openalex.org/I1283280774",
+                  "https://openalex.org/I48633490"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I136199984",
+                "display_name": "Harvard University",
+                "ror": "https://ror.org/03vek6s52",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I136199984"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Robert C. Green",
+            "raw_affiliation_strings": [
+              "Division of Genetics Department of Medicine Brigham and Women's Hospital and Harvard Medical School Boston MA USA",
+              "Division of Genetics, Department of Medicine, Brigham and Women's Hospital and Harvard Medical School, Boston, MA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Division of Genetics Department of Medicine Brigham and Women's Hospital and Harvard Medical School Boston MA USA",
+                "institution_ids": [
+                  "https://openalex.org/I1283280774",
+                  "https://openalex.org/I136199984"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Division of Genetics, Department of Medicine, Brigham and Women's Hospital and Harvard Medical School, Boston, MA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I1283280774",
+                  "https://openalex.org/I136199984"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5016442996",
+              "display_name": "Danielle Harvey",
+              "orcid": "https://orcid.org/0000-0002-5367-0951"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I84218800",
+                "display_name": "University of California, Davis",
+                "ror": "https://ror.org/05rrcem69",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I84218800"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Danielle Harvey",
+            "raw_affiliation_strings": [
+              "Division of Biostatistics Department of Public Health Sciences University of California Davis CA USA",
+              "Division of Biostatistics, Department of Public Health Sciences, University of California, Davis, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Division of Biostatistics Department of Public Health Sciences University of California Davis CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I84218800"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Division of Biostatistics, Department of Public Health Sciences, University of California, Davis, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I84218800"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5005099850",
+              "display_name": "Clifford R. Jack",
+              "orcid": "https://orcid.org/0000-0001-7916-622X"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210125099",
+                "display_name": "Mayo Clinic in Arizona",
+                "ror": "https://ror.org/03jp40720",
+                "country_code": "US",
+                "type": "healthcare",
+                "lineage": [
+                  "https://openalex.org/I1330342723",
+                  "https://openalex.org/I4210125099"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Clifford R. Jack",
+            "raw_affiliation_strings": [
+              "Department of Radiology Mayo Clinic Rochester MN USA",
+              "Department of Radiology, Mayo Clinic, Rochester, MN, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Radiology Mayo Clinic Rochester MN USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210125099"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Radiology, Mayo Clinic, Rochester, MN, USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210125099"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5061269385",
+              "display_name": "William J. Jagust",
+              "orcid": "https://orcid.org/0000-0002-4458-113X"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I95457486",
+                "display_name": "University of California, Berkeley",
+                "ror": "https://ror.org/01an7q238",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I95457486"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "William Jagust",
+            "raw_affiliation_strings": [
+              "Helen Wills Neuroscience Institute University of California Berkeley Berkeley CA USA",
+              "Helen Wills Neuroscience Institute, University of California Berkeley, Berkeley, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Helen Wills Neuroscience Institute University of California Berkeley Berkeley CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I95457486"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Helen Wills Neuroscience Institute, University of California Berkeley, Berkeley, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I95457486"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5013924216",
+              "display_name": "Enchi Liu",
+              "orcid": "https://orcid.org/0009-0006-6555-2131"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210151386",
+                "display_name": "Janssen (United States)",
+                "ror": "https://ror.org/05af73403",
+                "country_code": "US",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I1330063522",
+                  "https://openalex.org/I4210151386"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Enchi Liu",
+            "raw_affiliation_strings": [
+              "Janssen Alzheimer Immunotherapy South San Francisco CA USA",
+              "Janssen Alzheimer Immunotherapy, South San Francisco, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Janssen Alzheimer Immunotherapy South San Francisco CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210151386"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Janssen Alzheimer Immunotherapy, South San Francisco, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210151386"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5063630764",
+              "display_name": "John C. Morris",
+              "orcid": "https://orcid.org/0000-0001-9820-5618"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I36258959",
+                "display_name": "University of California San Diego",
+                "ror": "https://ror.org/0168r3w48",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I36258959"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "John C. Morris",
+            "raw_affiliation_strings": [
+              "Department of Neurosciences University of California San Diego La Jolla CA USA",
+              "Department of Neurosciences, University of California San Diego, La Jolla, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Neurosciences University of California San Diego La Jolla CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I36258959"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Neurosciences, University of California San Diego, La Jolla, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I36258959"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5045246745",
+              "display_name": "Ronald C. Petersen",
+              "orcid": "https://orcid.org/0000-0002-8178-6601"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210125099",
+                "display_name": "Mayo Clinic in Arizona",
+                "ror": "https://ror.org/03jp40720",
+                "country_code": "US",
+                "type": "healthcare",
+                "lineage": [
+                  "https://openalex.org/I1330342723",
+                  "https://openalex.org/I4210125099"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Ronald C. Petersen",
+            "raw_affiliation_strings": [
+              "Department of Neurology Mayo Clinic Rochester MN USA",
+              "Department of Neurology, Mayo Clinic, Rochester, MN, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Neurology Mayo Clinic Rochester MN USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210125099"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Neurology, Mayo Clinic, Rochester, MN, USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210125099"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5026257338",
+              "display_name": "Andrew J. Saykin",
+              "orcid": "https://orcid.org/0000-0002-1376-8532"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4394709130",
+                "display_name": "Indiana University School of Medicine",
+                "ror": "https://ror.org/02ets8c94",
+                "country_code": null,
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I4394709130",
+                  "https://openalex.org/I592451"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I55769427",
+                "display_name": "Indiana University – Purdue University Indianapolis",
+                "ror": "https://ror.org/05gxnyn08",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I55769427",
+                  "https://openalex.org/I592451"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Andrew J. Saykin",
+            "raw_affiliation_strings": [
+              "Department of Medical and Molecular Genetics Indiana University School of Medicine Indianapolis IN USA",
+              "Department of Radiology and Imaging Sciences Indiana University School of Medicine Indianapolis IN USA",
+              "Department of Medical and Molecular Genetics, Indiana University School of Medicine, Indianapolis, IN, USA",
+              "Department of Radiology and Imaging Sciences, Indiana University School of Medicine, Indianapolis, IN, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Medical and Molecular Genetics Indiana University School of Medicine Indianapolis IN USA",
+                "institution_ids": [
+                  "https://openalex.org/I4394709130",
+                  "https://openalex.org/I55769427"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Radiology and Imaging Sciences Indiana University School of Medicine Indianapolis IN USA",
+                "institution_ids": [
+                  "https://openalex.org/I4394709130",
+                  "https://openalex.org/I55769427"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Medical and Molecular Genetics, Indiana University School of Medicine, Indianapolis, IN, USA",
+                "institution_ids": [
+                  "https://openalex.org/I4394709130",
+                  "https://openalex.org/I55769427"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Radiology and Imaging Sciences, Indiana University School of Medicine, Indianapolis, IN, USA",
+                "institution_ids": [
+                  "https://openalex.org/I4394709130",
+                  "https://openalex.org/I55769427"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5080344209",
+              "display_name": "Mark E. Schmidt",
+              "orcid": "https://orcid.org/0000-0003-3417-8977"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I137982388",
+                "display_name": "Janssen (Belgium)",
+                "ror": "https://ror.org/04yzcpd71",
+                "country_code": "BE",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I1330063522",
+                  "https://openalex.org/I137982388"
+                ]
+              }
+            ],
+            "countries": [
+              "BE"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Mark E. Schmidt",
+            "raw_affiliation_strings": [
+              "Neuroscience Therapeutic Area Janssen Research and Development Division of Janssen Pharmaceutica NV Beerse Belgium",
+              "Neuroscience Therapeutic Area, Janssen Research and Development, Division of Janssen Pharmaceutica NV, Beerse, Belgium"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Neuroscience Therapeutic Area Janssen Research and Development Division of Janssen Pharmaceutica NV Beerse Belgium",
+                "institution_ids": [
+                  "https://openalex.org/I137982388"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Neuroscience Therapeutic Area, Janssen Research and Development, Division of Janssen Pharmaceutica NV, Beerse, Belgium",
+                "institution_ids": [
+                  "https://openalex.org/I137982388"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5101555764",
+              "display_name": "Leslie M. Shaw",
+              "orcid": "https://orcid.org/0000-0002-7650-1210"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I79576946",
+                "display_name": "University of Pennsylvania",
+                "ror": "https://ror.org/00b30xv10",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I79576946"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Leslie Shaw",
+            "raw_affiliation_strings": [
+              "Department of Pathology and Laboratory Medicine Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+              "Department of Pathology and Laboratory Medicine, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Department of Pathology and Laboratory Medicine Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+                "institution_ids": [
+                  "https://openalex.org/I79576946"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Pathology and Laboratory Medicine, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I79576946"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5047792117",
+              "display_name": "Judith A. Siuciak",
+              "orcid": "https://orcid.org/0000-0002-3945-3555"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I2800718396",
+                "display_name": "Foundation for the National Institutes of Health",
+                "ror": "https://ror.org/00k86s890",
+                "country_code": "US",
+                "type": "nonprofit",
+                "lineage": [
+                  "https://openalex.org/I2800718396"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Judith A. Siuciak",
+            "raw_affiliation_strings": [
+              "The Biomarkers Consortium Foundation for the National Institutes of Health Bethesda MD USA",
+              "The Biomarkers Consortium, Foundation for the National Institutes of Health, Bethesda, MD, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "The Biomarkers Consortium Foundation for the National Institutes of Health Bethesda MD USA",
+                "institution_ids": [
+                  "https://openalex.org/I2800718396"
+                ]
+              },
+              {
+                "raw_affiliation_string": "The Biomarkers Consortium, Foundation for the National Institutes of Health, Bethesda, MD, USA",
+                "institution_ids": [
+                  "https://openalex.org/I2800718396"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5034898819",
+              "display_name": "Holly Soares",
+              "orcid": "https://orcid.org/0000-0002-6140-9841"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I157075465",
+                "display_name": "Bristol-Myers Squibb (Germany)",
+                "ror": "https://ror.org/032hfv632",
+                "country_code": "DE",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I157075465",
+                  "https://openalex.org/I4210091812"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I4210091812",
+                "display_name": "Bristol-Myers Squibb (United States)",
+                "ror": "https://ror.org/00gtmwv55",
+                "country_code": "US",
+                "type": "company",
+                "lineage": [
+                  "https://openalex.org/I4210091812"
+                ]
+              }
+            ],
+            "countries": [
+              "DE",
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Holly Soares",
+            "raw_affiliation_strings": [
+              "Clinical Biomarkers Bristol‐Myers Squibb Wallingford CT USA",
+              "Clinical Biomarkers, Bristol-Myers Squibb, Wallingford, CT, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Clinical Biomarkers Bristol‐Myers Squibb Wallingford CT USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210091812"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Clinical Biomarkers, Bristol-Myers Squibb, Wallingford, CT, USA",
+                "institution_ids": [
+                  "https://openalex.org/I157075465"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5014949118",
+              "display_name": "Arthur W. Toga",
+              "orcid": "https://orcid.org/0000-0001-7902-3755"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I161318765",
+                "display_name": "University of California, Los Angeles",
+                "ror": "https://ror.org/046rm7j60",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I161318765"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Arthur W. Toga",
+            "raw_affiliation_strings": [
+              "Laboratory of Neuroimaging Department of Neurology School of Medicine University of California Los Angeles Los Angeles CA USA",
+              "Laboratory of Neuroimaging, Department of Neurology, School of Medicine, University of California Los Angeles, Los Angeles, CA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Laboratory of Neuroimaging Department of Neurology School of Medicine University of California Los Angeles Los Angeles CA USA",
+                "institution_ids": [
+                  "https://openalex.org/I161318765"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Laboratory of Neuroimaging, Department of Neurology, School of Medicine, University of California Los Angeles, Los Angeles, CA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I161318765"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5021394368",
+              "display_name": "John Q. Trojanowski",
+              "orcid": "https://orcid.org/0000-0002-9239-8794"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I4210136305",
+                "display_name": "Institute on Aging",
+                "ror": "https://ror.org/0390vdb22",
+                "country_code": "US",
+                "type": "nonprofit",
+                "lineage": [
+                  "https://openalex.org/I4210136305"
+                ]
+              },
+              {
+                "id": "https://openalex.org/I79576946",
+                "display_name": "University of Pennsylvania",
+                "ror": "https://ror.org/00b30xv10",
+                "country_code": "US",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I79576946"
+                ]
+              }
+            ],
+            "countries": [
+              "US"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "John Q. Trojanowski",
+            "raw_affiliation_strings": [
+              "Alzheimer's Disease Core Center Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+              "Department of Pathology and Laboratory Medicine Center for Neurodegenerative Research Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+              "Institute on Aging Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+              "Udall Parkinson's Research Center Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+              "Alzheimer's Disease Core Center, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA",
+              "Department of Pathology and Laboratory Medicine, Center for Neurodegenerative Research, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA",
+              "Institute on Aging, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA",
+              "Udall Parkinson's Research Center, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "Alzheimer's Disease Core Center Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+                "institution_ids": [
+                  "https://openalex.org/I79576946"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Pathology and Laboratory Medicine Center for Neurodegenerative Research Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+                "institution_ids": [
+                  "https://openalex.org/I79576946"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Institute on Aging Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210136305",
+                  "https://openalex.org/I79576946"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Udall Parkinson's Research Center Perelman School of Medicine University of Pennsylvania Philadelphia PA USA",
+                "institution_ids": [
+                  "https://openalex.org/I79576946"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Alzheimer's Disease Core Center, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I79576946"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Department of Pathology and Laboratory Medicine, Center for Neurodegenerative Research, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I79576946"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Institute on Aging, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I4210136305",
+                  "https://openalex.org/I79576946"
+                ]
+              },
+              {
+                "raw_affiliation_string": "Udall Parkinson's Research Center, Perelman School of Medicine, University of Pennsylvania, Philadelphia, PA, USA",
+                "institution_ids": [
+                  "https://openalex.org/I79576946"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": null,
+              "display_name": "Alzheimer's Disease Neuroimaging Initiative",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Alzheimer's Disease Neuroimaging Initiative",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10009",
+            "display_name": "Dementia and Cognitive Impairment Research",
+            "score": 0.9998000264167786,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2738",
+              "display_name": "Psychiatry and Mental health"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/27",
+              "display_name": "Medicine"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/4",
+              "display_name": "Health Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10086",
+            "display_name": "Alzheimer's disease research and treatments",
+            "score": 0.9998000264167786,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2737",
+              "display_name": "Physiology"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/27",
+              "display_name": "Medicine"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/4",
+              "display_name": "Health Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10241",
+            "display_name": "Functional Brain Connectivity Studies",
+            "score": 0.9714000225067139,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2805",
+              "display_name": "Cognitive Neuroscience"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/28",
+              "display_name": "Neuroscience"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/1",
+              "display_name": "Life Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W2012408028",
+        "doi": "https://doi.org/10.1145/382192.383004",
+        "display_name": "Concepts and paradigms of object-oriented programming",
+        "publication_year": 1990,
+        "publication_date": "1990-08-01",
+        "type": "article",
+        "cited_by_count": 437,
+        "primary_location": {
+          "id": "doi:10.1145/382192.383004",
+          "is_oa": true,
+          "landing_page_url": "https://doi.org/10.1145/382192.383004",
+          "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/382192.383004",
+          "source": {
+            "id": "https://openalex.org/S4210205212",
+            "display_name": "ACM SIGPLAN OOPS Messenger",
+            "issn_l": "1055-6400",
+            "issn": [
+              "1055-6400",
+              "1558-0253"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/P4310319798",
+            "host_organization_name": "Association for Computing Machinery",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310319798"
+            ],
+            "host_organization_lineage_names": [
+              "Association for Computing Machinery"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "ACM SIGPLAN OOPS Messenger",
+          "raw_type": "journal-article"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "bronze",
+          "oa_url": "https://dl.acm.org/doi/pdf/10.1145/382192.383004",
+          "any_repository_has_fulltext": false
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5023316692",
+              "display_name": "Peter Wegner",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": true,
+            "raw_author_name": "Peter Wegner",
+            "raw_affiliation_strings": [
+              "",
+              "University"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "University",
+                "institution_ids": []
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10126",
+            "display_name": "Logic, programming, and type systems",
+            "score": 0.9915000200271606,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1702",
+              "display_name": "Artificial Intelligence"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10260",
+            "display_name": "Software Engineering Research",
+            "score": 0.98580002784729,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1710",
+              "display_name": "Information Systems"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T12002",
+            "display_name": "Computability, Logic, AI Algorithms",
+            "score": 0.9702000021934509,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1703",
+              "display_name": "Computational Theory and Mathematics"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W2075613871",
+        "doi": "https://doi.org/10.1016/j.pmcj.2011.01.004",
+        "display_name": "Situation identification techniques in pervasive computing: A review",
+        "publication_year": 2011,
+        "publication_date": "2011-02-01",
+        "type": "article",
+        "cited_by_count": 427,
+        "primary_location": {
+          "id": "doi:10.1016/j.pmcj.2011.01.004",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.1016/j.pmcj.2011.01.004",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S140982614",
+            "display_name": "Pervasive and Mobile Computing",
+            "issn_l": "1574-1192",
+            "issn": [
+              "1574-1192",
+              "1873-1589"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Pervasive and Mobile Computing",
+          "raw_type": "journal-article"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "https://arrow.tudublin.ie/cgi/viewcontent.cgi?article=1053&context=scschcomart",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5100682481",
+              "display_name": "Juan Ye",
+              "orcid": "https://orcid.org/0000-0002-2838-6836"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I16835326",
+                "display_name": "University of St Andrews",
+                "ror": "https://ror.org/02wn5qz54",
+                "country_code": "GB",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I16835326"
+                ]
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": true,
+            "raw_author_name": "Juan Ye",
+            "raw_affiliation_strings": [
+              "School of Computer Science, University of St. Andrews, KY16 9SX, UK",
+              "School of Computer Science, University of St. Andrews, KY16 9SX, UK#TAB#"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Computer Science, University of St. Andrews, KY16 9SX, UK",
+                "institution_ids": [
+                  "https://openalex.org/I16835326"
+                ]
+              },
+              {
+                "raw_affiliation_string": "School of Computer Science, University of St. Andrews, KY16 9SX, UK#TAB#",
+                "institution_ids": [
+                  "https://openalex.org/I16835326"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "middle",
+            "author": {
+              "id": "https://openalex.org/A5079591803",
+              "display_name": "Simon Dobson",
+              "orcid": "https://orcid.org/0000-0001-9633-2103"
+            },
+            "institutions": [
+              {
+                "id": "https://openalex.org/I16835326",
+                "display_name": "University of St Andrews",
+                "ror": "https://ror.org/02wn5qz54",
+                "country_code": "GB",
+                "type": "education",
+                "lineage": [
+                  "https://openalex.org/I16835326"
+                ]
+              }
+            ],
+            "countries": [
+              "GB"
+            ],
+            "is_corresponding": false,
+            "raw_author_name": "Simon Dobson",
+            "raw_affiliation_strings": [
+              "School of Computer Science, University of St. Andrews, KY16 9SX, UK",
+              "School of Computer Science, University of St. Andrews, KY16 9SX, UK#TAB#"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Computer Science, University of St. Andrews, KY16 9SX, UK",
+                "institution_ids": [
+                  "https://openalex.org/I16835326"
+                ]
+              },
+              {
+                "raw_affiliation_string": "School of Computer Science, University of St. Andrews, KY16 9SX, UK#TAB#",
+                "institution_ids": [
+                  "https://openalex.org/I16835326"
+                ]
+              }
+            ]
+          },
+          {
+            "author_position": "last",
+            "author": {
+              "id": "https://openalex.org/A5086973117",
+              "display_name": "Susan McKeever",
+              "orcid": "https://orcid.org/0000-0003-1766-2441"
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": false,
+            "raw_author_name": "Susan McKeever",
+            "raw_affiliation_strings": [
+              "School of Computing, Dublin Institute of Technology, Dublin 8, Ireland",
+              "School of Computing,Dublin Institute of Technology Dublin 8,Ireland)"
+            ],
+            "raw_orcid": null,
+            "affiliations": [
+              {
+                "raw_affiliation_string": "School of Computing, Dublin Institute of Technology, Dublin 8, Ireland",
+                "institution_ids": []
+              },
+              {
+                "raw_affiliation_string": "School of Computing,Dublin Institute of Technology Dublin 8,Ireland)",
+                "institution_ids": []
+              }
+            ]
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10444",
+            "display_name": "Context-Aware Activity Recognition Systems",
+            "score": 0.9998000264167786,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1707",
+              "display_name": "Computer Vision and Pattern Recognition"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T12205",
+            "display_name": "Time Series Analysis and Forecasting",
+            "score": 0.9948999881744385,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1711",
+              "display_name": "Signal Processing"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T11106",
+            "display_name": "Data Management and Algorithms",
+            "score": 0.9912999868392944,
+            "subfield": {
+              "id": "https://openalex.org/subfields/1711",
+              "display_name": "Signal Processing"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/17",
+              "display_name": "Computer Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      },
+      {
+        "id": "https://openalex.org/W2186601538",
+        "doi": "https://doi.org/10.1017/cbo9781107415416.008",
+        "display_name": "Integrated Risk and Uncertainty Assessment of Climate Change Response Policies",
+        "publication_year": 2015,
+        "publication_date": "2015-01-26",
+        "type": "book-chapter",
+        "cited_by_count": 393,
+        "primary_location": {
+          "id": "doi:10.1017/cbo9781107415416.008",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.1017/cbo9781107415416.008",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S4306462995",
+            "display_name": "Cambridge University Press eBooks",
+            "issn_l": null,
+            "issn": null,
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": false,
+            "host_organization": "https://openalex.org/P4310311721",
+            "host_organization_name": "Cambridge University Press",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310311721",
+              "https://openalex.org/P4310311702"
+            ],
+            "host_organization_lineage_names": [
+              "Cambridge University Press",
+              "University of Cambridge"
+            ],
+            "type": "ebook platform"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Climate Change 2014: Mitigation of Climate Change",
+          "raw_type": "book-chapter"
+        },
+        "open_access": {
+          "is_oa": true,
+          "oa_status": "green",
+          "oa_url": "http://hdl.handle.net/11858/00-001M-0000-002D-DF30-A",
+          "any_repository_has_fulltext": true
+        },
+        "authorships": [
+          {
+            "author_position": "first",
+            "author": {
+              "id": "https://openalex.org/A5110857717",
+              "display_name": "Intergovernmental Panel on Climate Change",
+              "orcid": null
+            },
+            "institutions": [],
+            "countries": [],
+            "is_corresponding": true,
+            "raw_author_name": "Intergovernmental Panel on Climate Change",
+            "raw_affiliation_strings": [],
+            "raw_orcid": null,
+            "affiliations": []
+          }
+        ],
+        "topics": [
+          {
+            "id": "https://openalex.org/T10471",
+            "display_name": "Climate Change Policy and Economics",
+            "score": 0.9869999885559082,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2002",
+              "display_name": "Economics and Econometrics"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/20",
+              "display_name": "Economics, Econometrics and Finance"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/2",
+              "display_name": "Social Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T10119",
+            "display_name": "Sustainability and Climate Change Governance",
+            "score": 0.9860000014305115,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2306",
+              "display_name": "Global and Planetary Change"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/23",
+              "display_name": "Environmental Science"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          },
+          {
+            "id": "https://openalex.org/T12639",
+            "display_name": "Global Energy and Sustainability Research",
+            "score": 0.958899974822998,
+            "subfield": {
+              "id": "https://openalex.org/subfields/2105",
+              "display_name": "Renewable Energy, Sustainability and the Environment"
+            },
+            "field": {
+              "id": "https://openalex.org/fields/21",
+              "display_name": "Energy"
+            },
+            "domain": {
+              "id": "https://openalex.org/domains/3",
+              "display_name": "Physical Sciences"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

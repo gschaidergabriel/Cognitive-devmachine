@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.1",
+  "request_id": "claygraph-g2a-e2b-v04-20260808T2212p0700",
+  "tool": "e2b_sandbox",
+  "request_sha256": "9013a13e60742a532350ae2499d2b5ad11011fd2f1f83d55ca1c9d302d20cbcb",
+  "processed_at": "2026-08-08T15:37:33.439844+00:00",
+  "result": {
+    "provider": "E2B",
+    "tool": "e2b_sandbox",
+    "evidence_class": "runtime_experiment",
+    "command": "python3 -c '#!/usr/bin/env python3\nfrom __future__ import annotations\nimport json, random, math, re\nfrom collections import Counter\nVERSION='\"'\"'claygraph-g2a-lab-0.4-bridge-receipt'\"'\"'; SEED_ROUTE=9917; SEED_ATTRACTOR=7711\ndef words(s): return set(re.findall(r'\"'\"'[a-z0-9_]+'\"'\"',s.lower()))\ndef topi(xs,k): return sorted(range(len(xs)),key=lambda i:(xs[i],i),reverse=True)[:k]\ndef mv(v,A):\n o=[0.0]*len(v)\n for i,x in enumerate(v):\n  if x:\n   for j,w in enumerate(A[i]):\n    if w:o[j]+=x*w\n return o\ndef selfuse():\n n={'\"'\"'tcqs'\"'\"':'\"'\"'typed collection SET ORDERED MULTISET WEIGHTED duplicate order multiplicity'\"'\"','\"'\"'candidate'\"'\"':'\"'\"'candidate membership ranking topology workspace selection'\"'\"','\"'\"'g1d'\"'\"':'\"'\"'graph epochs sparse latent activation bounded assembly exact anchors'\"'\"','\"'\"'activation'\"'\"':'\"'\"'salience activation decay inhibition propagation'\"'\"','\"'\"'assembly'\"'\"':'\"'\"'bounded epoch pinned Assembly candidate exact anchors'\"'\"','\"'\"'u1'\"'\"':'\"'\"'authoritative event state spine graph vector FTS activation derived views'\"'\"','\"'\"'replay'\"'\"':'\"'\"'canonical event replay crash recovery rebuild derived'\"'\"','\"'\"'cacc'\"'\"':'\"'\"'continuity integrity utility authority adaptive salience'\"'\"','\"'\"'utility'\"'\"':'\"'\"'utility receipt salience routing not truth authority'\"'\"','\"'\"'anti'\"'\"':'\"'\"'anti attractor bounded gain inhibition novelty poisoning'\"'\"','\"'\"'gwt'\"'\"':'\"'\"'WorkspaceEpisode internal workspace projection uptake reentry'\"'\"','\"'\"'internal'\"'\"':'\"'\"'internal workspace uptake lesion rescue'\"'\"','\"'\"'projection'\"'\"':'\"'\"'reader projection view identity order'\"'\"','\"'\"'c7'\"'\"':'\"'\"'organ process storage authority boundaries'\"'\"','\"'\"'broker'\"'\"':'\"'\"'capability effect broker secrets authority'\"'\"','\"'\"'h4'\"'\"':'\"'\"'semantic firebreak role higher order'\"'\"','\"'\"'ecert'\"'\"':'\"'\"'emergence lesion rescue recurrence OOD'\"'\"','\"'\"'temporal'\"'\"':'\"'\"'valid time transaction time stale revoked'\"'\"','\"'\"'role'\"'\"':'\"'\"'role aware n ary direction identi",
+    "stdout": "{\"att0\":{\"fixed\":[1.0,1.0,0.0,0.6],\"governed\":[0.991,0.976548,0.006,0.6],\"naive\":[0.286667,0.016886,0.713333,0.697333]},\"att15\":{\"fixed\":[1.0,1.0,0.0,0.6],\"governed\":[0.990333,0.97561,0.006667,0.6],\"naive\":[0.286667,0.016886,0.713333,0.594867]},\"route\":{\"adaptive\":[0.9535,0.95392,0.3989,1.0,0.89639],\"always\":[0.5908,0.87286,0.451663,0.341981,0.89639],\"explicit\":[0.5577,0.60848,0.611213,1.0,0.014483],\"shuffled\":[0.06,0.44534,0.7194,0.108853,0.0]},\"self\":{\"explicit\":[0.527778,0.777778],\"shuffled\":[0.493056,0.680556],\"truthful\":[0.840278,0.958333]},\"status\":\"PASS\",\"v\":\"claygraph-g2a-lab-0.4-bridge-receipt\"}\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "status": "SUCCESS"
+}

@@ -1,0 +1,31 @@
+{
+  "schema":"claycode.research_architecture.v1",
+  "candidate_id":"EPOCH-G9",
+  "status":"OPEN_HOLD",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346","clay_generation":3},
+  "principle":"elastic compute/representation/selection; immutable truth/provenance; deterministic authority",
+  "planes":[
+    {"id":"P0_EXACT","authority":true,"objects":["exact_event_log","state_root","provenance","capability","effect_receipt"]},
+    {"id":"P1_HYPERPOSITION","authority":false,"views":["S_semantic","C_coordination","P_physical","Q_selector"]},
+    {"id":"P2_EPOCH_MEMORY","authority":false,"objects":["semantic_epoch","delta_overlay","epoch_manifest"],"binds":["exact_basis_root"]},
+    {"id":"P3_LATENT_FIELD","authority":false,"objects":["activation_epoch","lazy_timestamped_salience","typed_local_propagation","active_set"]},
+    {"id":"P4_ASSEMBLY","authority":false,"objects":["query_plan","retrieval_route","selection_receipt","reader_projection"]},
+    {"id":"P5_GWT","authority":false,"objects":["cognitive_frame","workspace_episode","gate_event","projection_receipt","uptake_receipt","reentry_receipt"]},
+    {"id":"P6_OTCC_EFFECT","authority":true,"objects":["trusted_static_envelope","observed_trace","capability_check","selection_integrity_check","durable_effect_intent","effect_receipt"]}
+  ],
+  "projection_receipt_fields":["basis_state_epoch","cognitive_frame_id","graph_epoch","activation_epoch_optional","query_plan_hash","semantic_hash","projection_hash","reader_version","selection_provenance_ref"],
+  "hard_invariants":[
+    "activation_not_truth",
+    "activation_not_ignition",
+    "model_output_not_authority",
+    "observed_trace_subset_trusted_static_envelope",
+    "unknown_scope_or_selection_integrity_escalates",
+    "deterministic_operator_executes_before_model_when_soundly_available",
+    "effect_bound_memory_selection_requires_stronger_integrity_than exploratory_association",
+    "reentry_requires_basis_compatibility"
+  ],
+  "retrieval_routes":["EXACT_ADDRESS","FTS","VECTOR","GRAPH_ROLE_TRAVERSAL","LATENT_PRIOR","FULL_AUTHORIZED_FALLBACK"],
+  "maintenance_actions":["OVERLAY","PARTIAL_COMPACT","FULL_REBUILD","ACTIVE_SET_GC"],
+  "gwt_factorization":["GRAPH_PRIOR","WORKSPACE_SELECTION","PROJECTION","REENTRY"],
+  "promotion_blockers":["target_qwen4b_reader","live_frame_epoch_test","selection_attack_test","truthful_vs_shuffled_latent_field","actual_corpus_retrieval_pareto","crash_replay","android_sustained_trace"]
+}

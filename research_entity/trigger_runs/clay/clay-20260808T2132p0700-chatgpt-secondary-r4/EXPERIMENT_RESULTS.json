@@ -1,0 +1,54 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-20260808T2132p0700-chatgpt-secondary-r4",
+  "experiments":[
+    {
+      "id":"EXP-G12-REPLAY-001",
+      "execution":"E2B isolated Linux/Python",
+      "status":"PASS_MECHANISM_TEST",
+      "design":"50,000 authoritative events over 200 keys; derived stream receives injected duplicates, local reordering and loss of the final 3% tail.",
+      "results":{"naive_key_mismatches":197,"naive_abs_error":6494,"certified_replay_key_mismatches":0},
+      "inference":"A canonical authoritative log plus replay/idempotent derivation can restore constructed state after duplicate/reorder/loss faults; direct derived-stream state cannot.",
+      "boundary":"Synthetic mechanism test; not live FRANK or production storage evidence.",
+      "source":"research_entity/runtime/tool_results/clay-g12-e2b-cacc-20260808T2132p0700.json"
+    },
+    {
+      "id":"EXP-G12-HIDDEN-DEPS-002",
+      "execution":"E2B isolated Linux/Python",
+      "status":"PASS_NEGATIVE_AND_REPAIR",
+      "design":"200,000 operations over 12 consistency domains; 8% of episodes hide one true dependency from the observed scoped closure.",
+      "results":{"hidden_cases":16068,"global_reject_rate":0.63306,"scoped_reject_rate":0.1787,"scoped_unsafe_accept_rate":0.00578,"conservative_reject_rate":0.220215,"conservative_unsafe_accept_rate":0.0},
+      "inference":"Operation-scoped revalidation is only safe when closure knowledge is sound. Unknown/hidden dependency state must trigger conservative broadening/escalation; otherwise the constructed test admits unsafe accepts.",
+      "boundary":"Zero unsafe accepts applies only to the constructed broadening policy/test family; it is not a production safety proof.",
+      "source":"research_entity/runtime/tool_results/clay-g12-e2b-cacc-20260808T2132p0700.json"
+    },
+    {
+      "id":"EXP-G12-COLLECTION-TOPOLOGY-003",
+      "execution":"E2B isolated Linux/Python",
+      "status":"PASS_MECHANISM_TEST",
+      "design":"100,000 constructed candidate-selection cases across SET, ORDERED, MULTISET and WEIGHTED semantics; compare correct semantics with a type-erased alternative.",
+      "results":{"top1_change_rate":0.48381,"top3_membership_change_rate":0.72679,"by_kind":{"SET":{"n":25065,"top1":0.0742469579,"top3":0.7079194095},"ORDERED":{"n":24987,"top1":0.8766958819,"top3":0.9827910513},"MULTISET":{"n":24932,"top1":0.4918177443,"top3":0.6197256538},"WEIGHTED":{"n":25016,"top1":0.4937639910,"top3":0.5966981132}}},
+      "inference":"Collection semantics can be a downstream causal dependency because type erasure changes candidate topology while item identities remain authentic. ORDERED was especially sensitive in this construction.",
+      "boundary":"Constructed candidate model, not a database or live GWT effect-size benchmark.",
+      "source":"research_entity/runtime/tool_results/clay-g12-e2b-cacc-20260808T2132p0700.json"
+    },
+    {
+      "id":"EXP-G12-GENERIC4B-CONTINUITY-004",
+      "execution":"NVIDIA hosted NIM request bridge",
+      "model":"nvidia/nemotron-mini-4b-instruct",
+      "requested_target_class":"generic actual 4B; not Qwen3-4B",
+      "arms":["OFF","truthful activation cue","shuffled/misleading activation cue"],
+      "gold":"AAAAABBA",
+      "request_files":["research_entity/runtime/nvidia_requests/clay-g12-continuity-off-001.json","research_entity/runtime/nvidia_requests/clay-g12-continuity-truthful-001.json","research_entity/runtime/nvidia_requests/clay-g12-continuity-shuffled-001.json"],
+      "status":"ATTEMPTED_RUNNER_RESULT_NOT_PRESENT_AT_G12_CLOSURE",
+      "inference":"No new model-behavior conclusion is drawn from this experiment in G12.",
+      "boundary":"Pending hosted runner output cannot be treated as evidence; exact Qwen3-4B remains unavailable in verified NVIDIA/OpenRouter catalogs."
+    }
+  ],
+  "negative_results":[
+    "Scoped consistency without uncertainty broadening is unsafe under hidden dependencies in the constructed E2B family.",
+    "Collection type erasure can substantially change candidate topology despite unchanged authentic item identities.",
+    "A queued model experiment without a returned result is not evidence.",
+    "No current experiment establishes live FRANK cognitive benefit, Qwen3-4B benefit, Android performance, emergence or phenomenal consciousness."
+  ]
+}

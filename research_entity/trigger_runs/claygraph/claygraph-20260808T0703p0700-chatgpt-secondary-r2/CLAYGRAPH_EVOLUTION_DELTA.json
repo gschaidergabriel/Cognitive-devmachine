@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
+  "accepted_parent":{"generation":0,"graph_id":"claygraph-v0-seed"},
+  "prior_held_candidate":"claygraph-g1-temporal-qualified-activation",
+  "new_candidate":"claygraph-g1b-query-planned-evidence-bounded-activation",
+  "changes":[
+    {"type":"ADD","semantic":"assembly planner/query class"},
+    {"type":"REFINE","semantic":"fixed qualified one-hop -> adaptive 0/1/2-hop routing"},
+    {"type":"ADD","semantic":"runtime deterministic active-packet-envelope as mandatory comparison/fallback"},
+    {"type":"ADD","semantic":"target relevance gate even for qualified graph edges"},
+    {"type":"REFINE","semantic":"evidence-family anti-echo from deletion/cap toward soft penalty + role diversity"},
+    {"type":"ADD","semantic":"assembly plan/certificate and explicit stop/fallback reason"},
+    {"type":"RETAIN","semantic":"exact anchors, temporal/provenance assertions, conflict preservation, no authority, reversible migration"}
+  ],
+  "external_pattern_matches":["PolyG query-dependent traversal","GRASP plan-guided graph retrieval + adaptive fusion/reranking","PAGE-RAG graph-as-projection/skeleton + source grounding","G-Retriever retrieval-size optimum/non-monotonic K","Graphiti benchmark/salience/temporal-versioning issues"],
+  "predicted_benefits":["lower stale leakage","better robustness to erroneous edges","higher independent evidence-family coverage","cleaner exact-vs-associative routing","replayable retrieval decisions"],
+  "predicted_regressions":["planner complexity","possible bridge-node suppression","extra metadata/token overhead","slightly lower precision observed on held-out proxy","query classifier error can select wrong traversal policy"],
+  "shared_ancestry":"No external source is counted as replication of the local proxy; repeated RAE branch descendants remain one evidence family where applicable.",
+  "contradiction_resolution":{"hard_family_cap":"REJECTED_AS_DEFAULT by cycle2 ablation","graph_replaces_packet_envelope":"NOT_SUPPORTED; deterministic envelope remains fallback","physical_db_merge":"NO_CHANGE; retrieval delta is independent of physical migration"}
+}

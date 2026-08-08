@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "run_id":"gwt-20260808T2140p0700-chatgpt-secondary-r5",
+  "experiments":{
+    "EXP-GWT-R5-NESTED-IDENTIFIABILITY-001":{
+      "kind":"synthetic_identifiability_calibration",
+      "seed":20260808,
+      "n":300000,
+      "factors":{"graph_field":["OFF","TRUTHFUL","SHUFFLED"],"system_workspace":[0,1],"internal_workspace_proxy":[0,1],"reentry":["OFF","TRUTHFUL","SHUFFLED"]},
+      "orthogonal_contrasts":{"system_workspace":0.10045275564329637,"internal_workspace_proxy":0.12838937492992958,"graph_truthful_vs_off":0.12522253087214896,"graph_shuffled_vs_off":-0.07925540235483597,"reentry_truthful_vs_off":0.12915150820109955,"reentry_shuffled_vs_off":-0.13249604580949897},
+      "bundled_all_good_minus_all_off":0.49029234057893606,
+      "reentry_truthful_rescue":{"internal_workspace_off":0.17679053289412677,"internal_workspace_on":0.08176978827531489},
+      "system_workspace_effect_by_internal_uptake":{"internal_workspace_off":0.05866391655547343,"internal_workspace_on":0.1426012048144667},
+      "interpretation":"The factorial can identify nested stage effects and interactions while the bundled contrast conflates them. The constructed rescue term demonstrates how truthful externalization/re-entry can compensate for a missing internal workspace in a design calibration.",
+      "boundary":"Constructed simulation only; values are not FRANK, Qwen, Claude, or biological effect-size estimates."
+    }
+  },
+  "imported_fresh_runtime_evidence":{
+    "EXP-G12-REPLAY-001":{"certified_key_mismatches":0,"naive_key_mismatches":197,"naive_abs_error":6494},
+    "EXP-G12-HIDDEN-DEPS-002":{"global_reject_rate":0.63306,"scoped_reject_rate":0.1787,"conservative_reject_rate":0.220215,"scoped_unsafe_accept_rate":0.00578,"conservative_unsafe_accept_rate":0.0},
+    "EXP-G12-COLLECTION-TOPOLOGY-003":{"top1_change_rate":0.48381,"top3_membership_change_rate":0.72679},
+    "boundary":"Imported from Clay G12 E2B runtime experiment; synthetic mechanism evidence, not live FRANK."
+  }
+}

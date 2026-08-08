@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0434+0700-chatgpt-secondary-drive-training-lineage-v14-v26",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "lane": "DRIVE_ADAPTER_BACKUP_AND_TRAINING_LINEAGE",
+  "status": "ANALYZED_INTEGRATED_PARTIAL_SOURCE_LINEAGE",
+  "sources": [
+    {"drive_file_id":"1yg0Hb3fNOKBNzsI6iZt8dctYecPc-YYY","title":"frank-adapter-sicherung/v25_final/README.md","evidence_class":"DRIVE_MODEL_CARD"},
+    {"drive_file_id":"1zcyPzWJQ8jcG9ZjkqxIOLIHPJzP0UiC-","title":"session_2026-03-23_complete_summary.txt","evidence_class":"PROJECT_REPORTED_SESSION_SUMMARY"},
+    {"drive_file_id":"1_zSwUl0CPvHjZiyIE4-6CTvRlcsZVXEn","title":"frank-lora-training-suite.txt","evidence_class":"PROJECT_MEMORY_TRAINING_SUITE_REPORT"},
+    {"drive_file_id":"15eF6a8RHBESoSEubrTQ677zk0JGQ0RTB","title":"FRANK-v26.1-Fertigstellung.txt","evidence_class":"PROJECT_TRAINING_DIRECTIVE_AND_RUNTIME_AUDIT"},
+    {"drive_file_id":"1OzymXtykFqjmWt9GqSDkbsrpCgUPSJMP","title":"v26-1-gemergt-eval-gebaut-2026-08-04.txt","evidence_class":"PROJECT_REPORTED_TRAINING_AND_EVALUATION_RESULT"},
+    {"drive_file_id":"1QKIouDlGN5K1MYsjn-cAYFa7fxbD5hAc","title":"AB-v25-gegen-v26.1.txt","evidence_class":"PROJECT_REPORTED_AB_EVALUATION_TABLE"}
+  ],
+  "lineage": [
+    {
+      "version": "v14",
+      "base_model": "Qwen2.5-3B-Instruct-abliterated",
+      "reported_training": "7h53, 422 steps, 2 epochs, LoRA r=32 alpha=64 fp16",
+      "reported_losses": {"train":1.7552,"eval":1.0429},
+      "reported_artifacts": ["adapter_model.safetensors 229 MB", "frank-lora-v14.gguf 115 MB F16"],
+      "reported_runtime": "AMD Phoenix1 Vulkan, ~122 prompt tok/s, ~11 generation tok/s",
+      "status": "HISTORICAL_PROJECT_REPORTED"
+    },
+    {
+      "version": "v15",
+      "reported_training_data": {"train_examples":3490,"eval_examples":263,"new_targeted_examples":309},
+      "reported_eval_design": "180 turns across 6 personas plus service-log/internal-state capture before new data generation",
+      "status": "HISTORICAL_PROJECT_REPORTED"
+    },
+    {
+      "version": "v19f_to_v23",
+      "reported_training_suite": [
+        "v19f: 3372 lines, completed",
+        "v22: Qwen2.5-3B, 3838 lines, merged GGUF",
+        "v23: Huihui-Qwen3.5-4B-abliterated, 4026 lines, QLoRA adapter completed"
+      ],
+      "v23_reported_config": "4-bit nf4, r=32 alpha=64, q/v/up_proj, 2 epochs, lr=1e-4 cosine, grad_accum=16, paged_adamw_8bit, max_len=768",
+      "v23_reported_result": "~6h, train loss 1.11 -> 0.99, token accuracy 0.80, adapter ~30 MB",
+      "status": "HISTORICAL_PROJECT_REPORTED"
+    },
+    {
+      "version": "v25_final_backup_identity",
+      "base_model": "huihui-ai/Huihui-Qwen3.5-4B-abliterated",
+      "adapter_framework": "PEFT LoRA 0.18.1",
+      "visible_backup_artifacts": ["README.md only in connector-visible extracted subtree"],
+      "status": "IDENTITY_CONFIRMED_ARTIFACT_COMPLETENESS_UNCONFIRMED"
+    },
+    {
+      "version": "v26.1",
+      "reported_training": "474/474 steps, 2 epochs, 12h20, loss 3.99 -> ~0.60, stable grad_norm, 96 adapter tensors, no NaN",
+      "reported_artifacts": ["v26.1_frank_Q4_K_M.gguf 2.52 GB", "frank-lora-v26.1.gguf 31.4 MB runtime adapter"],
+      "reported_eval": {"cases":328,"tool_required_cases":134,"exact_tool_hit_rate_percent":79.9,"tool_missing_percent":1.5,"tool_overuse_percent":5.2,"invalid_tools":0,"blocked_tools":0,"mean_response_chars":151},
+      "status": "HISTORICAL_PROJECT_REPORTED_REPLICATION_REQUIRED_FOR_CURRENT_TARGET"
+    }
+  ],
+  "critical_negative_results": [
+    {
+      "id": "DRIVE-TRAIN-NEG-001",
+      "claim": "A train/runtime representation mismatch was identified: a runtime KRAFTAUSDRUECKE block existed in the production prompt but was absent from 3785 training examples.",
+      "current_law": "Every runtime-visible structural projection that the model must handle needs explicit train/eval coverage or a deliberate held-out generalization test; runtime format cannot be assumed from prose similarity."
+    },
+    {
+      "id": "DRIVE-TRAIN-NEG-002",
+      "claim": "v26.1 max_len=1408 reportedly truncated 2907/3785 examples (76.8%), discarding about 1,023,224 tokens from the left, including early identity/system sections.",
+      "current_law": "Before paid Clay training, mechanically render the exact final corpus and prove zero unintended truncation of mandatory semantic fields at the selected context length."
+    },
+    {
+      "id": "DRIVE-TRAIN-NEG-003",
+      "claim": "The project discovered after v26.1 training that the nominal eval file had not been consumed by the training scripts; an actual 328-case runtime-format evaluator was built only afterward.",
+      "current_law": "Dataset existence != evaluation execution. Final training jobs require executable receipts proving eval_dataset attachment, periodic eval, final held-out inference and artifact identity."
+    },
+    {
+      "id": "DRIVE-TRAIN-NEG-004",
+      "claim": "Historical tool-reference data contained ambiguous/wrong labels (e.g. similar system_check/body or calendar/calendar_add semantics), producing symmetric confusions that could be data-quality rather than model-reasoning failures.",
+      "current_law": "Evaluation/training labels must be semantically discriminative and audited before interpreting model errors; label ambiguity is its own error class."
+    },
+    {
+      "id": "DRIVE-TRAIN-NEG-005",
+      "claim": "Historical version numbering/artifact location was inconsistent: training-suite notes observed live v25 while the mapped laptop's newest visible adapter was v23, with uncertainty about where v24/v25 were trained.",
+      "current_law": "Model/base/adapter/corpus/runtime identity must be content-addressed and provenance-bound; human version labels are display metadata, not identity."
+    }
+  ],
+  "reuse_for_clay_0_1": {
+    "REUSE": [
+      "QLoRA/PEFT adapter training and compact runtime-adapter deployment pattern",
+      "adapter swap A/B evaluation instead of always transferring/merging multi-GB models",
+      "exact runtime-format rendering before training/eval",
+      "span masking and bit-identical render checks",
+      "explicit max-length/truncation audit",
+      "adaptive adversarial eval -> failure extraction -> targeted data -> retrain loop",
+      "held-out runtime inference evaluator with deterministic temperature where appropriate",
+      "artifact completion markers/guards before merge or export",
+      "separate stable/dynamic runtime context from learned behavior"
+    ],
+    "ADAPT": [
+      "Old personality and self-model data can inform corpus structure but must be rewritten for the current FRANK/Q12/Clay architecture and current owner directives.",
+      "Historical GWT/body/state blocks are templates for state-conditioned learning, not current canonical field definitions.",
+      "Historical runtime/eval scripts are method references; current Together/local target requires new provider-specific receipts and current Clay semantics."
+    ],
+    "SUPERSEDE": [
+      "Do not train old tool-selection behavior into the Clay model: current owner-fixed architecture assigns tool use completely to Needle.",
+      "Do not train fixed hardware/API quotas or other live values as model knowledge; these remain dynamic state/tool outputs.",
+      "Do not inherit old room/world metaphors, internal module names or superseded prompt projections as mandatory Clay semantics.",
+      "Do not copy old natural-language/JSON/tag representations when Clay is now the native semantic language."
+    ],
+    "NEW_TARGET": [
+      "native Clay reading/thinking/speaking",
+      "creator-selected personality/self-model/world-model/body-as-complex-data-state",
+      "goal formation/revision under the current safe-effect architecture",
+      "GWT and Hyperposition mathematics/readout semantics",
+      "architecture-consistent persistent state reasoning",
+      "current Needle boundary understanding without model-authored tool authority"
+    ]
+  },
+  "doomsday_implication": {
+    "rows": ["DATA_FINAL_TRAINING_CORPUS", "FINAL_MODEL_FINE_TUNE", "MODEL_EXPORT_RUNTIME_PACKAGE", "CLAY_0_1_ACCEPTANCE_RUN"],
+    "direction": "SUBSTANTIAL_DE_RISKING_CONFIRMED",
+    "quantitative_credit": "PENDING_DEDUP_WITH_EXISTING_SOMA/IAPT/TRAINING_SHARDS",
+    "reason": "The Drive corpus demonstrates a mature end-to-end training/eval/export lineage and concrete failure corpus. It strongly reduces methodological unknowns, but precise avoided hours must be reconciled with already mapped SOMA/IAPT work to avoid double counting."
+  },
+  "branch_feedback": {
+    "frank": "Current fine-tune should encode persistent cognitive/personality/Clay semantics, not dynamic tools/facts now owned by Needle/runtime state.",
+    "claycode": "Freeze the exact model-facing Clay projection before corpus generation; training/eval must use the same canonical semantics and separately versioned reader projection.",
+    "harness": "Add pre-training render/truncation/span/label audit and post-training exact runtime-format A/B evaluation with model+adapter+corpus hashes.",
+    "gwt": "Training examples for GWT must reflect the current typed measurable episode/readout contract, not old poetic or stage-label-only text.",
+    "hyperposition": "Train relation/topology semantics only from current explicit higher-order contracts and controls, not quantum-like analogy language.",
+    "unifieddb": "Corpus source identity, trainability eligibility, version/supersession and model artifact lineage require durable provenance state.",
+    "q12_index": "Historical FRANK training already reached repeated real LoRA/eval cycles; current Clay training is a redesign/internalization step over mature method lineage, not the first training experiment."
+  },
+  "exact_level0_progress": {
+    "percent_awarded": 0.0,
+    "reason": "Whole Drive denominator remains unfrozen; this is a bounded semantic/training-lineage shard."
+  },
+  "completed_at": "2026-08-09T04:35:00+07:00"
+}

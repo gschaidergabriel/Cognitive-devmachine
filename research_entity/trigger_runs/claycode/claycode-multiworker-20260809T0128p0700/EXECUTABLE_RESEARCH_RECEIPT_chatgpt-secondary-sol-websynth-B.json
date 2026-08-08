@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "coordination_id": "claycode-multiworker-20260809T0128p0700",
+  "experiment_id": "EXP-CC-UECC-WEBSYNTH-LOWERING-TV-001",
+  "worker_id": "chatgpt-secondary-sol-websynth-B",
+  "role": "B_WEB_SYNTHESIS_REPLICATION_EXTENSION_NONCOUNTING",
+  "candidate_context": ["CC-RC1.9-UECC", "CC-RC1.9-CBEL-TV"],
+  "execution_surface": "ChatGPT local Python sandbox",
+  "python_version": "3.13.5",
+  "script_path": "research_entity/trigger_runs/claycode/claycode-multiworker-20260809T0128p0700/experiments/WEB_SYNTH_LOWERING_VALIDATION.py",
+  "script_git_blob_sha1": "3840ad83cebd318b7ea663e7109f4616277df4e6",
+  "seed": 202608090139,
+  "tested_semantics": {
+    "pure_operations": ["add", "xor", "mulmod"],
+    "effect_intents": ["fs.read", "fs.write", "fs.delete", "net.connect", "proc.spawn", "gpu.launch", "ffi.call"],
+    "lowering_target": "generated Python host representation",
+    "authority_rule": "lowered program may carry effect intent/signature but must not embed or mint EffectPermit authority",
+    "ffi_rule": "ffi.call requires explicit unsafe/trusted-boundary marker"
+  },
+  "results": {
+    "differential_programs": 20000,
+    "semantic_mismatches": 0,
+    "effect_trace_mismatches": 0,
+    "separate_process_smoke_exit": 0,
+    "separate_process_semantic_match": true,
+    "separate_process_elapsed_seconds": 6.477,
+    "identity_cases": 10000,
+    "backend_noise_semantic_hash_changes": 0,
+    "semantic_mutations_missed": 0,
+    "boundary_cases": 40000,
+    "injected_boundary_attacks": 40000,
+    "boundary_false_accepts": 0,
+    "valid_false_rejects": 0
+  },
+  "attack_classes": [
+    "drop or alter declared effect signature during lowering",
+    "serialize/embed a model-visible permit token into generated code",
+    "lower foreign call without an explicit unsafe FFI trust boundary"
+  ],
+  "observed_failure_and_repair": {
+    "initial_attempt": "A larger run used 100 separate-process smokes with a 3-second subprocess timeout; one Python interpreter startup exceeded the timeout and invalidated that attempt.",
+    "repair": "Reran the complete experiment from scratch with 20k differential programs, one 15-second separate-process smoke, 10k identity cases and 40k boundary mutations.",
+    "scientific_effect": "No result from the failed attempt was counted. The slower interpreter startup demonstrates that process-boundary latency must be measured separately from semantic correctness."
+  },
+  "expected_vs_observed": "All reference semantic/effect traces matched the generated lowering; all constructed authority/effect-signature/FFI boundary mutations were rejected; no benign lowering was rejected.",
+  "epistemic_boundary": "Finite constructed mechanism test only. It is not a formal soundness proof, real WASI/native/GPU/FFI execution, cryptographic capability test, or production FRANK measurement.",
+  "affected_branches": ["claycode", "frank", "clay", "hyperposition", "claygraph", "unifieddb", "gwt", "emergenz"],
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "created_at": "2026-08-09T01:43:00+07:00"
+  }
+}

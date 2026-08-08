@@ -35,14 +35,15 @@ def _registered_scientific_branches() -> list[str]:
 BRANCHES = _registered_scientific_branches()
 
 PRIORITY = {
-    "fusion": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph"],
-    "clay": ["clay", "frank", "claycode", "claygraph", "gwt", "emergenz", "hyperposition"],
-    "frank": ["clay", "claycode", "claygraph", "gwt", "hyperposition", "emergenz", "frank"],
-    "gwt": ["clay", "claygraph", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
-    "emergenz": ["clay", "gwt", "claygraph", "hyperposition", "frank", "claycode", "emergenz"],
-    "claycode": ["frank", "clay", "claygraph", "gwt", "hyperposition", "emergenz", "claycode"],
-    "hyperposition": ["clay", "claygraph", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
-    "claygraph": ["clay", "frank", "claycode", "hyperposition", "gwt", "emergenz", "claygraph"],
+    "fusion": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb"],
+    "clay": ["clay", "frank", "claycode", "claygraph", "unifieddb", "gwt", "emergenz", "hyperposition"],
+    "frank": ["clay", "claycode", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "frank"],
+    "gwt": ["clay", "claygraph", "unifieddb", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
+    "emergenz": ["clay", "gwt", "claygraph", "unifieddb", "hyperposition", "frank", "claycode", "emergenz"],
+    "claycode": ["frank", "clay", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "claycode"],
+    "hyperposition": ["clay", "claygraph", "unifieddb", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
+    "claygraph": ["clay", "frank", "claycode", "unifieddb", "hyperposition", "gwt", "emergenz", "claygraph"],
+    "unifieddb": ["clay", "frank", "claycode", "claygraph", "hyperposition", "gwt", "emergenz", "unifieddb"],
 }
 
 for trigger, order in PRIORITY.items():
@@ -58,6 +59,7 @@ BASE_PACKET_BUDGETS: dict[str, tuple[int, int]] = {
     "frank": (40, 80),
     "claycode": (40, 80),
     "claygraph": (48, 96),
+    "unifieddb": (48, 96),
     "gwt": (32, 64),
     "hyperposition": (32, 64),
     "emergenz": (32, 64),
@@ -67,10 +69,18 @@ DEEP_PACKET_OVERRIDES: dict[tuple[str, str], tuple[int, int]] = {
     ("frank", "clay"): (64, 128),
     ("frank", "claycode"): (64, 128),
     ("frank", "claygraph"): (64, 128),
+    ("frank", "unifieddb"): (64, 128),
     ("claycode", "frank"): (64, 128),
     ("claycode", "claygraph"): (64, 128),
+    ("claycode", "unifieddb"): (56, 112),
     ("gwt", "claygraph"): (56, 112),
+    ("gwt", "unifieddb"): (48, 96),
     ("hyperposition", "claygraph"): (56, 112),
+    ("hyperposition", "unifieddb"): (48, 96),
+    ("claygraph", "unifieddb"): (64, 128),
+    ("unifieddb", "claygraph"): (64, 128),
+    ("unifieddb", "frank"): (64, 128),
+    ("unifieddb", "claycode"): (64, 128),
 }
 
 ALIASES = {
@@ -78,9 +88,10 @@ ALIASES = {
     "frank": ["frank", "frankenstein"],
     "gwt": ["gwt", "workspace", "global-workspace", "global_workspace"],
     "emergenz": ["emergenz", "emergence", "causal-emergence", "causal_emergence"],
-    "claycode": ["claycode", "xeno", "xeno-claycode", "xeno_claycode", "cc6", "cc7", "cc8"],
-    "hyperposition": ["hyperposition", "hypergraph", "codependency", "h1", "h2"],
+    "claycode": ["claycode", "xeno", "xeno-claycode", "xeno_claycode", "cc6", "cc7", "cc8", "cc9", "cc10", "cc11"],
+    "hyperposition": ["hyperposition", "hypergraph", "codependency", "h1", "h2", "h3", "h4"],
     "claygraph": ["claygraph", "clay graph", "knowledge graph", "associative memory", "database migration", "database transcendence"],
+    "unifieddb": ["unifieddb", "unified database", "unified_database", "unified cognitive database", "unified cognitive data substrate", "cnucs", "single semantic world"],
 }
 
 ARTIFACT_NAMES = [
@@ -97,6 +108,8 @@ ARTIFACT_NAMES = [
     "DATABASE_INVENTORY.json", "CLAYGRAPH_SCHEMA.claycode.json", "CLAYGRAPH_CANDIDATE.claycode.json",
     "SELF_USE_BENCHMARK.json", "MIGRATION_PLAN.json", "FRANK_CLAYGRAPH_FEEDBACK.json",
     "GRAPH_EVOLUTION_DECISION.json",
+    "STORE_ROLE_MATRIX.json", "UNIFIED_DATABASE_ARCHITECTURE.claycode.json", "QUERY_ROUTING_PLAN.json",
+    "FRANK_UNIFIEDDB_FEEDBACK.json",
 ]
 
 META_RE = re.compile(r"<!--\s*RAE_META\s*\n(\{.*?\})\s*\nRAE_META\s*-->", re.S)
@@ -224,8 +237,6 @@ def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], in
     if not candidates or limit <= 0:
         return [], len(candidates), {}
 
-    # First reserve a small diversity slice across failure/contradiction/experiment/
-    # architecture/hypothesis/feedback categories, then fill by global priority.
     selected: list[Path] = []
     seen: set[Path] = set()
     category_counts: dict[str, int] = {}
@@ -255,9 +266,12 @@ def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], in
 def _run_depth(trigger: str, branch: str, base_depth: int) -> int:
     run_depth = max(1, base_depth)
     deep = {
-        ("frank", "clay"): 3, ("frank", "claycode"): 4, ("frank", "claygraph"): 4,
-        ("claycode", "frank"): 4, ("claycode", "clay"): 3, ("claycode", "claygraph"): 4,
-        ("hyperposition", "claygraph"): 4, ("gwt", "claygraph"): 4,
+        ("frank", "clay"): 3, ("frank", "claycode"): 4, ("frank", "claygraph"): 4, ("frank", "unifieddb"): 4,
+        ("claycode", "frank"): 4, ("claycode", "clay"): 3, ("claycode", "claygraph"): 4, ("claycode", "unifieddb"): 3,
+        ("hyperposition", "claygraph"): 4, ("hyperposition", "unifieddb"): 3,
+        ("gwt", "claygraph"): 4, ("gwt", "unifieddb"): 3,
+        ("claygraph", "unifieddb"): 4,
+        ("unifieddb", "claygraph"): 4, ("unifieddb", "frank"): 4, ("unifieddb", "claycode"): 4,
     }
     return max(run_depth, deep.get((trigger, branch), run_depth))
 
@@ -281,7 +295,7 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
     if trigger not in PRIORITY:
         raise ValueError(f"unknown connected trigger: {trigger}")
     branches = []
-    coverage_all = trigger in {"fusion", "claygraph"}
+    coverage_all = trigger in {"fusion", "claygraph", "unifieddb"}
     for rank, branch in enumerate(PRIORITY[trigger], 1):
         if coverage_all:
             all_runs = _runs(branch, include_incomplete=True)
@@ -318,8 +332,9 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
 
     latest_frank_arch = _latest_artifact(branches, "frank", "/FRANK_ARCHITECTURE.claycode.json")
     latest_claygraph = _latest_artifact(branches, "claygraph", "/CLAYGRAPH_CANDIDATE.claycode.json") or _latest_artifact(branches, "claygraph", "/CLAYGRAPH_SCHEMA.claycode.json")
+    latest_unifieddb = _latest_artifact(branches, "unifieddb", "/UNIFIED_DATABASE_ARCHITECTURE.claycode.json")
     return {
-        "schema_version": "1.5",
+        "schema_version": "1.6",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "trigger": trigger,
         "run_id": run_id,
@@ -346,17 +361,27 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict:
             "frank_requires_latest_clay_architecture_as_primary_foundation": trigger == "frank",
             "frank_requires_deep_claycode_architecture_input": trigger == "frank",
             "frank_requires_deep_claygraph_substrate_input": trigger == "frank",
+            "frank_requires_deep_unifieddb_persistence_input": trigger == "frank",
             "frank_architecture_source_language": "ClayCode semantic IR" if trigger == "frank" else None,
             "claycode_requires_latest_frank_research_as_primary_feedback": trigger == "claycode",
             "claycode_requires_deep_claygraph_input": trigger == "claycode",
+            "claycode_requires_unifieddb_contract_input": trigger == "claycode",
             "claycode_requires_goodman_anti_echo_review": trigger == "claycode",
             "claycode_latest_frank_architecture_artifact": latest_frank_arch if trigger == "claycode" else None,
             "claycode_frank_architecture_artifact_missing_must_be_explicit": trigger == "claycode" and latest_frank_arch is None,
             "hyperposition_requires_deep_claygraph_input": trigger == "hyperposition",
+            "hyperposition_requires_unifieddb_topology_input": trigger == "hyperposition",
             "gwt_requires_deep_claygraph_input": trigger == "gwt",
-            "latest_claygraph_artifact": latest_claygraph if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clay"} else None,
+            "gwt_requires_unifieddb_snapshot_selection_input": trigger == "gwt",
+            "latest_claygraph_artifact": latest_claygraph if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clay", "unifieddb"} else None,
+            "latest_unifieddb_artifact": latest_unifieddb if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clay", "claygraph"} else None,
             "claygraph_requires_full_mesh_coverage": trigger == "claygraph",
             "claygraph_requires_iterative_parent_candidate_selection": trigger == "claygraph",
+            "claygraph_requires_unifieddb_boundary_analysis": trigger == "claygraph",
+            "unifieddb_requires_full_mesh_coverage": trigger == "unifieddb",
+            "unifieddb_requires_store_role_inventory": trigger == "unifieddb",
+            "unifieddb_requires_logical_vs_physical_comparison": trigger == "unifieddb",
+            "unifieddb_requires_reversible_migration": trigger == "unifieddb",
             "clay_is_integrated_master_foundry": trigger == "clay",
         },
     }

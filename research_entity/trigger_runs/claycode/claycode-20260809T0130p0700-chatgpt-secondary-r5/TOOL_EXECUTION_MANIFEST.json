@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
   "trigger": "claycode",
   "actor": "chatgpt-secondary",
@@ -8,26 +8,26 @@
       "class": "canonical_and_mesh_reads",
       "tool": "GitHub connector",
       "status": "SUCCESS",
-      "evidence": ["canonical r2/hash verified", "current protocol/registry verified", "FRANK C8 then live C9 reread", "ClayGraph G2a", "UnifiedDB U2", "Hyperposition H6", "three-worker ClayCode rendezvous"]
+      "evidence": ["canonical r2/hash verified", "current protocol/registry verified", "FRANK C8 then live C9 reread", "ClayGraph G2a", "UnifiedDB U2", "Hyperposition H6", "three-worker ClayCode rendezvous", "late sol-03 atomic-authority result", "active sol-02 intent-adequacy lane"]
     },
     {
       "class": "multiworker_coordination",
       "tool": "GitHub connector",
       "status": "SUCCESS",
-      "evidence": ["WORKER_COORDINATION.json commit f1a02aaf1b1ec27f7669ad5f4b87d3b4f3432501", "3-of-3 shared rendezvous visible", "r5 mapped to Lane B compiler/runtime lowering", "Lane A and Lane C cross-read"]
+      "evidence": ["WORKER_COORDINATION.json commit f1a02aaf1b1ec27f7669ad5f4b87d3b4f3432501", "3-of-3 shared rendezvous visible", "r5 mapped to Lane B compiler/runtime lowering", "Lane A and Lane C cross-read", "Lane B completion receipt commit 2d1a5193776f63900fd23990fb862c37dac38b31", "post-close atomic budget refinement commit 69694d798ad832b96ba7fc38b2d3ae1a5616699d"]
     },
     {
       "class": "local_executable_research",
       "tool": "Python/local subprocess",
       "status": "SUCCESS",
-      "evidence": ["100000 mixed authorization cases", "40000 targeted invalid cases", "10000 benign cases", "0 reference/lowered mismatches"]
+      "evidence": ["100000 mixed authorization cases", "40000 targeted invalid cases", "10000 benign cases", "0 reference/lowered mismatches", "20000-trial maintenance/GC simulation"]
     },
     {
       "class": "external_executable_research",
       "tool": "e2b_sandbox through RAE research tool bridge",
       "status": "SUCCESS",
-      "requests": ["claycode-r5-cbel-tv-e2b-001", "claycode-r5-lane-b-crossboundary-e2b-002"],
-      "evidence": ["isolated Linux Python differential/mutation test", "C shared-library FFI via gcc/ctypes", "JSON subprocess IPC"]
+      "requests": ["claycode-r5-cbel-tv-e2b-001", "claycode-r5-lane-b-crossboundary-e2b-002", "claycode-r5-lane-b-origin-budget-e2b-003"],
+      "evidence": ["isolated Linux Python differential/mutation test", "C shared-library FFI via gcc/ctypes", "JSON subprocess IPC", "origin/integrity cross-boundary test", "aggregate consumed-budget state cross-boundary test"]
     },
     {
       "class": "external_primary_docs",
@@ -51,7 +51,7 @@
       "class": "WASI_runtime_lowering",
       "tool": "wasmtime",
       "status": "NOT_EXECUTED_RUNTIME_ABSENT_IN_E2B_IMAGE",
-      "reason": "Second E2B experiment explicitly observed wasmtime_present=false; no WASI execution is claimed."
+      "reason": "Cross-boundary E2B experiment explicitly observed wasmtime_present=false; no WASI execution is claimed."
     },
     {
       "class": "repository_preflight_shell",

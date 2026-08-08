@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "source": "research_entity/runtime/groq_8b_proxy/SCIENTIFIC_SYNTHESIS.json",
+  "source_run": "groq8b-complete-20260808T003641Z",
+  "evidence_role": "8b_proxy_for_4b",
+  "created_at": "2026-08-08T07:46:00+07:00",
+  "branches": {
+    "clay": {
+      "effect": ["REVISE"],
+      "durable_writeback_refs": ["research_entity/knowledge_micro_packets/synthetic_clay/KMP-GROQ8B-SMALLMODEL-PROXY.md"],
+      "summary": "Optimize representations for reader success/safety/context cost, not compactness alone."
+    },
+    "frank": {
+      "effect": ["REVISE", "NEW_EXPERIMENT"],
+      "durable_writeback_refs": ["research_entity/knowledge_micro_packets/frank_gwt/KMP-GROQ8B-GWT-RECONSTRUCTION-ORDER.md", "research_entity/knowledge_micro_packets/claycode/KMP-GROQ8B-CLAYCODE-ZEROSHOT.md", "research_entity/knowledge_micro_packets/claygraph/KMP-GROQ8B-CLAYGRAPH-SELFUSE.md"],
+      "summary": "Keep deterministic authority semantics; verify projection integrity; counterbalance GWT order/winner metadata; hold ClayGraph activation out of hot path."
+    },
+    "gwt": {
+      "effect": ["SUPPORT", "REVISE", "NEW_EXPERIMENT"],
+      "durable_writeback_refs": ["research_entity/knowledge_micro_packets/frank_gwt/KMP-GROQ8B-GWT-RECONSTRUCTION-ORDER.md"],
+      "summary": "Separates transport from reconstruction/uptake and adds direct proxy evidence for order/winner confounds."
+    },
+    "emergenz": {
+      "effect": ["NO_CHANGE"],
+      "durable_writeback_refs": [],
+      "summary": "No emergence mechanism directly tested; representation/order confounds are methodological controls for future small-model emergence tests."
+    },
+    "claycode": {
+      "effect": ["CHALLENGE", "REVISE", "NEW_EXPERIMENT"],
+      "durable_writeback_refs": ["research_entity/knowledge_micro_packets/claycode/KMP-GROQ8B-CLAYCODE-ZEROSHOT.md"],
+      "summary": "Zero-shot compact/readable projections are not reliable enough; compact safety semantics produced unsafe accepts."
+    },
+    "hyperposition": {
+      "effect": ["SUPPORT", "REVISE", "NEW_EXPERIMENT"],
+      "durable_writeback_refs": ["research_entity/knowledge_micro_packets/hyperposition/KMP-GROQ8B-HYP-ROLE-PROJECTION.md"],
+      "summary": "Reader projection favors explicit relation-instance role labels while canonical n-ary semantics remain valid."
+    },
+    "claygraph": {
+      "effect": ["CHALLENGE", "REVISE", "NEW_EXPERIMENT"],
+      "durable_writeback_refs": ["research_entity/knowledge_micro_packets/claygraph/KMP-GROQ8B-CLAYGRAPH-SELFUSE.md"],
+      "summary": "Current activation implementation remains HOLD due major latency/context overhead despite some relational retrieval benefit."
+    }
+  },
+  "canonical_promotion": "NOT_PERFORMED",
+  "target_replication_required": true
+}

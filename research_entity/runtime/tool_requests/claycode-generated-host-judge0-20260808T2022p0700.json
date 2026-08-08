@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.0",
+  "request_id":"claycode-generated-host-judge0-20260808T2022p0700",
+  "tool":"judge0_execute",
+  "code":"import json,hashlib\nCONTRACT=json.loads('{\"adequacy_hash\":\"fb949c55ba88e07e9b83def1c773009c296103e87262145778c33542513b0721\",\"assumptions\":[\"graph epoch pinned\"],\"authority_requirements\":[\"cap:memory.write\"],\"compiler_version\":\"claycode-lab-0.1-cc-rc1.5\",\"contract_hash\":\"c6b696d7b474b65c1903cb9c41145b760471b84a16ce0bbb30db4ebfc6154193\",\"effect_class\":\"REVERSIBLE\",\"hard_requirements\":[\"preserve exact truth\"],\"intent_id\":\"remember-safe\",\"prohibitions\":[],\"soft_preferences\":[\"minimize tokens\"],\"source_proposal_hash\":\"30b6594e2a765088196ee8092fa67ad365667955aab4d320661dedc87665d0fa\",\"state_id\":\"S.INTENT_CONTRACT\",\"unresolved_noncritical\":[\"preferred compression\"]}')\nEXPECTED='c6b696d7b474b65c1903cb9c41145b760471b84a16ce0bbb30db4ebfc6154193'\nassert CONTRACT['contract_hash']==EXPECTED\nassert not (set(CONTRACT['soft_preferences']) & set(CONTRACT['hard_requirements']))\nprint(json.dumps({'ok':True,'intent':CONTRACT['intent_id'],'effect':CONTRACT['effect_class'],'hard':len(CONTRACT['hard_requirements']),'soft':len(CONTRACT['soft_preferences']),'caps':len(CONTRACT['authority_requirements']),'contract_hash':EXPECTED},sort_keys=True))",
+  "options":{},
+  "purpose":"Execute the exact host program produced by ClayCode-Lab 0.1 to validate the full compile-lower-run path independently of the compiler process."
+}

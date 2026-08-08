@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.5",
+  "schema_version": "3.6",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "research_center_protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
@@ -23,13 +23,16 @@
   "frank_architecture_contract": "tools/frank_architecture_contract.py",
   "fusion_research_contract": "tools/fusion_research_contract.py",
   "commands": {
-    "go": {
-      "protocol": "research_entity/triggers/GO_AUTODISPATCH_PROTOCOL.md",
-      "kind": "program_autodispatch",
+    "666": {
+      "protocol": "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
+      "level0_protocol": "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
+      "post_level0_protocol": "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
+      "kind": "phase_sensitive_autonomous_research_genesis",
       "requires_program_state": true,
       "requires_center_discovery": true,
-      "must_self_select_room_role_task": true,
       "must_act_immediately": true,
+      "level0_exact_archive_progress": true,
+      "post_level0_stochastic_field_spawn": true,
       "paid_training_auto_start_forbidden": true
     },
     "q12": {
@@ -176,5 +179,5 @@
       "harness_graph_contract": "research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md"
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every scientific/research-center trigger reads the dynamic staged program and live center while remaining loyal to its own domain. The peer research branches remain clay, frank, gwt, emergenz, claycode, hyperposition, claygraph, unifieddb and harness. go is a self-routing meta-worker and q12 is the creator-advisor meta-role. Every substantive visible response ends with the dynamic status footer generated from the next unpassed milestone in PROGRAM_STATE.json, including all registered short commands."
+  "rule": "Reserved commands fire only on exact full-message match. Every scientific/research-center trigger reads the dynamic staged program and live center while remaining loyal to its own domain. 666 is the sole autonomous meta-trigger: archive assimilation before Level-0 PASS, emergent stochastic research-field spawning after Level-0 PASS. q12 is the creator-advisor meta-role. Every substantive visible response ends with the dynamic status footer generated from the next unpassed milestone in PROGRAM_STATE.json, including all registered short commands."
 }

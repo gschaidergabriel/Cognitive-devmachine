@@ -1,0 +1,88 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0548p0700-chatgpt-secondary-drive-wissen-unifieddb-claygraph",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"NON_OVERLAPPING_LATE_DRIVE_SEMANTIC_SHARD_ANALYZED",
+  "source_scope":{
+    "folder":"aicore/wissen",
+    "folder_id":"1chQK4-5f99W6yJsVrcbrvcDa4w-bkN1Z",
+    "scope_state":"PARTIAL_FOLDER_IDENTITY_FULL_DB_AND_CORE_MECHANISM_DEEP_READ",
+    "primary_sources":[
+      {"drive_id":"1e-5mLgm3mpQGLgkwXMfxABU4iouGacpP","name":"wissen.db","bytes":8359936,"sha256":"73381fb192786205c00e7a7c5dabb280a914bc9525286ca61b07fe2bb8af9502","sqlite_integrity":"ok","tables":54},
+      {"drive_id":"1Zn1A_sIBRtzTFZIByJfl3drBADT2bU3H","name":"substrat.db","bytes":3936256,"sha256":"6fac6c0db3bb84ba23501936cdf34df02f7a068742477180a8847224e6ace22c","sqlite_integrity":"ok","tables":13},
+      {"drive_id":"1aDj-17ThPcemSVs5NbocgbE1mo4-dUAk","name":"wissensschicht.py"},
+      {"drive_id":"1UjCubrlGH3RlTI_jqCPYLaRe1s2EaByF","name":"datenschicht.py"},
+      {"drive_id":"1D0rsPwG9aPDFnvXurxu6FnfhuYBc-C4V","name":"graphify.py"},
+      {"drive_id":"18uEBnXd3HDZiWZrN_D3WveYcBUfZlOFm","name":"experiment.py"},
+      {"drive_id":"1vNDpf56sT4Ve-jmwUZ43roQCFK_hRZeu","name":"evolution.py"},
+      {"drive_id":"1eWWLFPO-9Md6OSqgW2ZM3M-4lxCG5YUi","name":"kantendeutung.py"},
+      {"drive_id":"1GJkbfl21YaGhFBTV0ifT3gcZ7rjw6-K8","name":"wissensschicht.xeno"}
+    ]
+  },
+  "database_observations":{
+    "wissen_counts":{"knoten":356,"kante":1140,"dkante":1197,"organ":240,"hypothese":60,"experiment":8,"befund":181,"quelle":59,"pruefung":28,"analyse":31,"forschung":42,"evo":40,"offen":37},
+    "substrat_counts":{"invariants__convergence_checkpoints":9248,"titan_validator__observations":9248,"consciousness__mood_trajectory":3842,"consciousness__mood_archive":705,"titan__ego_state":1355,"topic_interest__evaluations":483,"aura_analyzer__blocks":453,"aura_analyzer__metas":582,"chat_memory__messages":38},
+    "substrat_convergence":{"rows":9248,"reported_stable":9248,"validator_convergent":9248,"distance_min":0.0,"distance_avg":0.0,"distance_max":0.0,"distinct_checkpoint_names":9248,"time_range":["2026-02-14T21:09:11","2026-02-18T03:11:01"],"interpretation":"DEGENERATE_ZERO_VARIANCE_CHANNEL_CANDIDATE_NOT_STABILITY_PROOF"}
+  },
+  "findings":[
+    {
+      "finding_id":"DRIVE-WISSEN-UDB-001",
+      "epistemic_class":"HISTORICAL_EMPIRICAL_ARCHITECTURE_MEASUREMENT",
+      "claim":"The late Drive knowledge layer did not assume a monolithic graph was superior. Its own source explicitly rejects the brain analogy as evidence, treats emergence as a result rather than a premise, and preregisters measurable tests for whether a graph/unified layer improves capability or cost.",
+      "evidence":{"source":"wissensschicht.py + analyse rows 27-31","latest_metrics":{"CI_d":0.0424,"RC_d_files":26,"CBC_d_cross_boundary_edges":661,"SD_d_duplicate_state_columns":30,"RS_d_required_files":65},"latest_real_coupling_fraction":{"value":0.225,"n":120,"wilson95":[0.159,0.308],"method":"stratified sample, three independent voices, majority"}},
+      "qualification":"A later preregistered criterion says expand to n>=160; below 25% would falsify T3 and above 40% support it. n=120 does not satisfy that gate, so the historical question remains unresolved rather than promoted.",
+      "targets":["unifieddb","claygraph","harness","clay"],
+      "current_implication":"Do not justify UnifiedDB by analogy or graph density. Benchmark capability, reconstruction cost, state duplication, typed cross-boundary dependencies and causal query value against source-local/attached baselines."
+    },
+    {
+      "finding_id":"DRIVE-WISSEN-UDB-002",
+      "epistemic_class":"HISTORICAL_NEGATIVE_RESULT_ON_PERFORMANCE_RATIONALE",
+      "claim":"The stored analysis says latency was not the decisive argument for unification: the data path was about 11.5 ms across eight links and the candidate unification saved about 8.2 ms (roughly 3x median on the small benchmark), still orders below a 4B inference. The stronger question was dependency visibility/capability, not raw milliseconds.",
+      "targets":["unifieddb","claygraph","harness"],
+      "current_implication":"Do not optimize the current database architecture around tiny local-query latency wins while ignoring provenance, replay, dependency visibility and model/inference cost shadows."
+    },
+    {
+      "finding_id":"DRIVE-WISSEN-GRAPH-003",
+      "epistemic_class":"HISTORICAL_EXECUTABLE_GRAPH_SEMANTICS",
+      "claim":"graphify.py separates measured, structurally derived and model-proposed edges. Model-proposed edges require a reason/evidence and preserve candidate status (V/C) rather than being silently promoted to measured truth.",
+      "targets":["claygraph","unifieddb","harness","frank"],
+      "current_implication":"Preserve edge provenance, epistemic class and candidate/promoted state in ClayGraph. A central graph must not flatten measured relations, derived relations and model hypotheses into one undifferentiated edge type."
+    },
+    {
+      "finding_id":"DRIVE-WISSEN-METHOD-004",
+      "epistemic_class":"HISTORICAL_EXECUTABLE_RESEARCH_METHOD",
+      "claim":"experiment.py implements preregistration as data integrity: hypothesis, prediction, falsifier and setup are SHA-256 sealed; a SQLite BEFORE UPDATE trigger aborts mutation after sealing. It also separates discoverer and reviewer provider pools and runs a boring-cause screen before measurement.",
+      "targets":["harness","claygraph","unifieddb","emergenz","gwt"],
+      "current_implication":"Reuse the mechanism, not the historical prose: immutable preregistration receipts, disjoint generation/review roles where feasible, and mundane-cause controls before novel-mechanism promotion."
+    },
+    {
+      "finding_id":"DRIVE-WISSEN-DATA-005",
+      "epistemic_class":"HISTORICAL_EXECUTABLE_EVIDENCE_LAYER",
+      "claim":"datenschicht.py was explicitly built after six LLM research tracks relied on a false reentry_closure=0 claim; it computes numeric evidence from sources and emits compressed findings rather than asking models to narrate raw data. wissensschicht.py opens source databases read-only/immutable for cross-database measurement.",
+      "targets":["claygraph","unifieddb","harness","gwt","frank"],
+      "current_implication":"Current research/data architecture should compute deterministic measurements before LLM synthesis and bind every condensed claim back to raw-source hashes/queries."
+    },
+    {
+      "finding_id":"DRIVE-WISSEN-VALIDATOR-006",
+      "epistemic_class":"HISTORICAL_MEASUREMENT_ORACLE",
+      "claim":"substrat.db contains 9,248 convergence checkpoints and 9,248 validator observations, but every recorded validator distance is exactly 0.0 and every row is marked convergent/stable. This zero-variance channel cannot by itself demonstrate robust convergence and is a regression oracle for tautological or self-comparing validators.",
+      "targets":["harness","unifieddb","frank","emergenz"],
+      "current_implication":"Harness convergence metrics require negative controls and injected divergence; a validator that cannot produce non-zero distance on deliberately different states must fail acceptance."
+    },
+    {
+      "finding_id":"DRIVE-WISSEN-TARGET-007",
+      "epistemic_class":"HISTORICAL_DESIGN_PROPOSAL_NOT_RESULT",
+      "claim":"wissen.db stores a design proposal for frozen-LLM + deterministic pure pipeline + one database for mutable state and for replay-vs-resampling as distinct experiments.",
+      "status":"DO_NOT_PROMOTE_AS_EMPIRICAL_RESULT",
+      "targets":["frank","unifieddb","harness"],
+      "current_implication":"The proposal is relevant ancestry for current Clay-native state/replay work but must earn current status only through executable current Harness evidence."
+    }
+  ],
+  "earned_work":{"applied_hours":0.0,"candidate":{"mapping_id":"HEW-DRIVE-WISSEN-012","reuse_category":"MEASUREMENT_FOUNDATION","current_doomsday_rows":["UDB_UNIFIED_DATABASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","CLAY_0_1_ACCEPTANCE_RUN"],"avoided_future_hours_low":2.0,"avoided_future_hours_center":6.0,"avoided_future_hours_high":12.0,"confidence":"MEDIUM_FOR_MECHANISM_LOW_FOR_HOUR_ESTIMATE","apply_rule":"Single-writer must deduplicate against existing LCME/GWT/UnifiedDB/negative-result mappings before materialization.","validation":"Current Harness encodes preregistration immutability, deterministic-evidence-before-LLM, real-vs-vocabulary coupling controls and zero-variance-validator negative controls."}},
+  "progress":{"exact_level0_global_percent_delta":0.0,"reason":"A high-value semantic shard and two DB fingerprints are closed, but the whole aicore/wissen recursive identity denominator and global Level-0 denominator remain open."},
+  "next_actions":["Freeze aicore/wissen direct and altbestand recursive identity denominator.","Route UDB-001..002 to UnifiedDB and GRAPH-003 to ClayGraph.","Encode VALIDATOR-006 as Harness negative control.","Do not credit HEW-DRIVE-WISSEN-012 until single-writer dedup." ]
+}

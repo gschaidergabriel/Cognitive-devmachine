@@ -20,6 +20,18 @@ The registry is authoritative for branch membership. `tools/research_interconnec
 
 The FRANK↔ClayCode feedback edge additionally uses `research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md` so recursive agreement cannot manufacture evidential confidence.
 
+## Fixed FRANK Clay-native target
+
+All seven scientific branches MUST treat `research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md` as a project-owner architecture directive, not as a hypothesis requiring repeated re-approval.
+
+The target FRANK is Clay-native across model thought/generated symbolic language, memory, state, values/vector semantics, architecture IR, GWT/Assemblies, Hyperposition and internal semantic communication. Clay/ClayCode is the target semantic source of truth and ClayGraph is the target persistent semantic memory/knowledge substrate subject to measured safety/performance constraints.
+
+Needle is the sole intentionally retained non-Clay semantic subsystem. It remains a fully used fast classifier/router. Needle output is converted into typed provenance-bound Clay input and never becomes execution authority by itself.
+
+Research MAY falsify proposed benefits, training recipes, representations, migration strategies, latency assumptions, memory mechanisms or safety mechanisms inside this fixed target. It MUST NOT silently convert the owner-fixed Clay-native target itself back into an open yes/no hypothesis.
+
+Physical implementation encodings such as neural tensors, KV caches, numeric arrays, machine code, filesystem formats and database pages need not be literal Clay text. Where they cross a semantic boundary, their meaning/provenance must be represented by Clay-native typed contracts rather than an independent competing semantic architecture.
+
 ## Mandatory preflight
 
 Before Fusion 1, every scientific research trigger MUST:

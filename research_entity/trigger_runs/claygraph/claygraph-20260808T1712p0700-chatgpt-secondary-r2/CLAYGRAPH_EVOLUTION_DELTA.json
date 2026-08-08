@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260808T1712p0700-chatgpt-secondary-r2",
+  "accepted_parent":{"generation":0,"graph_id":"claygraph-v0-seed"},
+  "research_from":"claygraph-g1c-resident-adaptive-escalation",
+  "candidate":"claygraph-g1d-epochal-latent-field",
+  "added":[
+    "immutable graph epoch and atomic publish semantics",
+    "delta overlay with workload-dependent compaction/rebuild",
+    "continuous sparse latent activation field between LLM calls",
+    "lazy timestamped decay and local propagation",
+    "activation epoch distinct from semantic graph epoch",
+    "Assembly pins graph_epoch + activation_epoch + CognitiveFrame",
+    "historical-mechanism recovery ledger"
+  ],
+  "changed":[
+    {"from":"graph escalation primarily begins at query time","to":"cheap event-driven latent salience may pre-exist the query; expensive traversal remains gated"},
+    {"from":"resident semantic index updated incrementally or rebuilt","to":"validated immutable base/delta epochs with explicit atomic publish and amortized compaction policy"},
+    {"from":"Assembly carries graph revision","to":"Assembly freezes semantic epoch, activation epoch and frame witness for replay/staleness checks"}
+  ],
+  "removed":[],
+  "preserved":["exact/event authority","activation is not truth","adaptive graph escalation","bounded Assembly","evidence-family/conflict preservation","direct-store fallback","no physical monolith requirement","capability authority outside graph"],
+  "expected_benefits":["restore original memory-through-thinking objective","avoid mixed semantic reads during concurrent updates","avoid O(N) continuous activation sweep","make incremental-vs-rebuild decision measurable","improve causal replay of memory influence"],
+  "predicted_regressions":["resident memory footprint","epoch/delta lifecycle complexity","reader reclamation complexity","possible activation saturation/noisy hubs","extra metadata in Assembly certificates"],
+  "evidence":{"historical":"mechanism continuity only","synthetic":"delta/epoch/latent-field implementation proxies","external":"current graph-agent-memory/spreading-activation/incremental-memory literature","live_target":"UNMEASURED"}
+}

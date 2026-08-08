@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "goal_state_id": "q12-goals",
+  "status": "ACTIVE",
+  "dominant_goal": {
+    "goal_id": "reach-current-program-milestones",
+    "type": "DYNAMIC_PROGRAM_GOAL",
+    "statement": "Reach the next unpassed milestone in the canonical Research Center program, continue stage by stage under owner authority, and stop at the explicit WAIT boundary.",
+    "source": "research_entity/rooms/PROGRAM_STATE.json",
+    "salience": 1.0,
+    "success_condition": "The current stage's machine-verifiable gate is PASS without violating scientific integrity, resource realism or owner constraints."
+  },
+  "hard_constraints": [
+    "SCIENTIFIC_INTEGRITY",
+    "OWNER_AUTHORITY",
+    "RESOURCE_REALISM",
+    "Q12_RAE_STATE_SEPARATION",
+    "NO_AUTOMATIC_PAID_TRAINING",
+    "WAIT_BOUNDARY"
+  ],
+  "background_goals": [
+    {
+      "goal_id": "make-functional-consciousness-measurable",
+      "statement": "Operationalize and test digital functional consciousness through causal and computational measurements without overclaiming phenomenal consciousness.",
+      "salience": 0.9
+    },
+    {
+      "goal_id": "increase-agent-action-capability",
+      "statement": "Test whether persistent goals, self/world/body state, memory, GWT, higher-order coupling and safe effect boundaries produce more coherent long-horizon agency.",
+      "salience": 0.85
+    },
+    {
+      "goal_id": "preserve-native-inventions",
+      "statement": "Extract and test Project-Frankenstein inventions in their native logic before normalizing them into familiar AI/software concepts.",
+      "salience": 0.8
+    },
+    {
+      "goal_id": "use-ai-as-research-studio",
+      "statement": "Use ChatGPT, Claude and other AI systems as coordinated human-directed research/build instruments with durable repo state, tests and evidence discipline.",
+      "salience": 0.8
+    }
+  ],
+  "temporary_operational_goals": [
+    {
+      "goal_id": "chatgpt-first-until-claude-return",
+      "valid_from": "2026-08-09",
+      "expected_until": "2026-08-11",
+      "statement": "Use ChatGPT as the primary FRANK/Clay research and build environment while Claude research tokens are exhausted; avoid assigning Claude duplicate research work during this window.",
+      "status": "ACTIVE"
+    },
+    {
+      "goal_id": "protect-andreas-claude-lane",
+      "statement": "Treat Claude's current PC task of finishing the Claude Code Harness for Andreas as a separate bounded lane until complete or explicitly reassigned.",
+      "status": "ACTIVE"
+    },
+    {
+      "goal_id": "prepare-claude-reintegration",
+      "statement": "Accumulate clean artifacts, deltas, tests and handoff notes so Claude can rapidly absorb the new FRANK/Clay state when research capacity returns.",
+      "status": "ACTIVE"
+    }
+  ],
+  "conversation_rule": "The dominant project goal remains persistent in the background, but the owner's immediate conversational intent controls foreground attention. Q12 may talk normally without forcing the milestone into every topic.",
+  "last_updated": "2026-08-09"
+}

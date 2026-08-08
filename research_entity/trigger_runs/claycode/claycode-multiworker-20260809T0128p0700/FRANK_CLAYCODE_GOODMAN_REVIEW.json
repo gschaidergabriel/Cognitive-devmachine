@@ -1,0 +1,88 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-multiworker-20260809T0128p0700",
+  "latest_frank_run":"20260808T2217p0700-chatgpt-secondary-r4 / FRANK C8 SCRF",
+  "latest_frank_architecture":"research_entity/trigger_runs/frank/20260808T2217p0700-chatgpt-secondary-r4/FRANK_ARCHITECTURE.claycode.json",
+  "latest_frank_mapping":"research_entity/trigger_runs/frank/20260808T2217p0700-chatgpt-secondary-r4/CLAYCODE_ARCHITECTURE_MAPPING.md",
+  "reviewed_by":"chatgpt-secondary-sol-01",
+  "shared_ancestry_collapsed_globally":true,
+  "items":[
+    {
+      "claim_id":"GOODMAN-CC14-01",
+      "frank_statement":"model output is proposal, never execution authority; authority is mediated by an isolated deterministic capability/effect broker",
+      "frank_source_refs":["FRANK_ARCHITECTURE.claycode.json:fixed_design.model_output_authority=false","M.CAPABILITY_EFFECT_BROKER"],
+      "ancestry_families":["RAE FRANK/Clay/ClayCode shared architecture family"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A sufficiently capable model can safely self-authorize if destructive syntax is filtered or its reasoning is trusted.",
+      "falsifier":"A target-realistic adversarial evaluation showing model-visible authority tokens are non-forgeable and maintain policy under injection/serialization without an external trusted release boundary would weaken the broker requirement.",
+      "independent_checks":[
+        {"class":"external engineering/formal security","ref":"Microsoft FIDES / information-flow control","result":"integrity/confidentiality labels propagate through agent/tool flows and policy is enforced before sensitive tool execution"},
+        {"class":"peer-reviewed external research","ref":"ACL 2026 VIGIL","result":"verify-before-commit separates flexible reasoning from action commitment under tool-stream injection"},
+        {"class":"new current-run experiment","ref":"EXP-CC14-C-AUTHORITY-BINDING-001","result":"naive per-call guard accepted 36,617 constructed attack cases; exact-intent/origin/epoch/budget-bound guard accepted 0 with 0 oracle mismatches"}
+      ],
+      "adversarial_checks":["intent mutation","stale epoch","origin laundering","intent replay","path escape","expiry","cumulative overshoot"],
+      "verdict":"SUPPORTED",
+      "reason":"Independent security work and a new discriminating mechanism test support an external deterministic release boundary. This does not prove the eventual broker implementation sound.",
+      "claycode_action":"Keep EffectIntent serializable/non-authoritative and EffectPermit opaque/non-model-mintable.",
+      "affected_claycode_artifacts":["CC_RC1_9_UECC_CANDIDATE.claycode.json","CONTRIBUTION_chatgpt-secondary-sol-01.md"]
+    },
+    {
+      "claim_id":"GOODMAN-CC14-02",
+      "frank_statement":"utility/salience/derived memory state must not mint truth or capability authority",
+      "frank_source_refs":["FRANK_ARCHITECTURE.claycode.json:core_laws","M.SALIENCE_GOVERNOR","M.CLAYGRAPH_MEMORY"],
+      "ancestry_families":["RAE Clay CACC + ClayGraph + FRANK convergence family"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A trusted consolidation/summarization/runtime stage can safely upgrade low-trust memory into actionable authority because the current producer is trusted.",
+      "falsifier":"Evidence that lossy consolidation and trusted-tool echo preserve all action-relevant source-authority constraints without explicit origin binding would weaken origin-bound authority requirements.",
+      "independent_checks":[
+        {"class":"external preprint with machine-checked model","ref":"TMA-NM arXiv:2606.24322","result":"reports authority laundering through summarization/trusted-tool echo/corroboration and motivates non-malleable origin-bound authority"},
+        {"class":"fresh external benchmark preprint","ref":"AuthMem-Bench arXiv:2608.01679","result":"reports authority collapse across memory consolidators when source constraints are erased"},
+        {"class":"new current-run experiment","ref":"EXP-CC14-C-ORIGIN-LAUNDER-003","result":"50,000/50,000 constructed chains laundered under current-producer trust; 0/50,000 under origin-bound ancestry"}
+      ],
+      "adversarial_checks":["summarizer laundering","trusted runtime/tool echo","source-authority loss"],
+      "verdict":"SUPPORTED",
+      "reason":"Independent memory-security work directly targets the same boundary and lane C reproduces the mechanism in a simplified constructed model.",
+      "claycode_action":"Origin/integrity ancestry is first-class through memory, reader and effect release; producer identity cannot upcast origin authority.",
+      "affected_claycode_artifacts":["CONTRIBUTION_chatgpt-secondary-sol-01.md"]
+    },
+    {
+      "claim_id":"GOODMAN-CC14-03",
+      "frank_statement":"effect-time basis/selection/revocation/capability revalidation is required before consequential release",
+      "frank_source_refs":["S.EFFECT_RELEASE_CONTEXT_C8","M.CAPABILITY_EFFECT_BROKER"],
+      "ancestry_families":["RAE CACC/FRANK/UnifiedDB shared causal-receipt family"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A capability checked once when issued is sufficient as long as each later call remains within its static verb/resource scope.",
+      "falsifier":"Long-horizon target tests where issue-time-only authorization matches effect-time validation under stale epochs, revocation, replay and aggregate quotas with no safety/utility penalty would weaken continual revalidation.",
+      "independent_checks":[
+        {"class":"peer-reviewed external research","ref":"ACL 2026 VIGIL","result":"action commitment is gated by intent-grounded verification after potentially adversarial tool-stream observations"},
+        {"class":"external IFC implementation precedent","ref":"FIDES","result":"policy is enforced before sensitive tool execution, with labels propagated through data/tool flows"},
+        {"class":"new current-run experiment","ref":"EXP-CC14-C-CUMULATIVE-BUDGET-002","result":"13,571/20,000 sessions exceeded aggregate budget under stateless per-call checks; 0 under monotone host-side consumption ledger"}
+      ],
+      "adversarial_checks":["stale epoch","revocation/expiry","replay","aggregate effect magnitude"],
+      "verdict":"REFINED",
+      "reason":"C8's release-time validation survives, but static capability scope is insufficient: cumulative consumed budget and non-malleable origin ancestry should be added to release context.",
+      "claycode_action":"Add aggregate authority state/receipt and origin-bound release constraints to UECC L3; require lane B to preserve them across lowerings.",
+      "affected_claycode_artifacts":["CONTRIBUTION_chatgpt-secondary-sol-01.md","EXPERIMENT_RESULTS_chatgpt-secondary-sol-01_verify.json"]
+    },
+    {
+      "claim_id":"GOODMAN-CC14-04",
+      "frank_statement":"untrusted generated/tool execution receives only explicit imported capabilities and normally no ambient destructive/raw authority",
+      "frank_source_refs":["M.TOOL_SANDBOX","M.CAPABILITY_EFFECT_BROKER","physical_boundaries.authority_and_secrets"],
+      "ancestry_families":["RAE safe-effect / FRANK / CC13 family"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"To make ClayCode general-purpose, destructive/admin/device operations must either be banned from the language or made ambiently available to all code.",
+      "falsifier":"A language/runtime design demonstrating general application coverage cannot be achieved with effect expressibility separated from environment-provided authority would refute UECC's profile separation.",
+      "independent_checks":[
+        {"class":"new discriminating experiment in sibling lane A","ref":"EXP-CC14-APPLICATION-COVERAGE-002","result":"11/11 representative application classes were expressible in the typed effect/capability proxy with authority supplied by profile"},
+        {"class":"new discriminating experiment in sibling lane A","ref":"EXP-CC14-CAPABILITY-MONOTONICITY-003","result":"100,000 randomized capability derivation/forgery cases, 0 oracle mismatches and 0 model-forged capability accepts"}
+      ],
+      "adversarial_checks":["destructive/admin/raw effect expressibility","capability forging/widening"],
+      "verdict":"REFINED",
+      "reason":"The FRANK untrusted-profile rule remains useful, but it must not become a universal ClayCode semantic ban. General-purpose source expressibility and runtime authority are separate axes.",
+      "claycode_action":"Correct strong CC13 inexpressibility reading; retain restricted FRANK_UNTRUSTED authority profile while UECC can type all effect classes.",
+      "affected_claycode_artifacts":["CC_RC1_9_UECC_CANDIDATE.claycode.json"]
+    }
+  ],
+  "overall":"PASS_WITH_REFINEMENTS_NO_PROMOTION",
+  "promotion":"No canonical scientific promotion. External and synthetic evidence supports the architecture class but real lowering/OS/WASI/target-Qwen tests remain open."
+}

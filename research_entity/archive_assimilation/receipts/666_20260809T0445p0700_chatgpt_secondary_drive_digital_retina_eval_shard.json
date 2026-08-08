@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0445+0700-chatgpt-secondary-drive-digital-retina-eval-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "invocation": {"requested":"666 with explicit instruction to use new Drive data","reserved_exact_trigger_match":false,"execution_basis":"explicit user instruction to execute the 666 Level-0 protocol"},
+  "status": "BOUNDED_RETINA_RUNTIME_EVAL_LINEAGE_ANALYZED",
+  "observed_at": "2026-08-09T04:45:00+07:00",
+  "source_scope": {
+    "submanifest": "research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_EVAL_SUBMANIFEST.json",
+    "digital_retina_root": "drive:1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m",
+    "digital_retina_e2e_root": "drive:1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja",
+    "crossread_dedup": ["research_entity/archive_assimilation/receipts/666_20260809T0422p0700_drive_unpacked_tree_digital_retina_xeno.json","research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json"],
+    "non_overlap": "This shard deep-reads Digital Retina runtime/evaluation lineage and raw results; it does not claim the already-assimilated rescue/identity or XENO work."
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-RETINA-001",
+      "epistemic_class": "HISTORICAL_SOURCE_CODE_PLUS_ARCHITECTURE_DOC",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "Digital Retina is a standalone stateless local vision pipeline that exposes structured concepts, objects, OCR, faces, scene data and a narrative through a public analyze/describe API, using specialized CPU-side vision components rather than a single general VLM.",
+      "targets": ["frank","gwt","harness","clay","claycode","claygraph","unifieddb"],
+      "implication": "For FRANK multimodality, preserve a typed VisualPercept boundary separating raw sensor/model evidence from model-facing narrative; do not collapse specialized detector evidence and generated description into one untyped string."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-002",
+      "epistemic_class": "HISTORICAL_NEGATIVE_MEASUREMENT_REPORT",
+      "status": "CURRENTLY_RELEVANT_TEST_ORACLE",
+      "claim": "The Tier-3 honest report measured strict text coverage at 35.3% on 12 hard images and 47.5% on 10 easy images, and explicitly rejected an earlier unsupported 55-to-95-percent coverage narrative.",
+      "targets": ["harness","gwt","frank","clay"],
+      "implication": "Import the honest hard/easy battery as a regression lineage and require metric provenance before promoting visual-capability claims."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-003",
+      "epistemic_class": "RAW_RESULT_LINEAGE_COMPARISON",
+      "status": "SUPPORTED_WITH_SCOPE",
+      "claim": "On the same 279 hard-set baseline phrases, p8 records 44.802867% strict and 94.623656% CLIP-lenient coverage, while p12 records 87.813620% strict and the identical 94.623656% CLIP-lenient coverage at threshold 0.20.",
+      "targets": ["harness","gwt","frank","claygraph"],
+      "implication": "The large p8-to-p12 gain is primarily a surfacing/projection change over an effectively unchanged weak-signal CLIP recognition score, demonstrating that internal representation coverage and downstream-readable semantic projection are separate measurable layers."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-004",
+      "epistemic_class": "MEASUREMENT_SENSITIVITY_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_METRIC_CONSTRAINT",
+      "claim": "The final report's CLIP-lenient headline is highly threshold-sensitive: the report lists 66.3% at cosine 0.22, 94.6% at 0.20, 99.3% at 0.18 and 100% at 0.15, while explicitly describing 0.20 as a weak visual cue threshold.",
+      "targets": ["harness","gwt","frank","emergenz"],
+      "implication": "A single thresholded coverage headline is not a robust capability measure. Harness should store full calibration curves and distinguish representation-presence, surfaced-text recall, correctness and false-positive/confabulation rates."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-005",
+      "epistemic_class": "FRESH_HOLDOUT_RAW_RESULT",
+      "status": "PARTIAL_GENERALIZATION_WITH_DISTRIBUTION_GAP",
+      "claim": "A later fresh set contains 32 images and 681 baseline phrases and records 72.246696% strict coverage and 92.511013% CLIP-lenient coverage at 0.20. Relative to p12 on the tuned 12-image set, strict coverage drops about 15.57 percentage points while lenient coverage drops about 2.11 points.",
+      "targets": ["harness","gwt","frank","clay"],
+      "implication": "The projection improvements generalize materially but not fully. The gap is consistent with test-set adaptation and/or distribution shift; because the complete experiment-design freeze was not independently verified in this shard, do not label it causal proof of overfitting."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-006",
+      "epistemic_class": "REPORT_AND_RAW_METADATA_PROVENANCE_CONFLICT",
+      "status": "OPEN_ADJUDICATION_REQUIRED",
+      "claim": "p8 and p12 raw JSON metadata name gemini-2.0-flash, while the final narrative describes Llama-4 Scout as the hard-set baseline; the fresh-set raw JSON explicitly names meta-llama/llama-4-scout-17b-16e-instruct.",
+      "targets": ["harness","claygraph","unifieddb","q12_index"],
+      "implication": "Do not attribute the p8/p12 hard-set scores to a specific baseline model until cached baseline phrase provenance is resolved. Store benchmark-target identity as immutable provenance, not mutable report prose."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-007",
+      "epistemic_class": "HISTORICAL_FAILURE_AND_REPAIR_PATTERN",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "The honest report documents error amplification where incorrect YOLO detections seeded region captions that hallucinated additional detail; later work added art/AI detector gating and confidence floors to suppress this pathway.",
+      "targets": ["gwt","harness","frank","clay"],
+      "implication": "Downstream semantic elaborators must not amplify uncertain upstream percepts. VisualPercept should carry source, confidence and abstention state through every transformation, and lesions should measure whether gating reduces both misses and hallucination propagation."
+    }
+  ],
+  "earned_work_candidate": {
+    "mapping_id": "HEW-DRIVE-RETINA-011",
+    "current_doomsday_rows": ["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","CLAY_0_1_FULL_INTEGRATION"],
+    "mechanism_or_result": "Existing historical Digital Retina implementation plus E2E hard-set/fresh-set evaluation lineage provides a concrete multimodal implementation base, typed sensory-output precedent and a reusable visual regression/metric-failure corpus.",
+    "reuse_category": "REUSABLE_WITH_ADAPTATION",
+    "avoided_future_hours_low": 2.0,
+    "avoided_future_hours_center": 5.0,
+    "avoided_future_hours_high": 10.0,
+    "confidence": "MEDIUM_FOR_TEST_AND_ARCHITECTURE_REUSE_LOW_FOR_HOUR_ESTIMATE",
+    "falsifier_or_validation_receipt": "Current FRANK/Clay VisualPercept integration must reproduce selected historical hard/fresh-set semantics under frozen benchmark provenance and demonstrate that the old implementation or tests materially reduce current build/search effort without preserving metric leakage or confabulation pathways."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Bounded Retina obligations are complete but whole-Drive recursive and Project-Frankenstein denominators remain incomplete; strict Level-0 global progress law therefore remains unchanged.",
+    "provisional_unique_avoided_future_hours_center": 5.0,
+    "global_credit_applied": false
+  },
+  "next_actions": [
+    "Resolve cached hard-set baseline phrase generator/model identity before model-specific benchmark claims.",
+    "Convert representation-vs-surfacing separation into H1/H2/H3 VisualPercept differential tests.",
+    "Use fresh-set 32-image/681-phrase result as the stronger historical generalization oracle than the tuned 12-image headline.",
+    "Continue recursive Digital Retina code/model inventory separately; this receipt does not claim full subtree coverage."
+  ]
+}

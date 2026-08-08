@@ -35,23 +35,29 @@ Run `tools/research_interconnect_preflight.py --trigger claycode --run-id <run_i
 
 ClayCode is not researched only as prose or JSON architecture. Every substantive `claycode` run must attempt to turn at least one current language hypothesis into an executable artifact: parser, canonicalizer, type/effect checker, compiler/lowering pass, interpreter/VM fragment, roundtrip checker, fuzz harness, or generated host-language program.
 
-Capability source: `research_entity/global/SANDBOXAPI_RESEARCH_CAPABILITY.json`.
+Capability sources:
+- `research_entity/global/E2B_RESEARCH_CAPABILITY.json`
+- `research_entity/global/SANDBOXAPI_RESEARCH_CAPABILITY.json`
 
-When `sandboxapi_sandbox` is `RUNTIME_VERIFIED`, it is the preferred external execution surface for ClayCode compiler/runtime experiments. The run should, where scientifically relevant:
+`e2b_sandbox` is currently `RUNTIME_VERIFIED` and is the **preferred external execution surface** for ClayCode compiler/runtime experiments. `sandboxapi_sandbox` remains an intended independent secondary backend but is currently `BLOCKED_NOT_SUBSCRIBED`; do not count it as runtime evidence until its own successful execution receipt exists.
+
+The run should, where scientifically relevant:
 
 1. write real ClayCode source examples and counterexamples;
 2. parse them into the current canonical IR;
 3. validate types, semantic classes, basis/closure and authority rules appropriate to the tested candidate;
 4. lower or compile them into an executable host representation;
-5. execute the generated program in the remote sandbox;
+5. execute the generated program in E2B, preferably as a separate process from the compiler itself;
 6. run positive, negative, mutation/fuzz and semantic-preservation tests;
-7. capture compile errors, runtime errors, counterexamples, timings and repair iterations;
-8. turn those observations into hypotheses, negative results, compiler revisions and cross-branch feedback.
+7. use local/Judge0 differential replication when it adds independent information;
+8. capture compile errors, runtime errors, bridge/tooling failures, counterexamples, timings and repair iterations;
+9. turn those observations into hypotheses, negative results, compiler revisions and cross-branch feedback.
 
 Every nontrivial executable experiment must emit an `EXECUTABLE_RESEARCH_RECEIPT.json` (or an array/ledger of equivalent receipts) containing at least:
 
 - ClayCode source hash and candidate/compiler version;
 - canonical IR/semantic hash where applicable;
+- provenance/contract-instance hash where applicable;
 - lowering/compiler target and generated-code hash;
 - sandbox provider/runtime/language identity;
 - test/fuzz corpus identity;
@@ -64,9 +70,20 @@ Every nontrivial executable experiment must emit an `EXECUTABLE_RESEARCH_RECEIPT
 
 A successful compilation is not automatically scientific support: differential/reference/oracle tests must establish which semantic property was preserved. A compiler/typechecker accepting a program does not prove the source intent was adequate; CC-RC1.5 intent-adequacy boundaries remain separate.
 
-If SandboxAPI is unavailable, unverified, quota-limited or not subscribed, record the exact blocker and automatically fall back to local sandbox and/or Judge0. The run may proceed, but it must not claim SandboxAPI evidence. When SandboxAPI later becomes operational, rerun the target-sensitive compiler/runtime subset there.
+### Executable identity rule learned from E2B
 
-Stateful sessions/package installation may be used only when the active SandboxAPI plan actually exposes them. One-shot Basic executions are sufficient for self-contained compiler+test harnesses and must not be mislabeled as persistent sessions.
+The first real E2B ClayCode compiler experiment exposed that ordering and duplicate set-like constraints changed one monolithic contract hash. CC-Lab v0.2 therefore separates:
+
+- `semantic_hash` — canonical executable meaning, insensitive to ordering/duplication for fields explicitly typed as sets;
+- `contract_hash` — exact provenance-bound contract instance, including proposal/adequacy ancestry.
+
+Do not collapse these identities. If future ClayCode introduces ordered/weighted preferences or ordered effects, they require an explicitly ordered type and must not be normalized as sets.
+
+### Sandbox fallback and replication
+
+If E2B is unavailable, quota-limited or fails, record the exact blocker and automatically fall back to local sandbox and/or Judge0. The run may proceed, but it must not claim E2B evidence. If SandboxAPI becomes subscribed and runtime-verified, use it as an independent second backend for target-sensitive compiler/runtime replication, especially multi-language lowering tests.
+
+Stateful sessions/package installation may be used only when the active provider/plan actually exposes them. Never infer session persistence from a one-shot execution API.
 
 The long-term self-hosting research path is:
 

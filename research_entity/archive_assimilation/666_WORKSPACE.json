@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "workspace_id": "666-frank-archive-assimilation",
   "program_stage": "L0_ARCHIVE_ASSIMILATION",
   "status": "ACTIVE",
@@ -29,7 +29,7 @@
     "folder_title": "clay",
     "folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
     "owner_reported_size_mb": 400,
-    "inventory_state": "EXTRACTED_TREE_ACCESSIBLE_CONCEPT_SUBMANIFEST_FROZEN_FULL_DRIVE_RECURSION_PENDING",
+    "inventory_state": "EXTRACTED_TREE_ACCESSIBLE_CONCEPT_SUBMANIFEST_FROZEN_RECOVERY_BRANCH_DISCOVERED_FULL_DRIVE_RECURSION_PENDING",
     "manifest_state": "PARTIAL_SEMANTIC_SUBMANIFEST_FROZEN",
     "manifest_path": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_MANIFEST.json",
     "concept_submanifest_path": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json",
@@ -54,8 +54,8 @@
       "07_uebersicht-und-praesentation": 36,
       "01_synthetic-equilibrium": 35
     },
-    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json",
-    "latest_access_attempt": "2026-08-09T04:22+07:00 Drive clay root exposed extracted folders; aicore/konzepte v7 index and category tree were directly readable.",
+    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json",
+    "latest_access_attempt": "2026-08-09T04:28+07:00 Drive root/extracted tree and frank-rettung branch were directly traversed; later uncommitted May work and unversioned Genesis/paper-research sources were identified.",
     "raw_tarball": {
       "file_id": "1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU",
       "size_bytes": 663552000,
@@ -74,6 +74,16 @@
       "lifecycle": {"current_le_30_days":561,"maturing_31_90_days":28,"old_91_240_days":66,"historic_gt_240_days":0},
       "origins": {"lokal-pc":638,"iar.frank.ink":14,"vps-frank.ink":3},
       "scope_warning": "Exact for the generated concept/text index only; not the complete Drive code/database/model/binary denominator."
+    },
+    "recovery_lineage": {
+      "status": "PARTIAL_SOURCE_BRANCH_DISCOVERED",
+      "recovery_folder": "drive:1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6",
+      "manifest_note": "drive:1fk7QhCkJbFE4UioFodgy_dXUBorLjspl",
+      "later_uncommitted_files_reported": 5,
+      "source_claimed_work_date": "2026-05-11",
+      "git_reference_head_date": "2026-04-05",
+      "unique_missing_module": "services/identity_forge.py",
+      "rule": "Treat rescue copies as separate lineage nodes; compare file-by-file and never overwrite current Git history blindly."
     }
   },
   "project_frankenstein": {
@@ -93,7 +103,7 @@
     "integrated_units": 0,
     "provisional_deep_read_units_minimum": 15,
     "provisional_deep_read_manifest": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
-    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
     "provisional_semantic_shards": [
       "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
       "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
@@ -101,13 +111,15 @@
       "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
       "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
       "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json",
-      "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json"
+      "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json"
     ],
     "noncounting_crossread": "research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/CROSSREAD_DEDUP.json",
-    "history_manifest_constraint": "Material deleted/superseded artifacts exist in commit history but not at frozen head; exact Level-0 Project-Frankenstein coverage must be history-aware rather than head-only."
+    "history_manifest_constraint": "Material deleted/superseded artifacts exist in commit history and later uncommitted Drive rescue branches exist outside GitHub; exact Level-0 Project-Frankenstein coverage must be history-aware and cross-source rather than head-only."
   },
   "cross_source_fusion": {
-    "status": "ACTIVE_PARTIAL_SOURCE_RECONCILIATION_NOW_POSSIBLE",
+    "status": "ACTIVE_PARTIAL_SOURCE_RECONCILIATION_WITH_RECOVERY_LINEAGE",
     "total_atomic_obligations": 0,
     "completed_atomic_obligations": 0,
     "exact_coverage_percent": 0.0,
@@ -127,13 +139,16 @@
     "mapping_path": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
     "temporary_doomsday_calibration_band_percent": [67.2, 76.6],
     "temporary_doomsday_center_percent": 72.7,
-    "partial_mapped_avoided_future_hours_low": 20.0,
-    "partial_mapped_avoided_future_hours_center": 53.0,
-    "partial_mapped_avoided_future_hours_high": 106.0,
+    "partial_mapped_avoided_future_hours_low": 28.0,
+    "partial_mapped_avoided_future_hours_center": 74.0,
+    "partial_mapped_avoided_future_hours_high": 148.0,
     "partial_mapping_receipts": [
       "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
       "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
-      "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json"
+      "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json"
     ],
     "corroborative_noncounting_receipts": [
       "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json",
@@ -141,7 +156,7 @@
       "research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json"
     ],
     "global_completion_credit_applied": false,
-    "aggregation_warning": "53 center hours is a provisional gross mechanism-deduped mapping, not strict completion credit; row-level overlap still requires final reconciliation. Drive XENO/Thalamus evidence adds measurement/correction value but zero additional avoided-hours credit pending mechanism-level deduplication.",
+    "aggregation_warning": "74 center hours is a provisional gross mechanism-deduped mapping, not strict completion credit. GWT/Thalamus/state, sandbox-safety and benchmark-scaffold overlaps are not double-credited; row-level implementation overlap still requires final reconciliation.",
     "rule": "Replace this temporary retention prior with evidence-mapped reusable/avoided current-work equivalents only after sufficient Level-0 coverage; partial mappings do not change exact completion."
   },
   "eta": {
@@ -154,26 +169,29 @@
     "bootstrap_high_hours": 3.0,
     "bootstrap_center_hours": 2.25,
     "hard_max_hours": 3.0,
-    "confidence": "DRIVE_EXTRACTED_TREE_ACCESSIBLE_FULL_DENOMINATOR_NOT_YET_FROZEN",
-    "basis": "The prior raw tarball connector-size blocker no longer blocks semantic traversal because the extracted Drive tree and a 655-document indexed concept corpus are directly accessible. Full Drive code/database/model/binary reconciliation and Project-Frankenstein history denominator remain open.",
+    "confidence": "DRIVE_EXTRACTED_TREE_ACCESSIBLE_FULL_DENOMINATORS_NOT_YET_FROZEN",
+    "basis": "Extracted Drive tree and 655-document concept index are accessible, and later uncommitted rescue lineage is now identified. Full Drive code/database/model/binary reconciliation and full Project-Frankenstein history/rescue denominator remain open.",
     "observed_batches": [
-      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json","kind":"surface-index-and-partial-history-analysis","active_minutes_approx":3,"exact_coverage_credit":0.0,"blocker":"Drive archive 663552000 bytes exceeds connector 104857600-byte limit for raw direct download; later extracted-tree discovery supersedes this as a semantic blocker."},
+      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json","kind":"surface-index-and-partial-history-analysis","active_minutes_approx":3,"exact_coverage_credit":0.0,"blocker":"Raw archive exceeds connector direct-download limit; later extracted-tree discovery supersedes this as a semantic blocker."},
       {"receipt":"research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json","kind":"non-overlapping-gwt-runtime-history-semantic-shard","exact_coverage_credit":0.0,"material_deltas":6,"branch_event":"research_entity/rooms/center_events/666_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json"},
-      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","kind":"non-overlapping-state-identity-body-failure-history-semantic-shard","exact_coverage_credit":0.0,"material_deltas":7,"earned_work_mappings":4,"provisional_avoided_future_hours_center":29.0,"branch_event":"research_entity/rooms/center_events/20260809T0415p0700_666_pf_state_failure_crossroom_delta.json","crossread_event":"research_entity/rooms/center_events/20260809T0415p0700_666_crossread_pf_gwt_runtime_b4f2.json"},
+      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","kind":"non-overlapping-state-identity-body-failure-history-semantic-shard","exact_coverage_credit":0.0,"material_deltas":7,"earned_work_mappings":4,"provisional_avoided_future_hours_center":29.0,"branch_event":"research_entity/rooms/center_events/20260809T0415p0700_666_pf_state_failure_crossroom_delta.json"},
       {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json","kind":"non-overlapping-execution-authority-safety-history-semantic-shard","exact_coverage_credit":0.0,"material_deltas":9,"earned_work_mappings":1,"provisional_avoided_future_hours_center":9.0,"branch_event":"research_entity/rooms/center_events/20260809T0420p0700_666_safety_authority_cross_room_delta.json"},
       {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","kind":"crossread-deduped-lcme-soma-autonomy-history-semantic-shard","exact_coverage_credit":0.0,"material_deltas":5,"earned_work_mappings":3,"provisional_unique_avoided_future_hours_center":15.0,"branch_event":"research_entity/rooms/center_events/20260809T0421p0700_666_lcme_soma_autonomy_crossroom_delta.json","crossread_peer_receipts":4},
       {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json","kind":"current-head-core-deep-read-corroborative-shard","exact_coverage_credit":0.0,"deep_read_units":9,"material_deltas":9,"earned_work_hours_added":0.0,"dedup_receipt":"research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/CROSSREAD_DEDUP.json"},
       {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json","kind":"memory-motivation-body-agency-deep-read-corroborative-shard","exact_coverage_credit":0.0,"deep_read_units":5,"material_deltas":6,"earned_work_hours_added":0.0,"dedup_receipt":"research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/CROSSREAD_DEDUP.json"},
-      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json","kind":"drive-extracted-tree-index-plus-xeno-thalamus-measurement-shard","exact_coverage_credit":0.0,"semantic_submanifest_documents":655,"semantic_submanifest_relations":3762,"material_deltas":6,"earned_work_hours_added":0.0,"concept_submanifest":"research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json"}
+      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json","kind":"drive-extracted-tree-index-plus-xeno-thalamus-measurement-shard","exact_coverage_credit":0.0,"semantic_submanifest_documents":655,"semantic_submanifest_relations":3762,"material_deltas":6,"earned_work_hours_added":0.0,"concept_submanifest":"research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json"},
+      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","kind":"xeno-claycode-precursor-and-context-efficiency-history-shard","exact_coverage_credit":0.0,"material_deltas":8,"earned_work_mappings":3,"provisional_avoided_future_hours_center":16.0},
+      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json","kind":"model-capacity-latency-feedback-contamination-history-shard","exact_coverage_credit":0.0,"material_deltas":6,"earned_work_mappings":1,"provisional_avoided_future_hours_center":3.0,"branch_event":"research_entity/rooms/center_events/20260809T0424p0700_666_model_latency_feedback_crossroom_delta.json"},
+      {"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json","kind":"drive-rescue-uncommitted-may-identity-recovery-shard","exact_coverage_credit":0.0,"material_deltas":5,"earned_work_mappings":1,"provisional_avoided_future_hours_center":2.0,"branch_event":"research_entity/rooms/center_events/20260809T0428p0700_666_drive_recovery_identityforge_crossroom_delta.json"}
     ]
   },
   "work_packages": {
-    "666-00-DUAL-INDEX": {"status":"ACTIVE_DRIVE_SEMANTIC_SUBMANIFEST_FROZEN_FULL_RECURSION_PENDING","goal":"Recursively inventory Drive and Project-Frankenstein in parallel; freeze exact manifests/hashes."},
-    "666-01-DEDUPE-SHARD": {"status":"ACTIVE_VERSION_GRAPH_AVAILABLE_PARTIAL_HISTORY_SHARDS_EXIST","goal":"Hash, duplicate/version cluster, classify and create parallel semantic shards."},
+    "666-00-DUAL-INDEX": {"status":"ACTIVE_DRIVE_SEMANTIC_SUBMANIFEST_FROZEN_RECOVERY_LINEAGE_DISCOVERED_FULL_RECURSION_PENDING","goal":"Recursively inventory Drive and Project-Frankenstein in parallel; freeze exact manifests/hashes."},
+    "666-01-DEDUPE-SHARD": {"status":"ACTIVE_VERSION_GRAPH_AND_RECOVERY_BRANCHES_PARTIAL_HISTORY_SHARDS_EXIST","goal":"Hash, duplicate/version cluster, classify and create parallel semantic shards."},
     "666-02-BULK-EXTRACT": {"status":"ACTIVE_DRIVE_EXTRACTED_SEMANTIC_TREE_GITHUB_PARTIAL","goal":"Bulk extract full relevant content by source class instead of serial manual reading."},
     "666-03-PARALLEL-ANALYZE": {"status":"ACTIVE","goal":"Analyze mechanisms, experiments, measurements, successes, failures and lineage across independent shards."},
     "666-04-EARNED-WORK-MAP": {"status":"ACTIVE_PARTIAL","goal":"Map historical FRANK/XENO/ClayCode/GWT work to current Clay 0.1 workstreams and avoided/reused current effort."},
-    "666-05-CROSS-SOURCE-RECONCILE": {"status":"ACTIVE_PARTIAL","goal":"Resolve duplicates, chronology, contradictions, supersession and ancestry across Drive and Project-Frankenstein."},
+    "666-05-CROSS-SOURCE-RECONCILE": {"status":"ACTIVE_PARTIAL_RECOVERY_LINEAGE_INCLUDED","goal":"Resolve duplicates, chronology, contradictions, supersession and ancestry across Drive and Project-Frankenstein."},
     "666-06-BRANCH-FEEDBACK": {"status":"ACTIVE_PARTIAL","goal":"Return material findings or NO_CHANGE receipts to all research branches and Q12 index."},
     "666-07-AUDIT": {"status":"BLOCKED_ON_FULL_DENOMINATORS_AND_RECONCILIATION","goal":"Verify exact coverage, earned-work mapping, hashes and PASS decision."}
   },
@@ -190,7 +208,10 @@
     "research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/BRANCH_FEEDBACK_MANIFEST.json",
     "research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/FINAL_REPORT.md",
     "research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json",
-    "research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json"
+    "research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json"
   ],
-  "last_updated": "2026-08-09T04:22:00+07:00"
+  "last_updated": "2026-08-09T04:29:00+07:00"
 }

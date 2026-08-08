@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.1",
+  "request_id": "c6-groq-claylearn-zero-correct-20260808T1750",
+  "tool": "groq_inference",
+  "request_sha256": "3244e09be0619515e2c2b8d09d14127f5c09b05e0927b357a51560d487511c3d",
+  "processed_at": "2026-08-08T11:08:06.091189+00:00",
+  "result": {
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "evidence_role": "8b_proxy_for_4b",
+    "content": "Here's a Python solution for the given problem:\n\n```python\ndef mini_clay(candidates, rules):\n    # Calculate scores for each candidate\n    scores = {}\n    for candidate in candidates:\n        score = candidate[1] + candidate[2] - candidate[3]\n        scores[candidate[0]] = score\n\n    # Apply rules to scores\n    for rule in rules:\n        source, target, value = rule.split(':')\n        if value == '0':\n            for candidate in candidates:\n                if candidate[0] == source:\n                    for other_candidate in candidates:\n                        if other_candidate[0] == target and other_candidate[1] == 0:\n                            scores[other_candidate[0]] += value\n        else:\n            for candidate in candidates:\n               ",
+    "finish_reason": "length",
+    "usage": {
+      "queue_time": 0.065037064,
+      "prompt_tokens": 724,
+      "prompt_time": 0.062031833,
+      "completion_tokens": 160,
+      "completion_time": 0.287675111,
+      "total_tokens": 884,
+      "total_time": 0.349706944
+    }
+  },
+  "status": "SUCCESS"
+}

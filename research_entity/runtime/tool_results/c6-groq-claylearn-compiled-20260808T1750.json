@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.1",
+  "request_id": "c6-groq-claylearn-compiled-20260808T1750",
+  "tool": "groq_inference",
+  "request_sha256": "47a26def743a4bafbcadf06ce0b653832fa6dbfb3ff429f28a54326af8a44c24",
+  "processed_at": "2026-08-08T11:08:04.946423+00:00",
+  "result": {
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "evidence_role": "8b_proxy_for_4b",
+    "content": "To solve this problem, we can use Python. We will first parse the input data, then sort the players based on their scores and blocked status, and finally print the output in the required format.\n\n```python\nclass Player:\n    def __init__(self, name, score, blocked):\n        self.name = name\n        self.score = score\n        self.blocked = blocked\n\n    def __repr__(self):\n        return f\"@{self.name}[s={self.score},b={self.blocked}]\"\n\ndef parse_input(lines):\n    players = {}\n    for line in lines:\n        name = line[1]\n        score = int(line[4:-2].split(\"=\")[1])\n        blocked = int(line[-2:-1])\n        players[name] = Player(name,",
+    "finish_reason": "length",
+    "usage": {
+      "queue_time": 0.079478945,
+      "prompt_tokens": 541,
+      "prompt_time": 0.222444121,
+      "completion_tokens": 160,
+      "completion_time": 0.280853037,
+      "total_tokens": 701,
+      "total_time": 0.503297158
+    }
+  },
+  "status": "SUCCESS"
+}

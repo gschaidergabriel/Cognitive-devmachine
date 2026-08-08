@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.1",
+  "request_id": "c6-groq-claylearn-fewshot-20260808T1750",
+  "tool": "groq_inference",
+  "request_sha256": "8ccc7ed0b6cf954e5da5d46e1bd8ed27342daef002384bdcc24f2113157cc55f",
+  "processed_at": "2026-08-08T11:08:05.614192+00:00",
+  "result": {
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "evidence_role": "8b_proxy_for_4b",
+    "content": "Here is a Python solution for the given problem:\n\n```python\ndef mini_clay(candidates, conditions):\n    # Create a dictionary to store the scores of each candidate\n    scores = {}\n    for candidate in candidates:\n        scores[candidate[0]] = candidate[1] + candidate[2] - candidate[3]\n\n    # Apply the conditions\n    for condition in conditions:\n        source, target, value = condition.split(':')\n        value = int(value)\n        if scores[source] + value > scores[target]:\n            scores[target] += value\n\n    # Filter out candidates with b=1\n    eligible_candidates = [candidate for candidate in scores if candidate[4] == 0]\n\n    # Sort the eligible candidates by their scores and then by their names\n    eligible",
+    "finish_reason": "length",
+    "usage": {
+      "queue_time": 0.060654923,
+      "prompt_tokens": 1166,
+      "prompt_time": 0.138476805,
+      "completion_tokens": 160,
+      "completion_time": 0.227294072,
+      "total_tokens": 1326,
+      "total_time": 0.365770877
+    }
+  },
+  "status": "SUCCESS"
+}

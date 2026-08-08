@@ -33,7 +33,7 @@ Canonical: r2 · 04234efdb86c
 Actor: chatgpt-secondary
 Trigger: none
 Research write: NO_RESEARCH_DELTA
-Short commands: dump · fusion · hypofusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb
+Short commands: dump · fusion · hypofusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness
 
 LAST PROMPT
 Completion: 100%
@@ -42,6 +42,8 @@ Open: none
 ```
 
 `Short commands` is mandatory and must list the currently registered reserved commands from `PROJECT_COMMAND_REGISTRY.json`. Do not silently omit it to shorten the footer. If the command registry changes, update the footer list accordingly.
+
+The current research-center peer branch set includes `clay`, `frank`, `gwt`, `emergenz`, `claycode`, `hyperposition`, `claygraph`, `unifieddb` and `harness`. `harness` is the executable convergence/integration/falsification branch and is a full research-center peer for interconnection and feedback.
 
 Allowed status values:
 

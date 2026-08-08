@@ -8,13 +8,7 @@ The footer is part of prompt completion, not optional decoration. Before sending
 
 There is exactly ONE valid visible rendering format for the RAE footer.
 
-The footer MUST be the final visible block and MUST be wrapped in one plain fenced Markdown code block whose opening line is exactly:
-
-```text
-```text
-```
-
-and whose closing line is exactly three backticks.
+The footer MUST be the final visible block and MUST be wrapped in one plain fenced Markdown code block. The opening fence line must be exactly ` ```text ` and the closing fence line must be exactly ` ``` `.
 
 Important rendering rules:
 - opener MUST be exactly ` ```text ` with no attributes, IDs, braces, classes or metadata after `text`;

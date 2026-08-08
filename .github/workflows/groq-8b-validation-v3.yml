@@ -1,0 +1,59 @@
+name: RAE Groq 8B validation V3
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/groq_8b_validation_v3.py'
+      - 'tools/groq_inference.py'
+      - 'research_entity/private/GROQ_API.env'
+      - '.github/workflows/groq-8b-validation-v3.yml'
+
+concurrency:
+  group: rae-groq-validation-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile V3
+        run: python -m py_compile tools/groq_8b_validation_v3.py tools/groq_inference.py tools/claygraph_query.py tools/claygraph_benchmark.py tools/claygraph_build.py
+      - name: Run V3 validation
+        run: |
+          mkdir -p research_entity/runtime/groq_8b_proxy
+          set +e
+          python tools/groq_8b_validation_v3.py --output research_entity/runtime/groq_8b_proxy/VALIDATION_V3.json > /tmp/v3.out 2>/tmp/v3.err
+          code=$?
+          set -e
+          V3_EXIT="$code" python - <<'PY'
+          import json,os
+          from datetime import datetime,timezone
+          from pathlib import Path
+          def tail(p):
+            try:return Path(p).read_text(encoding='utf-8',errors='replace')[-6000:]
+            except:return ''
+          Path('research_entity/runtime/groq_8b_proxy/VALIDATION_V3_DIAGNOSTIC.json').write_text(json.dumps({'schema_version':'1.0','checked_at':datetime.now(timezone.utc).isoformat(),'exit_code':int(os.environ['V3_EXIT']),'result_exists':Path('research_entity/runtime/groq_8b_proxy/VALIDATION_V3.json').exists(),'stdout_tail':tail('/tmp/v3.out'),'stderr_tail':tail('/tmp/v3.err'),'credential_value_exposed':False},indent=2)+'\n')
+          PY
+      - name: Commit V3 result
+        run: |
+          git config user.name 'rae-groq-experiment-runner'
+          git config user.email 'rae-groq-experiment-runner@users.noreply.github.com'
+          git add research_entity/runtime/groq_8b_proxy/VALIDATION_V3*.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record Groq 8B V3 validation results'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

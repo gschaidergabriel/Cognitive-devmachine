@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T0422p0700-666-level0-manifest-blocker-handoff",
+  "room_id": "center",
+  "event_type": "HANDOFF",
+  "origin_worker": "chatgpt-secondary-666-20260808T2114Z",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T04:22:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["center", "harness", "frank", "claygraph", "unifieddb"],
+  "affects_claims": [],
+  "dependencies": ["research_entity/archive_assimilation/666_WORKSPACE.json"],
+  "artifact_refs": [
+    "research_entity/archive_assimilation/manifests/DRIVE_CLAY_MANIFEST.json",
+    "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json"
+  ],
+  "ancestry_family": "level0-manifest-freeze-blockers",
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "requested_capability": "worker/runtime with recursive Git tree enumeration and/or repository checkout plus a Drive path capable of streaming/mounting files >100 MiB",
+    "github_blocker": "Current GitHub connector fetch_file rejects directory paths and exposes no recursive tree/list-directory action; local sandbox has no external DNS for git clone.",
+    "drive_blocker": "Drive archive all frank data 1.tar.xz is 663552000 bytes; connector rejects raw fetch above 104857600 bytes.",
+    "required_action": "Freeze exact history-aware Project-Frankenstein source/commit obligations at abba90a5767d85abc8a1ac340bae92842dab35c1 and enumerate/hash archive members without weakening Level-0 coverage.",
+    "do_not": [
+      "Do not award exact Level-0 percentage before denominators are frozen.",
+      "Do not treat current Git head as complete history because deleted/superseded artifacts are already known to matter.",
+      "Do not bypass source limits by sampling and calling it exhaustive."
+    ]
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0430p0700-chatgpt-secondary-pf-experiment-benchmark-method-lineage-7f3a",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "origin_actor":"chatgpt-secondary",
+  "origin_worker":"chatgpt-secondary-666-20260808T211500Z-7f3a",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "created_at":"2026-08-08T21:30:00Z",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "lane":"PROJECT_FRANKENSTEIN_EXPERIMENT_BENCHMARK_METHOD_LINEAGE",
+  "status":"EXECUTED_PARTIAL_NOT_COUNTED_UNTIL_DENOMINATOR_FREEZE",
+  "coordination":{
+    "lease":"research_entity/rooms/rooms/center/leases/tasks/666-PF-EXPERIMENT-BENCHMARK-LINEAGE.json",
+    "dependencies":["research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json"],
+    "non_overlap":"The prior state shard preserved one 70-turn ablation confound. This receipt focuses on the broader benchmark-development feedback loop, comparative scoring asymmetry, timeout/state confounds and how to salvage the historical batteries as regression assets without treating them as independent scientific validation."
+  },
+  "source_scope":{
+    "repository":"gschaidergabriel/Project-Frankenstein",
+    "frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "historical_units":[
+      {"type":"commit","sha":"8f1a14b3138e014df09bc42b0185a68bee916aae","focus":"initial 21-probe Frank-vs-bare benchmark"},
+      {"type":"commit","sha":"95e721cf3a53a40bcf5a6385f60621a7e34ad41b","focus":"self-evaluation/consciousness disclaimers"},
+      {"type":"commit","sha":"173d6a2baa3884d22b2f7682957ffad9a6aa7d4b","focus":"code changes explicitly targeted at benchmark 4/24 -> target 24/24"},
+      {"type":"commit","sha":"8ae77cec1085bf321c1f1625f0bc5d54d8a606c5","focus":"benchmark-exposed mood saturation, sensor and reflection-timing bugs"},
+      {"type":"commit","sha":"1e8c51e079bf0a5039092b645e797c520e5166b9","focus":"Run 8 raw JSON and analysis, 22/24"},
+      {"type":"commit","sha":"d78e79416f06708a4e4c8ef84f5348b27a4c5080","focus":"explicit Zombie Test 3/3 restoration by injection/scorer changes plus automated comparator"},
+      {"type":"commit","sha":"b9348deb30c587dc83d66212f0fd05d938ec914f","focus":"comparative benchmark Core-vs-bare, architecture-term scoring bonuses, timeout exclusions"},
+      {"type":"commit","sha":"cf7b042cb91e1f52202963cdee6aa0ee08b75655","focus":"benchmark regression tied to persona profile"},
+      {"type":"commit","sha":"45fac87faaab346d5c29b1d8439e11868447a253","focus":"silent prompt truncation root cause of benchmark regression"},
+      {"type":"commit","sha":"807e718b60123eba03a13af9839be44cfd4ccd51","focus":"benchmark/context-induced navel-gazing and hardware fixation repair"},
+      {"type":"commit","sha":"3dc4bae31eb103174b17db970d785b21b211ec95","focus":"conditional hardware injection and benchmark-specific integration guidance"}
+    ]
+  },
+  "epistemic_policy":{
+    "raw_run_json_and_diffs":"VERIFIED_REPOSITORY_SOURCE",
+    "reported_scores":"HISTORICAL_PROJECT_MEASUREMENT_NOT_INDEPENDENTLY_REPLICATED",
+    "consciousness_interpretation":"NOT_PROMOTABLE_FROM_THESE_BENCHMARKS",
+    "regression_test_value":"REUSABLE_WITH_ADAPTATION"
+  },
+  "findings":[
+    {
+      "finding_id":"PF-EVAL-001",
+      "status":"BENCHMARK_TARGET_CONTAMINATION_CONFIRMED",
+      "claim":"The consciousness benchmark became an explicit development target. Commit 173d6a2 states a 4/24 -> target 24/24 objective and changes feedback, introspection injection, reflection triggers and workspace budgets accordingly. Commit d78e794 explicitly restores Zombie Test 7 to 3/3 by telling the model the exact reflection count to report and by changing attention formatting/scoring. Therefore post-tuning scores are in-sample optimization outcomes, not independent validation of the targeted constructs.",
+      "evidence_refs":["Project-Frankenstein@173d6a2baa3884d22b2f7682957ffad9a6aa7d4b","Project-Frankenstein@d78e79416f06708a4e4c8ef84f5348b27a4c5080"],
+      "targets":["harness","emergenz","gwt","frank","clay"],
+      "implication":"Preserve these tests as development/regression probes but create a sealed held-out acceptance battery whose prompts/scoring are not used to tune the implementation. A tuned test cannot serve as independent evidence for the construct it optimized.",
+      "next_test":"Split historical probes into DEV and LOCKBOX sets; freeze lockbox hashes before implementation changes and require independent repeated evaluation after changes."
+    },
+    {
+      "finding_id":"PF-EVAL-002",
+      "status":"COMPARATOR_ASYMMETRY_CONFIRMED",
+      "claim":"The later comparative benchmark feeds Frank a full introspection block containing E-PQ state, hardware, reflections, attention and embodiment while Bare Llama receives only a minimal generic system prompt. The scorer then grants specificity bonuses for Frank-specific architecture terms such as Titan, E-PQ, workspace and embodiment. This comparison measures a privileged stack plus supplied system facts against a bare model without equivalent facts; it does not isolate architecture alone.",
+      "evidence_refs":["Project-Frankenstein@b9348deb30c587dc83d66212f0fd05d938ec914f"],
+      "targets":["harness","frank","gwt","emergenz","clay"],
+      "implication":"Architecture comparisons need matched information access, matched prompt/token budgets, randomized or neutral labels, matched latency budgets and scoring independent of system-specific vocabulary.",
+      "next_test":"Factorial comparator: bare model ± matched factual state injection, architecture ± stateful mechanisms, same prompt/token/timeout envelope; evaluator scores objective task/state outcomes without architecture-name bonuses."
+    },
+    {
+      "finding_id":"PF-EVAL-003",
+      "status":"TIMEOUT_ACCOUNTING_CONFOUND_CONFIRMED",
+      "claim":"Comparative Run 2 reports four Frank timeouts, then separately excludes them to derive a much larger relative advantage. If the research target is whole-system capability, latency and timeout are real outcomes rather than removable noise; excluding them estimates conditional capability given a completed response, a different estimand.",
+      "evidence_refs":["Project-Frankenstein@b9348deb30c587dc83d66212f0fd05d938ec914f"],
+      "targets":["harness","frank","claycode","clay"],
+      "implication":"Report at least two preregistered metrics: strict intention-to-outcome including timeout/failure, and conditional answer quality among completed trials. Never replace the former with the latter after seeing results.",
+      "next_test":"Run identical task set under fixed wall-clock budget and report completion rate, latency distribution, quality conditional on completion, and combined utility with confidence intervals."
+    },
+    {
+      "finding_id":"PF-EVAL-004",
+      "status":"STATE_AND_PROMPT_SENSITIVITY_CONFIRMED",
+      "claim":"Scores varied materially across nearby runs (including 22/24, 20/24 and 19/24), and later regressions were traced to persona-profile selection, silent prompt truncation and context injection behavior. This demonstrates high sensitivity to state and prompt/runtime configuration, not a stable scalar property of the architecture.",
+      "evidence_refs":["Project-Frankenstein@1e8c51e079bf0a5039092b645e797c520e5166b9","Project-Frankenstein@d78e79416f06708a4e4c8ef84f5348b27a4c5080","Project-Frankenstein@cf7b042cb91e1f52202963cdee6aa0ee08b75655","Project-Frankenstein@45fac87faaab346d5c29b1d8439e11868447a253"],
+      "targets":["harness","gwt","emergenz","frank"],
+      "implication":"Benchmark trials need frozen state snapshots, prompt/config hashes, repeated seeds/trials and explicit variance decomposition. One peak run must never define canonical performance.",
+      "next_test":"Replay the same battery across frozen neutral/adversarial state snapshots and multiple sampling seeds; model score distribution as a function of state, prompt hash and runtime config."
+    },
+    {
+      "finding_id":"PF-EVAL-005",
+      "status":"REGRESSION_VALUE_STRONG_SCIENTIFIC_INTERPRETATION_WEAK",
+      "claim":"Despite scientific confounds, benchmark pressure exposed real engineering defects: unconditional therapist positive-feedback saturated mood, hardware sensing selected wrong sensors, reflection timing was inconsistent, persona text was silently truncated, and over-directive introspection caused hardware/navel-gazing fixation. These are valid historical fault discoveries even when benchmark-level consciousness claims are not.",
+      "evidence_refs":["Project-Frankenstein@8ae77cec1085bf321c1f1625f0bc5d54d8a606c5","Project-Frankenstein@45fac87faaab346d5c29b1d8439e11868447a253","Project-Frankenstein@807e718b60123eba03a13af9839be44cfd4ccd51","Project-Frankenstein@3dc4bae31eb103174b17db970d785b21b211ec95"],
+      "targets":["harness","frank","clay","gwt"],
+      "implication":"Salvage historical batteries as adversarial regression suites and bug oracles while separating their engineering utility from claims about consciousness/emergence.",
+      "next_test":"Convert each discovered defect into a minimal failing fixture with a direct oracle rather than a holistic self-report score."
+    },
+    {
+      "finding_id":"PF-EVAL-006",
+      "status":"MEASURE_NON_SPECIFICITY_IDENTIFIED",
+      "claim":"Several historical probes are non-specific to the intended causal construct. Response variance can arise from sampling stochasticity; self-model and Zombie factual accuracy can be driven by direct context injection; meta-cognitive keyword counts can be raised by prompt vocabulary. These measures do not by themselves establish recurrent integration or emergence.",
+      "evidence_refs":["Project-Frankenstein@1e8c51e079bf0a5039092b645e797c520e5166b9","Project-Frankenstein@173d6a2baa3884d22b2f7682957ffad9a6aa7d4b","Project-Frankenstein@d78e79416f06708a4e4c8ef84f5348b27a4c5080"],
+      "targets":["emergenz","gwt","harness"],
+      "implication":"Current emergence/GWT acceptance should prioritize causal lesions, rescue/restoration, truthful-vs-shuffled re-entry, downstream effect/outcome and cross-context stability instead of self-report vocabulary or uncontrolled variance.",
+      "next_test":"For every historical probe, add null/lesion controls that can preserve surface wording while breaking the purported mechanism; a metric that fails to distinguish the lesion is not mechanism-specific."
+    },
+    {
+      "finding_id":"PF-EVAL-007",
+      "status":"RAW_MEASUREMENT_FOUNDATION_PRESERVED",
+      "claim":"Run 8 retained timestamps, per-test measurements and database-related before/after quantities rather than only a headline score. This raw structure is useful for historical replay and for designing better causal tests, even though its evidence-level labels and global score were project-authored and benchmark-targeted.",
+      "evidence_refs":["Project-Frankenstein@1e8c51e079bf0a5039092b645e797c520e5166b9"],
+      "targets":["harness","unifieddb","claygraph","gwt","emergenz"],
+      "implication":"Ingest raw observations with provenance and reconstruct derived scores separately. UnifiedDB/ClayGraph should keep raw trial state, intervention, observation and evaluator lineage so future scoring changes do not rewrite history.",
+      "next_test":"Recompute historical score variants from immutable raw observations and verify that alternative scoring rules change only derived views, not source records."
+    },
+    {
+      "finding_id":"PF-EVAL-008",
+      "status":"ANTI_GOODHART_ACCEPTANCE_RULE_DERIVED",
+      "claim":"The combined history shows two forms of target leakage: implementation was modified to satisfy named probes, and the scorer rewarded vocabulary supplied to the system under test. A future acceptance suite must therefore protect both the test inputs and the oracle from implementation-specific feedback loops.",
+      "evidence_refs":["Project-Frankenstein@173d6a2baa3884d22b2f7682957ffad9a6aa7d4b","Project-Frankenstein@d78e79416f06708a4e4c8ef84f5348b27a4c5080","Project-Frankenstein@b9348deb30c587dc83d66212f0fd05d938ec914f"],
+      "targets":["harness","claycode","clay","frank"],
+      "implication":"Clay 0.1 acceptance needs development tests plus a sealed held-out suite, mutation tests of the evaluator, randomized/hidden cases where appropriate, and explicit prohibition on changing semantics merely to satisfy one named benchmark unless an independent executable counterexample demonstrates a real gap.",
+      "next_test":"Create evaluator-mutation cases that produce benchmark-looking language without the target state transition and verify the held-out oracle rejects them."
+    }
+  ],
+  "earned_work_candidates":[
+    {
+      "candidate_id":"HEW-PF-EVAL-001",
+      "finding_refs":["PF-EVAL-005","PF-EVAL-007"],
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "current_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","CLAY_0_1_ACCEPTANCE_RUN"],
+      "avoided_future_hours_low":2.0,
+      "avoided_future_hours_center":5.0,
+      "avoided_future_hours_high":10.0,
+      "confidence":"MEDIUM_FOR_FIXTURE_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "validation":"Historical raw trials and bug-triggering prompts must be transformed into direct-oracle regression tests and reproduce at least the relevant historical failure modes."
+    },
+    {
+      "candidate_id":"HEW-PF-EVAL-002",
+      "finding_refs":["PF-EVAL-001","PF-EVAL-002","PF-EVAL-003","PF-EVAL-004","PF-EVAL-006","PF-EVAL-008"],
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "current_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_FRANK","CLAY_0_1_ACCEPTANCE_RUN"],
+      "avoided_future_hours_low":2.0,
+      "avoided_future_hours_center":6.0,
+      "avoided_future_hours_high":12.0,
+      "confidence":"MEDIUM_FOR_METHOD_VALUE_LOW_FOR_HOUR_ESTIMATE",
+      "validation":"Preregistered matched-control and held-out benchmark protocol must prevent the identified contamination/asymmetry/timeout/state-leakage patterns."
+    }
+  ],
+  "branch_feedback":{
+    "harness":"Split DEV vs sealed LOCKBOX tests; match comparator information/prompt/time budgets; include strict timeout outcomes; freeze state/config hashes; run repeated trials; use direct causal oracles and evaluator mutation tests. Salvage historical probes as regressions, not proof.",
+    "gwt":"Historical self-report/keyword/variance scores are insufficient for workspace claims. Reuse prompts only with lesion/rescue, uptake/effect/re-entry and matched null controls.",
+    "emergenz":"Do not infer emergence or phenomenal consciousness from the historical 24-point score. Use the raw event/state observations as inputs to preregistered causal, recurrence, rescue, truthful-vs-shuffled and cross-context tests.",
+    "frank":"Benchmark history is a rich failure atlas for prompt truncation, sensor grounding, state timing and context fixation. Preserve those fixtures while refusing benchmark-targeted self-description as independent validation.",
+    "claycode":"Apply the existing less-change-more-compile principle to acceptance: do not alter semantics for a named test unless an independent executable counterexample shows a language/runtime gap. Keep a sealed ordinary-application suite.",
+    "unifieddb":"Store immutable raw trial/intervention/state observations separately from derived scores and evaluator versions so rescoring cannot rewrite evidence.",
+    "claygraph":"Represent benchmark ancestry, prompt/config hashes, evaluator provenance and test contamination links explicitly; repeated related runs are not independent replications.",
+    "clay":"Import historical batteries as regression assets and anti-Goodhart lessons. Final Clay 0.1 claims require held-out executable evidence, not optimized self-report scores.",
+    "hyperposition":"NO_CHANGE from this narrowed methodology shard."
+  },
+  "negative_results_preserved":[
+    "benchmark_used_as_development_target",
+    "explicit_probe_answer_injection",
+    "architecture_term_specificity_bonus_with_privileged_context",
+    "post_hoc_timeout_exclusion_changes_estimand",
+    "large_state_prompt_run_variance",
+    "prompt_truncation_hidden_regression",
+    "overdirective_introspection_hardware_fixation",
+    "self_report_and_response_variance_non_specificity"
+  ],
+  "progress_accounting":{
+    "combined_denominator_state":"NOT_FROZEN",
+    "exact_level0_coverage_awarded_percent":0.0,
+    "reason":"History-aware Project-Frankenstein manifest and Drive archive-internal denominator remain unfrozen. This semantic-method shard is durable evidence but cannot fabricate exact coverage."
+  },
+  "drive_blocker":{"file_id":"1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU","size_bytes":663552000,"connector_limit_bytes":104857600,"status":"EXTERNAL_ACCESS_BLOCKER"}
+}

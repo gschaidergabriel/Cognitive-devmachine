@@ -1,0 +1,39 @@
+{
+  "schema_version":"1.0",
+  "tool_name":"openrouter_inference",
+  "provider":"OpenRouter",
+  "script":"tools/openrouter_inference.py",
+  "runner":".github/workflows/openrouter-research.yml",
+  "request_dir":"research_entity/runtime/openrouter_requests",
+  "result_dir":"research_entity/runtime/tool_results",
+  "class":"target_small_model_inference",
+  "requires_secret":["OPENROUTER_API_KEY"],
+  "credential_required":true,
+  "credential_store":"research_entity/private/API_TOKENS.env",
+  "credential_value_must_not_appear_in_artifacts":true,
+  "auth_transport":"Authorization: Bearer to https://openrouter.ai/api/v1",
+  "default_model":"qwen/qwen3-4b",
+  "free_model":"qwen/qwen3-4b:free",
+  "requested_target_class":"Qwen3-4B",
+  "executed_model_class":"4B",
+  "evidence_role":"direct_qwen3_4b_external_runtime",
+  "preferred_for":[
+    "Qwen3-4B semantic reader experiments",
+    "ClayCode/XENO representation exactness",
+    "COVE certified-operation-view projection tests",
+    "ClayGraph matched-context answer-quality tests",
+    "GWT projection/order sensitivity on the actual 4B model class",
+    "Hyperposition role-binding representation tests"
+  ],
+  "not_equivalent_to":[
+    "local Qwen3-4B runtime latency",
+    "Android/edge memory/KV/energy/thermal evidence",
+    "local tokenizer/runtime implementation identity when provider transformations are material",
+    "LoRA internalization",
+    "live FRANK causal intervention"
+  ],
+  "evidence_class":"external_target_model_runtime",
+  "status":"PENDING_RUNTIME_VERIFICATION",
+  "verification_request":"research_entity/runtime/openrouter_requests/openrouter-qwen3-4b-smoke-20260808T1942p0700.json",
+  "routing_rule":"For model-side experiments whose target is Qwen3-4B and whose scientific variable does not require local hardware/runtime identity, prefer verified OpenRouter qwen/qwen3-4b over the Groq 8B proxy. Preserve requested_target_class and executed_model_class in every result."
+}

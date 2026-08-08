@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0431+0700-chatgpt-secondary-drive-genesis-healing-shard",
+  "origin_actor": "chatgpt-secondary",
+  "actor_role": "SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "session_id": "chatgpt-secondary-20260809-666",
+  "prompt_run_id": "666-20260809T0431p0700-chatgpt-secondary",
+  "ingested_by": "chatgpt-secondary",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status": "DRIVE_GENESIS_RUNTIME_DYNAMICS_AND_HEALING_NEGATIVE_RESULTS_ANALYZED",
+  "source_scope": {
+    "drive_root": "drive:1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU:frank-werkzeuge",
+    "genesis_monitor_folder": "drive:1xwTAPEWzXOBo8jv6iXSIyFKboFd5D8O0:genesis-monitor",
+    "files": [
+      "drive:1N6_jyHoGurBu6B_QXiXYFdpt_erl2EvX:report.md",
+      "drive:1qlPlXsqObWPYLePbUYsrTEdu8GmCAVkQ:report_30min.md",
+      "drive:1jxhZ7bNYXIi4Gf-T6TSc5ls0pidlotNk:monitor_30min.jsonl",
+      "drive:1uMa_i_FgB9GemN7Hq5yzMEVikEvubvDt:healing-log.md"
+    ],
+    "raw_monitor_sha256": "6811fed4e313eb7e2fb3225ce755cb83b1378cb21afa937edd561d7e85bd6a52",
+    "raw_monitor_records": 15,
+    "raw_monitor_window": "2026-02-26T21:50:18.185364..2026-02-26T22:18:18.497475"
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-GENESIS-001",
+      "epistemic_class": "HISTORICAL_RUNTIME_MONITORING_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_DYNAMICS_FAILURE_ORACLE",
+      "claim": "The first monitored Genesis regime showed a severe false-activity pattern: daemon watchdog crash-looping, state frozen for roughly 50 minutes, population apparently fixed at 99-100, all six emotion dimensions saturated at 1.0, an initial crystal burst followed by zero new crystals, and 18+ watchdog kills. The report attributes the freeze to watchdog timing based on nominal tick intervals while a VCB sensor could block for tens of seconds.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["emergenz","gwt","frank","harness","clay"],
+      "implication": "Observed population size, activation, emotion magnitude or crystal count are not sufficient evidence of healthy autonomous dynamics. Current Harness needs wall-clock liveness, state-freshness and process-health receipts alongside cognitive metrics."
+    },
+    {
+      "finding_id": "DRIVE-GENESIS-002",
+      "epistemic_class": "HISTORICAL_INTERVENTION_RESULT_WITH_RAW_TRACE_CORROBORATION",
+      "status": "MEASUREMENT_FOUNDATION",
+      "claim": "After watchdog/state-save/wave-capping and forced-active changes, the 28-minute raw trace records 349 births, 348 deaths, 409 additional mutations, population 99->100, average fitness 0.2721->0.3709 and emotion spread 0.0000->0.3223 with zero added crystals and zero fusions. This verifies that stable turnover and improving internal fitness can coexist with complete failure of the intended crystallization output path.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "targets": ["emergenz","gwt","harness","frank","claycode"],
+      "implication": "Current emergence/agentic evaluation must keep internal-dynamics metrics, useful-output metrics and causal task outcomes separate. A proxy such as fitness or diversity cannot serve as the objective alone."
+    },
+    {
+      "finding_id": "DRIVE-GENESIS-003",
+      "epistemic_class": "HISTORICAL_SELECTION_GOODHART_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_ANTI_GOODHART_ORACLE",
+      "claim": "The stabilized run converged to a caching monoculture: 51% of the final 100-organism population used caching, while all 100 organisms had idea_type=optimization. Meanwhile the output gate produced zero new crystals because legacy organisms lacked metadata expected by the newer quality gate.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["emergenz","harness","clay","frank"],
+      "implication": "Selection systems require diversity shadows, ancestry/schema migration and explicit output utility. Tightening a quality gate can create a dead zone when inherited population state lacks newly required evidence fields."
+    },
+    {
+      "finding_id": "DRIVE-GENESIS-004",
+      "epistemic_class": "HISTORICAL_DYNAMICAL_THRESHOLD_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_STABILITY_CONSTRAINT",
+      "claim": "The healing log records a regime where Genesis activation equilibrated near 0.5567 while active_threshold was 0.65, making the active state dynamically unreachable despite nominally valid ranges. Lowering emotion decay and the threshold allowed the first observed active state.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank","gwt","emergenz","harness","claycode"],
+      "implication": "Threshold validity must be checked against reachable steady-state/trajectory distributions, not just static min/max bounds. Hysteresis and transition reachability belong in state-machine acceptance."
+    },
+    {
+      "finding_id": "DRIVE-HEAL-005",
+      "epistemic_class": "HISTORICAL_RUNTIME_FAILURE_ATLAS",
+      "status": "CURRENTLY_RELEVANT_RECOVERY_TEST_ATLAS",
+      "claim": "The healing log documents multiple temporal/lifecycle failures: orphan UI processes causing restart storms through a held singleton lock; model-loading health checks restarting services before load grace periods elapsed; missing stop timeouts causing long cleanup stalls; stale/incorrect HTTP success semantics during total model failure; and poll/cache rates causing unnecessary toolbox load.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness","frank","claycode","unifieddb"],
+      "implication": "Boot/recovery acceptance needs monotonic-time lifecycle logic, startup grace windows, bounded shutdown, honest failure status, orphan/singleton recovery and load-shedding tests."
+    },
+    {
+      "finding_id": "DRIVE-HEAL-006",
+      "epistemic_class": "HISTORICAL_FEEDBACK_STATE_BUG_ATLAS",
+      "status": "CURRENTLY_RELEVANT_STATEFUL_TEST_ATLAS",
+      "claim": "The healing log records state-update bugs where mood decay was initially event-only and later implemented non-cumulatively by re-reading the same raw E-PQ value each cycle; a later fix introduced cumulative state with E-PQ as a partial pull. It also records a QUBO coherence test whose negative-energy inequality made the improvement condition effectively always true under the chosen multiplier sign convention.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness","frank","gwt","unifieddb","claycode"],
+      "implication": "Stateful control tests must verify cumulative recurrence and sign-aware math using trajectory fixtures, not one-step unit checks only."
+    },
+    {
+      "finding_id": "DRIVE-HEAL-007",
+      "epistemic_class": "HISTORICAL_OBSERVABILITY_AND_SELF_MODEL_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_INITIALIZATION_CONSTRAINT",
+      "claim": "A CoreAwareness database existed conceptually but had never performed its initial scan; downstream self-knowledge/feature-training paths therefore operated over empty results until auto-initialization indexed 726 modules. This is an example of a healthy-looking service with semantically empty state.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank","harness","claygraph","unifieddb"],
+      "implication": "Boot identity requires semantic readiness receipts, not merely process health. Derived self/world indexes must prove initialized content and source epoch before use."
+    },
+    {
+      "finding_id": "DRIVE-GENESIS-008",
+      "epistemic_class": "HISTORICAL_FUNCTIONAL_DYNAMICS_ONLY",
+      "status": "NO_CONSCIOUSNESS_INFERENCE",
+      "claim": "Genesis reports use language such as emotions, population, evolution and crystals, but the measurements establish engineered dynamical behavior only. They do not provide evidence for phenomenal consciousness.",
+      "reuse_category": "CONTEXT_ONLY",
+      "targets": ["emergenz","gwt","q12_index"],
+      "implication": "Preserve the data as a dynamical-system and anti-Goodhart benchmark under the current GWT/Emergence readout contract; do not promote anthropomorphic labels into consciousness claims."
+    }
+  ],
+  "cross_mapping": {
+    "current_contract": "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
+    "historical_to_current": [
+      "emotion spread/population turnover/fitness -> dynamics proxies only",
+      "crystallization/manifestation -> candidate outcome path, must be linked to utility and causal use",
+      "watchdog/state freshness -> cost_shadow.instability_delta and liveness receipts",
+      "gate dead-zone/monoculture -> anti-Goodhart controls and null/lesion comparisons",
+      "activation threshold reachability -> metastability/hysteresis/transition-reachability tests"
+    ]
+  },
+  "earned_work_candidates": [
+    {
+      "mapping_id": "HEW-DRIVE-GENESIS-012",
+      "source_refs": ["DRIVE-GENESIS-001","DRIVE-GENESIS-002","DRIVE-GENESIS-003","DRIVE-GENESIS-004"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Historical monitored autonomous-dynamics runs provide raw trajectory fixtures and concrete proxy-failure, saturation, dead-gate, threshold-reachability and monoculture oracles for current emergence/stateful Harness tests.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "MEDIUM_FOR_FIXTURE_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Current Harness must recover enough raw Genesis state/config to replay representative trajectories or demonstrate that the historical fixtures cannot discriminate current mechanisms; otherwise reduce or remove this credit."
+    }
+  ],
+  "noncounting_overlap": [
+    {"family":"generic sandbox/fail-open security","hours_added":0.0,"reason":"Already captured by Project-Frankenstein safety shard and Drive recovery shard."},
+    {"family":"generic concurrency/persistence/resource cleanup bugs","hours_added":0.0,"reason":"Already substantially mapped by PF state/failure and safety shards; healing log adds concrete regression cases without duplicate hours."}
+  ],
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "provisional_unique_avoided_future_hours_low": 1.0,
+    "provisional_unique_avoided_future_hours_center": 3.0,
+    "provisional_unique_avoided_future_hours_high": 6.0,
+    "global_completion_credit_applied": false,
+    "reason": "New Drive runtime evidence is materially integrated, but whole-source atomic denominator remains unfrozen."
+  }
+}

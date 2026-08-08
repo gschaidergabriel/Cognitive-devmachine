@@ -79,6 +79,34 @@ Level-0 assimilation must ingest the existing Drive `digital-retina` lineage bef
 
 Historical code is evidence and reusable foundation, not automatic current truth. Reuse must be classified as directly reusable, reusable with adaptation, measurement foundation, negative-result value, superseded/informative or not reusable.
 
+## Historical implementation and measurement baseline
+
+Level-0 Drive assimilation has now confirmed a substantial historical implementation rather than a paper-only concept:
+
+- `retina/core.py` exposes a structured image-analysis API rather than only free-text captioning;
+- the historical structured result includes description, concepts, detected objects, OCR text, faces, logos, image metadata and elapsed time;
+- `retina/vision/` contains a large `frank_eye.py` implementation plus CLIP classification, OCR, region/scene/composition, Places365, colour and pattern-oriented modules;
+- `tests/test_smoke.py` expects the real pipeline to return the structured fields and requires actual model weights/sample image.
+
+A historical working paper reports, for its own limited engineering test regime, 82.4% held-out phrase coverage over 47 unseen images / 1,196 phrases, about 1.5-2.0 seconds per image on 4-vCPU CPU-only hardware, and 13.6% false-positive rate on a realistic-negative set at threshold 0.22. The paper explicitly describes itself as non-peer-reviewed, n=1 engineering work and notes distribution/compositional-binding limitations.
+
+These figures are **measurement foundations, not frozen Clay 0.1 acceptance thresholds**. H1/H2/H3 must reproduce or falsify the historical baseline on current project hardware and under the frozen multimodal contract before any performance target is promoted.
+
+The historical autonomous-vision design also proposes event-triggered rather than periodic visual attention, bounded daily/cooldown budgets and habituation for repetitive visual/OCR state. This is a candidate policy to test, not proof that the historical design was deployed or optimal.
+
+Required current discriminating tests therefore include:
+
+- structured-field preservation into `VisualPercept`, not caption-only projection;
+- current hardware latency/RAM measurement with cold and warm starts;
+- held-out object/scene/text/spatial/attribute coverage with realistic negatives;
+- compositional-binding correctness rather than phrase-presence alone;
+- stale/replayed/shuffled frame provenance tests;
+- visual-to-GWT lesion/rescue and causal-use tests;
+- event-triggered vs periodic visual-attention cost/utility comparison;
+- failure behavior when a visual model/weight is missing or degraded.
+
+Primary Level-0 receipt: `research_entity/archive_assimilation/receipts/666_20260809T0441p0700_chatgpt_secondary_drive_g8_g9_retina_code_shard.json`.
+
 ## Acceptance rule
 
 Digital Retina is mandatory architecture completeness. Clay 0.1 cannot reach chief-developer first-test acceptance if:

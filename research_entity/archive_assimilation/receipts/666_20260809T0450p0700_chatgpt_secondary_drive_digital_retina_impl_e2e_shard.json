@@ -1,0 +1,115 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0450+0700-chatgpt-secondary-drive-digital-retina-impl-e2e",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "work_packages":["666-01-DEDUPE-SHARD","666-03-PARALLEL-ANALYZE","666-04-EARNED-WORK-MAP","666-06-BRANCH-FEEDBACK"],
+  "status":"NON_OVERLAPPING_DRIVE_SHARD_ANALYZED",
+  "observed_at":"2026-08-09T04:50:00+07:00",
+  "source_scope":{
+    "drive_folders":["drive:1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m:digital-retina","drive:1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja:digital-retina-e2e"],
+    "scope":"Historical implementation semantics, structured output, E2E gating and evaluation methodology. The already-fixed owner directive that Digital Retina is mandatory inside FRANK is explicitly excluded from novelty credit.",
+    "primary_source_refs":[
+      "drive:12baWzxy_NpVQAKaM4lmY1Gx5xjnzfjnS:retina/core.py",
+      "drive:1SgzRqxB-ZJ368vvYhesBuAp0s-3Z0bw2:retina/vision/frank_eye.py",
+      "drive:1UW4tUKOKHucC_Es-v5P281h109nKGwmj:digital-retina-e2e/tier3_e2e.py",
+      "drive:1e3VGdtYziHp9VT_9ckuJ6VFEntL8Tb8U:coverage/freshset_coverage.json",
+      "drive:1xC0zrN6odKIvYfpRLpx77pLb5DO9FYVl:coverage/FINAL_REPORT.md",
+      "drive:1Bod2qv2fdirkgsfZWl5gGgcpFMWjt-vc:coverage/HONEST_REPORT.md"
+    ],
+    "non_overlap_refs":["commit:69877dfc","commit:cbf027a6","commit:29219777","commit:85db1ba2","commit:fbc9b69d","commit:cf25136b","commit:91efa1df"]
+  },
+  "findings":[
+    {
+      "finding_id":"DRIVE-RETINA-001",
+      "epistemic_class":"HISTORICAL_EXECUTABLE_IMPLEMENTATION",
+      "status":"DIRECT_SEMANTIC_ANCESTRY_FOR_CLAY_VISUALPERCEPT",
+      "claim":"The public Retina API already normalized path/URL/raw bytes into a local image and returned a structured analysis object rather than only prose. The historical structured schema included description, scored concepts, object class/confidence/box, OCR text, faces/emotion, logos, screenshot flag, image dimensions, elapsed time, AI/art provenance, scene tags, captions, region captions, multilingual VQA, relational/painting text, dominant colors, places, fine objects, region attributes, caption-grounded concepts, composition and optional GoL-derived fields.",
+      "targets":["frank","harness","claycode","unifieddb","claygraph","clay"],
+      "reuse_category":"REUSABLE_WITH_ADAPTATION",
+      "current_implication":"Do not collapse the mandatory Digital Retina into one narrative string. Define typed provenance-bound Clay VisualPercept subfields with per-field source/model/confidence and preserve the structured historical signal while removing implementation-specific prose coupling."
+    },
+    {
+      "finding_id":"DRIVE-RETINA-002",
+      "epistemic_class":"HISTORICAL_RUNTIME_ARCHITECTURE",
+      "status":"REUSABLE_WITH_ADAPTATION",
+      "claim":"The implementation used staged conditional computation: OCR+face analysis in parallel, a specialized screenshot branch, and CLIP+YOLO+DINO in parallel for photos. It also added an early art/AI detector specifically to drop low-confidence YOLO detections before region captioning after a documented hallucination cascade.",
+      "targets":["frank","harness","claycode","clay"],
+      "reuse_category":"REUSABLE_WITH_ADAPTATION",
+      "current_implication":"Preserve staged/conditional percept computation and explicit gating, but expose gating decisions and ancestry as receipts so downstream FRANK can distinguish not-run, no-detection, rejected-as-low-confidence and successful-percept states."
+    },
+    {
+      "finding_id":"DRIVE-RETINA-003",
+      "epistemic_class":"HISTORICAL_NEGATIVE_RESULT",
+      "status":"MANDATORY_PERCEPT_PROVENANCE_FAILURE_ORACLE",
+      "claim":"The honest hard-set report records a concrete cascading hallucination: on a Kandinsky image YOLO hallucinated a bed and region-BLIP then generated an invented artist attribution from that phantom region. Across the 12-image hard set Region-BLIP fired on 6/12; the report says one case actively hurt and several others mixed correct detail with wrong base classes or captions.",
+      "targets":["frank","harness","claygraph","gwt","clay"],
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "current_implication":"Every derived visual claim must retain parent-evidence ancestry. A caption derived from a weak/rejected object detection cannot be promoted as independent evidence. Harness must include confidence/provenance propagation and causal-parent invalidation tests."
+    },
+    {
+      "finding_id":"DRIVE-RETINA-004",
+      "epistemic_class":"HISTORICAL_EVALUATION_RESULT_WITH_THRESHOLD_SENSITIVITY",
+      "status":"MEASUREMENT_FOUNDATION_WITH_CAUSAL_LIMIT",
+      "claim":"The final hard-set report labels CLIP-lenient coverage 94.6% at cosine threshold 0.20, while its own threshold sweep reports 66.3% at 0.22 and 1.4% at 0.30. The report explicitly says this lenient metric measures whether the vision encoder contains a weak visual signal, not whether Retina surfaces that concept in text for a downstream LLM.",
+      "targets":["harness","frank","claygraph","gwt","clay"],
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "current_implication":"Clay 0.1 must not equate latent encoder recognizability with FRANK-accessible semantic perception. Primary acceptance metric should score the typed VisualPercept actually delivered/reconstructed/used by FRANK, with threshold curves reported rather than a cherry-picked point."
+    },
+    {
+      "finding_id":"DRIVE-RETINA-005",
+      "epistemic_class":"HISTORICAL_REPORT_INTERNAL_CONTRADICTION",
+      "status":"PROVENANCE_VERSIONING_FAILURE_ORACLE",
+      "claim":"FINAL_REPORT.md is internally version-inconsistent: its headline reports strict substring coverage 87.8% after gap-close and 44.8% pre-gap-close, but the explanatory section later still says the strict metric sits at 44.8% for the same images/phrases. The source therefore cannot support one unqualified strict number without consulting the machine artifacts/version lineage.",
+      "targets":["harness","unifieddb","q12_index","clay"],
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "current_implication":"Evaluation claims need immutable run IDs, config/threshold hashes and machine-result refs. Narrative reports are projections, not canonical measurements. Stale prose must not overwrite newer run state."
+    },
+    {
+      "finding_id":"DRIVE-RETINA-006",
+      "epistemic_class":"HISTORICAL_MACHINE_RESULT",
+      "status":"REPRODUCIBLE_MEASUREMENT_FOUNDATION",
+      "claim":"freshset_coverage.json contains 32 images and 681 baseline phrases. Its stored totals are 492 strict and 630 lenient hits, corresponding to 72.246696% strict and 92.511013% lenient at threshold 0.20. From the per-image recorded wall times, Retina mean/median/max were approximately 25.87/26.69/35.67 seconds in that evaluation path. Category strict coverage ranged from about 63.55% abstract to 86.36% vehicle; the complex category had the lowest lenient aggregate at about 78.35%.",
+      "targets":["harness","frank","clay","q12_index"],
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "current_implication":"Reuse the fresh-set machine artifact and category stratification as historical baseline data, but re-run on current hardware/typed VisualPercept because the old latency and representation path are not current acceptance evidence."
+    },
+    {
+      "finding_id":"DRIVE-RETINA-007",
+      "epistemic_class":"HISTORICAL_EXECUTABLE_E2E_TEST_DESIGN",
+      "status":"DIRECT_TEST_ANCESTRY",
+      "claim":"tier3_e2e.py tested three distinct surfaces: browser demo rendering, authenticated API behavior with English/German question paths, and a negative gating case requiring region_captions=[] and vqa=[] on a simple image with a non-question hint. This is valuable because it tests both positive capability and absence of inappropriate subsystem firing.",
+      "targets":["harness","frank","claycode","clay"],
+      "reuse_category":"MEASUREMENT_FOUNDATION",
+      "current_implication":"Port the positive/negative gating pattern into H1/H2/H3: equivalent visual input must produce equivalent typed percepts and equivalent non-events, not merely similar final prose."
+    },
+    {
+      "finding_id":"DRIVE-RETINA-008",
+      "epistemic_class":"HISTORICAL_SECURITY_NEGATIVE_RESULT",
+      "status":"TRAINING_CORPUS_SECRET_HYGIENE_ORACLE",
+      "claim":"The historical E2E source contains an embedded live-looking development API credential literal. The credential value is intentionally not copied into this receipt.",
+      "targets":["harness","data_final_training_corpus","clay","frank"],
+      "reuse_category":"NEGATIVE_RESULT_VALUE",
+      "current_implication":"Archive assimilation/training-corpus construction must include secret detection/redaction and credential revocation review. Executable historical sources are evidence, not automatically safe training text."
+    }
+  ],
+  "earned_work_mapping_candidate":{
+    "mapping_id":"HEW-DRIVE-RETINA-012",
+    "current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","CLAY_0_1_FULL_INTEGRATION","CLAY_0_1_ACCEPTANCE_RUN"],
+    "mechanism_or_result":"Executable structured multimodal percept pipeline, staged gating, positive/negative E2E suite, fresh-set machine evaluation and concrete hallucination/metric/provenance failure oracles provide direct ancestry for mandatory Digital Retina integration and differential testing.",
+    "reuse_category":"REUSABLE_WITH_ADAPTATION",
+    "avoided_future_hours_low":3.0,
+    "avoided_future_hours_center":8.0,
+    "avoided_future_hours_high":16.0,
+    "confidence":"MEDIUM_FOR_TEST_AND_SCHEMA_REUSE_LOW_FOR_HOUR_ESTIMATE",
+    "falsifier_or_validation_receipt":"H1/H2/H3 must implement typed VisualPercept with provenance/confidence, reproduce positive and negative gating, prevent weak-parent hallucination promotion, and demonstrate current fresh-set results/latency. If the historical schemas/tests do not reduce implementation/search effort, remove the avoided-work credit."
+  },
+  "progress_accounting":{
+    "exact_level0_coverage_awarded_percent":0.0,
+    "reason":"A bounded historical implementation/evaluation shard is analyzed, but recursive Drive and cross-source atomic denominators are not frozen.",
+    "secret_value_reproduced":false
+  }
+}

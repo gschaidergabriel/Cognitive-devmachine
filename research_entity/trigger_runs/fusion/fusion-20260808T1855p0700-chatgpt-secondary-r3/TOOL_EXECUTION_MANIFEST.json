@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.1",
+  "run_id":"fusion-20260808T1855p0700-chatgpt-secondary-r3",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "classes":["user_supplied_web_deep_read","scholarly","current_web","implementation","executable"],
+  "attempts":[
+    {"tool":"native_web_deep_read","status":"SUCCESS","note":"Deep-read all four user-supplied URLs; followed EmergentMind to primary arXiv 2507.10566 and 2508.18988; reviewed AINL public implementation context."},
+    {"tool":"openalex_search","status":"SUCCESS_LOW_PRECISION","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1855-openalex-ai-native-layers.json","note":"Broad query returned mostly low-specificity matches; not used as decisive support."},
+    {"tool":"arxiv_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1855-arxiv-ai-native-layers.json","note":"Found independent emergent-communication literature including VQEL arXiv:2503.04940 and cautionary literature on inductive pressures/compositionality."},
+    {"tool":"semantic_scholar_search","status":"RATE_LIMITED","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1855-semscholar-ai-native-layers.json","reason":"HTTP 429","fallback":["arXiv","OpenAlex","native web","Exa"]},
+    {"tool":"tavily_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1855-tavily-ai-native-layers.json","note":"Recovered supplied Medium/AINL material and broader AI-native development references; used as discovery, not authority."},
+    {"tool":"exa_search","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1855-exa-ai-native-layers.json","note":"Found independent VQEL, symbolic-controller and LLM-oriented language/IR candidates including NURL; used to challenge single-author AIM ancestry."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Reread canonical, fixed Clay-native contract, current fusion protocol/registry and latest seven-branch heads; persisted all run artifacts and seven branch feedback packets."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Executed 30-seed 2^4 language-layer identifiability calibration and high-symbol-purity causal-null experiment."},
+    {"tool":"judge0_execute","status":"SUCCESS","via":"repo_runner_bridge","result":"research_entity/runtime/tool_results/fusion1855-judge0-language-layer-identifiability.json","note":"Independent Python 3.8.1 replication recovered the native-null and native-present layer-identifiability directions."}
+  ],
+  "blocked_or_nonapplicable":[
+    {"tool":"e2b_sandbox","status":"BLOCKED","reason":"CREDENTIAL_UNAVAILABLE","fallback":"local_sandbox+Judge0"},
+    {"tool":"huggingface_inference","status":"BLOCKED_CACHED","reason":"QUOTA_EXHAUSTED_CACHED until 2026-09-01 UTC","fallback":"not required for current system-level calibration"},
+    {"tool":"groq_inference","status":"NON_APPLICABLE_NEW_RUN","reason":"The decisive current experiments concern layer identifiability and causal symbol-metric confounds, not a generic 8B reader. Existing C6/G10 Groq proxies were ingested with ancestry preserved; target full-FT Qwen remains the required model experiment."},
+    {"tool":"target_qwen3_4b_full_finetune","status":"BLOCKED_NOT_AVAILABLE","reason":"No trained C6 target checkpoint exists for this worker/run."}
+  ],
+  "validation":{"strong_promotion":"NOT_ATTEMPTED","unresolved_required_tool_violation":false,"secrets_recorded":false},
+  "evidence_boundary":"External source quality is heterogeneous: AINL is engineering/project evidence; Medium/Vibe are design/conceptual sources; AIM primary papers are preprints with narrow tasks and one incomplete manuscript; no source is promoted as direct FRANK/Qwen performance evidence."
+}

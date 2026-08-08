@@ -1,0 +1,43 @@
+name: RAE Groq runtime probe
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/groq_runtime_probe.py'
+      - 'tools/groq_inference.py'
+      - 'tools/rae_secret_loader.py'
+      - 'research_entity/private/GROQ_API.env'
+      - '.github/workflows/groq-runtime-probe.yml'
+
+concurrency:
+  group: rae-groq-runtime-probe-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run sanitized probe
+        run: python tools/groq_runtime_probe.py
+      - name: Commit probe receipt
+        run: |
+          git config user.name 'rae-groq-probe'
+          git config user.email 'rae-groq-probe@users.noreply.github.com'
+          git add research_entity/runtime/groq_probe.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record Groq runtime probe'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

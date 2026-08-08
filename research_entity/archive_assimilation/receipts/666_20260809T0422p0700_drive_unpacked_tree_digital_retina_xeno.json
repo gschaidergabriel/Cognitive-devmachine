@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0422+0700-drive-unpacked-tree-digital-retina-xeno",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_package": "666-00-DUAL-INDEX",
+  "status": "MATERIAL_DRIVE_ACCESS_CORRECTION_AND_ARCHITECTURE_DELTA",
+  "observed_at": "2026-08-09T04:22:00+07:00",
+  "drive_root": {
+    "folder_title": "clay",
+    "folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "previous_assumption": "The Drive source was effectively represented only by one 663552000-byte tar.xz whose raw download exceeded the 104857600-byte connector limit.",
+    "current_observation": "Direct parent-constrained Drive enumeration exposes a substantial unpacked folder tree under the same clay folder. The large archive may still be individually blocked, but it is not a global blocker for Level-0 Drive assimilation.",
+    "blocker_reclassification": "FROM_GLOBAL_EXTERNAL_ACCESS_BLOCKER_TO_ITEM_LEVEL_BULK_FILE_LIMIT_WITH_UNPACKED_TREE_ACCESSIBLE"
+  },
+  "observed_top_level_roots": [
+    {"title": "digital-retina", "id": "1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m"},
+    {"title": "digital-retina-e2e", "id": "1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja"},
+    {"title": "frank-rettung-2026-07-31", "id": "1zsb18bg0W8Ri8bgqZBkpTNTD-7fPKhT3"},
+    {"title": "frank-adapter-sicherung", "id": "1GRcwMEZYhpvehTnpQJlVN004WhoKOSOo"},
+    {"title": "xeno", "id": "1UkkTHX8Xo6EcINOOQ3OtA-LVEHh9Ssis"},
+    {"title": "synteq-umbau", "id": "1fWUuy1oxoOAOHEQGZhhF00SUxISV4qzr"},
+    {"title": "frank-rettung", "id": "1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6"},
+    {"title": "frank-projects", "id": "1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw"},
+    {"title": "aicore", "id": "1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty"},
+    {"title": "frank-werkzeuge", "id": "1_9LNAYK_duRvVoUQ8ry3RKS21uEC7KcU"},
+    {"title": "frank-demo", "id": "1GRQkmfinnCFJmP2GY4MqcJh2jTkyJJO_"},
+    {"title": "frank-library", "id": "12hFLFtBnmoePzBOuJnvKmvp-3_3YjilZ"}
+  ],
+  "aicore_probe": {
+    "folder_id": "1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty",
+    "observed_children": ["webd", "updater", "papers", ".claude", "desktopd", "konzepte", "services", "assets", "docker", "training", "router", "wissen", "modeld", "synteq", "bridges"],
+    "implication": "A directly traversable historical FRANK source tree exists in Drive and can be assimilated without downloading the monolithic archive first."
+  },
+  "xeno_probe": {
+    "path": ["xeno", "se_xeno", "G8"],
+    "ids": ["1UkkTHX8Xo6EcINOOQ3OtA-LVEHh9Ssis", "1KYzCEuqM3vU3zFQboxnCC03-qjLD1SIm", "1x5TrnLC4PwdNITXawMn_U4jngYBiV0sF"],
+    "g8_observed_children": ["reports", "provenance", "selective", "hypotheses", "evidence", "credit", "archive", "language", "traffic", "directcode", "implementation", "claude_code", "delivery", "state", "sources"],
+    "implementation_observed_children": ["fuzz", "egraphs", "parser", "renderer", "router", "compiler", "search", "proof_kernel", "cli", "tests", "replay"],
+    "implication": "Historical parser/compiler/proof/fuzz/test/replay work must be mapped against current ClayCode BASE work packages before treating those packages as greenfield."
+  },
+  "digital_retina_probe": {
+    "folder_id": "1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m",
+    "observed_children": ["deploy", "eval", ".git", "retina", "frontend", "api", "docs", "tests", "tools"],
+    "retina_folder_id": "1OjgyFLJEham9htKzx-Ngs0aIJhryCsek",
+    "retina_observed_child": {"title": "vision", "id": "1vQ5oNEMaStfzmkVoru-jtdsdbGgkFnp-"},
+    "reuse_status": "HISTORICAL_IMPLEMENTATION_LINEAGE_REQUIRES_DEEP_ASSIMILATION",
+    "targets": ["frank", "harness", "gwt", "clay", "claycode", "claygraph", "unifieddb"]
+  },
+  "owner_architecture_directive": {
+    "directive": "Digital Retina must be inside the FRANK module so FRANK is multimodal.",
+    "status": "PROJECT_OWNER_FIXED_TARGET",
+    "implemented_contract": "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
+    "updated_contracts": [
+      "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
+      "research_entity/harness/HARNESS_WORKSPACE.json",
+      "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
+      "research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json"
+    ],
+    "semantic_boundary": "Digital Retina may use conventional physical vision code/models, pixels/tensors/embeddings, but semantic output entering FRANK must become typed provenance-bound Clay VisualPercept state. Needle remains the sole intentional non-Clay semantic subsystem.",
+    "harness_rule": "H1/H2/H3 must preserve the same visual semantics; H3 and DOOMSDAY cannot PASS without the mandatory Digital Retina path."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "The discovery materially changes accessibility and the future denominator, but the recursive Drive manifest is not yet frozen. No exact coverage is awarded before atomic obligations are enumerated.",
+    "historical_earned_work_credit_awarded": false,
+    "next_required_step": "Recursively enumerate the accessible unpacked Drive tree, dedupe version/snapshot roots, classify atomic obligations, then freeze DRIVE_CLAY_MANIFEST.json."
+  }
+}

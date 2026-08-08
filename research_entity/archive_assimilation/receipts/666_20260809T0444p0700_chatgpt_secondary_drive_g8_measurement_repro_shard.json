@@ -1,0 +1,205 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0444+0700-chatgpt-secondary-drive-g8-measurement-repro-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "DRIVE_NEW_EPOCH_G8_EXECUTABLE_REPRODUCED_MEASUREMENT_LINEAGE_ANALYZED",
+  "observed_at": "2026-08-09T04:44:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_scope": {
+    "drive_root": "drive:1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "new_epoch_reason": "Previously inaccessible raw archive now has a directly traversable extracted Drive tree with newly materialized XENO/recovery artifacts. This shard treats those files as a new accessible source epoch rather than reusing the old raw-tar blocker state.",
+    "drive_files": [
+      "drive:1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g:BUNDLE_MANIFEST.json",
+      "drive:1kW2SDS4uN2nKtCQfr742xC5xY7nFeH5G:MACHINE_LANGUAGE_V0_1_R6_TRI_CLAUDE_CODE.zip",
+      "drive:1MD8y61t2kzy7D6XqtFSaBWghF7yGKRyR:SE_XENO_G8_CAUSAL_TRI_FOUNDRY.zip",
+      "drive:1Xi_j_jHvxSyAbEZGPP47LXQbZH1XCeoB:machine language v0.1.txt",
+      "drive:1A3rmxeK-6XLBQqX4E7ui7n-T9HQDOPdy:PAPER-NATIVE-SPRACHE.md",
+      "drive:1j20qp8lAr3cgdcbFVpXm7RICYF_e3cKQ:LIMITATIONS.md"
+    ],
+    "local_sha256": {
+      "BUNDLE_MANIFEST.json": "88cfe25de061e71621575f94f97fb0b18f6d2ae37658db5e93c9d719d6e256e4",
+      "MACHINE_LANGUAGE_V0_1_R6_TRI_CLAUDE_CODE.zip": "b763ba2647aecda6dff2b107a61713d430f1403c9ec99169b12aaeaa3e849e74",
+      "SE_XENO_G8_CAUSAL_TRI_FOUNDRY.zip": "d5de3d8e4569a6a1df6331118da14575d5819d05ca0be4b372f17f067bf7401d"
+    }
+  },
+  "integrity_and_dedup": {
+    "bundle_manifest_entries": 206,
+    "bundle_manifest_total_bytes": 42875631,
+    "locally_available_manifest_entries_verified": 204,
+    "hash_mismatches": 0,
+    "unavailable_manifest_entries": [
+      "se_xeno/G8/delivery/PACKAGE_MANIFEST.json",
+      "se_xeno/G8/delivery/ZIP_TEST.txt"
+    ],
+    "machine_language_zip_files": 19,
+    "machine_language_zip_files_byte_identical_to_g8_claude_code": 19,
+    "dedup_decision": "The separate machine-language ZIP adds provenance/packaging identity but no additional semantic-analysis obligation beyond the byte-identical G8 claude_code copies."
+  },
+  "this_session_reproduction": {
+    "environment": "Python 3.13.5 local sandbox",
+    "commands": [
+      "python -m pytest -q implementation/tests/test_g8.py",
+      "python implementation/proof_kernel/add4_verify.py",
+      "python implementation/fuzz/fuzz_control.py"
+    ],
+    "results": {
+      "g8_pytest": "11 passed in 0.03s",
+      "directcode_proof_kernel": "PASS 4 candidates x 256 cases",
+      "control_fuzz": "PASS 10000 control mutations"
+    },
+    "epistemic_rule": "This independently confirms that the delivered executable proof artifacts run and pass in this session. It does not independently reproduce the full synthetic experiment or convert synthetic findings into live reader/agent claims."
+  },
+  "crossread_dedup": {
+    "peer_receipts": [
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json"
+    ],
+    "excluded_overlap": [
+      "Generic compact-tool/typed-schema/reader-projection ancestry is already covered by the Project-Frankenstein XENO/ClayCode precursor shard.",
+      "Drive recovery Identity Forge, weak Genesis sandbox isolation and paper_research are already covered by the recovery shard and receive zero additional hours here.",
+      "General model-latency/context-contamination benchmark lessons are already covered by the model-latency-feedback shard.",
+      "NMK copying cascade and quota-confounded language control are already covered by the Drive XENO/Thalamus shard."
+    ],
+    "unique_delta": "Executable G8 proof/fuzz package, selective risk-control measurements, credit-attribution-vs-task-success separation, state-plus-decoder compaction result, bounded Directcode extraction proof, and explicit historical measurement-instrument failure/supersession lineage."
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-G8-001",
+      "epistemic_class": "DRIVE_BUNDLE_INTEGRITY_PLUS_LOCAL_HASH_VERIFICATION",
+      "status": "VERIFIED_DELIVERY_SUBSET",
+      "claim": "The newly materialized G8 delivery is internally coherent over the accessible subset: 204 of 206 manifest entries were locally available and hash-checked with zero mismatches; the separate 19-file machine-language bundle is byte-identical to the corresponding G8 claude_code copies.",
+      "targets": ["claycode", "harness", "clay", "q12_index"],
+      "implication": "Treat G8 as one versioned evidence package and avoid double-counting its duplicated language bundle as independent evidence."
+    },
+    {
+      "finding_id": "DRIVE-G8-002",
+      "epistemic_class": "THIS_SESSION_EXECUTABLE_REPRODUCTION",
+      "status": "REPRODUCED_EXECUTABLE_ARTIFACTS",
+      "claim": "The delivered G8 suite reran successfully in this session: 11/11 pytest cases pass, all four bounded 4-bit Directcode candidates pass exhaustive 256-input verification, and the control fuzzer passes 10,000 mutations.",
+      "targets": ["claycode", "harness", "clay", "frank"],
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "constraint": "This reproduces artifact execution, not the full reported multi-condition synthetic experiment."
+    },
+    {
+      "finding_id": "DRIVE-G8-003",
+      "epistemic_class": "SYNTHETIC_HARNESS_MEASUREMENT",
+      "status": "BOUNDED_MEASUREMENT_FOUNDATION",
+      "claim": "In the delivered risk-coverage holdout, calibrated WEAVE at the package-selected threshold 0.18 reports pair_accuracy=0.5569444444, coverage=0.3684722 and critical_violation_rate=0.0230556, whereas fixed WEAVE reports critical_violation_rate=0.5256 and fixed WEAVE_PW=0.4556. The threshold is package-specific and is not promoted as universal.",
+      "targets": ["claycode", "harness", "clay"],
+      "implication": "Risk/coverage must be calibrated and revalidated under held-out conditions; fixed confidence/control thresholds are a concrete historical failure mode."
+    },
+    {
+      "finding_id": "DRIVE-G8-004",
+      "epistemic_class": "SYNTHETIC_COUNTERFACTUAL_CREDIT_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_CAUSAL_MEASUREMENT_CONSTRAINT",
+      "claim": "The G8 credit experiment separates attribution quality from immediate task success: counterfactual credit reports fidelity=0.9998 and zero misupdate but holdout task success=0.53875, while terminal_reward has much lower fidelity=0.3178 but higher holdout task success=0.585. Near-perfect causal credit assignment therefore did not itself maximize immediate policy task success in this harness.",
+      "targets": ["gwt", "emergenz", "clay", "harness", "claycode", "frank"],
+      "implication": "Do not Goodhart on credit fidelity, causal attribution or re-entry correctness alone. Acceptance must retain separate task/outcome/utility shadows."
+    },
+    {
+      "finding_id": "DRIVE-G8-005",
+      "epistemic_class": "SYNTHETIC_COMPACTION_PROXY_RESULT",
+      "status": "MEASUREMENT_FOUNDATION_NOT_LIVE_READER_PROOF",
+      "claim": "The compaction proxy reports exact recovery=1.0 and critical_loss=0 only for core_skill_store, while transcript_only, stable_core_only and broken-handle variants fail exact recovery; full_root reports only 0.00225 exact recovery. In this bounded proxy, decoder/manual semantics alone are insufficient and canonical state plus decoder are jointly necessary.",
+      "targets": ["claycode", "claygraph", "unifieddb", "harness", "frank"],
+      "implication": "Separate stable semantic decoder from persisted dynamic state/handles, and test compaction by exact recoverability rather than prose similarity. Do not reinterpret this proxy as live 4B-reader evidence."
+    },
+    {
+      "finding_id": "DRIVE-G8-006",
+      "epistemic_class": "THIS_SESSION_BOUNDED_FORMAL_EXECUTION",
+      "status": "REPRODUCED_BOUNDED_EQUIVALENCE",
+      "claim": "Four Directcode implementations of the bounded 4-bit modular-addition task were exhaustively verified over all 256 inputs in this session. Package extraction then selects different implementations under CPU/code-size versus bitwise ASIC/ROM cost models.",
+      "targets": ["claycode", "harness", "clay"],
+      "implication": "Preserve semantic equivalence independently from backend/cost-model selection; there is no evidence for one universally best lowering."
+    },
+    {
+      "finding_id": "DRIVE-G8-007",
+      "epistemic_class": "SYNTHETIC_TRI_COUPLING_RESULT",
+      "status": "SYNTHETIC_ONLY_NO_LIVE_PROMOTION",
+      "claim": "The G8 synthetic tri-coupling table reports tri-foundry success=0.7517 with critical violation=0.00417 versus baseline success=0.5137/violation=0.1068, but the package itself records synthetic worlds, no live Claude/Anthropic reader, no independent agents and no consciousness conclusion.",
+      "targets": ["clay", "gwt", "emergenz", "hyperposition", "harness"],
+      "implication": "Use this as a candidate interaction mechanism and harness scaffold only; require matched live/sandbox factorials and independent effects before causal or emergence promotion."
+    },
+    {
+      "finding_id": "DRIVE-MEASURE-008",
+      "epistemic_class": "HISTORICAL_MEASUREMENT_INSTRUMENT_FAILURE_ATLAS",
+      "status": "HIGH_VALUE_NEGATIVE_RESULT",
+      "claim": "The native-language research paper documents eight distinct instrument failures in one day, including fabricated baseline format, language/status contamination, multiline-record misclassification, moving-reference comparison, measuring the wrong function, exclusionary verification criteria, and mistaking a two-slot llama-server configuration for hardware saturation. The source explicitly reports the later throughput estimate as factor 63 higher than the false saturation interpretation.",
+      "targets": ["harness", "claycode", "clay", "frank", "gwt", "emergenz", "q12_index"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "implication": "Every acceptance/measurement instrument should include a positive-control degradation or mutation that it must detect before unknown effects are trusted. Instrument validity is a prerequisite, not a footnote."
+    },
+    {
+      "finding_id": "DRIVE-MEASURE-009",
+      "epistemic_class": "HISTORICAL_SUPERSESSION_CONTRADICTION",
+      "status": "SUPERSEDED_CAUSAL_INTERPRETATION",
+      "claim": "LIMITATIONS.md correctly stopped the proposed 800-agent run because required orchestration/measurement capabilities were absent, but its causal conclusion that throughput saturated at two agents due to hardware is later contradicted by the native-language paper, which attributes that apparent saturation to llama-server being configured with two slots.",
+      "targets": ["harness", "clay", "claycode", "q12_index"],
+      "implication": "Preserve both documents in lineage: the stop decision remains evidentially justified under the observed setup, while the hardware-causality explanation is superseded. Versioned contradiction handling is mandatory."
+    },
+    {
+      "finding_id": "DRIVE-MEASURE-010",
+      "epistemic_class": "HISTORICAL_TOKENIZER_MEASUREMENT",
+      "status": "NEGATIVE_RESULT_VALUE_FOR_COMPRESSION_CLAIM",
+      "claim": "The native-language paper reports that XENO wire syntax did not save tokens in any tested model: local 4B compact English=27, compact German=32, JSON=47, XENO=56; groq/nvidia JSON=72 vs XENO=78; Mistral JSON=39 vs XENO=48. The claimed value therefore shifts from surface compression to typed mandatory fields, canonical state and verification structure.",
+      "targets": ["claycode", "clay", "harness"],
+      "implication": "ClayCode/XENO compactness must be measured as total semantic/effect cost, not assumed from unusual syntax. Reader reliability and verifiability can justify a representation even when raw token count is worse."
+    }
+  ],
+  "earned_work_candidates": [
+    {
+      "mapping_id": "HEW-DRIVE-G8-EXEC-011",
+      "source_refs": ["DRIVE-G8-002", "DRIVE-G8-003", "DRIVE-G8-004", "DRIVE-G8-005", "DRIVE-G8-006"],
+      "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE", "H2_CLAYCODE_HARNESS", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Delivered executable G8 proof/fuzz/risk/credit/compaction scaffolding and reproduced bounded Directcode equivalence provide concrete conformance and counterexample tests for ClayCode/Harness rather than requiring rediscovery.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "MEDIUM_FOR_ARTIFACT_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Current ClayCode/H2 harness must demonstrate that these tests transfer to frozen semantics and catch meaningful regressions; otherwise credit is reduced to historical context only."
+    },
+    {
+      "mapping_id": "HEW-DRIVE-INSTRUMENT-012",
+      "source_refs": ["DRIVE-MEASURE-008", "DRIVE-MEASURE-009", "DRIVE-MEASURE-010"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Eight concrete measurement-instrument failure modes plus a documented supersession of a false hardware-saturation explanation define mandatory instrument-validation and positive-control fixtures.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 4.0,
+      "avoided_future_hours_high": 8.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Reference/Clay/acceptance harnesses must show instrument-positive-control mutations, fixed-reference baselines and configuration-aware throughput attribution; otherwise these historical lessons have not transferred."
+    }
+  ],
+  "branch_feedback": {
+    "claycode": "Import G8's executable proof/fuzz/compaction/risk fixtures where semantically applicable. Keep semantic equivalence separate from backend cost choice; do not justify ClayCode by raw token savings.",
+    "harness": "Make instrument self-test mandatory: inject a known degradation/mutation and require detection before trusting the instrument. Add config-vs-hardware attribution, fixed-baseline and state+decoder compaction fixtures.",
+    "frank": "Treat model-facing state projections as projections over canonical state. Do not optimize internal causal-credit fidelity without separately measuring task/outcome utility.",
+    "gwt": "Counterfactual attribution fidelity is a useful causal-readout dimension but not a substitute for downstream outcome/task success; preserve both in GWT readouts.",
+    "emergenz": "Synthetic tri-coupling is hypothesis-generation only. Require matched live/sandbox factorials and interaction terms before emergence claims.",
+    "hyperposition": "NO_CHANGE to backend choice; G8 synthetic coupling supplies no independent evidence selecting a hyperposition representation.",
+    "claygraph": "Compaction result supports explicit persistent-state identity and decoder separation; preserve versioned contradiction/supersession edges for instrument claims.",
+    "unifieddb": "Persist exact dynamic state/handles separately from stable semantic decoder/version; broken handle identity must cause abstention/failure, not plausible reconstruction.",
+    "clay": "Carry forward G8 as a bounded executable foundry scaffold, not a live causal proof. Add measurement-instrument validity as a permanent Goodhart tripwire.",
+    "q12_index": "Record that the August-5 XENO research itself falsified two tempting narratives: XENO did not save raw tokens, and an apparent two-agent hardware saturation was a server-slot measurement artifact."
+  },
+  "progress_accounting": {
+    "whole_drive_denominator_frozen": false,
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "historical_earned_work_credit_applied": false,
+    "provisional_unique_avoided_future_hours_low": 3.0,
+    "provisional_unique_avoided_future_hours_center": 7.0,
+    "provisional_unique_avoided_future_hours_high": 14.0,
+    "reason": "This is a new accessible Drive semantic/executable shard. Exact whole-Drive and complete Project-Frankenstein+recovery denominators remain unfrozen; central earned-work aggregation requires a fresh mechanism-level CAS merge."
+  }
+}

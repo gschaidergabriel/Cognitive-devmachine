@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "oracle_set_id":"DRIVE-AICORE-ROUTER-CONTEXT-SCHEMA-ORACLES-20260809",
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROUTER_SUBMANIFEST.json",
+  "reference_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "local_reproduction":{
+    "environment":"pure-Python reproduction of exact old/new trim and response-field logic",
+    "cases":[
+      {"name":"system_growth_starves_history","input":"12000-char system + nine 500-char history turns","old_reference":"2 total messages remain = system + 1 history turn","new_drive":"10 total messages remain = system + all 9 history turns","status":"NEGATIVE_ORACLE_REPRODUCED"},
+      {"name":"reasoning_content_schema_drift","input":"message={content:'', reasoning_content:'valid answer'}","old_reference":"empty answer","new_drive":"valid answer","status":"NEGATIVE_ORACLE_REPRODUCED"}
+    ]
+  },
+  "oracles":[
+    {"id":"ROUTER-ORACLE-001-CONTEXT-CHANNEL-STARVATION","historical_mechanism":"Frozen router counted system prompt and conversation against one 10,000-character budget and repeatedly removed oldest history while system text was retained. Drive source records measured system text of 8,691-12,253 chars and 0/9 conversation steps reaching the model under the failing condition.","required_current_behavior":"Context budgets must be typed by semantic channel and derived from actual tokenizer/per-slot context. Growth in one retained channel must not silently zero another required channel without an explicit truncation/abstention receipt.","targets":["harness","claycode","frank"]},
+    {"id":"ROUTER-ORACLE-002-BUDGET-DERIVATION-CONFIG-DRIFT","historical_mechanism":"Drive cap 22,000 chars was derived from ctx-size 16,384 / parallel 2, reserved 2,048 output tokens and measured 3.86 chars/token.","required_current_behavior":"A derived budget is valid only for the runtime configuration/tokenizer it was measured against; changing context size, parallel slots, tokenizer or response reserve must invalidate/recompute the budget instead of preserving a magic number as semantic truth.","targets":["harness","claycode","frank","clay"]},
+    {"id":"ROUTER-ORACLE-003-RESPONSE-SCHEMA-DRIFT","historical_mechanism":"Newer llama.cpp reasoning handling could place output in message.reasoning_content while message.content was empty; frozen router interpreted that as no answer and route() converted it into a 503. Drive source reports 6/6 observations under tight max_tokens before mitigation.","required_current_behavior":"Provider/runtime response schemas must be versioned/validated and normalized before semantic success/failure classification. A field relocation must not turn valid model output into transport failure.","targets":["harness","needle","frank","claycode"]},
+    {"id":"ROUTER-ORACLE-004-STREAM-BLOCKING-PARITY","historical_mechanism":"Drive applies the same context-trim helper to blocking and streaming paths.","required_current_behavior":"Blocking and streaming variants of one semantic operation must share the same context/resource projection or differential tests must prove intended differences.","targets":["harness","claycode"]}
+  ],
+  "epistemic_boundary":"The local reproduction establishes the logic-level failure and fix. Historical 0/9 and 6/6 counts are source-reported measurements, not independently replayed against the original llama-server configuration.",
+  "created_by":"chatgpt-secondary","created_at":"2026-08-09T05:49:00+07:00"
+}

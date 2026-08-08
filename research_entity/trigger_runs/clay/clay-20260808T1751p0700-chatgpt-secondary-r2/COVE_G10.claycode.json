@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "candidate_id": "COVE-G10",
+  "name": "Certified Operation View Envelope",
+  "status": "OPEN_HOLD",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "parent_research": ["Clay-G9-EPOCH","FRANK-C5","ClayCode-CC9-CBCC","GWT-R4-CSOC","Hyperposition-H3","ClayGraph-G1d-HOLD","Emergence-Certificate"],
+  "rule": "For each consequential operation, trusted operation semantics compile the minimal sound causal slice whose variation could change the result. Acquire native consistency witnesses within each domain, explicit compatibility witnesses across domains, authenticate selection where reallocative, compile deterministic reader projection, and revalidate the effect-relevant slice at the external authority boundary.",
+  "objects": {
+    "CausalSlicePlan": ["positive_reads","negative_predicate_reads","consistency_domains","selector_dependency","projection_dependency","capability_dependencies","closure_policy"],
+    "ConsistencyDomainWitness": ["domain_id","primitive","snapshot_or_epoch","compatibility_policy","lineage_or_valid_at"],
+    "SelectionReceipt": ["selector_semantics_hash","authorized_view_hash","query_plan_hash","candidate_set_hash","ranking_policy_hash","selected_anchor_refs"],
+    "ProjectionProofReceipt": ["workspace_episode_hash","projection_semantics_hash","schema_hash","wire_hash","order_policy","reader_identity","reference_test_ref"],
+    "CertifiedOperationView": ["causal_slice_plan","consistency_witnesses","selection_receipt","projection_receipt","exact_anchors"],
+    "EffectReceipt": ["operation_id","capability_ref","basis_revalidation","intent_id","release_id","outcome_ref","reentry_ref"]
+  },
+  "pipeline": [
+    "operation_intent",
+    "trusted_operation_semantics",
+    "causal_slice_compile",
+    "consistency_witness_acquire",
+    "authorized_selection_and_receipt",
+    "exact_anchor_validation",
+    "gwt_competition_and_semantic_workspace_episode",
+    "deterministic_reader_abi_and_projection_proof",
+    "model_proposal",
+    "trusted_compositional_closure_and_capability_revalidation",
+    "idempotent_effect_intent_release_outcome",
+    "causally_compatible_reentry"
+  ],
+  "runtime_modules": [
+    "OP.CAUSAL_SLICE_COMPILE",
+    "M.CONSISTENCY_DOMAIN_REGISTRY",
+    "OP.CONSISTENCY_WITNESS_ACQUIRE",
+    "M.SELECTION_RECEIPT",
+    "OP.AUTHORIZED_SELECTOR_REPLAY",
+    "M.PROJECTION_PROOF_RECEIPT",
+    "OP.PROJECTION_REFERENCE_VALIDATE",
+    "M.REVOCATION_DEPENDENCY_INDEX",
+    "OP.CAUSAL_SLICE_REVALIDATE",
+    "M.RESOURCE_GOVERNOR"
+  ],
+  "hard_invariants": [
+    "truth != activation != candidate != ignition != projection != authority",
+    "record_provenance != selection_integrity",
+    "projection_hash_identity != projection_semantic_correctness",
+    "component_freshness != causal_compatibility",
+    "physical_colocation != semantic_unity",
+    "activation_or_graph_cannot_mint_capabilities",
+    "model_output != execution_authority",
+    "model_cannot_remove_required_trusted_dependencies",
+    "no_emergence_or_phenomenal_consciousness_claim_from_functional_integration_alone"
+  ],
+  "native_primitive_preference": ["transactional_snapshot_handle","immutable_semantic_epoch","narrow_conflict_range","typed_cross_domain_witness","conservative_broaden_isolate_reject_for_unknown_dependencies"],
+  "governor": {"policy":"hard_constraints_then_pareto","state":["memory","thermal","energy","p50","p95","p99","context","prefill","fanout","reader_identity"],"hysteresis":true,"multi_timescale":true},
+  "not_selected": ["universal_global_epoch_lock","record_provenance_only_security","always_graph_retrieval","pairwise_canonicalization_of_nary_relations","single_emergence_scalar","single_soft_governor_scalar","database_merge_as_semantic_unification"],
+  "promotion_blockers": ["live_frank_causal_slice_audit","live_claygraph_selection_integrity_attack","target_qwen3_4b_factorial","real_epoch_crash_replay","sustained_android_trace","truthful_vs_shuffled_latent_field","prospective_emergence_certificate"]
+}

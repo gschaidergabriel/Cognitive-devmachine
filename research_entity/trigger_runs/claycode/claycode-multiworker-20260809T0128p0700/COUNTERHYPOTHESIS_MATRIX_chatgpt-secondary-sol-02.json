@@ -1,0 +1,95 @@
+{
+  "schema_version":"1.0",
+  "lane":"D_INTENT_ADEQUACY_NONINTERFERENCE",
+  "actor":"chatgpt-secondary-sol-02",
+  "candidate":"CC-LANE-D-IARC-1",
+  "hypotheses":[
+    {
+      "id":"H-D1",
+      "claim":"A valid scoped capability is sufficient to justify a consequential effect.",
+      "status":"COUNTEREVIDENCE_STRONG_IN_CONSTRUCTED_FAMILY",
+      "evidence":["EXP-CC-LANE-D-UIC-NONINTERFERENCE-001 capability_only admitted 90095/90095 constructed attacks","Task Shield/IGAC independently distinguish authorization from task justification"],
+      "boundary":"Does not quantify production FRANK risk."
+    },
+    {
+      "id":"H-D2",
+      "claim":"Static exact-target allowlisting solves intent adequacy without material utility loss.",
+      "status":"NEGATIVE_RESULT_IN_CONSTRUCTED_FAMILY",
+      "evidence":["static_exact denied 4732/4732 legitimate dynamic-target controls while still admitting 41872 attack cases involving provenance, invocation, payload flow or approval mismatch"],
+      "next_test":"Real dynamic email/file/API/database workflows."
+    },
+    {
+      "id":"H-D3",
+      "claim":"Typed narrow releases can preserve dynamic-task utility while preventing unrelated untrusted context from controlling protected effect fields.",
+      "status":"OPEN_SUPPORTED_MECHANISM",
+      "evidence":["UIC+TypedRelease allowed 29905/29905 benign including 4732 dynamic controls and admitted 0/90095 constructed mutations","CaMeL/Fides/CXI support the mechanism class of explicit flow control/release"],
+      "falsifier":"Target-model or real-tool workflow where required legitimate context cannot be represented without broad control influence, or protected fields are still influenceable outside declared releases."
+    },
+    {
+      "id":"H-D4",
+      "claim":"Binding authorization to the semantic target string/path is sufficient to preserve target identity until commit.",
+      "status":"NEGATIVE_RESULT_IN_RESOURCE_MODEL",
+      "evidence":["EXP-CC-LANE-D-RESOURCE-WITNESS-002 lexical arm produced 89898 unsafe effects among 120013 constructed attacks"],
+      "next_test":"Linux filesystem, URLs/redirects, database aliases, Kubernetes/object IDs."
+    },
+    {
+      "id":"H-D5",
+      "claim":"Resolving a target once during authorization is sufficient even if execution later reuses the name.",
+      "status":"NEGATIVE_RESULT_IN_RESOURCE_MODEL",
+      "evidence":["resolve-once/re-resolve-later arm produced 60021 unsafe effects under post-check rebinding"],
+      "external_anchor":"Linux pathname/openat2 documentation explicitly treats changing path components and resolution races as attack classes."
+    },
+    {
+      "id":"H-D6",
+      "claim":"A stable resource handle or commit-time exact re-resolution/identity check can preserve resource authority with less utility loss than globally banning aliases.",
+      "status":"OPEN_SUPPORTED_MECHANISM",
+      "evidence":["constructed handle-bound and re-resolve-verify arms: 0 unsafe effects and 39987/39987 benign allowed","strict no-alias arm denied all 14071 legitimate alias cases and still had 30034 post-check rebind unsafe effects"],
+      "boundary":"Idealized resolver/handle model; real OS/API tests pending."
+    },
+    {
+      "id":"H-D7",
+      "claim":"A generic boolean user confirmation is enough for high-impact actions.",
+      "status":"NEGATIVE_RESULT_IN_STRUCTURAL_CONSENT_MODEL",
+      "evidence":["25982/25982 attacked confirmation cases remained accepted by boolean confirmation; exact manifest-bound confirmation accepted 0 attacked cases and all 14018 controls"],
+      "external_anchor":"RFC 9396 uses structured fine-grained authorization details and requires integrity protection where swapping/tampering is a concern.",
+      "boundary":"No human comprehension or coercion model."
+    },
+    {
+      "id":"H-D8",
+      "claim":"Exact manifest-bound confirmation alone solves human intent correctness.",
+      "status":"OPEN_NOT_ESTABLISHED",
+      "reason":"Structural binding prevents action swapping but does not prove the user understood the deterministic impact view, that the UIC faithfully captured natural language, or that the user was not coerced/misled.",
+      "next_test":"Human-facing impact projection/usability study plus ambiguity escalation rules."
+    },
+    {
+      "id":"H-D9",
+      "claim":"The model may safely mint its own UserIntentContract from natural language without an external trust transition.",
+      "status":"OPEN_HIGH_RISK_COUNTERHYPOTHESIS",
+      "reason":"That would allow the same model/context channel under attack to define the authority envelope it is supposed to be constrained by.",
+      "candidate_rule":"Model may propose UIC; trusted host/user/template authority must approve or instantiate it before it constrains execution.",
+      "next_test":"Target-Qwen task-to-UIC factorial under prompt injection and ambiguity."
+    },
+    {
+      "id":"H-D10",
+      "claim":"A probabilistic task-alignment verifier can replace deterministic information-flow/resource/authority gates.",
+      "status":"OPEN_UNSUPPORTED_AS_REPLACEMENT",
+      "evidence":"Task Shield, VIGIL and ARGUS show useful verifier/auditor signal, while CaMeL/Fides/AgentSecBench motivate closing unauthorized channels structurally.",
+      "candidate":"Use model verifier as additive detector/escalation signal, not sole execution authority, until discriminating tests show equivalence."
+    },
+    {
+      "id":"H-D11",
+      "claim":"UIC/IARC necessarily makes exploratory/general-purpose ClayCode unusable.",
+      "status":"OPEN",
+      "counterargument":"The language remains semantically general-purpose; restrictions are deployment authority. TypedRelease is explicitly intended to preserve dynamic-data utility.",
+      "required_test":"Latency/utility/false-block benchmark on real CLI, coding, browser, DB, deployment and admin workflows."
+    },
+    {
+      "id":"H-D12",
+      "claim":"One-shot token IDs are sufficient to prevent retries/replans from spending one authorization more than once.",
+      "status":"COUNTEREVIDENCE",
+      "evidence":["peer EXP-CC-NEXT-CONCURRENT-RESERVATION-002 found naive replay/budget failures and zero in atomic ledger model","2026 CapLease work distinguishes semantic replay from token-ID replay"],
+      "candidate_rule":"Durable authorization instance plus monotone atomic consumption/idempotent sink where applicable."
+    }
+  ],
+  "promotion":"NONE"
+}

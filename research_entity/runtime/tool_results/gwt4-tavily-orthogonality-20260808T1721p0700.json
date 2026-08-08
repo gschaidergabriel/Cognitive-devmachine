@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.1",
+  "request_id": "gwt4-tavily-orthogonality-20260808T1721p0700",
+  "tool": "tavily_search",
+  "request_sha256": "7c0b3ab1115f2ad86e8938c5d80f283196a41a5956e5695899ca28dd4a813586",
+  "processed_at": "2026-08-08T10:28:44.228383+00:00",
+  "result": {
+    "provider": "Tavily",
+    "tool": "tavily_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 global workspace spreading activation graph memory competition ignition reconstruction prompt order causal attention",
+    "answer": null,
+    "results": [
+      {
+        "title": "Verbalizable Representations Form a Global Workspace in ...",
+        "url": "https://transformer-circuits.pub/2026/workspace/index.html",
+        "content": "The examples above each involve a single unspoken intermediate step; we conclude with an example that involves two intermediate steps. We give Opus 4.5 the arithmetic prompt \"calc: ( 4 + 17 ) \\ 2 + 7 =\", which it answers correctly with 49. Across layers, the J-lens reveals the intermediate steps: 21, then 42, then finally 49. Figure ?? tracks the J-lens rank of each of these values across the model's layers. All three are absent from the J-space through roughly the first third of the network and climb together through the early workspace layers, but they separate around layer 71 in the order the computation requires: 21 reaches rank 1 first, 42 follows roughly eight layers later, and 49 only reaches the top in the final layers. In ?? we confirm this ordering causally—activation patching [...] In ?? we confirm this ordering causally—activation patching experiments reveal the same depths identified by the J-lens to be the ones that are causal for the computation. [...] Figure ?? shows the graph for the same arithmetic prompt as above in ??, here computed on Sonnet 4.5, alongside the coordinate swaps used to test it for causal accuracy. The three main intermediates—21, 42, and 49—each appear as named nodes at the final token position, in the order they are computed, with 49 driving the output logit. This matches the layerwise picture of Figure ??. Each node in the figure is a \"supernode\" as in Ameisen et al., grouping J-lens vectors across adjacent layers and near-equivalent tokens. The gray text under each lists what was grouped, including near-misses such as twent, 26, and 29 under the 21 node. Every swap shown follows the same procedure, exchanging a named concept's lens coordinates for an alternative concept's lens coordinates at every token position",
+        "score": 0.43972388,
+        "raw_content": null
+      },
+      {
+        "title": "Global Workspace Theory | The Unfinishable Map",
+        "url": "https://unfinishablemap.org/concepts/global-workspace-theory",
+        "content": "In July 2026, Anthropic interpretability researchers (Gurnee et al.) reported evidence for a mechanistic, global-workspace-like structure in an artificial system. Using a “Jacobian lens”—which traces, for each output token, the activation directions that most raise its likelihood—they isolated a sparse, emergent subspace they call J-space. It is small: on the order of a couple dozen concurrently active vectors (the authors observe roughly k≈25) accounting for never more than 10% of activation variance. Yet it behaves like Baars’s workspace. Information there is verbally reportable, can be deliberately held or suppressed on instruction (“hold X in mind”), plays a causal role in multi-step reasoning, is flexibly reused across tasks, and is selectively engaged for deliberate reasoning rather [...] ### Filter Theory Integration\n\nFrom the Map’s perspective, the workspace may be the neural correlate of the interface between consciousness and memory. Implicit memory shows consciousness can delegate, but the choking phenomenon indicates the interface remains: conscious re-engagement causally disrupts automatized skills. The Bidirectional Interaction tenet requires this relationship run both ways—consciousness accesses workspace content and influences which information achieves ignition. A complete dualist reading treats the workspace as a bidirectional interface that both delivers content to consciousness and receives causal influence from it.\n\n## Relation to Site Perspective\n\n### Alignment [...] This is precisely where the Map’s framework diverges most sharply. The absent qualia objection applies: a system could implement global broadcast without phenomenal experience. A nation of people, each simulating a neuron in a workspace architecture, would implement the same functional organization as a conscious brain. Is the nation conscious?\n\nSite’s AI consciousness skepticism rests on dualism, not denial that AI can implement workspace functions. The question is whether functio",
+        "score": 0.4187688,
+        "raw_content": null
+      },
+      {
+        "title": "Verbalizable Representations Form a Global Workspace in Language Models",
+        "url": "https://arxiv.org/html/2607.15495v1",
+        "content": "The examples above each involve a single unspoken intermediate step; we conclude with an example that involves two intermediate steps. We give Opus 4.5 the arithmetic prompt “calc: ( 4 + 17 ) \\ 2 + 7 =”, which it answers correctly with 49. Across layers, the J-lens reveals the intermediate steps: 21, then 42, then finally 49. Figure 17 tracks the J-lens rank of each of these values across the model’s layers. All three are absent from the J-space through roughly the first third of the network and climb together through the early workspace layers, but they separate around layer 71 in the order the computation requires: 21 reaches rank 1 first, 42 follows roughly eight layers later, and 49 only reaches the top in the final layers. In §A.24 we confirm this ordering causally—activation [...] In §A.24 we confirm this ordering causally—activation patching experiments reveal the same depths identified by the J-lens to be the ones that are causal for the computation. [...] The basic idea is to characterize an intermediate activation vector by its first-order causal effect on the model’s outputs, over a broad distribution of potential contexts. Consider the residual stream hℓh\\_{\\ell} at layer ℓ\\ell and some token position tt. A small perturbation to hℓh\\_{\\ell} will propagate through the remaining layers and shift the final-layer residual stream hfinal,t′h\\_{\\text{final},t^{\\prime}} at every position t′≥tt^{\\prime}\\geq t. To first order, this relationship is linear, and is described by the Jacobian matrix ∂hfinal,t′/∂hℓ,t\\partial h\\_{\\text{final},t^{\\prime}}/\\partial h\\_{\\ell,t}. Composing this Jacobian with the unembedding layer yields the first-order effect of the perturbation on the model’s output logits at position t′t^{\\prime}.",
+        "score": 0.3802761,
+        "raw_content": null
+      },
+      {
+        "title": "[PDF] Lost in the Prompt Order: Revealing the Limitations of Causal Attention ...",
+        "url": "https://arxiv.org/pdf/2601.14152",
+        "content": "1 arXiv:2601.14152v2 [cs.CL] 21 Apr 2026 Question (Q) Options (O) Context (C) Causal Mask Cannot see future context (a) Decoder model Question (Q) Options (O) Context (C) Bidirectional (All tokens attend to all tokens) (b) Encoder model Figure 2: Decoder vs. Encoder attention. In QOC (Question→Options→Context), causal masking pre-vents decoder models from attending to the context while selecting among options, so they often answer from option priors rather than evidence. Encoder mod-els use bidirectional attention and can condition on the context when scoring the options.\nformers makes it impossible for the option tokens to attend to the context tokens, creating an infor-mation bottleneck (Figure 2). [...] 5 Conclusion We investigated why decoder-only LLMs exhibit a huge performance gap between CQO and QOC orderings in MCQA tasks. After ruling out training distribution bias and memory decay, we identified causal attention as the core mechanism: in QOC, the causal mask prevents options from attending to context, rendering it effectively inaccessible. This finding is supported by architecture comparisons (encoder models show no gap), attention analysis, and targeted interventions that successfully degrade CQO or improve QOC performance. Our work provides mechanistic insight into prompt sensitivity and offers practical guidance. [...] Acknowledgments This work was supported in part by the Institute of Information & Communications Technology Planning & Evaluation (IITP) grant funded by the Korea government (MSIT) (Nos. RS-2024-00457882, No.RS-2019-II191906) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (Nos.\nRS-2024-00453301, RS-2025-24873016, RS-2026-25494004).\nReferences Samira Abnar and Willem Zuidema. 2020. Quantify-ing attention flow in transformers. In Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics, pages 4190–4197.\nShengnan An, Zexiong Ma, Zeqi Lin, Nanning Zheng",
+        "score": 0.3753864,
+        "raw_content": null
+      },
+      {
+        "title": "[PDF] Lost in the Prompt Order: Revealing the Limitations of Causal Attention ...",
+        "url": "https://aclanthology.org/2026.findings-acl.1921.pdf",
+        "content": "5 Conclusion We investigated why decoder-only LLMs exhibit a huge performance gap between CQO and QOC orderings in MCQA tasks. After ruling out training distribution bias and memory decay, we identified causal attention as the core mechanism: in QOC, the causal mask prevents options from attending to context, rendering it effectively inaccessible. This finding is supported by architecture comparisons (encoder models show no gap), attention analysis, and targeted interventions that successfully degrade CQO or improve QOC performance. Our work provides mechanistic insight into prompt sensitivity and offers practical guidance. [...] Acknowledgments This work was supported in part by the Institute of Information & Communications Technology Planning & Evaluation (IITP) grant funded by the Korea government (MSIT) (Nos. RS-2024-00457882, No.RS-2019-II191906) and in part by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (Nos.\nRS-2024-00453301, RS-2025-24873016, RS-2026-25494004).\nReferences Samira Abnar and Willem Zuidema. 2020. Quantify-ing attention flow in transformers. In Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics, pages 4190–4197.\nShengnan An, Zexiong Ma, Zeqi Lin, Nanning Zheng, Jian-Guang Lou, and Weizhu Chen. 2024. Make your llm fully utilize the context. Advances in Neural Information Processing Systems, 37:62160–62188. [...] a wide range of models and datasets. Through systematic architectural analysis, we identify causal attention as the core mechanism: in QOC prompts, the causal mask prevents option tokens from attending to context, creating an information bottleneck where context becomes invisible to options.",
+        "score": 0.31220272,
+        "raw_content": null
+      },
+      {
+        "title": "Lost in the Prompt Order: Revealing the Limitations of Causal Attention in Language Models - ACL Anthology",
+        "url": "https://aclanthology.org/2026.findings-acl.1921",
+        "content": "ACL Logo\n\n###### Details\n\n## Lost in the Prompt Order: Revealing the Limitations of Causal Attention in Language Models\n\nHyunjong Ok,\nJaeho Lee\n\n##### Correct Metadata for\n\n##### Abstract\n\n##### Export citation\n\n##### Markdown (Informal)\n\nLost in the Prompt Order: Revealing the Limitations of Causal Attention in Language Models (Ok & Lee, Findings 2026)\n\n##### ACL [...] ##### ACL\n\nCreative Commons License\nACL materials are Copyright © 1963–2026 ACL; other materials are copyrighted by their respective copyright holders. Materials prior to 2016 here are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 International License. Permission is granted to make copies for the purposes of teaching and research. Materials published in or after 2016 are licensed on a Creative Commons Attribution 4.0 International License.\n\nCreative Commons License\n\nThe ACL Anthology is managed and built by the ACL Anthology team of volunteers.\n\nSite last built on 08 August 2026 at 09:52 UTC with commit 1941968.",
+        "score": 0.27539927,
+        "raw_content": null
+      },
+      {
+        "title": "A Neuroscience-Grounded Architecture for Infinite Interaction",
+        "url": "https://arxiv.org/pdf/2603.29023",
+        "content": "Spreading activation. The automatic propagation of activation through associative connections in a network. When one node is activated, connected nodes receive partial activation proportional 13 Published as a conference paper at ICLR 2026 to connection strength. Established by Collins and Loftus (1975) as a fundamental property of semantic networks. Motivates: inherent spreading activation in the knowledge graph; System 1 automatic retrieval (§3, §5). [...] Deciding advanta-geously before knowing the advantageous strategy. Science, 275(5304):1293–1295, 1997.\nAaron T. Beck. Cognitive Therapy and the Emotional Disorders. International Universities Press, 1976.\nAli Behrouz, Peilin Zhong, and Vahab Mirrokni. Titans: Learning to memorize at test time. In NeurIPS, 2025.\nWilliam G Chase and Herbert A Simon. Perception in chess. Cognitive Psychology, 4(1):55–81, 1973.\n9 Published as a conference paper at ICLR 2026 Prateek Chhikara, Dev Khant, Saket Aryan, Taranjeet Singh, and Deshraj Yadav. Mem0: Building production-ready AI agents with scalable long-term memory. In Frontiers in Artificial Intelligence and Applications, 2025. doi: 10.3233/faia251160.\nAllan M Collins and Elizabeth F Loftus. A spreading-activation theory of semantic processing.",
+        "score": 0.27337232,
+        "raw_content": null
+      },
+      {
+        "title": "[2601.14152] Lost in the Prompt Order: Revealing the Limitations of Causal Attention in Language Models",
+        "url": "https://arxiv.org/abs/2601.14152",
+        "content": "archive\n\n# Computer Science > Computation and Language\n\n# Title:Lost in the Prompt Order: Revealing the Limitations of Causal Attention in Language Models\n\n|  |  |\n --- |\n| Comments: | ACL 2026 findings |\n| Subjects: | Computation and Language (cs.CL); Artificial Intelligence (cs.AI); Machine Learning (cs.LG) |\n| Cite as: | arXiv:2601.14152 [cs.CL] |\n|  | (or  arXiv:2601.14152v2 [cs.CL] for this version) |\n|  |  Focus to learn more  arXiv-issued DOI via DataCite |\n\n## Submission history\n\n## Access Paper:\n\n### Current browse context:\n\n### References & Citations\n\n## BibTeX formatted citation\n\n### Bookmark\n\nBibSonomy\nReddit\n\n# Bibliographic and Citation Tools\n\n# Code, Data and Media Associated with this Article\n\n# Demos\n\n# Recommenders and Search Tools",
+        "score": 0.27210298,
+        "raw_content": null
+      }
+    ],
+    "response_time": 0.0,
+    "request_id": "32e119b0-2a32-45f2-a055-ca1df9b9859b",
+    "usage": null
+  },
+  "status": "SUCCESS"
+}

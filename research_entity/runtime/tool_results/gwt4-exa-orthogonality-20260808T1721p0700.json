@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.1",
+  "request_id": "gwt4-exa-orthogonality-20260808T1721p0700",
+  "tool": "exa_search",
+  "request_sha256": "5d67886206537a3a6a90ce4cf77f1962c4caf0e34f550af008cf3406a5742f70",
+  "processed_at": "2026-08-08T10:28:34.951640+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "global workspace spreading activation memory graph candidate competition broadcast reconstruction prompt order winner metadata",
+    "results": [
+      {
+        "id": "https://github.com/giansha/Global-Workspace-Agents",
+        "title": "giansha/Global-Workspace-Agents",
+        "url": "https://github.com/giansha/Global-Workspace-Agents",
+        "published_date": "2026-04-09T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "> **GWA** transitions multi-agent LLM coordination from passive shared memory to an **active, event-driven discrete dynamical system** — inspired by Global Workspace Theory from cognitive science. The system maintains continuous self-directed reasoning through a heterogeneous agent swarm, entropy-based intrinsic drive, and dual-layer memory bifurcation.\n\n---\n...\n— reactive, stateless, unable to sustain autonomous deliberation. Existing multi-agent frameworks rely on static memory pools and passive message passing, which leads to **sycophancy, echo chambers, and\n...\n- **The Cognitive Tick** — a 4-phase discrete loop: *Perceive → Think → Arbitrate → Update*\n- **Entropy-Based Intrinsic Drive** — Shannon entropy over semantic clusters dynamically regulates generator temperature to break reasoning deadlocks\n- **Core Self & Genesis State** — invariant identity injection each tick prevents semantic drift\n- **Dual-Layer Memory** — STM (active cache) + LTM (vector DB via RAG) with automatic bifurcation at token threshold θ\n...\n```\n                          ┌─────────────────────────────────────┐\n                          │         Global Workspace (STM)      │\n                          │  S_t = STM ∪ INPUT ∪ RAG ∪ P_Self│\n                          └────────────────┬────────────────────┘\n                                           ⬆ broadcast/update\n               ┌───────────────────────────┼───────────────────────────┐\n               ▼                           ▼                           ▼\n    ┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐\n    │  Attention Node  │       │  Generator Node  │       │   Critic Node    │\n    │  (The Spotlight) │       │ (Divergent, T↑)  │       │ (Convergent, T→0)│\n    └────────┬─────────┘       └────────┬─────────┘       └────────┬─────────┘\n             │ RAG queries              │ N candidates             │ scores + critique\n             ▼                          └──────────┬───────────────┘\n        LTM (ChromaDB"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/5mw0wh84kvp70dwtq12nbzwf",
+        "title": "Query-Aware Spreading Activation for Multi-Hop Retrieval over Knowledge Graphs",
+        "url": "https://arxiv.org/html/2606.30133",
+        "published_date": null,
+        "author": "Illia Makarov, Mykola Glybovets",
+        "text": null,
+        "highlights": [
+          "(32.80 vs 33.50) and outperforms the strongest purely-structural baseline in our comparison, HippoRAG, by 5.3 EM and 3.4 F1; on 2WikiMultiHopQA HippoRAG and QAFD-RAG retain an advantage due to their phrase-node architectures. An ablation with the gate disabled confirms that the gate is the source of a simultaneous F1 gain of 3.6 to 7.4 points and a retrieval-latency reduction by a factor of 1.5 to 4.9.\n...\nOur method retains the core idea of QAFD-RAG -that the traversal must account for the query. At the same time, we dispense with holding the graph in memory and with the combined edge re-weighting. The proposed algorithm spreads activation from seed entities extracted from the question across the knowledge graph. Each propagation step passes through a semantic gate whose intensity is set by the cosine similarity between the candidate entity's description and the question. The entire retrieval procedure -seed-node mapping, three propagation iterations, selection of K chains and entities, and context return -is expressed as a single Cypher query executed in one round-trip to Neo4j, without moving any graph data outside the database. Experiments on two multihop benchmarks reveal three key findings. 1) Query-aware propagation simultaneously improves accuracy and reduces retrieval latency. On both datasets -MuSiQue and 2WikiMultiHopQA -replacing structural spreading activation with the proposed query-aware variant improves F 1 (+7.4 on MuSiQue, +3.6 on 2wiki) and reduces retrieval latency by a factor of 1.5 to 4.9. The improvement arises because the semantic gate prunes low-information branches at each iteration, thereby shrinking the working set on which the next iteration operates. 2) Retrieval is a single Cypher query and loads no graph into memory. Both HippoRAG and QAFD-RAG materialize the graph into Python data structures to perform the traversal. In contrast, the proposed method delegates the entire traversal to Neo4j's query planner; this makes the system trivia"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://arxiv.org/html/2602.15895v2",
+        "title": "Understand Then Memory: A Cognitive Gist-Driven RAG Framework with Global Semantic Diffusion",
+        "url": "https://arxiv.org/html/2602.15895v2",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Retrieval-Augmented Generation (RAG) effectively mitigates hallucinations in LLMs by incorporating external knowledge. However, the inherent discrete representation of text in existing frameworks often results in a loss of semantic integrity, leading to retrieval deviations. Inspired by the human episodic memory mechanism, we propose CogitoRAG, a RAG framework that simulates human cognitive memory processes. The core of this framework lies in the extraction and evolution of the Semantic Gist. During the offline indexing stage, CogitoRAG first deduces unstructured corpora into gist memory corpora, which are then transformed into a multi-dimensional knowledge graph integrating entities, relational facts, and memory nodes. In the online retrieval stage, the framework handles complex queries via Query Decomposition Module that breaks them into comprehensive sub-queries, mimicking the cognitive decomposition humans employ for complex information. Subsequently, Entity Diffusion Module performs associative retrieval across the graph, guided by structural relevance and an entity-frequency reward mechanism. Furthermore, we propose the CogniRank algorithm, which precisely reranks candidate passages by fusing diffusion-derived scores with semantic similarity. The final evidence is delivered to the generator in a passage-memory pairing format, providing high-density information support. Experimental results across five mainstream QA benchmarks and multi-task generation on GraphBench demonstrate that CogitoRAG significantly outperforms state-of-the-art RAG methods, showcasing superior capabilities in complex knowledge integration and reasoning.\n...\nInspired by this, we propose CogitoRAG, a novel RAG framework that simulates the process of human cognitive memory. To emulate the core characteristics of human gist memory, CogitoRAG first infers and comprehends unstructured corpora to derive a gist memory corpus, which is then encoded and transformed into a multi-dimensional knowled"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2025.1607190/full",
+        "title": "global workspace theory and dealing with a real-time world",
+        "url": "https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2025.1607190/full",
+        "published_date": "2025-11-13T14:04:35.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Baars (2005). The essence of GWT is a framework in which information is competed and integrated among many specialized modules (e.g., vision, hearing, memory, language) that operate in parallel, and the information that eventually wins is then shared among all modules (Figure 1). The winning information is temporarily retained in a conscious form within a memory area called the “global workspace”. Only a limited amount of information can win at a time, and other competing information is considered to be processed unconsciously in the background. In this way, GWT is positioned as a framework to explain the interaction between a serial, limited-capacity conscious process and parallel, large-capacity unconscious processes. This model is supported by numerous experimental findings\n...\nand dynamic processing, allowing the system to try out various thought processes and change your thought processes in response to changes in the situation. This is a great advantage when dealing with situations that are difficult to handle with a fixed pipeline process, such as when the processing procedure is unclear or the goal is changed partway through. For example, consider the case where a robot explores a room based on information from multiple sensors (vision, touch, audio input, etc.). At the start of the search, the main objective was to search for and move along the shortest route, and the processing was set up to call the object detection module and the route planning module in order. However, during the search, there were many collisions with people in the room along the route. In this case, the Selection-Broadcast Cycle makes it possible to share the problem with the whole system, devise a solution, and make changes to the processing, for example, by calling a human detection module while planning a route. Also, if a voice instruction is received and the content of the instruction changes, it is possible to call a voice recognition module to share the analysis results with th"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.doc.ic.ac.uk/~mpsha/ConCog08.pdf",
+        "title": "A Spiking Neuron Model of Cortical Broadcast and Competition",
+        "url": "https://www.doc.ic.ac.uk/~mpsha/ConCog08.pdf",
+        "published_date": null,
+        "author": "Murray Shanahan",
+        "text": null,
+        "highlights": [
+          "Abstract This paper presents a computer model of cortical broadcast and competition based on spiking neurons and inspired by the hypothesis of a global neuronal workspace underlying conscious information processing in the human brain. In the model, the hypothesised workspace is realised by a collection of recurrently inter-connected regions capable of sustaining and disseminating a reverberating spatial pattern of activation. At the same time, the workspace remains susceptible to new patterns arriving from outlying cortical populations. Competition among these cortical populations for influence on the workspace is effected by a combination of mutual inhibition and top-down amplification. Keywords: Consciousness, global workspace theory, global neuronal workspace, cortical competition, reverberating networks\n...\nsimulation can be built that exhibits the sort of information flow the architecture requires. Two such simulations have been built by Dehaene and his colleagues. In the simulation of (Dehaene, et al., 1998), the workspace is modelled as a pool of neurons whose state is influenced by several outlying cortical processes, and which in turn has either an inhibitory or excitatory effect on those processes, realising a form of cortical selection. The focus of the more recent work reported in (Dehaene, et al., 2003) and (Dehaene & Changeux, 2005) is a computer model of competitive access to the global workspace. In this model, the flow of information is mostly into the workspace, and the only influence of the workspace areas on outlying cortical populations is top-down amplification. The present paper can be thought of as complementing the work of Dehaene, et al. Its contribution is to supply an explicit model of the mechanism and dynamics of broadcast, something which is not present in their simulation, and to demonstrate a two-way flow of spatial patterns both into and out of the modelled workspace. The relationship between Dehaene, et al.’s more recent simulation"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://ceur-ws.org/Vol-378/paper1.pdf",
+        "title": "Applications of a Global Workspace Framework to Mathematical Discovery",
+        "url": "https://ceur-ws.org/Vol-378/paper1.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "John Charnley and Simon Colton Combined Reasoning Group, Department of Computing Imperial College, United Kingdom Abstract Systems which combine various forms of reasoning such as deductive inference and symbolic manipulation have repeatedly been shown to be more effective than stand-alone systems. In general, however, the combined systems are ad-hoc and designed for a single task. We present a generic framework for combining reasoning processes which is based on the theory of the Global Workspace Architecture. Within this blackboard-style framework, processes attached to a workspace propose information to be broadcast, along with a rating of the importance of the information, and only the most important is broadcast to all the processes, which react accordingly. To begin to demonstrate the value of the framework, we show that the tasks undertaken by previous ad-hoc systems can be performed by a configuration of the framework. To this end, we describe configurations for theorem discovery and conjecture making respectively, which produce comparable results to the previous ICARUS and HOMER systems. We further describe a novel application where we use a configuration of the framework to identify potentially interesting specialisations of finite algebras. Keywords: global workspace, combined reasoning, conjecture making, finite algebra\n...\nAs described in § 2, our framework allows for multiple processes to reason about information in \ndisparate ways and communicate via a blackboard-style global workspace. In each round of a session, \na single piece of information is broadcast to each process attached to the workspace. Each process may \nor may not reason about the broadcast information in order to produce novel information. For instance, \nif a conjecture is broadcast, a deductive process may try to prove the conjecture, whereas a model \ngeneration process may seek a counterexample. Any process which does produce novel information will \npropose it for broadcast, along wit"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://github.com/framersai/agentos/blob/master/src/cognition/memory/retrieval/store/MemoryStore.ts",
+        "title": "src/cognition/memory/retrieval/store/MemoryStore.ts",
+        "url": "https://github.com/framersai/agentos/blob/master/src/cognition/memory/retrieval/store/MemoryStore.ts",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Prefix: string;\n /** Embedding dimension (auto-detected if possible). */\n embeddingDimension?: number;\n decayConfig?: DecayConfig;\n /** Optional cognitive mechanisms engine for retrieval-time hooks. */\n mechanismsEngine?: import('../../mechanisms/CognitiveMechanismsEngine.js').CognitiveMechanismsEngine;\n /** Optional mood provider for reconsolidation drift during recordAccess. */\n moodProvider?: () => PADState;\n /**\n * Step 13: enable graph activation. When true, `store` upserts entity\n * nodes and `co_occurs` edges at ingest (from `trace.entities`), and\n * `query` seeds Anderson spreading activation from query-extracted\n * entities to compute the per-candidate `graphActivation` score\n * (weight 0.10 in `RetrievalPriorityScorer`). Default: false, which\n * preserves the legacy `graphActivation: 0` behavior for all\n * candidates.\n */\n enableGraphActivation?: boolean;\n}\n...\n// Record in knowledge graph as episodic memory. Step 13: thread\n // `trace.entities` through as `entityIds` (slugified for deterministic\n // lookup). Previously hardcoded to `[]`, which silenced the sixth\n // signal in the composite scoring formula.\n const entityIds = (trace.entities ?? [])\n .map(slugifyEntityId)\n .filter((id) => id.length > 0);\n try {\n await this.config.knowledgeGraph.recordMemory({\n type: trace.type === 'episodic' ? 'conversation' : 'discovery',\n summary: trace.content.substring(0, 200),\n description: trace.content,\n participants: [trace.scopeId],\n valence: trace.emotionalContext.valence,\n importance: trace.encodingStrength,\n entityIds,\n embedding,\n occurredAt: new Date(trace.createdAt).toISOString(),\n outcome: 'unknown',\n context: {\n memoryTraceId: trace.id,\n scope: trace.scope,\n scopeId: trace.scopeId,\n type: trace.type,\n },\n });\n } catch {\n // Knowledge graph may not be available; non-critical\n }\n\n // Step 13: upsert entity nodes and co-occurrence edges when the\n // feature flag is on. Non-critical; swallows errors so an unavailable\n // KG backend does not block encoding.\n if "
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.compneuro.uwaterloo.ca/files/publications/chateau.2020.pdf",
+        "title": "Flexibly chaining mental operations with spiking neurons",
+        "url": "https://www.compneuro.uwaterloo.ca/files/publications/chateau.2020.pdf",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "The ability to flexibly route information between brain regions is crucial to per form new multi-step tasks. The cognitive architecture underlying this mechanism has been investigated with a new paradigm and a series of behavioural exper iments [4]. During each trial, participants were shown a digit N ∈ { 2, 4, 6, 8}and asked to either compare it to 5 (simple comparison task), add 2 to N then compare the result I = N ⊕ 2 to 5 (addition-comparison task), or subtract 2 from N then compare the result I = N 2 to 5 (subtraction-comparison task). In each task, participants had to answer “smaller” or “larger”. A cycling rule was introduced to operations ⊕ and so that their result stayed within the set of the stimuli. Thus, 8⊕ 2 := 2 and 2 2 := 8. Their results suggest that the human cognitive architecture is suboptimal for chaining operations over concepts like digits due to crosstalk and partially parallel processing. In addition, conscious perception of N was required for chaining, but not for the simple task. The global neuronal workspace theory of consciousness (see [3] for a recent review) proposes that a network of interconnected neurons breaks the modularity of specialist processors by flexibly broadcasting selected concepts. Here, we pro pose a spiking neural implementation of the theory that accounts for top-down and bottom-up modulated access to the workspace, ignition and broadcast. We then test the ability of this architecture to perform the tasks.\n...\nweights are learned. The SPA is a vector-symbolic architecture in the sense that it encodes concepts using a vector representation and combines them with math ematical operations like vector addition for concept superposition and circular convolution for concept binding. Used in combination with the NEF, it provides a framework for modelling high-level cognitive functions in networks of spik ing neurons. Cortico-basal ganglia-thalamocortical loops play a key role in this framework and our model. Figure 1 describe"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "a24c4331c947da059e7cb7ea816fb9ac",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

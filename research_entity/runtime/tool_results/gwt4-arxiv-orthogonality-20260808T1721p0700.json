@@ -1,0 +1,265 @@
+{
+  "schema_version": "1.1",
+  "request_id": "gwt4-arxiv-orthogonality-20260808T1721p0700",
+  "tool": "arxiv_search",
+  "request_sha256": "173e92c066ef2a912af9ec8a1d6d363519a0912cd25681ce485895112b317db2",
+  "processed_at": "2026-08-08T10:28:34.735097+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-08T10:28:34.825223+00:00",
+    "credential_required": false,
+    "query": "all:\"global workspace\" AND (all:memory OR all:activation OR all:routing OR all:competition OR all:reconstruction)",
+    "start": 0,
+    "max_results": 10,
+    "total_results": 33,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2408.15982v2",
+        "title": "From Neuronal Packets to Thoughtseeds: A Hierarchical Model of Embodied Cognition in the Global Workspace",
+        "summary": "The emergence of cognition requires a framework that bridges evolutionary principles with neurocomputational mechanisms. This paper introduces the novel \"thoughtseed\" framework, proposing that cognition arises from the dynamic interaction of self-organizing units of embodied knowledge called \"thoughtseeds\" within the Global Workspace of consciousness. Leveraging foundational concepts from evolutionary theory, neuronal packets, and free energy principle, we propose a hierarchical model of cognitive states, comprising Neuronal Packet Domains (NPDs), Knowledge Domains (KDs), the thoughtseed network, and meta-cognition. This hierarchical interplay, mediated by nested Markov blankets and reciprocal message passing, facilitates the emergence of thoughtseeds as coherent patterns of activity that guide perception, action, and learning. Thoughtseeds, posited as fundamental units of thought, compete for dominance within the Global Workspace, with the dominant thoughtseed shaping conscious experience and guiding behavior. We present a mathematical framework grounded in active inference and dynamical systems theory to model thoughtseed dynamics and their contribution to the unitary nature of consciousness. The thoughtseed framework offers a promising step towards a novel, biologically-grounded model for understanding the organizing principles and emergence of embodied cognition, offering a unified account of cognitive phenomena, with potential applications in understanding consciousness, attention, and decision-making.",
+        "published": "2024-08-28T17:51:16Z",
+        "updated": "2024-10-17T11:42:29Z",
+        "authors": [
+          "Prakash Chandra Kavi",
+          "Gorka Zamora-López",
+          "Daniel Ari Friedman"
+        ],
+        "categories": [
+          "q-bio.NC"
+        ],
+        "primary_category": "q-bio.NC",
+        "doi": "10.1371/journal.pcbi.1012973",
+        "journal_ref": null,
+        "comment": "2nd version. Reduced in size from 88 pages to 48 pages, to focus on the core framework. Items removed: Detailed discussions on Evolutionary Biology, contemplative traditions and computational theories of Mind. Replaced Inner Screen Model with Global Workspace Theory. Mathematical equations have been streamlined and is better organized. preprint arXiv:2408.15982",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2408.15982v2",
+          "pdf": "https://arxiv.org/pdf/2408.15982v2",
+          "doi": "https://doi.org/10.1371/journal.pcbi.1012973"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2503.01906v2",
+        "title": "Learning to Chain Operations by Routing Information Through a Global Workspace",
+        "summary": "We present a model inspired by the Global Workspace Theory that integrates specialized modules to perform a sequential reasoning task. A controller selectively routes information between modules through the workspace using a gating mechanism. This approach allows the model to chain operations by iteratively broadcasting information between specialized domains, mimicking System-2 reasoning. We evaluate the model's performance on a simple addition task, where two addends must be summed. The task can be solved by routing information sequentially through an Input module, an Increment module (multiple times), and finally an Output module. We consider two implementations of this system with increasing complexity. First, using hand-designed modules operating on one-hot digit representations, the controller (a LSTM recurrent network) learns to select the appropriate modules (input, increment, output) in the appropriate sequence. Second, we replace the hand-designed modules with learned representation modules for MNIST images and an increment module trained on the task objectives; here again, the controller learns the appropriate sequential module selection to solve the task. Finally, we show that the Global Workspace model, while having fewer parameters, outperforms LSTMs and Transformers when tested on unseen addition operations (both interpolations and extrapolations of addition operations seen during training). Our results highlight the potential of architectures inspired by the Global Workspace Theory to enhance deep learning's reasoning capabilities.",
+        "published": "2025-02-28T15:30:55Z",
+        "updated": "2025-03-06T21:37:23Z",
+        "authors": [
+          "Hugo Chateau-Laurent",
+          "Rufin VanRullen"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CV",
+          "q-bio.NC"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "12 pages, 14 figures, submitted to a conference",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2503.01906v2",
+          "pdf": "https://arxiv.org/pdf/2503.01906v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.08206v1",
+        "title": "\"Theater of Mind\" for LLMs: A Cognitive Architecture Based on Global Workspace Theory",
+        "summary": "Modern Large Language Models (LLMs) operate fundamentally as Bounded-Input Bounded-Output (BIBO) systems. They remain in a passive state until explicitly prompted, computing localized responses without intrinsic temporal continuity. While effective for isolated tasks, this reactive paradigm presents a critical bottleneck for engineering autonomous artificial intelligence. Current multi-agent frameworks attempt to distribute cognitive load but frequently rely on static memory pools and passive message passing, which inevitably leads to cognitive stagnation and homogeneous deadlocks during extended execution. To address this structural limitation, we propose Global Workspace Agents (GWA), a cognitive architecture inspired by Global Workspace Theory. GWA transitions multi-agent coordination from a passive data structure to an active, event-driven discrete dynamical system. By coupling a central broadcast hub with a heterogeneous swarm of functionally constrained agents, the system maintains a continuous cognitive cycle. Furthermore, we introduce an entropy-based intrinsic drive mechanism that mathematically quantifies semantic diversity, dynamically regulating generation temperature to autonomously break reasoning deadlocks. Coupled with a dual-layer memory bifurcation strategy to ensure long-term cognitive continuity, GWA provides a robust, reproducible engineering framework for sustained, self-directed LLM agency.",
+        "published": "2026-04-09T13:06:43Z",
+        "updated": "2026-04-09T13:06:43Z",
+        "authors": [
+          "Wenlong Shang"
+        ],
+        "categories": [
+          "cs.MA"
+        ],
+        "primary_category": "cs.MA",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.08206v1",
+          "pdf": "https://arxiv.org/pdf/2604.08206v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2406.12375v1",
+        "title": "GW-MoE: Resolving Uncertainty in MoE Router with Global Workspace Theory",
+        "summary": "Mixture-of-Experts (MoE) has been demonstrated as an efficient method to scale up models. By dynamically and sparsely selecting activated experts, MoE can effectively reduce computational costs. Despite the success, we observe that many tokens in the MoE models have uncertain routing results. These tokens have nearly equal scores for choosing each expert, and we demonstrate that this uncertainty can lead to incorrect selections. Inspired by the Global Workspace Theory (GWT), we propose a new fine-tuning method, GW-MoE, to address this issue. The core idea is to broadcast the uncertain tokens across experts during fine-tuning. Therefore, these tokens can acquire the necessary knowledge from any expert during inference and become less sensitive to the choice. GW-MoE does not introduce additional inference overhead. We validate that GW can mitigate the uncertain problem and consistently improve in different tasks (text classification, question answering, summarization, code generation, and mathematical problem solving) and model sizes (650M and 8B parameters).",
+        "published": "2024-06-18T08:03:51Z",
+        "updated": "2024-06-18T08:03:51Z",
+        "authors": [
+          "Haoze Wu",
+          "Zihan Qiu",
+          "Zili Wang",
+          "Hang Zhao",
+          "Jie Fu"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2406.12375v1",
+          "pdf": "https://arxiv.org/pdf/2406.12375v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2305.15775v3",
+        "title": "Concept-Centric Transformers: Enhancing Model Interpretability through Object-Centric Concept Learning within a Shared Global Workspace",
+        "summary": "Many interpretable AI approaches have been proposed to provide plausible explanations for a model's decision-making. However, configuring an explainable model that effectively communicates among computational modules has received less attention. A recently proposed shared global workspace theory showed that networks of distributed modules can benefit from sharing information with a bottlenecked memory because the communication constraints encourage specialization, compositionality, and synchronization among the modules. Inspired by this, we propose Concept-Centric Transformers, a simple yet effective configuration of the shared global workspace for interpretability, consisting of: i) an object-centric-based memory module for extracting semantic concepts from input features, ii) a cross-attention mechanism between the learned concept and input embeddings, and iii) standard classification and explanation losses to allow human analysts to directly assess an explanation for the model's classification reasoning. We test our approach against other existing concept-based methods on classification tasks for various datasets, including CIFAR100, CUB-200-2011, and ImageNet, and we show that our model achieves better classification accuracy than all baselines across all problems but also generates more consistent concept-based explanations of classification output.",
+        "published": "2023-05-25T06:37:39Z",
+        "updated": "2023-11-07T23:56:05Z",
+        "authors": [
+          "Jinyung Hong",
+          "Keun Hee Park",
+          "Theodore P. Pavlic"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.CV"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "23 pages, 9 tables, 18 figures, Accepted at WACV2024",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2305.15775v3",
+          "pdf": "https://arxiv.org/pdf/2305.15775v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2508.08677v2",
+        "title": "Multi-level Collaborative Distillation Meets Global Workspace Model: A Unified Framework for OCIL",
+        "summary": "Online Class-Incremental Learning (OCIL) enables models to learn continuously from non-i.i.d. data streams. Since samples of the data streams can be seen only once, it is more suitable for real-world scenarios compared to offline learning. However, this constraint intensifies the challenge for OCIL in maintaining an appropriate balance between stability and plasticity. Moreover, under stricter memory buffer constraints in real world, current replay-based methods are less effective. While ensemble methods improve plasticity, they often struggle with stability. Inspired by the Global Workspace Theory (GWT), we propose a novel approach that enhances ensemble learning through a Global Workspace Model (GWM)-a shared, implicit memory that guides the learning of multiple student models. The GWM is formed by fusing the parameters of all students within each training batch, capturing the historical learning trajectory and serving as a dynamic anchor for knowledge consolidation. Like the broadcasting mechanism of GWT, the GWM is redistributed periodically to students, stabilizing learning and promoting cross-task consistency. In addition, we introduce a multi-level collaborative distillation mechanism. It enforces peer-to-peer consistency among students and preserves historical knowledge by aligning each student with the GWM. As a result, student models remain adaptable to new tasks while maintaining previously learned knowledge, striking a better balance between stability and plasticity. Extensive experiments on three standard OCIL benchmarks show that our method delivers significant performance improvement for several OCIL models across various memory budgets. The code is available at https://github.com/susususushi/GWM.",
+        "published": "2025-08-12T06:52:33Z",
+        "updated": "2026-05-28T01:40:35Z",
+        "authors": [
+          "Shibin Su",
+          "Guoqiang Liang",
+          "De Cheng",
+          "Shizhou Zhang",
+          "Lingyan Ran"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.CV"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "15 pages, 8 figures",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2508.08677v2",
+          "pdf": "https://arxiv.org/pdf/2508.08677v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2204.05138v3",
+        "title": "Artificial Intelligence Software Structured to Simulate Human Working Memory, Mental Imagery, and Mental Continuity",
+        "summary": "This article presents an artificial intelligence (AI) architecture intended to simulate the iterative updating of the human working memory system. It features several interconnected neural networks designed to emulate the specialized modules of the cerebral cortex. These are structured hierarchically and integrated into a global workspace. They are capable of temporarily maintaining high-level representational patterns akin to the psychological items maintained in working memory. This maintenance is made possible by persistent neural activity in the form of two modalities: sustained neural firing (resulting in a focus of attention) and synaptic potentiation (resulting in a short-term store). Representations held in persistent activity are recursively replaced resulting in incremental changes to the content of the working memory system. As this content gradually evolves, successive processing states overlap and are continuous with one another. The present article will explore how this architecture can lead to iterative shift in the distribution of coactive representations, ultimately leading to mental continuity between processing states, and thus to human-like thought and cognition. Taken together, these components outline a biologically motivated route toward synthetic consciousness or artificial sentience and subjectivity.",
+        "published": "2022-03-29T22:23:36Z",
+        "updated": "2026-02-09T23:30:19Z",
+        "authors": [
+          "Jared Edward Reser"
+        ],
+        "categories": [
+          "q-bio.NC",
+          "cs.AI",
+          "cs.LG",
+          "cs.NE",
+          "cs.SC"
+        ],
+        "primary_category": "q-bio.NC",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2204.05138v3",
+          "pdf": "https://arxiv.org/pdf/2204.05138v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2203.17255v7",
+        "title": "A Cognitive Architecture for Machine Consciousness and Artificial Superintelligence: Thought Is Structured by the Iterative Updating of Working Memory",
+        "summary": "This article provides an analytical framework for how to simulate human-like thought processes within a computer. It describes how attention and memory should be structured, updated, and utilized to search for associative additions to the stream of thought. The focus is on replicating the dynamics of the mammalian working memory system, which features two forms of persistent activity: sustained firing (preserving information on the order of seconds) and synaptic potentiation (preserving information from minutes to hours). The article uses a series of figures to systematically demonstrate how the iterative updating of these working memory stores provides functional organization to behavior, cognition, and awareness. In a machine learning implementation, these two memory stores should be updated continuously and in an iterative fashion. This means each state should preserve a proportion of the coactive representations from the state before it (where each representation is an ensemble of neural network nodes). This makes each state a revised iteration of the preceding state and causes successive configurations to overlap and blend with respect to the information they contain. Thus, the set of concepts in working memory will evolve gradually and incrementally over time. Transitions between states happen as persistent activity spreads activation energy throughout the hierarchical network, searching long-term memory for the most appropriate representation to be added to the global workspace. The result is a chain of associatively linked intermediate states capable of advancing toward a solution or goal. Iterative updating is conceptualized here as an information processing strategy, a model of working memory, a theory of consciousness, and an algorithm for designing and programming artificial intelligence (AI, AGI, and ASI).",
+        "published": "2022-03-29T22:28:30Z",
+        "updated": "2024-11-14T01:06:47Z",
+        "authors": [
+          "Jared Edward Reser"
+        ],
+        "categories": [
+          "q-bio.NC",
+          "cs.CL",
+          "cs.CV"
+        ],
+        "primary_category": "q-bio.NC",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "88 pages and 53 figures",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2203.17255v7",
+          "pdf": "https://arxiv.org/pdf/2203.17255v7"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2001.11027v3",
+        "title": "The Tensor Brain: Semantic Decoding for Perception and Memory",
+        "summary": "We analyse perception and memory, using mathematical models for knowledge graphs and tensors, to gain insights into the corresponding functionalities of the human mind. Our discussion is based on the concept of propositional sentences consisting of \\textit{subject-predicate-object} (SPO) triples for expressing elementary facts. SPO sentences are the basis for most natural languages but might also be important for explicit perception and declarative memories, as well as intra-brain communication and the ability to argue and reason. A set of SPO sentences can be described as a knowledge graph, which can be transformed into an adjacency tensor. We introduce tensor models, where concepts have dual representations as indices and associated embeddings, two constructs we believe are essential for the understanding of implicit and explicit perception and memory in the brain. We argue that a biological realization of perception and memory imposes constraints on information processing. In particular, we propose that explicit perception and declarative memories require a semantic decoder, which, in a simple realization, is based on four layers: First, a sensory memory layer, as a buffer for sensory input, second, an index layer representing concepts, third, a memoryless representation layer for the broadcasting of information ---the \"blackboard\", or the \"canvas\" of the brain--- and fourth, a working memory layer as a processing center and data buffer. We discuss the operations of the four layers and relate them to the global workspace theory. In a Bayesian brain interpretation, semantic memory defines the prior for observable triple statements. We propose that ---in evolution and during development--- semantic memory, episodic memory, and natural language evolved as emergent properties in agents' process to gain a deeper understanding of sensory information.",
+        "published": "2020-01-29T07:48:01Z",
+        "updated": "2020-02-10T08:41:03Z",
+        "authors": [
+          "Volker Tresp",
+          "Sahand Sharifzadeh",
+          "Dario Konopatzki",
+          "Yunpu Ma"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CV",
+          "cs.LG",
+          "stat.ML"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2001.11027v3",
+          "pdf": "https://arxiv.org/pdf/2001.11027v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2603.18676v1",
+        "title": "MANAR: Memory-augmented Attention with Navigational Abstract Conceptual Representation",
+        "summary": "MANAR (Memory-augmented Attention with Navigational Abstract Conceptual Representation), contextualization layer generalizes standard multi-head attention (MHA) by instantiating the principles of Global Workspace Theory (GWT). While MHA enables unconstrained all-to-all communication, it lacks the functional bottleneck and global integration mechanisms hypothesized in cognitive models of consciousness. MANAR addresses this by implementing a central workspace through a trainable memory of abstract concepts and an Abstract Conceptual Representation (ACR). The architecture follows a two-stage logic that maps directly to GWT mechanics: (i) an integration phase, where retrieved memory concepts converge to form a collective \"mental image\" (the ACR) based on input stimuli; and (ii) a broadcasting phase, where this global state navigates and informs the contextualization of individual local tokens. We demonstrate that efficient linear-time scaling is a fundamental architectural byproduct of instantiating GWT functional bottleneck, as routing global information through a constant-sized ACR resolves the quadratic complexity inherent in standard attention. MANAR is a compatible re-parameterization of MHA with identical semantic roles for its projections, enabling knowledge transfer from pretrained transformers via weight-copy and thus overcoming the adoption barriers of structurally incompatible linear-time alternatives. MANAR enables non-convex contextualization, synthesizing representations that provably lie outside the convex hull of input tokens - a mathematical reflection of the creative synthesis described in GWT. Empirical evaluations confirm that MANAR matches or exceeds strong baselines across language (GLUE score of 85.1), vision (83.9% ImageNet-1K), and speech (2.7% WER on LibriSpeech), positioning it as an efficient and expressive alternative to quadratic attention.",
+        "published": "2026-03-19T09:37:18Z",
+        "updated": "2026-03-19T09:37:18Z",
+        "authors": [
+          "Zuher Jahshan",
+          "Ben Ben Ishay",
+          "Leonid Yavits"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2603.18676v1",
+          "pdf": "https://arxiv.org/pdf/2603.18676v1"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

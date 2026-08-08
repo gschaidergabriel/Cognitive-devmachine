@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0413+0700-chatgpt-secondary-pf-head-drive-surface",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_package": "666-00-DUAL-INDEX",
+  "status": "PARTIAL_EXECUTED_EXTERNAL_BLOCKER_ON_DRIVE_BULK_BYTES",
+  "observed_at": "2026-08-09T04:13:51+07:00",
+  "drive_surface": {
+    "folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "root_children_observed": 1,
+    "child": {
+      "id": "1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU",
+      "title": "all frank data 1.tar.xz",
+      "mime_type": "application/x-xz",
+      "size_bytes": 663552000
+    },
+    "internal_archive_manifest_frozen": false,
+    "connector_result": "DOWNLOAD_REJECTED_FILE_GT_104857600_BYTES",
+    "blocker_class": "EXTERNAL_ACCESS_BLOCKER",
+    "note": "The Drive root is enumerated, but the compressed archive contents cannot be recursively inventoried through the current Drive download surface because the file exceeds the connector 100 MiB limit. No false exact coverage is awarded."
+  },
+  "project_frankenstein_surface": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "default_branch": "main",
+    "github_reported_size_kib": 228899,
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "head_observed_from_recent_commit_listing": true,
+    "exact_tree_manifest_frozen": false,
+    "partial_source_reads": [
+      "README.md@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "ARCHITECTURE.md@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "commit:62149151ba704479f46265a5b8b5865fd38ba99d"
+    ]
+  },
+  "historical_findings": [
+    {
+      "finding_id": "PF-HIST-001",
+      "epistemic_class": "HISTORICAL_RUNTIME_DOCUMENTATION",
+      "status": "OPEN_FOR_CURRENT_REUSE_MAPPING",
+      "claim": "Project-Frankenstein used a persistent background cognitive architecture with a multi-thread consciousness daemon, GWT-style global workspace injection, E-PQ five-dimensional personality state, embodied hardware-to-subjective mapping, attention gating and multiple persistence stores.",
+      "sources": ["ARCHITECTURE.md@abba90a5767d85abc8a1ac340bae92842dab35c1", "README.md@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "reuse_class": "MEASUREMENT_FOUNDATION_AND_REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "gwt", "harness", "claygraph", "unifieddb"]
+    },
+    {
+      "finding_id": "PF-HIST-002",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_FROM_CODE_CHANGE",
+      "status": "CURRENTLY_RELEVANT_CONSTRAINT",
+      "claim": "A hard-coded ARCHITECTURE FACT string injected the obsolete AURA label into prompts and overrode the intended trained behavior until the static prompt fact and related code references were removed/renamed.",
+      "sources": ["commit:62149151ba704479f46265a5b8b5865fd38ba99d"],
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank", "claycode", "unifieddb", "harness"],
+      "implication": "Avoid duplicated semantic truth in scattered prompt literals; centralize authoritative state/architecture semantics and validate prompt/context assembly against canonical runtime state."
+    },
+    {
+      "finding_id": "PF-HIST-003",
+      "epistemic_class": "HISTORICAL_RUNTIME_TUNING_RESULT",
+      "status": "OPEN_FOR_REPLICATION",
+      "claim": "Metacognitive vigilance decay required threshold/cooldown/intensity retuning because the prior dynamics could reduce vigilance by roughly 20% over two hours.",
+      "sources": ["commit:62149151ba704479f46265a5b8b5865fd38ba99d"],
+      "reuse_class": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank", "gwt", "emergenz", "harness"],
+      "implication": "Slow state variables need explicit rate limits, hysteresis and trajectory tests rather than only instantaneous bounds."
+    },
+    {
+      "finding_id": "PF-HIST-004",
+      "epistemic_class": "HISTORICAL_ARCHITECTURE_FACT",
+      "status": "OPEN_FOR_CURRENT_REUSE_MAPPING",
+      "claim": "The historical memory architecture included an LCME tri-hybrid of SQLite graph/claims, vector embeddings and FTS5, a direct conceptual precursor for current ClayGraph/UnifiedDB research but not evidence that a physical single-store merge is optimal.",
+      "sources": ["commit:62149151ba704479f46265a5b8b5865fd38ba99d"],
+      "reuse_class": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["claygraph", "unifieddb", "frank"]
+    },
+    {
+      "finding_id": "PF-HIST-005",
+      "epistemic_class": "HISTORICAL_DOCUMENT_CONTRADICTION",
+      "status": "OPEN_RECONCILIATION_REQUIRED",
+      "claim": "At the same frozen head, README.md describes Qwen 3.5-4B with LoRA v20+ while ARCHITECTURE.md still describes Qwen 2.5 3B with LoRA v12 in major sections; historical docs are not internally version-synchronous.",
+      "sources": ["README.md@abba90a5767d85abc8a1ac340bae92842dab35c1", "ARCHITECTURE.md@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "reuse_class": "SUPERSEDED_BUT_INFORMATIVE",
+      "targets": ["frank", "harness"],
+      "implication": "Level-0 extraction must preserve chronology and resolve source freshness at claim granularity rather than treating repository-level documentation as one current truth."
+    }
+  ],
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Combined denominator is not frozen; Drive archive internals and Project-Frankenstein exact tree obligations remain unenumerated.",
+    "historical_earned_work_credit_awarded": false
+  },
+  "next_high_information_actions": [
+    "Obtain a connector/runtime path that can stream or mount the 663552000-byte tar.xz without the 100 MiB Drive cap, then inventory archive members by metadata before extraction.",
+    "Freeze Project-Frankenstein exact tree/file manifest at abba90a5767d85abc8a1ac340bae92842dab35c1 using a recursive Git tree/listing surface.",
+    "Shard Project-Frankenstein by architecture/code, experiments/logs, memory/personality, GWT/emergence, XENO/ClayCode and failures, preserving claim-level chronology."
+  ]
+}

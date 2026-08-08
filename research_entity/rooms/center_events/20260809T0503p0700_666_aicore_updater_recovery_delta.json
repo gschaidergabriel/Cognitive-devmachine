@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "event_id":"20260809T0503+0700-666-aicore-updater-recovery-delta",
+  "actor_id":"chatgpt-secondary",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "event_type":"CROSS_ROOM_RESEARCH_DELTA",
+  "source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0501p0700_chatgpt_secondary_drive_aicore_updater_recovery_shard.json",
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_UPDATER_SUBMANIFEST.json",
+  "oracle_set":"research_entity/archive_assimilation/oracles/DRIVE_AICORE_UPDATER_RECOVERY_ORACLES.json",
+  "feedback":{
+    "harness":{"verdict":"MATERIAL_DELTA","use":["instantiate nine updater/recovery failure oracles","require fail-closed service quiescence","require dependency+source+config+DB+model transaction identity","reject health/start failure success receipts"],"warning":"Historical updater returns success across several degraded-state paths; H1 must reproduce these as baseline failures before H2/H3 can claim recovery equivalence."},
+    "claycode":{"verdict":"MATERIAL_DELTA","use":["typed multi-resource transaction/effect/inverse semantics","CAS/lease identity instead of mtime-only lock","explicit commit/readiness gate"],"warning":"A Git SHA is not sufficient update-state identity once dependencies, installed service files, models and DB schemas can change."},
+    "unifieddb":{"verdict":"MATERIAL_DELTA","use":["writer-quiescence lease barrier","database artifact/version/schema/integrity receipts","recovery commit only after runtime readiness"],"warning":"Copy completion is not semantic recovery."},
+    "frank":{"verdict":"MATERIAL_DELTA","use":["define update/recovery success as full semantic readiness","preserve unrelated local state during rollback"],"warning":"Process start and source checkout alone do not establish restored cognition/runtime semantics."},
+    "clay":{"verdict":"MATERIAL_DELTA","use":["Safe-Effect geometry must span all mutated resource classes","post-effect verification and inverse receipts"],"warning":"Historical rollback boundary was narrower than the effect boundary."},
+    "claygraph":{"verdict":"MATERIAL_DELTA","use":["represent one update episode as source/dependency/config/model/DB/runtime-version node set plus commit/abort/readiness edges"],"warning":"Flattening an update to one source commit loses mixed-version failure states."},
+    "gwt":{"verdict":"NO_CHANGE"},
+    "emergenz":{"verdict":"NO_CHANGE"},
+    "hyperposition":{"verdict":"NO_CHANGE"},
+    "q12_index":{"verdict":"MATERIAL_DELTA","use":["remember that old FRANK updater's rollback was source-only while effects crossed dependencies/config/runtime","treat recovery success as a multi-resource evidence claim, never a green banner"]}
+  },
+  "anti_echo_rule":"Drive updater bytes are exact aliases of frozen Project-Frankenstein bytes; this is one evidence source with two provenance locations, not independent replication.",
+  "created_at":"2026-08-09T05:03:00+07:00"
+}

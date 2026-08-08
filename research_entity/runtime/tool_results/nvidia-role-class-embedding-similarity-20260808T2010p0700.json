@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "request_id": "nvidia-role-class-embedding-similarity-20260808T2010p0700",
+  "tool": "nvidia_nim",
+  "request_sha256": "210887a1b2373cfd4c323cd27418a4e29e9bdf979bd7333d89ea1f50471a466e",
+  "processed_at": "2026-08-08T13:05:54.631642+00:00",
+  "result": {
+    "provider": "NVIDIA Hosted NIM",
+    "capability": "embedding_similarity",
+    "model": "nvidia/nv-embedqa-e5-v5",
+    "dimensions": 1024,
+    "pairs": [
+      {
+        "i": 0,
+        "j": 1,
+        "cosine": 0.9362262039041919,
+        "text_i": "FACT_EXACT: Alpha inhibits Beta.",
+        "text_j": "FACT_EXACT: Alpha suppresses Beta."
+      },
+      {
+        "i": 0,
+        "j": 2,
+        "cosine": 0.9917970644379646,
+        "text_i": "FACT_EXACT: Alpha inhibits Beta.",
+        "text_j": "FACT_EXACT: Beta inhibits Alpha."
+      },
+      {
+        "i": 0,
+        "j": 3,
+        "cosine": 0.8811560700826772,
+        "text_i": "FACT_EXACT: Alpha inhibits Beta.",
+        "text_j": "ACTIVATION_PRIOR: Alpha inhibits Beta."
+      },
+      {
+        "i": 0,
+        "j": 4,
+        "cosine": 0.870696681165853,
+        "text_i": "FACT_EXACT: Alpha inhibits Beta.",
+        "text_j": "PROPOSAL: Alpha inhibits Beta."
+      },
+      {
+        "i": 0,
+        "j": 5,
+        "cosine": 0.8388142772476096,
+        "text_i": "FACT_EXACT: Alpha inhibits Beta.",
+        "text_j": "AUTHORITY_CAP: Alpha inhibits Beta."
+      },
+      {
+        "i": 0,
+        "j": 6,
+        "cosine": 0.860878790728647,
+        "text_i": "FACT_EXACT: Alpha inhibits Beta.",
+        "text_j": "FACT_EXACT: Gamma activates Delta."
+      },
+      {
+        "i": 6,
+        "j": 7,
+        "cosine": 0.968479568454185,
+        "text_i": "FACT_EXACT: Gamma activates Delta.",
+        "text_j": "FACT_EXACT: Gamma stimulates Delta."
+      },
+      {
+        "i": 6,
+        "j": 8,
+        "cosine": 0.9859736949466192,
+        "text_i": "FACT_EXACT: Gamma activates Delta.",
+        "text_j": "FACT_EXACT: Delta activates Gamma."
+      }
+    ],
+    "evidence_role": "external_embedding_runtime_proxy_for_semantic_geometry",
+    "boundary": "Embedding similarity is not causal identity, role identity, canonical truth, authority or latent hidden-state equivalence."
+  },
+  "status": "SUCCESS"
+}

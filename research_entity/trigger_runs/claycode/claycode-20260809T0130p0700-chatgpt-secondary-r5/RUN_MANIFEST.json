@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-r5",
   "trigger": "claycode",
   "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
@@ -29,7 +29,8 @@
     "EXECUTABLE_RESEARCH_RECEIPT.json": true,
     "LATE_EXPERIMENT_DELTA.json": true,
     "EXTERNAL_EVIDENCE_LEDGER.md": true,
-    "FINAL_REPORT.md": true
+    "FINAL_REPORT.md": true,
+    "VALIDATION_REPORT.json": true
   },
   "multiworker": {
     "networked": true,
@@ -46,9 +47,12 @@
   },
   "validation": {
     "artifact_structure_manual_review": "PASS",
-    "goodman_exact_validator": "PENDING_E2B_REQUEST_claycode-r5-goodman-validate-e2b-004",
-    "remote_reread": "PENDING",
-    "canonical_recheck": "PENDING"
+    "goodman_exact_validator": "BLOCKED_PRIVATE_REPO_RAW_404_IN_E2B_NO_PASS_CLAIMED",
+    "goodman_validator_attempt_result": "research_entity/runtime/tool_results/claycode-r5-goodman-validate-e2b-004.json",
+    "remote_reread": "PASS_FINAL_REPORT_BLOB_17e63f5a1a3a68a1439e9a836d2bc7de971720f3",
+    "canonical_recheck": "PASS_UNCHANGED_R2_04234efdb86c",
+    "validation_report": "VALIDATION_REPORT.json"
   },
-  "status": "RESEARCH_DELTA_COMMITTED_PENDING_FINAL_VALIDATION_REREAD"
+  "status": "COMPLETED_OPEN_RESEARCH_DELTA_WITH_RECORDED_TECHNICAL_VALIDATION_GAP",
+  "completion_note": "Lane B research artifacts, executable receipts, external evidence, peer cross-reads and shared multiworker close were committed and reread. Exact Goodman validate-run execution was attempted through E2B but blocked because the private repository raw files returned 404; no validator PASS is claimed. Canonical remained unchanged."
 }

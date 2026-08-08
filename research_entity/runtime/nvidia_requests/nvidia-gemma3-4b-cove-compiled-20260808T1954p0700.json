@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "request_id":"nvidia-gemma3-4b-cove-compiled-20260808T1954p0700",
+  "tool":"nvidia_nim",
+  "mode":"chat",
+  "model":"google/gemma-3-4b-it",
+  "temperature":0.0,
+  "max_tokens":220,
+  "prompt":"Rule: classify each case VALID iff all listed required_checks are SAME. Return exactly a JSON array of 12 strings, each VALID or INVALID, in case order 1..12. No explanation.\n1: required_checks=S=SAME\n2: required_checks=S=SAME,G=CHANGED\n3: required_checks=S=SAME,A=SAME\n4: required_checks=S=SAME,A=CHANGED\n5: required_checks=S=SAME,SEL=CHANGED\n6: required_checks=S=SAME,PROJ=SAME\n7: required_checks=S=SAME,PROJ=CHANGED\n8: required_checks=S=SAME,G=SAME,SEL=SAME\n9: required_checks=S=CHANGED,G=SAME,A=SAME\n10: required_checks=S=SAME,G=SAME,A=SAME\n11: required_checks=S=SAME,SEL=SAME,PROJ=SAME\n12: required_checks=S=SAME,G=SAME,A=SAME,SEL=SAME,PROJ=SAME"
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "request_id":"nvidia-rerank-smoke-20260808T1950p0700",
+  "tool":"nvidia_nim",
+  "mode":"rerank",
+  "model":"nvidia/llama-nemotron-rerank-1b-v2",
+  "query":"Which passage directly supports selection integrity as distinct from record provenance?",
+  "passages":[
+    "Every retrieved record has a valid signature and authenticated source provenance.",
+    "Writable graph structure can redirect which authenticated records enter top-k selection while each selected record remains authentic.",
+    "A larger decoder can sometimes improve fluent answer generation without changing retrieval semantics.",
+    "Semantic epochs make graph publication replayable and atomic for pinned readers."
+  ],
+  "truncate":"END",
+  "purpose":"Verify NVIDIA hosted reranking capability and its suitability for evidence selection independent of reader generation."
+}

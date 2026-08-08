@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0448+0700-chatgpt-secondary-drive-frank-projects-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "ROOT_CORPUS_FROZEN_CAPABILITY_FAMILIES_PARTIALLY_ANALYZED",
+  "observed_at": "2026-08-09T04:48:00+07:00",
+  "source_scope": {
+    "manifest": "research_entity/archive_assimilation/manifests/DRIVE_FRANK_PROJECTS_ROOT_SUBMANIFEST.json",
+    "root": "drive:1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw:frank-projects",
+    "samples": [
+      "drive:1Lw6yF8sT1aMUANIzVGF0hKDf-avWSQmv:ai-research-agent",
+      "drive:1391rzRVgQBAVL0lsBQHgkrX5QfMcrhXD:autocarfinder-pro",
+      "drive:1HOz6qK1hHCcGqDgpo3VMtU_HDwCg47zR:autohunter-ioniq-5-autonomer-autokauf-agent",
+      "drive:1K7zgswugRw-NcOZrXv-FpEs-7Acoivua:video-launch-page"
+    ]
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-PROJECTS-001",
+      "epistemic_class": "DIRECT_FOLDER_DENOMINATOR",
+      "status": "FROZEN_ROOT",
+      "claim": "frank-projects contains 14 direct project roots, of which 11 are vehicle/camper search variants and three are other classes (research-agent, test-project, web launch page).",
+      "targets": ["claycode","harness","frank","claygraph"],
+      "implication": "Application evidence must be deduplicated by capability family rather than project-name count."
+    },
+    {
+      "finding_id": "DRIVE-PROJECTS-002",
+      "epistemic_class": "HISTORICAL_IMPLEMENTATION_EVIDENCE",
+      "status": "REUSABLE_AS_ACCEPTANCE_FIXTURE",
+      "claim": "The richer vehicle-search lineage contains persistent search/scoring code, data/results, logs, heartbeat state and alert templates, demonstrating a multi-step application pattern spanning acquisition, normalization, scoring, persistence, scheduling and reporting.",
+      "targets": ["claycode","harness","frank"],
+      "implication": "Use this as a historical application-shaped fixture for ClayCode general-purpose tests, not as proof that current ClayCode can already compile the workload."
+    },
+    {
+      "finding_id": "DRIVE-PROJECTS-003",
+      "epistemic_class": "HISTORICAL_APPROVAL_BOUNDARY_EVIDENCE",
+      "status": "CURRENTLY_RELEVANT_AUTHORITY_PATTERN",
+      "claim": "An inspected autonomous vehicle-search setup explicitly left recurring market scan, reporting, dealer-contact and price-analysis heartbeats disabled pending approval even though their planned workflow was configured.",
+      "targets": ["harness","claycode","frank","clay"],
+      "implication": "Preserve the separation between prepared automation and granted execution authority. Scheduling configuration is not authorization to perform external effects."
+    },
+    {
+      "finding_id": "DRIVE-PROJECTS-004",
+      "epistemic_class": "HISTORICAL_WEB_ARTIFACT_EVIDENCE",
+      "status": "REUSABLE_AS_APPLICATION_CLASS",
+      "claim": "video-launch-page contains a concrete HTML artifact, browser-state evidence and a deployment skill, providing a non-agentic web-output class alongside the search-agent family.",
+      "targets": ["claycode","harness"],
+      "implication": "ClayCode GENERAL_PURPOSE_GATE should include both persistent agent workflows and ordinary web artifact generation/deployment, preventing overfitting the language to FRANK-internal workloads."
+    },
+    {
+      "finding_id": "DRIVE-PROJECTS-005",
+      "epistemic_class": "HISTORICAL_SECRET_HANDLING_NEGATIVE_RESULT",
+      "status": "SECURITY_REDACTION_REQUIRED",
+      "claim": "An inspected setup report embeds credential-like plaintext while simultaneously describing the credentials as vaulted. Secret values are intentionally omitted from this receipt.",
+      "targets": ["harness","unifieddb","claygraph","claycode","frank"],
+      "implication": "Archive assimilation and future UnifiedDB ingestion need a pre-write secret-detection/redaction boundary. Provenance may retain that a secret-bearing source existed, but the secret bytes must not be copied into public/shared research artifacts."
+    },
+    {
+      "finding_id": "DRIVE-PROJECTS-006",
+      "epistemic_class": "NEGATIVE_EVIDENCE_FROM_SAMPLED_ROOT",
+      "status": "ANTI_INFLATION_CONSTRAINT",
+      "claim": "The inspected ai-research-agent code path contains only a small hello.py file, showing that project-directory existence and ambitious naming are not sufficient evidence of implemented capability.",
+      "targets": ["harness","claycode","q12_index"],
+      "implication": "Credit executable artifacts and verified outcomes, not folder names or planning documents."
+    }
+  ],
+  "earned_work_candidate": {
+    "mapping_id": "HEW-DRIVE-PROJECTS-012",
+    "current_doomsday_rows": ["BASE_CLAYCODE_RELEASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","CLAY_0_1_ACCEPTANCE_RUN"],
+    "mechanism_or_result": "Historical application corpus supplies non-greenfield acceptance fixtures for persistent search/scoring/scheduling/reporting workflows plus static web artifact generation, together with approval-boundary and anti-inflation negative cases.",
+    "reuse_category": "MEASUREMENT_FOUNDATION",
+    "avoided_future_hours_low": 1.0,
+    "avoided_future_hours_center": 3.0,
+    "avoided_future_hours_high": 6.0,
+    "confidence": "LOW_PARTIAL_RECURSION",
+    "falsifier_or_validation_receipt": "General-purpose ClayCode harness must translate these historical capability families into clean-room task contracts and show they distinguish real implementation from skeleton/project-name artifacts."
+  },
+  "progress_accounting": {"exact_level0_coverage_awarded_percent":0.0,"global_credit_applied":false,"reason":"Root denominator is frozen but recursive per-project obligations remain open and Drive upload is still changing."},
+  "security_handling": {"raw_secret_values_persisted":false,"redaction_rule_needed":true}
+}

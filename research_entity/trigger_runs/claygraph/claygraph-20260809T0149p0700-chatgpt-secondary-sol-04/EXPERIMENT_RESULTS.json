@@ -1,0 +1,36 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260809T0149p0700-chatgpt-secondary-sol-04",
+  "evidence_class":"constructed_local_mechanism_tests",
+  "seed":202608090149,
+  "experiments":[
+    {
+      "id":"EXP-G3-INTENT-ASSEMBLY-001",
+      "episodes":120000,
+      "classes":["exact","associative","consequential","temporal"],
+      "construction":"Each episode contains a correct memory plus high-salience poison, stale support, frequent-attractor and irrelevant candidates. 22% of associative/temporal and 8% of consequential correct memories are provisional low-trust to measure utility cost. IBCA permits low-trust SUPPLEMENT for cognition but requires trust+intent for consequential selection, with explicit exact-validation escalation.",
+      "arms":{
+        "explicit":{"accuracy":0.226467,"poison_select":0.344708,"stale_select":0.428825,"consequential_unauth":0.398140,"rare_accuracy":0.230463,"provisional_accuracy":0.069189,"mean_candidates":5.0},
+        "casar_proxy":{"accuracy":0.266983,"poison_select":0.701908,"stale_select":0.0,"consequential_unauth":0.878772,"rare_accuracy":0.272129,"provisional_accuracy":0.080483,"mean_candidates":4.0},
+        "ibca":{"accuracy":0.723892,"poison_select":0.087467,"stale_select":0.0,"consequential_unauth":0.0,"rare_accuracy":0.724880,"provisional_accuracy":0.221198,"mean_candidates":3.345,"escalation_rate":0.020058,"empty_admissible_rate":0.011425,"rescue_rate_all":0.014192},
+        "shuffled_intent_negative_control":{"accuracy":0.432108,"poison_select":0.212367,"consequential_unauth":0.0,"rare_accuracy":0.437101,"provisional_accuracy":0.048095,"empty_admissible_rate":0.038183}
+      },
+      "interpretation":"Task/provenance gating carries signal in this construction; shuffled intent loses much of the gain. Empty admissible sets occurred and require explicit escalation. This is not a fair reproduction of G2a's original workload: it deliberately stresses high-salience poisoning, so CASAR-proxy scores must not be compared to G2a published proxy numbers.",
+      "negative":"Hard consequential gating can suppress provisional but useful memories; exact-validation rescue is therefore part of the candidate rather than global trust censorship."
+    },
+    {
+      "id":"EXP-G3-NOISY-CREDIT-002",
+      "design":"7 replicates per verifier level; 30000 online episodes each; 12% poisoning. Compare naive scalar downstream reward, G2a-like bounded noisy item credit, and origin/intent-gated durable credit. Low-trust poison may remain transiently retrievable but cannot accumulate positive durable credit in the IBCA arm.",
+      "verifier_sweep":{
+        "0.55":{"naive":{"accuracy":0.516352,"rare_accuracy":0.654171,"poison_select":0.483648},"g2_noisy_item":{"accuracy":0.027310,"rare_accuracy":0.125115,"poison_select":0.972690},"ibca_origin_intent":{"accuracy":0.943905,"rare_accuracy":0.843927,"poison_select":0.056095}},
+        "0.65":{"naive":{"accuracy":0.561571,"rare_accuracy":0.691557,"poison_select":0.438429},"g2_noisy_item":{"accuracy":0.407676,"rare_accuracy":0.334505,"poison_select":0.592324},"ibca_origin_intent":{"accuracy":0.982605,"rare_accuracy":0.959511,"poison_select":0.017395}},
+        "0.75":{"naive":{"accuracy":0.582805,"rare_accuracy":0.604310,"poison_select":0.417195},"g2_noisy_item":{"accuracy":0.703405,"rare_accuracy":0.710025,"poison_select":0.296595},"ibca_origin_intent":{"accuracy":0.989233,"rare_accuracy":0.992759,"poison_select":0.010767}},
+        "0.85":{"naive":{"accuracy":0.562738,"rare_accuracy":0.601212,"poison_select":0.437262},"g2_noisy_item":{"accuracy":0.748357,"rare_accuracy":0.880067,"poison_select":0.251643},"ibca_origin_intent":{"accuracy":0.990538,"rare_accuracy":0.998259,"poison_select":0.009462}}
+      },
+      "interpretation":"G2a's itemwise-credit idea becomes fragile when the verifier is noisy in this construction; origin/use constraints provide a strong structural prior. However the IBCA arm intentionally embeds that prior, so the large gap is mechanism evidence, not an unbiased efficacy estimate.",
+      "falsifier_next":"Replace synthetic labels with blinded real memory-origin/task-intent labels and target-model outcomes; measure false quarantine of useful novel memories."
+    }
+  ],
+  "execution_surface":"ChatGPT local Python sandbox; no E2B capability exposed in this worker context",
+  "claim_boundary":"Synthetic finite tests only; no production FRANK, target-Qwen, OS/database or formal-security proof."
+}

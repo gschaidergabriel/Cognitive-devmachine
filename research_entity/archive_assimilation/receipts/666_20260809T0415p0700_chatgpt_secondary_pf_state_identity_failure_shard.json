@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0415+0700-chatgpt-secondary-pf-state-identity-failure-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_packages": ["666-03-PARALLEL-ANALYZE", "666-04-EARNED-WORK-MAP", "666-06-BRANCH-FEEDBACK"],
+  "status": "SHARD_ANALYZED_AND_INTEGRATION_DELTA_PREPARED",
+  "observed_at": "2026-08-09T04:15:00+07:00",
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "lane": "memory/personality/self/body/goals plus failures/recovery history",
+    "source_refs": [
+      "personality/e_pq.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "services/spatial_state.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "commit:c16e5991466e50e059e176c07910ca75293b415c",
+      "commit:4a2c8852742e8d50a9de48cb5cd605b64897ca7a",
+      "docs/ABLATION_ANALYSIS.md@49dfa7f367d11b56999ece625e8028c537bf2eec",
+      "commit:49dfa7f367d11b56999ece625e8028c537bf2eec"
+    ],
+    "head_only_history_warning": "docs/ABLATION_ANALYSIS.md is reachable at commit 49dfa7f... but was not present at frozen head when fetched. Level-0 manifest/history extraction must include deleted/superseded historical artifacts, not only current-tree files."
+  },
+  "findings": [
+    {
+      "finding_id": "PF-L0-STATE-001",
+      "epistemic_class": "HISTORICAL_CODE_EVIDENCE",
+      "status": "CURRENTLY_RELEVANT_ARCHITECTURE_CONSTRAINT",
+      "claim": "E-PQ implemented persistent temperament plus transient mood as an explicit state machine backed by SQLite/WAL, identity snapshots, event-specific weights, event-quality-modulated learning rate, per-event delta caps, repeated-event attenuation and continuous homeostatic pull.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "gwt", "claycode", "unifieddb", "harness"],
+      "current_implication": "Preserve the functional state-transition logic, but express it through ClayCode/UnifiedDB as explicit replayable transitions instead of hidden mutable process-local state."
+    },
+    {
+      "finding_id": "PF-L0-STATE-002",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT_FROM_CODE_COMMENT_AND_FIX",
+      "status": "CURRENTLY_RELEVANT_CONCURRENCY_CONSTRAINT",
+      "claim": "Independent EPQ singletons in multiple processes could hold stale vectors; without a refresh before each event, a later chat event could overwrite a homeostasis reset persisted by another process.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank", "claycode", "unifieddb", "harness", "claygraph"],
+      "current_implication": "A future one-module/shared-state FRANK needs authoritative transition identity, no lost-update semantics, snapshot/replay consistency and concurrency tests. Semantic truth cannot live in divergent mutable caches."
+    },
+    {
+      "finding_id": "PF-L0-SELF-003",
+      "epistemic_class": "HISTORICAL_CODE_EVIDENCE",
+      "status": "OPEN_FOR_CURRENT_REUSE_MAPPING",
+      "claim": "The consciousness daemon maintained persistent goal state, attention state, rumination controls, ultradian phases, proprioception, self-vs-environment resource attribution, service-health awareness and a bridge to persistent spatial/body state.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "gwt", "emergenz", "claygraph", "unifieddb", "harness"],
+      "current_implication": "Treat goals/body/proprioception as typed state and observable causal inputs; do not copy the historical giant daemon/service topology literally into Clay."
+    },
+    {
+      "finding_id": "PF-L0-BODY-004",
+      "epistemic_class": "HISTORICAL_CODE_EVIDENCE",
+      "status": "OPEN_FOR_CURRENT_REUSE_MAPPING",
+      "claim": "SpatialState provided a persistent location/world-state bridge: activities deterministically mapped to locations, transitions were persisted, dynamic locations could be registered, and body/service topology was exposed as contextual state.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "targets": ["frank", "claygraph", "unifieddb", "gwt", "harness"],
+      "current_implication": "The reusable invariant is persistent embodied/world context with explicit transitions and provenance, not the literal room metaphors."
+    },
+    {
+      "finding_id": "PF-L0-FAIL-005",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULTS_FROM_PATCHED_COMMITS",
+      "status": "CURRENTLY_RELEVANT_TEST_ATLAS",
+      "claim": "SOMA audits exposed a concentrated failure family: TOCTOU on adapter files, thread shutdown leaks, unsafe bare-bool concurrency, stale runtime config, non-atomic JSON writes, duplicate scoring after restart, adapter-key loss during EMA merge, near-zero baseline drift falsely reported safe, off-by-one safety thresholds, error-path model memory leaks and training-order bias.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "frank", "claycode", "unifieddb", "clay"],
+      "current_implication": "Convert this historical bug family into mandatory adversarial/differential harness cases: CAS/atomic writes, lifecycle cancellation, restart idempotence, schema/key conservation, zero-baseline metrics, resource cleanup and randomized/reproducible training order."
+    },
+    {
+      "finding_id": "PF-L0-ABL-006",
+      "epistemic_class": "HISTORICAL_EXPERIMENT_REPORT_WITH_CAUSAL_CONFOUND",
+      "status": "MEASUREMENT_FOUNDATION_NOT_CAUSAL_PROOF",
+      "claim": "The March 2026 70-turn comparison reported 11 vs 2 deflections and unique-word ratios 0.843 vs 0.929 for bare Llama vs Frank, plus different long-context degradation patterns. However, the systems also differed in system prompt, output-length policy, memory handling and 30+ active subsystems, so the report cannot isolate the causal contribution of the architecture as a whole or any component.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "targets": ["gwt", "emergenz", "frank", "harness", "clay"],
+      "current_implication": "Reuse the prompt battery and longitudinal metrics only after factorizing prompt, context compression, state injection, GWT/re-entry and other mechanisms into controlled ablations with matched generation constraints."
+    },
+    {
+      "finding_id": "PF-L0-LINEAGE-007",
+      "epistemic_class": "HISTORICAL_LINEAGE_OBSERVATION",
+      "status": "CURRENTLY_RELEVANT_INGESTION_CONSTRAINT",
+      "claim": "A historically material benchmark file existed at commit 49dfa7f but was absent at the frozen current head, demonstrating that head-only source manifests erase material project history.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["claygraph", "unifieddb", "harness", "frank"],
+      "current_implication": "Project-Frankenstein Level-0 coverage must include commit-history-reachable deleted/superseded artifacts and claim-level chronology, not merely the current tree."
+    }
+  ],
+  "earned_work_mappings": [
+    {
+      "mapping_id": "HEW-PF-STATE-001",
+      "source_refs": ["personality/e_pq.py@abba90a5767d85abc8a1ac340bae92842dab35c1", "services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "UDB_UNIFIED_DATABASE"],
+      "mechanism_or_result": "Persistent personality/state-transition semantics plus cross-process stale-state failure already discovered and partially repaired historically.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 7.0,
+      "avoided_future_hours_high": 14.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Differential replay/concurrency harness must show that the Clay/UnifiedDB implementation preserves event ordering and prevents lost updates under concurrent state transitions."
+    },
+    {
+      "mapping_id": "HEW-PF-FAIL-002",
+      "source_refs": ["commit:c16e5991466e50e059e176c07910ca75293b415c", "commit:4a2c8852742e8d50a9de48cb5cd605b64897ca7a"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "UDB_UNIFIED_DATABASE", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Historical concurrency, persistence, drift-metric, lifecycle, restart-idempotence and resource-cleanup bugs define concrete regression tests and invariants.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 10.0,
+      "avoided_future_hours_high": 20.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Harness coverage matrix must demonstrate each bug family as a failing historical-style test and passing current implementation test."
+    },
+    {
+      "mapping_id": "HEW-PF-BODY-003",
+      "source_refs": ["services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1", "services/spatial_state.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_BINARY_FRANK", "CLAY_0_1_FULL_INTEGRATION"],
+      "mechanism_or_result": "Persistent goals, proprioception, self/environment attribution and world/body transition semantics already have executable historical implementations.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 8.0,
+      "avoided_future_hours_high": 16.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Reference Harness must reproduce typed goal/body/proprioception state transitions without importing literal historical room metaphors as semantics."
+    },
+    {
+      "mapping_id": "HEW-PF-ABL-004",
+      "source_refs": ["docs/ABLATION_ANALYSIS.md@49dfa7f367d11b56999ece625e8028c537bf2eec"],
+      "current_doomsday_rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "CLAY_0_1_ACCEPTANCE_RUN"],
+      "mechanism_or_result": "Existing 70-turn longitudinal prompt battery and metrics are reusable as benchmark scaffolding, while the original causal interpretation is not reusable without factorized controls.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 4.0,
+      "avoided_future_hours_high": 8.0,
+      "confidence": "MEDIUM_FOR_BENCHMARK_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Matched factorized ablation must separate system-prompt, context-management and architecture effects before any component-level causal claim is promoted."
+    }
+  ],
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Combined denominator remains unfrozen because the 663552000-byte Drive archive cannot be recursively inventoried through the current 104857600-byte connector limit and the full Project-Frankenstein history manifest is not frozen.",
+    "historical_earned_work_credit_status": "PARTIAL_EVIDENCE_MAPPINGS_RECORDED_NOT_YET_APPLIED_TO_GLOBAL_COMPLETION",
+    "provisional_avoided_future_hours_center_from_this_shard": 29.0,
+    "warning": "The hour estimates are low-confidence engineering mapping priors; they must not replace the current CALIBRATING range until Level-0 coverage is sufficient."
+  },
+  "drive_blocker": {
+    "file_id": "1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU",
+    "size_bytes": 663552000,
+    "connector_limit_bytes": 104857600,
+    "stream_attempt_result": "HTTP_413_FILE_TOO_LARGE",
+    "blocker_class": "EXTERNAL_ACCESS_BLOCKER"
+  },
+  "next_actions": [
+    "Freeze a history-aware Project-Frankenstein manifest including deleted/superseded files reachable from commits.",
+    "Continue independent shards for experiments/logs, GWT/emergence, XENO/ClayCode, memory stores and boot/recovery chronology.",
+    "Provide a mount/stream/runtime path for the Drive tar.xz larger than 100 MiB, then inventory archive members before semantic extraction.",
+    "Turn PF-L0-FAIL-005 into explicit Harness regression cases rather than prose-only lessons."
+  ]
+}

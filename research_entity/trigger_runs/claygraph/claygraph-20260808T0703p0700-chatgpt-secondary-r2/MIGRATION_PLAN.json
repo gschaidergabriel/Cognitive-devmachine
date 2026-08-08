@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.1",
+  "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
+  "migration_goal":"Semantic/associative unification without forced physical database consolidation.",
+  "cycle2_delta":"Retrieval planning is refined; no physical migration phase advances because no new live store parity evidence exists.",
+  "phases":[
+    {"phase":"INVENTORY","status":"PARTIAL_BLOCKED","action":"read-only enumerate all 71 current stores, schema/WAL/service/authority/recovery"},
+    {"phase":"SEMANTIC_MAPPING","status":"PARTIAL","action":"map verified store fields to exact anchors + temporal assertions; mark unknowns"},
+    {"phase":"SHADOW_GRAPH","status":"PLANNED","action":"derive graph asynchronously from authoritative writes/changefeed; expose projection lag"},
+    {"phase":"PARITY_AND_REPLAY","status":"PLANNED","action":"current/history/conflict/stale/revoked/n-ary query parity plus deterministic replay/crash tests"},
+    {"phase":"DUAL_READ","status":"PLANNED","action":"compare direct store, deterministic packet envelope, FTS/vector and G1b assembly; no user-visible authority switch"},
+    {"phase":"DUAL_WRITE_WHERE_SAFE","status":"BLOCKED","action":"only derived semantic projection; authoritative write/event contract remains first or atomically receipted"},
+    {"phase":"CONTROLLED_CUTOVER","status":"BLOCKED","action":"per-store only after p99/parity/recovery/privacy gates"},
+    {"phase":"ROLLBACK_WINDOW","status":"REQUIRED","action":"retain legacy authoritative path and rebuildable graph for defined window"},
+    {"phase":"DEPRECATE_OR_KEEP_ISOLATED","status":"UNDECIDED","action":"MERGE/PROJECT/LINK/KEEP_ISOLATED decided per workload"}
+  ],
+  "current_dispositions":{"MERGE":[],"PROJECT":["frank:consciousness","frank:world_experience"],"DEFER":["thalamus current store","Titan/Ego current store","historical invariants/dream until verified","all unnamed current stores"]},
+  "rollback_conditions":["exact/current answer mismatch","history/conflict loss","CognitiveFrame stale assertion accepted","p99 regression above agreed budget","crash/replay divergence","capability/privacy leakage","graph projection lag hidden from consumers","retrieval improvement fails actual-corpus benchmark"],
+  "rule":"A retrieval win can change memory selection architecture but never by itself authorize physical MERGE."
+}

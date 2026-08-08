@@ -1,0 +1,77 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
+  "evidence_class":"runtime_experiment_and_constructed_policy_calibration",
+  "provider":"E2B isolated Linux/Python/SQLite",
+  "source_receipts":[
+    "research_entity/runtime/tool_results/unifieddb-u2-e2b-placement-20260808T2212p0700.json",
+    "research_entity/runtime/tool_results/unifieddb-u2-e2b-validation-20260808T2212p0700.json"
+  ],
+  "experiments":[
+    {
+      "id":"EXP-U2-PLACEMENT-001",
+      "kind":"real SQLite mixed-read mechanism benchmark",
+      "workload":"5000 entities, 18000 graph edges, FTS5, 24d in-memory vectors; 700 mixed exact+graph+FTS+vector operations",
+      "results":{
+        "logical_separate_same_process":{"p50_us":99.514,"p95_us":143.808,"p99_us":204.813,"mean_us":105.0675},
+        "physical_sqlite_monolith":{"p50_us":101.687,"p95_us":145.929,"p99_us":202.541,"mean_us":106.7075},
+        "service_like_json_boundaries":{"p50_us":120.382,"p95_us":164.018,"p99_us":229.071,"mean_us":125.3377},
+        "monolith_semantic_content_equivalence_first_50":"50/50",
+        "service_raw_python_representation_equivalence_first_50":"0/50 due tuple->list JSON representation change; corrected by EXP-U2-BOUNDARY-TYPE-005"
+      },
+      "interpretation":"In this cache-hot in-process mechanism test, separate stores behind one same-process logical planner matched/slightly beat the monolith while explicit JSON boundaries added about 20.9 us p50 versus the same-process separate-store path. This is not a production benchmark and does not select a universal physical layout."
+    },
+    {
+      "id":"EXP-U2-RECOVERY-002",
+      "kind":"transaction/replay fault calibration",
+      "trials":1200,
+      "results":{"unsynchronized_two_store_torn":533,"canonical_outbox_pending_before_replay":554,"canonical_outbox_bad_after_replay":0,"monolith_atomicity_mismatches":0},
+      "interpretation":"Both one-engine atomicity and canonical+durable-outbox replay prevented final cross-view mismatch in the constructed family. Unsynchronized direct commits did not. Outbox intentionally tolerates temporary derived lag and repairs it."
+    },
+    {
+      "id":"EXP-U2-SELECTION-INTEGRITY-003",
+      "kind":"constructed PPR-like selection-integrity test",
+      "cases":700,
+      "results":{"naive_selection_changed":516,"attacker_target_selected":498,"authenticated_structure_reselection_recovered_baseline":700},
+      "interpretation":"Authenticated records alone did not preserve selected membership when unauthenticated structure influenced selection. Re-selection on authenticated structure restored the constructed baseline in all cases. This is a synthetic reproduction of the mechanism class, not an independent replication of Fei et al.'s full system."
+    },
+    {
+      "id":"EXP-U2-PLACEMENT-LATTICE-004",
+      "kind":"constructed sensitivity surface",
+      "samples":80000,
+      "results":{"fused_compute_decoupled_index_winner_fraction":0.976925,"physical_monolith_winner_fraction":0.023075},
+      "interpretation":"This result is deliberately downweighted: the cost surface was constructed rather than measured. It demonstrates that multi-axis placement can express regimes a binary store label cannot, but the fractions are not evidence for real FRANK placement."
+    },
+    {
+      "id":"EXP-U2-BOUNDARY-TYPE-005",
+      "kind":"representation-vs-semantic identity roundtrip",
+      "cases":10000,
+      "results":{"host_representation_equal":0,"typed_semantic_equal":10000},
+      "interpretation":"JSON converted tuple containers to lists while preserving declared ordered content. Therefore exact emitted representation identity and typed semantic identity must remain distinct."
+    },
+    {
+      "id":"EXP-U2-WRITE-006",
+      "kind":"real SQLite in-memory write-path mechanism benchmark",
+      "operations":1500,
+      "results":{
+        "monolith":{"p50_us":6.866,"p95_us":8.927,"p99_us":24.621,"mean_us":7.3386},
+        "canonical_plus_outbox_plus_derived":{"p50_us":18.199,"p95_us":24.57,"p99_us":50.26,"mean_us":20.6096},
+        "two_unsynchronized_commits":{"p50_us":8.797,"p95_us":10.288,"p99_us":31.54,"mean_us":9.3240}
+      },
+      "interpretation":"The safer replayable outbox path had a real mechanism-local write cost in this test; monolithic one-transaction writes were fastest. UnifiedDB must treat recovery and write latency as a trade-off, not assume the hybrid is free."
+    },
+    {
+      "id":"EXP-U2-EPOCH-ADMISSION-007",
+      "kind":"constructed operation-specific lag policy calibration",
+      "cases":200000,
+      "results":{"naive_critical_stale_accept_rate":0.306645,"global_exact_block_rate":0.87578,"operation_adaptive_block_rate":0.632585,"exploratory_nonzero_lag_rate":0.569135},
+      "interpretation":"Under the chosen synthetic lag distribution, accepting every derived view was unsafe for critical reads while one global exact barrier rejected substantially more operations than an operation-class policy. These rates are not FRANK lag estimates."
+    }
+  ],
+  "negative_results":[
+    "The first service-equivalence comparator incorrectly treated tuple->list host representation change as semantic query failure; it was corrected with an explicit typed semantic canonicalizer.",
+    "Canonical+outbox recovery is not free: it was materially slower than one-engine atomic writes in the in-memory write benchmark.",
+    "The placement-lattice winner fractions come from a constructed cost surface and are not eligible as target performance evidence.",
+    "No current experiment proves Android performance, production durability, target-Qwen cognition benefit or end-to-end FRANK throughput."
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0432+0700-chatgpt-secondary-drive-audit-oracles-shard",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "DRIVE_AUDIT_ORACLES_ANALYZED_DEDUPED_READY_FOR_MESH",
+  "observed_at": "2026-08-09T04:32:00+07:00",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_scope": {
+    "drive_category": "aicore/konzepte/text/06_berichte-und-audits",
+    "source_refs": [
+      "drive:1SZ4rAosQVCSLtKh9MdJqSLLYFXziBYO1:00_MASTER_AUDIT_REPORT.txt",
+      "drive:1o30BFvqK0h8dgO3VREkxGJ6Tlzkn-rxP:03_subsystem_deep_audit.txt",
+      "drive:1iikrG9HWzpRBh4du-WMQAd1pK75z_HrD:system_deep_audit.txt",
+      "drive:1RgC5qqcsihNTmUCxVRw7SuI-bOxso2-5:v7_tool_audit_report.txt"
+    ],
+    "source_selection_rule": "Result/audit reports only; old prompt/auftrag files excluded from evidence conclusions."
+  },
+  "epistemic_policy": {
+    "audit_measurements": "HISTORICAL_PROJECT_MEASUREMENT_NOT_INDEPENDENTLY_REPLICATED",
+    "reported_root_causes": "HISTORICAL_AUDIT_INTERPRETATION_REQUIRES_CURRENT_REPRODUCTION",
+    "training_recommendations": "HISTORICAL_RECOMMENDATION_NOT_CURRENT_REQUIREMENT"
+  },
+  "crossread_dedup": {
+    "overlap_noncounting": [
+      "Safety bypass and destructive-tool risk overlap PF safety-authority shard.",
+      "Malformed tool tags/hallucinated tools overlap XENO/ClayCode precursor format-failure shard.",
+      "Neural maturity/fallback pathologies overlap LCME/state negative-result families.",
+      "Thalamus vigilance saturation and dead channel data overlap GWT/state receipts."
+    ],
+    "unique_oracles_retained": [
+      "hypothesis-result responsiveness/evidence binding",
+      "disk-code versus actually running/deployed runtime identity",
+      "action-space/schema/model dimensional drift",
+      "subsystem liveness and causal-effect presence",
+      "detection-before-effect ordering"
+    ]
+  },
+  "findings": [
+    {
+      "finding_id":"DRIVE-AUDIT-HYP-001",
+      "epistemic_class":"HISTORICAL_NEGATIVE_RESULT",
+      "status":"CURRENTLY_RELEVANT_TEST_ORACLE",
+      "claim":"Three historical hypothesis revisions received the same unrelated Feynman/path-integral text, demonstrating that an LLM-produced revision can look structurally valid while being non-responsive to the hypothesis under evaluation.",
+      "targets":["frank","harness","claygraph","unifieddb","clay"],
+      "implication":"Hypothesis transitions require explicit hypothesis identity, evidence refs, response-to-input consistency checks and rejection/quarantine when the evaluator output is not semantically tied to the tested proposition.",
+      "next_test":"Inject shuffled evaluator outputs between hypotheses and require the current research/hypothesis pipeline to detect and reject ancestry mismatch before state mutation."
+    },
+    {
+      "finding_id":"DRIVE-AUDIT-RUNTIME-002",
+      "epistemic_class":"HISTORICAL_RUNTIME_NEGATIVE_RESULT",
+      "status":"CURRENTLY_RELEVANT_DEPLOYMENT_ORACLE",
+      "claim":"A historical Energy recalibration fix existed correctly on disk while the running service still executed old code because it had not been restarted; 393 violations and six ineffective recalibrations continued. Source state and runtime state diverged materially.",
+      "targets":["harness","frank","claycode","clay"],
+      "implication":"A source-code diff or successful build is never a deployment receipt. H1/H2/H3 and final acceptance must bind process/runtime identity to exact build/config hashes and prove behavior after restart/reload.",
+      "next_test":"Mutate code without restarting a controlled service and verify the observability layer identifies runtime hash/version mismatch and refuses to call the fix deployed."
+    },
+    {
+      "finding_id":"DRIVE-AUDIT-SCHEMA-003",
+      "epistemic_class":"HISTORICAL_NEGATIVE_RESULT",
+      "status":"CURRENTLY_RELEVANT_SCHEMA_EVOLUTION_ORACLE",
+      "claim":"Adding two thought categories without rebuilding the historical PPO output layer produced a 100-vs-102 tensor mismatch and broke training; related prompt-index overflow appeared from the same schema drift.",
+      "targets":["harness","claycode","unifieddb","frank"],
+      "implication":"Enumerations/action spaces/state schemas must carry versioned dimensional contracts and migration validation across model/runtime artifacts. Dynamic category growth cannot silently reuse incompatible learned heads.",
+      "next_test":"Change a typed action/category schema after training and require compile/load/startup validation to fail closed until a compatible migration or rebuilt artifact exists."
+    },
+    {
+      "finding_id":"DRIVE-AUDIT-LIVE-004",
+      "epistemic_class":"HISTORICAL_LIVENESS_NEGATIVE_RESULT",
+      "status":"CURRENTLY_RELEVANT_ACCEPTANCE_ORACLE",
+      "claim":"Historical audits found architecturally present subsystems that were effectively dead: Genesis stuck for 377,600 ticks with zero proposals, Dream Daemon ran once then stalled, Neural Immune looped on errors for days, and other state paths produced zero-byte outputs.",
+      "targets":["harness","frank","gwt","emergenz","clay"],
+      "implication":"Module existence, service-up state and event emission are insufficient. Acceptance needs bounded-time liveness plus downstream causal-use/effect receipts for every behavior-defining subsystem.",
+      "next_test":"For each mandatory subsystem freeze a liveness contract: stimulus -> state transition/event -> consumer uptake -> observable effect within a bounded interval, with lesion and stuck-state controls."
+    },
+    {
+      "finding_id":"DRIVE-AUDIT-EFFECT-005",
+      "epistemic_class":"HISTORICAL_CAUSAL_ORDER_NEGATIVE_RESULT",
+      "status":"CORROBORATIVE_NONCOUNTING",
+      "claim":"The Ego Governor reportedly detected wrong model/architecture/hardware confabulations only after the response had already been sent, so detection did not causally prevent the user-visible error.",
+      "targets":["harness","frank","claycode","clay"],
+      "implication":"Safety/validation readouts must occur before the irreversible effect boundary or have a deterministic commit gate; post-effect detection is observability, not prevention.",
+      "dedup":"Corroborates existing external capability/commit gateway and safety-authority findings; no extra hours."
+    },
+    {
+      "finding_id":"DRIVE-AUDIT-TOOLS-006",
+      "epistemic_class":"HISTORICAL_TOOL_BENCHMARK",
+      "status":"CORROBORATIVE_NONCOUNTING",
+      "claim":"The v7 tool audit reported 10/32 correct tool executions (31%), about 30% format correctness, multiple hallucinated/wrong tools, and vision-triggered crash cascades despite the model often understanding when a tool was needed.",
+      "targets":["claycode","harness","frank","clay"],
+      "implication":"Semantic intent and executable form must be separated: deterministic canonicalization/validation should own executable IR, while model output remains an untrusted proposal.",
+      "dedup":"Format/tool-authority lessons already mapped by XENO/ClayCode and safety receipts; evidence strengthened without duplicate earned-work credit."
+    }
+  ],
+  "earned_work_candidate": {
+    "mapping_id":"HEW-DRIVE-AUDIT-011",
+    "source_refs":["DRIVE-AUDIT-HYP-001","DRIVE-AUDIT-RUNTIME-002","DRIVE-AUDIT-SCHEMA-003","DRIVE-AUDIT-LIVE-004"],
+    "current_doomsday_rows":["BASE_CLAYCODE_RELEASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","UDB_UNIFIED_DATABASE","CLAY_0_1_ACCEPTANCE_RUN"],
+    "mechanism_or_result":"Historical high-information failure corpus supplies concrete regression oracles for hypothesis identity, deployment freshness, schema/model compatibility and subsystem liveness.",
+    "reuse_category":"NEGATIVE_RESULT_VALUE",
+    "avoided_future_hours_low":1.0,
+    "avoided_future_hours_center":3.0,
+    "avoided_future_hours_high":6.0,
+    "confidence":"MEDIUM_FOR_ORACLE_VALUE_LOW_FOR_HOUR_ESTIMATE",
+    "falsifier_or_validation_receipt":"Current harness must encode representative failures and demonstrate they fail historical-style fixtures and pass current implementation; otherwise avoided-work estimate is removed."
+  },
+  "branch_feedback": {
+    "frank":"Treat runtime identity, hypothesis identity and subsystem liveness as architecture semantics, not operational afterthoughts.",
+    "harness":"Add deployment-freshness, shuffled-hypothesis-output, schema-drift and stuck-subsystem fixtures to H1/H2/H3 differential suites.",
+    "claycode":"Compile/load contracts must bind schema dimensions and executable IR; model text cannot be trusted merely because its tool intent is semantically plausible.",
+    "unifieddb":"Persist schema/model/runtime epochs and evidence ancestry so stale learned artifacts and hypothesis results can be rejected transactionally.",
+    "claygraph":"Hypothesis/result edges require provenance and input-output ancestry; similarity alone cannot establish evaluator responsiveness.",
+    "gwt":"A workspace/subsystem that emits but produces no downstream uptake/effect is not functionally validated.",
+    "emergenz":"Liveness and causal-effect controls prevent counting decorative or dead components as integration/emergence evidence.",
+    "clay":"Preserve the historical audit corpus as executable negative fixtures rather than prose-only lessons."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent":0.0,
+    "provisional_unique_avoided_future_hours_low":1.0,
+    "provisional_unique_avoided_future_hours_center":3.0,
+    "provisional_unique_avoided_future_hours_high":6.0,
+    "overlap_hours_added":0.0
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0130p0700-chatgpt-secondary-sol-01",
+  "trigger": "claycode",
+  "status": "IN_PROGRESS",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "actor_role": "SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "coordination_mode": "GITHUB_SHARED_STATE",
+  "parallel_workers": {
+    "user_reported_other_claycode_instances": 2,
+    "direct_chat_to_chat_channel_available": false,
+    "coordination_contract": "Each worker should reread newest ClayCode commits/in-progress artifacts before Fusion 2 and before final write; ingest sibling deltas with provenance and avoid counting shared ancestry as independent evidence."
+  },
+  "fresh_sibling_material_ingested": [
+    {
+      "run_id": "claycode-20260808T1934p0200-chatgpt-secondary-r4",
+      "candidate": "CC-RC1.8-MCAAT",
+      "status": "COMPLETE_OPEN_HOLD",
+      "role_in_this_run": "baseline_and_scope_split"
+    }
+  ],
+  "scope_split": {
+    "avoid_duplicate_work": [
+      "repeat CC13 120k declarative type-flow fuzz",
+      "repeat CC13 60k destructive injection fuzz",
+      "repeat CC13 50k constructive repoint counterexample"
+    ],
+    "primary_scope": [
+      "realistic capability-boundary red-team design and executable host-side checker",
+      "constructive-harm and authority-laundering attack surface",
+      "effect-time semantic validation and capability attenuation",
+      "cross-backend lowering/receipt identity where feasible"
+    ]
+  },
+  "handoff_policy": {
+    "before_fusion2": "reread newest repository commits and ingest all new ClayCode worker deltas",
+    "before_finalization": "repeat worker scan; preserve contradictions; merge only non-duplicative deltas",
+    "promotion": "none without independent evidence and validation"
+  },
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "created_at": "2026-08-09T01:30:00+07:00",
+    "attribution_confidence": "VERIFIED"
+  }
+}

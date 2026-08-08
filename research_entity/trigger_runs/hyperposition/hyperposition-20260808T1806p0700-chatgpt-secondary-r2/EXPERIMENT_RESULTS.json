@@ -1,0 +1,71 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hyperposition-20260808T1806p0700-chatgpt-secondary-r2",
+  "evidence_boundary":"H4 local numbers are synthetic/reference mechanism tests, not FRANK prevalence, target-Qwen behavior or production-security estimates. Judge0 independently replicates only one constructed namespace condition.",
+  "experiments":[
+    {
+      "id":"EXP-HYP-H4-DOMAIN-ALIAS-001",
+      "class":"LOCAL_SYNTHETIC_NAMESPACE_COLLISION_PROXY",
+      "setup":{"concepts":50000,"authoritative_fraction":0.30,"tested_non_authoritative_fraction":0.20,"seeds":20,"typed_witness_coverage":0.99},
+      "results":[
+        {"surface_namespace":1000,"untyped_unsafe_mean":1.0,"typed_unsafe":0.0,"typed_escalation_mean":0.009805},
+        {"surface_namespace":5000,"untyped_unsafe_mean":0.949935,"typed_unsafe":0.0,"typed_escalation_mean":0.009920},
+        {"surface_namespace":10000,"untyped_unsafe_mean":0.777170,"typed_unsafe":0.0,"typed_escalation_mean":0.009515},
+        {"surface_namespace":50000,"untyped_unsafe_mean":0.259070,"typed_unsafe":0.0,"typed_escalation_mean":0.009905}
+      ],
+      "interpretation":"In an adversarial aliasing construction, surface-token equality is a poor authority identity. Explicit semantic-class/resource identity blocks the constructed cross-class substitution; missing witnesses trigger broad fallback. This is not a Clay-token collision estimate."
+    },
+    {
+      "id":"EXP-HYP-H4-HYPERCASCADE-002",
+      "class":"LOCAL_SYNTHETIC_SIX_DOMAIN_HYPERGRAPH_CASCADE",
+      "setup":{"domains":6,"nodes_per_domain":500,"mixed_hyperedges":2500,"seeds_per_beta":20,"fault_origin":"ACTIVATION_PRIOR","typed_gate_error_probability":0.005,"steps":12},
+      "results":[
+        {"beta":0.1,"untyped_total":0.192517,"typed_total":0.042850,"untyped_authority":0.1892,"typed_authority":0.0003,"untyped_effect":0.1883,"typed_effect":0.0003},
+        {"beta":0.2,"untyped_total":0.848367,"typed_total":0.489933,"untyped_authority":0.8478,"typed_authority":0.0040,"untyped_effect":0.8434,"typed_effect":0.0049},
+        {"beta":0.3,"untyped_total":0.908733,"typed_total":0.565267,"untyped_authority":0.9095,"typed_authority":0.0067,"untyped_effect":0.9045,"typed_effect":0.0065},
+        {"beta":0.4,"untyped_total":0.932133,"typed_total":0.594950,"untyped_authority":0.9336,"typed_authority":0.0079,"untyped_effect":0.9296,"typed_effect":0.0079}
+      ],
+      "interpretation":"Typed semantic firebreaks do not eliminate cognitive-state propagation; in this construction they primarily contain privilege/effect escalation. The result is partly by policy construction and is a falsifier-generating mechanism test, not proof of production security."
+    },
+    {
+      "id":"EXP-HYP-H4-COVERAGE-003",
+      "class":"LOCAL_SYNTHETIC_FIREBREAK_COVERAGE_ECONOMICS",
+      "setup":{"operations_per_seed":500000,"seeds":20,"required_casts_per_operation":"uniform 1..5","constructed_attack_probability":0.02,"fallback":"broaden/fail-closed whenever any required witness is missing"},
+      "results":[
+        {"witness_coverage":0.90,"fast_path":0.737300,"escalation":0.262700,"benign_fail_closed":0.257413},
+        {"witness_coverage":0.95,"fast_path":0.859684,"escalation":0.140316,"benign_fail_closed":0.137516},
+        {"witness_coverage":0.98,"fast_path":0.941489,"escalation":0.058511,"benign_fail_closed":0.057341},
+        {"witness_coverage":0.99,"fast_path":0.970350,"escalation":0.029650,"benign_fail_closed":0.029064},
+        {"witness_coverage":0.995,"fast_path":0.985083,"escalation":0.014917,"benign_fail_closed":0.014626},
+        {"witness_coverage":0.999,"fast_path":0.997013,"escalation":0.002987,"benign_fail_closed":0.002923}
+      ],
+      "typed_unsafe_accepts":"0 by construction because missing required witnesses always escalate",
+      "interpretation":"Selective semantic firebreaks have a strong coverage economics curve. High coverage makes a narrow typed fast path cheap; incomplete coverage buys broader validation rather than optimistic execution."
+    },
+    {
+      "id":"EXP-HYP-H4-TYPED-HANDLE-004",
+      "class":"LOCAL_CPYTHON_MICROBENCHMARK",
+      "setup":{"operations":500000,"repetitions":5,"comparison":"integer identity vs compact tuple(class,id,epoch) vs verbose dict/string fields"},
+      "results":{"baseline_median_ns_per_op":86.359982,"compact_tuple_median_ns_per_op":133.917970,"verbose_dict_median_ns_per_op":257.176058,"compact_vs_baseline":1.550695,"verbose_vs_baseline":2.977954,"compact_vs_verbose":0.520725},
+      "interpretation":"In CPython, explicit semantic metadata has measurable cost, but a compact tuple costs about half the verbose dict representation in this microbenchmark. This motivates packed/interned handles; it does not estimate Rust/C/Android or FRANK end-to-end latency."
+    },
+    {
+      "id":"EXP-HYP-H4-JUDGE0-005",
+      "class":"INDEPENDENT_RUNTIME_REPLICATION_OF_ALIAS_CONDITION",
+      "result_ref":"research_entity/runtime/tool_results/hyp-h4-1806-judge0.json",
+      "runtime":"Judge0 Python 3.8.1",
+      "condition":{"concepts":30000,"surface_namespace":6000,"authoritative_fraction":0.30,"tested_non_authoritative":5000,"typed_coverage":0.99},
+      "results":{"untyped_unsafe_rate":0.7828,"typed_unsafe_rate":0.0,"typed_escalation_rate":0.0120},
+      "interpretation":"Independent runtime confirms the constructed alias mechanism direction for one condition; it does not make the workload realistic."
+    },
+    {
+      "id":"OBS-HYP-H4-C6-HOMOICONIC-006",
+      "class":"CONCURRENT_SIBLING_8B_PROXY_NEGATIVE_CONTROL",
+      "source_refs":["research_entity/runtime/tool_results/c6-groq-homoiconic-untyped-20260808T1750.json","research_entity/runtime/tool_results/c6-groq-homoiconic-typed-20260808T1750.json"],
+      "result":"Both the untyped memory form and the FACT/TEXT typed form returned all eight requested ground-truth values in the observed Groq llama-3.1-8b-instant outputs.",
+      "interpretation":"This simple obvious-injection corpus does not discriminate typed from untyped representations. It is negative evidence against claiming that textual FACT/TEXT tags alone establish the H4 security benefit; stronger multi-stage selector/authority/materialization tests are required.",
+      "ancestry_boundary":"Concurrent FRANK C6 sibling experiment; not independent replication of H4."
+    }
+  ],
+  "promotion":"NONE"
+}

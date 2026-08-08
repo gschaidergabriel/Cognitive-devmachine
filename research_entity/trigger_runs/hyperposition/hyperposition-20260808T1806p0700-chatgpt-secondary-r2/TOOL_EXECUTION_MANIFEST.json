@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.1",
+  "run_id":"hyperposition-20260808T1806p0700-chatgpt-secondary-r2",
+  "classes":["scholarly","current_web","implementation","executable","model_proxy_context"],
+  "bridge":"tools/research_tool_bridge.py via GitHub Actions",
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS_LOW_RELEVANCE","result_ref":"research_entity/runtime/tool_results/hyp-h4-1806-openalex.json","cost_usd_reported":0.001,"note":"Returned one weakly relevant multimodal survey; not used as substantive support."},
+    {"tool":"arxiv_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/hyp-h4-1806-arxiv.json","note":"Surfaced CapSeal and related capability/cascade material."},
+    {"tool":"semantic_scholar_search","status":"RATE_LIMITED","fallback_reason":"HTTP_429_SHARED_POOL","result_ref":"research_entity/runtime/tool_results/hyp-h4-1806-semanticscholar.json"},
+    {"tool":"tavily_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/hyp-h4-1806-tavily.json"},
+    {"tool":"exa_search","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/hyp-h4-1806-exa.json","note":"Surfaced ScopeGate, ChainCaps, SafeFlow, Lacuna/APPA and isolation-oriented current research."},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical, trigger protocol, fixed Clay-native contract, H3, Fusion CTC, G10, C6, CC9, GWT4, E1 and ClayGraph C4 material inspected; H4 artifacts written."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Four H4 local mechanism experiments rerun from scratch with fixed seeds."},
+    {"tool":"judge0_execute","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/hyp-h4-1806-judge0.json","note":"Independent runtime replication of one alias/domain-separation condition."},
+    {"tool":"groq_inference","status":"IMPORTED_CONCURRENT_SIBLING_CONTEXT","note":"No new H4 Groq request was required; concurrent C6 typed/untyped homoiconic 8B arms were inspected as a negative control. Both answered 8/8 facts correctly, so no typing benefit was inferred."},
+    {"tool":"e2b_sandbox","status":"SKIPPED_CREDENTIAL_UNAVAILABLE","fallback_reason":"CREDENTIAL_UNAVAILABLE","fallback":"local_sandbox + judge0_execute"}
+  ],
+  "native_web_support":{"status":"SUCCESS","used_for":"current primary/source verification and security literature; complements provider bridge"},
+  "validation":{"ok":true,"promotion_boundary":"No canonical promotion. Semantic-firebreak claims remain architecture candidates pending live/twin FRANK, target 4B, real ClayGraph selector/origin attack, and low-level hot-path benchmarks."}
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.3",
+  "schema_version": "2.4",
   "observed_at": "2026-08-08",
   "scope": "operational capability overlay; does not mutate research revision 2",
   "capabilities_observed": [
@@ -16,6 +16,7 @@
     "FRANK architecture source contract in ClayCode semantic IR with ClayGraph substrate input",
     "Goodman anti-echo FRANK↔ClayCode feedback contract via tools/goodman_filter_check.py",
     "visible status footer structure checking via tools/status_footer_check.py",
+    "Groq llama-3.1-8b-instant runtime verified as the default hosted small-model 8b_proxy_for_4b with automatic 429 cooldown/retry",
     "OpenAlex runtime verified with private-repo credential",
     "arXiv runtime verified credential-free",
     "Semantic Scholar runtime verified but public shared pool can rate-limit",
@@ -86,6 +87,23 @@
     "verdicts": ["SUPPORTED", "REFINED", "REFUTED", "UNRESOLVED"],
     "rule": "ClayCode reads newest FRANK plus deep ClayGraph input, then independently tests materially imported FRANK assumptions. Shared source/experiment ancestry never counts as independent replication."
   },
+  "small_model_proxy": {
+    "status": "RUNTIME_VERIFIED",
+    "policy": "research_entity/global/SMALL_MODEL_PROXY_POLICY.md",
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "executed_model_class": "8B",
+    "evidence_role": "8b_proxy_for_4b",
+    "verification_receipt": "research_entity/runtime/groq_verification.json",
+    "latest_complete_suite": "research_entity/runtime/groq_8b_proxy/groq8b-complete-20260808T003641Z.json",
+    "scientific_synthesis": "research_entity/runtime/groq_8b_proxy/SCIENTIFIC_SYNTHESIS.json",
+    "experiment_families_completed": 6,
+    "complete_suite_failures": 0,
+    "rate_limit_observed": "6000 TPM on current Groq on-demand tier during this run",
+    "rate_limit_behavior": "Adapter parses provider cooldown and retries HTTP 429 serially; experiment workflow is serialized to reduce burst pressure.",
+    "routing_rule": "Use Groq 8B for eligible hosted semantic/model proxy tests while preserving requested_target_class separately; it never closes Qwen3-4B-specific, LoRA, hidden-activation, live-FRANK or target-hardware experiments.",
+    "mesh_feedback_topic": "research_entity/topic_packets/groq-8b-small-model-proxy/PACKET.json"
+  },
   "research_orchestration": {
     "policy": "research_entity/global/RESEARCH_TOOL_ORCHESTRATION_POLICY.md",
     "router": "tools/research_provider_router.py",
@@ -117,7 +135,7 @@
     "health_audit": "tools/provider_health_audit.py",
     "health_state": "research_entity/runtime/PROVIDER_HEALTH.json",
     "quota_state": "research_entity/runtime/TOOL_QUOTA_STATE.json",
-    "private_token_store": "research_entity/private/API_TOKENS.env",
+    "private_token_stores": ["research_entity/private/API_TOKENS.env", "research_entity/private/GROQ_API.env"],
     "secret_loader": "tools/rae_secret_loader.py",
     "provider_status": {
       "OpenAlex": "RUNTIME_VERIFIED",
@@ -127,6 +145,7 @@
       "Tavily": "RUNTIME_VERIFIED",
       "DuckDuckGo/DDGS": "RUNTIME_VERIFIED",
       "Exa": "RUNTIME_VERIFIED",
+      "Groq llama-3.1-8b-instant": "RUNTIME_VERIFIED_8B_PROXY_FOR_4B",
       "E2B": "ADAPTER_READY_CREDENTIAL_UNAVAILABLE",
       "Judge0": "RUNTIME_VERIFIED",
       "Piston": "ADAPTER_READY_HOSTED_CREDENTIAL_UNAVAILABLE",
@@ -137,12 +156,13 @@
       "OPENALEX_API_KEY": "WORKING_PRIVATE_REPO_STORE",
       "TAVILY_API_KEY": "WORKING_PRIVATE_REPO_STORE",
       "EXA_API_KEY": "WORKING_PRIVATE_REPO_STORE",
+      "GROQ_API_KEY": "WORKING_PRIVATE_REPO_STORE_RUNTIME_VERIFIED",
       "HF_TOKEN": "VALID_AUTH_BUT_CURRENT_INFERENCE_QUOTA_EXHAUSTED",
       "E2B_API_KEY": "NOT_PERSISTED_CONNECTOR_BLOCKED",
       "PISTON_API_TOKEN": "NOT_CONFIGURED",
       "SEMANTIC_SCHOLAR_API_KEY": "OPTIONAL_NOT_CONFIGURED"
     },
-    "secret_rule": "By project-owner authorization, credentials may persist in the designated private-repository token store only when the active connector permits the write; values must never be copied into canonical research artifacts, reports, logs or visible responses."
+    "secret_rule": "By project-owner authorization, credentials may persist in designated private-repository stores only when the active connector permits the write; values must never be copied into canonical research artifacts, reports, logs or visible responses."
   },
   "contract_health": {
     "receipt": "research_entity/runtime/CONTRACT_HEALTH.json",
@@ -162,6 +182,8 @@
     ]
   },
   "limitations": [
+    "Groq 8B is a hosted 8b_proxy_for_4b and must not be cited as actual Qwen3-4B/bare-4B evidence",
+    "Qwen3-4B exact target/tokenizer, LoRA/internalization, hidden-activation, local hardware and live FRANK experiments remain open",
     "no assumption of direct shell access to the live FRANK host",
     "E2B cannot be runtime-verified until E2B_API_KEY is stored through a permitted channel",
     "hosted Piston cannot be runtime-verified until PISTON_API_TOKEN is configured or a self-hosted PISTON_API_URL is supplied",

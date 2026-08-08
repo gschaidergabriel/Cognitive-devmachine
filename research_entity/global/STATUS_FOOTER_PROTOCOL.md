@@ -2,11 +2,12 @@
 
 Every substantive response by a project Research-Entity worker must end with a clearly separated status block. Trigger runs always include it. Non-substantive social replies may omit it.
 
-The footer is part of prompt completion, but it no longer displays a percentage for the immediately preceding prompt. It displays the **next unpassed shared Research Center milestone**, its machine-derived progress and a dynamic ETA.
+The footer no longer reports prompt-completion percentage. It reports two separate horizons:
+
+1. **NEXT LEVEL** — the first unpassed shared program gate and its strict machine-derived progress.
+2. **DOOMSDAY / Clay 0.1** — a freshly recomputed project forecast for the first end-to-end project-hardware run of the Clay-programmed, one-module/binary FRANK with UnifiedDB and the final fully fine-tuned Clay-native model.
 
 ## Canonical rendering contract
-
-There is exactly ONE valid visible rendering format.
 
 The footer MUST be the final visible block and MUST be wrapped in one plain fenced Markdown code block. The opening fence line must be exactly ` ```text ` and the closing fence line exactly ` ``` `.
 
@@ -14,49 +15,72 @@ Rendering rules:
 
 - opener exactly ` ```text ` with no attributes;
 - no indentation before fences;
-- no Unicode/box-drawing frame characters such as `╔ ═ ║ ╚ ┌ ─ │ └`;
-- no Markdown tables or pipe-based layout;
+- no Unicode/box-drawing frame characters;
+- no Markdown tables or pipe-based layout inside the footer;
 - no nested code fence;
 - no visible content after the closing fence;
-- progress bars use ASCII only, e.g. `[#####...............]`;
+- progress bars use ASCII only;
 - `·` separators in the short-command list are allowed.
 
 ## Dynamic source of truth
 
-The milestone display MUST be resolved from:
+NEXT LEVEL is resolved from:
 
-- `research_entity/rooms/PROGRAM_STATE.json`
-- `research_entity/rooms/PROGRAM_THROUGHPUT.json`
-- stage-specific exact-progress workspaces such as `research_entity/archive_assimilation/666_WORKSPACE.json`;
-- `tools/program_progress.py`
+- `research_entity/rooms/PROGRAM_STATE.json`;
+- `research_entity/rooms/PROGRAM_THROUGHPUT.json`;
+- the current stage workspace, including `research_entity/archive_assimilation/666_WORKSPACE.json` for Level 0;
+- `tools/program_progress.py`.
 
-The stage list is data-driven. Do NOT hardcode stage names into footer logic. If the owner changes the research narrative/stage order, the footer follows `PROGRAM_STATE.json`.
+DOOMSDAY is recomputed on every resolver run from:
 
-Only the **first unpassed stage in `stage_order`** is shown.
+- `research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md`;
+- `research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json`;
+- `research_entity/forecast/DOOMSDAY_CAPABILITY_RULES.json`;
+- `research_entity/forecast/DOOMSDAY_EVENTS.jsonl`;
+- current program/stage progress;
+- measured throughput;
+- current/future verified capacity;
+- all registered APIs/tools and every `*_RESEARCH_CAPABILITY.json` extension;
+- verified API/technology benchmark impacts;
+- owner training authorization state;
+- `tools/doomsday_forecast.py`.
 
-## Progress semantics
+No fixed DOOMSDAY date is canonical. The date/range is always a fresh conclusion from the current critical-path table.
 
-Progress is based on the current stage's declared `progress_source`.
+## NEXT LEVEL progress semantics
 
-Default work-package rule:
+The first unpassed stage in `PROGRAM_STATE.stage_order` is shown.
 
-`progress = completed_weight / total_weight`
+Default work-package progress is based on completed machine-verifiable weight. Claimed/active work earns no percentage merely for being active.
 
-A package does not earn percentage merely because it is claimed or active.
+Level 0 is stricter: progress comes only from frozen atomic archive-analysis obligations. Before the denominator is frozen, exact progress remains 0%.
 
-Level 0 is stricter: its percentage comes only from frozen atomic archive-analysis obligations. Before its source denominator is frozen, exact progress remains `0%` and inventory/indexing state is reported separately by an exact `666` run.
+## DOOMSDAY progress semantics
+
+The DOOMSDAY percentage is an effort-weighted dynamic forecast-progress measure over the current Clay 0.1 critical-path table. It is not a simple stage count.
+
+It may move backward if a newly discovered necessary dependency legitimately expands the remaining scope. Verified eliminations or technology jumps may move it forward discontinuously.
+
+## APIs and new technology
+
+Every currently registered API/tool and every new `*_RESEARCH_CAPABILITY.json` extension is considered automatically by `tools/doomsday_forecast.py`.
+
+A newly available API appears immediately in the capability table, but availability alone does not make the date earlier. A time multiplier is applied only when:
+
+- the capability is runtime verified; and
+- a benchmark/receipt verifies its impact on one or more DOOMSDAY workstreams.
+
+For one workstream, multiple provider multipliers do not blindly multiply. The strongest single verified factor is used by default unless a future joint benchmark explicitly validates a combined factor.
 
 ## ETA semantics
 
-ETA is a range, never a deadline.
+ETA is a range, never a promise.
 
-Configured owner cadence:
+Configured owner cadence defaults to 10 active collaboration hours/day unless `PROGRAM_THROUGHPUT.json` changes it.
 
-`10 active owner-collaboration hours/day`
+DOOMSDAY uses a dependency/critical-path forecast, not a naive sum of all work. Independent rows may overlap when dependencies allow it. Hardware availability dates and owner authorization constraints are applied explicitly.
 
-ETA prefers measured throughput over bootstrap priors. Level 0 additionally uses its archive workspace ETA, initially based on the owner-reported ~400 MB Drive corpus plus GitHub repository metadata size and then recalibrated from real analyzed/integrated obligations.
-
-Do not invent a token-total value when no canonical 24h receipt exists.
+If final training is not yet authorized, the DOOMSDAY date must state that it is conditional on immediate owner authorization when the frozen training-data gate becomes ready. Unknown human waiting time is never guessed.
 
 ## Required format
 
@@ -70,14 +94,20 @@ Trigger: <none|registered trigger>
 Research write: <COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED>
 Short commands: 666 · q12 · dump · fusion · hypofusion · clay · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness
 
-NEXT MILESTONE
-Stage: <dynamic label from PROGRAM_STATE.json>
+NEXT LEVEL
+Stage: <dynamic stage label>
 Progress: [#####...............] 25%
 ETA @ 10h/day: <low> - <high>
 ETA confidence: <confidence> (<basis>)
-```
 
-`Short commands` is mandatory and must list the currently registered commands from `PROJECT_COMMAND_REGISTRY.json`.
+DOOMSDAY / Clay 0.1
+Progress: [###.................] 15%
+Forecast: <YYYY-MM-DD> - <YYYY-MM-DD>
+Center: <YYYY-MM-DD>
+Confidence: <confidence>
+Conditional on immediate training authorization when data is ready: <yes|no>
+Forecast basis: <N>-row dynamic critical path + live capabilities/APIs
+```
 
 ## Allowed status values
 
@@ -95,28 +125,28 @@ ETA confidence: <confidence> (<basis>)
 
 ## Trigger behavior
 
-Every registered trigger uses the same dynamic milestone status. A trigger may display its own name in `Trigger`, but it must not replace the shared program milestone with a trigger-local percentage.
+Every registered trigger uses the same two-horizon footer.
 
-Exact `666` while Level 0 is open additionally shows its dedicated detailed archive progress before this final footer.
+Exact `666` while Level 0 is open additionally shows its detailed archive-assimilation progress before this final footer.
 
-After Level 0 PASS, `666` becomes the emergent stochastic field-genesis trigger; the footer continues to show the first unpassed shared milestone as the common attractor.
+After Level 0 PASS, `666` becomes the stochastic emergent research-field genesis trigger, while NEXT LEVEL continues to show the current shared gate and DOOMSDAY remains the long-range Clay 0.1 forecast.
 
 ## Q12 behavior
 
-`q12` includes the same dynamic milestone and ETA in its executive briefing. It may explain the ETA basis, but it must not alter computed progress.
+Q12 must understand both horizons. When a major event materially moves DOOMSDAY, Q12 should be able to explain the underlying critical-path table, capability/API change, accelerator/blocker or new dependency rather than merely repeating a date.
 
 ## Pre-send invariant
 
 Before every substantive response verify:
 
 1. one final fenced `text` block exists;
-2. opener is exactly ` ```text `;
-3. required RAE metadata fields are present;
-4. all registered short commands are present;
-5. `NEXT MILESTONE`, `Stage`, `Progress`, `ETA @ 10h/day`, and `ETA confidence` are present;
-6. progress bar and percentage agree with the current canonical progress resolver;
-7. no forbidden Unicode frame characters occur;
-8. no prompt-completion percentage is shown;
-9. closing fence is final visible content.
+2. required RAE metadata fields are present;
+3. all registered short commands are present;
+4. NEXT LEVEL lines match `tools/program_progress.py`;
+5. DOOMSDAY lines match the same resolver / `tools/doomsday_forecast.py`;
+6. no fixed/stale DOOMSDAY date is copied from an older response;
+7. no prompt-completion percentage is shown;
+8. no forbidden frame characters occur;
+9. the closing fence is the final visible content.
 
 Any violation is a formatting/governance bug and must be corrected before sending.

@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"fusion-20260808T1755p0700-chatgpt-secondary-r2",
   "trigger":"fusion",
   "actor":"chatgpt-secondary",
@@ -8,7 +8,7 @@
   "registered_scientific_branches":7,
   "branches":{
     "clay":{"status":"FULL_INDEXED","latest_completed":"clay-20260808T1716p0700-chatgpt-secondary-r2 / EPOCH-G9","key_refs":["research_entity/trigger_runs/clay/clay-20260808T1716p0700-chatgpt-secondary-r2/FINAL_REPORT.md"],"freshness":"completed 2026-08-08T17:43+07:00"},
-    "frank":{"status":"FULL_INDEXED","latest_completed":"20260808T1722+0700-chatgpt-secondary-r2 / C5 Certified Cognitive Basis","newer_in_progress":"20260808T1750+0700-chatgpt-secondary-r2 / C6 Clay-Native Unified Cognitive Substrate","key_refs":["research_entity/trigger_runs/frank/20260808T1722+0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/frank/20260808T1750+0700-chatgpt-secondary-r2/RUN_MANIFEST.json"],"freshness":"C6 began 2026-08-08T17:50+07:00 and is incomplete"},
+    "frank":{"status":"FULL_INDEXED","latest_completed":"20260808T1722+0700-chatgpt-secondary-r2 / C5 Certified Cognitive Basis","newer_in_progress":"20260808T1750+0700-chatgpt-secondary-r2 / C6 Clay-Native Unified Cognitive Substrate","key_refs":["research_entity/trigger_runs/frank/20260808T1722+0700-chatgpt-secondary-r2/FINAL_REPORT.md","research_entity/trigger_runs/frank/20260808T1750+0700-chatgpt-secondary-r2/RUN_MANIFEST.json","research_entity/runtime/tool_requests/c6-groq-miniclay-v2-20260808T1750.json"],"freshness":"C6 began 2026-08-08T17:50+07:00; by 18:02 a corrected Groq Mini-Clay proxy had been queued, but no result was promoted into this fusion without a completed result artifact."},
     "gwt":{"status":"FULL_INDEXED","latest_completed":"gwt-20260808T1721p0700-chatgpt-secondary / Run 4 CSOC","key_refs":["research_entity/trigger_runs/gwt/gwt-20260808T1721p0700-chatgpt-secondary/FINAL_REPORT.md","research_entity/topic_packets/gwt-dual-workspace-causal-closure/R4_DELTA.json"]},
     "emergenz":{"status":"FULL_INDEXED","latest_completed":null,"current_method_head":"KMP-EMERGENCE-CERTIFICATE","key_refs":["research_entity/knowledge_micro_packets/synthetic_clay/emergence-certificate.md"],"note":"No newer dedicated completed emergence trigger run discovered; cross-branch emergence controls are retained but not upgraded to dedicated-branch evidence."},
     "claycode":{"status":"FULL_INDEXED","latest_completed":"claycode-20260808T1723p0700-chatgpt-secondary / CC9 CBCC","key_refs":["research_entity/trigger_runs/claycode/claycode-20260808T1723p0700-chatgpt-secondary/FINAL_REPORT.md"],"goodman":"CC9 Goodman review present"},
@@ -29,5 +29,7 @@
     "target_qwen3_4b":"BLOCKED_NOT_AVAILABLE_TO_THIS_WORKER"
   },
   "shared_ancestry_warning":"Clay G9, FRANK C5, GWT R4, CC9, H3 and ClayGraph C4 strongly cross-cite and share actor/provider/internal experiments; convergence is lineage, not independent replication.",
+  "shared_ancestry_scanned":true,
+  "contradictions_scanned":true,
   "coverage_complete_for_fusion1":true
 }

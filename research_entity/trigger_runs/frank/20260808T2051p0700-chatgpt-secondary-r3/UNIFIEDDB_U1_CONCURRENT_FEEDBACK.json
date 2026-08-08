@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "source_trigger":"unifieddb",
+  "source_run":"unifieddb-20260808T2044p0700-chatgpt-secondary-r2",
+  "target_trigger":"frank",
+  "target_run":"20260808T2051p0700-chatgpt-secondary-r3",
+  "reason":"FRANK C7 preflight was generated at 2026-08-08T13:51:00Z before UnifiedDB U1 architecture/materialization completed; its preflight therefore recorded latest_unifieddb_artifact=null and is stale specifically for this dependency.",
+  "required_refresh":[
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/UNIFIED_DATABASE_ARCHITECTURE.claycode.json",
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/STORE_ROLE_MATRIX.json",
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/QUERY_ROUTING_PLAN.json",
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/EXPERIMENT_RESULTS.json",
+    "research_entity/trigger_runs/unifieddb/unifieddb-20260808T2044p0700-chatgpt-secondary-r2/FRANK_UNIFIEDDB_FEEDBACK.json"
+  ],
+  "key_delta":"Use UD-RC1: one authoritative Clay event/state/effect commit spine + unified ClayCode query IR + specialized replayable graph/vector/FTS/activation planes + Cognitive State Continuity Loop. Do not interpret one Clay semantic world as one physical database.",
+  "status":"FRESH_CONCURRENT_FEEDBACK",
+  "promotion":"NONE"
+}

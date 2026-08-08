@@ -1,0 +1,48 @@
+{
+  "schema_version":"1.0",
+  "run_id":"emergenz-20260808T1756p0700-chatgpt-secondary",
+  "actor":"chatgpt-secondary",
+  "classes":["scholarly","current_web","implementation","executable"],
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web"},
+    {"tool":"duckduckgo_search","mode":"FALLBACK","class":"current_web"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation"},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable"},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable"},
+    {"tool":"piston_execute","mode":"FALLBACK","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"}
+  ],
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS_NO_RESULTS","request":"research_entity/runtime/tool_requests/em1-openalex-20260808T1756p0700.json","result":"research_entity/runtime/tool_results/em1-openalex-20260808T1756p0700.json","note":"Provider call succeeded; overly conjunctive query returned zero works, so no scientific inference was drawn from this result."},
+    {"tool":"arxiv_search","status":"SUCCESS","request":"research_entity/runtime/tool_requests/em1-arxiv-20260808T1756p0700.json","result":"research_entity/runtime/tool_results/em1-arxiv-20260808T1756p0700.json","notable_discoveries":["arXiv:2605.03267 PEID","arXiv:2605.06746 Causally Emergent Alignment Hypothesis","arXiv:2607.20708 Perspective Latents"]},
+    {"tool":"semantic_scholar_search","status":"RATE_LIMITED","fallback_reason":"RATE_LIMITED","request":"research_entity/runtime/tool_requests/em1-semantic-scholar-20260808T1756p0700.json","result":"research_entity/runtime/tool_results/em1-semantic-scholar-20260808T1756p0700.json"},
+    {"tool":"tavily_search","status":"SUCCESS","request":"research_entity/runtime/tool_requests/em1-tavily-20260808T1756p0700.json","result":"research_entity/runtime/tool_results/em1-tavily-20260808T1756p0700.json"},
+    {"tool":"exa_search","status":"SUCCESS","request":"research_entity/runtime/tool_requests/em1-exa-20260808T1756p0700.json","result":"research_entity/runtime/tool_results/em1-exa-20260808T1756p0700.json","notable_discoveries":["PEID","Emergent Coordination in Multi-Agent Language Models","SVD/dynamical-reversibility causal emergence","CAMO causal discovery"]},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical/protocols and latest Clay G9, GWT R4, Hyperposition H3, FRANK C5/C6, ClayGraph C4/G1d and ClayCode CC9 material were read; E1 artifacts were written and reread."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Executed mechanistic-rescue, partition-search, role-recurrence, common-driver TE, stage-factorial synergy and E-CERT2 reference-check tests with fixed seeds."},
+    {"tool":"judge0_execute","status":"SUCCESS","request":"research_entity/runtime/tool_requests/em1-judge0-nullcontrols-20260808T1756p0700.json","result":"research_entity/runtime/tool_results/em1-judge0-nullcontrols-20260808T1756p0700.json","note":"Independent runtime replication preserved the four qualitative null-control directions."}
+  ],
+  "fallbacks":[
+    {"for":"semantic_scholar_search","reason":"RATE_LIMITED","used":["arxiv_search","tavily_search","exa_search","direct_primary_sources"],"status":"SUFFICIENT"},
+    {"for":"e2b_sandbox","reason":"CREDENTIAL_UNAVAILABLE","used":["local_sandbox","judge0_execute"],"status":"SUFFICIENT"},
+    {"for":"piston_execute","reason":"CREDENTIAL_UNAVAILABLE","used":["judge0_execute"],"status":"NOT_NEEDED_AFTER_SUCCESS"}
+  ],
+  "not_applicable":[
+    {"class":"model_experiment","reason":"E1 tests emergence-measure validity and causal null controls; no new model-reader claim required a fresh target/proxy inference run. Existing Groq proxy evidence was ingested only as prior mesh evidence and not counted as E1 replication."},
+    {"tool":"huggingface_inference","reason":"model_experiment not required; provider also has cached quota exhaustion until 2026-09-01 UTC"}
+  ],
+  "primary_external_sources_used":[
+    "Partial Effective Information Decomposition for Synergistic Causality (arXiv:2605.03267, 2026)",
+    "The Causally Emergent Alignment Hypothesis (arXiv:2605.06746, 2026)",
+    "Perspective Latents as an Architectural Condition for Causal Emergence in Active Inference Agents (arXiv:2607.20708, 2026)",
+    "Emergent Coordination in Multi-Agent Language Models (ICLR 2026)",
+    "CAMO: Causal Discovery from Micro Behaviors to Macro Emergence (ACL Findings 2026)",
+    "Dynamical reversibility and a new theory of causal emergence based on SVD (npj Complexity, 2025)"
+  ],
+  "validation_expected":{"ok":true,"strong_promotion":false},
+  "rule":"Provider success does not strengthen evidence by itself; synthetic/runtime replication remains mechanism evidence, and no current result is a live FRANK emergent-organ or consciousness result."
+}

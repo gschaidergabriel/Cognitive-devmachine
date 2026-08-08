@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary",
+  "provider":"NVIDIA Hosted NIM",
+  "credential_value_recorded":false,
+  "capabilities":[
+    {"function":"model_catalog","status":"SUCCESS","result_ref":"research_entity/runtime/tool_results/nvidia-catalog-20260808T1950p0700.json","observed_models":100},
+    {"function":"chat","status":"SUCCESS","verified_model":"nvidia/nemotron-mini-4b-instruct","evidence_role":"direct_generic_4b_hosted_runtime"},
+    {"function":"chat","status":"FAILED_ACCOUNT_FUNCTION_NOT_FOUND","model":"google/gemma-3-4b-it","note":"catalog-visible but invocation returned HTTP 404; preserved as provider-entitlement negative result"},
+    {"function":"embeddings","status":"SUCCESS","model":"nvidia/nv-embedqa-e5-v5","dimensions":1024,"result_ref":"research_entity/runtime/tool_results/nvidia-embed-smoke-20260808T1950p0700.json"},
+    {"function":"embedding_similarity","status":"SUCCESS","model":"nvidia/nv-embedqa-e5-v5","result_ref":"research_entity/runtime/tool_results/nvidia-role-class-embedding-similarity-20260808T2010p0700.json"},
+    {"function":"rerank","status":"FAILED_ROUTE_UNRESOLVED","attempts":["research_entity/runtime/tool_results/nvidia-rerank-smoke-20260808T1950p0700.json","research_entity/runtime/tool_results/nvidia-rerank-mistral4b-smoke-20260808T1954p0700.json"],"fallback":"NO_SUBSTITUTION; embedding similarity is not reranking"}
+  ],
+  "model_experiments":{"COVE_4B":"SUCCESS","CC10_4B":"SUCCESS_WITH_COMPACT_NEGATIVE","LATENT_PRIOR_4B":"PARTIAL_NEGATIVE_CONTROL; BENEFIT_UNRESOLVED"},
+  "security":"NVIDIA_API_KEY loaded only through private RAE secret store/runtime loader; no credential value copied into research artifacts."
+}

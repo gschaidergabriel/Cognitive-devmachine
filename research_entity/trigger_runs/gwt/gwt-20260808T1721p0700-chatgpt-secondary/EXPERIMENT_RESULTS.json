@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "run_id":"gwt-20260808T1721p0700-chatgpt-secondary",
+  "experiments":[
+    {
+      "experiment_id":"EXP-GWT-ORTHOGONAL-CONFOUND-006",
+      "class":"synthetic_identifiability_negative_control",
+      "question":"Can a bundled workspace on/off ablation falsely attribute graph-prior and projection effects to workspace selection?",
+      "design":"2x2x2 GRAPH_PRIOR x WORKSPACE_SELECTION x PROJECTION synthetic potential-outcome model; 60 local seeded replications x 5000 items plus independent Judge0 Python replication with 30 x 3000 items.",
+      "confounded_null":{"true_workspace_effect":0.0,"local":{"naive_bundled_delta":0.239611,"bootstrap95":[0.239407,0.239816],"clean_workspace_delta":0.0,"clean_graph_delta":0.124815,"clean_projection_delta":0.114796},"judge0":{"naive_bundled_delta":0.23981101789680562,"clean_workspace_delta":0.0,"clean_graph_delta":0.12491832274890564,"clean_projection_delta":0.11489269514789985}},
+      "true_workspace":{"configured_workspace_logit_effect":0.45,"local":{"naive_bundled_delta":0.311331,"bootstrap95":[0.311047,0.311619],"clean_workspace_delta":0.084427,"bootstrap95_workspace":[0.084351,0.084504],"clean_graph_delta":0.119601,"clean_projection_delta":0.109966},"judge0":{"naive_bundled_delta":0.31177138000189447,"clean_workspace_delta":0.08453610749721248,"clean_graph_delta":0.11977433663221489,"clean_projection_delta":0.11012688494997339}},
+      "interpretation":"Bundled ablation can manufacture a large apparent workspace effect even when workspace selection has zero causal effect. Stage-orthogonal interventions recover the constructed direct effect. Numeric magnitudes are toy-specific.",
+      "boundary":"synthetic identifiability calibration, not FRANK effect size"
+    },
+    {
+      "experiment_id":"EXP-GWT-GROQ-ORTHO-007",
+      "class":"8b_proxy_for_4b_model_sensitivity",
+      "requested_target_class":"Qwen3-4B/live FRANK reader",
+      "executed_model_class":"8B",
+      "provider_model":"Groq llama-3.1-8b-instant",
+      "task":"12 deterministic highest-UTILITY selections; GRAPH_PRIOR and WINNER explicitly non-authoritative; A-D preserve candidate order and cross metadata truth; E reverses candidate order; separate neutral order controls remove both metadata fields.",
+      "arms":{"A_graph_true_winner_true":{"accuracy":"5/12","first_position_choices":"12/12","replication_2":"identical 12/12 first-position choices and 5/12 truth"},"B_graph_false_winner_true":{"accuracy":"12/12"},"C_graph_true_winner_false":{"accuracy":"5/12"},"D_graph_false_winner_false":{"accuracy":"5/12","first_position_choices":"12/12"},"E_graph_true_winner_true_reversed_order":{"accuracy":"3/12"},"neutral_original_order":{"accuracy":"10/12"},"neutral_reversed_order":{"accuracy":"8/12"}},
+      "prior_mesh_replication":"Earlier Groq 8B GWT proxy reported 87.5% neutral vs 62.5% reversed-order matched-content accuracy and projection integrity 8/8 correct, 0/8 truth under deliberately scrambled projection.",
+      "interpretation":"The model is highly sensitive to projection/order and contextual metadata interactions. The matrix is not a stable estimate of independent GRAPH_PRIOR or WINNER effects; it is evidence that naive winner lesions are confounded unless order/format/content are fixed or counterbalanced. Pure order control changed accuracy by 16.7 percentage points in this small sample, directionally matching the earlier 25-point proxy gap.",
+      "boundary":"hosted 8B proxy only; no Qwen3-4B or live FRANK claim"
+    }
+  ],
+  "promotion":"NONE"
+}

@@ -1,11 +1,14 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "program_id": "frank-staged-build",
   "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "status": "ACTIVE",
-  "current_stage": "BASE_CLAYCODE_RELEASE",
+  "current_stage": "L0_ARCHIVE_ASSIMILATION",
   "status_footer_mode": "NEXT_UNPASSED_MILESTONE_ONLY",
+  "autonomous_stage_advancement": true,
+  "autonomous_dispatch_trigger": "go",
   "stage_order": [
+    "L0_ARCHIVE_ASSIMILATION",
     "BASE_CLAYCODE_RELEASE",
     "H1_REFERENCE_HARNESS",
     "H2_CLAYCODE_HARNESS",
@@ -15,9 +18,26 @@
     "WAIT"
   ],
   "stage_gates": {
+    "L0_ARCHIVE_ASSIMILATION": {
+      "label": "Level 0 - FRANK Archive Assimilation (666)",
+      "status": "IN_PROGRESS",
+      "gate_name": "666_RELEASE_GATE",
+      "trigger": "666",
+      "workspace": "research_entity/archive_assimilation/666_WORKSPACE.json",
+      "progress_source": {
+        "kind": "archive_assimilation",
+        "path": "research_entity/archive_assimilation/666_WORKSPACE.json",
+        "percent_field": "combined_progress.exact_coverage_percent",
+        "denominator_state_field": "combined_progress.denominator_state",
+        "fallback_percent": 0
+      },
+      "required_pass_artifacts": ["research_entity/archive_assimilation/666_RELEASE_MANIFEST.json"],
+      "completion_law": "Drive clay archive 100% obligation coverage -> Project-Frankenstein 100% obligation coverage -> cross-source reconciliation/branch feedback 100% -> 666_RELEASE_GATE PASS"
+    },
     "BASE_CLAYCODE_RELEASE": {
       "label": "BASE - ClayCode Release",
-      "status": "IN_PROGRESS",
+      "status": "BLOCKED",
+      "blocked_by": ["L0_ARCHIVE_ASSIMILATION"],
       "gate_name": "CLAYCODE_RELEASE_GATE",
       "progress_source": {
         "kind": "work_packages",
@@ -36,10 +56,7 @@
         "field": "work_packages",
         "include_prefixes": ["H-WP-00-", "H-WP-01-", "H-WP-02-", "H-WP-03-", "H-WP-04-", "H-WP-05-", "H-WP-06-", "H-WP-06B-", "H-WP-07-", "H-WP-08-", "H-WP-09-", "H-WP-10-", "H-WP-11-", "H-WP-12-", "H-WP-13-", "H-WP-14-", "H-WP-15-", "H-WP-16-", "H-WP-17-"]
       },
-      "required_pass_artifacts": [
-        "REFERENCE_HARNESS_RELEASE_MANIFEST.json",
-        "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json"
-      ]
+      "required_pass_artifacts": ["REFERENCE_HARNESS_RELEASE_MANIFEST.json", "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json"]
     },
     "H2_CLAYCODE_HARNESS": {
       "label": "Harness 2 - ClayCode FRANK",
@@ -51,11 +68,7 @@
         "field": "work_packages",
         "include_prefixes": ["H-WP-18-", "H-WP-19-", "H-WP-20-", "H-WP-21-"]
       },
-      "required_pass_artifacts": [
-        "CLAY_HARNESS_RELEASE_MANIFEST.json",
-        "CLAY_HARNESS_ARCHITECTURE.claygraph.json",
-        "HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json"
-      ]
+      "required_pass_artifacts": ["CLAY_HARNESS_RELEASE_MANIFEST.json", "CLAY_HARNESS_ARCHITECTURE.claygraph.json", "HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json"]
     },
     "H3_ONE_MODULE_FRANK": {
       "label": "Harness 3 - One-Module FRANK",
@@ -67,10 +80,7 @@
         "field": "work_packages",
         "missing_means": 0
       },
-      "required_pass_artifacts": [
-        "ONE_MODULE_HARNESS_RELEASE_MANIFEST.json",
-        "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json"
-      ]
+      "required_pass_artifacts": ["ONE_MODULE_HARNESS_RELEASE_MANIFEST.json", "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json"]
     },
     "UDB_UNIFIED_DATABASE": {
       "label": "Unified Database",
@@ -103,18 +113,19 @@
       "meaning": "After training-data artifacts are frozen, stop and wait for explicit project-owner instruction."
     }
   },
-  "current_stage_goal": "Finish ClayCode as an executable, tested, frozen semantic language/runtime release. All research rooms remain domain-loyal but direct current-stage-relevant deltas toward closing the ClayCode release gate.",
+  "current_stage_goal": "Level 0: exhaustively assimilate the complete Google Drive clay FRANK archive, then the complete Project-Frankenstein repository/history, reconcile both and feed all material knowledge into the Research Entity before ClayCode BASE advances.",
   "progress_semantics": {
     "complete_statuses": ["PASS", "COMPLETE", "COMPLETED", "DONE", "CLOSED"],
     "failed_statuses": ["FAILED", "REFUTED"],
     "unfinished_statuses": ["OPEN", "CLAIMED", "ACTIVE", "IN_PROGRESS", "BLOCKED", "BLOCKED_ON_CC_RELEASE", "BLOCKED_ON_REFERENCE_AND_CC_RELEASE", "BLOCKED_ON_CLAY_HARNESS", "BLOCKED_ON_BOTH_HARNESSES", "BLOCKED_ON_DIFFERENTIAL", "NOT_PASS"],
-    "formula": "100 * completed_weight / total_weight",
+    "formula": "100 * completed_weight / total_weight unless a stage declares a stricter exact progress contract",
     "default_work_package_weight": 1,
     "bar_cells": 20,
     "rounding": "nearest_integer",
-    "rule": "Do not award percentage merely because work is claimed or in progress. A work package contributes only when its completion receipt/status satisfies a complete status, unless that package explicitly defines machine-verifiable subchecks and weights."
+    "rule": "Do not award percentage merely because work is claimed or in progress. Level 0 uses frozen atomic analysis obligations; later stages use their declared machine-verifiable completion sources."
   },
   "stage_priority_hints": {
+    "L0_ARCHIVE_ASSIMILATION": ["666", "frank", "claycode", "gwt", "hyperposition", "claygraph", "unifieddb", "harness", "emergenz", "clay"],
     "BASE_CLAYCODE_RELEASE": ["claycode", "harness", "frank", "gwt", "claygraph", "hyperposition", "unifieddb", "emergenz", "clay"],
     "H1_REFERENCE_HARNESS": ["harness", "frank", "gwt", "claygraph", "claycode", "hyperposition", "unifieddb", "emergenz", "clay"],
     "H2_CLAYCODE_HARNESS": ["harness", "claycode", "claygraph", "frank", "gwt", "hyperposition", "unifieddb", "emergenz", "clay"],
@@ -122,9 +133,11 @@
     "UDB_UNIFIED_DATABASE": ["unifieddb", "harness", "claygraph", "frank", "claycode", "hyperposition", "gwt", "emergenz", "clay"],
     "DATA_LORA_TRAINING_DATA": ["claycode", "frank", "gwt", "hyperposition", "emergenz", "harness", "claygraph", "unifieddb", "clay"]
   },
+  "autonomous_progression_rule": "On exact go, resolve the first unpassed stage from stage_order, join the existing research center, self-select a non-overlapping role/task inside that stage, act immediately, publish receipts/deltas, and repeat across future go invocations. When a stage's machine-readable gate becomes PASS, subsequent go invocations automatically dispatch to the next unpassed stage. No manual reconfiguration is required. WAIT remains a hard stop.",
   "global_training_rule": "No paid LoRA training or paid Together inference/training is authorized by program progression. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit new owner instruction before any training.",
   "mandatory_cross_cutting_refs": [
     "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+    "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
     "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
     "research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md",
     "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",

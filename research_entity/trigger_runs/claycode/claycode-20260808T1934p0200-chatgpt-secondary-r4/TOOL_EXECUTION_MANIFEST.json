@@ -1,0 +1,20 @@
+{
+  "run_id":"claycode-20260808T1934p0200-chatgpt-secondary-r4",
+  "tools":[
+    {"tool":"GitHub connector","status":"EXECUTED","purpose":"canonical boot, protocol/mesh ingestion, validator inspection, durable writeback"},
+    {"tool":"web research","status":"EXECUTED","purpose":"independent papers/docs/GitHub/Reddit evidence","classes":["preprint","authoritative docs/spec repository","system docs","community implementation discussion"]},
+    {"tool":"local Python + separate subprocess","status":"EXECUTED","purpose":"MCAAT checker, randomized mutation/property tests, codegen smoke"},
+    {"tool":"E2B","status":"NOT_AVAILABLE_ON_CURRENT_CHATGPT_TOOL_SURFACE","fallback":"current local executable lab; prior E2B evidence retained but not counted as current-run replication"},
+    {"tool":"target Qwen 4B","status":"NOT_EXECUTED","reason":"no target-model runtime exposed to this worker"}
+  ],
+  "external_sources":[
+    {"class":"PREPRINT","ref":"arXiv:2606.24322","title":"Securing LLM-Agent Long-Term Memory Against Poisoning","use":"origin-bound non-malleable authority/IFC; machine-checked model and reported benchmark"},
+    {"class":"PREPRINT","ref":"arXiv:2607.14651","title":"MemPoison","use":"compositional/context-triggered poisoning motivates use-time gates"},
+    {"class":"AUTHORITATIVE_DOC","ref":"WebAssembly/WASI docs/Capabilities.md","use":"unforgeable runtime handles and externally granted capabilities"},
+    {"class":"AUTHORITATIVE_DOC","ref":"WASI.dev + WebAssembly Component Model/WIT/Canonical ABI","use":"zero ambient authority, typed interface contracts, representation lowering"},
+    {"class":"SYSTEM_DOC","ref":"OSTree atomic-upgrades","use":"content-addressed state, atomic switching, rollback"},
+    {"class":"SYSTEM_DOC","ref":"Nix store","use":"immutable store, parallel versions, profile rollback"},
+    {"class":"PREPRINT","ref":"arXiv:2604.18593 HELIX","use":"verified semantics-preserving multi-IR lowering/translation validation precedent"},
+    {"class":"COMMUNITY","ref":"Reddit r/AI_Agents June 2026 IFC discussion","use":"implementation concerns only; not scientific replication"}
+  ]
+}

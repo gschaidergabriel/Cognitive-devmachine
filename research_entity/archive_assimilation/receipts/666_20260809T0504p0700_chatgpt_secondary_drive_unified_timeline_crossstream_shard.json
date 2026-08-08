@@ -1,0 +1,44 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0504+0700-chatgpt-secondary-drive-unified-timeline-crossstream",
+  "actor_id":"chatgpt-secondary",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"PARTIAL_EXECUTED_CORROBORATIVE_NONCOUNTING_CROSSSTREAM_SHARD",
+  "source":"Drive:30_unified_timeline.txt",
+  "observation_window":"2026-02-28T14:12..16:12 historical 120-minute fused timeline",
+  "source_stream_count":14,
+  "crossread":"research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json",
+  "findings":[
+    {
+      "finding_id":"DRV-TIMELINE-CONTENTION-001",
+      "epistemic_class":"HISTORICAL_CROSS_STREAM_RUNTIME_MEASUREMENT",
+      "claim":"Dream and Consciousness used the LLM/GPU concurrently; the timeline reports GPU 86-92%, load 7.3-8.2 and growing llama-server RSS while Dream replay JSON parsing failed and later synthesis/consolidation continued.",
+      "targets":["harness","frank","PROJECT_HARDWARE_DEPLOYMENT"],
+      "implication":"H1/H2/H3 need explicit inference-resource scheduling/contention tests and must separate model-format failure from resource starvation/parallel-load effects."
+    },
+    {
+      "finding_id":"DRV-TIMELINE-SAMPLE-002",
+      "epistemic_class":"HISTORICAL_CROSS_STREAM_CONSISTENCY_ANOMALY",
+      "claim":"A deep-reflection E-PQ empathy/mood update was reported in one path while periodic 60-second E-PQ samples remained unchanged, indicating either sampling visibility, overwrite, persistence or invariants reconciliation ambiguity.",
+      "targets":["harness","unifieddb","frank","claygraph"],
+      "implication":"State mutations and sampled readouts need epoch/event identity so silent overwrite or sampling blindness can be distinguished by replay."
+    },
+    {
+      "finding_id":"DRV-TIMELINE-DREAMSTATE-003",
+      "epistemic_class":"HISTORICAL_RUNTIME_ANOMALY",
+      "claim":"A Dream reflection path recorded mood_before=0.0 and mood_after=0.0 despite surrounding consciousness mood near 0.59, suggesting default/null-path or cross-store state inconsistency.",
+      "targets":["harness","unifieddb","frank"],
+      "implication":"Missing/default state must be typed distinctly from a real zero value; cross-module state reads require source/epoch consistency checks."
+    },
+    {
+      "finding_id":"DRV-TIMELINE-WATCHDOG-004",
+      "epistemic_class":"HISTORICAL_RUNTIME_FAILURE",
+      "claim":"Genesis was killed by its watchdog after a five-minute timeout and restarted, providing a concrete crash/restart point inside the fused causal timeline.",
+      "targets":["harness","frank"],
+      "implication":"Recovery tests should prove post-restart state continuity/idempotence and distinguish watchdog health failure from semantic module failure."
+    }
+  ],
+  "earned_work":{"additional_hours_awarded":0.0,"reason":"Corroborates existing audit liveness/runtime/state oracles; retained only for temporal cross-stream test specificity."},
+  "progress_accounting":{"exact_level0_coverage_awarded_percent":0.0,"combined_denominator_state":"NOT_FROZEN"}
+}

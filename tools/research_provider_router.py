@@ -12,6 +12,7 @@ REGISTRY = ROOT / "research_entity" / "global" / "EXTERNAL_RESEARCH_TOOL_REGISTR
 CAPABILITY_FILES = [
     ROOT / "research_entity" / "global" / "NVIDIA_RESEARCH_CAPABILITY.json",
     ROOT / "research_entity" / "global" / "OPENROUTER_RESEARCH_CAPABILITY.json",
+    ROOT / "research_entity" / "global" / "SANDBOXAPI_RESEARCH_CAPABILITY.json",
 ]
 QUOTA = ROOT / "research_entity" / "runtime" / "TOOL_QUOTA_STATE.json"
 HEALTH = ROOT / "research_entity" / "runtime" / "PROVIDER_HEALTH.json"
@@ -22,13 +23,14 @@ ALLOWED_FALLBACKS = {
     "RATE_LIMITED", "PROVIDER_UNAVAILABLE", "NETWORK_OR_PROVIDER_UNAVAILABLE", "CREDENTIAL_UNAVAILABLE",
     "CREDENTIAL_BLOCKED", "AUTH_FAILED", "HTTP_ERROR", "DEPENDENCY_MISSING", "CONNECTOR_BLOCKED",
     "RUNTIME_UNAVAILABLE", "DUPLICATE_EVIDENCE_NO_INFORMATION_GAIN", "MODEL_IDENTITY_UNAVAILABLE",
+    "SUBSCRIPTION_UNAVAILABLE",
 }
 
 FAILURE_STATUSES_REQUIRING_FALLBACK = {
     "QUOTA_EXHAUSTED", "QUOTA_OR_PLAN_EXHAUSTED", "RATE_LIMITED", "AUTH_FAILED", "HTTP_ERROR",
     "PROVIDER_ERROR", "PROVIDER_UNAVAILABLE", "NETWORK_OR_PROVIDER_UNAVAILABLE", "CREDENTIAL_UNAVAILABLE",
     "CREDENTIAL_BLOCKED", "DEPENDENCY_MISSING", "RUNTIME_ERROR", "RUNTIME_UNAVAILABLE", "CONNECTOR_BLOCKED",
-    "MODEL_IDENTITY_UNAVAILABLE",
+    "MODEL_IDENTITY_UNAVAILABLE", "SUBSCRIPTION_UNAVAILABLE",
 }
 
 BUNDLES = {
@@ -49,6 +51,11 @@ BUNDLES = {
         {"tool": "e2b_sandbox", "mode": "MUST_ATTEMPT"},
         {"tool": "judge0_execute", "mode": "FALLBACK"},
         {"tool": "piston_execute", "mode": "FALLBACK"},
+    ],
+    "claycode_executable": [
+        {"tool": "sandboxapi_sandbox", "mode": "MUST_ATTEMPT"},
+        {"tool": "local_sandbox", "mode": "FALLBACK"},
+        {"tool": "judge0_execute", "mode": "FALLBACK"},
     ],
     "model_experiment": [
         {"tool": "nvidia_nim", "mode": "MUST_ATTEMPT"},
@@ -119,7 +126,7 @@ def _health_blocker(tool: str) -> str | None:
         if receipt.get("status") == "RUNTIME_VERIFIED" and receipt.get("model") == "llama-3.1-8b-instant":
             return None
         return "RUNTIME_UNAVAILABLE"
-    if tool in {"nvidia_nim", "openrouter_inference"}:
+    if tool in {"nvidia_nim", "openrouter_inference", "sandboxapi_sandbox"}:
         return None
     checked, items = health_state()
     if checked is None or (datetime.now(timezone.utc) - checked).total_seconds() > 21600:
@@ -164,6 +171,8 @@ def unavailable_reason(tool: str, status: dict[str, dict], quota: dict) -> str |
     st = str(item.get("status", ""))
     if st.startswith("RUNTIME_VERIFIED"):
         return None
+    if "NOT_SUBSCRIBED" in st:
+        return "SUBSCRIPTION_UNAVAILABLE"
     if "CREDENTIAL" in st:
         return "CREDENTIAL_UNAVAILABLE"
     if "RATE_LIMIT" in st:
@@ -217,16 +226,20 @@ def plan(classes: list[str]) -> dict:
                 row["default_model"] = "llama-3.1-8b-instant"
                 row["evidence_role"] = "8b_proxy_for_4b"
                 row["proxy_policy"] = "research_entity/global/SMALL_MODEL_PROXY_POLICY.md"
+            elif spec["tool"] == "sandboxapi_sandbox":
+                row["capability"] = "research_entity/global/SANDBOXAPI_RESEARCH_CAPABILITY.json"
+                row["evidence_role"] = "isolated_runtime_experiment"
+                row["preferred_for"] = "real ClayCode compiler/parser/typechecker/interpreter/fuzz execution"
             selected.append(row)
     return {
-        "schema_version": "1.4",
+        "schema_version": "1.5",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "classes": classes,
         "planned_tools": selected,
         "legacy_fallback": LEGACY_FALLBACK,
         "allowed_fallback_reasons": sorted(ALLOWED_FALLBACKS),
         "bridge": registry.get("worker_invocation_bridge"),
-        "rule": "MUST_ATTEMPT tools require an attempt while healthy. Verified NVIDIA Nemotron-Mini-4B is direct generic-4B hosted evidence but never Qwen-specific evidence. OpenRouter Gemma-3-4B is an independent generic-4B fallback. Groq remains an explicitly labeled 8B proxy. Target/local hardware/training/live-system questions remain open unless the executed capability actually matches them. Every blocked/failed MUST_ATTEMPT tool requires a successful covering fallback.",
+        "rule": "MUST_ATTEMPT tools require an attempt while healthy. ClayCode executable research prefers SandboxAPI once runtime-verified and records SUBSCRIPTION_UNAVAILABLE separately from runtime failure; local/Judge0 cover the blocked path. Verified NVIDIA Nemotron-Mini-4B is direct generic-4B hosted evidence but never Qwen-specific evidence. OpenRouter Gemma-3-4B is an independent generic-4B fallback. Groq remains an explicitly labeled 8B proxy. Target/local hardware/training/live-system questions remain open unless the executed capability actually matches them. Every blocked/failed MUST_ATTEMPT tool requires a successful covering fallback.",
     }
 
 

@@ -1,12 +1,16 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"fusion-20260808T1755p0700-chatgpt-secondary-r2",
+  "trigger":"fusion",
   "registry_ref":"research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "fusion_protocol_ref":"research_entity/triggers/FUSION_RESEARCH_PROTOCOL.md",
+  "registry_scientific_branches":["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph"],
+  "branch_priority":["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph"],
   "branches":["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph"],
   "coverage_ref":"GLOBAL_COVERAGE_MANIFEST.json",
   "anti_echo_ref":"research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
-  "fresh_in_progress":[{"branch":"frank","run":"20260808T1750+0700-chatgpt-secondary-r2","candidate":"CNUCS","status":"IN_PROGRESS"}],
+  "special_rules":{"fusion_requires_global_coverage_manifest":true,"fusion_requires_feedback_receipt_for_every_branch":true},
+  "fresh_in_progress":[{"branch":"frank","run":"20260808T1750+0700-chatgpt-secondary-r2","candidate":"CNUCS","status":"IN_PROGRESS","latest_observed":"corrected Groq Mini-Clay proxy queued by 18:02+07; result not assumed"}],
   "cross_branch_mechanism_families":[
     {"family":"causal_basis","members":["FRANK CognitiveFrame/C5 CognitiveEpochCapsule","CC9 Certified Basis","H3 TopologyBasis","Clay G9 EPOCH basis","ClayGraph semantic+activation epochs"],"ancestry":"HIGH_SHARED"},
     {"family":"selection_projection_integrity","members":["Clay G9 Selection Integrity","GWT R4 CSOC","FRANK C5 Reader ABI","CC9 projection receipt","Hyperposition role-aware reader projection"],"ancestry":"HIGH_SHARED"},
@@ -19,6 +23,7 @@
     "Graph activation can improve candidate accessibility while remaining neither truth nor GWT ignition.",
     "Compiled projections can reduce reader burden yet deterministic semantics must not be delegated back to the model.",
     "Record authenticity does not guarantee selector/query-plan integrity.",
+    "Selector integrity cannot repair authority already laundered at memory write/store time.",
     "Bundled GWT lesions are confounded when graph prior or projection changes.",
     "Recurrence/persistence can be high without causal function; emergence cannot be inferred from persistence alone.",
     "C6 proposes Clay-only symbolic generation but hidden neural state remains continuous and target-model adaptation evidence is absent."

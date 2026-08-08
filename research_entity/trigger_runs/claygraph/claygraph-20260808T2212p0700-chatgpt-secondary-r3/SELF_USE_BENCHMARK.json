@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.1",
+  "run_id":"claygraph-20260808T2212p0700-chatgpt-secondary-r3",
+  "status":"EXECUTED_STAGED_SELF_USE_PROXY_LOCAL_AND_E2B",
+  "artifact":"tools/claygraph_g2a_lab.py",
+  "remote_receipt":"research_entity/runtime/tool_results/claygraph-g2a-selfuse-e2b-20260808T2212p0700.json",
+  "corpus":{"kind":"manually_curated_current_RAE_mechanism_graph","node_count":23,"questions":12,"sources":"current Clay/FRANK/ClayCode/UnifiedDB/GWT/Hyperposition/Emergenz/ClayGraph concepts as frozen for this run","gold":"manually declared mechanism sets per question","warning":"not a blind production retrieval corpus"},
+  "arms":[
+    {"name":"explicit_only","mechanism":"query lexical relevance only; no prior activation","recall_at_5":0.583333,"mrr":0.833333},
+    {"name":"truthful_prior","mechanism":"same query + prior event/continuity seed propagated locally before scoring","recall_at_5":0.756944,"mrr":0.902778},
+    {"name":"shuffled_prior","mechanism":"same query + deliberately wrong shifted prior seed","recall_at_5":0.604167,"mrr":0.736111}
+  ],
+  "remote_replication":{"provider":"E2B","exit_code":0,"status":"SUCCESS","matches_local_reference":true,"comparison_scope":"same self-use subset and summary metrics"},
+  "observed_delta":{"truthful_vs_explicit_recall_at_5":0.173611,"truthful_vs_shuffled_recall_at_5":0.152777,"truthful_vs_explicit_mrr":0.069445,"truthful_vs_shuffled_mrr":0.166667},
+  "interpretation":"On this small staged current-RAE graph, truthful continuity adds retrieval value beyond the lexical path, while shuffled prior does not reproduce the MRR/recall gain. This supports testing truthful activation as an associative prior, not a universal retrieval replacement.",
+  "limitations":["manual graph and gold sets","12 questions only","same researcher constructed corpus and mechanism","not target FRANK store/runtime","no model-answer quality measured","no token/latency production estimate","shared RAE ancestry"],
+  "decision_effect":"Unlike Cycle 4, this cycle has an executable self-use mechanism test. It is sufficient to refine the candidate to route-selective activation, but insufficient for graph promotion."
+}

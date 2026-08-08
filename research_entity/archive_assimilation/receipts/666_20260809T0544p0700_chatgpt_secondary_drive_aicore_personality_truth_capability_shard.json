@@ -1,0 +1,62 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0544p0700-chatgpt-secondary-drive-aicore-personality-truth-capability",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_PERSONALITY_DIRECT_SUBMANIFEST.json",
+  "scope":"AICORE personality direct root plus deep read of August self-knowledge/persona files; tests recursion remains open.",
+  "material_findings":[
+    {
+      "id":"PERS-CAP-001",
+      "finding":"The self-knowledge module advertises dynamic capability detection, but the discovery algorithm iterates a static CAPABILITY_MAP and marks a subsystem active primarily when a mapped module file/package exists. File existence is therefore conflated with live capability, service health, authority and semantic currency.",
+      "evidence":"CapabilityRegistry.discover() iterates CAPABILITY_MAP; _check_module() tests module/file existence and returns active/inactive/error.",
+      "current_implication":"Clay self/capability state requires typed evidence dimensions: implementation_present, service_live, authority_granted, dependency_ready, tested_at, semantic_version and provenance. A compatibility stub must not imply an active capability."
+    },
+    {
+      "id":"PERS-TRUTH-002",
+      "finding":"The same self-knowledge file combines an immutable CORE_IDENTITY block with many mutable operational claims (screen vision, always-on deployment, self-improvement stack, counts/channels, service capabilities). Historical comments show repeated manual corrections when modules were removed or deployment changed.",
+      "current_implication":"Split durable identity anchors from runtime/world/capability facts. Mutable operational facts must be projections from current typed state, never immutable prompt constants."
+    },
+    {
+      "id":"PERS-GUARD-003",
+      "finding":"Historical self-knowledge describes lack of root as the last/only deliberate security boundary while simultaneously documenting broad user-level file/process/configuration powers. That security model is insufficient for user-data destruction or destructive-equivalent actions and is contradicted by the separately assimilated historical approval-bypass incident.",
+      "current_implication":"No-root is defense-in-depth, not the safety theorem. Clay Safe-Effect must constrain destructive semantics, capability delegation, cumulative risk/resource budgets and equivalent effects at user level too."
+    },
+    {
+      "id":"PERS-PROMPT-004",
+      "finding":"The August persona still contains policy text instructing an uncensored answer-everything posture and 'no warnings', while separate fields ask for safety/helpfulness and tool-policy gates. This is a prompt-policy contradiction, not a trustworthy safety contract.",
+      "current_implication":"Do not train/import raw historical persona policy as normative authority. Separate personality/style from policy/authorization; deterministic policy has priority and is not editable by self/persona prose."
+    },
+    {
+      "id":"PERS-ONTO-005",
+      "finding":"Historical persona/self-knowledge manually accumulated and removed architecture claims across AURA, rooms, vision, experiment stations, news services, deployment hardware and autonomy. The change log itself is evidence that monolithic prompt identity acts as a stale architecture cache.",
+      "current_implication":"Clay self model should reference versioned canonical objects/handles and generated reader projections. Prompt text is a cache/projection, not the source of truth."
+    },
+    {
+      "id":"PERS-LANG-006",
+      "finding":"Historical change notes report that a short language prefix failed because several thousand characters of English identity text pulled the model back to English; moving the language rule into the beginning of the core prompt improved behavior.",
+      "current_implication":"This is useful historical evidence for instruction competition/context dominance. In final Clay-native training, language/reader projection must be measured under competing long-context identity state rather than validated in isolation."
+    }
+  ],
+  "cross_source":{
+    "pf_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "self_knowledge_drive_blob":"71dae627ebf527b4e6b6f81e134453619c9adb07",
+    "self_knowledge_pf_blob":"0a1f4d3ec7d47fe35d4f2ff0be855296c3405850",
+    "persona_drive_blob":"a2ce98fbaa345db55c1b851c69e1653fbff6d8b3",
+    "persona_pf_blob":"e1d040d9ba725588f702ba567db4e02f2bfc214b",
+    "result":"AUGUST_DRIVE_BRANCH_DIVERGES_FROM_PF_FROZEN_HEAD"
+  },
+  "required_harness_oracles":[
+    "compatibility file present but service absent must not yield capability=true",
+    "service live but authority revoked must not yield executable capability=true",
+    "runtime capability changes must invalidate stale reader/self projections",
+    "persona/style text cannot override deterministic policy/effect authorization",
+    "user-level destructive-equivalent actions remain blocked despite no-root boundary",
+    "long-context identity text must not overpower language/protocol boundary",
+    "self/world facts carry source version and freshness and fail closed when stale"
+  ],
+  "affects_rooms":["frank","harness","clay","claygraph","unifieddb","claycode","gwt","emergenz"],
+  "earned_work":{"hours_added":0.0,"reason":"Substantial overlap with existing state/identity/safety earned-work rows; preserve as stronger failure oracles and branch-supersession evidence pending final dedup."},
+  "level0":{"exact_coverage_credit_percent":0.0,"global_gate":"NOT_PASS"},
+  "completed_at":"2026-08-09T05:44:00+07:00"
+}

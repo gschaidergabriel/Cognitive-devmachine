@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.1",
+  "request_id":"gwt-r5-e2b-jlens-lite-20260808T2151p0700",
+  "tool":"e2b_sandbox",
+  "code":"import subprocess,json,os,re,sys,shutil\nroot='/tmp/jacobian-lens'\nshutil.rmtree(root,ignore_errors=True)\np=subprocess.run(['git','clone','--depth','1','https://github.com/anthropics/jacobian-lens.git',root],capture_output=True,text=True,timeout=50)\nout={'clone_returncode':p.returncode,'clone_stderr_tail':p.stderr[-800:]}\nif p.returncode==0:\n c=subprocess.run([sys.executable,'-m','compileall','-q',os.path.join(root,'jlens')],capture_output=True,text=True,timeout=40)\n out['compile_returncode']=c.returncode;out['compile_stderr_tail']=c.stderr[-800:]\n readme=open(os.path.join(root,'README.md'),encoding='utf-8').read()\n pyproj=open(os.path.join(root,'pyproject.toml'),encoding='utf-8').read()\n out['readme_mentions_qwen']='qwen' in readme.lower()\n out['readme_mentions_huggingface']='huggingface' in readme.lower()\n out['jlens_py_files']=sum(1 for dp,_,fs in os.walk(os.path.join(root,'jlens')) for f in fs if f.endswith('.py'))\n out['tests_py_files']=sum(1 for dp,_,fs in os.walk(os.path.join(root,'tests')) for f in fs if f.endswith('.py'))\n out['pyproject_head']=pyproj[:1600]\nprint(json.dumps(out,sort_keys=True))",
+  "options":{"timeout":120},
+  "research_context":{"trigger":"gwt","run_id":"gwt-20260808T2140p0700-chatgpt-secondary-r5","experiment":"EXP-GWT-R5-JLENS-LITE-002","boundary":"implementation syntax/repository smoke only; no target-model scientific result"}
+}

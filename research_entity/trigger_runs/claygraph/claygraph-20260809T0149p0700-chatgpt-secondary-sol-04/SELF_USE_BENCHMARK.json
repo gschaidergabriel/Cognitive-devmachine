@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claygraph-20260809T0149p0700-chatgpt-secondary-sol-04",
+  "benchmark_id":"SELFUSE-G3-CURRENT-RAE-001",
+  "corpus":"16 manually curated current RAE artifacts/material nodes: FRANK C9; ClayCode lanes A/B/C/D; Hyperposition H6; UnifiedDB U2; ClayGraph G2a + accepted G0; GWT R5/R6; CACC; E-CERT2; three external temporal/poisoning memory sources.",
+  "questions":12,
+  "gold":"Frozen exact artifact identity per question before scoring; manually curated, therefore staged mechanism benchmark only.",
+  "arms":{
+    "lexical":{"top1":0.916667,"recall_at_5":1.0,"mrr":0.944444},
+    "one_hop_graph":{"top1":0.833333,"recall_at_5":1.0,"mrr":0.881944},
+    "temporal_fresh_graph":{"top1":0.833333,"recall_at_5":1.0,"mrr":0.881944},
+    "intent_typed_graph":{"top1":0.833333,"recall_at_5":1.0,"mrr":0.895833}
+  },
+  "key_negative":"Graph propagation hurt a precise FRANK-C9 lookup: the FRANK seed's strongly linked ClayCode neighbors outranked the exact FRANK artifact. More graph was worse than lexical baseline on this small precision-oriented set.",
+  "external_memory_query":"Intent-typed graph improved the external memory-poisoning query from rank 3 in the lexical baseline to rank 2, but did not make it top-1; evidence-class intent was useful but insufficient.",
+  "interpretation":"G3 supports route-selective graph use, not universal propagation. Exact/identity questions should BYPASS or sharply cap graph gain; associative/temporal questions remain candidates for structured expansion.",
+  "limitations":["manual tiny corpus","shared RAE ancestry","no vector/FTS production indexes","no target model","no blind annotators","graph links hand-authored for mechanism test"],
+  "promotion_effect":"NONE"
+}

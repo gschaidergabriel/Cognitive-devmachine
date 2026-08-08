@@ -9,43 +9,26 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "research_entity" / "global" / "EXTERNAL_RESEARCH_TOOL_REGISTRY.json"
+CAPABILITY_FILES = [
+    ROOT / "research_entity" / "global" / "NVIDIA_RESEARCH_CAPABILITY.json",
+    ROOT / "research_entity" / "global" / "OPENROUTER_RESEARCH_CAPABILITY.json",
+]
 QUOTA = ROOT / "research_entity" / "runtime" / "TOOL_QUOTA_STATE.json"
 HEALTH = ROOT / "research_entity" / "runtime" / "PROVIDER_HEALTH.json"
 GROQ_VERIFY = ROOT / "research_entity" / "runtime" / "groq_verification.json"
 
 ALLOWED_FALLBACKS = {
-    "NOT_APPLICABLE",
-    "QUOTA_EXHAUSTED",
-    "QUOTA_EXHAUSTED_CACHED",
-    "QUOTA_OR_PLAN_EXHAUSTED",
-    "RATE_LIMITED",
-    "PROVIDER_UNAVAILABLE",
-    "NETWORK_OR_PROVIDER_UNAVAILABLE",
-    "CREDENTIAL_UNAVAILABLE",
-    "CREDENTIAL_BLOCKED",
-    "AUTH_FAILED",
-    "HTTP_ERROR",
-    "DEPENDENCY_MISSING",
-    "CONNECTOR_BLOCKED",
-    "RUNTIME_UNAVAILABLE",
-    "DUPLICATE_EVIDENCE_NO_INFORMATION_GAIN",
+    "NOT_APPLICABLE", "QUOTA_EXHAUSTED", "QUOTA_EXHAUSTED_CACHED", "QUOTA_OR_PLAN_EXHAUSTED",
+    "RATE_LIMITED", "PROVIDER_UNAVAILABLE", "NETWORK_OR_PROVIDER_UNAVAILABLE", "CREDENTIAL_UNAVAILABLE",
+    "CREDENTIAL_BLOCKED", "AUTH_FAILED", "HTTP_ERROR", "DEPENDENCY_MISSING", "CONNECTOR_BLOCKED",
+    "RUNTIME_UNAVAILABLE", "DUPLICATE_EVIDENCE_NO_INFORMATION_GAIN", "MODEL_IDENTITY_UNAVAILABLE",
 }
 
 FAILURE_STATUSES_REQUIRING_FALLBACK = {
-    "QUOTA_EXHAUSTED",
-    "QUOTA_OR_PLAN_EXHAUSTED",
-    "RATE_LIMITED",
-    "AUTH_FAILED",
-    "HTTP_ERROR",
-    "PROVIDER_ERROR",
-    "PROVIDER_UNAVAILABLE",
-    "NETWORK_OR_PROVIDER_UNAVAILABLE",
-    "CREDENTIAL_UNAVAILABLE",
-    "CREDENTIAL_BLOCKED",
-    "DEPENDENCY_MISSING",
-    "RUNTIME_ERROR",
-    "RUNTIME_UNAVAILABLE",
-    "CONNECTOR_BLOCKED",
+    "QUOTA_EXHAUSTED", "QUOTA_OR_PLAN_EXHAUSTED", "RATE_LIMITED", "AUTH_FAILED", "HTTP_ERROR",
+    "PROVIDER_ERROR", "PROVIDER_UNAVAILABLE", "NETWORK_OR_PROVIDER_UNAVAILABLE", "CREDENTIAL_UNAVAILABLE",
+    "CREDENTIAL_BLOCKED", "DEPENDENCY_MISSING", "RUNTIME_ERROR", "RUNTIME_UNAVAILABLE", "CONNECTOR_BLOCKED",
+    "MODEL_IDENTITY_UNAVAILABLE",
 }
 
 BUNDLES = {
@@ -54,17 +37,13 @@ BUNDLES = {
         {"tool": "arxiv_search", "mode": "MUST_ATTEMPT"},
         {"tool": "semantic_scholar_search", "mode": "MUST_ATTEMPT"},
     ],
-    "bibliographic": [
-        {"tool": "crossref_lookup", "mode": "MUST_ATTEMPT"},
-    ],
+    "bibliographic": [{"tool": "crossref_lookup", "mode": "MUST_ATTEMPT"}],
     "current_web": [
         {"tool": "tavily_search", "mode": "MUST_ATTEMPT"},
         {"tool": "exa_search", "mode": "MUST_ATTEMPT"},
         {"tool": "duckduckgo_search", "mode": "FALLBACK"},
     ],
-    "implementation": [
-        {"tool": "github_connector", "mode": "MUST_ATTEMPT"},
-    ],
+    "implementation": [{"tool": "github_connector", "mode": "MUST_ATTEMPT"}],
     "executable": [
         {"tool": "local_sandbox", "mode": "MUST_ATTEMPT"},
         {"tool": "e2b_sandbox", "mode": "MUST_ATTEMPT"},
@@ -72,23 +51,25 @@ BUNDLES = {
         {"tool": "piston_execute", "mode": "FALLBACK"},
     ],
     "model_experiment": [
-        {"tool": "groq_inference", "mode": "MUST_ATTEMPT"},
+        {"tool": "nvidia_nim", "mode": "MUST_ATTEMPT"},
+        {"tool": "openrouter_inference", "mode": "FALLBACK"},
+        {"tool": "groq_inference", "mode": "FALLBACK"},
         {"tool": "huggingface_inference", "mode": "FALLBACK"},
     ],
     "small_model_experiment": [
-        {"tool": "groq_inference", "mode": "MUST_ATTEMPT"},
+        {"tool": "nvidia_nim", "mode": "MUST_ATTEMPT"},
+        {"tool": "openrouter_inference", "mode": "FALLBACK"},
+        {"tool": "groq_inference", "mode": "FALLBACK"},
         {"tool": "huggingface_inference", "mode": "FALLBACK"},
+    ],
+    "embedding_experiment": [
+        {"tool": "nvidia_nim", "mode": "MUST_ATTEMPT"},
     ],
 }
 
 LEGACY_FALLBACK = [
-    "native_web",
-    "direct_primary_sources",
-    "github_connector",
-    "duckduckgo_search",
-    "local_sandbox",
-    "judge0_execute",
-    "archived_rae_sources",
+    "native_web", "direct_primary_sources", "github_connector", "duckduckgo_search",
+    "local_sandbox", "judge0_execute", "archived_rae_sources",
 ]
 
 
@@ -100,7 +81,17 @@ def load_json(path: Path, default):
 
 
 def registry_state() -> dict:
-    return load_json(REGISTRY, {"tools": []})
+    data = load_json(REGISTRY, {"tools": []})
+    tools = list(data.get("tools", []))
+    known = {x.get("tool_name") for x in tools}
+    for path in CAPABILITY_FILES:
+        item = load_json(path, {})
+        if item.get("tool_name") and item.get("tool_name") not in known:
+            tools.append(item)
+            known.add(item.get("tool_name"))
+    data["tools"] = tools
+    data["capability_extensions"] = [str(p.relative_to(ROOT)) for p in CAPABILITY_FILES if p.exists()]
+    return data
 
 
 def tool_statuses() -> dict[str, dict]:
@@ -128,6 +119,8 @@ def _health_blocker(tool: str) -> str | None:
         if receipt.get("status") == "RUNTIME_VERIFIED" and receipt.get("model") == "llama-3.1-8b-instant":
             return None
         return "RUNTIME_UNAVAILABLE"
+    if tool in {"nvidia_nim", "openrouter_inference"}:
+        return None
     checked, items = health_state()
     if checked is None or (datetime.now(timezone.utc) - checked).total_seconds() > 21600:
         return None
@@ -158,16 +151,13 @@ def unavailable_reason(tool: str, status: dict[str, dict], quota: dict) -> str |
                 pass
         if state:
             return state
-
     if tool in {"github_connector", "local_sandbox"}:
         return None
-
     health_blocker = _health_blocker(tool)
     if health_blocker:
         return health_blocker
     if tool == "groq_inference":
         return None
-
     item = status.get(tool)
     if not item:
         return "PROVIDER_UNAVAILABLE"
@@ -186,6 +176,8 @@ def unavailable_reason(tool: str, status: dict[str, dict], quota: dict) -> str |
 def invocation_surface(tool: str, registry: dict) -> str:
     if tool in {"github_connector", "local_sandbox"}:
         return "DIRECT_RUNTIME"
+    if tool in {"nvidia_nim", "openrouter_inference"}:
+        return "DEDICATED_GITHUB_RUNNER"
     if tool == "groq_inference":
         return "DIRECT_ADAPTER_OR_REPO_RUNNER_BRIDGE"
     bridge = registry.get("worker_invocation_bridge", {})
@@ -210,20 +202,31 @@ def plan(classes: list[str]) -> dict:
             row["class"] = cls
             row["availability_blocker"] = unavailable_reason(spec["tool"], status, quota)
             row["invocation_surface"] = invocation_surface(spec["tool"], registry)
-            if spec["tool"] == "groq_inference":
+            if spec["tool"] == "nvidia_nim":
+                row["verified_small_model"] = "nvidia/nemotron-mini-4b-instruct"
+                row["executed_model_class"] = "4B"
+                row["evidence_role"] = "direct_generic_4b_hosted_runtime"
+                row["embedding_model"] = "nvidia/nv-embedqa-e5-v5"
+                row["qwen3_4b_status"] = "NOT_EXPOSED_IN_OBSERVED_CATALOG"
+            elif spec["tool"] == "openrouter_inference":
+                row["verified_small_model"] = "google/gemma-3-4b-it"
+                row["executed_model_class"] = "4B"
+                row["evidence_role"] = "direct_generic_4b_hosted_runtime"
+                row["qwen3_4b_status"] = "ACCOUNT_CATALOG_UNAVAILABLE"
+            elif spec["tool"] == "groq_inference":
                 row["default_model"] = "llama-3.1-8b-instant"
                 row["evidence_role"] = "8b_proxy_for_4b"
                 row["proxy_policy"] = "research_entity/global/SMALL_MODEL_PROXY_POLICY.md"
             selected.append(row)
     return {
-        "schema_version": "1.3",
+        "schema_version": "1.4",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "classes": classes,
         "planned_tools": selected,
         "legacy_fallback": LEGACY_FALLBACK,
         "allowed_fallback_reasons": sorted(ALLOWED_FALLBACKS),
         "bridge": registry.get("worker_invocation_bridge"),
-        "rule": "MUST_ATTEMPT tools require an attempt while healthy. Groq llama-3.1-8b-instant is the current small-model proxy and must remain labeled 8b_proxy_for_4b; it never closes target-specific 4B/hardware tests. Every blocked/failed MUST_ATTEMPT tool requires a successful covering fallback.",
+        "rule": "MUST_ATTEMPT tools require an attempt while healthy. Verified NVIDIA Nemotron-Mini-4B is direct generic-4B hosted evidence but never Qwen-specific evidence. OpenRouter Gemma-3-4B is an independent generic-4B fallback. Groq remains an explicitly labeled 8B proxy. Target/local hardware/training/live-system questions remain open unless the executed capability actually matches them. Every blocked/failed MUST_ATTEMPT tool requires a successful covering fallback.",
     }
 
 
@@ -245,14 +248,12 @@ def validate_manifest(path: Path) -> dict:
     attempts = {x.get("tool"): x for x in manifest.get("attempts", [])}
     fallback_attempts = manifest.get("fallback_attempts", [])
     violations = []
-
     for spec in planned:
         if spec.get("mode") != "MUST_ATTEMPT":
             continue
         tool = spec.get("tool")
         blocker = spec.get("availability_blocker")
         attempt = attempts.get(tool)
-
         if blocker:
             if blocker not in ALLOWED_FALLBACKS:
                 violations.append({"tool": tool, "reason": blocker})
@@ -260,11 +261,9 @@ def validate_manifest(path: Path) -> dict:
             if blocker != "NOT_APPLICABLE" and not _fallback_covers(tool, fallback_attempts):
                 violations.append({"tool": tool, "reason": f"{blocker}_WITHOUT_COVERING_FALLBACK"})
             continue
-
         if not attempt or not attempt.get("status"):
             violations.append({"tool": tool, "reason": "MISSING_ATTEMPT"})
             continue
-
         attempt_status = attempt.get("status")
         if attempt_status in FAILURE_STATUSES_REQUIRING_FALLBACK:
             reason = attempt.get("fallback_reason") or attempt_status
@@ -273,7 +272,6 @@ def validate_manifest(path: Path) -> dict:
                 continue
             if not _fallback_covers(tool, fallback_attempts):
                 violations.append({"tool": tool, "reason": f"{attempt_status}_WITHOUT_COVERING_FALLBACK"})
-
     return {"ok": not violations, "violations": violations}
 
 

@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260808T2212p0700-chatgpt-secondary-r3",
+  "target_branch":"frank",
+  "target_architecture":"CORF-C7",
+  "disposition":"REVISE_SUPPORT_NO_PROMOTION",
+  "core_delta":"FRANK should stop representing a component as simply in-process/out-of-process or one-store/many-store. For every hot data path, model transaction domain, data placement, index placement, compute placement, process placement and fault domain independently while preserving one Clay semantic contract.",
+  "recommended_runtime_changes":[
+    "Add PlacementVector to MOSAIC/UnifiedDB execution receipts.",
+    "Keep semantic organ identity independent of where bytes/indexes/compute physically live.",
+    "Allow same-process fusion of high-affinity query computation without forcing one physical storage engine.",
+    "Keep non-primary graph/vector/FTS/activation views rebuildable and source-epoch bound unless explicitly promoted by schema/evidence.",
+    "Persist query/selection receipts for consequential cognitive paths so candidate formation can be separated from GWT selection and model uptake.",
+    "Use result admissibility to prevent approximate/salience/model-internal values from being treated as exact canonical state.",
+    "Treat UNKNOWN dependency closure as a runtime escalation state.",
+    "Keep protected external resources outside cognitive data stores and check current release conditions at the final effect boundary.",
+    "Benchmark same-process packed data exchange separately from cross-process IPC; Arrow C Data Interface is not a generic IPC protocol."
+  ],
+  "evidence_from_u2":[
+    "Mixed E2B SQLite read path p50: same-process separate stores 99.514 us; monolith 101.687 us; service-like JSON boundaries 120.382 us.",
+    "Write p50: monolith 6.866 us; canonical+outbox+derived 18.199 us; unsynchronized two-store 8.797 us in the mechanism-local in-memory benchmark.",
+    "Recovery: 533/1200 unsynchronized trials tore; canonical+outbox had 0 mismatches after replay; monolith had 0 mismatches.",
+    "Boundary identity: JSON host representation changed in 10000/10000 cases while typed ordered semantics were preserved in 10000/10000.",
+    "Selection integrity calibration: naive selection changed 516/700 constructed cases; authenticated-structure reselection restored the baseline in 700/700."
+  ],
+  "do_not_infer":[
+    "Do not infer that monolith or polystore is globally faster from U2.",
+    "Do not treat E2B microseconds as FRANK/Linux/Android production latency.",
+    "Do not physically consolidate protected-resource handling, model runtime state or transient salience merely because semantics are unified.",
+    "Do not count cross-branch agreement as independent replication."
+  ],
+  "highest_next":"Instrument one real FRANK episode trace end-to-end, replay it through competing PlacementVectors, then inject crash/restart and candidate-selection mutations before changing architecture placement."
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version":"1.1",
+  "run_id":"hyperposition-20260808T1722p0700-chatgpt-secondary-r2",
+  "classes":["scholarly","current_web","implementation","executable"],
+  "bridge":"tools/research_tool_bridge.py via GitHub Actions",
+  "planned_tools":[
+    {"tool":"openalex_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"arxiv_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"semantic_scholar_search","mode":"MUST_ATTEMPT","class":"scholarly"},
+    {"tool":"tavily_search","mode":"MUST_ATTEMPT","class":"current_web"},
+    {"tool":"exa_search","mode":"MUST_ATTEMPT","class":"current_web"},
+    {"tool":"github_connector","mode":"MUST_ATTEMPT","class":"implementation"},
+    {"tool":"local_sandbox","mode":"MUST_ATTEMPT","class":"executable"},
+    {"tool":"e2b_sandbox","mode":"MUST_ATTEMPT","class":"executable","availability_blocker":"CREDENTIAL_UNAVAILABLE"},
+    {"tool":"judge0_execute","mode":"FALLBACK","class":"executable"}
+  ],
+  "attempts":[
+    {"tool":"openalex_search","status":"SUCCESS","execution":"repo_runner_bridge","result_ref":"research_entity/runtime/tool_results/hyp-h3-1722-openalex.json","cost_usd_reported":0.001},
+    {"tool":"arxiv_search","status":"SUCCESS","execution":"repo_runner_bridge","result_ref":"research_entity/runtime/tool_results/hyp-h3-1722-arxiv.json"},
+    {"tool":"semantic_scholar_search","status":"RATE_LIMITED","execution":"repo_runner_bridge","fallback_reason":"RATE_LIMITED","result_ref":"research_entity/runtime/tool_results/hyp-h3-1722-semanticscholar.json","error":"HTTP 429 shared/public pool"},
+    {"tool":"tavily_search","status":"PROVIDER_ERROR","execution":"repo_runner_bridge","fallback_reason":"PROVIDER_UNAVAILABLE","result_ref":"research_entity/runtime/tool_results/hyp-h3-1722-tavily.json","error":"HTTP 403 in this run"},
+    {"tool":"exa_search","status":"SUCCESS","execution":"repo_runner_bridge","result_ref":"research_entity/runtime/tool_results/hyp-h3-1722-exa.json"},
+    {"tool":"github_connector","status":"SUCCESS","note":"Canonical, registry, trigger protocol, H2, Clay G8/G9 incomplete, ClayGraph C4, FRANK C4, CC8, GWT R3, Emergence method and Groq 8B packet inspected; writes performed."},
+    {"tool":"local_sandbox","status":"SUCCESS","note":"Four H3 experiments executed."},
+    {"tool":"judge0_execute","status":"SUCCESS","execution":"repo_runner_bridge","result_ref":"research_entity/runtime/tool_results/hyp-h3-1722-judge0.json","note":"Independent Python 3.8.1 replication of 12k n-ary activation condition."}
+  ],
+  "fallback_attempts":[
+    {"tool":"native_web","status":"SUCCESS","covers":["Semantic Scholar 429","Tavily 403"],"note":"Primary arXiv/USENIX and current web sources inspected."},
+    {"tool":"direct_primary_sources","status":"SUCCESS","note":"USENIX GraphOne/TEGRA/POEGA and arXiv primary pages used."},
+    {"tool":"openalex_search","status":"SUCCESS","note":"Scholarly fallback coverage for Semantic Scholar."},
+    {"tool":"arxiv_search","status":"SUCCESS","note":"Scholarly fallback coverage for Semantic Scholar."},
+    {"tool":"exa_search","status":"SUCCESS","note":"Current-web discovery coverage for Tavily failure."},
+    {"tool":"judge0_execute","status":"SUCCESS","note":"Executable fallback because E2B credential is unavailable."}
+  ],
+  "validation":{"ok":true,"promotion_boundary":"No strong canonical promotion attempted. All applicable healthy provider classes were actually attempted through the operational bridge; failures have explicit fallbacks."}
+}

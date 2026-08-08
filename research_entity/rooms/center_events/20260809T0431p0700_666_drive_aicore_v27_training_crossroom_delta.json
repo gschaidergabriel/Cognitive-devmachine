@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "event_id":"20260809T0431p0700-666-drive-aicore-v27-training-crossroom-delta",
+  "room_id":"center",
+  "event_type":"CROSS_ROOM_DELTA",
+  "origin_worker":"chatgpt-secondary-20260809-666",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"666",
+  "created_at":"2026-08-09T04:31:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms":["frank","claycode","harness","unifieddb","claygraph","clay"],
+  "affects_claims":[],
+  "dependencies":["research_entity/archive_assimilation/receipts/666_20260809T0431p0700_chatgpt_secondary_drive_aicore_v27_training_shard.json"],
+  "artifact_refs":["research_entity/archive_assimilation/receipts/666_20260809T0431p0700_chatgpt_secondary_drive_aicore_v27_training_shard.json"],
+  "ancestry_family":"drive-aicore-training-v27-20260805",
+  "delivery":"NEXT_CHECKPOINT",
+  "payload":{
+    "delta_type":"TRAINING_DATA_LINEAGE_VALIDATOR_NEGATIVE_RESULT_AUTHORITY_NAMESPACE",
+    "summary":"Post-GitHub Drive v27 training history records 3,785 examples including a 1,449-example seven-class recast, 4,261 rejected candidates, zero explicit tool calls in recast answers, and a later correction showing that `intent`/`hypothesis` were internal live markers rather than external registry tools. Blind evaluation initially read a growing file and had to freeze an explicit SHA. Runtime/source parity was treated as mandatory: dataset-only prompt cleanup was rejected as train-inference drift.",
+    "actions":[
+      "ClayCode/FRANK: type-separate internal cognition markers, declarative tool descriptions and external effect authority; syntax alone must not define capability.",
+      "Harness: add false-positive validator, stale-registry, moving-heldout and train-inference mismatch tests.",
+      "Training-data lane: recover/hash v27 source datasets/scripts and use historical rejection rules only after mapping to current fixed Clay/Needle semantics.",
+      "UnifiedDB/ClayGraph: dataset/eval identity is content hash + generator state/epoch, not filename."
+    ],
+    "provisional_unique_earned_work_center_hours":4.0,
+    "exact_level0_progress_delta_percent":0.0,
+    "paid_or_final_training_started":false
+  }
+}

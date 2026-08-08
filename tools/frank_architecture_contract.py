@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Validate that a FRANK research run expresses its architecture in ClayCode semantic IR.
 
-FRANK is derived from Clay, authored in ClayCode and must incorporate the current
-ClayGraph memory/state/database-substrate research. The deterministic host authority
-remains outside model self-authorization.
+FRANK is derived from Clay, authored in ClayCode, and must incorporate current
+ClayGraph associative-memory plus UnifiedDB persistence/query/transaction research.
+The deterministic host authority remains outside model self-authorization.
 """
 from __future__ import annotations
 
@@ -16,6 +16,8 @@ ALLOWED_PROPOSAL_CLASSES = {"PURE_TRANSFORM", "STATE_PROPOSAL", "EFFECT_PROPOSAL
 ARCH_NAME = "FRANK_ARCHITECTURE.claycode.json"
 MAPPING_NAME = "CLAYCODE_ARCHITECTURE_MAPPING.md"
 INTERCONNECT_NAME = "INTERCONNECT_MANIFEST.json"
+ROOT = Path(__file__).resolve().parents[1]
+REGISTRY = ROOT / "research_entity" / "global" / "RESEARCH_TRIGGER_REGISTRY.json"
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -30,9 +32,17 @@ def _load(path: Path) -> dict[str, Any]:
     return obj
 
 
+def _registered_scientific_branches() -> list[str]:
+    data = _load(REGISTRY)
+    return [
+        name for name, spec in (data.get("triggers") or {}).items()
+        if (spec or {}).get("kind") in {"domain_research", "integrated_research_foundry"}
+    ]
+
+
 def template(run_id: str) -> dict[str, Any]:
     return {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "language": "ClayCode",
         "representation": "canonical_semantic_ir_json_projection",
         "ir_version": "OPEN",
@@ -43,6 +53,7 @@ def template(run_id: str) -> dict[str, Any]:
             "clay": [],
             "claycode": [],
             "claygraph": [],
+            "unifieddb": [],
             "gwt": [],
             "hyperposition": [],
             "emergenz": [],
@@ -104,12 +115,23 @@ def validate(run_dir: Path) -> dict[str, Any]:
     arch = _load(run_dir / ARCH_NAME)
     violations: list[str] = []
 
+    registry_branches = _registered_scientific_branches()
+    registered = list(inter.get("registry_scientific_branches") or [])
+    if set(registered) != set(registry_branches) or len(registered) != len(registry_branches):
+        violations.append(
+            f"INTERCONNECT_MANIFEST scientific branches must exactly match current registry: "
+            f"manifest={registered!r} registry={registry_branches!r}"
+        )
+
     priority = inter.get("branch_priority") or []
-    if priority[:3] != ["clay", "claycode", "claygraph"]:
-        violations.append("INTERCONNECT_MANIFEST must prioritize clay, claycode, then claygraph for FRANK")
-    registered = set(inter.get("registry_scientific_branches") or [])
-    if "claygraph" not in registered:
-        violations.append("FRANK interconnect must use the seven-branch registry including claygraph")
+    expected_prefix = ["clay", "claycode", "claygraph", "unifieddb"]
+    if priority[:4] != expected_prefix:
+        violations.append(
+            "INTERCONNECT_MANIFEST must prioritize clay, claycode, claygraph, then unifieddb for FRANK"
+        )
+    if set(priority) != set(registry_branches) or len(priority) != len(registry_branches):
+        violations.append("FRANK branch_priority must contain every current registered scientific branch exactly once")
+
     special = inter.get("special_rules") or {}
     if special.get("frank_requires_latest_clay_architecture_as_primary_foundation") is not True:
         violations.append("FRANK interconnect must require latest Clay architecture foundation")
@@ -117,6 +139,8 @@ def validate(run_dir: Path) -> dict[str, Any]:
         violations.append("FRANK interconnect must require deep ClayCode architecture input")
     if special.get("frank_requires_deep_claygraph_substrate_input") is not True:
         violations.append("FRANK interconnect must require deep ClayGraph substrate input")
+    if special.get("frank_requires_deep_unifieddb_persistence_input") is not True:
+        violations.append("FRANK interconnect must require deep UnifiedDB persistence/query input")
     if special.get("frank_architecture_source_language") != "ClayCode semantic IR":
         violations.append("FRANK architecture source language must be ClayCode semantic IR")
 
@@ -128,7 +152,7 @@ def validate(run_dir: Path) -> dict[str, Any]:
         violations.append("architecture_id is required")
 
     source = arch.get("source_research") or {}
-    for required in ("clay", "claycode", "claygraph"):
+    for required in ("clay", "claycode", "claygraph", "unifieddb"):
         if not isinstance(source.get(required), list) or not source.get(required):
             violations.append(f"source_research.{required} must cite at least one {required} input")
 
@@ -192,7 +216,13 @@ def validate(run_dir: Path) -> dict[str, Any]:
     if not (run_dir / MAPPING_NAME).exists():
         violations.append(f"missing required human mapping: {MAPPING_NAME}")
 
-    return {"ok": not violations, "run_dir": str(run_dir), "architecture_file": str(run_dir / ARCH_NAME), "violations": violations}
+    return {
+        "ok": not violations,
+        "run_dir": str(run_dir),
+        "architecture_file": str(run_dir / ARCH_NAME),
+        "registry_scientific_branches": registry_branches,
+        "violations": violations,
+    }
 
 
 def main() -> None:

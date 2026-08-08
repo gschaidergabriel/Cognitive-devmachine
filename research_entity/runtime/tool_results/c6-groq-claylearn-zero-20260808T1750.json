@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.1",
+  "request_id": "c6-groq-claylearn-zero-20260808T1750",
+  "tool": "groq_inference",
+  "request_sha256": "24077e00901142359ea92250ccdb7c5bf43233890ad81de7515fdb5c0e1a2618",
+  "processed_at": "2026-08-08T11:07:07.450490+00:00",
+  "result": {
+    "provider": "Groq",
+    "model": "llama-3.1-8b-instant",
+    "evidence_role": "8b_proxy_for_4b",
+    "content": "Here's a Python solution for the given problem:\n\n```python\ndef mini_clay(input_str):\n    # Parse input string into a list of candidates and rules\n    lines = input_str.strip().split('\\n')\n    candidates = []\n    rules = []\n    for line in lines:\n        if line.startswith('@'):\n            candidate = line[1:].split(',')\n            candidates.append((candidate[0], int(candidate[1]), int(candidate[2]), int(candidate[3])))\n        elif line.startswith('+'):\n            rule = line[1:].split(':')\n            rules.append((rule[0].split('>')[0], rule[0].split('>')[1], int(rule[1])))\n    \n    # Sort candidates by their scores\n    candidates.sort(key=lambda x: x[1] +",
+    "finish_reason": "length",
+    "usage": {
+      "queue_time": 0.168026241,
+      "prompt_tokens": 729,
+      "prompt_time": 0.046580446,
+      "completion_tokens": 160,
+      "completion_time": 0.21827707,
+      "total_tokens": 889,
+      "total_time": 0.264857516
+    }
+  },
+  "status": "SUCCESS"
+}

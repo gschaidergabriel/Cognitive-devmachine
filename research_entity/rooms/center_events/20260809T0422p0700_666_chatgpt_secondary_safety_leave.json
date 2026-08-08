@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T0422p0700-666-chatgpt-secondary-safety-leave",
+  "room_id": "center",
+  "event_type": "LEAVE",
+  "origin_worker": "chatgpt-secondary-20260809T0417p0700-666-safety",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T04:22:00+07:00",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms": ["center", "clay", "claycode", "frank", "harness", "unifieddb", "claygraph"],
+  "affects_claims": [],
+  "dependencies": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+    "research_entity/rooms/center_events/20260809T0420p0700_666_safety_authority_cross_room_delta.json",
+    "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
+    "research_entity/archive_assimilation/666_WORKSPACE.json"
+  ],
+  "artifact_refs": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+    "research_entity/rooms/center_events/20260809T0420p0700_666_safety_authority_cross_room_delta.json"
+  ],
+  "ancestry_family": "666-level0-pf-safety-authority-shard-20260809T0417p0700",
+  "delivery": "IMMEDIATE",
+  "payload": {
+    "status": "SLICE_COMPLETE",
+    "lane": "Project-Frankenstein execution-authority/security-boundary history",
+    "material_findings": 9,
+    "earned_work_mapping": "HEW-PF-SAFETY-005",
+    "provisional_avoided_future_hours": {"low": 4.0, "center": 9.0, "high": 18.0},
+    "shared_partial_mapped_center_hours_after_integration": 38.0,
+    "exact_level0_coverage_credit": 0.0,
+    "main_negative_result": "Historical security repair reports approval bypass leading to a full system wipe.",
+    "handoff": "Do not duplicate the safety-authority lineage shard. Highest-value next safety work is executable Harness conversion: approval-token confusion, enforcement-backend loss, foreign-code/FFI effect escape, authority drift and compound resource-risk tests.",
+    "remaining_global_blocker": "Drive tar.xz is 663552000 bytes and current connector rejects >104857600-byte raw fetch, so Drive internal manifest remains unfrozen."
+  }
+}

@@ -1,15 +1,16 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"claygraph-20260808T0703p0700-chatgpt-secondary-r2",
   "trigger":"claygraph",
   "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
   "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
-  "accepted_graph":{"generation":0,"graph_id":"claygraph-v0-seed","unchanged":true},
-  "candidate":{"generation":1,"id":"claygraph-g1b-query-planned-evidence-bounded-activation","decision":"HOLD"},
+  "accepted_graph":{"generation":0,"graph_id":"claygraph-v0-seed","unchanged":true,"reread_verified":true},
+  "candidate":{"generation":1,"id":"claygraph-g1b-query-planned-evidence-bounded-activation","decision":"HOLD","decision_reread_verified":true},
   "coverage":{"registered_scientific_branches":7,"covered":7,"new_runtime_delta":"runtime-verified deterministic active packet envelopes"},
-  "required_outputs":{"INTERCONNECT_MANIFEST.json":"WRITTEN","TOOL_EXECUTION_MANIFEST.json":"WRITTEN","DATABASE_INVENTORY.json":"WRITTEN_NO_CHANGE_BLOCKED_GAPS","CLAYGRAPH_SCHEMA.claycode.json":"WRITTEN","CLAYGRAPH_CANDIDATE.claycode.json":"WRITTEN","CLAYGRAPH_EVOLUTION_DELTA.json":"WRITTEN","SELF_USE_BENCHMARK.json":"WRITTEN_PROXY","EXPERIMENT_RESULTS.json":"WRITTEN","HYPOTHESES.md":"WRITTEN","NEGATIVE_RESULTS.md":"WRITTEN","MIGRATION_PLAN.json":"WRITTEN","FRANK_CLAYGRAPH_FEEDBACK.json":"WRITTEN","BRANCH_FEEDBACK_MANIFEST.json":"WRITTEN","CLAYGRAPH_EVOLUTION_DECISION.json":"WRITTEN","FINAL_REPORT.md":"WRITTEN"},
+  "required_outputs":{"INTERCONNECT_MANIFEST.json":"WRITTEN","TOOL_EXECUTION_MANIFEST.json":"WRITTEN","DATABASE_INVENTORY.json":"WRITTEN_NO_CHANGE_BLOCKED_GAPS","CLAYGRAPH_SCHEMA.claycode.json":"WRITTEN","CLAYGRAPH_CANDIDATE.claycode.json":"WRITTEN","CLAYGRAPH_EVOLUTION_DELTA.json":"WRITTEN","SELF_USE_BENCHMARK.json":"WRITTEN_PROXY","EXPERIMENT_RESULTS.json":"WRITTEN","HYPOTHESES.md":"WRITTEN","NEGATIVE_RESULTS.md":"WRITTEN","MIGRATION_PLAN.json":"WRITTEN","FRANK_CLAYGRAPH_FEEDBACK.json":"WRITTEN","BRANCH_FEEDBACK_MANIFEST.json":"WRITTEN","CLAYGRAPH_EVOLUTION_DECISION.json":"WRITTEN","FINAL_REPORT.md":"WRITTEN_REREAD_VERIFIED"},
   "topic_packet":"research_entity/topic_packets/claygraph-cg2-query-planned-evidence-bounded-activation/PACKET.json",
   "promotion":{"canonical_revision_change":false,"accepted_graph_update":false,"physical_migration":false},
   "known_blocks":["actual repository runtime benchmark cannot execute through connector","complete current 71-store inventory unavailable","Qwen3-4B target inference unavailable due cached quota","live FRANK p99/crash/privacy and stale-frame tests unrun"],
-  "write_verification":"PENDING_FINAL_REREAD"
+  "write_verification":"VERIFIED_RW_AFTER_REREAD",
+  "reread_checks":{"canonical":"r2 04234efdb86c... unchanged","accepted_graph":"generation 0 unchanged","decision":"G1b HOLD","final_report":"present"}
 }

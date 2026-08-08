@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.2",
+  "run_id":"claycode-20260808T1723p0700-chatgpt-secondary",
+  "trigger":"claycode",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","role":"SECONDARY_RESEARCHER_INDEPENDENT_CO_RESEARCHER"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "parent_run":"claycode-20260808T0606p0700-chatgpt-secondary",
+  "candidate":"CC-RC1.4 Certified Basis & Compositional Closure (CBCC)",
+  "status":"COMPLETED_OPEN_RESEARCH",
+  "canonical_promotion":"NOT_PERFORMED",
+  "interconnect_manifest":"INTERCONNECT_MANIFEST.json",
+  "goodman_review":"FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+  "goodman_validation":{"artifact":"GOODMAN_VALIDATION.json","ok":true,"method":"logic-equivalent validation against current checker because arbitrary repo command execution is not exposed by connector"},
+  "artifacts":["FINAL_REPORT.md","HYPOTHESES.md","NEGATIVE_RESULTS.md","EXPERIMENT_RESULTS.json","CC_RC1_4_REFERENCE.py","TOOL_EXECUTION_MANIFEST.json","INTERCONNECT_MANIFEST.json","FRANK_CLAYCODE_GOODMAN_REVIEW.json","GOODMAN_VALIDATION.json"],
+  "knowledge_compilation":["research_entity/knowledge_micro_packets/xeno_claycode/KMP-CC9-CERTIFIED-CAUSAL-BASIS.md","research_entity/knowledge_micro_packets/xeno_claycode/KMP-CC9-COMPOSITIONAL-EFFECT-CLOSURE.md","research_entity/knowledge_micro_packets/xeno_claycode/KMP-CC9-COMPILED-READER-SURFACE.md","research_entity/topic_packets/claycode-cc9-certified-basis-compositional-closure/PACKET.json"],
+  "provider_results":["research_entity/runtime/tool_results/cc9-openalex-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-arxiv-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-semantic-scholar-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-tavily-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-exa-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-judge0-closure-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-groq-raw-20260808T1723p0700.json","research_entity/runtime/tool_results/cc9-groq-compiled-20260808T1723p0700.json"],
+  "main_findings":["Causal validity is operation-specific and may require frame/graph/activation/projection witnesses beyond one state root.","Static dependency/effect closure must compose transitively, union finite dynamic targets and canonicalize aliases; unknown dispatch/FFI/reflection escalates.","Projection semantics require their own receipt separate from semantic and wire identity.","The small model should not re-derive authority/freshness policy when a deterministic kernel can compile it: new Groq 8B proxy 1/10 raw vs 10/10 compiled with 53.5% fewer prompt tokens.","FRANK C4 CognitiveFrame is REFINED under Goodman, authority boundary SUPPORTED, semantic/projection split REFINED, fixed channel/threshold language semantics UNRESOLVED.","ClayGraph G1d changes ClayCode by adding typed graph/activation/frame basis dimensions while preserving activation!=truth/GWT/authority."],
+  "independent_runtime_replication":{"provider":"Judge0","status":"SUCCESS","experiment":"EXP-CC9-JUDGE0-REPL-005","n":50000,"mixed_epoch_rate":0.08736,"mixed_pass_after_tuple":0.0,"direct_only_escape_rate":0.6415,"single_predicted_target_escape_rate":0.438,"closed_world_union_escape_rate":0.0,"raw_alias_miss_rate_given_conflict":0.999403380841896},
+  "small_model_proxy":{"provider":"Groq","model":"llama-3.1-8b-instant","raw_exact":"1/10","compiled_exact":"10/10","raw_prompt_tokens":327,"compiled_prompt_tokens":152,"boundary":"8B proxy only; not Qwen3-4B"},
+  "blocked_or_degraded":{"semantic_scholar_search":"HTTP 429; covered by OpenAlex/arXiv/direct primary sources","e2b_sandbox":"credential unavailable; covered by Judge0/local sandbox","huggingface_inference":"cached quota exhausted until 2026-09-01 UTC; fallback not required because Groq succeeded"},
+  "highest_priority_next_tests":["EXP-CC9-LIVE-OPREGISTRY-CLOSURE","EXP-CC9-FRANK-CLAYGRAPH-BASIS-TRACE","EXP-CC9-ALIAS-FFI-FUZZ","EXP-LIVE-XENO-CLAY-FACTORIAL","EXP-CC9-SELFHOST-CLOSURE-EQUIVALENCE"],
+  "completion_note":"All required CC9 run artifacts were materialized. Strong promotion remains blocked by absence of live FRANK closure/basis transfer, pinned Qwen3-4B target data and self-host closure equivalence."
+}

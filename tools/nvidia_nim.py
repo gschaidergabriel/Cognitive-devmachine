@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 """NVIDIA hosted NIM adapter for FRANK/RAE research.
 
-Exposes explicitly separated capabilities against NVIDIA's hosted API Catalog:
-- model catalog
-- chat completions
-- text embeddings
-- passage reranking
-
+Exposes separated capabilities for model catalog, chat, embeddings and reranking.
 Credentials are loaded only through the RAE secret loader and never emitted.
 """
 from __future__ import annotations
@@ -32,7 +27,12 @@ ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$")
 MAX_RATE_RETRIES = 8
 
 DEFAULT_EMBED_MODEL = "nvidia/nv-embedqa-e5-v5"
-DEFAULT_RERANK_MODEL = "nvidia/llama-nemotron-rerank-1b-v2"
+DEFAULT_RERANK_MODEL = "nvidia/rerank-qa-mistral-4b"
+RERANK_ENDPOINTS = {
+    "nvidia/rerank-qa-mistral-4b": "https://ai.api.nvidia.com/v1/retrieval/nvidia/rerank-qa-mistral-4b/reranking",
+    "nvidia/llama-3.2-nv-rerankqa-1b-v2": "https://ai.api.nvidia.com/v1/retrieval/nvidia/llama-3_2-nv-rerankqa-1b-v2/reranking",
+    "nvidia/llama-nemotron-rerank-1b-v2": "https://ai.api.nvidia.com/v1/retrieval/nvidia/llama-nemotron-rerank-1b-v2/reranking",
+}
 
 
 def _retry_seconds(exc: urllib.error.HTTPError, body: str, attempt: int) -> float:
@@ -49,12 +49,12 @@ def _retry_seconds(exc: urllib.error.HTTPError, body: str, attempt: int) -> floa
     return min(2.0 + attempt * 2.0, 30.0)
 
 
-def _request(path: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
+def _request_url(url: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
     key = get_secret("NVIDIA_API_KEY")
     data = None if payload is None else json.dumps(payload).encode("utf-8")
     for attempt in range(MAX_RATE_RETRIES + 1):
         req = urllib.request.Request(
-            BASE_URL + path,
+            url,
             data=data,
             headers={
                 "Authorization": f"Bearer {key}",
@@ -74,6 +74,10 @@ def _request(path: str, payload: dict[str, Any] | None = None) -> dict[str, Any]
                 continue
             raise RuntimeError(f"NVIDIA HTTP {exc.code}: {body[:1500]}") from exc
     raise RuntimeError("NVIDIA request retry loop exhausted")
+
+
+def _request(path: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
+    return _request_url(BASE_URL + path, payload)
 
 
 def list_models() -> list[dict[str, Any]]:
@@ -121,22 +125,20 @@ def embeddings(inputs: list[str], *, model: str = DEFAULT_EMBED_MODEL, input_typ
         raise ValueError("non-empty inputs required")
     if input_type not in {"query", "passage"}:
         raise ValueError("input_type must be query or passage")
-    payload = {
-        "model": model,
-        "input": [str(x) for x in inputs],
-        "input_type": input_type,
-        "truncate": truncate,
-        "encoding_format": "float",
-    }
-    raw = _request("/embeddings", payload)
+    raw = _request(
+        "/embeddings",
+        {
+            "model": model,
+            "input": [str(x) for x in inputs],
+            "input_type": input_type,
+            "truncate": truncate,
+            "encoding_format": "float",
+        },
+    )
     vectors = []
     for row in raw.get("data") or []:
         vector = row.get("embedding") or []
-        vectors.append({
-            "index": row.get("index"),
-            "dimensions": len(vector),
-            "embedding": vector,
-        })
+        vectors.append({"index": row.get("index"), "dimensions": len(vector), "embedding": vector})
     return {
         "provider": "NVIDIA Hosted NIM",
         "capability": "embeddings",
@@ -151,20 +153,21 @@ def embeddings(inputs: list[str], *, model: str = DEFAULT_EMBED_MODEL, input_typ
 def rerank(query: str, passages: list[str], *, model: str = DEFAULT_RERANK_MODEL, truncate: str = "END") -> dict[str, Any]:
     if not query.strip() or not passages or any(not str(x).strip() for x in passages):
         raise ValueError("query and non-empty passages required")
-    raw = _request(
-        "/ranking",
-        {
-            "model": model,
-            "query": {"text": query},
-            "passages": [{"text": str(x)} for x in passages],
-            "truncate": truncate,
-        },
-    )
+    payload = {
+        "model": model,
+        "query": {"text": query},
+        "passages": [{"text": str(x)} for x in passages],
+        "truncate": truncate,
+    }
+    endpoint = RERANK_ENDPOINTS.get(model)
+    route = "model_bound_function_endpoint" if endpoint else "generic_v1_ranking"
+    raw = _request_url(endpoint, payload) if endpoint else _request("/ranking", payload)
     rankings = raw.get("rankings") or raw.get("data") or []
     return {
         "provider": "NVIDIA Hosted NIM",
         "capability": "reranking",
         "model": model,
+        "route": route,
         "rankings": rankings,
         "usage": raw.get("usage") or {},
         "evidence_role": "external_reranker_runtime",

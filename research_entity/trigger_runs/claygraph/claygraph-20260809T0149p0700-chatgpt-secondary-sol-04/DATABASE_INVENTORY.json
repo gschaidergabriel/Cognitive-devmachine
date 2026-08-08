@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.2",
+  "run_id":"claygraph-20260809T0149p0700-chatgpt-secondary-sol-04",
+  "status":"NO_NEW_LIVE_ENUMERATION_ARCHITECTURE_RECLASSIFIED",
+  "historical_reported_live_db_count":71,
+  "historical_count_source":"Frank-Architektur.md 2026-08-05; inherited only, not re-enumerated",
+  "current_sources":["FRANK C9 TCAEF","UnifiedDB U2 CPPF","ClayGraph G2a","ClayCode CC-RC1.9 live multiworker","Hyperposition H6 CARTS"],
+  "store_roles":[
+    {"store_id":"canonical_event_state_effect_outcome_spine","authority":"AUTHORITATIVE","graph_mapping":"exact anchors/source epochs only","disposition":"LINK","physical":"transaction/replay policy owned by FRANK+UnifiedDB","rollback":"authoritative replay"},
+    {"store_id":"semantic_relational_state","authority":"CANONICAL_OR_DERIVED_BY_SCHEMA","graph_mapping":"typed entities, n-ary roles, bitemporal validity, provenance","disposition":"PROJECT","physical":"UNIFY_LOGICALLY; engine benchmark-gated","rollback":"legacy relational path/rebuild"},
+    {"store_id":"claygraph_semantic_epochs","authority":"DERIVED_REBUILDABLE","graph_mapping":"immutable epoch + validated deltas + derivation identity","disposition":"PROJECT","physical":"specialized graph/index allowed","rollback":"previous epoch + direct exact retrieval"},
+    {"store_id":"vector_ann","authority":"DERIVED_REBUILDABLE","graph_mapping":"candidate refs only","disposition":"LINK","physical":"specialized ANN sidecar","rollback":"rebuild/fallback"},
+    {"store_id":"fts","authority":"DERIVED_REBUILDABLE","graph_mapping":"lexical route","disposition":"LINK","physical":"specialized FTS sidecar","rollback":"rebuild/fallback"},
+    {"store_id":"activation_salience","authority":"NONE","graph_mapping":"transient weighted frontier; no truth transition","disposition":"PROJECT","physical":"ephemeral/rebuildable","rollback":"drop activation and BYPASS"},
+    {"store_id":"assembly_workspace_cache","authority":"NONE","graph_mapping":"candidate/selection/influence receipts","disposition":"LINK","physical":"transient runtime","rollback":"reconstruct"},
+    {"store_id":"user_intent_contracts","authority":"PROTECTED_TASK_IDENTITY_NOT_EFFECT_AUTHORITY","graph_mapping":"opaque/versioned reference + allowed influence policy only; ClayGraph cannot author or widen contract","disposition":"KEEP_ISOLATED","physical":"trusted task/admission plane","rollback":"independent trusted contract store"},
+    {"store_id":"effect_permits_capability_secrets","authority":"EXTERNAL_AUTHORITY","graph_mapping":"opaque refs only; never bearer values","disposition":"KEEP_ISOLATED","physical":"broker/keyring/OS/trusted runtime","rollback":"independent of graph"},
+    {"store_id":"model_kv_latent_state","authority":"NONE","graph_mapping":"external runtime handle only","disposition":"KEEP_ISOLATED","physical":"model/device runtime","rollback":"runtime reset"},
+    {"store_id":"raw_external_sources","authority":"EXTERNAL_EVIDENCE","graph_mapping":"immutable source/provenance anchors","disposition":"KEEP_ISOLATED","physical":"source/blob archive","rollback":"source bytes preserved"}
+  ],
+  "new_G3_boundary":"ClayGraph may reference intent contracts and compute MemoryUseAdmissibility, but cannot mint user intent, effect authority, or capability permits.",
+  "blanket_merge_recommendation":false,
+  "destructive_action_performed":false,
+  "live_inventory_gaps":["current file/schema enumeration","writer/reader map","WAL/transaction settings","backup map","real FRANK traces","target p50/p95/p99","privacy retention map"],
+  "rule":"logical semantic linkage does not imply physical merge; KEEP_ISOLATED remains valid."
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"PF-HISTORY-INTERVAL-e1a881-to-abba90a-20260809",
+  "status":"FROZEN_EXACT_COMPARE_INTERVAL_PREBASE_AND_HEAD_TREE_OPEN",
+  "repository":"gschaidergabriel/Project-Frankenstein",
+  "base":{"sha":"e1a8812767668091d146ee958bbc2ebb2743031c","message_class":"Initial commit (source message)","parentless_root_verified":false,"constraint":"Connector fetch exposes the commit content/diff but not a trustworthy explicit parent list in the compact schema used here; do not infer absolute repository root solely from the message text."},
+  "head":{"sha":"abba90a5767d85abc8a1ac340bae92842dab35c1","frozen":true},
+  "compare":{"status":"ahead","ahead_by":544,"behind_by":0,"total_commits":544,"too_large":null,"merge_base_sha":"e1a8812767668091d146ee958bbc2ebb2743031c","semantics":"544 compare interval commits after the base through the frozen head; base itself is not included in this interval count"},
+  "frozen_history_obligations":{"interval_commit_units":544,"unit_definition":"one commit in the exact GitHub compare interval base-exclusive/head-inclusive","percent_countable_within_interval":true,"absolute_full_repository_history_denominator_frozen":false},
+  "not_proven":[
+    "that e1a881... has zero parents / is the absolute repository root",
+    "a complete ordered list of all 544 interval commit SHAs from this connector call",
+    "a complete head file-tree denominator",
+    "that compare.files equals the complete head tree; it is a base-to-head changed-file summary and must not be used as tree enumeration"
+  ],
+  "evidence_method":"GitHub compare_commits connector primitive, base=e1a881..., head=abba90...",
+  "value_to_level0":"Replaces the misleading search-index history-count attempt with an exact DAG-distance denominator for the known project-history interval. Full Level-0 history PASS still requires pre-base/root verification or an explicit scope law plus ordered/selection obligations, and exact head-tree inventory remains separate.",
+  "frozen_by":"chatgpt-secondary",
+  "frozen_at":"2026-08-09"
+}

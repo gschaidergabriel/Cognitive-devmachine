@@ -1,0 +1,14 @@
+<!-- RAE_META
+{"packet_id":"KMP-GROQ8B-CLAYGRAPH-SELFUSE","title":"ClayGraph self-use on Groq 8B: relational promise but current activation remains HOLD","domains":["claygraph","model_runtime","synthetic_clay","frank_architecture"],"topics":["claygraph","associative_memory","self_use","retrieval","activation","sqlite","latency","context_cost","hold"],"epistemic_class":"EXPERIMENT_MEMORY","claim_status_hint":"CURRENT_WITH_8B_PROXY_BOUNDARY","origin_class":"GROQ_8B_PROXY_EXPERIMENT_SUITE","origin_actor":"chatgpt-secondary","created_at":"2026-08-08T07:45:00+07:00","updated_at":"2026-08-08T07:45:00+07:00","source_refs":["research_entity/runtime/groq_8b_proxy/SCIENTIFIC_SYNTHESIS.json","research_entity/runtime/groq_8b_proxy/COMPLETE_LATEST.json","research_entity/runtime/groq_8b_proxy/VALIDATION_V3.json"],"evidence_refs":["GROQ8B-F6-CLAYGRAPH-SELF-USE"],"related_experiment_ids":["EXP-GROQ8B-CLAYGRAPH-MATCHED-BUDGET-ANSWER-QUALITY-V2","EXP-GROQ8B-CLAYGRAPH-FACTUAL-QA-V3"],"predecessor_packet_ids":[],"supersedes_packet_ids":[],"confidence":0.88,"verification_required":true,"falsifier_or_next_test":"Evolve ClayGraph indexing/seed/edge weighting and assembly compression, then beat deterministic packet-envelope/SQLite baselines on audited multi-hop recall or decision quality without unacceptable latency/context regression; replicate on live/twin FRANK traces.","search_terms":["ClayGraph self-use","Groq 8B ClayGraph","activation overlay latency","ClayGraph SQLite baseline","ClayGraph HOLD"]}
+RAE_META -->
+
+### Core
+The first real RAE self-use experiment with a hosted small-model proxy does **not** justify placing the current ClayGraph activation implementation in FRANK's hot path. On GitHub runner, ClayGraph activation/graph-lexical retrieval was roughly **84–87 ms median/query**, versus about **0.8–0.9 ms** for SQLite FTS, and graph contexts were substantially larger.
+
+At the same time, audited answers show the graph/lexical modes surfaced some cross-branch relational facts that plain FTS missed. The activation overlay itself did not consistently outperform graph-lexical selection and sometimes added noise. Therefore this is not a rejection of the semantic graph — it is a rejection of the **current hot-path activation implementation** as already superior.
+
+### Decision
+`HOLD` the current activation candidate. Keep ClayGraph as a derived semantic/associative substrate and use it to research better active-assembly selection. Prioritize compact Topic/Micro-Packet selection, faster seed/index structures, edge-weight calibration and explicit negative/contradiction preservation before hot-path migration.
+
+### Boundary
+Runner timing is not live FRANK timing. Automatic QA scoring was partially parser-sensitive and is not used as the sole promotion metric. Live 71-store migration parity, p99, crash/replay, privacy and target-model tests remain open.

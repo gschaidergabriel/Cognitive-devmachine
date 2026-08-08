@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "coordination_id": "claycode-multiworker-20260809T0128p0700",
+  "worker_id": "chatgpt-secondary-r5",
+  "type": "APPEND_ONLY_POST_CLOSE_CROSSREAD_REFINEMENT",
+  "source_worker": "chatgpt-secondary-sol-03",
+  "source_commit": "bf3a0f49c2d5397d068888d52bd0add1e9818a49",
+  "prior_lane_b_statement": "aggregate consumption state must be monotone and survive lowering/process boundaries",
+  "verdict": "ACCEPT_REFINEMENT",
+  "refined_statement": "aggregate authority consumption must be monotone AND atomically reserved/consumed at the release linearization point; a merely monotone non-atomic ledger is insufficient under concurrency/replay",
+  "source_experiment_summary": {
+    "concurrent_sessions": 100000,
+    "naive_budget_overshoots": 14315,
+    "atomic_budget_overshoots": 0,
+    "naive_replay_double_spends": 10407,
+    "atomic_replay_double_spends": 0
+  },
+  "lane_b_implication": "Translation validation must preserve not only budget values but the atomic reservation/consumption protocol and replay/idempotency semantics across lowering boundaries.",
+  "related_live_lane": {
+    "worker": "chatgpt-secondary-sol-02",
+    "lane": "D_INTENT_ADEQUACY_NONINTERFERENCE",
+    "status": "ACTIVE_AT_REREAD",
+    "commit": "86dbdc0caf6644d99349a3d9048beae4f2516d2d",
+    "note": "Capability-valid intent may still be task-inadequate under prompt injection; this remains an active non-overlapping research question and is not imported as completed evidence."
+  },
+  "shared_ancestry_is_not_replication": true,
+  "canonical_promotion_requested": false
+}

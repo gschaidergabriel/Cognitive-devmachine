@@ -1,0 +1,559 @@
+{
+  "schema_version": "1.1",
+  "request_id": "gwt-r6-arxiv-20260809T0140p0700",
+  "tool": "arxiv_search",
+  "request_sha256": "826f1617ef6cf2f0572528be6353cc0051905c8371222a368f18c8259ac2136b",
+  "processed_at": "2026-08-08T18:42:24.101695+00:00",
+  "result": {
+    "provider": "arXiv",
+    "tool": "arxiv_search",
+    "evidence_class": "external_preprint",
+    "retrieved_at": "2026-08-08T18:42:24.367564+00:00",
+    "credential_required": false,
+    "query": "all:\"global workspace\" AND (all:\"language model\" OR all:transformer OR all:agent)",
+    "start": 0,
+    "max_results": 20,
+    "total_results": 30,
+    "results": [
+      {
+        "id": "http://arxiv.org/abs/2607.15495v1",
+        "title": "Verbalizable Representations Form a Global Workspace in Language Models",
+        "summary": "Out of everything the human brain processes, only a small fraction is consciously accessible, in the sense of being available for verbal report, deliberate control, and flexible reasoning. In this paper, we present evidence that an analogous functional distinction has emerged in large language models. Using a new interpretability technique, the Jacobian lens, we identify the representations a model is poised to verbalize at any point in its processing. These representations, which we collectively call the J-space, exhibit the functional properties characteristic of a global workspace: their contents can be reported, deliberately summoned and held, used to carry the intermediate steps of silent reasoning, and passed as arguments to arbitrary downstream computations, while automatic processing such as text parsing and routine inference proceeds without them. The J-space also has structural signatures that global workspace theory associates with conscious access: it carries coherent content only in an intermediate band of layers, holds on the order of tens of concepts at a time, and is broadcast by the model's weights more widely than other representations. These properties make it a practical window into a model's unspoken thinking. In alignment audits, it reveals strategic deliberation, evaluation awareness, and trained-in misaligned dispositions that never appear in the model's outputs. We find that post-training installs the Assistant's point of view in the workspace, and we introduce counterfactual reflection training, which improves behavior by training only what a model would say if interrupted and asked to reflect. These results indicate that language models maintain a small, privileged set of representations bearing some of the functional hallmarks of conscious access, and that decoding these representations sheds light on ongoing cognitive processes.",
+        "published": "2026-07-16T22:54:30Z",
+        "updated": "2026-07-16T22:54:30Z",
+        "authors": [
+          "Wes Gurnee",
+          "Nicholas Sofroniew",
+          "Adam Pearce",
+          "Mateusz Piotrowski",
+          "Isaac Kauvar",
+          "Runjin Chen",
+          "Anna Soligo",
+          "Paul Bogdan",
+          "Euan Ong",
+          "Rowan Wang",
+          "Ben Thompson",
+          "David Abrahams",
+          "Subhash Kantamneni",
+          "Emmanuel Ameisen",
+          "Joshua Batson",
+          "Jack Lindsey"
+        ],
+        "categories": [
+          "cs.CL",
+          "cs.AI",
+          "cs.LG"
+        ],
+        "primary_category": "cs.CL",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2607.15495v1",
+          "pdf": "https://arxiv.org/pdf/2607.15495v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2608.05160v1",
+        "title": "The Ignition Index: Measuring Global Workspace Dynamics in Language Models",
+        "summary": "We introduce the Ignition Index (I), a validated scalar metric that operationalizes Global Workspace Theory's (GWT) all-or-none ignition prediction in transformer language models. The metric fits a four-parameter sigmoid to per-layer linear probe accuracy as a function of input signal strength, extracting steepness parameter beta-hat: high values indicate abrupt, ignition-like transitions; low values indicate graded build-up. Across 11 models spanning five architecture families, shuffled-label controls demonstrate 9.6-fold selectivity for genuine linguistic structure over spurious probe capacity (p < 0.001, Mann-Whitney U-test). We find: (1) Feedforward transformers exceed SSMs by 89% in aggregate beta-hat (p < 1e-13, Cohen's d = 0.52), with Mamba exhibiting near-linear profiles consistent with absent global broadcast. (2) Huginn-3.5B exhibits 2.12-fold higher ignition along its iteration axis than its depth axis, demonstrating that recurrent architectures manifest workspace-like transitions along the recurrence dimension. (3) Pythia-410M shows a PELT-detected phase transition at training step 256 (+67%), preceding induction-head formation. (4) Hypotheses linking ignition to model scale and signal strength were not confirmed, suggesting transformer architectures may saturate available ignition mechanisms. The Ignition Index provides the first validated quantitative bridge between GWT's dynamical predictions and mechanistic interpretability, with 9.6-fold measurement selectivity and architecture-level discriminability not previously characterized in the scaling literature. Code: https://github.com/saman-rahbar/ignition-index",
+        "published": "2026-05-26T05:58:11Z",
+        "updated": "2026-05-26T05:58:11Z",
+        "authors": [
+          "Saman Rahbar"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CL",
+          "cs.LG"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "26 pages, 10 figures. Code: https://github.com/saman-rahbar/ignition-index",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2608.05160v1",
+          "pdf": "https://arxiv.org/pdf/2608.05160v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2410.11407v1",
+        "title": "A Case for AI Consciousness: Language Agents and Global Workspace Theory",
+        "summary": "It is generally assumed that existing artificial systems are not phenomenally conscious, and that the construction of phenomenally conscious artificial systems would require significant technological progress if it is possible at all. We challenge this assumption by arguing that if Global Workspace Theory (GWT) - a leading scientific theory of phenomenal consciousness - is correct, then instances of one widely implemented AI architecture, the artificial language agent, might easily be made phenomenally conscious if they are not already. Along the way, we articulate an explicit methodology for thinking about how to apply scientific theories of consciousness to artificial systems and employ this methodology to arrive at a set of necessary and sufficient conditions for phenomenal consciousness according to GWT.",
+        "published": "2024-10-15T08:50:45Z",
+        "updated": "2024-10-15T08:50:45Z",
+        "authors": [
+          "Simon Goldstein",
+          "Cameron Domenico Kirk-Giannini"
+        ],
+        "categories": [
+          "cs.AI",
+          "q-bio.NC"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2410.11407v1",
+          "pdf": "https://arxiv.org/pdf/2410.11407v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2403.04588v2",
+        "title": "Zero-shot cross-modal transfer of Reinforcement Learning policies through a Global Workspace",
+        "summary": "Humans perceive the world through multiple senses, enabling them to create a comprehensive representation of their surroundings and to generalize information across domains. For instance, when a textual description of a scene is given, humans can mentally visualize it. In fields like robotics and Reinforcement Learning (RL), agents can also access information about the environment through multiple sensors; yet redundancy and complementarity between sensors is difficult to exploit as a source of robustness (e.g. against sensor failure) or generalization (e.g. transfer across domains). Prior research demonstrated that a robust and flexible multimodal representation can be efficiently constructed based on the cognitive science notion of a 'Global Workspace': a unique representation trained to combine information across modalities, and to broadcast its signal back to each modality. Here, we explore whether such a brain-inspired multimodal representation could be advantageous for RL agents. First, we train a 'Global Workspace' to exploit information collected about the environment via two input modalities (a visual input, or an attribute vector representing the state of the agent and/or its environment). Then, we train a RL agent policy using this frozen Global Workspace. In two distinct environments and tasks, our results reveal the model's ability to perform zero-shot cross-modal transfer between input modalities, i.e. to apply to image inputs a policy previously trained on attribute vectors (and vice-versa), without additional training or fine-tuning. Variants and ablations of the full Global Workspace (including a CLIP-like multimodal representation trained via contrastive learning) did not display the same generalization abilities.",
+        "published": "2024-03-07T15:35:29Z",
+        "updated": "2025-06-04T15:52:00Z",
+        "authors": [
+          "Léopold Maytié",
+          "Benjamin Devillers",
+          "Alexandre Arnold",
+          "Rufin VanRullen"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": "Reinforcement Learning Journal, Vol. 3, 2024, pp. 1410-1426",
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2403.04588v2",
+          "pdf": "https://arxiv.org/pdf/2403.04588v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.08206v1",
+        "title": "\"Theater of Mind\" for LLMs: A Cognitive Architecture Based on Global Workspace Theory",
+        "summary": "Modern Large Language Models (LLMs) operate fundamentally as Bounded-Input Bounded-Output (BIBO) systems. They remain in a passive state until explicitly prompted, computing localized responses without intrinsic temporal continuity. While effective for isolated tasks, this reactive paradigm presents a critical bottleneck for engineering autonomous artificial intelligence. Current multi-agent frameworks attempt to distribute cognitive load but frequently rely on static memory pools and passive message passing, which inevitably leads to cognitive stagnation and homogeneous deadlocks during extended execution. To address this structural limitation, we propose Global Workspace Agents (GWA), a cognitive architecture inspired by Global Workspace Theory. GWA transitions multi-agent coordination from a passive data structure to an active, event-driven discrete dynamical system. By coupling a central broadcast hub with a heterogeneous swarm of functionally constrained agents, the system maintains a continuous cognitive cycle. Furthermore, we introduce an entropy-based intrinsic drive mechanism that mathematically quantifies semantic diversity, dynamically regulating generation temperature to autonomously break reasoning deadlocks. Coupled with a dual-layer memory bifurcation strategy to ensure long-term cognitive continuity, GWA provides a robust, reproducible engineering framework for sustained, self-directed LLM agency.",
+        "published": "2026-04-09T13:06:43Z",
+        "updated": "2026-04-09T13:06:43Z",
+        "authors": [
+          "Wenlong Shang"
+        ],
+        "categories": [
+          "cs.MA"
+        ],
+        "primary_category": "cs.MA",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.08206v1",
+          "pdf": "https://arxiv.org/pdf/2604.08206v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2503.01906v2",
+        "title": "Learning to Chain Operations by Routing Information Through a Global Workspace",
+        "summary": "We present a model inspired by the Global Workspace Theory that integrates specialized modules to perform a sequential reasoning task. A controller selectively routes information between modules through the workspace using a gating mechanism. This approach allows the model to chain operations by iteratively broadcasting information between specialized domains, mimicking System-2 reasoning. We evaluate the model's performance on a simple addition task, where two addends must be summed. The task can be solved by routing information sequentially through an Input module, an Increment module (multiple times), and finally an Output module. We consider two implementations of this system with increasing complexity. First, using hand-designed modules operating on one-hot digit representations, the controller (a LSTM recurrent network) learns to select the appropriate modules (input, increment, output) in the appropriate sequence. Second, we replace the hand-designed modules with learned representation modules for MNIST images and an increment module trained on the task objectives; here again, the controller learns the appropriate sequential module selection to solve the task. Finally, we show that the Global Workspace model, while having fewer parameters, outperforms LSTMs and Transformers when tested on unseen addition operations (both interpolations and extrapolations of addition operations seen during training). Our results highlight the potential of architectures inspired by the Global Workspace Theory to enhance deep learning's reasoning capabilities.",
+        "published": "2025-02-28T15:30:55Z",
+        "updated": "2025-03-06T21:37:23Z",
+        "authors": [
+          "Hugo Chateau-Laurent",
+          "Rufin VanRullen"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "cs.CV",
+          "q-bio.NC"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "12 pages, 14 figures, submitted to a conference",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2503.01906v2",
+          "pdf": "https://arxiv.org/pdf/2503.01906v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2305.15775v3",
+        "title": "Concept-Centric Transformers: Enhancing Model Interpretability through Object-Centric Concept Learning within a Shared Global Workspace",
+        "summary": "Many interpretable AI approaches have been proposed to provide plausible explanations for a model's decision-making. However, configuring an explainable model that effectively communicates among computational modules has received less attention. A recently proposed shared global workspace theory showed that networks of distributed modules can benefit from sharing information with a bottlenecked memory because the communication constraints encourage specialization, compositionality, and synchronization among the modules. Inspired by this, we propose Concept-Centric Transformers, a simple yet effective configuration of the shared global workspace for interpretability, consisting of: i) an object-centric-based memory module for extracting semantic concepts from input features, ii) a cross-attention mechanism between the learned concept and input embeddings, and iii) standard classification and explanation losses to allow human analysts to directly assess an explanation for the model's classification reasoning. We test our approach against other existing concept-based methods on classification tasks for various datasets, including CIFAR100, CUB-200-2011, and ImageNet, and we show that our model achieves better classification accuracy than all baselines across all problems but also generates more consistent concept-based explanations of classification output.",
+        "published": "2023-05-25T06:37:39Z",
+        "updated": "2023-11-07T23:56:05Z",
+        "authors": [
+          "Jinyung Hong",
+          "Keun Hee Park",
+          "Theodore P. Pavlic"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.CV"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "23 pages, 9 tables, 18 figures, Accepted at WACV2024",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2305.15775v3",
+          "pdf": "https://arxiv.org/pdf/2305.15775v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2103.01197v2",
+        "title": "Coordination Among Neural Modules Through a Shared Global Workspace",
+        "summary": "Deep learning has seen a movement away from representing examples with a monolithic hidden state towards a richly structured state. For example, Transformers segment by position, and object-centric architectures decompose images into entities. In all these architectures, interactions between different elements are modeled via pairwise interactions: Transformers make use of self-attention to incorporate information from other positions; object-centric architectures make use of graph neural networks to model interactions among entities. However, pairwise interactions may not achieve global coordination or a coherent, integrated representation that can be used for downstream tasks. In cognitive science, a global workspace architecture has been proposed in which functionally specialized components share information through a common, bandwidth-limited communication channel. We explore the use of such a communication channel in the context of deep learning for modeling the structure of complex environments. The proposed method includes a shared workspace through which communication among different specialist modules takes place but due to limits on the communication bandwidth, specialist modules must compete for access. We show that capacity limitations have a rational basis in that (1) they encourage specialization and compositionality and (2) they facilitate the synchronization of otherwise independent specialists.",
+        "published": "2021-03-01T18:43:48Z",
+        "updated": "2022-03-22T21:31:37Z",
+        "authors": [
+          "Anirudh Goyal",
+          "Aniket Didolkar",
+          "Alex Lamb",
+          "Kartikeya Badola",
+          "Nan Rosemary Ke",
+          "Nasim Rahaman",
+          "Jonathan Binas",
+          "Charles Blundell",
+          "Michael Mozer",
+          "Yoshua Bengio"
+        ],
+        "categories": [
+          "cs.LG",
+          "cs.AI",
+          "stat.ML"
+        ],
+        "primary_category": "cs.LG",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "ICLR'22 accepted paper",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2103.01197v2",
+          "pdf": "https://arxiv.org/pdf/2103.01197v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2502.21142v2",
+        "title": "Multimodal Dreaming: A Global Workspace Approach to World Model-Based Reinforcement Learning",
+        "summary": "Humans leverage rich internal models of the world to reason about the future, imagine counterfactuals, and adapt flexibly to new situations. In Reinforcement Learning (RL), world models aim to capture how the environment evolves in response to the agent's actions, facilitating planning and generalization. However, typical world models directly operate on the environment variables (e.g. pixels, physical attributes), which can make their training slow and cumbersome; instead, it may be advantageous to rely on high-level latent dimensions that capture relevant multimodal variables. Global Workspace (GW) Theory offers a cognitive framework for multimodal integration and information broadcasting in the brain, and recent studies have begun to introduce efficient deep learning implementations of GW. Here, we evaluate the capabilities of an RL system combining GW with a world model. We compare our GW-Dreamer with various versions of the standard PPO and the original Dreamer algorithms. We show that performing the dreaming process (i.e., mental simulation) inside the GW latent space allows for training with fewer environment steps. As an additional emergent property, the resulting model (but not its comparison baselines) displays strong robustness to the absence of one of its observation modalities (images or simulation attributes). We conclude that the combination of GW with World Models holds great potential for improving decision-making in RL agents.",
+        "published": "2025-02-28T15:24:17Z",
+        "updated": "2025-10-28T14:49:07Z",
+        "authors": [
+          "Léopold Maytié",
+          "Roland Bertin Johannet",
+          "Rufin VanRullen"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.LG",
+          "q-bio.NC"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Under review",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2502.21142v2",
+          "pdf": "https://arxiv.org/pdf/2502.21142v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2303.07103v3",
+        "title": "Could a Large Language Model be Conscious?",
+        "summary": "There has recently been widespread discussion of whether large language models might be sentient. Should we take this idea seriously? I will break down the strongest reasons for and against. Given mainstream assumptions in the science of consciousness, there are significant obstacles to consciousness in current models: for example, their lack of recurrent processing, a global workspace, and unified agency. At the same time, it is quite possible that these obstacles will be overcome in the next decade or so. I conclude that while it is somewhat unlikely that current large language models are conscious, we should take seriously the possibility that successors to large language models may be conscious in the not-too-distant future.",
+        "published": "2023-03-04T19:14:20Z",
+        "updated": "2024-08-18T22:53:56Z",
+        "authors": [
+          "David J. Chalmers"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CL",
+          "cs.LG"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": "Boston Review, August 9, 2023",
+        "comment": "Invited lecture at NeurIPS, November 28, 2022",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2303.07103v3",
+          "pdf": "https://arxiv.org/pdf/2303.07103v3"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2407.10718v2",
+        "title": "Sibyl: Simple yet Effective Agent Framework for Complex Real-world Reasoning",
+        "summary": "Existing agents based on large language models (LLMs) demonstrate robust problem-solving capabilities by integrating LLMs' inherent knowledge, strong in-context learning and zero-shot capabilities, and the use of tools combined with intricately designed LLM invocation workflows by humans. However, these agents still exhibit shortcomings in long-term reasoning and under-use the potential of existing tools, leading to noticeable deficiencies in complex real-world reasoning scenarios. To address these limitations, we introduce Sibyl, a simple yet powerful LLM-based agent framework designed to tackle complex reasoning tasks by efficiently leveraging a minimal set of tools. Drawing inspiration from Global Workspace Theory, Sibyl incorporates a global workspace to enhance the management and sharing of knowledge and conversation history throughout the system. Furthermore, guided by Society of Mind Theory, Sibyl implements a multi-agent debate-based jury to self-refine the final answers, ensuring a comprehensive and balanced approach. This approach aims to reduce system complexity while expanding the scope of problems solvable-from matters typically resolved by humans in minutes to those requiring hours or even days, thus facilitating a shift from System-1 to System-2 thinking. Sibyl has been designed with a focus on scalability and ease of debugging by incorporating the concept of reentrancy from functional programming from its inception, with the aim of seamless and low effort integration in other LLM applications to improve capabilities. Our experimental results on the GAIA benchmark test set reveal that the Sibyl agent instantiated with GPT-4 achieves state-of-the-art performance with an average score of 34.55%, compared to other agents based on GPT-4. We hope that Sibyl can inspire more reliable and reusable LLM-based agent solutions to address complex real-world reasoning tasks.",
+        "published": "2024-07-15T13:45:40Z",
+        "updated": "2024-07-16T14:16:53Z",
+        "authors": [
+          "Yulong Wang",
+          "Tianhao Shen",
+          "Lifeng Liu",
+          "Jian Xie"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CL"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "Our code is available at https://github.com/Ag2S1/Sibyl-System",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2407.10718v2",
+          "pdf": "https://arxiv.org/pdf/2407.10718v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2503.03459v2",
+        "title": "Unified Mind Model: Reimagining Autonomous Agents in the LLM Era",
+        "summary": "Large language models (LLMs) have recently demonstrated remarkable capabilities across domains, tasks, and languages (e.g., ChatGPT and GPT-4), reviving the research of general autonomous agents with human-like cognitive abilities. Such human-level agents require semantic comprehension and instruction-following capabilities, which exactly fall into the strengths of LLMs. Although there have been several initial attempts to build human-level agents based on LLMs, the theoretical foundation remains a challenging open problem. In this paper, we propose a novel theoretical cognitive architecture, the Unified Mind Model (UMM), which offers guidance to facilitate the rapid creation of autonomous agents with human-level cognitive abilities. Specifically, our UMM starts with the global workspace theory and further leverage LLMs to enable the agent with various cognitive abilities, such as multi-modal perception, planning, reasoning, tool use, learning, memory, reflection and motivation. Building upon UMM, we then develop an agent-building engine, MindOS, which allows users to quickly create domain-/task-specific autonomous agents without any programming effort.",
+        "published": "2025-03-05T12:49:44Z",
+        "updated": "2025-03-06T03:32:45Z",
+        "authors": [
+          "Pengbo Hu",
+          "Xiang Ying"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CL"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "18 pages",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2503.03459v2",
+          "pdf": "https://arxiv.org/pdf/2503.03459v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2603.00130v2",
+        "title": "Agentic Hives: Equilibrium, Indeterminacy, and Endogenous Cycles in Self-Organizing Multi-Agent Systems",
+        "summary": "Current multi-agent AI systems operate with a fixed number of agents whose roles are specified at design time. No formal theory governs when agents should be created, destroyed, or re-specialized at runtime-let alone how the population structure responds to changes in resources or objectives. We introduce the Agentic Hive, a framework in which a variable population of autonomous micro-agents-each equipped with a sandboxed execution environment and access to a language model-undergoes demographic dynamics: birth, duplication, specialization, and death. Agent families play the role of production sectors, compute and memory play the role of factors of production, and an orchestrator plays the dual role of Walrasian auctioneer and Global Workspace. Drawing on the multi-sector growth theory developed for dynamic general equilibrium (Benhabib \\& Nishimura, 1985; Venditti, 2005; Garnier, Nishimura \\& Venditti, 2013), we prove seven analytical results: (i) existence of a Hive Equilibrium via Brouwer's fixed-point theorem; (ii) Pareto optimality of the equilibrium allocation; (iii) multiplicity of equilibria under strategic complementarities between agent families; (iv)-(v) Stolper-Samuelson and Rybczynski analogs that predict how the Hive restructures in response to preference and resource shocks; (vi) Hopf bifurcation generating endogenous demographic cycles; and (vii) a sufficient condition for local asymptotic stability. The resulting regime diagram partitions the parameter space into regions of unique equilibrium, indeterminacy, endogenous cycles, and instability. Together with the comparative-statics matrices, it provides a formal governance toolkit that enables operators to predict and steer the demographic evolution of self-organizing multi-agent systems.",
+        "published": "2026-02-23T13:22:23Z",
+        "updated": "2026-04-27T14:48:21Z",
+        "authors": [
+          "Jean-Philippe Garnier"
+        ],
+        "categories": [
+          "cs.MA",
+          "cs.AI",
+          "math.DS"
+        ],
+        "primary_category": "cs.MA",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2603.00130v2",
+          "pdf": "https://arxiv.org/pdf/2603.00130v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2506.03543v2",
+        "title": "CogniPair: From LLM Chatbots to Conscious AI Agents -- GNWT-Based Multi-Agent Digital Twins for Social Pairing -- Dating & Hiring Applications",
+        "summary": "Current large language model (LLM) agents lack authentic human psychological processes necessary for genuine digital twins and social AI applications. To address this limitation, we present a computational implementation of Global Workspace Theory (GNWT) that integrates human cognitive architecture principles into LLM agents, creating specialized sub-agents for emotion, memory, social norms, planning, and goal-tracking coordinated through a global workspace mechanism. However, authentic digital twins require accurate personality initialization. We therefore develop a novel adventure-based personality test that evaluates true personality through behavioral choices within interactive scenarios, bypassing self-presentation bias found in traditional assessments. Building on these innovations, our CogniPair platform enables digital twins to engage in realistic simulated dating interactions and job interviews before real encounters, providing bidirectional cultural fit assessment for both romantic compatibility and workplace matching. Validation using 551 GNWT-Agents and Columbia University Speed Dating dataset demonstrates 72% correlation with human attraction patterns, 77.8% match prediction accuracy, and 74% agreement in human validation studies. This work advances psychological authenticity in LLM agents and establishes a foundation for intelligent dating platforms and HR technology solutions.",
+        "published": "2025-06-04T03:54:30Z",
+        "updated": "2025-11-28T20:54:52Z",
+        "authors": [
+          "Wanghao Ye",
+          "Sihan Chen",
+          "Yiting Wang",
+          "Shwai He",
+          "Bowei Tian",
+          "Guoheng Sun",
+          "Ziyi Wang",
+          "Ziyao Wang",
+          "Yexiao He",
+          "Zheyu Shen",
+          "Meng Liu",
+          "Yuning Zhang",
+          "Meng Feng",
+          "Yang Wang",
+          "Siyuan Peng",
+          "Yilong Dai",
+          "Zhenle Duan",
+          "Lang Xiong",
+          "Joshua Liu",
+          "Hanzhang Qin",
+          "Ang Li"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.CY",
+          "cs.MA"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2506.03543v2",
+          "pdf": "https://arxiv.org/pdf/2506.03543v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2603.15371v1",
+        "title": "Brain-Inspired Graph Multi-Agent Systems for LLM Reasoning",
+        "summary": "Large Language Models (LLMs) have demonstrated remarkable capabilities across a wide range of language tasks, yet complex multi-step reasoning remains a fundamental challenge. While Large Reasoning Models (LRMs) equipped with extended chain-of-thought mechanisms demonstrate improved performance over standard LLMs, both model types still suffer from accuracy collapse on sufficiently complex tasks, suggesting that scaling model-level reasoning alone is insufficient. Inspired by the global workspace theory of human cognition, we propose Brain-Inspired Graph Multi-Agent Systems (BIGMAS), in which specialized LLM agents are organized as nodes in a dynamically constructed directed graph and coordinate exclusively through a centralized shared workspace. A problem-adaptive GraphDesigner constructs task-specific agent topologies, while a global Orchestrator leverages the complete shared state for routing decisions, overcoming the local-view bottleneck of reactive approaches. Experiments on Game24, Six Fives, and Tower of London across six frontier LLMs demonstrate that BIGMAS consistently improves reasoning performance for both standard LLMs and LRMs, outperforming existing multi-agent baselines including ReAct and Tree of Thoughts, showing that multi-agent architectural design provides complementary gains orthogonal to model-level reasoning enhancements.",
+        "published": "2026-03-16T14:48:06Z",
+        "updated": "2026-03-16T14:48:06Z",
+        "authors": [
+          "Guangfu Hao",
+          "Yuming Dai",
+          "Xianzhe Qin",
+          "Shan Yu"
+        ],
+        "categories": [
+          "cs.AI",
+          "cs.NI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2603.15371v1",
+          "pdf": "https://arxiv.org/pdf/2603.15371v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2011.14475v2",
+        "title": "An Artificial Consciousness Model and its relations with Philosophy of Mind",
+        "summary": "This work seeks to study the beneficial properties that an autonomous agent can obtain by implementing a cognitive architecture similar to the one of conscious beings. Along this document, a conscious model of autonomous agent based in a global workspace architecture is presented. We describe how this agent is viewed from different perspectives of philosophy of mind, being inspired by their ideas. The goal of this model is to create autonomous agents able to navigate within an environment composed of multiple independent magnitudes, adapting to its surroundings in order to find the best possible position in base of its inner preferences. The purpose of the model is to test the effectiveness of many cognitive mechanisms that are incorporated, such as an attention mechanism for magnitude selection, pos-session of inner feelings and preferences, usage of a memory system to storage beliefs and past experiences, and incorporating a global workspace which controls and integrates information processed by all the subsystem of the model. We show in a large experiment set how an autonomous agent can benefit from having a cognitive architecture such as the one described.",
+        "published": "2020-11-30T00:24:17Z",
+        "updated": "2020-12-01T17:27:10Z",
+        "authors": [
+          "Eduardo C. Garrido-Merchán",
+          "Martin Molina",
+          "Francisco M. Mendoza"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2011.14475v2",
+          "pdf": "https://arxiv.org/pdf/2011.14475v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2507.01967v1",
+        "title": "Ghost in the Machine: Examining the Philosophical Implications of Recursive Algorithms in Artificial Intelligence Systems",
+        "summary": "This paper investigates whether contemporary AI architectures employing deep recursion, meta-learning, and self-referential mechanisms provide evidence of machine consciousness. Integrating philosophical history, cognitive science, and AI engineering, it situates recursive algorithms within a lineage spanning Cartesian dualism, Husserlian intentionality, Integrated Information Theory, the Global Workspace model, and enactivist perspectives. The argument proceeds through textual analysis, comparative architecture review, and synthesis of neuroscience findings on integration and prediction. Methodologically, the study combines conceptual analysis, case studies, and normative risk assessment informed by phenomenology and embodied cognition. Technical examples, including transformer self-attention, meta-cognitive agents, and neuromorphic chips, illustrate how functional self-modeling can arise without subjective experience. By distinguishing functional from phenomenal consciousness, the paper argues that symbol grounding, embodiment, and affective qualia remain unresolved barriers to attributing sentience to current AI. Ethical analysis explores risks of premature anthropomorphism versus neglect of future sentient systems; legal implications include personhood, liability, authorship, and labor impacts. Future directions include quantum architectures, embodied robotics, unsupervised world modeling, and empirical tests for non-biological phenomenality. The study reframes the \"hard problem\" as a graded and increasingly testable phenomenon, rather than a metaphysical impasse. It concludes that recursive self-referential design enhances capability but does not entail consciousness or justify moral status. Keywords: Recursive algorithms; self-reference; machine consciousness; AI ethics; AI consciousness",
+        "published": "2025-06-18T08:44:35Z",
+        "updated": "2025-06-18T08:44:35Z",
+        "authors": [
+          "Llewellin RG Jegels"
+        ],
+        "categories": [
+          "q-bio.NC"
+        ],
+        "primary_category": "q-bio.NC",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "27 pages",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2507.01967v1",
+          "pdf": "https://arxiv.org/pdf/2507.01967v1"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2508.06832v2",
+        "title": "Remote Sensing Image Intelligent Interpretation with the Language-Centered Perspective: Principles, Methods and Challenges",
+        "summary": "The mainstream paradigm of remote sensing image interpretation has long been dominated by vision-centered models, which rely on visual features for semantic understanding. However, these models face inherent limitations in handling multi-modal reasoning, semantic abstraction, and interactive decision-making. While recent advances have introduced Large Language Models (LLMs) into remote sensing workflows, existing studies primarily focus on downstream applications, lacking a unified theoretical framework that explains the cognitive role of language. This review advocates a paradigm shift from vision-centered to language-centered remote sensing interpretation. Drawing inspiration from the Global Workspace Theory (GWT) of human cognition, We propose a language-centered framework for remote sensing interpretation that treats LLMs as the cognitive central hub integrating perceptual, task, knowledge and action spaces to enable unified understanding, reasoning, and decision-making. We first explore the potential of LLMs as the central cognitive component in remote sensing interpretation, and then summarize core technical challenges, including unified multimodal representation, knowledge association, and reasoning and decision-making. Furthermore, we construct a global workspace-driven interpretation mechanism and review how language-centered solutions address each challenge. Finally, we outline future research directions from four perspectives: adaptive alignment of multimodal data, task understanding under dynamic knowledge constraints, trustworthy reasoning, and autonomous interaction. This work aims to provide a conceptual foundation for the next generation of remote sensing interpretation systems and establish a roadmap toward cognition-driven intelligent geospatial analysis.",
+        "published": "2025-08-09T05:10:38Z",
+        "updated": "2026-01-27T05:14:39Z",
+        "authors": [
+          "Haifeng Li",
+          "Wang Guo",
+          "Haiyang Wu",
+          "Mengwei Wu",
+          "Jipeng Zhang",
+          "Qing Zhu",
+          "Yu Liu",
+          "Xin Huang",
+          "Chao Tao"
+        ],
+        "categories": [
+          "cs.AI"
+        ],
+        "primary_category": "cs.AI",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2508.06832v2",
+          "pdf": "https://arxiv.org/pdf/2508.06832v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2604.16592v2",
+        "title": "Human Cognition in Machines: A Unified Perspective of World Models",
+        "summary": "This report of world models distinguishes prior works by the cognitive functions they innovate. Many works claim an almost human-like cognitive capability in their world models. To evaluate these claims requires a proper grounding in first principles from human and machine cognition theory. In moving towards human-like world models we present a conceptual unified framework for world models that fully incorporates all the cognitive functions (i.e., memory, perception, language, reasoning, imagining, motivation, and metacognition) and identify gaps in existing research as a guide for future states of the art. In particular, we find that motivation (especially intrinsic motivation) and metacognition remain drastically under-researched, and we propose concrete directions to address these gaps informed by active inference and global workspace theory. We also introduce epistemic world models, a new category encompassing agent frameworks for scientific discovery that operate over structured knowledge. Our taxonomy, applied to video, embodied, and epistemic world models, suggests research directions where prior taxonomies have not.",
+        "published": "2026-04-17T17:51:46Z",
+        "updated": "2026-06-15T02:33:48Z",
+        "authors": [
+          "Timothy Rupprecht",
+          "Pu Zhao",
+          "Amir Taherin",
+          "Arash Akbari",
+          "Arman Akbari",
+          "Yumei He",
+          "Tooba Imtiaz",
+          "Sean Duffy",
+          "Juyi Lin",
+          "Yixiao Chen",
+          "Rahul Chowdhury",
+          "Enfu Nan",
+          "Yixin Shen",
+          "Yifan Cao",
+          "Haochen Zeng",
+          "Weiwei Chen",
+          "Geng Yuan",
+          "Jennifer Dy",
+          "Sarah Ostadabbas",
+          "Xuan Zhang",
+          "David Kaeli",
+          "Edmund Yeh",
+          "Yanzhi Wang"
+        ],
+        "categories": [
+          "cs.RO",
+          "cs.AI",
+          "cs.CV",
+          "cs.ET"
+        ],
+        "primary_category": "cs.RO",
+        "doi": null,
+        "journal_ref": null,
+        "comment": null,
+        "links": {
+          "alternate": "https://arxiv.org/abs/2604.16592v2",
+          "pdf": "https://arxiv.org/pdf/2604.16592v2"
+        }
+      },
+      {
+        "id": "http://arxiv.org/abs/2503.05823v1",
+        "title": "Introduction to Artificial Consciousness: History, Current Trends and Ethical Challenges",
+        "summary": "With the significant progress of artificial intelligence (AI) and consciousness science, artificial consciousness (AC) has recently gained popularity. This work provides a broad overview of the main topics and current trends in AC. The first part traces the history of this interdisciplinary field to establish context and clarify key terminology, including the distinction between Weak and Strong AC. The second part examines major trends in AC implementations, emphasising the synergy between Global Workspace and Attention Schema, as well as the problem of evaluating the internal states of artificial systems. The third part analyses the ethical dimension of AC development, revealing both critical risks and transformative opportunities. The last part offers recommendations to guide AC research responsibly, and outlines the limitations of this study as well as avenues for future research. The main conclusion is that while AC appears both indispensable and inevitable for scientific progress, serious efforts are required to address the far-reaching impact of this innovative research path.",
+        "published": "2025-03-05T09:34:36Z",
+        "updated": "2025-03-05T09:34:36Z",
+        "authors": [
+          "Aïda Elamrani"
+        ],
+        "categories": [
+          "cs.CY",
+          "cs.AI"
+        ],
+        "primary_category": "cs.CY",
+        "doi": null,
+        "journal_ref": null,
+        "comment": "65 pages",
+        "links": {
+          "alternate": "https://arxiv.org/abs/2503.05823v1",
+          "pdf": "https://arxiv.org/pdf/2503.05823v1"
+        }
+      }
+    ]
+  },
+  "status": "SUCCESS"
+}

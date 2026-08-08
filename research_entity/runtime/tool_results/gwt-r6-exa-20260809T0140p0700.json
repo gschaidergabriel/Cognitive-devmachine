@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.1",
+  "request_id": "gwt-r6-exa-20260809T0140p0700",
+  "tool": "exa_search",
+  "request_sha256": "9f3bc5503b9d6a713942646cd03d5984971df839e061eb88be3d8a0293f51d8e",
+  "processed_at": "2026-08-08T18:42:24.657588+00:00",
+  "result": {
+    "provider": "Exa",
+    "tool": "exa_search",
+    "evidence_class": "external_web_discovery",
+    "query": "2026 global workspace language model J-space broadcast ignition receiver causal uptake re-entry",
+    "results": [
+      {
+        "id": "https://www.anthropic.com/research/global-workspace",
+        "title": "A global workspace in language models \\ Anthropic",
+        "url": "https://www.anthropic.com/research/global-workspace",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "We call the collection of these patterns the J-space—named after the technique we used to find them, involving a mathematical concept called the Jacobian. Each J-space pattern is linked to a particular word. But when one of these patterns lights up, it doesn’t mean the model is saying that word—just that the word is on its mind. If you've heard of language models having a \"scratchpad\" or “chain of thought”—text they write to themselves while reasoning—the J-space is something different. It operates silently, in the model’s internal neural activations, allowing the model to think about a concept without writing it down. Notably, the J-space wasn’t designed or programmed by us, but instead emerged on its own during Claude’s training process.\n...\n- Claude uses its J-space for internal reasoning. If you ask Claude to solve a problem that requires multiple steps, the intermediate steps will light up in its J-space, even when it doesn’t say them out loud. These J-space patterns causally mediate its performance in such tasks, despite being smaller in magnitude than other representations.\n...\nOur experiments were inspired by a prominent theory in neuroscience that was developed to explain how conscious access works: the global workspace theory. This account pictures the brain as a collection of specialist systems that work in parallel, unconsciously, and largely in isolation from one another. A piece of information becomes consciously accessible when it gains entry to a small shared channel, the “workspace,” which is broadcast to other brain systems that can see it and make use of it. Based on our findings, we think the J-space plays a similar “workspace” role in Claude. For example, we find evidence that Claude’s J-space has especially strong connections to the rest of its neural network, allowing it to fulfill this kind of broadcasting role.\n...\nNone of this tells us whether Claude is conscious in the way people are, or whether it feels anything at all; we’ll come back to"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://transformer-circuits.pub/2026/workspace/",
+        "title": "Verbalizable Representations Form a Global Workspace in Language Models",
+        "url": "https://transformer-circuits.pub/2026/workspace/",
+        "published_date": null,
+        "author": "Wes Gurnee * ,",
+        "text": null,
+        "highlights": [
+          "One influential proposal in neuroscience, the global workspace theory, grounds these functional properties in architectural and computational features of the brain . In this account, the brain is composed of many specialized processors operating largely in parallel and in isolation, whose activity proceeds outside of conscious access. A representation becomes consciously accessible when it is posted to a shared \"global workspace\" from which many downstream processes can read . Under the theory, the workspace is a processing hub that integrates and broadcasts information, allowing it to be used for flexible internal reasoning and report . Notably, the workspace is held to be limited in capacity, so entry is competitive and subject to attentional modulation, and the contents of the workspace at any moment are a small selection from the brain's ongoing activity . While the global workspace model is not universally accepted, and there exist other theories that explain conscious access in different ways (??), we find it a useful comparison point to ground our investigations in language models.\n...\nCollectively, the J-lens vectors comprise a subcomponent of the model's representational space which we term the J-space.Mathematically, if we view the model's activations as decomposing into a sum of sparsely active linear features , these define a sparse frame which spans the activation space, of which the J-space is a sparse subframe. A more detailed formal description of the J-space is provided in ??. We find the J-space does far more than support verbalization, playing the other functional roles associated with a global workspace as well: directed modulation, internal reasoning, flexible generalization, and selectivity (??). The model can speak fluently, parse its input, and perform a great deal of automatic inference with its J-space suppressed; however, it struggles to perform more complex forms of internal reasoning.\n...\nThe J-space also has some of the structural signa"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://exa.ai/library/publication/kpmwdp693rs0lqvdx6xyny98",
+        "title": "Verbalizable Representations Form a Global Workspace in ...",
+        "url": "https://arxiv.org/abs/2607.15495",
+        "published_date": "2026-07-16T00:00:00.000Z",
+        "author": "Wes Gurnee, Nicholas Sofroniew, Adam Pearce, Mateusz Piotrowski, Isaac Kauvar, Runjin Chen, et al.",
+        "text": null,
+        "highlights": [
+          "# Verbalizable Representations Form a Global Workspace in Language Models\n...\nOut of everything the human brain processes, only a small fraction is consciously accessible, in the sense of being available for verbal report, deliberate control, and flexible reasoning. In this paper, we present evidence that an analogous functional distinction has emerged in large language models. Using a new interpretability technique, the Jacobian lens, we identify the representations a model is poised to verbalize at any point in its processing. These representations, which we collectively call the J-space, exhibit the functional properties characteristic of a global workspace: their contents can be reported, deliberately summoned and held, used to carry the intermediate steps of silent reasoning, and passed as arguments to arbitrary downstream computations, while automatic processing such as text parsing and routine inference proceeds without them. The J-space also has structural signatures that global workspace theory associates with conscious access: it carries coherent content only in an intermediate band of layers, holds on the order of tens of concepts at a time, and is broadcast by the model's weights more widely than other representations. These properties make it a practical window into a model's unspoken thinking. In alignment audits, it reveals strategic deliberation, evaluation awareness, and trained-in misaligned dispositions that never appear in the model's outputs. We find that post-training installs the Assistant's point of view in the workspace, and we introduce counterfactual reflection training, which improves behavior by training only what a model would say if interrupted and asked to reflect. These results indicate that language models maintain a small, privileged set of representations bearing some of the functional hallmarks of conscious access, and that decoding these representations sheds light on ongoing cognitive processes."
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://transformer-circuits.pub/2026/workspace/index.html",
+        "title": "Verbalizable Representations Form a Global Workspace in ...",
+        "url": "https://transformer-circuits.pub/2026/workspace/index.html",
+        "published_date": null,
+        "author": "Wes Gurnee * ,",
+        "text": null,
+        "highlights": [
+          "One influential proposal in neuroscience, the global workspace theory, grounds these functional properties in architectural and computational features of the brain . In this account, the brain is composed of many specialized processors operating largely in parallel and in isolation, whose activity proceeds outside of conscious access. A representation becomes consciously accessible when it is posted to a shared \"global workspace\" from which many downstream processes can read . Under the theory, the workspace is a processing hub that integrates and broadcasts information, allowing it to be used for flexible internal reasoning and report . Notably, the workspace is held to be limited in capacity, so entry is competitive and subject to attentional modulation, and the contents of the workspace at any moment are a small selection from the brain's ongoing activity . While the global workspace model is not universally accepted, and there exist other theories that explain conscious access in different ways (??), we find it a useful comparison point to ground our investigations in language models.\n...\nCollectively, the J-lens vectors comprise a subcomponent of the model's representational space which we term the J-space.Mathematically, if we view the model's activations as decomposing into a sum of sparsely active linear features , these define a sparse frame which spans the activation space, of which the J-space is a sparse subframe. A more detailed formal description of the J-space is provided in ??. We find the J-space does far more than support verbalization, playing the other functional roles associated with a global workspace as well: directed modulation, internal reasoning, flexible generalization, and selectivity (??). The model can speak fluently, parse its input, and perform a great deal of automatic inference with its J-space suppressed; however, it struggles to perform more complex forms of internal reasoning.\n...\nThe J-space also has some of the structural signa"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://corti.com/inside-the-j-space-anthropic-finds-a-global-workspace-in-claude/",
+        "title": "Inside the J-Space: Anthropic Finds a \"Global Workspace\" in Claude",
+        "url": "https://corti.com/inside-the-j-space-anthropic-finds-a-global-workspace-in-claude/",
+        "published_date": "2026-07-08T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "On July 6, 2026, Anthropic's interpretability team (Gurnee, Sofroniew, Lindsey et al.) published a paper on [Transformer Circuits](https://transformer-circuits.pub/2026/workspace/index.html?ref=corti.com) claiming that Claude-family models maintain a small, privileged set of internal representations — dubbed the **J-space** — that behaves functionally like the \"global workspace\" that some neuroscientists believe underlies conscious access in humans. The press coverage immediately reached for the C-word. The paper itself is more careful, and more interesting, than the headlines. Let's unpack the actual mechanics.\n...\n1. **Reportable** — the model can name them when asked what it's thinking about\n2. **Modulatable** — the model can deliberately load or suppress them on instruction\n3. **Reasoning-bearing** — they carry intermediate steps of multi-hop inference\n4. **Broadcast** — a single representation serves as a valid input to many different downstream computations\n5. **Selective** — they account for a small fraction of total activation content and are *not* needed for routine processing\n...\nThese five properties mirror the functional signatures that global workspace theory (GWT) attributes to consciously accessible information in the brain: reportability, top-down control, deliberate reasoning, flexible routing, and limited capacity. Importantly, the authors explicitly frame this as *access consciousness* — a purely functional notion about which information is available for reasoning and report — and take no position on subjective experience (phenomenal consciousness).\n...\nThe J-lens fixes this by computing, per layer, the **average linearized causal effect** of an activation on the model's output logits — now *or at any future position*:\n...\nThe averaging over a large prompt corpus is the crucial move. It separates representations that are *verbalizable in general* — poised to be spoken about should the occasion arise — from things that merely happen to influence th"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.noze.it/en/insights/claude-j-space/",
+        "title": "Claude's J-space: reading the model's unspoken thoughts | noze",
+        "url": "https://www.noze.it/en/insights/claude-j-space/",
+        "published_date": "2026-07-07T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "On 6 July 2026 Anthropic published 'A global workspace in language models': inside Claude there is a small internal workspace, the J-space, that emerged on its own during training and holds the reportable, reusable concepts while about 90% of the computation runs automatically. How the J-lens works, why it matters for safety, and why they talk about access, not consciousness.\n...\nThe J-space: a small reportable, broadcast workspace immersed in the 90% of automatic computation. The J-lens reads its contents. Diagram based on the Anthropic research.\n...\nOn 6 July 2026 Anthropic published the research A global workspace in language models. The thesis, in one line: inside Claude there is a small internal workspace, which the researchers call the J-space, holding the concepts the model is actively processing (the ones it can reason with and report on), immersed in a far larger ocean of computation that the model can neither see nor report on.\n...\nTwo details make it notable. First: the J-space was not designed, it emerged on its own during training. Second: it is tiny. It holds a few dozen concepts at a time and accounts for less than a tenth of the model’s overall internal activity. The stated analogy is with a theory from neuroscience, the Global Workspace Theory (Baars, Dehaene), which explains how a piece of information becomes “accessible” when it enters a shared channel and is broadcast to the rest of the system. The code is open source: anthropics/jacobian-lens(Apache-2.0, Python).\n...\nThe key is the technique that gives the space its name: the Jacobian lens (J-lens). For every word in Claude’s vocabulary, the J-lens finds the internal activity pattern that makes the model more likely to say that word, at some point in the future. Applied to the internal activity at a given moment, it yields a list of words: the contents of the J-space, which you can simply read. Applied layer by layer, you watch these “silent words” evolve as the model works through what to say.\n"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://lilting.ch/en/articles/claude-j-space-global-workspace",
+        "title": "Anthropic's J-space, a global workspace in Claude that J-lens can read and edit | lilting channel",
+        "url": "https://lilting.ch/en/articles/claude-j-space-global-workspace",
+        "published_date": "2026-07-08T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Claude’s middle layers hold a shared workspace that temporarily stores and manipulates verbalizable concepts, and it formed on its own during training. That is the claim of Anthropic’s new interpretability paper “Verbalizable Representations Form a Global Workspace in Language Models” (paper, overview). The workspace matches most of the functional properties predicted by Global Workspace Theory (GWT), a leading account of conscious information processing in humans.\n...\nThe main subject is Claude Sonnet 4.5, with corroboration on Haiku 4.5 and Opus 4.5/4.6. There are 16 authors, and the code is public. The paper does more than read out which concepts are active inside the model. Rewrite a concept vector, and both the model’s answer and its self-report of “what I was thinking about” change together.\n...\n| Method | How it reads middle layers | Weakness |\n| --- | --- | --- |\n| Logit lens | Applies the final-layer unembedding directly to every layer (the special case where the Jacobian is the identity) | Coordinate systems drift across layers, so it breaks down in earlier layers |\n| Tuned lens | Trains a per-layer map that predicts the final output distribution | Correlation-based, so it tends to skip past unverbalized intermediates and jump ahead to the output |\n| J-lens | Projects through a first-order approximation of the causal path to the output | First-order only, so nonlinear effects are lost |\n...\n, the tokens\n...\nJ-space is a sparse (most components are zero) nonnegative combination of vocabulary directions spanned in this middle region’s residual stream. Up to about 25 concepts are active at once, and J-space never accounts for more than 10% of the activation variance in any layer. Even so, when a concept vector is decomposed into its J-space component and the rest, the J-space component, carrying only 6-7% of the variance, produces 88% of successful rewrite interventions (the non-J-space remainder alone manages 5%).\n...\nAn embedding space is a static dictionar"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://www.lesswrong.com/posts/3PaLrzxagpbnNtPLT/a-global-workspace-in-language-models",
+        "title": "A global workspace in language models",
+        "url": "https://www.lesswrong.com/posts/3PaLrzxagpbnNtPLT/a-global-workspace-in-language-models",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "We call the collection of these patterns the J-space—named after the technique we used to find them, involving a mathematical concept called the Jacobian. Each J-space pattern is linked to a particular word. But when one of these patterns lights up, it doesn’t mean the model is saying that word—just that the word is on its mind. If you've heard of language models having a \"scratchpad\" or “chain of thought”—text they write to themselves while reasoning—the J-space is something different. It operates silently, in the model’s internal neural activations, allowing the model to think about a concept without writing it down. Notably, the J-space wasn’t designed or programmed by us, but instead emerged on its own during Claude’s training process.\n...\n- Claude uses its J-space for internal reasoning. If you ask Claude to solve a problem that requires multiple steps, the intermediate steps will light up in its J-space, even when it doesn’t say them out loud. These J-space patterns causally mediate its performance in such tasks, despite being smaller in magnitude than other representations.\n...\nOur experiments were inspired by a prominent theory in neuroscience that was developed to explain how conscious access works: the global workspace theory. This account pictures the brain as a collection of specialist systems that work in parallel, unconsciously, and largely in isolation from one another. A piece of information becomes consciously accessible when it gains entry to a small shared channel, the “workspace,” which is broadcast to other brain systems that can see it and make use of it. Based on our findings, we think the J-space plays a similar “workspace” role in Claude. For example, we find evidence that Claude’s J-space has especially strong connections to the rest of its neural network, allowing it to fulfill this kind of broadcasting role.\n...\n, the J-space is a practically useful tool for us, as it gives us a way to see what Claude is thinking but not saying. For insta"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://github.com/tao-hpu/jspace-replication",
+        "title": "tao-hpu/jspace-replication",
+        "url": "https://github.com/tao-hpu/jspace-replication",
+        "published_date": null,
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Independent replication of Anthropic's global-workspace paper (Jacobian lens) on small open models\n...\nAn independent, third-party replication of the core experiments in\n[**Verbalizable Representations Form a Global Workspace in Language Models**](https://transformer-circuits.pub/2026/workspace/index.html)\n(Anthropic, 2026) on small open-weights models, with systematic bookkeeping of\nwhich claims hold up and which do not.\n...\nThe paper shipped with one external review ([Neel Nanda's](https://www.lesswrong.com/posts/zFJ3ZdQwrTWE9jT5S/a-review-of-anthropic-s-global-workspace-paper)),\nand his results were mixed: the rhyme-planning and mental-arithmetic experiments\nfailed to replicate, the multi-hop probe-swap effect was weak, and the Jacobian\nlens produces many false positives, while the multi-fact editing result\n(swap *France*→*China*, and capital / language / continent / currency answers\nall change together) replicated cleanly.\n...\nThis project re-runs the highest-stakes claims from scratch and adds one control\nthe public review lacked: a direct final-token substitution baseline for the\nprobe-swap experiment (see `experiments/e2-probe-swap/`). Negative and partial\nresults are reported with the same care as positive ones.\n...\n- **Causal register control** (`e6-covert-register/`, `e6t-typo-register/`):\n...\nmeasured-gap translations of a language axis and a typo axis, with\n amplitude-matched random controls and dose curves.\n...\n- **Perspectival capture** (`e7-perspectival-capture/`): a mid-band entity\n...\nswap rewrites the model's restatement of the question itself, stably across\n a 1.7B-14B ladder, while self-report about the edit changes shape at every\n scale.\n...\n- **Transport-cone geometry** (`results/cone_*.json`): raw vs J-transported\n...\nThe transport-cone ladder includes one model we trained ourselves: a 124M\nGPT-2 reproduction (standard nanoGPT recipe), the same checkpoint released at\n[tao-hpu/llm-from-scratch](https://github.com/tao-hpu/llm-from-scratch)\n...\ng"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      },
+      {
+        "id": "https://github.com/Festyve/jspace-viz",
+        "title": "Festyve/jspace-viz",
+        "url": "https://github.com/Festyve/jspace-viz",
+        "published_date": "2026-07-10T00:00:00.000Z",
+        "author": null,
+        "text": null,
+        "highlights": [
+          "Live J-space / Jacobian-lens visualizer for open-weights language models — interactive layer-by-position workspace readouts from 'Verbalizable Representations Form a Global Workspace in LMs' (2026)\n...\nType a prompt, watch what every layer of the model is *disposed to say* at\nevery token position — the \"verbalizable workspace\" from Anthropic's\n[*Verbalizable Representations Form a Global Workspace in Language\nModels*](https://transformer-circuits.pub/2026/workspace/index.html)\n(Gurnee et al., 2026) — rendered as an interactive layer × position heatmap,\nwith one-click comparison against the vanilla logit lens and live plots of the\npaper's workspace-band signatures.\n...\nThe expectation runs over prompts, source positions, and all current-and-later\ntarget positions. The rows of `W_U · J_l` are the **J-lens vectors** — one\ndirection per vocabulary token — and the set of sparse non-negative\ncombinations of them is the **J-space**, the paper's candidate for a global\nworkspace: the small, verbalizable, causally load-bearing slice of the model's\nstate.\n...\nworkspace right now\"** is the shortcut for *\n...\nis it thinking\n...\nabout*: mid-\n...\nconcepts that are **not** words from your prompt and\n **not** the literal next word — i.e. content the model is holding, not\n copying. On the multi-hop boot example, GPT-2's workspace contains currency\n concepts before any currency word is ever said. Click a chip to trace it.\n...\n- **Click\n...\n:\n `★0` =\n...\n#1 thing on the model's mind at that (layer, position); 30000 =\n not a thought at all. Watch a concept *ignite* mid-stack — the paper's\n rank-tracking charts, live.\n...\n- **J-lens ↔ logit lens** toggle: the same grid without the Jacobian\n transport. Mid-layer cells collapse into filler — that contrast is the\n paper's contribution.\n...\n- **charts** (x = depth): next-token accuracy stays ~0 until late layers\n (early layers don't predict words); excess kurtosis humps in the middle —\n the shaded region is the heuristic **workspace band** w"
+        ],
+        "highlight_scores": null,
+        "summary": null
+      }
+    ],
+    "request_id": "13c818c05c4909fbc7e78510edcdb6ec",
+    "resolved_search_type": "",
+    "cost_dollars": {
+      "total": 0.007,
+      "search": {
+        "neural": 0.007
+      }
+    }
+  },
+  "status": "SUCCESS"
+}

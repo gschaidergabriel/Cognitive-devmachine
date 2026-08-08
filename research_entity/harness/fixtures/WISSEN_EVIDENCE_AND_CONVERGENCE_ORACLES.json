@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "fixture_id":"WISSEN-EVIDENCE-AND-CONVERGENCE-ORACLES",
+  "source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0548p0700_chatgpt_secondary_drive_wissen_unifieddb_claygraph_shard.json",
+  "historical_sources":{"wissen_db_sha256":"73381fb192786205c00e7a7c5dabb280a914bc9525286ca61b07fe2bb8af9502","substrat_db_sha256":"6fac6c0db3bb84ba23501936cdf34df02f7a068742477180a8847224e6ace22c","experiment_py":"drive:18uEBnXd3HDZiWZrN_D3WveYcBUfZlOFm","wissensschicht_py":"drive:1aDj-17ThPcemSVs5NbocgbE1mo4-dUAk"},
+  "oracles":[
+    {
+      "id":"PREREG-IMMUTABILITY",
+      "historical_mechanism":"Hypothesis, prediction, falsifier and setup are SHA-256 sealed; SQLite BEFORE UPDATE trigger aborts later mutation.",
+      "required_tests":[
+        "Seal a preregistration and prove mutation of hypothesis fails before any measurement is accepted.",
+        "Seal a preregistration and prove mutation of prediction/falsifier/setup fails.",
+        "Prove measurement/result fields can be appended without changing the preregistration hash.",
+        "Recompute the seal from canonical fields and reject mismatched stored hashes.",
+        "Bind preregistration to source/state epoch so replay cannot attach a valid old seal to a different episode."
+      ],
+      "acceptance_invariant":"No causal/scientific result may retroactively alter the hypothesis, prediction, falsifier or setup it claims to test."
+    },
+    {
+      "id":"ZERO-VARIANCE-CONVERGENCE",
+      "historical_observation":{"rows":9248,"stable_rows":9248,"convergent_rows":9248,"distance_min":0.0,"distance_avg":0.0,"distance_max":0.0,"distinct_checkpoint_names":9248},
+      "required_tests":[
+        "Feed byte-identical primary/shadow states: distance may be zero and convergence may be true.",
+        "Inject one controlled state-field difference: distance must become non-zero or the metric must explicitly abstain; it must not silently remain zero/stable.",
+        "Inject multiple differences across typed state regions and verify monotonic/specified sensitivity rather than constant output.",
+        "Use repeated stable checkpoint identity across time; unique labels alone cannot count as longitudinal convergence evidence.",
+        "Shuffle primary/shadow pairing and require convergence quality to degrade.",
+        "Lesion the compared-state input and require fail/UNKNOWN rather than default stable=true."
+      ],
+      "acceptance_invariant":"A convergence metric that cannot leave its all-zero/all-stable state under controlled divergence has no evidential authority."
+    },
+    {
+      "id":"COUPLING-VS-VOCABULARY",
+      "historical_observation":{"latest_sample_n":120,"real_coupling_fraction":0.225,"wilson95":[0.159,0.308]},
+      "required_tests":[
+        "Separate value-overlap caused by copied stores, shared vocabularies/enums, measurement artifacts and genuine cross-state dependency.",
+        "Run a frequency-preserving or otherwise matched null model before promoting latent overlap to dependency.",
+        "Preserve measured, derived and model-proposed graph edges as distinct epistemic classes.",
+        "Do not claim UnifiedDB superiority unless matched source-local/ATTACH/graph baselines show capability or cost improvement under the same query set."
+      ],
+      "acceptance_invariant":"Shared values or graph density alone never establish functional coupling."
+    }
+  ],
+  "created_by":"chatgpt-secondary",
+  "created_at":"2026-08-09T05:49:00+07:00"
+}

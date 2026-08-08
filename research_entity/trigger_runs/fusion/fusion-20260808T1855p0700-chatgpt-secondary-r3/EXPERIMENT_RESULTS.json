@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260808T1855p0700-chatgpt-secondary-r3",
+  "experiments":[
+    {
+      "experiment_id":"EXP-FUS3-LAYER-IDENT-001",
+      "class":"synthetic_language_layer_identifiability_negative_control",
+      "question":"Can a bundled AI-native-vs-legacy comparison falsely attribute gains to model-native symbolic language when the actual gains come from intent compilation, canonical IR and deterministic runtime?",
+      "factors":{"I":"typed intent/ambiguity handling","C":"canonical semantic IR/compiler","N":"model-native symbolic deliberation","R":"deterministic verified runtime"},
+      "construction":"Balanced 2^4 factorial. Base success 0.42; planted I +0.06, C +0.16, R +0.11, CxR +0.03. Two scenarios: N-null with native main/interactions exactly zero; N-present with native main +0.07 and CxN +0.04. 30 local seeds x 10,000 observations/cell.",
+      "local_30_seed_mean":{
+        "native_null":{"all_off":0.421007,"all_on":0.779783,"bundled_all_on_minus_off":0.358777,"native_orthogonal_average_delta":-0.000255,"canonical_x_native_interaction":-0.000243},
+        "native_present":{"all_off":0.421007,"all_on":0.890117,"bundled_all_on_minus_off":0.469110,"native_orthogonal_average_delta":0.089681,"canonical_x_native_interaction":0.039957}
+      },
+      "local_30_seed_sd":{
+        "native_null":{"all_off":0.003590,"all_on":0.005337,"bundled_all_on_minus_off":0.005854,"native_orthogonal_average_delta":0.002509,"canonical_x_native_interaction":0.004488},
+        "native_present":{"all_off":0.003590,"all_on":0.003661,"bundled_all_on_minus_off":0.004355,"native_orthogonal_average_delta":0.002364,"canonical_x_native_interaction":0.004079}
+      },
+      "judge0_replication":{
+        "runtime":"Judge0 Python 3.8.1",
+        "result_ref":"research_entity/runtime/tool_results/fusion1855-judge0-language-layer-identifiability.json",
+        "native_null":{"all_off":0.4152,"all_on":0.7767,"bundled_delta":0.3615,"native_orthogonal_delta":-0.0009125,"canonical_x_native_interaction":-0.001675},
+        "native_present":{"all_off":0.4158,"all_on":0.8892,"bundled_delta":0.4734,"native_orthogonal_delta":0.090175,"canonical_x_native_interaction":0.04045}
+      },
+      "interpretation":"In the constructed native-null world, a bundled AI-native comparison reports a large ~0.36 gain despite exactly zero planted native-symbol effect; orthogonal intervention correctly recovers approximately zero. When a native effect is planted, orthogonal analysis recovers it and the CxN interaction. Therefore AI-native language must be factorized by layer before causal attribution.",
+      "boundary":"Synthetic calibration only; magnitudes are planted/workload-specific and are not FRANK/Qwen estimates."
+    },
+    {
+      "experiment_id":"EXP-FUS3-SYMBOL-PURITY-NULL-002",
+      "class":"synthetic_interpretability_negative_control",
+      "question":"Can a highly semantically pure discrete symbol codebook be causally irrelevant to model output?",
+      "construction":"Four balanced classes. A synthetic discrete symbol matches the class about 95% of the time, producing high modal-label symbol purity. Output is generated independently by a separate latent predictor at about 80% accuracy; the symbol is unused by construction. 30 seeds x 50,000 observations.",
+      "local_30_seed_mean":{"symbol_purity":0.950118,"baseline_accuracy":0.799663,"symbol_lesion_accuracy":0.799663,"lesion_delta":0.0},
+      "local_30_seed_sd":{"symbol_purity":0.001229,"baseline_accuracy":0.002185,"symbol_lesion_accuracy":0.002185,"lesion_delta":0.0},
+      "interpretation":"High purity/semantic alignment can arise for a monitored or explicitly supervised codebook without the symbol carrying causal control of the decision. Purity, convergence and human-readable symbol chains therefore require lesion/permutation/rescue/OOD tests before being called a reasoning mechanism.",
+      "boundary":"Constructed null, not a claim about the AIM papers' implementation. It demonstrates a confound their metrics must rule out."
+    }
+  ],
+  "promotion":"NONE"
+}

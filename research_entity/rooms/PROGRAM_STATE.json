@@ -1,13 +1,25 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "program_id": "frank-staged-build",
   "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "status": "ACTIVE",
   "current_stage": "L0_ARCHIVE_ASSIMILATION",
-  "status_footer_mode": "NEXT_LEVEL_PLUS_DOOMSDAY",
+  "status_footer_mode": "NEXT_LEVEL_PLUS_DYNAMIC_DOOMSDAY",
   "autonomous_stage_advancement": true,
   "autonomous_dispatch_trigger": "666",
   "post_level0_autonomous_mode": "SEEDED_STOCHASTIC_RESEARCH_FIELD_GENESIS",
+  "dynamic_targets": {
+    "DOOMSDAY": {
+      "label": "DOOMSDAY / Clay 0.1",
+      "protocol": "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
+      "forecast_model": "research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json",
+      "capability_rules": "research_entity/forecast/DOOMSDAY_CAPABILITY_RULES.json",
+      "event_ledger": "research_entity/forecast/DOOMSDAY_EVENTS.jsonl",
+      "resolver": "tools/doomsday_forecast.py",
+      "definition": "First end-to-end project-hardware run of FRANK authored in Clay/ClayCode, distilled/compiled into the intended one-module binary/runtime, using UnifiedDB and the final fully fine-tuned Clay-native model. This release is named Clay 0.1.",
+      "forecast_rule": "Never store a fixed target date. Recalculate from the current critical-path table, stage progress, measured throughput, active/future verified capacity, APIs/capabilities, verified accelerators/blockers/new dependencies and owner training authorization state every time the status resolver runs."
+    }
+  },
   "stage_order": [
     "L0_ARCHIVE_ASSIMILATION",
     "BASE_CLAYCODE_RELEASE",
@@ -18,54 +30,6 @@
     "DATA_LORA_TRAINING_DATA",
     "WAIT"
   ],
-  "program_targets": {
-    "DOOMSDAY": {
-      "label": "DOOMSDAY",
-      "meaning": "First developer-runnable FRANK in the compact one-module/binary architecture with UnifiedDB, reproducible developer boot, persistent state and validated architecture semantics. The name is an internal joke; the gate itself is real.",
-      "target_type": "DEVELOPER_RUNNABLE_SYSTEM",
-      "required_stages": [
-        "L0_ARCHIVE_ASSIMILATION",
-        "BASE_CLAYCODE_RELEASE",
-        "H1_REFERENCE_HARNESS",
-        "H2_CLAYCODE_HARNESS",
-        "H3_ONE_MODULE_FRANK",
-        "UDB_UNIFIED_DATABASE"
-      ],
-      "progress_formula": "arithmetic mean of each required stage's declared machine-verifiable progress fraction; every stage has equal gate weight unless this target is explicitly revised",
-      "stage_weight": 1,
-      "required_final_artifacts": [
-        "ONE_MODULE_HARNESS_RELEASE_MANIFEST.json",
-        "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json",
-        "UNIFIEDDB_RELEASE_MANIFEST.json",
-        "DOOMSDAY_DEVELOPER_BOOT_RECEIPT.json"
-      ],
-      "developer_boot_acceptance": [
-        "one-module/binary FRANK artifact starts from a documented developer command",
-        "UnifiedDB is the active validated persistence/query substrate",
-        "canonical state initializes and persists across a restart test",
-        "GWT/ClayGraph/readout instrumentation remains observable",
-        "Reference/Clay/One-Module semantic validation has no unexplained required divergence",
-        "developer smoke scenario completes end-to-end",
-        "release is reproducible from frozen manifests and hashes"
-      ],
-      "excludes": [
-        "LoRA training data completion",
-        "LoRA training",
-        "paid Together inference/training",
-        "phenomenal-consciousness claims"
-      ],
-      "eta_bootstrap_days_by_stage": {
-        "L0_ARCHIVE_ASSIMILATION": {"low": 5.0, "high": 12.0},
-        "BASE_CLAYCODE_RELEASE": {"low": 1.0, "high": 4.0},
-        "H1_REFERENCE_HARNESS": {"low": 2.0, "high": 8.0},
-        "H2_CLAYCODE_HARNESS": {"low": 1.0, "high": 4.0},
-        "H3_ONE_MODULE_FRANK": {"low": 3.0, "high": 10.0},
-        "UDB_UNIFIED_DATABASE": {"low": 2.0, "high": 7.0}
-      },
-      "eta_confidence": "LOW_UNTIL_LEVEL0_AND_EARLY_RELEASE_THROUGHPUT_CALIBRATE",
-      "eta_rule": "For unfinished stages sum current measured/calibrated stage ETA when available; otherwise use explicit bootstrap ranges. Recalibrate continuously from actual receipts."
-    }
-  },
   "stage_gates": {
     "L0_ARCHIVE_ASSIMILATION": {
       "label": "Level 0 - FRANK Archive Assimilation (666)",
@@ -141,10 +105,10 @@
         "field": "work_packages",
         "missing_means": 0
       },
-      "required_pass_artifacts": ["UNIFIEDDB_RELEASE_MANIFEST.json", "DOOMSDAY_DEVELOPER_BOOT_RECEIPT.json"]
+      "required_pass_artifacts": ["UNIFIEDDB_RELEASE_MANIFEST.json"]
     },
     "DATA_LORA_TRAINING_DATA": {
-      "label": "LoRA Training Data",
+      "label": "Final Clay 0.1 Training Data",
       "status": "BLOCKED",
       "blocked_by": ["UDB_UNIFIED_DATABASE"],
       "progress_source": {
@@ -154,13 +118,13 @@
         "missing_means": 0
       },
       "training_authorized": false,
-      "purpose": "Build and freeze training and held-out data only. Do not train."
+      "purpose": "Build and freeze the final training and held-out corpus only. Do not start paid/final training automatically."
     },
     "WAIT": {
-      "label": "WAIT - Owner Decision",
+      "label": "WAIT - Owner Training Decision",
       "status": "BLOCKED",
       "progress_source": {"kind": "terminal", "value": 100},
-      "meaning": "After training-data artifacts are frozen, stop and wait for explicit project-owner instruction."
+      "meaning": "After training-data artifacts are frozen, stop and wait for explicit project-owner authorization. DOOMSDAY forecasting may continue conditionally, but execution of final paid training does not start automatically."
     }
   },
   "current_stage_goal": "Level 0: exhaustively assimilate the complete Google Drive clay FRANK archive, then the complete Project-Frankenstein repository/history, reconcile both and feed all material knowledge into the Research Entity before ClayCode BASE advances.",
@@ -183,13 +147,14 @@
     "UDB_UNIFIED_DATABASE": ["unifieddb", "harness", "claygraph", "frank", "claycode", "hyperposition", "gwt", "emergenz", "clay"],
     "DATA_LORA_TRAINING_DATA": ["claycode", "frank", "gwt", "hyperposition", "emergenz", "harness", "claygraph", "unifieddb", "clay"]
   },
-  "autonomous_progression_rule": "On exact 666 while Level 0 is open, autonomously claim and execute the next non-overlapping archive-assimilation shard. After 666_RELEASE_GATE PASS, exact 666 no longer deterministically dispatches into the first unpassed milestone. It spawns one seeded high-value diverse research field under EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md, performs research immediately, cross-connects it to the mesh, and routes material deltas to specialist branches. Sequential milestones remain the shared attractor and advance only when their specialist machine-readable gates pass. WAIT remains a hard stop.",
-  "global_training_rule": "No paid LoRA training or paid Together inference/training is authorized by program progression. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit new owner instruction before any training.",
+  "autonomous_progression_rule": "On exact 666 while Level 0 is open, autonomously claim and execute the next non-overlapping archive-assimilation shard. After 666_RELEASE_GATE PASS, exact 666 spawns one seeded high-value diverse research field, performs research immediately, cross-connects it to the mesh, and routes material deltas to specialist branches. Sequential release milestones remain the shared attractor and advance only when specialist machine-readable gates pass. WAIT remains a hard execution stop for final training until explicit owner authorization.",
+  "global_training_rule": "No paid or final model training is authorized by program progression alone. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit new owner instruction before final training. The dynamic DOOMSDAY forecast remains conditional on immediate authorization when the data gate is ready until such authorization exists.",
   "mandatory_cross_cutting_refs": [
     "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
     "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
     "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
     "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
+    "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
     "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
     "research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md",
     "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",

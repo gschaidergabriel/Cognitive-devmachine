@@ -1,0 +1,59 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-20260808T2033p0700-chatgpt-secondary-r3",
+  "evidence_boundary":"All six current-run experiments are local synthetic mechanism tests or CPython microbenchmarks. They are not live-FRANK, target-Qwen, production-database, Android or production-security estimates.",
+  "experiments":[
+    {
+      "id":"EXP-G11-IDENTITY-AXES-001",
+      "class":"LOCAL_SYNTHETIC_IDENTITY_MUTATION",
+      "n":100000,
+      "setup":"Contracts used typed SET/ORDERED/MULTISET collection semantics. Mutations varied semantic-equivalent reordering/duplication, provenance-only changes, semantic changes and reader-view-only changes. Compared one provenance-bound contract hash, semantic-only hash and separated semantic/contract/view axes.",
+      "results":{"naive_contract_hash_false_semantic_inequality":39915,"semantic_hash_instance_collapses":39915,"semantic_hash_unbound_view_mutations":24781,"separated_semantic_axis_errors":0,"separated_contract_axis_errors":0,"separated_view_axis_errors":0},
+      "interpretation":"One identity key cannot simultaneously answer executable semantic equality, exact committed-instance identity and emitted-view identity in this construction. Separate axes remove the constructed category errors. Zero errors are by construction for the implemented canonicalization and do not prove collision/security properties."
+    },
+    {
+      "id":"EXP-G11-SCOPED-SNAPSHOT-002",
+      "class":"LOCAL_SYNTHETIC_CROSS_DOMAIN_CONSISTENCY",
+      "n":300000,
+      "setup":"Eight independently changing domains. Each operation depended on 1-4 domains (mean 2.049) and lasted 1-5 ticks. Compared no commit revalidation, required-domain revalidation and all-domain/global revalidation.",
+      "results":{"effect_invalid_required_basis_changes":16101,"invalid_fraction":0.05367,"uncoordinated_unsafe_accepts":16101,"scoped_rejects":16101,"global_rejects":57731,"global_reject_fraction":0.1924367,"global_false_rejects_when_required_basis_unchanged":41630,"global_false_reject_fraction":0.1387667},
+      "interpretation":"In this constructed workload, scoped validation rejected every basis-invalid operation while a universal barrier rejected an additional 13.88% of all operations for unrelated domain changes. This supports operation-specific cross-store consistency as a target hypothesis, not a live rate estimate."
+    },
+    {
+      "id":"EXP-G11-PHYSICAL-UNIFICATION-SWEEP-003",
+      "class":"LOCAL_SYNTHETIC_ARCHITECTURE_SENSITIVITY",
+      "n":100000,
+      "setup":"Sampled cross-plane query fraction, write intensity and concurrency uniformly. Compared specialized stores, logically unified API over specialized stores, hybrid shared-canonical-plus-sidecars and physical monolith using explicit synthetic latency and common-mode-risk cost surfaces.",
+      "results":{"latency_winner_fraction":{"specialized":0.12232,"logical_unified_api":0.05811,"hybrid":0.54170,"physical_monolith":0.27787},"pareto_participation_fraction_latency_vs_risk":{"specialized":1.0,"logical_unified_api":0.84547,"hybrid":0.81934,"physical_monolith":0.27787},"regime_observation":"Physical monolith won most often in high-cross-plane/low-write/low-concurrency regimes; hybrid dominated latency wins under high concurrency or high writes in the chosen cost surface."},
+      "interpretation":"The synthetic sweep rejects a one-size-fits-all physical-unification assumption: the preferred architecture changes with workload and risk weights. Absolute fractions depend on the chosen synthetic cost model and are not empirical database benchmarks."
+    },
+    {
+      "id":"EXP-G11-INCREMENTAL-DAG-004",
+      "class":"LOCAL_SYNTHETIC_INCREMENTAL_RECOMPUTATION",
+      "setup":"50 modular domains, 5,000 base nodes, 20,000 derived nodes, mostly intra-domain dependencies with occasional cross-domain edges; each event changed five base nodes. Measured transitive affected derived set versus full recomputation over 2,000 events.",
+      "results":{"mean_affected_derived":439.366,"median_affected_derived":404.0,"p95_affected_derived":893.55,"max_affected_derived":1406,"full_derived_count":20000,"mean_full_to_incremental_work_ratio":45.5201},
+      "interpretation":"Modularity can make change-propagation dramatically cheaper than full recomputation. The gain collapses as dependency connectivity increases; the graph was deliberately modular and is not a FRANK topology estimate."
+    },
+    {
+      "id":"EXP-G11-QUERY-PLAN-IDENTITY-005",
+      "class":"LOCAL_SYNTHETIC_SELECTION_PLAN_MUTATION",
+      "n":50000,
+      "setup":"Twenty authentic candidates had four independent score signals. A top-5 plan used fixed weights; one weight was perturbed by +/-0.12 and renormalized while all candidate data remained unchanged.",
+      "results":{"top5_candidate_set_changed_fraction":0.54224,"mean_top5_jaccard":0.8038045,"record_bytes_changed":false,"plan_identity_changed":true},
+      "interpretation":"Selection can change materially while record bytes remain authentic. Query/selector plan identity therefore belongs in causal/provenance receipts whenever membership/ranking matters. A plan hash detecting mutation is an identity check, not proof that either plan is semantically correct."
+    },
+    {
+      "id":"EXP-G11-TRANSPORT-MICROBENCH-006",
+      "class":"LOCAL_CPYTHON_MICROBENCHMARK",
+      "setup":"One record containing identifiers/role/tags plus a 256-float vector. Compared JSON dumps+loads roundtrip, creation of a compact tuple+memoryview handle, and SHA-256 over the float buffer.",
+      "results":{"json_roundtrip_us_per_op":153.499,"compact_handle_creation_us_per_op":0.1067,"payload_sha256_us_per_op":1.0341},
+      "interpretation":"This isolates a potential serialization boundary: handle creation can be orders of magnitude cheaper than textual roundtrip in CPython. The operations are not semantically equivalent end-to-end; these numbers do not predict Rust/C/Android/FRANK latency and motivate a target-host Arrow/shared-memory benchmark only."
+    }
+  ],
+  "fresh_prior_measured_evidence":[
+    {"id":"NV-XB-COVE-4B","source":"nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary","result":"Nemotron-Mini-4B raw 4/12 -> COVE compiled 11/12; prompt tokens 458 -> 289 (-36.9%)."},
+    {"id":"NV-XB-ICSL-4B","source":"nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary","result":"Raw L0 12/16; typed L1 13/16 with +81% prompt tokens; compact Clay-like arm failed output contract."},
+    {"id":"NV-XB-EMBED-ROLE","source":"nvidia-crossbranch-20260808T2015p0700-chatgpt-secondary","result":"Role-reversed directed relations were more embedding-similar than role-preserving paraphrases in two constructed pairs."},
+    {"id":"E2B-CC-LAB-V02","source":"research_entity/runtime/e2b_verification.json","result":"Verified isolated multiline Python/generated-host execution; semantic executable identity separated from provenance-bound contract-instance identity after v0.1 failure."}
+  ]
+}

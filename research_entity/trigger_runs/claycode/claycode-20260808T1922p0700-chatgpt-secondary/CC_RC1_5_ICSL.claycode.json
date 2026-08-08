@@ -1,0 +1,63 @@
+{
+  "schema_version":"1.0",
+  "language":"ClayCode",
+  "representation":"canonical_semantic_ir_json_projection",
+  "candidate_id":"CC-RC1.5-ICSL",
+  "name":"Intent-Certified Semantic Lowering",
+  "status":"OPEN_RESEARCH_CANDIDATE",
+  "extends":"CC-RC1.4-CBCC",
+  "upstream":"CLAY-L4 L0 Intent -> L1 Canonical Clay boundary",
+  "purpose":"Compile partially specified human/agent intent into explicit canonical Clay obligations without converting ambiguity, preference or authority references into truth/execution authority; then lower into existing CBCC/COVE basis, closure, projection and capability semantics.",
+  "pipeline":[
+    "L0 external intent/source",
+    "OP.INTENT_EXTRACT -> S.INTENT_PROPOSAL",
+    "OP.INTENT_ADEQUACY_VALIDATE -> S.INTENT_ADEQUACY_RECEIPT",
+    "OP.INTENT_COMMIT -> S.INTENT_CONTRACT",
+    "OP.INTENT_LOWER_TO_COVE -> existing S.CAUSAL_SLICE_PLAN / OpSpec",
+    "CC-RC1.4 compositional closure + operation-specific basis",
+    "selection/projection receipts",
+    "model/native-Clay proposal",
+    "external capability/effect gateway",
+    "effect/outcome/re-entry receipt"
+  ],
+  "state_contracts":[
+    {"state_id":"S.INTENT_PROPOSAL","authority":"NONE","fields":["source_hash","extractor_id","extractor_version","clauses[]","requested_effect_class","authority_refs[]"],"clause_fields":["clause_id","kind","strength","semantic","source_span_hash","effect_critical"],"allowed_kind":["REQUIREMENT","PROHIBITION","PREFERENCE","ASSUMPTION","UNKNOWN"],"allowed_strength":["HARD","SOFT","UNKNOWN"],"invariant":"probabilistic extraction/proposal only; lexical content and L2 model fluency do not grant fact or authority"},
+    {"state_id":"S.INTENT_ADEQUACY_RECEIPT","authority":"FIDELITY_EVIDENCE_ONLY","fields":["proposal_hash","checks[]","unresolved_clause_ids[]","unresolved_effect_critical[]","status","verifier_semantics_hash"],"check_kinds":["SOURCE_ENTAILMENT","USER_CONFIRMATION","OWNER_CONTRACT","DOMAIN_VERIFIER","TEST_ORACLE"],"invariant":"binds evidence to exact proposal; compiler/type/hash validity is not semantic adequacy; adequacy is not execution authority"},
+    {"state_id":"S.INTENT_CONTRACT","authority":"EXECUTION_SEMANTICS_INPUT_NOT_CAPABILITY","fields":["source_hash","proposal_hash","adequacy_hash","hard_requirements[]","prohibitions[]","soft_preferences[]","assumptions[]","effect_class","authority_requirements[]","contract_hash"],"invariant":"committed executable meaning; authority requirements are dependencies to verify, not minted capabilities"}
+  ],
+  "operations":[
+    {"op_id":"OP.INTENT_EXTRACT","trusted":"NO","executor":"LLM/parser/semantic extractor may propose","result":"S.INTENT_PROPOSAL","rule":"preserve source-span grounding and UNKNOWN rather than forced completion"},
+    {"op_id":"OP.INTENT_ADEQUACY_VALIDATE","trusted":"PARTLY","executor":"deterministic checks + external/domain/user/owner/test evidence as available","result":"S.INTENT_ADEQUACY_RECEIPT","rule":"semantic adequacy evidence is typed by source and coverage; unknown remains first-class"},
+    {"op_id":"OP.INTENT_COMMIT","trusted":"YES","executor":"compiled Clay runtime","preconditions":["proposal shape valid","adequacy receipt bound to exact proposal","no unresolved effect-critical clauses","effect-class adequacy policy satisfied"],"result":"S.INTENT_CONTRACT"},
+    {"op_id":"OP.INTENT_LOWER_TO_COVE","trusted":"YES","executor":"compiled Clay runtime","mapping":{"HARD_REQUIREMENT":"invariant/predicate obligation","PROHIBITION":"deny invariant","SOFT_PREFERENCE":"optimization preference only","ASSUMPTION":"predicate/evidence obligation","AUTHORITY_REFERENCE":"required capability dependency only","UNKNOWN_EFFECT_CRITICAL":"cannot lower silently; escalate"},"result":"existing CBCC/COVE operation semantics"}
+  ],
+  "effect_tiering":{
+    "READ_ONLY":"PARTIAL adequacy may be allowed when all unresolved clauses are non-effect-critical and no protected truth/authority mutation occurs",
+    "REVERSIBLE":"policy may allow PARTIAL only with bounded recovery and no effect-critical unknown",
+    "IRREVERSIBLE":"requires VERIFIED adequacy for effect-critical clauses plus ordinary current external capability/authority checks at release"
+  },
+  "hard_invariants":[
+    "intent_proposal != intent_contract",
+    "intent_contract != fact_truth",
+    "intent_adequacy != execution_authority",
+    "soft_preference != hard_constraint",
+    "unknown != false",
+    "authority_reference != capability",
+    "source_hash_identity != semantic_adequacy",
+    "compiler_pass != source_intent_correctness",
+    "L2_native_clay_fluency != permission_to_rewrite_L1_contract",
+    "L0_or_L2_cannot_implicitly_cast_to_FACT_EXACT_AUTHORITY_CAP_EFFECT_INTENT",
+    "existing_CBCC_COVE_basis_selection_projection_and_gateway_checks_remain_mandatory"
+  ],
+  "claygraph_mapping":{
+    "raw_intent":"external/quoted provenance-bearing source, not canonical fact",
+    "intent_proposal":"derived interpretation record",
+    "intent_contract":"committed semantic contract with source/adequacy ancestry",
+    "model_native_symbols":"versioned CLAY_MODEL projection only; never canonical truth by frequency/purity"
+  },
+  "gwt_mapping":"IntentContract/view identity is an upstream causal witness; workspace experiments must pin or independently vary it rather than bundling intent reinterpretation with selection.",
+  "hyperposition_mapping":"language layer + semantic class participate in firebreak identity; no implicit authority-amplifying cross-layer cast.",
+  "emergence_mapping":"recurrent intent/contracts/native symbols are not emergence evidence; E-CERT2 remains required.",
+  "reader_boundary":"Canonical S.INTENT_CONTRACT is not necessarily optimal CLAY_MODEL surface. Reader projection remains versioned and independently benchmarked.",
+  "evidence_boundary":"Reference implementation + synthetic/Judge0 mechanism tests + Groq 8B proxy + independent 2026 external intent-compilation/effect-typed agent literature. No target-Qwen/live-FRANK promotion."
+}

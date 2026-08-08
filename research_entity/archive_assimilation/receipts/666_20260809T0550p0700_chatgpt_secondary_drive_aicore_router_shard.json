@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0550+0700-chatgpt-secondary-drive-aicore-router-shard",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"ROUTER_SUBTREE_FROZEN_AND_FAILURE_ORACLES_REPRODUCED",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROUTER_SUBMANIFEST.json",
+  "oracle_set":"research_entity/archive_assimilation/oracles/DRIVE_AICORE_ROUTER_CONTEXT_SCHEMA_ORACLES.json",
+  "findings":[
+    {"finding_id":"DRIVE-ROUTER-001","epistemic_class":"POST_HEAD_CODE_NEGATIVE_RESULT_PLUS_THIS_SESSION_REPRODUCTION","status":"REPRODUCED_LOGIC_FAILURE","claim":"Frozen router used one 10k-char budget for system+history, so retained system growth could silently evict history. In this session a 12k system plus nine 500-char history turns leaves only system+1 history turn under old logic, while the Drive Aug-4 split budget retains all nine turns. Drive source also records an original 0/9 history-delivery observation with 8,691-12,253-char system prompts.","targets":["harness","claycode","frank"],"reuse_category":"NEGATIVE_RESULT_VALUE"},
+    {"finding_id":"DRIVE-ROUTER-002","epistemic_class":"POST_HEAD_CODE_MEASUREMENT_FOUNDATION","status":"CONFIGURATION_BOUND","claim":"Drive derives a 22,000-char emergency total cap from per-slot context (16,384/2), output reserve 2,048, measured 3.86 chars/token and template margin. This is a better derivation than a floating constant but remains configuration-bound and must be invalidated when server/tokenizer settings change.","targets":["harness","claycode","frank","clay"]},
+    {"finding_id":"DRIVE-ROUTER-003","epistemic_class":"POST_HEAD_CODE_NEGATIVE_RESULT_PLUS_THIS_SESSION_REPRODUCTION","status":"REPRODUCED_SCHEMA_FAILURE","claim":"Frozen router reads only message.content; Drive adds fallback to message.reasoning_content after source-reported 6/6 empty-content cases on a newer llama.cpp reasoning schema. In this session a valid reasoning_content-only response evaluates empty under old logic and correctly under new logic.","targets":["harness","needle","frank","claycode"],"reuse_category":"NEGATIVE_RESULT_VALUE"},
+    {"finding_id":"DRIVE-ROUTER-004","epistemic_class":"POST_HEAD_CODE_EVIDENCE","status":"DESIGN_INVARIANT","claim":"Drive applies the same context trimming helper to blocking and streaming routes, supporting a parity invariant across transport variants.","targets":["harness","claycode"]}
+  ],
+  "crossread_dedup":{"peer_runtime_inventory":"research_entity/rooms/center_events/20260809T0431p0700_666_drive_runtime_inventory_crossroom_delta.json","decision":"Peer established only router blob divergence and assigned zero hours; this receipt adds semantic closure and executable logic oracles. Test/eval peer covers training truncation and behavior-eval confounds, not router history-starvation/provider-schema failure."},
+  "branch_feedback":{"harness":"Add context-channel starvation, config-bound budget invalidation, provider response-schema normalization and stream/blocking parity tests.","claycode":"Context budgets should be typed resource constraints per semantic channel; truncation must emit explicit loss/abstention receipts rather than silently erasing history.","frank":"Canonical memory availability requires proof that history survives projection into the model window; stored history alone is not functional context.","needle":"Normalize provider/runtime response schema before deciding whether model output is empty/failure.","clay":"Treat tokenizer/context/server configuration as part of the measured execution environment behind any budget constant."},
+  "earned_work_hours_added":0.0,
+  "earned_work_reason":"This worker contributes high-value concrete harness oracles but does not add hours pending central overlap reconciliation with existing memory/context/test mappings.",
+  "progress_accounting":{"router_subtree_exact":"2/2 files complete","global_exact_level0_percent":0.0},
+  "completed_at":"2026-08-09T05:50:00+07:00"
+}

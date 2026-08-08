@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "run_id": "android-20260808T2338p0700-chatgpt-secondary-r1",
+  "role": "secondary_cross_cutting_research_arm",
+  "primary_reference_platform": "linux",
+  "android_role": "edge_efficiency_portability_falsification",
+  "quota_policy": {
+    "firebase_virtual_daily_nominal": 10,
+    "firebase_physical_daily_nominal": 5,
+    "max_virtual_for_this_cycle": 3,
+    "max_physical_for_this_cycle": 0,
+    "virtual_already_consumed": 1,
+    "virtual_reserved_for_other_workers_after_cycle": 7,
+    "principle": "bundle orthogonal assertions per device invocation and use CI before device quota"
+  },
+  "priority_experiments": [
+    {
+      "id": "EXP-ANDROID-R1-INFRA-001",
+      "status": "COMPLETE_PASS",
+      "device_cost": 1,
+      "question": "Can GitHub Actions build a ClayCode semantic harness, authenticate with Firebase and execute it on an ARM Android Test Lab device?",
+      "device": "MediumPhone.arm / Android 35",
+      "tests": ["typed arithmetic + assertion", "unknown-reference deterministic rejection"]
+    },
+    {
+      "id": "EXP-ANDROID-R1-PORTABILITY-BUNDLE-002",
+      "status": "PLANNED_NEXT",
+      "device_cost": 2,
+      "question": "Do core ClayCode invariants and replay/safe-effect behaviors remain equivalent across two Android runtime generations while exposing basic constrained-device efficiency measurements?",
+      "devices": ["MediumPhone.arm / Android 35", "SmallPhone.arm / Android 30"],
+      "bundled_tests": [
+        "typed arithmetic equivalence",
+        "unknown-reference rejection",
+        "integer overflow rejection",
+        "ordered vs set vs multiset semantics remain distinguishable",
+        "canonical event replay is idempotent",
+        "damaged derived-state replay diverges and is detected",
+        "effect proposal cannot self-mint authority",
+        "compact Clay-like source byte density vs verbose JSON-like control",
+        "bounded parse/evaluate loop timing receipt",
+        "cold reconstruction produces identical semantic output"
+      ]
+    }
+  ],
+  "deferred_high_value_experiments": [
+    {
+      "id": "EXP-ANDROID-R2-QWEN-RUNTIME-003",
+      "reason": "requires model/native runtime integration; do CI/native packaging before device quota",
+      "question": "Can a quantized Qwen-class model execute reliably under Android memory/runtime constraints?"
+    },
+    {
+      "id": "EXP-ANDROID-R2-CONTEXT-KV-004",
+      "reason": "target model prerequisite",
+      "question": "Do bounded Clay Assemblies/views reduce prefill, KV/context memory and total latency at matched task quality?",
+      "links": ["H-G12-057", "H-G12-059"]
+    },
+    {
+      "id": "EXP-ANDROID-R2-RAILS-005",
+      "reason": "target model prerequisite",
+      "question": "Which Clay/ClayCode reader rail minimizes end-to-end cost on Android without semantic/task degradation?"
+    },
+    {
+      "id": "EXP-ANDROID-R2-GWT-006",
+      "reason": "requires model/runtime instrumentation",
+      "question": "What are candidate, WorkspaceEpisode, projection and re-entry memory/latency costs on edge runtime?"
+    },
+    {
+      "id": "EXP-ANDROID-R2-CLAYGRAPH-007",
+      "reason": "requires graph runtime packaging",
+      "question": "Sparse activation + conditional traversal versus always-traverse on Android latency/RAM."
+    },
+    {
+      "id": "EXP-ANDROID-R2-UNIFIEDDB-008",
+      "reason": "requires embedded persistence harness",
+      "question": "Canonical event replay, SQLite/query identity, write amplification and derived-sidecar rebuild under process kill."
+    },
+    {
+      "id": "EXP-ANDROID-R3-PHYSICAL-THERMAL-009",
+      "reason": "physical hardware is required; preserve physical quota until model path exists",
+      "question": "Does sustained thermal state reverse short-burst model/runtime rankings?",
+      "links": ["H-G12-060"]
+    },
+    {
+      "id": "EXP-ANDROID-R3-LINUX-DIFFERENTIAL-010",
+      "reason": "execute after same Android runtime corpus is stable",
+      "question": "Which Android findings replicate on Linux and can therefore move from Android-local to cross-platform evidence?"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "666-20260809T0444+0700-drive-g8-measurement-earned-work",
+  "actor_id": "chatgpt-secondary",
+  "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0444p0700_chatgpt_secondary_drive_g8_measurement_repro_shard.json",
+  "status": "PENDING_CENTRAL_CAS_AGGREGATION",
+  "crossread_deduplicated": true,
+  "central_baseline_observed_before_delta": {
+    "mapped_avoided_future_hours_low": 28.0,
+    "mapped_avoided_future_hours_center": 74.0,
+    "mapped_avoided_future_hours_high": 148.0,
+    "workspace_schema_version": "1.6"
+  },
+  "new_unique_candidates": [
+    {
+      "mapping_id": "HEW-DRIVE-G8-EXEC-011",
+      "low": 1.0,
+      "center": 3.0,
+      "high": 6.0,
+      "rows": ["BASE_CLAYCODE_RELEASE", "H2_CLAYCODE_HARNESS", "CLAY_0_1_ACCEPTANCE_RUN"]
+    },
+    {
+      "mapping_id": "HEW-DRIVE-INSTRUMENT-012",
+      "low": 2.0,
+      "center": 4.0,
+      "high": 8.0,
+      "rows": ["H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "CLAY_0_1_ACCEPTANCE_RUN"]
+    }
+  ],
+  "pending_unique_sum": {
+    "low": 3.0,
+    "center": 7.0,
+    "high": 14.0
+  },
+  "would_be_gross_if_no_new_overlap_found": {
+    "low": 31.0,
+    "center": 81.0,
+    "high": 162.0
+  },
+  "global_completion_credit_applied": false,
+  "merge_rule": "A central aggregator must reread HISTORICAL_EARNED_WORK.json and all newer deltas/receipts, deduplicate at mechanism and DOOMSDAY-row level, then CAS-update the central file. Do not blindly add 7 center hours if a concurrent worker has integrated equivalent G8/instrument work.",
+  "created_at": "2026-08-09T04:44:00+07:00"
+}

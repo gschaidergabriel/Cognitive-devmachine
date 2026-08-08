@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.0",
+  "fixture_id":"HANDOFF_SILENT_DEATH_SCHEMA_DRIFT_ORACLES",
+  "source_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROOT_FILES_IDENTITY_CHRONOLOGY_MANIFEST.json",
+  "purpose":"Convert high-value Aug-4 Drive handoff findings into current executable regression requirements without treating operational prose as current truth.",
+  "oracles":[
+    {
+      "id":"HDO-OBS-001",
+      "name":"background_loop_failures_must_be_visible",
+      "historical_evidence":"P4 reports 1275 swallow-capable exception sites, 1100 broad catches and 241 in consciousness_daemon.py after Attention Controller and ThoughtSeed had died silently.",
+      "required_pass":"Injected exceptions in every long-running critical loop produce a typed fault event, health-state transition and externally testable failure signal; no loop may silently disappear behind broad catch-and-continue behavior."
+    },
+    {
+      "id":"HDO-SCHEMA-002",
+      "name":"checkpoint_state_shape_version_mismatch",
+      "historical_evidence":"P4 records NAc STATE_DIM changing 102->100 while a persisted SFT anchor remained shape (64,102), requiring stale-shape reset logic.",
+      "required_pass":"Every persisted model/state/checkpoint artifact carries schema/version/shape identity; incompatible load fails closed or runs an explicit verified migration/reset path and emits a receipt."
+    },
+    {
+      "id":"HDO-PROMPT-003",
+      "name":"training_runtime_prompt_freshness",
+      "historical_evidence":"P3/P4 report repeated train/inference drift and propose a guard that fails when a prompt extract is older than living runtime source.",
+      "required_pass":"Training/evaluation prompt projections are provenance-bound to exact runtime semantic source/version; stale snapshots fail the data/eval gate rather than silently training against obsolete semantics."
+    },
+    {
+      "id":"HDO-SOURCE-004",
+      "name":"live_vs_repository_state_source_truth",
+      "historical_evidence":"P3 reports same-named repository database paths had become stale while live state existed under a runtime data directory.",
+      "required_pass":"Harness identifies authoritative live-state location through configuration/provenance rather than filename/path coincidence and rejects stale duplicate stores as current truth."
+    },
+    {
+      "id":"HDO-TRAIN-005",
+      "name":"lora_target_modules_must_exist_in_actual_model",
+      "historical_evidence":"P3 reports Qwen3.5 hybrid full/linear-attention layers where standard q/k/v/o projection names exist only in full-attention layers.",
+      "required_pass":"Before any allowed training run, a model-structure probe resolves intended target modules against the exact immutable model config and rejects missing/partial target coverage unless explicitly designed and measured."
+    }
+  ]
+}

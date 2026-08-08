@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "coordination_id":"claycode-multiworker-20260809T0128p0700",
+  "trigger":"claycode",
+  "owner_instruction":"Three concurrent ClayCode instances must network their findings and fuse after all workers finish.",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "shared_goal":"Revise ClayCode into a genuinely general-purpose programming language capable of implementing arbitrary application classes while preserving typed capability/effect safety, FRANK semantic contracts, TCQS, and recoverability.",
+  "required_worker_count":3,
+  "coordination_protocol":{
+    "join":"Each active ClayCode worker reads this RENDEZVOUS and all sibling WORKER_*.json / CONTRIBUTION_*.md files before finalizing.",
+    "write":"Each worker writes only its own append-only worker/contribution files; do not overwrite another worker file.",
+    "cross_read":"Before close, each worker must reread all available sibling contributions and record accepted/refined/rejected deltas.",
+    "fusion":"When all three workers are COMPLETE or explicitly CLOSED, one worker performs a final ClayCode fusion over all three contributions, preserving disagreements and negative results.",
+    "promotion":"No shared-ancestry agreement counts as independent replication; no canonical promotion without normal gates.",
+    "conflict_avoidance":"Do not update this rendezvous file concurrently. State changes are represented by new append-only receipts."
+  },
+  "lanes":[
+    {"lane_id":"A_GENERAL_PURPOSE_CORE","goal":"universality, language core, type/effect/capability separation, arbitrary application expressiveness"},
+    {"lane_id":"B_COMPILER_RUNTIME_LOWERING","goal":"compiler/ABI/runtime/backend lowering, FFI, OS/network/GPU/device/application coverage"},
+    {"lane_id":"C_ADVERSARIAL_SAFETY_FORMAL","goal":"prompt-injection/safety adversaries, destructive effects, capability laundering, soundness/falsifiers"}
+  ],
+  "mandatory_shared_questions":[
+    "Can ClayCode express destructive/admin/device operations even though execution requires explicit authority?",
+    "Can it implement CLI, GUI, web server/client, game, database, compiler/JIT, GPU/ML, embedded/robotics, kernel/driver-class software through typed lowerings/FFI?",
+    "Does the safety architecture constrain authority rather than computational expressiveness?",
+    "Which operations require host capabilities, and can those capabilities be forged, widened, laundered or ambiently inherited?",
+    "Can arbitrary computation be expressed by a small universal pure/control core independent of effects?"
+  ],
+  "status":"OPEN_WAITING_FOR_3_WORKER_RECEIPTS"
+}

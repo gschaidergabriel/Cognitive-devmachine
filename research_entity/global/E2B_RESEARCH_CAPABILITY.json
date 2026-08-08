@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "tool_name":"e2b_sandbox",
+  "provider":"E2B",
+  "script":"tools/e2b_sandbox.py",
+  "bridge":"tools/research_tool_bridge.py",
+  "class":"remote_isolated_linux_sandbox",
+  "requires_secret":["E2B_API_KEY"],
+  "credential_required":true,
+  "credential_value_must_not_appear_in_artifacts":true,
+  "evidence_class":"runtime_experiment",
+  "status":"RUNTIME_VERIFIED",
+  "verified_at":"2026-08-08T13:23:06Z",
+  "verification_receipt":"research_entity/runtime/tool_results/e2b-smoke-20260808T2026p0700.json",
+  "verification":{"expected_stdout":"RAE_E2B_OK:42","exit_code":0,"worker_bridge_verified":true},
+  "bridge_multiline_fix":{"commit":"e559841d74d5ca0a13a0a58605be5fdc93e22705","negative_receipt":"research_entity/runtime/tool_results/claycode-e2b-compiler-lab-v01-20260808T2028p0700.json","reason":"initial bridge shell quoting preserved JSON newline escapes; fixed with shell-safe quoting before compiler rerun"},
+  "claycode_priority":"PREFERRED_EXECUTABLE_RESEARCH_SANDBOX",
+  "claycode_required_uses":[
+    "execute real ClayCode parser/compiler/type/effect checker artifacts",
+    "execute generated host-language lowerings in isolated runtime",
+    "run positive/negative/mutation/fuzz compiler corpora",
+    "perform differential checks against local/Judge0 when information gain justifies it",
+    "capture compiler/runtime counterexamples as durable research evidence"
+  ],
+  "learning_rule":"Nontrivial ClayCode E2B experiments produce executable-research receipts. Failures in compiler, generated code, sandbox bridge or runtime semantics are research results: fix the relevant layer, rerun the discriminating case, and feed the result back into ClayCode hypotheses/negatives and affected mesh branches.",
+  "authority_boundary":"E2B success proves only the executed runtime property. It does not by itself promote ClayCode semantics, grant capabilities, or establish live-FRANK behavior.",
+  "fallbacks":["local_sandbox","judge0_execute"],
+  "independent_secondary_sandbox":{"tool":"sandboxapi_sandbox","status":"BLOCKED_NOT_SUBSCRIBED","purpose":"independent multi-language replication when RapidAPI subscription becomes active"}
+}

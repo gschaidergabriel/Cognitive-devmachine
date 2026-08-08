@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-AICORE-WEBD-20260809T0525p0700",
+  "status":"FROZEN_COMPLETE_TWO_FILE_SUBTREE_WITH_POST_HEAD_PORT_MIGRATION",
+  "source_folder":{"title":"aicore/webd","drive_id":"1jGgZCOKskL8TIynIqc3hOURRjU0zuPHu","parent_aicore_drive_id":"1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty"},
+  "reference":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1"},
+  "counts":{"recursive_files":2,"recursive_folders":0,"byte_identical_to_reference":1,"post_head_divergent":1},
+  "files":[
+    {"path":"webd/__init__.py","drive_id":"1UAZNRz9lWdINoLUFgAFK5hT6WRfFK88d","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","git_blob":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","reference_blob":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","status":"BYTE_IDENTICAL"},
+    {"path":"webd/app.py","drive_id":"1eiMQd-xxJPV16nDZMn5v3yxL5XzS_wMe","bytes":37942,"sha256":"0b10304809c0d6d700eb0441699fe8ab4a22d68e667f5b20915d5d47eef102e0","git_blob":"91da3e903f244e615fc30eddb8eaaf6780a3038b","reference_blob":"9c6077b431491179a667b700e4754605412b01dd","status":"POST_HEAD_DIVERGENT","exact_diff":"Reference `PORT = 8093` was replaced by `from config import instanz as _inst` + `PORT = _inst.port(\"webd\")  # Vorgabe = 8093, wie bisher`; inverse replacement reconstructs exact reference blob 9c6077b431491179a667b700e4754605412b01dd."}
+  ],
+  "cluster_relation":"Same Aug-4 systematic port-authority migration as modeld; no separate earned-work credit should be assigned merely for repeating the same two-line migration in another daemon.",
+  "semantic_obligations":{"identified":"2/2","content_covered":"2/2","classified":"2/2","lineage_linked":"2/2","analyzed":"2/2","status":"COMPLETE_FOR_WEBD_SUBTREE"},
+  "created_by":"chatgpt-secondary","created_at":"2026-08-09T05:25:00+07:00"
+}

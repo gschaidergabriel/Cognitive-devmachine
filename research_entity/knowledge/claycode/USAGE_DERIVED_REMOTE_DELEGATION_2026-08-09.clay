@@ -1,0 +1,70 @@
+module claycode.research.usage.remote_delegation_2026_08_09
+status OBSERVATION_TO_RESEARCH_CANDIDATE
+source observable_RAE_design_and_tool_receipts
+
+obs O1 {
+  symptom="private/unindexed repo code search may return no result"
+  failed_design="opaque trigger token -> hashed package id -> search required"
+  repair="trigger_token == package_id == deterministic request/result file stem"
+  effect="one human token becomes sufficient address for remote work"
+}
+
+obs O2 {
+  symptom="hardcoded ChatGPT capability list becomes stale"
+  repair="known capability families + live authorized capability resolution at execution"
+  effect="future ChatGPT tools become usable without language/protocol rewrite"
+}
+
+obs O3 {
+  symptom="SQLite cannot be page-safely shared through Git across provider nodes"
+  repair="local UnifiedDB authority + repo semantic request/receipt spine"
+  effect="remote ChatGPT work re-enters same entity state without provider-owned DB"
+}
+
+obs O4 {
+  symptom="human is forced to copy/paste remote result"
+  repair="repo result receipt -> local materializer ingest -> next Claude capsule"
+  effect="human launch only; result return automated"
+}
+
+obs O5 {
+  symptom="image generation capability may not expose exact bytes to repo connector"
+  repair="separate GENERATED_MEDIA_REFERENCE from REPO_ARTIFACT_SYNC; never conflate"
+  effect="media capability can be used without false artifact persistence claim"
+}
+
+hp H_ADDR {
+  claim="ClayCode should treat self-addressing remote work refs as first-class coordination objects"
+  candidate="address{scheme;entity;job;transport;result;epoch}"
+  predicted=[lower_retrieval_failure,lower_context_cost,better_cross_provider_reentry]
+  counter="deterministic URI/path convention may be enough; new language primitive may add no value"
+  test="compare convention-only vs typed address primitive across job routing/replay/error repair"
+}
+
+hp H_CAP {
+  claim="capability resolution should be late-bound in ClayCode coordination semantics"
+  candidate="cap.resolve(task,authority,now)"
+  predicted=[future_tool_adaptation,less_stale_prompt_state]
+  counter="late binding can reduce reproducibility unless capability receipt/version is frozen per job"
+  test="late-bind then freeze receipt vs fixed package capability list"
+}
+
+hp H_REMOTE {
+  claim="remote cognitive work needs explicit lifecycle primitive separate from ordinary effect execution"
+  candidate="remote{ready->claimed->running->posted->ingested->consumed}"
+  predicted=[less_fake_background_work,clearer_recovery,better_causal_credit]
+  counter="existing effect/receipt state machine can encode this without a new primitive"
+  test="semantic compression + error rate comparison against generic effect encoding"
+}
+
+hp H_MEDIA {
+  claim="generated media identity and durable artifact identity must be distinct semantic types"
+  candidate="MediaGenerationRef != ArtifactRef"
+  predicted=[fewer_false_DONE_states,cleaner_cross_provider_media_bridge]
+  counter="artifact status enum may be sufficient"
+  test="replay media jobs under bytes-available vs bytes-unavailable conditions"
+}
+
+research_queue=[H_ADDR,H_CAP,H_REMOTE,H_MEDIA]
+rule observation!=promotion
+rule promote iff matched_budget_test+semantic_preservation+counterevidence+rollback

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1216p0700_chatgpt_secondary_pf_reality_conscience_failure_lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_universe": "gschaidergabriel/Project-Frankenstein historical lineage",
+  "task_id": "666-l0-pf-reality-conscience-lineage-20260809T1214p0700",
+  "bounded_scope": {
+    "commits": [
+      "0c0a819ec593074405ebd43446956e73976166a8",
+      "92791d1cf0c2580688da1666d6e32386beaa5139",
+      "475652157d19b9f27625f07c8b9c125a04267b59"
+    ],
+    "implementation_files": ["core/app.py","services/consciousness_daemon.py","services/neural_conscience.py","services/autonomous_research.py","services/intent_queue.py","install.sh"],
+    "exact_history_denominator_credit": 0,
+    "reason": "Project-Frankenstein exact frozen-head tree and full commit-DAG/history denominators remain unresolved; this is a bounded semantic/failure lineage shard."
+  },
+  "verified_findings": [
+    {
+      "id": "PF-RC-L1",
+      "evidence_class": "HISTORICAL_VERIFIED_IN_DIFF",
+      "finding": "SystemRealityLayer was added as a ground-truth fact store and injected into user-facing chat prompts; the same reality block was also injected into idle-thought prompts. Ego Governor post-generation regex checks attempted to catch architecture/model/GPU/infrastructure confabulations.",
+      "source_commit": "0c0a819ec593074405ebd43446956e73976166a8"
+    },
+    {
+      "id": "PF-RC-L2",
+      "evidence_class": "HISTORICAL_REPORTED_AUDIT_PLUS_VERIFIED_FIX",
+      "finding": "The subsequent deep audit reports that idle-thought RealityLayer injection caused the model to echo the [REALITY] block, producing a 67% rejection rate. The fix removed RealityLayer from idle-thought prompts and added REALITY to the context-tag leak detector. The commit reports 0 prompt-leak rejections in the post-fix 30-minute idle window and a 30/30 conversation test averaging 11.2s via GPU.",
+      "source_commit": "92791d1cf0c2580688da1666d6e32386beaa5139",
+      "measurement_status": "HISTORICAL_SELF_REPORTED_NOT_REPRODUCED_BY_THIS_RUN"
+    },
+    {
+      "id": "PF-RC-L3",
+      "evidence_class": "HISTORICAL_REPORTED_AUDIT_PLUS_VERIFIED_FIX",
+      "finding": "A later audit reports a degenerate Neural Conscience state: ACC=0, verdict approximately 0.9999, with 0 negative and 960 positive samples. The stated root cause is missing record_outcome(accepted=False) calls on rejection/suppression paths. The fix adds negative outcome propagation for conscience rejection and downstream hallucination-filter suppression and resets the degenerate checkpoint/cold-start data.",
+      "source_commit": "475652157d19b9f27625f07c8b9c125a04267b59",
+      "measurement_status": "HISTORICAL_SELF_REPORTED_NOT_REPRODUCED_BY_THIS_RUN"
+    },
+    {
+      "id": "PF-RC-L4",
+      "evidence_class": "HISTORICAL_VERIFIED_IN_CODE",
+      "finding": "NeuralConscience stores each evaluation with outcome=-1 by default; record_outcome(trace_id, accepted) is the terminal training-label write; train_cycle selects only rows WHERE outcome >= 0. Therefore any terminal pipeline path that fails to call record_outcome leaves the trace unlabeled and excludes it from supervised training, creating survivorship/selection bias even when the evaluator saw the rejected example.",
+      "source_ref": "475652157d19b9f27625f07c8b9c125a04267b59:services/neural_conscience.py"
+    },
+    {
+      "id": "PF-RC-L5",
+      "evidence_class": "HISTORICAL_VERIFIED_IN_DIFF",
+      "finding": "The prompt-leak audit also repaired a silent memory-write failure: autonomous_research posted to a nonexistent /memory/store endpoint (404); the fix stores research directly into consciousness.db. This is another example of an apparently functioning cognitive loop losing learning because the terminal persistence edge was not actually connected.",
+      "source_commit": "92791d1cf0c2580688da1666d6e32386beaa5139"
+    }
+  ],
+  "current_architecture_implications": [
+    {
+      "target": "harness",
+      "rule": "Introduce TERMINAL_OUTCOME_COMPLETENESS: every evaluated action/thought/gate trace must finish as ACCEPT, REJECT, ABSTAIN/UNKNOWN, ERROR or CANCELLED with a durable receipt. Unlabeled disappearance is a test failure, not a neutral state."
+    },
+    {
+      "target": "needle",
+      "rule": "Needle/effect routing must propagate downstream disposition back to upstream decision traces with stage/reason provenance. A downstream hallucination/safety/effect rejection must not vanish after an upstream approve decision."
+    },
+    {
+      "target": "gwt",
+      "rule": "Do not inject complete ground-truth/state dumps into every internal cognitive loop. Context must be demand-conditioned and surface-specific. Internal thought loops should receive compact typed state projections/assemblies; user-facing factual claims can request authoritative reality facts separately."
+    },
+    {
+      "target": "unifieddb",
+      "rule": "Persist evaluation trace, terminal disposition, gate sequence, reason code, label provenance and training-admission state separately. Training queries must be able to prove class coverage and missing-label count."
+    },
+    {
+      "target": "harness",
+      "rule": "Before online learner updates, enforce label-health gates: minimum positive/negative support (or explicit multi-class equivalents), class-entropy floor, unlabeled-rate ceiling, held-out regression and rollback. A 960:0 label stream must freeze learning rather than reinforce itself."
+    },
+    {
+      "target": "claycode",
+      "rule": "The language/runtime should make terminal outcome state and effect receipts representable as typed/exhaustive transitions, enabling compile/test-time detection of decision paths that never emit a terminal learning signal."
+    }
+  ],
+  "negative_knowledge": [
+    "Ground-truth context can reduce factual uncertainty while simultaneously increasing prompt/state leakage when indiscriminately injected into generative internal loops.",
+    "A trainable gate can appear numerically confident while being functionally blind if rejected examples do not reach the learner.",
+    "Post-generation safety or hallucination filters are part of the learner's causal outcome graph; treating them as separate logging-only stages produces biased credit assignment.",
+    "A successful request path does not prove learning/persistence occurred; endpoint/schema drift can silently disconnect the memory edge."
+  ],
+  "required_regressions": [
+    "raw-context-canary leakage test across internal and user-facing surfaces",
+    "100% terminal outcome receipt coverage over all gate/effect branches",
+    "single-class degeneration injection test that must freeze learner updates",
+    "downstream-reject credit-propagation replay",
+    "memory-write endpoint/schema fault injection with explicit failure receipt",
+    "held-out factuality test comparing demand-retrieved reality facts vs always-injected raw reality block"
+  ],
+  "coverage_credit": {"global_level0_exact_percent_added":0.0,"semantic_lineage":"CLOSED_BOUNDED_SHARD"},
+  "status": "COMPLETE"
+}

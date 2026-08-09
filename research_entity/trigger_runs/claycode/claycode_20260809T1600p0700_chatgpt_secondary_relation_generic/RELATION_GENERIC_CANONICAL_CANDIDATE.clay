@@ -1,0 +1,23 @@
+module claycode.g9.relation_generic_candidate
+version "0.1"
+status OPEN_RESEARCH_CANDIDATE
+parent @research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay
+
+// Strict generic canonical surface for binary semantic relations.
+// Human/reader pretty forms may lower to this representation, but do not define identity.
+
+law canonical_binary_relation = relation(RelationId, lhs, rhs)
+law RelationId = typed_semantic_symbol_resolved_from_quoted_surface_id
+law pretty_infix_relation = optional_reader_surface_only
+law pretty_surface != canonical_semantic_identity
+law relation_name != lexer_operator
+law relation_representation != truth
+law relation_representation != authority
+
+// Examples of reversible surface lowering candidates:
+rule relation("never_implies",Delta,epistemic_upgrade)
+rule relation("cannot_authorize",graph.derived_relation,effect)
+rule relation("includes",NativeCognitionTask.forbidden_burden,[filesystem_search,api_selection,json_arguments])
+rule relation("lifecycle",external_effect,[REQUESTED,AUTHORIZED,CLAIMED,EXECUTED,VERIFIED,DONE])
+
+invariant model_output_and_surface_syntax_never_mint_execution_authority

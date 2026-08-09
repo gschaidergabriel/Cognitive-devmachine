@@ -1,5 +1,5 @@
 module clay.research.autonomous_swarm_coordination
-version "1.0"
+version "1.1"
 status PROJECT_OWNER_FIXED_GLOBAL_OPERATION_LAW
 
 goal="Frank v0.1 voll lauffähig auf Andreas PC"
@@ -16,6 +16,10 @@ law NO_PERMANENT_CHIEF=true
 law MANUAL_CENTRAL_DISPATCH=OPTIONAL
 law EVIDENCE_OUTRANKS_COORDINATION_ROLE=true
 law DUPLICATE_WORK_REQUIRES_EXPLICIT_REPLICATION=true
+law FIELD_MATCHED_TOOL_API_EXCHANGE=MANDATORY
+law TOOL_API_RECOMMENDATION_IS_PROPOSAL_NOT_AUTHORITY=true
+law TOGETHER_TOGETHER_AI_PROVIDER_IS_FORBIDDEN=true
+law TOGETHER_TABOO_CAN_ONLY_BE_REMOVED_BY_EXPLICIT_PROJECT_OWNER_OVERRIDE=true
 
 record SwarmBlackboardView {
   canonical_parent:Ref
@@ -97,6 +101,54 @@ rule blocker_removed -> recompute_frontier_and_bids
 rule mission_stage_change -> recompute_frontier_and_bids
 rule worker_may_abandon_or_handoff_when_new_work_dominates_expected_value
 
+// Field-matched capability exchange: workers actively help each other discover better tools/APIs.
+type CapabilityCandidateKind = TOOL|API|MODEL_GATEWAY|RUNTIME|LIBRARY|SERVICE|DATA_SOURCE
+
+record CapabilityRecommendation {
+  recommendation_id:Ref
+  from_worker:Ref
+  to_workers:Set<Ref>
+  field_or_work:Ref
+  candidate:Ref
+  candidate_kind:CapabilityCandidateKind
+  field_fit:Score
+  expected_quality:Score
+  reliability:Score
+  latency_fit:Score
+  cost_fit:Score
+  privacy_fit:Score
+  security_fit:Score
+  integration_fit:Score
+  reproducibility:Score
+  execution_availability:Score
+  freshness:Score
+  evidence:Set<Ref>
+  alternatives_considered:Set<Ref>
+  caveats:Set<Ref>
+}
+
+rule every_worker.before_material_work -> identify_field_matched_tools_apis_and_capabilities
+rule worker_with_relevant_capability_knowledge -> propose_best_known_candidates_to_semantically_affected_workers
+rule capability_recommendation_distribution -> targeted_not_broadcast_spam
+rule receiving_worker -> independently_evaluate_recommendation
+rule receiving_worker -> actively_search_current_authorized_surface_for_equal_or_better_alternatives_when_material
+rule receiving_worker -> may_select_recommended_candidate_or_better_candidate
+rule tool_api_selection -> compare(field_fit,quality,reliability,latency,cost,privacy,security,integration_effort,reproducibility,availability,freshness,authority_scope)
+rule selection_score_is_decision_support_not_truth
+rule stale_or_unverified_capability -> UNKNOWN_OR_DEGRADED_NOT_ASSUMED_AVAILABLE
+rule unavailable_or_unauthorized_candidate -> reject
+rule better_supported_candidate -> supersede_weaker_recommendation_with_reason
+rule material_tool_api_choice -> publish_selection_rationale_and_capability_evidence_to_affected_workers
+rule new_tool_api_evidence -> recompute_relevant_work_and_capability_frontier
+
+// Owner-fixed provider exclusion.
+rule candidate.provider in ["Together","Together.ai","Together AI","together.ai"] -> FORBIDDEN
+rule FORBIDDEN -> never_recommend
+rule FORBIDDEN -> never_select
+rule FORBIDDEN -> never_use
+rule FORBIDDEN -> never_route_work_through
+rule FORBIDDEN -> preserve_as_owner_policy_not_technical_negative_result
+
 // Exploration/exploitation balance. Critical path may never starve falsification or novel search.
 rule swarm_capacity.default_partition=[BUILD_AND_BLOCKER_DOMINANT,COUNTEREVIDENCE_RESERVED,EXPLORATION_RESERVED]
 rule exact_fraction_is_adaptive_not_fixed
@@ -134,6 +186,9 @@ rule workflow_started != test_passed
 rule only_execution_receipt_can_claim_runtime_effect
 
 invariant ALL_CURRENT_AND_FUTURE_WORKERS_SELF_COORDINATE_FROM_SHARED_STATE
+invariant ALL_CURRENT_AND_FUTURE_WORKERS_EXCHANGE_FIELD_MATCHED_TOOL_API_RECOMMENDATIONS
+invariant EACH_WORKER_INDEPENDENTLY_SEARCHES_FOR_BETTER_CAPABILITY_OPTIONS_WHEN_MATERIAL
+invariant TOGETHER_TOGETHER_AI_IS_TABOO_UNTIL_EXPLICIT_OWNER_REVOCATION
 invariant SELF_COORDINATION_NEVER_MINTS_TRUTH
 invariant SELF_COORDINATION_NEVER_EXPANDS_EFFECT_AUTHORITY
 invariant FRANK_REMAINS_SEPARATE_RESEARCH_SUBJECT

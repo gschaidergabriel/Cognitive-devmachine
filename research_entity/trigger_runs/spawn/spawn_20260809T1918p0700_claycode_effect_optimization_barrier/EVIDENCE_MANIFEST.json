@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn_20260809T1918p0700_claycode_effect_optimization_barrier",
+  "internal":[
+    {"ref":"research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","class":"CURRENT_REPO_STATE","use":"BASE gate and work packages"},
+    {"ref":"research_entity/claycode/base/CC_BASE_14_BLOCKER_BURNDOWN_20260809T1904p0700.md","class":"CURRENT_IMPLEMENTATION_PLAN","use":"WP04/06/07/11 closure constraints"},
+    {"ref":"tools/claycode_base_effect_pipeline.py","class":"CURRENT_EXECUTABLE_CANDIDATE","use":"transitive effect/capability summaries, Gateway and exact trace differential"},
+    {"ref":"tools/claycode_base_pure_toolchain.py","class":"CURRENT_EXECUTABLE_CANDIDATE","use":"typed pure evaluator/C lowering and short-circuit code-inspection candidate"},
+    {"ref":"tools/claycode_base_compiler.py","class":"CURRENT_EXECUTABLE_CANDIDATE","use":"canonical typed IR and direct C lowering"},
+    {"ref":"tools/claycode_wp11_fuzz_conformance.py","class":"LIVE_NEW_EXECUTABLE_TEST","use":"current WP11 oracle scope; effect optimizer mutation surface remains uncovered"},
+    {"ref":"research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md","class":"OWNER_DISTRIBUTED_OPEN_RESEARCH_CONTEXT","use":"outcome/reentry/rollback causality"},
+    {"ref":"research_entity/harness/HARNESS_WORKSPACE.json","class":"CURRENT_REPO_STATE","use":"H-WP-10 effect authority and H-WP-11 trace/replay coupling"},
+    {"ref":"EXECUTION_RECEIPT.json","class":"HOSTED_SYNTHETIC_PROXY","use":"constructed effect-equivalence discriminator"}
+  ],
+  "external_primary":[
+    {"url":"https://mlir.llvm.org/docs/Rationale/SideEffectsAndSpeculation/","class":"OFFICIAL_COMPILER_DOCUMENTATION","finding":"Effect and speculatability are explicit; resource hierarchy/disjointness supports conflict reasoning."},
+    {"url":"https://openxla.org/stablehlo/spec","class":"OFFICIAL_IR_SPECIFICATION","finding":"Side-effecting operations consume/produce tokens and after_all joins ordering dependencies."},
+    {"url":"https://llvm.org/docs/LangRef.html","class":"OFFICIAL_IR_LANGUAGE_REFERENCE","finding":"Optimizer legality depends on truthful side-effect/memory semantics; observable operations constrain deletion/reordering."},
+    {"url":"https://compcert.org/doc/html/compcert.common.Events.html","class":"PRIMARY_FORMAL_COMPILER_ARTIFACT","finding":"Program observations include traces of external events rather than only returned values."},
+    {"url":"https://compcert.org/man/manual001.html","class":"OFFICIAL_VERIFIED_COMPILER_MANUAL","finding":"Observable behavior includes termination/error mode plus I/O/volatile traces."}
+  ],
+  "negative_results":[
+    {"id":"NR-OUTPUT-ONLY","result":"Output equality accepted 20000/20000 constructed effect-erasure, effect-duplication and conflicting-reorder mutants despite semantic effect differences.","meaning":"Output-only is rejected as an effectful translation oracle."},
+    {"id":"NR-TOTAL-TRACE-PERMISSIVENESS","result":"Exact total trace equality rejected 20000/20000 disjoint-resource reorder cases while candidate conflict-partial-order accepted them.","meaning":"Total trace is conservative but potentially overrestrictive for optimization."},
+    {"id":"NR-CORE-SYNTAX","result":"No current evidence forces new user-facing/core ClayCode syntax.","meaning":"Implement in IR/lowering/runtime/validation layers first."}
+  ]
+}

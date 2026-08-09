@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0954p0700-chatgpt-secondary-aicore-v27-generation-pipeline-semantic-shard",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "COMPLETE_FOR_FOUR_FILE_V27_GENERATION_PIPELINE_SHARD",
+  "source_universe": "DRIVE_CLAY/AICORE/training/v27",
+  "parent_semantic_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0954p0700_chatgpt_secondary_aicore_v27_core_semantic_lineage.json",
+  "exact_level0_coverage_credit_percent": 0.0,
+  "source_files": [
+    {"path":"10_plan.py","drive_id":"18Y9OV9arDBhhZtWE7DReS4GUT9SLT-CV","bytes":4521,"sha256":"c2fd6e5c54f4417eb564184d684c9843ca909647d65f05794df8d82aa460d2a4"},
+    {"path":"11_erzeugen.py","drive_id":"1x_ZDDFZtmTBijs_xU0q5fy5wx8t9Y9yG","bytes":23372,"sha256":"652cc1a0f83650d2060dbafdc87454f6711d31e81945f13300092b34cf18a4d3"},
+    {"path":"12_pruefen.py","drive_id":"1QXMMitS-ukprKwdt-jQZ7cKAYwd9uNVk","bytes":5268,"sha256":"b5a200dc97d68857a3aaa753c66b3b091096da58dadf3073e9cd4f44e5685ee5"},
+    {"path":"13_bauen.py","drive_id":"17gfiP3Xqm8P9jdLBdA3mMhtwiDYHf-zr","bytes":9037,"sha256":"aca05d25146d63bf8297b791aa3948c01a31c5122f25bd2dffdc82486103069a"}
+  ],
+  "pipeline": [
+    {
+      "stage": 1,
+      "file": "10_plan.py",
+      "role": "Deterministically map the 1449 historical tool-answer slots to replacement classes before text generation.",
+      "reproducibility": "Uses a fixed random seed and sorts the completed plan back by source index.",
+      "critical_rule": "The old answer is not reused as target prose; it contributes only source situation/domain/tool-output structure where relevant."
+    },
+    {
+      "stage": 2,
+      "file": "11_erzeugen.py",
+      "role": "Generate only free-text behavior while exact structural components are built by templates/orchestration.",
+      "reproducibility": "Output is append/resume oriented; interruption loses at most an in-flight batch rather than requiring a full restart.",
+      "critical_rule": "The orchestrator does not itself invent final training prose; free-text generation is delegated and then gated."
+    },
+    {
+      "stage": 3,
+      "file": "12_pruefen.py",
+      "role": "Machine rejection gate before any human/blind review.",
+      "checks": [
+        "class-specific rejection rules",
+        "pattern-clone detection against class exemplars",
+        "near-duplicate detection by overlapping 8-grams",
+        "structured context checks before acceptance"
+      ]
+    },
+    {
+      "stage": 4,
+      "file": "13_bauen.py",
+      "role": "Merge accepted replacement examples into the training corpus while preserving original system texts 1:1 except the structured result block required by class 7.",
+      "reproducibility": "Builds an explicit blind sample with deterministic seed and emits measured reports.",
+      "critical_rule": "System-prompt rewriting is intentionally not smuggled into the answer-replacement stage."
+    }
+  ],
+  "reconciled_findings": [
+    {
+      "id": "V27-PIPE-F1",
+      "classification": "DATA_PROVENANCE_PATTERN",
+      "finding": "Plan, generation, rejection and assembly are separate executable stages. This is stronger than a single generation script because each boundary can be hashed, replayed and audited independently."
+    },
+    {
+      "id": "V27-PIPE-F2",
+      "classification": "ANTI_ECHO_CHAMBER_PATTERN",
+      "finding": "The historical design intentionally avoids repairing tool-calling answers in place. Replacement targets are generated from situation/structure rather than copying the old assistant prose, reducing direct imitation of the behavior being removed."
+    },
+    {
+      "id": "V27-PIPE-F3",
+      "classification": "STRUCTURE_TEXT_SEPARATION",
+      "finding": "Structured facts such as result blocks, prior goals and placement metadata are generated deterministically; free models supply only language/behavioral prose. This is a direct historical precursor to current ClayCode/UnifiedDB typed-state plus language-projection architecture."
+    },
+    {
+      "id": "V27-PIPE-F4",
+      "classification": "NEGATIVE_RESULT_VALUE",
+      "finding": "The blind-review artifact demonstrates that deterministic sampling is insufficient if the underlying source file is still mutating. Reproducibility requires both deterministic selection and an immutable generation-complete source hash."
+    },
+    {
+      "id": "V27-PIPE-F5",
+      "classification": "HARNESS_REQUIREMENT",
+      "finding": "Pattern-clone and near-duplicate rejection must run before manual quality scoring. High class quotas without lexical/structural diversity can produce a dataset that is numerically balanced but behaviorally narrow."
+    }
+  ],
+  "current_architecture_feedback": {
+    "harness": [
+      "Represent dataset construction as a four-stage DAG: plan -> generate -> reject -> assemble, with immutable manifests and hashes at every edge.",
+      "Require generation-complete barriers before blind sampling and evaluation.",
+      "Keep near-duplicate and exemplar-clone detection as pre-human gates."
+    ],
+    "unifieddb": [
+      "Store source slot identity, class assignment, generator provenance, rejection reasons and final accepted artifact as distinct records rather than flattening them into one JSONL lineage."
+    ],
+    "claygraph": [
+      "Expose provenance edges from original situation -> deterministic class plan -> generated candidate -> rejection/acceptance -> assembled training row."
+    ],
+    "claycode": [
+      "Typed structural fields should be generated by deterministic code; language generation should consume those fields rather than regenerate them from prose."
+    ],
+    "frank": [
+      "Behavioral training targets should not teach executable tool syntax when execution belongs to Needle; teach result consumption and state transitions instead."
+    ],
+    "needle": [
+      "Preserve tool/effect ownership outside Frank's language target while delivering typed result/effect receipts back to Frank."
+    ],
+    "gwt": [
+      "Goal/revision/abandonment/result states should enter workspace as typed events with provenance rather than as reconstructed narrative history."
+    ]
+  },
+  "security_and_authority": {
+    "training_started": false,
+    "training_authorized_by_this_receipt": false,
+    "external_provider_credentials_copied": false
+  },
+  "remaining_v27_content_obligations": [
+    "Content-close klassen.py and 20_trennung.py source bodies against their reports.",
+    "Content-close plan.json and verify its exact 1449-row class allocation against the planning script.",
+    "Content-close orchestration shell scripts and remaining hand-check reports.",
+    "Hash and reconcile the generated/rejected corpora if their files are present elsewhere in the Drive tree."
+  ],
+  "earned_work_hours_added": 0.0,
+  "created_at": "2026-08-09T09:54:00+07:00"
+}

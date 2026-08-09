@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure",
+  "tools":[
+    {"tool":"GitHub connector","status":"USED","purpose":"canonical boot, live branch reread, durable writes/rereads"},
+    {"tool":"web.run","status":"USED","purpose":"independent primary-source comparison: WebAssembly 3.0, LLVM LangRef, Microsoft Research/Koka effect typing"},
+    {"tool":"OpenAI hosted Python sandbox","status":"USED","runtime":{"python":"3.13.5","platform":"Linux-6.18.35-x86_64-with-glibc2.41","machine":"x86_64"},"purpose":"executable control-flow/effect-closure proxy"},
+    {"tool":"e2b_sandbox","status":"NOT_EXPOSED_TO_THIS_WORKER","note":"Project records it as runtime-verified, but no callable E2B tool is available in this hosted session; not counted as E2B evidence."},
+    {"tool":"sandboxapi_sandbox","status":"BLOCKED_NOT_SUBSCRIBED","note":"Inherited current project capability state; not counted as execution evidence."},
+    {"tool":"Andreas Ubuntu developer host","status":"NOT_CONNECTED","note":"No target-host acceptance evidence was produced."},
+    {"tool":"Qwen-class 4B target reader","status":"NOT_CALLABLE","note":"No target-reader selection evidence was produced."}
+  ]
+}

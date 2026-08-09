@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T122514Z_chatgpt_secondary_claycode_diagnostic_identity",
+  "internal_repo_evidence": [
+    {"ref":"research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","class":"CURRENT_IMPLEMENTATION_COORDINATION","finding":"WP04 requires precise diagnostics; WP11 conformance and WP12 held-out corpus are open BASE obligations."},
+    {"ref":"research_entity/claycode/base/CC_BASE_14_BLOCKER_BURNDOWN_20260809T1904p0700.md","class":"CURRENT_BURNDOWN","finding":"WP04 negative corpus and WP12 real-checker-diagnostic corpus are receipt-gated closure needs."},
+    {"ref":"commit:ed891379efc36759cbc6e0cf9dc0195ee08f2676","class":"EXECUTABLE_PROXY","finding":"reference checker distinguishes DENY_BAD_SIGNATURE, DENY_INTENT_DRIFT, DENY_SCOPE, etc.; lowered path collapses failures to generic DENY."},
+    {"ref":"commit:11d5b1825c0c5a3a0b13a735ef76617352b87da9","class":"CURRENT_IMPLEMENTATION","finding":"WP03 runner preserves failures as stage name, command, returncode and stdout/stderr tails but lacks stable diagnostic occurrence identity."},
+    {"ref":"commit:23b058c65c8f3c985ac8dcd4bdddfb28b18dc4d4","class":"CURRENT_IMPLEMENTATION","finding":"WP11/WP12 conformance corpus workflow landed during this run; it motivates machine-stable diagnostic labels but does not itself define them."},
+    {"ref":"commit:42ec2a5c8ca302adebd2d7d389d105af892b79f8","class":"CURRENT_IMPLEMENTATION","finding":"compiler/runtime fuzz gate uses local failure kind strings and exception reprs, creating a concrete integration surface for structured diagnostic identity."}
+  ],
+  "external_primary_sources": [
+    {"url":"https://doc.rust-lang.org/beta/rustc/json.html","class":"OFFICIAL_COMPILER_DOCUMENTATION","finding":"rustc JSON separates a unique diagnostic code from message, spans, child context and rendering."},
+    {"url":"https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Message-Formatting-Options.html","class":"OFFICIAL_COMPILER_DOCUMENTATION","finding":"GCC emits structured diagnostics including SARIF 2.1.0 and supports nested diagnostic structure/output sinks."},
+    {"url":"https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html","class":"OASIS_STANDARD","finding":"SARIF defines versioned fingerprints/partialFingerprints for stable logical result identity and comparison."}
+  ],
+  "executed_evidence": [
+    {"artifact":"DIAGNOSTIC_IDENTITY_EXECUTION_RECEIPT.json","class":"SYNTHETIC_DISCRIMINATOR","scope":"10,000 generated diagnostic events; compare text-span, rule-only, rule-anchor and structured-v1 identity under nonsemantic perturbation and cause mutation."},
+    {"artifact":"GCC_DIAGNOSTIC_PROBE_RECEIPT.json","class":"LOCAL_HOST_COMPILER_RUNTIME_EVIDENCE","scope":"GCC 14.2.0 same warning rule/message under path/line/column perturbation; not ClayCode target-host acceptance."}
+  ],
+  "negative_results": [
+    "text+absolute span identity failed nonsemantic invariance in the synthetic discriminator",
+    "rule-only identity failed occurrence/cause separation",
+    "rule+anchor identity failed same-anchor cause mutation separation",
+    "no evidence was found that diagnostic presentation text should become a ClayCode semantic primitive"
+  ],
+  "epistemic_guard": "External compiler/standard practice is mechanism precedent, not proof of the ClayCode candidate. Synthetic/local-host execution is not Ubuntu Frank-v0.1 BASE acceptance."
+}

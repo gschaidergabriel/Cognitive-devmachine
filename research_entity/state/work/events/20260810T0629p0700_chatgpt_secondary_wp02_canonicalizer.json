@@ -1,0 +1,51 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-wp02-canonicalizer-20260810T0629p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T06:29:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-WP02-CANON-20260810",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "GO_RECURSIVE_SWARM_CYCLE",
+    "title": "Close the grammar-bound deterministic canonicalization gap for CC-WP-02",
+    "work_clay": "Without modifying the active V17 parser-repair grammar or its current validator, add the smallest deterministic canonical structural serialization and mutation/trivia discriminator required by CC-WP-02. Preserve source order, semantic tokens and Unicode string bytes; remove parser-only NEWLINE/semicolon separator trivia from the canonical payload; bind hashes to grammar/source identities. Execute existing strict/full-corpus validation plus the canonicalizer discriminator on the verified Ubuntu self-hosted runner before any PASS claim.",
+    "reason_clay": "Current main proves strict parser construction/full-corpus parse-tree determinism but its own scope guard states that grammar-bound canonicalizer/target receipts remain open. Lark strict-mode validates grammar collisions, not semantic canonicalization. RFC 8785 provides an external canonicalization principle: hashes require invariant serialization and Unicode string data must not be silently normalized.",
+    "completion_clay": "A branch/PR contains a deterministic grammar-bound canonicalizer and focused tests; equivalent horizontal trivia/comments/newline/separator variants hash identically where grammar semantics are unchanged; operator/literal/order mutations hash differently; Unicode string lexemes remain preserved; existing V17 frontend validation still passes; Ubuntu self-hosted runner emits reproducible logs/receipt. CC-WP-02 remains non-PASS unless strict/full-corpus plus canonical roundtrip/hash acceptance receipts are all present.",
+    "evidence_need": [
+      "V17_STRICT_FULL_CORPUS_RECEIPT",
+      "CANONICAL_STRUCTURAL_HASH_RECEIPT",
+      "TRIVIA_EQUIVALENCE_RECEIPT",
+      "SEMANTIC_MUTATION_DISCRIMINATION_RECEIPT",
+      "UBUNTU_SELF_HOSTED_RUNNER_RECEIPT"
+    ],
+    "executor_policy": "ChatGPT may implement the isolated canonicalizer/test/workflow lane on a fresh branch. Do not edit the active V17 grammar while another parser-repair lineage may exist. Re-read main before writes. Use PR/self-hosted Ubuntu execution; no paid training/API budget.",
+    "required_capabilities": [
+      "GITHUB_READ_WRITE",
+      "GITHUB_ACTIONS_SELF_HOSTED_UBUNTU",
+      "PYTHON3",
+      "LARK_INTEREGULAR"
+    ],
+    "write_scope": [
+      "tools/claycode_base_canonicalizer.py",
+      "tools/test_claycode_base_canonicalizer.py",
+      ".github/workflows/wp02-canonicalizer-ubuntu.yml",
+      "research_entity/state/work/events/"
+    ],
+    "dependencies": [
+      "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+      "tools/claycode_base_frontend_validation.py"
+    ],
+    "invalidators": [
+      "V17 is superseded before execution",
+      "CC-WP-02 canonical contract is materially revised",
+      "Ubuntu self-hosted runner becomes unavailable"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 0.95,
+    "urgency": 1.0,
+    "information_gain": 0.9,
+    "status": "READY"
+  }
+}

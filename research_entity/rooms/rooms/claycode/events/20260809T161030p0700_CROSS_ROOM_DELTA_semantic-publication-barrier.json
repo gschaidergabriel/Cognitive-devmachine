@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.1",
+  "event_id":"20260809T161030p0700_CROSS_ROOM_DELTA_semantic-publication-barrier",
+  "room_id":"claycode",
+  "event_type":"CROSS_ROOM_DELTA",
+  "origin_worker":"chatgpt-secondary-20260809T155900-graph-udb-semantics",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"claycode",
+  "created_at":"2026-08-09T16:10:30+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms":["claycode","unifieddb","claygraph","frank","harness"],
+  "affects_claims":["H-CC-G9-PUBLICATION-CONTRACT-SUFFICIENCY-001","H-CC-PUBLICATION-PRIMITIVE-NECESSITY-002","FRANK-P11-ATOMIC-SEMANTIC-PUBLICATION","FRANK-P10-GRAPH-NEVER-AUTHORITY"],
+  "dependencies":["CLAYCODE_G9_FUSION_SPEC_V3","RAE_UNIFIEDDB_SCHEMA","RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION","FUSED_FRANK_TARGET_ARCHITECTURE"],
+  "artifact_refs":["research_entity/trigger_runs/claycode/claycode-20260809T1603p0700-chatgpt-semantic-publication/FINAL_REPORT.md","research_entity/trigger_runs/claycode/claycode-20260809T1603p0700-chatgpt-semantic-publication/EXECUTABLE_RESEARCH_RECEIPT.json","research_entity/knowledge_micro_packets/claycode/KMP-CLAYCODE-SEMANTIC-PUBLICATION-BARRIER-20260809.md"],
+  "ancestry_family":"CC-SEMANTIC-PUBLICATION-20260809",
+  "delivery":"NEXT_CHECKPOINT",
+  "payload":{
+    "delta_type":"evidence+architecture_constraint+test_request",
+    "novelty":"Executable proxy refines atomic semantic publication into a reader-visible epoch barrier separating committed canonical state from validated derived graph publication.",
+    "evidence":"12/12 fixed adversarial cases + 20000 mutation rounds; 0 violations; clean python -S receipt.",
+    "architecture_constraint":"Do not expose a graph epoch as CURRENT unless its source state epoch and projection/retraction closure validate; graph relevance never mints effect authority.",
+    "negative_result":"No dedicated publication/transaction syntax primitive justified in tested scope.",
+    "next_test":"Compile frozen SemanticPublicationReceipt/PublishedSemanticEpoch through production BASE checker/runtime and inject crashes across physically separated canonical/derived stores.",
+    "no_change_receipts":{"gwt":"mechanism unchanged","hyperposition":"mechanism unchanged","emergenz":"no emergence evidence"}
+  }
+}

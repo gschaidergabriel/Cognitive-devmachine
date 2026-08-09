@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T111551Z",
+  "origin_branch": "claycode",
+  "branches": {
+    "claycode": {
+      "receipt": "IMPLEMENTATION_CANDIDATE",
+      "delta": "Add a canonical-IR/runtime candidate for typed atomic cells and compare-exchange that separates semantic op identity from physical retries. Version/epoch-bound identity is required by default for semantic Clay state where equality is not identity. No surface syntax change is justified yet."
+    },
+    "harness": {
+      "receipt": "NEW_FUTURE_FIXTURE",
+      "delta": "H2/H3 differential replay should include ABA schedules, weak-CAS retry perturbation and semantic-vs-execution hash checks. Harness should compare successful atomic semantic outcomes independently of physical retry counts while retaining full attempt traces."
+    },
+    "frank": {
+      "receipt": "BOUNDARY_REFINEMENT",
+      "delta": "Frank state transitions that rely on compare-and-set style guards should bind state epoch/version identity where values may recur. This is a research constraint on the target system, not authority for Frank to modify its own Harness."
+    },
+    "clayresearch": {
+      "receipt": "MECHANISM_REFINEMENT",
+      "delta": "Loop-of-loops and Safe-Effect work should distinguish atomicity from freshness/identity: an operation can be atomic yet semantically stale under ABA."
+    },
+    "gwt": {
+      "receipt": "CONFOUND_CONTROL",
+      "delta": "Workspace/re-entry experiments that share mutable state should log semantic atomic outcome and state epoch separately from contention retries so scheduler contention is not misread as cognitive causal effect."
+    },
+    "emergenz": {
+      "receipt": "CONFOUND_CONTROL",
+      "delta": "Lesion/rescue and causal-emergence experiments should treat stale ABA accepts and retry contention as execution confounds unless intentionally manipulated. No emergence claim follows from atomics."
+    },
+    "hyperposition": {
+      "receipt": "IDENTITY_REFINEMENT",
+      "delta": "Dynamic topology/candidate relations that can return to the same visible value require versioned semantic identity if CAS-like transitions are used; value recurrence must not collapse temporal distinction."
+    },
+    "claygraph": {
+      "receipt": "EPOCH_FIXTURE",
+      "delta": "Graph-node/relation mutation paths using optimistic compare-exchange should test node/relation epoch or equivalent stable identity, not value equality alone, to reject A->B->A stale updates."
+    },
+    "unifieddb": {
+      "receipt": "EPOCH_CAS_CANDIDATE",
+      "delta": "UnifiedDB semantic epoch/version is a natural candidate identity component for optimistic CAS-style state publication. A stale expected epoch must fail even when the visible value has returned to the same representation."
+    }
+  },
+  "global_laws": [
+    "atomicity != freshness",
+    "value_equality != semantic_identity unless the type/resource contract proves it",
+    "semantic_atomic_operation_identity != physical_retry_attempt_identity",
+    "memory_ordering must be explicit in canonical semantics or safely fixed by the portable profile; never silently inherited from a host",
+    "atomic expressibility != effect authority"
+  ],
+  "promotion": "NONE",
+  "next_discriminator": "Production ClayCode IR/typechecker/lowering implementation plus Ubuntu-target ABA/order/retry differential."
+}

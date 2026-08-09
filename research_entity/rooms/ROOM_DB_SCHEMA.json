@@ -1,7 +1,10 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+  "semantic_protocol": "research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay",
   "design": "event_sourced_git_native_database",
+  "semantic_language": "resolve current ClayCode from research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay before every room action",
+  "transport_rule": "JSON/Git records are transport envelopes only; all machine coordination semantics are ClayCode",
   "concurrency_rule": "immutable unique event files plus CAS-updated owned/materialized records; never concurrently append one hot JSONL file",
   "paths": {
     "room": "research_entity/rooms/rooms/<room_id>/ROOM.json",
@@ -19,15 +22,19 @@
   },
   "records": {
     "worker": {
-      "required": ["schema_version", "room_id", "worker_session_id", "actor_id", "provider", "model", "trigger", "status", "joined_at", "last_pulse_at", "canonical_parent", "focus", "ancestry_family"],
+      "required": ["schema_version", "room_id", "worker_session_id", "actor_id", "provider", "model", "trigger", "status", "joined_at", "last_pulse_at", "canonical_parent", "stack_epoch", "focus_clay", "ancestry_family"],
+      "legacy_read_aliases": {"focus": "focus_clay"},
       "status": ["ACTIVE", "WAITING", "COMPLETE", "LEFT", "STALE"]
     },
     "event": {
       "immutable": true,
-      "required": ["schema_version", "event_id", "room_id", "event_type", "origin_worker", "origin_actor", "trigger", "created_at", "canonical_parent", "affects_rooms", "affects_claims", "dependencies", "artifact_refs", "ancestry_family", "delivery", "payload"]
+      "required": ["schema_version", "event_id", "room_id", "event_type", "origin_worker", "origin_actor", "trigger", "created_at", "canonical_parent", "stack_epoch", "affects_rooms", "affects_claims", "dependencies", "artifact_refs", "ancestry_family", "delivery", "payload_clay"],
+      "legacy_read_aliases": {"payload": "payload_clay"},
+      "semantic_validation": "payload_clay must parse under the stack_epoch ClayCode grammar/IR or the event remains transport-only and cannot drive a material decision"
     },
     "task": {
-      "required": ["schema_version", "task_id", "room_id", "title", "goal", "status", "dependencies", "completion_test", "created_by"],
+      "required": ["schema_version", "task_id", "room_id", "title", "goal_clay", "status", "dependencies", "completion_test_clay", "created_by", "stack_epoch"],
+      "legacy_read_aliases": {"goal": "goal_clay", "completion_test": "completion_test_clay"},
       "status": ["OPEN", "CLAIMED", "BLOCKED", "COMPLETE", "CLOSED", "STALE"]
     },
     "lease": {
@@ -36,22 +43,31 @@
       "truth_authority": false
     },
     "challenge": {
-      "required": ["schema_version", "challenge_id", "room_id", "challenger_worker", "target_claim_or_artifact", "challenge_statement", "discriminating_test_or_falsifier", "ancestry_family", "status"],
+      "required": ["schema_version", "challenge_id", "room_id", "challenger_worker", "target_claim_or_artifact", "challenge_clay", "falsifier_clay", "ancestry_family", "status", "stack_epoch"],
+      "legacy_read_aliases": {"challenge_statement": "challenge_clay", "discriminating_test_or_falsifier": "falsifier_clay"},
       "status": ["OPEN", "ANSWERED", "TESTED", "SUPPORTED", "REFUTED", "UNRESOLVED", "CLOSED"]
     },
     "team_epoch": {
-      "required": ["schema_version", "team_epoch_id", "room_id", "created_at", "status", "member_workers", "role_assignments", "shared_question"],
+      "required": ["schema_version", "team_epoch_id", "room_id", "created_at", "status", "member_workers", "role_assignments", "shared_question_clay", "stack_epoch"],
+      "legacy_read_aliases": {"shared_question": "shared_question_clay"},
       "status": ["ACTIVE", "FUSION_READY", "COMPLETE", "CLOSED"]
     },
     "cursor": {
       "required": ["schema_version", "room_id", "worker_session_id", "last_seen_event_id", "updated_at"]
     }
   },
+  "coordination_language_rule": {
+    "mandatory_for_new_writes": true,
+    "objects": ["JOIN", "PULSE", "TASK", "DELTA", "CHALLENGE", "ROAST", "HANDOFF", "INVALIDATE", "CROSSREAD", "CROSS_ROOM_DELTA", "CONFLICT", "FUSION", "COMPLETE", "LEAVE"],
+    "language": "LATEST.claycode",
+    "human_prose": "edge rendering only; never machine coordination truth",
+    "old_records": "remain readable; migrate/re-encode only when touched or materially reused"
+  },
   "event_delivery": {
     "INTERRUPT_NEXT_SAFE_POINT": "must be considered before the receiver's next material decision/write",
     "NEXT_CHECKPOINT": "must be considered at the receiver's next mandatory room pulse",
     "INDEX_ONLY": "discoverable but not forced into active context"
   },
-  "derived_state_rule": "ROOM_STATE.json is a cache/projection and never outranks immutable events, leases, task records or canonical RAE evidence.",
+  "derived_state_rule": "ROOM_STATE.json is a cache/projection and never outranks immutable events, leases, task records or canonical RAE evidence. Current room state is materialized through latest UnifiedDB semantics; current associative room topology is projected through latest ClayGraph semantics.",
   "large_artifact_rule": "room database stores refs/hashes, not duplicated papers, reports, code, traces or experiment outputs."
 }

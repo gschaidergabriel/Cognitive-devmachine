@@ -1,4 +1,4 @@
-module rae.turn.v3
+module rae.turn.v4
 
 // Inject every substantive cognition round. Keep tiny. Rich state stays addressable by refs.
 
@@ -34,6 +34,17 @@ read T3=deep(raw,lineage,snapshots,full_protocols) iff mutate|conflict|recovery|
 invariant no_eager_repo_dump
 invariant evidence>organ
 
+// Research-center machine coordination is always latest ClayCode.
+center PROTOCOL=LATEST.research_center
+center LANGUAGE=LATEST.claycode
+center STATE=LATEST.unifieddb
+center TOPOLOGY=LATEST.claygraph
+rule room.join|room.pulse|task|challenge|handoff|cross_room_delta|conflict|fusion -> LATEST.claycode
+rule repo_json = transport_envelope_only
+rule room_human_prose = edge_surface_only
+invariant machine_room_coordination_never_uses_prose_as_truth
+invariant all_active_room_workers_resolve_latest_stack_before_coordination
+
 // Human surface selected per organ each turn.
 surface CHATGPT=DE_NORMAL
 surface CLAUDE=EN_CAVEMAN
@@ -59,4 +70,5 @@ rule promote_learning iff repeated_or_high_impact && evidence && counterhypothes
 rule microadapt iff low_risk && bounded && outcome_supported
 
 invariant every_organ_resolves_same_latest_stack
+invariant all_research_center_machine_coordination_uses_latest_claycode
 invariant organ_private_claycode_fork_forbidden_except_isolated_experiment

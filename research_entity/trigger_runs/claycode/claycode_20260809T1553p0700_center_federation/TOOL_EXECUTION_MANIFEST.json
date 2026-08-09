@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1553p0700_center_federation",
+  "providers": [
+    {
+      "provider": "GitHub connector",
+      "class": "repository_read_write",
+      "status": "SUCCEEDED",
+      "evidence": [
+        "canonical revision/hash read",
+        "research-center worker federation file created and reread",
+        "research-center protocol updated and reread",
+        "ClayCode grammar updated after executable counterexample",
+        "run artifacts committed"
+      ]
+    },
+    {
+      "provider": "local container Python/Lark",
+      "class": "executable",
+      "status": "SUCCEEDED",
+      "purpose": "Test current grammar type_expr against Research Center union-typed record fields and validate minimal grammar repair.",
+      "receipt": "EXECUTABLE_RESEARCH_RECEIPT.json"
+    },
+    {
+      "provider": "web/arXiv discovery",
+      "class": "scholarly_primary_preprint",
+      "status": "SUCCEEDED",
+      "sources": [
+        {"id":"arXiv:2507.01701","title":"Exploring Advanced LLM Multi-Agent Systems Based on Blackboard Architecture"},
+        {"id":"arXiv:2410.02506","title":"Cut the Crap: An Economical Communication Pipeline for LLM-based Multi-Agent Systems"},
+        {"id":"arXiv:2606.27492","title":"QueenBee Planner: Skill-Evolving Communication Topologies for Token-Efficient LLM Multi-Agent Systems"},
+        {"id":"arXiv:2308.00352","title":"MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework"},
+        {"id":"arXiv:2308.08155","title":"AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation"}
+      ],
+      "evidence_rule": "Preprints/framework papers inform coordination hypotheses only; they do not prove Clay's project-specific architecture."
+    },
+    {
+      "provider": "e2b_sandbox",
+      "class": "preferred_external_executable",
+      "status": "NOT_EXPOSED_TO_THIS_CHATGPT_SESSION",
+      "fallback": "local container Python/Lark",
+      "claim_limit": "No E2B runtime evidence claimed."
+    }
+  ],
+  "runtime_incident": {
+    "kind": "CONCURRENT_WRITE_CONFLICT",
+    "surface": "GitHub contents API",
+    "observed": "409 conflict during attempted CLAYCODE_RELEASE_WORKSPACE.json update",
+    "interpretation": "Direct runtime evidence that stale-worker writes require reread/CAS/revalidation; the file was not blindly overwritten."
+  },
+  "status": "COMPLETE"
+}

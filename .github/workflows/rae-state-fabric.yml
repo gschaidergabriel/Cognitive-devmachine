@@ -1,0 +1,100 @@
+name: RAE central state fabric
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/runtime/**'
+      - 'research_entity/global/FRANKV0_1_*'
+      - '.claude/hooks/rae_hook.py'
+      - '.claude/settings.json'
+      - '.github/workflows/rae-state-fabric.yml'
+
+jobs:
+  state-fabric:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile runtime and Claude bridge
+        run: |
+          python -m py_compile research_entity/runtime/rae_state_runtime.py
+          python -m py_compile research_entity/runtime/claude_state_bridge.py
+          python -m py_compile .claude/hooks/rae_hook.py
+          python -m json.tool .claude/settings.json >/dev/null
+
+      - name: Boot isolated central UnifiedDB and ClayGraph
+        run: |
+          python research_entity/runtime/rae_state_runtime.py \
+            --state-dir "$RUNNER_TEMP/rae-state" --test-mode init > "$RUNNER_TEMP/init.json"
+          cat "$RUNNER_TEMP/init.json"
+          python - <<'PY'
+          import json, os, pathlib
+          d=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'init.json').read_text())
+          assert d['integrity']['UnifiedDB']=='ok'
+          assert d['integrity']['ClayGraph']=='ok'
+          assert d['graph_epoch'] >= 1
+          print('RAE_STATE_BOOT_PASS')
+          PY
+
+      - name: Exercise bounded research-state capsule
+        run: |
+          python research_entity/runtime/rae_state_runtime.py \
+            --state-dir "$RUNNER_TEMP/rae-state" --test-mode capsule \
+            --node ci:claude --actor claude-code-lead --provider Anthropic --model claude-ci \
+            --event UserPromptSubmit --prompt harness > "$RUNNER_TEMP/capsule.json"
+          python - <<'PY'
+          import json, os, pathlib
+          d=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'capsule.json').read_text())
+          assert d['entity']['id']=='frank-project-global-research-entity'
+          assert d['reference_harness']['repo']=='gschaidergabriel/frankv0.1'
+          assert d['reference_harness']['pilot_user']=='Andreas'
+          assert 'claygraph' in d['epochs']
+          assert any('misunderstanding' in x.lower() for x in d['invariants'])
+          print('RAE_CAPSULE_PASS')
+          PY
+
+      - name: Ingest privacy-minimized pilot misunderstanding fixture
+        run: |
+          cat > "$RUNNER_TEMP/pilot.json" <<'JSON'
+          {
+            "interaction_id":"ci-pilot-1",
+            "source_interaction_ref":"sanitized://ci/1",
+            "privacy_class":"SANITIZED_DERIVED",
+            "task_class":"handoff",
+            "outcome_class":"CORRECTED",
+            "provider_path":["Claude Code","ChatGPT"],
+            "events":[
+              {"event_id":"ci-e1","event_time":"2026-08-09T04:00:00Z","event_type":"USER_CORRECTION","payload":{"raw_private_content":false}}
+            ],
+            "misunderstanding_cases":[
+              {
+                "case_id":"ci-case-1",
+                "failure_classes":["USER_INTENT_MISUNDERSTOOD"],
+                "observed_behavior":{"class":"wrong referent"},
+                "candidate_causes":["CONTEXT_ASSEMBLY"],
+                "confidence":0.6,
+                "repair_target":"context_assembly",
+                "status":"OPEN"
+              }
+            ]
+          }
+          JSON
+          python research_entity/runtime/rae_state_runtime.py \
+            --state-dir "$RUNNER_TEMP/rae-state" --test-mode ingest-pilot "$RUNNER_TEMP/pilot.json" > "$RUNNER_TEMP/ingest.json"
+          cat "$RUNNER_TEMP/ingest.json"
+          python - <<'PY'
+          import json, os, pathlib, sqlite3
+          d=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'ingest.json').read_text())
+          assert d['cases']==1
+          con=sqlite3.connect(pathlib.Path(os.environ['RUNNER_TEMP'],'rae-state','RAE_UNIFIED.sqlite'))
+          assert con.execute("select count(*) from misunderstanding_cases where case_id='ci-case-1'").fetchone()[0]==1
+          assert con.execute("select count(*) from v_open_misunderstandings").fetchone()[0]>=1
+          con.close()
+          print('RAE_PILOT_REPAIR_LOOP_PASS')
+          PY

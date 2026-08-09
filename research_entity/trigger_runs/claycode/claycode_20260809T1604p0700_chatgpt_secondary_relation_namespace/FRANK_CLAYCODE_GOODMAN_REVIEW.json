@@ -1,0 +1,58 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1604p0700_chatgpt_secondary_relation_namespace",
+  "latest_frank_run":"research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+  "latest_frank_claycode_architecture_artifact":null,
+  "note":"FRANK_ARCHITECTURE.claycode.json was not located in the current active assembly; the newer OPEN fused target overlay was used without promotion.",
+  "reviews":[
+    {
+      "claim_id":"FRANK-CC-PARSER-TRANSFORMATION-PRESERVATION",
+      "frank_statement":"Parser/render/context transformations must not corrupt structured semantics or collapse causal/authority distinctions.",
+      "frank_source_refs":["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"],
+      "ancestry_families":["FRANK architecture lineage/fusion family"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"The @relation overloading is harmless because parser context can always distinguish it from @ref.",
+      "falsifier":"A frozen production parser parses and roundtrips all @ref/@relation mixtures identically across supported parser backends with stable hashes and no diagnostic/cost regression.",
+      "independent_checks":[
+        "EXP-CC-G9-RELATION-NAMESPACE-COLLISION-20260809: combined ref/relation proxy produces LALR regressions for @relation while disjoint controls pass 7/7.",
+        "MLIR LangRef independently uses distinct sigils for different identifier classes and a generic string-named operation form.",
+        "WebAssembly WIT independently specifies explicit token classes, identifiers and post-parse name resolution."
+      ],
+      "adversarial_checks":["standalone @foo ref","resource-path @research_entity/global/x ref","relation with @ref right operand","unary relation with @ref operand","LALR contextual/basic vs Earley dynamic"],
+      "verdict":"SUPPORTED",
+      "reason":"A new discriminating parser experiment independently exposes exactly the class of representation corruption the FRANK constraint is meant to prevent; independent compiler-language designs also favor explicit lexical namespaces/generic forms.",
+      "claycode_action":"Do not promote the current @relation surface. Preserve ref identity and require disjoint or full-corpus-proven sugar lowering to a typed canonical Relation node.",
+      "affected_claycode_artifacts":["research_entity/claycode/g9/grammar.ebnf","research_entity/trigger_runs/claycode/claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil/RELATION_SIGIL_CANDIDATE.ebnf"]
+    },
+    {
+      "claim_id":"FRANK-CC-MODEL-OUTPUT-NOT-AUTHORITY",
+      "frank_statement":"Model output and semantic relation naming are proposals/meaning, not execution authority.",
+      "frank_source_refs":["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"],
+      "ancestry_families":["FRANK C9/effect-authority lineage","ClayCode capability-bearing-effects lineage"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A resolved semantic relation can directly imply permission for the named action/resource.",
+      "falsifier":"An independently validated runtime design demonstrates that semantic relation resolution can safely substitute for host-minted/revalidated authority without ambient-authority or confused-deputy regressions.",
+      "independent_checks":["WebAssembly WIT separates interface/type/name description from host/runtime behavior; name resolution establishes referenced definitions, not Clay effect permission.","Current run's parser experiment changes only syntax/AST acceptance and creates no execution capability."],
+      "adversarial_checks":["relation name resembles capability/effect verb","relation operand is an @ref resource","unknown relation fail-closed requirement"],
+      "verdict":"REFINED",
+      "reason":"The boundary survives, but ClayCode should encode it more mechanically: RelationId resolution is a type/semantic operation only; effect authority remains an orthogonal runtime capability/commit check.",
+      "claycode_action":"Keep relation resolver outputs authority-free; capability/effect checker must consume distinct typed authority objects.",
+      "affected_claycode_artifacts":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"]
+    },
+    {
+      "claim_id":"FRANK-CC-ADAPTIVE-LEARNER-GENERIC-EXPRESSIBILITY",
+      "frank_statement":"Recognition validity, adaptive promotion, rollback and publication should remain distinct and executable in ClayCode.",
+      "frank_source_refs":["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json","research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"],
+      "ancestry_families":["FRANK adaptive-visual lineage"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"The full learner requires dedicated ClayCode syntax or opaque host-only state despite narrow gate prototypes passing.",
+      "falsifier":"Compile and replay the complete frozen learner component through production parser/type/effect/lowering/runtime; any required opaque semantic escape hatch falsifies generic sufficiency.",
+      "independent_checks":["Prior current ClayCode executable gate probe: 8/8 fixtures.","Prior current compiler/lowering prototype: 9/9 deterministic admission/promotion/rollback/effect cases."],
+      "adversarial_checks":["full versioned learner not yet compiled","transaction/crash/replay/resource-budget behavior not yet proven"],
+      "verdict":"REFINED",
+      "reason":"Narrow executable evidence supports existing generic semantics, but the full component remains unproven; this run adds no new learner-specific evidence.",
+      "claycode_action":"Do not add learner-specific syntax; keep the claim OPEN until the real Ubuntu-target learner compiles and replays.",
+      "affected_claycode_artifacts":["research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"]
+    }
+  ]
+}

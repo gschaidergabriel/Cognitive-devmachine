@@ -1,0 +1,50 @@
+name: ClayCode BASE typed pure-core native differential
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_base_pure_toolchain.py'
+      - 'tools/claycode_base_pure_toolchain_validation.py'
+      - 'research_entity/claycode/base/examples/PURE_CORE_V1.clay'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark'
+      - '.github/workflows/claycode-base-pure-toolchain.yml'
+
+concurrency:
+  group: claycode-base-pure-toolchain-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  pure-toolchain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned parser dependencies
+        run: python -m pip install --disable-pip-version-check --quiet 'lark[interegular]==1.3.1'
+      - name: Require native C compiler
+        run: cc --version
+      - name: Syntax-check toolchain
+        run: python -m py_compile tools/claycode_base_pure_toolchain.py tools/claycode_base_pure_toolchain_validation.py
+      - name: Run integrated typed IR/typecheck/evaluator/native-lowering differential
+        run: python tools/claycode_base_pure_toolchain_validation.py
+      - name: Preserve receipt
+        run: |
+          git config user.name 'claycode-pure-toolchain-gate'
+          git config user.email 'claycode-pure-toolchain-gate@users.noreply.github.com'
+          git add research_entity/claycode/autonomous/BASE_PURE_TOOLCHAIN_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: record typed pure-core native differential receipt'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

@@ -1,0 +1,74 @@
+name: ClayCode WP02 canonical IR
+
+on:
+  pull_request:
+    paths:
+      - 'tools/claycode_canonical_ir_receipt.py'
+      - 'tools/claycode_base_frontend_validation.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/g9/**'
+      - '.github/workflows/claycode-wp02-canonical-ir.yml'
+  workflow_dispatch:
+
+jobs:
+  canonical-ir:
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture target metadata
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p artifacts/wp02
+          {
+            echo "utc=$(date -u --iso-8601=seconds)"
+            echo "uname=$(uname -a)"
+            echo "arch=$(uname -m)"
+            echo "kernel=$(uname -r)"
+            echo "python_system=$(python3 --version 2>&1 || true)"
+            echo "git_commit=$(git rev-parse HEAD)"
+            echo "git_status=$(git status --porcelain=v1 | tr '\n' ';')"
+            if [ -f /etc/os-release ]; then cat /etc/os-release; fi
+          } | tee artifacts/wp02/ubuntu-metadata.txt
+      - name: Prepare pinned parser environment
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 -m venv .venv-wp02
+          . .venv-wp02/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install 'lark[interegular]==1.3.1'
+          python - <<'PY'
+          import lark, interegular, platform, sys
+          print('python', sys.version)
+          print('platform', platform.platform())
+          print('lark', lark.__version__)
+          print('interegular', getattr(interegular, '__version__', 'UNKNOWN'))
+          PY
+      - name: Strict full-corpus frontend validation
+        shell: bash
+        run: |
+          set -euxo pipefail
+          . .venv-wp02/bin/activate
+          python tools/claycode_base_frontend_validation.py --output artifacts/wp02/frontend-validation.json
+      - name: Grammar-bound canonical IR receipt
+        shell: bash
+        run: |
+          set -euxo pipefail
+          . .venv-wp02/bin/activate
+          python tools/claycode_canonical_ir_receipt.py --output artifacts/wp02/canonical-ir-receipt.json
+      - name: Receipt summary
+        if: always()
+        shell: bash
+        run: |
+          set -euxo pipefail
+          find artifacts/wp02 -maxdepth 1 -type f -print -exec sha256sum {} \;
+          if [ -f artifacts/wp02/canonical-ir-receipt.json ]; then cat artifacts/wp02/canonical-ir-receipt.json; fi
+      - name: Upload receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-wp02-canonical-ir-${{ github.run_id }}
+          path: artifacts/wp02/
+          if-no-files-found: warn

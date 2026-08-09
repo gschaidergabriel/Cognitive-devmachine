@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1703p0700_wp02_lineage_adjudication",
+  "trigger": "harness",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "coverage_mode": "COMPRESSED_FULL_MESH_VIA_CURRENT_LIVE_FUSION_PLUS_DIRECT_HARNESS_AND_BASELINE_AUDIT",
+  "registered_peer_branches": ["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "mesh_sources": [
+    "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+    "research_entity/global/PROJECT_COMMAND_REGISTRY.json",
+    "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/harness/HARNESS_WORKSPACE.json",
+    "research_entity/mesh_feedback/20260809T1703p0700-live-fusion/BRANCH_FEEDBACK_MANIFEST.json"
+  ],
+  "direct_harness_sources": [
+    "research_entity/harness/reference_state_ledger.py",
+    "research_entity/harness/reference/state_ledger.py",
+    "research_entity/harness/H_WP_02_STATE_LEDGER_EXECUTION_RECEIPT.json",
+    "research_entity/trigger_runs/harness/harness_20260809T1659p0700_wp02_identity_refinement/EXECUTION_RECEIPT.json",
+    "research_entity/experiments/FRANK_TEST1_CLAY_NATIVE_FULL_SIMULATION_CONTRACT.md",
+    "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md"
+  ],
+  "live_baseline": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "observed_head_commit": "d916b98fb65dc62fbf3275d6a48dc52c2bfc2612",
+    "semantic_replay_test": "tests/repo_transaction_replay.py",
+    "semantic_materializer": "runtime/state/repo_semantic_materializer_impl.py"
+  },
+  "latest_research_commit_observed_before_write": "73ae2483c9567e2737f2293da96ce8380e7d67ed",
+  "interconnect_preflight_script_executed": false,
+  "preflight_execution_limitation": "Hosted worker has repository connector read/write but no repository checkout/process execution surface. Coverage used the current all-branch live-fusion manifest and direct source audit; no strong promotion is claimed.",
+  "shared_ancestry_is_independent_replication": false,
+  "promotion_allowed": false,
+  "status": "PASS_FOR_NONPROMOTING_COMPONENT_ADJUDICATION"
+}

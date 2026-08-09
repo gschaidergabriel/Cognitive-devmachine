@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1053p0700-chatgpt-secondary-aicore-configs-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_CONFIGS_RECURSIVE_SCOPE",
+  "source_universe":"DRIVE_CLAY/AICORE/configs",
+  "source_folder_id":"1ydilqqqhbsKJ6eHsqY4YszWkvc7VgvA-",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"units_below_folder":1,"folder_units":0,"file_units":1,"file_units_semantically_closed":1,"coverage_percent":100.0},
+  "file":{"path":"configs/models.yaml","drive_id":"1lpM7l-UTHXCKtp4_HVhPFf0D8gQlVr82","bytes":280,"sha256":"0abbebeeaf129a3defa8b4943be119c4bf1126f853f0fd4ab40a6027e620e7bd"},
+  "cross_source_reconciliation":{
+    "project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "path":"configs/models.yaml",
+    "result":"Drive and frozen-head contents inspected as the same semantic snapshot.",
+    "indexed_reference_check":"Repository code search for the exact path returned no consumers; search for deepseek_r1_8b_q6k returned only this file. This is evidence of likely orphaned/legacy configuration, not proof that no runtime or historical consumer ever existed."
+  },
+  "semantic_findings":[
+    "models.yaml declares one DeepSeek-R1-Distill-Llama-8B-Abliterated Q6_K model as a single RLM serving chat, code, reason, audit and entity roles with max_ctx 4096 and an 8 GB RAM estimate.",
+    "This is a topology/policy snapshot, not artifact identity: it gives a filename and logical role set but no expected digest, source URI, tokenizer identity, runtime build identity or calibration/evaluation epoch.",
+    "Chronology matters: this file is dated earlier than the Docker model/bootstrap lineage, which later expects separate Llama 3.1 8B and Qwen 2.5 3B required files while treating DeepSeek as optional reasoning. The two configurations must not be merged into one static architecture claim.",
+    "The indexed repository search surfaced no additional consumers of this config at the frozen head, so current Level-0 treatment is LEGACY_OR_POSSIBLY_ORPHANED_MODEL_TOPOLOGY_SNAPSHOT pending history-aware reconciliation."
+  ],
+  "current_architecture_feedback":{
+    "frank":["Model role labels must not imply one physical model unless the active runtime manifest proves it.","Self-description of model/body identity must derive from verified current runtime state rather than stale YAML."],
+    "needle":["Routing policy and model artifact identity must be separate typed records; role assignment may change without changing artifact bytes and vice versa."],
+    "harness":["Every model topology under test must record runtime model digest, tokenizer/template identity, context limit, quantization/runtime build and route map; stale configs must be detected as inactive."],
+    "claycode":["Represent ModelArtifact, ModelRuntime, RoleBinding and RouterPolicy separately; a filename string cannot satisfy VerifiedModel identity."],
+    "unifieddb":["Persist versioned active-model topology and supersession lineage; distinguish configured, discovered, loaded and serving states."],
+    "claygraph":["Keep the single-RLM snapshot and later multi-model topology as separate chronological nodes with supersession/usage evidence, not one reconciled list."],
+    "gwt":["Broadcast active serving-model identity only from verified runtime state; role names are not evidence that a model is loaded."],
+    "clay":["One-module architecture can still support multiple model artifacts or route modes; physical fusion must not erase provenance/topology identity."
+    ]
+  },
+  "earned_work_hours_added":0.0,
+  "training":{"executed":false,"authorized":false},
+  "next":"Release configs claim; continue another non-overlapping AICORE leaf or root-file shard and preserve chronology against later model/bootstrap lineages.",
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

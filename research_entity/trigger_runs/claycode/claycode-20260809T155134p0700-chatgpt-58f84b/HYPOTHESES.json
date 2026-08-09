@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T155134p0700-chatgpt-58f84b",
+  "hypotheses":[
+    {
+      "id":"H-CC-G9-GRAMMAR-01",
+      "status":"SUPPORTED_IN_SAMPLED_COUNTEREXAMPLE_SET",
+      "mechanism":"The current G9 prose/source surface uses syntactic forms not admitted by the checked-in G9 EBNF, so the grammar cannot be a faithful parser contract for the current candidate.",
+      "expected":"Representative source lines containing >, <, union types, returns/includes, if, and postfix optional/or fail under the unmodified grammar.",
+      "counterhypothesis":"The EBNF is intentionally only a partial illustrative grammar and a different canonical parser accepts the current source.",
+      "falsifier":"The actual canonical parser/grammar parses the complete current G9 spec and roundtrips it without grammar extension or semantic loss.",
+      "test":"10-case sampled parser conformance corpus.",
+      "result":"Original grammar 2/10; eight source-used forms rejected."
+    },
+    {
+      "id":"H-CC-G9-GRAMMAR-02",
+      "status":"OPEN_SUPPORTED_BY_SAMPLE",
+      "mechanism":"A minimal parser/grammar alignment can cover the observed G9 source forms without redesigning ClayCode semantics.",
+      "expected":"Adding only source-used union/control/operator/postfix forms accepts the same corpus without changing rule meanings.",
+      "counterhypothesis":"The syntactic mismatches hide deeper ambiguity that requires semantic redesign.",
+      "falsifier":"Full-spec parse/roundtrip, type checking, or mutation tests expose ambiguous or contradictory meanings after the minimal grammar repair.",
+      "test":"Same 10-case corpus under minimal aligned grammar.",
+      "result":"10/10 accepted; full-spec roundtrip still untested."
+    },
+    {
+      "id":"H-CC-MVC-03",
+      "status":"OPEN_SUPPORTED_BY_PROTOTYPE",
+      "mechanism":"Existing typed records/rules/effect concepts are sufficient to encode the BASE-stage adaptive visual learner transition contract without a new language primitive.",
+      "expected":"Trusted-tier admission, BRONZE rejection, candidate promotion, budget fallback, rollback and external commit authority can parse, lower and execute from ClayCode-like source.",
+      "counterhypothesis":"Full H1 learner semantics require opaque host escape hatches or new primitives for version/provenance/replay/atomic promotion.",
+      "falsifier":"A frozen H1 learner transition cannot be represented and differentially replayed through the full ClayCode compiler/runtime using existing semantic classes.",
+      "test":"Prototype parser/compiler/lowering to Python plus separate-process execution.",
+      "result":"9/9 semantic cases passed; narrow prototype only."
+    },
+    {
+      "id":"H-CC-AUTH-04",
+      "status":"SUPPORTED_AS_ARCHITECTURAL_BOUNDARY_NOT_FINAL_IMPLEMENTATION",
+      "mechanism":"ClayCode should preserve computational expressibility while external effect authority is represented by non-textual, runtime-bound capability/authorization state.",
+      "expected":"Programs may express destructive/admin/device intents, but commit requires validated external authority and witnesses; text naming a capability cannot mint it.",
+      "counterhypothesis":"A sufficiently constrained language can safely encode authority directly in model-authored text without a separate runtime authority boundary.",
+      "falsifier":"Adversarial/full-runtime testing demonstrates text-only authority is equally unforgeable and preserves delegation/revocation/audit semantics, or capability-bound lowering cannot express required application classes.",
+      "independent_support":["WASI capability handles","effect-typed request/deny/commit research"],
+      "result":"Retain current expressibility!=authority invariant; final runtime handle representation remains implementation-gated."
+    }
+  ]
+}

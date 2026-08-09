@@ -88,3 +88,48 @@ with a separate adaptive personal learner layer and truthful self-model metadata
 2. Determine whether `feature_trainer.py` is enabled/current and whether `frankeye_vision` training was recently executed.
 3. Continue Project-Frankenstein history search for Retina learning/familiarity/prototype/dictionary mechanisms relevant to the mandatory v0.1 adaptive learner.
 4. Preserve the current hard blocker: exact Project-Frankenstein tree/history coverage still requires a recursive read-capable surface or equivalent exhaustive external manifest.
+
+---
+
+## Additional shard — SOMA safety/failure lineage delta
+
+This shard cross-read and deduplicated against:
+`research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json`
+
+The prior receipt already preserves the broad SOMA train/evaluate/deploy/rollback lifecycle, so this addition awards no duplicate earned-work hours.
+
+### Sources
+
+- `services/soma/interaction_buffer.py@abba90a5767d85abc8a1ac340bae92842dab35c1`
+- `services/soma/safety_check.py@abba90a5767d85abc8a1ac340bae92842dab35c1`
+- `services/soma/micro_trainer.py@abba90a5767d85abc8a1ac340bae92842dab35c1`
+- initial SOMA commit `78f31e7f1e4fa7109a90f6e32514923ca7428a87`
+- SOMA audit/fix commit `c16e5991466e50e059e176c07910ca75293b415c`
+
+### Material findings
+
+1. **Safety-gate implementation gap.** The frozen-head `safety_check.py` documents held-out perplexity/performance as its third gate, but the implementation does not execute a held-out behavioral test. It checks adapter drift, per-layer similarity, optional baseline drift and tensor sanity. This is retained as a negative/audit result.
+
+2. **Failure lineage.** The SOMA audit commit records defects in score-schema mapping, timestamp recovery, EMA key-set evolution, near-zero drift handling, threshold boundaries, large-object cleanup, background-thread shutdown and substring-based probe measurement. Adaptive learning therefore needs schema/version/concurrency/recovery tests in addition to model-quality tests.
+
+3. **Feedback semantics boundary.** SOMA uses explicit user feedback plus heuristic quality signals as weighted training input. For visual learning, user labels/feedback must remain provenance-bearing supervision signals, not sensor truth.
+
+4. **Transfer hypothesis for Retina/Micro Visual Classifier.** Strong candidate lifecycle:
+`trusted labeled example + provenance/tier -> versioned candidate learner update -> held-out semantic tests -> state/weight sanity -> staged promotion -> last-known-good snapshot -> rollback/rebuild on regression`.
+
+### Branch feedback delta
+
+- **FRANK:** expose visual learner version identity and last-known-good rollback; supervision != sensor truth.
+- **Harness:** inject mislabels, OOD classes, restart-mid-update, schema-version changes and concurrent shutdown; require exact rollback restoration.
+- **ClayCode:** express candidate/promotion/rollback as typed provenance/authority/recovery transitions; parameter drift alone never proves promotion success.
+- **UnifiedDB:** persist learner version, feature-backbone compatibility, example provenance/tier, calibration/open-set metrics, candidate state and rollback lineage separately from sensor facts.
+- **ClayGraph:** learned familiarity remains a provenance-bearing weighted association, never automatic truth authority.
+- **Emergenz:** NO_CHANGE — this adaptation lineage is not evidence for causal emergence or consciousness.
+
+### Durable delta receipt
+
+`research_entity/archive_assimilation/receipts/666_20260809T1424p0700_chatgpt_secondary_pf_soma_safety_failure_lineage_delta.json`
+
+### Surface/blocker update
+
+This run verified that the GitHub connector now exposes a large bounded commit-history search surface plus direct commit diffs. It still exposes no recursive read-tree or exhaustive paginated tree/history denominator. The old blocker is therefore narrowed, not removed; exact Level-0 coverage remains unclaimable until the exhaustive denominator is externally obtainable and reconciled.

@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1006p0700-chatgpt-secondary-xeno-provenance-hash-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "task_ref":"research_entity/rooms/rooms/center/tasks/666-xeno-provenance-hash-tranche.json",
+  "source":{"g8_folder_id":"1x5TrnLC4PwdNITXawMn_U4jngYBiV0sF","scope":"provenance","scope_folder_id":"1quNqcogS2aJgLDNT27PKs5YOxqZKb_bN","bundle_manifest_drive_id":"1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g"},
+  "method":{"enumeration":"Complete recursive Google_Drive.list_folder(top_k=1000) over provenance and every discovered child folder","raw_bytes":"Google_Drive.fetch(download_raw_file=true,include_base64=false)","hash":"local SHA-256 over downloaded raw bytes","search_used_for_completion":false,"race_guard":"durable claim committed before Drive traversal; final commit search found no competing XENO provenance claim"},
+  "denominator":{"expected_manifest_leaves":51,"observed_recursive_leaves":51,"folder_nodes_below_scope_root":5,"extra_leaves":0,"missing_leaves":0,"expected_manifest_bytes":15255,"verified_manifest_bytes":15255},
+  "families":[
+    {"path_prefix":"se_xeno/G8/provenance/authorization_graphs/","expected":24,"observed":24,"sha256_matches":24,"bytes":6924,"sorted_path_bytes_sha256_tuple_set_digest":"adcbb4484b4636fbc901ca4664f608c3649cc22d2dfa3bae3767cb29c62824e2"},
+    {"path_prefix":"se_xeno/G8/provenance/execution_graphs/","expected":24,"observed":24,"sha256_matches":24,"bytes":7116,"sorted_path_bytes_sha256_tuple_set_digest":"c1d2eebaa208f4dd9d1eab2b788ac83db0de7a34de77b8ab1b0217e4c8e9231e"},
+    {"path":"se_xeno/G8/provenance/alignments/README.md","drive_id":"12Xq_pSCkAiQ_kpeHoYCOzd1KgvEKb3UL","bytes":215,"sha256":"6713f8138a3b842949a963fb485f46eb405f3687699278f4b036d70142e0e00b","manifest_match":true},
+    {"path":"se_xeno/G8/provenance/witnesses/README.md","drive_id":"1-uRYBwVRYuCGelLbNaFTFzgj7at61hmI","bytes":142,"sha256":"1fd427ea413fa5cd5e9ad4306467605ffb914a2d2ba744153ce5a05db5513a9d","manifest_match":true},
+    {"path":"se_xeno/G8/provenance/attacks/g8_attack_catalog.json","drive_id":"1eZU7K-ezyRyKmI9g3tASo1Srs4L4b8lB","bytes":858,"sha256":"40f95a0ff606459b6ce9cd2df5fce37c34e1ddf688bf8eecc222b207e445475c","manifest_match":true}
+  ],
+  "comparison":{"size_matches":51,"sha256_matches":51,"mismatches":0,"sorted_path_bytes_sha256_tuple_set_digest":"e54def708cd162d28f6c38774d67c90262dee59843ffbf4e809e86704b36406d","binding_rule":"Digest is SHA-256 of newline-joined lexicographically sorted path\\0bytes\\0sha256 tuples from the authoritative 51-entry BUNDLE_MANIFEST provenance slice after every raw Drive leaf was independently hashed and matched."},
+  "result":{"scope_status":"HASH_CLOSED","verified_leaves_delta":51,"verified_bytes_delta":15255,"mismatches":0},
+  "semantic_credit_added":0.0,
+  "global_level0":{"gate":"NOT_PASS","exact_global_percent_added":0.0,"reason":"XENO local closure does not freeze the combined Drive + Project-Frankenstein + cross-source Level-0 denominator."},
+  "status":"COMPLETE",
+  "created_at":"2026-08-09T10:06:00+07:00"
+}

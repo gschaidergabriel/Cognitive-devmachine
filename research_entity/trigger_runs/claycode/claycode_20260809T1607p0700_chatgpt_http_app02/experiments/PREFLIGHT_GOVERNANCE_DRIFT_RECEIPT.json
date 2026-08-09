@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "CC-LOCAL-20260809-PREFLIGHT-GOVERNANCE-DRIFT-01",
+  "evidence_class": "CURRENT_REPOSITORY_CODE_COMPARISON_PLUS_LOCAL_LOGIC_REPRODUCTION",
+  "registry_source": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+  "preflight_source": "tools/research_interconnect_preflight.py",
+  "registry_branches": ["clayresearch","gwt","frank","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "claycode_preflight_priority_in_tool": ["frank","clay","harness","claygraph","unifieddb","gwt","hyperposition","emergenz","claycode"],
+  "missing_from_priority": ["clayresearch"],
+  "stale_in_priority": ["clay"],
+  "set_equal": false,
+  "official_tool_rule": "raise RuntimeError when a priority table does not cover exactly the registered peer branch set",
+  "expected_official_behavior": "FAIL_CLOSED_BEFORE_MANIFEST_GENERATION",
+  "literal_local_official_tool_execution": "NOT_PERFORMED_LOCAL_CONTAINER_COULD_NOT_CLONE_GITHUB",
+  "local_reproduction": "set comparison reproduced mismatch exactly from current fetched sources",
+  "meaning": "The current mandatory preflight is governance-drift blocked by the clay -> clayresearch trigger rename. This run must not claim validated full-mesh completion or strong promotion until synchronized.",
+  "recommended_work": "Synchronize research_interconnect_preflight.py, Goodman run validation assumptions, mesh protocol branch names and any active-knowledge alias/budget tables with current registry, then execute the official preflight and regression-test all trigger priorities."
+}

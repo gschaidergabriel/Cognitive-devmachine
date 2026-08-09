@@ -1,0 +1,36 @@
+name: ChatGPT sandbox source export
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/chatgpt-sandbox-source-export.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Build secret-free source snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar \
+            --exclude='./.git' \
+            --exclude='./research_entity/private' \
+            --exclude='./**/__pycache__' \
+            -czf /tmp/clay-global-research-entity-source.tgz .
+          sha256sum /tmp/clay-global-research-entity-source.tgz > /tmp/clay-global-research-entity-source.tgz.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clay-global-research-entity-source
+          path: |
+            /tmp/clay-global-research-entity-source.tgz
+            /tmp/clay-global-research-entity-source.tgz.sha256
+          if-no-files-found: error
+          retention-days: 1

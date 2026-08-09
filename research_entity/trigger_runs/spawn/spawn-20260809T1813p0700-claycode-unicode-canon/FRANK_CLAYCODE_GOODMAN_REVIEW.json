@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1813p0700-claycode-unicode-canon",
+  "review_scope": "Unicode canonical identity policy",
+  "frank_derived_semantic_assumption_promoted": false,
+  "shared_ancestry_collapsed": true,
+  "items": [
+    {
+      "assumption": "FRANK replay/provenance needs deterministic text identity.",
+      "origin": "shared FRANK/ClayCode architecture lineage",
+      "verdict": "REFINED",
+      "independent_discriminator": "Unicode standards plus hosted exact/NFC/NFKC counterexample corpus",
+      "result": "Deterministic identity does not imply global normalization; generic String should remain exact unless a type/operator explicitly requests normalization."
+    }
+  ],
+  "adversarial_check": {
+    "counterhypothesis": "Global NFC on all generic Strings is simpler and sufficient.",
+    "result": "COUNTEREXAMPLE_FOUND",
+    "detail": "Canonically equivalent strings can have different scalar-sequence observables; global NFC changes generic String behavior unless semantics are explicitly redefined."
+  },
+  "concurrent_head_assimilation": {
+    "reread_head_after_409": "194f7f4f04cea0a2d51c1607af3f5aeb803dc994",
+    "material_new_work_seen": [
+      "concurrent Harness visual-action closure spawn",
+      "concurrent Emergenz observer/probe-effect work",
+      "concurrent hypofusion r3",
+      "ClayCode bootstrap-tool staging spawn"
+    ],
+    "contradiction_with_unicode_finding": "NONE_FOUND"
+  },
+  "overall_verdict": "REFINED_NO_PROMOTION",
+  "note": "The primary finding is compiler/Unicode-specific and does not rely on FRANK-ClayCode agreement as independent evidence."
+}

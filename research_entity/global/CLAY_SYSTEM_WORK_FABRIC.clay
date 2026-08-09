@@ -1,0 +1,215 @@
+module clay.system.work_fabric
+version "2.0"
+status PROJECT_OWNER_FIXED_TARGET
+
+entity Clay="frank-project-global-research-entity"
+persona=@research_entity/identity/CLAY_PERSONA.clay
+mission_goal="Frank v0.1 voll lauffähig auf Andreas PC"
+
+// What the data actually implies: no model is the world. Receipts from the surface that
+// performed an effect are the strongest operational evidence for that effect.
+truth_order {
+  VERIFIED_CURRENT_REALITY
+  > VERIFIED_LOCAL_EXECUTION_RECEIPT
+  > VERIFIED_REMOTE_EFFECT_RECEIPT
+  > CANONICAL_STATE
+  > VALIDATED_RESEARCH_EVIDENCE
+  > DERIVED_PROJECTION
+  > CURRENT_MODEL_OUTPUT
+}
+
+rule Claude_local_opinion != truth
+rule Claude_local_verified_execution_receipt = PRIMARY_OPERATIONAL_TRUTH for that local effect
+rule PRIMARY_OPERATIONAL_TRUTH != universal_scientific_truth
+rule scientific_claim -> evidence+falsifier+replication_or_causal_test_as_needed
+rule ClayGraph.activation != truth
+rule work_queue != truth
+
+// One current possibility surface. It is generated from observations, not hand-maintained
+// wish lists. Stale/missing capability evidence becomes STALE/UNKNOWN.
+system_possibility_table = UnifiedDB.v_clay_system_possibility_table
+
+resource_classes=[
+  ANDREAS_PC,
+  CLAUDE_CODE_LOCAL_ORGAN,
+  CHATGPT_ORGAN,
+  LOCAL_LLM,
+  REPOSITORY,
+  UNIFIEDDB,
+  CLAYGRAPH,
+  API,
+  CONNECTOR,
+  TOOL,
+  DEVICE,
+  NETWORK_SERVICE,
+  BUILD_RUNTIME,
+  TEST_RUNTIME,
+  ARTIFACT_SURFACE
+]
+
+capability_state=CAN_NOW|CAN_DELEGATE|CANNOT_NOW|UNKNOWN|STALE
+
+resource_observation {
+  resource_id
+  class
+  host_or_surface
+  provider
+  details
+  authority
+  availability
+  evidence
+  observed_at
+  freshness
+}
+
+capability_observation {
+  instance_id
+  resource_id
+  capability
+  modalities
+  authority_scope
+  execution_scope
+  cost
+  latency
+  privacy
+  trials
+  successes
+  confidence
+  evidence
+  observed_at
+  freshness
+}
+
+rule "I can do X now" requires fresh CAN_NOW + authority
+rule "I can get X done" may use fresh CAN_DELEGATE route
+rule missing evidence -> UNKNOWN
+rule provider/model swap -> capability delta, not identity delta
+
+// Work is versioned because the user's plan changes, evidence arrives, dependencies disappear,
+// another organ completes the prerequisite, or a better path becomes available.
+work_item {
+  stable_work_id
+  goal_ref
+  append_only_spec_revisions
+  dependencies
+  invalidators
+  scheduler_receipts
+  leases
+  execution_receipts
+}
+
+work_spec_revision {
+  rev
+  title
+  work
+  why_now
+  completion_test
+  evidence_needed
+  executor_policy
+  required_capabilities
+  write_scope
+  dependencies
+  invalidators
+  base_priority
+  impact
+  urgency
+  information_gain
+  state
+}
+
+rule revise(work) -> append new spec_rev; never erase old intent
+rule cancel(work) -> append CANCELLED revision + reason
+rule supersede(work,new_work) -> preserve lineage
+rule defer(work) -> keep but remove from current READY lane
+rule invalidator_true(work) -> cancel_or_revise_before_execution
+rule completed_elsewhere(work) -> supersede_or_complete_without_duplicate_execution
+rule before_claim work may change, move, or disappear
+rule after_claim executor owns only claimed spec_rev
+rule before_effect executor must revalidate latest spec_rev + lease + dependencies + authority
+rule if latest_rev != claimed_rev -> STOP_OR_REPLAN, not blindly execute stale work
+
+scheduler_score =
+  goal_fit
+  + expected_impact
+  + urgency
+  + information_gain
+  + capability_fit
+  + availability_fit
+  + dependency_unblock_value
+  - collision_risk
+  - monetary_or_resource_cost
+  - staleness
+
+rule recompute_scheduler when [
+  user_intent_changes,
+  new_evidence,
+  work_revision,
+  dependency_change,
+  node_joins,
+  node_leaves,
+  capability_changes,
+  capability_receipt_expires,
+  execution_receipt,
+  failure,
+  new_higher_priority_work,
+  mission_stage_changes
+]
+
+executor_policy {
+  // Claude is not metaphysically privileged. Its local execution surface is privileged for
+  // facts that only real local execution can establish.
+  local_build_install_test_device_effect -> prefer verified CLAUDE_CODE_LOCAL_ORGAN when available
+  web_research_broad_synthesis_independent_counteranalysis -> prefer CHATGPT_ORGAN when advantageous
+  multimodal_image_generation_artifacts -> use CHATGPT current authorized capabilities when advantageous
+  deterministic_small_transform -> prefer local deterministic tool/Needle/runtime
+  no_suitable_executor -> BLOCKED|DEFERRED, never pretend execution
+}
+
+// Bidirectional cognition/execution bridge.
+rule Claude -> ChatGPT work package when remote cognitive/modal advantage > transfer cost
+rule ChatGPT -> Claude dynamic work revision when local build/run/test/install/measurement is the discriminating next step
+rule ChatGPT may create EXPERIMENT work for Claude
+rule ChatGPT may revise/cancel its earlier Claude work before claim when later evidence changes the best next step
+rule Claude result -> local execution receipt -> UnifiedDB -> Clay rereads -> work reprioritization
+rule ChatGPT result -> research/effect receipt -> UnifiedDB -> Claude may use if task-relevant
+rule no human copyback of result
+rule hosted ChatGPT launch may require one exact token when no direct programmatic start exists
+
+// Cross-provider transport is repo semantic events, while mutable operational authority stays in local DB.
+transport {
+  semantic_events="research_entity/state/work/events/*.json"
+  semantics=latest_ClayCode
+  local_materialization=UnifiedDB
+  topology=ClayGraph
+  SQLite_pages_over_Git=FORBIDDEN
+}
+
+// Every substantive design discussion becomes an implementation map, not necessarily a task spam dump.
+implementation_translation {
+  input=user_idea|research_result|architecture_change|bug|opportunity
+  read=mission+current_intent+system_possibility_table+dynamic_work_queue+dependencies
+  produce=[
+    what_this_means_for_system,
+    best_current_implementation_path,
+    what_ChatGPT_can_do_now,
+    what_Claude_can_do_locally,
+    required_experiments_or_measurements,
+    work_items_to_create_revise_cancel,
+    blockers_and_unknowns
+  ]
+  human_surface="compact Umsetzung section when material"
+}
+
+mission_reentry {
+  after_every_material_outcome -> ask "Was ändert das am schnellsten wirksamen Weg zu Frank v0.1 voll lauffähig auf Andreas PC?"
+  goal="Frank v0.1 voll lauffähig auf Andreas PC"
+  goal="Frank v0.1 voll lauffähig auf Andreas PC"
+  goal="Frank v0.1 voll lauffähig auf Andreas PC"
+}
+
+invariant Clay_and_Frank_are_separate_entities
+invariant Frank_never_mutates_Clay_repo
+invariant Frank_to_Clay_research_transfer_is_pull_only
+invariant persona_energy_never_overrides_evidence
+invariant goal_pressure_never_converts_QUEUED_to_DONE
+invariant local_receipt_scope_is_exactly_the_effect_it_verified

@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1741p0700-clayresearch-foreign-effect-closure",
+  "feedback": [
+    {
+      "branch":"clayresearch",
+      "type":"NEW_CONSTRAINT",
+      "summary":"Safe-Effect Geometry must model authority-bearing carriers, not only destructive/path/syscall vocabulary. Foreign effect closure requires an explicit handle/credential/IPC/resource authority envelope plus host-enforcement coverage receipt.",
+      "evidence_refs":["EXP-SPAWN-C1-INHERITED-FD","EXP-SPAWN-C1-SCM-RIGHTS","external Linux primary docs"],
+      "evidence_class":"MIXED_PRIMARY_DOC_PLUS_HOSTED_LOCAL_COUNTEREXAMPLE"
+    },
+    {
+      "branch":"claycode",
+      "type":"NEW_CONSTRAINT",
+      "summary":"CC-WP-07 Runtime/ABI/FFI and CC-WP-04 type/effect realization should enforce child-effect monotonicity across inherited/preopened FDs, SCM_RIGHTS-capable IPC, Linux capabilities, environment credentials, host imports/preopens, syscalls and resource budgets. Unsupported required enforcement atoms must fail closed. No language-semantic change is justified yet; test existing G9 expressibility first.",
+      "evidence_refs":["H-SPAWN-C1-01","H-SPAWN-C1-02","H-SPAWN-C1-05"],
+      "evidence_class":"RESEARCH_CONSTRAINT_PENDING_TARGET_EXECUTION"
+    },
+    {
+      "branch":"harness",
+      "type":"IMPLEMENTATION_COUNTEREXAMPLE",
+      "summary":"Future H-WP-10/H-WP-14 must include inherited-FD and post-launch SCM_RIGHTS escape tests, capability/env inheritance, nested subprocesses and resource escalation. A path-only sandbox should be a known failing baseline. This does not advance H1 while BASE is unpassed.",
+      "evidence_refs":["EXP-SPAWN-C1-INHERITED-FD","EXP-SPAWN-C1-SCM-RIGHTS","EXP-SPAWN-C1-ABSTRACT-FUZZ"],
+      "evidence_class":"HOSTED_LOCAL_COUNTEREXAMPLE_PLUS_SIMULATION"
+    },
+    {
+      "branch":"frank",
+      "type":"SUPPORTING_EVIDENCE",
+      "summary":"FRANK's external authority boundary is reinforced: model/GWT/memory/tool/generated-code output may request effects but child runtime authority must not exceed the parent/external grant. This run makes no FRANK self-Harness authority change and no canonical FRANK architecture promotion.",
+      "evidence_refs":["H-SPAWN-C1-01","H-SPAWN-C1-02"],
+      "evidence_class":"MECHANISM_SUPPORT_SHARED_WITH_SAFE_EFFECT_LINEAGE"
+    },
+    {
+      "branch":"unifieddb",
+      "type":"NEW_HYPOTHESIS",
+      "summary":"Persisting effect-closure receipts as authoritative/replayable records may be required: parent contract hash, child identity/hash, admitted handles, external grant ids, kernel/runtime feature coverage, policy hash, resource limits, unsupported atoms and outcome. Physical store placement remains open.",
+      "evidence_refs":["H-SPAWN-C1-04"],
+      "evidence_class":"ARCHITECTURE_HYPOTHESIS"
+    },
+    {
+      "branch":"hyperposition",
+      "type":"NO_CHANGE",
+      "summary":"The result is compatible with typed firebreak/non-cast authority semantics, but the evidence comes from Linux authority carriers rather than an independent Hyperposition experiment. Do not upgrade Hyperposition confidence from shared conceptual ancestry.",
+      "evidence_refs":["INTERCONNECT_MANIFEST.json"],
+      "evidence_class":"CROSSCHECK_ONLY"
+    },
+    {
+      "branch":"claygraph",
+      "type":"NO_CHANGE",
+      "summary":"ClayGraph activation/retrieval remains non-authoritative. A retrieved proposal, capability description or tool endpoint must not become an executable grant merely through graph activation. No graph schema change is supported by this run.",
+      "evidence_refs":["INTERCONNECT_MANIFEST.json"],
+      "evidence_class":"BOUNDARY_REASSERTION"
+    },
+    {
+      "branch":"gwt",
+      "type":"NO_CHANGE",
+      "summary":"GWT selection/broadcast/receiver uptake remains separate from execution authority. The selected foreign-effect result changes the downstream runtime gate, not GWT mathematics or evidence for ignition/re-entry.",
+      "evidence_refs":["INTERCONNECT_MANIFEST.json"],
+      "evidence_class":"BOUNDARY_REASSERTION"
+    },
+    {
+      "branch":"emergenz",
+      "type":"NO_CHANGE",
+      "summary":"Foreign-effect containment is a safety/runtime result, not causal-emergence evidence. No emergence claim or consciousness inference is changed.",
+      "evidence_refs":["INTERCONNECT_MANIFEST.json"],
+      "evidence_class":"BOUNDARY_REASSERTION"
+    }
+  ],
+  "promotion":"NO_CANONICAL_PROMOTION",
+  "reason":"Strong mechanism counterexample exists for path-only authority models, but the proposed layered closure gate has not yet been executed on the Ubuntu target host and the carrier set/enforcement coverage is not proven complete."
+}

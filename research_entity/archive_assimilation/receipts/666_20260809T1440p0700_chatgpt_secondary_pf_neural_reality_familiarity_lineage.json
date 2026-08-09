@@ -1,0 +1,184 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1440p0700_chatgpt_secondary_pf_neural_reality_familiarity_lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "gate": "666_RELEASE_GATE",
+  "gate_status_at_start": "NOT_PASS",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "created_at_local": "2026-08-09T14:40:27+07:00",
+  "stack_epoch": 15,
+  "mode": "LEVEL0_OPEN_SWARM_SHARD",
+  "task_id": "L0-PF-NEURAL-REALITY-FAMILIARITY-LINEAGE",
+  "lease_ref": "research_entity/rooms/rooms/center/leases/tasks/L0-PF-NEURAL-REALITY-FAMILIARITY-LINEAGE.json",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "selected_obligation": "Reconstruct the Project-Frankenstein Neural Reality Gate chronology and learned familiarity/grounding lifecycle as a non-visual historical mechanism. Preserve its cold-start-to-neural migration, outcome-buffer persistence, label-generation path, failures and current FRANK v0.1 implications without conflating text/self-grounding familiarity with visual Micro Visual Classifier truth.",
+  "source_refs": [
+    {
+      "kind": "github_commit",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "sha": "230aa43e5f57710fd14ef11d8b108704f0188db4",
+      "date": "2026-03-03",
+      "role": "predecessor hallucination-filter/subconscious grounding policy"
+    },
+    {
+      "kind": "github_commit",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "sha": "1d44389056cdd889e436f8b0a2dffcc49a95272b",
+      "date": "2026-03-11",
+      "role": "Neural Reality Gate introduction and integration"
+    },
+    {
+      "kind": "github_commit",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "sha": "8512cb3e7ed7edcb5b995a35c3e069865e54b53c",
+      "date": "2026-03-11",
+      "role": "live DB snapshot including neural_reality_gate seed persistence"
+    },
+    {
+      "kind": "github_commit",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "sha": "6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+      "date": "2026-03-31",
+      "role": "later v7 update including reality-gate rule fixes"
+    },
+    {
+      "kind": "github_file",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "services/neural_reality_gate.py",
+      "role": "frozen-head implementation evidence"
+    },
+    {
+      "kind": "rae_workspace",
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "path": "research_entity/archive_assimilation/666_WORKSPACE.json",
+      "role": "current Level-0 denominator and blocker state"
+    }
+  ],
+  "chronology": [
+    {
+      "date": "2026-03-03",
+      "event": "Subconscious hallucination filtering already used pre-input verified-memory curation, seven post-output reality checks and a penalty fed back into PPO. This is the immediate policy/grounding precursor, not yet the NRG multi-head network."
+    },
+    {
+      "date": "2026-03-11",
+      "event": "NRG introduced as a five-module hippocampal-prefrontal-inspired grounding circuit with source/identity/familiarity/temporal/experience-related outputs, rule-based cold start and consolidation-time supervised learning."
+    },
+    {
+      "date": "2026-03-11",
+      "event": "A subsequent system snapshot persisted neural_reality_gate.db among live seed databases, showing the mechanism had durable runtime state rather than being documentation-only."
+    },
+    {
+      "date": "2026-03-31_to_frozen_head",
+      "event": "Reality-gate rules continued to evolve; frozen-head code includes fabricated-code-reference checks and a critical training-label parser fix."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-NRG-001",
+      "status": "HISTORICAL_RUNTIME_MECHANISM",
+      "summary": "NRG implements a compact learned grounding controller over a 60-dimensional feature vector (30 text-derived plus 30 context-derived features) with five internal modules and separate outputs including familiarity_valid. Historical file documentation reports approximately 28K parameters and <3 ms CPU, while the introduction commit says 21K parameters; preserve this as an unresolved documentation/instrumentation discrepancy rather than inventing one exact size."
+    },
+    {
+      "id": "F-NRG-002",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "summary": "The cold-start migration is explicit and staged: below 100 evaluations output is 100% rule fallback while the neural path trains silently; below 300 it is 50% rule; below 500 it is 25% rule; after 500 the historical design becomes fully neural. This is a reusable migration pattern, but step count alone is not sufficient evidence to remove a safety baseline in current FRANK."
+    },
+    {
+      "id": "F-NRG-003",
+      "status": "NEGATIVE_RESULT_VALUE",
+      "summary": "Frozen-head code documents a critical historical bug: stored violation strings included suffix detail such as human_temporal:childhood, while auxiliary-label logic originally intersected them against bare prefixes. Before the later prefix-splitting fix, intersections were always empty and auxiliary targets were effectively all 1.0. Therefore historical multi-task neuralization cannot be assumed to have learned the intended module semantics throughout its lifetime."
+    },
+    {
+      "id": "F-NRG-004",
+      "status": "ARCHITECTURE_RISK",
+      "summary": "Even after the parser fix, familiarity_valid auxiliary supervision is generated directly from rule violations fabricated_object/external_place. Main grounded labels are also produced when the same validation stack rejects a thought or accepts/stores it. Inference: this creates a teacher-self-confirmation/label-leakage path; the neural head can distill rule policy and its errors rather than independently establish familiarity truth. This is a causal risk hypothesis, not a measured failure rate."
+    },
+    {
+      "id": "F-NRG-005",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "summary": "NRG persists feature traces, per-head scores, confidence, rule score, violations and later outcome labels in SQLite and trains during bounded consolidation cycles. It saves model+optimizer state through an atomic temporary-file rename and restores total/training steps. This is useful lifecycle scaffolding for a candidate learner."
+    },
+    {
+      "id": "F-NRG-006",
+      "status": "NEGATIVE_RESULT_VALUE",
+      "summary": "The inspected frozen-head NRG exposes one rolling checkpoint path, not an explicit candidate-vs-current shadow model, versioned promotion manifest, last-known-good rollback chain, independent holdout gate or open-set calibration contract. No repository search hit verified such NRG-specific rollback semantics. Therefore NRG persistence must not be credited as current MVC promotion/rollback compliance."
+    },
+    {
+      "id": "F-NRG-007",
+      "status": "BOUNDARY_CONSTRAINT",
+      "summary": "NRG familiarity is familiarity of textual/self/world claims against context and heuristic violation classes. It is not evidence of visual identity learning, prototype memory, sensor truth, or user-specific object recognition. The current visual MVC may reuse lifecycle/control ideas only after replacing the supervision/evidence boundary."
+    }
+  ],
+  "current_frank_mapping": {
+    "reuse": [
+      "staged baseline-to-learned migration rather than immediate neural authority",
+      "separate familiarity signal from overall grounded verdict",
+      "persistent trace/outcome buffer for replay and diagnostics",
+      "bounded consolidation-time training budget",
+      "atomic checkpoint write semantics",
+      "explicit module-level diagnostics rather than one opaque scalar"
+    ],
+    "must_change": [
+      "promotion must be evidence/calibration gated, not unlocked by evaluation count alone",
+      "visual familiarity labels must come from provenance-tiered sensor/user evidence and independent frozen holdouts, not from the same rule system being distilled",
+      "candidate-vs-current shadow evaluation and last-known-good rollback must be explicit",
+      "open-set/near-neighbor negatives and calibration must gate KNOWN/UNKNOWN/AMBIGUOUS outcomes",
+      "familiarity must remain non-authoritative: prediction != sensor truth and confidence != execution authority"
+    ],
+    "recommended_discriminating_test": "For H1, implement a candidate visual familiarity head beside a frozen baseline. Train only from admitted GOLD/SILVER examples; evaluate on a frozen independent recurring-user split plus realistic unknown/near-neighbor negatives; compare current vs candidate on known-class accuracy, open-set AUROC/FPR at target recall, calibration, forgetting after sequential additions, routing savings and CPU/RAM/update cost. Promote only on preregistered gates and retain atomic rollback."
+  },
+  "branch_feedback": {
+    "frank": "DELTA: reuse NRG's staged learned-controller lifecycle, but keep textual grounding familiarity and visual identity familiarity separate. Never let familiarity_valid become sensor or action authority.",
+    "harness": "DELTA: add an anti-echo acceptance test: a candidate learner trained from its own rule-derived labels must not count as independently validated. Require frozen external/held-out labels and rollback receipts.",
+    "claycode": "DELTA: represent learner authority phases explicitly (BASELINE_ONLY, SHADOW, BLENDED, PROMOTED, ROLLED_BACK) with evidence-gated transitions; evaluation count may be telemetry but not sufficient transition authority.",
+    "unifieddb": "DELTA: persist training-label origin separately from model prediction, plus candidate/current version, holdout identity, calibration gate, promotion receipt and rollback ancestry.",
+    "claygraph": "DELTA: encode learned familiarity as a provenance-bearing hypothesis edge distinct from observation/evidence edges; prevent self-produced learner labels from closing their own evidence loop.",
+    "gwt": "DELTA: familiarity may influence salience/routing but should broadcast uncertainty and provenance with the signal; do not collapse it into grounded truth.",
+    "emergenz": "DELTA: if testing causal benefit, lesion/rescue the familiarity head against the same external holdout and downstream task; self-agreement is not emergence evidence.",
+    "hyperposition": "DELTA: unresolved known/unknown alternatives should remain set-valued until independent evidence narrows them; a learned familiarity head is one constraint, not collapse authority.",
+    "clayresearch": "DELTA: NRG is a historical example of useful staged neuralization plus a concrete anti-echo failure mode. Carry both into the current adaptive learner architecture."
+  },
+  "earned_work_mapping_candidates": [
+    {
+      "target": "H1 adaptive learner control-plane",
+      "class": "REUSABLE_WITH_ADAPTATION",
+      "mechanism": "rule/baseline -> shadow learning -> blended control concept, persistent outcome buffer and bounded consolidation training",
+      "hours_credit": null,
+      "reason": "Must be deduplicated against SOMA and other candidate lifecycle mechanisms before historical earned-work credit."
+    },
+    {
+      "target": "H1 false-pass prevention",
+      "class": "NEGATIVE_RESULT_VALUE",
+      "mechanism": "auxiliary-label prefix bug plus rule-derived/self-confirming labels demonstrate that neuralization and internal accuracy are not independent validation",
+      "hours_credit": null,
+      "reason": "Method value is real but should not be converted to hours before row-level audit."
+    }
+  ],
+  "contradictions_preserved": [
+    "Introduction commit says NRG is ~21K parameters; the introduced file documentation says ~28K parameters. Runtime get_stats computes actual parameter count, but no historical runtime receipt in this shard resolves which exact revision each number described.",
+    "The architecture calls familiarity a learned head, yet its auxiliary target is derived from handcrafted violation classes; this is preserved as learned function approximation of a heuristic teacher unless independent outcome evidence proves more."
+  ],
+  "exact_coverage_credit": 0.0,
+  "coverage_reason": "This is a query-directed Project-Frankenstein history/runtime shard. The combined Level-0 atomic-obligation denominator is still NOT_FROZEN, and full Project-Frankenstein recursive tree/history closure remains externally blocked on the current read surface. No exact Level-0 percentage is increased.",
+  "next_obligations": [
+    "Continue non-overlapping Project-Frankenstein history/tree shards while the recursive denominator surface remains unavailable.",
+    "During H1 design, convert the NRG lifecycle lesson into an explicit independent-label/shadow/promotion/rollback acceptance test rather than copying NRG authority semantics.",
+    "Deduplicate NRG lifecycle earned-work value against SOMA, Digital Retina and other historical adaptive mechanisms before assigning avoided-work hours."
+  ],
+  "limitations": [
+    "This shard used accessible frozen-head file reads and commit-search/history evidence; it is not full repository tree/history closure.",
+    "No runtime benchmark was executed on the historical NRG model in this session; parameter count and latency claims remain source-reported where noted.",
+    "The label-leakage/self-confirmation point is an inference from code-level label provenance, not a measured generalization error rate."
+  ],
+  "promotion_boundary": "Do not promote NRG familiarity or its historical neural outputs as visual MVC evidence, independent ground truth, emergence evidence or FRANK v0.1 learner PASS. Preserve it as lifecycle prior plus anti-echo/label-provenance negative-result value."
+}

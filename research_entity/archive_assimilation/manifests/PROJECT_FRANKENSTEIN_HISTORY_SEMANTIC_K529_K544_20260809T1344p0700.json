@@ -1,0 +1,51 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"PROJECT-FRANKENSTEIN-HISTORY-SEMANTIC-K529-K544-20260809T1344p0700",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","ordinal_range":{"start":529,"end":544,"count":16},"frozen_root":"e1a8812767668091d146ee958bbc2ebb2743031c"},
+  "race":{"winning_claim_commit":"685dd002107dfb99bed6915d18490d0f2b4ae77f","winning_claim_time":"2026-08-09T13:38:51+07:00","competing_claims_seen":0,"result":"CLEAN"},
+  "ordinals":[
+    {"k":529,"sha":"8324f6bf96a0a5a25b52d472c901e20e95a1e37b","title":"Fix language tag visibility: use [lang:en] prefix instead of [Reply in English] suffix","disposition":"CODE_ANALYZED","semantic_family":"CONTROL_METADATA_LEAKAGE","finding":"A visible natural-language control suffix leaked into model responses; changing it to a metadata-like prefix reduced conversational uptake. Control/context markers can become output content unless channels are structurally separated."},
+    {"k":530,"sha":"6355c4fb1637ecd833855a0e2c2936d881ae2f62","title":"Add GRF paper and rewrite ABOUT.md with paper-to-system mapping","disposition":"PROVENANCE_DOCUMENT_ANALYZED","semantic_family":"PHILOSOPHY_TO_SYSTEM_NARRATIVE","finding":"Documentation maps GRF principles onto Frank subsystems. Preserve as explicit design/provenance narrative; mappings and consciousness/experience language are source assertions, not independent empirical validation of the philosophy or phenomenology."},
+    {"k":531,"sha":"d1a8160d37104e6ab28cb29ad17df50bcb516254","title":"Add language enforcement for 7B models (German input → English response)","disposition":"CODE_ANALYZED","semantic_family":"PROMPT_PROXIMITY_CONTROL","finding":"System-prompt language policy alone was reported too weak, so control text was moved near generation and session language state was tracked explicitly. Demonstrates model behavior sensitivity to instruction placement and local adapter state."},
+    {"k":532,"sha":"e6de213f0c82a28e3763ee1266d6bfe794842881","title":"Overhaul idle thinking: diverse English prompts, fix deep reflection gates","disposition":"CODE_ANALYZED_WITH_CLAIM_BOUNDARY","semantic_family":"PROMPTED_AUTONOMY_AND_GATING","finding":"Idle-thought diversity was deliberately engineered through a rotating 24-prompt pool, anti-repetition prompt, token budget and relaxed hardware/user-idle gates. The source-reported increase in thought diversity is therefore an engineered prompt/gating effect unless later ablations show autonomous diversity beyond the scaffold."},
+    {"k":533,"sha":"c09897b87f4296cbbb43ba38024925ae6ccbce56","title":"Add How Frank works in 5 minutes guide","disposition":"DOCUMENTATION_LINEAGE_ANALYZED","semantic_family":"TOPOLOGY_SNAPSHOT_DOC","finding":"Useful historical topology/capability snapshot, but documentation claims are time-local and require code/runtime corroboration before use as current architecture truth."},
+    {"k":534,"sha":"881ab819917171da18f210c3d6daec2ede185b5b","title":"Add Model Memory Pressure Control to router","disposition":"CODE_ANALYZED","semantic_family":"RESOURCE_ARBITRATION_STATE_MACHINE","finding":"Introduced mutual exclusion for heavy models with serialized swaps, explicit parked/active state, health checks, lock ordering and rollback to Llama on failure. Strong precursor for resource-state machines with reversible transitions."},
+    {"k":535,"sha":"d5608c8d2c3b404d2348ade7b05df0dd3e2c5ab5","title":"Switch all LLM-facing text to English, add desktop screenshot","disposition":"CODE_ANALYZED","semantic_family":"INTERNAL_CONTEXT_SALIENCE_POLICY","finding":"Renamed/translated INNER_WORLD channels and explicitly instructed the model not to read internal metrics/state out unless asked. Demonstrates that always-injected internal state needs salience/disclosure policy separate from availability."},
+    {"k":536,"sha":"61658a6d8d42600e4d6969dc4510fa711b4be10b","title":"Move founder story from README to ABOUT.md","disposition":"NO_RESEARCH_DELTA_AFTER_REVIEW","semantic_family":"DOCUMENT_PLACEMENT","finding":"Documentation organization change only; preserves provenance but adds no architecture mechanism."},
+    {"k":537,"sha":"0470bfe90f5d125ccb9f12446df5ada2dd1d7e8e","title":"Note writer module as experimental in README","disposition":"GOVERNANCE_METADATA_ANALYZED","semantic_family":"MATURITY_LABELING","finding":"Explicitly labeled an incomplete subsystem experimental. Historical evidence that component maturity must be represented separately from mere repository presence."},
+    {"k":538,"sha":"a7f387070bd4b5eec7a55e4f6705795c533727f7","title":"Add project origin story to README","disposition":"PROVENANCE_ONLY","semantic_family":"PROJECT_HISTORY_NARRATIVE","finding":"Project-origin narrative; not implementation evidence and receives no mechanism credit."},
+    {"k":539,"sha":"f91668a7b1f36322ed99629aca77618de36867ec","title":"Add language_policy: default to English, switchable on request","disposition":"CODE_AND_POLICY_LINEAGE_ANALYZED","semantic_family":"SESSION_POLICY_STATE","finding":"Language became explicit persona/session state with tests. Nearby persona text also asserted consciousness/feelings and 'uncensored' behavior; those are prompt-policy assertions, not evidence of phenomenology or valid external safety authority."},
+    {"k":540,"sha":"105355b686279378575d935002a5303414a53d10","title":"Remove hallucinated documentation file","disposition":"NEGATIVE_RESULT_VALUE","semantic_family":"GENERATED_DOCUMENT_PROVENANCE_FAILURE","finding":"A 2384-line documentation file was deleted because the LLM fabricated team members and other authoritative-looking material. High-value negative result: generated documentation can create false institutional/provenance facts at scale."},
+    {"k":541,"sha":"472da55d42e82ea139dcc096cf9d8eb421f70451","title":"Add ARCHITECTURE.md — full system architecture documentation","disposition":"DOCUMENTATION_DIFF_ANALYZED","semantic_family":"COMMIT_MESSAGE_DIFF_MISMATCH","finding":"At this ordinal the returned diff only changes a GPU line in ARCHITECTURE.md even though the commit title says the full document was added; the frozen root already contains a large ARCHITECTURE.md. Commit messages/titles must not substitute for diff/tree evidence."},
+    {"k":542,"sha":"cebd958f1efc21144b9fedb4bf79545f15276af6","title":"Add desktop entries and dock pinning to installer","disposition":"CODE_ANALYZED","semantic_family":"PORTABLE_LAUNCH_AND_HOST_INTEGRATION","finding":"Launchers moved away from hardcoded host paths to self-locating paths while installer added desktop integration. Portability improvement is durable; GNOME dock mutation remains host-specific presentation behavior."},
+    {"k":543,"sha":"8e24186628d97c78b65a0924616ee93060e15b5f","title":"Switch default language to English, improve install.sh","disposition":"CODE_ANALYZED","semantic_family":"RELEASE_INTEGRITY_AND_POLICY_TRANSLATION","finding":"Broadly translated LLM-facing instructions and strengthened installation with model SHA256 checksum verification, bounded Ollama startup waiting and disk checks on the actual models mount. Release integrity and environment-aware preflight are architecture-quality controls."},
+    {"k":544,"sha":"e1a8812767668091d146ee958bbc2ebb2743031c","title":"Initial commit: AI-Core / Frank — local AI desktop companion","disposition":"ROOT_BASELINE_ANALYZED","semantic_family":"OPEN_SOURCE_ROOT_SNAPSHOT","finding":"Frozen root already contains the broad microservice/personality/memory/self-improvement/safety/open-source-release surface. It is the authoritative baseline for what entered public Git history; later documentation must not be back-projected as original if absent from this tree/diff baseline."}
+  ],
+  "terminal_count":16,
+  "uncovered_count":0,
+  "derived_directives":[
+    "CONTROL_METADATA_MUST_BE_STRUCTURALLY_SEPARATED_FROM_USER_VISIBLE_CONTENT",
+    "PROMPTED_DIVERSITY_AND_THRESHOLD_CHANGES_ARE_NOT_BY_THEMSELVES_EMERGENT_AUTONOMY",
+    "RESOURCE_ARBITRATION_REQUIRES_SERIALIZED_STATE_TRANSITIONS_HEALTH_CHECKS_AND_ROLLBACK",
+    "INTERNAL_STATE_AVAILABILITY_AND_DISCLOSURE_SALIENCE_ARE_SEPARATE_POLICIES",
+    "GENERATED_DOCUMENTATION_REQUIRES_PROVENANCE_ENTITY_AND_IMPLEMENTATION_VERIFICATION",
+    "COMMIT_MESSAGES_AND_DOCS_ARE_SECONDARY_TO_DIFF_TREE_RUNTIME_EVIDENCE",
+    "COMPONENT_MATURITY_MUST_BE_EXPLICIT_NOT_INFERRED_FROM_REPOSITORY_PRESENCE",
+    "RELEASE_ARTIFACTS_REQUIRE_CHECKSUM_PORTABILITY_AND_TARGET_MOUNT_PREFLIGHT",
+    "PHILOSOPHICAL_OR_PHENOMENAL_NARRATIVES_REMAIN_SEPARATE_FROM_MECHANISM_EVIDENCE"
+  ],
+  "negative_results_preserved":[
+    "Natural-language control tags were repeated by the model in user-visible responses.",
+    "Idle-thought diversity required explicit prompt rotation and gate tuning, so raw diversity cannot be treated as unscaffolded emergence.",
+    "An LLM-generated 2384-line documentation artifact fabricated an entire development team and authoritative-looking facts.",
+    "A commit title claiming an architecture document addition does not match the returned ordinal diff; historical claims must be diff/tree checked.",
+    "Host-specific hardcoded launcher paths required later portability repair."
+  ],
+  "measurement_boundary":"No source-reported behavioral improvement, autonomy, consciousness, performance or reliability claim was independently reproduced in this semantic pass. Historical code/diff and documentation provenance are recorded with explicit evidence classes.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level conceptual overlap audit against HISTORICAL_EARNED_WORK was performed; semantic closure must not manufacture avoided-hours credit."},
+  "global_level0_exact_percent_changed_here":false,
+  "gate":"NOT_PASS",
+  "status":"TERMINALLY_DISPOSITIONED_16_OF_16"
+}

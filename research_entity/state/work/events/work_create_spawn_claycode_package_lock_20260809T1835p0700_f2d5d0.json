@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "event_type": "WORK_CREATE",
+  "work_id": "WORK-SPAWN-CLAYCODE-PACKAGE-LOCK-UBUNTU-F2D5D0",
+  "title": "Production ClayCode package-lock/provenance differential on Ubuntu",
+  "created_by": "chatgpt-secondary",
+  "created_at": "2026-08-09T18:35:00+07:00",
+  "origin_run": "research_entity/trigger_runs/spawn/spawn_20260809T1835p0700_claycode_package_lock_provenance_f2d5d0",
+  "stage": "BASE_CLAYCODE_RELEASE",
+  "status": "BLOCKED_ON_CLAYCODE_PACKAGE_TOOLCHAIN_SURFACE",
+  "target_host": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "dependencies": ["CC-WP-02-PARSER-CANON", "CC-WP-06-COMPILER-LOWERING", "CC-WP-07-RUNTIME-ABI-FFI", "CC-WP-08-STDLIB-SDK"],
+  "goal": "Attempt the candidate typed package-lock/provenance contract in the production current ClayCode toolchain and falsify identity-plane assumptions before BASE promotion.",
+  "required_tests": [
+    "Generate a lock from a version-range package request, then grow registry state: unlocked resolution may change; locked/frozen execution must not silently drift.",
+    "Mutate package payload under the same logical coordinate/version in a controlled local registry fixture: digest verification must fail closed.",
+    "Permute package/node/edge discovery order: canonical ResolvedGraphId and BuildProjectionId must remain stable.",
+    "Fetch identical verified logical package coordinate/content through two different mirrors: semantic graph/projection identity should remain stable while FetchReceipt differs.",
+    "Resolve same name/version/content under a deliberately distinct logical source namespace/authority: test whether PackageCoordinate/ResolvedGraphId changes as designed.",
+    "Change Ubuntu target/features/semantic markers so active dependency meaning changes: BuildProjectionId must change while underlying ResolvedGraphId may remain stable.",
+    "Apply yank/revocation/freshness policy after graph identification: immutable graph identity must remain stable while SupplyChainTrustReceipt verdict changes and use is blocked where policy says REJECT.",
+    "Run two resolver implementations/policies against a fixture that yields the same exact graph: ResolvedGraphId should match and ResolutionReceipt should differ.",
+    "Package declares a network/system effect without external capability grant: execution must be denied; explicit grant should permit only the granted authority.",
+    "Exercise candidate semantic cache: compare full rebuild vs cache reuse under trust-only changes and under actual semantic BuildProjection changes; no stale semantic artifact reuse is allowed."
+  ],
+  "required_receipts": [
+    "source/manifest hash",
+    "PackageRequestId",
+    "resolver policy/version and registry input hashes",
+    "ResolvedGraphId plus exact node/edge/content digests",
+    "BuildProjectionId",
+    "SupplyChainTrustReceipt",
+    "compiler/runtime/backend identity",
+    "generated artifact hash",
+    "execution result",
+    "cache hit/miss key and latency",
+    "capability grant/denial receipt"
+  ],
+  "acceptance_verdicts": ["CANDIDATE_SURVIVES_PRODUCTION_DIFFERENTIAL", "CANDIDATE_REQUIRES_TOOLCHAIN_REVISION", "EXECUTABLE_LANGUAGE_SEMANTIC_COUNTEREXAMPLE"],
+  "language_change_rule": "Only EXECUTABLE_LANGUAGE_SEMANTIC_COUNTEREXAMPLE may justify reopening ClayCode core semantics; otherwise repair compiler/runtime/package/toolchain layers.",
+  "scientific_promotion": "NONE_UNTIL_EXECUTED",
+  "training_authorized": false
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1340p0700-chatgpt-secondary-pf-history-k416-k431",
+  "trigger": "666",
+  "stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor_id": "chatgpt-secondary",
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "range": "k416-k431",
+    "expected": 16,
+    "resolved": 16,
+    "missing": 0,
+    "evidence_class": "HISTORICAL_REPOSITORY_COMMIT_DIFF",
+    "runtime_reproduction": false
+  },
+  "race": {
+    "status": "PASS_EARLIEST_CLAIM",
+    "this_claim_commit": "7d3108fae126f1ccac00558199617a42fa25585c",
+    "this_claim_time": "2026-08-09T13:35:02+07:00",
+    "later_peer_join_commit": "acbcd7b7e272b78c9300a72225975d447febe00e",
+    "later_peer_claim_commit": "752fd881f880ed2d5c09370d2cbf00bbc2e3b60c",
+    "later_peer_claim_time": "2026-08-09T13:35:48+07:00",
+    "credit_rule": "Earlier valid claim owns ordinal/semantic credit; later overlap must not receive duplicate credit."
+  },
+  "coverage_policy": {
+    "shard_resolution": "16/16",
+    "global_exact_level0_percent_delta": 0.0,
+    "global_denominator_frozen": false,
+    "earned_work_hours_added": 0.0
+  },
+  "ordinals": [
+    {"k":416,"sha":"5c7a726ed13a75db84b8b0f88e0acaebfb2f330f","disposition":"CODE_ANALYZED","family":"PROMPT_LANGUAGE_CONSISTENCY","finding":"Translated E-PQ temperament/mood/style descriptors injected through INNER_WORLD from German to English after mixed-language generations. Internal symbolic/linguistic state is part of the model input surface and can directly leak into output language."},
+    {"k":417,"sha":"c9bb3bcb3fcac61a1ae0f1de95d814dda3038302","disposition":"NEGATIVE_RESULT_VALUE","family":"AGENTIC_APPROVAL_CATASTROPHIC_FAILURE","finding":"Commit records that blanket skip_approval=True bypassed safety for high-risk tools and caused a full system wipe. Fix replaced blanket bypass with read-only whitelist, repaired approval-id flow, added protected paths and Firejail/path/command defenses.","current_transfer":"Agentic-mode consent is not transitive consent for arbitrary future effects. High-risk effects need explicit authorization at the effect boundary and fail-closed execution; catastrophic filesystem blast radius must be structurally unavailable where possible."},
+    {"k":418,"sha":"5de7058a072483686261e239288db18789b6076e","disposition":"CODE_ANALYZED","family":"UI_TRANSACTIONAL_RELAYOUT","finding":"Continuous resize triggered simultaneous bubble relayout and blanked chat; fix defers canvas-width mutation until resize end. High-frequency intermediate UI state should sometimes be coalesced into a commit point instead of applying every transient state."},
+    {"k":419,"sha":"f54f5eccbf6879a607f8b3128657289d26788ab2","disposition":"NEGATIVE_RESULT_VALUE","family":"REENTRANT_LOCKING_DEADLOCK","finding":"store_message held a non-reentrant Lock then called _store_preference which reacquired the same lock, permanently freezing the main UI thread. Changed to RLock.","current_transfer":"Nested persistence helpers require a declared lock graph/reentrancy contract; harness should deterministically exercise call paths under held locks rather than relying on runtime discovery."},
+    {"k":420,"sha":"7a587c3a567a084fe891a8e7251c11555f1e4627","disposition":"SUPERSEDED_LINEAGE_ANALYZED","family":"FEATURE_REMOVAL_DEPENDENCY_CLOSURE","finding":"Removes live wallpaper and voice daemon plus service/install/gaming/notification/agentic references and stale DB copies. Reinforces that feature deletion is a dependency-closure operation, not a single-file deletion."},
+    {"k":421,"sha":"59dfd4534c06f4545633231a434ab42956b803f6","disposition":"CODE_ANALYZED","family":"RETRIEVAL_GROUNDED_SELF_MEMORY","finding":"Adds read-only entity session list/read/search tools because Frank previously could not access actual session logs and hallucinated answers about past sessions.","current_transfer":"Do not ask a generator to reconstruct inaccessible autobiographical state from persona/context priors; expose provenance-bearing read paths to the actual durable record."},
+    {"k":422,"sha":"d49a1dcac833c644c2f43302aaf76892640a52cb","disposition":"SEMANTICALLY_ANALYZED","family":"SKILL_SYSTEM_DOCUMENTATION","finding":"Comprehensive documentation of native/OpenClaw skill dispatch, Router/persona integration, timeout layers and security scanning. Historical architecture description only; no independent mechanism credit."},
+    {"k":423,"sha":"f42acd4cd984d30145db10814b830e84dec5de22","disposition":"CODE_ANALYZED","family":"LATENCY_BUDGET_TIMEOUT","finding":"Raises OpenClaw minimum timeout from 60s to 90s after source-reported intermittent timeouts with local 7B inference/persona overhead.","epistemic_boundary":"Reported 4/17 timeout failures and 20/20 post-change passing are historical commit claims, not independently reproduced benchmarks in this run.","current_transfer":"Timeout should be derived from measured latency distribution and workload/model identity, not embedded as timeless architecture constants."},
+    {"k":424,"sha":"5116464c0bc7c3c57bce6f43ee8c26d478831319","disposition":"NEGATIVE_RESULT_VALUE","family":"EXHAUSTIVE_MIGRATION_PREDICATE","finding":"Initial migration detection sampled the first embedding row; if that row was already float16 while others remained float32, migration was skipped. Fix counts all rows matching legacy width.","current_transfer":"Schema/data migrations must test the actual migration predicate over the population or maintain explicit schema version state; a convenient sample is not a valid completeness witness."},
+    {"k":425,"sha":"839e288b42e32ecfa9c4910970599fd2b47bb990","disposition":"CODE_ANALYZED","family":"SKILL_ROUTER_PERSONA_CONFIGURATION","finding":"Routes OpenClaw skills through the same Router as chat, injects Frank identity, allows per-skill model/tokens/temperature and separates HTTP/user timeouts. Consolidates policy/model formatting at a shared routing boundary."},
+    {"k":426,"sha":"1108cff1a1960beaf5c717bb9085d8fc83c8b4a7","disposition":"NO_RESEARCH_DELTA_AFTER_REVIEW","family":"DOCUMENTATION_PRECISION","finding":"Corrects a remaining architecture-doc statement to distinguish float16 storage from float32 computation."},
+    {"k":427,"sha":"dd94601707d1b089acfe6f1783ec651781363e48","disposition":"NEGATIVE_RESULT_VALUE","family":"INTENT_ROUTER_FALSE_POSITIVE","finding":"Bare 'remember' anywhere in a sentence was interpreted as note-creation intent, so conversational text such as 'you can remember everything' was written as a note. Regex was anchored and made explicit-intent specific.","current_transfer":"Command/intent routers must be evaluated for false-positive side effects, especially when intent detection triggers persistence or tools. Conversational mention is not imperative authorization."},
+    {"k":428,"sha":"165d7149fb0aa499bb2474c1b85fca3b1367ec8c","disposition":"CODE_ANALYZED","family":"AGENT_LOOP_ROBUSTNESS_AND_SANDBOX","finding":"Introduces EMA-weighted failure scoring, compound multi-step risk, replan context versioning, dynamic context budget, auto-save and Firejail resource/network controls.","negative_boundary":"The code explicitly falls back to unsandboxed bash/code execution when Firejail is absent. A warning is not a safety barrier; safety-critical profiles should fail closed or reduce available capabilities when their sandbox dependency is unavailable."},
+    {"k":429,"sha":"88406f98cd151987749451552acce4ce6cda20c4","disposition":"CODE_ANALYZED","family":"EMBEDDING_STORAGE_PRECISION_MIGRATION","finding":"Moves persistent 384-d embeddings from float32 to float16 while unpacking to float32 for computation; adds backward-compatible migration. Its initial first-row migration detector is later corrected at k424 and must be read as superseded for completeness semantics."},
+    {"k":430,"sha":"3c941c00480a247783eaece5992e65967d69f6a0","disposition":"SEMANTICALLY_ANALYZED","family":"MEMORY_ARCHITECTURE_DOCUMENTATION","finding":"Large memory/persistence documentation synchronization for hybrid chat search, MemoryHub, preferences, metrics and Titan integrity. Source description supports lineage but performance/count claims remain historical assertions."},
+    {"k":431,"sha":"2d64017ce8e634e9b678f3d5520368ecf6c88dd4","disposition":"CODE_ANALYZED","family":"MEMORY_SYSTEM_PRODUCTIONIZATION","finding":"Eight-phase memory upgrade: repairs a corrupted Titan graph, enables foreign keys/cascade and node protection, adds shared embeddings + hybrid FTS/vector RRF, dynamic context budget, session compression, preference memory, MemoryHub fusion, retrieval metrics and consistency maintenance.","negative_result_value":"Commit reports a Titan state with 6675 orphaned edges and zero nodes before repair, demonstrating that graph structure without enforced referential integrity can silently become semantically meaningless.","epistemic_boundary":"Counts such as 6675 orphaned edges, 2014 nodes, 3233 edges, 642/642 embeddings and timing figures are preserved as source-reported historical results, not reproduced measurements."
+    }
+  ],
+  "mechanism_families": [
+    {"id":"PF-K416-431-M1","name":"FAIL_CLOSED_EFFECT_AUTHORIZATION","ordinals":[417,428],"transfer":"Consent must attach to concrete effect classes/actions, not a whole agentic session. Sandbox absence must narrow capabilities or fail closed. Compound plan risk and explicit approval tokens should be machine-verifiable."},
+    {"id":"PF-K416-431-M2","name":"LOCK_AND_TRANSACTION_CORRECTNESS","ordinals":[418,419],"transfer":"Treat high-frequency UI mutation as transactional/coalesced where needed and encode lock/reentrancy contracts in the harness with deterministic concurrency tests."},
+    {"id":"PF-K416-431-M3","name":"PROVENANCE_GROUNDED_AUTOBIOGRAPHICAL_MEMORY","ordinals":[421,431],"transfer":"Expose actual durable session/episodic records with provenance rather than letting an LLM infer inaccessible history. Retrieval attribution and integrity are part of identity continuity."},
+    {"id":"PF-K416-431-M4","name":"MIGRATION_AND_GRAPH_INTEGRITY","ordinals":[424,429,431],"transfer":"Use explicit schema/data versions or exhaustive predicates, enforce foreign keys/edge validity, and run consistency checks. Sampling one row cannot certify a heterogeneous migration."},
+    {"id":"PF-K416-431-M5","name":"INTENT_SIDE_EFFECT_PRECISION","ordinals":[427],"transfer":"Evaluate routing as a classifier with false-positive/false-negative costs proportional to downstream effect. Persistence/tool invocation requires explicit intent evidence."},
+    {"id":"PF-K416-431-M6","name":"SHARED_ROUTER_POLICY_BOUNDARY","ordinals":[423,425],"transfer":"Centralized model/prompt/policy routing reduces divergent skill behavior, but timeout/token/model parameters must be experiment metadata and measured rather than assumed."},
+    {"id":"PF-K416-431-M7","name":"CROSS_LAYER_FEATURE_REMOVAL","ordinals":[420],"transfer":"Removal must close dependency/reference surfaces across services, installer, self-model, UI, recovery and data artifacts."},
+    {"id":"PF-K416-431-M8","name":"PROMPT_SURFACE_LANGUAGE_CONSISTENCY","ordinals":[416],"transfer":"Structured internal state rendered to language is part of cognition input; canonical internal semantic representation should be localized only at controlled boundaries to avoid language leakage."}
+  ],
+  "negative_results_preserved": [
+    "Blanket agentic approval bypass was reported to enable destructive high-risk tool execution and a full system wipe.",
+    "A nested non-reentrant lock acquisition permanently deadlocked chat memory and froze the UI.",
+    "A first-row sample incorrectly certified completion of a heterogeneous float32-to-float16 migration.",
+    "An over-broad note-intent regex turned conversational mention into persistent side effect.",
+    "Titan reportedly reached 6675 orphaned edges with zero nodes before referential-integrity repair.",
+    "Firejail absence historically caused bash/code execution to fall back to unsandboxed mode.",
+    "Inaccessible entity-session history caused hallucinated autobiographical answers.",
+    "Internal German state descriptors injected into an English prompt leaked mixed-language output."
+  ],
+  "branch_feedback": {
+    "harness": ["catastrophic approval-bypass regression", "sandbox-missing fail-closed test", "lock/reentrancy deadlock test", "heterogeneous migration completeness test", "intent false-positive side-effect test", "graph orphan/integrity test"],
+    "frank": ["provenance-grounded entity/session recall", "explicit effect-level authorization", "memory graph integrity", "canonical prompt-state language boundaries"],
+    "claycode": ["typed effect capabilities", "approval tokens bound to effect/action", "sandbox requirement in effect type", "compound plan risk", "lock/resource ownership annotations"],
+    "unifieddb": ["explicit schema version/migration ledger", "FK/integrity constraints", "retrieval provenance/metrics", "crash-safe backfill state"],
+    "claygraph": ["referential integrity", "orphan-edge invariant", "provenance edges for autobiographical retrieval", "feature-removal dependency closure"],
+    "gwt": ["prompt-surface language consistency", "memory retrieval should provide sourced context rather than reconstructed history"],
+    "emergenz": ["do not interpret persistent hallucinated self-history as emergent memory when source records were inaccessible"],
+    "clay": ["side-effect geometry must distinguish conversational mention from authorized persistence/action"]
+  },
+  "decision_trace": {
+    "selected": "Preserve catastrophic incidents and integrity failures as first-class research evidence rather than treating later fixes as ordinary maintenance.",
+    "reason": "These failures directly falsify weaker assumptions about session-wide consent, sandbox optionality, lock safety, migration completeness, classifier precision and graph integrity.",
+    "uncertainty": "Historical incident magnitude and benchmark numbers are source-reported; current runtime state has not been reproduced here.",
+    "next_falsifiers": [
+      "Attempt every high-risk action under agentic mode without action-specific authorization and assert zero execution.",
+      "Remove sandbox dependency in a test profile and assert dangerous effect capabilities become unavailable rather than unsandboxed.",
+      "Schedule deterministic nested-memory writes under held locks and assert no deadlock.",
+      "Construct mixed legacy/current embedding rows where first and last rows differ and assert migration closes all legacy rows.",
+      "Generate conversational sentences containing command keywords and measure false side-effect rate.",
+      "Inject orphan edges/missing nodes and verify DB constraints/repair prevent semantic graph corruption."
+    ]
+  },
+  "release_gate": "NOT_PASS",
+  "created_at": "2026-08-09T13:40:00+07:00"
+}

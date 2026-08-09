@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "classification_id": "FRANK_ROOT_SURFACE_CLASSIFICATION_V1",
+  "created_at": "2026-08-09T21:23:00+07:00",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "path": "frank_reference/claycode/frank_runtime.clay",
+    "provenance": "frank_reference/claycode/frank_runtime.provenance.json",
+    "declared_role_in_source": "DU-FRANK-7 root semantic runtime contract",
+    "source_git_blob_sha": "8e2a3814c67540d7e83fd6aa4e14928928785822"
+  },
+  "acceptance_contract": {
+    "path": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+    "rule": "APP-10 requires executable evidence that BASE exposes everything needed for the frozen FRANK architecture without semantic escape hatches; it does not nominate frank_runtime.clay as the mandatory production source file."
+  },
+  "current_production_handoff": {
+    "finalizer": "tools/claycode_full_frank_target_finalizer.py",
+    "selected_executable_paths": [
+      "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay",
+      "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_H2_V1.clay",
+      "research_entity/claycode/apps/frank_active_assembly_packet_score_v1.clay",
+      "research_entity/claycode/base/examples/FRANK_GRT_FRAME_V1.clay"
+    ],
+    "independent_semantic_proofs": [
+      "H1_H2_FULL_STRUCTURED_CLAY",
+      "H1_H2_GENERIC_TYPED_FFI",
+      "H1_H3_CONSOLIDATED_COMMUTATION",
+      "PACKET_SCORE_TYPED_IR_NATIVE",
+      "GRT_BLOCK_BODY_LOWERING"
+    ],
+    "requires_no_semantic_escape_hatches": true,
+    "requires_physical_andreas_target": true
+  },
+  "surface_overlap_with_existing_generic_claycode": {
+    "backend": "tools/claycode_structured_backend.py",
+    "already_generic": ["fn block", "let", "require", "return", "if", "for", "continue", "qualified field access", "generic calls"],
+    "not_frank_specific": true,
+    "effect_authority_surface": []
+  },
+  "still_unclassified_for_root_contract_execution": [
+    "use declarations/import wildcard semantics",
+    "rich union/generic/record type declarations in one mixed source unit",
+    "symbol literals such as #andreas_unterweger",
+    "method/chained call sugar",
+    "lambda/map sugar such as x => x.id",
+    "named-argument or constructor sugar where present"
+  ],
+  "decision": {
+    "epistemic_class": "ARCHITECTURE_SCOPE_CLASSIFICATION",
+    "status": "CURRENT",
+    "root_contract_is_current_release_executable": false,
+    "root_contract_surface_gap_is_research_gap": true,
+    "root_contract_surface_gap_is_wp02_release_blocker": false,
+    "root_contract_surface_gap_is_wp13_release_blocker": false,
+    "root_contract_surface_gap_is_app10_release_blocker": false,
+    "reason": "The source self-identifies as a semantic runtime contract and the current receipt-gated APP-10/FULL_FRANK production chain selects other executable frozen FRANK programs. Existing generic structured ClayCode already realizes the main procedural constructs. Missing root-contract sugar therefore does not justify BASE semantic widening or block the current release unless this exact source becomes a selected executable acceptance input.",
+    "reactivation_rule": "If frank_runtime.clay or a byte-identical descendant is explicitly selected as a WP13/APP10 production executable, unresolved constructs immediately become gate-relevant and must be solved by the smallest typed/versioned dialect or lowering path before PASS."
+  },
+  "language_change_allowed_now": false,
+  "authority_invariant": "model output != execution authority"
+}

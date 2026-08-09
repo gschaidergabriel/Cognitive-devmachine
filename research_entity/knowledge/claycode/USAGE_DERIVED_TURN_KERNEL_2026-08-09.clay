@@ -1,0 +1,50 @@
+module research.claycode.usage.turn_kernel.20260809
+
+source conversation_owner_feedback
+status OPEN_RESEARCH
+
+obs O1 {class=misunderstanding; prior="GWT loaded mainly at boot"; correction="inject every round"; impact=.90}
+obs O2 {class=friction; prior="full/prose protocol injection"; correction="tiny repeated tensor/kernel"; impact=.92}
+obs O3 {class=misunderstanding; prior="protocol pointer considered sufficient"; correction="core semantics inline every round; pointer only expansion"; impact=.88}
+obs O4 {class=requirement; value="THINK=CLAYCODE every round"; impact=.95}
+obs O5 {class=requirement; value="READSTATE ladder every round"; impact=.93}
+obs O6 {class=requirement; value="STATUS footer invariant every round"; impact=.93}
+obs O7 {class=requirement; value="Claude final surface EN_CAVEMAN; ChatGPT final surface DE_NORMAL"; impact=.90}
+obs O8 {class=good_outcome; value="GWT can be represented as tiny operational kernel instead of theory dump"; impact=.80}
+obs O9 {class=token_waste; value="repo-local Claude should dereference state instead of receiving repeated large context"; impact=.95}
+obs O10 {class=research_loop; value="misunderstanding+good+friction+awkwardness become ClayCode research evidence"; impact=.95}
+
+hp H1 {
+  claim="per-turn tiny cognitive prior improves semantic consistency vs boot-only prior at lower total cost than repeated prose"
+  counter="model already retains instruction; repetition adds cost without behavior gain"
+  test="matched tasks: boot-only vs per-turn-kernel; same evidence/model/cache"
+  metrics=[instruction_adherence,wrong_surface_rate,state_read_errors,status_footer_errors,verified_outcome_per_token]
+  falsify="no significant adherence gain or worse verified_outcome_per_token"
+}
+
+hp H2 {
+  claim="GWT tensor schema gives better task selection/re-entry discipline than prose reminder at equal token budget"
+  counter="tensor notation is opaque priming with no causal benefit"
+  test="equal-token prose vs tensor vs no-GWT; lesion delivery/reconstruct/use/effect/reentry dimensions"
+  metrics=[selection_accuracy,receiver_closure,causal_credit_errors,token_cost]
+  falsify="tensor arm non-inferior neither on outcome nor causal-trace metrics"
+}
+
+hp H3 {
+  claim="positive and negative UX mining improves ClayCode architecture faster than failure-only mining"
+  counter="positive episodes mostly confirm status quo and dilute fault signal"
+  test="failure-only vs bidirectional UX corpus over repeated real tasks"
+  metrics=[regression_rate,new_useful_primitive_count,repair_latency,token_per_verified_delta]
+  falsify="bidirectional mining adds noise without preserving successful mechanisms"
+}
+
+candidate C1 {
+  target=[claude_hook,chatgpt_turn_protocol,claycode_training]
+  mechanism=@research_entity/global/RAE_TURN_KERNEL.clay
+  evidence=[O1,O2,O3,O4,O5,O6,O7,O8,O9,O10]
+  gate="replay + matched-budget evaluation before claiming performance gain"
+}
+
+invariant user_correction_is_evidence_not_automatic_truth
+invariant hidden_chain_of_thought_not_collected
+invariant optimize verified_outcome_per_token not brevity_alone

@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T0645p0700-runner-scope-tomography",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T06:45:40+07:00",
+  "identity_boundary": "RESEARCH_ENTITY_TEMPORARY_WORKER != FRANK; Frank self-Harness authority remains proposal-only",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_main_before_durable_write": "adf3389fc1e822bc1356d21c7d991f1b070fb8be",
+  "experiment_class": "OUT_OF_THE_BOX_READ_ONLY_HOST_RUNNER_SCOPE_TOMOGRAPHY",
+  "exactly_one_oob_for_this_worker_macrocycle": true,
+  "hypothesis": "The working Hostinger runner instance is repository-scoped to gschaidergabriel/Dr.-Unterweger, explaining why Clay self-hosted jobs do not receive that runner.",
+  "strongest_counterhypothesis": "A separate Clay-eligible runner exists on the same host under another OS account/path, or a shared runner registration exists but a different Actions policy prevents allocation.",
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 60,
+    "branch": "clay-go-runner-scope-probe-20260810",
+    "probe_source_commit": "1816a500d1aa9da199a61afbd6d66df45391e2f4",
+    "workflow_run_id": 31342664415,
+    "workflow_job_id": 93318894946,
+    "workflow_conclusion": "success",
+    "merged": false,
+    "pr_closed_after_measurement": true
+  },
+  "host_observation": {
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group_log": "Default",
+    "machine": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "runner_temp": "/home/frankrunner/actions-runner/digitaltransformation/_temp",
+    "frankrunner_home_runner_config_count": 1,
+    "runner_config_path": "actions-runner/.runner",
+    "runner_config_parse_state": "JSONDecodeError; raw config content was not emitted",
+    "active_runner_services": [
+      {
+        "unit": "actions.runner.gschaidergabriel-Dr.-Unterweger.clay.service",
+        "load": "loaded",
+        "active": "active",
+        "sub": "running"
+      }
+    ]
+  },
+  "security_guard": "Probe read only /home/frankrunner/**/.runner metadata attempt plus systemd unit state; it did not read or emit .credentials, .credentials_rsaparams, registration tokens, private keys, or environment secrets.",
+  "result": "SUPPORTED_HOSTINGER_ACTIVE_RUNNER_INSTANCE_REPOSITORY_SCOPED_TO_DR_UNTERWEGER",
+  "confidence": "HIGH_FOR_ACTIVE_FRANKRUNNER_INSTANCE_SCOPE; NOT_PROOF_OF_ABSENCE_OF_A_SECOND_RUNNER_UNDER_ANOTHER_OS_ACCOUNT",
+  "counterhypothesis_disposition": "No second .runner was visible below /home/frankrunner and only the Dr.-Unterweger-scoped actions.runner service was active there. A second runner outside that account remains logically possible and is not claimed absent.",
+  "external_primary_evidence": "Current GitHub documentation states that a repository-level self-hosted runner is dedicated to a single repository, while organization-level runners may serve multiple organization repositories subject to access policy.",
+  "shared_state_fusion": {
+    "wp02_hostinger_bridge": "A parallel worker has already executed exact Clay WP02 V17 source on this same Hostinger runner through a Dr.-Unterweger executor bridge. Therefore native Clay-repository runner eligibility is no longer a blocker for bounded exact-source Ubuntu research, but it remains a transport/continuity defect for Clay's own Actions lane.",
+    "exact_v17_replication_commit": "9624837c411f3ba5acf761f622020278329fc581",
+    "full_closure_bridge_observation": "Workflow run 31342673096 failed before scientific execution because unauthenticated git clone of the private Clay repository from the Dr.-Unterweger job could not read GitHub credentials. Classify as CROSS_REPOSITORY_AUTH_TRANSPORT_FAILURE, not ClayCode failure."
+  },
+  "architecture_delta": "NO_CHANGE",
+  "test_delta": [
+    "Preserve Dr.-Unterweger runner bridge as bounded exact-source research transport with source hash verification.",
+    "For native Clay self-hosted continuity, provision a separate Clay repository runner registration/service or a genuinely shared eligible runner arrangement; do not replace the working Dr.-Unterweger service blindly.",
+    "Keep transport/setup negatives distinct from language/scientific test failures.",
+    "Next WP02 closure bridge must avoid unauthenticated private cross-repository clone; use an authorized read-only transport or an exact hash-bound source bundle."
+  ],
+  "promotion": "NONE",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "rollback": "Diagnostic PR closed without merge; no Frank Harness, ClayCode semantics, release gate, or effect authority changed."
+}

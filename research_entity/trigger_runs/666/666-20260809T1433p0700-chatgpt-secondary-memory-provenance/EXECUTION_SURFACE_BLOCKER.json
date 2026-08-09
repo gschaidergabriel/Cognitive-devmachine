@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "666-20260809T1433p0700-chatgpt-secondary-memory-provenance",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "recorded_at": "2026-08-09T14:33:00+07:00",
+  "status": "CURRENT_INVOCATION_EXECUTION_SURFACE_EXHAUSTED_FOR_THIS_LINE",
+  "observations": [
+    {
+      "target": "gschaidergabriel/frankv0.1",
+      "reason": "PROGRAM_STATE H1 reference_baseline",
+      "result": "GITHUB_REPOSITORY_LOOKUP_404_ON_CURRENT_CONNECTOR"
+    },
+    {
+      "target": "gschaidergabriel/Dr.-Unterweger",
+      "reason": "BOOTSTRAP_MINIMAL current frank_repo",
+      "result": "REPOSITORY_VERIFIED_ACCESSIBLE_PRIVATE; CODE_SEARCH(memory, UnifiedDB) RETURNED_NO_RESULTS"
+    },
+    {
+      "target": "GitHub recursive read tree",
+      "result": "NO_READ_TREE_ACTION_EXPOSED; available discovered tree actions were create-only and were not used for inspection"
+    }
+  ],
+  "implication": "Do not claim current live Frank memory cross-reconciliation complete. Continue Level-0 query-directed history/semantic work on available surfaces in later active 666 invocations or when an exhaustive/read-tree surface becomes available.",
+  "exact_coverage_credit": 0.0,
+  "background_work_claimed": false
+}

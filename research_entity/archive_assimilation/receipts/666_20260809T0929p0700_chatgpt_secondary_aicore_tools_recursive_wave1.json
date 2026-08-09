@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0929p0700-chatgpt-secondary-aicore-tools-recursive-wave1",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope": {"drive_root": "clay/aicore/tools", "tools_id": "1RqVr3WkitB1-oOU_0F4knQZzVxydPD84"},
+  "method": "parent-scoped Google Drive list_folder enumeration with top_k=1000 for the tools root and every direct folder child",
+  "results": {
+    "tools_direct": {"entries": 57, "folders": 7, "files": 50},
+    "closed_leaf_children": {
+      "schranke": {"entries": 3, "folders": 0, "files": 3},
+      "chronik": {"entries": 3, "folders": 0, "files": 3},
+      "discovered": {"entries": 2, "folders": 0, "files": 2},
+      "lcme": {"entries": 11, "folders": 0, "files": 11},
+      "omni_log_monitor": {"entries": 6, "folders": 0, "files": 6},
+      "system_control": {"entries": 12, "folders": 0, "files": 12},
+      "titan": {"entries": 1, "folders": 0, "files": 1}
+    },
+    "tools_recursive_denominator": {"total_units_below_tools_root": 95, "folder_units": 7, "file_units": 88, "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"}
+  },
+  "level0_credit": {"exact_global_percent_added": 0.0, "reason": "The tools subtree denominator is exact, but the combined Level-0 denominator remains unfrozen."},
+  "status": "COMPLETED_SUBTREE_DENOMINATOR_CLOSURE",
+  "observed_at": "2026-08-09T09:29:00+07:00"
+}

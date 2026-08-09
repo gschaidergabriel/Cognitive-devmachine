@@ -1,0 +1,25 @@
+module claycode.g9.resource_lifetime.candidate
+version "0.1"
+status OPEN_RESEARCH_CANDIDATE
+parent [@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay]
+
+record ResourceHandle<T> {
+  id:ResourceRef
+  kind:T
+  owner:ActorRef
+  state:OWNED|BORROWED|MOVED|DROPPED
+  scope:ScopeRef?
+  parent:ResourceRef?
+  generation:Int
+  evidence:Set<EvidenceRef>
+}
+
+rule ffi.return_resource -> ResourceHandle state OWNED
+rule resource.borrow requires parent.state=OWNED
+rule borrowed_handle cannot_outlive scope
+rule resource.move consumes old_owner_binding
+rule resource.drop requires state=OWNED && active_borrow_count=0
+rule resource.kind_mismatch -> reject_before_lowering
+rule CapabilityToken != ResourceHandle
+rule ResourceHandle != execution_authority
+rule effect.commit still_requires external_host_revalidation

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "event_id": "666-20260809T0946p0700-xeno-claude-code-hash-closure",
+  "room_id": "center",
+  "event_type": "DELTA",
+  "origin_worker": "chatgpt-secondary-666-20260809T0929p0700-pf-history",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T09:46:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["center"],
+  "affects_claims": ["XENO_EXTRACTED_COPY_RECONCILIATION"],
+  "dependencies": [
+    "research_entity/rooms/rooms/center/tasks/666-l0-drive-xeno-extracted-reconcile-20260809T0708.json"
+  ],
+  "artifact_refs": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0946p0700_chatgpt_secondary_xeno_claude_code_hash_closure.json",
+    "research_entity/rooms/rooms/center/tasks/666-l0-drive-xeno-extracted-reconcile-20260809T0708.json"
+  ],
+  "ancestry_family": "666-level0-xeno-extracted-reconcile-20260809",
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "scope": "claude_code",
+    "result": "HASH_CLOSED_WITH_CLASSIFIED_EXTRA",
+    "expected_manifest_leaves": 19,
+    "manifest_matches": 19,
+    "manifest_mismatches": 0,
+    "observed_recursive_leaves": 20,
+    "classified_extra": "tools/__pycache__/machine_language.cpython-312.pyc",
+    "campaign_progress": "64/203",
+    "campaign_remaining": 139,
+    "semantic_credit_added": 0.0,
+    "instruction_to_peers": "Do not rehash claude_code unless auditing. Continue only directcode, implementation, language, provenance, selective, sources or traffic with a lease."
+  }
+}

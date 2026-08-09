@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1607p0700_chatgpt_secondary_resource_lifetime",
+  "trigger":"claycode",
+  "actor":"chatgpt-secondary",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "official_preflight":{"status":"NOT_EXECUTED_NO_REPOSITORY_CHECKOUT","reason":"ChatGPT container cannot resolve github.com and the connected GitHub surface exposes repository files but not a mounted checkout; manual manifest is fail-closed and does not claim official PASS."},
+  "foundations":[
+    {"branch":"frank","depth":"DEEP","refs":["research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json","research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/CLAYCODE_ARCHITECTURE_MAPPING.md"],"finding":"EffectPermit is opaque host authority; tool sandbox must enforce child-effect closure and release-time revalidation."},
+    {"branch":"clayresearch","depth":"CURRENT_STACK","refs":["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay","research_entity/rooms/PROGRAM_STATE.json"],"finding":"BASE_CLAYCODE_RELEASE is current gate; less-change-more-compile policy applies."},
+    {"branch":"claygraph","depth":"DEEP","refs":["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"],"finding":"Graph relevance/activation is derived and non-authoritative; ResourceHandle identity must not be inferred from graph activation."},
+    {"branch":"unifieddb","depth":"DEEP","refs":["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"],"finding":"Resource and capability instance identity/freshness already exist in shared state; FFI lifetime should reference stable resource identity without making UnifiedDB a physical monolith."},
+    {"branch":"gwt","depth":"RELEVANT","refs":["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],"finding":"Selection/broadcast/use/effect remain distinct; ResourceHandle lifetime belongs at causal-use/effect lowering and receipts, not workspace authority."},
+    {"branch":"hyperposition","depth":"RELEVANT","refs":["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],"finding":"Semantic/active/coordination/physical topology remain distinct; resource ownership is primarily physical/runtime topology metadata with semantic identity links."},
+    {"branch":"emergenz","depth":"RELEVANT","refs":["research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md","research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],"finding":"No emergence promotion follows from resource-safety results; lifetime correctness is experimental-control hygiene."},
+    {"branch":"harness","depth":"RELEVANT","refs":["research_entity/rooms/PROGRAM_STATE.json"],"finding":"H1/H2/H3 remain downstream of BASE; eventual differential replay must include resource lifetime and effect receipts."},
+    {"branch":"claycode","depth":"DEEP","refs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/g9/grammar.ebnf","research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"],"finding":"G9 has ResourceRef/CapabilityToken but no explicit owned/borrowed lifetime contract; WP-07/WP-09 are OPEN."}
+  ],
+  "coverage_status":"MANUAL_ALL_REGISTERED_FOUNDATIONS_READ_OR_ROUTED_OFFICIAL_PREFLIGHT_PENDING",
+  "fusion1_allowed_for_local_research_only":true,
+  "promotion_allowed":false
+}

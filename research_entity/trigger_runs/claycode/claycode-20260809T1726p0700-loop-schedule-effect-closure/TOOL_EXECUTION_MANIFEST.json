@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1726p0700-loop-schedule-effect-closure",
+  "tools": [
+    {"tool": "GitHub connector", "status": "USED_RW", "purpose": "canonical boot, protocol/current-stack reads, durable run artifacts, reread"},
+    {"tool": "web.run", "status": "USED", "purpose": "independent primary-source comparison: WASI capabilities, Microsoft P, LLVM effects, algebraic/type-effect literature"},
+    {"tool": "OpenAI hosted Linux container", "status": "USED", "purpose": "executable randomized loop schedule/effect/capability proxy experiment"},
+    {"tool": "E2B", "status": "NOT_EXPOSED_TO_THIS_WORKER", "purpose": "preferred external ClayCode execution surface per protocol; no E2B evidence claimed"},
+    {"tool": "SandboxAPI", "status": "NOT_USED_BLOCKED_PROJECT_STATE", "purpose": "independent backend not counted as evidence"},
+    {"tool": "Andreas Ubuntu developer host", "status": "NOT_CONNECTED", "purpose": "target-host replication remains required"}
+  ],
+  "external_primary_sources": [
+    "https://github.com/WebAssembly/WASI/blob/main/docs/Capabilities.md",
+    "https://www.microsoft.com/en-us/research/publication/p-safe-asynchronous-event-driven-programming/",
+    "https://llvm.org/docs/LangRef.html",
+    "https://arxiv.org/abs/1306.6316",
+    "https://arxiv.org/abs/1406.2061"
+  ]
+}

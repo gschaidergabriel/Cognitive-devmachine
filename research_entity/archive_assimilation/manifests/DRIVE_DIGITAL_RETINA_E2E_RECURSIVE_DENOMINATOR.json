@@ -1,11 +1,11 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "manifest_id":"DRIVE-DIGITAL-RETINA-E2E-RECURSIVE-DENOMINATOR-20260809T0624p0700",
   "trigger":"666",
   "actor":"chatgpt-secondary",
   "program_stage":"L0_ARCHIVE_ASSIMILATION",
   "source":{"title":"digital-retina-e2e","drive_folder_id":"1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja"},
-  "status":"EXACT_RECURSIVE_DENOMINATOR_FROZEN_CONTENT_HASH_CLOSURE_PENDING",
+  "status":"EXACT_RECURSIVE_DENOMINATOR_AND_RAW_CONTENT_IDENTITY_CLOSED",
   "denominator":{"root_files":4,"root_folders":4,"recursive_folders_below_root":0,"recursive_leaf_files":64,"complete_recursive_enumeration":true},
   "subtrees":{
     "root":{"files":["vlm_coverage_freshset.py","fetch_freshset.py","vlm_coverage_hard.py","tier3_e2e.py"],"leaf_count":4,"class":"EXECUTABLE_EVAL_CODE"},
@@ -14,9 +14,17 @@
     "freshset":{"drive_folder_id":"17_I6uR-VNu3-p5wyh-AK6OinESI5gD4Q","files":["nature_surf_tahiti.jpg","nature_aurora_meteor.jpg","nature_aurora.jpg","complex_surfer.jpg","complex_chinatown_sg.jpg","complex_marrakech_night.jpg","complex_marrakech.jpg","abstract_mondrian2.jpg","abstract_rothko_gallery.jpg","abstract_pollock_studio.jpg","abstract_rothko.jpg","abstract_mondrian.jpg","animal_dogcat.jpg","animal_penguin.jpg","animal_lion_male.jpg","animal_lions.jpg","crowd_chinatown.jpg","crowd_festival.jpg","crowd_stadium.jpg","crowd_marathon.jpg","crowd_protest.jpg","macro_flower.jpg","macro_butterfly.jpg","vehicle_steam.jpg","nature_canyon.jpg","arch_gothic.jpg","arch_taj_mahal.jpg","food_pizza.jpg","food_sushi.jpg","animal_eagle.jpg","animal_whale.jpg","animal_elephants.jpg"],"leaf_count":32,"class":"FRESH_HELD_OUT_VISUAL_BENCHMARK_CORPUS"},
     "__pycache__":{"drive_folder_id":"1zgJ-ApJ0x8ADcp43aGD9VOJOneRPjBBH","files":["vlm_coverage_hard.cpython-312.pyc"],"leaf_count":1,"class":"GENERATED_BYTECODE_NO_INDEPENDENT_RESEARCH_DELTA"}
   },
-  "obligation_state":{"IDENTIFIED":"64/64","CLASSIFIED":"64/64","ANALYZED":"bounded by prior Digital Retina implementation/E2E and measurement-lineage receipts; freshset corpus itself is benchmark input rather than independent mechanism claim","LINEAGE_LINKED":"64/64 to digital-retina-e2e","CONTENT_COVERED":"NOT_YET_EXACT_FOR_ALL_BINARY_LEAVES","INTEGRATED":"prior bounded Retina E2E findings already routed; this artifact adds denominator closure only"},
+  "obligation_state":{"IDENTIFIED":"64/64","CLASSIFIED":"64/64","ANALYZED":"64/64 dispositioned; executable evaluator code and measurement lineage analyzed, visual corpus identity-verified as benchmark input","LINEAGE_LINKED":"64/64 to digital-retina-e2e","CONTENT_COVERED":"64/64 raw bytes SHA-256 identified; 16200705 total bytes","INTEGRATED":"measurement/provenance/security deltas published in raw-content identity manifest; benchmark inputs do not receive independent mechanism-claim credit"},
+  "raw_content_identity":{"status":"CLOSED","leaf_files":"64/64","total_bytes":16200705,"manifest_ref":"research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_E2E_RAW_CONTENT_IDENTITY_20260809T0930p0700.json","manifest_commit":"ed9cf4d428a50c35c60f87e731f35a551ed4c38a"},
+  "key_deltas":[
+    "Hard-set strict: 35.31% initial -> 44.80% pre-gap -> 87.81% P12 tuned; fresh 32-image strict: 72.25%.",
+    "P7 filename says 022 but artifact records threshold 0.20; do not treat filename as a 0.22 measurement.",
+    "FINAL_REPORT contains a stale unqualified 44.8% strict sentence after its correct 87.8% post-gap headline.",
+    "Evaluator source includes a plaintext Groq credential fallback; secret intentionally not copied into RAE artifacts."
+  ],
   "existing_semantic_evidence":["commit:905a7266c8acbdc1157a0179b4b8cd0d4832d0a0","commit:ba6df6194feb7ad4caf6e1664b78ce46d34c0d1e","commit:7e5b4e3b28c6e9931636717ccbaa0a4055e24ca2"],
   "earned_work_hours_added":0.0,
-  "level0_effect":{"previous_state":"BOUNDED","new_state":"RECURSIVE_DENOMINATOR_FROZEN_CONTENT_HASH_CLOSURE_PENDING","exact_global_progress_credit":0.0,"reason":"Combined Level-0 denominator is not yet frozen; do not convert a local denominator closure into global percentage."},
-  "created_at":"2026-08-09T06:24:00+07:00"
+  "level0_effect":{"previous_state":"RECURSIVE_DENOMINATOR_FROZEN_CONTENT_HASH_CLOSURE_PENDING","new_state":"EXACT_RECURSIVE_DENOMINATOR_AND_RAW_CONTENT_IDENTITY_CLOSED","exact_global_progress_credit":0.0,"reason":"Combined Level-0 denominator is still not frozen; local exact closure must not be converted into global percentage."},
+  "created_at":"2026-08-09T06:24:00+07:00",
+  "updated_at":"2026-08-09T09:30:00+07:00"
 }

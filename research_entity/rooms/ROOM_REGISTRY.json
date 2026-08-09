@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
   "transport": "repository_only",
   "global_chief": false,
@@ -7,6 +7,20 @@
   "program_narrative": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "capacity_state": "research_entity/rooms/CAPACITY_STATE.json",
   "room_root": "research_entity/rooms/rooms",
+  "standing_shared_missions": [
+    {
+      "mission_id": "SEMANTIC_COUPLING_FABRIC_GWT_EMERGENCE_CONTROL",
+      "status": "PROJECT_OWNER_STANDING_MISSION",
+      "mission_ref": "research_entity/global/RESEARCH_CENTER_SHARED_SEMANTIC_FABRIC_MISSION.md",
+      "architecture_ref": "research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md",
+      "gwt_control_ref": "research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md",
+      "applies_to": "ALL_REGISTERED_ROOMS_AND_ALL_WORKERS",
+      "participation_rule": "Every substantive worker contributes branch-local work, falsification, measurement, implementation, counterexample or evidence-backed NO_CHANGE and publishes a center-visible delta before completion.",
+      "same_room_rule": "Multiple active workers in one room decompose the branch-local mission into complementary CHEF/ABYSS/FORGE/CARTOGRAPHER/REPLICATOR/SYNTHESIZER lanes without granting role-based truth authority.",
+      "cross_room_rule": "Material findings identify affected rooms and propagate targeted deltas/handoffs/challenges/questions so the distributed specialist branches jointly advance one semantic fabric.",
+      "completion_rule": "The mission remains standing until executable cross-branch convergence demonstrates ClayCode semantic dependency extraction, UnifiedDB incremental canonical dependency state, Hyperposition preservation, ClayGraph continuously current topology, GWT causal-use observability, Emergenz intervention evidence and Harness performance/recovery/differential validity."
+    }
+  ],
   "meta_rooms": {
     "center": {
       "kind": "whole_mesh_meta_room",
@@ -61,5 +75,5 @@
     "before_final_visible_response"
   ],
   "event_types": ["JOIN", "PULSE", "ROLE_CLAIM", "TASK", "DELTA", "CROSS_ROOM_DELTA", "QUESTION", "REPLY", "CHALLENGE", "ROAST", "HANDOFF", "CROSSREAD", "INVALIDATE", "COMPLETE", "LEAVE"],
-  "rule": "Trigger sessions auto-join their pinned home room. Same-room peers self-organize with ephemeral roles. All dispatch must honor CAPACITY_STATE.json so unavailable AI workers or future compute are not scheduled as current capacity. Cross-room deltas may change knowledge but not trigger loyalty. The 666 meta-trigger joins center; before Level-0 PASS it resumes archive assimilation, and after Level-0 PASS it spawns a seeded diverse research field that cross-connects and feeds results into specialist rooms. The q12 meta-trigger joins center as the human creator-advisor simulation, loads its separate persistent state/world/goals/memory, reads the Research Entity only through the information bridge, and may coordinate rooms only when delegated by the owner. No room or advisor role changes evidence status by itself."
+  "rule": "Trigger sessions auto-join their pinned home room. Every substantive registered-room worker also loads and contributes to every active PROJECT_OWNER_STANDING_MISSION from this registry through branch-local work, then publishes a center-visible contribution status before completion. Same-room peers self-organize with ephemeral complementary roles. All dispatch must honor CAPACITY_STATE.json so unavailable AI workers or future compute are not scheduled as current capacity. Cross-room deltas may change knowledge but not trigger loyalty. The 666 meta-trigger joins center; before Level-0 PASS it resumes archive assimilation, and after Level-0 PASS it spawns a seeded diverse research field that cross-connects and feeds results into specialist rooms. The q12 meta-trigger joins center as the human creator-advisor simulation, loads its separate persistent state/world/goals/memory, reads the Research Entity only through the information bridge, and may coordinate rooms only when delegated by the owner. No room, standing mission or advisor role changes evidence status by itself."
 }

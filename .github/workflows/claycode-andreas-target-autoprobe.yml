@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   target:
-    runs-on: [self-hosted, linux, x64]
+    runs-on: [self-hosted, linux, x64, andreas, claycode, target]
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
@@ -67,9 +67,10 @@ jobs:
               and (desktop.get('observed') or {}).get('window_was_mapped') is True
           )
           payload={
-              'schema_version':'2.3',
+              'schema_version':'2.4',
               'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
               'executed_on_self_hosted_runner':True,
+              'required_runner_labels':['self-hosted','linux','x64','andreas','claycode','target'],
               'transport':'GITHUB_ACTIONS_SELF_HOSTED_AFTER_REGISTERED_FINGERPRINT_VERIFY',
               'identity_returncode':identity_rc,
               'identity':identity,

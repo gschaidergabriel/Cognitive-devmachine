@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """One-command ClayCode BASE evidence runner for Andreas' Ubuntu developer host.
 
-This runner is the target-host convergence gate. It executes the current parser,
-canonicalizer, typed IR, pure compiler, effect compiler -> sealed runtime bridge,
+This runner is a target-host diagnostic/convergence gate. It executes the current
+parser/canonicalizer, typed IR, pure compiler, effect compiler -> sealed runtime bridge,
 package linker, runtime, fuzz, corpus, real FRANK subsystem handoff, and the hardened
 10-class application preflight on the attested Ubuntu developer system.
 
 It never promotes BASE by itself. WP10 still requires real non-proxy per-application
 target receipts, and WP14 requires the final manifest plus zero-P0/P1 audit.
+
+Grammar contract:
+- WP02 strict/full-corpus evidence is pinned to declarative V9 and hash-checked.
+- Dedicated executable typed-fn/compiler validators retain their own versioned grammar
+  contract until a later candidate (for example V10/V13) is explicitly promoted.
 """
 from __future__ import annotations
 
@@ -25,10 +30,10 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_TARGET_GATE.json"
-GRAMMAR = "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark"
+WP02_GRAMMAR = "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
 EXPECTED_TARGET_ID = "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM"
-STRICT_OUT = ROOT / "research_entity/claycode/target_receipts/STRICT_LALR_D_V7_TARGET_RECEIPT.json"
-FRONTEND_OUT = ROOT / "research_entity/claycode/target_receipts/BASE_FRONTEND_V7_TARGET_RECEIPT.json"
+STRICT_OUT = ROOT / "research_entity/claycode/target_receipts/STRICT_LALR_D_V9_TARGET_RECEIPT.json"
+FRONTEND_OUT = ROOT / "research_entity/claycode/target_receipts/BASE_FRONTEND_V9_TARGET_RECEIPT.json"
 EFFECT_OUT = ROOT / "research_entity/claycode/target_receipts/BASE_EFFECT_PIPELINE_TARGET_RECEIPT.json"
 
 
@@ -150,6 +155,9 @@ def main() -> int:
     diagnostic_input_allowed = clean_input or args.allow_dirty_input
     release_quality_input = clean_input
 
+    wp02_path = ROOT / WP02_GRAMMAR
+    wp02_grammar_sha256 = sha256_file(wp02_path) if wp02_path.exists() else None
+
     host = {
         "target_id_claim": target_id,
         "expected_target_id": EXPECTED_TARGET_ID,
@@ -179,26 +187,27 @@ def main() -> int:
         "clean_release_input": release_quality_input,
         "cc_available": bool(host["cc"]["available"]),
         "git_head_present": bool(git_head),
+        "wp02_v9_grammar_present": wp02_path.exists(),
     }
 
     before = snapshot_receipts()
     steps: list[dict[str, Any]] = []
-    can_execute = target_attested and diagnostic_input_allowed and preconditions["cc_available"] and bool(git_head)
+    can_execute = target_attested and diagnostic_input_allowed and preconditions["cc_available"] and bool(git_head) and wp02_path.exists()
 
     if can_execute:
         commands: list[tuple[str, list[str], str, bool, Path | None]] = [
             (
-                "WP02_STRICT_V7",
-                [sys.executable, "tools/claycode_strict_lalr_probe.py", "--grammar", GRAMMAR, "--output", str(STRICT_OUT.relative_to(ROOT))],
+                "WP02_STRICT_V9",
+                [sys.executable, "tools/claycode_strict_lalr_probe.py", "--grammar", WP02_GRAMMAR, "--output", str(STRICT_OUT.relative_to(ROOT))],
                 "CC-WP-02-PARSER-CANON", True, STRICT_OUT,
             ),
             (
-                "WP02_FULL_CORPUS_V7",
-                [sys.executable, "tools/claycode_base_frontend_validation.py", "--grammar", GRAMMAR, "--output", str(FRONTEND_OUT.relative_to(ROOT))],
+                "WP02_FULL_CORPUS_V9",
+                [sys.executable, "tools/claycode_base_frontend_validation.py", "--grammar", WP02_GRAMMAR, "--output", str(FRONTEND_OUT.relative_to(ROOT))],
                 "CC-WP-02-PARSER-CANON", True, FRONTEND_OUT,
             ),
-            ("WP02_CANONICALIZER", [sys.executable, "tools/claycode_base_canonicalizer_validation.py"], "CC-WP-02-PARSER-CANON", True, ROOT / "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json"),
-            ("WP03_TYPED_IR", [sys.executable, "tools/claycode_wp03_typed_ir_validation.py"], "CC-WP-03-IR-TYPES", True, ROOT / "research_entity/claycode/autonomous/WP03_TYPED_IR_RECEIPT.json"),
+            ("WP02_CANONICALIZER_ACTIVE_GRAMMAR", [sys.executable, "tools/claycode_base_canonicalizer_validation.py"], "CC-WP-02-PARSER-CANON", True, ROOT / "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json"),
+            ("WP03_TYPED_IR_EXECUTABLE_SLICE", [sys.executable, "tools/claycode_wp03_typed_ir_validation.py"], "CC-WP-03-IR-TYPES", True, ROOT / "research_entity/claycode/autonomous/WP03_TYPED_IR_RECEIPT.json"),
             ("WP03_06_PURE_NATIVE_DIFFERENTIAL", [sys.executable, "tools/claycode_base_pure_toolchain_validation.py"], "CC-WP-03..CC-WP-06", True, ROOT / "research_entity/claycode/autonomous/BASE_PURE_TOOLCHAIN_RECEIPT.json"),
             ("WP05_06_LARGE_INT_DIVISION", [sys.executable, "tools/claycode_int_division_regression.py"], "CC-WP-05..CC-WP-06", True, ROOT / "research_entity/claycode/autonomous/BASE_INT_DIVISION_REGRESSION_RECEIPT.json"),
             (
@@ -229,14 +238,33 @@ def main() -> int:
             semantic_pass = bool(row["process_pass"])
             semantic_check: dict[str, Any] | None = None
 
-            if step_id == "WP02_STRICT_V7":
+            if step_id == "WP02_STRICT_V9":
                 strict = json_file(STRICT_OUT)
-                semantic_pass = bool(row["process_pass"] and strict.get("strict_build_ok") is True and not strict.get("conflict_diagnostics"))
+                grammar_bound = strict.get("grammar_path") == WP02_GRAMMAR and strict.get("grammar_sha256") == wp02_grammar_sha256
+                semantic_pass = bool(row["process_pass"] and strict.get("strict_build_ok") is True and not strict.get("conflict_diagnostics") and grammar_bound)
                 semantic_check = {
                     "strict_build_ok": strict.get("strict_build_ok"),
                     "conflict_diagnostics": strict.get("conflict_diagnostics"),
                     "strict_error": strict.get("strict_error"),
+                    "grammar_path": strict.get("grammar_path"),
+                    "grammar_sha256": strict.get("grammar_sha256"),
+                    "grammar_bound_to_wp02_v9": grammar_bound,
                 }
+            elif step_id == "WP02_FULL_CORPUS_V9":
+                front = json_file(FRONTEND_OUT)
+                grammar_bound = front.get("grammar_path") == WP02_GRAMMAR and front.get("grammar_sha256") == wp02_grammar_sha256
+                semantic_pass = bool(row["process_pass"] and front.get("pass") is True and grammar_bound)
+                semantic_check = {
+                    "pass": front.get("pass"),
+                    "grammar_path": front.get("grammar_path"),
+                    "grammar_sha256": front.get("grammar_sha256"),
+                    "grammar_bound_to_wp02_v9": grammar_bound,
+                }
+            elif step_id == "WP02_CANONICALIZER_ACTIVE_GRAMMAR":
+                canonical = json_file(ROOT / "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json")
+                grammar_bound = canonical.get("grammar") == WP02_GRAMMAR
+                semantic_pass = bool(row["process_pass"] and canonical.get("pass") is True and grammar_bound)
+                semantic_check = {"pass": canonical.get("pass"), "grammar": canonical.get("grammar"), "grammar_bound_to_wp02_v9": grammar_bound}
             elif receipt_path is not None:
                 embedded_pass, embedded = receipt_semantic_pass(receipt_path)
                 semantic_pass = bool(row["process_pass"] and embedded_pass)
@@ -273,12 +301,19 @@ def main() -> int:
     ]
 
     report = {
-        "schema_version": "1.3",
+        "schema_version": "1.4",
         "receipt_id": "ANDREAS_UBUNTU_BASE_TARGET_GATE",
         "created_at": created_at,
         "host": host,
         "preconditions": preconditions,
         "execution_allowed": can_execute,
+        "wp02_parser_contract": {
+            "grammar_path": WP02_GRAMMAR,
+            "grammar_sha256": wp02_grammar_sha256,
+            "strict_receipt_path": str(STRICT_OUT.relative_to(ROOT)),
+            "frontend_receipt_path": str(FRONTEND_OUT.relative_to(ROOT)),
+            "scope": "CC-WP-02 declarative strict/full-corpus only; executable typed-fn evidence remains separately versioned",
+        },
         "steps": steps,
         "target_component_steps_pass": component_steps_pass,
         "wp10_proxy_preflight_pass": bool(proxy_steps) and all(s["semantic_pass"] for s in proxy_steps),
@@ -288,7 +323,8 @@ def main() -> int:
         "unresolved": unresolved,
         "promotion_law": (
             "Individual target components count only when their own semantic receipt is PASS on a clean attested non-CI Andreas Ubuntu checkout. "
-            "WP10/WP13-full/WP14 are never promoted from proxy execution. Model output, descriptors, package text and symbolic capability names are not execution authority."
+            "WP02 strict/full-corpus/canonicalizer evidence must be bound to V9. WP10/WP13-full/WP14 are never promoted from proxy execution. "
+            "Model output, descriptors, package text and symbolic capability names are not execution authority."
         ),
         "operator_command": (
             "CLAYCODE_TARGET_HOST_ID=ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM "
@@ -300,6 +336,8 @@ def main() -> int:
     print(json.dumps({
         "target_attested": target_attested,
         "clean_input": clean_input,
+        "wp02_grammar": WP02_GRAMMAR,
+        "wp02_grammar_sha256": wp02_grammar_sha256,
         "target_component_steps_pass": component_steps_pass,
         "wp10_proxy_preflight_pass": report["wp10_proxy_preflight_pass"],
         "base_release_pass": False,

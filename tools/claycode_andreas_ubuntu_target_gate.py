@@ -201,6 +201,7 @@ def main() -> int:
             ("WP02_CANONICALIZER", [sys.executable, "tools/claycode_base_canonicalizer_validation.py"], "CC-WP-02-PARSER-CANON", True, ROOT / "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json"),
             ("WP03_TYPED_IR", [sys.executable, "tools/claycode_wp03_typed_ir_validation.py"], "CC-WP-03-IR-TYPES", True, ROOT / "research_entity/claycode/autonomous/WP03_TYPED_IR_RECEIPT.json"),
             ("WP03_06_PURE_NATIVE_DIFFERENTIAL", [sys.executable, "tools/claycode_base_pure_toolchain_validation.py"], "CC-WP-03..CC-WP-06", True, ROOT / "research_entity/claycode/autonomous/BASE_PURE_TOOLCHAIN_RECEIPT.json"),
+            ("WP05_06_LARGE_INT_DIVISION", [sys.executable, "tools/claycode_large_int_division_regression.py"], "CC-WP-05..CC-WP-06", True, ROOT / "research_entity/claycode/autonomous/LARGE_INT_DIVISION_REGRESSION_RECEIPT.json"),
             (
                 "WP04_08_EFFECT_PIPELINE",
                 [sys.executable, "tools/claycode_base_effect_pipeline.py", "--self-test", "--output", str(EFFECT_OUT.relative_to(ROOT))],
@@ -213,6 +214,7 @@ def main() -> int:
             ),
             ("WP07_08_PACKAGE_LINK", [sys.executable, "tools/claycode_base_package_validation.py"], "CC-WP-07..CC-WP-08", True, ROOT / "research_entity/claycode/autonomous/BASE_PACKAGE_LINK_RECEIPT.json"),
             ("WP07_09_RUNTIME_ABI_FFI", [sys.executable, "tools/claycode_base_runtime_validation.py"], "CC-WP-07..CC-WP-09", True, ROOT / "research_entity/claycode/autonomous/BASE_RUNTIME_CAPABILITY_RECEIPT.json"),
+            ("WP09_CANCELLATION_ERROR", [sys.executable, "tools/claycode_base_concurrency_validation.py"], "CC-WP-09-CONCURRENCY-MEMORY", True, ROOT / "research_entity/claycode/autonomous/BASE_CONCURRENCY_CANCELLATION_RECEIPT.json"),
             ("WP11_FUZZ_CONFORMANCE", [sys.executable, "tools/claycode_base_fuzz_conformance.py"], "CC-WP-11-FUZZ-CONFORMANCE", True, ROOT / "research_entity/claycode/autonomous/BASE_FUZZ_CONFORMANCE_RECEIPT.json"),
             ("WP12_CORPUS_HELDOUT", [sys.executable, "tools/claycode_base_corpus_generator.py"], "CC-WP-12-CORPUS-HELDOUT", True, ROOT / "research_entity/claycode/corpus/base_v1/CORPUS_MANIFEST.json"),
             ("WP13_FRANK_SCORE_HANDOFF", [sys.executable, "tools/claycode_frank_score_handoff_validation.py"], "CC-WP-13-HARNESS-HANDOFF", True, ROOT / "research_entity/claycode/autonomous/FRANK_ACTIVE_ASSEMBLY_SCORE_HANDOFF_RECEIPT.json"),
@@ -272,7 +274,7 @@ def main() -> int:
     ]
 
     report = {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "receipt_id": "ANDREAS_UBUNTU_BASE_TARGET_GATE",
         "created_at": created_at,
         "host": host,

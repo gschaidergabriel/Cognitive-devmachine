@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1726p0700-loop-schedule-effect-closure",
+  "goodman_filter_check": {
+    "tool": "tools/goodman_filter_check.py validate-run",
+    "result": "PASS",
+    "registered_branch_count": 9,
+    "violations": []
+  },
+  "interconnect_preflight": {
+    "tool": "tools/research_interconnect_preflight.py --trigger claycode --run-id <run_id>",
+    "result": "BLOCKED_BY_REPO_GOVERNANCE_DRIFT",
+    "reason": "Current RESEARCH_TRIGGER_REGISTRY.json registers integrated branch 'clayresearch', while tools/research_interconnect_preflight.py still hard-codes legacy branch 'clay' in PRIORITY. Its startup governance-set equality check therefore cannot represent the current registry without script repair.",
+    "mitigation": "INTERCONNECT_MANIFEST.json was materialized against the current registry branch names and current Goodman validator schema; no claim is made that the preflight script itself succeeded."
+  },
+  "target_runtime_validation": {
+    "e2b": "NOT_EXPOSED_TO_THIS_WORKER",
+    "ubuntu_developer_host": "NOT_CONNECTED",
+    "status": "OPEN"
+  }
+}

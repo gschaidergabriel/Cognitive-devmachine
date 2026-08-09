@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-f5-actions-prestep-rerun-20260809T213200p0700",
+  "event_type": "NEGATIVE_RESULT",
+  "created_at": "2026-08-09T21:32:00+07:00",
+  "origin": {
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "repository": "gschaidergabriel/frankv0.1",
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger"
+  },
+  "subject": {
+    "pull_request": 7,
+    "head": "62957dc44573b25f15ed1b8bd500632249375e65",
+    "workflow_run_id": 31318130113,
+    "workflow": "Frank Deep Integrity"
+  },
+  "observations": [
+    {
+      "job_id": 93256625754,
+      "conclusion": "failure",
+      "steps": [],
+      "log_fetch": "404 BlobNotFound"
+    },
+    {
+      "action": "rerun exact failed job",
+      "result": "accepted"
+    },
+    {
+      "job_id": 93256918552,
+      "conclusion": "failure",
+      "steps": []
+    }
+  ],
+  "interpretation": {
+    "code_regression_proven": false,
+    "test_execution_proven": false,
+    "infrastructure_start_failure_reproduced": true,
+    "reason": "Both attempts ended with zero connector-visible workflow steps; the first job's log blob was absent. No repository test step is evidenced as having executed."
+  },
+  "policy": {
+    "merge_on_assumed_ci_pass": "FORBIDDEN",
+    "mark_pr_code_failed_from_this_run": "FORBIDDEN",
+    "required_next_evidence": "independent executable regression receipt or a workflow run with actual step/log evidence"
+  },
+  "affected_rooms": ["frank", "harness", "center"],
+  "research_state_change": "NEGATIVE_INFRASTRUCTURE_EVIDENCE_NO_RELEASE_PROMOTION"
+}

@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE-AICORE-SERVICES-ROOT-SHARD-MANIFEST-V2-DIRECT-LIST-20260809T0930p0700",
+  "created_at": "2026-08-09T09:30:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "logical_path": "drive://Clay/AICORE/services",
+    "folder_id": "1tVCchrYmiQnPizAoP64JFif5Q7QzzK1-"
+  },
+  "method": {
+    "enumerator": "Google_Drive.list_folder",
+    "top_k": 1000,
+    "root_threshold_crosscheck": {
+      "top_k_143_omitted_final_sentinel": true,
+      "top_k_144_included_final_sentinel": true,
+      "final_sentinel_name": "news_scanner_sources.json",
+      "final_sentinel_id": "1V7DD4oJKbUu0wNndPMaJ0HuNBXtuP_oK"
+    },
+    "search_sampling_used_for_completion": false,
+    "pagination_required": false
+  },
+  "direct_root_denominator": {
+    "entries_exact": 144,
+    "folders_exact": 13,
+    "files_exact": 131,
+    "status": "CLOSED_EXACT"
+  },
+  "recursive_subtrees": {
+    "pip_agent": {"files": 6, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "genesis": {
+      "root_files": 5,
+      "descendant_folders": 4,
+      "reflection_files": 4,
+      "sensors_files": 12,
+      "core_files": 6,
+      "integration_files": 4,
+      "files_total": 31,
+      "status": "CLOSED_EXACT"
+    },
+    "hypothesis_engine": {"files": 6, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "room_content": {
+      "root_files": 4,
+      "external_assets_root_files": 1,
+      "descendant_folders": 8,
+      "asset_children": {
+        "portraits": 18,
+        "sprites": 9,
+        "overlays": 18,
+        "fonts": 6,
+        "textures": 9,
+        "terminal_gui": 38,
+        "backgrounds": 82
+      },
+      "asset_children_files_total": 180,
+      "files_total": 185,
+      "status": "CLOSED_EXACT"
+    },
+    "asrs": {"files": 14, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "invariants": {"files": 11, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "news_intel": {"files": 12, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "nerd_physics": {"files": 8, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "neural_immune": {"files": 9, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "art": {"files": 5, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "sanctum_rl": {"files": 6, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "context_gate": {"files": 7, "descendant_folders": 0, "status": "CLOSED_EXACT"},
+    "quantum_reflector": {"files": 7, "descendant_folders": 0, "status": "CLOSED_EXACT"}
+  },
+  "recursive_denominator": {
+    "files_exact": 438,
+    "descendant_folders_exact": 25,
+    "entries_below_services_root_exact": 463,
+    "folders_including_services_root": 26,
+    "status": "CLOSED_RECURSIVE_EXACT"
+  },
+  "supersession": {
+    "historical_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_SERVICES_ROOT_SHARD_MANIFEST.json",
+    "superseded_claim": "Exact direct file/entry denominator cannot be closed because only a 100-object folder listing is available.",
+    "reason": "The current connected Drive capability exposes list_folder(top_k), verified beyond 100 objects in this session. The historical lower bound remains provenance and is not deleted."
+  },
+  "scope_effect": {
+    "aicore_services": "CLOSED_RECURSIVE_EXACT",
+    "aicore_root": "STILL_OPEN_UNTIL_OTHER_OPEN_SUBTREES_CLOSE",
+    "level0_release_gate": "NOT_CLAIMED_PASS"
+  },
+  "decision_trace": {
+    "evidence_used": "Direct Drive folder enumeration for services root and every descendant folder; root threshold crosscheck at 143/144.",
+    "alternatives": ["retain historical lower bound", "close exact denominator with current list_folder capability"],
+    "result": "close exact denominator with current list_folder capability",
+    "uncertainty": "No uncertainty retained for this enumerated services epoch; broader Drive/AICORE and Project-Frankenstein denominators are separate obligations.",
+    "next_falsifier": "A direct re-enumeration of the same epoch/folder IDs yielding a different child set without an intervening source change."
+  }
+}

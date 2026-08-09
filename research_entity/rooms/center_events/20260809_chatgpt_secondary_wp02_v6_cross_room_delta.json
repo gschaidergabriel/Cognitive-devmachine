@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809-chatgpt-secondary-wp02-v6-cross-room-delta",
+  "room_id": "claycode",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-20260809-frank-v01-continuation",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "none",
+  "created_at": "2026-08-09T20:47:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["claycode", "frank", "harness", "clayresearch"],
+  "affects_claims": ["BASE14-BURNDOWN-20260809"],
+  "dependencies": [
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "research_entity/rooms/PROGRAM_STATE.json"
+  ],
+  "artifact_refs": [
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark",
+    "tools/claycode_canonical_ir.py",
+    "tools/claycode_base_frontend_validation.py",
+    "research_entity/claycode/base/CC_WP02_V6_CANONICAL_DELTA_20260809.md"
+  ],
+  "ancestry_family": "CLAYCODE_BASE_WP02_FRONTEND_V6",
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "payload": {
+    "delta_type": "IMPLEMENTATION_PLUS_COUNTEREXAMPLE",
+    "summary": "V5 has a concrete strict-LALR ambiguity caused by optional dotted-relation objects. V6 makes the object mandatory, removing observed LALR conflict diagnostics, and a deterministic canonical parse-IR/hash tool is now committed.",
+    "negative_result": "Hosted sandbox cannot complete strict lexical validation because interegular is unavailable; no Ubuntu or production PASS is claimed.",
+    "next_test": "Run V6 strict construction, full G9+Dialect corpus validation and canonical IR/hash receipts on the Ubuntu developer-system checkout, then continue WP-03 only after receipt-gated WP-02 closure.",
+    "frank_impact": "BASE ClayCode remains the blocking program stage for H1 Reference Harness, but WP-02 now has a narrower executable closure path."
+  }
+}

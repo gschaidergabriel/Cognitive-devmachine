@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "experiment": "ClayCode V4/V5 frontend blocker minimization",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T19:07:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_class": "LOCAL_ISOLATED_LINUX_REPRO_NOT_TARGET_UBUNTU_ACCEPTANCE",
+  "runtime": {
+    "python": "3.x",
+    "lark": "1.3.1",
+    "parser": "lalr/contextual",
+    "strict": false,
+    "strict_reason": "interegular is not installed in the hosted local container; strict regex-collision acceptance remains delegated to repository CI"
+  },
+  "inputs": [
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay"
+  ],
+  "reproduction": [
+    {
+      "candidate": "V4",
+      "finding": "DIALECT_REGISTRY_V3 parses, but G9 V3 first fails at `rule Needle.lowers EffectIntent -> concrete_adapter_plan` because `.lowers` is consumed as qualified-identifier structure rather than the intended relation surface."
+    },
+    {
+      "candidate": "V5 local repair",
+      "finding": "Adding explicit dotted relations for `.lowers`/`.owns`, allowing prefix-relation targets to be relation terms, and allowing relation-assignment `lifecycle=[...]` advances the full G9 parse to one remaining source-surface failure."
+    },
+    {
+      "remaining_source_surface": "rule Claude_only consumes latest stack + writes task receipts",
+      "finding": "The line mixes two untyped space-separated noun phrases with an implicit repeated subject. Encoding English phrase grammar in the executable core would be parser bloat."
+    },
+    {
+      "minimal_source_normalization": "rule Claude_only consumes latest_stack + Claude_only writes task_receipts",
+      "result": "With this one semantic-preserving normalization, the locally transcribed current G9 V3 and Dialect V3 both parse completely under the V5 local candidate."
+    }
+  ],
+  "boundary_tests": {
+    "negative_reserved_identifier_cases": "4/4 rejected: if/invariant as fields and parameters",
+    "positive_control_newline_keyword_cases": "5/5 accepted: if, invariant, multiple blank-line record/cycle, contextual keyword-like identifiers"
+  },
+  "durable_candidate": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark",
+  "candidate_commit": "30a4bd4ccdd1e24f3d633995652ee63b5c8a859c",
+  "release_claim": false,
+  "cc_wp_02_status": "OPEN",
+  "next_falsifier": "Run V5 in strict LALR+interegular CI against exact repository bytes, after explicit review/apply of the single G9 source normalization. Then connect parser output to canonical typed-AST and semantic-hash roundtrip; only that can close CC-WP-02.",
+  "negative_result_preserved": "V4 is not full-current-G9 accepting on the reproduced local LALR path; a green strict-build-only receipt would therefore be insufficient for WP02."
+}

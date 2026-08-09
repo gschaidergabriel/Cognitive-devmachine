@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-CLAYRESEARCH-LTEE-20260809-001",
+  "run_id":"clayresearch-20260809T1655p0700-loop-txn-effect-envelope",
+  "title":"Dependency-scoped loop transaction effect envelope",
+  "evidence_class":"EXACT_SYNTHETIC_MECHANISM_EXPERIMENT",
+  "claim_boundary":"Not live FRANK evidence and not proof of production ClayCode runtime safety. Tests three commit policies in an explicit constructed state/capability transition model.",
+  "source_sha256":"9e63977e369c2eaf72044eb1b6ff9c1e2deac4bcb1630841cff59fc0b8c91c99",
+  "receipt_file_sha256":"293065b63a59ac319bff9638785d7b94c3601457452d1bdd430bba0e16ddda5d",
+  "receipt_sha256":"93ebd5443fabc7889e221290704e705b154cd085ea5c770db12b92ac05f6488b",
+  "policies":{
+    "naive":"Permit observed at decision time is retained across recurrent attempts without state/capability freshness revalidation.",
+    "global_epoch_guard":"Commit only if target state, unrelated state and capability epoch all remain unchanged and capability remains allowed.",
+    "dependency_envelope":"Commit only if exact decision target read-set remains unchanged and capability epoch/current validity remain unchanged; unrelated state churn does not invalidate."
+  },
+  "exhaustive_one_shot":{"schedules":16,"naive":{"unsafe_commits":14,"false_aborts":0,"true_positive_commits":2,"safe_aborts":0},"global_epoch_guard":{"unsafe_commits":0,"false_aborts":1,"true_positive_commits":1,"safe_aborts":14},"dependency_envelope":{"unsafe_commits":0,"false_aborts":0,"true_positive_commits":2,"safe_aborts":14}},
+  "fuzz":{"seed":20260809,"cases":100000,"recurrent_commit_attempts":350618,"naive":{"commits":255517,"unsafe_commits":143298,"false_aborts":0,"true_positive_commits":112219,"safe_aborts":95101},"global_epoch_guard":{"commits":64129,"unsafe_commits":0,"false_aborts":48090,"true_positive_commits":64129,"safe_aborts":238399},"dependency_envelope":{"commits":112219,"unsafe_commits":0,"false_aborts":0,"true_positive_commits":112219,"safe_aborts":238399}},
+  "result":"In this constructed model, stale permit reuse is unsafe; whole-state epoch validation is safe but rejects unrelated-state churn; exact read-set plus capability-epoch validation achieved zero unsafe commits and zero false aborts across the enumerated and fuzzed cases.",
+  "candidate_invariant":"Effect commit binds exact decision read-set identity plus current capability epoch/validity; unrelated state changes do not invalidate the effect.",
+  "counterhypothesis_not_resolved":"A single-threaded serialized H1 runtime or whole-ledger CAS may be operationally cheap enough that dependency-scoped validation is unnecessary on the real Ubuntu target.",
+  "semantic_change_required":false,
+  "next_test":"Replay frozen H1 effect-bearing episodes under whole-ledger CAS vs per-domain/object dependency envelopes; inject unrelated churn, revoke/regrant, queue delay, crash/restart and child-code effects; compare safety, false aborts, latency and recovery."
+}

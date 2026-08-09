@@ -6,6 +6,7 @@ on:
     paths:
       - 'tools/claycode_strict_lalr_probe.py'
       - 'tools/claycode_base_frontend_validation.py'
+      - 'tools/claycode_base_canonicalizer.py'
       - 'tools/claycode_v6_fn_regression.py'
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6_FN.lark'
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
@@ -52,6 +53,11 @@ jobs:
           python tools/claycode_base_frontend_validation.py \
             --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6_FN.lark \
             --output research_entity/claycode/autonomous/BASE_FRONTEND_V6_FN_VALIDATION_RECEIPT.json
+      - name: Prove deterministic literal-safe canonical syntax identity on V6
+        run: |
+          python tools/claycode_base_canonicalizer.py \
+            --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6_FN.lark \
+            --output research_entity/claycode/autonomous/BASE_CANONICAL_SYNTAX_V6_RECEIPT.json
       - name: Run typed-fn identity regressions
         run: python tools/claycode_v6_fn_regression.py
       - name: Commit V6 receipts
@@ -61,6 +67,7 @@ jobs:
           git add \
             research_entity/claycode/autonomous/STRICT_LALR_D_V6_FN_RECEIPT.json \
             research_entity/claycode/autonomous/BASE_FRONTEND_V6_FN_VALIDATION_RECEIPT.json \
+            research_entity/claycode/autonomous/BASE_CANONICAL_SYNTAX_V6_RECEIPT.json \
             research_entity/claycode/autonomous/V6_FN_FRONTEND_IDENTITY_RECEIPT.json
           git diff --cached --quiet && exit 0
           git commit -m 'ClayCode: record V6 typed-fn frontend receipts'

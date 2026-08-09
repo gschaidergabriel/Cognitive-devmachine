@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "origin_branch": "claycode",
+  "selected_microdirection": "C4 capability_ffi_attested_authority_closure",
+  "hypotheses": [
+    {
+      "id": "H1",
+      "status": "SUPPORTED_AS_WORKING_CONSTRAINT",
+      "claim": "ClayCode needs two independent fail-closed closures at the effect boundary: runtime bearer-authority closure and evidence/admission closure. Passing one never implies the other.",
+      "prediction": "A bearer-valid runtime can still have an inadmissible gate result when execution provenance, exact subject/material digests or scope are missing; conversely a perfectly attested build cannot authorize an effect without a live valid capability handle.",
+      "falsifier": "A single mechanism can safely and unambiguously provide both runtime effect authority and historical execution-evidence admission without creating a bearer/provenance confusion or replay path.",
+      "evidence_refs": [
+        "tools/claycode_base_runtime.py@d20d858202cd84e2c575a47f8fb6d2131b678cfd",
+        "tools/claycode_base_runtime_validation.py@4585745025e5767ef362aaec0c149213e84ee918",
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"
+      ]
+    },
+    {
+      "id": "H2",
+      "status": "SUPPORTED_BY_CURRENT_REPO_COUNTEREXAMPLE",
+      "claim": "Workflow presence and optimistic commit naming are not sufficient evidence that a ClayCode gate executed successfully.",
+      "prediction": "At least one current workflow-labelled gate will lack its declared result receipt or a verifiable executed-run binding on the default branch.",
+      "result": "Observed for both WP03 typed-IR workflow and runtime capability workflow: workflow-definition commits exist while expected committed receipt files were absent at inspection time.",
+      "falsifier": "Current branch contains a verified successful run plus exact declared receipt for each inspected gate, bound to the inspected source/test versions."
+    },
+    {
+      "id": "H3",
+      "status": "OPEN_STRONG_CANDIDATE",
+      "claim": "A GateExecutionAttestation should bind immutable subject digests to test/material digests, execution identity, conclusion, evidence scope and admission policy; release state should advance only after verification of that bundle.",
+      "prediction": "Mutation of head/source/test/workflow digest, run state, receipt presence, test result, negative-control result or execution scope will fail closed while a fully matched bundle admits.",
+      "falsifier": "A required field can be removed or mutated without producing a plausible stale/forged/mis-scoped admission case, showing that the field is unnecessary or wrongly placed."
+    },
+    {
+      "id": "H4",
+      "status": "OPEN",
+      "claim": "For in-process ClayCode/Frank execution, opaque runtime-instance-bound capability handles are preferable to serializable bearer records; cross-process FFI should use a broker/table/OS-handle representation rather than treating serialized Clay records as authority.",
+      "prediction": "Copying or reconstructing a capability-shaped value fails, while a broker-owned live handle/index can be passed according to adapter rules.",
+      "falsifier": "A serializable Clay capability record can be made equally safe under the required replay/restart/FFI threat model without confusing description, provenance and authority."
+    },
+    {
+      "id": "H5",
+      "status": "OPEN",
+      "claim": "Hosted GitHub Ubuntu CI and Andreas' Ubuntu developer system must remain distinct evidence scopes even when they execute byte-identical runtime/test inputs.",
+      "prediction": "A hosted-CI receipt can support regression confidence but cannot alone satisfy target-host acceptance; the target receipt may reference the same subject/material digests while carrying a different execution-scope identity.",
+      "falsifier": "The project acceptance contract is explicitly changed so hosted GitHub Ubuntu is an accepted substitute for the Andreas target host."
+    },
+    {
+      "id": "H6",
+      "status": "OPEN",
+      "claim": "Attestation/provenance is never execution authority. A verified GateExecutionAttestation may admit evidence but must not be accepted by the effect broker as a CapabilityHandle.",
+      "prediction": "Supplying a valid attestation object where a runtime capability is required always fails type/identity validation.",
+      "falsifier": "A project-owner-approved effect model intentionally defines a signed attestation as a bearer capability and supplies revocation/delegation/liveness semantics equivalent to the current runtime authority model."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH1",
+      "status": "PARTIALLY_REFUTED_FOR_CURRENT_GATE_STATE",
+      "claim": "Git commit history around a workflow is enough; no explicit gate attestation/receipt binding is needed.",
+      "discriminator": "Attempt to prove from current default-branch state that the runtime capability tests actually executed successfully against the exact current runtime and validation files.",
+      "result": "The workflow-definition commit and expected receipt path were observable, but the expected receipt was absent; commit title alone therefore did not establish executed success."
+    },
+    {
+      "id": "CH2",
+      "status": "OPEN",
+      "claim": "Plain committed JSON receipts with exact hashes and run identity are sufficient for BASE; cryptographic builder attestation would add complexity without useful admission discrimination.",
+      "discriminator": "Compare threat models: accidental stale/mis-scoped admission versus malicious repository writer/builder forgery. Plain receipts may solve the former while signed builder provenance targets the latter."
+    },
+    {
+      "id": "CH3",
+      "status": "OPEN",
+      "claim": "Capability object identity checks are too process-local for the eventual ClayCode runtime ABI/FFI and should be replaced immediately by portable MAC-bearing serialized tokens.",
+      "discriminator": "Implement the actual first Ubuntu adapter boundary and test whether capability authority ever needs to cross a process/serialization boundary. If not, process-local opacity is simpler and safer for BASE."
+    },
+    {
+      "id": "CH4",
+      "status": "OPEN",
+      "claim": "The V4/V6/V7 grammar drift is harmless because semantic-source authority remains G9/Dialect and downstream receipts bind current grammar hashes anyway.",
+      "discriminator": "Inspect actual frontend/typed-IR receipts after they exist and test cross-version semantic-hash equivalence."
+    }
+  ],
+  "promotion": {
+    "scientific_promotion_requested": false,
+    "base_work_package_pass_requested": false,
+    "reason": "Current evidence supports a concrete admission constraint and implementation candidate but target-host production receipts are still missing."
+  }
+}

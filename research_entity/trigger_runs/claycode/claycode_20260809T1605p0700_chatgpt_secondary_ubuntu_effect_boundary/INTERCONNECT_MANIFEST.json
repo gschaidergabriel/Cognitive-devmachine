@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1605p0700_chatgpt_secondary_ubuntu_effect_boundary",
+  "trigger":"claycode",
+  "actor":"chatgpt-secondary",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "target_host":"UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "out_of_scope":["ANDROID","MOBILE","GENERIC_EDGE_PORTABILITY"],
+  "official_preflight":"BLOCKED_GOVERNANCE_DRIFT",
+  "preflight_evidence":"tools/research_interconnect_preflight.py still hard-codes branch name clay while current RESEARCH_TRIGGER_REGISTRY.json registers clayresearch; fail-closed set equality therefore rejects the current registry.",
+  "manifest_mode":"MANUAL_FAIL_CLOSED_FROM_VERIFIED_GITHUB_READS",
+  "branches":{
+    "frank":{"depth":"DEEP","refs":["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json","research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md"],"finding":"P10 requires opaque host-minted effect authority and no ambient OS authority; Ubuntu target directive narrows realization work to Linux developer host."},
+    "clayresearch":{"depth":"DEEP","refs":["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay","research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md"],"finding":"Current shared mission is Frank v0.1 on Ubuntu developer system; portability research is not a current gate."},
+    "harness":{"depth":"DEEP","refs":["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md"],"finding":"H1/H2/H3 effect-boundary traces must be reproducible on Ubuntu and preserve authority/effect separation."},
+    "claygraph":{"depth":"DEEP","refs":["research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql"],"finding":"activation/salience remain non-authoritative; effect receipts can be linked but graph state cannot mint capability."},
+    "unifieddb":{"depth":"DEEP","refs":["research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql"],"finding":"semantic transactions already separate authority_scope, intent, idempotency and receipts; host capability realization should bind to these identities rather than paths in model text."},
+    "gwt":{"depth":"STANDARD","refs":["research_entity/global/RAE_GWT_MICROKERNEL.clay","research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],"finding":"workspace selection/use cannot imply effect authority; execution result must return as a causal receipt."},
+    "hyperposition":{"depth":"STANDARD","refs":["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],"finding":"shared state and physical colocation do not imply shared authority; sandbox placement is a physical topology choice preserving semantic boundaries."},
+    "emergenz":{"depth":"STANDARD","refs":["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],"finding":"sandbox/compiler success is implementation evidence only, not emergence evidence."},
+    "claycode":{"depth":"DEEP","refs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/g9/grammar.ebnf","research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"],"finding":"Existing CapabilityToken and EffectIntent semantics are the tested candidate; this run tests lowering/runtime realization, not language redesign."}
+  },
+  "concurrency_note":"A parallel ClayCode worker joined the ClayGraph/UnifiedDB representability lane at 15:59 +07. This run deliberately uses the non-overlapping Ubuntu effect/sandbox lowering lane.",
+  "completion_gate":"OFFICIAL_PREFLIGHT_STILL_BLOCKED; NO_STRONG_PROMOTION_CLAIMED"
+}

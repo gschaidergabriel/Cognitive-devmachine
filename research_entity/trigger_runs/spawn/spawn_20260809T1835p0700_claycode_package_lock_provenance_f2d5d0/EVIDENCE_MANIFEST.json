@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1835p0700_claycode_package_lock_provenance_f2d5d0",
+  "canonical_project_evidence": [
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+    "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
+    "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+    "research_entity/global/PROJECT_COMMAND_REGISTRY.json",
+    "tools/research_interconnect_preflight.py",
+    "latest peer commit material read through GitHub connector"
+  ],
+  "external_primary_sources": [
+    {"id":"SRC-CARGO","kind":"OFFICIAL_DOC","title":"Cargo Book — Dependency Resolution","url":"https://doc.rust-lang.org/cargo/reference/resolver.html","supports":["resolver result is locked to exact versions","locked/frozen modes refuse implicit lock updates","resolution is policy/heuristic dependent"]},
+    {"id":"SRC-GO","kind":"OFFICIAL_DOC","title":"Go Modules Reference","url":"https://go.dev/ref/mod","supports":["MVS defines a resolver policy","go.sum binds module/version to content hash","checksum database provides consistency/transparency","version-list/info metadata can remain mutable"]},
+    {"id":"SRC-PYLOCK","kind":"OFFICIAL_STANDARD","title":"PyPA pylock.toml Specification","url":"https://packaging.python.org/en/latest/specifications/pylock-toml/","supports":["environment markers are lock/install inputs","VCS locks use exact commit IDs","archives/wheels carry hashes","attestation identities can be recorded","artifact choice should be offline-determined where specified"]},
+    {"id":"SRC-NPM","kind":"OFFICIAL_DOC","title":"npm package-lock.json","url":"https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/","supports":["exact dependency tree","resolved origin and integrity fields","git dependencies may bind commits"]},
+    {"id":"SRC-NPM-CI","kind":"OFFICIAL_DOC","title":"npm ci","url":"https://docs.npmjs.com/cli/v11/commands/npm-ci/","supports":["frozen install behavior","configuration flags can affect dependency-tree shape"]},
+    {"id":"SRC-TUF-META","kind":"OFFICIAL_DOC","title":"TUF Roles and metadata","url":"https://theupdateframework.io/docs/metadata/","supports":["snapshot gives consistent repository view","timestamp provides freshness","target hashes/sizes are signed metadata"]},
+    {"id":"SRC-TUF-SEC","kind":"OFFICIAL_DOC","title":"TUF Security","url":"https://theupdateframework.io/docs/security/","supports":["rollback/freeze are distinct security properties","trust/freshness is stateful and policy-like"]},
+    {"id":"SRC-SLSA","kind":"OFFICIAL_STANDARD","title":"SLSA v1.2 Build Provenance","url":"https://slsa.dev/spec/v1.2/build-provenance","supports":["buildDefinition separated from runDetails","resolvedDependencies identify build-time artifacts by URI/digest","builder identity is separate from resolved dependency identity"]},
+    {"id":"SRC-BAZEL","kind":"OFFICIAL_DOC","title":"Bazel Lockfile","url":"https://bazel.build/external/lockfile","supports":["lock stores module-resolution/extension results","remote registry input hashes matter","OS/architecture-dependent extension entries can differ","mutable yanked-version state is represented distinctly"]},
+    {"id":"SRC-NIX","kind":"OFFICIAL_DOC","title":"Nix flake lock reference","url":"https://releases.nixos.org/nix/nix-2.13.5/manual/command-ref/new-cli/nix3-flake.html","supports":["lockfile is graph-shaped","locked inputs can carry revision/content hash","transitive inputs are locked"]},
+    {"id":"SRC-GRADLE-LOCK","kind":"OFFICIAL_DOC","title":"Gradle Dependency Locking","url":"https://docs.gradle.org/current/userguide/dependency_locking.html","supports":["dynamic dependency selection drifts over time","resolved direct/transitive versions can be locked"]},
+    {"id":"SRC-GRADLE-VERIFY","kind":"OFFICIAL_DOC","title":"Gradle Dependency Verification","url":"https://docs.gradle.org/current/userguide/dependency_verification.html","supports":["checksums and signatures are complementary","integrity and publisher/authenticity are distinct","bootstrapped verification metadata must not be confused with independent trust"]}
+  ],
+  "executed_proxy": {
+    "script": "package_lock_probe.py",
+    "script_sha256": "b0afc8241ce7932b564d6768f24e648812142e3f734c003e01c31e4b367d2ba8",
+    "receipt": "EXECUTION_RECEIPT.json",
+    "receipt_sha256": "cd47b0bb8a472cdf6d4c13fc20ec58724d70c0bdb7a6345679c6a9c643d5cece",
+    "evidence_class": "HOSTED_SYNTHETIC_PROXY_NOT_PRODUCTION_CLAYCODE",
+    "summary": {
+      "trials_per_constructed_attack_class": 10000,
+      "unlocked_registry_growth_drifts": 10000,
+      "locked_registry_growth_drifts": 0,
+      "same_version_mutations_missed_by_version_only": 10000,
+      "same_version_mutations_detected_by_digest": 10000,
+      "canonical_order_hash_mismatches": 0,
+      "projection_changes_detected": 10000,
+      "trust_receipt_changed_with_graph_stable": 10000,
+      "authority_denials_without_external_grant": 10000,
+      "factorial_candidate_semantic_detection": "30000/30000",
+      "factorial_candidate_nonsemantic_stability": "25000/25000",
+      "factorial_version_only_semantic_detection": "5000/30000",
+      "factorial_giant_hash_nonsemantic_stability": "0/25000"
+    }
+  },
+  "hard_limits": [
+    "No production ClayCode execution.",
+    "No Ubuntu target-host package manager execution.",
+    "Constructed proxies are mechanism discriminators, not real-world prevalence estimates.",
+    "External ecosystem convergence is analogy/support, not proof that ClayCode must copy another package format."
+  ]
+}

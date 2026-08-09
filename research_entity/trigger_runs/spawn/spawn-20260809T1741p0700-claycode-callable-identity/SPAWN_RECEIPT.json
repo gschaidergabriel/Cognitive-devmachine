@@ -1,0 +1,77 @@
+{
+  "actor_id": "chatgpt-secondary",
+  "branch_draw": {
+    "draw_int": 2944464,
+    "draw_percent": 29.44464,
+    "procedure": "secrets.randbelow(10_000_000); percent=draw/100_000",
+    "rng": "Python secrets.randbelow backed by OS CSPRNG",
+    "scale": 10000000,
+    "selected_origin_branch": "claycode",
+    "weights_blob_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+    "weights_version": "SPAWN_RESEARCH_WEIGHTS.json schema 1.0",
+    "bucket_percent": "[0,50)"
+  },
+  "candidate_microdirections": [
+    {
+      "direction": "strict-LALR conflict minimization with semantics-preserving repair",
+      "id": "C1",
+      "novelty_note": "high value but live autonomous workers concurrently moved onto exact conflict localization",
+      "status": "ELIGIBLE_NOT_SELECTED"
+    },
+    {
+      "direction": "contextual-keyword invariance under strict parser construction",
+      "id": "C2",
+      "reason": "mechanistically part of C1 conflict-localization surface",
+      "status": "MERGED_DUPLICATE"
+    },
+    {
+      "direction": "recursive compositional type/effect SCC closure",
+      "id": "C3",
+      "novelty_note": "fresh effect-closure proxy exists; SCC production integration still open",
+      "status": "ELIGIBLE_NOT_SELECTED"
+    },
+    {
+      "direction": "exact callable symbol/signature identity, ambiguity, replay identity and effect-boundary layering",
+      "id": "C4",
+      "status": "SELECTED"
+    },
+    {
+      "direction": "frozen FRANK loop vertical slice through current typed machinery",
+      "id": "C5",
+      "novelty_note": "depends downstream on parser and callable identity closure",
+      "status": "ELIGIBLE_NOT_SELECTED"
+    }
+  ],
+  "microdirection_draw": {
+    "draw_index_zero_based": 2,
+    "eligible": [
+      "C1",
+      "C3",
+      "C4",
+      "C5"
+    ],
+    "rng": "Python secrets.randbelow backed by OS CSPRNG",
+    "selected": "C4"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "paid_training_auto_start_forbidden": true,
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "recent_duplicate_check": {
+    "at_selection": "No material prior spawn receipt was visible through initial search; duplicate filtering used fresh ClayCode run evidence.",
+    "conclusion": "C4 callable identity remained materially non-duplicative.",
+    "live_reread_after_selection": [
+      "spawn-20260809T1746p0700-claycode-mvc-state selected adaptive visual learner state semantics",
+      "concurrent effect-authority spawn selected a different effect-boundary direction",
+      "concurrent harness-lowering spawn selected a different harness direction"
+    ]
+  },
+  "run_id": "spawn-20260809T1741p0700-claycode-callable-identity",
+  "schema_version": "1.0",
+  "selection_probability_is_not_evidence": true,
+  "trigger": "spawn"
+}

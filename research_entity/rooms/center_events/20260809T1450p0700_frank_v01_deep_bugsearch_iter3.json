@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-v01-deep-bugsearch-iter3-20260809T1450p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T14:50:00+07:00",
+  "origin": {
+    "class": "USER_DIRECTED_RESEARCH_ENTITY_AUDIT",
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/frankv0.1",
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger"
+  },
+  "authority": {
+    "research_entity_work": true,
+    "frank_self_harness_effect": "FORBIDDEN",
+    "frank_self_observation": "ALLOWED_PROPOSAL_ONLY",
+    "implementation_authority": "SEPARATE_RESEARCH_ENTITY_ONLY"
+  },
+  "evidence_class": "STATIC_EXECUTABLE_PATH_AUDIT",
+  "target_machine_execution_in_this_run": false,
+  "report": {
+    "path": "research/bugs/FRANK_DEEP_BUGSEARCH_2026-08-09_ITER3.md",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "9f45d17d4ef07b7edf1d05be361440bcb78b48cc"
+  },
+  "summary": {
+    "new_findings": 16,
+    "p0_class": 9,
+    "p1_class": 7,
+    "high_risk_unresolved": ["BUG-P1-021", "BUG-P1-022"],
+    "verdict": "NOT_RELEASE_READY",
+    "dominant_failure_modes": [
+      "repository truth contract stronger than executable admission/open gates",
+      "materialization lineage not verified at boot",
+      "local receipt path can impersonate external ChatGPT result",
+      "self-Harness guard is text-based rather than effect-based",
+      "ClayGraph projection fails to retract disappeared/superseded relations across graph epochs",
+      "snapshot/checkpoint path has direct SQL binding defect",
+      "repo-first persistence contains contradictory DB-first local path",
+      "dynamic work runtime uses mapping access on tuple sqlite rows",
+      "artifact logical identity can diverge from content identity"
+    ]
+  },
+  "critical_findings": [
+    "BUG-P0-009 repo preflight false-pass for unadmitted/divergent local HEAD or dirty critical worktree",
+    "BUG-P0-010 critical hashes computed but not checked against admitted manifest/authorization receipt",
+    "BUG-P0-011 DB presence accepted without entity/source-head/semantic-epoch/root/materializer lineage",
+    "BUG-P0-012 multiple state-open/bootstrap/schema paths remain callable without the repo truth gate",
+    "BUG-P0-013 local Frank-writable ChatGPT receipt can enter UnifiedDB as provider ChatGPT without strong origin binding",
+    "BUG-P0-014 self-Harness PreTool protection is substring-based, overblocks observation and can miss indirect effects",
+    "BUG-P0-015 ClayGraph old validated relations/activation can survive a newer projection as apparently current",
+    "BUG-P0-016 checkpoint INSERT placeholder/value mismatch breaks snapshot recording",
+    "BUG-P0-017 local DB-first persistence path conflicts with repository-admission truth hierarchy"
+  ],
+  "shared_semantic_fabric_implication": {
+    "status": "BLOCKED_FOR_STRONG_TRUST",
+    "reason": "Automatic semantic preconnection and GWT use of ClayGraph cannot be trusted as CURRENT until source admission, epoch coherence and graph retraction semantics are executable and tested.",
+    "hard_boundary": "ClayGraph activation/coupling remains derived and must not promote truth or Harness authority."
+  },
+  "affected_rooms": [
+    "frank",
+    "harness",
+    "unifieddb",
+    "claygraph",
+    "claycode",
+    "gwt",
+    "hyperposition",
+    "emergenz",
+    "clay"
+  ],
+  "branch_implications": {
+    "frank": "preserve self-diagnosis/proposal ability but do not allow self-repair authority; identity/materialization boot must fail closed",
+    "harness": "execute T3-01..T3-20 on target checkout and independently repair only through Research Entity authority",
+    "unifieddb": "bind CURRENT materialization to admitted repo head, semantic epoch, root hash, schema/materializer and receipts",
+    "claygraph": "implement epoch-safe version/retraction semantics and stale-activation invalidation before semantic fabric promotion",
+    "claycode": "represent admission/materialization identity, pending-repo-admission state, graph retraction and proposal/effect boundaries explicitly",
+    "gwt": "do not interpret stale graph activation or self-change salience as valid CURRENT cognitive evidence/authority",
+    "hyperposition": "preserve historical alternatives without letting superseded topology remain active-current",
+    "emergenz": "causal/emergence measurements must pin exact UDB/graph epochs and reject stale topology",
+    "clay": "treat admission/state-open/graph-retraction as immediate cross-cutting integrity blockers for the shared semantic fabric mission"
+  },
+  "required_next_evidence": {
+    "target_machine_matrix": "T3-01..T3-20 in FRANK_DEEP_BUGSEARCH_2026-08-09_ITER3.md",
+    "must_distinguish": [
+      "static proof",
+      "target-machine reproduced bug",
+      "repair implemented",
+      "repair regression passed",
+      "independent replication"
+    ]
+  },
+  "shared_mission_contribution": {
+    "status": "REFINED",
+    "semantic_objects": ["repo admission identity", "materialization identity", "graph epoch/retraction", "receipt authority", "artifact logical/content identity"],
+    "dependency_or_coupling_delta": "Current semantic fabric requires explicit negative/retraction deltas and source-admission identity; additive graph projection is insufficient.",
+    "falsifier_or_test": "Pass full T3 target-machine matrix including stale-edge removal, forged receipt rejection and repo-divergence fail-closed tests."
+  }
+}

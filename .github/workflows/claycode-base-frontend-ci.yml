@@ -1,0 +1,98 @@
+name: ClayCode BASE Frontend CI
+
+on:
+  push:
+    paths:
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'tools/claycode_base_frontend_validation.py'
+      - 'tools/claycode_base_canonicalizer.py'
+      - 'tools/claycode_base_ir.py'
+      - '.github/workflows/claycode-base-frontend-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  strict-v6-frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install parser dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'lark[interegular]>=1.2,<2'
+
+      - name: Capture execution environment
+        run: |
+          mkdir -p receipts/claycode-base-frontend
+          {
+            echo "git_head=$(git rev-parse HEAD)"
+            echo "python=$(python --version 2>&1)"
+            python - <<'PY'
+          import importlib.metadata
+          for pkg in ('lark', 'interegular'):
+              try:
+                  print(f"{pkg}={importlib.metadata.version(pkg)}")
+              except importlib.metadata.PackageNotFoundError:
+                  print(f"{pkg}=MISSING")
+          PY
+          } | tee receipts/claycode-base-frontend/ENVIRONMENT.txt
+
+      - name: Syntax compile validation tools
+        run: |
+          python -m py_compile \
+            tools/claycode_base_frontend_validation.py \
+            tools/claycode_base_canonicalizer.py \
+            tools/claycode_base_ir.py
+
+      - name: Strict V6 full-corpus frontend validation
+        run: |
+          python tools/claycode_base_frontend_validation.py \
+            --output receipts/claycode-base-frontend/FRONTEND_V6_STRICT.json
+
+      - name: Strict V6 canonical syntax identity validation
+        run: |
+          python tools/claycode_base_canonicalizer.py \
+            --output receipts/claycode-base-frontend/CANONICAL_V6_STRICT.json
+
+      - name: Strict typed declaration IR on G9 V3
+        run: |
+          python tools/claycode_base_ir.py \
+            research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay \
+            --output receipts/claycode-base-frontend/IR_G9_V3_STRICT.json
+
+      - name: Strict typed declaration IR on Dialect V3
+        run: |
+          python tools/claycode_base_ir.py \
+            research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay \
+            --output receipts/claycode-base-frontend/IR_DIALECT_V3_STRICT.json
+
+      - name: Strict typed declaration IR fixture self-test
+        run: |
+          python tools/claycode_base_ir.py \
+            --self-test \
+            --output receipts/claycode-base-frontend/IR_SELFTEST_STRICT.json
+
+      - name: Receipt hashes
+        run: |
+          sha256sum receipts/claycode-base-frontend/* | tee receipts/claycode-base-frontend/SHA256SUMS.txt
+
+      - name: Upload evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-base-frontend-${{ github.sha }}
+          path: receipts/claycode-base-frontend/
+          if-no-files-found: error
+          retention-days: 30

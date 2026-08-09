@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1053p0700-chatgpt-secondary-aicore-modeld-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_MODELD_RECURSIVE_SCOPE",
+  "source_universe":"DRIVE_CLAY/AICORE/modeld",
+  "source_folder_id":"1FeGdRyBGWJAGatgAGsoT6RIT9q61MtBF",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"units_below_folder":2,"folder_units":0,"file_units":2,"file_units_semantically_closed":2,"coverage_percent":100.0},
+  "files":[
+    {"path":"modeld/app.py","drive_id":"1EkFQlyp9jmOh8J5ruMi1I-H-AeC-mNRh","bytes":7421,"sha256":"a36966ccb2cc76ffbe949bbe20db0982a2e0d17c22be929c9b672267a5ead808"},
+    {"path":"modeld/__init__.py","drive_id":"1sn6b98403w0RTI-XetrYwhRL16eXovD3","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","disposition":"empty_package_marker"}
+  ],
+  "cross_source_reconciliation":{"project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","result":"Frozen-head modeld has the same empty BACKENDS architecture; later Drive delta centralizes only the modeld port through config.instanz. Core labels MODELD_BASE as legacy, while install.sh still creates, enables and starts aicore-modeld.service."},
+  "semantic_findings":[
+    {"id":"MODELD-1-EMPTY-BACKEND-SERVICE","severity":"P1_BOOT_CORRECTNESS","finding":"BACKENDS is an empty dict at module definition, so /models is empty and every /infer model_id is rejected as unknown. No config loader populates BACKENDS.","inheritance":"A service with zero routable backends must advertise NOT_READY/DISABLED, not run as a nominal model daemon."},
+    {"id":"MODELD-2-FALSE-HEALTH","severity":"P1_OBSERVABILITY","finding":"GET /health always returns HTTP 200 with ok:true even when BACKENDS is empty and active_model is None.","inheritance":"Readiness must encode required capability availability. HTTP process liveness and functional readiness are distinct typed states."},
+    {"id":"MODELD-3-LEGACY-BUT-AUTOSTARTED","severity":"P1_BOOT_TOPOLOGY","finding":"Core marks MODELD_BASE as legacy, yet frozen install.sh creates, enables and starts aicore-modeld.service by default.","inheritance":"Boot manifest must be generated from active dependency graph. Dead/legacy services cannot remain mandatory-autostarted because they distort health, resource use and failure diagnosis."},
+    {"id":"MODELD-4-CONFIGURED-SEMAPHORES-FROZEN-AT-IMPORT","severity":"P2_DESIGN_DEBT","finding":"_backend_sema is constructed once from BACKENDS keys. Even if BACKENDS were later mutated externally, semaphores would not appear automatically.","inheritance":"Backend registry and concurrency control must update transactionally under one runtime registry version."},
+    {"id":"MODELD-5-BODY-LIMIT-ABSENT","severity":"P2_LOCAL_RESOURCE_GAP","finding":"POST reads Content-Length bytes without a configured upper bound before JSON parsing. Loopback limits exposure but does not create a resource boundary.","inheritance":"Internal HTTP surfaces still require bounded message envelopes and principal/effect provenance."}
+  ],
+  "positive_controls":["Backend access is semaphore-limited per configured backend.","Backend health and active-model state are separated in response structure.","Transient connection-refused retry is bounded.","Drive delta adopts centralized multi-instance port resolution."],
+  "branch_feedback":{"frank":["Do not infer model capability from service process existence."],"harness":["Boot/readiness tests must fail when mandatory service reports ok with zero functional backends; detect legacy autostart services."],"needle":["Route only to runtime-registered READY backends with immutable identity."],"claycode":["Model daemon state should distinguish ABSENT, CONFIGURED, LOADING, READY, DEGRADED and DISABLED."],"unifieddb":["Persist active service/dependency topology and supersession rather than retaining dead service identity indefinitely."],"claygraph":["Mark modeld as legacy/dormant lineage and connect installer autostart as contradiction edge."],"gwt":["Service health signals entering workspace must reflect functional readiness, not process liveness."],"clay":["One-module architecture should delete dead service boundaries rather than preserve them as no-op daemons."]},
+  "earned_work_hours_added":0.0,
+  "training":{"executed":false,"authorized":false},
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

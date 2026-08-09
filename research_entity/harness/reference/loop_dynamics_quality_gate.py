@@ -3,9 +3,9 @@ from dataclasses import dataclass, asdict
 from typing import Literal
 import hashlib, json, math
 
-SCHEMA_VERSION = "h1-loop-dynamics-quality-gate-0.2"
+SCHEMA_VERSION = "h1-loop-dynamics-quality-gate-0.3"
 AUTHORITY_NONE = "NONE"
-DEFAULT_POLICY_ID = "h1-loop-quality-gate-default-v2"
+DEFAULT_POLICY_ID = "h1-loop-quality-gate-default-v3"
 
 Decision = Literal[
     "CONTINUE",
@@ -130,8 +130,9 @@ def decide_recurrence(
     """Deterministic proposal-only H1 reference candidate.
 
     Invalid telemetry is rejected before classification. Missing, stale, or
-    over-uncertain residual-estimator metadata routes fail-closed. The receipt
-    binds both the readout and the controller policy/thresholds used to decide.
+    over-uncertain residual-estimator metadata routes fail-closed. Convergence
+    requires both persistent low state change and low residual pressure. The
+    receipt binds both the readout and the controller policy/thresholds used.
     """
     r.validate()
     policy = _validate_policy(
@@ -142,8 +143,8 @@ def decide_recurrence(
         converged_residual=converged_residual,
         stalled_residual=stalled_residual,
     )
-    readout_sha256 = _canonical_hash(asdict(r), "H1_LOOP_QUALITY_READOUT_V2")
-    policy_sha256 = _canonical_hash(policy, "H1_LOOP_QUALITY_POLICY_V2")
+    readout_sha256 = _canonical_hash(asdict(r), "H1_LOOP_QUALITY_READOUT_V3")
+    policy_sha256 = _canonical_hash(policy, "H1_LOOP_QUALITY_POLICY_V3")
 
     if not r.residual_estimator_id or not r.residual_estimator_version:
         decision, reason = "ROUTE_READOUT_UNCERTAIN", "missing_residual_estimator_identity"
@@ -153,8 +154,8 @@ def decide_recurrence(
         decision, reason = "ROUTE_READOUT_UNCERTAIN", "residual_readout_stale"
     elif r.low_delta_streak >= 2 and r.state_delta_norm < low_delta_epsilon and r.residual_pressure > stalled_residual:
         decision, reason = "ESCALATE_STALLED", "low_delta_high_residual"
-    elif r.residual_pressure < converged_residual:
-        decision, reason = "HALT_CANDIDATE_CONVERGED", "low_residual_with_valid_readout"
+    elif r.low_delta_streak >= 2 and r.state_delta_norm < low_delta_epsilon and r.residual_pressure < converged_residual:
+        decision, reason = "HALT_CANDIDATE_CONVERGED", "low_delta_and_low_residual_with_valid_readout"
     elif r.marginal_utility_next < 0 and r.residual_pressure <= stalled_residual:
         decision, reason = "HALT_MARGINAL", "negative_marginal_utility"
     else:
@@ -180,5 +181,5 @@ def decide_recurrence(
         reason=reason,
         readout_sha256=readout_sha256,
         policy_sha256=policy_sha256,
-        receipt_sha256=_canonical_hash(receipt_payload, "H1_LOOP_QUALITY_RECEIPT_V2"),
+        receipt_sha256=_canonical_hash(receipt_payload, "H1_LOOP_QUALITY_RECEIPT_V3"),
     )

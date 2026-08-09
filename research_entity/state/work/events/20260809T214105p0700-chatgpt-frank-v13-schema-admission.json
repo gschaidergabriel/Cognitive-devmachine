@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-event:20260809T214105p0700:chatgpt:frank-v13-schema-admission",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:41:05+07:00",
+  "payload": {
+    "work_id": "work:frank-v01-v13-schema-admission-reconcile",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CHATGPT_SANDBOX_RESEARCH_HANDOFF",
+    "title": "Reconcile Frank UnifiedDB V13 admission",
+    "work_clay": "clay{target:FRANK_V0_1; inspect:[runtime/state/apply_current_schema.py,runtime/state/APPLIED_SCHEMA_MANIFEST_REQUIRED,runtime/state/repo_truth_gate.py,harness/frank_harness_runtime.py,runtime/state/UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql]; observed_conflict:{loader_includes:UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql,required_manifest_unifieddb_version:12.0,truth_gate_expected_udb_schema:12.0,harness_self_test_requires:research_bug_reports}; action:[determine_intended_admitted_schema_version,reconcile_loader+manifest+truth_gate+migration_metadata,run_disposable_sandbox_migration_and_harness_self_test]; canonical_migration:FORBIDDEN_WITHOUT_RESEARCH_ENTITY_AUTHORIZATION}",
+    "reason_clay": "clay{why_now:current_F7_and_harness_vertical_path_can_fail_if_schema_admission_components_disagree; evidence:[github:Dr.-Unterweger/runtime/state/apply_current_schema.py@0e43d82,github:Dr.-Unterweger/runtime/state/APPLIED_SCHEMA_MANIFEST_REQUIRED@2d82fbf2,github:Dr.-Unterweger/runtime/state/repo_truth_gate.py@9aa1964,github:Dr.-Unterweger/harness/frank_harness_runtime.py@b474aac6]; sandbox_policy:DISPOSABLE_ONLY_FIRST}",
+    "completion_clay": "clay{done_if:[single_consistent_admitted_unifieddb_version,required_manifest_covers_all_admitted_migrations,migration_updates_required_schema_metadata_or_explicitly_documents_nonversioned_patch,repo_truth_gate_matches_admission,harness_self_test_PASS_in_disposable_sandbox,negative_results_preserved]; not_done_if:[only_text_edit_without_execution,canonical_DB_mutated_without_authority]}",
+    "evidence_need": ["clay{type:LOCAL_EXECUTION_RECEIPT; test:disposable_migrate_pair_plus_harness_self_test}", "clay{type:DIFF_RECEIPT; scope:schema_loader_manifest_truth_gate}"],
+    "executor_policy": "clay{prefer:CLAUDE_CODE_LOCAL_ORGAN; reason:repo_build_and_execution_surface; duplicate_work:false}",
+    "required_capabilities": ["REPOSITORY", "TEST_RUNTIME", "BUILD_RUNTIME", "UNIFIEDDB"],
+    "write_scope": ["gschaidergabriel/Dr.-Unterweger"],
+    "dependencies": ["clay{requires:fresh_main_head_before_effect}"],
+    "invalidators": ["clay{if:schema_admission_already_reconciled_by_newer_commit; then:SUPERSEDE_OR_VERIFY_ONLY}"],
+    "base_priority": 0.94,
+    "expected_impact": 0.93,
+    "urgency": 0.90,
+    "information_gain": 0.88,
+    "status": "READY"
+  }
+}

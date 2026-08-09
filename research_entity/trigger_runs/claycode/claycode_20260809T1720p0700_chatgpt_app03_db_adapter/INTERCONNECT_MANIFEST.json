@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode_20260809T1720p0700_chatgpt_app03_db_adapter",
+  "trigger": "claycode",
+  "registry_basis": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json@e4c44a99b6f141096fd77e15efcb7506358b4aaa",
+  "registry_scientific_branches": ["clayresearch","gwt","frank","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "branch_priority": ["frank","clayresearch","claygraph","unifieddb","gwt","hyperposition","emergenz","harness","claycode"],
+  "special_rules": {
+    "claycode_requires_latest_frank_research_as_primary_feedback": true,
+    "claycode_requires_deep_claygraph_input": true,
+    "claycode_requires_deep_unifieddb_input": true,
+    "claycode_requires_goodman_anti_echo_review": true,
+    "claycode_latest_frank_architecture_artifact": "research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json"
+  },
+  "branches": [
+    {"branch":"frank","latest_run":"20260809T0130p0700-chatgpt-secondary-r5","evidence_refs":["ba0ab9ebadf62596b54bcd3f7e6c262ed3ca39dc","research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json","a83ba44bc4af154cc6c7538fa033388e12f0326d"],"effect":"SUPPORT_AND_CONSTRAIN","delta":"DB access is an effect/authority path: semantic intent and transaction plan may be model/Clay-visible, but host resource authority remains external and use-time checked."},
+    {"branch":"clayresearch","evidence_refs":["092ecdb7af624f3c751adbaa0fbb6680b7d8705a","f35e7c250b4499c6bbb25420460523827505c6a5"],"effect":"SUPPORT","delta":"Compile-first BASE direction retained. Current G9 spec/grammar conformance remains a separate blocking work item; APP-03 does not justify new core semantics."},
+    {"branch":"claygraph","evidence_refs":["af0f57a4d2c96f75faa594bf8b004001e25f1af5"],"effect":"NO_CHANGE","delta":"Graph activation/selection remains relevance state and cannot mint database authority. Exact DB transaction semantics stay outside activation."},
+    {"branch":"unifieddb","evidence_refs":["193b18851090ba5bd6df36f520a599c64c26ca91"],"effect":"SUPPORT_AND_REFINE","delta":"APP-03 supports U2's separation of semantic identity, transaction domain and physical placement. Typed adapter lowering can preserve a logical Clay contract while SQLite owns concrete transaction machinery."},
+    {"branch":"gwt","evidence_refs":["04f260bba372600821fcd972d3eeee66d59a8314","de4c4e9855cb479d573d1eced72201d524211322"],"effect":"NO_CHANGE","delta":"DB commit receipts are downstream effect evidence, not workspace uptake or GWT causal-use evidence."},
+    {"branch":"hyperposition","evidence_refs":["5a6f828d356c697fc6440825135b47ab6c34c42e"],"effect":"NO_CHANGE","delta":"No topology primitive is required by the tested exact transaction path."},
+    {"branch":"emergenz","evidence_refs":["c3f9dda83ae3ed8fa3b24b636245a2cfcb6e3d10"],"effect":"NO_CHANGE","delta":"Transaction success/rollback is runtime evidence only and is not emergence or consciousness evidence."},
+    {"branch":"harness","evidence_refs":["2f0f4d603794803c4cbd6003fd7118bbc313b847","00320ab84a5905ef4f7c017b14c29bd106517d24"],"effect":"HANDOFF","delta":"Future H2/BASE differential tests should compare transaction commit/rollback, parameter binding and adapter authority across backends."},
+    {"branch":"claycode","evidence_refs":["1a17bba3c835520baff2ac8fa432749ba2165d8e","ec2f17077333955cfdabe6c64868d597e7e734e3","61dbf9006eeca2d979e89deaa9d39be23a88b731","75e771f0ec8c72866ff31a11b5549e965df5dab6"],"effect":"NEW_EXECUTABLE_MECHANISM_EVIDENCE","delta":"Focused APP-03 source -> parsed subset -> canonical IR -> deterministic lowering -> real SQLite adapter execution supports implementation/FFI work over language redesign for the tested CRUD/transaction class."}
+  ],
+  "preflight_tool_status": {
+    "status": "BLOCKED_GOVERNANCE_DRIFT",
+    "reason": "Current tools/research_interconnect_preflight.py still hard-codes legacy branch name clay in PRIORITY while current registry renamed the integrated branch to clayresearch. Its import-time set equality therefore fails closed. This is preserved rather than bypassed.",
+    "prior_negative_ref": "N-CC-PREFLIGHT-20260809-01"
+  },
+  "coverage_complete_by_current_registry": true
+}

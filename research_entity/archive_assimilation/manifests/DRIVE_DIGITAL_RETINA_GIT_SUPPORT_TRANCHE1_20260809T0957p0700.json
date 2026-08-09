@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-DIGITAL-RETINA-GIT-SUPPORT-TRANCHE1-20260809T0957p0700",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "source":{"title":"digital-retina/.git","folder_id":"1Q_20Cxn6V88zYtsbqefnssPCpXBSq6ZD","digital_retina_root_id":"1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m"},
+  "method":{"enumerator":"Google_Drive.list_folder","top_k":1000,"search_used_for_completion":false,"guard":"research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md"},
+  "closed_metadata_geometry":{
+    "git_root":{"direct_folders":6,"direct_files":5,"folders":["refs","objects","hooks","info","branches","logs"]},
+    "hooks":{"files":14,"folders":0,"class":"PROVENANCE_SUPPORT_TEMPLATE_HOOKS"},
+    "info":{"files":1,"folders":0,"class":"PROVENANCE_SUPPORT"},
+    "branches":{"files":0,"folders":0,"class":"PROVENANCE_SUPPORT_EMPTY"},
+    "refs":{"descendant_folders":4,"leaf_files":2,"shape":"heads/main + remotes/origin/main; tags empty"},
+    "logs":{"descendant_folders":4,"leaf_files":3,"shape":"HEAD + refs/heads/main + refs/remotes/origin/main"},
+    "objects_info":{"files":0,"folders":0},
+    "objects_pack":{"files":0,"folders":0}
+  },
+  "loose_object_prefix_tranche":[
+    {"prefix":"33","folder_id":"1AhlKwfR4QNWsMifNPGYVhp0OvwpRwQbm","leaf_objects":4},
+    {"prefix":"18","folder_id":"1Sf6Eow2AGf4rZPf1-D9jEMb4hmJB3Kx9","leaf_objects":3},
+    {"prefix":"3a","folder_id":"1cLcrZ_0246mM665DGMp4Ef_U2tDxC5Av","leaf_objects":2},
+    {"prefix":"30","folder_id":"1xyz0kH7W7JfaMlYW9IeCWCQ_II--TxoO","leaf_objects":1},
+    {"prefix":"29","folder_id":"1rRzrg_pTGIdKMRaJWYN_mUi64ajKvEd-","leaf_objects":1},
+    {"prefix":"36","folder_id":"18IUymk7Gtw7fIFtx71Qm4ue7N0gI0qJ8","leaf_objects":1},
+    {"prefix":"80","folder_id":"1DZl8BY-zvlzuOJA7zLzRwAX6oBY0tafq","leaf_objects":1},
+    {"prefix":"44","folder_id":"1rp1V-7ybz-5fglHLFuCVhv1RFzxE0r0F","leaf_objects":2},
+    {"prefix":"a5","folder_id":"13muF8Wztz9-sOWF7ZyoiG8CUjgakvuWr","leaf_objects":1},
+    {"prefix":"0d","folder_id":"1lGbLEgBDKiVTyjt-rWE_MuWCqeLWVHx0","leaf_objects":1}
+  ],
+  "tranche_counts":{"loose_prefix_folders_closed":10,"loose_object_files_closed":17,"loose_object_units_closed":27},
+  "accounted_partial_git_counts":{"folder_units":26,"file_units":42,"total_units":68,"formula":"6 root child folders + 8 refs/log descendant folders + objects/{info,pack}=2 + 10 closed loose-prefix folders = 26 folders; 5 root files +14 hooks +1 info +2 refs +3 logs +17 loose objects =42 files"},
+  "classification":"PROVENANCE_SUPPORT_AND_GIT_OBJECT_STORAGE_ZERO_DUPLICATE_SEMANTIC_CREDIT",
+  "remaining_obligation":"Enumerate every remaining two-hex loose-object prefix folder returned by .git/objects direct listing; persist exact remaining prefix and object-file counts. No semantic reread of object bytes is required unless identity/lineage reconciliation exposes a source unit not already covered by tracked/history evidence.",
+  "whole_git_status":"OPEN_RECURSIVE_OBJECT_FANOUT",
+  "level0_credit":{"exact_global_percent_added":0.0,"reason":"Partial source-local structural progress only; global denominator remains unfrozen."},
+  "created_at":"2026-08-09T09:57:00+07:00"
+}

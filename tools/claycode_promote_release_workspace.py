@@ -3,8 +3,8 @@
 
 This is bookkeeping, not evidence generation. It cannot turn proxy/hosted results into
 release evidence: the WP14 manifest it consumes is itself fail-closed on the registered
-Andreas Ubuntu target receipts, ten real application receipts, full FRANK handoff and
-zero open P0/P1 defects.
+Andreas Ubuntu strict target receipt, ten real application receipts, full FRANK handoff
+and zero open P0/P1 defects.
 """
 from __future__ import annotations
 
@@ -141,9 +141,10 @@ def main() -> int:
     completed = list(workspace.get("completed_receipts") or [])
     for receipt in (
         str(args.manifest.relative_to(ROOT)) if args.manifest.is_relative_to(ROOT) else str(args.manifest),
-        "research_entity/claycode/target/ANDREAS_UBUNTU_BASE_ACCEPTANCE.json",
+        "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_V2.json",
+        "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
         "research_entity/claycode/target/FULL_FRANK_HANDOFF_PRODUCTION_RECEIPT.json",
-        "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_TARGET_GATE.json",
+        "research_entity/claycode/target_receipts/FULL_FRANK_HANDOFF_RECEIPT.json",
     ):
         if receipt not in completed:
             completed.append(receipt)
@@ -154,6 +155,7 @@ def main() -> int:
         "target_host": TARGET,
         "manifest": str(args.manifest.relative_to(ROOT)) if args.manifest.is_relative_to(ROOT) else str(args.manifest),
         "manifest_sha256": manifest_hash,
+        "strict_target_receipt": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
         "git_head_before_generated_evidence": git_head,
         "work_packages_passed": EXPECTED_WPS,
         "application_count": len(required_apps),

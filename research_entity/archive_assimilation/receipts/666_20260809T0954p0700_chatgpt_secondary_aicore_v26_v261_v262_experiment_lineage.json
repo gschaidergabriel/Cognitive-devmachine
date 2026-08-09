@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0954p0700-chatgpt-secondary-aicore-v26-v261-v262-experiment-lineage",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "COMPLETE_FOR_11_FILE_V261_V262_EXPERIMENT_SHARD",
+  "source_universe": "DRIVE_CLAY/AICORE/training/v26",
+  "exact_level0_coverage_credit_percent": 0.0,
+  "source_files": [
+    {"path":"pruefe_v262.py","bytes":2319,"sha256":"0d88efb834f0c3ea8ba19201063363b82238e79b5411cf30ce58bf4e7ea07dde"},
+    {"path":"runde1_regeltreue.py","bytes":5470,"sha256":"c5471dc6e59f639b99a9235d06a9d1288e442e8305d39f146d2bce5aa458fbe3"},
+    {"path":"runde3_gegenleser.py","bytes":3061,"sha256":"74dd9def62b9b03b27008078828995a3f094a9b7bf0b96cbba7ddcc5ee0aa52c"},
+    {"path":"train_v262_unsloth.py","bytes":6487,"sha256":"4dd2488ab4f416703335f43554116e48ecbf79152bbb1aaf7fe64495f8447936"},
+    {"path":"run_train_v262.bat","bytes":829,"sha256":"aa2fb5b2f50bbe560645d0d898f2ce3ad21d6a7a59fec710ff9e883d2844e734"},
+    {"path":"unsloth_rauchtest.py","bytes":4962,"sha256":"628b09030696e97209e97702d97d7c5b06d14a2b9bbcd9d741f34bf71e719a56"},
+    {"path":"40_v261_fix.py","bytes":6188,"sha256":"feab34d77b3488ff8dec0e8b4e60cdff03686a7ade3ab8148acaee7ac9c6d9a3"},
+    {"path":"42_v261_build.py","bytes":5760,"sha256":"8117f88731e2e6ab42ef7db861d6c3a0cbf1b811bae982b4716f3264b2c829e0"},
+    {"path":"43_realitaet_laengenbewusst.py","bytes":3671,"sha256":"67ef3cb4c11325833bd68b4f1de6481f13d27ea4ae319ec3ae45e10d214cf557"},
+    {"path":"50_kraftausdruecke_nachruesten.py","bytes":2232,"sha256":"cadc829a1e880f7fe881d93af8f9611ad11f7152feb5a44cdcce37cb30d9032a"},
+    {"path":"30_rendern.py","bytes":2269,"sha256":"0a0fb7335430ed0b4d310a8fea78f772a7b7ba0a665cd1863e560c6b9ad50524"}
+  ],
+  "lineage": {
+    "format_repair": {
+      "finding": "v26 explicitly re-rendered training rows into the live llama-server prompt format, including the empty think-block generation prefix. Earlier v23/v25 lineage is described as having been trained through a different HF template, creating a silent train/inference format break.",
+      "mechanism": "30_rendern.py isolates assistant answer spans so loss is applied only to assistant targets while the generation prefix remains prompt context."
+    },
+    "runtime_truth_repair": {
+      "finding": "v26.1 introduced deterministic BODY/REALITY fixes to align training system text with the measured runtime environment rather than leave stale or invented world claims.",
+      "risk": "Static runtime facts embedded into training prose can immediately become stale; modern architecture should keep volatile facts in typed runtime state and train only the contract for reading them."
+    },
+    "length_repair": {
+      "finding": "A full REALITY block caused severe sequence overflow. A later length-aware script inserted that block only when the complete example stayed inside a token budget, explicitly trading coverage for no truncation/content mismatch.",
+      "historical_measured_claim": "The full block was reported as 512 tokens and pushed 1082 examples beyond 2048; conditional insertion targeted about 25% coverage."
+    },
+    "prompt_parity_repair": {
+      "finding": "A 505-character KRAFTAUSDRUECKE runtime block was found in zero v26.1 training examples, so v26.2 deterministically injected the exact fresh prompt block into training system texts. This is direct evidence that runtime-prompt parity was already recognized as a correctness requirement."
+    },
+    "architecture_targeting": {
+      "base_model_claim": "Qwen3.5-4B hybrid with 32 layers: historical review records 8 layers with standard q/k/v/o attention projections and 24 layers with linear_attn projections.",
+      "v261_issue": "LoRA on a small standard target subset reaches the conventional attention path in only part of the hybrid stack; MLP projections remain the main shared adapted path in the other layers.",
+      "v262_change": "The v26.2 script targets the seven standard projections q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj. It explicitly leaves linear_attn projections for a separate experiment rather than mixing them into the A/B.",
+      "lesson": "LoRA target discovery must be architecture-aware and measured against actual module topology, not assumed from common Transformer names."
+    },
+    "overfit_risk": {
+      "historical_dataset": "3785 examples, 2 epochs, answer-span-only loss; review records 167875 target tokens out of 4863646 total tokens (3.4%).",
+      "historical_risk_signal": "The review estimated v26.2 would have about 2.7x more trainable parameters on the same small target-token surface, raising trainable-parameter/target-token ratio from about 94:1 to about 253:1.",
+      "mitigation_added": "v26.2 added a 328-example never-trained eval set and periodic eval, so overfitting could be observed instead of inferred from train loss alone."
+    },
+    "recovery_and_preflight": {
+      "finding": "The v26.2 wrapper restarts after process failure, resumes from checkpoints, stops on a FERTIG marker and has a 60-attempt loop guard. Separate smoke/preflight scripts test model loading, adapter placement, backward fit, span masking, curriculum sampler and required file topology before a full run.",
+      "lesson": "Long training jobs should be restartable and preflight-gated, with explicit completion markers and bounded retry loops."
+    }
+  },
+  "preserved_contradictions": [
+    {
+      "id": "V262-C1-MAXLEN",
+      "artifact_a": "pruefe_v262.py and unsloth_rauchtest.py explicitly expect/test MAX_LEN=2048.",
+      "artifact_b": "train_v262_unsloth.py contains MAX_LEN=2432 and states that 2048 would still truncate 288 examples while 2432 truncates zero.",
+      "related_report": "runde3_gegenleser.py still describes the planned v26.2 comparison as max_len 2048.",
+      "resolution": "UNRESOLVED_ITERATION_OR_STALE_PREFLIGHT_LINEAGE",
+      "rule": "Do not report one canonical v26.2 max length until file chronology/build identity is reconciled."
+    },
+    {
+      "id": "V262-C2-CLEAN_AB",
+      "claim": "Historical comments repeatedly call v26.2 a clean A/B against v26.1 with identical data.",
+      "counterevidence": "The final training script also adds the missing KRAFTAUSDRUECKE prompt block and a never-trained eval set; the review notes max length and target modules were changed together.",
+      "resolution": "NOT_STRICT_SINGLE_VARIABLE_AB",
+      "rule": "Treat it as a controlled lineage improvement attempt, not a scientifically clean single-variable causal experiment."
+    },
+    {
+      "id": "V262-C3-REALITY_INSERTION",
+      "artifact_a": "40_v261_fix.py describes insertion of a REALITY block in roughly 35% of stage-1/2 examples.",
+      "artifact_b": "43_realitaet_laengenbewusst.py later replaces this with token-budget-aware insertion targeting roughly 25% to avoid truncation.",
+      "resolution": "LATER_LENGTH_AWARE_TRANSFORM_SUPERSEDES_BLIND_PERCENT_INSERTION_FOR_BUILD_LINEAGE",
+      "rule": "Keep both as historical stages; do not aggregate their percentages."
+    }
+  ],
+  "current_architecture_feedback": {
+    "harness": [
+      "Require an executable prompt/state-schema parity test between training examples and inference assembly.",
+      "Track LoRA target coverage by actual layer/module topology before training; report adapted layers and parameter counts by module family.",
+      "Report effective supervised target tokens separately from total context tokens and compute trainable-parameter/target-token ratios as an overfit risk signal.",
+      "Never call a run a clean A/B when more than one training variable or data transform changed; encode experiment factors explicitly.",
+      "Preflight sequence length against the full rendered corpus and forbid silent truncation of supervised answer spans."
+    ],
+    "claycode": [
+      "Prompt assembly, runtime facts and supervised answer spans should be typed separately so rendering parity can be compiled and tested rather than maintained by copied strings.",
+      "Model topology introspection should generate adapter target sets; do not hard-code canonical Transformer projection names as universal truth."
+    ],
+    "unifieddb": [
+      "Persist experiment factors, corpus hash, prompt-schema hash, model topology hash, target-module set, max length, supervised-token count and eval split identity as immutable run metadata."
+    ],
+    "claygraph": [
+      "Represent v26.1->v26.2 as a version graph with multiple simultaneous factor edges and explicit contradiction nodes for stale preflight/report artifacts."
+    ],
+    "frank": [
+      "Volatile reality/body facts should come from current typed state, not be baked as literal historical facts into weights; train the behavior of grounding on state instead."
+    ],
+    "needle": [
+      "Effect/tool ownership is orthogonal to LoRA language training; avoid teaching obsolete executable syntax merely to match historical prompt text."
+    ],
+    "gwt": [
+      "Runtime state should enter as current evidence with provenance rather than as memorized world text."
+    ],
+    "emergenz": [
+      "Any behavioral improvement attributed to adapter expansion needs factor-isolated ablations because prompt/data/length changes can produce the same apparent gain."
+    ]
+  },
+  "security_and_authority": {
+    "training_started": false,
+    "training_authorized": false,
+    "note": "This receipt analyzes historical training code only; no current paid or local training was executed."
+  },
+  "remaining_v26_obligations": [
+    "Continue semantic closure of the remaining direct v26 files outside this 11-file experiment shard and the already-closed abzug/eval child folders.",
+    "Resolve exact chronology/build identity for the 2048-vs-2432 v26.2 max-length artifacts.",
+    "Locate and hash-close referenced rendered train/eval corpora and adapter/checkpoint artifacts where accessible.",
+    "Cross-reconcile historical hybrid-layer topology claims against the exact model config/checkpoint metadata if present."
+  ],
+  "earned_work_hours_added": 0.0,
+  "created_at": "2026-08-09T09:54:00+07:00"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-base14-wp03-ir-20260809T211015p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:10:15+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "reason_clay": "clay{delta:\"Added tools/claycode_base_ir.py as a WP03 production component over active V6 syntax. It lowers records/interfaces/generics/unions/optional types/Needle signatures into deterministic typed declaration IR, separates semantic_ir_sha256 from source_sha256 and grammar_sha256, rejects duplicate named declarations, classifies local/generic/unresolved type uses, and fixes generic resolution to declaration-local scope. Relaxed-parser sandbox fixture passed layout equivalence, source-vs-semantic identity separation, semantic mutation discrimination, duplicate rejection, type resolution and generic-scope isolation.\",evidence:[\"git:5006cb89cb330594986e091a9caa2454e3611abe\",\"tools/claycode_base_ir.py\",\"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay\",\"research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay\"],epistemic_class:\"IMPLEMENTATION_DELTA_PLUS_SANDBOX_REGRESSION\"}",
+    "work_clay": "Keep WP02 receipt-gated. In parallel, exercise tools/claycode_base_ir.py on the admitted G9 V3 + Dialect V3 corpus using the current strict V6 parser. Extend only from concrete lowering/type counterexamples. For WP03 closure, require typed records/interfaces/collections/union/optional/generic identities, semantic/source/runtime identity separation, duplicate/conflict diagnostics, real FRANK/adaptive-state fixtures and no untyped escape hatch. Do not promote WP03 from the sandbox fixture alone.",
+    "completion_clay": "Existing BASE14 completion law remains. WP03 needs production strict/full-corpus typed IR receipts and real FRANK/adaptive-state acceptance; the current component is implementation progress, not package PASS.",
+    "status": "READY"
+  }
+}

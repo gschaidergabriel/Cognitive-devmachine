@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1720p0700-hwp02-idempotency-repair",
+  "trigger": "harness",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "h1_gate": "BLOCKED_ON_BASE_CLAYCODE_RELEASE",
+  "coverage_basis": [
+    "research_entity/mesh_feedback/20260809T1703p0700-live-fusion/LIVE_REFRESH_3.json",
+    "research_entity/trigger_runs/harness/20260809T1714p0700-hwp02-idempotency-fingerprint/INTERCONNECT_MANIFEST.json",
+    "research_entity/trigger_runs/harness/20260809T1714p0700-hwp02-idempotency-fingerprint/FINAL_REPORT.md",
+    "research_entity/harness/HARNESS_WORKSPACE.json",
+    "research_entity/harness/reference_state_ledger.py",
+    "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+    "gschaidergabriel/Dr.-Unterweger@9120ad8285cf84ea8cd50282355d1e73aa081146 runtime-state lineage",
+    "post-fingerprint repository reread through the repair commit"
+  ],
+  "peer_coverage": {
+    "clayresearch": "COVERED_BY_LIVE_FUSION; MATERIAL_CHANGE: semantic idempotency now treated as safe state-transition boundary",
+    "frank": "COVERED_BY_LIVE_FUSION_PLUS_REFERENCE_BASELINE_REREAD; MATERIAL_CHANGE: retry identifiers cannot authorize changed state semantics",
+    "gwt": "COVERED_BY_LIVE_FUSION; NO_CHANGE_FROM_THIS_REPAIR",
+    "emergenz": "COVERED_BY_LIVE_FUSION; NO_CHANGE_FROM_THIS_REPAIR",
+    "claycode": "COVERED_BY_LIVE_FUSION; MATERIAL_CONSTRAINT: H2 lowering/runtime must preserve semantic idempotency equivalence and transaction placement",
+    "hyperposition": "COVERED_BY_LIVE_FUSION; NO_CHANGE_FROM_THIS_REPAIR",
+    "claygraph": "COVERED_BY_LIVE_FUSION; NO_CHANGE_TO_GRAPH_AUTHORITY; future run-graph replay must bind corrected ledger receipts",
+    "unifieddb": "COVERED_BY_LIVE_FUSION_PLUS_FRANK_RUNTIME_STATE REREAD; MATERIAL_CONSTRAINT: semantic replay identity and lock scope must remain explicit",
+    "harness": "DIRECT_REREAD_AND_IMPLEMENTATION_ON_CURRENT H-WP-02 REFERENCE LINEAGE"
+  },
+  "live_worker_decision": {
+    "work_package": "H-WP-02-STATE-LEDGER",
+    "workspace_claim": "chatgpt-secondary-sol-current",
+    "decision": "CONTINUE_EXISTING_CLAIM_AND_REPAIR_CONFIRMED_COUNTEREXAMPLE",
+    "duplicate_new_claim": false
+  },
+  "shared_ancestry_rule": "Passing Harness tests remain component evidence, not independent scientific replication of inherited architecture claims.",
+  "identity_boundary": "Research Entity repaired/tested a Harness component for Frank; Frank did not modify or authorize modification of its own Harness.",
+  "preflight_status": "PASS_FOR_COMPONENT_REPAIR_AND_EXECUTION"
+}

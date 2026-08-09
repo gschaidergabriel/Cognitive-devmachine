@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """ClayCode BASE typed declaration IR prototype for CC-WP-03.
 
-This component lowers accepted V6 syntax into a deterministic declaration/type IR while
-keeping semantic identity, source identity and parser-contract identity distinct. It is not
-the full evaluator/compiler IR and does not close CC-WP-03 by itself.
+This component lowers accepted declarative BASE-D V9 syntax into a deterministic
+declaration/type IR while keeping semantic identity, source identity and parser-contract
+identity distinct. Procedural structured functions are handled by the generic structured
+backend; this module intentionally does not silently discard or reinterpret that dialect.
+It is not the full evaluator/compiler IR and does not close CC-WP-03 by itself.
 """
 from __future__ import annotations
 
@@ -16,7 +18,7 @@ from typing import Any
 from lark import Lark, Token, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
 IR_SCHEMA = "claycode-base-typed-decl-ir/1"
 DECL_RULES = {
     "record_decl", "interface_decl", "class_decl", "needle_decl", "cycle_decl",
@@ -274,6 +276,7 @@ def lower_program(source: str, grammar: str, *, strict: bool = True) -> dict[str
     semantic_identity = sha256_bytes(stable_bytes(semantic_payload))
     return {
         "schema_version": IR_SCHEMA,
+        "surface": "BASE_D_V9_DECLARATIVE",
         "identity": {
             "semantic_ir_sha256": semantic_identity,
             "source_sha256": sha256_bytes(source.encode("utf-8")),
@@ -327,8 +330,9 @@ needle lower(x:Box<Int>)->Result<Int|Error>
     )
     passed = same_semantics and source_distinct and mutation_distinct and type_resolution_ok and duplicate_rejected and generic_scope_local
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "component": "ClayCode BASE typed declaration IR",
+        "surface": "BASE_D_V9_DECLARATIVE",
         "strict_parser": strict,
         "same_semantics_across_layout": same_semantics,
         "source_identity_remains_distinct": source_distinct,
@@ -337,7 +341,7 @@ needle lower(x:Box<Int>)->Result<Int|Error>
         "duplicate_declaration_rejected": duplicate_rejected,
         "generic_scope_is_declaration_local": generic_scope_local,
         "pass": passed,
-        "scope_guard": "PASS covers typed declaration lowering/identity invariants in this fixture only; it is sandbox/proxy evidence if strict_parser=false and does not close CC-WP-03.",
+        "scope_guard": "PASS covers typed declaration lowering/identity invariants in this fixture only; it is sandbox/proxy evidence if strict_parser=false and does not close CC-WP-03."
     }
 
 
@@ -359,15 +363,13 @@ def main() -> None:
         source_path = Path(args.source)
         out = lower_program(source_path.read_text(encoding="utf-8"), grammar, strict=strict)
         out["source_path"] = str(source_path)
-        out["pass"] = True
-        out["scope_guard"] = "Successful lowering is a component receipt only; full WP03 corpus/type obligations remain."
     text = json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if args.output:
-        p = Path(args.output)
-        p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(text, encoding="utf-8")
+        target = Path(args.output)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(text, encoding="utf-8")
     print(text, end="")
-    if not out.get("pass"):
+    if args.self_test and not out["pass"]:
         raise SystemExit(1)
 
 

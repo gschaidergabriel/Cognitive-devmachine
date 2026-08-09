@@ -1,0 +1,72 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1656p0700-trace-replay-v1",
+  "hypotheses":[
+    {
+      "id":"H-TR-001",
+      "statement":"A loop-aware content-addressed TurnTraceEnvelope localizes H1/H2 semantic divergence more precisely than final-state-only comparison.",
+      "status":"SUPPORTED_LOCAL_SYNTHETIC",
+      "evidence":["EXECUTION_RECEIPT.json:CROSS_IMPLEMENTATION_ID_NORMALIZATION","EXECUTION_RECEIPT.json:SELF_TEST"],
+      "falsifier":"Matched H1/H2 runs show that stage-level semantic projection produces frequent false divergence or misses divergences detected by a simpler final-state oracle."
+    },
+    {
+      "id":"H-TR-002",
+      "statement":"Binding one immutable status snapshot to the exact final semantic/graph basis prevents mixed-epoch status surfaces.",
+      "status":"SUPPORTED_BY_VALIDATOR_CONSTRUCTION_NOT_LIVE_TESTED",
+      "evidence":["trace_replay_v1.py:STATUS_NOT_BOUND_TO_FINAL_BASIS test"],
+      "falsifier":"A live atomic-snapshot implementation still emits a status surface whose component basis identities cannot be reconciled to one committed state."
+    },
+    {
+      "id":"H-TR-003",
+      "statement":"Replay identity should include an environment fingerprint in addition to seed/input/state identity for deterministic claims.",
+      "status":"SUPPORTED_EXTERNAL_ENGINEERING_PRECEDENT_AND_LOCAL_VALIDATOR",
+      "evidence":["FoundationDB Debugging in FDB: simulation reproducibility depends on OS/build environment","trace_replay_v1.py:ENV_FINGERPRINT_REQUIRED"],
+      "falsifier":"Target H1 experiments demonstrate byte/semantic deterministic replay across materially different environment/toolchain fingerprints without unexplained divergence."
+    },
+    {
+      "id":"H-TR-004",
+      "statement":"A recurrence-aware effect trace can detect authority drift by enforcing capabilities_after subseteq capabilities_before unless an external authorization receipt exists.",
+      "status":"SUPPORTED_LOCAL_SYNTHETIC",
+      "evidence":["EXECUTION_RECEIPT.json:1400 mutation sweep","Safe-Effect recurrence control delta"],
+      "falsifier":"A legitimate H1 effect transition requires recurrent self-expansion of authority without any external authority event."
+    },
+    {
+      "id":"H-TR-005",
+      "statement":"A deterministic in-process replay lane should be paired with an outside-in non-deterministic full-system fault lane because each has different blind spots.",
+      "status":"OPEN_WITH_STRONG_EXTERNAL_ENGINEERING_PRECEDENT",
+      "evidence":["TigerBeetle VOPR/Vortex defense-in-depth testing"],
+      "falsifier":"On FRANK's frozen fault corpus, the outside-in lane finds no distinct failure class or coverage gain after sufficient runs while imposing material cost."
+    },
+    {
+      "id":"H-TR-006",
+      "statement":"Cross-node causal IDs should be transportable independently from canonical semantic truth, analogous to distributed tracing context.",
+      "status":"OPEN_ENGINEERING_ANALOGUE",
+      "evidence":["OpenTelemetry SpanContext/propagation specification"],
+      "falsifier":"FRANK can preserve complete cross-node causal ancestry/replay without transportable trace context or the extra context creates semantic-authority confusion."
+    }
+  ],
+  "counterhypotheses":[
+    {
+      "id":"CH-TR-001",
+      "statement":"One envelope becomes too large and increases state/trace amplification enough to harm the runtime.",
+      "test":"Store large stage payloads content-addressed and keep only hashes/refs in the envelope; measure p50/p95/p99 latency, bytes/turn and recovery cost."
+    },
+    {
+      "id":"CH-TR-002",
+      "statement":"Strict causal-stage validation overconstrains legitimate bypass paths.",
+      "test":"Replay frozen BYPASS scenarios with explicit typed bypass receipts; validator must admit declared bypass without allowing silent stage collapse."
+    },
+    {
+      "id":"CH-TR-003",
+      "statement":"Environment fingerprinting is too coarse or too sensitive to predict replay equivalence.",
+      "test":"Factorially vary OS/runtime/dependency/build dimensions and identify the minimal fingerprint subset that predicts divergence."
+    },
+    {
+      "id":"CH-TR-004",
+      "statement":"Semantic projection normalization can hide a meaningful implementation-specific divergence.",
+      "test":"Mutation-test normalization fields and require explicit representation-normalization rules with negative fixtures before H2 PASS."
+    }
+  ],
+  "promotion":"NONE",
+  "evidence_boundary":"Shared project contracts plus this validator are not independent scientific replication of FRANK architecture claims."
+}

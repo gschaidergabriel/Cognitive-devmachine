@@ -1,13 +1,23 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "contract_id": "CLAYCODE_BASE_ANDREAS_UBUNTU_TARGET_RECEIPT_V1",
   "target_host": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
   "purpose": "Define the minimum evidence shape for host-specific ClayCode BASE acceptance. Hosted CI/proxy receipts cannot satisfy this contract. The consolidated V2 target runner is an evidence collector only; a separate strict adjudication receipt must satisfy this contract before WP14 can pass.",
   "collector_receipt_path": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_V2.json",
   "expected_receipt_path": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
   "wp02_parser_contract": {
-    "selected_grammar_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark",
-    "required_identity_rule": "At execution time the collector, strict-LALR receipt and full-corpus frontend receipt must all embed the exact SHA-256 of selected_grammar_path, while the active production canonicalizer must identify the same selected_grammar_path. A V7/V10/V13 or other candidate receipt cannot satisfy WP02 unless the acceptance contract is explicitly versioned and changed first.",
+    "selected_grammar_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+    "strict_receipt_path": "research_entity/claycode/target_receipts/STRICT_LALR_D_SELECTED_WP02_TARGET_RECEIPT.json",
+    "frontend_receipt_path": "research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json",
+    "canonicalizer_receipt_path": "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json",
+    "selection_reason": "V9/V10 dotted-prefix lookahead makes horizontal trivia semantically active for Needle.owns(X) versus Needle.owns (X). V17 is the minimal declarative V9 successor that excludes call-parenthesis/comment starts from the dotted-prefix RHS lookahead without importing V7/V10/V16 typed-fn or operator-surface changes.",
+    "selection_evidence": [
+      "research_entity/claycode/base/receipts/CC_WP02_V16_SANDBOX_20260809T2140p0700.json",
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+      "tools/claycode_v17_declarative_trivia_discriminator.py"
+    ],
+    "required_identity_rule": "At execution time the collector, strict-LALR receipt and full-corpus frontend receipt must all embed the exact SHA-256 of selected_grammar_path, while the active production canonicalizer must identify the same selected_grammar_path. No predecessor/unified research-candidate receipt can satisfy WP02 unless this contract is explicitly versioned and changed first.",
+    "strict_promotion_rule": "Selecting a repair candidate in this contract is not CC-WP-02 PASS. The selected grammar must still pass strict interegular-enabled construction, full admitted G9+Dialect corpus, canonical identity/trivia equivalence and target-host adjudication before promotion.",
     "executable_slice_separation": "Dedicated WP03/pure-compiler typed-fn evidence may retain its separately versioned grammar contract; it must not be relabeled as WP02 declarative strict evidence."
   },
   "required_top_level": [
@@ -53,7 +63,8 @@
     "semantic_escape_hatches", "h2_h3_handoff_ready"
   ],
   "additional_required_target_discriminators": [
-    "WP02 strict/full-corpus/canonicalizer evidence is bound to the selected V9 grammar path and exact repository bytes",
+    "WP02 strict/full-corpus/canonicalizer evidence is bound to wp02_parser_contract.selected_grammar_path and exact repository bytes",
+    "The selected WP02 grammar must preserve horizontal trivia identity for call syntax, including Needle.owns(X) == Needle.owns (X)",
     "BASE_RUNTIME_V04_HARDENING_RECEIPT.json pass=true on Andreas Ubuntu",
     "BASE_COMPILER_MAINLINE_RUNTIME_BRIDGE_RECEIPT.json pass=true on Andreas Ubuntu",
     "real application rows must not inherit proxy acceptance flags",
@@ -62,7 +73,8 @@
   "hard_rules": [
     "target_host must equal ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
     "collector target host checks must all pass on a clean non-CI non-container checkout",
-    "CC-WP-02-PARSER-CANON must use the selected V9 grammar bytes for strict-LALR and full-corpus evidence and the same V9 path for the active production canonicalizer",
+    "CC-WP-02-PARSER-CANON must use the exact selected WP02 grammar bytes for strict-LALR and full-corpus evidence and the same selected path for the active production canonicalizer",
+    "horizontal whitespace must not change admitted call semantics into dotted-prefix relation semantics",
     "every required work package must pass",
     "all ten applications must pass through the production ClayCode chain",
     "GUI_INTERACTIVE must execute an actual Ubuntu interactive/event-loop adapter, not only a hosted headless state proxy",

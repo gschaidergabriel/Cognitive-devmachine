@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "latest_frank_run": "same-day FRANK H1 refreeze / loop-readout commits inspected through live commit history",
+  "latest_frank_architecture_claycode_artifact": null,
+  "review_items": [
+    {
+      "claim_id": "G1_EFFECT_AUTHORITY_EXTERNAL",
+      "frank_statement": "FRANK/model-originated intent or self-observation must not directly mint execution authority; execution authority remains independently enforced at the runtime/effect boundary.",
+      "frank_source_refs": [
+        "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
+        "research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md"
+      ],
+      "ancestry_families": [
+        "OWNER_FIXED_FRANK_CLAY_NATIVE_AUTHORITY_BOUNDARY",
+        "CURRENT_CLAYCODE_G9_EFFECT_CONTRACT",
+        "CURRENT_RUNTIME_IMPLEMENTATION_CANDIDATE"
+      ],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A serialized or model-generated capability-shaped Clay value could safely function as bearer authority if cryptographically sealed and independently validated.",
+      "falsifier": "Demonstrate a simpler serializable authority mechanism with equivalent anti-forgery, revocation, runtime binding, delegation, replay and FFI properties under the actual Frank threat model, without conflating model output with minting authority.",
+      "independent_checks": [
+        "WASI official capability model independently uses unforgeable runtime handles for resource access.",
+        "WebAssembly Component Model independently uses opaque/generative per-instance resource handles and canonical lift/lower boundaries.",
+        "Current-run synthetic discriminator separately rejects textual/structural/copied/stale/revoked/wrong-runtime capability proxies under the fail-closed model."
+      ],
+      "adversarial_checks": [
+        "textual capability name treated as authority",
+        "structural forged capability record",
+        "copied bearer-shaped record",
+        "cross-runtime laundering",
+        "stale epoch",
+        "revoked handle"
+      ],
+      "verdict": "REFINED",
+      "reason": "The fixed authority boundary is retained. The implementation refinement is to prefer live runtime/broker handles for BASE and make cross-process serialization an explicit lowering problem rather than a Clay-data representation trick. External sources support the boundary pattern but do not prove the exact Clay implementation.",
+      "claycode_action": "Preserve current G9 authority semantics; test the existing runtime handle candidate and only add a cross-process broker/table lowering if an executable FFI counterexample requires it.",
+      "affected_claycode_artifacts": [
+        "tools/claycode_base_runtime.py",
+        "tools/claycode_base_runtime_validation.py",
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"
+      ]
+    },
+    {
+      "claim_id": "G2_EXECUTION_EVIDENCE_NOT_AUTHORITY",
+      "frank_statement": "Harness/build evidence may justify an architecture/release decision but cannot itself authorize Frank's external effects.",
+      "frank_source_refs": [
+        "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
+        "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md"
+      ],
+      "ancestry_families": [
+        "FRANK_CLAY_AUTHORITY_BOUNDARY",
+        "HARNESS_EXECUTION_EVIDENCE_BOUNDARY"
+      ],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A verified signed build/test attestation could double as a bearer capability, reducing the number of authority objects.",
+      "falsifier": "Show a concrete effect design where such reuse remains live, attenuable, revocable, scope-bound and non-replayable while still retaining historical attestation semantics.",
+      "independent_checks": [
+        "in-toto Statement independently models attestation as a claim about immutable subject digest plus predicate, not as a runtime resource handle.",
+        "GitHub artifact attestations independently model provenance of where/how a build occurred and require verification by consumers.",
+        "WASI independently models runtime capability as an unforgeable handle, providing a separate object class from provenance evidence."
+      ],
+      "adversarial_checks": [
+        "valid attestation substituted for runtime handle in the conceptual gate model",
+        "stale successful receipt against changed runtime/test/workflow",
+        "hosted-CI evidence incorrectly upgraded to target-host acceptance"
+      ],
+      "verdict": "SUPPORTED",
+      "reason": "Independent external mechanisms and the current discriminator strongly support orthogonality between historical provenance/evidence and live runtime authority. This supports the separation, not the exact candidate schema.",
+      "claycode_action": "Add proof-carrying gate admission infrastructure but explicitly type it as evidence/provenance, never CapabilityHandle.",
+      "affected_claycode_artifacts": [
+        "GATE_ATTESTATION_CONTRACT_CANDIDATE_V1.json",
+        ".github/workflows/claycode-base-runtime-gate.yml",
+        "research_entity/claycode/autonomous/BASE_RUNTIME_CAPABILITY_RECEIPT.json"
+      ]
+    }
+  ],
+  "scientific_boundary": "This review prevents FRANK↔ClayCode recursive agreement from counting as replication. External standards support mechanism separation; only production and target-host execution can close BASE acceptance."
+}

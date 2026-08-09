@@ -1,0 +1,54 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1247p0700-chatgpt-secondary-pf-subconscious-policy-lineage",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"subconscious learned idle-thought policy, reward/hallucination gate, PPO persistence and failure lineage"},
+  "source_refs":["services/subconscious.py@abba90a5767d85abc8a1ac340bae92842dab35c1","commit:230aa43e5f57710fd14ef11d8b108704f0188db4","commit:7ab9ed5cbefbff733e8818c4486e9afba00cb2f9","commit:f8e8e907e6fe37181e306e1aa14ee81e656ad194","commit:c69e5b4f3b05625a2b78dc3be129727206384f21","commit:e7ac4bc3c257b725a79020e354c997519ac086c8","commit:475652157d19b9f27625f07c8b9c125a04267b59"],
+  "lineage":[
+    {"ref":"commit:230aa43e5f57710fd14ef11d8b108704f0188db4","event":"Introduced ~3.1M-parameter Actor-Critic learned idle-thought policy, PPO consolidation training, reward shaping, verified-memory pre-input gate, seven post-output hallucination checks, and hallucination penalty feedback."},
+    {"ref":"commit:7ab9ed5cbefbff733e8818c4486e9afba00cb2f9","event":"32-bug audit fixed critical policy/training semantics including post-processing, spurious Jaccard penalties and action-mask omission during PPO training."},
+    {"ref":"commit:f8e8e907e6fe37181e306e1aa14ee81e656ad194","event":"30-minute cybernetic observation found fallback choices were not recorded; 46% of decisions were lost to learning. Fixed by storing behavior-policy log-prob, state, mask and critic estimate for fallback actions."},
+    {"ref":"commit:c69e5b4f3b05625a2b78dc3be129727206384f21","event":"Schema migration failure discovered: CREATE TABLE IF NOT EXISTS did not add mask column; record_transition silently failed on every call. Explicit PRAGMA/ALTER migration restored recording; four transitions verified in first three minutes."},
+    {"ref":"commit:e7ac4bc3c257b725a79020e354c997519ac086c8","event":"SFT stabilizer added weight decay, reference anchoring, drift monitoring and gradient clipping to guard policy collapse/catastrophic forgetting."},
+    {"ref":"commit:475652157d19b9f27625f07c8b9c125a04267b59","event":"20-category evolution exposed historical 19-vs-20 mask mismatch; loader now pads older masks with available=1.0 or truncates larger masks so old experience remains usable."},
+    {"ref":"services/subconscious.py@abba90a5767d85abc8a1ac340bae92842dab35c1","event":"Frozen head is reduced to ~19K parameters with 20 categories, 100-dim state, CPU inference, stored action masks, PPO clipped objective, SFT anchor/health checks, atomic checkpointing and explicit cold-start exploration."}
+  ],
+  "frozen_head_mechanism":{"network":"Actor-Critic MLP approximately 19K parameters","state_dim":100,"actions":20,"ppo":{"learning_rate":0.0003,"clip_ratio":0.2,"entropy_initial":0.05,"entropy_floor":0.005,"batch_size":32,"train_epochs":3,"minimum_buffer":50,"maximum_buffer":500},"cold_start":"phased temperature/fallback schedule, then mature temperature 0.8 and zero fallback","reward_components":["stored-quality","novelty when measured","anti-rumination","conversation consolidation","hypothesis generation","mood movement","type diversity","reflection depth","hallucination penalty"],"hallucination_penalty":"-3.0 * hallucination_score plus extra penalty for multiple violations","persistence":"SQLite transition/history/hallucination/preference data plus atomic torch checkpoint","stability":"gradient clip, weight decay, reference-anchor loss, policy entropy/drift health monitoring"},
+  "negative_results":[
+    {"id":"PF-SUB-FAIL-001","result":"Action mask not applied during PPO training although it constrained action selection.","impact":"Behavior-policy/training-policy mismatch invalidates PPO ratio semantics and can reinforce actions impossible in the sampled state.","ref":"commit:7ab9ed5cbefbff733e8818c4486e9afba00cb2f9"},
+    {"id":"PF-SUB-FAIL-002","result":"Fallback transitions were not recorded; 46% of decisions were absent from learner data.","impact":"Observed policy metrics represented a selected subset and could not learn from the dominant fallback behavior.","ref":"commit:f8e8e907e6fe37181e306e1aa14ee81e656ad194"},
+    {"id":"PF-SUB-FAIL-003","result":"Missing mask-column migration made record_transition fail silently on every call.","impact":"Service could appear healthy while online learning was completely inert.","ref":"commit:c69e5b4f3b05625a2b78dc3be129727206384f21"},
+    {"id":"PF-SUB-FAIL-004","result":"Category growth produced 19-vs-20 historical mask tensors.","impact":"Learner schema evolution requires explicit compatibility transforms; model/data versions cannot be assumed dimension-stable.","ref":"commit:475652157d19b9f27625f07c8b9c125a04267b59"},
+    {"id":"PF-SUB-FAIL-005","result":"Policy-collapse/catastrophic-forgetting risk required explicit anchor/decay/drift/gradient stabilization.","impact":"Small continuously trained policies need health shadows and last-known-good rollback, not loss-only promotion.","ref":"commit:e7ac4bc3c257b725a79020e354c997519ac086c8"}
+  ],
+  "current_inheritance":[
+    {"target":"Needle / routing","delta":"Historical evidence supports a tiny learned routing/policy head over compact state, but every selected action must carry availability mask, behavior-policy probability, provenance and an explicit fallback outcome."},
+    {"target":"Adaptive Visual Learner","delta":"Directly reuse schema-versioned replay-buffer lessons: examples/features/masks/class identities require compatibility metadata; learner health must distinguish no-data/no-op/silent-write-failure from successful training; candidate promotion needs retention/open-set shadows and rollback."},
+    {"target":"Harness","delta":"Regressionize missing transition columns, fallback-data omission, action-mask train/select mismatch, old-mask dimension migration, policy collapse and silent learning inactivity."},
+    {"target":"UnifiedDB","delta":"Persist transition schema/version, feature contract, action/class mask, behavior-policy probability, model version, reward components and outcome provenance atomically. Migrations must be explicit and tested on historical rows."},
+    {"target":"GWT / agency","delta":"Learned idle policy may propose/select candidate cognitive work, never establish truth. Hallucination suppression and reward are behavior-control signals, not epistemic evidence."},
+    {"target":"ClayCode","delta":"Make policy-selection contracts typed: state_version, allowed_actions, selected_action, behavior_logprob, value_estimate, outcome, reward_components and model_version should be replayable first-class data."}
+  ],
+  "reject_or_adapt":[
+    "Do not treat stored reflection or positive mood movement as truth-quality reward.",
+    "Do not allow post-output hallucination score to become sole epistemic authority; it is one gate/penalty signal.",
+    "Do not use catch-and-log-debug around authoritative learner writes without a health invariant proving transitions are actually accumulating.",
+    "Do not assume new action/class categories are semantically available merely because old masks are padded with 1.0; migration policy needs per-category compatibility rules.",
+    "Do not equate training loss, entropy or service uptime with useful online learning."
+  ],
+  "cheap_discriminating_tests":[
+    "Replay one trajectory with a forbidden action and assert selection and PPO training use the identical mask.",
+    "Force 50% fallback routing and assert every decision yields a transition with correct behavior-policy log-prob and outcome.",
+    "Remove a required transition column in a migration fixture and require startup/health to fail loudly before claiming learner-active.",
+    "Load N-action historical rows into N+1 schema and test explicit compatibility for each new action rather than unconditional availability.",
+    "Freeze policy weights while service stays healthy and assert learner health detects zero weight/data progression.",
+    "Inject reward-good but epistemically false generated content and assert truth/evidence stores remain unchanged."
+  ],
+  "earned_work":{"new_credit_hours":0.0,"mapping_candidate":true,"reason":"Strong reusable learner and negative-result value, but overlaps current Needle/adaptive-learning/safety/LCME historical mappings and requires row-level earned-work dedup before hours credit."},
+  "level0_effect":{"exact_global_percent_added":0.0,"reason":"Semantic/history shard only; PF repository-wide tree/history denominator remains unfrozen on unavailable recursive read-tree/archive/clone surface."},
+  "status":"COMPLETE_SEMANTIC_LINEAGE_SHARD",
+  "created_at":"2026-08-09T12:47:00+07:00"
+}

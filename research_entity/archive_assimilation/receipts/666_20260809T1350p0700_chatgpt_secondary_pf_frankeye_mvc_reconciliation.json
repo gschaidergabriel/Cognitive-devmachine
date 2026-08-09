@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1350p0700_chatgpt_secondary_pf_frankeye_mvc_reconciliation",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "gate": "666_RELEASE_GATE",
+  "actor_id": "chatgpt-secondary",
+  "created_at_local": "2026-08-09T13:50:00+07:00",
+  "mode": "LEVEL0_OPEN_SWARM_SHARD",
+  "shard_kind": "project_frankenstein_drive_cross_source_reconciliation",
+  "selected_obligation": "Reconcile historical Project-Frankenstein FrankEye/Digital-Retina vision pipeline and Drive Frank.ink visual pipeline evidence against the current FRANK 0.1 adaptive Micro Visual Classifier requirement.",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_refs": [
+    {
+      "kind": "github_file",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "tools/frank_eye.py",
+      "observed_claim": "FrankEye unified vision module merges Digital Retina v8 CNN classifier, DINOv2 scene analysis, GOLPU feature extraction, Tesseract OCR and OpenCV face detection into a fast CPU-only pipeline producing natural-language image descriptions. It declares fast/deep modes and CPU-only guards."
+    },
+    {
+      "kind": "github_file",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "ext/feature_trainer.py",
+      "observed_claim": "Ground-truth self-knowledge entry frankeye_vision describes FrankEye as 100% local Retina v8 CNN + GOLPU features + OCR/pytesseract + face recognition, CPU-only, no VLM, broad image-format support. This is feature self-knowledge training evidence, not an adaptive visual learner implementation."
+    },
+    {
+      "kind": "drive_text",
+      "title": "llms-full.txt / Institute for Agentic Research full text",
+      "observed_claim": "Frank.ink public/drive text reports a visual pipeline OCR -> YOLOv8n INT8 -> CLIP-B/32 INT8 -> DINOv2 -> VLM-style narrative, p50 about 900 ms on 1 vCPU and about 95% concept recall on an internal benchmark. This is measurement/architecture evidence for a related but non-identical Frank.ink lineage."
+    },
+    {
+      "kind": "rae_current_requirement",
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "path": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+      "observed_claim": "FRANK 0.1 requires an adaptive Micro Visual Classifier with reusable frozen visual features, calibrated confidence/open-set gate, bounded cyclic updates, trusted example tiers, shadow evaluation, promotion/rollback and resource instrumentation."
+    },
+    {
+      "kind": "rae_research_foundation",
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "path": "research_entity/retina/RETINA_MICRO_VISUAL_CLASSIFIER.md",
+      "observed_claim": "Recommended implementation ladder is MVC-0 prototype memory, MVC-1 frozen-backbone linear classifier, MVC-2 tiny MLP only if benchmarks justify it, with confidence != truth and familiarity != evidence."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-PF-FRANKEYE-001",
+      "status": "CURRENT_HISTORICAL_EVIDENCE",
+      "summary": "Project-Frankenstein contains a concrete historical FrankEye vision pipeline with Digital Retina v8 CNN, DINOv2, GOLPU, OCR and face detection. It is a strong feature-backbone/pipeline inheritance source for FRANK 0.1 Retina/MVC work."
+    },
+    {
+      "id": "F-PF-FRANKEYE-002",
+      "status": "OPEN_LINEAGE_DIVERGENCE",
+      "summary": "Drive/IAR Frank.ink visual pipeline evidence uses OCR/YOLOv8n/CLIP/DINOv2/VLM-style narrative and reports p50/recall metrics. This is related to but not byte/architecture-identical with Project-Frankenstein FrankEye, which uses Retina v8/GOLPU/DINOv2/OCR and explicitly says no VLM in self-knowledge training. Treat as cross-lineage divergence requiring reconciliation, not duplicate closure."
+    },
+    {
+      "id": "F-PF-FRANKEYE-003",
+      "status": "NEGATIVE_RESULT_VALUE",
+      "summary": "No evidence in the read Project-Frankenstein/Drive surfaces shows the full FRANK 0.1 adaptive MVC contract already implemented: no versioned prototype/classifier state, trusted GOLD/SILVER/BRONZE admission, candidate-vs-current shadow evaluation, rollback, open-set calibrated MVC states or bounded cyclic update loop were verified in this shard. Therefore historical FrankEye must not be counted as H1 adaptive visual learner PASS."
+    },
+    {
+      "id": "F-PF-FRANKEYE-004",
+      "status": "DIRECTLY_REUSABLE_WITH_ADAPTATION",
+      "summary": "Reusable inheritance candidates: CPU-only runtime guards, modular fast/deep visual pipeline split, OCR + local feature extraction, DINO/GOLPU/Retina feature surfaces, broad-image preprocessing, and natural-language perception-context output. These should become feature-backbone and perception-front-end candidates for MVC-E1/E2/E6, not semantic authority."
+    }
+  ],
+  "branch_feedback": {
+    "retina": {
+      "delta": "Historical FrankEye is a concrete local visual pipeline to preserve as lineage. Use it as baseline/front-end candidate, but append MVC state/update/open-set/rollback semantics rather than treating it as already adaptive."
+    },
+    "frank": {
+      "delta": "FRANK architecture should inherit FrankEye-style local perception surfaces while enforcing the fixed FRANK 0.1 law: micro-classifier prediction != sensor truth; familiarity != evidence; confidence != authority."
+    },
+    "claycode": {
+      "delta": "ClayCode must express not only image description calls but versioned MVC state transitions: buffer admission, prototype/readout update, confidence/open-set outcome, promotion/rejection/rollback, feature-version migration and replay hooks."
+    },
+    "claygraph": {
+      "delta": "ClayGraph should store learned visual entity/prototype lineage as provenance-linked familiarity nodes, not observed-truth nodes."
+    },
+    "unifieddb": {
+      "delta": "UnifiedDB must persist classifier/prototype version identity, training evidence tiers, calibration metadata, feature-backbone compatibility and rollback/rebuild state."
+    },
+    "harness": {
+      "delta": "H1 tests must distinguish historical FrankEye perception from MVC learning; pass requires MVC-E1..E7 style evidence, not only local OCR/CNN/DINO/GOLPU inference."
+    },
+    "gwt": {
+      "delta": "MVC output is a routing/familiarity candidate for workspace broadcast, not a broadcast-level truth source. Unknown/ambiguous/conflict states should increase sensing/retina escalation."
+    },
+    "emergenz": {
+      "delta": "Emergence measurements should test routing/compute savings and lesion-rescue of the MVC layer separately from base Retina perception."
+    },
+    "hyperposition": {
+      "delta": "Represent known/unknown/ambiguous/conflict visual hypotheses as set-valued alternatives until confidence/open-set and sensor evidence justify narrowing."
+    }
+  },
+  "earned_work_mapping_candidates": [
+    {
+      "target": "DOOMSDAY/H1 adaptive visual learner",
+      "class": "REUSABLE_WITH_ADAPTATION",
+      "mechanism": "Local FrankEye perception feature stack and fast/deep split",
+      "provisional_avoided_future_hours_center": 8,
+      "confidence": "medium",
+      "falsifier": "If full code audit shows FrankEye cannot expose stable feature vectors or run on project hardware, reduce to historical context only."
+    },
+    {
+      "target": "MVC-E1/MVC-E6 measurement design",
+      "class": "MEASUREMENT_FOUNDATION",
+      "mechanism": "Drive/IAR pipeline latency and concept-recall metrics provide a historical measurement style and target comparison surface, but require raw benchmark protocol before promotion.",
+      "provisional_avoided_future_hours_center": 3,
+      "confidence": "low_medium",
+      "falsifier": "If raw benchmark data/protocol cannot be recovered, metrics remain context-only and do not credit acceptance thresholds."
+    },
+    {
+      "target": "H1 PASS gating",
+      "class": "NEGATIVE_RESULT_VALUE",
+      "mechanism": "Historical non-adaptive perception must not be miscredited as adaptive MVC implementation.",
+      "provisional_avoided_future_hours_center": 4,
+      "confidence": "medium_high",
+      "falsifier": "Discovery of hidden versioned adaptive classifier/prototype state with trust-tiered cyclic updates in uninspected history/recovery branch."
+    }
+  ],
+  "exact_coverage_credit": 0.0,
+  "coverage_reason": "Semantic shard and cross-source reconciliation receipt only. Combined Level-0 denominator remains NOT_FROZEN; no exact coverage percentage may be increased from this shard alone.",
+  "next_obligations": [
+    "Search Project-Frankenstein history/recovery for prototype memory, classifier version state, open-set thresholding, confidence calibration, rollback, and training buffer terms to falsify or support hidden MVC lineage.",
+    "Recover/raw-audit Drive Frank.ink visual benchmark protocol behind p50~900ms and ~95% concept-recall before using it as measurement evidence.",
+    "Cross-link FrankEye code surfaces with RETINA_MICRO_VISUAL_CLASSIFIER implementation ladder to produce H1 MVC work packages."
+  ],
+  "limitations": [
+    "GitHub connector did not expose recursive tree/history enumeration in this invocation; shard used query-directed file search/read over frozen head and current Drive text surfaces.",
+    "No existing hot workspace file was updated; this receipt is additive and safe under concurrent swarm operation."
+  ],
+  "promotion_boundary": "Do not promote historical FrankEye to adaptive visual learning PASS. Promote only as lineage/reusable substrate candidate and negative-result guard against false PASS."
+}

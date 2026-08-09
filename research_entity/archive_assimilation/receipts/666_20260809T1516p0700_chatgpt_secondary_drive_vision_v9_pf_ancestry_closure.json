@@ -1,0 +1,37 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1516p0700_chatgpt_secondary_drive_vision_v9_pf_ancestry_closure",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "task_id":"666-l0-vision-v9-ancestry-20260809T1514p0700",
+  "status":"COMPLETE_TERMINAL_CROSS_SOURCE_ANCESTRY_DISPOSITION",
+  "question":"Does Drive-documented Frank Vision v9 CLIP/YOLO/VISION-FACTS represent an unaccounted portion of the frozen Project-Frankenstein Level-0 tree/history scope?",
+  "sources":[
+    {"kind":"DRIVE_PRIMARY_PROJECT_NOTE","id":"1dSdxpgiq4SWIN_A7Jp_DXWERR-ohECeV","title":"frank_ink_vision_v9_may10.md","source_date":"2026-05-10","reported_commit_refs":["d2b459f","51715ae","faea9ce","8285b33"],"reported_paths":["engine/vision/clip_classifier.py","engine/vision/object_detector.py","engine/vision/frank_eye.py","engine/vision/pipeline.py","api/master.py"]},
+    {"kind":"PF_FROZEN_HEAD","sha":"abba90a5767d85abc8a1ac340bae92842dab35c1","created_at":"2026-04-05T18:10:31Z"},
+    {"kind":"PF_EXACT_TREE","manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_FROZEN_HEAD_EXACT_TREE_20260809T1455p0700.json","tracked_entries":873,"raw_snapshot":"research_entity/archive_assimilation/raw_tree_snapshots/PF_TREE_abba90a5767d.ls-tree.txt"},
+    {"kind":"PF_EXACT_REACHABLE_HISTORY","manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_GLOBAL_545_CLOSURE_20260809T1358p0700.json","reachable_commits":545}
+  ],
+  "checks":[
+    {"id":"TEMPORAL_ORDER","result":"PASS_POST_FROZEN","evidence":"Drive Vision v9 note is dated 2026-05-10; frozen PF head is 2026-04-05. Therefore Vision v9 cannot be an ancestor or missing pre-freeze component of the frozen PF head."},
+    {"id":"REPORTED_COMMIT_MEMBERSHIP","result":"NOT_IN_PF_REACHABLE_HISTORY","queries":{"d2b459f":0,"51715ae":0,"faea9ce":0,"8285b33":0},"interpretation":"The Drive note's deployment commit references are not members discoverable in the frozen Project-Frankenstein repository history; do not manufacture Git ancestry."},
+    {"id":"PATH_MEMBERSHIP_FROZEN_TREE","result":"NOT_IN_873_FROZEN_TREE","checked_prefix":"engine/vision","checked_specific":"engine/vision/clip_classifier.py","interpretation":"The Drive v9 engine/vision implementation surface is absent from the exact frozen PF tree."},
+    {"id":"PF_KNOWN_VISUAL_LINEAGE","result":"DISTINCT_EARLIER_LINEAGE_PRESENT","evidence":["90596662837a75801fd2024069ee9bd547137869 adaptive YOLO/OCR->VLM escalation","0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb unified FrankEye","279eb175a326cefdb1bbd8281ae1a639ce1e4986 screenshot-specific FrankEye fixes","6158be8ddde637fbf6b78e820239bf4ee8e8b5ee native_vision pivot"],"interpretation":"PF contains an earlier independently tracked visual lineage, while Drive v9 documents a later post-freeze deployment evolution."}
+  ],
+  "terminal_disposition":{
+    "cross_source_relation":"POST_FROZEN_DRIVE_ONLY_DEPLOYMENT_OR_DESCENDANT_LINEAGE_DIRECT_GIT_PARENTAGE_UNPROVEN",
+    "pf_scope_effect":"NO_REOPEN_NO_MISSING_PF_UNIT",
+    "drive_scope_effect":"SEMANTICALLY_ANALYZED_AND_VERSION_RELATION_DISPOSITIONED",
+    "direct_external_git_parentage":"UNKNOWN_NOT_FABRICATED",
+    "reason_terminal":"For Level-0 accounting, exact direct external parent SHA is unnecessary to decide frozen-PF membership: temporal order, exact PF tree non-membership, and PF-history non-membership prove this is not a missing frozen-PF obligation. Preserve the Drive branch as a later independent/deployment lineage with its own provenance rather than forcing identity."},
+  "research_inheritance":[
+    "Preserve Vision v9 CLIP/YOLO/VISION-FACTS as later Drive-side reusable vision evidence, not PF frozen-head completion credit.",
+    "Keep its CLIP open-vocabulary/prototype-bank, smart routing, concurrency fixes and failure sentinels as historical mechanisms subject to existing Retina/vision dedup.",
+    "Do not grant duplicate semantic or earned-work credit; final earned-work adjudication already conservatively credits only the accepted Retina unique remainder."
+  ],
+  "earned_work":{"new_hours":0.0,"reason":"Version/ancestry closure only; visual mechanism value is already being deduplicated in the final earned-work audit."},
+  "exact_global_percent_added":0.0,
+  "release_effect":"CLOSES_EXPLICIT_VISUAL_ANCESTRY_RESIDUAL_FROM_666_20260809T1512p0700_VISUAL_LINEAGE_CROSSREAD_DEDUP; release preflight should crossread this receipt and must not reopen PF tree/history.",
+  "created_at":"2026-08-09T15:16:00+07:00"
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1602p0700-chatgpt-controlflow-precedence-v1",
+  "trigger": "claycode",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "research_class": "RUN_LOCAL_EXECUTABLE_LANGUAGE_RESEARCH",
+  "promotion_requested": false,
+  "current_live_inputs": {
+    "claycode_spec": {
+      "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e"
+    },
+    "grammar": {
+      "path": "research_entity/claycode/g9/grammar.ebnf",
+      "blob_sha": "ec2f17077333955cfdabe6c64868d597e7e734e3"
+    },
+    "union_type_fix_commit": "a8113c4790b234cc0c0637d06d5df554e348f8d6",
+    "ubuntu_target_commit": "386a260a917aa9eb58f6e1c0cae068cb33f8dd89",
+    "previous_surface_canon_run_commit": "482495ec7afc6c901b925d2c3e5f4979548ab4f5",
+    "concurrent_generic_infix_negative_commit": "5d3832ffc22bf59c5bf062d5ea70ed727eeda66c"
+  },
+  "scope": "Discriminate whether current G9 surface drift can be repaired as syntax-only normalization without introducing missing control-flow/operator semantics.",
+  "freshness_note": "Canonical revision/hash remained unchanged immediately before durable run write. Concurrent commits were reread; this run writes only isolated trigger-run artifacts and does not mutate current grammar/canonical state.",
+  "result_summary": [
+    "Concurrent union-type grammar mismatch is resolved and must not be carried as a current blocker.",
+    "Effectful conditional control cannot be naively normalized to an eager ordinary function call/select.",
+    "Flat operator-chain grammar without explicit precedence/associativity produces materially divergent execution.",
+    "Digit-leading bare 4B_emits remains a surface incompatibility; rename or explicit escaped/sigiled identifier is safer than broadening bare identifier lexing.",
+    "No FRANK-specific new primitive is justified by this run; the required deltas are general-purpose language/evaluator semantics."
+  ]
+}

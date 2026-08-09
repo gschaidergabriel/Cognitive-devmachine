@@ -1,6 +1,6 @@
 module clay.stack.latest
 
-epoch 16
+epoch 17
 entity frank-project-global-research-entity
 display_name Clay
 mission_goal "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system"
@@ -24,6 +24,8 @@ stack CURRENT {
   frank_self_observation_boundary=@research_entity/global/FRANK_SELF_OBSERVATION_PROPOSAL_BOUNDARY.md
   frank_identity_boundary=@research_entity/global/FRANK_IDENTITY_BOUNDARY_AND_CONTAMINATION_REPAIR.md
   frank_v0_1_target_host=@research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md
+  frank_loop_of_loops=@research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md
+  frank_loop_of_loops_mesh_feedback=@research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json
 
   claygraph_base=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
   claygraph_migrations=[@research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql]
@@ -80,7 +82,13 @@ rule system_capability_observation uses CURRENT.capability_events
 rule dynamic_work_transport uses CURRENT.work_events
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
-rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host
+rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host + CURRENT.frank_loop_of_loops + CURRENT.frank_loop_of_loops_mesh_feedback
+rule every_registered_branch ingests CURRENT.frank_loop_of_loops as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
+rule FRANK_whole_system research_model = HIERARCHICAL_MULTISCALE_RECURRENT_LOOP_OF_LOOPS until evidence refines_or_refutes
+rule loop_dynamics distinguishes CONVERGING_FIXED_POINT|PRODUCTIVE_LIMIT_CYCLE|STALLED|DIVERGING_OR_OVERTHINKING|CHAOTIC_OR_UNCLASSIFIED
+rule low_state_delta + high_unresolved_pressure -> STALLED; never automatic_CONVERGED
+rule recurrence != emergence
+rule adaptive_recurrence optimizes verified_outcome_gain_per_cost_under_stability_authority_recovery_constraints
 rule home_room("frank") = research_about(FRANK); never role_transition_to(FRANK)
 rule ANDREAS.interface = FRANK_ONLY
 rule ResearchEntity != FRANK
@@ -137,7 +145,10 @@ invariant frank_room_is_research_subject_not_identity_transition
 invariant ResearchEntity_never_appears_as_FRANK_runtime_node_or_user_persona
 invariant provider_or_model_identity_never_becomes_FRANK_persona
 invariant all_research_center_machine_coordination_uses_latest_claycode
-invariant all_registered_room_workers_share_semantic_fabric_gwt_emergence_control_mission_while_remaining_branch_loyal
+invariant all_registered_room_workers_share_semantic_fabric_gwt_emergence_control_loop_dynamics_mission_while_remaining_branch_loyal
+invariant loop_of_loops_distribution_does_not_upgrade_shared_ancestry_evidence
+invariant loop_stability_readout_never_mints_truth_or_execution_authority
+invariant productive_bounded_cycles_are_not_mislabeled_failure_by_fixed_point_bias
 invariant autonomous_semantic_preconnection_is_project_architecture_direction
 invariant semantic_dependency_visibility_does_not_require_manual_duplicate_graph_registration
 invariant GWT_is_emergence_observability_and_intervention_plane_not_emergence_truth_or_single_score

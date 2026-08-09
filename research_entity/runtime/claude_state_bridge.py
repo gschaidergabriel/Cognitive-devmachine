@@ -13,6 +13,7 @@ sys.path.insert(0,str(ROOT/"research_entity/runtime"))
 from rae_state_runtime import RAEStateRuntime
 from interaction_persona_runtime import init_tables as init_persona, summary as persona_summary
 from rae_hive_runtime import init_tables as init_hive, register_organ, observe_organ, begin_usage_episode, hive_capsule
+from claycode_experience_runtime import init_tables as init_claycode_experience
 
 ACTOR="claude-code-lead"; ROLE="REPO_BUILD_EXECUTION_ORGAN"
 CURSORS=ROOT/".rae_runtime/claude_context_cursors"; CURSORS.mkdir(parents=True,exist_ok=True)
@@ -57,24 +58,27 @@ def compact(cap:dict[str,Any],event:str,trig:str|None,sid:str)->dict[str,Any]:
     for x in (cap.get("open_misunderstandings") or [])[:2]:fs.append({"id":x.get("case_id"),"t":x.get("repair_target"),"s":x.get("status")})
     muts=[]
     for x in (h.get("pending_self_mutations") or [])[:2]:muts.append({"id":x.get("mutation_id"),"t":x.get("target_scope"),"s":x.get("status")})
+    ux=[]
+    for x in (cap.get("claycode_experience_queue") or [])[:2]:ux.append({"id":x.get("candidate_id"),"t":x.get("target_layer"),"s":x.get("status"),"n":x.get("supporting_count")})
     return {
       "clay":"RAE.CAPSULE.v1","E":"frank-project-global-research-entity","O":"claude-code",
-      "d":delta,"ev":event,"tr":trig,"stage":pr.get("current_stage"),"H":hs,"F":fs,"M":muts,
-      "ptr":{"hive":"research_entity/global/RAE_HIVE_ENTITY_CONTRACT.md","tok":"research_entity/global/RAE_CLAUDE_TOKEN_EFFICIENCY_CONTRACT.md","gwt":"research_entity/global/RAE_GWT_MICROKERNEL.clay","q":"python rae.py query <topic>"},
-      "law":"one_entity; evidence>organ; fetch_on_demand; write ClayCode IR; no hidden-CoT persistence"
+      "d":delta,"ev":event,"tr":trig,"stage":pr.get("current_stage"),"H":hs,"F":fs,"M":muts,"UXR":ux,
+      "ptr":{"hive":"research_entity/global/RAE_HIVE_ENTITY_CONTRACT.md","turn":"research_entity/global/RAE_TURN_KERNEL.clay","tok":"research_entity/global/RAE_CLAUDE_TOKEN_EFFICIENCY_CONTRACT.md","gwt":"research_entity/global/RAE_GWT_MICROKERNEL.clay","ux":"research_entity/runtime/claycode_experience_runtime.py","q":"python rae.py query <topic>"},
+      "law":"one_entity; evidence>organ; fetch_on_demand; explicit cognition=ClayCode; no hidden-CoT persistence"
     }
 
 
 def context(event:str,prompt:str,session_id:str,model:str,mode:str="compact"):
     node=f"claude-code:{session_id}"; rt=RAEStateRuntime()
     try:
-        init_persona(rt); init_hive(rt)
+        init_persona(rt); init_hive(rt); init_claycode_experience(rt)
         register_organ(rt,node_id=node,actor_id=ACTOR,provider="Anthropic",model=model,role=ROLE,session_id=session_id,capabilities=caps(event),limitations={"ctx":"ephemeral"},authority={"evidence_first":1})
         observe_organ(rt,organ_id=node,organ_class="LLM_REPO_EXECUTION_ORGAN",state={"ev":event},capabilities=caps(event),limitations=["ephemeral_context"],authority=["rae_guards"],evidence_refs=["CURRENT_HOOK_EVENT"])
         trig=trigger_of(prompt) if event=="UserPromptSubmit" else None
         cycle=rt.begin_cycle(prompt or f"{event}:{session_id}",node,ACTOR,"Anthropic",model,event,session_id=session_id,home_room=home_room(trig),trigger=trig)
         begin_usage_episode(rt,node_id=node,cycle_id=cycle,task_shape=(f"trigger:{trig}" if trig else event))
         rich=rt.capsule(node,ACTOR,cycle,event); rich["hive_entity"]=hive_capsule(rt,ACTOR); rich["persona_research"]=persona_summary(rt)
+        rich["claycode_experience_queue"]=[dict(r) for r in rt.u.execute("SELECT candidate_id,target_layer,status,supporting_count,accumulated_impact FROM v_claycode_experience_research_queue LIMIT 8")]
         rich["identity"]={"entity":"frank-project-global-research-entity","node_is_organ":True,"provider_is_identity":False}
         rt.record_injection(cycle,node,event,rich)
         return rich if mode=="full" else compact(rich,event,trig,session_id)
@@ -84,16 +88,15 @@ def context(event:str,prompt:str,session_id:str,model:str,mode:str="compact"):
 def close_cycle(session_id:str):
     node=f"claude-code:{session_id}"; rt=RAEStateRuntime()
     try:
-        init_hive(rt); row=rt.u.execute("SELECT cycle_id FROM prompt_cycles WHERE node_id=? AND status='ACTIVE' ORDER BY started_at DESC LIMIT 1",(node,)).fetchone()
+        init_hive(rt);init_claycode_experience(rt);row=rt.u.execute("SELECT cycle_id FROM prompt_cycles WHERE node_id=? AND status='ACTIVE' ORDER BY started_at DESC LIMIT 1",(node,)).fetchone()
         if row:rt.end_cycle(row[0],node)
         rt.u.execute("UPDATE hive_organs SET lifecycle_state='IDLE',last_pulse_at=datetime('now') WHERE node_id=?",(node,)); rt.u.commit()
     finally:rt.close()
 
 def refresh():
     rt=RAEStateRuntime()
-    try:init_persona(rt);init_hive(rt);rt.materialize_repo_sources()
+    try:init_persona(rt);init_hive(rt);init_claycode_experience(rt);rt.materialize_repo_sources()
     finally:rt.close()
-
 def main():
     import argparse
     ap=argparse.ArgumentParser(); sub=ap.add_subparsers(dest="cmd",required=True)

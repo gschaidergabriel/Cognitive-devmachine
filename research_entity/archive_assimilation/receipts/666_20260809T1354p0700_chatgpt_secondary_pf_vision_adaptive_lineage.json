@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1354p0700-chatgpt-secondary-pf-vision-adaptive-lineage",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T13:54:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "evidence_class": "HISTORICAL_PRIMARY_GIT_COMMIT_DIFF_AND_FILE",
+    "commit_shas": [
+      "90596662837a75801fd2024069ee9bd547137869",
+      "0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+      "6158be8ddde637fbf6b78e820239bf4ee8e8b5ee"
+    ],
+    "file_refs": [
+      "tools/frank_eye.py@0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "tools/native_vision.py@6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+      "research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json",
+      "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+    ]
+  },
+  "scope": "Project-Frankenstein adaptive visual inference, FrankEye consolidation, screenshot specialization and native multimodal vision lineage reconciled against historical Digital Retina learning and current FRANK 0.1 adaptive visual learner requirement",
+  "non_overlap_check": {
+    "existing_drive_retina_lineage": true,
+    "dedicated_pf_vision_history_shard_found_in_workspace": false,
+    "semantic_boundary": "Drive receipt owns historical Retina dictionary/prototype learning and measurements. This PF receipt owns runtime integration/supersession chronology and cross-source reconciliation."
+  },
+  "chronology": [
+    {
+      "commit": "90596662837a75801fd2024069ee9bd547137869",
+      "date": "2026-02-25",
+      "finding": "Project-Frankenstein introduced an Adaptive Visual Pipeline with Stage 1 YOLO+OCR/scene heuristics (~100 ms) and Stage 2 VLM escalation only when needed, plus region capture and legacy fallback.",
+      "interpretation": "This is compute-adaptive inference/routing, not evidence of user-specific online classifier learning. Reusable concept: cheap-first perception followed by uncertainty/need-driven deep escalation."
+    },
+    {
+      "commit": "0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "date": "2026-03-19",
+      "finding": "FrankEye replaced frank_visual_pipeline.py and frank_adaptive_vision.py with one CPU-only module combining a Digital Retina v8 CNN classifier, DINOv2 INT8 ONNX scene features, fixed visual features, OCR, face detection and optional GoL analysis. The embedded CNN path is explicitly inference-only.",
+      "interpretation": "Consolidation reduced service/module complexity and reused frozen perception features, but it removed the earlier explicit VLM escalation engine and did not itself implement personal cyclic learning."
+    },
+    {
+      "commit": "279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+      "date": "2026-03-24",
+      "finding": "FrankEye was specialized for screenshots: app/browser-tab detection, improved dark-theme OCR preprocessing, recognition of Frank's own WebUI, and removal of CIFAR-10 classification for screenshots as useless output.",
+      "interpretation": "Historical negative result for generic classifier reuse: a classifier can be valid on its training domain yet harmful/noisy for UI perception. Task/domain gating and familiar-UI specialization are required."
+    },
+    {
+      "commit": "6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+      "date": "2026-03-31",
+      "finding": "native_vision.py replaced FrankEye entirely with Qwen3.5-4B native multimodal inference through llama-server. The file explicitly removes CNN, DINOv2, ONNX and Tesseract from the path and sends each image plus prompt to the multimodal LLM.",
+      "interpretation": "This is a semantic-capability simplification, not adaptive familiarity learning and not evidence of low-cost familiar recognition. It removes the explicit cheap feature path unless another gate exists upstream."
+    }
+  ],
+  "cross_source_reconciliation": {
+    "drive_retina_learning_strand": "Historical Digital Retina implemented real data-driven pattern/dictionary/prototype mechanisms, cached replay and threshold calibration; those are the stronger ancestors of MVC-0/MVC-1 user-adaptive familiarity learning.",
+    "pf_runtime_strand": "Project-Frankenstein separately evolved cheap-first conditional escalation, then consolidated CPU inference, then screenshot-specific heuristics, then native multimodal inference.",
+    "combined_implication": "The current FRANK 0.1 directive is best understood as a deliberate synthesis of two previously separated strengths: cheap/conditional routing from PF plus replayable prototype/familiarity learning from Digital Retina, with modern open-set/provenance/rollback requirements added.",
+    "non_equivalence_law": "historical_adaptive_vision != online_personal_learning; native_multimodal_vision != learned_familiarity"
+  },
+  "negative_results_constraints": [
+    {
+      "id": "PF-VISION-NR-001",
+      "claim": "Do not count the February 'adaptive vision' label as evidence that FRANK already had user-specific online visual learning; the evidenced adaptation is inference escalation.",
+      "status": "SEMANTIC_DISAMBIGUATION_CONSTRAINT"
+    },
+    {
+      "id": "PF-VISION-NR-002",
+      "claim": "Generic CIFAR-10 classification was empirically useless/noisy for screenshot perception and was removed from the screenshot path.",
+      "status": "HISTORICAL_NEGATIVE_RESULT"
+    },
+    {
+      "id": "PF-VISION-NR-003",
+      "claim": "Replacing the whole visual path with native multimodal LLM inference does not satisfy the current FRANK 0.1 Micro Visual Classifier requirement because it provides neither persistent user-specific familiarity state nor bounded cyclic learner promotion/rollback semantics.",
+      "status": "CURRENT_REQUIREMENT_RECONCILIATION"
+    },
+    {
+      "id": "PF-VISION-NR-004",
+      "claim": "A frozen classifier/backbone prediction must not be treated as sensor truth; historical screenshot-domain mismatch reinforces the current confidence/open-set escalation law.",
+      "status": "ARCHITECTURE_CONSTRAINT"
+    }
+  ],
+  "reusable_candidates": [
+    {
+      "mechanism": "cheap Stage-1 visual path with selective deep escalation",
+      "mapping": "DIRECT_PRECURSOR",
+      "current_targets": ["frank", "harness", "clay"]
+    },
+    {
+      "mechanism": "region-selective screenshot capture",
+      "mapping": "REUSABLE_WITH_ADAPTATION",
+      "current_targets": ["frank", "harness"]
+    },
+    {
+      "mechanism": "frozen DINOv2-class reusable feature backbone",
+      "mapping": "MVC_FEATURE_BACKBONE_CANDIDATE_NOT_WINNER",
+      "current_targets": ["harness", "frank"]
+    },
+    {
+      "mechanism": "domain-specific screenshot/UI recognizers and OCR preprocessing",
+      "mapping": "REUSABLE_WITH_ADAPTATION",
+      "current_targets": ["frank", "claygraph"]
+    },
+    {
+      "mechanism": "native multimodal Qwen vision",
+      "mapping": "DEEP_ESCALATION_CANDIDATE",
+      "current_targets": ["frank", "harness"]
+    }
+  ],
+  "architecture_delta": {
+    "preferred_testable_shape": "change/region gate -> reusable frozen feature -> user-adaptive MVC familiarity/open-set gate -> familiar fast path OR deeper native multimodal/Retina analysis",
+    "reason": "This preserves the strongest historical routing and learning mechanisms without inheriting either generic-classifier domain mismatch or full-VLM-for-every-frame cost by assumption.",
+    "measurement_obligation": "Benchmark native multimodal escalation versus feature/prototype fast path on project hardware for latency, CPU/GPU/RAM/energy, known-vs-unknown accuracy, calibration, retention and routing savings."
+  },
+  "branch_feedback": {
+    "frank": "DELTA: preserve native multimodal vision as a deep semantic escalation candidate, not as a substitute for the fixed personal familiarity learner. Domain-specialized screenshot recognition and cheap-first routing have direct historical support.",
+    "harness": "DELTA: H1 should test a hybrid family: frozen reusable features + MVC-0/MVC-1 + open-set gate, with native Qwen vision as deeper comparator/escalation. Include screenshot/UI near-neighbor negatives and generic-classifier mismatch tests.",
+    "claycode": "DELTA: represent familiarity result, unknown/conflict, feature-backbone version, candidate learner version, escalation decision and visual evidence provenance as replayable state transitions.",
+    "unifieddb": "DELTA: persist personal prototype/readout lineage separately from raw sensor/evidence and from deep-VLM descriptions; retain feature-backbone compatibility and rollback state.",
+    "claygraph": "DELTA: familiar UI/entity associations can bias retrieval/routing but must not become truth edges solely from classifier output.",
+    "gwt": "NO_CHANGE to ignition theory; visual route/evidence receipts can become candidate inputs to workspace competition.",
+    "emergenz": "NO_CHANGE to emergence claim; adaptive compute/learning requires lesion/rescue if causal contribution is tested.",
+    "hyperposition": "NO_CHANGE beyond preserving set-valued/ambiguous alternatives before forced identity collapse.",
+    "clay": "DELTA: dissolved Retina should retain cheap-first routing and learned familiarity while allowing native multimodal escalation; physical module boundaries may dissolve without deleting semantic state.",
+    "q12_index": "DELTA: Project-Frankenstein vision lineage adds reusable runtime history but no deduplicated new historical hours yet."
+  },
+  "history_denominator_refinement": {
+    "compare_base": "3085d354aaf7a523b9389d6e9deaab1ca990758f",
+    "compare_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "ahead_by": 406,
+    "interval_commit_count_including_base": 407,
+    "base_is_not_proven_root": true,
+    "reason": "The base commit is itself a modification of an already-existing repository state and its message references earlier removals. The available connector response does not expose parent traversal/list-tree pagination sufficient to prove root ancestry.",
+    "conclusion": "Project-Frankenstein history denominator remains UNFROZEN, but it now has a verified lower-bound interval of at least 407 commits from 2026-02-20 through frozen HEAD; total history is greater or equal and likely greater than this interval."
+  },
+  "historical_earned_work": {
+    "mapping_state": "CANDIDATES_ONLY_PENDING_ROW_LEVEL_DEDUP",
+    "new_hours_credit": 0.0,
+    "reason": "PF routing/backbone/native-VLM concepts overlap with existing Retina/Harness work and require row-level deduplication before hours can be credited."
+  },
+  "exact_coverage_credit": 0.0,
+  "coverage_reason": "Full Project-Frankenstein commit history and recursive tree atomic-obligation denominators remain unfrozen; this closes one semantic lineage and refines the history lower bound only.",
+  "next_high_value_obligations": [
+    "Find an exhaustive commit-list or parent-pagination surface to freeze full Project-Frankenstein history beyond the verified 407-commit interval lower bound",
+    "Obtain recursive frozen tree manifest at abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "Reconcile all visual/runtime files and historical evaluation artifacts against Drive Retina and PF supersession lineage",
+    "Row-level deduplicate PF vision mechanisms against H1 adaptive MVC and historical earned-work mappings"
+  ]
+}

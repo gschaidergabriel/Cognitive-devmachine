@@ -157,7 +157,7 @@ record UsageObservation {
 }
 rule RAE.CHATGPT.endturn -> UsageObservation -> hypothesis+counterhypothesis+candidate
 rule RAE.CLAUDE.endturn_meta_research=false
-rule Claude_only consumes latest stack + writes task receipts
+rule Claude_only consumes latest_stack + Claude_only writes task_receipts
 rule successful_motif must_be_preserved_unless_counterevidence
 rule language_delta requires executable_or_usage_counterexample
 

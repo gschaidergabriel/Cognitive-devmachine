@@ -1,0 +1,144 @@
+module claycode.g9.dynamic_binding_lattice
+version "0.1-candidate"
+status RESEARCH_CANDIDATE
+parent ["XENO_G8","ClayCode_G9","ClayGraph_V2"]
+
+// PURPOSE
+// Extend the XENO lattice lineage into a dynamic ClayCode/ClayGraph binding substrate.
+// This candidate does NOT claim phenomenal emergence and does NOT promote graph activation to truth.
+
+law canonical_truth = UnifiedDB
+law graph_binding != semantic_truth
+law graph_binding != execution_authority
+law activation != evidence
+law repeated_coactivation != causal_support
+law model_proposed_binding starts CANDIDATE
+law irreversible_effect requires independent authority+witness path
+
+// LATTICE 1: EPISTEMIC / EFFECT WITNESS LATTICE
+// Preserve XENO witness dimensions as an algebraic commit gate, not merely a record shape.
+class WitnessAxis = TW | SW | AW | GW | CW | PW
+class WitnessState = INVALID | UNKNOWN | PARTIAL | VALID
+record WitnessCell {axis:WitnessAxis;state:WitnessState;e:Set<EvidenceRef>;epoch:Epoch}
+record WitnessLattice {cells:Set<WitnessCell>;provenance_sensitive:Bool;epoch:Epoch}
+rule critical_commit requires lattice_all_valid(WitnessLattice,[TW,SW,AW,GW,CW])
+rule provenance_sensitive requires lattice_valid(WitnessLattice,PW)
+rule witness_join never_upgrades UNKNOWN_without_evidence
+rule witness_meet preserves BLOCK|INVALID
+
+// LATTICE 2: DYNAMIC BINDING LATTICE
+// Each possible local relation is represented by a multi-axis binding state rather than one scalar edge weight.
+class BindingAxis = ASSOCIATION | COACTIVATION | TEMPORAL | PREDICTIVE | CAUSAL | COMPLEMENTARITY | TRANSFER | NOVELTY | CONFLICT | INHIBITION | PROVENANCE_DIVERSITY | REENTRY
+record BindingCell {axis:BindingAxis;value:Score;uncertainty:Score;e:Set<EvidenceRef>;updated_at:Time;decay:Rate}
+record BindingLattice {
+  id:BindingLatticeRef
+  members:Set<SemanticRef>
+  cells:Set<BindingCell>
+  contexts:Set<ContextRef>
+  source_epoch:Epoch
+  graph_epoch:Epoch
+  status:CANDIDATE|SHADOW|CURRENT|SUPPRESSED|RETRACTED
+}
+
+rule repetition_updates at_most [ASSOCIATION,COACTIVATION]
+rule causal_axis requires causal_receipt | discriminating_intervention | replay_supported_path
+rule predictive_axis requires heldout_prediction_gain
+rule provenance_diversity rewards independent_ancestry_not_duplicate_copies
+rule conflict_signal never_erased_by_positive_association
+rule inhibition can_block_activation_without_deleting_history
+rule binding_update is bounded+replayable+reversible
+
+// FAST/SLOW TIMESCALES
+record FastBinding {lattice:BindingLatticeRef;activation:Score;half_life:Duration;cycle:CycleRef}
+record SlowBinding {lattice:BindingLatticeRef;strength:Score;hysteresis:Score;support:Set<EvidenceRef>;last_verified:Time}
+rule fast_binding decays_without_reentry
+rule slow_binding_update requires verified_outcome && causal_credit
+rule slow_binding_never_directly_inherits FastBinding.activation
+
+// LATTICE 3: ASSEMBLY / HYPERBINDING NUCLEATION
+// Emergent graph structures may appear when a set has joint support not reducible to pairwise coactivation alone.
+record HyperBindingCandidate {
+  id:HyperBindingRef
+  members:Set<SemanticRef>
+  roles:Map<SemanticRef,Symbol>
+  pairwise_baseline:Score
+  joint_score:Score
+  synergy:Score
+  persistence:Score
+  cross_context_transfer:Score
+  causal_contribution:Score
+  conflict:Score
+  provenance:Set<EvidenceRef>
+  status:CANDIDATE|SHADOW|CURRENT|SUPPRESSED|RETRACTED
+}
+
+rule nucleate_hyperbinding requires joint_score>pairwise_baseline && synergy>0 && persistence>=candidate_floor
+rule promote_hyperbinding requires cross_context_transfer && causal_contribution && provenance_ok && false_binding_budget_ok
+rule hyperbinding_without_causal_support may_affect retrieval_salience_only
+rule hyperbinding never_authorizes_effect
+rule failed_hyperbinding -> ActiveArchive.NEGATIVE
+
+// CLAYGRAPH PROJECTION
+projection BindingLattice -> ClayGraph.Hyperrelation {
+  relation_class=MODEL_PROPOSED|STRUCTURALLY_DERIVED
+  carry=[source_epoch,graph_epoch,derivation_hash,selector_hash,provenance,admissibility,rebuild_recipe]
+}
+rule projected_binding requires projection_receipt
+rule selection_of_binding requires selection_receipt
+rule causal_use_of_binding requires receiver_receipt+outcome_ref+reentry
+
+// LOCAL DYNAMICS
+rule coactivation(a,b,context) -> update_fast_binding(a,b,context)
+rule repeated_verified_joint_use(set,context) -> candidate_hyperbinding(set,context)
+rule contradictory_outcome -> strengthen(CONFLICT|INHIBITION)
+rule successful_lesion_rescue -> strengthen(CAUSAL)
+rule source_echo_or_duplicate_ancestry -> reduce(PROVENANCE_DIVERSITY)
+rule context_shift_failure -> reduce(TRANSFER)
+rule stale_without_support -> decay_or_suppress
+
+// ANTI-RUNAWAY / ANTI-HALLUCINATED-TOPOLOGY
+invariant no_binding_from_frequency_alone
+invariant no_self_reinforcing_promotion_without_external_or_counterfactual_evidence
+invariant no_truth_upgrade_by_graph_density
+invariant no_effect_authority_from_salience
+invariant preserve_negative_and_conflicting_bindings
+invariant bounded_degree_or_energy_budget_per_context
+invariant every_promoted_binding_has_rollback_and_rebuild_recipe
+invariant duplicate_provenance_does_not_count_as_independent_support
+
+// REQUIRED EXPERIMENTAL ARMS
+experiment DBL_E1 = baseline_static_claygraph vs scalar_hebbian vs dynamic_binding_lattice
+experiment DBL_E2 = true_temporal_order vs shuffled_order
+experiment DBL_E3 = independent_sources vs duplicated_ancestry
+experiment DBL_E4 = pairwise_only vs hyperbinding_nucleation
+experiment DBL_E5 = lesion_binding vs rescue_binding
+experiment DBL_E6 = in_distribution vs context_shift
+experiment DBL_E7 = clean_reentry vs shuffled_reentry
+experiment DBL_E8 = fast_only vs fast_plus_slow_causal_consolidation
+
+metric false_binding_rate
+metric retrieval_gain
+metric verified_task_gain
+metric ood_transfer
+metric lesion_delta
+metric rescue_recovery
+metric hyper_synergy_gain
+metric hub_collapse_rate
+metric conflict_preservation
+metric provenance_echo_sensitivity
+metric effect_error_rate
+metric success_adjusted_cost
+
+// PROMOTION BAR
+rule promote_to_ClayGraph_runtime iff
+  executable_tests &&
+  beats_static_or_scalar_baseline_on_verified_task_gain &&
+  false_binding_rate_within_budget &&
+  survives_shuffled_controls &&
+  lesion_rescue_supports_causal_use &&
+  conflict_preservation &&
+  rollback_verified
+
+hypothesis H_DBL_01 = "A multi-axis dynamic binding lattice can create useful metastable ClayGraph assemblies that improve retrieval/coordination beyond scalar association while preserving epistemic and authority boundaries."
+counterhypothesis H_DBL_01_NULL = "Observed gains are explainable by ordinary weighted graph coactivation or retrieval heuristics; lattice structure adds complexity without causal benefit."
+falsifier H_DBL_01_F = "No verified gain over scalar/static baselines, no lesion-rescue dependence, or unacceptable false-binding/hub-collapse under shuffled/OOD controls."

@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"fusion-20260809T1538p0700-frank-architecture-lineage",
   "trigger":"fusion",
   "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
@@ -19,7 +19,10 @@
   "canonical_promotion":"NONE",
   "training_authorization":"NONE",
   "stage_advance":"NONE",
-  "artifacts_status":"COMMITTED",
+  "artifacts_status":"COMMITTED_AND_REREAD",
+  "validation_receipt":"VALIDATION_RECEIPT.json",
+  "validation_result":"PASS_ZERO_CONTRACT_VIOLATIONS_ON_REREAD_PREDICATE_REPLAY",
   "final_report":"FINAL_REPORT.md",
-  "completion_intent":"Run fusion_research_contract.py semantics against required artifacts and record receipt; no PASS manufactured by consensus."
+  "run_status":"COMPLETE",
+  "next_gate":"BASE_CLAYCODE_EXECUTABLE_RELEASE"
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"hypofusion-20260809T1816p0700-chatgpt-secondary-r3",
   "trigger":"hypofusion",
   "actor_id":"chatgpt-secondary",
@@ -16,24 +16,25 @@
     "FUSION2_HYPOTHESES.json",
     "CONTRADICTION_MAP.md",
     "BRANCH_FEEDBACK_MANIFEST.json",
+    "LATE_ARRIVAL_REFRESH.json",
     "RUN_MANIFEST.json",
     "FINAL_REPORT.md"
   ],
   "external_lanes":["peer-reviewed conference/journal","scholarly preprint","authoritative technical documentation","systems implementation precedent","causal abstraction/plasticity analogue"],
   "experiments_executed_by_this_run":0,
-  "experiments_ingested":["GWT adaptive recurrence proxy","adaptive lesion compensation","MVC state proxy","effect-authority broker proxy","ClayGraph provenance/reversal proxy","async replay proxy","Emergenz intervention-equivalence","Harness H-WP-01 completion","Harness H-WP-04 Needle component"],
-  "transformed_hypotheses":7,
-  "counterhypotheses":9,
+  "experiments_ingested":["GWT adaptive recurrence proxy","adaptive lesion compensation","MVC state proxy","effect-authority broker proxy","ClayGraph provenance/reversal proxy","async replay proxy","Emergenz intervention-equivalence","Harness H-WP-01 completion","Harness H-WP-04 Needle component","visual familiarity action-closure proxy","probe observer-effect timing proxy","Unicode canonical-boundary proxy"],
+  "transformed_hypotheses_total":10,
+  "counterhypotheses_total":12,
   "feedback_targets":9,
   "scientific_promotion":"NONE",
   "canonical_revision_change":"NONE",
   "known_blockers":[
     "BASE ClayCode release still NOT_PASS; all 14 formal BASE work packages remain OPEN and application_acceptance.passed is empty at latest workspace read.",
-    "Strict D-LALR diagnostic workflow exists, but expected durable conflict receipt was not present at screening cutoff.",
+    "Strict D-LALR diagnostic workflow exists, but expected durable conflict receipt was not present at initial screening cutoff; later arrival must be read only if a completed receipt appears before hard close.",
     "No target-host Ubuntu H1/H2/H3 evidence was produced by this Hypofusion run.",
     "Connector cannot recursively enumerate the complete repository tree; unreachable exact hypothesis records are explicitly INACCESSIBLE rather than invented."
   ],
-  "completion_estimate_percent":96,
-  "completion_reason":"All mandatory artifact classes and all nine branch feedback targets are covered; prior Hypofusion coverage was inherited and post-cutoff major run families were screened, but connector tree-enumeration limits prevent a literal proof that every historical/post-cutoff run-local hypothesis record was individually enumerated.",
-  "close_requires_live_reread":true
+  "completion_estimate_percent":97,
+  "completion_reason":"All mandatory artifact classes, adversarial external lanes, transformed/counterhypothesis sets and all nine branch feedback targets are covered including one live late-arrival refresh. Prior Hypofusion coverage was inherited and post-cutoff major run families were screened, but connector tree-enumeration limits prevent literal proof that every historical/post-cutoff run-local hypothesis record was individually enumerated.",
+  "close_requires_final_live_reread":true
 }

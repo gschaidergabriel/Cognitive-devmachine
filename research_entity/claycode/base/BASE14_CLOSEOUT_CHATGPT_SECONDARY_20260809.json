@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "record": "CLAYCODE_BASE14_CLOSEOUT_CHATGPT_SECONDARY_20260809",
+  "created_at": "2026-08-09T20:20:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "authority_invariant": "model_output != execution_authority",
+  "formal_release_state": {
+    "work_packages_passed": 1,
+    "work_packages_total": 14,
+    "general_purpose_gate": "NOT_PASS",
+    "claycode_release_gate": "NOT_PASS",
+    "source": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "promotion_performed": false
+  },
+  "last_verified_convergence_manifest": {
+    "path": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
+    "formal_pass_count": 1,
+    "implementation_closure_ready_count": 11,
+    "note": "This count predates the new WP10/WP13/WP14 candidate implementations below; those candidates are not upgraded to verified closure-ready without execution receipts."
+  },
+  "critical_defects": {
+    "open_p0": 0,
+    "open_p1": 0,
+    "ledger": "research_entity/claycode/BASE_DEFECT_LEDGER.json"
+  },
+  "new_closeout_implementation_candidates": {
+    "CC-WP-10-GENERAL-APP-SUITE": {
+      "status": "IMPLEMENTED_AWAITING_REAL_TARGET_EXECUTION",
+      "evidence": [
+        "tools/claycode_base_target_application_suite_v2.py",
+        "tools/claycode_base_web_state_extension.py",
+        "tools/claycode_base_concurrency_extensions.py",
+        "tools/claycode_andreas_application_acceptance.py"
+      ],
+      "changes": [
+        "APP-02 real loopback routing + HTML asset + query/state transition",
+        "APP-04 deterministic concurrent publication + explicit cancellation + structured error path",
+        "WP14-shaped nine application receipt materialization while FULL_FRANK remains independently sourced"
+      ]
+    },
+    "CC-WP-13-HARNESS-HANDOFF": {
+      "status": "DUAL_H2_PLUS_H3_IMPLEMENTED_AWAITING_EXECUTION",
+      "evidence": [
+        "tools/claycode_structured_backend.py",
+        "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay",
+        "tools/claycode_full_frank_active_assembly_validation.py",
+        "tools/claycode_base_record_selection.py",
+        "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_H2_V1.clay",
+        "tools/claycode_wp13_active_assembly_h2.py",
+        "tools/claycode_wp13_h3_consolidation.py",
+        "tools/claycode_wp13_frank_handoff_validation.py",
+        "tools/claycode_base_frank_block_toolchain.py",
+        "tools/claycode_full_frank_target_finalizer.py"
+      ],
+      "required_target_proof": "Two independent H1->H2 realizations + H1->H3 commutation + native packet-score + GRT block-body + negative authority/collision/policy tests all PASS on the registered Andreas Ubuntu target."
+    },
+    "CC-WP-14-BASE-AUDIT": {
+      "status": "AUDITOR_AND_ONE_COMMAND_CLOSEOUT_IMPLEMENTED_AWAITING_TARGET",
+      "evidence": [
+        "tools/claycode_base_wp14_audit.py",
+        "tools/claycode_target_host_identity.py",
+        "tools/claycode_andreas_base14_closure.py"
+      ]
+    }
+  },
+  "target_execution_boundary": {
+    "required_target": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+    "local_registration_default": "~/.config/claycode/andreas_target_registration.json",
+    "target_gate_receipt": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_TARGET_GATE.json",
+    "full_frank_receipt": "research_entity/claycode/target_receipts/FULL_FRANK_HANDOFF_RECEIPT.json",
+    "verified_present_in_repository_at_record_time": false,
+    "reason": "Both target receipt paths returned Not Found during this session. Commit titles or hosted Ubuntu runs are not target execution evidence.",
+    "one_command_after_registration": "python tools/claycode_andreas_base14_closure.py",
+    "registration_command_once_on_actual_target": "python tools/claycode_target_host_identity.py register --acknowledge ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM"
+  },
+  "notable_session_repairs": [
+    "process allowlist authority laundering closed by mint-bound policy/executable identity",
+    "arbitrary async callable authority crossing closed",
+    "operator identity/hyphen parser ambiguity repaired",
+    "strict parser path advanced to current V7 semantics",
+    "typed canonical IR and mutation/negative validation path added",
+    "real compiled effect -> sealed runtime file/SQLite/HTTP bridge added",
+    "post-checkout held-out differential/type-negative corpus path added",
+    "deterministic cancellation/error adapter added",
+    "owner-local Ubuntu target fingerprint registration added",
+    "hardened target APP-02/APP-04 path added",
+    "generic full ActiveAssembly H2/H3 transfer paths added without FRANK-specific language opcode",
+    "FULL_FRANK target finalizer strengthened to require two independent H2 realizations",
+    "stale nine-app/environment-string BASE14 closeout replaced by fingerprint/full-FRANK/ten-app/WP14 sequence"
+  ],
+  "verdict": "CODE_AND_CLOSEOUT_PATH_MATERIALLY_ADVANCED_BUT_FORMAL_14_OF_14_PASS_REQUIRES_REAL_TARGET_EXECUTION_AND_RECEIPTS",
+  "promotion_allowed": false
+}

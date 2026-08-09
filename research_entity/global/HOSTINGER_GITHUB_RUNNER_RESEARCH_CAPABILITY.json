@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "tool_name": "hostinger_github_runner",
   "provider": "Hostinger + GitHub Actions",
   "class": "self_hosted_remote_build_test_runtime",
@@ -17,7 +17,7 @@
     "reproducible GitHub Actions execution receipts"
   ],
   "evidence_class": "remote_execution_runtime",
-  "status": "RUNTIME_VERIFIED_CONNECTIVITY_BUILD_UNTESTED",
+  "status": "RUNTIME_VERIFIED_BUILD_TEST",
   "verification_receipt": "research_entity/state/system/events/20260809T161405Z-hostinger-vps-runner-resource.json",
   "capability_receipt": "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",
   "priority_work": "research_entity/state/work/events/20260809T161407Z-frank-v01-hostinger-runner-priority.json",
@@ -31,9 +31,27 @@
     "github_status_observed": "Idle",
     "status_indicator": "green",
     "evidence_source": "user-provided live GitHub Actions runner UI screenshot in ChatGPT turn",
-    "interpretation": "Runner agent is connected to GitHub and currently ready/idle. This proves live runner connectivity/availability, not successful Frank or ClayCode workload execution.",
-    "raw_screenshot_repo_persisted": false
+    "interpretation": "Runner agent is connected to GitHub and currently ready/idle. This proves live runner connectivity/availability; subsequent FRANK execution receipts below prove actual build/test execution. Raw UI screenshot is not persisted by this file."
   },
+  "verified_execution_receipts": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "tested_commit": "d1727c1d7f385553c0102c682660d25cb8cffd95",
+      "receipt_path": "runtime/vps_integrity/latest.json at evidence commit ce8378affe2a285a1f503f2e5d0481cd8b71a102",
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "result": "17/18 PASS; one preserved endpoint-boundary harness failure",
+      "scientific_value": "negative execution evidence used for causal diagnosis"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "tested_commit": "c901358039c542678cf866876bc01b5539e15956",
+      "receipt_path": "runtime/vps_integrity/latest.json after harness repair",
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "result": "18/18 PASS; pytest 13/13 PASS; F6 tool contract transport PASS; endpoint boundary PASS",
+      "release_claim": false,
+      "whole_frank_release_status": "NOT_CLAIMED"
+    }
+  ],
   "current_chatgpt_surface": {
     "can_read_existing_workflow_jobs": true,
     "can_read_job_steps_and_logs": true,
@@ -57,7 +75,7 @@
       "CLAY_0_1_ACCEPTANCE_RUN"
     ],
     "impacts": [],
-    "note": "No calibrated speed multiplier until successful build/test workflow receipts exist."
+    "note": "Successful real build/test execution is now verified, but no ETA multiplier is admitted from a single narrow workload. Add a calibrated impact only after repeated comparable workloads establish measured wall-clock/throughput benefit."
   },
   "security": {
     "no_raw_credentials_in_repo_state": true,
@@ -65,6 +83,6 @@
     "runner_label_revalidation_before_effect": true,
     "secrets_boundary_required": true
   },
-  "verified_at": "2026-08-09T16:27:00Z",
-  "source": "live GitHub Actions runner UI screenshot + project-owner confirmation + current GitHub Actions connector capability inspection"
+  "verified_at": "2026-08-09T16:33:05Z",
+  "source": "live GitHub Actions runner observation + two current self-hosted FRANK execution receipts + project-owner authorization"
 }

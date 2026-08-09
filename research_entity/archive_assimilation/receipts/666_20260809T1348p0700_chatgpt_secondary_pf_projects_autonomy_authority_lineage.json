@@ -1,0 +1,172 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1348p0700-chatgpt-secondary-pf-projects-autonomy-authority-lineage",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T13:48:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "evidence_class": "HISTORICAL_PRIMARY_GIT_COMMIT_DIFF",
+    "commit_shas": [
+      "62a661f51271e8ec024c3557b921eaddda0267d3",
+      "b6d8c17bde2087d88ef4a31c09d6db2756219739",
+      "7b1a7a439bb3d4951dcb42e161a40bd1d363340a",
+      "cfa7062ba62bc9d83fffada29dcc03a75c4f4050",
+      "35bbeacbce936e284f7cb8ab73747fd3cf7bebf0"
+    ]
+  },
+  "scope": "Project Engine / Projects autonomy, tool authority, sandbox removal, policy, checkpoint, world-model and replay lineage",
+  "non_overlap_check": {
+    "workspace_receipts_reviewed": [
+      "pf_head_drive_surface",
+      "pf_gwt_runtime_delta",
+      "pf_state_identity_failure_shard",
+      "pf_safety_authority_shard",
+      "pf_lcme_soma_autonomy_shard",
+      "pf_core_batch001",
+      "pf_core_batch002",
+      "pf_xeno_claycode_precursor_delta",
+      "pf_model_latency_feedback_shard",
+      "pf_dream_replay_lineage",
+      "pf_subconscious_policy_lineage"
+    ],
+    "dedicated_projects_lineage_found": false,
+    "rule": "This receipt is a new semantic/history shard; it does not imply repository-wide history closure."
+  },
+  "chronology": [
+    {
+      "commit": "62a661f51271e8ec024c3557b921eaddda0267d3",
+      "date": "2026-04-01",
+      "finding": "Projects became a tool-using coding agent with bash/read/write/edit/list tools, max-15 tool loop, explicit dangerous-command blocklist and path resolution constrained to the project root.",
+      "interpretation": "Historical positive pattern: execution authority was initially bounded by a deterministic filesystem scope independent of model intent."
+    },
+    {
+      "commit": "b6d8c17bde2087d88ef4a31c09d6db2756219739",
+      "date": "2026-04-01",
+      "finding": "The project-root path sandbox was explicitly removed. Bash gained arbitrary cwd/systemctl/docker/package-manager access; file tools accepted absolute paths; the dangerous-command list was reduced to four literal destructive patterns.",
+      "interpretation": "Historical negative architecture result: least-privilege containment was intentionally collapsed while the autonomous model retained direct effect authority. This is evidence for preserving the current external capability/commit gateway invariant, not for reproducing the old design."
+    },
+    {
+      "commit": "7b1a7a439bb3d4951dcb42e161a40bd1d363340a",
+      "date": "2026-04-03",
+      "finding": "Projects expanded into browser automation, live trading, spending, email, heartbeats and credential storage. The vault's encryption function used repeated-key XOR plus base64 while the system held passwords/API keys/tokens.",
+      "interpretation": "Historical effect-radius and secret-handling warning: adding financial/network/account side effects after sandbox removal materially increased consequence radius; the vault mechanism is a weak confidentiality boundary and should not be inherited as a security primitive."
+    },
+    {
+      "commit": "cfa7062ba62bc9d83fffada29dcc03a75c4f4050",
+      "date": "2026-04-05",
+      "finding": "Project Engine v3 introduced tiered routing, self-driven action chains, persistent goals, entity-relation world model, evolving agent profile, hard/soft policy system, tool-outcome learning, collision-safe heartbeat scheduling, checkpointing and activity traces.",
+      "interpretation": "Historical reusable mechanisms exist below the unsafe authority boundary: tiered decision routing, checkpoint/recovery, explicit goal metrics, world-model state, collision-safe scheduling and user-visible traces are candidates for adaptation."
+    },
+    {
+      "commit": "35bbeacbce936e284f7cb8ab73747fd3cf7bebf0",
+      "date": "2026-04-05",
+      "finding": "v3.2 added natural-language-to-policy parsing via an LLM, agent-profile cloning, A/B strategy execution with automatic winner application, cross-project world-model queries and session replay/time-travel debugging.",
+      "interpretation": "Replay/cross-project read concepts are reusable. Model-parsed policy text must not itself become hard execution authority without deterministic validation. Automatic strategy promotion based on shallow success-vs-error scoring is a Goodhart/authority risk and requires stronger outcome contracts."
+    }
+  ],
+  "mechanism_index_delta": [
+    "project-root deterministic path sandbox",
+    "literal dangerous-command filter",
+    "full-system tool authority",
+    "tiered decision routing T0/T1/T1.5/T2",
+    "bounded action chaining",
+    "persistent goal metrics and decomposition",
+    "entity-relation world model",
+    "agent profile / learned rules",
+    "hard-soft-advisory policy representation",
+    "checkpoint and crash recovery",
+    "collision-safe heartbeat scheduling",
+    "activity/event trace",
+    "session replay/time-travel debugging",
+    "cross-project knowledge query",
+    "A/B strategy execution and auto-apply",
+    "credential vault with repeated-key XOR"
+  ],
+  "negative_results_constraints": [
+    {
+      "id": "PF-PROJECTS-NR-001",
+      "claim": "Model tool autonomy plus a small literal command blocklist is not a sufficient authority boundary for a general system agent.",
+      "status": "HISTORICAL_ARCHITECTURE_NEGATIVE_RESULT",
+      "falsifier": "A current reproducible capability model demonstrates complete least-privilege confinement, typed effects and rollback despite unrestricted filesystem/system command exposure."
+    },
+    {
+      "id": "PF-PROJECTS-NR-002",
+      "claim": "Repeated-key XOR plus base64 should not be inherited as the security boundary for API keys, passwords or tokens.",
+      "status": "HISTORICAL_SECURITY_CONSTRAINT",
+      "falsifier": "None for direct inheritance; a replacement secret store must be validated under the current threat model."
+    },
+    {
+      "id": "PF-PROJECTS-NR-003",
+      "claim": "LLM-parsed natural-language policy cannot by itself authorize hard side effects; parse output requires deterministic schema/range/capability validation and explicit authority semantics.",
+      "status": "ARCHITECTURE_CONSTRAINT_CANDIDATE",
+      "falsifier": "Matched-budget adversarial policy parsing shows equivalent or stronger enforcement than deterministic validation across ambiguity, injection and threshold edge cases."
+    },
+    {
+      "id": "PF-PROJECTS-NR-004",
+      "claim": "A/B auto-promotion scored mainly by absence of execution errors is insufficient for goal-correct strategy selection.",
+      "status": "GOODHART_RISK_CANDIDATE",
+      "falsifier": "Outcome-grounded replay shows the heuristic reliably tracks intended goal quality under adversarial and side-effect-sensitive cases."
+    }
+  ],
+  "reusable_candidates": [
+    {
+      "mechanism": "checkpoint + session replay",
+      "mapping": "DIRECTLY_REUSABLE_CONCEPT",
+      "current_targets": ["harness", "unifieddb", "frank"]
+    },
+    {
+      "mechanism": "collision-safe scheduled heartbeat",
+      "mapping": "REUSABLE_WITH_ADAPTATION",
+      "current_targets": ["harness", "frank"]
+    },
+    {
+      "mechanism": "tiered decision routing and bounded action chaining",
+      "mapping": "REUSABLE_WITH_ADAPTATION",
+      "current_targets": ["frank", "claycode", "harness"]
+    },
+    {
+      "mechanism": "persistent goal metrics + entity-relation world model",
+      "mapping": "MEASUREMENT_FOUNDATION",
+      "current_targets": ["frank", "claygraph", "unifieddb"]
+    },
+    {
+      "mechanism": "activity/event trace",
+      "mapping": "DIRECTLY_REUSABLE_CONCEPT",
+      "current_targets": ["harness", "unifieddb", "gwt"]
+    }
+  ],
+  "branch_feedback": {
+    "frank": "Preserve model-output != execution-authority. Historical Projects demonstrates the consequence radius of collapsing path sandboxing before adding autonomous network/financial/account effects.",
+    "harness": "Promote deterministic capability/effect/commit gateway, explicit receipts, rollback/checkpoints and replay as validation targets. Reuse collision-safe scheduling and traces; do not inherit unrestricted system authority.",
+    "claycode": "Encode effects/capabilities/policies as typed validated transition contracts. Natural-language policy parsing may propose a contract but must not directly confer execution authority.",
+    "unifieddb": "Persist authoritative effect/outcome/replay receipts and secret provenance. Do not use legacy XOR vault design as a confidentiality primitive.",
+    "claygraph": "World-model/entity-relation concepts are historical precursors; preserve provenance and distinguish graph activation from authority/truth.",
+    "gwt": "Activity traces and action outcome receipts can support broadcast->effect->outcome causal reconstruction; they are not evidence of consciousness.",
+    "emergenz": "Autonomous chaining is not emergence evidence by itself; use lesion/rescue and outcome-grounded causal tests.",
+    "hyperposition": "No direct semantic delta beyond requiring capability boundaries when multiple active alternatives can lead to effects.",
+    "clay": "NO direct new substrate claim; the primary delta is safe effect geometry and recovery semantics.",
+    "q12_index": "Historical lesson: creator convenience pushed authority outward faster than safety boundaries matured; future advice should explicitly price effect radius and rollback."
+  },
+  "historical_earned_work": {
+    "mapping_state": "CANDIDATES_ONLY_PENDING_ROW_LEVEL_DEDUP",
+    "new_hours_credit": 0.0,
+    "reason": "Mechanisms are materially relevant but overlap with existing Harness/FRANK/UnifiedDB rows has not yet been row-level reconciled."
+  },
+  "exact_coverage_credit": 0.0,
+  "coverage_reason": "Project-Frankenstein full frozen tree/history denominator remains unfrozen; this receipt closes one semantic history shard only.",
+  "next_high_value_obligations": [
+    "Enumerate complete frozen commit interval/tree with an exhaustive surface or externally supplied manifest",
+    "Reconcile Projects lineage against current Harness capability gateway and UnifiedDB effect receipt contracts",
+    "Row-level deduplicate checkpoint/replay/scheduler/world-model historical earned-work mappings",
+    "Continue non-overlapping PF commit-history semantic shards until denominator closure"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-LOCAL-20260809-FULL-G9-SURFACE-CLOSURE-01",
+  "run_id": "claycode-20260809T1605p0700-chatgpt-full-g9-surface-closure",
+  "source": {
+    "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "git_blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "sha256": "c48e84f60315ca00bba4ddc5b446697fd8b4bc38fc55ba9f5f0ff8555fc14267"
+  },
+  "grammar": {
+    "path": "research_entity/claycode/g9/grammar.ebnf",
+    "git_blob_sha": "ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "proxy": "faithful Lark translation of current checked-in EBNF for tested constructs"
+  },
+  "experiment_artifact": "experiments/full_surface_closure_probe.py",
+  "experiment_artifact_sha256": "22a8ab7862f686b9372df4013c31fbc74a2c93dfac0f6e5afca9589a48ce44b0",
+  "runtime": {
+    "provider": "local hosted container fallback",
+    "language": "Python",
+    "parser_library": "Lark",
+    "fresh_e2b": false
+  },
+  "corpus": {
+    "identity": "complete current G9 V3 source split into brace-balanced top-level statements after comments/blank lines",
+    "top_level_chunks": 86
+  },
+  "baseline": {
+    "passed": 61,
+    "failed": 25
+  },
+  "candidate_N": {
+    "policy": "strict canonical-call/qualified-field normalization",
+    "source_normalizations": 20,
+    "core_grammar_additions": ["if_stmt","postfix optional value","comparisons > < >= <=","or"],
+    "passed": 86,
+    "failed": 0,
+    "normalized_source_sha256": "6ce33a9332f2d108e248b50486148c0fd3c4ad982a5f78aaa1e883bff8f80ca2"
+  },
+  "expected_vs_observed": {
+    "expected": "If most current failures are surface drift rather than missing semantic core, a small grammar extension plus explicit source normalization should close the current G9 top-level corpus.",
+    "observed": "Baseline proxy accepted 61/86; candidate N accepted 86/86. This supports surface-closure feasibility but does not establish intended typed AST equivalence or choose N over concurrent S/D candidates."
+  },
+  "failure_classification": [
+    "surface_grammar_drift",
+    "prose_relation_lexical_ambiguity",
+    "missing_general_control/comparison surface",
+    "digit-leading/noncanonical spelling"
+  ],
+  "repair_applied": "run-local only; no checked-in grammar/spec mutation",
+  "affected_hypotheses": ["H-CC-FULLSURF-001","H-CC-SURFACE-IR-SEPARATION-002","H-CC-NSD-FULLCORPUS-003"],
+  "affected_negative_results": ["N-CC-FULL-G9-GRAMMAR-20260809"],
+  "cross_branch_learning": ["frank","clayresearch","claygraph","unifieddb","gwt","hyperposition","emergenz","harness","claycode"],
+  "evidence_boundary": "No production parser, typed AST oracle, full roundtrip, target-reader, E2B, application-suite, or N/S/D matched winner evidence is claimed."
+}

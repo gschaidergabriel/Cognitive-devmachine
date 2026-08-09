@@ -1,0 +1,72 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1019p0700-chatgpt-secondary-drive-needle-snapshot-closure",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "origin_actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "worker_session_id":"chatgpt-secondary-666-20260809T1019p0700",
+  "source":{"title":"needle","drive_id":"14RALcFzrBw-6eNwp-3ZK4pIKDWuBAvDf","upstream_remote":"https://github.com/cactus-compute/needle.git"},
+  "structure":{
+    "root_direct":{"units":11,"folders":4,"files":7},
+    "tracked_source_snapshot":{"files":40,"directories":9,"units":49,"total_file_bytes":1467502},
+    "git_metadata":{"git_root_unit":1,"descendant_units":45,"root_direct_units":12,"refs_descendant_units":6,"objects_descendant_units":5,"hooks_descendant_units":14,"info_descendant_units":1,"logs_descendant_units":7,"branches_descendant_units":0},
+    "total_units_below_needle_root":95,
+    "counting_rule":"Needle root itself excluded. 49 tracked source units plus .git folder unit and 45 descendants = 95."
+  },
+  "git_snapshot":{
+    "shallow":true,
+    "shallow_commit":"6fdddb874dd6f46dabeea88d0bf239fc4a2474c4",
+    "commit_tree":"cc152112c0c7be4320e36d6cb4b6cc73b4c4c32d",
+    "commit_message":"Update README.md",
+    "parent_outside_archive":"ffb1c5144c5a16cb8ec650dbc8a6f6fd3854f8f2",
+    "parent_available_in_pack":false,
+    "pack_file":"pack-852b83bde91b533699d9f9113f745cf7c63e8e13.pack",
+    "pack_sha256":"ccb5df0bb8a325d3cafd003c319a2617755a241daa75721a3bbd5c0aa68044b7",
+    "idx_sha256":"669de3527cbca8537551d500a5beb8d7f92b72977a8496133dde6538007a0cdb",
+    "shallow_sha256":"2eb0708dab6103e86fda6c75bb39f42ee0c6a02a1e18fb5bba63e283ee5a2e7f",
+    "pack_verify":"PASS",
+    "pack_objects":{"total":51,"commits":1,"trees":10,"blobs":40},
+    "history_scope":"EXACT_SNAPSHOT_ONLY_NOT_FULL_UPSTREAM_HISTORY"
+  },
+  "source_semantics":{
+    "declared_model":"26M parameter Simple Attention Network specialized for function calling",
+    "declared_architecture":{"d_model":512,"attention_heads":8,"kv_heads":4,"bpe_vocab":8192,"encoder_layers":12,"decoder_layers":8,"feedforward":"omitted","normalization":"ZCRMSNorm","attention":"GQA+RoPE","residual":"gated","decoder_cross_attention":true},
+    "declared_training":{"pretraining_tokens":"200B","pretraining_hardware":"16 TPU v6e","pretraining_duration":"27h","posttraining_tokens":"2B single-shot function-call","posttraining_duration":"45min"},
+    "local_finetune_contract":"README and code require/recommend per-tool train/validation/test separation; warns that fewer than 120 examples/tool risks overfit; deterministic split seed 42 exists.",
+    "tool_call_representation":"JSON tool schema input; generated answer is tool name plus arguments; exact source includes constrained decoder, retrieval head, dataset synthesis, finetune, evaluation, local playground and TPU/distributed utilities.",
+    "evaluation_foundation":["JSON parse rate","exact canonical call match","tool-name precision/recall/F1","full-call precision/recall/F1","argument accuracy","hallucinated-parameter rate","missing-parameter rate","value accuracy","empty-call behavior","retrieval Recall@k","retrieval MRR"]
+  },
+  "current_frank_mapping":{
+    "fixed_contract_ref":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
+    "contract_status":"Needle is the sole intentional non-Clay semantic foreign body; retained as fast pre-model classifier/router; output bridged into Clay as typed provenance-bound observation/proposal; Needle never mints execution authority.",
+    "reuse":{
+      "specialized_tiny_function_router":"REUSABLE_WITH_ADAPTATION",
+      "tool_schema_and_argument_generation":"REUSABLE_WITH_ADAPTATION",
+      "contrastive_tool_retrieval":"MEASUREMENT_AND_IMPLEMENTATION_FOUNDATION",
+      "constrained_tool_name_and_argument_key_decoding":"REUSABLE_WITH_FAIL_CLOSED_WRAPPER",
+      "finetune_split_and_heldout_eval":"MEASUREMENT_FOUNDATION",
+      "synthetic_tool_data_generation":"DATA_GENERATION_FOUNDATION_WITH_PROVENANCE_GATING",
+      "local_playground":"REUSABLE_DEVELOPER_TOOLING"
+    },
+    "non_reuse_rule":"Historical Needle model/training choices do not redefine the current FRANK authority architecture and do not become a second semantic architecture. Current Needle outputs remain proposals/observations only."
+  },
+  "negative_and_security_findings":[
+    {"id":"NEEDLE-CONSTRAINT-FAILOPEN-001","severity":"HIGH_ARCHITECTURAL","finding":"When constrained decoding finds no valid token, source logs a warning and falls back to unconstrained logits. Argument values are explicitly unconstrained by the name/key trie. Therefore Needle output cannot be treated as an authority or fail-closed validator.","current_requirement":"Deterministic Clay/runtime authority/effect validation must reject invalid or out-of-contract proposals regardless of Needle fallback behavior."},
+    {"id":"NEEDLE-PICKLE-CHECKPOINT-002","severity":"HIGH_SECURITY_FOR_UNTRUSTED_ARTIFACTS","finding":"Checkpoint loading uses Python pickle.load; local UI permits model checkpoint upload and then loads it. Localhost/origin restrictions reduce remote exposure but pickle is unsafe for untrusted checkpoint artifacts.","current_requirement":"Only load trusted hash/signature-verified legacy pickle checkpoints or migrate to a non-code-executing weight format for untrusted/imported artifacts."},
+    {"id":"NEEDLE-SHALLOW-HISTORY-003","severity":"SCOPE","finding":"Drive archive is a shallow Git snapshot. Parent commit is named but absent from pack; older upstream history is not present in this source and must not receive archive-completion credit."},
+    {"id":"NEEDLE-SYNTHETIC-DATA-004","severity":"PROVENANCE","finding":"Dataset generator can synthesize function-call data via Gemini. Generated examples are synthetic evidence and cannot become sensor truth, execution authority, or final training data without separate provenance/admission policy."}
+  ],
+  "positive_safety_findings":[
+    "Playground defaults to 127.0.0.1.",
+    "Finetune status/download/model upload and finetune endpoints enforce localhost checks.",
+    "Cross-origin POST Origin checks are present.",
+    "Checkpoint download path is constrained to checkpoint directory.",
+    "Finetune subprocess includes a finite timeout."
+  ],
+  "training_execution":{"paid_or_final_training_started":false,"needle_training_started":false,"note":"Only historical source was inspected; 666 does not authorize paid/final model training."},
+  "earned_work_policy":{"automatic_hours_added":0.0,"reason":"Needle source provides reusable code and measurement foundations, but row-level deduplication against current FRANK/ClayCode/Harness work is required before avoided-hour credit."},
+  "global_level0":{"gate":"NOT_PASS","exact_global_progress_credit":0.0,"denominator_state":"NOT_FROZEN","reason":"Needle snapshot locally closed; other Drive root subtrees and Project-Frankenstein history/tree remain open."},
+  "created_at":"2026-08-09T10:19:00+07:00"
+}

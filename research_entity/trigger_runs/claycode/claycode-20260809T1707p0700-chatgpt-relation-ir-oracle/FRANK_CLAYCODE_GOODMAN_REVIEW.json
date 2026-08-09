@@ -1,0 +1,54 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1707p0700-chatgpt-relation-ir-oracle",
+  "latest_frank_run":"recent FRANK loop-of-loops lineage commits e71c91ef3bed149170a9c8eaa2c31f7d6a8a6602 and 687cc0a8a00807cfc48a363d42651ac9e466e00d",
+  "latest_frank_claycode_architecture_artifact":null,
+  "latest_frank_claycode_architecture_artifact_reason":"No current FRANK_ARCHITECTURE.claycode.json was resolved on this connector surface; not fabricated.",
+  "reviews":[
+    {
+      "claim_id":"GOODMAN-CC-REL-01",
+      "frank_statement":"FRANK semantic/state distinctions and external-authority boundaries must survive ClayCode source presentation and canonicalization.",
+      "frank_source_refs":["research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","recent FRANK loop-of-loops lineage"],
+      "ancestry_families":["frank-claycode-shared-project-lineage"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A compact relation surface could safely fuse semantic relation identity with authority or representation-specific meaning.",
+      "falsifier":"A production type/effect/lowering proof shows RelationId alone can authorize effects while preserving current safety invariants.",
+      "independent_checks":["Current-run executable Relation IR discriminator carries authority=NONE and rejects unknown relations.","MLIR primary docs separate textual forms from operation identity and support generic/custom assembly.","Tree-sitter primary docs separate lexical conflicts from parse structure."],
+      "adversarial_checks":["unknown relation mutation","existing @ref operand preservation","prior @relation/@ref collision"],
+      "verdict":"REFINED",
+      "reason":"RelationId resolution is semantic/type identity only; authority remains a separate capability/effect check.",
+      "claycode_action":"Test later type/effect/lowering stages for accidental authority leakage.",
+      "affected_claycode_artifacts":["CC-WP-02-PARSER-CANON","CC-WP-03-IR-TYPES","CC-WP-04-TYPE-EFFECT"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-REL-02",
+      "frank_statement":"FRANK loop-of-loops/adaptive architecture requires special ClayCode relation syntax.",
+      "frank_source_refs":["recent FRANK loop-of-loops lineage"],
+      "ancestry_families":["frank-claycode-shared-project-lineage"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"General typed Relation IR plus verified projections is sufficient.",
+      "falsifier":"A production-compiled FRANK component exposes a relation not representable/lowerable through generic typed Relation IR without semantic loss.",
+      "independent_checks":["current-run 4/4 cross-surface IR/hash equality","prior whole-G9 closure required no new cognitive/runtime primitive"],
+      "adversarial_checks":["digit-leading relation","@ref operand","unknown relation"],
+      "verdict":"UNRESOLVED",
+      "reason":"No full FRANK component was production-compiled; no evidence here justifies FRANK-specific relation syntax.",
+      "claycode_action":"Do not add FRANK-specific relation syntax absent executable counterexample.",
+      "affected_claycode_artifacts":["CC-WP-01-SPEC-FREEZE","CC-WP-10-GENERAL-APP-SUITE","CC-WP-13-HARNESS-HANDOFF"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-REL-03",
+      "frank_statement":"Current generic ClayCode semantics are sufficient for the full adaptive visual learner.",
+      "frank_source_refs":["FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md","current ClayCode feedback lineage"],
+      "ancestry_families":["frank-claycode-shared-project-lineage"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"The full learner exposes a missing type/effect/state transition.",
+      "falsifier":"Production compile/replay of the learner state machine across promotion/rollback/open-set/resource/replay cases.",
+      "independent_checks":["No full learner execution in this run."],
+      "adversarial_checks":["Refused to infer learner sufficiency from relation-IR success."],
+      "verdict":"UNRESOLVED",
+      "reason":"Relation canonicalization evidence is orthogonal to full learner sufficiency.",
+      "claycode_action":"Keep sufficiency open until Ubuntu-target application proof.",
+      "affected_claycode_artifacts":["CC-WP-10-GENERAL-APP-SUITE","CC-WP-13-HARNESS-HANDOFF"]
+    }
+  ]
+}

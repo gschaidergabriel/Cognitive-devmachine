@@ -1,0 +1,39 @@
+module app.dbtx.ledger.v0
+version "0.1-executable-proxy"
+status RESEARCH_EXECUTABLE_PROXY
+
+record DbResourceRef {
+  logical_id:ResourceRef
+  kind:Symbol
+  authority:Symbol
+}
+
+record DbTransfer {
+  key:IdempotencyKey
+  source_account:Symbol
+  target_account:Symbol
+  amount:Int
+}
+
+record DbTransactionPlan {
+  resource:DbResourceRef
+  mode:Symbol
+  ops:Ordered<DbOp>
+}
+
+record DbTxnReceipt {
+  semantic_hash:Hash
+  resource_ref:ResourceRef
+  committed:Bool
+  rolled_back:Bool
+  idempotency_keys:Set<IdempotencyKey>
+  outcome:Set<OutcomeRef>
+}
+
+rule db.resource.authority=HOST_OWNED_REFERENCE_ONLY
+rule db.source_reference!=db.execution_authority
+rule db.generated_program never_embeds runtime_resource_instance
+rule db.commit requires broker_verified
+rule db.rollback preserves pre_transaction_state
+rule db.replay same_idempotency_key -> NO_DUPLICATE_EFFECT
+rule db.raw_sql not_in guest_effect_surface

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-claycode-loop-eval-lowering",
+  "trigger": "spawn",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "randomness": {
+    "branch_selector": "OS_CSPRNG / secrets.SystemRandom",
+    "branch_draw_space": "[0,1000000000)",
+    "branch_draw_int": 479699728,
+    "branch_percentile": 47.9699728,
+    "weights": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    },
+    "selected_branch": "claycode"
+  },
+  "microdirection_candidates": [
+    {"id": "strict-lalr-conflict-resolution", "eligible": false, "reason": "fresh duplicate of current parser/fn strict-LALR work"},
+    {"id": "canonical-symbol-signature-identity", "eligible": false, "reason": "fresh duplicate of current function binding/identity work"},
+    {"id": "adaptive-learner-transactional-state", "eligible": true},
+    {"id": "http-ffi-capability-receipts", "eligible": true},
+    {"id": "frank-loop-evaluator-lowering", "eligible": true},
+    {"id": "async-resource-identity-lifetimes", "eligible_initially": true, "eligible_final": false, "reason": "rerolled after fresh repository duplicate discovered: FFI resource identity / TOCTOU / lifetime work"}
+  ],
+  "microdirection_selection": {
+    "method": "OS_CSPRNG among eligible high-value candidates",
+    "first_selection": "async-resource-identity-lifetimes",
+    "reroll_count": 1,
+    "reroll_rule": "microdirection only; branch retained",
+    "final_selection": "frank-loop-evaluator-lowering"
+  },
+  "research_question": "Can the current FRANK LoopDynamicsReadout/RecurrenceDecision slice be evaluated and lowered with ordinary canonical typed-control IR while preserving epoch/identity/authority boundaries, without a new FRANK-specific ClayCode primitive?",
+  "stop_reason": "Current local discriminating tests exhausted; decisive next evidence requires production parser/canonical-IR/compiler integration on the Ubuntu developer target.",
+  "scientific_promotion": "NONE",
+  "base_gate_change": "NONE",
+  "research_delta": "COMMITTED_CANDIDATE_EVIDENCE"
+}

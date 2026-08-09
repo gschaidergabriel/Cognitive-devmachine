@@ -1,0 +1,50 @@
+{
+  "schema_version": "2.0",
+  "event_id": "wev-20260809T235700p0700-frank-digital-soul-situated-continuity",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T23:57:00+07:00",
+  "payload": {
+    "work_id": "frank-digital-soul-situated-continuity-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "title": "Implement and falsify FRANK Digital Soul temporal/situated continuity",
+    "origin_class": "PROJECT_OWNER_FIXED_ARCHITECTURE_BOUNDARY",
+    "contract": "research_entity/global/FRANK_DATABASE_PULSE_CONTRACT.md",
+    "goal": "Make Database Pulse maintain a persistent, provenance-bound TimeState and SituatedState independent of any single LLM call, and prove continuity through idle time, environment changes, pause/resume and restart.",
+    "required_state": [
+      "wall_clock_time",
+      "timezone",
+      "monotonic_runtime_time",
+      "boot_id",
+      "session_epoch",
+      "pulse_sequence",
+      "last_pulse_at",
+      "last_external_interaction_at",
+      "state_entered_at",
+      "time_in_current_state",
+      "paused_or_offline_interval",
+      "restart_recovery_lineage",
+      "host_device_identity",
+      "workspace_project_context",
+      "authorized_desktop_filesystem_context",
+      "network_context_if_available",
+      "physical_location_only_if_authorized_and_observed",
+      "freshness_confidence_and_provenance"
+    ],
+    "mandatory_tests": [
+      "zero-LLM-call pulse advances temporal/entity state",
+      "same logical state accumulates duration without fabricating wall-clock monotonic equivalence",
+      "state transition resets state_entered_at and preserves prior duration receipt",
+      "desktop/workspace change becomes a bounded provenance-bearing environment delta",
+      "stale or unavailable place data remains UNKNOWN/STALE",
+      "pause/suspend/restart records offline interval rather than pretending uninterrupted cognition",
+      "restart resumes same admitted identity/state lineage when recovery receipt validates",
+      "model replacement does not reset Digital Soul identity/state continuity",
+      "Pulse-generated situated state can affect later routing/cognition while carrying no execution authority by itself",
+      "resource budgets prevent runaway polling or indiscriminate filesystem ingestion"
+    ],
+    "feedback_targets": ["frank","harness","unifieddb","claygraph","gwt","claycode","hyperposition","emergenz"],
+    "authority": "proposal_and_test_until_stage_gate",
+    "status": "READY"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1919p0700-chatgpt-secondary-readout-quality",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "evidence_class": "LOCAL_CONTAINER_SYNTHETIC_MECHANISM_TEST_NOT_TARGET_ACCEPTANCE",
+  "experiment": "FRANK_LOOP_REGIME_CONTROLLER_DISCRIMINATOR",
+  "seed": 20260809,
+  "episodes": 50000,
+  "local_executed_script_sha256": "fc11ab38670932d78beea5cc163334c1ba6335fdd0d74a5ede20e24612cc0906",
+  "local_stdout_receipt_sha256": "346f79857c2bef3b5f2e04c8cde61795f0611af4c2ca0f56c55adba4ce5196b5",
+  "persisted_reproducer": "research_entity/trigger_runs/frank/frank-20260809T1919p0700-chatgpt-secondary-readout-quality/EXPERIMENT_LOOP_READOUT_QUALITY.py",
+  "note_on_reproducer_identity": "The persisted reproducer preserves the executed mechanism and seed but is a cleaned repository rendering; the local execution hash identifies the exact byte sequence that produced this receipt.",
+  "regime_mix": {
+    "FAST": 0.35,
+    "SLOW": 0.30,
+    "STALLED": 0.20,
+    "PRODUCTIVE_CYCLE": 0.15
+  },
+  "metrics": {
+    "delta_only": {
+      "mean_steps": 8.50772,
+      "mean_final_residual": 0.2504282612999653,
+      "false_convergence_rate": 0.23208,
+      "stalled_false_convergence_rate": 1.0,
+      "stalled_escalation_rate": 0.0,
+      "stalled_mean_steps": 3.0001972775695402,
+      "fast_mean_steps": 7.569604306247495,
+      "productive_cycle_mean_steps": 12.0
+    },
+    "global_dual": {
+      "mean_steps": 10.46792,
+      "mean_final_residual": 0.2433021961352757,
+      "false_convergence_rate": 0.0,
+      "stalled_false_convergence_rate": 0.0,
+      "stalled_escalation_rate": 0.0,
+      "stalled_mean_steps": 12.0,
+      "fast_mean_steps": 7.613353948347935,
+      "productive_cycle_mean_steps": 12.0
+    },
+    "typed": {
+      "mean_steps": 8.07222,
+      "mean_final_residual": 0.25909787597150086,
+      "false_convergence_rate": 0.0,
+      "stalled_false_convergence_rate": 0.0,
+      "stalled_escalation_rate": 1.0,
+      "stalled_mean_steps": 4.000789110278161,
+      "fast_mean_steps": 5.400962034014774,
+      "productive_cycle_mean_steps": 11.999864773495606
+    }
+  },
+  "readout_noise_sensitivity": [
+    {"noise_sd":0.0,"stale_probability":0.0,"false_convergence_rate":0.0,"stalled_escalation_rate":1.0,"mean_steps":8.07222,"mean_final_residual":0.25909787597150086},
+    {"noise_sd":0.0,"stale_probability":0.2,"false_convergence_rate":0.0,"stalled_escalation_rate":1.0,"mean_steps":8.14722,"mean_final_residual":0.25741650384763043},
+    {"noise_sd":0.0,"stale_probability":0.5,"false_convergence_rate":0.0,"stalled_escalation_rate":1.0,"mean_steps":8.30384,"mean_final_residual":0.25434351318435555},
+    {"noise_sd":0.03,"stale_probability":0.0,"false_convergence_rate":0.0,"stalled_escalation_rate":1.0,"mean_steps":8.03014,"mean_final_residual":0.2611935872096134},
+    {"noise_sd":0.03,"stale_probability":0.2,"false_convergence_rate":0.0,"stalled_escalation_rate":1.0,"mean_steps":8.11924,"mean_final_residual":0.25900862608256353},
+    {"noise_sd":0.03,"stale_probability":0.5,"false_convergence_rate":0.0,"stalled_escalation_rate":1.0,"mean_steps":8.29518,"mean_final_residual":0.25529537895306126},
+    {"noise_sd":0.08,"stale_probability":0.0,"false_convergence_rate":0.00832,"stalled_escalation_rate":1.0,"mean_steps":7.78848,"mean_final_residual":0.2709760413401127},
+    {"noise_sd":0.08,"stale_probability":0.2,"false_convergence_rate":0.00614,"stalled_escalation_rate":1.0,"mean_steps":7.9069,"mean_final_residual":0.2674916539572489},
+    {"noise_sd":0.08,"stale_probability":0.5,"false_convergence_rate":0.00376,"stalled_escalation_rate":1.0,"mean_steps":8.15294,"mean_final_residual":0.2612038558699289},
+    {"noise_sd":0.15,"stale_probability":0.0,"false_convergence_rate":0.12782,"stalled_escalation_rate":0.9992108897218386,"mean_steps":7.17464,"mean_final_residual":0.29529823207339995},
+    {"noise_sd":0.15,"stale_probability":0.2,"false_convergence_rate":0.10558,"stalled_escalation_rate":0.9994081672913789,"mean_steps":7.38912,"mean_final_residual":0.28769383828258116},
+    {"noise_sd":0.15,"stale_probability":0.5,"false_convergence_rate":0.06644,"stalled_escalation_rate":0.9990136121522983,"mean_steps":7.79496,"mean_final_residual":0.2754164584429867}
+  ],
+  "interpretation": {
+    "supported": "In the constructed heterogeneous loop fixture, state-delta-only convergence is unsafe on STALLED traces. Residual-aware classification prevents that specific false convergence. A single global dual stop rule avoids false convergence but burns the full recurrence budget on stalls, while typed stall escalation exits the stall class earlier.",
+    "negative_result": "Pressure-aware recurrence is not self-validating. With sufficiently noisy residual-pressure observations, the typed controller begins falsely declaring convergence. Residual estimator identity/version, uncertainty and freshness therefore need to be explicit decision inputs rather than implicit assumptions.",
+    "cross_domain_transfer": "This mirrors the already-fixed FRANK visual-learning contract, where confidence/open-set decisions carry calibration/version and recency rather than treating familiarity as evidence.",
+    "not_established": "No claim is made about live FRANK cognitive benefit, H1/H2/H3 parity, target-Ubuntu performance, emergence, consciousness, or optimal threshold values."
+  },
+  "promotion_allowed": false,
+  "recommended_harness_delta": "Add explicit residual estimator identity/version, readout uncertainty and measurement age to the LoopDynamics readout boundary; route uncertain/stale readouts instead of allowing them to mint HALT_CANDIDATE_CONVERGED."
+}

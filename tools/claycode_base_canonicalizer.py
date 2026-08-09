@@ -19,7 +19,7 @@ from typing import Any
 from lark import Lark, Token, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
 DEFAULT_SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
@@ -77,9 +77,6 @@ def verify_roundtrip(payload: Any, grammar_sha256: str, expected_hash: str) -> d
 
 
 def layout_variant(source: str) -> str:
-    # Comments and repeated NEWLINE separators are lexical/layout concerns and must not
-    # change canonical syntax identity. Deliberate punctuation other than the grammar's
-    # equivalent NEWLINE/semicolon block separators is retained.
     return "// canonicalizer-layout-variant\n\n" + source.replace("\n", "\n\n") + "\n// canonicalizer-layout-end\n"
 
 
@@ -157,6 +154,7 @@ def main() -> None:
         "boolean_value": ("rule true\n", "rule false\n"),
         "argument_order": ("rule f(a,b)\n", "rule f(b,a)\n"),
         "dotted_relation_kind": ("rule Needle.lowers X\n", "rule Needle.owns X\n"),
+        "bare_owns_vs_prefix_owns": ("rule 4B_need_not_learn Needle.owns\n", "rule Needle.owns X\n"),
         "lifecycle_order": (
             "rule external_effect lifecycle=[REQUESTED,AUTHORIZED,DONE]\n",
             "rule external_effect lifecycle=[AUTHORIZED,REQUESTED,DONE]\n",
@@ -182,8 +180,8 @@ def main() -> None:
 
     overall = overall and all(x["pass"] for x in distinct) and all(x["pass"] for x in equivalent)
     receipt = {
-        "schema_version": "1.2",
-        "experiment": "ClayCode BASE deterministic grammar-bound literal-safe syntax canonicalization",
+        "schema_version": "1.3",
+        "experiment": "ClayCode BASE deterministic V9 grammar-bound literal-safe syntax canonicalization",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)) if grammar_path.is_relative_to(ROOT) else str(grammar_path),
         "grammar_sha256": grammar_sha,
@@ -194,7 +192,7 @@ def main() -> None:
         "semantic_surface_discrimination": distinct,
         "layout_equivalence": equivalent,
         "pass": overall,
-        "scope_guard": "PASS proves deterministic grammar-bound layout-insensitive and lexical-meaning-sensitive canonical syntax identity for the listed admitted sources and mutation pairs. A relaxed-parser run is sandbox regression evidence only. This is CC-WP-02 evidence and does not prove typed canonical IR/type/effect semantics (CC-WP-03/04).",
+        "scope_guard": "PASS proves deterministic V9 grammar-bound layout-insensitive and lexical-meaning-sensitive canonical syntax identity for the listed admitted sources and V5/V6 regression/mutation pairs. A relaxed-parser run is sandbox regression evidence only. This is CC-WP-02 evidence and does not prove typed canonical IR/type/effect semantics (CC-WP-03/04).",
     }
     rendered = json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
     if args.output:

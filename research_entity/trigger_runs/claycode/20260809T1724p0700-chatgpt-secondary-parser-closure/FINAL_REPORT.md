@@ -1,4 +1,4 @@
-# ClayCode Trigger Run — Parser/Canonical Surface Closure
+# ClayCode Trigger Run — Parser Closure Replication + Concurrent Assimilation
 
 Run ID: `20260809T1724p0700-chatgpt-secondary-parser-closure`  
 Actor: `chatgpt-secondary` · OpenAI · GPT-5.6 Sol  
@@ -9,202 +9,206 @@ Target implementation scope: Frank v0.1 on Ubuntu Linux developer system only.
 
 ## Executive result
 
-The highest-value current ClayCode blocker is not lack of another cognitive concept. It is executable closure between the admitted G9 V3 source surface and its declared grammar.
+This run independently reproduced a **strict subset** of the current ClayCode parser-closure problem, then cross-read stronger concurrent work before completion.
 
-The current G9 V3 source contains syntax that the current `grammar.ebnf` does not declare or leaves materially underspecified, including:
-
-- `<` and `>` comparisons used by current rules;
-- `if { ... }` conditional execution used in the current cycle;
-- `//` comments;
-- current legacy predicate-like rule forms such as `never_implies`, `returns`, and `is_explanation_of_derivation`;
-- a flat expression rule that provides no explicit executable precedence/associativity contract.
-
-A corrected local executable experiment compared a parser proxy faithful to the current declared EBNF against a minimal compatibility candidate on nine exact current-G9-V3 fragments.
-
-Result:
+Local experiment `CC-G9-PARSER-DELTA-20260809` tested nine exact current-G9-V3 fragments:
 
 - declared-grammar baseline proxy: **2/9 pass, 7/9 fail**;
-- minimal candidate: **9/9 pass, 0/9 fail**.
+- minimal compatibility candidate: **9/9 pass, 0/9 fail**.
 
-This is a real counterexample to treating the current grammar as release-ready for the tested source surface. It is **not** whole-file parser completion and it does not close `CC-WP-02`.
+The failures covered comparisons, conditional syntax, comments and current legacy predicate-like rule forms. The candidate repair added those missing constructs plus explicit executable precedence/associativity.
 
-## Why this matters to the current gate
+During this worker's execution, a broader concurrent ClayCode run `claycode-20260809T1717p0700-all-workers-production-parser` completed production-like parser saturation across the **full current G9 V3 plus Dialect corpus**, including typed method signatures, lexical identity, semantic-hash/contract-hash separation, fail-closed relation handling, mutation/fuzz tests and N/S/D surface candidates. That run is now the stronger primary parser evidence.
 
-`BASE_CLAYCODE_RELEASE` is still `NOT_PASS`; all 14 current ClayCode work packages remain open. The current release law is `less change, more compile`: preserve existing semantics unless a concrete executable counterexample forces a language correction.
+Therefore this run's correct novelty classification is:
 
-This run found exactly such a counterexample, but the repair can remain narrow: fix parser/surface closure and canonicalization rather than inventing new cognitive semantics.
+`INDEPENDENT_LOCAL_SUBSET_REPLICATION + METHOD_NEGATIVE_RESULT + CURRENT_MESH_ASSIMILATION`
 
-## Fusion 1 — internal evidence
+—not primary parser discovery and not release completion.
 
-### ClayCode
+`CC-WP-02-PARSER-CANON` remains `OPEN` and the BASE gate remains `NOT_PASS`.
 
-Current G9 V3 already carries substantial semantic machinery: delta calculus, provenance algebra, capability-bearing effects, dialect contracts, UnifiedDB/ClayGraph deltas, GWT readouts, effect intents, bounded equivalence search, reader/context accounting and native-cognition task structures.
+## Current gate and all-worker execution law
 
-The practical gap exposed here is that the executable source surface and formal grammar are not yet closed over one another.
+The current project stage remains `BASE_CLAYCODE_RELEASE`; all 14 work packages remain open and no mandatory application proof has passed. The ClayCode room directive requires:
 
-### FRANK
+`test -> receipt -> learn -> recompute -> next_test`
 
-No current `FRANK_ARCHITECTURE.claycode.json` was located. Repository search returned no artifact and the expected-path fetch returned 404. No artifact was fabricated. Current FRANK loop-of-loops and adaptive-visual-learning directives were therefore used only as provisional requirements.
+until the accessible question is saturated, genuinely blocked, or the next test would only duplicate evidence without material information gain.
 
-### Harness
+After the concurrent pulse, further hosted parser fuzzing in this worker would mostly duplicate the broader saturation run. The remaining high-information parser tests require one or more currently unavailable surfaces: normative repository parser/canonicalizer integration, target Qwen-class 4B reader comparison, E2B replication, or Andreas' Ubuntu developer-system execution.
 
-The Harness ClayCode adapter remains blocked on ClayCode release. Parser/canonicalizer closure is therefore a direct prerequisite for H2 rather than an isolated language-cleanup task.
+## Executable local result
 
-### ClayGraph / UnifiedDB
+### Exact tested counterexamples
 
-Current graph and persistence substrates already require epoch identity, provenance, selection/projection receipts, hyperrelations, revisioned work/capability state and explicit execution receipts. These requirements strengthen the case for deterministic typed IR and canonicalization, but they do not require arbitrary new surface operators.
+The current G9 source contains forms including:
 
-### GWT / Hyperposition / Emergenz
+- `rule diff>0 => ADD_OR_STRENGTHEN`
+- `rule diff<0 => RETRACT_OR_WEAKEN`
+- `rule Delta never_implies epistemic_upgrade`
+- `rule delegation returns narrower_or_equal(CapabilityToken)`
+- `rule ProvExpr is_explanation_of_derivation`
+- `if residual.effect {...}`
+- `// ...` comments
 
-These branches require typed causal/readout/intervention structures and strict distinctions such as selection vs causal use, activation vs truth, recurrence vs emergence and semantic vs physical topology. Nothing found in this run requires new surface-language semantics to represent those distinctions.
+The declared EBNF lacked or underspecified relevant surface classes.
 
-## Hypotheses and counterhypotheses
+### Minimal candidate tested here
 
-### H-CC-PARSER-01 — current grammar is not closed over current G9 V3
-
-Status: `SUPPORTED_FOR_TESTED_FRAGMENTS`.
-
-Mechanism: current source constructs are absent or underspecified in the EBNF.
-
-Counterhypothesis: the mismatch is cosmetic documentation drift and has no executable effect.
-
-Falsifier: a parser generated from the current declared grammar parses the exact tested fragments and whole current G9 source without hidden extensions.
-
-Observed: baseline proxy accepted 2/9 and rejected 7/9.
-
-### H-CC-PARSER-02 — minimal compatibility repair is sufficient
-
-Status: `SUPPORTED_FRAGMENT_LEVEL_ONLY`.
-
-Candidate delta:
-
-1. lex `//` comments as extras;
+1. lex `//` comments;
 2. add `<`, `>`, `<=`, `>=` comparisons;
-3. add explicit `if/else` statement form;
-4. define executable expression precedence/associativity;
-5. accept only a bounded legacy-predicate compatibility set and canonicalize it into typed IR rather than permitting arbitrary prose-like operators.
+3. add `if/else`;
+4. define executable precedence/associativity;
+5. bound legacy predicate compatibility and lower it toward typed identities rather than accept arbitrary prose operators.
 
-Observed: 9/9 targeted fragments parse in the candidate.
+Result: **9/9 targeted fragments parsed**.
 
-Falsifier: whole-file parse/canonical roundtrip reveals irreducible ambiguity or meaning changes.
+This is fragment-level evidence only. The broader concurrent parser run provides the whole-corpus evidence.
 
-### H-CC-RULE-RUNTIME-SPLIT-01 — separate rule language from executable expressions
+### Preserved method negative result
 
-Status: `OPEN`.
+The first quick checker in this run was too coarse and missed individual counterexamples. It was discarded and replaced. That failure is retained as `N-CC-FIRST-PROBE-20260809` rather than silently erased.
 
-Candidate architecture: retain a compatibility-oriented `rule_expr` for declarative research/constraint statements, but lower executable runtime behavior through a stricter precedence-defined `runtime_expr`.
+## Concurrent parser evidence assimilated
 
-Counterhypothesis: one unified typed operator table is simpler and equally deterministic.
+The production-like all-worker parser run materially supersedes this run on parser breadth. Its current findings include:
 
-Next test: whole-file parse + canonical roundtrip + mutation/fuzz corpus.
+- current grammar proxy: 61/86 current G9 top-level units before repair;
+- current Dialect grammar proxy: 22/25 before adding typed interface method signatures;
+- repaired LALR/contextual parser: full current G9 + full current Dialect parse for N/S/D candidates;
+- semantic relation oracle: 20/20 intended AST and roundtrip for all candidates;
+- unknown relation fuzz: 0 false accepts / 100,000;
+- whitespace semantic-hash preservation: 20,000/20,000;
+- relation mutation and operand-swap semantic identity tests: 20,000/20,000 each;
+- typed set/sequence identity replication: 50,000 randomized cases;
+- lexical semantic-identity bug found and repaired for booleans and keyword-like identifiers;
+- D currently `LEADING_NOT_SELECTED`, chiefly on migration cost, but not promoted because target-reader, normative integration, E2B and Ubuntu evidence remain missing.
 
-### H-CC-FFI-01 — WIT-like typed host boundary is useful
+This run does not count that concurrent work as its own independent replication. It consumes it as current branch evidence and narrows its own contribution accordingly.
 
-Status: `OPEN`.
+## Latest FRANK cross-read
 
-Independent primary implementation evidence shows WIT can define typed component imports/exports while WASI/Wasmtime provides explicit capability-scoped host resources. This is evidence for a **candidate interface pattern**, not evidence that WASM/WASI is the best first ClayCode backend.
+A newer FRANK run committed during this execution:
 
-Counterhypothesis: native Ubuntu ABI/FFI is simpler/faster with equivalent safety behind the same Clay authority gateway.
+`research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/`
 
-Next test: native-vs-WASM/WASI Ubuntu application and authority-bypass benchmarks.
+It now includes the previously unavailable:
 
-### H-CC-LOOP-REP-01 — current typed primitives can represent loop dynamics
+`FRANK_ARCHITECTURE.claycode.json`.
 
-Status: `OPEN`.
+The artifact represents `LoopDynamicsReadout`, `RecurrenceDecision`, effect-gateway authority, replay/rollback and Ubuntu-target identity as a **research candidate**, and explicitly states that the next useful slice is:
 
-The loop-of-loops research requirement should first be attempted with existing records/tensors/interventions/receipts. No new loop syntax is justified yet.
+`LoopDynamicsReadout + RecurrenceDecision + one frozen FRANK loop -> parser -> canonical typed IR -> type/effect -> evaluator/lowering -> Ubuntu receipt`.
 
-Next test: compile a minimal `LoopDynamicsReadout` plus continue/halt/escalate, lesion/rescue and rollback contract after parser closure.
+Critically, the latest FRANK report also finds **no justification for new ClayCode semantics** from the loop-of-loops hypothesis. That aligns with the current BASE rule: use existing general-purpose typed machinery until an executable counterexample forces a language change.
 
-## Executable experiment
+## Concurrent control/effect evidence assimilated
 
-Experiment: `CC-G9-PARSER-DELTA-20260809`.
+A second concurrent ClayCode run closed a different local proxy boundary:
 
-Runtime: local Linux x86_64 ChatGPT execution fallback; Python 3.13.5; Lark 1.3.1.
+`claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure`.
 
-Preferred E2B surface was not exposed in this ChatGPT session, so no E2B evidence is claimed. SandboxAPI remains non-runtime evidence under the current protocol state.
+It reports, in its tested local proxy:
 
-Corpus: nine exact current-source fragments covering comparisons, conditionals, comments, legacy rule predicates and already-supported controls.
+- 50,000 randomized branch/recursive-call/Result-match cases with 0 differential mismatches;
+- 20,000 transitive effect-graph mutations with 0 false accepts after removing an inferred effect;
+- fail-closed missing permits, undefined calls and recursion-budget overruns;
+- preserved separation between static potential-effect summary and runtime effect authority.
 
-Hashes and full test details are preserved in `EXECUTABLE_RESEARCH_RECEIPT.json` and the committed experiment script.
+This means the current hosted frontier has already moved beyond the fragment parser problem toward real integration of parser + typed IR + type/effect + evaluator + lowering.
 
-A first quick probe was rejected during method audit because it was too coarse. That failed method is preserved as a negative result rather than hidden.
+## Goodman anti-echo review
+
+The updated Goodman review cross-reads the latest FRANK run and architecture artifact.
+
+Verdicts:
+
+- external capability/effect authority boundary: `SUPPORTED` at mechanism level using independent WASI/Wasmtime evidence;
+- FRANK loop-of-loops causal mechanism: `UNRESOLVED`; parser/control proxies do not validate live loop dynamics;
+- WASM/WASI as first backend: `REFINED`; viable typed/capability boundary candidate, not mandatory winner;
+- adaptive visual learner state representation: `UNRESOLVED` scientifically while remaining an owner-fixed product requirement.
+
+`tools/goodman_filter_check.py validate-run` was executed against the conformed run manifests:
+
+- exit code: `0`;
+- registered branches: `9`;
+- violations: `[]`.
+
+Validation receipt: `GOODMAN_VALIDATION.json`.
 
 ## External primary-source research
 
-External research was used only to test design direction, not to replace the executable ClayCode result.
+External sources were used as independent design checks, not as proof of ClayCode.
 
-- Tree-sitter documentation independently supports explicit precedence/associativity, conflict handling, comment extras and parser test corpora for reliable grammar construction.
-- The Rust Reference provides an independent mature example in which comparison operators and `if` forms are explicitly grammar-defined and operator precedence is explicit.
-- WebAssembly Component Model WIT provides a typed interface/world contract model for imports and exports; it is an IDL rather than a general-purpose behavior language.
-- Wasmtime/WASI documents filesystem/resource access through explicit preopened/capability-scoped interfaces, supporting the ClayCode principle that computational expressibility should remain separate from ambient authority.
+- Tree-sitter documents explicit precedence/associativity, conflict handling, comments as extras and test-driven parser development.
+- The Rust Reference explicitly defines comparisons, `if` forms and expression precedence, independently supporting the decision not to leave executable precedence implicit.
+- WebAssembly Component Model WIT defines typed imports/exports and interface contracts while explicitly not being a general-purpose behavior language.
+- Wasmtime/WASI exposes host resources such as filesystem access through explicit configured/preopened permissions, providing an independent capability-oriented comparison for ClayCode's authority boundary.
 
-These are mechanism/design analogues, not ClayCode replication.
+## Nine-branch synthesis
 
-## Goodman anti-echo results
+- **frank:** latest architecture artifact now loaded; loop state is a representation/test target, not evidence for new syntax.
+- **harness:** H2 remains blocked on ClayCode release; integration evidence is the direct dependency.
+- **claygraph:** no change; activation/topology remains derived and non-authoritative.
+- **unifieddb:** no change; revision/capability/execution receipts reinforce explicit deterministic identities.
+- **clayresearch:** compile/realize priority strengthened.
+- **gwt:** no change; selection, causal use, outcome and re-entry remain distinct.
+- **hyperposition:** no change; alternatives/topologies remain typed semantics, not parser authority.
+- **emergenz:** no change; recurrence/parser closure is not emergence evidence.
+- **claycode:** this run is retained as a small independent parser replication; the current frontier is production integration.
 
-- External capability/effect authority boundary: `SUPPORTED` at mechanism level; final ClayCode API remains unproven.
-- FRANK loop-of-loops mechanism: `UNRESOLVED`; this run produced no independent loop-dynamics execution evidence.
-- WASM/WASI as first backend: `REFINED`; viable candidate boundary/backend, not mandatory winner.
-- Adaptive visual learner state representation: `UNRESOLVED` scientifically but remains an owner-fixed product requirement; first try existing typed state/version/provenance primitives.
+## Architecture implication
 
-Full review: `FRANK_CLAYCODE_GOODMAN_REVIEW.json`.
-
-## Negative results
-
-1. `N-CC-G9-GRAMMAR-CLOSURE-20260809`: current declared EBNF is not sufficient for the tested current G9 V3 source surface.
-2. `N-CC-FIRST-PROBE-20260809`: the first quick checker was inadequate and was discarded/replaced.
-
-No negative result was upgraded into a universal claim beyond its tested scope.
-
-## Branch feedback
-
-- `claycode`: parser/canonicalizer closure is now a concrete BASE blocker with a minimal repair candidate.
-- `harness`: H2 dependency is sharpened; next evidence must be whole-file closure before ClayCode Harness work can rely on this grammar.
-- `frank`: loop/adaptive-vision requirements preserved as representation targets; no independent mechanism promotion.
-- `clayresearch`: compile/realize priority reinforced.
-- `gwt`, `emergenz`, `hyperposition`, `claygraph`, `unifieddb`: `NO_CHANGE` to scientific semantics; their typed distinctions remain inputs to the eventual canonical IR.
-
-## Architecture delta candidate
-
-Do **not** promote yet. Candidate for the next compiler iteration:
+The local result and broader concurrent evidence jointly favor the following layering:
 
 ```text
-source surface
-  -> lexer/comments
-  -> statement split
-       declarative rule_expr      // compatibility, canonicalized to typed predicates
-       executable runtime_expr    // explicit precedence/associativity
-  -> typed canonical IR
-  -> deterministic semantic hash
-  -> type/effect/authority validation
-  -> lowering/runtime
+source spelling
+ -> deterministic lexer/parser
+ -> typed semantic identities / canonical IR
+ -> semantic_hash
+ -> exact contract/provenance identity
+ -> type/effect closure
+ -> evaluator
+ -> lowering/runtime
+ -> fresh capability/effect validation
+ -> execution/effect receipt
 ```
 
-Hard boundary retained:
+Candidate surface choices remain below typed semantic identity. Parse acceptance cannot mint relation truth or effect authority.
+
+Hard boundaries retained:
 
 `expressibility != authority`
 
-and
+`parse success != semantic truth`
 
-`model output != execution authority`.
+`static effect summary != runtime permit`
+
+`model output != execution authority`
 
 ## Gate impact
 
-`CC-WP-02-PARSER-CANON`: remains `OPEN`, but now has a concrete executable blocker and tested repair direction.
+No package is marked complete by this run.
 
-`CC-WP-01-SPEC-FREEZE`: cannot honestly freeze until whole-file grammar/source closure is tested.
+- `CC-WP-01-SPEC-FREEZE`: `OPEN`;
+- `CC-WP-02-PARSER-CANON`: `OPEN`, uncertainty materially reduced by broader concurrent evidence;
+- `CC-WP-03-IR-TYPES`: `OPEN`;
+- `CC-WP-04-TYPE-EFFECT`: `OPEN`;
+- `CC-WP-05-EVALUATOR`: `OPEN`;
+- `GENERAL_PURPOSE_GATE`: `NOT_PASS`;
+- `APP-01..APP-10`: no PASS from this run.
 
-`CC-WP-11-FUZZ-CONFORMANCE`: should inherit the exact counterexample corpus and expand it with precedence, keyword, malformed-rule and canonical-roundtrip mutations.
+## Highest-information next execution
 
-No application proof (`APP-01..APP-10`) passed in this run. `GENERAL_PURPOSE_GATE` remains `NOT_PASS`.
+The hosted parser question is experimentally saturated enough that repeating more local parser fragments would add little information. The next useful work is:
 
-## Highest-information next step
+1. normative repository integration of the leading parser/canonicalizer candidate;
+2. exact typed-AST/semantic-hash handoff into the current control/effect candidate;
+3. production evaluator/lowering path;
+4. target-reader N/S/D comparison when a callable Qwen-class 4B reader is exposed;
+5. E2B replication when E2B is callable to this worker;
+6. real Ubuntu developer-system receipt when that target is connected;
+7. then one frozen FRANK `LoopDynamicsReadout -> RecurrenceDecision -> effect-gateway` vertical slice.
 
-1. implement a real whole-file parser for the full current G9 V3 source using the minimal repair;
-2. deterministic parse -> canonical IR -> print -> parse roundtrip with semantic hash stability;
-3. negative/mutation corpus for precedence, keywords, legacy predicate boundaries and comments;
-4. then type/effect-check and execute a minimal `LoopDynamicsReadout` plus adaptive-visual learner state contract;
-5. only after that begin backend/FFI application proofs on the Ubuntu target.
-
-This sequence advances Frank v0.1 directly while honoring the current rule: **less language invention, more executable ClayCode**.
+Those decisive surfaces are not callable in this session. Additional hosted fragment parsing would now be duplication, so this run stops under the all-worker execution directive's explicit saturation/non-duplication rule.

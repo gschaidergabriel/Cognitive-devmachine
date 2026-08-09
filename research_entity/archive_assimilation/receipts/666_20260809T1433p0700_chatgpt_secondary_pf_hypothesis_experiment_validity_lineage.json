@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1433p0700-chatgpt-secondary-pf-hypothesis-experiment-validity-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "focus": "hypothesis-to-experiment translation, parser-failure lineage, fallback semantics, verdict validity and current inheritance",
+    "non_overlap": "Narrow epistemic/translation lineage only; broad experiment/benchmark chronology remains outside this shard."
+  },
+  "source_refs": [
+    "services/hypothesis_engine/service.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/hypothesis_engine/evaluator.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/hypothesis_engine/lab_connector.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/hypothesis_engine/lab_connector.py@9c1e034a53921b47d2eebda558e4bb95ab03e35a",
+    "commit:9c1e034a53921b47d2eebda558e4bb95ab03e35a",
+    "commit:07f8e26a296cf5bdcd4add14ee42ab501d09422b",
+    "commit:91bde413effdf2ecc67829e1088e2ec4b1b19868",
+    "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986"
+  ],
+  "lineage": [
+    {
+      "ref": "commit:9c1e034a53921b47d2eebda558e4bb95ab03e35a",
+      "event": "Introduced Experiment Lab + Hypothesis Engine with regex-based synthesis and passive/active evaluation. Initial LabConnector aborted an active test when station parsing failed."
+    },
+    {
+      "ref": "commit:07f8e26a296cf5bdcd4add14ee42ab501d09422b",
+      "event": "Deep audit reported 158 hypothesis experiment parse failures and repaired execution by station-specific templates plus fallback parameters."
+    },
+    {
+      "ref": "commit:91bde413effdf2ecc67829e1088e2ec4b1b19868",
+      "event": "Added topical Jaccard relevance gating after unrelated idle thoughts were resolving hypotheses; this is direct historical evidence that an executed evaluation path can be causally unrelated to the claim it updates."
+    },
+    {
+      "ref": "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+      "event": "Later maintenance added passive confidence decay for stale hypotheses, preserving service progress but not solving active-test semantic binding."
+    }
+  ],
+  "frozen_head_mechanism": {
+    "testability": "domain mapping OR keyword scan OR explicit experiment marker",
+    "translation": "prediction text inserted into station template",
+    "execution": "tier 1 generated-description parse; tier 2 station parser on prediction/hypothesis/description; tier 3 randomized station-specific default parameters",
+    "fallback_examples": "physics projectile defaults, random RC/RLC/electronics values, random math expressions, random quantum/astronomy/GoL configurations",
+    "verdict": "explicit narration markers first; otherwise confirmation/refutation keyword score; ties become inconclusive",
+    "passive_relational_evaluation": "behavioral keyword counting with exposure-based confidence nudges/refutation",
+    "revision": "refuted hypotheses can auto-create a generic child framed as 'Previous prediction was wrong' with reduced confidence"
+  },
+  "negative_results": [
+    {
+      "id": "PF-HYP-FAIL-001",
+      "result": "A station parser failure was historically an execution blocker; the repair made experiments runnable by supplying randomized default parameters that can be independent of the hypothesis's actual quantitative or causal prediction.",
+      "impact": "RUN_SUCCESS can diverge from TEST_VALIDITY. A successful experiment receipt is not sufficient evidence that the hypothesis was tested.",
+      "evidence": ["services/hypothesis_engine/lab_connector.py@9c1e034a53921b47d2eebda558e4bb95ab03e35a", "services/hypothesis_engine/lab_connector.py@abba90a5767d85abc8a1ac340bae92842dab35c1", "commit:07f8e26a296cf5bdcd4add14ee42ab501d09422b"]
+    },
+    {
+      "id": "PF-HYP-FAIL-002",
+      "result": "Head verdict interpretation may infer confirmation/refutation from generic narration keywords rather than an explicit preregistered observable/predicate bound to the hypothesis.",
+      "impact": "Narration language can become a Goodhartable proxy for empirical outcome and can create false confirmation/refutation.",
+      "evidence": ["services/hypothesis_engine/lab_connector.py@abba90a5767d85abc8a1ac340bae92842dab35c1"]
+    },
+    {
+      "id": "PF-HYP-FAIL-003",
+      "result": "Historical unrelated-thought resolution required a later Jaccard relevance gate.",
+      "impact": "Evidence routing must prove relevance before mutating claim state; mere availability of an observation is not causal evidence.",
+      "evidence": ["commit:91bde413effdf2ecc67829e1088e2ec4b1b19868"]
+    },
+    {
+      "id": "PF-HYP-FAIL-004",
+      "result": "Auto-revision after refutation can generate a generic meta-statement instead of a new falsifiable mechanism-level hypothesis.",
+      "impact": "Revision depth can look like scientific progress while reducing falsifiability and mechanism specificity.",
+      "evidence": ["services/hypothesis_engine/evaluator.py@abba90a5767d85abc8a1ac340bae92842dab35c1"]
+    }
+  ],
+  "cross_source_reconciliation": [
+    {
+      "with": "666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json",
+      "pattern": "Operational health can hide semantic invalidity: subconscious history had silently missing transitions / behavior-policy mismatch; hypothesis lab history has successful fallback execution without guaranteed hypothesis-test binding.",
+      "current_invariant": "Every adaptive or experimental transition needs both an execution receipt and a semantic-validity receipt."
+    },
+    {
+      "with": "666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json",
+      "pattern": "Historical Retina showed metric inflation under lenient thresholds/broad phrase emission; hypothesis lab shows analogous proxy inflation risk where narration keywords stand in for preregistered observables.",
+      "current_invariant": "Separate proxy/readout success from task/claim correctness and preserve calibrated falsifiers."
+    }
+  ],
+  "current_inheritance": [
+    {
+      "target": "Harness",
+      "delta": "Add a TEST_BINDING invariant: each hypothesis experiment must persist hypothesis id/version, preregistered prediction, intervention variables/ranges, controlled variables, observable, decision predicate, parser/translation version, actual executed parameters, result payload and verdict function. A fallback may execute for diagnostics but cannot update claim status unless semantic equivalence to the intended test is proven."
+    },
+    {
+      "target": "ClayCode",
+      "delta": "Represent experiments as typed transition contracts rather than prose-to-parser best effort. Distinguish COMPILED_TEST_VALID, EXECUTED, RESULT_OBSERVED and CLAIM_UPDATE_AUTHORIZED."
+    },
+    {
+      "target": "UnifiedDB",
+      "delta": "Persist test-binding provenance and actual-vs-intended parameter diffs; prohibit claim-state mutation when binding_valid=false or verdict_source is only uncalibrated narration heuristic."
+    },
+    {
+      "target": "GWT/emergenz",
+      "delta": "Lesion/rescue and causal-emergence experiments need preregistered intervention/readout binding; generic simulator success or narration agreement is not causal evidence."
+    },
+    {
+      "target": "FRANK",
+      "delta": "Autonomous research can propose tests, but execution success and model-generated interpretation remain separate from epistemic authority. Claim transitions require deterministic evidence binding or explicit human/validated adjudication."
+    },
+    {
+      "target": "Adaptive Visual Learner",
+      "delta": "Candidate-vs-current promotion must bind frozen replay split, thresholds, metrics and acceptance predicate before execution; fallback data paths may not silently become promotion evidence."
+    }
+  ],
+  "cheap_discriminating_tests": [
+    "Create a physics hypothesis whose prediction specifies a parameter outside station-parser syntax; force Tier-3 fallback and assert claim status remains unchanged because actual parameters are not semantically bound to the prediction.",
+    "Inject narration containing both positive generic words and a numerically failed preregistered predicate; assert deterministic predicate wins and narration keywords cannot confirm the hypothesis.",
+    "Mutation-test the experiment translator/parser so every dropped prediction field flips binding_valid=false.",
+    "Replay the same result payload through two narration phrasings and require identical verdict.",
+    "For GWT/Hyperposition lesion-rescue, persist actual intervention vector and compare it byte-for-byte/schema-for-schema against preregistered intervention before authorizing causal claim updates."
+  ],
+  "earned_work": {
+    "new_credit_hours": 0.0,
+    "mapping_candidate": true,
+    "reason": "High-value negative-result and harness-design inheritance, but overlaps existing experimental-validation work and requires row-level dedup before historical-hours credit."
+  },
+  "level0_effect": {
+    "exact_global_percent_added": 0.0,
+    "reason": "Semantic/history lineage shard completed, but the Project-Frankenstein repository-wide tree/history denominator remains unfrozen; sampling/deep reads cannot create exact global coverage credit."
+  },
+  "branch_feedback": {
+    "frank": "DELTA: require explicit semantic test binding before autonomous claim mutation.",
+    "claycode": "DELTA: type intended test, actual execution, observable and verdict predicate as separate replayable states.",
+    "gwt": "DELTA: causal GWT tests must bind intervention and readout before claim-state updates.",
+    "emergenz": "DELTA: preregistration and deterministic verdict predicates are mandatory for lesion/rescue evidence.",
+    "hyperposition": "DELTA: higher-order coupling experiments need actual-vs-intended intervention vectors and no narration-only verdicts.",
+    "claygraph": "DELTA: represent hypothesis->test->execution->observation->verdict lineage as provenance edges, including invalid-binding edges.",
+    "unifieddb": "DELTA: persist binding_valid, translator version, intended params, actual params, observable and verdict function.",
+    "harness": "DELTA: regressionize parser fallback semantic drift and narration-invariant verdicts.",
+    "clayresearch": "DELTA: execution success is not scientific test success; preserve this as a cross-cutting anti-Goodhart invariant.",
+    "q12_index": "DELTA: historical fix improved uptime while exposing a reusable negative result about semantic validity."
+  },
+  "status": "COMPLETE_SEMANTIC_LINEAGE_SHARD",
+  "created_at": "2026-08-09T14:33:00+07:00"
+}

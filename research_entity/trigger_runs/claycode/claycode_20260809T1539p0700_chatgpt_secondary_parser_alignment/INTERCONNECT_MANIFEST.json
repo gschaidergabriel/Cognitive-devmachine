@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
+  "trigger": "claycode",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "entity_version": "RAE-8.8"
+  },
+  "preflight_tool_required": "tools/research_interconnect_preflight.py --trigger claycode --run-id <run_id>",
+  "preflight_tool_execution": "BLOCKED_CURRENT_SESSION_HAS_CONNECTOR_READS_BUT_NO_REPO_CHECKOUT",
+  "manifest_mode": "MANUAL_FAIL_CLOSED_ASSEMBLY_FROM_VERIFIED_GITHUB_FILES",
+  "completion_gate": "INCOMPLETE_UNTIL_OFFICIAL_PREFLIGHT_RUNS",
+  "branches": {
+    "frank": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+        "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+      ],
+      "note": "FRANK_ARCHITECTURE.claycode.json was not located through current connector search/path probes; no artifact fabricated."
+    },
+    "clay": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md",
+        "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md"
+      ]
+    },
+    "harness": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+      ]
+    },
+    "claygraph": {
+      "depth": "DEEP",
+      "refs": ["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"]
+    },
+    "unifieddb": {
+      "depth": "DEEP",
+      "refs": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"]
+    },
+    "gwt": {
+      "depth": "CURRENT",
+      "refs": [
+        "research_entity/global/RAE_GWT_MICROKERNEL.clay",
+        "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"
+      ]
+    },
+    "hyperposition": {
+      "depth": "CURRENT",
+      "refs": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"]
+    },
+    "emergenz": {
+      "depth": "CURRENT",
+      "refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"]
+    },
+    "claycode": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+        "research_entity/claycode/g9/grammar.ebnf",
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"
+      ]
+    }
+  }
+}

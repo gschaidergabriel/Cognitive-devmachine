@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1216p0700_chatgpt_secondary_pf_ce007_semantic_lineage",
+  "trigger": "666",
+  "level": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "worker_session_id": "chatgpt-secondary-20260809T1210p0700-666-pf-ce007-semantic",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "base": "0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+    "head": "ce00787f4cabe65859132a762251e39449ad5ca5",
+    "selected_runtime_paths": ["router/app.py","modeld/app.py","services/consciousness_daemon.py"],
+    "scope_kind": "BOUNDED_SEMANTIC_ARCHITECTURE_LINEAGE",
+    "exhaustive_changed_path_claim": false
+  },
+  "direct_evidence": [
+    {
+      "id": "E1",
+      "class": "PRIMARY_GIT_COMMIT",
+      "observation": "ce00787 explicitly removes the entire writer module, the ui/overlay desktop interface, overlay icons, desktop shortcuts and overlay systemd service, and states that the Web UI becomes the single Frank interaction entry point."
+    },
+    {
+      "id": "E2",
+      "class": "PRIMARY_CODE_BEFORE_AFTER",
+      "path": "router/app.py",
+      "observation": "The base revision implements a three-tier router over Qwen2.5-3B, Llama 8B and DeepSeek-R1; the head revision implements a single-model Qwen2.5-3B router on port 8105 while keeping the public route/stream/ingest API surface."
+    },
+    {
+      "id": "E3",
+      "class": "PRIMARY_CODE_BEFORE_AFTER",
+      "path": "modeld/app.py",
+      "base_blob_sha": "a122a88eaff9c3f670197d577db2f41e0d70e629",
+      "head_blob_sha": "cb89e922f3442b0c699f39b8b63a81d316104ae8",
+      "observation": "The base modeld has a DeepSeek backend at 8101; the head modeld retains the service skeleton but BACKENDS is empty."
+    },
+    {
+      "id": "E4",
+      "class": "PRIMARY_CODE_BEFORE_AFTER",
+      "path": "services/consciousness_daemon.py",
+      "base_blob_sha": "1844d560c8d2ac0ad0788e92ae884d0242808e99",
+      "head_blob_sha": "afc1cd0f1423053bf9a3f98bbe5ec709b7f5cf5c",
+      "observation": "The persistent consciousness daemon remains present across the commit with its workspace persistence, mood trajectories, attention, predictions, consolidation, perception, experience vectors and goal/reflection loops; changed comments/token assumptions align background cognition with the smaller model regime rather than deleting those loops."
+    },
+    {
+      "id": "E5",
+      "class": "PRIMARY_DELETED_CODE",
+      "observation": "The deleted overlay code contained WebUI-to-Overlay chat synchronization, proving WebUI and Overlay coexisted before ce00787; the commit consolidates interfaces rather than introducing WebUI from nothing."
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "PF-CE007-F1",
+      "epistemic_class": "HISTORICAL_RUNTIME_EVIDENCE",
+      "status_hint": "CURRENT_AS_HISTORY",
+      "statement": "ce00787 is a coupled simplification event: desktop interface/writer surfaces are removed while the inference router is collapsed to a single Qwen2.5-3B backend.",
+      "support": ["E1","E2","E3"],
+      "confidence": 0.99,
+      "falsifier": "A source at the exact head showing retained active overlay/writer execution or a retained multi-tier router/modeld backend would falsify this reading."
+    },
+    {
+      "finding_id": "PF-CE007-F2",
+      "epistemic_class": "ARCHITECTURE_LINEAGE_INFERENCE",
+      "status_hint": "OPEN",
+      "statement": "The commit changes presentation and inference topology more strongly than the persistent cognitive-state topology: the consciousness daemon survives while interface and model-selection complexity are reduced.",
+      "support": ["E1","E2","E3","E4"],
+      "confidence": 0.94,
+      "falsifier": "A broader exact semantic diff showing removal/disablement of the daemon's persistent loops or migration of those loops into the deleted interface would overturn this inference."
+    },
+    {
+      "finding_id": "PF-CE007-F3",
+      "epistemic_class": "ARCHITECTURE_LINEAGE_INFERENCE",
+      "status_hint": "OPEN",
+      "statement": "WebUI centralization is consolidation of an already coexisting interface, not creation of the WebUI boundary at ce00787.",
+      "support": ["E1","E5"],
+      "confidence": 0.99,
+      "falsifier": "Evidence that the referenced WebUI sync code was dead/generated and no WebUI runtime existed before the commit would weaken this conclusion."
+    },
+    {
+      "finding_id": "PF-CE007-F4",
+      "epistemic_class": "METHOD_NEGATIVE_RESULT",
+      "status_hint": "NEGATIVE_RESULT",
+      "statement": "Commit-title/path-family assimilation alone is insufficient for semantic lineage: the same commit contains an under-described model-routing/backend collapse outside the headline overlay/writer deletion.",
+      "support": ["E1","E2","E3"],
+      "confidence": 0.99,
+      "falsifier": "A complete commit metadata source that explicitly enumerated the router/modeld semantic collapse would remove this specific under-description example but not the general need for semantic code reads."
+    }
+  ],
+  "branch_feedback": [
+    {
+      "room": "frank",
+      "delta": "Historical evidence supports treating interface topology, model routing topology and persistent cognitive-state loops as separable architecture axes; ce00787 simplifies the first two without deleting the third."
+    },
+    {
+      "room": "gwt",
+      "delta": "Historical persistence of the consciousness/workspace daemon across UI and model-router simplification is relevant lineage evidence, but is not causal evidence that the GWT-like mechanism was functionally preserved; lesion/rescue evidence remains required."
+    },
+    {
+      "room": "center",
+      "delta": "Level-0 method guard: exact path identities must be paired with semantic reads of high-impact modified runtime files because commit descriptions can under-specify coupled architecture changes."
+    }
+  ],
+  "credit": {
+    "semantic_units_completed": 1,
+    "global_level0_exact_percent_added": 0,
+    "reason": "Bounded semantic lineage shard; Project-Frankenstein global exact tree/history denominator is not yet certified complete."
+  },
+  "non_overlap": "Does not claim or alter Segment02b exact path-family/blob denominator ownership.",
+  "created_at": "2026-08-09T12:16:00+07:00"
+}

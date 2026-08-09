@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""FREE_ONLY Mistral reasoning adapter for Clay research.
+"""FREE_ONLY Mistral capability adapter for Clay research.
 
-The adapter uses only the account's existing Free Mode. HTTP 402/payment-required is a
-hard stop and is never converted into paid usage. HTTP 429 is a cooldown condition.
-Provider reasoning traces are intentionally not returned/persisted; only final text and
-usage metadata leave this adapter.
+Uses only the account's existing Free Mode. HTTP 402/payment-required is a hard stop and
+is never converted into paid usage. HTTP 429 is a cooldown condition. Provider reasoning
+traces are intentionally not returned/persisted; only final text and usage metadata leave
+this adapter.
 """
 from __future__ import annotations
 import json, urllib.error, urllib.request
@@ -55,8 +55,23 @@ def chat(prompt:str,*,model:str="mistral-small-latest",system:str|None=None,max_
     return {"provider":"Mistral","model":model,"answers":[{"content":_answer_text((c.get("message") or {}).get("content")),"finish_reason":c.get("finish_reason")} for c in choices],"usage":raw.get("usage") or {},"reasoning_trace_persisted":False}
 
 
+def fim(prefix:str,*,suffix:str="",model:str="codestral-latest",max_tokens:int=1024,prompt_cache_key:str|None="claycode-fim-v1")->dict[str,Any]:
+    if not prefix: raise ValueError("prefix required")
+    body={"model":model,"prompt":prefix,"suffix":suffix,"max_tokens":max(1,min(int(max_tokens),4096))}
+    if prompt_cache_key: body["prompt_cache_key"]=prompt_cache_key
+    raw=_request("/fim/completions",body)
+    choice=(raw.get("choices") or [{}])[0]
+    return {"provider":"Mistral","model":model,"capability":"fim","content":choice.get("text") or ((choice.get("message") or {}).get("content") or ""),"finish_reason":choice.get("finish_reason"),"usage":raw.get("usage") or {}}
+
+
+def embeddings(inputs:list[str]|str,*,model:str="mistral-embed")->dict[str,Any]:
+    vals=[inputs] if isinstance(inputs,str) else list(inputs)
+    raw=_request("/embeddings",{"model":model,"input":vals,"encoding_format":"float"})
+    return {"provider":"Mistral","model":model,"capability":"embeddings","data":raw.get("data") or [],"usage":raw.get("usage") or {}}
+
+
 def capabilities()->dict[str,Any]:
     models=list_models()
-    return {"provider":"Mistral","free_only":True,"models":[{"id":m.get("id"),"capabilities":m.get("capabilities") or {},"max_context_length":m.get("max_context_length")} for m in models]}
+    return {"provider":"Mistral","free_only":True,"models":[{"id":m.get("id"),"capabilities":m.get("capabilities") or {},"max_context_length":m.get("max_context_length")} for m in models],"implemented_adapter_modes":["models","chat_reasoning","structured_json","multi_completion","prompt_cache","fim","embeddings"],"discovery_only_until_account_free_verified":["batch","ocr","vision","classification","conversations","hosted_tools/connectors"]}
 
 if __name__=="__main__": print(json.dumps(capabilities(),ensure_ascii=False,indent=2))

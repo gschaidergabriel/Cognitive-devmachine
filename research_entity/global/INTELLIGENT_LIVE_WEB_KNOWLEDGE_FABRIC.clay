@@ -1,0 +1,123 @@
+module clay.research.intelligent_live_web_knowledge_fabric
+version "1.0"
+status PROJECT_OWNER_FIXED_GLOBAL_OPERATION_LAW
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+state=UnifiedDB
+topology=ClayGraph
+coordination_language=latest_ClayCode
+
+law LIVE_EXTERNAL_KNOWLEDGE_IS_STANDING_INPUT=true
+law BLIND_CRAWLING=FORBIDDEN
+law SEARCH_RELEVANCE_BEFORE_VOLUME=true
+law PRIMARY_OR_OFFICIAL_SOURCES_PREFERRED=true
+law COUNTEREVIDENCE_SEARCH_REQUIRED_FOR_MATERIAL_CLAIMS=true
+law INTERNET_RESULT_WITHOUT_PROVENANCE_CANNOT_PROMOTE=true
+law SEARCH_ENGINE_SUMMARY_IS_DISCOVERY_NOT_TRUTH=true
+law DUPLICATE_KNOWLEDGE_DOES_NOT_CREATE_EVIDENCE=true
+law STALE_WEB_KNOWLEDGE_CANNOT_SILENTLY_OVERRIDE_FRESH_PRIMARY_EVIDENCE=true
+
+// The fabric is event- and uncertainty-driven. Every material research/build cycle evaluates
+// whether external knowledge can change the next decision. When yes, it actively retrieves it.
+record KnowledgeNeed {
+  id:Ref
+  question:Clay
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  uncertainty:Score
+  expected_information_gain:Score
+  decision_impact:Score
+  blocker_reduction:Score
+  recency_need:Score
+  source_specificity:Score
+  counterevidence_need:Score
+  cost_budget:Score
+  urgency:Score
+}
+
+knowledge_need_score(n)=n.expected_information_gain+n.decision_impact+n.blocker_reduction+n.recency_need+n.counterevidence_need+n.urgency-n.cost_budget
+
+rule every_material_cycle -> derive(KnowledgeNeed from current_work+open_claims+blockers+recent_deltas+tool_runtime_changes)
+rule highest_material_knowledge_need -> retrieve_live_external_evidence
+rule no_material_external_need -> record NOT_APPLICABLE; do_not_search_for_noise
+rule version_sensitive_code_or_api_question -> official_docs_or_primary_repo_first
+rule scientific_mechanism_question -> original_paper_dataset_or_authoritative_preprint_first
+rule software_behavior_question -> current_release_notes_source_code_issue_tracker_when_needed
+rule provider_capability_question -> official_provider_surface_first
+rule implementation_pattern_question -> primary_repo_and_benchmark_evidence_before_blog_summary
+
+// Adaptive source routing. Search breadth grows only when uncertainty or disagreement requires it.
+source_tiers {
+  T0_DIRECT_CURRENT=[official_runtime_observation,official_docs,current_primary_repo,current_dataset]
+  T1_PRIMARY_RESEARCH=[original_paper,preprint,standards_body,publisher_metadata]
+  T2_INDEPENDENT_TECHNICAL=[independent_implementation,benchmark,reputable_engineering_report]
+  T3_DISCOVERY=[web_search_index,secondary_summary,forum]
+}
+
+rule start_at_highest_available_source_tier
+rule T3_may_discover_but_not_by_itself_promote_material_claim
+rule disagreement_between_high_quality_sources -> preserve_conflict+seek_discriminating_evidence
+rule single_source_high_impact_claim -> seek_second_independent_or_counter_source_when_feasible
+rule high_uncertainty -> widen_source_diversity
+rule low_uncertainty+fresh_primary_receipt -> avoid_redundant_search
+
+record ExternalEvidenceDelta {
+  delta_id:Ref
+  question_id:Ref
+  source_uri:Ref
+  source_class:Ref
+  publisher_or_repo:Ref
+  retrieved_at:Time
+  publication_or_update_time:Time?
+  claim_or_fact:Clay
+  evidence_for:Set<Ref>
+  evidence_against:Set<Ref>
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  novelty_class:NEW|REFINES|CONTRADICTS|CONFIRMS|SUPERSEDES|NO_MATERIAL_CHANGE
+  confidence:Score
+  freshness:Score
+  provenance_hash:Hash
+}
+
+rule retrieved_material -> compare_against_current_UnifiedDB_and_recent_external_evidence
+rule semantic_duplicate -> deduplicate_preserve_provenance
+rule newer_source_supersedes_old_behavior -> invalidate_or_revise_affected_work_before_effect
+rule contradiction -> open_conflict+route_to_affected_workers
+rule material_new_mechanism -> create_or_revise_hypothesis_or_work
+rule external_negative_result -> preserve_as_negative_result
+rule no_material_change -> retain_lightweight_receipt_not_context_spam
+
+// Targeted distribution instead of flooding every worker with every source.
+rule ExternalEvidenceDelta -> ClayGraph.project(semantic_dependencies,affected_work,affected_claims)
+rule route_delta_to_workers by semantic_relevance+current_work+dependency_unblock_value+conflict
+rule high_impact_contradiction -> INTERRUPT_NEXT_SAFE_POINT
+rule ordinary_relevant_delta -> NEXT_CHECKPOINT
+rule low_relevance_delta -> INDEX_ONLY
+rule worker_receiving_delta -> re-evaluate_current_plan_before_next_material_effect
+
+// Recursive web-learning loop used by GO and substantive research cycles.
+recursive_live_knowledge_cycle =
+  refresh_internal
+  -> derive_high_value_question
+  -> retrieve_current_external_evidence
+  -> search_counterevidence
+  -> fuse_with_shared_state
+  -> measure_novelty_and_conflict
+  -> distribute_targeted_delta
+  -> update_hypotheses_and_work_frontier
+  -> next_question_if_marginal_value_positive
+
+rule continue_external_cycle iff expected_marginal_information_gain > search_cost+coordination_noise and invocation_budget_remains
+rule stop_external_cycle when no_material_need|source_exhausted|budget_exhausted|decision_resolved
+
+// No silent internet-to-truth path.
+invariant WEB_SEARCH_NEVER_MINTS_EXECUTION_AUTHORITY
+invariant WEB_SEARCH_NEVER_MINTS_SCIENTIFIC_TRUTH
+invariant EXTERNAL_KNOWLEDGE_MUST_RETAIN_SOURCE_AND_TIME
+invariant CURRENT_PRIMARY_EVIDENCE_OUTRANKS_STALE_SECONDARY_SUMMARY
+invariant COUNTEREVIDENCE_SURVIVES_FUSION
+invariant TARGETED_DISTRIBUTION_BEATS_GLOBAL_CONTEXT_FLOOD
+invariant LIVE_WEB_KNOWLEDGE_IS_REEVALUATED_RECURSIVELY_NOT_ONLY_AT_RUN_START

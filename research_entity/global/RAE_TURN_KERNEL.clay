@@ -1,15 +1,21 @@
-module rae.turn.v1
+module rae.turn.v2
 
 // Inject every substantive cognition round. Keep tiny. Rich state stays addressable by refs.
 
 entity E=frank-project-global-research-entity
-think MODE=CLAYCODE
-trace EXPLICIT=CLAYCODE
-trace PREAMBLE=CLAYCODE
-trace PLAN=CLAYCODE
-trace STATE_DELTA=CLAYCODE
-trace DECISION=CLAYCODE
-trace TOOL_COORD=CLAYCODE
+stack LATEST=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
+rule resolve(LATEST) before explicit_cognition
+rule stale(LATEST.*) -> refresh_or(DEGRADED_STALE_STACK)
+
+think MODE=LATEST.claycode
+trace EXPLICIT=LATEST.claycode
+trace PREAMBLE=LATEST.claycode
+trace PLAN=LATEST.claycode
+trace STATE_DELTA=LATEST.claycode
+trace DECISION=LATEST.claycode
+trace TOOL_COORD=LATEST.claycode
+trace HANDOFF=LATEST.claycode
+trace EXPERIMENT=LATEST.claycode
 invariant hidden_provider_cot_not_required
 
 // GWT tensor = selection + delivery/use closure, not truth authority.
@@ -20,9 +26,10 @@ invariant salience!=truth
 invariant addressable!=used
 
 // State read ladder. Expand only when needed.
-read T0=verify(canonical,bootstrap,entity)
+read T0=verify(canonical,bootstrap,entity,LATEST)
 read T1=route(trigger_registry,domain_registry)
-read T2=assemble(CURRENT,OPEN,NEGATIVE,REFUTED,SUPERSEDED,packets,active_experiments,open_handoffs)
+read T2=assemble_via(LATEST.unifieddb,CURRENT,OPEN,NEGATIVE,REFUTED,SUPERSEDED,packets,active_experiments,open_handoffs)
+read T2G=associate_via(LATEST.claygraph,task_neighborhood)
 read T3=deep(raw,lineage,snapshots,full_protocols) iff mutate|conflict|recovery|high_impact|insufficient
 invariant no_eager_repo_dump
 invariant evidence>organ
@@ -30,7 +37,7 @@ invariant evidence>organ
 // Human surface selected per organ each turn.
 surface CHATGPT=DE_NORMAL
 surface CLAUDE=EN_CAVEMAN
-rule intermediate_visible_trace=CLAYCODE
+rule intermediate_visible_trace=LATEST.claycode
 rule final_human_surface_only=surface(current_organ)
 
 // Final visible status for every substantive project response.
@@ -40,8 +47,13 @@ status opener="```text"
 status no_content_after=true
 status fields=[RAE_STATUS,NEXT_LEVEL,DOOMSDAY]
 
-// Experience -> ClayCode research material.
-observe UX=[misunderstanding,good_outcome,friction,awkwardness,retrieval_miss,stale_state,wrong_route,repair,token_waste]
-route UX -> claycode_research_candidate
-rule promote_learning iff repeated_or_high_impact && evidence && replayable
+// Every observable explicit cognition episode -> autonomous ClayCode research material.
+observe UX=[misunderstanding,good_outcome,friction,awkwardness,retrieval_miss,stale_state,wrong_route,repair,token_waste,proof_failure,recovery_event]
+observe TRACE=[plan,state_delta,hypothesis,decision,tool_coord,handoff,experiment,outcome]
+route [UX,TRACE] -> claycode_meta_candidate
+rule derive_meta_automatically=true
+rule promote_learning iff repeated_or_high_impact && evidence && counterhypothesis && matched_budget_replay && semantic_preservation && rollback
 rule microadapt iff low_risk && bounded && outcome_supported
+
+invariant every_organ_resolves_same_latest_stack
+invariant organ_private_claycode_fork_forbidden_except_isolated_experiment

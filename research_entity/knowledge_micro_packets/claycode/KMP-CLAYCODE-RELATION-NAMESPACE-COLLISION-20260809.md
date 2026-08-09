@@ -1,0 +1,14 @@
+<!-- RAE_META
+{"packet_id":"KMP-CLAYCODE-RELATION-NAMESPACE-COLLISION-20260809","title":"ClayCode relation surface must not collide with @ref namespace","domains":["claycode"],"topics":["parser","grammar","relations","canonical IR","BASE release"],"epistemic_class":"EXECUTABLE_RESEARCH_RESULT","claim_status_hint":"NEGATIVE_RESULT_WITH_OPEN_ALTERNATIVE","origin_actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","created_at":"2026-08-09T16:04:00+07:00","source_refs":["research_entity/claycode/g9/grammar.ebnf","research_entity/trigger_runs/claycode/claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil/EXECUTABLE_RESEARCH_RECEIPT.json","research_entity/trigger_runs/claycode/claycode_20260809T1604p0700_chatgpt_secondary_relation_namespace/EXECUTABLE_RESEARCH_RECEIPT.json"],"evidence_refs":["EXP-CC-G9-RELATION-NAMESPACE-COLLISION-20260809"],"related_claim_ids":["H-CC-REL-CANONICAL-NODE-20260809-01","H-CC-REL-AT-SIGIL-20260809-02","NR-CC-G9-AT-RELATION-REF-COLLISION-20260809"],"confidence":0.94,"verification_required":true,"falsifier_or_next_test":"Implement the real frozen BASE parser and run complete G9+dialect @ref/relation mixtures across supported lexer/parser backends with canonical roundtrip and semantic-hash checks."}
+RAE_META -->
+
+### Core
+The compact `@relation` candidate is not currently a backend-neutral lexical namespace because ClayCode already uses `@...` for resource references. A combined Lark proxy preserved all seven mixed reference/relation cases under Earley dynamic parsing, but LALR contextual accepted only 5/7 and LALR basic 3/7. Existing standalone `@ref` forms regressed. A non-colliding sigil control and a quoted generic relation call each accepted 7/7 under all three parser modes.
+
+### Interpretation
+Do not promote the current `@relation` candidate. This does not refute compact relation sugar in general. The stronger architecture candidate is a typed canonical `Relation` node whose semantic identity is independent of surface spelling; compact syntax may lower to it only after full-corpus lexer-overlap, roundtrip, mutation and semantic-hash validation.
+
+Independent triangulation: MLIR separates identifier classes with distinct sigils and provides a generic string-named operation form; WIT specifies explicit lexical token classes and post-parse name resolution. These are design analogues, not FRANK-specific proof.
+
+### Next test
+Production BASE parser -> full admitted G9+dialects -> canonical Relation IR -> multi-surface roundtrip -> type/effect -> Ubuntu-target compiler/runtime. Compare generic relation form, finite declared relation sugar and any lexically disjoint compact sigil on ambiguity, diagnostics, semantic-hash stability, token/byte cost and Qwen-reader accuracy.

@@ -1,0 +1,29 @@
+{
+  "exp1_adaptation_and_rescue": {
+    "design": {"baseline_weights":{"A":0.8,"B":0.2},"eta":0.03,"seeds":50,"steps":400},
+    "summary": {
+      "adaptation_recovery_fraction":{"mean":1.0},
+      "adaptive_delayed_mse":{"mean":3.694190183699537e-17,"sd":1.1335438088783022e-16},
+      "adaptive_final_wB":{"mean":0.9999999999807376,"sd":5.412357824561924e-11},
+      "adaptive_immediate_mse":{"mean":0.21695248108639767,"sd":0.019228108540887683},
+      "base_mse":{"mean":6.707314877693809e-33,"sd":9.275857357160998e-34},
+      "frozen_delayed_mse":{"mean":0.64200245039827,"sd":0.09225014842090787},
+      "frozen_immediate_mse":{"mean":0.5798711807049819,"sd":0.16192336082136624},
+      "mechanism_only_rescue_mse":{"mean":0.6420024503716065,"sd":0.09225014844465834},
+      "rescue_sign_flip_fraction":{"mean":1.0},
+      "shuffled_delayed_mse":{"mean":1.0137035713206088,"sd":0.193766456754631},
+      "shuffled_final_wB":{"mean":0.017473928974950724,"sd":0.1605377584120198},
+      "state_rollback_rescue_mse":{"mean":6.948393845512867e-33,"sd":2.1079067081292955e-33}
+    }
+  },
+  "exp2_intervention_duty_cycle": {
+    "design":{"eta":0.01,"lesion_duty_cycles":[1.0,0.5,0.25,0.1],"seeds":50,"steps":5000},
+    "results":{
+      "0.1":{"final_wB_mean":0.2851334034296308,"final_wB_sd":0.044554428388775956,"intact_state_mse_mean":0.009200330176366213,"lesion_state_mse_mean":0.5137011811904499},
+      "0.25":{"final_wB_mean":0.40020737775925974,"final_wB_sd":0.06187490937598126,"intact_state_mse_mean":0.04397073212898732,"lesion_state_mse_mean":0.36384943079562554},
+      "0.5":{"final_wB_mean":0.5954438805354286,"final_wB_sd":0.0695348306340571,"intact_state_mse_mean":0.16141420828844935,"lesion_state_mse_mean":0.168544915840273},
+      "1.0":{"final_wB_mean":1.0,"final_wB_sd":1.1214946133455537e-16,"intact_state_mse_mean":0.6408858453808064,"lesion_state_mse_mean":2.444638489624122e-32}
+    }
+  },
+  "experiment_id":"EXP-SPAWN-EM-ADAPTIVE-LESION-001"
+}

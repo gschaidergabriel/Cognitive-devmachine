@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clay.local/schemas/udb-emergence-v03-measurement-receipt.schema.json",
+  "title": "UnifiedDB Emergence Meter v0.3 Measurement Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "run_id",
+    "evidence_scope",
+    "live_frank_validated",
+    "provenance",
+    "sampling",
+    "macro_selection",
+    "estimators",
+    "null_models",
+    "interventions",
+    "gwt_chain",
+    "outcomes",
+    "gate_statuses",
+    "adjudication"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.3"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "evidence_scope": {
+      "enum": [
+        "SYNTHETIC_METHOD",
+        "LOCAL_COMPONENT",
+        "HOSTED_PROXY",
+        "REGISTERED_ANDREAS_UBUNTU_TARGET"
+      ]
+    },
+    "live_frank_validated": {"type": "boolean"},
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code_sha256",
+        "data_sha256",
+        "source_epoch",
+        "graph_epoch",
+        "state_hash",
+        "model_build",
+        "host_id",
+        "clock_basis",
+        "attestation_layer"
+      ],
+      "properties": {
+        "code_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "data_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_epoch": {"type": ["string", "integer"]},
+        "graph_epoch": {"type": ["string", "integer"]},
+        "state_hash": {"type": "string", "minLength": 8},
+        "model_build": {"type": "string", "minLength": 1},
+        "host_id": {"type": "string", "minLength": 1},
+        "clock_basis": {"type": "string", "minLength": 1},
+        "attestation_layer": {
+          "enum": ["LOCAL", "HOSTED_PROXY", "REGISTERED_TARGET"]
+        }
+      }
+    },
+    "sampling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "independence_unit",
+        "unit_ids",
+        "episode_ids",
+        "seed_ids",
+        "context_ids",
+        "tick_count",
+        "exchangeability_assumptions",
+        "stationarity_status",
+        "dependence_diagnostics"
+      ],
+      "properties": {
+        "independence_unit": {
+          "enum": ["EPISODE", "SEED", "CONTEXT", "HOST_BUILD", "OTHER_DECLARED"]
+        },
+        "unit_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "episode_ids": {"type": "array", "items": {"type": "string"}},
+        "seed_ids": {"type": "array", "items": {"type": ["string", "integer"]}},
+        "context_ids": {"type": "array", "items": {"type": "string"}},
+        "tick_count": {"type": "integer", "minimum": 1},
+        "exchangeability_assumptions": {"type": "array", "items": {"type": "string"}},
+        "stationarity_status": {
+          "enum": ["SUPPORTED", "REJECTED", "LOCAL_ONLY", "UNKNOWN"]
+        },
+        "dependence_diagnostics": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "macro_selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "candidate_count",
+        "objective",
+        "train_unit_ids",
+        "validation_unit_ids",
+        "test_unit_ids",
+        "leakage_checks"
+      ],
+      "properties": {
+        "status": {"enum": ["PREREGISTERED", "CROSSFIT", "IN_SAMPLE_ONLY"]},
+        "candidate_count": {"type": "integer", "minimum": 1},
+        "objective": {"type": "string", "minLength": 1},
+        "train_unit_ids": {"type": "array", "items": {"type": "string"}},
+        "validation_unit_ids": {"type": "array", "items": {"type": "string"}},
+        "test_unit_ids": {"type": "array", "items": {"type": "string"}},
+        "leakage_checks": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "estimators": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["family", "version", "hyperparameters", "conditioning_set", "finite_sample_calibration"],
+        "properties": {
+          "family": {"type": "string"},
+          "version": {"type": "string"},
+          "hyperparameters": {"type": "object"},
+          "conditioning_set": {"type": "array", "items": {"type": "string"}},
+          "finite_sample_calibration": {"type": "object"}
+        }
+      }
+    },
+    "null_models": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["family", "invariants", "assumptions", "p_value", "validity_status"],
+        "properties": {
+          "family": {"type": "string"},
+          "invariants": {"type": "array", "items": {"type": "string"}},
+          "assumptions": {"type": "array", "items": {"type": "string"}},
+          "p_value": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "validity_status": {"enum": ["SUPPORTED", "VIOLATED", "UNKNOWN"]}
+        }
+      }
+    },
+    "interventions": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["condition", "intervention_id", "matched_set_id", "target", "receipt_ref"],
+        "properties": {
+          "condition": {
+            "enum": [
+              "BASELINE",
+              "LESION",
+              "RESCUE",
+              "TRUTHFUL_REENTRY",
+              "SHUFFLED_REENTRY",
+              "NO_REENTRY",
+              "EXCLUDED_VARIABLE",
+              "ALTERNATIVE_PATH"
+            ]
+          },
+          "intervention_id": {"type": "string"},
+          "matched_set_id": {"type": "string"},
+          "target": {"type": "string"},
+          "receipt_ref": {"type": "string"}
+        }
+      }
+    },
+    "gwt_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selection", "broadcast", "delivery", "reconstruction", "uptake", "causal_use", "outcome", "provenance_reentry"],
+      "properties": {
+        "selection": {"type": "string"},
+        "broadcast": {"type": "string"},
+        "delivery": {"type": "string"},
+        "reconstruction": {"type": "string"},
+        "uptake": {"type": "string"},
+        "causal_use": {"type": "string"},
+        "outcome": {"type": "string"},
+        "provenance_reentry": {"type": "string"}
+      }
+    },
+    "outcomes": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "gate_statuses": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt",
+        "independence_unit",
+        "null_concordance",
+        "context_closure",
+        "macro_selection",
+        "decomposition",
+        "pathwise_causality",
+        "gwt_receiver_use",
+        "ood_target_replication"
+      ],
+      "properties": {
+        "receipt": {"$ref": "#/$defs/gate"},
+        "independence_unit": {"$ref": "#/$defs/gate"},
+        "null_concordance": {"$ref": "#/$defs/gate"},
+        "context_closure": {"$ref": "#/$defs/gate"},
+        "macro_selection": {"$ref": "#/$defs/gate"},
+        "decomposition": {"$ref": "#/$defs/gate"},
+        "pathwise_causality": {"$ref": "#/$defs/gate"},
+        "gwt_receiver_use": {"$ref": "#/$defs/gate"},
+        "ood_target_replication": {"$ref": "#/$defs/gate"}
+      }
+    },
+    "adjudication": {
+      "enum": [
+        "INVALID_RECEIPT",
+        "INVALID_ASSUMPTIONS",
+        "ABSTAIN_NULL_DISAGREEMENT",
+        "ABSTAIN_CONTEXT_OPEN",
+        "ABSTAIN_ESTIMATOR_DISAGREEMENT",
+        "UNKNOWN_LOW_POWER",
+        "METHOD_CANDIDATE_ONLY",
+        "CAUSAL_EMERGENCE_CANDIDATE_OPEN"
+      ]
+    }
+  },
+  "$defs": {
+    "gate": {
+      "enum": ["PASS", "FAIL", "UNKNOWN", "NOT_RUN", "INVALID_ASSUMPTIONS", "DISAGREEMENT"]
+    }
+  }
+}
+

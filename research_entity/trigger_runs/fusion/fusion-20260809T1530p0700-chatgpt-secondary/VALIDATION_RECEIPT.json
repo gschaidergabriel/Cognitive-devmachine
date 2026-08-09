@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260809T1530p0700-chatgpt-secondary",
+  "validator_path":"tools/fusion_research_contract.py",
+  "validator_blob_sha":"0ec3ea4442c0d881f3e5673e9c32072db91849ed",
+  "mode":"FETCHED_CURRENT_VALIDATOR_LOGIC_EXECUTED_ON_LOCAL_MIRROR_OF_REREAD_RUN_MANIFESTS",
+  "result":{
+    "ok":true,
+    "branches":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+    "violations":[]
+  },
+  "checks":[
+    "all required output files created",
+    "interconnect trigger = fusion",
+    "registry scientific branch set = 9/9 current branches",
+    "branch priority covers each branch exactly once",
+    "global coverage contains every branch",
+    "branch feedback contains every branch with allowed effects and durable writeback refs",
+    "shared ancestry scan = true",
+    "contradiction scan = true"
+  ],
+  "note":"The ChatGPT connector does not expose a checked-out repository shell. The current validator source was fetched from GitHub, its validation logic was executed locally against a mirror of the reread run structures, and returned exit code 0 / no violations. GitHub artifacts themselves were separately reread through the connector.",
+  "created_at":"2026-08-09T15:31:00+07:00"
+}

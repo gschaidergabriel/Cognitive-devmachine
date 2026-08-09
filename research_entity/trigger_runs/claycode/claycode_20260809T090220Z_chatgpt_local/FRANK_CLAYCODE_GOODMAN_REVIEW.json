@@ -1,0 +1,39 @@
+{
+  "schema_version": "local-1.0",
+  "run_id": "claycode_20260809T090220Z_chatgpt_local",
+  "reviews": [
+    {
+      "assumption": "Model-produced effect intent must not itself confer execution authority.",
+      "origin_ancestry": "FRANK/ClayCode shared lineage",
+      "independent_evidence": ["ETAS preprint effect/trace separation","WASI capability-oriented host interface model","local generated gateway forgery/scope fuzz"],
+      "verdict": "SUPPORTED",
+      "counterhypothesis": "Typed intent text plus a named capability could accidentally become ambient authority at lowering/FFI boundaries.",
+      "falsifier": "Any generated/FFI/subprocess path commits an effect without a host-held valid capability or equivalent external authority."
+    },
+    {
+      "assumption": "Separate semantic_hash from provenance-bound contract_hash.",
+      "origin_ancestry": "Prior ClayCode E2B finding",
+      "independent_evidence": ["10k local set-order/duplication fuzz + 10k scope/order mutations"],
+      "verdict": "SUPPORTED_FOR_TESTED_SUBSET",
+      "counterhypothesis": "Canonicalization erases meaningful order or fails to normalize true sets.",
+      "falsifier": "A schema-typed ordered field normalizes as a set, or a set-equivalent mutation changes semantic_hash."
+    },
+    {
+      "assumption": "Existing G9 semantics are broadly adequate; BASE should implement rather than redesign.",
+      "origin_ancestry": "Program owner fixed milestone + ClayCode workspace",
+      "independent_evidence": ["WIT/WASI typed interface model","MLIR progressive lowering model","current branch substrate mapping"],
+      "verdict": "REFINED",
+      "counterhypothesis": "Current admitted G9 grammar/IR cannot express a mandatory application or even its own current spec.",
+      "falsifier": "Concrete executable counterexample requiring a semantic primitive rather than parser/runtime/stdlib/FFI work.",
+      "refinement": "Semantics remain presumptively adequate, but current surface grammar is demonstrably incomplete: it cannot parse the G9-V3 `if residual.effect { ... }` fragment."
+    },
+    {
+      "assumption": "Logical semantic unification need not imply physical storage unification.",
+      "origin_ancestry": "FRANK/Clay/UnifiedDB shared lineage",
+      "independent_evidence": ["No new independent storage benchmark executed this run"],
+      "verdict": "UNRESOLVED_NO_CHANGE",
+      "counterhypothesis": "A physically unified backend dominates specialized/hybrid placement without violating isolation/replay.",
+      "falsifier": "Matched H1/H2/H3 backend benchmark demonstrates superior cost/recovery/selection integrity for physical consolidation."
+    }
+  ]
+}

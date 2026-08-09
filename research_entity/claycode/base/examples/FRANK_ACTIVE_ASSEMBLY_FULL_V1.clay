@@ -46,7 +46,7 @@ fn compile_active_assembly(candidates:List, current_epoch:Int, max_items:Int, ma
   map_set(telemetry,"duplicates",0)
 
   for packet in candidates {
-    if packet.proposed_authority && authority_kind(packet.kind) { fail(concat("AUTHORITY_MINT_ATTEMPT:",packet.packet_id)) }
+    if packet.proposed_authority && (packet.kind == "model_output" || packet.kind == "peer_result" || packet.kind == "visual_model" || packet.kind == "capability") { fail(concat("AUTHORITY_MINT_ATTEMPT:",packet.packet_id)) }
     let score = packet_score(packet)
     let fingerprint = canonical_sha256(packet)
     if map_has(identity_by_id,packet.packet_id) {

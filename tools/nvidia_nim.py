@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""NVIDIA hosted NIM adapter for FRANK/RAE research.
+"""NVIDIA hosted NIM adapter for Clay research.
 
-Exposes separated capabilities for model catalog, chat, embeddings, embedding
-similarity experiments and reranking. Credentials are loaded only through the RAE
-secret loader and never emitted.
+Exposes separated capabilities for model catalog, chat, embeddings, embedding similarity
+and reranking. Credentials are loaded only through the secret loader and never emitted.
+Provider reasoning traces are deliberately not returned or persisted.
 """
 from __future__ import annotations
 
@@ -24,16 +24,19 @@ from rae_secret_loader import get_secret, secret_source
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "research_entity" / "runtime" / "tool_results"
 BASE_URL = "https://integrate.api.nvidia.com/v1"
-USER_AGENT = "FRANK-RAE/8.8 research-runtime (+https://github.com/gschaidergabriel/clay-global-research-entity)"
+USER_AGENT = "Clay/0.1 research-runtime"
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$")
 MAX_RATE_RETRIES = 8
 
 DEFAULT_EMBED_MODEL = "nvidia/nv-embedqa-e5-v5"
-DEFAULT_RERANK_MODEL = "nvidia/rerank-qa-mistral-4b"
+DEFAULT_RERANK_MODEL = "nvidia/llama-nemotron-rerank-vl-1b-v2"
 RERANK_ENDPOINTS = {
+    # Current NVIDIA hosted route (2026-08 verification target).
+    "nvidia/llama-nemotron-rerank-vl-1b-v2": "https://ai.api.nvidia.com/v1/retrieval/nvidia/llama-nemotron-rerank-vl-1b-v2/reranking",
+    "nvidia/llama-nemotron-rerank-1b-v2": "https://ai.api.nvidia.com/v1/retrieval/nvidia/llama-nemotron-rerank-1b-v2/reranking",
+    # Historical routes retained only for reproducibility of old receipts; not defaults.
     "nvidia/rerank-qa-mistral-4b": "https://ai.api.nvidia.com/v1/retrieval/nvidia/rerank-qa-mistral-4b/reranking",
     "nvidia/llama-3.2-nv-rerankqa-1b-v2": "https://ai.api.nvidia.com/v1/retrieval/nvidia/llama-3_2-nv-rerankqa-1b-v2/reranking",
-    "nvidia/llama-nemotron-rerank-1b-v2": "https://ai.api.nvidia.com/v1/retrieval/nvidia/llama-nemotron-rerank-1b-v2/reranking",
 }
 
 
@@ -115,9 +118,9 @@ def chat(prompt: str, *, model: str, max_tokens: int = 512, temperature: float =
         "capability": "chat_completions",
         "model": model,
         "content": message.get("content") or "",
-        "reasoning_content": message.get("reasoning_content"),
         "finish_reason": choice.get("finish_reason"),
         "usage": raw.get("usage") or {},
+        "reasoning_trace_persisted": False,
         "evidence_role": "external_model_runtime",
     }
 
@@ -206,6 +209,11 @@ def rerank(query: str, passages: list[str], *, model: str = DEFAULT_RERANK_MODEL
     }
 
 
+def _clean_error(text: str) -> str:
+    text = re.sub(r"account\s+['\"][^'\"]+['\"]", "account [REDACTED]", text, flags=re.I)
+    return text[:2000]
+
+
 def process_request(path: Path) -> dict[str, Any]:
     req = json.loads(path.read_text(encoding="utf-8"))
     rid = str(req.get("request_id") or path.stem)
@@ -213,7 +221,7 @@ def process_request(path: Path) -> dict[str, Any]:
         raise ValueError("invalid request_id")
     mode = str(req.get("mode") or "list_models")
     envelope: dict[str, Any] = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "request_id": rid,
         "tool": "nvidia_nim",
         "request_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
@@ -267,7 +275,7 @@ def process_request(path: Path) -> dict[str, Any]:
     except Exception as exc:
         envelope["status"] = "FAILED"
         envelope["error_type"] = type(exc).__name__
-        envelope["error"] = str(exc)[:2000]
+        envelope["error"] = _clean_error(str(exc))
     RESULTS.mkdir(parents=True, exist_ok=True)
     out = RESULTS / f"{rid}.json"
     out.write_text(json.dumps(envelope, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -1,0 +1,69 @@
+name: WP02 Lookahead Adversarial Replication
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/wp02-lookahead-adversarial.yml'
+      - 'tools/claycode_v17_lookahead_boundary_fuzzer.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wp02-lookahead-adversarial-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  adversarial-lookahead:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout candidate branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+
+      - name: Install strict Lark collision checker
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check 'lark[interegular]==1.3.1'
+
+      - name: Run V17 lookahead adversarial replication
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/claycode_v17_lookahead_boundary_fuzzer.py \
+            --seed 1729 \
+            --prefix-cases 768 \
+            --call-cases 384 \
+            --output /tmp/CC_WP02_V17_LOOKAHEAD_ADVERSARIAL.json
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/CC_WP02_V17_LOOKAHEAD_ADVERSARIAL.json', encoding='utf-8'))
+          assert p['counts_as_wp02_pass'] is False
+          assert p['promotion_allowed'] is False
+          assert p['pass'] is True, p['failures']
+          print(json.dumps({
+              'result_class': p['result_class'],
+              'case_counts': p['case_counts'],
+              'timing_ms': p['timing_ms'],
+              'runtime': p['runtime'],
+              'v9_counterexample_reproduced': p['baseline']['known_counterexample_reproduced'],
+              'v17_counterexample_rescued': p['candidate']['known_counterexample_rescued'],
+          }, sort_keys=True))
+          PY
+
+      - name: Upload adversarial receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CC_WP02_V17_LOOKAHEAD_ADVERSARIAL
+          path: /tmp/CC_WP02_V17_LOOKAHEAD_ADVERSARIAL.json
+          if-no-files-found: error

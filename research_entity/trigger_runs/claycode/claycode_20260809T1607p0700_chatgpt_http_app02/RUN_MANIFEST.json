@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode_20260809T1607p0700_chatgpt_http_app02",
+  "trigger": "claycode",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "focus": "Bounded APP-02 HTTP compiler/lowering probe with deterministic target identity and host-owned listener resource handle; no language redesign without executable counterexample.",
+  "coordination": {
+    "research_center_worker_federation_read": true,
+    "recent_parallel_commits_reread": true,
+    "overlap_avoided": [
+      "generic relation canonical-form worker",
+      "strict surface/parser workers",
+      "MVC/effect lowering worker"
+    ],
+    "complementary_parallel_evidence": "claycode_20260809T1605p0700_chatgpt_secondary_ubuntu_effect_boundary",
+    "center_runtime_join_receipt": "NOT_AVAILABLE_THROUGH_CONNECTOR_ONLY_SESSION",
+    "materialization_policy": "durable GitHub run artifacts; no claim of UnifiedDB runtime center join"
+  },
+  "execution_surface": {
+    "github": "READ_WRITE",
+    "local_container": "AVAILABLE",
+    "e2b": "NOT_EXPOSED",
+    "web_primary_sources": "USED"
+  },
+  "preflight_status": "FAIL_CLOSED_GOVERNANCE_DRIFT",
+  "preflight_blocker": "RESEARCH_TRIGGER_REGISTRY renamed clay to clayresearch while research_interconnect_preflight.py priority tables still contain clay; official tool is designed to raise RuntimeError on this set mismatch.",
+  "promotion": "NO_CANONICAL_PROMOTION",
+  "created_at": "2026-08-09T16:07:00+07:00"
+}

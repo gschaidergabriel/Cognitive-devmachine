@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1433p0700_chatgpt_secondary_drive_lcme_test_benchmark_disposition",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "source_class": "DRIVE_HISTORICAL_LCME_TEST_AND_PACKAGE_EVIDENCE",
+  "shard": "LCME/titan-memory test suite, package dependencies, and benchmark-claim disposition",
+  "exact_coverage_credit": 0.0,
+  "sources": [
+    {"drive_id":"1UkS1wgMKVJTbdGgP1-YczObmwQVyJabI","title":"tests/test_lcme.py"},
+    {"drive_id":"12ZbRts4roKHD5sGZ3vmtOFF5ASJi2i--","title":"pyproject.toml"},
+    {"drive_id":"1OVA0mqTrIytSkou2lJ4Uqm9LeIqIbcMP","title":"README.md"},
+    {"drive_id":"14er-87oF8XemK4zivk9ev_CaPfP5LJfd","title":"lcme/core.py"},
+    {"drive_id":"1pMF_pm5UYXqVUetHdUNitLZJxMGAqMOO","title":"lcme/storage.py"},
+    {"drive_id":"17czXLiBZk3AwKGkV3YthiBsggrhMvgMI","title":"lcme/ingestion.py"},
+    {"drive_id":"12oiw6B6br8R64O0_Qf5toyMMTfTJqk44","title":"lcme/maintenance.py"},
+    {"drive_id":"1qyP9FuHUfIJaYlgmA0l_s9f-ai7_eNv5","title":"lcme/neural_cortex.py"},
+    {"drive_id":"1zOQeOY6wskDLaWIeK9XCcOaDuU-Wk2Ay","title":"lcme/hippocampus.py"}
+  ],
+  "execution_receipt": {
+    "environment": "current ChatGPT container; reconstructed package from Drive source files; Python/pytest/numpy/torch available; sentence_transformers absent",
+    "full_suite_attempt": {
+      "command_class": "pytest tests/test_lcme.py with maxfail=5",
+      "result": "BLOCKED_BY_MISSING_RUNTIME_DEPENDENCY",
+      "observed": "1 passed, first 5 ingestion/FTS-path tests failed because storage.VectorStore lazy-imported sentence_transformers.SentenceTransformer and the package was absent",
+      "interpretation": "This is an environment/dependency blocker, not evidence that LCME retrieval logic itself fails. Full historical benchmark claims were not reproduced."
+    },
+    "dependency_independent_subset": {
+      "result": "PASS",
+      "tests_passed": 13,
+      "tests_failed": 0,
+      "covered_families": [
+        "knowledge graph relation creation/traversal",
+        "claim and entity extraction",
+        "neural cortex initialization/importance/cold-start blending",
+        "hippocampus bootstrap/not-ready behavior without vectors",
+        "maintenance and expired-protection handling",
+        "SQLite persistence",
+        "consolidation engine status"
+      ],
+      "epistemic_class": "CURRENT_REEXECUTION_OF_HISTORICAL_SOURCE_WITHOUT_EMBEDDING_MODEL"
+    }
+  },
+  "documentation_discrepancy": {
+    "id": "LCME-DOC-N1",
+    "finding": "README presents LCME as 'zero dependencies'/'zero external dependencies' in multiple places, while pyproject.toml declares mandatory runtime dependencies numpy>=1.24.0, sentence-transformers>=2.2.0, and torch>=2.0.0.",
+    "interpretation": "The defensible narrower claim is zero external servers/databases/APIs or no second LLM for routine memory operations; the literal package-level 'zero dependencies' claim is false for the archived source.",
+    "impact": "Do not carry the literal zero-dependency claim into current Clay/Frank architecture or performance planning."
+  },
+  "benchmark_disposition": {
+    "readme_claims": "HISTORICAL_REPORTED_MEASUREMENTS_NOT_PROMOTED",
+    "reason": "The current invocation did not reproduce the embedding-backed full suite or benchmark harness; required sentence-transformers/model assets were not present on this execution surface.",
+    "usable_evidence": "The source contains a real test suite and dependency-independent code paths that currently execute, supporting existence/reusability of several mechanisms but not advertised end-to-end precision/latency values."
+  },
+  "branch_feedback": {
+    "frank": "DELTA: LCME mechanisms have partial executable historical support; do not inherit advertised benchmark numbers without current hardware rerun.",
+    "harness": "DELTA: import the 13 passing dependency-independent regression families and add hermetic embedding-model fixtures plus actual-model performance lanes.",
+    "claycode": "NO_CHANGE beyond prior memory provenance delta.",
+    "claygraph": "DELTA: graph/claim basic regression semantics have executable historical tests worth porting.",
+    "unifieddb": "DELTA: SQLite persistence and lifecycle tests are reusable scaffolding, but benchmark/persistence claims require current replay.",
+    "gwt": "NO_CHANGE.",
+    "emergenz": "NO_CHANGE.",
+    "hyperposition": "NO_CHANGE.",
+    "q12_index": "DELTA: LCME earned-work credit should distinguish executable test scaffolding from unverified README performance claims."
+  },
+  "open_obligations": [
+    "Run the archived full LCME suite in a hermetic environment with exact declared dependencies and frozen embedding model artifact if/when available.",
+    "Disposition the Drive benchmarks/ directory and docs/BENCHMARK.md separately before any historical performance promotion.",
+    "Port dependency-independent regression families into current H1 only after deduplication against existing harness tests."
+  ],
+  "promotion": {"canonical_claim_promotion":false,"reason":"Partial test reexecution supports mechanism existence, not current production performance or full benchmark reproduction."}
+}

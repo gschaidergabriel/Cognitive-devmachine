@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Ultra-compact Claude Code lifecycle adapter for one repo-native RAE hive.
 
-Every substantive round injects the ClayCode/GWT/state/status kernel. Observable round,
-tool and repair metadata are automatically routed into ClayCode meta-research. Hidden
-provider chain-of-thought is neither requested nor stored.
+Every substantive round resolves the moving RAE cognitive-stack pointer and injects a
+small ClayCode/GWT/state/status kernel. Observable round/tool metadata is routed into
+ClayCode meta-research. Hidden provider chain-of-thought is neither requested nor stored.
 """
 from __future__ import annotations
 import hashlib, json, os, pathlib, subprocess, sys, time
@@ -14,6 +14,7 @@ LOG=RUNTIME/"claude_hooks.jsonl"
 TRIGGERS=ROOT/"research_entity/global/RESEARCH_TRIGGER_REGISTRY.json"
 STATE=ROOT/"research_entity/runtime/claude_state_bridge.py"
 META=ROOT/"research_entity/runtime/claycode_meta_cognition_runtime.py"
+STACK=ROOT/"research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"
 CRITICAL=("/research_entity/continuity/research_entity_canonical.json","/research_entity/ledgers/claims.jsonl","/research_entity/ledgers/claim_status_events.jsonl","/research_entity/events/")
 
 
@@ -51,9 +52,6 @@ def emit(ev,ctx,title=None):
 def text_shape(s):
     s=str(s or "")
     return {"chars":len(s),"words":len(s.split()),"lines":s.count("\n")+(1 if s else 0),"digest":hashlib.sha256(s.encode()).hexdigest()[:12] if s else None}
-def current_cycle(sid):
-    # Runtime resolves cycle if caller has one; hook never reads raw DB directly here.
-    return None
 def meta(d,event,trace_class,shape=None,props=None):
     if not META.exists():return
     sid=str(d.get("session_id") or "unknown");node=f"claude-code:{sid}"
@@ -62,23 +60,37 @@ def meta(d,event,trace_class,shape=None,props=None):
     try:subprocess.run(args,cwd=ROOT,text=True,capture_output=True,timeout=15)
     except Exception:pass
 
+def stack_marker():
+    try:
+        raw=STACK.read_bytes();h=hashlib.sha256(raw).hexdigest()[:12]
+        text=raw.decode("utf-8","replace")
+        epoch="?"
+        for line in text.splitlines():
+            s=line.strip()
+            if s.startswith("epoch "):
+                epoch=s.split(None,1)[1].strip();break
+        return f"STACK{{ptr=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay;epoch:{epoch};sha:{h};resolve_each_turn:1}}"
+    except Exception:
+        return "STACK{state:DEGRADED_STALE_STACK;missing:RAE_LATEST_COGNITIVE_STACK}"
+
 
 def turn_kernel():
-    # Intentionally repeated every round. Fixed semantic payload; rich state stays pointer-addressable.
     return (
-      "TURN{E=RAE;THINK=CLAYCODE;TRACE=CLAYCODE;USER=EN_CAVEMAN;"
+      stack_marker()+"\n"
+      "TURN{E=RAE;THINK=STACK.claycode;TRACE=STACK.claycode;USER=EN_CAVEMAN;"
       "GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];"
       "FOCUS=argmax(admissible(GWT0..4));CREDIT=receipt(deliv,recon,use,effect,reentry);"
-      "READ=T0verify(canonical)>T1route(registry)>T2assemble(current+open+negative+packets+experiments+handoffs)>T3deep?mutate|conflict|recovery|highimpact|insufficient;"
+      "READ=T0verify(canonical+STACK)>T1route(registry)>T2UnifiedDB(current+open+negative+packets+experiments+handoffs)+ClayGraph(task-neighborhood)>T3deep?mutate|conflict|recovery|highimpact|insufficient;"
+      "EFFECT=ClayIntent->Needle->receipt->verify->reentry;"
       "STATUS=final_plain_```text```:{RAE_STATUS,NEXT_LEVEL,DOOMSDAY};NO_AFTER=1;"
-      "OBS=explicit_trace+tool_receipt+ux->CLAYCODE_META_RESEARCH}"
+      "OBS=explicit_trace+tool_receipt+ux->CLAYCODE_META_RESEARCH;DERIVE=AUTO;PROMOTE=EVIDENCE_GATED}"
     )
 
 
 def main():
     d=inp();ev=d.get("hook_event_name","");log(ev,d)
     if ev=="SessionStart":
-        meta(d,ev,"LIFECYCLE",{"event":ev})
+        meta(d,ev,"LIFECYCLE",{"event":ev,"stack":stack_marker()})
         rc,c,e=bridge(d,"");src=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
         emit(ev,turn_kernel()+"\n"+src+"\nPTR=@CLAUDE.md,@research_entity/global/RAE_TURN_KERNEL.clay","RAE organ")
         return
@@ -87,21 +99,21 @@ def main():
         if not prompt.strip():return
         k,s=trig(prompt)
         props=["high_efficiency"] if len(prompt)<80 else []
-        meta(d,ev,"ROUND_INPUT",{"event":ev,"trigger":k if s else None,**text_shape(prompt)},props)
+        meta(d,ev,"ROUND_INPUT",{"event":ev,"trigger":k if s else None,"stack":stack_marker(),**text_shape(prompt)},props)
         rc,c,e=bridge(d,prompt);base=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
         kernel=turn_kernel()
         if s:
             purpose=s.get("purpose",k);protocol=s.get("protocol")
             rr,ro,re=run("run","start","--actor","claude-code-lead","--task",f"trigger:{k} {purpose}","--capture-level","L2")
-            ctx=kernel+"\n"+base+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=read pointer sections on demand; execute now; persist ClayCode receipts"
+            ctx=kernel+"\n"+base+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=resolve latest stack; fetch only needed refs; execute now; persist ClayCode receipts"
             emit(ev,ctx);return
         br,bo,be=run("boot","--actor","claude-code-lead","--task",prompt,"--max-claims","4","--max-packets","2","--max-chunks","1")
         task=(bo[:2200] if br==0 else "boot=DEGRADED")
-        emit(ev,kernel+"\n"+base+"\nTASK="+task+"\nDO=fetch only needed refs; explicit work ClayCode; final caveman English")
+        emit(ev,kernel+"\n"+base+"\nTASK="+task+"\nDO=latest-stack explicit work ClayCode; final caveman English")
         return
     if ev=="PreToolUse":
         tool=d.get("tool_name","");ti=d.get("tool_input") or {}
-        meta(d,ev,"TOOL_INTENT",{"tool":tool,"keys":sorted(str(k) for k in ti.keys())},["tool_friction"] if not tool else [])
+        meta(d,ev,"TOOL_INTENT",{"tool":tool,"keys":sorted(str(k) for k in ti.keys()),"stack":stack_marker()},["tool_friction"] if not tool else [])
         if tool in {"Write","Edit"}:
             p=norm(ti.get("file_path"))
             if any(x in p for x in CRITICAL):
@@ -116,23 +128,22 @@ def main():
         failed=False
         if isinstance(resp,dict):failed=bool(resp.get("is_error") or resp.get("error"))
         props=["effect_error"] if failed else ["good_outcome"]
-        meta(d,ev,"TOOL_RECEIPT",{"tool":tool,"failed":failed},props)
+        meta(d,ev,"TOOL_RECEIPT",{"tool":tool,"failed":failed,"stack":stack_marker()},props)
         refresh();return
     if ev in {"Stop","SessionEnd"}:
-        # Some Claude Code versions expose final assistant text here. Persist only shape, never raw text.
         msg=d.get("last_assistant_message") or d.get("assistant_response") or d.get("response") or ""
         props=[]
         if msg:
             sh=text_shape(msg);density=(str(msg).count('{')+str(msg).count('}')+str(msg).count('=')+str(msg).count(';'))/max(1,sh["words"])
-            sh["clay_density"]=round(density,4)
+            sh["clay_density"]=round(density,4);sh["stack"]=stack_marker()
             if density<0.03:props.append("semantic_loss")
             if sh["words"]>500:props.append("token_waste")
-        else:sh={"event":ev,"assistant_text_exposed":False}
+        else:sh={"event":ev,"assistant_text_exposed":False,"stack":stack_marker()}
         meta(d,ev,"ROUND_OUTPUT",sh,props)
         close(d);return
     if ev=="PreCompact":
-        meta(d,ev,"COMPACTION",{"event":ev},["recovery"])
+        meta(d,ev,"COMPACTION",{"event":ev,"stack":stack_marker()},["recovery"])
         (RUNTIME/"precompact.flag").write_text(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())+'\n')
-        emit(ev,turn_kernel()+"\nRAE.compact{reload=delta;ptr=@CLAUDE.md}");return
+        emit(ev,turn_kernel()+"\nRAE.compact{reload=latest-stack+delta;ptr=@CLAUDE.md}");return
 
 if __name__=="__main__":main()

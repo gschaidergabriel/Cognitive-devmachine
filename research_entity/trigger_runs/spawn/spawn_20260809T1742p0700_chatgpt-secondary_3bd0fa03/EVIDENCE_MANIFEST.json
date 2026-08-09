@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1742p0700_chatgpt-secondary_3bd0fa03",
+  "evidence": [
+    {
+      "id": "E-INT-G9",
+      "class": "CURRENT_INTERNAL_RESEARCH_CANDIDATE",
+      "source": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "supports": "Current Delta<T>.diff:Int, IncrementalReceipt, ViewDelta.selector_hash and source/output epoch semantics.",
+      "boundary": "Candidate semantics, not final compiler evidence."
+    },
+    {
+      "id": "E-INT-INCR-LOCALITY",
+      "class": "EXECUTED_SYNTHETIC_PRIOR_RESULT",
+      "source": "research_entity/trigger_runs/clay/clayresearch_20260809T1716p0700_chatgpt-secondary/EXPERIMENTS.md#EXP-INCR-001",
+      "supports": "Dependency-local recomputation can be much smaller than global scans under deliberately local topology.",
+      "boundary": "Performance/locality only; did not establish semantic equivalence."
+    },
+    {
+      "id": "E-EXT-DBSP",
+      "class": "PRIMARY_RESEARCH_PAPER",
+      "source": "DBSP: Automatic Incremental View Maintenance for Rich Query Languages (arXiv:2203.16684)",
+      "supports": "General incrementalization of relational/dataflow computations including deletions and non-monotone/recursive query classes.",
+      "boundary": "External formal/system model, not Clay execution evidence."
+    },
+    {
+      "id": "E-EXT-DIFFERENTIAL",
+      "class": "PRIMARY_OFFICIAL_IMPLEMENTATION_DOCUMENTATION",
+      "source": "Differential Dataflow official documentation: arrangements, making changes, advancing time",
+      "supports": "Update triples use data/time/diff; insert/remove alter multiplicities; progress/frontiers delimit when earlier logical times can no longer change.",
+      "boundary": "External implementation semantics, not Clay execution evidence."
+    },
+    {
+      "id": "E-EXT-SAC",
+      "class": "PRIMARY_RESEARCH_PAPER",
+      "source": "Self-Adjusting Stack Machines (arXiv:1106.0478)",
+      "supports": "Change propagation correctness can be stated as observational equivalence to from-scratch reevaluation.",
+      "boundary": "General self-adjusting-computation evidence, not Clay-specific."
+    },
+    {
+      "id": "EXP-SPAWN-DELTA-001",
+      "class": "EXECUTED_SYNTHETIC_MECHANISM_TEST",
+      "setup": "Python Z-set/bag edge relation with derived self-join path2; 20,000 randomized signed diffs including -2,-1,+1,+2; incremental differential formula compared after every step with full recomputation.",
+      "result": "PASS: 20,000 / 20,000 steps matched full recomputation; zero observed mismatches.",
+      "boundary": "Synthetic Python oracle; not current ClayCode compiler/runtime."
+    },
+    {
+      "id": "EXP-SPAWN-DELTA-002",
+      "class": "EXECUTED_SYNTHETIC_COUNTEREXAMPLE",
+      "setup": "Multiple support weight x=2, then apply diff=-1.",
+      "result": "Correct multiplicity remains 1; naive set-only deletion makes x absent and is incorrect.",
+      "boundary": "Minimal constructed correctness counterexample."
+    },
+    {
+      "id": "EXP-SPAWN-DELTA-003",
+      "class": "EXECUTED_SYNTHETIC_COUNTEREXAMPLE",
+      "setup": "argmax over scores a=10,b=9,c=8; delete a; compare full selector recomputation with support-only invalidation.",
+      "result": "Full recomputation selects b; support-only invalidation retracts a but fails to discover b.",
+      "boundary": "Minimal non-monotone selector counterexample."
+    },
+    {
+      "id": "EXP-SPAWN-DELTA-004",
+      "class": "EXECUTED_SYNTHETIC_COUNTEREXAMPLE",
+      "setup": "Data unchanged; selector semantics change from max to min.",
+      "result": "Result changes despite data_diff=0, proving selector/plan identity is itself an invalidation dependency.",
+      "boundary": "Minimal plan-change counterexample."
+    },
+    {
+      "id": "EXP-SPAWN-DELTA-005",
+      "class": "EXECUTED_SYNTHETIC_PERFORMANCE_TEST",
+      "setup": "100,000-element global max selector; 2,000 point updates; compare naive full max scan with maintained lazy heap index.",
+      "result": "Median naive full scan approximately 1.768707 ms/update; indexed update approximately 0.000147 ms/update; synthetic ratio approximately 12,032x.",
+      "boundary": "Intentionally synthetic microbenchmark; ratio must not be projected to Frank/Clay target runtime."
+    }
+  ],
+  "evidence_synthesis": {
+    "supported_at_current_scope": [
+      "Signed multiplicity/diff semantics are a viable exact basis for tested differential operators.",
+      "Support-only closure is unsound for tested non-monotone selector deletion.",
+      "Selector/plan changes require invalidation even with no data delta.",
+      "Coherent progress/sealed-epoch knowledge is the leading correctness model for out-of-order logical-time updates."
+    ],
+    "not_established": [
+      "Correctness of the full ClayCode compiler/runtime incremental engine",
+      "Performance on Andreas Ubuntu developer system",
+      "Live Frank behavior",
+      "BASE gate completion",
+      "Any emergence or consciousness claim"
+    ]
+  },
+  "promotion": "NONE"
+}

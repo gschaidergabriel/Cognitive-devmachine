@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T174614p0700_harness_lowering_semantics",
+  "origin_branch": "harness",
+  "feedback": {
+    "clayresearch": {
+      "type": "NEW_CONSTRAINT",
+      "statement": "Integrated Clay architecture should explicitly classify compiler-carried state into semantic first-class fields, verified external bindings and truly non-semantic trace/debug metadata; optimizer convenience cannot decide the class."
+    },
+    "frank": {
+      "type": "NEW_CONSTRAINT",
+      "statement": "FRANK architecture contracts should mark authority, resource/effect identity, epistemic UNKNOWN/CONFLICT/REVOKED state and causally required provenance as lowering-critical so H2 cannot silently compile them away."
+    },
+    "gwt": {
+      "type": "NO_CHANGE",
+      "statement": "No GWT mechanism change. Existing delivery/reconstruction/use/effect/reentry distinctions remain; when represented in compiled ClayCode, any causally required receipt fields fall under the same preservation gate."
+    },
+    "emergenz": {
+      "type": "NO_CHANGE",
+      "statement": "No emergence claim or metric change. The finding only protects intervention/measurement state from accidental lowering loss."
+    },
+    "claycode": {
+      "type": "NEW_CONSTRAINT",
+      "statement": "Implement a field-classified LoweringWitness/translation validator in compiler/runtime work. AUTHORITY must monotonically attenuate, EPISTEMIC_STATE must remain exact across pure lowering, PROVENANCE must remain exact or hash/epoch-bound when externalized, and effect/resource semantics must remain optimizer-visible. Treat this as CC-WP-06/11/13 implementation work, not a semantic redesign unless a real executable counterexample forces one."
+    },
+    "hyperposition": {
+      "type": "NO_CHANGE",
+      "statement": "No new topology mechanism. Existing set-valued alternatives/conflicts used by program semantics must not be collapsed by lowering unless an explicit semantic transform proves equivalence."
+    },
+    "claygraph": {
+      "type": "NEW_CONSTRAINT",
+      "statement": "Graph provenance/relevance/activation remains non-authoritative. Compiler lowering must not accidentally convert graph-derived relevance into capability authority; graph state that is causally used must have exact or validated target semantics."
+    },
+    "unifieddb": {
+      "type": "NEW_CONSTRAINT",
+      "statement": "Provenance externalization is acceptable only with deterministic binding from target artifact/receipt to exact derivation hash and source epoch. Canonical ledger storage cannot substitute for target semantic values needed at execution time and cannot mint authority."
+    },
+    "harness": {
+      "type": "NEW_HYPOTHESIS",
+      "statement": "Add semantic-lowering mutation/differential tests to the H2 path: intentionally drop/broaden each critical field after source canonicalization and require translation validation to fail closed before execution. Later H-WP-20 differential should compare these obligations in addition to state/output equality."
+    }
+  },
+  "recommended_work_links": [
+    "CC-WP-06-COMPILER-LOWERING",
+    "CC-WP-07-RUNTIME-ABI-FFI",
+    "CC-WP-11-FUZZ-CONFORMANCE",
+    "CC-WP-13-HARNESS-HANDOFF",
+    "H-WP-03-CLAYCODE-ADAPTER",
+    "H-WP-10-EFFECT-AUTHORITY",
+    "H-WP-14-FUZZ-ADVERSARIAL",
+    "H-WP-20-DIFFERENTIAL"
+  ],
+  "stage_gate_effect": {
+    "BASE_CLAYCODE_RELEASE": "NO_PASS_CHANGE; new validation constraint/de-risking result only",
+    "H1_REFERENCE_HARNESS": "NO_PASS_CHANGE",
+    "H2_CLAYCODE_HARNESS": "FUTURE_DIFFERENTIAL_REQUIREMENT"
+  },
+  "authority_boundary": "This manifest is research feedback. It does not authorize Frank to mutate its own Harness and does not itself authorize any external effect."
+}

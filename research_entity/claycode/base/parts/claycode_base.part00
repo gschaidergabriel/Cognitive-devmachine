@@ -1,0 +1,232 @@
+from __future__ import annotations
+
+import ast as pyast
+import asyncio
+import dataclasses
+import hashlib
+import json
+import os
+import re
+import sqlite3
+import subprocess
+import tempfile
+import threading
+import time
+import urllib.request
+from dataclasses import dataclass, field
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from typing import Any, Callable
+
+from lark import Lark, Transformer, v_args
+
+VERSION = "0.1.0-base-proxy"
+
+# ---------------------------------------------------------------------------
+# Structural frontend for the admitted G9 + current Frank surface dialects.
+# This deliberately separates surface acceptance from executable-core parsing.
+# Canonical executable meaning lives in TypedIR, not in the source spelling.
+# ---------------------------------------------------------------------------
+
+TOP_KEYWORDS = {
+    "module", "version", "status", "parent", "import", "use", "interface", "dialect",
+    "law", "rule", "invariant", "class", "type", "record", "tensor", "codec", "surface",
+    "metric", "hash", "needle", "cycle", "fn",
+}
+
+@dataclass(frozen=True)
+class SurfaceDecl:
+    kind: str
+    name: str | None
+    text: str
+    source_start: int
+    source_end: int
+
+@dataclass(frozen=True)
+class SurfaceProgram:
+    declarations: tuple[SurfaceDecl, ...]
+    normalized_source: str
+    surface_hash: str
+
+class StructuralError(ValueError):
+    pass
+
+
+def _strip_comments(src: str) -> str:
+    out = []
+    i = 0
+    n = len(src)
+    in_string = False
+    esc = False
+    while i < n:
+        c = src[i]
+        if in_string:
+            out.append(c)
+            if esc:
+                esc = False
+            elif c == "\\":
+                esc = True
+            elif c == '"':
+                in_string = False
+            i += 1
+            continue
+        if c == '"':
+            in_string = True
+            out.append(c)
+            i += 1
+            continue
+        if c == '/' and i + 1 < n and src[i+1] == '/':
+            while i < n and src[i] != '\n':
+                i += 1
+            continue
+        if c == '/' and i + 1 < n and src[i+1] == '*':
+            i += 2
+            depth = 1
+            while i < n and depth:
+                if src[i:i+2] == '/*':
+                    depth += 1; i += 2
+                elif src[i:i+2] == '*/':
+                    depth -= 1; i += 2
+                else:
+                    i += 1
+            if depth:
+                raise StructuralError("unterminated block comment")
+            continue
+        out.append(c)
+        i += 1
+    if in_string:
+        raise StructuralError("unterminated string")
+    return ''.join(out)
+
+
+def _balanced_scan(src: str) -> None:
+    stack: list[tuple[str, int]] = []
+    pairs = {'}':'{', ')':'(', ']':'[', '>':'<'}
+    # Angle brackets are ambiguous with comparison operators. We only balance (),[],{}.
+    opens = {'(', '[', '{'}
+    close_pairs = {')':'(', ']':'[', '}':'{'}
+    in_string = False
+    esc = False
+    for i, c in enumerate(src):
+        if in_string:
+            if esc:
+                esc = False
+            elif c == '\\':
+                esc = True
+            elif c == '"':
+                in_string = False
+            continue
+        if c == '"':
+            in_string = True
+        elif c in opens:
+            stack.append((c, i))
+        elif c in close_pairs:
+            if not stack or stack[-1][0] != close_pairs[c]:
+                raise StructuralError(f"unbalanced {c} at {i}")
+            stack.pop()
+    if stack:
+        c, i = stack[-1]
+        raise StructuralError(f"unclosed {c} at {i}")
+
+
+def normalize_surface(src: str) -> str:
+    src = _strip_comments(src)
+    _balanced_scan(src)
+    # Normalize horizontal whitespace but retain newlines as declaration separators.
+    lines = []
+    for line in src.splitlines():
+        s = re.sub(r"[ \t]+", " ", line.strip())
+        if s:
+            lines.append(s)
+    return "\n".join(lines)
+
+
+def _top_level_decl_spans(clean: str) -> list[tuple[int, int]]:
+    # Find declaration starts at brace depth 0 and line starts. A declaration owning a block
+    # continues through that matching block; scalar declarations end at newline.
+    spans = []
+    n = len(clean)
+    i = 0
+    depth = 0
+    in_string = False
+    esc = False
+    line_start = True
+    starts: list[int] = []
+    while i < n:
+        c = clean[i]
+        if in_string:
+            if esc: esc = False
+            elif c == '\\': esc = True
+            elif c == '"': in_string = False
+            line_start = (c == '\n')
+            i += 1; continue
+        if c == '"':
+            in_string = True; line_start = False; i += 1; continue
+        if c == '{': depth += 1
+        elif c == '}': depth -= 1
+        if line_start and depth == 0:
+            j = i
+            while j < n and clean[j] in ' \t': j += 1
+            m = re.match(r"([A-Za-z_][A-Za-z0-9_-]*)\b", clean[j:])
+            if m and m.group(1) in TOP_KEYWORDS:
+                starts.append(j)
+        line_start = (c == '\n')
+        i += 1
+    for idx, st in enumerate(starts):
+        en = starts[idx+1] if idx + 1 < len(starts) else n
+        spans.append((st, en))
+    return spans
+
+
+def scan_surface(src: str) -> SurfaceProgram:
+    clean = _strip_comments(src)
+    _balanced_scan(clean)
+    decls: list[SurfaceDecl] = []
+    for st, en in _top_level_decl_spans(clean):
+        text = clean[st:en].strip()
+        if not text:
+            continue
+        m = re.match(r"([A-Za-z_][A-Za-z0-9_-]*)\b(?:\s+([^\s({=]+))?", text)
+        if not m:
+            raise StructuralError(f"cannot classify declaration at {st}")
+        kind, name = m.group(1), m.group(2)
+        if kind not in TOP_KEYWORDS:
+            raise StructuralError(f"unknown top-level declaration {kind}")
+        decls.append(SurfaceDecl(kind, name, text, st, en))
+    normalized = normalize_surface(src)
+    return SurfaceProgram(tuple(decls), normalized, hashlib.sha256(normalized.encode()).hexdigest())
+
+# ---------------------------------------------------------------------------
+# Typed executable core. This is the frozen BASE proxy used for differential tests.
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Expr:
+    kind: str
+    value: Any = None
+    args: tuple[Any, ...] = ()
+
+@dataclass(frozen=True)
+class Stmt:
+    kind: str
+    value: Any = None
+    expr: Expr | None = None
+    body: tuple['Stmt', ...] = ()
+    else_body: tuple['Stmt', ...] = ()
+    type_hint: str | None = None
+
+@dataclass(frozen=True)
+class FunctionIR:
+    name: str
+    params: tuple[str, ...]
+    body: tuple[Stmt, ...]
+    source_hash: str
+    param_types: tuple[str | None, ...] = ()
+    return_type: str | None = None
+
+@dataclass(frozen=True)
+class ProgramIR:
+    module: str
+    functions: tuple[FunctionIR, ...]
+    effects: tuple[str, ...] = ()
+    semantic_version: str = "BASE-IR-0.1"

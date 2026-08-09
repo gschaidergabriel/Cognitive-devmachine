@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "event_type": "WORK_SUBMIT",
+  "work_id": "WORK-CLAYCODE-BASE14-H2-TARGET-20260809",
+  "submitted_at": "2026-08-09T20:06:00+07:00",
+  "submitted_by": "chatgpt-secondary",
+  "priority": "P0_RELEASE_BLOCKER",
+  "domains": ["claycode", "frank", "harness"],
+  "objective": "Close the remaining honest ClayCode BASE blockers without weakening the frozen FRANK H1 semantics or target-host evidence law.",
+  "current_state": {
+    "formal_pass": ["CC-WP-01-SPEC-FREEZE"],
+    "implementation_closure_ready": ["CC-WP-02-PARSER-CANON", "CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-05-EVALUATOR", "CC-WP-06-COMPILER-LOWERING", "CC-WP-07-RUNTIME-ABI-FFI", "CC-WP-08-STDLIB-SDK", "CC-WP-09-CONCURRENCY-MEMORY", "CC-WP-11-FUZZ-CONFORMANCE", "CC-WP-12-CORPUS-HELDOUT"],
+    "blocked": ["CC-WP-10-GENERAL-APP-SUITE", "CC-WP-13-HARNESS-HANDOFF", "CC-WP-14-BASE-AUDIT"],
+    "open_p0_p1_software_defects": 0
+  },
+  "blockers": [
+    {
+      "id": "B-H2-ACTIVE-ASSEMBLY",
+      "class": "EXECUTABLE_LANGUAGE_OR_GENERIC_RUNTIME_COUNTEREXAMPLE",
+      "must_preserve": ["typed packet/provenance/ancestry identity", "semantic epoch validity", "bounded score inputs", "explicit conflict alternatives", "deterministic bounded selection", "ancestry diversity", "re-expansion identity", "deterministic semantic hash", "capability visibility != bearer authority", "no authority mint from cognition"],
+      "forbidden_shortcut": "Do not implement one FRANK-specific opaque host call that simply executes the Python H1 algorithm. Prefer generic typed collection/resource/FFI/runtime mechanisms; change ClayCode semantics only after an executable generic-realization counterexample.",
+      "required_test": "Run H1 ordinary-code and H2 ClayCode/generic-runtime paths on identical randomized and adversarial packet sets; require equivalent bounded Assembly/conflict/authority invariants and deterministic semantic receipt."
+    },
+    {
+      "id": "B-ANDREAS-TARGET",
+      "class": "EXTERNAL_EXECUTION_DEPENDENCY",
+      "command": "CLAYCODE_TARGET_HOST_ID=ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM python tools/claycode_andreas_base14_closure.py",
+      "required_host": "Andreas Ubuntu Linux developer system, non-CI, clean source/toolchain checkout",
+      "required_outputs": ["research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_TARGET_GATE.json", "research_entity/claycode/target_receipts/apps/*.json", "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE14_CLOSURE.json", "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json"]
+    }
+  ],
+  "acceptance": {
+    "all_14_work_packages_pass": true,
+    "ten_real_app_receipts": true,
+    "full_frank_handoff_receipt": true,
+    "zero_open_p0_p1": true,
+    "general_purpose_gate_pass": true,
+    "authority_invariant": "model_output != execution_authority"
+  },
+  "references": ["CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json", "tools/claycode_base_wp14_audit.py", "tools/claycode_andreas_base14_closure.py", "research_entity/claycode/BASE_DEFECT_LEDGER.json", "research_entity/trigger_runs/frank/frank-20260809T1921p0700-chatgpt-secondary-active-assembly-cascade/CLAYCODE_ARCHITECTURE_MAPPING.md"]
+}

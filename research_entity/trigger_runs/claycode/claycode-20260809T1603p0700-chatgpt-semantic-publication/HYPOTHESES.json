@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1603p0700-chatgpt-semantic-publication",
+  "hypotheses": [
+    {
+      "id": "H-CC-G9-PUBLICATION-CONTRACT-SUFFICIENCY-001",
+      "status": "OPEN_REFINED_BY_EXECUTABLE_PROXY",
+      "mechanism": "Existing G9 generic records/rules, Delta/ViewDelta/GraphDelta and capability separation can encode a reader-visible semantic publication barrier over committed UnifiedDB state and derived ClayGraph projection without a dedicated transaction keyword.",
+      "expected": "Mismatch, incomplete projection/retraction, crash-before-publish and graph-only authority cases are rejected without exposing mixed CURRENT state.",
+      "observed": "12/12 fixed cases and 20000 mutation rounds passed; no mixed-epoch or graph-authority violation.",
+      "counterhypothesis": "A production type/effect checker or physically split store deployment will expose semantic states that generic records/rules cannot validate without a first-class transaction/publication primitive.",
+      "falsifier": "Production ClayCode lowering or H1/H2 crash/replay differential shows an unrepresentable or uncheckable partial-publication state despite the standard receipt contract.",
+      "next_test": "Freeze SemanticPublicationReceipt in canonical IR, compile it with the real BASE checker/runtime, then run crash injection across separate physical state/graph stores."
+    },
+    {
+      "id": "H-CC-PUBLICATION-PRIMITIVE-NECESSITY-002",
+      "status": "NOT_SELECTED",
+      "mechanism": "A new first-class transaction/publish syntax primitive is required for correctness.",
+      "expected": "Run-local generic record/rule encoding fails at least one closure/crash/authority property.",
+      "observed": "No failure in tested scope.",
+      "counterhypothesis": "A standard library/IR contract plus deterministic runtime commit gateway is sufficient.",
+      "falsifier": "Real compiler cannot statically enforce the required receipt/authority/epoch constraints without opaque host-only logic.",
+      "next_test": "Production checker implementation."
+    }
+  ]
+}

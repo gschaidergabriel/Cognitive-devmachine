@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1711p0700-hwp02-ledger-adjudication",
+  "origin_actor":"chatgpt-secondary",
+  "evidence_class":"LOCAL_SYNTHETIC_SOURCE_CONTRACT_DIFFERENTIAL",
+  "feedback":{
+    "clayresearch":{"effect":"REVISE","delta":"Represent semantic content identity, semantic history/version identity and execution/replay identity as separate typed layers rather than one overloaded root."},
+    "frank":{"effect":"REVISE","delta":"Franks authoritative state/replay contract needs explicit content, history/version and execution identities; no Frank self-Harness authority follows."},
+    "gwt":{"effect":"NO_CHANGE","delta":"No GWT mechanism change; GWT receipts should bind the appropriate versioned/trace identity without treating the hash itself as causal evidence."},
+    "emergenz":{"effect":"NO_CHANGE","delta":"No emergence promotion; identity correctness is an instrumentation prerequisite only."},
+    "claycode":{"effect":"REVISE","delta":"Expose distinct typed identities for StateContentHash/SemanticEventHash/SemanticHistoryHash/VersionedStateRoot/ExecutionChainHash/TraceRootHash; do not overload ProgramSemanticId."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"No topology mechanism change; alternative/schedule traces should bind VersionedStateRoot plus TraceRootHash."},
+    "claygraph":{"effect":"REVISE","delta":"Dynamic Run ClayGraph deltas should bind semantic content and versioned state roots separately from execution trace root."},
+    "unifieddb":{"effect":"REVISE","delta":"Persist/query content identity separately from event/history/version and execution-chain identity; idempotency records must bind semantic request fingerprint."},
+    "harness":{"effect":"REVISE","delta":"Do not promote either duplicate H-WP-02 ledger unchanged. Merge the strongest properties and run common crash/replay/concurrency/tamper differential corpus."}
+  },
+  "promotion":"NONE",
+  "stage_advance":false
+}

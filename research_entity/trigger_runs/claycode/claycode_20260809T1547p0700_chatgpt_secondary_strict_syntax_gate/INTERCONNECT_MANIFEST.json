@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode_20260809T1547p0700_chatgpt_secondary_strict_syntax_gate",
+  "trigger": "claycode",
+  "actor_id": "chatgpt-secondary",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "preflight_mode": "MANUAL_FAIL_CLOSED_GITHUB_CONNECTOR_NO_REPO_CHECKOUT",
+  "official_preflight_executed": false,
+  "official_preflight_blocker": "Local container has no network/repository checkout; git ls-remote failed DNS resolution. GitHub connector reads were used directly.",
+  "registry_scientific_branches": ["frank","clay","harness","claygraph","unifieddb","gwt","hyperposition","emergenz","claycode"],
+  "branch_priority": ["frank","clay","harness","claygraph","unifieddb","gwt","hyperposition","emergenz","claycode"],
+  "branches": [
+    {"branch":"frank","latest_run":"fusion-20260809T1538p0700-frank-architecture-lineage","inputs":["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"],"finding":"Preserve causal/authority distinctions; parser/render/context corruption is inherited as a regression risk."},
+    {"branch":"clay","latest_run":"stack-epoch-15","inputs":["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay","research_entity/rooms/PROGRAM_STATE.json"],"finding":"BASE_CLAYCODE_RELEASE is current stage; semantic changes require executable counterexamples."},
+    {"branch":"harness","latest_run":"HARNESS_WORKSPACE-v1.3-active","inputs":["research_entity/harness/HARNESS_WORKSPACE.json"],"finding":"H-WP-03 remains blocked on ClayCode release; adaptive visual learner and trace/replay semantics are mandatory representability targets."},
+    {"branch":"claygraph","latest_run":"ClayGraph-V2-hyperrelation-selection","inputs":["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"],"finding":"Typed hyperrelations, role identity and separate projection/selection/receiver receipts require deterministic language syntax; activation is not truth."},
+    {"branch":"unifieddb","latest_run":"UnifiedDB-V9-dynamic-work-fabric","inputs":["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"],"finding":"Capabilities, work revisions and execution receipts remain separately typed; parsing must not blur specification with authority."},
+    {"branch":"gwt","latest_run":"RAE-GWT-microkernel-current","inputs":["research_entity/global/RAE_GWT_MICROKERNEL.clay"],"finding":"Selection/broadcast/use/outcome/reentry distinctions remain representable under existing semantics."},
+    {"branch":"hyperposition","latest_run":"HYPERPOSITION_EMERGENCE_READOUT_CONTRACT-current","inputs":["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],"finding":"Higher-order relation and topology readouts remain explicit typed structures; no new parser primitive was required by this run."},
+    {"branch":"emergenz","latest_run":"GWT_EMERGENCE_READOUT_CONTRACT-current","inputs":["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],"finding":"Typed measurement vectors and intervention receipts remain explicit; no scalar/prose shortcut is acceptable."},
+    {"branch":"claycode","latest_run":"claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment","inputs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/g9/grammar.ebnf","research_entity/trigger_runs/claycode/claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment/FINAL_REPORT.md"],"finding":"Prior union/if repair is incomplete against additional CURRENT G9 constructs."}
+  ],
+  "special_rules": {
+    "claycode_requires_latest_frank_research_as_primary_feedback": true,
+    "claycode_requires_deep_claygraph_input": true,
+    "claycode_requires_deep_unifieddb_input": true,
+    "claycode_requires_goodman_anti_echo_review": true,
+    "claycode_latest_frank_architecture_artifact": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"
+  },
+  "coverage_result": "MANUAL_COMPLETE_FOR_REGISTERED_FOUNDATION_SET; OFFICIAL_PREFLIGHT_NOT_CLAIMED"
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0930p0700-chatgpt-secondary-digital-retina-e2e-raw-identity",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "origin_actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "worker_session_id":"chatgpt-secondary-666-20260809T0930p0700",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "task_id":"666-L0-DRE2E-HASH-20260809T0930p0700",
+  "result":"LOCAL_SHARD_COMPLETE",
+  "completion_test":{"expected_leaf_files":64,"raw_files_downloaded":64,"sha256_resolved":64,"missing":0,"blocked":0,"total_bytes":16200705,"subtree_reconciliation":{"root":4,"shots":9,"coverage":18,"freshset":32,"__pycache__":1}},
+  "durable_refs":["research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_E2E_RECURSIVE_DENOMINATOR.json","research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_E2E_RAW_CONTENT_IDENTITY_20260809T0930p0700.json"],
+  "measurement_delta":{"hard_initial_strict_pct":35.31468531468531,"hard_p6_strict_pct":44.80286738351254,"hard_p12_tuned_strict_pct":87.81362007168458,"hard_lenient_pct_at_0_20":94.6236559139785,"fresh_32_strict_pct":72.2466960352423,"fresh_32_lenient_pct_at_0_20":92.51101321585904,"strict_tuned_to_fresh_drop_pp":15.56692403644228},
+  "interpretation":"The hard-set P9-P12 gains are measurement-supported but benchmark-specific tuning risk is material because the final report explicitly says Tier-5 vocabulary targeted long-tail concepts named by the Llama-4 baseline. The separate 32-image freshset still shows substantial generalization, but at lower strict coverage.",
+  "artifact_inconsistencies":["p7_lenient_022.json records lenient_threshold=0.20, so its filename is misleading.","FINAL_REPORT has a stale unqualified sentence saying strict sits at 44.8% after correctly reporting 87.8% post-gap in the headline; p12_FINAL.json supports 87.8136%."],
+  "security_finding":"A plaintext Groq API credential fallback exists in evaluator source. Secret value was not copied into RAE; rotate/revoke it and require environment-only injection.",
+  "provenance_check":"All 32 freshset_baseline cache keys reconcile to SHA-1(raw image)[:16] of the exact downloaded freshset files.",
+  "level0":{"gate":"NOT_PASS","exact_global_progress_credit":0.0,"reason":"Combined Drive + Project-Frankenstein Level-0 denominator remains NOT_FROZEN. This receipt closes one exact local shard only."},
+  "commits":{"raw_identity_manifest":"ed9cf4d428a50c35c60f87e731f35a551ed4c38a","denominator_update":"c43527485d293b780feaf41d073f3902ab460bf8"},
+  "created_at":"2026-08-09T09:30:00+07:00"
+}

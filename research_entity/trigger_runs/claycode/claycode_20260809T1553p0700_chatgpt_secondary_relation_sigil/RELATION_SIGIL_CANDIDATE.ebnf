@@ -1,0 +1,19 @@
+(* ClayCode G9 research candidate: lexically explicit semantic-relation sigil. *)
+(* Candidate only. Canonical meaning remains typed IR; @ never confers authority. *)
+
+rule_expr = unary_relation | atom, { (closed_operator | relation_operator), atom } ;
+unary_relation = relation_operator, atom ;
+relation_operator = "@", relation_name ;
+relation_name = relation_char, { relation_char | "-" } ;
+relation_char = letter | digit | "_" ;
+
+(* Existing identifiers remain letter/underscore-leading. *)
+ident = letter, {letter|digit|"_"|"-"} ;
+qid = ident, {".", ident} ;
+
+(* Closed operators stay grammar-defined. Open semantic relations are never bare identifiers. *)
+closed_operator = "!="|"=="|"="|"->"|"&&"|"||"|"+"|"-"|"*"|"/"|"=>"|">="|"<="|">"|"<"|"iff"|"requires"|"in"|"subset_of" ;
+
+(* Resolver law: parse acceptance != semantic acceptance. *)
+(* Every @relation must resolve against a typed relation declaration/symbol table. *)
+(* Unknown relation -> diagnostic/abstain; never implicit semantics. *)

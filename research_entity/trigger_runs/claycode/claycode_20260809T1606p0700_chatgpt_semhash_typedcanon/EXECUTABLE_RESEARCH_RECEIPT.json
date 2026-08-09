@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1606p0700_chatgpt_semhash_typedcanon",
+  "candidate":"typed canonical IR semantic/artifact/deployment identity contract",
+  "candidate_version":"run-local-v0.1",
+  "source_basis":{"g9_source_blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e","grammar_blob_sha":"ec2f17077333955cfdabe6c64868d597e7e734e3","generic_relation_candidate_blob_sha":"926c9d57dbc5c2e4ce5cc610b6deda84c9796851"},
+  "execution":{"provider":"local_container","runtime":"python3","separate_process":true,"exit_status":0,"stderr":"","seed":20260809},
+  "experiments":[
+    {"experiment_id":"EXP-CC-TYPED-CANON-SEMANTIC-HASH-001","observed":{"surface_equivalence_same_semantic_hash":true,"surface_instances_distinct_contract_hash":true,"set_permutation_duplicate_trials":20000,"set_semantic_hash_preserved":20000,"set_contract_hash_changed":20000,"ordered_permutation_trials":20000,"ordered_semantic_hash_changed":20000,"schema_blind_sorting_collides_ordered_lifecycle":true,"typed_canonicalization_distinguishes_ordered_lifecycle":true,"hyperrelation_role_order_changes_semantic_hash":true,"dict_key_order_semantic_hash_preserved":true,"semantic_mutation_trials":50000,"semantic_mutation_hash_changed":50000}},
+    {"experiment_id":"EXP-CC-AUTHORITY-INSTANCE-HASH-002","triggering_counterevidence":"Concurrent HTTP v1 evidence showed fresh capability token contaminated generated target hash.","observed":{"trials":10000,"v1_embedded_runtime_authority_unique_artifact_hashes":10000,"v2_runtime_handle_unique_artifact_hashes":1,"v2_unique_deployment_instance_hashes":10000,"stable_artifact_identity_with_runtime_handle":true,"runtime_authority_instances_remain_distinct":true}}
+  ],
+  "semantic_property":"Equivalent surfaces may share semantic_hash; exact surface/provenance retains distinct contract_hash; stable generated artifact identity excludes per-run authority instances; Set order/duplicates may normalize only by explicit type while Ordered/role order remains semantic.",
+  "failure_counterexamples":["schema-blind sorting collapses forward and reversed ordered lifecycle to one hash","embedding per-run capability instance into generated code makes artifact identity nondeterministic"],
+  "repairs":["type-directed canonicalization; preserve order by default and normalize only explicit Set semantics","runtime capability/resource instances bind through host handle/table and deployment/execution receipt rather than stable generated-code identity"],
+  "affected_hypotheses":["H-CC-TYPED-CANON-011","H-CC-DUAL-SURFACE-HASH-012","H-CC-AUTHORITY-INSTANCE-SEPARATION-013"],
+  "negative_result_ids":["N-CC-SCHEMABLIND-CANON-003","N-CC-RUNTIME-AUTHORITY-ARTIFACT-HASH-004"],
+  "promotion_requested":false,
+  "evidence_boundary":"Executable micro-oracles, not production parser/canonicalizer, not Ubuntu target execution, not BASE PASS."
+}

@@ -1,0 +1,50 @@
+module claycode.loopdynamics.v0
+version "0.1-run-candidate"
+status RESEARCH_ONLY
+
+class LoopRegime = CONVERGING_FIXED_POINT|PRODUCTIVE_LIMIT_CYCLE|STALLED|DIVERGING_OR_OVERTHINKING|CHAOTIC_OR_UNCLASSIFIED
+class LoopAction = CONTINUE|HALT|ROUTE|ESCALATE
+
+record LoopDynamicsReadout {
+  loop_id:Ref
+  timescale:Duration
+  state_epoch:Epoch
+  state_delta:Score
+  residual_pressure:Score
+  input_injection:Score
+  recurrence_count:Int
+  recurrence_budget:Int
+  coupling:Score
+  convergence_rate:Score
+  period:Duration?
+  marginal_utility:Score
+  compute_cost:Cost
+  intervention:Ref?
+  rollback:RecoveryRef?
+  evidence:Set<EvidenceRef>
+  uncertainty:Score
+}
+
+record LoopControlDecision {
+  loop_id:Ref
+  regime:LoopRegime
+  action:LoopAction
+  reason:Symbol
+  checkpoint:RecoveryRef?
+  evidence:Set<EvidenceRef>
+}
+
+rule LoopDynamicsReadout != truth
+rule LoopDynamicsReadout != authority
+rule LoopControlDecision != effect_authority
+rule low_delta_high_pressure -> STALLED
+rule bounded_periodic_positive_utility -> PRODUCTIVE_LIMIT_CYCLE
+rule negative_marginal_utility -> DIVERGING_OR_OVERTHINKING
+rule recurrence != emergence
+
+cycle(input,node){
+  readout=observe_loop(input)
+  decision=classify_loop(readout)
+  outcome=apply_non_authorizing_control(decision)
+  reenter(Delta(outcome))
+}

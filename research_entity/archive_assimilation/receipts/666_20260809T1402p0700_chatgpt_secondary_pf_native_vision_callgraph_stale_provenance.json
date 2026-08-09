@@ -1,0 +1,47 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1402p0700_chatgpt_secondary_pf_native_vision_callgraph_stale_provenance",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"NativeVision active call graph plus stale FrankEye provenance after migration"},
+  "source_refs":[
+    "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "agentic/loop.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "ext/sovereign/vcb_integration.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/tools.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "ui/webui/app.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "gateway/app.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "research_entity/archive_assimilation/receipts/666_20260809T1356p0700_chatgpt_secondary_pf_native_vision_supersession.json"
+  ],
+  "active_callgraph_evidence":[
+    {"consumer":"agentic/loop.py","path":"error screenshot capture -> tools.native_vision.get_vision().analyze","role":"visual debugging on agentic abort/error context"},
+    {"consumer":"ext/sovereign/vcb_integration.py","path":"screenshot -> tools.native_vision.get_vision().analyze","role":"visual-causal bridge / desktop-log correlation"},
+    {"consumer":"services/tools.py","path":"see / see_deep tool -> NativeVision analyze","role":"model-invokable visual tool surface"},
+    {"consumer":"ui/webui/app.py","path":"image upload describe/OCR helpers -> NativeVision analyze/ocr","role":"interactive WebUI vision surface"},
+    {"consumer":"gateway/app.py","path":"/chat/vision -> NativeVision analyze -> Core refinement","role":"remote API vision surface"}
+  ],
+  "negative_results":[
+    {"id":"PF-VISION-PROV-FAIL-001","result":"gateway /chat/vision executes NativeVision but returns model='frankeye'.","impact":"Externally visible provenance/model identity can be stale even when the execution path has migrated; downstream logs/evaluation keyed only by reported model would misattribute observations."},
+    {"id":"PF-VISION-PROV-FAIL-002","result":"VCB module header says NativeVision but class/method docstrings still say FrankEye.","impact":"Documentation/string-level subsystem identity drift can survive functional migration and confuse archive reconciliation, tests and future maintainers."},
+    {"id":"PF-VISION-PROV-FAIL-003","result":"frank_eye.py remains in frozen head although major active consumers route to NativeVision.","impact":"Repository presence is not activation evidence; head-only file inventory overstates live architecture unless call graph/runtime receipts are frozen."}
+  ],
+  "current_inheritance":[
+    {"target":"H1 Reference Harness","delta":"Baseline freeze must include executable call-graph/runtime route receipts. Add a test that every visual response's reported provider/backbone/model/version matches the actually invoked path."},
+    {"target":"UnifiedDB","delta":"Persist visual provider_id, implementation_version, model/backbone identity and route_reason from the execution boundary, not UI labels or stale module names."},
+    {"target":"ClayGraph","delta":"Represent AVAILABLE_FILE, ACTIVE_CALLSITE, SUPERSEDED_IMPLEMENTATION and STALE_LABEL as distinct relation/status classes."},
+    {"target":"ClayCode","delta":"Perception receipts should type implementation identity separately from semantic sensor type; visual_sensor does not imply FrankEye/NativeVision/Retina."},
+    {"target":"Adaptive Visual Learner","delta":"Feature-backbone compatibility must bind to the actual active feature producer. A learner checkpoint cannot declare compatibility by historical subsystem name alone."},
+    {"target":"Harness regression","delta":"Create stale-provenance fixture: migrate visual backend while intentionally leaving old model label; test must fail until execution and reported provenance agree."}
+  ],
+  "cheap_discriminating_tests":[
+    "Invoke WebUI upload, gateway /chat/vision, see, see_deep, VCB audit and agentic error screenshot under instrumented import hooks; assert each route emits the actual NativeVision implementation/version receipt.",
+    "Temporarily rename/remove frank_eye.py in a controlled fixture and verify all claimed current visual routes still work; any hidden dependency becomes explicit.",
+    "Force NativeVision unavailable and record whether any path falls back to FrankEye. No fallback should be inferred from file presence; it must be directly observed and receipted."
+  ],
+  "earned_work":{"new_credit_hours":0.0,"reason":"Call-graph/provenance negative result; overlaps visual architecture family and awaits row-level dedup."},
+  "level0_effect":{"exact_global_percent_added":0.0,"denominator_state":"NOT_FROZEN","gate":"NOT_PASS"},
+  "status":"COMPLETE_CALLGRAPH_PROVENANCE_SHARD",
+  "completed_at":"2026-08-09T14:02:00+07:00"
+}

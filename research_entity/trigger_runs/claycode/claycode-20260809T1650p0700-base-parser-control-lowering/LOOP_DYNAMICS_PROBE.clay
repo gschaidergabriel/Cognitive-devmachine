@@ -1,0 +1,8 @@
+module frank.loop_probe
+record LoopInput { state_delta:Float; residual_pressure:Float; instability:Float; recurrence_delta:Float; }
+cycle classify(x:LoopInput) {
+  if x.instability >= 0.80 { emit("DIVERGING_OR_OVERTHINKING") }
+  if x.state_delta <= 0.05 && x.residual_pressure >= 0.50 { emit("STALLED") }
+  if x.recurrence_delta >= 0.15 && x.instability < 0.80 { emit("PRODUCTIVE_LIMIT_CYCLE") }
+  emit("CONVERGING_FIXED_POINT")
+}

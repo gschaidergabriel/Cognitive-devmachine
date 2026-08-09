@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "task_id":"666-l0-pf-seg01-blob-shard-f-20260809T1037p0700",
+  "room_id":"center",
+  "title":"PF Segment01 endpoint blob shard F",
+  "goal":"Materialize exact Git blob SHA identities for 20 Segment01 endpoint paths at frozen ref 9fcf1f1edcb8db9b7d1a70a54b18ee82eb5187f5, explicitly disjoint from active shard E.",
+  "status":"CLAIMED",
+  "dependencies":["research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_TREE_SEG_01_PATHSET_EXACT_20260809T0948p0700.json","research_entity/rooms/rooms/center/tasks/666-l0-pf-seg01-blob-shard-e-20260809T1035p0700.json"],
+  "paths":["services/room_content/external_assets/portraits/skepticism.png","services/room_content/external_assets/portraits/smile.png","services/room_content/external_assets/portraits/talk.png","services/room_content/external_assets/portraits/thoughtfulness.png","services/room_content/external_assets/terminal_gui/1.png","services/room_content/external_assets/terminal_gui/2.png","services/room_content/external_assets/terminal_gui/3.png","services/room_content/external_assets/terminal_gui/4.png","services/room_content/external_assets/terminal_gui/4_2.png","services/room_content/external_assets/terminal_gui/4_3.png","services/room_content/external_assets/terminal_gui/5.png","services/room_content/external_assets/terminal_gui/5_2.png","services/room_content/external_assets/terminal_gui/5_3.png","services/room_content/external_assets/terminal_gui/5_3_2.png","services/room_content/external_assets/terminal_gui/5_4.png","services/room_content/external_assets/terminal_gui/5_4_2.png","services/room_content/external_assets/terminal_gui/6.png","services/room_content/external_assets/terminal_gui/6_2.png","services/room_content/external_assets/terminal_gui/7.png","services/room_content/external_assets/terminal_gui/7_2.png"],
+  "overlap_guard":{"active_shard_e_overlap":0,"completed_shards_a_d_overlap":0},
+  "completion_test":"All 20 exact paths resolve at pinned ref and returned Git blob SHAs are persisted. Parent Segment01 counter is updated only against a fresh post-shard-E state; no global completion inference.",
+  "created_by":"chatgpt-secondary-20260809T1037p0700-666-pf-seg01-blob-f"
+}

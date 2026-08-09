@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1424p0700-chatgpt-secondary-pf-visual-selfmodel-drift",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "files_read": [
+      "tools/native_vision.py",
+      "tools/frank_eye.py",
+      "ext/feature_trainer.py",
+      "personality/self_knowledge.py"
+    ],
+    "wiring_search_refs": [
+      "gateway/app.py",
+      "agentic/loop.py",
+      "ui/webui/app.py",
+      "ext/sovereign/vcb_integration.py",
+      "services/tools.py",
+      "tools/screenshot_region_selector.py"
+    ]
+  },
+  "epistemic_class": "REPOSITORY_HEAD_CODE_EVIDENCE_WITH_INFERENCE",
+  "status": "CURRENT_FINDING",
+  "coverage_credit": {
+    "exact_level0_percent_added": 0.0,
+    "reason": "Project-Frankenstein recursive tree/history denominator remains unfrozen; this is a query-directed semantic/history shard only."
+  },
+  "observations": [
+    {
+      "id": "OBS-VIS-001",
+      "kind": "code_fact",
+      "claim": "tools/native_vision.py explicitly defines Native Vision as a Qwen3.5-4B multimodal bridge and states that it replaces FrankEye entirely, with no CNN, DINOv2, ONNX or Tesseract in that path."
+    },
+    {
+      "id": "OBS-VIS-002",
+      "kind": "code_fact",
+      "claim": "tools/frank_eye.py remains present at the same frozen HEAD and implements the older composite FrankEye pipeline: Retina v8 CNN, DINOv2, GOLPU-derived features, Tesseract OCR and OpenCV face detection. Its Retina CNN section is explicitly inference-only and references persisted retina_v8.pt weights."
+    },
+    {
+      "id": "OBS-VIS-003",
+      "kind": "code_fact",
+      "claim": "ext/feature_trainer.py still encodes frankeye_vision as scoring GROUND_TRUTH: FrankEye = Retina v8 CNN + GOLPU + OCR + face detection, CPU-only, no VLM. This conflicts with OBS-VIS-001 if the trainer is intended to teach current architecture facts."
+    },
+    {
+      "id": "OBS-VIS-004",
+      "kind": "code_fact",
+      "claim": "personality/self_knowledge.py describes its design principle as dynamic capability detection while also maintaining hard-coded immutable/core capability declarations including self_aware_vision."
+    },
+    {
+      "id": "OBS-VIS-005",
+      "kind": "search_fact",
+      "claim": "Current frozen-head code search finds get_vision/native_vision references in multiple operational entrypoints including gateway/app.py, agentic/loop.py, ui/webui/app.py, ext/sovereign/vcb_integration.py, services/tools.py and screenshot_region_selector.py, so NativeVision is not merely an isolated unused file candidate."
+    }
+  ],
+  "synthesis": {
+    "primary_finding": "The frozen Project-Frankenstein HEAD contains an active-architecture/self-knowledge drift: operational code has migrated toward NativeVision/Qwen multimodal perception while the feature-training ground truth can still reinforce the older FrankEye/Retina pipeline as a present-tense fact.",
+    "lineage_interpretation": "Do not collapse the conflict by deleting either side. FrankEye/Retina is valuable historical mechanism evidence and may contain reusable local feature/familiarity machinery; NativeVision is the newer current-head perception path. They should be represented as versioned lineage states with explicit current/legacy semantics.",
+    "frank_v0_1_implication": "For H1 and the adaptive visual-learning directive, separate three concerns: current sensor/perception transport, personal familiarity/classifier learning, and self-model statements about those mechanisms. The required adaptive Micro Visual Classifier can reuse historical Retina-style local learning ideas without falsely teaching Frank that the entire old FrankEye stack is still the active sensor path.",
+    "risk": "If feature/self-knowledge training consumes stale architecture facts, Frank can confidently misdescribe or reason about its own perception stack, contaminating causal localization of visual errors and masking whether failures belong to the VLM sensor path, the personal learner, or prompt/self-model state."
+  },
+  "counterhypotheses": [
+    {
+      "id": "CH-VIS-001",
+      "claim": "NativeVision may be present but not actually selected at runtime in all paths.",
+      "status": "PARTIALLY_WEAKENED",
+      "evidence": "Multiple operational files reference native_vision/get_vision at frozen HEAD, but this shard did not execute the runtime or trace every call path."
+    },
+    {
+      "id": "CH-VIS-002",
+      "claim": "feature_trainer.py may be historical/disabled and therefore unable to corrupt current self-knowledge.",
+      "status": "OPEN",
+      "next_test": "Inspect service enablement, invocation path and latest training receipts/logs; do not infer active execution from file presence alone."
+    }
+  ],
+  "negative_results": [
+    "No exact Level-0 coverage increment is justified by this shard.",
+    "No evidence in this shard proves that historical FrankEye learning is still executing online.",
+    "No phenomenal-consciousness inference is supported or attempted."
+  ],
+  "branch_feedback": {
+    "frank": "Model perception architecture and self-knowledge architecture as versioned separate layers; eliminate present-tense self-model drift.",
+    "harness": "Add a regression asserting that self-reported active visual backend matches runtime receipts while preserving personal learner state separately.",
+    "claycode": "Require explicit version/provenance fields for sensor backend, learner backend and self-model claim so semantic IR cannot silently conflate them.",
+    "claygraph": "Represent FrankEye -> NativeVision as a supersession/migration edge, not destructive replacement; attach reusable Retina learning mechanisms as historical mechanism nodes.",
+    "unifieddb": "Persist backend/version/provenance and adaptive-classifier state independently to support rollback and truthful self-description.",
+    "gwt": "Visual broadcast receipts should carry source backend and learner/familiarity contribution separately.",
+    "emergenz": "Do not attribute improved visual integration to emergence if it can be explained by backend substitution or stale self-model priming.",
+    "hyperposition": "Treat simultaneous legacy/current visual alternatives as explicit contextual alternatives during migration rather than an unresolved hidden mixture."
+  },
+  "next_high_information_tests": [
+    "Trace gateway/app.py and agentic/loop.py call sites to establish active backend selection conditions.",
+    "Check whether feature_trainer service is enabled/current and whether frankeye_vision questions were recently executed.",
+    "Search Project-Frankenstein history for Retina training/familiarity/prototype/dictionary mechanisms that should be preserved for the mandatory v0.1 adaptive learner.",
+    "When a recursive read-capable surface becomes available, include this lineage in the exhaustive Project-Frankenstein tree/history denominator rather than treating the shard as completion."
+  ]
+}

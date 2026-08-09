@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1553p0700_center_federation",
+  "experiment_id": "EXP-CC-RCF-GRAMMAR-UNION-001",
+  "hypothesis_id": "H-CC-RCF-GRAMMAR-001",
+  "purpose": "Test whether the current ClayCode G9 grammar can parse union-typed record fields already used by authoritative Research Center ClayCode contracts, then test the minimal repair.",
+  "candidate_before": {
+    "artifact": "research_entity/claycode/g9/grammar.ebnf",
+    "blob_sha": "80028aae6d9d26ac96fa7179dbccc7e467740990",
+    "rule": "type_expr = qid, [type_params], [?] | Set<...> | Map<...> | Ordered<...>"
+  },
+  "candidate_after": {
+    "artifact": "research_entity/claycode/g9/grammar.ebnf",
+    "blob_sha": "ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "rule": "type_expr = type_atom, {| type_atom}; type_atom = qid... | Set<type_expr> | Map<type_expr,type_expr> | Ordered<type_expr>"
+  },
+  "execution": {
+    "provider": "local container fallback",
+    "runtime": "Python + Lark LALR",
+    "language": "Python",
+    "baseline_script_sha256": "d9b9ddd9064060f1e05af86f3801f9250fd647287b675054516070ae8b113c3b",
+    "repair_script_sha256": "d506e59190929da9c897d9d0a44097904b2923cbc3c746bfce76bb25ca9f7eba",
+    "e2b_status": "NOT_EXPOSED_TO_THIS_CHATGPT_SESSION",
+    "exit_status": 0
+  },
+  "test_corpus": [
+    "worker:Ref",
+    "holder:Ref?",
+    "focus:Set<Ref>",
+    "state:ACTIVE|WAITING|COMPLETE|LEFT|STALE",
+    "delivery:DeliveryClass",
+    "status:OPEN|CLAIMED|BLOCKED|COMPLETE|CLOSED|STALE",
+    "mixed:Set<Ref|Hash>",
+    "ordered:Ordered<Ref|Hash>"
+  ],
+  "observed_before": {
+    "ordinary_cases_passed": 4,
+    "union_field_cases_failed": 2,
+    "failure_tokens": ["|", "|"],
+    "counterexample": true
+  },
+  "observed_after": {
+    "cases_passed": 8,
+    "cases_total": 8,
+    "union_field_cases_passed": true
+  },
+  "expected_vs_observed": "The original grammar was expected to reject union-typed record fields and did so. The minimal union-type extension was expected to accept both prior ordinary forms and union forms and passed all eight targeted cases.",
+  "failure_classification": "FORMAL_GRAMMAR_TOO_NARROW_FOR_EXISTING_CLAYCODE_CENTER_CONTRACTS",
+  "repair": "Extend type_expr to a union of type_atom terms; preserve optional, Set, Map and Ordered forms recursively.",
+  "semantic_change": false,
+  "syntax_contract_change": true,
+  "affected_branches": ["claycode", "clay", "frank", "harness", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz"],
+  "evidence_class": "LOCAL_EXECUTABLE_COUNTEREXAMPLE_AND_REPAIR_TEST",
+  "status": "SUPPORTED_TARGETED_REPAIR"
+}

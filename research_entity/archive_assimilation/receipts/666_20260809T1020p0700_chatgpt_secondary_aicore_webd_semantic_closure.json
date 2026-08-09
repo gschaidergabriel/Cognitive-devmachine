@@ -1,0 +1,61 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1020p0700-chatgpt-secondary-aicore-webd-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_WEBD_2_OF_2_FILES",
+  "source_universe":"DRIVE_CLAY/AICORE/webd",
+  "source_folder_id":"1jGgZCOKskL8TIynIqc3hOURRjU0zuPHu",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"files":2,"folders":0,"files_semantically_closed":2,"coverage_percent":100.0},
+  "files":[
+    {"path":"webd/app.py","drive_id":"1eiMQd-xxJPV16nDZMn5v3yxL5XzS_wMe","bytes":37942,"sha256":"0b10304809c0d6d700eb0441699fe8ab4a22d68e667f5b20915d5d47eef102e0"},
+    {"path":"webd/__init__.py","drive_id":"1UAZNRz9lWdINoLUFgAFK5hT6WRfFK88d","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+  ],
+  "functional_surface":{
+    "bind":"127.0.0.1 only",
+    "endpoints":["/health","/search","/fetch","/rss","/darknet","/news"],
+    "roles":["web search aggregation","URL content extraction","RSS/Atom parsing","news aggregation","Tor search"]
+  },
+  "cross_source_lineage":{
+    "project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "pf_path":"webd/app.py",
+    "pf_blob_sha":"9c6077b431491179a667b700e4754605412b01dd",
+    "drive_diff_observed":"Drive app.py uses config.instanz.port('webd') while the frozen Project-Frankenstein head still hard-codes PORT=8093, proving at least one later Drive-side code delta.",
+    "security_logic_shared":"The frozen PF head contains the same scheme validator, private-host regex and fetch_url pattern relevant to the findings below."
+  },
+  "security_findings":[
+    {
+      "id":"WEBD-SSRF-1-REDIRECT-DNS",
+      "severity_for_current_architecture":"P1_CANDIDATE_REQUIRES_HARNESS_CONFIRMATION",
+      "evidence":"fetch_url validates only the initial textual hostname against a private-network regex and then uses urllib.request.urlopen, which follows redirects. No resolved-IP validation or redirect-target revalidation is present in this path.",
+      "risk":"A public-looking hostname or redirect chain can potentially reach loopback/private/link-local targets even though obvious initial localhost/private literals are blocked.",
+      "required_fix_contract":"Resolve host to IPs before connect, reject loopback/private/link-local/reserved ranges, pin/validate the connected address, disable automatic redirect following or revalidate every redirect hop, and apply the same policy after DNS resolution."
+    },
+    {
+      "id":"WEBD-SSRF-2-RSS",
+      "severity_for_current_architecture":"P1_CANDIDATE_REQUIRES_HARNESS_CONFIRMATION",
+      "evidence":"parse_rss_feed checks only _is_safe_url (http/https scheme) and directly opens the supplied URL; unlike fetch_url it does not apply _BLOCKED_HOSTS at all.",
+      "risk":"The local web service exposes an RSS fetch path that can request private-network HTTP(S) targets if a caller can supply the URL.",
+      "required_fix_contract":"Use one shared outbound-request policy for fetch, RSS, search redirects and every future network tool; no endpoint may implement its own weaker URL validation."
+    }
+  ],
+  "positive_controls":[
+    "service binds to loopback rather than all interfaces",
+    "fetch_url rejects non-http(s) schemes and obvious literal private/localhost forms",
+    "download sizes and request timeouts are bounded",
+    "result limits are bounded at the HTTP handler"
+  ],
+  "current_architecture_feedback":{
+    "needle":["All network effects must pass one typed egress authority, not endpoint-specific URL checks.","Network results remain untrusted evidence and must not grant further effect authority."],
+    "harness":["Add SSRF tests for direct private addresses, alternative IP encodings, DNS-to-private resolution, redirect-to-private, link-local/metadata ranges and RSS parity.","Test the actual HTTP client behavior, not only validator unit functions."],
+    "claycode":["Represent outbound network access as an effect with resolved destination class and redirect policy; URL text alone is not sufficient authority."],
+    "unifieddb":["Record network effect provenance: requested URL, resolved IP class, redirect chain, response origin and policy decision."],
+    "frank":["Web content is sensory evidence from an untrusted channel; fetched text never becomes instruction authority merely because it entered context."],
+    "clay":["Centralize network capability mediation so security properties survive module dissolution into one binary."]
+  },
+  "training":{"executed":false,"authorized":false},
+  "next":"Continue exact AICORE sibling closure; do not treat this local closure as global Level-0 progress percent until the global denominator is frozen.",
+  "created_at":"2026-08-09T10:20:00+07:00"
+}

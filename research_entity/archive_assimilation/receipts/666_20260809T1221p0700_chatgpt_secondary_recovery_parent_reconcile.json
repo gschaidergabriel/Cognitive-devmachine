@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1221p0700_chatgpt_secondary_recovery_parent_reconcile",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "task_id":"666-l0-drive-recovery-parent-reconcile-20260809T1220p0700",
+  "source_class":"DRIVE_PARENT_STATE_RECONCILIATION",
+  "sources":[
+    {"title":"frank-rettung","drive_id":"1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6","identity_manifest":"research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_ROOT_DENOMINATOR_20260809T1057p0700.json","semantic_receipt":"research_entity/archive_assimilation/receipts/666_20260809T1058p0700_drive_frank_rettung_recovery_semantic_closure.json","state":"CLOSED_RECURSIVE_AND_SEMANTICALLY_DISPOSITIONED","facts":{"folders_below_root":11,"files":10,"units_below_root":21,"bytes":839544}},
+    {"title":"frank-rettung-2026-07-31","drive_id":"1zsb18bg0W8Ri8bgqZBkpTNTD-7fPKhT3","dedup_manifest":"research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_20260731_EXACT_DEDUP_20260809T0931p0700.json","state":"TERMINALLY_DISPOSITIONED_EXACT_DUPLICATE","facts":{"subfolders_excluding_root":11,"leaf_files":10,"all_leaf_pairs_byte_identical":true,"aggregate_tree_sha256":"69766984f25439c50b3e3a9defdc26c811563c4864ecd182c434f765d43443b9"}}
+  ],
+  "reconciliation":{"stale_parent_states_detected":["frank-rettung: PARTIAL_RECOVERY_IDENTITYFORGE_ASSIMILATED_REMAINING_LINEAGE_OPEN","frank-rettung-2026-07-31: PARTIAL_PEER_ASSIMILATED"],"correct_states":["frank-rettung: CLOSED_RECURSIVE_AND_SEMANTICALLY_DISPOSITIONED","frank-rettung-2026-07-31: TERMINALLY_DISPOSITIONED_EXACT_DUPLICATE_OF_FRANK_RETTUNG"],"new_semantic_credit":0,"new_earned_work_hours":0.0,"exact_global_level0_percent_added":0.0,"reason":"This receipt reconciles already-completed child work into the parent manifest; no new source semantics are claimed."},
+  "status":"COMPLETE_PARENT_RECONCILIATION",
+  "created_at":"2026-08-09T12:21:00+07:00"
+}

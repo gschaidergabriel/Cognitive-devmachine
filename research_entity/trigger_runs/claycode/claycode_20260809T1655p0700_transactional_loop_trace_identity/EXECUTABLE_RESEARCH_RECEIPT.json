@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1655p0700_transactional_loop_trace_identity",
+  "experiment_id": "EXP-CC-TXN-LOOP-TRACE-IDENTITY-20260809-01",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "source_artifact": "experiments/CC_TXN_LOOP_TRACE_IDENTITY.py",
+  "source_sha256_local_execution": "b8c0281ec8b8a31d7d7ffd25740bf6d65a9fee73b19c518d2325b5325109f365",
+  "result_sha256_local_execution": "fc250bff31be38692e058e12768a430adab376e9c99de01b8e57da91fb1c6262",
+  "execution_surface": {
+    "provider": "ChatGPT local Python execution sandbox",
+    "evidence_class": "EXACT_SYNTHETIC_MECHANISM_EXPERIMENT",
+    "target_ubuntu_evidence": false,
+    "e2b_used": false
+  },
+  "corpus": {
+    "starting_epochs": 100,
+    "transition_kinds": ["REVOKE", "GRANT"],
+    "writer_positions": 7,
+    "runs_per_variant": 1400,
+    "variants": ["naive_per_field_read_unbound_effect", "atomic_snapshot_guarded_effect_with_single_deterministic_retry"]
+  },
+  "results": {
+    "naive": {
+      "runs": 1400,
+      "decision_mismatches": 700,
+      "unsafe_effects": 300,
+      "missed_effects": 400,
+      "fractured_snapshots": 200,
+      "serialization_conflicts": 0,
+      "retries": 0,
+      "semantic_hash_unique": 1,
+      "trace_hash_unique": 1200,
+      "blind_trace_hash_unique": 1,
+      "wrong_semantic_hash_including_runtime_snapshot_unique": 402,
+      "outcome_variants": 602
+    },
+    "guarded": {
+      "runs": 1400,
+      "decision_mismatches": 0,
+      "unsafe_effects": 0,
+      "missed_effects": 0,
+      "fractured_snapshots": 0,
+      "serialization_conflicts": 1000,
+      "retries": 1000,
+      "semantic_hash_unique": 1,
+      "trace_hash_unique": 800,
+      "blind_trace_hash_unique": 1,
+      "wrong_semantic_hash_including_runtime_snapshot_unique": 202,
+      "outcome_variants": 402
+    }
+  },
+  "interpretation": {
+    "runtime_safety": "Snapshot/root-bound effect commit with explicit conflict and deterministic retry eliminated all tested stale/mixed-state decision errors in this exact mechanism corpus.",
+    "identity_split": "Static schedule/control/effect policy belongs in program semantic identity; dynamic snapshot/read-set/transaction/effect/root data belongs in execution/replay identity.",
+    "blind_execution_hash_negative": "A trace identity built only from semantic hash plus input collapsed all 1400 executions to one identity despite hundreds of outcome variants.",
+    "runtime_in_semantic_hash_negative": "Adding runtime snapshot roots to program semantic identity fragmented one static program into hundreds of identities."
+  },
+  "external_analogue": "PostgreSQL Serializable requires concurrent committed executions to be consistent with some serial execution and applications must retry serialization failures; used as independent mechanism analogue, not FRANK-specific proof.",
+  "promotion": "NONE"
+}

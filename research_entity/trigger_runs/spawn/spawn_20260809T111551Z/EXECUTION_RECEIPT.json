@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T111551Z",
+  "experiment_id": "EXP-SPAWN-CC-ATOMIC-CAS-ABA-01",
+  "actor": "chatgpt-secondary",
+  "truth_class": "HOSTED_EXECUTABLE_RESEARCH_PROXY",
+  "environment": {
+    "kernel": "Linux 6.18.35",
+    "arch": "x86_64",
+    "python": "3.13.5",
+    "gcc": "14.2",
+    "node": "22.16.0"
+  },
+  "source": {
+    "executed_source_sha256": "3174b1b39bc4cd40c7cad408d8337d7e560778067d16a0793aa92899477aa97c",
+    "durable_reproducer_sha256": "9275ea7f1c5e2417aac5039ca65e5411f3c3d050106bd03921a53569c8eec789",
+    "durable_difference": "unused os import removed only"
+  },
+  "first_captured_execution_result_sha256": "fcedf8fcc588f358513582a740dc9fed2fe20ad7d10d115b5e5fd64b6bc76db0",
+  "results": {
+    "aba_probe": {
+      "runs": 200000,
+      "value_only_stale_accepts": 200000,
+      "version_bound_stale_accepts": 0,
+      "verdict": "VALUE_EQUALITY_DOES_NOT_PRESERVE_VERSION_IDENTITY"
+    },
+    "weak_cas_retry_identity_probe": {
+      "runs": 100000,
+      "physical_retry_variants": 16,
+      "distinct_semantic_hashes": 1,
+      "distinct_execution_trace_hashes": 16,
+      "verdict": "PHYSICAL_RETRY_COUNT_SHOULD_NOT_ENTER_DEFAULT_SEMANTIC_HASH"
+    },
+    "c11_gcc_counter": {
+      "threads": 8,
+      "increments_per_thread": 100000,
+      "expected": 800000,
+      "observed": 800000,
+      "first_run_retries": 408145,
+      "exact_result": true
+    },
+    "node_atomics_counter": {
+      "workers": 8,
+      "increments_per_worker": 100000,
+      "expected": 800000,
+      "observed": 800000,
+      "first_run_retries": 345461,
+      "exact_result": true
+    },
+    "rerun_note": "A later rerun again produced exact 800000/800000 on C11 and Node while retry counts changed, confirming that contention retry counts are nondeterministic execution observations."
+  },
+  "checks": {
+    "raw_cas_aba_falsifier_triggered": true,
+    "version_bound_aba_rejections_complete": true,
+    "semantic_hash_retry_invariant": true,
+    "execution_trace_retry_sensitive": true,
+    "c11_exact_counter": true,
+    "ecmascript_exact_counter": true
+  },
+  "limitations": [
+    "not production ClayCode parser/typechecker/compiler/runtime execution",
+    "not formal proof of the full memory model",
+    "not Andreas' Ubuntu developer-host receipt",
+    "does not benchmark weaker memory orderings across architectures",
+    "does not prove version tagging is the only valid ABA defense"
+  ],
+  "scientific_promotion": "NONE"
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.1",
+  "run_id": "spawn_20260809T111551Z",
+  "evidence_items": [
+    {"id":"E-REPO-BASE","class":"VERIFIED_REPOSITORY_CONTRACT","ref":"research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md","supports":"BASE requires executable async/concurrency/atomics semantics and compiler/runtime proof."},
+    {"id":"E-REPO-G9","class":"CURRENT_RESEARCH_CANDIDATE","ref":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","supports":"Current ClayCode already separates semantic hashes, epochs, capabilities and effect intent; no general CAS identity/memory-order record is present in the inspected V3 slice."},
+    {"id":"E-REPO-ASYNC","class":"PRIOR_SYNTHETIC_EXECUTABLE_RESEARCH","ref":"commit 6e9a668fb98cca793f11e85f0410c953dae5bfd1","supports":"Async replay work separates semantic task/effect identity from physical scheduling and explicitly leaves conflicting accesses to synchronization/transaction semantics."},
+    {"id":"E-REPO-ATOMIC-AUTH","class":"PRIOR_SYNTHETIC_EXECUTABLE_RESEARCH","ref":"commit 69694d798ad832b96ba7fc38b2d3ae1a5616699d","supports":"Earlier authority-budget experiments found atomic reservation necessary under concurrency/replay; this is adjacent shared-ancestry evidence, not independent proof of CAS semantics."},
+    {"id":"E-REPO-HARNESS-ID","class":"CURRENT_EXECUTABLE_REPOSITORY_EVIDENCE","ref":"commit 1428ed8887406d6ce45b0048b31819a4bdc33383","supports":"H-WP-01 preserves semantic architecture identity separately from exact source-contract identity."},
+    {"id":"E-RUST-ATOMICS","class":"PRIMARY_OFFICIAL_DOCUMENTATION","source":"Rust standard library atomic Ordering / compare_exchange documentation","url":"https://doc.rust-lang.org/std/sync/atomic/enum.Ordering.html","supports":"Rust exposes explicit Relaxed/Acquire/Release/AcqRel/SeqCst ordering; compare_exchange uses separate success/failure ordering and documents ABA when equality is used as identity."},
+    {"id":"E-LLVM-CMPXCHG","class":"PRIMARY_OFFICIAL_DOCUMENTATION","source":"LLVM Language Reference and Atomic Instructions and Concurrency Guide","urls":["https://llvm.org/docs/LangRef.html#cmpxchg-instruction","https://llvm.org/docs/Atomics.html"],"supports":"LLVM cmpxchg is an atomic read-modify-write with explicit success/failure orderings; weak cmpxchg may fail spuriously; failure ordering has stricter constraints."},
+    {"id":"E-ECMA-MEMORY","class":"PRIMARY_OFFICIAL_SPECIFICATION","source":"ECMAScript 2026 Memory Model","url":"https://tc39.es/ecma262/2026/multipage/memory-model.html","supports":"ECMAScript SharedArrayBuffer Atomics are sequentially consistent, showing that backend atomic ordering surfaces are not identical."},
+    {
+      "id":"EXP-ABA-200K",
+      "class":"SYNTHETIC_EXECUTABLE_PROXY",
+      "artifact":"EXPERIMENT_ATOMIC_CAS.py",
+      "executed_source_sha256":"3174b1b39bc4cd40c7cad408d8337d7e560778067d16a0793aa92899477aa97c",
+      "durable_reproducer_sha256":"9275ea7f1c5e2417aac5039ca65e5411f3c3d050106bd03921a53569c8eec789",
+      "source_difference":"Durable reproducer removes one unused 'os' import only; experiment logic is unchanged.",
+      "execution_result_sha256":"fcedf8fcc588f358513582a740dc9fed2fe20ad7d10d115b5e5fd64b6bc76db0",
+      "result":"200000/200000 value-only ABA stale accepts; 0/200000 version-bound stale accepts."
+    },
+    {"id":"EXP-RETRY-100K","class":"SYNTHETIC_EXECUTABLE_PROXY","artifact":"EXPERIMENT_ATOMIC_CAS.py","result":"100000 fixed semantic CAS operations produced 1 semantic hash and 16 physical retry-trace hashes."},
+    {
+      "id":"EXP-CROSS-BACKEND",
+      "class":"HOSTED_LINUX_EXECUTABLE_PROXY",
+      "environment":"Linux x86_64 container; Python 3.13.5; GCC 14.2; Node 22.16",
+      "execution_receipt":"first captured run: C11 final 800000/800000 retries 408145; Node final 800000/800000 retries 345461",
+      "reproduction_note":"Subsequent rerun also produced exact 800000/800000 on both backends while contention retry counts changed. Retry count is therefore observational execution-trace data, not a deterministic semantic output."
+    }
+  ],
+  "ancestry": {
+    "independent_external_sources":["E-RUST-ATOMICS","E-LLVM-CMPXCHG","E-ECMA-MEMORY"],
+    "shared_project_ancestry":["E-REPO-ASYNC","E-REPO-ATOMIC-AUTH","E-REPO-HARNESS-ID"],
+    "new_execution_family":["EXP-ABA-200K","EXP-RETRY-100K","EXP-CROSS-BACKEND"],
+    "warning":"Repeated project agreement does not increase evidence strength. Hosted/container execution is not Andreas' Ubuntu developer-target acceptance evidence."
+  },
+  "promotion_boundary":"NO_CANONICAL_SCIENTIFIC_PROMOTION; candidate compiler/runtime contract only"
+}

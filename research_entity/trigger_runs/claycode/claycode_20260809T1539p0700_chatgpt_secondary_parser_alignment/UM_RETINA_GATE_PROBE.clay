@@ -1,0 +1,33 @@
+module claycode.probe.um_retina
+version "0.1"
+status RESEARCH_CANDIDATE
+
+type EvidenceTier = GOLD|SILVER|BRONZE
+type RecognitionOutcome = KNOWN_HIGH_CONFIDENCE|KNOWN_NEEDS_CONFIRMATION|AMBIGUOUS|UNKNOWN|CONFLICT
+
+record RecognitionGateInput {
+  known_high_confidence:Bool;
+  open_set_ok:Bool;
+  calibration_current:Bool;
+  version_compatible:Bool;
+  no_conflict:Bool;
+}
+
+record PromotionGateInput {
+  trusted_tier:Bool;
+  candidate_eval_pass:Bool;
+  rollback_ready:Bool;
+  budget_ok:Bool;
+}
+
+record PublicationGateInput {
+  source_admitted:Bool;
+  schema_preflight_ok:Bool;
+  projection_closed:Bool;
+  atomic_commit_ready:Bool;
+  replay_ready:Bool;
+}
+
+rule recognition_fast_path = known_high_confidence && open_set_ok && calibration_current && version_compatible && no_conflict
+rule promotion_allowed = trusted_tier && candidate_eval_pass && rollback_ready && budget_ok
+rule publication_allowed = source_admitted && schema_preflight_ok && projection_closed && atomic_commit_ready && replay_ready

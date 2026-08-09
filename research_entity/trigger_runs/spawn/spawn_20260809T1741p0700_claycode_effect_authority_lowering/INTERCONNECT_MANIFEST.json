@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1741p0700_claycode_effect_authority_lowering",
+  "origin_branch": "claycode",
+  "registry_ref": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "peer_coverage": [
+    {"branch":"clayresearch","depth":"deep","refs":["research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"],"finding":"effect reachability must be mediated; child authority closure is mandatory"},
+    {"branch":"frank","depth":"deep","refs":["research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"],"finding":"Needle/visual/model outputs never mint execution authority; Clay-native capability/effect contracts are fixed target semantics"},
+    {"branch":"gwt","depth":"targeted","refs":["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"],"finding":"selection/broadcast/reentry never mint truth or execution authority"},
+    {"branch":"emergenz","depth":"targeted","refs":["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"],"finding":"emergence control/readout never mints authority; no direct semantic change required"},
+    {"branch":"claycode","depth":"deep","refs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/g9/grammar.ebnf","research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md","research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"],"finding":"current spec separates model intent and authority conceptually but bearer-vs-descriptor runtime representation is not executable yet; parser/compiler work remains open"},
+    {"branch":"hyperposition","depth":"targeted","refs":["research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md","research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"],"finding":"typed firebreak/proposal-authority separation is compatible with opaque runtime capability handles"},
+    {"branch":"claygraph","depth":"targeted","refs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"],"finding":"derived graph relation cannot authorize effects; no new graph primitive required by this run"},
+    {"branch":"unifieddb","depth":"deep","refs":["research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql","research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"],"finding":"DB already stores authority metadata/scopes; active bearer authority should remain outside serializable semantic records unless protected by a separate runtime root"},
+    {"branch":"harness","depth":"deep","refs":["research_entity/harness/HARNESS_WORKSPACE.json"],"finding":"H-WP-10 directly requires proposal/intent/resource/authority/reservation/commit/outcome/reentry semantics; this run supplies a concrete implementation test oracle"}
+  ],
+  "coverage_complete_for_registered_scientific_branches": true,
+  "live_worker_note": "Harness H-WP-02 has an active chatgpt-secondary claim; no ClayCode live claims/completed receipts were present in CLAYCODE_RELEASE_WORKSPACE.json at read time.",
+  "limitations": [
+    "GitHub code search returned no indexed recent spawn receipts or ClayCode parser progress artifacts; connector-visible canonical files were used.",
+    "No current ClayCode compiler/parser executable was available through the inspected canonical workspace, so executable results are proxy/synthetic and cannot count as final compiler evidence."
+  ]
+}

@@ -1,0 +1,81 @@
+module claycode.research_center.worker_federation
+version "1.0"
+status PROJECT_OWNER_FIXED_INVARIANT
+
+center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
+stack=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
+work_fabric=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+
+law CLAYCODE_WORKERS_COORDINATE_THROUGH_RESEARCH_CENTER = REQUIRED
+law ISOLATED_CLAYCODE_WORK = FORBIDDEN
+law CENTER_STATE_IS_COORDINATION_SOURCE = UnifiedDB
+law CENTER_TOPOLOGY_IS_RELEVANCE_ROUTER = ClayGraph
+law CENTER_MACHINE_LANGUAGE = latest_ClayCode
+law DIRECT_PEER_COORDINATION_WITHOUT_CENTER_RECEIPT = NON_AUTHORITATIVE
+
+record ClayCodeWorkerFederationState {
+  worker:Ref
+  room:Ref
+  stack_epoch:Int
+  focus:Set<Ref>
+  capabilities:Set<Ref>
+  claimed_work:Set<Ref>
+  dependencies:Set<Ref>
+  consumed_deltas:Set<Ref>
+  open_conflicts:Set<Ref>
+  open_challenges:Set<Ref>
+  replication_intent:Set<Ref>
+  last_pulse:Time
+}
+
+record ClayCodeCoordinationDecision {
+  worker:Ref
+  candidate_work:Set<Ref>
+  overlapping_work:Set<Ref>
+  reusable_results:Set<Ref>
+  relevant_deltas:Set<Ref>
+  conflicts:Set<Ref>
+  selected_work:Set<Ref>
+  partition_clay:Clay
+  routing_clay:Clay
+  evidence:Set<Ref>
+  receipt:Ref
+}
+
+rule claycode_worker.start -> center.join(worker,focus,capabilities,stack)
+rule claycode_worker.before_claim -> center.read(current_workers,current_tasks,current_handoffs,current_conflicts,current_deltas,current_dynamic_work)
+rule claycode_worker.before_claim -> detect(overlap,reusable_results,dependencies,conflicts,replication_opportunities)
+rule claycode_worker.claim -> center.coordinate(goal_fit,capability_fit,dependency_pressure,information_gain,collision_risk)
+rule duplicate_work -> FORBIDDEN unless replication_intent=EXPLICIT_INDEPENDENT_REPLICATION
+rule overlapping_work -> partition_or_reuse_or_explicit_replication
+rule semantic_change_proposal -> publish(center.challenge_or_delta) before promotion
+rule executable_counterexample -> publish(center.delta + evidence + affected_work)
+rule negative_result -> publish(center.delta + preserved_counterevidence)
+rule material_progress -> center.pulse(delta,open,blockers)
+rule worker_handoff -> center.handoff(delta,evidence,unresolved,next)
+rule cross_worker_result -> center.route_by(semantic_dependency,affected_claims,affected_work,novelty,conflict,information_gain)
+rule high_impact_conflict -> delivery(INTERRUPT_NEXT_SAFE_POINT)
+rule ordinary_relevant_delta -> delivery(NEXT_CHECKPOINT)
+rule low_relevance_index_update -> delivery(INDEX_ONLY)
+rule worker.before_semantic_commit -> reread(center.current_state)
+rule worker.before_semantic_commit -> invalidate_if(stale_stack|superseded_work|new_counterevidence|claim_collision)
+rule worker.complete -> require(center_receipts_for(join,claim,pulses,relevant_handoffs,final_delta))
+rule worker.complete -> require(no_unhandled_relevant_conflict && no_unconsumed_critical_handoff)
+
+rule center.intelligent_networking != broadcast_everything_to_everyone
+rule center.intelligent_networking -> adaptive_relevance_routing
+rule adaptive_relevance_routing uses [semantic_dependencies,ClayGraph_topology,current_capabilities,work_dependencies,information_gain,collision_risk,novelty,conflict,replication_value]
+rule center.assignment -> maximize(nonduplicate_information_gain + critical_path_progress + falsification_value)
+rule center.assignment -> minimize(duplicate_work + stale_work + coordination_noise + shared_ancestry_false_replication)
+
+invariant EVERY_CLAYCODE_WORKER_JOINS_RESEARCH_CENTER_BEFORE_WORK
+invariant EVERY_CLAYCODE_WORKER_READS_SHARED_CENTER_STATE_BEFORE_CLAIM
+invariant EVERY_CLAYCODE_WORKER_PUBLISHES_MATERIAL_DELTAS_BACK_TO_CENTER
+invariant EVERY_CLAYCODE_WORKER_REREADS_CENTER_STATE_BEFORE_SEMANTIC_COMMIT
+invariant CLAYCODE_WORKER_TO_WORKER_COORDINATION_IS_CENTER_MEDIATED
+invariant DUPLICATION_REQUIRES_EXPLICIT_REPLICATION_INTENT
+invariant RELEVANT_COUNTEREVIDENCE_REACHES_AFFECTED_WORKERS
+invariant WORKER_SPECIALIZATION_IS_DYNAMIC_AND_CAPABILITY_AWARE
+invariant NETWORKING_INCREASES_INFORMATION_FLOW_NOT_EVIDENCE_STRENGTH
+invariant CENTER_COORDINATION_NEVER_MINTS_TRUTH_OR_EXECUTION_AUTHORITY

@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-f5-device-probe-state-gate-20260809T2121p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T21:21:00+07:00",
+  "origin": {
+    "class": "USER_DIRECTED_RESEARCH_ENTITY_IMPLEMENTATION_AUDIT",
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/frankv0.1",
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger"
+  },
+  "authority": {
+    "research_entity_work": true,
+    "frank_self_harness_effect": "FORBIDDEN",
+    "implementation_authority": "RESEARCH_ENTITY"
+  },
+  "finding": {
+    "id": "FRANK-F5-DEVICE-PROBE-STALE-STATE-REFRESH-20260809",
+    "severity": "P0_CONTINUITY_FOR_CANONICAL_WRITE",
+    "evidence_class": "STATIC_EXECUTABLE_PATH_AUDIT",
+    "summary": "The newly added F5 Ubuntu capability probe opened canonical UnifiedDB directly without repo/materialization preflight, so it could refresh short-lived capability observations on a stale/divergent materialization."
+  },
+  "interpretation": {
+    "operational_receipts": "ALLOWED_BEFORE_SEMANTIC_REPO_ADMISSION",
+    "reason": "FRANK_SYSTEM_WORK_FABRIC explicitly permits verified local operational receipts without immediately making them canonical semantic history.",
+    "hard_requirement": "Operational observations may update canonical local state only when the underlying repo/UnifiedDB/ClayGraph lineage is verified current."
+  },
+  "implementation": {
+    "branch": "research/fix-frank-deep-bugs-device-probe-gate-20260809",
+    "head": "62957dc44573b25f15ed1b8bd500632249375e65",
+    "pull_request": 7,
+    "changes": [
+      "canonical device-probe open now requires repo_truth_gate.preflight PASS before writable open_pair",
+      "stale/divergent/schema/graph failures stop before operational state refresh",
+      "disposable test-mode path remains independent of production gate",
+      "regression monkeypatches preflight/open_pair to prove fail-before-open semantics"
+    ]
+  },
+  "negative_result": {
+    "f5_release_pass": false,
+    "target_machine_execution_by_this_worker": false,
+    "reason": "The real Andreas Ubuntu capability census was not executed in this worker/session."
+  },
+  "ci": {
+    "run": 31318130113,
+    "conclusion": "failure",
+    "shared_gate_context": "Same Frank Deep Integrity workflow currently fails on multiple independent PRs before connector-visible step evidence.",
+    "merge_policy": "DO_NOT_MERGE_ON_ASSUMED_PASS"
+  },
+  "affected_rooms": ["frank", "unifieddb", "claygraph", "harness", "claycode", "clay"],
+  "feedback": {
+    "frank": "Fresh local capability evidence is useful only if attached to current admitted state lineage.",
+    "unifieddb": "Reject operational freshness updates when materialization identity is stale/divergent.",
+    "claygraph": "Capability-driven routing must not inherit stale semantic/graph context merely because observations have a fresh timestamp.",
+    "harness": "All production writers, including operational probes, need a current-state admission boundary even when repo-first semantic persistence is not required for the receipt itself.",
+    "claycode": "Distinguish OPERATIONAL_RECEIPT from CANONICAL_SEMANTIC_HISTORY while carrying the state-lineage precondition explicitly.",
+    "clay": "Reuse the pattern: current-state gate first; then bounded operational observation; later semantic admission only when the observation becomes durable knowledge."
+  },
+  "next_discriminating_work": [
+    "execute the F5 probe on Andreas Ubuntu and capture verified local receipts",
+    "verify the resulting possibility plane drives scheduler/capability routing correctly",
+    "diagnose shared GitHub Actions startup/log failure",
+    "continue F6 local LLM and F7 package work only against verified F5 capability state"
+  ],
+  "research_state_change": "IMPLEMENTATION_KNOWLEDGE_DELTA_NO_RELEASE_PROMOTION"
+}

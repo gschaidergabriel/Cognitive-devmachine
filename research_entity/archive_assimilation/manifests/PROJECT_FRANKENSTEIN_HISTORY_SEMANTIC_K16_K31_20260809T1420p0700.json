@@ -1,0 +1,53 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"PROJECT-FRANKENSTEIN-HISTORY-SEMANTIC-K16-K31-20260809T1420p0700",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","ordinal_range":{"start":16,"end":31,"count":16}},
+  "race":{"winning_claim_commit":"55d975ba59091a082930d309a8273835dd06e266","winning_claim_time":"2026-08-09T14:08:19+07:00","competing_claims_seen":0,"result":"CLEAN"},
+  "ordinals":[
+    {"k":16,"sha":"a1be56f58e85d13b0f3cb10dee5a845c8d03100a","title":"Update README: Qwen 3.5-4B, LoRA v20+, current WebUI pages, FAQ refresh","disposition":"DOCUMENTATION_EPOCH_ANALYZED","semantic_family":"MODEL_AND_CAPABILITY_EPOCH","finding":"README changed model/LoRA/page/topology and support claims while retaining a pre-release warning that the required custom LoRA was not included. Current-model behavior claims are epoch-bound and source-reported unless runtime-verified."},
+    {"k":17,"sha":"5aff68bcdac8920708b16dcfad4bfd24464d5069","title":"Projects: Drag & drop files into chat","disposition":"HIGH_VALUE_CONTEXT_PROVENANCE","semantic_family":"UNTRUSTED_FILE_TO_MODEL_CONTEXT","finding":"Dropped project files were uploaded and text previews injected into the agent prompt. File bytes/content, preview text, user instruction and trusted project state therefore require separate provenance/trust classes before model/tool use."},
+    {"k":18,"sha":"d8529c5b4a3a0e8753fd03e074827fd6e6894a8b","title":"Projects: Fix page-level scroll — override .page overflow and padding","disposition":"NO_COGNITIVE_RESEARCH_DELTA_AFTER_REVIEW","semantic_family":"UI_LAYOUT","finding":"Layout containment only."},
+    {"k":19,"sha":"fca5a0d87d2fcf3a6314abe547d998af89566d83","title":"Projects: Fix scroll — min-height:0 on all flex children","disposition":"NO_COGNITIVE_RESEARCH_DELTA_AFTER_REVIEW","semantic_family":"UI_LAYOUT","finding":"Nested flex overflow fix only."},
+    {"k":20,"sha":"25c1a2f94b2be94fbf9c047ad884b4fbc3ee91a6","title":"Projects: Markdown rendering in chat (bold, code blocks, lists)","disposition":"SECURITY_REVIEW_DELTA","semantic_family":"GENERATED_HTML_RENDERING_BOUNDARY","finding":"Assistant markdown was converted to HTML and inserted into the page without an explicit escaping/sanitization step in the shown renderer. Generated or file-derived text rendered as HTML requires strict escaping/allowlist handling before DOM insertion."},
+    {"k":21,"sha":"cedfdae59b4ac55f13202518da6d5c60e9994842","title":"Projects: Single-screen layout — compact topbar, workspace fills viewport","disposition":"NO_RESEARCH_DELTA_AFTER_REVIEW","semantic_family":"UI_LAYOUT","finding":"Presentation/layout consolidation only."},
+    {"k":22,"sha":"fca62a9d862d745f685939af714a04f2642bc1b1","title":"Fix streaming endpoint parameter (Request → body: dict)","disposition":"API_CONTRACT_FIX_ANALYZED","semantic_family":"FRAMEWORK_SCHEMA_BINDING","finding":"FastAPI endpoint declaration did not bind request input as intended; after changing to a typed body dict, source reports end-to-end streaming/tool tests succeeded. Interface contracts should be schema-tested, not inferred from framework conventions."},
+    {"k":23,"sha":"1c5c682aa84c13eadbf47fbc54e4219230ce5ee6","title":"Projects: Context compaction, SSE streaming, task tracking, max 25 iterations","disposition":"HIGH_VALUE_CONTEXT_AND_TEST_STATUS","semantic_family":"BOUNDED_AGENT_CONTEXT_AND_VERIFICATION_STATE","finding":"Long-agent sessions gained context compaction, persistent task files and increased iteration budget. The commit explicitly states structural verification only because API credits were insufficient; k22 later upgrades the testing state. Structural correctness and end-to-end validation must remain separate evidence statuses."},
+    {"k":24,"sha":"b6d8c17bde2087d88ef4a31c09d6db2756219739","title":"Projects: Full system access — no sandbox, like Claude Code terminal","disposition":"HIGH_VALUE_AUTHORITY_REGRESSION","semantic_family":"SANDBOX_REMOVAL_AND_BLOCKLIST_AUTHORITY","finding":"The project-directory sandbox was intentionally removed and the agent gained system-wide shell/read/write/edit/list access, with only a small destructive-command substring blocklist. Capability scope and effect approval cannot be replaced by a narrow blacklist once an agent has full host authority."},
+    {"k":25,"sha":"62a661f51271e8ec024c3557b921eaddda0267d3","title":"Projects: Tool-use agent loop — Claude can now execute code and edit files","disposition":"HIGH_VALUE_AGENT_EFFECT_BASELINE","semantic_family":"SANDBOXED_TOOL_LOOP","finding":"Introduced the initial project-scoped tool loop with bounded iterations, path containment and exact-match editing. This is the safer predecessor to k24 and provides the explicit authority/sandbox supersession boundary."},
+    {"k":26,"sha":"91b983a0f48a973c1fe5137d7271883e529b39fa","title":"Projects: PROJECT.md as base of truth for Claude","disposition":"HIGH_VALUE_TRUTH_FEEDBACK_RISK","semantic_family":"MODEL_WRITABLE_BASE_OF_TRUTH","finding":"PROJECT.md was injected every turn as base-of-truth and model-emitted update blocks were automatically parsed and written back to that same authoritative file. Generative suggestions can therefore self-condition future truth unless proposals, authority, provenance and committed state are separated."},
+    {"k":27,"sha":"e5315a225223fc16ab2c22ac3b200c998e7b263d","title":"Projects: Visual redesign, drag & drop, file search, open folder, AI sort","disposition":"MIXED_EFFECT_AND_FILE_PROVENANCE_ANALYZED","semantic_family":"FILE_EFFECT_SURFACE","finding":"Project upload/open/search/sort endpoints expanded file effects. Upload path attempted project-root containment; sorting moved files by extension. File ingestion and automatic reorganization require effect receipts, collision/rollback policy and content/provenance handling beyond UI convenience."},
+    {"k":28,"sha":"ce63f97c35928051cff98b0092058e111026584c","title":"Projects page: Claude Code Agent with Frank peripherals (Titan + Hypotheses)","disposition":"HIGH_VALUE_ENTITY_BOUNDARY","semantic_family":"PROJECT_AGENT_IDENTITY_AND_SCOPED_MEMORY","finding":"Created per-project Claude workspaces with their own chat, memory, hypotheses and filesystem folder, explicitly stating Claude is not Frank and omitting Frank consciousness/SOMA. This is strong lineage for separating agent identity/role and per-project memory from the host entity."},
+    {"k":29,"sha":"6c260650db2d28a5d7254599a64821fee3610a1b","title":"Feed: Fix 14 broken RSS feeds, replace with working alternatives","disposition":"HIGH_VALUE_SOURCE_QUALITY_LINEAGE","semantic_family":"SOURCE_AVAILABILITY_VS_EPISTEMIC_QUALITY","finding":"Unavailable primary/specialized feeds were replaced partly by HNRSS topic queries and broad fallback feeds. A working source is not epistemically equivalent to the source it replaces; source identity, authority and aggregation bias must persist through fallback."},
+    {"k":30,"sha":"288b2946fe89354e6715208e558bb47579a69016","title":"Feed: Fix double /feed prefix in API calls","disposition":"API_CONTRACT_DRIFT_ANALYZED","semantic_family":"CLIENT_PREFIX_COMPOSITION_ERROR","finding":"Client helper and call sites both encoded a feed prefix, producing invalid routes. API ownership/prefix composition should be centralized and contract-tested."},
+    {"k":31,"sha":"0b0dca0907ad18f14e9d051c4d0241d943ce025d","title":"Feed: Add /api/feed proxy routes, fix JS API path","disposition":"API_TOPOLOGY_ANALYZED","semantic_family":"SERVICE_PROXY_CONTRACT","finding":"WebUI/feed proxy routing was missing and client calls targeted the wrong API namespace until explicit feed proxy routes were added. Cross-service proxy contracts are part of executable topology and should be automatically validated."}
+  ],
+  "terminal_count":16,
+  "uncovered_count":0,
+  "derived_directives":[
+    "UNTRUSTED_FILES_PREVIEWS_USER_INSTRUCTIONS_AND_TRUSTED_PROJECT_STATE_USE_SEPARATE_PROVENANCE_CLASSES",
+    "GENERATED_TEXT_IS_ESCAPED_OR_ALLOWLIST_SANITIZED_BEFORE_HTML_DOM_RENDERING",
+    "STRUCTURAL_VERIFICATION_AND_END_TO_END_VERIFICATION_ARE_DISTINCT_EVIDENCE_STATUSES",
+    "FULL_HOST_AGENT_AUTHORITY_REQUIRES_CAPABILITY_SCOPE_APPROVAL_AND_RECEIPTS_NOT_DESTRUCTIVE_STRING_BLOCKLISTS",
+    "MODEL_GENERATED_PROJECT_UPDATES_ARE_PROPOSALS_NOT_AUTOMATIC_GROUND_TRUTH_COMMITS",
+    "AUTHORITATIVE_PROJECT_STATE_HAS_VERSION_PROVENANCE_AND_COMMIT_AUTHORITY_SEPARATE_FROM_GENERATION",
+    "PROJECT_AGENT_IDENTITY_AND_MEMORY_ARE_NAMESPACED_SEPARATELY_FROM_HOST_ENTITY_IDENTITY",
+    "SOURCE_FALLBACK_PRESERVES_SOURCE_IDENTITY_AUTHORITY_AND_BIAS_METADATA",
+    "FILE_UPLOAD_SORT_AND_WRITE_EFFECTS_REQUIRE_CONTAINMENT_RECEIPTS_AND_ROLLBACK_COLLISION_POLICY",
+    "API_PREFIX_PROXY_AND_REQUEST_SCHEMA_CONTRACTS_REQUIRE_MACHINE_CHECKABLE_TESTS"
+  ],
+  "negative_results_preserved":[
+    "A full project sandbox was removed and replaced by near-unrestricted system access plus a tiny destructive-command blocklist.",
+    "A model could automatically rewrite the same PROJECT.md that was injected as its future base of truth.",
+    "An SSE endpoint was structurally implemented but not live-tested because API credits were insufficient until a later fix/test.",
+    "Generated markdown was rendered into HTML without an explicit escaping step in the shown renderer.",
+    "RSS availability fixes changed source identity and often substituted aggregate topic search for unavailable primary feeds.",
+    "API route prefix ownership drift caused doubled or missing feed namespaces."
+  ],
+  "measurement_boundary":"All source-reported model/LoRA iteration counts, performance, uptime and benchmark claims are historical source claims unless independently reproduced. k23's initial streaming/tool implementation was explicitly structural-only at that commit; k22 records the later source-reported end-to-end test state.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level conceptual-dedup audit against HISTORICAL_EARNED_WORK was performed."},
+  "global_level0_exact_percent_changed_here":false,
+  "gate":"NOT_PASS",
+  "status":"TERMINALLY_DISPOSITIONED_16_OF_16"
+}

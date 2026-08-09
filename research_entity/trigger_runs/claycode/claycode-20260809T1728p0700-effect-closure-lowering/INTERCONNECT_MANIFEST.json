@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1728p0700-effect-closure-lowering",
+  "trigger": "claycode",
+  "canonical_parent": "r2 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "preflight_status": "MANUAL_EQUIVALENT_AFTER_TOOL_GOVERNANCE_DRIFT",
+  "preflight_negative_result": {
+    "class": "RESEARCH_INFRASTRUCTURE_REGISTRY_DRIFT",
+    "detail": "Current RESEARCH_TRIGGER_REGISTRY uses integrated branch name `clayresearch`, while tools/research_interconnect_preflight.py priority tables still enumerate `clay`; its import-time set-equality guard therefore cannot accept the current registry without repair.",
+    "action": "Materialize explicit nine-branch manifest for this run; do not pretend the exact repository-local preflight executable passed."
+  },
+  "priority": [
+    "frank",
+    "clayresearch",
+    "harness",
+    "claygraph",
+    "unifieddb",
+    "gwt",
+    "hyperposition",
+    "emergenz",
+    "claycode"
+  ],
+  "branches": {
+    "frank": {
+      "depth": "deep",
+      "refs": ["fusion commit a83ba44bc4af154cc6c7538fa033388e12f0326d"],
+      "finding": "EffectIntent vs opaque EffectPermit and runtime authority separation remain required; no FRANK-specific function/effect primitive justified."
+    },
+    "clayresearch": {
+      "depth": "standard",
+      "refs": ["research_entity/rooms/PROGRAM_STATE.json", "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"],
+      "finding": "BASE_CLAYCODE_RELEASE is critical path; compile/execute rather than redesign."
+    },
+    "harness": {
+      "depth": "deep",
+      "refs": ["harness commit 89dfb8bf08d9082cfa85bb5f48cf3fac0c3a02fa"],
+      "finding": "semantic_state_hash, state_version_hash, and trace_root_hash are distinct operational identities; ClayCode compiler receipts should preserve analogous layering."
+    },
+    "claygraph": {
+      "depth": "deep",
+      "refs": ["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"],
+      "finding": "graph activation/selection does not resolve exact callees and never grants effect authority."
+    },
+    "unifieddb": {
+      "depth": "deep",
+      "refs": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"],
+      "finding": "required capability observations/resources remain distinct from execution receipts and authority."
+    },
+    "gwt": {
+      "depth": "standard",
+      "refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
+      "finding": "No change; type/effect call closure is compiler semantics, not workspace selection or causal-use evidence."
+    },
+    "hyperposition": {
+      "depth": "standard",
+      "refs": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "finding": "No change; alternative call graphs may be research candidates, but a compiled artifact needs exact typed binding."
+    },
+    "emergenz": {
+      "depth": "standard",
+      "refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
+      "finding": "No change; recursive effect closure is not emergence evidence."
+    },
+    "claycode": {
+      "depth": "deep",
+      "refs": ["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "claycode prior commits af1a5546acedffbd4e7d2d5ff4734140e5c6c1f8 and b5d3059ba49c1dcaf8483414fd41fb89736384bd"],
+      "finding": "Compositional effect closure can be added in checker/compiler implementation without new source syntax in the tested subset."
+    }
+  }
+}

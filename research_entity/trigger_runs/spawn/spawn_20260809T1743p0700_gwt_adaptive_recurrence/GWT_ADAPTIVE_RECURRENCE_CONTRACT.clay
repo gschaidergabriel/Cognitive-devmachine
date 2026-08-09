@@ -1,0 +1,90 @@
+module spawn.gwt.adaptive_recurrence
+version "0.1-research-candidate"
+status OPEN_SYNTHETIC_PROXY_SUPPORTED
+
+// Library/schema-level candidate. This run found no executable counterexample
+// requiring a ClayCode core semantic change.
+
+enum LoopRegime {
+  CONVERGING_FIXED_POINT,
+  PRODUCTIVE_LIMIT_CYCLE,
+  STALLED,
+  DIVERGING_OR_OVERTHINKING,
+  CHAOTIC_OR_UNCLASSIFIED
+}
+
+enum RecurrenceAction {
+  CONTINUE,
+  HALT_RESOLVED,
+  HALT_STALLED,
+  HALT_BUDGET,
+  ROUTE,
+  ESCALATE,
+  ROLLBACK
+}
+
+record RecurrenceBudget {
+  max_steps:Int
+  remaining_steps:Int
+  compute_budget:Cost
+  latency_budget:Duration?
+  probe_budget:Int
+}
+
+record LoopDynamicsReadout {
+  loop:Ref
+  episode:Ref
+  source_epoch:Epoch
+  graph_epoch:Epoch?
+  recurrence_index:Int
+  timescale:Duration?
+  state_delta_norm:Score?
+  residual_pressure:Score?
+  marginal_verified_gain:Score?
+  marginal_gain_uncertainty:Score?
+  local_variance:Score?
+  instability_cost:Score?
+  recurrence_cost:Cost
+  regime:LoopRegime
+  evidence:Set<EvidenceRef>
+  receipts:Set<ReceiptRef>
+}
+
+record RecurrenceDecision {
+  loop:Ref
+  episode:Ref
+  action:RecurrenceAction
+  reason:Set<Symbol>
+  readout:Ref
+  budget:Ref
+  gwt_focus:Ref?
+  authority:Symbol
+  rollback:RecoveryRef?
+}
+
+rule low(LoopDynamicsReadout.state_delta_norm) && high(LoopDynamicsReadout.residual_pressure)
+  => LoopDynamicsReadout.regime=STALLED
+
+rule LoopDynamicsReadout.regime==PRODUCTIVE_LIMIT_CYCLE
+  => never_halt_from_single_step_delta
+
+rule RecurrenceDecision.action==CONTINUE
+  requires material(LoopDynamicsReadout.residual_pressure)
+       && expected(LoopDynamicsReadout.marginal_verified_gain)
+          > LoopDynamicsReadout.recurrence_cost + LoopDynamicsReadout.instability_cost
+       && RecurrenceBudget.remaining_steps>0
+
+rule GWT.focus may_inform RecurrenceDecision
+rule GWT.focus != RecurrenceDecision
+rule RecurrenceDecision.authority=PROPOSAL_ONLY
+rule RecurrenceDecision != EffectAuthority
+rule LoopDynamicsReadout != truth
+rule recurrence != emergence
+rule low_state_delta + high_residual_pressure != convergence
+rule measured_value != inferred_claim
+rule synthetic_proxy_result != live_frank_evidence
+
+// First discriminating target:
+// H1 Ubuntu frozen episodes: fixed recurrence budgets vs adaptive controller,
+// with residual-pressure lesion, trend/patience lesion, focus lesion/shuffle,
+// truthful/shuffled/no re-entry and exact latency/compute/instability/recovery receipts.

@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn_20260809T1751p0700_claycode_async_replay",
+  "experiment":"EXPERIMENT_ASYNC_REPLAY_CONTRACT.py",
+  "experiment_source_commit":"73bf52df140414188409e0b514a0b1389e403519",
+  "committed_source_sha256":"6e8f698379f71728df3b1f81c72d9793a223c01e4d297be6917cc5f15e5394ff",
+  "output_sha256":"f5c02722f34cea40acf8e90326f5f3fa97d7635a7adb01303afe61f415fe7b21",
+  "execution_environment":"current hosted container Python runtime; not Andreas Ubuntu developer target",
+  "seed":20260809,
+  "status":"PASS_PROXY",
+  "results":{
+    "disjoint_pairs":43823,
+    "disjoint_schedule_divergences":0,
+    "conflicting_pairs":6177,
+    "conflicting_order_divergences":6177,
+    "intentional_race_workflows":100000,
+    "replay_without_choice_receipt_mismatches":66583,
+    "replay_with_choice_receipt_mismatches":0,
+    "invalid_choice_receipts_detected":100000,
+    "cancel_retry_workflows":100000,
+    "naive_exactly_once_failures":50094,
+    "idempotent_intent_failures":0,
+    "deduplicated_retries_after_prior_commit":50094,
+    "stable_task_id_schedule_cases":20000,
+    "stable_task_id_schedule_failures":0,
+    "fairness_trials":10000,
+    "biased_shutdown_wins":0,
+    "randomized_shutdown_wins":4967
+  },
+  "interpretation":"The proxy supports deterministic-by-default noninterference plus explicit recorded nondeterminism. It rejects the stronger claim that one fixed global scheduler is sufficient as the sole production semantics.",
+  "limitations":["synthetic workload","Python proxy not production ClayCode runtime","no real async runtime integration","no Ubuntu target execution","no APP-04 release acceptance","idempotency result assumes a gateway/sink that can deduplicate stable semantic intent IDs"],
+  "promotion":"NONE"
+}

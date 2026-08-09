@@ -1,4 +1,6 @@
-import os, tempfile, unittest
+import os, sys, tempfile, unittest
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'reference'))
 from state_ledger import StateLedger, StaleEpoch, IdempotencyConflict, InvalidOperation, h
 
 class T(unittest.TestCase):

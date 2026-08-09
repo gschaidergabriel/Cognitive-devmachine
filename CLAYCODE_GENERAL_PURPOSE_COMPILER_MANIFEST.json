@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "manifest": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST",
   "created_at": "2026-08-09T20:05:00+07:00",
-  "last_updated_at": "2026-08-09T21:12:00+07:00",
+  "last_updated_at": "2026-08-09T21:25:00+07:00",
   "actor": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
@@ -24,22 +24,25 @@
       "evidence": "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"
     },
     "CC-WP-02-PARSER-CANON": {
-      "formal_status": "OPEN_STRICT_AND_REAL_FRANK_CLASSIFICATION_EVIDENCE",
-      "implementation_status": "V9_REPAIR_WIRED_STRICT_UBUNTU_RECEIPT_PENDING",
+      "formal_status": "OPEN_STRICT_RECEIPT",
+      "implementation_status": "V9_DEFAULTS_ALIGNED_STRICT_UBUNTU_CI_WIRED_V10_DISCRIMINATOR_AVAILABLE",
       "evidence": [
         "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark",
+        "tools/claycode_base_frontend.py",
         "tools/claycode_base_frontend_validation.py",
         "tools/claycode_base_canonicalizer.py",
-        "tools/claycode_frank_frontend_gap_probe.py",
-        "frank_reference/claycode/frank_runtime.provenance.json",
-        "research_entity/state/work/events/20260809T210800p0700_chatgpt_secondary_claycode_base14_v9_frank_gap_supersede.json"
+        "tools/claycode_base_ir.py",
+        ".github/workflows/claycode-base-frontend-ci.yml",
+        "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark",
+        "tools/claycode_v10_unified_frontend_discriminator.py",
+        "research_entity/claycode/base/FRANK_ROOT_SURFACE_CLASSIFICATION_V1.json"
       ],
-      "blocker": "Strict Lark/interegular exact-main receipt is still required. The provenance-bound real FRANK root source also exposes high-level use/fn/let/require/return surface forms that must be classified by executable evidence as an admitted dialect/pre-lowering layer or the smallest versioned frontend amendment."
+      "blocker": "A persisted strict Lark/interegular exact-main V9 receipt is still required before formal WP02 PASS. V10 is a non-promoted unification candidate and must win its strict V9/V7 differential before replacing any active grammar identity. The provenance-bound FRANK root semantic contract is tracked as non-gating coverage research, not as the selected WP02/APP10 executable."
     },
     "CC-WP-03-IR-TYPES": {
       "formal_status": "OPEN_TARGET_EVIDENCE",
-      "implementation_status": "CLOSURE_READY",
-      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_wp03_typed_ir_validation.py"]
+      "implementation_status": "DECLARATIVE_V9_DEFAULT_ALIGNED_CLOSURE_READY",
+      "evidence": ["tools/claycode_base_ir.py", "tools/claycode_base_compiler.py", "tools/claycode_wp03_typed_ir_validation.py"]
     },
     "CC-WP-04-TYPE-EFFECT": {
       "formal_status": "OPEN_TARGET_EVIDENCE",
@@ -54,7 +57,7 @@
     "CC-WP-06-COMPILER-LOWERING": {
       "formal_status": "OPEN_TARGET_EVIDENCE",
       "implementation_status": "CLOSURE_READY",
-      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain.py"]
+      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain.py", "tools/claycode_structured_backend.py"]
     },
     "CC-WP-07-RUNTIME-ABI-FFI": {
       "formal_status": "OPEN_TARGET_EVIDENCE",
@@ -94,13 +97,15 @@
     },
     "CC-WP-13-HARNESS-HANDOFF": {
       "formal_status": "BLOCKED_TARGET_EVIDENCE",
-      "implementation_status": "FULL_FRANK_GENERIC_DIFFERENTIAL_TARGET_FINALIZER_READY",
+      "implementation_status": "FIVE_PATH_FULL_FRANK_TARGET_FINALIZER_READY",
       "evidence": [
+        "tools/claycode_full_frank_target_finalizer.py",
         "tools/claycode_full_frank_active_assembly_validation.py",
         "tools/claycode_full_frank_target_finalizer_runner.py",
-        "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay"
+        "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay",
+        "research_entity/claycode/base/FRANK_ROOT_SURFACE_CLASSIFICATION_V1.json"
       ],
-      "blocker": "The production FULL_FRANK_HANDOFF receipt is absent because the physical registered Andreas Ubuntu target has not yet completed the target differential. The separate real frank_runtime.clay surface gap is being classified independently and must not be conflated with an H2 semantic escape-hatch claim."
+      "blocker": "The five-path production FULL_FRANK_HANDOFF receipt is absent because the physical registered Andreas Ubuntu target has not yet completed the target differential. The separate frank_runtime.clay semantic-contract surface is not a selected production executable and does not independently block WP13."
     },
     "CC-WP-14-BASE-AUDIT": {
       "formal_status": "BLOCKED_BY_02_TARGET_13",
@@ -120,26 +125,36 @@
   "open_p1": 0,
   "unresolved_language_counterexamples": [
     {
-      "id": "CC-COUNTEREXAMPLE-FRANK-RUNTIME-SURFACE",
-      "status": "OPEN_CLASSIFICATION",
+      "id": "CC-COVERAGE-FRANK-ROOT-CONTRACT-SURFACE",
+      "status": "CONTEXT_ONLY_NON_GATE",
       "source": "frank_reference/claycode/frank_runtime.clay",
       "provenance": "frank_reference/claycode/frank_runtime.provenance.json",
-      "observed_surface_gap": ["use", "fn", "let", "require", "return"],
-      "current_gap": "The exact external FRANK root semantic-runtime source is outside the current V9 BASE surface. It is not yet proven whether these forms are a separate high-level ClayCode dialect/sugar that can be legality-checked and pre-lowered into frozen BASE or require the smallest versioned frontend amendment.",
-      "language_change_allowed": "ONLY_IF an explicit typed/versioned dialect or pre-lowering cannot preserve required semantic identity, type/effect behavior and authority invariants under executable differential testing."
+      "classification": "research_entity/claycode/base/FRANK_ROOT_SURFACE_CLASSIFICATION_V1.json",
+      "already_generic_in_structured_backend": ["fn block", "let", "require", "return", "if", "for", "qualified field access", "generic calls"],
+      "remaining_unclassified_surface": ["use/import wildcard", "mixed rich type/record declarations", "symbol literals", "method/chained call sugar", "lambda/map sugar", "named-argument/constructor sugar"],
+      "current_gap": "Coverage research remains useful, but this exact semantic-contract source is not selected by the current receipt-gated APP10/FULL_FRANK finalizer. It therefore cannot justify BASE language widening or independently block the current release.",
+      "reactivation_rule": "Becomes gate-relevant immediately if this source or a byte-identical descendant is selected as a production WP13/APP10 executable."
     },
     {
       "id": "CC-TARGET-FULL-FRANK-EVIDENCE",
       "status": "OPEN_TARGET_EVIDENCE",
-      "current_gap": "The full frozen H1 ActiveAssembly generic structured differential has a fail-closed target validator, but no physical target production receipt is present on main.",
+      "current_gap": "The five-path fail-closed FULL_FRANK target finalizer exists, but no physical target production receipt is present on main.",
       "language_change_allowed": "NO. Missing target execution is an evidence/transport blocker, not language insufficiency."
+    }
+  ],
+  "non_promoted_candidates": [
+    {
+      "id": "CC_V10_UNIFIED_FRONTEND",
+      "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark",
+      "discriminator": "tools/claycode_v10_unified_frontend_discriminator.py",
+      "purpose": "Test whether V9 dotted-prefix repair and V7 executable typed-fn/operator surface can converge without semantic regression.",
+      "promotion_allowed_without_strict_discriminator": false
     }
   ],
   "next_command_on_target": "python3 tools/claycode_run_andreas_target_acceptance.py",
   "promotion_allowed": false,
   "promotion_blockers": [
     "WP02_STRICT_V9_RECEIPT_NOT_PRESENT",
-    "REAL_FRANK_SURFACE_ROUTE_NOT_ADJUDICATED",
     "ANDREAS_TARGET_RECEIPTS_NOT_PRESENT",
     "FULL_FRANK_TARGET_RECEIPT_NOT_PRESENT",
     "WP14_AUDIT_NOT_PASS"

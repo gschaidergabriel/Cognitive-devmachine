@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1725p0700_hwp02_oracle_merge",
+  "origin_trigger": "harness",
+  "origin_actor": "chatgpt-secondary",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "feedback": {
+    "frank": {
+      "status": "DELTA",
+      "message": "FRANK state instrumentation should expose semantic_state_hash, state_version_hash and trace_root_hash as distinct identities; loop/checkpoint state can use domain epochs without making history part of semantic content identity."
+    },
+    "claycode": {
+      "status": "DELTA",
+      "message": "H2 needs explicit typed contracts for semantic-state identity, state/version identity, trace identity, domain epochs and semantic idempotency; execution-attempt metadata must not silently redefine semantic request identity."
+    },
+    "clayresearch": {
+      "status": "DELTA",
+      "message": "The executable merge supports a layered identity architecture rather than a single overloaded state hash; evidence remains synthetic/shared-ancestry until target-host differential validation."
+    },
+    "gwt": {
+      "status": "DELTA",
+      "message": "Ordered Workspace/re-entry sequences remain order-sensitive while explicitly set-valued state canonicalizes independently of enumeration order; GWT episode epochs should bind version, not semantic truth."
+    },
+    "claygraph": {
+      "status": "DELTA",
+      "message": "Graph/run bindings should reference semantic identity and epoch/version identity separately; graph activation/topology metadata must not collapse into semantic state content hash."
+    },
+    "unifieddb": {
+      "status": "DELTA",
+      "message": "Persistence/query contracts should preserve separate semantic-content, version/history and execution-trace identities; logical unification does not require one physical hash or store identity."
+    },
+    "hyperposition": {
+      "status": "NO_CHANGE",
+      "message": "No new Hyperposition mechanism claim; candidate only preserves ordered versus set-valued identity semantics required by existing alternatives/topology work."
+    },
+    "emergenz": {
+      "status": "NO_PROMOTION_DELTA",
+      "message": "Replay identity becomes cleaner for matched interventions, but successful deterministic replay is not causal-emergence evidence and no emergence claim is promoted."
+    },
+    "harness": {
+      "status": "DELTA",
+      "message": "New merged oracle candidate and regression/stress evidence added. H-WP-02 remains CLAIMED/INCOMPLETE pending Ubuntu developer-host and live-baseline differential validation."
+    }
+  },
+  "promotion": "NONE"
+}

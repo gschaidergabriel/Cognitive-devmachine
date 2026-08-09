@@ -100,7 +100,9 @@ def _decode(value: Any) -> AstValue:
     raise ValueError("unknown or non-canonical AST member")
 
 
-def from_lark(value: Tree | Token) -> AstValue | None:
+def from_lark(value: Tree | Token | None) -> AstValue | None:
+    if value is None:
+        return None
     if isinstance(value, Tree):
         children = tuple(
             converted

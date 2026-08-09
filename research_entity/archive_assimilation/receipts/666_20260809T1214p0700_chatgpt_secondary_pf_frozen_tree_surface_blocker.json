@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1214p0700-chatgpt-secondary-pf-frozen-tree-surface-blocker",
+  "trigger":"666",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "task_id":"666-l0-pf-frozen-tree-denominator-20260809T1212p0700",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "target":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_ref":"abba90a5767d85abc8a1ac340bae92842dab35c1","obligation":"exact complete recursive frozen-head tree denominator"},
+  "attempts":[
+    {"method":"GitHub connector fetch_file at repository root and frozen ref","result":"BLOCKED","evidence":"connector returned InvalidInputException: GitHub path points to a directory, not a file","implication":"fetch_file cannot enumerate directory children"},
+    {"method":"GitHub connector capability discovery for tree","result":"BLOCKED","evidence":"available tree-matching actions are write-side create_tree/create_commit only; no read/list recursive tree action is exposed","implication":"no connector-native exact recursive tree walk is available"},
+    {"method":"public GitHub archive ZIP at exact frozen SHA","result":"BLOCKED","evidence":"web retrieval returned cache/safe-URL failure; container downloader therefore could not authorize the URL","implication":"cannot obtain a frozen archive through the current web/download bridge"},
+    {"method":"direct public GitHub Git Trees REST endpoint /git/trees/<sha>?recursive=1","result":"BLOCKED","evidence":"web open rejected the non-search URL under safe-URL rules; exact endpoint was not discoverable through search","implication":"cannot retrieve Git Trees JSON through web in this execution"},
+    {"method":"local urllib/DNS fallback to api.github.com","result":"BLOCKED","evidence":"Temporary failure in name resolution","implication":"container network cannot independently reach GitHub"}
+  ],
+  "adjudication":{"exact_tree_enumerated":false,"denominator_frozen":false,"exact_level0_credit":0.0,"status":"NEGATIVE_RESULT_EXECUTION_SURFACE_BLOCKER","reason":"No currently exposed read surface can enumerate the frozen repository tree exactly; partial code/file search must not be promoted to an exact denominator."},
+  "method_guard":"A future worker may close this obligation only with a read-capable recursive Git tree/archive/clone surface that proves the frozen ref and complete entry set (including explicit truncated=false or equivalent completeness evidence).",
+  "next_valid_paths":["GitHub Git Trees API recursive read with completeness flag","git clone/archive of exact frozen SHA with local git ls-tree -r -t","connector action that returns complete recursive tree identity"],
+  "release_gate":"NOT_PASS",
+  "created_at":"2026-08-09T12:14:00+07:00"
+}

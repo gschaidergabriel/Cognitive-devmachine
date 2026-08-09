@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T122514Z_chatgpt_secondary_claycode_diagnostic_identity",
+  "hypotheses": [
+    {
+      "id": "SPAWN-DIAG-H1",
+      "status": "OPEN_SUPPORTED_BY_SYNTHETIC_AND_EXTERNAL_MECHANISM_EVIDENCE",
+      "claim": "ClayCode diagnostics should separate stable rule identity, rule revision, occurrence fingerprint, source spans, presentation/rendering and run-local instance identity; a versioned structured occurrence fingerprint should outperform text/span and rule-only identity for regression and corpus use.",
+      "falsifier": "A production differential showing that a simpler identity scheme preserves nonsemantic invariance and semantically distinct-cause separation at equal or lower complexity across parser, type/effect, runtime/FFI and lowering diagnostics."
+    },
+    {
+      "id": "SPAWN-DIAG-H2",
+      "status": "OPEN_SUPPORTED",
+      "claim": "Human-readable diagnostic message text and absolute source positions should be presentation/location evidence, not the stable label used by WP11 fuzz deduplication or WP12 negative/held-out corpus identity.",
+      "falsifier": "A broad refactor/path/rendering differential where text+position identity remains stable whenever semantic diagnostic identity is unchanged without masking distinct causes."
+    },
+    {
+      "id": "SPAWN-DIAG-H3",
+      "status": "OPEN_SUPPORTED",
+      "claim": "When a lowered/runtime check preserves a known semantic denial cause, lowering should preserve or link its diagnostic rule/cause identity rather than collapse all failures to an undifferentiated DENY; behavioral outcome equivalence alone is insufficient for diagnostic equivalence.",
+      "falsifier": "H1/H2 differential evidence showing that generic outcome-only DENY preserves all required debugging, mutation localization, held-out labeling and causal replay information."
+    },
+    {
+      "id": "SPAWN-DIAG-H4",
+      "status": "OPEN",
+      "claim": "Diagnostic fingerprint algorithm version and diagnostic rule semantic revision should be independent version axes: algorithm changes affect matching mechanics, while rule revision changes the predicate/meaning being diagnosed.",
+      "falsifier": "A production implementation showing one version axis can evolve either concern without false equivalence, false novelty or migration ambiguity."
+    }
+  ],
+  "counterhypotheses": [
+    {"id":"SPAWN-DIAG-C1","claim":"Stable diagnostic identity is premature overengineering for BASE; message plus stage plus source location is sufficient until H1/H2.","discriminator":"Run location/rendering/refactor perturbations over current WP03/WP04/WP11/WP12 negative cases and measure false-new vs false-same classifications."},
+    {"id":"SPAWN-DIAG-C2","claim":"A stable rule_id alone is sufficient; occurrence fingerprints add needless complexity.","discriminator":"Generate multiple simultaneous instances and distinct causal signatures under the same rule; measure collisions and mutation-localization loss."},
+    {"id":"SPAWN-DIAG-C3","claim":"Stable diagnostic IDs ossify checker implementation details and impede refactoring.","discriminator":"Refactor checker/lowering implementation while preserving semantic predicate; verify whether rule identity can remain stable while implementation provenance changes independently."},
+    {"id":"SPAWN-DIAG-C4","claim":"Semantic anchors can create false stability when the underlying cause changes at the same IR node.","discriminator":"Hold rule+anchor fixed and mutate normalized cause signature; compare rule-anchor versus structured fingerprint separation."}
+  ],
+  "promotion": "NONE; candidate requires integration against production ClayCode and Ubuntu target-host receipts"
+}

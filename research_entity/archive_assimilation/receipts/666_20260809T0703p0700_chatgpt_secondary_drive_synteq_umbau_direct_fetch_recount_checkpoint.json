@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0703p0700-chatgpt-secondary-drive-synteq-umbau-direct-fetch-recount-checkpoint",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "task":"Revalidate synteq-umbau after discovery that Drive search false negatives invalidated the prior 55-unit exact denominator.",
+  "method":"DIRECT_FOLDER_FETCH_ONLY_FOR_EXACTNESS",
+  "observations":[
+    {"folder":"plaetze","id":"13X-vWIUA25WqRDHVEP7ytiri7r1Q8u3M","direct_fetch":"10 files; prior search-based claim was empty"},
+    {"folder":".claude","id":"1J1yJME8gP1hnknuJnhxc55ur2X59PADg","direct_fetch":"2 files; prior search-based claim was empty"},
+    {"folder":".gstack","id":"1FB9L7X9AB7RaHtl8KftTzhR4tg_XluA5","direct_fetch":"1 file; prior search-based claim was empty"},
+    {"folder":"assets","id":"1m1sAiVTndqNddiamISPsX8P36yfXi7LL","direct_fetch":"6 child folders + ledger.jsonl; all six child folders directly fetched and contain 44 files total","closed_manifest":"research_entity/archive_assimilation/manifests/DRIVE_SYNTEQ_UMBAU_ASSETS_V2_DIRECT_FETCH_SUBMANIFEST.json"},
+    {"folder":".store","id":"16VKbTlWw5_7yQvITX4UoBGhPOLHpDpyQ","direct_fetch":"many JSON objects; prior search-based claim was empty","exact_count_status":"BLOCKED_ON_CURRENT_SURFACE_FOR_LARGE_FOLDER"},
+    {"folder":"pruef-A2","id":"1eK2wY6FtKtYUtIqDwO7ZxZn8pp5RKmCB","direct_fetch":"knet plus many root Python/image files; prior search-based claim omitted these"},
+    {"folder":"pruef-A2/knet","id":"19FX8jt9yz7IMDzOWmGwac1swftonq8F9","direct_fetch":"large image/test artifact set; prior search-based claim of only proto.html refuted","exact_count_status":"BLOCKED_ON_CURRENT_SURFACE_FOR_LARGE_FOLDER"},
+    {"folder":".xenostore","id":"1B1C-JFeZrhS5yFQ2sPqU8vngGC5bwLGg","direct_fetch":"1 JSON file; prior search-based claim was empty"},
+    {"folder":".probe-bild","id":"1QCoXM2kVFWL5pvOQ143eNAco-imhtkYj","direct_fetch":"2 image files; prior search-based claim was empty"}
+  ],
+  "connector_limit_discovery":{"raw_folder_fetch_test":"download_raw_file=true on a Drive folder URL was rejected as Invalid Google Drive URL","normal_folder_fetch_limit":"tool contract states folders return at most 100 direct children and larger folders may be partial","consequence":"Large folders such as .store and pruef-A2/knet cannot receive an exact denominator from the currently exposed surface unless a separate complete/paginated inventory or pinned raw snapshot becomes available."},
+  "old_55_unit_claim":"REFUTED",
+  "current_exact_subtree":"assets = 51 units below assets root",
+  "global_level0_percent":0.0,
+  "next":"Continue direct-fetch recount for small folders; route large-folder exact enumeration to a pagination/raw-snapshot-capable path rather than weakening exactness.",
+  "status":"PARTIAL_RECOUNT_COMMITTED_BLOCKERS_EXPLICIT",
+  "created_at":"2026-08-09T07:03:00+07:00"
+}

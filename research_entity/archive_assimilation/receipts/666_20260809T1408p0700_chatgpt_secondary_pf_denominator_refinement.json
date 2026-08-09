@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1408p0700-chatgpt-secondary-pf-denominator-refinement",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T14:08:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "default_branch": "main",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "github_reported_size_kib": 228899,
+    "evidence_class": "PRIMARY_GITHUB_COMMIT_COMPARE_AND_CONNECTOR_SURFACE_AUDIT"
+  },
+  "history_denominator_refinement": {
+    "previous_verified_interval_lower_bounds": [407, 429, 488],
+    "root_candidate": {
+      "sha": "e1a8812767668091d146ee958bbc2ebb2743031c",
+      "created_at": "2026-02-14T18:05:27+01:00",
+      "commit_message": "Initial commit: AI-Core / Frank — local AI desktop companion",
+      "evidence": [
+        "GitHub commit search for 'initial' returns this commit as an explicit Initial commit.",
+        "Fetched commit diff contains extensive repository baseline additions beginning from empty-file hunks (for example @@ -0,0), consistent with an initial import.",
+        "GitHub compare from this candidate to frozen HEAD reports status=ahead, ahead_by=544, total_commits=544 and merge_base equal to the candidate."
+      ],
+      "candidate_root_to_head_commit_count_including_base": 545,
+      "parentlessness_directly_verified": false,
+      "classification": "STRONG_ROOT_CANDIDATE_NOT_VERIFIED_ROOT"
+    },
+    "state": "ROOT_CANDIDATE_545_NOT_FROZEN",
+    "why_not_frozen": "The current GitHub connector's normalized fetch_commit output does not expose commit parent arrays, and discovery for parent-reading functions returned only create_commit. Commit title and additive diff are strong evidence but not sufficient to prove a parentless root under the Level-0 exactness gate.",
+    "exact_history_denominator": null,
+    "exact_history_coverage_credit": 0.0
+  },
+  "tree_denominator_refinement": {
+    "state": "UNFROZEN_EXTERNAL_READ_SURFACE_BLOCKER",
+    "connector_surface_audit": [
+      "GitHub tool discovery for tree exposes create_tree/create_commit only; no read-tree/list-tree function.",
+      "GitHub tool discovery for recursive returns no function.",
+      "GitHub fetch_file rejects repository root path because it points to a directory rather than returning children.",
+      "Available contents functions fetch individual files/blobs but do not enumerate directories recursively.",
+      "Direct git transport from the execution runtime previously failed DNS resolution for github.com."
+    ],
+    "exact_tree_denominator": null,
+    "exact_tree_coverage_credit": 0.0
+  },
+  "combined_gate_effect": {
+    "666_RELEASE_GATE": "NOT_PASS",
+    "combined_exact_coverage_percent": 0.0,
+    "reason": "The Project-Frankenstein history root is not parentlessly verified and the recursive frozen tree denominator is still unavailable. Semantic/history shards may continue but cannot imply repository-wide exactness."
+  },
+  "non_fake_progress_rule": "Do not convert the 545 candidate count into frozen_source_units/frozen_commit_units or non-zero exact coverage unless a parentless-root proof and exhaustive root-to-head enumeration are obtained. Do not infer recursive tree completeness from compare_commits changed-file summaries.",
+  "next_high_value_resolution_paths": [
+    "Expose raw Git commit metadata including parents for e1a8812767668091d146ee958bbc2ebb2743031c; parent_count=0 would validate root status.",
+    "Provide a frozen `git rev-list --count --all` or equivalent root-to-head manifest with SHA list and lineage semantics.",
+    "Expose Git Trees API read with recursive=1 for frozen HEAD or provide a content-addressed frozen tree manifest.",
+    "If product connector cannot expose these surfaces, externally supply immutable history/tree manifests; validate hashes before gate mutation."
+  ],
+  "durable_delta": "The hard Level-0 blocker is now narrowed: Project-Frankenstein has a strong 545-commit root-to-frozen-HEAD candidate history, while the remaining exactness gap is explicit parentless-root verification plus recursive frozen-tree enumeration.",
+  "research_write_intent": "checkpoint_only_no_scientific_promotion"
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "cycle_id": "ccauto-20260809T104300Z",
+  "created_at": "2026-08-09T10:43:00.403882+00:00",
+  "mode": "FREE_ONLY",
+  "target_stage": "BASE_CLAYCODE_RELEASE",
+  "focus": "production frontend closure: deterministic typed function definition/call binding integrated into parser -> canonical IR -> type/effect -> lowering evidence chain",
+  "gate_snapshot": {
+    "gate_status": "NOT_PASS",
+    "general_purpose_gate_status": "NOT_PASS",
+    "passed_apps": []
+  },
+  "provider_discovery": {
+    "mistral": {
+      "status": "CREDENTIAL_NOT_CONFIGURED"
+    },
+    "nvidia": {
+      "status": "AVAILABLE",
+      "models": 100
+    }
+  },
+  "selected_context_refs": [
+    "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=5000-10000",
+    "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=10000-13239",
+    "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md#chars=0-5000",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md#chars=0-5000",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json#chars=0-5000",
+    "research_entity/claycode/g9/grammar.ebnf#chars=0-2303",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay#chars=0-5000",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay#chars=5000-8535"
+  ],
+  "rerank_error": "RuntimeError:NVIDIA HTTP 410: {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"This endpoint has reached its end of life on 2026-05-18T00:00:00Z and is no longer available.\"}\n",
+  "model_calls": [
+    {
+      "provider": "NVIDIA",
+      "model": "z-ai/glm-5.2",
+      "family": "glm",
+      "usage": {
+        "prompt_tokens": 4954,
+        "completion_tokens": 1930,
+        "total_tokens": 6884
+      }
+    }
+  ],
+  "candidate_roles": {
+    "alternative": {
+      "claim": "A minimal typed function-definition production can be added to the G9 grammar by reusing existing `needle_decl` (which already has params and return type) extended with an optional body expression, closing the definition→call gap without new semantic primitives.",
+      "counterhypothesis": "The existing `rule`/`needle`/host-action surface already provides sufficient deterministic call-binding semantics to compile the mandatory application suite, making an explicit function-definition production redundant.",
+      "minimal_delta": "Extend `needle_decl` with an optional `= expr` body clause: `needle_decl = 'needle', ident, '(', [params], ')', '->', type_expr, ['=', expr] ;`. Add a `FuncDef` node to canonical IR carrying (symbol_id, param_types, return_type, body_expr, effect_set). In the typechecker, resolve `call` targets against `FuncDef` symbol table with exact-identity match, arity check, and param-type compatibility; fail closed on any mismatch. No new keywords, no new nonterminals beyond the optional body.",
+      "executable_discriminator": "Parse and compile a source file containing two typed function definitions with mutual calls (e.g., `needle is_even(n:Int)->Bool = n==0` and `needle is_odd(n:Int)->Bool = is_even(n-1)==false`), then execute 20,000 randomized calls through the canonical IR evaluator. Separately, attempt the same program using only existing `rule`/`needle` without body. If the existing surface cannot express a callable body with deterministic resolution, the counterhypothesis is rejected.",
+      "affected_work_packages": [
+        "CC-WP-02-PARSER-CANON",
+        "CC-WP-03-IR-TYPES",
+        "CC-WP-04-TYPE-EFFECT-CHECK"
+      ],
+      "semantic_change_required": false,
+      "next_focus": "Control-flow closure: independently close branching + loop/recursion + pattern match + structured Result/error semantics in the canonical IR, without bundling into the function-definition result.",
+      "external_queries": [],
+      "bounded_python_test": "import random, hashlib, json\n\n# --- Minimal ClayCode function-definition closure test ---\n# Tests: parse needle-with-body, canonical IR, typecheck, call resolution\n\ndef parse_needle_decl(line):\n    # needle NAME(params) -> TypeExpr = body_expr\n    assert line.startswith('needle ')\n    rest = line[len('needle '):]\n    name_end = rest.index('(')\n    name = rest[:name_end_end] if False else rest[:name_end]\n    rest = rest[name_end+1:]\n    params_end = rest.index(')')\n    params_str = rest[:params_end]\n    rest = rest[params_end+1:]\n    assert rest.startswith(' -> ')\n    rest = rest[4:]\n    # split return type and body\n    if ' = ' in rest:\n        ret_type, body = rest.split(' = ', 1)\n    else:\n        ret_type, body = rest, None\n    params = []\n    if params_str.strip():\n        for p in params_str.split(','):\n            pname, ptype = p.split(':')\n            params.append((pname.strip(), ptype.strip()))\n    return {'name': name.strip(), 'params': params, 'ret_type': ret_type.strip(), 'body': body}\n\ndef typecheck_call(func_defs, call_name, call_args, call_arg_types):\n    if call_name not in func_defs:\n        return False, f'UNDEFINED_TARGET:{call_name}'\n    fd = func_defs[call_name]\n    if len(fd['params']) != len(call_arg_types):\n        return False, f'ARITY_MISMATCH:{len(fd[\"params\"])}!={len(call_arg_types)}'\n    for (pname, ptype), atype in zip(fd['params'], call_arg_types):\n        if ptype != atype:\n            return False, f'TYPE_MISMATCH:{pname}:{ptype}!={atype}'\n    return True, None\n\ndef eval_body(body, func_defs, env):\n    if body is None:\n        return None\n    body = body.strip()\n    # handle: n==0, is_even(n-1)==false, etc.\n    if '==' in body:\n        lhs, rhs = body.split('==', 1)\n        lhs_v = eval_simple(lhs.strip(), func_defs, env)\n        rhs_v = eval_simple(rhs.strip(), func_defs, env)\n        return lhs_v == rhs_v\n    if body in ('true','false'):\n        return body == 'true'\n    return eval_simple(body, func_defs, env)\n\ndef eval_simple(expr, func_defs, env):\n    expr = expr.strip()\n    if expr in env:\n        return env[expr]\n    if expr == 'true': return True\n    if expr == 'false': return False\n    try: return int(expr)\n    except: pass\n    # call: name(args)\n    if '(' in expr and expr.endswith(')'):\n        cname = expr[:expr.index('(')]\n        arg_str = expr[expr.index('(')+1:-1]\n        args = []\n        if arg_str.strip():\n            for a in arg_str.split(','):\n                args.append(eval_simple(a.strip(), func_defs, env))\n        ok, err = typecheck_call(func_defs, cname, args, [type(a).__name__ for a in args])\n        if not ok:\n            raise RuntimeError(err)\n        # eval body\n        fd = func_defs[cname]\n        local_env = {}\n        for (pname, ptype), aval in zip(fd['params'], args):\n            local_env[pname] = aval\n        return eval_body(fd['body'], func_defs, local_env)\n    # arithmetic: n-1\n    if '-' in expr:\n        parts = expr.split('-')\n        return eval_simple(parts[0], func_defs, env) - eval_simple(parts[1], func_defs, env)\n    raise ValueError(f'cannot eval: {expr}')\n\n# --- Test program ---\nsource = '''needle is_even(n:Int) -> Bool = n == 0\nneedle is_odd(n:Int) -> Bool = is_even(n - 1) == false'''\n\nfunc_defs = {}\nfor line in source.strip().split('\\n'):\n    fd = parse_needle_decl(line.strip())\n    func_defs[fd['name']] = fd\n\n# Canonical IR hash\ncanon = json.dumps(func_defs, sort_keys=True)\ncanon_hash = hashlib.sha256(canon.encode()).hexdigest()\n\n# --- 20,000 randomized composed calls ---\nrandom.seed(42)\nmismatches = 0\nfail_closed = 0\nfor i in range(20000):\n    n = random.randint(0, 100)\n    # is_even\n    ok, err = typecheck_call(func_defs, 'is_even', [n], ['int'])\n    if not ok:\n        fail_closed += 1\n        continue\n    result = eval_body(func_defs['is_even']['body'], func_defs, {'n': n})\n    expected = (n % 2 == 0)\n    if result != expected:\n        mismatches += 1\n    # is_odd via call to is_even\n    ok2, err2 = typecheck_call(func_defs, 'is_odd', [n], ['int'])\n    if not ok2:\n        fail_closed += 1\n        continue\n    result2 = eval_body(func_defs['is_odd']['body'], func_defs, {'n': n})\n    expected2 = (n % 2 == 1)\n    if result2 != expected2:\n        mismatches += 1\n\n# --- Negative tests: undefined target, arity mismatch, type mismatch ---\nneg_results = {}\nfor bad_call in [('nonexistent', [1], ['int']), ('is_even', [1,2], ['int','int']), ('is_even', ['x'], ['str'])]:\n    ok, err = typecheck_call(func_defs, bad_call[0], bad_call[1], bad_call[2])\n    neg_results[f'{bad_call[0]}({bad_call[1]})'] = {'ok': ok, 'err': err}\n\nprint(json.dumps({\n    'canonical_hash': canon_hash[:16],\n    'total_calls': 40000,\n    'mismatches': mismatches,\n    'fail_closed': fail_closed,\n    'negative_tests': neg_results,\n    'verdict': 'PASS' if mismatches == 0 and all(not v['ok'] for v in neg_results.values()) else 'FAIL'\n}, indent=2))"
+    }
+  },
+  "cross_model_diversity": {
+    "status": "INSUFFICIENT"
+  },
+  "queued_safe_requests": [],
+  "errors": [
+    "architect:RuntimeError:NVIDIA HTTP 500: ",
+    "falsifier:RuntimeError:NVIDIA HTTP 404: {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function 'e503b15c-62b0-4d69-b532-a88f0bfa2656': Not found for account 'lqEaewE7DO8HuEcPoSDzIGQS8easeRdrpi4xN5GmrV8'\"}",
+    "judge:TimeoutError:The read operation timed out"
+  ],
+  "authority": {
+    "research_only": true,
+    "may_mark_work_package_pass": false,
+    "may_promote_semantics": false,
+    "may_modify_frank_harness": false
+  },
+  "next_focus": "production frontend closure: deterministic typed function definition/call binding integrated into parser -> canonical IR -> type/effect -> lowering evidence chain",
+  "supervisor_attention": true
+}

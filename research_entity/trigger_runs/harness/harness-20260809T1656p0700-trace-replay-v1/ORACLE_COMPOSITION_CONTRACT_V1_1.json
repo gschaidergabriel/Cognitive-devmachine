@@ -1,0 +1,73 @@
+{
+  "schema_version":"1.1",
+  "contract_id":"harness-oracle-composition-v1.1",
+  "supersedes":"ORACLE_COMPOSITION_CONTRACT.json",
+  "run_id":"harness-20260809T1656p0700-trace-replay-v1",
+  "status":"OPEN_REFINED_COMPOSITION_CONTRACT_NOT_H1_H2_PASS",
+  "components":[
+    {
+      "oracle":"TurnTraceEnvelopeV1",
+      "artifact":"research_entity/harness/trace_replay_v1.py",
+      "status":"EXECUTED_LOCAL_SYNTHETIC_FOUNDATION",
+      "responsibility":"runtime causal/loop/epoch/GWT/memory/topology/effect/status/replay semantic differential"
+    },
+    {
+      "oracle":"SourceChainEvidenceV1",
+      "artifact":"research_entity/harness/source_chain_oracle_v1.py",
+      "status":"EXECUTED_LOCAL_SYNTHETIC_CANDIDATE_WITH_SEMANTIC_MINT_BOUNDARY_OPEN",
+      "responsibility":"source/grammar/parse/typed-IR/type-effect/lowering/execution/replay evidence continuity",
+      "required_refinement":"Pre-canonical Source/Parse stages must not independently mint canonical ProgramSemanticId. Canonical semantic identity should be derived at deterministic canonical typed IR or an equivalently verified canonical semantic stage; earlier stages carry source/parse/expected-semantic evidence only."
+    }
+  ],
+  "identity_layers_required":[
+    "baseline_transaction_root_hash",
+    "semantic_content_hash",
+    "state_version_hash",
+    "trace_root_hash",
+    "source_artifact_hash",
+    "grammar_contract_hash",
+    "canonical_program_semantic_id",
+    "type_effect_contract_hash",
+    "lowering_contract_hash",
+    "executable_artifact_hash",
+    "source_chain_evidence_hash"
+  ],
+  "conditional_resource_identity_layers":[
+    "capability_authorization_epoch",
+    "resource_generation_or_lifetime_epoch",
+    "resource_type_identity",
+    "opaque_handle_instance_identity"
+  ],
+  "conditional_resource_rule":"When a trace crosses a live host-resource boundary, semantic resource identity is insufficient. The effect receipt must bind current handle instance/type/lifetime or generation plus capability authorization state; capability epoch and resource generation epoch are not silently collapsed.",
+  "program_semantic_id_rule":"Source/parse evidence may predict/reference semantic identity but canonical ProgramSemanticId authority belongs only to a deterministic verified canonical semantic stage. A copied semantic_hash across source/parse/typed_ir is not by itself a derivation proof.",
+  "pass_rule":{
+    "reference_trace_valid":true,
+    "candidate_trace_valid":true,
+    "trace_semantic_projection_equivalent":true,
+    "reference_source_chain_valid_after_semantic_mint_refinement":true,
+    "candidate_source_chain_valid_after_semantic_mint_refinement":true,
+    "source_chain_differential_equivalent":true,
+    "baseline_transaction_compatibility_accounted":true,
+    "semantic_content_vs_version_vs_trace_identity_separated":true,
+    "resource_lifetime_identity_bound_when_applicable":true,
+    "no_unexplained_identity_binding_gap":true
+  },
+  "hard_failure_examples":[
+    "same final state but different lowering_contract_hash",
+    "source or parse stage independently asserting canonical semantic identity without derivation proof",
+    "same current semantic content but version/history identity silently conflated",
+    "source chain parent artifact discontinuity",
+    "typed-IR semantic drift",
+    "undeclared lowering semantic delta",
+    "executable artifact tamper",
+    "replay state divergence",
+    "runtime trace stage semantic divergence",
+    "capability expansion without external authorization",
+    "stale/ABA/wrong-type resource handle accepted",
+    "resource generation epoch silently replaced by graph or semantic epoch",
+    "status snapshot bound to a different final basis"
+  ],
+  "normalization_rule":"Implementation-only ids may normalize away only when runtime semantic, canonical typed-IR semantic, compiler-chain contract, executable artifact and applicable resource-lifetime identities remain equivalent under an explicit mapping.",
+  "authority_rule":"No observability, graph, GWT, source-chain, semantic-id, resource-reference or replay receipt mints execution authority.",
+  "gate_effect":"NONE"
+}

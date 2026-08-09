@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "FUSION-E1-TWO-GATE-ADAPTIVE-MEMORY",
+  "run_id": "fusion-20260809T1530p0700-chatgpt-secondary",
+  "epistemic_class": "SYNTHETIC_SIMULATION_ONLY",
+  "purpose": "Discriminate update-admission protection from recognition-validity protection in an online familiarity loop under near-confuser unknowns and mild known-class appearance shift.",
+  "seed_family": "1000..1099",
+  "replicates": 100,
+  "samples_per_replicate": 1200,
+  "policies": {
+    "naive_self_train": {
+      "known_accept_rate": {"mean":0.9054928470,"sd":0.0085679864},
+      "known_correct_rate_over_all_known": {"mean":0.9054109957,"sd":0.0084975663},
+      "accuracy_conditional_on_accept": {"mean":0.9999103898,"sd":0.0003790661},
+      "unknown_false_familiarity_rate": {"mean":0.8547744482,"sd":0.0263220164},
+      "updates": {"mean":1075.39,"sd":9.9594075115},
+      "bad_update_fraction": {"mean":0.1754184664,"sd":0.0112884894}
+    },
+    "evidence_admission_only": {
+      "known_accept_rate": {"mean":0.9010191652,"sd":0.0102139127},
+      "known_correct_rate_over_all_known": {"mean":0.9009577023,"sd":0.0101712366},
+      "accuracy_conditional_on_accept": {"mean":0.9999323312,"sd":0.0002692714},
+      "unknown_false_familiarity_rate": {"mean":0.7893391495,"sd":0.0361012418},
+      "updates": {"mean":263.16,"sd":16.8449374944},
+      "bad_update_fraction": {"mean":0.0,"sd":0.0}
+    },
+    "admission_plus_context_validity": {
+      "known_accept_rate": {"mean":0.8321642372,"sd":0.0127000282},
+      "known_correct_rate_over_all_known": {"mean":0.8321128957,"sd":0.0126711556},
+      "accuracy_conditional_on_accept": {"mean":0.9999388203,"sd":0.0002681828},
+      "unknown_false_familiarity_rate": {"mean":0.1466022010,"sd":0.0243689416},
+      "updates": {"mean":243.38,"sd":16.3180386027},
+      "bad_update_fraction": {"mean":0.0,"sd":0.0}
+    }
+  },
+  "interpretation": [
+    "Evidence-gated update admission prevented self-labeled unknowns from contaminating persistent prototype updates in this proxy.",
+    "Update admission alone did not solve recognition: near-confuser false familiarity remained high.",
+    "Adding an independent imperfect context/semantic validity gate sharply reduced false familiarity, at the cost of lower known fast-path acceptance.",
+    "Update-admission and recognition-validity are therefore distinct control surfaces and should remain independently ablatable."
+  ],
+  "limitations": [
+    "2D Gaussian proxy; not real Retina embeddings or project hardware.",
+    "The context mismatch signal is synthetic and intentionally informative; it does not prove a specific FRANK context gate.",
+    "No claim of optimal thresholds or conformal guarantees.",
+    "No causal-emergence or phenomenal-consciousness inference."
+  ],
+  "result_sha256": "21f9e1185486b9c938ad9216718878e08728b780e1a6813b578c4569cbcc4872",
+  "promotion_status": "NOT_PROMOTABLE; informs BASE/Harness test design only"
+}

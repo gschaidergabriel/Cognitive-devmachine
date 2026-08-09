@@ -1,13 +1,14 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "status": "ACTIVE",
   "last_reviewed_cycle": "ccauto-20260809T105416Z",
-  "current_focus": "restore the verified Andreas Ubuntu self-hosted execution transport and close BASE14 only through real target receipts; do not spend the autonomous critical path on further parser/model research unless the target run exposes a concrete compiler/runtime counterexample",
+  "current_focus": "close the newly selected WP02 V17 declarative trivia-safe grammar under strict interegular-enabled construction and admitted-corpus/canonicalizer checks, then continue fail-closed Andreas Ubuntu BASE14 target closure; do not widen language semantics unless a new executable counterexample survives the selected-grammar repair",
   "free_only": true,
   "provider_cooldowns": {},
   "blocked_capabilities": {
     "mistral_runtime": "CREDENTIAL_NOT_CONFIGURED_IN_AUTONOMOUS_RUNNER",
-    "andreas_target_execution": "SELF_HOSTED_RUNNER_NOT_YET_OBSERVED_ONLINE_OR_TARGET_RECEIPT_NOT_YET_COMMITTED"
+    "andreas_target_execution": "SELF_HOSTED_RUNNER_NOT_YET_OBSERVED_ONLINE_OR_TARGET_RECEIPT_NOT_YET_COMMITTED",
+    "wp02_target_promotion": "V17_SELECTED_BUT_STRICT_TARGET_RECEIPT_NOT_YET_PRESENT"
   },
   "verified_capabilities": {
     "nvidia_catalog_models": 100,
@@ -15,32 +16,36 @@
     "nvidia_code_embedding": "nvidia/nv-embedcode-7b-v1 RUNTIME_VERIFIED_IN_CYCLE",
     "nvidia_executable_model_families": ["nemotron", "deepseek", "glm", "gpt-oss"],
     "nvidia_verified_models": ["nvidia/nemotron-mini-4b-instruct", "z-ai/glm-5.2", "nvidia/nemotron-3-super-120b-a12b", "nvidia/nemotron-3-ultra-550b-a55b", "deepseek-ai/deepseek-v4-flash-0731", "openai/gpt-oss-120b"],
-    "strict_lalr_conflict_partition": "13 baseline shift/reduce conflicts causally localized: 6 ident_if + 6 ident_invariant + 1 nested-newline separator",
-    "minimal_repair_partial_evidence": "combined repair previously produced zero captured parser-table conflicts and representative parse equivalence; retain as historical evidence, not current release blocker",
+    "strict_lalr_conflict_partition": "historical baseline conflicts causally localized; retain as background evidence only",
     "andreas_runner_bootstrap": "FAIL_CLOSED_BOOTSTRAP_IMPLEMENTED_WITH_REGISTERED_FINGERPRINT_UBUNTU_X86_64_NON_CONTAINER_GH_AUTH_AND_ONLINE_RUNNER_CHECKS",
-    "andreas_target_autoprobe": "SELF_HOSTED_CANONICAL_CLOSURE_WORKFLOW_IMPLEMENTED_WITH_REAL_DESKTOP_AND_BASE14_VERDICT"
+    "andreas_target_autoprobe": "SELF_HOSTED_CANONICAL_CLOSURE_WORKFLOW_IMPLEMENTED_WITH_REAL_DESKTOP_AND_BASE14_VERDICT",
+    "wp02_v9_trivia_counterexample": "EXECUTABLE_COUNTEREXAMPLE: Needle.owns(X) versus Needle.owns (X) could diverge because dotted-prefix lookahead made horizontal trivia semantically active",
+    "wp02_selected_grammar": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+    "wp02_v17_selection_status": "SELECTED_BY_ACCEPTANCE_CONTRACT_NOT_PROMOTED",
+    "wp02_v16_sandbox_discriminator": "69/69 PASS including inherited 55/55 plus 14 RHS/scaling checks; strict dependency absent in that sandbox; does not count as WP02 or target PASS"
   },
   "model_family_history": [
     {"cycle": "ccauto-20260809T104300Z", "successful_role": "alternative", "model": "z-ai/glm-5.2", "family": "glm", "note": "First-cycle single-family success; retained as historical startup evidence."},
-    {"cycle": "ccauto-20260809T105416Z", "families": ["nemotron", "deepseek", "glm", "gpt-oss"], "status": "MULTI_FAMILY_SUCCESS", "note": "Provider/model pool is sufficient for research support, but model consensus is no longer the critical path."}
+    {"cycle": "ccauto-20260809T105416Z", "families": ["nemotron", "deepseek", "glm", "gpt-oss"], "status": "MULTI_FAMILY_SUCCESS", "note": "Provider/model pool is sufficient for research support; model agreement remains candidate evidence only."}
   ],
   "high_information_targets": [
+    "run strict selected-WP02 CI using the grammar path resolved from ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json, with lark[interegular] installed, and require zero strict conflict diagnostics",
+    "require selected V17 full admitted G9+Dialect frontend, canonicalizer, typed-IR and grammar-byte binding receipts; preserve the qualified owns call horizontal-trivia invariant and distinction from dotted-prefix relation",
+    "do not promote V17 from sandbox/model evidence; WP02 still requires the exact selected grammar bytes on the real Andreas Ubuntu target",
     "observe whether the repository-scoped Andreas self-hosted runner is online and consuming the latest-wins queued target workflow",
-    "if offline, use only the fail-closed local bootstrap on the registered Andreas Ubuntu host; never bypass fingerprint, Ubuntu/x86_64, non-container, gh-auth or desktop guards",
-    "run canonical Andreas target acceptance and preserve all negative receipts",
-    "require APP05 mapped real Ubuntu desktop proof, Full-FRANK H1/H2/H3, ten per-app target receipts, strict BASE acceptance and independent WP14 audit",
-    "promote BASE only if the manifest reports general_purpose_gate_pass=true and claycode_release_gate_pass=true, failed_work_packages empty, workspace 14/14 PASS and application acceptance 10/10",
-    "if target execution exposes a concrete compiler/runtime/semantic counterexample, route that exact failing receipt back to the smallest responsible ClayCode work package; otherwise do not reopen semantics or parser research"
+    "run canonical Andreas target acceptance and preserve all negative receipts, including APP05 real desktop and Full-FRANK H1/H2/H3 handoff",
+    "promote BASE only if strict WP02 target evidence, all 14 work packages, all 10 applications and independent WP14 audit pass",
+    "if selected V17 strict/admitted-corpus execution exposes another concrete semantic or parser counterexample, route that exact failing receipt to WP02; otherwise return immediately to physical target closure"
   ],
   "steering_notes": [
-    "Repository evidence after the last autonomous cycle supersedes the older parser-centric supervisor focus: implementation/orchestration has advanced to real-target closure tooling.",
-    "The remaining observable blocker is physical Andreas Ubuntu execution transport/runner availability plus the receipt-gated BASE14 closure, not model-family insufficiency.",
-    "The self-hosted bootstrap is fail-closed: registered target fingerprint, Ubuntu, x86_64, non-container, authenticated gh access and online repository-runner verification are mandatory before jobs can count.",
-    "The target workflow strips CI transport markers only after verified physical-host identity and still requires local target scripts to re-check their own gates.",
-    "Do not count hosted GitHub execution, model outputs, proxy sandboxes or provider consensus as Andreas-target evidence.",
-    "Do not modify Frank's Harness. Full-FRANK/H2/H3 evidence may be consumed as a gate, but Harness implementation authority remains separate.",
-    "Preserve FREE_ONLY. NVIDIA/Mistral research may assist diagnosis of a concrete target failure, but must not displace executable target evidence.",
-    "Mistral remains unavailable to the autonomous runner until its credential is reachable; this is no longer a release-critical blocker.",
-    "No BASE PASS is claimed by this steering update. Canonical semantics remain unchanged."
+    "A newly discovered executable semantic counterexample supersedes the previous instruction to avoid parser work entirely: V9/V10-style dotted-prefix lookahead could make horizontal whitespace change qualified-call semantics.",
+    "The acceptance contract now selects V17 as the minimal declarative trivia-safe successor. This is a targeted repair, not semantic widening, and remains NOT_PROMOTED until strict and target receipts exist.",
+    "The latest BASE frontend CI now resolves the selected WP02 grammar from the acceptance contract instead of hardcoding a version, reducing future grammar-identity drift.",
+    "Production canonicalizer validation now explicitly checks Needle.owns(X) == Needle.owns (X) == Needle.owns          (X), while Needle.owns X remains semantically distinct.",
+    "V16 sandbox evidence is useful discriminator evidence but interegular was absent there; it cannot satisfy strict WP02 or target acceptance.",
+    "Physical Andreas Ubuntu execution remains the final authority after selected-grammar strict closure. Hosted CI, sandbox, proxy and model consensus cannot satisfy target receipts.",
+    "Do not modify Frank's Harness. Consume Full-FRANK/H2/H3 evidence only as gate input.",
+    "Preserve FREE_ONLY and no paid fallback. Mistral credential absence remains non-release-critical.",
+    "No BASE PASS is claimed. WP01 remains the only formally closed workspace package until production/target receipts update the release workspace."
   ]
 }

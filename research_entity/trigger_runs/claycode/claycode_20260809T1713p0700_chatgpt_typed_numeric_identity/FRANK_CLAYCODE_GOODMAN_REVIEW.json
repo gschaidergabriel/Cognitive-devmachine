@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1713p0700_chatgpt_typed_numeric_identity",
+  "method":"GOODMAN_ANTI_ECHO",
+  "frank_derived_assumptions":[
+    {
+      "assumption":"Replay/provenance-sensitive FRANK state needs stable semantic identity across source, typed IR, lowering and replay.",
+      "independent_support":["RFC 8785 canonicalization exists specifically because hashes/signatures need invariant representations.","WebAssembly represents numeric types explicitly and encodes floating values by IEEE-754 bit patterns."],
+      "verdict":"REFINED",
+      "note":"External standards support deterministic typed representation as an engineering pattern, but do not validate FRANK's architecture or prove this exact ClayCode encoding."
+    },
+    {
+      "assumption":"Canonical JSON can be used directly as universal numeric semantic identity.",
+      "independent_support":["RFC 8785 restricts JSON numbers to IEEE-754 double, recommends strings for higher precision/longer integers, rejects NaN/Infinity and serializes negative zero as zero."],
+      "verdict":"REFUTED_FOR_UNIVERSAL_CLAY_NUMERIC_IDENTITY",
+      "note":"JCS may remain valid for a deliberately restricted transport/contract layer."
+    },
+    {
+      "assumption":"One deterministic binary encoding such as CBOR automatically resolves numeric semantics.",
+      "independent_support":["RFC 8949 deterministic encoding still requires protocol-level choices about integer-versus-float identity, negative zero and special floating values."],
+      "verdict":"REFINED",
+      "note":"A wire canonicalizer is subordinate to the ClayCode typed semantic contract, not a replacement for it."
+    },
+    {
+      "assumption":"Exact F64 bits are sufficient for all deterministic replay.",
+      "independent_support":["WebAssembly encodes float bit patterns directly but arithmetic NaN results may admit multiple payload/sign outcomes."],
+      "verdict":"REFUTED_AS_UNIVERSAL_ARITHMETIC_EQUIVALENCE",
+      "note":"Literal/value identity and arithmetic semantic-equivalence classes must be distinguished."
+    }
+  ],
+  "external_primary_sources":[
+    {"class":"RFC","ref":"RFC 8785 JSON Canonicalization Scheme","url":"https://www.rfc-editor.org/rfc/rfc8785.html"},
+    {"class":"RFC","ref":"RFC 8949 Concise Binary Object Representation","url":"https://www.rfc-editor.org/rfc/rfc8949.html"},
+    {"class":"specification","ref":"WebAssembly 3.0 binary values","url":"https://webassembly.github.io/spec/core/binary/values.html"},
+    {"class":"specification","ref":"WebAssembly numeric semantics","url":"https://webassembly.github.io/spec/core/exec/numerics.html"}
+  ],
+  "strongest_counterhypothesis":"Use an existing canonical format plus explicit string/tag wrappers for numbers, avoiding any Clay-specific numeric encoding beyond type metadata.",
+  "highest_information_test":"Implement two production canonicalizers behind the same typed IR oracle: minimal Clay typed tokens versus standard deterministic CBOR/JCS-with-wrappers; compare semantic identity, diagnostics, implementation complexity, bytes, latency, replay stability and native/Wasm lowering on the same Ubuntu corpus.",
+  "anti_echo_boundary":"Project worker results share ancestry and are not independent replication. Only external standards are treated as independent engineering analogues, not as validation of FRANK/Clay."
+}

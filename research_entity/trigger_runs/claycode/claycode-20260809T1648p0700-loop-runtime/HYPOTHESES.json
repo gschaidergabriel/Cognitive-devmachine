@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1648p0700-loop-runtime",
+  "hypotheses": [
+    {
+      "id": "H-CC-LOOP-001",
+      "status": "OPEN_SUPPORTED_NOT_PROMOTED",
+      "claim": "Generic structured recurrence/control flow plus existing typed ClayCode state/provenance/effect semantics is sufficient for the currently tested FRANK loop-of-loops requirements.",
+      "counterhypothesis": "A FRANK-specific loop primitive is required.",
+      "evidence": ["concurrent 2,000-case structured recurrence differential run", "current 250-case scheduler/budget probe"],
+      "falsifier": "A real H1 FRANK recurrence cannot be represented/lowered generically without semantic loss."
+    },
+    {
+      "id": "H-CC-LOOP-002",
+      "status": "OPEN_SUPPORTED_NOT_PROMOTED",
+      "claim": "Unordered/set-like coupled loop families require same-epoch snapshot reads or an equivalent deterministic semantic barrier to prevent accidental schedule-order dependence.",
+      "counterhypothesis": "In-place scheduler iteration is semantically harmless for such families.",
+      "evidence": ["all permutation snapshot equivalence PASS", "in-place mutation schedule dependence DETECTED"],
+      "falsifier": "Production translation validation shows order-independent semantics under in-place lowering for declared set-like loop families."
+    },
+    {
+      "id": "H-CC-LOOP-003",
+      "status": "OPEN_SUPPORTED_NOT_PROMOTED",
+      "claim": "Recurrence budget exhaustion must be represented as a resource/halt reason separate from successful convergence and can require escalation when residual pressure remains material.",
+      "counterhypothesis": "Budget exhaustion is a sufficient successful halt condition.",
+      "evidence": ["all budgets exhausted with state_delta=0.0 and residual=0.5690308937228293 -> STALLED/ESCALATE"],
+      "falsifier": "Representative H1 traces show exhausted budgets always coincide with correct low-residual task completion."
+    },
+    {
+      "id": "H-CC-LOOP-004",
+      "status": "OPEN_UNTESTED_ON_FRANK",
+      "claim": "Adaptive continuation policies outperform fixed recurrence budgets on selected FRANK loop families under matched outcome/cost/recovery evaluation.",
+      "counterhypothesis": "Ordinary fixed/event-driven scheduling is equal or better after complexity and latency are counted.",
+      "falsifier": "Matched H1 replay shows no outcome/cost/recovery advantage."
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "NR-CC-LOOP-INPLACE-ORDER-20260809",
+      "result": "In-place cross-loop reads changed results under loop-spec permutation in the tested set-like coupled update class.",
+      "implication": "Do not leave scheduler order implicit."
+    },
+    {
+      "id": "NR-CC-LOOP-BUDGET-CONVERGENCE-20260809",
+      "result": "Budget exhaustion plus zero next delta did not imply convergence; residual remained 0.5690308937228293.",
+      "implication": "Budget exhaustion must not map directly to successful HALT."
+    },
+    {
+      "id": "NR-CC-LOOP-PRIMITIVE-NOT-JUSTIFIED-20260809",
+      "result": "No current executable evidence requires a FRANK-specific loop primitive.",
+      "implication": "Continue BASE implementation with generic control-flow/runtime semantics."
+    }
+  ]
+}

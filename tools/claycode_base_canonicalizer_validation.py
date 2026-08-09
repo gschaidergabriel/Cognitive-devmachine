@@ -10,7 +10,9 @@ from lark.exceptions import UnexpectedInput
 import claycode_base_frontend as front
 
 ROOT = Path(__file__).resolve().parents[1]
-GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark"
+# Never hardcode an older grammar here: this receipt validates the grammar actually selected
+# by the production frontend. Candidate-specific strict/full-corpus gates remain separate.
+GRAMMAR = front.DEFAULT_GRAMMAR
 OUT = ROOT / "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json"
 
 
@@ -29,7 +31,8 @@ def run() -> dict:
 
     # Semantic operator/order mutations must remain distinguishable in this surface AST.
     gt = front.compile_frontend("module clay.demo\nlaw residual > 0\n", grammar)
-    result("operator_mutation_discriminated", a["semantic_hash"] != gt["semantic_hash"])
+    lt = front.compile_frontend("module clay.demo\nlaw residual < 0\n", grammar)
+    result("operator_mutation_discriminated", a["semantic_hash"] != gt["semantic_hash"] and gt["semantic_hash"] != lt["semantic_hash"])
     ordered_a = front.compile_frontend("module clay.demo\nrule external_effect lifecycle=[REQUESTED,AUTHORIZED,EXECUTED]\n", grammar)
     ordered_b = front.compile_frontend("module clay.demo\nrule external_effect lifecycle=[AUTHORIZED,REQUESTED,EXECUTED]\n", grammar)
     result("ordered_sequence_mutation_discriminated", ordered_a["semantic_hash"] != ordered_b["semantic_hash"])
@@ -66,8 +69,8 @@ def run() -> dict:
 
     failures = [x["name"] for x in checks if not x["pass"]]
     return {
-        "schema_version": "1.0",
-        "scope": "PRODUCTION_BASE_SURFACE_PARSER_CANONICALIZER",
+        "schema_version": "1.1",
+        "scope": "PRODUCTION_BASE_SURFACE_PARSER_CANONICALIZER_ACTIVE_GRAMMAR",
         "grammar": str(GRAMMAR.relative_to(ROOT)),
         "checks": checks,
         "passed": len(checks) - len(failures),

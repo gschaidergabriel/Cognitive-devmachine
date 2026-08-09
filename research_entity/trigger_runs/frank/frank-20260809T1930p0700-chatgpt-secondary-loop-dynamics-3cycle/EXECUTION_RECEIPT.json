@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1930p0700-chatgpt-secondary-loop-dynamics-3cycle",
+  "execution_class": "SUBSTANTIAL_FRANK_RESEARCH_TASK_NOT_EXACT_TRIGGER",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "cycles": 3,
+  "frank_change": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "a1f3604ee2f6075c316dfd6fb683c83b21547898",
+    "component": "harness/loop_dynamics_probe.py",
+    "semantic_version": "trajectory-probe-v1.4-proxy-safe",
+    "authority": "PROPOSAL_ONLY"
+  },
+  "local_validation": {
+    "environment": "ChatGPT hosted Linux/reference execution; not Andreas target Ubuntu",
+    "baseline_fixture_family": "PASS",
+    "trend_alias_regression": "PASS",
+    "stalled_history_proxy_fail_closed": "PASS",
+    "single_axis_growth_fail_closed": "PASS",
+    "readout_quality_fail_closed": "PASS",
+    "nonfinite_threshold_rejection": "PASS",
+    "diagnostic_stress_seed": 12345,
+    "diagnostic_stress_cases": 100000,
+    "pre_hardening_concern_cases": 17280,
+    "post_hardening_concern_cases": 0,
+    "stress_predicate": "unclassified + material growth on at least one tracked axis + CONTINUE from positive history-only proxy utility",
+    "incidence_claim": false
+  },
+  "concurrency": {
+    "stale_write": "409_CAS_REJECTED",
+    "resolution": "reread current file, preserve concurrent readout-quality and trend-safe cycle work, fuse only remaining proxy-safety delta"
+  },
+  "external_research": [
+    {"id":"arXiv:2607.20519","role":"trajectory/readout separation and adaptive-depth evidence"},
+    {"id":"arXiv:2604.07822","role":"recurrent-depth benefit plus overthinking evidence"},
+    {"id":"arXiv:1603.08983","role":"adaptive computation time foundation"}
+  ],
+  "hypotheses": [
+    {"id":"H-FRANK-LOOP-01","status":"OPEN"},
+    {"id":"H-FRANK-LOOP-02","status":"OPEN"},
+    {"id":"H-FRANK-LOOP-03","status":"OPEN_SUPPORTED_IMPLEMENTATION_HINT"},
+    {"id":"H-FRANK-LOOP-04","status":"OPEN"},
+    {"id":"H-FRANK-LOOP-05","status":"OPEN"},
+    {"id":"H-FRANK-LOOP-06","status":"OPEN"}
+  ],
+  "negative_or_limiting_evidence": [
+    "live local FRANK_UNIFIED.sqlite was not accessible from repository",
+    "final Frank commit had no associated GitHub workflow run when checked",
+    "target Ubuntu replay not executed",
+    "target 4B not executed",
+    "history-only tail utility is not a validated causal next-step utility estimate"
+  ],
+  "next_discriminator": "matched frozen-episode replay: fixed budget vs trend-safe pre-proxy policy vs v1.4 proxy-safe vs calibrated next-step marginal-utility controller, with outcome/cost/false-continue/false-route/recovery metrics",
+  "research_delta": "COMMITTED",
+  "scientific_promotion": "NONE",
+  "canonical_revision_bump": "NONE",
+  "h1_release_gate": "NOT_PASS"
+}

@@ -1,0 +1,532 @@
+{
+  "stage_id": "BASE_CLAYCODE_RELEASE",
+  "label": "BASE - ClayCode General-Purpose Compiler/Runtime",
+  "percent": 0.0,
+  "bar": "[....................]",
+  "progress_basis": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json:work_packages",
+  "denominator_state": null,
+  "eta": {
+    "low": 1.1199999999999999,
+    "high": 4.666666666666666,
+    "confidence": "LOW_UNTIL_FIRST_RELEASE_PACKAGES_CLOSE",
+    "basis": "bootstrap_stage_priors",
+    "hours_per_day": 10.0
+  },
+  "doomsday": {
+    "as_of": "2026-08-09",
+    "target": "DOOMSDAY / Clay 0.1",
+    "progress_percent": 25.6,
+    "forecast_low": "2026-08-22",
+    "forecast_high": "2026-10-02",
+    "forecast_center": "2026-09-11",
+    "confidence": "VERY_LOW",
+    "conditional_on_immediate_training_authorization": true,
+    "rows": [
+      {
+        "row_id": "L0_ARCHIVE_ASSIMILATION",
+        "label": "Level 0: rapid history assimilation + earned-work calibration incl. Retina learning lineage",
+        "progress_percent": 100.0,
+        "progress_basis": "stage_status_pass",
+        "remaining_days_low": 0.0,
+        "remaining_days_high": 0.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [],
+        "start_low": "2026-08-09T00:00:00",
+        "start_high": "2026-08-09T00:00:00",
+        "finish_low": "2026-08-09T00:00:00",
+        "finish_high": "2026-08-09T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "OWNER_FIXED_SLA_FEASIBILITY_UNCALIBRATED",
+        "applied_events": []
+      },
+      {
+        "row_id": "BASE_CLAYCODE_RELEASE",
+        "label": "ClayCode general-purpose compiler/runtime freeze incl. adaptive visual learner state expressibility",
+        "progress_percent": 0.0,
+        "progress_basis": "work_packages",
+        "remaining_days_low": 1.0,
+        "remaining_days_high": 4.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "L0_ARCHIVE_ASSIMILATION"
+        ],
+        "start_low": "2026-08-09T00:00:00",
+        "start_high": "2026-08-09T00:00:00",
+        "finish_low": "2026-08-10T00:00:00",
+        "finish_high": "2026-08-13T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "LOW_EXISTING_SEMANTICS_IMPLEMENTATION_HEAVY",
+        "applied_events": []
+      },
+      {
+        "row_id": "H1_REFERENCE_HARNESS",
+        "label": "Harness 1: reference multimodal FRANK + adaptive visual learner verification",
+        "progress_percent": 0.0,
+        "progress_basis": "work_packages",
+        "remaining_days_low": 2.0,
+        "remaining_days_high": 8.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "BASE_CLAYCODE_RELEASE"
+        ],
+        "start_low": "2026-08-10T00:00:00",
+        "start_high": "2026-08-13T00:00:00",
+        "finish_low": "2026-08-12T00:00:00",
+        "finish_high": "2026-08-21T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "LOW",
+        "applied_events": []
+      },
+      {
+        "row_id": "H2_CLAYCODE_HARNESS",
+        "label": "Harness 2: same multimodal + adaptive visual learning semantics in ClayCode",
+        "progress_percent": 0.0,
+        "progress_basis": "work_packages",
+        "remaining_days_low": 1.0,
+        "remaining_days_high": 4.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "H1_REFERENCE_HARNESS"
+        ],
+        "start_low": "2026-08-12T00:00:00",
+        "start_high": "2026-08-21T00:00:00",
+        "finish_low": "2026-08-13T00:00:00",
+        "finish_high": "2026-08-25T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "LOW",
+        "applied_events": []
+      },
+      {
+        "row_id": "H3_ONE_MODULE_BINARY_FRANK",
+        "label": "Harness 3: one-module/binary multimodal FRANK incl. dissolved Retina + adaptive visual learner",
+        "progress_percent": 0.0,
+        "progress_basis": "workspace_missing",
+        "remaining_days_low": 3.0,
+        "remaining_days_high": 10.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "H2_CLAYCODE_HARNESS"
+        ],
+        "start_low": "2026-08-13T00:00:00",
+        "start_high": "2026-08-25T00:00:00",
+        "finish_low": "2026-08-16T00:00:00",
+        "finish_high": "2026-09-04T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "VERY_LOW_FIRST_OF_KIND",
+        "applied_events": []
+      },
+      {
+        "row_id": "UDB_UNIFIED_DATABASE",
+        "label": "UnifiedDB final internal integration incl. adaptive visual learner persistence/version/rollback",
+        "progress_percent": 0.0,
+        "progress_basis": "workspace_missing",
+        "remaining_days_low": 2.0,
+        "remaining_days_high": 7.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "H3_ONE_MODULE_BINARY_FRANK"
+        ],
+        "start_low": "2026-08-16T00:00:00",
+        "start_high": "2026-09-04T00:00:00",
+        "finish_low": "2026-08-18T00:00:00",
+        "finish_high": "2026-09-11T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "LOW",
+        "applied_events": []
+      },
+      {
+        "row_id": "DATA_FINAL_TRAINING_CORPUS",
+        "label": "Final Clay 0.1 training + held-out corpus incl. familiarity/known/unknown/conflict visual interface",
+        "progress_percent": 0.0,
+        "progress_basis": "workspace_missing",
+        "remaining_days_low": 1.0,
+        "remaining_days_high": 5.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "UDB_UNIFIED_DATABASE"
+        ],
+        "start_low": "2026-08-18T00:00:00",
+        "start_high": "2026-09-11T00:00:00",
+        "finish_low": "2026-08-19T00:00:00",
+        "finish_high": "2026-09-16T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "LOW",
+        "applied_events": []
+      },
+      {
+        "row_id": "OWNER_TRAINING_RELEASE_GATE",
+        "label": "Owner authorization for final paid/model training",
+        "progress_percent": 0.0,
+        "progress_basis": "conditional_immediate_authorization_assumption",
+        "remaining_days_low": 0.0,
+        "remaining_days_high": 0.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "DATA_FINAL_TRAINING_CORPUS"
+        ],
+        "start_low": "2026-08-19T00:00:00",
+        "start_high": "2026-09-16T00:00:00",
+        "finish_low": "2026-08-19T00:00:00",
+        "finish_high": "2026-09-16T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "CONDITIONAL",
+        "applied_events": []
+      },
+      {
+        "row_id": "FINAL_MODEL_FINE_TUNE",
+        "label": "Final fully fine-tuned Clay-native model",
+        "progress_percent": 0.0,
+        "progress_basis": "workspace_missing",
+        "remaining_days_low": 1.0,
+        "remaining_days_high": 5.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "OWNER_TRAINING_RELEASE_GATE"
+        ],
+        "start_low": "2026-08-19T00:00:00",
+        "start_high": "2026-09-16T00:00:00",
+        "finish_low": "2026-08-20T00:00:00",
+        "finish_high": "2026-09-21T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "VERY_LOW_METHOD_NOT_FROZEN",
+        "applied_events": []
+      },
+      {
+        "row_id": "MODEL_EXPORT_RUNTIME_PACKAGE",
+        "label": "Model export / runtime package for internal build",
+        "progress_percent": 0.0,
+        "progress_basis": "workspace_missing",
+        "remaining_days_low": 0.5,
+        "remaining_days_high": 2.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "FINAL_MODEL_FINE_TUNE",
+          "H3_ONE_MODULE_BINARY_FRANK"
+        ],
+        "start_low": "2026-08-20T00:00:00",
+        "start_high": "2026-09-21T00:00:00",
+        "finish_low": "2026-08-20T12:00:00",
+        "finish_high": "2026-09-23T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "LOW",
+        "applied_events": []
+      },
+      {
+        "row_id": "CLAY_0_1_FULL_INTEGRATION",
+        "label": "Binary + dissolved Retina + adaptive visual learner + UnifiedDB + final model developer integration",
+        "progress_percent": 0.0,
+        "progress_basis": "workspace_missing",
+        "remaining_days_low": 1.0,
+        "remaining_days_high": 4.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "MODEL_EXPORT_RUNTIME_PACKAGE",
+          "UDB_UNIFIED_DATABASE"
+        ],
+        "start_low": "2026-08-20T12:00:00",
+        "start_high": "2026-09-23T00:00:00",
+        "finish_low": "2026-08-21T12:00:00",
+        "finish_high": "2026-09-27T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "VERY_LOW_FIRST_OF_KIND",
+        "applied_events": []
+      },
+      {
+        "row_id": "PROJECT_HARDWARE_DEPLOYMENT",
+        "label": "Run exact developer build on verified project hardware incl. adaptive visual learning overhead/benefit measurement",
+        "progress_percent": 0.0,
+        "progress_basis": "workspace_missing",
+        "remaining_days_low": 0.5,
+        "remaining_days_high": 3.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "CLAY_0_1_FULL_INTEGRATION"
+        ],
+        "start_low": "2026-08-21T12:00:00",
+        "start_high": "2026-09-27T00:00:00",
+        "finish_low": "2026-08-22T00:00:00",
+        "finish_high": "2026-09-30T00:00:00",
+        "capacity_basis_low": "active_project_hardware_assumed_capable_for_low_bound",
+        "capacity_basis_high": "high_bound_allows_expected_hardware_fallback",
+        "confidence": "LOW_HARDWARE_CAPABILITY_NOT_YET_BENCHMARKED",
+        "applied_events": []
+      },
+      {
+        "row_id": "CLAY_0_1_ACCEPTANCE_RUN",
+        "label": "Strict chief-developer first-test acceptance run incl. adaptive visual learner MVC-E1..E7",
+        "progress_percent": 0.0,
+        "progress_basis": "workspace_missing",
+        "remaining_days_low": 0.5,
+        "remaining_days_high": 2.0,
+        "effort_basis": "row_prior",
+        "event_factor": 1.0,
+        "capability_factor": 1.0,
+        "capability_choice": null,
+        "dependencies": [
+          "PROJECT_HARDWARE_DEPLOYMENT"
+        ],
+        "start_low": "2026-08-22T00:00:00",
+        "start_high": "2026-09-30T00:00:00",
+        "finish_low": "2026-08-22T12:00:00",
+        "finish_high": "2026-10-02T00:00:00",
+        "capacity_basis_low": null,
+        "capacity_basis_high": null,
+        "confidence": "LOW",
+        "applied_events": []
+      }
+    ],
+    "capabilities": [
+      {
+        "tool": "openalex_search",
+        "provider": "OpenAlex",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "L0_ARCHIVE_ASSIMILATION"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "arxiv_search",
+        "provider": "arXiv",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "CLAY_0_1_FULL_INTEGRATION",
+          "DATA_FINAL_TRAINING_CORPUS",
+          "L0_ARCHIVE_ASSIMILATION",
+          "UDB_UNIFIED_DATABASE"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "semantic_scholar_search",
+        "provider": "Semantic Scholar",
+        "status": "RUNTIME_VERIFIED_DEGRADED_SHARED_RATE_LIMIT",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "L0_ARCHIVE_ASSIMILATION"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "crossref_lookup",
+        "provider": "Crossref",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "L0_ARCHIVE_ASSIMILATION"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "tavily_search",
+        "provider": "Tavily",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "L0_ARCHIVE_ASSIMILATION"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "duckduckgo_search",
+        "provider": "DuckDuckGo/DDGS",
+        "status": "RUNTIME_VERIFIED",
+        "state": "NO_DIRECT_PATH_IMPACT",
+        "relevant_rows": [],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "exa_search",
+        "provider": "Exa",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "L0_ARCHIVE_ASSIMILATION"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "e2b_sandbox",
+        "provider": "E2B",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "CLAY_0_1_FULL_INTEGRATION",
+          "H1_REFERENCE_HARNESS",
+          "H2_CLAYCODE_HARNESS",
+          "H3_ONE_MODULE_BINARY_FRANK"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "judge0_execute",
+        "provider": "Judge0",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "CLAY_0_1_FULL_INTEGRATION",
+          "H1_REFERENCE_HARNESS",
+          "H2_CLAYCODE_HARNESS",
+          "H3_ONE_MODULE_BINARY_FRANK"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "piston_execute",
+        "provider": "Piston",
+        "status": "ADAPTER_READY_HOSTED_CREDENTIAL_UNAVAILABLE",
+        "state": "POTENTIAL_UNVERIFIED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "CLAY_0_1_FULL_INTEGRATION",
+          "H1_REFERENCE_HARNESS",
+          "H2_CLAYCODE_HARNESS",
+          "H3_ONE_MODULE_BINARY_FRANK"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "huggingface_inference",
+        "provider": "Hugging Face Inference Providers",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "CLAY_0_1_FULL_INTEGRATION",
+          "DATA_FINAL_TRAINING_CORPUS",
+          "FINAL_MODEL_FINE_TUNE",
+          "MODEL_EXPORT_RUNTIME_PACKAGE",
+          "UDB_UNIFIED_DATABASE"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "groq_inference",
+        "provider": "Groq",
+        "status": "RUNTIME_VERIFIED",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "CLAY_0_1_FULL_INTEGRATION",
+          "DATA_FINAL_TRAINING_CORPUS",
+          "FINAL_MODEL_FINE_TUNE",
+          "MODEL_EXPORT_RUNTIME_PACKAGE"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "nvidia_nim",
+        "provider": "NVIDIA Hosted NIM / API Catalog",
+        "status": "RUNTIME_VERIFIED_PARTIAL",
+        "state": "NO_DIRECT_PATH_IMPACT",
+        "relevant_rows": [],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "openrouter_inference",
+        "provider": "OpenRouter",
+        "status": "RUNTIME_VERIFIED_PARTIAL",
+        "state": "ACTIVE_UNCALIBRATED",
+        "relevant_rows": [
+          "CLAY_0_1_FULL_INTEGRATION",
+          "DATA_FINAL_TRAINING_CORPUS",
+          "FINAL_MODEL_FINE_TUNE",
+          "MODEL_EXPORT_RUNTIME_PACKAGE"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "sandboxapi_sandbox",
+        "provider": "SandboxAPI via RapidAPI",
+        "status": "BLOCKED_NOT_SUBSCRIBED",
+        "state": "POTENTIAL_UNVERIFIED",
+        "relevant_rows": [
+          "BASE_CLAYCODE_RELEASE",
+          "CLAY_0_1_FULL_INTEGRATION",
+          "H1_REFERENCE_HARNESS",
+          "H2_CLAYCODE_HARNESS",
+          "H3_ONE_MODULE_BINARY_FRANK"
+        ],
+        "calibrated_impacts": []
+      },
+      {
+        "tool": "together_ai",
+        "provider": "Together AI",
+        "status": "OWNER_REPORTED_CREDENTIAL_AVAILABLE_NOT_RUNTIME_VERIFIED",
+        "state": "POTENTIAL_UNVERIFIED",
+        "relevant_rows": [
+          "CLAY_0_1_FULL_INTEGRATION",
+          "DATA_FINAL_TRAINING_CORPUS",
+          "FINAL_MODEL_FINE_TUNE",
+          "MODEL_EXPORT_RUNTIME_PACKAGE"
+        ],
+        "calibrated_impacts": []
+      }
+    ],
+    "accepted_events": [],
+    "rejected_events": [],
+    "scope_center_days": 33.98,
+    "remaining_scope_progress_percent": 0.7,
+    "historical_baseline_percent": 25.1,
+    "historical_progress_basis": "evidence_mapped_historical_earned_work",
+    "historical_calibrating": false,
+    "historical_calibration_band_percent": null,
+    "historical_status": "FINAL_EVIDENCE_MAPPED_AFTER_LEVEL0_AUDIT",
+    "bar": "[#####...............]"
+  }
+}

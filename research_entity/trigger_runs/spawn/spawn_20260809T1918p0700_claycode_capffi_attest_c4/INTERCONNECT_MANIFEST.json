@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1918p0700_claycode_capffi_attest_c4",
+  "origin_branch": "claycode",
+  "canonical_parent": "r2/04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "coverage": {
+    "registered_peer_branches": [
+      "clayresearch",
+      "frank",
+      "gwt",
+      "emergenz",
+      "claycode",
+      "hyperposition",
+      "claygraph",
+      "unifieddb",
+      "harness"
+    ],
+    "all_peers_considered": true,
+    "priority": "claycode: frank -> clayresearch -> harness -> claygraph -> unifieddb -> gwt -> hyperposition -> emergenz -> claycode history"
+  },
+  "cross_branch_dependencies": [
+    {
+      "branch": "frank",
+      "relevance": "FRANK target effects must remain mediated by live runtime authority; Harness/compiler acceptance needs evidence that exact runtime semantics were executed."
+    },
+    {
+      "branch": "harness",
+      "relevance": "Harness is the primary executable discriminator and must consume verified execution receipts rather than workflow definitions or optimistic labels."
+    },
+    {
+      "branch": "unifieddb",
+      "relevance": "Gate state should be stored as append-only evidence-backed transitions, preserving DEFINED/QUEUED/RUNNING/EXECUTED/VERIFIED/ADMITTED distinctions and source/material identities."
+    },
+    {
+      "branch": "claygraph",
+      "relevance": "Receipt/provenance links may be graph-projected for retrieval, but graph activation or connectivity must never promote gate truth."
+    },
+    {
+      "branch": "gwt",
+      "relevance": "Workspace selection may surface gate evidence but cannot convert relevance/broadcast into release truth or effect authority."
+    },
+    {
+      "branch": "emergenz",
+      "relevance": "Intervention/replay measurements need exact executable artifact and harness identities so a changed build is not misread as a causal system effect."
+    },
+    {
+      "branch": "hyperposition",
+      "relevance": "Before verification, multiple possible execution/admission states may remain explicit; uncertainty must not collapse into PASS."
+    },
+    {
+      "branch": "clayresearch",
+      "relevance": "Whole-system semantic fabric should preserve orthogonality of truth, provenance, authority and execution evidence."
+    },
+    {
+      "branch": "claycode",
+      "relevance": "Direct current BASE blocker: runtime ABI/FFI and compiler gates require proof-carrying, exact-digest execution receipts without adding new core syntax."
+    }
+  ],
+  "contradiction_scan": [
+    {
+      "id": "C-STATUS-COLLAPSE",
+      "status": "FOUND",
+      "description": "Current commit wording says execute/gate while inspected repository evidence shows workflow definitions without the declared receipt files. Treating commit title or workflow presence as execution would conflict with the project's work-plan != execution and receipt-gated acceptance laws."
+    },
+    {
+      "id": "C-VERSION-DRIFT",
+      "status": "FOUND_AS_RISK_NOT_PROVEN_SEMANTIC_FAILURE",
+      "description": "Freeze/front-end/typed-IR artifacts reference different grammar generations. Exact material digests are therefore required in execution receipts; no semantic mismatch is claimed without a differential counterexample."
+    },
+    {
+      "id": "C-PROVENANCE-AUTHORITY",
+      "status": "NO_CONTRADICTION_IF_SEPARATED",
+      "description": "Build/test attestation is provenance/evidence, while CapabilityHandle is live execution authority. Existing ClayCode laws already require this separation."
+    },
+    {
+      "id": "C-HOST-SCOPE",
+      "status": "FOUND_AS_ACCEPTANCE_BOUNDARY",
+      "description": "Hosted Ubuntu CI is useful regression evidence but current project state explicitly requires Andreas Ubuntu developer-host acceptance; receipt scope must preserve that distinction."
+    }
+  ],
+  "ancestry_guard": {
+    "repo_gate_observations_are_independent_replication": false,
+    "reason": "WP03 and runtime workflows share repository/governance/workflow ancestry. Their recurrence strengthens the operational risk observation but does not create independent scientific replication.",
+    "external_sources_support": "problem decomposition and attestation/capability boundary only"
+  }
+}

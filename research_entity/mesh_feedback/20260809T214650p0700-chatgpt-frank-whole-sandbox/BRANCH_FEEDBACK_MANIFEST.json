@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-frank-whole-sandbox-20260809T214650p0700",
+  "created_at": "2026-08-09T21:46:50+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "frank_main_head_observed": "d6b798f45ac1b6e1c2c0e4be381724bee02e7c15",
+  "epistemic_status": "SANDBOX_EXECUTION_EVIDENCE_WITH_OPEN_BLOCKERS",
+  "scope_guard": "Development evidence for the sandbox only. This is not F6/F7/F8/F9 release acceptance and not a target-machine receipt.",
+  "sandbox_receipt": {
+    "receipt_id": "FRANK-SANDBOX-WHOLE-INTEGRATION-2026-08-09-A",
+    "sha256": "1c68145ed4ed6d69eb90c6a5b311d095327c3c7bfe3e4bc4ccfbf1069e32bf77",
+    "bundle_sha256": "57cdc7ed811ad5bd7437312babdde70b2a2991dfe0b1ccb5248af403c04c898b",
+    "tests": "7/7 PASS",
+    "stress_cycles": 1200,
+    "organ_receipts": 37200,
+    "named_organ_contracts": "31/31",
+    "individual_lesion_handles": "31/31",
+    "max_recurrence_observed": 6,
+    "vertical_path": "F7 boot receipt -> integrated organ loop -> GRT/Hyperposition -> F6 mock adapter -> visible response -> response_analyzer feedback/re-entry",
+    "sqlite": ["integrity", "foreign_keys", "WAL reader/writer snapshot", "checkpoint"],
+    "f6_security_replay": ["remote fail closed", "HTTP/HTTPS only", "endpoint userinfo forbidden", "redirect destination not reached", "hidden reasoning not persisted"]
+  },
+  "negative_results": [
+    {
+      "id": "NEG-SBX-THALAMUS-SEQUENTIAL-RESCUE-CONFOUND",
+      "result": "Sequential lesion then rescue with repeated stimulus changed habituation, invalidating the causal comparison.",
+      "repair": "Matched counterfactual branches from the same snapshot."
+    },
+    {
+      "id": "NEG-SBX-GWT-CONTROL-STIMULUS-NONIGNITION",
+      "result": "Initial matched control stimulus did not ignite under accumulated state.",
+      "repair": "Calibrate a shared-control input that demonstrably ignites before lesion/rescue comparison."
+    },
+    {
+      "id": "NEG-SBX-PROCESSLOCAL-LESION-EFFECT-LEAK",
+      "result": "global_workspace_processlocal_ancestor was marked inactive but retained a historical-effect string.",
+      "repair": "Make inactive receipt effect explicit LESIONED; rerun all 31 individual lesions PASS."
+    }
+  ],
+  "current_external_evidence": [
+    {
+      "class": "PRIMARY_LITERATURE",
+      "ref": "arXiv:2604.07822",
+      "use": "supports measuring useful recurrence separately from excessive recurrence/overthinking"
+    },
+    {
+      "class": "AUTHORITATIVE_DOCUMENTATION",
+      "ref": "sqlite.org/wal.html",
+      "use": "supports WAL reader/writer snapshot and checkpoint tests"
+    }
+  ],
+  "current_cross_worker_deltas": [
+    {
+      "frank_commit": "2c8ec51806d301e574a3160582c224446461305f",
+      "delta": "F6 endpoint boundary hardened; independently replayed in ChatGPT sandbox PASS."
+    },
+    {
+      "frank_commits": ["678a8e80f6c6e0cd0ab21677a0feb04c9ab7c702", "bf9c1fa03efe3d5bb216bdb70ecdd591646a1897"],
+      "delta": "34 recovered technical legacy modules now have lineage and successor probes on main; this improves ancestry coverage but is not yet an exact deduplicated 74-item proof."
+    },
+    {
+      "frank_commits": ["1b80ec0f55689c390dc7d8fc68d24f08d54322bf", "c4218e60d90e00ff0d332ca16064d92643e9be50", "d6b798f45ac1b6e1c2c0e4be381724bee02e7c15"],
+      "delta": "Schema migration chains made atomic per physical DB and regression/CI added."
+    }
+  ],
+  "open_blockers": [
+    {
+      "id": "FRANK-SCHEMA-ADMISSION-V12-V13",
+      "status": "OPEN",
+      "evidence": "Current apply_current_schema loads V13 and harness requires research_bug_reports; APPLIED_SCHEMA_MANIFEST_REQUIRED and repo_truth_gate still require UnifiedDB 12.0.",
+      "next_test": "Reconcile admission semantics and execute disposable full migration + harness + truth-gate regression before any canonical migration."
+    },
+    {
+      "id": "FRANK-ANCESTRY-74-COVERAGE",
+      "status": "PARTIAL",
+      "evidence": "Empirical ancestry reports 74 services/modules; 31 organ contracts are explicit and main now conserves 34 recovered technical modules, but overlap and exact residual identities are not yet proven as one 74-item provenance manifest.",
+      "next_test": "History-derived exact inventory with deduplication and machine-readable 74-item coverage receipt; never infer missing names."
+    },
+    {
+      "id": "FRANK-F6-REAL-MODEL",
+      "status": "OPEN",
+      "next_test": "Run real local candidate model(s) through F6 evaluation on the target Ubuntu developer system."
+    },
+    {
+      "id": "FRANK-F7-F8-RELEASE",
+      "status": "OPEN",
+      "next_test": "Clean-install/service lifecycle/recovery plus target-host vertical E2E; sandbox PASS is not release acceptance."
+    }
+  ],
+  "research_center_work_events_created": [
+    "work:frank-v01-v13-schema-admission-reconcile",
+    "work:frank-v01-reconstruct-legacy-74-module-inventory",
+    "work:frank-v01-independent-whole-frank-sandbox-replay"
+  ],
+  "branches": {
+    "frank": {"receipt": "FEEDBACK", "delta": "Sandbox supports one integrated loop-of-loops kernel with preserved organ lineage, explicit receiver closure, bounded recurrence and causal outcome re-entry. Continue integrating current main changes into this vertical path without restoring historical process boundaries.", "required_next_test": "Independent replay on fresh current main plus exact 74 ancestry coverage and V13 admission reconciliation."},
+    "gwt": {"receipt": "FEEDBACK", "delta": "Receiver addressability was separated from delivered/reconstructed/used/effect/re-entry receipts; lesion/rescue is matched-counterfactual rather than sequential.", "required_next_test": "Truthful-vs-shuffled re-entry and receiver lesion/rescue across matched episodes."},
+    "emergenz": {"receipt": "FEEDBACK", "delta": "Recurrence and GWT closure remain observable mechanisms, not emergence truth; preserve nulls and negative results.", "required_next_test": "Factorial recurrence x truthful-reentry x lesion/rescue with outcome and stability controls."},
+    "unifieddb": {"receipt": "FEEDBACK", "delta": "Sandbox WAL snapshot/checkpoint and FK/integrity tests pass; current Frank repo has unresolved V12/V13 admission semantics despite newly atomic migration chains.", "required_next_test": "Disposable full-chain V13 admission test with fail-closed mismatched-state controls."},
+    "claygraph": {"receipt": "FEEDBACK", "delta": "Integrated cycle keeps alternative lineage and effect authority separate from activation; no truth promotion from graph/workspace use.", "required_next_test": "Epoch-bound dynamic topology perturbation and stale-edge controls."},
+    "hyperposition": {"receipt": "FEEDBACK", "delta": "Multiple alternatives persist through selection and are included in the vertical sandbox cycle.", "required_next_test": "Matched branch-reopening versus destructive collapse under stalled trajectories."},
+    "claycode": {"receipt": "FEEDBACK", "delta": "The executable sandbox contract now exposes state, organ receipts, recurrence budget, GWT closure, interventions and causal credit as a compact integration target.", "required_next_test": "Represent the same contract in current ClayCode typed IR without weakening authority/rollback invariants."},
+    "harness": {"receipt": "FEEDBACK", "delta": "7/7 sandbox master regression PASS_WITH_OPEN_BLOCKERS; 1200-cycle stress and 31/31 individual lesions pass after one real lesion-semantics bug was found and fixed.", "required_next_test": "Independent fresh-main replay and differential comparison."},
+    "clayresearch": {"receipt": "FEEDBACK", "delta": "Cross-worker mainline changes were consumed during the run rather than frozen: F6 security, legacy module conservation and migration atomicity all changed the active test surface.", "required_next_test": "Fuse independent replay, schema admission outcome and exact ancestry inventory; preserve disagreements until receipts decide."}
+  },
+  "research_write_result": "EXPLICIT_SANDBOX_EVIDENCE_AND_BLOCKERS_RETURNED_TO_RESEARCH_MESH",
+  "promotion": "NONE_AUTOMATIC"
+}

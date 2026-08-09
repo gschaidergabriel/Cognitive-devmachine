@@ -1,0 +1,42 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1340p0700-chatgpt-secondary-pf-persona-authority",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"persona loading, prompt assembly and tool-policy authority boundary"},
+  "source_refs":[
+    "personality/personality.py@abba90a5767d85abc8a1ac340bae92842dab35c1#blob:98f54d24e2940023b90fb91d448e1d0e9f4c060e",
+    "personality/frank.persona.json@abba90a5767d85abc8a1ac340bae92842dab35c1#blob:e1d040d9ba725588f702ba567db4e02f2bfc214b"
+  ],
+  "mechanisms":[
+    {"id":"PF-PERSONA-001","mechanism":"Versioned hot-reload persona","detail":"Persona JSON is validated, hashed, cached as last-known-good, hot-reloadable and used to assemble deterministic prompt sections plus runtime/self-knowledge context."},
+    {"id":"PF-PERSONA-002","mechanism":"Prompt-level tool policy","detail":"frank.persona.json declares default allow, explicit allow, ask_before and deny lists; personality.py exposes is_tool_allowed as the policy decision helper."},
+    {"id":"PF-PERSONA-003","mechanism":"Last-known-good persona fallback","detail":"Invalid/unreadable persona state can fall back to in-memory or cached last-known-good instead of taking the identity layer down."}
+  ],
+  "negative_results":[
+    {"id":"PF-PERSONA-FAIL-001","result":"is_tool_allowed() reads deny, allow and default but never reads or enforces tool_policy.ask_before.","impact":"With default='allow', configured ask-before operations such as smc.execute, fs.write, fs.delete and fs.move return allowed unless another external gate independently intercepts them. The persona policy itself therefore does not implement its declared approval boundary.","class":"STATIC_CONTROL_FLOW_PROOF"},
+    {"id":"PF-PERSONA-FAIL-002","result":"Allow/deny entries are tested with tool_name.startswith(pattern.rstrip('*')) even when the configured pattern contains no wildcard.","impact":"Exact-looking policy entries act as prefixes; sibling tool names beginning with an allowed token can be accepted more broadly than the JSON presentation implies.","class":"STATIC_CONTROL_FLOW_PROOF"},
+    {"id":"PF-PERSONA-FAIL-003","result":"The assembled system prompt is truncated by raw character slice when exceeding MAX_PROMPT_LENGTH.","impact":"A prompt may be cut mid-section or mid-rule without semantic boundary validation; depending on profile/section ordering, late constraints/context can be partially lost while the prompt remains syntactically usable to the model.","class":"STATIC_CODE_PROPERTY"},
+    {"id":"PF-PERSONA-FAIL-004","result":"Persona self_model/capability claims are declared in static JSON independently of live capability health.","impact":"Identity narrative and operational truth can diverge. A capability claim must not itself authorize an effect or prove a live sensor/tool exists.","class":"AUTHORITY_DRIFT_RISK"}
+  ],
+  "current_inheritance":[
+    {"target":"Needle / effect authority","delta":"Approval/capability gates must live outside prompt/persona semantics and be enforced by exact typed authority contracts. 'ask_before' must be a first-class outcome, not collapsed into Boolean allow."},
+    {"target":"ClayCode","delta":"Tool/effect policy should return DENY|REQUIRE_APPROVAL|ALLOW with exact or explicitly wildcarded match semantics; model/prompt text cannot confer authority."},
+    {"target":"Harness","delta":"Regressionize ask_before fall-through under default allow, prefix overmatching, malformed/unknown tool names, and prompt truncation at every section boundary."},
+    {"target":"FRANK","delta":"Keep persona/identity projection separate from runtime capability registry and external capability tokens. Last-known-good identity fallback is reusable; last-known-good authority must never silently widen permissions."},
+    {"target":"UnifiedDB","delta":"Persist policy version/hash, decision class, matched rule, approval receipt/capability token and final verified effect separately for replay."},
+    {"target":"Retina","delta":"Vision/self-description in persona is declarative context only. Sensor health and classifier calibration must be verified through runtime receipts before visual claims influence action authority."}
+  ],
+  "cheap_discriminating_tests":[
+    "Set policy default=allow and put fs.write only in ask_before; assert decision is REQUIRE_APPROVAL, never ALLOW.",
+    "Allow fs.read exactly and query fs.read_secret; assert no match unless an explicit wildcard was configured.",
+    "Construct a full persona prompt that exceeds MAX_PROMPT_LENGTH at each section boundary; assert safety/authority contracts cannot be silently truncated.",
+    "Mark a persona capability present while its service is unhealthy; assert effect authority remains absent and the user-facing self-model reports degraded capability."
+  ],
+  "earned_work":{"new_credit_hours":0.0,"mapping_candidate":true,"reason":"High-value authority-boundary negative result; reusable only after dedup against existing safety/authority Level-0 shards and current Needle capability-token architecture."},
+  "level0_effect":{"exact_global_percent_added":0.0,"reason":"Two additional frozen-head semantic/code units analyzed; recursive PF tree/history denominator remains unfrozen."},
+  "status":"COMPLETE_SEMANTIC_CODE_SHARD",
+  "created_at":"2026-08-09T13:40:00+07:00"
+}

@@ -1,6 +1,6 @@
 module clay.stack.latest
 
-epoch 14
+epoch 15
 entity frank-project-global-research-entity
 display_name Clay
 mission_goal "Frank v0.1 voll lauffähig auf Andreas PC"
@@ -21,6 +21,7 @@ stack CURRENT {
   gwt_emergence_control_directive=@research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md
   research_center_shared_mission=@research_entity/global/RESEARCH_CENTER_SHARED_SEMANTIC_FABRIC_MISSION.md
   frank_self_observation_boundary=@research_entity/global/FRANK_SELF_OBSERVATION_PROPOSAL_BOUNDARY.md
+  frank_identity_boundary=@research_entity/global/FRANK_IDENTITY_BOUNDARY_AND_CONTAMINATION_REPAIR.md
 
   claygraph_base=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
   claygraph_migrations=[@research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql]
@@ -72,7 +73,7 @@ rule system_capability_observation uses CURRENT.capability_events
 rule dynamic_work_transport uses CURRENT.work_events
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
-rule every_research_worker uses CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary
+rule every_research_worker uses CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary
 rule every_substantive_room_run contributes branch_local_shared_mission_delta_or_evidence_backed_NO_CHANGE
 rule ClayCode makes semantic_dependencies_machine_extractable
 rule UnifiedDB maintains canonical_semantic_dependency_fabric incrementally
@@ -88,6 +89,11 @@ rule FRANK_self_harness_proposal always ORIGIN=FRANK_SELF_OBSERVATION + AUTHORIT
 rule FRANK never applies_patches_migrations_promotions_or_delegated_self_harness_changes
 rule ambiguous_FRANK_runtime_adaptation_vs_harness_change -> PROPOSAL_ONLY
 rule ResearchEntity independently_reviews_rejects_refines_tests_and_authorizes_FRANK_originated_proposals
+rule FRANK.personal_entity_id = "dr-unterweger-frank-personal-entity"
+rule FRANK.human = "Dr. Andreas Unterweger"
+rule Clay.project_owner.Gabriel != FRANK.human
+rule provider_or_repository_identity cannot_coerce FRANK.human
+rule identity_contamination -> quarantine + dependency_invalidation + projection_rebuild
 rule Claude_delegation uses CURRENT.chatgpt_delegation
 rule Claude_local_verified_execution_receipt = primary_operational_truth_for_exact_local_effect
 rule Claude_opinion != truth
@@ -120,6 +126,10 @@ invariant semantic_simultaneity_uses_coherent_epochs_not_zero_physical_time_clai
 invariant FRANK_self_observation_and_proposal_generation_is_allowed
 invariant FRANK_direct_or_indirect_self_harness_modification_is_forbidden
 invariant FRANK_self_proposal_authority_never_exceeds_PROPOSAL_ONLY
+invariant FRANK_human_is_Dr_Andreas_Unterweger
+invariant Gabriel_and_Andreas_are_distinct_person_entities
+invariant Clay_project_owner_identity_never_overrides_FRANK_personal_human_identity
+invariant graph_association_or_semantic_coupling_never_merges_person_identity
 invariant Frank_and_Clay_are_separate_entities
 invariant Frank_never_mutates_Clay_repo
 invariant ChatGPT_delegation_results_return_to_shared_Clay_state

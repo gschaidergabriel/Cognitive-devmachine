@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.1",
+  "event_id": "center-claycode-native-20260809T1307+0700",
+  "room_id": "center",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary:20260809T1307+0700",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "none",
+  "created_at": "2026-08-09T13:07:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "stack_epoch": 8,
+  "affects_rooms": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness", "center", "intake"],
+  "affects_claims": [],
+  "dependencies": [
+    "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+    "research_entity/global/RAE_TURN_KERNEL.clay",
+    "research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay",
+    "research_entity/rooms/ROOM_DB_SCHEMA.json"
+  ],
+  "artifact_refs": [
+    "research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay"
+  ],
+  "ancestry_family": "PROJECT_OWNER_DIRECTIVE_2026-08-09_RESEARCH_CENTER_CLAYCODE",
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "payload_clay": "cross{id:center-claycode-native;from:center;to=[clay,frank,gwt,emergenz,claycode,hyperposition,claygraph,unifieddb,harness,intake];impact=\"all machine room coordination uses CURRENT.claycode; JSON/Git envelope only; room current state via CURRENT.unifieddb; associative topology via CURRENT.claygraph\";e=[@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay,@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay];delivery=INTERRUPT_NEXT_SAFE_POINT}"
+}

@@ -20,6 +20,8 @@ class RuntimeContractTests(unittest.TestCase):
     def test_flat_schema_preserved(self):
         src=[{"name":"get_weather","parameters":{"location":{"type":"string","required":True}}}]
         nt,c=canonicalize_tools(src,AliasProfile({},{})); self.assertEqual(set(nt[0]["parameters"]),{"location"}); self.assertEqual(c["get_weather"]["required"],["location"])
+    def test_required_absent_from_properties_fails(self):
+        with self.assertRaises(NeedleAdapterError): canonicalize_tools([{"name":"x","parameters":{"type":"object","properties":{},"required":["missing"]}}],AliasProfile({},{}))
     def test_zero_arg(self):
         nt,c=canonicalize_tools([{"name":"ping","parameters":{}}],AliasProfile({},{})); self.assertTrue(validate_output('[{"name":"ping","arguments":{}}]',nt,c,AliasProfile({},{})).accepted)
     def test_no_tool(self):
@@ -35,11 +37,21 @@ class RuntimeContractTests(unittest.TestCase):
         t=next(t for t in self.tools if t["name"]=="list_capabilities"); args={k:"x" for k in t["parameters"]}; r=validate_output(json.dumps([{"name":"list_capabilities","arguments":args}]),self.tools,self.contract); self.assertTrue(r.accepted); self.assertEqual(r.frank_calls[0]["name"],"moeglichkeiten")
     def test_malformed_json_rejected(self): self.assertFalse(validate_output('[{"name":',self.tools,self.contract).accepted)
     def test_top_level_dict_rejected(self): self.assertFalse(validate_output('{"name":"x","arguments":{}}',self.tools,self.contract).accepted)
+    def test_duplicate_name_key_rejected(self):
+        self.assertFalse(validate_output('[{"name":"evil","name":"calc","arguments":{"expression":"2+2"}}]',self.tools,self.contract).accepted)
+    def test_duplicate_argument_key_rejected(self):
+        self.assertFalse(validate_output('[{"name":"calc","arguments":{"expression":"2+2","expression":"rm -rf /"}}]',self.tools,self.contract).accepted)
+    def test_nan_rejected(self):
+        src=[{"name":"set_n","parameters":{"type":"object","properties":{"n":{"type":"number"}},"required":["n"]}}]; nt,c=canonicalize_tools(src,AliasProfile({},{})); self.assertFalse(validate_output('[{"name":"set_n","arguments":{"n":NaN}}]',nt,c,AliasProfile({},{})).accepted)
+    def test_infinity_rejected(self):
+        src=[{"name":"set_n","parameters":{"type":"object","properties":{"n":{"type":"number"}},"required":["n"]}}]; nt,c=canonicalize_tools(src,AliasProfile({},{})); self.assertFalse(validate_output('[{"name":"set_n","arguments":{"n":Infinity}}]',nt,c,AliasProfile({},{})).accepted); self.assertFalse(validate_output('[{"name":"set_n","arguments":{"n":1e999}}]',nt,c,AliasProfile({},{})).accepted)
     def test_extra_call_fields_rejected(self):
         t=next(t for t in self.tools if not t["parameters"]); self.assertFalse(validate_output(json.dumps([{"name":t["name"],"arguments":{},"authority":"RUN"}]),self.tools,self.contract).accepted)
     def test_type_validation(self):
         src=[{"name":"set_n","parameters":{"type":"object","properties":{"n":{"type":"integer"},"ok":{"type":"boolean"}},"required":["n","ok"]}}]
         nt,c=canonicalize_tools(src,AliasProfile({},{})); self.assertTrue(validate_output('[{"name":"set_n","arguments":{"n":3,"ok":true}}]',nt,c,AliasProfile({},{})).accepted); self.assertFalse(validate_output('[{"name":"set_n","arguments":{"n":"3","ok":true}}]',nt,c,AliasProfile({},{})).accepted)
+    def test_unknown_schema_type_rejected(self):
+        src=[{"name":"x","parameters":{"type":"object","properties":{"v":{"type":"mystery"}},"required":["v"]}}]; nt,c=canonicalize_tools(src,AliasProfile({},{})); self.assertFalse(validate_output('[{"name":"x","arguments":{"v":"a"}}]',nt,c,AliasProfile({},{})).accepted)
     def test_name_collision_fails(self):
         with self.assertRaises(NeedleAdapterError): canonicalize_tools([{"name":"foo-bar","parameters":{}},{"name":"foo_bar","parameters":{}}],AliasProfile({},{}))
     def test_param_alias_collision_fails(self):
@@ -49,6 +61,8 @@ class RuntimeContractTests(unittest.TestCase):
     def test_budget_exact(self): self.assertEqual(assert_complete_encoder_budget(100,700,1024,200),801)
     def test_budget_fail_closed(self):
         with self.assertRaises(NeedleAdapterError): assert_complete_encoder_budget(100,800,1024,200)
+    def test_budget_negative_rejected(self):
+        with self.assertRaises(NeedleAdapterError): assert_complete_encoder_budget(-1,100,1024,0)
     def test_confidence_metadata_does_not_grant_authority(self):
         r=validate_output("[]",self.tools,self.contract,preconstraint_margin=9.0,preconstraint_entropy=.01); self.assertTrue(r.accepted); self.assertEqual(r.authority,"NONE"); self.assertFalse(r.effect_eligible)
     def test_random_invalid_tool_fuzz(self):

@@ -1,77 +1,87 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "666-20260809T1504p0700-chatgpt-secondary-pf-selfmodel",
   "actor": "chatgpt-secondary",
   "trigger": "666",
   "stage": "L0_ARCHIVE_ASSIMILATION",
-  "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1504p0700_chatgpt_secondary_pf_selfmodel_embodiment_identity_lineage.json",
+  "source_receipts": [
+    "research_entity/archive_assimilation/receipts/666_20260809T1504p0700_chatgpt_secondary_pf_selfmodel_embodiment_identity_lineage.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1504p0700_chatgpt_secondary_pf_realitylayer_egogovernor_repair_lineage.json"
+  ],
   "feedback": {
     "frank": {
       "status": "MATERIAL_DELTA",
       "items": [
-        "Use one authoritative versioned IdentityFact contract; do not duplicate identity constants in persona, self-knowledge and fallbacks.",
+        "Use one authoritative versioned IdentityFact contract; do not duplicate identity constants in persona, self-knowledge, RealityLayer and fallbacks.",
         "Separate AUTHORITATIVE_IDENTITY, OBSERVED_CAPABILITY, DERIVED_INTERNAL_STATE and NARRATIVE_RENDERING authority classes.",
-        "Require runtime receipts or STALE/UNKNOWN for capability claims."
+        "Require runtime receipts or STALE/UNKNOWN for capability/topology/model claims.",
+        "Use per-field freshness/authority rather than treating a mixed static/dynamic fact bag as ground truth."
       ]
     },
     "claycode": {
       "status": "MATERIAL_DELTA",
       "items": [
         "Represent identity/capability/subjective-state values with explicit authority, provenance, freshness and rollback semantics.",
-        "Own-output-derived state transitions must be explicit lower-authority transformations, not silent truth updates."
+        "Own-output-derived state transitions must be explicit lower-authority transformations, not silent truth updates.",
+        "Self-model projection and validation should consume the same authoritative typed state object."
       ]
     },
     "gwt": {
       "status": "MATERIAL_DELTA",
       "items": [
-        "Do not interpret output->internal-state feedback as externally grounded re-entry; distinguish self-generated proxy loops from sensor/event-grounded re-entry in GWT tests."
+        "Do not interpret output->internal-state feedback as externally grounded re-entry; distinguish self-generated proxy loops from sensor/event-grounded re-entry in GWT tests.",
+        "Do not globally broadcast large reality/identity blocks by default; compare selective task-scoped access against global injection for prompt leakage and interference."
       ]
     },
     "emergenz": {
       "status": "MATERIAL_DELTA",
       "items": [
-        "Add lesion/rescue control for own-output proxy feedback when evaluating causal integration/emergence so circular reinforcement is not mistaken for emergent causal contribution."
+        "Add lesion/rescue control for own-output proxy feedback when evaluating causal integration/emergence so circular reinforcement is not mistaken for emergent causal contribution.",
+        "Treat reduced confabulation from fact injection as grounding performance, not evidence of emergence/self-awareness."
       ]
     },
     "hyperposition": {
       "status": "MATERIAL_DELTA",
       "items": [
-        "Keep uncertain/stale capability alternatives as evidence-weighted possibilities instead of collapsing to one unsupported self-description."
+        "Keep uncertain/current/stale capability alternatives as evidence-weighted possibilities until evidence selects or supersedes them."
       ]
     },
     "claygraph": {
       "status": "MATERIAL_DELTA",
       "items": [
-        "Attach identity/capability/embodiment assertions to source/effect receipts and supersession lineage; graph activation must not upgrade assertion authority."
+        "Attach identity/capability/embodiment assertions to source/effect receipts and supersession lineage; graph activation must not upgrade assertion authority.",
+        "A ground-truth label is metadata only unless backed by authority/provenance/freshness evidence."
       ]
     },
     "unifieddb": {
       "status": "MATERIAL_DELTA",
       "items": [
-        "Persist identity once and materialize projections; capability observations are timestamped evidence rows with freshness/supersession instead of manually synchronized declarations."
+        "Persist identity once and materialize projections; capability/topology/model observations are timestamped evidence rows with freshness/supersession rather than synchronized declarations."
       ]
     },
     "harness": {
       "status": "MATERIAL_DELTA",
       "items": [
         "Add regressions for stale removed feature, wrong model version, denied live capability, identity hash mismatch and stale fallback after topology changes.",
-        "Run Ego state factorial ablation: telemetry-only vs event-grounded vs own-output proxy vs combined."
+        "Run Ego state factorial ablation: telemetry-only vs event-grounded vs own-output proxy vs combined.",
+        "Add prompt-contamination tests comparing global Reality blocks, task-scoped retrieval and structured side-channel validation; include stale-validator-source injection."
       ]
     },
     "clay": {
       "status": "MATERIAL_DELTA",
       "items": [
-        "Adopt authority-stratified self-model compilation: canonical identity + live observed capability + derived subjective state, rather than duplicated prompt truths."
+        "Adopt authority-stratified self-model compilation: canonical identity + live observed capability/topology + derived subjective state, rather than duplicated prompt truths."
       ]
     },
     "q12_index": {
       "status": "MATERIAL_DELTA",
       "items": [
-        "Historical design intent favored intrinsic self-knowledge and embodied metaphors, but the implementation repeatedly accumulated stale mirrored facts. Preserve the intent while replacing synchronization-by-editing with compiled projections and receipts."
+        "Historical design intent favored intrinsic self-knowledge and embodied metaphors, but implementation repeatedly accumulated stale mirrored facts; the later RealityLayer/Ego-Governor repair itself mixed dynamic hardware with static semantic constants and did not eliminate later self-model staleness. Preserve intent while replacing synchronization-by-editing with compiled projections and receipts."
       ]
     }
   },
   "exact_coverage_credit": 0.0,
   "level0_gate_change": "NO_CHANGE",
-  "reason": "PF full tree/history denominator remains unfrozen."
+  "historical_earned_work_new_quantified_hours": 0.0,
+  "reason": "PF full tree/history denominator remains unfrozen; repair lineage overlaps prior mapped identity/state work and receives no duplicate hour credit."
 }

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.1",
+  "event_id": "delta-666-20260809T1519p0700-perceptual-cache-coherence",
+  "room_id": "center",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-666-20260809T1519p0700-pcc",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T15:19:50+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "stack_epoch": 15,
+  "affects_rooms": ["claycode", "unifieddb", "claygraph", "harness", "frank", "clay"],
+  "affects_claims": ["PCC-H1", "PCC-H2", "PCC-H3"],
+  "dependencies": [
+    "research_entity/archive_assimilation/666_RELEASE_MANIFEST.json",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+    "research_entity/retina/RETINA_MICRO_VISUAL_CLASSIFIER.md",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql",
+    "research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql",
+    "research_entity/emergent_fields/fields/field-666-20260809T1521p0700-proof-carrying-adaptive-state-485652b7/FIELD_STATE.json"
+  ],
+  "artifact_refs": [
+    "research_entity/emergent_fields/fields/EF-20260809-001-PERCEPTUAL-CACHE-COHERENCE/FIELD_STATE.json",
+    "research_entity/emergent_fields/fields/EF-20260809-001-PERCEPTUAL-CACHE-COHERENCE/PCC_E1_RESULTS.json",
+    "research_entity/emergent_fields/fields/EF-20260809-001-PERCEPTUAL-CACHE-COHERENCE/pcc_e1_sim.py",
+    "research_entity/trigger_runs/666/666-20260809T1519p0700-FIRST-POST-L0/FINAL_REPORT.md"
+  ],
+  "ancestry_family": "perceptual-cache-coherence-20260809",
+  "delivery": "NEXT_CHECKPOINT",
+  "delta": {
+    "mechanism_candidate": "Perceptual Cache Coherence",
+    "status": "OPEN_RESEARCH_CANDIDATE_WITH_SYNTHETIC_SUPPORT",
+    "retina_frank": "Treat learned familiarity as a versioned performance cache over live sensor evidence; cache hit requires confidence/open-set/provenance plus perceptual-version coherence.",
+    "unifieddb": "Persist visual cache version lineage, context/perceptual compatibility identity, invalidation reason, trusted revalidation receipt and rollback predecessor.",
+    "claygraph": "Activation can retrieve a familiar candidate but activation is neither coherence nor sensor truth.",
+    "claycode": "Express lifecycle/version/revalidation/rollback/replay with existing typed semantics before any redesign; require executable counterexample for semantic change.",
+    "harness": "Run PCC-E2 threshold-only vs epoch-coherent vs epoch+drift-detector matched-budget replay using real Retina embeddings.",
+    "peer_crossread": "Complementary with Proof-Carrying Adaptive State: PCC checks coherence before cached use; PCAS checks evidence/policy certificate before adaptive-state promotion. Keep independently ablatable."
+  },
+  "payload_clay": "module clay.event.pcc_delta version \"1.0\" status CURRENT law familiarity != sensor_truth rule fast_path requires version_coherent rule version_mismatch -> deeper_perception rule claygraph_activation != coherence"
+}

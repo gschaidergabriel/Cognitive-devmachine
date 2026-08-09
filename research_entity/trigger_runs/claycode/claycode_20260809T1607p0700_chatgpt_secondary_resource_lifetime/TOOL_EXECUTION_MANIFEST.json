@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1607p0700_chatgpt_secondary_resource_lifetime",
+  "actor":"chatgpt-secondary",
+  "tools":[
+    {
+      "tool":"GitHub connector",
+      "role":"canonical boot, current-state reads, concurrent-worker inspection, durable research writes and verification",
+      "status":"VERIFIED_RW",
+      "evidence":"Multiple run artifacts were created successfully in gschaidergabriel/clay-global-research-entity during this session."
+    },
+    {
+      "tool":"ChatGPT local Python sandbox",
+      "role":"executable ResourceHandle lifetime discriminator",
+      "status":"EXECUTED",
+      "runtime":"Python 3.13.5",
+      "receipt":"EXECUTABLE_RESEARCH_RECEIPT.json"
+    },
+    {
+      "tool":"web.run",
+      "role":"independent primary-source technical triangulation",
+      "status":"EXECUTED",
+      "sources":["WebAssembly Component Model WIT resource/handle design","WebAssembly Component Model concurrency design"]
+    },
+    {
+      "tool":"E2B",
+      "role":"preferred external executable provider per ClayCode protocol",
+      "status":"NOT_INVOKED_NOT_EXPOSED_TO_CURRENT_TOOL_SURFACE",
+      "reason":"No E2B execution tool is available in this ChatGPT session; no E2B evidence is claimed."
+    },
+    {
+      "tool":"research_interconnect_preflight.py",
+      "role":"official interconnect gate",
+      "status":"NOT_EXECUTED_NO_REPOSITORY_CHECKOUT",
+      "reason":"The current ChatGPT execution environment has connected GitHub file access but no usable repository checkout; a local git remote attempt could not resolve github.com. The manual INTERCONNECT_MANIFEST is fail-closed and does not claim official PASS."
+    },
+    {
+      "tool":"goodman_filter_check.py",
+      "role":"official Goodman validation gate",
+      "status":"NOT_EXECUTED_NO_REPOSITORY_CHECKOUT",
+      "reason":"No repository checkout is available to execute the repo tool. FRANK_CLAYCODE_GOODMAN_REVIEW.json was produced manually under the protocol and no promotion is requested."
+    }
+  ],
+  "promotion_effect":"NO_PROMOTION",
+  "gate_effect":"BASE remains NOT_PASS"
+}

@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260809T1854p0700-chatgpt-secondary-needle-fusion",
+  "scope": "H-WP-04 Needle boundary overlay for H1 reference harness",
+  "status": "EVIDENCE_SUPPORTED_OVERLAY_NOT_H1_RELEASE",
+  "semantic_pipeline": [
+    "current dialogue + user input",
+    "external context/intent normalizer",
+    "NeedleIngressPreflight",
+    "runtime-profile tool canonicalization",
+    "optional evidence-gated tool retrieval",
+    "pinned unchanged Needle runtime",
+    "strict independent Needle output validator",
+    "NeedleDecisionReceipt",
+    "typed Clay ingress",
+    "independent authority/effect gate"
+  ],
+  "state_contracts": {
+    "NeedleIngressPreflight": {
+      "required": [
+        "normalized_intent_sha256",
+        "toolset_sha256",
+        "context_resolved",
+        "retrieval_mode",
+        "retrieval_succeeded",
+        "selected_tool_count",
+        "query_token_count",
+        "tools_token_count",
+        "max_enc_len",
+        "min_headroom",
+        "needle_eligible",
+        "fallback_required",
+        "rejection_reasons"
+      ],
+      "law": "Unresolved context, retrieval failure, empty selected toolset or incomplete encoder-budget fit blocks Needle and requires fallback."
+    },
+    "NeedleRuntimeIdentity": {
+      "required": [
+        "runtime_profile",
+        "runtime_source_ref",
+        "runtime_source_sha",
+        "checkpoint_sha256",
+        "tokenizer_sha256",
+        "identity_sha256"
+      ],
+      "law": "Display name alone is never sufficient provenance; executable Needle identity is hash-bound."
+    },
+    "NeedleDecisionReceipt": {
+      "required": [
+        "schema_version",
+        "needle_id",
+        "needle_version",
+        "toolset_sha256",
+        "raw_output_sha256",
+        "outcome",
+        "accepted",
+        "frank_calls",
+        "rejection_reasons",
+        "authority",
+        "effect_eligible",
+        "effect_gate_required",
+        "fallback_required"
+      ],
+      "outcomes": ["ROUTE_PROPOSAL", "NO_TOOL_PROPOSAL", "REJECTED"],
+      "laws": [
+        "FRANK_MAX_NEEDLE_CALLS = 1",
+        "NO_TOOL_PROPOSAL requires fallback to 4B",
+        "REJECTED requires fallback to 4B",
+        "ROUTE_PROPOSAL remains authority=NONE and effect_eligible=false",
+        "every effect requires an independent authority/effect gate"
+      ]
+    },
+    "ClayIngressEnvelope": {
+      "ref": "research_entity/harness/reference/needle_boundary.py",
+      "law": "Only validated, provenance-bound Needle proposal data crosses the foreign-to-Clay semantic boundary."
+    }
+  },
+  "runtime_profiles": {
+    "JAX_PYTHON": {
+      "wire_contract": "Needle-flat direct parameter map",
+      "known_counterexamples": [
+        "ordinary parameters.properties is misread by upstream constrained.py unless normalized",
+        "constraint activation uses compact exact markers and has fail-open states",
+        "load_checkpoint uses pickle",
+        "invalid-JSON restore fallback can mutate alias words inside values"
+      ]
+    },
+    "CACTUS_CPP": {
+      "wire_contract": "canonical compact OpenAI-style tool JSON transformed by current Cactus into Needle-flat map",
+      "known_counterexamples": [
+        "schema extraction is whitespace/escaping sensitive",
+        "Needle constraint activation retains compact exact-marker weakness",
+        "syntax sanitizer does not establish offered-tool membership/required-key/duplicate-key safety",
+        "Tool RAG failure can return all tools",
+        "BM25 lexical tokenizer is byte/ASCII oriented for German UTF-8"
+      ]
+    }
+  },
+  "hard_invariants": [
+    "Needle is the sole intentional non-Clay semantic subsystem but never execution authority",
+    "Needle is a single-shot tool reflex, not dialogue memory or multi-step planner",
+    "context-dependent/deictic intent must be externally resolved or sent to the 4B fallback path",
+    "normal ingress never silently bypasses the Needle boundary contract",
+    "all selected tools must fit completely before inference; blind truncation is inadmissible",
+    "runtime/tool/alias/checkpoint/tokenizer identities are provenance-bound and collision checked",
+    "strict post-validation is mandatory even when constrained decoding is enabled",
+    "no-tool and invalid/ambiguous output never terminate the user turn silently; they trigger fallback",
+    "accepted route proposals remain non-authoritative until the separate effect gate"
+  ],
+  "experimental_not_frozen": {
+    "retriever": ["NONE", "Needle contrastive", "Cactus hybrid Tool RAG"],
+    "retrieval_k": [2, 4, 8, 12, 16, 24],
+    "description_policy": ["full", "first-statement compressed", "bilingual", "manually discriminative"],
+    "alias_candidates": ["crl_session -> run_weekly_research_session"],
+    "confidence_surface": ["pre-mask margin", "entropy", "Cactus generic confidence", "other calibrated scores"],
+    "confidence_threshold": "UNSET_PENDING_HELD_OUT_CALIBRATION"
+  },
+  "open_release_dependencies": [
+    "mount official tokenizer/needle.model and an official pinned checkpoint/runtime artifact",
+    "exact Needle-tokenizer measurement of current German query + catalogue distributions",
+    "audited/versioned German tool/no-tool gold set",
+    "official-checkpoint zero-shot German routing and argument evaluation",
+    "retrieval recall@k/downstream differential if retrieval remains candidate",
+    "JAX/Cactus/ONNX differential where exact runtime artifacts are available",
+    "target Ubuntu reference-harness replay and recovery testing"
+  ],
+  "hwp04_status": "OPEN"
+}

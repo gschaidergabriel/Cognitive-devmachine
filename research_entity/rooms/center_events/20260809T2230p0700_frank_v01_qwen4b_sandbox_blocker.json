@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-v01-qwen4b-sandbox-blocker-20260809T2230p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T22:30:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "origin": {
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "artifact": "research/sandbox/FRANK_V01_REAL_QWEN4B_ENVIRONMENT_PROBE_2026-08-09.json"
+  },
+  "evidence_scope": "SANDBOX_ENVIRONMENT_ONLY",
+  "status": "BLOCKED_NOT_EXECUTED",
+  "observed_environment": {
+    "memory_total_gib_approx": 6.2,
+    "free_disk_gib_approx": 38,
+    "llama_server": false,
+    "llama_cli": false,
+    "ollama": false,
+    "vllm_command": false,
+    "transformers_python": false,
+    "vllm_python": false,
+    "llama_cpp_python": false,
+    "cached_qwen_or_gguf_model": false
+  },
+  "official_candidate": {
+    "repo": "Qwen/Qwen3-4B-GGUF",
+    "file": "Qwen3-4B-Q4_K_M.gguf",
+    "remote_size_gb": 2.5,
+    "remote_sha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
+    "intended_runner": "llama.cpp / compatible local OpenAI-style serving"
+  },
+  "attempt": {
+    "model_download_attempted": true,
+    "result": "FAILED_IN_CURRENT_SANDBOX",
+    "real_inference_receipt_created": false
+  },
+  "feedback": {
+    "model-runtime": "Do not report a real Qwen4B PASS in the current sandbox. Provision a verified local runner and model artifact first, verify SHA256, then rerun Frank hidden-reasoning/re-entry/effect/restart/latency contracts.",
+    "frank": "Keep the engine-neutral loopback boundary and fixture tests, but retain real local 4B inference as an explicit blocker.",
+    "harness": "Treat missing runner/model as an environmental BLOCKED result, not a functional FAIL and not a PASS."
+  },
+  "affected_rooms": ["frank", "model-runtime", "harness"],
+  "research_state_change": "ENVIRONMENT_BLOCKER_NO_RELEASE_PROMOTION"
+}

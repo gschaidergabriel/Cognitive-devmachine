@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "fusion-20260809T1530p0700-chatgpt-secondary",
+  "trigger": "fusion",
+  "executions": [
+    {"tool":"GitHub connector","class":"VERIFIED_REMOTE_REPOSITORY_READ","status":"PASS","detail":"Canonical r2, actor registry, trigger/command registry, program state, current stack, Level-0 release/reconciliation, ClayCode/Harness workspaces and live post-L0 commits read through snapshot cutoff."},
+    {"tool":"GitHub connector","class":"VERIFIED_REMOTE_REPOSITORY_WRITE","status":"PASS","detail":"Fusion run artifacts committed to unique paths; reread/validator receipt pending at manifest creation time."},
+    {"tool":"web primary-source search","class":"EXTERNAL_RESEARCH","status":"PASS","sources":[
+      {"title":"ODS: Test-Time Adaptation in the Presence of Open-World Data Shift","venue":"ICML/PMLR 2023","use":"open-world covariate+label shift makes online adaptation risk distinct from closed-set adaptation"},
+      {"title":"Efficient Test-Time Model Adaptation without Forgetting","venue":"ICML/PMLR 2022","use":"test-time adaptation can trade adaptation against forgetting and compute"},
+      {"title":"Inferring causation from time series in Earth system sciences","venue":"Nature Communications 2019","use":"common-driver and identifiability limits for observational directionality"},
+      {"title":"Discovering contemporaneous and lagged causal relations in autocorrelated nonlinear time series datasets","venue":"UAI/PMLR 2020","use":"conditioning/autocorrelation-aware causal discovery limitations and controls"},
+      {"title":"An update on memory reconsolidation updating","venue":"Trends in Cognitive Sciences 2017","use":"biological analogy only: reconsolidation has boundary conditions and prediction-error dependence; not FRANK evidence"},
+      {"title":"Adapting Conformal Prediction to Distribution Shifts Without Labels","venue":"arXiv 2024 / later UAI lineage","use":"conformal validity/quality is shift-sensitive; used as statistical-method triangulation, not FRANK proof"}
+    ]},
+    {"tool":"Python local sandbox","class":"SYNTHETIC_SIMULATION","status":"PASS","experiment":"FUSION-E1-TWO-GATE-ADAPTIVE-MEMORY","replicates":100,"note":"2D proxy; not target-hardware/runtime evidence"}
+  ],
+  "evidence_class_separation": {
+    "catalogued_historical":"PROVENANCE_BOUND_HISTORICAL_OR_SOURCE_EVIDENCE",
+    "recent_666":"SYNTHETIC_OR_SOURCE_TRIANGULATED_WORKING_HYPOTHESES_UNLESS_STATED_OTHERWISE",
+    "fusion_experiment":"SYNTHETIC_SIMULATION_ONLY",
+    "external_papers":"INDEPENDENT_METHOD_OR_ANALOGUE_EVIDENCE",
+    "live_frank_target_machine":"NOT_EXECUTED_IN_THIS_RUN"
+  },
+  "blockers": ["No target-machine FRANK/Retina embedding replay was available through this ChatGPT tool surface."],
+  "promotion_rule": "No synthetic or analogue result is promoted to live FRANK truth."
+}

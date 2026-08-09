@@ -1,0 +1,268 @@
+{
+  "schema_version": "1.2",
+  "experiment": "ClayCode BASE D repaired-frontend full-corpus validation",
+  "created_at": "2026-08-09T12:55:29.512735+00:00",
+  "grammar_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark",
+  "grammar_sha256": "3d1f37089ffafe8f304443851da8029401fcfb243aafc8225f3ff272d717706d",
+  "runtime": {
+    "parser": "lark",
+    "mode": "lalr/contextual",
+    "strict": true,
+    "keep_all_tokens": true
+  },
+  "sources": [
+    {
+      "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "source_sha256": "ce8eaa0562ea17533ae4fcf4b68f8af8db3b93f0ae78723d105c554f30b573b3",
+      "parse_tree_hash": "3992ffa5235271161ee7ab231b5054a41e930c213e0ed08abb6ecd999cbcded9",
+      "repeat_parse_tree_hash": "3992ffa5235271161ee7ab231b5054a41e930c213e0ed08abb6ecd999cbcded9",
+      "deterministic_repeat": true,
+      "tree_nodes": 1075
+    },
+    {
+      "path": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+      "source_sha256": "480e26dc715ee5ba5a5296293fb8973a99501f17c6dd249bfd3319951d621881",
+      "parse_tree_hash": "b276f7956e5efc31151423f7fed40913f97a60a1cbfa5e77374fa4818c24dec7",
+      "repeat_parse_tree_hash": "b276f7956e5efc31151423f7fed40913f97a60a1cbfa5e77374fa4818c24dec7",
+      "deterministic_repeat": true,
+      "tree_nodes": 387
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "if_as_record_field_identifier",
+      "expected": "REJECT",
+      "accepted": false,
+      "pass": true,
+      "error": "UnexpectedToken: Unexpected token Token('IF', 'if') at line 1, column 12.\nExpected one of: \n\t* SEMICOLON\n\t* CYCLE\n\t* IFF\n\t* RULE\n\t* MODULE\n\t* DIALECT\n\t* INTERFACE\n\t* IN\n\t* HASH\n\t* NAME\n\t* RECORD\n\t* LAW\n\t* SUBSET_OF\n\t* PARENT\n\t* STATUS\n\t* METRIC\n\t* CODEC\n\t* TYPE\n\t* CLASS\n\t* TENSOR\n\t* SURFACE\n\t* REQUIRES\n\t* NEEDLE\n\t* NEWLINE\n\t* OR\n\t* IMPORT\n\t* VERSION\nPrevious tokens: [Token('LBRACE', '{')]\n"
+    },
+    {
+      "case": "invariant_as_record_field_identifier",
+      "expected": "REJECT",
+      "accepted": false,
+      "pass": true,
+      "error": "UnexpectedToken: Unexpected token Token('NAME', 'variant') at line 1, column 14.\nExpected one of: \n\t* COLON\n"
+    },
+    {
+      "case": "if_as_parameter_identifier",
+      "expected": "REJECT",
+      "accepted": false,
+      "pass": true,
+      "error": "UnexpectedToken: Unexpected token Token('IF', 'if') at line 1, column 10.\nExpected one of: \n\t* CYCLE\n\t* IFF\n\t* RULE\n\t* MODULE\n\t* DIALECT\n\t* INTERFACE\n\t* IN\n\t* HASH\n\t* NAME\n\t* RPAR\n\t* RECORD\n\t* LAW\n\t* SUBSET_OF\n\t* PARENT\n\t* STATUS\n\t* METRIC\n\t* CODEC\n\t* TYPE\n\t* CLASS\n\t* TENSOR\n\t* SURFACE\n\t* REQUIRES\n\t* NEEDLE\n\t* OR\n\t* IMPORT\n\t* VERSION\nPrevious tokens: [Token('LPAR', '(')]\n"
+    },
+    {
+      "case": "invariant_as_parameter_identifier",
+      "expected": "REJECT",
+      "accepted": false,
+      "pass": true,
+      "error": "UnexpectedToken: Unexpected token Token('NAME', 'variant') at line 1, column 12.\nExpected one of: \n\t* COLON\n\t* COMMA\n\t* RPAR\n"
+    },
+    {
+      "case": "implicit_english_noun_phrase",
+      "expected": "REJECT",
+      "accepted": false,
+      "pass": true,
+      "error": "UnexpectedToken: Unexpected token Token('NAME', 'stack') at line 1, column 34.\nExpected one of: \n\t* EQUAL\n\t* IFF\n\t* DOT_REL\n\t* __ANON_0\n\t* INFIX_REL\n\t* __ANON_2\n\t* IN\n\t* __ANON_6\n\t* __ANON_4\n\t* __ANON_3\n\t* $END\n\t* DOT\n\t* __ANON_1\n\t* SLASH\n\t* SUBSET_OF\n\t* LPAR\n\t* __ANON_5\n\t* __ANON_7\n\t* MORETHAN\n\t* MINUS\n\t* VBAR\n\t* REQUIRES\n\t* POSTFIX_REL\n\t* QMARK\n\t* NEWLINE\n\t* LESSTHAN\n\t* OR\n\t* STAR\n\t* PLUS\n"
+    }
+  ],
+  "positive_cases": [
+    {
+      "case": "if_statement",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "case": "invariant_statement",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "case": "multiple_newlines_record",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "case": "multiple_newlines_cycle",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "case": "keyword_like_non_reserved_identifier",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "case": "dotted_relation_lowering",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "case": "dotted_relation_owns",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "case": "relation_assignment",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "case": "explicit_relation_chain",
+      "expected": "ACCEPT",
+      "accepted": true,
+      "pass": true,
+      "error": null
+    }
+  ],
+  "lexical_discrimination_cases": [
+    {
+      "case": "greater_vs_less",
+      "left": "rule x>0\n",
+      "right": "rule x<0\n",
+      "left_hash": "062995e5bc08ed2681205f196e2efd56b036b8b0cf41a8e9f96944de99461930",
+      "right_hash": "bbe48ce02f2c05aafacfee37d0febc6ef3b22d9dbed8d60fd7ebebc549a12e23",
+      "expected_same": false,
+      "observed_same": false,
+      "pass": true
+    },
+    {
+      "case": "gte_vs_lte",
+      "left": "rule x>=0\n",
+      "right": "rule x<=0\n",
+      "left_hash": "486dc7c80ee8540052eff6ca188ed363f6dea6cea7def3447ba744fded7fbc6f",
+      "right_hash": "88a5792ac0e84b0cc342709b0876e126d754f99f241c315e40f7f9025b06691b",
+      "expected_same": false,
+      "observed_same": false,
+      "pass": true
+    },
+    {
+      "case": "equal_vs_not_equal",
+      "left": "rule x=0\n",
+      "right": "rule x!=0\n",
+      "left_hash": "01aba2624066ded2ad61cf41de4e68538d757f444dfb45b0f65999bb4e18e377",
+      "right_hash": "830095adcce8ac7f8b85f80f369c638dcf5bb4c3e85fb04f1a2699dbe3ea9830",
+      "expected_same": false,
+      "observed_same": false,
+      "pass": true
+    },
+    {
+      "case": "plus_vs_minus",
+      "left": "rule x+1\n",
+      "right": "rule x-1\n",
+      "left_hash": "1bbcd8e62431263a9fd2afc001add8a95b840e9798b3302f1a4a953ffe76ce9c",
+      "right_hash": "9ad5e58597285fedde2462ddc01a0bd29da2fd5b3888900fcc5608aa3093e652",
+      "expected_same": false,
+      "observed_same": false,
+      "pass": true
+    },
+    {
+      "case": "and_vs_or",
+      "left": "rule x&&true\n",
+      "right": "rule x||true\n",
+      "left_hash": "bf4eb77531561ee19a78548a7ff5a5b86aefb43b1f4601eac47f4017113727a0",
+      "right_hash": "6870f9a952b17266a912e2b734731978b0b0b01542e575e9dca3f0938311a2d1",
+      "expected_same": false,
+      "observed_same": false,
+      "pass": true
+    },
+    {
+      "case": "true_vs_false",
+      "left": "rule true\n",
+      "right": "rule false\n",
+      "left_hash": "7e4043e88522a4205f1e3b9d404fe726cf304ba8d46c42c6e0994c0f0b18c473",
+      "right_hash": "eeea41b929ce5dcf5494d1f2c9d581b660746fca717b283f56a06a6d0e8a68c1",
+      "expected_same": false,
+      "observed_same": false,
+      "pass": true
+    },
+    {
+      "case": "ordered_call_arguments",
+      "left": "rule f(a,b)\n",
+      "right": "rule f(b,a)\n",
+      "left_hash": "fa40feb2cea29d45dbc52aa01e755eedc43c1d932c995473c94da3ef24abdb00",
+      "right_hash": "840fd23a4df100f315fb01758b034c6991f7ad508bdc4efb9f979c72c9bb7d80",
+      "expected_same": false,
+      "observed_same": false,
+      "pass": true
+    },
+    {
+      "case": "dotted_relation_kind",
+      "left": "rule Needle.lowers X\n",
+      "right": "rule Needle.owns X\n",
+      "left_hash": "5ffa727b7641b06955124da9d2b0c48086b7056a0b09423ea0854ae59af43229",
+      "right_hash": "0088ff3c6b1af0ede6fcb23cc2c000bb4cbe695e1fdec5f84cb6a4f2fc3d7266",
+      "expected_same": false,
+      "observed_same": false,
+      "pass": true
+    }
+  ],
+  "lexical_equivalence_cases": [
+    {
+      "case": "ignored_space_comment",
+      "left": "rule x>0\n",
+      "right": "rule   x > 0 // comment\n",
+      "left_hash": "062995e5bc08ed2681205f196e2efd56b036b8b0cf41a8e9f96944de99461930",
+      "right_hash": "062995e5bc08ed2681205f196e2efd56b036b8b0cf41a8e9f96944de99461930",
+      "expected_same": true,
+      "observed_same": true,
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "scope_guard": "PASS proves strict parser construction, current-corpus acceptance, deterministic literal-preserving parse fingerprints and listed boundary/discrimination cases only. It does not prove canonical typed-AST or semantic-hash equivalence and does not close CC-WP-02 by itself.",
+  "run_id": "claycode-wp02-v5-strict-lalr-fix-20260809",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "execution_surface": {
+    "class": "LOCAL_SANDBOX",
+    "python": "3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "ubuntu_target_acceptance": false
+  },
+  "repair_iterations": [
+    {
+      "result": "BLOCKED",
+      "classification": "MISSING_DEPENDENCY",
+      "detail": "lark not initially installed on worker"
+    },
+    {
+      "result": "FAIL",
+      "classification": "STRICT_LALR_SHIFT_REDUCE",
+      "detail": "V5 optional dotted-relation object conflicts at OR"
+    },
+    {
+      "result": "FAIL",
+      "classification": "FULL_CORPUS_DOTTED_RELATION_TARGET",
+      "detail": "mandatory object rejected postfix Needle.owns"
+    },
+    {
+      "result": "PASS",
+      "classification": "MINIMAL_GRAMMAR_REPAIR",
+      "detail": "prefix_relation now consumes prefix_target qid with optional DOT_REL; dotted relations retain mandatory object"
+    }
+  ],
+  "promotion": {
+    "cc_wp_02": "OPEN",
+    "reason": "Strict construction/full corpus/fingerprint tests pass, but typed canonical AST and semantic-hash roundtrip remain required."
+  }
+}

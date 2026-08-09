@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "field_id": "field-666-20260809T1522p0700-memory-reconsolidation-shock-733329b0",
+  "name": "Memory Reconsolidation Shock Test",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "spawn_seed": 8301024375851768655,
+  "seed_basis_sha256": "733329b06a80db4f7824bec9100e5422f806cb3e5ad5aaa3fbbb9d980da1e87f",
+  "created_at": "2026-08-09T15:22:00+07:00",
+  "spawning_run_id": "666-20260809T1522p0700-chatgpt-secondary-mrst",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "shared_program_milestone": "BASE_CLAYCODE_RELEASE",
+  "lifecycle_state": "INTEGRATED",
+  "local_lens": [
+    "memory reconsolidation",
+    "fault tolerance",
+    "control theory",
+    "causal intervention"
+  ],
+  "selection": {
+    "mode": "SEEDED_STOCHASTIC_AMONG_HIGH_VALUE_NON_DUPLICATE_CANDIDATES",
+    "candidate_family_pool": [
+      "Hysteretic Familiarity Gate",
+      "Event-Triggered Visual Computation",
+      "Temporal Binding by Epoch Clocks",
+      "Memory Reconsolidation Shock Test",
+      "Predictive Budget Thermostat"
+    ],
+    "selected": "Memory Reconsolidation Shock Test",
+    "duplicate_check": "Distinct from prior Proof-Carrying Adaptive State: this field tests how memory content itself should revise under surprise/conflict rather than how candidate updates prove policy compliance."
+  },
+  "research_question": "Should FRANK revise familiar visual memory by destructive online overwrite, or by a conflict-aware reconsolidation cycle that keeps the stable trace authoritative until repeated Retina evidence supports a revised trace?",
+  "mechanism_candidate": {
+    "name": "Conflict-Aware Memory Reconsolidation Loop (CAMRL)",
+    "status": "OPEN_RESEARCH_CANDIDATE",
+    "compact_law": "stable memory prior + surprising Retina evidence -> CHALLENGED trace -> bounded candidate accumulation -> confirm/revise/split/rollback; never let one surprising frame destructively rewrite identity",
+    "states": [
+      "STABLE",
+      "CHALLENGED",
+      "RECONSOLIDATING",
+      "REVISED",
+      "SPLIT_CONTEXT",
+      "CONFLICT",
+      "ROLLED_BACK"
+    ],
+    "authority_boundary": "Retina evidence remains sensor evidence; memory candidate state is prior/hypothesis. A reconsolidated trace may alter future priors but may not rewrite what the sensor actually observed.",
+    "implementation_bias": "Attempt as ordinary ClayCode typed state + events + deterministic replay before proposing any new language primitive."
+  },
+  "hypotheses": [
+    {
+      "id": "MRST-H1",
+      "status": "OPEN_SUPPORTED_BY_SYNTHETIC_TEST_ONLY",
+      "claim": "A bounded conflict-aware reconsolidation buffer can reduce corruption from isolated visual outliers while adapting quickly to repeated abrupt appearance changes.",
+      "falsifier": "On H1 Retina<->Unified Memory traces, naive/robust online updating matches or beats corruption, adaptation latency and compute/state cost."
+    },
+    {
+      "id": "MRST-H2",
+      "status": "OPEN",
+      "claim": "The same mechanism can preserve multiple context/view variants by splitting memory state instead of overwriting a single prototype when contradictory evidence is persistent but context-separable.",
+      "falsifier": "Context splitting increases false identity fragmentation or retrieval cost without improving UMV-E1/UMV-E4."
+    },
+    {
+      "id": "MRST-H3",
+      "status": "OPEN",
+      "claim": "GWT re-entry and conflict persistence can provide a measurable trigger for reconsolidation/active sensing without making workspace activation a truth signal.",
+      "falsifier": "Lesioning GWT-linked conflict/re-entry triggers does not change useful reconsolidation decisions, or causes only overhead."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "MRST-C1",
+      "claim": "A reconsolidation state machine may add unnecessary latency and state growth; robust streaming estimators or ordinary versioned prototypes may be sufficient."
+    },
+    {
+      "id": "MRST-C2",
+      "claim": "Conservative challenge thresholds can track slow continuous drift worse than simple streaming updates."
+    },
+    {
+      "id": "MRST-C3",
+      "claim": "Repeated corroborating frames can share a common failure cause, so persistence alone is not independent evidence."
+    }
+  ],
+  "synthetic_experiment": {
+    "id": "MRST-E0-OUTLIER-SHIFT",
+    "status": "COMPLETE_SYNTHETIC_NOT_FRANK_EVIDENCE",
+    "runs": 1000,
+    "model": "1-D latent visual prototype; true state 0 then abrupt shift to 1.5 at t=500; Gaussian observation noise sd=0.25; 5% large outliers. Compare naive EWMA alpha=0.1 with CAMRL-like slow stable update plus 4-of-6 consistent surprise promotion.",
+    "abrupt_shift_outlier_result": {
+      "naive_pre_shift_mse_mean": 0.0265288046524615,
+      "camrl_pre_shift_mse_mean": 0.0016352084786071719,
+      "naive_post_shift_mse_mean": 0.04598186358207695,
+      "camrl_post_shift_mse_mean": 0.01667855809129297,
+      "naive_recovery_steps_mean": 14.836,
+      "camrl_recovery_steps_mean": 3.446,
+      "naive_pre_shift_corrupt_steps_mean": 0.169,
+      "camrl_pre_shift_corrupt_steps_mean": 0.0,
+      "camrl_false_switches_pre_shift_mean": 0.0,
+      "camrl_true_switch_delay_mean": 3.252
+    },
+    "countercase": {
+      "id": "MRST-E0B-SMOOTH-DRIFT",
+      "model": "Clean continuous latent drift 0->2 across 1000 steps; noise sd=0.1; no large outliers.",
+      "naive_mse_mean": 0.00084624,
+      "camrl_mse_mean": 0.00166348,
+      "result": "NEGATIVE_RESULT_FOR_UNIVERSAL_CAMRL_SUPERIORITY",
+      "interpretation": "The conservative CAMRL-like policy was ~96.6% worse in MSE on clean smooth drift, showing the mechanism needs drift-mode discrimination/adaptive thresholds rather than universal replacement of streaming updates."
+    },
+    "interpretation": "Synthetic evidence supports a regime-dependent policy: protect stable memory against isolated shocks, but preserve a fast streaming path when drift is smooth and corroborated.",
+    "limitations": "Toy scalar dynamics, hand-chosen thresholds, no real Retina features, no Unified Memory retrieval, no project-hardware resource measurements. No FRANK performance claim may be promoted from this experiment."
+  },
+  "cross_connections": [
+    {
+      "branch": "frank",
+      "delta": "Treat Unified Memory visual identity as revisioned stable trace + candidate revisions under surprise; preserve Retina evidence separately; prefer split-context variants over destructive overwrite when persistent contradictions are context-separable."
+    },
+    {
+      "branch": "claycode",
+      "targets": [
+        "CC-WP-03-IR-TYPES",
+        "CC-WP-04-TYPE-EFFECT",
+        "CC-WP-05-EVALUATOR",
+        "CC-WP-11-FUZZ-CONFORMANCE"
+      ],
+      "delta": "Express CAMRL first as typed records/events/state transitions with explicit UNKNOWN/CONFLICT and replay. Do not add a new primitive unless an executable lowering/replay counterexample appears."
+    },
+    {
+      "branch": "gwt",
+      "delta": "Use conflict persistence, re-entry and hysteresis only as measurable control signals for deeper sensing/reconsolidation; workspace ignition must not become truth authority."
+    },
+    {
+      "branch": "harness",
+      "delta": "Extend UMV-E2/UMV-E4/UMV-E5 with abrupt-shock vs smooth-drift regimes, lesion the reconsolidation buffer, measure false rewrites, adaptation delay, identity fragmentation, retrieval cost and active-sensing cost."
+    },
+    {
+      "branch": "unifieddb/claygraph",
+      "delta": "Persist stable trace, challenged candidate, context/view variant, supporting/contradicting evidence lineage and rollback ancestry without overwriting raw observation provenance."
+    }
+  ],
+  "required_next_tests": [
+    "MRST-E1: replay real H1 Retina<->Unified Memory visual traces under naive robust streaming vs CAMRL vs adaptive hybrid at matched compute budget",
+    "MRST-E2: inject isolated outliers, repeated correlated bad frames, abrupt real appearance changes and smooth drift; pre-register regime labels and metrics",
+    "MRST-E3: evaluate SPLIT_CONTEXT vs overwrite on lookalikes and multi-view identity using UMV-E3/UMV-E4",
+    "MRST-E4: lesion GWT conflict/re-entry trigger and compare sensing/reconsolidation decisions to a local Retina-memory controller",
+    "MRST-E5: ClayCode roundtrip/replay test for every CAMRL state transition and crash point before any semantic change"
+  ],
+  "integration_result": {
+    "status": "ROUTED_AS_RESEARCH_CANDIDATE_NOT_CANONICAL_ARCHITECTURE",
+    "material_delta": "Add CAMRL as a regime-dependent memory-revision candidate and preserve the smooth-drift counterexample as a mandatory falsifier.",
+    "promotion_allowed": false,
+    "reason": "Only toy synthetic evidence plus current project architecture constraints; no H1 executable evidence yet."
+  }
+}

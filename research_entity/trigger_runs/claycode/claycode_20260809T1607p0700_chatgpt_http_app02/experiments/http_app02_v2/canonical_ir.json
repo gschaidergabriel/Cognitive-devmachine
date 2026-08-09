@@ -1,0 +1,24 @@
+{
+  "authority_model": {
+    "binding_authority": "host-only-before-guest-start",
+    "capability_id": "cap:http-listener",
+    "host_minted_resource_handle_required": true,
+    "permit": "http.serve",
+    "resource_handle_kind": "inherited-listening-socket-fd",
+    "source_capability_ref_is_authority": false
+  },
+  "ir_version": "cc-http-probe-ir-v2",
+  "module": "claycode.exp.http.v2",
+  "records": [
+    {"name":"HttpCapability","fields":[{"name":"id","type":"CapabilityRef"},{"name":"designates","type":"ResourceRef"},{"name":"permits","type":"Set<Verb>"}]},
+    {"name":"HttpRequest","fields":[{"name":"method","type":"String"},{"name":"path","type":"String"}]},
+    {"name":"AppState","fields":[{"name":"visits","type":"Int"}]},
+    {"name":"EffectIntent","fields":[{"name":"semantic_intent","type":"IntentRef"},{"name":"capability","type":"CapabilityRef?"},{"name":"desired","type":"Set<OutcomePredicate>"}]}
+  ],
+  "rules": [
+    {"action":"ROUTE_HOME","clauses":[{"op":"eq","ref":"request.method","value":"GET"},{"op":"eq","ref":"request.path","value":"/"}]},
+    {"action":"ROUTE_ASSET","clauses":[{"op":"eq","ref":"request.method","value":"GET"},{"op":"eq","ref":"request.path","value":"/asset.txt"}]},
+    {"action":"ROUTE_COUNT","clauses":[{"op":"eq","ref":"request.method","value":"GET"},{"op":"eq","ref":"request.path","value":"/count"}]},
+    {"action":"REQUEST_SERVE","clauses":[{"op":"eq","ref":"effect.semantic_intent","value":"http.serve"},{"op":"eq","ref":"effect.capability","value":"cap:http-listener"}]}
+  ]
+}

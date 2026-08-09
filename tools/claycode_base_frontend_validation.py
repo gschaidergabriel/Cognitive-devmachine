@@ -8,11 +8,10 @@ This is intentionally narrower than a canonical typed-AST proof. It establishes:
 4) explicit negative/positive keyword + newline boundary tests,
 5) lexical-operator/literal discrimination in the parse fingerprint.
 
-It must not be used to claim CC-WP-02 PASS by itself; typed canonical AST/semantic-hash
-integration remains a separate downstream requirement.
-Validation dispatch note: BASE14 closure requested 2026-08-09 by chatgpt-secondary.
-V6 note: dotted relations now require an explicit object, removing V5's strict-LALR
-shift/reduce ambiguity at following infix operators.
+It must not be used to claim CC-WP-02 PASS by itself; typed canonical IR/type semantics
+remain downstream requirements. V9 resolves both the V5 strict-LALR ambiguity and V6's
+current-corpus regression by contextually distinguishing bare Needle.owns from dotted
+Needle.lowers/Needle.owns prefix relations with an explicit same-line argument.
 """
 from __future__ import annotations
 
@@ -25,7 +24,7 @@ from pathlib import Path
 from lark import Lark, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
 SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
@@ -39,9 +38,6 @@ def sha256_bytes(data: bytes) -> str:
 def canonical_tree(node):
     if isinstance(node, Tree):
         return [str(node.data), [canonical_tree(x) for x in node.children]]
-    # Tokens deliberately include both terminal class and exact lexical value.
-    # The parser is created with keep_all_tokens=True so anonymous literal operators
-    # such as >, <, >=, <=, +, -, && and || cannot disappear from this fingerprint.
     return [getattr(node, "type", type(node).__name__), str(node)]
 
 
@@ -82,9 +78,6 @@ def main() -> None:
 
     grammar_path = Path(args.grammar)
     grammar = grammar_path.read_text(encoding="utf-8")
-    # keep_all_tokens is required for the fingerprint: without it, Lark normally
-    # drops anonymous string-literal terminals and e.g. x>0 and x<0 can collapse
-    # to the same structural Tree even though their source meaning differs.
     parser = Lark(
         grammar,
         parser="lalr",
@@ -118,6 +111,7 @@ def main() -> None:
         "dotted_relation_missing_object": "rule Needle.lowers\n",
     }
     positive_cases = {
+        "bare_needle_owns_operand": "rule 4B_need_not_learn Needle.owns\n",
         "if_statement": "cycle(input:Ref){\nif input {\ntrue\n}\n}\n",
         "invariant_statement": "invariant activation!=truth\n",
         "multiple_newlines_record": "record X {\n\n a:Int\n\n b:Int\n\n}\n",
@@ -138,9 +132,6 @@ def main() -> None:
         ok, err = try_parse(parser, src)
         pos.append({"case": name, "expected": "ACCEPT", "accepted": ok, "pass": ok, "error": err})
 
-    # These pairs are intentionally semantically distinct. They are a regression
-    # guard against a parser-tree identity bug where anonymous literal terminals
-    # are omitted and distinct programs receive the same structural fingerprint.
     discrimination_sources = {
         "greater_vs_less": ("rule x>0\n", "rule x<0\n"),
         "gte_vs_lte": ("rule x>=0\n", "rule x<=0\n"),
@@ -150,13 +141,13 @@ def main() -> None:
         "true_vs_false": ("rule true\n", "rule false\n"),
         "ordered_call_arguments": ("rule f(a,b)\n", "rule f(b,a)\n"),
         "dotted_relation_kind": ("rule Needle.lowers X\n", "rule Needle.owns X\n"),
+        "bare_owns_vs_prefix_owns": ("rule 4B_need_not_learn Needle.owns\n", "rule Needle.owns X\n"),
     }
     discrimination = [
         {"case": name, **pair_check(parser, left, right, expect_same=False)}
         for name, (left, right) in discrimination_sources.items()
     ]
 
-    # Whitespace and ignored comments are lexical presentation only at this layer.
     equivalence_sources = {
         "ignored_space_comment": ("rule x>0\n", "rule   x > 0 // comment\n"),
     }
@@ -173,7 +164,7 @@ def main() -> None:
         and all(x["pass"] for x in equivalence)
     )
     out = {
-        "schema_version": "1.3",
+        "schema_version": "1.4",
         "experiment": "ClayCode BASE D repaired-frontend full-corpus validation",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)),
@@ -190,7 +181,7 @@ def main() -> None:
         "lexical_discrimination_cases": discrimination,
         "lexical_equivalence_cases": equivalence,
         "pass": passed,
-        "scope_guard": "PASS proves strict parser construction, current-corpus acceptance, deterministic literal-preserving parse fingerprints and listed boundary/discrimination cases only. It does not prove canonical typed-AST or semantic-hash equivalence and does not close CC-WP-02 by itself."
+        "scope_guard": "PASS proves strict parser construction, exact current G9/Dialect acceptance, deterministic literal-preserving parse fingerprints and listed V5/V6 regression/boundary cases only. It does not close CC-WP-02 without the canonicalizer/differential receipts and does not prove typed IR/type/effect semantics."
     }
     text = json.dumps(out, ensure_ascii=False, indent=2) + "\n"
     if args.output:

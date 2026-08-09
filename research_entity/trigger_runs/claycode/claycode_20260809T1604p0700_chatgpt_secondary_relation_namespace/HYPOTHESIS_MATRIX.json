@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1604p0700_chatgpt_secondary_relation_namespace",
+  "hypotheses":[
+    {
+      "id":"H-CC-REL-CANONICAL-NODE-20260809-01",
+      "statement":"A backend-neutral typed canonical Relation node can serve as semantic identity while multiple validated surface forms lower into it without changing semantic_hash.",
+      "status":"OPEN_SUPPORTED_BY_PROXY_AND_EXTERNAL_ANALOGUE",
+      "support":["generic relation proxy 20,000/20,000 identity preservation from concurrent run","MLIR generic operation form with unique string operation names","current ClayGraph typed relation fields"],
+      "counterhypothesis":"One compact surface relation syntax should itself be canonical and no generic fallback is needed.",
+      "next_test":"Implement canonical RelationId node in real BASE AST and roundtrip full G9+dialects from generic and one compact surface."
+    },
+    {
+      "id":"H-CC-REL-AT-SIGIL-20260809-02",
+      "statement":"The current @relation candidate is safe as a backend-neutral compact relation surface beside existing @ref.",
+      "status":"CHALLENGED_BY_NEGATIVE_RESULT",
+      "support":["concurrent relation-only @relation proxy parsed/resolved 8/8 with 12/12 mutation rejects"],
+      "counterevidence":["combined namespace proxy: LALR contextual 5/7, LALR basic 3/7, Earley dynamic 7/7; standalone @refs regress"],
+      "counterhypothesis":"A lexically disjoint sigil or declared word syntax provides the same compactness without ref collision.",
+      "next_test":"Only reconsider after production parser proves full-corpus @ref/@relation coexistence and backend-independent roundtrip."
+    },
+    {
+      "id":"H-CC-REL-DECLARED-SUGAR-20260809-03",
+      "statement":"A finite declared relation registry can preserve compact human/machine-readable syntax while failing unknown relation words closed and lowering deterministically to canonical Relation IR.",
+      "status":"OPEN_SUPPORTED_BY_PROXY",
+      "support":["concurrent declared relation resolver: 8/8 valid, 0/50,000 unknown accepts, 10,000/10,000 whitespace semantic-hash preservation"],
+      "counterhypothesis":"Declared word operators create excessive parser/diagnostic/reader complexity compared with explicit generic calls.",
+      "next_test":"Full-corpus production parser A/B against generic-only syntax; compare ambiguity, diagnostics, token/byte cost, Qwen reader accuracy and canonical hash stability."
+    },
+    {
+      "id":"H-CC-BASE-BLOCKER-20260809-04",
+      "statement":"The immediate BASE blocker remains executable surface/parser/canonical-IR closure rather than missing FRANK-specific semantic primitives.",
+      "status":"SUPPORTED_RUN_LOCAL_NOT_PROMOTED",
+      "support":["multiple current parser negative results","8/8 fused gate representability proxy","9/9 MVC/effect lowering proxy","current release workspace 14/14 work packages OPEN"],
+      "counterhypothesis":"A hidden semantic inadequacy will appear only in the complete adaptive learner or real applications.",
+      "next_test":"Production parser -> typed IR -> type/effect -> lowering -> runtime over full learner and first Ubuntu applications."
+    }
+  ],
+  "promotion":"NONE"
+}

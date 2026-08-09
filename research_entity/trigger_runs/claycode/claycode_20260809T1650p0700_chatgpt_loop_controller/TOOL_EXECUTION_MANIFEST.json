@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1650p0700_chatgpt_loop_controller",
+  "tools": [
+    {"tool": "GitHub connector", "status": "EXECUTED", "uses": ["canonical boot", "protocol/state grounding", "current branch evidence", "append-only durable writes"]},
+    {"tool": "local Python sandbox", "status": "EXECUTED", "runtime": "Python 3.13.5 / Linux 6.18.35 x86_64 / Lark 1.3.1", "uses": ["run-local parser proxy", "typed IR construction", "type/arity/op fail-closed checks", "Python lowering", "100000-state differential runtime oracle", "5000 formatting variants", "4997 actual field-order mutations"]},
+    {"tool": "web primary-source search", "status": "EXECUTED", "sources": ["MLIR SCF Dialect official documentation", "MLIR Language Reference official documentation", "Tree-sitter official grammar documentation"], "purpose": "architecture triangulation only"},
+    {"tool": "e2b_sandbox", "status": "NOT_EXPOSED_TO_THIS_CHATGPT_SESSION", "repo_capability_status": "RUNTIME_VERIFIED", "claim": "NO_FRESH_E2B_EVIDENCE"},
+    {"tool": "sandboxapi_sandbox", "status": "BLOCKED_NOT_SUBSCRIBED", "claim": "NO_RUNTIME_EVIDENCE"},
+    {"tool": "tools/research_interconnect_preflight.py", "status": "NOT_EXECUTABLE_NO_REPOSITORY_CHECKOUT", "claim": "NO_OFFICIAL_PREFLIGHT_PASS"},
+    {"tool": "tools/goodman_filter_check.py", "status": "NOT_EXECUTABLE_NO_REPOSITORY_CHECKOUT", "claim": "NO_OFFICIAL_GOODMAN_VALIDATOR_PASS"}
+  ],
+  "authority_boundary": "Local parser/compiler success proves only the tested proxy semantics; it does not authorize effects, promote ClayCode, prove Ubuntu-target behavior, or advance H1/H2/H3."
+}

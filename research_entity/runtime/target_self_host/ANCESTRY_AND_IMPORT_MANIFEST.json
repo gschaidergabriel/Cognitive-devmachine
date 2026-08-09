@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "target_version": "RAE-TARGET-0.1",
+  "frank_source_repo": "gschaidergabriel/Dr.-Unterweger",
+  "frank_observed_head": "0a10d64f6ad297031fae955c1b75ce04dd4757a2",
+  "copy_policy": "architecture_and_schema_ancestry_only_no_personal_andreas_state",
+  "source_files": [
+    {"path":"runtime/state/UNIFIEDDB_SCHEMA.sql","sha":"20e5269c2770d98896477b4f263efb8c35d3c1fb"},
+    {"path":"runtime/state/UNIFIEDDB_V6_MIGRATION.sql","sha":"52e8d7b953453cd7293119e03ce24fea8b3725dc"},
+    {"path":"runtime/state/UNIFIEDDB_V7_MIGRATION.sql","sha":"71dc8787cd187cfdaa5e1023f511071ab99021e4"},
+    {"path":"runtime/state/UNIFIEDDB_V7_1_HARDENING.sql","sha":"3aab93f169dc1e9370759169e4c3f51e49241522"},
+    {"path":"runtime/state/UNIFIEDDB_V8_CHATGPT_DELEGATION.sql","sha":"7ff2041765708922ca7a75c9862301f4df1a21ac"},
+    {"path":"runtime/state/UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql","sha":"94ad0171ebdfc5025727ff9939bfa81cec09bb48"},
+    {"path":"runtime/state/UNIFIEDDB_V10_DYNAMIC_WORK_REVISIONS.sql","sha":"460f7299655e6e82fda40af8462e393808f11814"},
+    {"path":"runtime/state/UNIFIEDDB_V11_INTEGRITY_HARDENING.sql","sha":"098c269e7342ffbd22f8703ada8c8780a37cd679"},
+    {"path":"runtime/state/UNIFIEDDB_V12_SESSION_SKILLS.sql","sha":"6328247754f5dad4c9bcff49ca82c876c08fe254"},
+    {"path":"runtime/state/UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql","sha":"6b966ed0c99b2740878fe05d5c3eb3f4044e0fd5"},
+    {"path":"runtime/state/CLAYGRAPH_SCHEMA.sql","sha":"f09336d14b87fbee045d99eb19c1efe9610a6929"},
+    {"path":"runtime/state/CLAYGRAPH_V6_MIGRATION.sql","sha":"f782b70cf299f453e001e5d506aa871f8be0212d"},
+    {"path":"runtime/state/CLAYGRAPH_V7_MIGRATION.sql","sha":"5c63af6d680305de728253c939d1cc3b20012680"},
+    {"path":"runtime/state/CLAYGRAPH_V8_EPOCH_RETRACTION.sql","sha":"6ed3bc14ff35c8dc0cbbff07f97de57bb03e1908"},
+    {"path":"runtime/state/apply_current_schema.py","sha":"73005c691d4138309dafceacc8fd56668cbe242a"}
+  ],
+  "research_imports": [
+    {"domain":"gwt","commit":"03a4fddcf35b74e020c0011d27ec3477594a40cf","policy":"OPEN"},
+    {"domain":"emergenz","commit":"343fabb8b176df10f85aa3cbd4dce09f165b4987","policy":"FAIL_CLOSED_OPEN"},
+    {"domain":"claycode","commit":"d3c8e7de8ca2ccfdbc4db4180778b351b5b983b9","policy":"SOFTWARE_PATH_RELEASE_OPEN"},
+    {"domain":"claycode","commit":"1538ed5e5550ee2509c42e27077b87a00f918b33","policy":"SANDBOX_EVIDENCE_NOT_RELEASE"},
+    {"domain":"frank-loop","commit":"83d2d41e751a332fa285b3d81cc753ab9b67648b","policy":"OWNER_OBSERVATION_FUNCTIONAL_ONLY"}
+  ]
+}

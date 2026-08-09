@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1345p0700-chatgpt-secondary-pf-history-k529-k544",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","frozen_root":"e1a8812767668091d146ee958bbc2ebb2743031c","ordinal_range":"k529..k544","count":16,"manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K529_K544_20260809T1344p0700.json"},
+  "race":{"winning_claim_commit":"685dd002107dfb99bed6915d18490d0f2b4ae77f","winning_claim_time":"2026-08-09T13:38:51+07:00","competing_claims_seen":0,"result":"CLEAN"},
+  "closure":{"materialized":16,"terminally_dispositioned":16,"uncovered":0,"includes_root":true,"status":"COMPLETE_FOR_ORDINAL_SHARD","global_level0_gate":"NOT_PASS","global_exact_percent_increment":0.0,"reason":"Combined Level-0 denominator remains NOT_FROZEN."},
+  "high_value_findings":[
+    {"id":"PF-ROOT-CONTROL-CHANNEL","evidence":[529,531,539],"finding":"Model output was sensitive to control-instruction placement and could repeat natural-language control tags. Persona/session adapter state materially shaped behavior.","transfer":"Use structural control channels and explicit adapter/session state; never assume a system prompt alone is semantically dominant or invisible."},
+    {"id":"PF-ROOT-SCAFFOLDED-AUTONOMY","evidence":[532],"finding":"Idle thought diversity and reflection frequency were directly altered by a prompt pool, anti-repetition instructions, token budget and hardware/idle gates.","transfer":"Measure autonomous/emergent behavior against prompt/gate ablations; do not count scaffolded variety as unprompted emergence."},
+    {"id":"PF-ROOT-RESOURCE-STATE-MACHINE","evidence":[534],"finding":"Heavy-model VRAM arbitration required serialized swap transitions, service masking, health checks, lock ordering and emergency rollback.","transfer":"Treat scarce-resource routing as a reversible state machine with explicit authority, health and rollback rather than ad-hoc process starts/stops."},
+    {"id":"PF-ROOT-INTERNAL-SALIENCE","evidence":[535],"finding":"Internal world-state was continuously available but prompt policy was changed to keep it behaviorally influential without routinely reading metrics back to the user.","transfer":"Separate state availability from salience/disclosure policy in GWT/context routing."},
+    {"id":"PF-ROOT-DOC-PROVENANCE","evidence":[530,533,540,541,544],"finding":"Historical documentation mixes design narrative, philosophical interpretation, time-local topology and at least one large hallucinated authoritative document with fabricated people. Commit titles can also diverge from the actual diff.","transfer":"Documentation is an evidence source only with provenance class and diff/tree/runtime corroboration; generated institutional/person claims require explicit verification."},
+    {"id":"PF-ROOT-RELEASE-INTEGRITY","evidence":[542,543,544],"finding":"The early release lineage repaired hardcoded paths and added model checksum verification, target-mount disk checks and bounded service startup handling.","transfer":"Release correctness includes portable path resolution, artifact integrity hashes and target-like preflight/installation validation."}
+  ],
+  "negative_results_preserved":[
+    "Natural-language generation-control text leaked into visible responses.",
+    "Raw idle-thought diversity was heavily scaffolded by explicit prompt pools and thresholds.",
+    "A generated 2384-line documentation artifact invented team members and authoritative-looking history.",
+    "Commit-message/documentation wording could disagree with actual ordinal diff evidence.",
+    "Early launchers contained hardcoded host paths requiring later portability fixes."
+  ],
+  "epistemic_boundary":"GRF-to-system mappings, consciousness/experience wording and 'emergent behavior' documentation are preserved as historical design claims. This pass does not promote them into empirical proof of phenomenal consciousness, scientific novelty or current runtime behavior.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level conceptual dedup against the earned-work ledger was performed."},
+  "next_falsifiers":[
+    "A/B test structured control channels versus natural-language tags and measure tag leakage/instruction adherence.",
+    "Ablate idle prompt rotation, repetition guards and gate thresholds to estimate scaffold-dependent versus endogenous diversity.",
+    "Fault-inject each heavy-model swap transition and assert rollback plus single-active-heavy-model invariant.",
+    "Run generated documentation through entity/provenance verification and diff/runtime claim checking before publication.",
+    "Clean-install from the root/release lineage with checksum corruption and alternate model mountpoints."
+  ],
+  "status":"COMPLETE"
+}

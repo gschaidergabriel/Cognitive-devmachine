@@ -1,0 +1,19 @@
+name: Research Entity Identity Guard
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'research/strengthen-researcher-identity-*'
+
+jobs:
+  identity-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate every-turn Research Entity identity lock
+        run: python tools/research_identity_guard_check.py

@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K32_K47_20260809T1410p0700",
+  "repository":"gschaidergabriel/Project-Frankenstein",
+  "frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "ordinal_scheme":"head~k on frozen first-parent chain",
+  "range":{"first":32,"last":47,"count":16},
+  "materialized":[
+    {"k":32,"sha":"31ab35ecfc735ace30405de99d80d1fa48f92201","disposition":"HISTORICAL_PERSONALIZED_FEED_MECHANISM","semantic":"RSS feed engine with tiny neural ranker trained from dismiss/click signals, topic mixing and no LLM calls"},
+    {"k":33,"sha":"4634aebcd9f7700756df159fc125b9607dda7af4","disposition":"HISTORICAL_SOMA_SCHEDULING_AND_RESOURCE_POLICY","semantic":"SOMA timer enabled, snapshot retention reduced 14->3, personality labels translated, autonomous nightly news cycle removed in favor of on-demand intelligence"},
+    {"k":34,"sha":"e8a174d4654e9b88684ec65f61df3fbabe5757f6","disposition":"HISTORICAL_ON_DEMAND_INTELLIGENCE_REBUILD","semantic":"search-driven synthesis, full-page crawl, story clustering, relevance/drift guards, claim dedup, XSS/NER/entity-match fixes and mode-specific synthesis"},
+    {"k":35,"sha":"6158be8ddde637fbf6b78e820239bf4ee8e8b5ee","disposition":"HISTORICAL_V7_ARCHITECTURE_CLEANUP_BUNDLE","semantic":"removes art/stickers, adds native vision/news-intel, moves model recommendations toward Qwen3.5/native vision and repairs multiple state, safety, identity, memory-store and routing issues"},
+    {"k":36,"sha":"a016410734564abcb4ba3bd0143b04ded6b8d1e1","disposition":"HISTORICAL_SOMA_MODEL_MIGRATION_AND_FEEDBACK_TRAINING","semantic":"SOMA moves to Qwen3.5-4B/bfloat16, feedback-weighted learning with negative examples, lifecycle bug fixes, cycle-state persistence/reset and live training telemetry"},
+    {"k":37,"sha":"c85ef6973b9dd80e0218ec89d29c6d07e0ac4400","disposition":"HISTORICAL_SOMA_OBSERVABILITY_UI","semantic":"personality radar, feedback ratio, activation/status and changelog display added; visualization derives from heuristic probe dimensions"},
+    {"k":38,"sha":"4a2c8852742e8d50a9de48cb5cd605b64897ca7a","disposition":"NEGATIVE_RESULT_TO_SOMA_CONCURRENCY_AND_SAFETY_HARDENING","semantic":"audit fixes thread lifecycle, config bounds/atomic writes, dedup, adapter similarity/drift edge cases, sample shuffling, snapshot metadata and probe failure handling"},
+    {"k":39,"sha":"ba1a82c59fb1073a3c6ac57ae30270da583a6285","disposition":"NEGATIVE_RESULT_TO_LIVE_CONFIG_AND_TOCTOU_FIX","semantic":"stale WebUI config, concurrent sleep cycles and restart-flag check/unlink race repaired with live reads, lock and atomic rename"},
+    {"k":40,"sha":"c16e5991466e50e059e176c07910ca75293b415c","disposition":"NEGATIVE_RESULT_TO_ADAPTER_DATA_AND_THREAD_HARDENING","semantic":"dead scorer columns, DB leak, corrupted timestamp, EMA dropped-key corruption, model memory leak, toggle thread leak, probe substring bias and zero-baseline safety drift fixed"},
+    {"k":41,"sha":"31963d1161e37fb42f8471df8bfe4c4b95718871","disposition":"HISTORICAL_HEURISTIC_PERSONALITY_PROBE_MECHANISM","semantic":"five stochastic fixed prompts mapped to six lexical/style dimensions before/after training; results stored as cycle changelog"},
+    {"k":42,"sha":"b49250b1c8cf2797e54023272a8fc6844cc8f1a8","disposition":"HISTORICAL_SOMA_TRAINING_DEPLOYMENT_HARDENING","semantic":"down_proj added to LoRA targets, first-cycle half-step/LR warmup, multi-method GGUF conversion fallback with PEFT survival path"},
+    {"k":43,"sha":"b9f23cd48cce1f1307a073904c715c60dd85dc3e","disposition":"HISTORICAL_EXPLICIT_FEEDBACK_AND_SCORER_MECHANISM","semantic":"thumbs up/down stored and given strongest conversation-quality weight; scorer shifts toward response depth/user investment; LoRA targets widened to full attention projections"},
+    {"k":44,"sha":"30540e5767527b25f56e5c09e0e6e01c2d0146b4","disposition":"HISTORICAL_INSTALL_ARCHITECTURE_TRANSITION","semantic":"installer removes Ollama/unused model paths and legacy timers, fixes services/write paths, adds bridges and SOMA HF model support around single-model architecture"},
+    {"k":45,"sha":"5713f049f1e1b0504a62f039f71549d54e905e5c","disposition":"HISTORICAL_SOMA_DEPLOYMENT_INTEGRATION","semantic":"training dependencies plus systemd oneshot/timer installed with resource limits; timer initially opt-in via Personal Mode"},
+    {"k":46,"sha":"78f31e7f1e4fa7109a90f6e32514923ca7428a87","disposition":"HISTORICAL_SOMA_GENESIS_MECHANISM","semantic":"initial silent online Layer-2 LoRA adaptation package with conversation scorer, CPU trainer, sleep cycle, drift/similarity/NaN gates, EMA/snapshots/rollback, hot reload and explicit opt-in UI"},
+    {"k":47,"sha":"290d5e2b8640d55eb2a0aa38b99338c8070a0009","disposition":"HISTORICAL_MEMORY_RETRIEVAL_REBUILD","semantic":"Titan renamed LCME while preserving DB/tool compatibility; entity-vector cleanup, stop-word FTS, relevance-dominant scoring, cold-start gates, graph-expansion default-off and HNSW added; commit reports P@5 0.40->1.00"}
+  ],
+  "closure":{"materialized":16,"terminally_dispositioned":16,"uncovered":0,"status":"COMPLETE_FOR_ORDINAL_SHARD"},
+  "global_level0":{"gate":"NOT_PASS","exact_percent_increment":0.0,"reason":"Combined archive denominator remains open because exact Project-Frankenstein frozen-head tree identity is not yet enumerable on current execution surfaces."},
+  "provenance":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","created_at":"2026-08-09T14:10:00+07:00"}
+}

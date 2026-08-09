@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze",
+  "executions": [
+    {
+      "surface": "LOCAL_CONTAINER_LINUX",
+      "purpose": "Develop and falsify architecture freeze compiler before repository write",
+      "results": [
+        "python py_compile PASS",
+        "4/4 unit regressions PASS",
+        "semantic-hash versus exact-contract-hash identity split verified",
+        "missing MVC marker fails closed",
+        "source blob mismatch fails closed",
+        "missing required organ fails closed"
+      ],
+      "evidence_class": "LOCAL_COMPONENT_TEST"
+    },
+    {
+      "surface": "GITHUB_ACTIONS_UBUNTU_REPO_CHECKOUT",
+      "source_commit": "4f3ff9675e0b4fd0fb59d1a0a295c32d8da8a08a",
+      "purpose": "Execute exact repository source-lock build and freeze verification",
+      "receipt": "EXECUTION_RECEIPT_CI.json",
+      "results": [
+        "py_compile PASS",
+        "4/4 regressions PASS",
+        "source-locked build PASS",
+        "freeze verify PASS with 0 violations",
+        "15 modules / 13 logical planes"
+      ],
+      "evidence_class": "REPO_CHECKOUT_UBUNTU_COMPONENT_EVIDENCE"
+    },
+    {
+      "surface": "GITHUB_ACTIONS_UBUNTU_REPO_CHECKOUT",
+      "source_commit": "0fc1890ee64f460ccadc5cc21c5b509d420a1767",
+      "purpose": "Repair and execute registry-aligned nine-branch research interconnect preflight",
+      "receipt": "PREFLIGHT_RECEIPT_CI.json",
+      "results": [
+        "py_compile PASS",
+        "harness preflight PASS",
+        "9/9 registry branches",
+        "0 violations",
+        "legacy clay branch name removed from priority while historical trigger_runs/clay compatibility retained"
+      ],
+      "evidence_class": "RESEARCH_INFRASTRUCTURE_CI_EVIDENCE",
+      "frank_harness_modified": false
+    }
+  ],
+  "not_executed": [
+    "Andreas Ubuntu developer-host H1 runtime acceptance",
+    "live FRANK execution",
+    "ClayCode H2 differential",
+    "full Reference Harness release suite"
+  ],
+  "promotion": "NONE"
+}

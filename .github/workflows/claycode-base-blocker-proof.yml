@@ -1,0 +1,53 @@
+name: ClayCode BASE blocker proof
+on:
+  pull_request:
+    paths:
+      - 'research_entity/claycode/base/**'
+      - 'research_entity/claycode/g9/grammar.ebnf'
+      - '.github/workflows/claycode-base-blocker-proof.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ubuntu-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install proof dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb python3-tk gcc
+          python -m pip install --upgrade pip
+          python -m pip install -r research_entity/claycode/base/requirements.txt
+      - name: Run executable BASE proof under Xvfb
+        run: xvfb-run -a python research_entity/claycode/base/run_proof_suite.py
+      - name: Assert Ubuntu evidence boundary
+        run: |
+          python - <<'PY'
+          import json, pathlib, platform
+          p=pathlib.Path('research_entity/claycode/base/EXECUTABLE_RESEARCH_RECEIPT.json')
+          d=json.loads(p.read_text())
+          assert len(d['app_local_proxy_passed']) == 9
+          assert d['fuzz']['pass'] and d['authority_fuzz']['pass']
+          assert d['g9_cycle_conformance']['pass']
+          assert d['full_repo_g9_conformance']['available'] and d['full_repo_g9_conformance']['pass']
+          assert d['native_backend']['status'] == 'PASS'
+          assert d['heldout_corpus']['overlap'] == []
+          gui=next(x for x in d['application_receipts'] if x['app_id']=='APP-05-GUI-INTERACTIVE')
+          assert gui['adapter_details']['ui_backend']=='tk-x11-event-loop'
+          print(platform.platform())
+          print('CLAYCODE_BASE_UBUNTU_PROXY_PROOF=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: claycode-base-ubuntu-proof
+          path: |
+            research_entity/claycode/base/EXECUTABLE_RESEARCH_RECEIPT.json
+            research_entity/claycode/base/CLAYCODE_BASE_CORPUS.json
+          if-no-files-found: error

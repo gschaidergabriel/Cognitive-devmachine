@@ -111,11 +111,12 @@ class SandboxEffectGateway:
             if status in {'INTENT_RECORDED','RECOVERY_CONFLICT'}:
                 raise EffectDenied('effect has unresolved prior state')
         target.parent.mkdir(parents=True,exist_ok=True)
+        normalized_rel=target.relative_to(self.root).as_posix()
         before_hash=self._file_hash(target)
         after_hash=hashlib.sha256(payload).hexdigest()
         intent={
             'effect_id':proposal.effect_id,'status':'INTENT_RECORDED','capability':proposal.capability,
-            'relative_path':proposal.relative_path,'target':str(target),'before_hash':before_hash,
+            'relative_path':normalized_rel,'target_identity':f'sandbox:///{normalized_rel}','before_hash':before_hash,
             'after_hash':after_hash,'proposal_hash':self.proposal_hash(proposal),'permit_id':permit.permit_id,
             'intent_basis_epoch':permit.basis_epoch,'content_bytes':len(payload),'authority':'HOST_GATEWAY_ONLY'
         }

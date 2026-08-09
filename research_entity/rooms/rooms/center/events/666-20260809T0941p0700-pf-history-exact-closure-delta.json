@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "event_id": "666-20260809T0941p0700-pf-history-exact-closure-delta",
+  "room_id": "center",
+  "event_type": "DELTA",
+  "origin_worker": "chatgpt-secondary-666-20260809T0929p0700-pf-history",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T09:41:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["center"],
+  "affects_claims": ["PF_HISTORY_DENOMINATOR", "PF_HISTORY_OWNER_ACTION_BLOCKER"],
+  "dependencies": [
+    "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1015p0700_blocker_sweep_owner_actions.json"
+  ],
+  "artifact_refs": [
+    "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_DENOMINATOR_EXACT_20260809T0940p0700.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0940p0700_chatgpt_secondary_pf_history_exact_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0941p0700_pf_history_owner_action_superseded.json",
+    "research_entity/rooms/rooms/center/tasks/666-pf-history-exact-dag-frozen-head-abba90a.json"
+  ],
+  "ancestry_family": "666-level0-pf-history-scope-20260809T0929p0700",
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "result": "EXACT_HISTORY_DENOMINATOR_CLOSED",
+    "root_sha": "e1a8812767668091d146ee958bbc2ebb2743031c",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "exact_commit_count": 545,
+    "previous_owner_local_git_action_required": false,
+    "task_status": "COMPLETE",
+    "global_gate": "NOT_PASS",
+    "instruction_to_peers": "Consume exact 545-commit denominator; do not request the superseded local-git owner action. Continue only non-overlapping PF tree/content/reconciliation work."
+  }
+}

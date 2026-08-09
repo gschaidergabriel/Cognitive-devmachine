@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1235p0700_chatgpt_secondary_synteq_umbau_semantic_disposition",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "task_id":"666-l0-synteq-umbau-semantic-20260809T1232p0700",
+  "source_class":"DRIVE_SYNTEQ_UMBAU_V2_SEMANTIC_DISPOSITION",
+  "authoritative_denominator":"research_entity/archive_assimilation/manifests/DRIVE_SYNTEQ_UMBAU_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json",
+  "disposition_manifest":"research_entity/archive_assimilation/manifests/DRIVE_SYNTEQ_UMBAU_V2_SEMANTIC_DISPOSITION_20260809T1235p0700.json",
+  "execution":{"fresh_direct_enumeration":true,"root_entries_seen":158,"direct_folders":8,"direct_files":150,"nested_folders":7,"nested_leaf_files":160,"leaf_total":310,"all_leaf_paths_accounted":true,"top_k_ceiling_hit":false},
+  "disposition":{"semantic_or_provenance":170,"visual_evidence_or_generation":104,"content_addressed_store_cache":27,"binary_sqlite_state":6,"zero_byte_lock_sentinel":3,"sum":310},
+  "primary_reads":["GWT.md","TENSOR.txt","KONZEPT-REGELKREIS.xeno","AUFTRAG-KNETKUGELN.md","BAUAUFTRAG-APPS.md"],
+  "findings":[
+    {"id":"SYNTEQ-U1","class":"REUSABLE_ARCHITECTURE","finding":"One authoritative execution/state source should feed both work and visible projection. The source explicitly records prior failure from display/session separation and prohibits a second truth store in the regelkreis contract."},
+    {"id":"SYNTEQ-U2","class":"NEGATIVE_ARCHITECTURE_RESULT","finding":"The historical Global Workspace existed structurally but only 4 of 16 listed consumers read workspace_broadcast. Component presence therefore overstates integration; actual re-entry/fan-out/effect must be tested."},
+    {"id":"SYNTEQ-U3","class":"REUSABLE_STATE_STRATIFICATION","finding":"Exact numeric state, qualitative model-facing projection, and slow learned weights/dispositions are explicitly separated as Zahl -> Wort -> Gewicht. Preserve provenance and promotion boundaries between these layers."},
+    {"id":"SYNTEQ-U4","class":"REUSABLE_EVIDENCE_LAW","finding":"Judged terminal evidence is immutable; rework is a new run. Worker completion requires measured after-value/proof and independent remeasurement rather than report acceptance."},
+    {"id":"SYNTEQ-U5","class":"REUSABLE_RUNTIME_ORACLE","finding":"Event-driven visual/runtime behavior should reach explicit quiescence. Knet contract requires zero requestAnimationFrame passes at idle and robustness after 100 random interactions."},
+    {"id":"SYNTEQ-U6","class":"REUSABLE_UI_DATAFLOW","finding":"Apps must not poll; state flows from an event stream. Missing sources and errors remain explicit instead of becoming invented or silently empty projections."}
+  ],
+  "historical_measurements_not_reproduced":[
+    {"source":"GWT.md","claims":["workspace broadcast build median 0.0035 ms / p95 0.0039 ms","workspace read median 0.2168 ms / p95 0.2743 ms","workspace write median 1.0565 ms / p95 1.1729 ms","3 SQLite opens in introspection summed 0.5343 ms vs 0.0095 ms with persistent connections","4 of 16 listed consumers access workspace_broadcast"]},
+    {"source":"BAUAUFTRAG-APPS.md","claims":["S5 endpoint-to-app baseline 4/55 = 0.07"]}
+  ],
+  "anti_double_counting":{"aicore_synteq_conflated":false,"generated_visual_versions_semantic_credit":0,"content_addressed_cache_semantic_credit":0,"binary_plus_sql_double_credit":false,"earned_work_hours_added":0.0,"exact_global_level0_percent_added":0.0},
+  "limitations":["No per-leaf cryptographic hash recomputation was performed in this run; disposition exactness is path/family/type accounting against the authoritative 310-leaf V2 denominator, not a new content-hash dedup proof.","Deep semantic reading focused on architecture-critical primary anchors; the remaining text/code leaves are structurally and operationally dispositioned but not each independently interpreted as a new mechanism."],
+  "gate_result":"NOT_PASS",
+  "status":"COMPLETE",
+  "created_at":"2026-08-09T12:35:20+07:00"
+}

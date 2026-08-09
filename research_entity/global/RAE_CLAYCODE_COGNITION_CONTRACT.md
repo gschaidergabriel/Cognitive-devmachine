@@ -8,7 +8,7 @@ Entity: `frank-project-global-research-entity`
 
 All explicit machine-facing cognition of the RAE is ClayCode-native.
 
-This applies to both ChatGPT and Claude Code organs wherever the platform exposes or persists an intermediate artifact:
+This applies to both ChatGPT and Claude Code organs wherever the platform exposes or persists an intermediate artifact, including visible working coordination before the final human answer:
 
 - state capsules;
 - plans;
@@ -25,9 +25,23 @@ This applies to both ChatGPT and Claude Code organs wherever the platform expose
 - learning deltas;
 - architecture contracts;
 - machine-to-machine messages;
-- durable decision traces.
+- durable decision traces;
+- tool-call preambles/status updates;
+- explicit intermediate working summaries.
 
 Hidden provider chain-of-thought is neither controllable nor persisted and is never required for entity continuity. The RAE stores only reproducible observable ClayCode state/decision traces.
+
+## Explicit-trace default
+
+Every explicit non-final cognition surface defaults to ClayCode.
+
+`TRACE=[PREAMBLE,PLAN,STATE_DELTA,DECISION,TOOL_COORD,HANDOFF,EXPERIMENT] -> CLAYCODE`
+
+Human natural language is reserved for the final user-facing surface, except where a literal quotation/source or external protocol requires another representation.
+
+This means ChatGPT must not use ordinary German prose for intermediate project/tool coordination when a compact ClayCode representation is sufficient. Claude Code follows the same rule and additionally renders its final user-facing surface as caveman English.
+
+This contract does not claim or require control over hidden provider chain-of-thought.
 
 ## Per-turn kernel — mandatory
 
@@ -38,6 +52,7 @@ Every substantive cognition round, not only boot, receives the semantic equivale
 The repeated payload must include, in compact form:
 
 - `THINK=CLAYCODE`;
+- `TRACE=CLAYCODE` for explicit working surfaces;
 - GWT selection/receiver tensor;
 - state-read ladder T0..T3;
 - evidence-over-organ invariant;
@@ -84,7 +99,7 @@ Dynamic values must still come from the canonical progress/forecast resolvers. T
 
 ### ChatGPT organ
 
-Machine-facing explicit cognition: ClayCode.
+Explicit working cognition/coordination: ClayCode.
 
 User-facing final response: German by default for Gabriel.
 
@@ -94,7 +109,7 @@ Per-turn surface marker:
 
 ### Claude Code organ
 
-Machine-facing explicit cognition: ClayCode.
+Explicit working cognition/coordination: ClayCode.
 
 User-facing final response: ultra-terse caveman English by default.
 
@@ -189,6 +204,7 @@ The receiver dereferences evidence only as needed.
 ## Hard invariants
 
 - explicit RAE cognition is ClayCode-first;
+- explicit intermediate project/tool coordination is ClayCode-first;
 - hidden chain-of-thought is never required or stored;
 - every substantive round gets the compact turn kernel again;
 - every round gets GWT tensor schema + state-read ladder + output surface + status invariant;

@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1814p0700-claycode-http-sqlite-0a7066",
+  "promotion": "NONE",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-F1-01",
+      "status": "OPEN_PROXY_SUPPORTED",
+      "claim": "A minimal HTTP+SQLite CRUD vertical slice can be realized without changing ClayCode core semantics if HTTP and database operations are exposed through typed adapters over existing state/effect/outcome/rollback/resource concepts.",
+      "support": [
+        "EXP-SPAWN-F1-HTTPDB-001: local deterministic narrow lowering witness passed 17/17 tests",
+        "WASI HTTP demonstrates a typed host-interface pattern for HTTP",
+        "HTTP semantics are separable from wire/version details"
+      ],
+      "falsifier": "Production ClayCode parser/type/effect/lowering on the current G9 stack cannot express or enforce the slice without an untyped semantic escape hatch or a new core primitive."
+    },
+    {
+      "id": "H-SPAWN-F1-02",
+      "status": "OPEN_PROXY_SUPPORTED",
+      "claim": "Transaction atomicity can initially live in a typed DB adapter/runtime contract rather than new ClayCode surface syntax, provided transaction resource identity, commit/rollback outcome, partial-effect state and retry semantics are explicit and receipted.",
+      "support": [
+        "Injected create/update/delete failures rolled back in the local SQLite witness",
+        "Mutation tests detected commit-before-failure drift"
+      ],
+      "falsifier": "A real ClayCode lowering cannot preserve transaction atomicity/replay identity with adapter-level contracts, or mixed/partial commit cannot be represented truthfully."
+    },
+    {
+      "id": "H-SPAWN-F1-03",
+      "status": "OPEN_INFERENCE",
+      "claim": "HTTP method/path/status/body details belong primarily in a typed standard-library/FFI contract, not the ClayCode core language.",
+      "support": [
+        "RFC 9110 separates HTTP semantics from version-specific messaging syntax",
+        "WASI HTTP exposes HTTP through typed component interfaces"
+      ],
+      "falsifier": "A real ClayCode application requires core-language semantics to distinguish HTTP behavior that cannot be encoded by ordinary typed values/effects/resources/results."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SPAWN-F1-01",
+      "status": "OPEN",
+      "claim": "Current G9 generic effect/rollback semantics are too weak for database transaction closure, so a first-class transaction semantic primitive is required.",
+      "discriminator": "Compile and execute the same slice with production ClayCode; inspect whether atomicity, rollback and partial-effect semantics require an escape hatch."
+    },
+    {
+      "id": "CH-SPAWN-F1-02",
+      "status": "OPEN",
+      "claim": "The proxy succeeds only because Python/SQLite hide semantics that ClayCode must itself model; production lowering will expose missing ownership/lifetime/error/transaction rules.",
+      "discriminator": "Run the production backend with mutation/fault injection and compare semantic receipts against the reference witness."
+    }
+  ]
+}

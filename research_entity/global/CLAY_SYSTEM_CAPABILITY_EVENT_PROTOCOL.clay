@@ -1,0 +1,30 @@
+module clay.system.capability_events
+version "1.0"
+root=@research_entity/state/system/events/
+
+record ResourceObservationEvent {
+  schema_version="1.0"
+  event_id:String
+  kind="RESOURCE_OBSERVATION"
+  actor:String
+  created_at:Time
+  payload:{resource_id,resource_class,label,host_or_surface,provider,details,authority,availability_state,evidence_class,evidence_ref,freshness_seconds}
+}
+
+record CapabilityObservationEvent {
+  schema_version="1.0"
+  event_id:String
+  kind="CAPABILITY_OBSERVATION"
+  actor:String
+  created_at:Time
+  payload:{capability_instance_id,resource_id,capability_key,capability_class,state,modalities,execution_scope,authority_scope,cost,latency,privacy,trials,successes,confidence,evidence,freshness_seconds}
+}
+
+rule ChatGPT_substantive_turn -> observe current authorized tool/capability surface when state changed or current observation absent/stale
+rule Claude_prompt_boundary -> ingest system events before scheduler recompute
+rule capability_observation expires by freshness
+rule tool_presence != authority
+rule installed != verified_can_now unless current evidence supports it
+rule unavailable_or_unknown -> explicit CANNOT_NOW|UNKNOWN|STALE
+rule no secrets/tokens/raw credentials in events
+rule provider/model/session are provenance not identity

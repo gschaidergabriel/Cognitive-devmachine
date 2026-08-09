@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1342p0700-chatgpt-secondary-pf-tree-compare-surface-crosscheck",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "created_at": "2026-08-09T13:42:00+07:00"
+  },
+  "target": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "frozen_root": "e1a8812767668091d146ee958bbc2ebb2743031c",
+    "obligation": "test whether currently exposed compare/contents reads can substitute for an exact frozen-head tree denominator"
+  },
+  "crossread": "research_entity/archive_assimilation/receipts/666_20260809T1214p0700_chatgpt_secondary_pf_frozen_tree_surface_blocker.json",
+  "observations": [
+    {
+      "surface": "GitHub fetch_file at repository root, frozen ref",
+      "result": "BLOCKED",
+      "detail": "Directory path is rejected rather than enumerated; this independently reproduces the existing blocker."
+    },
+    {
+      "surface": "GitHub compare_commits(root, frozen_head)",
+      "result": "AVAILABLE_BUT_NOT_TREE_DENOMINATOR",
+      "detail": "The endpoint verifies root-to-head ahead_by=544 and returns a changed-files projection for the comparison. By contract and semantics this is a diff view, not the complete frozen-head tree identity set; it can include removals and cannot prove presence/identity of all unchanged head entries."
+    }
+  ],
+  "adjudication": {
+    "new_scientific_claim": false,
+    "method_delta": "COMPARE_SURFACE_EXPLICITLY_REJECTED_AS_TREE_DENOMINATOR_SUBSTITUTE",
+    "exact_tree_enumerated": false,
+    "tree_denominator_frozen": false,
+    "exact_global_level0_credit_percent": 0.0,
+    "release_gate": "NOT_PASS"
+  },
+  "anti_goodhart_guard": "Do not convert a large changed-files list into apparent tree coverage. Only a complete recursive tree/archive/clone identity surface with completeness evidence may close the obligation.",
+  "status": "NEGATIVE_RESULT_METHOD_CROSSCHECK"
+}

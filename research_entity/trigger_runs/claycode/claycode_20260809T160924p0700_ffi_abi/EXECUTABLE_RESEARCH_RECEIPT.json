@@ -1,0 +1,45 @@
+{
+  "schema": "CLAYCODE_EXECUTABLE_RESEARCH_RECEIPT_LOCAL_V1",
+  "run_id": "claycode_20260809T160924p0700_ffi_abi",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "execution_surface": "local_python_sandbox",
+  "target_host_claim": "NO_UBUNTU_NATIVE_TARGET_EVIDENCE",
+  "e2b_status": "UNAVAILABLE_IN_CURRENT_CHATGPT_TOOL_SURFACE",
+  "candidate": "ClayCode BASE FFI lifetime-bound resource identity subset",
+  "source_hash": "30e03690d5a4bbd64aeeb25a45677d3e6c03308095af120953bf803ac2a96c75",
+  "semantic_hash": "b8a32909d0eb94ef64a6ccfd2343ffde35bbfc1537359ef2592b8eb8e595977a",
+  "contract_hash": "50ed89c94ed3eca2ba8a216d3b85801949bee77586a9cd8450bb4b5dc3ceb3d5",
+  "probe_source_hash": "57a4996068be9a5abf84f5aefd8f6b7c5cfe9fe505e4dde0aab622c65de51c44",
+  "lowering_target": "Python executable model of host resource table + capability designation",
+  "generated_code_hash": "57a4996068be9a5abf84f5aefd8f6b7c5cfe9fe505e4dde0aab622c65de51c44",
+  "tests": {
+    "cases": 20000,
+    "naive_slot_only": {
+      "stale_handle_accepts": 20000,
+      "stale_capability_resource_alias_accepts": 20000,
+      "cross_type_stale_accepts": 10000,
+      "borrow_after_return_accepts": 20000
+    },
+    "typed_generation_lifetime": {
+      "stale_handle_accepts": 0,
+      "stale_capability_resource_alias_accepts": 0,
+      "cross_type_stale_accepts": 0,
+      "borrow_after_return_accepts": 0,
+      "valid_operation_accepts": 40000
+    },
+    "elapsed_seconds": 0.06909668599999463
+  },
+  "expected_vs_observed": {
+    "naive_slot_only_expected": "stale aliasing under deliberate slot reuse; no enforceable borrow extent",
+    "typed_expected": "reject stale/cross-type/capability-alias/borrow-after-return while preserving valid operations"
+  },
+  "failure_count": 0,
+  "failures": [],
+  "failure_classification": "NONE_IN_TESTED_CORPUS",
+  "repair_change_applied": "No production language change. Created bounded research candidate with typed resource identity and ownership/lifetime semantics.",
+  "affected_hypotheses": ["H-CC-FFI-001", "H-CC-FFI-002", "H-CC-FFI-003"],
+  "affected_branches": ["claycode", "frank", "harness", "unifieddb", "claygraph", "gwt", "hyperposition", "emergenz", "clayresearch"],
+  "claim_boundary": "Synthetic local prototype only. It refutes slot-only resource identity under the tested reuse model; it does not prove this exact field layout is necessary, does not close CC-WP-07, and is not a production compiler/runtime or Ubuntu-native execution proof."
+}

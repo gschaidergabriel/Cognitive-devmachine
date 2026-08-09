@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1924p0700-chatgpt-self-build-posthoc-recurrence",
+  "actor": "chatgpt-secondary",
+  "artifact": {
+    "path": "research_entity/harness/reference/recurrence_policy_differential.py",
+    "commit": "28afc283ea4100a9f4b70793c0b2ff732256552a"
+  },
+  "tests": {
+    "path": "research_entity/harness/reference/test_recurrence_policy_differential.py",
+    "commit": "08c0fdb2330a77bc8f3af89b1fdfd1bdcf93531b",
+    "execution_surface": "current ChatGPT local container against current H1 controller semantics",
+    "first_attempt": {
+      "result": "FAIL_FIXTURE_IMPORT",
+      "cause": "local loop_dynamics_reference fixture contained LoopDynamicsReadout only and omitted production decide_recurrence",
+      "disposition": "PRESERVED_NEGATIVE_RESULT_AND_RETESTED_AGAINST_CURRENT_H1_CONTROLLER_SEMANTICS"
+    },
+    "final_attempt": {
+      "tests_passed": 5,
+      "tests_total": 5,
+      "result": "PASS"
+    }
+  },
+  "scenario_observations": {
+    "transient_false_halt": {
+      "single_state_reference_first_terminal_epoch": 1,
+      "single_state_reference_decision": "HALT_CANDIDATE_CONVERGED",
+      "posthoc_trajectory_first_terminal": null,
+      "fixed_depth_3_first_terminal_epoch": 3,
+      "interpretation": "synthetic discriminator only: shows a transient low-delta/low-pressure state can produce an early single-state halt while the trajectory readout waits"
+    },
+    "gradual_convergence": {
+      "single_state_reference_first_terminal_epoch": 2,
+      "posthoc_trajectory_first_terminal_epoch": 3,
+      "fixed_depth_3_first_terminal_epoch": 3,
+      "interpretation": "synthetic discriminator only: posthoc protection can cost an extra recurrence on a clean convergence trajectory"
+    },
+    "rollback": {
+      "single_state_reference_terminal": "ROLLBACK",
+      "posthoc_trajectory_terminal": "ROLLBACK",
+      "fixed_depth_3_terminal": "HALT_FIXED_DEPTH"
+    }
+  },
+  "evidence_class": "EXECUTED_LOCAL_REFERENCE_H1_PROXY",
+  "winner_selected": false,
+  "authority": "PROPOSAL_ONLY",
+  "next_required_evidence": "Run the same differential on real frozen H1 trajectories with independent outcome/cost labels, then cross with ActiveAssembly policy and receiver-causal interventions before target-4B promotion."
+}

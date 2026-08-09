@@ -1,0 +1,56 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-TITAN-MEMORY-VENV-SETUPTOOLS-FOLDER-AUDIT-20260809T1228p0700",
+  "trigger":"666",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{
+    "titan_root_id":"1fnB_uYrxTL5ecjsyof8fIEbn-mnr4x19",
+    "venv_record_manifest":"research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_RECORD_FILE_IDENTITY_20260809T1058p0700.json",
+    "setuptools_record_drive_id":"1Os0DtrLFcJNUSSecZYyUtexrlPRMhQoR",
+    "setuptools_drive_id":"1KGHRAVMjvjtSFHwFOqw6Rgp9EuA4y-oT"
+  },
+  "record_revalidation":{
+    "raw_record_bytes":64701,
+    "raw_record_sha256":"713c74ebe32f7e7dc34f56d753498e640518cb1c8e7438d1a36493f72864cdcf",
+    "manifest_sha256_match":true,
+    "setuptools_record_files":747,
+    "record_implied_directories_including_setuptools_root":98
+  },
+  "method":{
+    "enumeration":"Google_Drive.list_folder(top_k=1000) on every one of the 98 RECORD-implied setuptools directories",
+    "comparison":"At every node, observed immediate folder identities were checked against the setuptools RECORD-derived expected child-folder set. All 35 __pycache__ leaves were directly listed rather than inferred.",
+    "empty_directory_rule":"RECORD provides file identities but cannot exclude unrecorded empty directories; direct listing of all 98 implied directories closes that risk only if no extra folder appears."
+  },
+  "measured_execution":{
+    "directories_expected":98,
+    "directories_direct_listed":98,
+    "directories_missing":0,
+    "extra_directories_observed":0,
+    "nodes_with_child_set_mismatch":0,
+    "normal_directory_nodes":63,
+    "pycache_leaf_nodes":35,
+    "status":"CLOSED_EXACT_EMPTY_DIRECTORY_AND_CHILD_IDENTITY_AUDIT"
+  },
+  "classification":{
+    "source_class":"VENDORED_RUNTIME_SUPPORT",
+    "semantic_credit":"ZERO_VENDOR_SUPPORT",
+    "scientific_replication_credit":"NONE"
+  },
+  "titan_frontier_effect":{
+    "prior_aggregate_possible_empty_directory_remainder":202,
+    "pip_internal_closed_this_invocation":38,
+    "pip_vendor_closed_this_invocation":66,
+    "setuptools_closed_this_lane":98,
+    "arithmetic_remainder":0,
+    "aggregation_rule":"A fresh whole-Titan aggregation must consume all three receipts before promoting the Titan root to exact recursive closure."
+  },
+  "global_level0":{
+    "gate":"NOT_PASS",
+    "exact_global_percent_added":0.0,
+    "denominator_state":"NOT_FROZEN"
+  },
+  "created_at":"2026-08-09T12:28:00+07:00"
+}

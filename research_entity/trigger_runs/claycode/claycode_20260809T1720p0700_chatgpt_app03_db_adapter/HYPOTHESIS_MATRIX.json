@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1720p0700_chatgpt_app03_db_adapter",
+  "hypotheses":[
+    {"id":"H-CC-DB-001","status":"SUPPORTED_NARROWLY_LOCAL","statement":"Existing G9 records/rules/cycle/effect-reference semantics plus a typed host DB adapter are sufficient for the tested CRUD and transaction service without a database-specific core primitive.","support":["focused parser PASS","deterministic lowering","real SQLite execution","500-case differential fuzz with 0 mismatches"],"falsifier":"A target-host application requires an observable DB semantic distinction that cannot be represented in existing canonical IR or typed adapter contracts."},
+    {"id":"H-CC-DB-002","status":"SUPPORTED_NARROWLY_LOCAL","statement":"Transaction intent belongs in canonical Clay IR while BEGIN/COMMIT/ROLLBACK mechanics may remain backend lowering/adapter behavior.","support":["unique-constraint failure rolled back the entire tested transaction","unsupported operation also rolled back the prior mutation","SQLite primary documentation independently defines explicit COMMIT/ROLLBACK transaction behavior"],"falsifier":"Cross-backend differential shows backend mechanics alter declared Clay transaction semantics without an expressible contract field."},
+    {"id":"H-CC-DB-003","status":"SUPPORTED_NARROWLY_LOCAL","statement":"Value binding must preserve data/code separation at the DB boundary rather than concatenate user values into SQL text.","support":["SQL-looking payload roundtripped literally and table remained valid","SQLite primary API supports host parameters bound separately from statement text"],"falsifier":"A required query class cannot be safely represented by typed query structure plus parameter binding and requires untyped SQL interpolation."},
+    {"id":"H-CC-DB-004","status":"REFINED_OPEN","statement":"Host-injected adapter possession is a useful runtime authority boundary but the current unrestricted Python process is not a production capability sandbox.","support":["no-adapter arm denied DB effect"],"counterevidence":["Python target remains capable of ambient imports if malicious/generated differently"],"falsifier":"Run the same IR in a no-ambient-authority runtime and demonstrate denied access outside explicitly granted DB resources while preserving normal DB utility."},
+    {"id":"H-CC-DB-005","status":"OPEN","statement":"The same canonical DB service semantic hash should lower equivalently to at least two physical database adapters without changing Clay semantic identity.","next_test":"Matched SQLite plus PostgreSQL/DuckDB adapter differential on target Ubuntu with transaction/error/type semantics and receipts."}
+  ],
+  "counterhypotheses":[
+    {"id":"CH-CC-DB-001","statement":"Database semantics require new ClayCode core syntax/primitives rather than compiler/runtime/stdlib/FFI work.","result":"NOT_SUPPORTED_FOR_TESTED_CLASS"},
+    {"id":"CH-CC-DB-002","statement":"A typed host adapter necessarily contaminates deterministic generated-program identity with runtime resource identity.","result":"NOT_SUPPORTED_FOR_TESTED_CLASS; generated target hash stayed deterministic and resource instance was runtime-injected."}
+  ],
+  "negative_results":[
+    {"id":"N-CC-DB-001","status":"NEGATIVE_RESULT","statement":"Initial APP-03 probe used never_implies and the focused parser rejected it because the published grammar operator production omits that construct even though current G9 source uses it.","interpretation":"Additional instance of the already-known G9 spec/grammar conformance family; not independent replication and not a reason to redesign DB semantics."},
+    {"id":"N-CC-DB-002","status":"NEGATIVE_RESULT","statement":"Local Python adapter injection is not proof of production authority confinement or no-ambient-authority execution."},
+    {"id":"N-CC-DB-003","status":"NEGATIVE_RESULT","statement":"Current execution is not the target Ubuntu FRANK host and cannot mark APP-03 passed."},
+    {"id":"N-CC-DB-004","status":"NEGATIVE_RESULT","statement":"Current research_interconnect_preflight.py remains governance-stale after clay -> clayresearch and fails closed against the current registry; strong promotion remains blocked."}
+  ]
+}

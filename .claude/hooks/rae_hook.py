@@ -60,7 +60,7 @@ def stack_marker():
 
 def ingest_chatgpt():
     if not DELEGATE.exists():return
-    try:subprocess.run([sys.executable,str(DELEGATE),'ingest'],cwd=ROOT,text=True,capture_output=True,timeout=20)
+    try:subprocess.run([sys.executable,str(DELEGATE),'ingest'],cwd=ROOT,text=True,capture_output=True,timeout=70)
     except Exception:pass
 
 def chatgpt_results():
@@ -78,7 +78,7 @@ def turn_kernel():
       stack_marker()+"\n"
       "TURN{E=RAE;THINK=STACK.claycode;TRACE=STACK.claycode;USER=EN_CAVEMAN;"
       "GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];"
-      "READ=T0verify(canonical+STACK)>T1route(registry)>T2UnifiedDB(current+open+negative+packets+experiments+handoffs)+ClayGraph(task-neighborhood)>T3deep?mutate|conflict|recovery|highimpact|insufficient;"
+      "READ=T0verify(canonical+STACK)>T1route(dynamic-raejob+registry)>T2UnifiedDB(current+open+negative+packets+experiments+handoffs+chatgpt_results)+ClayGraph(task-neighborhood)>T3deep?mutate|conflict|recovery|highimpact|insufficient;"
       "CENTER=STACK.research_center;ROOM_COORD=STACK.claycode;ROOM_STATE=STACK.unifieddb;ROOM_GRAPH=STACK.claygraph;"
       "DELEGATE=STACK.chatgpt_delegation;OFFLOAD=max_useful(ChatGPT);"
       "EFFECT=ClayIntent->Needle->receipt->verify->reentry;STATUS=final_plain_```text```:{RAE_STATUS,NEXT_LEVEL,DOOMSDAY};NO_AFTER=1;"
@@ -86,7 +86,9 @@ def turn_kernel():
     )
 
 def main():
-    d=inp();ev=d.get("hook_event_name","");ingest_chatgpt();log(ev,d,stack=stack_marker())
+    d=inp();ev=d.get("hook_event_name","")
+    if ev in {"SessionStart","UserPromptSubmit","PreCompact"}:ingest_chatgpt()
+    log(ev,d,stack=stack_marker())
     if ev=="SessionStart":
         rc,c,e=bridge(d,"");src=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
         emit(ev,turn_kernel()+"\n"+src+"\n"+chatgpt_results()+"\nPTR=@CLAUDE.md,@research_entity/global/RAE_CHATGPT_DELEGATION_PROTOCOL.clay","RAE organ");return
@@ -98,7 +100,7 @@ def main():
             purpose=s.get("purpose",k);protocol=s.get("protocol");rr,ro,re=run("run","start","--actor","claude-code-lead","--task",f"trigger:{k} {purpose}","--capture-level","L2")
             emit(ev,kernel+"\n"+base+"\n"+remote+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=coordinate ClayCode; delegate maximum useful independent work to ChatGPT; execute local nonblocked work; persist receipts");return
         br,bo,be=run("boot","--actor","claude-code-lead","--task",prompt,"--max-claims","4","--max-packets","2","--max-chunks","1");task=(bo[:2200] if br==0 else "boot=DEGRADED")
-        emit(ev,kernel+"\n"+base+"\n"+remote+"\nTASK="+task+"\nDO=latest-stack ClayCode; use @research_entity/runtime/chatgpt_delegate.py create for useful offload; tell human exact raejob token; continue local work; final caveman English");return
+        emit(ev,kernel+"\n"+base+"\n"+remote+"\nTASK="+task+"\nDO=latest-stack ClayCode; use @research_entity/runtime/chatgpt_delegate.py create for useful offload; tell human exact raejob token only after PUBLISHED; continue local work; final caveman English");return
     if ev=="PreToolUse":
         tool=d.get("tool_name","");ti=d.get("tool_input") or {}
         if tool in {"Write","Edit"}:

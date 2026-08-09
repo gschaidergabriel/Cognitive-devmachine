@@ -1,8 +1,11 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "workspace_id": "claycode-base-compiler",
   "status": "ACTIVE_BUILD",
-  "owner_directive": "Finish ClayCode as a general-purpose executable programming language/semantic IR and compiler/runtime before Clay 0.1. Preserve existing FRANK/XENO/ClayCode semantics wherever possible: less redesign, more compilation, lowering, runtime, FFI, stdlib and real application execution.",
+  "owner_directive": "Finish ClayCode as a general-purpose executable programming language/semantic IR and compiler/runtime before Clay 0.1. Preserve existing FRANK/XENO/ClayCode semantics wherever possible: less redesign, more compilation, lowering, runtime, FFI, stdlib and real application execution. Frank v0.1 execution/release target is exclusively the Ubuntu Linux developer system; Android/mobile/edge portability is out of scope until the owner explicitly reopens it.",
+  "target_host_directive": "research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md",
+  "frank_v0_1_target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "out_of_scope_for_frank_v0_1": ["ANDROID", "MOBILE", "GENERIC_EDGE_PORTABILITY", "WINDOWS", "MACOS", "BSD"],
   "general_purpose_acceptance_contract": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
   "release_gate_ref": "research_entity/global/LORA1_RELEASE_GATE.md",
   "mesh_protocol_ref": "research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md",
@@ -17,9 +20,10 @@
     "latest Hyperposition",
     "latest Emergenz",
     "Harness implementation feedback",
-    "Level-0 historical earned-work mappings"
+    "Level-0 historical earned-work mappings",
+    "Ubuntu Linux developer-system runtime evidence"
   ],
-  "coordination_rule": "Workers prefer compiler/runtime/toolchain implementation over semantic redesign. A ClayCode semantic change requires a concrete executable application or FRANK counterexample showing the existing semantics cannot express/lower the needed behavior.",
+  "coordination_rule": "Workers prefer compiler/runtime/toolchain implementation over semantic redesign. A ClayCode semantic change requires a concrete executable application or FRANK counterexample showing the existing semantics cannot express/lower the needed behavior. Non-Ubuntu portability work is not current v0.1 work.",
   "release_artifact": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
   "gate": "CLAYCODE_RELEASE_GATE",
   "gate_status": "NOT_PASS",
@@ -31,20 +35,20 @@
     "CC-WP-03-IR-TYPES": {"status":"OPEN","goal":"Typed canonical IR, collections, epistemic state, semantic identity and universal computational core."},
     "CC-WP-04-TYPE-EFFECT": {"status":"OPEN","goal":"Validator/type/effect checker with precise diagnostics; preserve expressibility != authority."},
     "CC-WP-05-EVALUATOR": {"status":"OPEN","goal":"Reference evaluator/interpreter for executable core semantics."},
-    "CC-WP-06-COMPILER-LOWERING": {"status":"OPEN","goal":"Real compiler/lowering pipeline with translation-validation contracts; first useful native and/or WASM/WASI target."},
-    "CC-WP-07-RUNTIME-ABI-FFI": {"status":"OPEN","goal":"Runtime ABI, typed host FFI, capability/effect gateway, modules/packages and explicit resource identity."},
-    "CC-WP-08-STDLIB-SDK": {"status":"OPEN","goal":"Minimal standard library/SDK for algorithms, collections, files/processes, HTTP/network, database adapters, async/concurrency, UI/event-loop adapters and backend interop."},
-    "CC-WP-09-CONCURRENCY-MEMORY": {"status":"OPEN","goal":"Define/implement errors, async/concurrency, atomics/resource/memory semantics sufficient for real app and backend lowering."},
-    "CC-WP-10-GENERAL-APP-SUITE": {"status":"OPEN","goal":"Compile and execute mandatory general-purpose application proof suite: CLI, real website/HTTP service, DB-backed service, concurrent service, GUI/interactive app, compiler/tool, GPU/ML/numerical backend, sandboxed system effect and FRANK component."},
+    "CC-WP-06-COMPILER-LOWERING": {"status":"OPEN","goal":"Real compiler/lowering pipeline with translation-validation contracts; first useful Ubuntu-native and/or WASM/WASI target used on Ubuntu."},
+    "CC-WP-07-RUNTIME-ABI-FFI": {"status":"OPEN","goal":"Ubuntu/Linux runtime ABI, typed host FFI, capability/effect gateway, modules/packages and explicit resource identity for Frank v0.1."},
+    "CC-WP-08-STDLIB-SDK": {"status":"OPEN","goal":"Minimal standard library/SDK for algorithms, collections, files/processes, HTTP/network, database adapters, async/concurrency, UI/event-loop adapters and backend interop on Ubuntu."},
+    "CC-WP-09-CONCURRENCY-MEMORY": {"status":"OPEN","goal":"Define/implement errors, async/concurrency, atomics/resource/memory semantics sufficient for real Ubuntu applications and backend lowering."},
+    "CC-WP-10-GENERAL-APP-SUITE": {"status":"OPEN","goal":"Compile and execute mandatory general-purpose application proof suite on Ubuntu: CLI, real website/HTTP service, DB-backed service, concurrent service, GUI/interactive app, compiler/tool, GPU/ML/numerical backend, sandboxed system effect and FRANK component."},
     "CC-WP-11-FUZZ-CONFORMANCE": {"status":"OPEN","goal":"Unit/property/fuzz/mutation/roundtrip/conformance/differential tests across compiler/runtime/FFI/application suite."},
     "CC-WP-12-CORPUS-HELDOUT": {"status":"OPEN","goal":"Semantics-derived positive/negative training corpus generator plus leak-resistant held-out/eval suite."},
-    "CC-WP-13-HARNESS-HANDOFF": {"status":"OPEN","goal":"Compile real frozen FRANK subsystem(s), prove no semantic escape hatch is needed and hand stable compiler/runtime into H2/H3."},
-    "CC-WP-14-BASE-AUDIT": {"status":"OPEN","goal":"General-purpose manifest, hashes, executable application receipts, unresolved-language-counterexample audit and PASS decision."}
+    "CC-WP-13-HARNESS-HANDOFF": {"status":"OPEN","goal":"Compile real frozen FRANK subsystem(s), prove no semantic escape hatch is needed and hand stable Ubuntu-targeted compiler/runtime into H2/H3."},
+    "CC-WP-14-BASE-AUDIT": {"status":"OPEN","goal":"General-purpose manifest, hashes, Ubuntu executable application receipts, unresolved-language-counterexample audit and PASS decision."}
   },
   "application_acceptance": {
     "required": ["CLI", "HTTP_WEBSITE", "DB_SERVICE", "CONCURRENT_SERVICE", "GUI_INTERACTIVE", "COMPILER_TOOL", "GPU_ML_NUMERICAL", "SYSTEM_EFFECT_SANDBOX", "FRANK_COMPONENT", "FULL_FRANK_HANDOFF"],
     "passed": [],
-    "rule": "Representability is insufficient; each applicable proof must compile/lower and execute with a reproducible receipt."
+    "rule": "Representability is insufficient; each applicable proof must compile/lower and execute with a reproducible receipt on the Ubuntu developer-system target before Frank v0.1 BASE PASS."
   },
   "language_change_policy": {
     "default": "IMPLEMENT_COMPILER_RUNTIME_STDLIB_FFI",

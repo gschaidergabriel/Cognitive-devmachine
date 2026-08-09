@@ -1,0 +1,44 @@
+name: GO Clay runner scope probe
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/go-runner-scope-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-control:
+    if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'chatgpt-secondary/go-runner-scope-probe-')
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Observe hosted control lane
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'experiment=GO-OOB-CLAY-RUNNER-SCOPE-DUAL-LANE-V1\n'
+          printf 'lane=github-hosted-control\n'
+          printf 'repository=%s\n' "$GITHUB_REPOSITORY"
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          printf 'runner_name=%s\n' "${RUNNER_NAME:-UNKNOWN}"
+          printf 'runner_os=%s\n' "${RUNNER_OS:-UNKNOWN}"
+          printf 'runner_arch=%s\n' "${RUNNER_ARCH:-UNKNOWN}"
+
+  selfhosted-scope-test:
+    if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'chatgpt-secondary/go-runner-scope-probe-')
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 3
+    steps:
+      - name: Observe Clay self-hosted scope lane
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'experiment=GO-OOB-CLAY-RUNNER-SCOPE-DUAL-LANE-V1\n'
+          printf 'lane=self-hosted-scope-test\n'
+          printf 'repository=%s\n' "$GITHUB_REPOSITORY"
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          printf 'runner_name=%s\n' "${RUNNER_NAME:-UNKNOWN}"
+          printf 'runner_os=%s\n' "${RUNNER_OS:-UNKNOWN}"
+          printf 'runner_arch=%s\n' "${RUNNER_ARCH:-UNKNOWN}"

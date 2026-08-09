@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "tool_name": "hostinger_github_runner",
+  "provider": "Hostinger + GitHub Actions",
+  "class": "self_hosted_remote_build_test_runtime",
+  "resource_id": "hostinger-vps-github-runner",
+  "requires_secret": [],
+  "credential_required": "managed_by_github_actions_runner_registration_and_repository_secrets",
+  "auth_transport": "GitHub Actions self-hosted runner channel",
+  "target_os": "Ubuntu Linux",
+  "preferred_for": [
+    "Frank v0.1 remote build",
+    "Frank v0.1 remote test",
+    "Frank v0.1 integration test",
+    "Frank v0.1 benchmark",
+    "ClayCode compiler/runtime Ubuntu execution",
+    "reproducible GitHub Actions execution receipts"
+  ],
+  "evidence_class": "remote_execution_runtime",
+  "status": "RUNTIME_VERIFIED_CONNECTIVITY_BUILD_UNTESTED",
+  "verification_receipt": "research_entity/state/system/events/20260809T161405Z-hostinger-vps-runner-resource.json",
+  "capability_receipt": "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",
+  "priority_work": "research_entity/state/work/events/20260809T161407Z-frank-v01-hostinger-runner-priority.json",
+  "availability": "ONLINE_VERIFIED",
+  "execution_authority": "authorized repository workflows only",
+  "current_chatgpt_surface": {
+    "can_read_existing_workflow_jobs": true,
+    "can_read_job_steps_and_logs": true,
+    "can_rerun_existing_jobs": true,
+    "can_arbitrary_workflow_dispatch": false,
+    "rule": "When no existing runnable job/workflow is exposed, create/revise repo work for an execution-capable organ rather than pretending a dispatch occurred."
+  },
+  "routing": {
+    "frank_v0_1_remote_build_test_priority": 1,
+    "policy": "PREFERRED_REMOTE_BUILD_TEST_PATH_FOR_FRANK_V0_1",
+    "final_release_boundary": "Hostinger remote receipts accelerate build/test/debug, but final Frank v0.1 acceptance still requires the designated Andreas Ubuntu developer system evidence."
+  },
+  "doomsday_forecast": {
+    "relevant_rows": [
+      "BASE_CLAYCODE_RELEASE",
+      "H1_REFERENCE_HARNESS",
+      "H2_CLAYCODE_HARNESS",
+      "H3_ONE_MODULE_BINARY_FRANK",
+      "UDB_UNIFIED_DATABASE",
+      "CLAY_0_1_FULL_INTEGRATION",
+      "CLAY_0_1_ACCEPTANCE_RUN"
+    ],
+    "impacts": [],
+    "note": "No calibrated speed multiplier until successful build/test workflow receipts exist."
+  },
+  "security": {
+    "no_raw_credentials_in_repo_state": true,
+    "workflow_revision_revalidation_before_effect": true,
+    "runner_label_revalidation_before_effect": true,
+    "secrets_boundary_required": true
+  },
+  "verified_at": "2026-08-09T16:14:05Z",
+  "source": "live Clay System Monitor observation + project-owner confirmation + current GitHub Actions connector capability inspection"
+}

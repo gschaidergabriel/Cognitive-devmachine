@@ -1,0 +1,48 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1710p0700-chatgpt-rule-surface-partition",
+  "experiment":"g9-rule-surface-partition-and-fail-closed-relation-normalization",
+  "evidence_class":"LOCAL_EXECUTABLE_PROXY",
+  "runtime":"hosted Python execution; exact Ubuntu developer target not available",
+  "inputs":{
+    "g9_source":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay@1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "grammar":"research_entity/claycode/g9/grammar.ebnf@ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "current_stack":"research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay@2bb50fc08677aa235033950123ef9ab350f53863"
+  },
+  "method":"Implement the checked EBNF expr production as an executable Lark proxy; compare current operator set vs minimal relational-operator repair; then route non-expression G9 rules through an explicitly registered PredicateIR compatibility normalizer. Unknown relations fail closed. Ambiguous mixed prose/control forms are not guessed.",
+  "results":{
+    "g9_rule_lines":53,
+    "current_expr_proxy_pass":29,
+    "current_expr_proxy_percent":54.7,
+    "minimal_relop_patch_pass":33,
+    "minimal_relop_patch_percent":62.3,
+    "deterministic_registered_predicate_ir_additional":17,
+    "deterministic_total_after_partition":50,
+    "deterministic_total_percent":94.3,
+    "ambiguous_or_semantic_choice_required":3,
+    "ambiguous_lines":[
+      "Needle.lowers EffectIntent -> concrete_adapter_plan",
+      "Claude_only consumes latest stack + writes task receipts",
+      "training_data personalizes_for_Andreas_when_FRANK_target && preserves_general_transfer_variants"
+    ],
+    "current_stack_rule_lines":65,
+    "stack_current_expr_proxy_pass":27,
+    "stack_minimal_relop_patch_pass":27,
+    "stack_expr_proxy_percent":41.5,
+    "stress":{
+      "predicate_whitespace_semantic_hash_stable":"20000/20000",
+      "binary_predicate_operand_swap_changes_hash":"10000/10000",
+      "unknown_relation_mutation_rejected":"5000/5000",
+      "permissive_any-word-relation_nonsense_accepted":"5000/5000"
+    }
+  },
+  "interpretation":"The smallest safe frontend delta is not an ever-growing arbitrary operator set. Keep executable expression operators closed; add a typed declarative PredicateIR/ConstraintIR surface with declared relation signatures plus bounded legacy normalization. Fail closed on source clauses whose meaning cannot be normalized without choosing semantics.",
+  "limitations":[
+    "expression parser is an EBNF-shaped proxy, not the production BASE parser",
+    "current stack may intentionally be a distinct protocol/control surface and is therefore evidence of syntax heterogeneity, not proof it must parse as G9 application code",
+    "no target Ubuntu execution",
+    "no full parser of interface method signatures/comments/research declarations in this experiment",
+    "no BASE work package is completed by this receipt"
+  ],
+  "promotion":"NONE"
+}

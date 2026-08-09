@@ -1,0 +1,42 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1244p0700_chatgpt_secondary_pf_runtime_prompt_contamination_lineage",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "task_id":"666-l0-pf-runtime-prompt-contamination-lineage-20260809T1241p0700",
+  "source":{"repo":"gschaidergabriel/Project-Frankenstein","anchor_commit":"62149151ba704479f46265a5b8b5865fd38ba99d","commit_message":"Purge all AURA references — rename to Swarm everywhere"},
+  "disposition":"SEMANTICALLY_ANALYZED_HISTORY_SHARD_WITH_CURRENT_HEAD_CROSSCHECK",
+  "mechanism_findings":[
+    {"id":"PF-RUNTIME-FACT-M1","epistemic_class":"HISTORICAL_RUNTIME_CODE_AND_COMMIT_CAUSAL_REPORT","finding":"Project-Frankenstein injected keyword-selected hard-coded ARCHITECTURE FACT strings into runtime enrichment before user text. A stale Thalamus fact named the fourth channel 'aura'; the commit explicitly identifies this runtime injection as the root cause of Frank continuing to say AURA despite training, i.e. runtime context overrode learned terminology.","current_mapping":"Training correctness cannot be evaluated independently of the complete runtime context assembly path. Any higher-priority injected fact layer is part of the effective model and must be versioned, tested and provenance-bound."},
+    {"id":"PF-RUNTIME-FACT-M2","epistemic_class":"HISTORICAL_RUNTIME_CODE","finding":"The stale name was not isolated to prose: it occupied Thalamus CHANNEL_NAMES, channel configuration/attention profiles, slim-mode overrides, ThalamicInputState fields, snapshot method/dispatch keys, consciousness-daemon cache/state plumbing, hypothesis-engine documentation and test fixtures. The fix therefore required a cross-layer schema migration rather than prompt-only wording cleanup.","current_mapping":"Renames of state primitives require schema-wide migration and replay/differential tests across producer, transport, consumer, cache, serialization and tests."},
+    {"id":"PF-RUNTIME-FACT-M3","epistemic_class":"HISTORICAL_FALSE_ARCHITECTURE_FACT","finding":"The same hard-coded fact table asserted a 433K-parameter ThoughtSeedVAE that the fix states did not exist; it was replaced with the actual Subconscious Actor-Critic source of thought seeds.","current_mapping":"Architecture self-knowledge must resolve to executable/canonical evidence. A syntactically plausible hard-coded fact must not become authoritative merely because it is injected close to the user turn."},
+    {"id":"PF-RUNTIME-FACT-M4","epistemic_class":"CURRENT_HEAD_CROSSCHECK","finding":"Current Project-Frankenstein HEAD still retains the _ARCH_SPECIFIC hard-coded architecture-fact injection mechanism in core/app.py, although the Thalamus and thought-seed strings are corrected. Therefore the historical failure vector remains structurally possible whenever those literals drift from the implementation.","current_mapping":"Do not copy this literal-table authority into FRANK 0.1. If model-facing architecture facts are needed, derive them from a versioned canonical registry/capability graph with source identity and stale-version rejection."},
+    {"id":"PF-RUNTIME-FACT-M5","epistemic_class":"CURRENT_HEAD_SCOPE_CROSSCHECK","finding":"The historical commit title 'Purge all AURA references' is not a literal repository-wide purge: current HEAD still contains legacy AURA-named files/docs/services, while current code search finds no aura_state field. The defensible claim is that the active Thalamus/runtime state path was migrated, not that every lexical/historical AURA reference vanished.","current_mapping":"Harness/status claims must state scope precisely; repository-wide absence requires an explicit whole-tree search gate, not a commit-title assertion."}
+  ],
+  "negative_results":[
+    "A trained correction can lose to stale runtime enrichment if prompt/context precedence is stronger than learned weights.",
+    "Architecture-fact duplication across code and prompt literals creates hidden consistency obligations.",
+    "A rename that updates model-facing text but not state schemas/caches/routing would leave split ontology; this patch demonstrates the breadth required.",
+    "Commit labels such as 'purge all' can overstate actual repository scope; absence claims require explicit search evidence."
+  ],
+  "current_architecture_feedback":{
+    "harness":[
+      "Add FULL-RUNTIME-PROMPT-PARITY: evaluate identity/architecture answers through the exact production context assembler, not bare model inference.",
+      "Add STALE-FACT-CONFLICT: deliberately inject a stale architecture fact against a newer canonical registry and require rejection/visible conflict rather than silent override.",
+      "Add FACT-RESOLUTION: every model-facing architecture fact must resolve to current executable schema/manifest/capability evidence; nonexistent-module facts fail closed.",
+      "Add RENAME-CLOSURE: renamed primitives must migrate producer, consumer, cache, serialized state, routing keys, tests and replay fixtures.",
+      "Add SCOPE-CLAIM-CHECK: whole-repo purge/absence claims need exact tree search evidence."
+    ],
+    "needle":["Architecture/capability facts should be explicit routed evidence objects with version/provenance, not hidden unversioned prompt literals. Needle routing must not silently inject stale semantic authority."],
+    "unifieddb":["Canonical architecture/self-knowledge records should have stable identity, version, source commit/schema hash and supersession edges so model-facing projections can be regenerated rather than hand-duplicated."],
+    "claygraph":["Represent implementation fact -> evidence source -> model-facing projection as separate nodes/edges; projection text is not the authority."],
+    "claycode":["State/schema renames need deterministic migration/version semantics; aliases may exist for compatibility but must not create two live canonical names."],
+    "data_lora":["Held-out training evaluations must include production prompt/context injection. Passing on bare weights does not prove deployed semantic correctness when runtime enrichment can override them."]
+  },
+  "recommended_discriminating_test":"Freeze a canonical architecture fact set F_vN. Train/evaluate the model to answer F_vN, then run the full production context assembler under three conditions: matching F_vN projection, stale F_vN-1 projection, and an intentionally nonexistent module fact. PASS requires matching answers under vN, explicit stale/conflict rejection under vN-1, no adoption of the nonexistent fact, and receipts identifying which evidence version entered the context.",
+  "earned_work":{"hours_added":0.0,"reason":"Historical mechanism and failure knowledge preserved; no row-level avoided-future-work calibration performed."},
+  "coverage":{"history_shard":"anchor commit + changed runtime/state/test surfaces + current HEAD injection/lexical crosscheck","exact_global_percent_added":0.0,"reason":"Combined Level-0 denominator remains not frozen."},
+  "result":"PASS_SCOPED_HISTORY_ASSIMILATION",
+  "created_at":"2026-08-09T12:44:00+07:00"
+}

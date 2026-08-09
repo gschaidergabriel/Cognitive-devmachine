@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1210p0700_chatgpt_secondary_pf_project_engine_v3_lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_universe": "gschaidergabriel/Project-Frankenstein historical lineage",
+  "bounded_scope": {
+    "task_id":"666-l0-pf-project-engine-v3-history-20260809T1202p0700",
+    "commits":[
+      "91b983a0f48a973c1fe5137d7271883e529b39fa",
+      "62a661f51271e8ec024c3557b921eaddda0267d3",
+      "b6d8c17bde2087d88ef4a31c09d6db2756219739",
+      "1c5c682aa84c13eadbf47fbc54e4219230ce5ee6",
+      "cfa7062ba62bc9d83fffada29dcc03a75c4f4050",
+      "35bbeacbce936e284f7cb8ab73747fd3cf7bebf0"
+    ],
+    "implementation_files":["services/project_engine.py"],
+    "exact_history_denominator_credit":0,
+    "reason":"Project-Frankenstein full commit-DAG and frozen-head tree denominators remain unresolved; this is a bounded semantic lineage shard."
+  },
+  "verified_mechanism_lineage": [
+    {
+      "id":"PF-PE3-L1",
+      "status":"HISTORICAL_VERIFIED_IN_CODE",
+      "finding":"PROJECT.md was introduced as persistent project base-of-truth, injected on every project chat and auto-updatable from model output.",
+      "current_implication":"Preserve human-readable recovery/project packets as a secondary continuity/recovery surface, but do not let model-authored text bypass canonical provenance/CAS governance."
+    },
+    {
+      "id":"PF-PE3-L2",
+      "status":"HISTORICAL_VERIFIED_IN_CODE",
+      "finding":"Tool-use agent loop began project-directory sandboxed with path resolution checks, dangerous-command blocklist, exact edit failure semantics and bounded iterations.",
+      "current_implication":"Fail-closed exact edits, bounded loops and explicit tool results remain reusable Harness/Needle primitives."
+    },
+    {
+      "id":"PF-PE3-L3",
+      "status":"HISTORICAL_NEGATIVE_TRANSITION",
+      "finding":"A subsequent commit deliberately removed the project sandbox and granted broad filesystem/system tool access while retaining only a minimal destructive-command blocklist.",
+      "current_implication":"Do not inherit this authority model. Treat it as evidence of architecture drift toward unsafe ambient authority; keep model output != execution authority and route capabilities through Needle/capability broker with scoped grants, provenance and rollback."
+    },
+    {
+      "id":"PF-PE3-L4",
+      "status":"HISTORICAL_VERIFIED_STRUCTURAL_ONLY",
+      "finding":"Context compaction above an estimated ~40K tokens, task files, SSE streaming and a 25-iteration agent loop were implemented structurally; the commit explicitly states live API end-to-end validation was blocked by insufficient credits.",
+      "current_implication":"Retain compaction as a candidate mechanism only; require replay-equivalence/information-loss tests before adoption."
+    },
+    {
+      "id":"PF-PE3-L5",
+      "status":"HISTORICAL_VERIFIED_IN_CODE",
+      "finding":"v3 implemented a world entity/relation graph, compact world snapshot, policy engine, activity feed, tiered deterministic/free-LLM/Claude action selection, bounded action chaining, outcome logging, profile updates, loop detection and minimal-context autonomous actions.",
+      "current_implication":"Strong precursor for current Needle routing + event/replay Harness + ClayGraph/UnifiedDB separation: state plane, decision plane, authority plane and evidence plane should remain explicit."
+    },
+    {
+      "id":"PF-PE3-L6",
+      "status":"HISTORICAL_SELF_REPORTED_MEASUREMENT_NOT_REPRODUCED",
+      "finding":"The v3 commit reports 39s/0-Claude-token autonomy cycle, 5-step/331s autonomous chain, 4s/0-Claude-token dream cycle, a real-project dealer-contact example, and projected ~$0.02/day cost.",
+      "current_implication":"Preserve as historical benchmark hypotheses only; do not promote without raw traces, exact workload, provider accounting and reproduction."
+    },
+    {
+      "id":"PF-PE3-L7",
+      "status":"HISTORICAL_VERIFIED_IN_CODE_WITH_EVALUATION_RISK",
+      "finding":"v3/v3.2 tool/action success classification often relies on textual error markers or tool-use presence; A/B strategy testing counts absence of [ERROR]/[TIMEOUT] as success and auto-applies a winner.",
+      "current_implication":"Reject proxy-only success as promotion criterion. Harness experiments need task-grounded outcome predicates, counterfactual/negative checks, rollback and holdout/OOD validation."
+    },
+    {
+      "id":"PF-PE3-L8",
+      "status":"HISTORICAL_VERIFIED_IN_CODE_WITH_AUTHORITY_RISK",
+      "finding":"Natural-language policies can be parsed by an LLM and automatically inserted; auto-refinement can also add policies from repeated failures/tool stats.",
+      "current_implication":"Policy learning may propose candidates but must not silently mutate execution authority. Separate learned recommendation from enforceable policy; require typed validation/provenance and approval rules."
+    },
+    {
+      "id":"PF-PE3-L9",
+      "status":"HISTORICAL_VERIFIED_IN_CODE",
+      "finding":"v3.2 added session replay/time-travel, agent-profile cloning and cross-project peer queries over world snapshots/memory.",
+      "current_implication":"Replay and peer-query are directly reusable concepts for the Research Center/Hive, but profile/knowledge transfer needs provenance, contamination boundaries and selective transfer tests."
+    }
+  ],
+  "crossread": {
+    "peer_run":"666-20260809T1206p0700-chatgpt-secondary-pf-recovery-reconcile",
+    "compatibility":"Consistent with peer finding that historical/recovery artifacts must be retained as lineage/provenance nodes rather than blindly restored; sandbox precursors and later variants require feature-level reconciliation."
+  },
+  "branch_feedback": {
+    "harness":["bounded loops + deterministic failure semantics","event trace/replay","task-grounded evaluators instead of no-error proxies","rollback for strategy/policy mutation"],
+    "frank":["persistent project state + world model lineage","do not restore ambient full-system authority"],
+    "claygraph_unifieddb":["world entity/relation graph as historical precursor; preserve provenance and exact/event state separately"],
+    "claycode":["typed transition/effect contracts should replace free-form model text as execution authority"],
+    "research_center":["peer-query/profile-transfer concepts require provenance and contamination controls"]
+  },
+  "negative_results_and_guards": [
+    "No exact Level-0 coverage credit from this bounded history shard.",
+    "No historical performance/cost number was independently reproduced.",
+    "Full-system tool access is not selected as a current architecture recommendation.",
+    "Context-compaction functionality was structurally implemented but historical commit reports no live end-to-end validation due insufficient API credits.",
+    "No paid training initiated."
+  ],
+  "next_falsifiers": [
+    "Replay-equivalence benchmark comparing full vs compacted context on long tool trajectories.",
+    "Capability-broker ablation: ambient authority vs typed scoped capabilities under adversarial tool prompts.",
+    "Outcome-evaluator benchmark: no-error proxy vs task-grounded oracle across partial/false-success cases.",
+    "Policy-learning test: proposal-only vs auto-enforced mutation with provenance/rollback and policy-conflict injection.",
+    "Selective profile-transfer benchmark measuring positive transfer, contamination and cross-project leakage."
+  ],
+  "completed_at":"2026-08-09T12:10:00+07:00"
+}

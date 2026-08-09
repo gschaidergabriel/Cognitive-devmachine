@@ -1,0 +1,118 @@
+module rae.chatgpt.delegate
+version "1.0"
+status PROJECT_OWNER_FIXED_TARGET
+
+entity RAE=frank-project-global-research-entity
+project CHATGPT_PROJECT="clay science pipeline"
+
+law CLAUDE_DELEGATES_MAX_USEFUL_WORK = true
+law DELEGATE_BY_COMPARATIVE_ADVANTAGE = true
+law CHATGPT_REMOTE_RESULT_RETURNS_TO_RAE_STATE = true
+law HUMAN_LAUNCH_REQUIRED_WHEN_HOSTED_CHATGPT_CANNOT_BE_PROGRAMMATICALLY_STARTED = true
+law QUEUED != EXECUTED
+
+score offload(task)=mix(
+  deep_research_gain,
+  web_gain,
+  independent_hypothesis_gain,
+  synthesis_gain,
+  multimodal_gain,
+  image_generation_gain,
+  artifact_generation_gain,
+  data_analysis_gain,
+  parallelism_gain,
+  minus_context_transfer_cost,
+  minus_repo_collision_risk,
+  minus_local_execution_advantage
+)
+
+rule if offload(task) >= useful_threshold -> make_work_package(task)
+rule split(task) into independent_packages when parallel_value > coordination_cost
+rule Claude keeps tight local build/test/debug loops when local_execution_advantage dominates
+rule Claude continues all nonblocked work after enqueue(package)
+
+record RAEChatGPTWorkPackage {
+  package_id:String
+  trigger_token:String
+  project_target:String="clay science pipeline"
+  requester_node:String
+  task_class:String
+  goal_clay:Clay
+  context_refs:Set<Ref>
+  capability_plan:Set<Capability>
+  required_outputs:Set<Clay>
+  write_scope:Set<Ref>
+  completion_test_clay:Clay
+  privacy_class:String
+  priority:Int
+  return_request_ref:Ref
+}
+
+capability CHATGPT_FULL {
+  web
+  deep_research
+  independent_counteranalysis
+  multimodal_analysis
+  image_generation
+  document_creation
+  pdf_creation
+  slides_creation
+  spreadsheet_analysis
+  code_review
+  cross_domain_synthesis
+}
+
+rule capability_plan=select_relevant(CHATGPT_FULL,task)
+rule current_external_fact_needed -> capability_plan += web
+rule broad_scientific_synthesis_needed -> capability_plan += deep_research
+rule image_or_visual_needed -> capability_plan += image_generation
+rule image_input_or_diagram_understanding_needed -> capability_plan += multimodal_analysis
+
+codec TRIGGER = "raejob-" + short_id(package_id)
+
+rule after enqueue(package) -> tell_human(
+  "Projekt clay science pipeline öffnen und exakt eingeben: " + package.trigger_token
+)
+
+rule on ChatGPT_receive(trigger_token) -> fetch matching request_ref
+rule ChatGPT_claim(package) before work
+rule ChatGPT.resolve_latest(RAE_LATEST_COGNITIVE_STACK) before cognition
+rule ChatGPT.explicit_cognition = latest.ClayCode
+rule ChatGPT.research_center_coordination = latest.ClayCode
+rule ChatGPT.use_all_relevant(package.capability_plan)
+rule ChatGPT.write_result_receipt to research_entity/state/receipts/chatgpt/<package_id>.json
+rule ChatGPT_result_semantics = latest.ClayCode
+rule ChatGPT_endturn_meta_claycode_research = ON
+
+record RAEChatGPTWorkResult {
+  package_id:String
+  result_id:String
+  executor_node:String
+  result_clay:Clay
+  evidence_refs:Set<Ref>
+  artifact_refs:Set<Ref>
+  web_refs:Set<Ref>
+  media_refs:Set<Ref>
+  unresolved_clay:Clay
+  completion_clay:Clay
+  verification_clay:Clay
+  status:POSTED|VERIFIED|PARTIAL|FAILED|CONFLICT
+}
+
+rule image_generation -> produce_image_in_ChatGPT
+rule if direct_repo_image_bytes_available -> persist bytes + artifact receipt
+rule if direct_repo_image_bytes_unavailable -> media_ref + prompt/receipt + ARTIFACT_SYNC_PENDING
+rule never_claim_repo_image_sync_without_exact_bytes
+
+rule Claude_prompt_boundary -> ingest_chatgpt_receipts()
+rule ingest_chatgpt_receipts -> UnifiedDB.rae_chatgpt_work_results
+rule next Claude kernel includes compact unconsumed ChatGPT results
+rule Claude consume(result) -> package.status=CONSUMED + receipt
+rule if Claude process actively waits/polls and result appears -> resume blocked lane
+rule else next Claude prompt resumes without human restating result
+
+invariant ChatGPT_result_not_truth_by_provider_rank
+invariant evidence>organ
+invariant no_manual_result_copy_required
+invariant Claude_meta_ClayCode_research_remains_OFF
+invariant ChatGPT_meta_ClayCode_research_remains_ON

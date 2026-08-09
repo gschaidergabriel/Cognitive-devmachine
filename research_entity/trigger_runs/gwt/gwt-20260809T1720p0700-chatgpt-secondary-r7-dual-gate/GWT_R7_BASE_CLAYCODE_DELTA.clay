@@ -1,0 +1,102 @@
+module gwt.r7.dual_gate_recurrence
+version "R7-OPEN-BASE-CANDIDATE"
+status OPEN_RESEARCH_CANDIDATE_NOT_PROMOTED
+parent [@research_entity/global/RAE_GWT_MICROKERNEL.clay,@research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md,@research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md]
+
+// BASE-stage semantic delta: intended to fit existing G9 record/type/tensor/rule surface.
+// No new ClayCode syntax is requested by this run.
+
+type CandidateSurfaceRelation = FILTER|AUGMENT|RECONSTRUCT|UNKNOWN
+type IgnitionMode = DISCRETE|GRADED|HYSTERETIC|MULTISTAGE|UNCLASSIFIED
+type LoopRegime = CONVERGING_FIXED_POINT|PRODUCTIVE_LIMIT_CYCLE|STALLED|DIVERGING_OR_OVERTHINKING|CHAOTIC_OR_UNCLASSIFIED
+type RecurrenceDecision = CONTINUE|HALT|INTERRUPT|ROUTE|ESCALATE
+
+record WorkspaceBasisR7 {
+  source_epoch:Epoch
+  graph_epoch:Epoch
+  hyperposition_topology_hash:Hash
+  candidate_surface_hash:Hash
+  candidate_surface_relation:CandidateSurfaceRelation
+  semantic_dependency_hash:Hash
+  model_output_hash:Hash?
+}
+
+record AdmissionReceiptR7 {
+  episode_id:WorkspaceEpisodeRef
+  basis:WorkspaceBasisR7
+  candidate_set:CandidateSetRef
+  winner:CandidateRef?
+  selection_axes:TensorRef
+  admission_score:Score?
+  ignition_mode:IgnitionMode
+  transition_steepness:Score?
+  hysteresis:Score?
+  reason:Symbol
+  provenance:Set<EvidenceRef>
+}
+
+record ReceiverStageReceiptR7 {
+  episode_id:WorkspaceEpisodeRef
+  receiver:ReceiverRef
+  addressable:Bool
+  delivered:Bool
+  payload_hash:Hash?
+  reconstructed:Bool?
+  reconstruction_hash:Hash?
+  uptake:Bool?
+  causal_use:Bool?
+  local_effect:ReceiptRef?
+  outcome_contribution:ReceiptRef?
+  reentry_contribution:ReceiptRef?
+}
+
+record RecurrenceControlReceiptR7 {
+  episode_id:WorkspaceEpisodeRef
+  recurrence_id:Ref
+  parent_recurrence:Ref?
+  loop_family:Symbol
+  timescale:Duration?
+  recurrence_index:Int
+  recurrence_budget:Int
+  state_delta:Score?
+  unresolved_pressure:Score?
+  marginal_utility_next:Score?
+  estimated_cost_next:Cost?
+  local_gain:Score?
+  stability_proxy:Score?
+  regime:LoopRegime
+  decision:RecurrenceDecision
+  decision_reason:Symbol
+  decision_dependency_hash:Hash
+  checkpoint:RecoveryRef?
+  provenance:Set<EvidenceRef>
+}
+
+record OutcomeReentryReceiptR7 {
+  episode_id:WorkspaceEpisodeRef
+  recurrence_id:Ref
+  observed_outcome:OutcomeRef
+  outcome_hash:Hash
+  state_delta:DeltaRef?
+  causal_credit:ReceiptRef?
+  reentry_epoch:Epoch
+  reentry_hash:Hash
+  authority_carried_forward:Bool=false
+}
+
+law gwt.admission != gwt.recurrence_continuation
+law low(state_delta) + high(unresolved_pressure) => STALLED
+law CandidateSurfaceRelation.FILTER => external_recall <= input_surface_recall
+law gwt.selection != effect.authority
+law gwt.reentry != effect.authority
+law graph.activation != gwt.ignition
+law addressable != delivered != reconstructed != uptake != causal_use != outcome_contribution != reentry_contribution
+law ignition_mode is measured_transition_profile; never truth_or_consciousness_label
+rule recurrence.CONTINUE requires unresolved_pressure_material + expected_marginal_utility_gt_cost + stability_within_budget
+rule recurrence.HALT requires reason + receipt
+rule effect.commit_after_recurrence requires current(effect_critical_dependency_versions) + current(capability_identity_epoch_validity) + current(resource_budget_flow_constraints)
+rule structural_control_update requires bounded_intervention + matched_control + causal_credit + rollback
+invariant emergence_readout_never_execution_authority
+invariant loop_stability_readout_never_truth_authority
+invariant model_internal_workspace != system_WorkspaceEpisode
+invariant system_WorkspaceEpisode != effect_authority

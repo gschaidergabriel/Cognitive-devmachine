@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "actor": "chatgpt-secondary / emergence_forge worker",
+  "evidence_boundary": {
+    "synthetic": true,
+    "live_frank_validated": false,
+    "consciousness_claim": false,
+    "independent_replication_claim": false
+  },
+  "reproduction": {
+    "v01_tests": {"passed": 2, "failed": 0},
+    "v01_expected_statuses_reproduced": true,
+    "v02_original_exit_code": 1,
+    "v02_original_failure": "TypeError: assess() got an unexpected keyword argument 'permutation_draws'",
+    "v02_compatibility_reexecution_exact_match": true,
+    "v02_reference_and_reexecution_canonical_json_sha256": "d4f802b16808535ad0d032ce5758658981bb73d35489f6a6df530f791c5c5564",
+    "lineage_warning": "Same provider/model ancestry may exist; this is not an independent replication."
+  },
+  "new_sweep": {
+    "families": 3,
+    "sample_sizes": [100, 200, 400, 800],
+    "corruption_fractions": [0.0, 0.05, 0.1, 0.2],
+    "seeds_per_cell": 12,
+    "regimes": 5,
+    "cells": 48,
+    "runs": 2880,
+    "tests": {"passed": 4, "failed": 0}
+  },
+  "calibration_comparison": {
+    "trusted_quality_gate": {
+      "threshold": 0.9,
+      "coverage": 0.75,
+      "accepted_runs": 1200,
+      "errors": 33,
+      "selective_error_rate": 0.0275,
+      "false_negative_control_promotions": 0
+    },
+    "sample_count_equal_coverage": {
+      "threshold": 200,
+      "coverage": 0.75,
+      "accepted_runs": 1200,
+      "errors": 93,
+      "selective_error_rate": 0.0775,
+      "false_negative_control_promotions": 0
+    },
+    "sample_count_risk_constrained_at_5_percent": {
+      "nonempty_gate_exists": false,
+      "coverage": 0.0
+    }
+  },
+  "held_out_adversarial_comparison": {
+    "trusted_external_quality_gate": {
+      "coverage": 0.75,
+      "accepted_runs": 2160,
+      "errors": 121,
+      "selective_error_rate": 0.056018518518518516,
+      "false_negative_control_promotions": 12
+    },
+    "sample_count_equal_coverage": {
+      "coverage": 0.75,
+      "accepted_runs": 2160,
+      "errors": 251,
+      "selective_error_rate": 0.1162037037037037,
+      "false_negative_control_promotions": 75
+    },
+    "self_attested_spoofable_naive_quality_gate": {
+      "coverage": 1.0,
+      "accepted_runs": 2880,
+      "errors": 314,
+      "selective_error_rate": 0.10902777777777778,
+      "false_negative_control_promotions": 83
+    },
+    "self_attested_spoofable_origin_aware_abstention": {
+      "coverage": 0.0,
+      "errors": 0,
+      "false_negative_control_promotions": 0
+    }
+  },
+  "leakage_failure_surface": {
+    "fraction_0_05": {"runs": 240, "errors": 12, "error_rate": 0.05, "false_promotions": 0},
+    "fraction_0_10": {"runs": 240, "errors": 105, "error_rate": 0.4375, "false_promotions": 12, "false_promotion_regimes": {"null": 4, "additive": 8, "common_driver": 0}},
+    "fraction_0_20": {"runs": 240, "errors": 189, "error_rate": 0.7875, "false_promotions": 71, "false_promotion_regimes": {"null": 31, "additive": 40, "common_driver": 0}}
+  },
+  "post_hoc_not_validated": {
+    "topology_specific_leakage_tripwire": {
+      "rule": "quality >= 0.9 and leakage <= 0.05",
+      "coverage": 0.6666666666666666,
+      "accepted_runs": 1920,
+      "errors": 16,
+      "selective_error_rate": 0.008333333333333333,
+      "false_promotions": 0
+    },
+    "warning": "Derived after seeing this test set; must be preregistered and tested on new seeds/topologies before use."
+  },
+  "bottom_line": "Trusted multidimensional quality gating outperformed sample count at matched coverage, but the scalar minimum-quality rule still failed the 5%/zero-false-promotion target under 10% cross-channel leakage. Provenance origin is necessary but not sufficient; topology-specific leakage/intervention-fidelity tripwires and externally verified receipts are required."
+}

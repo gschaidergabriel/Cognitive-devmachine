@@ -6,9 +6,9 @@ The V2 runner is only a collector. This script combines that collector with the 
 It writes the contract's STRICT receipt only when every hard rule passes. Hosted/proxy
 receipts can never substitute for target execution.
 
-CC-WP-02 is independently bound here to the selected declarative V9 grammar. The
-collector's claim is insufficient on its own: strict-LALR, full-corpus frontend and the
-active production canonicalizer must all identify that same grammar before WP02 can pass.
+CC-WP-02 grammar identity is selected only by ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json.
+The collector's claim is insufficient on its own: strict-LALR, full-corpus frontend and
+the active production canonicalizer must all identify the exact same selected grammar.
 """
 from __future__ import annotations
 import hashlib,json,subprocess,sys
@@ -23,12 +23,7 @@ FULL_FRANK=ROOT/'research_entity/claycode/target/FULL_FRANK_HANDOFF_PRODUCTION_R
 COUNTEREXAMPLES=ROOT/'research_entity/claycode/base/UNRESOLVED_LANGUAGE_COUNTEREXAMPLES.json'
 DIAGNOSTIC=ROOT/'research_entity/claycode/target_receipts/ANDREAS_UBUNTU_ACCEPTANCE_ASSEMBLY_DIAGNOSTIC.json'
 COMPILER=ROOT/'tools/claycode_base_compiler.py';EFFECT_PIPELINE=ROOT/'tools/claycode_base_effect_pipeline.py'
-WP02_GRAMMAR_REL='research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
-WP02_GRAMMAR=ROOT/WP02_GRAMMAR_REL
-PHASE_RECEIPTS={
- 'strict_lalr':'research_entity/claycode/target_receipts/STRICT_LALR_D_V9_TARGET_RECEIPT.json',
- 'frontend':'research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json',
- 'canonicalizer':'research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json',
+BASE_PHASE_RECEIPTS={
  'typed_ir':'research_entity/claycode/autonomous/WP03_TYPED_IR_RECEIPT.json',
  'effect_pipeline':'research_entity/claycode/autonomous/BASE_EFFECT_PIPELINE_RECEIPT.json',
  'pure_native':'research_entity/claycode/autonomous/BASE_PURE_TOOLCHAIN_RECEIPT.json',
@@ -62,8 +57,8 @@ def host_identity()->tuple[bool,dict[str,Any]]:
  except Exception:d={'verified':False,'errors':['HOST_IDENTITY_OUTPUT_INVALID'],'stdout_tail':cp.stdout[-1000:],'stderr_tail':cp.stderr[-1000:]}
  return cp.returncode==0 and d.get('verified') is True,d
 def phase_map(collector:dict)->dict[str,dict]:return {str(x.get('phase')):x for x in collector.get('phases',[]) if isinstance(x,dict) and x.get('phase')}
-def phase_evidence(name:str,row:dict)->dict[str,Any]:
- rel=PHASE_RECEIPTS.get(name);p=ROOT/rel if rel else None
+def phase_evidence(name:str,row:dict,phase_receipts:dict[str,str])->dict[str,Any]:
+ rel=phase_receipts.get(name);p=ROOT/rel if rel else None
  ev={'test_id':name,'argv':row.get('argv'),'process_pass':row.get('process_pass'),'semantic_pass':row.get('semantic_pass'),'stdout_sha256':row.get('stdout_sha256'),'stderr_sha256':row.get('stderr_sha256'),'receipt_path':rel,'receipt_sha256':sha(p) if p and p.exists() else None,'receipt_exists':bool(p and p.exists())}
  if p and p.exists() and p.suffix=='.json':
   try:
@@ -76,8 +71,18 @@ def main()->int:
  failures=[]
  if not CONTRACT.exists():raise SystemExit('target receipt contract missing')
  contract=load(CONTRACT);collector=ROOT/contract.get('collector_receipt_path','');final=ROOT/contract.get('expected_receipt_path','')
- for p in (collector,APPS,COUNTEREXAMPLES,COMPILER,EFFECT_PIPELINE,WP02_GRAMMAR):
-  if not p.exists():failures.append('MISSING:'+str(p.relative_to(ROOT)))
+ wp02_contract=contract.get('wp02_parser_contract') if isinstance(contract.get('wp02_parser_contract'),dict) else {}
+ wp02_grammar_rel=str(wp02_contract.get('selected_grammar_path') or '')
+ wp02_grammar=ROOT/wp02_grammar_rel if wp02_grammar_rel else ROOT/'__MISSING_WP02_GRAMMAR__'
+ phase_receipts=dict(BASE_PHASE_RECEIPTS)
+ phase_receipts.update({
+  'strict_lalr':str(wp02_contract.get('strict_receipt_path') or ''),
+  'frontend':str(wp02_contract.get('frontend_receipt_path') or ''),
+  'canonicalizer':str(wp02_contract.get('canonicalizer_receipt_path') or '')})
+ if not wp02_grammar_rel:failures.append('WP02_SELECTED_GRAMMAR_PATH_MISSING')
+ if not all(phase_receipts.get(x) for x in ('strict_lalr','frontend','canonicalizer')):failures.append('WP02_RECEIPT_PATH_CONTRACT_INCOMPLETE')
+ for p in (collector,APPS,COUNTEREXAMPLES,COMPILER,EFFECT_PIPELINE,wp02_grammar):
+  if not p.exists():failures.append('MISSING:'+str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else 'MISSING:'+str(p))
  c=load(collector) if collector.exists() else {};apps_doc=load(APPS) if APPS.exists() else {};ledger=load(COUNTEREXAMPLES) if COUNTEREXAMPLES.exists() else {};frank=load(FULL_FRANK) if FULL_FRANK.exists() else {}
  host_ok,host=host_identity()
  if not host_ok:failures.append('OWNER_REGISTERED_TARGET_HOST_NOT_VERIFIED')
@@ -99,10 +104,10 @@ def main()->int:
  unresolved=ledger.get('unresolved_language_counterexamples')
  if unresolved is None:failures.append('COUNTEREXAMPLE_LEDGER_MISSING_FIELD');unresolved=[]
  elif unresolved:failures.append('UNRESOLVED_LANGUAGE_COUNTEREXAMPLES:'+str(len(unresolved)))
- expected_wp02_sha=sha(WP02_GRAMMAR) if WP02_GRAMMAR.exists() else None
+ expected_wp02_sha=sha(wp02_grammar) if wp02_grammar.exists() else None
  collector_wp02=c.get('wp02_parser_contract') if isinstance(c.get('wp02_parser_contract'),dict) else {}
- collector_wp02_bound=bool(expected_wp02_sha and collector_wp02.get('grammar_path')==WP02_GRAMMAR_REL and collector_wp02.get('grammar_sha256')==expected_wp02_sha)
- if not collector_wp02_bound:failures.append('COLLECTOR_WP02_V9_GRAMMAR_BINDING_NOT_PASS')
+ collector_wp02_bound=bool(expected_wp02_sha and collector_wp02.get('grammar_path')==wp02_grammar_rel and collector_wp02.get('grammar_sha256')==expected_wp02_sha and collector_wp02.get('contract_path')==str(CONTRACT.relative_to(ROOT)))
+ if not collector_wp02_bound:failures.append('COLLECTOR_WP02_SELECTED_GRAMMAR_BINDING_NOT_PASS')
  phases=phase_map(c);work_packages={}
  for wp in contract.get('required_work_packages',[]):
   required=WP_PHASES.get(wp);evidence=[];ok=True
@@ -110,7 +115,7 @@ def main()->int:
   for name in required:
    row=phases.get(name)
    if not row:evidence.append({'test_id':name,'missing':True});ok=False;continue
-   ev=phase_evidence(name,row);evidence.append(ev)
+   ev=phase_evidence(name,row,phase_receipts);evidence.append(ev)
    ok=ok and row.get('semantic_pass') is True and row.get('process_pass') is True and ev['receipt_exists'] and bool(ev['receipt_sha256'])
   if wp=='CC-WP-02-PARSER-CANON':
    strict_ev=next((x for x in evidence if x.get('test_id')=='strict_lalr'),{})
@@ -118,10 +123,10 @@ def main()->int:
    canonical_ev=next((x for x in evidence if x.get('test_id')=='canonicalizer'),{})
    grammar_bind_ok=bool(
     expected_wp02_sha and collector_wp02_bound
-    and strict_ev.get('grammar_path')==WP02_GRAMMAR_REL and strict_ev.get('grammar_sha256')==expected_wp02_sha
-    and frontend_ev.get('grammar_path')==WP02_GRAMMAR_REL and frontend_ev.get('grammar_sha256')==expected_wp02_sha
-    and canonical_ev.get('grammar_path')==WP02_GRAMMAR_REL)
-   evidence.append({'test_id':'WP02_V9_GRAMMAR_IDENTITY','expected_grammar_path':WP02_GRAMMAR_REL,'expected_grammar_sha256':expected_wp02_sha,'collector_bound':collector_wp02_bound,'pass':grammar_bind_ok})
+    and strict_ev.get('grammar_path')==wp02_grammar_rel and strict_ev.get('grammar_sha256')==expected_wp02_sha
+    and frontend_ev.get('grammar_path')==wp02_grammar_rel and frontend_ev.get('grammar_sha256')==expected_wp02_sha
+    and canonical_ev.get('grammar_path')==wp02_grammar_rel)
+   evidence.append({'test_id':'WP02_SELECTED_GRAMMAR_IDENTITY','expected_grammar_path':wp02_grammar_rel,'expected_grammar_sha256':expected_wp02_sha,'collector_bound':collector_wp02_bound,'pass':grammar_bind_ok})
    ok=ok and grammar_bind_ok
   if wp=='CC-WP-10-GENERAL-APP-SUITE':
    rows=apps_doc.get('applications') if isinstance(apps_doc.get('applications'),dict) else {};names=contract.get('required_applications',[])
@@ -154,11 +159,11 @@ def main()->int:
  repo=(c.get('repo_head') or {}).get('stdout_tail') if isinstance(c.get('repo_head'),dict) else None
  repo=(repo or '').strip()
  if not repo:failures.append('REPOSITORY_COMMIT_MISSING')
- receipt={'schema_version':'1.2','target_host':TARGET,'repository_commit':repo,'host_fingerprint':host_fp,'compiler_runtime':{'compiler_sha256':sha(COMPILER) if COMPILER.exists() else None,'effect_pipeline_sha256':sha(EFFECT_PIPELINE) if EFFECT_PIPELINE.exists() else None,'collector_sha256':sha(collector) if collector.exists() else None,'application_suite_sha256':sha(APPS) if APPS.exists() else None,'versions':apps_doc.get('compiler_runtime')},'wp02_parser_contract':{'grammar_path':WP02_GRAMMAR_REL,'grammar_sha256':expected_wp02_sha,'collector_bound':collector_wp02_bound},'work_packages':work_packages,'applications':applications,'frank_handoff':frank_handoff,'unresolved_language_counterexamples':unresolved,'runtime_v04_hardening_pass':runtime_v04,'compiler_mainline_runtime_bridge_pass':bridge,'collector_clean_target_attestation_pass':collector_attested,'overall_pass':not failures,'assembled_at':datetime.now(timezone.utc).isoformat(),'contract_path':str(CONTRACT.relative_to(ROOT)),'contract_sha256':sha(CONTRACT),'collector_receipt_path':str(collector.relative_to(ROOT)),'authority_invariant':'model_output != execution_authority'}
+ receipt={'schema_version':'1.3','target_host':TARGET,'repository_commit':repo,'host_fingerprint':host_fp,'compiler_runtime':{'compiler_sha256':sha(COMPILER) if COMPILER.exists() else None,'effect_pipeline_sha256':sha(EFFECT_PIPELINE) if EFFECT_PIPELINE.exists() else None,'collector_sha256':sha(collector) if collector.exists() else None,'application_suite_sha256':sha(APPS) if APPS.exists() else None,'versions':apps_doc.get('compiler_runtime')},'wp02_parser_contract':{'grammar_path':wp02_grammar_rel,'grammar_sha256':expected_wp02_sha,'collector_bound':collector_wp02_bound,'contract_selected':True},'work_packages':work_packages,'applications':applications,'frank_handoff':frank_handoff,'unresolved_language_counterexamples':unresolved,'runtime_v04_hardening_pass':runtime_v04,'compiler_mainline_runtime_bridge_pass':bridge,'collector_clean_target_attestation_pass':collector_attested,'overall_pass':not failures,'assembled_at':datetime.now(timezone.utc).isoformat(),'contract_path':str(CONTRACT.relative_to(ROOT)),'contract_sha256':sha(CONTRACT),'collector_receipt_path':str(collector.relative_to(ROOT)),'authority_invariant':'model_output != execution_authority'}
  for field in contract.get('required_top_level',[]):
   if field not in receipt:failures.append('STRICT_TOP_LEVEL_FIELD_MISSING:'+field)
  receipt['overall_pass']=not failures
- diagnostic={'schema_version':'1.2','pass':not failures,'failures':failures,'candidate':receipt};DIAGNOSTIC.parent.mkdir(parents=True,exist_ok=True);DIAGNOSTIC.write_text(json.dumps(diagnostic,ensure_ascii=False,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+ diagnostic={'schema_version':'1.3','pass':not failures,'failures':failures,'candidate':receipt};DIAGNOSTIC.parent.mkdir(parents=True,exist_ok=True);DIAGNOSTIC.write_text(json.dumps(diagnostic,ensure_ascii=False,indent=2,sort_keys=True)+'\n',encoding='utf-8')
  if failures:
   if final.exists():final.unlink()
   print(json.dumps({'overall_pass':False,'failures':failures,'diagnostic':str(DIAGNOSTIC.relative_to(ROOT))},ensure_ascii=False));return 2

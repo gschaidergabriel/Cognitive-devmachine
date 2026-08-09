@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE-DIGITAL-RETINA-UNTRACKED-SUPPORT-RECONCILIATION-V2-20260809T0950p0700",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "source": {
+    "title": "digital-retina",
+    "drive_root_id": "1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m",
+    "git_head": "819dcac12253b7de45795239b44482627ade624f"
+  },
+  "tracked_universe": {
+    "tracked_files": 241,
+    "status": "CLOSED_TERMINAL_DISPOSITION_100_PERCENT",
+    "refs": [
+      "research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_TRACKED_SOURCE_SUBMANIFEST.json",
+      "research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_TRACKED_241_TERMINAL_DISPOSITION_LEDGER.json"
+    ]
+  },
+  "root_direct_observation": {
+    "folders": 9,
+    "files": 3,
+    "entries": 12,
+    "folders_named": ["deploy", ".git", "eval", "frontend", "retina", "api", "docs", "tests", "tools"],
+    "root_files_are_tracked": ["requirements.txt", ".gitignore", "README.md"]
+  },
+  "ignore_authority": {
+    "root_gitignore_drive_id": "1nIqpw190nOEBZ4kXMBHnqNr_WB4k67o8",
+    "frontend_gitignore_drive_id": "1iXq3lybjO-oxZxgWcAp6QRG2TX8NV2Le",
+    "relevant_patterns": ["__pycache__/", "*.pyc", ".env", ".env.local", ".env.server", "deploy/secrets/", "models/ and model-weight extensions", "tests/data/", "frontend/node_modules/", "frontend/.next/", "frontend/out/", "frontend/.env*.local", "frontend/.env.production", "frontend/.turbo/", "frontend/next-env.d.ts"],
+    "rule": "Ignore membership proves zero-semantic/support candidacy, not exact structural completion. Every present ignored unit still needs an exact denominator or explicit blocker per Level-0 law."
+  },
+  "small_present_ignored_families_closed": [
+    {"path":"deploy/secrets","folder_id":"1pMvpwEkkX-saHwvX4Qo3UnTBc_EzE7L3","folder_units":1,"leaf_files":2,"units":3,"class":"SUPPORT_RUNTIME_SECRET_CONFIG_CLASSIFIED_ZERO_SEMANTIC_CREDIT","content_read":false,"privacy_rule":"Only count/identity metadata was inspected; credential contents were not read or copied into research artifacts."},
+    {"path":"api/__pycache__","folder_id":"1MYC7Eb1HNQKpEicvNl7UllS0OM6RVmWZ","folder_units":1,"leaf_files":4,"units":5,"class":"SUPPORT_VENDOR_CACHE_CLASSIFIED_ZERO_SEMANTIC_CREDIT","proof":"All four leaves are CPython-312 bytecode corresponding to tracked api Python source."},
+    {"path":"retina/__pycache__","folder_id":"1VjUoPaHB5VtzqYYkwZ3nIvJY1cJPXySs","folder_units":1,"leaf_files":2,"units":3,"class":"SUPPORT_VENDOR_CACHE_CLASSIFIED_ZERO_SEMANTIC_CREDIT","proof":"Both leaves are CPython-312 bytecode corresponding to tracked retina source."},
+    {"path":"retina/vision/__pycache__","folder_id":"1PRd9IZsq-xXBOeIqU0albi_Hk-AISzWr","folder_units":1,"leaf_files":5,"units":6,"class":"SUPPORT_VENDOR_CACHE_CLASSIFIED_ZERO_SEMANTIC_CREDIT","proof":"All five leaves are CPython-312 bytecode corresponding to tracked retina/vision source."},
+    {"path":"frontend ignored singleton files","leaf_files":2,"units":2,"members":[".env.local","next-env.d.ts"],"classes":["SUPPORT_RUNTIME_SECRET_CONFIG_CLASSIFIED_ZERO_SEMANTIC_CREDIT","SUPPORT_GENERATED_TYPE_ENV_CLASSIFIED_ZERO_SEMANTIC_CREDIT"],"secret_content_read":false}
+  ],
+  "small_closed_totals": {"folder_units":4,"file_units":15,"total_units":19},
+  "large_present_support_families_open": [
+    {"path":".git","folder_id":"1Q_20Cxn6V88zYtsbqefnssPCpXBSq6ZD","direct_entries":11,"direct_folders":6,"direct_files":5,"direct_folders_named":["refs","objects","hooks","info","branches","logs"],"class_candidate":"PROVENANCE_SUPPORT","status":"RECURSIVE_DENOMINATOR_OPEN","available_identity_authority":"Git HEAD/index already verified; this does not substitute for exact Drive .git structural accounting."},
+    {"path":"frontend/node_modules","folder_id":"1f6AIZRuG7AsnaNVIdMZXjETTT26K3Yuh","class_candidate":"SUPPORT_VENDOR_CACHE_CLASSIFIED_ZERO_SEMANTIC_CREDIT","status":"RECURSIVE_DENOMINATOR_OPEN","generation_authority":"frontend/package-lock.json is tracked and already classified as vendor-generation authority, but exact Drive member denominator still must be persisted before closure."},
+    {"path":"frontend/.next","folder_id":"1j37kWsVxT1OUtiUIGOAE_RUO2u3a4uwc","class_candidate":"SUPPORT_GENERATED_BUILD_CACHE_CLASSIFIED_ZERO_SEMANTIC_CREDIT","status":"RECURSIVE_DENOMINATOR_OPEN","generation_authority":"Tracked frontend source + package lock + Next build configuration establish generated status; exact Drive member denominator remains open."}
+  ],
+  "absence_checks_from_direct_parent_enumeration": {
+    "root_absent_ignored_families": [".venv", "venv", ".env", ".env.server", "models"],
+    "tests_absent": ["tests/data", ".pytest_cache", ".ruff_cache"],
+    "frontend_direct_absent": ["out", ".turbo", ".env.production"]
+  },
+  "other_top_level_crosschecks": {
+    "tests":"exactly the one tracked test_smoke.py; no ignored extras",
+    "tools":"exactly the one tracked export_clip_l14.py; no ignored extras",
+    "docs":"exactly three tracked Markdown files; no ignored extras",
+    "deploy":"six tracked files plus ignored secrets folder",
+    "api":"four tracked Python files plus ignored __pycache__",
+    "retina":"tracked source plus ignored __pycache__; vision contains tracked source plus ignored __pycache__",
+    "eval":"tracked evaluation source/image families observed; no additional ignored root-level family discovered"
+  },
+  "rest_obligation_matrix": [
+    {"task":"digital-retina-git-support-exact-denominator","scope":".git recursively","priority":"HIGH_FOR_SOURCE_LOCAL_CLOSURE","completion":"Exact recursive identity denominator + PROVENANCE_SUPPORT terminal dispositions; use Git object/pack/index structure to avoid semantic reread."},
+    {"task":"digital-retina-node-modules-exact-denominator","scope":"frontend/node_modules recursively","priority":"HIGH_VOLUME_LOW_SEMANTIC","completion":"Exact deterministic member denominator + package-lock/integrity proof -> zero-semantic vendor-cache disposition."},
+    {"task":"digital-retina-next-cache-exact-denominator","scope":"frontend/.next recursively","priority":"MEDIUM_VOLUME_LOW_SEMANTIC","completion":"Exact deterministic member denominator + generated-build proof -> zero-semantic build-cache disposition."}
+  ],
+  "scope_effect": {"tracked_source":"CLOSED","small_untracked_support":"19_UNITS_CLOSED","large_untracked_support":"3_RECURSIVE_FAMILIES_OPEN","digital_retina_whole_folder":"NOT_YET_EXACTLY_CLOSED","level0_global":"NOT_PASS"},
+  "level0_credit": {"exact_global_percent_added":0.0,"reason":"The global denominator is not frozen and three accessible Digital Retina support-family recursive denominators remain open."},
+  "status": "UNTRACKED_SUPPORT_RECONCILIATION_ADVANCED_THREE_LARGE_FAMILIES_OPEN",
+  "created_at": "2026-08-09T09:50:00+07:00"
+}

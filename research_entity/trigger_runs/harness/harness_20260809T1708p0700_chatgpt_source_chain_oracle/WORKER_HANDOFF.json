@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness_20260809T1708p0700_chatgpt_source_chain_oracle",
+  "actor":"chatgpt-secondary",
+  "status":"COMPLETE_NARROW_DELTA",
+  "lane":"BASE source-chain evidence extension to H-WP-11-TRACE-REPLAY",
+  "coordination":"Non-duplicative follow-up to the sibling TurnTraceEnvelope worker after live Fusion introduced a stricter source-chain gate.",
+  "artifacts":[
+    "research_entity/harness/source_chain_oracle_v1.py",
+    "research_entity/harness/test_source_chain_oracle_v1.py",
+    "research_entity/trigger_runs/harness/harness_20260809T1708p0700_chatgpt_source_chain_oracle/INTERCONNECT_MANIFEST.json",
+    "research_entity/trigger_runs/harness/harness_20260809T1708p0700_chatgpt_source_chain_oracle/EXECUTION_RECEIPT.json",
+    "research_entity/trigger_runs/harness/harness_20260809T1708p0700_chatgpt_source_chain_oracle/BRANCH_FEEDBACK_MANIFEST.json"
+  ],
+  "next_high_information_action":"Wire SourceChainEvidence v1 into the production ClayCode BASE receipt collector once the production parser/canonicalizer/type-effect/lowering/runtime chain exists; then run the named-cycle and emit-termination regressions end-to-end on Andreas' Ubuntu target.",
+  "do_not_claim":["BASE PASS","H1 PASS","H2 PASS","target Ubuntu validation","live FRANK evidence"]
+}

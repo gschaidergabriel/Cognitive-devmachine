@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-REVISE-20260809T171800Z-FRANK-REAL-QWEN4B-PREBUILT",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:18:00Z",
+  "payload": {
+    "work_id": "FRANK-V01-REAL-QWEN4B-VPS-SHADOW",
+    "work_clay": "prefer the current official-prebuilt llama.cpp Ubuntu x64 CPU lane for the pinned Qwen3-4B-Instruct-2507 Q8_0 shadow experiment; verify upstream release tag/source commit plus release-asset digest/size and model revision/SHA/size, then execute the unchanged benchmark. Keep source-build/Make lanes only as fallback or build-reproducibility evidence, not as the first model-viability falsifier.",
+    "reason_clay": "fresh Frank main commit 0e1313c253ca65a9de422d8d68a69b554f5bc398 removes local CMake/Ninja/compiler bootstrap as a confounder while preserving model identity and benchmark semantics; this is now the highest-information smallest path to real_model_executed=true",
+    "executor_policy": "before effect re-read latest prebuilt receipt and main; if a newer successful receipt exists, ingest it instead of dispatching duplicate work; preserve failed source-build attempts as NEGATIVE_RESULT rather than deleting them; no promotion from runtime bootstrap success alone",
+    "dependencies": [
+      "hostinger runner online",
+      "official llama.cpp release metadata and Ubuntu x64 CPU asset retrievable",
+      "release asset digest and size verify",
+      "Qwen model source retrievable with exact expected hash and size"
+    ],
+    "invalidators": [
+      "release tag/source commit mismatch",
+      "release asset digest or size mismatch",
+      "model hash or size mismatch",
+      "benchmark answer-key leakage",
+      "newer current receipt supersedes this execution plan"
+    ],
+    "base_priority": 0.995,
+    "expected_impact": 0.99,
+    "urgency": 0.97,
+    "information_gain": 0.995,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "refresh_id": "live-fusion-20260809T1905p0700-refresh1",
+  "created_at": "2026-08-09T19:10:00+07:00",
+  "parent_feedback": "research_entity/mesh_feedback/20260809T1905p0700-live-fusion/BRANCH_FEEDBACK_MANIFEST.json",
+  "parent_commit": "008ef10ef7fd2fb5f7e2ddd5be81a9ed5a81f1f9",
+  "observed_concurrent_head": "95538d7c5130005099e1a098d5342350b0724d40",
+  "scientific_promotion": "NONE",
+  "canonical_revision_change": "NONE",
+  "material_refresh": {
+    "R1_CLAYCODE_V5_FULL_CORPUS_NEGATIVE": {
+      "effect": "BLOCKER_REFINEMENT_NEGATIVE_RESULT",
+      "source_commit": "d712e1584d2017cacec5ca62c2e0498a751bfdf3",
+      "evidence_class": "LOCAL_ISOLATED_LINUX_REPRO_NOT_TARGET_UBUNTU_ACCEPTANCE",
+      "finding": "V4 is not full-current-G9 accepting on the reproduced local LALR path: G9 first fails at dotted relation syntax Needle.lowers. A V5 local candidate adds explicit dotted relations/relation assignment and advances both current G9/Dialect sources to one remaining source-surface issue: an English-like Claude_only rule with two implicit space-separated noun phrases. After one explicit semantic-preserving normalization, both transcribed sources parse locally. Therefore a green strict-build-only receipt would be insufficient for WP02; exact repository bytes plus source normalization review, strict LALR+interegular and canonical typed-AST/semantic-hash roundtrip are still required.",
+      "counterhypothesis": "The V5 repair or proposed source normalization may alter intended semantics or reject valid corpus forms not represented by the focused controls; full baseline-vs-repair differential remains mandatory."
+    },
+    "R2_BASE14_WORKFLOW_AND_HOSTED_PREFLIGHT": {
+      "effect": "NO_CHANGE_SCIENTIFIC_OPERATIONAL_REFINEMENT",
+      "source_commits": [
+        "c805e10317ac18c45f5a5ce28b993a7b10a18f18",
+        "eab84c55ae1c1b6ac7f350454efae89671d2b869"
+      ],
+      "evidence_class": "WORKFLOW_AND_PREFLIGHT_TOOL_DEFINITION_EXECUTION_RECEIPT_NOT_YET_OBSERVED",
+      "finding": "A fail-closed Ubuntu CI BASE14 closure sweep and hosted proxy preflight are now defined. Both explicitly require zero package promotion and separate regression/preflight success from target-host acceptance. No durable successful sweep receipt was observed at this refresh cutoff, so no package status changes."
+    },
+    "R3_NEEDLE_REPO_REPRODUCIBILITY": {
+      "effect": "NO_CHANGE_SCIENTIFIC_OPERATIONAL_REFINEMENT",
+      "source_commit": "95538d7c5130005099e1a098d5342350b0724d40",
+      "evidence_class": "TEST_FIXTURE_REPRODUCIBILITY_CHANGE",
+      "finding": "Needle runtime tests now consume a frozen repo fixture for the 51-tool active set instead of an external registry file, improving reproducibility. This does not resolve the schema-normalization, real-tokenizer, checkpoint or end-to-end H1 gaps already fused."
+    }
+  },
+  "branch_receipts": {
+    "clayresearch": {"effect":"REVISE","delta":"Treat V4 strict-build success alone as insufficient; source-surface closure and semantic differential are part of the compiler evidence chain."},
+    "frank": {"effect":"NO_CHANGE","delta":"No new validated FRANK runtime mechanism; owner-fixed local/peer-state and proposal-only self-Harness authority remain unchanged."},
+    "gwt": {"effect":"NO_CHANGE","delta":"No new direct GWT execution evidence in this refresh."},
+    "emergenz": {"effect":"NO_CHANGE","delta":"No new emergence mechanism evidence in this refresh."},
+    "claycode": {"effect":"HIGH_PRIORITY_REVISE","delta":"Promote V5 only as a candidate. Gate WP02 on reviewed source normalization, strict LALR+interegular exact-byte execution, full baseline-vs-repair corpus differential, then canonical typed-AST and semantic-hash roundtrip."},
+    "hyperposition": {"effect":"NO_CHANGE","delta":"No representation-policy delta."},
+    "claygraph": {"effect":"NO_CHANGE","delta":"No graph-mechanism delta; preserve compiler provenance and semantic identity boundaries."},
+    "unifieddb": {"effect":"NO_CHANGE","delta":"No persistence-mechanism delta; retain source/grammar/canonical hash receipts when available."},
+    "harness": {"effect":"REFINE_OPERATIONAL_STATUS_ONLY","delta":"Needle fixture reproducibility improved; H-WP-04 remains open pending real tokenizer/model/end-to-end evidence. BASE14 workflow definitions are not successful execution receipts."}
+  },
+  "global_controls": [
+    "Research Entity != Frank",
+    "Frank self-Harness authority = PROPOSAL_ONLY",
+    "Ubuntu Linux developer system is the only Frank v0.1 release target",
+    "shared ancestry != independent replication",
+    "workflow/tool definition != successful execution receipt",
+    "canonical scientific state remains unpromoted"
+  ],
+  "research_write_result": "CONCURRENT_MATERIAL_NEGATIVE_ABSORBED_ALL_NINE_BRANCHES_NO_PROMOTION"
+}

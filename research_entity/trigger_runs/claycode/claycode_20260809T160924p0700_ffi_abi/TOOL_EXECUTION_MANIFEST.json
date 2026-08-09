@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T160924p0700_ffi_abi",
+  "tools": [
+    {
+      "tool": "GitHub",
+      "status": "SUCCESS",
+      "uses": ["canonical T0 boot", "trigger/protocol/current stack reads", "center JOIN/CLAIM", "current worker overlap reread", "durable artifact writes"]
+    },
+    {
+      "tool": "web.run",
+      "status": "SUCCESS",
+      "source_class": "official primary documentation",
+      "uses": ["WebAssembly Component Model WIT resources/own/borrow", "WASI capability-based sandbox and current release context"]
+    },
+    {
+      "tool": "local_python_sandbox",
+      "status": "SUCCESS",
+      "uses": ["20,000-case stale-handle/capability-alias/borrow-lifetime discriminator"]
+    },
+    {
+      "tool": "e2b_sandbox",
+      "status": "NOT_EXPOSED",
+      "claim": "No E2B runtime evidence claimed in this run."
+    },
+    {
+      "tool": "tools/research_interconnect_preflight.py",
+      "status": "BLOCKED_BY_REPO_GOVERNANCE_DRIFT",
+      "detail": "Current source still names integrated branch 'clay' in priority sets while registry uses 'clayresearch'; manual manifest emitted, tooling bug preserved."
+    },
+    {
+      "tool": "tools/goodman_filter_check.py",
+      "status": "NOT_EXECUTED_NO_REPO_CHECKOUT",
+      "detail": "Review constructed to protocol fields; no false checker-pass claimed."
+    }
+  ]
+}

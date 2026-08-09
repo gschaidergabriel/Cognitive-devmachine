@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1607p0700_chatgpt_http_app02",
+  "hypotheses": [
+    {
+      "id": "H-CC-HTTP-20260809-01",
+      "status": "SUPPORTED_RUN_LOCAL",
+      "proposition": "Existing G9 record/rule/EffectIntent semantics plus a typed host adapter are sufficient to lower and execute a bounded HTTP server without adding HTTP-specific core ClayCode syntax.",
+      "support": ["CC-LOCAL-20260809-HTTP-APP02-02"],
+      "counterhypothesis": "The adapter is hiding missing language semantics that will fail when errors, lifetimes, streaming, cancellation or cross-backend equivalence are required.",
+      "falsifier": "A frozen APP-02 program requires an unrepresentable semantic distinction even when a typed FFI/resource adapter is available."
+    },
+    {
+      "id": "H-CC-HTTP-20260809-02",
+      "status": "SUPPORTED_RUN_LOCAL_REFINED",
+      "proposition": "Network bind/serve authority can remain host-owned while guest code receives only an already-authorized opaque listener resource handle; generated program identity need not depend on capability-instance secrets.",
+      "support": ["CC-LOCAL-20260809-HTTP-APP02-02", "parallel Linux effect-boundary receipt CC-EXEC-UBUNTU-EFFECT-BOUNDARY-20260809-001"],
+      "counterhypothesis": "A raw OS file descriptor is too weakly typed and becomes forgeable or ambient when the guest can access unrestricted host APIs.",
+      "falsifier": "A sandboxed guest can acquire equivalent network authority without a host grant, or handle substitution crosses the declared resource/scope boundary."
+    },
+    {
+      "id": "H-CC-HTTP-20260809-03",
+      "status": "OPEN_EXTERNAL_SUPPORT",
+      "proposition": "A WebAssembly Component Model/WASI-style typed resource/import boundary is a strong candidate for a portable ClayCode HTTP FFI backend because capability availability can be determined by host-provided imports rather than source text.",
+      "support": ["official WebAssembly Component Model/WIT documentation", "official WASI 0.3 and wasi:http documentation"],
+      "counterhypothesis": "Native Linux handle passing is simpler, faster and sufficiently portable for the initial BASE release, making WASI unnecessary or costly.",
+      "falsifier": "Matched Clay IR lowering shows WASI cannot preserve required HTTP/error/async/resource semantics or incurs unacceptable cost relative to native."
+    },
+    {
+      "id": "H-CC-HTTP-20260809-04",
+      "status": "OPEN",
+      "proposition": "The next highest-information APP-02 test is differential lowering of one frozen canonical HTTP IR to two backends with identical semantic receipts and negative authority tests, rather than further language redesign.",
+      "support": ["current BASE compile-first contract", "run-local deterministic v2 lowering"],
+      "counterhypothesis": "Parser/type/effect surface closure is still too unstable for meaningful backend differential testing.",
+      "falsifier": "Current parser/IR cannot freeze the test program reproducibly enough to feed two backend lowerers."
+    }
+  ]
+}

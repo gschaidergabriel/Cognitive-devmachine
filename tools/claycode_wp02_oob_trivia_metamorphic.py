@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# GO retry marker 2026-08-10: no semantic change; retriggers receipt-bound Hostinger lane.
 """Bounded out-of-the-box WP02 experiment: metamorphic horizontal-trivia topology.
 
 Research-only discriminator. It never edits/promotes the grammar. For the contract-selected

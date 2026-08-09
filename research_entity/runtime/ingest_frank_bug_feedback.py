@@ -3,7 +3,8 @@
 
 The process reads Frank's export surface only. It never writes the Frank repo.
 Each valid bug becomes an idempotent Clay UnifiedDB record and a READY dynamic
-research work item.
+research work item. ``--watch`` provides a lightweight Ubuntu-local continuous
+pull loop without granting Frank any Clay write authority.
 """
 from __future__ import annotations
 import argparse,hashlib,json,sqlite3,time
@@ -56,6 +57,15 @@ def ingest(frank_root):
     finally:c.close()
     return out
 
+def watch(frank_root,interval=1.0):
+    while True:
+        results=ingest(frank_root)
+        fresh=[r for r in results if r.get('state') not in ('DUPLICATE',)]
+        if fresh:print(json.dumps({'observed_at':now(),'results':fresh},ensure_ascii=False),flush=True)
+        time.sleep(max(0.25,float(interval)))
+
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--frank-root',type=Path,required=True);a=ap.parse_args();print(json.dumps({'results':ingest(a.frank_root)},ensure_ascii=False))
+    ap=argparse.ArgumentParser();ap.add_argument('--frank-root',type=Path,required=True);ap.add_argument('--watch',action='store_true');ap.add_argument('--interval',type=float,default=1.0);a=ap.parse_args()
+    if a.watch:watch(a.frank_root,a.interval)
+    else:print(json.dumps({'results':ingest(a.frank_root)},ensure_ascii=False))
 if __name__=='__main__':main()

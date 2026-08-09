@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "closeout_id": "FRANK-V01-LIVE-FUSION-CLOSEOUT-20260810T000946P0700",
+  "actor": "chatgpt-secondary",
+  "observed_at": "2026-08-10T00:09:46+07:00",
+  "canonical_research_entity": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "frank": {
+    "latest_observed_main_head": "b8b8aea5beee6e8bde0db8b9ba1fb46795886634",
+    "latest_successful_harness_truth_snapshot": "ed5d35e60105dc9ad12496833c219c8f0b36d3c5",
+    "candidate_pr": "gschaidergabriel/Dr.-Unterweger#25",
+    "candidate_pr_state": "OPEN_DRAFT_MERGEABLE_AT_LAST_READ",
+    "truth_gate_harness_result": "UBUNTU_CONFIRMED_FOR_EXACT_TESTED_SNAPSHOT",
+    "promotion_to_latest_head": false
+  },
+  "qwen4b_parallel_lane": {
+    "latest_persisted_receipt_status": "FAIL",
+    "latest_persisted_receipt_real_model_executed": false,
+    "latest_persisted_failure_reason": "BOOTSTRAPPED_NINJA_MISSING",
+    "newer_main_commits_observed": [
+      "963fd8a6a044b6f5a6ddfde88fab25d0cc6e1dae",
+      "b8b8aea5beee6e8bde0db8b9ba1fb46795886634"
+    ],
+    "newer_success_receipt_observed": false,
+    "fusion_rule": "Do not convert newer repair commits into a Qwen4B PASS until a new persisted runtime receipt proves real_model_executed=true and the required benchmark/semantics pass."
+  },
+  "program": {
+    "current_stage": "BASE_CLAYCODE_RELEASE",
+    "base_completed_weight": 1,
+    "base_total_weight": 14,
+    "base_progress_percent": 7.1,
+    "h1_reference_completed_weight": 1,
+    "h1_reference_total_weight": 22,
+    "h1_reference_progress_percent": 4.5,
+    "h1_gate": "BLOCKED_ON_BASE"
+  },
+  "handoff": "research_entity/state/work/events/20260810T0008p0700_chatgpt_secondary_frank_truth_integration_followup.json",
+  "nonclaims": [
+    "LATEST_FRANK_MAIN_NOT_RETESTED_BY_THIS_CLOSEOUT",
+    "QWEN4B_NOT_PASS",
+    "ANDREAS_UBUNTU_FINAL_ACCEPTANCE_NOT_RUN",
+    "BASE_NOT_PASS",
+    "H1_NOT_PASS",
+    "WHOLE_FRANK_RELEASE_NOT_CLAIMED"
+  ]
+}

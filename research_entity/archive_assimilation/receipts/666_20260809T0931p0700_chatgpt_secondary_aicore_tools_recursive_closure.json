@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0931p0700-chatgpt-secondary-aicore-tools-recursive-closure",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "scope": {
+    "drive_root": "clay/aicore/tools",
+    "tools_id": "1RqVr3WkitB1-oOU_0F4knQZzVxydPD84",
+    "parent_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_DIRECT_DENOMINATOR_20260809T0703p0700.json"
+  },
+  "trigger_run_context": {
+    "parallel_overlap_detected": true,
+    "overlap_scope": "aicore/synteq recursive closure",
+    "peer_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_aicore_synteq_recursive_wave2.json",
+    "independent_local_replication_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0931p0700_chatgpt_secondary_aicore_synteq_recursive_closure.json",
+    "overlap_resolution": "Peer and local enumerations independently matched at 511 units = 22 folders + 489 files; no duplicate global completion credit was applied. Worker pivoted immediately to open aicore/tools obligation."
+  },
+  "method": {
+    "completion_mode": "FULL_RECURSIVE_DIRECT_PARENT_ENUMERATION",
+    "enumeration": "Google Drive list_folder(top_k=1000) on tools root and every one of its seven child folders",
+    "search_negative_completion_used": false,
+    "ceiling_ambiguity": false,
+    "identity_basis": "stable Drive IDs plus direct parent membership"
+  },
+  "root_direct_denominator": {
+    "entries": 57,
+    "folders": 7,
+    "files": 50
+  },
+  "child_folder_closures": {
+    "schranke": {"id": "18tKSTHBbZYS3j4ZHm0rWToanG-VuXVpN", "entries": 3, "folders": 0, "files": 3, "status": "CLOSED_LEAF"},
+    "chronik": {"id": "13kiY8cDiEMBklguCJDcYE12aJQ6_iYeD", "entries": 3, "folders": 0, "files": 3, "status": "CLOSED_LEAF"},
+    "discovered": {"id": "1qM48HeSDLNqRh-0zjlhjc1FwjWH_Zy6J", "entries": 2, "folders": 0, "files": 2, "status": "CLOSED_LEAF"},
+    "lcme": {"id": "1w_oprBowoSwAY8pCjBYcIhlxSISnqLdi", "entries": 11, "folders": 0, "files": 11, "status": "CLOSED_LEAF"},
+    "omni_log_monitor": {"id": "1pjS_OOjN83gYzOvAMfvL-W6UYpgFhk60", "entries": 6, "folders": 0, "files": 6, "status": "CLOSED_LEAF"},
+    "system_control": {"id": "1B2G3AQYA9S_tZgowDWouJ-bhzdIn1neu", "entries": 12, "folders": 0, "files": 12, "status": "CLOSED_LEAF"},
+    "titan": {"id": "1kofu5cBIaiRuqb3MqW6O8MHqf3jxyJZg", "entries": 1, "folders": 0, "files": 1, "status": "CLOSED_LEAF"}
+  },
+  "recursive_denominator": {
+    "folder_units_below_tools_root": 7,
+    "file_units_below_tools_root": 88,
+    "total_units_below_tools_root": 95,
+    "derivation": "7 direct child folders + 50 direct files + 38 files inside the seven leaf folders = 95 units.",
+    "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
+  },
+  "finding": "aicore/tools is recursively shallow: all seven direct child folders are leaves. Its exact observed-epoch denominator is 95 descendant units. Semantic interpretation and cross-source/version reconciliation remain separate obligations.",
+  "remaining_parent_obligations": [
+    "Close or reconcile the 22 skills child folders.",
+    "Map remaining aicore direct folders to already committed exact closures before retraversal.",
+    "Reconcile exact aicore subtrees against Project-Frankenstein and Drive recovery/version lineages.",
+    "Do not change global exact Level-0 percentage until the combined denominator is frozen."
+  ],
+  "level0_credit": {
+    "exact_global_percent_added": 0.0,
+    "reason": "Local recursive tools denominator is exact, but the combined global denominator remains unfrozen."
+  },
+  "earned_work_hours_added": 0.0,
+  "epistemic_class": "RUNTIME_SOURCE_ENUMERATION_RECEIPT",
+  "status": "COMPLETED_SUBTREE_DENOMINATOR_CLOSURE",
+  "observed_at": "2026-08-09T09:31:00+07:00"
+}

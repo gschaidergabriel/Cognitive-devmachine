@@ -3,7 +3,7 @@
 
 Scope: CC-WP-02 only. This converts an accepted Lark syntax tree into a stable JSON
 representation that is insensitive to comments and equivalent block-separator/layout
-trivia while preserving every non-layout lexical literal that can change program meaning.
+trivia while preserving every non-layout semantic value that can change program meaning.
 The canonical hash is bound to the exact grammar bytes so parser-contract drift cannot
 silently preserve an old identity. It does NOT claim typed canonical IR; that remains
 CC-WP-03.
@@ -15,6 +15,11 @@ conformance; grammar binding and ClayCode's own syntax contract remain authorita
 V17 adds one mandatory semantic-trivia guard to V9: `Needle.owns(X)` and
 `Needle.owns (X)` must canonicalize identically while `Needle.owns X` remains a distinct
 prefix relation.
+
+STRING tokens are canonicalized by their decoded JSON Unicode scalar sequence rather than
+by escape spelling. Thus `"é"` and `"\\u00e9"` share syntax identity, while `"é"` and the
+distinct scalar sequence `"e\\u0301"` remain different. Unpaired surrogates are rejected.
+This matches the production BASE frontend's existing string-identity contract.
 """
 from __future__ import annotations
 
@@ -37,6 +42,10 @@ CANON_SCHEMA = "claycode-base-canonical-syntax/2"
 PRESENTATION_TOKENS = {"NEWLINE", "SEMICOLON"}
 
 
+class CanonicalizationError(ValueError):
+    pass
+
+
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -45,12 +54,32 @@ def stable_json(value: Any) -> bytes:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
+def _validate_scalar_string(value: str) -> None:
+    bad = [ord(ch) for ch in value if 0xD800 <= ord(ch) <= 0xDFFF]
+    if bad:
+        raise CanonicalizationError(f"invalid Unicode surrogate scalar(s): {[hex(x) for x in bad[:8]]}")
+
+
+def _token_value(token: Token) -> Any:
+    raw = str(token)
+    if str(token.type) == "STRING":
+        try:
+            value = json.loads(raw)
+        except Exception as exc:
+            raise CanonicalizationError(f"invalid escaped string: {exc}") from exc
+        if not isinstance(value, str):
+            raise CanonicalizationError("STRING token did not decode to str")
+        _validate_scalar_string(value)
+        return value
+    return raw
+
+
 def canonical_node(node: Any) -> Any | None:
     """Return deterministic syntax identity, dropping equivalent layout separators only."""
     if isinstance(node, Token):
         if str(node.type) in PRESENTATION_TOKENS:
             return None
-        return {"token": str(node.type), "value": str(node)}
+        return {"token": str(node.type), "value": _token_value(node)}
     if isinstance(node, Tree):
         children = []
         for child in node.children:
@@ -170,6 +199,7 @@ def main() -> None:
             "rule external_effect lifecycle=[AUTHORIZED,REQUESTED,DONE]\n",
         ),
         "optional_type": ("record X { a:Int }\n", "record X { a:Int? }\n"),
+        "string_exact_scalar_sequence": ('rule label="é"\n', 'rule label="e\\u0301"\n'),
     }
     distinct = [
         {"case": name, **pair_receipt(parser, grammar_sha, left, right, expect_same=False)}
@@ -190,28 +220,49 @@ def main() -> None:
             "rule Needle.owns(X)\n",
             "rule Needle.owns          (X)\n",
         ),
+        "string_escape_spelling": ('rule label="é"\n', 'rule label="\\u00e9"\n'),
+        "string_surrogate_pair_escape_spelling": ('rule label="𝄞"\n', 'rule label="\\ud834\\udd1e"\n'),
     }
     equivalent = [
         {"case": name, **pair_receipt(parser, grammar_sha, left, right, expect_same=True)}
         for name, (left, right) in equivalent_cases.items()
     ]
 
-    overall = overall and all(x["pass"] for x in distinct) and all(x["pass"] for x in equivalent)
+    invalid_cases = {
+        "unpaired_surrogate_rejected": 'rule label="\\ud800"\n',
+    }
+    invalid = []
+    for name, source in invalid_cases.items():
+        try:
+            parse_canonical(parser, source, grammar_sha)
+            row = {"case": name, "expected": "REJECT", "pass": False, "error": "unexpected_accept"}
+        except CanonicalizationError as exc:
+            row = {"case": name, "expected": "REJECT", "pass": True, "error": str(exc)}
+        invalid.append(row)
+
+    overall = (
+        overall
+        and all(x["pass"] for x in distinct)
+        and all(x["pass"] for x in equivalent)
+        and all(x["pass"] for x in invalid)
+    )
     receipt = {
-        "schema_version": "1.4",
+        "schema_version": "1.5",
         "experiment": "ClayCode BASE deterministic V17 trivia-safe grammar-bound syntax canonicalization",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)) if grammar_path.is_relative_to(ROOT) else str(grammar_path),
         "grammar_sha256": grammar_sha,
         "canonical_schema": CANON_SCHEMA,
         "runtime": {"parser": "lark", "mode": "lalr/contextual", "strict": strict, "keep_all_tokens": True},
-        "canonicalizer": "literal-preserving tree->sorted compact JSON; NEWLINE/semicolon block separators dropped; semantic hash bound to grammar SHA-256",
+        "canonicalizer": "semantic-token tree->sorted compact JSON; NEWLINE/semicolon block separators dropped; STRING tokens use decoded validated Unicode scalar sequences; semantic hash bound to grammar SHA-256",
         "sources": rows,
         "semantic_surface_discrimination": distinct,
         "layout_equivalence": equivalent,
+        "invalid_semantic_values": invalid,
         "v9_trivia_counterexample_guard_present": True,
+        "string_escape_identity_guard_present": True,
         "pass": overall,
-        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia identity, including Needle.owns call whitespace invariance, for the listed admitted sources and regression/mutation pairs. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04).",
+        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia and decoded-string identity for the listed admitted sources and regression/mutation pairs. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04) or substitute for Hostinger/Andreas target receipts.",
     }
     rendered = json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
     if args.output:

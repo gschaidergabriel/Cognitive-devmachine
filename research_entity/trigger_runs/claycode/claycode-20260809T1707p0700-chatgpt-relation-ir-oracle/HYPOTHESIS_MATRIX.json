@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1707p0700-chatgpt-relation-ir-oracle",
+  "hypotheses":[
+    {
+      "claim_id":"H-CC-REL-SURFACE-IR-SEPARATION-20260809-01",
+      "status":"OPEN_SUPPORTED_RUN_LOCAL",
+      "hypothesis":"Readable/compact relation surface syntax can remain independent of one deterministic typed canonical Relation IR identity.",
+      "mechanism":"Parse each admitted surface into a declared RelationId and typed operands, then canonicalize before semantic hashing.",
+      "prediction":"Semantically equivalent declared-bare, lexically-disjoint-sigil and generic-call forms produce byte-identical canonical IR and semantic_hash.",
+      "observed":"4/4 matched semantic cases produced identical hashes across all three candidate surfaces; @ref operand identity was preserved in 3/3 surfaces.",
+      "counterhypothesis":"Full G9 context, precedence, dialect interactions or richer arities expose surface-dependent AST differences not present in this micro-oracle.",
+      "falsifier":"A production-bound full-corpus N/S/D run in which intended-equivalent sources lower to unequal typed IR/semantic_hash, or a malformed/ambiguous source is silently admitted.",
+      "evidence_class":"LOCAL_EXECUTABLE_PROXY",
+      "promotion":"NONE"
+    },
+    {
+      "claim_id":"H-CC-REL-AUTHORITY-SEPARATION-20260809-02",
+      "status":"OPEN_SUPPORTED_RUN_LOCAL",
+      "hypothesis":"Relation-name resolution can be mechanically separated from execution authority.",
+      "mechanism":"Canonical Relation nodes carry semantic relation identity and explicit authority=NONE; capability/effect authority remains external.",
+      "prediction":"Unknown relation names fail closed without creating semantic or effect authority.",
+      "observed":"Unknown relation mutation rejected in all 3 candidate surfaces; no candidate generated authority state.",
+      "counterhypothesis":"Later compiler stages accidentally infer capability/effect authority from relation identity despite the parser/IR boundary.",
+      "falsifier":"A type/effect/lowering test where a RelationId alone authorizes or commits an external effect.",
+      "evidence_class":"LOCAL_EXECUTABLE_PROXY_PLUS_ARCHITECTURE_CONSTRAINT",
+      "promotion":"NONE"
+    },
+    {
+      "claim_id":"H-CC-REL-SURFACE-WINNER-20260809-03",
+      "status":"OPEN_UNRESOLVED",
+      "hypothesis":"One of strict normalization/declared relation/disjoint compact/generic forms will dominate after production full-corpus cost and correctness measurement.",
+      "prediction":"Matched production-parser measurements separate candidates on diagnostics, migration cost, reader repair, token/context cost, complexity and latency while preserving one typed IR oracle.",
+      "counterhypothesis":"No single surface dominates and ClayCode should support a generic canonical form plus restricted verified sugar/projections.",
+      "falsifier":"Matched evidence shows a stable Pareto frontier without a justified single winner.",
+      "evidence_class":"OPEN_DESIGN_HYPOTHESIS",
+      "promotion":"NONE"
+    }
+  ]
+}

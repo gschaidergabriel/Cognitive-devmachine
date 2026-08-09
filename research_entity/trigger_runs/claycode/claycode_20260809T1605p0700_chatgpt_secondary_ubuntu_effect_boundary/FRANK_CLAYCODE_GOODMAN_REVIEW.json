@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1605p0700_chatgpt_secondary_ubuntu_effect_boundary",
+  "latest_frank_run":"research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+  "latest_frank_claycode_architecture_artifact":null,
+  "review_items":[
+    {
+      "claim_id":"FRANK-P10-EXTERNAL-AUTHORITY-BOUNDARY",
+      "frank_statement":"EffectIntent is a serializable proposal; an opaque host-minted permit and release-time revalidation enforce effects; no ambient OS authority is granted to model output.",
+      "frank_source_refs":["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json","research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"],
+      "ancestry_families":["FRANK_CLAY_SHARED_EFFECT_AUTHORITY_LINEAGE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A metadata-only capability contract, or a single Linux sandbox backend such as Landlock, is sufficient and no layered host enforcement design is needed.",
+      "falsifier":"A required Frank v0.1 Ubuntu effect either cannot be securely represented/lowered with current CapabilityToken/EffectIntent plus typed host adapters, or a simpler single-backend design proves equivalent isolation, recovery, coverage and lower complexity across the complete Ubuntu effect suite.",
+      "independent_checks":[
+        {"class":"PRIMARY_LINUX_DOCUMENTATION","source":"Linux kernel Landlock userspace API documentation","result":"Landlock explicitly targets restriction of ambient rights and is stackable, supporting the external-enforcement concept."},
+        {"class":"PRIMARY_UBUNTU_DOCUMENTATION","source":"Ubuntu AppArmor documentation","result":"Ubuntu uses AppArmor as a default Linux Security Module confinement layer, supporting an Ubuntu-native outer enforcement option."},
+        {"class":"PRIMARY_WEBASSEMBLY_SPECIFICATION","source":"WebAssembly WASI capabilities and Component Model WIT resource-handle specifications","result":"Independent capability-system design uses unforgeable runtime handles and owned/borrowed resource handles rather than textual authority."},
+        {"class":"NEW_EXECUTABLE_LINUX_EXPERIMENT","source":"EXECUTABLE_RESEARCH_RECEIPT.json","result":"Namespace/chroot/read-only resource injection enforced a narrow read capability; unsandboxed baseline retained ambient filesystem authority."}
+      ],
+      "adversarial_checks":[
+        {"check":"Landlock availability","result":"FAILED in current container with ENOSYS despite modern kernel surface; single-backend assumption rejected."},
+        {"check":"metadata-only authority","result":"FAILED; ordinary unsandboxed process could read /etc/passwd and read/write test resource."},
+        {"check":"narrowed delegation","result":"PASS; removing the resource bind denied the previously available resource."},
+        {"check":"write privilege under read grant","result":"PASS; read-only remount allowed read and denied write with EROFS."}
+      ],
+      "verdict":"REFINED",
+      "reason":"The external-authority boundary is independently supported, but its Ubuntu realization must not assume one sandbox API. The refined design is an opaque host capability table plus runtime-probed layered Linux enforcement and receipts.",
+      "claycode_action":"Preserve current CapabilityToken/EffectIntent semantics. Specify Ubuntu lowering/runtime ABI so textual/model references never mint authority; host revalidates scope/revocation and maps only authorized resources/verbs into the sandbox. Treat AppArmor/Landlock/namespaces/seccomp as backend mechanisms, not ClayCode semantic authority.",
+      "affected_claycode_artifacts":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","future CC-WP-04/06/07/10/11 implementation artifacts"]
+    }
+  ],
+  "validator_status":"NOT_RUN_NO_LOCAL_REPO_CHECKOUT_NO_STRONG_PROMOTION",
+  "promotion":"NONE"
+}

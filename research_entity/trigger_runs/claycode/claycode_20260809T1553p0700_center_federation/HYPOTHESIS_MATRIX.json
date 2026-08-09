@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1553p0700_center_federation",
+  "hypotheses": [
+    {
+      "id": "H-CC-RCF-001",
+      "status": "OPEN_SUPPORTED_BY_ANALOGUE",
+      "mechanism": "Research-Center-mediated shared state plus adaptive relevance routing lets ClayCode workers see current work, reuse results, partition overlap and route material deltas only to affected peers.",
+      "expected": "Lower duplicate-work ratio and lower coordination-token cost than isolated workers or broadcast-all while preserving task completion and counterevidence propagation.",
+      "counterhypothesis": "A center adds coordination latency and correlated decision errors; direct peer-to-peer or broad broadcast may outperform on some tasks.",
+      "falsifier": "Matched project replay shows no duplicate/cost reduction or worse correctness/conflict detection than alternatives.",
+      "next_test": "Replay the same frozen ClayCode task pool under ISOLATED, BROADCAST_ALL and CENTER_RELEVANCE_ROUTED topologies; measure duplicate work, token/message cost, stale work, unresolved conflicts, completion latency and correctness.",
+      "affected": ["claycode", "clay", "harness", "unifieddb", "claygraph"]
+    },
+    {
+      "id": "H-CC-RCF-002",
+      "status": "CURRENT_RUN_OPERATIONALLY_SUPPORTED",
+      "mechanism": "Mandatory center reread plus CAS/revalidation before semantic commit prevents stale workers from silently overwriting concurrent work.",
+      "expected": "Concurrent conflicts become explicit invalidation/merge events rather than last-writer-wins state loss.",
+      "counterhypothesis": "Git-level CAS alone is sufficient and Research Center reread adds no useful information.",
+      "falsifier": "Concurrent multiworker trials show center reread detects no additional stale semantic/dependency conflicts beyond raw Git CAS and only adds cost.",
+      "current_evidence": "This run encountered a real GitHub 409 concurrent write conflict while attempting to change CLAYCODE_RELEASE_WORKSPACE.json; the stale write was not forced.",
+      "next_test": "Controlled two-worker conflicting semantic update experiment with dependency-aware center state vs Git CAS only.",
+      "affected": ["claycode", "unifieddb", "claygraph", "harness"]
+    },
+    {
+      "id": "H-CC-RCF-003",
+      "status": "OPEN",
+      "mechanism": "Explicit independent-replication intent preserves valuable replication while default duplicate suppression removes accidental duplicate work.",
+      "expected": "Lower accidental duplication without loss of independent replication coverage.",
+      "counterhypothesis": "Workers misclassify replication intent or dedup suppresses serendipitous independent solutions.",
+      "falsifier": "Replay shows materially fewer independent counterexamples or higher correlated-error persistence after deduplication.",
+      "next_test": "Seed hidden counterexamples into matched worker teams and compare discovery under unrestricted duplication vs explicit REPLICATOR lanes.",
+      "affected": ["claycode", "emergenz", "harness"]
+    },
+    {
+      "id": "H-CC-RCF-GRAMMAR-001",
+      "status": "SUPPORTED_TARGETED_REPAIR",
+      "mechanism": "The prior ClayCode type_expr grammar lacked union types even though current Research Center contracts use union-typed record fields.",
+      "expected": "Strict parser rejects center fields containing | under the old grammar and accepts them after a minimal type-union grammar extension.",
+      "counterhypothesis": "The existing grammar already accepts those fields without change.",
+      "falsifier": "A conforming parser using the old grammar accepts the union-typed fields.",
+      "current_evidence": "Local executable test rejected 2/2 union-field cases under the old grammar; repaired grammar passed 8/8 targeted cases.",
+      "affected": ["claycode", "clay", "frank", "harness", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz"]
+    }
+  ]
+}

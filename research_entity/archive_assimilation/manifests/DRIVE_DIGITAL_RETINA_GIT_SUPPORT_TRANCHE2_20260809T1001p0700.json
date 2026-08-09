@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "manifest_id":"DRIVE-DIGITAL-RETINA-GIT-SUPPORT-TRANCHE2-20260809T1001p0700",
   "program_stage":"L0_ARCHIVE_ASSIMILATION",
   "trigger":"666",
@@ -19,11 +19,11 @@
     {"prefix":"b1","folder_id":"1GHV5d-5YuamLVgwtvvLC49eF-3WA-Z3F","leaf_objects":1}
   ],
   "tranche_counts":{"loose_prefix_folders_closed":10,"loose_object_files_closed":20,"loose_object_units_closed":30},
-  "cumulative_with_tranche1":{"loose_prefix_folders_closed":20,"loose_object_files_closed":37,"partial_git_folder_units":36,"partial_git_file_units":52,"partial_git_total_units":88,"formula":"Tranche1 partial .git total 68 + tranche2 10 prefix folders + 20 loose object files = 98? corrected structural cumulative: tranche1 contained 26 folders/42 files; adding 10 folders/20 files => 36 folders/62 files => 98 units."},
-  "correction_note":"The numeric fields partial_git_file_units=52 and partial_git_total_units=88 above are superseded inside this same artifact by the explicit formula result: correct cumulative after tranche2 is 36 folder units + 62 file units = 98 total units. Consumers MUST use corrected_cumulative below.",
-  "corrected_cumulative":{"loose_prefix_folders_closed":20,"loose_object_files_closed":37,"partial_git_folder_units":36,"partial_git_file_units":62,"partial_git_total_units":98},
+  "cumulative_with_tranche1":{"loose_prefix_folders_closed":20,"loose_object_files_closed":37,"partial_git_folder_units":36,"partial_git_file_units":62,"partial_git_total_units":98,"formula":"Tranche1 contained 26 folders/42 files; tranche2 adds 10 folders/20 files => 36 folders + 62 files = 98 units."},
+  "correction_history":{"prior_blob_sha":"8bc340517862cd77e950c5b807e389feb3ef7bc1","reason":"Arithmetic transcription error in cumulative file/total fields corrected via CAS; all per-prefix source counts unchanged."},
   "classification":"PROVENANCE_SUPPORT_AND_GIT_OBJECT_STORAGE_ZERO_DUPLICATE_SEMANTIC_CREDIT",
   "whole_git_status":"OPEN_RECURSIVE_OBJECT_FANOUT",
   "level0_credit":{"exact_global_percent_added":0.0,"reason":"Partial source-local structural progress only; combined denominator remains unfrozen."},
-  "created_at":"2026-08-09T10:01:00+07:00"
+  "created_at":"2026-08-09T10:01:00+07:00",
+  "corrected_at":"2026-08-09T10:02:00+07:00"
 }

@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1603p0700-chatgpt-semantic-publication",
+  "negative_results": [
+    {
+      "id": "NR-CC-NEW-PUBLISH-SYNTAX-20260809",
+      "status": "NEGATIVE_RESULT",
+      "claim_tested": "ClayCode needs a new dedicated publication/transaction syntax primitive immediately to represent coherent UnifiedDB→ClayGraph CURRENT publication.",
+      "observed": "Existing generic G9-style record/rule/effect semantics represented the tested barrier, crash recovery, idempotency, closure and authority cases with 12/12 fixed matches and 20000 mutation rounds without invariant violation.",
+      "scope": "Run-local semantic oracle; does not refute a future production-compiler need for a primitive.",
+      "interpretation": "Do not grow syntax now. Freeze a typed SemanticPublicationReceipt/PublishedSemanticEpoch IR contract and let production checker/lowering attempt to enforce it.",
+      "falsifier": "Real BASE compiler/type-effect checker or split-store crash test requires an unrepresentable semantic operation or cannot enforce the contract without unsafe opaque host logic."
+    }
+  ]
+}

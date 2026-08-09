@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1603p0700-chatgpt-semantic-publication",
+  "experiment_id": "EXP-CC-SEMANTIC-PUBLICATION-BARRIER-20260809",
+  "claycode_source": {
+    "path": "experiments/SEMANTIC_PUBLICATION_PROBE.clay",
+    "sha256": "5680b75e2467fab674dcf800823539dc778632b99cd78728a4f573938a33904c",
+    "candidate_version": "G9-V3-derived-run-contract",
+    "canonical_ir_semantic_hash": null,
+    "contract_instance_hash": "5680b75e2467fab674dcf800823539dc778632b99cd78728a4f573938a33904c",
+    "identity_note": "No production parser/canonicalizer was used; semantic hash intentionally not fabricated."
+  },
+  "compiler_or_lowering": {
+    "kind": "run-local hand-lowered executable semantic oracle",
+    "target": "Python 3 stdlib sqlite3",
+    "program_path": "experiments/semantic_epoch_publication_probe.py",
+    "generated_code_sha256": "0b2bd40d0beb0d0365738be208b636ae4d14163be61c714267e1c24e03ee515c",
+    "claim_boundary": "representability and invariant falsifier only; not production ClayCode compiler evidence"
+  },
+  "execution": {
+    "provider": "local ChatGPT python sandbox",
+    "runtime": "3.11.8",
+    "language": "Python",
+    "invocation": "python -S semantic_epoch_publication_probe.py",
+    "exit_status": 0,
+    "stdout_sha256": "d384e0115f09350f800ebf5ec4343adb0a175c42b12b5f90cde57e19a4b51f55",
+    "stderr": "",
+    "wall_seconds": 5.569646,
+    "reported_probe_elapsed_ms": 5500.642
+  },
+  "test_corpus": {
+    "fixed_cases": 12,
+    "fixed_pass": 12,
+    "mutation_seed": 20260809,
+    "mutation_rounds": 20000,
+    "mutation_accepted": 10809,
+    "mutation_rejected": 9191,
+    "violations": []
+  },
+  "expected_vs_observed": {
+    "all_ok": true,
+    "properties": [
+      "publication admitted iff state/graph source epoch and projection/retraction closure agree",
+      "rejected publication leaves visible reader epoch unchanged",
+      "post-state-commit crash leaves prior coherent reader epoch until recovery projection/publish",
+      "idempotency key replay does not create a new canonical state epoch",
+      "ClayGraph-derived relation never grants effect authority",
+      "revoked host capability cannot authorize commit"
+    ]
+  },
+  "failure_or_counterexample_classification": "NO_COUNTEREXAMPLE_IN_TESTED_SCOPE",
+  "repair_change_applied": "None to G9 semantics. Proposed standard IR contract record SemanticPublicationReceipt/PublishedSemanticEpoch; no new syntax/primitive.",
+  "affected_hypotheses": ["H-CC-G9-PUBLICATION-CONTRACT-SUFFICIENCY-001","H-CC-PUBLICATION-PRIMITIVE-NECESSITY-002"],
+  "branch_learning": {
+    "claycode": "Existing generic G9 records/rules/effect boundary are sufficient in this proxy; freeze a standard publication-receipt IR contract rather than add syntax.",
+    "frank": "P11 atomic CURRENT publication can be implemented as a reader-visible publication pointer over committed canonical state + validated graph projection.",
+    "claygraph": "Derived graph remains non-authoritative; graph epoch must bind to exact source epoch and closure receipt.",
+    "unifieddb": "Canonical state may commit ahead of derived graph while reader-visible CURRENT stays on previous coherent publication until recovery/publish.",
+    "gwt": "NO_CHANGE; this is state publication coherence, not GWT causal-use evidence.",
+    "hyperposition": "NO_CHANGE; alternatives still require preservation across the same publication epoch.",
+    "emergenz": "NO_CHANGE; no emergence claim.",
+    "clay": "Supports semantic-coupling epoch barrier direction with a concrete proxy.",
+    "harness": "Crash/restart and mixed-epoch Golden Traces should become mandatory acceptance fixtures."
+  }
+}

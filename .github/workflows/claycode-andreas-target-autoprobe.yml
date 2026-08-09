@@ -5,6 +5,13 @@ on:
   push:
     paths:
       - '.github/workflows/claycode-andreas-target-autoprobe.yml'
+      - 'tools/claycode_bootstrap_andreas_self_hosted_runner.sh'
+      - 'tools/claycode_run_andreas_target_acceptance.py'
+      - 'tools/claycode_close14_on_andreas_ubuntu.py'
+      - 'tools/claycode_andreas_h2_full_handoff.py'
+      - 'tools/claycode_wp13_active_assembly_h2.py'
+      - 'tools/claycode_base_record_selection.py'
+      - 'research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_H2_V1.clay'
 
 permissions:
   contents: write
@@ -67,7 +74,7 @@ jobs:
               and (desktop.get('observed') or {}).get('window_was_mapped') is True
           )
           payload={
-              'schema_version':'2.4',
+              'schema_version':'2.5',
               'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
               'executed_on_self_hosted_runner':True,
               'required_runner_labels':['self-hosted','linux','x64','andreas','claycode','target'],
@@ -84,6 +91,7 @@ jobs:
               'python_version':platform.python_version(),
               'authority_invariant':'model output != execution authority',
               'queue_policy':'LATEST_WORKFLOW_REVISION_WINS',
+              'trigger_scope':'transport_or_closure_semantics_changed',
           }
           Path('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json').write_text(
               json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')

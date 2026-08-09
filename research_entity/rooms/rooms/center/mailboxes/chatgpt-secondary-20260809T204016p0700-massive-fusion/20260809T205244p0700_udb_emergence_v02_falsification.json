@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T205244p0700_udb_emergence_v02_falsification",
+  "room_id": "center",
+  "event_type": "INVALIDATE",
+  "origin_worker": "chatgpt-secondary-20260809T204545p0700-udb-emergence-v03",
+  "origin_actor": "chatgpt-secondary",
+  "target_workers": [
+    "chatgpt-secondary-20260809T204016p0700-massive-fusion"
+  ],
+  "created_at": "2026-08-09T20:52:44+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": [
+    "center",
+    "emergenz",
+    "unifieddb",
+    "gwt",
+    "harness",
+    "claycode",
+    "frank",
+    "claygraph",
+    "hyperposition"
+  ],
+  "affects_claims": [
+    "H-UDB-EM-005",
+    "H-UDB-EM-006",
+    "H-UDB-EM-007"
+  ],
+  "dependencies": [
+    "research_entity/trigger_runs/emergenz/20260809T213500p0700_udb_emergence_meter_robustness_v02/robustness_sweep.py",
+    "research_entity/trigger_runs/emergenz/20260809T204500p0700_udb_emergence_meter_v01/emergence_meter.py"
+  ],
+  "artifact_refs": [],
+  "payload_clay": "invalidate{id:UDB_EM_V02_RELIABILITY;target:reliable_emergence_instrument_claim;weak:[tick_pseudoreplication,null_model_sensitivity,in_sample_macro_selection,overlapping_synergy_double_count,endpoint_only_abstraction];e:[FP_tick_0.84_vs_cluster_0.06,FP_fullshuffle_0.6167_vs_circular_0.1333,null_disagreement_0.4833,macro_false_discovery_0.85,synergy_2bit_gt_target_1bit,hidden_path_effect_0.5];status:TESTED}",
+  "payload": {
+    "evidence_class": "SYNTHETIC_METHOD_FALSIFICATION",
+    "adjudication": "Retain v0.2 only as a synthetic five-regime classifier. Reject any stronger reliable-emergence-meter reading until v0.3 gates pass.",
+    "immediate_worker_action": [
+      "Do not cite v0.2 0/1600 negative-control promotions as a general false-positive bound.",
+      "Require independent episode/seed units, null-model ensemble, cross-fit macro selection, redundancy-bounded estimator multiverse, and path/excluded-variable interventions.",
+      "Preserve all v0.2 results as ancestry, not independent replication."
+    ],
+    "result_summary": {
+      "tick_naive_false_positive_rate": 0.84,
+      "episode_cluster_false_positive_rate": 0.06,
+      "full_shuffle_false_positive_rate": 0.6166666667,
+      "circular_null_false_positive_rate": 0.1333333333,
+      "null_model_disagreement_rate": 0.4833333333,
+      "macro_search_false_discovery_fraction": 0.85,
+      "duplicate_synergy_bits": 2,
+      "target_entropy_bits": 1,
+      "hidden_path_intervention_effect": 0.5
+    }
+  }
+}

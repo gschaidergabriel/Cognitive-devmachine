@@ -1,15 +1,20 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "status": "ACTIVE",
-  "last_reviewed_cycle": null,
+  "last_reviewed_cycle": "ccauto-20260809T104300Z",
   "current_focus": "strict LALR conflict localization before typed-fn reintegration",
   "free_only": true,
   "provider_cooldowns": {},
   "blocked_capabilities": {
-    "mistral_runtime": "ADAPTER_READY_RUNTIME_VERIFICATION_PENDING",
-    "nvidia_reranker": "REVERIFICATION_PENDING"
+    "mistral_runtime": "CREDENTIAL_NOT_CONFIGURED_IN_AUTONOMOUS_RUNNER",
+    "nvidia_reranker": "OLD_HOSTED_ROUTE_EOL_410; NEW_ROUTE_REVERIFICATION_PENDING",
+    "nvidia_architect_model": "HTTP_500_TRANSIENT_OR_MODEL_SPECIFIC",
+    "nvidia_falsifier_model": "ACCOUNT_FUNCTION_NOT_FOUND_404",
+    "nvidia_judge_model": "TIMEOUT"
   },
-  "model_family_history": [],
+  "model_family_history": [
+    {"cycle":"ccauto-20260809T104300Z","successful_role":"alternative","model":"z-ai/glm-5.2","family":"glm","note":"Only successful model role in first cycle; cross-model diversity insufficient."}
+  ],
   "high_information_targets": [
     "localize exact strict-LALR conflicts in the current D baseline without changing semantics",
     "prove a minimal deterministic conflict repair under strict parser construction",
@@ -18,13 +23,14 @@
     "carry the same source chain through lowering and an Ubuntu-oriented executable receipt"
   ],
   "steering_notes": [
+    "First autonomous cycle completed but produced only one successful model role (GLM-5.2); architect, falsifier and judge provider calls failed, so there is no independent multi-model synthesis yet.",
+    "The cycle's NVIDIA rerank call hit HTTP 410 because the configured old endpoint reached end-of-life on 2026-05-18; official NVIDIA documentation currently exposes the llama-nemotron-rerank-1b-v2 retrieval family, but FREE_ONLY account execution needs a successful receipt before promotion.",
+    "Mistral is not callable by the autonomous runner because MISTRAL_API_KEY was not configured in that runtime; do not silently substitute NVIDIA and call it provider diversity.",
+    "The sole GLM candidate proposed typed-function work, but latest strict executable evidence puts baseline D parser conflicts upstream. Keep typed-fn as a downstream regression target, not the next primary task.",
+    "The generated bounded Python test was not queued and should not be treated as evidence; it is a model-authored proxy rather than the needed strict grammar construction discriminator.",
     "Latest executable evidence outranks the prior broader contextual-parser success: baseline D and D+typed-fn both fail strict LALR construction.",
     "Do not blame typed fn for a conflict already present in baseline D.",
     "20,000 typed-call lowering differentials remain useful downstream evidence, not parser-freeze evidence.",
-    "Prefer executable discriminators over architecture prose.",
-    "Collapse same-family/provider-shared ancestry before counting agreement.",
-    "Never award BASE progress from model consensus alone.",
-    "NVIDIA current official API documentation confirms a hosted llama-nemotron reranking family; account-level FREE_ONLY execution still requires a successful runtime receipt before promotion.",
-    "No autonomous cycle receipt exists yet; treat provider/model conclusions as pending until first cycle output lands."
+    "Prefer executable discriminators over architecture prose; never award BASE progress from model consensus alone."
   ]
 }

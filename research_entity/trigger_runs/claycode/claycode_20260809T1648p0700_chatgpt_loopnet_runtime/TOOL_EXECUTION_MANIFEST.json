@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1648p0700_chatgpt_loopnet_runtime",
+  "actor_id": "chatgpt-secondary",
+  "tools": [
+    {
+      "tool": "GitHub connector",
+      "status": "EXECUTED",
+      "uses": ["canonical boot", "protocol routing", "current stack reads", "branch artifact reads", "recent-commit concurrency reads", "append-only run writes"],
+      "evidence": "GitHub read succeeded; run artifact commits created."
+    },
+    {
+      "tool": "web primary-source research",
+      "status": "EXECUTED",
+      "uses": ["recurrent-depth stability triangulation", "adaptive recurrence", "multirate scheduling", "structured control-flow comparison"],
+      "sources": ["arXiv:2604.07822", "arXiv:2604.12946", "arXiv:1603.08983", "MLIR SCF documentation", "Lee & Messerschmitt Synchronous Data Flow"]
+    },
+    {
+      "tool": "local Python/Lark",
+      "status": "EXECUTED",
+      "uses": ["G9-subset candidate parsing", "type/effect proxy", "semantic-hash mutation tests", "loop-dynamics simulation"],
+      "runtime": "Python 3.13.5 / Lark 1.3.1"
+    },
+    {
+      "tool": "local separate-process target execution",
+      "status": "EXECUTED",
+      "uses": ["execute generated loop runtime proxy independently of compiler/parser process"],
+      "generated_target_hash": "02b644943101a652a2029b7c8b235ceb6abd14503882d1b368603d3639d3f920",
+      "exit_status": 0
+    },
+    {
+      "tool": "E2B",
+      "status": "NOT_AVAILABLE_ON_THIS_SESSION",
+      "claim": "NO_FRESH_E2B_EVIDENCE"
+    },
+    {
+      "tool": "SandboxAPI",
+      "status": "NOT_USED",
+      "claim": "NO_SANDBOXAPI_EVIDENCE"
+    },
+    {
+      "tool": "tools/research_interconnect_preflight.py",
+      "status": "NOT_RUN",
+      "reason": "Hosted ChatGPT surface has no repository checkout; manual fail-closed interconnect manifest written instead."
+    },
+    {
+      "tool": "tools/goodman_filter_check.py",
+      "status": "NOT_RUN",
+      "reason": "Hosted ChatGPT surface has no repository checkout; manual Goodman review written and no validator PASS claimed."
+    }
+  ],
+  "limitations": [
+    "No live Ubuntu FRANK runtime was executed.",
+    "No production G9 compiler/parser was built by this run.",
+    "No H1/H2 differential replay occurred.",
+    "No BASE work package or application proof item is closed by this run."
+  ]
+}

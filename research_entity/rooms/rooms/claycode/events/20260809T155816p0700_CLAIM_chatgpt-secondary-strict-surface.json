@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.1",
+  "event_id":"20260809T155816p0700_CLAIM_chatgpt-secondary-strict-surface",
+  "room_id":"claycode",
+  "event_type":"CLAIM",
+  "origin_worker":"chatgpt-secondary-20260809T155804-strict-surface",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"claycode",
+  "created_at":"2026-08-09T15:58:16+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "candidate_work":["typed relation/predicate surface resolver falsifier","semantic typo rejection fuzz"],
+  "overlapping_work":["WORK-CC-BASE-G9-PARSER-FREEZE-001"],
+  "reusable_results":["EXP-CC-G9-GRAMMAR-E2B-REPLICATION-20260809","CC-LOCAL-20260809-TYPED-CANON-01","EXP-CC-G9-UM-RETINA-GATE-001"],
+  "relevant_deltas":["first parser patch not release-ready","type-directed canonicalization supported in 20000 mutations","tested fused FRANK gates expressible without new primitive"],
+  "conflicts":["generic relation lexing can collide with generic identifiers"],
+  "selected_work":["STRICT_DECLARED_RELATION_RESOLUTION_FALSIFIER"],
+  "partition_clay":"Reuse parser implementation work. Test only the semantic/surface boundary: declared prefix/infix/property relations versus arbitrary identifiers, including 4B_emits, never_implies, includes and lifecycle= forms.",
+  "routing_clay":"If result is material, route to claycode, frank, harness, claygraph and unifieddb because parser/IR identity and authority boundaries are shared dependencies.",
+  "replication_intent":"NONE_DUPLICATIVE",
+  "delivery":"NEXT_CHECKPOINT"
+}

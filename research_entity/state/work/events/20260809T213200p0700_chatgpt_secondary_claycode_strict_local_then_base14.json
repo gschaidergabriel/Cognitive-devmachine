@@ -1,0 +1,43 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-strict-local-then-base14-20260809T213200p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:32:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "title": "Run strict V9 locally, then physical BASE14 acceptance",
+    "work_clay": "LATEST REVISION WINS. GitHub-hosted Actions is currently a negative infrastructure route: PR37 ClayCode BASE Frontend CI and the independent Identity Guard both failed before Step 1; the ClayCode rerun reproduced zero executed steps. Read research_entity/claycode/base/receipts/CI_STRICT_V9_GITHUB_ACTIONS_INFRA_NEGATIVE_20260809.json and do not interpret those failures as parser evidence. On the verified Ubuntu/local executor with lark+interegular installed, pull newest main and first run: python3 tools/claycode_base_frontend_validation.py --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark --output research_entity/claycode/base/receipts/LOCAL_FRONTEND_V9_STRICT.json ; python3 tools/claycode_base_canonicalizer.py --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark --output research_entity/claycode/base/receipts/LOCAL_CANONICAL_V9_STRICT.json ; python3 tools/claycode_base_ir.py research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark --output research_entity/claycode/base/receipts/LOCAL_IR_G9_V3_V9_STRICT.json ; python3 tools/claycode_base_ir.py research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark --output research_entity/claycode/base/receipts/LOCAL_IR_DIALECT_V3_V9_STRICT.json ; python3 tools/claycode_base_ir.py --self-test --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark --output research_entity/claycode/base/receipts/LOCAL_IR_SELFTEST_V9_STRICT.json. Persist exact environment/package versions, git HEAD, V9 grammar hash and receipt hashes. If and only if all strict V9 receipts pass, optionally run tools/claycode_v10_unified_frontend_discriminator.py under strict dependencies as a non-promoting research discriminator. Then on the registered physical Andreas Ubuntu target run bash tools/claycode_bootstrap_andreas_self_hosted_runner.sh and python3 tools/claycode_run_andreas_target_acceptance.py. Never widen BASE for frank_runtime.clay: that file is CONTEXT_ONLY_NON_GATE unless explicitly selected as a production executable. Preserve negative receipts; never weaken target, desktop, clean-tree, authority, APP01-10, FULL_FRANK or WP14 gates.",
+    "reason_clay": "The hosted CI transport was directly observed twice and failed before any workflow step; the independent Identity Guard showed the same signature, so no ClayCode semantic inference is warranted. The remaining executable path is a strict local Ubuntu V9 receipt followed by the already prepared physical Andreas BASE14/FULL_FRANK chain.",
+    "completion_clay": "Strict stage completes only with all five local V9 receipts PASS and grammar/package/git identities recorded. Overall work completes only after physical Andreas scoped-runner/autoprobe, BASE14 closure, strict target acceptance, ten application receipts, five-path FULL_FRANK receipt and independent WP14 PASS are present on main and the manifest promotes without open P0/P1 defects.",
+    "evidence_need": [
+      "research_entity/claycode/base/receipts/CI_STRICT_V9_GITHUB_ACTIONS_INFRA_NEGATIVE_20260809.json",
+      "research_entity/claycode/base/receipts/LOCAL_FRONTEND_V9_STRICT.json",
+      "research_entity/claycode/base/receipts/LOCAL_CANONICAL_V9_STRICT.json",
+      "research_entity/claycode/base/receipts/LOCAL_IR_G9_V3_V9_STRICT.json",
+      "research_entity/claycode/base/receipts/LOCAL_IR_DIALECT_V3_V9_STRICT.json",
+      "research_entity/claycode/base/receipts/LOCAL_IR_SELFTEST_V9_STRICT.json",
+      "research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json",
+      "research_entity/claycode/target_receipts/ANDREAS_BASE14_CLOSURE_RUN.json",
+      "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
+      "research_entity/claycode/target_receipts/FULL_FRANK_HANDOFF_RECEIPT.json"
+    ],
+    "executor_policy": "verified local Ubuntu executor for strict parser evidence; registered physical Andreas Ubuntu host for target/application/FULL_FRANK/WP14 evidence; re-read newest main before every effect; model output != execution authority",
+    "required_capabilities": [
+      "LOCAL_UBUNTU_PYTHON",
+      "LARK_INTEREGULAR_STRICT",
+      "REPOSITORY_CHECKOUT",
+      "REGISTERED_ANDREAS_TARGET_IDENTITY",
+      "REAL_DESKTOP_SESSION_FOR_APP05",
+      "GITHUB_READ_WRITE"
+    ],
+    "supersedes_work_revisions": [
+      "research_entity/state/work/events/20260809T212700p0700_chatgpt_secondary_claycode_base14_real_blockers_only.json"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 1.0,
+    "urgency": 1.0,
+    "information_gain": 1.0,
+    "status": "READY"
+  }
+}

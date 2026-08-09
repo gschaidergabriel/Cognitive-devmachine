@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
+  "experiment_id": "EXP-CC-G9-GRAMMAR-ADVERSARIAL-002",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "evidence_class": "LOCAL_EXECUTION_PRIMARY_FOR_PROXY_GRAMMAR_PROBE",
+  "question": "Does the run-local minimal if-plus-union grammar repair close the CURRENT G9 V3 surface?",
+  "source_ref": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+  "candidate_ref": "CLAYCODE_G9_GRAMMAR_PATCH_CANDIDATE.ebnf",
+  "runtime": {
+    "provider": "local ChatGPT Python sandbox",
+    "language": "Python 3",
+    "parser_library": "Lark",
+    "e2b": "NOT_EXPOSED_TO_CURRENT_SESSION"
+  },
+  "cases": [
+    {
+      "id": "external_effect_lifecycle",
+      "source": "rule external_effect lifecycle=[REQUESTED,AUTHORIZED,CLAIMED,EXECUTED,VERIFIED,DONE]",
+      "current_observed": "FAIL token=lifecycle column=22",
+      "minimal_repair_observed": "FAIL token=lifecycle column=22"
+    },
+    {
+      "id": "digit_prefixed_4B",
+      "source": "rule 4B_emits EffectIntent",
+      "current_observed": "FAIL token=B_emits column=7",
+      "minimal_repair_observed": "FAIL token=B_emits column=7"
+    },
+    {
+      "id": "includes_operator",
+      "source": "rule NativeCognitionTask.forbidden_burden includes [filesystem_search,api_selection]",
+      "current_observed": "FAIL token=includes column=43",
+      "minimal_repair_observed": "FAIL token=includes column=43"
+    }
+  ],
+  "result_sha256": "76c89347759f89049cc229b558fe06022b893a290e395d707ea3bf77bb5369cf",
+  "expected_vs_observed": "MATCH: all three adversarial CURRENT-source forms remain rejected by both current proxy grammar and the minimal if-plus-union repair.",
+  "negative_result": "The minimal if-plus-union patch is not sufficient to claim CURRENT G9 surface closure.",
+  "interpretation": "Do not accrete ad-hoc grammar tokens directly into CURRENT. First freeze one strict BASE surface/AST contract and decide explicitly which existing prose-like G9 forms are normalized source sugar versus retained grammar.",
+  "limitations": [
+    "Executable proxy grammar, not final repository parser.",
+    "This receipt demonstrates additional closure gaps, not the complete set of all full-file parse defects."
+  ],
+  "promotion_effect": "NONE"
+}

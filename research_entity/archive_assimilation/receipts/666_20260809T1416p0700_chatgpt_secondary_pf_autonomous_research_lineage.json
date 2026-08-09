@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1416p0700-chatgpt-secondary-pf-autonomous-research-lineage",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T14:16:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "evidence_class": "PRIMARY_GIT_COMMIT_AND_FROZEN_HEAD_SOURCE_CROSSREAD",
+    "commits": [
+      "d2c08bacbfd6a7ffae309a190e707582a809a351",
+      "92791d1cf0c2580688da1666d6e32386beaa5139",
+      "07f8e26a296cf5bdcd4add14ee42ab501d09422b"
+    ]
+  },
+  "scope": "Autonomous idle research: curiosity trigger, LLM research selection/planning, restricted tools, web/memory/files/code/experiments/papers, synthesis/persistence, E-PQ reinforcement, runtime integration and evidence/authority semantics",
+  "non_overlap_check": {
+    "dedicated_autonomous_research_receipt_found": false,
+    "boundary": "This shard owns the autonomous research orchestration/evidence pipeline. Prior Projects authority and context/tool-routing receipts own general agent authority and active prompt/tool-surface semantics."
+  },
+  "chronology": [
+    {
+      "commit": "d2c08bacbfd6a7ffae309a190e707582a809a351",
+      "date": "2026-02-25",
+      "finding": "Introduced idle-triggered autonomous research: model decides whether a thought is research-worthy, generates up to 10 tool calls, executes a restricted list, synthesizes, stores a memory and emits an autonomy reward. Initial limits: 15min idle, 1h cooldown, max5/day. The source described tools as low-risk/read-only despite including memory_store and sandboxed code execution.",
+      "interpretation": "Strong precursor for curiosity-driven slow-loop research, but the safety description was broader than the actual effect set."
+    },
+    {
+      "commit": "92791d1cf0c2580688da1666d6e32386beaa5139",
+      "date": "2026-03-11",
+      "finding": "Audit found autonomous research memory persistence had been POSTing to a nonexistent /memory/store endpoint (404); it was replaced by a direct consciousness.db reflection write. Missing threading import was also fixed.",
+      "interpretation": "Historical negative result: a research pipeline can appear complete while its durable-memory edge is silently nonfunctional. End-to-end receipt/readback tests are mandatory."
+    },
+    {
+      "commit": "07f8e26a296cf5bdcd4add14ee42ab501d09422b",
+      "date": "2026-03-13",
+      "finding": "A later deep audit again records autonomous research HTTP 404 repair via direct Titan Python calls, alongside several other dormant/dead learning-path fixes.",
+      "interpretation": "Repeated endpoint drift strengthens the case for typed in-process contracts or schema-tested service APIs plus execution receipts, rather than stringly endpoint assumptions."
+    },
+    {
+      "commit": "frozen-head",
+      "date": "2026-04-05",
+      "finding": "Frozen-head autonomous_research.py is still present and consciousness_daemon calls _maybe_autonomous_research every third idle-thought cycle. Current limits include 15min idle, 30min cooldown, max5/day; the allowed set expanded to experiment/hypothesize/test_hypothesis/paper_search/paper_read and web_fetch uses a curated domain whitelist.",
+      "interpretation": "Unlike the CRG shard, this mechanism has a verified frozen-head integration hook. Code-level activation is established; actual session frequency/effect still requires runtime/DB evidence."
+    }
+  ],
+  "confirmed_negative_results_constraints": [
+    {
+      "id": "PF-AR-NR-001",
+      "claim": "Initial autonomous-research memory persistence was nonfunctional because it called a nonexistent /memory/store endpoint; this was later repaired.",
+      "status": "HISTORICAL_NEGATIVE_RESULT_FIXED",
+      "evidence": "92791d1 commit diff and audit message",
+      "current_lesson": "Every research run needs write + reread/lookup verification of durable artifacts."
+    },
+    {
+      "id": "PF-AR-NR-002",
+      "claim": "Frozen-head autonomous code execution is not fail-closed with respect to sandbox availability: autonomous_research invokes code_execute with skip_approval=True, while ToolExecutor explicitly returns the raw inner command when Firejail is unavailable and warns execution will be unsandboxed.",
+      "status": "CURRENT_FROZEN_HEAD_CONDITIONAL_AUTHORITY_DEFECT",
+      "qualification": "The unsafe branch is conditional on Firejail being unavailable. Presence/absence on the historical live host is not established by source alone.",
+      "falsifier": "A frozen runtime receipt proves Firejail was always present and independently enforced, or a lower-level OS sandbox confined code even on this fallback branch."
+    },
+    {
+      "id": "PF-AR-NR-003",
+      "claim": "The 'read-only/low-risk' description is semantically false for the implementation: memory_store is a write, code_execute can produce side effects, and later experiment/hypothesis/paper tools may mutate local research state.",
+      "status": "CAPABILITY_DESCRIPTION_MISMATCH"
+    },
+    {
+      "id": "PF-AR-NR-004",
+      "claim": "Frozen-head research persistence is synthesis-centric rather than evidence-complete: research_sessions stores question/plan/tool-count/synthesis/status, while step outputs are concatenated/truncated and synthesis input is truncated; durable per-step raw source bodies/hashes/source classes/claim links are not represented in this module's session schema.",
+      "status": "PROVENANCE_REPLAY_CONSTRAINT",
+      "qualification": "Other services may independently log some tool activity; this module does not establish an evidence-complete research lineage."
+    },
+    {
+      "id": "PF-AR-NR-005",
+      "claim": "The frozen-head research-decision prompt is deliberately biased toward triggering research ('say true unless purely emotional'), so session caps limit resource use but do not create an epistemic value-of-information policy.",
+      "status": "SELECTION_GOODHART_RISK"
+    },
+    {
+      "id": "PF-AR-NR-006",
+      "claim": "Emitting an autonomy/personality reward after completed synthesis rewards research activity/completion, not independently verified epistemic quality; this signal must not be treated as evidence that the findings are correct.",
+      "status": "REWARD_SEMANTICS_CONSTRAINT"
+    }
+  ],
+  "reusable_candidates": [
+    {
+      "mechanism": "idle curiosity -> research-worthiness decision -> bounded plan -> synthesis",
+      "mapping": "DIRECT_PRECURSOR_WITH_STRONGER_EVIDENCE_CONTRACT",
+      "current_targets": ["frank", "harness", "666", "gwt"]
+    },
+    {
+      "mechanism": "hard per-run/per-day/cooldown budgets",
+      "mapping": "DIRECTLY_REUSABLE_CONCEPT",
+      "current_targets": ["harness", "frank"]
+    },
+    {
+      "mechanism": "tool allowlist plus web domain whitelist",
+      "mapping": "REUSABLE_ONLY_AS_ONE_LAYER_BELOW_TYPED_CAPABILITIES",
+      "current_targets": ["harness", "claycode"]
+    },
+    {
+      "mechanism": "experiment/hypothesis/paper-search tools inside autonomous research",
+      "mapping": "DIRECT_PRECURSOR_TO_RESEARCH_CENTER_LOOPS",
+      "current_targets": ["666", "harness", "emergenz"]
+    },
+    {
+      "mechanism": "research session DB with status/budget",
+      "mapping": "REUSABLE_SCHEMA_SEED_REQUIRES_RAW_EVIDENCE_GRAPH",
+      "current_targets": ["unifieddb", "claygraph", "harness"]
+    }
+  ],
+  "architecture_delta": {
+    "preferred_testable_shape": "curiosity/question candidate -> value-of-information gate -> typed research plan with declared capabilities/evidence requirements -> fail-closed capability executor -> immutable per-step raw evidence receipts -> source-class/claim extraction -> contradiction/negative-result preservation -> synthesis as derived object -> validated memory promotion -> optional intrinsic reward tied to process quality, not truth",
+    "fail_closed_law": "requested_sandbox && sandbox_unavailable => execution_refused",
+    "evidence_law": "synthesis != evidence; every synthesis sentence promoted to memory must retain source/claim lineage or be explicitly model inference/hypothesis",
+    "authority_law": "research planner output != execution authority"
+  },
+  "branch_feedback": {
+    "frank": "DELTA: preserve curiosity-driven slow-loop research, but route curiosity to proposals rather than direct authority. Reward process novelty/discipline separately from factual truth. Require source-linked memory promotion.",
+    "harness": "HIGH-PRIORITY: add fail-closed sandbox tests; no sandbox must mean no autonomous code. Add end-to-end persistence write/readback tests, per-tool evidence receipts, resource budgets and source-provenance assertions.",
+    "claycode": "DELTA: encode research plan steps as typed capability requests with source/evidence contracts; code execution, memory writes, experiments and paper reads are distinct effects and must never share a generic 'read-only' label.",
+    "unifieddb": "DELTA: research_run -> step -> tool_request -> raw_evidence -> source_hash/class -> claim/negative_result -> synthesis -> memory_promotion lineage should be first-class; summaries are derived projections.",
+    "claygraph": "DELTA: research findings enter as provenance-weighted claim nodes/relations, not immediate truth edges. Conflicts and failed tool paths remain retrievable.",
+    "gwt": "DELTA: autonomous research is a plausible slow-loop re-entry mechanism that can feed future workspace competition; it is not evidence of consciousness by itself.",
+    "emergenz": "DELTA: research/experiment loops provide interventions for lesion/rescue and hypothesis testing, but autonomous question generation alone is not causal emergence evidence.",
+    "hyperposition": "DELTA: competing research hypotheses/evidence interpretations should remain set-valued until discriminating tests resolve them.",
+    "clay": "DELTA: if research organs dissolve into Clay, retain capability/evidence/provenance semantics even when process boundaries disappear.",
+    "q12_index": "DELTA: autonomous-research lineage is historically reusable; no new historical-hour credit before row-level deduplication."
+  },
+  "runtime_activation": {
+    "frozen_head_source_integration_verified": true,
+    "integration": "services/consciousness_daemon.py invokes _maybe_autonomous_research(text) every third idle-thought count and calls services.autonomous_research.get_research().maybe_research(thought)",
+    "actual_live_session_count_verified": false,
+    "rule": "Do not infer historical runtime frequency/effect without DB/log evidence."
+  },
+  "historical_earned_work": {
+    "mapping_state": "CANDIDATES_ONLY_PENDING_ROW_LEVEL_DEDUP",
+    "new_hours_credit": 0.0
+  },
+  "exact_coverage_credit": 0.0,
+  "coverage_reason": "One semantic/runtime lineage assimilated; full PF history/tree denominator remains unfrozen.",
+  "next_high_value_obligations": [
+    "Locate and assimilate autonomous_research.db / consciousness research-session runtime rows if available in Drive/frozen artifacts",
+    "Create Harness fail-closed sandbox ablation and write/readback persistence tests",
+    "Compare historical PF autonomous research schema against current RAE raw-evidence/claim/negative-result pipeline",
+    "Row-level deduplicate research orchestration and experiment tooling against current earned-work ledger"
+  ]
+}

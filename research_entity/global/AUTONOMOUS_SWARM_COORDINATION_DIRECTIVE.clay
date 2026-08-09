@@ -1,0 +1,142 @@
+module clay.research.autonomous_swarm_coordination
+version "1.0"
+status PROJECT_OWNER_FIXED_GLOBAL_OPERATION_LAW
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
+work_fabric=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+state=UnifiedDB
+relevance_topology=ClayGraph
+coordination_language=latest_ClayCode
+
+law UNIVERSAL_SELF_COORDINATION=MANDATORY
+law NO_WORKER_WORKS_IN_ISOLATION=true
+law NO_PERMANENT_CHIEF=true
+law MANUAL_CENTRAL_DISPATCH=OPTIONAL
+law EVIDENCE_OUTRANKS_COORDINATION_ROLE=true
+law DUPLICATE_WORK_REQUIRES_EXPLICIT_REPLICATION=true
+
+record SwarmBlackboardView {
+  canonical_parent:Ref
+  mission_stage:Ref
+  active_workers:Set<Ref>
+  capabilities:Set<Ref>
+  active_work:Set<Ref>
+  ready_work:Set<Ref>
+  blockers:Set<Ref>
+  hypotheses:Set<Ref>
+  counterhypotheses:Set<Ref>
+  conflicts:Set<Ref>
+  negative_results:Set<Ref>
+  recent_receipts:Set<Ref>
+  cross_branch_deltas:Set<Ref>
+  possibility_frontier:Set<Ref>
+}
+
+rule every_worker.before_material_work -> live_refresh.refresh
+rule every_worker.before_material_work -> read(SwarmBlackboardView)
+rule every_worker.before_material_work -> detect(overlap,reuse,dependencies,invalidators,blockers,replication_need)
+rule worker_without_fresh_blackboard -> DEGRADED_COORDINATION
+rule DEGRADED_COORDINATION -> no_claim_of_global_priority_or_nonoverlap
+
+type OpportunityClass = CRITICAL_PATH_BUILD|BLOCKER_REMOVAL|BUG_REPAIR|DISCRIMINATING_EXPERIMENT|COUNTERHYPOTHESIS_TEST|INDEPENDENT_REPLICATION|CROSS_BRANCH_INTEGRATION|ARCHITECTURE_SIMPLIFICATION|PERFORMANCE_MEASUREMENT|RECOVERY_SAFETY_TEST|EXPLORATORY_RESEARCH
+
+record SwarmOpportunity {
+  id:Ref
+  class:OpportunityClass
+  goal_fit:Score
+  expected_impact:Score
+  dependency_unblock_value:Score
+  information_gain:Score
+  uncertainty_reduction:Score
+  falsification_value:Score
+  cross_branch_reuse:Score
+  capability_fit:Score
+  execution_availability:Score
+  reversibility:Score
+  reproducibility:Score
+  urgency:Score
+  collision_risk:Score
+  shared_ancestry_risk:Score
+  resource_cost:Score
+  authority_risk:Score
+  staleness:Score
+  dependencies:Set<Ref>
+  invalidators:Set<Ref>
+  completion_test:Clay
+}
+
+swarm_score(o)=o.goal_fit+o.expected_impact+o.dependency_unblock_value+o.information_gain+o.uncertainty_reduction+o.falsification_value+o.cross_branch_reuse+o.capability_fit+o.execution_availability+o.reversibility+o.reproducibility+o.urgency-o.collision_risk-o.shared_ancestry_risk-o.resource_cost-o.authority_risk-o.staleness
+
+rule opportunity_frontier includes ready_work+open_blockers+unresolved_conflicts+high_value_missing_tests+materially_useful_exploration
+rule impossible_or_unauthorized -> filter_out
+rule already_completed -> reuse_not_repeat
+rule blocked_without_unblock_path -> defer
+
+record WorkBid {
+  worker:Ref
+  opportunity:Ref
+  score:Score
+  capability_evidence:Set<Ref>
+  transfer_cost:Score
+  collision_risk:Score
+  partition:Clay
+  replication_intent:Bool
+  completion_test:Clay
+}
+
+rule available_worker -> bid_on(best_nonoverlapping_opportunities)
+rule bid_value=swarm_score(opportunity)-transfer_cost-collision_risk
+rule valid_highest_bid -> lease(work)
+rule tie -> prefer lower_cost+higher_reversibility+stronger_direct_measurement
+rule lease_expired_or_worker_stale -> return_to_frontier
+rule materially_new_evidence -> recompute_frontier_and_bids
+rule worker_capability_change -> recompute_frontier_and_bids
+rule blocker_removed -> recompute_frontier_and_bids
+rule mission_stage_change -> recompute_frontier_and_bids
+rule worker_may_abandon_or_handoff_when_new_work_dominates_expected_value
+
+// Exploration/exploitation balance. Critical path may never starve falsification or novel search.
+rule swarm_capacity.default_partition=[BUILD_AND_BLOCKER_DOMINANT,COUNTEREVIDENCE_RESERVED,EXPLORATION_RESERVED]
+rule exact_fraction_is_adaptive_not_fixed
+rule high_uncertainty -> increase_counterevidence_and_exploration
+rule hard_release_gate_near -> increase_build_test_recovery
+rule repeated_local_optimum -> increase_out_of_distribution_and_architecture_exploration
+
+// Important claims receive an adversarial second lane. Shared ancestry is explicitly marked.
+rule high_impact_claim -> create_or_reuse_counterhypothesis_lane
+rule high_impact_architecture_choice -> seek_independent_or_adversarial_check_when_capacity_allows
+rule same_source_or_same_prompt_lineage -> SHARED_ANCESTRY_NOT_INDEPENDENT_REPLICATION
+rule negative_result -> preserve_and_route_to_affected_workers
+
+// Material result distribution is targeted, not broadcast spam.
+rule material_delta -> identify_semantically_affected_work_claims_rooms
+rule material_delta -> publish_center_receipt
+rule affected_worker -> ingest_at_next_safe_point_or_interrupt_if_high_impact_conflict
+rule result_that_changes_critical_path -> immediate_reprioritization
+rule result_that_invalidates_claim -> interrupt_affected_work_before_next_effect
+
+// Each worker continues recursively while useful work exists and its current invocation budget permits.
+rule worker.after_material_outcome -> live_refresh.refresh
+rule worker.after_material_outcome -> fuse_result_into_shared_state
+rule worker.after_material_outcome -> recompute_frontier
+rule worker.after_material_outcome -> select_next_highest_valid_nonoverlap_work
+rule recurrence_continue iff expected_marginal_value(next_round)>cost+risk and invocation_budget_remains
+rule recurrence_halt when no_valid_work|blocked|budget_exhausted|owner_gate|unsafe_or_unauthorized
+rule halt -> durable_handoff_with_best_next_frontier
+
+// Build/test routing uses verified execution surfaces only.
+rule Ubuntu_remote_build_test -> prefer verified_hostinger_github_runner when compatible_authorized_workflow_exists
+rule final_release_truth -> Andreas_Ubuntu_target_required
+rule queued != executed
+rule workflow_started != test_passed
+rule only_execution_receipt_can_claim_runtime_effect
+
+invariant ALL_CURRENT_AND_FUTURE_WORKERS_SELF_COORDINATE_FROM_SHARED_STATE
+invariant SELF_COORDINATION_NEVER_MINTS_TRUTH
+invariant SELF_COORDINATION_NEVER_EXPANDS_EFFECT_AUTHORITY
+invariant FRANK_REMAINS_SEPARATE_RESEARCH_SUBJECT
+invariant FRANK_NEVER_MUTATES_CLAY
+invariant LIVE_KNOWLEDGE_REFRESH_REPEATS_INSIDE_RECURSION
+invariant USEFUL_DISSENT_AND_NEGATIVE_RESULTS_SURVIVE_FUSION

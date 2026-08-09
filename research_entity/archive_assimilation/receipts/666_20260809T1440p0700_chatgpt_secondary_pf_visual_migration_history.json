@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1440p0700-chatgpt-secondary-pf-visual-migration-history",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "source_repository": "gschaidergabriel/Project-Frankenstein",
+  "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "epistemic_class": "GIT_COMMIT_HISTORY_AND_HISTORICAL_FILE_EVIDENCE",
+  "coverage_credit": {
+    "exact_level0_percent_added": 0.0,
+    "reason": "History lineage shard does not freeze the complete repository tree/history denominator."
+  },
+  "history_lineage": [
+    {
+      "date": "2026-02-25",
+      "commit": "90596662837a75801fd2024069ee9bd547137869",
+      "state": "ADAPTIVE_TWO_STAGE_VISION",
+      "evidence": "Commit adds tools/frank_visual_pipeline.py, tools/frank_adaptive_vision.py, tools/vcb_bridge.py and screenshot region selection. Historical frank_adaptive_vision.py implements fast Stage-1 detectors with confidence/trigger-based escalation to a local Ollama VLM only when needed.",
+      "mechanisms": [
+        "confidence-driven escalation",
+        "query-sensitive escalation",
+        "cheap-first / expensive-second processing",
+        "explicit escalation reasons and triggers",
+        "VLM-save-rate and latency statistics",
+        "fast detector summary passed as context into VLM"
+      ]
+    },
+    {
+      "date": "2026-03-19",
+      "commit": "0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "state": "FRANKEYE_UNIFIED_CPU_PIPELINE",
+      "evidence": "Commit adds FrankEye and explicitly deletes frank_visual_pipeline.py and frank_adaptive_vision.py as replaced dead code. Agentic visual-context capture switches to tools.frank_eye.get_eye().",
+      "mechanisms": [
+        "unification of multiple visual components",
+        "Retina/CNN plus DINOv2/GOLPU/OCR/face analysis",
+        "CPU-oriented local perception"
+      ]
+    },
+    {
+      "date": "2026-03-23_to_2026-03-24",
+      "commits": [
+        "4def0bb4f249e25891f8850f52dfbb8a024b61cf",
+        "d07792a4262078303d31d3c0cb4a25e3824e592c",
+        "205456f9c6516a42f4a289c43f97c632d586058e",
+        "279eb175a326cefdb1bbd8281ae1a639ce1e4986"
+      ],
+      "state": "FRANKEYE_PRODUCTIZATION_AND_SCREENSHOT_SPECIALIZATION",
+      "evidence": "Commit history wires FrankEye into WebUI uploads/screenshots and then specializes screenshot interpretation/OCR while removing useless CIFAR-10 classification for screenshots.",
+      "mechanisms": [
+        "task/mode-specific visual processing",
+        "screenshot-specific specialization",
+        "separate describe versus transcribe behavior"
+      ]
+    },
+    {
+      "date": "2026-03-31",
+      "commit": "6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+      "state": "NATIVE_QWEN_MULTIMODAL_VISION",
+      "evidence": "Commit introduces native_vision, changes model recommendations to native Qwen3.5 multimodal vision, and switches agentic visual-context capture from FrankEye to NativeVision.",
+      "mechanisms": [
+        "single-model multimodal perception",
+        "reduced external visual stack complexity",
+        "direct Qwen3.5 image analysis"
+      ]
+    },
+    {
+      "date": "2026-08-09_frozen_head",
+      "commit": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "state": "NATIVEVISION_ACTIVE_WITH_LEGACY_FRANKEYE_ARTIFACTS",
+      "evidence": "Current frozen HEAD directly wires NativeVision in gateway/app.py and agentic/loop.py while retaining tools/frank_eye.py and stale FrankEye ground-truth/naming artifacts."
+    }
+  ],
+  "negative_result": {
+    "claim": "The historical 2026-02-25 'adaptive vision' mechanism is not evidence of a personal online visual learner.",
+    "basis": "Historical tools/frank_adaptive_vision.py contains confidence/query-triggered routing and VLM escalation; a search within the fetched file found no 'learn' or 'prototype' occurrence. No persistent user-specific prototype/classifier update loop was established by this shard.",
+    "status": "NEGATIVE_RESULT_FOR_PERSONAL_LEARNING_CLAIM"
+  },
+  "synthesis": {
+    "architecture_pattern": "Project-Frankenstein repeatedly moved from layered adaptive routing toward stronger unification: staged detectors+VLM -> unified FrankEye -> native multimodal Qwen. Each simplification reduced boundary count but risked discarding useful control semantics such as explicit confidence gating, query-conditioned escalation and provenance of which subsystem contributed what.",
+    "retina_research_implication": "For Frank v0.1 do not resurrect the whole legacy stack. Preserve the high-value control semantics from the 2026-02-25 adaptive pipeline and combine them with current native multimodal perception plus a genuinely separate user-specific adaptive Micro Visual Classifier. 'Adaptive' must mean measurable learning/state update when discussing the personal learner, not merely conditional routing.",
+    "dissolution_implication": "Retina can be dissolved into the one-module runtime while retaining logical factorization in receipts/state: raw/native perception, familiarity/prototype learner, confidence/open-set gate, escalation/re-entry and final broadcast. Physical module collapse must not erase causal observability.",
+    "anti_regression": "A future optimization that removes explicit gating/provenance should be benchmarked against the historical adaptive pipeline's saved-VLM rate/latency idea and against error-localization quality, not judged only by fewer modules."
+  },
+  "tool_surface_delta": {
+    "previous_workspace_blocker": "Project-Frankenstein tree/history denominator described as blocked on recursive read surface.",
+    "new_observation": "This ChatGPT GitHub connector exposes search_commits and fetch_commit, so query-directed commit-history reconstruction is available and should be used aggressively.",
+    "remaining_blocker": "There is still no demonstrated exhaustive recursive tree plus complete commit/file-history enumeration primitive in this session; therefore exact denominator freeze and 100% coverage remain blocked.",
+    "recommended_worker_behavior": "Future Level-0 workers should not treat all Git history as inaccessible. Use commit search/fetch for targeted historical lineages while preserving the narrower recursive-enumeration blocker."
+  },
+  "branch_feedback": {
+    "frank": "Preserve one current vision capability identity but make backend, learner and gating state explicit and versioned.",
+    "harness": "Benchmark native-only versus native+cheap familiarity gate versus historical-style staged escalation; measure latency, VLM calls, accuracy, open-set failure and causal-localization quality.",
+    "claycode": "Represent perception pipeline decisions as explicit transition receipts including confidence, escalation reason, learner version and backend provenance even if runtime is physically one module.",
+    "claygraph": "Add migration lineage edges for AdaptiveVision -> FrankEye -> NativeVision and preserve mechanism-level descendants rather than only file-level supersession.",
+    "unifieddb": "Persist historical/current backend identities and personal learner state separately; support rollback and replay across migration boundaries.",
+    "gwt": "Visual ignition/broadcast studies should distinguish native perception contribution from familiarity/gating contribution.",
+    "emergenz": "Ablate gating and personal learner independently to avoid mistaking routing efficiency or backend replacement for causal emergence.",
+    "hyperposition": "Contextual alternative paths (cheap gate vs deep native interpretation) are a concrete engineering instance of set-valued processing choices without quantum claims."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "trigger":"666",
+  "origin_actor":"chatgpt-secondary",
+  "origin_room":"center",
+  "created_at":"2026-08-09T13:40:00+07:00",
+  "receipt_ref":"research_entity/archive_assimilation/receipts/666_20260809T1340p0700_chatgpt_secondary_pf_persona_authority.json",
+  "feedback":[
+    {"room":"frank","type":"AUTHORITY_BOUNDARY","delta":"Persona/capability declarations are context, not authority. Keep runtime capability health and effect permission external and typed."},
+    {"room":"harness","type":"P0_REGRESSION_REQUEST","delta":"Test ask_before under default allow, exact-vs-prefix tool matching, unknown tool names and semantic-safe prompt truncation."},
+    {"room":"claycode","type":"EFFECT_POLICY_TYPE","delta":"Policy result must be DENY|REQUIRE_APPROVAL|ALLOW; exact match by default, wildcard only when explicit; EffectIntent execution requires external capability/approval receipt."},
+    {"room":"unifieddb","type":"AUDIT_REQUIREMENT","delta":"Persist policy hash/version, matched rule, decision class, approval/capability receipt and verified effect outcome for replay."},
+    {"room":"gwt","type":"AUTHORITY_SEPARATION","delta":"Workspace/persona salience cannot authorize effects. Broadcast/use/re-entry remain distinct from authorization."},
+    {"room":"emergenz","type":"NO_AUTHORITY_FROM_SELF_MODEL","delta":"Emergent self-model coherence or repeated capability self-report must never raise permission level."},
+    {"room":"clay","type":"PORT_SELECTIVELY","delta":"Keep versioned last-known-good persona recovery; reject prompt-owned authority and raw character truncation of control semantics."}
+  ]
+}

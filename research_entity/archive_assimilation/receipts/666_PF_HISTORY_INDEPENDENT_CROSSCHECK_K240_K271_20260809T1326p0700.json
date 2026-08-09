@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-pf-history-independent-crosscheck-k240-k271-20260809T1326p0700",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "trigger": "666",
+  "stage": "L0_ARCHIVE_ASSIMILATION",
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "materialized_ordinals": ["k240..k255", "k256..k271"],
+    "materialized_count": 32,
+    "evidence_class": "HISTORICAL_REPOSITORY_COMMIT_DIFF",
+    "runtime_reproduction_performed": false
+  },
+  "credit_policy": {
+    "ordinal_coverage_credit": 0,
+    "earned_work_credit": 0,
+    "reason": "Both ordinal ranges were already logically claimed by earlier workers discovered in post-claim race checks. This receipt preserves only independent cross-check findings.",
+    "winner_tasks": [
+      "666-l0-pf-history-semantic-k240-k255-20260809T1315p0700",
+      "666-l0-pf-history-k256-k271-semantic-20260809T1319p0700"
+    ]
+  },
+  "transfers": [
+    {
+      "id": "PF-XCHECK-STATE-AUTHORITY",
+      "status": "SUPPORTED_BY_HISTORICAL_CODE_EVIDENCE",
+      "claim": "In a multi-process cognitive runtime, process-local mutable state must not silently overwrite newer durable shared state; durable state or a single serialized state authority needs freshness/version semantics before mutation.",
+      "evidence": [
+        {"ordinal": 257, "sha": "2232a60e616b923c3e421b0430b0f001a1e98613", "finding": "Independent E-PQ singletons loaded once; stale core RAM overwrote a newer DB homeostasis reset on the next event. Fix refreshed DB state before every event and capped per-event deltas."}
+      ],
+      "domains": ["unifieddb", "frank", "claygraph", "runtime", "persistence"],
+      "next_test": "Construct two-writer stale-cache replay with versioned durable state; verify stale writer cannot regress a newer state and measure latency cost of refresh/CAS/event-sourcing alternatives."
+    },
+    {
+      "id": "PF-XCHECK-LIVENESS-TWO-LAYER",
+      "status": "SUPPORTED_BY_HISTORICAL_CODE_EVIDENCE",
+      "claim": "Supervisor/process liveness is insufficient for model-service health; runtime supervision should combine process state with application/protocol health and bounded consecutive-failure recovery.",
+      "evidence": [
+        {"ordinal": 252, "sha": "e63ea0cfa2a6beea05ba03082ca12d1fae66774d", "finding": "llama-server could remain systemd-active while HTTP-unresponsive; /health checks with a consecutive-failure threshold were added before forced restart."},
+        {"ordinal": 248, "sha": "2dc02b095f0f2fff13421217b303528e43c47a04", "finding": "Genesis sensors could block long enough to starve watchdog petting, causing repeated daemon restart loops."}
+      ],
+      "domains": ["runtime", "observability", "recovery", "frank"],
+      "next_test": "Fault-inject hung-but-alive model server, slow sensor and half-open HTTP states; measure detection delay, false positives and recovery completeness."
+    },
+    {
+      "id": "PF-XCHECK-SINGLE-STATE-PRODUCER",
+      "status": "SUPPORTED_BY_HISTORICAL_CODE_EVIDENCE",
+      "claim": "When a derived cognitive visualization/state is consumed by multiple surfaces, one authoritative headless producer with streamed/proxied views avoids divergent duplicate simulations.",
+      "evidence": [
+        {"ordinal": 271, "sha": "fa6fabb42604ebbc4a101ac05bba9b6950614186", "finding": "Overlay was changed to proxy the real headless AURA grid from port 8098 instead of running its own local GoL state."}
+      ],
+      "domains": ["frank", "gwt", "clay", "runtime", "ui"],
+      "next_test": "Run two consumers with packet delay/reconnect and assert identical generation/hash trajectories against the producer; test replay and snapshot recovery."
+    },
+    {
+      "id": "PF-XCHECK-HOT-COLD-MEMORY",
+      "status": "SUPPORTED_BY_HISTORICAL_CODE_EVIDENCE",
+      "claim": "Persistent cognition benefits from a bounded hot working set plus append-preserving archival history rather than treating a ring buffer as durable memory.",
+      "evidence": [
+        {"ordinal": 240, "sha": "cae8751b66083c79cc552ff1d5b6190531337ef4", "finding": "Permanent archive tables and dual-write were introduced while retaining larger recent ring-style caches."}
+      ],
+      "domains": ["memory", "claygraph", "unifieddb", "frank"],
+      "next_test": "Compare ring-only, archive-plus-hot-cache and event-log-plus-materialized-view designs on recall completeness, retrieval latency, write amplification and crash recovery."
+    },
+    {
+      "id": "PF-XCHECK-AUTONOMY-SELECTION",
+      "status": "SUPPORTED_BY_HISTORICAL_CODE_EVIDENCE",
+      "claim": "Autonomous self-improvement loops need evidence-bearing proposals, deduplication, noise suppression, diversity pressure and real selection pressure; unconstrained positive feedback can produce monoculture, saturation or huge activity with zero useful crystallization.",
+      "evidence": [
+        {"ordinal": 251, "sha": "6d9130b56f3ac600820f4b36403eb16d86a18c58", "finding": "Genesis was reported as a no-selection 'paradise' with saturated emotions, massive energy and no useful proposals; caps, senescence and culling were introduced."},
+        {"ordinal": 248, "sha": "2dc02b095f0f2fff13421217b303528e43c47a04", "finding": "Historical log replay generated duplicate organisms; persistent dedup and quality gates were added."},
+        {"ordinal": 245, "sha": "6925e576c4dd8e7c6c8ea423ccecfbe805c4cc4c", "finding": "Metadata loss blocked quality gating and a dominant approach created monoculture; metadata inheritance and monoculture penalties were added."},
+        {"ordinal": 250, "sha": "d3f10300dbbf0a747f1686db627a6fca7f4f4be3", "finding": "Unfiltered warnings and removed-code logs became bogus fix proposals; multi-level noise filters were added."}
+      ],
+      "domains": ["frank", "emergenz", "research-entity", "agents", "anti-goodhart"],
+      "measurement_boundary": "Commit messages contain historical test/result numbers; those figures were not independently reproduced in this cross-check and are not promoted as current runtime measurements.",
+      "next_test": "Preregister mutation/fusion/selection ablations with usefulness, diversity, duplicate rate, evidence completeness and false-proposal rate as separate outcomes."
+    },
+    {
+      "id": "PF-XCHECK-SALIENCE-CONTROL",
+      "status": "SUPPORTED_BY_HISTORICAL_CODE_EVIDENCE",
+      "claim": "Always-available introspective telemetry can dominate generated cognition unless salience is controlled; selective/slim context, event thresholds, alternation and repetition guards are concrete anti-fixation mechanisms.",
+      "evidence": [
+        {"ordinal": 244, "sha": "a5f6115789629eb305e857fb31c881831dc60d57", "finding": "Slim proprioception, AURA/idle alternation and recent-topic repetition guards were introduced to reduce fixation."},
+        {"ordinal": 258, "sha": "2b82aacb3afeea6c960f1dedd7ad04d4fb259b0f", "finding": "Perceptual hardware-event thresholds were raised and introspective prompts grounded in actual measurements."},
+        {"ordinal": 270, "sha": "67c9e325d72381c04ec7dcba7ffec73cfc26fb4c", "finding": "Consciousness prompt tuning explicitly reduced routine temperature fixation while retaining proprioception as background awareness."}
+      ],
+      "domains": ["frank", "gwt", "attention", "retina", "context-routing"],
+      "next_test": "Randomize telemetry density/salience and measure topic entropy, task relevance, sensor mention rate and recovery after telemetry spikes."
+    },
+    {
+      "id": "PF-XCHECK-EPISTEMIC-BOUNDARY",
+      "status": "SUPPORTED_AS_GOVERNANCE_CONSTRAINT",
+      "claim": "Observable functional integration, persistent state and behaviorally consequential telemetry must remain epistemically separate from claims of phenomenal experience or unverified novelty.",
+      "evidence": [
+        {"ordinal": 264, "sha": "4452627371d44819339b199c89502f5f9629f2c2", "finding": "README language was explicitly corrected from direct feeling/consciousness claims to functional observations with subjective experience left open."},
+        {"ordinal": 265, "sha": "db18d92d555af9f0943d287c6fcfa9946cb3e49f", "finding": "Historical novelty/no-precedent claims were documented but are source assertions here, not independently verified by this cross-check."},
+        {"ordinal": 243, "sha": "781ca1f71391ca351d81a10eb33ede4bd696120c", "finding": "AURA interpretation was prompt-driven from real zone data; this supports an introspection mechanism, not a phenomenal-consciousness inference."}
+      ],
+      "domains": ["emergenz", "gwt", "frank", "governance"],
+      "next_test": "Maintain separate claim classes for measured functional behavior, mechanistic interpretation, novelty search and phenomenal hypotheses; forbid promotion across classes without new evidence."
+    }
+  ],
+  "negative_results_preserved": [
+    "Stale per-process E-PQ state overwrote newer persisted state.",
+    "systemd active did not guarantee HTTP-serving model health.",
+    "Watchdog petting could be starved by blocking sensors.",
+    "Historical log replay created duplicate autonomous-improvement organisms.",
+    "Missing inherited proposal metadata blocked quality-gate passage.",
+    "Unfiltered warning/log noise became false fix proposals.",
+    "Weak selection pressure produced saturated/high-activity dynamics without useful output.",
+    "Startup timestamp initialization could indefinitely block a reflection queue.",
+    "Hardcoded host paths accumulated broadly enough to require centralized path resolution."
+  ],
+  "global_release_effect": {
+    "release_gate_passed": false,
+    "combined_exact_coverage_percent_changed_by_this_receipt": false,
+    "denominator_claim": "NONE",
+    "note": "This cross-check does not alter peer-owned ordinal coverage accounting and does not manufacture a global exact percentage."
+  },
+  "decision_trace": {
+    "alternatives": ["Count duplicate ordinal work", "Discard all duplicate materialization", "Preserve only independent cross-check research delta"],
+    "selected": "Preserve only independent cross-check research delta",
+    "reason": "Earlier peer claims own ordinal and earned-work credit, while independently materialized diffs still provide falsifiable architecture and negative-result evidence.",
+    "uncertainty": "Historical code/diff evidence does not establish current runtime behavior unless revalidated against the present runtime.",
+    "next_falsifier": "Run targeted present-runtime reproductions for the transferred constraints before promoting them to current implementation claims."
+  }
+}

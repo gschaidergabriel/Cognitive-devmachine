@@ -1,0 +1,210 @@
+name: ClayCode GO OOB Standalone Parser Differential
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-go-oob-standalone.yml'
+      - 'tools/claycode_wp02_oob_standalone_equivalence.py'
+      - 'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycode-go-oob-standalone
+  cancel-in-progress: false
+
+jobs:
+  standalone-differential:
+    permissions:
+      contents: read
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout current main without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Install hash-locked ephemeral parser dependencies
+        id: deps
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEPS_DIR="${RUNNER_TEMP:-/tmp}/claycode-oob-standalone-deps-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT:-1}"
+          echo "deps_dir=$DEPS_DIR" >> "$GITHUB_OUTPUT"
+          rm -rf "$DEPS_DIR"
+          mkdir -p "$DEPS_DIR"
+          export PYTHONNOUSERSITE=1
+          python3 -m pip install \
+            --target "$DEPS_DIR" \
+            --disable-pip-version-check \
+            --no-input \
+            --no-compile \
+            --require-hashes \
+            --only-binary=:all: \
+            -r research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt
+          echo "PYTHONPATH=$DEPS_DIR${PYTHONPATH:+:$PYTHONPATH}" >> "$GITHUB_ENV"
+          echo "PYTHONNOUSERSITE=1" >> "$GITHUB_ENV"
+
+      - name: Execute bounded dynamic-vs-standalone differential
+        id: experiment
+        shell: bash
+        run: |
+          set +e
+          python3 tools/claycode_wp02_oob_standalone_equivalence.py \
+            --output /tmp/CLAYCODE_GO_OOB_STANDALONE_INNER.json
+          rc=$?
+          set -e
+          echo "returncode=$rc" >> "$GITHUB_OUTPUT"
+
+          python3 - "$rc" <<'PY'
+          import hashlib, importlib.metadata, json, os, platform, socket, subprocess, sys
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          rc=int(sys.argv[1])
+          inner_path=Path('/tmp/CLAYCODE_GO_OOB_STANDALONE_INNER.json')
+          inner=json.loads(inner_path.read_text(encoding='utf-8')) if inner_path.exists() else {'pass':False,'failure':'MISSING_INNER_RECEIPT'}
+          head=subprocess.run(['git','rev-parse','HEAD'],text=True,capture_output=True,check=False).stdout.strip()
+          dirty=bool(subprocess.run(['git','status','--porcelain'],text=True,capture_output=True,check=False).stdout.strip())
+          lock=Path('research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt')
+          deps_root=Path(os.environ.get('PYTHONPATH','').split(':',1)[0]).resolve()
+          payload={
+              'schema_version':'1.0',
+              'evidence_class':'REAL_SELF_HOSTED_UBUNTU_BOUNDED_OOB_EXECUTION',
+              'scope':'GO_OOB_WP02_STANDALONE_DIFFERENTIAL_NOT_RELEASE_ACCEPTANCE',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'github_sha':os.environ.get('GITHUB_SHA',''),
+              'repository_head':head,
+              'repository_dirty':dirty,
+              'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+              'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT',''),
+              'runner':{
+                  'name':os.environ.get('RUNNER_NAME','unknown'),
+                  'os':os.environ.get('RUNNER_OS','unknown'),
+                  'arch':os.environ.get('RUNNER_ARCH','unknown'),
+                  'hostname':socket.gethostname(),
+                  'platform':platform.platform(),
+                  'python':platform.python_version(),
+              },
+              'dependencies':{
+                  'install_mode':'ephemeral_hash_locked_pip_target',
+                  'lock_path':str(lock),
+                  'lock_sha256':hashlib.sha256(lock.read_bytes()).hexdigest(),
+                  'lark':importlib.metadata.version('lark'),
+                  'interegular':importlib.metadata.version('interegular'),
+                  'root':str(deps_root),
+              },
+              'experiment_returncode':rc,
+              'experiment':inner,
+              'pass':rc==0 and inner.get('pass') is True,
+              'promotion':'NONE',
+              'authority_invariant':'model output != execution authority',
+              'final_release_boundary':'This Hostinger OOB receipt is differential evidence only and cannot substitute for formal WP02/BASE or Andreas target acceptance.',
+          }
+          Path('/tmp/CLAYCODE_GO_OOB_STANDALONE_SUMMARY.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps({'pass':payload['pass'],'github_sha':payload['github_sha'],'runner':payload['runner']['name'],'experiment_id':inner.get('experiment_id')},sort_keys=True))
+          PY
+
+      - name: Remove ephemeral dependencies
+        if: always()
+        shell: bash
+        env:
+          DEPS_DIR: ${{ steps.deps.outputs.deps_dir }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPS_DIR"
+          rm -rf "$DEPS_DIR"
+          test ! -e "$DEPS_DIR"
+
+      - name: Upload standalone differential receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-go-oob-standalone-${{ github.run_id }}
+          path: /tmp/CLAYCODE_GO_OOB_STANDALONE_SUMMARY.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Enforce bounded experiment result
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/CLAYCODE_GO_OOB_STANDALONE_SUMMARY.json',encoding='utf-8'))
+          assert p['evidence_class']=='REAL_SELF_HOSTED_UBUNTU_BOUNDED_OOB_EXECUTION'
+          assert p['scope']=='GO_OOB_WP02_STANDALONE_DIFFERENTIAL_NOT_RELEASE_ACCEPTANCE'
+          assert p['repository_head']==p['github_sha'], p
+          assert p['repository_dirty'] is False, p
+          assert p['dependencies']['install_mode']=='ephemeral_hash_locked_pip_target'
+          assert p['dependencies']['lark']=='1.3.1'
+          assert p['dependencies']['interegular']=='0.3.3'
+          assert p['experiment']['experiment_id']=='GO-OOB-WP02-STANDALONE-PARSER-EQUIVALENCE-V1'
+          assert p['pass'] is True, p
+          print('CLAYCODE_GO_OOB_STANDALONE_EQUIVALENCE=PASS')
+          PY
+
+  persist-receipt:
+    if: always()
+    needs: standalone-differential
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout persistence lane
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Download bounded receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: claycode-go-oob-standalone-${{ github.run_id }}
+          path: /tmp/claycode-go-oob-standalone
+
+      - name: Validate and persist receipt
+        shell: bash
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TESTED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          src=/tmp/claycode-go-oob-standalone/CLAYCODE_GO_OOB_STANDALONE_SUMMARY.json
+          python3 - "$src" <<'PY'
+          import json, os, sys
+          d=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert d['github_sha']==os.environ['TESTED_SHA']
+          assert d['repository_head']==os.environ['TESTED_SHA']
+          assert d['authority_invariant']=='model output != execution authority'
+          assert d['experiment']['promotion']=='NONE'
+          print(json.dumps({'transport_valid':True,'tested_sha':d['github_sha'],'pass':d['pass']},sort_keys=True))
+          PY
+
+          mkdir -p research_entity/claycode/remote_vps/oob_standalone/runs
+          cp "$src" "research_entity/claycode/remote_vps/oob_standalone/runs/${RUN_ID}.json"
+          cp "$src" research_entity/claycode/remote_vps/oob_standalone/LATEST.json
+          git config user.name 'claycode-receipt-writer'
+          git config user.email 'claycode-receipt-writer@users.noreply.github.com'
+          git add research_entity/claycode/remote_vps/oob_standalone/
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "evidence(vps): persist GO standalone OOB ${RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

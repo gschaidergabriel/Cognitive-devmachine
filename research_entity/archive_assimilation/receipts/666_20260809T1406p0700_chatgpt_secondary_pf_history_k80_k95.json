@@ -1,0 +1,36 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1406p0700-chatgpt-secondary-pf-history-k80-k95",
+  "trigger":"666","actor":"chatgpt-secondary","stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","ordinal_range":"k80..k95","count":16,"manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K80_K95_20260809T1405p0700.json"},
+  "race":{"winning_claim_commit":"3fcc206581c404beac1054c46a00863a61bdbb4c","winning_claim_time":"2026-08-09T13:57:06+07:00","later_competing_claim_commit":"4c52a7aad684a04b9ede536b49c844cf52821d24","later_competing_claim_time":"2026-08-09T13:57:23+07:00","result":"WINNER_EARLIEST_DURABLE_CLAIM"},
+  "closure":{"materialized":16,"terminally_dispositioned":16,"uncovered":0,"status":"COMPLETE_FOR_ORDINAL_SHARD","global_level0_gate":"NOT_PASS","global_exact_percent_increment":0.0,"reason":"Combined Level-0 denominator remains NOT_FROZEN."},
+  "high_value_findings":[
+    {"id":"PF-K80-95-SPATIAL-MEMORY","evidence":[80],"finding":"Persistent room objects introduced soft state, timestamps and placement provenance while only a bounded subset was projected into prompt context.","transfer":"Keep durable memory/state distinct from bounded task/context projection and preserve object provenance/temporal status."},
+    {"id":"PF-K80-95-CAPABILITY-DEACTIVATION","evidence":[84],"finding":"Genesis was surgically disabled across cognition, topology, UI/API, swarm and systemd/watchdog surfaces while code remained for later reactivation.","transfer":"Subsystem capability gating must deactivate all observable/effect/recovery surfaces coherently; a stopped daemon alone does not remove a subsystem from architecture truth."},
+    {"id":"PF-K80-95-CONTROL-SEPARATION","evidence":[83,85,86],"finding":"Location could be inferred by IP/timezone and hardcoded fallback; mail persona/language originally mixed into intent and later moved to separate API/system fields; read state moved from client-only to server sync.","transfer":"Track source/uncertainty for inferred personal context; structurally separate user content from persona/control metadata; visible state should reconcile to authoritative persistence."},
+    {"id":"PF-K80-95-OPTIMISTIC-BULK-EFFECTS","evidence":[87,88],"finding":"Mail UI adopted optimistic bulk/read/delete/spam projections and confirmation dialogs.","transfer":"Optimistic and bulk external effects require explicit receipts, reconciliation and rollback/failure semantics rather than assuming background sync succeeds."},
+    {"id":"PF-K80-95-DOC-EPOCH","evidence":[89,90],"finding":"Papers were rewritten to current Rooms/Qwen/WebUI topology and historical notices removed, while IAPT method/metrics were documented as current claims.","transfer":"Git-history document epochs must be preserved; current paper text cannot replace historical architecture snapshots. Method metrics/novelty require raw-run reconstruction."},
+    {"id":"PF-K80-95-TOPOLOGY-SUPERSESSION","evidence":[93,94,95],"finding":"Observability consolidated into Swarm, overlay/writer were deleted in favor of WebUI-only, and multiple models/backends were collapsed to Qwen2.5-3B only.","transfer":"Interface, model and observer topology are explicitly versioned/superseded domains; historical behavior must be interpreted against the active epoch."
+    }
+  ],
+  "negative_results_preserved":[
+    "IP/timezone-based location detection could end in a hardcoded city fallback.",
+    "Genesis had to be fully disabled after being judged unreliable for autonomous improvement on the available model.",
+    "Local-only email read state did not survive reload.",
+    "Persona/language instructions mixed into user intent leaked into generated email behavior.",
+    "Latest papers were rewritten to current topology and historical notices removed.",
+    "Large overlay/writer surfaces were deleted after prior development.",
+    "The multi-model architecture was later removed and replaced by a single 3B model."
+  ],
+  "measurement_boundary":"IAPT scores/turn counts/training durations, model-storage savings and all other source-reported performance or novelty statements were not independently reproduced.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level earned-work overlap audit was performed."},
+  "next_falsifiers":[
+    "Test location-context provenance so IP/timezone/default inference never becomes a durable user fact without evidence/scope.",
+    "Capability-disable a subsystem in a staging topology and verify UI/API/watchdog/edges/context all agree it is absent.",
+    "Inject mail transport/read-state failures and verify optimistic projections reconcile/rollback against authoritative receipts.",
+    "Reconstruct IAPT runs from immutable prompts, evaluator policy, raw transcripts and scoring before retaining quantitative claims.",
+    "Query historical architecture by commit epoch and verify latest rewritten papers cannot overwrite prior topology facts."
+  ],
+  "status":"COMPLETE"
+}

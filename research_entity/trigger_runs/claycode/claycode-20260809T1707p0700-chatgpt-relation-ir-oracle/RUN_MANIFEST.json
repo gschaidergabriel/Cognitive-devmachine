@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1707p0700-chatgpt-relation-ir-oracle",
+  "trigger": "claycode",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "focus": "Matched typed canonical Relation IR oracle for live ClayCode surface candidates after full-G9 parser-closure and relation-namespace results.",
+  "upstream_runs": [
+    "claycode-20260809T1605p0700-chatgpt-full-g9-surface-closure",
+    "claycode_20260809T1604p0700_chatgpt_secondary_relation_namespace",
+    "claycode-20260809T155804p0700-chatgpt-declared-relations",
+    "claycode_20260809T1702p0700_chatgpt_source_chain_integrity"
+  ],
+  "work_dependency": "WORK-CC-BASE-G9-PARSER-FREEZE-001",
+  "promotion_requested": false,
+  "identity_lock": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK"
+}

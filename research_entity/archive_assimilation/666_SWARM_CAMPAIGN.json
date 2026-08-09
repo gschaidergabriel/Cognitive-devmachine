@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "campaign_id": "666-level0-exhaustive-swarm",
   "status": "ACTIVE_UNTIL_LEVEL0_PASS",
   "trigger": "666",
@@ -9,12 +9,16 @@
   "laws": [
     "research_entity/global/LEVEL0_EXHAUSTIVE_CORPUS_COMPLETION_LAW.md",
     "research_entity/global/LEVEL0_SWARM_EXECUTION_LAW.md",
-    "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md"
+    "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
+    "research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md"
   ],
   "source_universes": {
     "drive": {
       "root_epoch": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T0650p0700.json",
-      "required_scope": "FULL_RECURSIVE_FROZEN_EPOCH"
+      "required_scope": "FULL_RECURSIVE_FROZEN_EPOCH",
+      "exact_enumeration_method": "DIRECT_FOLDER_FETCH_OR_INDEPENDENTLY_VERIFIABLE_PINNED_RAW_SNAPSHOT",
+      "search_negative_completion_forbidden": true,
+      "method_guard": "research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md"
     },
     "project_frankenstein": {
       "repository": "gschaidergabriel/Project-Frankenstein",
@@ -26,6 +30,7 @@
   "worker_law": "Every actually available worker joins the same campaign, discovers peers/leases, claims a non-overlapping highest-value obligation, publishes results, releases the lease, pivots on overlap and immediately takes another open obligation while execution capacity remains.",
   "sampling_rule": "PRIORITIZATION_ONLY_NEVER_COMPLETION",
   "duplicate_rule": "PROVE_IDENTITY_THEN_ONE_SEMANTIC_ANALYSIS_PLUS_ALL_PROVENANCE_LINKS",
+  "drive_enumeration_rule": "Google Drive search may discover candidates but MUST NOT establish exact emptiness, child counts or recursive completion. Exact Drive accounting requires direct folder fetch over stable folder IDs recursively, or an independently verifiable pinned raw snapshot. Search/fetch disagreement reopens affected exact claims.",
   "pass_requires": [
     "FULL_DRIVE_ACCOUNTING",
     "FULL_PROJECT_FRANKENSTEIN_ACCOUNTING",
@@ -38,5 +43,6 @@
   "post_pass_transition": "EXACT_666_SWITCHES_TO_EMERGENT_RESEARCH_FIELD_GENESIS",
   "training_auto_start_forbidden": true,
   "created_at": "2026-08-09T06:53:00+07:00",
-  "created_by": "chatgpt-secondary"
+  "created_by": "chatgpt-secondary",
+  "method_guard_updated_at": "2026-08-09T07:03:00+07:00"
 }

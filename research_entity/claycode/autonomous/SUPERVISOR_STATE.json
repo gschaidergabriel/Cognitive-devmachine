@@ -1,14 +1,16 @@
 {
-  "schema_version": "1.7",
+  "schema_version": "1.8",
   "status": "ACTIVE",
   "last_reviewed_cycle": "ccauto-20260809T105416Z",
-  "current_focus": "close contract-selected WP02 V17 with strict interegular-enabled exact-grammar receipts and immediately replay the newest WP06 deep-expression/call-chain/numeric/string/object hardening suite against those exact V17/current-main bytes; if that replay is clean, return directly to fail-closed registered Andreas Ubuntu BASE14 target closure",
+  "current_focus": "close contract-selected WP02 V17 with strict interegular-enabled exact-grammar receipts; then replay the newest WP06 deep-expression/call-chain/numeric/string/object hardening suite against those exact V17/current-main bytes with composite evaluator/native-C differentials; if clean, return directly to fail-closed registered Andreas Ubuntu BASE14 target closure",
   "free_only": true,
   "provider_cooldowns": {},
   "blocked_capabilities": {
     "mistral_runtime": "CREDENTIAL_NOT_CONFIGURED_IN_AUTONOMOUS_RUNNER",
     "andreas_target_execution": "SELF_HOSTED_RUNNER_NOT_YET_OBSERVED_ONLINE_OR_TARGET_RECEIPT_NOT_YET_COMMITTED",
     "wp02_target_promotion": "V17_SELECTED_BUT_STRICT_TARGET_RECEIPT_NOT_YET_PRESENT",
+    "wp02_frontend_closure": "BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT_NOT_YET_PRESENT",
+    "wp02_canonicalizer_closure": "BASE_CANONICALIZER_RECEIPT_NOT_YET_PRESENT",
     "wp06_selected_grammar_replay": "LATEST_EXECUTABLE_HARDENING_RECEIPT_IS_BOUND_TO_V16_GRAMMAR_BYTES_AND_MUST_NOT_BE_USED_AS_V17_OR_TARGET_EVIDENCE"
   },
   "verified_capabilities": {
@@ -30,6 +32,12 @@
       "counterexamples_fixed": ["HOST_STACK_DEEP_EXPRESSION", "HOST_STACK_ACYCLIC_CALL_CHAIN", "NO_ENTRY_OBJECT_WERROR", "UNICODE_C11_STRING_LITERAL"],
       "validated": ["25/25 combined compiler regression", "4000-operator build/eval/lower", "1200 and 2000 operator native C -Werror", "300-function source/eval/native", "5000-function manual-IR iterative eval", "5000-node acyclic cycle detector", "3/3 no-entry object -Werror", "8/8 targeted UTF-8/String cases"],
       "evidence_boundary": "EXECUTABLE_SANDBOX_ONLY_BOUND_TO_V16_GRAMMAR_SHA; NOT WP02 PASS, NOT WP06 PASS, NOT UBUNTU TARGET RECEIPT"
+    },
+    "control_surface_sync": {
+      "status": "SYNCHRONIZED_TO_V17_EXACT_BYTE_PATH",
+      "control_commit": "8ef9a4fb367f26b7dd39857895ed5a49fb188e7a",
+      "inbox_commit": "0feefa8401e5eb965ec37bbc715219248ab60eef",
+      "reason": "Removed stale H1/H2 and superseded V6 next-focus directives that conflicted with the current target receipt contract and executable evidence provenance."
     }
   },
   "model_family_history": [
@@ -47,6 +55,7 @@
   ],
   "steering_notes": [
     "The selected V17 path remains the only WP02 promotion candidate. No sandbox, hosted CI or model output can promote it without strict exact-byte and target receipts.",
+    "At this review, the contract-named V17 strict target receipt, frontend validation receipt, canonicalizer receipt and Andreas V2 collector receipt are absent from canonical GitHub paths.",
     "New executable WP06 evidence materially improves the compiler: recursive host-stack dependence was removed from type inference, evaluator/call traversal and C rendering; object lowering and Unicode C11 emission were hardened.",
     "That new receipt explicitly names the V16 research grammar and therefore cannot be treated as evidence for the contract-selected V17 grammar. The next cycle must replay it under V17/current-main before target closure can consume it.",
     "The four new findings are executable counterexamples, so they outrank prior model-family consensus under Goodman anti-echo. Their fixes remain provisional until selected-grammar and physical-target replay.",

@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T0635p0700-wp02-lineending",
+  "trigger": "go",
+  "created_at": "2026-08-10T06:35:40+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": {
+    "actor_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_main_before_write": "815f0a6ab80639121718e703e860dd958af953d5",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "selected_frontier": "CC-WP-02 receipt-backed frontend closure while Clay-repository Actions/self-hosted admission remains unverified",
+  "hypothesis": "The current V17 grammar-bound canonicalizer is invariant to ordinary Git checkout newline representation (LF versus CRLF) because NEWLINE is presentation trivia.",
+  "counterhypothesis": "CRLF or mixed LF/CRLF changes the accepted parse/canonical syntax identity, creating a hidden reproducibility defect across source checkouts.",
+  "out_of_box_experiment": {
+    "id": "GO-OOB-WP02-LINEENDING-CANONICAL-PARTITION-V1",
+    "class": "BOUNDED_OUT_OF_THE_BOX_EXPERIMENT",
+    "execution_scope": "LOCAL_DIAGNOSTIC_REPRODUCTION_NOT_STRICT_NOT_UBUNTU_ACCEPTANCE",
+    "runtime": {
+      "python": "3.13.5",
+      "lark": "1.3.1",
+      "interegular": "UNAVAILABLE"
+    },
+    "grammar": {
+      "remote_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+      "remote_blob_sha": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+      "local_reconstructed_sha256": "ec1bd96fe6f534b0172d49be7069bace7d61b8e72dfc9e7ecd2a7c65270ea0f4",
+      "strict": false,
+      "strict_false_reason": "interegular unavailable in disposable local runtime; result cannot be a release receipt"
+    },
+    "fixture": "record X with Int/String plus Needle.owns call; only newline encoding/layout varied",
+    "results": [
+      {"variant": "LF", "accepted": true, "canonical_sha256": "ca756db9af612f4ab89cc73d88777d7ee117e1c3332e2d0156081ff02e283201"},
+      {"variant": "CRLF", "accepted": true, "canonical_sha256": "ca756db9af612f4ab89cc73d88777d7ee117e1c3332e2d0156081ff02e283201"},
+      {"variant": "TRAILING_CRLF", "accepted": true, "canonical_sha256": "ca756db9af612f4ab89cc73d88777d7ee117e1c3332e2d0156081ff02e283201"},
+      {"variant": "MIXED_LF_CRLF", "accepted": true, "canonical_sha256": "ca756db9af612f4ab89cc73d88777d7ee117e1c3332e2d0156081ff02e283201"},
+      {"variant": "CR_ONLY", "accepted": false, "expected": "REJECT"}
+    ],
+    "result": "SUPPORTED_NO_CHANGE",
+    "interpretation": "Within this bounded non-strict diagnostic, ordinary LF/CRLF checkout newline variation does not split canonical syntax identity; CR-only is rejected. No grammar or canonicalizer change is justified.",
+    "rollback": "Receipt-only experiment; no runtime/grammar/canonicalizer mutation."
+  },
+  "same_cycle_material_evidence": {
+    "wp02_string_counterexample": "05624cd885deceb1b6383e325a43a19cc14ab98b",
+    "wp02_string_fix": "72fb8d3b2dff2c85a982035211b01d54bbe88c6e",
+    "lookahead_strict_counterevidence": "815f0a6ab80639121718e703e860dd958af953d5",
+    "actions_hosted_bounded_negative": "8a2c32d53a37cbfb064422e4f78a25dfd78ce9dc",
+    "runner_minlabel_fusion": "ff8775d464c4572fb856ed2b7ddb861a34601176"
+  },
+  "fusion": {
+    "architecture_delta": "NO_CHANGE",
+    "test_delta": [
+      "Preserve decoded JSON Unicode scalar string identity regression added by the current WP02 fix.",
+      "Preserve direct Needle owns/lowers boundary discriminators because V17 lookahead narrows the interpretation of strict/interegular collision coverage.",
+      "Add LF/CRLF canonical equivalence as a low-cost regression when the next executable WP02 receipt suite is revised; do not treat this local result as Ubuntu evidence."
+    ],
+    "current_blocker": "CLAY_REPOSITORY_ACTIONS_ADMISSION_AND_SELF_HOSTED_RUNNER_ELIGIBILITY_UNVERIFIED",
+    "gate_effect": "NONE: CC-WP-02 and BASE remain non-PASS until exact executable Ubuntu receipts exist.",
+    "next_frontier": [
+      "Obtain authoritative Clay repository Actions/runner scope evidence or one step-executed exact-SHA hosted heartbeat.",
+      "Then execute current-main WP02 strict/full-corpus/canonical + direct lookahead discriminators on an eligible Hostinger Ubuntu runner.",
+      "Consume the post-fix decoded-string identity regression in that receipt; repair only receipt-backed failures.",
+      "Continue BASE critical path to WP03 only after WP02 production evidence is admitted; final Frank acceptance remains Andreas' Ubuntu target."
+    ]
+  },
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+}

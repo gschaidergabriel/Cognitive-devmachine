@@ -1,0 +1,48 @@
+name: Clay PR-only WP02 Dispatch Transport
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/clay-pr-dispatch-wp02-once.yml'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch-existing-canonical-workflow:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Dispatch existing main WP02 workflow only
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_WORKFLOW: claycode-vps-wp02-probe.yml
+        run: |
+          set -euo pipefail
+          body='{"ref":"main"}'
+          code="$(curl -sS --retry 2 --retry-delay 1 \
+            -o /tmp/dispatch_response.txt \
+            -w '%{http_code}' \
+            -X POST \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/${TARGET_WORKFLOW}/dispatches" \
+            -d "$body")"
+          printf 'CLAY_PR_DISPATCH_HTTP=%s\n' "$code"
+          printf 'CLAY_PR_DISPATCH_TARGET=%s@main\n' "$TARGET_WORKFLOW"
+          test "$code" = 204
+
+      - name: Preserve authority boundary in log
+        if: always()
+        shell: bash
+        run: |
+          echo 'CLAY_PR_DISPATCH_SCOPE=TRANSPORT_ONLY'
+          echo 'CLAY_PR_DISPATCH_AUTHORITY=NO_SCIENTIFIC_OR_RELEASE_AUTHORITY'
+          echo 'CLAY_PR_DISPATCH_RULE=ONLY_PERSISTED_TARGET_WORKFLOW_RECEIPT_CAN_PROVE_EXECUTION'

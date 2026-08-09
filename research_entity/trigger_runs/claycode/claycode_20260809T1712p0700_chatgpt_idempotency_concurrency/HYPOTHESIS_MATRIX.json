@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1712p0700_chatgpt_idempotency_concurrency",
+  "hypotheses": [
+    {
+      "id": "H-CC-IDEMP-CONC-01",
+      "status": "SUPPORTED_LOCAL_EXECUTABLE",
+      "mechanism": "An idempotency lookup plus semantic payload/operation fingerprint check performed inside the same backend serialization domain as the effect commit prevents the tested duplicate-writer TOCTOU failure and distinguishes replay from key-reuse conflict.",
+      "expected": "Same-payload contenders classify as APPLY+REPLAY; different-payload contenders classify as APPLY+CONFLICT; one durable row/effect remains.",
+      "observed": "80/80 same-payload post-lock rounds were APPLY+REPLAY; 80/80 different-payload post-lock rounds were APPLY+CONFLICT; one row remained.",
+      "counterhypothesis": "A uniqueness constraint or a pre-lock lookup is already sufficient for deterministic concurrent replay handling.",
+      "falsifier": "A production backend/Ubuntu regression shows duplicate application, ambiguous replay/conflict classification, or inability to preserve the contract without new language semantics.",
+      "next_test": "Patch actual H-WP-02 implementation and run real concurrent project-host regression plus crash/restart replay."
+    },
+    {
+      "id": "H-CC-IDEMP-CONC-02",
+      "status": "SUPPORTED_LOCAL_EXECUTABLE",
+      "mechanism": "Database uniqueness is an integrity mechanism, not by itself a semantic idempotency/replay classification contract.",
+      "expected": "Same key with a different payload can be suppressed by a uniqueness path without proving whether the request is a valid replay or conflicting reuse.",
+      "observed": "INSERT OR IGNORE returned rowcount 0 and kept the original row, but no payload mismatch classification was produced.",
+      "counterhypothesis": "Unique-key conflict alone is sufficient semantic proof of replay equivalence.",
+      "falsifier": "The released semantic contract proves the key cryptographically/structurally binds all operation identity and payload semantics such that different-payload reuse is impossible by construction."
+    },
+    {
+      "id": "H-CC-IDEMP-CONC-03",
+      "status": "REFINED_NO_CORE_SYNTAX_CHANGE",
+      "mechanism": "The concurrency counterexample can be closed by a compiler/runtime/Needle legality and commit-envelope contract using existing typed IR, without adding a DB/idempotency-specific ClayCode core primitive.",
+      "expected": "Backend lowering can reject or implement the needed serialization/fingerprint/replay guarantees while semantic source remains ordinary typed IR.",
+      "observed": "The local SQLite mechanism closed the tested race without any new source-language construct; prior DB transaction broker already represented idempotency in generic typed transaction/resource IR.",
+      "counterhypothesis": "Distributed cancellation, multi-resource atomicity, nested effects or retry composition exposes semantics that cannot be represented or legalized with existing typed IR/runtime contracts.",
+      "falsifier": "A concrete executable application/FRANK counterexample demonstrates that existing G9 typed IR plus effect/resource/receipt semantics cannot express or lower the required guarantee."
+    }
+  ],
+  "not_promoted": [
+    "No BASE work package completion",
+    "No new ClayCode generation",
+    "No FRANK architecture promotion",
+    "No GWT/Hyperposition/Emergenz causal claim"
+  ]
+}

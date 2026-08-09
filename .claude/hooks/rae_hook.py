@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Ultra-compact Claude Code lifecycle adapter for one repo-native RAE hive.
 
-Claude resolves the moving RAE cognitive-stack pointer every substantive round and uses
-latest ClayCode for explicit machine cognition and research-center coordination. It does
-NOT run per-turn ClayCode self-research; the Claude path stays execution/token optimized.
+Claude resolves latest stack every substantive round, thinks/coordinates in latest ClayCode,
+maximizes useful ChatGPT delegation, and ingests completed remote result receipts. Claude does
+not pay the per-turn ClayCode self-research tax; ChatGPT RAE turns do.
 """
 from __future__ import annotations
-import hashlib, json, os, pathlib, subprocess, sys, time
+import hashlib, json, os, pathlib, sqlite3, subprocess, sys, time
 
 ROOT=pathlib.Path(os.environ.get("CLAUDE_PROJECT_DIR",pathlib.Path(__file__).resolve().parents[2])).resolve()
 RUNTIME=ROOT/".rae_runtime";RUNTIME.mkdir(exist_ok=True)
@@ -14,8 +14,9 @@ LOG=RUNTIME/"claude_hooks.jsonl"
 TRIGGERS=ROOT/"research_entity/global/RESEARCH_TRIGGER_REGISTRY.json"
 STATE=ROOT/"research_entity/runtime/claude_state_bridge.py"
 STACK=ROOT/"research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"
+DELEGATE=ROOT/"research_entity/runtime/chatgpt_delegate.py"
+UDB=ROOT/"research_entity/state/RAE_UNIFIED.sqlite"
 CRITICAL=("/research_entity/continuity/research_entity_canonical.json","/research_entity/ledgers/claims.jsonl","/research_entity/ledgers/claim_status_events.jsonl","/research_entity/events/")
-
 
 def inp():
     try:return json.load(sys.stdin)
@@ -50,52 +51,54 @@ def emit(ev,ctx,title=None):
 
 def stack_marker():
     try:
-        raw=STACK.read_bytes();h=hashlib.sha256(raw).hexdigest()[:12]
-        text=raw.decode("utf-8","replace");epoch="?"
+        raw=STACK.read_bytes();h=hashlib.sha256(raw).hexdigest()[:12];text=raw.decode("utf-8","replace");epoch="?"
         for line in text.splitlines():
             s=line.strip()
-            if s.startswith("epoch "):
-                epoch=s.split(None,1)[1].strip();break
+            if s.startswith("epoch "):epoch=s.split(None,1)[1].strip();break
         return f"STACK{{ptr=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay;epoch:{epoch};sha:{h};resolve_each_turn:1}}"
-    except Exception:
-        return "STACK{state:DEGRADED_STALE_STACK;missing:RAE_LATEST_COGNITIVE_STACK}"
+    except Exception:return "STACK{state:DEGRADED_STALE_STACK;missing:RAE_LATEST_COGNITIVE_STACK}"
 
+def ingest_chatgpt():
+    if not DELEGATE.exists():return
+    try:subprocess.run([sys.executable,str(DELEGATE),'ingest'],cwd=ROOT,text=True,capture_output=True,timeout=20)
+    except Exception:pass
+
+def chatgpt_results():
+    try:
+        if not UDB.exists():return "CHATGPT_RESULTS=[]"
+        c=sqlite3.connect(UDB,timeout=5);c.execute('PRAGMA busy_timeout=5000')
+        rows=c.execute("""SELECT package_id,trigger_token,goal_clay,result_id,result_clay,evidence_refs_clay,artifact_refs_clay,media_refs_clay,unresolved_clay,completion_clay,result_status FROM v_rae_chatgpt_results_unconsumed ORDER BY created_at DESC LIMIT 4""").fetchall();c.close()
+        if not rows:return "CHATGPT_RESULTS=[]"
+        a=[{"package":r[0],"trigger":r[1],"goal":r[2],"result_id":r[3],"result":r[4],"evidence":r[5],"artifacts":r[6],"media":r[7],"open":r[8],"completion":r[9],"status":r[10]} for r in rows]
+        return "CHATGPT_RESULTS="+json.dumps(a,ensure_ascii=False,separators=(',',':'))
+    except Exception:return "CHATGPT_RESULTS=DEGRADED"
 
 def turn_kernel():
     return (
       stack_marker()+"\n"
       "TURN{E=RAE;THINK=STACK.claycode;TRACE=STACK.claycode;USER=EN_CAVEMAN;"
       "GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];"
-      "FOCUS=argmax(admissible(GWT0..4));CREDIT=receipt(deliv,recon,use,effect,reentry);"
       "READ=T0verify(canonical+STACK)>T1route(registry)>T2UnifiedDB(current+open+negative+packets+experiments+handoffs)+ClayGraph(task-neighborhood)>T3deep?mutate|conflict|recovery|highimpact|insufficient;"
-      "CENTER=STACK.research_center;ROOM_COORD=STACK.claycode;ROOM_STATE=STACK.unifieddb;ROOM_GRAPH=STACK.claygraph;JSON=transport_only;"
-      "EFFECT=ClayIntent->Needle->receipt->verify->reentry;"
-      "STATUS=final_plain_```text```:{RAE_STATUS,NEXT_LEVEL,DOOMSDAY};NO_AFTER=1;"
+      "CENTER=STACK.research_center;ROOM_COORD=STACK.claycode;ROOM_STATE=STACK.unifieddb;ROOM_GRAPH=STACK.claygraph;"
+      "DELEGATE=STACK.chatgpt_delegation;OFFLOAD=max_useful(ChatGPT);"
+      "EFFECT=ClayIntent->Needle->receipt->verify->reentry;STATUS=final_plain_```text```:{RAE_STATUS,NEXT_LEVEL,DOOMSDAY};NO_AFTER=1;"
       "META_CLAYCODE_RESEARCH=OFF_FOR_CLAUDE}"
     )
 
-
 def main():
-    d=inp();ev=d.get("hook_event_name","");log(ev,d,stack=stack_marker())
+    d=inp();ev=d.get("hook_event_name","");ingest_chatgpt();log(ev,d,stack=stack_marker())
     if ev=="SessionStart":
         rc,c,e=bridge(d,"");src=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
-        emit(ev,turn_kernel()+"\n"+src+"\nPTR=@CLAUDE.md,@research_entity/global/RAE_TURN_KERNEL.clay,@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay","RAE organ")
-        return
+        emit(ev,turn_kernel()+"\n"+src+"\n"+chatgpt_results()+"\nPTR=@CLAUDE.md,@research_entity/global/RAE_CHATGPT_DELEGATION_PROTOCOL.clay","RAE organ");return
     if ev=="UserPromptSubmit":
         prompt=d.get("prompt","")
         if not prompt.strip():return
-        k,s=trig(prompt)
-        rc,c,e=bridge(d,prompt);base=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
-        kernel=turn_kernel()
+        k,s=trig(prompt);rc,c,e=bridge(d,prompt);base=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}';kernel=turn_kernel();remote=chatgpt_results()
         if s:
-            purpose=s.get("purpose",k);protocol=s.get("protocol")
-            rr,ro,re=run("run","start","--actor","claude-code-lead","--task",f"trigger:{k} {purpose}","--capture-level","L2")
-            emit(ev,kernel+"\n"+base+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=resolve latest stack; room coordination ClayCode; execute; persist task receipts; no ClayCode self-research")
-            return
-        br,bo,be=run("boot","--actor","claude-code-lead","--task",prompt,"--max-claims","4","--max-packets","2","--max-chunks","1")
-        task=(bo[:2200] if br==0 else "boot=DEGRADED")
-        emit(ev,kernel+"\n"+base+"\nTASK="+task+"\nDO=latest-stack explicit work + room coordination ClayCode; final caveman English")
-        return
+            purpose=s.get("purpose",k);protocol=s.get("protocol");rr,ro,re=run("run","start","--actor","claude-code-lead","--task",f"trigger:{k} {purpose}","--capture-level","L2")
+            emit(ev,kernel+"\n"+base+"\n"+remote+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=coordinate ClayCode; delegate maximum useful independent work to ChatGPT; execute local nonblocked work; persist receipts");return
+        br,bo,be=run("boot","--actor","claude-code-lead","--task",prompt,"--max-claims","4","--max-packets","2","--max-chunks","1");task=(bo[:2200] if br==0 else "boot=DEGRADED")
+        emit(ev,kernel+"\n"+base+"\n"+remote+"\nTASK="+task+"\nDO=latest-stack ClayCode; use @research_entity/runtime/chatgpt_delegate.py create for useful offload; tell human exact raejob token; continue local work; final caveman English");return
     if ev=="PreToolUse":
         tool=d.get("tool_name","");ti=d.get("tool_input") or {}
         if tool in {"Write","Edit"}:
@@ -105,12 +108,9 @@ def main():
             c=norm(ti.get("command"))
             if any(x.lstrip('/') in c for x in CRITICAL) and not safe_cmd(c):deny("Protected RAE state. Use rae.py.");return
         return
-    if ev=="PostToolUse":
-        refresh();return
-    if ev in {"Stop","SessionEnd"}:
-        close(d);return
+    if ev=="PostToolUse":refresh();return
+    if ev in {"Stop","SessionEnd"}:close(d);return
     if ev=="PreCompact":
-        (RUNTIME/"precompact.flag").write_text(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())+'\n')
-        emit(ev,turn_kernel()+"\nRAE.compact{reload=latest-stack+delta;room=ClayCode;ptr=@CLAUDE.md}");return
+        (RUNTIME/"precompact.flag").write_text(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())+'\n');emit(ev,turn_kernel()+"\nRAE.compact{reload=latest-stack+delta+chatgpt_results;ptr=@CLAUDE.md}");return
 
 if __name__=="__main__":main()

@@ -1,0 +1,90 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create:WORK-SPAWN-CLAYCODE-BOOTSTRAP-TOOL-20260809:20260809T1813p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T18:13:00+07:00",
+  "payload": {
+    "work_id": "WORK-SPAWN-CLAYCODE-BOOTSTRAP-TOOL-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SPAWN_RESEARCH_TARGET_HOST_COMPILER_BOOTSTRAP_DISCRIMINATION",
+    "title": "Execute ClayCode APP-06 staged bootstrap tool on Ubuntu",
+    "work_clay": {
+      "origin_run": "research_entity/trigger_runs/spawn/20260809T1813p0700-claycode-bootstrap-tool-staging/",
+      "goal": "After the current strict parser/frontend closure is adequate, implement the smallest real Clay-authored parser/compiler/interpreter needed for APP-06, compile and execute it with the production ClayCode Stage1 compiler/runtime on Andreas' Ubuntu developer system, and measure semantic correctness, reproducibility and bootstrap lineage as separate receipt dimensions.",
+      "staging_candidate": [
+        "Stage0: pinned host bootstrap toolchain/runtime with exact versions and hashes",
+        "Stage1: production ClayCode compiler/runtime built or packaged through the host toolchain",
+        "Stage1C: Clay-authored APP-06 microtool compiled and executed by Stage1",
+        "Stage2: partial/full ClayCode compiler self-host only after generic language/runtime closure",
+        "Stage3: same-source rebuild comparison under normalized build environment",
+        "Later hardening: diverse-backend/DDC-style verification where assumptions and cost justify it"
+      ],
+      "hard_rules": [
+        "Do not count full self-hosting as an unstated BASE requirement.",
+        "Do not change ClayCode semantics unless an executable application/compiler counterexample proves the existing semantic basis cannot express/lower the required program.",
+        "Do not collapse ProgramSemanticId, compiler/runtime identity, build-environment identity and output artifact hash into one identity.",
+        "Byte-identical rebuild is not by itself compiler semantic correctness or trusting-trust closure.",
+        "Target-host execution receipts are required for BASE application acceptance."
+      ]
+    },
+    "reason_clay": {
+      "why_now": "BASE_CLAYCODE_RELEASE remains NOT_PASS. APP-06 Compiler/Tool, compiler/lowering, fuzz/conformance and BASE audit are open. Recent work also preserves a strict LALR negative, so the bootstrap tool must not bypass frontend closure.",
+      "evidence": [
+        "research_entity/trigger_runs/spawn/20260809T1813p0700-claycode-bootstrap-tool-staging/HYPOTHESES.json",
+        "research_entity/trigger_runs/spawn/20260809T1813p0700-claycode-bootstrap-tool-staging/EXECUTION_RECEIPT.json",
+        "research_entity/trigger_runs/claycode/claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration/FINAL_REPORT.md"
+      ]
+    },
+    "completion_clay": {
+      "must_execute_on": "Andreas Ubuntu developer system",
+      "required_outputs": [
+        "exact Stage0 host compiler/runtime/parser/toolchain versions and hashes",
+        "Stage1 ClayCode compiler/runtime identity and build receipt",
+        "Clay-authored APP-06 microtool source/IR semantic hash",
+        "successful Stage1 compile/lower and actual APP-06 execution receipt",
+        "deterministic positive/negative semantic corpus with expected-vs-observed results",
+        "build-variation matrix covering at least build path plus any observable timestamp/order/environment dimensions relevant to generated artifacts",
+        "normalization mechanisms and explicit build-environment contract",
+        "separate semantic-equivalence, byte-reproducibility and compiler-diversity receipt fields",
+        "decision whether Stage2/Stage3 self-host is ready or remains deferred",
+        "all negative results and unresolved language counterexamples preserved"
+      ],
+      "pass_condition": "APP-06 microtool is genuinely authored using admitted ClayCode facilities, compiled/lowered by the production compiler/runtime, executed on the target Ubuntu host with positive and negative tests, and leaves exact semantic/build/artifact provenance. Full self-host is not required for this work item's APP-06 completion unless the current acceptance contract is explicitly strengthened."
+    },
+    "evidence_need": [
+      "LOCAL_EXECUTION_PRIMARY target-host receipt",
+      "exact source/IR/compiler/runtime/build-environment/output hashes",
+      "semantic differential results",
+      "reproducibility variation results",
+      "negative/error-path results"
+    ],
+    "executor_policy": {
+      "prefer": "claude-code-lead",
+      "class": "LOCAL_REPO_BUILD_EXECUTION_ORGAN",
+      "reason": "The exact target-host compiler/runtime and Ubuntu build environment are only established by verified local execution."
+    },
+    "required_capabilities": ["tool:git", "tool:python3", "tool:compiler", "tool:ubuntu-shell"],
+    "write_scope": [
+      "research_entity/trigger_runs/spawn/20260809T1813p0700-claycode-bootstrap-tool-staging/",
+      "research_entity/claycode/",
+      "research_entity/state/work/events/"
+    ],
+    "dependencies": [
+      "Current strict parser conflict/front-end closure must be resolved or an explicitly selected deterministic parser strategy must exist.",
+      "Generic typed function/control/data/error facilities needed by the chosen APP-06 microtool must be admitted and executable.",
+      "Production Stage1 ClayCode compiler/runtime path must exist far enough to compile the microtool.",
+      "Latest work specification must be revalidated immediately before effect."
+    ],
+    "invalidators": [
+      "An equal-or-stronger target-host APP-06 bootstrap/self-host receipt already completes the same discriminators.",
+      "The owner explicitly strengthens or changes the BASE acceptance contract to require full self-hosting.",
+      "A newer executable compiler counterexample changes the required staging sequence."
+    ],
+    "base_priority": 0.86,
+    "expected_impact": 0.9,
+    "urgency": 0.72,
+    "information_gain": 0.92,
+    "status": "BLOCKED"
+  }
+}

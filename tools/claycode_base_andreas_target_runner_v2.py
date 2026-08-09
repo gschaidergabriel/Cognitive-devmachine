@@ -4,6 +4,12 @@
 Exit 0 means the currently implemented target-component battery passed on a clean,
 locally-attested Andreas Ubuntu host. It NEVER means ClayCode BASE release PASS: real
 ten-app acceptance, full FRANK handoff and WP14 strict audit remain separate gates.
+
+Grammar contract:
+- CC-WP-02 strict/full-corpus evidence is bound to the active declarative V9 grammar.
+- CC-WP-03 executable typed-function evidence remains owned by its dedicated validator,
+  which currently exercises the V7 typed-fn/operator surface. These identities must not
+  be silently conflated.
 """
 from __future__ import annotations
 import argparse,hashlib,json,os,platform,subprocess,sys,time
@@ -13,11 +19,12 @@ ROOT=Path(__file__).resolve().parents[1]
 MARKER_TEXT='ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM'
 DEFAULT_MARKER=Path.home()/'.claycode/ANDREAS_TARGET_HOST'
 OUT=ROOT/'research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_V2.json'
-V7='research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark'
-STRICT='research_entity/claycode/target_receipts/STRICT_LALR_D_V7_TARGET_RECEIPT.json'
+WP02_GRAMMAR='research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
+STRICT='research_entity/claycode/target_receipts/STRICT_LALR_D_V9_TARGET_RECEIPT.json'
+FRONTEND='research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json'
 PHASES=[
- ('strict_lalr',['tools/claycode_strict_lalr_probe.py','--grammar',V7,'--output',STRICT],True),
- ('frontend',['tools/claycode_base_frontend_validation.py','--grammar',V7,'--output','research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json'],True),
+ ('strict_lalr',['tools/claycode_strict_lalr_probe.py','--grammar',WP02_GRAMMAR,'--output',STRICT],True),
+ ('frontend',['tools/claycode_base_frontend_validation.py','--grammar',WP02_GRAMMAR,'--output',FRONTEND],True),
  ('canonicalizer',['tools/claycode_base_canonicalizer_validation.py'],True),
  ('typed_ir',['tools/claycode_wp03_typed_ir_validation.py'],True),
  ('effect_pipeline',['tools/claycode_base_effect_pipeline.py','--self-test','--output','research_entity/claycode/autonomous/BASE_EFFECT_PIPELINE_RECEIPT.json'],True),
@@ -59,12 +66,17 @@ def embedded(path):
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--marker',type=Path,default=DEFAULT_MARKER);ap.add_argument('--output',type=Path,default=OUT);a=ap.parse_args();checks,rel,dirty=gate(a.marker)
  if not all(checks.values()):print(json.dumps({'error':'TARGET_HOST_GATE_FAILED','checks':checks,'dirty':dirty,'marker':str(a.marker)},indent=2));return 3
+ wp02_path=ROOT/WP02_GRAMMAR
+ if not wp02_path.exists():print(json.dumps({'error':'WP02_GRAMMAR_MISSING','path':WP02_GRAMMAR},indent=2));return 3
+ wp02_grammar_sha256=sha(wp02_path.read_bytes())
  phases=[]
  for name,args,target_component in PHASES:
   if not (ROOT/args[0]).exists():phases.append({'phase':name,'semantic_pass':False,'error':'MISSING_SCRIPT','path':args[0],'target_component':target_component});break
   row=command([sys.executable,*args]);row['phase']=name;row['target_component']=target_component;semantic=bool(row['process_pass'])
   if name=='strict_lalr':
-   d=embedded(ROOT/STRICT);semantic=semantic and d.get('strict_build_ok') is True and not d.get('conflict_diagnostics');row['strict_receipt']={'strict_build_ok':d.get('strict_build_ok'),'conflict_diagnostics':d.get('conflict_diagnostics'),'strict_error':d.get('strict_error')}
+   d=embedded(ROOT/STRICT);grammar_bound=d.get('grammar_sha256')==wp02_grammar_sha256 and d.get('grammar_path')==WP02_GRAMMAR;semantic=semantic and d.get('strict_build_ok') is True and not d.get('conflict_diagnostics') and grammar_bound;row['strict_receipt']={'strict_build_ok':d.get('strict_build_ok'),'conflict_diagnostics':d.get('conflict_diagnostics'),'strict_error':d.get('strict_error'),'grammar_path':d.get('grammar_path'),'grammar_sha256':d.get('grammar_sha256'),'grammar_bound_to_wp02_v9':grammar_bound}
+  if name=='frontend':
+   d=embedded(ROOT/FRONTEND);grammar_bound=d.get('grammar_sha256')==wp02_grammar_sha256 and d.get('grammar_path')==WP02_GRAMMAR;semantic=semantic and d.get('pass') is True and grammar_bound;row['frontend_receipt']={'pass':d.get('pass'),'grammar_path':d.get('grammar_path'),'grammar_sha256':d.get('grammar_sha256'),'grammar_bound_to_wp02_v9':grammar_bound}
   if name=='applications_proxy':
    d=embedded(ROOT/'research_entity/claycode/autonomous/BASE_APPLICATION_PROXY_SUITE_V2_RECEIPT.json');row['proxy_contract']={'pass':d.get('pass'),'counts_as_target_acceptance':d.get('counts_as_target_acceptance'),'counts_as_application_acceptance_pass':d.get('counts_as_application_acceptance_pass')};semantic=semantic and d.get('pass') is True and d.get('counts_as_target_acceptance') is False and d.get('counts_as_application_acceptance_pass') is False
   row['semantic_pass']=semantic;phases.append(row)
@@ -73,13 +85,13 @@ def main():
  for name in ARTIFACTS:
   p=auto/name;d=embedded(p) if p.exists() else {};arts.append({'path':str(p.relative_to(ROOT)),'missing':not p.exists(),'sha256':sha(p.read_bytes()) if p.exists() else None,'embedded_pass':d.get('pass')})
  corpus=ROOT/'research_entity/claycode/corpus/base_v1/CORPUS_MANIFEST.json';cd=embedded(corpus) if corpus.exists() else {};arts.append({'path':str(corpus.relative_to(ROOT)),'missing':not corpus.exists(),'sha256':sha(corpus.read_bytes()) if corpus.exists() else None,'embedded_pass':cd.get('pass')})
- strictp=ROOT/STRICT;sd=embedded(strictp) if strictp.exists() else {};arts.append({'path':STRICT,'missing':not strictp.exists(),'sha256':sha(strictp.read_bytes()) if strictp.exists() else None,'strict_build_ok':sd.get('strict_build_ok'),'conflict_diagnostics':sd.get('conflict_diagnostics')})
+ strictp=ROOT/STRICT;sd=embedded(strictp) if strictp.exists() else {};arts.append({'path':STRICT,'missing':not strictp.exists(),'sha256':sha(strictp.read_bytes()) if strictp.exists() else None,'strict_build_ok':sd.get('strict_build_ok'),'conflict_diagnostics':sd.get('conflict_diagnostics'),'grammar_path':sd.get('grammar_path'),'grammar_sha256':sd.get('grammar_sha256')})
  target_rows=[x for x in phases if x.get('target_component')];target_components_pass=len(target_rows)==sum(1 for _,_,t in PHASES if t) and all(x['semantic_pass'] for x in target_rows)
  proxy_rows=[x for x in phases if not x.get('target_component')];proxy_preflight_pass=bool(proxy_rows) and all(x['semantic_pass'] for x in proxy_rows)
  git=command(['git','rev-parse','HEAD'],15);native=command(['cc','--version'],15)
  unresolved=[]
  if not target_components_pass:unresolved.append('TARGET_COMPONENT_BATTERY_NOT_GREEN')
  unresolved+=['CC-WP-10_REQUIRES_REAL_NON_PROXY_PER_APPLICATION_TARGET_RECEIPTS','CC-WP-13_REQUIRES_FULL_STATEFUL_FRANK_HANDOFF','CC-WP-14_REQUIRES_STRICT_ADJUDICATION_AND_FINAL_GENERAL_PURPOSE_MANIFEST']
- r={'schema_version':'2.2','created_at':datetime.now(timezone.utc).isoformat(),'target_host':'ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM','target_host_checks':checks,'host':{'node':platform.node(),'platform':platform.platform(),'machine':platform.machine(),'python':platform.python_version(),'os_release':rel},'repo_head':git,'native_compiler':native,'phases':phases,'artifacts':arts,'target_component_battery_pass':target_components_pass,'runtime_v04_hardening_pass':any(x.get('phase')=='runtime_v04_hardening' and x.get('semantic_pass') for x in phases),'compiler_mainline_runtime_bridge_pass':any(x.get('phase')=='compiler_mainline_runtime_bridge' and x.get('semantic_pass') for x in phases),'concurrency_cancellation_error_pass':any(x.get('phase')=='concurrency_cancellation_error' and x.get('semantic_pass') for x in phases),'int_division_pass':any(x.get('phase')=='int_division' and x.get('semantic_pass') for x in phases),'wp10_proxy_preflight_pass':proxy_preflight_pass,'base_release_pass':False,'general_purpose_gate_pass':False,'target_acceptance_ready_for_wp14_audit':False,'unresolved':unresolved,'automatic_promotion':False,'authority_invariant':'model_output != execution_authority','scope':'Real target component evidence collector. Proxy application execution is explicitly non-accepting; WP10 real app receipts, full FRANK and strict WP14 adjudication remain mandatory.'}
- raw=json.dumps(r,indent=2,sort_keys=True,ensure_ascii=False)+'\n';a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(raw,encoding='utf-8');print(json.dumps({'target_component_battery_pass':target_components_pass,'runtime_v04_hardening_pass':r['runtime_v04_hardening_pass'],'compiler_mainline_runtime_bridge_pass':r['compiler_mainline_runtime_bridge_pass'],'concurrency_cancellation_error_pass':r['concurrency_cancellation_error_pass'],'int_division_pass':r['int_division_pass'],'base_release_pass':False,'receipt':str(a.output.relative_to(ROOT)),'sha256':sha(raw.encode()),'unresolved':unresolved}));return 0 if target_components_pass else 2
+ r={'schema_version':'2.3','created_at':datetime.now(timezone.utc).isoformat(),'target_host':'ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM','target_host_checks':checks,'host':{'node':platform.node(),'platform':platform.platform(),'machine':platform.machine(),'python':platform.python_version(),'os_release':rel},'repo_head':git,'native_compiler':native,'wp02_parser_contract':{'grammar_path':WP02_GRAMMAR,'grammar_sha256':wp02_grammar_sha256,'strict_receipt_path':STRICT,'frontend_receipt_path':FRONTEND,'scope':'CC-WP-02 declarative strict/full-corpus only; executable typed-fn evidence remains separately versioned'},'phases':phases,'artifacts':arts,'target_component_battery_pass':target_components_pass,'runtime_v04_hardening_pass':any(x.get('phase')=='runtime_v04_hardening' and x.get('semantic_pass') for x in phases),'compiler_mainline_runtime_bridge_pass':any(x.get('phase')=='compiler_mainline_runtime_bridge' and x.get('semantic_pass') for x in phases),'concurrency_cancellation_error_pass':any(x.get('phase')=='concurrency_cancellation_error' and x.get('semantic_pass') for x in phases),'int_division_pass':any(x.get('phase')=='int_division' and x.get('semantic_pass') for x in phases),'wp10_proxy_preflight_pass':proxy_preflight_pass,'base_release_pass':False,'general_purpose_gate_pass':False,'target_acceptance_ready_for_wp14_audit':False,'unresolved':unresolved,'automatic_promotion':False,'authority_invariant':'model_output != execution_authority','scope':'Real target component evidence collector. WP02 is explicitly grammar-bound to V9. Proxy application execution is explicitly non-accepting; WP10 real app receipts, full FRANK and strict WP14 adjudication remain mandatory.'}
+ raw=json.dumps(r,indent=2,sort_keys=True,ensure_ascii=False)+'\n';a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(raw,encoding='utf-8');print(json.dumps({'target_component_battery_pass':target_components_pass,'wp02_grammar':WP02_GRAMMAR,'wp02_grammar_sha256':wp02_grammar_sha256,'runtime_v04_hardening_pass':r['runtime_v04_hardening_pass'],'compiler_mainline_runtime_bridge_pass':r['compiler_mainline_runtime_bridge_pass'],'concurrency_cancellation_error_pass':r['concurrency_cancellation_error_pass'],'int_division_pass':r['int_division_pass'],'base_release_pass':False,'receipt':str(a.output.relative_to(ROOT)),'sha256':sha(raw.encode()),'unresolved':unresolved}));return 0 if target_components_pass else 2
 if __name__=='__main__':raise SystemExit(main())

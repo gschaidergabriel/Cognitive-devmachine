@@ -1,0 +1,45 @@
+module rae.chatgpt.dynamic_trigger
+version "1.0"
+
+match RAEJOB = /^raejob-[0-9a-f]{12}$/
+
+rule on exact(RAEJOB token) {
+  resolve(@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay)
+  request_ref = @research_entity/state/requests/chatgpt/<token>.json
+  fetch(request_ref)
+  verify(request.trigger_token == token)
+  verify(request.project_target == "clay science pipeline")
+  explicit_cognition = latest.ClayCode
+  research_center_coordination = latest.ClayCode
+  use_all_relevant(request.capability_plan)
+  expand(request.context_refs) only_as_needed
+  execute(request.goal_clay)
+  verify(request.completion_test_clay)
+  persist_result_semantics = latest.ClayCode
+  write @research_entity/state/receipts/chatgpt/<token>.json
+  endturn_meta_claycode_research = ON
+}
+
+result_schema {
+  package_id=token
+  result_id:String
+  executor_node:String
+  result_clay:Clay
+  evidence_refs:Set<Ref>
+  artifact_refs:Set<Ref>
+  web_refs:Set<Ref>
+  media_refs:Set<Ref>
+  unresolved_clay:Clay
+  completion_clay:Clay
+  verification_clay:Clay
+  status:POSTED|VERIFIED|PARTIAL|FAILED|CONFLICT
+  created_at:Time
+}
+
+rule image_generation_requested -> use ChatGPT image function
+rule exact_image_bytes_available_to_repo_bridge -> persist+register
+rule otherwise -> media_refs += generated_media_reference; verification_clay += ARTIFACT_SYNC_PENDING
+rule no_manual_result_copy
+rule result_receipt_is_Claude_resume_signal
+invariant queued!=executed
+invariant provider_result!=truth_without_evidence

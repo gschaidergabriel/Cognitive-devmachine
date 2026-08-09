@@ -1,9 +1,9 @@
 """Deterministic H1 reference compiler for FRANK's bounded ActiveAssembly.
 
 This is an ordinary-code semantic reference, not a production ClayCode implementation.
-It preserves ancestry/conflict/provenance, excludes stale packets, emits re-expansion
-references for omitted detail, and never converts model/peer/visual/capability state
-into execution authority.
+It preserves identity/ancestry/conflict/provenance, excludes stale packets, emits
+re-expansion references for omitted detail, and never converts model/peer/visual/
+capability state into execution authority.
 """
 from __future__ import annotations
 from dataclasses import dataclass, asdict
@@ -47,6 +47,25 @@ def packet_score(packet: AssemblyPacket) -> float:
     )
 
 
+def packet_identity_sha256(packet: AssemblyPacket) -> str:
+    """Fingerprint the complete semantic/provenance payload bound to packet_id."""
+    for name in ("packet_id", "ancestry_family", "kind"):
+        value = getattr(packet, name)
+        if not isinstance(value, str) or not value.strip():
+            raise ActiveAssemblyError(f"BAD_IDENTITY:{name}")
+    try:
+        canonical = json.dumps(
+            asdict(packet),
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        ).encode()
+    except (TypeError, ValueError) as exc:
+        raise ActiveAssemblyError(f"NON_CANONICAL_PACKET:{packet.packet_id}") from exc
+    return hashlib.sha256(canonical).hexdigest()
+
+
 def compile_active_assembly(
     candidates: Iterable[AssemblyPacket],
     *,
@@ -57,8 +76,12 @@ def compile_active_assembly(
     if max_items <= 0 or max_per_ancestry <= 0:
         raise ActiveAssemblyError("BAD_BUDGET")
 
-    eligible: list[AssemblyPacket] = []
-    omitted: list[tuple[AssemblyPacket, str]] = []
+    # Packet identity is a replay/provenance boundary. Exact duplicate deliveries are
+    # idempotent; the same packet_id bound to different content fails closed rather than
+    # allowing ranking/order to silently choose which semantic object "wins".
+    unique: list[AssemblyPacket] = []
+    identity_by_id: dict[str, str] = {}
+    input_duplicate_count = 0
     for packet in candidates:
         # Visibility is not authority. Bearer authority must come from the external
         # deterministic resource/effect gateway, never these cognitive packet classes.
@@ -67,6 +90,19 @@ def compile_active_assembly(
         }:
             raise ActiveAssemblyError(f"AUTHORITY_MINT_ATTEMPT:{packet.packet_id}")
         packet_score(packet)
+        fingerprint = packet_identity_sha256(packet)
+        previous = identity_by_id.get(packet.packet_id)
+        if previous is not None:
+            if previous != fingerprint:
+                raise ActiveAssemblyError(f"PACKET_ID_COLLISION:{packet.packet_id}")
+            input_duplicate_count += 1
+            continue
+        identity_by_id[packet.packet_id] = fingerprint
+        unique.append(packet)
+
+    eligible: list[AssemblyPacket] = []
+    omitted: list[tuple[AssemblyPacket, str]] = []
+    for packet in unique:
         if packet.valid_epoch != current_epoch:
             omitted.append((packet, "STALE_EPOCH"))
             continue
@@ -122,12 +158,13 @@ def compile_active_assembly(
     items = []
     for packet in selected:
         item = asdict(packet)
+        item["packet_identity_sha256"] = identity_by_id[packet.packet_id]
         item["score"] = packet_score(packet)
         item["execution_authority"] = False
         items.append(item)
 
     assembly = {
-        "schema": "frank.active-assembly.v0",
+        "schema": "frank.active-assembly.v1",
         "current_epoch": current_epoch,
         "max_items": max_items,
         "max_per_ancestry": max_per_ancestry,
@@ -137,4 +174,7 @@ def compile_active_assembly(
     }
     canonical = json.dumps(assembly, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
     assembly["assembly_sha256"] = hashlib.sha256(canonical).hexdigest()
+    # Delivery duplication is transport/input telemetry, not part of the semantic
+    # ActiveAssembly identity, so exact duplicate deliveries do not alter the hash.
+    assembly["input_duplicate_count"] = input_duplicate_count
     return assembly

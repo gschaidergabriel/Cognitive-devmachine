@@ -76,10 +76,19 @@ fn compile_active_assembly(candidates:List, current_epoch:Int, max_items:Int, ma
   let budget = map_new()
   map_set(budget,"used",0)
 
-  let conflict_representatives = list_new()
+  let claim_representatives = list_new()
+  let claim_value_seen = set_new()
   for packet in ranked {
     if packet.claim_key == null || packet.claim_value == null { continue }
-    for other in ranked {
+    let claim_value_key = concat(packet.claim_key,"\u001f",packet.claim_value)
+    if !set_has(claim_value_seen,claim_value_key) {
+      set_add(claim_value_seen,claim_value_key)
+      list_push(claim_representatives,packet)
+    }
+  }
+  let conflict_representatives = list_new()
+  for packet in claim_representatives {
+    for other in claim_representatives {
       if other.packet_id != packet.packet_id && other.claim_key == packet.claim_key && other.claim_value != packet.claim_value {
         list_push_unique_by(conflict_representatives,packet,"packet_id")
       }

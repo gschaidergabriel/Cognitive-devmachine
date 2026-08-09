@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "workspace_id": "claycode-base-compiler",
   "status": "ACTIVE_BUILD",
   "owner_directive": "Finish ClayCode as a general-purpose executable programming language/semantic IR and compiler/runtime before Clay 0.1. Preserve existing FRANK/XENO/ClayCode semantics wherever possible: less redesign, more compilation, lowering, runtime, FFI, stdlib and real application execution. Frank v0.1 execution/release target is exclusively the Ubuntu Linux developer system; Android/mobile/edge portability is out of scope until the owner explicitly reopens it.",
@@ -54,7 +54,7 @@
   "required_subgate": "GENERAL_PURPOSE_GATE",
   "general_purpose_gate_status": "NOT_PASS",
   "work_packages": {
-    "CC-WP-01-SPEC-FREEZE": {"status":"OPEN","goal":"Fuse existing candidates into one frozen executable semantic contract; preserve current semantics unless a real compiler/application counterexample forces change."},
+    "CC-WP-01-SPEC-FREEZE": {"status":"PASS","goal":"Fuse existing candidates into one frozen executable semantic contract; preserve current semantics unless a real compiler/application counterexample forces change.","receipt":"research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"},
     "CC-WP-02-PARSER-CANON": {"status":"OPEN","goal":"Parser plus deterministic canonicalizer for the frozen representation."},
     "CC-WP-03-IR-TYPES": {"status":"OPEN","goal":"Typed canonical IR, collections, epistemic state, semantic identity and universal computational core."},
     "CC-WP-04-TYPE-EFFECT": {"status":"OPEN","goal":"Validator/type/effect checker with precise diagnostics; preserve expressibility != authority."},
@@ -89,8 +89,15 @@
         "research_entity/claycode/base/CC_BASE_14_BLOCKER_BURNDOWN_20260809T1904p0700.md",
         "research_entity/state/work/events/20260809T1904p0700_chatgpt_secondary_claycode_base14_close.json"
       ]
+    },
+    {
+      "id": "BASE-SEMANTIC-FREEZE-V1",
+      "class": "IMPLEMENTATION_FREEZE",
+      "status": "CURRENT",
+      "claim": "WP-01 is closed by an explicit BASE semantic freeze; semantic redesign is closed by default unless an executable counterexample requires a versioned amendment.",
+      "evidence": ["research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"]
     }
   ],
-  "completed_receipts": [],
+  "completed_receipts": ["research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"],
   "last_updated": "2026-08-09"
 }

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1720p0700-hwp02-idempotency-repair",
+  "trigger": "harness",
+  "actor": "chatgpt-secondary",
+  "feedback": {
+    "clayresearch": {
+      "status": "CHANGE",
+      "finding": "Safe state/effect geometry must treat idempotency as semantic equivalence under an atomic transaction boundary, not identifier reuse alone."
+    },
+    "frank": {
+      "status": "CHANGE",
+      "finding": "Reference Harness retries may not reinterpret an existing idempotency key as authority for changed state semantics; identical retry remains replay-only."
+    },
+    "gwt": {
+      "status": "NO_CHANGE",
+      "reason": "Repair does not alter workspace selection/broadcast/receiver causal semantics."
+    },
+    "emergenz": {
+      "status": "NO_CHANGE",
+      "reason": "Repair changes state-transition integrity, not emergence readout/intervention definitions."
+    },
+    "claycode": {
+      "status": "CHANGE",
+      "finding": "H2 ClayCode runtime/lowering must preserve the same semantic retry identity and lock/transaction placement; identifier-only replay is non-equivalent."
+    },
+    "hyperposition": {
+      "status": "NO_CHANGE",
+      "reason": "No contextual-alternative or higher-order coupling semantics changed."
+    },
+    "claygraph": {
+      "status": "NO_CHANGE",
+      "reason": "Graph authority/admissibility semantics unchanged; dynamic graph replay must consume corrected ledger receipts when integrated."
+    },
+    "unifieddb": {
+      "status": "CHANGE",
+      "finding": "Logical replay/idempotency contracts must bind semantic request identity and resolve duplicate decisions inside the authoritative transaction boundary."
+    },
+    "harness": {
+      "status": "CHANGE",
+      "finding": "H-WP-02 active reference lineage repaired and concurrent actual-module probe added; target-host full-suite validation remains mandatory before package completion."
+    }
+  },
+  "promotion": "NO_CANONICAL_SCIENTIFIC_PROMOTION",
+  "h1_pass": false,
+  "hwp02_complete": false
+}

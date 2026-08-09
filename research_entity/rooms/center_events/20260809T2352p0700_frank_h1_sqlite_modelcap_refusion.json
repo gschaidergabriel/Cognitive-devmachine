@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "event_id": "frank-h1-sqlite-modelcap-refusion-20260809T2352p0700",
+  "created_at": "2026-08-09T23:52:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "project": "FRANK v0.1",
+  "report_ref": "research_entity/mesh_feedback/20260809T2349p0700-frank-h1-sqlite-capability-refusion/FINAL_REPORT.md",
+  "manifest_ref": "research_entity/mesh_feedback/20260809T2349p0700-frank-h1-sqlite-capability-refusion/BRANCH_FEEDBACK_MANIFEST.json",
+  "routing": [
+    "frank",
+    "harness",
+    "gwt",
+    "emergenz",
+    "claycode",
+    "claygraph",
+    "unifieddb",
+    "hyperposition",
+    "clayresearch"
+  ],
+  "current_frank_integration": {
+    "tested_commit": "07f9af41ca3f4b7add75d198bebf92887c3b52d3",
+    "receipt_commit": "b37a306e9266c44d1ab1b4faca9de643c96f440a",
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+    "gate_count": 20,
+    "pass_count": 20,
+    "fail_count": 0,
+    "matrix_elapsed_ms": 8878,
+    "release_claim": false,
+    "whole_frank_release_status": "NOT_CLAIMED"
+  },
+  "new_evidence": {
+    "adaptive_recurrence": {
+      "class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION_SYNTHETIC_WORKLOAD",
+      "raw_w4": {
+        "accuracy": 0.75,
+        "false_halts": 2,
+        "regret": 0.64,
+        "cost": 1.63,
+        "recurrences": 38
+      },
+      "separated_policy": {
+        "accuracy": 0.75,
+        "false_halts": 0,
+        "regret": 0.52,
+        "cost": 1.91,
+        "recurrences": 45
+      },
+      "fixed_budget": {
+        "accuracy": 0.625,
+        "false_halts": 0,
+        "regret": 1.38,
+        "cost": 2.21,
+        "recurrences": 52,
+        "correct_to_wrong_drift": 1
+      },
+      "interpretation": "Separate diagnostic/readout from proposal-only recurrence policy; concrete operating window remains falsifiable and not production-selected."
+    },
+    "sqlite_wal": {
+      "class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION_DISPOSABLE_SQLITE_WORKLOAD",
+      "sqlite_version": "3.45.1",
+      "full_commit_mean_ms": 0.745739983,
+      "normal_commit_mean_ms": 0.0259376583,
+      "host_local_full_normal_mean_ratio": 28.75,
+      "held_reader_wal_bytes": 650992,
+      "held_reader_passive_checkpoint": [0, 158, 3],
+      "after_reader_release_truncate_checkpoint": [0, 0, 0],
+      "after_release_wal_bytes": 0,
+      "contended_second_writer": "SQLITE_BUSY",
+      "contended_wait_ms": 100.860924,
+      "power_loss_claim": false
+    },
+    "model_host_capability": {
+      "class": "REAL_SELF_HOSTED_UBUNTU_READ_ONLY_CAPABILITY_OBSERVATION",
+      "cpu_logical": 4,
+      "memory_total_kib": 16376020,
+      "swap_total_kib": 0,
+      "visible_gpu_device": false,
+      "installed_local_inference_runtime_found": false,
+      "real_model_executed": false,
+      "interpretation": "Current VPS is an integration/falsification lane, not an already provisioned real Qwen-class 4B lane."
+    }
+  },
+  "parallel_worker_ingestion": {
+    "latest_local_model_response_hardening": "07f9af41ca3f4b7add75d198bebf92887c3b52d3",
+    "harness_truth_gate_pr": 25,
+    "harness_pr_state": "DRAFT_OPEN_UNMERGED_AT_REVIEW",
+    "review_feedback_posted": true,
+    "review_id": 4891911228,
+    "rule": "Do not overwrite sibling branches; ingest newer receipts before final synthesis and preserve branch provenance."
+  },
+  "anti_conflations": [
+    "real Ubuntu execution != real model execution",
+    "synthetic frozen workload != real task distribution",
+    "diagnostic readout != adaptive policy",
+    "proposal-only policy != execution authority",
+    "NORMAL consistency != strongest power-loss durability",
+    "20/20 integration PASS != FRANK v0.1 release acceptance"
+  ],
+  "next_high_information_actions": [
+    "frozen historical/runtime recurrence replay",
+    "pinned real Qwen-class 4B matched fixed-vs-adaptive trial on a capable Ubuntu host",
+    "representative FRANK SQLite WAL stress plus disposable crash/recovery",
+    "Harness PR #25 Ubuntu truth-gate completion and main-lane integration review",
+    "Andreas Ubuntu developer-system final acceptance"
+  ],
+  "research_promotion": "NONE",
+  "frank_release_promotion": "NONE"
+}

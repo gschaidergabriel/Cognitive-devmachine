@@ -29,6 +29,22 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIsNone(MOD.route({})["selected"])
         self.assertTrue(MOD.route({})["zero_cost_only"])
 
+    def test_key_without_zero_cost_evidence_fails_closed(self):
+        env = {"GROQ_API_KEY": "configured-but-billing-unknown"}
+        groq = next(row for row in MOD.inventory(env) if row["provider_id"] == "groq")
+        self.assertTrue(groq["configured"])
+        self.assertFalse(groq["zero_cost_assured"])
+        self.assertFalse(groq["eligible"])
+        self.assertIsNone(MOD.route(env)["selected"])
+
+    def test_explicit_zero_cost_attestation_enables_non_denied_provider(self):
+        env = {
+            "GROQ_API_KEY": "secret",
+            "FRANK_ZERO_COST_ATTESTED_PROVIDERS": "groq,together",
+        }
+        self.assertEqual(MOD.route(env)["selected"], "groq")
+        self.assertNotIn("together", MOD.route(env)["candidates"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,25 @@
+name: GO minimal-label self-hosted probe
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/go-selfhosted-minlabel-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  minimal-selfhosted:
+    if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'chatgpt-secondary/go-selfhosted-minlabel-')
+    runs-on: self-hosted
+    steps:
+      - name: Emit runner eligibility receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'experiment=GO-OOB-SELFHOSTED-MINLABEL-V1\n'
+          printf 'repository=%s\n' "$GITHUB_REPOSITORY"
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          printf 'runner_name=%s\n' "${RUNNER_NAME:-UNKNOWN}"
+          printf 'runner_os=%s\n' "${RUNNER_OS:-UNKNOWN}"
+          printf 'runner_arch=%s\n' "${RUNNER_ARCH:-UNKNOWN}"

@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1053p0700-chatgpt-secondary-aicore-router-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_ROUTER_RECURSIVE_SCOPE",
+  "source_universe":"DRIVE_CLAY/AICORE/router",
+  "source_folder_id":"1mamtIAyW9ubWnOOBvXKlnLQeJ6rsgvvG",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"units_below_folder":2,"folder_units":0,"file_units":2,"file_units_semantically_closed":2,"coverage_percent":100.0},
+  "files":[
+    {"path":"router/app.py","drive_id":"1KbvHGXXpNF-QdmyYyxJ7nisVy9DLl3D7","bytes":21155,"sha256":"cb7f99bcfa913f78c9ca2d42e4ac5c68d43d123b03e4ecfba4ae5c349a88e078"},
+    {"path":"router/__init__.py","drive_id":"1CAFKrqeStEwl5EYrsN6NG6Pfkm5ThIeH","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","disposition":"empty_package_marker"}
+  ],
+  "cross_source_reconciliation":{"project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","path":"router/app.py","result":"Same architectural lineage but Drive is later than the frozen head. Frozen-head router lacks the later separate VERLAUF_BUDGET_CHARS/GESAMT_DECKEL_CHARS context-budget repair and reasoning_content fallback present in Drive. Preserve Drive as later/uncommitted delta rather than declaring identity.","confirmed_later_drive_fixes":["Conversation history gets an independent 8000-char budget instead of system+history sharing one 10000-char cap.","A 22000-char total emergency cap is derived from measured context/token ratio.","Non-stream completion can recover reasoning_content when llama.cpp leaves content empty."]},
+  "semantic_findings":[
+    {"id":"ROUTER-LINEAGE-1-MODEL-IDENTITY-SPLIT","severity":"P1_IDENTITY_CORRECTNESS","finding":"The same Drive file describes/defaults as Qwen3.5-4B and initializes _last_model accordingly, but health/logging/route responses/startup identify qwen2.5-3b. Model identity is duplicated stale source text rather than one verified runtime fact.","inheritance":"Derive model identity from a verified loaded-artifact/runtime manifest."},
+    {"id":"ROUTER-LINEAGE-2-CONTEXT-BUDGET-REPAIR","severity":"POSITIVE_HISTORICAL_MEASUREMENT","finding":"Later Drive code documents a measured failure where one 10000-char cap caused 0/9 conversation steps to reach the model as system text grew, then repairs it with separate history and total budgets.","inheritance":"System/history/evidence/answer reserve need separate tokenizer-aware budgets and regression tests."},
+    {"id":"ROUTER-INGEST-3-BUFFER-BEFORE-LIMIT","severity":"P1_RESOURCE_GAP","finding":"/ingest fully reads UploadFile before checking INGEST_MAX_BYTES.","inheritance":"Enforce streaming byte limits before buffering."},
+    {"id":"ROUTER-INGEST-4-AMBIENT-HOST-WRITE","severity":"P1_EFFECT_BOUNDARY","finding":"/ingest writes directly to host AICORE_DATA/inbox and returns its host path; authority is assumed from loopback transport.","inheritance":"Loopback is not authority; ingest is a typed storage effect mediated by Needle/capabilities and provenance."},
+    {"id":"ROUTER-PROMPT-5-CALLER-SYSTEM-OVERRIDE","severity":"P1_TRUST_BOUNDARY_IF_EXPOSED","finding":"RouteRequest accepts arbitrary system/messages; an existing system message over 500 chars suppresses identity merge on the assumption that a trusted overlay already supplied identity/context.","inheritance":"Only trusted internal assemblies may acquire system authority; user-originated fields cannot become SystemAssembly by placement/length."},
+    {"id":"ROUTER-METRIC-6-CHARACTER-BUDGET","severity":"P2_TECHNICAL_DEBT","finding":"The repair derives 3.86 chars/token from measurement but runtime trimming still counts characters, so model/tokenizer changes can invalidate the approximation.","inheritance":"Budget calibration must be versioned to the actual tokenizer/model and checked in Harness."},
+    {"id":"ROUTER-STATE-7-HEALTH-MODEL-MISMATCH","severity":"P1_OBSERVABILITY","finding":"/health can prove endpoint health while returning a hard-coded qwen2.5-3b label unrelated to the actually loaded artifact.","inheritance":"Health must expose verified runtime artifact/tokenizer/build identity and readiness contract."}
+  ],
+  "branch_feedback":{"frank":["Eliminate duplicated model-identity literals; body/model identity comes from runtime evidence."],"needle":["Treat system/context authority and ingest storage as explicit capabilities."],"harness":["Add model-identity consistency, tokenizer-budget, long-system-history, read-before-limit and caller-system-authority tests."],"claycode":["Represent ContextBudget, SystemAssembly and ModelRuntime as typed values with provenance."],"unifieddb":["Persist active model/tokenizer/build identity and context-budget calibration epoch."],"claygraph":["Preserve frozen-head vs later Drive router as chronological nodes with measured history-loss repair."],"gwt":["Workspace resource arbitration must prevent system-text growth from silently evicting all prior relevant context."],"clay":["One-module fusion should use one runtime truth source for identity while retaining measured resource budgets."]},
+  "earned_work_hours_added":0.0,
+  "training":{"executed":false,"authorized":false},
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

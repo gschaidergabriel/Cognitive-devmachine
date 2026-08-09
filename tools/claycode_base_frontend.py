@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""ClayCode BASE deterministic parser/canonical frontend for declarative BASE-D V9.
+"""ClayCode BASE deterministic parser/canonical frontend for declarative BASE-D V17.
 
-This module owns the declarative G9/Dialect surface. Procedural structured ClayCode
-(block-bodied fn/let/require/return/loops) is owned by the generic structured backend;
-callers needing another surface must select it explicitly instead of relying on a stale
-implicit grammar default.
+V17 is the minimal trivia-safe successor to V9: it preserves the declarative G9/Dialect
+surface while preventing horizontal whitespace from changing `Needle.owns(X)` call
+semantics into a dotted-prefix relation. Procedural structured ClayCode
+(block-bodied fn/let/require/return/loops) remains owned by the generic structured backend.
+
+Selecting V17 here is an implementation repair, not a release promotion. Strict Ubuntu
+full-corpus/canonical evidence remains mandatory before CC-WP-02 PASS.
 """
 from __future__ import annotations
 
@@ -17,7 +20,7 @@ from typing import Any
 from lark import Lark, Token, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
 DOMAIN = b"ClayCodeBaseFrontendAST/v1\x00"
 
 
@@ -95,9 +98,9 @@ def compile_frontend(source: str, grammar_text: str, *, strict: bool = False) ->
     }
     contract_hash = _sha256(json.dumps(contract_payload, sort_keys=True, separators=(",", ":")).encode("utf-8"))
     return {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "frontend_schema": "ClayCodeBaseFrontendAST/v1",
-        "surface": "BASE_D_V9_DECLARATIVE",
+        "surface": "BASE_D_V17_DECLARATIVE_TRIVIA_SAFE",
         "strict": strict,
         "source_sha256": source_hash,
         "grammar_sha256": grammar_sha,

@@ -1,0 +1,16 @@
+{
+  "semantic": {
+    "op": "EffectIntent",
+    "capability": {
+      "designates": "resource:tmp-sandbox",
+      "permits": ["file.write","file.read"],
+      "scope": ["path:/sandbox/**","bytes<=4096"],
+      "delegate_to": ["organ:compiler-test"]
+    },
+    "desired": ["exists:result.txt","sha256:known"],
+    "constraints": ["atomic","rollbackable"],
+    "ordered_effects": ["write-temp","fsync","rename"],
+    "payload": {"path":"result.txt","text":"claycode-local-test"}
+  },
+  "provenance": {"proposal":"P-001","adequacy":"A-001","source":"chatgpt-secondary-local-experiment"}
+}

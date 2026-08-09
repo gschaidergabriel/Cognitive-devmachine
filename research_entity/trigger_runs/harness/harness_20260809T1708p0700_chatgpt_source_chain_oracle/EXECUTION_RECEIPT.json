@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1708p0700_chatgpt_source_chain_oracle",
+  "work_scope": "H-WP-11-TRACE-REPLAY / BASE_SOURCE_CHAIN_EVIDENCE_EXTENSION",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "evidence_class": "LOCAL_SYNTHETIC_EXECUTION_NOT_TARGET_UBUNTU",
+  "not_live_frank_evidence": true,
+  "not_target_andreas_ubuntu_execution": true,
+  "not_h1_h2_h3_pass": true,
+  "source_artifact": "research_entity/harness/source_chain_oracle_v1.py",
+  "test_artifact": "research_entity/harness/test_source_chain_oracle_v1.py",
+  "source_commit": "481770487e15614c5b5e50ea79f417f0e6bc22ea",
+  "test_commit": "f9e4ed89fccde5536199e91f91c0af0929369855",
+  "source_sha256": "9eedf2a2d2f41afa7201adcdfd5e8ae8e50b63fc6a9cf03000da95a9577bba00",
+  "test_sha256": "9196b9f78a04fff4caa829068b5f8767ed2fd53b8c9edb3bc6b1fe6694421895",
+  "environment": {"system":"Linux","kernel":"6.18.35","machine":"x86_64","python":"3.13.5","container_network_clone":"UNAVAILABLE_DNS"},
+  "executions": [
+    {"kind":"UNIT_REGRESSION","command_class":"python3 -m unittest -v test_source_chain_oracle_v1.py","status":"PASS","tests_total":8,"tests_passed":8,"tests_failed":0},
+    {"kind":"TARGETED_INVALID_MUTATION_SWEEP","seed":20260809,"status":"PASS","cases":5000,"invalid_cases_missed":0,"families":["source admission false","parent artifact discontinuity","undeclared emit->return termination","typed-IR semantic drift","execution/replay state divergence"]},
+    {"kind":"DIFFERENTIAL_FALSE_EQUIVALENCE_SWEEP","seed":20260809,"status":"PASS","cases":5000,"false_equivalent":0,"property":"Identical final state cannot hide a different lowering contract hash."}
+  ],
+  "regression_links": [
+    "N-CC-SOURCE-CHAIN-BYPASS-007",
+    "N-CC-EMIT-RETURN-SEMANTIC-LEAK-008"
+  ],
+  "validated_constraints": [
+    "BASE evidence requires admitted source plus content-addressed grammar identity",
+    "source->parse->typed_ir semantic identity cannot drift silently",
+    "type/effect and lowering contracts must be content-addressed",
+    "emit may lower to terminating return only when source semantics explicitly declare termination",
+    "artifact parent links must form an unbroken source-chain",
+    "execution and replay require explicit receipts and identical replay state for deterministic fixture evidence",
+    "H2-style differential comparison must inspect compiler-chain semantic contracts, not only final state"
+  ],
+  "limits": [
+    "The tests use constructed fixtures and targeted mutations.",
+    "External artifact refs are not fetched/rehashed by v1; their hashes are evidence fields that a higher-level receipt collector must bind to bytes.",
+    "No production ClayCode parser/compiler/runtime was executed in this hosted session.",
+    "No Andreas Ubuntu developer-system execution occurred.",
+    "No BASE/H1/H2/H3 gate progress is awarded by this receipt alone."
+  ],
+  "result": "PASS_AS_NARROW_BASE_HARNESS_VALIDATOR"
+}

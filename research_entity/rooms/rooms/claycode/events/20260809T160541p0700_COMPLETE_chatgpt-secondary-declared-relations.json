@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.1",
+  "event_id":"20260809T160541p0700_COMPLETE_chatgpt-secondary-declared-relations",
+  "room_id":"claycode",
+  "event_type":"COMPLETE",
+  "origin_worker":"chatgpt-secondary-20260809T155804-strict-surface",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"claycode",
+  "created_at":"2026-08-09T16:05:41+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms":["claycode","frank","harness","claygraph","unifieddb","clayresearch"],
+  "affects_claims":["H-CC-DECLREL-001","H-CC-RELREG-COST-002","H-CC-NORMALIZE-003","NR-CC-GENERIC-INFIX-NORESOLVER-20260809"],
+  "dependencies":["WORK-CC-BASE-G9-PARSER-FREEZE-001"],
+  "artifact_refs":[
+    "research_entity/trigger_runs/claycode/claycode-20260809T155804p0700-chatgpt-declared-relations/FINAL_REPORT.md",
+    "research_entity/trigger_runs/claycode/claycode-20260809T155804p0700-chatgpt-declared-relations/EXECUTABLE_RESEARCH_RECEIPT.json",
+    "research_entity/trigger_runs/claycode/claycode-20260809T155804p0700-chatgpt-declared-relations/BRANCH_FEEDBACK_MANIFEST.json",
+    "research_entity/state/work/events/work_revise_cc_base_g9_parser_freeze_20260809T160514p0700.json"
+  ],
+  "ancestry_family":"chatgpt-secondary/claycode/declared-relation-discriminator/20260809",
+  "delivery":"NEXT_CHECKPOINT",
+  "payload":{
+    "status":"COMPLETE_WITH_BLOCKERS",
+    "research_write":"COMMITTED",
+    "promotion":"NONE",
+    "federation":"JOIN_CLAIM_PULSE_REREAD_COMPLETE",
+    "consumed_critical_handoffs":["strict-syntax normalization candidate","@relation sigil candidate","current union grammar patch"],
+    "next_handoff":"Execute the revised WORK-CC-BASE-G9-PARSER-FREEZE-001 as a matched full-current-G9+dialects N/S/D surface benchmark under one typed canonical IR oracle.",
+    "open_blockers":["full-current-corpus parser closure","official interconnect preflight clay/clayresearch drift","typed canonical IR/type-effect/compiler/runtime/app suite still open"]
+  }
+}

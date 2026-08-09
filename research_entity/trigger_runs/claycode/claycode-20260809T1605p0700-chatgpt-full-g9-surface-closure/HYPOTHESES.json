@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1605p0700-chatgpt-full-g9-surface-closure",
+  "hypotheses": [
+    {
+      "id":"H-CC-FULLSURF-001",
+      "status":"OPEN_SUPPORTED_RUN_LOCAL",
+      "claim":"The immediate current-G9 parser blocker is predominantly surface/grammar closure rather than absence of a new semantic core primitive.",
+      "mechanism":"Current source uses control/comparison/optional and prose-like relation spellings not admitted by checked-in grammar; explicit normalization can map them into already expressible call/field/operator structures.",
+      "expected_observation":"A small core grammar extension plus semantics-conservative normalization closes the full current top-level G9 corpus.",
+      "observed":"61/86 baseline -> 86/86 candidate N in executable proxy.",
+      "counterhypothesis":"Typed AST construction will reveal that one or more normalized forms encode genuinely distinct semantics requiring a new primitive.",
+      "falsifier":"Production parser + typed AST oracle cannot preserve intended meaning for one or more failing forms without semantic redesign.",
+      "next_test":"Production full-corpus parse/typed-AST/roundtrip under matched N/S/D surface policies."
+    },
+    {
+      "id":"H-CC-SURFACE-IR-SEPARATION-002",
+      "status":"OPEN_REFINED",
+      "claim":"ClayCode should keep source/dialect presentation separable from one deterministic typed canonical IR used for semantic hashing and lowering.",
+      "mechanism":"Reader-friendly spellings can lower into explicit canonical operations/relations while identity, authority and ordering live in typed IR rather than lexical prose.",
+      "support":"Fresh full-corpus normalization feasibility plus independent compiler analogues with generic/canonical versus custom assembly forms.",
+      "counterhypothesis":"One source surface can directly serve all readers/backends with lower total complexity, making projection layers unnecessary.",
+      "falsifier":"Matched measurements show projection/canonical separation increases repair, latency or semantic drift without compensating determinism or reader gains.",
+      "next_test":"Measure AST identity, migration edits, tokens, parser complexity, diagnostics and target-reader repair across N/S/D."
+    },
+    {
+      "id":"H-CC-NSD-FULLCORPUS-003",
+      "status":"OPEN_NEXT_DISCRIMINATOR",
+      "claim":"Strict normalization (N), @relation sigil (S), and finite declared bare relations (D) are all viable surface policies until compared on the identical complete G9+dialect corpus and typed canonical-IR oracle.",
+      "counterhypothesis":"One arm fails full-corpus closure or semantic-hash/diagnostic requirements decisively enough to eliminate it before target-reader testing.",
+      "falsifier":"Matched corpus shows deterministic failure or unsafe semantic admission in an arm.",
+      "next_test":"Execute the already-revised WORK-CC-BASE-G9-PARSER-FREEZE-001 N/S/D benchmark."
+    }
+  ],
+  "promotion_requested": false
+}

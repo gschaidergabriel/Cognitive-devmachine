@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1720p0700_chatgpt_app03_db_adapter",
+  "trigger": "claycode",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "scope": "APP-03 database-backed service / typed host DB adapter / transaction lowering",
+  "promotion": "NONE",
+  "target_host_claim": "NON_TARGET_LOCAL_SANDBOX_ONLY",
+  "general_purpose_gate_change": "NONE",
+  "application_pass_change": "NONE",
+  "duplicate_avoidance": {
+    "http_app02_existing_run": "claycode_20260809T1607p0700_chatgpt_http_app02",
+    "app03_commit_search_before_run": "NO_MATCH",
+    "reason": "HTTP APP-02 already had a completed run; APP-03 had no matching run at pre-write pulse."
+  }
+}

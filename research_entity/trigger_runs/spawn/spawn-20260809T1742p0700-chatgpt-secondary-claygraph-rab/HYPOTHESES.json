@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-chatgpt-secondary-claygraph-rab",
+  "origin_branch": "claygraph",
+  "primary_hypothesis": {
+    "id": "H-SPAWN-CG-RAB-001",
+    "status": "OPEN",
+    "epistemic_class": "SYNTHETIC_MECHANISM_SUPPORTED_HYPOTHESIS",
+    "statement": "A provenance-diverse reversal gate layered over context-bound fast/slow ClayGraph bindings can sharply reduce false relation reversals caused by correlated source echo while preserving near-baseline adaptation to genuine reversals at moderate observation noise.",
+    "mechanism": [
+      "Context is part of binding identity; contradictory contexts need not globally overwrite one another.",
+      "Fast state reacts to recent evidence but does not directly become durable semantic topology.",
+      "Slow/durable reversal enters SHADOW first.",
+      "Promotion requires bounded-window contradiction support, fast-state agreement and multiple provenance families rather than raw repetition count.",
+      "The previous durable binding is versioned/archived or suppressed, never silently deleted.",
+      "Activation, promotion and provenance diversity do not mint truth or execution authority."
+    ],
+    "prediction": "Compared with signed scalar EMA and ungated fast/slow baselines, RAB will lower false-reversal error under duplicated/correlated-source bursts by a large margin while adding little true-reversal lag for moderate noise; the advantage should disappear if provenance diversity is irrelevant or incorrectly modeled.",
+    "falsifiers": [
+      "No material false-reversal reduction over simpler baselines under source-echo attacks.",
+      "True-reversal adaptation lag or task loss grows enough to erase the robustness gain.",
+      "A context-aware scalar baseline matches RAB under provenance-echo stress without extra state.",
+      "Source-family spoofing or ancestry mistakes routinely bypass the gate.",
+      "Replay/rollback cannot reconstruct the same promoted/suppressed binding sequence.",
+      "Live H1/H2 traces show no predictive or outcome benefit from provenance-diverse gating."
+    ]
+  },
+  "counterhypotheses": [
+    {
+      "id": "H-SPAWN-CG-RAB-NULL-01",
+      "status": "OPEN",
+      "statement": "A signed context-aware scalar EMA is sufficient; fast/slow shadow promotion adds complexity without causal or operational benefit."
+    },
+    {
+      "id": "H-SPAWN-CG-RAB-NULL-02",
+      "status": "OPEN",
+      "statement": "Most apparent RAB benefit comes from context partitioning, not provenance diversity."
+    },
+    {
+      "id": "H-SPAWN-CG-RAB-NULL-03",
+      "status": "OPEN",
+      "statement": "Provenance-diversity thresholds over-stabilize memory and cause harmful adaptation delay under high noise, sparse-source regimes or rapid genuine reversals."
+    },
+    {
+      "id": "H-SPAWN-CG-RAB-NULL-04",
+      "status": "OPEN",
+      "statement": "Provenance-family identity is too fallible or gameable to serve as a reliable reversal gate; correlated sources can masquerade as independent support."
+    },
+    {
+      "id": "H-SPAWN-CG-RAB-NULL-05",
+      "status": "OPEN",
+      "statement": "A single authoritative source can legitimately establish a rapid reversal, so mandatory multi-source diversity would be incorrect without a separately typed authority/evidence path."
+    }
+  ],
+  "boundary_cases": [
+    "Same relation is positive in context A and negative in context B: fork/preserve context-specific bindings; do not classify as global reversal.",
+    "One highly authoritative exact source changes value: use a separately typed exact-evidence/update path; do not fake independence through duplicates.",
+    "Many copies share one ancestry: count as one provenance family for reversal diversity.",
+    "Out-of-order/stale event arrives after promotion: epoch validity and replay identity decide admissibility; arrival time alone does not reverse.",
+    "Conflict remains unresolved: keep SHADOW/CONFLICT/UNKNOWN rather than forcing a winner.",
+    "Exact identity lookup: retain G3 BYPASS/capped graph-propagation rule."
+  ],
+  "promotion_bar": {
+    "required_before_runtime_promotion": [
+      "real or frozen-Harness trace experiment",
+      "scalar and ungated fast/slow baselines",
+      "duplicate-ancestry and source-family-spoof controls",
+      "true reversal and context-bifurcation controls",
+      "out-of-order replay",
+      "lesion/rescue of reversal gate",
+      "rollback/rebuild verification",
+      "latency/memory/update-amplification cost shadow",
+      "OOD/noise/source-sparsity sweep"
+    ],
+    "current_result": "HOLD"
+  }
+}

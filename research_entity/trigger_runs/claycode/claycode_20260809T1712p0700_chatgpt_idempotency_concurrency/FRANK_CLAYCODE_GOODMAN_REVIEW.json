@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1712p0700_chatgpt_idempotency_concurrency",
+  "review_scope": "FRANK/ClayCode shared-ancestry assumptions touching commit/replay semantics",
+  "items": [
+    {
+      "assumption": "Critical effects need explicit authority/recovery/replay evidence rather than trusting model intent or a storage side effect.",
+      "ancestry": "SHARED_FRANK_CLAYCODE_PROJECT_ANCESTRY",
+      "independent_discriminator": "Local SQLite concurrency experiment plus primary SQLite transaction semantics.",
+      "verdict": "REFINED",
+      "reason": "The independent mechanism probe supports moving replay identity checking into the commit serialization domain, but does not independently validate broader FRANK architecture or cognition claims.",
+      "counterhypothesis": "Storage uniqueness alone can provide equivalent safety with less protocol machinery.",
+      "counterhypothesis_result": "NOT_SUPPORTED_IN_TESTED_CONTROL"
+    },
+    {
+      "assumption": "ClayCode requires a new DB/idempotency-specific core syntax primitive to close concurrency replay races.",
+      "ancestry": "CURRENT_DESIGN_QUESTION",
+      "independent_discriminator": "Post-lock typed fingerprint/replay mechanism probe using existing host/runtime constructs.",
+      "verdict": "REFINED",
+      "reason": "No new core syntax was needed for the tested slice. Preserve existing typed IR and enforce a lowering/runtime legality contract unless a harder executable counterexample falsifies this."
+    },
+    {
+      "assumption": "An idempotency key collision can always be treated as a valid replay.",
+      "ancestry": "GENERIC_IMPLEMENTATION_SHORTCUT_NOT_CANONICAL_CLAIM",
+      "independent_discriminator": "Same-key different-payload control.",
+      "verdict": "REFUTED",
+      "reason": "The uniqueness-only control suppressed the write but could not classify semantic mismatch. Replay requires operation/payload identity binding or equivalent proof."
+    }
+  ],
+  "shared_ancestry_counted_as_replication": false,
+  "promotion": "NONE",
+  "remaining_falsifiers": [
+    "multi-resource atomicity",
+    "distributed retry races",
+    "cancellation during commit",
+    "nested/savepoint semantics",
+    "real Ubuntu target-host execution",
+    "second backend differential"
+  ]
+}

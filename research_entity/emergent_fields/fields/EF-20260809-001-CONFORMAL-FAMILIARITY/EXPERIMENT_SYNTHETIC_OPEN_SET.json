@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EF-CFM-E1-SYNTHETIC-OPEN-SET",
+  "field_id": "EF-20260809-001-CONFORMAL-FAMILIARITY",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T15:22:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "spawn_seed": 18192266457284498906,
+  "purpose": "Falsify the naive hypothesis that a familiarity threshold calibrated only for known-class coverage is sufficient for open-set safety.",
+  "setup": {
+    "embedding_space": "synthetic 2D",
+    "known_prototypes": [[0.0,0.0],[3.0,0.0]],
+    "known_sigma": 0.35,
+    "known_calibration_n": 2000,
+    "known_test_n": 10000,
+    "acceptance_score": "minimum Euclidean distance to known prototype",
+    "known_target_coverage": 0.95,
+    "finite_sample_threshold": 0.8626961235458076,
+    "unknown_populations": {
+      "far": {"mean":[1.5,3.0],"sigma":0.45},
+      "midpoint": {"mean":[1.5,0.0],"sigma":0.35},
+      "near_shifted_confuser": {"mean":[0.55,0.0],"sigma":0.35}
+    }
+  },
+  "results": {
+    "known_accept_rate": 0.9537,
+    "unknown_accept_rate_far": 0.0,
+    "unknown_accept_rate_midpoint": 0.051,
+    "unknown_accept_rate_near_shifted_confuser": 0.7327,
+    "secondary_unknown_calibrated_threshold": 0.8610817106980614,
+    "secondary_known_accept_rate": 0.9529,
+    "secondary_midpoint_unknown_accept_rate": 0.0465,
+    "secondary_near_shifted_unknown_accept_rate": 0.7341
+  },
+  "result_status": "NEGATIVE_RESULT",
+  "falsified_claim": "Known-distribution calibration of prototype distance is by itself sufficient to guarantee safe unknown rejection under user-specific distribution shift.",
+  "interpretation": "The same threshold can preserve approximately 95% known acceptance while catastrophically accepting a shifted semantically-unknown population that overlaps the known embedding neighborhood. This synthetic result does not quantify FRANK's real false-familiarity rate; it establishes only a counterexample to the naive guarantee.",
+  "architecture_consequence": "Calibration must carry explicit validity/shift assumptions and cannot become semantic authority. Unknown-risk evidence, drift/validity state, and escalation remain mandatory.",
+  "next_real_test": "Extend MVC-E5 with near-unknown user-specific confusers, distribution-shift slices, calibration-version invalidation and candidate-vs-current risk receipts on real frozen Retina embeddings."
+}

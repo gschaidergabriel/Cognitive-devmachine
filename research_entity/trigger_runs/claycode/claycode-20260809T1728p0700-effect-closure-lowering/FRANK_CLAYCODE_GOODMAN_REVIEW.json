@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1728p0700-effect-closure-lowering",
+  "latest_frank_run": "fusion-20260809T1538p0700-frank-architecture-lineage",
+  "latest_frank_claycode_architecture_artifact": null,
+  "note": "A guessed conventional path research_entity/frank/FRANK_ARCHITECTURE.claycode.json returned 404 in this worker; latest full FRANK architecture fusion was used as current provisional FRANK foundation.",
+  "reviews": [
+    {
+      "claim_id": "FRANK-C9-EFFECT-AUTHORITY-SEPARATION",
+      "frank_statement": "ClayCode/FRANK should represent effect intent and required capabilities while actual external execution remains behind an opaque, externally validated permit/capability gateway.",
+      "frank_source_refs": [
+        "fusion commit a83ba44bc4af154cc6c7538fa033388e12f0326d",
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"
+      ],
+      "ancestry_families": [
+        "FRANK/C9 project lineage",
+        "ClayCode G9 descendant project lineage"
+      ],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A compiler could treat declared capability names or inferred effects as sufficient execution authority, simplifying the runtime boundary without observable safety loss.",
+      "falsifier": "A matched executable design in which inferred/declared capability metadata alone safely authorizes effects across forgery, delegation, stale/revoked-resource and replay cases without ambient-authority escalation.",
+      "independent_checks": [
+        {
+          "class": "new_discriminating_experiment",
+          "result": "textual capability name rejected without actual external capability; missing cap.http rejected; 5,000 lowered executions preserved effect traces"
+        },
+        {
+          "class": "primary_external",
+          "source": "Koka official docs",
+          "result": "supports compositional effect typing across function boundaries; does not imply authority"
+        },
+        {
+          "class": "primary_external",
+          "source": "WASI capability model",
+          "result": "supports provisioned capability authority as distinct from program text/import request"
+        },
+        {
+          "class": "primary_external",
+          "source": "Alive2 project",
+          "result": "supports translation-validation framing for lowerings rather than compiler-acceptance-as-proof"
+        }
+      ],
+      "adversarial_checks": [
+        "reserved host.* namespace shadow attempt rejected",
+        "undefined function rejected",
+        "arity mismatch rejected",
+        "missing runtime capability rejected despite semantic requirement metadata",
+        "format-only source mutation preserved semantic/lowered identity but changed exact contract/source identity"
+      ],
+      "verdict": "REFINED",
+      "reason": "The effect/capability separation survives independent checks and a new executable proxy, but evidence remains hosted-local and does not validate the production ClayCode compiler or target Ubuntu runtime. The refined claim is implementation-level: inferred effects/capability requirements are compositional metadata; execution authority remains external.",
+      "claycode_action": "Add compositional effect-summary closure and required-capability propagation to the production typed IR/type-effect checker; keep runtime authorization in capability/effect gateway; do not add new syntax absent a counterexample.",
+      "affected_claycode_artifacts": [
+        "production canonical typed IR",
+        "type/effect checker",
+        "lowering contracts",
+        "runtime ABI/capability gateway",
+        "source-chain receipts"
+      ]
+    }
+  ]
+}

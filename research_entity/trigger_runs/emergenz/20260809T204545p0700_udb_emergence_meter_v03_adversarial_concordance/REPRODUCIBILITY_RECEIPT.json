@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T204545p0700_udb_emergence_meter_v03_adversarial_concordance",
+  "runtime": {
+    "python": "3.12.13",
+    "kernel": "Linux 6.18.35",
+    "architecture": "x86_64",
+    "dependencies": "Python standard library only"
+  },
+  "commands": [
+    "python v03_adversarial_probe.py --out V03_ADVERSARIAL_RESULTS.json",
+    "python v03_parameter_sweep.py --out V03_PARAMETER_SWEEP_RESULTS.json",
+    "python -m unittest -v test_v03_adversarial_probe.py test_v03_parameter_sweep.py"
+  ],
+  "tests": {
+    "count": 10,
+    "passed": 10,
+    "failed": 0,
+    "status": "PASS"
+  },
+  "sha256": {
+    "v03_adversarial_probe.py": "1d210277138a661b83e74e8ad071ecf99456bf8318087da8b6618547f54a1e80",
+    "test_v03_adversarial_probe.py": "273a5dce52418043616160e23e8005138ae817c53b691fb7535effac4afb7348",
+    "V03_ADVERSARIAL_RESULTS.json": "bc7995da03719ad719ea1a77707a78d33e334338932d32fa5aee8a11534104b4",
+    "v03_parameter_sweep.py": "0385d852f12a3a6ff7484286a6666b415bcd2d141985e8566405d62d1ac98f18",
+    "test_v03_parameter_sweep.py": "939d8024c3139e017aa0125a7d5310823de15938083c8c61f0e173f702fb73b5",
+    "V03_PARAMETER_SWEEP_RESULTS.json": "c1971dcc1516be3073623ee60429821f30927f9d8480aae7bea30748794778d4"
+  },
+  "evidence_scope": "SYNTHETIC_METHOD_ONLY",
+  "live_frank_validated": false
+}

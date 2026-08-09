@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.1",
+  "manifest_id":"DRIVE-ADAPTER-SICHERUNG-RECURSIVE-V3-OWNER-EXCLUSION-20260809T0911p0700",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "supersedes":"research_entity/archive_assimilation/manifests/DRIVE_ADAPTER_SICHERUNG_RECURSIVE_DENOMINATOR_V2.json",
+  "source":{"root":"frank-adapter-sicherung","root_id":"1GRcwMEZYhpvehTnpQJlVN004WhoKOSOo","v25_final_id":"1aewX72BzUJUW74eL06O_RLW9Yxrqqo5P"},
+  "status":"EXACT_RECURSIVE_DENOMINATOR_CLOSED_WITH_EXPLICIT_OWNER_SCOPE_EXCLUSION",
+  "denominator":{"recursive_leaf_files_observed":5,"active_level0_leaf_obligations":4,"owner_excluded_leaves":1,"complete_recursive_enumeration":true},
+  "leaves":[
+    {"path":"adapter_model.safetensors","drive_id":"1VyYsni9GsIT5R--2J6m5u0dWIHUYjuyc","bytes":53713920,"sha256":"cc4d5d8e15db95139c220e7b6172249619e3ee8bb1d2870def670dec498506a6","status":"STRUCTURALLY_TRUNCATED_CORRUPT_COPY_ANALYZED"},
+    {"path":"adapter_config.json","drive_id":"1Y1l83tJToo_AwKIgQ-HW6g5v-VJowKop","bytes":1114,"sha256":"0b028e00c1da0d9b8e5b51e087b641ffa90b3d8e770c92a0557020c42a43b38e","status":"HASH_VERIFIED"},
+    {"path":"v25_final/README.md","drive_id":"1yg0Hb3fNOKBNzsI6iZt8dctYecPc-YYY","bytes":5232,"sha256":"a24cc1de250f30f5ef7294f8a70d9d8cea482f05d3c2c1fd440380ba5503a066","status":"HASH_VERIFIED"},
+    {"path":"v25_final/adapter_config.json","drive_id":"1CcqKeoCLXKe5sN5FCmJKGsSjBToE5Dfa","bytes":1114,"sha256":"0b028e00c1da0d9b8e5b51e087b641ffa90b3d8e770c92a0557020c42a43b38e","status":"HASH_VERIFIED_BYTE_IDENTICAL_TO_ROOT_CONFIG"},
+    {"path":"v25_final/adapter_model.safetensors","drive_id":"1hmh3A1Vpaye1VGfTdFEWKRtumxAlRL1x","bytes":169903320,"status":"OWNER_EXCLUDED_FROM_ACTIVE_LEVEL0_SCOPE","owner_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0911p0700_owner_exclusion_v25_final_adapter_model.json"}
+  ],
+  "level0_effect":{"former_blocker":"connector 100MiB download ceiling for complete v25_final adapter binary","current_blocker":null,"must_not_block_level0":true},
+  "scientific_boundary":"The excluded object remains provenance-visible but is not downloaded, hashed, evaluated, exported, or used for training under this Level-0 scope.",
+  "created_at":"2026-08-09T09:11:00+07:00"
+}

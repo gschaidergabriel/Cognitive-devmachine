@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1508p0700-chatgpt-secondary-pf-visual-adaptive-native-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "focus": "Project-Frankenstein visual lineage: two-stage adaptive compute escalation -> unified FrankEye -> screenshot-specific cleanup -> Qwen3.5 native multimodal bridge; explicit comparison against current Frank v0.1 adaptive personal visual-learning requirement"
+  },
+  "source_refs": [
+    "commit:90596662837a75801fd2024069ee9bd547137869",
+    "tools/frank_adaptive_vision.py@90596662837a75801fd2024069ee9bd547137869",
+    "commit:0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+    "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+    "commit:6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+    "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+  ],
+  "lineage": [
+    {
+      "ref": "commit:90596662837a75801fd2024069ee9bd547137869",
+      "event": "Introduced an Adaptive Visual Pipeline with Stage 1 fast YOLO/OCR/scene heuristics and Stage 2 VLM only when confidence/question heuristics requested escalation, plus region capture and legacy fallback integration."
+    },
+    {
+      "ref": "tools/frank_adaptive_vision.py@90596662837a75801fd2024069ee9bd547137869",
+      "event": "The implementation's adaptivity is routing/escalation adaptivity: confidence is reduced by no detections, unclear scene, low detector confidence, people without context, photo/no-text, semantic-question classes, complex scenes and screenshot/no-text; text-heavy screenshots and labeled diagrams can bypass VLM. Runtime stats track total images, pipeline-only images, escalations and latency/save rate. No persistent user-specific class/prototype learner is present in the inspected file."
+    },
+    {
+      "ref": "commit:0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "event": "Deleted the separate visual pipeline/adaptive-vision/VCB files and replaced them with a unified FrankEye path using DINOv2 INT8 ONNX, consistent with a module-collapse/resource simplification step."
+    },
+    {
+      "ref": "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+      "event": "Specialized FrankEye for screenshots: app/browser-tab detection, OCR preprocessing for dark themes, recognition of Frank's own WebUI and removal of CIFAR-10 classification described as useless for screenshots."
+    },
+    {
+      "ref": "commit:6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+      "event": "Migrated vision again toward a native_vision pipeline as the architecture moved to Qwen3.5 multimodal inference."
+    },
+    {
+      "ref": "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "event": "Frozen-head NativeVision is a direct Qwen3.5-4B multimodal bridge over llama-server. It explicitly replaces FrankEye and removes CNN/DINOv2/ONNX/Tesseract dependencies, providing fixed/default/deep/OCR prompt modes and image-to-chat-completions transport. The inspected file contains no persistent personal familiarity/prototype/classifier learning state."
+    }
+  ],
+  "mechanism_findings": [
+    {
+      "id": "PF-VIS-MECH-001",
+      "finding": "Historical 'adaptive vision' primarily meant adaptive compute escalation, not online user-specific visual category learning.",
+      "epistemic_class": "HISTORICAL_CODE_EVIDENCE"
+    },
+    {
+      "id": "PF-VIS-MECH-002",
+      "finding": "The two-stage design encoded a reusable confidence-budget mechanism: cheap perception first, expensive semantic vision only when uncertainty/task type justified escalation.",
+      "epistemic_class": "HISTORICAL_CODE_EVIDENCE"
+    },
+    {
+      "id": "PF-VIS-MECH-003",
+      "finding": "The visual stack repeatedly collapsed components as model/runtime capability changed: detector/OCR+VLM -> unified FrankEye -> native Qwen multimodal bridge.",
+      "epistemic_class": "HISTORICAL_LINEAGE_EVIDENCE"
+    },
+    {
+      "id": "PF-VIS-MECH-004",
+      "finding": "Screenshot perception benefited from task-specific semantics and preprocessing rather than generic image classification.",
+      "epistemic_class": "HISTORICAL_COMMIT_EVIDENCE"
+    }
+  ],
+  "negative_results_and_counterexamples": [
+    {
+      "id": "PF-VIS-NEG-001",
+      "result": "CIFAR-10 classification was explicitly removed from screenshot analysis as useless output.",
+      "impact": "Generic closed-set labels can add noise without helping the actual user task. Current visual learning should optimize familiarity/useful task distinctions rather than arbitrary benchmark classes.",
+      "ref": "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+      "epistemic_class": "HISTORICAL_NEGATIVE_RESULT"
+    },
+    {
+      "id": "PF-VIS-NEG-002",
+      "result": "The historical Adaptive Visual Pipeline's confidence function is hand-coded from detector/OCR/scene/question heuristics and the inspected implementation records usage statistics but no learned calibration update.",
+      "impact": "A static confidence heuristic may route efficiently but is not evidence of personalized familiarity learning or calibrated open-set recognition.",
+      "ref": "tools/frank_adaptive_vision.py@90596662837a75801fd2024069ee9bd547137869",
+      "epistemic_class": "HISTORICAL_CODE_LIMITATION"
+    },
+    {
+      "id": "PF-VIS-NEG-003",
+      "result": "The frozen-head native vision bridge is stateless at the inspected visual interface: image + prompt -> multimodal model response, without persistent trusted-example lineage, class/prototype versioning, open-set calibration or rollback state in this file.",
+      "impact": "Current Frank v0.1 adaptive Micro Visual Classifier/cyclic learner cannot be considered inherited merely because native multimodal perception exists. A separate typed learner/state contract remains required unless equivalent functionality is found elsewhere in the corpus.",
+      "ref": "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "epistemic_class": "FROZEN_HEAD_CODE_LIMITATION"
+    }
+  ],
+  "critical_disambiguation": {
+    "term": "adaptive vision",
+    "historical_pf_meaning_observed": "dynamic escalation between cheap fast perception and expensive VLM based on heuristic confidence/task triggers",
+    "current_frank_v0_1_requirement": "adaptive user-specific Micro Visual Classifier/cyclic learner with trusted examples, familiarity/known/unknown/conflict semantics, versioning, calibration and rollback",
+    "equivalent": false,
+    "rule": "Do not credit the historical adaptive-routing mechanism as completion of the current personal visual-learning requirement. Reuse routing ideas separately from learner-state requirements."
+  },
+  "current_inheritance": [
+    {
+      "target": "FRANK v0.1 Adaptive Visual Learner",
+      "delta": "Reuse the cheap-first/escalate-on-uncertainty architecture, but add explicit personal learner state: feature-backbone identity, prototype/classifier version, trusted-example provenance/tier, known/unknown/conflict output, calibration, candidate promotion and last-known-good rollback."
+    },
+    {
+      "target": "Needle / routing",
+      "delta": "Visual routing is a concrete precedent for uncertainty- and task-sensitive escalation. Replace fixed keyword/confidence heuristics with measured calibration where beneficial, while preserving deterministic fallback and latency/resource receipts."
+    },
+    {
+      "target": "Harness",
+      "delta": "Regressionize text-heavy screenshot fast path, unclear-scene escalation, generic-classification-noise rejection, dark-theme OCR/screenshot handling, own-UI recognition, native-model fallback, and explicit distinction between perception success and learner-state update success."
+    },
+    {
+      "target": "ClayCode",
+      "delta": "Model perception and personal learning as separate typed transitions: perceive(image, task) may return evidence/uncertainty; learn(example, trust, class/prototype version) is a separate authorized state mutation with promotion/rollback semantics."
+    },
+    {
+      "target": "UnifiedDB",
+      "delta": "Native multimodal outputs are observations, not familiarity truth. Persist learner examples/features/prototypes/calibration/version/rollback lineage separately from raw image evidence and transient model descriptions."
+    },
+    {
+      "target": "ClayGraph",
+      "delta": "Associate repeated visual evidence and personal familiarity classes through provenance-bearing edges, but do not infer 'known' merely from semantic similarity or repeated model descriptions."
+    }
+  ],
+  "cheap_discriminating_tests": [
+    "Replay a text-heavy screenshot and a semantically ambiguous photo through cheap-first routing; measure escalation rate, latency and task accuracy separately.",
+    "Compare generic closed-set labels against task-specific screenshot/UI/OCR outputs on user tasks; generic labels should receive no credit unless they improve downstream decisions.",
+    "Present the same personally familiar object across lighting/background changes and unrelated lookalikes; require known/unknown/conflict calibration rather than free-form VLM confidence.",
+    "Freeze the multimodal model while updating only the personal Micro Visual Classifier; verify familiarity can improve without changing base perception semantics.",
+    "Corrupt or roll back a learner candidate and assert last-known-good prototype/classifier state restores deterministically with provenance intact.",
+    "Force native multimodal vision unavailable and verify the architecture degrades explicitly rather than silently converting missing perception into familiarity claims."
+  ],
+  "earned_work": {
+    "new_credit_hours": 0.0,
+    "mapping_candidate": true,
+    "reason": "Strong reusable routing, perception and negative-result value, but current adaptive personal learner is not equivalent to historical adaptive escalation; reusable-hour credit requires dedup against existing Drive Retina/adaptive-learning mappings."
+  },
+  "level0_effect": {
+    "exact_global_percent_added": 0.0,
+    "reason": "Completed an additional Project-Frankenstein semantic/history visual lineage shard, but the repository-wide tree/history denominator remains unfrozen."
+  },
+  "status": "COMPLETE_SEMANTIC_LINEAGE_SHARD",
+  "created_at": "2026-08-09T15:08:00+07:00"
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1711p0700-hwp02-ledger-adjudication",
+  "trigger":"harness",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "git_parent":"5eba088131133a59b52236fc5de23ca75be88f1c",
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "work_package":"H-WP-02-STATE-LEDGER",
+  "evidence_class":"LOCAL_SYNTHETIC_SOURCE_CONTRACT_DIFFERENTIAL",
+  "source_implementations":[
+    {"path":"research_entity/harness/reference_state_ledger.py","blob_sha":"1d0c5a5c39a17abe825e757bbfe77b78912f5f39"},
+    {"path":"research_entity/harness/reference/state_ledger.py","blob_sha":"821f023ea166e45975045b29ff2b120770573c3e"}
+  ],
+  "probe":"research_entity/harness/state_ledger_adjudication_probe_v1.py",
+  "seed":20260809,
+  "results":{
+    "changed_payload_same_event_and_idempotency_key":{"cases":10000,"first_implementation_false_replay":10000,"second_implementation_conflict":10000},
+    "same_materialized_state_different_history":{"cases":2000,"first_content_root_equal":2000,"second_semantic_state_hash_different":2000}
+  },
+  "findings":[
+    "reference_state_ledger.py does not bind an idempotent replay to incoming mutation/event/provenance identity once event_id matches the existing idempotency record.",
+    "reference/state_ledger.py binds payload/provenance identity more strongly, but its semantic_state_hash also binds epoch/history-chain identity, so it is not the same semantic object as the first implementation's history-independent content root.",
+    "The duplicate implementations therefore cannot be treated as interchangeable or independently confirming the same contract.",
+    "Neither implementation should be promoted unchanged."
+  ],
+  "adjudication":{
+    "decision":"NEITHER_AS_IS",
+    "proposed_identity_lattice":["StateContentHash","SemanticEventHash","SemanticHistoryHash","VersionedStateRoot","ExecutionChainHash","TraceRootHash"],
+    "retain_from_first":["history-independent semantic content root","snapshot restore with explicit recovery provenance","state/event tamper verification","broader epistemic-state vocabulary"],
+    "retain_from_second":["semantic-event/execution-chain decomposition","domain epochs","operation lifecycle status","typed set canonicalization","payload/provenance-bound idempotency fingerprint"]
+  },
+  "scientific_boundary":{"live_frank_evidence":false,"target_host_ubuntu_evidence":false,"h1_release_pass":false,"stage_advance":false},
+  "write_state":"ISOLATED_BRANCH_PENDING_MAIN_INTEGRATION",
+  "branch":"chatgpt/harness-hwp02-adjudication-20260809-1711"
+}

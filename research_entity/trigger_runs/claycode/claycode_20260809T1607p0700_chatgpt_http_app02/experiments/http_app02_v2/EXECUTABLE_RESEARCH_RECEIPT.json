@@ -1,0 +1,50 @@
+{
+  "all_pass": true,
+  "boundary": "Prototype lowering fragment only. Python process is not a real capability sandbox and could have ambient authority if arbitrary host APIs/imports were exposed. This is not APP-02 PASS, APP-04 PASS, or GENERAL_PURPOSE_GATE PASS. Production design still requires an opaque typed host resource/FFI boundary and sandbox policy.",
+  "canonical_ir_sha256": "f039a495467337d9d9aeaf45e97a28ab84bb54ffe75766cd31ee4f8b63fa1a1f",
+  "compiler_fragment_version": "cc-http-lowerer-v2",
+  "deterministic_generation_within_run": true,
+  "execution_backend": {
+    "kind": "local_container",
+    "language": "3.13.5",
+    "network": "loopback_only"
+  },
+  "experiment_id": "CC-LOCAL-20260809-HTTP-APP02-02",
+  "generated_code_repeat_sha256": "eaf2ca4f2749b983ab6d4a5720e984dbed9cf4c46b62b73c7a1dece7fb287a57",
+  "generated_code_sha256": "eaf2ca4f2749b983ab6d4a5720e984dbed9cf4c46b62b73c7a1dece7fb287a57",
+  "generated_target": "python3 stdlib ThreadingHTTPServer over inherited listening socket",
+  "negative_result_from_v1": "Embedding a per-run host token hash in generated target code makes generated-code identity capability-instance-dependent and violates deterministic compiler/receipt identity expectations.",
+  "passed": 3,
+  "semantic_claim": "For this bounded HTTP probe, existing G9 record/rule/effect-reference semantics plus a typed host resource-handle adapter suffice; the host can own bind authority and pass only an already-authorized listener handle without embedding capability-instance secrets into generated code.",
+  "source_sha256": "0a869f7b8e30b4293371a6fbd677dd4939daae66b6bb5aad2bd9041650b68592",
+  "tests": [
+    {
+      "case": "no_host_handle",
+      "exit": 77,
+      "ok": true,
+      "stdout": "{\"status\": \"DENIED\", \"reason\": \"missing_host_listener_handle\"}"
+    },
+    {
+      "case": "forged_fd_number",
+      "exit": 77,
+      "ok": true,
+      "stdout": "{\"status\": \"DENIED\", \"reason\": \"invalid_host_listener_handle\"}"
+    },
+    {
+      "case": "valid_inherited_listener_real_http_concurrent",
+      "ok": true,
+      "bound": {
+        "host": "127.0.0.1",
+        "port": 39699,
+        "status": "SERVING_HOST_HANDLE"
+      },
+      "home": {"status": 200, "content_type": "text/html; charset=utf-8", "body_contains": "ClayCode APP-02 probe v2"},
+      "asset": {"status": 200, "body": "claycode-asset-v2\n"},
+      "missing": {"status": 404, "body": "not found"},
+      "concurrent_requests": 32,
+      "observed_counts": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]
+    }
+  ],
+  "title": "Deterministic ClayCode HTTP lowering with host-owned inherited listener handle",
+  "total": 3
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "manifest_id": "DRIVE-AICORE-DIRECT-DENOMINATOR-20260809T0703p0700",
   "program_stage": "L0_ARCHIVE_ASSIMILATION",
   "trigger": "666",
@@ -44,7 +44,7 @@
         "direct_entries": 14,
         "direct_folders": 10,
         "direct_files": 4,
-        "recursive_status": "OPEN"
+        "recursive_status": "PARTIAL_WAVE1"
       },
       "tools": {
         "id": "1RqVr3WkitB1-oOU_0F4knQZzVxydPD84",
@@ -57,20 +57,40 @@
     "exact_global_percent_added": 0.0,
     "rule": "These direct counts replace any search-negative exactness claim for the three roots, but do not close their nested child folders or the whole aicore recursive denominator."
   },
+  "synteq_recursive_wave1_20260809T0921p0700": {
+    "receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T0921p0700_chatgpt_secondary_aicore_synteq_recursive_wave1.json",
+    "closed_leaf_children": {
+      "kern": {"id": "19wnJYHurVf-Ejcuk1v-VHSMNn_SGgf7A", "entries": 11, "folders": 0, "files": 11},
+      "konzepte": {"id": "1GNlbKvYsh__ZzHEin_EqgAp0ucB88jur", "entries": 22, "folders": 0, "files": 22, "semantic_analysis_separate": true}
+    },
+    "expanded_open_children": {
+      "vault": {
+        "id": "1rjUKzsiQvcfOfyOW6ftuTx27MbdbzxYU",
+        "entries": 7,
+        "folders": 5,
+        "files": 2,
+        "open_child_folders": ["digitaltranscence", "befunde", "kartei", "rohdaten", "sitzungen"]
+      }
+    },
+    "remaining_synteq_direct_children": ["bin", "ui", "lib", "systemd", "pruefung", "fusion", "zwilling"],
+    "status": "PARTIAL_RECURSIVE_CLOSURE"
+  },
   "remaining": {
     "prior_subtree_to_denominator_mapping": "OPEN",
     "unmatched_recursive_folders": "UNKNOWN_UNTIL_RECONCILIATION",
     "root_files_semantic_status": "PREVIOUSLY_ADJUDICATED_PER_ROOT_STATE",
     "raw_hash_obligations": "OPEN_WHERE_REQUIRED",
     "skills_recursive_child_folders": 22,
-    "synteq_recursive_child_folders": 10,
+    "synteq_unclosed_direct_child_folders": 7,
+    "synteq_vault_nested_child_folders": 5,
     "tools_recursive_child_folders": 7
   },
   "level0_credit": {
     "exact_global_percent_added": 0.0,
-    "reason": "Direct denominator only and global combined denominator remains unfrozen."
+    "reason": "Direct and child denominator closure progressed, but global combined denominator remains unfrozen."
   },
   "status": "DIRECT_DENOMINATOR_FROZEN_RECONCILIATION_REQUIRED",
   "created_at": "2026-08-09T07:03:00+07:00",
-  "last_revalidated_at": "2026-08-09T09:21:00+07:00"
+  "last_revalidated_at": "2026-08-09T09:21:00+07:00",
+  "last_recursive_update_at": "2026-08-09T09:21:00+07:00"
 }

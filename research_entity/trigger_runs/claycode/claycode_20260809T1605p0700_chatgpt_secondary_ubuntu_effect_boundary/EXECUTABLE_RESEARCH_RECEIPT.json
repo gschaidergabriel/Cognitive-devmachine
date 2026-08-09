@@ -1,0 +1,53 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"CC-EXEC-UBUNTU-EFFECT-BOUNDARY-20260809-001",
+  "run_id":"claycode_20260809T1605p0700_chatgpt_secondary_ubuntu_effect_boundary",
+  "candidate":"ClayCode G9 V3 CapabilityToken + EffectIntent lowering candidate",
+  "candidate_ref":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+  "semantic_property_tested":"External effect authority can remain outside model/source text while a host-minted capability is lowered to an OS-enforced resource view; delegation can narrow effective verbs/resources without changing ClayCode cognitive semantics.",
+  "environment":{"distribution":"Debian GNU/Linux 13 (trixie)","kernel":"6.18.35","arch":"x86_64","compiler":"gcc","final_target_match":false,"final_target":"Ubuntu Linux developer system"},
+  "tests":[
+    {
+      "id":"LANDLOCK_ABI_PROBE",
+      "source_sha256":"8a78f870c6e0eb82eebda5d971ee0abf45ffaf7a5fd1a7cad8861abdc066d669",
+      "binary_sha256":"94800d4453e093bed6ca56ddc2aefe178173af9f4fac695925abdef6baf3ed8e",
+      "mechanism":"landlock_create_ruleset(..., LANDLOCK_CREATE_RULESET_VERSION)",
+      "observed":"Function not implemented / ENOSYS",
+      "exit_status":3,
+      "classification":"NEGATIVE_BACKEND_AVAILABILITY",
+      "meaning":"Landlock is a valid Linux design option but must be runtime-probed and cannot be the sole mandatory enforcement backend."
+    },
+    {
+      "id":"UNSANDBOXED_AMBIENT_AUTHORITY_BASELINE",
+      "mechanism":"ordinary process with no namespace/chroot confinement",
+      "observed":{"read_allowed_test_file":"ALLOW","append_allowed_test_file":"ALLOW","read_/etc/passwd":"ALLOW"},
+      "classification":"COUNTEREXAMPLE_TO_METADATA_ONLY_AUTHORITY",
+      "meaning":"A ClayCode CapabilityToken represented only as metadata cannot constrain a normal Linux process; OS enforcement is required."
+    },
+    {
+      "id":"USER_MOUNT_NAMESPACE_READ_ONLY_RESOURCE",
+      "source_sha256":"d197e552c44a33a4a004ef35acbfcfb8bbdc49208345bbe653bc65e4ea69e6be",
+      "binary_sha256":"50e2745e27b166998df7dc4cb34eafa84e06f27a8b36f585bfa5bfd20daea520",
+      "mechanism":"unshare user+mount namespace; private mounts; bind one allowed directory; remount bind read-only; chroot to minimal root; execute static probe",
+      "capability_profile":"READ_ONLY allowed resource",
+      "observed":{"read_/allowed/a.txt":"ALLOW","write_/allowed/a.txt":"DENY_EROFS","read_/etc/passwd":"DENY_NOT_PRESENT"},
+      "exit_status":0,
+      "classification":"POSITIVE_MECHANISM_EVIDENCE"
+    },
+    {
+      "id":"NARROWED_DELEGATION_EMPTY_RESOURCE_SET",
+      "mechanism":"same user+mount namespace/chroot runtime with no allowed resource bind",
+      "capability_profile":"NONE",
+      "observed":{"read_/allowed/a.txt":"DENY_NOT_PRESENT","write_/allowed/a.txt":"DENY_NOT_PRESENT","read_/etc/passwd":"DENY_NOT_PRESENT"},
+      "exit_status":0,
+      "classification":"POSITIVE_NARROWING_EVIDENCE"
+    }
+  ],
+  "expected_vs_observed":"Observed behavior supports the architecture rule that capability/effect authority must be host-enforced and can be represented as opaque resource/verb grants. It does not prove the final Ubuntu backend or complete ClayCode compiler/runtime.",
+  "semantic_change_required":false,
+  "recommended_lowering":"CapabilityToken -> host capability table entry -> resource/verb-specific Ubuntu sandbox plan. EffectIntent references only opaque capability_id. Host revalidates issuer/scope/revocation/basis before execution and returns an effect receipt.",
+  "ubuntu_backend_candidate_order":["Ubuntu AppArmor outer profile where appropriate","user+mount namespaces and explicit resource injection","Landlock when runtime-supported","seccomp/no_new_privs for syscall reduction where appropriate","typed FFI/FD/handle passing for individual resources"],
+  "affected_work_packages":["CC-WP-04-TYPE-EFFECT","CC-WP-06-COMPILER-LOWERING","CC-WP-07-RUNTIME-ABI-FFI","CC-WP-10-GENERAL-APP-SUITE","CC-WP-11-FUZZ-CONFORMANCE"],
+  "affected_branches":["claycode","frank","harness","unifieddb","claygraph"],
+  "final_acceptance":"OPEN_REQUIRES_UBUNTU_DEVELOPER_SYSTEM_REPLICATION"
+}

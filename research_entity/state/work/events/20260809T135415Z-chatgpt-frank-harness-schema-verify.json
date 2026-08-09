@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create:frank-harness-current-schema-verify:20260809T135415Z",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T13:54:15Z",
+  "payload": {
+    "work_id": "WORK-FRANK-HARNESS-CURRENT-SCHEMA-VERIFY-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CHATGPT_RESEARCH_ENTITY_IMPLEMENTATION_DELTA",
+    "title": "Verify Frank harness against admitted current UnifiedDB/ClayGraph schema",
+    "work_clay": "clay{target:\"gschaidergabriel/frankv0.1:harness/frank_harness_runtime.py\",change:\"harness now imports runtime/state/apply_current_schema.py and normal harness access opens already-admitted canonical state instead of auto-migrating V7-only schemas\",local_actions:[\"pull latest Frank repo\",\"run python harness/frank_harness_runtime.py self-test --root <disposable-test-dir>\",\"run current state/runtime regression tests\",\"verify current canonical state still opens without implicit migration\"],after_pass:\"recompute fastest path to F5/F7/F8\"}",
+    "reason_clay": "clay{evidence:[\"Frank harness previously hardcoded UnifiedDB V7 while apply_current_schema admits V13 and ClayGraph V8\",\"V7.1 contains a hard organ-delete guard missed by the stale harness loader\",\"sandbox syntax + focused stub self-test passed\"],risk:\"stale harness self-tests can produce false confidence and schema drift\",why_now:\"blocks trustworthy harness/release evidence\"}",
+    "completion_clay": "clay{done_if:[\"fresh local execution receipt on Frank checkout shows harness self-test PASS against repository migrations through current admitted schema\",\"organ DELETE guard is observed blocked\",\"current runtime regression tests remain PASS or failures are captured with exact evidence\",\"no canonical state mutation occurs during disposable self-test\"],not_done_if:[\"queued only\",\"sandbox stub only\",\"untested code review only\"]}",
+    "evidence_need": [
+      "clay{type:LOCAL_EXECUTION_RECEIPT,scope:exact_commands_and_exit_codes}",
+      "clay{type:GIT_HEAD,repo:frankv0.1}",
+      "clay{type:TEST_OUTPUT,required:[harness_self_test,current_state_regressions]}"
+    ],
+    "executor_policy": "clay{prefer:CLAUDE_CODE_LOCAL_ORGAN,why:\"local repo/runtime execution is discriminating evidence\",fallback:BLOCKED_NO_FAKE_PASS}",
+    "required_capabilities": ["LOCAL_REPO_READ", "LOCAL_PYTHON_EXECUTION", "SQLITE_TEST_RUNTIME", "FRANK_REPO_WRITE_IF_FIX_REQUIRED"],
+    "write_scope": ["gschaidergabriel/frankv0.1"],
+    "dependencies": ["clay{requires:latest_Frank_repo_head}"],
+    "invalidators": ["clay{if:later_commit_supersedes_harness_schema_loader,then:REVISE_BEFORE_EFFECT}"],
+    "base_priority": 0.92,
+    "expected_impact": 0.88,
+    "urgency": 0.86,
+    "information_gain": 0.94,
+    "status": "READY"
+  }
+}

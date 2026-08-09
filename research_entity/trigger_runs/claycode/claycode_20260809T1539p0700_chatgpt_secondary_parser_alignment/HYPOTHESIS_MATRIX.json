@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
   "hypotheses": [
     {
@@ -9,16 +9,25 @@
       "counterhypothesis": "The mismatch is an artifact of the proxy EBNF-to-Lark translation rather than the source grammar.",
       "falsifier": "A parser generated directly from current grammar.ebnf parses the cited current-source constructs without grammar extension.",
       "evidence": ["EXECUTABLE_RESEARCH_RECEIPT.json", "direct grammar-vs-current-source comparison"],
-      "action": "Patch grammar/parser only; do not redesign ClayCode semantics."
+      "action": "Patch/freeze grammar-parser surface only after full-corpus conformance; do not redesign ClayCode semantics from this defect."
     },
     {
       "id": "H-CC-WASI-COMPONENT-001",
       "status": "OPEN",
-      "claim": "WASI 0.3 Component Model/WIT is a strong first candidate for ClayCode typed FFI/component lowering, while Clay capability authorization remains outside WIT.",
-      "counterhypothesis": "A native ABI or WASI 0.2/native hybrid yields lower complexity and better semantic/latency fidelity for the first BASE release.",
+      "claim": "WASI Component Model/WIT is a strong first candidate for ClayCode typed FFI/component lowering, while Clay capability authorization remains outside WIT.",
+      "counterhypothesis": "A native ABI or WASI/native hybrid yields lower complexity and better semantic/latency fidelity for the first BASE release.",
       "falsifier": "APP-02/APP-04/APP-07 lowering benchmarks show material semantic gaps, excessive adapter complexity, or worse latency/repair cost than alternatives.",
-      "evidence": ["Bytecode Alliance Component Model WIT/world/resource/async documentation (external primary documentation)"],
+      "evidence": ["Bytecode Alliance Component Model WIT/world/resource documentation (external primary documentation)"],
       "action": "Do not promote; benchmark in WP-06/WP-07 after parser/IR freeze."
+    },
+    {
+      "id": "H-CC-FUSED-GATE-SUFFICIENCY-001",
+      "status": "OPEN_REFINED_BY_EXECUTABLE_PROXY",
+      "claim": "Existing G9-compatible typed records/type aliases/rules are sufficient to represent and lower the current fused FRANK RecognitionValidity, AdaptiveStatePromotion and semantic-publication gate logic without dedicated new language primitives.",
+      "counterhypothesis": "The real Retina/Unified-Memory state machine will require a new core primitive once versioned state, asynchronous learning, rollback/replay, transactional publication and effects are compiled together.",
+      "falsifier": "A real frozen Retina/Unified-Memory component fails to type/check/lower/replay without an opaque host-only state or semantic escape hatch under the frozen BASE parser/IR.",
+      "evidence": ["EXECUTABLE_RESEARCH_RECEIPT_UM_RETINA_GATE.json", "UM_RETINA_GATE_PROBE.clay"],
+      "action": "No primitive growth. Compile the real component next; reopen semantics only on executable inadequacy."
     }
   ]
 }

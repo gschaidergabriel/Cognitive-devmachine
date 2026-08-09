@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_class": "LOCAL_ISOLATED_LINUX_EXECUTION_NOT_ANDREAS_TARGET_ACCEPTANCE",
+  "candidate": "tools/claycode_base_runtime_gateway.py",
+  "candidate_commit": "b5f9599834a724ad69fcaacbb916acb133949805",
+  "runtime": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "tests": {
+    "pass": true,
+    "checks": [
+      "fs_kind_and_scope",
+      "path_escape_rejection",
+      "structural_capability_rejection",
+      "capability_revocation",
+      "sqlite_crud",
+      "generation_bound_stale_resource_rejection",
+      "process_adapter",
+      "version_bound_ABA_rejection",
+      "effect_input_drift_rejection",
+      "double_commit_rejection"
+    ],
+    "semantic_trace_hash": "f44c18dd233f27dfefecd6cb763a5340391eb897cf3b2228f9bfced8098b9849",
+    "trace_events": 7
+  },
+  "comparison": {
+    "shared_mainline_runtime": "tools/claycode_base_runtime.py",
+    "shared_mainline_validation": "tools/claycode_base_runtime_validation.py",
+    "decision": "KEEP_CROSSCHECK_NOT_MAINLINE",
+    "reason": "The shared runtime already covers this core plus rollback, epoch rotation, cross-runtime authority laundering, process allowlists, numerical adapter and deterministic async publication."
+  },
+  "supports": [
+    "CC-WP-07-RUNTIME-ABI-FFI",
+    "CC-WP-08-STDLIB-SDK",
+    "CC-WP-09-CONCURRENCY-MEMORY"
+  ],
+  "counts_as_work_package_pass": false,
+  "counts_as_target_acceptance": false,
+  "next_falsifier": "Run the mainline runtime gate on the Andreas Ubuntu developer target and connect actual compiler-generated effect calls to the runtime-minted capability handles."
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0929p0700-chatgpt-secondary-aicore-synteq-recursive-wave2",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "scope": {
+    "drive_root": "clay/aicore/synteq",
+    "synteq_id": "1LnsZ7HLTdcnsuclwJwn61sWAxHmSnA6K",
+    "goal": "close the remaining synteq recursive denominator without crediting unfrozen global Level-0 progress"
+  },
+  "method": {
+    "primary": "parent-scoped Google Drive list_folder enumeration with top_k=1000 for every still-open folder identity",
+    "count_normalization": "for large all-file leaves, parent-scoped Drive search resources were used only to normalize counts after direct folder enumeration; search-negative completion was not used",
+    "duplicate_avoidance": "continued the 2026-08-09T09:21+07 wave-1 receipt instead of redoing closed kern/konzepte work"
+  },
+  "results": {
+    "synteq_direct": {
+      "entries": 14,
+      "folders": 10,
+      "files": 4
+    },
+    "previously_closed_children": {
+      "kern": {"entries": 11, "folders": 0, "files": 11},
+      "konzepte": {"entries": 22, "folders": 0, "files": 22}
+    },
+    "newly_closed_direct_children": {
+      "bin": {"entries": 1, "folders": 0, "files": 1},
+      "ui": {"entries": 3, "folders": 0, "files": 3},
+      "lib": {"entries": 9, "folders": 0, "files": 9},
+      "systemd": {"entries": 5, "folders": 0, "files": 5},
+      "pruefung": {"entries": 4, "folders": 0, "files": 4},
+      "fusion": {"entries": 2, "folders": 0, "files": 2},
+      "zwilling": {"entries": 2, "folders": 0, "files": 2}
+    },
+    "vault": {
+      "direct": {"entries": 7, "folders": 5, "files": 2},
+      "digitaltranscence": {
+        "direct": {"entries": 16, "folders": 1, "files": 15},
+        "sprachforschung_2026_08_05": {
+          "direct": {"entries": 26, "folders": 5, "files": 21},
+          "leaf_children": {
+            "bilder": {"entries": 13, "folders": 0, "files": 13},
+            "schwarm-auftrag": {"entries": 6, "folders": 0, "files": 6},
+            "werkzeuge": {"entries": 26, "folders": 0, "files": 26},
+            "logs": {"entries": 8, "folders": 0, "files": 8},
+            "rohdaten": {"entries": 16, "folders": 0, "files": 16}
+          },
+          "recursive_units_below_root": 95
+        },
+        "recursive_units_below_root": 111
+      },
+      "befunde": {"recursive_units_below_root": 1, "folders": 0, "files": 1},
+      "kartei": {"recursive_units_below_root": 145, "folders": 0, "files": 145},
+      "rohdaten": {
+        "direct": {"entries": 101, "folders": 1, "files": 100},
+        "forschungsfusion_2026_08_05": {"entries": 16, "folders": 0, "files": 16},
+        "recursive_units_below_root": 117
+      },
+      "sitzungen": {"recursive_units_below_root": 57, "folders": 0, "files": 57},
+      "recursive_units_below_root": 438
+    },
+    "synteq_recursive_denominator": {
+      "total_units_below_synteq_root": 511,
+      "folder_units": 22,
+      "file_units": 489,
+      "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
+    }
+  },
+  "level0_credit": {
+    "exact_global_percent_added": 0.0,
+    "reason": "The synteq subtree denominator is now exact, but the combined Drive + Project-Frankenstein Level-0 denominator is still not frozen."
+  },
+  "remaining_aicore_obligations": {
+    "skills_recursive_child_folders": 22,
+    "tools_recursive_child_folders": 7,
+    "prior_subtree_to_direct_denominator_mapping": "OPEN",
+    "whole_aicore_recursive_denominator": "OPEN"
+  },
+  "status": "COMPLETED_SUBTREE_DENOMINATOR_CLOSURE",
+  "observed_at": "2026-08-09T09:29:00+07:00"
+}

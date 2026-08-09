@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-"""RAE Claude->ChatGPT work-package bridge."""
+"""RAE Claude->ChatGPT work-package bridge.
+
+The trigger token is also package id and file stem so hosted ChatGPT can fetch the request
+from the exact path without code-search/index support.
+"""
 from __future__ import annotations
-import argparse, hashlib, json, sqlite3, time, uuid
+import argparse, json, sqlite3, time, uuid
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -23,9 +27,9 @@ def open_db():
 
 def create_package(args):
     REQ.mkdir(parents=True,exist_ok=True)
-    pid=uid('rae-chatgpt-work');short=hashlib.sha256(pid.encode()).hexdigest()[:10];trigger=f'raejob-{short}'
-    row={'schema_version':'1.0','package_id':pid,'trigger_token':trigger,'project_target':PROJECT,'requester_node':args.requester,'task_class':args.task_class,'goal_clay':args.goal,'context_refs':args.context_ref or [],'capability_plan':args.capability or [],'required_outputs':args.output or [],'write_scope':args.write_scope or [],'completion_test_clay':args.completion_test,'privacy_class':args.privacy,'priority':args.priority,'status':'READY','created_at':now(),'return_path':f'research_entity/state/receipts/chatgpt/{pid}.json'}
-    p=REQ/f'{pid}.json';p.write_text(json.dumps(row,ensure_ascii=False,indent=2),encoding='utf-8')
+    pid=f'raejob-{uuid.uuid4().hex[:12]}';trigger=pid
+    row={'schema_version':'1.1','package_id':pid,'trigger_token':trigger,'project_target':PROJECT,'requester_node':args.requester,'task_class':args.task_class,'goal_clay':args.goal,'context_refs':args.context_ref or [],'capability_plan':args.capability or [],'required_outputs':args.output or [],'write_scope':args.write_scope or [],'completion_test_clay':args.completion_test,'privacy_class':args.privacy,'priority':args.priority,'status':'READY','created_at':now(),'request_path':f'research_entity/state/requests/chatgpt/{trigger}.json','return_path':f'research_entity/state/receipts/chatgpt/{trigger}.json'}
+    p=REQ/f'{trigger}.json';p.write_text(json.dumps(row,ensure_ascii=False,indent=2),encoding='utf-8')
     c=open_db()
     try:
       c.execute('''INSERT OR REPLACE INTO rae_chatgpt_work_packages(package_id,trigger_token,project_target,requester_node,task_class,goal_clay,context_refs_clay,capability_plan_clay,required_outputs_clay,write_scope_clay,completion_test_clay,privacy_class,priority,status,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',(pid,trigger,PROJECT,args.requester,args.task_class,args.goal,j(args.context_ref or []),j(args.capability or []),j(args.output or []),j(args.write_scope or []),args.completion_test,args.privacy,args.priority,'READY',row['created_at']))
@@ -36,13 +40,12 @@ def create_package(args):
 def ingest():
     REC.mkdir(parents=True,exist_ok=True);c=open_db();out=[]
     try:
-      for p in sorted(REC.glob('*.json')):
+      for p in sorted(REC.glob('raejob-*.json')):
         try:r=json.loads(p.read_text(encoding='utf-8'))
         except Exception:continue
-        pid=r.get('package_id');rid=r.get('result_id') or uid('rae-chatgpt-result')
-        if not pid:continue
-        if c.execute('SELECT 1 FROM rae_chatgpt_work_results WHERE result_id=?',(rid,)).fetchone():continue
+        pid=r.get('package_id') or p.stem;rid=r.get('result_id') or uid('rae-chatgpt-result')
         if not c.execute('SELECT 1 FROM rae_chatgpt_work_packages WHERE package_id=?',(pid,)).fetchone():continue
+        if c.execute('SELECT 1 FROM rae_chatgpt_work_results WHERE result_id=?',(rid,)).fetchone():continue
         c.execute('''INSERT INTO rae_chatgpt_work_results(result_id,package_id,executor_node,provider,result_clay,evidence_refs_clay,artifact_refs_clay,web_refs_clay,media_refs_clay,unresolved_clay,completion_clay,verification_clay,status,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',(rid,pid,r.get('executor_node','chatgpt-remote'),'ChatGPT',j(r.get('result_clay',{})),j(r.get('evidence_refs',[])),j(r.get('artifact_refs',[])),j(r.get('web_refs',[])),j(r.get('media_refs',[])),j(r.get('unresolved_clay',{})),j(r.get('completion_clay',{})),j(r.get('verification_clay',{})),r.get('status','POSTED'),r.get('created_at') or now()))
         c.execute("UPDATE rae_chatgpt_work_packages SET status='INGESTED',result_ref=?,result_posted_at=COALESCE(result_posted_at,?),ingested_at=? WHERE package_id=?",(str(p.relative_to(ROOT)),r.get('created_at') or now(),now(),pid))
         c.execute('INSERT INTO rae_chatgpt_delegation_receipts VALUES(?,?,?,?,?)',(uid('rae-delegation-receipt'),pid,'RESULT_INGESTED',j({'result_id':rid,'receipt_ref':str(p.relative_to(ROOT))}),'SYSTEM',now()));out.append({'package_id':pid,'result_id':rid,'receipt_ref':str(p.relative_to(ROOT))})

@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1708p0700_chatgpt_stage_identity_chain",
+  "hypotheses":[
+    {
+      "id":"H-CC-STAGE-IDENTITY-021",
+      "status":"OPEN_SUPPORTED_BOUNDED_CLASS",
+      "statement":"ClayCode BASE receipts should separate content-addressed source/contract identity, canonical ProgramSemanticId, lowering identity, executable artifact identity and execution/replay identity instead of using one monolithic hash.",
+      "support":["5000 formatting/field-order cases produced 4958 source+contract identities but one canonical semantic identity and one generated artifact identity","semantic mutation changed semantic and artifact identity","parser-version-only mutation changed contract identity but not program semantics","lowerer-version mutation changed lowering/artifact identity but not program semantics","artifact tamper changed artifact identity"],
+      "counterhypothesis":"One source/contract hash plus final execution receipt is sufficient and cheaper.",
+      "falsifier":"Production Ubuntu matched tests show no stale-cache, replay, diagnosis or unsafe-reuse benefit from layered identities and material cost/repair harm."
+    },
+    {
+      "id":"H-CC-SEMANTIC-MINT-022",
+      "status":"OPEN_REFINED_BY_BOUNDED_TEST",
+      "statement":"ProgramSemanticId should be derived at deterministic canonical typed IR (or an equivalently verified canonical semantic stage); pre-canonical Source/Parse stages may carry source/parse hashes and a non-authoritative expected semantic reference but must not independently mint semantic authority.",
+      "support":["Lexical-closure run independently found ProgramSemanticId belongs post-parse/post-canonicalization","current Harness SourceChainEvidence v1 requires semantic_hash on source/parse/typed_ir, creating an ambiguous derivation-authority boundary","bounded formatting experiment shows many distinct source identities can map to one canonical semantic identity"],
+      "counterhypothesis":"Copying the same semantic_hash across all chain stages is harmless and clearer provided artifact hashes are separate.",
+      "falsifier":"A formal/production chain contract proves the source-stage semantic field is unambiguously non-authoritative, derivation-verifiable and cannot create circular or forged semantic evidence, with no replay/cache ambiguity."
+    }
+  ],
+  "negative_results_preserved":["N-CC-SOURCE-CHAIN-BYPASS-007","N-CC-EMIT-RETURN-SEMANTIC-LEAK-008","NR-CC-REF-LEXICAL-CLOSURE-20260809","NR-CC-HYPHEN-MINUS-AMBIGUITY-20260809"],
+  "promotion":"NONE"
+}

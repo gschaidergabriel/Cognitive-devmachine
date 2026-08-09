@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "target_version": "RAE-TARGET-0.1",
+  "checks": [
+    "imports_seeded",
+    "claycode_release_fail_closed",
+    "organ_delete_blocked",
+    "known_lane_present",
+    "emergent_not_manual",
+    "candidate_union_preserved",
+    "consistency_gate_blocks_conflict",
+    "gwt_stage_guard",
+    "receiver_use_measured",
+    "truthful_reentry_applied",
+    "state_adequacy_fail_closed",
+    "functional_gate_requires_controls",
+    "functional_pattern_not_consciousness",
+    "unified_integrity",
+    "graph_integrity"
+  ],
+  "passed": 15,
+  "candidate_example": [
+    {"semantic_ref":"intent:repair","lane":"KNOWN","fit":0.55,"novelty":0.05,"evidence":0.9,"risk":0.1,"score":0.47700000000000004},
+    {"semantic_ref":"state:workspace","lane":"KNOWN","fit":0.55,"novelty":0.05,"evidence":0.9,"risk":0.1,"score":0.47700000000000004},
+    {"semantic_ref":"state:memory_reentry","lane":"EMERGENT_NOVEL","fit":0.7356666666666667,"novelty":0.7075,"evidence":0.8260000000000001,"risk":0.122,"reason":"higher-order completion of ['intent:repair', 'state:workspace']; synergy=0.450","score":0.6542133333333333}
+  ],
+  "selected": {"semantic_ref":"state:memory_reentry","lane":"EMERGENT_NOVEL","score":0.6542133333333333},
+  "claim_boundary": "functional pattern only; no consciousness claim",
+  "evidence_class": "LOCAL_CHATGPT_SANDBOX_EXECUTION",
+  "canonical_promotion": false
+}

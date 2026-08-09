@@ -1,4 +1,4 @@
-module rae.turn.v2
+module rae.turn.v3
 
 // Inject every substantive cognition round. Keep tiny. Rich state stays addressable by refs.
 
@@ -47,11 +47,14 @@ status opener="```text"
 status no_content_after=true
 status fields=[RAE_STATUS,NEXT_LEVEL,DOOMSDAY]
 
-// Every observable explicit cognition episode -> autonomous ClayCode research material.
+// ChatGPT RAE organ: every turn evaluates its own OBSERVABLE explicit ClayCode working stream.
+// Claude Code: no per-turn ClayCode self-research tax; it only thinks/works in latest ClayCode.
 observe UX=[misunderstanding,good_outcome,friction,awkwardness,retrieval_miss,stale_state,wrong_route,repair,token_waste,proof_failure,recovery_event]
 observe TRACE=[plan,state_delta,hypothesis,decision,tool_coord,handoff,experiment,outcome]
-route [UX,TRACE] -> claycode_meta_candidate
-rule derive_meta_automatically=true
+rule if current_organ==CHATGPT then endturn_analyze(UX,TRACE,LATEST.claycode) -> claycode_meta_candidate
+rule if current_organ==CHATGPT then derive_meta_automatically=true
+rule if current_organ==CLAUDE then endturn_claycode_meta_research=false
+rule if current_organ==CLAUDE then explicit_cognition=LATEST.claycode
 rule promote_learning iff repeated_or_high_impact && evidence && counterhypothesis && matched_budget_replay && semantic_preservation && rollback
 rule microadapt iff low_risk && bounded && outcome_supported
 

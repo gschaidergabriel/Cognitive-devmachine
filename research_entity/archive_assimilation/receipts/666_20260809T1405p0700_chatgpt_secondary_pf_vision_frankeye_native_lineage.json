@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1405p0700-chatgpt-secondary-pf-vision-frankeye-native-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "focus": "Project-Frankenstein visual-perception lineage from consolidated FrankEye through screenshot-specialized heuristics to frozen-head Qwen3.5 native_vision bridge"
+  },
+  "evidence_class": "HISTORICAL_CODE_COMMIT_AND_FROZEN_HEAD_EVIDENCE",
+  "source_refs": [
+    "commit:0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+    "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+    "commit:6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+    "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+  ],
+  "lineage": [
+    {
+      "ref": "commit:0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "event": "Unified prior fragmented visual pipelines into FrankEye and routed error screenshots through it. The commit identifies FrankEye as DINOv2 INT8 ONNX-based and removes earlier frank_visual_pipeline/frank_adaptive_vision modules."
+    },
+    {
+      "ref": "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+      "event": "Screenshot-specific refinement added application/browser-tab/OCR handling and dark-theme/Otsu OCR preprocessing while explicitly removing CIFAR-10 screenshot classification as useless output."
+    },
+    {
+      "ref": "commit:6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+      "event": "v7 cleanup replaced FrankEye call sites with tools.native_vision and shifted model recommendations toward Qwen3.5 native multimodality."
+    },
+    {
+      "ref": "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "event": "Frozen head implements NativeVision as a thin image-to-base64/OpenAI-compatible bridge into Qwen3.5-4B multimodal inference. The file explicitly states that it replaces FrankEye entirely and uses no CNN, DINOv2, ONNX or Tesseract. It provides analyze/deep/OCR prompts but no user-adaptive familiarity state, prototype memory, learned readout, open-set calibration or candidate/rollback loop."
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "PF-VISION-NEG-001",
+      "result": "Generic CIFAR-10 classification was removed from screenshot analysis as useless output.",
+      "impact": "Visual feature/classification work must be task- and domain-aligned; generic closed-set labels can add latency/noise without helping UI/workspace perception.",
+      "ref": "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986"
+    },
+    {
+      "id": "PF-VISION-NEG-002",
+      "result": "Earlier separate visual pipelines were deleted when FrankEye became the unified path.",
+      "impact": "Historical direction favored consolidation and reuse over parallel vision stacks; current dissolved Retina should preserve that lesson while keeping semantic state inspectable/replayable.",
+      "ref": "commit:0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb"
+    },
+    {
+      "id": "PF-VISION-GAP-003",
+      "result": "Frozen-head native_vision is a direct multimodal LLM bridge and contains no persistent adaptive micro-classifier/familiarity learner or explicit open-set contract.",
+      "impact": "It cannot by itself satisfy the current owner-fixed FRANK v0.1 adaptive visual learning requirement. Historical frozen head therefore supplies a useful semantic baseline/gap, not the final target architecture.",
+      "ref": "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+    }
+  ],
+  "mechanism_findings": [
+    "Historical vision evolved from multiple specialized pipelines -> one FrankEye path -> screenshot-specific preprocessing -> direct native multimodal bridge.",
+    "Screenshot perception benefited from domain-specific routing/preprocessing rather than generic image classification.",
+    "The frozen native bridge is semantically simple and collapses image understanding into the model call, but correspondingly exposes little reusable intermediate feature/provenance state for adaptive familiarity learning.",
+    "The current FRANK v0.1 directive intentionally reintroduces a reusable frozen feature + Micro Visual Classifier layer for cheap familiarity routing while keeping deeper multimodal perception as escalation, which is compatible with the useful parts of this history without reverting to fragmented vision services."
+  ],
+  "current_inheritance": [
+    {
+      "target": "Retina",
+      "delta": "Keep deep native multimodal vision as an escalation/backstop candidate, not as the only perception path. Reuse a cheap feature representation before escalation so familiar recurring UI/object content can route cheaply while unknown/conflict remains visible."
+    },
+    {
+      "target": "Micro Visual Classifier",
+      "delta": "Do not resurrect generic CIFAR-style closed-set classification. Learn user/workspace-specific identities/relations from reusable features with calibrated KNOWN/AMBIGUOUS/UNKNOWN/CONFLICT outcomes and support/provenance metadata."
+    },
+    {
+      "target": "Harness",
+      "delta": "Regressionize generic-classifier noise, screenshot/OCR preprocessing cases, deep-native escalation parity, and the frozen-head gap: a direct multimodal bridge must not be mistaken for the required adaptive familiarity learner."
+    },
+    {
+      "target": "ClayCode / UnifiedDB",
+      "delta": "Unlike frozen native_vision's opaque one-shot model call, preserve replayable intermediate visual evidence: frame/crop identity, feature-backbone version, feature receipt, MVC candidate/result, open-set/calibration state, deep-escalation reason and outcome."
+    },
+    {
+      "target": "GWT",
+      "delta": "Vision-model prose is an interpretation downstream of sensor evidence. Workspace broadcast should retain sensor/provenance and uncertainty rather than treating native multimodal text as raw truth."
+    }
+  ],
+  "cross_source_reconciliation": {
+    "status": "OPEN_IDENTITY_ANCESTRY_CHECK_REQUIRED",
+    "finding": "The frozen Project-Frankenstein head ends with a direct native_vision bridge, whereas the current Drive corpus contains dedicated digital-retina and digital-retina-e2e roots and the current RAE has an owner-fixed dissolved-Retina + adaptive MVC contract. Treat the Drive Retina material as a possible later/recovery design lineage, but do not mark Project-Frankenstein native_vision superseded until file/content ancestry and chronology are proven from source evidence."
+  },
+  "cheap_discriminating_tests": [
+    "Benchmark familiar screenshot routing with and without generic closed-set labels; reject generic classifier stages that add cost/noise without task benefit.",
+    "Run repeated UI screenshots through reusable feature+MVC versus direct Qwen native vision and measure latency/CPU/RAM/task accuracy and escalation frequency.",
+    "Inject novel/visually similar UI states and require MVC UNKNOWN/AMBIGUOUS escalation rather than forced familiar classification.",
+    "Compare OCR-heavy dark-theme screenshots with/without dedicated preprocessing and record whether native vision alone makes the preprocessing path unnecessary on project hardware.",
+    "Replay one frame through sensor receipt -> feature -> MVC -> deep-native escalation and verify every transformation/provenance/version can be reconstructed after restart."
+  ],
+  "earned_work": {
+    "new_credit_hours": 0.0,
+    "mapping_candidate": true,
+    "reason": "Historically useful visual lineage but likely overlaps Drive Retina/digital-retina and existing current Retina research. Requires source-identity and row-level earned-work dedup before credit."
+  },
+  "level0_effect": {
+    "exact_global_percent_added": 0.0,
+    "reason": "Semantic/history shard only; Project-Frankenstein repository-wide tree/history denominator remains unfrozen, so exact global completion cannot increase under the Level-0 completion law."
+  },
+  "branch_feedback": [
+    "retina: preserve useful screenshot-specific preprocessing and native multimodal escalation while avoiding generic closed-set noise",
+    "adaptive-mvc: frozen-head native_vision gap proves direct multimodal inference is not equivalent to adaptive familiarity learning",
+    "harness: benchmark reusable-feature fast path against direct native vision and regressionize unknown/conflict escalation",
+    "unifieddb/claycode: retain replayable intermediate visual evidence and version/provenance state",
+    "gwt: model interpretation remains downstream of sensor evidence"
+  ],
+  "status": "COMPLETE_SEMANTIC_LINEAGE_SHARD",
+  "created_at": "2026-08-09T14:05:00+07:00"
+}

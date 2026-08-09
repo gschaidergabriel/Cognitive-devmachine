@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "event_id": "frank-f6-tool-contract-vps-falsification-20260809T2333p0700",
+  "created_at": "2026-08-09T23:33:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "project": "FRANK v0.1",
+  "routing": ["frank", "claycode", "gwt", "emergenz", "harness", "unifieddb", "hyperposition", "claygraph"],
+  "report_ref": "research_entity/trigger_runs/frank/frank-20260809T2325p0700-chatgpt-f6-tool-contract-vps/FINAL_REPORT.md",
+  "research_delta": {
+    "claim": "FRANK F6's engine-neutral OpenAI-compatible adapter previously preserved returned tool_calls but dropped outbound tools/tool_choice/parallel_tool_calls; the generic tool contract is now forwarded without granting model output execution authority.",
+    "evidence": [
+      "FRANK commit 37fea7876e7a7d967b0a2a8e1db26547782dfaea",
+      "FRANK regression commit d1727c1d7f385553c0102c682660d25cb8cffd95",
+      "llama.cpp docs/function-calling.md observed 2026-08-09",
+      "llama.cpp tools/server/server-common.cpp oaicompat_chat_params_parse observed 2026-08-09",
+      "llama.cpp Qwen3/Qwen3-Coder tool-aware Jinja templates observed 2026-08-09"
+    ],
+    "scope": "ENGINE_NEUTRAL_LOCAL_MODEL_TOOL_REQUEST_RESPONSE_TRANSPORT",
+    "promotion": "SCOPED_IMPLEMENTATION_DELTA_ONLY"
+  },
+  "hypotheses": [
+    {
+      "id": "H-F6-TOOL-TRANSPORT-GAP",
+      "result": "SUPPORTED",
+      "falsifier": "captured endpoint receives the same tool schema and tool policy from the pre-change adapter",
+      "test_receipt": "post-change loopback capture PASS on real VPS local_model_baseline gate"
+    },
+    {
+      "id": "H-F6-TOOLS-BACKEND-SPECIFIC-ONLY",
+      "result": "NOT_SUPPORTED",
+      "evidence": "primary OpenAI-compatible llama-server contract parses generic tools/tool_choice and Qwen templates consume tools"
+    },
+    {
+      "id": "H-F6-RESPONSE-ONLY-SUFFICIENT",
+      "result": "NOT_SUPPORTED",
+      "evidence": "tool-aware model prompting is conditioned on outbound tools schema"
+    },
+    {
+      "id": "H-VPS-PRODUCT-REGRESSION-FROM-TOOL-FORWARDING",
+      "result": "NOT_SUPPORTED",
+      "evidence": "new tool contract regression passed while independent pre-existing streaming boundary harness failed"
+    },
+    {
+      "id": "H-VPS-HARNESS-HALF-DUPLEX-TEARDOWN",
+      "result": "SUPPORTED_BY_DISCRIMINATING_REPAIR",
+      "evidence": "draining the POST request body in test-only large-response handlers restored deterministic MAX+1 oversize classification without changing product response-reader logic"
+    }
+  ],
+  "negative_result": {
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+    "tested_commit": "d1727c1d7f385553c0102c682660d25cb8cffd95",
+    "host": "digital-retina",
+    "runner": "clay",
+    "python": "3.12.3",
+    "gate_count": 18,
+    "pass_count": 17,
+    "fail_count": 1,
+    "failed_gate": "local_model_endpoint_boundary",
+    "observed_failure": "ConnectionResetError normalized to MODEL_RESPONSE_TRANSPORT_ERROR while test demanded MODEL_RESPONSE_TOO_LARGE",
+    "classification": "HARNESS_DEFECT_AFTER_CAUSAL_REPAIR",
+    "preserve": true
+  },
+  "repair": {
+    "commit": "c901358039c542678cf866876bc01b5539e15956",
+    "change": "test-only HTTP handlers drain complete declared request body before emitting synthetic large responses",
+    "product_security_weakened": false
+  },
+  "final_vps_receipt": {
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+    "tested_commit": "c901358039c542678cf866876bc01b5539e15956",
+    "host": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "gate_count": 18,
+    "pass_count": 18,
+    "fail_count": 0,
+    "status": "PASS",
+    "pytest": "13/13 PASS in 0.15s",
+    "tool_contract_transport": "PASS",
+    "tool_call_response_preservation": "PASS",
+    "local_model_endpoint_boundary": "PASS",
+    "release_claim": false,
+    "whole_frank_release_status": "NOT_CLAIMED"
+  },
+  "new_hypotheses": [
+    {
+      "id": "H-F6-REAL-4B-TOOL-ACCEPTANCE",
+      "status": "OPEN",
+      "claim": "A pinned Qwen-class 4B plus pinned tool-aware runtime/template can produce schema-valid FRANK tool calls through the completed F6 transport boundary.",
+      "next_probe": "measure tool selection precision/recall, schema and argument validity, false-call/no-call behavior, latency and token cost without executing model-proposed tools"
+    },
+    {
+      "id": "H-F6-TEMPLATE-IDENTITY",
+      "status": "OPEN",
+      "claim": "For tool-using FRANK, chat/tool template identity is part of the effective model/runtime identity and materially affects tool behavior.",
+      "next_probe": "hold weights/quantization fixed and vary template/runtime handling"
+    },
+    {
+      "id": "H-F6-PARALLEL-TOOLS-NOT-DEFAULT-SAFE",
+      "status": "OPEN",
+      "claim": "Transport support for parallel_tool_calls does not justify enabling parallel tool intents until ordering, conflict, authority and rollback semantics are measured.",
+      "next_probe": "matched sequential-vs-parallel intent tests through effect authorization/recovery boundaries"
+    }
+  ],
+  "open_blockers": [
+    "real local Qwen-class 4B model acceptance incomplete",
+    "Andreas-PC target capability census/acceptance incomplete",
+    "exact 2026-08-05 historical services-tree 74-module ledger remains HOLD",
+    "historical 71-DB payload semantic migration incomplete"
+  ],
+  "next_priority": "EXECUTE_ANDREAS_PC_CAPABILITY_CENSUS_THEN_PIN_REAL_4B_RUNTIME_MODEL_TEMPLATE_QUANTIZATION_MATRIX",
+  "swarm_receipt": {
+    "material_delta_broadcast": true,
+    "contradictions_preserved": true,
+    "negative_result_preserved": true,
+    "raw_secrets_broadcast": false,
+    "release_promotion": false
+  }
+}

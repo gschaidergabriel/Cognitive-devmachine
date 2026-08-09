@@ -11,6 +11,9 @@ This is intentionally narrower than a canonical typed-AST proof. It establishes:
 V17 is the minimal declarative successor to V9. Besides preserving the V5/V6 repair
 obligations, it must close the concrete V9/V10 trivia counterexample where
 `Needle.owns(X)` and `Needle.owns (X)` could acquire different parse semantics.
+Because V17 uses regex lookahead for the dotted relation/call boundary, strict parser
+construction is not treated as complete regex-collision evidence by itself; explicit
+metamorphic whitespace-boundary tests are mandatory.
 It must not be used to claim CC-WP-02 PASS by itself; strict canonical/target evidence
 and downstream typed/effect work remain separate requirements.
 """
@@ -18,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -34,6 +38,13 @@ SOURCES = [
 
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def package_version(name: str) -> str | None:
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        return None
 
 
 def canonical_tree(node):
@@ -111,6 +122,7 @@ def main() -> None:
         "implicit_english_noun_phrase": "rule Claude_only consumes latest stack + writes task receipts\n",
         "dotted_relation_missing_object": "rule Needle.lowers\n",
         "reserved_lowers_call_with_trivia": "rule Needle.lowers (X)\n",
+        "reserved_lowers_call_with_tab_trivia": "rule Needle.lowers\t(X)\n",
     }
     positive_cases = {
         "bare_needle_owns_operand": "rule 4B_need_not_learn Needle.owns\n",
@@ -120,9 +132,13 @@ def main() -> None:
         "multiple_newlines_cycle": "cycle(input:Ref){\n\n input\n\n}\n",
         "keyword_like_non_reserved_identifier": "record X { status:Int; dialect:Int; version:Int; requires:Int }\n",
         "dotted_relation_lowering": "rule Needle.lowers EffectIntent -> concrete_adapter_plan\n",
+        "dotted_relation_lowering_tab": "rule Needle.lowers\tEffectIntent -> concrete_adapter_plan\n",
         "dotted_relation_owns": "rule Needle.owns [tool_schema,api_wire]\n",
+        "dotted_relation_owns_tab": "rule Needle.owns\t[tool_schema,api_wire]\n",
         "qualified_owns_call_tight": "rule Needle.owns(X)\n",
         "qualified_owns_call_spaced": "rule Needle.owns (X)\n",
+        "qualified_owns_call_tabbed": "rule Needle.owns\t(X)\n",
+        "qualified_owns_call_mixed_trivia": "rule Needle.owns \t (X)\n",
         "relation_assignment": "rule external_effect lifecycle=[REQUESTED,AUTHORIZED,DONE]\n",
         "explicit_relation_chain": "rule Claude_only consumes latest_stack + Claude_only writes task_receipts\n",
     }
@@ -157,12 +173,17 @@ def main() -> None:
         "ignored_space_comment": ("rule x>0\n", "rule   x > 0 // comment\n"),
         "qualified_owns_call_horizontal_trivia": ("rule Needle.owns(X)\n", "rule Needle.owns (X)\n"),
         "qualified_owns_call_long_horizontal_trivia": ("rule Needle.owns(X)\n", "rule Needle.owns          (X)\n"),
+        "qualified_owns_call_tab_trivia": ("rule Needle.owns(X)\n", "rule Needle.owns\t(X)\n"),
+        "qualified_owns_call_mixed_horizontal_trivia": ("rule Needle.owns(X)\n", "rule Needle.owns \t (X)\n"),
+        "dotted_lowers_rhs_tab_trivia": ("rule Needle.lowers X\n", "rule Needle.lowers\tX\n"),
+        "dotted_owns_rhs_tab_trivia": ("rule Needle.owns X\n", "rule Needle.owns\tX\n"),
     }
     equivalence = [
         {"case": name, **pair_check(parser, left, right, expect_same=True)}
         for name, (left, right) in equivalence_sources.items()
     ]
 
+    regex_lookaround_present = "(?=" in grammar or "(?<=" in grammar or "(?!" in grammar or "(?<!" in grammar
     passed = (
         all(x["deterministic_repeat"] for x in source_results)
         and all(x["pass"] for x in neg)
@@ -171,7 +192,7 @@ def main() -> None:
         and all(x["pass"] for x in equivalence)
     )
     out = {
-        "schema_version": "1.5",
+        "schema_version": "1.6",
         "experiment": "ClayCode BASE D V17 trivia-safe repaired-frontend full-corpus validation",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)),
@@ -181,6 +202,8 @@ def main() -> None:
             "mode": "lalr/contextual",
             "strict": True,
             "keep_all_tokens": True,
+            "lark_version": package_version("lark"),
+            "interegular_version": package_version("interegular"),
         },
         "sources": source_results,
         "negative_cases": neg,
@@ -188,8 +211,15 @@ def main() -> None:
         "lexical_discrimination_cases": discrimination,
         "lexical_equivalence_cases": equivalence,
         "v9_trivia_counterexample_guard_present": True,
+        "metamorphic_relation_boundary_guard_present": True,
+        "regex_lookaround_present": regex_lookaround_present,
+        "strict_collision_scope_guard": (
+            "Lookaround is present: strict=True remains necessary but is not sufficient evidence for all regex collisions; explicit relation-boundary metamorphic tests are part of this gate."
+            if regex_lookaround_present
+            else "No regex lookaround detected by this static guard."
+        ),
         "pass": passed,
-        "scope_guard": "PASS proves strict parser construction, exact current G9/Dialect acceptance, V5/V6 regression obligations and the V9 horizontal-trivia call repair for the selected grammar. It does not close CC-WP-02 without grammar-bound canonicalizer/target receipts and does not prove typed IR/type/effect semantics."
+        "scope_guard": "PASS proves strict parser construction, exact current G9/Dialect acceptance, V5/V6 regression obligations, the V9 horizontal-trivia call repair and explicit V17 dotted relation/call boundary metamorphic guards for the selected grammar. It does not close CC-WP-02 without grammar-bound canonicalizer/target receipts and does not prove typed IR/type/effect semantics."
     }
     text = json.dumps(out, ensure_ascii=False, indent=2) + "\n"
     if args.output:

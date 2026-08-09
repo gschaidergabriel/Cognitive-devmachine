@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.1",
+  "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id": "claycode_20260809T1547p0700_chatgpt_secondary_strict_syntax_gate",
+  "latest_frank_run": "fusion-20260809T1538p0700-frank-architecture-lineage",
+  "latest_frank_architecture_artifact": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+  "shared_ancestry_is_not_replication": true,
+  "reviews": [
+    {
+      "claim_id": "GOODMAN-CC-STRICT-PARSER-001",
+      "frank_statement": "Parser/render/context transformations that corrupt downstream structured semantics are inherited FRANK regression risks; ClayCode should preserve explicit semantic/authority distinctions.",
+      "frank_source_refs": ["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"],
+      "ancestry_families": ["Project-Frankenstein parser/render/context failure lineage","FRANK fused target overlay","ClayCode G9 lineage"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A permissive prose-like ClayCode grammar with arbitrary identifier infix operators can remain deterministic and cheaper to author without damaging canonical roundtrip or semantic hashes.",
+      "falsifier": "A generic-infix parser over the complete G9 corpus demonstrates unambiguous ASTs, stable canonical hashes, lower repair cost and no authority/meaning collisions under mutation/fuzz tests.",
+      "independent_checks": ["WebAssembly Component Model WIT specification uses explicit lexical token classes, reserved keywords/operators and a pseudo-formal grammar rather than arbitrary prose infix syntax: https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md"],
+      "adversarial_checks": ["The local proxy intentionally kept arbitrary IDENT-as-infix disabled and tested exact prose-like CURRENT G9 counterexamples; they fail closed rather than being guessed."],
+      "verdict": "REFINED",
+      "reason": "Independent language-interface practice supports explicit lexical/grammar boundaries, while this run does not yet prove the exact final ClayCode grammar. Strict normalization is therefore a candidate, not promotion.",
+      "claycode_action": "retain_strict_candidate_and_full_parser_test",
+      "affected_claycode_artifacts": ["CLAYCODE_G9_GRAMMAR_PATCH_V2.ebnf","SOURCE_NORMALIZATION_CANDIDATE.md"]
+    },
+    {
+      "claim_id": "GOODMAN-CC-MVC-REPRESENTABILITY-002",
+      "frank_statement": "ClayCode BASE must express versioned visual classifier/prototype state, trusted example provenance, calibrated open-set outcomes, candidate promotion/rollback and resource/replay semantics.",
+      "frank_source_refs": ["research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json","research_entity/harness/HARNESS_WORKSPACE.json","research_entity/rooms/PROGRAM_STATE.json"],
+      "ancestry_families": ["FRANK adaptive visual learner directive","Harness MVC requirements","BASE ClayCode gate"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Existing generic records/deltas/provenance/effect constructs are insufficient for a real adaptive visual learner and require a new semantic primitive.",
+      "falsifier": "Compile and execute an MVC state/update/promotion/rollback program with current frozen semantics; any irreducible escape hatch or unrepresentable transition falsifies sufficiency.",
+      "independent_checks": [],
+      "adversarial_checks": ["No MVC implementation was compiled in this run; no representability claim is upgraded from shared FRANK/Harness ancestry alone."],
+      "verdict": "UNRESOLVED",
+      "reason": "The current run tested parser-surface compatibility only. Adaptive visual learner representability remains an executable application question.",
+      "claycode_action": "keep_open_until_mvc_compile_receipt",
+      "affected_claycode_artifacts": []
+    }
+  ]
+}

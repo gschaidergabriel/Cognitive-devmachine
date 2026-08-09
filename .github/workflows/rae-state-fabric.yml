@@ -26,6 +26,7 @@ jobs:
       - name: Compile runtime and Claude bridge
         run: |
           python -m py_compile research_entity/runtime/rae_state_runtime.py
+          python -m py_compile research_entity/runtime/interaction_persona_runtime.py
           python -m py_compile research_entity/runtime/claude_state_bridge.py
           python -m py_compile .claude/hooks/rae_hook.py
           python -m json.tool .claude/settings.json >/dev/null
@@ -100,4 +101,62 @@ jobs:
           assert con.execute("select count(*) from v_open_misunderstandings").fetchone()[0]>=1
           con.close()
           print('RAE_PILOT_REPAIR_LOOP_PASS')
+          PY
+
+      - name: Ingest user-benefiting interaction and persona observations
+        run: |
+          cat > "$RUNNER_TEMP/persona.json" <<'JSON'
+          {
+            "interaction_id":"ci-pilot-1",
+            "interaction_quality_observations":[
+              {
+                "observation_id":"ci-iq-1",
+                "dimension":"repair_quality",
+                "direction":"IMPROVED",
+                "magnitude":0.4,
+                "confidence":0.7,
+                "evidence":{"fixture":"correction followed by corrected behavior"},
+                "user_benefit":{"reduced_repetition":true},
+                "autonomy_guard_state":"PASS"
+              }
+            ],
+            "persona_consistency_observations":[
+              {
+                "observation_id":"ci-pc-1",
+                "dimension":"cross_node_consistency",
+                "observed_behavior":{"fixture":"same declared working style across nodes"},
+                "consistency_class":"CONSISTENT",
+                "confidence":0.7,
+                "node_path":["Claude Code","ChatGPT"]
+              }
+            ],
+            "interaction_persona_cases":[
+              {
+                "case_id":"ci-ipc-1",
+                "case_classes":["R8_REPAIR_FAILURE_CHECK"],
+                "quality_dimensions":["repair_quality"],
+                "persona_dimensions":["cross_node_consistency"],
+                "observed_behavior":{"fixture":"research case"},
+                "candidate_causes":["node_projection"],
+                "confidence":0.5,
+                "repair_target":"persona_projection",
+                "autonomy_guard_state":"PASS",
+                "status":"OPEN"
+              }
+            ]
+          }
+          JSON
+          python research_entity/runtime/interaction_persona_runtime.py \
+            --state-dir "$RUNNER_TEMP/rae-state" --test-mode ingest "$RUNNER_TEMP/persona.json" > "$RUNNER_TEMP/persona-ingest.json"
+          cat "$RUNNER_TEMP/persona-ingest.json"
+          python research_entity/runtime/interaction_persona_runtime.py \
+            --state-dir "$RUNNER_TEMP/rae-state" --test-mode summary > "$RUNNER_TEMP/persona-summary.json"
+          python - <<'PY'
+          import json, os, pathlib
+          d=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'persona-summary.json').read_text())
+          assert d['quality_observations']==1
+          assert d['persona_observations']==1
+          assert d['open_cases']==1
+          assert d['autonomy_violations']==0
+          print('RAE_INTERACTION_PERSONA_PASS')
           PY

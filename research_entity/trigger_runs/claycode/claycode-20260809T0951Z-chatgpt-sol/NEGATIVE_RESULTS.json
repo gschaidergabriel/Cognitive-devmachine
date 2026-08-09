@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T0951Z-chatgpt-sol",
+  "negative_results":[
+    {
+      "negative_id":"N-CC-20260809-GRAMMAR-CLOSURE-001",
+      "status":"NEGATIVE_RESULT",
+      "proposition":"The checked current grammar.ebnf is closed over the admitted/current G9 surface artifacts used by the active stack.",
+      "result":"FALSE_IN_TESTED_CORPUS",
+      "evidence":["GRAMMAR_COVERAGE_PROBE.json","EXECUTABLE_RESEARCH_RECEIPT.json","research_entity/runtime/tool_results/claycode-g9-grammar-e2b-20260809T0956Z.json"],
+      "observed_counterexamples":[">",">=","if block","typed method signature", "projection/experiment/hypothesis research declarations"],
+      "scope":"Bounded current-source corpus; does not establish behavior of an undiscovered alternative parser."
+    },
+    {
+      "negative_id":"N-CC-20260809-SEMANTIC-REDESIGN-002",
+      "status":"NEGATIVE_RESULT_FOR_THIS_RUN",
+      "proposition":"The observed parser failure requires adding a new effect-authority or cognition semantic primitive.",
+      "result":"NOT_SUPPORTED",
+      "evidence":["EXECUTABLE_RESEARCH_RECEIPT.json"],
+      "reason":"A minimal conditional parser repair preserved the tested effect/no-effect branch behavior without introducing new semantic authority constructs."
+    }
+  ]
+}

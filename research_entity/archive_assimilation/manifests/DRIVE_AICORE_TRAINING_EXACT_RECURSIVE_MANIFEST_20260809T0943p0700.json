@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE-AICORE-TRAINING-EXACT-RECURSIVE-20260809T0943p0700",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "source": {
+    "title": "training",
+    "id": "1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz",
+    "parent": "aicore",
+    "parent_id": "1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty"
+  },
+  "enumeration_method": {
+    "kind": "DIRECT_FOLDER_FETCH_RECURSIVE",
+    "search_used_for_completion": false,
+    "rule": "Every child folder returned by direct Drive folder fetch was recursively fetched. Search disagreement is ignored for exact completion because search is discovery-only under the method guard."
+  },
+  "root_direct": {
+    "entries": 2,
+    "folders": 2,
+    "files": 0,
+    "children": [
+      {"title": "v26", "id": "1DvQGJ-ASrsxXV1YVu_WRhOhFKdJpzNjz"},
+      {"title": "v27", "id": "1DzxU5uAezf5gq4DoYECR4RUE7mz-CUXf"}
+    ]
+  },
+  "v26": {
+    "id": "1DvQGJ-ASrsxXV1YVu_WRhOhFKdJpzNjz",
+    "direct_entries": 53,
+    "direct_folders": 2,
+    "direct_files": 51,
+    "child_folders": {
+      "abzug": {
+        "id": "1rhOeRluEScD3TvxuKE-n04E6wpXx_aSO",
+        "direct_entries": 4,
+        "folders": 0,
+        "files": 4,
+        "status": "LEAF_FOLDER_CLOSED"
+      },
+      "eval": {
+        "id": "1M9wEhdTBmFRxmb4MixWqpBiLThfwL8Ra",
+        "direct_entries": 2,
+        "folders": 0,
+        "files": 2,
+        "status": "LEAF_FOLDER_CLOSED"
+      }
+    },
+    "recursive_units_below_v26_root": 59,
+    "recursive_folder_units": 2,
+    "recursive_file_units": 57,
+    "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
+  },
+  "v27": {
+    "id": "1DzxU5uAezf5gq4DoYECR4RUE7mz-CUXf",
+    "direct_entries": 20,
+    "direct_folders": 0,
+    "direct_files": 20,
+    "recursive_units_below_v27_root": 20,
+    "recursive_folder_units": 0,
+    "recursive_file_units": 20,
+    "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
+  },
+  "recursive_denominator": {
+    "units_below_training_root": 81,
+    "folder_units": 4,
+    "file_units": 77,
+    "complete_recursive_enumeration": true,
+    "formula": "2 root child folders + 53 v26 direct units + 4 abzug files + 2 eval files + 20 v27 files = 81"
+  },
+  "classification": {
+    "domain": "HISTORICAL_MODEL_TRAINING_AND_EVALUATION_LINEAGE",
+    "semantic_content_status": "DENOMINATOR_CLOSED_CONTENT_ANALYSIS_STILL_REQUIRED",
+    "training_execution_authorized": false,
+    "note": "Enumeration is archival only. No training has been started or authorized by this Level-0 closure."
+  },
+  "important_observed_families": [
+    "v26 training/build/evaluation scripts and pre-rewrite train/eval corpora",
+    "v26 abzug system/tool/prompt snapshots",
+    "v26 evaluation scripts",
+    "v27 class-distribution, system-text separation, blind-check and generation/build artifacts"
+  ],
+  "level0_effect": {
+    "local_recursive_denominator": "CLOSED",
+    "global_exact_percent_added": 0.0,
+    "reason": "The global Drive + Project-Frankenstein Level-0 denominator is not yet frozen."
+  },
+  "created_at": "2026-08-09T09:43:00+07:00"
+}

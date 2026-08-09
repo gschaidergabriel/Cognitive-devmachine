@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn_20260809T1918p0700_claycode_effect_optimization_barrier",
+  "claycode_run_id":"spawn_20260809T1918p0700_claycode_effect_optimization_barrier",
+  "latest_frank_run":"live same-day FRANK loop-dynamics / ActiveAssembly sequence observed through commit b9c574400bae6ac34e0565a5fe3477f3984162b2",
+  "latest_frank_claycode_architecture_artifact":null,
+  "artifact_note":"A single stable current FRANK_ARCHITECTURE.claycode.json path was not resolved during this run; current FRANK assumptions were grounded in the loop-of-loops directive, live FRANK commits and Harness workspace rather than inventing a path.",
+  "items":[{
+    "claim_id":"GOODMAN-EFFECT-OUTCOME-REENTRY",
+    "frank_statement":"FRANK's organism-level loop contains action -> outcome -> causal credit -> learning/state delta -> next cycle, with intervention/rollback/replay identity.",
+    "frank_source_refs":["research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md","research_entity/harness/HARNESS_WORKSPACE.json"],
+    "ancestry_families":["FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809"],
+    "shared_ancestry_collapsed":true,
+    "counterhypothesis":"Only final state/value matters; exact effect timing/order can be delegated to backends.",
+    "falsifier":"Matched FRANK/Harness runs show arbitrary deletion/duplication/reordering of effect/outcome operations leaves causal credit, replay, recovery and task outcome invariant.",
+    "independent_checks":["current-run hosted effect-mutation discriminator","MLIR official side-effect/resource/speculatability model","StableHLO/OpenXLA token dependencies","CompCert observable-event trace semantics"],
+    "adversarial_checks":["effect deletion preserving return value","effect duplication preserving return and final state","same-resource conflict reorder","disjoint-resource reorder anti-overconstraint control","authorized-only authority bypass plus denied-capability control"],
+    "verdict":"REFINED",
+    "reason":"Independent evidence supports preserving observable causal effect dependencies, but does not support freezing one global total order forever. Conflict/causal partial order is the refined hypothesis; exact total trace remains the conservative BASE oracle.",
+    "claycode_action":"Represent and validate effect dependencies plus transaction/outcome phases in typed effect/lowering contracts; keep capability authority separate; relax total order only after commutation is independently validated.",
+    "affected_claycode_artifacts":["typed effect IR","translation-validation receipt","runtime/FFI gateway","WP11 mutation suite","H2 Harness differential"]
+  }]
+}

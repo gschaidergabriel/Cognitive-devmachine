@@ -26,12 +26,14 @@ on:
       - 'tools/claycode_base_canonicalizer.py'
       - 'tools/claycode_base_canonicalizer_validation.py'
       - 'tools/claycode_base_ir.py'
+      - 'tools/claycode_wp02_strict_local_closure_v2.py'
+      - 'tools/claycode_v17_declarative_trivia_discriminator.py'
       - 'tools/claycode_wp03_typed_ir_validation.py'
       - 'tools/claycode_base_compiler.py'
       - 'tools/claycode_structured_backend.py'
       - 'research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json'
       - 'research_entity/claycode/base/UNRESOLVED_LANGUAGE_COUNTEREXAMPLES.json'
-      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_*.lark'
       - 'research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay'
       - 'research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_H2_V1.clay'
       - 'research_entity/claycode/apps/frank_active_assembly_packet_score_v1.clay'
@@ -69,7 +71,8 @@ jobs:
             # GitHub transport variables are removed only after the registered machine
             # fingerprint has been verified. The canonical child still independently
             # checks Ubuntu, local marker/fingerprint, container boundaries, semantics,
-            # real desktop, Full-FRANK, ten apps, strict target assembly and WP14.
+            # the contract-selected WP02 grammar, real desktop, Full-FRANK, ten apps,
+            # strict target assembly and WP14.
             env -u GITHUB_ACTIONS -u CI \
               CLAYCODE_REGISTERED_SELF_HOSTED_ACTIONS=1 \
               python3 tools/claycode_run_andreas_target_acceptance.py
@@ -97,8 +100,14 @@ jobs:
               and (desktop.get('observed') or {}).get('io_mode')=='TK_REAL_DESKTOP_EVENT_LOOP'
               and (desktop.get('observed') or {}).get('window_was_mapped') is True
           )
+          contract={}
+          cp=Path('research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json')
+          if cp.exists():
+              try: contract=json.loads(cp.read_text(encoding='utf-8'))
+              except Exception as exc: contract={'parse_error':type(exc).__name__}
+          selected=((contract.get('wp02_parser_contract') or {}).get('selected_grammar_path')) if isinstance(contract,dict) else None
           payload={
-              'schema_version':'2.5',
+              'schema_version':'2.6',
               'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
               'executed_on_self_hosted_runner':True,
               'required_runner_labels':['self-hosted','linux','x64','andreas','claycode','target'],
@@ -108,6 +117,7 @@ jobs:
               'target_identity_verified':identity_rc==0,
               'acceptance_invoked':identity_rc==0,
               'acceptance_returncode':acceptance_rc,
+              'selected_wp02_grammar':selected,
               'desktop_gate_owned_by_canonical_closure':True,
               'desktop_gate_pass':desktop_pass,
               'release_pass_claimed':identity_rc==0 and acceptance_rc==0 and desktop_pass,
@@ -115,7 +125,7 @@ jobs:
               'python_version':platform.python_version(),
               'authority_invariant':'model output != execution authority',
               'queue_policy':'LATEST_WORKFLOW_REVISION_WINS',
-              'trigger_scope':'all_release_gate_dependencies',
+              'trigger_scope':'all_release_gate_dependencies_and_all_wp02_grammar_candidates',
           }
           Path('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json').write_text(
               json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')

@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.1",
+  "event_id":"20260809T160410p0700_PULSE_chatgpt-secondary-declared-relations",
+  "room_id":"claycode",
+  "event_type":"PULSE",
+  "origin_worker":"chatgpt-secondary-20260809T155804-strict-surface",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"claycode",
+  "created_at":"2026-08-09T16:04:10+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "consumed_concurrent_results":[
+    "claycode_20260809T1547p0700_chatgpt_secondary_strict_syntax_gate",
+    "claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil",
+    "current grammar union-type patch ec2f17077333955cfdabe6c64868d597e7e734e3"
+  ],
+  "delta":"A finite declared bare-relation resolver is now a third live surface candidate beside strict source normalization and @relation sigils. Run-local micro-oracle accepted 8/8 sampled current forms, rejected 50000/50000 undeclared relation typos, separated 20000/20000 digit-prefixed semantic symbols from 20000 pure numbers with zero overlap, and preserved 10000/10000 whitespace semantic hashes.",
+  "conflict_resolution":"This does not supersede the sigil or normalization workers. It addresses the sigil worker's explicit next falsifier: compare @relation normalization against a declared-infix alternative. Full LALR/full-corpus parse remains required because this micro-oracle tests semantic resolution, not lexical closure.",
+  "next":"Matched full-current-G9+dialects benchmark over three candidates: normalization, @relation sigil, finite declared bare relations; compare parse closure, diagnostics, roundtrip semantic_hash, migration edits, token/readability cost and mutation survival.",
+  "delivery":"INTERRUPT_NEXT_SAFE_POINT",
+  "artifact_refs":[
+    "research_entity/trigger_runs/claycode/claycode-20260809T155804p0700-chatgpt-declared-relations/EXECUTABLE_RESEARCH_RECEIPT.json",
+    "research_entity/trigger_runs/claycode/claycode-20260809T155804p0700-chatgpt-declared-relations/HYPOTHESES.json",
+    "research_entity/trigger_runs/claycode/claycode-20260809T155804p0700-chatgpt-declared-relations/NEGATIVE_RESULTS.json"
+  ]
+}

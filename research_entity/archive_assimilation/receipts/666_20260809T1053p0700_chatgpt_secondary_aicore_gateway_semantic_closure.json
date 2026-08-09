@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1053p0700-chatgpt-secondary-aicore-gateway-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_GATEWAY_RECURSIVE_SCOPE",
+  "source_universe":"DRIVE_CLAY/AICORE/gateway",
+  "source_folder_id":"13D0b-r17iJs5sSfVUeTHYy1PtUvSViRN",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"units_below_folder":4,"folder_units":0,"file_units":4,"file_units_semantically_closed":4,"coverage_percent":100.0},
+  "files":[
+    {"path":"gateway/app.py","drive_id":"1bVB6uNUy95GK6aoGL8Bew-1qCj9qRbXD","bytes":16627,"sha256":"bd6e00a0e875e8fd014f791285e1c0ad1284013e7cba4a2cc79fdfa2d35e2cec"},
+    {"path":"gateway/auth.py","drive_id":"1FeLd9nT0WJpe5pTe3rQJ5jSZA0uSxgR7","bytes":2177,"sha256":"e93e87bcfba4d0fb31c52bd97bcf767e02e2cc3c9414086dec80205a782cdccc"},
+    {"path":"gateway/config.json.example","drive_id":"1wM7mDksH8uSnUPCjY7OOy3sZsN35lJ_V","bytes":853,"sha256":"fdd6098db259eb9621d25aa2d9b4aa3b6fe10d2f10db4fb1f84c9c42c2b7f191"},
+    {"path":"gateway/__init__.py","drive_id":"1EewjZEVS1EwSXUxmUiYiHgJOSyjJuBso","bytes":64,"sha256":"7bf5499a89d821ad3df0e553011b34a80667b8ac8b80a825fc4e323c025f33d9","disposition":"package_marker_only"}
+  ],
+  "cross_source_reconciliation":{"project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","confirmed_paths":["gateway/app.py","gateway/auth.py","gateway/config.json.example"],"result":"Drive and frozen-head gateway are the same semantic lineage for the inspected security surface."},
+  "measured_policy_surface":{"protected_endpoints_with_verify_api_key":25,"delete_routes":3,"config_allowed_endpoint_entries":25,"runtime_references_to_allowed_endpoints":0,"runtime_references_to_max_body_bytes":0,"runtime_routes_missing_from_config":["/chat/vision","/calendar/{event_id}","/email/read/{email_id}","/todo/complete/{todo_id}","/todo/{todo_id}","/notes/{note_id}"],"configured_route_names_not_matching_runtime_parameterized_routes":["/calendar/delete","/email/read","/todo/complete","/todo/delete","/notes/delete"]},
+  "security_findings":[
+    {"id":"GATEWAY-AUTH-1-SINGLE-KEY-FULL-AUTHORITY","severity":"P0_IF_REMOTE_GATEWAY_IS_AUTHORITY_BOUNDARY","finding":"One bearer API key hash protects the entire remote surface, including reads, creates and destructive calendar/todo/note deletes. There are no per-principal scopes, read/write separation or destructive-effect step-up capabilities.","inheritance":"Needle/gateway must use scoped principal/session capabilities; destructive effects require stronger explicit authority and intent binding."},
+    {"id":"GATEWAY-POLICY-2-DEAD-CONFIG","severity":"P1","finding":"allowed_endpoints and max_body_bytes exist in config.json.example but are not consumed by app.py/auth.py. The configured endpoint list has already drifted from actual parameterized runtime routes and omits /chat/vision.","inheritance":"Security policy must be executable typed configuration validated against the actual route/capability registry at boot; dead policy configuration must fail closed."},
+    {"id":"GATEWAY-BODY-3-READ-BEFORE-LIMIT","severity":"P1","finding":"Voice and vision handlers fully buffer UploadFile data before checking 5MB/10MB limits; the configured 1MB max_body_bytes is unused.","inheritance":"Enforce streaming/request-body bounds before buffering and decoding."},
+    {"id":"GATEWAY-PROXY-4-UPSTREAM-STATUS-FLATTENING","severity":"P1","finding":"Proxy helpers parse and return upstream JSON without raise_for_status or preserving upstream HTTP status. Parseable upstream failures can be flattened into gateway handler success semantics.","inheritance":"Effect result must preserve transport/status/provenance; operation success cannot be inferred from JSON parse success."},
+    {"id":"GATEWAY-RATE-5-PROCESS_LOCAL_IP_LIMITER","severity":"P2","finding":"Rate limiting is in-memory and keyed by client IP, resets on restart, multiplies across workers and conflates principals behind shared addresses.","inheritance":"Rate/abuse state should bind authenticated principal/session and use shared durable/monotonic state when multi-worker."},
+    {"id":"GATEWAY-AUTH-6-NON_CONSTANT_HASH_COMPARE","severity":"P2","finding":"SHA-256 token hash is compared using ordinary inequality rather than a standard constant-time secret comparison.","inheritance":"Use standard secret verification/rotation and constant-time comparison primitives."},
+    {"id":"GATEWAY-VISION-7-PERCEPT-FLATTENING","severity":"P1_RETINA_LINEAGE","finding":"Vision raw model text is interpolated into a normal Core /chat request with an instruction to ignore fabricated details; source-stage confidence, contradiction and percept evidence are not preserved as typed state.","inheritance":"Dissolved Retina must deliver typed VisualPercept evidence into FRANK state. Natural-language refinement is a presentation layer, never the evidence contract."}
+  ],
+  "positive_controls":["All non-health exposed endpoints use an authentication dependency.","Upload handlers attempt explicit nominal size limits.","Gateway binds by documented usage to loopback and internal upstreams are explicit.","Audit middleware records path/status/latency/client address without logging bearer token values."],
+  "branch_feedback":{"frank":["Remote interface authority and perception provenance must be typed state, not implicit in one bearer credential or prose."],"needle":["Split remote capabilities by principal and effect class; destructive routes cannot share generic chat/read authority."],"harness":["Test dead-config detection, route-registry parity, body-limit-before-buffering, status propagation, key scopes and destructive-action authorization."],"claycode":["External calls need typed Principal, Capability, EffectRequest and EffectResult values."],"unifieddb":["Persist principal/session capability issuance, effect request/result provenance and revocation state."],"claygraph":["Represent credential/principal/capability/effect edges separately."],"gwt":["Do not broadcast a proxied failure as success or raw vision prose as sensor truth."],"clay":["One-module fusion must keep the remote authority boundary and typed percept boundary explicit."]},
+  "earned_work_hours_added":0.0,
+  "training":{"executed":false,"authorized":false},
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

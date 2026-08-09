@@ -1,0 +1,172 @@
+    def canonical_dict(self, include_source_identity: bool = False) -> dict[str, Any]:
+        def enc(x: Any) -> Any:
+            if dataclasses.is_dataclass(x):
+                out = {}
+                for f in dataclasses.fields(x):
+                    if not include_source_identity and isinstance(x, FunctionIR) and f.name == 'source_hash':
+                        continue
+                    out[f.name] = enc(getattr(x, f.name))
+                return out
+            if isinstance(x, tuple): return [enc(v) for v in x]
+            if isinstance(x, dict): return {k: enc(x[k]) for k in sorted(x)}
+            if isinstance(x, set): return sorted(enc(v) for v in x)
+            return x
+        return enc(self)
+
+    @property
+    def semantic_hash(self) -> str:
+        payload = json.dumps(self.canonical_dict(False), sort_keys=True, separators=(",",":"), ensure_ascii=False)
+        return hashlib.sha256(payload.encode()).hexdigest()
+
+    @property
+    def contract_hash(self) -> str:
+        payload = json.dumps(self.canonical_dict(True), sort_keys=True, separators=(",",":"), ensure_ascii=False)
+        return hashlib.sha256(payload.encode()).hexdigest()
+
+_BODY_GRAMMAR = r'''
+?start: stmt*
+?stmt: "let" NAME [":" type_annot] "=" expr ";"?       -> let_stmt
+     | "require" expr ";"?                               -> require_stmt
+     | "return" expr ";"?                                -> return_stmt
+     | "if" expr block ["else" block]                    -> if_stmt
+     | QID "=" expr ";"?                                 -> assign_stmt
+     | expr ";"?                                         -> expr_stmt
+block: "{" stmt* "}"
+?expr: coalesce_expr
+?coalesce_expr: or_expr ["?" OR or_expr]                  -> coalesce_expr
+?or_expr: and_expr (OR and_expr)*
+?and_expr: eq_expr (AND eq_expr)*
+?eq_expr: rel_expr ((EQ|NE) rel_expr)*
+?rel_expr: add_expr ((LE|GE|LT|GT|IN) add_expr)*
+?add_expr: mul_expr ((PLUS|MINUS) mul_expr)*
+?mul_expr: unary ((MUL|DIV|MOD) unary)*
+?unary: NOT unary                                          -> unary_expr
+      | MINUS unary                                       -> unary_expr
+      | atom
+?atom: NUMBER                                             -> number
+     | ESCAPED_STRING                                     -> string
+     | "true"                                            -> true
+     | "false"                                           -> false
+     | "null"                                            -> null
+     | SYMBOL                                             -> symbol
+     | list_lit
+     | call
+     | QID                                                -> var
+     | "(" expr ")"
+list_lit: "[" [expr ("," expr)*] "]"
+call: QID "(" [call_args] ")"
+call_args: call_arg ("," call_arg)*
+?call_arg: QID "=" expr                                  -> named_arg
+         | expr                                           -> positional_arg
+
+type_annot: /[^=;\n]+/
+SYMBOL: /#[A-Za-z_][A-Za-z0-9_-]*/
+QID: /[A-Za-z_][A-Za-z0-9_-]*(\.[A-Za-z_][A-Za-z0-9_-]*)*/
+NAME: /[A-Za-z_][A-Za-z0-9_-]*/
+OR: "||" | "or"
+AND: "&&" | "and"
+EQ: "=="
+NE: "!="
+LE: "<="
+GE: ">="
+LT: "<"
+GT: ">"
+IN: "in"
+PLUS: "+"
+MINUS: "-"
+MUL: "*"
+DIV: "/"
+MOD: "%"
+NOT: "!" | "not"
+%import common.NUMBER
+%import common.ESCAPED_STRING
+%import common.WS
+%ignore WS
+%ignore /\/\/[^\n]*/
+'''
+
+_body_parser = Lark(_BODY_GRAMMAR, parser="lalr", maybe_placeholders=False)
+
+class IRTransformer(Transformer):
+    def number(self, xs):
+        s = str(xs[0]); return Expr("literal", float(s) if '.' in s else int(s))
+    def string(self, xs): return Expr("literal", pyast.literal_eval(str(xs[0])))
+    def true(self, _): return Expr("literal", True)
+    def false(self, _): return Expr("literal", False)
+    def null(self, _): return Expr("literal", None)
+    def symbol(self, xs): return Expr("literal", str(xs[0]))
+    def var(self, xs): return Expr("var", str(xs[0]))
+    def list_lit(self, xs): return Expr("list", args=tuple(xs))
+    def positional_arg(self, xs): return (None, xs[0])
+    def named_arg(self, xs): return (str(xs[0]), xs[1])
+    def call_args(self, xs): return list(xs)
+    def call(self, xs):
+        name = str(xs[0]); pairs = xs[1] if len(xs)>1 else []
+        return Expr("call", name, tuple(pairs))
+    def unary_expr(self, xs): return Expr("unary", str(xs[0]), (xs[1],))
+    def _fold_bin(self, xs):
+        if len(xs)==1: return xs[0]
+        cur = xs[0]
+        for i in range(1, len(xs), 2): cur = Expr("binary", str(xs[i]), (cur, xs[i+1]))
+        return cur
+    or_expr=_fold_bin; and_expr=_fold_bin; eq_expr=_fold_bin; rel_expr=_fold_bin; add_expr=_fold_bin; mul_expr=_fold_bin
+    def coalesce_expr(self, xs):
+        if len(xs)==1: return xs[0]
+        # token sequence is lhs, OR-token, rhs
+        return Expr("coalesce", args=(xs[0], xs[-1]))
+    def type_annot(self, xs): return str(xs[0]).strip()
+    def let_stmt(self, xs):
+        hint = xs[1] if len(xs)==3 else None
+        return Stmt("let", value=str(xs[0]), expr=xs[-1], type_hint=hint)
+    def require_stmt(self, xs): return Stmt("require", expr=xs[0])
+    def return_stmt(self, xs): return Stmt("return", expr=xs[0])
+    def assign_stmt(self, xs): return Stmt("assign", value=str(xs[0]), expr=xs[1])
+    def expr_stmt(self, xs): return Stmt("expr", expr=xs[0])
+    def block(self, xs): return tuple(xs)
+    def if_stmt(self, xs):
+        return Stmt("if", expr=xs[0], body=xs[1], else_body=(xs[2] if len(xs)>2 else ()))
+    def start(self, xs): return tuple(xs)
+
+_transformer = IRTransformer()
+
+
+def _find_matching_brace(src: str, open_i: int) -> int:
+    depth=0; instr=False; esc=False
+    for i in range(open_i, len(src)):
+        c=src[i]
+        if instr:
+            if esc: esc=False
+            elif c=='\\': esc=True
+            elif c=='"': instr=False
+            continue
+        if c=='"': instr=True; continue
+        if src[i:i+2]=='//':
+            j=src.find('\n', i)
+            if j==-1: return len(src)-1
+            # cannot jump in for; tolerate comment braces by counting only chars before // is hard.
+        if c=='{': depth += 1
+        elif c=='}':
+            depth -= 1
+            if depth==0: return i
+    raise StructuralError("unclosed function body")
+
+
+def extract_functions(src: str) -> list[tuple[str,list[str],list[str|None],str|None,str,str]]:
+    clean = _strip_comments(src)
+    out=[]
+    pat = re.compile(r"\b(?:(fn)\s+([A-Za-z_][A-Za-z0-9_-]*)|(cycle)(?:\s+([A-Za-z_][A-Za-z0-9_-]*))?)\s*\(")
+    pos=0
+    while True:
+        m=pat.search(clean,pos)
+        if not m: break
+        kind='fn' if m.group(1) else 'cycle'; name=m.group(2) or m.group(4) or "cycle"
+        p0=m.end()-1; depth=0; instr=False; esc=False; p1=None
+        for j in range(p0,len(clean)):
+            c=clean[j]
+            if instr:
+                if esc: esc=False
+                elif c=='\\':esc=True
+                elif c=='"':instr=False
+                continue
+            if c=='"':instr=True;continue
+            if c=='(': depth+=1

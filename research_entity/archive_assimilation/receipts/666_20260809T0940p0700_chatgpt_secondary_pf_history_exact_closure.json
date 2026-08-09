@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0940p0700-chatgpt-secondary-pf-history-exact-closure",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "lane": "PROJECT_FRANKENSTEIN_HISTORY_DENOMINATOR",
+  "predecessor_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_pf_history_scope_expansion.json",
+  "predecessor_state": "SUPERSEDED_BY_EXACT_ENUMERATION",
+  "source_repository": "gschaidergabriel/Project-Frankenstein",
+  "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "root_sha": "e1a8812767668091d146ee958bbc2ebb2743031c",
+  "exact_history_commit_count": 545,
+  "proof": {
+    "head_tilde_544_resolves_to_root": true,
+    "head_tilde_545_not_found": true,
+    "root_caret_not_found": true,
+    "root_caret_2_not_found": true,
+    "root_commit_message_identifies_initial_commit": true,
+    "server_compare_root_to_head_ahead_by": 544,
+    "server_compare_root_to_head_total_commits": 544,
+    "side_history_excess": 0
+  },
+  "result": "EXACT_HISTORY_DENOMINATOR_CLOSED",
+  "exact_history_enumerated": true,
+  "exact_tree_enumerated": false,
+  "global_exact_coverage_credit_percent": 0.0,
+  "pass_impact": "LOCAL_DENOMINATOR_PREREQUISITE_CLOSED_NO_GLOBAL_PASS",
+  "manifest_ref": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_DENOMINATOR_EXACT_20260809T0940p0700.json",
+  "remaining": [
+    "Close exact frozen-head tree denominator.",
+    "Classify/reconcile historical deleted/superseded states against Drive rescue branches.",
+    "Finish full Drive denominator/content/hash closure and cross-source reconciliation.",
+    "Run global earned-work deduplication and Level-0 release audit."
+  ],
+  "decision_trace": "Initial connector-search attempt could not prove exactness. A later GitHub compare surface accepted pinned git ancestry expressions. Binary search found maximum valid first-parent depth 544; depth 545 failed. The resolved root had no first or second parent refs and was independently fetched as the initial commit. Server compare from root to frozen head reported exactly 544 reachable commits beyond root, matching first-parent distance with no side-history excess. Count therefore closes at 545 including root.",
+  "created_at": "2026-08-09T09:40:18+07:00"
+}

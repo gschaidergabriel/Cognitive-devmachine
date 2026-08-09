@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   strict-v6-frontend:
@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -38,6 +40,9 @@ jobs:
           mkdir -p receipts/claycode-base-frontend
           {
             echo "git_head=$(git rev-parse HEAD)"
+            echo "event=${GITHUB_EVENT_NAME}"
+            echo "ref=${GITHUB_REF_NAME}"
+            echo "runner_os=${RUNNER_OS}"
             echo "python=$(python --version 2>&1)"
             python - <<'PY'
           import importlib.metadata
@@ -51,42 +56,85 @@ jobs:
 
       - name: Syntax compile validation tools
         run: |
+          set -o pipefail
           python -m py_compile \
             tools/claycode_base_frontend_validation.py \
             tools/claycode_base_canonicalizer.py \
-            tools/claycode_base_ir.py
+            tools/claycode_base_ir.py \
+            2>&1 | tee receipts/claycode-base-frontend/PY_COMPILE.log
 
       - name: Strict V6 full-corpus frontend validation
         run: |
+          set -o pipefail
           python tools/claycode_base_frontend_validation.py \
-            --output receipts/claycode-base-frontend/FRONTEND_V6_STRICT.json
+            --output receipts/claycode-base-frontend/FRONTEND_V6_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/FRONTEND_V6_STRICT.log
 
       - name: Strict V6 canonical syntax identity validation
         run: |
+          set -o pipefail
           python tools/claycode_base_canonicalizer.py \
-            --output receipts/claycode-base-frontend/CANONICAL_V6_STRICT.json
+            --output receipts/claycode-base-frontend/CANONICAL_V6_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/CANONICAL_V6_STRICT.log
 
       - name: Strict typed declaration IR on G9 V3
         run: |
+          set -o pipefail
           python tools/claycode_base_ir.py \
             research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay \
-            --output receipts/claycode-base-frontend/IR_G9_V3_STRICT.json
+            --output receipts/claycode-base-frontend/IR_G9_V3_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/IR_G9_V3_STRICT.log
 
       - name: Strict typed declaration IR on Dialect V3
         run: |
+          set -o pipefail
           python tools/claycode_base_ir.py \
             research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay \
-            --output receipts/claycode-base-frontend/IR_DIALECT_V3_STRICT.json
+            --output receipts/claycode-base-frontend/IR_DIALECT_V3_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/IR_DIALECT_V3_STRICT.log
 
       - name: Strict typed declaration IR fixture self-test
         run: |
+          set -o pipefail
           python tools/claycode_base_ir.py \
             --self-test \
-            --output receipts/claycode-base-frontend/IR_SELFTEST_STRICT.json
+            --output receipts/claycode-base-frontend/IR_SELFTEST_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/IR_SELFTEST_STRICT.log
 
       - name: Receipt hashes
+        if: always()
         run: |
-          sha256sum receipts/claycode-base-frontend/* | tee receipts/claycode-base-frontend/SHA256SUMS.txt
+          find receipts/claycode-base-frontend -maxdepth 1 -type f ! -name SHA256SUMS.txt -print0 \
+            | sort -z \
+            | xargs -0 sha256sum \
+            | tee receipts/claycode-base-frontend/SHA256SUMS.txt
+
+      - name: Persist research-center receipt
+        if: always() && github.event_name == 'push'
+        continue-on-error: true
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          target="research_entity/claycode/base/receipts/ci/${GITHUB_SHA}"
+          mkdir -p "$target"
+          cp -a receipts/claycode-base-frontend/. "$target/"
+          printf '%s\n' \
+            "schema_version=1.0" \
+            "source_commit=${GITHUB_SHA}" \
+            "workflow=${GITHUB_WORKFLOW}" \
+            "run_id=${GITHUB_RUN_ID}" \
+            "run_attempt=${GITHUB_RUN_ATTEMPT}" \
+            "job_status_before_persist=${JOB_STATUS}" \
+            > "$target/WORKFLOW_RECEIPT.txt"
+          git config user.name "clay-research-center-ci"
+          git config user.email "clay-research-center-ci@users.noreply.github.com"
+          git add "$target"
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "receipt(claycode): strict frontend ${GITHUB_SHA}"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: Upload evidence bundle
         if: always()

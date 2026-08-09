@@ -1,0 +1,42 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1410p0700-chatgpt-secondary-pf-history-k32-k47",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","ordinal_range":"k32..k47","count":16,"manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K32_K47_20260809T1410p0700.json"},
+  "race":{"winning_claim_commit":"c558af3ea5e2f377fe5ea70bede988b834c4f4ee","competing_claims_seen":0,"result":"CLEAN_AT_PRECOMMIT_RECHECK"},
+  "closure":{"materialized":16,"terminally_dispositioned":16,"uncovered":0,"status":"COMPLETE_FOR_ORDINAL_SHARD","global_level0_gate":"NOT_PASS","global_exact_percent_increment":0.0},
+  "high_value_findings":[
+    {"id":"PF-K32-47-ONLINE-ADAPTATION-IS-A-CONTROL-SYSTEM","evidence":[36,38,39,40,42,43,45,46],"finding":"SOMA is not merely LoRA training: it is a recurrent control loop over interaction selection, explicit feedback, quality scoring, scheduled training, safety gates, EMA deployment, hot reload, rollback and runtime configuration. Multiple audit rounds found concurrency, stale-config, TOCTOU, dropped-parameter, thread and memory-leak failures.","transfer":"Treat online adaptation as a safety-critical state machine with explicit transaction boundaries, single-writer training leases, deterministic rollback, class-balance telemetry and fault-injection tests; model-quality metrics alone are insufficient."},
+    {"id":"PF-K32-47-FEEDBACK-IS-NOT-GROUND-TRUTH","evidence":[36,43],"finding":"Thumbs feedback became the strongest scorer signal and later weighted training strongly, including explicit negative-example handling. This improves preference responsiveness but also makes user rating behavior a direct model-update actuator.","transfer":"Separate preference reward from factual/capability/safety objectives; log provenance, calibration and class balance, cap influence, and evaluate Goodhart/overfit under sparse, adversarial or inconsistent feedback."},
+    {"id":"PF-K32-47-PERSONALITY-PROBE-MEASUREMENT-CONFOUND","evidence":[37,38,40,41],"finding":"Personality change was visualized from five sampled prompts and lexical/style heuristics; subsequent audits fixed substring false positives, failure averaging and defaults. Sampling remained stochastic and dimensions are operational proxies.","transfer":"Do not interpret radar/change percentages as latent personality ground truth. Use fixed seeds or repeated samples, confidence intervals, held-out behavioral tasks and probe-invariance tests before promotion."},
+    {"id":"PF-K32-47-LCME-RETRIEVAL-QUALITY-LINEAGE","evidence":[47],"finding":"Memory retrieval was redesigned around entity-vector removal, stop-word FTS, relevance-dominant scoring, maturity gates, graph-expansion suppression and HNSW; the commit reports P@5 improvement from 0.40 to 1.00.","transfer":"Preserve the exact retrieval benchmark/query set and reproduce across fresh/OOD queries; isolate each intervention with ablations before attributing the gain to HNSW or neural retrieval."},
+    {"id":"PF-K32-47-AUTONOMY-TO-ON-DEMAND-INTELLIGENCE","evidence":[33,34],"finding":"Nightly autonomous news collection was deliberately removed while Intelligence V6 moved to user-triggered/on-demand search, crawl and synthesis with relevance/drift/claim-dedup guards.","transfer":"Autonomy should be budgeted per task value and contamination risk; scheduled background collection is not inherently superior to demand-driven retrieval and must justify storage, freshness and failure costs."},
+    {"id":"PF-K32-47-LIGHTWEIGHT-ADAPTATION-PATH","evidence":[32],"finding":"A separate RSS feed ranker used a tiny neural model and direct click/dismiss feedback without LLM calls.","transfer":"Prefer small task-specific adaptive models where the objective is narrow and observable; benchmark them against LLM-based personalization for latency, energy, interpretability and feedback sample efficiency."},
+    {"id":"PF-K32-47-MODEL-MIGRATION-COUPLING-RISK","evidence":[35,36,44],"finding":"Core architecture, installer, model paths, native vision and SOMA training were migrated across Qwen generations while old components/models were removed. The changes couple runtime, training artifacts, deployment and safety filters.","transfer":"Model migration requires an explicit compatibility matrix for base model, LoRA adapter, tokenizer, GGUF/HF paths, prompt format, tool policy and deployment backend; partial migration can silently corrupt behavior."}
+  ],
+  "negative_results_preserved":[
+    "SOMA runtime configuration could remain stale after WebUI changes.",
+    "Concurrent forced/background training could corrupt shared adapter outputs without a run lock.",
+    "Restart flags had a check-then-unlink TOCTOU race.",
+    "EMA blending silently omitted new adapter keys before union-key handling.",
+    "Training error paths leaked large model objects and background toggles leaked threads.",
+    "Personality probe substring matching and failed-probe averaging produced false measurement shifts.",
+    "A zero-norm baseline could be incorrectly judged as zero drift.",
+    "Nightly autonomous news collection was removed rather than retained as inherently useful autonomy.",
+    "LCME retrieval had sufficiently poor historical precision that a later commit reports P@5 0.40 before redesign."
+  ],
+  "epistemic_boundary":"SOMA change percentages are heuristic sampled behavior metrics, not direct measurements of identity/personality. The reported SOMA training runtime/sample counts and LCME P@5 improvement are preserved as historical measurements/claims and require benchmark artifact reproduction before scientific promotion. Project consciousness/personality wording in prompts/docs is not phenomenal-consciousness evidence.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level conceptual dedup against the earned-work ledger was performed."},
+  "next_falsifiers":[
+    "Run crash/concurrency fault injection across SOMA score->train->validate->EMA->convert->reload->rollback transitions with exactly-once deployment assertions.",
+    "Simulate sparse, all-positive, all-negative, contradictory and adversarial thumbs feedback; measure adapter drift, factual accuracy, safety and preference overfit separately.",
+    "Repeat personality probes over multiple deterministic seeds and held-out prompts; quantify variance and correlation with human-rated behavioral dimensions.",
+    "Reproduce LCME P@5 on the frozen query corpus and fresh OOD queries, then ablate stop words, vector cleanup, graph expansion, maturity gates, scoring and HNSW independently.",
+    "Model-migration matrix test: base HF/GGUF/tokenizer/LoRA compatibility plus hot-reload and rollback across CPU/Vulkan/GPU paths.",
+    "Compare tiny feed ranker versus LLM reranking under matched feedback on relevance, diversity, energy, latency and sample efficiency.",
+    "Compare scheduled autonomous intelligence collection against on-demand retrieval on freshness, contamination, storage growth, latency and user-value metrics."
+  ],
+  "status":"COMPLETE"
+}

@@ -1,18 +1,20 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"hypofusion-20260809T1716p0700-chatgpt-secondary-r2",
   "trigger":"hypofusion",
   "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
   "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
   "program_stage":"BASE_CLAYCODE_RELEASE",
-  "live_cutoffs":{"initial":"61dbf9006eeca2d979e89deaa9d39be23a88b731","pre_fusion2":"7ba860f8a921020279e5c7a0c7ed3185be7565cf"},
+  "live_cutoffs":{"initial":"61dbf9006eeca2d979e89deaa9d39be23a88b731","pre_fusion2":"7ba860f8a921020279e5c7a0c7ed3185be7565cf","final_completed_external_delta":"8da3fa9de3c82cce26c074f2acce52d54b3074e2","final_reread_own_report_commit":"9120d64eb9b44ba6c5dc5e399524effdeb3e5a16"},
+  "final_late_arrivals_integrated":["emergenz-20260809T1714p0700 final causal-triangulation report with H-EM-20260809-01..06","N-CC-20260809-001 grammar surface-closure negative result","live Fusion Refresh 5 branch confirmation"],
+  "pending_at_close":["ClayCode G9 function-definition closure worker: started, no result at cutoff","ClayCode APP-03 database adapter worker: started, no result at cutoff"],
   "required_outputs":["INTERCONNECT_MANIFEST.json","HYPOTHESIS_COVERAGE_MATRIX.json","EXTERNAL_EVIDENCE_LEDGER.md","COUNTERHYPOTHESIS_MATRIX.json","FUSION2_HYPOTHESES.json","CONTRADICTION_MAP.md","BRANCH_FEEDBACK_MANIFEST.json","RUN_MANIFEST.json","FINAL_REPORT.md"],
   "external_lanes_used":["peer-reviewed/conference papers","arXiv/preprints where current mechanisms required it","authoritative RFC/specifications","official runtime/database documentation","implementation/reliability engineering sources"],
   "source_independence_rule":"shared Clay/FRANK ancestry never counted as independent replication",
-  "experiments_executed_by_this_hypofusion":"NONE_NEW; screened and integrated recent executable worker receipts",
+  "experiments_executed_by_this_hypofusion":"NONE_NEW; screened and integrated recent executable worker receipts including final Emergenz synthetic gates",
   "promotion":"NONE",
-  "completion_percent_before_final_reread":96,
-  "known_limitations":["current GitHub connector cannot recursively list repository directories/tree, so historical hypotheses outside prior Hypofusion mapping, direct known paths and commit search are explicitly marked inaccessible","no target-host H1/H2/H3 experiment executed by this run","current canonical revision remains r2; no scientific promotion attempted"],
-  "highest_information_next_actions":["real BASE cross-branch executable witness suite","compiler wrong-lowering mutation plus independent semantic oracle","numeric canonicalization/JCS and exact-Int cross-runtime corpus","actual FFI resource lifetime/ABA test on Ubuntu","H1 recurrence stability x truthful/shuffled re-entry factorial","H1 deterministic staged replay plus outside-in fault lane","UnifiedDB sparse/dense incremental-to-batch crossover","external-effect crash/reconciliation/idempotency matrix"],
-  "research_write":"DURABLE_RUN_ARTIFACTS_CREATED"
+  "completion_percent":98,
+  "known_limitations":["current GitHub connector cannot recursively list repository directories/tree, so historical hypotheses outside prior Hypofusion mapping, direct known paths and commit search are explicitly marked inaccessible","two workers began after the close window and had no result to integrate","no target-host H1/H2/H3 experiment executed by this Hypofusion itself","current canonical revision remains r2; no scientific promotion attempted"],
+  "highest_information_next_actions":["real BASE cross-branch executable witness suite","compiler wrong-lowering mutation plus independent semantic oracle","full admitted grammar/surface closure then parse/canonicalization differential","numeric canonicalization/JCS and exact-Int cross-runtime corpus","actual FFI resource lifetime/ABA test on Ubuntu","H1 recurrence stability x truthful/shuffled re-entry factorial","H1 causal-emergence Golden fixtures: common-driver false positive, XOR pairwise false negative, content-matched false rescue","H1 deterministic staged replay plus outside-in fault lane","UnifiedDB sparse/dense incremental-to-batch crossover","external-effect crash/reconciliation/idempotency matrix"],
+  "research_write":"COMMITTED_AND_REREAD"
 }

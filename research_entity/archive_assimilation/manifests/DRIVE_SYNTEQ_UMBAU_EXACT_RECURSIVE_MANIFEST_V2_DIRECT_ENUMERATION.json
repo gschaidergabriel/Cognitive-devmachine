@@ -1,0 +1,26 @@
+{
+  "schema_version":"2.0",
+  "manifest_id":"DRIVE-SYNTEQ-UMBAU-EXACT-RECURSIVE-V2-DIRECT-ENUMERATION-20260809T0703p0700",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "source":{"title":"synteq-umbau","id":"1fWUuy1oxoOAOHEQGZhhF00SUxISV4qzr","parent_root_id":"1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm"},
+  "method":{"enumerator":"Google Drive direct list_folder","root_top_k_crosscheck":159,"normal_top_k":1000,"recursive":true,"guard":"research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md","note":"Root returned fewer than 159 entries; manual structural count from returned identities is 158 = 8 folders + 150 files. All child folders recursively enumerated; no child call hit its top_k ceiling."},
+  "exact_recursive_counts":{"direct_entries":158,"direct_folders":8,"direct_files":150,"nested_folders_below_direct_folders":7,"nested_leaf_files":160,"total_folders_below_synteq_umbau_root":15,"total_leaf_files":310,"total_units_below_synteq_umbau_root":325,"include_root_itself":326,"all_discovered_folders_recursively_enumerated":true},
+  "children":[
+    {"title":"plaetze","id":"13X-vWIUA25WqRDHVEP7ytiri7r1Q8u3M","folders_below":0,"leaf_files":10,"units_below":10},
+    {"title":".claude","id":"1J1yJME8gP1hnknuJnhxc55ur2X59PADg","folders_below":0,"leaf_files":2,"units_below":2},
+    {"title":".gstack","id":"1FB9L7X9AB7RaHtl8KftTzhR4tg_XluA5","folders_below":0,"leaf_files":1,"units_below":1},
+    {"title":"assets","id":"1m1sAiVTndqNddiamISPsX8P36yfXi7LL","folders_below":6,"leaf_files":45,"units_below":51,"ref":"research_entity/archive_assimilation/manifests/DRIVE_SYNTEQ_UMBAU_ASSETS_V2_DIRECT_FETCH_SUBMANIFEST.json"},
+    {"title":".store","id":"16VKbTlWw5_7yQvITX4UoBGhPOLHpDpyQ","folders_below":0,"leaf_files":26,"units_below":26},
+    {"title":"pruef-A2","id":"1eK2wY6FtKtYUtIqDwO7ZxZn8pp5RKmCB","folders_below":1,"leaf_files":73,"units_below":74,"shape":{"root_files":22,"nested_folder":{"title":"knet","id":"19FX8jt9yz7IMDzOWmGwac1swftonq8F9","leaf_files":51}}},
+    {"title":".xenostore","id":"1B1C-JFeZrhS5yFQ2sPqU8vngGC5bwLGg","folders_below":0,"leaf_files":1,"units_below":1},
+    {"title":".probe-bild","id":"1QCoXM2kVFWL5pvOQ143eNAco-imhtkYj","folders_below":0,"leaf_files":2,"units_below":2}
+  ],
+  "count_check":{"root_direct_files":150,"child_leaf_files_total":160,"leaf_total":310,"direct_folders":8,"nested_folders":7,"folder_total":15,"unit_total":325},
+  "supersession":{"prior_manifest":"research_entity/archive_assimilation/manifests/DRIVE_SYNTEQ_UMBAU_EXACT_RECURSIVE_MANIFEST.json","prior_count":55,"current_count":325,"delta_units":270,"verdict":"PRIOR_SEARCH_DERIVED_EXACT_DENOMINATOR_REFUTED","recount_checkpoint":"research_entity/archive_assimilation/receipts/666_20260809T0703p0700_chatgpt_secondary_drive_synteq_umbau_direct_fetch_recount_checkpoint.json","semantic_preservation":"Prior semantic/projection findings remain historical evidence where files were actually read; structural exactness only is superseded."},
+  "level0_credit":{"exact_global_percent_added":0.0,"reason":"Combined Level-0 denominator is not yet frozen."},
+  "earned_work":{"new_credit_hours":0.0,"reason":"Structural accounting and reconciliation only."},
+  "closure":"EXACT_RECURSIVE_STRUCTURAL_DENOMINATOR_FROZEN_BY_DIRECT_ENUMERATION",
+  "created_at":"2026-08-09T07:03:00+07:00"
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0952p0700-chatgpt-secondary-xeno-traffic-hash-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "task":"Continue non-overlapping XENO extracted-copy raw-byte SHA-256 reconciliation on open scope traffic.",
+  "claim_event_ref":"research_entity/rooms/center_events/20260809T0949p0700_666_claim_xeno_traffic_hash_tranche.json",
+  "source":{"drive_root_id":"1UkkTHX8Xo6EcINOOQ3OtA-LVEHh9Ssis","g8_folder_id":"1x5TrnLC4PwdNITXawMn_U4jngYBiV0sF","scope":"traffic","scope_folder_id":"1lJYddoiSalYBMXtmB01zI_yNoZ6uL5Il","bundle_manifest_drive_id":"1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g"},
+  "method":{"guard":"DRIVE_ENUMERATION_METHOD_GUARD_V3","enumeration":"Google_Drive.list_folder structured identity sets","raw_bytes":"Google_Drive.fetch(download_raw_file=true,include_base64=false)","hash":"SHA-256 over downloaded raw bytes","stability_probes":{"traffic_root":"5 identities at top_k=6","private_states":"8 identities at top_k=9"}},
+  "denominator":{"expected_manifest_leaves":12,"observed_recursive_leaves":12,"root_files":4,"descendant_folders":1,"private_state_files":8,"extra_leaves":0,"missing_leaves":0,"identity_set_status":"STABLE_NO_CEILING_AMBIGUITY"},
+  "verified":[
+    {"path":"se_xeno/G8/traffic/outcomes.jsonl","drive_id":"1s1B_0gQG7mCb2cdV1QtPhMk7AF0gnm-e","bytes":1108,"sha256":"be65f9020b5cec70487bf52734ba97f370460484be138f65f98739e8f71772de","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/public_messages.jsonl","drive_id":"1dCJUVuaL4B12Gn57KuZkH6bc1i0NUgnP","bytes":4109,"sha256":"14351a55a7bb8a4a3702e37127e9ff370cb2c80ed9141cbd1001c2a5a5a31b61","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/reconstructions.jsonl","drive_id":"1lauUDiTLCL2BayapCxgBfeqvo_kKMXXq","bytes":3074432,"sha256":"8afd2d1e1a050f873eeee7102b66d197f03477cb54619f67884360d0f68031bd","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/repairs.jsonl","drive_id":"1zWv3SzPODYDYF9WALeYTWNHgrnINuOeS","bytes":195,"sha256":"6e809cafc4a116c6f61b8496c8e2872608240733321cb6409250660081f44a8e","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/private_states/ariadne.json","drive_id":"1Ox2soWS1WG-gE9TUgXpbpwLQHu0SgybO","bytes":466,"sha256":"d93b4a761307b59e7aff8dbd1d8ca7707c9d643d95f0cdb34759b5e2a23629a3","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/private_states/daedalus.json","drive_id":"1PMKnRQeYCWVGzgbCbtSNZmMfKKCURr-g","bytes":459,"sha256":"88460cb791208c70b9ab64d9ff58844d65bf8ee670363c3fbefde5948c31a67f","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/private_states/hermes.json","drive_id":"1ruXwROac3RRwn_vubiiwdD2Edt9CDdFr","bytes":451,"sha256":"1bbfa49fa6c74f869d70b9a0aef1baff133a305fb5940b5367676b0b897efe3b","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/private_states/janus.json","drive_id":"1MbSGGA2GmH-rD-ICN6gKbxXqO0GWM74n","bytes":452,"sha256":"c6b9f633e1472c3d18d765a5130be8fb572c18c7f01e9d140af466dbeef02300","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/private_states/mnemosyne.json","drive_id":"1ohTp6yC3vWSm1A4f3tG9Ht2bbFYh3TCz","bytes":447,"sha256":"0903995ad128a1721f8156a0fadbd06818af02b23da5f3d4af7f71b25ff25913","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/private_states/moirai.json","drive_id":"1vafrBUdQIEAGWFIXw5rRcO5bgqB1PZlm","bytes":458,"sha256":"97e84f11b8d732a1de8c6dbc557d78a6a0052bb6d0b2ecd78011bb69ec52cdae","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/private_states/nemesis.json","drive_id":"1bFxXFmqOqr020ppD20YcMLM0IB8svQc8","bytes":448,"sha256":"03f196d363538e94b847abca155ffca8bf5f33640e1294c0cbe851aa5c18d147","manifest_match":true},
+    {"path":"se_xeno/G8/traffic/private_states/themis.json","drive_id":"1b82cndg8UusZBifTFDU-fUC13q1ygrzX","bytes":453,"sha256":"cbc142006d1bb177f0e598ce2c4988c90c87538f135b79e2efee9492a750cfd1","manifest_match":true}
+  ],
+  "result":{"scope_status":"HASH_CLOSED","mismatches":0,"verified_leaves_delta":12,"verified_bytes_delta":3083478,"campaign_baseline_before_parallel_peer_merge":{"verified_leaves":45,"expected_leaves":203},"local_turn_deltas":{"selective":7,"traffic":12},"campaign_floor_after_local_turn_deltas":{"verified_leaves":64,"expected_leaves":203,"remaining_at_most":139,"leaf_coverage_percent_floor":31.527094},"shared_task_mutation":"DEFERRED_BECAUSE_OTHER_XENO_SCOPES_ARE_PEER_OWNED"},
+  "semantic_credit_added":0.0,
+  "global_level0":{"gate":"NOT_PASS","exact_global_percent_added":0.0},
+  "status":"COMPLETE_APPEND_ONLY_DELTA_PENDING_SHARED_TASK_AGGREGATION",
+  "created_at":"2026-08-09T09:52:00+07:00"
+}

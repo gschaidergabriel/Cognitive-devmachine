@@ -324,16 +324,34 @@ def c_expr(expr: dict, env: dict[str, str], signatures: dict[str, tuple[list[str
     raise CompileError(f"C_UNSUPPORTED:{kind}")
 
 
+def _needs_int_div(expr: dict, env: dict[str, str], signatures: dict[str, tuple[list[str], str]]) -> bool:
+    kind = expr["k"]
+    if kind == "bin":
+        if expr["op"] == "/" and infer(expr, env, signatures) == "Int":
+            return True
+        return _needs_int_div(expr["l"], env, signatures) or _needs_int_div(expr["r"], env, signatures)
+    if kind == "call":
+        return any(_needs_int_div(arg, env, signatures) for arg in expr["a"])
+    return False
+
+
 def lower_c(ir: dict, entry: str | None = None) -> str:
     signatures = {f["name"]: ([p["type"] for p in f["params"]], f["return"]) for f in ir["functions"]}
+    needs_int_div = any(
+        _needs_int_div(function["body"], {p["name"]: p["type"] for p in function["params"]}, signatures)
+        for function in ir["functions"]
+    )
     lines = [
         "#include <stdint.h>", "#include <stdbool.h>", "#include <stdio.h>", "#include <stdlib.h>", "#include <limits.h>", "",
-        "static int64_t cc_int_div(int64_t a,int64_t b){",
-        "  if(b==0){fputs(\"CC_INT_DIV_ZERO\\n\",stderr);exit(65);}",
-        "  if(a==INT64_MIN && b==-1){fputs(\"CC_INT_DIV_OVERFLOW\\n\",stderr);exit(66);}",
-        "  return a/b;",
-        "}", "",
     ]
+    if needs_int_div:
+        lines += [
+            "static int64_t cc_int_div(int64_t a,int64_t b){",
+            "  if(b==0){fputs(\"CC_INT_DIV_ZERO\\n\",stderr);exit(65);}",
+            "  if(a==INT64_MIN && b==-1){fputs(\"CC_INT_DIV_OVERFLOW\\n\",stderr);exit(66);}",
+            "  return a/b;",
+            "}", "",
+        ]
     for function in ir["functions"]:
         params = ", ".join(f"{c_type(p['type'])} {c_var(p['name'])}" for p in function["params"]) or "void"
         lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params});")

@@ -1,9 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "experiment_id": "EXP-CC-G9-RELATION-GENERIC-20260809",
   "run_id": "claycode_20260809T1600p0700_chatgpt_secondary_relation_generic",
   "actor": "chatgpt-secondary",
-  "candidate": "strict generic binary relation surface: relation(quoted_relation_id,lhs,rhs)",
+  "candidate": "strict generic binary relation surface relation(quoted_relation_id,lhs,rhs) plus typed RelationId semantic resolver",
   "candidate_ref": "RELATION_GENERIC_CANONICAL_CANDIDATE.clay",
   "parent_language_ref": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
   "parent_grammar_ref": "research_entity/claycode/g9/grammar.ebnf",
@@ -17,35 +17,44 @@
   "test_corpus": {
     "current_g9_relation_examples": 10,
     "deterministic_fuzz_seed": 20260809,
-    "fuzz_cases": 20000,
+    "generic_surface_fuzz_cases": 20000,
+    "unknown_relation_semantic_admission_fuzz_cases": 50000,
     "adversarial_relation_ids": ["requires","iff","includes","if","module","rule","cycle","status","type","record","4B_emits","never implies","rel\\\"quote","path\\\\name","ümlaut","关系","with-dash","with.dot"]
   },
   "observed": {
     "current_g9_relation_examples_parse_and_preserve_relation_id": "10/10",
-    "fuzz_parse_success": "20000/20000",
-    "fuzz_relation_identity_preserved": "20000/20000",
+    "generic_surface_fuzz_parse_success": "20000/20000",
+    "generic_surface_relation_identity_preserved": "20000/20000",
     "relation_name_mutation_changes_semantic_hash": "20000/20000",
     "operand_swap_changes_semantic_hash": "20000/20000",
     "adversarial_relation_id_roundtrip": "10/10",
+    "typed_relation_resolver_known_accepts": "10/10",
+    "typed_relation_resolver_unknown_accepts": "0/50000",
     "failures": 0,
     "mean_surface_byte_overhead_vs_infix": 12,
-    "approx_wall_seconds": 1.1744
+    "initial_parse_fuzz_approx_wall_seconds": 1.1744
   },
-  "semantic_property_tested": "Binary relation identity and operand order remain explicit and hash-sensitive while relation vocabulary is removed from lexer/operator classification.",
-  "result": "SUPPORTED_AS_STRICT_CANONICAL_SURFACE_CANDIDATE",
+  "semantic_property_tested": "Binary relation identity and operand order remain explicit and hash-sensitive while relation vocabulary is removed from lexer/operator classification; parser acceptance alone does not admit semantic relation identity because a separate typed resolver fails closed on unknown RelationIds.",
+  "result": "SUPPORTED_AS_STRICT_CANONICAL_SURFACE_PLUS_TYPED_RESOLVER_CANDIDATE",
+  "concurrent_counterevidence_consumed": {
+    "ref": "research_entity/trigger_runs/claycode/claycode-20260809T155804p0700-chatgpt-declared-relations/EXECUTABLE_RESEARCH_RECEIPT.json",
+    "finding": "A finite declared infix relation resolver also passed its tested known forms and rejected 50000/50000 unknown relation words; therefore this run does not establish that generic canonical syntax is superior to declared readable infix syntax.",
+    "synthesis": "Both candidates converge on the same deeper requirement: typed semantic relation resolution must be separate from lexer acceptance. The remaining question is surface policy and migration/reader/compiler cost."
+  },
   "not_proven": [
     "full CURRENT-G9 parser closure",
-    "complete typed RelationId registry semantics",
+    "complete project-wide RelationId registry",
     "roundtrip of every G9 statement form",
+    "generic-vs-declared-infix superiority",
     "production compiler correctness",
     "APP acceptance",
     "Qwen-4B reader performance"
   ],
-  "counterhypothesis": "A declared infix operator registry with lexical precedence can provide equal semantic closure with lower surface cost and no relation-name collisions.",
-  "falsifier_next_test": "Implement both generic relation form and declared-infix-registry form in the real BASE parser, run the complete admitted G9+dialect corpus plus mutation/fuzz/roundtrip tests, and compare diagnostics, ambiguity count, semantic-hash stability and reader/token cost.",
+  "counterhypothesis": "A declared infix relation registry can lower to the same typed canonical Relation IR with lower reader/migration cost, making generic syntax useful only as canonical/generic serialization rather than the sole surface.",
+  "falsifier_next_test": "Implement both generic quoted relation form and declared-infix-registry form over one shared typed RelationId resolver in the real BASE parser; run complete admitted G9+dialect corpus, roundtrip, unknown-symbol mutation/fuzz, diagnostics, migration-edit count and target-reader/token benchmarks.",
   "failure_classification": [],
-  "affected_hypotheses": ["H-CC-G9-RELATION-GENERIC-008"],
-  "affected_negative_results": ["NR-CC-G9-RELATION-LEXER-004"],
+  "affected_hypotheses": ["H-CC-G9-RELATION-GENERIC-008","H-CC-G9-DUAL-SURFACE-009"],
+  "affected_negative_results": ["NR-CC-G9-RELATION-LEXER-004","NR-CC-G9-BINARY-RELATION-UNIVERSALITY-005"],
   "affected_branches": ["claycode","frank","claygraph","unifieddb","gwt","hyperposition","emergenz","clay","harness"],
   "promotion": "NO_LANGUAGE_PROMOTION"
 }

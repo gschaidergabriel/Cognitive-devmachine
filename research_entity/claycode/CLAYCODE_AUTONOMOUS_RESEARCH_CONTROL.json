@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -85,11 +85,31 @@
     "CC-WP-13-HARNESS-HANDOFF",
     "CC-WP-14-BASE-AUDIT"
   ],
-  "current_focus": "strict LALR conflict localization and minimum deterministic grammar repair for current D baseline; only after baseline strict construction succeeds, re-integrate typed function definition/call binding and prove parser -> canonical typed symbol/signature identity -> type/effect -> lowering with executable differentials",
+  "current_focus": "strict-validate the exact combined minimal D grammar repair with lark[interegular]==1.3.1; then require full current G9/Dialect parser-to-canonical-typed-AST/semantic-hash differential plus negative keyword/newline corpus before typed-function reintegration",
   "supervisor_last_steer": {
-    "reason": "Latest strict-LALR executable evidence shows both the unmodified D baseline and D+typed-fn fail strict construction; function-binding work is downstream until baseline conflict semantics are localized. NVIDIA reranking re-verification is pending and Mistral remains runtime-verification-pending.",
-    "evidence_priority": ["strict parser construction failure", "20k typed-call lowering differential success", "provider runtime receipts"],
-    "do_not_infer": ["D parser freeze-readiness", "semantic inadequacy", "BASE progress from model agreement"]
+    "reason": "New executable Linux-proxy evidence localized all 13 D baseline shift/reduce conflicts to 6 ident_if, 6 ident_invariant and 1 nested-newline separator. The combined minimal repair removes captured parser-table conflicts and preserves four representative parse-tree hashes, but strict validation then fails only because interegular is absent. Official Lark documentation confirms strict mode requires interegular for regex-collision checks.",
+    "evidence_priority": [
+      "exact-blob local conflict-partition execution receipt",
+      "interegular-enabled strict construction result",
+      "full current G9/Dialect canonical typed-AST/semantic-hash differential",
+      "negative/adversarial keyword and newline corpus",
+      "20k typed-call lowering differential success",
+      "provider/model receipts"
+    ],
+    "required_next_actions": [
+      "rerun CI with lark[interegular]==1.3.1",
+      "strict-test the combined minimal repair, not merely the unmodified baseline",
+      "classify regex collisions separately from parser-table conflicts",
+      "run full accepted-source semantic differential and negative corpus",
+      "defer typed-function reintegration until those checks close"
+    ],
+    "do_not_infer": [
+      "minimal repair is canonical",
+      "D parser freeze-readiness",
+      "semantic inadequacy",
+      "need for a parser-backend switch",
+      "BASE progress from model agreement or four representative cases"
+    ]
   },
   "supervisor": {
     "actor": "chatgpt-secondary",

@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "process_id": "claycode-autonomous-research-cycles",
+  "status": "ACTIVE",
+  "mode": "FREE_ONLY",
+  "owner_directive": "Exploit all currently free Mistral, NVIDIA, Clay repository and ChatGPT-supervisor capabilities to accelerate ClayCode BASE research in evidence-bearing cycles. Never create paid usage automatically.",
+  "target_stage": "BASE_CLAYCODE_RELEASE",
+  "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "cycle_policy": {
+    "github_cycle_cron": "13 * * * *",
+    "supervisor_review_target": "hourly",
+    "max_llm_calls_per_cycle": 8,
+    "max_output_tokens_per_llm_call": 2048,
+    "max_mistral_completions_per_request": 2,
+    "max_retrieval_passages_per_rerank": 64,
+    "on_http_402": "HARD_STOP_PROVIDER_AND_FALLBACK_FREE_ONLY",
+    "on_http_429": "COOLDOWN_PROVIDER_AND_CONTINUE_OTHER_FREE_CAPABILITIES",
+    "paid_fallback": false,
+    "automatic_subscription_upgrade": false
+  },
+  "research_loop": [
+    "REFRESH_CURRENT_BASE_GATE_AND_RECENT_EVIDENCE",
+    "HARVEST_PROVIDER_MODELS_AND_CAPABILITIES",
+    "SELECT_NON_REDUNDANT_MODEL_FAMILIES",
+    "RETRIEVE_AND_RERANK_RELEVANT_CLAYCODE_EVIDENCE",
+    "ARCHITECT_CANDIDATE",
+    "ADVERSARIAL_FALSIFICATION",
+    "INDEPENDENT_ALTERNATIVE_DESIGN",
+    "SYNTHESIS_WITH_ANCESTRY_COLLAPSE",
+    "GENERATE_BOUNDED_EXECUTABLE_TEST_REQUESTS",
+    "RUN_OR_QUEUE_SAFE_SANDBOX_ORACLES",
+    "PRESERVE_NEGATIVE_RESULTS",
+    "WRITE_CYCLE_RECEIPT_AND_SUPERVISOR_INBOX",
+    "SELECT_NEXT_HIGHEST_INFORMATION_TARGET"
+  ],
+  "model_role_policy": {
+    "architect": ["mistral:reasoning_high", "nvidia:strong_reasoning_or_coding"],
+    "falsifier": ["nvidia:different_model_family_from_architect", "mistral:independent_counterhypothesis"],
+    "alternative": ["nvidia:deepseek_or_qwen_or_glm_or_other_nonarchitect_family"],
+    "judge": ["nvidia:nemotron_or_other_nonidentical_family"],
+    "mass_workers": ["free_small_models", "groq", "huggingface_free_when_verified"],
+    "retrieval": ["nvidia:nv-embedcode-7b-v1", "repo_search", "claygraph", "unifieddb"],
+    "reranker": ["nvidia:llama-3.2-nv-rerankqa-1b-v2"],
+    "execution_oracles": ["judge0", "e2b_if_free_verified", "sandboxapi_if_free_verified", "fixed_local_tests"]
+  },
+  "independence_rules": [
+    "same_model_via_two_providers_is_shared_ancestry_not_replication",
+    "same_base_family_counts_as_correlated_evidence",
+    "prefer_distinct_model_families_for_architect_falsifier_judge",
+    "model_agreement_never_overrides_executable_counterexample",
+    "retrieval_or_graph_salience_never_mints_semantic_truth"
+  ],
+  "authority_rules": [
+    "model_output_is_candidate_not_truth",
+    "model_output_never_mints_capability_or_execution_authority",
+    "autonomous_cycle_may_write_research_receipts_and_requests",
+    "autonomous_cycle_may_not_mark_BASE_work_packages_PASS",
+    "autonomous_cycle_may_not_promote_canonical_semantics",
+    "autonomous_cycle_may_not_modify_FRANK_harness",
+    "semantic_change_requires_executable_counterexample_and_supervisor_review",
+    "untrusted_model_generated_code_must_run_only_in_bounded_sandbox_oracle"
+  ],
+  "capability_classes": {
+    "AUTONOMOUS_CALLABLE": [
+      "GitHub Actions", "repository filesystem/read/search", "Mistral API when credential present and free-mode succeeds", "NVIDIA free development APIs", "OpenAlex", "arXiv", "Crossref", "Tavily", "Exa", "DuckDuckGo/DDGS", "Groq", "Hugging Face under explicit zero-cost policy", "Judge0", "E2B only when free-access verified", "SandboxAPI only when free-access verified", "NVIDIA embeddings", "NVIDIA reranking"
+    ],
+    "CHATGPT_SUPERVISOR_ONLY": [
+      "ChatGPT web search and official-source verification", "GitHub connector read/write/review", "File Library search", "current user/project context", "interactive reasoning and cross-branch synthesis", "supported connected-app tools when materially relevant"
+    ],
+    "DISCOVERY_ONLY_UNTIL_FREE_VERIFIED": [
+      "Mistral batch", "Mistral OCR/vision/tools", "NVIDIA multimodal/vision APIs", "NVIDIA self-hosted NIM", "provider features whose free eligibility is not machine-verifiable in the active account"
+    ]
+  },
+  "priority_order": [
+    "CC-WP-02-PARSER-CANON",
+    "CC-WP-03-IR-TYPES",
+    "CC-WP-04-TYPE-EFFECT",
+    "CC-WP-05-EVALUATOR",
+    "CC-WP-06-COMPILER-LOWERING",
+    "CC-WP-07-RUNTIME-ABI-FFI",
+    "CC-WP-09-CONCURRENCY-MEMORY",
+    "CC-WP-08-STDLIB-SDK",
+    "CC-WP-10-GENERAL-APP-SUITE",
+    "CC-WP-11-FUZZ-CONFORMANCE",
+    "CC-WP-13-HARNESS-HANDOFF",
+    "CC-WP-14-BASE-AUDIT"
+  ],
+  "current_focus": "production frontend closure: deterministic typed function definition/call binding integrated into parser -> canonical IR -> type/effect -> lowering evidence chain",
+  "supervisor": {
+    "actor": "chatgpt-secondary",
+    "responsibility": "observe cycle receipts, detect drift/redundancy/provider-correlation, change focus/model roles/quotas, demand stronger falsifiers, and route high-information experiments",
+    "inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "state": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"
+  }
+}

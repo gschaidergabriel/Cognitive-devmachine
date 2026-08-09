@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0703p0700-chatgpt-secondary-drive-search-false-negative-invalidation",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "empirical_result":"PARENT_SCOPED_GOOGLE_DRIVE_SEARCH_CAN_RETURN_FALSE_EMPTY_FOR_EXISTING_FOLDER_CHILDREN",
+  "reproductions":[
+    {"folder":"frank-projects/ai-research-agent/.tasks","id":"1IZ63GAOdeF4FfT9Qi2nSfZ0dLHges5qW","search_children":0,"direct_fetch_children":5},
+    {"folder":"frank-projects/autocar-hunter/.tasks","id":"1a7O73z14NQfu6K_LInav5BnTTUK9hw7G","search_children":0,"direct_fetch_children":8},
+    {"folder":"frank-werkzeuge/genesis-monitor","id":"1xwTAPEWzXOBo8jv6iXSIyFKboFd5D8O0","search_observed_children":2,"direct_fetch_children":7}
+  ],
+  "method_guard":"research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md",
+  "affected_current_session_artifacts":[
+    {"path":"research_entity/archive_assimilation/manifests/DRIVE_FRANK_PROJECTS_EXACT_RECURSIVE_MANIFEST.json","status":"ALREADY_REOPENED_BY_PEER_CONTRADICTION"},
+    {"path":"research_entity/archive_assimilation/manifests/DRIVE_FRANK_WERKZEUGE_EXACT_RECURSIVE_MANIFEST.json","status":"SUPERSEDED_BY_DIRECT_FETCH_V2"},
+    {"path":"research_entity/archive_assimilation/manifests/DRIVE_SYNTEQ_UMBAU_EXACT_RECURSIVE_MANIFEST.json","status":"EXACTNESS_INVALID_PENDING_DIRECT_FETCH_REVALIDATION"},
+    {"path":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SKILLS_EXACT_RECURSIVE_MANIFEST.json","status":"EXACTNESS_INVALID_PENDING_DIRECT_FETCH_REVALIDATION"},
+    {"path":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SYNTEQ_EXACT_RECURSIVE_MANIFEST.json","status":"EXACTNESS_INVALID_PENDING_DIRECT_FETCH_REVALIDATION"},
+    {"path":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_TOOLS_CURRENT_EXACT_RECURSIVE_MANIFEST.json","status":"EXACTNESS_INVALID_PENDING_DIRECT_FETCH_REVALIDATION"}
+  ],
+  "semantic_preservation_rule":"Actual file reads and semantic findings remain valid evidence for those file identities; only absence/count/exactness claims derived from search are invalidated.",
+  "global_effect":{"exact_level0_coverage_percent":0.0,"reason":"No valid combined denominator is frozen and affected exact Drive counts require direct-fetch revalidation."},
+  "status":"METHOD_CORRECTION_COMMITTED",
+  "created_at":"2026-08-09T07:03:00+07:00"
+}

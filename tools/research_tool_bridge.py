@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Allowlisted GitHub-runner bridge for FRANK/RAE research tools.
+"""Allowlisted GitHub-runner bridge for FRANK/Clay research tools.
 
 GitHub-connected workers may enqueue JSON provider requests under
 research_entity/runtime/tool_requests/. A GitHub runner executes only allowlisted
 adapters, writes sanitized results, and feeds observed quota/rate-limit state back into
 the provider router so future research automatically falls back instead of repeatedly
 burning failed calls.
+
+Mistral is available here only as a subordinate FREE_ONLY research/build worker under
+ChatGPT orchestration. Credential values are never persisted.
 """
 from __future__ import annotations
 
@@ -38,6 +41,7 @@ import judge0_execute  # noqa: E402
 import piston_execute  # noqa: E402
 import huggingface_inference  # noqa: E402
 import groq_inference  # noqa: E402
+import mistral_inference  # noqa: E402
 import sandboxapi_sandbox  # noqa: E402
 from rae_secret_loader import get_secret  # noqa: E402
 
@@ -45,8 +49,8 @@ ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$")
 SECRET_NAMES = [
     "OPENALEX_API_KEY", "TAVILY_API_KEY", "EXA_API_KEY", "E2B_API_KEY", "HF_TOKEN",
     "GROQ_API_KEY", "SEMANTIC_SCHOLAR_API_KEY", "JUDGE0_API_KEY", "PISTON_API_TOKEN",
-    "RAPIDAPI_KEY",
-]
+    "RAPIDAPI_KEY", "MISTRAL_API_KEY",
+] + [f"MISTRAL_API_KEY_{i}" for i in range(1, 33)]
 
 
 def _redact(text: str) -> str:
@@ -65,7 +69,7 @@ def _sanitize(value: Any) -> Any:
     if isinstance(value, dict):
         clean = {}
         for k, v in value.items():
-            if str(k).lower() in {"api_key", "key", "token", "authorization", "credential_value"}:
+            if str(k).lower() in {"api_key", "key", "token", "authorization", "credential_value", "secret_value"}:
                 clean[k] = "[REDACTED]"
             else:
                 clean[k] = _sanitize(v)
@@ -93,9 +97,12 @@ def _load_quota() -> dict[str, Any]:
 
 
 def _quota_key(req: dict[str, Any]) -> str:
-    if req.get("tool") == "huggingface_inference" and (req.get("options") or {}).get("mode") == "chat":
+    tool = str(req.get("tool") or "")
+    if tool == "huggingface_inference" and (req.get("options") or {}).get("mode") == "chat":
         return "huggingface_inference"
-    return str(req.get("tool") or "")
+    if tool == "mistral_inference":
+        return "mistral_inference"
+    return tool
 
 
 def _next_month_utc(now: datetime) -> datetime:
@@ -107,10 +114,10 @@ def _next_month_utc(now: datetime) -> datetime:
 def _classify_quota_error(text: str) -> tuple[str, str | None] | None:
     lower = text.lower()
     now = datetime.now(timezone.utc)
-    if "http 402" in lower or "depleted" in lower or "quota exhausted" in lower or "credits" in lower and "purchase" in lower:
+    if "http 402" in lower or "depleted" in lower or "quota exhausted" in lower or ("credits" in lower and "purchase" in lower) or "free_only_402" in lower:
         reset = _next_month_utc(now).isoformat() if "monthly" in lower else None
         return "QUOTA_EXHAUSTED_CACHED", reset
-    if "http 429" in lower or "rate limit" in lower or "rate-limited" in lower:
+    if "http 429" in lower or "rate limit" in lower or "rate-limited" in lower or "rate_limited_429" in lower:
         return "RATE_LIMITED", (now + timedelta(minutes=15)).isoformat()
     return None
 
@@ -215,6 +222,38 @@ def _execute(req: dict[str, Any]) -> Any:
             temperature=float(options.get("temperature", 0.0)),
             system=str(options.get("system")) if options.get("system") else None,
         )
+    if tool == "mistral_inference":
+        mode = str(options.get("mode") or "chat")
+        if mode == "status":
+            return mistral_inference.key_pool_status()
+        if mode == "models":
+            return mistral_inference.capabilities()
+        if mode == "chat":
+            if not query:
+                raise ValueError("query required for Mistral chat")
+            return mistral_inference.chat(
+                query,
+                model=str(options.get("model") or mistral_inference.DEFAULT_MODEL),
+                system=str(options.get("system")) if options.get("system") else None,
+                max_tokens=_int(options.get("max_tokens"), 4096, 1, 8192),
+                temperature=float(options.get("temperature", 0.05)),
+                reasoning_effort=str(options.get("reasoning_effort") or "high"),
+                n=_int(options.get("n"), 1, 1, 4),
+                json_mode=bool(options.get("json_mode", False)),
+                prompt_cache_key=str(options.get("prompt_cache_key") or "frank-build-current-v1"),
+                timeout=_int(options.get("timeout"), 180, 10, 300),
+            )
+        if mode == "fim":
+            prefix = str(options.get("prefix") or query)
+            if not prefix:
+                raise ValueError("prefix/query required for Mistral FIM")
+            return mistral_inference.fim(
+                prefix,
+                suffix=str(options.get("suffix") or ""),
+                model=str(options.get("model") or "codestral-latest"),
+                max_tokens=_int(options.get("max_tokens"), 2048, 1, 8192),
+            )
+        raise ValueError("Mistral mode must be status, models, chat, or fim")
 
     if tool == "sandboxapi_sandbox":
         code = str(req.get("code") or "")

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1605p0700-chatgpt-full-g9-surface-closure",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "started_at": "2026-08-09T16:05:19+07:00",
+  "scope": "Whole-current-G9 top-level parser surface-closure audit plus cross-branch synthesis; no language/canonical promotion.",
+  "source_under_test": {
+    "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "git_blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "content_sha256": "c48e84f60315ca00bba4ddc5b446697fd8b4bc38fc55ba9f5f0ff8555fc14267"
+  },
+  "grammar_under_test": {
+    "path": "research_entity/claycode/g9/grammar.ebnf",
+    "git_blob_sha": "ec2f17077333955cfdabe6c64868d597e7e734e3"
+  },
+  "concurrency_assimilated": [
+    "claycode_20260809T1547p0700_chatgpt_secondary_strict_syntax_gate",
+    "claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil",
+    "claycode-20260809T155804p0700-chatgpt-declared-relations",
+    "WORK-CC-BASE-G9-PARSER-FREEZE-001 revision at 2026-08-09T16:05:14+07:00"
+  ],
+  "promotion_requested": false
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-DIGITAL-RETINA-GIT-SUPPORT-TRANCHE2-20260809T1001p0700",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "source":{"title":"digital-retina/.git/objects loose fanout","folder_id":"1fCKrUcSD9v28I-sQ5psPrFFSOo9--IU-"},
+  "method":{"enumerator":"Google_Drive.list_folder","top_k":1000,"routing_search_used_only_for_folder_id_lookup":true,"search_used_for_completion":false,"guard":"research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md"},
+  "prefixes_closed":[
+    {"prefix":"64","folder_id":"1u8weDbc22W--59n5POS7pl9f7i641xKn","leaf_objects":1},
+    {"prefix":"f0","folder_id":"1UO6rkzsi6cdpExZGjbg0nipAgG9VE0Xq","leaf_objects":4},
+    {"prefix":"6c","folder_id":"1YFBBRoyw3-vJ1XW_ORnBLb0hXK-m10Cu","leaf_objects":1},
+    {"prefix":"2a","folder_id":"1IGxGUDxE79OnPJBE-ViZgJyk-8W30Ylv","leaf_objects":2},
+    {"prefix":"e9","folder_id":"11ULjrw9qHu0q3jQL1gOEjoxkJh9gj8vl","leaf_objects":1},
+    {"prefix":"e2","folder_id":"1Vf_0mywH6uDyy3hllu4Ut8CGoQf2Ph4p","leaf_objects":2},
+    {"prefix":"05","folder_id":"1aXR8RWFuzaSA8I8uqMmNApoqlgAxcLaa","leaf_objects":5},
+    {"prefix":"a8","folder_id":"1Iqrr18_pahs_D0U98cu0lq9qjrvWipoP","leaf_objects":2},
+    {"prefix":"0c","folder_id":"1oVZEd6pXe7RXwTjbd0VWiq4K4WYjhbQB","leaf_objects":1},
+    {"prefix":"b1","folder_id":"1GHV5d-5YuamLVgwtvvLC49eF-3WA-Z3F","leaf_objects":1}
+  ],
+  "tranche_counts":{"loose_prefix_folders_closed":10,"loose_object_files_closed":20,"loose_object_units_closed":30},
+  "cumulative_with_tranche1":{"loose_prefix_folders_closed":20,"loose_object_files_closed":37,"partial_git_folder_units":36,"partial_git_file_units":52,"partial_git_total_units":88,"formula":"Tranche1 partial .git total 68 + tranche2 10 prefix folders + 20 loose object files = 98? corrected structural cumulative: tranche1 contained 26 folders/42 files; adding 10 folders/20 files => 36 folders/62 files => 98 units."},
+  "correction_note":"The numeric fields partial_git_file_units=52 and partial_git_total_units=88 above are superseded inside this same artifact by the explicit formula result: correct cumulative after tranche2 is 36 folder units + 62 file units = 98 total units. Consumers MUST use corrected_cumulative below.",
+  "corrected_cumulative":{"loose_prefix_folders_closed":20,"loose_object_files_closed":37,"partial_git_folder_units":36,"partial_git_file_units":62,"partial_git_total_units":98},
+  "classification":"PROVENANCE_SUPPORT_AND_GIT_OBJECT_STORAGE_ZERO_DUPLICATE_SEMANTIC_CREDIT",
+  "whole_git_status":"OPEN_RECURSIVE_OBJECT_FANOUT",
+  "level0_credit":{"exact_global_percent_added":0.0,"reason":"Partial source-local structural progress only; combined denominator remains unfrozen."},
+  "created_at":"2026-08-09T10:01:00+07:00"
+}

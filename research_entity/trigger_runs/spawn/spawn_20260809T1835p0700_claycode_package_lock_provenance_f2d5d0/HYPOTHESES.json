@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1835p0700_claycode_package_lock_provenance_f2d5d0",
+  "origin_branch": "claycode",
+  "epistemic_rule": "Random selection chooses what to study, never what is true.",
+  "hypotheses": [
+    {
+      "id": "H-PKG-01",
+      "title": "Typed multi-plane dependency identity",
+      "claim": "ClayCode package/build reproducibility is best represented by multiple linked typed identities/receipts rather than one monolithic lock hash.",
+      "planes": ["PackageRequestId", "ResolutionReceipt", "ResolvedGraphId", "BuildProjectionId", "SupplyChainTrustReceipt", "BuildProvenanceReceipt", "ArtifactHash", "CapabilityAuthority"],
+      "status": "SUPPORTED_BY_EXTERNAL_ANALOGY_PLUS_HOSTED_SYNTHETIC_DISCRIMINATOR_NOT_PROMOTED",
+      "falsifiers": ["A simpler identity scheme achieves equal semantic mutation sensitivity, equal provenance stability and equal auditability on production ClayCode cases.", "Typed separation creates unresolved ambiguity that cannot be repaired without duplicating semantics."]
+    },
+    {
+      "id": "H-PKG-02",
+      "title": "Exact graph needs digest-bound logical package identity",
+      "claim": "Exact versions alone are insufficient; a resolved graph must bind logical package coordinates/namespaces, exact versions or revisions, content digests and semantic dependency edges.",
+      "status": "SUPPORTED_NOT_PROMOTED",
+      "falsifiers": ["Production ecosystem guarantees immutable version-to-content binding strongly enough that digest binding adds no discriminating value under the threat model.", "Content digest plus coordinate is insufficient to reproduce semantically relevant metadata/edges."]
+    },
+    {
+      "id": "H-PKG-03",
+      "title": "Build projection is separate from resolved graph",
+      "claim": "Target, enabled features/groups, cfg/environment markers and other semantically active build switches need a BuildProjectionId layered above the exact resolved graph.",
+      "status": "SUPPORTED_NOT_PROMOTED",
+      "falsifiers": ["ClayCode package semantics prove target/feature-independent for all supported module forms.", "Target/feature changes are already fully encoded by distinct resolved graph nodes/edges so a separate projection identity is redundant."]
+    },
+    {
+      "id": "H-PKG-04",
+      "title": "Logical source namespace differs from fetch locator",
+      "claim": "A logical package source/namespace may be identity-relevant, but a transport mirror/fetch URL should not change semantic build identity when coordinate and verified content are identical.",
+      "status": "WORKING_HYPOTHESIS",
+      "falsifiers": ["Mirror/location choice changes package semantics or dependency metadata after digest verification.", "ClayCode deliberately defines transport origin as part of semantic package identity for policy reasons."]
+    },
+    {
+      "id": "H-PKG-05",
+      "title": "Freshness/trust is admissibility, not semantic identity",
+      "claim": "Yank/revocation/freshness/trust-root changes should be able to turn an install/build from admissible to inadmissible without rewriting the ResolvedGraphId of the already identified program.",
+      "status": "SUPPORTED_NOT_PROMOTED",
+      "falsifiers": ["Project semantics explicitly define trust status as an observable program-semantic input.", "Separating trust permits replay/install of disallowed code without an enforceable policy gate."]
+    },
+    {
+      "id": "H-PKG-06",
+      "title": "Resolver algorithm is provenance when exact graph agrees",
+      "claim": "Resolver algorithm/version/policy and registry resolution inputs belong in ResolutionReceipt; if two resolvers produce the same exact graph, the executable dependency graph identity should remain equal.",
+      "status": "WORKING_HYPOTHESIS",
+      "falsifiers": ["Resolver choice changes hidden semantically relevant state not represented in the graph/projection.", "Audit requires resolver identity in every downstream semantic cache key for correctness, not merely provenance."]
+    },
+    {
+      "id": "H-PKG-07",
+      "title": "Dependency declaration never grants authority",
+      "claim": "A package may declare required effects/capabilities, but package membership or manifest metadata must never mint runtime authority; explicit external capability grant remains mandatory.",
+      "status": "PROJECT_CONSTRAINT_REINFORCED",
+      "falsifiers": ["None within current owner-fixed safety architecture; only an explicit project architecture change could alter this constraint."]
+    },
+    {
+      "id": "H-PKG-08",
+      "title": "Cache keys should bind semantic projection, not mutable trust metadata",
+      "claim": "Compiler/build-cache semantic keys should primarily bind BuildProjectionId plus compiler/runtime/backend semantic identity; mutable trust/freshness should gate cache use separately rather than poison semantic cache identity.",
+      "status": "NEW_HYPOTHESIS_NEEDS_PRODUCTION_TEST",
+      "falsifiers": ["Cache reuse after trust state change violates required quarantine/security semantics even with a separate admissibility gate.", "Compiler/backend nondeterminism requires additional inputs not captured by the proposed key."]
+    }
+  ],
+  "counterhypotheses": [
+    {"id": "C-PKG-01", "claim": "Manifest version ranges alone are sufficient for reproducibility.", "status": "REFUTED_BY_CONSTRUCTED_COUNTEREXAMPLE"},
+    {"id": "C-PKG-02", "claim": "Exact package version alone is a sufficient dependency identity.", "status": "REFUTED_BY_SAME_VERSION_CONTENT_MUTATION_COUNTEREXAMPLE"},
+    {"id": "C-PKG-03", "claim": "One giant hash over manifest, resolver, trust, builder, graph and target is strictly better.", "status": "REFUTED_AS_IDENTITY_DESIGN_BY_FALSE_SEMANTIC_CHURN_IN_CONSTRUCTED_FACTORIAL"},
+    {"id": "C-PKG-04", "claim": "Current trust/yank/freshness verdict must be part of the immutable semantic graph identity.", "status": "DISFAVORED_BY_TUF_SLSA_BAZEL_ANALOGY_AND_IDENTITY_SEPARATION_TEST"},
+    {"id": "C-PKG-05", "claim": "A fetch mirror URL must be semantic identity.", "status": "DISFAVORED_IF_LOGICAL_COORDINATE_AND_VERIFIED_CONTENT_ARE_STABLE"},
+    {"id": "C-PKG-06", "claim": "A dependency can self-grant the effects it declares.", "status": "REJECTED_BY_CURRENT_CLAYCODE_AUTHORITY_MODEL"}
+  ]
+}

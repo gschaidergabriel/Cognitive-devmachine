@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1547p0700_chatgpt_secondary_strict_syntax_gate",
+  "head_observed_before_write": "c0953ffdd4325ce88a6b55584f107e1f985950a0",
+  "concurrent_findings": [
+    {"commit":"c0953ffdd4325ce88a6b55584f107e1f985950a0","finding":"Concurrent ClayCode run already falsified sufficiency of the minimal union+if patch on external_effect lifecycle, 4B_emits and includes, and executed an 8/8 Retina/Unified-Memory gate subset."},
+    {"commit":"f1e4ced8bfb646fd69063dd2b57a3871f2506b9c","finding":"Concurrent cross-room event already marks parser/canonicalizer freeze as BASE blocker and notes stale official preflight after clay->clayresearch rename."}
+  ],
+  "reread_current": {"grammar_blob_sha":"80028aae6d9d26ac96fa7179dbccc7e467740990","g9_source_blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e","changed_since_initial_read":false},
+  "deduplication_decision": "Do not duplicate Retina gate proof. Preserve only broader strict-syntax adversarial coverage and normalization candidate as new delta."
+}

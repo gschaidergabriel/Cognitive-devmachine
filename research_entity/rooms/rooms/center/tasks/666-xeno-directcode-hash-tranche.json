@@ -4,7 +4,7 @@
   "room_id": "center",
   "title": "XENO directcode extracted-copy hash closure",
   "goal": "Hash-close every manifest leaf under se_xeno/G8/directcode by complete recursive Drive enumeration and raw-byte SHA-256 verification, while separately classifying any extra generated/support leaves.",
-  "status": "CLAIMED",
+  "status": "COMPLETE",
   "dependencies": [
     "drive:1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g",
     "research_entity/archive_assimilation/receipts/666_20260809T0931p0700_chatgpt_secondary_xeno_archive_hash_closure.json"
@@ -17,7 +17,20 @@
     "model": "GPT-5.6 Sol",
     "claimed_at": "2026-08-09T09:44:00+07:00"
   },
+  "completion": {
+    "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0949p0700_chatgpt_secondary_xeno_directcode_hash_closure.json",
+    "expected_manifest_leaves": 12,
+    "observed_manifest_leaves": 12,
+    "verified_sha256_matches": 12,
+    "mismatches": 0,
+    "extras": 0,
+    "missing": 0,
+    "folder_nodes_below_scope_root": 7,
+    "scope_status": "HASH_CLOSED",
+    "global_counter_policy": "DEFER_TO_COORDINATOR_CAS_RECONCILIATION"
+  },
   "non_overlap": "directcode only; excludes peer-owned claude_code, AICORE ui/training, Digital Retina E2E and Project-Frankenstein history/tree lanes",
   "expected_information_gain": "Closes one currently open XENO extracted-copy scope with exact byte identity evidence and advances Level-0 without double credit.",
-  "created_at": "2026-08-09T09:44:00+07:00"
+  "created_at": "2026-08-09T09:44:00+07:00",
+  "completed_at": "2026-08-09T09:49:00+07:00"
 }

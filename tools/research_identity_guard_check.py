@@ -36,10 +36,16 @@ turn=require('research_entity/global/RAE_TURN_KERNEL.clay',
     'if home_room==frank then meaning=research_about(FRANK); never meaning=become(FRANK)',
     'detect(RESEARCH_IDENTITY_DRIFT) -> STOP + reinject(CURRENT.identity_guard)',
     'rule ANDREAS.interface=FRANK_ONLY','rule RESEARCH_ENTITY != FRANK')
+hook=require('.claude/hooks/rae_hook.py',
+    "IDENTITY=ROOT/'research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md'",
+    'def identity_lock():','I_AM_NOT=FRANK','ANDREAS_INTERFACE=FRANK_ONLY',
+    "if ev=='UserPromptSubmit':",'emit(ev,kernel()',
+    'FRANK_RESEARCH_FRAME{actor=RESEARCH_ENTITY;subject=FRANK;room=frank;role_transition=FORBIDDEN;Andreas_interface=FRANK_ONLY}',
+    "if ev=='PostToolUse':",'POST_FRANK_CONTEXT_REINJECTION{actor=RESEARCH_ENTITY;subject=FRANK;role_transition=FORBIDDEN;Andreas_interface=FRANK_ONLY}')
 # Hard anti-collapse patterns. Explicit never/forbidden clauses are required above and are not violations.
-for path,text in [('injection',inj),('stack',stack),('turn',turn)]:
+for path,text in [('injection',inj),('stack',stack),('turn',turn),('hook',hook)]:
     for pat in (r'ResearchEntity\s*==\s*FRANK',r'RESEARCH_ENTITY\s*=\s*FRANK',r'ANDREAS\.interface\s*=\s*RESEARCH_ENTITY'):
         if re.search(pat,text,re.I):fail.append(f'IDENTITY_COLLAPSE_PATTERN:{path}:{pat}')
 if fail:
     print(json.dumps({'status':'FAIL','failures':fail},ensure_ascii=False,indent=2));sys.exit(1)
-print(json.dumps({'status':'PASS','identity_guard':'EVERY_TURN','actor':'RESEARCH_ENTITY','frank':'SEPARATE_SUBJECT','andreas_interface':'FRANK_ONLY'},indent=2))
+print(json.dumps({'status':'PASS','identity_guard':'EVERY_TURN_HOOKED','actor':'RESEARCH_ENTITY','frank':'SEPARATE_SUBJECT','andreas_interface':'FRANK_ONLY'},indent=2))

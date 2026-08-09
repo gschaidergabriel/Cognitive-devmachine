@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "cc-app03-db-adapter-20260809",
+  "run_id": "claycode_20260809T1720p0700_chatgpt_app03_db_adapter",
+  "candidate": "ClayCode G9 V3 / 0.4-g9-fusion-candidate",
+  "source_ref": "run-local APP-03 focused Clay source",
+  "source_sha256": "a68e744b6b9164dd9635264ad5bb7a841a2bf6d0851c611042ce6c5ae9b3daeb",
+  "grammar_basis": "research_entity/claycode/g9/grammar.ebnf@ec2f17077333955cfdabe6c64868d597e7e734e3",
+  "focused_parse": {"runtime":"Python 3.13.5 + Lark 1.3.1","result":"PASS","parse_tree_sha256":"0d02748de74d2356aeca8382b926cdaaa990317ffc872886cb3862f2b9b12c44","scope":"APP-03 subset only; not full production parser"},
+  "canonical_ir": {"version":"cc-app03-ir-v1","semantic_hash":"0f0861fe9b549c83391446c21f33604dfeae28fcc25698c5611ccd3d0cfc6daf","authority_kind":"HOST_INJECTED_DB_ADAPTER","transaction_mode":"EXPLICIT","binding":"PARAMETERIZED_VALUES_ONLY"},
+  "lowering": {"compiler_fragment":"cc-app03-lowerer-v1","target":"Python host module with injected DB adapter","generated_code_sha256":"08e597e50ad99d9c07c1603d09a951e23df64b4b3f94048083a201702b093317","repeat_lowering_same_hash":true,"generated_target_imports_sqlite_or_opens_paths":false},
+  "execution_surface": {"provider":"OpenAI local container","target_host_class":"NON_TARGET_LOCAL_SANDBOX","python":"3.13.5","sqlite":"3.46.1","e2b":"REGISTERED_BUT_NOT_INVOKABLE_IN_CURRENT_CHATGPT_TOOL_SURFACE","sandboxapi":"NOT_INVOKABLE_IN_CURRENT_CHATGPT_TOOL_SURFACE"},
+  "tests": [
+    {"id":"P1_BOOTSTRAP_CRUD","expected":"schema + inserts + list commit","observed":"COMMITTED","pass":true},
+    {"id":"P2_PARAMETER_BINDING","expected":"SQL-looking payload remains literal data and table survives","observed":"payload x'); DROP TABLE items; -- roundtripped as data; LIST remained valid","pass":true},
+    {"id":"N1_UNIQUE_FAILURE_ROLLBACK","expected":"whole transaction rollback","observed":"ROLLED_BACK on UNIQUE constraint; preceding id=4 absent afterward","pass":true},
+    {"id":"P3_UPDATE_DELETE","expected":"update/delete commit with deterministic final rows","observed":"COMMITTED","pass":true},
+    {"id":"N2_UNSUPPORTED_OPERATION","expected":"reject and rollback prior mutation","observed":"ROLLED_BACK on UNSUPPORTED_OPERATION; preceding id=6 absent afterward","pass":true},
+    {"id":"N3_NO_ADAPTER","expected":"no database effect without injected adapter","observed":"DENIED_NO_ADAPTER","pass":true},
+    {"id":"F1_TRANSACTION_DIFFERENTIAL_FUZZ","seed":20260809,"cases":500,"oracle":"independent in-memory transactional reference model","mismatches":0,"pass":true}
+  ],
+  "negative_iteration": {"initial_probe_issue":"used never_implies, which is used by current G9 source but absent from published grammar operator production","action":"probe rewritten to already-supported != relation for this APP-03 experiment; no ClayCode semantic change","classification":"KNOWN_G9_SPEC_GRAMMAR_CONFORMANCE_FAMILY"},
+  "semantic_result": "Within this bounded non-target experiment, existing record/rule/cycle/effect-reference semantics plus a typed injected host DB adapter are sufficient to realize CRUD, parameter binding and atomic commit/rollback behavior. No database-specific ClayCode core primitive was required.",
+  "scope_limit": "Not APP-03 acceptance and not GENERAL_PURPOSE_GATE PASS. Production parser/type-effect checker, target Ubuntu execution, opaque capability enforcement, crash durability, concurrency/SQL backend differential and full compiler-chain provenance remain required.",
+  "affected_hypotheses": ["H-CC-DB-001","H-CC-DB-002","H-CC-DB-003","H-CC-DB-004"],
+  "affected_branches": ["claycode","frank","clayresearch","claygraph","unifieddb","gwt","hyperposition","emergenz","harness"]
+}

@@ -1,0 +1,93 @@
+module clay.work.events
+version "1.0"
+
+transport_root=@research_entity/state/work/events/
+projection_root=@research_entity/state/work/projections/
+semantics=latest_ClayCode
+envelope=JSON_allowed
+
+// Event files are append-only cross-provider transport. UnifiedDB materializes them.
+record WorkEvent {
+  schema_version="2.0"
+  event_id:String
+  kind:WORK_CREATE|WORK_REVISE|WORK_DEFER|WORK_CANCEL|WORK_EXECUTION_RECEIPT
+  actor:String
+  payload:ClaySemanticPayload
+  created_at:Time
+}
+
+WORK_CREATE.payload {
+  work_id:String
+  goal_ref:String="FRANK_V0_1_ANDREAS_PC"
+  origin_class:String
+  title:String
+  work_clay:Clay
+  reason_clay:Clay
+  completion_clay:Clay
+  evidence_need:Set<Clay>
+  executor_policy:Clay
+  required_capabilities:Set<String>
+  write_scope:Set<Ref>
+  dependencies:Set<Clay>
+  invalidators:Set<Clay>
+  base_priority:Real
+  expected_impact:Real
+  urgency:Real
+  information_gain:Real
+  status=READY|PROPOSED|DEFERRED|BLOCKED
+}
+
+WORK_REVISE.payload {
+  work_id:String
+  // omitted fields inherit from latest materialized revision
+  title?:String
+  work_clay?:Clay
+  reason_clay:Clay
+  completion_clay?:Clay
+  executor_policy?:Clay
+  required_capabilities?:Set<String>
+  dependencies?:Set<Clay>
+  invalidators?:Set<Clay>
+  base_priority?:Real
+  expected_impact?:Real
+  urgency?:Real
+  information_gain?:Real
+  status?:READY|PROPOSED|DEFERRED|BLOCKED
+}
+
+WORK_DEFER.payload {work_id:String;reason_clay:Clay}
+WORK_CANCEL.payload {work_id:String;reason_clay:Clay}
+
+WORK_EXECUTION_RECEIPT.payload {
+  work_id:String
+  spec_rev:Int
+  execution_receipt_id:String
+  executor_class:String
+  machine_ref:String
+  action:Clay
+  observed_effect:Clay
+  verification:Clay
+  evidence_refs:Set<Ref>
+  truth_class:LOCAL_EXECUTION_PRIMARY|REMOTE_EXECUTION_RECEIPT|RESEARCH_EVIDENCE|SIMULATION_ONLY|UNVERIFIED
+  success:Bool
+  complete:Bool
+}
+
+rule ChatGPT_create_local_experiment -> write WORK_CREATE event to this Clay repo
+rule later_evidence_changes_plan -> WORK_REVISE|WORK_DEFER|WORK_CANCEL before execution
+rule Claude_prompt_boundary -> ingest remote events -> UnifiedDB -> recompute scheduler
+rule Claude_before_effect -> verify event/current spec_rev has not changed
+rule Claude_after_local_effect -> emit execution receipt
+rule execution_receipt -> recompute affected work + mission reentry
+
+// Current projections are generated from UnifiedDB for organs that cannot open local SQLite.
+projection CURRENT_DYNAMIC_WORK=@research_entity/state/work/projections/CURRENT_DYNAMIC_WORK.clay
+projection CURRENT_SYSTEM_POSSIBILITY=@research_entity/state/work/projections/CURRENT_SYSTEM_POSSIBILITY.clay
+rule projection_is_derived_not_authority
+rule projection_publish_on_hash_change
+rule projection_excludes=[secrets,tokens,raw_environment,private_telemetry,credential_material]
+
+invariant event_history_append_only
+invariant current_work_is_latest_revision_projection
+invariant work_can_disappear_from_ready_queue_without_history_erasure
+invariant stale_projection_never_claimed_current_without_timestamp/hash

@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0943p0700-chatgpt-secondary-aicore-training-v26-abzug-eval-semantic-closure",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "COMPLETE_FOR_DECLARED_SIX_FILE_SEMANTIC_SHARD",
+  "source_universe": "DRIVE_CLAY/AICORE/training/v26",
+  "exact_level0_coverage_credit_percent": 0.0,
+  "source_files": [
+    {"path":"v26/abzug/apis.json","drive_id":"1Dq8fzEmPthF84nitGYzQsZSwHbU6CbMJ","bytes":1821,"sha256":"42c666a520002936f2e547f4a1789cb681ccceb2272831216b4990791157355e"},
+    {"path":"v26/abzug/idle_prompts.json","drive_id":"10oiIxc7gSzRV9Q3OO985TkmTsCn0hj-D","bytes":2822,"sha256":"8d9ac9e832044faa5371ef3db77adc36c61f9964b30157642fb27cecac8a911c"},
+    {"path":"v26/abzug/systemtext_teile.json","drive_id":"1I-1AdUcpj4Ewxs-wwc_NeWbe9E15CIrB","bytes":8726,"sha256":"0e548a73c647e395f7902a1e27af6340a8a76439902647b35e9d2acad142204c"},
+    {"path":"v26/abzug/werkzeuge.json","drive_id":"1nDozubGyyuQBAjyINyzyec13qMmRJcMi","bytes":16268,"sha256":"da73009b6d57fe6c17a9a21f6f255c91eaec7c8056627faccce02ed1c129be7b"},
+    {"path":"v26/eval/eval_frank.py","drive_id":"1l6UKYq1_5E5YJ8JtA1lRE9uSoPs11LGY","bytes":3591,"sha256":"768f5b4e80b172355be577ccaf709fd942ad47cb74c40c2e07bc540a16cf1afb"},
+    {"path":"v26/eval/analyse_eval.py","drive_id":"1USJUgEdZ9DO2-15lvV1U918kbYxQJMyc","bytes":5701,"sha256":"23ccfa4a64ac8d8a0fbdc8ddac414d3920cb00c29cfcff0ef7191aa1e08ec830"}
+  ],
+  "structural_facts": {
+    "api_provider_entries": 10,
+    "api_credentials_referenced_by_environment_variable": true,
+    "idle_prompt_count": 31,
+    "idle_prompts_person_specific_count": 22,
+    "systemtext_variant_groups": {
+      "kompakt_bloecke": 7,
+      "kompakt_bloecke_positiv": 7,
+      "kompakt_bloecke_minimal": 3
+    },
+    "tool_policy": {
+      "allowed": 51,
+      "blocked": 11,
+      "registry": 62,
+      "allowed_blocked_overlap": 0
+    },
+    "eval_declared_examples": 328,
+    "eval_temperature": 0.0,
+    "eval_top_k": 1
+  },
+  "reconciled_findings": [
+    {
+      "id": "TRN26-F1",
+      "classification": "DIRECTLY_REUSABLE",
+      "finding": "The historical API registry separates provider/model routing from credential material by storing environment-variable names rather than literal secret values. This is the correct secret-boundary pattern and contrasts with the separate Retina E2E scripts that later accumulated literal credential defaults."
+    },
+    {
+      "id": "TRN26-F2",
+      "classification": "REUSABLE_WITH_ADAPTATION",
+      "finding": "The v26 tool policy separates ontology from authority: 62 registered tools exist while 51 are allowed and 11 blocked, with zero allow/block overlap. This is a strong precursor to current Needle/capability/effect-policy separation; registration must not imply permission."
+    },
+    {
+      "id": "TRN26-F3",
+      "classification": "NEGATIVE_RESULT_VALUE",
+      "finding": "The system-text snapshot encodes identity, embodiment, permanence, personality, memory and world assumptions directly in large static text blocks. The paired evaluator explicitly detects obsolete-world leakage, showing that frozen narrative world claims became a recognized failure mode. Current FRANK should encode durable invariants in typed state/contracts and user/runtime facts in replaceable provenance-backed state rather than monolithic immortal prose."
+    },
+    {
+      "id": "TRN26-F4",
+      "classification": "USER_SPECIFIC_STATE_BOUNDARY",
+      "finding": "22 of 31 idle prompts are tied to one named person/relationship context. This is valuable evidence for personalization behavior but should not be treated as generic FRANK identity or universal model-training truth. It belongs in user/workspace-scoped memory/profile state with provenance and portability boundaries."
+    },
+    {
+      "id": "TRN26-F5",
+      "classification": "MEASUREMENT_FOUNDATION",
+      "finding": "eval_frank.py runs the declared 328-example evaluation deterministically (temperature 0, top_k 1) and recreates the training prompt rendering rather than injecting a different chat template. It is resumable and writes each result incrementally, making it a useful historical reproducibility pattern."
+    },
+    {
+      "id": "TRN26-F6",
+      "classification": "MEASUREMENT_FOUNDATION",
+      "finding": "analyse_eval.py measures hard behavioral properties rather than subjective style: correct/missing/excess tool use, exact tool identity, invalid/blocked tool emission, language drift, obsolete-world leakage, API leakage, repeated reasoning-tag leakage, malformed tool tags, role-marker leakage and response length. These should survive as modern Harness regression families."
+    },
+    {
+      "id": "TRN26-F7",
+      "classification": "ARCHITECTURE_INHERITANCE",
+      "finding": "Historical evaluation already distinguished 'tool should exist in registry' from 'tool may be used here'. This supports current Safe-Effect Geometry/Needle semantics: capability discovery, policy permission and action execution are separate state transitions."
+    }
+  ],
+  "branch_feedback": {
+    "frank": [
+      "Move person-specific idle/reflection behavior to user/workspace state rather than core identity weights or static system prose.",
+      "Represent body/identity/world facts as typed versioned state where possible; keep prose as derived projection."
+    ],
+    "claycode": [
+      "Retain explicit registered-vs-allowed-vs-blocked tool/effect types.",
+      "Support deterministic replay of prompt/state/effect decisions without depending on one chat-template string."
+    ],
+    "harness": [
+      "Port the v26 hard metrics into regression tests: tool missing/excess/invalid/blocked, language drift, stale-world leakage, API leak, reasoning/role marker leak and malformed tool syntax.",
+      "Require deterministic replay mode for acceptance runs."
+    ],
+    "unifieddb": [
+      "Persist user-scoped personalization facts separately from global model/identity invariants and retain provenance for each."
+    ],
+    "claygraph": [
+      "Model capability existence and permission/effect authority as separate edges rather than a single tool-available fact."
+    ],
+    "gwt": [
+      "Do not broadcast stale static-world statements merely because they exist in historical system text; state provenance/recency must participate in selection."
+    ],
+    "emergenz": [
+      "Behavioral continuity claims should be tested under state replacement/ablation instead of inferred from repeated system-text wording."
+    ],
+    "hyperposition": [
+      "User-specific hypotheses/preferences and generic system invariants should remain separate contextual alternatives, not collapsed into one fixed identity narrative."
+    ],
+    "clay": [
+      "This shard supports dissolving prompt monoliths into typed persistent state plus explicit effect policy."
+    ]
+  },
+  "security": {
+    "literal_secret_values_copied_into_receipt": false,
+    "finding": "apis.json uses credential environment-variable references only; preserve this pattern as the required source-control boundary."
+  },
+  "earned_work": {
+    "hours_added_low": 0.0,
+    "hours_added_center": 0.0,
+    "hours_added_high": 0.0,
+    "reason": "Tool-policy and evaluation concepts overlap existing current architecture work; defer row-level credit until deduplicated historical earned-work reconciliation."
+  },
+  "remaining_training_obligations": [
+    "Semantically process the remaining 51 direct v26 files and their train/eval corpus artifacts.",
+    "Semantically process all 20 v27 files including system-text separation/class-distribution/blind-check lineage.",
+    "Map v26->v27 training/evaluation changes into one version lineage and current DATA_LORA/Harness requirements.",
+    "Do not start any training; final/paid training remains owner-authorization gated."
+  ],
+  "created_at": "2026-08-09T09:43:00+07:00"
+}

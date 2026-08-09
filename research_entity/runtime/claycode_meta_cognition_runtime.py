@@ -205,7 +205,7 @@ def derive_observation(rt: RAEStateRuntime, observation_id: str) -> str:
         pid = uid("cc-meta-pattern")
         status = "READY_FOR_EXPERIMENT" if weight >= 1.4 else "ACCUMULATING"
         rt.u.execute(
-            "INSERT INTO claycode_meta_patterns VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO claycode_meta_patterns VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 pid, pattern_key, layer, ts, ts, _j([observation_id]), 1, pos, neg, friction, weight,
                 _j(hypothesis), _j(counter), _j(language_delta), _j(predicted), _j(falsifier), _j(bench), status,
@@ -214,7 +214,7 @@ def derive_observation(rt: RAEStateRuntime, observation_id: str) -> str:
     rid = uid("cc-meta-derive")
     conclusion = {"pattern": pattern_key, "target_layer": layer, "candidate": language_delta, "status": status}
     rt.u.execute(
-        "INSERT INTO claycode_meta_derivation_receipts VALUES(?,?,?,?,?,?,?,?)",
+        "INSERT INTO claycode_meta_derivation_receipts VALUES(?,?,?,?,?,?,?,?,?)",
         (rid, observation_id, pid, ts, DERIVATION_VERSION, _j(["layer_rules", "polarity_rules", "evidence_gate"]), _j(conclusion), _j({"confidence": o["confidence"], "causality": "UNPROVEN_UNTIL_EXPERIMENT"}), "DERIVED"),
     )
     rt.u.execute("UPDATE claycode_meta_observations SET status='DERIVED' WHERE observation_id=?", (observation_id,))

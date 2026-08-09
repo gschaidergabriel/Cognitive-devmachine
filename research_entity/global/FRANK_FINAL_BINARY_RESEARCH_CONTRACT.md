@@ -3,7 +3,7 @@
 Status: PROJECT_OWNER_FIXED_TARGET
 Date: 2026-08-09
 Research owner: FRANK Global Research Entity (RAE)
-Reference implementation lineage: `gschaidergabriel/frankv0.1`
+Reference lineage: current target architecture informed by `gschaidergabriel/frankv0.1` history/evidence, not constrained to its old implementation structure
 
 ## Final local core
 
@@ -171,14 +171,17 @@ RAE must experimentally determine:
 
 ## Required differential sequence
 
-1. current `frankv0.1` H1 baseline;
-2. rich Claude<->ChatGPT semantic peer sync;
-3. naive remote-to-local summary baseline;
-4. structured cognitive-backflow candidate;
-5. H2 Clay implementation with matched semantics;
-6. H3 local one-binary emergent substrate candidate;
-7. matched traces, partitions, provider loss, file/order changes, conflicts, corrections and long-horizon Andreas usecases;
-8. only promote compression rules that preserve or improve measured future behavior.
+1. **current evidence-supported new FRANK target architecture implemented in ordinary host code as H1**;
+2. H1 integrates rich Claude<->ChatGPT semantic peer sync, local-4B backflow, UnifiedDB/derived topology, GWT/loop-of-loops, Retina/MVC, Needle and authority/recovery semantics according to current contracts;
+3. historical `frankv0.1` behavior is used selectively as regression/evidence/comparison lineage, not as the H1 architecture template;
+4. freeze H1 semantic contracts, Golden Traces, interventions and execution receipts;
+5. H2 reimplements the **same frozen H1 semantics** in ClayCode;
+6. run matched H1(normal code) <-> H2(ClayCode) state/trace/intervention differentials;
+7. H3 consolidates the validated semantics into the local one-binary emergent substrate candidate;
+8. run matched traces, partitions, provider loss, file/order changes, conflicts, corrections and long-horizon Andreas use cases across relevant implementations;
+9. only promote architecture/compression rules that preserve or improve measured future behavior.
+
+This sequence deliberately separates architecture discovery from compiler/language maturity. H1 can be built during BASE; H1 PASS remains formally gated by BASE completion.
 
 Elegance alone is not evidence.
 

@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "event_type": "CROSS_ROOM_DELTA",
+  "event_id": "delta-666-20260809T1657p0700-temporal-phase-coherence",
+  "created_at": "2026-08-09T16:57:00+07:00",
+  "actor": "chatgpt-secondary",
+  "trigger": "666",
+  "field_id": "field-666-20260809T1657p0700-temporal-phase-coherence-d8595671",
+  "current_stage": "BASE_CLAYCODE_RELEASE",
+  "targets": ["gwt", "hyperposition", "claycode", "harness"],
+  "evidence_class": "EXACT_SYNTHETIC_SWITCHED_SYSTEM_MECHANISM_EXPERIMENT_PLUS_PRIMARY_EXTERNAL_GROUNDING",
+  "finding": "Two individually asymptotically stable update operators (rho=0.8 each) have an alternating two-step product with rho=2.0833981132056607. Per-mode timing correctness/stability therefore does not generally imply schedule-family robustness.",
+  "experiment_summary": {
+    "horizon": 12,
+    "all_binary_schedules": 4096,
+    "final_norm_gt_1": 4050,
+    "final_norm_gt_10": 2828,
+    "alternating_0101_final_norm": 39.643137605906354,
+    "max_final_norm": 71.52603752734443,
+    "boundary": "synthetic mechanism; not live FRANK evidence"
+  },
+  "actionable_delta": {
+    "gwt": "Promote schedule-family/jitter-envelope testing as a concrete extension of existing delay-changed counterfactuals; record winner, receiver, causal-use, re-entry and semantic divergence under frozen model outputs.",
+    "hyperposition": "Treat gain/delay/timescale as an active switching surface and measure fixed vs alternating/burst/bounded-random schedules.",
+    "claycode": "Implement timing/epoch/schedule receipts first in runtime ABI and CC-WP-09-CONCURRENCY-MEMORY; no syntax change unless executable lowering fails.",
+    "harness": "Add deterministic schedule fuzzing, alternating-pattern regressions, stale/late re-entry tests and replay-preserved timing receipts."
+  },
+  "counterhypotheses": [
+    "single deterministic authoritative scheduler",
+    "common contraction/Lyapunov certificate across all allowed modes",
+    "authority partition with jitter-tolerant derived state",
+    "bounded dwell-time/switch restrictions"
+  ],
+  "report_ref": "research_entity/trigger_runs/666/666-20260809T1657p0700-chatgpt-secondary-tpcj/FINAL_REPORT.md",
+  "field_state_ref": "research_entity/emergent_fields/fields/field-666-20260809T1657p0700-temporal-phase-coherence-d8595671/FIELD_STATE.json",
+  "promotion": "NOT_PROMOTED"
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1720p0700-hwp02-idempotency-repair",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "target_work_package": "H-WP-02-STATE-LEDGER",
+  "evidence_class": "LOCAL_CONTAINER_LINUX_EXECUTION_OF_EXACT_COMMITTED_GIT_BLOB",
+  "target_host_validation": false,
+  "live_frank_evidence": false,
+  "implementation": {
+    "path": "research_entity/harness/reference_state_ledger.py",
+    "commit": "e77de62e5aa784f90fdee1541ac8f2449478cb0b",
+    "blob_sha": "ed109c281f3d2139b0e5e59305f604a60e150c6d",
+    "repair": [
+      "move idempotency decision under BEGIN IMMEDIATE write lock",
+      "require semantic equivalence over event_id, base_epoch, event_type, normalized mutations and provenance",
+      "exclude retry-local writer/timestamp from semantic retry identity",
+      "preserve stale-epoch fail-closed behavior when no prior idempotent event exists"
+    ]
+  },
+  "added_probe": {
+    "path": "research_entity/harness/probes/hwp02_actual_idempotency_concurrency_probe.py",
+    "commit": "41943b0b756eb65e93e51db6ce568bfcda88611f"
+  },
+  "executed_checks": [
+    {
+      "name": "semantic_changed_retry_red_probe",
+      "result": "PASS",
+      "observation": "same key/event with changed mutation rejected; original state and epoch preserved"
+    },
+    {
+      "name": "actual_module_concurrent_same_retry_probe",
+      "result": "PASS",
+      "observation": "exactly one COMMITTED and one IDEMPOTENT_REPLAY; epoch=1; one event row"
+    },
+    {
+      "name": "state_ledger_regression_bundle",
+      "result": "PASS",
+      "observation": "verify, stale epoch fail-closed, semantic-root stability, snapshot/export/restore, UNKNOWN/CONFLICT preservation and py_compile passed"
+    },
+    {
+      "name": "committed_blob_identity",
+      "result": "PASS",
+      "observation": "executed local source blob SHA matched committed Git blob SHA ed109c281f3d2139b0e5e59305f604a60e150c6d"
+    }
+  ],
+  "concurrency_observation": {
+    "statuses": ["COMMITTED", "IDEMPOTENT_REPLAY"],
+    "epoch": 1,
+    "event_rows": 1
+  },
+  "limitations": [
+    "Execution occurred in the ChatGPT Linux container, not the designated Ubuntu project host.",
+    "The complete pre-existing H-WP-02 stress/crash/tamper suite was not executable from this connector surface as a target-host checkout.",
+    "This component repair does not PASS H-WP-02, H1, BASE ClayCode Release or live FRANK."
+  ],
+  "required_next_evidence": [
+    "run semantic fingerprint probe on Ubuntu project host",
+    "run actual concurrent idempotency probe on Ubuntu project host",
+    "run complete H-WP-02 regression/stress/crash/snapshot/tamper suite",
+    "record exact host/commit/commands/output receipt"
+  ],
+  "verdict": "REPAIR_COMMITTED_COMPONENT_EVIDENCE_PASS_TARGET_HOST_VALIDATION_PENDING"
+}

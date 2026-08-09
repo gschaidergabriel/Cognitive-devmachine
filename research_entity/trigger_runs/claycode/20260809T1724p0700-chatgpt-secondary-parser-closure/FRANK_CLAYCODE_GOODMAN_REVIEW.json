@@ -1,0 +1,69 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1724p0700-chatgpt-secondary-parser-closure",
+  "latest_frank_run":null,
+  "latest_frank_claycode_architecture_artifact":null,
+  "artifact_search_note":"FRANK_ARCHITECTURE.claycode.json was not located by repository search and expected-path fetch returned 404; current FRANK directives and mesh feedback were used provisionally without fabrication.",
+  "items":[
+    {
+      "claim_id":"FRANK-CC-AUTHORITY-BOUNDARY",
+      "frank_statement":"Model or learned-state output must not itself confer external effect authority; effectful host access requires an external authority/capability boundary.",
+      "frank_source_refs":["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md","research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"],
+      "ancestry_families":["FRANK_CLAY_SHARED_AUTHORITY_LINEAGE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Ambient host FFI plus process sandboxing is sufficient; a typed capability gateway adds complexity without material safety gain.",
+      "falsifier":"Representative FFI/system-effect tests show the explicit capability boundary can be bypassed as easily as ambient access, or provides no measurable containment/audit advantage.",
+      "independent_checks":["Wasmtime/WASI primary documentation describes capability-scoped host access and absence of ambient built-in system calls in WebAssembly/WASI-style execution."],
+      "adversarial_checks":["Future APP-08 must attempt file/process/network access without capability grants, including child/FFI equivalents."],
+      "verdict":"SUPPORTED",
+      "reason":"Independent implementation architecture supports capability-scoped host interfaces as a valid safety mechanism. This does not prove the final ClayCode gateway API or implementation correct.",
+      "claycode_action":"Retain explicit capability/effect boundary; test it at ABI/FFI level rather than encode authority in model-readable text.",
+      "affected_claycode_artifacts":["CC-WP-04-TYPE-EFFECT","CC-WP-07-RUNTIME-ABI-FFI","APP-08"]
+    },
+    {
+      "claim_id":"FRANK-CC-LOOP-OF-LOOPS",
+      "frank_statement":"FRANK should be modeled as a hierarchical multiscale recurrent loop-of-loops and ClayCode should represent loop identity, timescale, budget, dynamics, interventions and rollback.",
+      "frank_source_refs":["research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md","research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"],
+      "ancestry_families":["FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Ordinary persistent event-driven orchestration explains the useful behavior; recurrent dynamical mathematics adds no material predictive or control value.",
+      "falsifier":"Matched H1/H2 replay shows loop-specific state/readouts/interventions do not improve prediction, control, diagnosis or recovery over a simpler event-driven representation.",
+      "independent_checks":[],
+      "adversarial_checks":["Current run intentionally did not treat cross-branch repetition of the owner-distributed hypothesis as independent support."],
+      "verdict":"UNRESOLVED",
+      "reason":"This run established parser-surface closure evidence only; it did not execute the loop-dynamics hypothesis. ClayCode must preserve representability and testability without promoting the mechanism as truth.",
+      "claycode_action":"Use existing record/tensor/intervention/receipt primitives for the first executable LoopDynamicsReadout; add semantics only if that concrete program cannot be represented or lowered.",
+      "affected_claycode_artifacts":["CC-WP-03-IR-TYPES","CC-WP-05-EVALUATOR","CC-WP-13-HARNESS-HANDOFF"]
+    },
+    {
+      "claim_id":"FRANK-CC-WASM-WASI-FIRST-BACKEND",
+      "frank_statement":"A useful Ubuntu lowering path may use native code and/or WASM/WASI with typed host interop.",
+      "frank_source_refs":["research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json","research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"],
+      "ancestry_families":["CLAYCODE_BASE_RELEASE_DESIGN"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Direct native Ubuntu lowering/FFI is simpler, faster and easier to debug; WASM/WASI adds an unnecessary boundary for the first release.",
+      "falsifier":"Ubuntu application-suite benchmarks show WASM/WASI materially worsens latency, FFI coverage, debugging or resource control without compensating isolation/portability benefits.",
+      "independent_checks":["WebAssembly Component Model/WIT primary specifications provide typed import/export interfaces and canonical lift/lower concepts.","Wasmtime/WASI primary documentation provides a capability-oriented execution boundary."],
+      "adversarial_checks":["Do not infer target suitability from interface elegance; require APP-01..APP-10 execution and cost receipts on Ubuntu."],
+      "verdict":"REFINED",
+      "reason":"WASM/WASI is independently supported as a viable typed host-boundary pattern, but evidence does not establish it as the mandatory or best first backend for FRANK v0.1.",
+      "claycode_action":"Keep native and WASM/WASI as competing lowering targets; choose by Ubuntu execution evidence, not architecture preference.",
+      "affected_claycode_artifacts":["CC-WP-06-COMPILER-LOWERING","CC-WP-07-RUNTIME-ABI-FFI","CC-WP-10-GENERAL-APP-SUITE"]
+    },
+    {
+      "claim_id":"FRANK-CC-ADAPTIVE-VISION-STATE",
+      "frank_statement":"FRANK v0.1 requires representable/replayable adaptive visual learner version, provenance tier, confidence/open-set, candidate promotion/rollback and resource-budget state.",
+      "frank_source_refs":["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"],
+      "ancestry_families":["PROJECT_OWNER_FIXED_FRANK_V0_1_REQUIREMENT"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Some of these fields may be implementable entirely in host/runtime state without first-class ClayCode semantics.",
+      "falsifier":"H1-to-H2 differential implementation demonstrates equivalent replay/provenance/rollback semantics with a smaller existing ClayCode representation and no semantic escape hatch.",
+      "independent_checks":[],
+      "adversarial_checks":["Treat the directive as a release contract, not independent scientific evidence for any particular classifier architecture."],
+      "verdict":"UNRESOLVED",
+      "reason":"The requirement is owner-fixed for the product, while the minimal language representation and optimal learner mechanism remain research-gated.",
+      "claycode_action":"Guarantee expressibility of required state/transition receipts using existing typed records/version/provenance primitives before adding dedicated learner syntax.",
+      "affected_claycode_artifacts":["CC-WP-03-IR-TYPES","CC-WP-13-HARNESS-HANDOFF"]
+    }
+  ]
+}

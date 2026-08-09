@@ -1,4 +1,4 @@
-# ClayCode Trigger Run — Parser Alignment + Fused FRANK Gate Representability / BASE Compiler Gate
+# ClayCode Trigger Run — Parser Alignment + Fused FRANK Gate Representability
 
 Run: `claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment`  
 Actor: `chatgpt-secondary` / OpenAI / GPT-5.6 Sol  
@@ -7,61 +7,96 @@ Program stage: `BASE_CLAYCODE_RELEASE` (IN_PROGRESS)
 
 ## Executive result
 
-This run produced two complementary results.
+This run separated two questions that had been easy to conflate:
 
-First, it found and executed a concrete current-language tooling counterexample: admitted G9 V3 source uses constructs that admitted `grammar.ebnf` does not cover. The initial executable proxy demonstrated missing type-level unions and an explicit `if` statement. A minimal grammar repair accepts those two cases while preserving a baseline `Delta<T>` record, but an adversarial extension then showed that the minimal repair is **not sufficient**: other exact CURRENT-G9 forms (`external_effect lifecycle=...`, digit-prefixed `4B_...` symbols and the `includes` relation word) remain rejected. Therefore the BASE parser task needs a strict surface/AST freeze plus full-current-corpus conformance, not incremental keyword accretion.
-
-Second, after a concurrent FRANK architecture-lineage Fusion materialized the fused C9+overlay target, this run compiled a focused Unified-Memory/Retina gate probe using only a grammar-compatible G9 subset. It represented independent RecognitionValidity, AdaptiveStatePromotion and semantic-publication gates, lowered the rules to a deterministic Python CLI and matched **8/8** positive/veto fixtures with exit status 0 and empty stderr. This is executable evidence that the tested fused gate logic does **not** require a new dedicated ClayCode primitive. It is not a production compiler or APP acceptance result.
+1. **Semantic expressibility:** the tested fused FRANK RecognitionValidity, AdaptiveStatePromotion and semantic-publication gate logic is expressible and executable with existing G9-compatible generic constructs. No dedicated new ClayCode primitive is justified by this test.
+2. **Production parser readiness:** the published CURRENT G9 source and `grammar.ebnf` are not surface-closed. The first minimal `if` + union repair is also insufficient. BASE therefore needs a strict surface/AST freeze and full-corpus parser conformance before any parser work package can pass.
 
 No CURRENT-stack, BASE-stage or canonical scientific promotion is requested.
 
-## Evidence
+## Internal evidence
 
-### Parser self-alignment
+Primary repository inputs:
 
-- Current source: `research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay`
-- Current grammar: `research_entity/claycode/g9/grammar.ebnf`
-- Initial executable receipt: `EXECUTABLE_RESEARCH_RECEIPT.json`
-- Candidate grammar repair: `CLAYCODE_G9_GRAMMAR_PATCH_CANDIDATE.ebnf`
-- Probe: `grammar_probe.py`
-- Adversarial follow-up: `GRAMMAR_ADVERSARIAL_EXTENSION_RECEIPT.json`
+- `research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay`
+- `research_entity/claycode/g9/grammar.ebnf`
+- `research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json`
+- `research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md`
+- `research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md`
+- `research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql`
+- `research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql`
+- current GWT/Hyperposition/Emergenz contracts and latest Clay stack
 
-Initial proxy result:
+Concurrent material assimilated before final synthesis:
 
-```text
-old
-  union_field: FAIL
-  if_cycle: FAIL
-  baseline: PASS
-repaired
-  union_field: PASS
-  if_cycle: PASS
-  baseline: PASS
-```
+- `research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FRANK_ARCHITECTURE_LINEAGE.json`
+- `research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json`
 
-Adversarial minimal-repair result:
+The concurrent FRANK fusion preserves C9 as the latest explicit pre-overlay architecture base and adds mandatory current extensions including dissolved Retina, Unified Memory <-> Retina recurrent learning, separate recognition/promotion gates, atomic semantic publication and common-driver-aware causal receipts. This is an OPEN fused target overlay, not canonical promotion.
 
-```text
-external_effect_lifecycle: current FAIL / minimal_repair FAIL
-4B_emits:                  current FAIL / minimal_repair FAIL
-includes operator:         current FAIL / minimal_repair FAIL
-```
-
-Evidence boundary: these are executable Lark translations/probes of the published EBNF, not the final repository parser. They prove concrete surface-closure gaps and falsify sufficiency of the two-feature minimal patch; they do not enumerate every full-file defect.
-
-### Unified Memory <-> Retina fused gate probe
+## Experiment 1 — grammar self-alignment
 
 Artifacts:
 
-- ClayCode source: `UM_RETINA_GATE_PROBE.clay`
-- generated target: `generated_um_retina_gate_cli.py`
-- receipt: `EXECUTABLE_RESEARCH_RECEIPT_UM_RETINA_GATE.json`
+- `grammar_probe.py`
+- `CLAYCODE_G9_GRAMMAR_PATCH_CANDIDATE.ebnf`
+- `EXECUTABLE_RESEARCH_RECEIPT.json`
+
+Observed proxy behavior:
+
+```text
+current grammar
+  union_field: FAIL
+  if_cycle: FAIL
+  baseline Delta<T>: PASS
+minimal repair
+  union_field: PASS
+  if_cycle: PASS
+  baseline Delta<T>: PASS
+```
+
+This proves a concrete executable mismatch in the published surface contract, but not yet full-file parser conformance.
+
+## Experiment 2 — adversarial minimal-patch sufficiency
+
+Artifact: `GRAMMAR_ADVERSARIAL_EXTENSION_RECEIPT.json`
+
+Three additional exact CURRENT-G9 forms were tested against both the current proxy grammar and the minimal `if` + union repair:
+
+```text
+rule external_effect lifecycle=[...]
+rule 4B_emits EffectIntent
+rule NativeCognitionTask.forbidden_burden includes [...]
+```
+
+All three remained rejected by both grammars.
+
+**Negative result:** the minimal `if` + union patch is not sufficient to claim CURRENT G9 surface closure. Do not accrete ad-hoc tokens directly into CURRENT. Freeze one strict BASE surface/AST and decide explicitly which prose-like existing forms are normalized sugar versus retained grammar.
+
+## Experiment 3 — Unified Memory <-> Retina gate representability
+
+Artifacts:
+
+- `UM_RETINA_GATE_PROBE.clay`
+- `generated_um_retina_gate_cli.py`
+- `EXECUTABLE_RESEARCH_RECEIPT_UM_RETINA_GATE.json`
+
+Hashes:
+
 - Clay source SHA-256: `533cd82763ccb7db39ea687d00632112ed63f2f1d99fd00cacb096bfff1d9a7c`
 - generated target SHA-256: `24d82e7649394ec051b083af812202aec0ae4147b2ce06e42a5491c224574674`
 
-Executed fixture classes:
+The probe used only grammar-compatible G9 constructs for three independent controls:
 
-1. all gates pass;
+- RecognitionValidity fast-path gate;
+- AdaptiveStatePromotion gate;
+- semantic-publication gate.
+
+A conservative run-local lowering generated a Python CLI and executed it in a separate Python process with `-S`.
+
+Fixture classes:
+
+1. all pass;
 2. open-set/unknown veto;
 3. stale-calibration veto;
 4. sensor/conflict veto;
@@ -70,101 +105,94 @@ Executed fixture classes:
 7. incomplete projection/retraction closure veto;
 8. replay-not-ready publication veto.
 
-Observed: `8/8 MATCH`, all exit statuses `0`, stderr empty.
+Observed: **8/8 MATCH**, all process exit statuses `0`, stderr empty.
 
-Interpretation: the three control surfaces can be expressed separately using existing generic typed records/type aliases/rules in the tested subset. Recognition truth, durable learning promotion and CURRENT publication therefore remain distinct without a new language primitive.
+Interpretation: tested recognition truth, durable promotion and CURRENT publication can remain explicitly distinct using existing generic G9-compatible constructs. This is evidence against inventing a dedicated new Retina/learning/publication primitive now.
 
-Limitations: the probe does not execute real Retina features, classifier training, resource budgets, UnifiedDB transactions, ClayGraph projection, target-machine effects or a full rollback state machine. It does not qualify APP-01, APP-09 or any BASE work package as PASS.
+Limitations: this is a partial research compiler probe. It does not execute real Retina features, classifier training, resource budgets, UnifiedDB transactions, ClayGraph projection, target-machine effects or a full rollback state machine. It does not qualify APP-01, APP-09 or any BASE work package as PASS.
 
-## Concurrent FRANK architecture assimilation
+## Cross-branch feedback
 
-During the run, `fusion-20260809T1538p0700-frank-architecture-lineage` materialized the full historical FRANK architecture lineage and an OPEN fused target overlay. The target keeps C9 typed causal/admission/effect architecture as the latest explicit base and adds mandatory current overlays including dissolved Retina, Unified Memory <-> Retina recurrent learning, two separate learning/recognition gates, atomic semantic publication and common-driver-aware causal receipts.
-
-This newer material was re-read before final synthesis and added to `INTERCONNECT_MANIFEST.json`. It is research input, not canonical promotion.
-
-The ClayCode result is compatible with that fusion: current fused gate requirements are representable in the tested existing G9 subset, while the production parser surface remains the immediate toolchain blocker.
-
-## Cross-branch fusion
-
-- **FRANK:** preserve RecognitionValidity separately from AdaptiveStatePromotion; current sensor evidence retains veto over memory/familiarity. No dedicated new language primitive is justified by the gate probe.
-- **Clay/Harness:** BASE should freeze/parser-normalize one strict surface and compile the real fused component before H1/H2; do not simplify H1 semantics to fit an incomplete parser.
-- **ClayGraph:** `projection_closed` is representable as a publication condition, but PATCH versus COMPLETE_SNAPSHOT/retraction semantics still require the stronger runtime/IR contract and crash/replay tests from prior research.
-- **UnifiedDB:** source admission, schema preflight and atomic publication can be represented as typed conditions; physical DB consolidation is not implied.
-- **GWT:** recognition/promotion/publication signals are control/readout state, not truth or causal-emergence evidence.
-- **Hyperposition:** UNKNOWN/AMBIGUOUS/CONFLICT alternatives remain explicit rather than being collapsed into familiar certainty.
-- **Emergenz:** neither parser success nor gate execution is evidence of emergence; later causal claims still require intervention/lesion/rescue controls.
-- **ClayCode:** parser/canonical-IR closure is now the immediate BASE engineering discriminator; semantic growth remains evidence-gated.
+- **FRANK:** keep RecognitionValidity separate from AdaptiveStatePromotion; current sensor evidence retains veto over memory/familiarity. Compile the real fused component before requesting language growth.
+- **Clay/Harness:** H1/H2 semantics must not be simplified to fit an incomplete parser. BASE must freeze and implement one parser/IR surface first.
+- **ClayGraph:** publication closure is representable as a gate, but PATCH vs COMPLETE_SNAPSHOT/retraction and invalidation require the stronger runtime/IR contract plus crash/replay tests.
+- **UnifiedDB:** source admission, schema preflight and atomic publication are representable as typed conditions; this does not imply physical DB monolith consolidation.
+- **GWT:** recognition/promotion/publication state is control/readout, not truth or emergence proof.
+- **Hyperposition:** UNKNOWN/AMBIGUOUS/CONFLICT alternatives remain explicit rather than collapsed into familiar certainty.
+- **Emergenz:** neither parser success nor gate execution is emergence evidence; later claims still require intervention/lesion/rescue controls.
+- **ClayCode:** immediate discriminator is parser/canonical-IR closure under frozen semantics.
 
 ## External triangulation
 
-Primary technical sources were used as triangulation only:
+Primary/official technical evidence was used only as independent triangulation:
 
-- Bytecode Alliance WIT/Component Model provides a typed interface/world/resource boundary that is a plausible future FFI lowering surface, but does not replace Clay dynamic capability/commit authorization.
-- MLIR dialect-conversion documentation supports the implementation pattern of progressive typed lowering with explicit legality/conversion targets rather than one monolithic compiler jump.
-- independent effect-typed agent-language research provides conceptual support for keeping requested/handled/denied/committed action states explicit; it is not proof of FRANK or ClayCode semantics.
+- Bytecode Alliance WIT/Component Model: typed interfaces/worlds/resources are a plausible FFI lowering surface, but interface membership does not replace Clay dynamic capability/commit authorization.
+- MLIR dialect conversion: progressive typed lowering with explicit legality/conversion targets supports a staged compiler architecture rather than a monolithic translation jump.
+- independent effect-typed agent-language research: keeping requested/handled/denied/committed action states explicit is a plausible typed design pattern, but not FRANK-specific proof.
 
-No external source is promoted into FRANK-specific proof.
-
-## Hypotheses / counterhypotheses
-
-1. `H-CC-PARSER-ALIGN-001` — **SUPPORTED_FOR_DEFECT / PATCH-CANDIDATE ONLY**. Current grammar/source mismatch is executable. Counterhypothesis: proxy translation artifact. Falsifier: a parser generated directly from the published EBNF accepts all cited CURRENT forms without extension or normalization.
-2. `H-CC-WASI-COMPONENT-001` — **OPEN**. WIT/Component Model is a candidate typed FFI lowering target. Falsifier: executable APP lowerings show semantic gaps, excessive adapter complexity or material cost/latency reversal.
-3. `H-CC-FUSED-GATE-SUFFICIENCY-001` — **OPEN_REFINED_BY_EXECUTABLE_PROXY**. Existing generic G9 constructs are sufficient for the tested fused RecognitionValidity/AdaptiveStatePromotion/publication logic. Falsifier: the real frozen Retina/Unified-Memory component cannot type/check/lower/replay without opaque host-only state or a semantic escape hatch.
+No external source is promoted into FRANK-specific evidence.
 
 ## Goodman anti-echo
 
-`FRANK_CLAYCODE_GOODMAN_REVIEW.json` was updated after the executable gate test.
+See `FRANK_CLAYCODE_GOODMAN_REVIEW.json`.
 
-- Authority/host-boundary claim remains `REFINED`: typed external interfaces are useful lowerings but do not confer execution authority.
-- Adaptive-visual expressibility moved from `UNRESOLVED` to `REFINED`: the narrow three-gate logic is executable with existing G9-compatible constructs; full versioned learning/replay behavior remains open until a real component executes.
+- `FRANK-CC-AUTHORITY-BOUNDARY`: `REFINED` — external typed interface boundaries help lowering but do not confer runtime authority.
+- `FRANK-MVC-STATE-EXPRESSIBILITY`: moved from `UNRESOLVED` to `REFINED` after `EXP-CC-G9-UM-RETINA-GATE-001`; narrow fused gate logic is executable without new primitives, while full versioned learner/replay behavior remains open.
 
-Shared FRANK/ClayCode ancestry was not counted as independent replication. The new local execution is recorded as a new discriminating experiment with its own limitations.
+Shared FRANK/ClayCode ancestry was collapsed and was not counted as independent replication.
+
+## Hypotheses / counterhypotheses
+
+1. `H-CC-PARSER-ALIGN-001` — `SUPPORTED_FOR_GRAMMAR_DEFECT/PATCH_CANDIDATE_ONLY`. Falsifier: a parser generated directly from published EBNF accepts all cited CURRENT forms without extension or normalization.
+2. `H-CC-WASI-COMPONENT-001` — `OPEN`. Falsifier: real APP lowerings show semantic gaps, excessive adapter complexity, or material cost/latency reversal.
+3. `H-CC-FUSED-GATE-SUFFICIENCY-001` — `OPEN_REFINED_BY_EXECUTABLE_PROXY`. Falsifier: the real frozen Retina/Unified-Memory component cannot type/check/lower/replay without opaque host-only state or a semantic escape hatch.
 
 ## Negative results
 
-- `NR-CC-G9-GRAMMAR-SELFALIGN-001`: admitted current grammar is not self-aligned with admitted current source for at least union types and conditionals.
-- `NR-CC-G9-MINIMAL-PATCH-SUFFICIENCY-002`: adding only `if` plus type-union grammar is insufficient; other exact CURRENT-G9 forms remain rejected.
-- `NR-CC-NEW-PRIMITIVE-FUSED-GATES-003`: the tested fused FRANK gate logic produced no language inadequacy that would justify a dedicated new primitive.
+- `NR-CC-G9-GRAMMAR-SELFALIGN-001`: published grammar is not aligned with admitted CURRENT source for at least union types and conditionals.
+- `NR-CC-G9-MINIMAL-PATCH-SUFFICIENCY-002`: adding only `if` plus union support does not close the CURRENT surface.
+- `NR-CC-NEW-PRIMITIVE-FUSED-GATES-003`: tested fused FRANK gate logic produced no language inadequacy that would justify a new dedicated primitive.
 
-These negative results concern different layers: surface/parser closure is defective; tested semantic expressibility remains adequate.
+Surface/parser closure is defective while tested semantic expressibility remains adequate; these are different layers and are preserved separately.
+
+## Tool/capability evidence
+
+See `TOOL_EXECUTION_MANIFEST.json`.
+
+- GitHub connector: verified read/write in this session.
+- local ChatGPT Python sandbox: used for executable grammar and gate probes.
+- E2B: current registry status is `ADAPTER_READY_CREDENTIAL_UNAVAILABLE`, and E2B is not exposed directly to this worker surface. No credential workaround was attempted.
+- Judge0: repository registry marks it `RUNTIME_VERIFIED`, but it is not directly exposed to this worker surface and was not invoked because the protocol-allowed local fallback had already produced the required executable evidence.
+- official `research_interconnect_preflight.py`: blocked because this worker has connector reads/writes but no repository checkout on its local execution surface.
+
+Therefore the **official interconnect completion gate remains incomplete**. The run uses a fail-closed manual manifest from verified GitHub files and does not pretend the preflight passed.
 
 ## Release/workspace implication
 
-- Do **not** mark `CC-WP-02-PARSER-CANON` complete.
-- Do **not** mark any application acceptance item PASS from this run.
-- Do **not** promote the minimal grammar patch directly to CURRENT.
-- Freeze one strict BASE surface and typed AST policy, explicitly deciding which existing prose-like forms are normalized sugar versus retained grammar.
-- Run a real repository parser over the complete admitted G9 V3 corpus; require parse/roundtrip/mutation/semantic-hash stability.
-- Then compile the real Unified-Memory <-> Retina adaptive component through parser -> typed IR -> type/effect -> lowering -> runtime and test versioning, open-set/conflict, promotion/rejection, rollback/replay, publication/crash semantics and resource budgets.
-- Reopen ClayCode semantics only if that real component produces an executable inadequacy.
+- Keep `CC-WP-02-PARSER-CANON` open.
+- Keep all application acceptance rows unpassed.
+- Do not promote the minimal grammar patch to CURRENT.
+- Freeze one strict BASE surface and typed AST policy.
+- Run the real repository parser over the complete admitted G9 V3 corpus and require parse/roundtrip/mutation/semantic-hash stability.
+- Then compile a real Unified-Memory <-> Retina adaptive component through parser -> typed IR -> type/effect -> lowering -> runtime, including versioning, open-set/conflict, candidate promotion/rejection, rollback/replay, publication/crash semantics and resource budgets.
+- Reopen semantics only on executable inadequacy.
 
-## Protocol limitations
+## Durable research delta
 
-The official `research_interconnect_preflight.py` could not be executed because this ChatGPT organ has GitHub connector access but no repository checkout exposed to its execution surface. A fail-closed manual interconnect manifest was materialized from verified GitHub files and updated for concurrent FRANK lineage work. Therefore the **official interconnect completion gate remains incomplete** and is not claimed as PASS.
-
-E2B is repository-marked `RUNTIME_VERIFIED` but is not exposed as a tool in this session. The protocol fallback used the local Python sandbox and records the evidence class explicitly.
-
-## Research delta
-
-Durable run delta now includes:
+Committed by this run:
 
 - grammar self-alignment negative result;
 - minimal grammar repair candidate;
 - executable parser proxy receipt;
 - adversarial falsification of minimal-patch sufficiency;
 - OPEN WIT/Component-Model FFI hypothesis;
-- executable G9-compatible Unified-Memory/Retina three-gate probe with 8/8 fixtures;
+- executable G9-compatible Unified-Memory/Retina gate probe with 8/8 fixtures;
 - refined Goodman verdict for adaptive-visual expressibility;
 - updated hypothesis matrix;
 - concurrent FRANK architecture-lineage assimilation;
-- cross-branch fail-closed manifest and tool manifest;
+- updated fail-closed interconnect/tool manifests;
 - no semantic/current-stack/BASE promotion.
 
 ## Final synthesis
 
-The highest-information result is a separation of two questions that had been easy to conflate:
-
-1. **Can current ClayCode semantics express the fused FRANK learning/publication control logic?** For the tested gate subset, yes.
-2. **Can the published current ClayCode surface/grammar already serve as the BASE production parser contract?** No; executable self-conformance counterexamples remain, and the first minimal repair is incomplete.
-
-Therefore BASE should not redesign the cognitive language now. It should freeze and implement the compiler surface rigorously, then let the first real Retina/Unified-Memory component decide whether any semantic primitive is actually missing.
+**Do not redesign ClayCode now.** The tested FRANK fused learning/publication controls already fit the existing semantic basis. The release blocker exposed by this trigger is implementation-contract closure: one strict parser surface, typed AST/canonical IR, then a real compiler/runtime path over the full CURRENT corpus and the first real Retina/Unified-Memory component.

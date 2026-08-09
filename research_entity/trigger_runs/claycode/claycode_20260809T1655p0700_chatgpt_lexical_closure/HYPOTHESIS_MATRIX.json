@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1655p0700_chatgpt_lexical_closure",
+  "hypotheses": [
+    {
+      "id": "H-CC-LEXREF-018",
+      "status": "OPEN_SUPPORTED_FOR_TESTED_CLASS",
+      "claim": "ClayCode reference tokens should be delimiter-aware or contextually parsed so structural delimiters cannot become part of an unescaped Ref identity.",
+      "support": [
+        "EXP-CC-LEXICAL-CLOSURE-20260809-01: current matcher overconsumed 10000/10000 adjacent-ref cases",
+        "candidate delimiter-aware matcher failed 0/10000 matched cases"
+      ],
+      "counterhypothesis": "The production parser already uses contextual delimiter termination and the broad EBNF prose is harmless documentation shorthand.",
+      "falsifier": "Admitted canonical parser accepts and roundtrips all current delimiter-adjacent refs without a grammar or lexer delta."
+    },
+    {
+      "id": "H-CC-IDCLASS-019",
+      "status": "OPEN",
+      "claim": "Separating bare identifiers from explicit escaped/sigil/quoted symbol identifiers is likely to reduce operator ambiguity while preserving compatibility better than globally forbidding hyphens.",
+      "support": [
+        "current bare-id/minus family collided in 10000/10000 generated unspaced cases",
+        "simple hyphen removal resolved the tested ambiguity but also rejected all tested hyphenated names"
+      ],
+      "counterhypothesis": "A contextual/precedence-aware lexer can retain hyphenated bare identifiers and minus without materially harming deterministic roundtrip or compiler complexity.",
+      "falsifier": "Repository-wide corpus plus parser differential shows the current identifier class is deterministic, low-repair-cost and roundtrip-stable across no-space arithmetic and admitted hyphenated symbols."
+    },
+    {
+      "id": "H-CC-LEXER-RECEIPT-020",
+      "status": "OPEN_SUPPORTED_ARCHITECTURE_CANDIDATE",
+      "claim": "Lexer/parser policy and grammar/compiler version belong in provenance/contract identity, while ProgramSemanticId should be computed from canonical typed IR after successful parsing rather than raw source token spelling.",
+      "support": [
+        "concurrent ClayCode evidence already separates static program semantic identity from execution/replay identity",
+        "this run shows lexical policy can change source interpretation before canonical IR exists"
+      ],
+      "counterhypothesis": "Raw source hashing is sufficient for all identity roles and a separate post-parse semantic identity adds no correctness value.",
+      "falsifier": "A matched source-equivalence corpus shows raw-source identity gives equal deduplication, roundtrip, migration and replay correctness without false distinctions or collisions."
+    }
+  ],
+  "promotion": "NONE"
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "20260809T0948p0700-666-aicore-training-v26-semantic-batchA",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "task_ref": "research_entity/rooms/rooms/center/tasks/666-l0-aicore-training-v26-semantic-batchA-20260809T0943p0700.json",
+  "identity_parent_ref": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_TRAINING_RECURSIVE_DIRECT_20260809T0939p0700.json",
+  "source_units": [
+    {"drive_id":"1AP9hiqTekCEGqHpGeDLKpzwEZhcJ5wz3","name":"train_v26.py","sha256":"aef7ae044b3f99a40d43106c58d5c8ae56a486643924cc09542648b97b879bcf","ast_parse":"PASS"},
+    {"drive_id":"1Cm8NvS1kieORR18m-vcBnf0-4nWpMf1z","name":"42_v261_build.py","sha256":"8117f88731e2e6ab42ef7db861d6c3a0cbf1b811bae982b4716f3264b2c829e0","ast_parse":"PASS"},
+    {"drive_id":"1WpgPw649WKt8PoZh7VB4D2mx8XrqRZAC","name":"43_realitaet_laengenbewusst.py","sha256":"67ef3cb4c11325833bd68b4f1de6481f13d27ea4ae319ec3ae45e10d214cf557","ast_parse":"PASS"},
+    {"drive_id":"1sr4Tw6RZWctJxYwzqULUpkM2a6BTJse0","name":"train_v262_unsloth.py","sha256":"4dd2488ab4f416703335f43554116e48ecbf79152bbb1aaf7fe64495f8447936","ast_parse":"PASS"},
+    {"drive_id":"1-zDVkjjvOux2YPjv2qbuwhmEADx7DkV4","name":"pruefe_v262.py","sha256":"0d88efb834f0c3ea8ba19201063363b82238e79b5411cf30ce58bf4e7ea07dde","ast_parse":"PASS"},
+    {"drive_id":"1Ykg9_VRbTLUVcKvI2GgFnT3goWJApdlf","name":"runde1_regeltreue.py","sha256":"c5471dc6e59f639b99a9235d06a9d1288e442e8305d39f146d2bce5aa458fbe3","ast_parse":"PASS"},
+    {"drive_id":"1YNYTuwlXwoEY02BUsRBTVSXwsKWs-aaW","name":"runde3_gegenleser.py","sha256":"74dd9def62b9b03b27008078828995a3f094a9b7bf0b96cbba7ddcc5ee0aa52c","ast_parse":"PASS"},
+    {"drive_id":"1cmCiewa73oIQHknAF22Zxty-0WtOpBVh","name":"unsloth_rauchtest.py","sha256":"628b09030696e97209e97702d97d7c5b06d14a2b9bbcd9d741f34bf71e719a56","ast_parse":"PASS"}
+  ],
+  "source_derived_findings": [
+    {
+      "id":"V26-F1",
+      "status":"SOURCE_ASSERTED_HISTORICAL_MEASUREMENT_AND_CODE_CONTRACT",
+      "finding":"train_v26.py documents four anti-mismatch changes relative to the older trainer: raise context from 768 to 2048 because the source reports tokenizer median 1445/max 1953; preserve curriculum with SequentialSampler; compute loss only on Frank answer spans; render exact llama-server inference format including the empty think block. It also states that the prior setup sent >90% of gradient into system-text memorization.",
+      "source_units":["train_v26.py"]
+    },
+    {
+      "id":"V26-F2",
+      "status":"SOURCE_ASSERTED_BUILD_LINEAGE",
+      "finding":"42_v261_build.py constructs a stage-preserving v26.1 corpus, creates a deterministic stage-stratified 8% eval split with seed 261, renders answer spans, strips provenance prefixes, and records stage counts 2224/1314/575. Its legend also records deterministic BODY/REALITAET/state-block format fixes and tool-registry checks.",
+      "source_units":["42_v261_build.py"]
+    },
+    {
+      "id":"V26-F3",
+      "status":"SOURCE_ASSERTED_LENGTH_REPAIR",
+      "finding":"43_realitaet_laengenbewusst.py says the full REALITAET block drove 1082 examples over 2048 tokens. It therefore removes prior REALITAET blocks and reinserts the full block only when the resulting example remains below an approximately 2000-token budget, targeting roughly 25% coverage. This is a later length-aware corpus rewrite and must not be silently conflated with the earlier v26.1 build legend's roughly 35% insertion statement.",
+      "source_units":["43_realitaet_laengenbewusst.py","42_v261_build.py"]
+    },
+    {
+      "id":"V26-F4",
+      "status":"SOURCE_ASSERTED_ARCHITECTURE_FINDING",
+      "finding":"train_v262_unsloth.py and runde3_gegenleser.py describe the Qwen3.5-4B base as a 32-layer hybrid with only 8 layers using standard q/k/v/o attention projections and 24 using linear-attention projections. The proposed seven standard LoRA targets therefore adapt sequence mixing through standard attention only in 8/32 layers; adding linear-attention projections is explicitly deferred as a separate experiment.",
+      "source_units":["train_v262_unsloth.py","runde3_gegenleser.py"]
+    },
+    {
+      "id":"V26-F5",
+      "status":"SOURCE_ASSERTED_V261_RUN_AND_V262_PLAN",
+      "finding":"runde3_gegenleser.py records v26.1 as finished with 3785 examples, 167875 answer target tokens out of 4863646 total tokens (3.4%), q/v/up LoRA with about 15.7M trainable parameters, max_len 1408, start loss 3.99 and end loss about 0.6. The same source describes v26.2 as planned with more context and all seven standard targets, not as a completed measured run.",
+      "source_units":["runde3_gegenleser.py"]
+    },
+    {
+      "id":"V26-F6",
+      "status":"SOURCE_ASSERTED_V262_DESIGN",
+      "finding":"train_v262_unsloth.py proposes max_len 2432, all seven standard projections, a held-out 328-example eval set, checkpoint resume, frequent eval/save, and a KRAFTAUSDRUECKE prompt/data patch because the source says that operating-prompt block occurred in zero of 3785 training examples. Its comments report zero truncation at 2432 versus 288 truncated examples at 2048 for that corpus version.",
+      "source_units":["train_v262_unsloth.py"]
+    },
+    {
+      "id":"V26-F7",
+      "status":"STATIC_VALIDATOR_NOT_RUNTIME_RESULT",
+      "finding":"pruefe_v262.py checks files, syntax and expected source-code invariants but explicitly excludes the actual training run. runde1_regeltreue.py deterministically validates corpus spans, rendering, registered/blocked tool usage, leakage/dead-world strings and curriculum ordering. unsloth_rauchtest.py is a non-persistent smoke-test program; no execution output is present in this eight-file batch.",
+      "source_units":["pruefe_v262.py","runde1_regeltreue.py","unsloth_rauchtest.py"]
+    }
+  ],
+  "reasoned_deltas": [
+    {
+      "id":"V26-I1",
+      "epistemic_class":"INFERENCE_FROM_SOURCE_DESIGN",
+      "finding":"The strongest reusable training lesson is not a specific LoRA recipe but a representation contract: training serialization, response-only loss boundaries, curriculum order and runtime prompt facts must match serving-time behavior. Violating any of those boundaries can create apparent learning that is actually prompt memorization or train/serve mismatch.",
+      "falsifier":"A controlled experiment in which deliberately mismatched serialization/loss/prompt contracts matches or outperforms the aligned condition on held-out runtime behavior."
+    },
+    {
+      "id":"V26-I2",
+      "epistemic_class":"EXPERIMENT_DESIGN_CRITIQUE",
+      "finding":"The proposed v26.2 comparison is causally confounded: context length, adapter target set and training prompt/data content are changed together; evaluation instrumentation also changes observability. A positive or negative v26.2 outcome therefore cannot be attributed to one mechanism without single-variable or factorial ablations.",
+      "falsifier":"A version-controlled proof that the actually executed v26.2 run held all but one intervention constant, or a factorial experiment that independently estimates the effects."
+    },
+    {
+      "id":"V26-I3",
+      "epistemic_class":"OPEN_RISK_NOT_RESULT",
+      "finding":"The source itself recognizes overfitting risk because v26.2 would increase trainable parameters substantially on the same small answer-token target set while v26.1 training lacked consumed held-out evaluation. Actual overfitting is not established by this batch because no v26.2 eval trajectory or completed-run artifacts were read.",
+      "falsifier":"Held-out v26.2 eval curves and behavior tests showing stable/improving generalization despite the larger adapter."
+    }
+  ],
+  "negative_results_and_nonclaims": [
+    "No v26.2 completed training result is established by these eight sources.",
+    "AST parse PASS for 8/8 files proves syntax integrity only; it does not prove imports, GPU compatibility, memory fit, training completion or benchmark success.",
+    "The smoke-test source is not equivalent to smoke-test output.",
+    "The static acceptance script is not equivalent to a successful run.",
+    "The external-review script contains questions and source fact blocks; reviewer answers were not in this batch and are not treated as evidence.",
+    "The earlier ~35% REALITAET insertion statement and later ~25% length-aware target are lineage states, not silently reconciled into one final measured coverage number."
+  ],
+  "architecture_implications": {
+    "frank":"Treat training/serving serialization, state/prompt facts and response-loss masks as explicit versioned contracts rather than incidental preprocessing.",
+    "harness":"Require held-out evaluation consumed by the trainer, preserve deterministic corpus validators, and reject multi-variable A/B labels unless the interventions are factored or separately ablated.",
+    "model_runtime":"For hybrid-attention models, adapter target discovery must inspect actual module topology; standard q/k/v/o names do not imply coverage of linear-attention sequence-mixing layers.",
+    "provenance":"Separate planned scripts, static validators, smoke-test code and completed-run measurements in claim state."
+  },
+  "unprocessed_remainder":"This is a bounded semantic batch of 8 source units within the 77-file training subtree. The remaining v26 files, generated JSON artifacts, wrappers, evaluator outputs and other lineage units remain separate Level-0 obligations unless independently dispositioned elsewhere.",
+  "exact_global_level0_percent_added": 0.0,
+  "earned_work_hours_added": 0.0,
+  "status": "BOUNDED_SEMANTIC_BATCH_COMPLETE_GLOBAL_LEVEL0_NOT_PASS",
+  "created_at": "2026-08-09T09:48:00+07:00"
+}

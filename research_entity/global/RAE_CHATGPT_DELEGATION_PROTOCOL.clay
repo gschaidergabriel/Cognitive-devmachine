@@ -1,5 +1,5 @@
 module rae.chatgpt.delegate
-version "1.0"
+version "1.1"
 status PROJECT_OWNER_FIXED_TARGET
 
 entity RAE=frank-project-global-research-entity
@@ -12,18 +12,9 @@ law HUMAN_LAUNCH_REQUIRED_WHEN_HOSTED_CHATGPT_CANNOT_BE_PROGRAMMATICALLY_STARTED
 law QUEUED != EXECUTED
 
 score offload(task)=mix(
-  deep_research_gain,
-  web_gain,
-  independent_hypothesis_gain,
-  synthesis_gain,
-  multimodal_gain,
-  image_generation_gain,
-  artifact_generation_gain,
-  data_analysis_gain,
-  parallelism_gain,
-  minus_context_transfer_cost,
-  minus_repo_collision_risk,
-  minus_local_execution_advantage
+  deep_research_gain,web_gain,independent_hypothesis_gain,synthesis_gain,multimodal_gain,
+  image_generation_gain,artifact_generation_gain,data_analysis_gain,parallelism_gain,
+  minus_context_transfer_cost,minus_repo_collision_risk,minus_local_execution_advantage
 )
 
 rule if offload(task) >= useful_threshold -> make_work_package(task)
@@ -48,7 +39,8 @@ record RAEChatGPTWorkPackage {
   return_request_ref:Ref
 }
 
-capability CHATGPT_FULL {
+// Minimum known capability families. Resolve actual current authorized ChatGPT tools live.
+capability CHATGPT_KNOWN {
   web
   deep_research
   independent_counteranalysis
@@ -58,29 +50,37 @@ capability CHATGPT_FULL {
   pdf_creation
   slides_creation
   spreadsheet_analysis
+  data_analysis
   code_review
+  connectors_and_apps
   cross_domain_synthesis
 }
 
-rule capability_plan=select_relevant(CHATGPT_FULL,task)
+rule LIVE_CAPS=resolve_current_authorized_chatgpt_capabilities()
+rule capability_plan=select_relevant(CHATGPT_KNOWN union LIVE_CAPS,task)
+rule use capability iff expected_gain > overhead+risk
 rule current_external_fact_needed -> capability_plan += web
 rule broad_scientific_synthesis_needed -> capability_plan += deep_research
 rule image_or_visual_needed -> capability_plan += image_generation
 rule image_input_or_diagram_understanding_needed -> capability_plan += multimodal_analysis
+rule future_new_chatgpt_tool -> eligible_automatically_if_authorized_and_task_relevant
 
-codec TRIGGER = "raejob-" + short_id(package_id)
+// Token is package id and deterministic request/result file stem.
+codec TRIGGER=package.package_id
+rule request_ref(package)=@research_entity/state/requests/chatgpt/<package.trigger_token>.json
+rule result_ref(package)=@research_entity/state/receipts/chatgpt/<package.trigger_token>.json
 
 rule after enqueue(package) -> tell_human(
   "Projekt clay science pipeline öffnen und exakt eingeben: " + package.trigger_token
 )
 
-rule on ChatGPT_receive(trigger_token) -> fetch matching request_ref
+rule on ChatGPT_receive(trigger_token) -> fetch request_ref(trigger_token)
 rule ChatGPT_claim(package) before work
 rule ChatGPT.resolve_latest(RAE_LATEST_COGNITIVE_STACK) before cognition
 rule ChatGPT.explicit_cognition = latest.ClayCode
 rule ChatGPT.research_center_coordination = latest.ClayCode
-rule ChatGPT.use_all_relevant(package.capability_plan)
-rule ChatGPT.write_result_receipt to research_entity/state/receipts/chatgpt/<package_id>.json
+rule ChatGPT.use_all_relevant(package.capability_plan union resolve_current_authorized_chatgpt_capabilities())
+rule ChatGPT.write_result_receipt to result_ref(package)
 rule ChatGPT_result_semantics = latest.ClayCode
 rule ChatGPT_endturn_meta_claycode_research = ON
 

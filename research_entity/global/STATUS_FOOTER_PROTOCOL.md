@@ -14,7 +14,7 @@ Required goal line: `Goal: Frank v0.1 voll lauffähig auf Andreas PC`.
 Exact `clay` now addresses/names the Clay entity and is NOT a research trigger. The old integrated foundry trigger is `clayresearch`.
 
 Current short commands:
-`666 · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness`
+`666 · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn`
 
 NEXT LEVEL and DOOMSDAY values remain dynamic and must be resolved from current program/forecast state/tools when available. Never copy stale fixed percentages/dates simply because they appeared in an older footer.
 
@@ -29,7 +29,7 @@ Organ: <current organ/provenance>
 Trigger: <none|registered trigger>
 Research write: <COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED>
 Goal: Frank v0.1 voll lauffähig auf Andreas PC
-Short commands: 666 · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness
+Short commands: 666 · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
 NEXT LEVEL
 Stage: <dynamic stage label>

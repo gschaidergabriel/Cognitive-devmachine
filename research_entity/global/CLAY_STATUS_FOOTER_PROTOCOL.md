@@ -23,7 +23,7 @@ Organ: <current organ/provenance>
 Trigger: <none|registered trigger>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
 Goal: Frank v0.1 voll lauffähig auf Andreas PC
-Short commands: 666 · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness
+Short commands: 666 · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
 NEXT LEVEL
 Stage: <dynamic stage label>

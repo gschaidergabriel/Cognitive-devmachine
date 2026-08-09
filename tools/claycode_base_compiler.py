@@ -241,9 +241,11 @@ def compile_ir(program: dict) -> dict:
 
 
 def _trunc_int_div(left: int, right: int) -> int:
-    """Float-free truncation toward zero, matching C integer division for valid int64 pairs."""
+    """Checked int64 truncation toward zero; matches the C11 backend error boundary."""
     if right == 0:
         raise CompileError("DIVISION_BY_ZERO")
+    if left == -(1 << 63) and right == -1:
+        raise CompileError("INT_DIV_OVERFLOW")
     quotient = abs(left) // abs(right)
     return -quotient if (left < 0) != (right < 0) else quotient
 
@@ -305,28 +307,41 @@ def c_fn(name: str) -> str:
     return "ccf_" + name
 
 
-def c_expr(expr: dict) -> str:
+def c_expr(expr: dict, env: dict[str, str], signatures: dict[str, tuple[list[str], str]]) -> str:
     kind = expr["k"]
     if kind == "num": return repr(expr["v"])
     if kind == "bool": return "true" if expr["v"] else "false"
     if kind == "str": return json.dumps(expr["v"])
     if kind == "name": return c_var(expr["v"])
-    if kind == "call": return f"{c_fn(expr['f'])}({','.join(c_expr(a) for a in expr['a'])})"
+    if kind == "call": return f"{c_fn(expr['f'])}({','.join(c_expr(a, env, signatures) for a in expr['a'])})"
     if kind == "bin":
+        left = c_expr(expr["l"], env, signatures)
+        right = c_expr(expr["r"], env, signatures)
+        if expr["op"] == "/" and infer(expr, env, signatures) == "Int":
+            return f"cc_int_div({left},{right})"
         operator = {"or": "||", "iff": "==", "=>": "<="}.get(expr["op"], expr["op"])
-        return f"({c_expr(expr['l'])} {operator} {c_expr(expr['r'])})"
+        return f"({left} {operator} {right})"
     raise CompileError(f"C_UNSUPPORTED:{kind}")
 
 
 def lower_c(ir: dict, entry: str | None = None) -> str:
-    lines = ["#include <stdint.h>", "#include <stdbool.h>", "#include <stdio.h>", "#include <stdlib.h>", ""]
+    signatures = {f["name"]: ([p["type"] for p in f["params"]], f["return"]) for f in ir["functions"]}
+    lines = [
+        "#include <stdint.h>", "#include <stdbool.h>", "#include <stdio.h>", "#include <stdlib.h>", "#include <limits.h>", "",
+        "static int64_t cc_int_div(int64_t a,int64_t b){",
+        "  if(b==0){fputs(\"CC_INT_DIV_ZERO\\n\",stderr);exit(65);}",
+        "  if(a==INT64_MIN && b==-1){fputs(\"CC_INT_DIV_OVERFLOW\\n\",stderr);exit(66);}",
+        "  return a/b;",
+        "}", "",
+    ]
     for function in ir["functions"]:
         params = ", ".join(f"{c_type(p['type'])} {c_var(p['name'])}" for p in function["params"]) or "void"
         lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params});")
     lines.append("")
     for function in ir["functions"]:
         params = ", ".join(f"{c_type(p['type'])} {c_var(p['name'])}" for p in function["params"]) or "void"
-        lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params}) {{ return {c_expr(function['body'])}; }}")
+        env = {p["name"]: p["type"] for p in function["params"]}
+        lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params}) {{ return {c_expr(function['body'], env, signatures)}; }}")
     if entry:
         function = next((f for f in ir["functions"] if f["name"] == entry), None)
         if not function:

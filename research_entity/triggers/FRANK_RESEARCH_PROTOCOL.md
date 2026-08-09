@@ -8,6 +8,7 @@ Use the Master Research Trigger Protocol, mandatory Interconnected Research Mesh
 - `research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md`
 - `research_entity/global/FRANK_DUAL_INSTANCE_EMBODIED_STATE_CONTRACT.md`
 - `research_entity/global/FRANK_CHATGPT_MISTRAL_BUILD_CASCADE_PROTOCOL.md`
+- `research_entity/global/FRANK_CHATGPT_SELF_BUILD_FLOOR_DIRECTIVE.md`
 - `research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md`
 - `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`
 - `research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md`
@@ -33,6 +34,8 @@ Compact law:
 `-> next build/test`.
 
 A report-only run is incomplete when a useful executable discriminator is available.
+
+The current ChatGPT worker must also satisfy `FRANK_CHATGPT_SELF_BUILD_FLOOR_DIRECTIVE.md`: where writable/testable capability and a justified non-duplicative delta exist, worker delegation alone is insufficient; ChatGPT itself must author or materially modify an executable artifact, validate it, then re-fuse the result before the final cascade.
 
 ## 1. Dynamic research resolver — mandatory
 
@@ -129,11 +132,13 @@ The Harness must simulate/test availability, unavailability, stale capability st
 
 For the owner-directed iterative `frank` build cascade, ChatGPT (`chatgpt-secondary`) is the sole global scheduler/adjudicator.
 
-Load `FRANK_CHATGPT_MISTRAL_BUILD_CASCADE_PROTOCOL.md`.
+Load `FRANK_CHATGPT_MISTRAL_BUILD_CASCADE_PROTOCOL.md` and `FRANK_CHATGPT_SELF_BUILD_FLOOR_DIRECTIVE.md`.
 
 Mistral and any later owner-supplied workers may deeply research, build code, produce patches, write tests and analyze measurements. They do not recursively coordinate the system or make final architecture decisions.
 
 ChatGPT reviews every worker result, executes/obtains available validation, draws conclusions, updates the current whole-mesh synthesis and only then issues the next tasks.
+
+When the self-build preconditions hold, ChatGPT must additionally contribute a concrete executable implementation/test delta itself; reviewing or merging worker code alone does not satisfy the run.
 
 ## 9. Mandatory run cycle
 
@@ -150,7 +155,7 @@ Every exact `frank` run should, to current capability limits:
 9. preregister hypotheses, falsifiers and acceptance criteria;
 10. dispatch concrete research/build/test tasks to Mistral/other owner-supplied workers when useful, under ChatGPT-only orchestration;
 11. inspect returned patches/results and accept/reject/revise them;
-12. implement the smallest coherent accepted Harness delta when authorized capability exists;
+12. after deep research/fusion, ChatGPT itself authors or materially modifies the smallest coherent accepted executable Harness delta or highest-information discriminator whenever `FRANK_CHATGPT_SELF_BUILD_FLOOR_DIRECTIVE.md` preconditions hold;
 13. execute available tests, replay, fault injection, differential checks, ablations and benchmarks;
 14. preserve failures and rollback/reject regressions;
 15. ingest the new result into the semantic/research fabric;

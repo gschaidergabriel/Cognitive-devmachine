@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1053p0700-chatgpt-secondary-aicore-ingestd-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_INGESTD_RECURSIVE_SCOPE",
+  "source_universe":"DRIVE_CLAY/AICORE/ingestd",
+  "source_folder_id":"1mEgi9Wkg3dpkpYjb02CDL5H062n8fsAM",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"units_below_folder":2,"folder_units":0,"file_units":2,"file_units_semantically_closed":2,"coverage_percent":100.0},
+  "files":[
+    {"path":"ingestd/app.py","drive_id":"1BgLmbs-HzrZuDIPaXx_-G6PdeXM4UWhL","bytes":14214,"sha256":"d6e484b8dad8a9fd9cea5e3476e96d5e11b3efc47570ccc0bd487d19f9ee8b80"},
+    {"path":"ingestd/__init__.py","drive_id":"1rF8fZ_5GhcO2NtpUbE8_2i0Rvlc4hMA7","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","disposition":"empty_package_marker"}
+  ],
+  "cross_source_reconciliation":{"project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","result":"Frozen-head ingestd/app.py matches the inspected Drive semantic implementation for the findings below."},
+  "semantic_findings":[
+    {"id":"INGESTD-1-HOME-WIDE-DEFAULT-READ","severity":"P0_IF_REACHABLE_BY_UNTRUSTED_AGENT","finding":"DEFAULT_POLICY allowed_roots includes Path.home(), making the second ~/aicore root redundant and permitting read_file to copy/process any resolvable file under the Frank OS user's home by default.","inheritance":"Perception/file-read authority must be path-capability scoped per request. Home-wide ambient read is forbidden for generated/agent-originated actions."},
+    {"id":"INGESTD-2-POLICY-MODE-NONENFORCED","severity":"P1_AUTHORITY_MODEL_GAP","finding":"Policy field mode defaults to read_only but is only returned by /health; no enforcement branch consumes mode. The actual policy is solely an allowed-root path check.","inheritance":"Policy labels are not authority. Typed effects and mechanically enforced capabilities must define allowed operations."},
+    {"id":"INGESTD-3-UNBOUNDED-UPLOAD-DISK","severity":"P1_RESOURCE_GAP","finding":"Upload is correctly streamed in 1 MiB chunks but has no total byte/quota limit before writing to ART_DIR; processing occurs only after the full file is stored.","inheritance":"Streaming is necessary but insufficient: enforce per-artifact, per-principal and global storage quotas plus cleanup/retention policy."},
+    {"id":"INGESTD-4-UNBOUNDED-READFILE-PROCESSING","severity":"P1_RESOURCE_GAP","finding":"read_file has no source-size/page/object limit before copying and parsing. PDF/DOCX/image/audio processors can therefore consume resources far beyond MAX_TEXT_CHARS, which only truncates extracted text after expensive parsing/allocation.","inheritance":"Input byte/page/pixel/duration/archive-complexity budgets must be checked before or during decoding, not only on resulting text."},
+    {"id":"INGESTD-5-VLM-IMAGE-DOUBLE-BUFFER","severity":"P2_RESOURCE_GAP","finding":"Image processing reads the complete stored image into memory then base64-encodes it into another large string before subprocess invocation.","inheritance":"Retina/input runtime should operate on bounded image surfaces/features or streamed/local file handles, not duplicate arbitrary input bytes in memory."},
+    {"id":"INGESTD-6-ARTIFACT-PROVENANCE-POSITIVE","severity":"POSITIVE_INHERITANCE","finding":"Each ingest/read creates a unique artifact directory, preserves an original copy, computes SHA-256, stores metadata and extracted output separately.","inheritance":"UnifiedDB should preserve this provenance pattern while replacing directory-scattered state with transactional evidence records and immutable blob identities."},
+    {"id":"INGESTD-7-PERCEPTION-RESULT-NOT-TRUTH","severity":"RETINA_INHERITANCE","finding":"Image VLM and speech transcription output is stored as extracted text with engine/provider metadata but without calibrated confidence/open-set/contradiction semantics.","inheritance":"All perceptual extraction becomes typed evidence. OCR/VLM/STT descriptions are hypotheses with provenance, never sensor truth."}
+  ],
+  "positive_controls":["Path checks use resolved paths and relative_to containment rather than naive string-prefix comparison.","Uploads stream to disk rather than buffering the whole request in RAM.","Original artifact bytes are SHA-256 hashed and preserved separately from extraction.","Text output has a configurable maximum and NUL stripping.","Filename does not determine read_file authorization; resolved source path does."],
+  "branch_feedback":{"frank":["Perception access to local files is a capability-bearing act, not ambient self-access to the whole home directory."],"needle":["Broker file-read/input capabilities with explicit allowed object/path scope and resource budgets."],"harness":["Add home-secret denial, symlink/TOCTOU, giant upload, giant PDF/DOCX/image/audio, quota exhaustion and percept-provenance tests."],"claycode":["Expose immutable InputArtifact handles instead of arbitrary host Path values to normal code."],"unifieddb":["Retain content hash/original/extraction/provenance lineage transactionally and apply quotas/retention."],"claygraph":["Connect source artifact -> extractor/version -> percept hypothesis -> later interpretation as distinct edges."],"gwt":["Broadcast extracted claims with source/confidence rather than flattened text."],"clay":["Dissolved Retina should inherit artifact provenance but remove ambient host-path authority and unbounded decoder surfaces."]},
+  "earned_work_hours_added":0.0,
+  "training":{"executed":false,"authorized":false},
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

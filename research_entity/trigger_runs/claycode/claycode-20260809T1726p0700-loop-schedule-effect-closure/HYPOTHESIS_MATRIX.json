@@ -1,0 +1,37 @@
+{
+  "run_id": "claycode-20260809T1726p0700-loop-schedule-effect-closure",
+  "hypotheses": [
+    {
+      "id": "H-CC-LOOP-001",
+      "status": "OPEN_SUPPORTED_BY_PROXY",
+      "claim": "FRANK's loop-of-loops architecture does not currently require a new first-class ClayCode loop primitive; existing record/state semantics plus the already-needed generic function/recursion-control closure can represent loop families when schedule/update policy is explicit data in typed IR.",
+      "counterhypothesis": "First-class loop semantics are required to statically enforce heterogeneous timescale, budget, intervention and rollback behavior without semantic leakage.",
+      "evidence": ["EXECUTABLE_RESEARCH_RECEIPT.json", "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"],
+      "falsifier": "A production ClayCode compiler/runtime counterexample where generic typed functions/state/control cannot preserve required loop behavior or safety while a first-class loop construct can."
+    },
+    {
+      "id": "H-CC-LOOP-002",
+      "status": "SUPPORTED_BY_EXECUTABLE_COUNTEREXAMPLE",
+      "claim": "Executable loop scheduling policy belongs to ClayCode semantic identity: ORDERED_SEQUENTIAL schedules must retain order, while order normalization is only valid under explicitly order-independent synchronous snapshot/aggregation semantics.",
+      "counterhypothesis": "Loop schedule can always be normalized as an unordered set because only loop membership matters.",
+      "evidence": ["EXECUTABLE_RESEARCH_RECEIPT.json"],
+      "falsifier": "Matched production traces showing all relevant sequential/coupled FRANK loop updates are order-independent under the admitted runtime semantics."
+    },
+    {
+      "id": "H-CC-LOOP-003",
+      "status": "OPEN_SUPPORTED_BY_PROXY_AND_INDEPENDENT_PRIOR_ART",
+      "claim": "Nested-loop calls need transitive type/effect closure, but effect expressibility must remain separate from external capability authority.",
+      "counterhypothesis": "Per-function local effect declarations are sufficient and authority can be inferred from declared effect intent.",
+      "evidence": ["EXECUTABLE_RESEARCH_RECEIPT.json", "https://arxiv.org/abs/1306.6316", "https://arxiv.org/abs/1406.2061", "https://github.com/WebAssembly/WASI/blob/main/docs/Capabilities.md"],
+      "falsifier": "Production compiler/runtime evidence that local-only summaries preserve all nested effects and do not permit hidden authority widening."
+    },
+    {
+      "id": "H-CC-LOOP-004",
+      "status": "OPEN",
+      "claim": "The next BASE implementation step should prioritize production control-flow/type-effect/evaluator closure over new loop syntax.",
+      "counterhypothesis": "A dedicated loop construct materially reduces implementation/repair cost or prevents safety failures that generic control-flow cannot.",
+      "evidence": ["research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json", "research_entity/trigger_runs/claycode/claycode-20260809T1711p0700-chatgpt-secondary-fn-closure/FINAL_REPORT.md", "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/FINAL_REPORT.md"],
+      "falsifier": "Executable production benchmark where first-class loop syntax yields a safety/semantic capability unavailable to generic typed control-flow rather than merely convenience."
+    }
+  ]
+}

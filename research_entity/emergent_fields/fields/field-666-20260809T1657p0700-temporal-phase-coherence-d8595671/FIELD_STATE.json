@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "field_id": "field-666-20260809T1657p0700-temporal-phase-coherence-d8595671",
+  "name": "Temporal Phase Coherence under Scheduler Jitter",
+  "spawn_seed": 15589586631566225798,
+  "spawn_seed_hash": "d8595671b9aef186fbf3b75a3d028322454fa2dad4c56b5257f137f6583e6f12",
+  "created_at": "2026-08-09T16:57:00+07:00",
+  "spawning_run_id": "666-20260809T1657p0700-chatgpt-secondary-tpcj",
+  "milestone_at_spawn": "BASE_CLAYCODE_RELEASE",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "lens": ["real-time systems", "switched dynamical systems", "control timing", "multi-timescale cognitive coupling"],
+  "required_connections": ["gwt", "hyperposition", "claycode", "harness"],
+  "lifecycle_state": "INTEGRATED",
+  "research_question": "Can individually stable timing/update modes become unstable or semantically divergent when scheduler jitter switches among them, and what timing receipts/robustness envelopes must FRANK/ClayCode expose?",
+  "hypotheses": [
+    {"id":"H-TPCJ-01","claim":"Per-mode correctness/stability is insufficient; switching among timing modes can amplify coupled state unless the schedule family itself is tested.","status":"SUPPORTED_WORKING_HYPOTHESIS"},
+    {"id":"H-TPCJ-02","claim":"GWT/Hyperposition delay interventions should report a temporal robustness envelope over schedule/jitter classes, not only single fixed-delay points.","status":"OPEN"},
+    {"id":"H-TPCJ-03","claim":"ClayCode likely needs executable time/deadline/epoch receipts in runtime/ABI semantics before any new language syntax is justified.","status":"OPEN"}
+  ],
+  "counterhypotheses": [
+    "A single deterministic scheduler may make schedule-family robustness unnecessary for authoritative paths.",
+    "If all relevant coupled update operators share a common contraction/Lyapunov certificate, arbitrary switching may already be safe.",
+    "Some slow or derived state can tolerate jitter if it is excluded from consequential authority and causally tagged by epoch."
+  ],
+  "experiment": {
+    "id":"EXP-TPCJ-01",
+    "class":"EXACT_SYNTHETIC_SWITCHED_SYSTEM_MECHANISM_EXPERIMENT",
+    "mode_A":[[0.8,1.0],[0.0,0.8]],
+    "mode_B":[[0.8,0.0],[1.0,0.8]],
+    "spectral_radius_A":0.8,
+    "spectral_radius_B":0.8,
+    "alternating_two_step_spectral_radius":2.0833981132056607,
+    "enumeration_horizon":12,
+    "schedule_count":4096,
+    "initial_state":[1.0,0.0],
+    "schedules_with_final_norm_gt_1":4050,
+    "schedules_with_final_norm_gt_10":2828,
+    "alternating_0101_final_norm":39.643137605906354,
+    "max_final_norm":71.52603752734443,
+    "max_schedule":"101010101010",
+    "interpretation":"Both fixed update operators are individually asymptotically stable by spectral radius, yet a legal alternating switch product has spectral radius >1 and strongly amplifies the state. This is a mechanism counterexample to inferring schedule-family safety from per-mode safety.",
+    "boundary":"Synthetic linear mechanism only; not live FRANK evidence."
+  },
+  "external_grounding": [
+    {"source":"Lincoln & Cervin, Jitterbug: A Tool for Analysis of Real-Time Control Performance, IEEE CDC 2002","doi":"10.1109/CDC.2002.1184698","support":"Delay, sampling jitter, output jitter, lost samples and period overruns can be analyzed as implementation timing effects on control performance."},
+    {"source":"Cervin et al., Jitterbug and TrueTime: Analysis Tools for Real-Time Control Systems, 2002","support":"Real-time control analysis/co-simulation explicitly couples task scheduling and process dynamics."},
+    {"source":"Linux kernel PREEMPT_RT documentation","support":"Linux real-time behavior requires explicit scheduling/preemption/locking treatment; realtime execution is an implementation property, not implied by ordinary correctness."}
+  ],
+  "branch_implications": {
+    "gwt":"Extend delay_changed counterfactuals into schedule-family/jitter-envelope sweeps bound to episode IDs and state epochs.",
+    "hyperposition":"Treat delay/timescale metadata as an active switching surface; measure robustness under alternating/multi-rate coupling, not only static delay values.",
+    "claycode":"Route first to CC-WP-09-CONCURRENCY-MEMORY and runtime receipts: logical_time, observed_latency, deadline/budget, source_epoch, target_epoch, schedule_class, nondeterminism receipt. No syntax change absent executable counterexample.",
+    "harness":"Add deterministic schedule-fuzzing and worst-case alternating-pattern tests while model outputs are frozen; record semantic divergence, GWT winner changes, re-entry validity and recovery."
+  },
+  "decision":"ROUTE_TEMPORAL_ROBUSTNESS_ENVELOPE_AS_RUNTIME_AND_HARNESS_OBLIGATION_NOT_LANGUAGE_REDESIGN",
+  "result":"SUPPORTED_WORKING_HYPOTHESIS_WITH_EXACT_SWITCHING_COUNTEREXAMPLE_ROUTED_TO_MESH_NOT_PROMOTED"
+}

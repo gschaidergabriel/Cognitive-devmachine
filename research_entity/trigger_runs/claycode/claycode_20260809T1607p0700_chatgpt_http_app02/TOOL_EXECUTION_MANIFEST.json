@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1607p0700_chatgpt_http_app02",
+  "executions": [
+    {
+      "tool": "GitHub connector",
+      "purpose": "Canonical boot, branch/material reads, concurrency refresh and durable writes",
+      "status": "SUCCESS"
+    },
+    {
+      "tool": "local container Python 3.13.5",
+      "purpose": "Execute bounded HTTP compiler/lowering experiments",
+      "status": "SUCCESS",
+      "receipts": [
+        "experiments/http_app02_v1/EXECUTABLE_RESEARCH_RECEIPT.json",
+        "experiments/http_app02_v2/EXECUTABLE_RESEARCH_RECEIPT.json"
+      ]
+    },
+    {
+      "tool": "git clone",
+      "purpose": "Attempt literal execution of repository research_interconnect_preflight.py",
+      "status": "FAILED_ENVIRONMENT",
+      "observed": "Could not resolve host github.com from local container",
+      "interpretation": "Connector can read/write GitHub, but local container cannot clone the repository. No claim that the official preflight executable ran locally."
+    },
+    {
+      "tool": "preflight governance logic reproduction",
+      "purpose": "Test registry branch set against the fail-closed priority invariant visible in the current official preflight source",
+      "status": "NEGATIVE_RESULT",
+      "observed": {
+        "registry_missing_from_tool_priority": ["clayresearch"],
+        "stale_tool_priority_entry": ["clay"],
+        "set_equal": false
+      },
+      "receipt": "experiments/PREFLIGHT_GOVERNANCE_DRIFT_RECEIPT.json"
+    },
+    {
+      "tool": "web primary-source research",
+      "purpose": "Triangulate typed component/resource and WASI HTTP authority-boundary design",
+      "status": "SUCCESS",
+      "sources": [
+        "https://github.com/WebAssembly/component-model",
+        "https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md",
+        "https://github.com/WebAssembly/WASI/releases",
+        "https://github.com/WebAssembly/wasi-http/blob/main/wit/handler.wit"
+      ]
+    },
+    {
+      "tool": "E2B",
+      "purpose": "Preferred external executable sandbox",
+      "status": "NOT_EXPOSED_TO_SESSION"
+    }
+  ],
+  "strong_completion_validation": "BLOCKED_BY_CURRENT_PREFLIGHT_GOVERNANCE_DRIFT",
+  "canonical_promotion": "NOT_ATTEMPTED"
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "2.0",
+  "event_id": "workevt-20260809T1741p0700-spawn-cc-effect-authority-app08-create",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:41:00+07:00",
+  "payload": {
+    "work_id": "WORK-CC-EFFECT-AUTHORITY-APP08-001",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SPAWN_RESEARCH_DELTA",
+    "title": "Implement and falsify ClayCode effect-authority closure in APP-08",
+    "work_clay": "Implement the current G9 rule model_intent_and_effect_authority_separate in the first real ClayCode type/effect checker, lowering, runtime ABI and FFI gateway. Treat serialized CapabilityRef/descriptor state as non-authorizing; require independently validated opaque/sealed bearer possession or an equivalently strong signed capability mechanism. Enforce transitive child authority closure across Python/Bash/WASM/native subprocess and FFI adapters.",
+    "reason_clay": "Spawn run spawn_20260809T1741p0700_claycode_effect_authority_lowering produced two proxy counterexamples: structural field-only capability validation accepted 20000/20000 forgeries; ambient-host lowering bypassed the broker in 10000/10000 unauthorized cases. Brokered/opaque controls produced zero unauthorized accepts in the tested proxy corpus. Real compiler/Ubuntu evidence is still absent.",
+    "completion_clay": "Execute APP-08 on the Ubuntu developer target with valid reversible effects plus forged descriptors, copied/stale/revoked refs, attenuation/delegation, generated child code, confused-deputy/path substitution, restart/replay and brokered-vs-ambient differential. Record source semantic hash, effect manifest hash, adapter ABI/set hash, capability-scope hash, target hash, environment identity and exact outcomes. PASS only if ordinary utility remains available and tested unauthorized protected effects are unreachable.",
+    "evidence_need": [
+      "real ClayCode compiler/type-effect/lowering execution receipt",
+      "Ubuntu target-host APP-08 execution receipt",
+      "negative-control ambient backend receipt",
+      "forgery/revocation/confused-deputy corpus receipt"
+    ],
+    "executor_policy": "Research Entity local build/execution organ after current ClayCode compiler path exists; revalidate latest work revision and program gate before effect. Frank may propose but may not authorize or modify its own Harness.",
+    "required_capabilities": ["CLAYCODE_COMPILER_RUNTIME", "UBUNTU_LOCAL_EXECUTION", "REPO_RW", "SANDBOX_OR_CAPABILITY_BROKER"],
+    "write_scope": ["research_entity/claycode/", "research_entity/harness/", "research_entity/trigger_runs/"],
+    "dependencies": [
+      "CC-WP-04-TYPE-EFFECT available",
+      "CC-WP-06-COMPILER-LOWERING available",
+      "CC-WP-07-RUNTIME-ABI-FFI available"
+    ],
+    "invalidators": [
+      "newer executable ClayCode evidence already proves an equivalent or stronger authority-closure contract",
+      "program-stage revision changes the required APP-08 semantics"
+    ],
+    "base_priority": 0.86,
+    "expected_impact": 0.95,
+    "urgency": 0.78,
+    "information_gain": 0.96,
+    "status": "BLOCKED"
+  }
+}

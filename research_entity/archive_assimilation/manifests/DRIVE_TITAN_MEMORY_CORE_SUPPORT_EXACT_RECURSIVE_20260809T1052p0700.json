@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-TITAN-MEMORY-CORE-SUPPORT-EXACT-RECURSIVE-20260809T1052p0700",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"title":"titan-memory","drive_id":"1fnB_uYrxTL5ecjsyof8fIEbn-mnr4x19","direct_entries":14,"direct_folders":9,"direct_files":5},
+  "method":{"enumerator":"Google_Drive.list_folder","top_k":1000,"search_role":"NONE_FOR_EXACTNESS","guard":"research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md"},
+  "partition":{"closed_now":["root material files","assets","benchmarks","docs","examples","tests","lcme",".pytest_cache"],"open_large_support":[".git",".venv"]},
+  "closed_counts":{"folders_below_titan_root_excluding_git_and_venv":11,"files_below_titan_root_excluding_git_and_venv":45,"total_units_below_titan_root_excluding_git_and_venv":56},
+  "count_derivation":{
+    "root_files":5,
+    "assets":{"folder_units_including_root":1,"files":5},
+    "benchmarks":{"folder_units_including_root":1,"files":4},
+    "docs":{"folder_units_including_root":1,"files":3},
+    "examples":{"folder_units_including_root":1,"files":4},
+    "tests":{"folder_units_including_root_and_pycache":2,"files":2},
+    "lcme":{"folder_units_including_root_and_pycache":2,"files":18},
+    ".pytest_cache":{"folder_units_including_root_v_cache":3,"files":4},
+    "formula":"folders: 1+1+1+1+2+2+3=11; files: 5 root +5+4+3+4+2+18+4=45; total=56"
+  },
+  "semantic_reconciliation":{"prior_manifest":"research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_EXECUTABLE_ORACLE_MANIFEST.json","prior_status":"SEMANTIC_SOURCE_CLASSES_FROZEN_VENDOR_GENERATED_IDENTITY_OPEN","semantic_source_credit":"NO_DUPLICATE_CREDIT","new_value":"exact structural identity closure for previously open assets/.pytest/generated cache leaves plus direct confirmation of previously frozen semantic folders"},
+  "generated_support_classification":{"tests/__pycache__":"GENERATED_BYTECODE","lcme/__pycache__":"GENERATED_BYTECODE",".pytest_cache":"GENERATED_TEST_CACHE","assets":"SUPPORT_MEDIA_MEASUREMENT_ARTIFACTS"},
+  "open_support":{".git":{"drive_id":"1s5VagzrofdZ39JjV3oPvLCLH0YRJi1wv","direct_entries":13,"direct_folders":6,"direct_files":7,"objects_root":"1T0SZAnNVFTNueF0bjOFkyxgcp6Harv6Y","status":"DIRECT_ROOT_FROZEN_RECURSIVE_OPEN"},".venv":{"drive_id":"15SDcUJdzzKhoc74cwwh5UCL0W_u74GKi","direct_entries":4,"direct_folders":3,"direct_files":1,"site_packages_root":"1MM1lC6dkh07gQNq4U0zxoletNzRvBvaG","site_packages_direct_entries":10,"site_packages_direct_folders":9,"site_packages_direct_files":1,"status":"SCAFFOLDING_DIRECT_FROZEN_PACKAGE_RECURSION_OPEN"}},
+  "scope_effect":{"titan_memory_core_and_small_support":"EXACT_RECURSIVE_CLOSED","titan_memory_whole_folder":"OPEN_ONLY_ON_GIT_AND_VENV","global_level0":"NOT_PASS"},
+  "level0_credit":{"exact_global_percent_added":0.0,"reason":"Global Drive + Project-Frankenstein + reconciliation denominator remains unfrozen."},
+  "earned_work_hours_added":0.0,
+  "created_at":"2026-08-09T10:52:00+07:00"
+}

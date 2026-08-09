@@ -1,0 +1,9 @@
+module claycode.exp.http.v2
+record HttpCapability { id:CapabilityRef; designates:ResourceRef; permits:Set<Verb>; }
+record HttpRequest { method:String; path:String; }
+record AppState { visits:Int; }
+record EffectIntent { semantic_intent:IntentRef; capability:CapabilityRef?; desired:Set<OutcomePredicate>; }
+rule request.method = "GET" && request.path = "/" => ROUTE_HOME
+rule request.method = "GET" && request.path = "/asset.txt" => ROUTE_ASSET
+rule request.method = "GET" && request.path = "/count" => ROUTE_COUNT
+rule effect.semantic_intent = "http.serve" && effect.capability = "cap:http-listener" => REQUEST_SERVE

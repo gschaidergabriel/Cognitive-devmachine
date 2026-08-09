@@ -1,0 +1,93 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1020p0700-chatgpt-secondary-aicore-config-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_CONFIG_10_OF_10_FILES",
+  "source_universe":"DRIVE_CLAY/AICORE/config",
+  "source_folder_id":"1yPxfkHebhZvDF4qSmzhmnKI87qVJme1k",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"files":10,"folders":0,"files_semantically_closed":10,"coverage_percent":100.0},
+  "files":[
+    {"path":"config/instanz.py","bytes":6586,"sha256":"c751ee913f0df7af3f119beb2f792d2640407b217c7c22d86ff76d73aef4e7ac"},
+    {"path":"config/ports.py","bytes":6168,"sha256":"c2a4b17b09687fcb5a7f3447d9bfda5162d1d0a38dbcf28f6218f86618637bd4"},
+    {"path":"config/gpu.py","bytes":9985,"sha256":"94ebb4f6db0c09717f89986ff924b9266470e28cb63f86df21833c6231d56e3a"},
+    {"path":"config/adi_config.py","bytes":4312,"sha256":"583b1221b20e47ce768a4ce4f916b992a09e0aa8c5ebdcca972f8110f33be58a"},
+    {"path":"config/paths.py","bytes":10028,"sha256":"07ca08fe1bc2f499fc2404c50d9ac9293461c3d08b7542c32d005c8228523831"},
+    {"path":"config/__init__.py","bytes":17,"sha256":"c14ca3c1b7f819ee5d603746b36c1843f0f28eda5075589c079265705386f48a"},
+    {"path":"config/ewish_config.py","bytes":2937,"sha256":"ca49b8bdb78eefe143a4e4d551c1393c751cea3fb16e5f5305ea714764cd844c"},
+    {"path":"config/fas_popup_config.py","bytes":5640,"sha256":"e8b9f48362b69d8f10a0f56c3d78949089288a8c3cb3d14a5f368c052dc7e741"},
+    {"path":"config/logging_config.py","bytes":2308,"sha256":"c597da7b67468102e10ff31d123d021042d730ace952bd95a28e11f9e8a0c48b"},
+    {"path":"config/genesis_config.json","bytes":893,"sha256":"937d97050c899f7d8ffd337eaa0079a5a0a12a70cdc49d23f2f9cc58cc379649"}
+  ],
+  "positive_lineage":[
+    "ports.py explicitly centralizes live service ports, separates known-dead ports and introduces per-instance FRANK_PORT_BASE offset semantics.",
+    "instanz.py delegates port truth to ports.py and injects existing environment-variable interfaces rather than independently recalculating ports.",
+    "paths.py centralizes a large historical set of database/state/data paths and supports environment overrides.",
+    "GPU detection captures resolved hardware/backend characteristics and Genesis thresholds are explicit data rather than hidden constants."
+  ],
+  "executed_reproductions":[
+    {"id":"CFG-R1-MODEL-SPLIT","setup":"AICORE_DATA=/tmp/.../data and AICORE_MODELS_DIR=/tmp/.../override_models before importing config.paths","observed":"paths.MODELS_DIR resolved to override_models while paths.MODEL_PATHS['subconscious'] remained data/models/subconscious.pt","result":"CONFIRMED"},
+    {"id":"CFG-R2-IMPORT-ORDER","setup":"import config.paths first, then import config.instanz with FRANK_ROOT set","observed":"instanz updated os.environ['AICORE_DATA'] but the already-bound paths.AICORE_DATA constant remained at its earlier value","result":"CONFIRMED"},
+    {"id":"CFG-R3-INVALID-PORT-BASE","setup":"FRANK_PORT_BASE=notanint","observed":"config.ports silently set PORT_BASE=0 and core remained 8088","result":"CONFIRMED"},
+    {"id":"CFG-R4-UNKNOWN-DB","setup":"config.paths.get_db('typo_name') in an isolated data root","observed":"returned and created parent for data/db/typo_name.db rather than rejecting unknown registry key","result":"CONFIRMED"}
+  ],
+  "findings":[
+    {
+      "id":"CFG-1-IMPORT-ORDER-STATE",
+      "severity_for_current_architecture":"P1_BOOT_DETERMINISM",
+      "evidence":"instanz.py says early import is sufficient and mutates environment at import time. paths.py resolves module-level constants at import time. Executed reproduction proves late instance injection cannot rebind already-imported path constants.",
+      "effect":"Boot/import order changes which data root/runtime paths some modules use; one process can contain two configuration epochs.",
+      "required_contract":"No import-time configuration mutation. Construct one immutable InstanceConfig/BootManifest before subsystem initialization and inject it explicitly into all modules."
+    },
+    {
+      "id":"CFG-2-MODEL-PATH-SPLIT",
+      "severity_for_current_architecture":"P1_CONFIRMED_BUG",
+      "evidence":"paths.py defines MODELS_DIR=AICORE_DATA/models, constructs MODEL_PATHS from it, then later reassigns MODELS_DIR from AICORE_MODELS_DIR. Executed reproduction confirms MODEL_PATHS retain the old directory.",
+      "effect":"Different components can read/write different model roots while both believe they use the centralized config.",
+      "required_contract":"Resolve root configuration once, then derive every dependent path after overrides are final; immutable config validation must reject duplicate/reassigned root definitions."
+    },
+    {
+      "id":"CFG-3-SILENT-REGISTRY-FALLBACK",
+      "severity_for_current_architecture":"P1_UNIFIEDDB_INTEGRITY",
+      "evidence":"get_db/get_state fall back to constructing arbitrary <name>.db/.json paths for unknown names. Executed reproduction creates typo_name.db path without error.",
+      "effect":"Typos or divergent subsystem names can silently fork persistence into new files, defeating a canonical unified database/state registry.",
+      "required_contract":"Production get_db/get_state are closed-world typed registry lookups. Unknown identities fail loudly; explicit dynamic namespaces, if needed, use a separate API with provenance."
+    },
+    {
+      "id":"CFG-4-INVALID-INSTANCE-FALLBACK",
+      "severity_for_current_architecture":"P1_MULTI_INSTANCE_COLLISION",
+      "evidence":"ports.py catches ValueError parsing FRANK_PORT_BASE and silently resets it to 0. Executed reproduction with non-integer input maps core to the prime 8088 port.",
+      "effect":"A malformed twin configuration can collapse onto Prime's ports instead of refusing to start.",
+      "required_contract":"Instance identity/port offset validation is fail-closed and collision-checked before any bind. Invalid configuration cannot default into another identity."
+    },
+    {
+      "id":"CFG-5-PARTIAL-CENTRALIZATION",
+      "severity_for_current_architecture":"P1_MULTI_INSTANCE_ISOLATION",
+      "evidence":"adi_config.py hardcodes llm_url 127.0.0.1:8105 and a ~/.config/frank user path; fas_popup_config.py hardcodes /tmp/fas_popup_state.json and ~/.config/frank/fas_popup.json; logging_config.py hardcodes ~/.local/share/frank/logs instead of the central instance paths.",
+      "effect":"A shifted/twin instance can still address Prime's LLM or collide in UI state/config/logs despite the central port/path modules.",
+      "required_contract":"Harness must scan/runtime-trace every filesystem/network endpoint against InstanceConfig; no hardcoded instance-scoped path/port remains outside the canonical manifest."
+    },
+    {
+      "id":"CFG-6-GPU-FORCE-SOFTENING",
+      "severity_for_current_architecture":"REPRODUCIBILITY_REQUIREMENT",
+      "evidence":"detect_gpu treats an unavailable/unknown forced AICORE_GPU_BACKEND as a reason to continue auto-detection rather than fail the requested backend configuration.",
+      "effect":"An experiment can silently execute on a different backend than the requested one unless resolved backend is separately recorded.",
+      "required_contract":"Distinguish preferred backend from required backend; required mismatch fails, resolved hardware/backend is persisted in every benchmark/training/runtime epoch."
+    }
+  ],
+  "cross_source_lineage":{"project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","paths_py_present_and_contains_model_dir_reassignment_and_open_fallback":"CONFIRMED","instanz_py_at_frozen_head":"NOT_FOUND","ports_centralization_search_at_frozen_head":"NOT_FOUND","interpretation":"The Drive config contains a later centralization effort layered over older PF configuration; the fixes themselves still have partial-centralization/import-order defects and must be reconciled rather than blindly copied."},
+  "current_architecture_feedback":{
+    "frank":["FRANK identity includes one immutable instance/boot manifest; a process cannot contain mixed config epochs."],
+    "harness":["Add config-order permutation tests, invalid-instance fail-closed tests, hardcoded endpoint scans and two-instance isolation tests covering LLM/DB/log/temp/UI state."],
+    "claycode":["Paths, ports, artifact identities and runtime endpoints are typed capabilities/handles, not literal strings emitted or interpreted ad hoc."],
+    "unifieddb":["Eliminate silent dynamic DB-name fallback; persistence namespaces are schema-registered and migration-versioned."],
+    "claygraph":["Bind every state/artifact node to instance_id and boot_epoch so twins cannot merge histories accidentally."],
+    "gwt":["Broadcast verified instance identity/current substrate endpoints as state, never infer them from default ports or filenames."],
+    "clay":["Dissolving modules into one binary is an opportunity to eliminate import-order configuration side effects entirely."]
+  },
+  "training":{"executed":false,"authorized":false},
+  "next":"Continue exact AICORE sibling closure; add config split-brain and twin-isolation cases to Harness gates.",
+  "created_at":"2026-08-09T10:20:00+07:00"
+}

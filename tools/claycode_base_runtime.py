@@ -25,7 +25,7 @@ import uuid
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping
 
-RUNTIME_VERSION = "claycode-base-runtime/0.2"
+RUNTIME_VERSION = "claycode-base-runtime/0.3"
 _CONSTRUCTOR_KEY = object()
 
 class RuntimeFault(RuntimeError): pass
@@ -111,9 +111,34 @@ class ClayRuntime:
             raise CapabilityFault("CAPABILITY_POLICY_NOT_CANONICAL_JSON") from exc
         return normalized, hashlib.sha256(encoded).hexdigest()
 
+    @staticmethod
+    def _normalize_process_programs(policy: Mapping[str, Any] | None) -> dict[str, Any]:
+        raw = dict(policy or {})
+        programs = raw.get("programs")
+        if not isinstance(programs, list) or not programs:
+            raise CapabilityFault("PROCESS_POLICY_REQUIRES_ABSOLUTE_EXECUTABLE_ALLOWLIST")
+        canonical: list[str] = []
+        for entry in programs:
+            if not isinstance(entry, str) or not entry:
+                raise CapabilityFault("PROCESS_POLICY_REQUIRES_ABSOLUTE_EXECUTABLE_ALLOWLIST")
+            supplied = Path(entry)
+            if not supplied.is_absolute():
+                raise CapabilityFault("PROCESS_POLICY_REQUIRES_ABSOLUTE_EXECUTABLE_ALLOWLIST")
+            try:
+                resolved = supplied.resolve(strict=True)
+            except OSError as exc:
+                raise CapabilityFault(f"PROCESS_POLICY_EXECUTABLE_MISSING:{entry}") from exc
+            if not resolved.is_file() or not os.access(resolved, os.X_OK):
+                raise CapabilityFault(f"PROCESS_POLICY_NOT_EXECUTABLE:{resolved}")
+            canonical.append(str(resolved))
+        raw["programs"] = sorted(set(canonical))
+        return raw
+
     def mint_capability(self, kind: str, policy: Mapping[str, Any] | None = None) -> _CapabilityHandle:
         if kind not in {x.capability_kind for x in self._adapters.values()}:
             raise CapabilityFault(f"UNKNOWN_CAPABILITY_KIND:{kind}")
+        if kind == "process.exec":
+            policy = self._normalize_process_programs(policy)
         normalized, ph = self._canonical_policy(policy)
         self._validate_policy(kind, normalized)
         cid = uuid.uuid4().hex
@@ -127,8 +152,8 @@ class ClayRuntime:
     def _validate_policy(kind: str, policy: dict[str, Any]) -> None:
         if kind == "process.exec":
             programs = policy.get("programs")
-            if not isinstance(programs, list) or not programs or not all(isinstance(x, str) and x and "/" not in x for x in programs):
-                raise CapabilityFault("PROCESS_POLICY_REQUIRES_BASENAME_ALLOWLIST")
+            if not isinstance(programs, list) or not programs or not all(isinstance(x, str) and Path(x).is_absolute() for x in programs):
+                raise CapabilityFault("PROCESS_POLICY_REQUIRES_ABSOLUTE_EXECUTABLE_ALLOWLIST")
         elif kind == "async.compute":
             ops = policy.get("operations", ["identity", "square", "negate"])
             if not isinstance(ops, list) or any(x not in {"identity", "square", "negate"} for x in ops):
@@ -240,9 +265,14 @@ class ClayRuntime:
 
     def _process_exec(self, policy, argv: list[str]):
         if not argv: raise ResourceFault("EMPTY_ARGV")
-        program=Path(argv[0]).name
+        supplied = Path(argv[0])
+        if not supplied.is_absolute(): raise CapabilityFault("PROCESS_EXEC_REQUIRES_ABSOLUTE_PATH")
+        try:
+            program = str(supplied.resolve(strict=True))
+        except OSError as exc:
+            raise ResourceFault(f"PROCESS_EXECUTABLE_MISSING:{argv[0]}") from exc
         if program not in set(policy["programs"]): raise CapabilityFault(f"PROCESS_NOT_ALLOWLISTED:{program}")
-        cp=subprocess.run(argv,cwd=self._sandbox_root,text=True,capture_output=True,timeout=10,check=False)
+        cp=subprocess.run([program, *argv[1:]],cwd=self._sandbox_root,text=True,capture_output=True,timeout=10,check=False)
         return {"returncode":cp.returncode,"stdout":cp.stdout,"stderr":cp.stderr}
 
     @staticmethod

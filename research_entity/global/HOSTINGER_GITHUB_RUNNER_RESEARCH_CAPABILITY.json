@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "tool_name": "hostinger_github_runner",
   "provider": "Hostinger + GitHub Actions",
   "class": "self_hosted_remote_build_test_runtime",
@@ -32,7 +32,30 @@
     "github_status_observed": "Idle",
     "status_indicator": "green",
     "evidence_source": "user-provided live GitHub Actions runner UI screenshot in ChatGPT turn",
-    "interpretation": "Runner agent is connected to GitHub and currently ready/idle. Subsequent FRANK receipts prove real build/test and real Qwen-class model execution on this host."
+    "interpretation": "Runner agent was connected to GitHub and ready/idle at observation time. Subsequent FRANK receipts prove real build/test and real Qwen-class model execution on this host."
+  },
+  "repository_scope_observation": {
+    "observed_at": "2026-08-09T17:53:00Z",
+    "machine_availability": "ONLINE_VERIFIED_BY_PRIOR_REAL_EXECUTION",
+    "dr_unterweger_repository_execution": "VERIFIED_BY_PERSISTED_SELF_HOSTED_RECEIPTS",
+    "clay_global_research_entity_actions_admission": "DEGRADED_UNVERIFIED",
+    "clay_global_research_entity_self_hosted_scope": "NOT_CURRENTLY_PROVEN_EXECUTABLE",
+    "clay_wp02_receipt": "MISSING_EVIDENCE",
+    "evidence_event": "research_entity/state/system/events/20260809T175300Z-chatgpt-secondary-actions-prerun-cross-repo-replication.json",
+    "observations": [
+      "A prior same-repository Clay dual-lane probe instantiated a workflow while its self-hosted [self-hosted, Linux, X64] job remained queued in the observation window.",
+      "Clay PR #52 instantiated GitHub-hosted run 31327468352, but job 93280013413 failed before any visible step/log.",
+      "One connector-authorized rerun was accepted and job 93280085034 reproduced completed/failure before any visible step.",
+      "No dispatch HTTP request was reached and no Clay WP02/WP06 receipt was materialized.",
+      "Official GitHub Status reported Actions operational during the cross-repository reproduction, weakening a current global outage explanation."
+    ],
+    "interpretation": "Do not conflate a verified Hostinger machine/runner history with current execution availability for every repository. Until GitHub Actions admission and an eligible Clay repository runner scope are reverified, Clay-repository remote execution stays DEGRADED/UNKNOWN while existing Dr.-Unterweger receipts remain valid for their exact runs.",
+    "routing_rule": "For clay-global-research-entity, do not claim or schedule receipt-dependent promotion from Hostinger until a step-executed exact-SHA run re-establishes Actions admission and runner eligibility. For Dr.-Unterweger, use only workflows with current verified execution receipts and revalidate before consequential effects.",
+    "operator_checks": [
+      "GitHub personal Billing & licensing -> Actions usage/budgets/payment state",
+      "Repository Settings -> Actions -> General",
+      "Repository Settings -> Actions -> Runners for clay-global-research-entity"
+    ]
   },
   "verified_execution_receipts": [
     {
@@ -130,11 +153,13 @@
     "can_read_job_steps_and_logs": true,
     "can_rerun_existing_jobs": true,
     "can_arbitrary_workflow_dispatch": false,
-    "rule": "When no existing runnable job/workflow is exposed, create/revise repo work for an execution-capable organ rather than pretending a dispatch occurred."
+    "can_create_issue_or_pr_event_transport": true,
+    "event_transport_result": "PR event can instantiate runs, but current hosted jobs reproduced pre-step failure; issue bridge receipts did not materialize",
+    "rule": "When no existing runnable job/workflow is exposed, create/revise repo work for an execution-capable organ rather than pretending a dispatch occurred. Do not treat event creation as execution evidence."
   },
   "routing": {
     "frank_v0_1_remote_build_test_priority": 1,
-    "policy": "PREFERRED_REMOTE_BUILD_TEST_PATH_FOR_FRANK_V0_1",
+    "policy": "PREFERRED_REMOTE_BUILD_TEST_PATH_FOR_FRANK_V0_1_WHEN_REPOSITORY_SCOPE_AND_ACTIONS_ADMISSION_ARE_VERIFIED",
     "final_release_boundary": "Hostinger remote receipts accelerate build/test/debug/model experiments, but final Frank v0.1 acceptance still requires the designated Andreas Ubuntu developer system evidence."
   },
   "doomsday_forecast": {
@@ -148,14 +173,16 @@
       "CLAY_0_1_ACCEPTANCE_RUN"
     ],
     "impacts": [],
-    "note": "Real build/test and real Qwen-class model execution are verified. No ETA multiplier is admitted yet because repeated comparable workload calibration and final-device transfer evidence remain insufficient."
+    "note": "Real build/test and real Qwen-class model execution are verified on prior Frank runs. Current Clay-repository Actions admission is degraded/unverified, so no new ETA multiplier is admitted."
   },
   "security": {
     "no_raw_credentials_in_repo_state": true,
     "workflow_revision_revalidation_before_effect": true,
     "runner_label_revalidation_before_effect": true,
+    "repository_scope_revalidation_before_effect": true,
+    "actions_admission_revalidation_before_effect": true,
     "secrets_boundary_required": true,
-    "open_authority_hardening": "persistent self-hosted execution and canonical receipt persistence must continue moving toward minimum-permission execution plus separately constrained persistence; no compromise is claimed"
+    "open_authority_hardening": "persistent self-hosted execution and canonical receipt persistence must continue using minimum-permission execution plus separately constrained persistence; do not weaken gates to route around orchestration failures"
   },
   "research_handoff": {
     "report": "research_entity/reports/20260810T0007p0700_CHATGPT_FRANK_V01_DEEP_RESEARCH_VPS_FUSION.md",
@@ -164,8 +191,10 @@
     "completed_first_lane_receipt": "research_entity/state/work/events/20260809T171300Z-chatgpt-secondary-frank-hostinger-first-lane-receipt.json",
     "current_real_model_work": "research_entity/state/work/events/20260809T171800Z-chatgpt-secondary-frank-real-qwen4b-prebuilt-revise.json",
     "real_model_partial_receipt": "research_entity/state/work/events/20260809T173400Z-chatgpt-secondary-frank-real-qwen4b-partial-receipt.json",
-    "runner_authority_work": "research_entity/state/work/events/20260809T171500Z-chatgpt-secondary-frank-runner-authority-hardening.json"
+    "runner_authority_work": "research_entity/state/work/events/20260809T171500Z-chatgpt-secondary-frank-runner-authority-hardening.json",
+    "actions_prerun_blocker": "research_entity/state/system/events/20260809T175100Z-chatgpt-secondary-github-actions-prerun-blocker.json",
+    "actions_cross_repo_replication": "research_entity/state/system/events/20260809T175300Z-chatgpt-secondary-actions-prerun-cross-repo-replication.json"
   },
-  "verified_at": "2026-08-09T17:35:00Z",
-  "source": "live GitHub Actions runner observation + current self-hosted FRANK execution receipts + real Qwen4B execution + project-owner authorization"
+  "verified_at": "2026-08-09T17:53:00Z",
+  "source": "live GitHub Actions runner observation + persisted FRANK self-hosted execution receipts + real Qwen4B execution + cross-repository Actions pre-step failure replication + official GitHub Status + project-owner authorization"
 }

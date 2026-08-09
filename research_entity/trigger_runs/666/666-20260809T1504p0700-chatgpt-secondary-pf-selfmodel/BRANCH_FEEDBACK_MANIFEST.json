@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "666-20260809T1504p0700-chatgpt-secondary-pf-selfmodel",
+  "actor": "chatgpt-secondary",
+  "trigger": "666",
+  "stage": "L0_ARCHIVE_ASSIMILATION",
+  "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1504p0700_chatgpt_secondary_pf_selfmodel_embodiment_identity_lineage.json",
+  "feedback": {
+    "frank": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Use one authoritative versioned IdentityFact contract; do not duplicate identity constants in persona, self-knowledge and fallbacks.",
+        "Separate AUTHORITATIVE_IDENTITY, OBSERVED_CAPABILITY, DERIVED_INTERNAL_STATE and NARRATIVE_RENDERING authority classes.",
+        "Require runtime receipts or STALE/UNKNOWN for capability claims."
+      ]
+    },
+    "claycode": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Represent identity/capability/subjective-state values with explicit authority, provenance, freshness and rollback semantics.",
+        "Own-output-derived state transitions must be explicit lower-authority transformations, not silent truth updates."
+      ]
+    },
+    "gwt": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Do not interpret output->internal-state feedback as externally grounded re-entry; distinguish self-generated proxy loops from sensor/event-grounded re-entry in GWT tests."
+      ]
+    },
+    "emergenz": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Add lesion/rescue control for own-output proxy feedback when evaluating causal integration/emergence so circular reinforcement is not mistaken for emergent causal contribution."
+      ]
+    },
+    "hyperposition": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Keep uncertain/stale capability alternatives as evidence-weighted possibilities instead of collapsing to one unsupported self-description."
+      ]
+    },
+    "claygraph": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Attach identity/capability/embodiment assertions to source/effect receipts and supersession lineage; graph activation must not upgrade assertion authority."
+      ]
+    },
+    "unifieddb": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Persist identity once and materialize projections; capability observations are timestamped evidence rows with freshness/supersession instead of manually synchronized declarations."
+      ]
+    },
+    "harness": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Add regressions for stale removed feature, wrong model version, denied live capability, identity hash mismatch and stale fallback after topology changes.",
+        "Run Ego state factorial ablation: telemetry-only vs event-grounded vs own-output proxy vs combined."
+      ]
+    },
+    "clay": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Adopt authority-stratified self-model compilation: canonical identity + live observed capability + derived subjective state, rather than duplicated prompt truths."
+      ]
+    },
+    "q12_index": {
+      "status": "MATERIAL_DELTA",
+      "items": [
+        "Historical design intent favored intrinsic self-knowledge and embodied metaphors, but the implementation repeatedly accumulated stale mirrored facts. Preserve the intent while replacing synchronization-by-editing with compiled projections and receipts."
+      ]
+    }
+  },
+  "exact_coverage_credit": 0.0,
+  "level0_gate_change": "NO_CHANGE",
+  "reason": "PF full tree/history denominator remains unfrozen."
+}

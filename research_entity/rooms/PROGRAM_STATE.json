@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.8",
+  "schema_version": "1.9",
   "program_id": "frank-staged-build",
   "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "status": "ACTIVE",
@@ -18,7 +18,7 @@
       "capability_rules": "research_entity/forecast/DOOMSDAY_CAPABILITY_RULES.json",
       "event_ledger": "research_entity/forecast/DOOMSDAY_EVENTS.jsonl",
       "resolver": "tools/program_progress.py",
-      "definition": "First strict internal chief-developer test candidate of Clay 0.1: FRANK authored in Clay, general-purpose ClayCode compiler/runtime, one-module/binary architecture, UnifiedDB, final fully fine-tuned Clay-native model, reproducible project-hardware boot and all mandatory internal acceptance tests passed with zero known P0/P1 defects. Not a public release.",
+      "definition": "First strict internal chief-developer test candidate of Clay 0.1: FRANK authored in Clay, general-purpose ClayCode compiler/runtime, dissolved multimodal Retina perception with mandatory adaptive user-specific Micro Visual Classifier and bounded cyclic learning, one-module/binary architecture, UnifiedDB, final fully fine-tuned Clay-native model, reproducible project-hardware boot and all mandatory internal acceptance tests passed with zero known P0/P1 defects. Not a public release.",
       "forecast_rule": "Never store a fixed target date. Recalculate from the current critical-path table, historical earned work, stage progress, measured throughput, active/future verified capacity, APIs/capabilities, verified accelerators/blockers/new dependencies and owner training authorization state every time the status resolver runs."
     }
   },
@@ -51,7 +51,7 @@
         "research_entity/archive_assimilation/666_RELEASE_MANIFEST.json",
         "research_entity/forecast/HISTORICAL_EARNED_WORK.json"
       ],
-      "completion_law": "Within <=3h active wall-clock, the persistent 666 swarm exhaustively accounts for and evaluates the full frozen Drive clay corpus plus the full frozen Project-Frankenstein Level-0 history/tree scope, reconciles both source universes, completes branch feedback and historical earned-work audit, validates the release manifest, reaches exact coverage 100%, then PASS. Sampling is prioritization only and never completion. External connector waiting is reported separately and never hidden by weakening coverage.",
+      "completion_law": "Within <=3h active wall-clock, the persistent 666 swarm exhaustively accounts for and evaluates the full frozen Drive clay corpus plus the full frozen Project-Frankenstein Level-0 history/tree scope, including historical Retina learning/pattern/dictionary/familiarity mechanisms relevant to the mandatory v0.1 adaptive visual learner; reconciles both source universes, completes branch feedback and historical earned-work audit, validates the release manifest, reaches exact coverage 100%, then PASS. Sampling is prioritization only and never completion. External connector waiting is reported separately and never hidden by weakening coverage.",
       "execution_laws": [
         "research_entity/global/LEVEL0_EXHAUSTIVE_CORPUS_COMPLETION_LAW.md",
         "research_entity/global/LEVEL0_SWARM_EXECUTION_LAW.md"
@@ -64,64 +64,73 @@
       "gate_name": "CLAYCODE_RELEASE_GATE",
       "general_purpose_gate": "GENERAL_PURPOSE_GATE",
       "acceptance_contract": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+      "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
       "progress_source": {
         "kind": "work_packages",
         "path": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
         "field": "work_packages"
       },
       "required_pass_artifacts": ["CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json"],
-      "completion_law": "Freeze existing semantics where adequate; build parser/canonical IR/type-effect checker/compiler/lowering/runtime/FFI/stdlib/toolchain; compile and execute the mandatory general-purpose application proof suite including a real HTTP/website stack and real FRANK component; semantics may change only for an executable counterexample."
+      "completion_law": "Freeze existing semantics where adequate; build parser/canonical IR/type-effect checker/compiler/lowering/runtime/FFI/stdlib/toolchain; compile and execute the mandatory general-purpose application proof suite including a real HTTP/website stack and real FRANK component. The language/runtime must be capable of expressing versioned prototype/classifier state, trusted training-example provenance/tier, confidence/open-set results, learner candidate promotion/rollback and resource-budget/replay semantics required by FRANK v0.1 adaptive visual learning. Semantics may change only for an executable counterexample."
     },
     "H1_REFERENCE_HARNESS": {
-      "label": "Harness 1 - Reference FRANK",
+      "label": "Harness 1 - Reference FRANK + Adaptive Visual Learning",
       "status": "BLOCKED",
       "blocked_by": ["BASE_CLAYCODE_RELEASE"],
+      "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
       "progress_source": {
         "kind": "work_packages",
         "path": "research_entity/harness/HARNESS_WORKSPACE.json",
         "field": "work_packages",
         "include_prefixes": ["H-WP-00-", "H-WP-01-", "H-WP-02-", "H-WP-03-", "H-WP-04-", "H-WP-05-", "H-WP-06-", "H-WP-06B-", "H-WP-07-", "H-WP-08-", "H-WP-09-", "H-WP-10-", "H-WP-11-", "H-WP-12-", "H-WP-13-", "H-WP-14-", "H-WP-15-", "H-WP-16-", "H-WP-17-"]
       },
-      "required_pass_artifacts": ["REFERENCE_HARNESS_RELEASE_MANIFEST.json", "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json"]
+      "required_pass_artifacts": ["REFERENCE_HARNESS_RELEASE_MANIFEST.json", "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json"],
+      "completion_law": "Reference Harness PASS requires the complete frozen multimodal FRANK architecture plus executable adaptive visual learning: prototype baseline, tiny frozen-backbone learner where required, trusted-example admission, calibrated known/unknown/conflict routing, bounded cyclic updates, shadow promotion/rollback, retention/forgetting, poisoning/open-set and resource tests."
     },
     "H2_CLAYCODE_HARNESS": {
-      "label": "Harness 2 - FRANK Compiled/Executed in ClayCode",
+      "label": "Harness 2 - FRANK Compiled/Executed in ClayCode + Adaptive Visual Learning",
       "status": "BLOCKED",
       "blocked_by": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS"],
+      "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
       "progress_source": {
         "kind": "work_packages",
         "path": "research_entity/harness/HARNESS_WORKSPACE.json",
         "field": "work_packages",
         "include_prefixes": ["H-WP-18-", "H-WP-19-", "H-WP-20-", "H-WP-21-"]
       },
-      "required_pass_artifacts": ["CLAY_HARNESS_RELEASE_MANIFEST.json", "CLAY_HARNESS_ARCHITECTURE.claygraph.json", "HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json"]
+      "required_pass_artifacts": ["CLAY_HARNESS_RELEASE_MANIFEST.json", "CLAY_HARNESS_ARCHITECTURE.claygraph.json", "HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json"],
+      "completion_law": "Clay Harness PASS requires differential equivalence to H1 for dissolved visual semantics and adaptive visual learner state transitions, trusted-example admission, confidence/open-set routing, candidate promotion/rejection/rollback, feature-version behavior and learner resource-budget/replay semantics."
     },
     "H3_ONE_MODULE_FRANK": {
-      "label": "Harness 3 - One-Module/Binary FRANK",
+      "label": "Harness 3 - One-Module/Binary FRANK + Dissolved Retina + Adaptive Visual Learner",
       "status": "BLOCKED",
       "blocked_by": ["H2_CLAYCODE_HARNESS"],
+      "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
       "progress_source": {
         "kind": "stage_workspace",
         "path": "research_entity/harness/HARNESS3_WORKSPACE.json",
         "field": "work_packages",
         "missing_means": 0
       },
-      "required_pass_artifacts": ["ONE_MODULE_HARNESS_RELEASE_MANIFEST.json", "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json", "ONE_MODULE_BINARY_BUILD_RECEIPT.json"]
+      "required_pass_artifacts": ["ONE_MODULE_HARNESS_RELEASE_MANIFEST.json", "ONE_MODULE_HARNESS_ARCHITECTURE.claygraph.json", "ONE_MODULE_BINARY_BUILD_RECEIPT.json", "ONE_MODULE_ADAPTIVE_VISUAL_LEARNING_RECEIPT.json"],
+      "completion_law": "H3 cannot PASS unless dissolved visual perception and the mandatory adaptive Micro Visual Classifier/cyclic learner are integrated into the one-module/binary FRANK runtime as far down the runtime stack as feasible, with no unexplained semantic external learner boundary and with last-known-good rollback/recovery."
     },
     "UDB_UNIFIED_DATABASE": {
-      "label": "Unified Database",
+      "label": "Unified Database + Adaptive Visual Learner Persistence",
       "status": "BLOCKED",
       "blocked_by": ["H3_ONE_MODULE_FRANK"],
+      "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
       "progress_source": {
         "kind": "stage_workspace",
         "path": "research_entity/unifieddb/UNIFIEDDB_RELEASE_WORKSPACE.json",
         "field": "work_packages",
         "missing_means": 0
       },
-      "required_pass_artifacts": ["UNIFIEDDB_RELEASE_MANIFEST.json"]
+      "required_pass_artifacts": ["UNIFIEDDB_RELEASE_MANIFEST.json"],
+      "completion_law": "UnifiedDB PASS must persist/recover classifier/prototype version identity, trusted-example lineage/tier, calibration/open-set metadata, feature-backbone compatibility, rollback/rebuild state and links to visual evidence without conflating learned familiarity with sensor truth."
     },
     "DATA_LORA_TRAINING_DATA": {
-      "label": "Final Clay 0.1 Training + Held-Out Data",
+      "label": "Final Clay 0.1 Training + Held-Out Data incl. Adaptive Visual State Interface",
       "status": "BLOCKED",
       "blocked_by": ["UDB_UNIFIED_DATABASE"],
       "progress_source": {
@@ -131,7 +140,7 @@
         "missing_means": 0
       },
       "training_authorized": false,
-      "purpose": "Build and freeze final training and held-out corpus only. Do not start paid/final training automatically."
+      "purpose": "Build and freeze final training and held-out corpus only. Include the model-facing familiarity/known/unknown/conflict visual Assembly/schema required by FRANK v0.1, while keeping online personal Micro Visual Classifier data out of final model training unless separately admitted by provenance/policy. Do not start paid/final training automatically."
     },
     "WAIT": {
       "label": "WAIT - Owner Training Decision",
@@ -161,7 +170,7 @@
     "DATA_LORA_TRAINING_DATA": ["claycode", "frank", "gwt", "hyperposition", "emergenz", "harness", "claygraph", "unifieddb", "clay"]
   },
   "autonomous_progression_rule": "On exact 666 while Level 0 is open, join/resume the persistent exhaustive Level-0 swarm campaign. Discover active peers/tasks/leases, compute the current rest-obligation matrix from the latest frozen source epochs/scope laws, claim and execute the highest-value non-overlapping obligation, publish receipts/deltas, release the lease, cross-read peer results, pivot on overlap, immediately claim another open obligation while execution capacity remains, and continue until Level-0 PASS or the current invocation's actual execution surface is exhausted. Sampling is prioritization only, never completion. After Level-0 PASS, exact 666 switches to one seeded high-value diverse research field per invocation and feeds evidence-preserving deltas into the mesh.",
-  "global_training_rule": "No paid or final model training is authorized by program progression alone. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit owner instruction before final training. The dynamic DOOMSDAY forecast remains conditional on immediate authorization when the data gate is ready until such authorization exists.",
+  "global_training_rule": "No paid or final model training is authorized by program progression alone. The mandatory Micro Visual Classifier may perform its bounded local autonomous cyclic updates because those are part of the runtime perception contract, not final paid model training. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit owner instruction before final model training. The dynamic DOOMSDAY forecast remains conditional on immediate authorization when the data gate is ready until such authorization exists.",
   "mandatory_cross_cutting_refs": [
     "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
     "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
@@ -172,6 +181,7 @@
     "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
     "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
     "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
     "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
     "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
     "research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md",

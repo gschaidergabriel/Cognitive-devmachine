@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1648p0700-loop-runtime",
+  "executions": [
+    {
+      "tool": "GitHub connector",
+      "status": "PASS",
+      "purpose": "T0 canonical verification, current protocol/state/source reads and durable run writes",
+      "evidence": ["canonical r2 hash 04234efd...f489346", "write commit fa5aa4d5dbb906fd4f3bdf40b6be3db27ad6b1e1"]
+    },
+    {
+      "tool": "web primary-source research",
+      "status": "PASS",
+      "purpose": "independent recurrence/loop stability and counterevidence review",
+      "sources": ["arXiv:2604.07822", "arXiv:2604.11791", "arXiv:2604.12946", "arXiv:2506.21734", "ARC Prize HRM analysis 2025-08-15"]
+    },
+    {
+      "tool": "local Python execution sandbox",
+      "status": "PASS",
+      "purpose": "CC-G9 loop-runtime library/lowering experiment v0.2",
+      "runtime": "Python host lowering probe",
+      "wall_ms": 958.447,
+      "tests": {"snapshot_permutation_equivalence": "PASS", "inplace_mutant_schedule_dependence": "DETECTED", "fuzz_cases": 250, "authority_forgery": "REJECTED"}
+    },
+    {
+      "tool": "tools/research_interconnect_preflight.py",
+      "status": "BLOCKED",
+      "purpose": "authoritative repo-native mesh preflight",
+      "blocker": "local sandbox DNS could not resolve github.com; no local repository checkout"
+    }
+  ]
+}

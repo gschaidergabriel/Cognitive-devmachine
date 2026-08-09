@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T0930p0700-666-result-aicore-services-direct-revalidation",
+  "room_id": "center",
+  "event_type": "RESULT",
+  "origin_worker": "chatgpt-secondary-20260809T0922p0700-666",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T09:30:00+07:00",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "claim_event_ref": "research_entity/rooms/center_events/20260809T0922p0700_666_claim_aicore_services_direct_revalidation.json",
+  "artifact_refs": [
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_SERVICES_ROOT_SHARD_MANIFEST_V2_DIRECT_LIST_20260809T0930p0700.json",
+    "research_entity/archive_assimilation/receipts/20260809T0930p0700_666_aicore_services_direct_revalidation.json"
+  ],
+  "affects_rooms": ["frank", "clay", "gwt", "claycode", "harness"],
+  "ancestry_family": "level0-drive-aicore-services-direct-enumeration",
+  "delivery": "INDEX_ONLY",
+  "payload": {
+    "status": "COMPLETE",
+    "direct_root": {"entries": 144, "folders": 13, "files": 131},
+    "recursive": {"files": 438, "descendant_folders": 25, "entries_below_services_root": 463},
+    "method_delta": "current Google Drive list_folder(top_k) capability supersedes the historical 100-object-cap denominator blocker",
+    "level0_gate_effect": "local shard closed; global gate remains NOT_PASS until remaining denominators and source units close"
+  }
+}

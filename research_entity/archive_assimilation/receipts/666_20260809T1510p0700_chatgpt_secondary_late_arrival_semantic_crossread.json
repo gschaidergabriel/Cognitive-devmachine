@@ -1,0 +1,50 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1510p0700_chatgpt_secondary_late_arrival_semantic_crossread",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "observed_at":"2026-08-09T15:10:00+07:00",
+  "purpose":"Cross-read semantic receipts that landed after final Drive/PF reconciliation or during final earned-work/release audit, so concurrent late arrivals cannot silently invalidate Level-0 closure.",
+  "late_arrivals":[
+    {
+      "commit":"5103522f13bd7bb66427b12aec5ce6b2f1154629",
+      "receipt":"research_entity/archive_assimilation/receipts/666_20260809T1506p0700_chatgpt_secondary_pf_project_engine_autonomy_lineage.json",
+      "class":"ADDITIONAL_SEMANTIC_LINEAGE_WITHIN_ALREADY_CLOSED_PF_TREE_HISTORY_SCOPE",
+      "new_denominator_units":0,
+      "new_quantified_earned_work_hours":0.0,
+      "material_routing":["authority-boundary counterexample","outcome-vs-error Goodhart guard","async acknowledgement != completion","cross-context learned-rule provenance"]
+    },
+    {
+      "commit":"295bdeb45e8581928b640178f56764a621ef0238",
+      "receipt":"research_entity/archive_assimilation/receipts/666_20260809T1504p0700_chatgpt_secondary_pf_selfmodel_embodiment_identity_lineage.json",
+      "class":"ADDITIONAL_SEMANTIC_LINEAGE_WITHIN_ALREADY_CLOSED_PF_TREE_HISTORY_SCOPE",
+      "new_denominator_units":0,
+      "new_quantified_earned_work_hours":0.0,
+      "material_routing":["single authoritative identity record with derived projections","runtime-evidenced capability/self-model facts","own-output feedback is lower-authority than sensor/event evidence","identity/capability staleness regression tests"],
+      "stale_text_supersession":"Receipt text saying the PF frozen tree/history denominator remains blocked is historically accurate at that worker's read time but is now superseded by exact 873-tree and 545/545-history closure evidence. It must not reopen the denominator."
+    },
+    {
+      "commit":"2a58f7d17d646d5bea516638cfe322ee63aad83b",
+      "receipt":"research_entity/archive_assimilation/receipts/666_20260809T1508p0700_chatgpt_secondary_pf_visual_adaptive_native_lineage.json",
+      "class":"ADDITIONAL_SEMANTIC_LINEAGE_WITHIN_ALREADY_CLOSED_PF_TREE_HISTORY_SCOPE",
+      "new_denominator_units":0,
+      "new_quantified_earned_work_hours":0.0,
+      "material_routing":["historical adaptive vision = compute escalation, not personal visual learner","reuse cheap-first/escalate-on-uncertainty separately from learner state","native multimodal observation != familiarity authority","dedup against existing Drive Retina/adaptive-learning lineage"],
+      "stale_text_supersession":"Receipt text saying the PF repository-wide denominator remains unfrozen is superseded by exact 873-tree and 545/545-history closure evidence. It must not reopen the denominator."
+    }
+  ],
+  "closure_effect":{
+    "pf_tree_denominator":"UNCHANGED_PASS_873",
+    "pf_history_denominator":"UNCHANGED_PASS_545_OF_545",
+    "drive_root_routing":"UNCHANGED_14_OF_14_TERMINAL_OR_EXCLUDED_LINEAGES",
+    "cross_source_final":"NO_REOPEN; peer final reconciliation remains terminal 10/10 unless its release preflight finds a concrete contradiction",
+    "earned_work":"NO_DIRECT_MUTATION; all three report zero new quantified hours and any mapping_candidate remains subject to the active final earned-work audit",
+    "release_preflight":"MUST_CROSSREAD_THIS_RECEIPT_AS_LATE_ARRIVAL_GUARD; no new source obligation created"
+  },
+  "invariants":["LATE_SEMANTIC_RECEIPT != NEW_SOURCE_UNIT","STALE_BLOCKER_TEXT_IS_SUPERSEDED_BY_NEWER_EXACT_CLOSURE","ZERO_HOUR_MAPPING_CANDIDATE_DOES_NOT_MUTATE_AUTHORITATIVE_HEW","NO_DUPLICATE_SEMANTIC_CREDIT"],
+  "exact_global_percent_added":0.0,
+  "gate":"NOT_PASS_PENDING_ACTIVE_FINAL_AUDIT_PEERS",
+  "status":"LATE_ARRIVALS_CROSSREAD_NO_DENOMINATOR_REOPEN",
+  "created_at":"2026-08-09T15:10:00+07:00"
+}

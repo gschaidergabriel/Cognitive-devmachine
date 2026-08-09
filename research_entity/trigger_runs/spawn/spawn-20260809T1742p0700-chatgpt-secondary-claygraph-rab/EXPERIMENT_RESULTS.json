@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-chatgpt-secondary-claygraph-rab",
+  "evidence_class": "CONSTRUCTED_LOCAL_SYNTHETIC_MECHANISM_TEST",
+  "production_claim_allowed": false,
+  "experiment_1": {
+    "id": "EXP-SPAWN-CG-RAB-001",
+    "design": {
+      "replicates": 200,
+      "noise_rates": [0.05, 0.10, 0.20],
+      "scenarios": ["true_reversal", "echo_false_reversal", "context_bifurcation", "reversal_restore"],
+      "arms": ["ema_global", "ema_context", "dual_context", "rab"],
+      "parameters": {
+        "window": 8,
+        "min_diverse": 3,
+        "contradiction_fraction": 0.75,
+        "fast_alpha": 0.50,
+        "slow_alpha": 0.05,
+        "ema_alpha": 0.12,
+        "blend_fast": 0.35
+      },
+      "preregistered_note": "Parameters were fixed in the constructed script before reading aggregate results."
+    },
+    "selected_results": {
+      "noise_0.05": {
+        "true_reversal": {
+          "ema_context": {"accuracy": 0.974396, "adapt_lag": 6.08},
+          "rab": {"accuracy": 0.972896, "adapt_lag": 6.11}
+        },
+        "echo_false_reversal": {
+          "ema_context": {"accuracy": 0.892438, "echo_error_rate": 0.5139},
+          "dual_context": {"accuracy": 0.901688, "echo_error_rate": 0.4678},
+          "rab": {"accuracy": 0.995979, "echo_error_rate": 0.0114}
+        },
+        "context_bifurcation": {
+          "ema_global": {"accuracy": 0.212625},
+          "ema_context": {"accuracy": 0.994813},
+          "rab": {"accuracy": 0.992583}
+        },
+        "reversal_restore": {
+          "ema_context": {"accuracy": 0.959000, "lags": [6.145, 6.230]},
+          "rab": {"accuracy": 0.957417, "lags": [6.170, 6.210]}
+        }
+      },
+      "noise_0.10": {
+        "true_reversal": {
+          "ema_context": {"accuracy": 0.973313, "adapt_lag": 6.23},
+          "rab": {"accuracy": 0.970000, "adapt_lag": 6.415}
+        },
+        "echo_false_reversal": {
+          "ema_context": {"accuracy": 0.887125, "echo_error_rate": 0.5355},
+          "dual_context": {"accuracy": 0.892104, "echo_error_rate": 0.5054},
+          "rab": {"accuracy": 0.990083, "echo_error_rate": 0.0319}
+        },
+        "context_bifurcation": {
+          "ema_global": {"accuracy": 0.318333},
+          "ema_context": {"accuracy": 0.993458},
+          "rab": {"accuracy": 0.988896}
+        },
+        "reversal_restore": {
+          "ema_context": {"accuracy": 0.958317, "lags": [6.370, 6.235]},
+          "rab": {"accuracy": 0.954783, "lags": [6.445, 6.335]}
+        }
+      },
+      "noise_0.20": {
+        "true_reversal": {
+          "ema_context": {"accuracy": 0.965875, "adapt_lag": 7.005},
+          "rab": {"accuracy": 0.958521, "adapt_lag": 7.315}
+        },
+        "echo_false_reversal": {
+          "ema_context": {"accuracy": 0.870646, "echo_error_rate": 0.5903},
+          "dual_context": {"accuracy": 0.859104, "echo_error_rate": 0.5928},
+          "rab": {"accuracy": 0.966583, "echo_error_rate": 0.1088}
+        },
+        "context_bifurcation": {
+          "ema_global": {"accuracy": 0.410875},
+          "ema_context": {"accuracy": 0.984104},
+          "rab": {"accuracy": 0.976354}
+        },
+        "reversal_restore": {
+          "ema_context": {"accuracy": 0.951333, "lags": [6.925, 6.720]},
+          "rab": {"accuracy": 0.943417, "lags": [7.345, 6.840]}
+        }
+      }
+    },
+    "interpretation": [
+      "The large RAB advantage is specific to correlated source echo, where repetition without provenance diversity should not trigger durable reversal.",
+      "Context-aware scalar state already solves ordinary context bifurcation nearly as well or better; RAB is not justified by context splitting alone.",
+      "At high noise, provenance-diverse gating imposes a measurable stability/plasticity cost; this is a Pareto trade-off, not a universal win."
+    ]
+  },
+  "experiment_2": {
+    "id": "EXP-SPAWN-CG-RAB-002",
+    "design": {
+      "replicates_per_cell": 500,
+      "noise_rates": [0.05, 0.10, 0.20],
+      "minimum_distinct_provenance_families": [1, 2, 3, 4, 5],
+      "scenarios": ["true_reversal", "echo_false_reversal"]
+    },
+    "results": {
+      "noise_0.05": {
+        "k1": {"true_accuracy": 0.9728, "true_lag": 6.138, "echo_accuracy": 0.892475, "echo_error": 0.50832},
+        "k2": {"true_accuracy": 0.9728, "true_lag": 6.138, "echo_accuracy": 0.982358, "echo_error": 0.07688},
+        "k3": {"true_accuracy": 0.9728, "true_lag": 6.138, "echo_accuracy": 0.996667, "echo_error": 0.00820},
+        "k4": {"true_accuracy": 0.972567, "true_lag": 6.190, "echo_accuracy": 0.998125, "echo_error": 0.00112},
+        "k5": {"true_accuracy": 0.970483, "true_lag": 6.680, "echo_accuracy": 0.998317, "echo_error": 0.00000}
+      },
+      "noise_0.10": {
+        "k1": {"true_accuracy": 0.969892, "true_lag": 6.422, "echo_accuracy": 0.888275, "echo_error": 0.52040},
+        "k2": {"true_accuracy": 0.969892, "true_lag": 6.422, "echo_accuracy": 0.964342, "echo_error": 0.15528},
+        "k3": {"true_accuracy": 0.969892, "true_lag": 6.422, "echo_accuracy": 0.989592, "echo_error": 0.03408},
+        "k4": {"true_accuracy": 0.969675, "true_lag": 6.468, "echo_accuracy": 0.995442, "echo_error": 0.00588},
+        "k5": {"true_accuracy": 0.967458, "true_lag": 6.974, "echo_accuracy": 0.996317, "echo_error": 0.00116}
+      },
+      "noise_0.20": {
+        "k1": {"true_accuracy": 0.959042, "true_lag": 7.318, "echo_accuracy": 0.874058, "echo_error": 0.55628},
+        "k2": {"true_accuracy": 0.959042, "true_lag": 7.318, "echo_accuracy": 0.925117, "echo_error": 0.31120},
+        "k3": {"true_accuracy": 0.959033, "true_lag": 7.320, "echo_accuracy": 0.963167, "echo_error": 0.12856},
+        "k4": {"true_accuracy": 0.958933, "true_lag": 7.360, "echo_accuracy": 0.982833, "echo_error": 0.03448},
+        "k5": {"true_accuracy": 0.956283, "true_lag": 8.010, "echo_accuracy": 0.987667, "echo_error": 0.01144}
+      }
+    },
+    "interpretation": "In this constructed benchmark k=3-4 captures most source-echo protection with almost unchanged true-reversal lag through moderate noise; k=5 begins a clearer adaptation penalty. No global threshold is promoted."
+  },
+  "decision": "MECHANISM_INTERESTING_OPEN_HOLD_NO_RUNTIME_PROMOTION"
+}

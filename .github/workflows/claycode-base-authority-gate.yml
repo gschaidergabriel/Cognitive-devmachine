@@ -1,0 +1,70 @@
+name: ClayCode BASE authority gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_base_compiler.py'
+      - 'tools/claycode_base_effect_pipeline.py'
+      - 'tools/claycode_base_authority_runtime.py'
+      - 'tools/claycode_base_authority_integration_validation.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark'
+      - '.github/workflows/claycode-base-authority-gate.yml'
+
+concurrency:
+  group: claycode-base-authority-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned parser dependencies
+        run: python -m pip install --disable-pip-version-check --quiet 'lark[interegular]==1.3.1'
+      - name: Run opaque authority runtime mutation suite
+        run: python tools/claycode_base_authority_runtime.py > research_entity/claycode/autonomous/BASE_AUTHORITY_RUNTIME_RECEIPT.json
+      - name: Run compiler-to-authority integration differential
+        run: python tools/claycode_base_authority_integration_validation.py
+      - name: Fail closed on authority regressions or false promotion
+        run: |
+          python - <<'PY'
+          import json
+          for p in [
+            'research_entity/claycode/autonomous/BASE_AUTHORITY_RUNTIME_RECEIPT.json',
+            'research_entity/claycode/autonomous/BASE_AUTHORITY_INTEGRATION_RECEIPT.json',
+          ]:
+              d=json.load(open(p,encoding='utf-8'))
+              assert d['pass'] is True
+              assert d['counts_as_work_package_pass'] is False
+              assert d['counts_as_target_acceptance'] is False
+          r=json.load(open('research_entity/claycode/autonomous/BASE_AUTHORITY_RUNTIME_RECEIPT.json',encoding='utf-8'))
+          assert r['unauthorized_accepts'] == 0
+          i=json.load(open('research_entity/claycode/autonomous/BASE_AUTHORITY_INTEGRATION_RECEIPT.json',encoding='utf-8'))
+          assert i['output_mismatches'] == 0
+          assert i['trace_mismatches'] == 0
+          print('BASE_AUTHORITY_PROXY_PASS')
+          PY
+      - name: Commit authority receipts
+        run: |
+          git config user.name 'claycode-base-authority'
+          git config user.email 'claycode-base-authority@users.noreply.github.com'
+          git add \
+            research_entity/claycode/autonomous/BASE_AUTHORITY_RUNTIME_RECEIPT.json \
+            research_entity/claycode/autonomous/BASE_AUTHORITY_INTEGRATION_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: record BASE authority integration receipts'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

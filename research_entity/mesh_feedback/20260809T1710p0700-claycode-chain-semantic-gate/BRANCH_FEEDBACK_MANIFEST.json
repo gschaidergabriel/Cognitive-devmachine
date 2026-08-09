@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "feedback_id":"claycode-chain-semantic-gate-20260809T1710p0700",
+  "origin_actor":"chatgpt-secondary",
+  "origin_run":"claycode_20260809T1710p0700_chatgpt_chain_semantic_gate",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scientific_result":"Compiler provenance/hash continuity and semantic-preservation evidence are orthogonal gates. A self-consistent wrong lowerer can pass provenance integrity.",
+  "evidence":{"tamper_detected":"50000/50000","clean_false_rejects":"0/10000","wrong_lowerer_chain_pass":"10000/10000","semantic_oracle_differences":"9996/10000","executed_wrong_witness":"expected 12 observed 2 with zero chain errors"},
+  "branch_feedback":{
+    "clayresearch":{"effect":"REVISE","delta":"CTK/source-chain work should require independent semantic validation in addition to joined receipts."},
+    "frank":{"effect":"REFINE","delta":"Keep semantic identity, execution identity and authority separate; valid receipts do not imply semantic correctness or authority."},
+    "harness":{"effect":"NEW_INTERFACE","delta":"Link compiler provenance identity into TurnTraceEnvelope, but keep build/compiler ancestry and runtime causal trace as distinct receipt layers."},
+    "claygraph":{"effect":"SUPPORT","delta":"Stable canonical Ref/program semantics precede trustworthy graph provenance/selection lineage; no graph authority follows."},
+    "unifieddb":{"effect":"SUPPORT","delta":"Preserve typed semantic identity separately from exact source/provenance representation identity."},
+    "gwt":{"effect":"NO_CHANGE","delta":"No GWT semantic change; lowering/trace receipts must preserve causal-stage distinctions."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"No topology change; semantic equivalence must be stable before topology comparison."},
+    "emergenz":{"effect":"NO_CHANGE","delta":"Receipt integrity is observability/provenance, not emergence evidence."},
+    "claycode":{"effect":"REVISE","delta":"BASE acceptance candidate: deterministic frontend + canonical typed semantics + joined provenance + translation validation + backend execution + runtime trace + app proof."}
+  },
+  "promotion":"NONE",
+  "stage_progress_credit":"NONE"
+}

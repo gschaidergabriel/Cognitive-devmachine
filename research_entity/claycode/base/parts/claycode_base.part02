@@ -1,0 +1,143 @@
+            elif c==')':
+                depth-=1
+                if depth==0: p1=j; break
+        if p1 is None: raise StructuralError("unclosed parameter list")
+        sig=clean[p0+1:p1]
+        params=[]; param_types=[]
+        cur=''; adepth=0
+        for c in sig+',':
+            if c in '<[(': adepth+=1
+            elif c in '>])': adepth=max(0,adepth-1)
+            if c==',' and adepth==0:
+                s=cur.strip(); cur=''
+                if s:
+                    if ':' in s:
+                        pn,pt=s.split(':',1); params.append(pn.strip()); param_types.append(pt.strip())
+                    else:
+                        params.append(s.strip()); param_types.append(None)
+            else: cur+=c
+        b0=clean.find('{',p1)
+        if b0==-1: raise StructuralError(f"missing body for {name}")
+        between=clean[p1+1:b0].strip()
+        rm=re.search(r"->\s*(.+)$",between,re.S)
+        return_type=rm.group(1).strip() if rm else None
+        b1=_find_matching_brace(clean,b0)
+        body=clean[b0+1:b1]
+        full=clean[m.start():b1+1]
+        out.append((name,params,param_types,return_type,body,full))
+        pos=b1+1
+    return out
+
+
+def parse_executable(src: str, only_functions: set[str] | None = None) -> ProgramIR:
+    sm = re.search(r"\bmodule\s+([A-Za-z_][A-Za-z0-9_.-]*)", _strip_comments(src))
+    module = sm.group(1) if sm else "anonymous"
+    funcs=[]
+    extracted=extract_functions(src)
+    for name, params, param_types, return_type, body, full in extracted:
+        if only_functions and name not in only_functions: continue
+        tree = _body_parser.parse(body)
+        irbody = _transformer.transform(tree)
+        if isinstance(irbody, Stmt): irbody=(irbody,)
+        elif not isinstance(irbody, tuple): irbody=tuple(irbody if isinstance(irbody,list) else [irbody])
+        funcs.append(FunctionIR(name, tuple(params), tuple(irbody), hashlib.sha256(full.encode()).hexdigest(), tuple(param_types), return_type))
+    if only_functions and set(f.name for f in funcs) != set(only_functions):
+        missing=set(only_functions)-set(f.name for f in funcs); raise StructuralError(f"missing functions: {sorted(missing)}")
+    if re.search(r"\b(fn|cycle)\b",_strip_comments(src)) and not funcs:
+        raise StructuralError("function/cycle syntax present but no executable declaration was extracted")
+    return ProgramIR(module, tuple(funcs))
+
+# ---------------------------------------------------------------------------
+# Type/effect validation (bounded BASE proxy)
+# ---------------------------------------------------------------------------
+
+PURE_BUILTINS = {"len", "min", "max", "sum", "abs", "str", "int", "float", "bool"}
+
+@dataclass
+class Diagnostic:
+    level: str
+    code: str
+    message: str
+    function: str
+
+@dataclass
+class CheckResult:
+    ok: bool
+    diagnostics: list[Diagnostic]
+    effects: set[str]
+
+
+def walk_expr(e: Expr):
+    yield e
+    for a in e.args:
+        if isinstance(a, Expr): yield from walk_expr(a)
+        elif isinstance(a, tuple) and len(a)==2 and isinstance(a[1], Expr): yield from walk_expr(a[1])
+
+
+def _norm_type(t: str | None) -> str:
+    if not t: return 'Any'
+    return re.sub(r'\s+','',t)
+
+HOST_TYPES={
+ 'host.file.write':(('String','String'),'Int'),'host.file.read':(('String',),'String'),
+ 'host.process.echo':(('String',),'String'),'host.http.roundtrip':(('String','String'),'String'),
+ 'host.db.transaction':(('String','Int'),'Int'),'host.concurrent.sum':(('Int',),'Int'),
+ 'host.concurrent.cancel':((),'String'),'host.concurrent.atomic_increment':(('Int','Int'),'Int'),
+ 'host.ui.event_loop':(('List<Int>',),'String'),'host.numeric.matmul_checksum':(('Int',),'Float'),
+ 'host.system.probe':((),'String'),'host.compiler.eval_expr':(('String',),'Any'),
+}
+
+def _compatible(expected:str, actual:str)->bool:
+    expected=_norm_type(expected); actual=_norm_type(actual)
+    return expected=='Any' or actual=='Any' or expected==actual or (expected=='Float' and actual=='Int') or (expected.startswith('OPTION<') and actual=='Null')
+
+def _infer_expr_type(e:Expr, env:dict[str,str], ds:list[Diagnostic], fn_name:str)->str:
+    if e.kind=='literal':
+        if e.value is None:return 'Null'
+        if isinstance(e.value,bool):return 'Bool'
+        if isinstance(e.value,int):return 'Int'
+        if isinstance(e.value,float):return 'Float'
+        if isinstance(e.value,str):return 'String' if not e.value.startswith('#') else 'Symbol'
+        return 'Any'
+    if e.kind=='var': return env.get(str(e.value).split('.')[0],'Any')
+    if e.kind=='list':
+        ts=[_infer_expr_type(x,env,ds,fn_name) for x in e.args]
+        base=ts[0] if ts and all(_compatible(ts[0],x) and _compatible(x,ts[0]) for x in ts) else 'Any'
+        return f'List<{base}>'
+    if e.kind=='unary':
+        t=_infer_expr_type(e.args[0],env,ds,fn_name); return 'Bool' if e.value in ('!','not') else t
+    if e.kind=='coalesce':
+        a=_infer_expr_type(e.args[0],env,ds,fn_name); b=_infer_expr_type(e.args[1],env,ds,fn_name); return b if a in ('Any','Null') else a
+    if e.kind=='binary':
+        a=_infer_expr_type(e.args[0],env,ds,fn_name); b=_infer_expr_type(e.args[1],env,ds,fn_name)
+        if e.value in {'==','!=','<','>','<=','>=','in','&&','||','and','or'}: return 'Bool'
+        if e.value=='+' and a==b=='String': return 'String'
+        if a in ('Int','Float') and b in ('Int','Float'): return 'Float' if 'Float' in (a,b) or e.value=='/' else 'Int'
+        if a!='Any' and b!='Any': ds.append(Diagnostic('error','TYPE_BINARY',f'incompatible {a} {e.value} {b}',fn_name))
+        return 'Any'
+    if e.kind=='call':
+        name=str(e.value); argts=[_infer_expr_type(x,env,ds,fn_name) for _,x in e.args]
+        if name in HOST_TYPES:
+            expected,ret=HOST_TYPES[name]
+            if len(argts)!=len(expected): ds.append(Diagnostic('error','ARITY',f'{name} expects {len(expected)} args, got {len(argts)}',fn_name))
+            for i,(ex,ac) in enumerate(zip(expected,argts)):
+                if not _compatible(ex,ac): ds.append(Diagnostic('error','TYPE_ARG',f'{name} arg{i} expects {ex}, got {ac}',fn_name))
+            return ret
+        if name=='len': return 'Int'
+        if name in {'int'}: return 'Int'
+        if name in {'float'}: return 'Float'
+        if name in {'str'}: return 'String'
+        if name in {'bool'}: return 'Bool'
+        if name and name[0].isupper(): return name
+        return 'Any'
+    return 'Any'
+
+def check_program(p: ProgramIR, allowed_effects: set[str] | None = None) -> CheckResult:
+    allowed_effects = allowed_effects or set()
+    ds=[]; effects=set()
+    for fn in p.functions:
+        ptypes=fn.param_types or tuple(None for _ in fn.params)
+        env={n:_norm_type(t) for n,t in zip(fn.params,ptypes)}
+        def check_stmt(s: Stmt):
+            if s.kind in {'let','assign'}:
+                t=_infer_expr_type(s.expr,env,ds,fn.name)

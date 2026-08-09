@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EF001-SYNTH-DRIFT-01",
+  "epistemic_class": "SYNTHETIC_SIMULATION_ONLY",
+  "claim_scope": "Mechanism stress test; not FRANK hardware/data evidence and not a release-gate result.",
+  "hypothesis_tested": "Unverified self-predictions used as online training truth create a positive-feedback contamination loop that worsens unknown rejection relative to sparse trusted-evidence updates.",
+  "model": "2D frozen representation with two drifting known classes and a moving unknown distribution; nearest-prototype classifier; Euclidean open-set threshold; exponential prototype updates.",
+  "parameters": {
+    "steps": 5000,
+    "prototype_alpha": 0.03,
+    "open_set_distance_threshold": 1.6,
+    "trusted_known_example_rate": 0.12,
+    "unknown_rate_sweep": [0.10, 0.25, 0.40, 0.55, 0.70],
+    "replicates_per_sweep_point": 30,
+    "replicate_seed_base": 1000
+  },
+  "policies": {
+    "naive_self_update": "Accept any sample inside threshold and update predicted prototype, including unknown samples misclassified as known.",
+    "trust_gated": "Only trusted labeled known examples update prototypes; unknown and self-generated labels never directly update trusted state."
+  },
+  "mean_results": [
+    {"unknown_rate":0.10,"known_acc_naive":1.000,"known_acc_gated":1.000,"unknown_reject_naive":0.385,"unknown_reject_gated":0.421,"naive_wrong_unknown_update_fraction":0.078},
+    {"unknown_rate":0.25,"known_acc_naive":0.999,"known_acc_gated":1.000,"unknown_reject_naive":0.339,"unknown_reject_gated":0.419,"naive_wrong_unknown_update_fraction":0.224},
+    {"unknown_rate":0.40,"known_acc_naive":0.999,"known_acc_gated":1.000,"unknown_reject_naive":0.319,"unknown_reject_gated":0.419,"naive_wrong_unknown_update_fraction":0.389},
+    {"unknown_rate":0.55,"known_acc_naive":0.999,"known_acc_gated":1.000,"unknown_reject_naive":0.283,"unknown_reject_gated":0.432,"naive_wrong_unknown_update_fraction":0.553},
+    {"unknown_rate":0.70,"known_acc_naive":0.987,"known_acc_gated":1.000,"unknown_reject_naive":0.261,"unknown_reject_gated":0.440,"naive_wrong_unknown_update_fraction":0.724}
+  ],
+  "interpretation": [
+    "The synthetic mechanism reproduces the expected positive-feedback hazard: as OOD prevalence increases, an increasing fraction of accepted naive updates are actually unknown samples.",
+    "Unknown rejection degrades before known-class accuracy visibly collapses, so known accuracy alone is an insufficient health metric for an adaptive familiarity controller.",
+    "Sparse trusted updates preserve better unknown rejection in this setup, supporting the FRANK GOLD/SILVER admission rule as a control boundary worth testing in H1."
+  ],
+  "limitations": [
+    "Synthetic low-dimensional geometry is not a substitute for real Retina embeddings.",
+    "Thresholds and distributions were chosen for mechanism discrimination, not to estimate production effect size.",
+    "The gated policy uses trusted labels; future H1 tests must model realistic GOLD/SILVER acquisition cost and imperfect SILVER evidence."
+  ],
+  "reproduction": "prototype_drift_sim.py",
+  "result_status": "SUPPORTS_WORKING_HYPOTHESIS_NOT_PROMOTABLE"
+}

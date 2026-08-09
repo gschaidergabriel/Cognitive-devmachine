@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
+  "latest_frank_run": null,
+  "latest_frank_claycode_architecture_artifact": null,
+  "frank_artifact_search_note": "Expected direct path and connector search did not locate FRANK_ARCHITECTURE.claycode.json in this run; provisional current FRANK contracts were used as permitted by ClayCode protocol.",
+  "items": [
+    {
+      "claim_id": "FRANK-CC-AUTHORITY-BOUNDARY",
+      "frank_statement": "Typed effects/host access must remain separate from execution authority.",
+      "frank_source_refs": ["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md"],
+      "ancestry_families": ["FRANK_HARNESS_CURRENT", "CLAYCODE_G9_CURRENT", "EXTERNAL_COMPONENT_MODEL_DOCS"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A component import/export boundary alone is sufficient authority control.",
+      "falsifier": "A target runtime demonstrates that interface membership alone safely captures dynamic delegation, revocation, resource scopes and commit witnesses without a Clay-side authority layer.",
+      "independent_checks": [
+        "Bytecode Alliance WIT documentation: WIT defines interface contracts/worlds/resources, not program behavior; resource handles/imports are suitable typed boundary material but do not replace Clay authorization."
+      ],
+      "adversarial_checks": [
+        "Treating WIT import presence as authorization would conflate interface availability with dynamic authority."
+      ],
+      "verdict": "REFINED",
+      "reason": "External component-model evidence supports a typed host boundary but not collapsing Clay capability/commit authorization into WIT.",
+      "claycode_action": "Retain CapabilityToken/effect commit gateway; consider WIT only as typed lowering surface.",
+      "affected_claycode_artifacts": ["CLAYCODE_G9_FUSION_SPEC_V3.clay"]
+    },
+    {
+      "claim_id": "FRANK-MVC-STATE-EXPRESSIBILITY",
+      "frank_statement": "BASE ClayCode must express versioned prototype/classifier state, trusted example tiers, confidence/open-set outcomes, candidate promotion/rollback, resource budgets and replay hooks.",
+      "frank_source_refs": ["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"],
+      "ancestry_families": ["PROJECT_OWNER_REQUIREMENT", "CLAYCODE_G9_CURRENT"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Existing generic records/deltas/provenance are insufficient without additional semantic primitives.",
+      "falsifier": "An executable MVC state-machine example fails to type/check/lower without opaque host-only state or semantic escape hatch.",
+      "independent_checks": [],
+      "adversarial_checks": ["No MVC representability program was compiled in this run."],
+      "verdict": "UNRESOLVED",
+      "reason": "Requirement is binding, but this run produced no independent executable representability evidence.",
+      "claycode_action": "Do not add primitives yet; schedule executable MVC state/rollback example after parser/IR alignment.",
+      "affected_claycode_artifacts": []
+    }
+  ]
+}

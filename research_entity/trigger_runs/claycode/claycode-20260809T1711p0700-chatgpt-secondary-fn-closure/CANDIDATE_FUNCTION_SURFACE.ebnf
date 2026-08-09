@@ -1,0 +1,17 @@
+(* NON-PROMOTED BASE FRONTEND CANDIDATE
+   Purpose: expose the already-researched universal-core function/call contract.
+   This file is not the canonical grammar and does not authorize mutation of grammar.ebnf. *)
+
+statement_candidate = current_statement | fn_decl ;
+
+fn_decl = "fn", ident, "(", [param_list], ")", "->", type_expr, "=", expr, [";"] ;
+param_list = typed_param, {",", typed_param} ;
+typed_param = ident, ":", type_expr ;
+
+(* Binding laws to be enforced in canonical typed IR / checker, not guessed by parser. *)
+(* 1. Every call target resolves to exactly one module/symbol/signature identity. *)
+(* 2. Missing, ambiguous or arity/type-incompatible targets fail closed. *)
+(* 3. ClayGraph activation, UnifiedDB proximity, GWT selection and model text are not symbol authority. *)
+(* 4. Source spelling does not mint canonical ProgramSemanticId; deterministic canonical typed IR does. *)
+(* 5. Function definition/call never mints capability/effect authority. *)
+(* 6. This candidate does not yet define recursion, branching, pattern matching, errors, async or memory semantics. *)

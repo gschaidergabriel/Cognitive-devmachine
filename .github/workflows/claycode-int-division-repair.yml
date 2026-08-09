@@ -1,0 +1,36 @@
+name: ClayCode exact Int division repair
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/claycode_patch_checked_int_division.py'
+      - 'tools/claycode_int_division_regression.py'
+      - '.github/workflows/claycode-int-division-repair.yml'
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install --disable-pip-version-check --quiet 'lark[interegular]==1.3.1'
+      - name: Patch evaluator arithmetic at the source of truth
+        run: python tools/claycode_patch_checked_int_division.py
+      - name: Run large-int evaluator/native differential
+        run: python tools/claycode_int_division_regression.py
+      - name: Commit repaired mainline and receipt
+        run: |
+          git config user.name 'claycode-int-division-gate'
+          git config user.email 'claycode-int-division-gate@users.noreply.github.com'
+          git add tools/claycode_base_compiler.py tools/claycode_base_effect_pipeline.py research_entity/claycode/autonomous/BASE_INT_DIVISION_REGRESSION_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: repair exact Int division evaluator semantics'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

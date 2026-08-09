@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1705p0700-hwp02-idempotency-race",
+  "finding_id": "HWP02-IDEMPOTENCY-PRELOCK-RACE",
+  "evidence_class": "LOCAL_DETERMINISTIC_SYNTHETIC_MECHANISM_PROBE",
+  "shared_ancestry_warning": "The finding is derived from current Harness implementation structure plus an independent mechanism probe; it is not independent live-FRANK replication.",
+  "feedback": {
+    "harness": {
+      "effect": "COUNTEREXAMPLE",
+      "delta": "H-WP-02 cannot be considered concurrency-safe while idempotency is checked only before BEGIN IMMEDIATE. Add post-lock validation and actual concurrent regression on the Ubuntu project host."
+    },
+    "unifieddb": {
+      "effect": "CONSTRAINT",
+      "delta": "Idempotency/replay semantics require transaction-scoped winner observation; a uniqueness constraint alone does not implement replay semantics for the losing writer."
+    },
+    "frank": {
+      "effect": "CONSTRAINT",
+      "delta": "Duplicate turn/effect/replay handling must distinguish already-committed semantic identity from storage-level uniqueness failure. No target-runtime claim changes yet."
+    },
+    "claycode": {
+      "effect": "FUTURE_CONFORMANCE_REQUIREMENT",
+      "delta": "H2 lowering/runtime must preserve transaction-scoped idempotency behavior rather than merely reproduce a preflight check plus UNIQUE index."
+    },
+    "claygraph": {
+      "effect": "NO_CHANGE",
+      "delta": "No graph semantic change; later Run ClayGraph receipts should record the winner/replay relation once H-WP-02 is fixed."
+    },
+    "gwt": {"effect": "NO_CHANGE", "delta": "No workspace-mechanism claim affected."},
+    "emergenz": {"effect": "NO_CHANGE", "delta": "No emergence claim affected."},
+    "hyperposition": {"effect": "NO_CHANGE", "delta": "No higher-order coupling claim affected."},
+    "clayresearch": {
+      "effect": "SUPPORT_GENERAL_SAFETY_LAW",
+      "delta": "Reinforces dependency-scoped commit/effect validation: authority/replay correctness must be established inside the protected transaction boundary, not inferred from preflight observation."
+    }
+  }
+}

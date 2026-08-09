@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1600p0700_chatgpt_secondary_relation_generic",
+  "actor": "chatgpt-secondary",
+  "tools": [
+    {
+      "tool": "GitHub connector",
+      "status": "EXECUTED",
+      "evidence": "T0 canonical/actor/trigger reads, current stack/workspace/branch refs, work-event commit, run-artifact commits",
+      "authority": "repository read/write verified"
+    },
+    {
+      "tool": "ChatGPT local Python sandbox",
+      "status": "EXECUTED",
+      "runtime": "Python 3.13.5 / Lark 1.3.1",
+      "evidence_ref": "EXECUTABLE_RESEARCH_RECEIPT.json"
+    },
+    {
+      "tool": "web primary-source research",
+      "status": "EXECUTED",
+      "sources": [
+        "MLIR Language Reference generic-operation vs custom-operation syntax",
+        "Tree-sitter grammar documentation on lexical conflicts/keyword-vs-identifier handling",
+        "WebAssembly Component Model WIT reference for typed interface boundaries"
+      ]
+    },
+    {
+      "tool": "E2B",
+      "status": "NOT_EXPOSED_CURRENT_CHATGPT_SURFACE",
+      "note": "Prior repository evidence includes successful E2B replication of the parent G9 grammar defect; it is consumed as existing evidence only, not claimed as a fresh execution for this candidate."
+    },
+    {
+      "tool": "official interconnect preflight",
+      "status": "BLOCKED_NO_REPOSITORY_CHECKOUT",
+      "note": "Manual fail-closed interconnect manifest written; no PASS claim."
+    },
+    {
+      "tool": "live UnifiedDB coordination projections",
+      "status": "UNAVAILABLE_IN_REPO_EXPORT",
+      "note": "CURRENT_DYNAMIC_WORK.clay and CURRENT_SYSTEM_POSSIBILITY.clay returned 404; federation coordination is therefore degraded repo-native and explicitly not equivalent to a live materialized UnifiedDB read."
+    }
+  ],
+  "safety_boundary": "Model/parser output never grants execution authority; this run performs research-only repository writes and bounded local parsing/fuzzing."
+}

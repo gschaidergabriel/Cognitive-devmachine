@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T155804p0700-chatgpt-declared-relations",
+  "tools":[
+    {"tool":"GitHub connector","class":"repo read/write","status":"SUCCESS","evidence":"canonical/stack/registry/grammar/federation/ClayGraph/UnifiedDB reads plus durable run writes"},
+    {"tool":"local container python3","class":"executable research fallback","status":"SUCCESS","experiment":"EXP-CC-G9-DECLARED-RELATION-RESOLVER-20260809","exit_status":0,"stderr":""},
+    {"tool":"web primary-source search","class":"external triangulation","status":"SUCCESS","sources":["Tree-sitter official grammar/lexing documentation","MLIR official ODS and SymbolTable documentation"]},
+    {"tool":"E2B","class":"independent prior runtime evidence","status":"REUSED_NOT_REEXECUTED","evidence_ref":"research_entity/runtime/tool_results/cc_g9_parser_e2b_replication_20260809T1539p0700.json"},
+    {"tool":"research_interconnect_preflight.py","class":"mandatory repo preflight","status":"NOT_RUN_NOT_CLAIMED","reason":"Current checked-in tool remains inconsistent with clay->clayresearch registry rename; manual registry-derived fail-closed manifest used instead."}
+  ],
+  "execution_boundary":"No production parser or canonical stack file was modified. The executable probe is a run-local micro-oracle and does not confer BASE PASS or semantic promotion."
+}

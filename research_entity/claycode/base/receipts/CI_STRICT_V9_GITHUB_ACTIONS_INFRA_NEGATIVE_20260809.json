@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CI_STRICT_V9_GITHUB_ACTIONS_INFRA_NEGATIVE_20260809",
+  "created_at": "2026-08-09T21:31:00+07:00",
+  "actor": "chatgpt-secondary",
+  "epistemic_class": "NEGATIVE_RESULT",
+  "status": "NEGATIVE_RESULT",
+  "scope": "GitHub-hosted Actions transport/runner allocation for strict V9 evidence",
+  "observability_probe": {
+    "pull_request": 37,
+    "head_sha": "4de89b8823f4560caa2a64f638bc68c09f63b12c",
+    "toolchain_base_sha": "d51e37ccd1be46078ad0613361305813048e34ae",
+    "semantic_diff_from_toolchain_base": false,
+    "only_branch_change": "research_entity/claycode/base/CI_STRICT_V9_TRIGGER.txt"
+  },
+  "workflow_runs": [
+    {
+      "workflow": "ClayCode BASE Frontend CI",
+      "run_id": 31318399544,
+      "attempt_1_job_id": 93257312686,
+      "attempt_1": {"status": "completed", "conclusion": "failure", "steps_returned": 0, "decoded_log": "BLOB_NOT_FOUND"},
+      "attempt_2_job_id": 93257446216,
+      "attempt_2": {"status": "completed", "conclusion": "failure", "steps_returned": 0, "decoded_log": "NOT_AVAILABLE"}
+    },
+    {
+      "workflow": "Research Entity Identity Guard",
+      "run_id": 31318399508,
+      "job_id": 93257312667,
+      "observation": {"status": "completed", "conclusion": "failure", "steps_returned": 0}
+    }
+  ],
+  "inference": {
+    "parser_counterexample_observed": false,
+    "claycode_test_step_executed": false,
+    "failure_stage": "BEFORE_WORKFLOW_STEP_EXECUTION",
+    "most_supported_classification": "GITHUB_ACTIONS_EXECUTION_OR_RUNNER_ALLOCATION_INFRASTRUCTURE_FAILURE",
+    "reason": "Two independent workflows on the same PR, including the repository identity guard, failed before Step 1. The ClayCode run was retried and reproduced the same zero-step failure. Therefore the result contains no evidence against V9 grammar/parser semantics."
+  },
+  "gate_effect": {
+    "wp02_pass": false,
+    "wp02_refuted": false,
+    "github_hosted_strict_route_currently_usable": false,
+    "required_fallback": "Run strict V9 lark+interegular receipts on a verified Ubuntu executor/local Andreas host before BASE14 target acceptance."
+  },
+  "falsifier": "A later GitHub-hosted run that executes workflow steps and emits grammar-bound strict receipts supersedes only the infrastructure-unavailable part of this negative result.",
+  "authority_invariant": "model output != execution authority"
+}

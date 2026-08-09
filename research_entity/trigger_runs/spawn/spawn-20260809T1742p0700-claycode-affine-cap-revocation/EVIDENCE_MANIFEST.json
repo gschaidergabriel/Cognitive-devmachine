@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-claycode-affine-cap-revocation",
+  "evidence": [
+    {"class":"VERIFIED_REPOSITORY_CURRENT_STATE","ref":"research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json","finding":"RAE-8.8 r2 parent state hash 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346."},
+    {"class":"VERIFIED_REPOSITORY_PROGRAM_STATE","ref":"research_entity/rooms/PROGRAM_STATE.json","finding":"Current stage BASE_CLAYCODE_RELEASE."},
+    {"class":"SHARED_ANCESTRY_EXECUTABLE_PROXY","ref":"research_entity/trigger_runs/claycode/claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure/FINAL_REPORT.md","finding":"Static effect summary != runtime authority; revoke/regrant and FFI escape explicitly remained next tests."},
+    {"class":"SHARED_ANCESTRY_EXECUTABLE_PROXY","ref":"research_entity/trigger_runs/claycode/claycode-20260809T1728p0700-effect-closure-lowering/FINAL_REPORT.md","finding":"Transitive effect closure and translation-validation direction supported without surface syntax change."},
+    {"class":"SHARED_ANCESTRY_HARNESS_EXECUTION","ref":"commit:89dfb8bf08d9082cfa85bb5f48cf3fac0c3a02fa","finding":"H-WP-02 candidate separates semantic/version/trace identity and fails stale epochs closed; not independent replication."},
+    {"class":"CURRENT_FRANK_RESEARCH","ref":"commit:56920faa53f9231946e0b331431c2bae1b24c93b","finding":"Recurrent decisions do not bypass external effect authority."},
+    {"class":"LOCAL_SYNTHETIC_EXECUTION","ref":"EXECUTABLE_RESEARCH_RECEIPT.json","finding":"100000 delayed cases: generation-bound effect-time checking had 0 oracle mismatches; cached task-start authority had 79982 unauthorized accepts."},
+    {"class":"LOCAL_DIRECT_LINUX_RUNTIME_OBSERVATION","ref":"EXECUTABLE_RESEARCH_RECEIPT.json#linux_fd_reuse_fixture","finding":"fd 3 was closed, reused for a different file, and a stale integer write mutated the new file."},
+    {"class":"PRIMARY_EXTERNAL_STANDARD","ref":"https://component-model.bytecodealliance.org/design/wit.html#resources","finding":"WebAssembly Component Model uses resource handles with explicit own/borrow semantics rather than exposing the underlying resource directly."},
+    {"class":"PRIMARY_EXTERNAL_STANDARD_DESIGN","ref":"https://github.com/WebAssembly/component-model/blob/main/design/mvp/Concurrency.md","finding":"Component Model concurrency design tracks borrows across asynchronous tasks and constrains drop/return while borrows are outstanding."},
+    {"class":"PRIMARY_EXTERNAL_PLATFORM_DOCUMENTATION","ref":"https://doc.rust-lang.org/std/os/fd/struct.OwnedFd.html","finding":"Rust OwnedFd models ownership and closes on drop."},
+    {"class":"PRIMARY_EXTERNAL_PLATFORM_DOCUMENTATION","ref":"https://doc.rust-lang.org/std/os/fd/struct.BorrowedFd.html","finding":"Rust BorrowedFd represents a lifetime-bounded borrowed descriptor."},
+    {"class":"PRIMARY_EXTERNAL_CAPABILITY_DOCUMENTATION","ref":"https://github.com/bytecodealliance/wasmtime/blob/main/docs/WASI-capabilities.md","finding":"WASI capability design uses resource handles and avoids ambient authority by explicit provisioning."}
+  ],
+  "ancestry_rule": "Repository branch agreement derived from the same Clay/FRANK design family is not counted as independent replication. External standards are comparison anchors, not proof of ClayCode correctness.",
+  "negative_results_preserved": true
+}

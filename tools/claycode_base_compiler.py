@@ -10,6 +10,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
+from decimal import Decimal, InvalidOperation
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -29,6 +31,9 @@ OP_MAP = {
     "op_or": "or", "op_iff": "iff", "op_requires": "requires",
     "op_in": "in", "op_subset_of": "subset_of",
 }
+
+INT64_MIN = -(1 << 63)
+INT64_MAX = (1 << 63) - 1
 
 
 @dataclass(frozen=True)
@@ -96,7 +101,21 @@ def canonical_expr(node: Any) -> Any:
     if isinstance(node, Token):
         if node.type == "SIGNED_NUMBER":
             value = str(node)
-            return {"k": "num", "v": float(value) if any(x in value for x in ".eE") else int(value)}
+            if any(x in value for x in ".eE"):
+                try:
+                    decimal_value = Decimal(value)
+                except InvalidOperation as exc:
+                    raise CompileError(f"REAL_LITERAL_INVALID:{value}") from exc
+                real_value = float(value)
+                if not math.isfinite(real_value):
+                    raise CompileError(f"REAL_LITERAL_OUT_OF_RANGE:{value}")
+                if real_value == 0.0 and decimal_value != 0:
+                    raise CompileError(f"REAL_LITERAL_UNDERFLOW:{value}")
+                return {"k": "num", "v": real_value}
+            int_value = int(value)
+            if int_value < INT64_MIN or int_value > INT64_MAX:
+                raise CompileError(f"INT_LITERAL_OUT_OF_RANGE:{value}")
+            return {"k": "num", "v": int_value}
         if node.type == "BOOLEAN":
             return {"k": "bool", "v": str(node) == "true"}
         if node.type == "STRING":
@@ -219,6 +238,42 @@ def infer(expr: dict, env: dict[str, str], signatures: dict[str, tuple[list[str]
     raise CompileError(f"UNSUPPORTED_EXPR:{kind}")
 
 
+def _called_function_names(expr: dict) -> set[str]:
+    kind = expr["k"]
+    if kind == "call":
+        out = {expr["f"]}
+        for arg in expr["a"]:
+            out.update(_called_function_names(arg))
+        return out
+    if kind == "bin":
+        return _called_function_names(expr["l"]) | _called_function_names(expr["r"])
+    return set()
+
+
+def _reject_recursive_call_cycles(functions: list[Function]) -> None:
+    graph = {function.name: _called_function_names(function.body) for function in functions}
+    state: dict[str, int] = {}
+    stack: list[str] = []
+
+    def visit(name: str) -> None:
+        mark = state.get(name, 0)
+        if mark == 2:
+            return
+        if mark == 1:
+            start = stack.index(name) if name in stack else 0
+            cycle = stack[start:] + [name]
+            raise CompileError("RECURSIVE_CALL_CYCLE:" + "->".join(cycle))
+        state[name] = 1
+        stack.append(name)
+        for callee in sorted(graph.get(name, set())):
+            visit(callee)
+        stack.pop()
+        state[name] = 2
+
+    for function in functions:
+        visit(function.name)
+
+
 def compile_ir(program: dict) -> dict:
     functions = program["functions"]
     signatures = {f.name: ([p.type for p in f.params], f.return_type) for f in functions}
@@ -229,6 +284,7 @@ def compile_ir(program: dict) -> dict:
         actual = infer(function.body, {p.name: p.type for p in function.params}, signatures)
         if actual != function.return_type:
             raise CompileError(f"RETURN_TYPE_MISMATCH:{function.name}:{actual}!={function.return_type}")
+    _reject_recursive_call_cycles(functions)
     canonical = {"schema": "claycode.typed-ir.v0", "functions": []}
     for function in sorted(functions, key=lambda f: f.name):
         canonical["functions"].append({
@@ -240,11 +296,17 @@ def compile_ir(program: dict) -> dict:
     return canonical
 
 
+def _checked_int64(value: int, error: str) -> int:
+    if value < INT64_MIN or value > INT64_MAX:
+        raise CompileError(error)
+    return value
+
+
 def _trunc_int_div(left: int, right: int) -> int:
     """Checked int64 truncation toward zero; matches the C11 backend error boundary."""
     if right == 0:
         raise CompileError("DIVISION_BY_ZERO")
-    if left == -(1 << 63) and right == -1:
+    if left == INT64_MIN and right == -1:
         raise CompileError("INT_DIV_OVERFLOW")
     quotient = abs(left) // abs(right)
     return -quotient if (left < 0) != (right < 0) else quotient
@@ -267,10 +329,18 @@ def eval_expr(expr: dict, env: dict[str, Any], functions: dict[str, dict], depth
         left = eval_expr(expr["l"], env, functions, depth)
         right = eval_expr(expr["r"], env, functions, depth)
         op = expr["op"]
-        if op == "+": return left + right
-        if op == "-": return left - right
-        if op == "*": return left * right
-        if op == "/": return _trunc_int_div(left, right) if isinstance(left, int) and isinstance(right, int) else left / right
+        if op == "+":
+            return _checked_int64(left + right, "INT_ADD_OVERFLOW") if type(left) is int and type(right) is int else left + right
+        if op == "-":
+            return _checked_int64(left - right, "INT_SUB_OVERFLOW") if type(left) is int and type(right) is int else left - right
+        if op == "*":
+            return _checked_int64(left * right, "INT_MUL_OVERFLOW") if type(left) is int and type(right) is int else left * right
+        if op == "/":
+            if type(left) is int and type(right) is int:
+                return _trunc_int_div(left, right)
+            if right == 0.0:
+                raise CompileError("REAL_DIVISION_BY_ZERO")
+            return left / right
         if op == ">": return left > right
         if op == "<": return left < right
         if op == ">=": return left >= right
@@ -284,6 +354,31 @@ def eval_expr(expr: dict, env: dict[str, Any], functions: dict[str, dict], depth
     raise CompileError(f"EVAL_UNSUPPORTED:{expr}")
 
 
+def _coerce_runtime_arg(value: Any, type_name_: str) -> Any:
+    if type_name_ == "Int":
+        if type(value) is not int or value < INT64_MIN or value > INT64_MAX:
+            raise CompileError("INT_ARGUMENT_OUT_OF_RANGE_OR_TYPE")
+        return value
+    if type_name_ == "Real":
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise CompileError("REAL_ARGUMENT_TYPE")
+        real_value = float(value)
+        if not math.isfinite(real_value):
+            raise CompileError("REAL_ARGUMENT_OUT_OF_RANGE")
+        return real_value
+    if type_name_ == "Bool":
+        if type(value) is bool:
+            return value
+        if type(value) is int and value in (0, 1):
+            return bool(value)
+        raise CompileError("BOOL_ARGUMENT_TYPE")
+    if type_name_ == "String":
+        if not isinstance(value, str):
+            raise CompileError("STRING_ARGUMENT_TYPE")
+        return value
+    raise CompileError(f"UNSUPPORTED_RUNTIME_TYPE:{type_name_}")
+
+
 def eval_function(ir: dict, name: str, args: list[Any]) -> Any:
     functions = {f["name"]: f for f in ir["functions"]}
     if name not in functions:
@@ -291,7 +386,8 @@ def eval_function(ir: dict, name: str, args: list[Any]) -> Any:
     function = functions[name]
     if len(args) != len(function["params"]):
         raise CompileError(f"ARITY_MISMATCH:{name}")
-    env = dict(zip([p["name"] for p in function["params"]], args))
+    values = [_coerce_runtime_arg(value, param["type"]) for value, param in zip(args, function["params"])]
+    env = dict(zip([p["name"] for p in function["params"]], values))
     return eval_expr(function["body"], env, functions)
 
 
@@ -309,7 +405,10 @@ def c_fn(name: str) -> str:
 
 def c_expr(expr: dict, env: dict[str, str], signatures: dict[str, tuple[list[str], str]]) -> str:
     kind = expr["k"]
-    if kind == "num": return repr(expr["v"])
+    if kind == "num":
+        if type(expr["v"]) is int and expr["v"] == INT64_MIN:
+            return "INT64_MIN"
+        return repr(expr["v"])
     if kind == "bool": return "true" if expr["v"] else "false"
     if kind == "str": return json.dumps(expr["v"])
     if kind == "name": return c_var(expr["v"])
@@ -317,33 +416,36 @@ def c_expr(expr: dict, env: dict[str, str], signatures: dict[str, tuple[list[str
     if kind == "bin":
         left = c_expr(expr["l"], env, signatures)
         right = c_expr(expr["r"], env, signatures)
-        if expr["op"] == "/" and infer(expr, env, signatures) == "Int":
-            return f"cc_int_div({left},{right})"
+        left_type = infer(expr["l"], env, signatures)
+        result_type = infer(expr, env, signatures)
+        if left_type == "String" and expr["op"] in {"==", "!="}:
+            cmp = "==" if expr["op"] == "==" else "!="
+            return f"(strcmp({left},{right}) {cmp} 0)"
+        if result_type == "Int" and expr["op"] in {"+", "-", "*", "/"}:
+            helper = {"+": "cc_int_add", "-": "cc_int_sub", "*": "cc_int_mul", "/": "cc_int_div"}[expr["op"]]
+            return f"{helper}({left},{right})"
+        if result_type == "Real" and expr["op"] == "/":
+            return f"cc_real_div({left},{right})"
         operator = {"or": "||", "iff": "==", "=>": "<="}.get(expr["op"], expr["op"])
         return f"({left} {operator} {right})"
     raise CompileError(f"C_UNSUPPORTED:{kind}")
 
 
-def _needs_int_div(expr: dict, env: dict[str, str], signatures: dict[str, tuple[list[str], str]]) -> bool:
+def _required_numeric_helpers(expr: dict, env: dict[str, str], signatures: dict[str, tuple[list[str], str]]) -> set[str]:
     kind = expr["k"]
     if kind == "bin":
-        if expr["op"] == "/" and infer(expr, env, signatures) == "Int":
-            return True
-        return _needs_int_div(expr["l"], env, signatures) or _needs_int_div(expr["r"], env, signatures)
-    if kind == "call":
-        return any(_needs_int_div(arg, env, signatures) for arg in expr["a"])
-    return False
-
-
-def _called_function_names(expr: dict) -> set[str]:
-    kind = expr["k"]
-    if kind == "call":
-        out = {expr["f"]}
-        for arg in expr["a"]:
-            out.update(_called_function_names(arg))
+        out = _required_numeric_helpers(expr["l"], env, signatures) | _required_numeric_helpers(expr["r"], env, signatures)
+        result_type = infer(expr, env, signatures)
+        if result_type == "Int" and expr["op"] in {"+", "-", "*", "/"}:
+            out.add("int_" + {"+": "add", "-": "sub", "*": "mul", "/": "div"}[expr["op"]])
+        elif result_type == "Real" and expr["op"] == "/":
+            out.add("real_div")
         return out
-    if kind == "bin":
-        return _called_function_names(expr["l"]) | _called_function_names(expr["r"])
+    if kind == "call":
+        out: set[str] = set()
+        for arg in expr["a"]:
+            out.update(_required_numeric_helpers(arg, env, signatures))
+        return out
     return set()
 
 
@@ -367,21 +469,84 @@ def _entry_reachable_functions(ir: dict, entry: str | None) -> list[dict]:
 def lower_c(ir: dict, entry: str | None = None) -> str:
     signatures = {f["name"]: ([p["type"] for p in f["params"]], f["return"]) for f in ir["functions"]}
     emitted_functions = _entry_reachable_functions(ir, entry)
-    needs_int_div = any(
-        _needs_int_div(function["body"], {p["name"]: p["type"] for p in function["params"]}, signatures)
-        for function in emitted_functions
-    )
+    numeric_helpers: set[str] = set()
+    for function in emitted_functions:
+        numeric_helpers.update(
+            _required_numeric_helpers(function["body"], {p["name"]: p["type"] for p in function["params"]}, signatures)
+        )
     lines = [
-        "#include <stdint.h>", "#include <stdbool.h>", "#include <stdio.h>", "#include <stdlib.h>", "#include <limits.h>", "",
+        "#include <stdint.h>", "#include <stdbool.h>", "#include <stdio.h>", "#include <stdlib.h>", "#include <limits.h>",
+        "#include <errno.h>", "#include <math.h>", "#include <string.h>", "",
     ]
-    if needs_int_div:
-        lines += [
+    helper_lines = {
+        "int_add": [
+            "static int64_t cc_int_add(int64_t a,int64_t b){",
+            "  if((b>0 && a>INT64_MAX-b)||(b<0 && a<INT64_MIN-b)){fputs(\"CC_INT_ADD_OVERFLOW\\n\",stderr);exit(67);}",
+            "  return a+b;",
+            "}", "",
+        ],
+        "int_sub": [
+            "static int64_t cc_int_sub(int64_t a,int64_t b){",
+            "  if((b<0 && a>INT64_MAX+b)||(b>0 && a<INT64_MIN+b)){fputs(\"CC_INT_SUB_OVERFLOW\\n\",stderr);exit(68);}",
+            "  return a-b;",
+            "}", "",
+        ],
+        "int_mul": [
+            "static int64_t cc_int_mul(int64_t a,int64_t b){",
+            "  if(a>0){",
+            "    if((b>0 && a>INT64_MAX/b)||(b<0 && b<INT64_MIN/a)){fputs(\"CC_INT_MUL_OVERFLOW\\n\",stderr);exit(69);}",
+            "  }else if(a<0){",
+            "    if((b>0 && a<INT64_MIN/b)||(b<0 && b<INT64_MAX/a)){fputs(\"CC_INT_MUL_OVERFLOW\\n\",stderr);exit(69);}",
+            "  }",
+            "  return a*b;",
+            "}", "",
+        ],
+        "int_div": [
             "static int64_t cc_int_div(int64_t a,int64_t b){",
             "  if(b==0){fputs(\"CC_INT_DIV_ZERO\\n\",stderr);exit(65);}",
             "  if(a==INT64_MIN && b==-1){fputs(\"CC_INT_DIV_OVERFLOW\\n\",stderr);exit(66);}",
             "  return a/b;",
             "}", "",
-        ]
+        ],
+        "real_div": [
+            "static double cc_real_div(double a,double b){",
+            "  if(b==0.0){fputs(\"CC_REAL_DIV_ZERO\\n\",stderr);exit(73);}",
+            "  return a/b;",
+            "}", "",
+        ],
+    }
+    for helper in ("int_add", "int_sub", "int_mul", "int_div", "real_div"):
+        if helper in numeric_helpers:
+            lines += helper_lines[helper]
+    if entry:
+        entry_function = next((f for f in ir["functions"] if f["name"] == entry), None)
+        if not entry_function:
+            raise CompileError(f"UNDEFINED_ENTRY:{entry}")
+        entry_param_types = {p["type"] for p in entry_function["params"]}
+        if "Int" in entry_param_types:
+            lines += [
+                "static int64_t cc_parse_int(const char*s){",
+                "  errno=0; char*end=NULL; long long v=strtoll(s,&end,10);",
+                "  if(errno==ERANGE||end==s||*end!='\\0'){fputs(\"CC_ARG_INT_INVALID\\n\",stderr);exit(70);}",
+                "  return (int64_t)v;",
+                "}", "",
+            ]
+        if "Real" in entry_param_types:
+            lines += [
+                "static double cc_parse_real(const char*s){",
+                "  errno=0; char*end=NULL; double v=strtod(s,&end);",
+                "  if(errno==ERANGE||end==s||*end!='\\0'||!isfinite(v)){fputs(\"CC_ARG_REAL_INVALID\\n\",stderr);exit(71);}",
+                "  return v;",
+                "}", "",
+            ]
+        if "Bool" in entry_param_types:
+            lines += [
+                "static bool cc_parse_bool(const char*s){",
+                "  if(s[0]=='0'&&s[1]=='\\0') return false;",
+                "  if(s[0]=='1'&&s[1]=='\\0') return true;",
+                "  fputs(\"CC_ARG_BOOL_INVALID\\n\",stderr);exit(72);",
+                "}", "",
+            ]
     for function in emitted_functions:
         params = ", ".join(f"{c_type(p['type'])} {c_var(p['name'])}" for p in function["params"]) or "void"
         lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params});")
@@ -389,7 +554,9 @@ def lower_c(ir: dict, entry: str | None = None) -> str:
     for function in emitted_functions:
         params = ", ".join(f"{c_type(p['type'])} {c_var(p['name'])}" for p in function["params"]) or "void"
         env = {p["name"]: p["type"] for p in function["params"]}
-        lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params}) {{ return {c_expr(function['body'], env, signatures)}; }}")
+        unused_marks = " ".join(f"(void){c_var(p['name'])};" for p in function["params"])
+        prefix = (unused_marks + " ") if unused_marks else ""
+        lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params}) {{ {prefix}return {c_expr(function['body'], env, signatures)}; }}")
     if entry:
         function = next((f for f in ir["functions"] if f["name"] == entry), None)
         if not function:
@@ -398,9 +565,9 @@ def lower_c(ir: dict, entry: str | None = None) -> str:
             raise CompileError("ENTRY_ARG_TYPE_UNSUPPORTED")
         args = []
         for index, param in enumerate(function["params"], 1):
-            if param["type"] == "Int": args.append(f"(int64_t)strtoll(argv[{index}],NULL,10)")
-            elif param["type"] == "Real": args.append(f"strtod(argv[{index}],NULL)")
-            else: args.append(f"(atoi(argv[{index}])!=0)")
+            if param["type"] == "Int": args.append(f"cc_parse_int(argv[{index}])")
+            elif param["type"] == "Real": args.append(f"cc_parse_real(argv[{index}])")
+            else: args.append(f"cc_parse_bool(argv[{index}])")
         return_type = function["return"]
         call = f"{c_fn(entry)}({','.join(args)})"
         fmt = {"Int": "%lld\\n", "Bool": "%d\\n", "Real": "%.17g\\n", "String": "%s\\n"}[return_type]

@@ -16,7 +16,7 @@ TECHNICAL = {
 'aicore-desktopd':'agency_tools','aicore-webd':'agency_tools','aicore-ingestd':'perception_gate',
 'aicore-consciousness':'workspace_core','aicore-genesis':'deliberation','aicore-genesis-watchdog':'safety_recovery',
 'aicore-invariants':'safety_recovery','aicore-asrs':'safety_recovery','aicore-rooms':'agency_tools',
-'aicore-gaming-mode':'perception_gate','aicore-quantum-reflector':'deliberation','aicore-swarm':'agency_tools',
+'aicore-gaming-mode':'perception_gate','aicore-quantum-reflector':'deliberation','aura-headless':'agency_tools','aura-analyzer':'agency_tools','aicore-swarm':'agency_tools',
 'aicore-dream':'memory_identity','aicore-dream-watchdog':'safety_recovery','aicore-dream-watchdog-meta':'safety_recovery',
 'aicore-fas':'agency_tools','aicore-therapist':'agency_tools','aicore-atlas':'agency_tools','aicore-muse':'agency_tools',
 'aicore-mirror':'memory_identity','aicore-ui-webui':'workspace_core','aicore-notruf':'safety_recovery',
@@ -33,7 +33,7 @@ COMPONENT_TO_TRANSITIONAL = {
 }
 
 def validate():
-    assert len(TECHNICAL)==34
+    assert len(TECHNICAL)==36
     components=set(TECHNICAL.values())
     assert components==set(COMPONENT_TO_TRANSITIONAL), (components,set(COMPONENT_TO_TRANSITIONAL))
     module_set=set(MODULES)

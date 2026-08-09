@@ -40,9 +40,17 @@ EQUIVALENCE = [
 
 
 def normalized(node):
+    """Canonical parse-tree view; layout tokens are intentionally non-semantic."""
     if isinstance(node, Tree):
-        return [node.data, [normalized(x) for x in node.children]]
+        children = []
+        for child in node.children:
+            value = normalized(child)
+            if value is not None:
+                children.append(value)
+        return [str(node.data), children]
     if isinstance(node, Token):
+        if node.type == "NEWLINE":
+            return None
         return [node.type, str(node)]
     return node
 
@@ -89,11 +97,12 @@ def main() -> int:
             failures.append(f"equivalence:{i}")
 
     report = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "scope": "KNOWN_FRONTEND_GRAMMAR_REGRESSION_ONLY_NOT_CC_WP_02_PROMOTION",
         "grammar": str(GRAMMAR.relative_to(ROOT)),
         "grammar_sha256": hashlib.sha256(grammar_text.encode("utf-8")).hexdigest(),
         "strict_lalr_constructed": True,
+        "canonicalization_rule": "NEWLINE/layout and ignored comments are non-semantic in this frontend tree witness",
         "valid_cases": valid,
         "invalid_cases": invalid,
         "whitespace_comment_equivalence": equivalence,

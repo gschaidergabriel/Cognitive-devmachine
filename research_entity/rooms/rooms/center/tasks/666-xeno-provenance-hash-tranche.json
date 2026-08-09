@@ -4,7 +4,7 @@
   "room_id": "center",
   "title": "XENO provenance extracted-copy hash closure",
   "goal": "Hash-close every manifest leaf under se_xeno/G8/provenance by complete recursive Drive enumeration and raw-byte SHA-256 verification, with explicit disposition for any non-manifest support/generated leaves.",
-  "status": "CLAIMED",
+  "status": "COMPLETE",
   "dependencies": [
     "drive:1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g",
     "research_entity/archive_assimilation/receipts/666_20260809T0954p0700_xeno_parallel_delta_aggregation_floor_108_of_203.json"
@@ -15,9 +15,18 @@
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
     "model": "GPT-5.6 Sol",
-    "claimed_at": "2026-08-09T09:58:00+07:00"
+    "claimed_at": "2026-08-09T09:58:00+07:00",
+    "released_at": "2026-08-09T10:07:00+07:00"
   },
-  "non_overlap": "provenance only; excludes peer-owned sources, implementation, PF segment 3, Digital Retina .git support and AICORE v27 lanes",
-  "expected_information_gain": "Closes the only currently free remaining XENO G8 scope and advances the extracted-copy denominator without overlap.",
-  "created_at": "2026-08-09T09:58:00+07:00"
+  "completion": {
+    "expected_manifest_leaves": 51,
+    "verified_manifest_leaves": 51,
+    "mismatches": 0,
+    "extras": 0,
+    "verified_bytes": 15255,
+    "receipt": "research_entity/archive_assimilation/receipts/666_20260809T1006p0700_chatgpt_secondary_xeno_provenance_hash_closure.json"
+  },
+  "non_overlap": "provenance only; sources and implementation completed independently while this lease was active; PF segment 3, Digital Retina .git support and AICORE lanes were not touched.",
+  "created_at": "2026-08-09T09:58:00+07:00",
+  "completed_at": "2026-08-09T10:07:00+07:00"
 }

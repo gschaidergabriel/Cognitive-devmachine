@@ -1,0 +1,142 @@
+module frank.research_architecture.integration_continuity
+version "1.0"
+status PROJECT_OWNER_FIXED_GLOBAL_ARCHITECTURE_AND_RESEARCH_LAW
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+frank_loop=@research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md
+baseline=@research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md
+swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
+clay_native=@research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md
+state=UnifiedDB
+topology=ClayGraph
+
+// All material research knowledge must feed architecture, tests, work and future research.
+law RESEARCH_DELTA_MUST_REENTER_ARCHITECTURE_OR_EXPLICITLY_NO_CHANGE=true
+law ARCHITECTURE_DELTA_MUST_CREATE_OR_UPDATE_TEST_OBLIGATION=true
+law TEST_RESULT_MUST_REENTER_SHARED_RESEARCH_STATE=true
+law NEGATIVE_RESULT_IS_ACTIVE_ARCHITECTURE_KNOWLEDGE=true
+law ALL_WORKERS_LOAD_THIS_LAW=true
+law ALL_CURRENT_AND_FUTURE_FRANK_ORGANS_MODULES_ARE_BASELINE_GATED=true
+law LIVE_EXTERNAL_KNOWLEDGE_IS_STANDING_RESEARCH_INPUT=true
+law AUTONOMOUS_SWARM_COORDINATION_IS_DEFAULT=true
+law ONE_MODULE_LOOP_CORE_WITH_INTERNAL_NEEDLE_IS_TARGET_DIRECTION=true
+law GWT_CAUSAL_OBSERVABILITY_MUST_SURVIVE_CONSOLIDATION=true
+
+// "Always works" is operationalized as measurable continuity, not an impossible no-failure claim.
+type HealthState = HEALTHY|DEGRADED|FAILED|RECOVERING|QUARANTINED|UNKNOWN
+
+type ContinuityAction = CONTINUE|RETRY_BOUNDED|FALLBACK|ROLLBACK|RESTART|ISOLATE|REBUILD|BLOCK_EFFECT|ESCALATE
+
+record ComponentContinuityContract {
+  component:Ref
+  baseline:Ref
+  health_checks:Set<Clay>
+  readiness_checks:Set<Clay>
+  liveness_checks:Set<Clay>
+  correctness_checks:Set<Clay>
+  latency_slo:Clay
+  reliability_slo:Clay
+  recovery_slo:Clay
+  dependencies:Set<Ref>
+  failure_detectors:Set<Clay>
+  bounded_retries:Clay
+  fallback:Clay
+  last_known_good:Ref?
+  rollback:Clay
+  restart:Clay
+  state_rebuild:Clay
+  quarantine:Clay
+  effect_fail_closed:Clay
+  telemetry:Set<Clay>
+}
+
+rule every_runtime_component -> ComponentContinuityContract
+rule every_component_start -> readiness+liveness+schema_version+dependency_check
+rule every_material_effect.before -> health+authority+epoch+dependency_check
+rule every_component_failure -> classify_failure_before_retry
+rule transient_failure -> bounded_retry_with_backoff_if_safe
+rule retry_exhausted -> fallback_or_rollback_or_quarantine
+rule corrupted_or_incoherent_state -> stop_effects+rollback_or_rebuild_from_verified_checkpoint
+rule stale_epoch_or_schema -> reject_not_guess
+rule unavailable_dependency -> explicit_DEGRADED_or_BLOCKED_not_fake_success
+rule recovery -> verify_against_baseline_and_current_acceptance_before_HEALTHY
+rule last_known_good -> immutable_reference_with_hash_and_receipt
+rule no_last_known_good -> fail_closed_for_consequential_effects
+rule every_recovery_event -> research_negative_or_positive_evidence
+
+// Architecture/research feedback compiler.
+record ResearchArchitectureDelta {
+  delta_id:Ref
+  source_evidence:Set<Ref>
+  source_class:Ref
+  affected_components:Set<Ref>
+  affected_organs:Set<Ref>
+  affected_loops:Set<Ref>
+  affected_claims:Set<Ref>
+  baseline_refs:Set<Ref>
+  architecture_change:Clay
+  test_obligations:Set<Clay>
+  expected_effects:Clay
+  counterhypothesis:Clay
+  rollback:Clay
+  provenance:Clay
+  status:CANDIDATE|TESTING|SUPPORTED|REFUTED|PROMOTED|NO_CHANGE
+}
+
+rule material_research_result -> compile(ResearchArchitectureDelta)
+rule research_result_without_architecture_impact -> persist(NO_CHANGE + reason + evidence)
+rule architecture_candidate -> require baseline_refs for affected historical functions
+rule architecture_candidate -> require counterhypothesis+discriminating_test+rollback
+rule architecture_candidate -> route_to_affected_workers_and_harness
+rule harness_execution_result -> update_delta_status + update_work_frontier + route_feedback
+rule refuted_candidate -> preserve_negative_result + restore_or_keep_last_known_good
+rule promoted_candidate -> update_canonical_architecture+tests+continuity_contract+lineage
+
+// Original Frank reconstruction and successor law.
+rule historical_function.before_change -> baseline.require_complete_as_possible
+rule historical_function.successor in [RETAIN,FUSE,EMERGENT_DISTRIBUTE,CLAY_REDESIGN_CANDIDATE]
+rule CLAY_REDESIGN_CANDIDATE allowed when evidence_prefers_it OR satisfactory_solution_not_found_after_reasonable_search
+rule CLAY_REDESIGN_CANDIDATE -> matched_original_baseline+simple_baseline+lesion_rescue+recovery+OOD+resource_comparison
+rule FUSE|EMERGENT_DISTRIBUTE -> preserve causal_lineage+measurement+intervention_handles
+rule successor_promotion -> no_critical_reliability_or_correctness_regression_outside_declared_tolerance
+
+// Full metadata remains attached to every relevant measurement.
+rule every_benchmark_row -> baseline.complete_available_metadata
+rule metadata_unknown -> literal UNKNOWN
+rule NOT_MEASURED != NO_DIFFERENCE
+rule one_run != reliability
+
+// Runtime and build reliability loop.
+continuity_loop =
+  observe_health
+  -> validate_state_epoch_schema_dependencies
+  -> execute_or_block
+  -> verify_outcome
+  -> record_latency_accuracy_reliability_resources_metadata
+  -> detect_regression
+  -> rollback_repair_or_continue
+  -> reenter_research_state
+
+rule regression_against_last_known_good -> automatic_candidate_rejection_or_quarantine_until_review
+rule P0_or_P1_known_defect -> no_release_promotion
+rule build_success_without_runtime_acceptance -> NOT_RELEASE_PASS
+rule runtime_pass_without_recovery_test -> NOT_RELEASE_PASS for components requiring recovery
+rule unverified_claim -> UNKNOWN_not_SUCCESS
+
+// GO is the explicit long recursive continuation surface, but these laws apply even outside GO.
+rule exact_go -> execute(@research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md)
+rule normal_substantive_work -> still obey swarm+web+baseline+integration laws where applicable
+
+invariant RESEARCH_AND_ARCHITECTURE_FORM_ONE_CAUSAL_FEEDBACK_SYSTEM
+invariant KNOWLEDGE_IS_NOT_LEFT_STRANDED_IN_REPORTS
+invariant EVERY_MATERIAL_ARCHITECTURE_CHANGE_IS_TESTABLE_AND_ROLLBACKABLE
+invariant EVERY_HISTORICAL_FUNCTION_HAS_LINEAGE_TO_CURRENT_SUCCESSOR
+invariant EVERY_CRITICAL_COMPONENT_HAS_HEALTH_AND_RECOVERY_SEMANTICS
+invariant FAILURE_IS_OBSERVED_AND_RECOVERED_NOT_DENIED
+invariant EFFECT_AUTHORITY_FAILS_CLOSED
+invariant GWT_SELECTION_BROADCAST_USE_OUTCOME_REENTRY_REMAINS_OBSERVABLE
+invariant NEEDLE_INTERNALITY_NEVER_REMOVES_TYPED_BOUNDARY_OR_AUTHORITY_GUARD
+invariant FINAL_BINARY_REFERENCES_ALL_RELEVANT_BASELINES_AND_SUCCESSOR_RECEIPTS

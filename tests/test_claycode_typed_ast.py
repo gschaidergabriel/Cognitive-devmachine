@@ -7,7 +7,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
-from claycode_typed_ast import Document, Frontend, SCHEMA, compare, verify_roundtrip
+from claycode_typed_ast import Document, Frontend, SCHEMA, compare, validate, verify_roundtrip
 
 
 GRAMMAR = r'''
@@ -56,6 +56,14 @@ def test_mutations_change_hash(frontend, left, right):
 
 def test_ignored_layout_is_equivalent(frontend):
     assert compare(frontend, "rule x>0\n", "\nrule  x > 0 // c\n\n", True)["pass"]
+
+
+def test_receipt_declares_hash_and_parser_contract(frontend):
+    receipt = validate(frontend, [("sample", "rule x>0\n")])
+    assert receipt["pass"]
+    assert receipt["hash_algorithm"] == "SHA-256"
+    assert receipt["parser_contract"]["maybe_placeholders"] is False
+    assert receipt["canonicalization"]["ignored_layout_terminals"] == ["NEWLINE"]
 
 
 @pytest.mark.parametrize("bad", [

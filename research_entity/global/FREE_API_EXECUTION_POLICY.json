@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "status": "IMPLEMENTED_CANDIDATE",
+  "mission_goal": "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system",
+  "default_cost_limit": 0,
+  "providers": {
+    "preferred": ["nvidia", "groq", "cerebras", "gemini", "openrouter"],
+    "hard_denied": ["together"]
+  },
+  "nvidia": {
+    "priority": 100,
+    "key_names": ["NVIDIA_API_KEY", "NVCF_API_KEY"],
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "activate_only_when_key_present": true
+  },
+  "invariants": [
+    "Never serialize, log, commit, echo or display API secret values.",
+    "Never access Together, including discovery, probes, routing and fallback.",
+    "Never make a paid request unless the project owner separately authorizes a nonzero budget.",
+    "A configured key is capability evidence, not proof of quota or health.",
+    "Every real provider request must emit a redacted execution receipt.",
+    "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."
+  ],
+  "runtime": "research_entity/runtime/free_api_provider_runtime.py"
+}

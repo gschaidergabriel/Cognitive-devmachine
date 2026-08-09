@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1710p0700-effect-authority-v1",
+  "trigger":"harness",
+  "work_package":"H-WP-10-EFFECT-AUTHORITY",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "fixed_contracts":["research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","research_entity/experiments/FRANK_TEST1_CLAY_NATIVE_FULL_SIMULATION_CONTRACT.md","research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md","research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md"],
+  "mesh_inputs":[
+    {"branch":"frank","ref":"6c96186510902ea6bb9a13ed6bebde803791f569"},
+    {"branch":"claycode","ref":"b2e6403ed549aa1b13d74c6dca7f3e41e64ca6e3"},
+    {"branch":"clayresearch","ref":"dab56dd342fdb27527af5472bf3bbdd6b3a091d1"},
+    {"branch":"gwt","ref":"04f260bba372600821fcd972d3eeee66d59a8314"},
+    {"branch":"claygraph","ref":"166280d7d20a052432b1753fd5ebeb6cd35c0a7d"},
+    {"branch":"unifieddb","ref":"afa47870dfc46fa38b21e5bb0e1bfc45c5ce87aa"},
+    {"branch":"hyperposition","ref":"35c59eac8662ea71c9aa989766ca0d51dccb3dcd"},
+    {"branch":"emergenz","ref":"c3f9dda83ae3ed8fa3b24b636245a2cfcb6e3d10"},
+    {"branch":"harness","ref":"21418accdbf42c656f18b01b1a0c87a534151d25","use":"collision avoidance: H-WP-04 separately claimed"},
+    {"branch":"harness","ref":"56a53be9952b94b3c906d7dbd5226cae28afe038","use":"TurnTraceEnvelope synthetic replay receipt"}
+  ],
+  "reference_harness_repo":{"semantic_name":"gschaidergabriel/frankv0.1","connector_alias":"gschaidergabriel/Dr.-Unterweger","latest_observed_head":"d916b98fb65dc62fbf3275d6a48dc52c2bfc2612"},
+  "shared_ancestry_warning":"Concurrent same-repository findings are not independent replication.",
+  "build_target":"scoped effect-commit validator/oracle; no live effect execution",
+  "status":"MATERIALIZED"
+}

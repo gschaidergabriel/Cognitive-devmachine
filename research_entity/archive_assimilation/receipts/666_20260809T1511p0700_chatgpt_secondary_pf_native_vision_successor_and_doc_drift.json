@@ -1,0 +1,64 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1511p0700_chatgpt_secondary_pf_native_vision_successor_and_doc_drift",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "started_at":"2026-08-09T15:11:00+07:00",
+  "source_class":"PROJECT_FRANKENSTEIN_FROZEN_HEAD_CODE_AND_HISTORY",
+  "shard":"FrankEye -> Qwen3.5 native_vision successor plus frozen-head documentation/runtime contradiction",
+  "disposition":"SEMANTICALLY_ANALYZED_HISTORY_AND_CURRENT_CODE_SHARD_WITH_DOC_DRIFT_NEGATIVE_RESULT",
+  "exact_coverage_credit":0.0,
+  "exact_coverage_reason":"Project-Frankenstein full recursive tree/history denominator remains unavailable and combined Level-0 denominator is NOT_FROZEN.",
+  "source_refs":[
+    {"kind":"github_commit","repo":"gschaidergabriel/Project-Frankenstein","sha":"6158be8ddde637fbf6b78e820239bf4ee8e8b5ee","role":"2026-03-31 native_vision introduction and routing switch away from FrankEye"},
+    {"kind":"github_file","repo":"gschaidergabriel/Project-Frankenstein","path":"tools/native_vision.py","ref":"abba90a5767d85abc8a1ac340bae92842dab35c1","role":"frozen-head Qwen3.5 multimodal bridge; explicitly replaces FrankEye"},
+    {"kind":"github_file","repo":"gschaidergabriel/Project-Frankenstein","path":"README.md","ref":"abba90a5767d85abc8a1ac340bae92842dab35c1","role":"frozen-head documentation still describes FrankEye CPU pipeline"},
+    {"kind":"rae_receipt","path":"research_entity/archive_assimilation/receipts/666_20260809T1508p0700_chatgpt_secondary_pf_vision_lineage_reconciliation.json","role":"immediately preceding PF vision lineage shard"}
+  ],
+  "findings":[
+    {"id":"PF-NVISION-L0-1","epistemic_class":"CURRENT_FROZEN_HEAD_RUNTIME_CODE","finding":"At the frozen Project-Frankenstein head, tools/native_vision.py explicitly states that Qwen3.5-4B native multimodal inference replaces FrankEye entirely. It sends image+text messages to the local llama-server /v1/chat/completions endpoint and contains no CNN, DINOv2, ONNX or Tesseract pipeline."},
+    {"id":"PF-NVISION-L0-2","epistemic_class":"HISTORICAL_COMMIT_LINEAGE","finding":"The 2026-03-31 cleanup switched error screenshots, VCB integration and WebUI image analysis from tools.frank_eye/get_eye to tools.native_vision/get_vision, making the multimodal Qwen path a runtime successor rather than a side experiment."},
+    {"id":"PF-NVISION-L0-3","epistemic_class":"CURRENT_FROZEN_HEAD_DOCUMENTATION_CONTRADICTION","finding":"The same frozen head README still advertises FrankEye as a 937-line CPU-only pipeline using Digital Retina v8, DINOv2, GOLPU, Tesseract and OpenCV. This contradicts the frozen-head runtime path that says native_vision replaces FrankEye entirely."},
+    {"id":"PF-NVISION-L0-4","epistemic_class":"CURRENT_RUNTIME_LIMIT","finding":"NativeVision is a stateless inference bridge over the local multimodal LLM. It does not implement the current v0.1 user-specific Micro Visual Classifier, prototype/version state, trusted-example provenance, open-set calibration, candidate promotion or rollback semantics."}
+  ],
+  "negative_results_and_failure_modes":[
+    "Frozen-head architecture documentation can lag executable routing by at least one major vision-backend replacement; H1 baseline capture must privilege executable code and runtime receipts over README descriptions.",
+    "Replacing a structured deterministic sensor stack with direct multimodal LLM inference can erase explicit intermediate evidence, latency decomposition and calibrated familiarity surfaces unless those are reintroduced as first-class state.",
+    "Native multimodal output is model-generated semantic interpretation and must not be treated as sensor truth or trusted adaptive-learning labels by default.",
+    "A single-model vision path may simplify deployment but couples perception latency/availability to the shared LLM server; this must be measured rather than assumed cheaper than FrankEye."
+  ],
+  "current_architecture_delta":{
+    "reuse":[
+      "Use Qwen3.5 native multimodal inference as one candidate semantic visual interpreter in H1/H3, because it is the actual frozen-head PF runtime path.",
+      "Keep a separate deterministic/evidence feature surface for adaptive familiarity and open-set gating even if native multimodal inference supplies high-level descriptions.",
+      "Make visual backend identity/version an explicit runtime state so replay can distinguish FrankEye, native_vision and future dissolved Retina paths.",
+      "Generate architecture docs from executable configuration/manifests or regression-check docs against runtime routing."
+    ],
+    "recommended_discriminating_test":"On H1 target hardware, compare native Qwen3.5 vision against FrankEye and hybrid native-vision+MVC on the same photo/screenshot/OOD corpus. Measure semantic task accuracy, OCR/UI accuracy, p50/p95 latency, LLM contention, CPU/GPU/RAM cost, structured-evidence availability and user-specific familiarity gains."
+  },
+  "branch_feedback":{
+    "frank":"DELTA: frozen PF head actually routes vision through Qwen3.5 native multimodal, not README FrankEye; baseline reconstruction must follow executable routing.",
+    "harness":"DELTA: add documentation-vs-runtime routing check and three-way vision differential benchmark (native_vision, FrankEye, hybrid+MVC).",
+    "claycode":"DELTA: visual backend identity/version and evidence class must be typed; native LLM interpretation cannot collapse into raw sensor truth.",
+    "claygraph":"DELTA: add supersession edge FrankEye -> native_vision plus contradiction edge README-FrankEye vs frozen-head-runtime-native_vision.",
+    "unifieddb":"DELTA: persist visual backend/version and links from raw image evidence to model interpretation and familiarity state separately.",
+    "gwt":"DELTA: native multimodal descriptions should enter workspace as interpreted evidence with uncertainty/provenance, not as authoritative observation.",
+    "hyperposition":"NO_CHANGE: no new higher-order coupling result.",
+    "emergenz":"NO_CHANGE: no new emergence measurement result.",
+    "clay":"DELTA: do not choose FrankEye vs native vision from stale docs; H1 measurement should decide the base sensory interpreter while MVC remains a separate adaptive familiarity contract.",
+    "q12_index":"DELTA: add doc/runtime drift and visual-backend replacement as historical failure-oracle questions; no earned-hours credit yet."
+  },
+  "earned_work_mapping":[
+    {"target":"H1 reference vision baseline","class":"MEASUREMENT_FOUNDATION","mechanism":"actual native_vision frozen-head path plus doc/runtime contradiction","hours_credit":null},
+    {"target":"H1/H3 visual backend selection","class":"REUSABLE_WITH_ADAPTATION","mechanism":"Qwen3.5 local native multimodal bridge","hours_credit":null}
+  ],
+  "open_obligations":[
+    "Verify current frozen-head call sites comprehensively once recursive tree enumeration is available.",
+    "Measure native_vision on actual H1 target hardware; current source contains no benchmark receipt sufficient for backend selection.",
+    "Reconcile all architecture/manual/paper references that may still describe FrankEye after the native_vision switch.",
+    "Preserve prior FrankEye and Drive Retina mechanisms as superseded/alternative evidence, not deleted history."
+  ],
+  "promotion":{"canonical_claim_promotion":false,"reason":"Current frozen-head runtime contradiction and successor lineage were established, but no live H1 benchmark or exhaustive tree closure occurred."},
+  "status":"COMPLETE"
+}

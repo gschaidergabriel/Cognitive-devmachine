@@ -1,0 +1,60 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-frank-harness-truth-gate-ubuntu-20260809T2334p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T23:34:00+07:00",
+  "payload": {
+    "work_id": "WORK-FRANK-HARNESS-TRUTH-GATE-UBUNTU-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "EVIDENCE_BACKED_FRANK_HARNESS_SAFETY_DELTA",
+    "title": "Close and measure Frank Harness repository-truth-gate bypass on Ubuntu",
+    "work_clay": "Re-read newest gschaidergabriel/frankv0.1 main plus draft PR #25. Independently reproduce the finding that harness/frank_harness_runtime.py reaches open_pair() without the repository/materialization truth preflight used by frank_prompt_capsule.py. If reproduced, integrate fail-closed repo_truth_gate enforcement at the canonical Harness entry boundary so every repository-backed Harness read/mutation path is blocked unless status=PASS; retain self-test isolation. Exercise PASS plus MATERIALIZATION_STALE, GRAPH_STALE, SCHEMA_MIGRATION_REQUIRED and CONTINUITY_DEGRADED fault injections and prove zero canonical Harness mutation after every rejected preflight. Run existing Harness/state regressions. On the Ubuntu v0.1 target, measure cold/warm preflight latency, git-fetch contribution, SQLite-open latency, guarded Harness command latency and recovery after induced stale/divergent materialization. Separately probe trusted_schema=OFF and SQLITE_DBCONFIG_DEFENSIVE compatibility as a research experiment; do not promote that hardening without a passing compatibility receipt.",
+    "reason_clay": "Current Frank prompt injection already fails closed through runtime/state/repo_truth_gate.py, which verifies repository head, critical files, UnifiedDB lineage and ClayGraph source epoch. The legacy Harness controller instead calls open_pair() directly. The initial broader hypothesis that Frank lacks pair-coherence validation was therefore refuted; the narrower entry-path bypass remains code-supported. SQLite official documentation also confirms that multi-database atomicity is not guaranteed under WAL, making fail-closed lineage validation a material correctness boundary rather than cosmetic duplication.",
+    "completion_clay": "Ubuntu execution receipt proves the bypass either reproduced or falsified. If reproduced: all repository-backed Harness entry paths require repo truth PASS; stale/graph-stale/migration/degraded injections produce expected exit classes and zero canonical DB mutations; existing self-tests/regressions pass; PASS path executes; cold/warm latency distributions and failure/recovery timings are recorded; PR #25 is revised or superseded by the smallest verified integration; any trusted_schema/DEFENSIVE proposal has an explicit compatibility verdict. No H1/BASE gate is credited from this safety task alone.",
+    "evidence_need": [
+      "LEGACY_HARNESS_BYPASS_REPRODUCTION_RECEIPT",
+      "REPO_TRUTH_PASS_HARNESS_RECEIPT",
+      "STALE_ZERO_MUTATION_RECEIPT",
+      "GRAPH_STALE_ZERO_MUTATION_RECEIPT",
+      "SCHEMA_MIGRATION_ZERO_MUTATION_RECEIPT",
+      "CONTINUITY_DEGRADED_ZERO_MUTATION_RECEIPT",
+      "HARNESS_REGRESSION_RECEIPT",
+      "UBUNTU_TRUTH_GATE_LATENCY_DISTRIBUTION",
+      "UBUNTU_RECOVERY_FAULT_INJECTION_RECEIPT",
+      "SQLITE_CONNECTION_HARDENING_COMPATIBILITY_RECEIPT"
+    ],
+    "executor_policy": "Use the local Claude Code/build-execution organ or another actually connected Ubuntu execution surface with repository checkout. A connector read, ChatGPT sandbox test, GitHub branch, PR or CI proxy is not an Ubuntu developer-host receipt. Re-read remote main immediately before patching; preserve Frank/Clay authority separation; use reversible branch/PR workflow and append-only receipts; never mark PASS from proposed code alone.",
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "GITHUB_READ_WRITE",
+      "UBUNTU_DEVELOPER_HOST_EXECUTION",
+      "LOCAL_TEST_EXECUTION",
+      "SQLITE_FAULT_INJECTION",
+      "LATENCY_MEASUREMENT"
+    ],
+    "write_scope": [
+      "gschaidergabriel/frankv0.1:harness/",
+      "gschaidergabriel/frankv0.1:runtime/state/",
+      "gschaidergabriel/frankv0.1:tests/",
+      "gschaidergabriel/frankv0.1:research/",
+      "research_entity/state/work/events/",
+      "research_entity/mesh_feedback/"
+    ],
+    "dependencies": [
+      "gschaidergabriel/frankv0.1:runtime/state/repo_truth_gate.py",
+      "gschaidergabriel/frankv0.1:harness/frank_harness_runtime.py",
+      "gschaidergabriel/Dr.-Unterweger#25",
+      "FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE"
+    ],
+    "invalidators": [
+      "newer Frank main already removes the direct Harness bypass with verified Ubuntu evidence",
+      "project owner supersedes Ubuntu developer system as v0.1 target"
+    ],
+    "base_priority": 0.98,
+    "expected_impact": 0.92,
+    "urgency": 0.9,
+    "information_gain": 0.96,
+    "status": "READY"
+  }
+}

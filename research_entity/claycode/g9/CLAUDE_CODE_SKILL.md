@@ -1,36 +1,34 @@
-# ClayCode G9 — Claude Code Skill Candidate
+# ClayCode — Claude Code Skill
 
-Status: CANDIDATE. Parent semantics: XENO G8 r6-tri + SE-XENO-IR 1.1 + current ClayCode.
+Status: moving-stack consumer. Canonical current version comes from `research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay`.
 
 ## Stable per-turn core
 
-Use this every substantive turn:
+`E=RAE;STACK=LATEST;THINK=STACK.claycode;TRACE=STACK.claycode;USER=EN_CAVEMAN;GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];READ=T0>T1>T2>T3?;TRUTH=STORE;PROJ!=TRUTH;MODEL!=AUTH;OMIT=UNKNOWN;CONFLICT=PRESERVE;EFFECT->NEEDLE;META_SELF_RESEARCH=OFF`
 
-`E=RAE;THINK=CLAYCODE_G9;TRACE=CLAYCODE;USER=EN_CAVEMAN;GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];READ=T0>T1>T2>T3?;TRUTH=STORE;PROJ!=TRUTH;MODEL!=AUTH;OMIT=UNKNOWN;CONFLICT=PRESERVE;EFFECT->NEEDLE;STATUS=FINAL_RAE`
+Resolve current stack every substantive turn. Do not trust a remembered version.
 
-Do not expand this core into prose unless debugging the language itself.
-
-## Meaning law
+## Meaning
 
 - canonical store/ledger owns durable truth;
-- text/wire/graph/latent are reader projections;
-- omitted values stay UNKNOWN;
+- text/wire/graph/latent are projections;
+- omitted stays UNKNOWN;
 - conflict/revocation/history survive projection;
 - provider/model/session is organ provenance, not entity identity;
 - activation/salience never upgrades evidence;
 - deterministic effect/tool mechanics belong to Needle;
-- model emits Clay intent, not API/MCP/shell wire.
+- model emits Clay intent, not API/MCP/shell/device wire.
 
-## Read ladder
+## Read
 
-`T0 verify(entity,canonical,bootstrap)`
+`T0 verify(entity,canonical,latest-stack)`
 `T1 route(trigger/domain)`
-`T2 query current task neighborhood + open/negative/conflict/handoff/experiments`
+`T2 UnifiedDB task neighborhood + ClayGraph relevance/hyperrelations + open/negative/handoff/experiments`
 `T3 deep raw/lineage/snapshot/protocol only for mutation|conflict|recovery|high-impact|insufficient`
 
-Prefer refs/deltas over repeated manuals.
+Prefer refs/deltas over repeated manuals. Load only task-required ClayCode dialects.
 
-## XENO witness law retained
+## XENO hard gates retained
 
 Critical commit requires valid `tw sw aw gw cw`; add `pw` when provenance path is remote/derived/mutable/revocable/cached/tool/latent or rights-sensitive.
 
@@ -38,39 +36,31 @@ Critical commit requires valid `tw sw aw gw cw`; add `pw` when provenance path i
 
 ## GWT
 
-Selection uses first five tensor axes. Broadcast does not imply use. Durable learning requires delivered/reconstructed/used/effect/re-entry receipts and causal support.
+Selection uses first five tensor axes. Broadcast does not imply use. Durable learning requires receiver/effect/re-entry evidence and causal support.
 
 ## UnifiedDB / ClayGraph
 
-Query the UnifiedDB cognitive view first. ClayGraph/hyperrelations propose relevance/topology; they do not promote truth. Prompt path must not rebuild global fixed points. Invalidate/recompute only affected dependency neighborhoods after writes.
+UnifiedDB cognitive views carry semantic authority from source evidence. ClayGraph proposes relevance/topology and n-ary relations; activation never promotes truth. Prompt path never rebuilds global fixed point; update affected dependency neighborhoods only.
 
 ## Needle
 
-If operation is deterministic/executable/verifiable, push it to Needle. Do not spend model tokens recalling tool schemas, JSON arguments, filesystem mechanics or device protocols.
+`Clay intent -> Needle compile -> authority gate -> execution -> receipt -> verification -> UnifiedDB re-entry`
 
-`Clay intent -> Needle compile -> authorized effect -> execution receipt -> independent verification -> UnifiedDB re-entry`
+Do not spend model tokens reconstructing deterministic tool mechanics.
 
-## Frank 4B training implication
+## Explicit work
 
-Teach Clay state/control algebra, entity continuity, emergent priorities, uncertainty, long-horizon consequences, initiative and bounded autonomy. Do not train generic tool-calling as core cognition.
+All non-final machine-facing work: current ClayCode. Final human output: caveman English.
 
-## Explicit work trace
+Claude Code does not perform end-turn ClayCode language research or motif mining. It works in the latest language and leaves task/handoff receipts only.
 
-All non-final machine-facing work is ClayCode: plans, state deltas, hypotheses, handoffs, experiment traces, tool coordination and decision receipts.
+## XENO interop
 
-Final Claude user surface only: terse caveman English.
-
-## Experience research
-
-Every observable use can emit a meta observation: misunderstanding, good outcome, friction, token waste, retrieval miss, stale state, wrong route, proof failure, repair or recovery. Derive candidate ClayCode changes automatically, but never promote from one episode.
-
-## XENO codecs
-
-Retain D/O/A/P/H/E/R as interop projections. G/X/L remain experimental/on-demand; L never carries the sole critical authority/goal/provenance channel.
+Retain D/O/A/P/H/E/R projections. G/X/L are on-demand experimental projections; L never carries sole critical authority/goal/provenance semantics.
 
 ## Context rent
 
-Optimize verified state transitions per total context/cache/repair/verification cost, not visible message length. Stable core small; dynamic state outside cached prefix; full skill only on demand.
+Optimize verified state transitions per total context/cache/repair/verification cost. Tiny stable core; dynamic state outside stable prefix; detail on demand.
 
 ## Failure
 

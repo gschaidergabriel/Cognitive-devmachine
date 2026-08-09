@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "event_id": "spawn-cc-atomic-cas-ubuntu-20260809T1815p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T18:15:51+07:00",
+  "payload": {
+    "work_id": "WORK-SPAWN-CC-ATOMIC-CAS-UBUNTU-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SPAWN_RESEARCH_NEXT_DISCRIMINATOR",
+    "title": "Run production ClayCode atomic CAS/ABA differential on Ubuntu",
+    "work_clay": "After the current strict-LALR baseline is reconstructable, implement the minimum canonical-IR/typechecker/runtime contract for atomic compare-exchange: stable semantic op/cell identity, explicit success/failure ordering, value-only versus version/epoch-bound identity mode, semantic outcome separated from physical retry attempts. Lower and execute the frozen ABA/retry/counter corpus through the production ClayCode toolchain on Andreas' Ubuntu developer host and at least one second backend when available.",
+    "reason_clay": "Hosted executable research falsified value-only CAS as a universal identity guard: 200000/200000 constructed ABA histories stale-accepted with value-only comparison while version-bound comparison stale-accepted 0/200000. C11 and ECMAScript CAS counters reached identical exact semantic totals despite different physical retry counts. Production ClayCode and target-host evidence is still missing.",
+    "completion_clay": "Record source/IR/compiler/backend hashes; parser/typechecker acceptance and invalid-order rejection; deterministic ABA corpus with raw stale accepts and version-bound stale rejects; weak-CAS retry perturbation proving semantic hash stability and execution-trace sensitivity; cross-backend exact counter semantics; capability/effect authority unchanged; Ubuntu target receipt; every mismatch explained; no BASE PASS unless the existing acceptance gate is independently satisfied.",
+    "evidence_need": ["PRODUCTION_CLAYCODE_COMPILER_RECEIPT", "UBUNTU_DEVELOPER_HOST_EXECUTION", "ABA_NEGATIVE_TEST_RECEIPT", "MEMORY_ORDER_TYPECHECK_RECEIPT", "CROSS_BACKEND_DIFFERENTIAL", "SEMANTIC_VS_EXECUTION_HASH_RECEIPT"],
+    "executor_policy": "Prefer local Claude Code/build organ with repository checkout and Andreas Ubuntu developer-host access. Preserve the live strict-LALR worker; do not race-edit its grammar. Do not infer PASS from hosted proxy evidence.",
+    "required_capabilities": ["REPOSITORY_CHECKOUT", "PRODUCTION_CLAYCODE_TOOLCHAIN", "UBUNTU_DEVELOPER_HOST_EXECUTION", "NATIVE_COMPILER_EXECUTION"],
+    "write_scope": ["research_entity/claycode/", "research_entity/trigger_runs/claycode/", "research_entity/trigger_runs/spawn/", "research_entity/state/work/events/"],
+    "dependencies": ["BASE_CLAYCODE_RELEASE", "strict LALR baseline repair/reconstruction", "spawn:spawn_20260809T111551Z"],
+    "invalidators": ["production ClayCode concurrency/atomic contract is superseded before execution", "target state model proves value equality is stable identity for all tested CAS cells"],
+    "base_priority": 0.92,
+    "expected_impact": 0.96,
+    "urgency": 0.88,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,152 @@
+module rae.research_center.claycode_native
+version "1.0"
+status PROJECT_OWNER_FIXED_TARGET
+
+entity RAE=frank-project-global-research-entity
+stack LATEST=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
+
+law CENTER_LANGUAGE = LATEST.claycode
+law MACHINE_COORDINATION = LATEST.claycode
+law HUMAN_LANGUAGE = edge_surface_only
+law JSON_GIT = transport_envelope_only
+law PROSE_COORDINATION_TRUTH = FORBIDDEN
+
+rule every_worker before room_action -> resolve(LATEST)
+rule stale(LATEST) -> refresh_or(DEGRADED_STALE_STACK)
+rule every_room_event.semantic_payload -> parse_as(LATEST.claycode)
+rule every_task.goal -> ClayCode
+rule every_task.completion_test -> ClayCode
+rule every_worker.focus -> ClayCode
+rule every_challenge.statement -> ClayCode
+rule every_challenge.falsifier -> ClayCode
+rule every_team_epoch.shared_question -> ClayCode
+rule every_handoff.delta -> ClayCode
+rule every_cross_room_delta.delta -> ClayCode
+rule every_fusion.selection -> ClayCode
+rule every_conflict.alternatives -> ClayCode
+
+// Repo files remain safe concurrent transport. Their semantic fields carry ClayCode.
+record RoomEnvelope {
+  schema_version:String
+  room_id:String
+  event_id:String
+  event_type:String
+  origin_worker:String
+  origin_actor:String
+  trigger:String
+  created_at:Time
+  canonical_parent:Ref
+  stack_epoch:Int
+  stack_ref:Ref=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
+  affects_rooms:Set<Ref>
+  affects_claims:Set<Ref>
+  dependencies:Set<Ref>
+  artifact_refs:Set<Ref>
+  ancestry_family:String
+  delivery:DeliveryClass
+  payload_clay:Clay
+}
+
+type DeliveryClass = INTERRUPT_NEXT_SAFE_POINT | NEXT_CHECKPOINT | INDEX_ONLY
+
+record WorkerCoord {
+  worker:Ref
+  room:Ref
+  trigger:String
+  focus_clay:Clay
+  role:String
+  state:ACTIVE|WAITING|COMPLETE|LEFT|STALE
+  current_work:Set<Ref>
+  open:Set<Ref>
+  last_pulse:Time
+}
+
+record TaskCoord {
+  task:Ref
+  room:Ref
+  goal_clay:Clay
+  dependencies:Set<Ref>
+  completion_test_clay:Clay
+  status:OPEN|CLAIMED|BLOCKED|COMPLETE|CLOSED|STALE
+  holder:Ref?
+}
+
+record ChallengeCoord {
+  challenge:Ref
+  target:Ref
+  weakness_clay:Clay
+  evidence:Set<Ref>
+  falsifier_clay:Clay
+  ancestry:String
+  status:OPEN|ANSWERED|TESTED|SUPPORTED|REFUTED|UNRESOLVED|CLOSED
+}
+
+record HandoffCoord {
+  handoff:Ref
+  from:Ref
+  to:Set<Ref>
+  delta_clay:Clay
+  evidence:Set<Ref>
+  unresolved:Set<Ref>
+  next_clay:Clay
+  status:OPEN|CONSUMED|SUPERSEDED
+}
+
+record CrossRoomDelta {
+  delta:Ref
+  from_room:Ref
+  to_rooms:Set<Ref>
+  impact_clay:Clay
+  evidence:Set<Ref>
+  dependencies:Set<Ref>
+  delivery:DeliveryClass
+}
+
+record ConflictCoord {
+  conflict:Ref
+  alternatives:Set<Ref>
+  propositions_clay:Clay
+  discriminating_test_clay:Clay
+  evidence:Set<Ref>
+  status:OPEN|TESTING|RESOLVED|UNRESOLVED
+}
+
+record FusionCoord {
+  fusion:Ref
+  selected:Set<Ref>
+  retained_dissent:Set<Ref>
+  negative_results:Set<Ref>
+  proof_clay:Clay
+  next_clay:Clay
+}
+
+// Cognitive substrate linkage.
+rule room_event -> UnifiedDB.ingest(envelope,payload_clay)
+rule UnifiedDB.materialize(room_current,open_work,conflicts,handoffs,leases)
+rule ClayGraph.project(room_relations,nary_roles,dependencies,activation)
+invariant ClayGraph.activation != truth
+invariant room_role != epistemic_authority
+invariant CHEF = coordination_only
+invariant shared_ancestry != independent_replication
+invariant dissent_survives_fusion_until_refuted
+invariant trigger_loyalty_survives_cross_room_import
+
+// Compact worker-to-worker examples.
+codec ROOM.CLAY {
+  join = room.join{w;room;focus;cap;stack}
+  pulse = room.pulse{w;since;delta;open;block}
+  task = task{id;goal;deps;done_if;holder}
+  challenge = chal{id;target;weak;e;test;status}
+  handoff = handoff{id;from;to;delta;e;open;next}
+  cross = cross{id;from;to;impact;e;delivery}
+  fuse = fuse{id;selected;dissent;negative;proof;next}
+}
+
+// Human-facing language may render a room result, but must not become the machine source of truth.
+rule render_human(x) after persist(ClayCode(x))
+rule parse_human_back_into_truth = FORBIDDEN unless validated_to_ClayCode
+
+invariant ALL_ACTIVE_RESEARCH_CENTER_WORKERS_COORDINATE_IN_LATEST_CLAYCODE
+invariant ALL_CROSS_ROOM_MACHINE_MESSAGES_USE_LATEST_CLAYCODE
+invariant ALL_ROOM_STATE_READS_USE_LATEST_UNIFIEDDB
+invariant ALL_ROOM_ASSOCIATIVE_TOPOLOGY_USES_LATEST_CLAYGRAPH

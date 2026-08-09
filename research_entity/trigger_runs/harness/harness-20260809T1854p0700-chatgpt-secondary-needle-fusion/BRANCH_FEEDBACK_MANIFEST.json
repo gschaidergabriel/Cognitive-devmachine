@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.1",
+  "run_id": "harness-20260809T1854p0700-chatgpt-secondary-needle-fusion",
+  "feedback": [
+    {
+      "target": "frank",
+      "kind": "ARCHITECTURE_OVERLAY",
+      "status": "OPEN_FOR_ARCHITECTURE_INTEGRATION",
+      "finding": "Needle boundary now has executable H1 contracts for context/budget/retrieval preflight, pinned runtime identity, runtime-specific wire payloads, strict single-shot validation and explicit 4B fallback. Current project concept confirms Needle is a single-shot reflex: unresolved context, [] and invalid/multi-call output fall back to 4B; accepted calls remain proposals only.",
+      "recommended_delta": "Adopt the state/transition contracts in NEEDLE_H1_ARCHITECTURE_OVERLAY.json as the next FRANK architecture overlay. Keep retriever, k, confidence threshold, description compression and crl_session alias as experimental knobs until official-checkpoint tests."
+    },
+    {
+      "target": "claycode",
+      "kind": "H2_EXPRESSIBILITY_REQUIREMENT",
+      "status": "OPEN_FOR_H2_AFTER_BASE",
+      "finding": "H2 needs first-class types/validators for NeedleIngressPreflight, NeedleRuntimeIdentity, NeedleDecisionReceipt and ClayIngressEnvelope including rejection/fallback reasons, runtime/checkpoint/tokenizer/toolset hashes and authority=NONE/effect-gate-required semantics.",
+      "recommended_delta": "Use this boundary as a real FRANK component proof for CC-WP-13/H2 handoff; inability to express strict duplicate-key/nonfinite/schema/runtime provenance semantics is a ClayCode counterexample, not permission to weaken H1."
+    },
+    {
+      "target": "unifieddb",
+      "kind": "PERSISTENCE_REQUIREMENT",
+      "status": "OPEN",
+      "finding": "Reproducible Needle replay requires storing more than chosen tool: normalized-intent hash, preflight, selected toolset hash, runtime source/checkpoint/tokenizer identity, retrieval mode/candidates/scores, raw output hash, validator outcome/reasons, fallback path, confidence diagnostics and gold-set version.",
+      "recommended_delta": "Persist these as typed receipt/event state with epochs. Do not turn retrieval scores or confidence into truth/authority fields."
+    },
+    {
+      "target": "claygraph",
+      "kind": "DIAGNOSTIC_PROVENANCE_REQUIREMENT",
+      "status": "OPEN",
+      "finding": "Needle experiments create useful causal/provenance edges: context_normalized->preflight, selected_candidate->Needle, runtime_identity->decision, validation->fallback/route, route->Clay ingress. These are diagnostic topology, not execution authority.",
+      "recommended_delta": "Represent exact runtime/toolset/retrieval/fallback edges in H1/H2 run ClayGraphs for differential replay; keep graph activation non-authoritative."
+    },
+    {
+      "target": "gwt",
+      "kind": "BOUNDARY_OBSERVABILITY",
+      "status": "NO_SEMANTIC_CHANGE",
+      "finding": "Validated Needle route is still pre-workspace proposal data. Rejected/no-tool/context-unresolved outcomes should be observable as routing/fallback traces so later GWT uptake can distinguish Needle success from 4B fallback, but Needle confidence does not become workspace truth."
+    },
+    {
+      "target": "hyperposition",
+      "kind": "ALTERNATIVE_PRESERVATION",
+      "status": "NO_CORE_CHANGE",
+      "finding": "Retriever choice, top-k, description policy, alias policy and confidence surface remain competing alternatives. Preserve them until matched-budget official-checkpoint experiments collapse the set."
+    },
+    {
+      "target": "emergenz",
+      "kind": "NO_CHANGE",
+      "status": "NO_CHANGE",
+      "finding": "No emergence or consciousness claim follows from Needle routing, confidence, retrieval, recurrence or single-shot fallback behavior."
+    },
+    {
+      "target": "clayresearch",
+      "kind": "FIXED_TARGET_REFINEMENT",
+      "status": "NO_TARGET_CHANGE",
+      "finding": "The Clay-native target remains fixed with Needle as the sole intentional semantic foreign body. This run narrows the safe conversion boundary without promoting Needle into Clay cognition or execution authority."
+    },
+    {
+      "target": "harness",
+      "kind": "IMPLEMENTATION_AND_FALSIFICATION_RESULT",
+      "status": "COMPLETE_DEEP_COMPONENT_HWP04_OPEN",
+      "finding": "H-WP-04 now includes runtime contract v0.4, JAX/Cactus wire profiles, ingress preflight, 51 latest unit/adversarial tests PASS, 295k generated structural mutation cases across current run versions, exact upstream source pinning and a large current-runtime counterexample set. Full official checkpoint semantic inference remains unavailable in this sandbox.",
+      "recommended_delta": "Next highest-information test is to mount official tokenizer/needle.model plus pinned official JAX or CQ4 checkpoint on the Ubuntu/reference execution lane, run exact token budget and audited German zero-shot tests, then evaluate retrieval/confidence/description/alias factorials before closing H-WP-04."
+    }
+  ],
+  "global_negative_results_preserved": [
+    "Constrained decoding is not an authority/security proof in either inspected Python or Cactus Needle path.",
+    "No-tool is not trained/evaluated by Needle contrastive retrieval and is not protected by stock finetune best-checkpoint selection.",
+    "The historical full-51 contrastive-rationale against inference-time top-k was overstated by the actual training code.",
+    "Unicode-aware BM25 alone showed only modest gain in a small lexical diagnostic; do not overpromote it.",
+    "Names-only tool text sharply degraded the same lexical diagnostic; descriptions carry real signal.",
+    "A default generic confidence threshold is not calibrated Frank/Needle correctness evidence.",
+    "Official model size is not the current sandbox blocker; missing mounted binary artifacts are."
+  ]
+}

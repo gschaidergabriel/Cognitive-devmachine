@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "harness-20260809T1725p0700-hwp02-oracle-merge-execution",
+  "run_id": "harness_20260809T1725p0700_hwp02_oracle_merge",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "evidence_class": "LOCAL_DETERMINISTIC_SYNTHETIC_MECHANISM_TEST",
+  "execution_surface": "ChatGPT Python sandbox",
+  "target_ubuntu_developer_host_executed": false,
+  "live_frankv0_1_executed": false,
+  "artifacts": {
+    "candidate": "research_entity/harness/reference/oracle_state_ledger.py",
+    "candidate_commit": "64cd0c2f676c114f1b8ff5065dc78316d81e03cc",
+    "candidate_sha256": "fb4af892b38fc07f71e71340e37afb3cc7dab1e56498be1c7a5fdaf512b467d3",
+    "tests": "research_entity/harness/tests/test_oracle_state_ledger.py",
+    "tests_commit": "9dfd7a41a23556752014d07bb1a1f2d11230623d",
+    "tests_sha256": "0d9815f85c6dfdb56e596a238fd30f81ef13d33fc6ac835d8caecf8d36408888"
+  },
+  "regression_suite": {
+    "tests_run": 9,
+    "tests_passed": 9,
+    "runtime_seconds": 0.057,
+    "result": "PASS",
+    "covered": [
+      "typed set canonicalization and ordered-sequence sensitivity",
+      "same semantic state with different history",
+      "semantic-state versus state-version identity separation",
+      "execution trace separation",
+      "payload-bound semantic idempotency",
+      "stale epoch fail-closed",
+      "fault-after-event atomic rollback",
+      "deterministic replay and verification",
+      "exact snapshot restore and tamper rejection",
+      "two-writer same-request concurrency: one COMMITTED plus one IDEMPOTENT_REPLAY"
+    ]
+  },
+  "stress_suite": {
+    "result": "PASS",
+    "typed_set_permutations": 5000,
+    "ordered_mutations_detected": 5000,
+    "events": 1000,
+    "replay_equal": true,
+    "domain_epochs": {"authority":200,"gwt":200,"loop_dynamics":200,"memory":200,"world":200},
+    "semantic_state_hash": "30dc67a93c7dd35688c908dac5a71b3fe2d63f99d5f84d0ac021162038aec24a",
+    "state_version_hash": "b5f53def94718ca73b6abc08d2ddd328ce2ee2cf637d517ad4aead655c35e3fc",
+    "trace_root_hash": "5381096c15158dfa8b08e03e1780e15b6df0dd9478f4142b6e1b8f013035ed38"
+  },
+  "concurrent_delta_observed": {
+    "commit": "e77de62e5aa784f90fdee1541ac8f2449478cb0b",
+    "effect": "A-lineage independently hardened semantic idempotency under BEGIN IMMEDIATE during this run; candidate retains the same invariant and adds the remaining identity/domain-epoch merge." 
+  },
+  "negative_results_and_limits": [
+    "No actual Ubuntu developer-host execution was possible in this ChatGPT execution surface.",
+    "No live frankv0.1 golden-corpus differential was executed.",
+    "No H1/Reference Harness release gate is advanced by this receipt.",
+    "The candidate is not canonical production state and does not supersede either lineage until repository/host differential validation and adjudication."
+  ],
+  "next_falsifier": "Execute the committed candidate and regressions on the Ubuntu developer host against captured frankv0.1 transaction fixtures, then compare exact state/version/trace roots and crash/recovery behavior against the hardened A lineage and typed/domain-epoch B lineage."
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-TITAN-MEMORY-VENV-RECORD-FILE-IDENTITY-20260809T1058p0700",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"venv_id":"15SDcUJdzzKhoc74cwwh5UCL0W_u74GKi","site_packages_id":"1MM1lC6dkh07gQNq4U0zxoletNzRvBvaG"},
+  "method":{"exact_file_snapshot":"installed-wheel *.dist-info/RECORD manifests fetched raw from Drive and unioned after path normalization","direct_boundary_verification":"Drive list_folder(top_k=1000) on .venv root, bin, include/python3.12, site-packages and package roots pip/packaging/wheel/setuptools","folder_exactness_rule":"RECORD proves installed file identities but does not prove absence of empty directories; folder count is therefore a lower bound until direct empty-directory audit completes"},
+  "records":{
+    "packaging-26.0.dist-info/RECORD":{"drive_id":"18PA4NwAfPKv8uISeWxfYbISksUcGwCT7","rows":42,"bytes":2918,"sha256":"836fcea9436752c0abd3f94d6c2b4fe2246d479c04daaa1b8e57079b6fc7ee49"},
+    "pip-26.0.1.dist-info/RECORD":{"drive_id":"1UZiTN3ZQxn1bVaOACkv-2xahwUIR2q3Q","rows":878,"bytes":68761,"sha256":"f8a80b64bf3ed5b6ea4c9b0887a0f3d069afbe36d314c1bd66248f02e79c36db"},
+    "wheel-0.46.3.dist-info/RECORD":{"drive_id":"1mKLBfRkLxEDz2xlYvTGYNf-RkQT71vfG","rows":36,"bytes":2474,"sha256":"788ad6d3351831d9a2f973749aee768d5a9bfc1f27fb2c2bac35b76eadbc1af5"},
+    "setuptools-82.0.1.dist-info/RECORD":{"drive_id":"1Os0DtrLFcJNUSSecZYyUtexrlPRMhQoR","rows":760,"bytes":64701,"sha256":"713c74ebe32f7e7dc34f56d753498e640518cb1c8e7438d1a36493f72864cdcf"}
+  },
+  "record_union":{"raw_rows":1716,"unique_normalized_paths":1716,"duplicate_normalized_paths":0,"escape_paths_outside_site_packages_or_bin":0,"site_package_files":1712,"record_bin_files":4,"record_bin_names":["pip","pip3","pip3.12","wheel"],"normalized_union_sha256_with_direct_extras":"931ea6fc7dd403a40b321ae626363f4a74c63e3a3c9e67b4ff64c07fb0ca4a5b"},
+  "direct_extras_not_in_records":{"bin_activation_files":["activate","activate.csh","activate.fish","Activate.ps1"],"venv_root_files":["pyvenv.cfg"],"count":5},
+  "exact_file_denominator":{"files_below_venv_root":1721,"status":"EXACT_FILE_IDENTITY_FROZEN","formula":"1712 site-packages files + 8 directly observed bin files + pyvenv.cfg = 1721; the four pip/wheel bin scripts represented by RECORD are excluded from site-package count and counted once in direct bin 8"},
+  "folder_lower_bound":{"folders_below_venv_root_min":250,"site_package_direct_and_nested_path_prefixes_min":244,"scaffolding_folders":6,"status":"LOWER_BOUND_NOT_EXACT","reason":"RECORD enumerates installed files and their implied parent paths but cannot exclude extra empty directories; direct recursion is still required to close that risk"},
+  "boundary_crosschecks":{
+    "site_packages_direct":{"drive_observed":"9 folders + distutils-precedence.pth","record_union_top_level":["_distutils_hack","pip","packaging-26.0.dist-info","pip-26.0.1.dist-info","wheel-0.46.3.dist-info","setuptools-82.0.1.dist-info","setuptools","packaging","wheel","distutils-precedence.pth"],"verdict":"EXACT_TOP_LEVEL_MATCH"},
+    "pip":{"drive_direct":"3 folders + 4 files","record_expected":"3 folders + 4 files","verdict":"MATCH"},
+    "packaging":{"drive_direct":"2 folders + 16 files","record_expected":"2 folders + 16 files","verdict":"MATCH"},
+    "wheel":{"drive_direct":"2 folders + 9 files","record_expected":"2 folders + 9 files","verdict":"MATCH"},
+    "setuptools":{"drive_direct":"7 folders + 44 files","record_expected":"7 folders + 44 files","verdict":"MATCH"},
+    "include/python3.12":{"drive_direct_entries":0,"record_role":"explicit empty scaffold outside RECORD","verdict":"DIRECT_EMPTY_CLOSED"}
+  },
+  "classification":{"all_venv_material":"VENDORED_RUNTIME_SUPPORT","semantic_credit":"ZERO"},
+  "remaining":"Direct recursive folder-identity audit for possible empty directories; file identity is frozen regardless.",
+  "global_level0":{"gate":"NOT_PASS","exact_global_percent_added":0.0,"denominator_state":"NOT_FROZEN"},
+  "created_at":"2026-08-09T10:58:00+07:00"
+}

@@ -4,6 +4,13 @@ module rae.turn.v1
 
 entity E=frank-project-global-research-entity
 think MODE=CLAYCODE
+trace EXPLICIT=CLAYCODE
+trace PREAMBLE=CLAYCODE
+trace PLAN=CLAYCODE
+trace STATE_DELTA=CLAYCODE
+trace DECISION=CLAYCODE
+trace TOOL_COORD=CLAYCODE
+invariant hidden_provider_cot_not_required
 
 // GWT tensor = selection + delivery/use closure, not truth authority.
 tensor GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry]
@@ -23,6 +30,8 @@ invariant evidence>organ
 // Human surface selected per organ each turn.
 surface CHATGPT=DE_NORMAL
 surface CLAUDE=EN_CAVEMAN
+rule intermediate_visible_trace=CLAYCODE
+rule final_human_surface_only=surface(current_organ)
 
 // Final visible status for every substantive project response.
 status protocol=@research_entity/global/STATUS_FOOTER_PROTOCOL.md

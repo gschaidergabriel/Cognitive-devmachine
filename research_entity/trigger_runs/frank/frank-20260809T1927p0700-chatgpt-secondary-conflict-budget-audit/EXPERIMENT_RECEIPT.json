@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1927p0700-chatgpt-secondary-conflict-budget-audit",
+  "experiment_id": "EXP-FRANK-AA-CONFLICT-BUDGET-001",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_class": "SYNTHETIC",
+  "target_host_evidence": false,
+  "environment": {
+    "surface": "hosted Linux container",
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "not_andreas_ubuntu_target": true
+  },
+  "source_semantics_ref": "research_entity/harness/reference/active_assembly.py",
+  "experiment_ref": "research_entity/trigger_runs/frank/frank-20260809T1927p0700-chatgpt-secondary-conflict-budget-audit/EXPERIMENT_ACTIVE_ASSEMBLY_CONFLICT_BUDGET.py",
+  "seed": 20260809,
+  "trials": 10000,
+  "direct_counterexample": {
+    "max_items": 8,
+    "conflict_claims": 4,
+    "alternatives_per_claim": 2,
+    "high_score_critical_packets": 3,
+    "current_conflict_first_selected": ["c0a","c1a","c2a","c3a","c0b","c1b","c2b","c3b"],
+    "current_critical_retained": 0,
+    "candidate_conflict_cap_4_critical_retained": 3
+  },
+  "sweep": {
+    "generated_conflict_claims": 34511,
+    "current": {
+      "critical_recall": 0.4666,
+      "all_3_critical_rate": 0.384,
+      "complete_conflict_pair_rate_per_generated_claim": 0.6902726666859842
+    },
+    "candidate_conflict_cap_4": {
+      "critical_recall": 1.0,
+      "all_3_critical_rate": 1.0,
+      "complete_conflict_pair_rate_per_generated_claim": 0.3580307727970792
+    }
+  },
+  "interpretation": {
+    "supported": "The current unconditional conflict-first reservation rule can consume the entire bounded Assembly budget and starve higher-scoring non-conflict packets. Conflict visibility and general evidence retention therefore form an explicit allocation tradeoff that requires a typed/tested scheduling policy.",
+    "not_supported": [
+      "A 50 percent conflict quota is optimal.",
+      "Synthetic critical labels represent real FRANK utility.",
+      "The candidate quota should replace current H1 semantics without matched frozen/live traces.",
+      "ActiveAssembly is superior to compact retrieval or cache baselines.",
+      "Any scientific or release promotion."
+    ],
+    "why_quota_is_not_promoted": "The generator explicitly assigns three high-score packets as task-critical, so the quota arm has an authored objective advantage. It demonstrates the tradeoff and current starvation counterexample, not a production threshold."
+  },
+  "result": "CURRENT_POLICY_COUNTEREXAMPLE_FOUND",
+  "scientific_promotion": "NONE",
+  "architecture_change_authorized": false,
+  "next_discriminator": "Matched frozen H1 traces sweeping conflict density and budget across current conflict-first, diversity-aware/MRR-or-MMR-style baseline, claim-group compression, fixed conflict reservation, adaptive utility allocation and broad retrieval/cache; measure task outcome, contradiction recall, provenance fidelity, re-expansion success, token/KV cost, latency and update amplification."
+}

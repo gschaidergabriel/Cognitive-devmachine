@@ -1,0 +1,50 @@
+{
+  "schema_version":"1.0",
+  "run_id":"666-20260809T1053p0700-chatgpt-secondary",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"BRANCH_FEEDBACK_DELTA_COMMITTED",
+  "baseline_feedback":"research_entity/trigger_runs/666/666-20260809T1048p0700-chatgpt-secondary/AICORE_SAFETY_BRANCH_FEEDBACK_MANIFEST.json",
+  "anti_echo_rule":"Only findings not already represented by the baseline webd/updater/docker/config feedback are promoted below. Repeated authority/provenance/boot principles are linked, not independently credited.",
+  "source_receipts":[
+    "research_entity/archive_assimilation/receipts/666_20260809T1053p0700_chatgpt_secondary_aicore_dotgithub_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1053p0700_chatgpt_secondary_aicore_configs_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1053p0700_chatgpt_secondary_aicore_writer_sandbox_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1053p0700_chatgpt_secondary_aicore_gateway_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1053p0700_chatgpt_secondary_aicore_router_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1053p0700_chatgpt_secondary_aicore_modeld_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1053p0700_chatgpt_secondary_aicore_ingestd_semantic_closure.json"
+  ],
+  "new_evidence_families":{
+    "release_identity":["CI build/push has no Harness gate","mutable tags are not artifact identity","workflow source path filter can leave registry image stale relative to main"],
+    "execution_boundary":["writer SandboxExecutor allow_network flag is unenforced","ambient parent environment is inherited","temp cwd is not filesystem isolation","host filesystem read/outside-cwd write reproduced with benign probe"],
+    "remote_authority":["one gateway bearer key spans read/create/delete authority","allowed_endpoints/max_body_bytes config is dead at runtime","upstream HTTP failures can be flattened to JSON success transport"],
+    "model_identity_and_context":["router source contains Qwen3.5-4B versus qwen2.5-3b identity split","later Drive router repairs measured 0/9 history-retention failure absent frozen PF head","context budget is still character-based approximation tied to a measured tokenizer epoch"],
+    "readiness_topology":["modeld BACKENDS is empty","modeld /health still returns ok:true","Core labels modeld legacy while installer still enables/starts it"],
+    "perception_input_authority":["ingestd defaults to home-wide read scope","policy mode is descriptive rather than enforced","uploads stream but have no total quota","decoder resource limits happen after file acquisition/parsing surface"],
+    "legacy_model_topology":["configs/models.yaml single-RLM DeepSeek role topology appears orphaned at frozen head and conflicts chronologically with later multi-model boot lineage"]
+  },
+  "feedback":{
+    "frank":{"verdict":"MATERIAL_DELTA","add":["derive self model/runtime identity from verified active artifacts, never duplicated literals or stale config","treat remote credentials, file reads, code execution and perception sources as explicit authority/evidence boundaries","do not equate service liveness, endpoint health or build success with functional readiness"]},
+    "claycode":{"verdict":"MATERIAL_DELTA","add":["normal generated code has no ambient POSIX filesystem/network/environment authority","introduce typed Principal, Capability, InputArtifact, ModelRuntime, ContextBudget, ReleaseCandidate and VerifiedRelease states","separate pure computation from privileged effect broker; destructive effects are unrepresentable without privileged capabilities"]},
+    "gwt":{"verdict":"MATERIAL_DELTA","add":["broadcast functional readiness separately from process liveness","broadcast percept extraction as provenance-bearing hypothesis rather than flattened truth","resource arbitration must protect relevant history from system-text growth and report truncation decisions"]},
+    "hyperposition":{"verdict":"NO_CHANGE","reason":"The new evidence is authority/resource/provenance/lineage evidence rather than a new higher-order alternative-state mechanism."},
+    "emergenz":{"verdict":"NO_CHANGE","reason":"No new causal-emergence measurement was produced by these implementation lineage shards."},
+    "claygraph":{"verdict":"MATERIAL_DELTA","add":["model source->artifact digest->runtime->role binding->health must be separate versioned edges","record source commit -> Harness result -> build manifest -> image digest -> activation/rollback ancestry","record requested/granted capability and observed execution effects per sandbox/job","record artifact->extractor/version->percept hypothesis lineage"]},
+    "unifieddb":{"verdict":"MATERIAL_DELTA","add":["persist principal/session capabilities and revocation","persist immutable input artifact hash plus extraction lineage and bounded retention/quota state","persist active service/model topology including DISABLED/LEGACY versus READY","persist release source/build/test/image identities as one transactionally linked chain"]},
+    "harness":{"verdict":"MATERIAL_DELTA","mandatory_regression_additions":["sandbox network-deny must be externally enforced","sandbox cannot read arbitrary host paths or parent-secret environment","sandbox output/disk/process/CPU/wall limits and cancellation reuse","release image cannot publish before Harness/security/boot PASS and immutable digest mapping","gateway route registry must equal executable policy registry; read/write/delete capability separation","body size limits enforced before buffering/decoding","router model identity consistency and tokenizer-aware context-budget regression","modeld zero-backend health must be NOT_READY and legacy service must not autostart","ingestd home-secret denial and per-artifact/global quota tests"]},
+    "clay":{"verdict":"MATERIAL_DELTA","add":["one-module dissolution strengthens rather than erases OS/effect boundaries","one immutable boot/runtime truth replaces duplicated model/port/path identity strings","perception ingest and code execution enter through bounded capability gates even inside one binary"]},
+    "q12_index":{"verdict":"MATERIAL_DELTA","add":["index fake-sandbox boundary reproduction","index single-key gateway authority collapse/dead policy config","index modeld false-health legacy autostart","index router 0/9 history-loss repair lineage and model identity split","index home-wide ingest read default and unbounded decoder/upload surfaces","index CI no-test-gate/mutable-tag/source-trigger drift"]}
+  },
+  "cross_source_notes":[
+    "Gateway and ingestd findings are directly corroborated at frozen Project-Frankenstein head.",
+    "Router later Drive fixes are NOT present at the frozen PF head; preserve as later/uncommitted repair lineage.",
+    "Writer/sandbox executor was not found at the frozen PF head path and remains Drive-only/later lineage pending history reconciliation.",
+    "modeld empty-backend behavior exists at frozen PF head; Drive later centralizes its port only.",
+    "AICORE itself is already root-closed by concurrent swarm evidence, so these receipts add semantic/safety deltas only and must not receive duplicate root closure credit."
+  ],
+  "credit":{"exact_global_level0_percent_added":0.0,"earned_work_hours_added":0.0},
+  "training":{"executed":false,"authorized":false},
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

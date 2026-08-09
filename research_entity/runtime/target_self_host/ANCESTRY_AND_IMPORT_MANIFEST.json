@@ -1,54 +1,52 @@
 {
-  "schema_version": "1.2",
-  "target_version": "RAE-TARGET-0.2.1",
+  "schema_version": "1.3",
+  "target_version": "RAE-TARGET-0.2.1+live-evidence-20260809T2226p0700",
   "semantic_source": "research_entity/runtime/target_self_host/RAE_TARGET_CONTRACT.clay",
   "semantic_contract_sha256": "468c45df8706530e27c1b2ca686a3a77fc57adfe5a556940c2232bb6b9f7de90",
-  "projection_policy": "Clay is semantic source; RAE_UNIFIED_SCHEMA.sql, RAE_CLAYGRAPH_SCHEMA.sql and rae_target_runtime_v021.py are auditable executable/materialized projections. rae_target_runtime.py is the compatibility entrypoint.",
+  "projection_policy": "Clay is semantic source. The primary runtime layers live evidence -> source-backed correction -> tested 0.2.1 mechanism core over the transformed UnifiedDB/ClayGraph schemas.",
   "runtime_blobs": {
-    "entrypoint": "816c5bd23ba2143ff5165d2a3f7a7d6e0ba9c994",
-    "target_core": "ead81682a50ef80d78723a32cec83f616b499986",
+    "entrypoint": "0ffbc73e17a798a05bcd6a103387a6793a96e94b",
+    "live_overlay": "6fddb25cbeade4af8613f796202fa325313b6a2c",
+    "correction_overlay": "1d7c81f34f75cdb78b66005b4ef9dd86c1cefd6c",
+    "mechanism_core": "ead81682a50ef80d78723a32cec83f616b499986",
     "contract": "27d2b4812c12f7afe339e80a0d35cd7508b6628e",
     "unified_schema": "08dcf096f971e148c6f63d003277d99f51113f72",
     "claygraph_schema": "44a603ca0d8c18f3c4eb796e369c09cc1d1c7b65"
   },
   "frank_source_repo": "gschaidergabriel/Dr.-Unterweger",
-  "frank_schema_ancestry_observed_head": "0a10d64f6ad297031fae955c1b75ce04dd4757a2",
-  "expanded_frank_sandbox_baseline": {
-    "branch": "research/frank-v01-integrated-sandbox-20260809",
-    "head": "d91c45b9a5b9b892953d6be2c57ca1c7dc39b85f",
-    "source_event": "ecba47036c4e5c25be5372c5c291429fdb3a9ca9"
-  },
-  "copy_policy": "Architecture/schema/research-state lineage is transformed into a distinct Research-Entity database. Andreas personal live semantic state is not copied. Frank identity and Research-Entity identity remain distinct.",
+  "copy_policy": "Transform Frank architecture/schema/research lineage into a distinct Research-Entity database. Do not copy Andreas personal live semantic state or merge entity identities.",
   "frank_schema_chain": {
     "unified": ["UNIFIEDDB_SCHEMA","V6","V7","V7_1","V8","V9","V10","V11","V12","V13"],
     "claygraph": ["CLAYGRAPH_SCHEMA","V6","V7","V8"],
     "loader_blob": "73005c691d4138309dafceacc8fd56668cbe242a"
   },
-  "research_imports": [
-    {"domain":"gwt","ref":"research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md","blob_sha":"b2d9a903f256e1f26db500317b34930456188245","policy":"OWNER_DIRECTIVE"},
-    {"domain":"semantic_fabric","ref":"research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md","blob_sha":"8685421de82b76b0ce925b2cf45fa72082502654","policy":"OWNER_DIRECTIVE"},
-    {"domain":"gwt_emergence_control","ref":"research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md","blob_sha":"b295d5744ae836424925a00d2d2b3a8325f47ccb","policy":"OWNER_DIRECTIVE"},
-    {"domain":"frank_clay_native","ref":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","blob_sha":"7d07e54acf0e62bda81de3b032fe480c0f08f234","policy":"OWNER_DIRECTIVE"},
-    {"domain":"gwt","commit":"03a4fddcf35b74e020c0011d27ec3477594a40cf","policy":"OPEN"},
-    {"domain":"emergenz","commit":"343fabb8b176df10f85aa3cbd4dce09f165b4987","policy":"FAIL_CLOSED_OPEN"},
-    {"domain":"claycode","commit":"d3c8e7de8ca2ccfdbc4db4180778b351b5b983b9","policy":"SOFTWARE_PATH_RELEASE_OPEN"},
-    {"domain":"claycode","commit":"1538ed5e5550ee2509c42e27077b87a00f918b33","policy":"SANDBOX_EVIDENCE_NOT_RELEASE"},
-    {"domain":"claycode","ref":"tools/claycode_base_compiler.py","blob_sha":"5d01dfeb77b1bece85433cd09af6ea3427a5f995","policy":"CURRENT_PURE_SLICE_SOURCE"},
-    {"domain":"frank_loop","commit":"83d2d41e751a332fa285b3d81cc753ab9b67648b","policy":"OWNER_OBSERVATION_FUNCTIONAL_ONLY"},
+  "live_research_heads": [
+    {"domain":"whole_frank_corrected_v2","commit":"c41d233f7960f206c0a5969630071abbfa451806","policy":"CURRENT_CORRECTED_SANDBOX_COMPOSITE"},
+    {"domain":"aggregate74_correction","commit":"955b789cdc891b2968a5387a0871812dd6ee4e3a","policy":"COUNTEREVIDENCE_CORRECTION"},
+    {"domain":"frank_v7_lesion_rescue","commit":"2900ba76748a8fcd932c9fbfb57fe55e822a0aa8","policy":"LOCAL_EXECUTION_PRIMARY_SANDBOX"},
+    {"domain":"h1_loop_of_loops","commit":"3bc5735453f805df67a5f5b742bb5ffb83498871","policy":"REMOTE_SANDBOX_DETERMINISTIC_TEST_NOT_RELEASE"},
     {"domain":"golden_loop","commit":"158c9d92401a5406615015e7fa4d16942ccc1f57","policy":"OPEN_HIGH_CAUSAL_CLOSURE_NOT_MAX_COUPLING"},
     {"domain":"retina_voice","commit":"ecba47036c4e5c25be5372c5c291429fdb3a9ca9","policy":"SANDBOX_OBSERVATION_PROPOSAL_AUTHORITY"},
-    {"domain":"causal_credit_fuzz","commit":"eb84cd5aafb7c2e47747ee6270a5e5e10b5a3238","policy":"LOCAL_EXECUTION_PRIMARY_SANDBOX"}
+    {"domain":"gwt","ref":"research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md","blob_sha":"b2d9a903f256e1f26db500317b34930456188245","policy":"OWNER_DIRECTIVE"},
+    {"domain":"semantic_fabric","ref":"research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md","blob_sha":"8685421de82b76b0ce925b2cf45fa72082502654","policy":"OWNER_DIRECTIVE"},
+    {"domain":"gwt_control","ref":"research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md","blob_sha":"b295d5744ae836424925a00d2d2b3a8325f47ccb","policy":"OWNER_DIRECTIVE"},
+    {"domain":"clay_native","ref":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","blob_sha":"7d07e54acf0e62bda81de3b032fe480c0f08f234","policy":"OWNER_DIRECTIVE"},
+    {"domain":"emergenz","commit":"343fabb8b176df10f85aa3cbd4dce09f165b4987","policy":"FAIL_CLOSED_OPEN"},
+    {"domain":"claycode_v17","commit":"d3c8e7de8ca2ccfdbc4db4180778b351b5b983b9","policy":"SOFTWARE_PATH_RELEASE_OPEN"},
+    {"domain":"claycode_c11","commit":"1538ed5e5550ee2509c42e27077b87a00f918b33","policy":"SANDBOX_EVIDENCE_NOT_RELEASE"},
+    {"domain":"claycode_current","ref":"tools/claycode_base_compiler.py","blob_sha":"5d01dfeb77b1bece85433cd09af6ea3427a5f995","policy":"CURRENT_PURE_SLICE_SOURCE"}
   ],
   "legacy_conservation_boundary": {
-    "cognitive_ancestor_organs_exact": 31,
-    "source_resolved_technical_identities_exact": 36,
-    "historical_slots_measured": 74,
-    "unresolved_primary_identities_opaque": 38,
-    "exact_74_name_completeness_claim": false
+    "measured_historical_services_modules": 74,
+    "measurement_semantics": "AGGREGATE_ONLY_NOT_NUMBERED_SLOT_LEDGER",
+    "source_resolved_technical_identities": 40,
+    "superseded_aliases_preserved": 1,
+    "numeric_unresolved_remainder": null,
+    "mapped_primary_slots": 0,
+    "named_cognitive_lineages_separate_namespace": 31,
+    "fabricated_placeholder_identities_forbidden": true,
+    "cross_namespace_arithmetic_completion_forbidden": true,
+    "whole_frank_gate": "HOLD_SOURCE_BACKED_74_SLOT_MAPPING"
   },
-  "sandbox_receipt": {
-    "exact_repo_runtime": "33/33 PASS",
-    "deeper_pre_persistence_runtime": "35/35 PASS",
-    "canonical_promotion": false
-  }
+  "sandbox_receipt": {"exact_primary_runtime":"37/37 PASS","canonical_promotion":false}
 }

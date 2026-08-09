@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "probe": "claycode_g9_grammar_coverage_probe_v0.1",
+  "candidate_grammar": "research_entity/claycode/g9/grammar.ebnf@ec2f17077333955cfdabe6c64868d597e7e734e3",
+  "source_artifacts": [
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay@1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "research_entity/claycode/g9/CLAYCODE_G9_DYNAMIC_BINDING_LATTICE_CANDIDATE.clay@d31a6320ddfd692b74ca43aaf69e4d940dacb262",
+    "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay@dbb72460bc5a049c784d1acd1aaef152fa37f797"
+  ],
+  "test_corpus_hash": "fc4098bc147300639b7cb5e801876f1f0577aae55773d97db73753220fc4601e",
+  "summary": {"cases":8,"clean":1,"flagged":7,"issue_count":7},
+  "cases": [
+    {"case":"positive_rule","source":"rule gwt.broadcast!=gwt.use","issues":[]},
+    {"case":"g9_diff_gt","source":"rule diff>0 => ADD_OR_STRENGTHEN","issues":[{"kind":"unsupported_operator","token":">"}]},
+    {"case":"g9_generation_gte","source":"rule valid_generation requires count(distinct(classes))>=2 && count(executable)>=1","issues":[{"kind":"unsupported_operator","token":">="}]},
+    {"case":"g9_if_stmt","source":"if residual.effect {effect_intent=EffectIntent(residual);receipt=Needle.execute(effect_intent)}","issues":[{"kind":"unsupported_control_statement","token":"if"}]},
+    {"case":"dbl_projection","source":"projection BindingLattice -> ClayGraph.Hyperrelation {","issues":[{"kind":"unsupported_top_level_keyword","token":"projection"}]},
+    {"case":"dbl_experiment","source":"experiment DBL_E1 = baseline_static_claygraph vs scalar_hebbian vs dynamic_binding_lattice","issues":[{"kind":"unsupported_top_level_keyword","token":"experiment"}]},
+    {"case":"dbl_hypothesis","source":"hypothesis H_DBL_01 = candidate","issues":[{"kind":"unsupported_top_level_keyword","token":"hypothesis"}]},
+    {"case":"dialect_method_sig","source":"projection(reader:ReaderId)->Ref","issues":[{"kind":"unsupported_typed_method_signature","token":":"}]}
+  ],
+  "replication_ref": "research_entity/runtime/tool_results/claycode-g9-grammar-e2b-20260809T0956Z.json",
+  "scope_note": "Lexical/grammar coverage probe, not a complete parser. It establishes specific constructs absent from the checked EBNF and does not prove that every surrounding file fails a future or alternative parser."
+}

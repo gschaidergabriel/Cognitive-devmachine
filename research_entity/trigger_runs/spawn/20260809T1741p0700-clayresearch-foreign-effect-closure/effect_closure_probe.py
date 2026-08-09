@@ -5,13 +5,14 @@ Scope:
 - temporary 0600 files only;
 - child drops to uid/gid 65534 when setpriv is available;
 - demonstrates inherited-FD and SCM_RIGHTS authority carriers;
-- runs a deterministic abstract effect-closure fuzz model.
+- reproduces the deterministic abstract effect-closure fuzz model used in this run.
 
 This is a research probe, not a production sandbox implementation.
 """
 from __future__ import annotations
 
 import array
+import collections
 import json
 import os
 import random
@@ -23,6 +24,17 @@ import tempfile
 
 SEED = 202608091741
 FUZZ_CASES = 200_000
+PATH_ATOMS = {
+    "fs_read_workspace", "fs_write_workspace", "fs_truncate_workspace",
+    "fs_read_protected", "fs_write_protected", "fs_truncate_protected",
+    "net_connect_https", "net_connect_arbitrary",
+}
+CARRIER_ATOMS = {
+    "fd_protected_rw", "scm_rights_receive", "ambient_capability", "secret_env",
+}
+KERNEL_ATOMS = {"spawn", "signal_external", "device_ioctl", "ptrace_external"}
+RESOURCE_ATOMS = {"pids_unbounded", "memory_unbounded", "cpu_unbounded", "io_unbounded"}
+UNIVERSE = sorted(PATH_ATOMS | CARRIER_ATOMS | KERNEL_ATOMS | RESOURCE_ATOMS)
 
 
 def nobody_prefix() -> list[str]:
@@ -46,7 +58,7 @@ try:
 except Exception as e:
     out["path_open"]=False; out["path_error"]=type(e).__name__
 try:
-    os.write(fd,b"inherited-fd-write\\n"); out["fd_write"]=True
+    os.write(fd,b"inherited-fd-write\n"); out["fd_write"]=True
 except Exception as e:
     out["fd_write"]=False; out["fd_error"]=type(e).__name__
 print(json.dumps(out,sort_keys=True))
@@ -80,7 +92,7 @@ for level, typ, data in anc:
         fds=array.array("i"); fds.frombytes(data[:len(data)-(len(data)%fds.itemsize)]); received.extend(fds)
 out={"received_fd":bool(received),"fd_write":False}
 if received:
-    os.write(received[0],b"scm-rights-write\\n"); out["fd_write"]=True
+    os.write(received[0],b"scm-rights-write\n"); out["fd_write"]=True
     for x in received: os.close(x)
 print(json.dumps(out,sort_keys=True))
 '''
@@ -104,62 +116,67 @@ print(json.dumps(out,sort_keys=True))
         except FileNotFoundError: pass
 
 
+def naive_path_sandbox(parent_allowed: set[str], child_requested: set[str], ambient: set[str]):
+    requested_path = child_requested & PATH_ATOMS
+    if not requested_path <= parent_allowed:
+        return False, set()
+    effective = requested_path | set(ambient)
+    return True, effective
+
+
+def carrier_aware_broker(parent_allowed: set[str], child_requested: set[str], ambient: set[str]):
+    if not child_requested <= parent_allowed:
+        return False, set()
+    admitted_ambient = set(ambient) & parent_allowed
+    effective = set(child_requested) | admitted_ambient
+    if not effective <= parent_allowed:
+        return False, set()
+    return True, effective
+
+
 def abstract_fuzz() -> dict:
     rng = random.Random(SEED)
-    atoms = [
-        "path_read", "path_write", "path_exec", "net_connect", "net_bind",
-        "proc_spawn", "syscall_admin", "fd_protected_rw", "scm_rights_receive",
-        "ambient_capability", "secret_env", "resource_unbounded",
-    ]
-    carrier_atoms = {"fd_protected_rw", "scm_rights_receive", "ambient_capability", "secret_env"}
-    naive_accept = naive_escape = strict_accept = strict_escape = 0
-    channel_counts = {x: 0 for x in sorted(carrier_atoms)}
-
+    naive_accepts = naive_escapes = safe_accepts = safe_escapes = 0
+    escape_counter = collections.Counter()
     for _ in range(FUZZ_CASES):
-        parent = {a for a in atoms if rng.random() < 0.35}
-        requested = {a for a in atoms if rng.random() < 0.28}
-        ambient = {a for a in carrier_atoms if rng.random() < 0.12}
-        effective = requested | ambient
+        parent = {a for a in UNIVERSE if rng.random() < 0.22}
+        child = {a for a in UNIVERSE if rng.random() < 0.16}
+        ambient = {a for a in CARRIER_ATOMS if rng.random() < 0.08}
 
-        # Naive model checks only non-carrier declarative effects.
-        visible_req = requested - carrier_atoms
-        if visible_req <= parent:
-            naive_accept += 1
-            leaked = effective - parent
+        ok, eff = naive_path_sandbox(parent, child, ambient)
+        if ok:
+            naive_accepts += 1
+            leaked = eff - parent
             if leaked:
-                naive_escape += 1
-                for x in leaked & carrier_atoms:
-                    channel_counts[x] += 1
+                naive_escapes += 1
+                for a in leaked:
+                    escape_counter[a] += 1
 
-        # Carrier-aware model requires complete effective authority subset.
-        if effective <= parent:
-            strict_accept += 1
-            if effective - parent:
-                strict_escape += 1
+        ok2, eff2 = carrier_aware_broker(parent, child, ambient)
+        if ok2:
+            safe_accepts += 1
+            if eff2 - parent:
+                safe_escapes += 1
 
     return {
         "seed": SEED,
         "cases": FUZZ_CASES,
-        "naive_path_only": {
-            "accepted": naive_accept,
-            "escapes": naive_escape,
-            "escape_rate_among_accepted": naive_escape / naive_accept if naive_accept else 0.0,
-            "escape_channels": channel_counts,
-        },
-        "carrier_aware_subset": {
-            "accepted": strict_accept,
-            "escapes": strict_escape,
-        },
+        "naive_accepts": naive_accepts,
+        "naive_escapes": naive_escapes,
+        "naive_escape_rate_among_accepts": naive_escapes / naive_accepts,
+        "carrier_aware_accepts": safe_accepts,
+        "carrier_aware_escapes": safe_escapes,
+        "carrier_aware_escape_rate_among_accepts": 0 if safe_accepts == 0 else safe_escapes / safe_accepts,
+        "top_escape_channels": escape_counter.most_common(),
     }
 
 
 def main() -> None:
-    out = {
+    print(json.dumps({
         "inherited_fd_probe": inherited_fd_probe(),
         "scm_rights_probe": scm_rights_probe(),
         "abstract_fuzz": abstract_fuzz(),
-    }
-    print(json.dumps(out, indent=2, sort_keys=True))
+    }, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "freeze_id": "CLAYCODE_BASE_SEMANTIC_FREEZE_V1",
+  "status": "FROZEN_FOR_BASE_IMPLEMENTATION",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T19:14:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "purpose": "Freeze the executable semantic contract for ClayCode BASE so parser/compiler/runtime work can converge without continuing semantic redesign. This is a BASE implementation freeze, not a claim that the compiler/runtime gate has passed.",
+  "authority_order": [
+    {
+      "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "git_blob_sha": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+      "role": "PRIMARY_BASE_SEMANTIC_CONTRACT"
+    },
+    {
+      "path": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+      "git_blob_sha": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+      "role": "DIALECT_AND_INTERFACE_CONTRACT"
+    },
+    {
+      "path": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+      "git_blob_sha": "86d8ec3e3d72261d42b9e017f546bdfe41cffe66",
+      "role": "RELEASE_ACCEPTANCE_CONTRACT"
+    }
+  ],
+  "frozen_laws": [
+    "model_output != execution_authority",
+    "textual_capability_name never_confers authority",
+    "effect.commit requires independently valid capability possession and witnesses",
+    "provenance != truth",
+    "provenance != authority",
+    "state truth and graph relevance remain distinct",
+    "conflict/unknown/revocation are preserved rather than silently collapsed",
+    "semantic identity is distinct from runtime state-version/trace identity where the contract distinguishes them",
+    "language semantics change only when an executable application/compiler counterexample forces the change",
+    "general-purpose expressibility may be realized through typed lowering/FFI; safety constrains authority rather than computational expressibility"
+  ],
+  "frontend_status": {
+    "semantic_authority": "THIS_FREEZE_DOES_NOT_MAKE_A_PARSER_PASS",
+    "active_syntax_candidate": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark",
+    "active_syntax_candidate_git_blob_sha": "507126993797f8f52c69467410978712e6d495cd",
+    "required_before_wp02_pass": [
+      "strict LALR construction receipt",
+      "full admitted G9 + Dialect frontend receipt",
+      "baseline-vs-repair differential receipt",
+      "deterministic canonical roundtrip/hash receipt with mutation discrimination"
+    ]
+  },
+  "candidate_disposition_rule": {
+    "rule": "Any ClayCode/XENO/FRANK language candidate not explicitly listed in authority_order is NOT_SELECTED_FOR_BASE_FREEZE unless an executable counterexample is recorded and this freeze is amended by a new version. Historical evidence and negative results remain preserved in repository history/ledgers.",
+    "silent_overwrite_forbidden": true,
+    "amendment_requires": [
+      "concrete executable counterexample",
+      "minimal semantic delta",
+      "updated frozen source hashes",
+      "regression tests proving the delta is required",
+      "supersession link to this freeze"
+    ]
+  },
+  "unresolved_language_counterexamples": [],
+  "known_nonsemantic_implementation_debt": [
+    "production parser/canonicalizer",
+    "typed canonical IR integration",
+    "type/effect checker",
+    "reference evaluator",
+    "compiler/lowering/backend",
+    "Ubuntu runtime ABI/FFI/stdlib/concurrency",
+    "general-purpose application suite",
+    "production conformance/fuzz/heldout",
+    "FRANK handoff",
+    "final BASE audit"
+  ],
+  "decision": {
+    "CC-WP-01-SPEC-FREEZE": "PASS",
+    "semantic_redesign_default": "CLOSED_UNLESS_EXECUTABLE_COUNTEREXAMPLE",
+    "CLAYCODE_RELEASE_GATE": "NOT_PASS",
+    "GENERAL_PURPOSE_GATE": "NOT_PASS"
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "FRANK-LOOP-TREND-ALIAS-20260809T1930P0700",
+  "run_id": "frank-20260809T1931p0700-chatgpt-secondary-log-state-three-cycle",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "subject": "FRANK loop/log/state fusion: trend alias in periodicity plus causal state/log correlation hypotheses",
+  "evidence_class": "REPOSITORY_CODE_REPRODUCER_PLUS_LOCAL_SYNTHETIC_MONTE_CARLO_PLUS_EXTERNAL_PRIMARY_ENGINEERING_SOURCES",
+  "target_acceptance": false,
+  "frank_repo": {
+    "semantic_repo": "gschaidergabriel/frankv0.1",
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger",
+    "preexisting_quality_fusion_head": "ef22a56990e8ebdfc3e7cab6292b74daf55d94d2",
+    "trend_safe_fix_commit": "22638720574ce33821b021d78f4ebbbdb5e65df7",
+    "trend_safe_fix_blob": "bd50357774f2cf01bd7f97d8193e7cffecc77cbd",
+    "component": "harness/loop_dynamics_probe.py"
+  },
+  "concurrency_receipt": {
+    "event": "first CAS update rejected with HTTP 409 because the component changed after read",
+    "interpretation": "positive evidence that repository CAS prevented stale overwrite during concurrent research/build work",
+    "response": "re-read new head ef22a569..., fuse its residual-quality changes, then rebase trend-safe delta and write with fresh blob SHA",
+    "authority_effect": "NONE"
+  },
+  "cycle_1": {
+    "focus": "loop dynamics / periodicity",
+    "hypothesis": "raw lag similarity normalized by global trajectory span aliases smooth monotone trends into false PRODUCTIVE_LIMIT_CYCLE evidence",
+    "counterhypothesis": "because the probe is advisory and also requires boundedness/utility/pressure, the raw lag heuristic is sufficiently discriminative",
+    "reproducer": {
+      "samples": 12,
+      "state_delta": "strictly monotone 0.50 -> 0.20",
+      "residual_pressure": "strictly monotone 0.60 -> 0.36",
+      "net_utility": 0.05,
+      "old_periodicity_score": 0.8181818181818181,
+      "old_threshold": 0.72,
+      "old_classification": "PRODUCTIVE_LIMIT_CYCLE",
+      "ground_truth_for_fixture": "NON_PERIODIC_MONOTONE_TREND"
+    },
+    "external_research": [
+      {
+        "source_class": "PRIMARY_SOFTWARE_DOCUMENTATION",
+        "source": "SciPy signal.detrend documentation",
+        "finding": "linear/constant detrending is an explicit preprocessing operation for trend removal before residual signal analysis"
+      },
+      {
+        "source_class": "REVIEW_LITERATURE",
+        "source": "Trends in recurrence analysis of dynamical systems (2024 review)",
+        "finding": "recurrence analysis requires explicit treatment of nonstationarity, parameterization and failure modes rather than raw similarity alone"
+      }
+    ],
+    "result": "SUPPORTED",
+    "implementation": "detrend state_delta by least-squares linear trend; compute lag similarity on residuals; require >=2 raw direction changes; keep boundedness/utility/pressure gates",
+    "regression": "monotone_decline_not_cycle fixture added"
+  },
+  "cycle_2": {
+    "focus": "receipt/state identity",
+    "hypothesis": "replay and comparison are ambiguous if diagnostic policy/semantic version and state basis identity are not receipt-visible",
+    "counterhypothesis": "input hashes and surrounding repository head are sufficient",
+    "fusion_with_concurrent_worker": "Concurrent worker independently hardened the H1 quality gate and trajectory probe with residual estimator identity/version/freshness/uncertainty and policy-bound receipt identity. This supports the provenance direction and was preserved during rebase.",
+    "implemented_now": [
+      "probe semantic version trajectory-probe-v1.3-trend-safe participates in input/receipt identity",
+      "controller policy and thresholds remain policy-hash-bound from concurrent quality fusion"
+    ],
+    "not_implemented_without_discriminator": [
+      "making state_basis_epoch mandatory instead of defaulting projection epoch 0",
+      "global schema migration for trace/span IDs"
+    ],
+    "status": "PARTIALLY_SUPPORTED_OPEN"
+  },
+  "cycle_3": {
+    "focus": "cross-node logs/state reconstruction",
+    "hypothesis": "timestamp-only or loosely correlated logs are insufficient for deterministic asynchronous/multi-node FRANK reconstruction; causal envelope should bind trace/root span, parent span, cycle, state epoch/version, node/resource identity and policy/code identity",
+    "counterhypothesis": "single-process H1 cycle_id plus state epoch already reconstructs enough causality; wider trace metadata may add cost without improving fault localization",
+    "external_research": [
+      {
+        "source_class": "PRIMARY_STANDARD/DOCUMENTATION",
+        "source": "OpenTelemetry Logs Data Model and Trace Context",
+        "finding": "logs are correlated through TraceId/SpanId/resource execution context rather than timestamp alone"
+      },
+      {
+        "source_class": "PRIMARY_DOCUMENTATION",
+        "source": "OpenTelemetry file exporter",
+        "finding": "exported record order and timestamp monotonicity are not guaranteed"
+      },
+      {
+        "source_class": "PRIMARY_DATABASE_DOCUMENTATION",
+        "source": "SQLite isolation/WAL documentation",
+        "finding": "a reader can hold a consistent older snapshot while newer writes exist, so wall-clock proximity does not establish identical state basis"
+      },
+      {
+        "source_class": "DEVELOPMENT_STANDARD",
+        "source": "OpenTelemetry GenAI semantic conventions",
+        "finding": "agent/workflow/plan/tool execution is modeled as causally nested spans; engineering pattern useful but conventions remain development-stage"
+      }
+    ],
+    "required_discriminator": "concurrent writer/reader plus multi-node handoff replay with intentionally shuffled log export; compare reconstruction/fault-localization error with cycle/timestamp baseline versus causal envelope",
+    "status": "OPEN_HIGH_VALUE"
+  },
+  "local_proxy_validation": {
+    "environment": "ChatGPT Python reasoning sandbox; algorithm-equivalent proxy, not target Ubuntu execution of repository file",
+    "monotone_exact": {
+      "old": {"score": 0.8181818181818181, "lag": 2, "classified_cycle_by_periodicity_gate": true},
+      "new": {"score": 0.0, "lag": null, "turning_points": 0, "classified_cycle_by_periodicity_gate": false}
+    },
+    "noisy_monotone_monte_carlo": {
+      "seed": 0,
+      "cases": 10000,
+      "old_cycle_gate_false_positives": 9283,
+      "new_cycle_gate_false_positives": 0,
+      "generator": "8-20 samples; negative linear trend; Gaussian noise sigma 0.003"
+    },
+    "alternating_cycle_control": {
+      "cases": 10000,
+      "old_detected": 10000,
+      "new_detected": 10000
+    },
+    "limitations": [
+      "synthetic distributions are not calibrated to live Frank trajectories",
+      "full committed repository self-test was not executed on Andreas Ubuntu host",
+      "GitHub combined status returned no CI statuses for the new Frank commit"
+    ]
+  },
+  "architecture_fidelity": "IMPROVED_WITHIN_PROBE_SCOPE",
+  "promotion": {
+    "canonical_scientific_promotion": "NONE",
+    "h1_gate": "NOT_PASS",
+    "reason": "proxy discrimination supports a code correction but does not substitute for target-host H1 trace/replay acceptance"
+  },
+  "negative_results_preserved": [
+    "raw periodicity score is not sufficient evidence of a limit cycle",
+    "recent tail net utility remains only a proxy for causal next-step marginal utility",
+    "gain ratio remains not a Jacobian spectral radius",
+    "timestamp order remains not a causal state identity guarantee"
+  ],
+  "next_tests": [
+    "execute Frank harness/loop_dynamics_probe.py self-test at commit 22638720574ce33821b021d78f4ebbbdb5e65df7 on target Ubuntu host",
+    "run frozen H1 traces including monotone-convergence, damped oscillation, drift, noisy plateau, real productive recurrence and adversarial trend-plus-seasonality",
+    "calibrate periodicity threshold and turning-point floor against labeled H1 traces, not synthetic data",
+    "run concurrent SQLite WAL snapshot + reordered trace export discriminator before changing UnifiedDB/log schema",
+    "evaluate making state_basis_epoch/trace_root_hash mandatory in recurrence receipts only if replay ambiguity is reproduced"
+  ],
+  "mesh_feedback": {
+    "frank": "IMPROVED: trend-safe trajectory adapter; preserve quality-gate fusion",
+    "harness": "ADD regression + target-host replay; do not promote from proxy",
+    "gwt": "NO_DIRECT_CHANGE: recurrence classification remains distinct from ignition/broadcast",
+    "emergenz": "ADD negative control: monotone trend must not count as recurrence/cycle evidence",
+    "claycode": "ADD future conformance fixture for detrended cycle semantics only after H1 contract freezes",
+    "hyperposition": "NO_DIRECT_CHANGE: use cycle evidence only after trend/null controls",
+    "claygraph": "ADD provenance link from cycle/coupling readout to state epoch and causal trace when discriminator supports it",
+    "unifieddb": "OPEN: test causal trace/state envelope before schema migration",
+    "clayresearch": "FUSE: state identity + readout quality + trend-safe dynamics form one observability-control boundary"
+  }
+}

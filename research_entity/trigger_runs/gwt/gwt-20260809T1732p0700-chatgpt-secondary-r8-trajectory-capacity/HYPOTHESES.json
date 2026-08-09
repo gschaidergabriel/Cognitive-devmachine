@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "run_id": "gwt-20260809T1732p0700-chatgpt-secondary-r8-trajectory-capacity",
+  "candidate": "TC-RWC-R8 — Trajectory-Capacity Recurrent Workspace Control",
+  "status": "OPEN_NO_PROMOTION",
+  "hypotheses": [
+    {
+      "id": "GWT-R8-H1",
+      "claim": "Recurrence continuation cannot be robustly inferred from one first-order state-delta scalar; multi-step trajectory geometry plus residual pressure will better discriminate converging, oscillatory/productive-cycle, stalled and diverging regimes.",
+      "expected_observation": "At matched compute, a trajectory-aware continuation controller reduces false halts and overthinking relative to scalar-delta control.",
+      "test": "Frozen-output H1 replay comparing state_delta-only, R7 dual-gate and R8 trajectory-aware continuation across regime-labeled episodes.",
+      "falsifier": "State-delta plus residual-pressure control matches or exceeds trajectory-aware control on held-out correctness, false halt, overthinking and cost."
+    },
+    {
+      "id": "GWT-R8-H2",
+      "claim": "Required recurrent depth is conditional on available working-state capacity; workspace/scratchpad/receiver-memory capacity and recurrence depth can partially substitute, with both undercapacity and dilution/overcapacity failure regimes possible.",
+      "expected_observation": "The best continuation threshold/depth shifts systematically when state capacity changes while task and model are held fixed.",
+      "test": "Factorial H1/Qwen-class replay over low/medium/high state capacity and fixed/adaptive recurrence budgets with matched task families.",
+      "falsifier": "Capacity state adds no held-out predictive/intervention value for depth, outcome or stability beyond task/model features."
+    },
+    {
+      "id": "GWT-R8-H3",
+      "claim": "Recurrence receipts should separate semantic-state equivalence, state/version equivalence and execution-trace equivalence; treating all three as one identity will misclassify retry/churn as cognitive progress or hide materially different histories.",
+      "expected_observation": "Matched episodes exist with equal semantic state but unequal version/trace identities and with trace-only retry changes that should not count as semantic progress.",
+      "test": "Bind GWT recurrence receipts to Harness oracle semantic_state_hash/state_version_hash/trace_root_hash and replay retry, regrouping, crash/restart and idempotent cases.",
+      "falsifier": "A single identity representation preserves all required recurrence, recovery, freshness and semantic-progress decisions with lower complexity and no additional errors."
+    },
+    {
+      "id": "GWT-R8-H4",
+      "claim": "Pairwise transfer-entropy/directed-flow readouts are screening evidence only when higher-order joint causation is plausible; conditioned multivariate or higher-order tests are required before a flow-based emergence promotion.",
+      "expected_observation": "Constructed/common-driver and XOR-like controls produce pairwise false-positive or false-negative interpretations that multivariate controls resolve.",
+      "test": "H1 synthetic causal motifs plus matched intervention/lesion/rescue using pairwise and multivariate estimators.",
+      "falsifier": "Pairwise measures plus the existing intervention battery resolve all preregistered higher-order motifs without material ambiguity or added false conclusions."
+    },
+    {
+      "id": "GWT-R8-H5",
+      "claim": "Existing ClayCode G9 semantic machinery can represent the R8 readout without new surface syntax; R8 should be a typed semantic-contract extension, not a language redesign.",
+      "expected_observation": "LoopDynamicsReadoutR8 and RecurrenceDecision compile through the existing record/tensor/rule/type-effect surface after current BASE parser closure.",
+      "test": "Compile canonical R8 contract through the real repository parser -> canonical typed IR -> type/effect -> evaluator/lowering path.",
+      "falsifier": "A minimal R8 contract exposes an executable semantic requirement that current G9 cannot express without a new primitive."
+    },
+    {
+      "id": "GWT-R8-H6",
+      "claim": "R7's admission-versus-continuation split remains necessary even after trajectory/capacity observables are added; richer observability should refine the continuation gate rather than collapse both decisions into one scalar.",
+      "expected_observation": "Dual-gate trajectory-aware control dominates or matches an overloaded single score under mixed easy/hard and interruption-sensitive tasks.",
+      "test": "Matched-compute fixed-budget vs one-gate vs R7 dual-gate vs R8 dual-gate-plus-trajectory/capacity replay.",
+      "falsifier": "One calibrated gate or fixed budget matches/exceeds R8 across preregistered utility, safety and cost metrics."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "GWT-R8-C0-A",
+      "claim": "State delta plus residual pressure is already sufficient; trajectory geometry adds estimator noise and cost without useful control signal."
+    },
+    {
+      "id": "GWT-R8-C0-B",
+      "claim": "The depth-state/memory trade-off is architecture/task specific and should remain inside the model; exposing system-GWT capacity fields will not improve FRANK control."
+    },
+    {
+      "id": "GWT-R8-C0-C",
+      "claim": "Three identity layers are unnecessary for GWT; ordinary episode id plus semantic state is sufficient and the Harness split should remain a persistence concern only."
+    },
+    {
+      "id": "GWT-R8-C0-D",
+      "claim": "Higher-order estimators are too data-hungry/noisy for operational use; pairwise measures plus direct interventions provide better practical evidence."
+    },
+    {
+      "id": "GWT-R8-C0-E",
+      "claim": "Ordinary event-driven orchestration with explicit queues, budgets and retries explains any gains, so GWT-specific continuation remains unnecessary."
+    }
+  ],
+  "promotion": "NONE"
+}

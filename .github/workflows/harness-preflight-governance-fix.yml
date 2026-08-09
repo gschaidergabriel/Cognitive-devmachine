@@ -1,0 +1,92 @@
+name: Repair Research Interconnect Preflight Governance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/harness-preflight-governance-fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Apply clayresearch registry migration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tools/research_interconnect_preflight.py')
+          s=p.read_text(encoding='utf-8')
+          if '"clayresearch"' not in s or '"clay"' in s:
+              s=s.replace('"clay"', '"clayresearch"')
+          s=s.replace(
+              '"clayresearch": ["clayresearch", "synthetic-clay", "synthetic_clay"],',
+              '"clayresearch": ["clay", "clayresearch", "synthetic-clay", "synthetic_clay"],'
+          )
+          s=s.replace(
+              'base = TRIGGER_RUNS / branch',
+              'base = TRIGGER_RUNS / ("clay" if branch == "clayresearch" else branch)'
+          )
+          p.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Compile and execute harness preflight
+        run: |
+          python -m py_compile tools/research_interconnect_preflight.py
+          python tools/research_interconnect_preflight.py \
+            --trigger harness \
+            --run-id ci-hwp01-preflight \
+            --history-per-branch 1 \
+            --output /tmp/hwp01-preflight.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/hwp01-preflight.json').read_text())
+          expected={'clayresearch','gwt','frank','emergenz','claycode','hyperposition','claygraph','unifieddb','harness'}
+          registered=set(d.get('registry_scientific_branches') or [])
+          branches={x.get('branch') for x in d.get('branches',[]) if isinstance(x,dict)}
+          priority=d.get('branch_priority') or []
+          assert registered == expected, (registered, expected)
+          assert branches == expected, (branches, expected)
+          assert set(priority) == expected and len(priority) == len(expected), priority
+          assert 'clayresearch' in priority and 'clay' not in priority, priority
+          receipt={
+            'schema_version':'1.0',
+            'run_id':'harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze',
+            'execution_class':'GITHUB_ACTIONS_UBUNTU_REPO_CHECKOUT',
+            'source_commit':__import__('os').environ.get('GITHUB_SHA'),
+            'repair':'research_interconnect_preflight registry branch migration clay -> clayresearch with historical trigger_runs/clay path compatibility',
+            'py_compile':'PASS',
+            'harness_preflight':'PASS',
+            'registered_branches':sorted(registered),
+            'branch_priority':priority,
+            'canonical_promotion':'NONE',
+            'frank_harness_modified':False
+          }
+          out=Path('research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/PREFLIGHT_RECEIPT_CI.json')
+          out.write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+
+      - name: Persist governance repair and receipt
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/research_interconnect_preflight.py \
+            research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/PREFLIGHT_RECEIPT_CI.json
+          if git diff --cached --quiet; then
+            echo 'No changes.'
+          else
+            git commit -m 'research: align interconnect preflight with clayresearch registry'
+            git push
+          fi

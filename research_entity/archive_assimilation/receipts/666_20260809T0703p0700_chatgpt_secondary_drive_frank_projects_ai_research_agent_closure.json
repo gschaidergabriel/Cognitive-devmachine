@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0703+0700-chatgpt-secondary-drive-frank-projects-ai-research-agent",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "EXACT_RECURSIVE_9_LEAF_SUBTREE_CLOSED",
+  "source_scope": {
+    "parent": "frank-projects",
+    "parent_id": "1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw",
+    "subtree": "ai-research-agent",
+    "subtree_id": "1Lw6yF8sT1aMUANIzVGF0hKDf-avWSQmv",
+    "root_folders": 4,
+    "root_files": 0,
+    "recursive_leaf_files": 9,
+    "leaves": {
+      "code": ["hello.py"],
+      "docs": ["PROJECT.md", "social_media_posts.md"],
+      "tasks": ["task_1.json", "task_2.json", "task_3.json", "task_4.json", "task_5.json"],
+      "browser": ["state.json"]
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "FRANK-PROJECTS-AIRA-001",
+      "epistemic_class": "HISTORICAL_PROTOTYPE_NEGATIVE_RESULT",
+      "status": "NEGATIVE_RESULT",
+      "claim": "The executable code in ai-research-agent is only a Hello-World placeholder. PROJECT.md still says the architecture and success metrics are undefined. The subtree therefore does not provide implementation evidence for an autonomous research agent.",
+      "targets": ["harness", "frank", "q12_index"],
+      "current_implication": "Classify this subtree as prototype/planning history rather than reusable autonomous-agent implementation."
+    },
+    {
+      "finding_id": "FRANK-PROJECTS-AIRA-002",
+      "epistemic_class": "HISTORICAL_EVIDENCE_PROVENANCE_FAILURE",
+      "status": "CURRENTLY_RELEVANT_NEGATIVE_RESULT",
+      "claim": "The marketing document claims browser automation, recurring scheduling and marketing generation as delivered capabilities while task state records browser automation as in_progress and marketing/social launch as pending; the project document still marks architecture as undefined. Promotional narrative therefore overstates the executable/task evidence.",
+      "targets": ["harness", "frank", "claygraph", "unifieddb"],
+      "current_implication": "RAE/Harness must type marketing, task status, executable tests and runtime measurements as different evidence classes. Natural-language capability claims may not promote implementation status without executable receipts."
+    },
+    {
+      "finding_id": "FRANK-PROJECTS-AIRA-003",
+      "epistemic_class": "HISTORICAL_SECURITY_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_SESSION_STATE_WARNING",
+      "claim": "The subtree stores a browser state file containing live-style cookie/session material. Values are intentionally not reproduced in RAE.",
+      "targets": ["harness", "frank", "claycode", "unifieddb"],
+      "current_implication": "Archive ingestion and replay need automatic secret/session detection, redaction and capability-scoped runtime state. Browser profiles/cookies must never be treated as ordinary durable research text."
+    }
+  ],
+  "credit": {
+    "research_value": "NEGATIVE_RESULT_AND_ARCHIVE_ACCOUNTING_ONLY",
+    "earned_work_hours_added": 0.0,
+    "reason": "No reusable autonomous research-agent implementation is present; the useful value is provenance/security failure evidence and exact coverage."
+  },
+  "progress_accounting": {
+    "local_subtree_exact": true,
+    "global_level0_percent_awarded": 0.0,
+    "reason": "A local subtree closure does not freeze the combined Level-0 denominator."
+  },
+  "cross_branch_feedback": {
+    "harness": "Add evidence-class separation tests: marketing/prose and task-completed flags cannot satisfy capability predicates; sanitize browser/session state before persistence.",
+    "claygraph": "Store evidence class and provenance on capability assertions so promotional text cannot become graph truth.",
+    "unifieddb": "Separate durable research facts from runtime session secrets and browser profile state.",
+    "frank": "Do not inherit this prototype as agent architecture; retain only its negative-result lessons."
+  },
+  "created_at": "2026-08-09T07:03:00+07:00"
+}

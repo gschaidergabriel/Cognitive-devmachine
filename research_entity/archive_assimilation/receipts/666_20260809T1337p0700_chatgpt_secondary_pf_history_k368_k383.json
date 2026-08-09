@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1337p0700-chatgpt-secondary-pf-history-k368-k383",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "stage": "L0_ARCHIVE_ASSIMILATION",
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "ordinal_range": "k368..k383",
+    "count": 16,
+    "manifest": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K368_K383_20260809T1336p0700.json"
+  },
+  "claim_race": {
+    "winner": "666-l0-pf-history-k368-k383-20260809T1333p0700",
+    "winner_commit": "45af63eb7cf40ed3748a11cc36c807126ed36ee3",
+    "winner_time": "2026-08-09T13:33:02+07:00",
+    "later_competing_claim_commit": "3bf2f2604802a31d78a75d47021d2cc19bf82573",
+    "later_competing_claim_time": "2026-08-09T13:33:37+07:00",
+    "disposition": "EARLIEST_DURABLE_CLAIM_WINS; later worker should pivot or record only explicit noncounting replication"
+  },
+  "closure": {
+    "materialized": 16,
+    "terminally_dispositioned": 16,
+    "uncovered": 0,
+    "status": "COMPLETE_FOR_ORDINAL_SHARD",
+    "global_level0_gate": "NOT_PASS",
+    "global_exact_percent_increment": 0.0,
+    "global_percent_reason": "Combined Level-0 obligation denominator remains NOT_FROZEN; shard closure must not be converted into a manufactured global percentage."
+  },
+  "high_value_findings": [
+    {
+      "id": "PF-K368-383-EFFECT-AUTHORITY",
+      "evidence": [368,369,370,379],
+      "finding": "Email evolved from context/read functionality into a broad mutating external-effect subsystem while ghostwriter/style prompts also attempted to define refusal/safety behavior. Generative style or persona prompts must never be the authority boundary for send/delete/spam/forward effects.",
+      "current_transfer": "Keep user intent, generation style, capability authority, confirmation and effect execution as separate layers with independently enforceable policy."
+    },
+    {
+      "id": "PF-K368-383-EFFECT-TRUTH",
+      "evidence": [372,375,376],
+      "finding": "Remote IMAP state and local/UI replicas could diverge. k376 used optimistic hiding with rollback on failed IMAP; k375 later removed rollback while removing cards before confirmation, creating a visible-truth regression.",
+      "current_transfer": "Effect surfaces need explicit PENDING/COMMITTED/FAILED/ROLLED_BACK state and receipts; optimistic UI must reconcile or rollback against authoritative effect results."
+    },
+    {
+      "id": "PF-K368-383-CONTEXT-TRUST",
+      "evidence": [371,374,377,378],
+      "finding": "Email reply quality and robustness improved by bounded task-specific context, explicit user-intent capture and normalization/sanitization of untrusted message content before LLM use.",
+      "current_transfer": "Assemble minimal task context and distinguish untrusted external content from trusted instructions and authoritative state."
+    },
+    {
+      "id": "PF-K368-383-CONTRACT-DRIFT",
+      "evidence": [380],
+      "finding": "A proactive caller assumed a nonexistent function, unsupported parameter and wrong return schema from the email module.",
+      "current_transfer": "Cross-module calls require machine-checkable versioned contracts/types and compatibility tests rather than convention-only assumptions."
+    },
+    {
+      "id": "PF-K368-383-DEPLOYMENT-CLOSURE",
+      "evidence": [381,383],
+      "finding": "Runtime components referenced a systemd service the installer did not create; native runtime dependencies were also missing until later fixes.",
+      "current_transfer": "Deployment manifests must close every declared service/native dependency and be validated on a clean target-like environment."
+    }
+  ],
+  "negative_results_preserved": [
+    "A style/ghostwriter prompt attempted to remove refusal/safety mediation from a high-authority communication channel.",
+    "Optimistic delete/spam UI could assert disappearance before the external IMAP effect was confirmed, and a later revision removed rollback logic.",
+    "Remote IMAP and local Thunderbird mbox replicas required explicit synchronization.",
+    "Cross-service API assumptions drifted from the actual email-reader contract.",
+    "Installer/service definitions were incomplete relative to runtime references.",
+    "Native package dependencies required by QR/screenshot features were absent from installation closure."
+  ],
+  "conceptual_dedup": {
+    "new_earned_work_hours_quantified": 0.0,
+    "reason": "This shard contributes historical semantic evidence and negative-result value. Row-level overlap against existing HISTORICAL_EARNED_WORK mappings was not audited in this pass, so no new avoided-hours credit is manufactured.",
+    "likely_overlap_domains": ["external capability gateway", "safe-effect geometry", "context routing", "deployment reproducibility", "API contracts"]
+  },
+  "evidence_boundary": {
+    "class": "HISTORICAL_REPOSITORY_CODE_DIFF",
+    "runtime_reproduction_performed": false,
+    "rule": "Repository history proves historical implementation changes and regressions, not present-runtime correctness or current policy."
+  },
+  "next_falsifiers": [
+    "Replay send/delete/spam with injected transport failure and assert UI state, durable receipt and remote state converge or roll back.",
+    "Schema/type test all cross-module email calls against the actual provider contract.",
+    "Clean-install test from zero host state and verify every declared service/native dependency before startup.",
+    "Adversarial email-body test separating external content from trusted user instruction and tool authority."
+  ],
+  "status": "COMPLETE"
+}

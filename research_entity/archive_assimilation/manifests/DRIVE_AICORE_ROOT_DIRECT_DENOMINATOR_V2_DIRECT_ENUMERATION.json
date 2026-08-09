@@ -1,0 +1,30 @@
+{
+  "schema_version":"2.0",
+  "manifest_id":"DRIVE-AICORE-ROOT-DIRECT-DENOMINATOR-V2-DIRECT-ENUMERATION-20260809T0703p0700",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "source":{"title":"aicore","id":"1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty","parent_root_id":"1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm"},
+  "method":{"enumerator":"Google Drive direct list_folder","top_k":70,"guard":"research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md","ceiling_status":"NOT_HIT"},
+  "exact_direct_counts":{"folders":37,"files":30,"direct_entries":67},
+  "supersession":{"prior_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_DIRECT_DENOMINATOR_20260809T0703p0700.json","prior_direct_entries":50,"current_direct_entries":67,"delta_entries":17,"verdict":"PRIOR_SEARCH_DERIVED_DIRECT_DENOMINATOR_REFUTED"},
+  "current_v2_closed_subtrees":[
+    {"title":"tools","id":"1RqVr3WkitB1-oOU_0F4knQZzVxydPD84","units_below_root":95,"ref":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_TOOLS_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json"},
+    {"title":"skills","id":"1mFuEdx6gFkoG7rgi14nZBB8_wYdeqKoB","units_below_root":50,"ref":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SKILLS_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json"},
+    {"title":"synteq","id":"1LnsZ7HLTdcnsuclwJwn61sWAxHmSnA6K","units_below_root":519,"ref":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SYNTEQ_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json"},
+    {"title":"webd","id":"1jGgZCOKskL8TIynIqc3hOURRjU0zuPHu","units_below_root":2,"shape":"flat 2 files"},
+    {"title":"updater","id":"1g4J8JhgCbaAcP2Y_T3NvHmrchmMBpNYl","units_below_root":8,"shape":"flat 8 files"},
+    {"title":"papers","id":"1JOglDLN5ew0GNuL0LA1tTdvawvGUl_q7","units_below_root":9,"shape":"flat 9 files"},
+    {"title":".claude","id":"1BbdrBEuF_1mv9c8RziqhBbTIUlnrJCJD","units_below_root":1,"shape":"flat 1 file"},
+    {"title":"desktopd","id":"13X-3x-nri4MM-JRqcQmi-oQM8Kr_zSs_","units_below_root":2,"shape":"flat 2 files"},
+    {"title":"assets","id":"1uvyPRXTE8wDKATL_4ZOxPZzQn9donlh1","units_below_root":32,"shape":"flat 32 files"}
+  ],
+  "partial_open_subtrees":[
+    {"title":"konzepte","id":"17F_V6A3QEcGSv0raGAJFVOIBEtiHsHoN","state":"ROOT_HAS_TEXT_FOLDER; text has 8 topic folders; first topic direct-count=31, second=25, third enumerated but whole subtree not yet frozen"},
+    {"title":"services","id":"1tVCchrYmiQnPizAoP64JFif5Q7QzzK1-","state":"LARGE_RECURSIVE_BLOCK; direct enumeration exposes 13 child folders plus large root service file surface; recursive exactness open"}
+  ],
+  "whole_aicore_status":"OPEN_RECURSIVE_REVALIDATION_IN_PROGRESS",
+  "level0_credit":{"exact_global_percent_added":0.0,"reason":"Combined Level-0 denominator remains unfrozen."},
+  "closure":"EXACT_DIRECT_ROOT_DENOMINATOR_FROZEN_PARTIAL_RECURSIVE_V2_REVALIDATION",
+  "created_at":"2026-08-09T07:03:00+07:00"
+}

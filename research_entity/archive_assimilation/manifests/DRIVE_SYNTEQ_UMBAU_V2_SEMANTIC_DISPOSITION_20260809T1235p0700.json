@@ -1,0 +1,47 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-SYNTEQ-UMBAU-V2-SEMANTIC-DISPOSITION-20260809T1235p0700",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "source":{"title":"synteq-umbau","drive_id":"1fWUuy1oxoOAOHEQGZhhF00SUxISV4qzr","structural_denominator_ref":"research_entity/archive_assimilation/manifests/DRIVE_SYNTEQ_UMBAU_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json","structural_units_below_root":325,"folders":15,"leaf_files":310},
+  "method":{"enumeration":"fresh direct Google Drive list_folder over root and all eight direct child folders plus all seven nested folders, top_k=1000; no call hit ceiling","disposition_unit":"leaf path","classification_basis":"path family + MIME/type + role in source tree; representative/high-value semantic families deep-read from primary files","hash_dedup_scope":"NOT_RECOMPUTED_IN_THIS_RUN","rule":"Every leaf receives exactly one operational disposition. Versioned visual outputs and content-addressed cache/store entries are accounted structurally but receive no independent semantic/earned-work credit. Binary SQLite plus readable SQL projections are one state family, not independent knowledge claims."},
+  "leaf_disposition":{"total":310,"semantic_or_provenance_bearing_text_code_state_projection":170,"visual_test_ui_generation_evidence":104,"content_addressed_store_cache_metadata":27,"binary_sqlite_state":6,"zero_byte_lock_or_sentinel":3,"sum_check":310},
+  "family_accounting":[
+    {"family":"root_direct","leaf_total":150,"semantic_or_provenance":142,"visual":4,"binary_sqlite":1,"lock_sentinel":3,"notes":["Visual root evidence: .buehne-ausgang.png, .a1-kugelzone.png, VORBILD-KUGEL.png, .a1-bahn.png.","Binary root state: bausteine.db; readable bausteine.db.sql is semantic projection.","Zero-byte locks: .schloss-A1, .schloss-A2, .schloss-A3."]},
+    {"family":"plaetze","leaf_total":10,"semantic_or_provenance":5,"binary_sqlite":5,"note":"A1/A2/Chef/Jasmin/Shed DB files paired with readable .db.sql projections; one state family."},
+    {"family":".claude","leaf_total":2,"semantic_or_provenance":2,"note":"settings.json + wache-befehl.py."},
+    {"family":".gstack","leaf_total":1,"semantic_or_provenance":1,"note":"browse-audit.jsonl provenance/audit record."},
+    {"family":"assets","leaf_total":45,"semantic_or_provenance":2,"visual":43,"note":"ledger.jsonl + clay texture manifest carry provenance; images are versioned/generated UI material evidence."},
+    {"family":".store","leaf_total":26,"content_addressed_store_cache_metadata":26,"note":"hash-named JSON operational store entries; structurally retained, no per-entry semantic credit."},
+    {"family":"pruef-A2","leaf_total":73,"semantic_or_provenance":18,"visual":55,"note":"22 root leaves = 14 Python mechanism/test files + 8 images; nested knet = 4 code files + 47 image traces."},
+    {"family":".xenostore","leaf_total":1,"content_addressed_store_cache_metadata":1},
+    {"family":".probe-bild","leaf_total":2,"visual":2,"note":"stable-diffusion-xl-base-1.0.png and flux-1-schnell.jpg are generation/test outputs."}
+  ],
+  "semantic_anchors":[
+    {"path":"GWT.md","kind":"PRIMARY_ARCHITECTURE_MEASUREMENT_NOTE","findings":["Global Workspace is a cognitive integration path, not UI; component existence is insufficient without process-crossing re-entry and competing consumers.","Historical source reports only 4 of 16 listed consumers actually read workspace_broadcast, an under-connectivity failure.","Workspace pipeline uses salience competition, ignition threshold 0.55, focused vs compressed channels and durable DB re-entry.","Source separates exact numeric machine state, word-level workspace projection, and slowly learned weights/dispositions.","Historical latency numbers are source-reported and were not reproduced in this run."]},
+    {"path":"TENSOR.txt","kind":"COMPACT_STATE_PROJECTION","findings":["Compact projection preserves K6 workspace channels, EPQ5, THAL9, NAC9, novelty annotations and the 4-of-16 consumer warning."]},
+    {"path":"KONZEPT-REGELKREIS.xeno","kind":"STATE_MACHINE_AND_AUTHORITY_CONTRACT","findings":["Allowed transitions are explicit; not every describable state is legal.","kern.db is designated one truth; a second state store is forbidden because display and execution divergence becomes a lie.","Judged/terminal evidence is immutable; rework is a new run.","Workers finish own open packet before taking new work; closure requires measured after-value/token and independent Chef remeasurement."]},
+    {"path":"AUFTRAG-KNETKUGELN.md","kind":"EVENT_DRIVEN_UI_HARNESS_CONTRACT","findings":["Visible coordination and actual agent/session work must use the same authoritative source.","No permanent render loop; objective idle oracle is zero requestAnimationFrame passes after settle.","Three prototypes A/B/C share identical test states and are selected by measured material realism, FPS/main-thread cost, runtime size and 100-random-interaction robustness.","If a hard visual requirement is too expensive, report measured evidence and fallback instead of silently omitting it."]},
+    {"path":"BAUAUFTRAG-APPS.md","kind":"UI_DATAFLOW_CONTRACT","findings":["18 exact app surfaces map endpoint groups explicitly.","No polling; state flows via /api/kern/strom.","Missing sources and failures must remain visible rather than fabricated or silently empty.","Before/after measurement is mandatory; source reports S5 baseline 4 of 55 endpoint groups = 0.07."]}
+  ],
+  "current_architecture_feedback":[
+    {"target":"harness","rule_id":"SYNTEQ-SOURCE-IDENTITY","rule":"Display/readout and execution/session state must derive from the same authoritative source; test divergence explicitly."},
+    {"target":"harness","rule_id":"SYNTEQ-GWT-REAL-FANOUT","rule":"Do not PASS a Global Workspace because a module exists. Require multiple independent consumers, re-entry receipts and demonstrable downstream behavior change."},
+    {"target":"harness","rule_id":"SYNTEQ-TERMINAL-IMMUTABILITY","rule":"Terminal judged/verified evidence is immutable; rework creates a new lineage/run instead of rewriting the old result."},
+    {"target":"harness","rule_id":"SYNTEQ-MEASURED-CLOSURE","rule":"Performance/capability completion requires before/after measurements or task-grounded proof; self-report alone cannot close a claim."},
+    {"target":"harness","rule_id":"SYNTEQ-IDLE-QUIESCENCE","rule":"Event-driven visual/processing components must settle to an explicit idle oracle; no permanent polling/render loop without evidence-based necessity."},
+    {"target":"needle","rule_id":"SYNTEQ-ONE-AUTHORITY","rule":"Needle should expose scoped transitions over one authoritative execution/state surface; UI/model projections are read views, not competing stores."},
+    {"target":"frank","rule_id":"SYNTEQ-NUMBER-WORD-WEIGHT","rule":"Keep exact machine state, bounded model-facing qualitative projection, and slow learned dispositions as distinct layers with provenance and promotion tests."},
+    {"target":"rae","rule_id":"SYNTEQ-HIVE-WORKSPACE-CAUSALITY","rule":"The repo-native RAE must not call a state surface global merely because it is written. Track actual organ consumers, re-entry and causal behavior changes."}
+  ],
+  "falsifiers":[
+    "If a replicated same-source-vs-projected-store experiment shows no detectable divergence risk under failures/restarts, the single-authority constraint may be relaxed only with explicit consistency semantics.",
+    "If a workspace with one consumer outperforms multi-consumer competition/re-entry on held-out causal tasks, the GWT fan-out requirement should be revised rather than preserved by analogy.",
+    "If permanent polling/render loops are measurably cheaper and equally recoverable than event-driven quiescence on target hardware for a specific subsystem, allow that subsystem by measured exception.",
+    "If number/word/weight separation causes loss of task-critical precision in held-out FRANK interactions, redesign the projection rather than leaking all raw state into model context."
+  ],
+  "credit":{"exact_scoped_leaf_disposition":"310/310","exact_global_level0_percent_added":0.0,"earned_work_hours_added":0.0,"semantic_credit_policy":"family/mechanism level only; generated/version/cache/binary replicas do not multiply credit"},
+  "status":"SCOPED_SEMANTIC_DISPOSITION_COMPLETE",
+  "created_at":"2026-08-09T12:35:00+07:00"
+}

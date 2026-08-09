@@ -1,0 +1,147 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0943p0700-chatgpt-secondary-retina-e2e-metric-executable-reconciliation",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "COMPLETED_PARTIAL_SHARD",
+  "source_universe": "DRIVE_CLAY",
+  "shard_kind": "DIGITAL_RETINA_E2E_EXECUTABLE_METRIC_AND_SECURITY_LINEAGE",
+  "exact_level0_coverage_credit_percent": 0.0,
+  "reason_no_exact_credit": "The 64-leaf digital-retina-e2e denominator is locally frozen, but the global Level-0 Drive and Project-Frankenstein atomic denominator remains incomplete. This shard must not fabricate global positive completion.",
+  "source_scope": {
+    "folder": "digital-retina-e2e",
+    "drive_folder_id": "1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja",
+    "local_denominator_ref": "research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_E2E_RECURSIVE_DENOMINATOR.json",
+    "locally_frozen_leaf_count": 64
+  },
+  "content_hash_checkpoint": [
+    {"title":"vlm_coverage_freshset.py","drive_id":"10RBQG0oSituI-5UGNH48klCgwIORQEnd","bytes":15283,"sha256":"72dd3546205d5bd539c3afb0038444251d47d23ea87bda989698e5665b65bd83"},
+    {"title":"vlm_coverage_hard.py","drive_id":"1AYorVd0-n4tRY-6t9Z94Hxz9T1ZpLlJ_","bytes":21077,"sha256":"2d6bb3d8d6a52a7ffe39312670203aaf3a81f12aaab17cf88506497a135f851e"},
+    {"title":"tier3_e2e.py","drive_id":"1UW4tUKOKHucC_Es-v5P281h109nKGwmj","bytes":16061,"sha256":"4fd9ee45e3b49aa59329df8518483cf566d6637e907a076e325dc39e80adba09"},
+    {"title":"hard_coverage.json","drive_id":"1wHx4qVJ0lADQk_4vlJDoLXJFaJZSb2U6","bytes":38476,"sha256":"127951bf60caf3a44365fbdaf94caa01e25b24008b72626a51db19cfaba73be2"},
+    {"title":"p12_FINAL.json","drive_id":"12uAsKpwCXspllndt9tFQ_jbP-Sr0th0j","bytes":43259,"sha256":"6dc0ef16e1756834be04502cf501ae25a0778f37ee846fdec32bb0e69aff31b0"},
+    {"title":"freshset_coverage.json","drive_id":"1e3VGdtYziHp9VT_9ckuJ6VFEntL8Tb8U","bytes":108571,"sha256":"2858648db19c818e091ab119f58190a87338bcf04441e8c7a985f496c86cbe23"}
+  ],
+  "executable_metric_contract": {
+    "strict": {
+      "meaning": "The benchmark counts a baseline phrase as covered when at least 60% of its meaningful tokens are present in Retina's surfaced text; single-token phrases use an exact token/text condition.",
+      "role": "Measures what downstream text-consuming cognition can actually read from Retina output.",
+      "warning": "This remains a lexical/surface proxy and is not equivalent to compositional visual correctness."
+    },
+    "clip_lenient": {
+      "meaning": "Baseline phrases are independently scored against the source image through Retina's CLIP score endpoint; phrase coverage is thresholded on image-text cosine similarity.",
+      "default_threshold_in_freshset": 0.20,
+      "role": "Measures whether the vision encoder carries a weak semantic signal for a phrase even when Retina does not surface the phrase in text.",
+      "warning": "This is not equivalent to surfaced recognition and is highly threshold-sensitive."
+    }
+  },
+  "measurement_lineage": [
+    {
+      "artifact": "hard_coverage.json",
+      "historical_state": "early hard-set strict result",
+      "images": 12,
+      "phrases": 286,
+      "strict_covered": 101,
+      "strict_percent": 35.31468531468531,
+      "note": "This result predates the later gap-close snapshots and must remain as a negative-result baseline."
+    },
+    {
+      "artifact": "p12_FINAL.json",
+      "historical_state": "later hard-set gap-close snapshot",
+      "images": 12,
+      "phrases": 279,
+      "strict_covered": 245,
+      "strict_percent": 87.81362007168458,
+      "clip_lenient_covered": 264,
+      "clip_lenient_percent": 94.6236559139785,
+      "clip_lenient_threshold": 0.20,
+      "note": "Later vocab/emission expansion produced large strict gains on the same hard-set family; this does not erase the earlier failure lineage."
+    },
+    {
+      "artifact": "freshset_coverage.json",
+      "historical_state": "fresh never-before-measured corpus",
+      "images": 32,
+      "phrases": 681,
+      "strict_covered": 492,
+      "strict_percent": 72.2466960352423,
+      "clip_lenient_covered": 630,
+      "clip_lenient_percent": 92.51101321585904,
+      "clip_lenient_threshold": 0.20,
+      "note": "Fresh-set strict coverage falls materially below the tuned hard-set p12 value while CLIP-lenient remains high; this is direct evidence that tuning/surfacing gains do not imply equivalent out-of-sample text coverage."
+    }
+  ],
+  "reconciled_findings": [
+    {
+      "id": "RET-E2E-F1",
+      "classification": "MEASUREMENT_INVARIANT",
+      "finding": "Retina must report at least three separate quantities: surfaced strict-text recall, encoder/embedding signal recall, and task/compositional correctness. A single 'coverage' number is scientifically ambiguous."
+    },
+    {
+      "id": "RET-E2E-F2",
+      "classification": "OVERFIT_OR_EVAL_ADAPTATION_WARNING",
+      "finding": "The hard-set lineage improves from 35.3% strict to 87.8% strict after targeted vocabulary/emission gap-closing, while a later fresh 32-image corpus measures 72.25% strict. Treat hard-set improvement as genuine engineering progress but not as a generalization estimate without the fresh-set result beside it."
+    },
+    {
+      "id": "RET-E2E-F3",
+      "classification": "THRESHOLD_SENSITIVITY",
+      "finding": "CLIP-lenient coverage near 93-95% at threshold 0.20 is intentionally a weak-cue metric. It must never be surfaced as equivalent to factual recognition or downstream-readable perception."
+    },
+    {
+      "id": "RET-E2E-F4",
+      "classification": "EXECUTABLE_GATING_CONTRACT",
+      "finding": "tier3_e2e.py explicitly tests positive and negative gating: multi-object/question cases should produce region captions/VQA; simple non-question cases should keep region_captions and VQA empty. This is reusable Harness evidence for sparse conditional perception rather than always-on expensive stages."
+    },
+    {
+      "id": "RET-E2E-F5",
+      "classification": "SECURITY_NEGATIVE_RESULT",
+      "finding": "Historical evaluation scripts contain embedded non-placeholder credential-like defaults for Retina and/or external evaluation providers. Secret values are intentionally not copied into this receipt. These artifacts must be treated as compromised historical credentials: remove defaults from executable history where practical and rotate/revoke any credential that could still be active."
+    }
+  ],
+  "current_architecture_feedback": {
+    "frank": [
+      "Keep visual evidence typed and metric-versioned; do not let CLIP-lenient similarity become semantic truth.",
+      "Use sparse conditional escalation: familiar/simple input should bypass expensive/question-specific stages unless uncertainty or user intent requires them."
+    ],
+    "harness": [
+      "Freeze three separate Retina acceptance tracks: strict surfaced evidence, embedding-signal recall, and relational/task correctness.",
+      "Carry the 12-image hard family plus the 32-image fresh family as distinct regression suites.",
+      "Preserve positive/negative gating tests from tier3_e2e.py.",
+      "Add a secret-scanning gate forbidding credential-like literal defaults in source/eval artifacts."
+    ],
+    "claycode": [
+      "IR should represent metric/calibration identity and gated-stage activation as state, not infer them from prose."
+    ],
+    "claygraph": [
+      "Store benchmark family, sample identity, metric version and threshold as provenance edges so tuned and fresh results cannot be conflated."
+    ],
+    "unifieddb": [
+      "Persist visual calibration/threshold history separately from classifier/dictionary state and from sensor observations."
+    ],
+    "gwt": [
+      "Only broadcast similarity-derived percepts as weighted hypotheses unless corroborated by stronger sensor/relational evidence."
+    ],
+    "emergenz": [
+      "Embedding coverage is not evidence of emergent compositional understanding; require ablation and relation/task tests."
+    ],
+    "hyperposition": [
+      "Keep weak semantic alternatives live without collapsing them into the selected factual percept."
+    ],
+    "clay": [
+      "Dissolved Retina should preserve sparse-stage gating and measurement provenance while replacing the old textual black-box boundary."
+    ]
+  },
+  "earned_work": {
+    "hours_added_low": 0.0,
+    "hours_added_center": 0.0,
+    "hours_added_high": 0.0,
+    "reason": "This sharpens already-known Retina/MVC work and adds reproducible evidence plus a security negative result; row-level overlap remains unresolved, so no duplicate earned-work hours are credited."
+  },
+  "remaining_e2e_obligations": [
+    "Hash/content-close the remaining locally enumerated digital-retina-e2e leaves, including baseline/result lineage, screenshots and freshset image corpus.",
+    "Bind p2..p12 phase snapshots to source commit/version changes where available.",
+    "Cross-reconcile digital-retina E2E artifacts with the pinned tracked-source commit and Project-Frankenstein Retina history.",
+    "Verify/record credential revocation status without storing secret values.",
+    "Continue full Drive/AICORE recursive denominator closure and Project-Frankenstein history closure before global Level-0 percentage can advance."
+  ]
+}

@@ -1,29 +1,33 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "20260809T1505p0700-chatgpt-secondary",
   "actor": "chatgpt-secondary",
   "trigger": "claycode",
   "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
-  "inputs": {
-    "frank": [
-      "research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md",
-      "research_entity/rooms/center_events/20260809T1450p0700_frank_v01_deep_bugsearch_iter3.json"
-    ],
-    "clay": ["research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md"],
-    "harness": ["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md"],
-    "claygraph": ["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"],
-    "unifieddb": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"],
-    "gwt": ["research_entity/global/RAE_GWT_MICROKERNEL.clay", "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
-    "hyperposition": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
-    "emergenz": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md", "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
-    "claycode": [
-      "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
-      "research_entity/claycode/g9/grammar.ebnf",
-      "research_entity/claycode/g9/CLAYCODE_G9_DYNAMIC_BINDING_LATTICE_CANDIDATE.clay",
-      "research_entity/knowledge/claycode/USAGE_DERIVED_DYNAMIC_WORK_TRUTH_SCOPE_2026-08-09.clay"
-    ]
+  "registry_scientific_branches": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "branch_priority": ["frank", "clay", "harness", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "claycode"],
+  "branches": [
+    {
+      "branch": "frank",
+      "latest_run": "center-frank-v01-deep-bugsearch-iter3-20260809T1450p0700",
+      "materials": ["research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md", "research_entity/rooms/center_events/20260809T1450p0700_frank_v01_deep_bugsearch_iter3.json"]
+    },
+    {"branch": "clay", "materials": ["research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md"]},
+    {"branch": "harness", "materials": ["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md"]},
+    {"branch": "claygraph", "materials": ["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql", "research_entity/claycode/g9/CLAYCODE_G9_DYNAMIC_BINDING_LATTICE_CANDIDATE.clay"]},
+    {"branch": "unifieddb", "materials": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"]},
+    {"branch": "gwt", "materials": ["research_entity/global/RAE_GWT_MICROKERNEL.clay", "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"]},
+    {"branch": "hyperposition", "materials": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"]},
+    {"branch": "emergenz", "materials": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md", "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"]},
+    {"branch": "claycode", "materials": ["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "research_entity/claycode/g9/grammar.ebnf", "research_entity/knowledge/claycode/USAGE_DERIVED_DYNAMIC_WORK_TRUTH_SCOPE_2026-08-09.clay"]}
+  ],
+  "special_rules": {
+    "claycode_requires_latest_frank_research_as_primary_feedback": true,
+    "claycode_requires_deep_claygraph_input": true,
+    "claycode_requires_deep_unifieddb_input": true,
+    "claycode_requires_goodman_anti_echo_review": true,
+    "claycode_latest_frank_architecture_artifact": "research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md"
   },
-  "deep_inputs_present": {"claygraph": true, "unifieddb": true, "harness": true},
   "frank_architecture_claycode_json": {
     "status": "NOT_FOUND_VIA_GITHUB_SEARCH",
     "fallback": "current executable/runtime evidence and current FRANK contracts were used; no file was invented"
@@ -40,5 +44,5 @@
     "claycode": "candidate ProjectionMode + AdmissionIdentity + SchemaBinding refinements; no grammar keyword expansion selected"
   },
   "strong_promotion_eligible": false,
-  "reason": "target-machine FRANK reproduction and H1/H2 differential fixtures are still open; current run provides isolated/local executable evidence only"
+  "reason": "target-machine FRANK reproduction and H1/H2 differential fixtures are still open; current run provides isolated E2B plus local executable evidence only"
 }

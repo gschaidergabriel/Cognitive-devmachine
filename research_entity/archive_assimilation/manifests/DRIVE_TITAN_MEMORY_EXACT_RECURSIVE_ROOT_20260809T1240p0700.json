@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-TITAN-MEMORY-EXACT-RECURSIVE-ROOT-20260809T1240p0700",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "source":{"title":"titan-memory","drive_id":"1fnB_uYrxTL5ecjsyof8fIEbn-mnr4x19","fresh_observed_at":"2026-08-09T12:39:30+07:00","direct_entries":14,"direct_folders":9,"direct_files":5,"direct_folder_titles":[".git",".pytest_cache","assets","benchmarks","docs","examples","tests","lcme",".venv"],"direct_file_titles":["README.md","pyproject.toml",".gitignore","openapi_letta.json","LICENSE"],"git_drive_id":"1s5VagzrofdZ39JjV3oPvLCLH0YRJi1wv","venv_drive_id":"15SDcUJdzzKhoc74cwwh5UCL0W_u74GKi"},
+  "evidence_refs":[
+    "research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_CORE_SUPPORT_EXACT_RECURSIVE_20260809T1052p0700.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1054p0700_chatgpt_secondary_titan_memory_git_support_exact.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_RECORD_FILE_IDENTITY_20260809T1058p0700.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_PIP_INTERNAL_FOLDER_AUDIT_20260809T1203.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_PIP_VENDOR_FOLDER_AUDIT_20260809T1210.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_SETUPTOOLS_FOLDER_AUDIT_20260809T1228.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_AGGREGATION_FRONTIER_20260809T1113p0700.json"
+  ],
+  "partition_counts":{
+    "core_and_small_support":{"folders":11,"files":45,"units":56,"status":"EXACT_RECURSIVE_CLOSED"},
+    "git":{"git_root":1,"descendant_folders":144,"files":203,"folders_including_git_root":145,"units_including_git_root":348,"status":"EXACT_RECURSIVE_CLOSED"},
+    "venv":{"venv_root":1,"folders_below_venv_root":250,"files_below_venv_root":1721,"folders_including_venv_root":251,"units_including_venv_root":1972,"status":"EXACT_RECURSIVE_CLOSED","folder_closure_derivation":{"previously_exact_below_venv_root":48,"pip_internal_direct_audit":38,"pip_vendor_direct_audit":66,"setuptools_direct_audit":98,"sum_below_venv_root":250,"remaining":0}}
+  },
+  "exact_recursive_counts_below_titan_root":{"folders":407,"files":1969,"units":2376,"folder_formula":"11 core/support + 145 .git including .git root + 251 .venv including .venv root = 407","file_formula":"45 core/support + 203 .git + 1721 .venv = 1969","unit_formula":"407 + 1969 = 2376"},
+  "exact_recursive_counts_including_titan_root":{"folders":408,"files":1969,"units":2377},
+  "closure_proof":{"prior_open_empty_directory_audit":202,"pip_internal":{"expected":38,"direct_listed":38,"missing":0,"extra":0,"child_set_mismatch_nodes":0},"pip_vendor":{"expected":66,"direct_listed":66,"missing":0,"extra":0,"child_set_mismatch_nodes":0},"setuptools":{"expected":98,"direct_listed":98,"missing":0,"extra":0,"child_set_mismatch_nodes":0},"sum_closed":"38+66+98=202","remaining":0,"root_identity_fresh_recheck":"MATCHED_14_DIRECT_ENTRIES_9_FOLDERS_5_FILES"},
+  "classification":{"vendored_runtime_support_semantic_credit":"ZERO_DUPLICATE_VENDOR_SUPPORT","prior_executable_semantics":"PRESERVED_FROM_PRIOR_TITAN_RECEIPTS","new_value":"exact recursive structural denominator closure only"},
+  "credit":{"exact_global_level0_percent_added":0.0,"earned_work_hours_added":0.0,"reason":"Scoped Titan root denominator closure does not freeze the combined Drive + Project-Frankenstein + cross-source Level-0 denominator."},
+  "status":"EXACT_RECURSIVE_ROOT_CLOSED",
+  "created_at":"2026-08-09T12:40:00+07:00"
+}

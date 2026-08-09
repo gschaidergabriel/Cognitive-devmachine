@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T06:45:34+07:00",
+  "subject": "CC-WP-02 complete strict closure transport from Dr.-Unterweger Hostinger runner",
+  "source_repository": "gschaidergabriel/clay-global-research-entity",
+  "source_sha_requested": "9624837c411f3ba5acf761f622020278329fc581",
+  "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+  "workflow_run_id": 31342673096,
+  "workflow_job_id": 93318914876,
+  "runner": {
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "hostname": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "repository_permission": "contents:read"
+  },
+  "result": "BLOCKED_BEFORE_SCIENTIFIC_TEST",
+  "failure_class": "CROSS_REPOSITORY_READ_AUTHORIZATION",
+  "observed_error": "fatal: could not read Username for 'https://github.com': No such device or address",
+  "scientific_test_executed": false,
+  "full_wp02_closure_receipt_created": false,
+  "interpretation": "The working self-hosted Hostinger runner in Dr.-Unterweger cannot anonymously clone the Clay repository, and the executor repository token was intentionally not repurposed or expanded for cross-repository access. This is transport/auth evidence only, not a ClayCode failure.",
+  "cross_repo_blob_shortcut": {
+    "attempted": true,
+    "result": "REFUTED",
+    "error": "GitHub create-tree rejected a Clay-only blob SHA in the Dr.-Unterweger repository with HTTP 422 invalid blob.",
+    "production_ref_mutated": false
+  },
+  "safe_next_options": [
+    "Restore repository-eligible Hostinger runner registration for clay-global-research-entity.",
+    "Provide an explicitly owner-authorized read-only cross-repository credential/runner group if desired.",
+    "Construct a bounded hash-verified exact-source bundle only when its expected value exceeds coordination and maintenance cost."
+  ],
+  "architecture_delta": "NO_CHANGE",
+  "counts_as_wp02_pass": false,
+  "authority_invariant": "model output != execution authority",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+}

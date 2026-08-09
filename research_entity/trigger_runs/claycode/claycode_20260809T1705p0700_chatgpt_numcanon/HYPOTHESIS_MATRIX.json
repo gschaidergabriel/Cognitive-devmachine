@@ -1,0 +1,48 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1705p0700_chatgpt_numcanon",
+  "hypotheses":[
+    {
+      "id":"H-CC-NUMCANON-20260809-01",
+      "status":"SUPPORTED_WORKING_HYPOTHESIS",
+      "claim":"ClayCode semantic hashes containing numeric leaves require explicit type-directed numeric canonicalization rather than host-native JSON number serialization.",
+      "prediction":"Cross-runtime host-native numeric serialization will diverge for semantically relevant edge cases while an explicit typed canonical token will remain stable on the same corpus.",
+      "observed":"Python/Node host-native float JSON differed in 204/10000 cases; candidate typed f64 tokens differed in 0/10000; candidate exact integer tokens differed in 0/9.",
+      "falsifier":"A production ClayCode canonicalizer can prove equivalent cross-runtime numeric semantic identity and roundtrip preservation without explicit type-directed numeric rules across the admitted numeric domain.",
+      "evidence_class":"LOCAL_CROSS_RUNTIME_COMPONENT_EXPERIMENT"
+    },
+    {
+      "id":"H-CC-INTLOWER-20260809-02",
+      "status":"SUPPORTED_WORKING_HYPOTHESIS",
+      "claim":"Exact ClayCode Int semantics must reject or adapt lowerings to target numeric types that cannot exactly represent the source value.",
+      "prediction":"Values outside JavaScript Number's exact integer range will change value when naively lowered to Number.",
+      "observed":"9007199254740993 serialized after Number conversion as 9007199254740992; 9223372036854775807 became 9223372036854776000; a 31-digit integer collapsed to 1e+30.",
+      "falsifier":"The released target lowering either uses a proven exact integer representation for all admitted Int values or statically bounds Int so every admitted value is exactly representable on every selected backend.",
+      "evidence_class":"LOCAL_CROSS_RUNTIME_COMPONENT_EXPERIMENT"
+    },
+    {
+      "id":"H-CC-F64SPECIAL-20260809-03",
+      "status":"OPEN_REFINED",
+      "claim":"NaN, infinities and signed zero require explicit ClayCode semantic and wire policies rather than accidental host behavior.",
+      "prediction":"Host JSON and target-runtime behavior will disagree or erase distinctions for special IEEE-754 values.",
+      "observed":"Python emitted NaN/Infinity tokens under its default permissive JSON mode; Node JSON.stringify converted non-finite Number values to null and erased -0 in JSON presentation.",
+      "falsifier":"The released type/effect/canonicalization contract excludes these values by type or defines and verifies a single target-independent behavior including arithmetic/replay implications.",
+      "evidence_class":"LOCAL_COMPONENT_PLUS_PRIMARY_SPEC_TRIANGULATION"
+    },
+    {
+      "id":"H0-CC-HOSTJSON-SEMID-20260809-01",
+      "status":"REFUTED_BY_LOCAL_COUNTEREXAMPLE",
+      "claim":"Raw host-native JSON number serialization is safe semantic-hash material for ClayCode numeric values.",
+      "counterexample":"204/10000 f64 presentation mismatches plus exact-integer loss under JS Number lowering.",
+      "evidence_class":"LOCAL_CROSS_RUNTIME_COMPONENT_EXPERIMENT"
+    },
+    {
+      "id":"H0-CC-NEWNUMSYNTAX-20260809-02",
+      "status":"NOT_SELECTED",
+      "claim":"The numeric identity problem requires a new FRANK-specific ClayCode syntax or cognition primitive.",
+      "reason":"The observed failure is resolved at typed canonical IR/checker/lowering boundaries in the bounded experiment; no executable counterexample requires FRANK-specific syntax.",
+      "falsifier":"A production application or FRANK component demonstrates that existing typed values plus canonicalizer/lowering contracts cannot express the required numeric semantics."
+    }
+  ],
+  "promotion":"NONE"
+}

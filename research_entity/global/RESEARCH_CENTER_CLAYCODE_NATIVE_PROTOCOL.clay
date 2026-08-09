@@ -1,9 +1,10 @@
 module rae.research_center.claycode_native
-version "1.1"
+version "1.2"
 status PROJECT_OWNER_FIXED_TARGET
 
 entity RAE=frank-project-global-research-entity
 stack LATEST=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
+live_knowledge=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
 claycode_worker_federation=@research_entity/global/CLAYCODE_RESEARCH_CENTER_WORKER_FEDERATION.clay
 
 law CENTER_LANGUAGE = LATEST.claycode
@@ -13,8 +14,11 @@ law JSON_GIT = transport_envelope_only
 law PROSE_COORDINATION_TRUTH = FORBIDDEN
 law CLAYCODE_WORKER_NETWORK = claycode_worker_federation
 law CLAYCODE_ISOLATED_WORK = FORBIDDEN
+law LIVE_REFRESH_EVERY_MATERIAL_RESEARCH_OPERATION = MANDATORY
+law ONE_REFRESH_AT_RUN_START = INSUFFICIENT
 
 rule every_worker before room_action -> resolve(LATEST)
+rule every_worker before room_action -> live_knowledge.refresh
 rule stale(LATEST) -> refresh_or(DEGRADED_STALE_STACK)
 rule every_room_event.semantic_payload -> parse_as(LATEST.claycode)
 rule every_task.goal -> ClayCode
@@ -28,12 +32,35 @@ rule every_cross_room_delta.delta -> ClayCode
 rule every_fusion.selection -> ClayCode
 rule every_conflict.alternatives -> ClayCode
 
+// Recursive freshness inside research itself.
+rule every_hypothesis_round.before -> live_knowledge.refresh
+rule every_counterhypothesis_round.before -> live_knowledge.refresh
+rule every_challenge_round.before -> live_knowledge.refresh
+rule every_fusion_round.before -> live_knowledge.refresh
+rule every_cross_room_fusion.before -> live_knowledge.refresh
+rule every_experiment_round.before -> live_knowledge.refresh
+rule every_experiment_round.after -> live_knowledge.refresh
+rule every_analysis_round.before -> live_knowledge.refresh
+rule every_implementation_round.before -> live_knowledge.refresh
+rule every_handoff.before -> live_knowledge.refresh
+rule every_durable_research_write.before -> live_knowledge.refresh
+rule every_claim_promotion.before -> live_knowledge.refresh
+rule live_knowledge.external_applicable -> fresh_primary_or_official_external_retrieval
+rule live_knowledge.cache_only -> FORBIDDEN_AS_FRESHNESS_PROOF
+rule live_knowledge.unavailable -> DEGRADED_LIVE_REFRESH
+rule DEGRADED_LIVE_REFRESH -> no_fully_current_claim_promotion
+
 // ClayCode workers are a mandatory intelligent federation mediated by the Research Center.
 rule trigger_worker(claycode).start -> claycode_worker_federation.center.join
+rule trigger_worker(claycode).start -> live_knowledge.refresh
+rule trigger_worker(claycode).before_claim -> live_knowledge.refresh
 rule trigger_worker(claycode).before_claim -> claycode_worker_federation.center.read_current_coordination_state
 rule trigger_worker(claycode).before_claim -> claycode_worker_federation.detect_overlap_dependencies_conflicts_reuse
 rule trigger_worker(claycode).material_delta -> claycode_worker_federation.center.route_to_affected_workers
+rule trigger_worker(claycode).material_delta -> live_knowledge.refresh_before_next_material_decision
+rule trigger_worker(claycode).before_semantic_commit -> live_knowledge.refresh
 rule trigger_worker(claycode).before_semantic_commit -> claycode_worker_federation.center.reread_and_revalidate
+rule trigger_worker(claycode).complete -> live_knowledge.refresh
 rule trigger_worker(claycode).complete -> require(claycode_worker_federation.completion_receipts)
 rule uncoordinated_claycode_worker -> fail_closed(INCOMPLETE_UNCOORDINATED)
 
@@ -166,3 +193,6 @@ invariant ALL_CLAYCODE_WORKERS_NETWORK_THROUGH_RESEARCH_CENTER
 invariant NO_CLAYCODE_WORKER_MAY_CLAIM_OR_COMPLETE_IN_ISOLATION
 invariant CLAYCODE_DUPLICATE_WORK_REQUIRES_EXPLICIT_INDEPENDENT_REPLICATION
 invariant CLAYCODE_MATERIAL_DELTAS_ROUTE_TO_ALL_SEMANTICALLY_AFFECTED_WORKERS
+invariant EVERY_MATERIAL_RESEARCH_OPERATION_REFRESHES_LIVE_KNOWLEDGE
+invariant EVERY_RESEARCH_SUBCYCLE_REFRESHES_AGAIN
+invariant NO_LONG_STALE_RESEARCH_CHAIN_AFTER_SINGLE_REFRESH

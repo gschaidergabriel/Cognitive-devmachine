@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "event_id": "ACTIONS-PRERUN-CROSS-REPO-REPLICATION-20260809T175300Z",
+  "kind": "NEGATIVE_EXECUTION_EVIDENCE_REPLICATION",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T17:53:00Z",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "trigger": "go",
+  "replicates_event": "research_entity/state/system/events/20260809T175100Z-chatgpt-secondary-github-actions-prerun-blocker.json",
+  "classification": "CROSS_REPOSITORY_REPRODUCTION_OF_GITHUB_ACTIONS_PRE_STEP_FAILURE_EXACT_ROOT_CAUSE_UNKNOWN",
+  "new_observation": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pull_request": 52,
+    "head_sha": "97e55396e59d9a0afabc670260b56f7dac001553",
+    "workflow_run_id": 31327468352,
+    "workflow": "Clay PR-only WP02 Dispatch Transport",
+    "initial_job_id": 93280013413,
+    "initial_status": "completed",
+    "initial_conclusion": "failure",
+    "initial_steps_returned": [],
+    "initial_job_logs_result": "404_BlobNotFound",
+    "rerun_requested_via_api": true,
+    "rerun_api_accepted": true,
+    "rerun_job_id": 93280085034,
+    "rerun_status": "completed",
+    "rerun_conclusion": "failure",
+    "rerun_steps_returned": [],
+    "inference": "The Clay repository independently reproduced the same failure before any observable workflow step. The transport Bash/curl never executed and no workflow_dispatch HTTP request was made."
+  },
+  "controls": {
+    "same_repository_pr": true,
+    "github_hosted_runner_requested": "ubuntu-latest",
+    "self_hosted_execution_in_probe": false,
+    "checkout_in_probe": false,
+    "repository_write_in_probe": false,
+    "scientific_or_release_authority": false,
+    "probe_closed_without_merge": true
+  },
+  "external_counterevidence": {
+    "source": "official GitHub Status",
+    "retrieved_during_turn": true,
+    "actions_current_status": "OPERATIONAL",
+    "latest_visible_global_actions_incident_in_status_history": "2026-07-19/20 incident resolved",
+    "consequence": "A current global GitHub Actions outage is weakened as the explanation for this reproduced pre-step failure."
+  },
+  "updated_hypotheses": [
+    {
+      "hypothesis": "Account-level GitHub Actions billing/quota/budget/payment admission is blocking hosted jobs before step execution.",
+      "status": "PLAUSIBLE_NOT_VERIFIED_STRENGTHENED_BY_CROSS_REPO_REPLICATION",
+      "reason": "The same pre-step failure shape is now observed in both Dr.-Unterweger and clay-global-research-entity while GitHub Status reports Actions operational. Current connector cannot inspect account billing/budget surfaces."
+    },
+    {
+      "hypothesis": "Shared account/repository Actions policy or workflow admission configuration blocks jobs before runner execution.",
+      "status": "PLAUSIBLE_NOT_VERIFIED",
+      "reason": "Workflow runs instantiate but jobs fail before visible steps. Exact Settings -> Actions policy is not exposed by the connector."
+    },
+    {
+      "hypothesis": "Current global GitHub Actions outage explains the failures.",
+      "status": "WEAKENED",
+      "reason": "Official status reports Actions operational; recent historical incidents are resolved."
+    },
+    {
+      "hypothesis": "ClayCode parser/V17 or the dispatch Bash/curl caused the observed failure.",
+      "status": "REFUTED_FOR_THE_OBSERVED_PRE_STEP_FAILURE",
+      "reason": "No workflow step executed, so neither parser code nor dispatch code ran."
+    }
+  ],
+  "architecture_consequence": "NO_CLAYCODE_OR_FRANK_SEMANTIC_CHANGE. Keep WP02/WP06 receipts UNKNOWN/MISSING_EVIDENCE. Do not weaken receipt gates or move write authority into self-hosted execution to bypass orchestration failure.",
+  "safe_next_actions": [
+    "Owner/operator checks GitHub personal Billing & licensing -> Actions usage/budgets/payment state.",
+    "Owner/operator checks repository Settings -> Actions -> General for both repositories and verifies allowed-actions/workflow-permission/admission configuration.",
+    "Verify an eligible online self-hosted runner is registered or shared specifically with clay-global-research-entity; Dr.-Unterweger execution history does not prove Clay repository scope.",
+    "After Actions admission is restored, rerun the existing canonical claycode-vps-wp02-probe.yml and accept only the persisted exact-SHA receipt."
+  ],
+  "hostinger_machine_status": "REMAINS_VERIFIED_BY_PRIOR_REAL_FRANK_AND_QWEN_EXECUTION_RECEIPTS; THIS EVENT DOES_NOT_PROVE_HOSTINGER_OFFLINE",
+  "out_of_box_accounting": "NO_NEW_OOB_EXPERIMENT_ADDED; this is infrastructure replication/negative evidence only.",
+  "promotion": "NONE",
+  "authority_invariant": "model output != execution authority",
+  "paid_training_started": false
+}

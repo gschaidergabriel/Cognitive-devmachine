@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "event_id": "WORK-FRANK-REAL-QWEN4B-SHADOW-20260810",
+  "created_at": "2026-08-10T00:08:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "subject": "Frank v0.1",
+  "status": "ACTIVE_EXECUTION_NOT_PASS",
+  "goal": "Frank v0.1 voll lauffaehig auf Andreas PC",
+  "execution_lane": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "runner": "Hostinger self-hosted GitHub Actions runner / digital-retina",
+    "target_semantics": "Ubuntu Linux x86_64 CPU-only integration/falsification lane",
+    "final_acceptance_substitute": false
+  },
+  "experiment": {
+    "id": "FRANK_REAL_QWEN4B_SHADOW_DIFFERENTIAL",
+    "go_out_of_box_experiment": true,
+    "model_repo": "ggml-org/Qwen3-4B-Instruct-2507-Q8_0-GGUF",
+    "model_revision_short": "e92aed4",
+    "model_revision_full_verified_web": "e92aed4f497879443454375ac6786f6d240d0ed2",
+    "model_file": "qwen3-4b-instruct-2507-q8_0.gguf",
+    "model_file_sha256": "ae916ede1c010a26955ee8ae2e908bf8815a3f135ec860439ab924701c69d5f1",
+    "model_file_bytes": 4280403520,
+    "quantization": "Q8_0",
+    "llama_cpp_commit": "936918514ce522b553c0fd80b169a6440e6096c6",
+    "policy": "five-step fixed trajectory plus temporal_multi_signal_w4 offline shadow selection",
+    "answer_key_visible_to_policy": false,
+    "tool_execution_authority": false,
+    "scientific_promotion": false,
+    "release_claim": false
+  },
+  "preserved_negative_runs": [
+    {
+      "receipt_commit": "ed5d35e60105dc9ad12496833c219c8f0b36d3c5",
+      "tested_commit": "c2f846734cae24046097045fa8aa197f5c3ff664",
+      "result": "FAIL_BEFORE_MODEL_EXECUTION",
+      "failure_reason": "MISSING_REQUIRED_COMMAND:cmake"
+    },
+    {
+      "receipt_commit": "5092752f2c100d9d23ca7f7015e4ecb57c4db55c",
+      "tested_commit": "7216d4c9ac84e4471da2d83dc0f3f4d430403251",
+      "result": "FAIL_BEFORE_MODEL_EXECUTION",
+      "failure_reason": "BOOTSTRAPPED_NINJA_MISSING",
+      "diagnosis": "pinned wheels installed successfully; workflow assumed the wrong Debian pip --prefix script path"
+    }
+  ],
+  "current_candidate": {
+    "frank_commit": "963fd8a6a044b6f5a6ddfde88fab25d0cc6e1dae",
+    "repair": "resolve pinned CMake/Ninja executable paths from the actual temporary prefix and invoke them by absolute path",
+    "requirements_weakened": false,
+    "receipt": "PENDING_REAL_EXECUTION"
+  },
+  "concurrent_lane_observed": {
+    "frank_commit": "b8b8aea5beee6e8bde0db8b9ba1fb46795886634",
+    "description": "parallel make-based ephemeral toolchain lane",
+    "coordination": "do not treat shared ancestry as independent replication; compare receipts and retain the smallest robust bootstrap after execution"
+  },
+  "original_baseline_gate": {
+    "historical_module_replacement": false,
+    "comparison_basis": "current F6 engine-neutral local-model adapter plus current 21/21 Ubuntu integrity baseline",
+    "no_replacement_claim": true
+  },
+  "architecture_delta_status": "TESTING",
+  "architecture_delta": "No architecture promotion. Candidate adds a reproducible pinned real-model acceptance/measurement lane and tests whether adaptive recurrence telemetry survives real 4B inference.",
+  "feedback_targets": ["frank", "harness", "gwt", "emergenz", "claycode", "unifieddb", "claygraph", "hyperposition", "clayresearch"],
+  "next_update_condition": "real-model success/failure receipt from current Hostinger lane"
+}

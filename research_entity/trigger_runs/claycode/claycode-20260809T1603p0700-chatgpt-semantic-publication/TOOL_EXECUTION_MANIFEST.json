@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1603p0700-chatgpt-semantic-publication",
+  "provider_classes": {
+    "implementation": {"status":"ATTEMPTED","tools":["GitHub connector","local Python sqlite3"],"outcome":"current code/schema and executable proxy inspected/executed"},
+    "executable": {"status":"ATTEMPTED","preferred":"E2B","preferred_status":"UNAVAILABLE_ON_THIS_CHATGPT_TOOL_SURFACE","fallback":"local Python -S","outcome":"PASS 12/12 fixed + 20000 mutations"},
+    "scholarly": {"status":"ATTEMPTED","sources":["Differential Dataflow (CIDR/MSR)"],"outcome":"supports incremental delta-based maintenance as reference mechanism"},
+    "current_web": {"status":"ATTEMPTED","sources":["SQLite atomic commit official docs","MLIR dialect conversion official docs","Bytecode Alliance WIT/Component Model official docs"],"outcome":"triangulation only"},
+    "model_experiment": {"status":"NOT_REQUIRED","reason":"No claim about Qwen-4B reader behavior was tested"}
+  },
+  "source_class_boundary": "External docs support implementation patterns only; FRANK/ClayCode-specific conclusions come from repository contracts plus this run's executable proxy."
+}

@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank_20260809T1918p0700_chatgpt_secondary_research_cascade",
+  "trigger": "frank",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "final_target": "ONE_CLAY_BINARY + ONE_LOCAL_UNIFIEDDB + ONE_CLAY_NATIVE_4B",
+  "laws": [
+    "H1 is the current evidence-supported FRANK target architecture implemented first in ordinary host code; historical frankv0.1 is evidence/regression lineage, not the architecture template.",
+    "H1 implementation may proceed during BASE; H1 PASS remains gated by BASE.",
+    "H2 must reproduce frozen H1 semantics in ClayCode; inability to express validated H1 semantics reopens BASE rather than simplifying FRANK.",
+    "H3 consolidates proven H1/H2 semantics into one local Clay module/binary and one logical/local UnifiedDB; diagnostic H1/H2 service boundaries do not become final architecture by inertia.",
+    "Model, peer, Retina, graph and Needle outputs are proposals/observations, never execution authority.",
+    "Adaptive recurrence, provenance-gated binding and emergence metrics remain experiment-swappable until discriminating H1 evidence selects them.",
+    "Frank v0.1 release evidence is Ubuntu-only; non-Ubuntu portability is not on the current critical path."
+  ],
+  "steps": [
+    {
+      "order": 0,
+      "id": "CASCADE-00-FRONTEND-DRIFT-FIX",
+      "status": "EXECUTED_SUPERSEDED_BY_FASTER_FRONTIER",
+      "action": "Bind deterministic BASE frontend away from obsolete V4 to the then-current V5 candidate.",
+      "evidence": ["commit:94e9cb595661f56417212f749903cf317a05ef0a"],
+      "note": "Useful version-drift repair at execution time; later V6/V7 candidate gates advanced the frontier. Do not promote V5 as final merely because this fix landed."
+    },
+    {
+      "order": 1,
+      "id": "CASCADE-01-WP02-ACTIVE-FRONTEND-FREEZE",
+      "status": "EXECUTE_NOW",
+      "action": "Converge V6/V7 strict full-corpus/operator-identity evidence into one production parser/canonical frontend selection, exact grammar identity and deterministic semantic/contract hashing. Update CC-WP-02 only after its stated production receipt requirements are satisfied.",
+      "requires": ["strict LALR+interegular receipt", "exact current G9+Dialect corpus", "operator identity", "literal-safe canonicalization", "baseline-vs-repair differential", "production active-grammar binding"],
+      "falsifier": "Any admitted source or semantic operator mutation aliases to the same canonical identity, or production frontend selects a grammar different from the validated active grammar."
+    },
+    {
+      "order": 2,
+      "id": "CASCADE-02-WP03-06-INTEGRATED-PURE-CORE",
+      "status": "EXECUTE_NOW_PARALLEL",
+      "action": "Harden the new V7 source -> canonical typed IR -> exact type/symbol check -> reference evaluator -> C11 lowering candidate into a translation-validated pure computational core without pretending effects/FFI/async are closed.",
+      "evidence": ["commit:dd2b418856601654b611c356e945701bbc6f2e6a"],
+      "falsifier": "Interpreter/C11 differential mismatch, ambiguous typed identity, unsupported core semantics required by frozen BASE, or mutation tests fail to detect semantic changes."
+    },
+    {
+      "order": 3,
+      "id": "CASCADE-03-H1-CURRENT-TARGET-REFREEZE",
+      "status": "EXECUTE_NOW_PARALLEL",
+      "action": "Recompute H-WP-01 as a versioned current-target architecture freeze. Preserve compatible old schemas/tests, but remove the old frankv0.1-baseline interpretation from release-oracle status. The refreeze must make ActiveAssembly, peer/backflow, dynamic capability state, Digital Retina/MVC, GWT causal stages, effect authority, recovery/replay and final one-binary mappings explicit.",
+      "evidence": ["commit:d4c565d7cd4671be247e42fb4dc9228dadb9eb79", "commit:c46d3dc6084e12f985c140b6443fbfc4126e7c2e"],
+      "falsifier": "Freeze omits a current owner-fixed invariant or treats a research-only mechanism as selected architecture without a baseline comparison."
+    },
+    {
+      "order": 4,
+      "id": "CASCADE-04-H1-STATE-REPLAY-SPINE",
+      "status": "IN_PROGRESS_OTHER_WORKER_DO_NOT_DUPLICATE",
+      "action": "Complete canonical event/state ledger, epochs, provenance, snapshots, deterministic hashes and replay identity. This is already claimed by another H1 worker and should be consumed, not duplicated.",
+      "work_package": "H-WP-02-STATE-LEDGER",
+      "falsifier": "Concurrent/stale updates can silently overwrite state, replay differs without an explicit nondeterminism receipt, or paired-trajectory identity cannot be recovered."
+    },
+    {
+      "order": 5,
+      "id": "CASCADE-05-H1-UNIFIEDDB-ACTIVE-ASSEMBLY",
+      "status": "READY_NOW_IF_UNCLAIMED",
+      "action": "Implement one logical semantic state plane with explicit transaction/epoch/replay semantics, derived sparse topology and a bounded task-conditioned ActiveAssembly compiler. Benchmark single-writer contention, snapshot staleness and checkpoint/restart behavior on Ubuntu before deciding physical placement.",
+      "work_packages": ["H-WP-05-UNIFIEDDB", "H-WP-09-MODEL-ADAPTER"],
+      "falsifier": "A multi-store/service design gives materially better correctness/latency/recovery under the same semantic identity contract, or broad prompt-time reconstruction outperforms prepared ActiveAssembly at matched quality/cost."
+    },
+    {
+      "order": 6,
+      "id": "CASCADE-06-H1-GWT-BASELINES-RECURRENCE",
+      "status": "READY_NOW_IF_UNCLAIMED",
+      "action": "Build explicit GWT stages with per-receiver delivery/reconstruction/uptake/causal-use/outcome/re-entry receipts. Compare ordinary event-driven and fixed-recurrence baselines against the pressure/trend/cost adaptive recurrence candidate; do not let GWT focus itself become the halting oracle.",
+      "work_packages": ["H-WP-07-GWT", "H-WP-12-ABLATION"],
+      "falsifier": "Simpler event-driven/fixed-loop baselines equal or beat adaptive recurrence on verified outcome per compute, tail latency and recovery."
+    },
+    {
+      "order": 7,
+      "id": "CASCADE-07-EFFECT-AUTHORITY-NEEDLE",
+      "status": "READY_NOW_IF_UNCLAIMED",
+      "action": "Join existing Needle fail-closed proposal validation to opaque capability/resource authority, reserve/commit/outcome/re-entry semantics. Add malformed JSON, duplicate-key, alias collision, unknown/unoffered/blocked tool, tamper, stale capability and retry/idempotency adversarial cases.",
+      "work_packages": ["H-WP-04-NEEDLE-BOUNDARY", "H-WP-10-EFFECT-AUTHORITY"],
+      "falsifier": "Any descriptive/model/peer/Needle content can acquire bearer authority or an externally visible effect lacks a verified receipt/recovery boundary."
+    },
+    {
+      "order": 8,
+      "id": "CASCADE-08-RETINA-MVC",
+      "status": "READY_NOW_IF_UNCLAIMED",
+      "action": "Implement dissolved VisualPercept/PerceptualField semantics plus bounded MVC-0/MVC-1 adaptive learner with GOLD/SILVER/BRONZE provenance, open-set UNKNOWN/AMBIGUOUS/CONFLICT, shadow promotion, resource budget and last-known-good rollback.",
+      "work_packages": ["H-WP-07-VISION-DIGITAL-RETINA", "H-WP-07-MICRO-VISUAL-LEARNER"],
+      "falsifier": "Learner familiarity becomes sensor truth/authority, poisoning/open-set tests fail, or resource overhead erases routing benefit."
+    },
+    {
+      "order": 9,
+      "id": "CASCADE-09-OBSERVER-CALIBRATED-TRACE",
+      "status": "READY_AFTER_STATE_SPINE",
+      "action": "Make observability itself an intervention surface: common-snapshot no/low/high instrumentation arms, paired trajectory identity, trace completeness and explicit timing/resource perturbation receipts.",
+      "work_packages": ["H-WP-11-TRACE-REPLAY", "H-WP-15-PERFORMANCE"],
+      "falsifier": "Instrumentation causes paired semantic/action flips beyond preregistered tolerance or hides unobserved causal paths."
+    },
+    {
+      "order": 10,
+      "id": "CASCADE-10-QWEN4B-TARGET-BENCH",
+      "status": "BLOCKED_ON_TARGET_RUNTIME_RECEIPT_NOT_ON_ARCHITECTURE_WORK",
+      "action": "Use deterministic model fixtures now; later benchmark the chosen Qwen-class 4B quantization/backend on Andreas' Ubuntu host for latency, RAM/KV, long-context degradation, ActiveAssembly size, tool-intent quality and peer-escalation rate.",
+      "falsifier": "Target 4B cannot meet frozen latency/memory/outcome envelope or another local model/quantization dominates under the same architecture."
+    },
+    {
+      "order": 11,
+      "id": "CASCADE-11-H2-DIFFERENTIAL",
+      "status": "READY_AFTER_BASE_AND_H1_FREEZE",
+      "action": "Reimplement frozen H1 semantics in ClayCode and run translated state/input/intervention Golden Traces. Classify every divergence as H2 bug, H1 bug, ambiguous contract, ClayCode expressibility gap or intentional versioned divergence.",
+      "falsifier": "Unexplained divergence remains or ClayCode needs a semantic escape hatch."
+    },
+    {
+      "order": 12,
+      "id": "CASCADE-12-H3-COLLAPSE",
+      "status": "READY_AFTER_H2_DIFFERENTIAL_PASS",
+      "action": "Collapse diagnostic module/service boundaries into one Clay runtime/binary where evidence allows, retain one local UnifiedDB semantic world, local 4B, transient/derived topology and explicit security/resource boundaries. Remove a boundary only when H1/H2 semantic/recovery/performance receipts survive.",
+      "falsifier": "Consolidation causes unacceptable fault containment, tail latency, recovery or authority regressions versus H1/H2."
+    }
+  ],
+  "non_promotions": [
+    "No adaptive recurrence promotion from synthetic proxy evidence.",
+    "No RAB/provenance lattice promotion from synthetic reversal tests.",
+    "No phenomenal-consciousness inference from GWT/emergence behavior.",
+    "No ClayCode package PASS solely from candidate/CI definitions.",
+    "No H1 credit from the invalidated old freeze until a current-target refreeze exists.",
+    "No non-Ubuntu v0.1 portability work on the critical path."
+  ]
+}

@@ -11,6 +11,8 @@ Mandatory foundations:
 - `research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay`
 - `research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md`
 - `research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md`
+- `research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md`
+- `research_entity/global/FRANK_RESEARCH_ARCHITECTURE_INTEGRATION_AND_CONTINUITY_DIRECTIVE.clay`
 - current `RAE_LATEST_COGNITIVE_STACK.clay`
 
 ## 1. Meaning
@@ -19,7 +21,7 @@ Exact `go` continues the whole Clay research/build organism for **maximum useful
 
 Core loop:
 
-`fresh repo/shared state -> self-coordinate -> intelligent live-web intake -> hypothesis + counterhypothesis -> build/repair -> Ubuntu/VPS test -> measure -> deep analysis -> fuse -> targeted knowledge distribution -> one bounded out-of-the-box experiment -> compare -> reprioritize -> recurse`
+`fresh repo/shared state -> self-coordinate -> intelligent live-web intake -> hypothesis + counterhypothesis -> original-baseline check -> build/repair -> Ubuntu/VPS test -> measure all relevant metrics+metadata -> deep analysis -> fuse into research+architecture -> targeted knowledge distribution -> one bounded out-of-the-box experiment -> compare -> reprioritize -> recurse`
 
 Long means deep and productive, never blind repetition.
 
@@ -37,30 +39,48 @@ Workers choose work from the current shared opportunity frontier rather than wai
 
 High-impact claims should receive an adversarial/counterhypothesis lane when capacity allows. Results that invalidate another active worker's premise interrupt that work at its next safe point.
 
-## 4. Research -> implementation -> execution
+## 4. Original organ/module baseline gate
+
+Before materially changing, fusing, emergently distributing or Clay-redesigning any historical Frank organ/module/function, load or construct its baseline under `FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md`.
+
+Required baseline dimensions include, as applicable:
+- latency distribution including tail/cold/warm/end-to-end contribution;
+- task-appropriate accuracy/functional correctness;
+- reliability/failure/retry/restart/recovery/rollback behavior;
+- resource usage;
+- causal/GWT/re-entry behavior;
+- ALL available environment/build/model/cognitive-state/workload/time/provenance metadata.
+
+Unknown values remain `UNKNOWN`.
+
+`NO_ORIGINAL_BASELINE -> NO_REPLACEMENT_CLAIM`.
+
+## 5. Research -> implementation -> execution
 
 For each selected frontier item:
 
 1. state the leading hypothesis and strongest plausible counterhypothesis;
 2. seek the smallest discriminating evidence/test;
 3. ingest fresh internal and external evidence;
-4. decide whether the highest-value next move is research, implementation, repair, experiment, deferral or refutation;
-5. when implementation is chosen, patch the smallest coherent current target;
-6. run deterministic/local tests;
-7. when runtime evidence matters, run the exact candidate on the verified Hostinger Ubuntu runner if a compatible authorized workflow exists;
-8. measure against the current baseline/counterfactuals;
-9. preserve logs, hashes, artifacts and receipts;
-10. fuse the result into shared state and redistribute material deltas.
+4. verify applicable original baseline and metadata completeness;
+5. decide whether the highest-value next move is research, implementation, repair, experiment, deferral or refutation;
+6. when implementation is chosen, patch the smallest coherent current target;
+7. run deterministic/local tests;
+8. when runtime evidence matters, run the exact candidate on the verified Hostinger Ubuntu runner if a compatible authorized workflow exists;
+9. measure against the exact applicable original/reference baseline and counterfactuals under matched conditions;
+10. preserve raw per-run rows, all available metadata, logs, hashes, artifacts and receipts;
+11. compile material findings into architecture/test/work deltas under the integration/continuity directive;
+12. fuse the result into shared state and redistribute material deltas.
 
 `QUEUED != EXECUTED != PASS`.
 
-## 5. Frank loop-core measurement
+## 6. Frank loop-core measurement
 
 When work touches Frank's recurrent loop/core, measure where applicable: task/outcome quality, residual error/pressure, recurrence depth and marginal utility, convergence/productive-cycle/stalled/diverging regime, GWT ignition/receiver closure, causal-use/outcome/re-entry closure, diversity/overcoupling, Needle routing accuracy/latency/open-set behavior, lesion/rescue, recovery and latency/CPU/RAM/token/context/resource shadows.
 
 Do not optimize one scalar. Prefer Pareto/robust operating windows over lucky peaks.
 
-## 6. Module-level Clay freedom
+## 7. Module-level Clay freedom
 
 Workers are explicitly allowed to use or redesign **individual Frank modules/organs in Clay/ClayCode** when either:
 
@@ -74,7 +94,7 @@ Valid dispositions remain:
 
 A Clay redesign may be selected only if matched replay/intervention, lesion/rescue, recovery, cost and held-out/OOD evidence justify it. If it fails, keep/refine the historical or fused/distributed realization. Needle remains a typed internal reflex/router boundary and never gains execution authority from being inside the module.
 
-## 7. Mandatory out-of-the-box experiment
+## 8. Mandatory out-of-the-box experiment
 
 Every `go` macro-cycle attempts **exactly one materially novel, bounded experiment** outside the current local optimum. It may be unusual, cross-domain or first-principles, including a novel Clay-native module mechanism, but must remain consistent with GWT and Frank invariants:
 
@@ -84,15 +104,18 @@ Every `go` macro-cycle attempts **exactly one materially novel, bounded experime
 - model/Needle/GWT output != effect authority;
 - Frank self-observation != Harness-change authority;
 - experiment is reversible, lesionable and has a baseline/rollback;
+- original-module comparison applies whenever a historical function is touched;
 - `NO BENEFIT` and `REFUTED` are valid outcomes.
 
 Novelty alone never promotes architecture.
 
-## 8. Fusion and recursion
+## 9. Fusion, architecture re-entry and recursion
 
 After every material result:
 
-`refresh -> fuse evidence + counterevidence -> persist receipt/negative result -> update hypotheses/work -> project dependencies -> targeted distribution -> recompute opportunity frontier`
+`refresh -> fuse evidence + counterevidence -> persist receipt/negative result -> compile architecture/test/work delta or explicit NO_CHANGE -> update hypotheses/work -> project dependencies -> targeted distribution -> recompute opportunity frontier`
+
+Critical runtime components must also update their health/recovery/last-known-good obligations when the result changes reliability or failure semantics.
 
 Then recurse while:
 
@@ -100,14 +123,15 @@ Then recurse while:
 
 and the current invocation budget/capabilities permit it.
 
-## 9. End-of-run handoff
+## 10. End-of-run handoff
 
-Before the invocation ends, persist exact completed work, tests actually executed, new external knowledge/contradictions, bugs fixed/open, hypothesis state, current best measured candidate/configuration, the out-of-the-box experiment result, blockers/capability gaps and the next highest-value frontier items so the next `go` continues without reconstructing the whole run from chat history.
+Before the invocation ends, persist exact completed work, tests actually executed, new external knowledge/contradictions, bugs fixed/open, hypothesis state, current best measured candidate/configuration, original/successor baseline comparison state, the out-of-the-box experiment result, architecture/test deltas, recovery/continuity impact, blockers/capability gaps and the next highest-value frontier items so the next `go` continues without reconstructing the whole run from chat history.
 
-## 10. Hard boundaries
+## 11. Hard boundaries
 
 - No paid/final model training starts without the owner's explicit training authorization.
 - No worker claims effects it did not execute/verify.
 - No coordination role creates truth authority.
 - Frank remains a separate research subject and cannot mutate its own Harness under Frank authority.
 - All durable material deltas must be available to the shared Research Center.
+- Critical consequential effects fail closed when health/state/authority is unknown.

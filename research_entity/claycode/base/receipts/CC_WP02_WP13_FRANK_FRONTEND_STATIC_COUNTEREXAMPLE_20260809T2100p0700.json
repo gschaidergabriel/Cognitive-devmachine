@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-WP02-WP13-FRANK-FRONTEND-STATIC-COUNTEREXAMPLE-20260809T2100p0700",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:00:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "claim_class": "SOURCE_LEVEL_FRONTEND_COVERAGE_COUNTEREXAMPLE",
+  "status": "OPEN_EXECUTION_CONFIRMATION_REQUIRED",
+  "target_work_packages": [
+    "CC-WP-02-PARSER-CANON",
+    "CC-WP-13-HARNESS-HANDOFF"
+  ],
+  "evidence": {
+    "base_grammar": {
+      "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark",
+      "git_blob_sha": "eec6e756809af47ccbeda71530794c12658eb1da",
+      "observed_top_level_statement_forms": "module/version/status/parent/import/interface/dialect/law/rule/invariant/class/type/record/tensor/codec/surface/metric/hash/needle/cycle; no use_decl and no fn_decl are present in the fetched V5 grammar"
+    },
+    "real_frank_source": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "path": "claycode/frank_runtime.clay",
+      "git_blob_sha": "8e2a3814c67540d7e83fd6aa4e14928928785822",
+      "observed_forms": [
+        "use frank.entity.*",
+        "multiple additional use declarations",
+        "fn cycle(input : RuntimeInput, node : NodeId) -> RuntimeCycleReceipt",
+        "let bindings",
+        "require statements",
+        "return RuntimeCycleReceipt(...)"
+      ]
+    }
+  },
+  "inference": "The exact current FRANK runtime source uses frontend forms that are not represented by the current V5 top-level grammar. Without a separate admitted preprocessing/dialect path, the V5 grammar cannot be assumed to cover this real FRANK source. This is a concrete source-level counterexample to treating current G9/Dialect corpus acceptance as sufficient evidence for FRANK frontend coverage.",
+  "counterhypotheses": [
+    "frank_runtime.clay may intentionally belong to a different admitted ClayCode dialect and may lower into BASE without widening BASE surface syntax",
+    "a versioned preprocessing or module-import lowering phase may legitimately translate use/fn/let/require/return before the V5 parser",
+    "the current FRANK source may be a semantic contract rather than the exact WP13 frozen production subsystem selected for compilation"
+  ],
+  "next_discriminator": {
+    "tool": "tools/claycode_frank_frontend_gap_probe.py",
+    "tool_commit": "f766933b778f4a97050881640036059170851156",
+    "action": "On a real checkout, run the current strict V5 parser against the exact selected frozen FRANK ClayCode source(s), record first failures and hashes, then test the smallest candidate bridge: direct grammar extension versus explicit dialect/pre-lowering translation.",
+    "acceptance": "Select the smallest route that preserves the frozen semantic contract, determinism, type/effect boundaries and source identity while eliminating the real FRANK counterexample. Do not change semantics merely to make parsing succeed."
+  },
+  "promotion_guard": "This static comparison is sufficient to reopen frontend-coverage investigation but is not an executed parser receipt and does not amend BASE_SEMANTIC_FREEZE_V1 by itself. Strict execution confirmation is required before selecting a syntax/translation delta.",
+  "gate_effect": "NO_PASS_CHANGE"
+}

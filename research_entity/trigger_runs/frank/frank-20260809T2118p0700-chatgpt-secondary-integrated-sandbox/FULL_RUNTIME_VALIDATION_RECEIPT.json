@@ -1,0 +1,41 @@
+{
+  "schema_version":"frank-h1-full-runtime-validation-0.1",
+  "run_id":"frank-20260809T2118p0700-chatgpt-secondary-integrated-sandbox",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class":"REMOTE_SANDBOX_DETERMINISTIC_TEST",
+  "owner_evidence_rule_for_this_run":"SANDBOX_SUFFICIENT_FOR_NOW",
+  "scope":"One executable H1 reference surface joining current FRANK modules, historical lineage mappings, typed Claude peer fixtures, UnifiedDB epoch-bound query/selection, bounded Assembly, static/dynamic ClayGraph, GWT stages, model proposal, effect authority, outcome/re-entry, adaptive promotion and deterministic replay.",
+  "exact_committed_artifacts":{
+    "unifieddb_query_plane":{"path":"research_entity/harness/reference/unifieddb_query_plane.py","git_blob_sha":"87a1abbf15883755f71ac9fd34da6730376a45ad","sandbox_git_blob_sha":"87a1abbf15883755f71ac9fd34da6730376a45ad","byte_identity":true},
+    "unifieddb_tests":{"path":"research_entity/harness/reference/test_unifieddb_query_plane.py","git_blob_sha":"b674ce74bdc3a2b4746f4a88c83c3358334185a3","sandbox_git_blob_sha":"b674ce74bdc3a2b4746f4a88c83c3358334185a3","byte_identity":true},
+    "claygraph_generator":{"path":"research_entity/harness/reference/h1_claygraph.py","git_blob_sha":"af5f485743cb38ab1c52c220b8cd4e690cdb0e68","sandbox_git_blob_sha":"af5f485743cb38ab1c52c220b8cd4e690cdb0e68","byte_identity":true},
+    "claygraph_tests":{"path":"research_entity/harness/reference/test_h1_claygraph.py","git_blob_sha":"ec68cd601771b539370dc75b256af2fcbb0c4964","sandbox_git_blob_sha":"ec68cd601771b539370dc75b256af2fcbb0c4964","byte_identity":true},
+    "full_runtime":{"path":"research_entity/harness/reference/frank_h1_full_runtime.py","git_blob_sha":"28d0f7ddeb33733d5b5270e5274c62c1b29e4463","sandbox_git_blob_sha":"28d0f7ddeb33733d5b5270e5274c62c1b29e4463","byte_identity":true},
+    "full_runtime_tests":{"path":"research_entity/harness/reference/test_frank_h1_full_runtime.py","git_blob_sha":"57b73e5ee5e605e059537669dccd99923df4960b","sandbox_git_blob_sha":"57b73e5ee5e605e059537669dccd99923df4960b","byte_identity":true},
+    "static_claygraph":{"path":"research_entity/harness/REFERENCE_HARNESS_ARCHITECTURE.claygraph.json","git_blob_sha":"18e417f94735601637ebd47646f64c404b088190","sandbox_git_blob_sha":"18e417f94735601637ebd47646f64c404b088190","byte_identity":true,"release_claim":"NOT_H1_RELEASE_PASS"},
+    "dynamic_run_claygraph":{"path":"research_entity/harness/traces/integrated_smoke/RUN_CLAYGRAPH.json","git_blob_sha":"07ee3349a908aff8e6d2a4d4cbc1ab974153a1ee","sandbox_git_blob_sha":"07ee3349a908aff8e6d2a4d4cbc1ab974153a1ee","byte_identity":true},
+    "integration_audit":{"path":"research_entity/harness/traces/integrated_smoke/INTEGRATION_AUDIT.json","git_blob_sha":"a6690fe08e47b6beac7390f69c19297a5dee90ed","sandbox_git_blob_sha":"a6690fe08e47b6beac7390f69c19297a5dee90ed","byte_identity":true}
+  },
+  "combined_validation":{
+    "tests":{"passed":77,"failed":0,"wall_seconds":3.217},
+    "compileall":"PASS",
+    "full_runtime_stress":{"cycles":100,"audit_pass":100,"persisted_events":500,"final_epoch":500,"wall_seconds":4.6967,"cycles_per_second":21.29,"semantic_state_hash_replay_equal":true,"trace_root_hash_replay_equal":true,"epoch_replay_equal":true}
+  },
+  "static_claygraph_validation":{"module_count":15,"historical_lineage_families":29,"edge_count":23,"module_hash_matches_executed_architecture":true,"all_edges_have_known_endpoints":true,"all_edges_have_intervention_handles":true,"graph_tamper_detection":"PASS"},
+  "dynamic_claygraph_smoke":{"active_edge_count":17,"gwt_candidate_count":2,"ignition":true,"delivered":true,"reconstructed":true,"uptake":true,"causal_use":true,"outcome_present":true,"reentry":true,"peer_result_accepted":true,"peer_selected_by_workspace":true,"peer_backflow_authority":"NONE","peer_context_chars_saved":3643,"effect_status":"COMMITTED","integration_audit_pass":true},
+  "unifieddb_semantics":{"epoch_bound_queries":"PASS","semantic_state_hash_bound_selection":"PASS","deterministic_query_receipts":"PASS","default_known_only_assembly":"PASS","explicit_conflict_preservation":"PASS","stale_selection_rejection":"PASS","idempotent_transaction_contract":"PASS","derived_capability_view_is_not_second_store":"PASS"},
+  "negative_results":[{"finding":"First Golden Trace export invocation used raw_prose instead of the FullRuntime parameter name peer_raw_prose.","classification":"TEST_CALLSITE_ARGUMENT_BUG","resolution":"Corrected callsite; regenerated artifacts; reran all 77 tests and 100-cycle FullRuntime stress successfully."}],
+  "architecture_fidelity":"IMPROVED",
+  "release_claim":"NOT_H1_RELEASE_PASS",
+  "harness_workspace_promotion":"NOT_ATTEMPTED",
+  "limitations":[
+    "The 4B model path is an ABI/proposal fixture, not live target Qwen-class 4B inference.",
+    "Digital Retina/MVC is deterministic fixture logic, not a measured real vision stack.",
+    "Claude Code transport is simulated with typed fixtures; no live Claude result is claimed.",
+    "Static ClayGraph is a current executable candidate and explicitly not an H1 release PASS graph.",
+    "Broader crash/fuzz/race/partial-effect/security/resource tests remain open.",
+    "Target Ubuntu RAM/KV/cache/latency/energy evidence remains open.",
+    "H2 ClayCode differential remains gated by BASE ClayCode release."
+  ]
+}

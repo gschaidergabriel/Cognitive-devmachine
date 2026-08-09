@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1924p0700-chatgpt-secondary-snapshot-commit",
+  "experiment_id": "EXP-FRANK-SNAPSHOT-COMMIT-001",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class": "HOSTED_LINUX_COMPONENT_TEST_PLUS_SQLITE_RUNTIME_PROXY_PLUS_SYNTHETIC_WORKLOAD",
+  "target_host_acceptance": false,
+  "component": {
+    "implementation_ref": "research_entity/harness/reference/snapshot_commit.py",
+    "test_ref": "research_entity/harness/tests/test_snapshot_commit.py",
+    "hosted_component_tests": {"passed":6,"failed":0,"result":"PASS"},
+    "tested_semantics": [
+      "unrelated state change does not force an effect-precondition abort",
+      "relevant dependency version change blocks handoff to runtime authority",
+      "capability epoch change blocks handoff",
+      "a dependency absent from the cognitive snapshot requires re-assembly",
+      "guard hashing is deterministic under dependency-order permutation",
+      "commit epoch cannot precede snapshot epoch",
+      "the commit guard itself always has authority NONE"
+    ]
+  },
+  "sqlite_runtime_probe": {
+    "sqlite_version": "3.46.1",
+    "journal_mode": "wal",
+    "read_snapshot_before": {"value":1,"version":1},
+    "concurrent_writer_after": {"value":2,"version":2},
+    "stale_read_snapshot_upgrade": {
+      "succeeded": false,
+      "sqlite_errorcode": 517,
+      "sqlite_errorname": "SQLITE_BUSY_SNAPSHOT",
+      "message": "database is locked"
+    },
+    "fresh_commit_transaction_read": {"value":2,"version":2},
+    "fresh_revalidation_detected_change": true,
+    "interpretation": "A cognition-phase read snapshot must not be assumed safely upgradeable into the later effect write transaction after concurrent state change. Close/materialize cognition, then start a fresh commit transaction and revalidate effect-relevant state."
+  },
+  "dependency_revalidation_proxy": {
+    "seed": 20260809,
+    "state_key_universe": 1000,
+    "trials_per_cell": 20000,
+    "selected_cells": [
+      {"dependency_count":1,"concurrent_changed_keys":1,"whole_epoch_abort_rate":1.0,"dependency_closure_abort_rate":0.00095,"stale_effect_rate_without_revalidation":0.00095},
+      {"dependency_count":5,"concurrent_changed_keys":5,"whole_epoch_abort_rate":1.0,"dependency_closure_abort_rate":0.02515,"stale_effect_rate_without_revalidation":0.02515},
+      {"dependency_count":5,"concurrent_changed_keys":10,"whole_epoch_abort_rate":1.0,"dependency_closure_abort_rate":0.049,"stale_effect_rate_without_revalidation":0.049},
+      {"dependency_count":20,"concurrent_changed_keys":10,"whole_epoch_abort_rate":1.0,"dependency_closure_abort_rate":0.1818,"stale_effect_rate_without_revalidation":0.1818}
+    ],
+    "interpretation": "In this constructed uniform-key workload, rejecting every effect whenever any global state changed creates large false-abort pressure. Revalidating only the declared effect-relevant dependency closure preserves the stale-effect protection of checking relevant dependencies while allowing unrelated state changes. This is a mechanism sanity check, not a calibrated FRANK workload estimate."
+  },
+  "negative_results_and_limits": [
+    "No Andreas-PC target-Ubuntu execution was performed.",
+    "The synthetic key-change workload is deliberately simple and does not estimate real FRANK update distributions.",
+    "This experiment does not prove that dependency-closure revalidation is sufficient when dependencies are incomplete or dynamically discovered.",
+    "Dependency laundering is therefore fail-closed: a newly required dependency absent from the cognitive snapshot forces re-assembly.",
+    "The guard does not execute effects and does not replace the runtime-minted opaque capability boundary."
+  ],
+  "promotion": "NO_SCIENTIFIC_PROMOTION_COMPONENT_REFERENCE_DELTA_ONLY"
+}

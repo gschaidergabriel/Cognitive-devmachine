@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "tool_name": "hostinger_github_runner",
   "provider": "Hostinger + GitHub Actions",
   "class": "self_hosted_remote_build_test_runtime",
@@ -13,11 +13,12 @@
     "Frank v0.1 remote test",
     "Frank v0.1 integration test",
     "Frank v0.1 benchmark",
+    "Frank v0.1 real Qwen-class local-model experiments",
     "ClayCode compiler/runtime Ubuntu execution",
     "reproducible GitHub Actions execution receipts"
   ],
   "evidence_class": "remote_execution_runtime",
-  "status": "RUNTIME_VERIFIED_BUILD_TEST",
+  "status": "RUNTIME_VERIFIED_BUILD_TEST_REAL_MODEL",
   "verification_receipt": "research_entity/state/system/events/20260809T161405Z-hostinger-vps-runner-resource.json",
   "capability_receipt": "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",
   "priority_work": "research_entity/state/work/events/20260809T161407Z-frank-v01-hostinger-runner-priority.json",
@@ -31,7 +32,7 @@
     "github_status_observed": "Idle",
     "status_indicator": "green",
     "evidence_source": "user-provided live GitHub Actions runner UI screenshot in ChatGPT turn",
-    "interpretation": "Runner agent is connected to GitHub and currently ready/idle. This proves live runner connectivity/availability; subsequent FRANK execution receipts below prove actual build/test execution. Raw UI screenshot is not persisted by this file."
+    "interpretation": "Runner agent is connected to GitHub and currently ready/idle. Subsequent FRANK receipts prove real build/test and real Qwen-class model execution on this host."
   },
   "verified_execution_receipts": [
     {
@@ -82,6 +83,23 @@
       "release_claim": false,
       "whole_frank_release_status": "NOT_CLAIMED",
       "measurement_scope": "host baseline plus per-gate wall time, user/system CPU, max RSS, page faults and context switches; not energy, thermals, power-loss durability or real-model performance"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "tested_commit": "963fd8a6a044b6f5a6ddfde88fab25d0cc6e1dae",
+      "receipt_path": "runtime/vps_integrity/real_qwen4b_shadow_latest.json at evidence commit c9d06222643aa9028940cbba24b0421f6ef45ad6",
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_QWEN4B_EXECUTION",
+      "result": "real Qwen3-4B-Instruct-2507 Q8_0 executed through pinned llama.cpp; fixed four-task pilot 3/4; real read_state tool selection PASS; hidden reasoning not persisted",
+      "real_model_executed": true,
+      "fixed_accuracy": 0.75,
+      "decode_tokens_per_second_mean": 10.705266714677407,
+      "prompt_tokens_per_second_mean": 39.94125425865801,
+      "tool_read_state_selected": true,
+      "confidence_counterexample": "modular-power answer 4 was wrong while verbalized confidence was 100%",
+      "adaptive_v1_recurrence_reduction_fraction": 0.2,
+      "adaptive_v1_status": "DIAGNOSTIC_ONLY_PENDING_HALT_ONLY_V2",
+      "release_claim": false,
+      "whole_frank_release_status": "NOT_CLAIMED"
     }
   ],
   "negative_execution_receipts": [
@@ -97,7 +115,14 @@
       "receipt_path": "runtime/vps_integrity/real_qwen4b_shadow_latest.json at evidence commit 5092752f2c100d9d23ca7f7015e4ecb57c4db55c",
       "failure_reason": "BOOTSTRAPPED_NINJA_MISSING",
       "real_model_executed": false,
-      "interpretation": "distro-dependent pip-prefix executable path assumption falsified; current main contains later absolute-path and Make fallback repairs"
+      "interpretation": "distro-dependent pip-prefix executable path assumption falsified"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "receipt_path": "runtime/vps_integrity/real_qwen4b_shadow_make_latest.json at evidence commit 2bde0fb0050d1ff664b9845350b4eb09aa4006bc",
+      "failure_reason": "BOOTSTRAPPED_CMAKE_MISSING",
+      "real_model_executed": false,
+      "interpretation": "make-lane prefix-path assumption falsified; does not contradict the separately successful source-build lane"
     }
   ],
   "current_chatgpt_surface": {
@@ -110,7 +135,7 @@
   "routing": {
     "frank_v0_1_remote_build_test_priority": 1,
     "policy": "PREFERRED_REMOTE_BUILD_TEST_PATH_FOR_FRANK_V0_1",
-    "final_release_boundary": "Hostinger remote receipts accelerate build/test/debug, but final Frank v0.1 acceptance still requires the designated Andreas Ubuntu developer system evidence."
+    "final_release_boundary": "Hostinger remote receipts accelerate build/test/debug/model experiments, but final Frank v0.1 acceptance still requires the designated Andreas Ubuntu developer system evidence."
   },
   "doomsday_forecast": {
     "relevant_rows": [
@@ -123,21 +148,24 @@
       "CLAY_0_1_ACCEPTANCE_RUN"
     ],
     "impacts": [],
-    "note": "Successful real build/test execution and multiple measured workloads are verified, including one 21-gate process-resource matrix. No ETA multiplier is admitted yet because repeated comparable workload calibration remains insufficient."
+    "note": "Real build/test and real Qwen-class model execution are verified. No ETA multiplier is admitted yet because repeated comparable workload calibration and final-device transfer evidence remain insufficient."
   },
   "security": {
     "no_raw_credentials_in_repo_state": true,
     "workflow_revision_revalidation_before_effect": true,
     "runner_label_revalidation_before_effect": true,
     "secrets_boundary_required": true,
-    "open_authority_hardening": "persistent self-hosted execution currently coexists with contents:write receipt persistence; no compromise is claimed; test read-only execution plus separately constrained receipt writer and evaluate ephemeral/JIT lifecycle for higher-authority jobs"
+    "open_authority_hardening": "persistent self-hosted execution and canonical receipt persistence must continue moving toward minimum-permission execution plus separately constrained persistence; no compromise is claimed"
   },
   "research_handoff": {
     "report": "research_entity/reports/20260810T0007p0700_CHATGPT_FRANK_V01_DEEP_RESEARCH_VPS_FUSION.md",
+    "real_model_addendum": "research_entity/reports/20260810T0032p0700_FRANK_REAL_QWEN4B_FIRST_EXECUTION_ADDENDUM.md",
+    "real_model_packet": "research_entity/knowledge_micro_packets/frank/FRANK_REAL_QWEN4B_FIRST_EXECUTION_20260810.md",
     "completed_first_lane_receipt": "research_entity/state/work/events/20260809T171300Z-chatgpt-secondary-frank-hostinger-first-lane-receipt.json",
-    "current_real_model_work": "research_entity/state/work/events/20260809T171400Z-chatgpt-secondary-frank-real-qwen4b-lane.json",
+    "current_real_model_work": "research_entity/state/work/events/20260809T171800Z-chatgpt-secondary-frank-real-qwen4b-prebuilt-revise.json",
+    "real_model_partial_receipt": "research_entity/state/work/events/20260809T173400Z-chatgpt-secondary-frank-real-qwen4b-partial-receipt.json",
     "runner_authority_work": "research_entity/state/work/events/20260809T171500Z-chatgpt-secondary-frank-runner-authority-hardening.json"
   },
-  "verified_at": "2026-08-09T17:16:00Z",
-  "source": "live GitHub Actions runner observation + current self-hosted FRANK execution receipts + current real-model negative receipts + project-owner authorization"
+  "verified_at": "2026-08-09T17:35:00Z",
+  "source": "live GitHub Actions runner observation + current self-hosted FRANK execution receipts + real Qwen4B execution + project-owner authorization"
 }

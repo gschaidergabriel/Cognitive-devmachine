@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1607p0700_chatgpt_http_app02",
+  "negative_results": [
+    {
+      "id": "N-CC-HTTP-20260809-01",
+      "status": "NEGATIVE_RESULT",
+      "proposition_refuted": "A per-run host capability token may be embedded into generated target code without affecting deterministic compiler identity.",
+      "observation": "The v1 generated-code SHA changed across executions because a freshly generated capability-token hash was compiled into the target.",
+      "impact": "Capability instances must be runtime resources/handles or separately receipted deployment data, not compiler-output identity inputs unless contract identity explicitly requires that distinction.",
+      "preserved_artifact": "experiments/http_app02_v1/EXECUTABLE_RESEARCH_RECEIPT.json"
+    },
+    {
+      "id": "N-CC-HTTP-20260809-02",
+      "status": "BOUNDARY_NEGATIVE_RESULT",
+      "proposition_refuted": "Passing an inherited file descriptor into an ordinary unrestricted Python process is sufficient proof of a production capability sandbox.",
+      "observation": "The v2 test constrains the generated probe path, but the Python runtime itself is not sandboxed against arbitrary ambient host APIs/imports.",
+      "impact": "Production acceptance requires OS/runtime enforcement and typed opaque host resource semantics in addition to source-level capability references."
+    },
+    {
+      "id": "N-CC-PREFLIGHT-20260809-01",
+      "status": "OPEN_GOVERNANCE_BLOCKER",
+      "proposition_refuted": "The current mandatory ClayCode interconnect preflight can execute against the current trigger registry without governance drift.",
+      "observation": "Registry peer set contains clayresearch; research_interconnect_preflight.py explicit PRIORITY tables still contain clay and intentionally raise RuntimeError when sets differ.",
+      "impact": "Strong mesh completion/promotion is fail-closed until the rename is synchronized across preflight/validators/protocol tables; this run records but does not silently bypass the blocker."
+    }
+  ]
+}

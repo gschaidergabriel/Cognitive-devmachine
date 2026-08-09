@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T0948p0700-666-result-aicore-training-v26-semantic-batchA",
+  "room_id": "center",
+  "event_type": "RESULT",
+  "origin_worker": "chatgpt-secondary-20260809T0934p0700-666-aicore-smallleaf",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T09:48:00+07:00",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms": ["frank", "harness", "clay", "q12_index"],
+  "affects_claims": [],
+  "dependencies": ["research_entity/archive_assimilation/manifests/DRIVE_AICORE_TRAINING_RECURSIVE_DIRECT_20260809T0939p0700.json"],
+  "artifact_refs": ["research_entity/archive_assimilation/receipts/20260809T0948p0700_666_aicore_training_v26_semantic_batchA.json"],
+  "ancestry_family": "level0-drive-aicore-training-v26-semantic-lineage",
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "status": "BOUNDED_SEMANTIC_BATCH_COMPLETE",
+    "source_units": 8,
+    "syntax_integrity": "AST_PARSE_8_OF_8_PASS",
+    "material_findings": [
+      "Training/serving representation contract was explicitly tightened via exact serving-format rendering, response-span-only loss and curriculum preservation.",
+      "Length-aware prompt-fact insertion was introduced because the full REALITAET block overflowed 1082 examples; earlier ~35% and later ~25% statements are lineage states, not one reconciled measurement.",
+      "The archived hybrid-model finding says only 8/32 layers use standard q/k/v/o attention while 24/32 use linear attention; seven standard LoRA targets therefore do not adapt all sequence-mixing paths.",
+      "The proposed v26.2 experiment is confounded by simultaneous changes to context length, adapter targets and prompt/data content.",
+      "No completed v26.2 training outcome is established by this batch; static validators and smoke-test source are not run results."
+    ],
+    "branch_implications": {
+      "frank":"Version training/serving serialization and prompt/state facts as runtime contracts.",
+      "harness":"Require consumed held-out eval and intervention-isolated ablations for causal attribution.",
+      "clay":"Inspect actual hybrid module topology before selecting adapter targets.",
+      "q12_index":"Preserve planned/static/run-result epistemic distinctions."
+    },
+    "level0_gate_effect": "Adds an eight-unit bounded semantic disposition; global denominator remains unfrozen and gate remains NOT_PASS."
+  }
+}

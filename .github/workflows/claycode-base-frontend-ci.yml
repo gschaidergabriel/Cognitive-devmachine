@@ -5,8 +5,10 @@ on:
     paths:
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark'
+      - 'research_entity/claycode/base/CI_STRICT_V9_TRIGGER.txt'
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
       - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'tools/claycode_base_frontend.py'
       - 'tools/claycode_base_frontend_validation.py'
       - 'tools/claycode_base_canonicalizer.py'
       - 'tools/claycode_base_ir.py'
@@ -15,8 +17,10 @@ on:
     paths:
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark'
+      - 'research_entity/claycode/base/CI_STRICT_V9_TRIGGER.txt'
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
       - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'tools/claycode_base_frontend.py'
       - 'tools/claycode_base_frontend_validation.py'
       - 'tools/claycode_base_canonicalizer.py'
       - 'tools/claycode_base_ir.py'
@@ -73,10 +77,25 @@ jobs:
         run: |
           set -o pipefail
           python -m py_compile \
+            tools/claycode_base_frontend.py \
             tools/claycode_base_frontend_validation.py \
             tools/claycode_base_canonicalizer.py \
             tools/claycode_base_ir.py \
             2>&1 | tee receipts/claycode-base-frontend/PY_COMPILE.log
+
+      - name: Assert default declarative tools point at V9
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, 'tools')
+          import claycode_base_frontend as frontend
+          import claycode_base_ir as ir
+          expected=Path('research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark').resolve()
+          assert Path(frontend.DEFAULT_GRAMMAR).resolve() == expected, (frontend.DEFAULT_GRAMMAR, expected)
+          assert Path(ir.DEFAULT_GRAMMAR).resolve() == expected, (ir.DEFAULT_GRAMMAR, expected)
+          print('DEFAULT_DECLARATIVE_V9_BINDING=PASS')
+          PY
 
       - name: Strict V9 full-corpus frontend validation
         run: |
@@ -166,7 +185,7 @@ jobs:
           mkdir -p "$target"
           cp -a receipts/claycode-base-frontend/. "$target/"
           printf '%s\n' \
-            "schema_version=1.1" \
+            "schema_version=1.2" \
             "source_commit=${GITHUB_SHA}" \
             "workflow=${GITHUB_WORKFLOW}" \
             "run_id=${GITHUB_RUN_ID}" \

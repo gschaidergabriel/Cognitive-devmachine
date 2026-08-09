@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-GWT-R7-FILTER-BOUNDARY-001",
+  "run_id":"gwt-20260809T1720p0700-chatgpt-secondary-r7-dual-gate",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "epistemic_class":"EXACT_MODEL_FREE_ENUMERATION",
+  "claim_scope":"set-theoretic candidate-surface semantics only; not FRANK/Qwen performance evidence",
+  "question":"Can an external workspace that is only a pure filter over an internal candidate surface recover relevant candidates absent from that surface?",
+  "definition":{"universe_size":6,"relevant_set":"R","internal_surface":"Wi","external_surface":"We","filter_constraint":"We subset_of Wi","recall":"|W intersect R| / |R|","precision":"|W intersect R| / |W|"},
+  "source_sha256":"e82d923ea3e36b1d96408a6e5f9454718d8999db0f5ab2eb4c4d9270631db808",
+  "filter_enumeration":{"nonempty_cases":41895,"recall_improvement_violations":0,"recall_equal":14231,"recall_drop":27664,"precision_improved":15482},
+  "augmentation_control":{"candidate_relation":"We may contain elements outside Wi","nonempty_cases":250047,"recall_improved_cases":83307,"first_witness":{"R":[0],"Wi":[1],"We":[0],"internal_recall":0.0,"external_recall":1.0}},
+  "proof_note":"If We subset_of Wi, then (We intersect R) subset_of (Wi intersect R), therefore recall(We) <= recall(Wi). Enumeration is an executable implementation check of this invariant.",
+  "result":"PASS_FILTER_RECALL_MONOTONICITY",
+  "architecture_implication":"A nested model/internal-to-system GWT bridge must type its candidate-surface relation as FILTER|AUGMENT|RECONSTRUCT|UNKNOWN. FILTER can improve selectivity/precision but cannot rescue absent relevant candidates without an augmentation/re-query/reconstruction path.",
+  "negative_boundary":"This result does not show that AUGMENT is beneficial in FRANK, that a Qwen internal workspace exists, or that any workspace mechanism is emergent/conscious."
+}

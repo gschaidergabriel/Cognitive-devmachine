@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809_chatgpt_secondary_surface_canon_wasi03_v1",
+  "hypotheses": [
+    {
+      "id": "H-CC-20260809-01",
+      "status": "SUPPORTED_RUN_LOCAL",
+      "mechanism": "The immediate BASE blocker is surface/grammar drift between the admitted G9 V3 source and grammar, not evidence that the semantic basis must be redesigned.",
+      "expected_observation": "A parser generated strictly from grammar.ebnf rejects current admitted G9 V3 constructs including relational operators, union field syntax, digit-leading identifier and conditional statement.",
+      "counterhypothesis": "The grammar is intentionally incomplete documentation and another authoritative parser grammar already accepts all current constructs.",
+      "falsifier": "Locate or execute the authoritative current parser/grammar and show complete deterministic roundtrip of G9 V3 without undocumented syntax extensions.",
+      "cheapest_next_test": "Build CC-WP-02 parser against one frozen surface and parse/canonicalize the complete current G9 V3 + dialect registry corpus.",
+      "affected_branches": ["claycode", "harness", "frank"],
+      "stage_implication": "Prioritize CC-WP-01 and CC-WP-02 before adding new language primitives."
+    },
+    {
+      "id": "H-CC-20260809-02",
+      "status": "SUPPORTED_RUN_LOCAL",
+      "mechanism": "ClayCode semantic identity must be type-directed: set-like collections normalize ordering/duplicates while Ordered sequences preserve order; exact contract/provenance identity remains separate.",
+      "expected_observation": "Set permutations preserve semantic execution/hash while ordered operation permutations change execution and semantic hash.",
+      "counterhypothesis": "A single recursively order-insensitive normalization can safely define semantic identity.",
+      "falsifier": "Find an order-sensitive program family where global normalization still never merges observably distinct semantics, or show the tested operational ordering is outside Clay semantic identity by contract.",
+      "cheapest_next_test": "Integrate schema/type-aware canonicalization into parser/IR and fuzz nested Set/Map/Ordered combinations plus UnifiedDB transaction fixtures.",
+      "affected_branches": ["claycode", "unifieddb", "claygraph", "harness"],
+      "stage_implication": "Freeze semantic_hash/contract_hash separation in CC-WP-02/03."
+    },
+    {
+      "id": "H-CC-20260809-03",
+      "status": "OPEN_EXTERNAL_SUPPORT",
+      "mechanism": "WASI 0.3 plus the WebAssembly Component Model is a high-value first lowering/ABI target for ClayCode BASE because it supplies typed component interfaces/resources and native async while preserving a host-mediated authority boundary.",
+      "expected_observation": "APP-01 CLI, APP-02 HTTP service and APP-04 concurrent service can lower through a small Clay runtime/WIT adapter layer on a current Wasmtime runtime with explicit receipts and no semantic escape hatch.",
+      "counterhypothesis": "A native host-language backend first is materially simpler/faster and WASI component overhead or immature ecosystem increases repair cost.",
+      "falsifier": "Matched prototypes show worse implementation complexity, unsupported required APIs, unacceptable overhead, nondeterministic semantics or authority leakage relative to a native backend.",
+      "cheapest_next_test": "Implement one minimal Clay IR -> WASI 0.3 component path for CLI + async timer/HTTP and compare code size, latency, adapter complexity and error fidelity with one native lowering.",
+      "affected_branches": ["claycode", "harness", "frank"],
+      "stage_implication": "Treat WASI 0.3 as first experimental backend candidate, not a promoted mandatory architecture."
+    },
+    {
+      "id": "H-CC-20260809-04",
+      "status": "OPEN",
+      "mechanism": "The FRANK v0.1 adaptive visual learner can be expressed using general ClayCode records/state/provenance/version/transaction/rollback constructs without learner-specific core syntax.",
+      "expected_observation": "Frozen H1 learner fixtures roundtrip and replay in ClayCode using ordinary typed state and effects with no opaque semantic service boundary.",
+      "counterhypothesis": "Learner version/calibration/open-set/promotion semantics require a dedicated primitive to preserve correctness or tractable compilation.",
+      "falsifier": "An H1 parity fixture cannot be represented or safely replayed with the generic core without hidden external state or ambiguous authority/version semantics.",
+      "cheapest_next_test": "Add a compact MVC state/update/promotion/rollback fixture to the BASE conformance corpus before changing language semantics.",
+      "affected_branches": ["claycode", "frank", "harness", "unifieddb", "claygraph"],
+      "stage_implication": "No new learner-specific primitive now; test general-purpose expressibility first."
+    },
+    {
+      "id": "H-CC-20260809-05",
+      "status": "OPEN",
+      "mechanism": "GWT, Hyperposition and emergence readout contracts should initially compile as typed library/schema records and intervention APIs rather than dedicated language syntax.",
+      "expected_observation": "All required readout fields, UNKNOWN states, epochs, topology identities, lesions/rescues and receipts can be represented and replayed through the typed IR and runtime ABI.",
+      "counterhypothesis": "Dedicated syntax is needed to preserve causal/topological invariants or enable efficient lowering.",
+      "falsifier": "Executable readout/intervention fixtures expose an invariant that cannot be statically represented or checked through ordinary types/effects.",
+      "cheapest_next_test": "Compile one WorkspaceEpisode + EmergenceReadout + Hyperposition intervention fixture through the reference evaluator.",
+      "affected_branches": ["claycode", "gwt", "hyperposition", "emergenz", "harness"],
+      "stage_implication": "Prefer stdlib/schema work over semantic-core expansion until a counterexample exists."
+    }
+  ]
+}

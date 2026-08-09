@@ -1,0 +1,38 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-wp02-string-identity-fix-20260810T0634p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T06:34:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-WP02-STRING-IDENTITY-FIX-20260810",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "GO_RECURSIVE_SWARM_CYCLE_FALSIFIER",
+    "title": "Unify WP02 JSON string identity across canonical surfaces",
+    "status": "CLAIMED",
+    "reason_clay": "The cancelled broad canonicalizer lane explicitly allowed reopening only after a concrete defect was falsified. GO-OOB-WP02-CROSS-CANONICAL-STRING-PARTITION-V1 falsified the cross-surface identity assumption: 4/5 bounded pairs that are the same decoded JSON string split in the strict syntax canonicalizer because it retains raw STRING lexemes, while the production frontend decodes escapes. This contradicts the existing production canonicalizer regression requiring literal and escaped spellings of the same Unicode scalar sequence to share semantic identity.",
+    "hypothesis": "Decoding JSON STRING lexemes into validated Unicode scalar sequences in the strict syntax canonicalizer will align equivalence semantics with the production frontend without collapsing canonically distinct scalar sequences such as composed versus decomposed Unicode.",
+    "counterhypothesis": "Raw escape spelling is intentionally semantic in the strict canonicalizer, so decoding would erase required source-level identity or break admitted corpus/mutation behavior.",
+    "smallest_test": "Add regression pairs for literal-vs-escaped equality, composed-vs-decomposed inequality, surrogate-pair equivalence, and lone-surrogate rejection; rerun the existing strict/full-corpus/canonical WP02 closure and Hostinger receipt lane.",
+    "evidence": [
+      "research_entity/trigger_runs/go/go-20260810T0632p0700-wp02-cross-canonical-string/OOB_RESULT.json",
+      "tools/claycode_base_frontend.py@f7ac0d63c0d1f1fe3b8753c8246859340aba02ca",
+      "tools/claycode_base_canonicalizer.py@cd83a6b49f5a85a2161f63d39ddee1e2d17110ab",
+      "tools/claycode_base_canonicalizer_validation.py@6bc6443c6e69b18684600cf3aec1a87d7596ffef",
+      "RFC8259-sections-7-8"
+    ],
+    "write_scope": [
+      "tools/claycode_base_canonicalizer.py",
+      "research_entity/state/work/events/",
+      "research_entity/trigger_runs/go/go-20260810T0632p0700-wp02-cross-canonical-string/"
+    ],
+    "acceptance": [
+      "same decoded JSON string => same strict canonical identity",
+      "different Unicode scalar sequence remains distinct",
+      "unpaired surrogate is rejected",
+      "existing V17 full-corpus and mutation/trivia checks remain green",
+      "Hostinger preliminary WP02 receipt is required before any WP02 promotion"
+    ],
+    "rollback": "Revert the one canonicalizer change if any admitted corpus or semantic mutation discriminator regresses; preserve this negative result either way."
+  }
+}

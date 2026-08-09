@@ -8,7 +8,7 @@ Promotion: **NONE**
 
 ## Executive result
 
-This Hypofusion does **not** justify another architecture expansion. It pushes the current programme toward stricter executable boundaries and several simpler external mechanism candidates.
+This Hypofusion does **not** justify another architecture expansion. It pushes the programme toward stricter executable boundaries and several simpler external mechanism candidates.
 
 Eight transformed hypotheses were created because external comparison materially changed their mechanism, boundary or next test:
 
@@ -21,116 +21,156 @@ Eight transformed hypotheses were created because external comparison materially
 7. **dual replay lanes**: deterministic staged replay + outside-in nondeterministic faulting;
 8. **BASE witness first**: executable cross-branch conformance before more surface-language redesign.
 
-The dominant meta-result is:
+Dominant rule:
 
-> **Keep semantic distinctions rich, but make every expensive or exotic mechanism earn its place against the strongest simpler external alternative.**
+> **Keep semantic distinctions rich, but make every expensive or exotic mechanism earn its place against the strongest simpler alternative.**
 
-## What changed most
+## Main Fusion-2 changes
 
-### 1. ClayCode compiler trust is now a two-proof problem
+### Compiler trust is a two-evidence problem
 
-Current worker evidence already refuted the idea that a self-consistent provenance/hash chain proves semantic preservation: deliberately wrong but internally consistent lowerings passed chain integrity. External verified-compiler work independently treats source/target behavior preservation as a separate correctness property.
+Current ClayCode evidence refuted the idea that a self-consistent provenance/hash chain proves semantic preservation: deliberately wrong but internally consistent lowerings passed chain integrity. External verified-compiler work independently treats source/target behavioral preservation as a different correctness property.
 
-Therefore BASE evidence should keep both:
+BASE should therefore preserve both:
 
 - ancestry/provenance integrity: source -> parser -> AST -> typed IR -> semantic identity -> lowering -> artifact -> execution receipt;
 - an independent semantic/reference/translation-validation oracle.
 
 Neither substitutes for the other.
 
-### 2. Numeric identity should be standard-first
+### Numeric identity becomes standard-first
 
-The new ClayCode cross-runtime probe found host-native JSON numeric divergence and exact-integer loss. RFC 8785 already provides a mature canonicalization model for an IEEE-754/I-JSON domain, including explicit behavior for non-finite values and long integers outside that domain.
+The cross-runtime worker found host-native JSON numeric divergence and exact-integer loss. RFC 8785 provides a mature canonicalization mechanism for an IEEE-754/I-JSON domain and explicitly bounds non-finite/long-integer behavior.
 
-Fusion result: do not invent Clay-specific numeric formatting until the admitted Clay numeric domain proves JCS-compatible semantics insufficient. Exact `Int`, signed-zero and special-value policy must be explicit at the type/canonical-IR/lowering boundary.
+Fusion result: do not invent Clay-specific numeric formatting until the admitted Clay numeric domain proves JCS-compatible semantics insufficient. Exact `Int`, signed-zero and special-value policy belong at the type/canonical-IR/lowering boundary.
 
-### 3. Resource lifetime is real, but generation tags are not privileged
+### Resource lifetime is required; generation tags are only one mechanism
 
-The local ABA probe strongly demonstrates the failure mode of raw reusable slot identity under forced reuse. WebAssembly Component Model/Wasmtime supplies an independent typed `own`/`borrow` handle family.
+The local ABA probe demonstrates the failure class of raw reusable slot identity under forced reuse. WebAssembly Component Model/Wasmtime independently supplies typed `own`/`borrow` resource handles.
 
-Fusion result: require **opaque current-lifetime resource identity**. Generation counters, backend-native resource handles and non-reusing identifiers remain competing mechanisms.
+Fusion result: require **opaque current-lifetime resource identity**. Generation counters, backend-native handles and non-reusing identifiers remain competing implementations.
 
-### 4. FRANK's loop-of-loops survives, but only as a controlled dynamical system
+### FRANK loop-of-loops survives only as a controlled dynamical system
 
-The integrated ClayResearch hypothesis that FRANK is better modeled as interacting multi-timescale recurrent loops remains plausible. Current external looped-LM work supplies a serious counterboundary: additional recurrence can improve performance up to a point and then collapse.
+The integrated hypothesis that FRANK is better modeled as interacting multi-timescale recurrent loops remains plausible. Current external looped-LM work supplies a serious counterboundary: additional recurrence can improve performance up to a point and then collapse.
 
-Fusion result: recurrence depth/gain is an intervention variable. The architecture needs explicit stop/stall/overcoupling criteria and matched-compute comparisons against shallow/fixed recurrence. This is not an argument against FRANK's loop mechanics; it is a requirement to measure their stability envelope.
+Fusion result: recurrence depth/gain is an intervention variable. Explicit stop/stall/overcoupling criteria and matched-compute comparison against fixed/shallow recurrence are mandatory. This refines FRANK's loop mechanics; it does not replace them with a flat pipeline.
 
-### 5. Hyperposition becomes reducer-first
+### Hyperposition becomes reducer-first
 
-The internal relation work already showed that unlabeled pairwise reductions can lose role-bearing semantics. But 2026 peer-reviewed work demonstrates exact pairwise reductions for a nontrivial class of hypergraph dynamics, and current theory work challenges universal expressivity claims for hypergraphs.
+Internal work shows unlabeled pairwise reductions can lose role-bearing semantics. Independent 2026 work also demonstrates exact pairwise reductions for nontrivial higher-order model classes and challenges universal claims of native-hypergraph necessity.
 
-Fusion result: explicit n-ary/hyperrelation representation stays available, but it must beat the best typed graph/factor/state-machine reduction on semantic/intervention/replay equivalence or measurable cost. `higher-order interaction != mandatory hyperedge`.
+Fusion result: n-ary/hyperrelation representation stays available, but it must beat the strongest typed graph/factor/state-machine reduction on semantic/intervention/replay equivalence or measurable cost. `higher-order interaction != mandatory hyperedge`.
 
-### 6. Shared semantic epochs and effect freshness are different problems
+### Shared semantic epoch and effect freshness are different contracts
 
-Shared epochs remain a useful candidate for coherent UDB/ClayGraph/GWT/Hyperposition reads and replay. A fresh Harness worker, however, found that global-epoch equality at effect commit safely rejected unsafe changes but also falsely aborted safe work under unrelated churn, while a scoped dependency/capability/resource check avoided both in the constructed model.
+Shared epochs remain useful candidates for coherent UDB/ClayGraph/GWT/Hyperposition reads and replay. The fresh Harness effect oracle found that global-epoch equality at commit can safely reject stale work while falsely aborting safe work under unrelated churn; scoped dependency/capability/resource revalidation avoided both in the constructed model.
 
 Fusion result:
 
-- use coherent semantic epochs for snapshot/read/replay identity where they help;
-- revalidate **scoped decision dependencies** at effect commit;
-- never infer commit authority from model output, Needle routing, GWT selection, ClayGraph activation, recurrence or emergence state.
+- coherent semantic epochs for snapshot/read/replay where useful;
+- **scoped decision dependency revalidation** at effect commit;
+- model output, Needle routing, GWT selection, ClayGraph activation, recurrence and emergence state never mint authority.
 
-### 7. Exactly-once external effects remain unproven
+### Exactly-once external effects remain unproven
 
-Local idempotency ledgers and serialized transactions can classify retries/concurrency, but a local `PREPARED` record cannot generally distinguish crash-before-effect from crash-after-effect without remote cooperation.
+Local ledgers and serialized transactions can classify retries/concurrency, but a local `PREPARED` state does not generally distinguish crash-before-effect from crash-after-effect without remote cooperation.
 
-Fusion result: external effects need remote idempotency/deduplication, transactional coupling, queryable/reconcilable remote identity, or a typed `UNCERTAIN` recovery result. Do not promote a local ledger into an exactly-once guarantee.
+External effects therefore require remote idempotency/deduplication, transactional coupling, queryable/reconcilable remote identity, or a typed `UNCERTAIN` recovery result.
 
-### 8. Replay needs two lanes
+### Replay requires complementary deterministic and outside-in lanes
 
-Current Harness work supports content-addressed staged TurnTrace replay and environment fingerprints. Independent reliability-engineering precedents pair deterministic simulation with real/outside-in fault injection.
+Current Harness work supports content-addressed staged TurnTrace replay and environment fingerprints. Independent high-reliability systems pair deterministic simulation with real/outside-in fault injection.
 
-Fusion result: H1/H2/H3 validation should pair:
+H1/H2/H3 should pair deterministic staged semantic replay for localization with nondeterministic outside-in faulting for failure classes hidden by the simulator/model.
 
-- deterministic staged semantic replay for reproducibility/localization;
-- outside-in nondeterministic faulting for failure classes hidden by the simulator/model.
+## Final live-worker reread
+
+The required closing reread found three material completed deltas and two pending starts.
+
+### Emergenz late arrival — integrated
+
+`emergenz-20260809T1714p0700` adds six open hypotheses and a stricter causal-triangulation bundle. Its synthetic controls demonstrate opposite failure modes that the Harness measurement plane must be able to distinguish:
+
+- a **common-driver false positive**, where apparent directed-flow signal collapses when the common driver is conditioned;
+- a **pairwise-blind XOR-style mechanism**, where pairwise information is near zero but joint/conditional information and matched lesion/rescue reveal the higher-order dependency.
+
+This strengthens the Hypofusion emergence rule:
+
+`measured_value != estimator_interpretation != evidence_status != execution_authority`
+
+Required Golden fixtures now include:
+
+1. `COMMON_DRIVER_FALSE_POSITIVE`;
+2. `XOR_PAIRWISE_FALSE_NEGATIVE`;
+3. `CONTENT_MATCHED_FALSE_RESCUE`.
+
+PEID/interventional synergy should coexist with observational decomposition; the decomposition family, intervention distribution, conditioning set, estimator identity and disagreement are first-class measurement provenance. No emergence scalar is promoted.
+
+### G9 grammar surface-closure negative result — integrated
+
+`N-CC-20260809-001` strengthens the earlier focused grammar counterexample: the current admitted grammar is not surface-closed over current admitted G9 V3 artifacts in the targeted audit. Observed failure classes include relational operators, `if` statements and typed interface method signatures. This does **not** prove semantic unsoundness of G9 or target-host runtime failure.
+
+Repair remains narrow: add missing syntax productions without semantic redesign, then run complete admitted-corpus parse/canonicalization differential tests.
+
+### Live Fusion Refresh 5 — consistency confirmation
+
+The independent concurrent Fusion worker consumed this Hypofusion branch closure and returned `REVISE` receipts to all nine branches with no promotion. Its synthesis agrees with the current result: recurrence retained but bounded; system/model workspaces separated; hyperrelations reducer-gated; logical UnifiedDB preserved; scoped effect freshness and explicit external-effect uncertainty kept distinct.
+
+### Pending at close — not invented
+
+- ClayCode G9 function-definition closure worker had started but had no result at the close cutoff.
+- ClayCode APP-03 database-adapter worker had started but had no result at the close cutoff.
+
+Neither is interpreted before completion.
 
 ## Current-stage implication
 
-The `BASE_CLAYCODE_RELEASE` gate should become more execution-heavy, not more speculative.
+`BASE_CLAYCODE_RELEASE` should become more execution-heavy, not more speculative.
 
 Highest-information order:
 
 1. Build one minimal executable semantic witness for every registered branch through the **real** BASE parser/type/effect/lowering/runtime chain.
-2. Run a wrong-but-self-consistent lowering mutation suite against a distinct reference evaluator/semantic oracle.
-3. Run numeric canonicalization/roundtrip across selected backends using RFC8785-compatible behavior as the baseline where applicable.
-4. Run real FFI lifetime/ABA tests across files, processes, sockets/HTTP and DB handles on the Ubuntu developer target.
-5. Freeze ambiguous legacy G9 semantics explicitly; fail closed before authoritative freeze rather than guessing intent from source formatting.
-6. Preserve later-stage H1/H2/H3 work as blocked prerequisites; do not skip the staged programme.
+2. Close the full admitted grammar/surface gap and run parse/canonicalization differential tests.
+3. Run wrong-but-self-consistent lowering mutations against a distinct reference evaluator/semantic oracle.
+4. Run numeric canonicalization/roundtrip across selected backends with RFC8785-compatible behavior as baseline where applicable.
+5. Run real FFI lifetime/ABA tests across files, processes, sockets/HTTP and DB handles on the Ubuntu developer target.
+6. Freeze ambiguous legacy G9 semantics explicitly; fail closed before authoritative freeze.
+7. Preserve H1/H2/H3 as staged prerequisites; do not skip gates.
 
 ## Whole-mesh feedback
 
-All nine currently registered scientific branches received explicit feedback in `BRANCH_FEEDBACK_MANIFEST.json`:
+All nine registered scientific branches received explicit feedback in `BRANCH_FEEDBACK_MANIFEST.json`. Main effects:
 
-- `clayresearch`: refine toward standard-first/reducer-first/scoped-freshness/dual-replay tests;
-- `frank`: preserve recurrence but add stability envelope and non-authority boundary;
-- `gwt`: keep system vs model-internal workspace distinct and causally test uptake/re-entry;
-- `emergenz`: no promotion; strengthen intervention/multiscale/transfer controls;
-- `claycode`: highest-priority execution delta; compile real cross-branch witnesses;
+- `clayresearch`: standard-first/reducer-first/scoped-freshness/dual-replay refinements;
+- `frank`: recurrence retained with stability envelope and non-authority boundary;
+- `gwt`: system and model-internal workspace kept separate with causal uptake/re-entry tests;
+- `emergenz`: causal triangulation and Golden fixtures, no scalar promotion;
+- `claycode`: highest-priority real compiler/runtime witnesses;
 - `hyperposition`: reducer-first and bounded propagation;
-- `claygraph`: keep provenance/conflict/activation separation without intrinsic hypergraph claims;
-- `unifieddb`: logical unification survives, physical/incremental choices remain benchmarked;
-- `harness`: staged deterministic replay + outside-in fault lane + scoped commit freshness.
+- `claygraph`: provenance/conflict/activation separation retained without intrinsic hypergraph claim;
+- `unifieddb`: logical unity retained while physical/incremental choices remain benchmarked;
+- `harness`: deterministic staged replay + outside-in faulting + scoped commit freshness + explicit external-effect uncertainty.
 
-## Negative results preserved
+## Preserved negative results
 
-- cryptographic/provenance continuity is **not sufficient** for semantic-preserving lowering in the tested class;
+- provenance/hash continuity is not sufficient semantic-preservation evidence;
 - raw reusable runtime slot identity is unsafe under forced ABA reuse in the constructed model;
 - host-native JSON number serialization is unsafe semantic-hash material for the tested cross-runtime edge corpus;
-- G9 V3 contains focused grammar/source self-consistency counterexamples;
-- three legacy G9 rule lines remain semantically ambiguous and must not be auto-normalized before authoritative freeze;
-- one global epoch at effect commit can cause false aborts under unrelated churn in the current synthetic oracle;
-- local effect state does not establish exactly-once external side effects;
-- universal native-hyperrelation necessity is not defensible against exact reduction counterexamples.
+- current admitted G9 grammar is not surface-closed in the targeted audit;
+- ambiguous legacy G9 rules must not be auto-normalized before authoritative semantic freeze;
+- one global commit epoch can cause false aborts under unrelated churn in the synthetic oracle;
+- local effect state does not establish exactly-once external effects;
+- universal native-hyperrelation necessity is contradicted by exact-reduction counterexamples;
+- pairwise directed flow can be a common-driver false positive;
+- pairwise measures can miss genuine higher-order mechanisms.
 
 ## Completion boundary
 
-All nine mandatory Hypofusion run artifacts were written. External searches covered every major mechanism cluster represented by the current integrated matrix and fresh worker deltas. Counterhypotheses were paired with discriminating tests and every registered branch received feedback.
+All nine mandatory Hypofusion artifacts are present and the final live-worker reread was integrated. External searches covered every major mechanism cluster represented by the inherited prior-Hypofusion baseline, the current 60-hypothesis integrated matrix and reachable fresh worker deltas. Counterhypotheses have discriminating tests and every registered branch has feedback.
 
-One product/tool limitation remains: the current GitHub connector cannot recursively enumerate repository directories/tree. The run therefore inherits the previous Hypofusion's 99-record mapping, explicitly enumerates the current 60-hypothesis integrated matrix plus recent worker deltas, and marks any otherwise-unreachable historical hypothesis records as `INACCESSIBLE` rather than pretending exhaustive tree visibility.
+One tool limitation prevents claiming literal repository-tree exhaustiveness: the current GitHub connector cannot recursively enumerate repository directories. Historical records outside the prior Hypofusion mapping, direct known paths and current commit search are explicitly marked `INACCESSIBLE` rather than silently omitted.
 
-No new target-host experiment was executed by this Hypofusion itself. No canonical revision or scientific claim was promoted.
+No target-host H1/H2/H3 experiment was executed by this Hypofusion itself. No canonical revision or scientific claim was promoted.
 
-**Operational completion before final live-worker reread: 96%.**
+**Operational completion: 98%.**

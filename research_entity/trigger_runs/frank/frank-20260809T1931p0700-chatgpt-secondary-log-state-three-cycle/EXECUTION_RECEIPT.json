@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1931p0700-chatgpt-secondary-log-state-three-cycle",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_class": "LOCAL_CONTAINER_COMPONENT_VALIDATION_PLUS_REPOSITORY_STATE_AUDIT_NOT_TARGET_ACCEPTANCE",
+  "scope": "FRANK loop/log/state fusion; quality-gate hardening; policy/receipt provenance binding",
+  "pre_fix_reproducer": {
+    "component": "research_entity/harness/reference/loop_dynamics_quality_gate.py",
+    "component_blob_sha_before": "438ce0241e372c620c3d0b82924ca329f428d9d1",
+    "observed_invalid_inputs_that_reached_decision_logic": {
+      "negative_residual_uncertainty": "HALT_CANDIDATE_CONVERGED",
+      "negative_measurement_age_cycles": "HALT_CANDIDATE_CONVERGED",
+      "nan_residual_uncertainty": "HALT_CANDIDATE_CONVERGED",
+      "negative_residual_pressure": "HALT_CANDIDATE_CONVERGED",
+      "nan_residual_pressure": "CONTINUE"
+    },
+    "policy_identity_gap": "The same readout could produce identical receipts under different controller thresholds when the decision did not change, and readout_sha256 stayed identical even when a threshold changed the decision. No policy hash or receipt hash existed."
+  },
+  "implementation_delta": {
+    "component_commit": "312c532db49d570c4866b9015dc72d63d568291d",
+    "component_blob_sha_after": "ac3767fb72f87da10ab625a7721486c9d5b400a9",
+    "tests_commit": "c8c2f7919f30b2060bc6f658bc3cd49269881703",
+    "tests_blob_sha_after": "f2317a60a14d58e3bac5110ed389707f06e41047",
+    "schema_version_after": "h1-loop-dynamics-quality-gate-0.2",
+    "changes": [
+      "reject non-finite numeric telemetry before recurrence classification",
+      "reject negative epochs/streaks/measurement ages and negative state delta/residual pressure",
+      "bound oscillation_indicator and residual_uncertainty to [0,1]",
+      "validate controller threshold domain and ordering",
+      "serialize hash inputs with allow_nan=false",
+      "domain-separate readout, policy and receipt hashes",
+      "bind controller_policy_id and thresholds into policy_sha256",
+      "bind readout_sha256 plus policy_sha256 plus decision metadata into receipt_sha256",
+      "preserve NONE external-effect authority and effect-gate requirement"
+    ]
+  },
+  "local_regression": {
+    "environment": "ChatGPT Python sandbox/local proxy; not target Ubuntu",
+    "command": "python -m unittest -v test_loop_dynamics_quality_gate.py",
+    "tests_run": 13,
+    "tests_passed": 13,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "note": "The Python subprocess emitted an unrelated artifact_tool spreadsheet warmup timeout on stderr before unittest output; unittest execution itself returned exit code 0 and all 13 tests passed."
+  },
+  "property_fuzz": {
+    "seed": 202608091931,
+    "cases": 100000,
+    "deliberately_invalid_cases_rejected": 29808,
+    "invalid_cases_accepted": 0,
+    "decision_counts_on_accepted_cases": {
+      "ROUTE_READOUT_UNCERTAIN": 46907,
+      "CONTINUE": 19814,
+      "HALT_CANDIDATE_CONVERGED": 1894,
+      "HALT_MARGINAL": 1338,
+      "ESCALATE_STALLED": 239
+    },
+    "checked_invariants": [
+      "invalid telemetry cannot mint a recurrence decision",
+      "valid stale/high-uncertainty telemetry routes rather than converges",
+      "policy/threshold changes are receipt-visible",
+      "decision receipts remain proposal-only and effect-ineligible"
+    ]
+  },
+  "repository_reread": {
+    "component_blob_sha_verified": "ac3767fb72f87da10ab625a7721486c9d5b400a9",
+    "tests_blob_sha_verified": "f2317a60a14d58e3bac5110ed389707f06e41047"
+  },
+  "combined_commit_status_after_tests_write": "NO_STATUSES_RETURNED_BY_GITHUB_COMBINED_STATUS_SURFACE",
+  "release_effect": "NONE",
+  "h1_gate": "NOT_PASS",
+  "promotion_allowed": false,
+  "remaining_falsifiers": [
+    "run the v0.2 component and expanded tests on the target Ubuntu developer host",
+    "integrate the quality gate into the ordinary-code H1 executable spine",
+    "run frozen/live-derived Golden Traces through state-ledger -> loop-readout -> quality-gate -> trajectory decision -> GWT/effect non-authority path",
+    "calibrate thresholds per residual estimator/version from observed H1 traces",
+    "compare typed adaptive recurrence against tuned fixed-budget, delta-only and event-driven baselines under matched outcome/latency/compute/recovery cost",
+    "evaluate whether state_version_hash and trace_root_hash should be bound directly into recurrence receipts"
+  ]
+}

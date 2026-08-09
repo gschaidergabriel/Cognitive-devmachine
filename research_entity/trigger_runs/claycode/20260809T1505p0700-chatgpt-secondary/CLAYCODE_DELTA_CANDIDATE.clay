@@ -1,0 +1,74 @@
+module claycode.g9.research.projection_admission_lowering_delta
+version "0.1-candidate"
+status OPEN_RESEARCH_DELTA
+parent [@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay]
+origin_actor chatgpt-secondary
+
+// This candidate refines G9 V3; it is not a BASE or current-stack promotion.
+
+class AdmissionState = PENDING | ADMITTED | REJECTED
+class ProjectionMode = PATCH | COMPLETE_SNAPSHOT
+
+record AdmissionIdentity {
+  repository:RepoRef
+  admitted_ref:Ref
+  source_tree_hash:Hash
+  semantic_epoch:Epoch
+  schema_hash:Hash
+  materializer_hash:Hash
+  receipt:ReceiptRef
+  state:AdmissionState
+}
+
+record ProjectionCommitReceipt {
+  projection:Ref
+  mode:ProjectionMode
+  source_epoch:Epoch
+  previous_graph_epoch:Epoch?
+  graph_epoch:Epoch
+  admission:AdmissionIdentity
+  previous_output_hash:Hash?
+  new_output_hash:Hash
+  added:Set<Ref>
+  retracted:Set<Ref>
+  unchanged:Set<Ref>
+  derivation_hash:Hash
+  rollback:RecoveryRef
+}
+
+rule ProjectionMode.COMPLETE_SNAPSHOT requires retracted=previous_current_domain-new_output
+rule ProjectionMode.COMPLETE_SNAPSHOT requires unchanged=previous_current_domain*new_output
+rule ProjectionMode.PATCH omission_never_implies_retraction
+rule publish(CURRENT) requires admission.state=ADMITTED
+rule publish(CURRENT) requires projection_epoch_coherent
+rule publish(CURRENT) requires retraction_closed_if_complete_snapshot
+rule retracted_relation cannot_remain active_current
+rule graph_retraction never_deletes historical_provenance
+
+record SchemaBinding {
+  record_type:TypeRef
+  target_schema:SchemaRef
+  target_table:Symbol
+  semantic_hash:Hash
+  contract_hash:Hash
+}
+
+rule sql.lower(record,SchemaBinding) -> named_columns
+rule schema_check before sql.execute
+rule schema_check rejects unknown_source_field
+rule schema_check rejects missing_required_target_field_without_default
+rule named_lowering != schema_compatibility_proof
+rule semantic_hash != contract_hash
+
+hypothesis H_CC_NAMED_20260809 = "Named-field lowering plus schema preflight reduces silent schema-drift corruption across evolving UnifiedDB boundaries relative to positional tuple lowering."
+counterhypothesis H_CC_NAMED_NULL_20260809 = "Compiler-known positional lowering is equally safe when the exact schema contract is frozen and verified before every execution."
+
+hypothesis H_CC_RETRACT_20260809 = "Complete-snapshot graph projections require explicit retraction closure; additive-only projection can preserve stale CURRENT topology across epochs."
+counterhypothesis H_CC_RETRACT_NULL_20260809 = "Existing invalidation/runtime machinery can guarantee stale-edge removal without a distinct projection-completeness contract in ClayCode IR."
+
+hypothesis H_CC_ADMISSION_20260809 = "Derived CURRENT publication should bind to an admitted source/materialization identity rather than only a graph/source epoch."
+counterhypothesis H_CC_ADMISSION_NULL_20260809 = "Existing provenance plus an external boot admission gate is sufficient; adding admission identity to ClayCode IR duplicates responsibility."
+
+invariant no_truth_upgrade_by_projection
+invariant no_effect_authority_by_projection
+invariant candidate_language_semantics_reversible_until_validated

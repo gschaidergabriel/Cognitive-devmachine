@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1813p0700-claycode-unicode-canon",
+  "evidence": [
+    {
+      "id": "E-CC-UNICODE-REPO-GRAMMAR",
+      "class": "CURRENT_REPOSITORY_EVIDENCE",
+      "source": "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark",
+      "finding": "Current candidate grammar restricts NAME and REF to ASCII-compatible regexes while STRING uses the parser string literal facility.",
+      "weight": "HIGH_FOR_CURRENT_GRAMMAR_SURFACE_ONLY"
+    },
+    {
+      "id": "E-CC-UNICODE-PRIOR-TYPED-CANON",
+      "class": "CURRENT_RESEARCH_LINEAGE",
+      "source": "claycode_20260809T1606p0700_chatgpt_semhash_typedcanon",
+      "finding": "Prior executable research established that canonicalization must be type-directed and separated semantic_hash, artifact_hash, contract_hash and deployment/execution identity.",
+      "weight": "HIGH_SHARED_ANCESTRY_NOT_INDEPENDENT_REPLICATION"
+    },
+    {
+      "id": "E-CC-UNICODE-PROXY",
+      "class": "HOSTED_EXECUTABLE_PROXY",
+      "source": "EXECUTABLE_RESEARCH_RECEIPT.json",
+      "finding": "12665 canonical-equivalence pairs and 2411 compatibility-only pairs passed the exact-vs-explicit-NFC typed policy; global normalization counterexamples and concat boundary counterexamples were reproduced.",
+      "weight": "MEDIUM_FOR_SEMANTIC_COUNTEREXAMPLE_LOW_FOR_TARGET_RUNTIME_TRUTH"
+    },
+    {
+      "id": "E-UNICODE-UAX15",
+      "class": "PRIMARY_NORMATIVE_STANDARD",
+      "source": "Unicode Standard Annex #15, Unicode Normalization Forms, current published Version 17.0.0, 2025-07-30",
+      "url": "https://www.unicode.org/reports/tr15/",
+      "finding": "Defines canonical versus compatibility equivalence, NFC/NFD/NFKC/NFKD, warns that compatibility normalization is context-sensitive, and states normalization forms are not closed under concatenation.",
+      "weight": "HIGH_EXTERNAL_PRIMARY"
+    },
+    {
+      "id": "E-UNICODE-UAX31",
+      "class": "PRIMARY_NORMATIVE_STANDARD",
+      "source": "Unicode Standard Annex #31, Unicode Identifiers and Syntax",
+      "url": "https://www.unicode.org/reports/tr31/",
+      "finding": "Identifier specifications should define normalization/profile behavior; NFC is the straightforward policy for canonical-equivalent identifier handling when Unicode identifiers are supported.",
+      "weight": "HIGH_EXTERNAL_PRIMARY_FOR_IDENTIFIER_POLICY"
+    },
+    {
+      "id": "E-IETF-RFC8785",
+      "class": "PRIMARY_STANDARD",
+      "source": "RFC 8785 JSON Canonicalization Scheme",
+      "url": "https://www.rfc-editor.org/rfc/rfc8785.html",
+      "finding": "A deterministic canonical wire format can preserve Unicode string data as-is rather than performing Unicode normalization; invalid lone-surrogate data is rejected.",
+      "weight": "HIGH_EXTERNAL_PRIMARY_AS_SERIALIZATION_ANALOGUE"
+    }
+  ],
+  "ancestry_notes": [
+    "The local typed-policy result extends the earlier ClayCode type-directed canonicalization lineage and is not counted as independent replication of that general principle.",
+    "Unicode standards are independent external primary evidence about normalization behavior, not evidence that a specific ClayCode policy is automatically correct.",
+    "The hosted proxy uses Unicode database 15.1.0; current UAX #15 is Unicode 17.0.0, so production conformance must pin/verify the target Unicode data version."
+  ],
+  "unsupported_claims_explicitly_not_made": [
+    "No BASE ClayCode gate PASS",
+    "No normative compiler acceptance",
+    "No Ubuntu target execution",
+    "No need for a new ClayCode primitive established",
+    "No phenomenal/emergence claim"
+  ]
+}

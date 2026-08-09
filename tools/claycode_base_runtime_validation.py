@@ -2,10 +2,10 @@
 """Executable adversarial validation for tools/claycode_base_runtime.py.
 
 Hosted Ubuntu execution is proxy evidence only; target-host receipts remain required.
-The suite explicitly probes caller-controlled policy/callable laundering.
+The suite explicitly probes caller-controlled policy/callable/path laundering.
 """
 from __future__ import annotations
-import json, pickle, tempfile
+import json, os, pickle, tempfile
 from pathlib import Path
 from claycode_base_runtime import CapabilityFault, ClayRuntime, ResourceFault, VersionedCell, RUNTIME_VERSION
 
@@ -55,22 +55,28 @@ def main()->int:
         after=rt.invoke('db.sqlite_transaction',db,'state.db',[('SELECT k,v FROM t ORDER BY k',())])
         check('sqlite_rollback_atomic',after['rows'][-1]==[('a',1)])
 
-        # Process allowlist is fixed into the capability. The caller cannot supply or widen it.
-        proc=rt.mint_capability('process.exec',{'programs':['echo']})
-        echo=rt.invoke('process.exec',proc,['/bin/echo','clay'])
+        # Process authority is bound to a canonical absolute executable at mint time.
+        echo_real=str(Path('/bin/echo').resolve(strict=True))
+        proc=rt.mint_capability('process.exec',{'programs':[echo_real]})
+        echo=rt.invoke('process.exec',proc,[echo_real,'clay'])
         check('process_allowlist_positive',echo['returncode']==0 and echo['stdout'].strip()=='clay')
-        rejects('process_policy_scope_negative',lambda:rt.invoke('process.exec',proc,['/bin/true']),CapabilityFault)
+        rejects('process_policy_scope_negative',lambda:rt.invoke('process.exec',proc,[str(Path('/bin/true').resolve(strict=True))]),CapabilityFault)
         rejects('process_policy_missing_rejected',lambda:rt.mint_capability('process.exec'),CapabilityFault)
-        rejects('process_policy_path_entry_rejected',lambda:rt.mint_capability('process.exec',{'programs':['/bin/bash']}),CapabilityFault)
-        # Regression for v0.1 bug: invoke no longer accepts caller-provided allowed_programs.
-        rejects('caller_cannot_widen_process_allowlist',lambda:rt.invoke('process.exec',proc,['/bin/true'],['true']),TypeError)
+        rejects('process_policy_basename_entry_rejected',lambda:rt.mint_capability('process.exec',{'programs':['echo']}),CapabilityFault)
+        rejects('process_relative_argv_rejected',lambda:rt.invoke('process.exec',proc,['echo','clay']),CapabilityFault)
+        # P0 regression: a hostile binary with the same basename must not inherit authority.
+        fake_dir=Path(td)/'evil'; fake_dir.mkdir(); fake_echo=fake_dir/'echo'
+        fake_echo.write_text('#!/bin/sh\nprintf "PWNED\\n"\n',encoding='utf-8'); os.chmod(fake_echo,0o755)
+        rejects('process_same_basename_spoof_rejected',lambda:rt.invoke('process.exec',proc,[str(fake_echo)]),CapabilityFault)
+        # Caller still cannot widen a sealed policy during invocation.
+        rejects('caller_cannot_widen_process_allowlist',lambda:rt.invoke('process.exec',proc,[str(Path('/bin/true').resolve(strict=True))],['/bin/true']),TypeError)
 
         num=rt.mint_capability('numerical.cpu',{'max_vector':3})
         check('numerical_dot',rt.invoke('numerical.dot',num,[1,2,3],[4,5,6])==32.0)
         rejects('numerical_shape_error',lambda:rt.invoke('numerical.dot',num,[1],[1,2]),ResourceFault)
         rejects('numerical_resource_limit',lambda:rt.invoke('numerical.dot',num,[1,2,3,4],[1,2,3,4]),ResourceFault)
 
-        # Regression for v0.1 bug: arbitrary host callables are forbidden at the async boundary.
+        # Arbitrary host callables are forbidden at the async boundary.
         ac=rt.mint_capability('async.compute',{'operations':['square']})
         mapped=rt.invoke('async.map',ac,'square',[5,1,3,2],4)
         check('async_publication_order_deterministic',mapped==[
@@ -87,7 +93,7 @@ def main()->int:
         check('trace_no_raw_capability_secret','nonce' not in rendered and 'issuer_secret' not in rendered)
 
     failures=[c['name'] for c in checks if not c['pass']]
-    report={'schema_version':'1.1','runtime_version':RUNTIME_VERSION,'experiment':'ClayCode BASE sealed runtime/ABI/FFI authority boundary adversarial validation','evidence_class':'HOSTED_OR_LOCAL_LINUX_EXECUTION_NOT_ANDREAS_TARGET_ACCEPTANCE','counts_as_target_acceptance':False,'counts_as_full_work_package_pass':False,'supports':['CC-WP-07-RUNTIME-ABI-FFI','CC-WP-08-STDLIB-SDK','CC-WP-09-CONCURRENCY-MEMORY','CC-WP-11-FUZZ-CONFORMANCE'],'checks':checks,'checks_passed':len(checks)-len(failures),'checks_total':len(checks),'failures':failures,'pass':not failures,'authority_invariant':'model_output != execution_authority','closed_regressions':['CALLER_SUPPLIED_PROCESS_ALLOWLIST','ARBITRARY_CALLABLE_ASYNC_MAP'],'target_host_required_next':'ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM'}
+    report={'schema_version':'1.2','runtime_version':RUNTIME_VERSION,'experiment':'ClayCode BASE sealed runtime/ABI/FFI authority boundary adversarial validation','evidence_class':'HOSTED_OR_LOCAL_LINUX_EXECUTION_NOT_ANDREAS_TARGET_ACCEPTANCE','counts_as_target_acceptance':False,'counts_as_full_work_package_pass':False,'supports':['CC-WP-07-RUNTIME-ABI-FFI','CC-WP-08-STDLIB-SDK','CC-WP-09-CONCURRENCY-MEMORY','CC-WP-11-FUZZ-CONFORMANCE'],'checks':checks,'checks_passed':len(checks)-len(failures),'checks_total':len(checks),'failures':failures,'pass':not failures,'authority_invariant':'model_output != execution_authority','closed_regressions':['CALLER_SUPPLIED_PROCESS_ALLOWLIST','PROCESS_BASENAME_COLLISION','RELATIVE_PROCESS_PATH','ARBITRARY_CALLABLE_ASYNC_MAP'],'target_host_required_next':'ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM'}
     OUT.parent.mkdir(parents=True,exist_ok=True);OUT.write_text(json.dumps(report,ensure_ascii=False,indent=2,sort_keys=True)+'\n',encoding='utf-8')
     print(json.dumps({'pass':report['pass'],'passed':report['checks_passed'],'total':report['checks_total'],'failures':failures}))
     return 0 if report['pass'] else 1

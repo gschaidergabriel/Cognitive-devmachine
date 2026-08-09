@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1505p0700-chatgpt-secondary",
+  "experiments":[
+    {"id":"CC-E-NAMED-01","surface":"local_sandbox","status":"PASS","cases":["baseline","add-default-column","reorder-columns","add-required-column-schema-preflight"],"result_ref":"EXECUTABLE_RESEARCH_RECEIPT.json"},
+    {"id":"CC-E-NAMED-02","surface":"E2B","status":"PASS","cases":["add-default-column","reorder-columns","add-required-column-schema-preflight"],"result_ref":"research_entity/runtime/tool_results/claycode-20260809t1505-e2b-named-retraction.json"},
+    {"id":"CC-E-RETRACT-01","surface":"local_sandbox+E2B","status":"PASS","cases":["epoch1 A-B,A-C -> complete epoch2 A-B","naive additive","retraction-closed"],"observed":"naive leaves A-C stale; retraction-closed removes A-C"}
+  ],
+  "not_run":[
+    {"id":"CC-E-FRANK-TARGET-01","reason":"current run has no target-machine execution surface; static FRANK audit provides issue evidence but not target-machine reproduction"},
+    {"id":"CC-E-H1H2-DIFF-01","reason":"BASE/H1/H2 stage gates not yet open under current L0 program state"}
+  ]
+}

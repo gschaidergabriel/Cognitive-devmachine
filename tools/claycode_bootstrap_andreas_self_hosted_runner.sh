@@ -15,6 +15,7 @@ STATE_FILE="${STATE_ROOT}/andreas_self_hosted_runner_bootstrap.json"
 SERVICE_DIR="${HOME}/.config/systemd/user"
 SERVICE_FILE="${SERVICE_DIR}/claycode-github-runner.service"
 DOWNLOADS_FILE="${STATE_ROOT}/github_runner_downloads.json"
+RUNNERS_FILE="${STATE_ROOT}/github_repository_runners.json"
 DESKTOP_PREFLIGHT_FILE="${STATE_ROOT}/desktop_preflight.json"
 FAILED_DETAIL_WRITTEN=0
 
@@ -29,7 +30,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 path=Path(sys.argv[1]); status=sys.argv[2]; detail=sys.argv[3]
 payload={
-  "schema_version":"1.2",
+  "schema_version":"1.3",
   "status":status,
   "detail":detail,
   "host":socket.gethostname(),
@@ -39,6 +40,7 @@ payload={
   "repo":"gschaidergabriel/clay-global-research-entity",
   "authority_invariant":"model output != execution authority",
   "runner_source_policy":"repository-specific GitHub Actions runner downloads API only when fresh registration is required",
+  "runner_reconciliation_policy":"existing local runner identity + scoped labels are reconciled fail-closed before listener start",
   "desktop_policy":"real Tk mapped-window preflight plus runner-service environment verification",
 }
 path.parent.mkdir(parents=True,exist_ok=True)
@@ -139,7 +141,99 @@ PY
 fi
 
 [[ -f .runner ]] || fail "runner_registration_state_missing"
+[[ -x ./config.sh ]] || fail "runner_config_entrypoint_missing"
 [[ -x ./runsvc.sh ]] || fail "runner_service_entrypoint_missing"
+
+# Reconcile an older local runner registration with the scoped labels required by the
+# physical-target workflow. A previously configured `.runner` must not silently bypass
+# the newer `andreas,claycode,target` routing contract and leave the closure job queued.
+LOCAL_RUNNER_NAME="$(python3 - .runner <<'PY'
+import json,sys
+p=json.load(open(sys.argv[1],encoding='utf-8'))
+name=str(p.get('agentName') or '').strip()
+assert name, p
+print(name)
+PY
+)" || fail "local_runner_config_invalid"
+[[ "${LOCAL_RUNNER_NAME}" == andreas-claycode-* ]] || fail "local_runner_name_not_scoped_${LOCAL_RUNNER_NAME}"
+
+gh api "repos/${REPO}/actions/runners?per_page=100" > "${RUNNERS_FILE}" \
+  || fail "cannot_list_repository_runners_before_reconcile"
+RUNNER_RECONCILE="$(python3 - "${RUNNERS_FILE}" "${LOCAL_RUNNER_NAME}" <<'PY'
+import json,sys
+payload=json.load(open(sys.argv[1],encoding='utf-8'))
+name=sys.argv[2]
+required={'self-hosted','linux','x64','andreas','claycode','target'}
+rows=[r for r in (payload.get('runners') or []) if str(r.get('name') or '') == name]
+if len(rows)>1:
+    print('DUPLICATE_REMOTE')
+elif not rows:
+    print('REMOTE_MISSING')
+else:
+    labels={str(x.get('name') or '').lower() for x in rows[0].get('labels') or []}
+    missing=sorted(required-labels)
+    if missing:
+        print('LABELS_MISSING:'+','.join(missing))
+    else:
+        print('READY:'+str(rows[0].get('status') or 'unknown'))
+PY
+)" || fail "runner_reconciliation_probe_failed"
+
+case "${RUNNER_RECONCILE}" in
+  READY:*)
+    ;;
+  LABELS_MISSING:*)
+    systemctl --user stop claycode-github-runner.service 2>/dev/null || true
+    REMOVE_TOKEN="$(gh api --method POST "repos/${REPO}/actions/runners/remove-token" --jq .token 2>/dev/null)" \
+      || fail "cannot_create_runner_remove_token"
+    [[ -n "${REMOVE_TOKEN}" ]] || fail "empty_runner_remove_token"
+    ./config.sh remove --token "${REMOVE_TOKEN}" || fail "runner_remove_for_label_reconcile_failed"
+    TOKEN="$(gh api --method POST "repos/${REPO}/actions/runners/registration-token" --jq .token 2>/dev/null)" \
+      || fail "cannot_create_runner_registration_token_for_reconcile"
+    [[ -n "${TOKEN}" ]] || fail "empty_runner_registration_token_for_reconcile"
+    ./config.sh \
+      --unattended \
+      --url "${REPO_URL}" \
+      --token "${TOKEN}" \
+      --name "${LOCAL_RUNNER_NAME}" \
+      --labels "andreas,claycode,target" \
+      --work "_work" \
+      --replace \
+      || fail "runner_reconfigure_for_labels_failed"
+    ;;
+  REMOTE_MISSING)
+    # If GitHub no longer has the runner but local credentials remain, preserve those
+    # credentials in a private local quarantine and create a fresh remote registration.
+    # This path is allowed only after owner-machine identity has already passed above.
+    systemctl --user stop claycode-github-runner.service 2>/dev/null || true
+    QUARANTINE="${STATE_ROOT}/stale_runner_config_$(date -u +%Y%m%dT%H%M%SZ)"
+    mkdir -p "${QUARANTINE}"
+    chmod 700 "${QUARANTINE}" || true
+    for f in .runner .credentials .credentials_rsaparams .service; do
+      [[ ! -e "$f" ]] || mv "$f" "${QUARANTINE}/$f"
+    done
+    TOKEN="$(gh api --method POST "repos/${REPO}/actions/runners/registration-token" --jq .token 2>/dev/null)" \
+      || fail "cannot_create_runner_registration_token_after_remote_loss"
+    [[ -n "${TOKEN}" ]] || fail "empty_runner_registration_token_after_remote_loss"
+    ./config.sh \
+      --unattended \
+      --url "${REPO_URL}" \
+      --token "${TOKEN}" \
+      --name "${LOCAL_RUNNER_NAME}" \
+      --labels "andreas,claycode,target" \
+      --work "_work" \
+      --replace \
+      || fail "runner_reconfigure_after_remote_loss_failed"
+    ;;
+  DUPLICATE_REMOTE)
+    fail "duplicate_remote_runner_name_${LOCAL_RUNNER_NAME}"
+    ;;
+  *)
+    fail "unexpected_runner_reconciliation_${RUNNER_RECONCILE}"
+    ;;
+esac
+
+[[ -f .runner ]] || fail "runner_registration_state_missing_after_reconcile"
 
 # APP-05 is a *real desktop* gate. Import the active graphical-session variables into the
 # user systemd manager before launching/restarting the listener. If the shell lacks them,
@@ -237,20 +331,20 @@ assert env.get('DISPLAY') or env.get('WAYLAND_DISPLAY'), {
 print('RUNNER_LISTENER_DESKTOP_ENV=PASS')
 PY
 
-ONLINE_JSON="$(gh api "repos/${REPO}/actions/runners" 2>/dev/null)" || fail "cannot_list_repository_runners"
-python3 - "${ONLINE_JSON}" <<'PY' || fail "no_online_matching_runner"
+ONLINE_JSON="$(gh api "repos/${REPO}/actions/runners?per_page=100" 2>/dev/null)" || fail "cannot_list_repository_runners"
+python3 - "${ONLINE_JSON}" "${LOCAL_RUNNER_NAME}" <<'PY' || fail "no_online_matching_runner"
 import json,sys
-payload=json.loads(sys.argv[1]); rows=payload.get('runners') or []; matched=[]
+payload=json.loads(sys.argv[1]); expected=sys.argv[2]; rows=payload.get('runners') or []; matched=[]
 for row in rows:
     name=str(row.get('name') or '')
     labels={str(x.get('name') or '').lower() for x in row.get('labels') or []}
-    if name.startswith('andreas-claycode-') and row.get('status')=='online' and {'self-hosted','linux','x64','andreas','claycode','target'}.issubset(labels):
+    if name == expected and row.get('status')=='online' and {'self-hosted','linux','x64','andreas','claycode','target'}.issubset(labels):
         matched.append({'id':row.get('id'),'name':name,'status':row.get('status'),'busy':row.get('busy'),'version':row.get('version'),'labels':sorted(labels)})
-assert matched, {'error':'no_online_matching_runner','runners':rows}
+assert len(matched)==1, {'error':'no_unique_online_matching_runner','expected':expected,'runners':rows}
 print(json.dumps({'online_matching_runners':matched},sort_keys=True))
 PY
 
-emit_state "PASS" "runner_online_with_real_desktop_preflight_and_service_environment_verified"
+emit_state "PASS" "runner_online_with_scoped_labels_real_desktop_preflight_and_service_environment_verified"
 trap - EXIT
 
 echo "CLAYCODE_RUNNER_BOOTSTRAP_PASS"

@@ -1,0 +1,38 @@
+{
+  "schema_version":"2.0",
+  "manifest_id":"DRIVE-AICORE-SYNTEQ-EXACT-RECURSIVE-V2-DIRECT-ENUMERATION-20260809T0703p0700",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "source":{"title":"aicore/synteq","id":"1LnsZ7HLTdcnsuclwJwn61sWAxHmSnA6K","aicore_id":"1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty"},
+  "method":{"enumerator":"Google Drive direct list_folder","top_k":"1000 normally, boundary checks for large flat sets","recursive":true,"guard":"research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md","no_unresolved_ceiling":true},
+  "exact_recursive_counts":{"direct_folders":10,"direct_files":4,"nested_folders":12,"nested_leaf_files":493,"total_folders_below_synteq_root":22,"total_leaf_files":497,"total_units_below_synteq_root":519,"include_synteq_root_itself":520},
+  "root_files":["UEBERGABE-P2.md","README.md","START.md","__init__.py"],
+  "direct_child_breakdown":[
+    {"title":"kern","id":"19wnJYHurVf-Ejcuk1v-VHSMNn_SGgf7A","folders_below":0,"leaf_files":11,"units_below":11},
+    {"title":"vault","id":"1rjUKzsiQvcfOfyOW6ftuTx27MbdbzxYU","folders_below":12,"leaf_files":434,"units_below":446},
+    {"title":"konzepte","id":"1GNlbKvYsh__ZzHEin_EqgAp0ucB88jur","folders_below":0,"leaf_files":22,"units_below":22},
+    {"title":"bin","id":"1VMLwdGKNiiROpmp_B0KB6lz-dfwVg5um","folders_below":0,"leaf_files":1,"units_below":1},
+    {"title":"ui","id":"1CZL2tH-71y8-Z1Tgg92_oxqQREdjnlZY","folders_below":0,"leaf_files":3,"units_below":3},
+    {"title":"lib","id":"1TaQ08DYKexWtMFoJKGMWhpTktafBKiTC","folders_below":0,"leaf_files":9,"units_below":9},
+    {"title":"systemd","id":"1pU4SyPafeHHTlITHd9aUdgZfewXSiobQ","folders_below":0,"leaf_files":5,"units_below":5},
+    {"title":"pruefung","id":"1ROg2FkPSMjjytwGqnHtLZEmyRthnyBhg","folders_below":0,"leaf_files":4,"units_below":4},
+    {"title":"fusion","id":"1YEEcuF0ttJYx9uE75IMuh3aGtYVuFEiU","folders_below":0,"leaf_files":2,"units_below":2},
+    {"title":"zwilling","id":"1gFDyZwly3MUScIrukx-OKPL_IQ4OX6PW","folders_below":0,"leaf_files":2,"units_below":2}
+  ],
+  "vault_breakdown":{
+    "root":{"direct_folders":5,"direct_files":2,"files":["DB-INDEX.md","KATALOG.md"]},
+    "befunde":{"id":"1HVGxCa91oQWlY1se2rKqrmzxON9Vt_sx","leaf_files":8},
+    "kartei":{"id":"1JTf6U-Ln9_ZW6ejjw547qtVaRGlPEB7o","leaf_files":145,"boundary_proof":"top_k=144 omitted organ-werkzeugausfuehrung.md; top_k=145 included it; top_k=150 added nothing"},
+    "rohdaten":{"id":"1Amf80IpIOvd-9LMjyYZSldtkY1TCzHM1","direct_folders":1,"direct_files":100,"nested":{"title":"forschungsfusion-2026-08-05","id":"1vjf4xfwa2k_T8J1-x0VI6qlEuPPGjjb9","leaf_files":16},"folders_below":1,"leaf_files":116,"units_below":117,"boundary_proof":"top_k=100 omitted final router-log item; top_k=101 included it; top_k=102 added nothing"},
+    "sitzungen":{"id":"1Q_A8k1o5MtnnN_xXPvVMPSR4u1GhrR2f","leaf_files":57,"boundary_proof":"top_k=56 omitted final daily-health item; top_k=57 included it; top_k=58 added nothing"},
+    "digitaltranscence":{"id":"1fW2MvQZNnBjwP2LJBnpeq3gm7NsQBMIY","direct_folders":1,"direct_files":15,"folders_below":6,"leaf_files":106,"units_below":112,"sprachforschung":{"id":"1L0rkKASGHeqZXHEX4KXy0v0tBoFPmhDe","direct_folders":5,"direct_files":21,"child_leaf_files":{"bilder":13,"schwarm-auftrag":6,"werkzeuge":27,"logs":8,"rohdaten":16},"folders_below":5,"leaf_files":91,"units_below":96}}
+  },
+  "vault_count_check":{"folders_below_vault":12,"leaf_files_below_vault":434,"units_below_vault":446,"leaf_formula":"2 root + 106 digitaltranscence + 8 befunde + 145 kartei + 116 rohdaten + 57 sitzungen = 434"},
+  "synteq_count_check":{"folders":"10 direct + 12 nested = 22","leaves":"4 root + 59 non-vault direct-child leaves + 434 vault leaves = 497","units":519},
+  "supersession":{"prior_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SYNTEQ_EXACT_RECURSIVE_MANIFEST.json","prior_units_below_root":368,"current_units_below_root":519,"delta_units":151,"verdict":"PRIOR_SEARCH_DERIVED_EXACT_DENOMINATOR_REFUTED","semantic_preservation":"Historical source reads remain scoped evidence; only current structural exactness is superseded."},
+  "level0_credit":{"exact_global_percent_added":0.0,"reason":"Combined Level-0 denominator remains unfrozen."},
+  "earned_work":{"new_credit_hours":0.0,"reason":"Structural correction only."},
+  "closure":"EXACT_RECURSIVE_STRUCTURAL_DENOMINATOR_FROZEN_BY_DIRECT_ENUMERATION",
+  "created_at":"2026-08-09T07:03:00+07:00"
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1915p0700-qwen35-recurrence-authority-fusion",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "actor": "chatgpt-secondary",
+  "hypotheses": [
+    {
+      "id": "H-FRANK-R9-RECURRENCE-READOUT",
+      "status": "OPEN",
+      "claim": "On matched frozen trajectories, simple post-hoc trajectory/residual-pressure/capacity readouts match or beat jointly learned halt gates on verified outcome per cost and false-halt rate.",
+      "counterhypothesis": "A trained halt gate materially dominates simple readouts once tuned on representative FRANK trajectories.",
+      "falsifier": "H1 matched-compute replay shows a learned gate Pareto-dominates simple R8/post-hoc readouts across OOD episodes without trajectory degradation or recovery regressions.",
+      "evidence_class": ["EXTERNAL_PREPRINT", "SYNTHETIC_INTERNAL"],
+      "next_test": "FRC-R9-07"
+    },
+    {
+      "id": "H-FRANK-R9-PEER-VERIFIER",
+      "status": "OPEN",
+      "claim": "A strong provenance-bound peer verifier improves local 4B correction/decision quality more than local self-verification at acceptable latency/context cost.",
+      "counterhypothesis": "Peer verification adds stale-state, confirmation, latency and dependency costs that erase its quality gain.",
+      "falsifier": "Matched H1 episodes show no material verified-outcome gain versus local self-verification or unacceptable peer-loss degradation/cost.",
+      "evidence_class": ["EXTERNAL_PREPRINT", "ARCHITECTURE_HYPOTHESIS"],
+      "next_test": "FRC-R9-07"
+    },
+    {
+      "id": "H-FRANK-R9-DISSOLVED-VISION",
+      "status": "OPEN",
+      "claim": "A multimodal Qwen-class 4B can provide numerical vision features for Clay-native Retina/MVC semantics without a second full vision model and without unacceptable target-host cost/failure coupling.",
+      "counterhypothesis": "Separate vision backing is more stable, cheaper, more accessible or more robust for open-set personal learning.",
+      "falsifier": "Target-shaped benchmark shows inaccessible/unstable features, materially worse unknown rejection or calibration, unacceptable latency/RAM, coupled failures, or unsafe feature-version migration.",
+      "evidence_class": ["OFFICIAL_MODEL_DOCUMENTATION", "ARCHITECTURE_INFERENCE"],
+      "next_test": "FRC-R9-08"
+    },
+    {
+      "id": "H-FRANK-R9-EFFECT-HANDLES",
+      "status": "OPEN",
+      "claim": "Opaque runtime capability handles plus release-time revalidation and OS sandboxing reduce ambient-authority failures without materially reducing legitimate tool completion.",
+      "counterhypothesis": "The handle/gateway architecture adds complexity without enough security benefit, or stronger process isolation is required.",
+      "falsifier": "Production Ubuntu adversarial tests show forged/stale/revoked paths remain exploitable, or legitimate completion regresses materially versus a safer simpler alternative.",
+      "evidence_class": ["PROJECT_NEGATIVE_RESULT", "LINUX_PRIMARY_DOC", "WASM_PRIMARY_SPEC"],
+      "next_test": "FRC-R9-04"
+    },
+    {
+      "id": "H-FRANK-R9-ASSEMBLY-BACKFLOW",
+      "status": "OPEN",
+      "claim": "Bounded task-conditioned ActiveAssembly plus evidence-preserving peer backflow outperforms raw/full-state mirror baselines for a local 4B at matched context and latency.",
+      "counterhypothesis": "Raw retrieval or fuller mirrors preserve rare details better enough to dominate compiled Assemblies.",
+      "falsifier": "Matched long-horizon H1/target-shaped tests show lower task success, higher catastrophic omission or worse correction after peer loss at equal resource budget.",
+      "evidence_class": ["OWNER_FIXED_ARCHITECTURE", "OPEN_MECHANISM_HYPOTHESIS"],
+      "next_test": "FRC-R9-07"
+    }
+  ]
+}

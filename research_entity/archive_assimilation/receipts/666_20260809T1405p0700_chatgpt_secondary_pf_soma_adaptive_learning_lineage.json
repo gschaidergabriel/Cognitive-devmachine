@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1405p0700-chatgpt-secondary-pf-soma-adaptive-learning-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "focus": "SOMA personal online adaptation lineage: candidate training, feedback weighting, safety gates, snapshots/rollback, resource lifecycle and failure modes relevant to FRANK v0.1 adaptive visual learning"
+  },
+  "evidence_class": "HISTORICAL_CODE_COMMIT_EVIDENCE",
+  "runtime_verification_current": false,
+  "source_refs": [
+    "commit:78f31e7f1e4fa7109a90f6e32514923ca7428a87",
+    "commit:b9f23cd48cce1f1307a073904c715c60dd85dc3e",
+    "commit:c16e5991466e50e059e176c07910ca75293b415c",
+    "commit:a016410734564abcb4ba3bd0143b04ded6b8d1e1",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+  ],
+  "lineage": [
+    {
+      "ref": "commit:78f31e7f1e4fa7109a90f6e32514923ca7428a87",
+      "event": "Introduced SOMA as an out-of-band personal-adaptation subsystem: conversation scoring, bounded idle training, pre-deploy drift/similarity/NaN gates, snapshots, EMA blending, GGUF conversion/hot reload and rollback. The commit reports 50 real chat iterations, 104 conversations scored, 80 qualified and one 18.7-minute CPU training/deploy cycle; these are preserved as historical commit-reported measurements, not independently reverified runtime facts."
+    },
+    {
+      "ref": "commit:b9f23cd48cce1f1307a073904c715c60dd85dc3e",
+      "event": "Added explicit thumbs-up/down provenance paired to prompting user text and made explicit feedback a high-weight training-quality signal; widened LoRA attention targets. This is evidence for provenance-aware preference signals, not evidence that explicit feedback is epistemic truth."
+    },
+    {
+      "ref": "commit:c16e5991466e50e059e176c07910ca75293b415c",
+      "event": "Deep audit exposed authoritative online-learning failures: wrong/dead score columns, leaked DB connection, corrupted timestamp handling, EMA blend dropping new keys, model-memory leak on error, background worker not stopping, false-safe zero-baseline drift and TOCTOU artifact checks."
+    },
+    {
+      "ref": "commit:a016410734564abcb4ba3bd0143b04ded6b8d1e1",
+      "event": "Later rebuild added persisted cycle state, feedback-window reset, stronger weighted-positive/negative training semantics, explicit service stop ordering/masking to prevent restart conflicts and lighter bfloat16 training while keeping LoRA parameters in float32."
+    }
+  ],
+  "reusable_mechanism": {
+    "name": "transactional_candidate_adaptation_envelope",
+    "description": "The historically reusable mechanism is not SOMA LoRA itself but the surrounding transactional adaptation pattern: provenance-scoped examples -> bounded candidate update -> shadow validation -> last-known-good snapshot -> atomic promotion -> versioned rollback/recovery -> persistent cycle cursor and resource/worker cleanup.",
+    "transfer_to_mvc": [
+      "Keep feature/example receipts versioned by user/workspace, source, evidence tier and feature-backbone identity.",
+      "Treat GOLD/SILVER labels as admissible training evidence and BRONZE/self-generated labels as non-authoritative unless independently promoted under the current visual-learning contract.",
+      "Train/update candidate prototype/readout state off the authoritative active path.",
+      "Evaluate candidate against frozen replay, recent held-out user examples, retention/forgetting cases, open-set negatives, calibration and resource budgets before promotion.",
+      "Snapshot and retain last-known-good classifier/prototype state before every authoritative promotion.",
+      "Promote atomically and persist candidate/current version identity, thresholds, feature-backbone compatibility and rollback metadata.",
+      "Make disable/stop semantics real: no ghost learner thread, restart loop or hidden continuing update after the learner is disabled.",
+      "Persist cycle cursors/feedback windows so evidence is not replayed or double-counted across restarts.",
+      "Clean large model/feature/training objects on success and every error path; perception must remain available when adaptation pauses or fails."
+    ]
+  },
+  "negative_results": [
+    {
+      "id": "PF-SOMA-FAIL-001",
+      "result": "EMA blending iterated only old adapter keys and silently dropped new keys.",
+      "impact": "Candidate/current state compatibility cannot be inferred from partial key overlap; adaptive visual state migration must validate the complete feature/class/prototype/readout contract before blend or promotion.",
+      "ref": "commit:c16e5991466e50e059e176c07910ca75293b415c"
+    },
+    {
+      "id": "PF-SOMA-FAIL-002",
+      "result": "Near-zero old adapter norm produced relative drift 0.0 and therefore a false-safe drift result.",
+      "impact": "Fresh/empty visual baselines need an explicit absolute-distance or alternate calibration path; zero denominator must never mean zero risk.",
+      "ref": "commit:c16e5991466e50e059e176c07910ca75293b415c"
+    },
+    {
+      "id": "PF-SOMA-FAIL-003",
+      "result": "Disabling Personal Mode did not reliably stop the background worker and stop() did not join it.",
+      "impact": "Adaptive visual learning requires observable worker lifecycle and hard stop semantics so disabled/over-budget learning cannot continue invisibly.",
+      "ref": "commit:c16e5991466e50e059e176c07910ca75293b415c"
+    },
+    {
+      "id": "PF-SOMA-FAIL-004",
+      "result": "Training-model objects were not freed on all error paths.",
+      "impact": "Background adaptation can degrade or destabilize foreground perception through resource leakage unless cleanup is a tested invariant.",
+      "ref": "commit:c16e5991466e50e059e176c07910ca75293b415c"
+    },
+    {
+      "id": "PF-SOMA-FAIL-005",
+      "result": "Scored-interaction persistence wrote obsolete dimensions instead of the actual current scorer outputs.",
+      "impact": "Schema names and semantic field identities need typed/versioned migration and replay tests; healthy writes are not equivalent to semantically correct learner data.",
+      "ref": "commit:c16e5991466e50e059e176c07910ca75293b415c"
+    },
+    {
+      "id": "PF-SOMA-RISK-006",
+      "result": "Explicit user feedback was intentionally made a dominant training signal.",
+      "impact": "For the visual learner, user confirmation/preference can be a strong provenance signal but must remain distinct from sensor truth, class identity evidence and open-set calibration to prevent preference-driven Goodhart or poisoning.",
+      "ref": "commit:b9f23cd48cce1f1307a073904c715c60dd85dc3e"
+    }
+  ],
+  "current_inheritance": [
+    {
+      "target": "Adaptive Visual Learner",
+      "delta": "Adopt a transactional candidate/promotion/rollback envelope around MVC-0/MVC-1 state. Carry example tier/provenance, classifier/prototype version, feature-backbone version, calibration identity, held-out evaluation and atomic last-known-good rollback as first-class state."
+    },
+    {
+      "target": "Retina",
+      "delta": "Learning must fail closed to the familiar fast path: adaptation failure, incompatibility, ambiguous/open-set score or stale classifier state escalates to deeper perception and never suppresses sensor evidence."
+    },
+    {
+      "target": "Harness",
+      "delta": "Regressionize PF-SOMA-FAIL-001..005 plus feedback-poisoning/Goodhart: complete-state migration, zero-baseline drift, real worker stop, failed-update resource cleanup, semantic schema correctness and no untrusted-feedback promotion."
+    },
+    {
+      "target": "UnifiedDB / ClayGraph",
+      "delta": "Persist candidate/current/LKG version graph, example provenance/tier, feature-backbone compatibility, calibration thresholds, update-cycle cursor, rejection reason, rollback ancestry and resource/evaluation receipts without equating familiarity with evidence."
+    },
+    {
+      "target": "ClayCode",
+      "delta": "Learner transitions should be replayable typed contracts: collect/admit -> update_candidate -> evaluate -> reject|promote -> rollback, with explicit version identities, evidence tiers, budget state and effect receipts."
+    },
+    {
+      "target": "GWT / epistemics",
+      "delta": "MVC familiarity may alter routing/attention cost but never becomes workspace truth authority. User preference, confidence and learned familiarity remain separate from sensor/evidence provenance."
+    }
+  ],
+  "cheap_discriminating_tests": [
+    "Create an empty/fresh classifier baseline and assert drift/risk evaluation cannot return safe merely because the baseline norm/support is zero.",
+    "Add/remove one feature/class dimension between candidate and current state and require explicit compatibility migration or hard rejection; no silent partial blend.",
+    "Disable or force over-budget learning during an active update and assert the worker exits, no restart loop resurrects it, perception remains active and no candidate is promoted.",
+    "Inject a failure after feature/model allocation and assert CPU/RAM/thread counts return within frozen tolerance without losing current classifier state.",
+    "Replay a schema-version mismatch where field names exist but semantics changed and require migration/replay failure rather than successful but wrong persistence.",
+    "Provide strongly positive user feedback for a deliberately mislabeled/unknown visual sample and assert it cannot become GOLD/SILVER training truth without independent evidence admission.",
+    "Crash between candidate validation and promotion and assert restart deterministically restores either previous current or fully committed new current, never a mixed state."
+  ],
+  "crossread": {
+    "adaptive_visual_directive": "Current fixed FRANK v0.1 directive independently requires GOLD/SILVER/BRONZE admission, bounded cyclic candidate update, replay/retention/open-set evaluation, atomic promotion and last-known-good rollback.",
+    "subconscious_lineage_overlap": "Existing PF Subconscious receipt already captures adjacent online-learning lessons such as schema migration, silent transition-write failure, dimension growth and rollback/health shadows. This SOMA receipt adds distinct candidate-artifact, drift-baseline, worker-lifecycle, resource-cleanup and explicit-feedback lineage; overlap is flagged for earned-work dedup."
+  },
+  "earned_work": {
+    "new_credit_hours": 0.0,
+    "mapping_candidate": true,
+    "reason": "Strong reusable architecture and negative-result value, but historical SOMA mechanisms overlap existing adaptive-learning/Subconscious/LCME/Retina mappings. Row-level dedup is required before any avoided-work credit."
+  },
+  "level0_effect": {
+    "exact_global_percent_added": 0.0,
+    "reason": "This is a semantic/history lineage shard. Project-Frankenstein repository-wide tree/history denominator remains unfrozen, so the current exact Level-0 completion law forbids positive global percentage credit."
+  },
+  "branch_feedback": [
+    "retina: transactional learner candidate/promotion/rollback envelope + zero-baseline/open-set guards",
+    "harness: regress PF-SOMA failure classes and feedback poisoning",
+    "unifieddb: persist current/candidate/LKG ancestry, calibration, provenance and cycle cursors",
+    "claycode: typed replayable learner transition contract",
+    "gwt: familiarity/feedback/confidence are routing signals, not truth authority"
+  ],
+  "status": "COMPLETE_SEMANTIC_LINEAGE_SHARD",
+  "created_at": "2026-08-09T14:05:00+07:00"
+}

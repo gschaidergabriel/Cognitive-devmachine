@@ -1,0 +1,168 @@
+{
+  "schema_version": "1.0",
+  "field_id": "field-666-20260809T1521p0700-proof-carrying-adaptive-state-485652b7",
+  "name": "Proof-Carrying Adaptive State",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "spawn_seed": 5212444565239029137,
+  "seed_basis_sha256": "485652b7227cdd91f0192b058f51138aeced247ca3821ca7f3c7f138b2ac1db6",
+  "created_at": "2026-08-09T15:21:00+07:00",
+  "spawning_run_id": "666-20260809T1521p0700-chatgpt-secondary-pcas",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "level0_release_manifest": "research_entity/archive_assimilation/666_RELEASE_MANIFEST.json",
+  "shared_program_milestone": "BASE_CLAYCODE_RELEASE",
+  "lifecycle_state": "INTEGRATED",
+  "local_lens": [
+    "formal methods",
+    "continual learning",
+    "proof-carrying systems",
+    "provenance and rollback"
+  ],
+  "selection": {
+    "mode": "SEEDED_STOCHASTIC_AMONG_HIGH_VALUE_NON_DUPLICATE_CANDIDATES",
+    "candidate_family_pool": [
+      "Causal Receipt Clocks",
+      "Algebraic Effect Authority",
+      "Cognitive State Error-Correcting Codes",
+      "Counterfactual Replay Lattices",
+      "Proof-Carrying Adaptive State"
+    ],
+    "selected": "Proof-Carrying Adaptive State",
+    "reason": "High orthogonality to recent vision-lineage work while directly cross-connecting ClayCode type/effect validation, Unified Memory/UnifiedDB adaptive state, Harness replay and FRANK online learning."
+  },
+  "research_question": "Can every autonomously learned FRANK state transition be treated as a candidate artifact that must carry a small machine-checkable evidence/provenance/rollback certificate before atomic promotion?",
+  "mechanism_candidate": {
+    "name": "Adaptive State Promotion Certificate (ASPC)",
+    "status": "OPEN_RESEARCH_CANDIDATE",
+    "law": "candidate adaptive state != promoted authoritative state until certificate verification passes",
+    "minimum_fields": [
+      "parent_state_version",
+      "candidate_state_hash",
+      "policy_version",
+      "feature_or_schema_compatibility",
+      "training/evidence provenance tiers",
+      "held-out and replay evaluation receipts",
+      "retention/forgetting gate",
+      "unknown/conflict gate where applicable",
+      "resource-budget gate",
+      "rollback_pointer",
+      "verifier_result"
+    ],
+    "promotion_semantics": "build candidate -> evaluate in shadow -> verify conjunctive certificate -> atomic promote OR quarantine/reject -> retain last-known-good rollback target",
+    "authority_boundary": "A certificate proves compliance with declared promotion policy and evidence receipts; it does not prove that memory priors or labels are true sensor evidence."
+  },
+  "hypotheses": [
+    {
+      "id": "PCAS-H1",
+      "status": "OPEN_SUPPORTED_BY_SYNTHETIC_TEST_ONLY",
+      "claim": "A conjunctive proof-carrying promotion gate can materially reduce unsafe adaptive-state promotions relative to a single aggregate utility score when regressions occur on retention, open-set behavior, resource limits or provenance/compatibility constraints.",
+      "falsifier": "On representative FRANK update streams, a simpler scalar or existing gate matches or beats unsafe-promotion rate at equal useful-promotion recall and lower complexity."
+    },
+    {
+      "id": "PCAS-H2",
+      "status": "OPEN",
+      "claim": "The certificate can be represented using ordinary ClayCode typed records/effects plus deterministic verifier logic without requiring a new language primitive.",
+      "falsifier": "A concrete executable adaptive-state transition cannot preserve certificate, authority and rollback semantics through existing ClayCode IR/lowering without semantic escape hatches."
+    },
+    {
+      "id": "PCAS-H3",
+      "status": "OPEN",
+      "claim": "Binding the certificate to UnifiedDB/Unified Memory state versions and evidence lineage can make autonomous learning crash-replayable and auditable across Retina, graph memory and tiny learned readouts.",
+      "falsifier": "Crash/replay tests show accepted updates cannot be reconstructed or rollback targets become ambiguous despite certificate binding."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "PCAS-C1",
+      "claim": "A proof-carrying gate may overconstrain plasticity, rejecting too many beneficial updates and increasing latency/state growth without enough safety gain."
+    },
+    {
+      "id": "PCAS-C2",
+      "claim": "Machine-checkable proof receipts can create false assurance because they validate only the encoded policy and measurements, not the truth or independence of the underlying data."
+    },
+    {
+      "id": "PCAS-C3",
+      "claim": "Existing candidate-vs-current shadow evaluation plus rollback may already provide the same practical guarantees more simply."
+    }
+  ],
+  "external_evidence": [
+    {
+      "source_class": "PRIMARY_PUBLISHED_RESEARCH",
+      "ref": "Necula, Proof-Carrying Code, POPL 1997",
+      "use": "Supports the producer-supplies-evidence / small verifier architectural pattern; does not validate the FRANK adaptation."
+    },
+    {
+      "source_class": "PRIMARY_PUBLISHED_RESEARCH",
+      "ref": "Torres-Arias et al., in-toto, USENIX Security 2019",
+      "use": "Supports cryptographically/provenance-bound verification across a multi-step artifact pipeline; used as provenance analogy, not direct learning evidence."
+    },
+    {
+      "source_class": "PRIMARY_PREPRINT_RESEARCH",
+      "ref": "Rolnick et al., Experience Replay for Continual Learning, arXiv:1811.11682",
+      "use": "Supports replay as a practical mechanism for mitigating catastrophic forgetting; motivates retention receipts."
+    },
+    {
+      "source_class": "PRIMARY_PREPRINT_RESEARCH",
+      "ref": "Fulton & Platzer, Verifiably Safe Off-Model Reinforcement Learning, arXiv:1902.05632",
+      "use": "Shows verification-preserving model-update framing is technically plausible in a learning setting; domain differs from FRANK."
+    }
+  ],
+  "synthetic_experiment": {
+    "id": "PCAS-E0-MONTE-CARLO",
+    "status": "COMPLETE_SYNTHETIC_NOT_FRANK_EVIDENCE",
+    "seed": 5212444565239029137,
+    "candidate_updates": 100000,
+    "setup": "Latent candidate task gain, retention delta, unknown-FPR delta, CPU cost and structural provenance/compatibility/rollback flags were sampled with noisy observed metrics. Unsafe means any true retention regression below -0.02, unknown-FPR increase above 0.01, CPU cost above 12 ms, or missing provenance/compatibility/rollback. Compared a weighted scalar promotion score with a conservative conjunctive certificate gate.",
+    "scalar_policy": {
+      "accept_rate": 0.51883,
+      "unsafe_accepted": 21345,
+      "unsafe_fraction_among_accepted": 0.4114064337,
+      "beneficial_safe_recall": 0.8469310062
+    },
+    "certificate_policy": {
+      "accept_rate": 0.18285,
+      "unsafe_accepted": 159,
+      "unsafe_fraction_among_accepted": 0.0086956522,
+      "beneficial_safe_recall": 0.5195326227
+    },
+    "interpretation": "The stricter conjunctive gate drastically reduced unsafe promotions in this synthetic construction but rejected substantially more beneficial-safe candidates. The real research target is therefore the safety/plasticity Pareto frontier, not maximal rejection.",
+    "limitations": "Synthetic distributions and policy thresholds were chosen by this worker; result is mechanism stress-test evidence only and cannot be promoted as a FRANK performance claim."
+  },
+  "cross_connections": [
+    {
+      "branch": "claycode",
+      "targets": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-06-COMPILER-LOWERING", "CC-WP-11-FUZZ-CONFORMANCE"],
+      "delta": "Attempt ASPC first as normal typed/canonical data plus verifier/effect policy. Do not redesign ClayCode semantics unless an executable counterexample proves current representation/lowering insufficient."
+    },
+    {
+      "branch": "unifieddb",
+      "delta": "Persist candidate/promoted state identity, parent version, evidence/provenance refs, verifier policy version and last-known-good rollback pointer transactionally; test crash between certificate verification and promotion."
+    },
+    {
+      "branch": "harness",
+      "delta": "Add differential/replay cases for accepted, rejected, stale-version, poisoned-label and crash-mid-promotion adaptive updates; require H2 semantic parity for verifier receipts."
+    },
+    {
+      "branch": "frank",
+      "delta": "Apply first to Unified Memory <-> Retina online learning, where memory priors must never acquire sensor authority merely because an adaptive update is certified."
+    }
+  ],
+  "required_next_tests": [
+    "PCAS-E1: replay actual H1 adaptive visual/memory update candidates under scalar-vs-certificate policies at matched useful-promotion recall",
+    "PCAS-E2: crash at every step between shadow evaluation, certificate write, state commit and index publication; verify exactly one authoritative version and deterministic rollback",
+    "PCAS-E3: inject BRONZE pseudo-label poisoning and stale feature-backbone versions; verifier must reject autonomous truth promotion",
+    "PCAS-E4: measure certificate bytes, verification latency and state-growth overhead on project hardware",
+    "PCAS-E5: ClayCode roundtrip/lowering differential test for certificate semantics before considering any language change"
+  ],
+  "integration_result": {
+    "status": "ROUTED_AS_RESEARCH_CANDIDATE_NOT_CANONICAL_ARCHITECTURE",
+    "material_delta": "Introduce ASPC as a testable cross-branch promotion-contract candidate and explicit safety/plasticity Pareto experiment family.",
+    "promotion_allowed": false,
+    "reason": "Only synthetic test plus cross-domain primary evidence; no FRANK/H1 executable evidence yet."
+  }
+}

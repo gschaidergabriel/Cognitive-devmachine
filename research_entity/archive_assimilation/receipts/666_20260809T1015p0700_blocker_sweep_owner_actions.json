@@ -1,0 +1,45 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1015p0700-blocker-sweep-owner-actions",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "task":"Sweep all currently known Level-0 blockers, resolve internally solvable blockers, preserve peer ownership, and isolate only actions that genuinely require owner/local execution.",
+  "owner_exclusions_resolved":[
+    {"path":"frank-adapter-sicherung/v25_final/adapter_model.safetensors","drive_id":"1hmh3A1Vpaye1VGfTdFEWKRtumxAlRL1x","receipt":"research_entity/archive_assimilation/receipts/666_20260809T0911p0700_owner_exclusion_v25_final_adapter_model.json","must_not_block_level0":true},
+    {"path":"all frank data 1.tar.xz","drive_id":"1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU","receipt":"research_entity/archive_assimilation/receipts/666_20260809T0915p0700_owner_exclusion_large_tarball.json","must_not_block_level0":true}
+  ],
+  "advanced_or_closed_this_sweep":[
+    {"scope":"Digital Retina tracked source","result":"241/241 terminal dispositions bound to verified Git index","ref":"research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_TRACKED_241_TERMINAL_DISPOSITION_LEDGER.json"},
+    {"scope":"XENO extracted-copy reconciliation","result":"archive scope hash-closed; campaign 45/203 leaves verified, 0 mismatches","ref":"research_entity/archive_assimilation/receipts/666_20260809T0931p0700_chatgpt_secondary_xeno_archive_hash_closure.json"},
+    {"scope":"Project-Frankenstein tree segment 02a","result":"path-set complete; blob identities remain","ref":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_TREE_SEG_02A_PATHSET.json"},
+    {"scope":"Project-Frankenstein tree segment 02c","result":"path-set complete; blob identities remain","ref":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_TREE_SEG_02C_PATHSET.json"},
+    {"scope":"Project-Frankenstein tree segment 02d","result":"path-set complete; blob identities remain","ref":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_TREE_SEG_02D_PATHSET.json"},
+    {"scope":"Project-Frankenstein tree segment 02b","result":"exact 720-path overlay/writer family deletion proved; non-prefix paths/blobs remain","ref":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_TREE_SEG_02B_EXACT_FAMILY_DELETIONS.json"},
+    {"scope":"AICORE remaining root mapping","result":"26 formerly-unmapped root folders directly revalidated; 17 flat roots recursively closed and 9 recursive shapes isolated","ref":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_REMAINING_26_ROOT_CHILDREN_V3_DIRECT_REVALIDATION.json"},
+    {"scope":"AICORE small recursive roots","result":".github, writer, personality, tests closed","ref":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_SMALL_RECURSIVE_CLOSURES_V3.json"},
+    {"scope":"AICORE analysen/ext/wissen","result":"all three recursively closed; wissen exact 61 files","ref":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_ANALYSEN_EXT_WISSEN_CLOSURES_V3.json"}
+  ],
+  "peer_owned_or_recent_internal_work":[
+    {"scope":"AICORE services","state":"CLOSED_BY_PEER","commit":"b59a83a533df11f903c63c7a1c2ff523fdcfd51f"},
+    {"scope":"AICORE synteq","state":"CLOSED_BY_PEER_LATEST_PULSE","commit":"a24347f05e7e6291d162077fbcdee19e9b28a2d8"},
+    {"scope":"AICORE training","state":"ACTIVE_PEER_LEASE","commit":"61e426fd15020eefab1cf5275d60ff58b00fbc01"},
+    {"scope":"Digital Retina E2E content hashes","state":"ACTIVE_PEER_LEASE","commit":"55b3eccd8e314422c8b482b356b5d4c403725061"}
+  ],
+  "remaining_internal_no_owner_action":[
+    "AICORE ui recursive denominator continuation",
+    "remaining Digital Retina generated/.git/support identity accounting after tracked 241 closure",
+    "XENO extracted-copy open scopes: claude_code,directcode,implementation,language,provenance,selective,sources,traffic (158 leaves remain after 45/203 verified)",
+    "Project-Frankenstein tree modified/renamed blob identities and non-prefix segment-02b changes",
+    "cross-source reconciliation, branch feedback/NO_CHANGE, earned-work row dedup and final audit"
+  ],
+  "genuine_external_or_owner_action_blockers":[
+    {"scope":"Project-Frankenstein exact history DAG denominator","task":"research_entity/rooms/rooms/center/tasks/666-pf-history-exact-dag-frozen-head-abba90a.json","class":"ENUMERATION_SURFACE","why":"Current GitHub connector exposes commit search/individual fetch/compare but no reproducible complete DAG pagination/root-count proof; search windows alone are forbidden as exact completion evidence.","required_artifact":"A local full-git traversal snapshot for frozen head abba90a5767d85abc8a1ac340bae92842dab35c1 containing reachable commit hashes with parents, exact commit count, root commit(s), and SHA-256 of the snapshot.","user_action_required":true}
+  ],
+  "owner_action_summary":{"required_actions":1,"do_not_do":["Do not upload/hash v25_final/adapter_model.safetensors","Do not upload/hash all frank data 1.tar.xz"],"only_required_action":"Provide or cause a local-git exact Project-Frankenstein history DAG snapshot at frozen head abba90a5767d85abc8a1ac340bae92842dab35c1."},
+  "level0":{"gate":"NOT_PASS","global_exact_percent":"UNDEFINED_UNTIL_COMBINED_DENOMINATOR_FROZEN","blocker_sweep":"COMPLETE_FOR_CURRENT_KNOWN_BLOCKERS"},
+  "status":"COMPLETE_CURRENT_BLOCKER_SWEEP_ONE_OWNER_LOCAL_GIT_ACTION_REMAINS",
+  "created_at":"2026-08-09T10:15:00+07:00"
+}

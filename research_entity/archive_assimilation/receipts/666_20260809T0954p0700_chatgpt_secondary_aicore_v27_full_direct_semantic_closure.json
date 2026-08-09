@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0954p0700-chatgpt-secondary-aicore-v27-full-direct-semantic-closure",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "V27_20_OF_20_DIRECT_FILES_SEMANTICALLY_CLOSED",
+  "source_universe": "DRIVE_CLAY/AICORE/training/v27",
+  "exact_level0_coverage_credit_percent": 0.0,
+  "local_denominator": {
+    "direct_files_total": 20,
+    "direct_folders_total": 0,
+    "semantic_direct_files_analyzed": 20,
+    "semantic_direct_files_remaining": 0,
+    "recursive_status": "EXACT_RECURSIVE_DENOMINATOR_AND_DIRECT_CONTENT_CLOSED"
+  },
+  "direct_files": [
+    "BERICHT-KLASSENVERTEILUNG.md",
+    "rest.sh",
+    "waechter-marker-patch.md",
+    "BERICHT-SYSTEMTEXT-TRENNUNG.md",
+    "trennung_handprobe_91.md",
+    "20_trennung.py",
+    "trennung_handprobe.md",
+    "blindpruefung_S1.md",
+    "letzte.sh",
+    "klassen.py",
+    "11_erzeugen.py",
+    "fuellen2.sh",
+    "nachfuellen.sh",
+    "13_bauen.py",
+    "start_gen.sh",
+    "lauf.sh",
+    "12_pruefen.py",
+    "plan.json",
+    "10_plan.py",
+    "ANTWORTKLASSEN.md"
+  ],
+  "plan_json_identity": {
+    "drive_id": "15VCJJ5WzbrfLHasg6_bd-Pt5W33s29-Y",
+    "bytes": 435749,
+    "sha256": "c1db20dcc10bff0ac66152ae35634fca210de6eb5bfb2cff27ed0a3a42361ea1",
+    "rows": 1449,
+    "unique_source_indices": 1449,
+    "source_indices_sorted": true,
+    "class_counts": {
+      "1_Zielbildung": 250,
+      "2_Zielrevision": 200,
+      "3_Zielverwerfung": 150,
+      "4_Unaufgefordertes_Handeln": 250,
+      "5_Unterlassung": 249,
+      "6_Rueckfrage": 250,
+      "7_Ergebnis_Formulierung": 100
+    },
+    "step_counts": {
+      "1": 872,
+      "2": 519,
+      "3": 52,
+      "4": 6
+    },
+    "multi_step_rows_gt_1": 577,
+    "domain_counts": {
+      "eigene_Moeglichkeiten": 427,
+      "Kalender": 249,
+      "Wissen": 213,
+      "eigener_Zustand": 204,
+      "Rechnen": 180,
+      "Dateien": 110,
+      "Gedaechtnis": 30,
+      "Web": 28,
+      "Wetter": 6,
+      "Notizen": 1,
+      "Sehen": 1
+    }
+  },
+  "contradictions_preserved": [
+    {
+      "id": "V27-C1",
+      "historical_claim": "The v27 specification/plan narrative states 559 multi-step historical tool-answer slots.",
+      "direct_artifact_measurement": "The frozen plan.json contains 577 rows with schritte > 1 (519 two-step + 52 three-step + 6 four-step).",
+      "resolution": "UNRESOLVED_LINEAGE_DIFFERENCE",
+      "rule": "Do not silently replace either number. Treat 559 as a historical specification/report claim and 577 as the direct plan artifact measurement for this observed file."
+    },
+    {
+      "id": "V27-C2",
+      "historical_claim": "An early guard considered intent and hypothesis dead tools because they were absent from the tool registry.",
+      "later_evidence": "System-text separation work found both were live marker protocols with runtime consumers outside the registry.",
+      "resolution": "EARLY_GUARD_FALSE_POSITIVE_SUPERSEDED_BY_TYPED_MARKER_INTERPRETATION"
+    },
+    {
+      "id": "V27-C3",
+      "historical_claim": "The initial hand-separation classifier treated several prompt forms as declarations.",
+      "later_evidence": "After adding context/vorlauf and correcting condition/negation rules, an unseen hand sample reached 29/30 agreement.",
+      "resolution": "CLASSIFIER_V1_SUPERSEDED_BY_CORRECTED_CONTEXT_AWARE_RULE"
+    }
+  ],
+  "full_lineage_findings": [
+    {
+      "id": "V27-FULL-F1",
+      "classification": "ARCHITECTURE_PRECURSOR",
+      "finding": "v27 is a concrete historical transition from an LLM that directly emits tool syntax toward an architecture where Frank owns goals/reasoning/result formulation while external effect machinery owns tool execution."
+    },
+    {
+      "id": "V27-FULL-F2",
+      "classification": "COUNTERMETRIC_DESIGN",
+      "finding": "The seven-class ontology deliberately includes opposites: initiative versus omission, persistence/revision versus abandonment, acting versus asking. This is stronger than maximizing a single autonomy score because it constrains pathological actionism and pathological persistence."
+    },
+    {
+      "id": "V27-FULL-F3",
+      "classification": "EFFECT_AUTHORITY_SEPARATION",
+      "finding": "Tool-shaped syntax is insufficient to infer authority. A tag may be a registry action, an internal marker/event protocol, a declaration, a restraint statement or a literal memory fragment. Current architecture should encode these as distinct typed entities before policy evaluation."
+    },
+    {
+      "id": "V27-FULL-F4",
+      "classification": "PROVENANCE_AND_EVAL",
+      "finding": "The strongest reusable part of v27 is the staged provenance chain: deterministic plan -> delegated free-text generation -> class-specific machine rejection -> blind review -> assembly. Every current training/eval corpus should preserve equivalent stage identities and immutable hashes."
+    },
+    {
+      "id": "V27-FULL-F5",
+      "classification": "FAILURE_RECOVERY",
+      "finding": "The orchestration scripts repeatedly generate, reject, count accepted rows and refill until quota, with explicit no-progress stopping logic in the main loop. This is a useful data-pipeline recovery pattern, but it must be paired with immutable final snapshots before evaluation."
+    },
+    {
+      "id": "V27-FULL-F6",
+      "classification": "PROMPT_RUNTIME_PARITY",
+      "finding": "Historical authors explicitly recognized that editing training system text without changing the runtime prompt source creates train-inference divergence. Current Harness should enforce prompt/state-schema parity from source-of-truth artifacts rather than copied prompt snapshots."
+    },
+    {
+      "id": "V27-FULL-F7",
+      "classification": "DATA_QUALITY_BOUNDARY",
+      "finding": "Mechanical class validators can reject obvious structural failures, but some semantic conditions were explicitly marked not machine-checkable and delegated to blind review. Current pipelines should retain this distinction instead of claiming hard validation for semantic judgments they cannot actually establish."
+    },
+    {
+      "id": "V27-FULL-F8",
+      "classification": "MODEL_BOUNDARY",
+      "finding": "Result formulation is a dedicated training surface: typed effect results enter context and Frank converts them to natural language without reproducing tool metadata. This maps directly to the current Needle -> Frank result-consumption boundary."
+    }
+  ],
+  "branch_feedback": {
+    "frank": [
+      "Retain goal formation, revision, abandonment, initiative, omission, clarification and result formulation as independently testable behavioral surfaces.",
+      "Do not treat direct tool-call abstention as sufficient autonomy evidence; test countermetrics and state-dependent choices."
+    ],
+    "needle": [
+      "Needle should own executable effects and return typed result receipts; Frank should not need executable tool syntax in its ordinary language target.",
+      "Marker/event protocols must live in a namespace distinct from executable tools."
+    ],
+    "harness": [
+      "Freeze source hash before blind sampling.",
+      "Verify plan counts directly from artifact, not only from reports; the 559-vs-577 discrepancy proves why.",
+      "Test train/runtime prompt-schema parity from source, not copied snapshots.",
+      "Keep machine-checkable and human/semantic-check-only invariants explicitly separated."
+    ],
+    "claycode": [
+      "Give executable effect, internal event marker, declaration, permission and result distinct IR types.",
+      "Compile result blocks/state structures deterministically and use language models only for the language projection when possible."
+    ],
+    "claygraph": [
+      "Persist provenance DAGs and contradictions rather than overwriting historical measurements with later corrections.",
+      "Attach liveness proofs to marker consumers so marker exceptions expire when consumers disappear."
+    ],
+    "unifieddb": [
+      "Store plan rows, candidate generations, rejection reasons, blind-sample identities, accepted rows and final corpus snapshots as linked immutable records.",
+      "Keep report claims and direct artifact measurements as separate evidence nodes when they disagree."
+    ],
+    "gwt": [
+      "Model goal selection/revision/abandonment and effect results as typed workspace events with reasons and provenance.",
+      "Clarification should be a valid competing workspace action, not an error fallback."
+    ],
+    "hyperposition": [
+      "Keep bounded alternative interpretations alive until clarification/evidence collapses them; do not invent certainty to avoid asking."
+    ],
+    "emergenz": [
+      "Evaluate autonomy through balanced counterfactual surfaces rather than raw action frequency."
+    ],
+    "clay": [
+      "v27 is strong historical evidence for the current dissolution direction: move syntax-heavy prompt/tool behavior into typed state/effect machinery and leave language as projection."
+    ]
+  },
+  "training_authority": {
+    "training_started": false,
+    "training_authorized": false,
+    "historical_guard_principle": "Rendering/training must stop when source prompt/runtime parity is not trustworthy."
+  },
+  "remaining_training_branch_obligations": [
+    "v26 still has direct files outside the already closed abzug/eval semantic shard.",
+    "Generated v27 candidate/accepted/rejected corpora referenced by these scripts must be located and hash-closed if they exist elsewhere in Drive.",
+    "Cross-reconcile v27 marker consumers and Needle/result-boundary concepts with current AICORE and Project-Frankenstein runtime code before declaring current implementation inheritance."
+  ],
+  "earned_work_hours_added": 0.0,
+  "created_at": "2026-08-09T09:54:00+07:00"
+}

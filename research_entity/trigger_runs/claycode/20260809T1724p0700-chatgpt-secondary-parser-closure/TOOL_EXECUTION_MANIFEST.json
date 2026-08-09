@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1724p0700-chatgpt-secondary-parser-closure",
+  "actor":"chatgpt-secondary",
+  "tools":[
+    {"class":"repository","provider":"GitHub connector","status":"EXECUTED","uses":["canonical boot","branch evidence reads","safe unique-path research writes"]},
+    {"class":"scholarly_current_web","provider":"web.run","status":"EXECUTED","policy":"primary/official technical sources only","sources":["Tree-sitter official grammar documentation","Rust Reference","WebAssembly Component Model/WIT specification repository","Wasmtime/WASI capability documentation"]},
+    {"class":"executable","provider":"local Linux Python fallback","status":"EXECUTED","runtime":"Linux x86_64; Python 3.13.5; Lark 1.3.1","experiment":"CC-G9-PARSER-DELTA-20260809"},
+    {"class":"executable","provider":"E2B","status":"UNAVAILABLE_ON_CURRENT_CHATGPT_TOOL_SURFACE","fallback":"local Linux Python/Lark","claim_boundary":"No E2B evidence claimed."},
+    {"class":"executable","provider":"SandboxAPI","status":"NOT_ATTEMPTED_KNOWN_PROTOCOL_BLOCKED_NOT_SUBSCRIBED","claim_boundary":"No SandboxAPI runtime evidence claimed."},
+    {"class":"community","provider":"Reddit","status":"NOT_USED","reason":"Current technical-search policy requires primary sources; community anecdotes were not needed for the discriminating parser test."}
+  ],
+  "external_findings":[
+    "Tree-sitter documentation independently confirms that operator precedence/associativity and intentional conflicts must be made explicit for reliable parser generation.",
+    "The Rust Reference provides an independent mature example of explicit comparison operators, if expressions and precedence semantics.",
+    "WIT/Component Model provides a typed interface boundary model suitable for evaluating ClayCode host-FFI design without making it a mandatory language semantic.",
+    "WASI/Wasmtime capability documentation independently supports explicit capability-scoped host access rather than ambient authority."
+  ]
+}

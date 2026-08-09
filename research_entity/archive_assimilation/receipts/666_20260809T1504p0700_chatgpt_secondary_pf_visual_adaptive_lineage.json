@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1504p0700-chatgpt-secondary-pf-visual-adaptive-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "focus": "historical visual perception, adaptive routing, Retina artifact consumption, native-vision supersession and relevance to current FRANK v0.1 user-adaptive Micro Visual Classifier requirements",
+    "non_overlap": "Cross-reads the existing Drive Digital Retina learning lineage and adds the distinct Project-Frankenstein routing/backend lineage. It does not claim full Project-Frankenstein tree/history enumeration."
+  },
+  "source_refs": [
+    "tools/frank_visual_pipeline.py@90596662837a75801fd2024069ee9bd547137869",
+    "tools/frank_adaptive_vision.py@90596662837a75801fd2024069ee9bd547137869",
+    "tools/vcb_bridge.py@90596662837a75801fd2024069ee9bd547137869",
+    "commit:90596662837a75801fd2024069ee9bd547137869",
+    "commit:0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+    "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+    "commit:6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+    "tools/frank_eye.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "ext/sovereign/vcb_integration.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "ext/feature_trainer.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+  ],
+  "chronology": [
+    {
+      "date": "2026-02-25",
+      "ref": "commit:90596662837a75801fd2024069ee9bd547137869",
+      "event": "Project-Frankenstein introduced a two-stage Adaptive Visual Pipeline: fast YOLO+OCR/scene heuristics first, then local VLM escalation when a hand-composed confidence score fell below a gate or the question required richer understanding."
+    },
+    {
+      "date": "2026-03-19",
+      "ref": "commit:0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "event": "The prior frank_visual_pipeline.py and frank_adaptive_vision.py were explicitly deleted/replaced by FrankEye, which fused Retina v8 CNN, DINOv2 features, OCR, face detection and other local visual features."
+    },
+    {
+      "date": "2026-03-24",
+      "ref": "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+      "event": "Screenshot-specific vision was repaired; the commit records removal of useless CIFAR-10 classification for screenshots and cleanup of misleading CIFAR/DINOv2 output, preserving a concrete negative result about indiscriminate classifier surfacing."
+    },
+    {
+      "date": "2026-03-31",
+      "ref": "commit:6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+      "event": "Native Qwen3.5 multimodal vision was added. At frozen head, tools/native_vision.py states that it replaces FrankEye for native image understanding, while FrankEye remains in the repository as an older/parallel implementation artifact."
+    },
+    {
+      "date": "2026-04-05",
+      "ref": "frozen-head:abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "event": "Frozen-head VCB executable code imports tools.native_vision, despite an internal class comment still referring to FrankEye. This is documentation/supersession drift, not evidence that both backends are simultaneously authoritative."
+    }
+  ],
+  "mechanism_findings": [
+    {
+      "id": "PF-VISION-M1",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE",
+      "finding": "The February Adaptive Visual Pipeline was adaptive in routing, not in user-specific learning: it combined detector/OCR/scene evidence with a hand-authored confidence score and escalated to a VLM when confidence was below 0.55 or task semantics demanded deeper interpretation.",
+      "current_mapping": "Reusable-with-adaptation as a cost/uncertainty routing ancestor for the current familiar-fast-path/deeper-perception architecture; it is not itself the current Micro Visual Classifier."
+    },
+    {
+      "id": "PF-VISION-M2",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE_PLUS_CROSS_SOURCE_LINEAGE",
+      "finding": "Frozen-head FrankEye loads Retina v8 weights from an external ~/projects/retina/cache/retina_v8.pt path and defines configuration specifically for compatibility with retina.py, establishing a concrete Project-Frankenstein -> Digital Retina artifact dependency.",
+      "current_mapping": "Feature/classifier artifacts require explicit backbone/version/provenance identity and migration/invalidation rules in H1/H2/UDB rather than implicit filesystem coupling."
+    },
+    {
+      "id": "PF-VISION-M3",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE",
+      "finding": "Frozen-head VCB persists prose visual descriptions and log-correlation observations into world_experience, but does not persist user-scoped visual prototypes, trusted example tiers, candidate classifier states or open-set calibration state.",
+      "current_mapping": "Visual description memory and adaptive familiarity memory are distinct data products and should remain explicitly separated in the current architecture."
+    },
+    {
+      "id": "PF-VISION-M4",
+      "epistemic_class": "HISTORICAL_SUPERSESSION_LINEAGE",
+      "finding": "The visual backend changed from heuristic detector+VLM routing to FrankEye and then toward Qwen3.5 native multimodal vision within roughly five weeks.",
+      "current_mapping": "The current learner should expose a backend-neutral familiarity/open-set contract with explicit feature-backbone compatibility instead of binding semantic identity to one visual backend."
+    }
+  ],
+  "cross_source_reconciliation": [
+    {
+      "relation": "COMPLEMENTARY_ANCESTORS",
+      "drive_ref": "666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage",
+      "pf_ref": "this_receipt",
+      "finding": "The Drive Digital Retina lineage contains the stronger historical learning ancestor: learned K-means/prototype-like dictionaries, replay/miss iteration and measured threshold/FPR behavior. Project-Frankenstein contributes the separate adaptive routing/backend-integration lineage. They should not be collapsed into one historical mechanism."
+    },
+    {
+      "relation": "ARTIFACT_DEPENDENCY",
+      "finding": "Project-Frankenstein FrankEye consumed an external Retina v8 weight artifact, connecting the repositories operationally even though the Project-Frankenstein head does not contain the Retina training source."
+    }
+  ],
+  "negative_results_and_failure_modes": [
+    {
+      "id": "PF-VISION-NEG-001",
+      "evidence": "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+      "result": "CIFAR-10 classification was removed for screenshots after producing useless/garbage visual output.",
+      "lesson": "A classifier can be locally confident yet task-irrelevant; fast-path gating must be calibrated to the actual domain/task and preserve escalation."
+    },
+    {
+      "id": "PF-VISION-NEG-002",
+      "evidence": "tools/frank_adaptive_vision.py@90596662837a75801fd2024069ee9bd547137869",
+      "result": "The historical term 'adaptive' referred to heuristic compute routing. No versioned per-user prototypes, GOLD/SILVER admission, candidate-vs-current promotion, rollback or explicit open-set state were found in this implementation.",
+      "lesson": "Do not count adaptive routing as adaptive learning or as satisfaction of the current FRANK v0.1 MVC contract."
+    },
+    {
+      "id": "PF-VISION-NEG-003",
+      "evidence": "ext/sovereign/vcb_integration.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "result": "A class comment says VCB uses FrankEye while executable code imports NativeVision.",
+      "lesson": "Backend identity must come from executable/versioned configuration and receipts; comments/docs can drift across rapid supersession."
+    },
+    {
+      "id": "PF-VISION-NEG-004",
+      "evidence": "tools/frank_adaptive_vision.py@90596662837a75801fd2024069ee9bd547137869",
+      "result": "The code claims that about 90% of images do not need VLM, but this run found no retrieved benchmark receipt establishing that claim.",
+      "lesson": "Treat performance comments as hypotheses until backed by measured workload-specific receipts."
+    }
+  ],
+  "current_inheritance": [
+    {
+      "target": "H1 Adaptive Micro Visual Classifier",
+      "inherit": "Fuse the Drive Retina prototype/dictionary learning ancestor with Project-Frankenstein's fast-first/deep-on-uncertainty routing pattern. Keep the MVC as familiarity/routing only, not sensor truth."
+    },
+    {
+      "target": "H1/H2/H3 Harness",
+      "inherit": "Expose backend_version, feature_backbone_version, classifier/prototype_version, calibration identity, evidence tier, open-set result, compute path and escalation reason in replayable receipts."
+    },
+    {
+      "target": "UnifiedDB/ClayGraph",
+      "inherit": "Persist visual sensor evidence, prose descriptions, familiarity prototypes/classifiers and training-example provenance as related but non-conflated objects with explicit supersession and compatibility edges."
+    },
+    {
+      "target": "ClayCode",
+      "inherit": "Represent fast-path/deep-path decisions as deterministic typed transitions over confidence/open-set/resource state; do not bake a specific CNN/DINO/VLM backend into the semantic contract."
+    }
+  ],
+  "reject_or_adapt": [
+    "Do not reuse the historical hand-composed confidence <0.55 threshold as semantic authority or as a current calibrated open-set gate.",
+    "Do not interpret detector/OCR routing adaptation as evidence of user-specific learning.",
+    "Do not treat prose VLM descriptions or BRONZE/self-generated labels as autonomous training truth.",
+    "Do not bind the new MVC to CIFAR-10 classes or to one historical FrankEye backend.",
+    "Do not treat the historical '~90% VLM saved' code comment as a measured fact.",
+    "Do not let a native multimodal VLM replacement erase the fixed FRANK v0.1 requirement for a small user-adaptive familiarity learner."
+  ],
+  "cheap_discriminating_tests": [
+    "Replay the same recurring-user and OOD image sequence through a historical-style heuristic escalator and MVC-0 prototype routing; compare task correctness, unknown rejection, escalation rate and compute cost.",
+    "Train/collect MVC state on one frozen feature backbone, then change backbone version and assert explicit invalidation or validated migration rather than silent prototype reuse.",
+    "Use screenshot near-neighbors and unrelated CIFAR-like classes to verify that locally confident but task-irrelevant classifier output cannot enter KNOWN_HIGH_CONFIDENCE fast path.",
+    "Crash between candidate evaluation and promotion; assert last-known-good classifier/prototype version is restored and the same replay yields identical state transitions.",
+    "Feed native-VLM prose descriptions back as BRONZE examples and require autonomous training admission rejection unless independently promoted to trusted provenance."
+  ],
+  "branch_feedback": {
+    "frank": "DELTA: preserve fast-first/deep-on-uncertainty routing, but pair it with the separate learned prototype lineage and current provenance/open-set/rollback laws.",
+    "harness": "DELTA: add backend-supersession, feature-version invalidation and task-irrelevant-confidence regression tests to MVC acceptance.",
+    "claycode": "DELTA: adaptive visual semantics should be backend-neutral typed state transitions with explicit compatibility/version identities.",
+    "claygraph": "DELTA: represent sensor evidence, description memory, prototype/classifier state and backend supersession as distinct linked nodes/edges.",
+    "unifieddb": "DELTA: persist feature-backbone compatibility and visual learner version lineage independently of prose visual observations.",
+    "gwt": "NO_CHANGE: this lineage does not establish a new workspace ignition/broadcast mechanism.",
+    "emergenz": "NO_CHANGE: routing/backend evolution is architectural history, not new causal-emergence evidence.",
+    "hyperposition": "NO_CHANGE: no new higher-order set-valued coupling result is established by this shard.",
+    "clayresearch": "DELTA: dissolved Retina should combine learned familiarity with selective deeper perception while keeping both non-authoritative relative to sensor/effect evidence.",
+    "q12_index": "DELTA: Project-Frankenstein contributes a distinct adaptive-routing/backend-supersession ancestor that complements, rather than duplicates, the Drive learned-dictionary lineage."
+  },
+  "earned_work": {
+    "new_credit_hours": 0.0,
+    "mapping_candidate": true,
+    "reason": "Reusable routing and backend-migration mechanisms were recovered, but row-level historical earned-work deduplication remains incomplete and must not double-credit the already mapped Drive Retina lineage."
+  },
+  "level0_effect": {
+    "exact_global_percent_added": 0.0,
+    "reason": "Project-Frankenstein exact frozen tree/history denominator remains unfrozen because the current connector has no recursive read-tree/archive/clone surface. This is valid semantic/history evidence, not repository-wide denominator closure."
+  },
+  "promotion": {
+    "canonical_claim_promotion": false,
+    "reason": "Historical mechanism, supersession and negative-result evidence was preserved. No new live implementation result was produced and Level-0 remains open."
+  },
+  "status": "COMPLETE_SEMANTIC_LINEAGE_SHARD",
+  "created_at": "2026-08-09T15:04:00+07:00"
+}

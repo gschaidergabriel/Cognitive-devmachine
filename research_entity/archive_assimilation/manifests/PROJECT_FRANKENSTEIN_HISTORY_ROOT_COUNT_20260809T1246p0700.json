@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "manifest_id":"PROJECT-FRANKENSTEIN-HISTORY-ROOT-COUNT-20260809T1246p0700",
   "trigger":"666",
   "actor":"chatgpt-secondary",
@@ -12,14 +12,30 @@
     "bridge":"3085d354^ resolved to parent 6cef05b91360ab8852d390bd3a1e4a4a2fcebda8.",
     "binary_first_parent_boundary":["6cef~137 resolves to e1a8812767668091d146ee958bbc2ebb2743031c","6cef~138 returns Not Found","e1a881^ returns Not Found"],
     "root_to_head_compare":{"status":"ahead","merge_base":"e1a8812767668091d146ee958bbc2ebb2743031c","ahead_by":544,"behind_by":0,"total_commits_after_root":544},
+    "head_ordinal_boundary":["abba90a~544 resolves exactly to e1a8812767668091d146ee958bbc2ebb2743031c","abba90a~545 returns Not Found"],
     "reachable_commit_count_including_root":545,
+    "first_parent_distance_head_to_root":544,
+    "reachable_count_equals_first_parent_distance_plus_one":true,
     "formula":"1 root + 544 commits reachable from frozen head but after root = 545"
   },
-  "denominator_state":{"reachable_history_count_frozen":true,"reachable_commit_count":545,"root_identity_frozen":true,"all_commit_sha_identities_enumerated":false,"all_commit_semantics_dispositioned":false,"full_history_level0_complete":false},
-  "method_guard":"GitHub commit-search ordering is not an exact history enumerator. Use Git revision ancestry/compare for denominator boundaries; search remains discovery/prioritization only.",
-  "next_obligations":["enumerate/preserve all 545 reachable commit identities or an equivalent cryptographically/reproducibly complete commit-set representation","map existing PF semantic lineage receipts against the 545-count denominator","close uncovered commits without double credit","only then mark PF history semantic completion"],
+  "commit_set_representation":{
+    "kind":"REVSET_ORDINAL_FIRST_PARENT_COMPLETE",
+    "expression":"{ resolve(abba90a5767d85abc8a1ac340bae92842dab35c1~k) | integer k, 0 <= k <= 544 }",
+    "cardinality":545,
+    "head_ordinal":0,
+    "root_ordinal":544,
+    "ordinal_after_root":545,
+    "ordinal_after_root_resolves":false,
+    "complete_commit_identity_set_reproducibly_addressable":true,
+    "all_commit_sha_identities_explicitly_materialized":false,
+    "linearity_evidence":"compare(root, head).ahead_by=544 equals first-parent distance 544 and head~544=root; no merged-only reachable commits increase the reachable count beyond the first-parent chain."
+  },
+  "denominator_state":{"reachable_history_count_frozen":true,"reachable_commit_count":545,"root_identity_frozen":true,"complete_commit_identity_set_reproducibly_addressable":true,"all_commit_sha_identities_explicitly_materialized":false,"all_commit_semantics_dispositioned":false,"full_history_level0_complete":false},
+  "method_guard":"GitHub commit-search ordering is not an exact history enumerator. Use Git revision ancestry/compare for denominator boundaries. A compact complete ordinal revset is sufficient to freeze the identity universe, but it does not imply semantic review of every member.",
+  "next_obligations":["map existing PF semantic lineage receipts against ordinal revset k=0..544","close every uncovered ordinal/commit without double credit","only then mark PF history semantic completion"],
   "exact_global_level0_credit_percent":0.0,
   "release_gate":"NOT_PASS",
-  "status":"EXACT_REACHABLE_HISTORY_COUNT_FROZEN_IDENTITY_AND_SEMANTIC_ENUMERATION_OPEN",
-  "created_at":"2026-08-09T12:46:00+07:00"
+  "status":"EXACT_REACHABLE_HISTORY_IDENTITY_UNIVERSE_FROZEN_SEMANTIC_DISPOSITION_OPEN",
+  "created_at":"2026-08-09T12:46:00+07:00",
+  "updated_at":"2026-08-09T12:48:00+07:00"
 }

@@ -1,0 +1,70 @@
+{
+  "schema_version":"1.0",
+  "run_id":"666-20260809T1048p0700-chatgpt-secondary",
+  "trigger":"666",
+  "task_id":"666-l0-aicore-safety-feedback-20260809T1051p0700",
+  "source_receipts":[
+    "research_entity/archive_assimilation/receipts/666_20260809T1020p0700_chatgpt_secondary_aicore_webd_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1020p0700_chatgpt_secondary_aicore_updater_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1020p0700_chatgpt_secondary_aicore_docker_semantic_closure.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1020p0700_chatgpt_secondary_aicore_config_semantic_closure.json"
+  ],
+  "evidence_families":{
+    "web_egress":["WEBD-SSRF-1-REDIRECT-DNS","WEBD-SSRF-2-RSS"],
+    "update_recovery":["UPDATER-GATE-1-POSTSTART-NONFATAL","UPDATER-SUPPLY-2-MODEL-SIZE-ONLY","UPDATER-SUPPLY-3-CODE-DEPENDENCY-TRUST","RECOVERY-GATE-4-BACKUP-NOT-TRANSACTION","RECOVERY-AUTH-5-DESTRUCTIVE-SURFACE"],
+    "artifact_boot":["DOCKER-ARTIFACT-1-UNVERIFIED-MODELS","DOCKER-ARTIFACT-2-QWEN-IDENTITY-MISLABEL","DOCKER-BOOT-3-READINESS-NONFATAL","DOCKER-SUPERVISION-4-CRITICAL-CHILD-DEATH"],
+    "config_identity":["CFG-1-IMPORT-ORDER-STATE","CFG-2-MODEL-PATH-SPLIT","CFG-3-SILENT-REGISTRY-FALLBACK","CFG-4-INVALID-INSTANCE-FALLBACK","CFG-5-PARTIAL-CENTRALIZATION","CFG-6-GPU-FORCE-SOFTENING"]
+  },
+  "feedback":{
+    "frank":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["treat fetched web content as untrusted sensory evidence, never instruction authority","derive active model identity from verified artifact metadata rather than filenames","bind every runtime to one immutable instance/boot manifest before subsystem initialization","separate cognition/recommendation from privileged update/recovery commit authority"],
+      "warning":"A nominal RUNNING/update-success state is invalid when mandatory readiness, health, artifact identity or instance-isolation invariants are false."
+    },
+    "claycode":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["represent outbound network access as a typed effect carrying resolved destination class and redirect policy","represent VerifiedArtifact, UpdateCandidate, StagedRelease, Activation, RollbackSnapshot and DestructiveRecoveryCommit as distinct authority-graded effects","represent paths/ports/runtime endpoints as typed handles derived from one immutable boot manifest","make mandatory ServiceReadiness a typed state that blocks downstream activation"],
+      "warning":"Normal generated ClayCode must not possess destructive recovery commit or unverified software/model activation authority."
+    },
+    "gwt":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["broadcast proposed/verified/activated/failed/rolled_back update states distinctly","broadcast degraded/not-ready substrate state when mandatory services/artifacts are unavailable","broadcast verified instance identity rather than inferring it from default ports or filenames"],
+      "warning":"A failed health/readiness state must never be globally represented as completed success or normal ignition."
+    },
+    "hyperposition":{
+      "verdict":"NO_CHANGE",
+      "reason":"The new evidence concerns authority, provenance, boot, network egress and configuration determinism; it does not establish a new set-valued/higher-order state mechanism."
+    },
+    "emergenz":{
+      "verdict":"NO_CHANGE",
+      "reason":"These are implementation/safety lineage findings and executed failure reproductions, not independent emergence evidence."
+    },
+    "claygraph":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["record network provenance edges for requested URL, resolved IP class, redirect chain, response origin and policy decision","record immutable release/recovery ancestry: previous -> candidate -> verified -> activated|rolled_back","represent boot as dependency/readiness transition edges","bind state/artifact nodes to instance_id and boot_epoch","treat model filename as display metadata only; identity edge must bind digest+source revision+tokenizer/config"],
+      "warning":"Do not turn repeated historical safety defects into independent evidence merely because they appear in Drive and PF ancestry; cross-source confirmation is lineage corroboration, not replication."
+    },
+    "unifieddb":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["use schema-registered closed-world persistence identities; unknown DB/state names fail loudly","persist release/recovery manifests with hashes, schema versions and snapshot ancestry","make snapshots/recovery database-consistent staged transactions with validation and automatic rollback","persist boot epoch, verified artifact manifest and readiness transition log","persist network-effect provenance needed for replay/audit"],
+      "warning":"Ad-hoc live-file copy/wipe and silent typo-created databases violate the current single-truth persistence goal."
+    },
+    "harness":{
+      "verdict":"MATERIAL_DELTA",
+      "mandatory_regression_seeds":["SSRF direct-private, alternative-IP-encoding, DNS-to-private, redirect-to-private, metadata/link-local and RSS-policy parity","failed post-update service start and failing health must prevent success/trigger rollback","wrong-but-plausible-size or wrong-but-existing model artifact must fail digest identity","dependency-install/release-manifest failure and rollback failure","recovery with corrupt/incompatible reference DB, interrupted copy and failed restart must auto-restore snapshot","cold boot with missing/corrupt model, readiness timeout and mid-run mandatory child death","boot/import-order permutations must yield one configuration epoch","invalid FRANK_PORT_BASE must fail closed rather than collide with Prime","two-instance isolation across ports, LLM, DB, logs, temp and UI state","unknown persistence registry names rejected","required GPU/backend mismatch recorded/fails according to required-vs-preferred policy"],
+      "warning":"Acceptance cannot rely on validator unit tests alone; tests must exercise actual HTTP client redirect/DNS behavior, actual activation/rollback, and actual multi-instance runtime state."
+    },
+    "clay":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["one-binary dissolution must centralize egress authority, artifact verification, boot health and rollback instead of erasing those boundaries","eliminate import-time configuration side effects by constructing one immutable boot/instance state before module initialization","preserve typed criticality and dependency semantics internally even when process boundaries disappear"],
+      "warning":"Less process/module separation is acceptable only if transaction and authority boundaries become stronger and more explicit."
+    },
+    "q12_index":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["index the confirmed SSRF redirect/DNS and weaker RSS egress paths","index updater false-success, size-only artifact validation and non-transactional recovery lineage","index Docker wrong-model identity label, nonfatal readiness and critical-child supervision defects","index executed config reproductions: stale MODEL_PATHS after override, import-order split epoch, invalid port-base fallback, typo DB creation","mark all as historical/current-lineage safety or determinism constraints with zero new earned-work credit pending dedup"]
+    }
+  },
+  "anti_echo_rule":"Cross-source confirmation against Project-Frankenstein ancestry strengthens lineage confidence but is not independent replication. Existing safety/boot/UnifiedDB mappings must be row-deduplicated before any avoided-work credit is assigned.",
+  "credit":{"exact_global_level0_percent_added":0.0,"earned_work_hours_added":0.0},
+  "created_at":"2026-08-09T10:52:00+07:00"
+}

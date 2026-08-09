@@ -1,9 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
-  "latest_frank_run": null,
+  "latest_frank_run": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
   "latest_frank_claycode_architecture_artifact": null,
-  "frank_artifact_search_note": "Expected direct path and connector search did not locate FRANK_ARCHITECTURE.claycode.json in this run; provisional current FRANK contracts were used as permitted by ClayCode protocol.",
+  "frank_artifact_search_note": "Expected FRANK_ARCHITECTURE.claycode.json was not located. During this run a newer FRANK architecture-lineage Fusion materialized FUSED_FRANK_TARGET_ARCHITECTURE.json; that OPEN fused target overlay was assimilated without treating it as canonical promotion.",
   "items": [
     {
       "claim_id": "FRANK-CC-AUTHORITY-BOUNDARY",
@@ -26,18 +26,30 @@
     },
     {
       "claim_id": "FRANK-MVC-STATE-EXPRESSIBILITY",
-      "frank_statement": "BASE ClayCode must express versioned prototype/classifier state, trusted example tiers, confidence/open-set outcomes, candidate promotion/rollback, resource budgets and replay hooks.",
-      "frank_source_refs": ["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"],
-      "ancestry_families": ["PROJECT_OWNER_REQUIREMENT", "CLAYCODE_G9_CURRENT"],
+      "frank_statement": "BASE ClayCode must express versioned prototype/classifier state, trusted example tiers, confidence/open-set outcomes, candidate promotion/rollback, resource budgets and replay hooks; the fused FRANK target further separates RecognitionValidity, AdaptiveStatePromotion and atomic semantic publication.",
+      "frank_source_refs": [
+        "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+        "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"
+      ],
+      "ancestry_families": ["PROJECT_OWNER_REQUIREMENT", "FRANK_ARCHITECTURE_LINEAGE_FUSION", "CLAYCODE_G9_CURRENT", "CURRENT_RUN_EXECUTABLE_GATE_PROBE"],
       "shared_ancestry_collapsed": true,
-      "counterhypothesis": "Existing generic records/deltas/provenance are insufficient without additional semantic primitives.",
-      "falsifier": "An executable MVC state-machine example fails to type/check/lower without opaque host-only state or semantic escape hatch.",
-      "independent_checks": [],
-      "adversarial_checks": ["No MVC representability program was compiled in this run."],
-      "verdict": "UNRESOLVED",
-      "reason": "Requirement is binding, but this run produced no independent executable representability evidence.",
-      "claycode_action": "Do not add primitives yet; schedule executable MVC state/rollback example after parser/IR alignment.",
-      "affected_claycode_artifacts": []
+      "counterhypothesis": "Existing generic records/type aliases/rules are insufficient and the fused gates require new dedicated ClayCode semantic primitives.",
+      "falsifier": "A real frozen Retina/MVC state-machine program cannot type/check/lower/replay the required versioned learning state, promotion/rollback and publication behavior without an opaque host-only state or semantic escape hatch.",
+      "independent_checks": [
+        "EXP-CC-G9-UM-RETINA-GATE-001: a CURRENT-grammar-compatible ClayCode probe encoded independent recognition-validity, adaptive-state-promotion and semantic-publication gates, lowered them to a deterministic Python CLI, and matched 8/8 positive/veto fixtures with exit status 0 and empty stderr."
+      ],
+      "adversarial_checks": [
+        "The probe deliberately separates open-set/conflict vetoes from trusted-tier/candidate-evaluation vetoes and publication/replay vetoes.",
+        "It is only a partial compiler probe: no real Retina features, classifier training, resource budgets, SQLite transaction, ClayGraph projection, target-machine effect or full rollback state machine was executed.",
+        "The current full G9 surface remains grammar-misaligned in other constructs, so this result cannot be promoted into a production-parser or APP acceptance claim."
+      ],
+      "verdict": "REFINED",
+      "reason": "The narrow fused gate semantics are executable using existing generic G9-compatible constructs, so no dedicated new primitive is justified by this test. Full adaptive-visual state/replay expressibility remains open until a real BASE/H1 component executes.",
+      "claycode_action": "Keep grammar growth frozen; use existing typed constructs for the next real Retina/Unified-Memory component and reopen semantics only on an executable inadequacy.",
+      "affected_claycode_artifacts": [
+        "UM_RETINA_GATE_PROBE.clay",
+        "EXECUTABLE_RESEARCH_RECEIPT_UM_RETINA_GATE.json"
+      ]
     }
   ]
 }

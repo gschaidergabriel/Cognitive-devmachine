@@ -6,7 +6,7 @@ This module is deliberately separate from FRANK itself. It provides:
 - deterministic canonical JSON and SHA-256 state identity;
 - append-only event receipts with hash chaining;
 - monotonic epochs with compare-and-swap base_epoch checks;
-- idempotency keys;
+- transaction-safe semantic idempotency;
 - explicit epistemic state preservation;
 - provenance-bound mutations;
 - deterministic snapshot/export and verified restore.
@@ -24,12 +24,7 @@ from typing import Any, Iterable
 
 SCHEMA_VERSION = "h1-ledger-0.1"
 ALLOWED_EPISTEMIC_STATES = {
-    "KNOWN",
-    "UNKNOWN",
-    "CONFLICT",
-    "REVOKED",
-    "HYPOTHESIS",
-    "OBSERVED",
+    "KNOWN", "UNKNOWN", "CONFLICT", "REVOKED", "HYPOTHESIS", "OBSERVED",
 }
 GENESIS_HASH = "0" * 64
 
@@ -108,7 +103,6 @@ class StateLedger:
               key TEXT PRIMARY KEY,
               value TEXT NOT NULL
             );
-
             CREATE TABLE IF NOT EXISTS ledger_epochs(
               epoch INTEGER PRIMARY KEY,
               parent_epoch INTEGER,
@@ -119,7 +113,6 @@ class StateLedger:
               writer_node TEXT NOT NULL,
               FOREIGN KEY(parent_epoch) REFERENCES ledger_epochs(epoch)
             );
-
             CREATE TABLE IF NOT EXISTS ledger_events(
               event_id TEXT PRIMARY KEY,
               idempotency_key TEXT NOT NULL UNIQUE,
@@ -134,7 +127,6 @@ class StateLedger:
               committed_at TEXT NOT NULL,
               writer_node TEXT NOT NULL
             );
-
             CREATE TABLE IF NOT EXISTS ledger_state(
               domain TEXT NOT NULL,
               state_key TEXT NOT NULL,
@@ -145,7 +137,6 @@ class StateLedger:
               provenance_json TEXT NOT NULL,
               PRIMARY KEY(domain,state_key)
             );
-
             CREATE TABLE IF NOT EXISTS ledger_snapshots(
               snapshot_id TEXT PRIMARY KEY,
               epoch INTEGER NOT NULL,
@@ -179,10 +170,6 @@ class StateLedger:
 
     @staticmethod
     def _root_hash(rows: Iterable[dict[str, Any]]) -> str:
-        # Canonical semantic state identity is independent of event IDs, timestamps,
-        # writer nodes and provenance packaging. Those remain bound by the event hash
-        # chain and snapshot payload hash. This keeps state identity stable across a
-        # verified snapshot restore while preserving provenance separately.
         normalized = [
             {
                 "domain": r["domain"],
@@ -237,6 +224,24 @@ class StateLedger:
             "provenance": json.loads(r["provenance_json"]),
         }
 
+    @staticmethod
+    def _same_semantic_request(
+        existing: sqlite3.Row,
+        *,
+        event_id: str,
+        base_epoch: int,
+        event_type: str,
+        mutations_json: str,
+        provenance_json: str,
+    ) -> bool:
+        return (
+            existing["event_id"] == event_id
+            and existing["base_epoch"] == base_epoch
+            and existing["event_type"] == event_type
+            and existing["mutations_json"] == mutations_json
+            and existing["provenance_json"] == provenance_json
+        )
+
     def commit(
         self,
         *,
@@ -256,30 +261,43 @@ class StateLedger:
         norm_mutations = [m.normalized() for m in mutations]
         if not norm_mutations:
             raise LedgerError("at least one mutation is required")
+        provenance_json = canonical_bytes(provenance).decode("utf-8")
+        mutations_json = canonical_bytes(norm_mutations).decode("utf-8")
 
-        existing = self.db.execute(
-            "SELECT event_id,committed_epoch,event_hash,post_root_hash FROM ledger_events WHERE idempotency_key=?",
-            (idempotency_key,),
-        ).fetchone()
-        if existing:
-            if existing["event_id"] != event_id:
-                raise LedgerError("idempotency key reused by a different event_id")
-            return {
-                "status": "IDEMPOTENT_REPLAY",
-                "event_id": existing["event_id"],
-                "epoch": existing["committed_epoch"],
-                "event_hash": existing["event_hash"],
-                "root_hash": existing["post_root_hash"],
-            }
-
+        # Resolve idempotency under the same write lock as the first commit. This closes
+        # the pre-lock TOCTOU race and rejects same-key retries whose semantic request
+        # differs. Execution-local retry metadata (writer/timestamp) is deliberately not
+        # part of semantic identity.
         self.db.execute("BEGIN IMMEDIATE")
         try:
+            existing = self.db.execute(
+                "SELECT event_id,base_epoch,event_type,mutations_json,provenance_json,"
+                "committed_epoch,event_hash,post_root_hash FROM ledger_events WHERE idempotency_key=?",
+                (idempotency_key,),
+            ).fetchone()
+            if existing:
+                if not self._same_semantic_request(
+                    existing,
+                    event_id=event_id,
+                    base_epoch=base_epoch,
+                    event_type=event_type,
+                    mutations_json=mutations_json,
+                    provenance_json=provenance_json,
+                ):
+                    raise LedgerError("idempotency key reused with changed semantic request")
+                self.db.execute("COMMIT")
+                return {
+                    "status": "IDEMPOTENT_REPLAY",
+                    "event_id": existing["event_id"],
+                    "epoch": existing["committed_epoch"],
+                    "event_hash": existing["event_hash"],
+                    "root_hash": existing["post_root_hash"],
+                }
+
             head = self.head()
             if head["epoch"] != base_epoch:
                 raise StaleEpoch(f"base_epoch={base_epoch} current_epoch={head['epoch']}")
             new_epoch = base_epoch + 1
-            provenance_json = canonical_bytes(provenance).decode("utf-8")
-            mutations_json = canonical_bytes(norm_mutations).decode("utf-8")
 
             for m in norm_mutations:
                 self.db.execute(
@@ -294,13 +312,8 @@ class StateLedger:
                       provenance_json=excluded.provenance_json
                     """,
                     (
-                        m["domain"],
-                        m["key"],
-                        canonical_bytes(m["value"]).decode("utf-8"),
-                        m["epistemic_state"],
-                        event_id,
-                        new_epoch,
-                        provenance_json,
+                        m["domain"], m["key"], canonical_bytes(m["value"]).decode("utf-8"),
+                        m["epistemic_state"], event_id, new_epoch, provenance_json,
                     ),
                 )
 
@@ -328,18 +341,8 @@ class StateLedger:
                 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
                 """,
                 (
-                    event_id,
-                    idempotency_key,
-                    base_epoch,
-                    new_epoch,
-                    event_type,
-                    mutations_json,
-                    provenance_json,
-                    head["event_hash"],
-                    event_hash,
-                    post_root,
-                    committed_at,
-                    writer_node,
+                    event_id, idempotency_key, base_epoch, new_epoch, event_type, mutations_json,
+                    provenance_json, head["event_hash"], event_hash, post_root, committed_at, writer_node,
                 ),
             )
             self.db.execute(
@@ -358,13 +361,14 @@ class StateLedger:
                 "root_hash": post_root,
             }
         except Exception:
-            self.db.execute("ROLLBACK")
+            try:
+                self.db.execute("ROLLBACK")
+            except sqlite3.Error:
+                pass
             raise
 
     def verify(self) -> dict[str, Any]:
-        events = self.db.execute(
-            "SELECT * FROM ledger_events ORDER BY committed_epoch"
-        ).fetchall()
+        events = self.db.execute("SELECT * FROM ledger_events ORDER BY committed_epoch").fetchall()
         prev = GENESIS_HASH
         expected_epoch = 1
         for e in events:
@@ -399,11 +403,8 @@ class StateLedger:
         if prev != head["event_hash"]:
             raise TamperDetected("head event hash mismatch")
         return {
-            "status": "PASS",
-            "events": len(events),
-            "epoch": head["epoch"],
-            "root_hash": head["root_hash"],
-            "event_hash": head["event_hash"],
+            "status": "PASS", "events": len(events), "epoch": head["epoch"],
+            "root_hash": head["root_hash"], "event_hash": head["event_hash"],
         }
 
     def snapshot(self, *, snapshot_id: str, created_at: str, created_by: str) -> dict[str, Any]:
@@ -423,15 +424,8 @@ class StateLedger:
             VALUES(?,?,?,?,?,?,?,?,?)
             """,
             (
-                snapshot_id,
-                payload["epoch"],
-                payload["root_hash"],
-                payload["event_hash"],
-                payload_hash,
-                payload_json,
-                created_at,
-                created_by,
-                "UNTESTED",
+                snapshot_id, payload["epoch"], payload["root_hash"], payload["event_hash"],
+                payload_hash, payload_json, created_at, created_by, "UNTESTED",
             ),
         )
         return {"snapshot_id": snapshot_id, "payload_hash": payload_hash, **payload}
@@ -466,10 +460,6 @@ class StateLedger:
                 " VALUES(0,NULL,NULL,?,?,?,?)",
                 (ledger._root_hash([]), GENESIS_HASH, "1970-01-01T00:00:00Z", "GENESIS"),
             )
-
-            # Snapshot restore intentionally reconstructs current state, not historical events.
-            # It installs a synthetic, provenance-explicit recovery event so the restored DB
-            # has a fresh verifiable ledger head and never pretends to have replayed history.
             provenance = {
                 "class": "SNAPSHOT_RECOVERY",
                 "source_snapshot_hash": sha256_hex(raw),
@@ -479,12 +469,7 @@ class StateLedger:
             }
             event_id = f"restore:{sha256_hex(raw)[:24]}"
             muts = [
-                Mutation(
-                    domain=r["domain"],
-                    key=r["key"],
-                    value=r["value"],
-                    epistemic_state=r["epistemic_state"],
-                )
+                Mutation(r["domain"], r["key"], r["value"], r["epistemic_state"])
                 for r in payload["state"]
             ]
             if not muts:

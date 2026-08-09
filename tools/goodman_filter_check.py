@@ -66,7 +66,7 @@ def validate_run(run_dir:Path)->dict[str,Any]:
     if not registered:v.append("registry_scientific_branches must be non-empty")
     if set(branch_names)!=set(registered):v.append("preflight branches must cover exactly registry_scientific_branches")
     priority=inter.get("branch_priority") or []
-    required_prefix=[x for x in ["frank","clay","claygraph","unifieddb"] if x in registered]
+    required_prefix=[x for x in ["frank","clay","harness","claygraph","unifieddb"] if x in registered]
     if priority[:len(required_prefix)]!=required_prefix:v.append(f"ClayCode preflight priority must begin {required_prefix}")
     if set(priority)!=set(registered):v.append("branch_priority must cover exactly registered scientific branches")
     special=inter.get("special_rules") or inter.get("requirements") or {}

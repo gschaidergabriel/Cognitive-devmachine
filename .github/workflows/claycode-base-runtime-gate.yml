@@ -6,6 +6,7 @@ on:
     paths:
       - 'tools/claycode_base_runtime.py'
       - 'tools/claycode_base_runtime_validation.py'
+      - 'tools/claycode_runtime_v04_hardening_validation.py'
       - '.github/workflows/claycode-base-runtime-gate.yml'
 
 permissions:
@@ -18,7 +19,7 @@ concurrency:
 jobs:
   runtime-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,15 +27,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate runtime authority and resource semantics
+      - name: Validate baseline runtime authority and resource semantics
         run: python tools/claycode_base_runtime_validation.py
-      - name: Commit runtime receipt
+      - name: Validate v0.4 context budget HTTP child and TOCTOU hardening
+        run: python tools/claycode_runtime_v04_hardening_validation.py
+      - name: Require mainline v0.4 without proxy promotion
+        run: |
+          python - <<'PY'
+          import json
+          base=json.load(open('research_entity/claycode/autonomous/BASE_RUNTIME_CAPABILITY_RECEIPT.json',encoding='utf-8'))
+          hard=json.load(open('research_entity/claycode/autonomous/BASE_RUNTIME_V04_HARDENING_RECEIPT.json',encoding='utf-8'))
+          assert base['pass'] is True, base['failures']
+          assert hard['pass'] is True, hard['failures']
+          assert hard['runtime_version']=='claycode-base-runtime/0.4'
+          assert hard['counts_as_work_package_pass'] is False
+          assert hard['counts_as_target_acceptance'] is False
+          print('BASE_RUNTIME_V04_PROXY_GATE_PASS')
+          PY
+      - name: Commit runtime receipts
         run: |
           git config user.name 'claycode-base-runtime-gate'
           git config user.email 'claycode-base-runtime-gate@users.noreply.github.com'
-          git add research_entity/claycode/autonomous/BASE_RUNTIME_CAPABILITY_RECEIPT.json
+          git add \
+            research_entity/claycode/autonomous/BASE_RUNTIME_CAPABILITY_RECEIPT.json \
+            research_entity/claycode/autonomous/BASE_RUNTIME_V04_HARDENING_RECEIPT.json
           git diff --cached --quiet && exit 0
-          git commit -m 'ClayCode: record runtime capability gate receipt'
+          git commit -m 'ClayCode: record runtime v0.4 capability receipts'
           for attempt in 1 2 3; do
             git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
             sleep $((attempt * 2))

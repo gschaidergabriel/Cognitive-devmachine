@@ -1,0 +1,93 @@
+name: RAE PF Exact Tree Probe
+
+on:
+  push:
+    paths:
+      - '.github/workflows/rae_pf_exact_tree_probe.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout research entity
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Materialize exact Project-Frankenstein trees
+        shell: bash
+        run: |
+          set -euo pipefail
+          PF=/tmp/project-frankenstein-tree-probe
+          OUT="$GITHUB_WORKSPACE/research_entity/archive_assimilation/raw_tree_snapshots"
+          rm -rf "$PF"
+          mkdir -p "$OUT"
+          git clone --filter=blob:none --no-checkout https://github.com/gschaidergabriel/Project-Frankenstein.git "$PF"
+          refs=(
+            2ee91c4479eec549de3bec357af69799fad583ad
+            9fcf1f1edcb8db9b7d1a70a54b18ee82eb5187f5
+            0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb
+            62deb0a39a8ade4fad0fd7c40978fd6dd128d277
+            ce00787f4cabe65859132a762251e39449ad5ca5
+            124ca2d15c6dfd456729357dd826f891f9952e49
+            290d5e2b8640d55eb2a0aa38b99338c8070a0009
+            6158be8ddde637fbf6b78e820239bf4ee8e8b5ee~1
+            6158be8ddde637fbf6b78e820239bf4ee8e8b5ee
+            62149151ba704479f46265a5b8b5865fd38ba99d
+            abba90a5767d85abc8a1ac340bae92842dab35c1
+          )
+          cd "$PF"
+          git fetch --quiet origin main
+          python3 - "$OUT" "${refs[@]}" <<'PY'
+          import hashlib, json, pathlib, subprocess, sys
+          out = pathlib.Path(sys.argv[1])
+          refs = sys.argv[2:]
+          summary = {"schema_version":"1.0","repository":"gschaidergabriel/Project-Frankenstein","snapshots":[]}
+          for ref in refs:
+              sha = subprocess.check_output(["git","rev-parse",ref], text=True).strip()
+              raw = subprocess.check_output(["git","ls-tree","-r","--full-tree",sha], text=True)
+              rows = []
+              for line in raw.splitlines():
+                  meta, path = line.split("\t",1)
+                  mode, typ, obj = meta.split(" ",2)
+                  rows.append((path, mode, typ, obj))
+              rows.sort(key=lambda x:x[0])
+              canonical = "".join(f"{p}\t{m}\t{t}\t{o}\n" for p,m,t,o in rows)
+              pathset = "".join(f"{p}\n" for p,_,_,_ in rows)
+              pathblob = "".join(f"{p}\t{o}\n" for p,_,_,o in rows)
+              short = sha[:12]
+              txt = out / f"PF_TREE_{short}.ls-tree.txt"
+              txt.write_text(canonical, encoding="utf-8")
+              summary["snapshots"].append({
+                  "requested_ref":ref,
+                  "sha":sha,
+                  "entries":len(rows),
+                  "canonical_ls_tree_sha256":hashlib.sha256(canonical.encode()).hexdigest(),
+                  "pathset_sha256":hashlib.sha256(pathset.encode()).hexdigest(),
+                  "path_blob_sha256":hashlib.sha256(pathblob.encode()).hexdigest(),
+                  "file":str(txt.relative_to(pathlib.Path.cwd().parent if False else out.parent.parent.parent.parent)) if False else f"research_entity/archive_assimilation/raw_tree_snapshots/{txt.name}"
+              })
+          (out / "PF_TREE_PROBE_SUMMARY.json").write_text(json.dumps(summary, indent=2)+"\n", encoding="utf-8")
+          PY
+
+      - name: Commit exact tree snapshots back to RAE
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "rae-tree-probe"
+          git config user.email "actions@users.noreply.github.com"
+          git add research_entity/archive_assimilation/raw_tree_snapshots/
+          git commit -m "666 PF: materialize exact recursive tree snapshots via CI" || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1

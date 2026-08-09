@@ -1,0 +1,79 @@
+{
+  "schema_version":"1.0",
+  "run_id":"666-20260809T1020p0700-chatgpt-secondary",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "gate":"666_RELEASE_GATE",
+  "gate_status":"NOT_PASS",
+  "global_denominator_state":"NOT_FROZEN",
+  "global_exact_coverage_percent":0.0,
+  "status":"RUN_SHARDS_COMMITTED_HANDOFF_READY",
+  "campaign_state":"ACTIVE_LEVEL0_ARCHIVE_ASSIMILATION",
+  "frozen_scopes":{
+    "drive_clay_root":"epoch-specific direct root manifest exists; whole recursive Drive denominator remains open",
+    "aicore_root_direct":"67 entries = 37 folders + 30 files frozen at this run",
+    "aicore_training_recursive":"81 units = 4 folders + 77 files; 77/77 file content semantically closed",
+    "project_frankenstein":"frozen head abba90a5767d85abc8a1ac340bae92842dab35c1; history-aware denominator remains open"
+  },
+  "completed_shards_this_invocation":[
+    {"shard":"AICORE/training/v26 remaining direct files","result":"40 newly deep-read + prior 11 = 51/51 direct; plus 6 child files = 57/57 recursive file content","commit":"f343c0bc21e55dab03d36700d0f96135c8921c34","hash_manifest_commit":"73df0032153aac9cadfcafbf7388c953e044a758"},
+    {"shard":"AICORE/training rollup","result":"77/77 file content closed across v26+v27","commit":"9df17fc91659bfb372ce54429c3e931d9a017aea"},
+    {"shard":"AICORE/webd","result":"2/2 files closed","commit":"9e58ab23d4cff726c67250f1e87144beef697458"},
+    {"shard":"AICORE/updater","result":"8/8 files closed","commit":"ea90bf1ea4af5499d4dca0f2ffd7763be5851b02"},
+    {"shard":"AICORE/.claude","result":"1/1 file closed","commit":"6f9c42fe79560bef0ef48ac4b3dc8554147b78d2"},
+    {"shard":"AICORE/docker","result":"2/2 files closed","commit":"fcb482cf1e8821c27b9f73eb66eb92426e2da7ac"},
+    {"shard":"AICORE/config","result":"10/10 files closed; four config failure modes executed in isolation","commit":"b736aab04845fa0ecd66458753f9ab0dea2fa765"},
+    {"shard":"AICORE root direct denominator","result":"67 direct entries exactly listed with top_k 1000: 37 folders, 30 files","commit":"9003d5c3c6d2e9d31965b1dc6775bf1aa232a7ff"}
+  ],
+  "aicore_local_progress":{
+    "root_direct_folders_total":37,
+    "root_direct_files_total":30,
+    "fully_closed_root_folders":["training","webd","updater",".claude","docker","config"],
+    "fully_closed_root_folder_count":6,
+    "remaining_root_folders":31,
+    "root_files_semantically_closed_in_this_rollup":0,
+    "remaining_root_files":30,
+    "file_contents_closed_inside_closed_folders":100,
+    "warning":"100 is a local file-content count across six closed subtrees, not the recursive AICORE denominator and not Level-0 percent. Recursive denominators for the remaining 31 folders are not yet frozen."
+  },
+  "major_findings":[
+    "Historical v26 judge governance discovered constant-good and over-harsh evaluator bias; calibrated known-good/known-bad anchor sets and disagreement escalation are reusable Harness precursors.",
+    "v26 judgment persistence suffered an observed concurrent whole-file overwrite incident (~795 judgments lost); transaction/event persistence is mandatory for UnifiedDB.",
+    "Tool-description translation preserved registry shape but changed permission/obligation semantics; authority must be typed outside localizable prose.",
+    "webd has confirmed SSRF-hardening gaps: initial textual private-host blocking does not validate resolved/redirect destinations, and RSS uses a weaker scheme-only network gate.",
+    "updater can report success despite post-start health failure; model repair accepts plausible-size downloads without cryptographic identity; recovery is destructive backup/wipe/copy without transactional integrity+rollback gate.",
+    "docker model bootstrap trusts existence/download completion without artifact verification and mislabels a normal Qwen2.5 Instruct download with an abliterated destination filename.",
+    "docker boot readiness failures are nonfatal and critical child death does not collapse/restart the whole runtime, directly supporting the historical boot-order fragility concern.",
+    "config centralization still has executable split-brain defects: import-order-dependent instance injection, MODEL_PATHS bound before MODELS_DIR override, silent unknown DB/state path creation, invalid port-base fallback to Prime, and remaining hardcoded instance endpoints/state/log paths."
+  ],
+  "executed_config_reproductions":[
+    "AICORE_MODELS_DIR override leaves MODEL_PATHS pointing to the pre-override root",
+    "late instanz import changes environment but not already-imported path constants",
+    "FRANK_PORT_BASE=notanint silently resolves to base 0/core 8088",
+    "get_db('typo_name') returns a new unregistered DB path instead of failing"
+  ],
+  "safety_harness_regressions_promoted":[
+    "SSRF: DNS-to-private, redirect-to-private, metadata/link-local, RSS parity",
+    "Update transaction: failed service start/health, wrong-but-large model artifact, dependency failure, rollback failure",
+    "Recovery transaction: corrupted/incompatible reference DB, interrupted copy, failed restart, automatic snapshot restore",
+    "Boot: missing/wrong-but-existing model, readiness timeout, mandatory child death, boot-order permutation",
+    "Multi-instance: invalid offset fail-closed, twin isolation for ports/LLM/DB/log/temp/UI state, no import-order dependence",
+    "Persistence registry: unknown DB/state names rejected"
+  ],
+  "historical_earned_work":{"hours_added":0.0,"reason":"Findings overlap existing safety/boot/UnifiedDB/Needle workstreams and require final row-level dedup before earned-work credit."},
+  "peer_lease_state":"No lease claim was created or modified by this run report. Do not infer absence of external peers from this field; peer state was not used as a completion denominator.",
+  "throughput":"Not converted to a wall-clock semantic-throughput metric; exact local file closures and hashes are used instead.",
+  "training":{"executed":false,"authorized":false},
+  "next_cursor":[
+    "Freeze recursive denominators and close additional non-overlapping AICORE root folders; prioritize small leaves first, then core/services/needle/tests as deep shards.",
+    "Semantically close the 30 AICORE root files (handoffs, install/bootstrap, architecture/docs, container manifests, empty historical DB placeholders).",
+    "Treat papers as a dedicated source shard because it includes a PDF and requires page-level PDF analysis rather than casual text-only disposition.",
+    "Reconcile later Drive-only config/instanz/ports centralization against Project-Frankenstein history/rescue lineage.",
+    "Continue whole Drive root denominator freeze and Project-Frankenstein history-aware denominator before any Level-0 audit/PASS."
+  ],
+  "research_write":"COMMITTED",
+  "created_at":"2026-08-09T10:20:00+07:00"
+}

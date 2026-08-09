@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1705p0700_chatgpt_numcanon",
+  "trigger": "claycode",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "research_question": "Can ClayCode canonical IR and semantic hashing rely on host-native numeric/JSON serialization, or does BASE require explicit typed numeric canonicalization before cross-runtime lowering and replay are trustworthy?",
+  "input_heads": {
+    "latest_stack":"research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay@2bb50fc08677aa235033950123ef9ab350f53863",
+    "claycode_g9_v3":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay@1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "claycode_grammar":"research_entity/claycode/g9/grammar.ebnf@ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "claygraph_v2":"research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql@75fe1322e20a1580903dcba75dc7417ed44b5d96",
+    "unifieddb_v9":"research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql@88d504c1563a86fd21403b70ae7fef358c0deb82",
+    "frank_loop_directive_commit":"687cc0a8a00807cfc48a363d42651ac9e466e00d",
+    "harness_identity_refinement_commit":"1d72ea64a4a3f03d0eab48885dd7552602d33727",
+    "clayresearch_loop_txn_feedback_commit":"c67d14584ea24f0a3d53505ac4be11b90980dccd",
+    "previous_claycode_loopnet_final_commit":"b2d1f6a1a3fee15aa4ca7745457dd1cd41a7eb4a",
+    "previous_claycode_frontend_final_commit":"93530b2e1bcba06d1ea1fc93bad794e3414708b7"
+  },
+  "concurrency_note": "Live sibling workers were observed on DB transaction capability brokerage and lexical/frontend closure. This run intentionally selected numeric semantic identity as a non-overlapping BASE risk.",
+  "promotion_requested": false,
+  "status": "IN_PROGRESS"
+}

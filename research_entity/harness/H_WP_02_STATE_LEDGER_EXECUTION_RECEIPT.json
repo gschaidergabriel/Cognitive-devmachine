@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "harness-wp02-20260809-state-ledger-v01",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "target": "H1 Reference Harness",
+  "evidence_class": "LOCAL_DETERMINISTIC_TEST_PLUS_SYNTHETIC_STRESS",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "artifacts": {
+    "implementation": "research_entity/harness/reference_state_ledger.py",
+    "implementation_sha256": "cec1723a06815aa5930846abaa1551decec28e19bd836cd91c69ffba4b42e297",
+    "tests": "tests/test_reference_state_ledger.py",
+    "tests_sha256": "2c39e8c83ba2b68b3a2f539e0a41b8fa22b23a4e0400454a350801d814169b7e"
+  },
+  "test_run": {
+    "pytest": "7 passed in 0.30s",
+    "families": [
+      "deterministic semantic state hash",
+      "stale epoch CAS rejection",
+      "idempotent replay",
+      "explicit UNKNOWN/CONFLICT/REVOKED preservation",
+      "snapshot/restore root equivalence",
+      "snapshot tamper rejection",
+      "direct DB tamper detection"
+    ],
+    "first_run_negative_result": "Initial implementation failed 7/7 because ledger_state referenced ledger_events before event insertion; schema/order defect found and repaired.",
+    "post_repair": "PASS"
+  },
+  "stress_run": {
+    "commits": 250,
+    "mutations": 500,
+    "elapsed_s": 0.5320580470000067,
+    "commits_per_s": 469.8735437037697,
+    "final_epoch": 250,
+    "verify_status": "PASS",
+    "snapshot_restore_root_equal": true,
+    "snapshot_root": "ce2c159029bd6bb4000e2a9257ea8a99a06259787e8295b10b14407400dca4e0"
+  },
+  "scientific_boundary": {
+    "live_frank_evidence": false,
+    "synthetic_harness_evidence": true,
+    "h1_release_pass": false,
+    "reason": "Component is executable and locally tested but not yet integrated against the frozen frankv0.1 baseline corpus, ClayGraph dynamic traces, crash/recovery matrix, or project-host execution."
+  },
+  "next_tests": [
+    "Integrate adapter mapping to frankv0.1 state_epochs/semantic_transactions/snapshots.",
+    "Run process-crash injection between state mutation, event receipt and epoch publication.",
+    "Emit dynamic Run ClayGraph state/persistence/provenance edges for each commit.",
+    "Differential replay against captured frankv0.1 baseline state transitions.",
+    "Run project-host concurrency and checkpoint/restart tests."
+  ]
+}

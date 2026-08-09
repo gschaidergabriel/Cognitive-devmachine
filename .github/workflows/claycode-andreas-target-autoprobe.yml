@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: claycode-andreas-target-autoprobe
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   target:
@@ -67,7 +67,7 @@ jobs:
               and (desktop.get('observed') or {}).get('window_was_mapped') is True
           )
           payload={
-              'schema_version':'2.2',
+              'schema_version':'2.3',
               'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
               'executed_on_self_hosted_runner':True,
               'transport':'GITHUB_ACTIONS_SELF_HOSTED_AFTER_REGISTERED_FINGERPRINT_VERIFY',
@@ -82,6 +82,7 @@ jobs:
               'runner_uname':subprocess.run(['uname','-a'],text=True,capture_output=True).stdout.strip(),
               'python_version':platform.python_version(),
               'authority_invariant':'model output != execution authority',
+              'queue_policy':'LATEST_WORKFLOW_REVISION_WINS',
           }
           Path('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json').write_text(
               json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')

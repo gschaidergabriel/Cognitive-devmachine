@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the dynamic RAE footer: NEXT LEVEL + DOOMSDAY / Clay 0.1."""
+"""Validate the canonical Clay footer: NEXT LEVEL + DOOMSDAY / Clay 0.1."""
 from __future__ import annotations
 
 import argparse
@@ -11,19 +11,20 @@ ROOT = Path(__file__).resolve().parents[1]
 COMMAND_REGISTRY = ROOT / "research_entity" / "global" / "PROJECT_COMMAND_REGISTRY.json"
 
 REQUIRED = [
-    "RAE STATUS",
+    "CLAY STATUS",
     "Entity:",
     "GitHub:",
     "Canonical:",
-    "Actor:",
+    "Organ:",
     "Trigger:",
     "Research write:",
+    "Goal: Frank v0.1 voll lauffähig auf Andreas PC",
     "Short commands:",
     "NEXT LEVEL",
     "Stage:",
     "ETA @ 10h/day:",
     "ETA confidence:",
-    "DOOMSDAY / Clay 0.1",
+    "DOOMSDAY / Clay 0.1 - Chief Developer First Test",
     "Forecast:",
     "Center:",
     "Confidence:",
@@ -87,8 +88,10 @@ def validate(text: str) -> list[str]:
 
     if re.search(r"(?m)^Completion:\s*\d+%", tail):
         errors.append("legacy_prompt_completion_forbidden")
-    if "LAST PROMPT" in tail or "NEXT MILESTONE" in tail:
+    if "LAST PROMPT" in tail or "NEXT MILESTONE" in tail or "RAE STATUS" in tail:
         errors.append("legacy_status_section_forbidden")
+    if re.search(r"(?m)^Actor:\s*", tail):
+        errors.append("legacy_actor_label_forbidden_use_organ")
 
     progress_lines = re.findall(r"(?m)^Progress:\s*(\[[#.]+\])\s+(\d{1,3}(?:\.\d+)?)%\s*$", tail)
     if len(progress_lines) != 2:
@@ -111,9 +114,12 @@ def validate(text: str) -> list[str]:
     cmd_match = re.search(r"(?m)^Short commands:\s*(.+)$", tail)
     if cmd_match:
         line = cmd_match.group(1).lower()
-        for command in _required_commands():
+        required = _required_commands()
+        for command in required:
             if not re.search(rf"(?<![a-z0-9_-]){re.escape(command)}(?![a-z0-9_-])", line):
                 errors.append(f"missing_command:{command}")
+        if re.search(r"(?<![a-z0-9_-])clay(?![a-z0-9_-])", line):
+            errors.append("entity_name_clay_forbidden_in_short_commands")
 
     try:
         expected = _expected_program_lines()
@@ -130,19 +136,20 @@ def _self_test() -> list[str]:
     expected = _expected_program_lines()
     good = (
         "answer\n\n```text\n"
-        "RAE STATUS\n"
+        "CLAY STATUS\n"
         "Entity: JOINED\n"
         "GitHub: VERIFIED_RW\n"
         "Canonical: test\n"
-        "Actor: chatgpt-secondary\n"
+        "Organ: chatgpt-secondary · OpenAI · GPT-5.6 Sol\n"
         "Trigger: none\n"
         "Research write: NO_RESEARCH_DELTA\n"
+        "Goal: Frank v0.1 voll lauffähig auf Andreas PC\n"
         f"Short commands: {commands}\n\n"
         + "\n".join(expected)
         + "\n```"
     )
     bad_attr = good.replace("```text\n", "```text id=\"broken\"\n", 1)
-    bad_box = good.replace("RAE STATUS", "╔ RAE STATUS ═╗")
+    bad_box = good.replace("CLAY STATUS", "╔ CLAY STATUS ═╗")
     bad_after = good + "\nvisible trailing prose"
     bad_legacy = good.replace("NEXT LEVEL", "LAST PROMPT\nCompletion: 100%\n\nNEXT LEVEL")
     bad_forecast = re.sub(r"Forecast: \d{4}-\d{2}-\d{2} - \d{4}-\d{2}-\d{2}", "Forecast: 2099-01-02 - 2099-01-01", good)

@@ -5,205 +5,238 @@
 **Applies to:** exact `frank` trigger and architecture-led Harness evolution  
 **Sole orchestrator:** ChatGPT organ (`chatgpt-secondary`)  
 **Worker class:** Mistral API workers plus additional owner-supplied workers  
-**Target:** progressively transform the GitHub-based Harness toward the target FRANK architecture for the Qwen-class 4B on Ubuntu
+**Target:** progressively transform the GitHub-based Harness toward the current evidence-supported realization of target FRANK for the Clay-native Qwen-class 4B on Ubuntu
 
 ## 0. Sole-orchestrator law
 
-Only the ChatGPT organ coordinates this cascade.
+Only ChatGPT coordinates and adjudicates this cascade.
 
-Mistral workers and any later owner-supplied workers are subordinate research/build workers. They do not own global scheduling, architecture adjudication, branch prioritization or promotion.
+Mistral workers and later owner-supplied workers are subordinate research/build workers. They do not own global scheduling, architecture adjudication, branch prioritization, promotion, recursive worker spawning or final merge decisions.
 
-Compact law:
+`ChatGPT -> task -> worker -> proposed code/analysis/test -> ChatGPT review -> executable validation -> whole-mesh re-fusion -> accept/reject/revise -> next task`
 
-`ChatGPT -> task -> worker -> proposed code/analysis/test result -> ChatGPT review/fusion -> accepted/rejected/revised delta -> measurement -> next ChatGPT task`
+## 1. Dynamic architecture input is mandatory
 
-Mistral must never recursively spawn or coordinate other workers under its own authority.
+No worker batch may be planned from a stale static FRANK snapshot.
 
-## 1. Worker purpose
+Before the first batch and after every materially informative batch, ChatGPT MUST regenerate or equivalently refresh the current whole-mesh research input using:
 
-Mistral is not restricted to analysis. When tasked by ChatGPT it should produce concrete implementation material such as:
+`tools/frank_dynamic_research_fusion.py --write`
+
+or an equivalent current-head enumeration when that executable surface is unavailable.
+
+The fusion input must cover every branch currently registered as scientific research plus current Fusion/Hypofusion, Harness receipts, program state, Needle/Retina, effect/security/recovery work and owner-supplied worker results.
+
+The current architecture realization is then derived from:
+
+`owner-fixed invariants + newest admissible evidence + current negative results + current Harness execution state`.
+
+Worker output from round N becomes input to the synthesis that plans round N+1.
+
+## 2. Worker purpose
+
+Mistral is a builder as well as a researcher. ChatGPT may task it to produce concrete implementation material including:
 
 - repository patches/diffs;
-- Harness modules;
-- state schemas;
-- UnifiedDB SQL/migrations/queries;
-- ClayGraph projection/update logic;
-- GWT instrumentation;
+- Harness modules and state machines;
+- UnifiedDB schemas/migrations/queries/materializations;
+- transient topology/ClayGraph projection logic;
+- GWT instrumentation and workspace receipts;
 - Hyperposition representation/tests;
 - emergence/causal measurement code;
 - replay/ablation/fuzz/fault-injection tests;
-- target-shaped 4B model adapters;
+- target-shaped 4B adapters and Assembly compilers;
+- strong-peer/backflow adapters;
+- direct Claude Code tool bridge fixtures/adapters;
 - benchmark harnesses;
 - migration/recovery code;
-- code review and counterexamples.
+- code review, counterexamples and differential oracles.
 
-Every build result is a proposal until ChatGPT reviews it against current architecture, evidence, tests and project invariants.
+Every result remains `WORKER_PROPOSAL` until ChatGPT reviews it against the current whole-mesh synthesis and executable evidence.
 
-## 2. Iterative cycle
+## 3. Iterative build/research cycle
 
-A material `frank` cascade proceeds in repeated rounds:
+A material `frank` cascade repeats:
 
-1. ChatGPT rereads current canonical state, latest research mesh, current Harness, live claims, failures and measurements.
-2. ChatGPT performs a cross-domain fusion across FRANK, Harness, ClayCode, UnifiedDB, ClayGraph, GWT, Hyperposition, Emergenz and relevant Retina/Needle/security/recovery evidence.
-3. ChatGPT computes the current architecture-to-Harness gap set.
-4. ChatGPT assigns narrow high-information work packets to Mistral and any additional owner-supplied workers.
-5. Workers return concrete patches/analysis/tests with provenance and explicit assumptions.
-6. ChatGPT inspects each result, compares sibling proposals, identifies contradictions and checks target-architecture fidelity.
-7. ChatGPT accepts, rejects, edits or combines proposed changes. Worker output is never auto-promoted merely because it compiles.
-8. Accepted code is tested with the strongest currently available execution surface.
-9. ChatGPT interprets measurements and updates hypotheses/counterhypotheses, architecture gap ranking and worker tasks.
-10. Repeat while useful authorized worker capacity remains and the current turn/runtime permits.
+1. refresh repository head and dynamic whole-mesh research input;
+2. synthesize fixed invariants, supported mechanisms, open hypotheses, refuted/superseded candidates, negative results and current blockers;
+3. derive current architecture-to-Harness gaps;
+4. rank gaps by information gain, target fidelity, dependency unblocking, execution feasibility and current-stage value;
+5. assign narrow high-information build/research packets to Mistral and any owner-supplied workers;
+6. receive concrete patches/analysis/tests with assumptions and provenance;
+7. inspect sibling results and contradictions;
+8. accept/reject/edit/combine only after architecture review;
+9. execute strongest available tests/replay/ablation/differentials;
+10. classify evidence without upgrading proxy/synthetic results;
+11. feed accepted results and negative results into current semantic/research state;
+12. rerun whole-mesh fusion;
+13. reprioritize and issue the next changed task.
 
-A later round must receive the consequences of earlier rounds; repeated identical prompts are not a valid cascade.
+Repeated identical prompts without assimilation of previous results are not a valid cascade.
 
-## 3. Mandatory research/build lanes
+## 4. Mandatory research/build lanes
 
-ChatGPT dynamically allocates workers across the highest-value gaps. The active lane set may include:
+ChatGPT dynamically allocates work across current highest-value gaps, including when relevant:
 
-- FRANK organ/module decomposition and causal boundaries;
-- two-instance PC/Repo local-state separation and cross-instance signaling;
-- compressed prepared 4B possibility-space / simplified graph projection;
-- canonical event/state ledger;
+- FRANK organ/function decomposition and causal boundaries;
+- local embodied 4B state vs independent peer state;
+- strong-peer rich semantic sync and compact peer-to-local cognitive backflow;
+- dynamic bounded 4B `ActiveAssembly` generation from current UnifiedDB state;
+- current capabilities/body-extension semantics, including direct Claude Code reachability;
+- canonical event/state/effect/outcome ledger;
 - UnifiedDB semantic identity/dependency/transaction/replay fabric;
-- ClayGraph sparse active topology and incremental projection;
-- GWT competition/broadcast/reconstruction/uptake/causal-use/re-entry;
-- Hyperposition alternatives, higher-order dependencies and dynamic topology;
-- Emergenz measurements: lesions, rescue, shuffles, interaction terms, PID/PEID or other justified readouts;
-- loop-of-loops dynamics and recurrence control;
+- transient sparse topology generated from UnifiedDB state;
+- H1/H2 ClayGraph diagnostic/differential surfaces without assuming a permanent final graph database;
+- GWT competition, ignition, broadcast, reconstruction, uptake, causal use and re-entry;
+- Hyperposition alternatives, higher-order dependencies and reversible context projections;
+- Emergenz measurements: interventions, lesions/rescues, shuffles, interaction terms, PID/PEID or simpler justified readouts;
+- loop-of-loops dynamics and adaptive recurrence control;
 - Digital Retina and adaptive Micro Visual Classifier integration;
-- Needle bridge;
-- self/world/body/goals/value/personality state;
-- effect/authority/resource gateway;
+- Needle boundary;
+- self/world/body/Andreas/goals/value/personality semantic state;
+- effect/authority/resource and epistemic-action closure;
 - recovery/crash/idempotency/rollback;
-- replay and counterfactual execution;
-- target 4B model ABI and compressed context projection;
-- performance: latency, RAM, context/KV/token cost, update amplification;
-- ClayCode H2 equivalence and H3 one-module lowering.
+- async/conflicting replay identity;
+- target 4B ABI, context/KV and cognitive-backflow cost;
+- H1 -> H2 semantic intervention equivalence -> H3 one-module lowering;
+- latency, RAM, context/token cost, update amplification and observation perturbation.
 
-## 4. Worker depth policy
+## 5. No standalone PossibilitySpace build lane
 
-Workers should be given enough context and output budget to perform substantive work rather than superficial summaries.
+`possibility space` is human shorthand only.
 
-However the objective is **maximum useful reasoning and implementation per available request**, not artificial token padding.
+Workers must not introduce a second persistent manually maintained possibility database/module.
 
-Each task should demand:
+The current possibility/capability/cognitive surface must emerge from current UnifiedDB semantic state, local instance state, peer deltas, capability/resource observations, dependency closure, transient topology, Hyperposition and GWT/Assembly selection.
 
-- mechanism-level reasoning;
+Derived views/projections are allowed and expected; they are rebuildable current views, not truth stores.
+
+## 6. Worker depth policy
+
+Use enough context and output budget for substantive mechanism-level work, not superficial summaries or artificial token padding.
+
+Each task should request where applicable:
+
+- current evidence/architecture basis;
 - concrete repository-grounded implementation;
-- explicit falsifiers/counterexamples;
-- tests or measurement plan;
-- risks and rollback;
 - exact files/symbols affected;
-- machine-readable patch or structured change proposal where feasible.
+- counterhypotheses/falsifiers;
+- tests/measurement plan;
+- safety/authority/recovery implications;
+- rollback;
+- machine-readable patch or structured change proposal.
 
-## 5. Mistral key pool
+The optimization target is maximum useful reasoning/build value per available request.
 
-Mistral credentials are secret material. Key values must never be placed in prompts, logs, commits, research packets or chat output.
+## 7. Mistral key pool
 
-The runtime may select from configured Mistral key references such as `MISTRAL_API_KEY`, `MISTRAL_API_KEY_1`, `MISTRAL_API_KEY_2`, etc. Selection uses only availability/lease/quota metadata and a non-secret key fingerprint.
+Mistral credentials remain secret and may never appear in prompts, logs, commits, result artifacts or chat output.
 
-The preferred key is one that is configured, not currently leased/in-use by this cascade, and not known to be rate/quota blocked.
+Runtime may select from configured secret references such as:
 
-A key value is loaded only at the provider call boundary.
+`MISTRAL_API_KEY`, `MISTRAL_API_KEY_1`, `MISTRAL_API_KEY_2`, ...
 
-## 6. Quota/cost law
+Selection uses availability/lease/rate/quota metadata and non-secret fingerprints only. Prefer a configured key that is not currently leased and not known blocked. Load the actual value only at the provider-call boundary.
 
-The owner requests aggressive use of already available Mistral request capacity for the FRANK build cascade.
+A key is a credential, not an independent quota claim; keys can share provider/workspace limits.
 
-This directive does **not** authorize automatic purchase, automatic top-up, spending-limit increases or creation of new paid capacity.
+## 8. Quota/cost law
 
-The cascade may consume available configured request/token capacity until a provider/workspace/org limit, explicit local budget limit, authorization boundary or useful-work stop is reached.
+Use available already-authorized Mistral capacity aggressively for useful FRANK work, but do not auto-purchase, auto-top-up, raise spending limits or create unbounded paid capacity.
 
-`429`, spending-limit, quota or provider-throttle responses are recorded and routed; they are not bypassed by credential abuse.
+Stop/route cleanly on provider/workspace quota, authorization or useful-work exhaustion.
 
-Multiple keys that share one workspace/organization may share effective limits. Key rotation is for available configured capacity and concurrency isolation, not an assumption of independent quota.
+`402`/payment-required is a hard paid-capacity boundary unless the owner separately authorizes spending. `429`/rate limits are recorded as provider state; rotation may try another configured free/available key but must not be represented as quota bypass.
 
-## 7. Additional owner-supplied workers
+## 9. Additional owner-supplied workers
 
-When the owner adds another worker/runtime/model, ChatGPT may assign it tasks inside the same cascade.
+When the owner supplies another worker/model/runtime, ChatGPT alone inserts it into this cascade.
 
-Each worker receives:
+Each task carries:
 
-- stable worker id and provenance;
-- explicit task id;
-- current architecture context subset;
+- worker/provenance id;
+- task id;
+- current synthesis/head/cutoff;
+- relevant architecture context;
 - required output contract;
-- token/request budget if known;
+- known budget/quota;
 - dependencies and prohibited authority;
 - acceptance/falsification criteria.
 
-ChatGPT remains the only global scheduler and adjudicator.
+## 10. Cross-domain re-fusion cadence
 
-## 8. Cross-domain fusion cadence
+After every material worker/test batch, ChatGPT must reread new results and recompute the whole-mesh synthesis before assigning the next batch.
 
-ChatGPT must not run long independent worker chains against a stale architecture snapshot.
+At minimum re-evaluate:
 
-After every materially informative batch, ChatGPT rereads newly written results and recomputes the cross-domain synthesis before assigning the next batch.
-
-At minimum the fusion checks:
-
-- FRANK target fidelity;
-- Harness executable coverage;
-- H1 progress and blockers;
-- ClayCode expressibility;
-- UnifiedDB state/dependency implications;
-- ClayGraph topology implications;
+- target/final-binary invariants;
+- current Harness executable coverage and H1 progress;
+- ClayCode expressibility/BASE blockers;
+- UnifiedDB state/dependency/replay implications;
+- transient topology/ClayGraph diagnostic implications;
 - GWT causal-stage implications;
-- Hyperposition alternative/coupling implications;
-- Emergenz measurement opportunities;
-- two-instance state-separation invariants;
-- 4B possibility-space/context-cost implications;
-- effect authority/safety/recovery;
-- performance and resource shadows.
+- Hyperposition alternatives/coupling;
+- Emergenz causal-measurement validity;
+- per-instance state separation and peer backflow;
+- derived 4B Assembly/context cost;
+- current direct-Claude/tool/capability surface;
+- effect authority + epistemic-action closure;
+- recovery/resource/performance shadows;
+- newly arrived concurrent research commits.
 
-## 9. Promotion rule
+## 11. Promotion rule
 
-A worker patch is not accepted merely because it is plausible.
+A worker patch is never accepted because it is plausible, long, confident or produced by a prestigious model.
 
-Promotion requires, as applicable:
+Promotion requires as applicable:
 
-- architecture fit;
+- current architecture fit;
 - no violation of owner-fixed contracts;
+- semantic/state/authority separation;
 - code review;
 - deterministic/static validation;
-- executed tests where possible;
-- differential/replay evidence;
-- preserved provenance;
-- no hidden state collapse;
-- rollback path;
-- negative-result preservation.
+- executed tests;
+- differential/replay/intervention evidence;
+- preserved provenance/ancestry;
+- no hidden state or PossibilitySpace duplication;
+- rollback/rebuild path;
+- preservation of negative results.
 
-If two workers disagree, ChatGPT creates the discriminating test rather than choosing by provider prestige.
+If workers disagree, prefer a discriminating test.
 
-## 10. Evidence labels
+## 12. Evidence labels
 
-Every worker contribution is labeled at least:
+At minimum distinguish:
 
 `WORKER_PROPOSAL`
 `STATIC_VALIDATED`
 `EXECUTED_TEST`
+`SYNTHETIC`
 `SIMULATION`
 `PROXY_MODEL`
+`H1`
+`H2`
+`H3`
 `TARGET_4B`
 `LIVE_PC_FRANK`
 
-No label may be silently upgraded.
+No silent evidence upgrade.
 
-## 11. Termination / pause conditions
+## 13. Stop/continuation conditions
 
-A cascade round stops or pauses when any of these holds:
+A cascade stops within the current execution surface when:
 
-- no remaining useful non-duplicated task in current evidence state;
-- configured Mistral capacity is unavailable/rate limited/quota limited;
-- next step requires target-PC execution unavailable to the current surface;
+- useful nonduplicated work is exhausted for the current evidence state;
+- configured worker capacity is unavailable/rate/quota limited;
+- next discriminator requires unavailable target-PC execution;
 - an owner authorization gate is reached;
-- a critical contradiction requires owner input;
-- current turn/tool surface cannot continue synchronously.
+- a material contradiction needs owner input;
+- the current synchronous tool surface cannot continue.
 
-Stopping does not mean completion. Leave exact continuation state and next task.
+Leave exact continuation state; do not claim background execution unless an actual observable execution mechanism exists.
 
-## 12. `frank` trigger integration
+## 14. `frank` integration
 
-The exact `frank` trigger loads this protocol after the FRANK target contracts and before worker dispatch.
+Exact `frank` loads this protocol after target/final-binary/current-instance contracts and dynamic research fusion setup.
 
-Every `frank` response must make clear what was actually executed versus merely queued/proposed. It may not claim an asynchronous cascade is still running unless an actual authorized execution mechanism exists and is observable.
+Visible output must distinguish what was actually built/tested from what remains proposed/queued and must render the dynamically resolved first-GitHub-Harness progress block.

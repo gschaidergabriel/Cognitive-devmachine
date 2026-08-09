@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-live-fusion-20260810T0058p0700",
+  "branch":"harness",
+  "status":"DELTA",
+  "promotion":"NONE",
+  "evidence":[
+    {"class":"REMOTE_REAL_MODEL_COMPONENT_EVIDENCE","source":"2e8ea2eb4604345f27d7d3036ac9fec888692325","finding":"A real pinned Qwen3-4B model executed on Hostinger and passed the read_state tool-contract sample, but the receipt is partial and explicitly incomplete."},
+    {"class":"EXECUTION_TRANSPORT_NEGATIVE_EVIDENCE","source":"c882c36fe8a16031eeb3e36af295826b6a72550d","finding":"Current Clay-repository Actions admission/runner eligibility is degraded/unverified: hosted jobs reproduced pre-step failure while a self-hosted job could remain queued; prior Dr.-Unterweger Hostinger receipts remain valid for their exact runs."}
+  ],
+  "counterhypotheses":["The Actions degradation may be transient allocation/runner occupancy plus an unrelated hosted billing/policy issue rather than one shared root cause."],
+  "contradictions_preserved":["Verified historical Hostinger execution does not imply current executable scope for every repository.","Event creation, queueing or workflow presence is not execution evidence."],
+  "scope":"Hostinger is not Andreas final Ubuntu acceptance host.",
+  "ancestry_rule":"Repeated workflow, report and capability records from the same execution/Actions episode are correlated evidence only.",
+  "open_blockers":["Current Clay-repository self-hosted execution scope/admission needs step-executed exact-SHA re-verification","H1 release remains NOT_PASS","Andreas-target Harness acceptance absent"]
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1741p0700-emergenz-d79-m4",
+  "trigger": "spawn",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "weights_source": {
+    "path": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+    "schema_version": "1.0",
+    "weights_percent": {"claycode":50,"harness":10,"frank":10,"gwt":6,"emergenz":6,"hyperposition":5,"claygraph":5,"unifieddb":4,"clayresearch":4}
+  },
+  "branch_draw": {
+    "rng": "OS_CSPRNG /dev/urandom",
+    "raw_uint32": 2596416178,
+    "mapping": "raw_uint32 % 100 + 1",
+    "draw_1_to_100": 79,
+    "ranges": {"claycode":"1-50","harness":"51-60","frank":"61-70","gwt":"71-76","emergenz":"77-82","hyperposition":"83-87","claygraph":"88-92","unifieddb":"93-96","clayresearch":"97-100"},
+    "selected_origin_branch": "emergenz"
+  },
+  "recent_spawn_duplicate_check": {"path_checked":"research_entity/trigger_runs/spawn","result":"NOT_FOUND_AT_INVOCATION","available_recent_receipts":0,"rerolls":0},
+  "candidate_microdirections": [
+    {"id":1,"name":"adaptive_credit_topology_null","question":"Do path/broadcast credit policies manufacture stable recurrence or topology that vanishes under frozen or shuffled learning?","test":"Compare frozen learning, truthful path credit, broadcast credit, and shuffled credit while holding perturbation and update budget fixed.","affected_branches":["emergenz","hyperposition","gwt","harness","claycode"]},
+    {"id":2,"name":"volatility_conditioned_reentry_estimand","question":"Do emergence readouts misclassify harmful fixed recurrence as stable integration across volatility regimes?","test":"Compare fixed, adaptive, no, and shuffled re-entry over matched volatility regimes and compute causal/cost readouts.","affected_branches":["emergenz","gwt","frank","harness"]},
+    {"id":3,"name":"timescale_aliasing_of_directed_flow","question":"Can sampling cadence and lag choice create apparent macro autonomy or directed flow in recurrent multi-timescale traces?","test":"Replay the same process at multiple observation cadences and lag embeddings with common-driver controls.","affected_branches":["emergenz","gwt","hyperposition","harness","unifieddb"]},
+    {"id":4,"name":"adaptive_compensation_confounds_lesion_rescue","question":"Can continued online learning during a lesion reroute function so delayed lesion loss and post-adaptation rescue falsely imply that an originally causal pathway was unnecessary or that rescue is harmful?","test":"Fork from one pre-intervention snapshot: frozen-learning lesion, truthful-learning lesion, shuffled-credit lesion, mechanism-only rescue, full learner-state rollback rescue, and intermittent perturbation schedules.","affected_branches":["emergenz","gwt","hyperposition","claycode","harness","frank","claygraph","unifieddb","clayresearch"]},
+    {"id":5,"name":"estimator_selection_leakage","question":"Does selecting an emergence estimator or coarse-graining on the same episodes inflate apparent emergence?","test":"Compare same-data selection to nested held-out estimator/coarse-graining selection under fixed candidate budgets.","affected_branches":["emergenz","claycode","harness","unifieddb"]}
+  ],
+  "microdirection_draw": {"rng":"OS_CSPRNG /dev/urandom","raw_uint32":987306813,"mapping":"raw_uint32 % 5 + 1","draw_1_to_5":4,"selected_candidate_id":4,"selected_name":"adaptive_compensation_confounds_lesion_rescue"},
+  "selection_is_evidence": false,
+  "strong_promotion_allowed": false,
+  "reason": "Spawn selection probability is provenance only. This run uses synthetic execution plus external primary literature, not live FRANK/H1 evidence.",
+  "concurrency_check_before_write": {
+    "observed_newer_commit": "9b044a9be6128201e4fbc6fb6831ae3cce21ff4e",
+    "commit_message": "spawn: add adaptive learner semantic proxy",
+    "relation": "ADJACENT_NOT_DUPLICATE",
+    "reason": "Concurrent spawn concerns adaptive visual learner state/promotion/rollback semantics; this run concerns emergence-causal lesion/rescue estimands under online compensation. No microdirection reroll required."
+  }
+}

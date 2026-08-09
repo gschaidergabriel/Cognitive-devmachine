@@ -1,0 +1,57 @@
+{
+  "schema_version":"1.0",
+  "purpose":"Make the ChatGPT supervisory layer over autonomous ClayCode cycles explicit without pretending GitHub Actions can invoke ChatGPT-only tools.",
+  "supervisor_actor":"chatgpt-secondary",
+  "mode":"FREE_ONLY_RESEARCH",
+  "capabilities":{
+    "web_official_primary_sources":{
+      "class":"CHATGPT_SUPERVISOR_ONLY",
+      "use":"verify current compiler/runtime/provider/API/tool claims and discover current primary technical sources",
+      "rule":"technical claims prefer official docs/research papers; current provider capability must be rechecked when material"
+    },
+    "github_connector":{
+      "class":"CHATGPT_SUPERVISOR_ONLY_AND_REPO_AUTONOMOUS_COUNTERPART",
+      "use":"read current Clay state, inspect commits/actions/receipts, compare branches, write steering/control/research artifacts",
+      "rule":"respect concurrent writes; no force overwrite; current repository evidence outranks stale chat context"
+    },
+    "google_drive_connector":{
+      "class":"CHATGPT_SUPERVISOR_ONLY",
+      "use":"retrieve project-source documents or historical research corpus when the current question depends on Drive material",
+      "rule":"do not search Drive on every cycle when current repository evidence already closes the question"
+    },
+    "file_library_search":{
+      "class":"CHATGPT_SUPERVISOR_ONLY",
+      "use":"retrieve prior uploaded files/images/PDFs when they contain relevant ClayCode/Frank evidence not already canonicalized",
+      "rule":"use only when materially relevant; connector/file evidence must be cited or routed into durable research artifacts"
+    },
+    "python_or_local_reasoning_runtime":{
+      "class":"SESSION_DEPENDENT_SUPERVISOR_CAPABILITY",
+      "use":"bounded analysis, differential calculations, parsing or experiment design when available in the active ChatGPT session",
+      "rule":"do not claim future automation can execute a session-local Python/container tool unless that run actually exposes it"
+    },
+    "connected_google_services":{
+      "class":"AVAILABLE_IF_MATERIALLY_RELEVANT",
+      "surfaces":["Gmail","Google Calendar","Google Contacts"],
+      "use":"only if a ClayCode research dependency genuinely lives on that connected surface; never call merely to increase tool count"
+    },
+    "other_installed_connectors":{
+      "class":"DISCOVER_AND_USE_IF_MATERIALLY_RELEVANT",
+      "use":"the supervisor may inspect/use installed connected tools when they materially improve evidence or execution; absence of relevance is not a failure to use them"
+    },
+    "automations":{
+      "class":"ACTIVE_CONTROL_PLANE",
+      "use":"hourly condition-watch supervisor that reviews autonomous cycles and steers only on meaningful evidence"
+    }
+  },
+  "repo_autonomous_capabilities":[
+    "GitHub Actions and repository-local code",
+    "NVIDIA hosted FREE development APIs through canonical NIM adapter",
+    "Mistral FREE Mode adapter when MISTRAL_API_KEY is reachable",
+    "NVIDIA code embeddings and current free reranking endpoint",
+    "OpenAlex/arXiv/Crossref/DDGS and other zero-cost verified discovery surfaces",
+    "Judge0 and other verified zero-cost bounded execution surfaces",
+    "existing ClayGraph/UnifiedDB/research corpus and source-chain evidence"
+  ],
+  "hard_boundary":"ChatGPT-only tools are supervision capabilities, not callable functions of the GitHub Actions process. The two layers communicate through durable GitHub cycle receipts, supervisor inbox/state and steering control.",
+  "tool_use_law":"Use every materially relevant available capability, not every tool indiscriminately. Evidence quality and information gain determine tool use."
+}

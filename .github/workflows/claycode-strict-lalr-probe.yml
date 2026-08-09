@@ -7,6 +7,7 @@ on:
       - 'tools/claycode_strict_lalr_probe.py'
       - 'tools/claycode_base_frontend_validation.py'
       - 'tools/claycode_base_grammar_differential.py'
+      - 'tools/claycode_v4_frontend_regression.py'
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark'
       - 'research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark'
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
@@ -50,6 +51,8 @@ jobs:
               raise SystemExit('strict repaired grammar still reports conflicts: '+str(d['conflict_diagnostics']))
           print('STRICT_REPAIR_PASS')
           PY
+      - name: Run focused V4 grammar regressions
+        run: python tools/claycode_v4_frontend_regression.py
       - name: Run full current G9 + Dialect repaired frontend validation
         run: |
           python tools/claycode_base_frontend_validation.py \
@@ -67,6 +70,7 @@ jobs:
           git config user.email 'claycode-lalr-probe@users.noreply.github.com'
           git add \
             research_entity/claycode/autonomous/STRICT_LALR_D_REPAIR_RECEIPT.json \
+            research_entity/claycode/autonomous/V4_FRONTEND_REGRESSION_RECEIPT.json \
             research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json \
             research_entity/claycode/autonomous/BASE_GRAMMAR_DIFFERENTIAL_RECEIPT.json
           git diff --cached --quiet && exit 0

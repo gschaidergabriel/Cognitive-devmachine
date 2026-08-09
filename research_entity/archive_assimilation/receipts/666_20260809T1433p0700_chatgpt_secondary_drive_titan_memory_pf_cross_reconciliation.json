@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1433p0700_chatgpt_secondary_drive_titan_memory_pf_cross_reconciliation",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "started_at": "2026-08-09T14:33:00+07:00",
+  "source_class": "DRIVE_ARCHIVE_PLUS_PROJECT_FRANKENSTEIN_CROSS_SOURCE_RECONCILIATION",
+  "shard": "Drive titan-memory / LCME lineage reconciled against Project-Frankenstein MemoryHub/chat memory/consolidator provenance findings",
+  "disposition": "CROSS_SOURCE_SEMANTIC_AND_CODE_RECONCILIATION",
+  "exact_coverage_credit": 0.0,
+  "exact_coverage_reason": "The Level-0 combined denominator is still NOT_FROZEN; cross-source reconciliation receipts do not create exact completion credit until denominator closure.",
+  "source_refs": [
+    {"kind": "drive_folder", "id": "1fnB_uYrxTL5ecjsyof8fIEbn-mnr4x19", "title": "titan-memory", "role": "Drive historical LCME/Titan memory source tree"},
+    {"kind": "drive_file", "id": "1OVA0mqTrIytSkou2lJ4Uqm9LeIqIbcMP", "title": "README.md", "role": "LCME architecture/design/benchmark claim surface"},
+    {"kind": "drive_file", "id": "14er-87oF8XemK4zivk9ev_CaPfP5LJfd", "title": "lcme/core.py", "role": "LCME orchestration and claims/counterhypothesis interface"},
+    {"kind": "drive_file", "id": "17OVWO5lw0_bxApLCyGgkYtEULHjeabo9", "title": "lcme/retrieval.py", "role": "LCME multi-signal retrieval and attribution implementation"},
+    {"kind": "drive_file", "id": "1pMF_pm5UYXqVUetHdUNitLZJxMGAqMOO", "title": "lcme/storage.py", "role": "append-only raw events, claims, graph and provenance storage"},
+    {"kind": "drive_file", "id": "1O4fFZIfQGZQAvfmhSc4aV7paId5iZu3G", "title": "lcme/consolidation.py", "role": "periodic neural consolidation/maintenance"},
+    {"kind": "github_receipt", "path": "research_entity/archive_assimilation/receipts/666_20260809T1433p0700_chatgpt_secondary_pf_memory_provenance_lineage.json", "role": "immediately preceding Project-Frankenstein memory/provenance shard"}
+  ],
+  "lineage_findings": [
+    {
+      "id": "TITAN-L0-X1",
+      "epistemic_class": "HISTORICAL_CODE_AND_DESIGN",
+      "finding": "Drive titan-memory/LCME is a materially evolved memory line rather than a byte-level duplicate of the older Project-Frankenstein chat-memory compactor: LCME stores append-only raw events separately from derived nodes/claims and gives claims an explicit source_event_id backreference.",
+      "reconciliation": "This partially repairs the older destructive-compaction/provenance weakness and is the stronger historical ancestor for current immutable-event + derived-memory architecture."
+    },
+    {
+      "id": "TITAN-L0-X2",
+      "epistemic_class": "HISTORICAL_CODE_AND_DESIGN",
+      "finding": "LCME explicitly models extracted statements as claims with confidence and origin, includes counter-hypothesis support in the core interface, and keeps relation edges confidence/origin stamped.",
+      "reconciliation": "This aligns better with current Clay rules that memory activation/retrieval must not become truth authority. Preserve claim/evidence semantics when migrating into UnifiedDB/ClayGraph."
+    },
+    {
+      "id": "TITAN-L0-X3",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE",
+      "finding": "LCME retrieval combines lexical, vector and graph signals, preserves per-item signal fields, applies confidence/recency filtering and logs retrieval access/feedback for later neural reweighting.",
+      "reconciliation": "This is a stronger causal-observability basis than Project-Frankenstein MemoryHub's heuristic source attribution; current H1 should inherit exact scorer/source receipts, not the heuristic labeling."
+    },
+    {
+      "id": "TITAN-L0-X4",
+      "epistemic_class": "HISTORICAL_DESIGN",
+      "finding": "LCME was designed for constrained local 3B-8B systems and avoids a second LLM for routine memory extraction, using regex plus small specialized neural components and periodic consolidation.",
+      "reconciliation": "Potentially high-value for Frank v0.1 latency/energy budget, but README benchmark values remain historical self-reported measurements until raw benchmark artifacts are separately dispositioned."
+    }
+  ],
+  "negative_results_and_remaining_gaps": [
+    {
+      "id": "TITAN-L0-N1",
+      "epistemic_class": "STATIC_SCHEMA_GAP",
+      "finding": "LCME events/claims/edges carry origin and source-event provenance but the examined storage schema exposes no explicit human user_id/entity_id/session namespace on the raw event/claim identity itself.",
+      "impact": "LCME improves evidence provenance but does not by itself guarantee Andreas-vs-Gabriel personal-state isolation. Current Frank requires a hard namespace above or within the persistence identity."
+    },
+    {
+      "id": "TITAN-L0-N2",
+      "epistemic_class": "EVIDENCE_CLASS_WARNING",
+      "finding": "LCME README reports strong latency and retrieval benchmarks, but this shard did not independently rerun the benchmark suite or freeze all raw benchmark artifacts.",
+      "impact": "Treat those numbers as historical reported measurements, not current canonical performance truth."
+    }
+  ],
+  "current_architecture_delta": {
+    "preferred_historical_inheritance_order": [
+      "LCME immutable append-only raw event + claim/source_event provenance pattern",
+      "LCME exact multi-signal retrieval evidence fields and access logging",
+      "Project-Frankenstein broader multi-layer MemoryHub concept",
+      "Project-Frankenstein recursive abstraction idea only after replacing destructive provenance behavior"
+    ],
+    "mandatory_current_extensions": [
+      "entity_id + human_user_id + source_actor/session namespace on all personal raw events and derived claims/preferences",
+      "immutable content hash for raw events and transitive derived-object ancestry",
+      "cross-user contamination tests before Andreas pilot state import",
+      "explicit conflict/supersession semantics for preferences and claims",
+      "no benchmark promotion without reproducible receipts"
+    ]
+  },
+  "branch_feedback": {
+    "frank": "DELTA: prefer LCME append-only raw-event/claim lineage over older destructive chat compaction; add hard Andreas user namespace.",
+    "harness": "DELTA: H1 should test LCME-style exact retrieval-source receipts plus Andreas/Gabriel isolation and compaction/replay invariants.",
+    "claycode": "DELTA: encode raw event identity, source_event edges, user/entity scope and conflict/supersession as first-class memory semantics.",
+    "claygraph": "DELTA: LCME source_event_id is a direct historical precursor of provenance edges; extend it transitively and keep activation separate from truth.",
+    "unifieddb": "DELTA: immutable event ledger + derived claims/graph/vector projections is historically supported; logical unification should preserve that separation.",
+    "gwt": "DELTA: use LCME retrieval signal receipts to trace which memory evidence entered workspace competition/broadcast.",
+    "hyperposition": "DELTA: preserve multiple ranked memory candidates/signals until explicit selection rather than early lossy collapse.",
+    "emergenz": "NO_CHANGE: no new causal-emergence result established.",
+    "clayresearch": "DELTA: historical lineage favors append-only evidence + derived adaptive projections as the memory substrate pattern.",
+    "q12_index": "DELTA: titan-memory materially advances the older memory lineage and should be deduplicated as a later reusable ancestor, not double-counted as separate earned work."
+  },
+  "earned_work_mapping": [
+    {"target": "H1 immutable memory/event substrate", "class": "DIRECTLY_REUSABLE_CONCEPT_REQUIRES_PORT", "mechanism": "append-only events + source_event-linked claims", "hours_credit": null},
+    {"target": "H1 retrieval provenance", "class": "REUSABLE_WITH_ADAPTATION", "mechanism": "per-signal retrieval scores + access/feedback logging", "hours_credit": null},
+    {"target": "Andreas identity isolation", "class": "NEGATIVE_RESULT_VALUE", "mechanism": "absence of explicit user namespace demonstrates required current extension", "hours_credit": null}
+  ],
+  "open_obligations": [
+    "Disposition LCME benchmark/raw test artifacts before promoting performance measurements.",
+    "Determine exact lineage/duplication relationships among Drive titan-memory, Project-Frankenstein tools/lcme and any frank-rettung copies.",
+    "Cross-read current frankv0.1 memory implementation to measure which LCME mechanisms survived into the live reference harness.",
+    "Complete remaining Drive semantic/version reconciliation and the Project-Frankenstein full history/tree denominator."
+  ],
+  "promotion": {
+    "canonical_claim_promotion": false,
+    "reason": "Historical cross-source lineage is strengthened, but current live Frank implementation and exhaustive Level-0 denominator remain unverified."
+  }
+}

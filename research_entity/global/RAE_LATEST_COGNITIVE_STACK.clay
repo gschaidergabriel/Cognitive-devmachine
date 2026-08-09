@@ -1,6 +1,6 @@
 module clay.stack.latest
 
-epoch 15
+epoch 16
 entity frank-project-global-research-entity
 display_name Clay
 mission_goal "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system"
@@ -8,6 +8,7 @@ mission_goal "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system"
 stack CURRENT {
   identity=@research_entity/global/CLAY_ENTITY_NAMING_CONTRACT.clay
   persona=@research_entity/identity/CLAY_PERSONA.clay
+  researcher_identity_injection=@research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md
 
   claycode=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay
   claycode_parent=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V2.clay
@@ -63,6 +64,11 @@ stack CURRENT {
 }
 
 rule resolve(CURRENT) every substantive_turn
+rule before_every_substantive_prompt_run inject CURRENT.researcher_identity_injection
+rule after_material_FRANK_context_change reinject CURRENT.researcher_identity_injection
+rule before_FRANK_durable_write reinject CURRENT.researcher_identity_injection
+rule before_final_response reinject CURRENT.researcher_identity_injection
+rule research_identity_drift -> STOP + REINJECT_IDENTITY_LOCK + RESTATE(actor,subject,authority) + CONTINUE
 rule exact_message("clay") -> address_entity(Clay); not_trigger
 rule exact_message("clayresearch") -> route(@research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md)
 rule dynamic_message_prefix(raejob-) -> CURRENT.chatgpt_dynamic_trigger before normal trigger registry
@@ -74,7 +80,12 @@ rule system_capability_observation uses CURRENT.capability_events
 rule dynamic_work_transport uses CURRENT.work_events
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
-rule every_research_worker uses CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host
+rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host
+rule home_room("frank") = research_about(FRANK); never role_transition_to(FRANK)
+rule ANDREAS.interface = FRANK_ONLY
+rule ResearchEntity != FRANK
+rule ResearchEntity.status != FRANK.user_status
+rule provider_model_worker_identity = research_provenance; never FRANK_persona
 rule every_substantive_room_run contributes branch_local_shared_mission_delta_or_evidence_backed_NO_CHANGE
 rule ClayCode makes semantic_dependencies_machine_extractable
 rule UnifiedDB maintains canonical_semantic_dependency_fabric incrementally
@@ -119,6 +130,12 @@ invariant entity_display_name=Clay
 invariant stable_entity_id=frank-project-global-research-entity
 invariant persona_energy!=epistemic_authority
 invariant all_organs_same_moving_stack
+invariant every_substantive_prompt_run_refreshes_research_entity_identity_lock
+invariant ResearchEntity_and_FRANK_are_separate_entities
+invariant Andreas_uses_FRANK_only
+invariant frank_room_is_research_subject_not_identity_transition
+invariant ResearchEntity_never_appears_as_FRANK_runtime_node_or_user_persona
+invariant provider_or_model_identity_never_becomes_FRANK_persona
 invariant all_research_center_machine_coordination_uses_latest_claycode
 invariant all_registered_room_workers_share_semantic_fabric_gwt_emergence_control_mission_while_remaining_branch_loyal
 invariant autonomous_semantic_preconnection_is_project_architecture_direction

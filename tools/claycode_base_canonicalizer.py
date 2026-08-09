@@ -8,6 +8,10 @@ The canonical hash is bound to the exact grammar bytes so parser-contract drift 
 silently preserve an old identity. It does NOT claim typed canonical IR; that remains
 CC-WP-03.
 
+The JSON serialization below is a project-local ClayCode syntax-identity envelope. It uses
+deterministic compact key-sorted serialization, but it does not claim RFC 8785/JCS
+conformance; grammar binding and ClayCode's own syntax contract remain authoritative.
+
 V17 adds one mandatory semantic-trivia guard to V9: `Needle.owns(X)` and
 `Needle.owns (X)` must canonicalize identically while `Needle.owns X` remains a distinct
 prefix relation.

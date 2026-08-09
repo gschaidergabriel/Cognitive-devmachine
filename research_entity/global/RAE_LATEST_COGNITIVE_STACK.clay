@@ -1,6 +1,6 @@
 module rae.stack.latest
 
-epoch 8
+epoch 9
 entity frank-project-global-research-entity
 
 stack CURRENT {
@@ -21,7 +21,8 @@ stack CURRENT {
     @research_entity/runtime/RAE_UNIFIEDDB_V4_HIVEMIND.sql,
     @research_entity/runtime/RAE_UNIFIEDDB_V5_CLAYCODE_EXPERIENCE_RESEARCH.sql,
     @research_entity/runtime/RAE_UNIFIEDDB_V6_CLAYCODE_META_COGNITION.sql,
-    @research_entity/runtime/RAE_UNIFIEDDB_V7_COGNITIVE_PROCESSOR.sql
+    @research_entity/runtime/RAE_UNIFIEDDB_V7_COGNITIVE_PROCESSOR.sql,
+    @research_entity/runtime/RAE_UNIFIEDDB_V8_CHATGPT_DELEGATION.sql
   ]
   unifieddb_frontier=resolve_latest_validated(branch=unifieddb,prefer=CURRENT|PROMOTED_COMPATIBLE,preserve=NEGATIVE_RESULT|REFUTED|SUPERSEDED)
   unifieddb=[unifieddb_base,unifieddb_migrations,unifieddb_frontier]
@@ -31,6 +32,7 @@ stack CURRENT {
   research_center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
   room_schema=@research_entity/rooms/ROOM_DB_SCHEMA.json
   chatgpt_endturn=@research_entity/global/RAE_CHATGPT_CLAYCODE_ENDTURN_PROTOCOL.clay
+  chatgpt_delegation=@research_entity/global/RAE_CHATGPT_DELEGATION_PROTOCOL.clay
   hive=@research_entity/global/RAE_HIVE_ENTITY_CONTRACT.md
 }
 
@@ -40,6 +42,7 @@ rule state_query uses CURRENT.unifieddb
 rule associative_projection uses CURRENT.claygraph
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
+rule Claude_delegation uses CURRENT.chatgpt_delegation
 rule component_upgrade -> bump(epoch) + preserve(parent_ref) + emit(migration_ref) + replay_test
 rule stale_component_detected -> refresh_before_cognition
 rule missing_component -> state(DEGRADED_STALE_STACK) + no_false_latest_claim
@@ -52,11 +55,13 @@ derive CHATGPT_EXPLICIT via CURRENT.chatgpt_endturn -> claycode_meta_candidate
 rule CHATGPT.derive_automatic=true
 rule CLAUDE.endturn_meta_research=false
 rule CLAUDE.explicit_cognition=CURRENT.claycode
+rule CLAUDE.delegate_max_useful_work_to_CHATGPT=true
 rule candidate != promotion
 rule promote requires evidence+counterhypothesis+matched_budget_replay+semantic_preservation+rollback
 
 invariant all_organs_same_moving_stack
 invariant all_research_center_machine_coordination_uses_latest_claycode
+invariant ChatGPT_delegation_results_return_to_shared_RAE_state
 invariant latest_means_admitted_stack_pointer_not_newest_timestamp
 invariant research_candidate_use_preserves_XENO_G8_hard_control_gates
 invariant critical_control_invariants_preserved_across_candidate_language_updates

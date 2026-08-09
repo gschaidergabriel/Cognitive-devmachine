@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-20260809T173700Z-QWEN4B-CALIBRATION-RESEED",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:37:00Z",
+  "payload": {
+    "work_id": "FRANK-QWEN4B-CALIBRATION-AND-RESEED",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "REAL_MODEL_NEGATIVE_OBSERVATION_PLUS_PRIMARY_RESEARCH",
+    "title": "Measure Qwen4B confidence calibration and verification/reseed rescue on stable wrong attractors",
+    "work_clay": "after the conservative V2 receipt, run a larger deterministic held-out/OOD real-Qwen experiment on the same pinned local-model lane. Compare ordinary continuation with an answer-key-free independent verification/reseed branch. Measure verbalized-confidence calibration, high-confidence-wrong rate, correction of initially wrong answers, regression of initially correct answers, selective risk, latency/token cost and W4 halt/route behavior. The policy/verifier must never receive the expected answer.",
+    "reason_clay": "the first real Qwen4B receipt contains a stable wrong modular answer (4 instead of 2) with visible confidence 100% across recurrence. This falsifies treating raw visible confidence as calibrated correctness. Recent primary self-correction/calibration research also treats verification quality as a distinct problem rather than assuming confidence equals truth.",
+    "completion_clay": "a reproducible Hostinger receipt covers a preregistered deterministic task set larger than the four-task pilot, exact model/runtime pins, no answer-key visibility to controller/verifier, fixed continuation versus independent verification/reseed, Brier/ECE or explicitly justified calibration metrics, high-confidence-wrong/selective-risk measures, correction/regression counts, cost/latency, and a decision whether raw verbalized confidence remains an admitted W4 residual-pressure input, is recalibrated, is demoted, or is paired with independent verification evidence",
+    "evidence_need": [
+      "conservative V2 receipt",
+      "exact Qwen/llama runtime identity",
+      "held-out deterministic task manifest with expected answers hidden from model/controller",
+      "ordinary-continuation trajectory",
+      "fresh independent verification/reseed trajectory",
+      "confidence and correctness per arm",
+      "latency/token throughput/cost per arm",
+      "false halt / missed correction / correct-to-wrong regression",
+      "calibration metric definitions and sample-size caveats"
+    ],
+    "executor_policy": "offline shadow or evaluation only; no online Frank controller authority. Verification prompts may request a different method but may not contain expected answers or correctness feedback. Preserve every wrong/high-confidence and regression case as evidence. Do not optimize one confidence scalar as truth.",
+    "required_capabilities": [
+      "frank_v0_1.build_test.self_hosted_runner",
+      "local_qwen4b_cpu_inference",
+      "llama_cpp_build_runtime"
+    ],
+    "dependencies": [
+      "FRANK-V01-REAL-QWEN4B-VPS-SHADOW conservative V2 receipt",
+      "pinned real-model lane available"
+    ],
+    "invalidators": [
+      "answer-key leakage into model/verifier/controller",
+      "model/runtime identity drift",
+      "task set too small or homogeneous for claimed calibration conclusion",
+      "new evidence makes visible-confidence proxy irrelevant to current controller"
+    ],
+    "base_priority": 0.94,
+    "expected_impact": 0.96,
+    "urgency": 0.90,
+    "information_gain": 0.98,
+    "status": "BLOCKED_ON_V2_RECEIPT"
+  }
+}

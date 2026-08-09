@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-claycode-affine-cap-revocation",
+  "negative_results": [
+    {
+      "id": "N-SPAWN-CC-CACHED-AUTH-001",
+      "status": "NEGATIVE_RESULT",
+      "claim": "Task-start capability snapshot remains sufficient for delayed effect execution.",
+      "result": "79982/100000 unauthorized delayed effects falsely accepted by the cached-snapshot comparator; 59747 were specifically stale after revoke/regrant/transfer.",
+      "scope": "synthetic executable proxy"
+    },
+    {
+      "id": "N-SPAWN-CC-RAW-FD-002",
+      "status": "NEGATIVE_RESULT",
+      "claim": "Raw Linux fd number is stable semantic resource identity after close/reopen.",
+      "result": "fd 3 was reused for a different file and stale integer write modified the new file.",
+      "scope": "direct hosted Linux runtime observation"
+    },
+    {
+      "id": "N-SPAWN-CC-STATIC-EFFECT-AUTH-003",
+      "status": "NEGATIVE_RESULT",
+      "claim": "Static effect declaration can stand in for current runtime authorization.",
+      "result": "The unsafe comparator had no mechanism to observe revoke/regrant/transfer/right changes and therefore admitted unauthorized effects.",
+      "scope": "synthetic executable proxy plus prior ClayCode effect-closure lineage"
+    },
+    {
+      "id": "N-SPAWN-CC-BASE-PASS-004",
+      "status": "NEGATIVE_RESULT",
+      "claim": "This spawn is sufficient to close a BASE work package or application proof.",
+      "result": "False: no production ClayCode compiler/runtime integration, no target Ubuntu execution and no APP-01..APP-10 proof occurred.",
+      "scope": "release governance"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1725p0700_hwp02_oracle_merge",
+  "trigger": "harness",
+  "actor": "chatgpt-secondary",
+  "worker_claim": "harness-20260809-state-ledger-chatgpt-secondary-sol-current",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "coverage_status": "COMPLETE_FOR_WORK_PACKAGE_ROUTING",
+  "peer_branches": {
+    "clayresearch": {"latest_observed_commit": "9022209585e1180d172a467f496e6cd7c844a6b4", "relevance": "integrated current architecture/conformance context"},
+    "frank": {"latest_relevant_observed_commit": "687cc0a8a00807cfc48a363d42651ac9e466e00d", "relevance": "loop-of-loops state, epochs, checkpoint and replay directive"},
+    "gwt": {"latest_observed_commit": "7b56d91e99541189600298160de82a181bd3c6bc", "relevance": "workspace recurrence semantics require ordered and epoch-bound state"},
+    "emergenz": {"latest_observed_commit": "b8adb802c34a42a763c2c7b94888d8a7b6d0a87c", "relevance": "causal triangulation requires replay identity separation"},
+    "claycode": {"latest_observed_commit": "8f38eb2599a6251e34b86164a5997b870e59d269", "relevance": "typed semantic identity and idempotency/concurrency semantics"},
+    "hyperposition": {"latest_relevant_observed_commit": "35c59eac8662ea71c9aa989766ca0d51dccb3dcd", "relevance": "alternative-state identity must not collapse ordered/set-valued distinctions"},
+    "claygraph": {"latest_relevant_observed_commit": "166280d7d20a052432b1753fd5ebeb6cd35c0a7d", "relevance": "dynamic bindings require epoch/version identities distinct from semantic content"},
+    "unifieddb": {"latest_relevant_observed_commit": "afa47870dfc46fa38b21e5bb0e1bfc45c5ce87aa", "relevance": "logical persistence/replay needs semantic/version/trace separation"},
+    "harness": {"latest_relevant_observed_commits": ["e77de62e5aa784f90fdee1541ac8f2449478cb0b", "41943b0b756eb65e93e51db6ce568bfcda88611f", "91f8f97ad9396c25d15fab9ef820c69fe3b1eaf1"], "relevance": "lineage adjudication plus transaction-safe semantic idempotency"}
+  },
+  "live_worker_coordination": {
+    "workspace": "research_entity/harness/HARNESS_WORKSPACE.json",
+    "claim_status": "ACTIVE",
+    "duplicate_package_claim_detected": false,
+    "concurrent_delta_integrated": "A-lineage idempotency race/payload hardening landed during this run and was treated as an input invariant."
+  },
+  "selected_gap": "Merge A/B evidenced invariants into one non-promoted oracle candidate with separate semantic-state, state-version/history and trace identities, typed collection canonicalization, domain epochs, transactional semantic idempotency, exact replay and snapshot restore.",
+  "evidence_boundary": "Harness execution of inherited branch contracts is shared-ancestry evidence; local sandbox execution is not target Ubuntu developer-host validation and does not promote H1."
+}

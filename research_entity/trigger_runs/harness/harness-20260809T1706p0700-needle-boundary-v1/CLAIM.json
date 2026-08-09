@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1706p0700-needle-boundary-v1",
+  "trigger":"harness",
+  "work_package":"H-WP-04-NEEDLE-BOUNDARY",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "status":"CLAIMED",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "scope":"Executable fail-closed Clay CapabilityRegistry -> NeedleProjection -> untrusted NeedleRawRoute -> strict post-decode validation -> non-authoritative ClayToolProposal boundary. No Needle effect authority; no H1 PASS claim.",
+  "nonduplication_check":[
+    "H-WP-02 state ledger has active/partial executable work and is not duplicated",
+    "H-WP-11 trace/replay has a live sibling claim and is not duplicated",
+    "existing NEEDLE_SOURCE_SANDBOX_ORACLES are consumed as regression inputs rather than recreated"
+  ],
+  "basis_refs":[
+    "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+    "research_entity/harness/HARNESS_WORKSPACE.json",
+    "research_entity/frank/NEEDLE_CLAY_BOUNDARY_SANDBOX_DELTA.md",
+    "research_entity/harness/fixtures/NEEDLE_SOURCE_SANDBOX_ORACLES.json",
+    "research_entity/mesh_feedback/20260809T1704p0700-live-fusion-delta/BRANCH_FEEDBACK_MANIFEST.json"
+  ]
+}

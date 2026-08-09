@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Materialize exact Project-Frankenstein trees
+      - name: Materialize exact Project-Frankenstein trees and diffs
         shell: bash
         run: |
           set -euo pipefail
@@ -46,7 +46,9 @@ jobs:
           import hashlib, json, pathlib, subprocess, sys
           out = pathlib.Path(sys.argv[1])
           refs = sys.argv[2:]
-          summary = {"schema_version":"1.0","repository":"gschaidergabriel/Project-Frankenstein","snapshots":[]}
+          summary = {"schema_version":"1.1","repository":"gschaidergabriel/Project-Frankenstein","snapshots":[]}
+          maps = {}
+          resolved = {}
           for ref in refs:
               sha = subprocess.check_output(["git","rev-parse",ref], text=True).strip()
               raw = subprocess.check_output(["git","ls-tree","-r","--full-tree",sha], text=True)
@@ -56,6 +58,9 @@ jobs:
                   mode, typ, obj = meta.split(" ",2)
                   rows.append((path, mode, typ, obj))
               rows.sort(key=lambda x:x[0])
+              tree = {p:(m,t,o) for p,m,t,o in rows}
+              maps[sha] = tree
+              resolved[ref] = sha
               canonical = "".join(f"{p}\t{m}\t{t}\t{o}\n" for p,m,t,o in rows)
               pathset = "".join(f"{p}\n" for p,_,_,_ in rows)
               pathblob = "".join(f"{p}\t{o}\n" for p,_,_,o in rows)
@@ -69,9 +74,39 @@ jobs:
                   "canonical_ls_tree_sha256":hashlib.sha256(canonical.encode()).hexdigest(),
                   "pathset_sha256":hashlib.sha256(pathset.encode()).hexdigest(),
                   "path_blob_sha256":hashlib.sha256(pathblob.encode()).hexdigest(),
-                  "file":str(txt.relative_to(pathlib.Path.cwd().parent if False else out.parent.parent.parent.parent)) if False else f"research_entity/archive_assimilation/raw_tree_snapshots/{txt.name}"
+                  "file":f"research_entity/archive_assimilation/raw_tree_snapshots/{txt.name}"
               })
           (out / "PF_TREE_PROBE_SUMMARY.json").write_text(json.dumps(summary, indent=2)+"\n", encoding="utf-8")
+
+          def diff(base_ref, head_ref, name):
+              bsha, hsha = resolved[base_ref], resolved[head_ref]
+              b, h = maps[bsha], maps[hsha]
+              bp, hp = set(b), set(h)
+              added = sorted(hp-bp)
+              removed = sorted(bp-hp)
+              modified = sorted(p for p in bp&hp if b[p] != h[p])
+              return {
+                  "name":name,"base_ref":base_ref,"base_sha":bsha,"head_ref":head_ref,"head_sha":hsha,
+                  "base_entries":len(b),"head_entries":len(h),
+                  "added_count":len(added),"removed_count":len(removed),"modified_count":len(modified),
+                  "changed_count":len(added)+len(removed)+len(modified),
+                  "added_paths":added,"removed_paths":removed,"modified_paths":modified
+              }
+          named = [
+            (refs[0],refs[1],"segment01"),
+            (refs[1],refs[2],"segment02a"),
+            (refs[2],refs[4],"segment02b"),
+            (refs[4],refs[5],"segment02c"),
+            (refs[5],refs[6],"segment02d"),
+            (refs[6],refs[7],"segment03_first11"),
+            (refs[7],refs[8],"segment03_cleanup"),
+            (refs[6],refs[8],"segment03_full"),
+            (refs[8],refs[9],"segment04"),
+            (refs[9],refs[10],"segment05"),
+            (refs[0],refs[10],"anchor_to_frozen_head")
+          ]
+          dsum = {"schema_version":"1.0","repository":"gschaidergabriel/Project-Frankenstein","method":"exact git ls-tree set/object diff from locally cloned immutable commits","diffs":[diff(a,b,n) for a,b,n in named]}
+          (out / "PF_TREE_DIFF_SUMMARY.json").write_text(json.dumps(dsum, indent=2)+"\n", encoding="utf-8")
           PY
 
       - name: Commit exact tree snapshots back to RAE
@@ -81,7 +116,7 @@ jobs:
           git config user.name "rae-tree-probe"
           git config user.email "actions@users.noreply.github.com"
           git add research_entity/archive_assimilation/raw_tree_snapshots/
-          git commit -m "666 PF: materialize exact recursive tree snapshots via CI" || exit 0
+          git commit -m "666 PF: refresh exact recursive tree snapshots and diffs via CI" || exit 0
           for attempt in 1 2 3 4 5 6; do
             git fetch origin main
             git rebase origin/main

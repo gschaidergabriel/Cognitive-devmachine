@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EF002-SYNTH-COMMON-DRIVER-01",
+  "epistemic_class": "SYNTHETIC_SIMULATION_ONLY",
+  "claim_scope": "Mechanism identifiability test; not FRANK runtime evidence and not a release-gate result.",
+  "design": "Two matched autoregressive dynamical systems share a latent/common driver C. In condition 1 there is no direct A->B edge. In condition 2 a true A->B coefficient of 0.35 is added. Observational directed prediction gain is compared with conditioning on C and a matched blocking lesion that clamps A to zero while holding exogenous noise fixed.",
+  "replicates": 50,
+  "seed_range": [2000, 2049],
+  "mean_results": {
+    "common_driver_only_no_direct_coupling": {
+      "directed_prediction_gain_from_adding_A": 0.3218,
+      "apparent_A_coefficient_without_C": 0.4369,
+      "A_coefficient_conditioned_on_C": -0.0034,
+      "A_lesion_downstream_B_MAE": 0.0,
+      "A_lesion_downstream_B_RMS": 0.0
+    },
+    "true_direct_coupling_0_35": {
+      "directed_prediction_gain_from_adding_A": 0.6252,
+      "apparent_A_coefficient_without_C": 0.8825,
+      "A_coefficient_conditioned_on_C": 0.3457,
+      "A_lesion_downstream_B_MAE": 1.1563,
+      "A_lesion_downstream_B_RMS": 1.4461
+    }
+  },
+  "interpretation": [
+    "A shared lagged driver can create strong apparent directed predictive structure even when A has zero causal effect on B.",
+    "Conditioning on the known common driver removes the spurious coefficient in this linear setup, but FRANK may have hidden or incompletely observed shared state, so conditioning alone cannot be presumed sufficient.",
+    "Matched blocking intervention cleanly distinguishes the zero-coupling and true-coupling systems here, supporting lesion/rescue receipts as a stronger evidence tier than observational directionality alone."
+  ],
+  "limitations": [
+    "Linear Gaussian autoregressive dynamics are much simpler than FRANK.",
+    "The common driver is explicitly known for the conditioning test; real Harness confounds may be latent or only partially logged.",
+    "The lesion is idealized and does not model every distribution-shift artifact introduced by intervention."
+  ],
+  "reproduction": "common_driver_reentry_sim.py",
+  "result_status": "SUPPORTS_WORKING_HYPOTHESIS_NOT_PROMOTABLE"
+}

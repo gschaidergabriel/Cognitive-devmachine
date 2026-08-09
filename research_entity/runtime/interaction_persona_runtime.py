@@ -42,6 +42,8 @@ def ingest(rt: RAEStateRuntime, payload: dict) -> dict:
     interaction_id = payload.get("interaction_id")
     if not interaction_id:
         raise ValueError("interaction_id required")
+    if not rt.u.execute("SELECT 1 FROM pilot_interactions WHERE interaction_id=?", (interaction_id,)).fetchone():
+        raise ValueError("interaction_id must reference an ingested pilot interaction")
     quality_count = persona_count = case_count = 0
     for o in payload.get("interaction_quality_observations", []):
         dim = o.get("dimension")
@@ -95,10 +97,12 @@ def summary(rt: RAEStateRuntime) -> dict:
 
 
 def main():
-    ap=argparse.ArgumentParser(); sub=ap.add_subparsers(dest="cmd",required=True)
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--state-dir"); ap.add_argument("--test-mode", action="store_true")
+    sub=ap.add_subparsers(dest="cmd",required=True)
     i=sub.add_parser("ingest"); i.add_argument("manifest")
     sub.add_parser("summary")
-    args=ap.parse_args(); rt=RAEStateRuntime()
+    args=ap.parse_args(); rt=RAEStateRuntime(args.state_dir, test_mode=args.test_mode)
     try:
         init_tables(rt)
         if args.cmd=="ingest": print(json.dumps(ingest(rt,json.loads(Path(args.manifest).read_text(encoding="utf-8"))),ensure_ascii=False,indent=2))

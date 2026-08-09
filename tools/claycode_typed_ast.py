@@ -100,9 +100,7 @@ def _decode(value: Any) -> AstValue:
     raise ValueError("unknown or non-canonical AST member")
 
 
-def from_lark(value: Tree | Token | None) -> AstValue | None:
-    if value is None:
-        return None
+def from_lark(value: Tree | Token) -> AstValue | None:
     if isinstance(value, Tree):
         children = tuple(
             converted
@@ -126,6 +124,9 @@ class Frontend:
             strict=True,
             start="start",
             keep_all_tokens=True,
+            # Lark defaults [] EBNF optionals to explicit None children.  The
+            # canonical AST represents absence by absence, not sentinel values.
+            maybe_placeholders=False,
         )
 
     def parse(self, source: str) -> Document:

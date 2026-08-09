@@ -1,0 +1,64 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1443p0700-chatgpt-secondary-pf-voice-wakeword-lineage",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_class":"PROJECT_FRANKENSTEIN_PRIMARY_GIT_HISTORY_AND_FROZEN_HEAD_CODE",
+  "scope":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"voice/wake-word capability temporal lineage and source-level reachability"},
+  "coverage_credit":{"exact_level0_percent_added":0.0,"reason":"Bounded history/code shard; Project-Frankenstein global tree/history denominator is not yet frozen."},
+  "lineage":[
+    {"phase":"VOICE-L1","date":"2026-02-14","state":"WAKEWORD_PLUS_PTT_DECLARED","evidence":"Initial repository commit explicitly lists voice interaction with wake-word, push-to-talk and local STT."},
+    {"phase":"VOICE-L2","date":"2026-02-19","state":"LEGACY_WAKE_DAEMON_DISABLED","evidence":"Commit 5e7f623a removes aicore-voice from frank_watchdog and states wake-word listener disabled; push-to-talk remains functional."},
+    {"phase":"VOICE-L3","date":"2026-02-19..2026-02-21","state":"PUSH_TO_TALK_ONLY_DOCUMENTED","evidence":"README/HOW_IT_WORKS/persona/self-knowledge changes repeatedly replace wake-word with push-to-talk and remove wake-word references."},
+    {"phase":"VOICE-L4","date":"2026-03-19","state":"FRANKVOICE_REINTRODUCTION","evidence":"Commit 0fd27f adds unified CPU-only FrankVoice with faster-whisper, VAD, TTS and WebSocket voice. The FrankVoice source includes OpenWakeWord detector and an explicit wake_word process mode; WebSocket code handles wake_word action by switching to conversation mode."},
+    {"phase":"VOICE-L5","date":"2026-03-19","state":"DEPENDENCY_REINTRODUCED","evidence":"Commit 51d6b30d adds faster-whisper and openwakeword to requirements.txt."},
+    {"phase":"VOICE-L6","date":"FROZEN_HEAD","state":"SOURCE_PATH_PRESENT_CURRENT","evidence":"At abba90a5 services/frank_voice.py still contains OpenWakeWord ONNX loading, wake_word mode and status; ui/webui/app.py still routes wake_word actions and accepts client-selected voice mode over /ws/voice; requirements.txt still contains openwakeword."}
+  ],
+  "observations":[
+    {"id":"VOICE-OBS-001","claim":"The Feb-19 disable event applies to the legacy aicore-voice watchdog-managed wake daemon, not to a permanent project-wide prohibition on wake-word functionality."},
+    {"id":"VOICE-OBS-002","claim":"Wake-word functionality was subsequently reintroduced inside the unified FrankVoice architecture rather than by reviving the old aicore-voice daemon."},
+    {"id":"VOICE-OBS-003","claim":"Frozen-head source evidence establishes a reachable server-side wake_word mode at code level: the WebSocket handler passes mode to FrankVoice, handles wake_word action, and changes to conversation mode after detection."},
+    {"id":"VOICE-OBS-004","claim":"The detector currently uses OpenWakeWord hey_jarvis_v0.1 as a proxy for 'Hey Frank', threshold 0.5, with fail-closed behavior if model load fails."},
+    {"id":"VOICE-OBS-005","claim":"Source-level presence and routeability still do not prove that the deployed Frank v0.1 UI selects wake_word mode, that models are installed, or that microphone-to-effect detection works on Andreas' target PC."}
+  ],
+  "synthesis":{
+    "primary_finding":"The apparent wake-word contradiction is a supersession/reintroduction lineage, not simple stale dependency drift: legacy wake daemon disabled -> push-to-talk-only interval -> wake-word reintroduced as an internal FrankVoice mode.",
+    "status_assignment":{"legacy_aicore_voice_daemon":"SUPERSEDED_DISABLED","frankvoice_wakeword_source_capability":"CURRENT_SOURCE_REACHABLE","deployed_target_capability":"OPEN_UNVERIFIED_EFFECT"},
+    "new_invariant":"CAPABILITY_REINTRODUCTION_MUST_CREATE_A_NEW_LINEAGE_IDENTITY_NOT_REACTIVATE_THE_OLD_COMPONENT_BY_NAME",
+    "frank_v0_1_implication":"Self-knowledge should say that current FrankVoice contains optional wake-word support only when runtime/config/effect receipts show it enabled; it must not claim the old aicore-voice daemon is active."
+  },
+  "counterhypotheses":[
+    {"id":"VOICE-CH-001","claim":"openwakeword is merely stale and unused","status":"REFUTED_AT_SOURCE_LEVEL","evidence":"Frozen-head FrankVoice imports OpenWakeWord lazily, instantiates _WakeWord, exposes wake_word process mode, and WebSocket route handles wake_word action."},
+    {"id":"VOICE-CH-002","claim":"current end-user UI actually enables wake-word mode","status":"OPEN","next_test":"Trace current static frontend controls or run browser/WebSocket interaction; do not infer enabled UI from server capability alone."},
+    {"id":"VOICE-CH-003","claim":"wake-word works correctly on target hardware","status":"OPEN","next_test":"Install/load model and run microphone replay/live detection with positive/negative/near-phrase corpus, latency and false-accept/false-reject measurement."}
+  ],
+  "negative_results":[
+    "No target-PC runtime effect was executed in this shard.",
+    "No claim that wake-word is enabled by default.",
+    "No claim that hey_jarvis proxy reliably recognizes 'Hey Frank'.",
+    "No exact Level-0 percent or earned-work hours assigned."
+  ],
+  "tests":[
+    {"id":"VOICE-X1","name":"source-to-runtime reachability","design":"Trace frontend mode control -> /ws/voice -> process_chunk(mode='wake_word') -> OpenWakeWord model load -> wake_word event -> conversation transition; record each edge as enabled/reachable/effect-verified."},
+    {"id":"VOICE-X2","name":"wake phrase calibration","design":"Evaluate intended 'Hey Frank', proxy phrase, phonetic near-neighbors, ambient speech and household noise. Measure FAR/FRR, latency and CPU cost; preserve negative results."},
+    {"id":"VOICE-X3","name":"legacy component falsification","design":"Assert aicore-voice daemon remains absent/disabled while FrankVoice wake path can function independently; prevent self-model from conflating the two generations."},
+    {"id":"VOICE-X4","name":"fail-closed degradation","design":"Remove/unavailable OpenWakeWord model/dependency and verify voice PTT/conversation paths continue without false capability reporting or crash."}
+  ],
+  "branch_feedback":{
+    "frank":"DELTA: distinguish legacy aicore-voice daemon from current optional FrankVoice wake mode; self-report only verified enablement/effect.",
+    "harness":"DELTA: add source-to-runtime wake reachability, FAR/FRR, fail-closed and legacy-component falsification tests.",
+    "claycode":"DELTA: capability identity requires generation/version lineage; replacement implementation with same user function must not inherit old component status implicitly.",
+    "claygraph":"DELTA: model aicore-voice -> DISABLED/SUPERSEDED and FrankVoice wake-word -> REINTRODUCES_FUNCTION edges.",
+    "unifieddb":"DELTA: persist capability generation, enabled state, dependency state, reachability and effect verification separately.",
+    "gwt":"NO_CHANGE: wake-word is an input-trigger mechanism; no new workspace ignition result established.",
+    "emergenz":"NO_CHANGE: no emergence inference.",
+    "hyperposition":"DELTA: temporal alternatives are resolved by validity interval and component identity, not merged into one ambiguous 'voice' state.",
+    "clayresearch":"DELTA: feature retirement and later reintroduction should be treated as new capability generations across the whole system.",
+    "q12_index":"DELTA: preserve voice lineage as reusable migration/failure evidence; no hour credit."
+  },
+  "earned_work_mapping":{"new_hours_low":0.0,"new_hours_center":0.0,"new_hours_high":0.0,"reason":"Lineage evidence only; no deduplicated current-work hour mapping assigned."},
+  "open_obligations":["Trace current frontend mode controls at frozen head or runtime.","Run target-PC effect and calibration tests.","Continue exact PF tree/history denominator closure."],
+  "created_at":"2026-08-09T14:48:00+07:00"
+}

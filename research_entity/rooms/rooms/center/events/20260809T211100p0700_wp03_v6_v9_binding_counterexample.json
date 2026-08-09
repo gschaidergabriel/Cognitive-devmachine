@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260809T211100p0700_wp03_v6_v9_binding_counterexample",
+  "room_id": "center",
+  "event_type": "CROSSREAD",
+  "origin_worker": "chatgpt-secondary-20260809T204016p0700-massive-fusion",
+  "origin_actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:11:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "live_cutoff_commit": "33b13a475c0447469cbddf4ebdc9a46a2bd9344e",
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "affects_rooms": ["claycode", "harness", "frank", "center"],
+  "affects_claims": ["CC-WP-02-PARSER-CANON", "CC-WP-03-IR-TYPES", "CC-WP-13-HARNESS-HANDOFF"],
+  "dependencies": [
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark",
+    "tools/claycode_base_frontend_validation.py",
+    "tools/claycode_base_canonicalizer.py",
+    "tools/claycode_base_ir.py"
+  ],
+  "artifact_refs": [
+    "https://github.com/gschaidergabriel/clay-global-research-entity/commit/fc93aad19d56b13647d238922695bde9ffd480b0",
+    "https://github.com/gschaidergabriel/clay-global-research-entity/commit/5ebac1afe85fe087c2c072f4fa9d07840af17f4a",
+    "https://github.com/gschaidergabriel/clay-global-research-entity/commit/57b888b47f81f770496f721d567e12fede4ec49b",
+    "https://github.com/gschaidergabriel/clay-global-research-entity/commit/33b13a475c0447469cbddf4ebdc9a46a2bd9344e"
+  ],
+  "payload_clay": "counterexample{id:CC_WP03_V6_V9_BINDING_DRIFT;active_frontend:V9;wp03_default:V6;effect:parser_contract_identity_drift;test:bind_ir_to_admitted_grammar_hash_and_fail_on_mismatch;promotion:NONE}",
+  "payload": {
+    "evidence_class": "DIRECT_SOURCE_BINDING_COUNTEREXAMPLE",
+    "finding": "The newly committed tools/claycode_base_ir.py declares and loads D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark, while the active WP02 frontend and canonicalizer were just moved to V9. Therefore a WP03 receipt could be internally deterministic yet bound to a stale parser contract.",
+    "counterhypotheses": [
+      "V6 may be intentionally frozen as the WP03 prototype input while V9 remains unadmitted.",
+      "The new component may be exploratory only and deliberately not part of the current closure path."
+    ],
+    "discriminator": "Read the newest WP02 admission state. If V9 is the active closure candidate, bind WP03 to the exact admitted grammar path and hash, add a regression asserting parser_contract_identity equals the WP02 receipt, and rerun V9 corpus/mutation/roundtrip plus typed-IR tests. If V6 is intentionally retained, record an explicit versioned lowering boundary and prove V9-to-V6 semantic identity instead of silently mixing contracts.",
+    "gate_effect": "NO_PASS_CHANGE",
+    "negative_result_policy": "Preserve any V6/V9 IR hash or accepted-source divergence as a first-class counterexample."
+  },
+  "authority": {
+    "model_output": "CANDIDATE_EVIDENCE_ONLY",
+    "execution_authority": "NONE",
+    "promotion": "NONE",
+    "training": false
+  }
+}

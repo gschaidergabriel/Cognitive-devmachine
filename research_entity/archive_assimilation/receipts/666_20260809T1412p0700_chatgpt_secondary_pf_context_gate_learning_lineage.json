@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1412p0700-chatgpt-secondary-pf-context-gate-learning-lineage",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T14:12:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "introduction_commit": "3a264068e5000d7d6212336048b3bf6e8e5e28eb",
+    "evidence_class": "PRIMARY_GIT_COMMIT_AND_FROZEN_HEAD_SOURCE_CROSSREAD"
+  },
+  "scope": "Context Relevance Gate (CRG): learned context-channel selection, implicit feedback, cold-start blending, persistence/training semantics, runtime integration lifecycle and implications for Needle/GWT/Harness/UnifiedDB",
+  "non_overlap_check": {
+    "dedicated_context_gate_receipt_found": false,
+    "boundary_to_prior_context_tool_shard": "Prior PF context/tool-routing receipt covers model tool-surface filtering, scratch offload and prompt compaction. This receipt covers neural selection of state/context channels before model context assembly."
+  },
+  "mechanism": {
+    "channels": 15,
+    "always_pass_channels": ["relevant_memories", "perception", "attention_focus", "active_goals", "nac_drive", "attention_schema", "introspection_block", "mood_trajectory"],
+    "model_size_claim": "~30K parameters",
+    "feature_dim": 420,
+    "gate_threshold": 0.5,
+    "cold_start_training_steps": 100,
+    "forced_rule_exploration_interval_calls": 20,
+    "entropy_floor": 0.3,
+    "low_entropy_noise_alpha": 0.1,
+    "fallback": "rule-based when embedding/torch unavailable; unknown channels pass through",
+    "episode_persistence": true,
+    "implicit_feedback": ["explicit praise/complaint regex", "short follow-up", "rapid follow-up", "topic continuation", "continued engagement"],
+    "trainer": {
+      "optimizer": "Adam",
+      "learning_rate": 0.0003,
+      "batch_size": 32,
+      "minimum_rewarded_episodes": 50,
+      "max_epochs_per_step": 5,
+      "gradient_clip_norm": 0.5,
+      "loss_declared": "L_task + 0.005*L_anchor + 0.1*L_diversity"
+    }
+  },
+  "confirmed_negative_result": {
+    "id": "PF-CRG-NR-001",
+    "title": "Reward sign is inverted in frozen-head CRG task loss",
+    "status": "CURRENT_FROZEN_HEAD_CODE_DEFECT_RUNTIME_EFFECT_UNVERIFIED",
+    "evidence": [
+      "Frozen-head feedback.py explicitly defines helpful feedback as positive reward (e.g. +0.7) and harmful feedback as negative reward (e.g. -0.8).",
+      "Frozen-head training.py computes BCE(gate_scores, prior_decisions), then weighted = BCE * (-reward), and minimizes the mean composite loss.",
+      "For positive reward r>0, L_task=-r*BCE. Minimization therefore maximizes BCE with respect to the recorded decision; for negative reward r<0, L_task=|r|*BCE and minimization reinforces the recorded decision.",
+      "Analytical gradient check: y=1,p=0.8 gives d(BCE)/dz=-0.2 and d(-BCE)/dz=+0.2, so gradient descent lowers z/p away from y=1; y=0,p=0.2 gives d(-BCE)/dz=-0.2, so gradient descent raises p away from y=0."
+    ],
+    "qualification": "Anchor/diversity terms can alter net gradients, but they do not correct the task-loss sign. This proves the declared reward direction is inverted in the task term; it does not prove realized live degradation without evidence that the trainer was active on rewarded episodes.",
+    "minimal_fix_hypothesis": "Use +reward*BCE for positive reinforcement only with a separately defined negative-reward target inversion, or formulate an explicit policy-gradient / signed advantage objective with unit tests. A naive sign flip alone is not sufficient unless negative rewards are given a bounded, well-defined counter-target.",
+    "falsifier": "A source-level derivation or executable frozen-head test demonstrates that optimizer minimization under the actual composite objective reliably moves positive-reward examples toward prior decisions and negative-reward examples away, across representative states, despite the -reward multiplier."
+  },
+  "additional_constraints": [
+    {
+      "id": "PF-CRG-NR-002",
+      "claim": "Implicit conversation-level reward is confounded by response quality, topic, user timing and downstream model behavior; assigning one scalar to all gate decisions does not identify which context channel caused the outcome.",
+      "status": "CAUSAL_CREDIT_ASSIGNMENT_CONSTRAINT",
+      "next_test": "Matched replay with per-channel ablations/shapley-like or doubly robust attribution, shadow policy logging and counterfactual evaluation."
+    },
+    {
+      "id": "PF-CRG-NR-003",
+      "claim": "Context relevance gating is attention shaping, not truth validation, safety authority or execution authority.",
+      "status": "ARCHITECTURE_CONSTRAINT"
+    },
+    {
+      "id": "PF-CRG-NR-004",
+      "claim": "A learned gate must not permanently suppress provenance-critical evidence solely because engagement reward is low; immutable evidence remains retrievable outside active context.",
+      "status": "ANTI_GOODHART_CONTEXT_CONSTRAINT"
+    },
+    {
+      "id": "PF-CRG-NR-005",
+      "claim": "Unknown-channel pass-through is a completeness-safe default but cannot serve as a security boundary if context channels may contain untrusted/injected content.",
+      "status": "BOUNDARY_CONSTRAINT"
+    }
+  ],
+  "lifecycle": {
+    "introduced": "2026-03-10 via 3a264068e5000d7d6212336048b3bf6e8e5e28eb",
+    "frozen_head_training_file_present": true,
+    "frozen_head_feedback_file_present": true,
+    "training_file_blob_unchanged_from_introduction": true,
+    "feedback_file_blob_unchanged_from_introduction": true,
+    "frozen_head_core_app_context_gate_reference_found": false,
+    "frozen_head_consciousness_daemon_context_gate_reference_found": false,
+    "frozen_head_old_overlay_chat_mixin_present": false,
+    "runtime_activation_status": "UNVERIFIED_DORMANT_CANDIDATE",
+    "rule": "Do not infer live behavioral impact from retained source files alone."
+  },
+  "reusable_candidates": [
+    {
+      "mechanism": "small CPU learned relevance gate over named context channels",
+      "mapping": "BENCHMARK_CANDIDATE_WITH_CORRECTED_OBJECTIVE",
+      "current_targets": ["needle", "harness", "frank", "gwt"]
+    },
+    {
+      "mechanism": "cold-start rule baseline with gradual neural blending",
+      "mapping": "DIRECTLY_REUSABLE_CONCEPT",
+      "current_targets": ["harness", "frank"]
+    },
+    {
+      "mechanism": "forced baseline/exploration episodes plus episode logging",
+      "mapping": "REUSABLE_WITH_STRONGER_RANDOMIZATION_AND_CAUSAL_EVAL",
+      "current_targets": ["harness", "gwt", "unifieddb"]
+    },
+    {
+      "mechanism": "entropy-collapse monitoring",
+      "mapping": "REUSABLE_HEALTH_METRIC",
+      "current_targets": ["harness", "frank"]
+    },
+    {
+      "mechanism": "named state/context channels with per-channel gate scores",
+      "mapping": "DIRECT_PRECURSOR_TO_TYPED_CONTEXT_ASSEMBLY",
+      "current_targets": ["claycode", "unifieddb", "claygraph", "gwt"]
+    }
+  ],
+  "architecture_delta": {
+    "preferred_testable_shape": "durable evidence/state plane -> typed candidate context channels -> deterministic must-include/safety/provenance anchors -> learned relevance shadow gate -> calibrated inclusion set -> model context; all gate decisions/version/reward/outcomes logged; execution capabilities remain independent",
+    "training_requirement": "Before promotion, unit-test reward direction, run shadow-mode replay, per-channel lesion/rescue, OOD/rare-critical-context retention, reward-hacking tests, and compare against deterministic/top-k/retrieval baselines.",
+    "key_law": "context_relevance != truth != authority"
+  },
+  "branch_feedback": {
+    "frank": "DELTA: resurrect only the semantic idea of a small learned relevance gate if it beats baselines under corrected, causal evaluation. Preserve must-include provenance/safety channels and an explicit unknown/escalate route.",
+    "harness": "HIGH-PRIORITY NEGATIVE RESULT: add a signed-reward gradient unit test that would have caught PF-CRG-NR-001. Benchmark shadow CRG vs deterministic/retrieval gates, with rare-critical-context retention and per-channel lesion/rescue.",
+    "claycode": "DELTA: represent candidate context channel, inclusion score, must-include flag, gate version, decision, evidence refs and later outcome as typed/replayable transitions. No context score grants effect authority.",
+    "unifieddb": "DELTA: persist full candidate channel contents/evidence refs, gate/version/scores, randomized exploration assignment, reward source and outcomes; active context is a projection, not the durable record.",
+    "claygraph": "DELTA: activation/relevance scores may bias projection but must remain distinct from truth/confidence/provenance edges.",
+    "gwt": "DELTA: CRG is a historical precursor for pre-workspace candidate shaping. Test whether selective context improves broadcast->effect outcomes through lesion/rescue rather than assuming neural gating is workspace competition.",
+    "emergenz": "NO_CHANGE to emergence claims; learned context selection is not emergence evidence. It can become an experimental factor in causal integration studies.",
+    "hyperposition": "DELTA: retain multiple uncertain context candidates in durable/set-valued state even when only a subset is projected into the active model context.",
+    "clay": "DELTA: a dissolved Clay runtime may learn active-context projections, but the durable evidence substrate and authority geometry must remain semantically separable.",
+    "q12_index": "DELTA: context-gate archaeology yields a concrete reusable lesson and negative result; no historical-hour credit is added before row-level deduplication."
+  },
+  "historical_earned_work": {
+    "mapping_state": "CANDIDATES_ONLY_PENDING_ROW_LEVEL_DEDUP",
+    "new_hours_credit": 0.0
+  },
+  "exact_coverage_credit": 0.0,
+  "coverage_reason": "One semantic/source lineage closed; full PF history/tree denominator remains unfrozen.",
+  "next_high_value_obligations": [
+    "Search remaining frozen-head files/history for actual CRG gate() and record_user_reaction() call sites or prove dormancy with an exhaustive tree/read surface",
+    "Add signed-reward objective test to current Harness research backlog",
+    "Run matched synthetic replay comparing corrected objective, explicit counter-target BCE and policy-gradient alternatives",
+    "Deduplicate learned-context-gate lineage against Needle/Thalamus/GWT historical mechanisms"
+  ]
+}

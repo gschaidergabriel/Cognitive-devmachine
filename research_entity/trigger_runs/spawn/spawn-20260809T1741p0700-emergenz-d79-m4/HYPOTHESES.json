@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1741p0700-emergenz-d79-m4",
+  "selected_microdirection": "adaptive_compensation_confounds_lesion_rescue",
+  "status": "OPEN",
+  "promotion": "NONE",
+  "hypotheses": [
+    {"id":"H-SPAWN-EM-01","claim":"Allowing online adaptation during perturbation attenuates delayed lesion loss relative to acute frozen-learning lesion loss for redundant/plastic FRANK pathways.","counterhypothesis":"Compensation is negligible at relevant FRANK timescales, so acute and delayed lesion rankings match.","prediction":"For at least some H1 pathways, chronic lesion loss after a fixed learning budget is materially smaller than acute frozen-learning loss.","falsifier":"Across preregistered H1 episodes/pathways, frozen-vs-allowed learning produces no material change in lesion effect or causal ranking.","status":"OPEN"},
+    {"id":"H-SPAWN-EM-02","claim":"A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effect after adaptation.","counterhypothesis":"Recovered chronic function implies the lesioned mechanism was not necessary in the original state.","prediction":"Common-snapshot acute lesion shows large loss while the same lesion after adaptation shows near-baseline performance plus measurable rerouting/parameter change.","falsifier":"Any pathway with near-zero chronic lesion effect also has near-zero acute frozen-learning effect from the same pre-lesion snapshot.","status":"OPEN"},
+    {"id":"H-SPAWN-EM-03","claim":"Mechanism-only rescue after adaptive compensation can under-recover or worsen outcome unless learner state is rolled back or counterfactually matched.","counterhypothesis":"Restoring the lesioned mechanism is sufficient regardless of adaptation history.","prediction":"Some adapted states show worse outcome after mechanism-only rescue than immediately before rescue, while full state rollback restores baseline.","falsifier":"Across H1 adaptive lesions, mechanism-only rescue is statistically equivalent to state-rollback/counterfactual-twin rescue.","status":"OPEN"},
+    {"id":"H-SPAWN-EM-04","claim":"Perturbation duty cycle is part of causal measurement identity because it changes adaptation opportunity and therefore measured chronic effect.","counterhypothesis":"Only cumulative lesion exposure matters; schedule does not affect inferred causal role.","prediction":"Continuous vs intermittent perturbation with declared matched budgets yields different compensation trajectories and chronic readouts.","falsifier":"Duty cycle never changes compensation or causal ranking after matched exposure/data/compute controls.","status":"OPEN"},
+    {"id":"H-SPAWN-EM-05","claim":"A two-window protocol separating acute frozen-learning necessity from chronic adaptive compensation is more informative than a single lesion metric.","counterhypothesis":"A single delayed lesion/rescue metric is sufficient for causal interpretation.","prediction":"The pair (acute_loss, compensation_gain) predicts cross-context/cross-implementation outcomes better than chronic_loss alone.","falsifier":"Two-window metrics add no out-of-sample predictive or falsification value over the best single lesion metric.","status":"OPEN"}
+  ],
+  "hard_distinctions": [
+    "causal_necessity != adaptation_compensated_performance",
+    "rescue_magnitude_without_state_lineage != mechanism_restoration",
+    "intervention_schedule != incidental_metadata"
+  ]
+}

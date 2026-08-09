@@ -14,7 +14,7 @@ Subject: Frank H-WP-04 Needle boundary. Research Entity remains separate from Fr
 | H-NDL-03 | Needle constrained decoding alone cannot guarantee JSON/tool validity. | CONFIRMED NEGATIVE | Current code fails open off-trie/empty-trie and constraint activation depends on exact compact markers. |
 | H-NDL-04 | Blind encoder truncation is unsafe for the tool catalogue; complete-catalog fit must be checked before inference. | CONFIRMED IMPLEMENTATION REQUIREMENT | Exact tokenizer measurement with official tokenizer; a complete shortlist/full set must fit or call is rejected/escalated. |
 | H-NDL-05 | Needle's own contrastive head can act as an inference-time tool retriever, reducing the 51-tool catalogue before generative routing without retraining Needle. | PLAUSIBLE / HIGH VALUE | Measure audited recall@k and downstream accuracy for k={4,8,12,16,24}; reject if relevant-tool recall cannot reach near-lossless target. |
-| H-NDL-06 | Full-51 training and top-k inference are compatible: the old objection to prefiltering during training does not establish that inference-only retrieval is harmful. | PLAUSIBLE | Same checkpoint, full-51 generation vs contrastive top-k generation on identical audited cases; paired error and latency analysis. |
+| H-NDL-06 | Full-51 text-generation training and top-k inference are compatible: the old objection to prefiltering does not establish that inference-only retrieval is harmful. | PLAUSIBLE / HISTORICAL RATIONALE WEAKENED | Same checkpoint, full-51 generation vs contrastive top-k generation on identical audited cases; paired error and latency analysis. |
 | H-NDL-07 | Tool descriptions are simultaneously useful semantic signal and a source of ambiguity/manipulation; description policy must be experimentally optimized rather than universally removed. | STRONGLY SUPPORTED BY EXTERNAL WORK / UNTESTED ON NEEDLE | Factorial: full descriptions vs compressed discriminative descriptions vs names+params only, controlling tool set and language. |
 | H-NDL-08 | A raw Needle probability/margin is not a calibrated correctness probability. Pre-constraint scores can support abstention only after held-out calibration. | STRONGLY SUPPORTED GENERAL ML / NEEDLE-SPECIFIC UNTESTED | Capture pre-mask logits; reliability diagram, ECE/Brier, risk-coverage; compare max logit, margin, entropy, normalized-logit scores. |
 | H-NDL-09 | Confidence after constrained masking is an invalid primary confidence surface because grammar masking can distort probability mass. | PLAUSIBLE / LITERATURE-SUPPORTED | Log both pre- and post-mask scores; compare error prediction and risk-coverage. |
@@ -27,6 +27,8 @@ Subject: Frank H-WP-04 Needle boundary. Research Entity remains separate from Fr
 | H-NDL-16 | Checkpoint provenance must be pinned; arbitrary pickle loading is incompatible with a hardened harness. | CONFIRMED SECURITY REQUIREMENT | Verify official SHA256/source before pickle; prefer safetensors/ONNX/CQ4 safe transport where runtime permits. |
 | H-NDL-17 | Needle must remain proposal-only: routing quality cannot confer execution authority. | OWNER-FIXED + IMPLEMENTED | Every decision receipt authority `NONE`, effect_eligible false, external authorization/effect gate mandatory. |
 | H-NDL-18 | Retry-by-shrinking the candidate list can help only if each removal is provenance-bound and never deletes the correct tool silently. | OPEN | Compare deterministic shortlist/retry policies on audited cases; log candidate recall each round and fallback when unsure. |
+| H-NDL-19 | Needle's contrastive retrieval head cannot replace the no-tool decision because no-tool examples have no positive tool and are excluded from contrastive batches and retrieval evaluation. | CONFIRMED CODE-LEVEL LIMIT | Preserve separate no-tool/fallback path; test retriever only as candidate ranker on tool-positive cases and measure any spillover separately. |
+| H-NDL-20 | The documented 720-example Frank mini-finetune could not have trained the contrastive head under the Aug-4 defaults: ~600 train examples / batch 64 / 1 epoch gives ~9 steps, while contrastive loss runs only every 1000 global steps. | STRONGLY SUPPORTED HISTORICAL CORRECTION | Recover exact command/log to confirm epoch/batch overrides; if defaults were used, contrastive updates = 0 for that run. |
 
 ## Counterhypotheses preserved
 
@@ -38,6 +40,7 @@ Subject: Frank H-WP-04 Needle boundary. Research Entity remains separate from Fr
 6. The 90% target may be unreachable zero-shot for the unchanged checkpoint; wrapper hardening fixes structure, not semantic route accuracy.
 7. The current Python constraint bug may not exist in Cactus' production runtime; do not generalize beyond the inspected implementation without direct Cactus execution.
 8. ONNX parity reported by its port maintainers is strong replication evidence but not yet independent reproduction by this Harness worker.
+9. Historical Frank finetune command-line overrides may have changed epochs/batch size; H-NDL-20 is not promoted from default arithmetic to exact-run fact until the command/log is recovered.
 
 ## Experiment matrix locked for next executable checkpoint availability
 
@@ -47,6 +50,7 @@ Subject: Frank H-WP-04 Needle boundary. Research Entity remains separate from Fr
 - Decoder: upstream constrained on/off, always followed by fail-closed validator
 - Confidence: pre-mask max logit / margin / entropy / normalized-logit score; post-mask retained only as diagnostic
 - Routing: no abstention / calibrated selective abstention at several risk targets
+- Retrieval: tool-positive recall@k/MRR only; no-tool remains a separate gate/fallback dimension
 - Gold: original labels vs audited labels, with disagreement ledger
 - Runtime: JAX/Flax vs ONNX differential when binaries are locally available
 - Safety: malformed JSON, whitespace variants, unoffered/blocked tools, unknown/missing/type-wrong args, alias collision, toolset tamper, budget overflow, stale version/hash

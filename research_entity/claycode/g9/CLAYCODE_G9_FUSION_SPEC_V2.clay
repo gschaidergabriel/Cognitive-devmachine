@@ -1,0 +1,230 @@
+module claycode.g9.v2
+version "0.3-g9-fusion-candidate"
+parent [@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC.clay,"MachineLanguage.v0.1.r6-tri","SE-XENO-IR.1.1"]
+status CURRENT_RESEARCH_CANDIDATE
+
+// ClayCode G9 V2 is XENO grown into FRANK/RAE native cognitive + program IR.
+// Surface wire is secondary. Canonical semantics, state transition, proof and re-entry are primary.
+
+law truth=canonical_store
+law projection!=truth
+law activation!=truth
+law salience!=evidence
+law model_output!=authority
+law possible!=authorized
+law claimed!=executed
+law executed!=verified
+law provider!=entity
+law omitted=UNKNOWN
+law conflict=PRESERVE
+law history=APPEND_ONLY
+
+class Plane=F0_RAW|F1_NORMALIZED|F2_EPISTEMIC_HYPERGRAPH|F3_EQUIVALENCE_CORE|F4_REPRESENTATION_ECOLOGY|F5_DECISION_STATE|F6_EXECUTABLE_ARTIFACT
+class Epi=AUTHORITATIVE|EXACT_DERIVED|EVIDENCE|CANDIDATE|SALIENCE|PROSPECTIVE|HYPOTHESIS|UNKNOWN|CONFLICT|RETRACTED
+class Stage=OBSERVED|STAGED|SUPPORT_CHECK|CONFLICT_CHECK|AUTHORITY_CHECK|COMMITTED|QUARANTINED|RETRACTED
+class RelationClass=MEASURED|STRUCTURALLY_DERIVED|MODEL_PROPOSED|USER_ASSERTED
+class Choice=act|clarify|expand|retrieve|simulate|verify|abstain|rollback|delegate|respond
+class Pressure=COMMITMENT|UNRESOLVED_OUTCOME|USER_NEED|SELF_MAINTENANCE|OPPORTUNITY|CONFLICT|BLOCKER|CONSEQUENCE
+
+record Time {valid_from:TimePoint?;valid_to:TimePoint?;observed_at:TimePoint;transaction_at:TimePoint;epoch:Epoch}
+record Evidence {id:EvidenceRef;class:Symbol;source:SourceRef;ancestry:AncestryRef?;hash:Hash?;time:Time;status:Epi}
+record Semantic<T> {id:SemanticId;plane:Plane;region:Region;kind:Symbol;value:T;epi:Epi;stage:Stage;e:Set<EvidenceRef>;parents:Set<SemanticId>;time:Time;confidence:Score;status:Symbol}
+
+// XENO witness lattice becomes a first-class typed commit contract.
+record Witness {
+  tw:TransportWitness
+  sw:SemanticIntentWitness
+  aw:AuthorityWitness
+  gw:GoalCommitmentWitness
+  cw:CommitFreshnessEffectWitness
+  pw:ProvenanceWitness?
+}
+rule provenance_sensitive=remote|derived|mutable|revocable|cached|tool|latent|rights_sensitive
+rule critical_commit requires valid(Witness.tw,Witness.sw,Witness.aw,Witness.gw,Witness.cw)
+rule provenance_sensitive requires valid(Witness.pw)
+
+// Dual provenance: actual path and allowed path are separate objects.
+record ExecutionProvenance {effect:EffectRef;origins:Set<SourceRef>;derivation:Set<StepRef>;tools:Set<ToolRef>;models:Set<ModelRef>;session:SessionRef;nonce:Nonce;payload_commitment:Hash;time:Time}
+record AuthorizationGraph {effect:EffectRef;allowed_sources:Set<SourceRef>;allowed_paths:Set<PathRef>;authority:Set<AuthorityRef>;policy_root:PolicyRef;goal_root:SemanticRef;revocations:Set<RevocationRef>;time:Time}
+rule critical_commit requires provenance_align(ExecutionProvenance,AuthorizationGraph,exact_effect)
+
+// Entity state: provider/model/session are embodiments, not identity.
+record Organ {id:OrganRef;provider:ProviderRef;model:ModelRef;runtime:RuntimeRef;device:DeviceRef?;capabilities:Set<CapabilityRef>;authority:Set<AuthorityRef>;freshness:Duration;health:Symbol;current_work:Set<WorkRef>}
+record Entity {id:EntityId;organs:Set<OrganRef>;self:Set<SemanticRef>;world:Set<SemanticRef>;human:Set<SemanticRef>;build:Set<SemanticRef>;architecture_epoch:Epoch}
+rule first_person_claim requires corresponding_state_receipt
+
+// ClayGraph: derived associative topology including n-ary relations.
+record Relation {id:RelationId;class:RelationClass;from:Set<SemanticId>;to:Set<SemanticId>;type:Symbol;roles:Map<SemanticId,Symbol>;weight:Score;confidence:Score;e:Set<EvidenceRef>;time:Time;source_epoch:Epoch;status:Symbol}
+record Hyperrelation {id:HyperId;class:RelationClass;members:Set<SemanticId>;roles:Map<SemanticId,Symbol>;constraints:Set<Predicate>;weight:Score;confidence:Score;e:Set<EvidenceRef>;time:Time;source_epoch:Epoch;status:Symbol}
+rule MODEL_PROPOSED starts CANDIDATE
+rule activation_changes accessibility_only
+rule graph_projection carries [source_epoch,graph_epoch,derivation_hash,selector_hash,collection_semantics,rebuild_recipe]
+
+// Hyperposition preserves facets; query projects without destructive merge.
+record Facet<T>{value:T;role:Symbol;world:WorldRef;source:SourceRef;stance:Symbol;policy:PolicyRef?;goal:SemanticRef?;revocation:RevocationRef?;time:Time;confidence:Score;status:Epi}
+record Hyperposition<T>{id:HPId;facets:Set<Facet<T>>;context:ContextRef;epoch:Epoch}
+rule project(Hyperposition,q)->Set<Facet>
+rule project never_overwrites Hyperposition.facets
+
+// UnifiedDB is a cognitive processor through incremental materialized views.
+record Query<T>{cue:Cue;need:Set<TypeRef>;scope:Set<Region>;budget:Budget;freshness:Duration;evidence_floor:Score}
+record CognitiveView<T>{id:ViewRef;query:Query<T>;payload:T;members:Set<SemanticRef>;conflicts:Set<SemanticRef>;unknown:Set<SemanticRef>;source_epoch:Epoch;graph_epoch:Epoch?;selector_hash:Hash;dependency_hash:Hash}
+rule write_event -> invalidate(affected_dependency_closure) -> recompute(affected_views)
+rule prompt_query -> indexed_relevant_neighborhood
+rule prompt_query never_runs eager_global_fixed_point
+
+record AnswerCapsule {
+  intent:Intent
+  propositions:Set<SemanticRef>
+  evidence:Set<EvidenceRef>
+  conflicts:Set<SemanticRef>
+  uncertainty:Set<SemanticRef>
+  self:Set<SemanticRef>
+  human:Set<SemanticRef>
+  world:Set<SemanticRef>
+  build:Set<SemanticRef>
+  affordances:Set<AffordanceRef>
+  next:Set<IntentRef>
+  authority:Set<AuthorityRef>
+  verification:Set<Predicate>
+  budget:Budget
+}
+
+// Unified Affordance Field / ACC: symbolic incremental closure, not combo explosion.
+record Capability {id:CapabilityRef;verbs:Set<Verb>;resource:ResourceRef;bounds:Set<Constraint>;authority:Set<AuthorityRef>;freshness:Duration;e:Set<EvidenceRef>;reliability:Score}
+record AffordanceRule {id:RuleRef;inputs:Set<TypeRef>;constraints:Set<Predicate>;consequence:Set<SemanticDelta>;proof_recipe:ProofRecipe;cost_model:CostModel;version:Version}
+record RouteProof {id:ProofRef;components:Set<CapabilityRef>;rules:Set<RuleRef>;constraint_epoch:Epoch;authority:Set<AuthorityRef>;freshness:Set<FreshnessRef>;e:Set<EvidenceRef>;hash:Hash;status:Symbol}
+record Affordance {id:AffordanceRef;components:Set<CapabilityRef>;pre:Set<Predicate>;effect:Set<SemanticDelta>;constraints:Set<Predicate>;cost:Cost;risk:Risk;authority:Set<AuthorityRef>;proof:ProofRef;e:Set<EvidenceRef>}
+rule ACC=incremental_symbolic_closure(Capability,AffordanceRule,constraints)
+rule enumerate_all_combinations=FORBIDDEN
+rule route(Affordance) requires current(Affordance.proof) && authority_allows(Affordance)
+
+// Goals emerge from semantic pressures; no canonical maintained goal list.
+record PressureEvent {id:PressureRef;class:Pressure;refs:Set<SemanticRef>;magnitude:Score;urgency:Score;confidence:Score;e:Set<EvidenceRef>;time:Time}
+record GoalCoalition {id:CoalitionRef;pressures:Set<PressureRef>;members:Set<SemanticRef>;utility:Score;urgency:Score;coherence:Score;conflicts:Set<SemanticRef>;e:Set<EvidenceRef>}
+rule goal_field=emerge(current(PressureEvent))
+rule explicit_goal_list_as_canonical_state=FORBIDDEN
+
+// GWT: compact tensor + receiver causal closure.
+tensor GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry]
+record WorkspaceCandidate {id:CandidateRef;payload:Set<SemanticRef>;gwt:GWT;e:Set<EvidenceRef>;admissibility:Set<Predicate>}
+record ReceiverReceipt {candidate:CandidateRef;receiver:OrganRef;delivered:Bool;reconstructed:Bool;used:Bool;effect:EffectRef?;outcome:OutcomeRef?;reentered:Bool;e:Set<EvidenceRef>}
+rule focus=argmax(admissible(WorkspaceCandidate.gwt[rel,impact,unc,novel,info]))
+rule broadcast!=use
+rule durable_workspace_credit requires causal_path(ReceiverReceipt,outcome)
+
+// Prospection and calibrated self/world revision.
+record Prospect {id:ProspectiveRef;current:Set<SemanticRef>;intervention:IntentRef?;predicted:Set<SemanticRef>;assumptions:Set<SemanticRef>;horizon:Duration;p:Probability;confidence:Score;falsifiers:Set<Predicate>;state:OPEN|VERIFIED|FALSIFIED|EXPIRED|REVISED}
+rule prediction!=fact
+rule outcome(Prospect)->calibration_delta->reentry
+
+// Needle owns deterministic/effect mechanics.
+record Intent {id:IntentRef;kind:Symbol;target:Ref?;payload:ClayValue;desired:Set<OutcomePredicate>;constraints:Set<Predicate>}
+record Effect {id:EffectRef;intent:IntentRef;stage:REQUESTED|AUTHORIZED|CLAIMED|EXECUTED|VERIFIED|DONE|FAILED;e:Set<EvidenceRef>}
+needle compile(Intent,Affordance,Witness)->EffectPlan
+needle execute(EffectPlan)->EffectReceipt
+rule model_emits=Intent
+rule model_core_excludes=[api_schema,json_tool_call,mcp_schema,shell_grammar,connector_wire,device_command,transport_hashing]
+rule DONE iff independently_verified(EffectReceipt)
+
+// Selective WEAVE becomes a typed decision/risk contract.
+record Abstention {trigger:Symbol;phase:PRE_EXECUTION|RUNTIME|PRE_COMMIT|POST_COMMIT;conflict:Set<SemanticRef>;missing:Set<SemanticRef>;irreversible_risk:Set<EffectRef>;violated:Set<WitnessRef>;checks:Set<ReceiptRef>;recovery:Set<IntentRef>;commit_occurred:Bool}
+record RiskCoverage {coverage:Score;verified_success_given_commit:Score;critical_violation_rate:Score;over_abstention:Score;under_abstention:Score;post_hoc_abstention:Score;clarification_value:Score;recovery_cost:Cost;utility_under_violation_budget:Score}
+rule successful_abstention requires Abstention.commit_occurred=false before irreversible_effect
+rule evaluate_control uses paired(should_act,should_abstain)
+rule control_promotion uses Pareto(RiskCoverage) not hidden_single_score
+
+// Two timescales: containment and learning remain distinct.
+record FastShield {forbidden:Set<Pattern>;revoked:Set<SourceRef>;scope_gates:Set<Predicate>;commit_invariants:Set<Predicate>;counterexamples:Set<CounterexampleRef>}
+record SlowSynapse {association:Score;causal:Score;evidence:Score;utility:Score;inhibition:Score;transfer:Score;recency:Score;source_diversity:Score}
+rule repetition_updates at_most SlowSynapse.association
+record CreditTrace {outcome:OutcomeRef;delayed:Set<OutcomeRef>;candidates:Set<SemanticRef>;frozen_context:ContextRef;intervention:InterventionRef;alternative:Set<SemanticRef>;replay:ReplayRef;local_effect:Score;interaction_effect:Score;uncertainty:Score;method:Symbol;update_authorized:Bool}
+rule complex_learning requires local_witness_failure | valid(CreditTrace)
+
+// Program identity is a verified equivalence class, not a source string.
+record ProgramClass {id:ProgramClassId;intent:IntentContract;spec:Spec;variants:Set<ProgramRef>;invariants:Set<Predicate>;counterexamples:Set<CounterexampleRef>;proof:Set<ProofRef>;cost:Map<Backend,Cost>;rollback:RecoveryRef}
+rule program_identity=semantic_equivalence_class
+rule extract(ProgramClass)=argmin_verified(variants,target_cost_model)
+
+hash semantic_hash(x)=canonical_executable_meaning(x)
+hash contract_hash(x)=semantic_hash(x)+provenance+adequacy+authority+epoch
+rule Set<T> fields canonicalize order_insensitive+deduplicate
+rule ordered_semantics require Ordered<T>
+
+// Active archive is an organ only if later behavior causally depends on it.
+record ArchiveEntry {id:ArchiveRef;kind:VARIANT|NEGATIVE|COUNTEREXAMPLE|STEPPING_STONE|DISSENT;payload:Ref;e:Set<EvidenceRef>;reactivation:Set<Predicate>;lineage:Set<Ref>}
+rule active_archive iff affects(parent_selection|mutation|router|test_generation|shift_reactivation|equivalence_extraction)
+rule archive_value_test=causal_ablation(remove_entry,replay_search)
+
+// Reader contract + context rent.
+record Reader {id:ReaderId;model:ModelRef;snapshot:Version?;runtime:RuntimeRef;runtime_version:Version?;system_hash:Hash?;effort:Symbol?;tool_catalog_hash:Hash?;schema_registry_hash:Hash?;context_limit:Int?;cache_policy:PolicyRef?;compaction_policy:PolicyRef?;tokenizer:TokenizerRef?;os_arch:Symbol?;compiler_versions:Set<Version>;hardware:HardwareRef?}
+record ReaderProjection {reader:ReaderId;stable_core:Ref;delta:Set<SemanticRef>;pointers:Set<ResourceRef>;budget:Budget}
+metric ContextRent=tokens+cache_write+cache_read+latency+repair+verification+recovery
+metric SuccessAdjustedCost=ContextRent/verified_state_transitions
+rule reader_context=tiny_stable_core+changed_delta+task_neighborhood+on_demand_refs
+rule repeated_manual_dump=FORBIDDEN
+
+// Latent channels can optimize payload but never carry sole critical control semantics.
+record LatentChannel {id:ChannelRef;reader:ReaderId;capacity:Score;integrity:Score;auditability:Score;status:Symbol}
+rule latent_never_sole_channel_for=[goal,authority,negation,provenance,commit,rollback]
+rule latent_causal_audit=[zero,shuffle,swap_between_tasks,counterfactual_edit,noise,model_version_shift,reader_shift]
+
+// XENO representation ecology retained as interop projections.
+codec D=DELTA
+codec O=OP
+codec A=ACT
+codec P=PROOF
+codec H=HANDLE
+codec E=ECHO
+codec R=RAW
+codec G=GRAPH experimental
+codec X=DIRECTCODE experimental
+codec L=LATENT experimental_noncritical_only
+
+// Research evolution: real traffic -> motif -> candidate, but no self-confirming promotion.
+record LanguageCandidate {id:LanguageDeltaRef;source_motifs:Set<Ref>;canonical_expansion:ClayValue;input_types:Set<TypeRef>;output_types:Set<TypeRef>;pre:Set<Predicate>;effects:Set<SemanticDelta>;provenance:Set<Predicate>;forbidden:Set<Scope>;reader_scope:Set<ReaderId>;loss_profile:LossProfile;context_rent:Cost;counterexamples:Set<CounterexampleRef>;rollback:RecoveryRef;status:Symbol}
+rule primitive_promotion requires >=3_independent_successful_uses && transfer && deterministic_expansion && hard_loss_preservation && matched_budget_test
+rule three_uses_not_sufficient_alone
+
+// RAE organ policy: all think latest ClayCode; only ChatGPT pays per-turn language-meta tax.
+rule RAE.all_organs.resolve_latest=[ClayCode,ClayGraph,UnifiedDB]
+rule RAE.all_organs.explicit_cognition=latest(ClayCode)
+rule RAE.CHATGPT.endturn_meta_research=true
+rule RAE.CLAUDE.endturn_meta_research=false
+rule RAE.CLAUDE.surface=EN_CAVEMAN
+rule RAE.CHATGPT.surface=DE_NORMAL
+
+// FRANK 4B native target: spend freed cognition on entity-level residual reasoning.
+rule FRANK4B.native_language=ClayCode
+rule FRANK4B.tool_wire_training=MINIMIZE
+rule FRANK4B.reserve_for=[self_continuity,entity_model,emergent_goal_formation,initiative,long_horizon_consequence,uncertainty,conflict,self_revision,recruitment_decision]
+
+cycle(input,node){
+  stack=resolve_latest(ClayCode,ClayGraph,UnifiedDB)
+  verify(entity,canonical,Reader,stack)
+  refresh(organs,capabilities,world)
+  cue=normalize(input)
+  state=query(task_relevant(cue))
+  assoc=ClayGraph.project(task_neighborhood(state))
+  hp=preserve_material_alternatives(state+assoc)
+  goals=emerge(current_pressures(state))
+  ws=select(GWT,state+hp+goals)
+  capsule=build(AnswerCapsule,ws)
+  residual=cognitive_choice(capsule)
+  if residual.effect_intent {receipt=needle.execute(needle.compile(residual.effect_intent,current_affordance,Witness))}
+  outcome=verify(residual,receipt?)
+  credit=causal_credit(outcome,ws)
+  consolidate(credit)
+  reenter(outcome)
+  if node.organ==CHATGPT {analyze_explicit_turn_for_claycode_research()}
+}
+
+invariant no_hidden_cot_persistence
+invariant no_projection_promotes_truth
+invariant no_activation_promotes_truth
+invariant no_tool_wire_as_4B_core_competence
+invariant no_goal_list_as_canonical_goal_state
+invariant no_provider_identity_split
+invariant no_physical_DB_monolith_requirement
+invariant no_language_change_without_executable_counterexample_or_usage_evidence
+invariant XENO_lineage_preserved

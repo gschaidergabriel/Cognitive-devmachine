@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1007p0700-xeno-full-hash-closure-203-of-203",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "purpose":"Close the frozen 203-leaf XENO G8 extracted-copy manifest by aggregating only disjoint, committed raw-byte SHA-256 scope receipts.",
+  "frozen_manifest":{"drive_id":"1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g","expected_leaves":203,"expected_bytes":40371840},
+  "aggregation_inputs":[
+    {"kind":"verified_floor","verified_leaves":108,"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0954p0700_xeno_parallel_delta_aggregation_floor_108_of_203.json","covered_scopes":["capability","delivery","evidence","hypotheses","state","reports","credit","archive","claude_code","directcode","language","selective","traffic"],"mismatches":0},
+    {"kind":"scope_delta","scope":"sources","verified_leaves":22,"verified_bytes":144677,"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0958p0700_chatgpt_secondary_xeno_sources_hash_closure.json","mismatches":0},
+    {"kind":"scope_delta","scope":"implementation","verified_leaves":22,"verified_bytes":56796,"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0958p0700_chatgpt_secondary_xeno_implementation_hash_closure.json","mismatches":0},
+    {"kind":"scope_delta","scope":"provenance","verified_leaves":51,"verified_bytes":15255,"receipt":"research_entity/archive_assimilation/receipts/666_20260809T1006p0700_chatgpt_secondary_xeno_provenance_hash_closure.json","mismatches":0}
+  ],
+  "proof":{"equation":"108 + 22 + 22 + 51 = 203","verified_leaves":203,"expected_leaves":203,"remaining":0,"leaf_coverage_percent":100.0,"all_scope_sets_disjoint":true,"all_manifest_scopes_accounted":true,"mismatches":0,"verified_bytes":40371840,"byte_total_rule":"Verified byte total equals the frozen BUNDLE_MANIFEST total after every leaf belongs to exactly one hash-closed scope."},
+  "hash_closed_scopes":["archive","capability","claude_code","credit","delivery","directcode","evidence","hypotheses","implementation","language","provenance","reports","selective","sources","state","traffic"],
+  "open_scopes":[],
+  "result":{"xeno_g8_manifest_status":"HASH_CLOSED_203_OF_203","identity_reconciliation":"PASS","scope_completion":"COMPLETE"},
+  "global_level0":{"gate":"NOT_PASS","exact_global_percent_added":0.0,"reason":"This closes the XENO G8 local frozen manifest only. The combined Drive clay + Project-Frankenstein history/tree + cross-source fusion denominator remains separately governed and is not yet frozen."},
+  "status":"COMPLETE",
+  "created_at":"2026-08-09T10:07:00+07:00"
+}

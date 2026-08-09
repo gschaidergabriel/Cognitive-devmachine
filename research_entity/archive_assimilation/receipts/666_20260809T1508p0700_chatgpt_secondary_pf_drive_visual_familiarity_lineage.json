@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1508p0700_chatgpt_secondary_pf_drive_visual_familiarity_lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T15:08:00+07:00",
+  "status": "COMPLETE_PARTIAL_SOURCE_RECONCILIATION",
+  "scope": {
+    "kind": "query_directed_semantic_and_cross_source_lineage_shard",
+    "project_frankenstein_frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "focus": "FrankEye / Retina / visual familiarity / adaptive visual learning / anti-hallucination lineage",
+    "global_exact_coverage_credit_percent": 0.0,
+    "reason_no_exact_credit": "Combined Level-0 denominator remains NOT_FROZEN; this receipt is a semantic/history shard and must not be interpreted as repository-wide tree/history closure."
+  },
+  "source_refs": [
+    {
+      "source_class": "GITHUB_FROZEN_HEAD_CODE",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "tools/frank_eye.py"
+    },
+    {
+      "source_class": "GITHUB_FROZEN_HEAD_CODE",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "ext/feature_trainer.py"
+    },
+    {
+      "source_class": "GITHUB_FROZEN_HEAD_CODE",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "services/neural_reality_gate.py"
+    },
+    {
+      "source_class": "DRIVE_HISTORICAL_PROJECT_NOTE",
+      "drive_file_id": "1dSdxpgiq4SWIN_A7Jp_DXWERR-ohECeV",
+      "title": "frank_ink_vision_v9_may10.md",
+      "modified_time": "2026-05-10T16:49:48Z"
+    },
+    {
+      "source_class": "DRIVE_HISTORICAL_PROJECT_NOTE",
+      "drive_file_id": "1RsagrM_JUl_s0QOw8tRmYxsjU3YR6aoe",
+      "title": "autonomous_vision_training.txt",
+      "modified_time": "2026-08-05T22:36:56Z"
+    },
+    {
+      "source_class": "DRIVE_HISTORICAL_PROJECT_NOTE_WITH_LIVE_VERIFICATION_REPORTED",
+      "drive_file_id": "1Rj5dGKDC_TvuQEmTS7xX1X40qSMd2CGX",
+      "title": "frank_image_anti_hallucination_may16.md",
+      "modified_time": "2026-05-16T08:02:35Z"
+    }
+  ],
+  "findings": [
+    {
+      "id": "VIS-LINEAGE-001",
+      "epistemic_class": "FROZEN_HEAD_CODE_OBSERVATION",
+      "status": "CURRENT_FOR_FROZEN_HEAD_ONLY",
+      "claim": "Project-Frankenstein frozen-head FrankEye is a local CPU-oriented inference pipeline combining a Retina-v8-style CNN classifier, DINOv2 scene features, OCR, Haar face detection, handcrafted visual features and optional GoL dynamics; the visible code path loads fixed Retina weights and performs inference, not online personal visual learning.",
+      "confidence": 0.98
+    },
+    {
+      "id": "VIS-LINEAGE-002",
+      "epistemic_class": "CROSS_SOURCE_LINEAGE_OBSERVATION",
+      "status": "OPEN_RECONCILIATION",
+      "claim": "A separate Drive-documented Frank Vision v9 lineage reports a materially richer CPU-only open-vocabulary stack using CLIP, YOLO, DINOv2, OCR, Retina fallback and structured VISION-FACTS, with measured concept-recall/latency and concurrency hardening. Direct searches of the frozen Project-Frankenstein HEAD did not surface the documented clip_classifier lineage, so the two surfaces must not be silently treated as the same version.",
+      "confidence": 0.94,
+      "falsifier": "Locate the exact CLIP/YOLO implementation or equivalent content in the frozen Project-Frankenstein history/tree and establish ancestry/identity."
+    },
+    {
+      "id": "VIS-LINEAGE-003",
+      "epistemic_class": "DRIVE_HISTORICAL_DESIGN",
+      "status": "SUPERSEDED_OR_UNVERIFIED_AS_RUNTIME_UNTIL_CODE_RECEIPT",
+      "claim": "The autonomous-vision training design framed desktop perception as intermittent, curiosity/context/post-action-triggered sensing with hard cooldown/day budgets, no-look training examples, chat-active blocking and habituation based on repeated similar screenshots. It is evidence of a historical design mechanism, not proof that the current runtime implements it.",
+      "confidence": 0.98
+    },
+    {
+      "id": "VIS-LINEAGE-004",
+      "epistemic_class": "DRIVE_HISTORICAL_VERIFICATION_REPORT",
+      "status": "HISTORICALLY_VERIFIED_REPORTED",
+      "claim": "The May-16 anti-hallucination lineage documents a concrete multimodal failure mode: generator/analyzer tool confusion plus downstream guessing on empty/failing vision output. The reported fix separated describe_image from image_gen, added no-guess prompt rules and explicit Vision-Fehler propagation, then reported live dependency repair and grounded OCR verification.",
+      "confidence": 0.97
+    },
+    {
+      "id": "VIS-LINEAGE-005",
+      "epistemic_class": "FROZEN_HEAD_CODE_OBSERVATION",
+      "status": "CURRENT_FOR_FROZEN_HEAD_ONLY",
+      "claim": "Project-Frankenstein feature_trainer encodes FrankEye capability as explicit ground truth for self-knowledge training, while neural_reality_gate contains a distinct learned 'familiarity_valid' reality-monitoring head. This 'familiarity' is cognitive/source-monitoring familiarity, not a personal visual identity/object-familiarity classifier and must not be conflated with the v0.1 Micro Visual Classifier requirement.",
+      "confidence": 0.96
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "VIS-NEG-001",
+      "claim": "No evidence was found in the inspected frozen-head FrankEye code of an online adaptive personal visual classifier/prototype learner with trusted-example provenance, open-set calibration, candidate promotion and rollback.",
+      "scope_limit": "Query-directed inspected files only; not repository-wide proof because recursive tree/history denominator remains blocked."
+    },
+    {
+      "id": "VIS-NEG-002",
+      "claim": "Searches for the documented Drive-side clip_classifier lineage returned no matching frozen-head Project-Frankenstein file in the current GitHub search surface.",
+      "scope_limit": "Search-index negative, not proof of historical absence."
+    }
+  ],
+  "current_program_implications": [
+    "Treat fixed/pretrained scene perception, personal familiarity learning, and reality/confabulation gating as three separate layers/contracts.",
+    "H1/H2/H3 adaptive-visual acceptance tests should preserve the historical no-guess/error-sentinel lesson: missing/failed visual evidence must remain explicit rather than be filled by the model.",
+    "The current mandatory Micro Visual Classifier should not be justified by the neural_reality_gate familiarity head; they solve different problems.",
+    "Historical autonomous-vision trigger/cooldown/habituation ideas are reusable candidates for scheduling/attention policy, but require explicit current-runtime validation before inheritance.",
+    "Cross-source reconciliation must determine whether the Drive CLIP/YOLO Vision v9 branch is ancestor, sibling, deployment-only branch, or superseded branch relative to frozen Project-Frankenstein FrankEye."
+  ],
+  "branch_feedback": {
+    "frank": "DELTA: separate perception inference, learned personal familiarity, and reality-monitoring authority boundaries.",
+    "claycode": "DELTA: visual state contract needs evidence provenance/error sentinel plus versioned classifier/prototype state if adaptive learner is implemented.",
+    "gwt": "DELTA: autonomous visual sensing is a gated attention/input policy candidate; it is not itself ignition/broadcast evidence.",
+    "hyperposition": "NO_CHANGE beyond preserving multiple competing visual hypotheses/evidence sources without collapse before adjudication.",
+    "claygraph": "DELTA: store image evidence, classifier version, source/tool provenance, familiarity result and contradiction links as distinct nodes/edges.",
+    "unifieddb": "DELTA: persist visual evidence separately from learned familiarity/prototype state and from reality-monitor scores.",
+    "harness": "DELTA: add failure-sentinel/no-guess regression, fixed-vs-adaptive classifier differential, cooldown/habituation policy tests, and rollback tests for learned visual identity.",
+    "emergenz": "NO_CHANGE: no emergence claim follows from these visual mechanisms.",
+    "clayresearch": "DELTA: vision lineage contains reusable anti-confab and adaptive-attention mechanisms but unresolved ancestry/version split."
+  },
+  "historical_earned_work": {
+    "new_quantified_hours": 0.0,
+    "mapping_state": "CANDIDATE_PENDING_ROW_LEVEL_DEDUP",
+    "candidate_classes": [
+      "MEASUREMENT_FOUNDATION",
+      "REUSABLE_WITH_ADAPTATION",
+      "NEGATIVE_RESULT_VALUE"
+    ],
+    "warning": "No duplicate earned-work credit assigned until existing Drive retina/adaptive-learning receipts and DOOMSDAY rows are reconciled."
+  },
+  "coordination": {
+    "peer_discovery": "Current connector searches did not expose a dedicated active lease index for this shard; recent workspace receipts were cross-read to avoid named duplicate shards.",
+    "lease_protocol_deviation": "No separate lease artifact was published before analysis because the active lease path/index was not discoverable on the exposed surface. This receipt records the deviation rather than pretending compliance.",
+    "collision_mitigation": "Selected a visual-familiarity cross-source shard not listed among the workspace's recent Project-Frankenstein semantic receipts; if a peer receipt later proves overlap, this receipt should become corroborative/noncounting."
+  },
+  "next_tests": [
+    "Recover exhaustive Project-Frankenstein tree/history manifest through a recursive-read-capable surface; determine exact ancestry of FrankEye/CLIP/YOLO/Retina variants.",
+    "Locate any historical personal visual dictionary/prototype/familiarity learner and compare its update/rollback/open-set semantics to the current v0.1 adaptive visual directive.",
+    "Cross-check Drive Frank Vision v9 claimed commits against reachable repository history once commit-level enumeration is available.",
+    "Build H1 regression fixtures for image-analysis/tool-routing failure sentinels and no-guess behavior."
+  ],
+  "global_gate_effect": {
+    "666_RELEASE_GATE": "NOT_PASS",
+    "combined_denominator": "NOT_FROZEN",
+    "project_frankenstein_recursive_tree_history_blocker": "UNCHANGED"
+  }
+}

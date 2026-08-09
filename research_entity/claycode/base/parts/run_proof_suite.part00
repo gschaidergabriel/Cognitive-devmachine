@@ -1,0 +1,152 @@
+from __future__ import annotations
+import hashlib, json, random, tempfile, traceback
+from pathlib import Path
+from claycode_base import *
+
+OUT=Path(__file__).resolve().parent
+
+APPS = {
+'APP-01-CLI': ('''module app.cli
+fn main(text : String) -> Int {
+  let n = host.file.write("input.txt", text)
+  let reread = host.file.read("input.txt")
+  require n == len(reread)
+  return len(reread)
+}''', ['fs'], ['file'], ['ClayCode']),
+'APP-02-HTTP-WEBSITE': ('''module app.http
+fn main() -> String {
+  return host.http.roundtrip("/", "<h1>ClayCode</h1>")
+}''', ['net'], ['http'], []),
+'APP-03-DB-SERVICE': ('''module app.db
+fn main() -> Int {
+  let a = host.db.transaction("counter", 5)
+  let b = host.db.transaction("counter", 7)
+  return b
+}''', ['db'], ['db'], []),
+'APP-04-CONCURRENT-SERVICE': ('''module app.concurrent
+fn main() -> Int {
+  let total = host.concurrent.sum(25)
+  let c = host.concurrent.cancel()
+  require c == "cancelled"
+  let atomic = host.concurrent.atomic_increment(4, 500)
+  require atomic == 2000
+  return total
+}''', ['concurrency'], ['concurrent'], []),
+'APP-05-GUI-INTERACTIVE': ('''module app.ui
+fn main() -> String {
+  return host.ui.event_loop([1,2,3,4])
+}''', ['ui'], ['ui'], []),
+'APP-06-COMPILER-TOOL': ('''module app.compiler
+fn main() -> Int {
+  return host.compiler.eval_expr("2+3*4")
+}''', ['compiler'], ['compiler'], []),
+'APP-07-GPU-ML-NUMERICAL': ('''module app.numeric
+fn main() -> Float {
+  return host.numeric.matmul_checksum(24)
+}''', ['numeric'], ['numeric'], []),
+'APP-08-SYSTEM-EFFECT': ('''module app.system
+fn main() -> String {
+  return host.system.probe()
+}''', ['system'], ['system'], []),
+}
+
+FRANK_FRAME = r'''module frank.grt
+fn frame(current : RealizedState, goal : OPTION<SemanticRef>) -> GRTFrame {
+  let constraints = current_constraints(current, goal)
+  let M = construct_admissible_possibility_space(current, constraints)
+  return GRTFrame(
+    realized=current,
+    admissible=M,
+    constraints=constraints,
+    generative_map=#frank_transition_model,
+    precedence=current_causal_precedence(),
+    counterfactuals=bounded_counterfactuals(M),
+    observation_surface=current_observation_interfaces(),
+    intervention_surface=current_authorized_interventions(),
+    uncertainty=calibrate_frame_uncertainty(current,M),
+    source_status=THINKING_FRAMEWORK_NOT_WORLD_FACT
+  )
+}'''
+
+G9_CYCLE = r'''cycle(input,node){
+  stack=resolve_latest(ClayCode,ClayGraph,UnifiedDB)
+  dialect_set=load_dialects(task(input))
+  verify(entity,canonical,reader,stack,dialect_set)
+  cue=normalize(input)
+  delta_in=observe_changes(cue,current_state)
+  apply_incremental(delta_in)
+  state=state.query(task_relevant(cue))
+  assoc=graph.project(state)
+  hp=preserve_conflict_unknown(state+assoc)
+  pressures=state.open_pressures(hp)
+  coalition=emerge(pressures)
+  ws=gwt.select(state+hp+coalition)
+  capsule=state.answer_capsule(ws)
+  residual=cognitive_choice(capsule)
+  if residual.effect {effect_intent=EffectIntent(residual);receipt=Needle.execute(effect_intent)}
+  outcome=verify(receipt? or residual)
+  credit=causal_credit(outcome,ws)
+  reenter(Delta(outcome))
+  if node.organ==CHATGPT {meta.analyze_explicit_turn()}
+}'''
+
+# Exact function body is extracted from current gschaidergabriel/frankv0.1 semantic alias
+# gschaidergabriel/Dr.-Unterweger claycode/frank_grt.clay, blob b9027118e886b8da4110c0801f7d5e1cf9d1c3b9.
+
+def frank_runtime(root:Path):
+    rt=make_runtime(root,set())
+    rt.register('current_constraints', lambda current,goal: {'goal':goal,'secure':True})
+    rt.register('construct_admissible_possibility_space', lambda current,constraints: ['stay','explore'])
+    rt.register('current_causal_precedence', lambda: ['observe','decide','act'])
+    rt.register('bounded_counterfactuals', lambda M: [f'cf:{x}' for x in M])
+    rt.register('current_observation_interfaces', lambda: ['user','state'])
+    rt.register('current_authorized_interventions', lambda: ['answer'])
+    rt.register('calibrate_frame_uncertainty', lambda current,M: 0.25)
+    return rt
+
+def run_one(app_id,src,resources,allowed,args):
+    p=parse_executable(src)
+    chk=check_program(p,set(allowed))
+    if not chk.ok: raise AssertionError([d.__dict__ for d in chk.diagnostics])
+    lower=PythonLowerer(); code=lower.lower_program(p)
+    root=OUT/'tmp'/app_id; root.mkdir(parents=True,exist_ok=True)
+    rt1=make_runtime(root/'eval',set(resources)); rt2=make_runtime(root/'compiled',set(resources))
+    fn=p.functions[0]
+    expected=Evaluator(rt1).run(fn,args)
+    ns={}; exec(compile(code,f'<{app_id}>','exec'),ns)
+    observed=ns[fn.name](rt2,*args)
+    if isinstance(expected,float):
+        assert abs(expected-observed)<1e-9,(expected,observed)
+    else: assert expected==observed,(expected,observed)
+    # Negative authority test: source compiles, but absent runtime authority must deny.
+    denied=False
+    try:
+        rt0=make_runtime(root/'denied',set())
+        Evaluator(rt0).run(fn,args)
+    except AuthorityDenied:
+        denied=True
+    if resources and not denied: raise AssertionError('missing runtime authority was not denied')
+    gen_hash=hashlib.sha256(code.encode()).hexdigest()
+    return {
+      'app_id':app_id,'status':'PASS_LOCAL_PROXY','source_sha256':hashlib.sha256(src.encode()).hexdigest(),
+      'semantic_hash':p.semantic_hash,'contract_hash':p.contract_hash,'generated_target_sha256':gen_hash,
+      'reference_result':expected,'compiled_result':observed,'authority_negative_denied':denied,
+      'type_effects':sorted(chk.effects),'runtime':'python-'+__import__('platform').python_version(),
+      'target_surface':__import__('platform').platform(),'compiler_version':VERSION,
+      'generated_source':code,
+      'receipts':rt2.receipts,'adapter_details':{'ui_backend':getattr(getattr(rt2,'sdk',None),'ui_backend',None)},
+    }
+
+def main():
+    (OUT/'tmp').mkdir(exist_ok=True)
+    receipts=[]
+    for app_id,(src,res,allowed,args) in APPS.items():
+        receipts.append(run_one(app_id,src,res,allowed,args))
+
+    # APP-09: current real FRANK GRT frame function, with its dependencies supplied through explicit host bindings.
+    p=parse_executable(FRANK_FRAME,{'frame'}); chk=check_program(p,set())
+    assert chk.ok
+    rt1=frank_runtime(OUT/'tmp'/'frank-eval'); rt2=frank_runtime(OUT/'tmp'/'frank-compiled')
+    fn=p.functions[0]; args=[{'epoch':1},'#goal']
+    const_env={'THINKING_FRAMEWORK_NOT_WORLD_FACT':'THINKING_FRAMEWORK_NOT_WORLD_FACT'}
+    expected=Evaluator(rt1).run(fn,args,extra_env=const_env)

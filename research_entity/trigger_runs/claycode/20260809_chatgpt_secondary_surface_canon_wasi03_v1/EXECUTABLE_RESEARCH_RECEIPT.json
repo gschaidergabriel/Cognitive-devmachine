@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "CC-LOCAL-20260809-TYPED-CANON-01",
+  "run_id": "20260809_chatgpt_secondary_surface_canon_wasi03_v1",
+  "candidate_version": "ClayCode G9 V3 research candidate / canonicalization micro-oracle",
+  "source_refs": [
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "research_entity/claycode/g9/grammar.ebnf"
+  ],
+  "sandbox": {
+    "provider": "local ChatGPT Python sandbox",
+    "runtime": "Python 3.13",
+    "e2b_fresh_execution": false,
+    "reason_e2b_not_used": "E2B is registered RUNTIME_VERIFIED in the repository but was not exposed as an invokable tool on this ChatGPT surface."
+  },
+  "surface_conformance_counterexamples": {
+    "relational_gt": "operator '>' used by current G9 V3 but absent from grammar.operator",
+    "relational_lt": "operator '<' used by current G9 V3 but absent from grammar.operator",
+    "union_field": "POS|NEG used in a record field while type_expr has no union production",
+    "digit_identifier": "4B_emits violates ident first-character rule",
+    "if_statement": "if statement used by current cycle but absent from statement/action_stmt productions"
+  },
+  "canonicalization_fuzz": {
+    "seed": 20260809,
+    "cases": 20000,
+    "set_fields": ["caps", "constraints"],
+    "ordered_field": "ops",
+    "good_canonicalizer": "deduplicate/sort only set-typed fields and preserve Ordered operation order",
+    "bad_canonicalizer": "recursively sorts/deduplicates sequences irrespective of type",
+    "observations": {
+      "set_reorder_duplicate_semantic_hash_preserved": 20000,
+      "set_reorder_duplicate_execution_preserved": 20000,
+      "ordered_swap_execution_changed": 20000,
+      "ordered_swap_good_semantic_hash_changed": 20000,
+      "ordered_swap_bad_hash_collision_despite_execution_change": 20000
+    },
+    "example": {
+      "original_ops": ["set y 2", "set y 3", "inc y -1"],
+      "original_result_y": 2,
+      "swapped_result_y": 1,
+      "bad_hash_relation": "same",
+      "good_hash_relation": "different"
+    }
+  },
+  "expected_semantic_property": "Canonical identity must ignore order/duplicates only where the static type declares set semantics and must preserve order for Ordered sequences.",
+  "observed_semantic_result": "SUPPORTED_WITH_20000_MUTATION_CASES",
+  "failure_classification": [
+    "CURRENT_SURFACE_GRAMMAR_DRIFT",
+    "GLOBAL_ORDER_INSENSITIVE_CANONICALIZATION_REFUTED"
+  ],
+  "repair_change_applied": "No repository language change applied. Run recommends surface/grammar reconciliation in CC-WP-01/02 and freezes type-directed canonicalization as the implementation hypothesis.",
+  "affected_hypotheses": ["H-CC-20260809-01", "H-CC-20260809-02"],
+  "affected_negative_results": ["N-CC-20260809-01"],
+  "affected_branches": ["claycode", "frank", "claygraph", "unifieddb", "harness"],
+  "timing": {
+    "approx_wall_seconds": 2.014,
+    "scope": "local fuzz micro-experiment only"
+  },
+  "epistemic_boundary": "Local bounded test supports the canonicalization invariant and identifies current grammar counterexamples. It does not prove the complete compiler, WASM lowering, live FRANK parity or Qwen-4B performance."
+}

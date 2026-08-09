@@ -1,0 +1,131 @@
+name: WP02 Canonicalizer Ubuntu
+
+on:
+  pull_request:
+    paths:
+      - 'tools/claycode_base_canonicalizer.py'
+      - 'tools/claycode_base_frontend_validation.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - '.github/workflows/wp02-canonicalizer-ubuntu.yml'
+  workflow_dispatch:
+
+jobs:
+  wp02-canonicalizer:
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+
+      - name: Capture Ubuntu runner metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/wp02
+          {
+            echo "utc=$(date -u --iso-8601=seconds)"
+            echo "commit=$(git rev-parse HEAD)"
+            echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF_NAME:-UNKNOWN}}"
+            echo "runner_name=${RUNNER_NAME:-UNKNOWN}"
+            echo "runner_os=${RUNNER_OS:-UNKNOWN}"
+            echo "runner_arch=${RUNNER_ARCH:-UNKNOWN}"
+            echo "kernel=$(uname -srmo)"
+            echo "python=$(python3 --version 2>&1)"
+            echo "cpu_count=$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo UNKNOWN)"
+            echo "mem_kib=$(awk '/MemTotal/{print $2}' /proc/meminfo 2>/dev/null || echo UNKNOWN)"
+          } | tee artifacts/wp02/runner_metadata.txt
+          if command -v lscpu >/dev/null 2>&1; then lscpu > artifacts/wp02/lscpu.txt; fi
+          if [ -f /etc/os-release ]; then cat /etc/os-release > artifacts/wp02/os-release.txt; fi
+
+      - name: Build isolated Python environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv-wp02
+          . .venv-wp02/bin/activate
+          python -m pip install --disable-pip-version-check --upgrade pip
+          python -m pip install --disable-pip-version-check 'lark[interegular]>=1.2,<2'
+          python -m pip freeze | tee artifacts/wp02/pip-freeze.txt
+
+      - name: Existing strict full-corpus frontend validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .venv-wp02/bin/activate
+          /usr/bin/time -v -o artifacts/wp02/frontend-time.txt \
+            python tools/claycode_base_frontend_validation.py \
+              --output artifacts/wp02/frontend-validation.json
+
+      - name: Deterministic canonical syntax validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .venv-wp02/bin/activate
+          /usr/bin/time -v -o artifacts/wp02/canonicalizer-time.txt \
+            python tools/claycode_base_canonicalizer.py \
+              --output artifacts/wp02/canonicalizer.json
+
+      - name: Out-of-box hash-seed invariance experiment
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .venv-wp02/bin/activate
+          python - <<'PY'
+          import json, os, subprocess, sys
+          from pathlib import Path
+
+          outdir = Path('artifacts/wp02/hashseed')
+          outdir.mkdir(parents=True, exist_ok=True)
+          seeds = ['0', '1', '42', '314159']
+          signatures = {}
+          for seed in seeds:
+              p = outdir / f'receipt-{seed}.json'
+              env = dict(os.environ, PYTHONHASHSEED=seed)
+              proc = subprocess.run(
+                  [sys.executable, 'tools/claycode_base_canonicalizer.py', '--output', str(p)],
+                  env=env,
+                  text=True,
+                  stdout=subprocess.DEVNULL,
+                  stderr=subprocess.PIPE,
+              )
+              if proc.returncode != 0:
+                  raise SystemExit(f'canonicalizer failed for PYTHONHASHSEED={seed}: {proc.stderr}')
+              data = json.loads(p.read_text(encoding='utf-8'))
+              signatures[seed] = {
+                  row['path']: row['canonical_syntax_sha256']
+                  for row in data['sources']
+              }
+          baseline = signatures[seeds[0]]
+          passed = all(signatures[s] == baseline for s in seeds[1:])
+          receipt = {
+              'schema_version': '1.0',
+              'experiment': 'bounded out-of-box PYTHONHASHSEED invariance probe',
+              'seeds': seeds,
+              'source_signatures': signatures,
+              'pass': passed,
+              'scope_guard': 'Tests process hash-randomization independence only; does not promote syntax identity to typed semantic IR.'
+          }
+          Path('artifacts/wp02/hashseed-invariance.json').write_text(
+              json.dumps(receipt, ensure_ascii=False, indent=2) + '\n', encoding='utf-8'
+          )
+          print(json.dumps(receipt, ensure_ascii=False, indent=2))
+          if not passed:
+              raise SystemExit(1)
+          PY
+
+      - name: Summarize receipt hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum artifacts/wp02/* 2>/dev/null | tee artifacts/wp02/artifact-sha256.txt || true
+
+      - name: Upload WP02 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp02-canonicalizer-${{ github.run_id }}
+          path: artifacts/wp02
+          if-no-files-found: error
+          retention-days: 30

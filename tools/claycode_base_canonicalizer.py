@@ -2,10 +2,15 @@
 """Deterministic syntax canonicalizer for the active ClayCode BASE repaired frontend.
 
 Scope: CC-WP-02 only. This converts an accepted Lark syntax tree into a stable JSON
-representation that is insensitive to comments and equivalent block-separator layout while
-preserving every non-layout lexical literal that can change program meaning. The canonical
-hash is bound to the exact grammar bytes so parser-contract drift cannot silently preserve an
-old identity. It does NOT claim typed canonical IR; that remains CC-WP-03.
+representation that is insensitive to comments and equivalent block-separator/layout
+trivia while preserving every non-layout lexical literal that can change program meaning.
+The canonical hash is bound to the exact grammar bytes so parser-contract drift cannot
+silently preserve an old identity. It does NOT claim typed canonical IR; that remains
+CC-WP-03.
+
+V17 adds one mandatory semantic-trivia guard to V9: `Needle.owns(X)` and
+`Needle.owns (X)` must canonicalize identically while `Needle.owns X` remains a distinct
+prefix relation.
 """
 from __future__ import annotations
 
@@ -19,7 +24,7 @@ from typing import Any
 from lark import Lark, Token, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
 DEFAULT_SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
@@ -155,6 +160,7 @@ def main() -> None:
         "argument_order": ("rule f(a,b)\n", "rule f(b,a)\n"),
         "dotted_relation_kind": ("rule Needle.lowers X\n", "rule Needle.owns X\n"),
         "bare_owns_vs_prefix_owns": ("rule 4B_need_not_learn Needle.owns\n", "rule Needle.owns X\n"),
+        "call_vs_prefix_owns": ("rule Needle.owns(X)\n", "rule Needle.owns X\n"),
         "lifecycle_order": (
             "rule external_effect lifecycle=[REQUESTED,AUTHORIZED,DONE]\n",
             "rule external_effect lifecycle=[AUTHORIZED,REQUESTED,DONE]\n",
@@ -172,6 +178,14 @@ def main() -> None:
             "record X {\n a:Int\n b:Int\n}\n",
             "record X { a:Int; b:Int }\n",
         ),
+        "qualified_owns_call_horizontal_trivia": (
+            "rule Needle.owns(X)\n",
+            "rule Needle.owns (X)\n",
+        ),
+        "qualified_owns_call_long_horizontal_trivia": (
+            "rule Needle.owns(X)\n",
+            "rule Needle.owns          (X)\n",
+        ),
     }
     equivalent = [
         {"case": name, **pair_receipt(parser, grammar_sha, left, right, expect_same=True)}
@@ -180,8 +194,8 @@ def main() -> None:
 
     overall = overall and all(x["pass"] for x in distinct) and all(x["pass"] for x in equivalent)
     receipt = {
-        "schema_version": "1.3",
-        "experiment": "ClayCode BASE deterministic V9 grammar-bound literal-safe syntax canonicalization",
+        "schema_version": "1.4",
+        "experiment": "ClayCode BASE deterministic V17 trivia-safe grammar-bound syntax canonicalization",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)) if grammar_path.is_relative_to(ROOT) else str(grammar_path),
         "grammar_sha256": grammar_sha,
@@ -191,8 +205,9 @@ def main() -> None:
         "sources": rows,
         "semantic_surface_discrimination": distinct,
         "layout_equivalence": equivalent,
+        "v9_trivia_counterexample_guard_present": True,
         "pass": overall,
-        "scope_guard": "PASS proves deterministic V9 grammar-bound layout-insensitive and lexical-meaning-sensitive canonical syntax identity for the listed admitted sources and V5/V6 regression/mutation pairs. A relaxed-parser run is sandbox regression evidence only. This is CC-WP-02 evidence and does not prove typed canonical IR/type/effect semantics (CC-WP-03/04).",
+        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia identity, including Needle.owns call whitespace invariance, for the listed admitted sources and regression/mutation pairs. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04).",
     }
     rendered = json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
     if args.output:

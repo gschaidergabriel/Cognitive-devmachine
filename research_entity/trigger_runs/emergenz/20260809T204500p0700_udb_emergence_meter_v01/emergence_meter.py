@@ -75,6 +75,24 @@ def factorial_omega(rows: Sequence[tuple[int, int, float]]) -> float | None:
     return means[(1, 1)] - means[(1, 0)] - means[(0, 1)] + means[(0, 0)]
 
 
+def factorial_permutation_p(
+    rows: Sequence[tuple[int, int, float]], seed: int, draws: int = 499
+) -> float | None:
+    observed = factorial_omega(rows)
+    if observed is None:
+        return None
+    rng = random.Random(seed)
+    factors = [(a, b) for a, b, _ in rows]
+    outcomes = [v for _, _, v in rows]
+    extreme = 0
+    for _ in range(draws):
+        shuffled = outcomes[:]
+        rng.shuffle(shuffled)
+        value = factorial_omega([(a, b, v) for (a, b), v in zip(factors, shuffled)])
+        extreme += value is not None and abs(value) >= abs(observed)
+    return (extreme + 1) / (draws + 1)
+
+
 def bootstrap_ci(values: Sequence[float], seed: int, draws: int = 400) -> list[float]:
     if not values:
         return [0.0, 0.0]
@@ -100,6 +118,7 @@ def permutation_paired_p(deltas: Sequence[float], seed: int, draws: int = 999) -
 class Assessment:
     candidate_id: str
     factorial_omega: float | None
+    factorial_permutation_p: float | None
     synergy_bits: float
     source_target_mi_bits: float
     source_target_cmi_given_driver_bits: float | None
@@ -134,6 +153,7 @@ def assess(
     falsifiers: list[str] = []
 
     omega = factorial_omega(factorial_rows)
+    omega_p = factorial_permutation_p(factorial_rows, seed)
     synergy = two_source_synergy_mmi(x, y, target)
     mi = mutual_information(x, target)
     cmi = conditional_mutual_information(x, target, driver) if driver is not None else None
@@ -180,7 +200,7 @@ def assess(
         else:
             controls_passed.append("COMMON_DRIVER")
 
-    if omega is not None and abs(omega) > 0.05:
+    if omega is not None and abs(omega) > 0.05 and omega_p is not None and omega_p <= 0.01:
         controls_passed.append("FACTORIAL_INTERACTION")
     else:
         controls_failed.append("FACTORIAL_INTERACTION")
@@ -206,7 +226,7 @@ def assess(
         status = "NOT_SUPPORTED"
 
     return Assessment(
-        candidate_id, omega, synergy, mi, cmi, lesion_loss, rescue_recovery,
+        candidate_id, omega, omega_p, synergy, mi, cmi, lesion_loss, rescue_recovery,
         reentry_delta, ci, p, sorted(set(controls_passed)),
         sorted(set(controls_failed)), level, status, falsifiers,
     )

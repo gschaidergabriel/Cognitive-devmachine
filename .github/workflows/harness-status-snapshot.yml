@@ -1,0 +1,43 @@
+name: Harness Dynamic Status Snapshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/harness-status-snapshot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Resolve current dynamic status
+        run: |
+          OUT=research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/STATUS_SNAPSHOT_CI.json
+          python tools/program_progress.py --json > "$OUT"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/STATUS_SNAPSHOT_CI.json')
+          d=json.loads(p.read_text())
+          assert d['stage_id']=='BASE_CLAYCODE_RELEASE'
+          assert 0 <= float(d['percent']) <= 100
+          assert 'doomsday' in d
+          PY
+      - name: Persist snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/STATUS_SNAPSHOT_CI.json
+          git commit -m 'harness: record post-H-WP-01 dynamic program status'
+          git pull --rebase origin main
+          git push origin HEAD:main

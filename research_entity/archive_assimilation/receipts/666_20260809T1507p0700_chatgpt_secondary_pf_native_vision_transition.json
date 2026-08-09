@@ -1,0 +1,67 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1507p0700_chatgpt_secondary_pf_native_vision_transition",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "source_class":"PROJECT_FRANKENSTEIN_HISTORY_HEAD_SEMANTIC_RECONCILIATION",
+  "shard":"FrankEye -> Qwen3.5 native vision transition and MVC implications",
+  "exact_coverage_credit":0.0,
+  "exact_coverage_reason":"Combined Level-0 denominator remains NOT_FROZEN.",
+  "source_refs":[
+    "gschaidergabriel/Project-Frankenstein@6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+    "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1:tools/native_vision.py",
+    "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1:tools/frank_eye.py",
+    "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1:ext/sovereign/vcb_integration.py",
+    "gschaidergabriel/Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1:HOW_IT_WORKS.md",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+  ],
+  "findings":[
+    {"id":"PF-NV-M1","class":"CURRENT_HEAD_CODE","finding":"native_vision.py explicitly says Qwen3.5-4B native multimodal vision replaces FrankEye entirely; it sends image data to local llama-server and returns generated text."},
+    {"id":"PF-NV-M2","class":"HISTORY","finding":"Commit 6158be8d (2026-03-31) rewired visual consumers from FrankEye to native_vision and shifted model recommendations to Qwen3.5 native multimodal vision."},
+    {"id":"PF-NV-M3","class":"CURRENT_HEAD_CONTRADICTION","finding":"Frozen HEAD still retains frank_eye.py and HOW_IT_WORKS.md describes FrankEye as current, while native_vision.py and multiple current runtime consumers use native_vision. Current repository therefore contains stale/remnant FrankEye surfaces alongside the newer path."},
+    {"id":"PF-NV-M4","class":"CURRENT_HEAD_CODE","finding":"VCB imports native_vision, rate-limits screenshots to 100/day and 20/hour, and stores generated descriptions in world_experience.vcb_observations."},
+    {"id":"PF-NV-M5","class":"NEGATIVE_RESULT","finding":"VCB confidence is heuristic 0.7 with anomaly keywords and 0.5 otherwise; it is not calibrated visual identity/open-set confidence."},
+    {"id":"PF-NV-M6","class":"INTERFACE_LIMITATION","finding":"The inspected native_vision bridge exposes generated text, not a reusable visual embedding API. The current MVC requirement cannot assume cheap deterministic feature vectors are available through this bridge."}
+  ],
+  "disposition":{
+    "operational_visual_path_hint":"NATIVE_VISION_PRIMARY",
+    "frankeye_status_hint":"RETAINED_REMNANT_OR_AUXILIARY_UNRESOLVED",
+    "documentation":"STALE_CONTRADICTORY",
+    "verification_limit":"Full recursive call-graph/runtime verification remains open."
+  },
+  "mvc_implications":[
+    "Native multimodal inference is not user-adaptive MVC learning and contains no inspected trust-tier, user-prototype, candidate-promotion, rollback or open-set learner loop.",
+    "FrankEye/DINO as MVC backbone is now a candidate, not a settled current-path assumption. H1 should compare retained micro-feature extraction, direct Qwen vision-encoder embeddings, or another frozen micro-backbone.",
+    "Generated native-vision text is not a deterministic feature substitute by default.",
+    "A calibrated cheap familiarity gate is potentially more valuable in front of Qwen3.5 multimodal generation; unknown/ambiguous/conflict should escalate to native vision.",
+    "VCB anomaly confidence, native-model uncertainty, MVC familiarity/open-set confidence and sensor evidence must remain separate typed quantities."
+  ],
+  "cross_source_architecture_hypothesis":{
+    "path":"cheap_change_gate -> deterministic_frozen_micro_feature -> user_MVC -> KNOWN_HIGH_CONFIDENCE fast path else Qwen3.5 native vision/deeper perception",
+    "status":"OPEN_NOT_MEASURED",
+    "lineage":"Drive Retina prototype/dictionary + PF historical fast/deep routing + PF native multimodal deep perception"
+  },
+  "branch_feedback":{
+    "frank":"Current PF evidence points to Qwen3.5 native vision as primary deep-perception path; FrankEye remains remnant/possibly auxiliary; user-adaptive MVC remains absent in inspected code.",
+    "harness":"H1 must compare retained FrankEye/DINO micro-features vs direct Qwen vision embeddings vs another frozen micro-backbone; benchmark familiar-gate savings against native multimodal calls.",
+    "claycode":"Type mvc_familiarity_confidence separately from vcb_anomaly_confidence, model-generation uncertainty and sensor evidence.",
+    "unifieddb":"Persist backbone compatibility/version so visual-backbone migration can invalidate/rebuild MVC state deterministically.",
+    "claygraph":"Preserve supersession/remnant edges among adaptive-routing, FrankEye and native_vision.",
+    "gwt":"Native vision is a candidate deep visual receiver/evidence producer; no new broadcast/re-entry result established.",
+    "emergenz":"NO_CHANGE",
+    "hyperposition":"Retain FrankEye/DINO auxiliary vs Qwen-encoder alternatives until measured.",
+    "clayresearch":"Visual timeline now separates adaptive compute routing, FrankEye engineered pipeline, Qwen native deep perception and the orthogonal still-required user-adaptive MVC."
+  },
+  "earned_work_mapping":[
+    {"target":"deep perception","class":"REUSABLE_WITH_ADAPTATION","mechanism":"local Qwen3.5 native multimodal bridge","hours_credit":null},
+    {"target":"active sensing budget","class":"RUNTIME_FOUNDATION","mechanism":"VCB 100/day and 20/hour screenshot limits","hours_credit":null},
+    {"target":"MVC feature backbone","class":"UNRESOLVED_SELECTION","hours_credit":0.0}
+  ],
+  "open_obligations":[
+    "Exhaustively enumerate frozen-head callsites/history to resolve FrankEye remnant vs auxiliary status.",
+    "Locate native_vision latency/OCR/resource/failure benchmarks.",
+    "Run H1 frozen known/OOD differential tests before selecting the MVC backbone."
+  ],
+  "promotion":{"canonical_claim_promotion":false,"reason":"History/head reconciliation only; no live hardware verification or MVC experiment."}
+}

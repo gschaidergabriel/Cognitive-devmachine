@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
   "actor": "chatgpt-secondary",
   "tools": [
@@ -26,9 +26,18 @@
     },
     {
       "tool": "e2b_sandbox",
-      "status": "NOT_EXPOSED_TO_CURRENT_SESSION",
+      "worker_surface_status": "NOT_EXPOSED_TO_CURRENT_SESSION",
+      "repo_capability_status": "ADAPTER_READY_CREDENTIAL_UNAVAILABLE",
+      "registry_ref": "research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json",
+      "blocker": "Current registry records E2B credential unavailable; no credential workaround was attempted.",
+      "fallback_used": "local ChatGPT Python sandbox"
+    },
+    {
+      "tool": "judge0_execute",
+      "worker_surface_status": "NOT_DIRECTLY_EXPOSED_TO_CURRENT_SESSION",
       "repo_capability_status": "RUNTIME_VERIFIED",
-      "fallback": "local ChatGPT Python sandbox per capability contract"
+      "registry_ref": "research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json",
+      "use_in_this_run": "NOT_INVOKED; local protocol fallback already supplied the executable evidence."
     },
     {
       "tool": "web primary documentation/research search",

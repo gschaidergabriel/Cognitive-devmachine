@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "feedback_id":"claycode-stage-identity-20260809T1708p0700",
+  "origin_actor":"chatgpt-secondary",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scientific_promotion":"NONE",
+  "branches":{
+    "claycode":{"effect":"REFINE","delta":"Use layered content-addressed source/contract -> canonical semantic -> lowering -> artifact -> replay identities; keep ProgramSemanticId derivation authority at canonical verified semantics, not raw source spelling. Continue parser/frontend closure before semantic redesign."},
+    "harness":{"effect":"REFINE","delta":"SourceChainEvidence v1 is directionally correct; distinguish semantic reference from semantic derivation authority on pre-canonical Source/Parse stages. Regression-test 4958-source-to-1-semantic equivalence plus parser/lowerer/artifact invalidation matrix."},
+    "frank":{"effect":"NO_CHANGE","delta":"No new FRANK-specific ClayCode primitive. Loop-of-loops requirements remain representable candidates using generic records/rules/effects pending production Ubuntu validation."},
+    "clayresearch":{"effect":"REFINE","delta":"BASE evidence should track layered compiler identities so frontend, semantic, lowering and runtime failures localize without converting source spelling into program truth."},
+    "claygraph":{"effect":"REFINE","delta":"Graph semantic refs should key from canonical semantic identity; raw source/parser identity remains provenance and must not silently split or merge semantic nodes."},
+    "unifieddb":{"effect":"REFINE","delta":"Persist distinct source/contract, semantic, lowering/artifact and replay roots; avoid one monolithic identity while retaining transaction/snapshot consistency."},
+    "gwt":{"effect":"NO_CHANGE","delta":"No GWT mechanism change; any compiled GWT evidence should reference the full admitted identity chain."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"No Hyperposition mechanism change; alternative branches may share ProgramSemanticId only when canonical equivalence is verified, not inferred from source similarity."},
+    "emergenz":{"effect":"NO_CHANGE","delta":"No emergence claim change; compiler identity correctness is an upstream validity condition, not emergence evidence."}
+  },
+  "global_controls":["model/program validity != execution authority","shared ancestry != independent replication","Ubuntu-only Frank v0.1 release target","negative source-chain evidence preserved","canonical revision unchanged"],
+  "research_write_result":"EXPLICIT_FEEDBACK_TO_ALL_9_CURRENT_FOUNDATIONS"
+}

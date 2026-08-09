@@ -1,0 +1,64 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create-claycode-base14-ubuntu-closure-20260809T190800p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T19:08:00+07:00",
+  "payload": {
+    "work_id": "CLAYCODE_BASE14_UBUNTU_CLOSURE",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CHATGPT_RESEARCH_AND_BUILD_ESCALATION",
+    "title": "Close ClayCode BASE blockers on real Ubuntu target",
+    "work_clay": "On the Andreas Ubuntu developer system, pull current main and execute the production ClayCode chain source/front-end -> deterministic canonical IR -> type/effect -> evaluator -> compiler/lowering -> runtime/ABI/FFI -> Ubuntu execution. Use research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json as the exact 14-package acceptance surface. Repair implementation defects rather than weakening gates. Then execute the mandatory application proof suite (CLI, HTTP_WEBSITE, DB_SERVICE, CONCURRENT_SERVICE, GUI_INTERACTIVE, COMPILER_TOOL, GPU_ML_NUMERICAL, SYSTEM_EFFECT_SANDBOX, FRANK_COMPONENT, FULL_FRANK_HANDOFF), fuzz/conformance/differential suites, corpus/heldout checks and harness handoff. Emit exact hashes and local execution receipts for every passed subgate; preserve failures/negative results. Do not mark a work package PASS from representability, prose, proxy tests or unexecuted code.",
+    "reason_clay": "BASE currently has 14 OPEN work packages and zero recorded application passes. GitHub CI can validate repository-generic semantics, but Frank v0.1 BASE explicitly requires Ubuntu developer-system execution receipts for host/runtime/application claims. Local execution is therefore the discriminating truth surface.",
+    "completion_clay": "Complete only when every CC-WP-01..14 acceptance condition has a reproducible receipt, all ten mandatory application proofs execute on Ubuntu, CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json is generated from evidence, unresolved language counterexamples are zero or explicitly blocking, and CLAYCODE_RELEASE_GATE plus GENERAL_PURPOSE_GATE may be set PASS without weakening any acceptance rule. Otherwise emit failure receipts and keep affected packages OPEN.",
+    "evidence_need": [
+      "LOCAL_EXECUTION_RECEIPTS_WITH_SOURCE_PROGRAM_BACKEND_HASHES",
+      "STRICT_PARSER_AND_CANONICALIZATION_RECEIPT",
+      "TYPE_EFFECT_DIAGNOSTIC_RECEIPT",
+      "EVALUATOR_DIFFERENTIAL_RECEIPT",
+      "UBUNTU_COMPILER_LOWERING_RECEIPT",
+      "RUNTIME_ABI_FFI_CAPABILITY_RECEIPT",
+      "TEN_APPLICATION_EXECUTION_RECEIPTS",
+      "FUZZ_MUTATION_ROUNDTRIP_CONFORMANCE_RECEIPTS",
+      "CORPUS_HELDOUT_SEPARATION_RECEIPT",
+      "FRANK_HARNESS_HANDOFF_RECEIPT",
+      "FINAL_BASE_AUDIT_MANIFEST"
+    ],
+    "executor_policy": "prefer_verified_CLAUDE_CODE_LOCAL_ORGAN_for_local_build_run_test_and_repair; may use local deterministic tools and free model workers where useful; never weaken safety/authority or evidence gates",
+    "required_capabilities": [
+      "ANDREAS_PC_LOCAL_REPO_ACCESS",
+      "UBUNTU_BUILD_RUNTIME",
+      "PYTHON",
+      "COMPILER_TOOLCHAIN",
+      "LOCAL_PROCESS_EXECUTION",
+      "NETWORK_LOOPBACK_TESTING",
+      "DATABASE_TESTING",
+      "GUI_OR_HEADLESS_UI_TEST_SURFACE",
+      "GPU_OR_NUMERICAL_BACKEND_WHERE_AVAILABLE",
+      "GIT_WRITE"
+    ],
+    "write_scope": [
+      "@research_entity/claycode/",
+      "@tools/",
+      "@tests/",
+      "@research_entity/state/work/events/",
+      "@research_entity/trigger_runs/claycode/"
+    ],
+    "dependencies": [
+      "current main checkout available",
+      "do not require Android/mobile/edge for Frank v0.1",
+      "respect external authority boundary: model output != execution authority"
+    ],
+    "invalidators": [
+      "owner changes Frank v0.1 target host",
+      "BASE acceptance contract superseded by newer canonical repository state",
+      "work already completed with stronger verified receipts"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 1.0,
+    "urgency": 1.0,
+    "information_gain": 1.0,
+    "status": "READY"
+  }
+}

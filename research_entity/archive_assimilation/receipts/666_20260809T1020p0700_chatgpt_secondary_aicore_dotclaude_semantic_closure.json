@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1020p0700-chatgpt-secondary-aicore-dotclaude-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_DOTCLAUDE_1_OF_1_FILE",
+  "source_universe":"DRIVE_CLAY/AICORE/.claude",
+  "source_folder_id":"1BbdrBEuF_1mv9c8RziqhBbTIUlnrJCJD",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"files":1,"folders":0,"files_semantically_closed":1,"coverage_percent":100.0},
+  "file":{"path":".claude/settings.local.json","drive_id":"1ew5vT_z0q_QtUQHomvANI-L5m_Nv_9MQ","bytes":99,"sha256":"23cb2d182f83fb6a149234bb1dae81c69669376bf80c82189e117b7160699209"},
+  "semantic_disposition":{"permissions_allow":["Bash(du -sh .git && git count-objects -vH)"],"finding":"This local Claude permission snapshot grants only one narrowly-scoped repository-size/count diagnostic Bash command. No broad shell wildcard or destructive permission appears in this file.","inheritance":"Useful historical evidence for capability-specific least privilege, but not a complete current authority policy."},
+  "current_architecture_feedback":{"harness":["Preserve least-privilege allowlists as typed capabilities and test exact argument-shape constraints."],"claycode":["Capability grants should be semantic effect contracts, not free-form shell strings in model-visible prompt state."],"needle":["Narrow diagnostics may be autonomous; privilege must not generalize from one allowed command to a shell class."]},
+  "training":{"executed":false,"authorized":false},
+  "created_at":"2026-08-09T10:20:00+07:00"
+}

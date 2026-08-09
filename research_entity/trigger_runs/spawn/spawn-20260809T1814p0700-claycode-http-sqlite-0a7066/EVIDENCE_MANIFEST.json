@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1814p0700-claycode-http-sqlite-0a7066",
+  "promotion": "NONE",
+  "internal": [
+    {
+      "id": "E-INT-01",
+      "class": "VERIFIED_GITHUB_CURRENT_STATE",
+      "ref": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "use": "BASE gate and open compiler/runtime/FFI/application packages."
+    },
+    {
+      "id": "E-INT-02",
+      "class": "VERIFIED_GITHUB_CURRENT_STATE",
+      "ref": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+      "use": "Current EffectIntent/capability/Needle/state semantics."
+    },
+    {
+      "id": "E-INT-03",
+      "class": "VERIFIED_GITHUB_CURRENT_STATE",
+      "ref": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+      "use": "Compile/realize rule and HTTP/database application acceptance families."
+    },
+    {
+      "id": "E-INT-04",
+      "class": "VERIFIED_GITHUB_CURRENT_STATE",
+      "ref": "research_entity/harness/HARNESS_WORKSPACE.json",
+      "blob_sha": "a8f5b7139e361421a677e50f2686e23751e8c40f",
+      "use": "H-WP-03 ClayCode adapter blocked on release; H-WP-10/11/14 open."
+    },
+    {
+      "id": "E-INT-05",
+      "class": "VERIFIED_GITHUB_CURRENT_STATE",
+      "ref": "research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FRANK_ARCHITECTURE.claycode.json",
+      "blob_sha": "ba3f11bf8ab36f1ed2024925023b2053fc86325f",
+      "use": "UnifiedDB logical query/transaction/replay plane and effect gateway boundary."
+    },
+    {
+      "id": "E-INT-06",
+      "class": "RECENT_RESEARCH_DELTA",
+      "ref": "commit 903cda18856936a1485d5d47945d9fa9ea7e24ef",
+      "use": "Duplicate rejection: foreign-code effect closure already researched."
+    }
+  ],
+  "external": [
+    {
+      "id": "E-EXT-01",
+      "class": "PRIMARY_STANDARD",
+      "title": "RFC 9110 HTTP Semantics",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+      "use": "HTTP request/response semantics and separation from transport/message syntax."
+    },
+    {
+      "id": "E-EXT-02",
+      "class": "PRIMARY_IMPLEMENTATION_SPEC",
+      "title": "WebAssembly wasi-http WIT handler interface",
+      "url": "https://github.com/WebAssembly/wasi-http/blob/main/wit/handler.wit",
+      "use": "Typed host-interface precedent for incoming/outgoing HTTP resources and results."
+    },
+    {
+      "id": "E-EXT-03",
+      "class": "PRIMARY_DATABASE_DOC",
+      "title": "SQLite Transaction",
+      "url": "https://www.sqlite.org/lang_transaction.html",
+      "use": "BEGIN/COMMIT/ROLLBACK, non-nested BEGIN transactions, SAVEPOINT and retry-relevant SQLITE_BUSY semantics."
+    }
+  ],
+  "executed": [
+    {
+      "id": "EXP-SPAWN-F1-HTTPDB-001",
+      "class": "LOCAL_HOST_PROXY_NOT_PRODUCTION_CLAYCODE",
+      "probe_sha256": "c041569143b840a7f604061bc1d70a3517badee2b89e087e1c6399b8c55458b3",
+      "semantic_spec_hash": "e9eb1d810277aa733d1f4d98aa21fc0f3ba1ec533d45a4c5ff8e3d1f388090b7",
+      "generated_target_hash": "a6ed8f5ec1ad4a4a0445d29aef51fdbb325faed1251e3b4db097469b2a4eec78",
+      "runtime": {
+        "python": "3.13.5",
+        "sqlite": "3.46.1"
+      },
+      "base": {
+        "tests_total": 17,
+        "tests_passed": 17,
+        "final_rows": [
+          [
+            1,
+            "alpha2"
+          ]
+        ]
+      },
+      "mutation_results": {
+        "commit_before_failure": {
+          "detected": true,
+          "tests_passed": 14,
+          "tests_total": 17
+        },
+        "drop_unique_constraint": {
+          "detected": true,
+          "tests_passed": 16,
+          "tests_total": 17
+        },
+        "update_commit_before_failure": {
+          "detected": true,
+          "tests_passed": 16,
+          "tests_total": 17
+        },
+        "wrong_create_status": {
+          "detected": true,
+          "tests_passed": 15,
+          "tests_total": 17
+        }
+      },
+      "scope_boundary": "Hosted local proxy only; not Andreas Ubuntu target and not production ClayCode compiler evidence."
+    }
+  ],
+  "negative_results": [
+    "No production ClayCode parser/type/effect/compiler/runtime was executed in this run.",
+    "No Andreas Ubuntu target-host PASS is claimed.",
+    "The proxy does not establish that current G9 can encode transaction semantics without adapter metadata.",
+    "The local witness cannot prove FFI ownership, cancellation, concurrency, networking sandboxing or capability closure.",
+    "No BASE work package is passed by this spawn."
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1724p0700-chatgpt-secondary-parser-closure",
+  "hypotheses":[
+    {
+      "id":"H-CC-PARSER-01",
+      "status":"SUPPORTED_FOR_TESTED_FRAGMENTS",
+      "mechanism":"The current G9 V3 surface language is not closed under its declared EBNF because current source constructs are absent or underspecified in the grammar.",
+      "expected":"Exact current source fragments using comparisons, if, line comments and legacy predicate forms fail under a parser proxy faithful to the declared grammar.",
+      "counterhypothesis":"The apparent mismatch is only cosmetic documentation drift and does not affect executable parsing.",
+      "falsifier":"A parser generated from the current declared EBNF parses the exact tested current-G9 fragments and whole current G9 source without hidden extensions.",
+      "test":"CC-G9-PARSER-DELTA-20260809",
+      "result":"baseline 2/9 pass, 7/9 fail",
+      "affected":["CC-WP-01-SPEC-FREEZE","CC-WP-02-PARSER-CANON"]
+    },
+    {
+      "id":"H-CC-PARSER-02",
+      "status":"SUPPORTED_FRAGMENT_LEVEL_ONLY",
+      "mechanism":"A minimal compatibility grammar can close the observed surface gap without changing ClayCode cognitive semantics.",
+      "expected":"Adding comments, comparison operators, conditional syntax, explicit executable precedence and bounded legacy predicates parses the targeted current fragments.",
+      "counterhypothesis":"The surface mismatch reflects deeper semantic ambiguity that cannot be repaired without redesigning the language.",
+      "falsifier":"Whole-file parsing/canonical roundtrip exposes irreducible ambiguities or meaning-changing parses under the minimal candidate.",
+      "test":"CC-G9-PARSER-DELTA-20260809",
+      "result":"candidate 9/9 pass on targeted fragments",
+      "affected":["CC-WP-02-PARSER-CANON","CC-WP-11-FUZZ-CONFORMANCE"]
+    },
+    {
+      "id":"H-CC-RULE-RUNTIME-SPLIT-01",
+      "status":"OPEN",
+      "mechanism":"Separating declarative rule expressions from executable runtime expressions allows compatibility with current semantic prose-like predicates while keeping executable code deterministic and precedence-defined.",
+      "expected":"Whole G9 can canonicalize legacy rule predicates into typed relation nodes while runtime expressions remain unambiguous.",
+      "counterhypothesis":"One unified expression grammar is simpler and equally safe if all operators are declared centrally.",
+      "falsifier":"A unified typed operator table yields equal deterministic roundtrip, diagnostics and fuzz robustness with lower complexity.",
+      "next_test":"whole-file parse + deterministic canonical roundtrip + mutation corpus"
+    },
+    {
+      "id":"H-CC-FFI-01",
+      "status":"OPEN",
+      "mechanism":"A WIT-like typed import/export boundary combined with capability-scoped host access can serve ClayCode Ubuntu FFI/lowering without moving authority into model text.",
+      "expected":"APP-01..APP-10 can use explicit typed adapters and capabilities with stable receipts and no ambient authority.",
+      "counterhypothesis":"Direct native Ubuntu ABI/FFI is simpler and more performant with equivalent safety under a host gateway.",
+      "falsifier":"Ubuntu benchmarks show WASM/WASI-style boundaries materially worsen coverage/latency/debuggability or add no containment/audit benefit.",
+      "next_test":"native-vs-WASM/WASI microbenchmarks and APP-08 authority-bypass tests"
+    },
+    {
+      "id":"H-CC-LOOP-REP-01",
+      "status":"OPEN",
+      "mechanism":"Existing record/tensor/intervention/receipt primitives can represent the LoopDynamicsReadout/controller contract without adding new core syntax.",
+      "expected":"Minimal loop readout + continue/halt/escalate + lesion/rescue + rollback program parses, type-checks and executes after parser closure.",
+      "counterhypothesis":"Loop semantics require first-class language primitives beyond generic records/rules.",
+      "falsifier":"A concrete loop program cannot preserve required identity/timescale/intervention semantics through current typed IR/lowering without opaque escape hatches.",
+      "next_test":"compile minimal LoopDynamicsReadout contract on Ubuntu target"
+    }
+  ]
+}

@@ -1,9 +1,14 @@
-module rae.stack.latest
+module clay.stack.latest
 
-epoch 10
+epoch 11
 entity frank-project-global-research-entity
+display_name Clay
+mission_goal "Frank v0.1 voll lauffähig auf Andreas PC"
 
 stack CURRENT {
+  identity=@research_entity/global/CLAY_ENTITY_NAMING_CONTRACT.clay
+  persona=@research_entity/identity/CLAY_PERSONA.clay
+
   claycode=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay
   claycode_parent=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V2.clay
   claycode_dialects=@research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay
@@ -22,10 +27,16 @@ stack CURRENT {
     @research_entity/runtime/RAE_UNIFIEDDB_V5_CLAYCODE_EXPERIENCE_RESEARCH.sql,
     @research_entity/runtime/RAE_UNIFIEDDB_V6_CLAYCODE_META_COGNITION.sql,
     @research_entity/runtime/RAE_UNIFIEDDB_V7_COGNITIVE_PROCESSOR.sql,
-    @research_entity/runtime/RAE_UNIFIEDDB_V8_CHATGPT_DELEGATION.sql
+    @research_entity/runtime/RAE_UNIFIEDDB_V8_CHATGPT_DELEGATION.sql,
+    @research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql
   ]
   unifieddb_frontier=resolve_latest_validated(branch=unifieddb,prefer=CURRENT|PROMOTED_COMPATIBLE,preserve=NEGATIVE_RESULT|REFUTED|SUPERSEDED)
   unifieddb=[unifieddb_base,unifieddb_migrations,unifieddb_frontier]
+
+  work_fabric=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+  work_runtime=@research_entity/runtime/dynamic_work_runtime_v2.py
+  system_possibility_table=UnifiedDB.v_clay_system_possibility_table
+  dynamic_work_queue=UnifiedDB.v_clay_dynamic_work_queue
 
   gwt=@research_entity/global/RAE_GWT_MICROKERNEL.clay
   turn=@research_entity/global/RAE_TURN_KERNEL.clay
@@ -38,19 +49,22 @@ stack CURRENT {
 }
 
 rule resolve(CURRENT) every substantive_turn
+rule exact_message("clay") -> address_entity(Clay); not_trigger
+rule exact_message("clayresearch") -> route(@research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md)
 rule dynamic_message_prefix(raejob-) -> CURRENT.chatgpt_dynamic_trigger before normal trigger registry
 rule explicit_cognition uses CURRENT.claycode
 rule state_query uses CURRENT.unifieddb
 rule associative_projection uses CURRENT.claygraph
+rule planning uses CURRENT.work_fabric + CURRENT.system_possibility_table + CURRENT.dynamic_work_queue
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
 rule Claude_delegation uses CURRENT.chatgpt_delegation
-rule component_upgrade -> bump(epoch) + preserve(parent_ref) + emit(migration_ref) + replay_test
-rule stale_component_detected -> refresh_before_cognition
-rule missing_component -> state(DEGRADED_STALE_STACK) + no_false_latest_claim
-rule organ_private_version_pin = FORBIDDEN unless isolated_experiment
-rule provider_specific_projection may_differ
-rule canonical_semantics must_not_fork_by_provider
+rule Claude_local_verified_execution_receipt = primary_operational_truth_for_exact_local_effect
+rule Claude_opinion != truth
+rule ChatGPT_may_create_revise_cancel_Claude_work_before_execution
+rule work_revision_must_be_revalidated_before_effect
+rule material_discussion -> implementation_translation_from_current_possibility_space
+rule every_material_outcome -> reenter("Frank v0.1 voll lauffähig auf Andreas PC")
 
 observe CHATGPT_EXPLICIT=[plan,state_delta,hypothesis,decision,tool_coord,handoff,experiment,repair,outcome]
 derive CHATGPT_EXPLICIT via CURRENT.chatgpt_endturn -> claycode_meta_candidate
@@ -61,13 +75,14 @@ rule CLAUDE.delegate_max_useful_work_to_CHATGPT=true
 rule candidate != promotion
 rule promote requires evidence+counterhypothesis+matched_budget_replay+semantic_preservation+rollback
 
+invariant entity_display_name=Clay
+invariant stable_entity_id=frank-project-global-research-entity
+invariant persona_energy!=epistemic_authority
 invariant all_organs_same_moving_stack
 invariant all_research_center_machine_coordination_uses_latest_claycode
-invariant ChatGPT_delegation_results_return_to_shared_RAE_state
-invariant raejob_token_deterministically_addresses_repo_request
+invariant Frank_and_Clay_are_separate_entities
+invariant Frank_never_mutates_Clay_repo
+invariant ChatGPT_delegation_results_return_to_shared_Clay_state
 invariant latest_means_admitted_stack_pointer_not_newest_timestamp
-invariant research_candidate_use_preserves_XENO_G8_hard_control_gates
-invariant critical_control_invariants_preserved_across_candidate_language_updates
 invariant claygraph_activation!=truth
-invariant unifieddb_logical_unification!=physical_monolith_requirement
 invariant hidden_provider_cot_not_required_or_persisted

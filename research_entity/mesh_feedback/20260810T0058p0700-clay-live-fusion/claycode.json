@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-live-fusion-20260810T0058p0700",
+  "branch":"claycode",
+  "status":"DELTA",
+  "promotion":"NONE",
+  "selected_line":"V17 remains sole declarative WP02 promotion candidate",
+  "evidence":[
+    {"class":"TEST_INFRASTRUCTURE_REPRODUCIBILITY_FALSIFIER","source":"85fa66375cec9266480756e3afa7e52f063b494d","finding":"Matched local test showed verifier-like invocation selected ephemeral dependency 20/20, actual python tools/probe.py selected same-directory shadow 20/20 under PYTHONPATH+PYTHONNOUSERSITE, and PYTHONSAFEPATH=1 restored ephemeral dependency 20/20."},
+    {"class":"EXECUTABLE_TEST_INFRASTRUCTURE","source":"c61a2a445df3002e708774a237d15ef02ea0d06c","finding":"WP02 V17 trivia/contextual-lexer falsifier and current-main WP06 typed-slice replay were added with read-only self-hosted execution and separated receipt-write authority; remote current receipt remained missing."},
+    {"class":"ORCHESTRATION_NEGATIVE_EVIDENCE","source":"c882c36fe8a16031eeb3e36af295826b6a72550d","finding":"Clay repository Hostinger/Actions admission is currently degraded/unverified, so missing remote WP02 receipt cannot be interpreted as parser failure."}
+  ],
+  "counterhypotheses":[
+    "No current tools/lark.py or tools/interegular.py shadow exists, so the import-path result is a latent reproducibility gap rather than evidence any existing WP02 result was contaminated.",
+    "V17 may still fail the direct lookahead/contextual-lexer boundary even after safe-path hardening; strict/interegular alone is insufficient to settle that boundary."
+  ],
+  "contradictions_preserved":["V17 is selected, but selected does not mean executed/accepted.","Typed-fn WP06 compiler evidence is contract-separated and cannot be relabeled as V17 WP02 evidence."],
+  "ancestry_rule":"Workflow hardening, OOB probe, supervisor guards and synthesis descendants share implementation lineage and are not independent scientific replications.",
+  "open_blockers":["Schema-current exact-tested-SHA Hostinger WP02 receipt absent","PYTHONSAFEPATH/-P equivalence not remotely receipted","registered Andreas Ubuntu ten-app + FULL_FRANK + independent WP14 acceptance absent"],
+  "architecture_change":"NO_CHANGE_TO_CLAYCODE_SEMANTICS"
+}

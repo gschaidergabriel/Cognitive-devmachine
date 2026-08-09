@@ -1,21 +1,30 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "ACTIVE",
   "last_reviewed_cycle": null,
-  "current_focus": "production frontend closure",
+  "current_focus": "strict LALR conflict localization before typed-fn reintegration",
   "free_only": true,
   "provider_cooldowns": {},
-  "blocked_capabilities": {},
+  "blocked_capabilities": {
+    "mistral_runtime": "ADAPTER_READY_RUNTIME_VERIFICATION_PENDING",
+    "nvidia_reranker": "REVERIFICATION_PENDING"
+  },
   "model_family_history": [],
   "high_information_targets": [
-    "function definition/call production parser and canonical IR closure",
-    "branching plus recursion/iteration closure",
-    "compositional type/effect summaries across calls",
-    "Ubuntu lowering and executable source-chain evidence"
+    "localize exact strict-LALR conflicts in the current D baseline without changing semantics",
+    "prove a minimal deterministic conflict repair under strict parser construction",
+    "re-integrate typed function definition/call only after baseline construction succeeds",
+    "prove canonical typed symbol/signature identity and compositional type/effect summaries across calls",
+    "carry the same source chain through lowering and an Ubuntu-oriented executable receipt"
   ],
   "steering_notes": [
+    "Latest executable evidence outranks the prior broader contextual-parser success: baseline D and D+typed-fn both fail strict LALR construction.",
+    "Do not blame typed fn for a conflict already present in baseline D.",
+    "20,000 typed-call lowering differentials remain useful downstream evidence, not parser-freeze evidence.",
     "Prefer executable discriminators over architecture prose.",
     "Collapse same-family/provider-shared ancestry before counting agreement.",
-    "Never award BASE progress from model consensus alone."
+    "Never award BASE progress from model consensus alone.",
+    "NVIDIA current official API documentation confirms a hosted llama-nemotron reranking family; account-level FREE_ONLY execution still requires a successful runtime receipt before promotion.",
+    "No autonomous cycle receipt exists yet; treat provider/model conclusions as pending until first cycle output lands."
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1713p0700_chatgpt_typed_numeric_identity",
+  "feedback":[
+    {"to":"claycode","status":"DELTA","message":"Do not hash host JSON numeric text. Candidate BASE canonicalizer should bind numeric type to semantic identity; general Int lowering must stay exact; F64 literal identity may be bit-based with arithmetic equivalence rules separate."},
+    {"to":"harness","status":"DELTA","message":"SourceChainEvidence semantic hashes require an explicit typed numeric canonicalizer; add large-Int, -0 and cross-runtime float-text regression vectors."},
+    {"to":"unifieddb","status":"DELTA","message":"Exact state/hash identity must distinguish semantic numeric type from host serializer presentation and runtime resource identity."},
+    {"to":"clayresearch","status":"DELTA","message":"CTK typed domain payloads need a numeric canonical identity contract; do not put backend JSON formatting into the common header identity."},
+    {"to":"frank","status":"NO_CHANGE","message":"No FRANK whole-architecture change follows; this is a compiler/runtime identity constraint."},
+    {"to":"claygraph","status":"NO_CHANGE","message":"No graph semantic change; preserve logical identity, provenance, activation/admissibility and authority distinctions."},
+    {"to":"gwt","status":"NO_CHANGE","message":"Numeric determinism is not workspace causal-use evidence."},
+    {"to":"hyperposition","status":"NO_CHANGE","message":"No higher-order relation/topology semantics changed."},
+    {"to":"emergenz","status":"NO_CHANGE","message":"Canonicalization determinism is not evidence of causal emergence."}
+  ],
+  "next_shared_test":"Production BASE source->parse->typed_ir->numeric canonical hash->lowering->native/Wasm execution->replay on Andreas Ubuntu, including big integers, signed zero, finite arithmetic and preregistered NaN equivalence classes."
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1713p0700_chatgpt_typed_numeric_identity",
+  "hypotheses":[
+    {
+      "id":"H-CC-NUMID-001",
+      "status":"SUPPORTED_LOCAL_EXECUTABLE",
+      "claim":"ClayCode numeric semantic identity can be made cross-runtime-stable for the tested exact Int and finite parsed F64 domains by hashing typed canonical values rather than host JSON number text.",
+      "mechanism":"Canonical IR preserves numeric type; Int is encoded losslessly and F64 literal identity is encoded from its IEEE-754 binary64 bits after the specified parse/rounding step.",
+      "expected":"Python and Node produce identical typed tokens on the matched corpus.",
+      "observed":"0/20013 Int-token mismatches and 0/50010 F64 parse-bit mismatches.",
+      "counterhypothesis":"A simpler JCS/string-wrapper protocol provides equivalent determinism with lower compiler/runtime complexity.",
+      "falsifier":"Production multi-backend differential testing finds typed-token divergence, unacceptable migration/latency cost, or no practical benefit over a simpler canonical protocol.",
+      "next_test":"Implement the same typed canonical numeric contract in the production BASE canonicalizer and compare native versus Wasm/WASI lowering on Andreas' Ubuntu target."
+    },
+    {
+      "id":"H-CC-NUMID-002",
+      "status":"SUPPORTED_NEGATIVE",
+      "claim":"Host-native JSON numeric serialization is not a valid universal ClayCode semantic-hash layer.",
+      "observed":"2427/50010 Python-vs-Node JSON text mismatches for equal parsed finite F64 values; -0 was serialized as -0.0 by Python and 0 by Node in the probe.",
+      "counterhypothesis":"Using one mandated JCS implementation everywhere eliminates the presentation divergence sufficiently for all required Clay numeric semantics.",
+      "falsifier":"The released numeric type contract restricts values to the JCS/I-JSON domain and proves that erased distinctions such as negative zero and larger exact integers are semantically irrelevant."
+    },
+    {
+      "id":"H-CC-NUMID-003",
+      "status":"OPEN_REFINED",
+      "claim":"Parsed F64 literal identity may use exact IEEE-754 bits, but cross-backend arithmetic equivalence must not require exact NaN sign/payload identity unless ClayCode explicitly narrows the backend semantics.",
+      "support":"Current WebAssembly numeric semantics represent floats as IEEE-754 bit patterns while permitting nondeterministic NaN sign/payload in arithmetic cases.",
+      "counterhypothesis":"Canonicalizing every arithmetic NaN at Clay runtime boundaries provides useful deterministic replay at acceptable cost.",
+      "falsifier":"Matched production arithmetic/replay tests show exact NaN payload equality is necessary and can be enforced portably without unacceptable cost or semantic distortion.",
+      "next_test":"Run finite arithmetic, signed-zero, infinities and NaN-producing operations across native and Wasm backends with semantic-equivalence classes preregistered."
+    },
+    {
+      "id":"H-CC-NUMID-004",
+      "status":"REFINED_NO_CORE_SYNTAX_CHANGE",
+      "claim":"The numeric mismatch does not currently justify new ClayCode surface syntax or a FRANK-specific numeric primitive.",
+      "mechanism":"The failure occurs at canonicalization/lowering representation boundaries and is repairable with typed IR plus backend legality checks.",
+      "counterhypothesis":"A real application exposes decimal/fixed-point or arbitrary-precision semantics that cannot be expressed by current G9 types without a source-level semantic extension.",
+      "falsifier":"A production BASE application counterexample requires numeric semantics not representable by current typed IR and cannot be safely carried as a library/domain type."
+    }
+  ],
+  "promotion_requested":false
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version":"frank-h1-effect-recovery-validation-0.1",
+  "run_id":"frank-20260809T2118p0700-chatgpt-secondary-integrated-sandbox",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class":"REMOTE_SANDBOX_DETERMINISTIC_TEST",
+  "owner_evidence_rule_for_this_run":"SANDBOX_SUFFICIENT_FOR_NOW",
+  "scope":"Real sandbox file side-effect path joined to the same H1 cognition/UnifiedDB ledger: proposal -> host capability permit -> persisted intent -> atomic effect -> verified/recovered outcome -> typed UnifiedDB re-entry.",
+  "exact_committed_artifacts":{
+    "effect_gateway_runtime":{"path":"research_entity/harness/reference/effect_gateway_runtime.py","git_blob_sha":"0046993f68e63008935aef3125c1a199ad39f381","sandbox_git_blob_sha":"0046993f68e63008935aef3125c1a199ad39f381","sandbox_sha256":"d0e2acf9a2441233bf70240915e477d1c5583865c34d72e1b0244fcf81baff87","byte_identity":true},
+    "effect_gateway_tests":{"path":"research_entity/harness/reference/test_effect_gateway_runtime.py","git_blob_sha":"d56e3cbbfd090bc6a15323de59f5df0e628373f6","sandbox_git_blob_sha":"d56e3cbbfd090bc6a15323de59f5df0e628373f6","sandbox_sha256":"941949bc0014a31fedc9cb599290ee1f38d57c425e5e9a13b832d749048905c4","byte_identity":true},
+    "effectful_runtime":{"path":"research_entity/harness/reference/frank_h1_effectful_runtime.py","git_blob_sha":"3a2cc04152baeef4461187dc171c7d0d72f0abb3","sandbox_git_blob_sha":"3a2cc04152baeef4461187dc171c7d0d72f0abb3","sandbox_sha256":"6d6d775852315002e55633523857aa0948439bf9aae4e39c84fddb7fa1a2d353","byte_identity":true},
+    "effectful_runtime_tests":{"path":"research_entity/harness/reference/test_frank_h1_effectful_runtime.py","git_blob_sha":"9f7d2133956f9398ec135639b690dca2002b255e","sandbox_git_blob_sha":"9f7d2133956f9398ec135639b690dca2002b255e","sandbox_sha256":"4f5c8e5620957125557860c3ad3b56b871e37d7732350057fd40ffefbfe41d34","byte_identity":true}
+  },
+  "combined_validation":{
+    "tests":{"passed":95,"failed":0},
+    "compileall":"PASS",
+    "effect_stress":{"cycles":100,"integration_audit_pass":100,"normal_committed":90,"crash_after_replace_recovered_committed":10,"files_verified":100,"persisted_events":700,"final_epoch":700,"wall_seconds":11.1533,"cycles_per_second":8.97,"semantic_state_hash_replay_equal":true,"trace_root_hash_replay_equal":true,"epoch_replay_equal":true}
+  },
+  "authority_and_effect_invariants":[
+    "model and peer outputs remain authority NONE",
+    "host permit binds capability, sandbox root, current epoch, proposal hash and byte budget",
+    "missing/tampered/stale/out-of-scope/oversize effects are denied before mutation",
+    "intent is durably represented in the same logical ledger before filesystem mutation",
+    "write uses temp-file fsync + atomic replace + directory fsync in the sandbox reference implementation",
+    "post-effect file hash is verified before normal COMMITTED_VERIFIED outcome",
+    "crash after intent or temp fsync recovers as not applied when preimage remains",
+    "crash after atomic replace recovers as committed when target hash equals intended hash",
+    "unexpected external target state is RECOVERY_CONFLICT rather than silently accepted",
+    "retry of same committed effect is idempotent and does not advance ledger epoch",
+    "reusing one effect_id with a different proposal is denied"
+  ],
+  "negative_results":[
+    {
+      "finding":"First 100-cycle effect stress produced only 23/100 FullRuntime wrapper audit PASS although all 100 file effects were correctly written and 10/10 after-replace crash cases recovered.",
+      "classification":"EFFECT_REENTRY_QUERY_WINDOW_BUG",
+      "cause":"Effect outcome re-entry queried the broad effect domain with limit=16. As history grew, lexicographic ordering excluded the just-created effect from the selected window.",
+      "resolution":"Bind the re-entry QuerySpec to keys=(effect_id,) so consequential outcome reconstruction targets the exact causal effect identity rather than an arbitrary bounded prefix.",
+      "post_fix_result":"100/100 audit PASS under the identical stress structure; 700 events; exact replay hashes."
+    }
+  ],
+  "architecture_implication":"Consequential re-entry must be identity-addressed. Generic bounded retrieval is unsafe for causal outcome reconstruction even when it is acceptable for exploratory context assembly.",
+  "architecture_fidelity":"IMPROVED",
+  "release_claim":"NOT_H1_RELEASE_PASS",
+  "limitations":[
+    "Filesystem effect is a sandbox reference effect, not unrestricted host mutation authority.",
+    "Power-loss behavior is approximated by injected process crash points and fsync discipline; no physical power-cut test is claimed.",
+    "Broader multi-process/race/partial-effect/fuzz/security tests remain open.",
+    "Target Ubuntu filesystem and hardware behavior remain unmeasured in this phase."
+  ]
+}

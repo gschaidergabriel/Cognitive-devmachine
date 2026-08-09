@@ -96,7 +96,11 @@ def type_params_ir(node: Tree | None) -> list[dict[str, Any]]:
 
 def type_ir(node: Any) -> dict[str, Any]:
     if isinstance(node, Tree) and str(node.data) == "type_expr":
-        members = [type_ir(child) for child in node.children if isinstance(child, Tree) and str(child.data) in {"type_atom", "type_expr", "qid"}]
+        members = [
+            type_ir(child)
+            for child in node.children
+            if isinstance(child, Tree) and str(child.data) in {"type_atom", "type_expr", "qid"}
+        ]
         if len(members) == 1:
             return members[0]
         return {"kind": "union", "members": members}
@@ -134,7 +138,10 @@ def name_after_keyword(node: Tree) -> str:
 
 def field_ir(node: Tree) -> dict[str, Any]:
     name = token_text(node.children[0])
-    type_node = next((x for x in node.children if isinstance(x, Tree) and str(x.data) in {"type_atom", "type_expr", "qid"}), None)
+    type_node = next(
+        (x for x in node.children if isinstance(x, Tree) and str(x.data) in {"type_atom", "type_expr", "qid"}),
+        None,
+    )
     if not name or type_node is None:
         raise ValueError("malformed field")
     default_expr = None
@@ -151,7 +158,10 @@ def field_ir(node: Tree) -> dict[str, Any]:
 
 def param_ir(node: Tree) -> dict[str, Any]:
     name = token_text(node.children[0])
-    type_node = next((x for x in node.children if isinstance(x, Tree) and str(x.data) in {"type_atom", "type_expr", "qid"}), None)
+    type_node = next(
+        (x for x in node.children if isinstance(x, Tree) and str(x.data) in {"type_atom", "type_expr", "qid"}),
+        None,
+    )
     return {"name": name, "type": type_ir(type_node) if type_node is not None else None}
 
 
@@ -164,7 +174,10 @@ def params_ir(node: Tree | None) -> list[dict[str, Any]]:
 def method_ir(node: Tree) -> dict[str, Any]:
     name = token_text(node.children[0])
     params = first_tree(node, "params")
-    type_nodes = [x for x in node.children if isinstance(x, Tree) and str(x.data) in {"type_atom", "type_expr", "qid"}]
+    type_nodes = [
+        x for x in node.children
+        if isinstance(x, Tree) and str(x.data) in {"type_atom", "type_expr", "qid"}
+    ]
     if not type_nodes:
         raise ValueError("method signature missing return type")
     return {"name": name, "params": params_ir(params), "returns": type_ir(type_nodes[-1])}
@@ -192,7 +205,10 @@ def lower_decl(node: Tree) -> dict[str, Any]:
     if kind == "needle_decl":
         name = name_after_keyword(node)
         params = first_tree(node, "params")
-        type_nodes = [x for x in node.children if isinstance(x, Tree) and str(x.data) in {"type_atom", "type_expr", "qid"}]
+        type_nodes = [
+            x for x in node.children
+            if isinstance(x, Tree) and str(x.data) in {"type_atom", "type_expr", "qid"}
+        ]
         if not type_nodes:
             raise ValueError("needle missing return type")
         return {"kind": "needle", "name": name, "params": params_ir(params), "returns": type_ir(type_nodes[-1])}
@@ -227,17 +243,22 @@ def walk_types(value: Any):
 
 def classify_type_uses(declarations: list[dict[str, Any]]) -> list[dict[str, Any]]:
     local = {d["name"] for d in declarations if d.get("kind") in {"record", "interface", "type_alias"} and d.get("name")}
-    generics = {p for d in declarations for p in d.get("type_params", [])}
-    names = set()
-    for decl in declarations:
-        for t in walk_types(decl):
-            if t.get("kind") == "named":
-                names.add(str(t["name"]))
     rows = []
-    for name in sorted(names):
-        scope = "LOCAL_DECLARED" if name in local else ("GENERIC_PARAM" if name in generics else "EXTERNAL_OR_BUILTIN_UNRESOLVED")
-        rows.append({"name": name, "resolution": scope})
-    return rows
+    seen = set()
+    for index, decl in enumerate(declarations):
+        owner = str(decl.get("name") or f"{decl.get('kind','decl')}#{index}")
+        generics = set(decl.get("type_params", []))
+        for t in walk_types(decl):
+            if t.get("kind") != "named":
+                continue
+            name = str(t["name"])
+            scope = "LOCAL_DECLARED" if name in local else ("GENERIC_PARAM" if name in generics else "EXTERNAL_OR_BUILTIN_UNRESOLVED")
+            key = (owner, name, scope)
+            if key in seen:
+                continue
+            seen.add(key)
+            rows.append({"owner": owner, "name": name, "resolution": scope})
+    return sorted(rows, key=lambda x: (x["owner"], x["name"], x["resolution"]))
 
 
 def lower_program(source: str, grammar: str, *, strict: bool = True) -> dict[str, Any]:
@@ -287,14 +308,24 @@ needle lower(x:Box<Int>)->Result<Int|Error>
     same_semantics = ira["identity"]["semantic_ir_sha256"] == irb["identity"]["semantic_ir_sha256"]
     source_distinct = ira["identity"]["source_sha256"] != irb["identity"]["source_sha256"]
     mutation_distinct = ira["identity"]["semantic_ir_sha256"] != irm["identity"]["semantic_ir_sha256"]
-    type_rows = {x["name"]: x["resolution"] for x in ira["type_uses"]}
-    type_resolution_ok = type_rows.get("Box") == "LOCAL_DECLARED" and type_rows.get("T") == "GENERIC_PARAM" and type_rows.get("ReceiptRef") == "EXTERNAL_OR_BUILTIN_UNRESOLVED"
+    type_rows = {(x["owner"], x["name"]): x["resolution"] for x in ira["type_uses"]}
+    type_resolution_ok = (
+        type_rows.get(("lower", "Box")) == "LOCAL_DECLARED"
+        and type_rows.get(("Box", "T")) == "GENERIC_PARAM"
+        and type_rows.get(("Verifiable", "ReceiptRef")) == "EXTERNAL_OR_BUILTIN_UNRESOLVED"
+    )
     duplicate_rejected = False
     try:
         lower_program("record X {a:Int}\nrecord X {b:Int}\n", grammar, strict=strict)
     except ValueError:
         duplicate_rejected = True
-    passed = same_semantics and source_distinct and mutation_distinct and type_resolution_ok and duplicate_rejected
+    scoped = lower_program("record A<T> {x:T}\nrecord B {x:T}\n", grammar, strict=strict)
+    scoped_rows = {(x["owner"], x["name"]): x["resolution"] for x in scoped["type_uses"]}
+    generic_scope_local = (
+        scoped_rows.get(("A", "T")) == "GENERIC_PARAM"
+        and scoped_rows.get(("B", "T")) == "EXTERNAL_OR_BUILTIN_UNRESOLVED"
+    )
+    passed = same_semantics and source_distinct and mutation_distinct and type_resolution_ok and duplicate_rejected and generic_scope_local
     return {
         "schema_version": "1.0",
         "component": "ClayCode BASE typed declaration IR",
@@ -304,6 +335,7 @@ needle lower(x:Box<Int>)->Result<Int|Error>
         "semantic_mutation_changes_identity": mutation_distinct,
         "type_resolution_classification": type_resolution_ok,
         "duplicate_declaration_rejected": duplicate_rejected,
+        "generic_scope_is_declaration_local": generic_scope_local,
         "pass": passed,
         "scope_guard": "PASS covers typed declaration lowering/identity invariants in this fixture only; it is sandbox/proxy evidence if strict_parser=false and does not close CC-WP-03.",
     }

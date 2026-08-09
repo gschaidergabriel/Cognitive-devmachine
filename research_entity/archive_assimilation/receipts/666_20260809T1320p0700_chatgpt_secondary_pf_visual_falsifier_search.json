@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1320p0700-chatgpt-secondary-pf-visual-falsifier-search",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T13:20:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "extends_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1317p0700_chatgpt_secondary_pf_visual_perception_lineage.json",
+  "source_universe": "gschaidergabriel/Project-Frankenstein",
+  "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "scope": {
+    "lane": "visual_learning_falsifier_search",
+    "coverage_class": "TARGETED_HISTORY_FALSIFIER_SEARCH",
+    "exact_coverage_credit": 0.0,
+    "searches": [
+      "commit-history query: retina",
+      "commit-history query: vision",
+      "commit-history query: familiar",
+      "commit-history query: learn image",
+      "direct source inspection: tools/frank_visual_pipeline.py@90596662837a75801fd2024069ee9bd547137869"
+    ]
+  },
+  "result": {
+    "epistemic_class": "TARGETED_NEGATIVE_SEARCH_RESULT",
+    "status": "NEGATIVE_RESULT",
+    "statement": "No falsifier for PF-VIS-005 was found on the inspected Project-Frankenstein history surface. Commit-history searches exposed the adaptive detector/VLM routing lineage, FrankEye, and native_vision migrations; 'familiar' hits concerned spatial-room familiarity rather than image identity learning. Direct inspection of the original Stage-1 visual pipeline showed stateless YOLO object detection, Tesseract OCR, scene/screenshot/photo/diagram heuristics and color extraction, with no persistent personal visual classifier/prototype learner."
+  },
+  "source_refs": [
+    {
+      "kind": "commit",
+      "sha": "90596662837a75801fd2024069ee9bd547137869",
+      "meaning": "Introduces Adaptive Visual Pipeline: YOLO+OCR Stage 1 plus optional VLM Stage 2"
+    },
+    {
+      "kind": "file_at_ref",
+      "ref": "90596662837a75801fd2024069ee9bd547137869",
+      "path": "tools/frank_visual_pipeline.py",
+      "meaning": "Stage-1 source inspected for learning/persistence state"
+    },
+    {
+      "kind": "commit_search",
+      "query": "vision",
+      "meaning": "Returned vision architecture lineage commits including 9059666, 0fd27f23, 4def0bb4, 279eb175 and 6158be8d"
+    },
+    {
+      "kind": "commit_search",
+      "query": "familiar",
+      "meaning": "Returned spatial room-familiarity history, not visual identity learning"
+    }
+  ],
+  "anti_overclaim_boundary": "This is not proof of repository-wide absence. Commit-message search is incomplete evidence and the frozen Project-Frankenstein tree/history denominator remains unfrozen. The result only strengthens the negative conclusion for the directly inspected visual lineage.",
+  "architecture_delta": "No change to the preceding receipt: current Clay 0.1 work must keep native semantic perception separate from an explicit user-specific adaptive visual learner unless later exhaustive history produces a genuine inherited learner.",
+  "next_falsifier": "Inspect Drive Retina source/training artifacts and any Project-Frankenstein history paths discovered once the complete tree/history denominator is available; search specifically for persistent prototype/classifier stores, trusted visual examples, user-object identity, face/person identity learning, online fit/update, open-set calibration and rollback/version state.",
+  "gate_effect": "NO_GATE_CHANGE"
+}

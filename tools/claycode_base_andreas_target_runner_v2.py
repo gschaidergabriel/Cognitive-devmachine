@@ -2,9 +2,8 @@
 """Fail-closed ClayCode BASE target runner for Andreas' Ubuntu developer host.
 
 Exit 0 means the currently implemented target-component battery passed on a clean,
-locally-attested Andreas Ubuntu host. It NEVER means ClayCode BASE release PASS: the
-hosted/proxy ten-app suite is deliberately non-accepting, so WP10 real application
-receipts and WP14 final audit remain separate mandatory gates.
+locally-attested Andreas Ubuntu host. It NEVER means ClayCode BASE release PASS: real
+ten-app acceptance, full FRANK handoff and WP14 strict audit remain separate gates.
 """
 from __future__ import annotations
 import argparse,hashlib,json,os,platform,subprocess,sys,time
@@ -23,13 +22,22 @@ PHASES=[
  ('typed_ir',['tools/claycode_wp03_typed_ir_validation.py'],True),
  ('effect_pipeline',['tools/claycode_base_effect_pipeline.py','--self-test','--output','research_entity/claycode/autonomous/BASE_EFFECT_PIPELINE_RECEIPT.json'],True),
  ('pure_native',['tools/claycode_base_pure_toolchain_validation.py'],True),
+ ('int_division',['tools/claycode_int_division_regression.py'],True),
  ('package_link',['tools/claycode_base_package_validation.py'],True),
  ('runtime',['tools/claycode_base_runtime_validation.py'],True),
+ ('runtime_v04_hardening',['tools/claycode_runtime_v04_hardening_validation.py'],True),
+ ('compiler_mainline_runtime_bridge',['tools/claycode_effect_mainline_runtime_bridge.py'],True),
+ ('concurrency_cancellation_error',['tools/claycode_base_concurrency_validation.py'],True),
  ('applications_proxy',['tools/claycode_base_application_proxy_suite_v2.py'],False),
  ('fuzz',['tools/claycode_base_fuzz_conformance.py'],True),
  ('corpus',['tools/claycode_base_corpus_generator.py'],True),
  ('frank',['tools/claycode_frank_score_handoff_validation.py'],True)]
-ARTIFACTS=['BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json','BASE_CANONICALIZER_RECEIPT.json','WP03_TYPED_IR_RECEIPT.json','BASE_EFFECT_PIPELINE_RECEIPT.json','BASE_PURE_TOOLCHAIN_RECEIPT.json','BASE_PACKAGE_LINK_RECEIPT.json','BASE_RUNTIME_CAPABILITY_RECEIPT.json','BASE_APPLICATION_PROXY_SUITE_V2_RECEIPT.json','BASE_FUZZ_CONFORMANCE_RECEIPT.json','FRANK_ACTIVE_ASSEMBLY_SCORE_HANDOFF_RECEIPT.json']
+ARTIFACTS=[
+ 'BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json','BASE_CANONICALIZER_RECEIPT.json','WP03_TYPED_IR_RECEIPT.json',
+ 'BASE_EFFECT_PIPELINE_RECEIPT.json','BASE_PURE_TOOLCHAIN_RECEIPT.json','BASE_INT_DIVISION_REGRESSION_RECEIPT.json',
+ 'BASE_PACKAGE_LINK_RECEIPT.json','BASE_RUNTIME_CAPABILITY_RECEIPT.json','BASE_RUNTIME_V04_HARDENING_RECEIPT.json',
+ 'BASE_COMPILER_MAINLINE_RUNTIME_BRIDGE_RECEIPT.json','BASE_CONCURRENCY_CANCELLATION_RECEIPT.json',
+ 'BASE_APPLICATION_PROXY_SUITE_V2_RECEIPT.json','BASE_FUZZ_CONFORMANCE_RECEIPT.json','FRANK_ACTIVE_ASSEMBLY_SCORE_HANDOFF_RECEIPT.json']
 def sha(b):return hashlib.sha256(b).hexdigest()
 def release():
  d={};p=Path('/etc/os-release')
@@ -71,7 +79,7 @@ def main():
  git=command(['git','rev-parse','HEAD'],15);native=command(['cc','--version'],15)
  unresolved=[]
  if not target_components_pass:unresolved.append('TARGET_COMPONENT_BATTERY_NOT_GREEN')
- unresolved+=['CC-WP-10_REQUIRES_REAL_NON_PROXY_PER_APPLICATION_TARGET_RECEIPTS','CC-WP-14_REQUIRES_FINAL_GENERAL_PURPOSE_MANIFEST_AND_ZERO_P0_P1_AUDIT']
- r={'schema_version':'2.1','created_at':datetime.now(timezone.utc).isoformat(),'target_host':'ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM','target_host_checks':checks,'host':{'node':platform.node(),'platform':platform.platform(),'machine':platform.machine(),'python':platform.python_version(),'os_release':rel},'repo_head':git,'native_compiler':native,'phases':phases,'artifacts':arts,'target_component_battery_pass':target_components_pass,'wp10_proxy_preflight_pass':proxy_preflight_pass,'base_release_pass':False,'general_purpose_gate_pass':False,'target_acceptance_ready_for_wp14_audit':False,'unresolved':unresolved,'automatic_promotion':False,'authority_invariant':'model_output != execution_authority','scope':'Real target component evidence collector. Proxy application execution is explicitly non-accepting; WP10 real app receipts and WP14 remain mandatory.'}
- raw=json.dumps(r,indent=2,sort_keys=True,ensure_ascii=False)+'\n';a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(raw,encoding='utf-8');print(json.dumps({'target_component_battery_pass':target_components_pass,'base_release_pass':False,'receipt':str(a.output.relative_to(ROOT)),'sha256':sha(raw.encode()),'unresolved':unresolved}));return 0 if target_components_pass else 2
+ unresolved+=['CC-WP-10_REQUIRES_REAL_NON_PROXY_PER_APPLICATION_TARGET_RECEIPTS','CC-WP-13_REQUIRES_FULL_STATEFUL_FRANK_HANDOFF','CC-WP-14_REQUIRES_STRICT_ADJUDICATION_AND_FINAL_GENERAL_PURPOSE_MANIFEST']
+ r={'schema_version':'2.2','created_at':datetime.now(timezone.utc).isoformat(),'target_host':'ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM','target_host_checks':checks,'host':{'node':platform.node(),'platform':platform.platform(),'machine':platform.machine(),'python':platform.python_version(),'os_release':rel},'repo_head':git,'native_compiler':native,'phases':phases,'artifacts':arts,'target_component_battery_pass':target_components_pass,'runtime_v04_hardening_pass':any(x.get('phase')=='runtime_v04_hardening' and x.get('semantic_pass') for x in phases),'compiler_mainline_runtime_bridge_pass':any(x.get('phase')=='compiler_mainline_runtime_bridge' and x.get('semantic_pass') for x in phases),'concurrency_cancellation_error_pass':any(x.get('phase')=='concurrency_cancellation_error' and x.get('semantic_pass') for x in phases),'int_division_pass':any(x.get('phase')=='int_division' and x.get('semantic_pass') for x in phases),'wp10_proxy_preflight_pass':proxy_preflight_pass,'base_release_pass':False,'general_purpose_gate_pass':False,'target_acceptance_ready_for_wp14_audit':False,'unresolved':unresolved,'automatic_promotion':False,'authority_invariant':'model_output != execution_authority','scope':'Real target component evidence collector. Proxy application execution is explicitly non-accepting; WP10 real app receipts, full FRANK and strict WP14 adjudication remain mandatory.'}
+ raw=json.dumps(r,indent=2,sort_keys=True,ensure_ascii=False)+'\n';a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(raw,encoding='utf-8');print(json.dumps({'target_component_battery_pass':target_components_pass,'runtime_v04_hardening_pass':r['runtime_v04_hardening_pass'],'compiler_mainline_runtime_bridge_pass':r['compiler_mainline_runtime_bridge_pass'],'concurrency_cancellation_error_pass':r['concurrency_cancellation_error_pass'],'int_division_pass':r['int_division_pass'],'base_release_pass':False,'receipt':str(a.output.relative_to(ROOT)),'sha256':sha(raw.encode()),'unresolved':unresolved}));return 0 if target_components_pass else 2
 if __name__=='__main__':raise SystemExit(main())

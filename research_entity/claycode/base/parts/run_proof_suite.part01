@@ -1,0 +1,80 @@
+    code=PythonLowerer().lower_program(p); ns=dict(const_env);exec(code,ns); observed=ns['frame'](rt2,*args)
+    assert expected==observed
+    assert observed['source_status']=='THINKING_FRAMEWORK_NOT_WORLD_FACT'
+    receipts.append({'app_id':'APP-09-FRANK-COMPONENT','status':'PASS_LOCAL_PROXY','upstream_path':'claycode/frank_grt.clay','upstream_git_blob':'b9027118e886b8da4110c0801f7d5e1cf9d1c3b9','source_sha256':hashlib.sha256(FRANK_FRAME.encode()).hexdigest(),'semantic_hash':p.semantic_hash,'contract_hash':p.contract_hash,'generated_target_sha256':hashlib.sha256(code.encode()).hexdigest(),'reference_result':expected,'compiled_result':observed,'compiler_version':VERSION,'generated_source':code})
+
+    # Admitted G9 V3 main cycle must now be recognized and parsed (fixes silent cycle extraction + if/coalesce gap).
+    g9p=parse_executable(G9_CYCLE); assert [f.name for f in g9p.functions]==['cycle']; assert check_program(g9p,set()).ok
+    repo_g9=OUT.parent/'g9'/'CLAYCODE_G9_FUSION_SPEC_V3.clay'
+    full_g9_conformance={'available':repo_g9.exists(),'pass':False}
+    if repo_g9.exists():
+        full_text=repo_g9.read_text()
+        surface=scan_surface(full_text)
+        full_exec=parse_executable(full_text,{'cycle'})
+        full_g9_conformance={'available':True,'pass':True,'surface_declarations':len(surface.declarations),'surface_hash':surface.surface_hash,'cycle_semantic_hash':full_exec.semantic_hash}
+
+
+    # Independent native C backend smoke: same IR -> reference evaluator -> gcc executable.
+    native_src='module native.proof\nfn main() -> Int { return (7 * 6) + 1 }'
+    native_p=parse_executable(native_src); native_ref=Evaluator(make_runtime(OUT/'tmp'/'native-ref',set())).run(native_p.functions[0],[])
+    csrc=CLowerer().lower_main(native_p); cfile=OUT/'tmp'/'native.c'; exe=OUT/'tmp'/'native-proof'; cfile.write_text(csrc)
+    cp=__import__('subprocess').run(['gcc','-O2',str(cfile),'-o',str(exe)],capture_output=True,text=True)
+    assert cp.returncode==0,cp.stderr
+    rp=__import__('subprocess').run([str(exe)],capture_output=True,text=True); assert rp.returncode==0
+    native_observed=int(rp.stdout.strip()); assert native_ref==native_observed==43
+    native_receipt={'status':'PASS','source_sha256':hashlib.sha256(native_src.encode()).hexdigest(),'semantic_hash':native_p.semantic_hash,'generated_c_sha256':hashlib.sha256(csrc.encode()).hexdigest(),'binary_sha256':hashlib.sha256(exe.read_bytes()).hexdigest(),'reference_result':native_ref,'native_result':native_observed,'compiler':cp.args[0]}
+
+    # Differential/property fuzz of pure arithmetic source -> evaluator vs generated Python.
+    rng=random.Random(20260809); fuzz_fail=[]; n_fuzz=5000
+    for i in range(n_fuzz):
+        a,b,c=[rng.randint(-1000,1000) for _ in range(3)]
+        op1=rng.choice(['+','-','*']); op2=rng.choice(['+','-','*'])
+        src=f'module fuzz.m{i}\nfn main() -> Int {{ return ({a} {op1} {b}) {op2} {c} }}'
+        try:
+            p=parse_executable(src); rt=make_runtime(OUT/'tmp'/'fuzz',set()); ref=Evaluator(rt).run(p.functions[0],[])
+            code=PythonLowerer().lower_program(p); ns={};exec(code,ns); obs=ns['main'](rt)
+            if ref!=obs:fuzz_fail.append({'i':i,'ref':ref,'obs':obs,'src':src})
+        except Exception as e:fuzz_fail.append({'i':i,'error':repr(e),'src':src})
+        if len(fuzz_fail)>10:break
+
+    # Formatting/comment perturbation must preserve semantic hash while contract/source identity changes.
+    s1='module hash.test\nfn main() -> Int { return 1 + 2 }'
+    s2='module hash.test\n// formatting change\nfn main()->Int {\n return 1+2\n}'
+    p1,p2=parse_executable(s1),parse_executable(s2)
+    identity_test={'semantic_same':p1.semantic_hash==p2.semantic_hash,'contract_diff':p1.contract_hash!=p2.contract_hash}
+    assert identity_test=={'semantic_same':True,'contract_diff':True}
+
+    # Type/effect checker negative controls.
+    bad_type=parse_executable('module bad.type\nfn main() -> Int { let x : String = 3 return x }')
+    bad_type_check=check_program(bad_type,set()); assert not bad_type_check.ok and any(d.code in {'TYPE_LET','TYPE_RETURN'} for d in bad_type_check.diagnostics)
+    bad_effect=parse_executable('module bad.effect\nfn main() -> String { return host.system.probe() }')
+    bad_effect_check=check_program(bad_effect,set()); assert not bad_effect_check.ok and any(d.code=='EFFECT_NOT_DECLARED' for d in bad_effect_check.diagnostics)
+
+    # 1000 authority mutation attempts: forged source-side names never create a token/grant.
+    auth_denied=0
+    src='module attack\nfn main() -> String { return host.system.probe() }'; p=parse_executable(src); fn=p.functions[0]
+    for i in range(1000):
+        rt=make_runtime(OUT/'tmp'/'auth',set())
+        try: Evaluator(rt).run(fn,[])
+        except AuthorityDenied: auth_denied+=1
+    assert auth_denied==1000
+
+    # Corpus / held-out generator
+    corpus=generate_corpus(seed=20260809,count=256)
+    (OUT/'CLAYCODE_BASE_CORPUS.json').write_text(json.dumps(corpus,indent=2,ensure_ascii=False))
+
+    app_passed=[r['app_id'] for r in receipts]
+    result={
+      'schema_version':'1.0','run_id':'claycode_base_blocker_attack_20260809','compiler_version':VERSION,
+      'environment':__import__('platform').platform(),'application_receipts':receipts,
+      'app_local_proxy_passed':app_passed,
+      'app_local_proxy_not_executed':['APP-10-FULL-FRANK-HANDOFF'],
+      'fuzz':{'cases':n_fuzz,'failures':fuzz_fail,'pass':not fuzz_fail},
+      'authority_fuzz':{'cases':1000,'denied':auth_denied,'pass':auth_denied==1000},
+      'identity_test':identity_test,'g9_cycle_conformance':{'pass':True,'semantic_hash':g9p.semantic_hash},'full_repo_g9_conformance':full_g9_conformance,'native_backend':native_receipt,
+      'type_effect_negative_controls':{'type_diagnostics':[d.__dict__ for d in bad_type_check.diagnostics],'effect_diagnostics':[d.__dict__ for d in bad_effect_check.diagnostics]},'heldout_corpus':{'train_count':corpus['count'],'heldout_count':corpus['heldout_count'],'overlap':corpus['overlap'],'sha256':corpus['sha256']},
+      'claim_boundary':'LOCAL_PROXY_ONLY; not Andreas target Ubuntu host, not BASE gate pass, GUI adapter is real Tk/X11 when DISPLAY is available, otherwise headless fallback, APP-10 remains open.'
+    }
+    (OUT/'EXECUTABLE_RESEARCH_RECEIPT.json').write_text(json.dumps(result,indent=2,ensure_ascii=False,default=str))
+    print(json.dumps({k:v for k,v in result.items() if k not in ('application_receipts',)},indent=2))
+

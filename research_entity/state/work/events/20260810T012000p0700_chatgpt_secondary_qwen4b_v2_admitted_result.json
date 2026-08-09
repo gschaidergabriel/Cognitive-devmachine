@@ -1,0 +1,119 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-RESULT-20260810T012000P0700-QWEN4B-V2-ADMITTED",
+  "kind": "WORK_RESULT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T01:20:00+07:00",
+  "payload": {
+    "work_id": "FRANK-QWEN4B-CALIBRATION-AND-RESEED",
+    "status": "V2_AND_CALIBRATION_ADMITTED_FRESH_CONTEXT_NOW_ELIGIBLE_NOT_YET_EXECUTED",
+    "source_repository": "gschaidergabriel/Dr.-Unterweger",
+    "v2": {
+      "tested_sha": "5756eded599770f02c42735647a6715ac0ee369b",
+      "receipt_commit": "0c6d9de4ffc314765bcc03b1d7e487cb9bbaec21",
+      "run_id": "31328419870",
+      "receipt_path": "runtime/vps_integrity/real_qwen4b_prebuilt_v2_latest.json",
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_QWEN4B_PREBUILT_V2_EXECUTION",
+      "status": "PASS",
+      "real_model_executed": true,
+      "receipt_admission": "ADMITTED_PASS_CANDIDATE",
+      "fixed_accuracy": 0.75,
+      "adaptive_accuracy": 0.75,
+      "task_count": 4,
+      "fixed_recurrences": 20,
+      "adaptive_recurrences": 20,
+      "fixed_latency_ms": 49831.534,
+      "adaptive_latency_ms": 49831.534,
+      "recurrence_reduction_fraction": 0.0,
+      "latency_reduction_fraction": 0.0,
+      "early_halt_count": 0,
+      "policy_decisions": {"ROUTE_READOUT_UNCERTAIN": 8},
+      "policy_regimes": {"READOUT_UNCERTAIN": 8},
+      "readout_quality_invalid_event_count": 8,
+      "residual_estimator_quality_status": "UNCALIBRATED_REAL_QWEN_SELF_REPORT",
+      "residual_uncertainty_supplied_to_w4": 1.0,
+      "decode_tokens_per_second_mean": 10.552447395535133,
+      "prompt_tokens_per_second_mean": 38.110198987659686,
+      "tool_case": {
+        "read_state_selected": true,
+        "arguments_valid": true,
+        "tool_call_count": 1,
+        "reasoning_content_persisted": false,
+        "latency_ms": 6753.376
+      },
+      "process_resources": {
+        "VmRSS_kib": 4762812,
+        "VmHWM_kib": 4762812,
+        "VmSize_kib": 5594492,
+        "Threads": 15,
+        "user_cpu_s": 224.21,
+        "system_cpu_s": 1.5,
+        "voluntary_context_switches": 58,
+        "nonvoluntary_context_switches": 10105
+      },
+      "authority": {
+        "executor_repository_permission": "contents:read",
+        "executor_checkout_persist_credentials": false,
+        "model_output_has_repo_write_authority": false,
+        "writer": "SEPARATE_SELF_HOSTED_WRITER_JOB_DEGRADED_FALLBACK",
+        "same_physical_host_as_executor": true,
+        "writer_executes_model_output": false,
+        "artifact_sha256": "53499dbecf1fe611d416af58baa043052d871cef4a119f1edbfcc8296e3b27b1",
+        "raw_executor_receipt_sha256": "8fc245889b5bfd94524043ae4b413846c8f0ee63dc3b7dbe918b2f9c58575880",
+        "raw_executor_log_sha256": "e49eea90a4a84736f8ffc93c71cafe82b1aef54b5d519a18c7d540ac46f34786"
+      }
+    },
+    "calibration_audit": {
+      "receipt_commit": "a9376bd83db8c3170df8c3a3e84e06334eb2d508",
+      "run_id": "31327918491",
+      "receipt_path": "runtime/vps_integrity/qwen4b_residual_calibration_audit_latest.json",
+      "model_executed_in_audit": false,
+      "task_count": 4,
+      "correct_count": 3,
+      "fixed_accuracy": 0.75,
+      "mean_verbalized_confidence": 1.0,
+      "absolute_calibration_gap": 0.25,
+      "ece_10bin": 0.25,
+      "brier_score": 0.25,
+      "overconfident_wrong_95_count": 1,
+      "calibration_gate_pass": false,
+      "calibration_evidence_sufficient_for_promotion": false,
+      "residual_proxy_conclusion": "RAW_VERBALIZED_CONFIDENCE_NOT_VALIDATED_FOR_AUTONOMOUS_HALT_CORRECTNESS_GATING",
+      "promotion": "NONE"
+    },
+    "hypothesis_update": {
+      "historical_v1_claim": "Raw confidence plus answer stability appeared to allow one recurrence of savings per four observed trajectories.",
+      "v2_result": "REFUTED_AS_CANONICAL_STOPPING_POLICY",
+      "reason": "Once the exact same visible-confidence residual is correctly marked uncalibrated at uncertainty 1.0, every recurrence-4/5 W4 readout becomes invalid/uncertain and no early HALT is admitted. The observed V1 speedup therefore depended on unjustified confidence-quality metadata rather than validated correctness evidence.",
+      "retained_observation": "Repeated answers still provide a descriptive stability signal, but stability is not truth and cannot independently authorize halt or effects.",
+      "calibration_result": "The post-hoc audit gives 100% mean stated confidence at only 75% accuracy with ECE/Brier/calibration gap 0.25 and one confidently wrong case. This blocks lowering W4 residual uncertainty from 1.0 on current evidence.",
+      "counterhypothesis": "A same-model fresh-context verification route may rescue some stable wrong attractors, but can add cost or regress correct answers and is not independent replication."
+    },
+    "architecture_delta": {
+      "status": "SUPPORTED_NEGATIVE_AND_FAIL_CLOSED",
+      "changes": [
+        "Raw verbalized confidence remains an observable diagnostic feature only; it is not a truth, correctness, autonomous halt, route-success, or effect-authority gate.",
+        "The current W4 real-Qwen residual must remain UNCALIBRATED with uncertainty 1.0 until a separately admitted calibration mechanism justifies another value.",
+        "The historical V1 ~20.5% latency saving remains diagnostic provenance and must not be promoted as current adaptive benefit.",
+        "Current conservative V2 has NO_BENEFIT for recurrence reduction on the four-task pilot: zero early halts and zero saved recurrence/latency.",
+        "Fresh-context same-model verification is now scientifically eligible because the prerequisite V2 and calibration audit are admitted; it remains offline-only and must preserve 3-anchor/21-stress evidence partitions."
+      ]
+    },
+    "work_update": {
+      "old_status": "BLOCKED_ON_POST_GUARD_V2_RECEIPT",
+      "new_status": "READY_FOR_GATED_FRESH_CONTEXT_EXECUTION",
+      "completed_dependencies": [
+        "post-302066f admitted conservative V2 receipt",
+        "V2 benchmark/receipt schema 2.1 admission contract PASS",
+        "post-hoc calibration audit admitted"
+      ],
+      "remaining_dependency": "fresh-context workflow must materialize its own admitted receipt; absence of receipt remains QUEUED_OR_UNKNOWN, not FAIL"
+    },
+    "promotion": "NONE",
+    "release_claim": false,
+    "reliability_claim": false,
+    "andreas_target_acceptance": false,
+    "routing": ["frank", "harness", "gwt", "unifieddb", "claygraph", "clayresearch", "model-runtime"],
+    "next_evidence": "runtime/vps_integrity/qwen4b_independent_reseed_latest.json"
+  }
+}

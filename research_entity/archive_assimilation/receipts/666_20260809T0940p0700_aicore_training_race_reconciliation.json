@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "trigger":"666",
+  "event":"CONCURRENT_WORKER_RACE_RECONCILIATION",
+  "scope":"drive://Clay/AICORE/training recursive denominator",
+  "our_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_TRAINING_EXACT_RECURSIVE_MANIFEST_20260809T0936p0700.json",
+  "peer_commit":"b5d3330b273cfc7ee87c6ac7a8189a0124f67bee",
+  "race_cause":"GitHub commit search did not surface the peer training claim during pre-write overlap check; the claim became visible on post-write recent-commit reread.",
+  "replication":{"our_counts":{"files":77,"descendant_folders":4,"entries_below_root":81},"peer_counts":{"files":77,"descendant_folders":4,"entries_below_root":81},"count_verdict":"INDEPENDENT_EXACT_REPLICATION_PASS","double_credit_forbidden":true},
+  "metadata_conflict":{"field":"training root Drive ID","our_direct_drive_id":"1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz","prior_aicore_revalidation_id":"1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz","peer_manifest_id_string":"1VQVIWCEAzf5gq4DoYECR4RUE7mz-CUXf","verdict":"PEER_ROOT_ID_METADATA_ERROR; CHILD IDS AND COUNTS REPLICATE","resolution":"Use 1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz as training root identity; retain peer manifest as independent count replication with corrected metadata note."},
+  "gate_effect":{"training_denominator":"CLOSED_RECURSIVE_EXACT_REPLICATED","global_gate":"NOT_PASS","exact_global_percent_added":0.0},
+  "created_at":"2026-08-09T09:40:00+07:00"
+}

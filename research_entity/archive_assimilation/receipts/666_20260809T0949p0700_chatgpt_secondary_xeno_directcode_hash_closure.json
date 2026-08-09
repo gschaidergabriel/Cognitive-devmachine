@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0949p0700-chatgpt-secondary-xeno-directcode-hash-closure",
+  "trigger": "666",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "task_ref": "research_entity/rooms/rooms/center/tasks/666-xeno-directcode-hash-tranche.json",
+  "source": {
+    "drive_g8_root_id": "1x5TrnLC4PwdNITXawMn_U4jngYBiV0sF",
+    "scope": "directcode",
+    "scope_folder_id": "1sCBqRiX4YS5EymbV86uVmK1WXxJWQ_o0",
+    "bundle_manifest_drive_id": "1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g"
+  },
+  "method": {
+    "enumeration": "Complete recursive parent-scoped Google Drive list_folder enumeration with top_k=1000",
+    "identity": "Raw file download followed by local SHA-256 over exact bytes",
+    "race_guard": "Durable center task claim committed before enumeration; post-hash GitHub commit search found no competing directcode claim"
+  },
+  "denominator": {
+    "expected_manifest_leaves": 12,
+    "observed_recursive_leaves": 12,
+    "folder_nodes_below_scope_root": 7,
+    "extra_leaves": 0,
+    "missing_leaves": 0
+  },
+  "verified": [
+    {"path":"se_xeno/G8/directcode/backends/add4_equivalence.c","drive_id":"1S213BbwukBurGfbM3iKm_nFSwkyu4IP8","bytes":1415,"sha256":"6c21a9cc1b63617ec07ee2f39183a7e7c0c955f967d0c7b3b9544c6ab91aa5b3","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/backends/add4_equivalence_clang","drive_id":"1POY1QNaPpmZNI0zzEPNOGA6BE30z3QNu","bytes":16408,"sha256":"8525006750fb5e80aa2c13fe1428ad7379419c91af98bdd76599d7b9183ba016","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/backends/add4_equivalence_gcc","drive_id":"1aYbqkQYO0TRT49nDA7w3gruLBVNjwa3D","bytes":16336,"sha256":"378b1723e62ea789687b701887e930e9dae87f8377a3daf6dea5cbd89939b0e3","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/backends/compile_log.json","drive_id":"1TF5ojiHlt9SmNTGK_UTlIrXaKe-nuN6z","bytes":341,"sha256":"5462a285e94bb708828cdc467ade61e25520a3878ca4a2e1b66930e93e8008c0","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/benchmarks/local_runtime.jsonl","drive_id":"1vYt7PBsXEUjnvhPszbkLT6oq6dBRZZem","bytes":1578,"sha256":"b30184f4049319f6aabfccb23e4d831b7434369b1c9bb08c01ab2bef5f493144","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/benchmarks/tri_coupling_summary.json","drive_id":"1ccFsRcdsC1g08JxPkc8EfxGYksYWIgIP","bytes":1451,"sha256":"f6000a4a65290157838ff794c0814c404e388477c6d82f9d272a5deb3916d0c6","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/benchmarks/tri_coupling_tasks.jsonl","drive_id":"1D7x2IzEU1Xg6_3WsFwCZJGTXyRgBnoVe","bytes":6802275,"sha256":"2528dc8065d73c12da7077dd95ff43254fe1f3e74db9fd1014e591e86ec25f7c","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/egraphs/ADD4_MOD16.json","drive_id":"1_jSuq4-p-9IMmfqKG5sO3ZoyJ2C72pl5","bytes":2378,"sha256":"76f44079a0eeae9b58b02df82c9d8c23714c83a36bb876dcb4469e1231914a98","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/equivalence_classes/ADD4_MOD16.json","drive_id":"1jMkJbbavkW8cxkifvXeHz9lWoBGEI9HL","bytes":2378,"sha256":"76f44079a0eeae9b58b02df82c9d8c23714c83a36bb876dcb4469e1231914a98","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/intents/add4.json","drive_id":"1IVFEL_25WTK3GzzC-jvlYpMBRC5Jzgg_","bytes":343,"sha256":"d0eb6b1d264a97e8dcd55d69de3a22b3f658f55912213a5d2a227de8305024aa","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/program_graphs/ADD4_MOD16.json","drive_id":"1qFTcHWZyJSY7XBZpj49v4n-gDiDIHeHW","bytes":283,"sha256":"07bfcf3ff03d8aa1db101043d9bcf8dea1bc9934a80e593db5f40aab6ad8f840","manifest_match":true},
+    {"path":"se_xeno/G8/directcode/proofs/add4_exhaustive.json","drive_id":"1kK_8wE42_ihvZFOODWf5ScAWnLGCKOSN","bytes":695,"sha256":"55da7aa7aacaecd21c49c863787a035243289c5c79008b9b3164e9687e8655fa","manifest_match":true}
+  ],
+  "result": {
+    "scope_status": "HASH_CLOSED",
+    "verified_manifest_leaves": 12,
+    "mismatches": 0,
+    "scope_leaf_credit": 12,
+    "global_campaign_counter_update": "DEFER_TO_COORDINATOR_CAS_RECONCILIATION",
+    "reason": "Other XENO scopes are concurrently active; this receipt contributes an exact non-overlapping 12-leaf delta without guessing the live global campaign numerator."
+  },
+  "semantic_credit_added": 0.0,
+  "level0_effect": {"gate": "NOT_PASS", "global_exact_percent_added": 0.0, "reason": "Combined Level-0 denominator is not yet frozen."},
+  "status": "COMPLETE",
+  "created_at": "2026-08-09T09:49:00+07:00"
+}

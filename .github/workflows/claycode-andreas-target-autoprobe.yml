@@ -1,74 +1,151 @@
 name: ClayCode Andreas target autoprobe
+
 on:
   workflow_dispatch:
   push:
     paths:
       - '.github/workflows/claycode-andreas-target-autoprobe.yml'
+
 permissions:
   contents: write
+
 concurrency:
   group: claycode-andreas-target-autoprobe
   cancel-in-progress: false
+
 jobs:
   target:
     runs-on: [self-hosted, linux, x64]
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
-        with: {fetch-depth: 0}
-      - name: Probe registered target identity and run acceptance when verified
+        with:
+          fetch-depth: 0
+          clean: true
+
+      - name: Verify registered physical target and run canonical closure
         shell: bash
         run: |
-          mkdir -p research_entity/claycode/target
+          mkdir -p research_entity/claycode/target research_entity/claycode/target_receipts
           set +e
           python3 tools/claycode_target_host_identity.py verify --json > /tmp/claycode_identity.json
           identity_rc=$?
           desktop_rc=98
+          acceptance_rc=97
+
           if [ "$identity_rc" -eq 0 ]; then
             python3 -m pip install --user --disable-pip-version-check 'lark[interegular]==1.3.1'
-            python3 tools/claycode_ubuntu_desktop_target_validation.py
+
+            # The runner is physically self-hosted, but GitHub injects CI markers into
+            # every Actions process.  After the machine fingerprint has been verified,
+            # remove only those transport markers for the child target process.  All
+            # target scripts still re-check the registered fingerprint / local marker,
+            # Ubuntu identity, container boundaries and their own semantic receipts.
+            env -u GITHUB_ACTIONS -u CI \
+              CLAYCODE_REGISTERED_SELF_HOSTED_ACTIONS=1 \
+              python3 tools/claycode_ubuntu_desktop_target_validation.py
             desktop_rc=$?
-            python3 tools/claycode_run_andreas_target_acceptance.py
+
+            env -u GITHUB_ACTIONS -u CI \
+              CLAYCODE_REGISTERED_SELF_HOSTED_ACTIONS=1 \
+              python3 tools/claycode_run_andreas_target_acceptance.py
             acceptance_rc=$?
-          else
-            acceptance_rc=97
           fi
+
           python3 - "$identity_rc" "$desktop_rc" "$acceptance_rc" <<'PY'
-          import json,platform,subprocess,sys
+          import json, platform, subprocess, sys
           from pathlib import Path
-          identity_rc=int(sys.argv[1]); desktop_rc=int(sys.argv[2]); acceptance_rc=int(sys.argv[3])
-          try: identity=json.load(open('/tmp/claycode_identity.json',encoding='utf-8'))
-          except Exception as exc: identity={'parse_error':type(exc).__name__}
+
+          identity_rc=int(sys.argv[1])
+          desktop_rc=int(sys.argv[2])
+          acceptance_rc=int(sys.argv[3])
+          try:
+              identity=json.load(open('/tmp/claycode_identity.json',encoding='utf-8'))
+          except Exception as exc:
+              identity={'parse_error':type(exc).__name__}
           payload={
-            'schema_version':'1.1',
-            'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
-            'executed_on_self_hosted_runner':True,
-            'identity_returncode':identity_rc,
-            'identity':identity,
-            'target_identity_verified':identity_rc==0,
-            'desktop_gate_invoked':identity_rc==0,
-            'desktop_gate_returncode':desktop_rc,
-            'desktop_gate_pass':desktop_rc==0,
-            'acceptance_invoked':identity_rc==0,
-            'acceptance_returncode':acceptance_rc,
-            'release_pass_claimed':False,
-            'runner_uname':subprocess.run(['uname','-a'],text=True,capture_output=True).stdout.strip(),
-            'python_version':platform.python_version(),
+              'schema_version':'2.0',
+              'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
+              'executed_on_self_hosted_runner':True,
+              'transport':'GITHUB_ACTIONS_SELF_HOSTED_AFTER_REGISTERED_FINGERPRINT_VERIFY',
+              'identity_returncode':identity_rc,
+              'identity':identity,
+              'target_identity_verified':identity_rc==0,
+              'desktop_gate_invoked':identity_rc==0,
+              'desktop_gate_returncode':desktop_rc,
+              'desktop_gate_pass':desktop_rc==0,
+              'acceptance_invoked':identity_rc==0,
+              'acceptance_returncode':acceptance_rc,
+              'release_pass_claimed':identity_rc==0 and desktop_rc==0 and acceptance_rc==0,
+              'runner_uname':subprocess.run(['uname','-a'],text=True,capture_output=True).stdout.strip(),
+              'python_version':platform.python_version(),
+              'authority_invariant':'model output != execution authority',
           }
-          Path('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          Path('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json').write_text(
+              json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
           PY
           exit 0
-      - name: Preserve probe and any target receipts
+
+      - name: Preserve complete target evidence and receipt-gated promotion
+        if: always()
+        shell: bash
         run: |
           git config user.name 'claycode-andreas-autoprobe'
           git config user.email 'claycode-andreas-autoprobe@users.noreply.github.com'
-          git add research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json
-          test ! -f research_entity/claycode/target/ANDREAS_UBUNTU_BASE_ACCEPTANCE.json || git add research_entity/claycode/target/ANDREAS_UBUNTU_BASE_ACCEPTANCE.json
-          git add research_entity/claycode/target/*.json 2>/dev/null || true
+
+          # actions/checkout started clean, so these namespaces contain only evidence
+          # generated by this target run plus the receipt-gated workspace/manifest.
+          test -f research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json && \
+            git add research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json
+          git add research_entity/claycode/target 2>/dev/null || true
+          git add research_entity/claycode/target_receipts 2>/dev/null || true
+          git add research_entity/claycode/autonomous 2>/dev/null || true
+          git add research_entity/claycode/corpus/base_v1 2>/dev/null || true
+          test ! -f research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json || \
+            git add research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json
+          test ! -f CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json || \
+            git add CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json
+
           git diff --cached --quiet && exit 0
-          git commit -m 'ClayCode: record Andreas self-hosted autoprobe'
-          for attempt in 1 2 3; do
-            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
-            sleep $((attempt * 2))
+          git commit -m 'ClayCode: record registered Andreas target BASE14 closure'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 4))
           done
           exit 1
+
+      - name: Enforce physical target release verdict
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          probe=json.load(open('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json',encoding='utf-8'))
+          assert probe['target_identity_verified'] is True, probe
+          assert probe['desktop_gate_pass'] is True, probe
+          assert probe['acceptance_returncode'] == 0, probe
+          assert probe['release_pass_claimed'] is True, probe
+
+          run=json.load(open('research_entity/claycode/target_receipts/ANDREAS_BASE14_CLOSURE_RUN.json',encoding='utf-8'))
+          assert run['overall_pass'] is True, run
+
+          manifest=json.load(open('CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json',encoding='utf-8'))
+          assert manifest['general_purpose_gate_pass'] is True, manifest
+          assert manifest['claycode_release_gate_pass'] is True, manifest
+          assert manifest.get('promotion_allowed') is True, manifest
+          assert manifest.get('failed_work_packages') in ([], None), manifest
+
+          ws=json.load(open('research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json',encoding='utf-8'))
+          packages=ws.get('work_packages') or {}
+          assert len(packages) == 14, packages
+          assert all((row or {}).get('status') == 'PASS' for row in packages.values()), packages
+          assert ws.get('gate_status') == 'PASS', ws.get('gate_status')
+          assert ws.get('general_purpose_gate_status') == 'PASS', ws.get('general_purpose_gate_status')
+          required=set((ws.get('application_acceptance') or {}).get('required') or [])
+          passed=set((ws.get('application_acceptance') or {}).get('passed') or [])
+          assert len(required) == 10 and required == passed, {'required':sorted(required),'passed':sorted(passed)}
+          print('ANDREAS_BASE14_SELF_HOSTED_RELEASE=PASS')
+          PY

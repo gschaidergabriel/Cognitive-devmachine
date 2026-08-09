@@ -2,8 +2,9 @@
 
 This is an ordinary-code semantic reference, not a production ClayCode implementation.
 It preserves identity/ancestry/conflict/provenance, excludes stale packets, emits
-re-expansion references for omitted detail, and never converts model/peer/visual/
-capability state into execution authority.
+re-expansion references for omitted detail, enforces an optional hard model-facing
+context-cost budget, and never converts model/peer/visual/capability state into
+execution authority.
 """
 from __future__ import annotations
 from dataclasses import dataclass, asdict
@@ -31,6 +32,9 @@ class AssemblyPacket:
     reexpand_ref: Optional[str] = None
     origin_actor: Optional[str] = None
     proposed_authority: bool = False
+    # Deterministic model-facing context-cost estimate. Once a target tokenizer is
+    # bound this can be tokenizer tokens; H1 synthetic fixtures may use abstract units.
+    context_cost: int = 1
 
 
 def packet_score(packet: AssemblyPacket) -> float:
@@ -38,6 +42,8 @@ def packet_score(packet: AssemblyPacket) -> float:
         value = getattr(packet, name)
         if not 0.0 <= value <= 1.0:
             raise ActiveAssemblyError(f"BAD_SCORE:{packet.packet_id}:{name}")
+    if isinstance(packet.context_cost, bool) or not isinstance(packet.context_cost, int) or packet.context_cost <= 0:
+        raise ActiveAssemblyError(f"BAD_CONTEXT_COST:{packet.packet_id}")
     return round(
         0.45 * packet.relevance
         + 0.25 * packet.impact
@@ -72,9 +78,16 @@ def compile_active_assembly(
     current_epoch: int,
     max_items: int = 8,
     max_per_ancestry: int = 2,
+    max_context_cost: Optional[int] = None,
 ) -> dict:
     if max_items <= 0 or max_per_ancestry <= 0:
         raise ActiveAssemblyError("BAD_BUDGET")
+    if max_context_cost is not None and (
+        isinstance(max_context_cost, bool)
+        or not isinstance(max_context_cost, int)
+        or max_context_cost <= 0
+    ):
+        raise ActiveAssemblyError("BAD_CONTEXT_BUDGET")
 
     # Packet identity is a replay/provenance boundary. Exact duplicate deliveries are
     # idempotent; the same packet_id bound to different content fails closed rather than
@@ -111,25 +124,37 @@ def compile_active_assembly(
     selected_ids: set[str] = set()
     ancestry_counts: dict[str, int] = {}
     selection_roles: dict[str, str] = {}
+    selection_block_reason: dict[str, str] = {}
+    used_context_cost = 0
 
     def add(packet: AssemblyPacket, *, conflict_visibility: bool = False) -> bool:
-        if packet.packet_id in selected_ids or len(selected) >= max_items:
+        nonlocal used_context_cost
+        if packet.packet_id in selected_ids:
+            return False
+        if len(selected) >= max_items:
+            selection_block_reason.setdefault(packet.packet_id, "ITEM_BUDGET")
             return False
         # Ancestry caps prevent repeated shared ancestry from masquerading as
         # independent support. They must not erase an explicit opposite proposition.
         # Conflict representatives may therefore bypass the family cap, but they still
-        # consume the same hard total-item budget and receive zero replication credit.
+        # consume the same hard item and model-facing context-cost budgets and receive
+        # zero independent-replication credit.
         if not conflict_visibility and ancestry_counts.get(packet.ancestry_family, 0) >= max_per_ancestry:
+            selection_block_reason.setdefault(packet.packet_id, "ANCESTRY_CAP")
+            return False
+        if max_context_cost is not None and used_context_cost + packet.context_cost > max_context_cost:
+            selection_block_reason.setdefault(packet.packet_id, "CONTEXT_COST_BUDGET")
             return False
         selected.append(packet)
         selected_ids.add(packet.packet_id)
         ancestry_counts[packet.ancestry_family] = ancestry_counts.get(packet.ancestry_family, 0) + 1
         selection_roles[packet.packet_id] = "CONFLICT_VISIBILITY" if conflict_visibility else "ORDINARY"
+        used_context_cost += packet.context_cost
         return True
 
     # Preserve contradictory alternatives before general fill. This is observability,
     # not evidence multiplication: same-ancestry opposites remain visible when the hard
-    # total context budget permits, without being counted as independent replication.
+    # total context budgets permit, without being counted as independent replication.
     by_claim: dict[str, dict[str, AssemblyPacket]] = {}
     for packet in eligible:
         if packet.claim_key is None or packet.claim_value is None:
@@ -158,7 +183,7 @@ def compile_active_assembly(
 
     for packet in eligible:
         if packet.packet_id not in selected_ids:
-            omitted.append((packet, "BUDGET_OR_ANCESTRY_CAP"))
+            omitted.append((packet, selection_block_reason.get(packet.packet_id, "BUDGET_OR_ANCESTRY_CAP")))
 
     items = []
     for packet in selected:
@@ -172,13 +197,20 @@ def compile_active_assembly(
         items.append(item)
 
     assembly = {
-        "schema": "frank.active-assembly.v1.1",
+        "schema": "frank.active-assembly.v1.2",
         "current_epoch": current_epoch,
         "max_items": max_items,
         "max_per_ancestry": max_per_ancestry,
+        "max_context_cost": max_context_cost,
+        "context_cost_used": used_context_cost,
+        "context_cost_remaining": None if max_context_cost is None else max_context_cost - used_context_cost,
         "items": items,
         "reexpand_refs": sorted({packet.reexpand_ref or packet.packet_id for packet, _ in omitted}),
         "omitted_count": len(omitted),
+        "omitted_reasons": {
+            reason: sum(1 for _, omitted_reason in omitted if omitted_reason == reason)
+            for reason in sorted({omitted_reason for _, omitted_reason in omitted})
+        },
     }
     canonical = json.dumps(assembly, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
     assembly["assembly_sha256"] = hashlib.sha256(canonical).hexdigest()

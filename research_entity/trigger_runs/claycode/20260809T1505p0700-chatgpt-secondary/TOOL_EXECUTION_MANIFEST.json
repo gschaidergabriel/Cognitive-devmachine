@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1505p0700-chatgpt-secondary",
+  "actor": "chatgpt-secondary",
+  "planned_classes": ["implementation", "claycode_executable"],
+  "attempts": [
+    {
+      "tool": "github_connector",
+      "mode": "MUST_ATTEMPT",
+      "status": "SUCCESS",
+      "evidence_role": "canonical/internal implementation inspection and durable run write",
+      "write_verified": true
+    },
+    {
+      "tool": "e2b_sandbox",
+      "mode": "MUST_ATTEMPT",
+      "status": "SUCCESS",
+      "surface": "GitHub research_tool_bridge",
+      "request": "research_entity/runtime/tool_requests/claycode-20260809t1505-e2b-named-retraction.json",
+      "result": "research_entity/runtime/tool_results/claycode-20260809t1505-e2b-named-retraction.json",
+      "evidence_role": "isolated ClayCode compiler/lowering and retraction experiment",
+      "provider": "E2B",
+      "sqlite_version": "3.40.1",
+      "exit_code": 0
+    },
+    {
+      "tool": "local_sandbox",
+      "mode": "FALLBACK_DIFFERENTIAL",
+      "status": "SUCCESS",
+      "evidence_role": "independent local reproduction",
+      "sqlite_version": "3.46.1",
+      "result_sha256": "2479b33cf0206fa708534ab63dc834bb7c7c2256a84b76eae164342bf301d7d8"
+    },
+    {
+      "tool": "judge0_execute",
+      "mode": "FALLBACK",
+      "status": "NOT_ATTEMPTED",
+      "fallback_reason": "DUPLICATE_EVIDENCE_NO_INFORMATION_GAIN",
+      "reason": "E2B primary and local independent reproduction both succeeded"
+    },
+    {
+      "tool": "sandboxapi_sandbox",
+      "mode": "FALLBACK",
+      "status": "NOT_ATTEMPTED",
+      "fallback_reason": "SUBSCRIPTION_UNAVAILABLE"
+    }
+  ],
+  "supplementary_external_primary_sources": [
+    {"class": "official_database_semantics", "source": "SQLite INSERT documentation", "use": "column-list versus positional INSERT semantics"},
+    {"class": "primary_research", "source": "McSherry et al., Differential Dataflow, CIDR 2013 / Microsoft Research", "use": "incremental changing-state prior art"},
+    {"class": "official_provenance_standard", "source": "SLSA v1.2 provenance", "use": "artifact/source lineage triangulation"}
+  ],
+  "secrets_recorded": false,
+  "qwen_or_paid_model_experiment": "NOT_APPLICABLE",
+  "tool_gate_status": "PASS_FOR_IMPLEMENTATION_AND_CLAYCODE_EXECUTABLE_CLASSES"
+}

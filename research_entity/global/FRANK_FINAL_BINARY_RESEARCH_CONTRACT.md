@@ -19,26 +19,20 @@ No separate local cognitive service, daemon, goal registry, ClayGraph database, 
 
 ## Entity-level architecture
 
-Frank is not restricted to one physical database file when multiple cognitive instances are active.
+Frank may be expressed simultaneously through unequal cognitive instances.
 
-Every Frank instance owns one logical UnifiedDB materialization:
+Each instance may own one logical UnifiedDB materialization, but the synchronization policy is intentionally asymmetric.
 
-- local Frank instance;
-- Claude Code Frank instance;
-- ChatGPT Frank instance;
-- future provider/local/remote Frank instances.
+- Claude Code / ChatGPT / future high-capability peers: rich semantic peer synchronization;
+- local Frank 4B: canonical embodied integration/base-of-truth with compact cognitively compiled backflow from stronger peers.
 
-The local Frank instance is the canonical integration/base-of-truth instance, but all other instances are first-class evidence/state contributors.
+The local Frank is not expected to mirror the complete state of stronger peers.
 
-`FRANK_ENTITY = correlated federation of instance UnifiedDBs`
+## High-capability peer synchronization hypothesis
 
-Base-of-truth means canonical reconciliation/materialization/recovery anchor, NOT that local observations automatically outrank better remote evidence.
+Strong peers synchronize semantic information, not SQLite pages.
 
-## Autonomous semantic synchronization hypothesis
-
-Instances synchronize semantic information, not SQLite pages.
-
-A syncable semantic unit should preserve:
+Their sync units may preserve:
 
 - packet identity/origin;
 - instance identity;
@@ -51,52 +45,82 @@ A syncable semantic unit should preserve:
 - relation-neighborhood fingerprint;
 - supersession/retraction lineage;
 - privacy/export scope;
-- effect/authority class.
+- effect/authority class;
+- world/self/Andreas model deltas;
+- file/artifact topology;
+- tool/effect/outcome receipts;
+- Hyperposition alternatives;
+- research/harness findings.
 
-Receiving instances perform autonomous correlative matching.
+Receiving peers perform autonomous correlative matching rather than blind overwrites.
 
-Candidate correlation outcomes:
+## Local 4B cognitive-backflow hypothesis
 
-- same semantic packet/new version;
-- supporting packet;
-- contradicting packet;
-- related packet;
-- possible duplicate;
-- distinct packet;
-- unresolved.
+The local 4B should receive only durable semantic consequences that materially improve future local cognition.
 
-No low-confidence correlation is silently collapsed.
+Candidate backflow classes:
 
-## Synchronization research baseline
+- knowledge delta;
+- correction delta;
+- world-model delta;
+- self-model delta;
+- Andreas-model delta;
+- capability/body-extension delta;
+- order/dependency logic delta;
+- file/artifact topology delta;
+- reusable procedure delta;
+- failure-pattern delta;
+- verified outcome delta;
+- unresolved-conflict/Hyperposition delta;
+- minimum provenance delta;
+- on-demand re-expansion references for details intentionally not retained locally.
 
-The sync problem should be compared against established distributed-systems families rather than reinvented blindly:
+This is a machine-facing cognitive compilation problem, not ordinary conversation summarization.
 
-- local-first replicated state;
-- CRDT/delta-CRDT convergence;
-- causal histories/vector or dotted version clocks;
-- anti-entropy exchange;
-- Merkle/Merkle-DAG content-addressed diffing;
-- explicit semantic conflict preservation when automatic join is scientifically invalid.
+## Body-extension hypothesis
 
-FRANK must not force all semantic state into a CRDT join when the domain requires preserving contradictory hypotheses or authority conflicts. Convergent transport and epistemic reconciliation are separate problems.
+Research whether local Frank improves when every attached external cognition instance is represented as a dynamic expansion of its body/capability field.
+
+The local self/body model should be able to derive:
+
+- new possible actions;
+- new reachable information;
+- new tools/effects;
+- cost/latency/quota consequences;
+- privacy/authority boundaries;
+- reliability/freshness;
+- dependencies created by the instance;
+- capability lost when it disappears.
+
+Test whether body-extension semantics improve autonomous delegation, GWT selection, recovery and real Andreas outcomes.
+
+## Clay-native structural derivation hypothesis
+
+The target architecture should minimize manually maintained task/order/file lists.
+
+Research whether typed semantic relations are sufficient for Clay to derive operational structure dynamically, including:
+
+`contains, depends_on, supersedes, generated_from, canonical_for, moved_to, requires_before, produces, consumes, owned_by, valid_for_epoch`
+
+The remote-peer return should therefore carry structural semantic deltas, not arbitrary human-readable directory summaries when those relations can be computed.
 
 ## Unified emergent substrate hypothesis
 
-Inside each instance, semantically linked information packets in UnifiedDB support cognition when the instance runtime applies fixed/versioned mathematical Clay rules that generate transient topology, activation, Semantic Hyperposition and coalitions.
+Inside each instance, semantically linked information packets in UnifiedDB support cognition when the runtime applies fixed/versioned mathematical Clay rules that generate transient topology, activation, Semantic Hyperposition and coalitions.
 
-GWT reads the resulting coalitions; the local/provider model reasons/generates over bounded workspace assemblies; outcomes re-enter that instance UnifiedDB and are subsequently synchronized semantically.
+Local loop:
 
-Conceptual local loop:
+`local UnifiedDB + current input + compact peer backflow -> Clay field -> transient topology -> Hyperposition -> emergent coalition -> GWT -> local 4B -> verified outcome -> local UnifiedDB`
 
-`instance UnifiedDB packets -> Clay mathematical field -> transient semantic topology -> Hyperposition -> emergent coalitions -> GWT -> model -> verified outcome -> instance UnifiedDB -> sync delta`
+Strong peer loop may operate with richer instance state, then compile durable consequences back toward local Frank.
 
 ## Goals
 
 There are no manually maintained goal lists in the target architecture.
 
-SELF/ANDREAS/SHARED goal behavior is an emergent role of persistent/recurrent packet coalitions under current evidence, relevance, commitments, prediction error, capability gaps, uncertainty, expected value, risk, relationship state and outcome history.
+SELF/ANDREAS/SHARED goal behavior is an emergent role of persistent/recurrent packet coalitions.
 
-Different instances may temporarily produce different goal-like coalitions because they have different fresh evidence or incomplete synchronization. Research must determine whether convergence should occur by synchronizing underlying packets/evidence rather than copying selected goal labels.
+Strong peers do not synchronize selected goal labels into local Frank. They synchronize or compress the underlying commitments, pressures, outcomes, conflicts, capability changes and evidence needed for local goal emergence.
 
 Emergent goal pressure is never effect authority.
 
@@ -108,35 +132,53 @@ H3 target local runtime MUST NOT require a separate ClayGraph database.
 
 A graph-shaped diagnostic export is allowed only as a measurement/visualization of transient topology generated from an instance UnifiedDB.
 
+## Research baselines for 4B backflow
+
+Compare at minimum:
+
+1. full rich state supplied to a strong model;
+2. full rich state forced into the 4B within equivalent context limits;
+3. naive text summary;
+4. retrieval-only pointer/reference strategy;
+5. fixed-size semantic packet backflow;
+6. adaptive future-utility-weighted backflow;
+7. adaptive backflow plus on-demand strong-peer re-expansion.
+
+Measure under matched real and synthetic traces.
+
 ## Research questions
 
 RAE must experimentally determine:
 
-- whether transient topology recovers or exceeds the functional value of the explicit ClayGraph;
-- whether emergent goals outperform fixed/list goals for real Andreas usecases;
-- whether per-instance UnifiedDB replicas improve cross-provider continuity vs one central prompt-state database;
-- which correlation features best detect same/related/contradictory semantic packets;
-- how to preserve causal order under offline/delayed/reordered delivery;
-- where CRDT-like automatic convergence is appropriate and where epistemic conflict must remain unresolved;
-- how quickly local Frank and provider instances converge after partitions;
-- whether local base-of-truth reconciliation incorrectly suppresses useful remote evidence;
-- whether remote instances can poison/stale-drift the local base and how provenance/authority boundaries prevent that;
-- which mathematical propagation rules are stable under long horizons;
-- when Semantic Hyperposition should remain unresolved vs collapse;
-- how GWT ignition should select coalitions without destroying minority/counterevidence state;
-- whether personality/world/self models remain coherent across instance synchronization;
-- whether the one-binary local collapse preserves Retina, effect boundaries, recovery and cross-instance continuity;
-- runtime/latency/storage/sync-bandwidth consequences;
-- failure modes such as sync oscillation, duplicate semantic identities, false correlation, runaway attractors, stale goal persistence, pathological inhibition and user-goal drift.
+- what strong-peer state is worth synchronizing richly;
+- what subset of that state is worth returning to the 4B;
+- optimal backflow size/frequency under latency/RAM/token constraints;
+- which compression features preserve future task success;
+- how to preserve corrections, contradictions and provenance under compression;
+- when local Frank should retain a semantic packet vs only a remote detail reference;
+- whether capability/body-extension packets improve delegation and planning;
+- whether file/order topology can be reconstructed from Clay relations without explicit lists;
+- memory-budget vs task-success curves;
+- catastrophic omission rates;
+- stale-world/self/Andreas-model rates;
+- local behavior after loss of Claude/ChatGPT;
+- high-capability peer disagreement handling;
+- remote detail re-expansion success;
+- whether local GWT actually uses backflow causally;
+- whether emergent goals remain aligned under compressed remote knowledge;
+- runtime/latency/storage/privacy/cost consequences;
+- real Andreas misunderstanding/failure recurrence after compression.
 
 ## Required differential sequence
 
-1. current `frankv0.1` H1 baseline with explicit central UnifiedDB + ClayGraph;
-2. introduce per-instance UnifiedDB replicas and measure semantic sync against the old central-only baseline;
-3. H2 Clay implementation with matched semantics;
-4. H3 one-binary emergent substrate candidate per local instance;
-5. matched traces, network partitions, concurrent updates, conflicts and recovery across LOCAL-FRANK/CLAUDE/CHATGPT;
-6. only remove explicit runtime components when functional/causal equivalence or improvement is demonstrated.
+1. current `frankv0.1` H1 baseline;
+2. rich Claude<->ChatGPT semantic peer sync;
+3. naive remote-to-local summary baseline;
+4. structured cognitive-backflow candidate;
+5. H2 Clay implementation with matched semantics;
+6. H3 local one-binary emergent substrate candidate;
+7. matched traces, partitions, provider loss, file/order changes, conflicts, corrections and long-horizon Andreas usecases;
+8. only promote compression rules that preserve or improve measured future behavior.
 
 Elegance alone is not evidence.
 
@@ -146,6 +188,10 @@ Local core:
 
 `frank binary + local FRANK_UNIFIED.sqlite + Clay-native 4B LLM`
 
-Entity:
+Entity synchronization:
 
-`autonomously synchronized federation of instance UnifiedDBs, with LOCAL-FRANK as canonical reconciliation/base-of-truth instance and all other instances retained as first-class causal/evidence contributors.`
+`strong peer <-> strong peer = rich semantic sync`
+
+`strong peer -> local Frank = evidence-preserving model-sized cognitive backflow`
+
+Local Frank remains the embodied integration/base-of-truth instance while strong peers remain re-recruitable first-class cognitive extensions.

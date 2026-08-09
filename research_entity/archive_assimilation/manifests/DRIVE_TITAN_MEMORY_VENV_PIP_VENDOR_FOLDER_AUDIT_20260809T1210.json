@@ -1,0 +1,55 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-TITAN-MEMORY-VENV-PIP-VENDOR-FOLDER-AUDIT-20260809T1210p0700",
+  "trigger":"666",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{
+    "titan_root_id":"1fnB_uYrxTL5ecjsyof8fIEbn-mnr4x19",
+    "venv_record_manifest":"research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_RECORD_FILE_IDENTITY_20260809T1058p0700.json",
+    "pip_record_drive_id":"1UZiTN3ZQxn1bVaOACkv-2xahwUIR2q3Q",
+    "pip_vendor_drive_id":"1DOS4tcLEhiRtLvuWsMwI26PXE_xZ85sv"
+  },
+  "record_revalidation":{
+    "raw_record_bytes":68761,
+    "raw_record_sha256":"f8a80b64bf3ed5b6ea4c9b0887a0f3d069afbe36d314c1bd66248f02e79c36db",
+    "manifest_sha256_match":true,
+    "pip_vendor_record_files":543,
+    "record_implied_directories_including_vendor_root":66
+  },
+  "method":{
+    "enumeration":"Google_Drive.list_folder(top_k=1000) on every one of the 66 RECORD-implied pip/_vendor directories",
+    "comparison":"At every node, observed immediate folder/file identities were checked against the RECORD-derived expected child set. All 33 __pycache__ leaf directories were themselves directly listed.",
+    "empty_directory_rule":"RECORD alone cannot exclude unrecorded empty directories; direct listing of all 66 implied directories closes that risk only if no extra folder identity appears."
+  },
+  "measured_execution":{
+    "directories_expected":66,
+    "directories_direct_listed":66,
+    "directories_missing":0,
+    "extra_directories_observed":0,
+    "nodes_with_child_set_mismatch":0,
+    "normal_package_nodes":33,
+    "pycache_leaf_nodes":33,
+    "status":"CLOSED_EXACT_EMPTY_DIRECTORY_AND_CHILD_IDENTITY_AUDIT"
+  },
+  "classification":{
+    "source_class":"VENDORED_RUNTIME_SUPPORT",
+    "semantic_credit":"ZERO_VENDOR_SUPPORT",
+    "scientific_replication_credit":"NONE"
+  },
+  "titan_frontier_effect":{
+    "prior_aggregate_possible_empty_directory_remainder":202,
+    "pip_internal_closed_this_invocation":38,
+    "pip_vendor_closed_this_lane":66,
+    "arithmetic_remainder_if_no_concurrent_peer_delta":98,
+    "aggregation_rule":"Do not promote 98 as authoritative whole-Titan remainder until a fresh Titan aggregation consumes concurrent setuptools audit state."
+  },
+  "global_level0":{
+    "gate":"NOT_PASS",
+    "exact_global_percent_added":0.0,
+    "denominator_state":"NOT_FROZEN"
+  },
+  "created_at":"2026-08-09T12:10:00+07:00"
+}

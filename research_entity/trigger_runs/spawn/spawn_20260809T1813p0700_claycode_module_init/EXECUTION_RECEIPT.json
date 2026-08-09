@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1813p0700_claycode_module_init",
+  "experiment": "EXPERIMENT_MODULE_INIT.py",
+  "experiment_source_commit": "ad6f71da5820578144e3c422c708bb79bf777589",
+  "execution_class": "HOSTED_SYNTHETIC_PROXY",
+  "target_host_evidence": false,
+  "production_claycode_evidence": false,
+  "live_frank_evidence": false,
+  "selection_rng_independent_from_experiment_rng": true,
+  "experiment_reproducibility_seeds": {
+    "module_init": 3248996574,
+    "cycle_receipt": 97262622
+  },
+  "results": {
+    "module_init": {
+      "cases": 50000,
+      "import_cycle_cases": 21613,
+      "eager_value_cycle_cases": 6620,
+      "import_cycle_but_eager_acyclic_cases": 14993,
+      "proposed_accepted_eager_acyclic_cases": 43380,
+      "proposed_order_perturbation_failures": 0,
+      "naive_partial_init_order_divergence_cases": 5625,
+      "naive_partial_init_uninitialized_read_cases": 6620
+    },
+    "cycle_receipt": {
+      "cases": 50000,
+      "cyclic_graphs": 32099,
+      "canonical_receipt_order_mismatches": 0
+    }
+  },
+  "derived_rates": {
+    "structural_import_cycle_but_eager_acyclic_fraction_all_cases": 0.29986,
+    "proposed_order_perturbation_failure_rate_over_accepted_cases": 0.0,
+    "naive_partial_init_order_divergence_fraction_all_cases": 0.1125,
+    "canonical_cycle_receipt_order_mismatch_rate_over_cyclic_graphs": 0.0
+  },
+  "interpretation": [
+    "A blanket ban on every import/link cycle rejected 14993 generated cases whose eager value-dependency graph was acyclic in this proxy.",
+    "Stable semantic-ID topological eager initialization produced no order-perturbation mismatch in 43380 accepted eager-acyclic cases.",
+    "A deliberately unsafe partial/default-state cycle break produced order-dependent final values in 5625 cases and uninitialized reads in every generated eager-cycle case.",
+    "Canonical SCC membership plus internal-edge normalization produced identical cycle receipt hashes across edge-order perturbation for 32099 cyclic graphs."
+  ],
+  "negative_result_guards": [
+    "This does not prove the production ClayCode linker/compiler implements the contract.",
+    "This does not prove all real module dependency forms are statically discoverable.",
+    "This does not refute sophisticated runtime cyclic initialization schemes such as ECMAScript or JVM mechanisms.",
+    "This does not pass CC-WP-07, CC-WP-10, or the BASE gate."
+  ],
+  "status": "EXECUTED_PROXY_ONLY"
+}

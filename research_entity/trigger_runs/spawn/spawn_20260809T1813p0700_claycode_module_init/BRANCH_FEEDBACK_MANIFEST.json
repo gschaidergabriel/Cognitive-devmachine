@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1813p0700_claycode_module_init",
+  "origin_branch": "claycode",
+  "feedback": {
+    "claycode": {
+      "type": "NEW_CONSTRAINT",
+      "summary": "Separate structural module linking from eager value initialization; do not add syntax yet; implement/test canonical eager-dependency planning and fail-closed cycle receipts in compiler/runtime metadata."
+    },
+    "harness": {
+      "type": "NEW_CONSTRAINT",
+      "summary": "Add differential fixtures for structural cyclic modules, acyclic eager values over cyclic link graphs, eager init-cycle rejection, and import/discovery-order perturbation; production/Ubuntu execution is required before promotion."
+    },
+    "frank": {
+      "type": "NEW_CONSTRAINT",
+      "summary": "FRANK's recurrent/loop architecture must not be conflated with startup eager-value dependency cycles. Structural reciprocal references may remain cyclic while initialization/effect readiness stays explicitly phased and deterministic."
+    },
+    "claygraph": {
+      "type": "NEW_CONSTRAINT",
+      "summary": "Represent structural import/link edges and eager initialization dependency edges as distinct typed relations; a structural SCC is not automatically an initialization failure."
+    },
+    "unifieddb": {
+      "type": "NEW_CONSTRAINT",
+      "summary": "Where module runtime state is persisted, preserve module semantic identity, init-plan hash, init outcome/failure lineage and canonical cycle receipt without treating persistence as execution authority."
+    },
+    "hyperposition": {
+      "type": "NEW_HYPOTHESIS",
+      "summary": "Cyclic/higher-order structural topology can coexist with an acyclic activation/initialization projection; test whether this separation generalizes to other dynamic Clay topologies."
+    },
+    "gwt": {
+      "type": "NO_CHANGE",
+      "summary": "No workspace mechanism change. Startup/link ordering should be controlled so it cannot masquerade as GWT causal variation."
+    },
+    "emergenz": {
+      "type": "NO_CHANGE",
+      "summary": "No emergence claim. Initialization-order variation is a potential confound that later lesion/replay studies should control."
+    },
+    "clayresearch": {
+      "type": "NEW_CONSTRAINT",
+      "summary": "Integrated architecture should distinguish persistent recurrent structure from one-time eager initialization dependencies; fewer deploy-time boundaries must not erase lifecycle-phase distinctions."
+    }
+  },
+  "all_registered_scientific_branches_receipted": true,
+  "scientific_promotion": "NONE",
+  "base_gate_change": "NONE"
+}

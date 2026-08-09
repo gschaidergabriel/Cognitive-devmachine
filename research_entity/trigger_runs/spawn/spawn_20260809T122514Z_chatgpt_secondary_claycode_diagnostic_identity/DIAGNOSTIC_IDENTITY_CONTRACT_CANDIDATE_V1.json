@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "status": "RESEARCH_CANDIDATE_NOT_LANGUAGE_PROMOTION",
+  "purpose": "Give ClayCode parser/checker/lowering/runtime diagnostics a machine-stable identity suitable for fuzz deduplication, regression, negative corpus generation and later Harness differentials without binding semantics to human rendering or absolute source coordinates.",
+  "diagnostic_record": {
+    "rule_id": "Stable namespaced identifier for the semantic predicate/check, e.g. CC.TYPE.MISMATCH or CC.EFFECT.REVOKED.",
+    "rule_revision": "Monotonic semantic revision of the rule predicate; changes only when meaning/decision boundary changes.",
+    "stage": "parse|ir_validate|typecheck|effectcheck|lowering|runtime|ffi|other-versioned-stage",
+    "severity": "Presentation-independent machine severity class.",
+    "semantic_anchor": "Canonical IR/node/resource/token-context identity when available; must exclude absolute path/line/column and other nonsemantic layout.",
+    "cause_signature": "Normalized structured cause fields sufficient to distinguish materially different causes at one rule+anchor.",
+    "fingerprint_algorithm": "claydiag-occurrence/v1",
+    "occurrence_fingerprint": "SHA-256 over canonical {rule_id, rule_revision, stage, semantic_anchor, cause_signature} for v1.",
+    "source_spans": "One or more current source locations; evidence/display data, not occurrence identity.",
+    "message_key": "Stable localization/rendering template key where useful; not occurrence identity.",
+    "message_args": "Structured rendering arguments; not trusted as semantic identity unless also present in normalized cause_signature by rule contract.",
+    "rendered": "Human-facing text; nonsemantic.",
+    "children": "Ordered or explicitly keyed causal/context diagnostics; preserve parent-child relation independently of rendered indentation.",
+    "suggestions": "Structured replacements plus applicability/confidence class; separate from diagnostic identity.",
+    "instance_id": "Run-local unique emission identity for repeated occurrences; never used as semantic fingerprint.",
+    "compiler_runtime_provenance": "Exact toolchain/backend/run identity carried in receipt, not folded into semantic occurrence fingerprint unless the rule itself diagnoses that provenance."
+  },
+  "anchor_fallbacks": {
+    "parser_without_ir": "Versioned token-context/parser-rule anchor derived from token kinds and parser state/rule, excluding whitespace/comments/absolute offsets unless those are semantically meaningful to that rule.",
+    "type_effect_ir": "Canonical typed-IR node/edge identity plus rule-declared cause fields.",
+    "runtime_ffi": "Semantic resource identity/epoch + operation identity + rule-declared normalized cause fields. Opaque bearer capability material must not be serialized merely for diagnostics."
+  },
+  "required_invariants": [
+    "Changing only path, line, column, whitespace, locale or rendering must not change occurrence_fingerprint.",
+    "Changing the diagnosed rule semantic revision must change occurrence_fingerprint.",
+    "Changing a rule-declared semantic cause at the same anchor must change occurrence_fingerprint.",
+    "Two simultaneous occurrences of the same rule at different semantic anchors must remain distinguishable.",
+    "Repeated emission of the same occurrence in separate runs may have different instance_id but the same occurrence_fingerprint.",
+    "Diagnostic identity never grants effect/capability authority.",
+    "A lowered/backend diagnostic may link to a source diagnostic fingerprint but must not claim cause equivalence if lowering has lost the evidence needed to distinguish causes."
+  ],
+  "integration_targets": ["CC-WP-04-TYPE-EFFECT", "CC-WP-11-FUZZ-CONFORMANCE", "CC-WP-12-CORPUS-HELDOUT", "CC-WP-13-HARNESS-HANDOFF"],
+  "not_required": ["new ClayCode surface syntax", "new computational primitive", "physical UnifiedDB merge", "BASE promotion from this candidate alone"],
+  "next_falsification": "Integrate as structured diagnostic envelope around current ClayError/checker/runtime paths, then run refactor/path/rendering/cause-mutation differential on the production Ubuntu ClayCode toolchain."
+}

@@ -1,0 +1,91 @@
+name: ClayCode WP02 Ubuntu lexer differential
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'tools/claycode_base_frontend_validation.py'
+      - 'tools/claycode_wp02_lexer_differential.py'
+      - '.github/workflows/claycode-wp02-ubuntu-lexer-differential.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wp02-ubuntu:
+    name: WP02 strict frontend + bounded lexer differential
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact PR revision
+        uses: actions/checkout@v4
+
+      - name: Capture host metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/wp02
+          {
+            echo "timestamp_utc=$(date -u --iso-8601=seconds)"
+            echo "git_commit=$(git rev-parse HEAD)"
+            echo "git_status=$(git status --porcelain | wc -l) dirty_entries"
+            echo "uname=$(uname -a)"
+            echo "os_release_begin"
+            cat /etc/os-release || true
+            echo "os_release_end"
+            echo "cpu_begin"
+            lscpu || true
+            echo "cpu_end"
+            echo "memory_begin"
+            free -h || true
+            echo "memory_end"
+            echo "disk_begin"
+            df -h . || true
+            echo "disk_end"
+            echo "python=$(python3 --version 2>&1)"
+          } | tee artifacts/wp02/HOST_METADATA.txt
+
+      - name: Create isolated Python environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv
+          .venv/bin/python -m pip install --disable-pip-version-check --upgrade pip
+          .venv/bin/python -m pip install --disable-pip-version-check lark interegular
+          .venv/bin/python -m pip freeze | tee artifacts/wp02/PYTHON_PACKAGES.txt
+
+      - name: Run production strict/full-corpus frontend validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v .venv/bin/python tools/claycode_base_frontend_validation.py \
+            --output artifacts/wp02/FRONTEND_VALIDATION.json \
+            2> artifacts/wp02/FRONTEND_VALIDATION_TIME.txt
+
+      - name: Run one bounded out-of-box lexer differential
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v .venv/bin/python tools/claycode_wp02_lexer_differential.py \
+            --output artifacts/wp02/LEXER_DIFFERENTIAL.json \
+            2> artifacts/wp02/LEXER_DIFFERENTIAL_TIME.txt
+
+      - name: Hash evidence bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd artifacts/wp02 && sha256sum * | sort) | tee artifacts/wp02/SHA256SUMS.txt
+
+      - name: Upload WP02 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-wp02-ubuntu-${{ github.sha }}
+          path: artifacts/wp02/
+          if-no-files-found: error
+          retention-days: 30

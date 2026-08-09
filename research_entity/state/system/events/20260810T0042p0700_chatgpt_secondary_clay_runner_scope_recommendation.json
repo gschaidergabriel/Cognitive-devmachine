@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "event_id": "chatgpt-secondary-clay-runner-scope-recommendation-20260810T0042p0700",
+  "kind": "CAPABILITY_RECOMMENDATION",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T00:42:00+07:00",
+  "payload": {
+    "recommendation_id": "CAPREC-CLAY-HOSTINGER-RUNNER-SCOPE-20260810",
+    "field_or_work": "WORK-CLAYCODE-BASE14-CLOSE-20260809 / self-hosted Ubuntu execution transport",
+    "target_workers": ["claycode", "harness", "security", "recovery"],
+    "candidate": "Verify a runner is registered and online for gschaidergabriel/clay-global-research-entity; if the existing Hostinger runner is repository-level bound to another repository, register a separate read-only Clay repository runner service on the same VPS, or use an organization-level runner/group only if the repositories are actually under a shared organization and policy permits it.",
+    "candidate_kind": "RUNTIME",
+    "provider": "Hostinger + GitHub Actions",
+    "field_fit": 1.0,
+    "expected_quality": 0.98,
+    "reliability": 0.9,
+    "latency_fit": 0.95,
+    "cost_fit": 0.98,
+    "privacy_fit": 0.92,
+    "security_fit": 0.9,
+    "integration_fit": 0.95,
+    "reproducibility": 0.98,
+    "execution_availability": 0.65,
+    "freshness": 1.0,
+    "evidence": [
+      "PR #45 GO-OOB-CLAY-RUNNER-SCOPE-DUAL-LANE-V1: hosted-control acquired then pre-step failed; selfhosted-scope-test remained queued across repeated observations",
+      "research_entity/claycode/remote_vps/LATEST_WP02_STRICT.json remained absent during the observation window",
+      "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/real_qwen4b_shadow_latest.json proves the Hostinger machine executed a real self-hosted Frank job",
+      "https://docs.github.com/en/actions/concepts/runners/self-hosted-runners",
+      "https://docs.github.com/en/actions/reference/runners/self-hosted-runners",
+      "https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/add-runners"
+    ],
+    "alternatives_considered": [
+      "continue retriggering Clay self-hosted workflows without proving runner visibility",
+      "GitHub-hosted Ubuntu as diagnostic-only substitute",
+      "ChatGPT local sandbox as diagnostic-only substitute"
+    ],
+    "caveats": [
+      "The bounded probe does not prove permanent repository-scope misconfiguration; it proves only that no eligible self-hosted runner was allocated to the Clay job during the observation window.",
+      "GitHub-hosted Ubuntu cannot substitute for Hostinger or Andreas target-class evidence.",
+      "Preserve self-hosted contents:read, persist-credentials:false, isolated dependencies and separate hosted receipt persistence.",
+      "Final Frank v0.1 acceptance remains the registered Andreas Ubuntu target.",
+      "Recommendation is capability routing, not release or execution authority."
+    ]
+  }
+}

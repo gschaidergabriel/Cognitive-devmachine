@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1435p0700-chatgpt-secondary-pf-early-architecture-temporal-truth",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_class": "PROJECT_FRANKENSTEIN_PRIMARY_GIT_HISTORY_WITH_DOCUMENTED_RUNTIME_OBSERVATION_AND_CURRENT_HEAD_CROSSCHECK",
+  "scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "commits": [
+      "3085d354aaf7a523b9389d6e9deaab1ca990758f",
+      "94f8051b3dd986853bcdb2e0006e256b6b9eeb8e",
+      "151b78090e10aca53973815c027269caa5dada6d",
+      "46f31e569924e18d6ff31cfef7d89b8aa78c704a",
+      "51d6b30d91754189462b48abf0040572ca6d3509"
+    ],
+    "crosschecks": [
+      "requirements.txt@51d6b30d91754189462b48abf0040572ca6d3509",
+      "requirements.txt@abba90a5767d85abc8a1ac340bae92842dab35c1"
+    ],
+    "peer_crossreads": [
+      "research_entity/archive_assimilation/receipts/666_20260809T1424p0700_chatgpt_secondary_pf_visual_selfmodel_drift.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_vision_retina_native_lineage.json"
+    ]
+  },
+  "coverage_credit": {"exact_level0_percent_added":0.0,"reason":"The Project-Frankenstein recursive tree/history denominator remains unfrozen; this is a bounded semantic history shard."},
+  "observations": [
+    {
+      "id":"PF-EARLY-OBS-001",
+      "evidence_class":"PRIMARY_COMMIT_DIFF",
+      "claim":"On 2026-02-20 documentation removed Live Wallpaper and voice directory references while expanding consciousness, Genesis and safety descriptions, showing active component retirement and architecture churn rather than a monotonic additive system history."
+    },
+    {
+      "id":"PF-EARLY-OBS-002",
+      "evidence_class":"PRIMARY_COMMIT_DIFF",
+      "claim":"On 2026-02-21 the project corrected Frank's self-description to persistent cross-session memory and fuller email capability, removed wake-word and wallpaper references, trimmed identity_core, and reverted personality traits toward less hard-coded/emergent behavior. The same change left former wallpaper trigger functions as explicit no-ops."
+    },
+    {
+      "id":"PF-EARLY-OBS-003",
+      "evidence_class":"HISTORICAL_DOCUMENTED_OBSERVATION_NOT_INDEPENDENTLY_REPLAYED",
+      "claim":"The 2026-03-04 commit documents an intention-to-action-to-reflection sequence across consciousness, spatial state and NeRD physics, with the claimed closure occurring through shared spatial state injected into later model context rather than a direct intention-to-action API. This is evidence for a historical re-entry architecture motif, not proof of causal emergence or phenomenal consciousness."
+    },
+    {
+      "id":"PF-EARLY-OBS-004",
+      "evidence_class":"PRIMARY_COMMIT_DIFF",
+      "claim":"On 2026-03-10 documentation replaced the autonomous entity system with Rooms and simultaneously added/foregrounded Thalamus, Subconscious, Neural Conscience, ThoughtSeedVAE, Nucleus Accumbens, Hypothesis Engine, Experiment Lab and other subsystems; model routing documentation also changed to a shared GPU slot and 3-tier routing."
+    },
+    {
+      "id":"PF-EARLY-OBS-005",
+      "evidence_class":"PRIMARY_COMMIT_DIFF",
+      "claim":"On 2026-03-19 papers were rewritten again to current architecture, changing entity references to rooms, revising model descriptions to Qwen2.5-3B, changing UI assumptions, and removing historical-note caveats from papers. This creates a concrete lineage hazard: later documentation can overwrite the apparent historical state if commit provenance is not retained."
+    },
+    {
+      "id":"PF-EARLY-OBS-006",
+      "evidence_class":"PRIMARY_FILE_AT_COMMIT_PLUS_CURRENT_HEAD",
+      "claim":"requirements.txt at 2026-03-19 contains openwakeword>=0.6,<1.0 even though the 2026-02-21 architecture change explicitly removed wake-word as a capability. The dependency remains present at frozen HEAD. Dependency presence therefore cannot be treated as proof that a capability is active."
+    },
+    {
+      "id":"PF-EARLY-OBS-007",
+      "evidence_class":"CROSSREAD_DEDUP",
+      "claim":"Recent peer receipts already establish visual-backend/self-model drift and Retina-to-NativeVision lineage. This shard does not re-credit that work; it generalizes the same failure class across architecture documentation, model identity, service retirement, dependencies and runtime self-description."
+    }
+  ],
+  "synthesis": {
+    "primary_finding":"Project-Frankenstein's history contains repeated temporal truth drift: documentation, training/self-knowledge text, dependency lists, code stubs and runtime topology changed at different rates. A single present-tense 'architecture fact' cannot safely be inferred from any one of those surfaces.",
+    "new_invariant":"RUNTIME_CAPABILITY_TRUTH_REQUIRES_VERSIONED_REACHABILITY_OR_EFFECT_EVIDENCE",
+    "truth_classes":[
+      "historical claim/document snapshot",
+      "current source/file presence",
+      "dependency presence",
+      "configured/enabled service state",
+      "reachable runtime path",
+      "verified effect receipt",
+      "model/self-description claim"
+    ],
+    "lineage_rule":"Never destructively normalize older architecture docs into current truth. Preserve claim-level SUPERSEDED/CURRENT status with commit/time provenance and explicit transition edges.",
+    "frank_v0_1_implication":"Frank's self-model must be generated from current versioned runtime/capability receipts plus durable identity state, not from stale feature-training ground truth or dependency/file presence alone. This applies to vision, voice, memory, email, model backend and every tool/service."
+  },
+  "contradictions": [
+    {
+      "id":"PF-EARLY-CONTRA-001",
+      "status":"OPEN",
+      "a":"2026-02-21 source history states wake-word was removed and push-to-talk only remained.",
+      "b":"2026-03-19 requirements adds openwakeword and frozen HEAD still contains the dependency.",
+      "non_resolution":"No code-path or service-start evidence in this shard establishes whether openwakeword is active, dead, experimental or merely stale.",
+      "next_test":"Trace imports/startup/service enablement and perform an actual wake-word reachability/effect test before assigning capability status."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id":"PF-EARLY-CH-001",
+      "claim":"Documentation churn may have been editorial only and not reflect runtime topology changes.",
+      "status":"OPEN_PARTIAL",
+      "resolution":"Some changes are clearly documentation-only, so runtime claims must remain unpromoted without code or effect evidence. The historical value of the shard is precisely the divergence between surfaces."
+    },
+    {
+      "id":"PF-EARLY-CH-002",
+      "claim":"openwakeword may remain solely as an unused transitive/legacy dependency.",
+      "status":"OPEN",
+      "next_test":"Import/reference/startup reachability audit."
+    },
+    {
+      "id":"PF-EARLY-CH-003",
+      "claim":"The March 4 sequence can be fully explained by shared-state context priming rather than a stronger emergent intention mechanism.",
+      "status":"PLAUSIBLE_OPEN",
+      "next_test":"Truthful-vs-shuffled-vs-lesioned spatial re-entry replay with matched prompts and locomotion state."
+    }
+  ],
+  "negative_results": [
+    "No exact Level-0 completion credit is assigned.",
+    "No claim is made that openwakeword is currently active.",
+    "No claim is made that the March 4 observation proves consciousness or irreducible causal emergence.",
+    "No duplicate earned-work hours are assigned for vision/self-model findings already covered by peer receipts."
+  ],
+  "discriminating_tests": [
+    {
+      "id":"PF-EARLY-X1",
+      "name":"Self-model/runtime concordance",
+      "design":"For each claimed capability, compare self_knowledge/training text, dependency presence, configured service, reachable call path and verified effect receipt. Fail any present-tense self-description unsupported by the strongest available runtime evidence."
+    },
+    {
+      "id":"PF-EARLY-X2",
+      "name":"Deprecated-stub reachability",
+      "design":"Enumerate no-op/deprecated compatibility functions and verify that capability discovery cannot promote them merely because symbols/files still exist."
+    },
+    {
+      "id":"PF-EARLY-X3",
+      "name":"Spatial re-entry causal test",
+      "design":"Replay matched idle-thought episodes under truthful spatial injection, shuffled spatial injection and spatial-input lesion. Measure next-thought semantic dependence, action selection and persistence; preserve null results."
+    },
+    {
+      "id":"PF-EARLY-X4",
+      "name":"Temporal architecture lineage audit",
+      "design":"Represent model/UI/service/entity-room transitions as versioned supersession edges and check that current retrieval cannot silently return an older present-tense architecture claim without its validity interval."
+    }
+  ],
+  "branch_feedback": {
+    "frank":"DELTA: self-model claims must resolve from versioned runtime/effect evidence; file/dependency presence is weaker than reachability and verified effect.",
+    "harness":"DELTA: add self-model/runtime concordance, deprecated-stub reachability, and truthful/shuffled/lesioned re-entry regressions.",
+    "claycode":"DELTA: capability/state IR should encode validity interval, provenance, enabled/reachable/effect-verified state and supersession; symbol existence must not imply authority or capability.",
+    "claygraph":"DELTA: preserve temporal architecture snapshots and SUPERSEDED edges; retrieval should prefer current valid nodes while keeping lineage reachable.",
+    "unifieddb":"DELTA: store capability evidence class and validity interval separately from dependencies/files and self-description text.",
+    "gwt":"DELTA: March 4 shared-state re-entry motif is a candidate for causal replay, not established ignition/emergence evidence.",
+    "emergenz":"DELTA: require lesion/shuffle controls before interpreting cross-module closed loops as emergence.",
+    "hyperposition":"DELTA: historical/current architecture alternatives should be explicit contextual alternatives, not silently collapsed.",
+    "clayresearch":"DELTA: temporal truth drift is a cross-cutting architecture risk across model, UI, voice, memory, tools and perception.",
+    "q12_index":"DELTA: preserve the rapid Feb-Mar architecture migration as design-history evidence without duplicate hour credit."
+  },
+  "earned_work_mapping": {"new_hours_low":0.0,"new_hours_center":0.0,"new_hours_high":0.0,"reason":"Semantic/history value recorded; row-level deduplication and exact Level-0 denominator remain incomplete."},
+  "open_obligations": [
+    "Trace openwakeword imports/service activation in relevant historical/current commits.",
+    "Continue exact Project-Frankenstein tree/history denominator work through non-overlapping segments.",
+    "Reconcile documentation snapshots with code/runtime receipts before promoting architecture claims.",
+    "Run causal re-entry replay under H1/H2 Harness when executable runtime exists."
+  ],
+  "created_at":"2026-08-09T14:39:00+07:00"
+}

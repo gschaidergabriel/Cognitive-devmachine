@@ -1,0 +1,51 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1027p0700-chatgpt-secondary-aicore-root17-semantic-reconciliation",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "task_id":"666-l0-aicore-root-semantic-20260809T1019p0700",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope_binding":{
+    "aicore_root_drive_id":"1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty",
+    "correction_commit":"b8487a243f596c43012a48abdd210734aff0d612",
+    "prior_root_files":13,
+    "corrected_root_files":30,
+    "newly_admitted_files":17,
+    "rule":"This receipt covers only the exact 17-file set introduced by the 50->67 denominator correction; the prior 13 document-like root files and all child subtrees are excluded from credit."
+  },
+  "files":[
+    {"name":".gitignore","drive_id":"15qD_GT1QlDUQTcegYrK3ywG8FUIuxRjB","bytes":2288,"sha256":"3d412a973bca1697b16f1d80d1d5789e86401404a6aa66c634f6098a65a8fa21","class":"BOUNDARY_POLICY","disposition":"SEMANTIC_READ","finding":"Defines repository/runtime boundary: excludes volatile DB WAL/SHM/journals, live DBs outside admitted reference/seed paths, secrets/tokens, generated user config, models, voices, ADI profiles, test/UI artifacts, node_modules and manual backup copies while explicitly preserving reference database/seed material."},
+    {"name":"install.sh","drive_id":"1aw8DwXSgYf-R9pkOq9cRLkHjdXS2WftP","bytes":63623,"sha256":"0de5ba54ed362e6568f798bd682c4f31b7a363c80c42f5f27f08bf67965d3592","class":"DEPLOYMENT_RUNTIME_TOPOLOGY","disposition":"SEMANTIC_READ_AND_BASH_SYNTAX_PASS","finding":"Historical executable install topology: GPU auto-selection CPU/CUDA/Vulkan, separate main and ingestd venvs, llama.cpp and whisper.cpp builds, Qwen2.5-3B primary model plus optional Llama-3.1-8B, voice assets, and 39 systemd service/timer definitions. Newer source explicitly says Ollama removed and adaptive vision/OCR+YOLO used instead."},
+    {"name":"_bootstrap.py","drive_id":"1dNT7bkKdDThwF9cYIJW00ap9ad_1yfz-","bytes":484,"sha256":"93a46158aa3717e4b1ae763d6d9c72c7c720b89489f0852057d969c786a8997a","class":"ENTRYPOINT_BOOTSTRAP","disposition":"SEMANTIC_READ_AST_PASS","finding":"Minimal systemd/CLI import bootstrap inserts the AICORE source root at sys.path[0] so config.paths and sibling imports resolve regardless of invocation cwd."},
+    {"name":"install_wizard.py","drive_id":"1fSsJvcTM-CovOg31f_pM0ODd7Q6TbWKL","bytes":33238,"sha256":"dacfc5d2a23de9fe8f7ab675e54985cf216db89dae80b764af012e0ba5072ed5","class":"INSTALLER_UI_WRAPPER","disposition":"SEMANTIC_READ_AST_PASS","finding":"Rich terminal TUI wrapper around install.sh; supports source-tree and PyInstaller onefile execution, hardware checks/options, clone/install path resolution and progress parsing rather than defining an independent runtime architecture."},
+    {"name":"test_frank.py","drive_id":"11sKUiBvxS5KNrvWST5c4iHTUS5FKjy46","bytes":41,"sha256":"6ee8c717dad0203b7aae1e43dec68afb8814108952430490396c441ed480c09d","class":"BUILD_MARKER_MISLEADING_EXTENSION","disposition":"NEGATIVE_RESULT_AST_FAIL","finding":"Not valid Python despite .py suffix; content is only 'Hello from Frank — build-script works!'. Treat as build marker/fixture, not executable test evidence."},
+    {"name":".gitlab-ci.yml","drive_id":"1uGx3G_lN6GM_6mXDeRpQkHg0pyvUOMzM","bytes":3114,"sha256":"9057847cf040c1968cc810dd78810247de4dd57a2017d4726d510864840f5f59","class":"CI_BUILD_TOPOLOGY","disposition":"SEMANTIC_READ_YAML_PASS","finding":"Local frank-local GitLab runner builds/pushes CPU image first then CUDA/Vulkan images sequentially to reduce OOM risk, with retry policy and main-branch gating."},
+    {"name":"Dockerfile","drive_id":"1dPxFsMQkWTBr0zE6jOoSV_a_AZPHEmZG","bytes":6354,"sha256":"45a2ae2dcb09ca0a4f85029cfb7ed10f965e58190d5ec24f10cfc2a0db252be6","class":"CONTAINER_RUNTIME_TOPOLOGY","disposition":"SEMANTIC_READ","finding":"Multi-stage Ubuntu 24.04 CPU/CUDA/Vulkan image compiles llama.cpp + whisper.cpp, creates frank user and persistent AICORE data/config/model paths, copies application and entrypoint, and exposes the core FRANK service port family."},
+    {"name":".dockerignore","drive_id":"1E9VUbN_Qzjmdr8RDXP6jh1HIPjo9m_Zg","bytes":413,"sha256":"93347f00d57471c58f845282c239cf06cc26eec00fa3049186ea1b2a88e88929","class":"CONTAINER_BOUNDARY_POLICY","disposition":"SEMANTIC_READ","finding":"Docker build context excludes VCS/cache/build artifacts, live runtime DB/WAL/SHM, logs, local env/config and orchestration files; confirms live state is intended to be rebuilt/mounted rather than baked into image."},
+    {"name":"docker-compose.vulkan.yml","drive_id":"1bMNX9HbwdiUlI1PeZdJOYqmCFwHpKK-N","bytes":692,"sha256":"3e9ab887a38ad390044fd5334e5e1046d9ec6faf71a0d21fe08854e6879e1203","class":"GPU_OVERRIDE","disposition":"SEMANTIC_READ_YAML_PASS","finding":"Vulkan override selects GPU_BACKEND=vulkan, GGML device 0, maps /dev/dri and video/render groups."},
+    {"name":"docker-compose.cuda.yml","drive_id":"10IK6zJYgIgynOU-9zpHJ_S9H1hbbeoxq","bytes":886,"sha256":"397aef57fb011bb91290629e55da23676ceda479c28ef615eee1d8bfb61f39dd","class":"GPU_OVERRIDE","disposition":"SEMANTIC_READ_YAML_PASS","finding":"CUDA override selects NVIDIA CUDA 12.6 builder/runtime images and reserves one GPU via container runtime capabilities."},
+    {"name":"docker-compose.yml","drive_id":"1EW9zqOtPfsO53hLPVw6_uIvkm-fHaQ4b","bytes":2231,"sha256":"1ed4449dd7aca6531840b64a081b84ff85c456f8c843f2fa41fc47c2dc1bf85f","class":"SERVICE_ORCHESTRATION","disposition":"SEMANTIC_READ_YAML_PASS","finding":"Base CPU FRANK container exposes 8088/8091/8093/8096/8097/8098/8099/8100/8101/8103/8105 and persists models, Frank data, Whisper models, voices and Kokoro via named volumes; memory limit 16G, reservation 4G."},
+    {"name":"titan.db","drive_id":"1EOqco_WDvTTNm-EkYR-7--nBGkqb9DFd","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","class":"ZERO_BYTE_PLACEHOLDER","disposition":"TERMINAL_EMPTY","finding":"Drive identity exists but raw payload is exactly zero bytes; no database contents exist to semantically mine in this artifact."},
+    {"name":"consciousness.db","drive_id":"1ti6utxy8VXnjxF-xwmQGJW75LQd_612P","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","class":"ZERO_BYTE_PLACEHOLDER","disposition":"TERMINAL_EMPTY","finding":"Drive identity exists but raw payload is exactly zero bytes; no consciousness-state database evidence is present in this root artifact."},
+    {"name":"install-wizard.spec","drive_id":"1OSIkVDMC_p9Kj8900_5QNwV86x5ooozO","bytes":853,"sha256":"fde08224ba53d3e4e8f505ebded3325863bec726cbf455363eca08eb000f84c1","class":"PACKAGING_METADATA","disposition":"SEMANTIC_READ_AST_PASS","finding":"PyInstaller specification bundles install_wizard.py, rich dependencies and install.sh into console executable frank-installer; packaging evidence only."},
+    {"name":"pyproject.toml","drive_id":"1hb-MbROPMJ9LQ1P5MIRjAe87HlBGiqkB","bytes":641,"sha256":"4d8aa4dea96b8a0b77e1c01153262e81e8500d40d4c975db27854cb559ad516f","class":"PACKAGE_METADATA","disposition":"SEMANTIC_READ_TOML_PASS","finding":"Declares project-frankenstein 1.0.0, description F.R.A.N.K. Fully Realized Autonomous Neural Kernel, MIT license, Python >=3.10 and homepage/issues at gschaidergabriel/Project-Frankenstein; includes pytest/ruff policy."},
+    {"name":"config.yaml.example","drive_id":"1Pt4Q3maeG3-RSB4D2FklhJgDxBQc8xI8","bytes":1932,"sha256":"31b21387c7d0eb3d882f36c50082b9c3da9c466c0c7e4f347f8dfb1a1ddfd7dc","class":"HISTORICAL_CONFIG_EXAMPLE","disposition":"SEMANTIC_READ_YAML_PASS","finding":"Documents paths, CPU/CUDA/Vulkan/ROCm selection, historical Ollama/LLaVA plus llama/qwen/whisper endpoints, microservice ports, overlay/voice and local-first privacy. This older Ollama vision configuration is superseded by the later install.sh statement that Ollama was removed for adaptive vision."},
+    {"name":"LICENSE","drive_id":"11CxZ9xOFanfa57T1uJH6cpMBciEwWYoH","bytes":1097,"sha256":"74618c7608e41a067632b3dcb0f8b4112ed6fd018e2b0e090a31d383632b8930","class":"LEGAL_METADATA","disposition":"SEMANTIC_READ","finding":"MIT License artifact; legal/provenance metadata, not architecture evidence."}
+  ],
+  "aggregate":{"files":17,"bytes":117887,"zero_byte_files":2,"python_ast_pass":2,"python_ast_fail":1,"pyinstaller_spec_ast_pass":true,"bash_syntax_pass":true,"yaml_parse_pass":5,"toml_parse_pass":true},
+  "material_synthesis":[
+    "The previously omitted root files encode deployment and runtime-boundary evidence, so the old document-only root view was semantically incomplete even though many architecture documents had already been read.",
+    "Historical deployment was explicitly multi-backend: CPU baseline plus CUDA and Vulkan variants, with llama.cpp/whisper.cpp compiled locally and persistent data/model/voice volumes separated from the image.",
+    "install.sh defines 39 systemd service/timer artifacts, showing a substantially broader live service topology than the small subset surfaced by docker-compose alone.",
+    "Repository and container ignore policies intentionally separate volatile/user/runtime state and secrets from source/reference data; this is relevant to current snapshot/recovery/UnifiedDB provenance design.",
+    "A source-version drift is resolved directionally: older config.yaml.example advertises Ollama/LLaVA vision, while later install.sh explicitly removes Ollama and names adaptive vision with OCR+YOLO; do not merge both as simultaneous current architecture.",
+    "test_frank.py is negative evidence against trusting filename extensions as executable-test proof; acceptance evidence must distinguish fixture markers from parsed/executed tests.",
+    "The root titan.db and consciousness.db files contribute identity only, not database semantic content, because both are exactly zero bytes."
+  ],
+  "epistemic_boundaries":{"runtime_execution_proven":false,"docker_build_proven":false,"ci_execution_proven":false,"systemd_services_executed_proven":false,"semantic_credit_to_prior_13_files":0,"subtree_credit_added":0,"exact_global_level0_percent_added":0.0},
+  "status":"COMPLETE",
+  "created_at":"2026-08-09T10:27:00+07:00"
+}

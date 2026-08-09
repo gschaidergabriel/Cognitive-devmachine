@@ -1,0 +1,36 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1353p0700-chatgpt-secondary-pf-history-k144-k159",
+  "trigger":"666","actor":"chatgpt-secondary","stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","ordinal_range":"k144..k159","count":16,"manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K144_K159_20260809T1352p0700.json"},
+  "race":{"winning_claim_commit":"64f0c73f415b91385d89c80a4de213287b29eeed","winning_claim_time":"2026-08-09T13:44:43+07:00","competing_claims_seen":0,"result":"CLEAN"},
+  "closure":{"materialized":16,"terminally_dispositioned":16,"uncovered":0,"status":"COMPLETE_FOR_ORDINAL_SHARD","global_level0_gate":"NOT_PASS","global_exact_percent_increment":0.0,"reason":"Combined Level-0 denominator remains NOT_FROZEN."},
+  "high_value_findings":[
+    {"id":"PF-K144-159-REALITY-SALIENCE","evidence":[144,146],"finding":"A ground-truth SystemRealityLayer reduced some confabulation risk but universal idle-prompt injection caused the model to echo the control block; it was removed from that path in the next historical revision.","transfer":"Ground truth needs task-specific routing/salience and post-generation validation; more truth-context is not monotonically better."},
+    {"id":"PF-K144-159-INTERNAL-CALL-ISOLATION","evidence":[144,158],"finding":"Internal autonomous-research and summarization calls exposed contract/data-plane mistakes: nonexistent memory API and a maintenance prompt persisted as visible user chat.","transfer":"Internal LLM jobs need explicit non-conversational channels, no-persist/default-isolation semantics, and machine-checkable storage contracts."},
+    {"id":"PF-K144-159-EVIDENCE-REVERSAL","evidence":[150,153,157,159],"finding":"Behavioral screenshots and a 70-turn quantitative ablation were used for strong claims, then the ablation was explicitly removed and replaced by raw no-claims excerpts; later README language added caveats and removed persuasion/comparative claims.","transfer":"Evidence-class downgrades, retractions and supersession must dominate older claim artifacts in research synthesis."},
+    {"id":"PF-K144-159-VALIDATOR-SAFETY","evidence":[154],"finding":"Aggressive response regex cleaning could delete legitimate answers; the fix added a retained-content ratio guard. Neural Reality Gate also used cold-start rule fallback and blending.","transfer":"Validators/filters need measurable collateral-damage guards, cold-start fallback, and outcome feedback rather than binary trust in learned filters."},
+    {"id":"PF-K144-159-TOPOLOGY-DRIFT","evidence":[151,152,156],"finding":"Installer, recovery, updater and documentation diverged from the live system in services, ports, models, paths and entity/rooms topology, then required broad reconciliation.","transfer":"Generate deployment/recovery/docs topology from an authoritative manifest where possible; otherwise require contract tests and document epochs."},
+    {"id":"PF-K144-159-SEED-IDENTITY","evidence":[152],"finding":"Forty-eight live databases, including personality/state databases, were snapshotted as seed databases for release/recovery.","transfer":"Bootstrap/reference seed state must carry provenance and remain categorically separate from runtime/user identity state to prevent identity cloning or stale-state promotion."}
+  ],
+  "negative_results_preserved":[
+    "Ground-truth context became prompt-leak material when injected into idle-thought prompts.",
+    "Autonomous research targeted a nonexistent memory endpoint.",
+    "Internal summary prompts polluted persistent user-visible chat history.",
+    "Response-cleaning regexes over-stripped legitimate philosophical content.",
+    "Deployment/recovery/update maps drifted materially from live topology.",
+    "A previously promoted quantitative ablation artifact was later removed and its evidence class downgraded.",
+    "Runtime support and architecture documentation changed enough across adjacent commits that docs cannot be treated as timeless truth."
+  ],
+  "measurement_boundary":"Source-reported benchmark percentages, latencies, fix counts and rejection rates were not independently reproduced. The historical ablation metrics at k153 are explicitly superseded in evidence status by k150.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level earned-work overlap audit was performed."},
+  "next_falsifiers":[
+    "A/B task-routed versus universal reality-context injection measuring factual correction and control-tag leakage separately.",
+    "Enforce no-persist internal LLM channel and test that maintenance prompts never enter chat/session memory.",
+    "Replay response filters against a labeled corpus and measure legitimate-content deletion rate.",
+    "Reconstruct any claimed ablation from immutable raw prompts/outputs/configs before restoring quantitative evidence status.",
+    "Generate updater/recovery/service health maps from one authoritative topology manifest and test drift detection.",
+    "Boot from seed DBs and verify runtime identity/user state cannot be confused with reference bootstrap provenance."
+  ],
+  "status":"COMPLETE"
+}

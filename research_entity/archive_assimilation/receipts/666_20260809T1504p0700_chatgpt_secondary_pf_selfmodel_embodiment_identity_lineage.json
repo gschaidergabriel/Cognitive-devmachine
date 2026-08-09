@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1504p0700-chatgpt-secondary-pf-selfmodel-embodiment-identity",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "mode": "LEVEL0_OPEN_QUERY_DIRECTED_SEMANTIC_HISTORY_SHARD",
+  "status": "COMPLETE_NONCOUNTING_DENOMINATOR_NOT_FROZEN",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T15:04:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "frozen_project_frankenstein_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "scope": {
+    "lane": "identity/self-knowledge/embodiment runtime lineage",
+    "non_overlap_basis": "Current PROJECT_FRANKENSTEIN_MANIFEST deep-read units did not include personality/ego_construct.py, personality/self_knowledge.py, personality/personality.py or personality/frank.persona.json. 666_WORKSPACE live_claims was empty at read time.",
+    "exact_level0_coverage_credit": 0.0,
+    "reason_no_exact_credit": "Project-Frankenstein full frozen tree/history denominator remains not frozen; this is a valid semantic/history shard only."
+  },
+  "sources": [
+    {
+      "class": "PRIMARY_CODE",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "personality/ego_construct.py"
+    },
+    {
+      "class": "PRIMARY_CODE",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "personality/self_knowledge.py"
+    },
+    {
+      "class": "PRIMARY_CODE",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "personality/personality.py"
+    },
+    {
+      "class": "PRIMARY_CONFIG",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "personality/frank.persona.json"
+    },
+    {
+      "class": "HISTORY_QUERY",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "queries": ["ego", "self-knowledge"],
+      "selected_commit_shas": [
+        "e1a8812767668091d146ee958bbc2ebb2743031c",
+        "b6b76d99bd7ff58489bab9786bd57e542a44ce45",
+        "f2cb3914a4b35885d115d239790b716d044e0058",
+        "b50ab8e30098356ef932f3b6e3bc26bd3385696f",
+        "94f8051b3dd986853bcdb2e0006e256b6b9eeb8e",
+        "607657af03ae61726af2d28efb3a2c45682a4bd7",
+        "320d364ddc718597c64c21a59420074a5bb2708a",
+        "d2c08bacbfd6a7ffae309a190e707582a809a351",
+        "3a47fef19027b2677bf96c6d5d6965364251a425",
+        "0c0a819ec593074405ebd43446956e73976166a8",
+        "279eb175a326cefdb1bbd8281ae1a639ce1e4986"
+      ],
+      "coverage_warning": "Query-directed history is not full history enumeration."
+    },
+    {
+      "class": "DRIVE_DETERMINISTIC_ORGAN_CARD",
+      "drive_file_id": "1TIrP1rRWuNlE-mNVsWy50hxarlpWAxp6",
+      "title": "organ-ego-construct.md"
+    },
+    {
+      "class": "DRIVE_RUNTIME_EVAL_LOG",
+      "drive_file_id": "1LtLiPGWZsLmGnVRSYjVnXE3x8TsDsw0J",
+      "title": "live_bugs.txt"
+    }
+  ],
+  "findings": [
+    {
+      "id": "PF-SM-001",
+      "epistemic_class": "PRIMARY_CODE_PLUS_HISTORY_SUPPORTED",
+      "status": "CURRENT_HISTORICAL_FINDING",
+      "claim": "Project-Frankenstein carried duplicated identity authority: personality/personality.py describes frank.persona.json as the single source of truth, while personality/self_knowledge.py separately hardcodes CORE_IDENTITY as non-negotiable facts. Commit b6b76d99 explicitly synchronized creator identity across persona JSON, self_knowledge CORE_IDENTITY and fallback prompts, showing multi-layer identity duplication was deliberate rather than incidental.",
+      "implication": "A future Frank identity contract should have one authoritative identity record and derived read-only projections, not multiple independently editable identity stores."
+    },
+    {
+      "id": "PF-SM-002",
+      "epistemic_class": "HISTORICAL_RUNTIME_NEGATIVE_RESULT",
+      "status": "NEGATIVE_RESULT",
+      "claim": "The later Drive live bug tracker records self-knowledge/tool-awareness drift despite the structured identity/capability stack: vague architecture self-description, denial of screenshot capability, wrong current model size, and stale AURA terminology after replacement by Swarm.",
+      "implication": "Static capability declarations and prompt grounding are insufficient. Capability/self-model statements need runtime evidence receipts, versioning and explicit UNKNOWN/STALE states."
+    },
+    {
+      "id": "PF-SM-003",
+      "epistemic_class": "PRIMARY_CODE_SUPPORTED_MECHANISM",
+      "status": "CURRENT_HISTORICAL_FINDING",
+      "claim": "Ego-Construct separates SensationMapper, AffectLinker and AgencyAssertor, persists ego state in titan.db, and was auto-trained from recurrent hardware/events/autonomous decisions. The Drive organ card independently records ego_construct.py as a live organ with 12 dependents, two dependent services and a titan.db/ego_state write assurance.",
+      "implication": "The mechanism is reusable as a derived embodied-state layer, but its high dependency blast radius requires strict provenance and failure isolation."
+    },
+    {
+      "id": "PF-SM-004",
+      "epistemic_class": "PRIMARY_CODE_RISK_INFERENCE",
+      "status": "OPEN",
+      "claim": "Ego-Construct process_own_response changes agency_score, embodiment_level and affective_range using properties of Frank's own generated response such as confidence, verbosity, creativity and emotionality. This creates a circular self-reinforcement path where output style can alter future internal self-state without independent external evidence.",
+      "falsifier": "Ablate output-derived updates versus externally grounded telemetry/event updates and show no material self-state drift, calibration loss or behavior change attributable to the output-feedback path.",
+      "implication": "Own-output features should be typed as introspective/expression evidence, never as authoritative bodily or world truth."
+    },
+    {
+      "id": "PF-SM-005",
+      "epistemic_class": "HISTORY_SUPPORTED_FAILURE_PATTERN",
+      "status": "NEGATIVE_RESULT",
+      "claim": "Multiple later commits repeatedly repaired stale self-knowledge, grounding and removed-feature references, including model descriptions, wallpaper/wake-word references and capability maps. This is a maintenance-drift pattern caused by duplicated semantic state across identity, capability and prompt layers.",
+      "implication": "Eliminate manually synchronized mirrors where possible; compile prompt/self-knowledge projections from one versioned semantic state plus live capability observations."
+    }
+  ],
+  "cross_source_reconciliation": [
+    "Drive organ card agrees with the frozen PF source that Ego-Construct is a persistent titan.db-backed subsystem and confirms dependency blast radius.",
+    "Drive live evaluation supplies independent runtime evidence that self-knowledge/capability grounding did drift in practice, matching the duplication/staleness failure mode visible in code/history.",
+    "No contradiction found between the selected frozen PF files and the Drive ego organ card; the bug tracker adds later negative runtime evidence rather than superseding the mechanism."
+  ],
+  "architecture_delta": {
+    "frank": [
+      "Define one authoritative immutable/versioned IdentityFact contract; all prompts/self-knowledge surfaces reference it by stable identity/version hash.",
+      "Split self-model facts into AUTHORITATIVE_IDENTITY, OBSERVED_CAPABILITY, DERIVED_INTERNAL_STATE and NARRATIVE_RENDERING. Never let lower-authority layers overwrite higher-authority facts.",
+      "Capability claims require fresh runtime observation/receipt or explicit STALE/UNKNOWN; static fallback may guide discovery but must not authorize effects.",
+      "Keep sensor facts separate from subjective metaphor. Store both with provenance; subjective renderings never become sensor truth."
+    ],
+    "claycode": [
+      "Add typed authority/provenance contracts for IdentityFact, ObservedCapability and DerivedExperienceState.",
+      "Make transitions from generated-output features to embodied state explicit, reversible and lower-authority than sensor/event evidence."
+    ],
+    "unifieddb": [
+      "Persist identity once and materialize projections; store capability observations as timestamped/versioned evidence rather than duplicated declarations.",
+      "Represent stale/superseded capability and architecture claims explicitly."
+    ],
+    "claygraph": [
+      "Use provenance edges from identity/capability/embodiment assertions to source receipts and supersession lineage; activation cannot upgrade authority."
+    ],
+    "harness": [
+      "Regression tests: persona-vs-self-model identity hash mismatch, removed-feature staleness, wrong-model-version claim, capability denial despite live tool, and stale fallback after service topology change.",
+      "Ablate output-style feedback into Ego state against telemetry-only and event-grounded variants."
+    ],
+    "gwt_emergenz": [
+      "Do not count self-referential output->internal-state reinforcement as evidence of causal emergence by itself; separate it from externally grounded re-entry and test with lesion/rescue."
+    ],
+    "hyperposition": [
+      "Represent uncertain capability alternatives as evidence-weighted/dated possibilities rather than collapsing immediately to one asserted self-description."
+    ]
+  },
+  "historical_earned_work": {
+    "new_quantified_hours": 0.0,
+    "mapping_candidate": true,
+    "reason": "Mechanism and negative-result value are clear, but workspace already warns against double-counting related identity/state lineages. Row-level dedup is required before adding avoided-work hours."
+  },
+  "next_tests": [
+    "Compile a single-source identity/capability projection prototype and inject deliberately stale mirrors; verify mismatch detection and fail-closed behavior.",
+    "Replay historical self-knowledge failure cases against runtime-receipt-backed capability state.",
+    "Run factorial Ego update ablation: telemetry only vs event grounded vs own-output proxy vs combined; measure drift, calibration and downstream behavior."
+  ],
+  "blockers": [
+    "Project-Frankenstein exact frozen tree/history denominator remains blocked because the current connected GitHub surface still exposes no recursive read-tree/archive/clone operation; directory fetch was explicitly rejected as directory-not-file.",
+    "Therefore no repository-wide exact coverage or Level-0 PASS is claimed by this receipt."
+  ]
+}

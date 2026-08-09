@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "manifest_id": "DRIVE-AICORE-DIRECT-DENOMINATOR-20260809T0703p0700",
   "program_stage": "L0_ARCHIVE_ASSIMILATION",
   "trigger": "666",
@@ -29,7 +29,7 @@
   ],
   "reconciliation_rule": "Do not retraverse all 37 folders blindly. First map prior committed subtree closures to this exact direct denominator; recurse only unmatched or stale identities.",
   "method_revalidation_20260809T0921p0700": {
-    "status": "DIRECT_CHILD_DENOMINATORS_REVALIDATED_SYNTEQ_AND_TOOLS_RECURSIVELY_CLOSED",
+    "status": "DIRECT_CHILD_DENOMINATORS_REVALIDATED_SKILLS_SYNTEQ_TOOLS_RECURSIVELY_CLOSED",
     "receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T0921p0700_chatgpt_secondary_aicore_skills_synteq_tools_direct_revalidation.json",
     "subtrees": {
       "skills": {
@@ -37,7 +37,10 @@
         "direct_entries": 28,
         "direct_folders": 22,
         "direct_files": 6,
-        "recursive_status": "OPEN"
+        "recursive_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED",
+        "recursive_units_below_root": 50,
+        "recursive_folder_units": 22,
+        "recursive_file_units": 28
       },
       "synteq": {
         "id": "1LnsZ7HLTdcnsuclwJwn61sWAxHmSnA6K",
@@ -128,21 +131,34 @@
     },
     "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
   },
+  "skills_recursive_closure_20260809T0929p0700": {
+    "receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_aicore_skills_recursive_wave1.json",
+    "root_direct": {"entries": 28, "folders": 22, "files": 6},
+    "verified_direct_folder_children": 22,
+    "child_shape": {"entries_each": 1, "folders_each": 0, "files_each": 1, "file_name": "SKILL.md"},
+    "recursive_denominator": {
+      "total_units_below_skills_root": 50,
+      "folder_units": 22,
+      "file_units": 28
+    },
+    "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
+  },
   "remaining": {
     "prior_subtree_to_denominator_mapping": "OPEN",
     "unmatched_recursive_folders": "UNKNOWN_UNTIL_RECONCILIATION",
     "root_files_semantic_status": "PREVIOUSLY_ADJUDICATED_PER_ROOT_STATE",
     "raw_hash_obligations": "OPEN_WHERE_REQUIRED",
-    "skills_recursive_child_folders": 22,
+    "skills_recursive_child_folders": 0,
     "synteq_unclosed_direct_child_folders": 0,
     "synteq_vault_nested_child_folders": 0,
     "tools_recursive_child_folders": 0,
+    "skills_recursive_units_closed": 50,
     "synteq_recursive_units_closed": 511,
     "tools_recursive_units_closed": 95
   },
   "level0_credit": {
     "exact_global_percent_added": 0.0,
-    "reason": "Synteq and tools local recursive denominators are exact, but the combined Drive + Project-Frankenstein Level-0 denominator remains unfrozen."
+    "reason": "Skills, synteq and tools local recursive denominators are exact, but the combined Drive + Project-Frankenstein Level-0 denominator remains unfrozen."
   },
   "status": "DIRECT_DENOMINATOR_FROZEN_RECONCILIATION_REQUIRED",
   "created_at": "2026-08-09T07:03:00+07:00",

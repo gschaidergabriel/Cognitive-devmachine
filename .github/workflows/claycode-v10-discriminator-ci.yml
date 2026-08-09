@@ -1,0 +1,183 @@
+name: ClayCode V10 Unified Frontend Discriminator
+
+on:
+  push:
+    paths:
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'research_entity/claycode/base/examples/PURE_CORE_V1.clay'
+      - 'frank_reference/claycode/frank_runtime.clay'
+      - 'frank_reference/claycode/frank_runtime.provenance.json'
+      - 'tools/claycode_base_canonical_ir_validation.py'
+      - 'tools/claycode_base_compiler.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'tools/claycode_frank_frontend_gap_probe.py'
+      - 'tools/claycode_v10_unified_frontend_discriminator.py'
+      - '.github/workflows/claycode-v10-discriminator-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  discriminate-v10:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install strict parser dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'lark[interegular]>=1.2,<2'
+
+      - name: Capture execution environment
+        run: |
+          mkdir -p receipts/claycode-v10-discriminator
+          {
+            echo "git_head=$(git rev-parse HEAD)"
+            echo "event=${GITHUB_EVENT_NAME}"
+            echo "ref=${GITHUB_REF_NAME}"
+            echo "runner_os=${RUNNER_OS}"
+            echo "python=$(python --version 2>&1)"
+            python - <<'PY'
+          import importlib.metadata
+          for pkg in ('lark', 'interegular'):
+              try:
+                  print(f"{pkg}={importlib.metadata.version(pkg)}")
+              except importlib.metadata.PackageNotFoundError:
+                  print(f"{pkg}=MISSING")
+          PY
+          } | tee receipts/claycode-v10-discriminator/ENVIRONMENT.txt
+
+      - name: Syntax compile discriminator stack
+        run: |
+          python -m py_compile \
+            tools/claycode_base_canonical_ir_validation.py \
+            tools/claycode_base_compiler.py \
+            tools/claycode_base_typed_ir.py \
+            tools/claycode_frank_frontend_gap_probe.py \
+            tools/claycode_v10_unified_frontend_discriminator.py
+
+      - name: Run strict V9-V10-V7 discriminator
+        id: discriminator
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python tools/claycode_v10_unified_frontend_discriminator.py \
+            --output receipts/claycode-v10-discriminator/V10_STRICT_DISCRIMINATOR.json \
+            2>&1 | tee receipts/claycode-v10-discriminator/V10_STRICT_DISCRIMINATOR.log
+
+      - name: Run current V7 native pure-toolchain differential
+        id: pure_v7
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python tools/claycode_base_pure_toolchain_validation.py \
+            2>&1 | tee receipts/claycode-v10-discriminator/V7_PURE_TOOLCHAIN.log
+          cp research_entity/claycode/autonomous/BASE_PURE_TOOLCHAIN_RECEIPT.json \
+            receipts/claycode-v10-discriminator/V7_PURE_TOOLCHAIN_RECEIPT.json
+
+      - name: Build decision summary
+        if: always()
+        env:
+          DISCRIMINATOR_OUTCOME: ${{ steps.discriminator.outcome }}
+          PURE_V7_OUTCOME: ${{ steps.pure_v7.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path('receipts/claycode-v10-discriminator')
+          def load(name):
+              p=root/name
+              return json.loads(p.read_text(encoding='utf-8')) if p.exists() else None
+          d=load('V10_STRICT_DISCRIMINATOR.json')
+          p=load('V7_PURE_TOOLCHAIN_RECEIPT.json')
+          decision={
+              'schema_version':'1.0',
+              'source_commit':os.environ['GITHUB_SHA'],
+              'discriminator_step_outcome':os.environ.get('DISCRIMINATOR_OUTCOME'),
+              'v7_pure_step_outcome':os.environ.get('PURE_V7_OUTCOME'),
+              'strict_discriminator_present':d is not None,
+              'strict_discriminator_pass':bool(d and d.get('pass') and d.get('strict_parser')),
+              'v10_adoption_candidate':bool(d and d.get('v10_adoption_candidate')),
+              'frank_surface_route_still_open':None if not d else d.get('frank_source',{}).get('surface_route_still_open'),
+              'v7_pure_receipt_present':p is not None,
+              'v7_pure_pass':bool(p and p.get('pass')),
+              'promotion_allowed':False,
+              'gate_effect':'DISCRIMINATOR_ONLY_NO_AUTOMATIC_WP_PASS',
+          }
+          decision['pass']=decision['strict_discriminator_pass'] and decision['v7_pure_pass']
+          (root/'DECISION.json').write_text(json.dumps(decision,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(decision,sort_keys=True))
+          PY
+
+      - name: Receipt hashes
+        if: always()
+        run: |
+          find receipts/claycode-v10-discriminator -maxdepth 1 -type f ! -name SHA256SUMS.txt -print0 \
+            | sort -z \
+            | xargs -0 sha256sum \
+            | tee receipts/claycode-v10-discriminator/SHA256SUMS.txt
+
+      - name: Persist append-only research-center receipt
+        if: always() && github.event_name == 'push'
+        continue-on-error: true
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          target="research_entity/claycode/base/receipts/v10-discriminator/${GITHUB_SHA}"
+          mkdir -p "$target"
+          cp -a receipts/claycode-v10-discriminator/. "$target/"
+          printf '%s\n' \
+            "schema_version=1.0" \
+            "source_commit=${GITHUB_SHA}" \
+            "workflow=${GITHUB_WORKFLOW}" \
+            "run_id=${GITHUB_RUN_ID}" \
+            "run_attempt=${GITHUB_RUN_ATTEMPT}" \
+            "job_status_before_persist=${JOB_STATUS}" \
+            > "$target/WORKFLOW_RECEIPT.txt"
+          git config user.name "clay-research-center-ci"
+          git config user.email "clay-research-center-ci@users.noreply.github.com"
+          git add "$target"
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "receipt(claycode): V10 discriminator ${GITHUB_SHA}"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Upload evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-v10-discriminator-${{ github.sha }}
+          path: receipts/claycode-v10-discriminator/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Enforce discriminator result
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('receipts/claycode-v10-discriminator/DECISION.json')
+          if not p.exists():
+              raise SystemExit('MISSING_DECISION_RECEIPT')
+          row=json.loads(p.read_text(encoding='utf-8'))
+          if not row.get('pass'):
+              raise SystemExit('V10_DISCRIMINATOR_NOT_PASS')
+          print('V10_DISCRIMINATOR_PASS')
+          PY

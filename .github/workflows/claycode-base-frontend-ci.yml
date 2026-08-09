@@ -3,7 +3,8 @@ name: ClayCode BASE Frontend CI
 on:
   push:
     paths:
-      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark'
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
       - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
       - 'tools/claycode_base_frontend_validation.py'
@@ -16,9 +17,11 @@ permissions:
   contents: write
 
 jobs:
-  strict-v6-frontend:
+  strict-v9-frontend:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      CLAYCODE_ACTIVE_GRAMMAR: research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v4
@@ -35,7 +38,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install 'lark[interegular]>=1.2,<2'
 
-      - name: Capture execution environment
+      - name: Capture execution environment and grammar identity
         run: |
           mkdir -p receipts/claycode-base-frontend
           {
@@ -44,6 +47,8 @@ jobs:
             echo "ref=${GITHUB_REF_NAME}"
             echo "runner_os=${RUNNER_OS}"
             echo "python=$(python --version 2>&1)"
+            echo "active_grammar=${CLAYCODE_ACTIVE_GRAMMAR}"
+            echo "active_grammar_sha256=$(sha256sum "${CLAYCODE_ACTIVE_GRAMMAR}" | awk '{print $1}')"
             python - <<'PY'
           import importlib.metadata
           for pkg in ('lark', 'interegular'):
@@ -63,43 +68,75 @@ jobs:
             tools/claycode_base_ir.py \
             2>&1 | tee receipts/claycode-base-frontend/PY_COMPILE.log
 
-      - name: Strict V6 full-corpus frontend validation
+      - name: Strict V9 full-corpus frontend validation
         run: |
           set -o pipefail
           python tools/claycode_base_frontend_validation.py \
-            --output receipts/claycode-base-frontend/FRONTEND_V6_STRICT.json \
-            2>&1 | tee receipts/claycode-base-frontend/FRONTEND_V6_STRICT.log
+            --grammar "${CLAYCODE_ACTIVE_GRAMMAR}" \
+            --output receipts/claycode-base-frontend/FRONTEND_V9_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/FRONTEND_V9_STRICT.log
 
-      - name: Strict V6 canonical syntax identity validation
+      - name: Strict V9 canonical syntax identity validation
         run: |
           set -o pipefail
           python tools/claycode_base_canonicalizer.py \
-            --output receipts/claycode-base-frontend/CANONICAL_V6_STRICT.json \
-            2>&1 | tee receipts/claycode-base-frontend/CANONICAL_V6_STRICT.log
+            --grammar "${CLAYCODE_ACTIVE_GRAMMAR}" \
+            --output receipts/claycode-base-frontend/CANONICAL_V9_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/CANONICAL_V9_STRICT.log
 
-      - name: Strict typed declaration IR on G9 V3
+      - name: Strict V9 typed declaration IR on G9 V3
         run: |
           set -o pipefail
           python tools/claycode_base_ir.py \
             research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay \
-            --output receipts/claycode-base-frontend/IR_G9_V3_STRICT.json \
-            2>&1 | tee receipts/claycode-base-frontend/IR_G9_V3_STRICT.log
+            --grammar "${CLAYCODE_ACTIVE_GRAMMAR}" \
+            --output receipts/claycode-base-frontend/IR_G9_V3_V9_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/IR_G9_V3_V9_STRICT.log
 
-      - name: Strict typed declaration IR on Dialect V3
+      - name: Strict V9 typed declaration IR on Dialect V3
         run: |
           set -o pipefail
           python tools/claycode_base_ir.py \
             research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay \
-            --output receipts/claycode-base-frontend/IR_DIALECT_V3_STRICT.json \
-            2>&1 | tee receipts/claycode-base-frontend/IR_DIALECT_V3_STRICT.log
+            --grammar "${CLAYCODE_ACTIVE_GRAMMAR}" \
+            --output receipts/claycode-base-frontend/IR_DIALECT_V3_V9_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/IR_DIALECT_V3_V9_STRICT.log
 
-      - name: Strict typed declaration IR fixture self-test
+      - name: Strict V9 typed declaration IR fixture self-test
         run: |
           set -o pipefail
           python tools/claycode_base_ir.py \
             --self-test \
-            --output receipts/claycode-base-frontend/IR_SELFTEST_STRICT.json \
-            2>&1 | tee receipts/claycode-base-frontend/IR_SELFTEST_STRICT.log
+            --grammar "${CLAYCODE_ACTIVE_GRAMMAR}" \
+            --output receipts/claycode-base-frontend/IR_SELFTEST_V9_STRICT.json \
+            2>&1 | tee receipts/claycode-base-frontend/IR_SELFTEST_V9_STRICT.log
+
+      - name: Assert every machine-readable receipt is bound to V9
+        if: always()
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          grammar=Path('research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark')
+          expected=hashlib.sha256(grammar.read_bytes()).hexdigest()
+          receipt_dir=Path('receipts/claycode-base-frontend')
+          checked=0
+          for p in sorted(receipt_dir.glob('*.json')):
+              try:
+                  row=json.loads(p.read_text(encoding='utf-8'))
+              except Exception:
+                  continue
+              candidates=[]
+              if isinstance(row.get('grammar_sha256'),str): candidates.append(row['grammar_sha256'])
+              ident=row.get('identity') or {}
+              if isinstance(ident,dict) and isinstance(ident.get('grammar_sha256'),str): candidates.append(ident['grammar_sha256'])
+              if not candidates:
+                  continue
+              checked+=1
+              assert all(x==expected for x in candidates), {'receipt':str(p),'expected':expected,'observed':candidates}
+          assert checked >= 2, {'error':'insufficient_grammar_bound_receipts','checked':checked}
+          print(f'V9_GRAMMAR_BINDING_RECEIPTS={checked}:PASS')
+          PY
 
       - name: Receipt hashes
         if: always()
@@ -119,11 +156,13 @@ jobs:
           mkdir -p "$target"
           cp -a receipts/claycode-base-frontend/. "$target/"
           printf '%s\n' \
-            "schema_version=1.0" \
+            "schema_version=1.1" \
             "source_commit=${GITHUB_SHA}" \
             "workflow=${GITHUB_WORKFLOW}" \
             "run_id=${GITHUB_RUN_ID}" \
             "run_attempt=${GITHUB_RUN_ATTEMPT}" \
+            "active_grammar=${CLAYCODE_ACTIVE_GRAMMAR}" \
+            "active_grammar_sha256=$(sha256sum "${CLAYCODE_ACTIVE_GRAMMAR}" | awk '{print $1}')" \
             "job_status_before_persist=${JOB_STATUS}" \
             > "$target/WORKFLOW_RECEIPT.txt"
           git config user.name "clay-research-center-ci"
@@ -132,7 +171,7 @@ jobs:
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m "receipt(claycode): strict frontend ${GITHUB_SHA}"
+          git commit -m "receipt(claycode): strict V9 frontend ${GITHUB_SHA}"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
@@ -140,7 +179,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: claycode-base-frontend-${{ github.sha }}
+          name: claycode-base-frontend-v9-${{ github.sha }}
           path: receipts/claycode-base-frontend/
           if-no-files-found: error
           retention-days: 30

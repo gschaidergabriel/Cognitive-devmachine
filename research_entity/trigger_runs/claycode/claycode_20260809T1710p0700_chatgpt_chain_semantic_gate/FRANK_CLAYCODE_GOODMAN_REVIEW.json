@@ -1,0 +1,55 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1710p0700_chatgpt_chain_semantic_gate",
+  "latest_frank_run":"20260809T0130p0700-chatgpt-secondary-r5 / FRANK C9 TCAEF",
+  "latest_frank_claycode_architecture_artifact":null,
+  "architecture_artifact_lookup":"research_entity/frank/FRANK_ARCHITECTURE.claycode.json returned 404 in this session",
+  "items":[
+    {
+      "claim_id":"FRANK-C9-IDENTITY-SEPARATION",
+      "frank_statement":"Semantic identity and execution/replay identity must remain distinct.",
+      "frank_source_refs":["ba0ab9ebadf62596b54bcd3f7e6c262ed3ca39dc","de4c4e9855cb479d573d1eced72201d524211322"],
+      "ancestry_families":["FRANK-C9","live-fusion-shared-RAE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"A single raw source/artifact identity is sufficient.",
+      "falsifier":"Corpus-wide equivalence/replay benchmark shows no false distinctions or replay ambiguity with single identity.",
+      "independent_checks":["Current run whitespace-equivalence experiment: same AST/typed-IR/semantic/artifact hashes but different source and contract hashes.","SLSA/in-toto independently motivate cryptographic artifact/provenance identity separate from program semantics."],
+      "adversarial_checks":["Mutated 50,000 chain fields","Self-consistent wrong lowering"],
+      "verdict":"REFINED",
+      "reason":"Identity separation survives, but compiler semantic identity must be paired with exact provenance identity and semantic validation; one does not replace the other.",
+      "claycode_action":"Keep ProgramSemanticId post-canonicalization; add CompilerProvenanceChain/contract identity.",
+      "affected_claycode_artifacts":["CC-WP-02 parser/canonicalizer","CC-WP-03 typed IR/checker","CC-WP-06 runtime/receipt","CC-WP-11 toolchain"]
+    },
+    {
+      "claim_id":"FRANK-C9-RECEIPT-AUTHORITY",
+      "frank_statement":"Receipted causal/effect identity improves consequential execution safety; model proposal is not authority.",
+      "frank_source_refs":["ba0ab9ebadf62596b54bcd3f7e6c262ed3ca39dc"],
+      "ancestry_families":["FRANK-C9","ClayCode-effect-boundary-shared"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Compiler/runtime receipts can themselves serve as sufficient execution authorization.",
+      "falsifier":"A design demonstrates receipt possession cannot be replayed/forged/substituted into authority and needs no independent capability domain.",
+      "independent_checks":["Current experiment demonstrates attestation integrity can coexist with semantically wrong behavior, so receipt validity cannot imply correctness or authority."],
+      "adversarial_checks":["Self-consistent wrong lowering with valid receipt chain"],
+      "verdict":"REFINED",
+      "reason":"Receipts remain evidence, never authority. Audit identity, semantic correctness and effect authority stay orthogonal.",
+      "claycode_action":"Never let CompilerProvenanceChain or ExecutionReceipt mint capability/permit authority.",
+      "affected_claycode_artifacts":["CC-WP-03 type/effect checker","CC-WP-07 capability boundary","CC-WP-11 receipts"]
+    },
+    {
+      "claim_id":"FRANK-C9-MUTABLE-RESOURCE-IDENTITY",
+      "frank_statement":"Consequential resource use should bind semantic identity plus current instance/resolver identity/epoch where mutable namespaces exist.",
+      "frank_source_refs":["ba0ab9ebadf62596b54bcd3f7e6c262ed3ca39dc","af0f57a4d2c96f75faa594bf8b004001e25f1af5"],
+      "ancestry_families":["FRANK-C9","ClayGraph-G3-shared"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Stable semantic Ref alone is enough for all runtime resource bindings.",
+      "falsifier":"Target-host alias/rebind/TOCTOU suite shows no stale-instance substitution with semantic-only identity.",
+      "independent_checks":["Current run did not execute mutable resource aliasing."],
+      "adversarial_checks":["Searched current run scope for a fresh independent mutable-resource binding test; none was executed."],
+      "verdict":"UNRESOLVED",
+      "reason":"Current compiler-chain experiment distinguishes semantic/provenance identity but does not establish mutable resource instance safety.",
+      "claycode_action":"Keep as explicit runtime/FFI hypothesis; do not bake new surface syntax.",
+      "affected_claycode_artifacts":["CC-WP-07 FFI/IPC","CC-WP-08 capabilities","system-effect app gate"]
+    }
+  ],
+  "promotion":"NONE"
+}

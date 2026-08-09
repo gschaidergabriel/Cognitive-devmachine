@@ -6,6 +6,7 @@ from research_entity.harness.reference.active_assembly import (
     AssemblyPacket,
     ActiveAssemblyError,
     compile_active_assembly,
+    packet_identity_sha256,
     packet_score,
 )
 
@@ -54,6 +55,55 @@ class ActiveAssemblyTests(unittest.TestCase):
         bad = AssemblyPacket("bad", "fam", "knowledge", 1.1, 1, 1, 0, 7)
         with self.assertRaisesRegex(ActiveAssemblyError, "BAD_SCORE"):
             packet_score(bad)
+
+    def test_conflicting_duplicate_packet_id_fails_closed(self):
+        a = AssemblyPacket("same", "fam", "knowledge", .8, .8, .8, .1, 7, "claim", "A", "r1", "peer-a")
+        b = AssemblyPacket("same", "fam", "knowledge", .8, .8, .8, .1, 7, "claim", "B", "r2", "peer-b")
+        for pair in ([a, b], [b, a]):
+            with self.assertRaisesRegex(ActiveAssemblyError, "PACKET_ID_COLLISION:same"):
+                compile_active_assembly(pair, current_epoch=7)
+
+    def test_exact_duplicate_delivery_is_idempotent(self):
+        packet = AssemblyPacket("same", "fam", "knowledge", .8, .8, .8, .1, 7, "claim", "A", "r1", "peer-a")
+        single = compile_active_assembly([packet], current_epoch=7)
+        duplicate = compile_active_assembly([packet, packet], current_epoch=7)
+        self.assertEqual(single["assembly_sha256"], duplicate["assembly_sha256"])
+        self.assertEqual(single["items"], duplicate["items"])
+        self.assertEqual(duplicate["input_duplicate_count"], 1)
+        self.assertEqual(single["input_duplicate_count"], 0)
+
+    def test_selected_packet_exposes_bound_identity_fingerprint(self):
+        packet = AssemblyPacket("id", "fam", "knowledge", .8, .7, .6, .1, 7)
+        out = compile_active_assembly([packet], current_epoch=7)
+        self.assertEqual(out["items"][0]["packet_identity_sha256"], packet_identity_sha256(packet))
+        self.assertEqual(len(out["items"][0]["packet_identity_sha256"]), 64)
+
+    def test_bad_empty_identity_fails_closed(self):
+        packet = AssemblyPacket("", "fam", "knowledge", .8, .7, .6, .1, 7)
+        with self.assertRaisesRegex(ActiveAssemblyError, "BAD_IDENTITY:packet_id"):
+            compile_active_assembly([packet], current_epoch=7)
+
+    def test_randomized_collision_fuzz(self):
+        rng = random.Random(202608091921)
+        trials = 10000
+        silent = 0
+        for i in range(trials):
+            a = AssemblyPacket(
+                f"id{i}", f"fam{rng.randrange(5)}", "knowledge",
+                rng.random(), rng.random(), rng.random(), rng.random(), 1,
+                "claim", f"A{rng.randrange(7)}", f"ref{i}", "peer-a"
+            )
+            b = AssemblyPacket(
+                a.packet_id, a.ancestry_family, a.kind,
+                a.relevance, a.impact, a.novelty, a.uncertainty, a.valid_epoch,
+                a.claim_key, a.claim_value + ":mut", a.reexpand_ref, "peer-b"
+            )
+            try:
+                compile_active_assembly([a, b], current_epoch=1)
+                silent += 1
+            except ActiveAssemblyError as exc:
+                self.assertIn("PACKET_ID_COLLISION", str(exc))
+        self.assertEqual(silent, 0)
 
     def test_randomized_echo_fixture(self):
         rng = random.Random(20260809)

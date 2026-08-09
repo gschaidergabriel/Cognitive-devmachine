@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1711p0700-chatgpt-g9-surface-closure",
+  "provider_gate":{"scholarly":"ATTEMPTED_PRIMARY_IMPLEMENTATION_STANDARDS","implementation":"ATTEMPTED","executable":"ATTEMPTED_LOCAL_FALLBACK","current_web":"PRIMARY_DOCS_ONLY","model_experiment":"NOT_REQUIRED_FOR_GRAMMAR_CLOSURE_TEST"},
+  "tools":[
+    {"tool":"GitHub connector","status":"SUCCESS","uses":["canonical boot","protocol/current-stack reads","durable run writes","reread validation"]},
+    {"tool":"web primary-source search","status":"SUCCESS","sources":["https://github.com/WebAssembly/component-model","https://github.com/WebAssembly/WASI/blob/main/docs/Capabilities.md","https://github.com/bytecodealliance/wasmtime"],"purpose":"independent mechanism evidence for typed host interfaces and capability-oriented effect boundaries"},
+    {"tool":"local Linux container Python 3.13.5","status":"SUCCESS","purpose":"targeted executable grammar/surface closure audit","evidence_scope":"LOCAL_EXECUTION_PRIMARY_FOR_AUDIT_ONLY_NOT_TARGET_UBUNTU_RELEASE"},
+    {"tool":"e2b_sandbox","status":"NOT_EXPOSED_TO_CURRENT_CHATGPT_TOOL_SURFACE","project_capability_status":"RUNTIME_VERIFIED","fallback":"local_sandbox","capability_ref":"research_entity/global/E2B_RESEARCH_CAPABILITY.json"},
+    {"tool":"sandboxapi_sandbox","status":"BLOCKED_NOT_SUBSCRIBED","capability_ref":"research_entity/global/E2B_RESEARCH_CAPABILITY.json"}
+  ],
+  "source_policy":"Technical external verification used primary/official project sources. Community anecdotes were not treated as verification evidence.",
+  "limits":["No execution on Andreas' Ubuntu developer system in this run.","No E2B execution receipt in this run.","No complete parser implementation was available/executed; the experiment is a targeted grammar-closure audit."]
+}

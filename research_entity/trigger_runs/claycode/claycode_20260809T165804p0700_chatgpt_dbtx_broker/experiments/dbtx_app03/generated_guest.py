@@ -1,29 +1,13 @@
 import os,sys,json,socket
 RESOURCE='db.main'
-ACTIONS=json.loads('[{"amount":30,"from":"alice","key":"k1","mode":"IMMEDIATE","op":"begin","to":"bob"}]') if False else [
- {"op":"begin","mode":"IMMEDIATE"},
- {"op":"transfer_once","key":"k1","from":"alice","to":"bob","amount":30},
- {"op":"commit"},
- {"op":"balance","account":"alice"},
- {"op":"balance","account":"bob"},
- {"op":"begin","mode":"IMMEDIATE"},
- {"op":"transfer_once","key":"k2","from":"alice","to":"bob","amount":20},
- {"op":"rollback"},
- {"op":"balance","account":"alice"},
- {"op":"balance","account":"bob"},
- {"op":"begin","mode":"IMMEDIATE"},
- {"op":"transfer_once","key":"k1","from":"alice","to":"bob","amount":30},
- {"op":"commit"},
- {"op":"balance","account":"alice"},
- {"op":"balance","account":"bob"}
-]
+ACTIONS=json.loads('[{"mode":"IMMEDIATE","op":"begin"},{"amount":30,"from":"alice","key":"k1","op":"transfer_once","to":"bob"},{"op":"commit"},{"account":"alice","op":"balance"},{"account":"bob","op":"balance"},{"mode":"IMMEDIATE","op":"begin"},{"amount":20,"from":"alice","key":"k2","op":"transfer_once","to":"bob"},{"op":"rollback"},{"account":"alice","op":"balance"},{"account":"bob","op":"balance"},{"mode":"IMMEDIATE","op":"begin"},{"amount":30,"from":"alice","key":"k1","op":"transfer_once","to":"bob"},{"op":"commit"},{"account":"alice","op":"balance"},{"account":"bob","op":"balance"}]')
 try:
     fd=int(os.environ["CLAY_DB_FD"])
     s=socket.socket(fileno=fd)
 except Exception as e:
     print(json.dumps({"status":"DENIED_NO_VALID_RESOURCE","error":type(e).__name__}))
     raise SystemExit(77)
-f=s.makefile("rwb",buffering=0)
+f=s.makefile("rwb", buffering=0)
 out=[]
 for action in ACTIONS:
     req={"resource":RESOURCE,**action}

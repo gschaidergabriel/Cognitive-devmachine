@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T0951Z-chatgpt-sol",
+  "trigger": "claycode",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "registered_scientific_inputs": [
+    {
+      "branch": "frank",
+      "depth": "DEEP_REQUIREMENTS",
+      "refs": [
+        "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+        "research_entity/harness/HARNESS_WORKSPACE.json"
+      ],
+      "finding": "Current FRANK requirement surface demands versioned state, provenance/tier, open-set outcomes, promotion/rollback, resource budgets and replay; no dedicated visual-learning syntax is justified yet because generic G9 state/provenance/delta/recovery constructs can represent the contract in principle.",
+      "missing_expected_artifacts": [
+        "research_entity/frank/FRANK_ARCHITECTURE.claycode.json",
+        "research_entity/frank/CLAYCODE_ARCHITECTURE_MAPPING.md"
+      ]
+    },
+    {
+      "branch": "clayresearch",
+      "depth": "INTEGRATION",
+      "refs": ["research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md"],
+      "finding": "ClayCode is the semantic origin of dependency/effect/authority/provenance/hyperposition/invalidation signatures; frontend closure is therefore a cross-system prerequisite rather than cosmetic syntax work."
+    },
+    {
+      "branch": "claygraph",
+      "depth": "DEEP_SUBSTRATE",
+      "refs": [
+        "research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql",
+        "research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"
+      ],
+      "finding": "Versioned node/edge/hyperrelation identity, typed roles, activation, projection/selection/receiver receipts and invalidation can map to G9 records/deltas; activation remains non-authoritative. Current parser closure, not a missing graph semantic primitive, is the immediate blocker found in this run."
+    },
+    {
+      "branch": "unifieddb",
+      "depth": "DEEP_SUBSTRATE",
+      "refs": ["research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql"],
+      "finding": "Epochs, semantic transactions, idempotency, authority scope, query receipts, evidence and claim refs align with existing G9 records. No evidence in this run requires physical store unification or new ClayCode syntax."
+    },
+    {
+      "branch": "gwt",
+      "depth": "REQUIREMENTS",
+      "refs": [
+        "research_entity/global/RAE_GWT_MICROKERNEL.clay",
+        "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"
+      ],
+      "finding": "GWT requires explicit selection/broadcast/delivery/use/outcome/re-entry distinctions and typed causal receipts; G9 already models these distinctions, but the admitted surface must be parseable before H2 can differentially execute them."
+    },
+    {
+      "branch": "hyperposition",
+      "depth": "REQUIREMENTS",
+      "refs": [
+        "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md",
+        "research_entity/claycode/g9/CLAYCODE_G9_DYNAMIC_BINDING_LATTICE_CANDIDATE.clay"
+      ],
+      "finding": "Higher-order relations, roles, alternatives and topology/readout requirements are present in current candidates. The dynamic-binding candidate itself exposes grammar-closure counterexamples through comparison operators and research-meta declarations."
+    },
+    {
+      "branch": "emergenz",
+      "depth": "MEASUREMENT_REQUIREMENTS",
+      "refs": [
+        "research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md",
+        "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"
+      ],
+      "finding": "Interventions, nulls, lesion/rescue, shuffled re-entry and vector readouts remain data/measurement semantics, not execution authority. No new emergence syntax is required by evidence from this run."
+    },
+    {
+      "branch": "harness",
+      "depth": "IMPLEMENTATION_FEEDBACK",
+      "refs": ["research_entity/harness/HARNESS_WORKSPACE.json"],
+      "finding": "H-WP-03 and H-WP-18 are explicitly blocked on ClayCode release, so parser/compiler closure is directly on the staged critical path."
+    },
+    {
+      "branch": "claycode",
+      "depth": "PRIMARY",
+      "refs": [
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+        "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+        "research_entity/claycode/g9/grammar.ebnf"
+      ],
+      "finding": "BASE remains NOT_PASS with all release work packages open. Current admitted G9 artifacts use constructs absent from grammar.ebnf; this run isolates a frontend closure gap and a minimal repair path without semantic reinvention."
+    }
+  ],
+  "historical_lineage": {
+    "refs": [
+      "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
+      "gschaidergabriel/Project-Frankenstein:services/tools.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+    ],
+    "finding": "Project-Frankenstein already accumulated multiple tolerant tool-tag parser fallbacks and hallucination-specific aliases. This is active negative design knowledge: ClayCode should prefer one frozen grammar plus deterministic diagnostics/canonicalization instead of growing permissive hidden parse heuristics."
+  },
+  "deep_input_gate": {
+    "claygraph_loaded": true,
+    "unifieddb_loaded": true,
+    "all_current_scientific_branches_accounted_for": true
+  }
+}

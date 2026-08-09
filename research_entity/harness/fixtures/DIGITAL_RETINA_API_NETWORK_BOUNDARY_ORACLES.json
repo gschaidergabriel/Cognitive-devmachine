@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "fixture_id":"digital-retina-api-network-boundary-oracles",
+  "source_scope":{"drive_root":"digital-retina","git_commit":"819dcac12253b7de45795239b44482627ade624f","tracked_api_files_blob_verified":"4/4"},
+  "evidence_class":"HISTORICAL_SOURCE_NEGATIVE_ORACLE",
+  "findings":[
+    {
+      "id":"DR-API-NET-001",
+      "class":"SSRF_BOUNDARY_MISSING",
+      "claim":"Historical authenticated image_url ingestion uses an HTTP client with redirects enabled and no destination host/IP policy before fetching user-selected URLs. Safe current implementations must treat remote-image retrieval as an external effect and block loopback, private, link-local, metadata and otherwise forbidden destinations across every redirect hop.",
+      "required_regression":"Synthetic harness must reject prohibited destination classes before any network effect and revalidate every redirect target. No real internal target probing is required."
+    },
+    {
+      "id":"DR-API-NET-002",
+      "class":"RESPONSE_SIZE_BOUND_INCOMPLETE",
+      "claim":"At least one historical remote-image path uses Content-Length as the pre-read size guard and then materializes the full response body. Missing or deceptive Content-Length can therefore bypass the intended pre-read 50 MB bound.",
+      "required_regression":"Synthetic streamed-response fixture with absent/incorrect Content-Length must terminate once the hard byte budget is exceeded and must not materialize an unbounded body."
+    }
+  ],
+  "integration_rule":"Digital Retina perception semantics are unaffected; these are API/effect-boundary regressions for Harness/Safe-Effect. Needle/model text never gains network-fetch authority.",
+  "earned_work_hours_added":0,
+  "created_by":"chatgpt-secondary",
+  "created_at":"2026-08-09T07:02:00+07:00"
+}

@@ -1,129 +1,25 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "manifest_id": "DRIVE-AICORE-TRAINING-RECURSIVE-DIRECT-20260809T0939p0700",
   "program_stage": "L0_ARCHIVE_ASSIMILATION",
   "trigger": "666",
   "actor": "chatgpt-secondary",
-  "source": {"title": "training", "id": "1VQVIWCEAzf5gq4DoYECR4RUE7mz-CUXf", "actual_id": "1VQVIWCEAzf5gq4DoYECR4RUE7mz-CUXf"},
-  "source_correction": {"actual_training_root_id": "1VQVIWCEAzf5gq4DoYECR4RUE7mz-CUXf", "note": "INVALID_PLACEHOLDER_DO_NOT_USE"},
-  "method": {"kind": "GOOGLE_DRIVE_DIRECT_LIST_FOLDER", "top_k": 1000, "search_used_for_completion": false},
-  "root": {
-    "id": "1VQVIWCEAzf5gq4DoYECR4RUE7mz-CUXf",
+  "status": "CORRECTED_COMPOSITE_EXACT_RECURSIVE_IDENTITY_DENOMINATOR_CLOSED",
+  "source": {
     "title": "training",
-    "direct_folders": [
-      {"id": "1DvQGJ-ASrsxXV1YVu_WRhOhFKdJpzNjz", "title": "v26"},
-      {"id": "1DzxU5uAezf5gq4DoYECR4RUE7mz-CUXf", "title": "v27"}
-    ],
-    "direct_files": [],
-    "direct_entries": 2
+    "id": "1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz"
   },
-  "v26": {
-    "id": "1DvQGJ-ASrsxXV1YVu_WRhOhFKdJpzNjz",
-    "direct_entries": 53,
-    "direct_folders": [
-      {"id": "1rhOeRluEScD3TvxuKE-n04E6wpXx_aSO", "title": "abzug"},
-      {"id": "1M9wEhdTBmFRxmb4MixWqpBiLThfwL8Ra", "title": "eval"}
-    ],
-    "direct_files": [
-      ["1-zDVkjjvOux2YPjv2qbuwhmEADx7DkV4","pruefe_v262.py"],
-      ["1RC5rbXGyi2Z22CthfVegclqKurI23lce","run_train_v262.bat"],
-      ["1Ykg9_VRbTLUVcKvI2GgFnT3goWJApdlf","runde1_regeltreue.py"],
-      ["1YNYTuwlXwoEY02BUsRBTVSXwsKWs-aaW","runde3_gegenleser.py"],
-      ["1sr4Tw6RZWctJxYwzqULUpkM2a6BTJse0","train_v262_unsloth.py"],
-      ["1cmCiewa73oIQHknAF22Zxty-0WtOpBVh","unsloth_rauchtest.py"],
-      ["1QAnLZPsBuQwrMwmK-P8CKieeVrJgTRrG","50_kraftausdruecke_nachruesten.py"],
-      ["1WpgPw649WKt8PoZh7VB4D2mx8XrqRZAC","43_realitaet_laengenbewusst.py"],
-      ["1Cm8NvS1kieORR18m-vcBnf0-4nWpMf1z","42_v261_build.py"],
-      ["1QYj31ftfsgx1HoHfTa28dsS_sAqJTOAM","40_v261_fix.py"],
-      ["1AP9hiqTekCEGqHpGeDLKpzwEZhcJ5wz3","train_v26.py"],
-      ["1k6YZfSEYr8YwnB7PdSG_2SOIBvFOFbbB","30_rendern.py"],
-      ["13WCXVD8DChSz0B86_b28yELCinPaA_Jk","v26_eval.jsonl.vor-neufassung"],
-      ["1kCV3f0TiOI0gXHPx12oYmivA055wYeUO","v26_train.jsonl.vor-neufassung"],
-      ["1lbezcj5LuEWzHNfFFiJ2Vvh-LfqJh43C","bauen.py"],
-      ["1arcSSsN-EH_pR2Nna-qwnLBTnyki4rd_","urteile.json"],
-      ["1iA_09X2lIrDtVA7W0pwuV12-K09Kg0ym","20_fuer_chatgpt.py"],
-      ["1Oa2D45XEpcZtg3SwJaJEF4uWXZVEegT_","16_pruefkette.py"],
-      ["1bJ11MzRnUPHJvkOa1lJMxE0LDNbGe_e6","urteile-vor-anker-0346.json"],
-      ["1wGbtmqr1KSRkX-r2diedZKKuhlORvriE","gremium.json"],
-      ["1oHvrdnhNzloHAxvJ2KNNgZFhGrBr7FXU","richterwahl-rest.json"],
-      ["1kI9C14QrBTOEsp8p3FBOhfqqc1srJDKB","18_richterwahl.py"],
-      ["16Oo2ATBmPzMWspJSEaLvHmCYBRghHF_o","richterwahl-anker.json"],
-      ["1f9pX9L-ApkJE46PYyphhDnIEUNgsmu8x","19_gremium_pruefen.py"],
-      ["1K3UEM-u_EybLvtdeGxOZfQTT01j_hz9v","richterwahl-nim2.json"],
-      ["1HguBzhu3rxUhtHcDPovYXCPKwrawIrA6","richterwahl-lokal.json"],
-      ["1JM4NfzqBi1Wj79YK2vjO0GDkZZhLnP23","richterwahl-mistral.json"],
-      ["13vEznGK-qXgWlivVQdciObRRBK3Fwb2F","richterwahl-scharf.json"],
-      ["1xBR11Zk042Slo1_1s2lU8aA7AY6jYMNI","richterwahl.json"],
-      ["10LP5xJWkwLaSl21ZcQO53NXRxaQVIypb","eichsatz.json"],
-      ["125b4nOVwnB1j0ucNHfhJrS-mn5cI4Exo","17_eichsatz.py"],
-      ["1PLxqZ7delYB_sE11N_Bzqf0HZTyajDVq","11_gruppen.py"],
-      ["11CN5LwULQx_F5WZsG0bz9hzbF2JWJ7kn","fuer-c.json"],
-      ["1JVBELBrgMfp441Lr5hFqTxchtMexXih2","lauf-stark.sh"],
-      ["1bxxz3xb9Lgo901M1oiVR2IFCshvP156G","00_export_fuer_vps.py"],
-      ["1usL3oAUJjlkUVwsfr_zNmu8esRoot9Gx","pruefbogen.py"],
-      ["1PwIdlpq_5Xyq4MkEuYmF4tvOSPi7t6iI","13_pruefen.py"],
-      ["1sDj364ZmCMitx5-Z4kRSGpL8vcS572T-","15_verbessern.py"],
-      ["1CtbB9kAktP5mvUBx4AFQFjdP9wuzSGrV","12_erzeugen.py"],
-      ["1ImMPfkqwaruIinyPzat1DUZsFYCxgTRA","erzeuge.py"],
-      ["10VF9Mc09oSQU83659DtIa8VQt3YSysrC","14_bauen.py"],
-      ["1E59WEAtPvJ3BfqjhyGPdRgGXeXy8s-vu","verbessert.json"],
-      ["1iR3sfv2P9YTCEnPRaiqSBK63zI78sI74","10_systemtext.py"],
-      ["1ZPb3vYjRcHSwuq9l4plvSQ2Q5ekjbbfW","hole-vom-vps.sh"],
-      ["1zDFsp9a2VbkLR2Gohn83a8fK-a9zn68W","lauf.sh"],
-      ["1qiZQf-ufkl46U1IszKRRhLMo54pGW_dZ","beschreibungen_de.json"],
-      ["1sPc3-BLThVDb5JCjrPwz4TQaT_5Hz_Yd","PDF-KAPITEL-M-R.md"],
-      ["1rdNMEGKjafBuiB2DNKkuhqekGLQlbxC-","03_deutsch_eintragen.py"],
-      ["1I64-kSbtW3yV3NgxlRVQwSSWt5MMbpkW","02_uebersetzen.py"],
-      ["1zz7iynoSQhluXIiWFx6HUR5zo83GFVpb","beschreibungen_en.json"],
-      ["1S47tphbrca-sTdruRoJd1fiM9tVIBY-c","01_beschreibungen_ziehen.py"]
-    ]
+  "method": {
+    "kind": "GOOGLE_DRIVE_DIRECT_LIST_FOLDER",
+    "top_k": 1000,
+    "search_used_for_completion": false
   },
-  "v26_abzug": {
-    "id": "1rhOeRluEScD3TvxuKE-n04E6wpXx_aSO",
-    "direct_entries": 4,
-    "direct_folders": [],
-    "direct_files": [
-      ["1Dq8fzEmPthF84nitGYzQsZSwHbU6CbMJ","apis.json"],
-      ["10oiIxc7gSzRV9Q3OO985TkmTsCn0hj-D","idle_prompts.json"],
-      ["1I-1AdUcpj4Ewxs-wwc_NeWbe9E15CIrB","systemtext_teile.json"],
-      ["1nDozubGyyuQBAjyINyzyec13qMmRJcMi","werkzeuge.json"]
-    ]
-  },
-  "v26_eval": {
-    "id": "1M9wEhdTBmFRxmb4MixWqpBiLThfwL8Ra",
-    "direct_entries": 2,
-    "direct_folders": [],
-    "direct_files": [
-      ["1l6UKYq1_5E5YJ8JtA1lRE9uSoPs11LGY","eval_frank.py"],
-      ["1USJUgEdZ9DO2-15lvV1U918kbYxQJMyc","analyse_eval.py"]
-    ]
-  },
-  "v27": {
-    "id": "1DzxU5uAezf5gq4DoYECR4RUE7mz-CUXf",
-    "direct_entries": 20,
-    "direct_folders": [],
-    "direct_files": [
-      ["1Eh0XHMbI0l8kgiwKJlpQ9b0HthtAVUjM","BERICHT-KLASSENVERTEILUNG.md"],
-      ["1XLMze3JQCkJKkA8guH1ujhTSHTnAGoMa","rest.sh"],
-      ["1kVrBPLEmAL1_q2yNP1eN6iYFn3D3cOTv","waechter-marker-patch.md"],
-      ["1eed0lAIbLR6NYZs-GI2ORdVgmZnpHBFj","BERICHT-SYSTEMTEXT-TRENNUNG.md"],
-      ["1hhTldppznSMi_cUXVru1z9RZCQ9Qgf7W","trennung_handprobe_91.md"],
-      ["1FronCMTHoPsKZhizpgkr_XzFjMd8_CFy","20_trennung.py"],
-      ["1NLgZ3DEw97yvN1PAA1fLFCjvod87xIlT","trennung_handprobe.md"],
-      ["1SeQy5kQ6bMg-O3-kYx0pWCJL_h-UWc6t","blindpruefung_S1.md"],
-      ["1NLsEZpy_jpFB6KY_CFb0PYOHG3tIeo6B","letzte.sh"],
-      ["1KmMexwgRR5bZZUZhCUAmv8jV7YACn5Fx","klassen.py"],
-      ["1x_ZDDFZtmTBijs_xU0q5fy5wx8t9Y9yG","11_erzeugen.py"],
-      ["1-H8ddJPaJWOVeDgESV7hxJ73DIeKDdXR","fuellen2.sh"],
-      ["1zz52yE6dexd1b73uXKQayJjjYw4yE6Qq","nachfuellen.sh"],
-      ["17gfiP3Xqm8P9jdLBdA3mMhtwiDYHf-zr","13_bauen.py"],
-      ["1l_TEDQsmYnLYUiEA4WQFw-VNezNS745R","start_gen.sh"],
-      ["1NzDsbm1M_4ikuAUgTeMDslctCDGMEcDi","lauf.sh"],
-      ["1QXMMitS-ukprKwdt-jQZ7cKAYwd9uNVk","12_pruefen.py"],
-      ["15VCJJ5WzbrfLHasg6_bd-Pt5W33s29-Y","plan.json"],
-      ["18Y9OV9arDBhhZtWE7DReS4GUT9SLT-CV","10_plan.py"],
-      ["11zCq4k1Jh8PqxZ5A2rrinurtDH0HYK1L","ANTWORTKLASSEN.md"]
-    ]
+  "corrected_tree": {
+    "training": {"id": "1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz", "direct_entries": 2, "direct_folders": 2, "direct_files": 0},
+    "v26": {"id": "1DvQGJ-ASrsxXV1YVu_WRhOhFKdJpzNjz", "direct_entries": 53, "direct_folders": 2, "direct_files": 51},
+    "v26_abzug": {"id": "1rhOeRluEScD3TvxuKE-n04E6wpXx_aSO", "direct_entries": 4, "direct_folders": 0, "direct_files": 4},
+    "v26_eval": {"id": "1M9wEhdTBmFRxmb4MixWqpBiLThfwL8Ra", "direct_entries": 2, "direct_folders": 0, "direct_files": 2},
+    "v27": {"id": "1DzxU5uAezf5gq4DoYECR4RUE7mz-CUXf", "direct_entries": 20, "direct_folders": 0, "direct_files": 20}
   },
   "aggregate": {
     "descendant_folders": 4,
@@ -131,11 +27,21 @@
     "entries_below_training_root": 81,
     "recursive_identity_status": "EXACT_CLOSED"
   },
+  "identity_payload_provenance": {
+    "predecessor_commit": "b5d3330b273cfc7ee87c6ac7a8189a0124f67bee",
+    "predecessor_note": "The predecessor version contains the complete 77-file Drive-ID/title arrays captured from the same direct-list calls. Its three training-root ID fields were erroneous; descendant folder IDs and all file identity arrays remain the direct-list payload and are retained in Git history as evidence.",
+    "correction_scope": "Replace only training source/root ID with 1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz and discard the predecessor source_correction placeholder. No descendant/file identity was changed."
+  },
   "semantic_reconciliation": {
     "v27_prior_lineage_commits": ["1c726703b184440f9ecd7d83bed13c8b051196ec", "0fad26c1752bd7478999286eb9340a7da618783b"],
-    "policy": "Reference prior v27 assimilation; this manifest does not duplicate or upgrade semantic claims. v26 semantic terminal disposition remains separately open unless covered by other evidence."
+    "policy": "Reference prior v27 assimilation; identity closure does not duplicate or upgrade semantic claims. v26 semantic terminal disposition remains separately open unless covered elsewhere."
   },
-  "level0_credit": {"exact_global_percent_added": 0.0, "reason": "Global Level-0 denominator still not frozen."},
-  "status": "EXACT_RECURSIVE_IDENTITY_DENOMINATOR_CLOSED",
-  "created_at": "2026-08-09T09:39:00+07:00"
+  "level0_credit": {"exact_global_percent_added": 0.0, "reason": "Global Level-0 denominator remains unfrozen."},
+  "correction": {
+    "type": "PROVENANCE_PRESERVING_ROOT_ID_FIX_BEFORE_RESULT_PUBLICATION",
+    "bad_root_id_in_predecessor": "1VQVIWCEAzf5gq4DoYECR4RUE7mz-CUXf",
+    "correct_root_id": "1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz"
+  },
+  "created_at": "2026-08-09T09:39:00+07:00",
+  "corrected_at": "2026-08-09T09:41:00+07:00"
 }

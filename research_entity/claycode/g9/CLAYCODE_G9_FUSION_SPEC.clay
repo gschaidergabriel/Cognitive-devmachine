@@ -1,0 +1,208 @@
+module claycode.g9
+version "0.2-g9-candidate"
+parent ["MachineLanguage.v0.1.r6-tri","SE-XENO-IR.1.1","ClayCode.current"]
+status CANDIDATE
+
+// PURPOSE
+// Native cognitive/program IR for RAE + FRANK. XENO lineage preserved, not replaced.
+// Human prose is an edge renderer. Deterministic serialization/tool mechanics live outside model cognition.
+
+law truth = canonical_store
+law projection != truth
+law model_output != authority
+law possible != authorized
+law executed != verified
+law salience != evidence
+law provider != entity
+law omitted = UNKNOWN
+law conflict = PRESERVE
+
+// CORE EPISTEMIC/TEMPORAL TYPES
+class Epi = AUTHORITATIVE | EXACT_DERIVED | EVIDENCE | CANDIDATE | SALIENCE | PROSPECTIVE | HYPOTHESIS | UNKNOWN | CONFLICT | RETRACTED
+class Stage = OBSERVED | STAGED | CHECKED | COMMITTED | QUARANTINED | RETRACTED
+class Time = {valid,observed,transaction,epoch}
+class Ref<T> = {id:T,e:Set<EvidenceRef>,t:Time,epi:Epi,stage:Stage}
+
+// XENO WITNESS LATTICE -> FIRST CLASS
+witness W = {
+  tw:transport,
+  sw:semantic_intent,
+  aw:authority_scope,
+  gw:goal_commitment_origin,
+  cw:commit_freshness_effect,
+  pw?:provenance_path
+}
+rule critical_commit iff valid(W.tw,W.sw,W.aw,W.gw,W.cw) && provenance_ok_if_required(W.pw)
+rule provenance_sensitive iff remote|derived|mutable|revocable|cached|tool|latent|rights_sensitive
+
+// ENTITY/SELF/WORLD
+entity E {
+  id:EntityId
+  organs:Set<OrganRef>
+  capability:AffordanceField
+  self:View<SelfState>
+  world:View<WorldState>
+}
+
+region SELF | HUMAN | BUILD | WORLD | EVIDENCE
+record S<T> {id:SemanticId,region:region,kind:Symbol,value:T,epi:Epi,e:Set<EvidenceRef>,parents:Set<SemanticId>,t:Time,confidence:Score,status:Stage}
+
+// RELATION/HYPERGRAPH
+relation R {id:RelationId,from:Set<SemanticId>,type:Symbol,to:Set<SemanticId>,role:Map<SemanticId,Symbol>,epi:Epi,e:Set<EvidenceRef>,t:Time,confidence:Score}
+hyper H {id:HyperId,members:Set<SemanticId>,roles:Map<SemanticId,Symbol>,constraints:Set<Predicate>,e:Set<EvidenceRef>,t:Time}
+
+// HYPERPOSITION = FACET PRESERVATION, NOT QUANTUM CLAIM
+hp HP<T> {id:HPId,facets:Set<Facet<T>>,context:ContextRef,epoch:Epoch}
+facet F<T> {value:T,role:Symbol,world:WorldRef,source:SourceRef,stance:Symbol,t:Time,confidence:Score,status:Epi}
+rule project(HP,q) -> Set<Facet> // projection never overwrites source facets
+
+// UNIFIEDDB COGNITIVE PROCESSOR
+query Q<T> {cue:Cue,need:Set<TypeRef>,scope:Set<Region>,budget:Budget,freshness:Duration,evidence_floor:Score}
+view V<T> = materialize(Q<T>, dependency_index)
+receipt QR = query_receipt(Q,V,epoch,selector_hash)
+rule hot_query = indexed_relevant_neighborhood_only
+rule global_fixed_point_on_prompt = FORBIDDEN
+rule write_event -> invalidate(dependency_closure) -> incrementally_recompute(affected_views)
+
+// ANSWER CAPSULE: structure before model residual cognition
+capsule Answer {
+  intent:Intent
+  propositions:Set<SemanticRef>
+  evidence:Set<EvidenceRef>
+  conflicts:Set<ConflictRef>
+  uncertainty:Set<UnknownRef>
+  self:Set<SemanticRef>
+  human:Set<SemanticRef>
+  build:Set<SemanticRef>
+  affordances:Set<AffordanceRef>
+  next:Set<IntentRef>
+  authority:Set<AuthorityRef>
+  verification:Set<Predicate>
+  budget:Budget
+}
+
+// UNIFIED AFFORDANCE FIELD / ACC
+capability C {id:CapabilityRef,verbs:Set<Verb>,resource:ResourceRef,bounds:Set<Constraint>,authority:Set<AuthorityRef>,freshness:Duration,e:Set<EvidenceRef>}
+affordance A {id:AffordanceRef,components:Set<CapabilityRef>,pre:Set<Predicate>,effect:Set<SemanticDelta>,cost:Cost,risk:Score,authority:Set<AuthorityRef>,proof:RouteProof}
+rule ACC = incremental_closure(C,hyperrules,constraints)
+rule enumerate_all_combinations = FORBIDDEN
+rule route(A) requires current(A.proof) && authority_allows(A)
+
+// NEEDLE BOUNDARY: EVERYTHING DETERMINISTIC/EXECUTABLE OFF MODEL
+intent I {id:IntentRef,kind:Symbol,target:Ref?,payload:ClayValue,desired:Set<OutcomePredicate>,constraints:Set<Predicate>}
+effect X {id:EffectRef,intent:IntentRef,stage:REQUESTED|AUTHORIZED|CLAIMED|EXECUTED|VERIFIED|DONE|FAILED,e:Set<EvidenceRef>}
+needle compile(I,A,W) -> EffectPlan
+needle execute(EffectPlan) -> EffectReceipt
+rule model_emits = I
+rule model_never_needs = [api_schema,json_tool_call,shell_grammar,connector_wire,device_command]
+rule DONE iff independently_verified(EffectReceipt)
+
+// GWT: COMPACT OPERATIONAL TENSOR EACH CYCLE
+tensor GWT = [rel,impact,unc,novel,info,deliv,recon,use,effect,reentry]
+workspace CAND {id:CandidateRef,src:Symbol,payload:Set<SemanticRef>,gwt:GWT,e:Set<EvidenceRef>}
+rule focus = argmax(admissible(CAND.gwt[rel,impact,unc,novel,info]))
+receipt USE = observe(deliv,recon,use,effect,reentry)
+rule broadcast != use
+rule learning_credit requires causal_path(USE,outcome)
+
+// PROSPECTION
+prospect P {id:ProspectiveRef,current:Set<SemanticRef>,intervention:IntentRef?,predicted:Set<SemanticRef>,assumptions:Set<SemanticRef>,horizon:Duration,p:Probability,confidence:Score,falsifiers:Set<Predicate>,state:OPEN|VERIFIED|FALSIFIED|EXPIRED|REVISED}
+rule prediction != fact
+rule outcome(P) -> calibration_delta -> reentry
+
+// EMERGENT GOALS: NO MAINTAINED GOAL LIST
+type Pressure = COMMITMENT | UNRESOLVED_OUTCOME | USER_NEED | SELF_MAINTENANCE | OPPORTUNITY | CONFLICT | BLOCKER | CONSEQUENCE
+coalition G {members:Set<SemanticRef>,pressure:Set<Pressure>,utility:Score,urgency:Score,coherence:Score,e:Set<EvidenceRef>}
+rule goals = emerge(current_semantic_pressures)
+rule explicit_goal_database = FORBIDDEN
+
+// CAUSAL CREDIT
+credit CRED {outcome:OutcomeRef,target:SemanticRef,class:DIRECT_RECEIPT|PATH_SUPPORTED|CORRELATED|UNKNOWN,weight:Score,e:Set<EvidenceRef>}
+rule durable_learning iff CRED.class in [DIRECT_RECEIPT,PATH_SUPPORTED]
+
+// XENO CONTROL DECISIONS PRESERVED
+choice CH = act | clarify | expand | retrieve | simulate | verify | abstain | rollback | delegate | respond
+rule abstain_success iff before_irreversible_effect
+rule rollback requires recovery_ref
+
+// DIRECTCODE / EQUIVALENCE CLASSES
+programclass PC {id:ProgramClassId,intent:IntentContract,spec:Spec,variants:Set<ProgramRef>,invariants:Set<Predicate>,counterexamples:Set<CounterexampleRef>,proof:Set<ProofRef>,cost:Map<Backend,Cost>,rollback:RecoveryRef}
+rule program_identity = semantic_equivalence_class
+rule extraction = argmin_verified(PC.variants,target_cost_model)
+
+// SEMANTIC HASH != CONTRACT INSTANCE HASH
+hash semantic_hash(x) = canonical_semantics(x)
+hash contract_hash(x) = canonical_semantics(x)+provenance+adequacy+authority+epoch
+rule set_typed_fields = order_insensitive_deduplicated
+rule ordered_fields require Ordered<T>
+
+// CONTEXT RENT / READER PROJECTIONS
+reader Reader {id:ReaderId,model:ModelRef,runtime:RuntimeRef,skill:SkillRef,tokenizer:TokenizerRef?,surface:Surface}
+projection RP {reader:ReaderId,stable_core:Ref,delta:Set<SemanticRef>,pointers:Set<ResourceRef>,budget:Budget}
+rule reader_context = tiny_stable_core + changed_delta + task_neighborhood + on_demand_refs
+rule repeated_manual_dump = FORBIDDEN
+metric ContextRent = tokens+cache_write+cache_read+latency+repair+verification
+metric SuccessAdjustedCost = ContextRent / verified_state_transitions
+
+// SURFACE
+surface DE_NORMAL
+surface EN_CAVEMAN
+rule RAE.chatgpt.surface=DE_NORMAL
+rule RAE.claude.surface=EN_CAVEMAN
+rule FRANK.user.surface=DE_OR_USER_LANGUAGE
+rule explicit_machine_trace=ClayCode
+
+// AUTOMATIC EXPERIENCE -> LANGUAGE RESEARCH
+observe UX = misunderstanding | good_outcome | friction | awkwardness | retrieval_miss | stale_state | wrong_route | repair | token_waste | proof_failure | recovery_event
+meta M {trace:ShapeRef,signal:UX,layer:Symbol,confidence:Score,outcome:Set<OutcomeRef>,e:Set<EvidenceRef>}
+rule every_observable_use -> M
+rule derive(M) -> candidate(language_primitive|query_operator|projection|compiler_rule|preservation_rule)
+rule candidate != language_change
+rule promote iff repeated_or_high_impact && matched_budget_test && semantic_preservation && no_hard_loss && rollback
+
+// SLOW PLASTICITY
+adapt AP {key:Symbol,value:Number,bounds:Range,max_step:Number,max_day:Number,evidence_floor:Score}
+rule microadapt(AP) requires verified_outcome && within_episode_limit && within_daily_limit
+rule structural_change = candidate -> prediction -> snapshot -> shadow -> replay -> recovery -> validation -> promotion
+
+// XENO CODECS RETAINED AS INTEROP PROJECTIONS
+codec D=DELTA
+codec O=OP
+codec A=ACT
+codec P=PROOF
+codec H=HANDLE
+codec E=ECHO
+codec R=RAW
+codec G=GRAPH experimental
+codec X=DIRECTCODE experimental
+codec L=LATENT experimental_noncritical_only
+
+// READ/WRITE CYCLE
+cycle(input,node) {
+  verify(entity,canonical,reader)
+  refresh(organs,capabilities,world)
+  cue = normalize(input)
+  state = query(task_relevant(cue))
+  hp = preserve_material_alternatives(state)
+  g = emerge(current_pressures(state))
+  ws = select(GWT,state+hp+g)
+  ac = build_answer_or_action_capsule(ws)
+  residual = cognitive_choice(ac)
+  if residual.effect_intent { receipt = needle.execute(needle.compile(residual.effect_intent,current_affordance,W)) }
+  outcome = verify(residual,receipt?)
+  credit = causal_credit(outcome,ws)
+  learn = consolidate(credit)
+  reenter(outcome,learn)
+  observe_meta_usage(cycle_receipts)
+}
+
+// HARD INVARIANTS
+invariant no_hidden_cot_persistence
+invariant no_projection_promotes_truth
+invariant no_activation_promotes_truth
+invariant no_tool_wire_as_4B_core_competence
+invariant no_goal_list_as_canonical_goal_state
+invariant no_provider_identity_split
+invariant no_physical_DB_monolith_requirement
+invariant no_language_change_without_executable_counterexample_or_usage_evidence
+invariant XENO_lineage_preserved

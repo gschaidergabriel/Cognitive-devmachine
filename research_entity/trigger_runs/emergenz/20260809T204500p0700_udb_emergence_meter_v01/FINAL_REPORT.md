@@ -25,6 +25,11 @@ The meter currently separates five preregistered calibration regimes:
 | XOR + lesion/rescue + truthful re-entry | `CAUSAL_EMERGENCE_CANDIDATE_OPEN` |
 
 All deterministic regression tests pass, including exact same-seed reproduction.
+After an initial seed sweep exposed noisy raw-Omega warnings, the detector was
+revised to require a dedicated factorial permutation test (`p <= 0.01`). A
+second sweep over 20 independent seeds, 800 samples per regime and 100 total
+regime runs classified all 100 as preregistered, with zero false causal-
+emergence promotions on negative controls.
 
 ## Real copied FRANK database evidence
 
@@ -86,6 +91,11 @@ Add the following mandatory controls to `EmergenceEstimatorBank`:
 8. estimator/version/sample/source/result hashes;
 9. evidence ladder and explicit falsifiers;
 10. UNKNOWN for missing causal stages rather than zero.
+
+Factorial interaction specifically requires both a material effect and its own
+permutation control. The first uncorrected threshold produced harmless but noisy
+`INTERACTION_ONLY` warnings; that negative calibration result is retained as
+method memory rather than hidden.
 
 ## Hypotheses and counterhypotheses
 

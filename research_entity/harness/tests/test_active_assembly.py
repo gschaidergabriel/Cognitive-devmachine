@@ -31,6 +31,22 @@ class ActiveAssemblyTests(unittest.TestCase):
         out = compile_active_assembly(self.fixture(), current_epoch=7, max_items=3, max_per_ancestry=1)
         self.assertIn("counter", [item["packet_id"] for item in out["items"]])
 
+    def test_same_ancestry_opposites_remain_visible_without_replication_credit(self):
+        yes = AssemblyPacket("yes", "same-family", "knowledge", .9, .9, .5, .1, 7, "k", "yes", "yes-ref")
+        no = AssemblyPacket("no", "same-family", "knowledge", .8, .9, .7, .2, 7, "k", "no", "no-ref")
+        out = compile_active_assembly([yes, no], current_epoch=7, max_items=2, max_per_ancestry=1)
+        self.assertEqual({item["packet_id"] for item in out["items"]}, {"yes", "no"})
+        for item in out["items"]:
+            self.assertEqual(item["selection_role"], "CONFLICT_VISIBILITY")
+            self.assertFalse(item["independent_replication_credit"])
+
+    def test_tight_total_budget_stays_hard_for_same_ancestry_conflict(self):
+        yes = AssemblyPacket("yes", "same-family", "knowledge", .9, .9, .5, .1, 7, "k", "yes", "yes-ref")
+        no = AssemblyPacket("no", "same-family", "knowledge", .8, .9, .7, .2, 7, "k", "no", "no-ref")
+        out = compile_active_assembly([yes, no], current_epoch=7, max_items=1, max_per_ancestry=1)
+        self.assertEqual(len(out["items"]), 1)
+        self.assertEqual(set(out["reexpand_refs"]), {"no-ref"})
+
     def test_cognitive_packet_cannot_mint_authority(self):
         packet = AssemblyPacket("bad", "peer", "peer_result", 1, 1, 1, 0, 7, proposed_authority=True)
         with self.assertRaisesRegex(ActiveAssemblyError, "AUTHORITY_MINT_ATTEMPT"):

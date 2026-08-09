@@ -8,6 +8,7 @@ on:
       - '.github/workflows/claycode-vps-wp02-probe.yml'
       - 'tools/claycode_wp02_strict_local_closure_v2.py'
       - 'tools/claycode_wp02_oob_trivia_metamorphic.py'
+      - 'tools/claycode_wp06_current_main_replay.py'
       - 'tools/claycode_strict_lalr_probe.py'
       - 'tools/claycode_v17_declarative_trivia_discriminator.py'
       - 'tools/claycode_base_frontend.py'
@@ -15,6 +16,7 @@ on:
       - 'tools/claycode_base_canonicalizer.py'
       - 'tools/claycode_base_canonicalizer_validation.py'
       - 'tools/claycode_base_ir.py'
+      - 'tools/claycode_base_compiler.py'
       - 'research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json'
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_*.lark'
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
@@ -49,7 +51,7 @@ jobs:
           test -z "$extra"
           printf '%s\n' '{"checkout_persist_credentials":false,"git_extraheader_present":false}' > /tmp/CLAYCODE_VPS_WP02_AUTHORITY.json
 
-      - name: Execute strict selected-grammar closure on remote Ubuntu runner
+      - name: Execute V17 strict closure, bounded OOB discriminator and WP06 replay
         id: probe
         shell: bash
         run: |
@@ -63,14 +65,17 @@ jobs:
           python3 tools/claycode_wp02_oob_trivia_metamorphic.py \
             --output /tmp/CLAYCODE_VPS_WP02_OOB_TRIVIA.json
           oob_rc=$?
+          python3 tools/claycode_wp06_current_main_replay.py \
+            --output /tmp/CLAYCODE_VPS_WP06_REPLAY.json
+          wp06_rc=$?
           set -e
 
-          python3 - "$rc" "$oob_rc" <<'PY'
+          python3 - "$rc" "$oob_rc" "$wp06_rc" <<'PY'
           import json, os, platform, socket, sys
           from datetime import datetime, timezone
           from pathlib import Path
 
-          rc=int(sys.argv[1]); oob_rc=int(sys.argv[2])
+          rc=int(sys.argv[1]); oob_rc=int(sys.argv[2]); wp06_rc=int(sys.argv[3])
           def read(path, fallback):
               try:
                   return json.loads(Path(path).read_text(encoding='utf-8'))
@@ -78,11 +83,12 @@ jobs:
                   return {**fallback, 'parse_error':f'{type(exc).__name__}:{exc}'}
           inner=read('/tmp/CLAYCODE_VPS_WP02_STRICT.json', {'pass':False})
           oob=read('/tmp/CLAYCODE_VPS_WP02_OOB_TRIVIA.json', {'pass':False})
+          wp06=read('/tmp/CLAYCODE_VPS_WP06_REPLAY.json', {'pass':False})
           authority=read('/tmp/CLAYCODE_VPS_WP02_AUTHORITY.json', {'checkout_persist_credentials':None})
           payload={
-              'schema_version':'1.1',
+              'schema_version':'1.2',
               'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
-              'scope':'REMOTE_PRELIMINARY_WP02_NOT_ANDREAS_TARGET_ACCEPTANCE',
+              'scope':'REMOTE_PRELIMINARY_WP02_PLUS_WP06_REPLAY_NOT_ANDREAS_TARGET_ACCEPTANCE',
               'created_at':datetime.now(timezone.utc).isoformat(),
               'github_sha':os.environ.get('GITHUB_SHA',''),
               'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
@@ -100,18 +106,22 @@ jobs:
               'oob_experiment_returncode':oob_rc,
               'oob_experiment_pass':oob.get('pass') is True and oob_rc==0,
               'oob_experiment':oob,
+              'wp06_replay_returncode':wp06_rc,
+              'wp06_replay_pass':wp06.get('pass') is True and wp06_rc==0,
+              'wp06_replay':wp06,
               'execution_authority':authority,
               'self_hosted_repository_permission':'contents:read',
               'checkout_persist_credentials':False,
               'authority_invariant':'model output != execution authority',
-              'final_release_boundary':'This remote VPS receipt cannot substitute for registered Andreas Ubuntu target identity, desktop/application gates or WP14 release acceptance.',
+              'final_release_boundary':'This remote VPS receipt cannot substitute for registered Andreas Ubuntu target identity, desktop/application gates, formal WP06 promotion or WP14 release acceptance.',
           }
           Path('/tmp/CLAYCODE_VPS_WP02_SUMMARY.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
-          print(json.dumps({'wp02_pass':payload['wp02_pass'],'oob_pass':payload['oob_experiment_pass'],'hostname':payload['hostname'],'runner_name':payload['runner_name']},sort_keys=True))
+          print(json.dumps({'wp02_pass':payload['wp02_pass'],'oob_pass':payload['oob_experiment_pass'],'wp06_replay_pass':payload['wp06_replay_pass'],'hostname':payload['hostname'],'runner_name':payload['runner_name']},sort_keys=True))
           PY
 
           echo "probe_rc=$rc" >> "$GITHUB_OUTPUT"
           echo "oob_rc=$oob_rc" >> "$GITHUB_OUTPUT"
+          echo "wp06_rc=$wp06_rc" >> "$GITHUB_OUTPUT"
 
       - name: Upload bounded VPS receipt artifact
         if: always()
@@ -122,20 +132,22 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Enforce preliminary WP02 and OOB falsifier result
+      - name: Enforce preliminary WP02, OOB and WP06 replay results
         if: always()
         shell: bash
         run: |
           python3 - <<'PY'
           import json
           p=json.load(open('/tmp/CLAYCODE_VPS_WP02_SUMMARY.json',encoding='utf-8'))
-          assert p['scope']=='REMOTE_PRELIMINARY_WP02_NOT_ANDREAS_TARGET_ACCEPTANCE'
+          assert p['scope']=='REMOTE_PRELIMINARY_WP02_PLUS_WP06_REPLAY_NOT_ANDREAS_TARGET_ACCEPTANCE'
           assert p['self_hosted_repository_permission']=='contents:read'
           assert p['checkout_persist_credentials'] is False
           assert p['wp02_pass'] is True, p
           assert p['oob_experiment_pass'] is True, p
+          assert p['wp06_replay_pass'] is True, p
           print('CLAYCODE_REMOTE_VPS_WP02_STRICT=PASS')
           print('CLAYCODE_GO_OOB_TRIVIA_METAMORPHIC=PASS')
+          print('CLAYCODE_REMOTE_VPS_WP06_CURRENT_MAIN_REPLAY=PASS')
           PY
 
   persist-receipt:
@@ -170,14 +182,14 @@ jobs:
           from pathlib import Path
           p=Path('/tmp/claycode-vps-wp02/CLAYCODE_VPS_WP02_SUMMARY.json')
           d=json.loads(p.read_text(encoding='utf-8'))
-          assert d['schema_version']=='1.1'
+          assert d['schema_version']=='1.2'
           assert d['evidence_class']=='REAL_SELF_HOSTED_UBUNTU_EXECUTION'
-          assert d['scope']=='REMOTE_PRELIMINARY_WP02_NOT_ANDREAS_TARGET_ACCEPTANCE'
+          assert d['scope']=='REMOTE_PRELIMINARY_WP02_PLUS_WP06_REPLAY_NOT_ANDREAS_TARGET_ACCEPTANCE'
           assert d['github_sha']==os.environ['TESTED_SHA'], (d['github_sha'], os.environ['TESTED_SHA'])
           assert d['self_hosted_repository_permission']=='contents:read'
           assert d['checkout_persist_credentials'] is False
           assert d['authority_invariant']=='model output != execution authority'
-          print(json.dumps({'transport_valid':True,'tested_sha':d['github_sha'],'wp02_pass':d['wp02_pass'],'oob_pass':d['oob_experiment_pass']},sort_keys=True))
+          print(json.dumps({'transport_valid':True,'tested_sha':d['github_sha'],'wp02_pass':d['wp02_pass'],'oob_pass':d['oob_experiment_pass'],'wp06_replay_pass':d['wp06_replay_pass']},sort_keys=True))
           PY
 
       - name: Persist receipt from constrained hosted writer
@@ -197,7 +209,7 @@ jobs:
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m "evidence(vps): persist ClayCode WP02 run ${RUN_ID} [skip ci]"
+          git commit -m "evidence(vps): persist ClayCode WP02/WP06 run ${RUN_ID} [skip ci]"
           for attempt in 1 2 3 4 5 6; do
             git pull --rebase origin "${GITHUB_REF_NAME}" && \
               git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0

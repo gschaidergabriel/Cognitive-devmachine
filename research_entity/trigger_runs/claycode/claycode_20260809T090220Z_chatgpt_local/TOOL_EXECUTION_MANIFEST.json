@@ -1,0 +1,16 @@
+{
+  "schema_version": "local-1.0",
+  "run_id": "claycode_20260809T090220Z_chatgpt_local",
+  "tools": [
+    {"tool":"GitHub connector","status":"VERIFIED_RW","use":"canonical boot/state reads plus trigger-run artifact create and reread; canonical state not mutated"},
+    {"tool":"web.run","status":"EXECUTED","use":"primary docs/papers plus GitHub/Reddit search attempts"},
+    {"tool":"python local sandbox","status":"EXECUTED","use":"canonicalization, grammar counterexample, generated separate-process capability gateway fuzz"},
+    {"tool":"container","status":"EXECUTED","use":"local backend availability probe"},
+    {"tool":"E2B","status":"UNAVAILABLE","use":"not exposed in current tool surface"},
+    {"tool":"SandboxAPI","status":"UNAVAILABLE","use":"not exposed/current project protocol marks not subscribed"}
+  ],
+  "local_backend_probe":{"available":["clang"],"not_found":["wasmtime","wasm-tools","wat2wasm","wasm-opt","rustc","cargo","mlir-opt","llc"]},
+  "github_write":"VERIFIED_RW_BY_CREATE_AND_REREAD",
+  "github_write_receipt_commit":"efd95b86d6ce0ccd41658260cd9faca5a75cccd3",
+  "canonical_mutation":"NOT_ATTEMPTED"
+}

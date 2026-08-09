@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
+  "experiment_id": "EXP-CC-G9-UM-RETINA-GATE-001",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "entity_version": "RAE-8.8"
+  },
+  "evidence_class": "LOCAL_EXECUTION_PRIMARY_FOR_PARTIAL_COMPILER_PROBE",
+  "question": "Can existing G9-compatible records/type aliases/boolean rules express and lower the fused FRANK recognition-validity, adaptive-state-promotion and semantic-publication gates without a new language primitive?",
+  "source_refs": [
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "research_entity/claycode/g9/grammar.ebnf",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+    "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"
+  ],
+  "claycode_source": "UM_RETINA_GATE_PROBE.clay",
+  "claycode_source_sha256": "533cd82763ccb7db39ea687d00632112ed63f2f1d99fd00cacb096bfff1d9a7c",
+  "parser_contract": "Executable Lark transliteration of the relevant CURRENT grammar.ebnf subset; no run-local syntax extension required for this probe.",
+  "canonical_ir_semantic_hash": null,
+  "contract_hash": null,
+  "lowering": {
+    "kind": "run-local conservative boolean-rule lowering",
+    "target": "Python 3 CLI",
+    "generated_file": "generated_um_retina_gate_cli.py",
+    "generated_sha256": "24d82e7649394ec051b083af812202aec0ae4147b2ce06e42a5491c224574674",
+    "scope": "records/type aliases are validated for surface syntax; three conjunction rules are lowered to deterministic boolean functions"
+  },
+  "runtime": {
+    "provider": "local ChatGPT Python sandbox",
+    "language": "Python 3",
+    "execution_mode": "separate subprocess with -S",
+    "e2b": "NOT_EXPOSED_TO_CURRENT_SESSION"
+  },
+  "test_corpus": {
+    "fixture_count": 8,
+    "sha256": "6aed759136b9bab4a0823fc552eb6a8b9024307b24b54d7f3e05a5e4161704ea",
+    "cases": [
+      "all_pass",
+      "unknown_open_set",
+      "stale_calibration",
+      "conflict_sensor_veto",
+      "bronze_untrusted",
+      "candidate_eval_fail",
+      "projection_not_closed",
+      "replay_not_ready"
+    ]
+  },
+  "result": {
+    "passed": 8,
+    "total": 8,
+    "exit_statuses": [0,0,0,0,0,0,0,0],
+    "stderr_all_empty": true,
+    "expected_vs_observed": "8/8 MATCH"
+  },
+  "semantic_observations": [
+    "Recognition fast-path vetoes unknown/open-set failure, stale calibration and explicit conflict independently of promotion/publication.",
+    "Promotion vetoes untrusted evidence tier and failed candidate evaluation independently of recognition/publication.",
+    "Publication vetoes incomplete projection/retraction closure and missing replay readiness independently of recognition/promotion.",
+    "The tested fused gate logic required no new G9 semantic primitive."
+  ],
+  "failure_counterexample_classification": "NO_LANGUAGE_COUNTEREXAMPLE_FOUND_FOR_TESTED_GATE_LOGIC",
+  "negative_result": "No evidence from this experiment justifies new dedicated Retina/learning/publication grammar primitives.",
+  "limitations": [
+    "This is a partial run-local compiler, not the BASE production parser/type/effect/compiler/runtime.",
+    "It does not execute real Retina features, classifier training, SQLite transactions, ClayGraph projection or target-machine effects.",
+    "It does not qualify APP-01 or APP-09 as PASS.",
+    "Full-current-G9 grammar closure remains blocked by the separate parser-alignment counterexample."
+  ],
+  "affected_hypotheses": ["H-CC-FUSED-GATE-SUFFICIENCY-001","H-CC-NO-NEW-PRIMITIVE-BASE-001"],
+  "affected_branches": ["claycode","frank","harness","claygraph","unifieddb"],
+  "promotion_effect": "NONE; research delta only"
+}

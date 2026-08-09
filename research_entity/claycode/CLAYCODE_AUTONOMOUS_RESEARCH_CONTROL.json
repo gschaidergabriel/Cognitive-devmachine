@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -40,7 +40,7 @@
     "judge": ["nvidia:nemotron_or_other_nonidentical_family"],
     "mass_workers": ["free_small_models", "groq", "huggingface_free_when_verified"],
     "retrieval": ["nvidia:nv-embedcode-7b-v1", "repo_search", "claygraph", "unifieddb"],
-    "reranker": ["nvidia:llama-3.2-nv-rerankqa-1b-v2"],
+    "reranker": ["nvidia:llama-nemotron-rerank-1b-v2", "nvidia:llama-3.2-nv-rerankqa-1b-v2_when_verified"],
     "execution_oracles": ["judge0", "e2b_if_free_verified", "sandboxapi_if_free_verified", "fixed_local_tests"]
   },
   "independence_rules": [
@@ -85,7 +85,12 @@
     "CC-WP-13-HARNESS-HANDOFF",
     "CC-WP-14-BASE-AUDIT"
   ],
-  "current_focus": "production frontend closure: deterministic typed function definition/call binding integrated into parser -> canonical IR -> type/effect -> lowering evidence chain",
+  "current_focus": "strict LALR conflict localization and minimum deterministic grammar repair for current D baseline; only after baseline strict construction succeeds, re-integrate typed function definition/call binding and prove parser -> canonical typed symbol/signature identity -> type/effect -> lowering with executable differentials",
+  "supervisor_last_steer": {
+    "reason": "Latest strict-LALR executable evidence shows both the unmodified D baseline and D+typed-fn fail strict construction; function-binding work is downstream until baseline conflict semantics are localized. NVIDIA reranking re-verification is pending and Mistral remains runtime-verification-pending.",
+    "evidence_priority": ["strict parser construction failure", "20k typed-call lowering differential success", "provider runtime receipts"],
+    "do_not_infer": ["D parser freeze-readiness", "semantic inadequacy", "BASE progress from model agreement"]
+  },
   "supervisor": {
     "actor": "chatgpt-secondary",
     "responsibility": "observe cycle receipts, detect drift/redundancy/provider-correlation, change focus/model roles/quotas, demand stronger falsifiers, and route high-information experiments",

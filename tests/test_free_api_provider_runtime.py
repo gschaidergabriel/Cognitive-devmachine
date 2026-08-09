@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -44,6 +45,61 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         }
         self.assertEqual(MOD.route(env)["selected"], "groq")
         self.assertNotIn("together", MOD.route(env)["candidates"])
+
+    def test_local_mock_executes_full_verified_lifecycle_without_secret_leak(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({"choices": [{"message": {"content": "mock-ok"}}]}).encode()
+
+        captured = {}
+        def opener(request, timeout):
+            captured["url"] = request.full_url
+            captured["authorization"] = request.headers["Authorization"]
+            return Response()
+
+        env = {
+            "NVIDIA_API_KEY": "never-serialize-this",
+            "FRANK_PROVIDER_BASE_URL": "http://127.0.0.1:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [{"role": "user", "content": "ping"}], model="mock-model",
+            environ=env, opener=opener, now=iter((10.0, 10.125)).__next__,
+        )
+        self.assertEqual(result["content"], "mock-ok")
+        self.assertEqual(result["receipt"]["lifecycle"][-3:], ["EXECUTED", "VERIFIED", "DONE"])
+        self.assertEqual(result["receipt"]["duration_ms"], 125)
+        self.assertNotIn("never-serialize-this", repr(result))
+        self.assertNotIn("together", captured["url"])
+
+    def test_unallowlisted_remote_endpoint_is_blocked_before_network(self):
+        env = {"NVIDIA_API_KEY": "secret", "FRANK_PROVIDER_BASE_URL": "https://evil.example/v1"}
+        with self.assertRaisesRegex(RuntimeError, "not_allowlisted"):
+            MOD.execute_chat([], model="x", environ=env)
+
+    def test_invalid_response_is_executed_but_never_verified(self):
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit): return b"not-json"
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            [], model="mock", environ=env, opener=lambda *args, **kwargs: Response(),
+            now=iter((20.0, 20.01)).__next__,
+        )
+        self.assertEqual(result["receipt"]["outcome"], "invalid_or_unreachable_provider_response")
+        self.assertIn("EXECUTED", result["receipt"]["lifecycle"])
+        self.assertNotIn("VERIFIED", result["receipt"]["lifecycle"])
+        self.assertNotIn("DONE", result["receipt"]["lifecycle"])
 
 
 if __name__ == "__main__":

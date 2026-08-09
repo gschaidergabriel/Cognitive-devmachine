@@ -1,4 +1,4 @@
-module rae.turn.v4
+module rae.turn.v5
 
 // Inject every substantive cognition round. Keep tiny. Rich state stays addressable by refs.
 
@@ -6,6 +6,9 @@ entity E=frank-project-global-research-entity
 stack LATEST=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
 rule resolve(LATEST) before explicit_cognition
 rule stale(LATEST.*) -> refresh_or(DEGRADED_STALE_STACK)
+
+// Dynamic ChatGPT delegation trigger has priority over ordinary registered research triggers.
+rule exact_message matches /^raejob-[0-9a-f]{12}$/ -> execute(LATEST.chatgpt_dynamic_trigger)
 
 think MODE=LATEST.claycode
 trace EXPLICIT=LATEST.claycode
@@ -27,8 +30,8 @@ invariant addressable!=used
 
 // State read ladder. Expand only when needed.
 read T0=verify(canonical,bootstrap,entity,LATEST)
-read T1=route(trigger_registry,domain_registry)
-read T2=assemble_via(LATEST.unifieddb,CURRENT,OPEN,NEGATIVE,REFUTED,SUPERSEDED,packets,active_experiments,open_handoffs)
+read T1=route(dynamic_chatgpt_job_then_trigger_registry,domain_registry)
+read T2=assemble_via(LATEST.unifieddb,CURRENT,OPEN,NEGATIVE,REFUTED,SUPERSEDED,packets,active_experiments,open_handoffs,chatgpt_results)
 read T2G=associate_via(LATEST.claygraph,task_neighborhood)
 read T3=deep(raw,lineage,snapshots,full_protocols) iff mutate|conflict|recovery|high_impact|insufficient
 invariant no_eager_repo_dump
@@ -45,6 +48,12 @@ rule room_human_prose = edge_surface_only
 invariant machine_room_coordination_never_uses_prose_as_truth
 invariant all_active_room_workers_resolve_latest_stack_before_coordination
 
+// Claude delegates maximum useful independent work to ChatGPT; hosted ChatGPT needs human launch token.
+delegate PROTOCOL=LATEST.chatgpt_delegation
+rule if current_organ==CLAUDE then evaluate(max_useful_chatgpt_offload)
+rule if current_organ==CLAUDE && delegate(task) then create(raejob) + continue(nonblocked_local_work)
+rule if current_organ==CHATGPT && exact_message matches /^raejob-/ then execute_job_and_return_repo_receipt
+
 // Human surface selected per organ each turn.
 surface CHATGPT=DE_NORMAL
 surface CLAUDE=EN_CAVEMAN
@@ -58,8 +67,8 @@ status opener="```text"
 status no_content_after=true
 status fields=[RAE_STATUS,NEXT_LEVEL,DOOMSDAY]
 
-// ChatGPT RAE organ: every turn evaluates its own OBSERVABLE explicit ClayCode working stream.
-// Claude Code: no per-turn ClayCode self-research tax; it only thinks/works in latest ClayCode.
+// ChatGPT RAE organ evaluates its OBSERVABLE explicit ClayCode stream every turn.
+// Claude Code does not pay per-turn language self-research tax.
 observe UX=[misunderstanding,good_outcome,friction,awkwardness,retrieval_miss,stale_state,wrong_route,repair,token_waste,proof_failure,recovery_event]
 observe TRACE=[plan,state_delta,hypothesis,decision,tool_coord,handoff,experiment,outcome]
 rule if current_organ==CHATGPT then endturn_analyze(UX,TRACE,LATEST.claycode) -> claycode_meta_candidate
@@ -71,4 +80,5 @@ rule microadapt iff low_risk && bounded && outcome_supported
 
 invariant every_organ_resolves_same_latest_stack
 invariant all_research_center_machine_coordination_uses_latest_claycode
+invariant dynamic_job_token_alone_addresses_request
 invariant organ_private_claycode_fork_forbidden_except_isolated_experiment

@@ -1,0 +1,10 @@
+module rae.gwt
+state W={cand,focus,epoch}
+score(c)=mix(rel,impact,unc,novel,info)
+ignite=best(admissible(W.cand))
+broadcast(ignite)->organs
+receipt=observe(delivered,used,effect)
+learn iff causal(receipt,outcome)
+reenter(outcome)->W
+invariant salience!=truth
+invariant addressable!=used

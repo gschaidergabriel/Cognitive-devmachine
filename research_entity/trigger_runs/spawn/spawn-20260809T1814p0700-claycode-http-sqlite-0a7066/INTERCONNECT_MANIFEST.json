@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1814p0700-claycode-http-sqlite-0a7066",
+  "actor": "chatgpt-secondary",
+  "coverage_status": "MANUAL_FULL_MESH_CURRENT_REGISTRY",
+  "preflight_note": "Current connector execution did not run repository-local tools/research_interconnect_preflight.py. Full registered branch coverage is materialized explicitly; no executable-preflight PASS is claimed.",
+  "registered_branches": [
+    {
+      "branch": "claycode",
+      "depth": "DEEP",
+      "inputs": [
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+      ]
+    },
+    {
+      "branch": "frank",
+      "depth": "DEEP_COUPLED",
+      "inputs": [
+        "research_entity/trigger_runs/frank/frank-20260809T1726p0700-loop-base-bridge/FRANK_ARCHITECTURE.claycode.json",
+        "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json"
+      ]
+    },
+    {
+      "branch": "harness",
+      "depth": "DEEP_COUPLED",
+      "inputs": [
+        "research_entity/harness/HARNESS_WORKSPACE.json"
+      ]
+    },
+    {
+      "branch": "unifieddb",
+      "depth": "COUPLED",
+      "inputs": [
+        "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+        "current UnifiedDB logical identity/query/transaction/replay plane"
+      ]
+    },
+    {
+      "branch": "gwt",
+      "depth": "COUPLED",
+      "inputs": [
+        "research_entity/global/RAE_GWT_MICROKERNEL.clay"
+      ]
+    },
+    {
+      "branch": "claygraph",
+      "depth": "MESH",
+      "inputs": [
+        "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"
+      ]
+    },
+    {
+      "branch": "hyperposition",
+      "depth": "MESH",
+      "inputs": [
+        "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"
+      ]
+    },
+    {
+      "branch": "emergenz",
+      "depth": "MESH",
+      "inputs": [
+        "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"
+      ]
+    },
+    {
+      "branch": "clayresearch",
+      "depth": "MESH",
+      "inputs": [
+        "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md"
+      ]
+    }
+  ],
+  "identity_lock": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": "FRANK",
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  }
+}

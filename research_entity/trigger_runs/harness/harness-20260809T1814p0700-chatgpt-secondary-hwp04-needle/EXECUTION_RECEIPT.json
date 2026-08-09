@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260809T1814p0700-chatgpt-secondary-hwp04-needle",
+  "work_package": "H-WP-04-NEEDLE-BOUNDARY",
+  "evidence_class": "REMOTE_SANDBOX_DETERMINISTIC_TEST",
+  "execution_environment": "ChatGPT isolated Linux container",
+  "target_host_verified": false,
+  "live_frank_verified": false,
+  "repository_code_path": "research_entity/harness/reference/needle_boundary.py",
+  "repository_test_path": "research_entity/harness/reference/test_needle_boundary.py",
+  "code_blob_sha": "ecfbeb0fae6ff3acbf36f264fe66d64dab621943",
+  "test_blob_sha": "cee5eddfa0402a94f5a67f869775e425a231f2e3",
+  "local_code_sha256": "28d13550495941ab473b88458bfeaa19b969249e2a7d3b06d980e85c6ea47656",
+  "tests_run": 9,
+  "tests_passed": 9,
+  "tests_failed": 0,
+  "tested_invariants": [
+    "deterministic bridge hash",
+    "translator provenance preserved",
+    "Needle version/route/certificate preserved",
+    "Needle cannot mint execution authority",
+    "translator->Needle hash-chain mismatch rejected",
+    "missing Needle certificate rejected",
+    "non-Clay cognitive ingress rejected",
+    "normal ingress Needle bypass rejected",
+    "payload tampering breaks envelope verification"
+  ],
+  "result": "PASS_COMPONENT",
+  "promotion_limit": "This proves the adapter component in a remote sandbox only. It does not prove live frankv0.1 Needle behavior, target-Ubuntu integration, or H1 release readiness."
+}

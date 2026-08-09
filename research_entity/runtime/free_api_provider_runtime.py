@@ -7,15 +7,22 @@ hard-denied provider and is intentionally absent from discovery and routing.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import time
+import urllib.error
+import urllib.request
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
+ALLOWED_REMOTE_HOSTS = frozenset({
+    "integrate.api.nvidia.com", "api.groq.com", "api.cerebras.ai",
+    "generativelanguage.googleapis.com", "openrouter.ai",
+})
 
 
 @dataclass(frozen=True)
@@ -112,6 +119,90 @@ def receipt() -> dict:
             "network_probe_performed": False,
         },
     }
+
+
+def _safe_request_id(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()[:16]
+
+
+def execute_chat(
+    messages: list[dict[str, str]],
+    *,
+    model: str,
+    environ: dict[str, str] | None = None,
+    opener=urllib.request.urlopen,
+    now=time.time,
+) -> dict:
+    """Execute one bounded chat request and return output plus a redacted receipt.
+
+    The injectable opener makes the full lifecycle testable without an external API.
+    Remote execution is limited to policy-listed provider hosts. A localhost override is
+    accepted only when FRANK_ALLOW_LOCAL_TEST_ENDPOINT=1.
+    """
+    env = os.environ if environ is None else environ
+    selected = route(env)["selected"]
+    if not selected:
+        raise RuntimeError("no_configured_zero_cost_provider")
+    spec = next(item for item in PROVIDERS if item.provider_id == selected)
+    key_name = _configured_key_name(spec, env)
+    base_url = env.get("FRANK_PROVIDER_BASE_URL", spec.openai_compatible_base_url).rstrip("/")
+    from urllib.parse import urlparse
+    parsed = urlparse(base_url)
+    local_test = parsed.hostname in {"127.0.0.1", "localhost"} and env.get(
+        "FRANK_ALLOW_LOCAL_TEST_ENDPOINT"
+    ) == "1"
+    if parsed.scheme != "https" and not local_test:
+        raise RuntimeError("provider_endpoint_must_use_https")
+    if parsed.hostname not in ALLOWED_REMOTE_HOSTS and not local_test:
+        raise RuntimeError("provider_endpoint_not_allowlisted")
+
+    started = now()
+    lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]
+    body = json.dumps({"model": model, "messages": messages, "stream": False}).encode()
+    request = urllib.request.Request(
+        f"{base_url}/chat/completions",
+        data=body,
+        headers={"Authorization": f"Bearer {env[key_name]}", "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with opener(request, timeout=30) as response:
+            response_body = response.read(2_000_000)
+            status = getattr(response, "status", 200)
+        lifecycle.append("EXECUTED")
+        payload = json.loads(response_body)
+        content = payload["choices"][0]["message"]["content"]
+        lifecycle.extend(["VERIFIED", "DONE"])
+        outcome = "success"
+        cooldown_seconds = 0
+    except urllib.error.HTTPError as exc:
+        status = exc.code
+        content = None
+        outcome = "rate_limited" if status == 429 else "provider_error"
+        cooldown_seconds = 60 if status == 429 else 15
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, KeyError):
+        status = None
+        content = None
+        outcome = "invalid_or_unreachable_provider_response"
+        cooldown_seconds = 15
+
+    finished = now()
+    receipt_data = {
+        "schema_version": "1.0",
+        "kind": "FREE_API_EXECUTION_RECEIPT",
+        "provider": selected,
+        "model": model,
+        "endpoint_host": parsed.hostname,
+        "request_id": _safe_request_id(f"{selected}:{started}:{len(body)}"),
+        "status": status,
+        "outcome": outcome,
+        "lifecycle": lifecycle,
+        "cooldown_seconds": cooldown_seconds,
+        "duration_ms": max(0, round((finished - started) * 1000)),
+        "secret_exposed": False,
+        "together_accessed": False,
+    }
+    return {"content": content, "receipt": receipt_data}
 
 
 def main() -> None:

@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1605p0700_chatgpt_secondary_ubuntu_effect_boundary",
+  "hypotheses":[
+    {
+      "hypothesis_id":"H-CC-UBUNTU-CAPHANDLE-001",
+      "status":"OPEN_SUPPORTED_PRELIMINARY",
+      "claim":"Existing ClayCode CapabilityToken and EffectIntent semantics can lower on Ubuntu to opaque host capability handles plus Linux-enforced resource/verb views without a ClayCode semantic change.",
+      "support":["Local Linux namespace/chroot/read-only-bind experiment enforced read-only resource access and denied ambient paths.","WASI runtime-capability design independently uses unforgeable handles for resource authority."],
+      "counterhypothesis":"ClayCode needs new language-level OS-specific authority primitives for Ubuntu.",
+      "falsifier":"A required Frank v0.1 Ubuntu effect cannot be represented and securely lowered using current capability/effect semantics plus typed host adapters without semantic leakage or an untestable escape hatch.",
+      "next_test":"Implement the first real ClayCode Ubuntu capability lowering in the compiler/runtime and execute APP-08 on the developer Ubuntu system."
+    },
+    {
+      "hypothesis_id":"H-CC-UBUNTU-LAYERED-SANDBOX-002",
+      "status":"OPEN",
+      "claim":"For Frank v0.1 on Ubuntu, a layered effect sandbox using explicit resource handles/mounts plus Ubuntu-native confinement is more robust than depending on any one Linux sandbox API.",
+      "support":["Landlock returned ENOSYS in the current Linux execution environment while user+mount namespaces worked.","Ubuntu documents AppArmor as a default LSM confinement mechanism."],
+      "counterhypothesis":"Landlock alone is sufficiently universal for the v0.1 effect gateway.",
+      "falsifier":"Developer Ubuntu validation shows one backend has complete required coverage, stable availability, lower complexity, equivalent isolation and better recovery across all mandatory APP-08/FRANK effect classes.",
+      "next_test":"Probe AppArmor, Landlock ABI, unprivileged user namespace policy, seccomp/no_new_privs and namespace isolation on the exact developer Ubuntu host."
+    },
+    {
+      "hypothesis_id":"H-CC-AUTHORITY-METADATA-NULL-003",
+      "status":"REFUTED_AS_RUNTIME_ENFORCEMENT_MODEL",
+      "claim":"Capability metadata alone, without an OS/runtime enforcement layer, is sufficient to prevent ambient Linux authority.",
+      "counterevidence":"Unsandboxed baseline retained ordinary filesystem access including /etc/passwd despite no ClayCode capability grant.",
+      "meaning":"Semantic capability records are necessary for reasoning/audit but are not enforcement by themselves."
+    }
+  ]
+}

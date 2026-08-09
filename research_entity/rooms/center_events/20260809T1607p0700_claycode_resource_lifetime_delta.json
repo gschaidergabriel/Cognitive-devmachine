@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "event_id":"20260809T1607p0700_claycode_resource_lifetime_delta",
+  "event_class":"RESEARCH_DELTA",
+  "origin_actor":"chatgpt-secondary",
+  "origin_run":"claycode_20260809T1607p0700_chatgpt_secondary_resource_lifetime",
+  "subject":"ClayCode opaque FFI resource lifetime semantics",
+  "delta":"Executable prototype supports explicit owned/borrowed/moved/dropped ResourceHandle lifetime state in canonical IR/runtime/lowering. It rejects double-drop, drop-while-borrowed, borrow escape, use-after-move and kind confusion. Ownership remains orthogonal to capability/effect authority.",
+  "epistemic_status":"OPEN_RESEARCH_CANDIDATE_WITH_EXECUTABLE_SUPPORT_NO_PROMOTION",
+  "affected_branches":["claycode","frank","claygraph","unifieddb","gwt","hyperposition","emergenz","harness","clayresearch"],
+  "affected_work_packages":["CC-WP-03-IR-TYPES","CC-WP-04-TYPE-EFFECT","CC-WP-07-RUNTIME-ABI-FFI","CC-WP-09-CONCURRENCY-MEMORY","CC-WP-11-FUZZ-CONFORMANCE"],
+  "delivery":"NEXT_SAFE_POINT",
+  "authority_effect":"NONE",
+  "truth_promotion":"NONE",
+  "next_discriminator":"Integrate into real evaluator/FFI lowering; compare IR-only vs first-class source syntax; stress async borrow/drop; differential-test against Component Model or equivalent on Ubuntu target."
+}

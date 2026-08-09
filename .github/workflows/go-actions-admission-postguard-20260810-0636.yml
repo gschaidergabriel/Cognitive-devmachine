@@ -1,0 +1,31 @@
+name: GO post-guard hosted Actions admission probe
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-admission:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Prove a real hosted step executed
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          printf 'GO_ACTIONS_POSTGUARD_STEP_EXECUTED=1\n'
+          printf 'repo=%s sha=%s run=%s attempt=%s runner_os=%s runner_arch=%s\n' \
+            "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$RUNNER_OS" "$RUNNER_ARCH"
+          code="$(curl -sS -o /tmp/repo.json -w '%{http_code}' \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}")"
+          test "$code" = 200
+          printf 'GO_ACTIONS_POSTGUARD_REPO_TOKEN=PASS\n'

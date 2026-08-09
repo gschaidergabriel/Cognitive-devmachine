@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-CC-G9-CANON-PROBE-20260809",
+  "run_id":"claycode-20260809T1539p0700-chatgpt-parser-compat",
+  "execution":{"provider":"local ChatGPT Python sandbox fallback","runtime":"Python 3 + Lark LALR","exit_status":0},
+  "method":"Parse with the minimal compatibility candidate, normalize the parse tree to deterministic JSON, hash with SHA-256. This is a parser/canonicalization probe only, not ClayCode's final semantic_hash or provenance-bound contract_hash.",
+  "cases":{"formatting_variants":3,"semantic_change":"polarity POS|NEG -> POS|UNKNOWN"},
+  "results":{"formatting_variants_same_hash":true,"semantic_change_changes_hash":true,"base_hash":"d0a2e827e2869a7595098fbed333d138623bfac47c74ee3af742acba660dfe60","changed_hash":"7438d2204f25012f3d1ad2823b7643239a630e76d9e3b7b87b67f862afcaaac4"},
+  "interpretation":"Whitespace/comment variation can be erased before deterministic canonical identity in this tested surface, while a tested type-semantic change remains distinguishable. This supports proceeding to a typed canonical IR without claiming the final semantic identity contract is solved.",
+  "falsifier":"Complete-corpus canonicalization reveals two meaningfully different programs with the same canonical IR/hash, or equivalent admitted programs with unstable canonical identity."
+}

@@ -3,6 +3,8 @@
 
 The adapter uses only the account's existing Free Mode. HTTP 402/payment-required is a
 hard stop and is never converted into paid usage. HTTP 429 is a cooldown condition.
+Provider reasoning traces are intentionally not returned/persisted; only final text and
+usage metadata leave this adapter.
 """
 from __future__ import annotations
 import json, urllib.error, urllib.request
@@ -50,7 +52,7 @@ def chat(prompt:str,*,model:str="mistral-small-latest",system:str|None=None,max_
     if json_mode: body["response_format"]={"type":"json_object"}
     raw=_request("/chat/completions",body)
     choices=raw.get("choices") or []
-    return {"provider":"Mistral","model":model,"answers":[{"content":_answer_text((c.get("message") or {}).get("content")),"raw_content":(c.get("message") or {}).get("content"),"finish_reason":c.get("finish_reason")} for c in choices],"usage":raw.get("usage") or {}}
+    return {"provider":"Mistral","model":model,"answers":[{"content":_answer_text((c.get("message") or {}).get("content")),"finish_reason":c.get("finish_reason")} for c in choices],"usage":raw.get("usage") or {},"reasoning_trace_persisted":False}
 
 
 def capabilities()->dict[str,Any]:

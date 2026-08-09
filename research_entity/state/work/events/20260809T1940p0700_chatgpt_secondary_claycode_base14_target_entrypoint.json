@@ -1,0 +1,28 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-base14-target-entrypoint-20260809T1940p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T19:40:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "status": "READY",
+    "reason_clay": "The production chain now has a consolidated target convergence runner plus a local machine-id/host-fingerprint registration verifier. Bind the existing BASE14 work to that entrypoint so hosted CI/container evidence cannot be mistaken for Andreas-target acceptance.",
+    "execution_entrypoint": "python tools/claycode_run_andreas_target_acceptance.py",
+    "one_time_target_registration": "python tools/claycode_target_host_identity.py register --acknowledge ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+    "target_identity_contract": "tools/claycode_target_host_identity.py",
+    "target_gate": "tools/claycode_andreas_ubuntu_target_gate.py",
+    "current_grammar_line": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark",
+    "receipt": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_TARGET_GATE.json",
+    "hard_rules": [
+      "Run only on the registered Andreas Ubuntu developer system from a clean repository checkout.",
+      "CI/container/proxy execution is regression evidence, never Frank v0.1 target acceptance.",
+      "Strict LALR success must be read from the strict receipt; diagnostic process exit code alone is insufficient.",
+      "WP10 remains OPEN until real non-proxy target application receipts satisfy every required application class.",
+      "WP13 remains OPEN until full frozen FRANK handoff, not only packet/score subsystem handoff.",
+      "WP14 remains OPEN until final manifest validation and zero unresolved P0/P1 defects.",
+      "model_output != execution_authority"
+    ],
+    "supersedes_execution_hint_only": "The original work event remains authoritative for goal/scope. Its V4 grammar dependency is stale as an execution hint; V7 is the current production grammar line."
+  }
+}

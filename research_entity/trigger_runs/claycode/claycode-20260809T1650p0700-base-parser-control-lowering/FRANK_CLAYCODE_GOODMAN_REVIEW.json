@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1650p0700-base-parser-control-lowering",
+  "review_class": "FRANK_CLAYCODE_GOODMAN_ANTI_ECHO",
+  "ancestry_warning": "FRANK architecture, ClayCode, ClayGraph and UnifiedDB share project ancestry; agreement among them is not independent replication.",
+  "items": [
+    {
+      "assumption": "ClayCode must represent FRANK recurrent loop dynamics, including halt/continuation and regime classification.",
+      "origin": "FRANK loop-of-loops shared research context",
+      "verdict": "REFINED",
+      "independent_check": "Executable grammar/control probe independent of FRANK implementation details found the admitted G9 source itself needs relational comparisons and an explicit control form to express constructs it already uses.",
+      "counterhypothesis": "Loop dynamics can remain external instrumentation and ClayCode need not represent control directly.",
+      "result": "Counterhypothesis remains possible for some observability, but current G9 source already embeds control-like semantics; self-conformance requires at least surface completion.",
+      "scope": "Minimal grammar/control completion only; no broad semantic redesign."
+    },
+    {
+      "assumption": "ClayCode needs a typed capability/effect boundary rather than ambient authority.",
+      "origin": "FRANK safety history + current G9 CapabilityToken/EffectIntent design",
+      "verdict": "SUPPORTED",
+      "independent_check": "Current WASI authoritative documentation specifies a capability-based sandbox in which components begin without ambient authority and receive host-granted access explicitly.",
+      "counterhypothesis": "Ordinary unrestricted host FFI plus application policy is simpler and sufficient.",
+      "result": "Rejected as release default for ClayCode because it would erase the language/runtime authority boundary required by current acceptance and historical destructive-bypass regression constraints."
+    },
+    {
+      "assumption": "ClayCode should use explicit typed resource/ABI contracts for host interop.",
+      "origin": "ClayCode runtime/FFI requirement",
+      "verdict": "SUPPORTED",
+      "independent_check": "WebAssembly Component Model/WIT independently separates typed interface contracts and resources from implementation; the Canonical ABI defines cross-language representation.",
+      "counterhypothesis": "Serialize arbitrary host calls through untyped JSON or shell text.",
+      "result": "Untyped wire escape remains useful only behind Needle/adapter boundaries, not as the canonical ClayCode FFI contract."
+    },
+    {
+      "assumption": "Async/concurrency requires immediate new ClayCode semantic machinery.",
+      "origin": "BASE acceptance contract",
+      "verdict": "REFINED",
+      "independent_check": "WASI 0.3 now provides native async func, stream<T> and future<T> in the Component Model/Canonical ABI, so a first implementation can lower typed ClayCode async/resource concepts into a host ABI instead of inventing a large scheduler semantics immediately.",
+      "counterhypothesis": "ClayCode must own a complete bespoke scheduler before any real app can run.",
+      "result": "Not supported for BASE sequencing; first prove typed lowering and observable cancellation/error semantics."
+    },
+    {
+      "assumption": "WASM/WASI should be the first ClayCode backend on Ubuntu.",
+      "origin": "BASE compiler target options",
+      "verdict": "UNRESOLVED",
+      "independent_check": "WASI 0.3/Wasmtime provide capabilities, typed components, HTTP/system APIs and native async, while MLIR provides a strong progressive-lowering model. This makes WASI high-value, but no target-host benchmark was run in this session.",
+      "counterhypothesis": "Direct native/LLVM lowering reaches the Ubuntu-only v0.1 goal faster with lower runtime overhead.",
+      "next_test": "Compile the same small ClayCode CLI/HTTP/effect exemplar to a native path and a WASI 0.3 component on Andreas' Ubuntu host; compare implementation effort, cold start, steady latency, binary size, capability isolation and diagnostics."
+    }
+  ],
+  "promotion_decision": "NO_SCIENTIFIC_PROMOTION; executable counterexample authorizes a candidate grammar repair and implementation work only."
+}

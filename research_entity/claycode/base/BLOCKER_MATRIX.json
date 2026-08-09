@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "evidence_run": "claycode_base_blocker_attack_20260809",
+  "compiler_version": "0.1.0-base-proxy",
+  "work_packages": {
+    "CC-WP-01-SPEC-FREEZE": {"status":"PARTIAL","evidence":"Executable BASE-IR 0.1 frozen for tested subset; full semantic fusion still needs final audit."},
+    "CC-WP-02-PARSER-CANON": {"status":"PROVISIONAL_PASS_LOCAL","evidence":"G9 cycle + Frank fn surface parse; deterministic semantic/contract hashes; full G9 file checked in CI."},
+    "CC-WP-03-IR-TYPES": {"status":"PROVISIONAL_PASS_LOCAL","evidence":"Typed FunctionIR/Stmt hints plus canonical semantic identity implemented for executable subset."},
+    "CC-WP-04-TYPE-EFFECT": {"status":"PROVISIONAL_PASS_LOCAL","evidence":"Type diagnostics + declared effect classes + runtime authority separation; negative controls pass."},
+    "CC-WP-05-EVALUATOR": {"status":"PASS_LOCAL_PROXY","evidence":"Reference evaluator executes APP-01..09 subset."},
+    "CC-WP-06-COMPILER-LOWERING": {"status":"PROVISIONAL_PASS_LOCAL","evidence":"Python target for APP-01..09 plus independent C/gcc native pure target; differential equality checked."},
+    "CC-WP-07-RUNTIME-ABI-FFI": {"status":"PASS_LOCAL_PROXY","evidence":"Explicit RuntimeABI, typed bindings, capability tokens, receipts, denied missing grants."},
+    "CC-WP-08-STDLIB-SDK": {"status":"PROVISIONAL_PASS_LOCAL","evidence":"Files, HTTP, SQLite, async/atomics, Tk event loop, compiler, NumPy, system adapters exercised."},
+    "CC-WP-09-CONCURRENCY-MEMORY": {"status":"PROVISIONAL_PASS_LOCAL","evidence":"Async gather, cancellation, lock-backed atomic increments and resource closure exercised."},
+    "CC-WP-10-GENERAL-APP-SUITE": {"status":"PARTIAL_9_OF_10_LOCAL","evidence":"APP-01..09 executable; APP-10 FULL_FRANK_HANDOFF remains open; exact target host pending."},
+    "CC-WP-11-FUZZ-CONFORMANCE": {"status":"PASS_LOCAL_PROXY","evidence":"5,000 differential arithmetic cases, 1,000 authority denial attempts, identity invariance tests."},
+    "CC-WP-12-CORPUS-HELDOUT": {"status":"PROVISIONAL_PASS_LOCAL","evidence":"256 train + 32 disjoint held-out examples, zero source-hash overlap."},
+    "CC-WP-13-HARNESS-HANDOFF": {"status":"PARTIAL","evidence":"Real frank_grt frame function compiles/runs; full frozen FRANK handoff still open."},
+    "CC-WP-14-BASE-AUDIT": {"status":"BLOCKED_EXTERNAL_AND_APP10","evidence":"Cannot honestly PASS until APP-10 and exact Andreas Ubuntu developer-system receipts exist."}
+  },
+  "hard_remaining": ["APP-10-FULL-FRANK-HANDOFF","EXACT_ANDREAS_UBUNTU_TARGET_VALIDATION"],
+  "gate": "NOT_PASS",
+  "reason": "Project acceptance contract requires full FRANK handoff and exact target-host execution; connector session has no shell on Andreas machine."
+}

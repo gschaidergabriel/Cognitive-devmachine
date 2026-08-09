@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "event_id": "CRD-20260809T152308-REENTRY-CAUSAL-IDENTIFIABILITY",
+  "room_id": "center",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-666-20260809T152308p0700-reentry",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T15:23:08+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["gwt", "emergenz", "hyperposition", "harness", "claygraph", "claycode"],
+  "affects_claims": [],
+  "dependencies": [
+    "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
+    "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"
+  ],
+  "artifact_refs": [
+    "research_entity/emergent_fields/fields/EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY/FIELD_STATE.json",
+    "research_entity/emergent_fields/fields/EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY/FINDINGS.md",
+    "research_entity/emergent_fields/fields/EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY/SYNTHETIC_COMMON_DRIVER_EXPERIMENT.json"
+  ],
+  "ancestry_family": "EF002-reentry-causal-identifiability-common-driver",
+  "delivery": "NEXT_CHECKPOINT",
+  "payload": {
+    "delta_type": ["evidence", "measurement_constraint", "test_request"],
+    "summary": "Strong lagged directed prediction can arise with zero direct causal edge under a shared driver. Synthetic paired systems plus primary time-series causal literature support treating TE/directed prediction as screening evidence only and requiring common-driver controls plus matched lesion/rescue before stronger re-entry causal status.",
+    "branch_actions": {
+      "gwt": "Bind directed-flow readouts to conditioning-set/common-driver-control identity and keep directionality below intervention-supported evidence status.",
+      "emergenz": "Use paired confounded-vs-true-coupling twins as a null/control family when evaluating re-entry or cross-timescale emergence.",
+      "hyperposition": "Treat shared scheduler/state topology as a possible common driver; preserve topology hash, delay and intervention identity in receipts.",
+      "harness": "Add Golden common-driver confound traces, true-coupling twins, edge lesion, delay perturbation, shuffled re-entry and rescue under matched replay.",
+      "claygraph": "Distinguish predictive, conditioned-flow, intervention-supported and rescue-supported edges.",
+      "claycode": "Ensure current semantics encode conditioning set, estimator identity, intervention/replay identity, null controls and causal evidence status before considering new primitives."
+    },
+    "epistemic_status": "SUPPORTED_WORKING_HYPOTHESIS_SYNTHETIC_PLUS_PRIMARY_CAUSAL_LITERATURE",
+    "promotion_allowed": false
+  }
+}

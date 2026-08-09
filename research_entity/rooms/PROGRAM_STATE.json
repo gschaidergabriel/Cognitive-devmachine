@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.9",
+  "schema_version": "2.0",
   "program_id": "frank-staged-build",
   "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "status": "ACTIVE",
@@ -74,9 +74,13 @@
       "completion_law": "Freeze existing semantics where adequate; build parser/canonical IR/type-effect checker/compiler/lowering/runtime/FFI/stdlib/toolchain; compile and execute the mandatory general-purpose application proof suite including a real HTTP/website stack and real FRANK component. The language/runtime must be capable of expressing versioned prototype/classifier state, trusted training-example provenance/tier, confidence/open-set results, learner candidate promotion/rollback and resource-budget/replay semantics required by FRANK v0.1 adaptive visual learning. Semantics may change only for an executable counterexample."
     },
     "H1_REFERENCE_HARNESS": {
-      "label": "Harness 1 - Reference FRANK + Adaptive Visual Learning",
+      "label": "Harness 1 - Live frankv0.1 Reference FRANK + Adaptive Visual Learning",
       "status": "BLOCKED",
       "blocked_by": ["BASE_CLAYCODE_RELEASE"],
+      "reference_baseline": "gschaidergabriel/frankv0.1",
+      "reference_baseline_contract": "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+      "live_user_research_contract": "research_entity/global/FRANKV0_1_LIVE_USER_HARNESS_RESEARCH_PROTOCOL.md",
+      "pilot_user_role": "LONGITUDINAL_FOUNDING_PILOT_NOT_HARDCODED_PRODUCT_LOGIC",
       "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
       "progress_source": {
         "kind": "work_packages",
@@ -85,12 +89,14 @@
         "include_prefixes": ["H-WP-00-", "H-WP-01-", "H-WP-02-", "H-WP-03-", "H-WP-04-", "H-WP-05-", "H-WP-06-", "H-WP-06B-", "H-WP-07-", "H-WP-08-", "H-WP-09-", "H-WP-10-", "H-WP-11-", "H-WP-12-", "H-WP-13-", "H-WP-14-", "H-WP-15-", "H-WP-16-", "H-WP-17-"]
       },
       "required_pass_artifacts": ["REFERENCE_HARNESS_RELEASE_MANIFEST.json", "REFERENCE_HARNESS_ARCHITECTURE.claygraph.json"],
-      "completion_law": "Reference Harness PASS requires the complete frozen multimodal FRANK architecture plus executable adaptive visual learning: prototype baseline, tiny frozen-backbone learner where required, trusted-example admission, calibrated known/unknown/conflict routing, bounded cyclic updates, shadow promotion/rollback, retention/forgetting, poisoning/open-set and resource tests."
+      "completion_law": "Reference Harness PASS means the exact current frankv0.1 harness is captured as the executable baseline with versioned intentional divergences only, including its repository-mediated Claude Code/ChatGPT node continuity, central UnifiedDB, derived ClayGraph, prompt-state injection, world/self/body/goal state surfaces, tools/effects/recovery/receipts, mandatory multimodal/adaptive visual overlays, and longitudinal Andreas pilot telemetry. Material misunderstandings, wrong actions, retrieval/context/handoff/tool/recovery failures and success patterns must be causal-localized, regressionized and fed into evidence-gated repair; person-specific state remains configurable while general Harness changes require generalized evidence."
     },
     "H2_CLAYCODE_HARNESS": {
-      "label": "Harness 2 - FRANK Compiled/Executed in ClayCode + Adaptive Visual Learning",
+      "label": "Harness 2 - frankv0.1 Reference Semantics Compiled/Executed in ClayCode",
       "status": "BLOCKED",
       "blocked_by": ["BASE_CLAYCODE_RELEASE", "H1_REFERENCE_HARNESS"],
+      "reference_baseline_contract": "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+      "live_user_research_contract": "research_entity/global/FRANKV0_1_LIVE_USER_HARNESS_RESEARCH_PROTOCOL.md",
       "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
       "progress_source": {
         "kind": "work_packages",
@@ -99,7 +105,7 @@
         "include_prefixes": ["H-WP-18-", "H-WP-19-", "H-WP-20-", "H-WP-21-"]
       },
       "required_pass_artifacts": ["CLAY_HARNESS_RELEASE_MANIFEST.json", "CLAY_HARNESS_ARCHITECTURE.claygraph.json", "HARNESS_CLAYGRAPH_DIFFERENTIAL_VALIDATION.json"],
-      "completion_law": "Clay Harness PASS requires differential equivalence to H1 for dissolved visual semantics and adaptive visual learner state transitions, trusted-example admission, confidence/open-set routing, candidate promotion/rejection/rollback, feature-version behavior and learner resource-budget/replay semantics."
+      "completion_law": "Clay Harness PASS requires differential equivalence to the frozen H1 frankv0.1 baseline for authoritative state transitions, provider/node handoff continuity, UnifiedDB/ClayGraph behavior, world/self/body/goal exposure, misunderstanding/error replay and repair semantics, tool/effect/recovery receipts, dissolved visual semantics and adaptive visual learner state transitions. If ClayCode cannot express H1 semantics, reopen the ClayCode gate instead of simplifying H1."
     },
     "H3_ONE_MODULE_FRANK": {
       "label": "Harness 3 - One-Module/Binary FRANK + Dissolved Retina + Adaptive Visual Learner",
@@ -182,6 +188,8 @@
     "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
     "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
     "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+    "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+    "research_entity/global/FRANKV0_1_LIVE_USER_HARNESS_RESEARCH_PROTOCOL.md",
     "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
     "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
     "research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md",

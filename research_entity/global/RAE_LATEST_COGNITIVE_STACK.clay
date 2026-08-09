@@ -1,10 +1,9 @@
 module rae.stack.latest
 
-epoch 3
+epoch 4
 entity frank-project-global-research-entity
 
-// All compatible organs resolve this file at T0 every substantive round.
-// This file is the moving pointer; components may evolve independently.
+// Moving semantic stack resolved by every compatible organ at T0.
 
 stack CURRENT {
   claycode=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC.clay
@@ -12,16 +11,20 @@ stack CURRENT {
   claycode_grammar=@research_entity/claycode/g9/grammar.ebnf
   claycode_migration=@research_entity/claycode/g9/XENO_G8_TO_CLAYCODE_G9_MIGRATION.clay
 
-  claygraph_exec=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
+  claygraph_base=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
+  claygraph_migrations=[@research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql]
   claygraph_frontier=resolve_latest_validated(branch=claygraph,prefer=CURRENT|PROMOTED_COMPATIBLE,preserve=NEGATIVE_RESULT|REFUTED|SUPERSEDED)
+  claygraph=[claygraph_base,claygraph_migrations,claygraph_frontier]
 
   unifieddb_base=@research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql
   unifieddb_migrations=[
     @research_entity/runtime/RAE_UNIFIEDDB_V4_HIVEMIND.sql,
     @research_entity/runtime/RAE_UNIFIEDDB_V5_CLAYCODE_EXPERIENCE_RESEARCH.sql,
-    @research_entity/runtime/RAE_UNIFIEDDB_V6_CLAYCODE_META_COGNITION.sql
+    @research_entity/runtime/RAE_UNIFIEDDB_V6_CLAYCODE_META_COGNITION.sql,
+    @research_entity/runtime/RAE_UNIFIEDDB_V7_COGNITIVE_PROCESSOR.sql
   ]
   unifieddb_frontier=resolve_latest_validated(branch=unifieddb,prefer=CURRENT|PROMOTED_COMPATIBLE,preserve=NEGATIVE_RESULT|REFUTED|SUPERSEDED)
+  unifieddb=[unifieddb_base,unifieddb_migrations,unifieddb_frontier]
 
   gwt=@research_entity/global/RAE_GWT_MICROKERNEL.clay
   turn=@research_entity/global/RAE_TURN_KERNEL.clay
@@ -31,8 +34,8 @@ stack CURRENT {
 
 rule resolve(CURRENT) every substantive_turn
 rule explicit_cognition uses CURRENT.claycode
-rule state_query uses CURRENT.unifieddb_base + CURRENT.unifieddb_migrations + CURRENT.unifieddb_frontier
-rule associative_projection uses CURRENT.claygraph_exec + CURRENT.claygraph_frontier
+rule state_query uses CURRENT.unifieddb
+rule associative_projection uses CURRENT.claygraph
 rule component_upgrade -> bump(epoch) + preserve(parent_ref) + emit(migration_ref) + replay_test
 rule stale_component_detected -> refresh_before_cognition
 rule missing_component -> state(DEGRADED_STALE_STACK) + no_false_latest_claim
@@ -40,7 +43,6 @@ rule organ_private_version_pin = FORBIDDEN unless isolated_experiment
 rule provider_specific_projection may_differ
 rule canonical_semantics must_not_fork_by_provider
 
-// Meta-language research policy is organ-specific for cost control.
 observe CHATGPT_EXPLICIT=[plan,state_delta,hypothesis,decision,tool_coord,handoff,experiment,repair,outcome]
 derive CHATGPT_EXPLICIT via CURRENT.chatgpt_endturn -> claycode_meta_candidate
 rule CHATGPT.derive_automatic=true
@@ -50,7 +52,8 @@ rule candidate != promotion
 rule promote requires evidence+counterhypothesis+matched_budget_replay+semantic_preservation+rollback
 
 invariant all_organs_same_moving_stack
-invariant latest_means_validated_pointer_not_newest_timestamp
+invariant latest_means_admitted_stack_pointer_not_newest_timestamp
+invariant critical_control_invariants_preserved_across_candidate_language_updates
 invariant claygraph_activation!=truth
 invariant unifieddb_logical_unification!=physical_monolith_requirement
 invariant hidden_provider_cot_not_required_or_persisted

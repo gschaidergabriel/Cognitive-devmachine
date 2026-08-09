@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"CC-EXEC-RESOURCE-LIFETIME-20260809-001",
+  "run_id":"claycode_20260809T1607p0700_chatgpt_secondary_resource_lifetime",
+  "actor":"chatgpt-secondary",
+  "candidate":"ClayCode G9 ResourceHandle lifetime candidate",
+  "candidate_sha256":"c7643efbf1ae46f30fef6aca86b6b22c09aed6252fd8dcb6c694af1820783bd8",
+  "reference_checker_source_sha256":"f402072e21598bfb38c1f9aa0cad1e813e21360633ed3b2a7ddc8d0898bfb58c",
+  "runtime":{"language":"Python","version":"3.13.5","surface":"ChatGPT local sandbox"},
+  "semantic_property_tested":"Opaque FFI/resource handles need explicit ownership/borrow/drop lifetime state to reject use-after-move, double-drop, drop-while-borrowed, borrow escape and nominal resource-kind confusion before host lowering; the handle itself remains non-authoritative.",
+  "baseline":{"kind":"explicit naive ResourceRef lowering proxy, not a claim about a completed ClayCode compiler","unsafe_traces_accepted":5,"traces":["double_drop","drop_while_borrowed","borrow_escape_after_call","use_after_move_by_old_owner","nominal_resource_kind_mismatch"]},
+  "candidate_tests":[
+    {"name":"valid_borrow_then_drop","expected":"PASS","observed":"PASS","ok":true},
+    {"name":"double_drop","expected":"REJECT:DROP_INVALID","observed":"REJECT:DROP_INVALID","ok":true},
+    {"name":"drop_while_borrowed","expected":"REJECT:DROP_WHILE_BORROWED","observed":"REJECT:DROP_WHILE_BORROWED","ok":true},
+    {"name":"borrow_escape_after_call","expected":"REJECT:BORROW_EXPIRED","observed":"REJECT:BORROW_EXPIRED","ok":true},
+    {"name":"use_after_move_by_old_owner","expected":"REJECT:USE_OWNED_INVALID","observed":"REJECT:USE_OWNED_INVALID","ok":true},
+    {"name":"nominal_resource_kind_mismatch","expected":"REJECT:KIND_MISMATCH","observed":"REJECT:KIND_MISMATCH","ok":true},
+    {"name":"valid_move_then_drop","expected":"PASS","observed":"PASS","ok":true}
+  ],
+  "summary":{"tests":7,"matched_expected":7,"negative_traces_rejected":5,"positive_traces_passed":2},
+  "external_independent_evidence":[
+    {"source":"WebAssembly Component Model WIT resource/handle design","class":"primary specification","finding":"resources are abstract lifetime-bearing types; owned handles transfer unique ownership while borrow handles are temporary loans"},
+    {"source":"WebAssembly Component Model concurrency design","class":"primary specification","finding":"borrow lifetimes are dynamically enforced across asynchronous tasks and dropping while lent can trap"}
+  ],
+  "affected_work_packages":["CC-WP-03-IR-TYPES","CC-WP-04-TYPE-EFFECT","CC-WP-07-RUNTIME-ABI-FFI","CC-WP-09-CONCURRENCY-MEMORY","CC-WP-11-FUZZ-CONFORMANCE"],
+  "semantic_change_required":"OPEN_CANDIDATE_NOT_PROMOTED",
+  "claim_scope":"Prototype evidence for a ClayCode IR/runtime lifetime primitive; not Ubuntu-target proof and not compiler conformance proof."
+}

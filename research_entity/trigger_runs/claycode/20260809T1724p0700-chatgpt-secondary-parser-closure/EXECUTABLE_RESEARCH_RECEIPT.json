@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T1724p0700-chatgpt-secondary-parser-closure",
+  "experiment_id":"CC-G9-PARSER-DELTA-20260809",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source":{"path":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e"},
+  "declared_grammar":{"path":"research_entity/claycode/g9/grammar.ebnf","blob_sha":"ec2f17077333955cfdabe6c64868d597e7e734e3"},
+  "experiment_artifact":{"path":"research_entity/trigger_runs/claycode/20260809T1724p0700-chatgpt-secondary-parser-closure/claycode_g9_parser_delta_experiment.py","local_sha256":"c35833ce92ec65be1b5a42bcfcb25f8cd2d7b28bb7651f9bf5e15882f509739a"},
+  "corpus":{"identity":"nine exact current-G9-V3 source fragments targeting grammar closure","sha256":"325844d4b98e5da5420a75b2c9bb924d4d079abfdd71711634f3be83a612ac6c","count":9},
+  "runtime":{"surface":"local ChatGPT Linux execution fallback","os":"Linux x86_64","python":"3.13.5","parser_library":"Lark 1.3.1","preferred_e2b_status":"UNAVAILABLE_ON_CURRENT_CHATGPT_TOOL_SURFACE","sandboxapi_status":"KNOWN_PROTOCOL_BLOCKED_NOT_SUBSCRIBED"},
+  "expected":"A parser contract intended to cover current G9 V3 must accept the current source constructs under test without changing their intended semantic class.",
+  "observed":{
+    "baseline_grammar_proxy":{"pass":2,"fail":7},
+    "minimal_candidate":{"pass":9,"fail":0},
+    "result_sha256":"59050a455de868206dd29193147e2bab922e8ee7ef2bccb4af5a0633f2618086"
+  },
+  "counterexample_classes":["comparison_operators_missing","conditional_statement_missing","line_comment_missing","legacy_predicate_surface_not_closed","flat_expression_precedence_underspecified"],
+  "candidate_repair":["lex // comments as extras","add < > <= >= comparison operators","add if/else statement form","define executable expression precedence/associativity","bound legacy predicate infix/postfix compatibility and canonicalize it into typed IR rather than permit arbitrary prose operators"],
+  "classification":"EXECUTABLE_COUNTEREXAMPLE_CURRENT_GRAMMAR_COVERAGE_PLUS_FRAGMENT_LEVEL_REPAIR",
+  "evidence_class":"LOCAL_EXECUTION_PRIMARY_FOR_THIS_TOOL_RUNTIME_ONLY",
+  "target_substrate_replication_required":true,
+  "affected_work_packages":["CC-WP-01-SPEC-FREEZE","CC-WP-02-PARSER-CANON","CC-WP-11-FUZZ-CONFORMANCE"],
+  "affected_branches":["claycode","harness"],
+  "promotion":"NONE",
+  "limits":["fragment corpus only, not whole-file G9 parse","candidate grammar is unpromoted","no canonicalizer/type/effect/compiler execution yet","no Ubuntu developer-system target receipt","no E2B receipt"]
+}

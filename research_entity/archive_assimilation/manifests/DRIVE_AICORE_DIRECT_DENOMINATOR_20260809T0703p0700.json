@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "manifest_id": "DRIVE-AICORE-DIRECT-DENOMINATOR-20260809T0703p0700",
   "program_stage": "L0_ARCHIVE_ASSIMILATION",
   "trigger": "666",
@@ -9,59 +9,39 @@
     "id": "1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty",
     "parent_root_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm"
   },
-  "direct_denominator": {
+  "prior_direct_denominator": {
     "total_entries": 50,
     "folders": 37,
     "files": 13,
+    "status": "REFUTED_AS_EXACT_DENOMINATOR",
+    "reason": "The earlier enumeration used a document-like retrieval path for files and therefore omitted 17 non-document root files. Full direct folder listing shows 30 root files."
+  },
+  "direct_denominator": {
+    "total_entries": 67,
+    "folders": 37,
+    "files": 30,
     "complete_for_observed_direct_epoch": true,
-    "identity_basis": "Drive IDs + parent relation from complete parent-scoped enumeration"
+    "identity_basis": "Full direct child listing of the AICORE Drive folder; all child IDs are scoped to parent 1sUy3Jain-_jNwfmzqkPo30q7LWJDO3ty."
   },
   "direct_folders": [
     "webd", "updater", "papers", ".claude", "desktopd", "konzepte", "services", "assets", "docker", "training", "router", "wissen", "modeld", "synteq", "bridges", "common", "ui", "ext", "docs", "skills", "configs", "scripts", "config", "tests", "needle", "writer", "tools", ".github", "personality", "core", "gateway", "gaming", "agentic", "analysen", ".next", "intelligence", "ingestd"
   ],
   "direct_files": [
-    "UEBERGABE-P4-2026-08-04.md", "UEBERGABE-P3-2026-08-04.md", "README.md", "requirements.txt", "ARCHITECTURE.md", "HOW_IT_WORKS.md", "MANUAL.md", "ABOUT.md", "CONSCIOUSNESS.md", "CONTRIBUTIONS.md", "USECASES.md", "BENCHMARK.md", "MEMORY&PERSISTENCE-ARCHITECTURE.md"
+    "UEBERGABE-P4-2026-08-04.md", "UEBERGABE-P3-2026-08-04.md", ".gitignore", "README.md", "install.sh", "requirements.txt", "_bootstrap.py", "install_wizard.py", "test_frank.py", "ARCHITECTURE.md", "HOW_IT_WORKS.md", ".gitlab-ci.yml", "Dockerfile", ".dockerignore", "MANUAL.md", "docker-compose.vulkan.yml", "docker-compose.cuda.yml", "docker-compose.yml", "ABOUT.md", "titan.db", "consciousness.db", "CONSCIOUSNESS.md", "CONTRIBUTIONS.md", "USECASES.md", "BENCHMARK.md", "MEMORY&PERSISTENCE-ARCHITECTURE.md", "install-wizard.spec", "pyproject.toml", "config.yaml.example", "LICENSE"
   ],
-  "existing_root_state": "MANY_SUBTREES_CLOSED_AND_ROOT_FILES_ADJUDICATED_WHOLE_RECURSIVE_IDENTITY_STILL_OPEN",
+  "existing_root_state": "ROOT_DIRECT_DENOMINATOR_REFROZEN_AT_67_RECURSIVE_RECONCILIATION_IN_PROGRESS",
   "existing_root_refs": [
     "commit:484fdb659fe6ddde6ea217de14c6e8d7afb46e2a",
     "commit:c2f858913ab340b34e27106ccdecc20ecf5daadf"
   ],
-  "reconciliation_rule": "Do not retraverse all 37 folders blindly. First map prior committed subtree closures to this exact direct denominator; recurse only unmatched or stale identities.",
+  "reconciliation_rule": "Reuse exact prior subtree closures; recurse only unmatched or method-stale identities. Never use file-type-filtered search counts as an all-files denominator.",
   "method_revalidation_20260809T0921p0700": {
     "status": "DIRECT_CHILD_DENOMINATORS_REVALIDATED_SKILLS_SYNTEQ_TOOLS_RECURSIVELY_CLOSED",
     "receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T0921p0700_chatgpt_secondary_aicore_skills_synteq_tools_direct_revalidation.json",
     "subtrees": {
-      "skills": {
-        "id": "1mFuEdx6gFkoG7rgi14nZBB8_wYdeqKoB",
-        "direct_entries": 28,
-        "direct_folders": 22,
-        "direct_files": 6,
-        "recursive_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED",
-        "recursive_units_below_root": 50,
-        "recursive_folder_units": 22,
-        "recursive_file_units": 28
-      },
-      "synteq": {
-        "id": "1LnsZ7HLTdcnsuclwJwn61sWAxHmSnA6K",
-        "direct_entries": 14,
-        "direct_folders": 10,
-        "direct_files": 4,
-        "recursive_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED",
-        "recursive_units_below_root": 511,
-        "recursive_folder_units": 22,
-        "recursive_file_units": 489
-      },
-      "tools": {
-        "id": "1RqVr3WkitB1-oOU_0F4knQZzVxydPD84",
-        "direct_entries": 57,
-        "direct_folders": 7,
-        "direct_files": 50,
-        "recursive_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED",
-        "recursive_units_below_root": 95,
-        "recursive_folder_units": 7,
-        "recursive_file_units": 88
-      }
+      "skills": {"id": "1mFuEdx6gFkoG7rgi14nZBB8_wYdeqKoB", "direct_entries": 28, "direct_folders": 22, "direct_files": 6, "recursive_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED", "recursive_units_below_root": 50, "recursive_folder_units": 22, "recursive_file_units": 28},
+      "synteq": {"id": "1LnsZ7HLTdcnsuclwJwn61sWAxHmSnA6K", "direct_entries": 14, "direct_folders": 10, "direct_files": 4, "recursive_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED", "recursive_units_below_root": 511, "recursive_folder_units": 22, "recursive_file_units": 489},
+      "tools": {"id": "1RqVr3WkitB1-oOU_0F4knQZzVxydPD84", "direct_entries": 57, "direct_folders": 7, "direct_files": 50, "recursive_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED", "recursive_units_below_root": 95, "recursive_folder_units": 7, "recursive_file_units": 88}
     },
     "exact_global_percent_added": 0.0,
     "rule": "Direct counts are exact for the observed epoch; subtree closure is credited only where all nested folder identities were enumerated."
@@ -73,13 +53,7 @@
       "konzepte": {"id": "1GNlbKvYsh__ZzHEin_EqgAp0ucB88jur", "entries": 22, "folders": 0, "files": 22, "semantic_analysis_separate": true}
     },
     "expanded_open_children": {
-      "vault": {
-        "id": "1rjUKzsiQvcfOfyOW6ftuTx27MbdbzxYU",
-        "entries": 7,
-        "folders": 5,
-        "files": 2,
-        "open_child_folders": ["digitaltranscence", "befunde", "kartei", "rohdaten", "sitzungen"]
-      }
+      "vault": {"id": "1rjUKzsiQvcfOfyOW6ftuTx27MbdbzxYU", "entries": 7, "folders": 5, "files": 2, "open_child_folders": ["digitaltranscence", "befunde", "kartei", "rohdaten", "sitzungen"]}
     },
     "remaining_synteq_direct_children": ["bin", "ui", "lib", "systemd", "pruefung", "fusion", "zwilling"],
     "status": "SUPERSEDED_BY_WAVE2_EXACT_CLOSURE"
@@ -88,47 +62,16 @@
     "receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_aicore_synteq_recursive_wave2.json",
     "replication_receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T0931p0700_chatgpt_secondary_aicore_synteq_recursive_closure.json",
     "replication_result": "INDEPENDENT_MATCH_511_UNITS_22_FOLDERS_489_FILES_NO_DUPLICATE_GLOBAL_CREDIT",
-    "newly_closed_direct_children": {
-      "bin": 1,
-      "ui": 3,
-      "lib": 9,
-      "systemd": 5,
-      "pruefung": 4,
-      "fusion": 2,
-      "zwilling": 2
-    },
-    "vault": {
-      "recursive_units_below_root": 438,
-      "digitaltranscence_recursive_units": 111,
-      "befunde_recursive_units": 1,
-      "kartei_recursive_units": 145,
-      "rohdaten_recursive_units": 117,
-      "sitzungen_recursive_units": 57
-    },
-    "synteq_recursive_denominator": {
-      "total_units_below_synteq_root": 511,
-      "folder_units": 22,
-      "file_units": 489
-    },
+    "newly_closed_direct_children": {"bin": 1, "ui": 3, "lib": 9, "systemd": 5, "pruefung": 4, "fusion": 2, "zwilling": 2},
+    "vault": {"recursive_units_below_root": 438, "digitaltranscence_recursive_units": 111, "befunde_recursive_units": 1, "kartei_recursive_units": 145, "rohdaten_recursive_units": 117, "sitzungen_recursive_units": 57},
+    "synteq_recursive_denominator": {"total_units_below_synteq_root": 511, "folder_units": 22, "file_units": 489},
     "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED_AND_INDEPENDENTLY_REPLICATED"
   },
   "tools_recursive_closure_20260809T0931p0700": {
     "receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T0931p0700_chatgpt_secondary_aicore_tools_recursive_closure.json",
     "root_direct": {"entries": 57, "folders": 7, "files": 50},
-    "child_leaf_files": {
-      "schranke": 3,
-      "chronik": 3,
-      "discovered": 2,
-      "lcme": 11,
-      "omni_log_monitor": 6,
-      "system_control": 12,
-      "titan": 1
-    },
-    "recursive_denominator": {
-      "total_units_below_tools_root": 95,
-      "folder_units": 7,
-      "file_units": 88
-    },
+    "child_leaf_files": {"schranke": 3, "chronik": 3, "discovered": 2, "lcme": 11, "omni_log_monitor": 6, "system_control": 12, "titan": 1},
+    "recursive_denominator": {"total_units_below_tools_root": 95, "folder_units": 7, "file_units": 88},
     "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
   },
   "skills_recursive_closure_20260809T0929p0700": {
@@ -136,17 +79,42 @@
     "root_direct": {"entries": 28, "folders": 22, "files": 6},
     "verified_direct_folder_children": 22,
     "child_shape": {"entries_each": 1, "folders_each": 0, "files_each": 1, "file_name": "SKILL.md"},
-    "recursive_denominator": {
-      "total_units_below_skills_root": 50,
-      "folder_units": 22,
-      "file_units": 28
-    },
+    "recursive_denominator": {"total_units_below_skills_root": 50, "folder_units": 22, "file_units": 28},
     "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
   },
+  "method_revalidation_20260809T0930p0700": {
+    "status": "ROOT_DENOMINATOR_CORRECTED_RECURSIVE_RECONCILIATION_IN_PROGRESS",
+    "root_direct": {"entries": 67, "folders": 37, "files": 30},
+    "root_denominator_correction": {"previous_entries": 50, "previous_files": 13, "new_entries": 67, "new_files": 30, "newly_visible_files": 17, "cause": "document-filtered file enumeration was not a complete all-file denominator"},
+    "exact_recursive_subtrees": {
+      "skills": {"units": 50, "folders": 22, "files": 28, "basis": "prior exact closure"},
+      "synteq": {"units": 511, "folders": 22, "files": 489, "basis": "prior exact closure + independent replication"},
+      "tools": {"units": 95, "folders": 7, "files": 88, "basis": "prior exact closure"},
+      ".claude": {"id": "1BbdrBEuF_1mv9c8RziqhBbTIUlnrJCJD", "units": 1, "folders": 0, "files": 1},
+      "docker": {"id": "1f2JoVoALmiuNjWI04KyBrgokgJg26Iaa", "units": 2, "folders": 0, "files": 2},
+      "configs": {"id": "1ydilqqqhbsKJ6eHsqY4YszWkvc7VgvA-", "units": 1, "folders": 0, "files": 1},
+      "config": {"id": "1yPxfkHebhZvDF4qSmzhmnKI87qVJme1k", "units": 10, "folders": 0, "files": 10},
+      "bridges": {"id": "1wN2fHeWMCX7GTV4kx1Eo1e3J_S8C4jeo", "units": 5, "folders": 0, "files": 5},
+      "common": {"id": "1gsAQe6LtuVzWNxx5itvX-3hHJ450QZt4", "units": 2, "folders": 0, "files": 2},
+      ".github": {"id": "1V4QaR7yLKS33f_5nZzJZTlxscaFW1K9E", "units": 3, "folders": 1, "files": 2},
+      "personality": {"id": "1pD8C5XSUZQ-rQLS_TPoMXtPJoDNiQnS3", "units": 13, "folders": 1, "files": 12},
+      "writer": {"id": "1FsjU2dGOIAsOvyoypHcekjo9BAKewB-a", "units": 3, "folders": 1, "files": 2},
+      "tests": {"id": "1g23VZuaK3CMziWmC2SQFEaqsRB7Ik-qN", "units": 43, "folders": 1, "files": 42},
+      "webd": {"id": "1jGgZCOKskL8TIynIqc3hOURRjU0zuPHu", "units": 2, "folders": 0, "files": 2},
+      "updater": {"id": "1g4J8JhgCbaAcP2Y_T3NvHmrchmMBpNYl", "units": 8, "folders": 0, "files": 8},
+      "papers": {"id": "1JOglDLN5ew0GNuL0LA1tTdvawvGUl_q7", "units": 9, "folders": 0, "files": 9},
+      "desktopd": {"id": "13X-3x-nri4MM-JRqcQmi-oQM8Kr_zSs_", "units": 2, "folders": 0, "files": 2}
+    },
+    "exact_recursive_root_children": 17,
+    "open_direct_subtrees": ["konzepte", "services", "assets", "training", "router", "wissen", "modeld", "ui", "ext", "docs", "scripts", "needle", "core", "gateway", "gaming", "agentic", "analysen", ".next", "intelligence", "ingestd"],
+    "open_direct_subtree_count": 20,
+    "new_root_files_requiring_semantic_reconciliation": [".gitignore", "install.sh", "_bootstrap.py", "install_wizard.py", "test_frank.py", ".gitlab-ci.yml", "Dockerfile", ".dockerignore", "docker-compose.vulkan.yml", "docker-compose.cuda.yml", "docker-compose.yml", "titan.db", "consciousness.db", "install-wizard.spec", "pyproject.toml", "config.yaml.example", "LICENSE"],
+    "global_exact_percent_added": 0.0
+  },
   "remaining": {
-    "prior_subtree_to_denominator_mapping": "OPEN",
-    "unmatched_recursive_folders": "UNKNOWN_UNTIL_RECONCILIATION",
-    "root_files_semantic_status": "PREVIOUSLY_ADJUDICATED_PER_ROOT_STATE",
+    "prior_subtree_to_denominator_mapping": "PARTIAL_17_OF_37_EXACT",
+    "unmatched_recursive_folders": 20,
+    "root_files_semantic_status": "13 previously visible document-like files retain prior adjudication; 17 newly included non-document root files require explicit reconciliation.",
     "raw_hash_obligations": "OPEN_WHERE_REQUIRED",
     "skills_recursive_child_folders": 0,
     "synteq_unclosed_direct_child_folders": 0,
@@ -158,10 +126,10 @@
   },
   "level0_credit": {
     "exact_global_percent_added": 0.0,
-    "reason": "Skills, synteq and tools local recursive denominators are exact, but the combined Drive + Project-Frankenstein Level-0 denominator remains unfrozen."
+    "reason": "Local AICORE denominator corrections and exact subtree closures are real, but the combined Drive + Project-Frankenstein Level-0 denominator remains unfrozen."
   },
-  "status": "DIRECT_DENOMINATOR_FROZEN_RECONCILIATION_REQUIRED",
+  "status": "DIRECT_DENOMINATOR_REFROZEN_67_RECONCILIATION_IN_PROGRESS",
   "created_at": "2026-08-09T07:03:00+07:00",
-  "last_revalidated_at": "2026-08-09T09:21:00+07:00",
-  "last_recursive_update_at": "2026-08-09T09:31:00+07:00"
+  "last_revalidated_at": "2026-08-09T09:30:00+07:00",
+  "last_recursive_update_at": "2026-08-09T09:30:00+07:00"
 }

@@ -1,0 +1,106 @@
+name: RAE Earned Work Finalize
+
+on:
+  push:
+    paths:
+      - '.github/workflows/rae_earned_work_finalize.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply final evidence-mapped adjudication losslessly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib, copy
+          root=pathlib.Path('.')
+          hew_path=root/'research_entity/forecast/HISTORICAL_EARNED_WORK.json'
+          hew=json.loads(hew_path.read_text())
+          adj_path=root/'research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json'
+          adj=json.loads(adj_path.read_text())
+          deltas={
+            'g8':json.loads((root/'research_entity/forecast/earned_work_deltas/20260809T0441p0700_drive_g8_g9_retina.json').read_text()),
+            'new':json.loads((root/'research_entity/forecast/earned_work_deltas/20260809T1250p0700_pf_new_lineages_reconcile.json').read_text()),
+            'mem':json.loads((root/'research_entity/forecast/earned_work_deltas/666_20260809T0424p0700_pf_memory_persistence_recovery_unique.json').read_text()),
+          }
+          mappings=hew.setdefault('evidence_mappings',[])
+          by={str(m.get('mapping_id')):m for m in mappings if isinstance(m,dict)}
+          # Required downgrade: preserve row but remove avoided-hour credit.
+          abl=by.get('HEW-PF-ABL-004')
+          if not abl: raise SystemExit('missing HEW-PF-ABL-004')
+          abl['avoided_future_hours_low']=0.0; abl['avoided_future_hours_center']=0.0; abl['avoided_future_hours_high']=0.0
+          abl['final_audit_disposition']='SCAFFOLD_PROVENANCE_ONLY_ZERO_HOURS'
+          abl['final_audit_ref']=str(adj_path)
+          # Accepted unique mappings only.
+          accepted=[]
+          for m in deltas['g8'].get('mappings',[]):
+            if m.get('mapping_id')=='HEW-DRIVE-RETINA-014':
+              x=copy.deepcopy(m); x['source_receipt']=deltas['g8'].get('source_receipt'); accepted.append(x)
+          for m in deltas['new'].get('proposed_mappings',[]):
+            if m.get('mapping_id') in {'HEW-PF-POLICY-PARITY-CANDIDATE','HEW-PF-RUNTIME-CONTEXT-PARITY-CANDIDATE'}:
+              x=copy.deepcopy(m); x['source_receipt']=';'.join(deltas['new'].get('source_receipts',[])); accepted.append(x)
+          for m in deltas['mem'].get('unique_mappings',[]):
+            if m.get('mapping_id') in {'HEW-PF-MEMFED-009','HEW-PF-MEMREC-010','HEW-PF-MEMMIG-011'}:
+              x=copy.deepcopy(m); x['source_receipt']=deltas['mem'].get('source_receipt'); accepted.append(x)
+          for x in accepted:
+            mid=str(x['mapping_id'])
+            x['final_audit_disposition']='ACCEPTED_EVIDENCE_MAPPED_UNIQUE_REMAINDER'
+            x['final_audit_ref']=str(adj_path)
+            if mid in by:
+              # Idempotent rerun: require same core evidence/hours before retaining existing.
+              old=by[mid]
+              keys=['source_refs','current_doomsday_rows','avoided_future_hours_low','avoided_future_hours_center','avoided_future_hours_high']
+              if any(old.get(k)!=x.get(k) for k in keys): raise SystemExit(f'non-idempotent existing mapping {mid}')
+            else:
+              mappings.append(x); by[mid]=x
+          # Recompute mapped totals from authoritative rows after correction/merge.
+          sums={'low':0.0,'center':0.0,'high':0.0}
+          for m in mappings:
+            sums['low']+=float(m.get('avoided_future_hours_low',0) or 0)
+            sums['center']+=float(m.get('avoided_future_hours_center',0) or 0)
+            sums['high']+=float(m.get('avoided_future_hours_high',0) or 0)
+          expected=adj['final_mapped_hours']
+          for k in sums:
+            if abs(sums[k]-float(expected[k]))>1e-9: raise SystemExit(f'final sum mismatch {k}: {sums[k]} != {expected[k]}')
+          center_remaining=float(hew.get('current_remaining_work_prior',{}).get('center_active_hours'))
+          baseline=100*sums['center']/(sums['center']+center_remaining)
+          if abs(baseline-float(adj['evidence_mapped_project_baseline_percent']))>0.02: raise SystemExit(f'baseline mismatch {baseline}')
+          hew['schema_version']='2.0'
+          hew['status']='FINAL_EVIDENCE_MAPPED_AFTER_LEVEL0_AUDIT'
+          hew['evidence_mapped_avoided_future_hours']={k:round(v,3) for k,v in sums.items()}
+          hew['evidence_mapped_project_baseline_percent']=round(baseline,2)
+          hew['evidence_mapped_baseline_formula']='100 * mapped_avoided_future_hours_center / (mapped_avoided_future_hours_center + current_remaining_work_prior.center_active_hours)'
+          hew['temporary_retention_prior_retired']=True
+          hew['final_audit']={
+            'status':'PASS_CONSERVATIVE_DEDUPED_MAPPING',
+            'adjudication':str(adj_path),
+            'machine_audit':'research_entity/forecast/EARNED_WORK_FINAL_AUDIT_20260809.json',
+            'delta_index':'research_entity/forecast/EARNED_WORK_DELTA_INDEX_20260809.json',
+            'cross_source':'research_entity/archive_assimilation/manifests/666_CROSS_SOURCE_FINAL_RECONCILIATION_20260809T1504p0700.json',
+            'mappings_count':len(mappings),
+            'downgraded_mapping_ids':['HEW-PF-ABL-004'],
+            'accepted_new_mapping_ids':[x['mapping_id'] for x in accepted],
+            'zero_credit_delta_families':['PF_CONSCIOUSNESS_BENCHMARK_22_OF_24','PF_DREAM_REPLAY','PF_WATCHDOG_BOOT_STABILITY','HEW-DRIVE-XENO-G8CODE-012','HEW-DRIVE-XENO-G9SEM-013','HEW-DRIVE-TRAINSCHEMA-015','HEW-DRIVE-MEM50-016','PF_PROJECT_ENGINE_AUTONOMY_LINEAGE_PENDING_ROW_DEDUP'],
+            'rule':'Unconnected historical effort remains historical but does not inflate Clay 0.1 completion; only evidence-mapped unique reusable/avoided current-work equivalents contribute to the baseline.'
+          }
+          hew_path.write_text(json.dumps(hew,indent=2,ensure_ascii=False)+'\n')
+          PY
+      - name: Commit finalized earned-work state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "rae-earned-work-finalizer"
+          git config user.email "actions@users.noreply.github.com"
+          git add research_entity/forecast/HISTORICAL_EARNED_WORK.json
+          git commit -m "666: finalize evidence-mapped historical earned work" || exit 0
+          for attempt in 1 2 3 4 5 6; do git fetch origin main; git rebase origin/main; if git push origin HEAD:main; then exit 0; fi; sleep 2; done
+          exit 1

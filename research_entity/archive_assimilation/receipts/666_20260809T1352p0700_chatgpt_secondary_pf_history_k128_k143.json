@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1352p0700-chatgpt-secondary-pf-history-k128-k143",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","ordinal_range":"k128..k143","count":16,"manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K128_K143_20260809T1351p0700.json"},
+  "race":{"winning_claim_commit":"28b00a68308924d1a18dbd700edf1ccbaa9638fe","competing_claims_seen":0,"result":"CLEAN_AT_PRECOMMIT_RECHECK"},
+  "closure":{"materialized":16,"terminally_dispositioned":16,"uncovered":0,"status":"COMPLETE_FOR_ORDINAL_SHARD","global_level0_gate":"NOT_PASS","global_exact_percent_increment":0.0},
+  "high_value_findings":[
+    {"id":"PF-K128-143-PORTABILITY-AS-SUBSTRATE","evidence":[129,130,131,135,136,137,138],"finding":"Cross-platform portability emerged as a concrete runtime substrate: systemd assumptions were replaced inside containers, CPU/CUDA/Vulkan builds were separated, and repeated dependency/link failures hardened native and container installation paths.","transfer":"Treat portability as executable architecture with backend-specific build/runtime tests, not as README capability wording."},
+    {"id":"PF-K128-143-DISTRIBUTION-PROVENANCE","evidence":[129,135,137],"finding":"Prebuilt artifacts became a release channel through GHCR and CI, with OCI source metadata and explicit package write permissions.","transfer":"FRANK releases should bind artifact identity to source revision, backend, checksums/SBOM and reproducible build provenance before promotion."},
+    {"id":"PF-K128-143-OBSERVATION-VS-SIMULATION","evidence":[128],"finding":"The AURA UI mixed backend-derived captions with a 10Hz local GoL simulation between slower backend polls for visual fluidity.","transfer":"Observability UIs must label measured state versus interpolated/simulated presentation so visual smoothness cannot be mistaken for higher-frequency cognitive evidence."},
+    {"id":"PF-K128-143-BOUNDED-RECURSIVE-MEMORY","evidence":[142,143],"finding":"Conversation memory moved from character truncation to asynchronous recursive abstraction, then added explicit caps, merges and archival to prevent unbounded live-context growth.","transfer":"ClayGraph/UnifiedDB memory should preserve bounded active context while retaining reversible provenance links from compressed packets to exact source records."},
+    {"id":"PF-K128-143-COMPRESSION-PROVENANCE-RISK","evidence":[142,143],"finding":"Tier-2 blocks were deleted after Tier-3 distillation and old message text was replaced with an archive marker while relying on other indexes/embeddings/abstractions for retained access.","transfer":"Before adopting destructive/subsuming compression, verify source recoverability independently; compression must never be the sole surviving representation of evidence."}
+  ],
+  "negative_results_preserved":[
+    "Vulkan builds were incomplete without development headers and glslc.",
+    "Container builds required dbus-python compiler dependencies and CUDA stub linking that were absent initially.",
+    "Documentation-only claims such as deployment recommendations, version labels, recovery links and component listings were explicitly not promoted to runtime evidence.",
+    "AURA presentation included locally simulated/interpolated evolution between backend measurements, so display dynamics are not direct measurement cadence.",
+    "Recursive memory compression introduced provenance/recoverability risk when lower-level abstractions or message text were removed after distillation."
+  ],
+  "epistemic_boundary":"README claims of emergent personality/consciousness and release capabilities are retained as historical context only unless supported by code/runtime evidence. This shard establishes mechanisms present in the diffs, not current runtime behavior at the frozen head unless separately corroborated.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level conceptual dedup against the earned-work ledger was performed."},
+  "next_falsifiers":[
+    "Build CPU/CUDA/Vulkan images from pinned source on clean runners and verify runtime health, model loading and artifact provenance/SBOM.",
+    "Compare AURA backend snapshots with displayed/interpolated frames and assert UI labels prevent simulated frames from entering measurement datasets.",
+    "Stress RAE memory beyond Tier-3 caps and verify exact source-message reconstruction or durable immutable provenance refs after pruning/archival.",
+    "Kill the Micro-LLM during consolidation and verify fallback preserves semantic coverage without blocking chat or corrupting abstraction lineage.",
+    "Run container/native fault injection for missing Vulkan headers, CUDA stubs, dbus build deps and process-manager service failure."
+  ],
+  "status":"COMPLETE"
+}

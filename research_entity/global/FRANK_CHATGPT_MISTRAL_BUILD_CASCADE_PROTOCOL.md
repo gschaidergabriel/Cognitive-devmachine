@@ -240,3 +240,80 @@ Leave exact continuation state; do not claim background execution unless an actu
 Exact `frank` loads this protocol after target/final-binary/current-instance contracts and dynamic research fusion setup.
 
 Visible output must distinguish what was actually built/tested from what remains proposed/queued and must render the dynamically resolved first-GitHub-Harness progress block.
+
+## 15. Mandatory deep-research phase for every exact `frank`
+
+Every exact `frank` invocation is a **deep research run first, implementation cascade second**. A shallow status read, short architecture summary, or immediate build dispatch is incomplete.
+
+Before computing the final cascade, ChatGPT MUST perform all of the following to the maximum useful depth available in the current synchronous surface:
+
+1. exhaustively refresh current repo/project evidence and all relevant scientific branches;
+2. inspect the newest concurrent commits and execution receipts that can change the answer;
+3. perform current web research using external primary/authoritative sources for material architecture, compiler/runtime, cognition, persistence, systems, safety, model/runtime or measurement questions where outside evidence can discriminate among live hypotheses;
+4. prefer primary sources such as official documentation, standards, source repositories and original research papers; secondary sources may be used for discovery or triangulation but do not outrank primary evidence;
+5. form explicit hypotheses and counterhypotheses rather than only collecting supportive material;
+6. define falsifiers, discriminating experiments and expected observations for the highest-value unresolved claims;
+7. fuse internal repo evidence, live Harness/runtime evidence, negative results, external evidence and worker results while collapsing shared ancestry;
+8. run a second-pass adversarial analysis after fusion: search for contradictions, hidden dependencies, authority/state conflation, stale assumptions, overfitting to one architecture, and alternative explanations;
+9. revise the current FRANK realization only after that second-pass analysis.
+
+Compact law:
+
+`repo refresh + whole-mesh read + current web/primary-source research + hypotheses/counterhypotheses + falsifiers + evidence fusion + adversarial re-analysis -> revised current FRANK realization`.
+
+The web phase is mandatory whenever the current environment exposes web research and the question has material external evidence. If web access is genuinely unavailable, record that exact capability limitation; never silently treat stale model knowledge as current external verification.
+
+## 16. Mandatory final recomputation before output
+
+The final architecture and next work are never copied mechanically from the beginning of the run.
+
+After the last useful experiment, worker result, web finding or branch update, ChatGPT MUST recompute from scratch enough of the synthesis to answer:
+
+- What changed during this run?
+- Which hypotheses gained or lost support?
+- Which counterhypotheses remain live?
+- What is now the earliest causal blocker?
+- Which previous proposed tasks became obsolete, redundant or downstream?
+- Which single dependency chain now maximizes progress toward the owner-fixed FRANK target?
+
+This final recomputation must include the newest evidence produced during the same run.
+
+`initial plan != final cascade unless the final re-analysis independently reproduces it`.
+
+## 17. Mandatory end-of-run implementation cascade
+
+Every exact `frank` run MUST end with a newly calculated **FRANK IMPLEMENTATION CASCADE** derived from the complete final fused state of that run.
+
+The cascade is not a generic roadmap. It must be a dependency-aware executable continuation plan whose ordering follows causal prerequisites and measured blockers.
+
+For each cascade step, record where applicable:
+
+- step/work id;
+- exact objective;
+- why it is now the next dependency;
+- required input artifacts/state;
+- concrete files/modules/interfaces or Harness surfaces affected;
+- executable experiment/build/test;
+- hypothesis and counterhypothesis being discriminated;
+- PASS/FAIL acceptance criteria;
+- evidence label required for promotion;
+- rollback/recovery rule;
+- downstream work unlocked;
+- exact blocker if the step cannot currently execute.
+
+The default shape is:
+
+`earliest proven blocker -> minimal repair/discriminator -> production-chain integration -> executable validation -> re-fusion -> next blocker -> ... -> target/handoff/audit gate`.
+
+Rules:
+
+- never place a downstream task ahead of an unresolved prerequisite merely because it is more interesting;
+- collapse duplicate tasks from different branches into one evidence-bearing work item;
+- reuse valid existing artifacts and tests instead of rebuilding equivalent proxies;
+- if a language/architecture change is not forced by an executable counterexample, prefer implementation, compiler/runtime, integration or measurement work;
+- if a step depends on unavailable Ubuntu/target-model/provider capability, mark the dependency precisely and continue any independent upstream work that remains executable;
+- the cascade must explicitly distinguish `EXECUTE_NOW`, `READY_AFTER_PREDECESSOR`, `BLOCKED_EXTERNAL`, and `RESEARCH_ONLY` states;
+- the cascade must be written back into durable repo-native work state when a writable GitHub surface is available;
+- the visible response must end with the current cascade summary plus the mandatory dynamic status footer.
+
+A `frank` run without this final evidence-derived cascade is **INCOMPLETE** even if the research report itself is excellent.

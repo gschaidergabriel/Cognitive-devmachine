@@ -1,0 +1,16 @@
+name: GO OOB control-plane skip probe
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  scheduler-skip-probe:
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: MUST_NOT_EXECUTE
+        run: echo "unexpected execution"

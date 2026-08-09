@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "ir_dialect": "ClayCode-G9-V3-research-projection",
+  "architecture_id": "FRANK-V0.1-CLAY-NATIVE-LOOP-BASE-BRIDGE",
+  "status": "RESEARCH_CANDIDATE_NO_PROMOTION",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "fixed_contracts": {
+    "clay_native_semantics": true,
+    "needle_only_intentional_foreign_semantic_subsystem": true,
+    "digital_retina_mandatory": true,
+    "model_output_never_mints_authority": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "semantic_organs": [
+    {"id":"needle_bridge","role":"fast classifier/router input bridge","semantic_boundary":"FOREIGN_TO_TYPED_CLAY","proposal_class":"OBSERVATION_OR_ROUTE_PROPOSAL","physical_fault_domain":"MAY_BE_ISOLATED"},
+    {"id":"digital_retina","role":"visual perception pipeline to VisualPercept","semantic_boundary":"PHYSICAL_VISION_TO_TYPED_CLAY","proposal_class":"OBSERVATION","physical_fault_domain":"MAY_BE_ISOLATED"},
+    {"id":"clay_model_4b","role":"Clay-native deliberative/generative model","semantic_boundary":"CLAY_NATIVE","proposal_class":"COGNITIVE_PROPOSAL_ONLY","physical_fault_domain":"HOT_RUNTIME_CANDIDATE"},
+    {"id":"semantic_state","role":"typed self/world/goal/value/uncertainty/provenance state","semantic_boundary":"CLAY_NATIVE","proposal_class":"STATE_TRANSITION_PROPOSAL","physical_fault_domain":"HOT_RUNTIME_CANDIDATE"},
+    {"id":"claygraph_memory","role":"derived associative topology and activation","semantic_boundary":"CLAY_NATIVE_DERIVED","proposal_class":"RETRIEVAL_ACTIVATION_PROPOSAL","physical_fault_domain":"LOGICALLY_UNIFIED_PHYSICALLY_EVIDENCE_BOUNDED"},
+    {"id":"gwt_workspace","role":"candidate competition, ignition, broadcast, uptake and re-entry","semantic_boundary":"CLAY_NATIVE","proposal_class":"COMPUTE_ROUTING_PROPOSAL","physical_fault_domain":"HOT_RUNTIME_CANDIDATE"},
+    {"id":"hyperposition","role":"preserve typed alternatives/codependencies and route reopening","semantic_boundary":"CLAY_NATIVE","proposal_class":"ALTERNATIVE_SET_PROPOSAL","physical_fault_domain":"HOT_RUNTIME_CANDIDATE"},
+    {"id":"loop_dynamics_controller","role":"typed recurrence measurement and continue/halt/route/escalate proposal","semantic_boundary":"CLAY_NATIVE","proposal_class":"RECURRENCE_CONTROL_PROPOSAL","physical_fault_domain":"HOT_RUNTIME_CANDIDATE"},
+    {"id":"unifieddb_plane","role":"logical identity/query/transaction/replay plane","semantic_boundary":"CLAY_NATIVE_LOGICAL","proposal_class":"PERSISTENCE_TRANSACTION_PROPOSAL","physical_fault_domain":"KEEP_SPECIALIZED_STORES_UNTIL_BENCHMARKED"},
+    {"id":"effect_gateway","role":"deterministic capability/effect validation and receipting","semantic_boundary":"CLAY_CONTRACT_COMPILED_ENFORCEMENT","proposal_class":"EXTERNAL_EFFECT_AUTHORIZATION_GATE","physical_fault_domain":"INDEPENDENT_SECURITY_BOUNDARY"}
+  ],
+  "state_contracts": {
+    "LoopDynamicsReadout": {
+      "fields": ["loop_id","loop_family","timescale","state_epoch","state_delta_norm","residual_pressure","input_injection","recurrence_count","recurrence_budget","coupling_estimate","jacobian_proxy","convergence_rate","oscillation_indicator","marginal_utility_next","stagnation_indicator","overthinking_indicator","intervention_ref","rollback_ref","evidence_refs","uncertainty","provenance"],
+      "authority": "OBSERVATION_ONLY"
+    },
+    "RecurrenceDecision": {
+      "variants": ["CONTINUE","HALT_CANDIDATE_CONVERGED","ROUTE","ESCALATE_STALLED","ABORT_DIVERGING","ROLLBACK"],
+      "requires": ["LoopDynamicsReadout","resource_budget","effect_scope"],
+      "authority": "PROPOSAL_UNTIL_EFFECT_GATEWAY"
+    }
+  },
+  "causal_relations": [
+    "observation->semantic_state",
+    "semantic_state->claygraph_memory",
+    "claygraph_memory->gwt_workspace",
+    "hyperposition->gwt_workspace",
+    "gwt_workspace->clay_model_4b",
+    "clay_model_4b->semantic_state_proposal",
+    "semantic_state_proposal->loop_dynamics_controller",
+    "loop_dynamics_controller->gwt_workspace",
+    "gwt_workspace->effect_gateway",
+    "effect_gateway->outcome_receipt",
+    "outcome_receipt->semantic_state",
+    "outcome_receipt->unifieddb_plane",
+    "outcome_receipt->claygraph_memory"
+  ],
+  "operations": [
+    {"id":"measure_loop","reads":["typed_loop_state","outcome_history"],"writes":["LoopDynamicsReadout"],"effects":[],"causal_parent_required":true},
+    {"id":"decide_recurrence","reads":["LoopDynamicsReadout","resource_budget"],"writes":["RecurrenceDecision"],"effects":[],"causal_parent_required":true},
+    {"id":"commit_effect","reads":["effect_proposal","capability_state","state_epoch"],"writes":["effect_receipt"],"effects":["EXTERNAL_EFFECT"],"capability_required":true,"revalidation_required":true}
+  ],
+  "invariants": [
+    "low_state_delta_plus_high_residual_pressure_is_not_convergence",
+    "recurrence_is_not_emergence",
+    "activation_is_not_truth",
+    "selection_is_not_authority",
+    "model_output_is_not_execution_authority",
+    "semantic_hash_is_distinct_from_exact_contract_hash",
+    "mixed_partial_semantic_epochs_are_forbidden"
+  ],
+  "mosaic_cove_identity": {
+    "basis_epoch_required": true,
+    "operation_scoped_identity_witness_required": true,
+    "global_scalar_identity_forbidden": true
+  },
+  "gwt_episode_receipts": ["candidate_set_ref","selection_ref","ignition_ref","broadcast_ref","reader_uptake_ref","effect_ref","outcome_ref","reentry_ref"],
+  "claygraph_mapping": {
+    "loop_nodes":"derived_epoch_bound",
+    "couplings":"typed_gain_delay_inhibition_timescale",
+    "interventions":"addressable_handles",
+    "truth_authority": false
+  },
+  "unifieddb_mapping": {
+    "logical_unification": true,
+    "physical_monolith_required": false,
+    "exact_event_effect_authority":"KEEP_ISOLATED_OR_REPLAY_SAFE",
+    "derived_graph_vector_fts":"REBUILDABLE_INDEXES",
+    "loop_state_timeseries":"PERSIST_WITH_EPOCH_AND_INTERVENTION_IDENTITY"
+  },
+  "persistence_replay_recovery": {
+    "checkpoint_before_material_recurrence_policy_change": true,
+    "deterministic_replay_identity_required": true,
+    "rollback_receipt_required": true
+  },
+  "reader_runtime_identity": {
+    "reader":"target Qwen-class 4B future validation required",
+    "runtime":"ClayCode compiler/runtime BASE gate",
+    "platform":"Ubuntu Linux developer system",
+    "android_mobile_edge":"OUT_OF_SCOPE_FOR_V0.1"
+  },
+  "required_next_executable_slice": "Compile LoopDynamicsReadout + RecurrenceDecision + one frozen FRANK loop through parser -> canonical typed IR -> type/effect -> evaluator/lowering -> Ubuntu runtime receipt.",
+  "upstream_dependencies": [
+    "FRANK_CLAY_NATIVE_CONTRACT",
+    "FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE",
+    "CLAYCODE_G9_V3",
+    "CLAYCODE_RELEASE_WORKSPACE",
+    "ClayGraph V2 frontier",
+    "UnifiedDB V9 frontier",
+    "GWT emergence readout contract",
+    "H1 reference harness baseline"
+  ]
+}

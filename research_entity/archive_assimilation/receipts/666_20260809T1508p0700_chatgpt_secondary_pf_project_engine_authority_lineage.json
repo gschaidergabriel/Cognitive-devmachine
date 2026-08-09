@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1508p0700-chatgpt-secondary-pf-project-engine-authority-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "created_at": "2026-08-09T15:08:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "shard": "Project Engine autonomy, persistence, policy, checkpoint, context-compaction and capability-boundary lineage",
+    "historical_commits": [
+      "62a661f51271e8ec024c3557b921eaddda0267d3",
+      "b6d8c17bde2087d88ef4a31c09d6db2756219739",
+      "1c5c682aa84c13eadbf47fbc54e4219230ce5ee6",
+      "cfa7062ba62bc9d83fffada29dcc03a75c4f4050"
+    ],
+    "current_head_paths_reviewed": [
+      "services/project_engine.py"
+    ]
+  },
+  "status": "COMPLETE_NONCOUNTING_SEMANTIC_HISTORY_SHARD",
+  "exact_coverage_credit": 0.0,
+  "exact_coverage_reason": "Project-Frankenstein exact tree/history denominator remains unfrozen; this is valid analyzed evidence but cannot define or increase repository-wide exact Level-0 coverage.",
+  "non_overlap_basis": "The current 666 workspace lists dedicated receipts for core, GWT, state/identity, safety/authority, LCME/SOMA, XENO/ClayCode, latency, Retina, Dream and Subconscious lineages, but no dedicated Project Engine autonomy/policy/checkpoint/capability lineage receipt.",
+  "findings": [
+    {
+      "id": "PF-PE-AUTH-001",
+      "epistemic_class": "VERIFIED_HISTORY_DIFF",
+      "status": "CURRENT_AS_HISTORICAL_FACT",
+      "claim": "Project Engine initially enforced project-root path confinement for model file/tool access, then a later commit deliberately removed that sandbox and accepted absolute filesystem paths while permitting broad system administration commands.",
+      "evidence": [
+        "62a661f51271e8ec024c3557b921eaddda0267d3",
+        "b6d8c17bde2087d88ef4a31c09d6db2756219739"
+      ]
+    },
+    {
+      "id": "PF-PE-PERSIST-002",
+      "epistemic_class": "VERIFIED_FROZEN_HEAD_CODE",
+      "status": "CURRENT_AT_FROZEN_HEAD",
+      "claim": "Frozen-head Project Engine retains persistent goals, entity-relation world state, policies, agent profile, traces, crash checkpoints and per-project token budgets.",
+      "evidence": ["services/project_engine.py@abba90a5767d85abc8a1ac340bae92842dab35c1"]
+    },
+    {
+      "id": "PF-PE-CTX-003",
+      "epistemic_class": "VERIFIED_HISTORY_DIFF_WITH_TEST_LIMIT",
+      "status": "HISTORICAL_MECHANISM",
+      "claim": "A 2026-04-01 lineage added context compaction above an estimated 40k-token threshold, SSE execution visibility and persistent task files; the commit explicitly reports structural verification but insufficient API credits for complete live end-to-end verification.",
+      "evidence": ["1c5c682aa84c13eadbf47fbc54e4219230ce5ee6"]
+    },
+    {
+      "id": "PF-PE-AUTON-004",
+      "epistemic_class": "VERIFIED_FROZEN_HEAD_CODE_PLUS_BOUNDED_INFERENCE",
+      "status": "OPEN_ARCHITECTURE_RISK",
+      "claim": "In the reviewed frozen-head autonomy path, the model is instructed to execute immediately and tool calls are dispatched through _exec_tool; no mandatory check_policy or external capability-gateway call was observed immediately before each tool dispatch in the reviewed slices. This is a bounded call-path finding, not proof that no external OS/service guard exists elsewhere.",
+      "evidence": ["services/project_engine.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],
+      "falsifier": "An exhaustive callgraph plus deployment/service inspection shows every privileged effect is obligatorily pre-authorized by an external immutable capability gateway or equivalent OS sandbox before _exec_tool can commit the effect."
+    },
+    {
+      "id": "PF-PE-POLICY-005",
+      "epistemic_class": "VERIFIED_FROZEN_HEAD_CODE",
+      "status": "SUPERSEDED_AS_AUTHORITY_MODEL_CANDIDATE",
+      "claim": "The reviewed policy checker is category/string/threshold based and therefore useful as a preference/risk layer but insufficient by itself as a complete execution-authority boundary.",
+      "evidence": ["services/project_engine.py@abba90a5767d85abc8a1ac340bae92842dab35c1"]
+    }
+  ],
+  "reuse_mapping": [
+    {
+      "mechanism": "crash checkpoints + time-travel traces + activity receipts",
+      "classification": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "harness", "unifieddb"]
+    },
+    {
+      "mechanism": "persistent goal/world/task state and tiered routing",
+      "classification": "REUSABLE_WITH_ADAPTATION",
+      "targets": ["frank", "claycode", "claygraph", "unifieddb"]
+    },
+    {
+      "mechanism": "context compaction retaining recent exchanges while compressing older tool results",
+      "classification": "MEASUREMENT_FOUNDATION",
+      "targets": ["frank", "claycode", "harness"]
+    },
+    {
+      "mechanism": "deliberate removal of project sandbox for broad full-system model tool access",
+      "classification": "NEGATIVE_RESULT_VALUE",
+      "targets": ["frank", "harness", "claycode"]
+    },
+    {
+      "mechanism": "heuristic prompt/policy enforcement as the principal control plane",
+      "classification": "SUPERSEDED_BUT_INFORMATIVE",
+      "targets": ["frank", "harness", "claycode", "unifieddb"]
+    }
+  ],
+  "architecture_delta": {
+    "keep": [
+      "checkpoint/replay semantics",
+      "persistent task DAG / goal state",
+      "tool outcome statistics",
+      "tiered model/cost routing",
+      "loop detection",
+      "token budgets",
+      "observable activity/effect traces"
+    ],
+    "do_not_inherit_as_is": [
+      "unrestricted model-owned full-system filesystem/shell authority",
+      "credential collection through conversational onboarding as an authority mechanism",
+      "string-matching policies as sufficient effect authorization",
+      "autonomous contact/effect execution without a mandatory external capability/commit gate"
+    ],
+    "current_clay_alignment": "Project Engine is an architecture quarry, not a blueprint. Reusable cognition/persistence patterns should be separated from effect authority. Model output and internal policy state must remain upstream of an external capability/commit gateway with receipts, rollback and denial semantics."
+  },
+  "earned_work_delta": {
+    "new_quantified_hours": 0.0,
+    "reason": "Material historical value is preserved, but quantified avoided-work credit is withheld pending row-level deduplication against existing safety/authority, LCME/SOMA and core architecture mappings."
+  },
+  "next_tests": [
+    "Exhaustively inspect Project-Frankenstein _exec_tool callgraph and every policy/capability precondition when a recursive/tree-capable read surface is available.",
+    "Inspect deployment/systemd/container sandboxing around Project Engine to test the counterhypothesis that external confinement compensated for in-process sandbox removal.",
+    "Translate reusable checkpoint/replay/task semantics into current ClayCode/Harness contracts only with external capability-gateway invariants and differential bypass tests."
+  ],
+  "level0_gate_effect": "NO_PASS_CHANGE",
+  "level0_blocker": "Project-Frankenstein full frozen tree/history denominator remains unavailable on the current read surface."
+}

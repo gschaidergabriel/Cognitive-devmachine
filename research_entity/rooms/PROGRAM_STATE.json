@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.7",
+  "schema_version": "1.8",
   "program_id": "frank-staged-build",
   "narrative_ref": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "status": "ACTIVE",
@@ -47,8 +47,15 @@
         "denominator_state_field": "combined_progress.denominator_state",
         "fallback_percent": 0
       },
-      "required_pass_artifacts": ["research_entity/archive_assimilation/666_RELEASE_MANIFEST.json", "research_entity/forecast/HISTORICAL_EARNED_WORK.json"],
-      "completion_law": "Within <=3h active wall-clock, Drive clay archive exact obligations + Project-Frankenstein exact obligations + cross-source reconciliation/branch feedback + historical earned-work mapping -> 100% -> PASS. External connector waiting is reported separately and never hidden by weakening coverage."
+      "required_pass_artifacts": [
+        "research_entity/archive_assimilation/666_RELEASE_MANIFEST.json",
+        "research_entity/forecast/HISTORICAL_EARNED_WORK.json"
+      ],
+      "completion_law": "Within <=3h active wall-clock, the persistent 666 swarm exhaustively accounts for and evaluates the full frozen Drive clay corpus plus the full frozen Project-Frankenstein Level-0 history/tree scope, reconciles both source universes, completes branch feedback and historical earned-work audit, validates the release manifest, reaches exact coverage 100%, then PASS. Sampling is prioritization only and never completion. External connector waiting is reported separately and never hidden by weakening coverage.",
+      "execution_laws": [
+        "research_entity/global/LEVEL0_EXHAUSTIVE_CORPUS_COMPLETION_LAW.md",
+        "research_entity/global/LEVEL0_SWARM_EXECUTION_LAW.md"
+      ]
     },
     "BASE_CLAYCODE_RELEASE": {
       "label": "BASE - ClayCode General-Purpose Compiler/Runtime",
@@ -133,7 +140,7 @@
       "meaning": "After training-data artifacts are frozen, stop and wait for explicit project-owner authorization. DOOMSDAY forecasting may continue conditionally, but execution of final paid training does not start automatically."
     }
   },
-  "current_stage_goal": "Level 0: in <=3 active hours assimilate the Drive FRANK archive and Project-Frankenstein history, reconcile them, map the ~8-month historical effort onto current Clay 0.1 earned work, and feed all material knowledge into the Research Entity before ClayCode BASE compilation work advances.",
+  "current_stage_goal": "Level 0: within <=3 active hours, use the persistent repo-native 666 swarm to exhaustively evaluate the complete frozen Drive FRANK corpus and complete frozen Project-Frankenstein Level-0 history/tree scope, reconcile all duplicates/versions/recovery branches, map the ~8-month historical effort onto current Clay 0.1 earned work, feed all material knowledge into the Research Entity, audit exact 100% coverage and PASS before ClayCode BASE advances.",
   "progress_semantics": {
     "complete_statuses": ["PASS", "COMPLETE", "COMPLETED", "DONE", "CLOSED"],
     "failed_statuses": ["FAILED", "REFUTED"],
@@ -153,12 +160,15 @@
     "UDB_UNIFIED_DATABASE": ["unifieddb", "harness", "claygraph", "frank", "claycode", "hyperposition", "gwt", "emergenz", "clay"],
     "DATA_LORA_TRAINING_DATA": ["claycode", "frank", "gwt", "hyperposition", "emergenz", "harness", "claygraph", "unifieddb", "clay"]
   },
-  "autonomous_progression_rule": "On exact 666 while Level 0 is open, autonomously claim and execute the next non-overlapping assimilation/earned-work shard. After Level-0 PASS, exact 666 spawns one seeded high-value diverse research field, researches it immediately, cross-connects it to the mesh and routes material deltas to specialist branches. Milestone gates remain the shared attractor; 666 exploration does not force every worker to attack the same gate directly.",
+  "autonomous_progression_rule": "On exact 666 while Level 0 is open, join/resume the persistent exhaustive Level-0 swarm campaign. Discover active peers/tasks/leases, compute the current rest-obligation matrix from the latest frozen source epochs/scope laws, claim and execute the highest-value non-overlapping obligation, publish receipts/deltas, release the lease, cross-read peer results, pivot on overlap, immediately claim another open obligation while execution capacity remains, and continue until Level-0 PASS or the current invocation's actual execution surface is exhausted. Sampling is prioritization only, never completion. After Level-0 PASS, exact 666 switches to one seeded high-value diverse research field per invocation and feeds evidence-preserving deltas into the mesh.",
   "global_training_rule": "No paid or final model training is authorized by program progression alone. After DATA_LORA_TRAINING_DATA completes, transition to WAIT and require an explicit owner instruction before final training. The dynamic DOOMSDAY forecast remains conditional on immediate authorization when the data gate is ready until such authorization exists.",
   "mandatory_cross_cutting_refs": [
     "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
     "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
     "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
+    "research_entity/global/LEVEL0_EXHAUSTIVE_CORPUS_COMPLETION_LAW.md",
+    "research_entity/global/LEVEL0_SWARM_EXECUTION_LAW.md",
+    "research_entity/archive_assimilation/666_SWARM_CAMPAIGN.json",
     "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
     "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
     "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",

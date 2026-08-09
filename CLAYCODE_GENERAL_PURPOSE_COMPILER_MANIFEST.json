@@ -1,7 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "manifest": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST",
   "created_at": "2026-08-09T20:05:00+07:00",
+  "last_updated_at": "2026-08-09T21:12:00+07:00",
   "actor": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
@@ -23,50 +24,124 @@
       "evidence": "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json"
     },
     "CC-WP-02-PARSER-CANON": {
+      "formal_status": "OPEN_STRICT_AND_REAL_FRANK_CLASSIFICATION_EVIDENCE",
+      "implementation_status": "V9_REPAIR_WIRED_STRICT_UBUNTU_RECEIPT_PENDING",
+      "evidence": [
+        "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark",
+        "tools/claycode_base_frontend_validation.py",
+        "tools/claycode_base_canonicalizer.py",
+        "tools/claycode_frank_frontend_gap_probe.py",
+        "frank_reference/claycode/frank_runtime.provenance.json",
+        "research_entity/state/work/events/20260809T210800p0700_chatgpt_secondary_claycode_base14_v9_frank_gap_supersede.json"
+      ],
+      "blocker": "Strict Lark/interegular exact-main receipt is still required. The provenance-bound real FRANK root source also exposes high-level use/fn/let/require/return surface forms that must be classified by executable evidence as an admitted dialect/pre-lowering layer or the smallest versioned frontend amendment."
+    },
+    "CC-WP-03-IR-TYPES": {
       "formal_status": "OPEN_TARGET_EVIDENCE",
       "implementation_status": "CLOSURE_READY",
-      "evidence": ["research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark", "tools/claycode_base_frontend.py", "tools/claycode_base_canonicalizer.py", "tools/claycode_andreas_ubuntu_target_gate.py"]
+      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_wp03_typed_ir_validation.py"]
     },
-    "CC-WP-03-IR-TYPES": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_wp03_typed_ir_validation.py"]},
-    "CC-WP-04-TYPE-EFFECT": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_effect_pipeline.py", "tools/claycode_effect_runtime_bridge_validation.py"]},
-    "CC-WP-05-EVALUATOR": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain_validation.py"]},
-    "CC-WP-06-COMPILER-LOWERING": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain.py"]},
-    "CC-WP-07-RUNTIME-ABI-FFI": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_runtime_gateway.py", "tools/claycode_base_package_compiler.py"]},
-    "CC-WP-08-STDLIB-SDK": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_stdlib_extensions.py", "tools/claycode_base_package_compiler.py"]},
-    "CC-WP-09-CONCURRENCY-MEMORY": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_runtime_gateway.py", "tools/claycode_base_resource_lifetime_validation.py"]},
+    "CC-WP-04-TYPE-EFFECT": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_effect_pipeline.py", "tools/claycode_effect_runtime_bridge_validation.py"]
+    },
+    "CC-WP-05-EVALUATOR": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain_validation.py"]
+    },
+    "CC-WP-06-COMPILER-LOWERING": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_compiler.py", "tools/claycode_base_pure_toolchain.py"]
+    },
+    "CC-WP-07-RUNTIME-ABI-FFI": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_runtime_gateway.py", "tools/claycode_base_package_compiler.py"]
+    },
+    "CC-WP-08-STDLIB-SDK": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_stdlib_extensions.py", "tools/claycode_base_package_compiler.py"]
+    },
+    "CC-WP-09-CONCURRENCY-MEMORY": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_runtime.py", "tools/claycode_base_runtime_gateway.py", "tools/claycode_base_resource_lifetime_validation.py"]
+    },
     "CC-WP-10-GENERAL-APP-SUITE": {
-      "formal_status": "BLOCKED",
-      "implementation_status": "NINE_OF_TEN_TARGET_RUNNER_READY",
-      "evidence": ["tools/claycode_andreas_application_acceptance.py", "tools/claycode_base_application_proxy_suite_v2.py"],
-      "blocker": "APP-10 FULL_FRANK_HANDOFF has no valid receipt; proxy handoff is forbidden."
+      "formal_status": "BLOCKED_TARGET_EVIDENCE",
+      "implementation_status": "TARGET_CHAIN_READY_FULL_FRANK_GENERATION_INCLUDED",
+      "evidence": [
+        "tools/claycode_base_target_application_suite_v2_runner.py",
+        "tools/claycode_full_frank_active_assembly_validation.py",
+        "tools/claycode_andreas_application_acceptance.py",
+        "tools/claycode_base_application_proxy_suite_v2.py"
+      ],
+      "blocker": "No physical Andreas Ubuntu ten-application production receipt exists on main yet. Proxy/hosted evidence is forbidden from satisfying APP-01..10."
     },
-    "CC-WP-11-FUZZ-CONFORMANCE": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_fuzz_conformance.py"]},
-    "CC-WP-12-CORPUS-HELDOUT": {"formal_status": "OPEN_TARGET_EVIDENCE", "implementation_status": "CLOSURE_READY", "evidence": ["tools/claycode_base_corpus_generator.py"]},
+    "CC-WP-11-FUZZ-CONFORMANCE": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_fuzz_conformance.py"]
+    },
+    "CC-WP-12-CORPUS-HELDOUT": {
+      "formal_status": "OPEN_TARGET_EVIDENCE",
+      "implementation_status": "CLOSURE_READY",
+      "evidence": ["tools/claycode_base_corpus_generator.py"]
+    },
     "CC-WP-13-HARNESS-HANDOFF": {
-      "formal_status": "BLOCKED",
-      "implementation_status": "REAL_SUBSYSTEM_HANDOFF_ONLY",
-      "evidence": ["tools/claycode_frank_score_handoff_validation.py", "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_SCORE_V1.clay"],
-      "blocker": "H2 must preserve typed packet/provenance/ancestry identity, semantic epoch validity, conflict alternatives, bounded deterministic selection, re-expansion identity and authority invariants. Current direct compiled evidence covers packet score only."
+      "formal_status": "BLOCKED_TARGET_EVIDENCE",
+      "implementation_status": "FULL_FRANK_GENERIC_DIFFERENTIAL_TARGET_FINALIZER_READY",
+      "evidence": [
+        "tools/claycode_full_frank_active_assembly_validation.py",
+        "tools/claycode_full_frank_target_finalizer_runner.py",
+        "research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay"
+      ],
+      "blocker": "The production FULL_FRANK_HANDOFF receipt is absent because the physical registered Andreas Ubuntu target has not yet completed the target differential. The separate real frank_runtime.clay surface gap is being classified independently and must not be conflated with an H2 semantic escape-hatch claim."
     },
     "CC-WP-14-BASE-AUDIT": {
-      "formal_status": "BLOCKED_BY_02_13",
+      "formal_status": "BLOCKED_BY_02_TARGET_13",
       "implementation_status": "AUDITOR_READY",
       "evidence": ["tools/claycode_base_wp14_audit.py", "research_entity/claycode/BASE_DEFECT_LEDGER.json", "tools/claycode_andreas_base14_closure.py"]
     }
   },
-  "closed_critical_defects": ["CC-DEFECT-P0-001", "CC-DEFECT-P0-002", "CC-DEFECT-P1-001", "CC-DEFECT-P1-002", "CC-DEFECT-P1-003", "CC-DEFECT-P1-004"],
+  "closed_critical_defects": [
+    "CC-DEFECT-P0-001",
+    "CC-DEFECT-P0-002",
+    "CC-DEFECT-P1-001",
+    "CC-DEFECT-P1-002",
+    "CC-DEFECT-P1-003",
+    "CC-DEFECT-P1-004"
+  ],
   "open_p0": 0,
   "open_p1": 0,
   "unresolved_language_counterexamples": [
     {
-      "id": "CC-COUNTEREXAMPLE-FRANK-H2-ACTIVE-ASSEMBLY",
-      "status": "OPEN",
-      "required_semantics": ["typed structured packet identity", "epoch validity", "bounded deterministic selection", "conflict retention", "ancestry diversity", "re-expansion identity", "deterministic assembly hash", "authority non-minting"],
-      "current_gap": "The production executable compiler directly covers scalar typed functions/effects/packages; it has not yet directly realized the complete H1 ActiveAssembly behavior in H2 ClayCode without a FRANK-specific semantic escape hatch.",
-      "language_change_allowed": "ONLY_IF a generic typed FFI/runtime/collection realization cannot preserve the H1 behavior under executable differential testing."
+      "id": "CC-COUNTEREXAMPLE-FRANK-RUNTIME-SURFACE",
+      "status": "OPEN_CLASSIFICATION",
+      "source": "frank_reference/claycode/frank_runtime.clay",
+      "provenance": "frank_reference/claycode/frank_runtime.provenance.json",
+      "observed_surface_gap": ["use", "fn", "let", "require", "return"],
+      "current_gap": "The exact external FRANK root semantic-runtime source is outside the current V9 BASE surface. It is not yet proven whether these forms are a separate high-level ClayCode dialect/sugar that can be legality-checked and pre-lowered into frozen BASE or require the smallest versioned frontend amendment.",
+      "language_change_allowed": "ONLY_IF an explicit typed/versioned dialect or pre-lowering cannot preserve required semantic identity, type/effect behavior and authority invariants under executable differential testing."
+    },
+    {
+      "id": "CC-TARGET-FULL-FRANK-EVIDENCE",
+      "status": "OPEN_TARGET_EVIDENCE",
+      "current_gap": "The full frozen H1 ActiveAssembly generic structured differential has a fail-closed target validator, but no physical target production receipt is present on main.",
+      "language_change_allowed": "NO. Missing target execution is an evidence/transport blocker, not language insufficiency."
     }
   ],
-  "next_command_on_target": "CLAYCODE_TARGET_HOST_ID=ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM python tools/claycode_andreas_base14_closure.py",
+  "next_command_on_target": "python3 tools/claycode_run_andreas_target_acceptance.py",
   "promotion_allowed": false,
-  "promotion_blockers": ["ANDREAS_TARGET_RECEIPTS_NOT_PRESENT", "FULL_FRANK_HANDOFF_NOT_PROVEN", "WP14_AUDIT_NOT_PASS"]
+  "promotion_blockers": [
+    "WP02_STRICT_V9_RECEIPT_NOT_PRESENT",
+    "REAL_FRANK_SURFACE_ROUTE_NOT_ADJUDICATED",
+    "ANDREAS_TARGET_RECEIPTS_NOT_PRESENT",
+    "FULL_FRANK_TARGET_RECEIPT_NOT_PRESENT",
+    "WP14_AUDIT_NOT_PASS"
+  ]
 }

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1600p0700_chatgpt_secondary_relation_generic",
+  "negative_results": [
+    {
+      "id": "NR-CC-G9-RELATION-LEXER-004",
+      "status": "NEGATIVE_RESULT_REUSED_AND_REFINED",
+      "claim_tested": "Open-ended word relations can safely derive semantic operator status from parser/lexer acceptance alone.",
+      "observed": "Prior E2B/current-worker evidence shows relation-word vs identifier collisions, and concurrent declared-relation testing shows a naïve arbitrary-identifier infix parser admitted 50000/50000 unknown relation words.",
+      "interpretation": "Semantic relation admission requires a typed resolver/registry independent of lexer acceptance, whether the surface is generic call or declared infix.",
+      "falsifier": "A production parser demonstrates fail-closed unknown-relation semantics without a separate typed resolution step and with no ambiguity or accidental admission across the full corpus/fuzz suite."
+    },
+    {
+      "id": "NR-CC-G9-BINARY-RELATION-UNIVERSALITY-005",
+      "status": "NEGATIVE_RESULT_ARCHITECTURE_CONSTRAINT",
+      "claim_tested": "The new generic binary relation form can serve as the universal relation representation for ClayCode/ClayGraph/Hyperposition.",
+      "observed": "Current ClayGraph and Hyperposition contracts require explicit n-ary/higher-order relation identity, role bindings, hyperedge interventions and pairwise-reduction comparison semantics that are not established by this binary micro-oracle.",
+      "interpretation": "Do not flatten higher-order relations into binary Relation IR merely to simplify parser surface. Binary generic syntax is a parser/canonicalization candidate only.",
+      "falsifier": "Executable matched representations show binary encoding preserves all role/identity/intervention/replay semantics and has equal or lower cost without hidden reconstruction assumptions."
+    }
+  ]
+}

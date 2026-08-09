@@ -4,16 +4,11 @@ from typing import Any, Mapping, Iterable
 import hashlib, json, math, re
 
 AUTHORITY_NONE = "NONE"
-SCHEMA_VERSION = "h1-needle-runtime-contract-0.3"
+FRANK_MAX_NEEDLE_CALLS = 1
+SCHEMA_VERSION = "h1-needle-runtime-contract-0.4"
 
 class NeedleAdapterError(ValueError):
     pass
-
-def canonical_json(v: Any) -> str:
-    return json.dumps(v, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
-
-def sha256_json(v: Any) -> str:
-    return hashlib.sha256(canonical_json(v).encode("utf-8")).hexdigest()
 
 def _reject_duplicate_pairs(pairs):
     out = {}
@@ -41,6 +36,12 @@ def strict_json_loads(text: str) -> Any:
         raise NeedleAdapterError("non-finite JSON number")
     return value
 
+def canonical_json(v: Any) -> str:
+    return json.dumps(v, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
+
+def sha256_json(v: Any) -> str:
+    return hashlib.sha256(canonical_json(v).encode("utf-8")).hexdigest()
+
 def to_snake_case(name: str) -> str:
     s = re.sub(r"[^a-zA-Z0-9_]+", "_", name)
     s = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s)
@@ -64,7 +65,9 @@ class AliasProfile:
             if not tgt:
                 raise NeedleAdapterError(f"empty normalized tool name for {src}")
             if tgt in target_to_source and target_to_source[tgt] != src:
-                raise NeedleAdapterError(f"tool alias collision: {target_to_source[tgt]} and {src} -> {tgt}")
+                raise NeedleAdapterError(
+                    f"tool alias collision: {target_to_source[tgt]} and {src} -> {tgt}"
+                )
             target_to_source[tgt] = src
         for tool, aliases in self.param_aliases.items():
             if tool not in source:
@@ -74,7 +77,9 @@ class AliasProfile:
                 if not tgt:
                     raise NeedleAdapterError(f"empty param alias: {tool}.{src}")
                 if tgt in rev and rev[tgt] != src:
-                    raise NeedleAdapterError(f"param alias collision: {tool}.{rev[tgt]} and {tool}.{src} -> {tgt}")
+                    raise NeedleAdapterError(
+                        f"param alias collision: {tool}.{rev[tgt]} and {tool}.{src} -> {tgt}"
+                    )
                 rev[tgt] = src
 
     def needle_tool_name(self, frank_name: str) -> str:
@@ -97,8 +102,14 @@ class AliasProfile:
         return needle_param
 
 DEFAULT_ALIASES = AliasProfile(
-    tool_aliases={"moeglichkeiten": "list_capabilities", "wissen": "search_knowledge"},
-    param_aliases={"calc": {"ausdruck": "expression"}, "claude_code": {"auftrag": "task"}},
+    tool_aliases={
+        "moeglichkeiten": "list_capabilities",
+        "wissen": "search_knowledge",
+    },
+    param_aliases={
+        "calc": {"ausdruck": "expression"},
+        "claude_code": {"auftrag": "task"},
+    },
 )
 
 def _openai_properties(parameters: Any) -> tuple[dict[str, Any], set[str]]:
@@ -128,10 +139,14 @@ def _openai_properties(parameters: Any) -> tuple[dict[str, Any], set[str]]:
             required.add(k)
     return props, required
 
-def canonicalize_tools(tools: list[dict[str, Any]], aliases: AliasProfile = DEFAULT_ALIASES) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
-    """Canonicalize schemas to the flat parameter map expected by current Needle constrained.py."""
-    if not isinstance(tools, list):
-        raise NeedleAdapterError("tools must be a list")
+def canonicalize_tools(
+    tools: list[dict[str, Any]],
+    aliases: AliasProfile = DEFAULT_ALIASES,
+) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Canonicalize schemas to the exact flat parameter map expected by Needle constrained.py.
+
+    Returns (needle_tools, validation_contract_by_needle_name).
+    """
     names = [t.get("name") for t in tools if isinstance(t, dict) and isinstance(t.get("name"), str)]
     aliases.validate(names)
     out = []
@@ -163,17 +178,33 @@ def canonicalize_tools(tools: list[dict[str, Any]], aliases: AliasProfile = DEFA
             elif nspec.get("required") is True:
                 needle_required.add(np)
             needle_props[np] = nspec
-        nt = {"name": needle_name, "description": str(tool.get("description", "")), "parameters": needle_props}
+        nt = {
+            "name": needle_name,
+            "description": str(tool.get("description", "")),
+            "parameters": needle_props,
+        }
         out.append(nt)
-        contract[needle_name] = {"frank_name": frank_name, "params": needle_props, "reverse_param_map": reverse, "required": sorted(needle_required)}
+        contract[needle_name] = {
+            "frank_name": frank_name,
+            "params": needle_props,
+            "reverse_param_map": reverse,
+            "required": sorted(needle_required),
+        }
     return out, contract
 
-def assert_complete_encoder_budget(query_token_count: int, tools_token_count: int, max_enc_len: int = 1024, min_headroom: int = 0) -> int:
+def assert_complete_encoder_budget(
+    query_token_count: int,
+    tools_token_count: int,
+    max_enc_len: int = 1024,
+    min_headroom: int = 0,
+) -> int:
     total = int(query_token_count) + 1 + int(tools_token_count)
     if min(query_token_count, tools_token_count, max_enc_len, min_headroom) < 0:
         raise NeedleAdapterError("token counts and budgets must be non-negative")
     if total + int(min_headroom) > int(max_enc_len):
-        raise NeedleAdapterError(f"encoder budget exceeded: total={total}, headroom_required={min_headroom}, max={max_enc_len}")
+        raise NeedleAdapterError(
+            f"encoder budget exceeded: total={total}, headroom_required={min_headroom}, max={max_enc_len}"
+        )
     return total
 
 def _type_ok(value: Any, spec: Mapping[str, Any]) -> bool:
@@ -205,10 +236,20 @@ class NeedleDecisionReceipt:
     authority: str
     effect_eligible: bool
     effect_gate_required: bool
+    fallback_required: bool
     preconstraint_margin: float | None = None
     preconstraint_entropy: float | None = None
 
-def validate_output(raw_output: str, needle_tools: list[dict[str, Any]], contract: Mapping[str, Mapping[str, Any]], aliases: AliasProfile = DEFAULT_ALIASES, needle_id: str = "cactus-compute/needle", needle_version: str = "UNPINNED", preconstraint_margin: float | None = None, preconstraint_entropy: float | None = None) -> NeedleDecisionReceipt:
+def validate_output(
+    raw_output: str,
+    needle_tools: list[dict[str, Any]],
+    contract: Mapping[str, Mapping[str, Any]],
+    aliases: AliasProfile = DEFAULT_ALIASES,
+    needle_id: str = "cactus-compute/needle",
+    needle_version: str = "UNPINNED",
+    preconstraint_margin: float | None = None,
+    preconstraint_entropy: float | None = None,
+) -> NeedleDecisionReceipt:
     reasons: list[str] = []
     calls_out: list[dict[str, Any]] = []
     toolset_hash = sha256_json(needle_tools)
@@ -220,38 +261,67 @@ def validate_output(raw_output: str, needle_tools: list[dict[str, Any]], contrac
         reasons.append(f"JSON_PARSE:{type(e).__name__}")
     if decoded is not None and not isinstance(decoded, list):
         reasons.append("TOP_LEVEL_NOT_LIST")
+    if isinstance(decoded, list) and len(decoded) > FRANK_MAX_NEEDLE_CALLS:
+        reasons.append(f"MULTI_CALL_FORBIDDEN:{len(decoded)}>{FRANK_MAX_NEEDLE_CALLS}")
     if isinstance(decoded, list):
         for i, call in enumerate(decoded):
             if not isinstance(call, dict):
-                reasons.append(f"CALL_{i}_NOT_OBJECT"); continue
+                reasons.append(f"CALL_{i}_NOT_OBJECT")
+                continue
             if set(call) != {"name", "arguments"}:
-                reasons.append(f"CALL_{i}_FIELDS_INVALID"); continue
-            name, args = call.get("name"), call.get("arguments")
+                reasons.append(f"CALL_{i}_FIELDS_INVALID")
+                continue
+            name = call.get("name")
+            args = call.get("arguments")
             if not isinstance(name, str) or name not in contract:
-                reasons.append(f"CALL_{i}_UNAVAILABLE_TOOL"); continue
+                reasons.append(f"CALL_{i}_UNAVAILABLE_TOOL")
+                continue
             if not isinstance(args, dict):
-                reasons.append(f"CALL_{i}_ARGUMENTS_NOT_OBJECT"); continue
+                reasons.append(f"CALL_{i}_ARGUMENTS_NOT_OBJECT")
+                continue
             tc = contract[name]
-            specs, required = tc["params"], set(tc["required"])
-            unknown, missing = set(args) - set(specs), required - set(args)
-            if unknown: reasons.append(f"CALL_{i}_UNKNOWN_ARGS:{','.join(sorted(unknown))}")
-            if missing: reasons.append(f"CALL_{i}_MISSING_REQUIRED:{','.join(sorted(missing))}")
-            type_failed = False
+            specs = tc["params"]
+            required = set(tc["required"])
+            unknown = set(args) - set(specs)
+            missing = required - set(args)
+            if unknown:
+                reasons.append(f"CALL_{i}_UNKNOWN_ARGS:{','.join(sorted(unknown))}")
+            if missing:
+                reasons.append(f"CALL_{i}_MISSING_REQUIRED:{','.join(sorted(missing))}")
             for key, value in args.items():
                 if key in specs and not _type_ok(value, specs[key]):
                     reasons.append(f"CALL_{i}_TYPE:{key}")
-                    type_failed = True
-            if unknown or missing or type_failed:
+            if unknown or missing or any(r.startswith(f"CALL_{i}_TYPE:") for r in reasons):
                 continue
             frank_name = tc["frank_name"]
             frank_args = {}
             for nk, v in args.items():
                 fk = tc["reverse_param_map"].get(nk, aliases.frank_param_name(frank_name, nk))
                 if fk is None:
-                    reasons.append(f"CALL_{i}_REVERSE_ALIAS"); break
+                    reasons.append(f"CALL_{i}_REVERSE_ALIAS")
+                    break
                 frank_args[fk] = v
             else:
                 calls_out.append({"name": frank_name, "arguments": frank_args})
     accepted = not reasons
-    outcome = "NO_TOOL_PROPOSAL" if accepted and isinstance(decoded, list) and len(decoded) == 0 else ("ROUTE_PROPOSAL" if accepted else "REJECTED")
-    return NeedleDecisionReceipt(schema_version=SCHEMA_VERSION, needle_id=needle_id, needle_version=needle_version, toolset_sha256=toolset_hash, raw_output_sha256=raw_hash, outcome=outcome, accepted=accepted, frank_calls=tuple(calls_out if accepted else []), rejection_reasons=tuple(reasons), authority=AUTHORITY_NONE, effect_eligible=False, effect_gate_required=True, preconstraint_margin=preconstraint_margin, preconstraint_entropy=preconstraint_entropy)
+    outcome = "NO_TOOL_PROPOSAL" if accepted and isinstance(decoded, list) and len(decoded) == 0 else (
+        "ROUTE_PROPOSAL" if accepted else "REJECTED"
+    )
+    fallback_required = outcome in {"NO_TOOL_PROPOSAL", "REJECTED"}
+    return NeedleDecisionReceipt(
+        schema_version=SCHEMA_VERSION,
+        needle_id=needle_id,
+        needle_version=needle_version,
+        toolset_sha256=toolset_hash,
+        raw_output_sha256=raw_hash,
+        outcome=outcome,
+        accepted=accepted,
+        frank_calls=tuple(calls_out if accepted else []),
+        rejection_reasons=tuple(reasons),
+        authority=AUTHORITY_NONE,
+        effect_eligible=False,
+        effect_gate_required=True,
+        fallback_required=fallback_required,
+        preconstraint_margin=preconstraint_margin,
+        preconstraint_entropy=preconstraint_entropy,
+    )

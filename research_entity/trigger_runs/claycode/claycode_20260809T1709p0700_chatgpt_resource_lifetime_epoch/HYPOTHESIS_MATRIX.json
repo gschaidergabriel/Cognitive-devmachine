@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1709p0700_chatgpt_resource_lifetime_epoch",
+  "hypotheses":[
+    {
+      "id":"H-CC-RL-01",
+      "statement":"Current ClayCode G9 semantics can realize bounded host-resource lifetime safety through typed FFI/runtime lowering using existing CapabilityToken/ResourceRef/effect boundaries; no DB-specific core primitive is required for this slice.",
+      "status":"OPEN_SUPPORTED_NOT_PROMOTED",
+      "evidence":["20,000 randomized broker/oracle operations with 0 mismatches","current DB transaction host-resource micro-packet","WebAssembly Component Model opaque own/borrow resource handles"],
+      "falsifier":"A real ClayCode application or FRANK component requiring resource lifetime behavior that cannot be represented through existing typed ResourceRef/capability/effect semantics plus runtime ABI/FFI."
+    },
+    {
+      "id":"H-CC-RL-02",
+      "statement":"Host-resource validity must include freshness/capability epoch or equivalent generational identity; opaque handle identity alone is insufficient against stale reuse.",
+      "status":"OPEN_SUPPORTED_NOT_PROMOTED",
+      "evidence":["epoch-check ablation accepted stale handle when the check was removed","parallel ABA worker tests slot-reuse identity as a complementary failure mode"],
+      "falsifier":"A target backend whose generative handle semantics provably prevent all stale reuse without an explicit or implicit freshness/generation mechanism."
+    },
+    {
+      "id":"H-CC-RL-03",
+      "statement":"Borrow/ownership lifetime must be enforced either statically, dynamically, or both; allowing owner close while a borrow remains live creates an executable safety counterexample.",
+      "status":"OPEN_SUPPORTED_NOT_PROMOTED",
+      "evidence":["borrow-close ablation changed rejection into acceptance","Component Model dynamically tracks borrows/lends and enforces drop conditions"],
+      "falsifier":"A backend/translation proof showing equivalent lifetime safety without borrow tracking because stronger ownership constraints make the state unreachable."
+    },
+    {
+      "id":"H-CC-RL-04",
+      "statement":"Resource type identity must survive lowering; an untyped opaque integer/handle is insufficient because cross-resource misuse becomes executable when the type check is removed.",
+      "status":"OPEN_SUPPORTED_NOT_PROMOTED",
+      "evidence":["type-check ablation accepted db handle as file handle","Component Model resource types are generative and classify handle kinds"],
+      "falsifier":"A lowering that erases resource type identity yet proves cross-kind substitution impossible by a stronger independently verified mechanism."
+    }
+  ],
+  "counterhypotheses":[
+    {"id":"CH-CC-RL-A","statement":"The final backend already supplies all lifetime/freshness/type guarantees, so ClayCode/runtime metadata would be redundant and should not duplicate them."},
+    {"id":"CH-CC-RL-B","statement":"A static affine type checker can make runtime borrow/freshness checks unnecessary for all trusted lowering paths."},
+    {"id":"CH-CC-RL-C","statement":"Capability epoch belongs only to effect authorization, not resource identity; tying them could spuriously invalidate long-lived resources."}
+  ],
+  "decision":"Do not change ClayCode syntax/core semantics from this run. Specify/test a backend-neutral ResourceHandle lowering contract in CC-WP-07 and require target-specific translation validation."
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version":"2.0",
+  "event_id":"clay-work-event:20260809-projection-bridge-validation",
+  "kind":"WORK_CREATE",
+  "actor":"chatgpt-secondary",
+  "created_at":"2026-08-09T13:46:00Z",
+  "payload":{
+    "work_id":"work:clay-projection-bridge-e2e-20260809",
+    "goal_ref":"FRANK_V0_1_ANDREAS_PC",
+    "origin_class":"CHATGPT_IMPLEMENTATION_TRANSLATION",
+    "title":"Validate Clay cross-organ work and possibility projection bridge",
+    "work_clay":{"task":"Verify local Claude sync publishes safe hash-stable CURRENT_DYNAMIC_WORK.clay and CURRENT_SYSTEM_POSSIBILITY.clay to origin without merging/disturbing the worktree. Verify a remote ChatGPT organ can read both projections and that no secret-like fields leak."},
+    "reason_clay":{"why":"Hosted ChatGPT cannot open local SQLite. The repo projections are required for a real shared possibility/work surface."},
+    "completion_clay":{"tests":["projection files visible on remote","unchanged projection does not create needless semantic change","worktree/staging preserved","secret scrub test passes","remote read reconstructs current work ids and capability states"]},
+    "evidence_need":["git status before/after","remote blob hashes","sanitization test receipt"],
+    "executor_policy":{"prefer":"claude-code-lead"},
+    "required_capabilities":["tool:python3","tool:git"],
+    "write_scope":["research_entity/runtime/","research_entity/state/work/projections/"],
+    "dependencies":[{"work_id":"work:clay-workfabric-runtime-validation-20260809","condition":"runtime core passes"}],
+    "invalidators":["projection transport replaced by a validated lower-cost equivalent"],
+    "base_priority":0.88,
+    "expected_impact":0.9,
+    "urgency":0.75,
+    "information_gain":0.85,
+    "status":"READY"
+  }
+}

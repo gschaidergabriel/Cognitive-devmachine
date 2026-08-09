@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness_20260809T1703p0700_wp02_crash_recovery_chatgpt_secondary",
+  "execution_classes": {
+    "repository": {"provider":"GitHub connector","status":"EXECUTED_RW_WITH_CAS_CONFLICT_REREAD_AND_RETRY"},
+    "executable": {"provider":"local Linux Python/pytest sandbox","status":"EXECUTED","result":"11 passed in 5.27s"},
+    "implementation": {"provider":"current FRANK repository + Clay research repo","status":"READ_PRIMARY_RUNTIME_SCHEMA_AND_HARNESS_CONTRACTS"},
+    "e2b_sandbox": {"status":"NOT_WORKER_SURFACE_INVOKABLE_THIS_RUN","fallback":"local Linux sandbox","note":"Registry marks E2B runtime verified, but this ChatGPT surface did not expose the repository bridge as a direct executable tool during the run."},
+    "scholarly": {"status":"NOT_APPLICABLE","reason":"No literature-dependent novelty or scientific-generalization claim was promoted."},
+    "current_web": {"status":"NOT_APPLICABLE","reason":"Decision depended on current repository contracts and executable crash behavior."},
+    "model_experiment": {"status":"NOT_APPLICABLE","reason":"Target-model behavior is not a variable in transactional crash atomicity."}
+  },
+  "concurrency_event": "First GitHub create attempt returned CAS 409 due concurrent repo progress; worker reread current Harness workspace, verified no WP02 overlap, then retried successfully.",
+  "promotion_boundary": "Synthetic/local component evidence only; no H1 PASS, no live-FRANK promotion, no paid training."
+}

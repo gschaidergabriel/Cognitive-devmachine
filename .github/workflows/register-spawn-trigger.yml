@@ -1,0 +1,119 @@
+name: Register spawn research trigger
+
+on:
+  push:
+    paths:
+      - '.github/workflows/register-spawn-trigger.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebase onto newest main
+        run: git pull --rebase origin main
+      - name: Register spawn across canonical command surfaces
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          def load(path):
+              return json.loads(Path(path).read_text(encoding='utf-8'))
+
+          def save(path, obj):
+              Path(path).write_text(json.dumps(obj, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          rt_path = 'research_entity/global/RESEARCH_TRIGGER_REGISTRY.json'
+          pc_path = 'research_entity/global/PROJECT_COMMAND_REGISTRY.json'
+          boot_path = 'research_entity/continuity/BOOTSTRAP_MINIMAL.json'
+
+          rt = load(rt_path)
+          rt['schema_version'] = '2.4'
+          rt.setdefault('triggers', {})['spawn'] = {
+              'kind': 'weighted_stochastic_deep_research_genesis',
+              'protocol': 'research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md',
+              'weights': 'research_entity/global/SPAWN_RESEARCH_WEIGHTS.json',
+              'selector': 'tools/spawn_research.py',
+              'purpose': 'Spawn one weighted-random temporary research direction per invocation, research it at maximum useful depth, network it through the complete Research Center, and write evidence-preserving feedback to the shared mesh; ClayCode is deliberately the most probable origin branch.',
+              'mesh_role': 'stochastic_deep_research_field_genesis',
+              'home_room': 'center',
+              'requires_program_state': True,
+              'requires_interconnect_manifest': True,
+              'requires_live_worker_reread': True,
+              'must_act_immediately': True,
+              'maximum_useful_depth': True,
+              'research_center_networking': 'MANDATORY',
+              'claycode_dominant_probability': True,
+              'training_auto_start_forbidden': True
+          }
+          save(rt_path, rt)
+
+          pc = load(pc_path)
+          pc['schema_version'] = '3.8'
+          pc.setdefault('commands', {})['spawn'] = {
+              'protocol': 'research_entity/triggers/SPAWN_RESEARCH_PROTOCOL.md',
+              'weights': 'research_entity/global/SPAWN_RESEARCH_WEIGHTS.json',
+              'selector': 'tools/spawn_research.py',
+              'kind': 'weighted_stochastic_deep_research_genesis',
+              'requires_interconnect_manifest': True,
+              'requires_program_state': True,
+              'requires_live_worker_reread': True,
+              'must_act_immediately': True,
+              'maximum_useful_depth': True,
+              'research_center_networking': 'MANDATORY',
+              'claycode_dominant_probability': True,
+              'paid_training_auto_start_forbidden': True
+          }
+          save(pc_path, pc)
+
+          boot = load(boot_path)
+          cmds = boot.setdefault('reserved_commands', [])
+          if 'spawn' not in cmds:
+              cmds.append('spawn')
+          save(boot_path, boot)
+
+          old = '666 · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness'
+          new = old + ' · spawn'
+          for path in [
+              'research_entity/global/STATUS_FOOTER_PROTOCOL.md',
+              'research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md',
+          ]:
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if new not in text:
+                  text = text.replace(old, new)
+              p.write_text(text, encoding='utf-8')
+
+          # Hard validation.
+          rt = load(rt_path); pc = load(pc_path); boot = load(boot_path)
+          assert rt['triggers']['spawn']['protocol'].endswith('SPAWN_RESEARCH_PROTOCOL.md')
+          assert pc['commands']['spawn']['maximum_useful_depth'] is True
+          assert 'spawn' in boot['reserved_commands']
+          weights = load('research_entity/global/SPAWN_RESEARCH_WEIGHTS.json')['weights_percent']
+          assert sum(weights.values()) == 100
+          assert weights['claycode'] > max(v for k,v in weights.items() if k != 'claycode')
+          PY
+      - name: Validate executable selector
+        run: python tools/spawn_research.py
+      - name: Commit registration
+        run: |
+          git config user.name 'Clay Research Entity'
+          git config user.email 'clay-research-entity@users.noreply.github.com'
+          git add research_entity/global/RESEARCH_TRIGGER_REGISTRY.json \
+                  research_entity/global/PROJECT_COMMAND_REGISTRY.json \
+                  research_entity/continuity/BOOTSTRAP_MINIMAL.json \
+                  research_entity/global/STATUS_FOOTER_PROTOCOL.md \
+                  research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md
+          if git diff --cached --quiet; then
+            echo 'spawn already registered'
+            exit 0
+          fi
+          git commit -m 'research: register spawn stochastic deep-research trigger'
+          git pull --rebase origin main
+          git push origin HEAD:main

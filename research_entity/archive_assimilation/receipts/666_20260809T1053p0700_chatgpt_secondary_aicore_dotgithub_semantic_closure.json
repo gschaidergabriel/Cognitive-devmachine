@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1053p0700-chatgpt-secondary-aicore-dotgithub-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_DOTGITHUB_RECURSIVE_SCOPE",
+  "source_universe":"DRIVE_CLAY/AICORE/.github",
+  "source_folder_id":"1V4QaR7yLKS33f_5nZzJZTlxscaFW1K9E",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"units_below_folder":3,"folder_units":1,"file_units":2,"file_units_semantically_closed":2,"coverage_percent":100.0},
+  "files":[
+    {"path":".github/FUNDING.yml","drive_id":"1hooU0whcKF5jjdpS31obbCgDMHt8z4E8","bytes":25,"sha256":"cbe6d97d868fef88216530ebd9f0b592c74f7db23eb026c2ea315a49c4470e1b","disposition":"metadata_only","semantic":"GitHub Sponsors points to gschaidergabriel; no runtime/architecture behavior."},
+    {"path":".github/workflows/docker.yml","drive_id":"1GtrCEDjR1iQ9-b5rfsJQFoYf6qb4uQm2","bytes":3548,"sha256":"7747d0d9126d30e002d6ffa113eb2d7e1eb2199d6f031ae26bc9d986a0e01614","disposition":"release_pipeline_semantic_evidence"}
+  ],
+  "cross_source_reconciliation":{
+    "project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "paths_present_at_frozen_head":[".github/FUNDING.yml",".github/workflows/docker.yml"],
+    "content_result":"Drive copies match the frozen-head contents inspected through GitHub for this shard; treat as duplicate provenance nodes, not separate semantic implementations."
+  },
+  "release_pipeline_findings":[
+    {"id":"CI-RELEASE-1-NO-TEST-GATE","severity_for_current_architecture":"P1_HARDENING_REQUIREMENT","evidence":"The Docker workflow contains checkout/buildx/login/build-push steps for CPU, CUDA and Vulkan but no test, Harness, health, vulnerability scan, SBOM/signature, or acceptance-gate job before push.","effect":"A successful container build is sufficient to publish an image even when runtime or architecture acceptance would fail.","required_contract":"Clay 0.1 release publication must consume a verified release manifest produced only after mandatory Harness/security/boot gates pass."},
+    {"id":"CI-RELEASE-2-SOURCE-TRIGGER-DRIFT","severity_for_current_architecture":"P1_CONFIRMED_LINEAGE","evidence":"push.paths includes Dockerfile, docker/**, requirements.txt and the workflow itself, but not ordinary core/services/config/runtime source paths despite build context '.'.","effect":"Normal source-code changes can advance repository main without rebuilding the published container, so registry image state can lag the repository while tags still imply current product identity.","required_contract":"Artifact identity must bind source-tree/commit digest to image digest. Relevant source changes must rebuild or explicitly invalidate the release; deployment must never infer freshness from mutable tag names."},
+    {"id":"CI-RELEASE-3-MUTABLE-TAG-ACTIVATION","severity_for_current_architecture":"P1_HARDENING_REQUIREMENT","evidence":"The workflow directly publishes mutable latest/cpu/cuda/vulkan tags and does not record/sign a release-manifest-to-image-digest mapping in the workflow.","effect":"A tag is not a stable artifact identity and cannot support deterministic rollback/replay by itself.","required_contract":"Publish immutable content-addressed image digests plus signed/verified release manifest; mutable aliases may point to them only as convenience views."},
+    {"id":"CI-RELEASE-4-ACTION-REF-PINNING","severity_for_current_architecture":"SUPPLY_CHAIN_HARDENING","evidence":"Third-party GitHub Actions are referenced by moving major tags such as actions/checkout@v4, docker/setup-buildx-action@v3, docker/login-action@v3 and docker/build-push-action@v6 rather than immutable commit SHAs.","effect":"Workflow dependency identity is not fully frozen by the repository commit alone.","required_contract":"Security-sensitive release workflows should pin external actions to immutable revisions and record their identities in the release provenance."}
+  ],
+  "positive_controls":[
+    "Workflow permissions are explicitly scoped to contents:read and packages:write per job.",
+    "CPU, CUDA and Vulkan variants are separated rather than silently sharing one ambiguous tag.",
+    "Workflow labels preserve repository source URL metadata.",
+    "Buildx cache configuration is explicit and reproducible at the workflow level."
+  ],
+  "current_architecture_feedback":{
+    "harness":["Container publication must be downstream of Harness PASS, not merely Docker build success.","Add image boot/readiness/mandatory-child-death and artifact-identity tests to the release gate."],
+    "claycode":["Model ReleaseCandidate and VerifiedRelease as typed states; mutable registry tags cannot satisfy VerifiedArtifact identity."],
+    "unifieddb":["Persist source commit/tree digest -> build manifest -> image digest -> activation/rollback ancestry."],
+    "claygraph":["Represent immutable build/release provenance edges and distinguish convenience aliases from artifact identity."],
+    "needle":["Deployment/activation effects may consume only verified immutable release identities, never a bare latest-style tag."],
+    "frank":["Runtime self-reporting of version must derive from immutable release manifest/image/source identity, not human-readable tag."],
+    "clay":["One-binary/container distribution needs a single verified release transaction joining source, dependencies, tests, build output and activated artifact identity."]
+  },
+  "earned_work_hours_added":0.0,
+  "training":{"executed":false,"authorized":false},
+  "next":"Release .github claim, then continue another non-overlapping AICORE leaf/root-file shard while global Level-0 denominator remains unfrozen.",
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

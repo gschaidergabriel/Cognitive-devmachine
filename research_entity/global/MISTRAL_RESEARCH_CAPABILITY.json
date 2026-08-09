@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "tool_name": "mistral_inference",
+  "provider": "Mistral AI",
+  "script": "tools/mistral_inference.py",
+  "class": "reasoning_coding_multimodal_model_api",
+  "requires_secret": ["MISTRAL_API_KEY"],
+  "credential_required": true,
+  "status": "ADAPTER_READY_RUNTIME_VERIFICATION_PENDING",
+  "free_policy": "FREE_ONLY; HTTP 402 hard-stops provider; no paid fallback",
+  "preferred_for": [
+    "ClayCode compiler architecture",
+    "adjustable reasoning",
+    "coding and counterhypothesis generation",
+    "structured JSON research outputs",
+    "multi-completion hypothesis diversity",
+    "prompt-cache reuse on stable ClayCode prefixes",
+    "model and capability discovery"
+  ],
+  "capabilities_to_harvest": [
+    "GET /v1/models capability metadata",
+    "chat completions",
+    "reasoning_effort",
+    "JSON/schema structured output",
+    "parallel tool-call semantics",
+    "n completions",
+    "prompt caching",
+    "batch/embeddings/OCR/classification/conversations when account-free eligibility is separately verified"
+  ],
+  "reasoning_trace_policy": "Reasoning may improve provider output but provider CoT/thinking chunks are not persisted by Clay.",
+  "doomsday_forecast": {"relevant_rows":["BASE_CLAYCODE_RELEASE"],"impacts":[]}
+}

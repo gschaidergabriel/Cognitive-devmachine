@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "DRIVE-FRANK-PROJECTS-DENOMINATOR-CONTRADICTION-20260809T0703p0700",
+  "trigger": "666",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "PREVIOUS_EXACT_DENOMINATOR_FALSIFIED_RECOUNT_REQUIRED",
+  "source": {
+    "drive_folder_title": "frank-projects",
+    "drive_folder_id": "1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw",
+    "contradicted_manifest": "research_entity/archive_assimilation/manifests/DRIVE_FRANK_PROJECTS_EXACT_RECURSIVE_MANIFEST.json"
+  },
+  "contradictions": [
+    {
+      "project": "ai-research-agent",
+      "project_id": "1Lw6yF8sT1aMUANIzVGF0hKDf-avWSQmv",
+      "previous_manifest_claim": {
+        "leaf_files": 2,
+        "notes": ".tasks empty; docs=2 files; .browser empty; code empty"
+      },
+      "current_direct_drive_observation": {
+        "root_folders": 4,
+        "docs_leaf_files": 2,
+        "tasks_leaf_files": 5,
+        "browser_leaf_files": 1,
+        "code_leaf_files": 1,
+        "total_leaf_files": 9,
+        "observed_files": [
+          "docs/PROJECT.md",
+          "docs/social_media_posts.md",
+          ".tasks/task_1.json",
+          ".tasks/task_2.json",
+          ".tasks/task_3.json",
+          ".tasks/task_4.json",
+          ".tasks/task_5.json",
+          ".browser/state.json",
+          "code/hello.py"
+        ]
+      },
+      "delta_vs_previous_leaf_count": 7,
+      "verdict": "PREVIOUS_EXACT_COUNT_REFUTED"
+    },
+    {
+      "project": "autocar-hunter",
+      "project_id": "1swK6E-e_xiQvolRo2GqzxjTPV0iMPZLp",
+      "previous_manifest_claim": {
+        "leaf_files": 1,
+        "notes": ".browser and .tasks empty"
+      },
+      "current_direct_drive_observation": {
+        "root_files": 2,
+        "tasks_leaf_files": 8,
+        "browser_leaf_files": 1,
+        "total_leaf_files": 11,
+        "observed_files": [
+          "PROJECT.md",
+          "screenshot.png",
+          ".tasks/task_BUILD_DATABASE.json",
+          ".tasks/task_CONTACT_DEALERS.json",
+          ".tasks/task_COORDINATE_VIEWINGS.json",
+          ".tasks/task_FINALIZE_PURCHASE.json",
+          ".tasks/task_PREPARE_EMAILS.json",
+          ".tasks/task_SCAN_AUTOSCOUT.json",
+          ".tasks/task_SCAN_MOBILE_DE.json",
+          ".tasks/task_SCAN_WILLHABEN.json",
+          ".browser/state.json"
+        ]
+      },
+      "delta_vs_previous_leaf_count": 10,
+      "verdict": "PREVIOUS_EXACT_COUNT_REFUTED"
+    },
+    {
+      "project": "video-launch-page",
+      "project_id": "1K7zgswugRw-NcOZrXv-FpEs-7Acoivua",
+      "previous_manifest_claim": {
+        "leaf_files": 6,
+        "notes": ".browser and .tasks empty"
+      },
+      "current_direct_drive_observation": {
+        "verdict": "DIRECT_ROOT_LISTING_VISIBLY_EXCEEDS_SIX_LEAF_FILES",
+        "examples": [
+          "deploy-github-pages.skill.md",
+          "temp_email_guerrilla.png",
+          "index.html",
+          "tiktok_current_state.png",
+          "guerrilla_mail.png",
+          "temp_email_inbox.png",
+          "tiktok_form_filled.png"
+        ],
+        "exact_total": "NOT_YET_RECOUNTED"
+      },
+      "verdict": "PREVIOUS_EXACT_COUNT_REFUTED"
+    }
+  ],
+  "minimum_consequence": {
+    "previous_total_units_below_frank_projects_root": 114,
+    "previous_exactness_valid": false,
+    "known_leaf_understatement_from_two_fully_recounted_projects": 17,
+    "safe_new_exact_total": "UNKNOWN_RECOUNT_REQUIRED",
+    "rule": "Do not repair 114 by simple arithmetic because other project subtrees may also be stale or incomplete. Re-enumerate every project against the current Drive epoch."
+  },
+  "epistemic_resolution": {
+    "old_manifest_status": "SUPERSEDED_FOR_CURRENT_DENOMINATOR_BY_CONTRADICTION",
+    "old_manifest_preserved": true,
+    "current_denominator_status": "OPEN_RECOUNT_REQUIRED",
+    "exact_global_progress_credit": 0.0,
+    "reason": "An exact denominator that is contradicted by direct current source observations cannot satisfy Level-0 closure."
+  },
+  "next_actions": [
+    "Re-enumerate all 14 frank-projects child trees against the same current Drive epoch.",
+    "Record exact leaf/folder counts and stable Drive IDs for each child.",
+    "Cross-check supposedly empty .tasks/.browser/code/screenshots folders instead of inferring emptiness from a prior fetch result.",
+    "Publish a V2 exact recursive manifest only after contradiction-free recount and peer crossread."
+  ],
+  "created_at": "2026-08-09T07:03:00+07:00"
+}

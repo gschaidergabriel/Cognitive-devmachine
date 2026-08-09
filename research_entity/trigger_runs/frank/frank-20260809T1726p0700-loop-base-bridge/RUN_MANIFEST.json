@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1726p0700-loop-base-bridge",
+  "trigger": "frank",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "entity_identity": "Research Entity temporary worker; FRANK is separate research/development subject and Andreas operational entity.",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "stage_gate_before": "NOT_PASS",
+  "stage_gate_after": "NOT_PASS",
+  "research_focus": "Translate the newly distributed FRANK loop-of-loops hypothesis into a falsifiable executable BASE-stage architecture bridge without reopening Clay-native target decisions or inventing new language semantics.",
+  "artifacts": [
+    "INTERCONNECT_MANIFEST.json",
+    "TOOL_EXECUTION_MANIFEST.json",
+    "FRANK_ARCHITECTURE.claycode.json",
+    "CLAYCODE_ARCHITECTURE_MAPPING.md",
+    "HYPOTHESIS_MATRIX.json",
+    "NEGATIVE_RESULTS.json",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "RUN_MANIFEST.json",
+    "FINAL_REPORT.md"
+  ],
+  "external_sources": [
+    {"id":"arXiv:2502.05171","title":"Scaling up Test-Time Compute with Latent Reasoning: A Recurrent Depth Approach","class":"PREPRINT_PRIMARY_SOURCE"},
+    {"id":"arXiv:2606.04678","title":"Test-Time Compute Scaling for ASR with Depth-Conditioned Looped Transformers","class":"PREPRINT_PRIMARY_SOURCE"},
+    {"id":"arXiv:2604.21215","title":"The Recurrent Transformer: Greater Effective Depth and Efficient Decoding","class":"PREPRINT_PRIMARY_SOURCE"},
+    {"id":"arXiv:2604.10739","title":"When More Thinking Hurts: Overthinking in LLM Test-Time Compute Scaling","class":"PREPRINT_PRIMARY_SOURCE"},
+    {"id":"arXiv:2606.02835","title":"Thinking Past the Answer: Evaluating Harmful Overthinking in Large Reasoning Models","class":"PREPRINT_PRIMARY_SOURCE"}
+  ],
+  "executed_experiments": ["SYNTHETIC_DELTA_VS_RESIDUAL_PRESSURE_CLASSIFIER","SYNTHETIC_FIXED_VS_ADAPTIVE_RECURRENCE"],
+  "claim_state_changes": [],
+  "canonical_promotion": "NONE",
+  "research_delta": "COMMITTED_RUN_ARTIFACTS_ONLY",
+  "next_best_action": "Compile and execute the bounded LoopDynamicsReadout + RecurrenceDecision FRANK slice through the real ClayCode parser/canonical IR/type-effect/evaluator/lowering/runtime path on the Ubuntu target when available, then feed the exact semantics into H1 replay instrumentation."
+}

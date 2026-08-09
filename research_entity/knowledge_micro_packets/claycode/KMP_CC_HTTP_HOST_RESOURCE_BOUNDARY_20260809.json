@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "KMP-CC-HTTP-HOST-RESOURCE-BOUNDARY-20260809",
+  "domains": ["claycode","frank","harness","runtime","security"],
+  "topics": ["HTTP","FFI","capability","deterministic lowering","resource handle"],
+  "epistemic_class": "EXECUTABLE_RUN_LOCAL_CANDIDATE",
+  "status_hint": "OPEN",
+  "claim": "A bounded HTTP service can be expressed with current ClayCode G9 record/rule/EffectIntent concepts and lowered through a typed host resource-handle adapter without adding HTTP-specific core syntax; host authority and capability-instance state should remain runtime/deployment concerns rather than contaminating deterministic compiler-output identity.",
+  "source_refs": [
+    "research_entity/trigger_runs/claycode/claycode_20260809T1607p0700_chatgpt_http_app02/experiments/http_app02_v2/EXECUTABLE_RESEARCH_RECEIPT.json",
+    "research_entity/trigger_runs/claycode/claycode_20260809T1607p0700_chatgpt_http_app02/NEGATIVE_RESULTS.json",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+  ],
+  "source_hashes": [
+    "source:0a869f7b8e30b4293371a6fbd677dd4939daae66b6bb5aad2bd9041650b68592",
+    "canonical_ir:f039a495467337d9d9aeaf45e97a28ab84bb54ffe75766cd31ee4f8b63fa1a1f",
+    "generated_target:eaf2ca4f2749b983ab6d4a5720e984dbed9cf4c46b62b73c7a1dece7fb287a57"
+  ],
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "ingested_by": "chatgpt-secondary",
+  "adjudicated_by": null,
+  "evidence_refs": ["CC-LOCAL-20260809-HTTP-APP02-02","N-CC-HTTP-20260809-01","N-CC-HTTP-20260809-02"],
+  "experiment_refs": ["CC-LOCAL-20260809-HTTP-APP02-01","CC-LOCAL-20260809-HTTP-APP02-02"],
+  "confidence": "moderate_run_local",
+  "verification_requirement": "Freeze one canonical HTTP program and differential-lower it through at least two backends with opaque typed resources, errors/lifetimes/async coverage and adversarial authority tests.",
+  "falsifier": "A realistic APP-02 program requires a semantic distinction that cannot be represented by current ClayCode plus a typed FFI/resource adapter, or a sandboxed guest acquires network authority without the declared host grant.",
+  "predecessor": null,
+  "supersession_links": ["v1 token-embedded authority mechanism superseded by v2 host-resource mechanism"],
+  "promotion_allowed": false,
+  "notes": "The current run's mandatory mesh preflight is fail-closed due clay->clayresearch governance drift, so this packet is discoverable working memory, not canonical promotion."
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1600p0700_chatgpt_secondary_relation_generic",
+  "shared_ancestry_rule": "FRANK/ClayCode/ClayGraph/UnifiedDB agreement is not counted as independent replication.",
+  "reviews": [
+    {
+      "assumption_id": "FRANK-CC-RELATION-SURFACE-01",
+      "assumption": "FRANK architecture relations and invariants require readable relation words to be first-class lexer operators in ClayCode.",
+      "origin": "possible inference from current G9/FRANK-readable surface",
+      "verdict": "REFUTED_AS_REQUIREMENT",
+      "independent_or_new_evidence": ["local generic relation parser+typed-resolver experiment", "MLIR generic-vs-custom operation syntax as external design triangulation"],
+      "reason": "Tested binary relation semantics can be represented without granting relation vocabulary lexer/operator status. Readability may remain optional surface sugar.",
+      "counterhypothesis": "Declared infix words materially improve model/human reader performance enough to justify a custom surface over the same canonical IR.",
+      "next_test": "Matched reader/compiler benchmark over dual surfaces."
+    },
+    {
+      "assumption_id": "FRANK-CC-RELATION-SEMANTIC-02",
+      "assumption": "Parser acceptance of a relation-looking token is sufficient to admit semantic relation identity.",
+      "origin": "surface-language risk, not an owner-fixed FRANK law",
+      "verdict": "REFUTED",
+      "independent_or_new_evidence": ["concurrent 50000-case unknown generic-infix negative result", "this run 50000-case typed resolver rejection test"],
+      "reason": "Unknown relation names must fail closed at typed semantic resolution, independently of syntactic acceptance.",
+      "counterhypothesis": "A parser can itself be the complete typed resolver with equivalent explicit declaration semantics.",
+      "next_test": "Production parser/typechecker integration test."
+    },
+    {
+      "assumption_id": "FRANK-CC-RELATION-UNIVERSALITY-03",
+      "assumption": "One binary Relation representation is sufficient for all FRANK/ClayGraph/Hyperposition relationship semantics.",
+      "origin": "possible overgeneralization from parser simplification",
+      "verdict": "UNRESOLVED_WITH_STRONG_COUNTERCONSTRAINT",
+      "independent_or_new_evidence": ["ClayGraph explicit hyperrelation+role schema", "Hyperposition mandatory n-ary identity and pairwise-reduction contract"],
+      "reason": "Current architecture requires higher-order relation identity and roles; no executable reduction has shown binary equivalence.",
+      "counterhypothesis": "Binary graph encoding with auxiliary relation nodes can preserve all semantics at lower complexity.",
+      "next_test": "Pairwise/binary reduction versus explicit hyperrelation intervention and replay benchmark."
+    }
+  ],
+  "overall": "REFINED: parser surface and semantic relation authority are separated. No FRANK semantic redesign or BASE promotion follows."
+}

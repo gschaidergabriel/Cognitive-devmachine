@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "receipt_type": "EXECUTABLE_RESEARCH_RECEIPT",
+  "run_id": "20260809T1505p0700-chatgpt-secondary",
+  "actor": "chatgpt-secondary",
+  "hypotheses": ["H_CC_NAMED_20260809", "H_CC_RETRACT_20260809"],
+  "compiler_or_artifact": "minimal G9 record-field parser + SQLite lowering/schema preflight + projection retraction harness",
+  "input_semantics": {
+    "record": "WorkSpec{work_id:Text;spec_rev:Int;title:Text}",
+    "named_lowering": "INSERT INTO work_spec (work_id, spec_rev, title) VALUES (?, ?, ?)",
+    "positional_lowering": "INSERT INTO work_spec VALUES (?, ?, ?)",
+    "projection_epoch1": ["A-B", "A-C"],
+    "projection_epoch2_complete_snapshot": ["A-B"]
+  },
+  "expected": {
+    "default_column_add": "named remains semantically correct; positional detects arity drift",
+    "column_reorder": "named remains semantically correct; positional must not be trusted to preserve field meaning",
+    "new_required_column": "schema preflight detects missing required field",
+    "complete_projection": "A-C is explicitly retracted and cannot remain CURRENT"
+  },
+  "observed": {
+    "local_sqlite_3_46_1": {
+      "default_column_add_named": "PASS",
+      "default_column_add_positional": "OperationalError: 4 columns but 3 values",
+      "column_reorder_named": "PASS semantic_ok=true",
+      "column_reorder_positional": "EXECUTED semantic_ok=false; observed logical row work_id='3', spec_rev='compile', title='W-1'",
+      "required_column_preflight": "PASS detected authority_scope",
+      "naive_projection_stale": ["A-C"],
+      "retraction_closed_stale": [],
+      "result_sha256": "2479b33cf0206fa708534ab63dc834bb7c7c2256a84b76eae164342bf301d7d8"
+    },
+    "e2b_sqlite_3_40_1": {
+      "status": "SUCCESS",
+      "default_column_add_named": "PASS",
+      "default_column_add_positional": "OperationalError: 4 columns but 3 values",
+      "column_reorder_named": "PASS semantic_ok=true",
+      "column_reorder_positional": "EXECUTED semantic_ok=false",
+      "required_column_preflight": "PASS detected authority_scope",
+      "naive_projection_stale": ["A-C"],
+      "retraction_closed_stale": [],
+      "provider_result": "research_entity/runtime/tool_results/claycode-20260809t1505-e2b-named-retraction.json",
+      "provider_request_sha256": "5cbb2a47067870a7a7405a95c557bc6009f12a7ce899baafb5c12962d5c13822",
+      "exit_code": 0
+    }
+  },
+  "counterexamples": [
+    "named lowering still fails when a genuinely new NOT NULL/no-default field is omitted; this is correct and requires schema preflight",
+    "PATCH projection omission is not deletion; retraction closure applies only to declared complete-domain snapshot semantics"
+  ],
+  "semantic_conclusion": "named-field lowering plus schema preflight is a supported compiler-policy candidate at evolving schema boundaries; complete-snapshot projections need explicit retraction closure",
+  "authority_boundary": "isolated/local runtime evidence does not establish live-FRANK target-machine behavior or authorize BASE/current-stack promotion"
+}

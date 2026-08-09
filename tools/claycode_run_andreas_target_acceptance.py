@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Canonical entry point for ClayCode BASE execution on Andreas' Ubuntu target.
 
-The local owner registration is verified first. Only a successful machine-id/host
-fingerprint check is allowed to set the target-id environment consumed by the full
-convergence gate. The hardened ten-application suite is executed on the same verified
-host before the convergence gate. Neither step can self-promote BASE.
+Order is fail-closed:
+1. verify the owner-registered target fingerprint;
+2. prove the full frozen FRANK H1/H2/H3 handoff and materialize target-only receipts;
+3. execute the hardened ten-application suite;
+4. execute the full ClayCode convergence gate.
+
+No hosted/proxy path can self-promote BASE.
 """
 from __future__ import annotations
 
@@ -17,6 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 IDENTITY = ROOT / "tools/claycode_target_host_identity.py"
+FULL_FRANK = ROOT / "tools/claycode_full_frank_target_finalizer_runner.py"
 APPS = ROOT / "tools/claycode_base_target_application_suite_v2_runner.py"
 GATE = ROOT / "tools/claycode_andreas_ubuntu_target_gate.py"
 TARGET = "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM"
@@ -52,6 +56,17 @@ def main() -> int:
     env = dict(os.environ)
     env["CLAYCODE_TARGET_HOST_ID"] = TARGET
 
+    full_frank = subprocess.run(
+        [sys.executable, str(FULL_FRANK), "--registration", str(args.registration)],
+        cwd=ROOT,
+        env=env,
+        check=False,
+    )
+    if full_frank.returncode != 0:
+        # Do not allow the ten-app suite to reinterpret a missing/failed FULL_FRANK
+        # receipt as a partial success. Component receipts already preserve the failure.
+        return full_frank.returncode
+
     apps = subprocess.run(
         [sys.executable, str(APPS), "--registration", str(args.registration)],
         cwd=ROOT,
@@ -64,9 +79,6 @@ def main() -> int:
         argv += ["--output", str(args.output)]
     gate = subprocess.run(argv, cwd=ROOT, env=env, check=False)
 
-    # FULL_FRANK_HANDOFF intentionally keeps the application suite nonzero until the
-    # production H2/H3 receipt exists. The convergence gate may still run and preserve
-    # all other component evidence, but canonical acceptance succeeds only if both pass.
     if apps.returncode != 0:
         return apps.returncode
     return gate.returncode

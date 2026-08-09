@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1741p0700-clayresearch-foreign-effect-closure",
+  "origin_branch": "clayresearch",
+  "selected_microdirection": "C1 Ubuntu foreign-code effect closure",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-C1-01",
+      "status": "OPEN",
+      "claim": "Foreign-effect closure on Linux requires authority-carrier semantics in addition to path/network/syscall effect declarations.",
+      "mechanism": "Pre-opened/inherited file descriptors, connected sockets, SCM_RIGHTS, Linux capabilities, environment credentials and other live handles can carry effective authority independently of later pathname checks.",
+      "prediction": "A child can perform a protected effect through an inherited or received authority-bearing handle while direct pathname access is denied.",
+      "current_evidence": ["EXP-SPAWN-C1-INHERITED-FD", "EXP-SPAWN-C1-SCM-RIGHTS", "Linux Landlock and unix(7) primary documentation"],
+      "counterhypothesis": "Complete pathname/syscall mediation alone can indirectly eliminate all relevant authority carriers without representing them as first-class effect/capability objects.",
+      "falsifier": "A production-relevant target-host enforcement proof demonstrates that no undeclared carrier can survive or enter a child across the supported foreign-code surfaces while the carrier itself is absent from the semantic contract.",
+      "confidence": "HIGH_FOR_MECHANISM_LOW_FOR_COMPLETE_CARRIER_ENUMERATION"
+    },
+    {
+      "id": "H-SPAWN-C1-02",
+      "status": "OPEN",
+      "claim": "A layered Ubuntu Foreign Effect Closure Gate can enforce EffectiveEffects(child) subseteq ParentGrantedEffects union ExternalGrant(receipt) for the supported foreign-code surfaces without a ClayCode semantic redesign.",
+      "mechanism": "Before child execution, deterministically derive an enforcement plan from the parent Clay effect contract: scrub undeclared descriptors/environment/credentials, drop Linux authority, set no_new_privs, apply supported Landlock restrictions, install seccomp filters, apply resource cgroup limits, constrain IPC/network namespaces or brokers where required, and admit only explicit host/WASI capabilities.",
+      "prediction": "On Andreas' Ubuntu developer host, adversarial inherited-FD/SCM_RIGHTS/capability/env/syscall/resource probes will fail closed while the ordinary BASE application suite remains functional under explicitly granted capabilities.",
+      "counterhypothesis": "Linux enforcement gaps or the required restrictions impose unacceptable utility/complexity cost, so the subset contract cannot be soundly realized for all current foreign-code surfaces with the proposed stack.",
+      "falsifier": "Any supported child obtains an undeclared effect, or a required normal BASE application cannot run without ambient authority that cannot be represented and safely scoped.",
+      "confidence": "MEDIUM_LOW_PENDING_TARGET_HOST_EXECUTION"
+    },
+    {
+      "id": "H-SPAWN-C1-03",
+      "status": "OPEN",
+      "claim": "WASI is a useful low-ambient foreign-code backend but cannot by itself establish Clay's full foreign-effect closure theorem.",
+      "mechanism": "WASI starts from host-provided capabilities/imports, preopens and network grants, which maps well to Clay capability contracts; however host configuration, runtime imports, terminal/host side effects and outer native process authority remain part of the trusted enforcement surface.",
+      "prediction": "A tightly configured WASI child will require fewer ambient-carrier scrub rules than Python/Bash/native children, but an overbroad host preopen/import/network grant will still widen effective authority.",
+      "counterhypothesis": "For the WASM-only subset, the runtime sandbox and a minimal WasiCtx are sufficient and no outer Clay-specific effect-closure layer adds meaningful protection.",
+      "falsifier": "Matched WASI tests show the outer effect-closure layer contributes no additional detection, containment or receipt fidelity under all supported host configurations.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "H-SPAWN-C1-04",
+      "status": "OPEN",
+      "claim": "Effect-closure translation validation should be expressed as a coverage receipt, not only as a pass/fail sandbox launch.",
+      "mechanism": "For every required semantic effect/restriction atom, record the concrete Ubuntu enforcement mechanism, kernel/runtime feature version, inherited-handle allowlist, unsupported atoms, external grants, policy hash and resource limits. Fail closed when a required restriction lacks enforcement coverage.",
+      "prediction": "Coverage receipts will expose silent host-version gaps such as unavailable Landlock rights or unconfined IPC channels before execution rather than allowing a weaker-than-declared sandbox.",
+      "counterhypothesis": "The receipt becomes a stale paper model that increases complexity without predicting real enforcement failures better than direct integration tests.",
+      "falsifier": "Mutation tests change effective authority while leaving the proposed receipt semantically identical, or receipt coverage repeatedly predicts safety where target-host adversarial tests escape.",
+      "confidence": "MEDIUM_LOW"
+    },
+    {
+      "id": "H-SPAWN-C1-05",
+      "status": "OPEN",
+      "claim": "The current evidence does not justify changing ClayCode G9 semantics; the next move is Runtime/ABI/FFI implementation and executable counterexample testing.",
+      "mechanism": "The current project already has capability/resource/effect identity concepts and a policy of preserving semantics unless a real program proves the language cannot represent the requirement. The discovered failure is presently an enforcement-realization gap, not yet a representation impossibility.",
+      "prediction": "An effect-closure prototype can encode handle identity, grant provenance and host enforcement coverage using existing ClayCode structures plus runtime metadata.",
+      "counterhypothesis": "G9 cannot represent first-class authority-bearing handles, nested grant provenance or partial host-enforcement coverage without an explicit semantic extension.",
+      "falsifier": "A concrete ClayCode program/IR example demonstrates that the necessary carrier/grant/coverage distinction cannot be expressed without ambiguity or semantic escape hatch.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "H-SPAWN-C1-06",
+      "status": "OPEN",
+      "claim": "Foreign-effect closure can preserve high ordinary developer utility if grants are task-scoped rather than globally restrictive.",
+      "mechanism": "Build/test/debug/admin tasks receive explicit narrow writable roots, process/network/resource capabilities and time-bounded handles; destructive protected-state effects remain absent or externally brokered.",
+      "prediction": "The BASE CLI/HTTP/DB/concurrent/GUI/compiler/GPU/system-effect/FRANK-component suite will retain near-baseline task success with bounded overhead while adversarial undeclared-effect tests are rejected.",
+      "counterhypothesis": "Real developer workflows depend so heavily on ambient authority and dynamic discovery that explicit scoping causes unacceptable breakage or prompts broad grants that erase the safety benefit.",
+      "falsifier": "Matched utility tests show substantial task failure/latency burden unless grants are widened enough to restore the same protected-damage surface as baseline.",
+      "confidence": "LOW_PENDING_MATCHED_UTILITY_TEST"
+    }
+  ],
+  "promotion_boundary": "No hypothesis is promoted to canonical scientific truth by this spawn run. H-SPAWN-C1-01 has strong mechanism-level support but still lacks exhaustive carrier enumeration and target-host enforcement proof."
+}

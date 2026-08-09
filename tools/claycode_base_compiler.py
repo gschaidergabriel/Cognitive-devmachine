@@ -240,6 +240,14 @@ def compile_ir(program: dict) -> dict:
     return canonical
 
 
+def _trunc_int_div(left: int, right: int) -> int:
+    """Float-free truncation toward zero, matching C integer division for valid int64 pairs."""
+    if right == 0:
+        raise CompileError("DIVISION_BY_ZERO")
+    quotient = abs(left) // abs(right)
+    return -quotient if (left < 0) != (right < 0) else quotient
+
+
 def eval_expr(expr: dict, env: dict[str, Any], functions: dict[str, dict], depth: int = 0) -> Any:
     if depth > 128:
         raise CompileError("RECURSION_LIMIT")
@@ -260,7 +268,7 @@ def eval_expr(expr: dict, env: dict[str, Any], functions: dict[str, dict], depth
         if op == "+": return left + right
         if op == "-": return left - right
         if op == "*": return left * right
-        if op == "/": return int(left / right) if isinstance(left, int) and isinstance(right, int) else left / right
+        if op == "/": return _trunc_int_div(left, right) if isinstance(left, int) and isinstance(right, int) else left / right
         if op == ">": return left > right
         if op == "<": return left < right
         if op == ">=": return left >= right

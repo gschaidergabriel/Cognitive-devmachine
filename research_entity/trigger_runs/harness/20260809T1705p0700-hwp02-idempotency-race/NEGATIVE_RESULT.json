@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "negative_result_id": "NR-HARNESS-HWP02-IDEMPOTENCY-PRELOCK-RACE-20260809",
+  "run_id": "20260809T1705p0700-hwp02-idempotency-race",
+  "status": "NEGATIVE_RESULT",
+  "claim_under_test": "The current H-WP-02 reference-ledger idempotency path is sufficient for concurrent duplicate writers.",
+  "result": "NOT_SUPPORTED_BY_MECHANISM_PROBE",
+  "counterexample": "Two writers can both miss the same idempotency key before lock acquisition. After writer A commits, writer B acquires the write lock and attempts the same UNIQUE idempotency insert without a second lookup, yielding IntegrityError rather than deterministic idempotent replay handling.",
+  "falsifier_scope": "Concurrency-safety of the pre-lock-only idempotency pattern; does not refute single-writer correctness, deterministic hashing, snapshot restore or the existing 7-test local receipt.",
+  "repair_hypothesis": "Move or repeat idempotency validation inside the BEGIN IMMEDIATE transaction and validate event identity/fingerprint before returning replay status.",
+  "repair_probe_result": "A post-lock lookup in the same deterministic interleaving returns IDEMPOTENT_REPLAY and preserves one committed row.",
+  "evidence_refs": [
+    "research_entity/harness/probes/hwp02_idempotency_prelock_race_probe.py",
+    "research_entity/trigger_runs/harness/20260809T1705p0700-hwp02-idempotency-race/EXECUTION_RECEIPT.json",
+    "commit:3c551698dcdcfa7a7dce01d9ea1cc3625354b9a7",
+    "commit:8ac51973ad4fe719f19ed5636f6fded6312ee0b1"
+  ],
+  "promotion_rule": "Do not mark H-WP-02 COMPLETE until the actual reference-ledger implementation is patched and a real concurrent project-host regression plus prior suites pass."
+}

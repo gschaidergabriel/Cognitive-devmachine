@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T155804p0700-chatgpt-declared-relations",
+  "hypotheses":[
+    {
+      "id":"H-CC-DECLREL-001",
+      "status":"OPEN_SUPPORTED_AT_MICRO_ORACLE_SCOPE",
+      "claim":"A finite declared relation/predicate registry resolved into typed canonical IR can retain selected readable G9 word-relations while failing closed on undeclared relation words, without adding new cognitive/runtime semantics.",
+      "support":["8/8 sampled current forms accepted","0/50000 unknown relation words accepted by strict resolver","10000/10000 whitespace variants preserved semantic hash","declared relation mutation changed hash"],
+      "counterhypothesis":"Normalize all prose-like relation forms to calls/punctuation/qualified fields; a relation registry adds unnecessary parser/type-system complexity.",
+      "falsifier":"Full-current-corpus parser/roundtrip/cost benchmark shows declared relation resolution is ambiguous, less stable, or materially more expensive than normalization."
+    },
+    {
+      "id":"H-CC-RELREG-COST-002",
+      "status":"OPEN",
+      "claim":"Declared relation words should live in a typed semantic symbol/operation registry rather than lexer-only keyword accretion, so surface readability does not mint meaning or authority.",
+      "support":["Tree-sitter official docs separate keyword/identifier lexical handling and contextual lexing","MLIR ODS/SymbolTable use explicit operation/symbol definitions with verification"],
+      "counterhypothesis":"Lexer-level reserved keywords alone are sufficient and simpler.",
+      "falsifier":"A complete parser with lexer-only relation keywords preserves intended AST, diagnostics, symbol evolution and semantic hashes with lower complexity and no accidental acceptance."
+    },
+    {
+      "id":"H-CC-NORMALIZE-003",
+      "status":"OPEN_COMPETING",
+      "claim":"The concurrent strict-normalization policy may still be superior to declared relation words if it lowers repair cost and parser ambiguity across the full G9 corpus.",
+      "support":["concurrent 10/10 strict-normalized proxy result"],
+      "counterhypothesis":"Selective declared relations preserve equivalent determinism with lower migration/edit cost and better model/human readability.",
+      "falsifier":"Matched full-corpus and reader/compiler benchmark decisively favors one policy on parse closure, roundtrip stability, diagnostics, migration burden and target-reader performance."
+    }
+  ]
+}

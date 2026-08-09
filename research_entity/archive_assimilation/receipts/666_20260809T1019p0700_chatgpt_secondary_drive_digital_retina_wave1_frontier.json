@@ -1,0 +1,91 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1019p0700-chatgpt-secondary-drive-digital-retina-wave1-frontier",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "origin_actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "worker_session_id":"chatgpt-secondary-666-20260809T1019p0700",
+  "source":{"title":"digital-retina","drive_id":"1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m"},
+  "status":"PARTIAL_FRONTIER_PRESERVED_NOT_FULL_RECURSIVE_CLOSURE",
+  "root_direct":{"units":12,"folders":9,"files":3,"status":"EXACT_DIRECT_DENOMINATOR_FOR_OBSERVED_EPOCH"},
+  "root_direct_folders":{
+    "deploy":"1akl-8DWrhDhOzsLu9i8gVmUZSua2vHPK",
+    "api":"1Omo8kqHk1vpGt89yRVDGLK1a6mLK9bcc",
+    "frontend":"1Dp9axGJATgsBgZ-g-sDif-X2tLOtbYD3",
+    "docs":"11_na8vfHkQztfo1CJtff-QYRkHcDzPUe",
+    "tests":"1cPZc4Yug1c8LxYTSTaNZUjkaWayNrEGi",
+    "tools":"1GStcE_-2zgf5ub93JX7enNaGL_Bv8Cvn",
+    "retina":"1OjgyFLJEham9htKzx-Ngs0aIJhryCsek",
+    "eval":"1zCcwLYZ3jctQQcseiDG9Zn1iYBhh8Euo",
+    ".git":"1Q_20Cxn6V88zYtsbqefnssPCpXBSq6ZD"
+  },
+  "exact_closed_subtrees":{
+    "deploy":{"recursive_units_below_root":9,"folder_units":1,"file_units":8,"secret_file_values_read":false,"note":"deploy/secrets names observed but secret contents intentionally not fetched"},
+    "api":{"recursive_units_below_root":9,"folder_units":1,"file_units":8},
+    "docs":{"recursive_units_below_root":3,"folder_units":0,"file_units":3},
+    "tests":{"recursive_units_below_root":1,"folder_units":0,"file_units":1},
+    "tools":{"recursive_units_below_root":1,"folder_units":0,"file_units":1},
+    "retina":{"recursive_units_below_root":34,"folder_units":3,"file_units":31,"shape":"retina root -> __pycache__ + vision; vision -> __pycache__ + 22 Python source files"},
+    "eval":{"recursive_units_below_root":161,"folder_units":4,"file_units":157,"image_leaf_sets":{"images":100,"images_art":12,"images_photo":10,"images_ai":18},"root_direct_units":21}
+  },
+  "frontend":{
+    "root_direct":{"units":16,"folders":4,"files":12},
+    "classes":{"generated_build":".next","vendored_dependencies":"node_modules","public_assets":"public","application_source":"src"},
+    "public":{"recursive_descendant_units_below_public_root":12,"direct_units":11,"articles_leaf_files":1},
+    "src":{"recursive_descendant_units_below_src_root":32,"direct_units":4,"components_leaf_files":7,"lib_leaf_files":3,"app_recursive_units_below_app_root":18},
+    "app":{"direct_units":8,"direct_folders":4,"direct_files":4,"sign_up_recursive_units":2,"sign_in_recursive_units":2,"api_recursive_units":4,"dashboard_recursive_units":2},
+    "known_units_below_frontend_root_excluding_descendants_of_generated_build_and_vendored_dependency_folders":60,
+    "open_generated_descendant_roots":["frontend/.next","frontend/node_modules"],
+    "rule":"Generated/vendored descendants are denominator obligations but are not silently promoted to source-semantic evidence."
+  },
+  "git_frontier":{
+    "git_root_direct":{"units":11,"folders":6,"files":5},
+    "objects":"Large loose-object store with many two-hex fanout folders plus pack/info; direct enumeration began but full recursive object denominator is not yet closed.",
+    "history_status":"OPEN_EXACT_RECURSION_REQUIRED",
+    "rule":"Git object/history units remain provenance obligations and are not conflated with working-tree semantic source."
+  },
+  "prior_semantic_crossread":{
+    "receipt":"research_entity/archive_assimilation/receipts/666_20260809T0441p0700_chatgpt_secondary_drive_g8_g9_retina_code_shard.json",
+    "status":"READ_AND_DEDUPED",
+    "already_known_not_recredited":["real multi-file CPU vision pipeline","structured Retina result","held-out Retina working-paper baseline","event-triggered vision design","generic Retina reuse foundation"]
+  },
+  "new_mechanistic_deltas":{
+    "historical_familiarity_family_1":{
+      "source":"retina/vision/retina.py",
+      "mechanism":"Supervised CNN penultimate features -> 1024-bit LSH code -> kNN master library, k=15, Hamming-distance classification.",
+      "mapping":"Direct historical predecessor to prototype/familiarity readout ideas; candidate measurement foundation for MVC-0 style prototypes, not a user-specific online learning contract by itself."
+    },
+    "historical_familiarity_family_2":{
+      "source":"retina/vision/gol_library.py",
+      "mechanism":"Game-of-Life-derived pattern signatures with synthetic archetype library plus data-driven clustering of real images; nearest-cluster similarity and interpretable phrase labels, with historical match thresholds around 0.92-0.93.",
+      "mapping":"Pattern/dictionary/familiarity lineage relevant to current adaptive visual learner prototype bank and open-set fixtures; historical fixed thresholds are not current acceptance thresholds."
+    },
+    "calibration_failure_lineage":{
+      "source":"retina/vision/frank_eye.py",
+      "finding":"Historical comments record false-positive feedback and manual threshold changes, including a sauna classifier threshold raised from 0.18 to 0.25 plus other Llama-4-guided vocabulary/threshold tuning.",
+      "mapping":"Preserve as negative/calibration regression fixtures; do not inherit hand-tuned thresholds as current truth."
+    }
+  },
+  "security_and_provenance_findings":[
+    {"id":"RETINA-URL-SSRF-001","source":"retina/core.py","finding":"URL image ingestion uses urllib.request.urlopen with timeout and size cap but no observed host/scheme allowlist in the inspected core path. If exposed to untrusted callers this is an SSRF/network-reachability surface.","current_requirement":"Current runtime ingress must enforce explicit URL/network authority policy or disable arbitrary remote fetch by default."},
+    {"id":"RETINA-TORCHLOAD-002","source":"retina/vision/retina.py","finding":"Historical model/library loading uses torch.load(..., weights_only=False). Untrusted serialized model artifacts can execute code through pickle semantics.","current_requirement":"Only load trusted hash/signature-verified legacy artifacts or migrate imported weights/state to a non-code-executing format."},
+    {"id":"RETINA-SECRETS-003","source":"deploy/secrets","finding":"Secret-file names are present in the archive. Their values were intentionally not fetched or copied into RAE.","current_requirement":"Preserve secret provenance without semantic ingestion of credential values."},
+    {"id":"RETINA-GENERATED-004","source":"frontend/.next + frontend/node_modules","finding":"Generated build output and vendored dependencies are materially large archive units and must be denominator-accounted separately from authored Retina semantics."}
+  ],
+  "current_contract_mapping":{
+    "contract":"research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
+    "fixed_target":"Dissolved Clay-native visual semantics with physical conventional backing; adaptive user-specific Micro Visual Classifier; calibrated known/unknown/conflict routing; bounded cyclic updates; provenance, rollback and no execution authority from familiarity.",
+    "implication":"Historical kNN/LSH and GoL pattern libraries are implementation/measurement ancestors, not permission to preserve a separate semantic vision service or to treat similarity as sensor truth."
+  },
+  "remaining_frontier":{
+    "must_recurse":["frontend/.next","frontend/node_modules",".git/objects and remaining .git history structure"],
+    "source_semantic_frontier":"Core authored source is substantially mapped; generated/vendored/history denominator remains the dominant structural obligation.",
+    "full_digital_retina_recursive_denominator":"NOT_YET_FROZEN"
+  },
+  "earned_work_policy":{"automatic_hours_added":0.0,"reason":"Earlier Retina semantic receipt already proposes overlapping historical reuse. This wave contributes exact structure/provenance and specific familiarity/security deltas; row-level deduplication is required before any avoided-hour credit."},
+  "training_execution":{"paid_or_final_training_started":false,"adaptive_runtime_training_started":false},
+  "global_level0":{"gate":"NOT_PASS","exact_global_progress_credit":0.0,"denominator_state":"NOT_FROZEN","reason":"Digital Retina full recursive denominator remains open, as do other Drive roots and Project-Frankenstein history/tree obligations."},
+  "created_at":"2026-08-09T10:19:00+07:00"
+}

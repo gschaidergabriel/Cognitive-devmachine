@@ -39,16 +39,16 @@ BRANCHES = _registered_scientific_branches()
 # Explicit priority is governance: depth differs by trigger, inclusion does not.
 # Any registry change not represented here is intentionally fail-closed.
 PRIORITY: dict[str, list[str]] = {
-    "fusion": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
-    "clay": ["clay", "frank", "claycode", "harness", "claygraph", "unifieddb", "gwt", "emergenz", "hyperposition"],
-    "frank": ["clay", "claycode", "harness", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "frank"],
-    "gwt": ["clay", "harness", "claygraph", "unifieddb", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
-    "emergenz": ["clay", "gwt", "harness", "claygraph", "unifieddb", "hyperposition", "frank", "claycode", "emergenz"],
-    "claycode": ["frank", "clay", "harness", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "claycode"],
-    "hyperposition": ["clay", "harness", "claygraph", "unifieddb", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
-    "claygraph": ["clay", "frank", "claycode", "harness", "unifieddb", "hyperposition", "gwt", "emergenz", "claygraph"],
-    "unifieddb": ["clay", "frank", "claycode", "harness", "claygraph", "hyperposition", "gwt", "emergenz", "unifieddb"],
-    "harness": ["frank", "claycode", "clay", "gwt", "claygraph", "unifieddb", "hyperposition", "emergenz", "harness"],
+    "fusion": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+    "clayresearch": ["clayresearch", "frank", "claycode", "harness", "claygraph", "unifieddb", "gwt", "emergenz", "hyperposition"],
+    "frank": ["clayresearch", "claycode", "harness", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "frank"],
+    "gwt": ["clayresearch", "harness", "claygraph", "unifieddb", "frank", "emergenz", "hyperposition", "claycode", "gwt"],
+    "emergenz": ["clayresearch", "gwt", "harness", "claygraph", "unifieddb", "hyperposition", "frank", "claycode", "emergenz"],
+    "claycode": ["frank", "clayresearch", "harness", "claygraph", "unifieddb", "gwt", "hyperposition", "emergenz", "claycode"],
+    "hyperposition": ["clayresearch", "harness", "claygraph", "unifieddb", "frank", "claycode", "gwt", "emergenz", "hyperposition"],
+    "claygraph": ["clayresearch", "frank", "claycode", "harness", "unifieddb", "hyperposition", "gwt", "emergenz", "claygraph"],
+    "unifieddb": ["clayresearch", "frank", "claycode", "harness", "claygraph", "hyperposition", "gwt", "emergenz", "unifieddb"],
+    "harness": ["frank", "claycode", "clayresearch", "gwt", "claygraph", "unifieddb", "hyperposition", "emergenz", "harness"],
 }
 
 for trigger, order in PRIORITY.items():
@@ -58,7 +58,7 @@ for trigger, order in PRIORITY.items():
         )
 
 BASE_PACKET_BUDGETS: dict[str, tuple[int, int]] = {
-    "clay": (48, 96),
+    "clayresearch": (48, 96),
     "frank": (40, 80),
     "claycode": (40, 80),
     "claygraph": (48, 96),
@@ -70,7 +70,7 @@ BASE_PACKET_BUDGETS: dict[str, tuple[int, int]] = {
 }
 
 DEEP_PACKET_OVERRIDES: dict[tuple[str, str], tuple[int, int]] = {
-    ("frank", "clay"): (64, 128),
+    ("frank", "clayresearch"): (64, 128),
     ("frank", "claycode"): (64, 128),
     ("frank", "claygraph"): (64, 128),
     ("frank", "unifieddb"): (64, 128),
@@ -91,7 +91,7 @@ DEEP_PACKET_OVERRIDES: dict[tuple[str, str], tuple[int, int]] = {
     ("unifieddb", "frank"): (64, 128),
     ("unifieddb", "claycode"): (64, 128),
     ("unifieddb", "harness"): (64, 128),
-    ("harness", "clay"): (72, 144),
+    ("harness", "clayresearch"): (72, 144),
     ("harness", "frank"): (96, 192),
     ("harness", "claycode"): (96, 192),
     ("harness", "gwt"): (80, 160),
@@ -103,7 +103,7 @@ DEEP_PACKET_OVERRIDES: dict[tuple[str, str], tuple[int, int]] = {
 }
 
 ALIASES: dict[str, list[str]] = {
-    "clay": ["clay", "synthetic-clay", "synthetic_clay"],
+    "clayresearch": ["clay", "clayresearch", "synthetic-clay", "synthetic_clay"],
     "frank": ["frank", "frankenstein"],
     "gwt": ["gwt", "workspace", "global-workspace", "global_workspace", "rcwc"],
     "emergenz": ["emergenz", "emergence", "causal-emergence", "causal_emergence"],
@@ -219,7 +219,7 @@ def _matches_branch(path: Path, branch: str) -> bool:
 
 
 def _runs(branch: str, include_incomplete: bool = True) -> list[Path]:
-    base = TRIGGER_RUNS / branch
+    base = TRIGGER_RUNS / ("clay" if branch == "clayresearch" else branch)
     if not base.exists():
         return []
     runs = [p for p in base.iterdir() if p.is_dir()]
@@ -327,13 +327,13 @@ def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], in
 def _run_depth(trigger: str, branch: str, base_depth: int) -> int:
     run_depth = max(1, base_depth)
     deep = {
-        ("frank", "clay"): 3,
+        ("frank", "clayresearch"): 3,
         ("frank", "claycode"): 4,
         ("frank", "claygraph"): 4,
         ("frank", "unifieddb"): 4,
         ("frank", "harness"): 4,
         ("claycode", "frank"): 4,
-        ("claycode", "clay"): 3,
+        ("claycode", "clayresearch"): 3,
         ("claycode", "claygraph"): 4,
         ("claycode", "unifieddb"): 3,
         ("claycode", "harness"): 4,
@@ -474,8 +474,8 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict[str, A
             "hyperposition_requires_unifieddb_topology_input": trigger == "hyperposition",
             "gwt_requires_deep_claygraph_input": trigger == "gwt",
             "gwt_requires_unifieddb_snapshot_selection_input": trigger == "gwt",
-            "latest_claygraph_artifact": latest_claygraph if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clay", "unifieddb", "harness"} else None,
-            "latest_unifieddb_artifact": latest_unifieddb if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clay", "claygraph", "harness"} else None,
+            "latest_claygraph_artifact": latest_claygraph if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clayresearch", "unifieddb", "harness"} else None,
+            "latest_unifieddb_artifact": latest_unifieddb if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clayresearch", "claygraph", "harness"} else None,
             "latest_harness_release_artifact": latest_harness_release if trigger != "harness" else latest_harness_release,
             "claygraph_requires_full_mesh_coverage": trigger == "claygraph",
             "claygraph_requires_iterative_parent_candidate_selection": trigger == "claygraph",
@@ -484,7 +484,7 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict[str, A
             "unifieddb_requires_store_role_inventory": trigger == "unifieddb",
             "unifieddb_requires_logical_vs_physical_comparison": trigger == "unifieddb",
             "unifieddb_requires_reversible_migration": trigger == "unifieddb",
-            "clay_is_integrated_master_foundry": trigger == "clay",
+            "clay_is_integrated_master_foundry": trigger == "clayresearch",
             "harness_requires_full_mesh_coverage": trigger == "harness",
             "harness_requires_live_worker_reread": trigger == "harness",
             "harness_must_build_and_execute": trigger == "harness",

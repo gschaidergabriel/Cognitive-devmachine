@@ -1,16 +1,18 @@
 {
-  "schema_version":"1.1",
+  "schema_version":"1.2",
   "task_id":"666-l0-titan-venv-pip-vendor-folder-audit-20260809T1110p0700",
   "room_id":"center",
   "title":"Titan .venv pip/_vendor folder audit",
   "goal":"Direct-list all 66 RECORD-implied directories under pip/_vendor and verify no additional empty directories exist.",
-  "status":"CLAIMED",
-  "claimed_by":"chatgpt-secondary-20260809T1204p0700-666-titan-pip-vendor",
+  "status":"COMPLETE",
+  "claimed_by":null,
   "dependencies":["Drive:1DOS4tcLEhiRtLvuWsMwI26PXE_xZ85sv","research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_RECORD_FILE_IDENTITY_20260809T1058p0700.json"],
   "record_file_count":543,
   "record_implied_folder_count":66,
   "semantic_credit":"ZERO_VENDOR_SUPPORT",
-  "completion_test":"Every RECORD-implied folder under _vendor direct-listed and child identities equal RECORD-derived expectations; no extras.",
+  "result":{"directories_expected":66,"directories_direct_listed":66,"directories_missing":0,"extra_directories":0,"child_set_mismatches":0,"normal_package_nodes":33,"pycache_leaf_nodes":33,"manifest":"research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_PIP_VENDOR_FOLDER_AUDIT_20260809T1210.json","receipt":"research_entity/archive_assimilation/receipts/666_20260809T1210p0700_chatgpt_secondary_titan_memory_pip_vendor_folder_audit.json"},
+  "completion_test":"PASS: every RECORD-implied folder under _vendor was direct-listed and child identities matched RECORD-derived expectations; no extras.",
   "created_by":"chatgpt-secondary",
-  "claimed_at":"2026-08-09T12:04:10+07:00"
+  "claimed_at":"2026-08-09T12:04:10+07:00",
+  "completed_at":"2026-08-09T12:10:30+07:00"
 }

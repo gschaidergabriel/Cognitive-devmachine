@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1539p0700-chatgpt-parser-compat",
+  "trigger":"claycode",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "registered_scientific_branches":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "coverage_status":"MANUAL_CURRENT_REGISTRY_COVERAGE_DUE_TO_PREFLIGHT_GOVERNANCE_DRIFT",
+  "preflight":{"tool":"tools/research_interconnect_preflight.py","status":"BLOCKED_GOVERNANCE_DRIFT","finding":"Current RESEARCH_TRIGGER_REGISTRY names the integrated foundry trigger clayresearch, while the preflight PRIORITY/alias tables still hard-code clay. Its fail-closed branch-set equality check therefore raises before materialization.","registry_minus_priority":["clayresearch"],"priority_minus_registry":["clay"],"promotion_effect":"NONE; infrastructure negative result only"},
+  "deep_inputs":{
+    "frank":["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md","research_entity/harness/HARNESS_WORKSPACE.json","research_entity/knowledge_micro_packets/frank/KMP-ANDROID-R1-FEEDBACK-FRANK.md"],
+    "claygraph":["research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql","research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql","research_entity/knowledge_micro_packets/claygraph/KMP-ANDROID-R1-FEEDBACK-CLAYGRAPH.md"],
+    "unifieddb":["research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql","research_entity/knowledge_micro_packets/unifieddb/KMP-ANDROID-R1-FEEDBACK-UNIFIEDDB.md"],
+    "harness":["research_entity/harness/HARNESS_WORKSPACE.json"]
+  },
+  "branch_inputs":{
+    "clayresearch":["research_entity/knowledge_micro_packets/clay/KMP-ANDROID-R1-FEEDBACK-CLAY.md","research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md"],
+    "frank":["research_entity/knowledge_micro_packets/frank/KMP-ANDROID-R1-FEEDBACK-FRANK.md"],
+    "gwt":["research_entity/knowledge_micro_packets/gwt/KMP-ANDROID-R1-FEEDBACK-GWT.md"],
+    "emergenz":["research_entity/knowledge_micro_packets/emergenz/KMP-ANDROID-R1-FEEDBACK-EMERGENZ.md"],
+    "claycode":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/g9/grammar.ebnf","research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay","research_entity/knowledge_micro_packets/claycode/KMP-ANDROID-R1-FEEDBACK-CLAYCODE.md","research_entity/knowledge_micro_packets/claycode/KMP-CLAYCODE-3WORKER-RENDEZVOUS-20260809.md"],
+    "hyperposition":["research_entity/knowledge_micro_packets/hyperposition/KMP-ANDROID-R1-FEEDBACK-HYPERPOSITION.md"],
+    "claygraph":["research_entity/knowledge_micro_packets/claygraph/KMP-ANDROID-R1-FEEDBACK-CLAYGRAPH.md"],
+    "unifieddb":["research_entity/knowledge_micro_packets/unifieddb/KMP-ANDROID-R1-FEEDBACK-UNIFIEDDB.md"],
+    "harness":["research_entity/harness/HARNESS_WORKSPACE.json"]
+  },
+  "result":"All current scientific branches were manually cross-read to the bounded degree relevant to this parser/runtime question. The mandatory preflight itself is a discovered blocker and is not falsely reported as PASS."
+}

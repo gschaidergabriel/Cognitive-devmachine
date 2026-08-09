@@ -1,0 +1,37 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-REVISE-20260809T172600Z-FRANK-QWEN4B-HALT-ONLY-V2",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:26:00Z",
+  "payload": {
+    "work_id": "FRANK-V01-REAL-QWEN4B-VPS-SHADOW",
+    "status": "ACTIVE_EXECUTION_NOT_PASS",
+    "methodology_revision": "HALT_ONLY_CONSERVATIVE_V2",
+    "frank_evidence": [
+      "gschaidergabriel/Dr.-Unterweger@16b1e5cc3baec430ed192a9147e8451f361a8b5f",
+      "gschaidergabriel/Dr.-Unterweger@3899534147d7f8de8380f6574ff7292b43c08c04"
+    ],
+    "correction": "The original shadow pilot executed the full five-step trajectory correctly, but its counterfactual selector treated every non-CONTINUE w4 advisory decision as if the current answer could be finalized with no downstream cost. That is invalid for ROUTE, ROUTE_READOUT_UNCERTAIN, ESCALATE_STALLED, ABORT_DIVERGING and ROLLBACK. V2 permits counterfactual early finalization/savings only for HALT_CANDIDATE_CONVERGED before the fixed budget. All other advisory outcomes retain their telemetry but fall back to the full fixed-budget answer for quality/compute comparison.",
+    "unchanged": [
+      "same pinned Qwen3-4B-Instruct-2507 Q8_0 model bytes",
+      "same official-prebuilt pinned llama.cpp runtime family",
+      "same full model trajectories",
+      "same observable self-confidence/state-delta/marginal-utility proxies",
+      "same answer-key isolation from policy",
+      "same proposal-only effect authority boundary"
+    ],
+    "interpretation_rules": [
+      "V1 per-step real model outputs, latencies, usage and w4 trace remain diagnostic observations if execution succeeds",
+      "V1 adaptive compute-saving claims are not promotion evidence",
+      "V2 is the comparison surface for adaptive quality/compute conclusions",
+      "HALT_CANDIDATE_CONVERGED is still advisory and never grants execution/effect authority",
+      "one successful V2 pilot run is not reliability and cannot promote recurrence policy",
+      "if V2 yields no valid early halt, record NO_BENEFIT/NO_CHANGE rather than forcing an adaptive claim",
+      "if a valid early halt loses a fixed-correct answer, current thresholds/proxies are refuted for that case"
+    ],
+    "routing": ["frank", "harness", "gwt", "emergenz", "unifieddb", "claygraph", "clayresearch"],
+    "architecture_delta": "TESTING_NO_PROMOTION",
+    "next_evidence": "real_qwen4b_prebuilt_v2_latest.json receipt from the serialized Hostinger Ubuntu lane"
+  }
+}

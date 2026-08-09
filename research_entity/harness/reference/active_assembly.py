@@ -83,8 +83,6 @@ def compile_active_assembly(
     identity_by_id: dict[str, str] = {}
     input_duplicate_count = 0
     for packet in candidates:
-        # Visibility is not authority. Bearer authority must come from the external
-        # deterministic resource/effect gateway, never these cognitive packet classes.
         if packet.proposed_authority and packet.kind in {
             "model_output", "peer_result", "visual_model", "capability"
         }:
@@ -112,19 +110,26 @@ def compile_active_assembly(
     selected: list[AssemblyPacket] = []
     selected_ids: set[str] = set()
     ancestry_counts: dict[str, int] = {}
+    selection_roles: dict[str, str] = {}
 
-    def add(packet: AssemblyPacket) -> bool:
+    def add(packet: AssemblyPacket, *, conflict_visibility: bool = False) -> bool:
         if packet.packet_id in selected_ids or len(selected) >= max_items:
             return False
-        if ancestry_counts.get(packet.ancestry_family, 0) >= max_per_ancestry:
+        # Ancestry caps prevent repeated shared ancestry from masquerading as
+        # independent support. They must not erase an explicit opposite proposition.
+        # Conflict representatives may therefore bypass the family cap, but they still
+        # consume the same hard total-item budget and receive zero replication credit.
+        if not conflict_visibility and ancestry_counts.get(packet.ancestry_family, 0) >= max_per_ancestry:
             return False
         selected.append(packet)
         selected_ids.add(packet.packet_id)
         ancestry_counts[packet.ancestry_family] = ancestry_counts.get(packet.ancestry_family, 0) + 1
+        selection_roles[packet.packet_id] = "CONFLICT_VISIBILITY" if conflict_visibility else "ORDINARY"
         return True
 
-    # Preserve contradictory alternatives before general fill. This makes unresolved
-    # conflict visible to the 4B rather than silently collapsing it during retrieval.
+    # Preserve contradictory alternatives before general fill. This is observability,
+    # not evidence multiplication: same-ancestry opposites remain visible when the hard
+    # total context budget permits, without being counted as independent replication.
     by_claim: dict[str, dict[str, AssemblyPacket]] = {}
     for packet in eligible:
         if packet.claim_key is None or packet.claim_value is None:
@@ -138,11 +143,11 @@ def compile_active_assembly(
             conflict_representatives.extend(values.values())
     conflict_representatives.sort(key=lambda packet: (-packet_score(packet), packet.packet_id))
     for packet in conflict_representatives:
-        add(packet)
+        add(packet, conflict_visibility=True)
 
-    # One high-value packet per ancestry family first prevents repeated shared ancestry
-    # from consuming the complete small-model slice. A second pass may use remaining
-    # family budget when space is still available.
+    # One high-value ordinary packet per ancestry family first prevents repeated shared
+    # ancestry from consuming the complete small-model slice. A second pass may use
+    # remaining ordinary family budget when space is still available.
     seen_families: set[str] = set()
     for packet in eligible:
         if packet.ancestry_family not in seen_families:
@@ -157,14 +162,17 @@ def compile_active_assembly(
 
     items = []
     for packet in selected:
+        role = selection_roles[packet.packet_id]
         item = asdict(packet)
         item["packet_identity_sha256"] = identity_by_id[packet.packet_id]
         item["score"] = packet_score(packet)
+        item["selection_role"] = role
+        item["independent_replication_credit"] = False if role == "CONFLICT_VISIBILITY" else None
         item["execution_authority"] = False
         items.append(item)
 
     assembly = {
-        "schema": "frank.active-assembly.v1",
+        "schema": "frank.active-assembly.v1.1",
         "current_epoch": current_epoch,
         "max_items": max_items,
         "max_per_ancestry": max_per_ancestry,
@@ -174,7 +182,6 @@ def compile_active_assembly(
     }
     canonical = json.dumps(assembly, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
     assembly["assembly_sha256"] = hashlib.sha256(canonical).hexdigest()
-    # Delivery duplication is transport/input telemetry, not part of the semantic
-    # ActiveAssembly identity, so exact duplicate deliveries do not alter the hash.
+    # Delivery duplication is transport/input telemetry, not part of semantic identity.
     assembly["input_duplicate_count"] = input_duplicate_count
     return assembly

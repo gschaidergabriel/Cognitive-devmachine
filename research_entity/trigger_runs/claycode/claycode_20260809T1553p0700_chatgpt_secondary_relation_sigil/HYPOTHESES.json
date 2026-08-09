@@ -1,0 +1,36 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil",
+  "hypotheses":[
+    {
+      "id":"H-CC-RELATION-SIGIL-003",
+      "status":"OPEN_SUPPORTED_BY_LOCAL_PROXY",
+      "claim":"Prefixing open semantic relation names with a one-character sigil can eliminate the observed identifier/operator lexical ambiguity while preserving relation identity and requiring no ClayCode semantic redesign.",
+      "evidence":["EXECUTABLE_RESEARCH_RECEIPT.json"],
+      "counterhypothesis":"A declared bare-infix relation design with contextual lexing/resolution provides equal or better stability and lower reader/repair cost without ambiguity.",
+      "falsifier":"Full admitted-corpus parser/roundtrip tests show sigil normalization changes meaning, creates new ambiguity, raises repair/token cost materially, or performs worse than declared bare-infix syntax."
+    },
+    {
+      "id":"H-CC-DECLARED-RELATION-RESOLVER-004",
+      "status":"OPEN_SUPPORTED_BY_LOCAL_PROXY",
+      "claim":"Open relation names belong in the typed symbol/resolution layer after lexical disambiguation; parser acceptance must not implicitly mint semantics for unknown relation names.",
+      "evidence":["EXECUTABLE_RESEARCH_RECEIPT.json","MLIR symbol-table analogue","Tree-sitter lexical-conflict analogue"],
+      "falsifier":"A simpler grammar-only closed relation set covers the frozen/general-purpose language without extensibility loss, or typed relation resolution adds avoidable ambiguity/cost without benefit."
+    },
+    {
+      "id":"H-CC-GENERIC-INFIX-NULL-002",
+      "status":"OPEN_WEAKENED_BY_COUNTEREXAMPLE",
+      "claim":"Allowing arbitrary identifier-as-infix syntax is superior to strict lexical relation marking.",
+      "evidence":[],
+      "counterevidence":["prior E2B relation-word lexer ambiguity","EXP-CC-G9-RELATION-SIGIL-003 fail-fast mutation results"],
+      "falsifier":"A declared contextual-infix implementation parses the complete corpus with stable AST, precise typo diagnostics, equal semantic-hash preservation and lower measured reader/token/repair cost than the sigil candidate."
+    }
+  ],
+  "negative_results":[
+    {
+      "id":"NR-CC-BARE-OPEN-RELATION-LEXICAL-003",
+      "status":"NEGATIVE_RESULT_AT_TESTED_SCOPE",
+      "claim":"The current path of bare open relation words remains unsafe to freeze without an explicit lexical/resolution policy; prior E2B replication already exposed an identifier-vs-relation ambiguity, while the sigil proxy removes it at the tested scope."
+    }
+  ]
+}

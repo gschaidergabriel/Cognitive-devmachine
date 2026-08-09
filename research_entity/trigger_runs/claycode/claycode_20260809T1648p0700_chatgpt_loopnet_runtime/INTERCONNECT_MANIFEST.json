@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1648p0700_chatgpt_loopnet_runtime",
+  "trigger": "claycode",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "official_preflight_executed": false,
+  "official_preflight_status": "NOT_RUN_HOSTED_NO_REPO_CHECKOUT",
+  "manual_fail_closed_coverage": true,
+  "deep_inputs": ["claygraph", "unifieddb"],
+  "branches": {
+    "frank": {
+      "status": "READ",
+      "inputs": ["research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md"],
+      "feedback": "Loop-of-loops is representable as typed recurrent state/runtime semantics in the tested proxy; no FRANK-specific ClayCode core primitive is justified."
+    },
+    "clayresearch": {
+      "status": "READ",
+      "inputs": ["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay", "research_entity/rooms/PROGRAM_STATE.json"],
+      "feedback": "BASE_CLAYCODE_RELEASE remains the active gate; prioritize compiler/runtime realization over semantic redesign."
+    },
+    "claygraph": {
+      "status": "DEEP_READ",
+      "inputs": ["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql", "research_entity/claycode/g9/CLAYCODE_G9_DYNAMIC_BINDING_LATTICE_CANDIDATE.clay"],
+      "feedback": "Loop coupling must preserve typed hyperrelation roles, epochs, selection/projection receipts and graph!=authority boundaries."
+    },
+    "unifieddb": {
+      "status": "DEEP_READ",
+      "inputs": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"],
+      "feedback": "Loop state, scheduler decisions and execution receipts require revisioned identities and replayable state; runtime loop identity must not collapse work/resource/capability identity."
+    },
+    "gwt": {
+      "status": "READ",
+      "inputs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
+      "feedback": "Recurrence remains distinct from emergence; loop control must consume typed outcome/re-entry evidence rather than an emergence scalar."
+    },
+    "hyperposition": {
+      "status": "READ",
+      "inputs": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "feedback": "Multirate recurrent coupling should retain gain/delay/timescale and higher-order topology as typed state rather than flattening to pairwise scalar edges."
+    },
+    "emergenz": {
+      "status": "READ_VIA_SHARED_CONTRACT",
+      "inputs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md", "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "feedback": "Convergence, productive cycles, stagnation and divergence are dynamics classes, not emergence claims; lesion/rescue and shuffled controls remain required for causal promotion."
+    },
+    "harness": {
+      "status": "READ_VIA_PROGRAM_GATE",
+      "inputs": ["research_entity/rooms/PROGRAM_STATE.json", "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"],
+      "feedback": "No H1/H2/H3 gate advances. The loop runtime candidate should later be differential-tested against frozen H1 loop traces on Ubuntu."
+    },
+    "claycode": {
+      "status": "DEEP_READ",
+      "inputs": ["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "research_entity/claycode/g9/grammar.ebnf", "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay", "prior typed-canonical, namespace and control-flow trigger runs"],
+      "feedback": "Keep current semantic core. Add/freeze loop-network schemas and runtime lowering only after production tests; reuse the already identified general structured-control-flow work rather than inventing FRANK-specific loop syntax."
+    }
+  }
+}

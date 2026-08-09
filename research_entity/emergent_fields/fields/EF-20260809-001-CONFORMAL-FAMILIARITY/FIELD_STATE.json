@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "field_id": "EF-20260809-001-CONFORMAL-FAMILIARITY",
+  "name": "Conformal Familiarity Metrology",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "spawn_seed": 18192266457284498906,
+  "seed_basis_sha256": "fc77e9f4c5b255da64478b2f0b75c7f5071503f33f80277fae24e4787773ecf9",
+  "created_at": "2026-08-09T15:22:00+07:00",
+  "spawning_run_id": "666-20260809T1522p0700-fc77e9f4",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "shared_program_milestone": "BASE_CLAYCODE_RELEASE",
+  "lifecycle_state": "TESTED",
+  "local_lens": ["measurement/metrology", "conformal prediction", "risk control", "open-set visual familiarity"],
+  "selection": {
+    "mode": "SEEDED_STOCHASTIC_AMONG_HIGH_VALUE_NON_DUPLICATE_CANDIDATES",
+    "selected": "Conformal Familiarity Metrology",
+    "candidate_scores": {
+      "Conformal Familiarity Metrology": 5.48,
+      "Change-Point Learning Governor": 5.36,
+      "Temporal Visual Memory Transactions": 5.32,
+      "Active-Sensing Information Budget": 5.21,
+      "Ecological Novelty Niche": 4.86
+    },
+    "recent_field_crossread": "field-666-20260809T1521p0700-proof-carrying-adaptive-state-485652b7",
+    "non_duplicate_reason": "The recent Proof-Carrying Adaptive State field governs whether adaptive state is promotable after evaluation. This field instead measures whether a visual familiarity/open-set decision is statistically valid enough to justify fast-path routing. They couple at promotion/receipt boundaries but test different failure modes."
+  },
+  "research_question": "What statistical measurement receipt is sufficient to justify FRANK's KNOWN_HIGH_CONFIDENCE visual fast path without converting familiarity into sensor truth?",
+  "hypotheses": [
+    {"id":"CFM-H1","status":"OPEN","claim":"Versioned calibration/risk receipts can make the familiar fast path more measurable and falsifiable than an unqualified confidence threshold."}
+  ],
+  "counterhypotheses": [
+    {"id":"CFM-C1","status":"SUPPORTED_BY_COUNTEREXAMPLE","claim":"Known-only conformal/coverage calibration is not sufficient for open-set safety under overlapping or shifted unknowns."},
+    {"id":"CFM-C2","status":"SUPPORTED_BY_COUNTEREXAMPLE","claim":"Unknown-negative calibration remains scoped to its calibration distribution and can fail under shifted near-manifold unknowns."}
+  ],
+  "experiment_refs": ["research_entity/emergent_fields/fields/EF-20260809-001-CONFORMAL-FAMILIARITY/EXPERIMENT_SYNTHETIC_OPEN_SET.json"],
+  "report_ref": "research_entity/emergent_fields/fields/EF-20260809-001-CONFORMAL-FAMILIARITY/FINAL_REPORT.md",
+  "negative_results": [
+    {"id":"EF-CFM-N1","status":"NEGATIVE_RESULT","claim":"Known-class confidence or known-only conformal coverage cannot be promoted to a general open-set safety guarantee for FRANK's user-adaptive visual learner."}
+  ],
+  "cross_connections": [
+    {"branch":"claycode","delta":"Represent calibration validity, domain/version, unknown-risk evidence, stale/conflict state and replay receipts using existing typed semantics first; no language redesign without executable counterexample."},
+    {"branch":"gwt","delta":"Preserve measured value != inferred claim != evidence status != authority for familiarity calibration receipts."},
+    {"branch":"frank","delta":"Fast-path routing requires classifier result plus calibration validity/open-set evidence/provenance/conflict gates; invalid or shifted state escalates to deeper Retina."},
+    {"branch":"harness","delta":"Extend MVC-E5 with near-manifold unknown confusers, calibration-to-test distribution shift, stale calibration/version invalidation and compute-vs-abstention tradeoffs."},
+    {"branch":"claygraph/unifieddb","delta":"Persist calibration/classifier/backbone version, calibration domain/hash/age/validity lineage and rollback links when those stages materialize the learner state."}
+  ],
+  "integration_result": {
+    "status": "READY_FOR_ROUTING_NOT_CANONICAL_PROMOTION",
+    "promotion_allowed": false,
+    "reason": "Synthetic falsification plus external statistical-method evidence; no real FRANK embedding/hardware test yet."
+  }
+}

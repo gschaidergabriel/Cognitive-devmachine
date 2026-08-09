@@ -1,0 +1,94 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1020p0700-chatgpt-secondary-aicore-updater-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_UPDATER_8_OF_8_DIRECT_FILES",
+  "source_universe":"DRIVE_CLAY/AICORE/updater",
+  "source_folder_id":"1g4J8JhgCbaAcP2Y_T3NvHmrchmMBpNYl",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"files":8,"folders":0,"files_semantically_closed":8,"coverage_percent":100.0},
+  "files":[
+    {"path":"updater/frank_updater.py","bytes":52667,"sha256":"4bab6e817aff3c46009d9231e97850b6502b166d17e4a00f2df45b0fd6a670f5"},
+    {"path":"updater/frank_recovery.py","bytes":15817,"sha256":"02a08e2e49d57998d690d0dc104e2485a4a418311b6dd4db98c36f8e6066207a"},
+    {"path":"updater/frank_recovery_entry.py","bytes":3505,"sha256":"6a9835927c25286f10679120453c361eb8cf69ff3f320b0615189c4de514bfd3"},
+    {"path":"updater/frank_updater_entry.py","bytes":5887,"sha256":"6ef67eda227d51ab23632f4a2dc37434a98b124e8d8cf44f970752268ff9c888"},
+    {"path":"updater/frank_updater_tray.py","bytes":12235,"sha256":"c772937562e39d8c79ad9d4a17f6e46cf02f3dd85dfad2e0c7790e8146d5a355"},
+    {"path":"updater/__init__.py","bytes":55,"sha256":"c02fbd97648bf88084176a7b552ffa85d51231a7bf55aff9f15444918736ad9b"},
+    {"path":"updater/frank-recovery.spec","bytes":1124,"sha256":"a0f1d4c536bc72245d1f4d4cc90c4ae700ed9be38e18cb2cc15ec229f4ad0e9c"},
+    {"path":"updater/frank-updater.spec","bytes":1342,"sha256":"eb91151da7108594cd058010249b404149804c516dbc353f3585fa42780de0fe"}
+  ],
+  "functional_lineage":{
+    "updater":"Fetches origin/main, computes changed files/services, saves pre-update SHA, stops affected services, fast-forward pulls, optionally pip-installs changed requirements, reloads systemd, restarts services, runs health/model checks and can git-reset to the saved SHA on selected failures.",
+    "recovery":"Interactive destructive DB reset path: stop services -> backup live DB directory -> unlink live DB/WAL/SHM files -> copy reference DBs/invariants from repository -> restart prior active services.",
+    "entrypoints":"Desktop/tray/standalone wrappers expose the same update and recovery engines; updater supports --yes auto-confirm and 6-hour tray update checks, while recovery confirmation defaults to false.",
+    "packaging":"PyInstaller specs explicitly set codesign_identity=None; packaging itself provides no code-signing trust anchor."
+  },
+  "cross_source_confirmation":{
+    "project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "confirmed_paths":["updater/frank_updater.py","updater/frank_recovery.py"],
+    "confirmed_current_at_frozen_head":[
+      "model auto-repair downloads via wget and validates only a minimum byte size before replacement",
+      "service health check reports done in both all_ok branches and returns True even when services are inactive",
+      "recovery backs up then wipes/copies DB files and reports completion without an integrity/health rollback gate"
+    ]
+  },
+  "safety_findings":[
+    {
+      "id":"UPDATER-GATE-1-POSTSTART-NONFATAL",
+      "severity_for_current_architecture":"P1_CONFIRMED_LINEAGE",
+      "evidence":"step_start_services warns on failed starts but returns True; step_health_check sets status to done whether all_ok is true or false and always returns True. Main run invokes both without checking return values and then prints the success path.",
+      "effect":"An update can be declared successful while one or more affected services failed to start or remain unhealthy. Rollback is not triggered by this failure class.",
+      "required_contract":"Post-update activation and health are commit gates. Any required service failure must abort the update transaction and restore the prior verified release/state, or explicitly enter a degraded recovery state that cannot be labeled success."
+    },
+    {
+      "id":"UPDATER-SUPPLY-2-MODEL-SIZE-ONLY",
+      "severity_for_current_architecture":"P1_CONFIRMED_LINEAGE",
+      "evidence":"_download_model downloads directly from configured HTTPS URLs to a temporary path and accepts/replaces the target when file size exceeds min_bytes. No expected digest/signature is bound in MODEL_REGISTRY or checked in this path.",
+      "effect":"Artifact identity is not cryptographically established; a wrong/corrupted/compromised artifact of plausible size can become the active model/voice file.",
+      "required_contract":"Every executable/model/data artifact must be content-addressed or signature-verified before activation. Registry entries require expected digest/signature/provenance and atomic verified install."
+    },
+    {
+      "id":"UPDATER-SUPPLY-3-CODE-DEPENDENCY-TRUST",
+      "severity_for_current_architecture":"P1_HARDENING_REQUIREMENT",
+      "evidence":"Update commits are accepted from configured origin/main via git fetch/pull --ff-only and changed requirements trigger pip install -r. The updater itself does not verify a pinned commit allowlist/signature or hashed dependency lock before activation.",
+      "effect":"Repository/remote or dependency-channel compromise can propagate into the running agent with its local authority.",
+      "required_contract":"Separate discovery from authorization: fetch candidate release, verify signed/content-addressed release manifest and dependency lock, stage in isolated environment, run Harness gates, then atomically activate."
+    },
+    {
+      "id":"RECOVERY-GATE-4-BACKUP-NOT-TRANSACTION",
+      "severity_for_current_architecture":"P1_CONFIRMED_LINEAGE",
+      "evidence":"Recovery makes a file copy backup, wipes live DB files, copies reference files, starts services, and returns success. Failed service starts are warnings; no SQLite integrity checks, schema/invariant validation, reference manifest digest, or automatic restore-from-backup path is executed before success.",
+      "effect":"A failed or incompatible reference restore can leave the live state replaced while the tool announces completion; the backup exists but restoration from it is manual/out-of-band.",
+      "required_contract":"Recovery must be a staged transaction: immutable snapshot -> validate reference manifest/hashes/schema -> restore into staging -> integrity/invariant checks -> boot/health probe -> atomic swap. Failure automatically restores the snapshot."
+    },
+    {
+      "id":"RECOVERY-AUTH-5-DESTRUCTIVE-SURFACE",
+      "severity_for_current_architecture":"AUTHORITY_REQUIREMENT",
+      "evidence":"Recovery explicitly unlinks all current DB files after an interactive confirmation. The path is deliberately destructive, though reversible only via retained backups.",
+      "effect":"This operation cannot belong to ordinary autonomous Frank/Needle authority under the current no-destructive-action Clay alignment target.",
+      "required_contract":"Expose recovery as a privileged reversible maintenance transaction requiring explicit external/user authorization; ordinary model-generated action paths may inspect/prepare but cannot execute the destructive commit."
+    }
+  ],
+  "positive_controls":[
+    "Updater saves the exact pre-update Git SHA and uses fast-forward-only pull.",
+    "Updater scopes service restarts to changed-file mappings and has an update lock.",
+    "Model downloads use temporary files before replacement and have timeout/min-size checks.",
+    "Recovery confirmation defaults to No and makes a timestamped backup before wiping.",
+    "Recovery stops services before DB copy operations and retains up to three backup directories."
+  ],
+  "current_architecture_feedback":{
+    "needle":["Ordinary effect authority must not include destructive DB wipe/reset or unverified software/model activation.","Model/code update is a privileged transaction, not a generic shell effect."],
+    "harness":["Add fault-injection gates for failed service start, failing /health, corrupted model of valid size, bad DB schema, interrupted copy, dependency-install failure and rollback failure.","No green success state unless post-activation health and invariant gates pass."],
+    "claycode":["Represent UpdateCandidate, VerifiedArtifact, StagedRelease, Activation, RollbackSnapshot and DestructiveRecoveryCommit as distinct effect types with authority levels.","A destructive commit primitive must be unavailable to normal generated ClayCode; preparation/verification can remain autonomous."],
+    "unifieddb":["Snapshots and recovery should be database-native consistent checkpoints, not ad-hoc copies of live multi-file state.","Persist release/recovery manifests with hashes, schema versions and snapshot ancestry."],
+    "claygraph":["Record release and recovery ancestry as immutable graph edges: previous release -> candidate -> verified -> activated or rolled_back."],
+    "frank":["Frank may reason about and recommend updates/recovery, but runtime authority must distinguish cognition from privileged state mutation."],
+    "gwt":["Broadcast proposed/verified/activated/failed/rolled_back update states separately so a failed health check cannot be represented as completed success."],
+    "clay":["One-binary dissolution must strengthen, not erase, the transaction boundary: central artifact verification + activation gate + rollback is required before module fusion."]
+  },
+  "training":{"executed":false,"authorized":false},
+  "next":"Continue exact AICORE sibling closure; keep updater/recovery P1 lineage in the Harness safety acceptance set.",
+  "created_at":"2026-08-09T10:20:00+07:00"
+}

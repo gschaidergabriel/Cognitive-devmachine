@@ -1,0 +1,68 @@
+name: ClayCode Andreas target autoprobe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/claycode-andreas-target-autoprobe.yml'
+permissions:
+  contents: write
+concurrency:
+  group: claycode-andreas-target-autoprobe
+  cancel-in-progress: false
+jobs:
+  target:
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Probe registered target identity and run acceptance when verified
+        shell: bash
+        run: |
+          mkdir -p research_entity/claycode/target
+          set +e
+          python3 tools/claycode_target_host_identity.py verify --json > /tmp/claycode_identity.json
+          identity_rc=$?
+          if [ "$identity_rc" -eq 0 ]; then
+            python3 -m pip install --user --disable-pip-version-check 'lark[interegular]==1.3.1'
+            python3 tools/claycode_run_andreas_target_acceptance.py
+            acceptance_rc=$?
+          else
+            acceptance_rc=97
+          fi
+          python3 - "$identity_rc" "$acceptance_rc" <<'PY'
+          import json,platform,subprocess,sys
+          from pathlib import Path
+          identity_rc=int(sys.argv[1]); acceptance_rc=int(sys.argv[2])
+          try: identity=json.load(open('/tmp/claycode_identity.json',encoding='utf-8'))
+          except Exception as exc: identity={'parse_error':type(exc).__name__}
+          payload={
+            'schema_version':'1.0',
+            'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
+            'executed_on_self_hosted_runner':True,
+            'identity_returncode':identity_rc,
+            'identity':identity,
+            'target_identity_verified':identity_rc==0,
+            'acceptance_invoked':identity_rc==0,
+            'acceptance_returncode':acceptance_rc,
+            'release_pass_claimed':False,
+            'runner_uname':subprocess.run(['uname','-a'],text=True,capture_output=True).stdout.strip(),
+            'python_version':platform.python_version(),
+          }
+          Path('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+          exit 0
+      - name: Preserve probe and any target receipts
+        run: |
+          git config user.name 'claycode-andreas-autoprobe'
+          git config user.email 'claycode-andreas-autoprobe@users.noreply.github.com'
+          git add research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json
+          test ! -f research_entity/claycode/target/ANDREAS_UBUNTU_BASE_ACCEPTANCE.json || git add research_entity/claycode/target/ANDREAS_UBUNTU_BASE_ACCEPTANCE.json
+          git add research_entity/claycode/target/*.json 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -m 'ClayCode: record Andreas self-hosted autoprobe'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

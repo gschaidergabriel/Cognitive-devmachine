@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1431p0700-chatgpt-secondary-pf-visual-wiring-validation",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "parent_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1424p0700_chatgpt_secondary_pf_visual_selfmodel_drift.json",
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "files_read": ["gateway/app.py", "agentic/loop.py"],
+    "queries": ["frank-feature-training", "feature_trainer.py", "feature-training.service"]
+  },
+  "coverage_credit": {
+    "exact_level0_percent_added": 0.0,
+    "reason": "Validation shard only; Project-Frankenstein exhaustive denominator remains unfrozen."
+  },
+  "observations": [
+    {
+      "id": "OBS-WIRE-001",
+      "kind": "code_fact",
+      "claim": "gateway/app.py /chat/vision directly imports tools.native_vision.get_vision and calls get_vision().analyze() for uploaded-image analysis."
+    },
+    {
+      "id": "OBS-WIRE-002",
+      "kind": "code_fact",
+      "claim": "The same /chat/vision endpoint returns metadata model='frankeye' even though the implementation path immediately above used NativeVision. This is a concrete naming/telemetry drift at the API surface."
+    },
+    {
+      "id": "OBS-WIRE-003",
+      "kind": "code_fact",
+      "claim": "agentic/loop.py _capture_visual_context directly imports tools.native_vision.get_vision and uses NativeVision for error-screenshot analysis, confirming NativeVision is wired into agentic error-observation behavior at frozen HEAD."
+    },
+    {
+      "id": "OBS-WIRE-004",
+      "kind": "negative_search_result",
+      "claim": "Repository search for frank-feature-training and feature_trainer.py returned only ext/feature_trainer.py; search for feature-training.service returned no result. The repository therefore does not provide evidence in this shard that the feature trainer service is installed/enabled from tracked code."
+    }
+  ],
+  "synthesis": {
+    "backend_selection": "NativeVision is demonstrably wired into at least the remote vision API and agentic visual error-context path. The earlier counterhypothesis that NativeVision might be an isolated unused file is materially weakened.",
+    "trainer_activity": "The stale FrankEye training ground truth remains a real repository artifact, but active corruption risk is not established because no tracked service enablement/invocation was found. Treat active execution as OPEN, not CURRENT.",
+    "telemetry_bug": "API metadata reports model='frankeye' for a NativeVision-backed request. Any Harness/observability layer that trusts this label can misclassify backend provenance even when execution is correct.",
+    "level0_lineage": "Project-Frankenstein carries at least three distinct states that must not be collapsed: legacy FrankEye implementation, newer NativeVision execution wiring, and stale/legacy naming/self-knowledge artifacts that still say FrankEye."
+  },
+  "branch_feedback": {
+    "harness": "Record backend provenance from actual execution identity/version rather than the legacy API label 'frankeye'; add a test that endpoint metadata matches executed backend.",
+    "frank": "Separate capability name ('vision') from backend implementation identity and historical aliases.",
+    "claygraph": "Encode alias versus supersession explicitly: FrankEye can remain a historical/capability alias while NativeVision is current backend for confirmed call paths.",
+    "unifieddb": "Persist execution receipts with backend module/version, not only user-facing model labels.",
+    "claycode": "Make perception effect receipts carry semantic backend identity distinct from compatibility/display aliases."
+  },
+  "counterhypotheses": [
+    {
+      "id": "CH-WIRE-001",
+      "claim": "Some other visual call paths may still use FrankEye.",
+      "status": "OPEN",
+      "reason": "This shard validates two NativeVision paths, not all vision paths."
+    },
+    {
+      "id": "CH-WIRE-002",
+      "claim": "feature_trainer may be installed/enabled outside tracked repository state.",
+      "status": "OPEN",
+      "next_test": "Requires actual target-machine/systemd/runtime receipt; repository search cannot establish external service state."
+    }
+  ],
+  "negative_results": [
+    "No tracked feature-training service unit or repository-side invocation was found by the available code-search surface.",
+    "No exact Level-0 coverage credit is justified.",
+    "No claim is made about target-machine service enablement without runtime evidence."
+  ]
+}

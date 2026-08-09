@@ -1,0 +1,59 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1053p0700-chatgpt-secondary-aicore-writer-sandbox-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_WRITER_RECURSIVE_SCOPE",
+  "source_universe":"DRIVE_CLAY/AICORE/writer",
+  "source_folder_id":"1FsjU2dGOIAsOvyoypHcekjo9BAKewB-a",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"units_below_folder":3,"folder_units":1,"file_units":2,"file_units_semantically_closed":2,"coverage_percent":100.0},
+  "files":[
+    {"path":"writer/sandbox/executor.py","drive_id":"1p3FP-3djhMdw2d--t9xIJOKXuJpsOACh","bytes":8232,"sha256":"5bca6faa2c8189eb91a084decf17ef3084a5b38aa17abb914212818420aa44b6"},
+    {"path":"writer/sandbox/__init__.py","drive_id":"1Cnw4pXiqCD7xyo2JRV-bxxAb4OuQHHIS","bytes":54,"sha256":"a75b0c1fda391cda54a00f9f09e2f016c7dc237abfd1892cf3c5631cc2a5266","disposition":"package_marker_only"}
+  ],
+  "cross_source_reconciliation":{
+    "project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "path_lookup_result":"writer/sandbox/executor.py was not present at the frozen-head path; repository code search did not surface writer/sandbox. Treat as Drive-only/later-uncommitted lineage until history-aware reconciliation proves ancestry.",
+    "rule":"Do not back-project this executor into the frozen PF head architecture."
+  },
+  "executed_reproduction":{
+    "configuration":{"allow_network":false,"timeout_sec":5,"memory_mb":256,"max_processes":10},
+    "language":"bash",
+    "probe":"Read non-secret HOME presence, read /etc/hostname, write a benign marker to /tmp outside the per-execution cwd, then remove marker from the outer test harness.",
+    "result":{"success":true,"return_code":0,"home_visible":true,"etc_hostname_readable":true,"outside_cwd_tmp_write":true},
+    "interpretation":"The documented temp-dir isolation is cwd isolation only; it is not a filesystem security boundary. Parent environment is inherited."
+  },
+  "safety_findings":[
+    {"id":"SANDBOX-BOUNDARY-1-NETWORK-FLAG-NOOP","severity_for_current_architecture":"P0_IF_USED_AS_UNTRUSTED_CODE_SANDBOX","evidence":"SandboxExecutor stores allow_network from config but executor.py contains no enforcement path for it. Processes inherit the host network namespace.","effect":"Code believed to be network-disabled is not actually network-isolated.","required_contract":"Network capability must be enforced outside generated code using a fail-closed namespace/seccomp/proxy capability boundary; a boolean carried only in Python state is insufficient."},
+    {"id":"SANDBOX-BOUNDARY-2-FILESYSTEM-NOT-ISOLATED","severity_for_current_architecture":"P0_IF_USED_AS_UNTRUSTED_CODE_SANDBOX","evidence":"Subprocess cwd is a fresh temp directory, but there is no mount/user namespace, chroot, Landlock/seccomp filesystem policy or path broker. Executed benign probe read /etc/hostname and wrote /tmp/frank_writer_escape_probe.txt outside cwd.","effect":"Generated code can read/write any host path available to the Frank OS user, including project/state files, regardless of the sandbox temp directory.","required_contract":"ClayCode execution must expose explicit capability-mounted inputs/outputs only; host filesystem is deny-by-default and destructive primitives cannot be reachable through ambient POSIX access."},
+    {"id":"SANDBOX-BOUNDARY-3-AMBIENT-ENVIRONMENT","severity_for_current_architecture":"P0_IF_PARENT_HAS_SECRETS","evidence":"env = dict(os.environ) passes the full parent environment to generated code. Benign reproduction confirmed inherited HOME visibility.","effect":"API tokens, credentials or authority-bearing environment variables present in the parent may become readable by generated code.","required_contract":"Start from a minimal allowlisted environment; secrets are never ambient and must be capability-brokered per operation."},
+    {"id":"SANDBOX-RESOURCE-4-OUTPUT-DISK-UNBOUNDED","severity_for_current_architecture":"P1_HARDENING_REQUIREMENT","evidence":"ulimit -v and -u plus wall timeout are set, but stdout/stderr are fully buffered by parent communicate(), and no file-size/quota limit is applied to the temp directory or other writable paths.","effect":"A child can consume parent memory through huge pipe output or disk through large writes despite its virtual-memory/process limits.","required_contract":"Bound stdout/stderr bytes, writable storage quota, CPU time, wall time, open files and process count with externally enforced kill/cleanup semantics."},
+    {"id":"SANDBOX-LANGUAGE-5-RUST-COMPILE-NOT-RUN","severity_for_current_architecture":"FUNCTIONAL_CORRECTNESS","evidence":"rust maps to rustc and the generic command is ['rustc', code.rs]; unlike Go there is no subsequent execution of the compiled binary.","effect":"A Rust program can be reported successful when only compilation succeeded, making language-differential Harness results incomparable.","required_contract":"Language adapters must implement compile+run semantics explicitly and declare execution surface/version."},
+    {"id":"SANDBOX-STATE-6-CANCEL-LATCH","severity_for_current_architecture":"P2_CORRECTNESS","evidence":"cancel() sets _cancel_requested=True and it is reset only by cleanup(), not at the start/end of each execute call.","effect":"A reused executor after one cancellation may label later successful executions Cancelled until cleanup is invoked.","required_contract":"Cancellation state is per-execution identity, not shared sticky mutable state."
+    }
+  ],
+  "positive_controls":[
+    "Uses a fresh temp cwd per execution and tracks cleanup directories.",
+    "Starts a separate process session and kills the process group on timeout/cancel.",
+    "Applies virtual-memory and process-count ulimits on Linux.",
+    "Uses non-interactive matplotlib backend and captures a bounded semantic output filename for plots.",
+    "Unsupported language is rejected before execution."
+  ],
+  "current_architecture_feedback":{
+    "claycode":["This executor is a historical precursor, not an acceptable security boundary. ClayCode must compile effect capabilities so destructive/network/host-filesystem actions are unrepresentable without explicit privileged capability tokens.","Separate pure computation runtime from effect broker; normal generated programs get no ambient POSIX host authority."],
+    "needle":["Needle owns effect mediation; shell/process execution cannot bypass typed permission/effect checks by inheriting host user authority."],
+    "harness":["Promote filesystem escape, env-secret exposure, network-deny enforcement, fork/output/disk bombs, timeout/cancel reuse and compile-vs-run language parity to mandatory adversarial tests."],
+    "unifieddb":["Execution inputs/results/artifacts need provenance and bounded output storage; generated code must not open database files directly via host paths."],
+    "claygraph":["Record requested capability set, granted capabilities, sandbox runtime identity and observed effects per execution event."],
+    "frank":["Frank may reason freely about code but execution authority is a separate substrate. A statement like allow_network=false must correspond to an externally verifiable enforcement state."],
+    "gwt":["Broadcast requested/granted/denied effects and execution result separately; never present 'sandboxed' as a fact from configuration alone."],
+    "clay":["One-module fusion must preserve a hard capability boundary at the OS/effect edge; dissolving modules must not dissolve isolation."
+    ]
+  },
+  "earned_work_hours_added":0.0,
+  "training":{"executed":false,"authorized":false},
+  "next":"Release writer claim. Keep this Drive-only executor as a negative-result lineage and use it to define ClayCode/Harness sandbox acceptance tests.",
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

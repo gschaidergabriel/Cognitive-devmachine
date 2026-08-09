@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1433+0700-chatgpt-secondary-pf-hypothesis-experiment-adequacy",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "source_family": "PROJECT_FRANKENSTEIN",
+  "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "status": "SHARD_COMPLETE_INTEGRATED_DENOMINATOR_NOT_FROZEN",
+  "scope": "Narrow hypothesis-to-experiment adequacy shard explicitly reserved by PROJECT_FRANKENSTEIN_MANIFEST.json; avoids broad experiment/benchmark chronology.",
+  "sources": [
+    "services/hypothesis_engine/service.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/hypothesis_engine/lab_connector.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/hypothesis_engine/evaluator.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "services/experiment_lab.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+  ],
+  "findings": [
+    {
+      "id": "PF-HX-001",
+      "type": "MECHANISM",
+      "mechanism": "Project-Frankenstein already implements a persistent empirical hypothesis lifecycle: observe/hypothesize/predict/test/revise, creation and experiment budgets, active-hypothesis caps, novelty guards, passive evaluation, active lab tests, persisted experiment linkage, inconclusive retry and bounded auto-revision.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE",
+      "reuse_category": "MEASUREMENT_FOUNDATION_WITH_ADAPTATION",
+      "targets": ["frank", "harness", "claycode", "emergenz", "gwt"],
+      "implication": "Preserve the lifecycle/state-machine semantics as H1 archaeology and differential-test them in H2/H3 rather than rebuilding research orchestration from prose."
+    },
+    {
+      "id": "PF-HX-002",
+      "type": "NEGATIVE_RESULT",
+      "mechanism": "Experimental testability is partly inferred by keyword-to-station routing. The quantum keyword list includes terms such as world model, integrated information, phi, binding problem, qualia and consciousness, so a cognitive claim can be routed to a quantum simulation without evidence that the simulation operationalizes the claim.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE_STATIC_ANALYSIS",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "emergenz", "gwt", "frank"],
+      "falsifier": "Show an explicit station contract that maps the hypothesis' predicted variable and intervention to the returned quantum observable for every such routed term.",
+      "implication": "Current Harness must require an explicit hypothesis->intervention->observable->decision contract before granting causal-test credit."
+    },
+    {
+      "id": "PF-HX-003",
+      "type": "NEGATIVE_RESULT",
+      "mechanism": "When semantic parsing fails, LabConnector can execute randomized station defaults. This preserves execution availability but can sever the causal relationship between the original prediction and the parameters actually tested.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE_STATIC_ANALYSIS",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "claycode", "emergenz", "unifieddb"],
+      "implication": "Fallback experiments may be exploratory only. They must not confirm/refute the originating hypothesis unless a machine-checkable adequacy receipt proves variable/intervention alignment."
+    },
+    {
+      "id": "PF-HX-004",
+      "type": "NEGATIVE_RESULT",
+      "mechanism": "Experiment verdict interpretation uses narration keyword scores such as 'matches', 'consistent', 'expected', 'unexpected' and 'failed' when explicit markers are absent. It does not require structured comparison of the hypothesis prediction against the experiment's measured result.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE_STATIC_ANALYSIS",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "targets": ["harness", "emergenz", "gwt", "claycode"],
+      "implication": "Replace narration-level verdict authority with structured result predicates and preregistered thresholds; narration is explanatory output only."
+    },
+    {
+      "id": "PF-HX-005",
+      "type": "ARCHITECTURE_CONSTRAINT",
+      "mechanism": "ExperimentLab itself is a deterministic pure-computation multi-station simulator for fixed parameters with persistence, budgets, dedup and an imagination-leak rejection guard. The scientific weakness is therefore mainly the semantic binding between hypothesis and experiment, not the existence of a test runner.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE",
+      "reuse_category": "DIRECTLY_REUSABLE_WITH_ADAPTATION",
+      "targets": ["harness", "claycode", "frank"],
+      "implication": "Reuse the runner/persistence pattern, but interpose a typed adequacy contract before execution and verdict promotion."
+    },
+    {
+      "id": "PF-HX-006",
+      "type": "ARCHITECTURE_CONSTRAINT",
+      "mechanism": "Passive hypothesis confidence is modified by time-without-evidence and heuristic conversational/idle-thought pattern matching. These values are useful prioritization signals but should not be promoted as calibrated epistemic probabilities without validation.",
+      "evidence_class": "HISTORICAL_RUNTIME_CODE_STATIC_ANALYSIS",
+      "reuse_category": "SUPERSEDED_BUT_INFORMATIVE",
+      "targets": ["frank", "harness", "claycode", "unifieddb"],
+      "implication": "Separate scheduling/prioritization score from evidence confidence and keep provenance for every update."
+    }
+  ],
+  "cross_source_pattern": {
+    "name": "EXECUTION_IS_NOT_DISCRIMINATION",
+    "statement": "A tool or simulation run only earns hypothesis-test credit when the executed intervention and measured observable are demonstrably linked to the preregistered prediction.",
+    "current_mesh_relevance": ["Harness causal receipts", "GWT lesion/rescue", "Emergence null models", "Hyperposition intervention tests", "ClayCode typed effects"]
+  },
+  "earned_work_result": {
+    "credit_status": "MATERIAL_REUSE_CONFIRMED_NO_NEW_HOURS_QUANTIFIED",
+    "new_reuse_families": ["hypothesis lifecycle orchestration", "experiment persistence/budget/dedup", "imagination-leak guard"],
+    "negative_result_value": ["semantic station misrouting", "random fallback experiment inadequacy", "narration keyword verdict bias"],
+    "new_avoided_future_hours_awarded": 0.0,
+    "reason": "Mechanism reuse is real, but row-level overlap with existing Harness/research-center work is not yet reconciled."
+  },
+  "exact_level0_progress": {
+    "percent_awarded": 0.0,
+    "reason": "Project-Frankenstein full frozen tree/history denominator remains unavailable on the current recursive read surface. This shard is valid semantic evidence but cannot define repository-wide coverage."
+  },
+  "next_tests": [
+    "Construct adversarial hypotheses containing 'consciousness' or 'integrated information' whose predictions have no quantum observable and verify current router misclassification.",
+    "Force station parse failure and verify fallback parameters differ from the prediction while the run still returns success.",
+    "Replay narrations containing positive verdict keywords with numerically contradictory structured results to measure false-confirmation risk.",
+    "Define a typed adequacy receipt schema binding hypothesis_id, intervention, manipulated variable, observable, threshold/null, result and verdict."
+  ],
+  "completed_at": "2026-08-09T14:33:00+07:00"
+}

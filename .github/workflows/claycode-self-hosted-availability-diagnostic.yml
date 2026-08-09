@@ -1,0 +1,23 @@
+name: ClayCode self-hosted runner availability diagnostic
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/claycode/diagnostics/**'
+
+permissions:
+  contents: read
+
+jobs:
+  availability:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'diag/claycode-full-frank-actions-20260809'
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 5
+    steps:
+      - name: Report runner availability without checking out PR code
+        shell: bash
+        run: |
+          echo "SELF_HOSTED_RUNNER_REACHED=1"
+          uname -a
+          python3 --version || true
+          test -f "$HOME/.config/claycode/andreas_target_registration.json" && echo "TARGET_REGISTRATION_PRESENT=1" || echo "TARGET_REGISTRATION_PRESENT=0"

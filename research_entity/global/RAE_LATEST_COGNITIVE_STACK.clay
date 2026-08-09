@@ -1,6 +1,6 @@
 module rae.stack.latest
 
-epoch 9
+epoch 10
 entity frank-project-global-research-entity
 
 stack CURRENT {
@@ -33,10 +33,12 @@ stack CURRENT {
   room_schema=@research_entity/rooms/ROOM_DB_SCHEMA.json
   chatgpt_endturn=@research_entity/global/RAE_CHATGPT_CLAYCODE_ENDTURN_PROTOCOL.clay
   chatgpt_delegation=@research_entity/global/RAE_CHATGPT_DELEGATION_PROTOCOL.clay
+  chatgpt_dynamic_trigger=@research_entity/global/RAE_CHATGPT_DYNAMIC_TRIGGER_ROUTER.clay
   hive=@research_entity/global/RAE_HIVE_ENTITY_CONTRACT.md
 }
 
 rule resolve(CURRENT) every substantive_turn
+rule dynamic_message_prefix(raejob-) -> CURRENT.chatgpt_dynamic_trigger before normal trigger registry
 rule explicit_cognition uses CURRENT.claycode
 rule state_query uses CURRENT.unifieddb
 rule associative_projection uses CURRENT.claygraph
@@ -62,6 +64,7 @@ rule promote requires evidence+counterhypothesis+matched_budget_replay+semantic_
 invariant all_organs_same_moving_stack
 invariant all_research_center_machine_coordination_uses_latest_claycode
 invariant ChatGPT_delegation_results_return_to_shared_RAE_state
+invariant raejob_token_deterministically_addresses_repo_request
 invariant latest_means_admitted_stack_pointer_not_newest_timestamp
 invariant research_candidate_use_preserves_XENO_G8_hard_control_gates
 invariant critical_control_invariants_preserved_across_candidate_language_updates

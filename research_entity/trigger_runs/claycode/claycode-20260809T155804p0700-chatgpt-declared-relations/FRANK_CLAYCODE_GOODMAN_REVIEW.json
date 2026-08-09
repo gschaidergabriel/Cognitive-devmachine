@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T155804p0700-chatgpt-declared-relations",
+  "latest_frank_claycode_architecture_artifact":null,
+  "artifact_discovery_note":"No current FRANK_ARCHITECTURE.claycode.json was established in this run; current fused FRANK architecture overlays and fixed v0.1 contracts were treated as provisional requirements, not independent evidence.",
+  "items":[
+    {
+      "claim_id":"GOODMAN-CC-SURFACE-DECLREL-001",
+      "frank_statement":"FRANK architecture distinctions must survive ClayCode representation without parser ambiguity or accidental semantic promotion.",
+      "frank_source_refs":["current fused FRANK target architecture overlay","research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"],
+      "ancestry_families":["FRANK_CLAY_SHARED_ARCHITECTURE_LINEAGE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Open-ended prose-like relations are harmless because later code can infer intended meaning.",
+      "falsifier":"A full parser/runtime shows open-ended relations have deterministic intended AST/semantic resolution, stable roundtrip identity and no typo/authority ambiguity at equal or lower cost.",
+      "independent_checks":["Current-run 50000 unknown-relation fuzz: naive relation parser accepted all, declared resolver rejected all","Tree-sitter official documentation separates keywords/identifiers and resolves lexical conflicts explicitly","MLIR ODS/SymbolTable independently centralize operation/symbol definitions and verification"],
+      "adversarial_checks":["undeclared relation typo fuzz","digit-prefixed semantic symbol vs pure-number ambiguity fuzz","declared relation mutation semantic-hash test"],
+      "verdict":"REFINED",
+      "reason":"Independent parser/compiler practice and executable fuzz support fail-closed declared semantic resolution, but do not establish whether relation-word retention is better than full normalization.",
+      "claycode_action":"Keep arbitrary identifier-as-operator non-authoritative; compare finite declared relations against strict source normalization on full corpus before freezing surface policy.",
+      "affected_claycode_artifacts":["research_entity/claycode/g9/grammar.ebnf","research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-MVC-NOPRIMITIVE-002",
+      "frank_statement":"Adaptive visual learner requirements should not force new ClayCode primitives unless existing typed records/rules/effects fail under real compile/replay.",
+      "frank_source_refs":["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"],
+      "ancestry_families":["OWNER_FIXED_FRANK_V0_1_REQUIREMENT","FRANK_RETINA_LINEAGE"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Full learner semantics require a dedicated ClayCode primitive or opaque host service.",
+      "falsifier":"Frozen H1 learner transitions fail full parser/type/effect/lowering/replay without a new primitive or semantic escape hatch.",
+      "independent_checks":["Reused prior current-run gate/lowering evidence only; this run did not independently execute the full learner"],
+      "adversarial_checks":["No new learner claim promoted from parser results"],
+      "verdict":"UNRESOLVED",
+      "reason":"This run concerns parser/semantic resolution and adds no independent full learner adequacy evidence.",
+      "claycode_action":"No semantic growth; proceed to complete parser/canonical IR and then real frozen learner compile/replay.",
+      "affected_claycode_artifacts":["research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"]
+    }
+  ]
+}

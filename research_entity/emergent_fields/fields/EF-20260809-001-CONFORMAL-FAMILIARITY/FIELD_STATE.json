@@ -12,7 +12,7 @@
   "spawning_run_id": "666-20260809T1522p0700-fc77e9f4",
   "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
   "shared_program_milestone": "BASE_CLAYCODE_RELEASE",
-  "lifecycle_state": "TESTED",
+  "lifecycle_state": "INTEGRATED",
   "local_lens": ["measurement/metrology", "conformal prediction", "risk control", "open-set visual familiarity"],
   "selection": {
     "mode": "SEEDED_STOCHASTIC_AMONG_HIGH_VALUE_NON_DUPLICATE_CANDIDATES",
@@ -37,6 +37,7 @@
   ],
   "experiment_refs": ["research_entity/emergent_fields/fields/EF-20260809-001-CONFORMAL-FAMILIARITY/EXPERIMENT_SYNTHETIC_OPEN_SET.json"],
   "report_ref": "research_entity/emergent_fields/fields/EF-20260809-001-CONFORMAL-FAMILIARITY/FINAL_REPORT.md",
+  "cross_room_event_ref": "research_entity/rooms/rooms/center/events/delta-666-20260809T1522p0700-conformal-familiarity.json",
   "negative_results": [
     {"id":"EF-CFM-N1","status":"NEGATIVE_RESULT","claim":"Known-class confidence or known-only conformal coverage cannot be promoted to a general open-set safety guarantee for FRANK's user-adaptive visual learner."}
   ],
@@ -48,7 +49,7 @@
     {"branch":"claygraph/unifieddb","delta":"Persist calibration/classifier/backbone version, calibration domain/hash/age/validity lineage and rollback links when those stages materialize the learner state."}
   ],
   "integration_result": {
-    "status": "READY_FOR_ROUTING_NOT_CANONICAL_PROMOTION",
+    "status": "ROUTED_TO_MESH_NOT_CANONICAL_PROMOTION",
     "promotion_allowed": false,
     "reason": "Synthetic falsification plus external statistical-method evidence; no real FRANK embedding/hardware test yet."
   }

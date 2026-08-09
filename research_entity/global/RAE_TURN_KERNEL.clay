@@ -1,0 +1,38 @@
+module rae.turn.v1
+
+// Inject every substantive cognition round. Keep tiny. Rich state stays addressable by refs.
+
+entity E=frank-project-global-research-entity
+think MODE=CLAYCODE
+
+// GWT tensor = selection + delivery/use closure, not truth authority.
+tensor GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry]
+rule focus=argmax(admissible(GWT[0:5]))
+rule credit iff receipt(deliv,recon,use,effect,reentry)
+invariant salience!=truth
+invariant addressable!=used
+
+// State read ladder. Expand only when needed.
+read T0=verify(canonical,bootstrap,entity)
+read T1=route(trigger_registry,domain_registry)
+read T2=assemble(CURRENT,OPEN,NEGATIVE,REFUTED,SUPERSEDED,packets,active_experiments,open_handoffs)
+read T3=deep(raw,lineage,snapshots,full_protocols) iff mutate|conflict|recovery|high_impact|insufficient
+invariant no_eager_repo_dump
+invariant evidence>organ
+
+// Human surface selected per organ each turn.
+surface CHATGPT=DE_NORMAL
+surface CLAUDE=EN_CAVEMAN
+
+// Final visible status for every substantive project response.
+status protocol=@research_entity/global/STATUS_FOOTER_PROTOCOL.md
+status final_block=plain_fenced_text
+status opener="```text"
+status no_content_after=true
+status fields=[RAE_STATUS,NEXT_LEVEL,DOOMSDAY]
+
+// Experience -> ClayCode research material.
+observe UX=[misunderstanding,good_outcome,friction,awkwardness,retrieval_miss,stale_state,wrong_route,repair,token_waste]
+route UX -> claycode_research_candidate
+rule promote_learning iff repeated_or_high_impact && evidence && replayable
+rule microadapt iff low_risk && bounded && outcome_supported

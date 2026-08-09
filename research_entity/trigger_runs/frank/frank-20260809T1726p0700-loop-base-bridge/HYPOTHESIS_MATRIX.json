@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1726p0700-loop-base-bridge",
+  "hypotheses": [
+    {
+      "id": "H-FRANK-LOOP-001",
+      "status": "OPEN_SUPPORTED_BY_SYNTHETIC_PROXY",
+      "claim": "A typed halt rule using both state-delta and unresolved residual pressure will reduce false convergence/false halt relative to a delta-only rule on real FRANK replay episodes.",
+      "support": ["synthetic proxy A: delta-only falsely converged on 100% stalled toy trajectories; delta+residual-pressure produced 0% false convergence in the constructed toy set"],
+      "falsifier": "On matched H1 frozen episodes, delta+pressure fails to reduce false halt/stagnation classification versus delta-only after controlling thresholds and budgets.",
+      "next_test": "H1 replay classification with converging, stalled, productive-cycle and diverging episodes."
+    },
+    {
+      "id": "H-FRANK-LOOP-002",
+      "status": "OPEN_SUPPORTED_BY_EXTERNAL_AND_SYNTHETIC_ANALOGY",
+      "claim": "Outcome-gated adaptive recurrence will outperform one fixed recurrence budget across heterogeneous FRANK task difficulty at matched compute or matched outcome quality.",
+      "support": ["2025 recurrent-depth language-model research reports gains from scaling recurrent test-time compute", "2026 overthinking research reports that additional reasoning can degrade already-correct trajectories", "synthetic proxy B favored adaptive stopping under deliberately heterogeneous optimum-depth assumptions"],
+      "falsifier": "A fixed budget matches or beats adaptive routing on H1 frozen episodes across outcome quality, latency, compute, false halt and recovery after threshold tuning.",
+      "next_test": "Matched fixed-budget vs adaptive continue/halt routing on H1."
+    },
+    {
+      "id": "H-FRANK-GWT-003",
+      "status": "OPEN",
+      "claim": "GWT ignition/focus carries useful predictive information for whether another expensive recurrence step has positive marginal utility.",
+      "support": ["mechanistic compatibility only; no FRANK causal evidence yet"],
+      "falsifier": "Ignition/focus adds no predictive or causal value beyond task difficulty, residual pressure and loop-local state on held-out H1 episodes.",
+      "next_test": "Ablate/permute GWT routing variables under matched replay."
+    },
+    {
+      "id": "H-FRANK-REG-004",
+      "status": "OPEN",
+      "claim": "At least one historical regulator family (Thalamus gain/habituation, NAcc value/persistence, novelty, urgency) provides causal control benefit for loop allocation beyond descriptive logging.",
+      "support": ["historical architecture motivation only"],
+      "falsifier": "Lesion causes no meaningful degradation and mechanistic rescue provides no restoration across representative H1 episodes.",
+      "next_test": "Factorial lesion/rescue with resource shadows and negative controls."
+    },
+    {
+      "id": "H-FRANK-HYPER-005",
+      "status": "OPEN",
+      "claim": "Bounded reopening of preserved Hyperposition alternatives can rescue stalled attractors with acceptable destabilization cost.",
+      "support": ["cross-branch mechanism proposal only"],
+      "falsifier": "Reopening fails to improve recovery from stalled episodes or increases divergence/oscillation enough to erase outcome gains.",
+      "next_test": "Matched stalled episodes: reopen compatible alternative vs no reopen vs random reopen."
+    }
+  ],
+  "counterhypotheses": [
+    {"id":"H0-A","claim":"Ordinary persistent event-driven orchestration explains the useful behavior; recurrent-model mathematics adds little."},
+    {"id":"H0-B","claim":"A global stability controller damages heterogeneous useful timescales; only local/typed controllers work."},
+    {"id":"H0-C","claim":"Historical neuro-inspired regulators are descriptive legacy readouts with no causal control value."},
+    {"id":"H0-D","claim":"Jacobian/spectral-radius style diagnostics predict numerical stability but not cognitive usefulness; outcome-gated control is necessary."},
+    {"id":"H0-E","claim":"Observed cycles are epiphenomenal timing artifacts and do not causally improve task outcomes."}
+  ],
+  "promotion": "NONE",
+  "reason": "No live Ubuntu H1 replay, target Qwen-4B reader, or regulator lesion/rescue evidence was available in this run."
+}

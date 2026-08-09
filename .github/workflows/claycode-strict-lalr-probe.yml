@@ -8,6 +8,7 @@ on:
       - 'tools/claycode_base_frontend_validation.py'
       - 'tools/claycode_base_grammar_differential.py'
       - 'tools/claycode_v4_frontend_regression.py'
+      - 'tools/claycode_base_canonicalizer.py'
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark'
       - 'research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark'
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
@@ -64,6 +65,11 @@ jobs:
             --baseline research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark \
             --repair research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark \
             --output research_entity/claycode/autonomous/BASE_GRAMMAR_DIFFERENTIAL_RECEIPT.json
+      - name: Prove deterministic layout-insensitive syntax canonicalization
+        run: |
+          python tools/claycode_base_canonicalizer.py \
+            --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark \
+            --output research_entity/claycode/autonomous/BASE_CANONICAL_SYNTAX_RECEIPT.json
       - name: Commit validation receipts
         run: |
           git config user.name 'claycode-lalr-probe'
@@ -72,7 +78,8 @@ jobs:
             research_entity/claycode/autonomous/STRICT_LALR_D_REPAIR_RECEIPT.json \
             research_entity/claycode/autonomous/V4_FRONTEND_REGRESSION_RECEIPT.json \
             research_entity/claycode/autonomous/BASE_FRONTEND_REPAIR_VALIDATION_RECEIPT.json \
-            research_entity/claycode/autonomous/BASE_GRAMMAR_DIFFERENTIAL_RECEIPT.json
+            research_entity/claycode/autonomous/BASE_GRAMMAR_DIFFERENTIAL_RECEIPT.json \
+            research_entity/claycode/autonomous/BASE_CANONICAL_SYNTAX_RECEIPT.json
           git diff --cached --quiet && exit 0
           git commit -m 'ClayCode: record repaired frontend validation receipts'
           for attempt in 1 2 3; do

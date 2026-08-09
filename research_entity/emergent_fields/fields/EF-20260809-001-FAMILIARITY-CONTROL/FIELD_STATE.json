@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "field_id": "EF-20260809-001-FAMILIARITY-CONTROL",
+  "name": "Familiarity Stability Control",
+  "status": "INTEGRATED",
+  "lifecycle": ["SPAWNED", "ACTIVE", "CROSS_CONNECTED", "TESTED", "INTEGRATED"],
+  "created_at": "2026-08-09T15:23:08+07:00",
+  "trigger": "666",
+  "spawning_run_id": "666-20260809T152308p0700-chatgpt-secondary",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "shared_program_stage": "BASE_CLAYCODE_RELEASE",
+  "spawn_seed": "10051668388208013663",
+  "spawn_seed_material_sha256": "9b7eb3249f29715f4f1edf38419b2a5aa6fcf04b5bb9b84809de644a7c3c040e",
+  "candidate_lens_pairs": [
+    ["security/adversarial systems", "dynamical systems"],
+    ["topology/geometry", "information theory"],
+    ["neuroscience/cognitive architectures", "database/transaction theory"],
+    ["programming-language semantics", "measurement/metrology"],
+    ["compression/representation learning", "control theory"],
+    ["dynamical systems", "causal inference"]
+  ],
+  "selected_lens": ["compression/representation learning", "control theory"],
+  "selection_rationale": "High novelty and falsifiability with direct relevance to FRANK's mandatory user-adaptive Retina path: treat familiarity learning as a closed-loop controller over a frozen representation, with explicit admission, uncertainty and rollback state rather than unconstrained self-training.",
+  "connected_branches": ["frank", "claycode", "unifieddb", "claygraph", "harness"],
+  "primary_hypothesis": "For FRANK v0.1, a frozen visual backbone plus prototype/linear readout can safely lower recurring visual compute only if online updates are controlled by evidence-tier admission and open-set feedback. BRONZE self-predictions must not directly update trusted prototypes/classifier state because the resulting positive feedback loop can degrade unknown rejection and eventually known-class performance under sustained OOD contamination.",
+  "counterhypotheses": [
+    "A sufficiently conservative confidence threshold on self-training alone is enough; provenance-tier admission adds complexity without measurable robustness gain.",
+    "Prototype-only learning is too weak under user-specific drift; a continually adapted backbone is required despite added forgetting risk.",
+    "Unknown rejection should be handled entirely by downstream Retina, so the micro-classifier does not need an explicit open-set controller."
+  ],
+  "falsifier_or_completion_test": "On frozen user-specific replay plus injected near-OOD streams, compare naive confident self-update against GOLD/SILVER-gated updates. The field hypothesis is weakened if naive self-update matches or beats gated updates on known retention, false-familiarity/open-set rejection, calibration and compute cost across contamination levels without rollback intervention.",
+  "internal_evidence_refs": [
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+    "research_entity/retina/RETINA_MICRO_VISUAL_CLASSIFIER.md",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"
+  ],
+  "external_evidence": [
+    {"class":"primary_paper","ref":"arXiv:2203.13591","finding":"continual test-time self-training can accumulate pseudo-label errors and catastrophically forget under non-stationary shifts"},
+    {"class":"primary_paper","ref":"OpenReview:lHaGLJ65J9","finding":"continual entropy-minimization adaptation can collapse; stability constraints materially matter"},
+    {"class":"primary_paper","ref":"OpenReview:EFS2hfLuUF","finding":"reusing incorrect predictions can cause long-horizon degradation and creates an attack surface"},
+    {"class":"primary_paper","ref":"arXiv:2308.09942","finding":"open-world test-time training benefits from explicit strong-OOD filtering and dynamic prototype handling"}
+  ],
+  "experiment_refs": [
+    "research_entity/emergent_fields/fields/EF-20260809-001-FAMILIARITY-CONTROL/SYNTHETIC_DRIFT_EXPERIMENT.json",
+    "research_entity/emergent_fields/fields/EF-20260809-001-FAMILIARITY-CONTROL/prototype_drift_sim.py"
+  ],
+  "findings": [
+    "Synthetic 2D frozen-embedding simulation supports the direction, not a FRANK-specific claim: naive self-update admitted increasing fractions of unknown samples as contamination rose.",
+    "At 40% unknown contamination, naive unknown rejection averaged about 0.319 versus about 0.419 for trust-gated updates while known accuracy stayed about 0.999-1.000.",
+    "At 70% unknown contamination, about 72.4% of naive accepted updates were actually unknown; known accuracy dropped to about 0.987 while trust-gated remained about 1.000 in this synthetic setup.",
+    "The most important control variable is not classifier confidence alone but evidence admission authority: prediction confidence must not be allowed to bootstrap itself into training truth.",
+    "ClayCode BASE therefore needs explicit representability for learner version, evidence tier, candidate/current state, open-set result, promotion/rejection and rollback receipts; this is already directionally required by the owner-fixed visual learning directive and does not yet justify new language semantics."
+  ],
+  "epistemic_status": "SUPPORTED_WORKING_HYPOTHESIS_SYNTHETIC_PLUS_EXTERNAL_ANALOGUE",
+  "promotion_allowed": false,
+  "next_test": "Run MVC-E4/MVC-E5 in H1 with real frozen Retina embeddings and user-specific replay; sweep contamination, confidence thresholds and GOLD/SILVER support requirements, then compare prototypes vs linear head under identical resource budgets.",
+  "cross_room_delta_ref": "research_entity/rooms/center_events/CRD-20260809T152308-FAMILIARITY-CONTROL.json"
+}

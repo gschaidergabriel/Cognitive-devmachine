@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "experiment":"ClayCode effect optimizer barrier / equivalence discriminator",
+  "evidence_class":"HOSTED_SYNTHETIC_PROXY_NOT_PRODUCTION_CLAYCODE",
+  "seed":20260809,
+  "trials_per_case":20000,
+  "executed_local_source_sha256":"e814147555eb9f2c1ef16c32706137be209ed9ad68d94c435f6bdf0a6af1023e",
+  "repository_reproduction_commit":"51f0a4ca96a91fa3675fad486d0cfac91f65cf81",
+  "repository_reproduction_byte_identity":"NOT_CLAIMED; committed script is a normalized equivalent reproduction of the executed local discriminator",
+  "results":{
+    "PURE_IDENTITY":{"output_only_accept":20000,"output_state_accept":20000,"exact_trace_accept":20000,"effect_graph_accept":20000},
+    "EFFECT_ERASE":{"output_only_accept":20000,"output_state_accept":0,"exact_trace_accept":0,"effect_graph_accept":0},
+    "EFFECT_DUPLICATE_CANCEL":{"output_only_accept":20000,"output_state_accept":20000,"exact_trace_accept":0,"effect_graph_accept":0},
+    "CONFLICT_REORDER":{"output_only_accept":20000,"output_state_accept":0,"exact_trace_accept":0,"effect_graph_accept":0},
+    "DISJOINT_REORDER":{"output_only_accept":20000,"output_state_accept":20000,"exact_trace_accept":0,"effect_graph_accept":20000},
+    "AUTH_BYPASS_AUTHORIZED":{"output_only_accept":20000,"output_state_accept":0,"exact_trace_accept":0,"effect_graph_accept":0},
+    "AUTH_BYPASS_DENIED":{"output_only_accept":0,"output_state_accept":0,"exact_trace_accept":0,"effect_graph_accept":0}
+  },
+  "interpretation_guards":[
+    "Constructed trial counts discriminate equivalence relations and are not prevalence estimates.",
+    "This PASS does not close any ClayCode BASE work package or Ubuntu acceptance gate.",
+    "Capability authority and effect ordering are distinct; an ordering token/edge must never mint authority.",
+    "The conflict/effect-graph relation is a candidate and requires production validation."
+  ],
+  "pass":true
+}

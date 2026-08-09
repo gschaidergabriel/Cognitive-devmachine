@@ -1,0 +1,56 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create-frank-h1-causal-loop-replay-20260809T205900p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:59:00+07:00",
+  "payload": {
+    "work_id": "WORK-FRANK-H1-CAUSAL-LOOP-REPLAY-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "FRANK_H1_CAUSAL_DISCRIMINATOR",
+    "title": "Run matched FRANK H1 lesion/rescue and recurrence-policy replay on Andreas Ubuntu",
+    "work_clay": "On the owner-registered Andreas Ubuntu target, use the current Frank main plus the Research-Entity draft candidate from Dr.-Unterweger PR #5. First run tests/test_loop_causal_replay.py and the adapter self-test. Then run frozen accepted H1 episodes through matched BASELINE -> LESION -> RESCUE interventions with identical frozen_input_sha256, loop_id, loop_family, state_epoch and regulator. Begin with a reversible regulator already exposed by the H1 harness; prefer GWT ignition/gain or habituation/damping if both intervention and rollback are real. Preserve target-runtime receipts for every arm. Separately compare FIXED_BUDGET vs current adaptive recurrence, and truthful re-entry vs shuffled/no re-entry when executable. Record actual next-step utility outcomes; label history-only estimates HISTORY_PROXY and never relabel them VALIDATED_NEXT_STEP_ESTIMATE. Store provenance_origin separately from attestation_layer. Self-attested or unverified receipts are not strong causal evidence. Reuse the admitted central UnifiedDB causal spine (episodes -> predictions -> prediction_outcomes -> causal_credit_receipts); do not add a new migration or node-local DB. Preserve negative results and benign one-axis-growth cases. Do not grant effect authority from the analyzer receipt.",
+    "reason_clay": "The trajectory classifier is now proxy-safe and quality-gated, but trajectory classification still does not establish causal regulator value. A matched lesion/rescue replay with observed next-step outcomes is the highest-information discriminator and directly tests the current loop-of-loops hypothesis without collapsing recurrence into emergence.",
+    "completion_clay": "PASS for implementation integration only when the adapter regression suite passes on the registered Andreas Ubuntu target, at least one fully matched baseline/lesion/rescue triple has target-runtime receipts with reversible intervention and rollback semantics, all match fields are identical across arms, negative outcomes are preserved, and the produced deterministic analysis receipt can be projected through the admitted central Frank runtime without new schema or effect authority. Scientific promotion remains separate and requires repeated/independent evidence. Report fixed-vs-adaptive and re-entry comparisons when available; explicitly mark unavailable arms rather than synthesizing them.",
+    "evidence_need": [
+      "ANDREAS_TARGET_RUNTIME_RECEIPTS",
+      "FROZEN_H1_EPISODE_HASHES",
+      "BASELINE_LESION_RESCUE_MATCH_RECEIPT",
+      "OBSERVED_NEXT_STEP_UTILITY",
+      "PROVENANCE_ORIGIN_AND_ATTESTATION",
+      "ROLLBACK_OR_RESCUE_RECEIPT",
+      "NEGATIVE_RESULT_RECEIPTS"
+    ],
+    "dependencies": [
+      "Dr.-Unterweger PR #5",
+      "current H1 loop dynamics probe v1.4 proxy-safe",
+      "WORK-CLAYCODE-RESTORE-RUNNER-CLOSE-BASE14-20260809 for full release transport, but direct verified local target execution may proceed independently"
+    ],
+    "required_capabilities": [
+      "ANDREAS_PC_LOCAL_REPO_ACCESS",
+      "REGISTERED_TARGET_HOST_IDENTITY",
+      "FROZEN_H1_REPLAY_INPUTS",
+      "REVERSIBLE_LOOP_REGULATOR_INTERVENTION",
+      "CENTRAL_FRANK_STATE_RUNTIME",
+      "TARGET_RUNTIME_ATTESTATION",
+      "GIT_READ_WRITE_FOR_RECEIPTS"
+    ],
+    "executor_policy": "prefer_verified_CLAUDE_CODE_LOCAL_ORGAN; Research Entity owns Harness research changes; Frank self-Harness authority is proposal-only; no evidence gate weakening; no fake target receipts",
+    "affected_rooms": [
+      "frank",
+      "harness",
+      "gwt",
+      "emergenz",
+      "unifieddb",
+      "claycode",
+      "claygraph",
+      "hyperposition",
+      "center"
+    ],
+    "base_priority": 0.99,
+    "expected_impact": 0.97,
+    "urgency": 0.95,
+    "information_gain": 0.99,
+    "status": "READY"
+  }
+}

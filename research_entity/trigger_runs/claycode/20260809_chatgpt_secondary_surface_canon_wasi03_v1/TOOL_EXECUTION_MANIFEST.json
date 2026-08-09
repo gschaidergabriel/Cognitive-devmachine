@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809_chatgpt_secondary_surface_canon_wasi03_v1",
+  "tools": [
+    {
+      "class": "canonical_and_repository_read",
+      "provider": "GitHub connector",
+      "status": "SUCCESS",
+      "evidence_class": "current_repository_evidence"
+    },
+    {
+      "class": "executable",
+      "provider": "E2B",
+      "registered_status": "RUNTIME_VERIFIED",
+      "attempt_status_this_run": "UNAVAILABLE_ON_CURRENT_CHATGPT_TOOL_SURFACE",
+      "fallback": "local Python sandbox",
+      "note": "The run does not claim fresh E2B execution evidence. Prior E2B capability and failure/fix receipts were read from the repository."
+    },
+    {
+      "class": "executable",
+      "provider": "local Python sandbox",
+      "status": "SUCCESS",
+      "experiment": "CC-LOCAL-20260809-TYPED-CANON-01",
+      "evidence_class": "local_runtime_experiment"
+    },
+    {
+      "class": "implementation_and_standards_research",
+      "provider": "web primary sources",
+      "status": "SUCCESS",
+      "topics": [
+        "WebAssembly Component Model WIT/resources",
+        "WASI 0.3 async and Wasmtime support",
+        "RFC 8785 JSON canonicalization",
+        "RFC 8949 deterministic CBOR",
+        "MLIR dialect conversion"
+      ],
+      "evidence_class": "authoritative_external_documentation"
+    }
+  ],
+  "provider_gate_notes": [
+    "Primary specifications/documentation were preferred over secondary summaries.",
+    "No fresh target-Qwen-4B experiment was run; no model-performance claim is promoted.",
+    "No current E2B receipt was fabricated when the registered provider was not exposed as an invokable tool in this session."
+  ]
+}

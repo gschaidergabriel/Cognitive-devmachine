@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "tool_name": "hostinger_github_runner",
   "provider": "Hostinger + GitHub Actions",
   "class": "self_hosted_remote_build_test_runtime",
@@ -50,6 +50,20 @@
       "result": "18/18 PASS; pytest 13/13 PASS; F6 tool contract transport PASS; endpoint boundary PASS",
       "release_claim": false,
       "whole_frank_release_status": "NOT_CLAIMED"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "tested_commit": "f0f2820fa3ea81a89bfcfb31bfdf779e6796028d",
+      "receipt_path": "runtime/vps_integrity/latest.json at evidence commit e36e1c1b9d1e134d344b8e09484db09746a00edd",
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "result": "20/20 PASS with per-gate wall-clock telemetry and host baseline",
+      "matrix_elapsed_ms": 8290,
+      "gate_elapsed_ms_sum": 8082,
+      "cpu_logical": 4,
+      "memory_total_kib": 16376020,
+      "release_claim": false,
+      "whole_frank_release_status": "NOT_CLAIMED",
+      "measurement_scope": "host baseline and gate wall-time; not process peak RSS, energy, thermals or real-model performance"
     }
   ],
   "current_chatgpt_surface": {
@@ -75,7 +89,7 @@
       "CLAY_0_1_ACCEPTANCE_RUN"
     ],
     "impacts": [],
-    "note": "Successful real build/test execution is now verified, but no ETA multiplier is admitted from a single narrow workload. Add a calibrated impact only after repeated comparable workloads establish measured wall-clock/throughput benefit."
+    "note": "Successful real build/test execution and one measured 20-gate workload are verified. No ETA multiplier is admitted yet because repeated comparable workload calibration is still insufficient to estimate a stable acceleration factor."
   },
   "security": {
     "no_raw_credentials_in_repo_state": true,
@@ -83,6 +97,6 @@
     "runner_label_revalidation_before_effect": true,
     "secrets_boundary_required": true
   },
-  "verified_at": "2026-08-09T16:33:05Z",
-  "source": "live GitHub Actions runner observation + two current self-hosted FRANK execution receipts + project-owner authorization"
+  "verified_at": "2026-08-09T16:43:38Z",
+  "source": "live GitHub Actions runner observation + three current self-hosted FRANK execution receipts + project-owner authorization"
 }

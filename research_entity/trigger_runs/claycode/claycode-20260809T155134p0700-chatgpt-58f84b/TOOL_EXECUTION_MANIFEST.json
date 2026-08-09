@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T155134p0700-chatgpt-58f84b",
+  "executions":[
+    {"tool":"GitHub connector","class":"canonical_read_write","status":"EXECUTED","result":"Canonical identity verified; current ClayCode/peer contracts read; run artifacts written and reread planned."},
+    {"tool":"local_container_python","class":"executable","status":"EXECUTED_FALLBACK","reason":"E2B repository capability is recorded RUNTIME_VERIFIED, but the active ChatGPT tool surface does not expose the repository E2B bridge directly. Trigger protocol permits local fallback.","results":["G9 grammar/spec sampled conformance: original 2/10, minimally aligned grammar 10/10","MVC/effect compiler-lowering fragment: 9/9 in separate generated-program process"]},
+    {"tool":"web primary-source research","class":"external_research","status":"EXECUTED","clusters":["WASI capability authority boundary","MLIR dialect conversion/legality","effect-typed request/deny/commit semantics"]},
+    {"tool":"research_interconnect_preflight.py","class":"repo_preflight","status":"BLOCKED_FAIL_CLOSED","reason":"Registry uses clayresearch; tool PRIORITY still uses clay."},
+    {"tool":"goodman_filter_check.py","class":"repo_validator","status":"NOT_EXECUTED","reason":"Full repository runtime is not mounted in the active local execution surface; Goodman review was materialized but strong promotion is not attempted."}
+  ],
+  "provider_state_note":"research_entity/global/E2B_RESEARCH_CAPABILITY.json currently says RUNTIME_VERIFIED while the broader external registry contains an older unavailable-credential entry; the capability-file merge rule makes the dedicated capability record newer for repo runtime routing, but this session still lacked a direct E2B invocation surface.",
+  "promotion_effect":"NONE"
+}

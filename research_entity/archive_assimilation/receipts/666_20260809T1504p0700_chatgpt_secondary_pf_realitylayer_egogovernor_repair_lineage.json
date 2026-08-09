@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1504p0700-chatgpt-secondary-pf-realitylayer-egogovernor-repair-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "mode": "LEVEL0_OPEN_QUERY_DIRECTED_HISTORY_REPAIR_SHARD",
+  "status": "COMPLETE_NONCOUNTING_DENOMINATOR_NOT_FROZEN",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T15:04:00+07:00",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "frozen_project_frankenstein_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "scope": {
+    "lane": "historical self-model grounding repair response after identity/capability drift",
+    "ancestry_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1504p0700_chatgpt_secondary_pf_selfmodel_embodiment_identity_lineage.json",
+    "crossread_receipts": [
+      "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json"
+    ],
+    "exact_level0_coverage_credit": 0.0,
+    "reason_no_exact_credit": "History/tree denominator remains unfrozen."
+  },
+  "sources": [
+    {"class":"HISTORICAL_COMMIT_DIFF","repository":"gschaidergabriel/Project-Frankenstein","commit":"0c0a819ec593074405ebd43446956e73976166a8","claim":"Introduced SystemRealityLayer and Ego Governor."},
+    {"class":"HISTORICAL_CODE","repository":"gschaidergabriel/Project-Frankenstein","path":"services/system_reality_layer.py","ref":"0c0a819ec593074405ebd43446956e73976166a8"},
+    {"class":"HISTORICAL_COMMIT_MESSAGE","repository":"gschaidergabriel/Project-Frankenstein","commit":"92791d1cf0c2580688da1666d6e32386beaa5139","claim":"Removed SystemRealityLayer injection from idle thoughts after 67% context/prompt-leak rejection rate; post-fix 0% in reported 30min idle run."},
+    {"class":"DRIVE_RUNTIME_EVAL_LOG","drive_file_id":"1LtLiPGWZsLmGnVRSYjVnXE3x8TsDsw0J","title":"live_bugs.txt","claim":"Later V25 tests still found self-knowledge/tool-awareness staleness including wrong model size and stale AURA terminology."}
+  ],
+  "findings": [
+    {
+      "id":"PF-RL-001",
+      "epistemic_class":"HISTORICAL_PRIMARY_CODE",
+      "status":"NEGATIVE_RESULT_VALUE",
+      "claim":"SystemRealityLayer was described as dynamically probed ground truth, but dynamic probing covered hardware only. Software stack, service topology and creator/user identity were hard-coded module constants.",
+      "implication":"A component named or treated as ground truth is not authoritative merely by placement or naming. Every field requires per-field provenance, freshness and update semantics."
+    },
+    {
+      "id":"PF-RL-002",
+      "epistemic_class":"HISTORICAL_IMPLEMENTATION_RESULT",
+      "status":"MEASUREMENT_FOUNDATION",
+      "claim":"The Ego Governor used post-generation regex categories for wrong model/architecture/GPU/infrastructure and appended corrections from SystemRealityLayer facts.",
+      "implication":"Post-generation correction can be a defense-in-depth layer, but it is downstream of generation and inherits any staleness/errors of its fact store. It cannot be the sole self-model consistency mechanism."
+    },
+    {
+      "id":"PF-RL-003",
+      "epistemic_class":"HISTORICAL_RUNTIME_NEGATIVE_RESULT_FROM_COMMIT_REPORT",
+      "status":"NEGATIVE_RESULT",
+      "claim":"Injecting SystemRealityLayer into idle-thought prompts caused a reported 67% rejection rate due to verbatim [REALITY] prompt leakage; removing that injection plus leak-regex handling produced a reported 0% rejection rate in the subsequent 30-minute idle test.",
+      "implication":"Grounding payloads can become behavioral contaminants when broadcast indiscriminately. Authority/facts should be retrieved or projected only when causally relevant and should not be exposed as a large prompt block to every cognitive loop."
+    },
+    {
+      "id":"PF-RL-004",
+      "epistemic_class":"CROSS_SOURCE_TEMPORAL_NEGATIVE_RESULT",
+      "status":"NEGATIVE_RESULT",
+      "claim":"Later V25 evaluation still recorded wrong model self-knowledge and stale AURA terminology, so the SystemRealityLayer/Ego-Governor repair did not eliminate self-model staleness across the system lifecycle.",
+      "implication":"The durable fix is semantic single-authority state with compiled projections and runtime receipts, not another manually maintained mirror plus regex correction."
+    },
+    {
+      "id":"PF-RL-005",
+      "epistemic_class":"ARCHITECTURE_INFERENCE",
+      "status":"OPEN",
+      "claim":"Self-model grounding should be demand-shaped: canonical identity is immutable/versioned; live capabilities/topology are observed with timestamps; derived subjective state is separate; prompts receive only task-relevant projections. A validator checks claims against the same typed state rather than a second constant table.",
+      "falsifier":"A simpler duplicated-static-fact design with no typed authority/freshness layer matches or outperforms the proposed design under topology/model churn, stale-cache injection, prompt-leak and capability-denial regression tests."
+    }
+  ],
+  "branch_delta": {
+    "frank":["Replace RealityLayer-style mixed static/dynamic fact bags with per-field authority/freshness semantics and one semantic source."],
+    "claycode":["Make projection/retrieval of self-model facts typed and context-scoped; validation must consume the same authoritative state object."],
+    "unifieddb":["Store observed topology/model/capability facts with observed_at, source, version and stale/superseded state."],
+    "gwt":["Do not globally broadcast large identity/reality blocks; test selective access versus global injection for leakage and interference."],
+    "harness":["Add topology/model churn tests, stale constant injection, prompt-leak measurement and post-generation-validator stale-source tests."],
+    "claygraph":["Represent fact provenance and supersession explicitly; ground-truth label is metadata only unless backed by authority evidence."],
+    "emergenz":["Treat reduced confabulation from injected fact blocks as grounding performance, not evidence of emergence or self-awareness."],
+    "hyperposition":["Maintain conflicting/current/stale self-model candidates until evidence selects or supersedes them instead of forcing a single stale constant."]
+  },
+  "historical_earned_work": {
+    "new_quantified_hours": 0.0,
+    "mapping_candidate": true,
+    "reuse_category":"NEGATIVE_RESULT_VALUE_PLUS_MEASUREMENT_FOUNDATION",
+    "reason":"Useful repair/failure lineage, but likely overlaps previously mapped state/identity and harness work; row-level dedup required."
+  },
+  "next_tests": [
+    "Topology churn replay: change model/service topology, leave stale mirrors intentionally, and verify authoritative projections update while old claims become SUPERSEDED/STALE.",
+    "Prompt contamination test: compare global reality-block broadcast, task-scoped retrieval and structured side-channel validation on leakage/rejection/context cost.",
+    "Validator common-source test: corrupt a downstream mirror and verify both generation projection and validator remain consistent because neither owns separate truth constants."
+  ],
+  "blockers": [
+    "Current GitHub connector still provides no recursive Project-Frankenstein tree/archive/clone read. Directory fetch at frozen ref was rejected as directory-not-file.",
+    "No exact repository-wide coverage or Level-0 PASS is claimed."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
+  "hypotheses": [
+    {
+      "id": "H-CC-PARSER-ALIGN-001",
+      "status": "SUPPORTED_FOR_GRAMMAR_PATCH_CANDIDATE",
+      "claim": "Current grammar.ebnf is not syntactically aligned with current G9 V3 source constructs: it lacks type-level union syntax and explicit if statements used by the current spec.",
+      "counterhypothesis": "The mismatch is an artifact of the proxy EBNF-to-Lark translation rather than the source grammar.",
+      "falsifier": "A parser generated directly from current grammar.ebnf parses the cited current-source constructs without grammar extension.",
+      "evidence": ["EXECUTABLE_RESEARCH_RECEIPT.json", "direct grammar-vs-current-source comparison"],
+      "action": "Patch grammar/parser only; do not redesign ClayCode semantics."
+    },
+    {
+      "id": "H-CC-WASI-COMPONENT-001",
+      "status": "OPEN",
+      "claim": "WASI 0.3 Component Model/WIT is a strong first candidate for ClayCode typed FFI/component lowering, while Clay capability authorization remains outside WIT.",
+      "counterhypothesis": "A native ABI or WASI 0.2/native hybrid yields lower complexity and better semantic/latency fidelity for the first BASE release.",
+      "falsifier": "APP-02/APP-04/APP-07 lowering benchmarks show material semantic gaps, excessive adapter complexity, or worse latency/repair cost than alternatives.",
+      "evidence": ["Bytecode Alliance Component Model WIT/world/resource/async documentation (external primary documentation)"],
+      "action": "Do not promote; benchmark in WP-06/WP-07 after parser/IR freeze."
+    }
+  ]
+}

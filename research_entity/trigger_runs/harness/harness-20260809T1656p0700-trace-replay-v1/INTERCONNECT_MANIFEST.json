@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260809T1656p0700-trace-replay-v1",
+  "trigger": "harness",
+  "actor_id": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "registry_ref": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "coverage_mode": "ALL_REGISTERED_BRANCHES_PLUS_LIVE_WORKERS_PLUS_ARCHAEOLOGY",
+  "preflight_execution": "MANUAL_FAIL_CLOSED_ASSEMBLY_FROM_VERIFIED_GITHUB_CONNECTOR_READS_NO_REPO_CHECKOUT",
+  "registered_peer_count": 9,
+  "covered_peer_count": 9,
+  "branches": {
+    "clayresearch": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+        "research_entity/trigger_runs/clayresearch/clayresearch-20260809T1653p0700-chatgpt-loopcontrol-fusion/SAFE_EFFECT_GEOMETRY_DELTA.md"
+      ],
+      "retained": ["loop continuation authority != effect authority", "higher recurrence budget != wider capability set"]
+    },
+    "frank": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md",
+        "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+        "gschaidergabriel/Dr.-Unterweger@d916b98fb65dc62fbf3275d6a48dc52c2bfc2612"
+      ],
+      "retained": ["P9 causal observability/replay", "state/graph epochs", "crash/restart/idempotency receipts", "functional distinctions survive placement collapse"]
+    },
+    "gwt": {
+      "depth": "DEEP",
+      "refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
+      "retained": ["addressability != delivery != reconstruction != uptake != causal_use != outcome != reentry", "counterfactual replay mandatory"]
+    },
+    "emergenz": {
+      "depth": "DEEP",
+      "refs": ["research_entity/trigger_runs/emergenz/emergenz-20260808T1756p0700-chatgpt-secondary/RUN_MANIFEST.json"],
+      "retained": ["stage-orthogonal factorial intervention", "endpoint-only rescue is insufficient", "causal basis/epoch validity prerequisite"]
+    },
+    "claycode": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/trigger_runs/claycode/claycode-20260809T1650p0700-base-parser-control-lowering/FINAL_REPORT.md",
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"
+      ],
+      "retained": ["epoch-coherent recurrent loop semantics", "explicit lowering legality", "less change more compile", "BASE remains NOT_PASS"]
+    },
+    "hyperposition": {
+      "depth": "DEEP",
+      "refs": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md", "commit:93d2d109ad40007f43abb3dabf992a148b7ae7f3"],
+      "retained": ["semantic/active/coordination/physical topologies distinct", "gain/delay/timescale interventions", "pairwise-vs-nary comparison"]
+    },
+    "claygraph": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md",
+        "research_entity/trigger_runs/claygraph/claygraph-20260809T0149p0700-chatgpt-secondary-sol-04/RUN_MANIFEST.json"
+      ],
+      "retained": ["dynamic Run ClayGraph/delta required", "retrievable != admissible != consequential use", "activation != truth"]
+    },
+    "unifieddb": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/global/UNIFIED_DATABASE_RESEARCH_FOUNDATION.md",
+        "gschaidergabriel/Dr.-Unterweger/runtime/state/UNIFIEDDB_SCHEMA.sql",
+        "gschaidergabriel/Dr.-Unterweger/runtime/state/UNIFIEDDB_V6_MIGRATION.sql"
+      ],
+      "retained": ["semantic/logical/physical unification distinct", "state epochs/root hashes", "query receipts", "snapshots", "replay/auditability"]
+    },
+    "harness": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/triggers/HARNESS_BUILD_PROTOCOL.md",
+        "research_entity/harness/HARNESS_WORKSPACE.json",
+        "research_entity/harness/HARNESS_TRACE_REPLAY_STATUS_RESEARCH_20260809.md",
+        "gschaidergabriel/Dr.-Unterweger/runtime/state/frank_state_runtime_impl.py",
+        "gschaidergabriel/Dr.-Unterweger/.claude/hooks/frank_prompt_inject.py",
+        "gschaidergabriel/Dr.-Unterweger/.claude/hooks/frank_stop_guard.py"
+      ],
+      "live_claims_checked": true,
+      "selected_non_duplicate_package": "H-WP-11-TRACE-REPLAY"
+    }
+  },
+  "cross_branch_constraints": [
+    "trace must preserve recurrent loop/cycle identity rather than force one linear pipeline",
+    "trace observability never grants truth or authority",
+    "model output never grants effect authority",
+    "recurrence/retry cannot widen capability without external authorization",
+    "GWT receiver causal stages remain separately addressable",
+    "memory retrieval/admission/consequential-use remain separately addressable",
+    "semantic/active/coordination/physical topology identities remain distinct",
+    "state and graph epochs plus source repo identity bind replay",
+    "dynamic Run ClayGraph delta must bind to the same trace identity",
+    "deterministic replay claims require explicit environment/nondeterminism identity",
+    "shared ancestry is not independent replication"
+  ],
+  "contradictions_or_tensions": [
+    {
+      "id": "TENSION-BASE-H1",
+      "statement": "H-WP-11 belongs to H1 scope but current program stage is BASE.",
+      "resolution": "Build only architecture-generic trace/replay foundation now; do not integrate into live H1 or claim H1 completion before BASE PASS."
+    },
+    {
+      "id": "TENSION-LINEAR-PIPELINE-LOOPS",
+      "statement": "Older turn descriptions can read as a linear stage chain while current FRANK research emphasizes coupled loops-of-loops.",
+      "resolution": "Use ordered event records plus loop/cycle identities and causal-parent edges; sequence is an observation order, not a claim that the architecture is acyclic."
+    }
+  ],
+  "fresh_live_worker_check": {
+    "harness_workspace_read": true,
+    "recent_clay_commits_checked": true,
+    "recent_frank_commits_checked": true,
+    "frank_baseline_head_observed": "d916b98fb65dc62fbf3275d6a48dc52c2bfc2612"
+  },
+  "status": "PASS_MANUAL_EQUIVALENT_WITH_TOOL_LIMIT_DISCLOSED"
+}

@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0921p0700-chatgpt-secondary-drive-retina-code-lineage",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "COMPLETED_PARTIAL_SHARD",
+  "source_universe": "DRIVE_CLAY",
+  "shard_kind": "RETINA_CODE_MECHANISM_AND_NEGATIVE_RESULT_LINEAGE",
+  "exact_level0_coverage_credit_percent": 0.0,
+  "source": {
+    "provider": "google_drive",
+    "file_id": "1SgzRqxB-ZJ368vvYhesBuAp0s-3Z0bw2",
+    "title": "frank_eye.py",
+    "size_bytes": 154494,
+    "sha256_of_extracted_bytes": "e792f883e2aa477fb872afd5e301422715f6c2078c796e8962f72febde306f4a",
+    "line_count": 3551,
+    "historical_modified_time": "2026-05-27T21:18:05Z"
+  },
+  "mechanisms": [
+    {
+      "id": "RET-CODE-M1",
+      "lines": "729-749",
+      "finding": "Narrative uncertainty was explicitly hardened after a real false-positive: CLIP scores below 0.40 are linguistically hedged (likely/possibly/perhaps), preserving uncertainty for the downstream LLM instead of presenting weak similarity as fact.",
+      "reuse_class": "DIRECTLY_REUSABLE"
+    },
+    {
+      "id": "RET-CODE-M2",
+      "lines": "2753-2778",
+      "finding": "The exact Kandinsky failure from the historical HONEST_REPORT is implemented as a code-level regression fix: art/AI detection runs before region captioning and low-confidence YOLO detections (<0.50) are dropped on art/AI scenes to prevent phantom objects from being fluently captioned.",
+      "reuse_class": "MEASUREMENT_FOUNDATION"
+    },
+    {
+      "id": "RET-CODE-M3",
+      "lines": "2793-2919",
+      "finding": "Historical hard-set demographic misses drove an explicit CLIP face/person-crop age/gender layer with top1/top2 margin gating for age bins. This is useful lineage but must be treated as weak attribute inference, not sensor truth.",
+      "reuse_class": "REUSABLE_WITH_ADAPTATION"
+    },
+    {
+      "id": "RET-CODE-M4",
+      "lines": "3234-3263",
+      "finding": "GoL-based visual dynamics and a 50-dimensional learned pattern-library readout are separate mechanisms. The library performs cosine-matched archetype-to-phrase stabilization; this is historical evidence for familiarity/dictionary readout, not proof of compositional understanding.",
+      "reuse_class": "MEASUREMENT_FOUNDATION"
+    },
+    {
+      "id": "RET-CODE-M5",
+      "lines": "3463-3508",
+      "finding": "The module already exposes a structured representation with separate concepts, objects, OCR, faces, scene tags, captions, region captions, VQA, colors, places, fine objects, composition, GoL patterns and library matches. This is the strongest bridge to dissolved Retina: preserve/normalize these typed channels rather than throwing them away into description text.",
+      "reuse_class": "DIRECTLY_REUSABLE"
+    }
+  ],
+  "critical_gap": {
+    "id": "RET-CODE-G1",
+    "finding": "Although outputs are structurally separated by field, there is no single per-percept evidence contract carrying source-stage id, calibration/version, uncertainty/open-set state, contradiction status and truth-vs-prior semantics uniformly across all channels. The natural-language description still concatenates heterogeneous evidence into declarative text, so downstream consumers can lose the distinction unless they use analyze_structured().",
+    "current_implication": "FRANK/Clay should make the structured evidence path canonical and treat description as a derived human/LLM convenience view."
+  },
+  "lineage_reconciliation": [
+    "HONEST_REPORT May-26 identified Kandinsky->bed->false-artist cascade as harmful Tier-3 behavior.",
+    "frank_eye.py May-27 contains an explicit pre-caption art/AI YOLO filter whose comment names the Kandinsky bed failure, proving a direct negative-result->code-fix lineage.",
+    "The code also adds demographics, richer vocabularies, region captioning and pattern-library readout, explaining why later strict/lenient coverage could improve without invalidating the earlier negative report."
+  ],
+  "branch_feedback": {
+    "frank": "Make analyze_structured-equivalent typed evidence the semantic input; never rely on narrative text alone.",
+    "claycode": "Represent typed percept channels plus source/calibration/uncertainty/contradiction metadata in IR.",
+    "harness": "Freeze the Kandinsky cascade as a regression and verify that negative-result-derived fixes remain effective after dissolution into one-module FRANK.",
+    "claygraph": "Persist each percept candidate and provenance edge independently; do not merge competing candidates into one fact node.",
+    "unifieddb": "Persist calibration/model/dictionary versions needed to replay a percept decision.",
+    "gwt": "Broadcast selected percept hypotheses with alternatives/uncertainty available for re-entry.",
+    "emergenz": "Ablate GoL pattern/library channels independently before assigning causal/emergent value.",
+    "hyperposition": "Keep alternative visual interpretations explicit until evidence resolves them.",
+    "clay": "Dissolve the current multi-stage pipeline into typed state transitions while preserving the historical regression logic."
+  },
+  "earned_work": {
+    "hours_added_low": 0.0,
+    "hours_added_center": 0.0,
+    "hours_added_high": 0.0,
+    "reason": "Mechanisms are materially reusable but overlap with already-open Retina/MVC mapping; no duplicate hour credit until row-level reconciliation."
+  },
+  "next_obligations": [
+    "Assimilate sibling vision modules and model artifacts as deterministic code/model obligations rather than treating frank_eye.py as representative closure.",
+    "Locate evaluation scripts/data that generated strict and CLIP-assisted coverage numbers and bind them to executable Harness tests.",
+    "Cross-reconcile this Drive code with Project-Frankenstein Retina history, deletions and superseded versions.",
+    "Continue global denominator freeze; exact Level-0 coverage stays 0 until obligations are frozen."
+  ]
+}

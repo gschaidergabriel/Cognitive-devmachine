@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0939p0700-chatgpt-secondary-aicore-ui-recursive-closure",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "LOCAL_RECURSIVE_DENOMINATOR_CLOSED_NO_GLOBAL_COVERAGE_CREDIT",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source_scope": {
+    "drive_root": "aicore/ui",
+    "drive_root_id": "17UgqDx9-7hj_LJoemVkVR97xcMmmQPVB",
+    "manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_UI_RECURSIVE_CLOSURE_20260809T0939p0700.json"
+  },
+  "method": {
+    "enumerator": "Google_Drive.list_folder",
+    "top_k": 1000,
+    "recursive_completion_rule": "Every discovered child folder was direct-listed until no child folder remained.",
+    "search_used_for_completion": false
+  },
+  "result": {
+    "direct_root_folders": 6,
+    "direct_root_files": 5,
+    "descendant_folder_units": 28,
+    "file_units": 186,
+    "total_units_below_ui_root": 214,
+    "all_descendant_folders_direct_listed": true,
+    "local_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"
+  },
+  "lineage_notes": [
+    "The tree contains both current-looking and historical/backup UI artifacts; denominator closure is identity accounting, not semantic promotion.",
+    "webui/static contains a nested synteq UI source branch; it is counted as source identity here without duplicate semantic/earned-work credit.",
+    "Backup files such as app.py.vor-toolboxd-fix-055036 and frank-buddy.js.vor-* remain counted archive units rather than silently discarded duplicates."
+  ],
+  "crossworker_dedup": {
+    "observed_recent_peer_closures": ["aicore/tools", "aicore/synteq", "aicore/analysen", "aicore/ext", "aicore/wissen", "aicore/training", "aicore/skills"],
+    "excluded_active_or_recent_peer_lane": "Digital Retina E2E content-hash closure",
+    "selected_lane": "aicore/ui recursive denominator",
+    "overlap_credit_added": 0.0
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "AICORE ui is locally exact, but the combined Drive + Project-Frankenstein Level-0 denominator remains unfrozen.",
+    "earned_work_hours_added": 0.0
+  },
+  "remaining_high_value_obligations": [
+    "Finish other still-open AICORE recursive roots from the direct revalidation ledger (tests, writer, .github, personality unless peers close them first).",
+    "Finish Digital Retina E2E content/hash closure and untracked/support reconciliation.",
+    "Establish exhaustive Project-Frankenstein history/tree DAG accounting for the recorded full scope.",
+    "Reconcile all local subtree denominators into one frozen Drive denominator before exact global percentage can move above zero."
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0941p0700-chatgpt-secondary-synteq-511-invalidation-v2-correction",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "event_class": "INVALIDATION_CORRECTION",
+  "invalidated_exactness_claims": [
+    {
+      "ref": "research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_aicore_synteq_recursive_wave2.json",
+      "claim": "synteq exact recursive denominator = 511 units = 22 folders + 489 files",
+      "verdict": "INVALID_AS_EXACT_DENOMINATOR"
+    },
+    {
+      "ref": "research_entity/archive_assimilation/receipts/666_20260809T0931p0700_chatgpt_secondary_aicore_synteq_recursive_closure.json",
+      "claim": "independent replication of 511 units = 22 folders + 489 files",
+      "verdict": "INVALID_AS_EXACT_DENOMINATOR"
+    }
+  ],
+  "authoritative_correction": {
+    "ref": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_SYNTEQ_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json",
+    "root_ref": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROOT_DIRECT_DENOMINATOR_V2_DIRECT_ENUMERATION.json",
+    "correct_total_units_below_synteq_root": 519,
+    "correct_folder_units": 22,
+    "correct_file_units": 497,
+    "include_synteq_root_itself": 520,
+    "closure": "EXACT_RECURSIVE_STRUCTURAL_DENOMINATOR_FROZEN_BY_DIRECT_ENUMERATION"
+  },
+  "delta_from_invalid_511": {
+    "units": 8,
+    "folders": 0,
+    "files": 8,
+    "sources": [
+      {
+        "path": "synteq/vault/befunde",
+        "invalid_count": 1,
+        "correct_count": 8,
+        "delta": 7
+      },
+      {
+        "path": "synteq/vault/digitaltranscence/sprachforschung-2026-08-05/werkzeuge",
+        "invalid_count": 26,
+        "correct_count": 27,
+        "delta": 1
+      }
+    ]
+  },
+  "methodological_finding": "Two near-simultaneous workers agreeing on the same 511 count did not constitute valid independent structural replication because they shared a connector/enumeration failure mode. Boundary-proven V2 direct enumeration (including explicit top_k edge checks on large flat leaves) outranks correlated worker agreement. Agreement must not promote a denominator when a stronger source-enumeration manifest falsifies it.",
+  "supersession_context": {
+    "stale_parent_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_DIRECT_DENOMINATOR_20260809T0703p0700.json",
+    "stale_parent_direct_entries": 50,
+    "authoritative_parent_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROOT_DIRECT_DENOMINATOR_V2_DIRECT_ENUMERATION.json",
+    "authoritative_parent_direct_entries": 67,
+    "parent_delta": 17,
+    "verdict": "50-entry AICORE direct root is superseded and must not be used for whole-AICORE completion."
+  },
+  "preserved_valid_local_closures": {
+    "skills": {"units_below_root": 50, "folders": 22, "files": 28},
+    "tools": {"units_below_root": 95, "folders": 7, "files": 88}
+  },
+  "level0_credit": {
+    "exact_global_percent_added": 0.0,
+    "reason": "Correction improves local denominator truth but the combined Level-0 denominator remains unfrozen."
+  },
+  "earned_work_hours_added": 0.0,
+  "status": "CORRECTION_COMMITTED_INVALIDATED_RECEIPTS_RETAINED_FOR_AUDIT",
+  "observed_at": "2026-08-09T09:41:00+07:00"
+}

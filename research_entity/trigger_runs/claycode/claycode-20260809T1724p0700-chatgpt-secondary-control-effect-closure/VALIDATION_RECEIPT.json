@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure",
+  "validated_by":"chatgpt-secondary",
+  "current_validator_ref":{"path":"tools/goodman_filter_check.py","sha":"625441a98a061cc61ea806e389f2fe722dd5d626"},
+  "goodman_validation":{"method":"LOCAL_MIRROR_OF_CURRENT_VALIDATOR_SEMANTICS_AGAINST_EXACT_WRITTEN_OBJECTS","result":"PASS","violations":[],"repo_native_completion_command_executed":false,"reason":"The hosted GitHub connector exposes file/read/write and workflow inspection but no arbitrary repository-shell or workflow-dispatch action for this command. The current validator source was reread and its validate/validate-run predicates were mirrored locally."},
+  "remote_reread":{
+    "INTERCONNECT_MANIFEST.json":{"result":"PASS","blob_sha":"d1da21ab30188883350bee83ca66383efb102fa8"},
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json":{"result":"PASS","blob_sha":"c114a3f01c6d2443ea95be879256d1a246d3f654"},
+    "EXECUTABLE_RESEARCH_RECEIPT.json":{"result":"PASS","blob_sha":"32fdb4cf7565dce9e8b20a8d3760ab82133974d6"},
+    "EXPERIMENT_CONTROL_EFFECT_CLOSURE.py":{"result":"PASS","blob_sha":"90631d22fda6f3c5da17714f7083e5496b762e75","local_source_sha256":"2cd3574914f37dc39910e303c1233e3cacaeebe24dcc9353e871733d8074301c"},
+    "FINAL_REPORT.md":{"result":"PASS","blob_sha":"5ab1df08dc6dff22432eeffe979538e9e1ef9206"}
+  },
+  "live_worker_reread":{"latest_frank_run":"frank-20260809T1726p0700-loop-base-bridge","commit":"56920faa53f9231946e0b331431c2bae1b24c93b","finding":"The newly landed FRANK run independently consumes this control/effect receipt as non-production BASE evidence and converges on the same external-effect-authority boundary; shared ancestry is explicitly not counted as replication.","conflict":"NONE_MATERIAL"},
+  "release_effect":"NONE",
+  "base_gate":"NOT_PASS"
+}

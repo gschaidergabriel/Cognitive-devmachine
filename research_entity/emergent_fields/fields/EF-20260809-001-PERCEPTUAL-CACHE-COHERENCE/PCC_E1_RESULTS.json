@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "PCC-E1-SYNTHETIC-EPOCH-DRIFT",
+  "evidence_class": "SYNTHETIC_SIMULATION",
+  "config": {
+    "seeds": 30,
+    "seed_range": [1000, 1029],
+    "steps_per_seed": 12000,
+    "threshold": 0.7,
+    "known_probability": 0.8,
+    "embedding_dim": 32,
+    "classes": 20,
+    "drifted_classes": 6,
+    "fast_cost_ratio": 0.05
+  },
+  "aggregate": {
+    "naive": {
+      "false_fast_per_fast_mean": 0.030740429602451682,
+      "false_fast_per_fast_sd": 0.006110776686711316,
+      "deep_rate_mean": 0.17821944444444446,
+      "deep_rate_sd": 0.007734856271658179,
+      "compute_saving_mean": 0.7806915277777777,
+      "compute_saving_sd": 0.007348113458075292
+    },
+    "coherent": {
+      "false_fast_per_fast_mean": 0.00008715710788167491,
+      "false_fast_per_fast_sd": 0.00016207669476616705,
+      "deep_rate_mean": 0.20212500000000003,
+      "deep_rate_sd": 0.004544061550020023,
+      "compute_saving_mean": 0.75798125,
+      "compute_saving_sd": 0.00431685847251901
+    },
+    "relative_false_fast_reduction": 0.9971647400830493,
+    "deep_rate_increase_abs": 0.02390555555555554,
+    "compute_saving_decrease_abs": 0.022710277777777677
+  },
+  "interpretation": "In this intentionally adversarial synthetic drift setup, epoch-coherent cache eligibility preserved most simulated compute savings while suppressing stale near-OOD false fast-path decisions. This is a mechanism test, not FRANK-specific performance evidence.",
+  "limits": [
+    "Synthetic embeddings and oracle deep recognition",
+    "Perceptual epoch tag assumed available and correct",
+    "Arbitrary fast/deep cost ratio",
+    "No real Retina features or project-hardware timings"
+  ]
+}

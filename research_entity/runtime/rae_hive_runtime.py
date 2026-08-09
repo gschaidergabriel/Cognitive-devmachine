@@ -111,7 +111,7 @@ def begin_usage_episode(
     init_tables(rt)
     eid = uid("rae-usage")
     rt.u.execute(
-        "INSERT INTO rae_usage_episodes VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO rae_usage_episodes VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
         (
             eid, cycle_id, node_id, task_shape, _j(selected_refs or []),
             _j(suppressed_refs or []), _j(retrieval_receipts or []), None,
@@ -223,7 +223,7 @@ def stage_mutation(
     mid = uid("rae-mutation")
     ts = now()
     rt.u.execute(
-        "INSERT INTO rae_mutation_candidates VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO rae_mutation_candidates VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         (mid, target_scope, _j(hypothesis), _j(predicted_effect), _j(evidence_refs or []),
          float(support), None, None, None, None, None, "ACCUMULATING", ts, ts),
     )

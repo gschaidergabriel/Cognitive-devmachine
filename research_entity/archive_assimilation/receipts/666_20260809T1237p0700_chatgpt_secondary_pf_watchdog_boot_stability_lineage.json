@@ -1,0 +1,41 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1237p0700_chatgpt_secondary_pf_watchdog_boot_stability_lineage",
+  "trigger":"666",
+  "level":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "worker_session_id":"chatgpt-secondary-20260809T1231p0700-666-pf-watchdog-boot-lineage",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","historical_commits":["e63ea0cfa2a6beea05ba03082ca12d1fae66774d","2dc02b095f0f2fff13421217b303528e43c47a04","7bf44fb459bff12b70108ebffe04d61d7789ad84"],"frozen_head_files":["services/llm_guard.py","services/frank_watchdog.py","services/neural_immune/supervisor.py"]},
+  "causal_lineage":[
+    {"id":"PF-BOOT-L1","event":"systemd-active but functionally hung LLM","historical_fix":"LLM Guard added /health probes, consecutive-failure threshold=3 and force restart after repeated endpoint failure.","evidence_class":"CODE_VERIFIED_HISTORICAL","current_head":"Mechanism remains in deprecated llm_guard with 90s startup grace; supervision authority moved toward Neural Immune System."},
+    {"id":"PF-BOOT-L2","event":"Genesis crash-loop despite process supervision","historical_fix":"Watchdog heartbeats moved from interval accounting to monotonic-time pets before/after ticks and between potentially blocking sensors; source commit reports sensors blocking >30s under WatchdogSec=120 and ~18 crashes/hour before repair.","evidence_class":"CODE_VERIFIED_MECHANISM_SOURCE_REPORTED_METRIC","metric_reproduction":"NOT_REPRODUCED_THIS_RUN"},
+    {"id":"PF-BOOT-L3","event":"watchdog/immune restart cascade from nonexistent optional services","historical_fix":"Resolve installed service set via systemctl LoadState before constructing trackers/circuit breakers; skip uninstalled services.","evidence_class":"CODE_VERIFIED_HISTORICAL","current_head":"Installed-service filtering survives in both frank_watchdog lineage and Neural Immune supervisor."}
+  ],
+  "findings":[
+    {"id":"PF-BOOT-F1","statement":"Liveness must be multi-layered: declared/installed -> process active -> endpoint responsive -> dependency-ready -> semantically ready. Treating systemd active as health was historically false.","confidence":0.99},
+    {"id":"PF-BOOT-F2","statement":"Desired topology and instantiated topology are different objects. Optional/absent services must not enter failure/restart accounting as failed nodes.","confidence":0.99},
+    {"id":"PF-BOOT-F3","statement":"Blind heartbeat petting is not sufficient as a final Clay design: long operations need phase/deadline leases so a stuck operation cannot remain indefinitely healthy merely because another heartbeat continues.","confidence":0.92,"epistemic_class":"CURRENT_ARCHITECTURE_INFERENCE_FROM_HISTORICAL_FAILURE"},
+    {"id":"PF-BOOT-F4","statement":"Supervisor feedback can create the very instability it measures. Restart actions, watchdog lifecycle messages and dependency failures need causal provenance and anti-cascade budgets.","confidence":0.97}
+  ],
+  "current_contract_deltas":{
+    "harness":["BOOT_GRAPH_REALITY: freeze expected modules/services for a build, then compare to actually instantiated capabilities before health scoring.","LIVENESS_LADDER: test installed/deployed, process-active, endpoint-responsive, dependency-ready and semantic-readiness separately.","PHASE_DEADLINE_RECEIPTS: every long sensor/tool/model operation emits phase start, deadline/progress and terminal outcome; missed deadline must be distinguishable from process death.","CASCADE_INJECTION_TEST: optional service absent, one required service hung, one dependency unavailable; supervisor must recover only causal targets and preserve healthy nodes.","STARTUP_ORDER_FACTORIAL: replay boot orders and verify same authoritative state/ready graph after convergence, or explicitly record order dependence as failure."],
+    "claycode":["Encode module/service capability presence and dependency edges in compiled runtime metadata instead of hardcoded supervisor lists.","Make liveness/readiness/terminal-outcome types first-class so supervisor policy can be statically and dynamically checked."],
+    "h3_one_module_frank":["One-module does not remove boot ordering; it moves ordering inside initialization phases. Require deterministic initialization DAG, phase receipts, rollback to last-known-good initialization snapshot and no hidden optional-node restart loops."],
+    "unifieddb":["Persist boot epoch id, module presence, dependency graph version, readiness transitions, restart cause/effect, phase deadlines and recovery outcome so crashes cannot erase the causal boot story."],
+    "needle":["Tool/model calls whose process exists but readiness/endpoint is unhealthy must route as unavailable/degraded, not as normal execution followed by timeout."]
+  },
+  "regression_suite":[
+    "R1 systemd-active + HTTP-hung model must be detected without killing unrelated services",
+    "R2 startup grace prevents false restart during legitimate cold model load",
+    "R3 absent optional service is classified ABSENT_OPTIONAL, never FAILED",
+    "R4 absent required service produces explicit boot-gate failure, not cascade restart storm",
+    "R5 long sensor/tool phase crosses normal heartbeat interval but reports phase progress and survives",
+    "R6 intentionally stuck long phase misses deadline and is recovered despite process heartbeat",
+    "R7 restart/lifecycle logs cannot recursively trigger supervisor recovery",
+    "R8 boot-order permutation either converges to identical ready state hash or fails the deterministic-boot gate"
+  ],
+  "credit":{"global_level0_exact_percent_added":0,"earned_work_hours_added":0,"reason":"Bounded PF historical failure-lineage shard; full PF history/tree denominator remains unfrozen."},
+  "branch_feedback":[{"room":"harness","delta":"Add deterministic boot/readiness/cascade regression family."},{"room":"frank","delta":"Treat boot epoch and instantiated capability graph as part of body/self runtime state."},{"room":"claycode","delta":"Compile capability/dependency/liveness metadata; avoid hardcoded supervisor topology."},{"room":"unifieddb","delta":"Persist phase and restart causality across crashes."}],
+  "created_at":"2026-08-09T12:37:00+07:00"
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "workspace_id": "claycode-base-compiler",
   "status": "ACTIVE_BUILD",
   "owner_directive": "Finish ClayCode as a general-purpose executable programming language/semantic IR and compiler/runtime before Clay 0.1. Preserve existing FRANK/XENO/ClayCode semantics wherever possible: less redesign, more compilation, lowering, runtime, FFI, stdlib and real application execution. Frank v0.1 execution/release target is exclusively the Ubuntu Linux developer system; Android/mobile/edge portability is out of scope until the owner explicitly reopens it.",
@@ -24,6 +24,30 @@
     "Ubuntu Linux developer-system runtime evidence"
   ],
   "coordination_rule": "Workers prefer compiler/runtime/toolchain implementation over semantic redesign. A ClayCode semantic change requires a concrete executable application or FRANK counterexample showing the existing semantics cannot express/lower the needed behavior. Non-Ubuntu portability work is not current v0.1 work.",
+  "blocker_burndown": {
+    "scope": "CC-WP-01..CC-WP-14",
+    "status": "EXECUTABLE_CLOSURE_PLAN_ACTIVE",
+    "report": "research_entity/claycode/base/CC_BASE_14_BLOCKER_BURNDOWN_20260809T1904p0700.md",
+    "execution_work_event": "research_entity/state/work/events/20260809T1904p0700_chatgpt_secondary_claycode_base14_close.json",
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "accounting_rule": "Do not promote any package from proxy/research evidence alone. Update package status only from its stated production/Ubuntu acceptance receipts.",
+    "critical_path": [
+      "CC-WP-01-SPEC-FREEZE",
+      "CC-WP-02-PARSER-CANON",
+      "CC-WP-03-IR-TYPES",
+      "CC-WP-04-TYPE-EFFECT",
+      "CC-WP-05-EVALUATOR",
+      "CC-WP-06-COMPILER-LOWERING",
+      "CC-WP-07-RUNTIME-ABI-FFI",
+      "CC-WP-08-STDLIB-SDK",
+      "CC-WP-09-CONCURRENCY-MEMORY",
+      "CC-WP-10-GENERAL-APP-SUITE",
+      "CC-WP-11-FUZZ-CONFORMANCE",
+      "CC-WP-12-CORPUS-HELDOUT",
+      "CC-WP-13-HARNESS-HANDOFF",
+      "CC-WP-14-BASE-AUDIT"
+    ]
+  },
   "release_artifact": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
   "gate": "CLAYCODE_RELEASE_GATE",
   "gate_status": "NOT_PASS",
@@ -55,7 +79,18 @@
     "semantic_change_requires": "EXECUTABLE_COUNTEREXAMPLE_SHOWING_EXISTING_SEMANTICS_INADEQUATE",
     "motto": "less change, more compile"
   },
-  "live_claims": [],
+  "live_claims": [
+    {
+      "id": "BASE14-BURNDOWN-20260809",
+      "class": "IMPLEMENTATION_COORDINATION_STATE",
+      "status": "CURRENT",
+      "claim": "All fourteen coarse BASE packages have one receipt-gated executable closure path; no package is credited as PASS from research proxies alone.",
+      "evidence": [
+        "research_entity/claycode/base/CC_BASE_14_BLOCKER_BURNDOWN_20260809T1904p0700.md",
+        "research_entity/state/work/events/20260809T1904p0700_chatgpt_secondary_claycode_base14_close.json"
+      ]
+    }
+  ],
   "completed_receipts": [],
   "last_updated": "2026-08-09"
 }

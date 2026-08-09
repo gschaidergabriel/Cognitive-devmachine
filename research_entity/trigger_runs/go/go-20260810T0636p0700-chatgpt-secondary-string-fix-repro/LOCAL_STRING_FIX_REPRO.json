@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T0636p0700-chatgpt-secondary-string-fix-repro",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "identity_boundary": "RESEARCH_ENTITY_TEMPORARY_WORKER != FRANK; Frank self-Harness authority remains proposal-only",
+  "tested_fix_commit": "72fb8d3b2dff2c85a982035211b01d54bbe88c6e",
+  "tested_file": "tools/claycode_base_canonicalizer.py",
+  "observed_file_blob_sha": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+  "evidence_class": "LOCAL_LOGIC_REPRODUCTION_NOT_REPOSITORY_CHECKOUT_NOT_TARGET_ACCEPTANCE",
+  "method": "Reproduced the current _token_value/_validate_scalar_string logic with lark.Token on the sandbox runtime after reading the exact current source via the connected GitHub backend. This is a logic-level falsifier, not an import of the repository file and not an execution receipt for the exact Git checkout.",
+  "runtime": {
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "lark_present": true
+  },
+  "cases": [
+    {"case":"latin_literal_vs_escape","expected_same":true,"observed_same":true,"pass":true},
+    {"case":"ascii_literal_vs_escape","expected_same":true,"observed_same":true,"pass":true},
+    {"case":"slash_literal_vs_escape","expected_same":true,"observed_same":true,"pass":true},
+    {"case":"gclef_literal_vs_surrogate_pair","expected_same":true,"observed_same":true,"pass":true},
+    {"case":"composed_vs_decomposed","expected_same":false,"observed_same":false,"pass":true},
+    {"case":"unpaired_surrogate_rejected","expected":"REJECT","observed":"CanonicalizationError invalid Unicode surrogate scalar 0xd800","pass":true}
+  ],
+  "summary": {"passed":6,"total":6,"pass":true},
+  "microbenchmark": {
+    "operation": "100000 STRING token decodes per sample",
+    "samples_n": 20,
+    "elapsed_ms": {"min":132.458585,"p50":135.192425,"p95":140.256051,"max":146.63577},
+    "scope_guard": "Sandbox microbenchmark only; not a ClayCode throughput or target-host performance claim."
+  },
+  "hypothesis": "The 72fb8d3 fix closes the discovered raw-lexeme vs decoded-string equivalence defect for the bounded regression set.",
+  "strongest_counterhypothesis": "The logic-level reproduction passes while the exact repository checkout can still fail due parser integration, grammar interaction, dependency version, or receipt-chain defects.",
+  "result": "SUPPORTED_LOCAL_FIX_LOGIC",
+  "promotion": "NONE",
+  "architecture_delta": "NO_NEW_CHANGE; retain fix commit and require exact-checkout strict/full-corpus/canonical receipt before WP02 promotion.",
+  "next_falsifier": "First exact-SHA Clay repository execution of V17 strict frontend plus canonicalizer on an eligible Ubuntu runner, followed by WP06 replay.",
+  "runner_blocker": "CLAY_REPOSITORY_ACTIONS_ADMISSION_UNVERIFIED / no online-or-repository-eligible self-hosted runner observed in current bounded evidence.",
+  "tool_api_selection": {
+    "selected": ["connected GitHub backend", "local Python 3.13.5", "Lark Token"],
+    "reason": "Highest available reproducibility without inventing unavailable runner authority; direct repository checkout and Clay self-hosted execution are currently unavailable.",
+    "alternatives_considered": ["GitHub Actions self-hosted Clay runner", "GitHub-hosted Actions", "cross-repo Hostinger proxy"],
+    "rejected_or_deferred": {
+      "GitHub Actions self-hosted Clay runner": "queued/unallocated in bounded observations",
+      "GitHub-hosted Actions": "step-executed admission still unverified",
+      "cross-repo Hostinger proxy": "useful for mechanism replication but not exact Clay-repository receipt"
+    },
+    "owner_forbidden_provider_respected": true
+  }
+}

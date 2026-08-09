@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "field_id": "EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY",
+  "name": "Re-entry Causal Identifiability",
+  "status": "INTEGRATED",
+  "lifecycle": ["SPAWNED", "ACTIVE", "CROSS_CONNECTED", "TESTED", "INTEGRATED"],
+  "created_at": "2026-08-09T15:23:08+07:00",
+  "trigger": "666",
+  "spawning_run_id": "666-20260809T152308p0700-chatgpt-secondary-reentry",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "shared_program_stage": "BASE_CLAYCODE_RELEASE",
+  "spawn_seed": "8560758903970440746",
+  "spawn_seed_material_sha256": "76cdecddc6eba62a7530d178bd4157be260a7d24d9a6a60f0c86fc012fa6503a",
+  "resample_reason": "Concurrent FIELD_REGISTRY update revealed that the initial compression/control adaptive-learning field materially overlapped the earlier Proof-Carrying Adaptive State field. Per duplicate-avoidance law it was not counted as the new spawn; this field is the orthogonal resample.",
+  "selected_lens": ["dynamical systems", "causal inference"],
+  "research_question": "When FRANK observes directed prediction gain, transfer entropy or recurrent co-activation between workspace/re-entry channels, how can it distinguish true causal re-entry from spurious directionality created by shared state, scheduler timing or a common latent driver?",
+  "connected_branches": ["gwt", "emergenz", "hyperposition", "harness", "claygraph"],
+  "primary_hypothesis": "Observational directed-flow metrics are useful screening signals but are insufficient to certify FRANK re-entry. A mechanism should only advance toward causal-emergence status when matched blocking/lesion interventions produce the predicted downstream loss and a targeted rescue restores it, with common-driver controls and frozen-output counterfactuals where applicable.",
+  "counterhypotheses": [
+    "Conditioned transfer entropy/directed prediction gain with sufficiently rich conditioning already captures the needed causal distinction, making intervention receipts mostly redundant.",
+    "Scheduler/common-state confounding will be negligible in the deterministic H1 Harness because exact replay exposes all relevant state.",
+    "Lesion/rescue may itself create distribution shift so large that observational measures are more faithful to normal system operation."
+  ],
+  "falsifier_or_completion_test": "Construct matched dynamical systems with identical-looking lagged predictive structure: one with only a shared driver, one with a true A->B coupling. A useful FRANK measurement stack must assign different causal evidence after intervention even when both show positive unconditioned directed prediction gain. The hypothesis is weakened if observational estimators alone reliably separate the cases across hidden/common-driver and delay conditions without intervention.",
+  "internal_evidence_refs": [
+    "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
+    "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"
+  ],
+  "external_evidence": [
+    {"class":"primary_published_research","ref":"PMLR 323: Panayiotou & Simsek 2026","finding":"blocking interventions can uniquely identify causal structure in chain-reaction dynamical systems where observational heuristics fail under delayed/overlapping effects"},
+    {"class":"primary_published_research","ref":"PMLR 119: Bica et al. 2020","finding":"hidden confounding in longitudinal systems can bias causal estimates and requires explicit deconfounding assumptions/mechanisms"},
+    {"class":"primary_published_research","ref":"PMLR 216: Gunther et al. 2023","finding":"time-series causal discovery must explicitly handle observed and latent contexts/common drivers"},
+    {"class":"primary_published_research","ref":"PMLR 275: Jahn et al. 2025","finding":"causal effects in time-series graphs with latent confounders require identifiability analysis rather than raw directional association alone"}
+  ],
+  "experiment_refs": [
+    "research_entity/emergent_fields/fields/EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY/SYNTHETIC_COMMON_DRIVER_EXPERIMENT.json",
+    "research_entity/emergent_fields/fields/EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY/common_driver_reentry_sim.py"
+  ],
+  "findings": [
+    "In a synthetic common-driver system with zero direct A->B coupling, adding lagged A to a B autoregression improved prediction by about 32.2% and yielded a mean apparent A coefficient about 0.437 across 50 seeds.",
+    "When the common driver was included, the apparent A coefficient collapsed to about -0.003, while a matched blocking intervention on A changed B by exactly zero under matched exogenous noise.",
+    "With a real A->B coupling of 0.35, the conditioned coefficient recovered about 0.346 and the same A lesion produced mean downstream B absolute change about 1.156 (RMS about 1.446).",
+    "This synthetic result directly supports the existing GWT contract's rule that directionality estimators are not proof of causality and elevates common-driver control plus lesion/rescue from good practice to a concrete Harness identifiability test family.",
+    "ClayCode BASE should represent conditioning-set identity, intervention identity, matched-replay identity and common-driver-control result alongside transfer-entropy/directed-prediction metrics; current contracts already require these semantics, so no new language primitive is yet justified."
+  ],
+  "epistemic_status": "SUPPORTED_WORKING_HYPOTHESIS_SYNTHETIC_PLUS_PRIMARY_CAUSAL_LITERATURE",
+  "promotion_allowed": false,
+  "next_test": "In H1 Golden GWT traces, create common-driver confounds using shared memory/scheduler state, then compare raw directed prediction gain, conditioned estimators, edge lesion, delay perturbation, truthful-vs-shuffled re-entry and rescue. Require effect receipts before moving any re-entry mechanism above observational/predictive evidence status.",
+  "cross_room_delta_ref": "research_entity/rooms/center_events/CRD-20260809T152308-REENTRY-CAUSAL-IDENTIFIABILITY.json"
+}

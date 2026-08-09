@@ -11,7 +11,7 @@ from typing import Any
 import nvidia_nim as nim
 
 DEFAULT_EMBED_MODEL="nvidia/nv-embedcode-7b-v1"
-DEFAULT_RERANK_MODEL="nvidia/llama-3.2-nv-rerankqa-1b-v2"
+DEFAULT_RERANK_MODEL="nvidia/llama-nemotron-rerank-vl-1b-v2"
 class FreeOnlyViolation(RuntimeError): pass
 class RateLimited(RuntimeError): pass
 
@@ -45,13 +45,13 @@ def rerank(query:str,passages:list[str],*,model:str=DEFAULT_RERANK_MODEL)->dict[
 
 def family(model_id:str)->str:
     x=model_id.lower()
-    for key in ("nemotron","deepseek","qwen","glm","mistral","llama","gemma","phi","devstral","codestral"):
+    for key in ("nemotron","deepseek","qwen","glm","mistral","llama","gemma","phi","devstral","codestral","kimi","gpt-oss","poolside","granite"):
         if key in x:return key
     return x.split("/")[0]
 
 
 def smoke_test()->dict[str,Any]:
     models=list_models(); ids=[str(x.get("id")) for x in models if x.get("id")]
-    return {"status":"RUNTIME_VERIFIED_FREE_ENDPOINT_DISCOVERY","provider":"NVIDIA Hosted NIM","model_count":len(ids),"sample_models":ids[:20],"free_only":True,"canonical_adapter":"tools/nvidia_nim.py"}
+    return {"status":"RUNTIME_VERIFIED_FREE_ENDPOINT_DISCOVERY","provider":"NVIDIA Hosted NIM","model_count":len(ids),"sample_models":ids[:20],"free_only":True,"canonical_adapter":"tools/nvidia_nim.py","reranker":DEFAULT_RERANK_MODEL}
 
 if __name__=="__main__":print(json.dumps(smoke_test(),ensure_ascii=False,indent=2))

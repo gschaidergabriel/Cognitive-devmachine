@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1741p0700_claycode_effect_authority_lowering",
+  "trigger": "spawn",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "rng": {
+    "branch": {
+      "procedure": "secrets.SystemRandom().randrange(1,101)",
+      "draw_1_100": 4,
+      "weights_ref": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+      "weights_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+      "selected_origin_branch": "claycode",
+      "drawn_at": "2026-08-09T10:41:57.807109Z"
+    },
+    "microdirection": {
+      "procedure": "secrets.SystemRandom().randrange(5)",
+      "draw_index_0based": 1,
+      "drawn_at": "2026-08-09T10:43:02.195844Z"
+    }
+  },
+  "candidate_microdirections": [
+    {
+      "id": "C0",
+      "topic": "canonical semantic identity: set normalization vs ordered semantics",
+      "test": "permutation/duplication property tests plus ordered-field counterexamples",
+      "affected": ["claycode", "harness", "unifieddb"]
+    },
+    {
+      "id": "C1",
+      "topic": "effect intent vs execution authority across lowering/FFI",
+      "test": "brokered-vs-ambient lowering and capability-forgery differential fuzz",
+      "affected": ["claycode", "harness", "frank", "clayresearch", "unifieddb", "hyperposition"],
+      "selected": true
+    },
+    {
+      "id": "C2",
+      "topic": "UNKNOWN/CONFLICT/REVOKED preservation across FFI roundtrip",
+      "test": "cross-backend roundtrip mutation corpus",
+      "affected": ["claycode", "frank", "unifieddb"]
+    },
+    {
+      "id": "C3",
+      "topic": "async/concurrency receipt determinism",
+      "test": "schedule-perturbation replay and happens-before receipt comparison",
+      "affected": ["claycode", "harness", "unifieddb"]
+    },
+    {
+      "id": "C4",
+      "topic": "adaptive visual learner state contract expressibility",
+      "test": "prototype/version/promotion/rollback/open-set state compile-execute proof",
+      "affected": ["claycode", "frank", "harness", "unifieddb"]
+    }
+  ],
+  "novelty_check": {
+    "recent_spawn_receipt_search": "GitHub repository search for SPAWN_RECEIPT returned no indexed result; direct fetch of research_entity/trigger_runs/spawn returned 404 at run start.",
+    "duplicate_window_requested": 10,
+    "duplicate_receipts_reviewed": 0,
+    "limitation": "Absence could reflect no prior spawn runs or connector index/path visibility; no duplication claim beyond observed repository surface."
+  },
+  "selected_microdirection": "effect intent vs execution authority across lowering/FFI",
+  "selection_rationale": "Stochastic selection among five eligible current-stage candidates after branch draw; high information gain because BASE requires a capability/effect gateway and APP-08, while current G9 semantics encode CapabilityToken as a record plus a rule that textual capability names confer no authority."
+}

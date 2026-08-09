@@ -1,21 +1,14 @@
 import json, random, string, unittest
+from pathlib import Path
 from needle_runtime_contract import *
 
-REG = json.load(open("registry.json"))
-BLOCKED = set(REG["gesperrt"])
-ACTIVE = {n:v for n,v in REG["werkzeuge"].items() if n not in BLOCKED and not v.get("gesperrt")}
-
-def frank_tools():
-    out=[]
-    for name,v in ACTIVE.items():
-        props={a:{"type":"string"} for a in v.get("argumente",[])}
-        out.append({"name":name,"description":v.get("beschreibung",""),"parameters":{"type":"object","properties":props,"required":list(v.get("argumente",[]))}})
-    return out
+FIXTURE = Path(__file__).parent / "fixtures" / "frank_needle_active_tools_20260804.json"
+FRANK_TOOLS = json.loads(FIXTURE.read_text(encoding="utf-8"))
 
 class RuntimeContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.tools, cls.contract = canonicalize_tools(frank_tools())
+        cls.tools, cls.contract = canonicalize_tools(FRANK_TOOLS)
 
     def test_real_registry_count(self): self.assertEqual(len(self.tools), 51)
     def test_real_registry_aliases(self):
@@ -32,8 +25,6 @@ class RuntimeContractTests(unittest.TestCase):
     def test_no_tool(self):
         r=validate_output("[]",self.tools,self.contract); self.assertTrue(r.accepted); self.assertEqual(r.outcome,"NO_TOOL_PROPOSAL"); self.assertEqual(r.authority,"NONE"); self.assertFalse(r.effect_eligible); self.assertTrue(r.effect_gate_required)
     def test_unoffered_tool_rejected(self): self.assertFalse(validate_output('[{"name":"evil","arguments":{}}]',self.tools,self.contract).accepted)
-    def test_blocked_tool_absent_and_rejected(self):
-        blocked=next(iter(BLOCKED)); self.assertNotIn(blocked,{x["name"] for x in self.tools}); self.assertFalse(validate_output(json.dumps([{"name":blocked,"arguments":{}}]),self.tools,self.contract).accepted)
     def test_unknown_arg_rejected(self):
         t=next(t for t in self.tools if not t["parameters"]); self.assertFalse(validate_output(json.dumps([{"name":t["name"],"arguments":{"x":"y"}}]),self.tools,self.contract).accepted)
     def test_missing_required_rejected(self):

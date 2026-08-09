@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -40,7 +40,7 @@
     "judge": ["nvidia:nemotron_or_other_nonidentical_family"],
     "mass_workers": ["free_small_models", "groq", "huggingface_free_when_verified"],
     "retrieval": ["nvidia:nv-embedcode-7b-v1", "repo_search", "claygraph", "unifieddb"],
-    "reranker": ["nvidia:llama-nemotron-rerank-1b-v2", "nvidia:llama-3.2-nv-rerankqa-1b-v2_when_verified"],
+    "reranker": ["nvidia:llama-nemotron-rerank-vl-1b-v2", "nvidia:llama-3.2-nv-rerankqa-1b-v2_when_verified"],
     "execution_oracles": ["judge0", "e2b_if_free_verified", "sandboxapi_if_free_verified", "fixed_local_tests"]
   },
   "independence_rules": [
@@ -72,45 +72,48 @@
     ]
   },
   "priority_order": [
+    "CC-WP-02-PARSER-CANON",
+    "CC-WP-06-COMPILER-LOWERING",
     "CC-WP-13-HARNESS-HANDOFF",
     "CC-WP-10-GENERAL-APP-SUITE",
     "CC-WP-14-BASE-AUDIT",
-    "CC-WP-02-PARSER-CANON",
     "CC-WP-03-IR-TYPES",
     "CC-WP-04-TYPE-EFFECT",
     "CC-WP-05-EVALUATOR",
-    "CC-WP-06-COMPILER-LOWERING",
     "CC-WP-07-RUNTIME-ABI-FFI",
     "CC-WP-08-STDLIB-SDK",
     "CC-WP-09-CONCURRENCY-MEMORY",
     "CC-WP-11-FUZZ-CONFORMANCE",
     "CC-WP-12-CORPUS-HELDOUT"
   ],
-  "current_focus": "Realize the complete frozen H1 ActiveAssembly contract through generic ClayCode typed collections/resources/FFI/runtime mechanisms, then run matched H1 ordinary-code versus H2 ClayCode randomized and adversarial differentials. Preserve packet/provenance/ancestry identity, epoch filtering, explicit conflicts, bounded deterministic selection, ancestry diversity, re-expansion identity, deterministic semantic hash and authority non-minting. Do not add FRANK-specific opaque host semantics; only consider a language change after an executable generic-realization counterexample. In parallel keep target-only closure runner ready, but do not fabricate Andreas-host receipts from CI.",
+  "current_focus": "Close the contract-selected WP02 V17 declarative-trivia-safe grammar using exact selected bytes: strict LALR with lark[interegular], full admitted G9+Dialect frontend/canonical/IR corpus, horizontal-trivia identity including Needle.owns(X) == Needle.owns (X), and receipts embedding the exact selected grammar SHA. Then replay the newest WP06 deep-expression/call-chain/no-entry-object/Unicode hardening battery against those same V17/current-main bytes, including composite evaluator-vs-native-C differentials. If clean, return immediately to fail-closed physical Andreas Ubuntu BASE14 target closure. Do not inherit V16-bound receipts across the grammar-selection boundary; do not reopen semantics absent an executable counterexample; do not modify Frank's Harness.",
   "supervisor_last_steer": {
-    "reason": "The live fail-closed BASE convergence manifest now reports WP-01 formally PASS, eleven packages implementation-closure-ready, zero open P0/P1 software defects, and only three material closure blockers: full FRANK H2 handoff, ten-app suite completion through that handoff, and genuine Andreas Ubuntu target receipts/WP14 audit. Continuing to spend the autonomous research loop primarily on parser conflict work is now stale relative to the current executable critical path.",
+    "reason": "Autonomous control surfaces had drifted: the target receipt contract selects V17, SUPERVISOR_STATE already requires V17 exact-byte closure and V16->V17 WP06 replay, while this control file still prioritized H1/H2 and SUPERVISOR_INBOX still named superseded V6. The required V17 strict, frontend and canonicalizer receipts and the Andreas collector receipt are currently absent, while the strongest new WP06 executable hardening receipt is explicitly bound to V16 bytes. Synchronization is required to stop the next cycle from researching stale branches or laundering V16 evidence into V17 acceptance.",
     "evidence_priority": [
-      "matched H1 ordinary-code versus H2 ClayCode ActiveAssembly executable differential",
-      "generic typed collections/resource/FFI/runtime realization without FRANK-specific semantic escape hatch",
-      "randomized and adversarial packet/provenance/ancestry cases",
-      "deterministic assembly semantic-hash and authority-invariant receipts",
+      "exact selected V17 grammar strict construction with interegular-enabled collision checking",
+      "full G9+Dialect frontend/canonical/IR differential bound to exact V17 SHA",
+      "horizontal-trivia semantic identity and adversarial dotted-prefix/call cases",
+      "WP06 hardening replay against exact V17/current-main compiler and grammar bytes",
+      "composite evaluator/native-C differentials for Int64 Real Bool Unicode String deep expressions and long acyclic call chains",
       "genuine non-CI Andreas Ubuntu target receipts from clean checkout",
-      "WP14 fail-closed audit",
+      "Full-FRANK H1/H2/H3 and ten application receipts as downstream gate inputs",
       "provider/model agreement only as hypothesis support"
     ],
     "required_next_actions": [
-      "map each frozen H1 ActiveAssembly invariant to an existing generic ClayCode construct and identify only actual missing executable primitives",
-      "implement the smallest generic H2 realization needed for the full ActiveAssembly path",
-      "build a matched differential harness that feeds identical randomized/adversarial packet sets to H1 and H2 and compares bounded selection/conflict/provenance/ancestry/re-expansion/authority/hash invariants",
-      "treat any mismatch as executable counterevidence and repair implementation before proposing semantic changes",
-      "keep the Andreas BASE14 closure command fail-closed and wait for real target-host execution; never infer target evidence from GitHub CI or model output"
+      "resolve selected_grammar_path only from ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json and record its exact SHA-256",
+      "run strict LALR with lark[interegular] on exact V17 and preserve zero-conflict or failure diagnostics",
+      "run full admitted G9+Dialect frontend canonicalizer and typed-IR checks plus adversarial trivia/call/dotted-prefix cases and bind receipts to exact V17 SHA",
+      "replay CC_WP06_SANDBOX_DEPTH_STRING_OBJECT_HARDENING battery against exact V17/current-main bytes; do not inherit the V16 receipt",
+      "add composite evaluator-vs-native-C differentials mixing the newly hardened dimensions rather than isolated tests only",
+      "after selected-grammar replay is clean, run physical Andreas Ubuntu BASE14 acceptance; hosted CI/model/sandbox evidence remains non-target"
     ],
     "do_not_infer": [
-      "WP-13 PASS from component-level packet scoring",
-      "APP-10 FULL_FRANK_HANDOFF from proxy or host-call substitution",
-      "Andreas target execution from CI or registered host metadata alone",
-      "need for new language semantics before generic realization is falsified",
-      "BASE PASS from model consensus or implementation readiness"
+      "WP02 PASS from V16 69/69 sandbox evidence",
+      "WP06 PASS from the V16-bound hardening receipt",
+      "V17 semantic equivalence from model consensus",
+      "Andreas target execution from CI or runner metadata alone",
+      "need for new String ABI unless a required application produces an executable embedded-NUL counterexample",
+      "BASE PASS from implementation readiness or model-family agreement"
     ]
   },
   "supervisor": {

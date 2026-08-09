@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "event_id": "ACTIONS-PRERUN-BLOCKER-20260809T175100Z",
+  "kind": "NEGATIVE_EXECUTION_EVIDENCE",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T17:51:00Z",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "trigger": "go",
+  "classification": "REPRODUCED_GITHUB_ACTIONS_PRE_STEP_FAILURE_EXACT_ROOT_CAUSE_UNKNOWN",
+  "scope": "GitHub Actions orchestration / receipt persistence / explicit dispatch diagnostics; not ClayCode semantic correctness and not Frank runtime correctness",
+  "observations": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pull_request": 48,
+      "head_sha": "27bf924767c54332324224c086488dd3a65825c4",
+      "workflow_run_id": 31327346610,
+      "workflow": "FRANK Bounded Dispatch Bridge",
+      "job_id": 93279715241,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps_returned": [],
+      "job_logs_result": "404_BlobNotFound",
+      "inference": "PR event was accepted and workflow run instantiated, but the job failed before any observable workflow step executed. Therefore bridge Bash/dispatch semantics were not reached."
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pull_request": 48,
+      "head_sha": "27bf924767c54332324224c086488dd3a65825c4",
+      "workflow_run_id": 31327346592,
+      "workflow": "Frank Deep Integrity",
+      "job_id": 93279714989,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps_returned": null,
+      "inference": "An independent pre-existing PR workflow failed in the same pre-step shape, which falsifies the hypothesis that the new dispatch bridge script alone caused the failure."
+    }
+  ],
+  "historical_context": [
+    "Earlier persisted deep-integrity receipts prove REAL_SELF_HOSTED_UBUNTU_EXECUTION on the Dr.-Unterweger Hostinger lane.",
+    "A persisted real Qwen3-4B Q8_0 receipt also proves prior self-hosted model execution on runner clay / host digital-retina.",
+    "Current Clay WP02, Qwen V2, calibration audit, runner-scope and hosted heartbeat receipts remain missing and must stay UNKNOWN rather than PASS/FAIL without execution receipts."
+  ],
+  "hypotheses_ranked": [
+    {
+      "hypothesis": "GitHub-hosted private-repository usage is blocked by exhausted included quota, absent/invalid payment method, or an Actions budget with stop-usage enabled.",
+      "status": "PLAUSIBLE_NOT_VERIFIED",
+      "support": "Official GitHub billing docs state private-repository GitHub-hosted minutes consume account quota and additional hosted usage can be blocked when quota/payment/budget limits are reached; GitHub troubleshooting explicitly recommends checking billing for workflows failing due to billing/storage errors.",
+      "counterevidence": "The current connector cannot read the account billing/budget dashboard, so this cannot be promoted as the exact cause."
+    },
+    {
+      "hypothesis": "Repository/account Actions policy or workflow-run admission setting rejects jobs before runner assignment.",
+      "status": "PLAUSIBLE_NOT_VERIFIED",
+      "support": "GitHub documents repository-level Actions enable/limit policies.",
+      "counterevidence": "The PR event still instantiated workflow runs, so Actions is not globally absent; exact policy state is unavailable through the current connector."
+    },
+    {
+      "hypothesis": "Fork-PR approval requirement blocked the run.",
+      "status": "WEAK",
+      "support": "GitHub supports manual approval for selected fork-origin pull-request workflows.",
+      "counterevidence": "PR 48 is a same-repository branch PR, not a fork, and the observed workflow status was completed/failure rather than an awaiting-approval state."
+    },
+    {
+      "hypothesis": "The bounded dispatch bridge Bash or curl failed.",
+      "status": "REFUTED_FOR_OBSERVED_RUN",
+      "support": "none",
+      "counterevidence": "No workflow step executed and an unrelated existing workflow failed in the same pre-step shape."
+    }
+  ],
+  "architecture_consequence": "NO_CLAYCODE_SEMANTIC_CHANGE. Treat GitHub Actions orchestration as a degraded external capability until a step-executed receipt re-establishes it. Do not weaken evidence gates and do not move repository write authority into the self-hosted model-execution job merely to bypass the writer outage.",
+  "safe_next_actions": [
+    "Owner/operator checks GitHub personal Billing & licensing -> Actions usage/budgets/payment state and repository Settings -> Actions -> General; this current connector cannot verify those UI-only/account surfaces.",
+    "Keep self-hosted execution read-only with non-persistent checkout credentials and separate receipt adjudication/writer authority.",
+    "If hosted writer remains blocked but self-hosted execution is available, preserve artifacts as UNKNOWN/unadmitted evidence until an independently authorized writer lane can validate tested SHA/run identity and persist them.",
+    "For Clay WP02 separately verify runner registration/eligibility for clay-global-research-entity; prior Dr.-Unterweger runner evidence does not prove Clay repository scope."
+  ],
+  "out_of_box_accounting": "NO_NEW_OOB_EXPERIMENT_ADDED_BY_THIS_EVENT; this is infrastructure falsification/negative evidence only. The worker's go OOB remains GO-OOB-WP02-TRIVIA-METAMORPHIC-V1.",
+  "promotion": "NONE",
+  "authority_invariant": "model output != execution authority",
+  "frank_self_harness_authority": "PROPOSAL_ONLY",
+  "paid_training_started": false
+}

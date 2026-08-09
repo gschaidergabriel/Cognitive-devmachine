@@ -4,7 +4,9 @@
 Research-only discriminator. It never edits/promotes the grammar. For the contract-selected
 V17 grammar it checks that horizontal space/tab perturbations before a call parenthesis are
 semantic trivia, while the dotted-prefix relation remains a distinct parse. The relation
-form is the lesion/counterfactual. NO_BENEFIT/REFUTED is an accepted outcome.
+form is the lesion/counterfactual. The same single experiment also keeps a small fixed
+lookahead-boundary matrix because Lark documents that advanced regex lookahead can limit
+what generic interegular collision analysis can detect. NO_BENEFIT/REFUTED is accepted.
 """
 from __future__ import annotations
 
@@ -34,6 +36,13 @@ def canon(node):
 def tree_hash(parser: Lark, source: str) -> str:
     payload = json.dumps(canon(parser.parse(source)), ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     return sha256_bytes(payload)
+
+
+def parse_hash(parser: Lark, source: str) -> tuple[bool, str | None, str | None]:
+    try:
+        return True, tree_hash(parser, source), None
+    except Exception as exc:
+        return False, None, f"{type(exc).__name__}: {exc}"
 
 
 def main() -> int:
@@ -70,14 +79,55 @@ def main() -> int:
             if len(failures) >= 16:
                 break
 
-    passed = not failures and call_hash != relation_hash
+    # Fixed boundary matrix for the lookahead-bearing DOTTED_PREFIX_REL token. This does not
+    # replace strict/interegular; it directly falsifies the specific parser boundary where a
+    # lookahead-capable regex checker can otherwise have incomplete collision visibility.
+    boundary_specs = [
+        ("owns_call_tab", "rule Needle.owns\t(X)\n", "ACCEPT_EQ_CALL"),
+        ("owns_relation_tab", "rule Needle.owns\tX\n", "ACCEPT_EQ_RELATION"),
+        ("lowers_relation_tab", "rule Needle.lowers\tX\n", "ACCEPT"),
+        ("lowers_call_tab", "rule Needle.lowers\t(X)\n", "REJECT"),
+        ("lowers_newline_split", "rule Needle.lowers \n X\n", "REJECT"),
+        ("lowers_semicolon_split", "rule Needle.lowers ; X\n", "REJECT"),
+        ("owns_comment_not_rhs", "rule Needle.owns // comment\n", "ACCEPT_DISTINCT_FROM_CALL_RELATION"),
+    ]
+    boundary_rows = []
+    boundary_failures = []
+    for name, source, expected in boundary_specs:
+        accepted, observed_hash, error = parse_hash(parser, source)
+        if expected == "ACCEPT_EQ_CALL":
+            ok = accepted and observed_hash == call_hash
+        elif expected == "ACCEPT_EQ_RELATION":
+            ok = accepted and observed_hash == relation_hash
+        elif expected == "ACCEPT_DISTINCT_FROM_CALL_RELATION":
+            ok = accepted and observed_hash not in {call_hash, relation_hash}
+        elif expected == "ACCEPT":
+            ok = accepted
+        elif expected == "REJECT":
+            ok = not accepted
+        else:
+            ok = False
+        row = {
+            "case": name,
+            "source": source,
+            "expected": expected,
+            "accepted": accepted,
+            "observed_hash": observed_hash,
+            "error": error,
+            "pass": ok,
+        }
+        boundary_rows.append(row)
+        if not ok:
+            boundary_failures.append(row)
+
+    passed = not failures and call_hash != relation_hash and not boundary_failures
     out = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "experiment_id": "GO-OOB-WP02-TRIVIA-METAMORPHIC-V1",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "class": "BOUNDED_OUT_OF_THE_BOX_EXPERIMENT",
-        "hypothesis": "For selected V17, admitted horizontal trivia before '(' does not change call semantics, while the dotted-prefix relation remains distinct.",
-        "counterhypothesis": "The V17 lookahead still leaks horizontal trivia into call-vs-relation parse identity for at least one bounded perturbation.",
+        "hypothesis": "For selected V17, admitted horizontal trivia before '(' does not change call semantics, while the dotted-prefix relation remains distinct and fixed lookahead boundaries remain stable.",
+        "counterhypothesis": "The V17 lookahead still leaks horizontal trivia or an adjacent comment/newline/semicolon boundary into call-vs-relation parse identity for at least one bounded perturbation.",
         "grammar_path": str(args.grammar.relative_to(ROOT)),
         "grammar_sha256": sha256_bytes(grammar.encode("utf-8")),
         "seed": args.seed,
@@ -87,11 +137,14 @@ def main() -> int:
         "lesion_relation_hash": relation_hash,
         "baseline_vs_lesion_distinct": call_hash != relation_hash,
         "sample": observed,
-        "failures": failures,
+        "metamorphic_failures": failures,
+        "lookahead_boundary_matrix": boundary_rows,
+        "lookahead_boundary_failures": boundary_failures,
+        "tooling_limit_guard": "Strict/interegular remains mandatory, but generic regex-collision analysis is not treated as a substitute for direct boundary regressions around the V17 lookahead-bearing terminal.",
         "pass": passed,
         "promotion": "NONE",
-        "rollback": "Remove this research-only probe/workflow step; selected grammar bytes are untouched.",
-        "scope_guard": "This is metamorphic parser evidence only. It cannot promote WP02, BASE, Frank Harness, or target-host acceptance."
+        "rollback": "Revert this research-only probe/workflow step; selected grammar bytes are untouched.",
+        "scope_guard": "This is one bounded metamorphic parser experiment with an internal fixed boundary matrix. It cannot promote WP02, BASE, Frank Harness, or target-host acceptance."
     }
     text = json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if args.output:

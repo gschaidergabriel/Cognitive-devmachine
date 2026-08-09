@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "AUDIT_EXECUTED_NOT_AUTO_PROMOTED",
   "source": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
   "source_schema_version": "1.7",
@@ -487,254 +487,81 @@
     {
       "path": "research_entity/forecast/earned_work_deltas/20260809T0456p0700_drive_memory50t.json",
       "status": "PROVISIONAL_PENDING_GLOBAL_DEDUP_MERGE",
-      "matched_guard_terms": true,
-      "object": {
-        "schema_version": "1.0",
-        "status": "PROVISIONAL_PENDING_GLOBAL_DEDUP_MERGE",
-        "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0456p0700_chatgpt_secondary_drive_memory50t_version_failure_shard.json",
-        "mapping": {
-          "mapping_id": "HEW-DRIVE-MEM50-016",
-          "source_refs": [
-            "DRV-MEM50-RECALL-002",
-            "DRV-MEM50-CORRECTION-003",
-            "DRV-MEM50-FORGET-004",
-            "DRV-MEM50-STORECLAIM-005",
-            "DRV-MEM50-NOTE-006",
-            "DRV-MEM50-REALITY-007"
-          ],
-          "current_doomsday_rows": [
-            "H1_REFERENCE_HARNESS",
-            "H2_CLAYCODE_HARNESS",
-            "H3_ONE_MODULE_BINARY_FRANK",
-            "UDB_UNIFIED_DATABASE",
-            "DATA_FINAL_TRAINING_CORPUS",
-            "CLAY_0_1_ACCEPTANCE_RUN"
-          ],
-          "mechanism_or_result": "Versioned 50-turn memory failure battery with source-class contamination, stale-context-over-correction, overbroad forget, unsupported store claims and exact-vs-semantic retrieval differential.",
-          "reuse_category": "NEGATIVE_RESULT_VALUE",
-          "avoided_future_hours_low": 2.0,
-          "avoided_future_hours_center": 5.0,
-          "avoided_future_hours_high": 10.0,
-          "confidence": "MEDIUM_FOR_TEST_ORACLE_LOW_FOR_HOUR_ESTIMATE",
-          "falsifier_or_validation_receipt": "Current UnifiedDB/Harness must reproduce representative historical failures against naive baselines and prove typed source identity/supersession/scoped revoke/evidence-linked recall prevent them."
-        },
-        "global_completion_credit_applied": false,
-        "rule": "Deduplicate against LCME/retrieval/correction lineage before merging into HISTORICAL_EARNED_WORK."
-      }
+      "mapping_ids": [],
+      "proposed_unique_increment": {},
+      "decisions": [],
+      "guard_or_downgrade": true
     },
     {
       "path": "research_entity/forecast/earned_work_deltas/20260809T1250p0700_pf_new_lineages_reconcile.json",
       "status": "PROVISIONAL_PENDING_GLOBAL_DEDUP_MERGE",
-      "matched_guard_terms": true,
-      "object": {
-        "schema_version": "1.0",
-        "status": "PROVISIONAL_PENDING_GLOBAL_DEDUP_MERGE",
-        "task_id": "666-l0-earned-work-reconcile-20260809T1248p0700",
-        "created_at": "2026-08-09T12:50:00+07:00",
-        "authoritative_hew_summary_at_crossread": {
-          "low": 32.0,
-          "center": 84.0,
-          "high": 168.0
-        },
-        "source_receipts": [
-          "research_entity/archive_assimilation/receipts/666_20260809T1240p0700_chatgpt_secondary_pf_dream_replay_lineage.json",
-          "research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json",
-          "research_entity/archive_assimilation/receipts/666_20260809T1244p0700_chatgpt_secondary_pf_runtime_prompt_contamination_lineage.json",
-          "research_entity/archive_assimilation/receipts/666_20260809T1237p0700_chatgpt_secondary_pf_watchdog_boot_stability_lineage.json"
-        ],
-        "overlap_matrix": [
-          {
-            "lineage": "PF_DREAM_REPLAY",
-            "decision": "ZERO_NEW_CREDIT_OVERLAP_DOMINANT",
-            "overlaps_existing": [
-              "HEW-PF-STATE-001",
-              "HEW-PF-FAIL-002",
-              "HEW-PF-LCME-006",
-              "HEW-PF-AUTON-008"
-            ],
-            "unique_value_preserved": "resumable cyclic-job/no-effect/effect-receipt regression family",
-            "hours": {
-              "low": 0.0,
-              "center": 0.0,
-              "high": 0.0
-            }
-          },
-          {
-            "lineage": "PF_WATCHDOG_BOOT_STABILITY",
-            "decision": "ZERO_NEW_CREDIT_OVERLAP_DOMINANT",
-            "overlaps_existing": [
-              "HEW-PF-FAIL-002",
-              "HEW-PF-AUTON-008"
-            ],
-            "unique_value_preserved": "multi-layer liveness, startup-order factorial and anti-cascade regression family",
-            "hours": {
-              "low": 0.0,
-              "center": 0.0,
-              "high": 0.0
-            }
-          },
-          {
-            "lineage": "PF_SUBCONSCIOUS_POLICY",
-            "decision": "SMALL_UNIQUE_INCREMENT",
-            "overlaps_existing": [
-              "HEW-PF-LCME-006",
-              "HEW-PF-SOMA-007",
-              "HEW-PF-AUTON-008"
-            ],
-            "unique_value": "behavior-policy/training-policy mask parity; fallback-decision capture; explicit learner schema migration; detect service-healthy but learning-inert state",
-            "hours": {
-              "low": 1.0,
-              "center": 3.0,
-              "high": 6.0
-            }
-          },
-          {
-            "lineage": "PF_RUNTIME_PROMPT_CONTAMINATION",
-            "decision": "SMALL_UNIQUE_INCREMENT",
-            "overlaps_existing": [
-              "HEW-PF-CTX-006",
-              "HEW-PF-FMTFAIL-007"
-            ],
-            "unique_value": "production-context parity; stale architecture-fact conflict; canonical fact projection provenance; schema-wide rename closure",
-            "hours": {
-              "low": 1.0,
-              "center": 3.0,
-              "high": 6.0
-            }
+      "mapping_ids": [
+        "HEW-PF-POLICY-PARITY-CANDIDATE",
+        "HEW-PF-RUNTIME-CONTEXT-PARITY-CANDIDATE"
+      ],
+      "proposed_unique_increment": {
+        "low": 2.0,
+        "center": 6.0,
+        "high": 12.0
+      },
+      "decisions": [
+        {
+          "lineage": "PF_DREAM_REPLAY",
+          "decision": "ZERO_NEW_CREDIT_OVERLAP_DOMINANT",
+          "hours": {
+            "low": 0.0,
+            "center": 0.0,
+            "high": 0.0
           }
-        ],
-        "proposed_mappings": [
-          {
-            "mapping_id": "HEW-PF-POLICY-PARITY-CANDIDATE",
-            "source_refs": [
-              "PF-SUB-FAIL-001",
-              "PF-SUB-FAIL-002",
-              "PF-SUB-FAIL-003",
-              "PF-SUB-FAIL-004",
-              "PF-SUB-FAIL-005"
-            ],
-            "current_doomsday_rows": [
-              "H1_REFERENCE_HARNESS",
-              "H2_CLAYCODE_HARNESS",
-              "UDB_UNIFIED_DATABASE",
-              "CLAY_0_1_ACCEPTANCE_RUN"
-            ],
-            "mechanism_or_result": "Historical online-policy failures show that action availability must be identical between behavior and training policies, fallback actions must enter the replay record, schema migrations must be explicit, and learner health must prove data/weight progression rather than service uptime.",
-            "reuse_category": "NEGATIVE_RESULT_VALUE",
-            "avoided_future_hours_low": 1.0,
-            "avoided_future_hours_center": 3.0,
-            "avoided_future_hours_high": 6.0,
-            "confidence": "MEDIUM_FOR_REGRESSION_REUSE_LOW_FOR_HOUR_ESTIMATE",
-            "falsifier_or_validation_receipt": "Current Harness/Adaptive Learner must demonstrate these failure classes are impossible by construction or already covered by an equivalent accepted regression family."
-          },
-          {
-            "mapping_id": "HEW-PF-RUNTIME-CONTEXT-PARITY-CANDIDATE",
-            "source_refs": [
-              "PF-RUNTIME-FACT-M1",
-              "PF-RUNTIME-FACT-M2",
-              "PF-RUNTIME-FACT-M3",
-              "PF-RUNTIME-FACT-M4",
-              "PF-RUNTIME-FACT-M5"
-            ],
-            "current_doomsday_rows": [
-              "H1_REFERENCE_HARNESS",
-              "H2_CLAYCODE_HARNESS",
-              "DATA_FINAL_TRAINING_CORPUS",
-              "CLAY_0_1_ACCEPTANCE_RUN"
-            ],
-            "mechanism_or_result": "Historical runtime fact injection overrode trained semantics and exposed cross-layer rename drift; this supplies a production-context parity oracle and stale/nonexistent fact conflict tests that are not equivalent to parser-format or generic context-compaction tests.",
-            "reuse_category": "NEGATIVE_RESULT_VALUE",
-            "avoided_future_hours_low": 1.0,
-            "avoided_future_hours_center": 3.0,
-            "avoided_future_hours_high": 6.0,
-            "confidence": "MEDIUM_FOR_REGRESSION_REUSE_LOW_FOR_HOUR_ESTIMATE",
-            "falsifier_or_validation_receipt": "Full production-context evaluation proves model-facing architecture facts are generated from one canonical versioned registry and stale/nonexistent facts cannot silently override current truth."
+        },
+        {
+          "lineage": "PF_WATCHDOG_BOOT_STABILITY",
+          "decision": "ZERO_NEW_CREDIT_OVERLAP_DOMINANT",
+          "hours": {
+            "low": 0.0,
+            "center": 0.0,
+            "high": 0.0
           }
-        ],
-        "proposed_unique_increment": {
-          "low": 2.0,
-          "center": 6.0,
-          "high": 12.0
         },
-        "illustrative_authoritative_plus_this_delta_only": {
-          "low": 34.0,
-          "center": 90.0,
-          "high": 180.0
+        {
+          "lineage": "PF_SUBCONSCIOUS_POLICY",
+          "decision": "SMALL_UNIQUE_INCREMENT",
+          "hours": {
+            "low": 1.0,
+            "center": 3.0,
+            "high": 6.0
+          }
         },
-        "global_completion_credit_applied": false,
-        "doomsday_display_changed": false,
-        "exact_level0_percent_added": 0.0,
-        "merge_rule": "Do not mutate HISTORICAL_EARNED_WORK.json or the displayed 72.7% calibration from this delta alone. A global reconciler must deduplicate this candidate against all other unmerged earned_work_deltas and current row priors before authoritative merge."
-      }
+        {
+          "lineage": "PF_RUNTIME_PROMPT_CONTAMINATION",
+          "decision": "SMALL_UNIQUE_INCREMENT",
+          "hours": {
+            "low": 1.0,
+            "center": 3.0,
+            "high": 6.0
+          }
+        }
+      ],
+      "guard_or_downgrade": true
     },
     {
       "path": "research_entity/forecast/earned_work_deltas/20260809T1314p0700_pf_ablation_epistemic_downgrade.json",
       "status": "REQUIRED_FINAL_AUDIT_CORRECTION_NOT_YET_AUTHORITATIVE",
-      "matched_guard_terms": true,
-      "object": {
-        "schema_version": "1.0",
-        "status": "REQUIRED_FINAL_AUDIT_CORRECTION_NOT_YET_AUTHORITATIVE",
-        "trigger": "666",
-        "created_at": "2026-08-09T13:14:00+07:00",
-        "target_mapping_id": "HEW-PF-ABL-004",
-        "current_authoritative_mapping_ref": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
-        "source_lineage": {
-          "earlier_claim_commit": "49dfa7f367d11b56999ece625e8028c537bf2eec",
-          "earlier_history_ordinal": 153,
-          "later_epistemic_correction_commit": "937193896a15d34cdb95656cdce41781fbd29752",
-          "later_history_ordinal": 150,
-          "later_change": "ABLATION_ANALYSIS.md deleted/replaced by TALKING_TO_FRANK.md; README changed from quantitative ablation framing to unedited excerpts explicitly described as no metrics/no claims."
-        },
-        "historical_claims_to_downgrade": [
-          "82% fewer deflections (2 vs 11)",
-          "unique-word ratio 0.929 vs 0.843",
-          "bare model response-length collapse 296 to 10 words/turn",
-          "any architecture-level causal interpretation derived from that historical document without matched factorized controls"
-        ],
-        "preservable_value": "The question sequence / longitudinal prompt battery remains reusable as benchmark scaffolding and can justify some measurement-foundation credit if reconstructed independently from the superseded claim document.",
-        "required_final_action": {
-          "mapping_status": "RETAIN_SCAFFOLD_ONLY_REESTIMATE_HOURS",
-          "rule": "Final HISTORICAL_EARNED_WORK reconciliation must not credit superseded quantitative/causal claims. Re-estimate HEW-PF-ABL-004 solely from current reusable prompt-battery/scaffold value, or set to zero if that scaffold cannot be independently recovered/validated.",
-          "authoritative_hours_changed_now": false
-        },
-        "global_exact_level0_percent_added": 0.0,
-        "doomsday_display_changed": false
-      }
+      "mapping_ids": [
+        "HEW-PF-ABL-004"
+      ],
+      "proposed_unique_increment": {},
+      "decisions": [],
+      "guard_or_downgrade": true
     },
     {
       "path": "research_entity/forecast/earned_work_deltas/20260809T1352p0700_pf_consciousness_benchmark_contamination_guard.json",
       "status": "REQUIRED_FINAL_AUDIT_EXCLUSION_GUARD_NOT_HOUR_MAPPING",
-      "matched_guard_terms": true,
-      "object": {
-        "schema_version": "1.0",
-        "status": "REQUIRED_FINAL_AUDIT_EXCLUSION_GUARD_NOT_HOUR_MAPPING",
-        "trigger": "666",
-        "created_at": "2026-08-09T13:52:00+07:00",
-        "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1334p0700_chatgpt_secondary_pf_history_k304_k319.json",
-        "source_lineage": {
-          "headline_commit": "171b927ce1197b3678ef272069f74a7a651cae3c",
-          "headline_ordinal": 311,
-          "reported_metrics": [
-            "22/24 tests",
-            "91.7% overall",
-            "11/12 consciousness indicators"
-          ],
-          "contamination_ordinals": [
-            314,
-            315,
-            316,
-            318,
-            319
-          ],
-          "explicit_target_optimization": "k319 states 4/24 -> target 24/24; adjacent commits modify benchmark-readable fields, query-triggered E-PQ events, synchronous meta-reflection inserts, expected wording/vocabulary and context specifically against known test criteria."
-        },
-        "audit_rule": "No historical-earned-work hours, causal validation credit, consciousness/emergence validation credit, or architecture-over-scale validation credit may be derived from the k311 22/24 / 91.7% result as independent evidence. The benchmark may retain development-scaffold value only if separately mapped and hour-estimated from reusable test infrastructure, not from the contaminated score.",
-        "replacement_requirement": "Newly frozen held-out evaluation unknown to the implementation/adaptation path; non-mutating measurement or preregistered query-effect controls; exact version/model/prompt/sampling receipts; independent replication where practical.",
-        "authoritative_hours_changed_now": false,
-        "global_exact_level0_percent_added": 0.0,
-        "doomsday_display_changed": false
-      }
+      "mapping_ids": [],
+      "proposed_unique_increment": {},
+      "decisions": [],
+      "guard_or_downgrade": true
     }
   ],
-  "audit_rule": "Raw sums are diagnostics only and MUST NOT be promoted as completion credit. Shared source receipts, overlapping current rows, contamination guards and ancestry overlap require explicit adjudication before evidence-mapped baseline promotion."
+  "audit_rule": "Raw sums are diagnostics only; explicit guard/downgrade and ancestry-dedup adjudication required before promotion."
 }

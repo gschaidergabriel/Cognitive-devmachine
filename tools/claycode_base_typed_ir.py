@@ -7,6 +7,7 @@ collapsing an unknown type to Any. Expressions remain syntax trees until CC-WP-0
 checker/evaluator semantics consume them.
 
 Authority invariant: IR description never mints capability/effect authority.
+Identity invariant: typed semantic identity is independent of source/provenance identity.
 """
 from __future__ import annotations
 
@@ -311,10 +312,12 @@ def build_typed_ir(units: list[SourceUnit]) -> dict[str, Any]:
             cls = "EXTERNAL_NOMINAL"
         type_universe.append({"name": name, "class": cls})
 
-    core = {
-        "schema_version": "1.0",
+    # Semantic identity deliberately excludes source path/hash and frontend-contract
+    # provenance. Two semantically identical programs with different whitespace/source
+    # bytes must converge here; provenance remains attached outside this hash domain.
+    semantic_core = {
+        "schema_version": "1.1",
         "ir_schema": "ClayCodeBaseTypedIR/v1",
-        "sources": source_rows,
         "types": type_universe,
         "declarations": sorted(declarations, key=lambda d: (d["kind"], d["name"])),
         "invariants": {
@@ -322,10 +325,16 @@ def build_typed_ir(units: list[SourceUnit]) -> dict[str, Any]:
             "model_output_execution_authority": "FORBIDDEN",
             "descriptive_capability_is_bearer_authority": "FORBIDDEN",
             "declaration_authority": "NONE_UNLESS_RUNTIME_BROKER_SUPPLIES_SEALED_CAPABILITY",
+            "semantic_identity_includes_source_provenance": "FORBIDDEN",
         },
     }
-    ir_hash = sha256(DOMAIN + canon_bytes(core))
-    return {**core, "typed_ir_sha256": ir_hash, "program_semantic_id": f"clayir:{ir_hash}"}
+    ir_hash = sha256(DOMAIN + canon_bytes(semantic_core))
+    return {
+        **semantic_core,
+        "sources": source_rows,
+        "typed_ir_sha256": ir_hash,
+        "program_semantic_id": f"clayir:{ir_hash}",
+    }
 
 
 def compile_sources(paths: list[Path], grammar_path: Path) -> dict[str, Any]:

@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "freeze_id": "CLAYCODE-BASE-SEMANTIC-FREEZE-V1-20260809",
+  "status": "FROZEN_FOR_BASE_IMPLEMENTATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "purpose": "Close CC-WP-01 by freezing the exact current ClayCode semantic implementation baseline. Remaining parser/compiler/runtime gaps are executable implementation counterexamples and may not silently mutate semantics.",
+  "sources": [
+    {
+      "role": "semantic_core",
+      "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "git_blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+      "admission": "FROZEN_BASE_SEMANTIC_INPUT"
+    },
+    {
+      "role": "dialect_contract",
+      "path": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+      "git_blob_sha": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+      "admission": "FROZEN_BASE_SEMANTIC_INPUT"
+    },
+    {
+      "role": "published_research_surface_grammar",
+      "path": "research_entity/claycode/g9/grammar.ebnf",
+      "git_blob_sha": "ec2f17077333955cfdabe6c64868d597e7e734e3",
+      "admission": "SURFACE_REFERENCE_NOT_SEMANTIC_AUTHORITY"
+    },
+    {
+      "role": "general_purpose_acceptance_law",
+      "path": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+      "git_blob_sha": "86d8ec3e3d72261d42b9e017f546bdfe41cffe66",
+      "admission": "PROJECT_OWNER_FIXED_MILESTONE"
+    }
+  ],
+  "semantic_authority_order": [
+    "typed canonical IR meaning defined by frozen semantic_core + dialect_contract",
+    "explicit BASE acceptance law",
+    "surface syntax/grammar only after deterministic binding into typed canonical IR"
+  ],
+  "hard_invariants": [
+    "model_output != execution_authority",
+    "provenance_and_authority_separate",
+    "state_truth_and_graph_relevance_separate",
+    "model_intent_and_effect_authority_separate",
+    "conflict_unknown_revocation_preserved",
+    "candidate_language_semantics_reversible_until_validated",
+    "Delta never_implies epistemic_upgrade",
+    "textual_capability_name never_confers authority",
+    "graph.derived_relation cannot_authorize effect",
+    "ClayGraph activation != exact symbol/function resolution",
+    "less change, more compile"
+  ],
+  "semantic_change_law": {
+    "default": "NO_SEMANTIC_CHANGE",
+    "allowed_only_if": "A production compiler/application/FRANK executable counterexample proves the frozen contract cannot express or lower required behavior.",
+    "required_response": "Preserve failing fixture, propose the smallest falsifiable semantic delta, run regression/differential tests, and retain rollback/supersession provenance."
+  },
+  "unresolved_semantic_disputes": [],
+  "implementation_counterexamples": [
+    {
+      "counterexample_id": "CC-CE-FUNCTION-DEFINITION-001",
+      "class": "FRONTEND_BINDING_GAP",
+      "observation": "The published G9 research grammar contains call expressions but no general reusable function-definition production.",
+      "disposition": "Production frontend must materialize deterministic typed definition/signature binding or demonstrate equivalent frozen semantics; this does not justify a FRANK-specific primitive.",
+      "evidence_commit": "af1a5546acedffbd4e7d2d5ff4734140e5c6c1f8"
+    },
+    {
+      "counterexample_id": "CC-CE-LALR-CONFLICT-001",
+      "class": "PARSER_TABLE_GAP",
+      "observation": "Baseline D LALR grammar has known keyword/newline parser-table conflicts.",
+      "disposition": "Use D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark plus strict/full-corpus/baseline-differential receipts. Repair may tighten ambiguous keyword-as-identifier surfaces but may not silently change admitted corpus meaning.",
+      "repair_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark",
+      "repair_git_blob_sha": "507126993797f8f52c69467410978712e6d495cd"
+    },
+    {
+      "counterexample_id": "CC-CE-CANONICAL-IR-001",
+      "class": "PRODUCTION_INTEGRATION_GAP",
+      "observation": "Deterministic typed canonical IR serialization/semantic-hash roundtrip is not yet admitted as production receipt.",
+      "disposition": "Close under CC-WP-02/03 without changing frozen semantics unless an executable counterexample forces a minimal delta."
+    }
+  ],
+  "explicit_non_admissions": [
+    "proxy experiment output as production compiler evidence",
+    "host ambient authority as ClayCode authority",
+    "FRANK-specific syntax merely for convenience",
+    "Android/mobile/edge portability as Frank v0.1 BASE requirement"
+  ],
+  "freeze_result": {
+    "semantic_baseline_frozen": true,
+    "unresolved_semantic_dispute_count": 0,
+    "remaining_gaps_reclassified_as_executable_implementation_counterexamples": true,
+    "cc_wp_01_acceptance_ready": true
+  }
+}

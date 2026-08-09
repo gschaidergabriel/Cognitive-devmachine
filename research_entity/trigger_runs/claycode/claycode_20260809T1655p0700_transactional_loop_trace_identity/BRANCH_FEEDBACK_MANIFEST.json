@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1655p0700_transactional_loop_trace_identity",
+  "feedback":[
+    {"branch":"claycode","delta":"REFINE_IDENTITY_CONTRACT","finding":"Static schedule/control/effect policy and dynamic snapshot/transaction/effect provenance require separate identity layers. Guarded snapshot+retry eliminated all 1400 tested decision mismatches.","next":"Implement ProgramSemanticId plus execution/replay identity in typed IR/runtime; exercise in DB/concurrent/system-effect application proofs."},
+    {"branch":"frank","delta":"SAFETY_REPLAY_REFINEMENT","finding":"Capability/state changes between cognition and effect commit must be root/read-set bound; stale effects failed in the naive mechanism and disappeared under guard+retry.","next":"Bind FRANK effect commit to authoritative snapshot identity and fail closed on mismatch."},
+    {"branch":"harness","delta":"NEW_RACE_ORACLE","finding":"Add grant/revoke races across snapshot, recurrence, effect commit and retry; verify exact trace identity and zero stale effects.","next":"Carry the same oracle into H1 then H2 differential replay."},
+    {"branch":"unifieddb","delta":"IDENTITY_PLANE_REFINEMENT","finding":"Snapshot/read-set/txn/effect roots belong to replay/execution identity, not static program semantic identity.","next":"Persist transaction/effect receipts and exact roots with replay indexes."},
+    {"branch":"claygraph","delta":"NO_SEMANTIC_PROMOTION","finding":"Graph epoch/projection identities attach to execution traces; activation/relevance remains non-authoritative.","next":"Expose first divergent graph/replay stage without making graph state semantic authority."},
+    {"branch":"gwt","delta":"TRACE_BINDING","finding":"Workspace/use/outcome/reentry receipts should be execution-trace bound to the same snapshot/root identity; no GWT authority change.","next":"Include GWT receipt IDs in replay envelope."},
+    {"branch":"hyperposition","delta":"TRACE_BINDING","finding":"Alternative/counterfactual branches should reference exact execution epochs so stale alternatives cannot masquerade as current state.","next":"Bind branch identities to execution/replay receipt plane."},
+    {"branch":"emergenz","delta":"CONTROL_REFINEMENT","finding":"Mixed-epoch or stale-effect artifacts must be excluded before interpreting recurrent dynamics as causal emergence.","next":"Require coherent replay/root identity for emergence interventions."},
+    {"branch":"clayresearch","delta":"PROGRAM_DIRECTION_CONFIRMED","finding":"The new evidence still favors runtime/ABI/compiler realization rather than FRANK-specific syntax.","next":"Keep BASE first; reopen semantics only on executable inadequacy."}
+  ],
+  "promotion":"NONE"
+}

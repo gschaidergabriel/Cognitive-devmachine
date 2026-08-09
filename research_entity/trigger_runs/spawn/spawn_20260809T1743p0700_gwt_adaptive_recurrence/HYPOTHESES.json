@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1743p0700_gwt_adaptive_recurrence",
+  "origin_branch": "gwt",
+  "epistemic_default": "OPEN",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-GWT-01",
+      "statement": "A typed pressure-aware adaptive recurrence controller can match the task success of a sufficiently deep fixed recurrence budget while using materially less compute on heterogeneous episode regimes.",
+      "mechanism": "Continue expensive recurrent processing only while unresolved pressure remains material and the estimated marginal verified benefit of another recurrence exceeds compute/resource/instability cost; use multi-step trend/patience so productive cycles are not misclassified as failure.",
+      "current_support": ["EXP-SPAWN-GWT-ADAPTIVE-RECURRENCE-PROXY-01", "adaptive-computation literature"],
+      "status": "OPEN_PROXY_SUPPORTED",
+      "falsifier": "On matched frozen H1 FRANK episodes, adaptive routing fails to achieve a Pareto improvement over fixed budgets in outcome-versus-compute/latency, or its advantage disappears under OOD tasks/regimes."
+    },
+    {
+      "id": "H-SPAWN-GWT-02",
+      "statement": "Residual unresolved pressure is necessary to distinguish convergence from stagnation; low state delta alone is an unsafe halt criterion.",
+      "mechanism": "A low-delta state can represent either successful contraction or a stalled attractor. The controller therefore needs both state-change and unresolved-pressure/error signals.",
+      "current_support": ["FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE", "EXP-SPAWN-GWT-ADAPTIVE-RECURRENCE-PROXY-01"],
+      "status": "OPEN_PROXY_SUPPORTED",
+      "falsifier": "A delta-only criterion matches pressure-aware routing on false-halt, task outcome, correction time and compute across frozen real H1 episodes."
+    },
+    {
+      "id": "H-SPAWN-GWT-03",
+      "statement": "A multi-step trend/patience window is required to preserve productive limit-cycle-like recurrence that contains locally adverse or low-improvement steps.",
+      "mechanism": "Useful recurrent computation may require an integration/organization step before a subsequent pressure reduction; one-step monotonic improvement is therefore too restrictive.",
+      "current_support": ["EXP-SPAWN-GWT-ADAPTIVE-RECURRENCE-PROXY-01"],
+      "status": "OPEN_PROXY_SUPPORTED",
+      "falsifier": "One-step marginal-gain halting performs equivalently or better on validated productive-cycle H1 traces without increasing overthinking or compute."
+    },
+    {
+      "id": "H-SPAWN-GWT-04",
+      "statement": "GWT ignition/focus can be useful as a recurrent-compute admission/continuation signal only when bound to objective episode/readout receipts; ignition/focus alone is not a sufficient halt/continue oracle.",
+      "mechanism": "Workspace selection indicates prioritized global use, but continuation quality depends on downstream receiver use, residual pressure, outcomes, re-entry and cost shadows.",
+      "current_support": ["RAE_GWT_MICROKERNEL", "GWT_EMERGENCE_READOUT_CONTRACT", "shared-workspace competition literature"],
+      "status": "OPEN",
+      "falsifier": "A focus-only router equals or exceeds the receipt-bound controller under matched frozen episodes and shuffled-focus controls."
+    },
+    {
+      "id": "H-SPAWN-GWT-05",
+      "statement": "Typed local recurrence controllers will outperform a single global stability threshold when FRANK loop families have heterogeneous timescales and productive dynamics.",
+      "mechanism": "Perception, workspace, memory, goals, consolidation and other loops have different natural periods, noise and costs; one global threshold risks premature halt in slow loops or over-computation in fast loops.",
+      "current_support": ["FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE"],
+      "status": "OPEN",
+      "falsifier": "A single global controller matches or beats per-loop calibrated controllers on OOD outcome, false halt, instability, compute and recovery across loop families."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "H0-SPAWN-GWT-A",
+      "statement": "Conventional persistent event-driven orchestration with fixed or externally scheduled budgets is sufficient; recurrent-control mathematics and GWT routing add little practical value.",
+      "discriminating_test": "Compare fixed/event-driven scheduler against adaptive GWT-linked router using identical frozen episodes, seeds, model outputs and compute accounting."
+    },
+    {
+      "id": "H0-SPAWN-GWT-B",
+      "statement": "GWT focus is correlated with difficulty but adds no independent predictive or causal value beyond residual pressure and local controller state.",
+      "discriminating_test": "Ablate focus, shuffle focus across matched episodes and compare incremental prediction/calibration of useful additional recurrence."
+    },
+    {
+      "id": "H0-SPAWN-GWT-C",
+      "statement": "Adaptive halting introduces routing overhead, synchronization cost and instability that erase theoretical compute savings on the Ubuntu runtime.",
+      "discriminating_test": "Measure wall-clock latency, scheduler overhead, cache effects and tail latency, not only recurrence-count/FLOP proxies."
+    },
+    {
+      "id": "H0-SPAWN-GWT-D",
+      "statement": "The synthetic proxy advantage is an artifact of authored dynamics and thresholds and does not transfer to real FRANK episodes.",
+      "discriminating_test": "Pre-register controller thresholds or fit only on training traces, then evaluate frozen held-out and OOD H1 traces."
+    },
+    {
+      "id": "H0-SPAWN-GWT-E",
+      "statement": "Adaptive compute can create shallow-halt attractors that systematically under-compute hard cases.",
+      "discriminating_test": "Stress initial router bias/calibration, hard-example distribution shift and recovery/probe-budget behavior; compare against deep-start and fixed-depth controls."
+    }
+  ],
+  "promotion_guard": "No hypothesis is promoted from this run. The executable evidence is synthetic proxy evidence only; current architecture implications are candidate constraints and H1 test requirements."
+}

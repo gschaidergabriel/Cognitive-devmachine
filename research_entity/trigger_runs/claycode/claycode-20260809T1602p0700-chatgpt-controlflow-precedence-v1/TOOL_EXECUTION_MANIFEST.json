@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1602p0700-chatgpt-controlflow-precedence-v1",
+  "tools": [
+    {"class":"canonical_repo","tool":"GitHub connector","status":"EXECUTED","evidence":"Canonical r2/hash verified, current spec/grammar/branch inputs and concurrent commits reread."},
+    {"class":"executable","tool":"local ChatGPT Python/container","status":"EXECUTED","evidence":"Separate-process executable probe plus in-process parser/short-circuit tests; receipt attached."},
+    {"class":"executable","tool":"E2B","status":"NOT_AVAILABLE_ON_CURRENT_SURFACE","evidence":"Repository records E2B capability, but no E2B execution tool is exposed in this hosted ChatGPT session; no fresh E2B evidence claimed."},
+    {"class":"external_primary","tool":"web official docs","status":"EXECUTED","sources":["LLVM MLIR Language Reference / SCF dialect / Arith dialect","Rust Reference: identifiers, if expressions, operator precedence"],"purpose":"Independent checks for structured conditional control, explicit comparison operations, strict bare identifiers and frozen precedence semantics."},
+    {"class":"community","tool":"Reddit","status":"NOT_NEEDED_FOR_DECISION","reason":"The discriminating claims were resolved by current repo evidence, executable counterexamples and primary language/IR documentation; community anecdotes would not raise evidential strength."}
+  ],
+  "fallbacks": ["Local executable fallback used because fresh E2B execution was unavailable from this surface."],
+  "write_surface": "GitHub contents API via connector"
+}

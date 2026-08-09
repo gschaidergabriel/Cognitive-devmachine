@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-CC-20260809-G9-GRAMMAR-CONTROL-PROBE",
+  "run_id": "claycode-20260809T1650p0700-base-parser-control-lowering",
+  "origin_actor": "chatgpt-secondary",
+  "epistemic_class": "LOCAL_SYNTHETIC_EXECUTION_NOT_TARGET_UBUNTU_RECEIPT",
+  "source_candidate": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+  "grammar_candidate": "research_entity/claycode/g9/grammar.ebnf",
+  "source_observations": [
+    {
+      "case": "diff_gt",
+      "source": "rule diff>0 => ADD_OR_STRENGTHEN",
+      "unsupported_current_grammar": [">"],
+      "current_grammar_accept_possible": false
+    },
+    {
+      "case": "generation_ge",
+      "source": "rule valid_generation requires count(distinct(classes))>=2 && count(executable)>=1",
+      "unsupported_current_grammar": [">="],
+      "current_grammar_accept_possible": false
+    },
+    {
+      "case": "cycle_if",
+      "source": "if residual.effect {effect_intent=EffectIntent(residual);receipt=Needle.execute(effect_intent)}",
+      "unsupported_current_control_form": "if",
+      "current_grammar_accept_possible": false
+    },
+    {
+      "case": "safe_ne",
+      "source": "rule gwt.broadcast!=gwt.use",
+      "unsupported_current_grammar": [],
+      "current_grammar_accept_possible": true
+    }
+  ],
+  "candidate_repair": {
+    "classification": "SURFACE_GRAMMAR_AND_EXECUTABLE_CONTROL_COMPLETION",
+    "add_relational_operators": ["<", ">", "<=", ">="],
+    "add_control_form": "if_stmt = 'if', expr, block ;",
+    "semantic_change_claimed": false,
+    "promotion_status": "NOT_PROMOTED"
+  },
+  "executable_probe": {
+    "source_sha256": "df0cb663a68da4c20e4dfccc16147b3a9f3c30cced5336c895bb5c0e0e82cb87",
+    "generated_target": "Python 3 reference lowering",
+    "generated_code_sha256": "adab9591dda9e9be33aee503f675879aead2b22390ecece1cf4924cfb1cbbb17",
+    "typed_fields": ["state_delta:Float", "residual_pressure:Float", "instability:Float", "recurrence_delta:Float"],
+    "effect_model": "emit-only observational result; no host authority",
+    "positive_tests": [
+      {"expected":"DIVERGING_OR_OVERTHINKING","observed":"DIVERGING_OR_OVERTHINKING","pass":true},
+      {"expected":"STALLED","observed":"STALLED","pass":true},
+      {"expected":"PRODUCTIVE_LIMIT_CYCLE","observed":"PRODUCTIVE_LIMIT_CYCLE","pass":true},
+      {"expected":"CONVERGING_FIXED_POINT","observed":"CONVERGING_FIXED_POINT","pass":true}
+    ],
+    "negative_test": {
+      "mutation": "condition references undeclared x.ghost",
+      "expected": "type/effect rejection before lowering",
+      "observed": "rejected",
+      "pass": true
+    },
+    "all_positive_pass": true
+  },
+  "runtime": {
+    "system": "Linux",
+    "kernel": "6.18.35",
+    "machine": "x86_64",
+    "python": "3.13.5"
+  },
+  "failure_classification": "CURRENT_G9_SPEC_GRAMMAR_SELF_CONFORMANCE_GAP",
+  "scientific_result": "The admitted G9 V3 source contains constructs the admitted EBNF cannot express. A minimal repair is sufficient for the tested LoopDynamicsReadout subset; this does not justify broader semantic redesign.",
+  "limits": [
+    "Not Andreas' exact Ubuntu developer system",
+    "E2B not exposed on this hosted worker tool surface; local fallback used",
+    "SandboxAPI not used",
+    "Not a complete ClayCode parser/compiler",
+    "No native/WASM target produced",
+    "Does not establish GENERAL_PURPOSE_GATE or BASE PASS"
+  ]
+}

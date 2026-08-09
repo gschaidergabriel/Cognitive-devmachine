@@ -1,0 +1,39 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise-claycode-restore-runner-close-base14-20260809T205500p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:55:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-RESTORE-RUNNER-CLOSE-BASE14-20260809",
+    "title": "Restore Andreas self-hosted runner with desktop-safe restart and finish ClayCode BASE14",
+    "work_clay": "On the owner-registered Andreas Ubuntu target, first pull current main and verify commit 2efe9a69141c07048e00468c7d4fd7de38647346 or a descendant is present. Run bash tools/claycode_bootstrap_andreas_self_hosted_runner.sh. The bootstrap must preserve exact failure diagnostics, reuse an existing .runner without unnecessarily requiring a new registration token, import/recover real desktop session variables, execute a mapped Tk desktop preflight, explicitly restart the systemd user runner service, verify the restarted listener process itself inherited DISPLAY or WAYLAND_DISPLAY, and verify the online repository runner has labels self-hosted/linux/x64/andreas/claycode/target. Do not bypass any fingerprint, Ubuntu/x86_64, non-container, desktop, authority or target gate. Once the runner is online, allow the latest-wins queued target workflow to consume the job. If no queued job is consumed, execute python3 tools/claycode_run_andreas_target_acceptance.py directly from the clean checkout with GitHub Actions transport variables absent. Preserve all failing receipts and repair only concrete implementation/orchestration defects; never weaken target identity, real desktop, Full-FRANK, authority, real-app, WP14 or P0/P1 gates. Finish only after remote GitHub reread proves independent WP14 PASS, 14/14 ClayCode work packages PASS and 10/10 real applications PASS.",
+    "reason_clay": "The remaining release path is physical Andreas Ubuntu execution. A concrete orchestration gap was fixed on main: systemctl enable --now did not guarantee an already-running runner listener inherited newly imported desktop environment, so APP05 could fail although bootstrap Tk preflight passed. Main now explicitly restarts and verifies the listener environment. Existing registered runners also no longer require a fresh registration token merely to restart, and failure receipts retain their specific cause.",
+    "completion_clay": "PASS only when a matching scoped repository self-hosted runner is online, the canonical target acceptance exits 0 on the registered Andreas Ubuntu host, APP05 real Ubuntu desktop is mapped and independently audited, Full-FRANK H1/H2/H3 passes, ten per-app target receipts pass, ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT overall_pass=true, CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST general_purpose_gate_pass=true and claycode_release_gate_pass=true with failed_work_packages=[], and CLAYCODE_RELEASE_WORKSPACE is BASE_PASS with every CC-WP-01..14 status=PASS.",
+    "evidence_need": [
+      "tools/claycode_bootstrap_andreas_self_hosted_runner.sh at commit 2efe9a69141c07048e00468c7d4fd7de38647346 or descendant",
+      "~/.local/state/claycode/desktop_preflight.json",
+      "~/.local/state/claycode/andreas_self_hosted_runner_bootstrap.json",
+      "research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json",
+      "research_entity/claycode/target_receipts/ANDREAS_BASE14_CLOSURE_RUN.json",
+      "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
+      "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
+      "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"
+    ],
+    "executor_policy": "prefer_verified_CLAUDE_CODE_LOCAL_ORGAN; actual Andreas Ubuntu execution required; latest spec revision wins; repair implementation not evidence gates; preserve negative receipts; model output != execution authority",
+    "required_capabilities": [
+      "ANDREAS_PC_LOCAL_REPO_ACCESS",
+      "REGISTERED_TARGET_HOST_IDENTITY",
+      "AUTHENTICATED_GH_CLI",
+      "UBUNTU_X86_64_NON_CONTAINER",
+      "SYSTEMD_USER_SERVICE",
+      "REAL_DESKTOP_SESSION_FOR_APP05",
+      "GIT_WRITE_PUSH"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 1.0,
+    "urgency": 1.0,
+    "information_gain": 1.0,
+    "status": "READY"
+  }
+}

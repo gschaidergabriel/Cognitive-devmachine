@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0703p0700-chatgpt-secondary-level0-enumeration-repair-run",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "run_kind": "EXHAUSTIVE_LEVEL0_DENOMINATOR_REPAIR_AND_DIRECT_ENUMERATION",
+  "primary_method_result": {
+    "finding": "Parent-scoped Google Drive search is not completeness-safe for exact folder accounting on the connected surface.",
+    "reproduced_false_negatives": [
+      "frank-projects/ai-research-agent/.tasks: search 0 vs direct fetch 5",
+      "frank-projects/autocar-hunter/.tasks: search 0 vs direct fetch/list_folder 8",
+      "frank-werkzeuge/genesis-monitor: search-derived 2 visible reports vs direct fetch 7 files"
+    ],
+    "binding_guard": "research_entity/archive_assimilation/DRIVE_ENUMERATION_METHOD_GUARD.md",
+    "preferred_exact_method": "direct list_folder over stable folder identity with top_k safely above returned population, recursively; direct fetch as small-folder crosscheck; search discovery-only",
+    "ceiling_rule": "If list_folder returns exactly top_k items, result is ceiling-ambiguous and must be rerun higher."
+  },
+  "corrected_drive_closures": [
+    {
+      "root": "frank-werkzeuge",
+      "old_exactness": "search-derived 3-leaf denominator",
+      "current_exact_units_below_root": 9,
+      "current_shape": "1 folder + 8 leaves",
+      "manifest": "research_entity/archive_assimilation/manifests/DRIVE_FRANK_WERKZEUGE_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_FETCH.json",
+      "status": "CLOSED_V2"
+    },
+    {
+      "root": "frank-projects",
+      "old_exact_units_below_root": 114,
+      "current_exact_units_below_root": 565,
+      "delta_units": 451,
+      "current_shape": "14 direct project folders + 42 nested folders + 509 leaves",
+      "manifest": "research_entity/archive_assimilation/manifests/DRIVE_FRANK_PROJECTS_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json",
+      "status": "CLOSED_V2"
+    },
+    {
+      "root": "synteq-umbau",
+      "old_exact_units_below_root": 55,
+      "current_exact_units_below_root": 325,
+      "delta_units": 270,
+      "current_shape": "15 folders + 310 leaves",
+      "manifest": "research_entity/archive_assimilation/manifests/DRIVE_SYNTEQ_UMBAU_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json",
+      "status": "CLOSED_V2"
+    }
+  ],
+  "important_dense_subtrees": [
+    "frank-projects/autocarfinder-pro: 6 nested folders + 252 leaves, including 156 browser screenshots and 63 task files",
+    "frank-projects/e-auto-graz-finder: 7 nested folders + 50 leaves",
+    "frank-projects/autoscout-e-car-hunter: 6 nested folders + 38 leaves",
+    "synteq-umbau/assets: 6 nested folders + 45 leaves = 51 units",
+    "synteq-umbau/pruef-A2: 1 nested folder + 73 leaves = 74 units",
+    "synteq-umbau/.store: 26 leaves"
+  ],
+  "epistemic_handling": {
+    "structural_rule": "Newer direct-enumeration evidence supersedes search-derived exact counts for current denominator accounting.",
+    "history_rule": "Superseded/refuted exact-count artifacts remain preserved as historical provenance.",
+    "semantic_rule": "Actual file reads and semantic findings are not automatically refuted merely because the surrounding denominator was wrong; semantic evidence remains scoped to the identities actually read.",
+    "authority_rule": "Evidence beats prior worker assertions, including this actor's own earlier commits."
+  },
+  "current_root_state_written": {
+    "path": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T0650p0700.json",
+    "latest_known_commit_from_this_run": "bf237f6df5fb126145eb3df98d728e5697b211a1",
+    "frank_projects": "EXACT_RECURSIVE_565_UNIT_DENOMINATOR_FROZEN_BY_DIRECT_ENUMERATION",
+    "synteq_umbau": "EXACT_RECURSIVE_325_UNIT_DENOMINATOR_FROZEN_BY_DIRECT_ENUMERATION",
+    "frank_werkzeuge": "EXACT_RECURSIVE_9_UNIT_DENOMINATOR_FROZEN_BY_DIRECT_FOLDER_FETCH"
+  },
+  "remaining_level0_obligations": [
+    "Direct-enumeration revalidation and whole-tree reconciliation for AICORE, especially search-derived interim skills/synteq/tools artifacts and any older exact closures without independently verifiable inventory provenance.",
+    "Digital Retina tracked-vs-untracked/generated/model/support reconciliation and digital-retina-e2e content-hash closure.",
+    "Titan-memory global root identity reconciliation.",
+    "frank-adapter-sicherung remaining external-access identity blocker.",
+    "XENO extracted-copy reconciliation.",
+    "Large raw tarball content hash remains connector-blocked while extracted semantic tree remains usable.",
+    "Complete frozen Project-Frankenstein Level-0 history/tree denominator remains open; current GitHub connector surface lacks a recursive read-tree action.",
+    "Cross-source duplicate/version/recovery reconciliation, branch feedback, earned-work row dedup, final release manifest validation and exact 100% coverage audit."
+  ],
+  "level0_gate": {
+    "workspace_status": "ACTIVE",
+    "gate_status": "NOT_PASS",
+    "denominator_state": "NOT_FROZEN",
+    "exact_coverage_percent": 0.0,
+    "why_zero": "Level-0 law forbids nonzero exact coverage before the combined Drive + Project-Frankenstein + fusion obligation denominator is frozen. This does not mean no work was completed."
+  },
+  "training": {
+    "paid_or_final_training_started": false,
+    "reason": "Program explicitly forbids automatic paid/final model training before owner authorization after later data gates."
+  },
+  "research_write": "COMMITTED",
+  "status": "RUN_COMPLETE_CAMPAIGN_CONTINUES",
+  "created_at": "2026-08-09T07:03:00+07:00"
+}

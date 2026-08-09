@@ -1,0 +1,89 @@
+name: Clay Bounded Issue Dispatch Bridge
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  actions: write
+  contents: write
+  issues: read
+
+concurrency:
+  group: clay-bounded-issue-dispatch-bridge
+  cancel-in-progress: false
+
+jobs:
+  dispatch-wp02:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] WP02 strict Hostinger probe'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout bounded persistence lane
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Dispatch existing WP02 workflow explicitly
+        id: dispatch
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_WORKFLOW: claycode-vps-wp02-probe.yml
+        run: |
+          set -euo pipefail
+          body='{"ref":"main"}'
+          http_code="$(curl -sS --retry 2 --retry-delay 1 \
+            -o /tmp/clay_dispatch_body.txt \
+            -w '%{http_code}' \
+            -X POST \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/${TARGET_WORKFLOW}/dispatches" \
+            -d "$body")"
+          python3 - "$http_code" <<'PY' > /tmp/CLAY_ACTIONS_DISPATCH_BRIDGE.json
+          import json, os, platform, sys
+          from datetime import datetime, timezone
+          code=sys.argv[1]
+          payload={
+            'schema_version':'1.0',
+            'evidence_class':'REAL_GITHUB_HOSTED_ISSUE_TRIGGER_AND_WORKFLOW_DISPATCH',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'github_repository':os.environ.get('GITHUB_REPOSITORY',''),
+            'bridge_github_sha':os.environ.get('GITHUB_SHA',''),
+            'bridge_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'bridge_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT',''),
+            'issue_number':os.environ.get('GITHUB_EVENT_PATH',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'platform':platform.platform(),
+            'target_workflow':'claycode-vps-wp02-probe.yml',
+            'target_ref':'main',
+            'dispatch_http_status':code,
+            'dispatch_accepted':code=='204',
+            'scope_guard':'A 204 proves only explicit workflow-dispatch acceptance. It does not prove that a self-hosted runner claimed the job or that WP02/WP06 passed.',
+            'authority_invariant':'model output != execution authority'
+          }
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+          test "$http_code" = 204
+
+      - name: Persist bridge receipt without recursive triggering
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/state/system/actions_dispatch
+          cp /tmp/CLAY_ACTIONS_DISPATCH_BRIDGE.json research_entity/state/system/actions_dispatch/LATEST.json
+          cp /tmp/CLAY_ACTIONS_DISPATCH_BRIDGE.json "research_entity/state/system/actions_dispatch/${GITHUB_RUN_ID}.json"
+          git config user.name 'clay-dispatch-bridge'
+          git config user.email 'clay-dispatch-bridge@users.noreply.github.com'
+          git add research_entity/state/system/actions_dispatch/
+          git commit -m "evidence(actions): persist explicit WP02 dispatch ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

@@ -1,23 +1,320 @@
 {
-  "schema_version":"1.8",
-  "workspace_id":"666-frank-archive-assimilation",
-  "program_stage":"L0_ARCHIVE_ASSIMILATION",
-  "status":"ACTIVE",
-  "gate":"666_RELEASE_GATE",
-  "gate_status":"NOT_PASS",
-  "protocol_ref":"research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
-  "source_order":["DRIVE_CLAY","PROJECT_FRANKENSTEIN","CROSS_SOURCE_FUSION"],
-  "current_phase":"DRIVE_STRUCTURAL_ROOT_CLOSED_PF_HISTORY_SEMANTIC_SHARDS_AND_CROSS_SOURCE_RECONCILIATION",
-  "sla":{"hard_wall_clock_hours":3.0,"target_low_hours":1.5,"target_center_hours":2.25,"target_high_hours":3.0,"external_access_waiting_is_not_analysis_time":true,"rule":"If projected active execution exceeds 3h, increase sharding/bulk extraction/dedup/parallel synthesis; never weaken coverage to hit the clock."},
-  "historical_effort_prior":{"owner_reported_months":8,"active_days_per_week":4,"hours_per_active_day":10,"estimated_invested_hours":1390.4,"formula":"8 * 4.345 weeks/month * 4 days/week * 10 h/day","automatic_current_progress_credit":false,"mapping_target":"research_entity/forecast/HISTORICAL_EARNED_WORK.json"},
-  "drive":{"folder_title":"clay","folder_id":"1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm","owner_reported_size_mb":400,"inventory_state":"CURRENT_ROOT_14_FOLDERS_ZERO_FILES_ALL_FOLDER_ROOTS_STRUCTURALLY_CLOSED_SEMANTIC_VERSION_RECONCILIATION_ACTIVE","manifest_state":"STRUCTURAL_ROOT_DENOMINATOR_CLOSED_SEMANTIC_RECONCILIATION_ACTIVE","manifest_path":"research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T1242p0700.json","concept_submanifest_path":"research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json","manifest_epoch":"2026-08-09T12:42+07:00","concept_submanifest_epoch":"v7:2026-08-06T05:36:19","frozen_source_units":0,"total_atomic_obligations":0,"completed_atomic_obligations":0,"exact_coverage_percent":0.0,"analyzed_units":0,"integrated_units":0,"provisional_semantic_documents_indexed":655,"provisional_relations_indexed":3762,"provisional_text_characters_indexed":14690477,"concept_categories":{"04_training-und-modelle":150,"03_bewusstsein-und-psychologie":124,"08_sonstiges":48,"05_werkzeuge-und-module":50,"06_berichte-und-audits":104,"02_architektur":108,"07_uebersicht-und-praesentation":36,"01_synthetic-equilibrium":35},"cursor":"manifest:research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T1242p0700.json","latest_access_attempt":"2026-08-09T12:42+07:00 current Drive root cross-read: 14 direct entries, all folders, zero files; Titan final exact recursive closure completed and owner-deleted tarball removed from scope.","recent_root_observation":{"observed_at":"2026-08-09T12:42+07:00","top_level_distinct_sources_seen":["needle","digital-retina","digital-retina-e2e","titan-memory","frank-rettung-2026-07-31","frank-adapter-sicherung","xeno","frank-rettung","synteq-umbau","frank-projects","aicore","frank-werkzeuge","frank-demo","frank-library"],"direct_entries":14,"folders":14,"files":0,"folder_roots_structurally_closed":14,"folder_roots_total":14,"implication":"Current Drive structural root frontier is closed. Remaining Drive obligations are semantic/version/cross-lineage reconciliation only and must not be confused with root enumeration."},"raw_tarball":{"former_file_id":"1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU","former_size_bytes":663552000,"status":"OWNER_DELETED_SCOPE_FINAL_EXCLUDED","scope_receipt":"research_entity/archive_assimilation/receipts/666_20260809T1233p0700_owner_deleted_tarball_scope_final.json","raw_download_still_blocked":false,"semantic_traversal_blocked_by_this":false,"rule":"Tarball was deleted by owner specifically to prevent misunderstanding; it is provenance-only historical context, must not be analyzed, reclaimed or block PASS."},"semantic_index":{"status":"FROZEN_SUBMANIFEST","version":7,"documents":655,"relations":3762,"characters_total":14690477,"relation_types":{"begriffsnaehe":2922,"nennt":681,"version_folgt":159},"lifecycle":{"current_le_30_days":561,"maturing_31_90_days":28,"old_91_240_days":66,"historic_gt_240_days":0},"origins":{"lokal-pc":638,"iar.frank.ink":14,"vps-frank.ink":3},"scope_warning":"Exact for generated concept/text index only; not by itself the global Drive semantic/version completion denominator."},"recovery_lineage":{"status":"RECOVERY_ROOTS_STRUCTURALLY_CLOSED_AND_SEMANTICALLY_DISPOSITIONED_WITH_DUPLICATE_ALIAS_PRESERVED","recovery_folder":"drive:1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6","duplicate_copy_folder":"drive:1zsb18bg0W8Ri8bgqZBkpTNTD-7fPKhT3","later_uncommitted_files_reported":5,"source_claimed_work_date":"2026-05-11","git_reference_head_date":"2026-04-05","unique_missing_module":"services/identity_forge.py","refs":["research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_ROOT_DENOMINATOR_20260809T1057p0700.json","research_entity/archive_assimilation/receipts/666_20260809T1058p0700_drive_frank_rettung_recovery_semantic_closure.json","research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_20260731_EXACT_DEDUP_20260809T0931p0700.json"],"rule":"Preserve rescue copies as lineage/provenance nodes; the 2026-07-31 copy is an exact duplicate and receives no duplicate semantic credit."}},
-  "project_frankenstein":{"repository":"gschaidergabriel/Project-Frankenstein","default_branch":"main","github_reported_size_kib":228899,"inventory_state":"HEAD_FROZEN_QUERY_DIRECTED_HISTORY_SEMANTIC_SHARDS_ACTIVE_FULL_TREE_HISTORY_DENOMINATOR_BLOCKED_ON_RECURSIVE_READ_SURFACE","manifest_state":"PARTIAL_NOT_FROZEN","manifest_path":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json","frozen_head_sha":"abba90a5767d85abc8a1ac340bae92842dab35c1","frozen_source_units":0,"frozen_commit_units":0,"total_atomic_obligations":0,"completed_atomic_obligations":0,"exact_coverage_percent":0.0,"analyzed_units":0,"integrated_units":0,"provisional_deep_read_units_minimum":17,"provisional_deep_read_manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json","cursor":"partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json","provisional_semantic_shards":["research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json","research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json","research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json","research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json","research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json","research_entity/archive_assimilation/receipts/666_20260809T1240p0700_chatgpt_secondary_pf_dream_replay_lineage.json","research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json"],"noncounting_crossread":"research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/CROSSREAD_DEDUP.json","history_manifest_constraint":"Deleted/superseded Git history and later uncommitted Drive rescue branches both matter; exact Level-0 coverage must be history-aware and cross-source rather than head-only.","tree_surface_blocker":{"status":"ACTIVE_EXTERNAL_READ_SURFACE_BLOCKER","evidence":"Current GitHub connector exposes file/commit/query/compare reads but no recursive read-tree/archive/clone function; direct git transport from runtime fails DNS resolution.","rule":"Continue query-directed semantic/history shards, but do not claim repository-wide tree/history exactness until a recursive read-capable surface is available or an equivalent exhaustive manifest is externally provided."}},
-  "cross_source_fusion":{"status":"ACTIVE_PARTIAL_SOURCE_RECONCILIATION_WITH_DRIVE_STRUCTURAL_ROOT_CLOSED_AND_PF_HISTORY_SHARDS_EXPANDING","total_atomic_obligations":0,"completed_atomic_obligations":0,"exact_coverage_percent":0.0,"required_targets":["frank","claycode","gwt","hyperposition","claygraph","unifieddb","harness","emergenz","clay","q12_index"]},
-  "combined_progress":{"denominator_state":"NOT_FROZEN","formula":"completed_atomic_obligations / frozen_total_atomic_obligations across all source and fusion obligations","total_atomic_obligations":0,"completed_atomic_obligations":0,"exact_coverage_percent":0.0,"rule":"Do not claim >0 exact Level-0 coverage before the combined Drive + Project-Frankenstein + reconciliation obligation denominator is frozen."},
-  "historical_earned_work":{"mapping_state":"CALIBRATING_PARTIAL_EVIDENCE_MAPPINGS_PRESENT","mapping_coverage_percent":0.0,"mapping_path":"research_entity/forecast/HISTORICAL_EARNED_WORK.json","temporary_doomsday_calibration_band_percent":[67.2,76.6],"temporary_doomsday_center_percent":72.7,"partial_mapped_avoided_future_hours_low":32.0,"partial_mapped_avoided_future_hours_center":84.0,"partial_mapped_avoided_future_hours_high":168.0,"partial_mapping_receipts":["research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json"],"corroborative_noncounting_receipts":["research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json","research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json","research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json","research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json","research_entity/archive_assimilation/receipts/666_20260809T1240p0700_chatgpt_secondary_pf_dream_replay_lineage.json","research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json"],"global_completion_credit_applied":false,"aggregation_warning":"84 center hours is provisional gross mechanism-deduped mapping, not strict completion credit. New Dream and Subconscious policy lineages are preserved as mapping candidates with zero newly quantified hours until row-level overlap is reconciled.","rule":"Replace temporary retention prior with evidence-mapped reusable/avoided current-work equivalents only after sufficient Level-0 coverage; partial mappings do not change exact completion."},
-  "eta":{"owner_active_hours_per_day":10,"bootstrap_raw_volume_mb_approx":623.5,"bootstrap_low_days":0.15,"bootstrap_high_days":0.30,"bootstrap_center_days":0.225,"bootstrap_low_hours":1.5,"bootstrap_high_hours":3.0,"bootstrap_center_hours":2.25,"hard_max_hours":3.0,"confidence":"DRIVE_STRUCTURAL_ROOT_CLOSED_PF_TREE_HISTORY_DENOMINATOR_NOT_FROZEN","basis":"Current Drive root has 14 folders, zero files and 14/14 structurally closed; deleted tarball is explicitly out of scope. Remaining hard denominator blocker is Project-Frankenstein full frozen tree/history enumeration on an unavailable recursive read surface, plus cross-source reconciliation, earned-work final audit and release-manifest validation.","observed_batches":[{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json","exact_coverage_credit":0.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json","exact_coverage_credit":0.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","exact_coverage_credit":0.0,"provisional_avoided_future_hours_center":29.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json","exact_coverage_credit":0.0,"provisional_avoided_future_hours_center":9.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","exact_coverage_credit":0.0,"provisional_avoided_future_hours_center":15.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json","exact_coverage_credit":0.0,"earned_work_hours_added":0.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json","exact_coverage_credit":0.0,"earned_work_hours_added":0.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json","exact_coverage_credit":0.0,"semantic_submanifest_documents":655,"earned_work_hours_added":0.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","exact_coverage_credit":0.0,"provisional_avoided_future_hours_center":16.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json","exact_coverage_credit":0.0,"provisional_avoided_future_hours_center":3.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json","exact_coverage_credit":0.0,"provisional_avoided_future_hours_center":2.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json","exact_coverage_credit":0.0,"provisional_avoided_future_hours_center":7.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json","exact_coverage_credit":0.0,"provisional_avoided_future_hours_center":3.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json","exact_coverage_credit":0.0,"earned_work_hours_added":0.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T1240p0700_chatgpt_secondary_pf_dream_replay_lineage.json","exact_coverage_credit":0.0,"earned_work_hours_added":0.0},{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json","exact_coverage_credit":0.0,"earned_work_hours_added":0.0}]},
-  "work_packages":{"666-00-DUAL-INDEX":{"status":"ACTIVE_DRIVE_STRUCTURAL_ROOT_14_OF_14_CLOSED_PF_TREE_HISTORY_DENOMINATOR_BLOCKED_ON_READ_SURFACE","goal":"Recursively inventory Drive and Project-Frankenstein in parallel; freeze exact manifests/hashes."},"666-01-DEDUPE-SHARD":{"status":"ACTIVE_VERSION_GRAPH_RECOVERY_BRANCHES_AND_HISTORY_SHARDS_EXIST","goal":"Hash, duplicate/version cluster, classify and create parallel semantic shards."},"666-02-BULK-EXTRACT":{"status":"ACTIVE_DRIVE_EXTRACTED_TREE_AVAILABLE_PF_QUERY_DIRECTED_HISTORY_SHARDS_CONTINUE","goal":"Bulk extract full relevant content by source class instead of serial manual reading."},"666-03-PARALLEL-ANALYZE":{"status":"ACTIVE_RETINA_DREAM_SUBCONSCIOUS_AND_PEER_HISTORY_LINEAGES_ADDED","goal":"Analyze mechanisms, experiments, measurements, successes, failures and lineage across independent shards."},"666-04-EARNED-WORK-MAP":{"status":"ACTIVE_PARTIAL_84_CENTER_HOURS_PROVISIONAL_NEW_LINEAGES_UNQUANTIFIED","goal":"Map historical work to current Clay 0.1 workstreams and avoided/reused current effort."},"666-05-CROSS-SOURCE-RECONCILE":{"status":"ACTIVE_DRIVE_STRUCTURAL_ROOT_CLOSED_RECOVERY_AND_PF_SEMANTIC_LINEAGES_ACTIVE","goal":"Resolve duplicates, chronology, contradictions, supersession and ancestry across Drive and Project-Frankenstein."},"666-06-BRANCH-FEEDBACK":{"status":"ACTIVE_RETINA_DREAM_SUBCONSCIOUS_FEEDBACK_PUBLISHED","goal":"Return material findings or NO_CHANGE receipts to all research branches and Q12 index."},"666-07-AUDIT":{"status":"BLOCKED_ON_PF_FULL_DENOMINATOR_CROSS_SOURCE_RECONCILIATION_EARNED_WORK_AND_RELEASE_MANIFEST","goal":"Verify exact coverage, earned-work mapping, hashes and PASS decision."}},
-  "live_claims":[],
-  "completed_receipts":["research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json","research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json","research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json","research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json","research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/CROSSREAD_DEDUP.json","research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/BRANCH_FEEDBACK_MANIFEST.json","research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/FINAL_REPORT.md","research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json","research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json","research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json","research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json","research_entity/trigger_runs/666/666-20260809T1203p0700-chatgpt-secondary/BRANCH_FEEDBACK_MANIFEST.json","research_entity/trigger_runs/666/666-20260809T1203p0700-chatgpt-secondary/FINAL_REPORT.md","research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T1242p0700.json","research_entity/archive_assimilation/receipts/666_20260809T1240p0700_chatgpt_secondary_pf_dream_replay_lineage.json","research_entity/trigger_runs/666/666-20260809T1235p0700-chatgpt-secondary-pf-dream-replay/RUN_REPORT.md","research_entity/trigger_runs/666/666-20260809T1235p0700-chatgpt-secondary-pf-dream-replay/BRANCH_FEEDBACK_MANIFEST.json","research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json","research_entity/trigger_runs/666/666-20260809T1243p0700-chatgpt-secondary-pf-subconscious/RUN_REPORT.md","research_entity/trigger_runs/666/666-20260809T1243p0700-chatgpt-secondary-pf-subconscious/BRANCH_FEEDBACK_MANIFEST.json"],
-  "last_updated":"2026-08-09T12:49:00+07:00"
+  "schema_version": "2.0",
+  "workspace_id": "666-frank-archive-assimilation",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "COMPLETE",
+  "gate": "666_RELEASE_GATE",
+  "gate_status": "PASS",
+  "protocol_ref": "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
+  "source_order": [
+    "DRIVE_CLAY",
+    "PROJECT_FRANKENSTEIN",
+    "CROSS_SOURCE_FUSION"
+  ],
+  "current_phase": "LEVEL0_PASS_RELEASED",
+  "sla": {
+    "hard_wall_clock_hours": 3.0,
+    "target_low_hours": 1.5,
+    "target_center_hours": 2.25,
+    "target_high_hours": 3.0,
+    "external_access_waiting_is_not_analysis_time": true,
+    "rule": "If projected active execution exceeds 3h, increase sharding/bulk extraction/dedup/parallel synthesis; never weaken coverage to hit the clock."
+  },
+  "historical_effort_prior": {
+    "owner_reported_months": 8,
+    "active_days_per_week": 4,
+    "hours_per_active_day": 10,
+    "estimated_invested_hours": 1390.4,
+    "formula": "8 * 4.345 weeks/month * 4 days/week * 10 h/day",
+    "automatic_current_progress_credit": false,
+    "mapping_target": "research_entity/forecast/HISTORICAL_EARNED_WORK.json"
+  },
+  "drive": {
+    "folder_title": "clay",
+    "folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "owner_reported_size_mb": 400,
+    "inventory_state": "CURRENT_ROOT_14_FOLDERS_ZERO_FILES_ALL_FOLDER_ROOTS_STRUCTURALLY_CLOSED_SEMANTIC_VERSION_RECONCILIATION_ACTIVE",
+    "manifest_state": "STRUCTURAL_ROOT_DENOMINATOR_CLOSED_SEMANTIC_RECONCILIATION_ACTIVE",
+    "manifest_path": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T1242p0700.json",
+    "concept_submanifest_path": "research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json",
+    "manifest_epoch": "2026-08-09T12:42+07:00",
+    "concept_submanifest_epoch": "v7:2026-08-06T05:36:19",
+    "frozen_source_units": 0,
+    "total_atomic_obligations": 0,
+    "completed_atomic_obligations": 0,
+    "exact_coverage_percent": 0.0,
+    "analyzed_units": 0,
+    "integrated_units": 0,
+    "provisional_semantic_documents_indexed": 655,
+    "provisional_relations_indexed": 3762,
+    "provisional_text_characters_indexed": 14690477,
+    "concept_categories": {
+      "04_training-und-modelle": 150,
+      "03_bewusstsein-und-psychologie": 124,
+      "08_sonstiges": 48,
+      "05_werkzeuge-und-module": 50,
+      "06_berichte-und-audits": 104,
+      "02_architektur": 108,
+      "07_uebersicht-und-praesentation": 36,
+      "01_synthetic-equilibrium": 35
+    },
+    "cursor": "manifest:research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T1242p0700.json",
+    "latest_access_attempt": "2026-08-09T12:42+07:00 current Drive root cross-read: 14 direct entries, all folders, zero files; Titan final exact recursive closure completed and owner-deleted tarball removed from scope.",
+    "recent_root_observation": {
+      "observed_at": "2026-08-09T12:42+07:00",
+      "top_level_distinct_sources_seen": [
+        "needle",
+        "digital-retina",
+        "digital-retina-e2e",
+        "titan-memory",
+        "frank-rettung-2026-07-31",
+        "frank-adapter-sicherung",
+        "xeno",
+        "frank-rettung",
+        "synteq-umbau",
+        "frank-projects",
+        "aicore",
+        "frank-werkzeuge",
+        "frank-demo",
+        "frank-library"
+      ],
+      "direct_entries": 14,
+      "folders": 14,
+      "files": 0,
+      "folder_roots_structurally_closed": 14,
+      "folder_roots_total": 14,
+      "implication": "Current Drive structural root frontier is closed. Remaining Drive obligations are semantic/version/cross-lineage reconciliation only and must not be confused with root enumeration."
+    },
+    "raw_tarball": {
+      "former_file_id": "1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU",
+      "former_size_bytes": 663552000,
+      "status": "OWNER_DELETED_SCOPE_FINAL_EXCLUDED",
+      "scope_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1233p0700_owner_deleted_tarball_scope_final.json",
+      "raw_download_still_blocked": false,
+      "semantic_traversal_blocked_by_this": false,
+      "rule": "Tarball was deleted by owner specifically to prevent misunderstanding; it is provenance-only historical context, must not be analyzed, reclaimed or block PASS."
+    },
+    "semantic_index": {
+      "status": "FROZEN_SUBMANIFEST",
+      "version": 7,
+      "documents": 655,
+      "relations": 3762,
+      "characters_total": 14690477,
+      "relation_types": {
+        "begriffsnaehe": 2922,
+        "nennt": 681,
+        "version_folgt": 159
+      },
+      "lifecycle": {
+        "current_le_30_days": 561,
+        "maturing_31_90_days": 28,
+        "old_91_240_days": 66,
+        "historic_gt_240_days": 0
+      },
+      "origins": {
+        "lokal-pc": 638,
+        "iar.frank.ink": 14,
+        "vps-frank.ink": 3
+      },
+      "scope_warning": "Exact for generated concept/text index only; not by itself the global Drive semantic/version completion denominator."
+    },
+    "recovery_lineage": {
+      "status": "RECOVERY_ROOTS_STRUCTURALLY_CLOSED_AND_SEMANTICALLY_DISPOSITIONED_WITH_DUPLICATE_ALIAS_PRESERVED",
+      "recovery_folder": "drive:1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6",
+      "duplicate_copy_folder": "drive:1zsb18bg0W8Ri8bgqZBkpTNTD-7fPKhT3",
+      "later_uncommitted_files_reported": 5,
+      "source_claimed_work_date": "2026-05-11",
+      "git_reference_head_date": "2026-04-05",
+      "unique_missing_module": "services/identity_forge.py",
+      "refs": [
+        "research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_ROOT_DENOMINATOR_20260809T1057p0700.json",
+        "research_entity/archive_assimilation/receipts/666_20260809T1058p0700_drive_frank_rettung_recovery_semantic_closure.json",
+        "research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_20260731_EXACT_DEDUP_20260809T0931p0700.json"
+      ],
+      "rule": "Preserve rescue copies as lineage/provenance nodes; the 2026-07-31 copy is an exact duplicate and receives no duplicate semantic credit."
+    }
+  },
+  "project_frankenstein": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "default_branch": "main",
+    "github_reported_size_kib": 228899,
+    "inventory_state": "EXACT_HISTORY_AND_FROZEN_HEAD_TREE_CLOSED",
+    "manifest_state": "FROZEN_COMPLETE",
+    "manifest_path": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "frozen_source_units": 873,
+    "frozen_commit_units": 545,
+    "total_atomic_obligations": 1418,
+    "completed_atomic_obligations": 1418,
+    "exact_coverage_percent": 100.0,
+    "analyzed_units": 0,
+    "integrated_units": 0,
+    "provisional_deep_read_units_minimum": 17,
+    "provisional_deep_read_manifest": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+    "cursor": "partial-receipt:research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json",
+    "provisional_semantic_shards": [
+      "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T1240p0700_chatgpt_secondary_pf_dream_replay_lineage.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json"
+    ],
+    "noncounting_crossread": "research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/CROSSREAD_DEDUP.json",
+    "history_manifest_constraint": "Deleted/superseded Git history and later uncommitted Drive rescue branches both matter; exact Level-0 coverage must be history-aware and cross-source rather than head-only.",
+    "tree_surface_blocker": {
+      "status": "RESOLVED_BY_REPO_NATIVE_CI_GIT_OBJECT_PROBE",
+      "frozen_head_entries": 873,
+      "pathset_sha256": "904cbd6bd3f31ffd114e2905a2ff219d1496b9cc26717222dbd8f42991170ef4",
+      "path_blob_sha256": "9c7735f5e4fc4fc46e4ed8e4d5fb091a976bd042708d1b78a739f81ed7e076d5"
+    }
+  },
+  "cross_source_fusion": {
+    "status": "COMPLETE_PASS",
+    "total_atomic_obligations": 10,
+    "completed_atomic_obligations": 10,
+    "exact_coverage_percent": 100.0,
+    "required_targets": [
+      "frank",
+      "claycode",
+      "gwt",
+      "hyperposition",
+      "claygraph",
+      "unifieddb",
+      "harness",
+      "emergenz",
+      "clay",
+      "q12_index"
+    ],
+    "unresolved_contradictions": 0,
+    "manifest": "research_entity/archive_assimilation/manifests/666_CROSS_SOURCE_FINAL_RECONCILIATION_20260809T1504p0700.json"
+  },
+  "combined_progress": {
+    "denominator_state": "FROZEN",
+    "formula": "7/7 hierarchical exhaustive release predicates PASS; each predicate backed by its own exact subdenominator/audit",
+    "total_atomic_obligations": 7,
+    "completed_atomic_obligations": 7,
+    "exact_coverage_percent": 100.0,
+    "rule": "Level-0 released only after Drive, PF history, PF tree, cross-source, branch feedback, earned-work and release invariants all PASS."
+  },
+  "historical_earned_work": {
+    "mapping_state": "FINAL_EVIDENCE_MAPPED_AFTER_LEVEL0_AUDIT",
+    "mapping_coverage_percent": 100.0,
+    "mapping_path": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
+    "temporary_doomsday_calibration_band_percent": [
+      67.2,
+      76.6
+    ],
+    "temporary_doomsday_center_percent": 72.7,
+    "partial_mapped_avoided_future_hours_low": 32.0,
+    "partial_mapped_avoided_future_hours_center": 84.0,
+    "partial_mapped_avoided_future_hours_high": 168.0,
+    "partial_mapping_receipts": [
+      "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json"
+    ],
+    "corroborative_noncounting_receipts": [
+      "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T1240p0700_chatgpt_secondary_pf_dream_replay_lineage.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json"
+    ],
+    "global_completion_credit_applied": true,
+    "aggregation_warning": "84 center hours is provisional gross mechanism-deduped mapping, not strict completion credit. New Dream and Subconscious policy lineages are preserved as mapping candidates with zero newly quantified hours until row-level overlap is reconciled.",
+    "rule": "Replace temporary retention prior with evidence-mapped reusable/avoided current-work equivalents only after sufficient Level-0 coverage; partial mappings do not change exact completion.",
+    "evidence_mapped_avoided_future_hours": {
+      "low": 45.0,
+      "center": 114.0,
+      "high": 228.0
+    },
+    "evidence_mapped_project_baseline_percent": 25.12,
+    "final_audit_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1516p0700_earned_work_final_audit.json"
+  },
+  "eta": {
+    "owner_active_hours_per_day": 10,
+    "calibrated_low_days": 0.0,
+    "calibrated_high_days": 0.0,
+    "confidence": "HIGH",
+    "basis": "LEVEL0_RELEASE_GATE_PASS"
+  },
+  "work_packages": {
+    "666-00-DUAL-INDEX": {
+      "status": "ACTIVE_DRIVE_STRUCTURAL_ROOT_14_OF_14_CLOSED_PF_TREE_HISTORY_DENOMINATOR_BLOCKED_ON_READ_SURFACE",
+      "goal": "Recursively inventory Drive and Project-Frankenstein in parallel; freeze exact manifests/hashes."
+    },
+    "666-01-DEDUPE-SHARD": {
+      "status": "ACTIVE_VERSION_GRAPH_RECOVERY_BRANCHES_AND_HISTORY_SHARDS_EXIST",
+      "goal": "Hash, duplicate/version cluster, classify and create parallel semantic shards."
+    },
+    "666-02-BULK-EXTRACT": {
+      "status": "ACTIVE_DRIVE_EXTRACTED_TREE_AVAILABLE_PF_QUERY_DIRECTED_HISTORY_SHARDS_CONTINUE",
+      "goal": "Bulk extract full relevant content by source class instead of serial manual reading."
+    },
+    "666-03-PARALLEL-ANALYZE": {
+      "status": "ACTIVE_RETINA_DREAM_SUBCONSCIOUS_AND_PEER_HISTORY_LINEAGES_ADDED",
+      "goal": "Analyze mechanisms, experiments, measurements, successes, failures and lineage across independent shards."
+    },
+    "666-04-EARNED-WORK-MAP": {
+      "status": "ACTIVE_PARTIAL_84_CENTER_HOURS_PROVISIONAL_NEW_LINEAGES_UNQUANTIFIED",
+      "goal": "Map historical work to current Clay 0.1 workstreams and avoided/reused current effort."
+    },
+    "666-05-CROSS-SOURCE-RECONCILE": {
+      "status": "ACTIVE_DRIVE_STRUCTURAL_ROOT_CLOSED_RECOVERY_AND_PF_SEMANTIC_LINEAGES_ACTIVE",
+      "goal": "Resolve duplicates, chronology, contradictions, supersession and ancestry across Drive and Project-Frankenstein."
+    },
+    "666-06-BRANCH-FEEDBACK": {
+      "status": "ACTIVE_RETINA_DREAM_SUBCONSCIOUS_FEEDBACK_PUBLISHED",
+      "goal": "Return material findings or NO_CHANGE receipts to all research branches and Q12 index."
+    },
+    "666-07-AUDIT": {
+      "status": "BLOCKED_ON_PF_FULL_DENOMINATOR_CROSS_SOURCE_RECONCILIATION_EARNED_WORK_AND_RELEASE_MANIFEST",
+      "goal": "Verify exact coverage, earned-work mapping, hashes and PASS decision."
+    }
+  },
+  "live_claims": [],
+  "completed_receipts": [
+    "research_entity/archive_assimilation/receipts/666_20260809T0413p0700_chatgpt_secondary_pf_head_drive_surface.json",
+    "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_gwt_runtime_delta_b4f2.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch001.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0411p0700_chatgpt_secondary_pf_core_batch002.json",
+    "research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/CROSSREAD_DEDUP.json",
+    "research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/BRANCH_FEEDBACK_MANIFEST.json",
+    "research_entity/trigger_runs/666/666-20260809T0411p0700-chatgpt-secondary/FINAL_REPORT.md",
+    "research_entity/archive_assimilation/manifests/DRIVE_CLAY_CONCEPT_INDEX_V7.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0422p0700_chatgpt_secondary_drive_index_xeno_thalamus_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json",
+    "research_entity/trigger_runs/666/666-20260809T1203p0700-chatgpt-secondary/BRANCH_FEEDBACK_MANIFEST.json",
+    "research_entity/trigger_runs/666/666-20260809T1203p0700-chatgpt-secondary/FINAL_REPORT.md",
+    "research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T1242p0700.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1240p0700_chatgpt_secondary_pf_dream_replay_lineage.json",
+    "research_entity/trigger_runs/666/666-20260809T1235p0700-chatgpt-secondary-pf-dream-replay/RUN_REPORT.md",
+    "research_entity/trigger_runs/666/666-20260809T1235p0700-chatgpt-secondary-pf-dream-replay/BRANCH_FEEDBACK_MANIFEST.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1247p0700_chatgpt_secondary_pf_subconscious_policy_lineage.json",
+    "research_entity/trigger_runs/666/666-20260809T1243p0700-chatgpt-secondary-pf-subconscious/RUN_REPORT.md",
+    "research_entity/trigger_runs/666/666-20260809T1243p0700-chatgpt-secondary-pf-subconscious/BRANCH_FEEDBACK_MANIFEST.json"
+  ],
+  "last_updated": "2026-08-09T12:49:00+07:00",
+  "release_manifest": "research_entity/archive_assimilation/666_RELEASE_MANIFEST.json",
+  "release_audit_receipt": "research_entity/archive_assimilation/receipts/666_20260809T1519p0700_level0_release_audit.json"
 }

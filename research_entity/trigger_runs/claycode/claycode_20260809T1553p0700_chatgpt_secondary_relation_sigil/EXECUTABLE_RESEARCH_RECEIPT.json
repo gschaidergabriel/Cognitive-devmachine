@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil",
+  "experiment_id": "EXP-CC-G9-RELATION-SIGIL-003",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class": "LOCAL_EXECUTION_PRIMARY_FOR_RELATION_SURFACE_PROXY_ONLY",
+  "question": "Can a one-character lexical sigil separate open semantic relation names from identifiers/operators while preserving current G9 relation names and avoiding the observed lexer ambiguity?",
+  "source_basis": {
+    "current_g9": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "current_g9_blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "current_grammar": "research_entity/claycode/g9/grammar.ebnf",
+    "current_grammar_blob_sha": "80028aae6d9d26ac96fa7179dbccc7e467740990",
+    "prior_strict_syntax_experiment": "claycode_20260809T1547p0700_chatgpt_secondary_strict_syntax_gate",
+    "prior_counterevidence": "E2B replication exposed relation-word lexical ambiguity under the first compatibility patch"
+  },
+  "runtime": {"provider":"local_python_sandbox","language":"Python","parser_library":"lark","parser_mode":"LALR"},
+  "candidate": {
+    "surface_rule": "open semantic relation operator := @relation_name",
+    "resolver_rule": "parsed relation must resolve against a declared typed relation symbol; parser acceptance alone is not semantic acceptance",
+    "authority_rule": "relation resolution never grants execution authority",
+    "candidate_grammar_sha256": "58aaa4368a3f6cd73da7f8111e450f3389a8eff8afed4586c8a1bbbb334cd438"
+  },
+  "valid_corpus": {
+    "count": 8,
+    "families": ["never_implies","may_reference","never_confers","returns","cannot_authorize","distinct_from","includes","4B_emits"],
+    "parsed_and_resolved": 8,
+    "canonical_tuple_matches": 8,
+    "source_sha256": "56fe4c1d931cae84ae9ab4192664f259c3c08e79a53ed226622c6cdca1518de6",
+    "canonical_semantic_tuple_sha256": "633b19a10e220f1a46d235a2c0bbd871366f0b77cc7533b6947c89d203d46766",
+    "mean_character_overhead": 1,
+    "max_character_overhead": 1
+  },
+  "mutation_corpus": {
+    "count": 12,
+    "classes": ["missing_sigil","undeclared_relation_typo","missing_rhs","missing_unary_argument","double_sigil","stray_trailing_identifier"],
+    "rejected_by_parser_or_declared_relation_resolver": 12,
+    "false_accepts": 0,
+    "mutation_sha256": "358ba7a3d32ededae925774754bfb2cac7c1e8e61c3d7f91075558ab72bfbf8c"
+  },
+  "interpretation": {
+    "supports": "A sigil-prefixed open-relation surface can remove identifier-vs-relation lexical ambiguity for the tested subset without renaming even digit-leading relation labels such as 4B_emits.",
+    "does_not_support": ["full G9 parser closure","full-corpus semantic preservation","BASE release","runtime/compiler correctness","new ClayCode semantic primitive"],
+    "next_falsifier": "Generate/execute a real parser over the complete admitted G9+dialect corpus and compare @relation normalization against a declared-infix alternative for parse stability, diagnostics, roundtrip semantic_hash, mutation survival and reader/token cost."
+  },
+  "changed_semantics": false,
+  "promotion_requested": false
+}

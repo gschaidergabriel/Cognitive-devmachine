@@ -9,6 +9,7 @@ import sys
 ROOT = pathlib.Path(os.environ.get("CLAUDE_PROJECT_DIR", pathlib.Path(__file__).resolve().parents[2])).resolve()
 sys.path.insert(0, str(ROOT / "research_entity/runtime"))
 from rae_state_runtime import RAEStateRuntime
+from interaction_persona_runtime import init_tables as init_interaction_persona, summary as interaction_persona_summary
 
 ACTOR = "claude-code-lead"
 
@@ -33,10 +34,19 @@ def context(event: str, prompt: str, session_id: str, model: str):
     node = f"claude-code:{session_id}"
     rt = RAEStateRuntime()
     try:
+        init_interaction_persona(rt)
         trig = trigger_of(prompt) if event == "UserPromptSubmit" else None
         cycle = rt.begin_cycle(prompt or f"{event}:{session_id}", node, ACTOR, "Anthropic", model, event,
                                session_id=session_id, home_room=home_room(trig), trigger=trig)
         cap = rt.capsule(node, ACTOR, cycle, event)
+        cap["interaction_persona_research"] = interaction_persona_summary(rt)
+        cap["interaction_persona_invariants"] = [
+            "improve relationship quality through reliability, understanding, continuity, calibrated warmth and repair",
+            "do not optimize covert attachment, dependency, guilt, exclusivity or engagement retention",
+            "simulated personality authenticity means causal consistency with declared persona state, not consciousness evidence",
+            "cross-node Frank persona consistency is a testable Harness property",
+            "person-specific preferences remain personal/configurable state; general architecture promotion requires evidence",
+        ]
         rt.record_injection(cycle, node, event, cap)
         return cap
     finally:
@@ -55,7 +65,9 @@ def close_cycle(session_id: str):
 
 def refresh():
     rt = RAEStateRuntime()
-    try: rt.materialize_repo_sources()
+    try:
+        init_interaction_persona(rt)
+        rt.materialize_repo_sources()
     finally: rt.close()
 
 

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "refresh_id": "live-fusion-20260809T1802p0700-refresh1",
+  "created_at": "2026-08-09T18:04:00+07:00",
+  "parent_feedback": "research_entity/mesh_feedback/20260809T1802p0700-live-fusion/BRANCH_FEEDBACK_MANIFEST.json",
+  "parent_commit": "69fee957195dbb15636bf15bb8e4f3ce01c080d1",
+  "concurrent_commit": "ab18123fee4f378e0d77baaea83675366c539fed",
+  "scientific_promotion": "NONE",
+  "material_refresh": {
+    "R1_HWP01_COMPLETION_ADJUDICATION_WORKFLOW": {
+      "effect": "OPERATIONAL_REFINEMENT_NO_NEW_SCIENTIFIC_EVIDENCE",
+      "evidence_class": "REPO_GOVERNANCE_CI_WORKFLOW_CREATED_EXECUTION_RESULT_NOT_YET_OBSERVED",
+      "result": "A CI adjudicator now exists to verify the already-produced H-WP-01 execution, preflight, validation, architecture semantic hash and exact contract hash before atomically changing only H-WP-01 to COMPLETE while asserting H-WP-02 remains unchanged.",
+      "boundary": "The workflow definition itself is not a completion receipt. Until a successful durable workspace-completion commit/receipt is observed, the prior fused classification COMPLETE_COMPONENT_CANDIDATE remains the evidence-safe status. H1 remains NOT_PASS and BASE is not bypassed.",
+      "branch_effect": "NO_CHANGE to scientific claims; Harness governance path strengthened."
+    }
+  },
+  "branch_receipts": {
+    "clayresearch": "NO_CHANGE",
+    "frank": "NO_CHANGE",
+    "gwt": "NO_CHANGE",
+    "emergenz": "NO_CHANGE",
+    "claycode": "NO_CHANGE",
+    "hyperposition": "NO_CHANGE",
+    "claygraph": "NO_CHANGE",
+    "unifieddb": "NO_CHANGE",
+    "harness": "REFINE_OPERATIONAL_STATUS_ONLY"
+  },
+  "global_controls": [
+    "Research Entity != Frank",
+    "Frank self-Harness authority = PROPOSAL_ONLY",
+    "Ubuntu-only Frank v0.1 release target",
+    "workflow definition != successful execution receipt",
+    "shared ancestry != independent replication",
+    "canonical revision remains unchanged"
+  ],
+  "research_write_result": "CONCURRENT_DELTA_ABSORBED_WITH_NO_SCIENTIFIC_PROMOTION"
+}

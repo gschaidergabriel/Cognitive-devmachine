@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-DIGITAL-RETINA-TRACKED-TREE-20260809T0702",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "campaign":"research_entity/archive_assimilation/666_SWARM_CAMPAIGN.json",
+  "source":{"drive_root_id":"1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m","drive_root_title":"digital-retina","git_remote":"gschaidergabriel/digital-retina","drive_git_head":"819dcac12253b7de45795239b44482627ade624f"},
+  "status":"TRACKED_TREE_DENOMINATOR_EXACT_UNTRACKED_AND_GIT_HISTORY_REMAIN_SEPARATE",
+  "proof":{"source":"Drive .git/index","index_bytes":22822,"index_version":2,"index_entry_count":241,"index_sha256":"f6d90bd7a22884ed2a83af60de31a9337ff2fdd82ff21d9ee971a9ff3a03c6c5","index_internal_sha1":"2e34acd28ef7ad0de445afea20547e0161bbdcfe","internal_checksum_verified":true,"tracked_content_bytes_from_index":67549391},
+  "tracked_top_level_counts":{".gitignore":1,"README.md":1,"api":4,"deploy":6,"docs":3,"eval":157,"frontend":42,"requirements.txt":1,"retina":24,"tests":1,"tools":1},
+  "tracked_extension_counts":{"jpg":131,"png":10,"py":44,"tsx":13,"md":8,"ts":7,"svg":5,"txt":4,"json":3,"sh":3,"service":2,"js":2,"mjs":2,"conf":1,"sql":1,"xml":1,"ico":1,"css":1,"no_extension":2},
+  "evaluation_corpus":{"tracked_eval_files":157,"tracked_eval_images":140,"image_families":{"eval/images":100,"eval/images_art":12,"eval/images_photo":10,"eval/images_ai":18},"rule":"Existing Retina semantic/evaluation receipts are crossread inputs; this identity lane does not duplicate specialist scientific credit."},
+  "deploy_closure":{"tracked_files":6,"tracked_blob_identity_verified":6,"result":"6_OF_6_DRIVE_BYTES_MATCH_GIT_INDEX_BLOB_SHA1","untracked_sensitive_files":2,"sensitive_handling":".env.frontend and .env.server were raw-hashed without semantic inspection and deleted from local sandbox immediately after hashing","sensitive_sha256":["f0b9bf8d395a2933b83cb18f4cd0e637b7fa93e63207926a9787904a71fa0da6","16de1da7e11c4dad4643f69c435e38c31c09f1f3ccb329c4d6ff322d5cc953ce"]},
+  "deployment_semantic_review":{"findings":["backend and frontend systemd units run as root; backend adds NoNewPrivileges/PrivateTmp/ProtectSystem/ProtectHome while frontend only NoNewPrivileges/PrivateTmp","backend service contains a hard-coded development API-key setting and schema stores API keys plaintext with an explicit future hashed-lookup note","deployment script rsyncs source with --delete and can optionally sync model weights; effect authority therefore belongs outside model/Needle and behind Safe-Effect","nginx terminates TLS, enforces per-IP rate limiting and routes API vs frontend separately"]},
+  "untracked_families_from_gitignore":{"support_vendor_generated":["frontend/node_modules","frontend/.next","frontend/out","frontend/.turbo","__pycache__",".venv","tests/data","pytest/ruff caches"],"sensitive":[".env",".env.local",".env.server","deploy/secrets","frontend env files"],"model_binary":["models","*.pt","*.onnx","*.npz"]},
+  "remaining_obligations":["exact recursive Drive identity/count for each untracked support/vendor/generated family actually present","exact .git provenance/history accounting beyond current index/head/config","working-tree content identity verification for tracked families not yet blob-verified","crossread existing Retina semantic/eval receipts and mark each tracked semantic family ANALYZED or NO_RESEARCH_DELTA without duplicate credit"],
+  "global_level0_credit":"DENOMINATOR_PROGRESS_ONLY_NOT_GLOBAL_PASS",
+  "earned_work_hours_added":0,
+  "created_at":"2026-08-09T07:02:00+07:00"
+}

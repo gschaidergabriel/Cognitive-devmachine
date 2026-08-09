@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1935p0700-chatgpt-secondary-three-cycle-log-state-fusion",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class": "HOSTED_SYNTHETIC_PLUS_LOCAL_CONTAINER_REFERENCE",
+  "target_ubuntu_execution": false,
+  "target_4b_execution": false,
+  "policy_sweep": {
+    "seed": 20260809,
+    "budgets": [4,8,16],
+    "conflict_groups": "0..7",
+    "trials_per_budget_conflict_cell": 800,
+    "total_scenarios": 19200,
+    "arms": ["current_conflict_first","fixed_25_percent","fixed_50_percent","fixed_75_percent","adaptive_diagnostic_heuristic"],
+    "overall": {
+      "current_conflict_first": {"critical_recall":0.541354166667,"complete_conflict_pair_recall":0.820065228175,"mean_selected_score":0.753653072085},
+      "fixed_25_percent": {"critical_recall":0.957378472222,"complete_conflict_pair_recall":0.552258060516,"mean_selected_score":0.810771224666},
+      "fixed_50_percent": {"critical_recall":0.894670138889,"complete_conflict_pair_recall":0.651221974206,"mean_selected_score":0.802926050681},
+      "fixed_75_percent": {"critical_recall":0.748836805556,"complete_conflict_pair_recall":0.723175967262,"mean_selected_score":0.783071089631},
+      "adaptive_diagnostic_heuristic": {"critical_recall":0.853854166667,"complete_conflict_pair_recall":0.6554140625,"mean_selected_score":0.799330812454}
+    },
+    "budget8_structural_counterexample": {
+      "four_conflict_groups_current_critical_recall": 0.0,
+      "four_conflict_groups_current_complete_conflict_pair_recall": 1.0,
+      "interpretation": "Under the authored synthetic generator, four two-way conflicts can consume all eight slots under current conflict-first selection. This demonstrates resource competition, not a production optimum or live-FRANK failure rate."
+    },
+    "result": "NO_FIXED_QUOTA_SELECTED",
+    "reason": "No fixed conflict reservation arm dominates both critical-evidence retention and explicit conflict-pair visibility across the synthetic sweep."
+  },
+  "implemented_improvement": {
+    "module_path": "research_entity/harness/reference/active_assembly_pressure.py",
+    "module_commit": "4ac4656054b05e906d9ec3ab7158f78ea7414f78",
+    "test_path": "research_entity/harness/tests/test_active_assembly_pressure.py",
+    "test_commit": "d6043b82a3c2d17fa0b0058ef47664fceed71cfa",
+    "semantics": "Non-authoritative observation only. Does not change ActiveAssembly selection, ranking, truth state, re-expansion, semantic hash or execution authority.",
+    "local_container_tests": {"tests_total":5,"tests_passed":5,"tests_failed":0},
+    "github_combined_status_at_check": "NO_STATUS_CHECKS_RETURNED"
+  },
+  "write_concurrency": {
+    "observed_409": true,
+    "handling": "stale test write was not forced; repository head was refreshed and the new-file write retried successfully"
+  },
+  "scientific_promotion": "NONE"
+}

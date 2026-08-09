@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC_WP06_SANDBOX_DEPTH_STRING_OBJECT_HARDENING_20260809T2210p0700",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T22:10:00+07:00",
+  "evidence_class": "EXECUTABLE_SANDBOX_PRODUCTION_COMPILER_COUNTEREXAMPLES_AND_FIXES",
+  "tool": "tools/claycode_base_compiler.py",
+  "parent_compiler_commit": "c86763969b157c797eb66a07644f43172676dd6b",
+  "final_compiler_commit": "80d1d74cae69eff4103a1477597b27dd33083344",
+  "final_blob_sha": "5d01dfeb77b1bece85433cd09af6ea3427a5f995",
+  "grammar_candidate": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V16_GENERIC_DOTTED_LINEAR_LOOKAHEAD.lark",
+  "grammar_sha256": "e577603d83b8e37a06c7ee98e38e66ed994b01545b99da1378e61a23cf9c0b63",
+  "counterexamples": [
+    {
+      "id": "HOST-STACK-DEEP-EXPR",
+      "observed": "A valid left-associated arithmetic expression succeeded at 900 operators but compile_ir failed around 1200 with Python RecursionError in recursive type inference.",
+      "fix": "Replace expression type inference and C expression rendering with explicit iterative postorder machines."
+    },
+    {
+      "id": "HOST-STACK-ACYCLIC-CALL-CHAIN",
+      "observed": "A 140-function acyclic call chain was accepted by the compiler but eval_function failed at the fixed RECURSION_LIMIT despite no recursive cycle.",
+      "fix": "Keep recursive cycles compile-time rejected, but evaluate function/call/expression tasks with an explicit stack and make call-graph cycle detection iterative."
+    },
+    {
+      "id": "NO-ENTRY-OBJECT-WERROR",
+      "observed": "lower_c(entry=None) emitted every function static; compiling the generated translation unit with -Werror -c failed as unused-function.",
+      "fix": "No-entry/module lowering emits externally visible ccf_* functions; entry executables retain private static call-closure lowering."
+    },
+    {
+      "id": "UNICODE-C11-STRING-LITERAL",
+      "observed": "Emoji JSON escaping produced surrogate universal-character sequences rejected by GCC; embedded NUL also produced an invalid C universal character.",
+      "fix": "Validate Unicode scalar strings, encode valid source strings as explicit UTF-8 octal byte escapes for C11, support String CLI parameters, and fail explicitly on the current const-char backend limitation C11_STRING_NUL_UNSUPPORTED rather than silently truncating."
+    }
+  ],
+  "validation": {
+    "v16_frontend_discriminator": "69/69 PASS; strict lexer collision proof still requires interegular on target/current-main",
+    "combined_compiler_regression_after_iterative_rewrite": "25/25 PASS",
+    "deep_expression": {
+      "4000_operators_build_eval_lower": "PASS",
+      "1200_operator_native_c_werror": "PASS",
+      "2000_operator_native_c_werror": "PASS"
+    },
+    "deep_acyclic_calls": {
+      "300_function_source_eval_and_native": "PASS",
+      "5000_function_manual_ir_iterative_eval": "PASS",
+      "5000_node_acyclic_cycle_detector": "PASS"
+    },
+    "no_entry_object_files": "3/3 representative -std=c11 -O2 -Wall -Wextra -Werror -c builds PASS",
+    "string_utf8_cli_and_content": "8/8 targeted cases PASS: ASCII, umlaut, emoji, newline, String CLI eq/ne, explicit NUL rejection, invalid surrogate rejection",
+    "previous_numeric_hardening_regressions": "retained in the 25/25 combined run"
+  },
+  "epistemic_limits": {
+    "counts_as_wp06_pass": false,
+    "counts_as_wp02_pass": false,
+    "counts_as_target_acceptance": false,
+    "counts_as_ubuntu_receipt": false,
+    "promotion_allowed": false,
+    "known_open_string_gap": "Embedded NUL is explicitly rejected by the current const-char C backend. A future length-aware runtime string representation may close this if BASE general-purpose acceptance requires arbitrary byte-containing strings."
+  },
+  "next_falsifiers": [
+    "Run strict V16 frontend and full compiler suite on clean registered Ubuntu/current-main.",
+    "Exercise composite multi-function programs mixing Int64, Real, Bool, Unicode String, deep expressions and call chains against evaluator/native C differential.",
+    "Check whether general-purpose application suite requires embedded-NUL String semantics; if yes, implement a length-aware runtime string ABI rather than weakening the test."
+  ],
+  "authority_invariant": "model output != execution authority"
+}

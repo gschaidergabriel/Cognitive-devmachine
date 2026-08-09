@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T160924p0700_ffi_abi",
+  "latest_frank_run": "fusion-20260809T1538p0700-frank-architecture-lineage",
+  "latest_frank_claycode_architecture_artifact": null,
+  "items": [
+    {
+      "claim_id": "GOODMAN-CC-FFI-001",
+      "frank_statement": "Effect authority remains external to model output; host effects use explicit capabilities/permits with release-time revalidation and no ambient OS authority.",
+      "frank_source_refs": ["FUSED_FRANK_TARGET_ARCHITECTURE.json:P10_EFFECT_AUTHORITY_AND_SANDBOX"],
+      "ancestry_families": ["FRANK/ClayCode shared effect-authority lineage"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A simpler host ABI can use globally unique opaque resource IDs plus lexical borrow enforcement, so ClayCode need not expose generation/ownership fields in its canonical IR.",
+      "falsifier": "A production lowering with a simpler representation passes stale-resource, cross-type, borrow-escape, replay and authority tests at equal or lower cost.",
+      "independent_checks": [
+        {
+          "class": "NEW_EXECUTABLE_EXPERIMENT",
+          "ref": "EXECUTABLE_RESEARCH_RECEIPT.json",
+          "result": "slot-only designation fails deliberate reuse; lifetime-bound typed identity passes tested corpus"
+        },
+        {
+          "class": "PRIMARY_EXTERNAL_STANDARD_DOC",
+          "ref": "WebAssembly Component Model WIT resources",
+          "result": "independently uses typed resources with owned vs borrowed handles and call-bounded borrows"
+        },
+        {
+          "class": "PRIMARY_EXTERNAL_STANDARD_DOC",
+          "ref": "WASI security/capability model",
+          "result": "supports explicit host-granted capabilities rather than ambient authority"
+        }
+      ],
+      "adversarial_checks": [
+        "deliberate slot reuse after drop",
+        "cross-resource-type reuse",
+        "stale capability designation after slot reuse",
+        "borrow use after call boundary"
+      ],
+      "verdict": "REFINED",
+      "reason": "The external authority boundary survives independent checks, but FFI resource designation needs lifetime-safe identity or an equivalent mechanism. The exact five-field representation is not established.",
+      "claycode_action": "Keep G9 CapabilityToken/EffectIntent authority separation; add an OPEN BASE FFI requirement that lowering binds capability designation to lifetime-bound typed resource identity and enforces owned/borrowed or equivalent lifetime semantics. Do not promote exact syntax yet.",
+      "affected_claycode_artifacts": ["FFI_RESOURCE_IDENTITY_CANDIDATE.clay", "CC-WP-07-RUNTIME-ABI-FFI"]
+    }
+  ]
+}

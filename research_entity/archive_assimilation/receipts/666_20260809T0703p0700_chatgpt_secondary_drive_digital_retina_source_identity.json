@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0703+0700-chatgpt-secondary-drive-digital-retina-source-identity",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "work_packages": [
+    "666-00-DUAL-INDEX",
+    "666-01-DEDUPE-SHARD",
+    "666-03-PARALLEL-ANALYZE",
+    "666-05-CROSS-SOURCE-RECONCILE",
+    "666-06-BRANCH-FEEDBACK"
+  ],
+  "status": "NON_OVERLAPPING_DRIVE_SOURCE_IDENTITY_DELTA_COMMITTED",
+  "observed_at": "2026-08-09T07:03:00+07:00",
+  "source_scope": {
+    "drive_root_folder_id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "folder": "digital-retina",
+    "folder_id": "1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m",
+    "tracked_source_manifest": "research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_TRACKED_SOURCE_SUBMANIFEST.json",
+    "upstream_repository": "gschaidergabriel/digital-retina",
+    "frozen_commit": "819dcac12253b7de45795239b44482627ade624f",
+    "tracked_source_leaves": 241,
+    "peer_crossread": [
+      "research_entity/archive_assimilation/manifests/DRIVE_CLAY_ROOT_EPOCH_20260809T0650p0700.json",
+      "research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_E2E_RECURSIVE_DENOMINATOR.json",
+      "research_entity/archive_assimilation/manifests/DRIVE_EXTERNAL_NEEDLE_SOURCE_SUBMANIFEST.json"
+    ],
+    "dedup_rule": "Needle and Digital Retina E2E denominators were already frozen by peer work and receive no duplicate credit here. This receipt only closes Digital Retina tracked-source identity and records source-level deltas."
+  },
+  "findings": [
+    {
+      "finding_id": "DRIVE-RETINA-SRC-001",
+      "epistemic_class": "HISTORICAL_EXECUTABLE_SOURCE_IDENTITY",
+      "status": "CURRENTLY_RELEVANT_ARCHIVE_IDENTITY",
+      "claim": "The Drive digital-retina working tree is a Git repository on main whose tracked source snapshot resolves to commit 819dcac12253b7de45795239b44482627ade624f of gschaidergabriel/digital-retina. Its Git index v2 enumerates exactly 241 tracked files; independent blob checks for README.md, tests/test_smoke.py and tools/export_clip_l14.py match the pinned GitHub commit.",
+      "targets": ["frank", "harness", "clay", "claycode"],
+      "reuse_category": "PROVENANCE_AND_REPLAY_FOUNDATION",
+      "current_implication": "Treat this commit as the historical source identity for Retina replay. Keep untracked caches/models/support artifacts as separate obligations rather than silently folding them into the source denominator."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-SRC-002",
+      "epistemic_class": "HISTORICAL_EXECUTABLE_PERCEPTION_ARCHITECTURE",
+      "status": "CURRENTLY_RELEVANT_MECHANISM_EVIDENCE",
+      "claim": "Digital Retina is implemented as a structured CPU-oriented visual perception service rather than a single monolithic VLM call. The source/README exposes object, concept, OCR, face/emotion, scene/attention and in-house classification outputs through a stable structured API, with lazy model loading and warm-up behavior.",
+      "targets": ["frank", "gwt", "claygraph", "harness", "clay"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "current_implication": "For the current FRANK target, Retina can be treated as a perception organ that emits typed evidence into Clay state. Any stronger claim that perception must be fused directly into internal Clay state transitions remains an integration hypothesis to validate in the Harness, not something proven merely by this historical service architecture."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-SRC-003",
+      "epistemic_class": "HISTORICAL_PERFORMANCE_PATH_SEPARATION",
+      "status": "CURRENTLY_RELEVANT_BENCHMARK_CONSTRAINT",
+      "claim": "Historical Retina artifacts contain materially different latency regimes: the README reports an approximately 150 ms screenshot short-circuit and approximately 900 ms p50 normal CPU path, while stored Tier-3 VQA evidence for complex multi-object questions is approximately 10.9-11.0 seconds. These are different execution paths and must not be collapsed into one Retina latency number.",
+      "targets": ["harness", "frank", "clay", "q12_index"],
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "current_implication": "Harness benchmarks must label the exact Retina path/tier, warm/cold state, hardware and requested outputs. A single aggregate latency target would be misleading."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-SRC-004",
+      "epistemic_class": "HISTORICAL_DOCUMENTATION_CONTRADICTION",
+      "status": "OPEN_AUDIT_NOTE",
+      "claim": "The README says that five vision models run in parallel but then enumerates six pipeline components: CLIP, YOLO, DINOv2, Tesseract, OpenCV/FER+ and CNN Retina v8. The source is internally inconsistent on this count.",
+      "targets": ["frank", "harness", "clay"],
+      "reuse_category": "AUDIT_CONSTRAINT",
+      "current_implication": "Do not inherit the prose count as architecture truth. Derive the active component set from executable source/runtime instrumentation when constructing the current Retina-to-Clay contract."
+    },
+    {
+      "finding_id": "DRIVE-RETINA-SRC-005",
+      "epistemic_class": "HISTORICAL_SECURITY_NEGATIVE_RESULT",
+      "status": "CURRENTLY_RELEVANT_CREDENTIAL_HYGIENE_WARNING",
+      "claim": "A historical Digital Retina E2E script contains an embedded development API credential. The credential value is intentionally not reproduced in RAE. Its presence is evidence that test artifacts can accidentally become authority-bearing secret stores.",
+      "targets": ["harness", "frank", "claycode"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "current_implication": "Current Harness and Retina integration must source credentials from explicit capability/secret stores, scan replay corpora for embedded secrets, redact them from research objects and treat any historically embedded credential as requiring rotation/invalidity checking rather than reuse."
+    }
+  ],
+  "cross_branch_feedback": {
+    "frank": "Retina source identity is now replayable at a pinned commit; integrate typed perception outputs through the current Clay-native architecture rather than inheriting service boundaries blindly.",
+    "harness": "Add path-specific Retina benchmarks, typed output contract tests, warm/cold separation and a secret-scanning regression oracle.",
+    "gwt": "Retina outputs are sensory evidence candidates; broadcast/uptake still requires separate causal readouts and must not be inferred from perception availability.",
+    "claygraph": "Preserve perception provenance and confidence per typed observation instead of flattening narrative text into graph truth.",
+    "claycode": "Any Retina-to-ClayCode bridge should encode typed observations/effects while keeping model or sensor output distinct from execution authority.",
+    "clay": "Historical Retina supports a fast structured sensor layer; direct state-coupled Clay perception remains a current design/test target rather than a historical fact.",
+    "emergenz": "No emergence claim follows from multimodal coupling alone; matched lesion/rescue remains required.",
+    "hyperposition": "Retina can supply contextual evidence facets, but set-valued/higher-order relation semantics are not demonstrated by this source snapshot.",
+    "unifieddb": "Persist raw observation provenance, derived percepts and downstream state transitions as separable identities.",
+    "q12_index": "Source-level historical value is concrete and replayable, but no additional earned-work hours are assigned here to avoid double-counting prior Retina/E2E work."
+  },
+  "earned_work": {
+    "hours_added": 0.0,
+    "reason": "Existing Retina semantic/E2E work was already present in peer evidence; this invocation closes source identity and adds audit constraints, not a new independent historical-effort credit row."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Digital Retina tracked source is now pinned, but untracked/support material and the combined Level-0 denominator/reconciliation remain open.",
+    "strict_progress_rule_preserved": true
+  },
+  "next_actions": [
+    "Reconcile untracked/generated/model/support artifacts under digital-retina against the 241 tracked-source leaves without contaminating source identity.",
+    "Continue with another root child whose recursive identity remains open after cross-reading current peer receipts.",
+    "Do not claim Level-0 PASS until the global exact denominator is frozen and every pass obligation is closed."
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1506p0700-chatgpt-secondary-pf-project-engine-autonomy-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "focus": "Project Engine autonomy lineage: project-local workspace -> sandboxed tool agent -> full-system authority widening -> tiered autonomous project engine -> replay/policy/A-B/multi-project coordination"
+  },
+  "source_refs": [
+    "commit:ce63f97c35928051cff98b0092058e111026584c",
+    "commit:62a661f51271e8ec024c3557b921eaddda0267d3",
+    "commit:b6d8c17bde2087d88ef4a31c09d6db2756219739",
+    "commit:cfa7062ba62bc9d83fffada29dcc03a75c4f4050",
+    "commit:35bbeacbce936e284f7cb8ab73747fd3cf7bebf0"
+  ],
+  "lineage": [
+    {
+      "ref": "commit:ce63f97c35928051cff98b0092058e111026584c",
+      "event": "Introduced a per-project workspace explicitly framed as Claude with Frank peripherals rather than Frank itself: project folder, project-local persistent memory, project-local hypotheses, chat history and CRUD/API surfaces. This is an early explicit identity/module boundary precedent."
+    },
+    {
+      "ref": "commit:62a661f51271e8ec024c3557b921eaddda0267d3",
+      "event": "Converted the workspace into a tool-using coding agent with bash/read/write/edit/list operations, a bounded 15-iteration tool loop, project-root path confinement, destructive-command filtering and exact-string edit semantics that fail on zero or multiple matches instead of silently mutating ambiguous text."
+    },
+    {
+      "ref": "commit:b6d8c17bde2087d88ef4a31c09d6db2756219739",
+      "event": "Removed project-folder confinement and widened the same agent to full-system filesystem, service, package-manager and shell authority while shrinking the destructive-command blocklist. This is a historical authority-boundary transition, not evidence that unrestricted authority is desirable."
+    },
+    {
+      "ref": "commit:cfa7062ba62bc9d83fffada29dcc03a75c4f4050",
+      "event": "Rebuilt Project Engine into a goal-driven autonomous platform with tiered decision routing, action chaining, persistent goals, an entity-relation world model, evolving agent profile, hard/soft policy engine, tool-outcome learning, heartbeat/checkpoint recovery and low-cost/free-model delegation. Commit-reported demonstrations included a 39 s zero-Claude-token autonomy cycle, a five-step autonomous chain and a real project contacting dealers."
+    },
+    {
+      "ref": "commit:35bbeacbce936e284f7cb8ab73747fd3cf7bebf0",
+      "event": "Added smart notifications, natural-language policy parsing, profile cloning, A/B strategy testing, peer-project queries, session replay/time-travel and a manual autonomy trigger. The implementation records useful observability surfaces but also exposes several important historical counterexamples for modern authority/evidence design."
+    }
+  ],
+  "mechanism_findings": [
+    {
+      "id": "PF-PROJ-MECH-001",
+      "finding": "Persistent agentic project work was already separated into goal state, project memory, hypotheses, world model, profile, policies, action traces and checkpoints rather than one undifferentiated chat transcript.",
+      "epistemic_class": "HISTORICAL_CODE_AND_COMMIT_EVIDENCE"
+    },
+    {
+      "id": "PF-PROJ-MECH-002",
+      "finding": "The architecture used explicit cost/latency tiers before invoking expensive cognition, demonstrating an early routing pattern analogous to current Needle/model-routing goals.",
+      "epistemic_class": "HISTORICAL_COMMIT_EVIDENCE"
+    },
+    {
+      "id": "PF-PROJ-MECH-003",
+      "finding": "Replay/time-travel, activity feeds and checkpoints were treated as first-class agent-operability features before current Harness/UnifiedDB formalization.",
+      "epistemic_class": "HISTORICAL_CODE_AND_COMMIT_EVIDENCE"
+    },
+    {
+      "id": "PF-PROJ-MECH-004",
+      "finding": "Exact-edit failure on ambiguous matches is a reusable historical safety pattern: mutation should fail closed when the intended target is not uniquely identified.",
+      "epistemic_class": "HISTORICAL_CODE_EVIDENCE"
+    }
+  ],
+  "negative_results_and_counterexamples": [
+    {
+      "id": "PF-PROJ-NEG-001",
+      "result": "The project-root sandbox was later removed and replaced with nearly unrestricted full-system authority plus a very small command blocklist.",
+      "impact": "This lineage demonstrates that convenience can erase a previously explicit capability boundary. Current Clay/FRANK should preserve external capability authorization, scoped effects and receipts rather than relying on prompt intent or a blacklist.",
+      "ref": "commit:b6d8c17bde2087d88ef4a31c09d6db2756219739",
+      "epistemic_class": "HISTORICAL_ARCHITECTURE_COUNTEREXAMPLE"
+    },
+    {
+      "id": "PF-PROJ-NEG-002",
+      "result": "The v3.2 A/B test scores a strategy primarily by whether autonomous action text contains [ERROR] or [TIMEOUT], then automatically writes the apparent winner into goal strategy state.",
+      "impact": "Execution success is not task success. Modern experiment selection must score causal/outcome receipts and preserve uncertainty instead of treating absence of tool errors as strategy quality.",
+      "ref": "commit:35bbeacbce936e284f7cb8ab73747fd3cf7bebf0",
+      "epistemic_class": "HISTORICAL_CODE_COUNTEREXAMPLE"
+    },
+    {
+      "id": "PF-PROJ-NEG-003",
+      "result": "Natural-language policy text is converted by a free LLM into JSON and then persisted as a policy after syntactic extraction, with no independently evidenced formal semantic validation step in the inspected change.",
+      "impact": "User-language intent parsing must remain separate from enforcement authority; hard policy activation needs deterministic validation, provenance and reversible confirmation semantics.",
+      "ref": "commit:35bbeacbce936e284f7cb8ab73747fd3cf7bebf0",
+      "epistemic_class": "HISTORICAL_CODE_RISK_INFERENCE"
+    },
+    {
+      "id": "PF-PROJ-NEG-004",
+      "result": "The manual autonomy endpoint starts a daemon thread and immediately returns that the cycle started; the shown path logs failures but does not itself prove durable started/completed/effect receipts.",
+      "impact": "Queued/started/done/effect states must remain distinct. Harness and Dynamic Work should require durable lifecycle receipts rather than HTTP acknowledgement as completion evidence.",
+      "ref": "commit:35bbeacbce936e284f7cb8ab73747fd3cf7bebf0",
+      "epistemic_class": "HISTORICAL_CODE_RISK_INFERENCE"
+    },
+    {
+      "id": "PF-PROJ-NEG-005",
+      "result": "Agent profile cloning copies strengths, weaknesses, tool preferences and learned rules across projects as a bulk profile transfer.",
+      "impact": "Cross-context learned behavior needs provenance, compatibility and context validity checks; transfer itself does not establish that a learned rule remains correct in the target project.",
+      "ref": "commit:35bbeacbce936e284f7cb8ab73747fd3cf7bebf0",
+      "epistemic_class": "HISTORICAL_CODE_RISK_INFERENCE"
+    }
+  ],
+  "current_inheritance": [
+    {
+      "target": "Dynamic Work / Harness",
+      "delta": "Preserve the historical decomposition into goal, task/action trace, tool effect, checkpoint and replay, but strengthen it to durable queued->claimed->started->effect->verified lifecycle receipts. HTTP/tool success alone is never completion."
+    },
+    {
+      "target": "Needle / model routing",
+      "delta": "Retain the tiered-decision principle: use deterministic/code paths and cheaper cognition where evidence says they suffice, escalate only when uncertainty/complexity justifies it, and measure routing quality against outcome not cost alone."
+    },
+    {
+      "target": "ClayCode",
+      "delta": "Represent capability scope, policy provenance, action intent, target identity, preconditions, effect receipt, outcome receipt and rollback as typed execution contracts. Exact/unique target resolution should be a first-class mutation precondition."
+    },
+    {
+      "target": "UnifiedDB",
+      "delta": "Historical project state argues for logically unified but typed storage of goals, policies, world-model entities, memories, strategy trials, notifications, checkpoints and replay events with explicit project/context identity and transfer provenance."
+    },
+    {
+      "target": "ClayGraph",
+      "delta": "The historical entity-relation world model and peer-project query are useful precursors, but cross-project association must not imply cross-project policy validity or execution authority."
+    },
+    {
+      "target": "FRANK authority boundary",
+      "delta": "Reject the historical unrestricted full-system authority pattern as a default. Use external capability/commit gateways, least-necessary scope, deterministic validation for enforcement changes and receipt-backed effects."
+    },
+    {
+      "target": "Research Entity",
+      "delta": "The A/B lineage is a concrete anti-Goodhart lesson: discriminate hypotheses/strategies using outcome-grounded tests and falsifiers, not absence of runtime errors or worker agreement."
+    }
+  ],
+  "cheap_discriminating_tests": [
+    "Run the same edit request against zero, one and two matching targets; only the unique target may mutate and every attempt must leave a receipt.",
+    "Run paired strategies where both tools exit successfully but only one improves the task metric; the experiment framework must select by outcome metric rather than error absence.",
+    "Feed an ambiguous natural-language hard policy and require parse->deterministic validation->human/authority acceptance separation before enforcement state changes.",
+    "Trigger an asynchronous action that crashes after acknowledgement and assert started, failed and effect states remain distinguishable after restart/replay.",
+    "Transfer a learned rule between two intentionally incompatible project contexts and require compatibility/provenance gating to reject or quarantine it.",
+    "Compare unrestricted-system-agent execution with scoped capability tokens on the same benchmark; measure success, unauthorized reachable surface, rollback completeness and receipt fidelity."
+  ],
+  "earned_work": {
+    "new_credit_hours": 0.0,
+    "mapping_candidate": true,
+    "reason": "Historically reusable architecture and counterexample value is material, but exact reusable-hour credit requires row-level dedup against current Dynamic Work, Harness, Needle, UnifiedDB, security and replay mappings."
+  },
+  "level0_effect": {
+    "exact_global_percent_added": 0.0,
+    "reason": "Completed one additional semantic/history lineage shard. Project-Frankenstein repository-wide tree/history denominator remains unfrozen, so no exact global Level-0 coverage may be claimed."
+  },
+  "status": "COMPLETE_SEMANTIC_LINEAGE_SHARD",
+  "created_at": "2026-08-09T15:06:00+07:00"
+}

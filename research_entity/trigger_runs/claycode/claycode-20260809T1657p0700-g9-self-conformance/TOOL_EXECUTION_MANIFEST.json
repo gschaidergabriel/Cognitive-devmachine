@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1657p0700-g9-self-conformance",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "executions":[
+    {"surface":"GitHub connector","status":"PASS","use":"canonical boot, current stack/branch evidence, prior run inspection, durable run writes"},
+    {"surface":"local Python/Linux probe","status":"PASS_WITH_ENVIRONMENT_WARNING","use":"Lark parser coverage, normalization coverage, interface-signature counterexample, fallback evaluation probe, precedence probe","runtime":"Python 3.13.5 / Linux x86_64","probe_sha256":"09d07c4114bab0c2fabfb8596edce397e511c9580aee3307aa0890f438883fe2","result_sha256":"218b2ec7dfba7fb6d8f193d91574bc4bbd620d27fedb4380473a9bb125f2f7bf","note":"Probe exit status 0. Host Python emitted unrelated spreadsheet-runtime warmup stderr; probe result itself completed."},
+    {"surface":"official web documentation","status":"PASS","use":"independent parser/operator/evaluation analogues: Swift operator/precedence and nil-coalescing; Tree-sitter precedence/lexing; Rust Option fallback/try semantics"},
+    {"surface":"E2B","status":"UNAVAILABLE_TO_HOSTED_WORKER","use":"preferred external compiler/runtime execution was not exposed"},
+    {"surface":"Andreas Ubuntu developer host","status":"UNAVAILABLE_TO_HOSTED_WORKER","use":"target-host execution not performed"},
+    {"surface":"repo-local preflight/Goodman validators","status":"NOT_EXECUTABLE_ON_HOSTED_SURFACE","use":"equivalent manifests/review written but scripts themselves not claimed as run"}
+  ]
+}

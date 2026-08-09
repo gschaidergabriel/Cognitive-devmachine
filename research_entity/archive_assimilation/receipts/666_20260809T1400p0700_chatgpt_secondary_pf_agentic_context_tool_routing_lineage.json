@@ -1,0 +1,178 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1400p0700-chatgpt-secondary-pf-agentic-context-tool-routing-lineage",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T14:00:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "evidence_class": "HISTORICAL_PRIMARY_GIT_COMMIT_DIFF",
+    "commit_shas": [
+      "40edcbb502718debd89c8d3275162fa627e1582d",
+      "165d7149fb0aa499bb2474c1b85fca3b1367ec8c",
+      "4995e08f2e1e5251ceeb41388c167bb6a629ada8",
+      "1c5c682aa84c13eadbf47fbc54e4219230ce5ee6"
+    ]
+  },
+  "scope": "Project-Frankenstein agentic truthfulness routing, context budgeting/versioning, plan recitation, scratch offload, goal-scoped tool filtering, lossy context compaction, persistent task tracking and live execution traces",
+  "non_overlap_check": {
+    "workspace_existing_shards_reviewed": true,
+    "dedicated_agentic_context_tool_routing_shard_found": false,
+    "authority_overlap_rule": "Safety/authority incidents already assigned to prior PF safety/authority receipts are not re-credited here; this shard owns attention/context/tool-surface semantics."
+  },
+  "chronology": [
+    {
+      "commit": "40edcbb502718debd89c8d3275162fa627e1582d",
+      "date": "2026-02-17",
+      "finding": "A concrete failure was recorded: simple chat answered a self-code-analysis request without tools and fabricated a plausible nonexistent Titan timestamp bug. The fix routed self-analysis phrases into the real agentic loop and added explicit action-honesty rules forbidding pretend file reads/commands.",
+      "interpretation": "Historical epistemic routing negative result: text-only cognition must not claim externally grounded observations/actions. Current Needle/FRANK routing should preserve evidence-required task detection and explicit tool/receipt provenance."
+    },
+    {
+      "commit": "165d7149fb0aa499bb2474c1b85fca3b1367ec8c",
+      "date": "2026-02-20",
+      "finding": "The agentic loop added EMA-weighted failure scoring, compound plan risk aggregation, state auto-save, failed-attempt context versioning, dynamic context budget, and Firejail wrapping for bash/code when available. Failed contexts were tagged and summarized separately from clean successful observations.",
+      "interpretation": "Direct precursor to provenance-aware context management: stale/failed hypotheses should remain retrievable but should not contaminate the active evidence surface. Dynamic budgets and cumulative risk are reusable test candidates. Firejail fallback-to-unsandboxed behavior is not a sufficient modern authority guarantee."
+    },
+    {
+      "commit": "4995e08f2e1e5251ceeb41388c167bb6a629ada8",
+      "date": "2026-03-22",
+      "finding": "Deep-Agents-style context engineering added update_plan as a local no-op attention tool, session scratch_write/read, automatic offload of outputs over 1500 chars, goal-classified tool filtering with at most 15 shown tools, and a permissive legacy <tool> tag fallback parser. Context tools bypassed the normal executor.",
+      "interpretation": "Plan recitation and tool-surface filtering are attention-control mechanisms, not execution authority. Scratch offload is reusable only if the full source remains addressable. Flexible legacy tool parsing must sit before deterministic schema/capability validation, never replace it."
+    },
+    {
+      "commit": "1c5c682aa84c13eadbf47fbc54e4219230ce5ee6",
+      "date": "2026-04-01",
+      "finding": "Projects added context compaction above ~40K estimated tokens, truncating older tool results/text while keeping the last three exchanges full; persistent task_write/task_list JSON records; SSE live tool/result/text events; and increased the agent loop from 15 to 25 iterations. The commit explicitly states API credits prevented end-to-end live testing at that point.",
+      "interpretation": "Gradient context and persistent task ledgers are useful, but destructive/lossy compaction without immutable source references is not replay-safe. Live observability does not confer authorization. Increased iteration depth expands failure/effect accumulation and needs explicit budgets/checkpoints."
+    }
+  ],
+  "negative_results_constraints": [
+    {
+      "id": "PF-CTX-NR-001",
+      "claim": "A text-only/chat route must not report file/code/system findings as observed facts when no corresponding tool/evidence receipt exists.",
+      "status": "HISTORICAL_EPISTEMIC_NEGATIVE_RESULT",
+      "falsifier": "A reproducible mechanism provides the same grounded evidence without external observation/tool execution and exposes verifiable provenance."
+    },
+    {
+      "id": "PF-CTX-NR-002",
+      "claim": "Goal-scoped tool filtering reduces cognitive/action-space load but is not a security or capability boundary.",
+      "status": "ARCHITECTURE_CONSTRAINT",
+      "falsifier": "A formally enforced tool-surface mechanism proves hidden tools are unreachable at the executor/capability layer rather than merely absent from the prompt."
+    },
+    {
+      "id": "PF-CTX-NR-003",
+      "claim": "Lossy context compaction that replaces old evidence without a content-addressed source handle is insufficient for replay, audit and contradiction recovery.",
+      "status": "ARCHITECTURE_CONSTRAINT",
+      "falsifier": "Replay tests show bit-/semantics-equivalent causal reconstruction from compacted state alone across adversarial long-horizon cases."
+    },
+    {
+      "id": "PF-CTX-NR-004",
+      "claim": "Plan recitation improves attention continuity but plan text is not an authoritative task-state transition or execution grant.",
+      "status": "ARCHITECTURE_CONSTRAINT"
+    },
+    {
+      "id": "PF-CTX-NR-005",
+      "claim": "Permissive fallback parsing of model-generated tool tags must not directly authorize effects; parsed output requires deterministic typed validation and capability checks.",
+      "status": "ARCHITECTURE_CONSTRAINT"
+    },
+    {
+      "id": "PF-CTX-NR-006",
+      "claim": "Increasing autonomous loop depth without cumulative risk/failure budgets, cancellation and checkpoints can increase consequence radius even when each individual action appears bounded.",
+      "status": "RISK_ACCUMULATION_CONSTRAINT"
+    }
+  ],
+  "reusable_candidates": [
+    {
+      "mechanism": "evidence-required route selection / action honesty",
+      "mapping": "DIRECTLY_REUSABLE_CONCEPT",
+      "current_targets": ["needle", "frank", "harness"]
+    },
+    {
+      "mechanism": "plan recitation / recent-plan checkpoint",
+      "mapping": "REUSABLE_AS_TYPED_PLAN_CHECKPOINT",
+      "current_targets": ["harness", "claycode", "frank"]
+    },
+    {
+      "mechanism": "session scratch offload",
+      "mapping": "REUSABLE_WITH_CONTENT_ADDRESS_AND_PROVENANCE",
+      "current_targets": ["unifieddb", "claygraph", "harness"]
+    },
+    {
+      "mechanism": "goal-scoped tool surface",
+      "mapping": "COGNITIVE_ROUTING_PRECURSOR_NOT_AUTHORITY",
+      "current_targets": ["needle", "harness", "claycode"]
+    },
+    {
+      "mechanism": "failed-attempt context versioning",
+      "mapping": "DIRECT_PRECURSOR_TO_NEGATIVE_RESULT_PRESERVATION",
+      "current_targets": ["unifieddb", "claygraph", "harness", "frank"]
+    },
+    {
+      "mechanism": "dynamic context budget",
+      "mapping": "BENCHMARK_CANDIDATE",
+      "current_targets": ["needle", "harness", "frank"]
+    },
+    {
+      "mechanism": "persistent task ledger + SSE execution trace",
+      "mapping": "DIRECTLY_REUSABLE_CONCEPT_WITH_RECEIPT_HARDENING",
+      "current_targets": ["harness", "unifieddb", "frank"]
+    },
+    {
+      "mechanism": "compound multi-step risk aggregation",
+      "mapping": "BENCHMARK_CANDIDATE",
+      "current_targets": ["harness", "frank"]
+    }
+  ],
+  "architecture_delta": {
+    "recommended_testable_shape": "Needle/task router selects a small cognitive tool surface -> model proposes typed ClayCode action/plan -> deterministic validator resolves schema + capability + budget -> executor produces immutable evidence/effect receipt -> large evidence may be summarized in active context only by retaining content-addressed source handles -> failed attempts remain versioned retrievable evidence, not silently discarded.",
+    "key_distinction": "attention_surface != capability_surface != execution_authority",
+    "context_distinction": "active_summary != durable_evidence",
+    "plan_distinction": "plan_recitation != committed_state_transition"
+  },
+  "branch_feedback": {
+    "frank": "DELTA: preserve action honesty as a first-class self/world-model invariant. Claims of inspection/action should require linked observation/effect receipts. Preserve cancellation and cumulative failure/risk accounting across long autonomous loops.",
+    "harness": "DELTA: benchmark dynamic context budgets, plan checkpoints and goal-scoped tool surfaces, but enforce capabilities independently. Add immutable evidence handles before any scratch/compaction summary and test replay after aggressive compaction.",
+    "claycode": "DELTA: model plans/tool tags should compile into typed transition proposals. Legacy permissive parsers may normalize syntax but cannot grant authority; capability/budget/provenance validation remains external and deterministic.",
+    "unifieddb": "DELTA: store full tool results/evidence content-addressably, active-context summaries as derived views, versioned failed-attempt branches, persistent task states, and effect/outcome receipts. Compaction must never erase the durable object.",
+    "claygraph": "DELTA: failed-attempt and successful-observation branches should remain distinguishable in activation/retrieval so stale failures can inform without contaminating current fact status.",
+    "gwt": "DELTA: small goal-relevant candidate/tool surfaces can be tested as competition-input shaping, while global availability must retain provenance links to the original evidence.",
+    "emergenz": "NO_CHANGE to emergence claims; longer autonomous loops and plan recitation are not emergence evidence without causal lesion/rescue tests.",
+    "hyperposition": "DELTA: unresolved candidate actions/evidence branches can remain set-valued until validation commits one transition; prompt filtering must not silently delete alternatives from durable state.",
+    "clay": "DELTA: module dissolution should preserve semantic separation of attention shaping, evidence persistence and effect authority even if implemented in one runtime.",
+    "q12_index": "DELTA: context-engineering lineage is historically reusable but receives no new hour credit until row-level deduplication."
+  },
+  "history_denominator_refinement": {
+    "previous_verified_interval_lower_bound": 407,
+    "intermediate_verified_interval_lower_bound": 429,
+    "new_compare_base": "40edcbb502718debd89c8d3275162fa627e1582d",
+    "new_compare_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "ahead_by": 487,
+    "verified_interval_commit_count_including_base": 488,
+    "base_created_at": "2026-02-17T00:12:21Z",
+    "base_is_not_proven_root": true,
+    "reason": "The base modifies already-existing files/architecture and thematic commit search is not an exhaustive parent traversal. Earlier commits may exist and the connector still lacks an exhaustive root-to-head pagination/tree API in the current surface.",
+    "conclusion": "Project-Frankenstein history denominator remains UNFROZEN; verified lower-bound interval is now at least 488 commits from 2026-02-17 through frozen HEAD. Recursive frozen tree denominator remains separately unfrozen."
+  },
+  "historical_earned_work": {
+    "mapping_state": "CANDIDATES_ONLY_PENDING_ROW_LEVEL_DEDUP",
+    "new_hours_credit": 0.0,
+    "reason": "Context, task, trace and safety mechanisms likely overlap existing Harness/FRANK/UnifiedDB rows and require row-level deduplication before credit."
+  },
+  "exact_coverage_credit": 0.0,
+  "coverage_reason": "Neither full Project-Frankenstein root-to-head commit history nor recursive frozen tree atomic-obligation denominator is frozen. This receipt closes a semantic lineage and improves a lower bound only.",
+  "next_high_value_obligations": [
+    "Acquire exhaustive root-to-head commit enumeration or a frozen git log manifest and prove the actual root commit",
+    "Acquire recursive tree manifest for abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "Benchmark current Needle/Harness against goal-scoped tool filtering and dynamic context budgeting under matched tasks",
+    "Test replay fidelity after scratch/compaction with immutable source handles versus summary-only baselines",
+    "Row-level deduplicate historical context/task/trace mechanisms against current earned-work ledger"
+  ]
+}

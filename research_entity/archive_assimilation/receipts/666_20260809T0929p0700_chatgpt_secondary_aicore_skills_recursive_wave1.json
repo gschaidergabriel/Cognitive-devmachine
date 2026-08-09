@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0929p0700-chatgpt-secondary-aicore-skills-recursive-wave1",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope": {"drive_root": "clay/aicore/skills", "skills_id": "1mFuEdx6gFkoG7rgi14nZBB8_wYdeqKoB"},
+  "method": "parent-scoped Google Drive list_folder enumeration with top_k=1000 for the skills root and all 22 direct folder children; no pattern extrapolation was used",
+  "results": {
+    "skills_direct": {"entries": 28, "folders": 22, "files": 6},
+    "verified_child_pattern": {"child_folders_checked": 22, "entries_per_child": 1, "nested_folders_per_child": 0, "files_per_child": 1, "file_name": "SKILL.md"},
+    "skills_recursive_denominator": {"total_units_below_skills_root": 50, "folder_units": 22, "file_units": 28, "status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED"}
+  },
+  "level0_credit": {"exact_global_percent_added": 0.0, "reason": "The skills subtree denominator is exact, but the combined Level-0 denominator remains unfrozen."},
+  "status": "COMPLETED_SUBTREE_DENOMINATOR_CLOSURE",
+  "observed_at": "2026-08-09T09:29:00+07:00"
+}

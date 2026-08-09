@@ -15,6 +15,7 @@ STATE_FILE="${STATE_ROOT}/andreas_self_hosted_runner_bootstrap.json"
 SERVICE_DIR="${HOME}/.config/systemd/user"
 SERVICE_FILE="${SERVICE_DIR}/claycode-github-runner.service"
 DOWNLOADS_FILE="${STATE_ROOT}/github_runner_downloads.json"
+RUNNERS_FILE="${STATE_ROOT}/github_repository_runners.json"
 
 mkdir -p "${STATE_ROOT}"
 
@@ -27,7 +28,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 path=Path(sys.argv[1]); status=sys.argv[2]; detail=sys.argv[3]
 payload={
-  "schema_version":"1.1",
+  "schema_version":"1.2",
   "status":status,
   "detail":detail,
   "host":socket.gethostname(),
@@ -37,6 +38,7 @@ payload={
   "repo":"gschaidergabriel/clay-global-research-entity",
   "authority_invariant":"model output != execution authority",
   "runner_source_policy":"repository-specific GitHub Actions runner downloads API",
+  "runner_reconciliation_policy":"existing local runner configs are checked against repository identity + scoped labels and repaired fail-closed",
   "desktop_policy":"real Tk mapped-window preflight before starting listener",
 }
 path.parent.mkdir(parents=True,exist_ok=True)
@@ -112,23 +114,97 @@ TOKEN="$(gh api --method POST "repos/${REPO}/actions/runners/registration-token"
 mkdir -p "${RUNNER_ROOT}"
 cd "${RUNNER_ROOT}"
 
-if [[ ! -f .runner ]]; then
-  curl --fail --location --retry 4 --retry-delay 2 --output "${ARCHIVE}.tmp" "${DOWNLOAD_URL}" \
-    || fail "runner_download_failed"
-  mv "${ARCHIVE}.tmp" "${ARCHIVE}"
-  tar xzf "${ARCHIVE}" || fail "runner_extract_failed"
-  rm -f "${ARCHIVE}"
-
-  RUNNER_NAME="andreas-claycode-$(hostname | tr -cs 'A-Za-z0-9._-' '-')"
+configure_runner() {
+  local runner_name="$1"
+  if [[ ! -x ./config.sh ]]; then
+    curl --fail --location --retry 4 --retry-delay 2 --output "${ARCHIVE}.tmp" "${DOWNLOAD_URL}" \
+      || fail "runner_download_failed"
+    mv "${ARCHIVE}.tmp" "${ARCHIVE}"
+    tar xzf "${ARCHIVE}" || fail "runner_extract_failed"
+    rm -f "${ARCHIVE}"
+  fi
   ./config.sh \
     --unattended \
     --url "${REPO_URL}" \
     --token "${TOKEN}" \
-    --name "${RUNNER_NAME}" \
+    --name "${runner_name}" \
     --labels "andreas,claycode,target" \
     --work "_work" \
     --replace \
     || fail "runner_config_failed"
+}
+
+RUNNER_NAME="andreas-claycode-$(hostname | tr -cs 'A-Za-z0-9._-' '-')"
+if [[ -f .runner ]]; then
+  LOCAL_RUNNER_NAME="$(python3 - .runner <<'PY'
+import json,sys
+p=json.load(open(sys.argv[1],encoding='utf-8'))
+name=str(p.get('agentName') or '').strip()
+assert name, p
+print(name)
+PY
+  )" || fail "local_runner_config_invalid"
+  [[ "${LOCAL_RUNNER_NAME}" == andreas-claycode-* ]] || fail "local_runner_name_not_scoped_${LOCAL_RUNNER_NAME}"
+
+  gh api "repos/${REPO}/actions/runners?per_page=100" > "${RUNNERS_FILE}" \
+    || fail "cannot_list_repository_runners_before_reconcile"
+  RUNNER_RECONCILE="$(python3 - "${RUNNERS_FILE}" "${LOCAL_RUNNER_NAME}" <<'PY'
+import json,sys
+payload=json.load(open(sys.argv[1],encoding='utf-8'))
+name=sys.argv[2]
+required={'self-hosted','linux','x64','andreas','claycode','target'}
+rows=[r for r in (payload.get('runners') or []) if str(r.get('name') or '') == name]
+if len(rows)>1:
+    print('DUPLICATE_REMOTE')
+elif not rows:
+    print('REMOTE_MISSING')
+else:
+    labels={str(x.get('name') or '').lower() for x in rows[0].get('labels') or []}
+    missing=sorted(required-labels)
+    if missing:
+        print('LABELS_MISSING:'+','.join(missing))
+    else:
+        print('READY:'+str(rows[0].get('status') or 'unknown'))
+PY
+  )" || fail "runner_reconciliation_probe_failed"
+
+  case "${RUNNER_RECONCILE}" in
+    READY:*)
+      RUNNER_NAME="${LOCAL_RUNNER_NAME}"
+      ;;
+    LABELS_MISSING:*)
+      # The workflow is intentionally pinned to scoped labels. Repair an older runner
+      # registration instead of weakening runs-on. Stop the listener before changing it.
+      systemctl --user stop claycode-github-runner.service 2>/dev/null || true
+      REMOVE_TOKEN="$(gh api --method POST "repos/${REPO}/actions/runners/remove-token" --jq .token 2>/dev/null)" \
+        || fail "cannot_create_runner_remove_token"
+      [[ -n "${REMOVE_TOKEN}" ]] || fail "empty_runner_remove_token"
+      ./config.sh remove --token "${REMOVE_TOKEN}" || fail "runner_remove_for_label_reconcile_failed"
+      RUNNER_NAME="${LOCAL_RUNNER_NAME}"
+      configure_runner "${RUNNER_NAME}"
+      ;;
+    REMOTE_MISSING)
+      # Remote deletion + retained local credentials is a known stale-runner state. Because
+      # target identity is already verified and GitHub confirms no remote runner owns this
+      # name, quarantine only the local registration credentials and configure fresh.
+      systemctl --user stop claycode-github-runner.service 2>/dev/null || true
+      QUARANTINE="${STATE_ROOT}/stale_runner_config_$(date -u +%Y%m%dT%H%M%SZ)"
+      mkdir -p "${QUARANTINE}"
+      chmod 700 "${QUARANTINE}" || true
+      for f in .runner .credentials .credentials_rsaparams .service; do
+        [[ ! -e "$f" ]] || mv "$f" "${QUARANTINE}/$f"
+      done
+      configure_runner "${RUNNER_NAME}"
+      ;;
+    DUPLICATE_REMOTE)
+      fail "duplicate_remote_runner_name_${LOCAL_RUNNER_NAME}"
+      ;;
+    *)
+      fail "unexpected_runner_reconciliation_${RUNNER_RECONCILE}"
+      ;;
+  esac
+else
+  configure_runner "${RUNNER_NAME}"
 fi
 
 # APP-05 is a *real desktop* gate. Import the active graphical-session variables into the
@@ -192,20 +268,20 @@ for _ in $(seq 1 30); do
 done
 systemctl --user is-active --quiet claycode-github-runner.service || fail "runner_service_not_active"
 
-ONLINE_JSON="$(gh api "repos/${REPO}/actions/runners" 2>/dev/null)" || fail "cannot_list_repository_runners"
-python3 - "${ONLINE_JSON}" <<'PY' || fail "no_online_matching_runner"
+ONLINE_JSON="$(gh api "repos/${REPO}/actions/runners?per_page=100" 2>/dev/null)" || fail "cannot_list_repository_runners"
+python3 - "${ONLINE_JSON}" "${RUNNER_NAME}" <<'PY' || fail "no_online_matching_runner"
 import json,sys
-payload=json.loads(sys.argv[1]); rows=payload.get('runners') or []; matched=[]
+payload=json.loads(sys.argv[1]); expected=sys.argv[2]; rows=payload.get('runners') or []; matched=[]
 for row in rows:
     name=str(row.get('name') or '')
     labels={str(x.get('name') or '').lower() for x in row.get('labels') or []}
-    if name.startswith('andreas-claycode-') and row.get('status')=='online' and {'self-hosted','linux','x64','andreas','claycode','target'}.issubset(labels):
+    if name == expected and row.get('status')=='online' and {'self-hosted','linux','x64','andreas','claycode','target'}.issubset(labels):
         matched.append({'id':row.get('id'),'name':name,'status':row.get('status'),'busy':row.get('busy'),'version':row.get('version'),'labels':sorted(labels)})
-assert matched, {'error':'no_online_matching_runner','runners':rows}
+assert len(matched)==1, {'error':'no_unique_online_matching_runner','expected':expected,'runners':rows}
 print(json.dumps({'online_matching_runners':matched},sort_keys=True))
 PY
 
-emit_state "PASS" "runner_online_with_real_desktop_preflight_and_waiting_for_queued_jobs"
+emit_state "PASS" "runner_online_with_scoped_labels_real_desktop_preflight_and_waiting_for_queued_jobs"
 trap - EXIT
 
 echo "CLAYCODE_RUNNER_BOOTSTRAP_PASS"

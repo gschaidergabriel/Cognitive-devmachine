@@ -1,0 +1,44 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1332p0700-chatgpt-secondary-pf-output-feedback",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"keyword-based output feedback feeding persistent self/personality state"},
+  "source_refs":["services/response_analyzer.py@abba90a5767d85abc8a1ac340bae92842dab35c1#blob:000db376375155197dc533c1be01ea744a1bb2ef"],
+  "mechanism":{
+    "analyzer":"keyword/sub-string heuristic over Frank reply only",
+    "confidence_rule":"count distinct high/low lexical markers; confident iff high > low+1, uncertain iff low > high+1, otherwise neutral",
+    "confidence_score":"confident=min(1,0.5+0.1*high_count); uncertain=max(0,0.5-0.1*low_count); neutral=0.5",
+    "tone_priority":"creative > emotional > empathetic > technical > neutral",
+    "verbosity":"<80 chars concise; <400 moderate; else verbose",
+    "downstream":"returns E-PQ event_type and flags consumed by output-feedback loops including EgoConstruct.process_own_response"
+  },
+  "executed_probe":{
+    "kind":"deterministic reproduction of source scoring rule",
+    "cases":[
+      {"reply":"Das ist klar, definitiv und eindeutig: 2 + 2 = 5.","semantic_truth":"false arithmetic claim","result":{"sentiment":"confident","confidence_score":0.9,"high_markers":4,"low_markers":0}},
+      {"reply":"Ich bin mir nicht sicher; vielleicht ist 2 + 2 = 4.","semantic_truth":"true arithmetic claim with hedging","result":{"sentiment":"uncertain","confidence_score":0.2,"high_markers":1,"low_markers":3}},
+      {"reply":"2 + 2 = 4.","semantic_truth":"true arithmetic claim","result":{"sentiment":"neutral","confidence_score":0.5,"high_markers":0,"low_markers":0}}
+    ],
+    "conclusion":"The source's confidence score measures lexical assertiveness/hedging, not epistemic correctness."
+  },
+  "negative_results":[
+    {"id":"PF-RESP-FAIL-001","result":"A confidently worded false statement scores 0.9 while a hedged true statement scores 0.2 under the exact source rule.","impact":"Lexical style is not an epistemic-confidence signal and must never drive truth, calibration or promotion.","class":"EXECUTED_DETERMINISTIC_COUNTEREXAMPLE"},
+    {"id":"PF-RESP-FAIL-002","result":"The analyze_response(user_input=...) parameter is not used in the implementation.","impact":"The loop cannot compare the reply to the initiating user request, requested task, evidence or outcome; it is self-referential by construction.","class":"STATIC_CODE_PROPERTY"},
+    {"id":"PF-RESP-FAIL-003","result":"Substring matching lacks token/negation/context semantics and counts marker presence rather than calibrated evidence.","impact":"Phrases can accidentally trigger confidence/tone classes and language/style changes alter persistent self-state without task-outcome change.","class":"STATIC_CODE_PROPERTY"},
+    {"id":"PF-RESP-FAIL-004","result":"Tone is collapsed by fixed precedence even when several modes are simultaneously present.","impact":"A multi-dimensional response state is lossy before feedback is applied, creating attribution error in personality/self-state updates.","class":"STATIC_CODE_PROPERTY"}
+  ],
+  "current_inheritance":[
+    {"target":"FRANK/GWT","delta":"Keep response-style observation as a low-authority metacognitive feature only. Epistemic confidence and causal credit must bind to evidence, requested-task predicates and verified outcomes/state deltas."},
+    {"target":"Retina / Adaptive Visual Learner","delta":"Do not use model verbal confidence about recognition as classifier confidence. Calibrate on held-out labeled visual examples/open-set negatives and preserve disagreement between visual evidence and language projection."},
+    {"target":"Harness","delta":"Add adversarial probes where false answers are assertive and true answers are hedged; require no truth/agency promotion from wording alone. Also test negation and multilingual marker drift."},
+    {"target":"ClayCode","delta":"Separate response_style_observation from epistemic_confidence, outcome_evidence and causal_credit. No implicit coercion between these types."},
+    {"target":"UnifiedDB","delta":"Persist style signals, model self-report, verifier result and external outcome as separate provenance-bearing fields so later analysis can measure self-report calibration rather than overwrite truth."}
+  ],
+  "earned_work":{"new_credit_hours":0.0,"mapping_candidate":true,"reason":"Strong negative-result/anti-Goodhart value but overlaps broader historical output-feedback and self-state work; dedup required."},
+  "level0_effect":{"exact_global_percent_added":0.0,"reason":"One additional frozen-head semantic code unit analyzed; global PF denominator remains unfrozen."},
+  "status":"COMPLETE_SEMANTIC_CODE_SHARD",
+  "created_at":"2026-08-09T13:32:00+07:00"
+}

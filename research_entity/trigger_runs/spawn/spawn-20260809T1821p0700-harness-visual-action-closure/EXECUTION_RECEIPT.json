@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "run_id":"spawn-20260809T1821p0700-harness-visual-action-closure",
+  "experiment":"visual_familiarity_authority_probe.py",
+  "executed_by":"chatgpt-secondary",
+  "execution_surface":"hosted Python runtime",
+  "source_sha256":"3a64ec4b164a146c9bcb4a15d87d3a6bcbfcbf05c0e0db558c23952ee58979e9",
+  "evidence_class":"SYNTHETIC_HOSTED_PYTHON_MODEL",
+  "result":"PASS_WITH_ARCHITECTURE_COUNTEREXAMPLE",
+  "metrics": {
+    "state_space_cases":720,
+    "current_policy_high_risk_familiarity_only_allows":3,
+    "proposed_policy_high_risk_familiarity_only_allows":0,
+    "proposed_policy_invariant_failures":0,
+    "legitimate_low_risk_fastpath_cases":4,
+    "legitimate_low_risk_allowed":4,
+    "legitimate_high_risk_confirmed_cases":2,
+    "legitimate_high_risk_confirmed_allowed":2
+  },
+  "interpretation":"The proxy exposes a reachable wrong-but-authorized action class when familiarity may be the sole epistemic basis for HIGH-risk commit. A separate risk-sensitive evidence floor closes all modeled instances while preserving modeled low-risk utility.",
+  "scope_limits":[
+    "not production ClayCode execution",
+    "not H1/H2/H3 execution",
+    "not real visual classifier accuracy or calibration measurement",
+    "not Andreas Ubuntu developer-system target evidence",
+    "not live FRANK evidence"
+  ],
+  "promotion":"NONE"
+}

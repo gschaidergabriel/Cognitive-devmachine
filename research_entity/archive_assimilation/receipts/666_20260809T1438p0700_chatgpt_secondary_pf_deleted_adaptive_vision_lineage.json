@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1438p0700_chatgpt_secondary_pf_deleted_adaptive_vision_lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "source_class": "PROJECT_FRANKENSTEIN_GIT_HISTORY_DELETED_CODE",
+  "frozen_project_frankenstein_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "history_commit": "0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+  "history_commit_date": "2026-03-19T17:31:10+01:00",
+  "shard": "Deleted Project-Frankenstein tools/frank_adaptive_vision.py lineage and its semantic distinction from FRANK v0.1 adaptive visual learning",
+  "disposition": "HISTORY_AWARE_DELETED_CODE_ASSIMILATION",
+  "exact_coverage_credit": 0.0,
+  "exact_coverage_reason": "The global Project-Frankenstein tree/history denominator remains unfrozen; a recovered deleted-file shard is material evidence but cannot create exact global completion credit.",
+  "source_refs": [
+    {
+      "kind": "github_commit",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "sha": "0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "role": "deletion/replacement commit whose patch preserves tools/frank_adaptive_vision.py"
+    },
+    {
+      "kind": "deleted_github_file_in_commit_patch",
+      "path": "tools/frank_adaptive_vision.py",
+      "role": "historical two-stage adaptive visual routing implementation"
+    },
+    {
+      "kind": "deleted_github_file_in_commit_patch",
+      "path": "tools/frank_visual_pipeline.py",
+      "role": "historical Stage-1 fast visual detector pipeline used by adaptive routing"
+    },
+    {
+      "kind": "github_file",
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "tools/frank_eye.py",
+      "role": "replacement unified CPU-local visual inference runtime"
+    },
+    {
+      "kind": "rae_contract",
+      "path": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+      "role": "current owner-fixed user-adaptive Micro Visual Classifier requirement"
+    }
+  ],
+  "history_findings": [
+    {
+      "id": "PF-VISHIST-M1",
+      "epistemic_class": "DELETED_RUNTIME_CODE_PRESERVED_IN_COMMIT_DIFF",
+      "finding": "The deleted frank_adaptive_vision.py implemented a two-stage perception policy: Stage 1 fast detectors at about 100 ms always, Stage 2 VLM via Ollama at about 800 ms only when an escalation policy judged Stage 1 insufficient.",
+      "current_mapping": "Direct ancestor of the current cheap-gate/familiar-fast-path versus deeper-perception routing architecture."
+    },
+    {
+      "id": "PF-VISHIST-M2",
+      "epistemic_class": "DELETED_RUNTIME_CODE_PRESERVED_IN_COMMIT_DIFF",
+      "finding": "Its EscalationEngine represented an explicit decision object with needs_vlm, reason, confidence_without_vlm and triggers. It clamped a heuristic confidence score and escalated when confidence fell below 0.55.",
+      "current_mapping": "Useful routing-state shape, but the historical heuristic confidence is not a calibrated open-set familiarity probability."
+    },
+    {
+      "id": "PF-VISHIST-M3",
+      "epistemic_class": "DELETED_RUNTIME_CODE_PRESERVED_IN_COMMIT_DIFF",
+      "finding": "The policy contained cheap-path overrides: text-heavy screenshots could skip VLM because OCR was considered sufficient (confidence 0.9), and diagrams with text labels could skip VLM at confidence 0.75.",
+      "current_mapping": "Strong predecessor for modality/task-specific compute avoidance: cheap evidence can terminate the path when it is sufficient, while uncertainty escalates."
+    },
+    {
+      "id": "PF-VISHIST-M4",
+      "epistemic_class": "GIT_HISTORY_TRANSITION",
+      "finding": "Commit 0fd27f23 explicitly deleted frank_adaptive_vision.py and frank_visual_pipeline.py and replaced them with FrankEye, while adding a DINOv2 INT8 ONNX local visual path.",
+      "current_mapping": "Project-Frankenstein moved from conditional external-VLM escalation toward a unified local CPU inference module; the routing idea survived conceptually but the named adaptive pipeline disappeared from HEAD."
+    },
+    {
+      "id": "PF-VISHIST-M5",
+      "epistemic_class": "SEMANTIC_RECONCILIATION",
+      "finding": "Historical Project-Frankenstein used the word adaptive primarily for adaptive inference/escalation, not for online user-specific classifier learning. No inspected evidence in this deleted file establishes prototype updates, trusted example tiers, sequential class learning, candidate promotion, rollback or user-scoped classifier persistence.",
+      "current_mapping": "Prevents a dangerous lineage error: historical 'adaptive vision' must not be counted as satisfying the current FRANK v0.1 adaptive visual learning requirement."
+    }
+  ],
+  "cross_source_synthesis": {
+    "pf_deleted_adaptive_vision": "adaptive compute routing / escalation based on fast-path sufficiency",
+    "pf_frankeye_head": "unified fixed local perception backbone and description pipeline",
+    "drive_digital_retina": "learned dictionary/prototype/centroid and replay/evaluation lineage",
+    "current_mvc_contract": "user-specific online bounded learning plus calibrated open-set routing, provenance tiers, promotion/rollback/versioning and resource budgets",
+    "synthesis": "Current FRANK v0.1 Retina design can legitimately inherit three different historical mechanisms, but they must remain semantically distinct: (1) fast/deep adaptive routing, (2) local reusable perception features, and (3) learned prototype/dictionary memory. The new MVC contract is the first point where all three are required to coexist under explicit provenance/open-set/recovery laws."
+  },
+  "negative_results_and_guardrails": [
+    "Do not equate the historical name 'Adaptive Visual Pipeline' with online adaptive learning.",
+    "Do not promote the historical 0.55 escalation threshold or 0.9/0.75 override confidences into current acceptance thresholds; they were heuristic routing constants.",
+    "Do not infer that replacing the VLM path with FrankEye preserved every deleted pipeline capability without differential evidence.",
+    "Deleted code is historical evidence and must be preserved as lineage even though it is superseded at HEAD."
+  ],
+  "architecture_delta": {
+    "reuse": [
+      "Explicit fast-path versus deep-path decision object with reasons/triggers.",
+      "Task-sensitive cheap-path termination such as OCR-sufficient screenshots.",
+      "Uncertainty-driven escalation instead of always-on expensive perception.",
+      "Current FrankEye/DINO-style local features as candidate reusable backbone.",
+      "Drive Retina prototype/centroid memory as candidate familiarity layer."
+    ],
+    "required_modernization": [
+      "replace heuristic confidence with calibrated known/unknown/conflict semantics where familiarity is used",
+      "make user-specific learned state versioned and replayable",
+      "add trusted example admission and poisoning resistance",
+      "add candidate shadow evaluation, atomic promotion and rollback",
+      "measure compute savings and task loss rather than assuming adaptive routing is beneficial"
+    ]
+  },
+  "recommended_discriminating_tests": [
+    "Replay the same screenshot/image set through three policies: always-deep, historical heuristic fast/deep routing, and current MVC familiarity+open-set routing; compare task correctness, escalation rate, latency and CPU/RAM cost.",
+    "Separate two ablations: lesion only learned familiarity state while keeping fast/deep policy, then lesion fast/deep policy while keeping classifier predictions. This distinguishes learning benefit from routing benefit.",
+    "Include OCR-heavy screenshots, diagrams, recurring UI states, near-neighbor unknowns and genuinely novel scenes to test whether cheap-path exits are appropriately calibrated."
+  ],
+  "branch_feedback": {
+    "frank": "DELTA: preserve historical adaptive-compute routing separately from adaptive learning; current dissolved Retina should combine both under explicit uncertainty state.",
+    "harness": "DELTA: add differential fast/deep routing replay and separate routing-vs-learning ablations.",
+    "claycode": "DELTA: represent routing decision reason/triggers and learner state as separate typed semantics.",
+    "claygraph": "DELTA: record lineage edges from deleted adaptive routing -> FrankEye and from Drive learned dictionary -> MVC; do not merge them into one undifferentiated 'adaptive vision' node.",
+    "unifieddb": "DELTA: persistence is required for learned MVC state, not necessarily for ephemeral routing decisions; preserve receipts/provenance for both.",
+    "gwt": "NO_CHANGE: no new workspace ignition/broadcast mechanism established.",
+    "emergenz": "DELTA: routing-vs-learning factorial lesions provide a cleaner causal test surface for visual subsystem contribution.",
+    "hyperposition": "NO_CHANGE: no new higher-order set-valued coupling result established.",
+    "clay": "DELTA: historical visual evolution now resolves into three orthogonal axes: routing adaptivity, feature-backbone integration and learned familiarity.",
+    "q12_index": "DELTA: deleted adaptive-vision code recovered as superseded-but-informative history; prevents false earned-work equivalence with the current MVC requirement."
+  },
+  "open_obligations": [
+    "Recover and disposition any other deleted/superseded visual pipeline files/commits relevant to Retina, including runtime measurement receipts.",
+    "Determine whether any historical deployment actually used the deleted Stage-2 VLM escalation path and with what measured escalation/latency/error rates.",
+    "Reconcile the exact external retina_v8.pt lineage against Drive digital-retina/digital-retina-e2e versions.",
+    "Freeze the complete Project-Frankenstein history/tree denominator before any exact Level-0 coverage claim."
+  ],
+  "promotion": {
+    "canonical_claim_promotion": false,
+    "reason": "This receipt preserves a superseded historical mechanism and semantic distinction; it does not establish a new live implementation result or close the Level-0 denominator."
+  }
+}

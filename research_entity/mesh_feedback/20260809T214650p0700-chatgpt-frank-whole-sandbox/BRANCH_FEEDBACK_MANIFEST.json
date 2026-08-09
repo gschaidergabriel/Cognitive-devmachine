@@ -1,7 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "feedback_id": "mesh-feedback-frank-whole-sandbox-20260809T214650p0700",
   "created_at": "2026-08-09T21:46:50+07:00",
+  "updated_at": "2026-08-09T22:08:30+07:00",
   "origin_actor": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
@@ -9,22 +10,37 @@
     "revision": 2,
     "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
   },
-  "frank_main_head_observed": "d6b798f45ac1b6e1c2c0e4be381724bee02e7c15",
+  "frank_main_head_observed": "21dfb30674fd4ffa605bdb438059eb6d1e24f068",
   "epistemic_status": "SANDBOX_EXECUTION_EVIDENCE_WITH_OPEN_BLOCKERS",
-  "scope_guard": "Development evidence for the sandbox only. This is not F6/F7/F8/F9 release acceptance and not a target-machine receipt.",
+  "scope_guard": "Sandbox is sufficient for the current development stage only. This is not F6/F7/F8/F9 release acceptance and not an Andreas target-machine receipt.",
   "sandbox_receipt": {
     "receipt_id": "FRANK-SANDBOX-WHOLE-INTEGRATION-2026-08-09-A",
-    "sha256": "1c68145ed4ed6d69eb90c6a5b311d095327c3c7bfe3e4bc4ccfbf1069e32bf77",
-    "bundle_sha256": "57cdc7ed811ad5bd7437312babdde70b2a2991dfe0b1ccb5248af403c04c898b",
-    "tests": "7/7 PASS",
+    "sha256": "cd494158621fbac5f771a91a6337d1e17fe6f0d84b1d9576b1bdc6066991136c",
+    "bundle_sha256": "5a11aa315b5eeaa3f5ba25bb70025c8f964d2695758bf24fa1924891bec84c42",
+    "tests": "20/20 PASS",
+    "master_status": "PASS_WITH_OPEN_BLOCKERS",
     "stress_cycles": 1200,
     "organ_receipts": 37200,
     "named_organ_contracts": "31/31",
     "individual_lesion_handles": "31/31",
+    "fused_runtime_realizations": 8,
+    "technical_legacy_lineage": "36/36 currently named technical modules",
+    "historical_74_slot_gate": {
+      "measured_total": 74,
+      "named_technical": 36,
+      "unresolved_opaque_non_deletable": 38,
+      "whole_frank_gate": "HOLD_UNRESOLVED_LEGACY_IDENTITIES",
+      "scientific_claim": "NO_FUNCTIONAL_COVERAGE_CLAIM_FOR_UNRESOLVED_SLOTS"
+    },
     "max_recurrence_observed": 6,
-    "vertical_path": "F7 boot receipt -> integrated organ loop -> GRT/Hyperposition -> F6 mock adapter -> visible response -> response_analyzer feedback/re-entry",
-    "sqlite": ["integrity", "foreign_keys", "WAL reader/writer snapshot", "checkpoint"],
-    "f6_security_replay": ["remote fail closed", "HTTP/HTTPS only", "endpoint userinfo forbidden", "redirect destination not reached", "hidden reasoning not persisted"]
+    "deterministic_replay_cycles": 220,
+    "vertical_path": "F7 boot receipt -> integrated 31-organ loop -> GRT/Hyperposition -> prediction/outcome/causal credit -> provenance/identity-bound causal reentry -> F6 mock adapter -> visible response -> response analyzer",
+    "sqlite": ["integrity_check", "foreign_key_check", "WAL multi-reader snapshot", "checkpoint blocked-by-reader control", "post-reader TRUNCATE checkpoint"],
+    "f5_device_state_gate": "stale/divergent repo truth fails closed before canonical DB open; disposable test mode isolated",
+    "f6_security_replay": ["remote fail closed", "HTTP/HTTPS only", "endpoint userinfo forbidden", "redirect destination not reached", "hidden reasoning not persisted", "oversized response >8MiB denied before JSON parse"],
+    "effect_authority": "toolbox/model proposal only; external confirmation issues action-hash-bound transactional lease; retry/restart/parallel double-spend denied",
+    "causal_reentry": ["truthful verified causal exact-next-epoch accepted", "shuffled/provenance-broken/no-reentry controls are no-op", "stale epoch denied", "correlated-only credit denied", "authority delta denied", "episode/signal/causal-identity lineage required and persisted", "overcoupling tripwire tested"],
+    "memory": "bounded selective retention: 128 episodes / 256 verified outcomes with recent exact-duplicate suppression"
   },
   "negative_results": [
     {
@@ -40,75 +56,108 @@
     {
       "id": "NEG-SBX-PROCESSLOCAL-LESION-EFFECT-LEAK",
       "result": "global_workspace_processlocal_ancestor was marked inactive but retained a historical-effect string.",
-      "repair": "Make inactive receipt effect explicit LESIONED; rerun all 31 individual lesions PASS."
+      "repair": "Inactive receipt effect became LESIONED; all 31 individual lesion handles reran PASS."
+    },
+    {
+      "id": "NEG-SBX-LEGACY-REINSTALL-IDENTITY",
+      "result": "INSERT OR REPLACE can delete/recreate SQLite rows and lose technical-lineage identity/probe history.",
+      "repair": "UPSERT DO UPDATE; two install cycles preserve row identity and monotonically advance probe history."
+    },
+    {
+      "id": "NEG-SBX-SQLITE-INTEGRITY-FK-BLINDSPOT",
+      "result": "PRAGMA integrity_check can report ok while foreign-key-invalid rows exist.",
+      "repair": "foreign_key_check is an independent required health invariant."
     }
   ],
   "current_external_evidence": [
     {
       "class": "PRIMARY_LITERATURE",
       "ref": "arXiv:2604.07822",
-      "use": "supports measuring useful recurrence separately from excessive recurrence/overthinking"
+      "use": "useful recurrent depth must be separated from excessive recurrence/overthinking"
+    },
+    {
+      "class": "PRIMARY_LITERATURE",
+      "ref": "arXiv:2608.01710",
+      "use": "durable monotonic authorization state motivated the replay-resistant capability-lease falsifier"
     },
     {
       "class": "AUTHORITATIVE_DOCUMENTATION",
-      "ref": "sqlite.org/wal.html",
-      "use": "supports WAL reader/writer snapshot and checkpoint tests"
+      "ref": "sqlite.org/isolation.html + sqlite.org/wal.html",
+      "use": "WAL snapshot isolation, one-writer semantics and checkpoint-reader interference"
     }
   ],
   "current_cross_worker_deltas": [
     {
       "frank_commit": "2c8ec51806d301e574a3160582c224446461305f",
-      "delta": "F6 endpoint boundary hardened; independently replayed in ChatGPT sandbox PASS."
+      "delta": "F6 endpoint boundary hardened and independently replayed PASS."
     },
     {
-      "frank_commits": ["678a8e80f6c6e0cd0ab21677a0feb04c9ab7c702", "bf9c1fa03efe3d5bb216bdb70ecdd591646a1897"],
-      "delta": "34 recovered technical legacy modules now have lineage and successor probes on main; this improves ancestry coverage but is not yet an exact deduplicated 74-item proof."
+      "frank_commits": ["678a8e80f6c6e0cd0ab21677a0feb04c9ab7c702", "bf9c1fa03efe3d5bb216bdb70ecdd591646a1897", "6a47f2f30285778baf73191a8dc6be89529964a7", "23a7e88f78895f974ad3a44db48e0de454d294e3", "ad194d744765d5ea06df9e94ab38581388572626"],
+      "delta": "Technical legacy lineage increased from 34 to 36 with AURA->Swarm conservation and reinstall-stable identity."
     },
     {
-      "frank_commits": ["1b80ec0f55689c390dc7d8fc68d24f08d54322bf", "c4218e60d90e00ff0d332ca16064d92643e9be50", "d6b798f45ac1b6e1c2c0e4be381724bee02e7c15"],
-      "delta": "Schema migration chains made atomic per physical DB and regression/CI added."
+      "frank_commit": "be92672731cbfce8d0b3f541be7d9003017376b9",
+      "delta": "Measured 74-slot aggregate is now conserved without invented identities: 36 named technical slots + 38 opaque non-deletable unresolved slots; Whole Frank remains HOLD for exact identity completeness."
+    },
+    {
+      "frank_commits": ["1b80ec0f55689c390dc7d8fc68d24f08d54322bf", "c4218e60d90e00ff0d332ca16064d92643e9be50", "d6b798f45ac1b6e1c2c0e4be381724bee02e7c15", "7a5184ce3f9af6e65409d0c48d8f396b96f51f2a", "39aa0bd487cbcd58055791e15c87e56ad6b43d9e"],
+      "delta": "Schema migrations became atomic per physical DB and FK-invalid materializations are rejected; V12/V13 admission semantics remain unresolved."
+    },
+    {
+      "frank_commits": ["0a10d64f6ad297031fae955c1b75ce04dd4757a2"],
+      "delta": "F5 canonical capability refresh now shares Frank boot's fail-closed repo-truth admission boundary."
+    },
+    {
+      "frank_commits": ["f1a2da0c5775a89934efbb31910d0a29ef2a54eb", "12ed02552670d73ecc009ee8bdf2c5bd787751cf", "66b3354b7f4cc61e37afaa7d6d1a70ef4c16018a", "ac3b8455cb18ea6a3a64587c959914d7f44116e1", "21dfb30674fd4ffa605bdb438059eb6d1e24f068"],
+      "delta": "Causal re-entry became a first-class runtime contract and was tightened to episode/signal/causal-identity/provenance exactness with explicit control arms and no authority escalation."
     }
   ],
   "open_blockers": [
     {
       "id": "FRANK-SCHEMA-ADMISSION-V12-V13",
       "status": "OPEN",
-      "evidence": "Current apply_current_schema loads V13 and harness requires research_bug_reports; APPLIED_SCHEMA_MANIFEST_REQUIRED and repo_truth_gate still require UnifiedDB 12.0.",
+      "evidence": "Current loader includes V13 and harness requires research_bug_reports; APPLIED_SCHEMA_MANIFEST_REQUIRED and repo_truth_gate still require UnifiedDB 12.0.",
       "next_test": "Reconcile admission semantics and execute disposable full migration + harness + truth-gate regression before any canonical migration."
     },
     {
-      "id": "FRANK-ANCESTRY-74-COVERAGE",
-      "status": "PARTIAL",
-      "evidence": "Empirical ancestry reports 74 services/modules; 31 organ contracts are explicit and main now conserves 34 recovered technical modules, but overlap and exact residual identities are not yet proven as one 74-item provenance manifest.",
-      "next_test": "History-derived exact inventory with deduplication and machine-readable 74-item coverage receipt; never infer missing names."
+      "id": "FRANK-ANCESTRY-74-IDENTITY-COMPLETENESS",
+      "status": "HOLD_PARTIAL_IDENTITIES",
+      "evidence": "74 measured slots are now explicitly conserved; 36 are currently named technical identities and 38 remain opaque/non-deletable/unmapped. Cognitive organ identity remains separate.",
+      "next_test": "Resolve opaque slots only from primary historical evidence; never infer names/functions."
     },
     {
       "id": "FRANK-F6-REAL-MODEL",
       "status": "OPEN",
-      "next_test": "Run real local candidate model(s) through F6 evaluation on the target Ubuntu developer system."
+      "next_test": "Run real local candidate model(s) through F6 evaluation on Andreas' Ubuntu developer system."
     },
     {
-      "id": "FRANK-F7-F8-RELEASE",
+      "id": "FRANK-F7-F8-F9-RELEASE",
       "status": "OPEN",
       "next_test": "Clean-install/service lifecycle/recovery plus target-host vertical E2E; sandbox PASS is not release acceptance."
     }
   ],
+  "review_branch": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/sandbox-whole-frank-20260809",
+    "scope": "isolated sandbox candidate handoff; no canonical DB; no release promotion",
+    "contains": ["whole-system evidence index", "compact 31-organ/8-realization kernel", "transactional capability lease candidate", "branch-self-contained vertical authority regression"]
+  },
   "research_center_work_events_created": [
     "work:frank-v01-v13-schema-admission-reconcile",
     "work:frank-v01-reconstruct-legacy-74-module-inventory",
     "work:frank-v01-independent-whole-frank-sandbox-replay"
   ],
   "branches": {
-    "frank": {"receipt": "FEEDBACK", "delta": "Sandbox supports one integrated loop-of-loops kernel with preserved organ lineage, explicit receiver closure, bounded recurrence and causal outcome re-entry. Continue integrating current main changes into this vertical path without restoring historical process boundaries.", "required_next_test": "Independent replay on fresh current main plus exact 74 ancestry coverage and V13 admission reconciliation."},
-    "gwt": {"receipt": "FEEDBACK", "delta": "Receiver addressability was separated from delivered/reconstructed/used/effect/re-entry receipts; lesion/rescue is matched-counterfactual rather than sequential.", "required_next_test": "Truthful-vs-shuffled re-entry and receiver lesion/rescue across matched episodes."},
-    "emergenz": {"receipt": "FEEDBACK", "delta": "Recurrence and GWT closure remain observable mechanisms, not emergence truth; preserve nulls and negative results.", "required_next_test": "Factorial recurrence x truthful-reentry x lesion/rescue with outcome and stability controls."},
-    "unifieddb": {"receipt": "FEEDBACK", "delta": "Sandbox WAL snapshot/checkpoint and FK/integrity tests pass; current Frank repo has unresolved V12/V13 admission semantics despite newly atomic migration chains.", "required_next_test": "Disposable full-chain V13 admission test with fail-closed mismatched-state controls."},
-    "claygraph": {"receipt": "FEEDBACK", "delta": "Integrated cycle keeps alternative lineage and effect authority separate from activation; no truth promotion from graph/workspace use.", "required_next_test": "Epoch-bound dynamic topology perturbation and stale-edge controls."},
-    "hyperposition": {"receipt": "FEEDBACK", "delta": "Multiple alternatives persist through selection and are included in the vertical sandbox cycle.", "required_next_test": "Matched branch-reopening versus destructive collapse under stalled trajectories."},
-    "claycode": {"receipt": "FEEDBACK", "delta": "The executable sandbox contract now exposes state, organ receipts, recurrence budget, GWT closure, interventions and causal credit as a compact integration target.", "required_next_test": "Represent the same contract in current ClayCode typed IR without weakening authority/rollback invariants."},
-    "harness": {"receipt": "FEEDBACK", "delta": "7/7 sandbox master regression PASS_WITH_OPEN_BLOCKERS; 1200-cycle stress and 31/31 individual lesions pass after one real lesion-semantics bug was found and fixed.", "required_next_test": "Independent fresh-main replay and differential comparison."},
-    "clayresearch": {"receipt": "FEEDBACK", "delta": "Cross-worker mainline changes were consumed during the run rather than frozen: F6 security, legacy module conservation and migration atomicity all changed the active test surface.", "required_next_test": "Fuse independent replay, schema admission outcome and exact ancestry inventory; preserve disagreements until receipts decide."}
+    "frank": {"receipt": "FEEDBACK", "delta": "One loop-of-loops sandbox body now carries 31 named organ contracts, 36 named technical lineage entries, a conservative 74-slot ledger, bounded recurrence, causal re-entry, F5/F7 fail-closed admission and proposal-only effects with replay-resistant external leases.", "required_next_test": "Independent fresh-main replay plus V13 admission reconciliation and primary-evidence resolution of opaque legacy slots."},
+    "gwt": {"receipt": "FEEDBACK", "delta": "Receiver addressability is separated from delivered/reconstructed/used/effect/re-entry; truthful re-entry now requires exact episode/signal/causal identity and control arms remain no-ops.", "required_next_test": "Factorial truthful-vs-shuffled re-entry with receiver lesion/rescue across matched episodes."},
+    "emergenz": {"receipt": "FEEDBACK", "delta": "Recurrence, receiver closure and re-entry remain measured mechanisms rather than emergence truth; overcoupling is a negative/stability regime, not a score to maximize.", "required_next_test": "Recurrence x truthful-reentry x lesion/rescue x shuffle with outcome, cost and stability controls."},
+    "unifieddb": {"receipt": "FEEDBACK", "delta": "Sandbox WAL/FK/recovery controls pass; current Frank still has V12/V13 admission drift despite atomic migrations and FK materialization rejection.", "required_next_test": "Disposable full-chain V13 admission test with fail-closed mismatched-state controls."},
+    "claygraph": {"receipt": "FEEDBACK", "delta": "Activation and receiver use do not grant re-entry/effect authority; causal identity/provenance is now explicit before state change.", "required_next_test": "Epoch-bound topology perturbation and stale-edge/mixed-epoch controls."},
+    "hyperposition": {"receipt": "FEEDBACK", "delta": "Alternatives survive selection lineage inside the vertical cycle; re-entry is separately provenance-bound.", "required_next_test": "Matched branch reopening versus destructive collapse under stalled trajectories."},
+    "claycode": {"receipt": "FEEDBACK", "delta": "First-class re-entry and loop-regime contracts now align the semantic runtime with executable sandbox falsifiers and authority invariants.", "required_next_test": "Keep executable Python receipts and typed ClayCode contract differentially aligned."},
+    "harness": {"receipt": "FEEDBACK", "delta": "20/20 sandbox master PASS_WITH_OPEN_BLOCKERS; 1200-cycle stress, 31/31 individual lesions, 36/36 technical lineage, 74-slot HOLD guard, deterministic replay, WAL, F5/F6/F7 and effect-authority controls all pass.", "required_next_test": "Independent fresh-main replay and differential comparison."},
+    "clayresearch": {"receipt": "FEEDBACK", "delta": "Concurrent worker changes were repeatedly consumed during this run instead of frozen; new evidence narrowed work rather than duplicating it.", "required_next_test": "Fuse independent replay, V13 admission outcome and primary-evidence legacy identity recovery; preserve HOLD/UNKNOWN states until receipts decide."}
   },
-  "research_write_result": "EXPLICIT_SANDBOX_EVIDENCE_AND_BLOCKERS_RETURNED_TO_RESEARCH_MESH",
+  "research_write_result": "EXPLICIT_SANDBOX_EVIDENCE_NEGATIVE_RESULTS_AND_OPEN_BLOCKERS_RETURNED_TO_RESEARCH_MESH",
   "promotion": "NONE_AUTOMATIC"
 }

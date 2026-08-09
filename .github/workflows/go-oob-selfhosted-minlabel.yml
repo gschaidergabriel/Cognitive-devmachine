@@ -1,0 +1,27 @@
+name: GO OOB self-hosted minimal-label discriminator
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/go-oob-selfhosted-minlabel.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  selfhosted-minlabel:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'chatgpt-secondary/go-oob-selfhosted-minlabel-20260810'
+    runs-on: self-hosted
+    timeout-minutes: 3
+    steps:
+      - name: Observe minimally constrained self-hosted admission
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'experiment=GO-OOB-SELFHOSTED-MINLABEL-V1\n'
+          printf 'repository=%s\n' "$GITHUB_REPOSITORY"
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          printf 'runner_name=%s\n' "${RUNNER_NAME:-UNKNOWN}"
+          printf 'runner_os=%s\n' "${RUNNER_OS:-UNKNOWN}"
+          printf 'runner_arch=%s\n' "${RUNNER_ARCH:-UNKNOWN}"
+          printf 'interpretation=execution falsifies Linux/X64 label mismatch as the only blocker; queued state preserves repo-access/offline/runner-availability alternatives\n'

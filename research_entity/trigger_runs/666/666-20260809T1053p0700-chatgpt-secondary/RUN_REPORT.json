@@ -1,0 +1,56 @@
+{
+  "schema_version":"1.0",
+  "run_id":"666-20260809T1053p0700-chatgpt-secondary",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "gate":"666_RELEASE_GATE",
+  "gate_status":"NOT_PASS",
+  "global_denominator_state":"NOT_FROZEN",
+  "global_exact_coverage_percent":0.0,
+  "status":"RUN_SHARDS_COMMITTED_CROSSREAD_COMPLETE_CURRENT_SURFACE_EXHAUSTED",
+  "campaign_state":"ACTIVE_UNTIL_LEVEL0_PASS",
+  "user_action_required":false,
+  "completed_delta_scopes":[
+    {"scope":"AICORE/.github","recursive_units":3,"files":2,"receipt_commit":"922d50499e190d9ded0498d55db60c3dd92776b6","lease_release_commit":"c7fc266475676121d5dee4d33223fe7967e40c40"},
+    {"scope":"AICORE/configs","recursive_units":1,"files":1,"receipt_commit":"c12ee5361aec9000368bfeaf8222cc886ef12c2a","lease_release_commit":"b820797ad22bf28380fb6f6729ad261503ce9df7"},
+    {"scope":"AICORE/writer","recursive_units":3,"files":2,"receipt_commit":"e38cec9bd750124091036f25b26e287f530da3da","lease_release_commit":"78536acade4800d2962ba28626c812e8b1bd41c1"},
+    {"scope":"AICORE/gateway","recursive_units":4,"files":4,"receipt_commit":"039c46f466306af80e125731bf372f143571fec0","lease_release_commit":"11ca1b997b49e6cb3a72779fa09c4835b7bc3e06"},
+    {"scope":"AICORE/router","recursive_units":2,"files":2,"receipt_commit":"1572f846c938949b328b2ddcd8b9b6a061bbe30d","lease_release_commit":"39541ec3782b021432fd578ebf35544849461cfa"},
+    {"scope":"AICORE/modeld","recursive_units":2,"files":2,"receipt_commit":"face858886391497489a53814ab96f7e58c339b0","lease_release_commit":"2bbee0821b76388da7d52fe35dcfbd6ef07e7c9b"},
+    {"scope":"AICORE/ingestd","recursive_units":2,"files":2,"receipt_commit":"82d6ab81c1f874473f8ef96b0cbf3389615d341f","lease_release_commit":"e168fb257c28dc0f4a1f4a75d1ad42a286bdeb91"}
+  ],
+  "local_delta_totals":{"recursive_units_examined":17,"file_units_semantically_dispositioned":15,"folder_units_in_local_denominators":2,"root_closure_credit_added":0,"reason":"Concurrent swarm evidence already classifies AICORE root as exact-recursive and semantically dispositioned. These are deeper semantic/safety deltas and lineage refinements only."},
+  "major_new_findings":[
+    "Historical writer SandboxExecutor is not a security sandbox: allow_network is unenforced, parent environment is ambient, host filesystem is reachable outside temp cwd; benign execution reproduced host read and outside-cwd write.",
+    "Gateway collapses remote read/create/delete authority into one bearer API key and carries dead allowed_endpoints/max_body_bytes configuration not enforced by runtime.",
+    "Gateway/router upload limits are checked only after full buffering; ingestd streams uploads but lacks any total quota and defaults read_file authority to the whole user home.",
+    "Router contains contradictory Qwen3.5-4B versus qwen2.5-3b identity literals; later Drive router repairs a measured 0/9 history-retention failure absent the frozen PF head, so the repair is preserved as later/uncommitted lineage.",
+    "modeld has BACKENDS={} and rejects every infer target, Core labels it legacy, yet installer enables/starts the service and /health still returns ok:true.",
+    "Docker release workflow has no Harness/security/boot gate, uses mutable image tags and source-path triggering that can leave published image state behind normal source changes.",
+    "Legacy configs/models.yaml single-RLM topology is distinct from later multi-model boot lineage and appears orphaned by frozen-head indexed references."
+  ],
+  "executed_reproductions":[
+    "writer/sandbox with allow_network=false still inherited parent environment, read /etc/hostname and wrote a benign marker outside its temp cwd; marker removed after test.",
+    "Earlier config reproductions retained from prior run: model path split, import-order split epoch, invalid port base fallback and typo DB creation."
+  ],
+  "branch_feedback":{"addendum_commit":"c237fcf0ab0db94ed729bf7aa9db7e7f628d79a1","center_event_commit":"793c5c3d834c9c1738f5d30403ec403f38b69ca1","anti_echo":"New AICORE deltas were deduplicated against the prior webd/updater/docker/config Safety feedback manifest; no earned-work hours added."},
+  "crossread":{"base_commit":"2924631f46ca04846f397e1203ea9d766c6bfd6c","concurrent_commits_observed":169,"drive_root":{"exact_direct_denominator":"15 units = 14 child folders + raw tarball file","verified_closed_child_root_floor":"12/14","closed_percent_floor":85.7142857,"open_or_active_roots":["digital-retina","titan-memory"],"aicore":"already exact-recursive/semantically dispositioned by peer evidence"},"project_frankenstein":{"commit_scope_units":545,"segment01":"232/232 endpoint blobs closed; mechanical output digest open","segment02":"02b non-prefix tail + endpoint blobs open","segment03":"cleanup tail beyond 300-file provider surface + endpoint blobs open","segment04":"path/relevant blob delta complete; output digest waits on exact segment03 state","segment05":"complete"}},
+  "current_surface_blockers":[
+    "Digital-retina and titan-memory remaining Drive roots are under active frontier/support leases; this run does not duplicate them.",
+    "PF Segment03 exact cleanup tail is behind a demonstrated 300-file provider cap. Current connector exposes compare/file fetch but no exact Git tree listing; sampling is forbidden as completion.",
+    "PF Segment02b and other PF blob/path shards are concurrently active; crossread consumed them without overwriting peer work."
+  ],
+  "next_cursor":[
+    "On next 666 pulse, refresh peer leases first; claim a disjoint PF mechanical/path/blob obligation if one is free.",
+    "If Drive digital-retina or titan-memory frontier becomes unleased, take a denominator-preserving non-overlap shard rather than more AICORE refinement.",
+    "After remaining Drive roots and PF path/blob history close, perform cross-source duplicate/version/supersession reconciliation, row-level earned-work dedup, branch-feedback audit and release-manifest validation."
+  ],
+  "historical_earned_work":{"hours_added":0.0,"reason":"New safety findings overlap existing authority/boot/sandbox/persistence work; negative-test value is preserved without duplicate hour credit."},
+  "training":{"executed":false,"authorized":false},
+  "canonical_promotion":{"performed":false,"reason":"Level-0 archival evidence changed; no new scientific revision/generation promotion warranted by this run alone."},
+  "research_write":"COMMITTED",
+  "created_at":"2026-08-09T10:53:00+07:00"
+}

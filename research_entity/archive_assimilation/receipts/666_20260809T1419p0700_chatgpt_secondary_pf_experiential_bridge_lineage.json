@@ -1,0 +1,183 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1419p0700-chatgpt-secondary-pf-experiential-bridge-lineage",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T14:19:30+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "introduction_commit": "3a47fef19027b2677bf96c6d5d6965364251a425",
+    "evidence_class": "PRIMARY_GIT_COMMIT_AND_FROZEN_HEAD_SOURCE_CROSSREAD"
+  },
+  "scope": "Experiential Bridge: tool/chat/room effects -> consciousness.activity_log -> E-PQ / narrative reflection / GWS / idle-context coupling; causal instrumentation, replay limitations and emergence/GWT implications",
+  "non_overlap_check": {
+    "dedicated_experiential_bridge_receipt_found": false,
+    "boundary": "Prior PF authority/context receipts own execution permission and prompt/tool routing. This receipt owns post-effect observation, persistence and re-entry into cognitive state."
+  },
+  "chronology": [
+    {
+      "commit": "3a47fef19027b2677bf96c6d5d6965364251a425",
+      "date": "2026-03-01",
+      "finding": "Experiential Bridge introduced direct cross-process SQLite recording of core-proxy tools, agentic tools, chats and entity sessions into consciousness.db activity_log. Tool success/failure also fired E-PQ events; entity sessions recorded pre/post mood, a narrative reflection and mood-delta-dependent feedback. Daily SQL activity summaries were injected into idle-thought prompts.",
+      "interpretation": "This is a strong historical precursor to effect->outcome->re-entry instrumentation: external action became durable-enough state that could alter future cognition instead of vanishing after the response."
+    },
+    {
+      "commit": "3a47fef19027b2677bf96c6d5d6965364251a425",
+      "date": "2026-03-01",
+      "finding": "The same audit fixed important bridge defects: cross-process get_consciousness_daemon() calls had instantiated heavyweight daemons in the wrong processes; proxy failures were previously not recorded; entity-experience UPDATE WHERE MAX(id) could race; agentic executor lacked E-PQ events.",
+      "interpretation": "Historical negative results show why effect telemetry must be process-safe, append-oriented, include failures, and avoid race-prone post-hoc row mutation."
+    },
+    {
+      "commit": "frozen-head",
+      "date": "2026-04-05",
+      "finding": "Frozen-head core/app.py and agentic/executor.py retain direct activity_log writes. consciousness_daemon retains a 500-row activity ring buffer, structured room experience recording, narrative reflection, GWS room_session_complete broadcast and daily activity summaries. Daily summaries are no longer injected into all deep thoughts; they are restricted to data-driven prompt classes because raw metric injection caused prompt leakage/semantic conflict.",
+      "interpretation": "The bridge survived but evolved toward selective re-entry. This is evidence against indiscriminate global broadcast of every metric into every cognitive context."
+    }
+  ],
+  "frozen_head_mechanism": {
+    "activity_log_fields": ["timestamp", "activity_type", "source", "name", "success", "context", "duration_ms", "mood_before", "mood_after", "epq_snapshot", "metadata"],
+    "ring_buffer_max_rows": 500,
+    "core_proxy_recording": {
+      "activity_type": "tool_use",
+      "source": "core_proxy",
+      "success_default_if_missing_ok": true,
+      "context": "first recognized payload key among query/text/path/title/name/command/event_id, truncated",
+      "duration_ms": 0,
+      "epq_side_effect": "tool_success/tool_failure except selected monitoring tools"
+    },
+    "agentic_recording": {
+      "activity_type": "tool_use",
+      "source": "agentic",
+      "context": "failure error only; success context empty",
+      "duration_ms": "measured",
+      "epq_side_effect": "tool_success/tool_failure"
+    },
+    "room_experience": {
+      "pre_post_mood": true,
+      "summary_and_topics": true,
+      "exit_reason": true,
+      "narrative_reflection": true,
+      "gws_broadcast": "room_session_complete",
+      "mood_delta_metadata": true
+    },
+    "daily_summary_reentry": "selective at frozen head; data-oriented prompt paths rather than unconditional deep-thought injection"
+  },
+  "negative_results_constraints": [
+    {
+      "id": "PF-EB-NR-001",
+      "claim": "Calling a process-local heavyweight consciousness singleton from unrelated processes was an architecture defect; the bridge had to switch to cross-process-safe direct persistence.",
+      "status": "HISTORICAL_NEGATIVE_RESULT_FIXED"
+    },
+    {
+      "id": "PF-EB-NR-002",
+      "claim": "A telemetry path that omits failures biases the self/world model; proxy failures initially were not recorded and were explicitly fixed.",
+      "status": "HISTORICAL_NEGATIVE_RESULT_FIXED"
+    },
+    {
+      "id": "PF-EB-NR-003",
+      "claim": "Race-prone UPDATE of the most recent experience row is unsafe under concurrent inserts; the bridge moved to a single INSERT with correct pre/post mood values.",
+      "status": "HISTORICAL_NEGATIVE_RESULT_FIXED"
+    },
+    {
+      "id": "PF-EB-NR-004",
+      "claim": "The frozen-head 500-row ring buffer is not a durable replay/evidence ledger because old effect observations are intentionally deleted.",
+      "status": "CURRENT_PROVENANCE_CONSTRAINT",
+      "falsifier": "An independently immutable complete event/effect ledger is proven to retain the same events with stable correlation IDs and raw evidence."
+    },
+    {
+      "id": "PF-EB-NR-005",
+      "claim": "Frozen-head bridge records are insufficient for deterministic effect replay: core-proxy records keep only one truncated input hint, no raw result/hash, no request/capability/plan/claim correlation, duration=0; agentic successful calls generally omit inputs/results from this activity record.",
+      "status": "CURRENT_REPLAY_CONSTRAINT"
+    },
+    {
+      "id": "PF-EB-NR-006",
+      "claim": "core proxy success defaults to true when a response dict lacks an explicit ok field, so activity success is not a universally strong outcome contract.",
+      "status": "OUTCOME_SEMANTICS_CONSTRAINT"
+    },
+    {
+      "id": "PF-EB-NR-007",
+      "claim": "Unconditional raw daily-activity injection into deep thoughts was not stable; frozen-head code restricts daily metrics because raw numbers conflicted with deep-thought prompts and caused prompt leakage.",
+      "status": "HISTORICAL_CONTEXT_REENTRY_NEGATIVE_RESULT"
+    },
+    {
+      "id": "PF-EB-NR-008",
+      "claim": "Recording external action and feeding it into mood/E-PQ/GWS is evidence of functional re-entry and causal coupling architecture, not evidence of phenomenal subjective experience.",
+      "status": "EPISTEMIC_BOUNDARY"
+    },
+    {
+      "id": "PF-EB-NR-009",
+      "claim": "Tool success/failure -> E-PQ is a coarse credit signal; successful execution is not equivalent to goal correctness, epistemic truth or beneficial user outcome.",
+      "status": "CREDIT_ASSIGNMENT_CONSTRAINT"
+    }
+  ],
+  "reusable_candidates": [
+    {
+      "mechanism": "effect/outcome event re-enters future cognitive state",
+      "mapping": "DIRECT_PRECURSOR_TO_REENTRY_CLOSURE",
+      "current_targets": ["gwt", "frank", "harness", "emergenz"]
+    },
+    {
+      "mechanism": "cross-process append-oriented event recording",
+      "mapping": "DIRECTLY_REUSABLE_CONCEPT_WITH_STRONGER_SCHEMA",
+      "current_targets": ["unifieddb", "harness"]
+    },
+    {
+      "mechanism": "failure events preserved alongside successes",
+      "mapping": "DIRECTLY_REUSABLE_CONCEPT",
+      "current_targets": ["harness", "unifieddb", "claygraph"]
+    },
+    {
+      "mechanism": "pre/post state and effect duration for bounded episodes",
+      "mapping": "CAUSAL_MEASUREMENT_PRECURSOR",
+      "current_targets": ["gwt", "emergenz", "harness"]
+    },
+    {
+      "mechanism": "selective daily/activity re-entry rather than universal broadcast",
+      "mapping": "REUSABLE_WITH_TYPED_CONTEXT_POLICY",
+      "current_targets": ["gwt", "needle", "claycode"]
+    }
+  ],
+  "architecture_delta": {
+    "preferred_testable_shape": "model proposal -> validated capability -> effect request_id -> executor -> raw effect/outcome receipt with input/result hashes, timings, pre/post state and error -> immutable append-only event history -> derived activity/experience projection -> selective GWT/context re-entry -> later outcome measurement -> causal linkage back to proposal/claim/goal",
+    "key_laws": [
+      "effect telemetry != authoritative effect receipt",
+      "execution_success != goal_success",
+      "derived narrative != raw evidence",
+      "global availability != indiscriminate prompt injection",
+      "functional re-entry != phenomenal consciousness"
+    ],
+    "measurement_obligation": "Test whether truthful effect/outcome re-entry causally improves later decisions using replay, shuffled-reentry controls, lesion/rescue and matched no-reentry baselines."
+  },
+  "branch_feedback": {
+    "frank": "DELTA: preserve external-action-to-self/world-model closure, but derive experience state from authoritative effect/outcome receipts rather than lossy activity telemetry. Separate execution success, goal outcome and affective/intrinsic response.",
+    "harness": "HIGH-PRIORITY: every effect should receive a stable request/effect/outcome ID, input/result hashes, capability decision, timing, pre/post state and rollback link. Add failure-path completeness tests and shuffled-vs-truthful re-entry experiments.",
+    "claycode": "DELTA: encode effect proposal, authorization, execution, receipt, outcome and later re-entry as distinct typed transitions. An activity summary is a derived projection only.",
+    "unifieddb": "DELTA: replace ring-buffer-as-history with immutable append-only effect/outcome events plus bounded derived views. Preserve raw refs while allowing compact daily/experience projections.",
+    "claygraph": "DELTA: actions/outcomes become provenance-bearing temporal edges; narrative reflections and mood interpretations remain derived nodes with links to source receipts.",
+    "gwt": "HIGH-VALUE DELTA: Experiential Bridge is a concrete historical precursor for effect->outcome->re-entry closure. Test causal broadcast utility with truthful-vs-shuffled re-entry, lesion/rescue and delayed-outcome measures.",
+    "emergenz": "DELTA: bridge supplies an intervention surface for causal integration tests; do not count self-referential telemetry as emergence without interaction/synergy and counterfactual evidence.",
+    "hyperposition": "DELTA: pre-outcome candidate interpretations can remain unresolved; commit authoritative event facts first, then attach competing derived interpretations.",
+    "clay": "DELTA: physical bridge modules may dissolve, but semantic separation of effect receipt, derived experience projection and re-entry must survive module collapse.",
+    "q12_index": "DELTA: Experiential Bridge lineage is reusable architecture history; no earned-work hours added until row-level deduplication."
+  },
+  "historical_earned_work": {
+    "mapping_state": "CANDIDATES_ONLY_PENDING_ROW_LEVEL_DEDUP",
+    "new_hours_credit": 0.0
+  },
+  "exact_coverage_credit": 0.0,
+  "coverage_reason": "One semantic/runtime lineage assimilated; full PF history/tree denominator remains unfrozen.",
+  "next_high_value_obligations": [
+    "Map frozen activity_log/runtime DB rows if available and quantify failure/success/re-entry coverage",
+    "Build Harness truthful-vs-shuffled effect re-entry experiment with stable correlation IDs",
+    "Reconcile Experiential Bridge semantics against current GWT effect/outcome and UnifiedDB event contracts",
+    "Row-level deduplicate bridge/history mechanisms against current earned-work ledger"
+  ]
+}

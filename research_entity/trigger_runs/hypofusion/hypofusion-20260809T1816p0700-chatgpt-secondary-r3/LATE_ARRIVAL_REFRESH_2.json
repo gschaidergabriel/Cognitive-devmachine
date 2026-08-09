@@ -1,0 +1,32 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260809T1816p0700-chatgpt-secondary-r3",
+  "refresh":"LIVE_REREAD_2",
+  "observed_head_before_refresh":"125ae155c35c380322a225da29cadf626d71c80c",
+  "material_delta":{
+    "id":"R-HF3-11-STRICT-LALR-CAUSAL-PARTITION",
+    "source_run":"spawn_20260809T1821p0700_claycode_keyword_partition",
+    "evidence_class":"LOCAL_ISOLATED_LINUX_PROXY_NOT_TARGET_HOST",
+    "finding":"Exact D grammar baseline has 13 captured shift/reduce conflicts: 6 ident_if, 6 ident_invariant, 1 nested-newline separator. Removing if/invariant generic identifier aliases leaves one newline conflict; a combined minimal repair removes captured parser-table conflicts and preserves identical parse-tree hashes on four representative cases.",
+    "negative_result":"Strict closure is still NOT proven: after parser-table conflict removal, strict construction stops with LexError because interegular is not installed. CI workflow currently installs lark==1.3.1 only, so dependency/infrastructure failure can masquerade as grammar failure.",
+    "effect_on_prior":"Supersedes the earlier 'strict receipt absent' blocker description. Parser ambiguity is now causally localized with partial repair evidence; the active blocker becomes strict regex-collision validation + full corpus typed-AST/semantic-hash differential + normative source-chain execution.",
+    "counterhypothesis":"A different parser backend or lexical partition can solve the same ambiguity with lower compatibility cost; the minimal repair is not canonical until full-corpus equivalence and strict collision checks pass.",
+    "next_test":"Pin/install interegular support; classify dependency LexError separately; rerun strict build; then full current G9/Dialect parser->typed AST->semantic-hash differential and negative corpus."
+  },
+  "non_material_at_cutoff":[
+    {"commit":"125ae155c35c380322a225da29cadf626d71c80c","message":"ClayCode HTTP SQLite stochastic receipt","effect":"NO_CHANGE","reason":"stochastic selection/dispatch metadata alone is not execution evidence for application acceptance."}
+  ],
+  "all_branch_feedback":{
+    "clayresearch":{"effect":"REVISE","delta":"BASE parser blocker is now localized rather than generic; preserve minimal-repair preference and require dependency-aware strict diagnostics plus full semantic differential before claim advance."},
+    "frank":{"effect":"NO_CHANGE","delta":"No FRANK architecture claim changes; ClayCode parser readiness remains upstream BASE work."},
+    "gwt":{"effect":"NO_CHANGE","delta":"No GWT claim-state change."},
+    "emergenz":{"effect":"NO_CHANGE","delta":"No emergence claim-state change from parser diagnostics."},
+    "claycode":{"effect":"REVISE_BLOCKER","delta":"Prior generic strict-LALR blocker narrows to if/invariant alias ambiguity + newline separator, followed by missing interegular strict-collision dependency. Minimal repair is promising but not frozen until full corpus semantic equivalence passes."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"No higher-order claim change."},
+    "claygraph":{"effect":"NO_CHANGE","delta":"No graph claim change; stable parsed identity remains prerequisite."},
+    "unifieddb":{"effect":"NO_CHANGE","delta":"No DB claim change; stable parsed/canonical identity remains prerequisite."},
+    "harness":{"effect":"REVISE","delta":"Add exact parser conflict fixture and dependency-LexError classification to H2/BASE preflight; do not treat strict-tool dependency failure as semantic parser failure or pass."}
+  },
+  "scientific_promotion":"NONE",
+  "stage_gate_change":"NONE"
+}

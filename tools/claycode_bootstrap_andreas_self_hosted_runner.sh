@@ -15,6 +15,8 @@ STATE_FILE="${STATE_ROOT}/andreas_self_hosted_runner_bootstrap.json"
 SERVICE_DIR="${HOME}/.config/systemd/user"
 SERVICE_FILE="${SERVICE_DIR}/claycode-github-runner.service"
 DOWNLOADS_FILE="${STATE_ROOT}/github_runner_downloads.json"
+DESKTOP_PREFLIGHT_FILE="${STATE_ROOT}/desktop_preflight.json"
+FAILED_DETAIL_WRITTEN=0
 
 mkdir -p "${STATE_ROOT}"
 
@@ -27,7 +29,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 path=Path(sys.argv[1]); status=sys.argv[2]; detail=sys.argv[3]
 payload={
-  "schema_version":"1.1",
+  "schema_version":"1.2",
   "status":status,
   "detail":detail,
   "host":socket.gethostname(),
@@ -36,8 +38,8 @@ payload={
   "created_at":datetime.now(timezone.utc).isoformat(),
   "repo":"gschaidergabriel/clay-global-research-entity",
   "authority_invariant":"model output != execution authority",
-  "runner_source_policy":"repository-specific GitHub Actions runner downloads API",
-  "desktop_policy":"real Tk mapped-window preflight before starting listener",
+  "runner_source_policy":"repository-specific GitHub Actions runner downloads API only when fresh registration is required",
+  "desktop_policy":"real Tk mapped-window preflight plus runner-service environment verification",
 }
 path.parent.mkdir(parents=True,exist_ok=True)
 path.write_text(json.dumps(payload,indent=2,sort_keys=True)+"\n",encoding="utf-8")
@@ -45,12 +47,13 @@ PY
 }
 
 fail() {
+  FAILED_DETAIL_WRITTEN=1
   emit_state "FAIL" "$*"
   echo "CLAYCODE_RUNNER_BOOTSTRAP_FAIL: $*" >&2
   exit 2
 }
 
-trap 'rc=$?; if [[ $rc -ne 0 ]]; then emit_state "FAIL" "unexpected_exit_${rc}"; fi' EXIT
+trap 'rc=$?; if [[ $rc -ne 0 && ${FAILED_DETAIL_WRITTEN:-0} -ne 1 ]]; then emit_state "FAIL" "unexpected_exit_${rc}"; fi' EXIT
 
 cd "${ROOT}"
 
@@ -83,11 +86,19 @@ fi
 
 gh auth status >/dev/null 2>&1 || fail "gh_not_authenticated"
 
-# Use GitHub's repository-specific downloads endpoint, rather than assuming the globally
-# newest actions/runner release has already reached this repository's progressive rollout.
-gh api "repos/${REPO}/actions/runners/downloads" > "${DOWNLOADS_FILE}" \
-  || fail "cannot_list_repository_runner_downloads"
-readarray -t RUNNER_META < <(python3 - "${DOWNLOADS_FILE}" <<'PY'
+mkdir -p "${RUNNER_ROOT}"
+cd "${RUNNER_ROOT}"
+
+# A working existing repository runner does not need a new registration token. Requiring
+# repo-admin registration permission on every restart creates an avoidable transport
+# blocker. The stronger online label check below still proves this runner belongs to the
+# intended repository scope before success is reported.
+if [[ ! -f .runner ]]; then
+  # Use GitHub's repository-specific downloads endpoint, rather than assuming the globally
+  # newest actions/runner release has already reached this repository's progressive rollout.
+  gh api "repos/${REPO}/actions/runners/downloads" > "${DOWNLOADS_FILE}" \
+    || fail "cannot_list_repository_runner_downloads"
+  readarray -t RUNNER_META < <(python3 - "${DOWNLOADS_FILE}" <<'PY'
 import json,re,sys
 rows=json.load(open(sys.argv[1],encoding='utf-8'))
 match=[r for r in rows if r.get('os')=='linux' and r.get('architecture')=='x64']
@@ -98,21 +109,17 @@ assert url.startswith('https://github.com/actions/runner/releases/download/'), u
 assert url.endswith('/'+filename), (url,filename)
 print(url); print(filename)
 PY
-)
-[[ "${#RUNNER_META[@]}" -eq 2 ]] || fail "runner_download_metadata_invalid"
-DOWNLOAD_URL="${RUNNER_META[0]}"
-ARCHIVE="${RUNNER_META[1]}"
+  )
+  [[ "${#RUNNER_META[@]}" -eq 2 ]] || fail "runner_download_metadata_invalid"
+  DOWNLOAD_URL="${RUNNER_META[0]}"
+  ARCHIVE="${RUNNER_META[1]}"
 
-# The registration token is short-lived and is requested only after host identity and
-# local GitHub authentication have both passed.
-TOKEN="$(gh api --method POST "repos/${REPO}/actions/runners/registration-token" --jq .token 2>/dev/null)" \
-  || fail "cannot_create_runner_registration_token"
-[[ -n "${TOKEN}" ]] || fail "empty_runner_registration_token"
+  # The registration token is short-lived and is requested only for fresh registration,
+  # after host identity and local GitHub authentication have both passed.
+  TOKEN="$(gh api --method POST "repos/${REPO}/actions/runners/registration-token" --jq .token 2>/dev/null)" \
+    || fail "cannot_create_runner_registration_token"
+  [[ -n "${TOKEN}" ]] || fail "empty_runner_registration_token"
 
-mkdir -p "${RUNNER_ROOT}"
-cd "${RUNNER_ROOT}"
-
-if [[ ! -f .runner ]]; then
   curl --fail --location --retry 4 --retry-delay 2 --output "${ARCHIVE}.tmp" "${DOWNLOAD_URL}" \
     || fail "runner_download_failed"
   mv "${ARCHIVE}.tmp" "${ARCHIVE}"
@@ -131,9 +138,14 @@ if [[ ! -f .runner ]]; then
     || fail "runner_config_failed"
 fi
 
+[[ -f .runner ]] || fail "runner_registration_state_missing"
+[[ -x ./runsvc.sh ]] || fail "runner_service_entrypoint_missing"
+
 # APP-05 is a *real desktop* gate. Import the active graphical-session variables into the
-# user systemd manager before launching the listener. If the shell lacks them, recover
-# any already-known values from the user manager. Then prove Tk can actually map a window.
+# user systemd manager before launching/restarting the listener. If the shell lacks them,
+# recover any already-known values from the user manager. Then prove Tk can actually map
+# a window. Restarting the service is mandatory: enable --now alone does not refresh the
+# environment of an already-running listener.
 env_keys=()
 for key in DISPLAY WAYLAND_DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR; do
   if [[ -n "${!key:-}" ]]; then env_keys+=("$key"); fi
@@ -149,8 +161,9 @@ while IFS='=' read -r key value; do
   esac
 done < <(systemctl --user show-environment)
 
-python3 - <<'PY' || fail "real_desktop_tk_preflight_failed"
-import json, os
+python3 - "${DESKTOP_PREFLIGHT_FILE}" <<'PY' || fail "real_desktop_tk_preflight_failed"
+import json, os, sys
+from pathlib import Path
 if not (os.environ.get('DISPLAY') or os.environ.get('WAYLAND_DISPLAY')):
     raise SystemExit('NO_GRAPHICAL_SESSION_ENV')
 try:
@@ -160,7 +173,15 @@ except Exception as exc:
 root=tk.Tk(); root.title('ClayCode runner desktop preflight'); root.geometry('240x80+20+20')
 root.update_idletasks(); root.update(); mapped=bool(root.winfo_ismapped()); screen=root.winfo_screen(); root.destroy()
 assert mapped, 'WINDOW_NOT_MAPPED'
-print(json.dumps({'desktop_preflight':True,'screen':screen,'display':bool(os.environ.get('DISPLAY')),'wayland':bool(os.environ.get('WAYLAND_DISPLAY'))}))
+payload={
+    'desktop_preflight':True,
+    'screen':screen,
+    'display':os.environ.get('DISPLAY'),
+    'wayland_display':os.environ.get('WAYLAND_DISPLAY'),
+    'xdg_runtime_dir':os.environ.get('XDG_RUNTIME_DIR'),
+}
+Path(sys.argv[1]).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+print(json.dumps(payload,sort_keys=True))
 PY
 
 mkdir -p "${SERVICE_DIR}"
@@ -184,13 +205,37 @@ WantedBy=default.target
 EOF
 
 systemctl --user daemon-reload || fail "systemd_user_daemon_reload_failed"
-systemctl --user enable --now claycode-github-runner.service || fail "systemd_user_service_start_failed"
+systemctl --user enable claycode-github-runner.service >/dev/null || fail "systemd_user_service_enable_failed"
+systemctl --user restart claycode-github-runner.service || fail "systemd_user_service_restart_failed"
 
 for _ in $(seq 1 30); do
   systemctl --user is-active --quiet claycode-github-runner.service && break
   sleep 1
 done
 systemctl --user is-active --quiet claycode-github-runner.service || fail "runner_service_not_active"
+
+# Verify the restarted listener inherited a real graphical environment. This closes the
+# subtle failure mode where bootstrap preflight passes in the launching shell but an old
+# already-running systemd listener remains headless and later fails APP-05.
+MAIN_PID="$(systemctl --user show --property MainPID --value claycode-github-runner.service)"
+[[ "${MAIN_PID}" =~ ^[1-9][0-9]*$ ]] || fail "runner_service_mainpid_invalid"
+python3 - "${MAIN_PID}" <<'PY' || fail "runner_service_desktop_environment_missing"
+import sys
+pid=sys.argv[1]
+raw=open(f'/proc/{pid}/environ','rb').read().split(b'\0')
+env={}
+for item in raw:
+    if b'=' in item:
+        k,v=item.split(b'=',1)
+        env[k.decode(errors='replace')]=v.decode(errors='replace')
+assert env.get('DISPLAY') or env.get('WAYLAND_DISPLAY'), {
+    'error':'RUNNER_LISTENER_HEADLESS',
+    'has_display':bool(env.get('DISPLAY')),
+    'has_wayland_display':bool(env.get('WAYLAND_DISPLAY')),
+    'has_xdg_runtime_dir':bool(env.get('XDG_RUNTIME_DIR')),
+}
+print('RUNNER_LISTENER_DESKTOP_ENV=PASS')
+PY
 
 ONLINE_JSON="$(gh api "repos/${REPO}/actions/runners" 2>/dev/null)" || fail "cannot_list_repository_runners"
 python3 - "${ONLINE_JSON}" <<'PY' || fail "no_online_matching_runner"
@@ -205,7 +250,7 @@ assert matched, {'error':'no_online_matching_runner','runners':rows}
 print(json.dumps({'online_matching_runners':matched},sort_keys=True))
 PY
 
-emit_state "PASS" "runner_online_with_real_desktop_preflight_and_waiting_for_queued_jobs"
+emit_state "PASS" "runner_online_with_real_desktop_preflight_and_service_environment_verified"
 trap - EXIT
 
 echo "CLAYCODE_RUNNER_BOOTSTRAP_PASS"

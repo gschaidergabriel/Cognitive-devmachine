@@ -1,0 +1,49 @@
+meta_turn TURN_2026-08-09_LATEST_STACK_AND_ORGAN_SCOPE {
+  source=OBSERVABLE_EXPLICIT_RAE_WORK
+  stack=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
+  evidence=[
+    user_correction("all RAE organs use latest ClayCode/ClayGraph/UnifiedDB"),
+    user_correction("visible ClayCode working stream must feed ClayCode research at end of ChatGPT turn"),
+    user_correction("Claude Code must not pay this meta-research cost; latest-ClayCode cognition is enough")
+  ]
+
+  observed_success=[
+    motif("moving stack pointer separates semantic freshness from provider/session identity"),
+    motif("per-turn GWT+state ladder can remain tiny while rich state stays pointer-addressable"),
+    motif("organ-specific surface policy does not require semantic fork")
+  ]
+
+  friction=[
+    bug("universal meta-research rule imposed unnecessary Claude overhead"),
+    bug("hardcoded THINK=CLAYCODE could silently lag newest language candidate"),
+    bug("ClayGraph/UnifiedDB freshness was implicit rather than one resolved stack contract")
+  ]
+
+  hypothesis H1="ClayCode needs a first-class moving semantic-stack reference so cognition can bind to current IR+graph+DB without reloading manuals"
+  counterhypothesis H1c="stack resolution belongs only to orchestration and should not become language semantics"
+  candidate C1={primitive:"stack/ref+epoch+semantic_hash",layer:"reader_projection",benefit:"freshness+token_efficiency",risk:"couple language to repository layout"}
+  disposition C1=REFINE_TO_PROVIDER_NEUTRAL_SEMANTIC_STACK_REF
+
+  hypothesis H2="meta-language learning should be role/cost-scoped rather than required from every organ"
+  counterhypothesis H2c="more organs mining their own traces may improve discovery enough to justify cost"
+  candidate C2={policy:"meta_research_scope",CHATGPT:"ON",CLAUDE:"OFF",future:"explicit"}
+  disposition C2=ADOPT_AS_RAE_ORCHESTRATION_POLICY
+
+  hypothesis H3="latest ClayGraph+UnifiedDB are part of reader grounding, not optional post-hoc context"
+  counterhypothesis H3c="forcing both each turn may create unnecessary context rent"
+  candidate C3={rule:"resolve identities every turn; materialize/fetch only task-neighborhood deltas"}
+  disposition C3=ADOPT_POINTER_FIRST
+
+  preservation=[
+    "hidden provider chain-of-thought is never required or stored",
+    "candidate != promotion",
+    "Claude path remains token-minimal",
+    "evidence > organ preference"
+  ]
+
+  next_test=[
+    "measure stack-marker token rent vs stale-state/reload failures",
+    "compare Claude with and without meta-mining overhead under identical tasks",
+    "test provider-neutral stack IDs independent of GitHub paths"
+  ]
+}

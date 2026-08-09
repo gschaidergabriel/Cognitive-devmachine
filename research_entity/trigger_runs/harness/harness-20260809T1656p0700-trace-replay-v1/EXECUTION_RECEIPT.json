@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260809T1656p0700-trace-replay-v1",
+  "work_package": "H-WP-11-TRACE-REPLAY",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "evidence_class": "LOCAL_SYNTHETIC_EXECUTION",
+  "not_live_frank_evidence": true,
+  "not_target_andreas_ubuntu_execution": true,
+  "not_h1_pass": true,
+  "source_artifact": "research_entity/harness/trace_replay_v1.py",
+  "source_commit": "7177a1ef1dd9bed449e0c9b64ae2a5553bbcfd11",
+  "module_sha256": "89f37f19eda54358c4fc3e872fb4920f70c46bfe9453fc3d22cffb7efd10116b",
+  "environment": {
+    "os": "linux",
+    "arch": "x86_64",
+    "runtime": "trace-replay-v1-self-test",
+    "toolchain": "python-3.13.5",
+    "dependency_hash": "dc2d2c8daa6340070e31f9751f0cd34c6a2bec1aab7407924c588fe41b852738",
+    "fingerprint_hash": "dbdc92b18a3a4a5be71e6d9d8f60f5955d9e157f63b0f3ed4d77dd02ee6e1f27"
+  },
+  "executions": [
+    {
+      "kind": "SELF_TEST",
+      "command_class": "python trace_replay_v1.py --self-test",
+      "status": "PASS",
+      "tests_total": 13,
+      "tests_passed": 13,
+      "tested_properties": [
+        "valid reference trace",
+        "GWT downstream stage requires upstream causal stages",
+        "recurrence cannot mint authority",
+        "externally authorized capability expansion remains representable",
+        "future causal parent rejected",
+        "status snapshot binds final epoch",
+        "deterministic replay requires environment fingerprint",
+        "quarantined memory cannot drive consequential use",
+        "visual familiarity cannot grant authority",
+        "nested recurrent loop identity remains valid",
+        "differential localizes first semantic divergence",
+        "canonical hash is key-order independent",
+        "repeated denial with fixed authority is representable"
+      ]
+    },
+    {
+      "kind": "TARGETED_MUTATION_PROPERTY_SWEEP",
+      "status": "PASS",
+      "mutation_cases": 1400,
+      "mutations_detected": 1400,
+      "families": [
+        "GWT causal-stage prerequisite violations",
+        "effect capability expansion without external authorization"
+      ]
+    },
+    {
+      "kind": "RECURRENCE_DEPTH_STRESS",
+      "status": "PASS",
+      "nested_reentry_depth": 64,
+      "meaning": "Loop-aware trace representation did not reject deep recurrent nesting merely because the architecture is cyclic."
+    },
+    {
+      "kind": "CROSS_IMPLEMENTATION_ID_NORMALIZATION",
+      "status": "PASS",
+      "result": "EQUIVALENT",
+      "meaning": "Different trace/stage implementation ids and harness build hash compare equivalent when the normalized semantic projection is identical."
+    },
+    {
+      "kind": "PY_COMPILE",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "epistemic_boundary": "These tests validate the reference validator against constructed traces and mutations. They do not establish that the live Frank runtime emits complete envelopes, that H1 replay is deterministic on Andreas' Ubuntu host, or that H2 is equivalent to H1.",
+  "next_execution": "Integrate a non-authoritative adapter against frozen H1 trace fixtures after BASE passes, then execute on Andreas' Ubuntu target and a compiled/outside-in fault lane."
+}

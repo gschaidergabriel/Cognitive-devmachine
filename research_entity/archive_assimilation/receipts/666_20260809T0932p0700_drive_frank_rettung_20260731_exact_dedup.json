@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0932p0700-drive-frank-rettung-20260731-exact-dedup",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status": "TERMINAL_EXACT_DUPLICATE",
+  "source_root": "Drive:1zsb18bg0W8Ri8bgqZBkpTNTD-7fPKhT3:frank-rettung-2026-07-31",
+  "duplicate_of": "Drive:1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6:frank-rettung",
+  "proof_manifest": "research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_20260731_EXACT_DEDUP_20260809T0931p0700.json",
+  "proof": {"recursive_leaf_count":10,"byte_identical_pairs":10,"aggregate_tree_sha256":"69766984f25439c50b3e3a9defdc26c811563c4864ecd182c434f765d43443b9"},
+  "semantic_reuse": "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json",
+  "new_findings": [],
+  "negative_results": [],
+  "branch_feedback": {
+    "frank":"NO_CHANGE_EXACT_DUPLICATE; preserve second Drive provenance only.",
+    "harness":"NO_CHANGE_EXACT_DUPLICATE; existing IdentityForge/Genesis recovery feedback remains authoritative for this content.",
+    "clay":"NO_CHANGE_EXACT_DUPLICATE.",
+    "claycode":"NO_CHANGE_EXACT_DUPLICATE.",
+    "claygraph":"ADD_PROVENANCE_ALIAS_ONLY; two Drive roots point to byte-identical historical content.",
+    "unifieddb":"ADD_PROVENANCE_ALIAS_ONLY; content identity is shared while source-instance provenance remains distinct.",
+    "q12_index":"NO_NEW_SEMANTICS; second rescue root is a proven duplicate and must not inflate historical evidence or effort counts."
+  },
+  "progress_accounting": {"new_semantic_credit":0,"new_earned_work_hours":0.0,"exact_level0_global_coverage_awarded_percent":0.0,"source_copy_terminally_disposed":true},
+  "decision_trace": "Direct recursive enumeration found 10 leaves. Raw download of every source/target leaf was SHA-256 hashed and byte-compared. All 10 pairs matched. Therefore semantic analysis is reused rather than repeated; both physical Drive provenance roots remain recorded.",
+  "observed_at": "2026-08-09T09:32:00+07:00"
+}

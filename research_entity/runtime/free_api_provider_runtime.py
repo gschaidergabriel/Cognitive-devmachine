@@ -25,11 +25,13 @@ class ProviderSpec:
     priority: int
     openai_compatible_base_url: str
     free_or_prepaid_only: bool = True
+    zero_cost_evidence: str | None = None
 
 
 PROVIDERS = (
     ProviderSpec("nvidia", ("NVIDIA_API_KEY", "NVCF_API_KEY"), 100,
-                 "https://integrate.api.nvidia.com/v1"),
+                 "https://integrate.api.nvidia.com/v1", True,
+                 "nvidia_developer_program_free_prototype_endpoint"),
     ProviderSpec("groq", ("GROQ_API_KEY",), 80, "https://api.groq.com/openai/v1"),
     ProviderSpec("cerebras", ("CEREBRAS_API_KEY",), 75,
                  "https://api.cerebras.ai/v1"),
@@ -40,24 +42,45 @@ PROVIDERS = (
 )
 
 
+def _attested_zero_cost_providers(environ: dict[str, str]) -> set[str]:
+    """Return explicitly operator-attested zero-cost provider IDs.
+
+    A key proves configuration, not billing state.  Non-NVIDIA providers therefore
+    fail closed unless the execution host explicitly attests that its account/project
+    is on a zero-cost plan.  The attestation contains provider IDs only, never secrets.
+    """
+    raw = environ.get("FRANK_ZERO_COST_ATTESTED_PROVIDERS", "")
+    return {
+        provider_id.strip().lower()
+        for provider_id in raw.split(",")
+        if provider_id.strip() and provider_id.strip().lower() not in DENIED_PROVIDERS
+    }
+
+
 def _configured_key_name(spec: ProviderSpec, environ: dict[str, str]) -> str | None:
     return next((name for name in spec.key_names if environ.get(name, "").strip()), None)
 
 
 def inventory(environ: dict[str, str] | None = None) -> list[dict]:
     env = os.environ if environ is None else environ
+    attested = _attested_zero_cost_providers(env)
     rows = []
     for spec in PROVIDERS:
         if spec.provider_id in DENIED_PROVIDERS:
             continue
         key_name = _configured_key_name(spec, env)
+        zero_cost_evidence = spec.zero_cost_evidence
+        if spec.provider_id in attested:
+            zero_cost_evidence = "operator_zero_cost_attestation"
         row = asdict(spec)
         row["key_names"] = list(spec.key_names)
         row.update({
             "configured": key_name is not None,
             "configured_via": key_name,
             "secret_exposed": False,
-            "eligible": bool(key_name and spec.free_or_prepaid_only and ZERO_COST_ONLY),
+            "zero_cost_assured": zero_cost_evidence is not None,
+            "zero_cost_evidence": zero_cost_evidence,
+            "eligible": bool(key_name and zero_cost_evidence and ZERO_COST_ONLY),
         })
         rows.append(row)
     return sorted(rows, key=lambda x: (-x["priority"], x["provider_id"]))

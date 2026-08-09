@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"frank-20260809T1921p0700-chatgpt-secondary-active-assembly-cascade",
+  "finding_source":"research_entity/trigger_runs/frank/frank-20260809T1926p0700-chatgpt-secondary-adversarial-fusion/FINAL_REPORT.md",
+  "finding":"Same-ancestry opposite propositions could be hidden by max_per_ancestry despite sufficient total item budget.",
+  "status":"FIXED_IN_REFERENCE_COMPONENT",
+  "implementation_commit":"1bdae62689070b3b083ce4acaead4e52f05aac71",
+  "test_commit":"c9a1a9852d2fd0046a8e731084449ba3cd9f89a9",
+  "semantic_change":"Conflict representatives may bypass ancestry-family duplicate-support caps while still consuming the hard total item budget; they are marked CONFLICT_VISIBILITY and receive independent_replication_credit=false. Tight total budgets remain hard and omitted alternatives retain re-expansion references.",
+  "additional_preserved_concurrent_delta":"Packet identity is content/provenance-bound; exact duplicate delivery is idempotent and same packet_id with different content fails closed.",
+  "execution_class":"HOSTED_PYTHON_SEMANTIC_REPLAY_OF_COMMITTED_ALGORITHM",
+  "execution_results":{
+    "same_ancestry_two_opposites_budget2":"PASS_BOTH_VISIBLE",
+    "replication_credit":"PASS_FALSE_FOR_CONFLICT_VISIBILITY",
+    "same_ancestry_two_opposites_budget1":"PASS_HARD_BUDGET_AND_REEXPAND_REF",
+    "echo_conflict_trials":5000,
+    "naive_top3_counterevidence_retained":4212,
+    "patched_ancestry_conflict_aware_counterevidence_retained":5000
+  },
+  "limitation":"The connected GitHub file surface was not mounted into the hosted Python runtime, so the regression execution recreated the committed algorithm semantics rather than importing the repository file byte-for-byte. GitHub content writes themselves are durable; target-Ubuntu execution remains required.",
+  "promotion":"NONE"
+}

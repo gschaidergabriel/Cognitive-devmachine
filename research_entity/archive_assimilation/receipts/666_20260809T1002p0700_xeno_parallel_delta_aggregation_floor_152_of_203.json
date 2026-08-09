@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1002p0700-xeno-parallel-delta-aggregation-floor-152-of-203",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "purpose": "Advance the append-only XENO G8 hash-closure aggregation floor by merging only disjoint committed sources and implementation deltas that were intentionally excluded from the previous 108/203 floor because they were concurrent.",
+  "base": {
+    "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0954p0700_xeno_parallel_delta_aggregation_floor_108_of_203.json",
+    "verified_leaves": 108,
+    "expected_leaves": 203,
+    "included_scopes": ["capability","delivery","evidence","hypotheses","state","reports","credit","archive","claude_code","directcode","language","selective","traffic"]
+  },
+  "disjoint_committed_deltas": [
+    {
+      "scope": "sources",
+      "leaves": 22,
+      "bytes": 144677,
+      "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0958p0700_chatgpt_secondary_xeno_sources_hash_closure.json",
+      "commit": "9e03529c7d09d9224e6c0e83ab5263ee6766742e",
+      "mismatches": 0,
+      "missing": 0,
+      "extra": 0
+    },
+    {
+      "scope": "implementation",
+      "leaves": 22,
+      "bytes": 56796,
+      "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0958p0700_chatgpt_secondary_xeno_implementation_hash_closure.json",
+      "commit": "d6b2f514a6f33255c5ede7647a5c826e7aa02a47",
+      "mismatches": 0,
+      "missing": 0,
+      "extra": 0
+    }
+  ],
+  "aggregation": {
+    "base_leaves": 108,
+    "delta_leaves": 44,
+    "verified_floor": 152,
+    "expected_leaves": 203,
+    "remaining": 51,
+    "leaf_coverage_percent_floor": 74.876847,
+    "mismatches_across_added_deltas": 0,
+    "double_credit_check": "PASS_SCOPES_DISJOINT",
+    "active_scope_excluded": "provenance",
+    "active_scope_state": "CLAIMED_BY_PEER"
+  },
+  "shared_task_mutation": "NOT_PERFORMED_APPEND_ONLY_TO_AVOID_CONCURRENT_CAS_RACE",
+  "semantic_credit_added": 0.0,
+  "global_level0": {
+    "gate": "NOT_PASS",
+    "exact_global_percent_added": 0.0,
+    "reason": "152/203 is only the XENO extracted-copy manifest reconciliation floor. The combined Level-0 Drive + Project-Frankenstein denominator and final reconciliation/audit are not complete."
+  },
+  "status": "VERIFIED_PARALLEL_AGGREGATION_FLOOR",
+  "created_at": "2026-08-09T10:02:00+07:00"
+}

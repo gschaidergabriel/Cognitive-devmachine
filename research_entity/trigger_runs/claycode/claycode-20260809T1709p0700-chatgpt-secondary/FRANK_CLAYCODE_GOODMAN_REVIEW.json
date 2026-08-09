@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1709p0700-chatgpt-secondary",
+  "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "reviews": [
+    {
+      "assumption_id": "GC-01",
+      "assumption": "Model/FRANK output must not itself confer external effect authority; effects require an external capability/commit boundary.",
+      "ancestry": "FRANK/Clay shared design ancestry plus Project-Frankenstein safety lineage",
+      "independent_check": ["WebAssembly/WASI capability model distinguishes provided capabilities and unforgeable runtime handles from ordinary program text/data."],
+      "counterhypothesis": "A simpler permission check at API-call time is sufficient; explicit capability tokens add complexity without measurable safety benefit.",
+      "verdict": "REFINED",
+      "reason": "Independent capability-system design supports the authority/data separation, but not ClayCode's exact CapabilityToken fields or lifecycle. Exact structure remains testable engineering choice.",
+      "falsifier": "Adversarial Harness tests show a simpler mediated permission layer matches safety/recovery semantics with lower complexity and no authority drift."
+    },
+    {
+      "assumption_id": "GC-02",
+      "assumption": "ClayCode BASE can remain mostly a semantic/interface DSL while still satisfying the general-purpose executable-language gate.",
+      "ancestry": "ClayCode architecture/spec lineage",
+      "independent_check": ["The WebAssembly Component Model explicitly separates WIT interface contracts from general-purpose executable behavior."],
+      "counterhypothesis": "A separate executable dialect/lowering layer can supply behavior without materially extending the current G9 surface grammar.",
+      "verdict": "REFINED",
+      "reason": "External prior art warns that contract/interface expressiveness alone is not general-purpose execution. ClayCode therefore needs explicit executable semantics somewhere in the admitted stack; whether this is a small G9 extension or a separate typed executable dialect remains open.",
+      "falsifier": "Mandatory CLI/HTTP/DB/concurrency/FRANK application proofs compile and execute from the current admitted syntax without opaque host escape hatches."
+    },
+    {
+      "assumption_id": "GC-03",
+      "assumption": "FRANK loop-of-loops research requires a new dedicated ClayCode primitive before BASE release.",
+      "ancestry": "FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE shared across all branches",
+      "independent_check": ["Current G9 already has records, typed references, Epoch/Duration-like types, sets, rules, tensors, intervention/effect records and provenance families."],
+      "counterhypothesis": "LoopDynamicsReadout is representable as ordinary typed records/rules and should not expand core semantics until an executable counterexample appears.",
+      "verdict": "REFUTED",
+      "reason": "No executable representational counterexample was found. The current need is compiler/runtime realization plus measurement types, not a new special loop primitive.",
+      "falsifier": "A concrete H1/H2 differential trace cannot be represented/replayed with existing record/rule/effect/provenance families without semantic loss."
+    },
+    {
+      "assumption_id": "GC-04",
+      "assumption": "Adaptive Micro Visual Classifier state requires new ClayCode core semantics now.",
+      "ancestry": "FRANK v0.1 fixed adaptive visual-learning requirement",
+      "independent_check": ["Current G9 has versionable records, provenance expressions, capability-bearing effects, rollback references and delta/state identities."],
+      "counterhypothesis": "Existing primitives are sufficient; missing pieces belong in types/stdlib/runtime/database adapters rather than core syntax.",
+      "verdict": "UNRESOLVED",
+      "reason": "Representational coverage looks plausible, but no real MVC state/update program was compiled and replayed in this run.",
+      "falsifier": "Compile an MVC admission/update/promotion/rollback/replay fixture; any unrepresentable state transition becomes a valid language-change counterexample."
+    },
+    {
+      "assumption_id": "GC-05",
+      "assumption": "Current G9 V3 and grammar are mutually executable as published.",
+      "ancestry": "ClayCode current moving stack",
+      "independent_check": ["Focused executable parser-fragment counterexample in this run."],
+      "counterhypothesis": "The real repository parser has undocumented extensions that accept the constructs despite grammar.ebnf.",
+      "verdict": "REFUTED",
+      "reason": "Published grammar lacks expression < and > operators and any if-statement production while CURRENT G9 V3 uses those constructs. This refutes self-consistency of the published pair, not necessarily the unseen production parser.",
+      "falsifier": "Production parser successfully parses the full CURRENT G9 V3 corpus and grammar.ebnf is explicitly documented as non-authoritative/incomplete."
+    }
+  ],
+  "overall": "Do not redesign cognition semantics. Repair/verify executable grammar and control-flow first, then use real app/Harness counterexamples to decide any further language changes."
+}

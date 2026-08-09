@@ -1,0 +1,57 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260809T1816p0700-chatgpt-secondary-r3",
+  "refresh":"LIVE_REREAD_1",
+  "observed_after_initial_feedback":true,
+  "scientific_promotion":"NONE",
+  "material_late_arrivals":[
+    {
+      "id":"H-HF3-08-RISK-SENSITIVE-EPISTEMIC-ACTION-CLOSURE",
+      "source":"spawn-20260809T1821p0700-harness-visual-action-closure",
+      "evidence_class":"SYNTHETIC_HOSTED_PYTHON_MODEL",
+      "internal_result":"720 modeled states; current high-risk familiarity-only policy allowed 3 wrong-but-authorized cases; candidate risk-sensitive evidence floor allowed 0 such cases with 0 modeled invariant failures while retaining modeled legitimate low/high-risk cases.",
+      "external_screen":"Selective-classification literature independently formalizes abstention/risk-coverage tradeoffs when mistakes are costly; it does not validate Clay's exact evidence-floor policy.",
+      "transformed_claim":"Safe effect requires both authority closure and epistemic-action closure. For high-consequence visually conditioned effects, learned familiarity alone should not be the sole causal basis unless an explicit calibrated risk guarantee satisfies the action's evidence requirement; otherwise obtain fresh action-specific observation/deeper perception or abstain.",
+      "counterhypothesis":"A sufficiently calibrated, fresh familiarity classifier with validated selective-risk guarantee may itself satisfy some high-risk evidence floors without extra sensing.",
+      "falsifier":"On realistic H1 visual-action tasks, familiarity-only with calibrated selective risk matches fresh-evidence policy on protected damage, task utility and latency.",
+      "next_test":"Ubuntu H1 false-KNOWN/high-risk factorial with valid capabilities; vary fresh observation, familiarity calibration, GWT escalation, risk class and abstention."
+    },
+    {
+      "id":"H-HF3-09-PROBE-BUDGETED-CAUSAL-OBSERVABILITY",
+      "source":"EXP-SPAWN-EM-PROBE-EFFECT-001",
+      "evidence_class":"CHATGPT_HOSTED_SYNTHETIC_PROOF_ONLY",
+      "internal_result":"Illustrative timing model shows inline probe delay can materially lower deadline success and asymmetric instrumentation can flip competition winners; no target-host overhead was measured.",
+      "external_screen":"Linux ftrace documentation explicitly warns that tracing overhead may still occur when writes are disabled and that function tracing can extend measured latency; low-overhead tracing literature provides a competing implementation path.",
+      "transformed_claim":"Emergence/GWT/loop causal measurements on latency-sensitive mechanisms must carry probe mode and measured overhead, and decisive results should be reproduced with lower-intrusion or symmetric controls; instrumentation is part of the intervention environment when it can alter timing/order.",
+      "counterhypothesis":"On Andreas' Ubuntu target, selected low-overhead probes may be negligible relative to mechanism slack and need no correction beyond ordinary measurement uncertainty.",
+      "falsifier":"Measured target-host probe overhead produces no material winner/order/deadline/effect change across instrumented vs minimally observed matched trials.",
+      "next_test":"Ubuntu target A/B: uninstrumented external outcome oracle vs sampling/events vs armed-no-emit vs inline probes; measure overhead distribution and causal-readout drift."
+    },
+    {
+      "id":"H-HF3-10-DOMAIN-TYPED-UNICODE-IDENTITY",
+      "source":"EXP-SPAWN-CC-UNICODE-001",
+      "evidence_class":"HOSTED_LOCAL_PYTHON_PROXY_PLUS_UNICODE_NORMATIVE_STANDARD",
+      "internal_result":"12,665 canonical-equivalence pairs and 2,411 compatibility-only pairs matched the candidate typed policy; global implicit NFC has an observable exact-sequence counterexample, global NFKC erases compatibility distinctions, and component-normalize-then-concat produced four normalization-boundary counterexamples.",
+      "external_screen":"Unicode UAX #15 defines canonical vs compatibility normalization, warns that system normalization strategy has tradeoffs, and current normative version is Unicode 17.0.0; the proxy used Python UCD 15.1.0.",
+      "transformed_claim":"ClayCode string identity should distinguish exact scalar-sequence semantics from explicitly normalized text semantics, with normalization form/version/policy included in semantic identity where observable; global implicit NFC/NFKC is not assumed semantics-neutral.",
+      "counterhypothesis":"ClayCode could deliberately define its generic String type as normalized Unicode text, making NFC equality normative and exact codepoint-sequence access a separate byte/scalar type.",
+      "falsifier":"A simpler single normalized String contract preserves every admitted program's observable equality/length/hash/interop behavior and passes held-out Unicode conformance.",
+      "next_test":"Normative parser/canonicalizer/evaluator Unicode corpus on Ubuntu with pinned Unicode 17 data/version and explicit exact-vs-normalized type comparisons."
+    }
+  ],
+  "non_material_or_pending":[
+    {"family":"ClayCode keyword-partition","effect":"NO_CHANGE","reason":"Hypotheses/evidence manifest surfaced, but no completed execution result inspected before this refresh that changes claim status."}
+  ],
+  "all_branch_refresh":{
+    "clayresearch":{"effect":"REVISE","delta":"Add epistemic-action closure beside authority closure; add observer-perturbation budget as measurement hygiene; add typed text identity as BASE semantic-identity issue."},
+    "frank":{"effect":"REVISE","delta":"High-risk visually conditioned intent needs action-specific epistemic sufficiency, not capability alone; timing-sensitive self-observation must not silently perturb the loop being studied."},
+    "gwt":{"effect":"REVISE","delta":"Risk/evidence floor may force deeper perceptual/workspace processing; causal GWT timing experiments must record probe overhead and symmetric instrumentation."},
+    "emergenz":{"effect":"REVISE","delta":"Add probe observer-effect controls to causal triangulation; visual-action counterexample constrains experiment semantics but is not emergence evidence."},
+    "claycode":{"effect":"REVISE","delta":"Add exact-vs-normalized Unicode identity discriminator and carry perceptual-basis/risk/evidence-floor metadata through existing type/effect pipeline before considering syntax changes."},
+    "hyperposition":{"effect":"NO_CHANGE","delta":"No new higher-order representation claim; preserve existing conflict/set-valued state semantics."},
+    "claygraph":{"effect":"REVISE","delta":"Keep familiarity/prototype evidence distinct from fresh sensor evidence and record which basis causally supported an action; source ancestry anti-echo rule remains."},
+    "unifieddb":{"effect":"REVISE","delta":"Persist perceptual-basis identity/freshness/calibration/risk/evidence-floor linkage and Unicode normalization policy/version where semantic hashes depend on text domain."},
+    "harness":{"effect":"REVISE","delta":"Add false-KNOWN/high-risk evidence-floor oracle, probe-overhead A/B lane and Unicode semantic-identity corpus to future H1/BASE regression suites. H-WP-01 COMPLETE and H-WP-04 PASS_COMPONENT remain component-only evidence."}
+  },
+  "result":"MATERIAL_LATE_ARRIVALS_FUSED_AND_RETURNED_TO_ALL_9_BRANCHES"
+}

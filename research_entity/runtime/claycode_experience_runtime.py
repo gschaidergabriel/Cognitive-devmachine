@@ -28,10 +28,8 @@ LAYER_MAP={
 
 def _j(x:Any)->str:
     return json.dumps(x if x is not None else {},ensure_ascii=False,sort_keys=True,separators=(",",":"))
-
 def init_tables(rt:RAEStateRuntime)->None:
     rt.u.executescript(MIGRATION.read_text(encoding="utf-8"));rt.u.commit()
-
 def record(
     rt:RAEStateRuntime,*,node_id:str,signal_class:str,direction:str,magnitude:float,confidence:float,
     symptom:Any,evidence:Any,episode_id:str|None=None,cycle_id:str|None=None,task_shape:str|None=None,
@@ -47,7 +45,6 @@ def record(
        max(0,min(1,float(confidence))),_j(evidence),layer,_j(symptom),_j(preferred_property),
        _j(evidence_refs or []),token_cost_estimate,latency_cost_ms,repair_cost_estimate,"OPEN",ts)
     );rt.u.commit();return oid
-
 def _candidate_template(signal:str,layer:str)->tuple[dict,dict,dict,dict,dict]:
     h={"claim":f"changing ClayCode/{layer} can improve repeated {signal} outcomes"}
     ch={"claim":"observed pattern is task/provider noise or upstream architecture issue, not ClayCode"}
@@ -55,7 +52,6 @@ def _candidate_template(signal:str,layer:str)->tuple[dict,dict,dict,dict,dict]:
     fals={"rule":"matched-budget replay shows no improvement or introduces hard-loss regression"}
     bench={"arms":["current","candidate"],"controls":["same task","same evidence","same model/provider when feasible"],"require":["counterevidence","negative_results","rollback"]}
     return h,ch,gain,fals,bench
-
 def derive(rt:RAEStateRuntime,observation_id:str,pattern_key:str|None=None)->str:
     init_tables(rt)
     o=rt.u.execute("SELECT * FROM rae_experience_observations WHERE observation_id=?",(observation_id,)).fetchone()
@@ -78,10 +74,9 @@ def derive(rt:RAEStateRuntime,observation_id:str,pattern_key:str|None=None)->str
     else:
         cid=uid("cc-research");h,ch,gain,fals,bench=_candidate_template(signal,layer)
         status="READY_FOR_EXPERIMENT" if impact>=.85 else "ACCUMULATING"
-        rt.u.execute("INSERT INTO claycode_research_candidates VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        rt.u.execute("INSERT INTO claycode_research_candidates VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
           (cid,ts,ts,signal,layer,key,_j([observation_id]),1,positive,negative,float(o["confidence"]),impact,_j(h),_j(ch),_j(gain),_j(fals),_j(bench),None,status,"MATCHED_BUDGET_REPLAY_AND_NO_HARD_LOSS"))
     rt.u.execute("UPDATE rae_experience_observations SET status='ROUTED' WHERE observation_id=?",(observation_id,));rt.u.commit();return cid
-
 def queue(rt:RAEStateRuntime,limit:int=20)->list[dict[str,Any]]:
     init_tables(rt)
     return [dict(r) for r in rt.u.execute("SELECT * FROM v_claycode_experience_research_queue LIMIT ?",(int(limit),))]

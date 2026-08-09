@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1356p0700_chatgpt_secondary_pf_native_vision_supersession",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"active visual-path supersession after FrankEye and distinction from later Digital Retina learner lineage"},
+  "source_refs":[
+    "commit:6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+    "tools/native_vision.py@6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+    "tools/native_vision.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "tools/frank_eye.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "research_entity/archive_assimilation/receipts/666_20260809T1348p0700_chatgpt_secondary_pf_drive_retina_transition_lineage.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json"
+  ],
+  "finding":{
+    "event":"On 2026-03-31 commit 6158be8 introduced tools/native_vision.py and changed active visual consumers from FrankEye to Qwen3.5 native multimodal vision. The file explicitly states that it replaces FrankEye entirely and removes CNN/DINOv2/ONNX/Tesseract from that active path.",
+    "frozen_head_status":"The same native_vision.py remains present byte-identically at frozen head abba90a, while frank_eye.py also remains present as a file. Therefore file presence alone must not be used to infer active routing; FrankEye is historical/retained code at this head unless a specific current call site proves otherwise.",
+    "history_shape":"PF visual lineage is at least: detector/OCR + optional VLM escalation (2026-02-25) -> unified FrankEye CPU perception (2026-03-19) -> Qwen3.5 native multimodal active path (2026-03-31). The later Drive Digital Retina learned pattern/dictionary lineage is a separate research/deployment ancestry and must be reconciled rather than silently projected onto PF frozen-head runtime."
+  },
+  "negative_result":"The first transition receipt's frozen-head FrankEye source remains valid as historical retained code evidence, but it must not be interpreted as proof that FrankEye is the active frozen-head visual route. NativeVision is the stronger current-head route evidence discovered in this follow-on shard.",
+  "current_inheritance":[
+    {"target":"H1 Reference Harness","delta":"Freeze actual active visual call graph, not merely available files. Differential baseline must identify whether visual evidence comes from native Qwen multimodal, retained FrankEye, or both on distinct paths."},
+    {"target":"FRANK dissolved Retina","delta":"Do not inherit PF's March native-VLM replacement as an architectural mandate. Current owner-fixed Clay target may dissolve/recompose perception, but migration must preserve measured behavior and lineage."},
+    {"target":"Adaptive Visual Learner","delta":"A learned familiarity/MVC layer is absent from native_vision.py itself; current FRANK 0.1 learner remains new integration work even if the backbone is multimodal."},
+    {"target":"Harness","delta":"Add a stale-code/call-graph regression: file existence != active subsystem. Instrument real invocation receipts before claiming baseline parity."},
+    {"target":"UnifiedDB/ClayGraph","delta":"Store active-route provenance per perception episode so future migrations can distinguish available, superseded and actually invoked visual mechanisms."}
+  ],
+  "earned_work":{"new_credit_hours":0.0,"reason":"Supersession/call-graph correction only; no duplicate credit over existing visual lineage mappings."},
+  "level0_effect":{"exact_global_percent_added":0.0,"denominator_state":"NOT_FROZEN","gate":"NOT_PASS"},
+  "status":"COMPLETE_SUPERSESSION_SHARD",
+  "completed_at":"2026-08-09T13:56:00+07:00"
+}

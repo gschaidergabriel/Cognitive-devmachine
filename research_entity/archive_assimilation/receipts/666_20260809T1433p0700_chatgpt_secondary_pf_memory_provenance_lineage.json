@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1433p0700_chatgpt_secondary_pf_memory_provenance_lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "started_at": "2026-08-09T14:33:00+07:00",
+  "source_class": "PROJECT_FRANKENSTEIN_FROZEN_HEAD_HISTORICAL_CODE_AND_ARCHITECTURE",
+  "frozen_project_frankenstein_ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "shard": "memory retrieval, consolidation, user-preference and provenance lineage relevant to Frank v0.1 persistent Andreas-specific memory",
+  "disposition": "SEMANTICALLY_AND_CODE_ANALYZED_TARGETED_HISTORY_SHARD_WITH_STATIC_REPRO",
+  "exact_coverage_credit": 0.0,
+  "exact_coverage_reason": "The Level-0 combined Drive + Project-Frankenstein atomic-obligation denominator remains NOT_FROZEN; targeted semantic shards must not manufacture exact completion credit.",
+  "peer_overlap_check": {
+    "result": "NO_DIRECT_EXISTING_RECEIPT_FOUND_BY_AVAILABLE_REPO_SEARCH_FOR_MEMORY_HUB_PROJECT_FRANKENSTEIN_666",
+    "limitation": "The exposed GitHub search surface did not expose a dedicated live lease/task listing. This worker therefore avoided already named workspace shards and selected a distinct memory/provenance lineage."
+  },
+  "source_refs": [
+    {"kind": "github_file", "repo": "gschaidergabriel/Project-Frankenstein", "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1", "path": "MEMORY&PERSISTENCE-ARCHITECTURE.md", "role": "historical architecture claim surface"},
+    {"kind": "github_file", "repo": "gschaidergabriel/Project-Frankenstein", "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1", "path": "services/memory_hub.py", "blob_sha": "51a5bc6fe750fb7f70d0175559d4f031b0f0f35f", "role": "unified retrieval implementation"},
+    {"kind": "github_file", "repo": "gschaidergabriel/Project-Frankenstein", "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1", "path": "services/chat_memory.py", "blob_sha": "1020af6f60055c51ab384c799e4b9a749256badd", "role": "FTS5/vector hybrid store and retrieval implementation"},
+    {"kind": "github_file", "repo": "gschaidergabriel/Project-Frankenstein", "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1", "path": "services/memory_consolidator.py", "blob_sha": "441d60cb87b1b27a742bf5aabfbe760b9f519086", "role": "Tier-1/Tier-2/Tier-3 consolidation and archival implementation"},
+    {"kind": "github_file", "repo": "gschaidergabriel/Project-Frankenstein", "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1", "path": "services/memory_consistency.py", "blob_sha": "081e58473e080b3af3d93a2ee93f28900bd3149f", "role": "cross-layer consistency implementation"},
+    {"kind": "github_file", "repo": "gschaidergabriel/Project-Frankenstein", "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1", "path": "services/preference_extractor.py", "blob_sha": "f767c455e9302b66df9f9129129fc26b71ce2735", "role": "automatic user-preference extraction implementation"}
+  ],
+  "mechanism_findings": [
+    {
+      "id": "PF-MEM-L0-M1",
+      "epistemic_class": "HISTORICAL_ARCHITECTURE_AND_CODE",
+      "finding": "Project-Frankenstein already implemented a multi-layer persistent memory stack spanning conversational FTS/vector memory, Titan graph retrieval, consciousness retrieval, world-experience context and learned user preferences behind a MemoryHub API.",
+      "current_mapping": "Strong architectural ancestor for Frank v0.1: preserve logical multi-surface retrieval, but map it into current UnifiedDB/ClayGraph semantics with explicit provenance, user scope and replay receipts rather than treating one fused context string as truth."
+    },
+    {
+      "id": "PF-MEM-L0-M2",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE",
+      "finding": "chat_memory.py implements genuine intra-chat RRF over FTS5 and cosine-vector ranks, while memory_hub.py performs a second-stage cross-layer sort over preassigned per-item RRF-like scores rather than recomputing true cross-source RRF lists.",
+      "current_mapping": "Reuse hybrid retrieval as a baseline, but instrument actual retrieval provenance and per-source rank contribution before using retrieval fusion as a causal memory mechanism."
+    },
+    {
+      "id": "PF-MEM-L0-M3",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE",
+      "finding": "MemoryHub source attribution for hybrid chat results is heuristic: the first five returned hybrid items are labeled chat_vector and later items chat_fts even though _hybrid_search_history returns already-fused rows without the winning source path.",
+      "current_mapping": "Current Frank/Clay memory receipts need exact retrieval-path attribution, not inferred labels, so later causal localization can distinguish lexical, vector, graph, user-state and GWT contributions."
+    },
+    {
+      "id": "PF-MEM-L0-M4",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE",
+      "finding": "The memory consolidator implemented bounded recursive abstraction: live turns -> Tier-2 summaries -> Tier-3 essences, with a local Qwen 2.5 3B compression path and extractive fallback.",
+      "current_mapping": "Reusable-with-adaptation memory compaction pattern for small-context Frank v0.1, provided raw evidence remains durable and every abstraction retains reversible provenance."
+    },
+    {
+      "id": "PF-MEM-L0-M5",
+      "epistemic_class": "HISTORICAL_RUNTIME_CODE",
+      "finding": "Preference extraction is fast and local but stores normalized key/value preferences without an explicit user/person identity dimension in the user_preferences schema; preference provenance is only a coarse source field plus timestamps/confidence.",
+      "current_mapping": "For Andreas-Frank, user-specific memory must be namespaced and provenance-scoped so historical Gabriel/user material cannot bleed into Andreas state. Preference extraction should create candidate facts/preferences with source-message lineage and contradiction/update semantics, not silent global profile truth."
+    }
+  ],
+  "negative_results_and_failure_modes": [
+    {
+      "id": "PF-MEM-L0-N1",
+      "epistemic_class": "REPRODUCED_STATIC_RUNTIME_BUG",
+      "finding": "memory_consolidator._archive_old_messages claims original text remains searchable in the FTS5 index, but chat_memory.py defines an AFTER UPDATE trigger that deletes the old FTS row and inserts the new text. Replacing message text with '[archived]' therefore removes the original lexical content from FTS5.",
+      "reproduction": {
+        "method": "isolated in-memory SQLite reproduction using the same external-content FTS5 table plus INSERT and UPDATE trigger logic",
+        "before_update_query": "MATCH durable -> [(1, 'hello durable memory')]",
+        "after_update_old_term_query": "MATCH durable -> []",
+        "after_update_marker_query": "MATCH archived -> [(1, '[archived]')]",
+        "result": "CONFIRMED"
+      },
+      "impact": "Old compressed messages lose lexical retrieval even though the code comment promises otherwise."
+    },
+    {
+      "id": "PF-MEM-L0-N2",
+      "epistemic_class": "STATIC_CODE_LINEAGE_DEFECT",
+      "finding": "Tier-3 essence rows record source_msg_ids as Tier-2 abstraction IDs, then delete those Tier-2 rows. The direct message->Tier-2->Tier-3 source chain therefore becomes non-dereferenceable after compaction; turn_start/turn_end retain only a coarse range.",
+      "impact": "Abstraction provenance and exact replay/audit are weakened, conflicting with current evidence-preserving ClayGraph/UnifiedDB requirements."
+    },
+    {
+      "id": "PF-MEM-L0-N3",
+      "epistemic_class": "STATIC_CODE_RETRIEVAL_DEGRADATION",
+      "finding": "Embeddings are not removed when text becomes '[archived]'; vector search joins embeddings back to the current messages.text. A semantically matching archived embedding can therefore retrieve the marker text instead of the historical message content.",
+      "impact": "Semantic retrieval may spend context budget on an opaque marker and cannot reconstruct the evidence that produced the embedding without a separate immutable raw-content store."
+    },
+    {
+      "id": "PF-MEM-L0-N4",
+      "epistemic_class": "ARCHITECTURE_SCOPE_RISK",
+      "finding": "The historical chat/preference schema is session-aware but not explicitly person/user-identity scoped. In a single-user prototype this can work; in Andreas-Frank migration it is insufficient to guarantee separation from prior creator/test-user state.",
+      "impact": "Identity contamination risk unless current Frank state uses hard user namespaces and migration filters."
+    }
+  ],
+  "current_architecture_delta": {
+    "reuse": [
+      "Hybrid lexical + semantic retrieval with deterministic measured fusion as a baseline.",
+      "Multi-layer memory routing behind one logical query surface.",
+      "Bounded recursive abstraction for context reduction.",
+      "Local embedding/compression execution and explicit retrieval latency metrics.",
+      "Nightly integrity checks and embedding backfill as operational resilience patterns."
+    ],
+    "must_change": [
+      "Keep immutable raw message/evidence content separate from compacted context representations.",
+      "Preserve transitive provenance from every summary/essence back to immutable source message IDs/hashes.",
+      "Do not infer retrieval source labels after fusion; persist exact scorer/source contributions.",
+      "Namespace all personal memory/preferences by Frank entity + human user identity + source provenance.",
+      "Treat auto-extracted preferences as candidates with evidence/contradiction/update semantics, not unqualified profile truth.",
+      "Regression-test lexical and vector retrieval before/after compaction."
+    ],
+    "recommended_discriminating_tests": [
+      "H1 memory compaction differential: ingest a frozen conversation corpus, retrieve lexical/vector targets before compaction, run Tier-2/Tier-3 compaction, then require equivalent evidence-bearing retrieval after compaction with intact source IDs/hashes.",
+      "H1 identity-isolation test: load synthetic Gabriel and Andreas histories containing contradictory preferences and require zero cross-user retrieval/profile contamination under normal, semantic-neighbor and fallback queries.",
+      "Retrieval attribution test: for every injected memory item, log exact contributing retrievers/ranks/scores and replay the context build deterministically."
+    ]
+  },
+  "branch_feedback": {
+    "frank": "DELTA: historical memory stack is a strong reusable ancestor, but Andreas-Frank requires immutable raw evidence, strict user namespaces and replayable provenance across every compaction/retrieval step.",
+    "harness": "DELTA: add compaction-retention, archived-vector, source-attribution and Gabriel-vs-Andreas identity-isolation regression tests to H1.",
+    "claycode": "DELTA: memory abstractions need explicit source-ref/hash lineage, user/entity scope, immutable/raw vs derived state type separation and reversible compaction semantics.",
+    "claygraph": "DELTA: represent derived memory nodes with transitive provenance edges to immutable source events; deleted intermediate summaries must not sever ancestry.",
+    "unifieddb": "DELTA: separate immutable event/raw-content plane from derived summaries/embeddings/preferences while retaining one logical query identity and source lineage.",
+    "gwt": "DELTA: workspace memory injection should expose causal source attribution so uptake/effect/re-entry can be tied to the actual memory channel used.",
+    "emergenz": "NO_CHANGE: this shard establishes memory/provenance mechanisms and defects, not a new causal-emergence result.",
+    "hyperposition": "DELTA: multiple retrieval candidates can remain set-valued until context packing; provenance should survive selection rather than collapsing early into one unlabeled string.",
+    "clayresearch": "DELTA: preserve memory compaction as a useful historical mechanism but elevate immutable evidence lineage and identity isolation to architectural invariants.",
+    "q12_index": "DELTA: recovered historical memory implementation contains both reusable architecture and concrete compaction/retrieval defects; no duplicated reusable-hours credit assigned yet."
+  },
+  "earned_work_mapping": [
+    {"target": "H1 persistent memory retrieval", "class": "REUSABLE_WITH_ADAPTATION", "mechanism": "FTS5 + vector RRF and MemoryHub multi-layer routing", "hours_credit": null},
+    {"target": "H1 memory compaction/recovery", "class": "NEGATIVE_RESULT_VALUE", "mechanism": "FTS archive-trigger loss + non-dereferenceable Tier-3 lineage", "hours_credit": null},
+    {"target": "H1 Andreas user-state isolation", "class": "MEASUREMENT_FOUNDATION", "mechanism": "historical schema demonstrates need for explicit person namespace and contamination regression", "hours_credit": null}
+  ],
+  "open_obligations": [
+    "History-search earlier/later Project-Frankenstein revisions of memory_hub/chat_memory/memory_consolidator to determine whether these defects were introduced, fixed or superseded outside frozen HEAD.",
+    "Cross-reconcile the Project-Frankenstein memory architecture with Drive titan-memory, frank-rettung and current frankv0.1 memory state.",
+    "Add row-level earned-work estimates only after duplicate mechanism reconciliation.",
+    "Complete the full Project-Frankenstein tree/history denominator before any exact Level-0 coverage promotion."
+  ],
+  "promotion": {
+    "canonical_claim_promotion": false,
+    "reason": "This is historical source assimilation plus an isolated reproduction of source-code semantics. It is a high-value Level-0 negative result and architecture delta, not proof about the current live Frank v0.1 runtime until validated there."
+  }
+}

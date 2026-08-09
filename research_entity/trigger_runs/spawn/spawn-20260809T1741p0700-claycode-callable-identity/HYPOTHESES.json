@@ -1,0 +1,61 @@
+{
+  "counterhypotheses": [
+    {
+      "claim": "Put inferred effects directly into lexical binding identity.",
+      "id": "CH-SPAWN-CC-CALLID-A",
+      "result": "Rejected in the tested pipeline because it introduces a dependency cycle and identity churn under effect-only mutations.",
+      "status": "NEGATIVE_RESULT_FOR_INFERRED_EFFECT_BINDING"
+    },
+    {
+      "claim": "Use overload identity (name + full signature) as the default source-level binding policy.",
+      "id": "CH-SPAWN-CC-CALLID-B",
+      "result": "Exact typed calls resolved in 20,000/20,000 proxy cases, but partial-type calls were ambiguous in the constructed 20,000/20,000 discriminating cases; no current BASE requirement justifies default overload complexity.",
+      "status": "OPEN"
+    },
+    {
+      "claim": "Include runtime capabilities in callable semantic identity to increase safety.",
+      "id": "CH-SPAWN-CC-CALLID-C",
+      "result": "Runtime capability is invocation authority, not program meaning; safety requires fresh authorization rather than static identity amplification.",
+      "status": "REJECTED_BY_AUTHORITY_BOUNDARY"
+    }
+  ],
+  "hypotheses": [
+    {
+      "claim": "Lexical BindingKey should be based on module/scope plus exact symbol identity and must exclude inferred effect summaries and runtime capability context.",
+      "falsifier": "A production compiler design that includes inferred effects in binding identity yet remains acyclic, deterministic, incrementally stable and diagnostically simpler.",
+      "id": "H-SPAWN-CC-CALLID-01",
+      "prediction": "Effect-summary changes leave BindingKey stable; adding inferred effect closure as a BindingKey dependency creates a Resolve/CallGraph/EffectClosure cycle.",
+      "status": "SUPPORTED_LOCAL_PROXY_OPEN"
+    },
+    {
+      "claim": "ClayCode needs separate identity layers for BindingKey, FunctionTypeId, DefinitionSemanticId and provenance/ABI-bound ContractId.",
+      "falsifier": "A fewer-layer scheme that preserves exact resolution, semantic equivalence, replay integrity and incremental invalidation under the same mutation matrix.",
+      "id": "H-SPAWN-CC-CALLID-02",
+      "prediction": "Rename, signature, body, provenance and ABI mutations affect different identity layers without cross-contaminating unrelated layers.",
+      "status": "SUPPORTED_LOCAL_PROXY_OPEN"
+    },
+    {
+      "claim": "For BASE, same-scope duplicate source names should fail closed unless a concrete application counterexample requires overload resolution.",
+      "falsifier": "A mandatory BASE application or FRANK slice that cannot be expressed ergonomically/correctly without overloading.",
+      "id": "H-SPAWN-CC-CALLID-03",
+      "prediction": "Unique-name resolution avoids partial-type ambiguity while remaining sufficient for current G9/FRANK callable needs.",
+      "status": "OPEN_NOT_SELECTED_POLICY"
+    },
+    {
+      "claim": "Declared effect contracts may be part of a callable static contract/type if fixed before effect inference; inferred effect summaries remain analysis outputs checked against that declaration.",
+      "falsifier": "Production SCC inference demonstrating declared effect contracts necessarily destabilize binding or cannot conservatively bound effects.",
+      "id": "H-SPAWN-CC-CALLID-04",
+      "prediction": "Recursive effect inference remains acyclic and BindingKey stable; exceeding declared effect bounds is rejected.",
+      "status": "SUPPORTED_LOCAL_PROXY_OPEN"
+    },
+    {
+      "claim": "Replay/effect receipts should bind at least the resolved DefinitionSemanticId plus emitted artifact/ContractId, not BindingKey alone.",
+      "falsifier": "A replay system proving BindingKey-only receipts cannot misattribute changed implementations across rebuilds/ABI changes.",
+      "id": "H-SPAWN-CC-CALLID-05",
+      "prediction": "Body or ABI changes invalidate replay compatibility even when the lexical symbol name is unchanged.",
+      "status": "OPEN"
+    }
+  ],
+  "run_id": "spawn-20260809T1741p0700-claycode-callable-identity",
+  "schema_version": "1.0"
+}

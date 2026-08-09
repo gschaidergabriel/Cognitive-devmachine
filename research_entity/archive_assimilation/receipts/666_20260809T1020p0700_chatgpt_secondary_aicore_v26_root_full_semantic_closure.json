@@ -1,0 +1,131 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1020p0700-chatgpt-secondary-aicore-v26-root-full-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_ALL_51_DIRECT_V26_FILES_AND_RECURSIVE_57_FILE_CONTENT_WITH_PRIOR_CHILD_RECEIPT",
+  "source_universe":"DRIVE_CLAY/AICORE/training/v26",
+  "exact_level0_coverage_credit_percent":0.0,
+  "denominator":{
+    "direct_files":51,
+    "direct_files_semantically_closed":51,
+    "child_folders":2,
+    "child_files":6,
+    "recursive_files":57,
+    "recursive_files_semantically_closed":57,
+    "recursive_folder_units_accounted":2,
+    "manifest_ref":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_TRAINING_EXACT_RECURSIVE_MANIFEST_20260809T0943p0700.json",
+    "remaining40_hash_manifest":"research_entity/archive_assimilation/manifests/DRIVE_AICORE_V26_REMAINING40_HASH_MANIFEST_20260809T1020p0700.json",
+    "prior11_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0954p0700_chatgpt_secondary_aicore_v26_v261_v262_experiment_lineage.json",
+    "child6_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0943p0700_chatgpt_secondary_aicore_training_v26_abzug_eval_semantic_closure.json"
+  },
+  "semantic_lineage":{
+    "early_corpus_epoch":{
+      "artifact":"v26_train/eval.jsonl.vor-neufassung",
+      "train_rows":85,
+      "eval_rows":7,
+      "finding":"These are valid UTF-8 JSONL despite octet-stream naming. They are a much earlier small v26 corpus epoch, not the later multi-thousand-row v26.1 lineage.",
+      "train_system_blocks":{"TOOLS":85,"BODY":85,"STATE":85,"GEDAECHTNIS":85,"INNER_STATE":61},
+      "train_assistant_tool_tags":23,
+      "eval_assistant_tool_tags":3,
+      "rule":"A label such as v26 is not an artifact identity. Corpus hash + builder/prompt epoch are mandatory."
+    },
+    "group_plan_growth":{
+      "earlier_document":"PDF-KAPITEL-M-R.md describes 14 groups / target 1450.",
+      "later_machine_spec":"11_gruppen.py contains 21 groups / target 4100.",
+      "later_build_lineage":"v26.1 build documentation records a 4113-example training master.",
+      "interpretation":"This is chronology/evolution, not one internally consistent static v26 specification."
+    },
+    "generation_and_build":{
+      "standalone_vps_generator":"erzeuge.py is snapshot-driven and deliberately independent of the live Frank codebase.",
+      "integrated_generator":"12_erzeugen.py later reads live local registries/services, persists each batch and treats rate-limit exhaustion as WAIT rather than completion.",
+      "deterministic_gate":"13_pruefen.py rejects machine-checkable violations before expensive/model review.",
+      "critic_stage":"15_verbessern.py separates strong-model critique from generation; accepted repairs must re-pass the deterministic gate and originals are kept separately.",
+      "critic_trace":{"decisions":83,"gebessert":72,"verworfen":11},
+      "builder":"14_bauen.py constructs per-example current-style system context and an eval split; volatile body metrics are varied so literal telemetry is not memorized.",
+      "snapshot_builder":"bauen.py is the VPS counterpart and explicitly depends on a refreshed runtime snapshot."
+    },
+    "prompt_snapshot_correctness":{
+      "finding":"00_export_fuer_vps.py exports tool registry, prompt blocks, body template, tool-keyword mapping and idle prompts from the running system, but explicitly identifies the result as a snapshot rather than a live link.",
+      "historical_parser_fix":"AST extraction originally risked losing the first compact-prompt f-string if only ast.Constant was collected; JoinedStr handling was added.",
+      "durability_fix":"Translation/extraction work moved from scratch space into the repository after a crash erased completed /tmp work.",
+      "rule":"Every dataset build must bind to an immutable prompt-schema hash and snapshot epoch; 'built against live prompt' is insufficient without recorded identity."
+    },
+    "translation_policy_drift":{
+      "english_tool_entries":61,
+      "german_description_entries":61,
+      "key_sets_identical":true,
+      "structural_patch":"03_deutsch_eintragen.py patches only the second register_tool argument using AST byte offsets; parameter/example/category/logic positions are structurally preserved.",
+      "critical_counterexample":[
+        "claude_code English says only when the user asked for programming/software/system-change work; German description instead says to delegate whenever work exceeds Frank and includes self-improvement/system changes.",
+        "calendar_del English contains Only use on a clear request; the German description omits that permission qualifier.",
+        "calc English says ALWAYS use for any calculation and says own arithmetic is unreliable; German description weakens this to a normal conditional use description."
+      ],
+      "conclusion":"Structure preservation did not preserve authority semantics because obligation/permission lived inside translatable natural-language descriptions.",
+      "current_rule":"Permissions, obligations, capability identity and destructive-effect policy must be typed machine-enforced fields. Localization may render explanatory prose but must not rewrite authority."
+    },
+    "judge_governance":{
+      "calibration_set":{"cases":22,"known_good":12,"known_bad":10},
+      "early_bias_failure":"An early polite judge configuration let Mistral-small answer all 22 and catch 0/10 known-bad cases. A later harsh configuration made multiple judges over-reject, proving raw accuracy alone was misleading.",
+      "metric_repair":"Judge selection separates recognition of known-good and known-bad examples; anchored examples are used and candidate models are re-measured after prompt changes.",
+      "measured_anchor_candidates":{
+        "cloudflare_llama_3_3_70b":{"quality_percent":87,"good":"10/12","bad":"9/10"},
+        "mistral_medium_latest":{"quality_percent":79,"good":"7/12","bad":"10/10"},
+        "local_qwen3_8b":{"quality_percent":59,"good":"7/12","bad":"6/10"}
+      },
+      "production_rule_in_later_code":"Two different-family cloud judges; agreement decides, disagreement escalates. The local model is a sieve/reserve rather than quality authority.",
+      "three_voice_snapshot":"gremium.json is an earlier 22-case, 3-voice snapshot. Its majority rejected 10/10 known-bad but also rejected 5/12 known-good. The later code changed to the two-cloud consensus rule.",
+      "small_sample_warning":"The source itself notes 22 cases are small; judge quality must be re-evaluated as the calibration set grows."
+    },
+    "judge_state_provenance_failure":{
+      "pre_anchor_judgment_entries":2486,
+      "current_judgment_entries":2486,
+      "entries_changed_between_snapshots":320,
+      "current_entries_with_three_voice_arrays":807,
+      "current_entries_with_two_voice_arrays":320,
+      "problem":"urteile.json mixes judgments created under different judge ensembles while entries store verdict arrays but not a complete per-entry judge-model/prompt/calibration identity.",
+      "rule":"Each judgment must store judge identity/version, prompt hash, calibration-set hash, decision-rule version, timestamp and source-example hash. Mixed epochs must never be silently interpreted as one homogeneous vote table."
+    },
+    "concurrency_failure_and_fix":{
+      "incident":"Two stage-3 processes loaded the same judgment file and rewrote whole-state snapshots concurrently.",
+      "measured_processed_logs":1790,
+      "retained_file_entries_at_incident":995,
+      "estimated_overwritten_judgments":795,
+      "fixes":["process-level flock single-run guard","reread-and-merge immediately before write","thread write lock","temporary file + flush + fsync + atomic replace"],
+      "rule":"UnifiedDB/Harness must make multi-writer state updates transactional by construction; PID files and whole-file last-writer-wins persistence are insufficient."
+    },
+    "second_opinion_design":{
+      "finding":"20_fuer_chatgpt.py deliberately exports disagreements, bounded rejected cases, and stratified accepted controls rather than the entire corpus.",
+      "lesson":"Human/expensive review should be uncertainty- and disagreement-targeted, with false-positive and false-negative controls, not redundant full-corpus rereading."
+    },
+    "evaluation_surface":{
+      "finding":"pruefbogen.py distinguishes endpoint-level rule evaluation from naked-model evaluation and explicitly says the two measurements must not be compared as if they were the same surface.",
+      "lesson":"Harness metrics require an evaluation-surface identity: model-only, assembled-prompt, router/tool loop, or full FRANK runtime."
+    }
+  },
+  "preserved_contradictions_and_supersessions":[
+    "PDF training-plan snapshot 14 groups/1450 vs later machine spec 21 groups/4100; later code supersedes the earlier planning snapshot for that epoch, but both remain historical evidence.",
+    "Existing gremium.json contains three votes per calibration case while later 16_pruefkette.py uses two production voices; timestamps/code lineage show a judge-policy change, not a reason to rewrite the old snapshot.",
+    "v26 artifact name spans at least the early 85+7-row corpus and later ~4.1k-example lineage; do not merge them by filename/version label.",
+    "Translation scripts preserve registry structure but not all natural-language permission/obligation semantics; structural equality is not policy equivalence.",
+    "Prior v26.2 MAX_LEN 2048-vs-2432 and non-clean-A/B contradictions remain open in the earlier experiment receipt."
+  ],
+  "current_architecture_feedback":{
+    "frank":["Treat volatile body/runtime facts as typed current state, not weight facts.","Do not let localized capability prose define what Frank is permitted or obliged to do."],
+    "needle":["Own effect execution and permission checks in typed policy; translated descriptions are presentation only.","Record effect/tool registry epoch and result provenance independently of model language."],
+    "harness":["Hash prompt schema, corpus, builder, model topology, evaluator prompt and calibration set for every run.","Run deterministic gates before model judges; calibrate judges on known-good and known-bad cases and re-calibrate after prompt/model changes.","Require transaction/concurrency fault tests for persistent evaluation state."],
+    "claycode":["Separate EffectCapability, Permission, Obligation, CognitiveMarker, DescriptionLocalization and Result types in the IR.","Compile permission semantics independently from prose/localization; translations must be unable to grant authority."],
+    "claygraph":["Represent artifact epochs and judge-policy changes as versioned nodes rather than overwriting one v26 label.","Attach provenance edges from each verdict to judge model, prompt, calibration and decision rule."],
+    "unifieddb":["Use append/transaction semantics for judgment events; derive materialized state instead of whole-file last-writer-wins snapshots.","Persist source hashes and immutable evaluator epochs so mixed 2-voice/3-voice judgments remain interpretable."],
+    "gwt":["Broadcast typed current facts/effect results rather than memorized telemetry or localized permission prose."],
+    "hyperposition":["Judge disagreement is useful uncertainty mass; keep competing verdicts until a calibrated decision rule resolves or escalates them."],
+    "emergenz":["Claims of data-quality improvement need calibrated counterfactual evaluation because stricter judges can create apparent quality by discarding good coverage."],
+    "clay":["The v26 lineage is strong evidence for making state, authority, localization, evaluation and persistence first-class typed substrates instead of prompt conventions."]
+  },
+  "earned_work_hours_added":0.0,
+  "training":{"executed":false,"authorized":false},
+  "remaining_local_obligations":[],
+  "next":"Roll up v26 57/57 file-content closure with v27 20/20 into AICORE/training 77/77 file semantic closure, then return to AICORE-root sibling reconciliation and Project-Frankenstein history-aware denominator work.",
+  "created_at":"2026-08-09T10:20:00+07:00"
+}

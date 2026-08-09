@@ -1,0 +1,67 @@
+module claycode.g9.meta.research_center_coordination
+status ACCUMULATING
+source CHATGPT_EXPLICIT_TURN_TRACE
+stack_epoch 8
+
+observation O1 {
+  pattern:"research-center coordination was specified partly as prose/JSON while cognition itself is ClayCode"
+  consequence:"semantic coordination could fork from native cognition and add translation/token/error cost"
+  evidence:[
+    @research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md,
+    @research_entity/rooms/ROOM_DB_SCHEMA.json,
+    @research_entity/global/RAE_TURN_KERNEL.clay
+  ]
+}
+
+hypothesis H1 {
+  claim:"coordination semantics should be first-class ClayCode while repository serialization remains a separable transport concern"
+  predicts:[
+    lower_context_rent,
+    fewer_semantic_translation_errors,
+    easier_UnifiedDB_materialization,
+    easier_ClayGraph_projection,
+    stronger_cross_organ_replay
+  ]
+  candidate_primitives:[room.join,room.pulse,task,challenge,handoff,cross,conflict,fuse]
+}
+
+counterhypothesis H0 {
+  claim:"JSON envelope plus ClayCode payload creates dual-representation friction; direct .clay event records are simpler and safer"
+  falsifier_for_H1:"matched-budget direct-Clay event pipeline has lower parse/repair cost with equal concurrency, tooling and replay integrity"
+}
+
+inference I1 {
+  claim:"coordination language is part of ClayCode's native cognitive/program IR surface, not merely an external orchestration protocol"
+  confidence:0.86
+}
+
+inference I2 {
+  claim:"stack epoch/version provenance belongs in coordination objects because stale-language semantics can change worker interpretation"
+  confidence:0.92
+}
+
+inference I3 {
+  claim:"room current-state assembly belongs in UnifiedDB; room associative/task/dependency topology belongs in ClayGraph projection; neither replaces evidence authority"
+  confidence:0.90
+}
+
+experiment E1 {
+  arms:[JSON_ENVELOPE_PLUS_CLAY_PAYLOAD,DIRECT_CLAY_EVENT]
+  matched:[same_event_semantics,same_worker_count,same_repo_concurrency,same_replay_corpus]
+  metrics:[tokens_to_consume,parse_failures,repair_cost,merge_conflicts,replay_integrity,tooling_cost,semantic_hash_stability]
+  preserve:[negative_results,stack_epoch,provenance,authority]
+  status:QUEUED
+}
+
+candidate_delta D1 {
+  target:ClayCode_G9
+  action:"admit room coordination forms as native IR families; keep physical event encoding as a dialect/transport decision until E1"
+  direct_promotion:false
+}
+
+receipt R1 {
+  derived_from:observable_explicit_work_trace
+  hidden_cot:false
+  project_owner_correction:true
+  result:"research-center machine coordination now bound to latest ClayCode; language-level transport question remains experimentally open"
+}

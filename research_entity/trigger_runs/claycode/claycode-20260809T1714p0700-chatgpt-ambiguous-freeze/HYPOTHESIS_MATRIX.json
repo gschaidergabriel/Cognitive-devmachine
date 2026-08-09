@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1714p0700-chatgpt-ambiguous-freeze",
+  "hypotheses":[
+    {
+      "id":"H-CC-AF-01",
+      "statement":"For the three currently ambiguous legacy G9 rule lines, automatic source-to-IR normalization before an authoritative semantic freeze is unsafe; after explicit freeze, registry-gated typed n-ary PredicateIR/ConstraintIR can preserve deterministic semantic identity.",
+      "status":"SUPPORTED_LOCAL_PROXY_FOR_FAIL_CLOSED_POLICY",
+      "observation":"Each line admitted at least two materially distinct plausible AST hashes; explicit frozen test candidates validated 3/3 and remained hash-stable under 10000 whitespace mutations.",
+      "counterhypothesis":"A grammar precedence/associativity rule alone can uniquely recover the intended semantics of all three lines.",
+      "falsifier":"Authoritative prior IR/parser evidence or a production parser contract uniquely identifies one intended AST for each line without additional semantic choice."
+    },
+    {
+      "id":"H-CC-AF-02",
+      "statement":"A relation-signature registry with fixed arity provides a safer BASE boundary than accepting arbitrary bare identifiers as semantic relations.",
+      "status":"SUPPORTED_ADVERSARIAL_LOCAL_PROXY",
+      "observation":"10000/10000 unknown-relation mutations and 10000/10000 wrong-arity mutations were rejected fail-closed by the tested registry.",
+      "counterhypothesis":"Fail-open arbitrary relation parsing plus later type checking provides equal mutation rejection and diagnostic quality at lower implementation cost.",
+      "falsifier":"A production compiler benchmark demonstrates equal-or-better rejection, diagnostics and semantic preservation with a fail-open relation grammar."
+    },
+    {
+      "id":"H-CC-AF-03",
+      "statement":"Executable operator precedence and declarative predicate identity are separate frontend problems and should be represented by separate typed IR layers rather than one overloaded flat operator grammar.",
+      "status":"OPEN_REFINED",
+      "observation":"Prior self-conformance work exposed arithmetic/boolean precedence ambiguity while the rule-surface partition independently recovered 17 declarative relations through registered PredicateIR and left three semantic-choice cases.",
+      "counterhypothesis":"One sufficiently rich expression grammar can encode both layers without ambiguity or diagnostic loss.",
+      "falsifier":"The production BASE parser/type checker expresses all current G9 executable and declarative rules through one grammar with unique ASTs, strong mutation rejection and no semantic escape hatches."
+    }
+  ],
+  "promotion":"NONE"
+}

@@ -1,30 +1,26 @@
-# `go` -> `666` Trigger Migration
+# Historical `go` -> `666` Migration — SUPERSEDED
 
-**Status:** PROJECT_OWNER_FIXED_RENAME
-**Effective:** 2026-08-09
+**Status:** SUPERSEDED_BY_PROJECT_OWNER_DIRECTIVE  
+**Original effective date:** 2026-08-09  
+**Superseded:** 2026-08-09
 
-## Canonical rule
+## Current rule
 
-The former autonomous trigger word `go` is fully renamed to `666`.
+The earlier rename that removed `go` is no longer authoritative.
 
-`go` is no longer a registered command, alias or autonomous entry point.
+`666` remains its own phase-sensitive autonomous research-genesis trigger:
+- before Level-0 PASS: exhaustive archive assimilation;
+- after Level-0 PASS: seeded/diverse emergent research-field spawning.
 
-Any residual historical documentation phrase such as:
+`go` is now restored as a **separate global recursive continuation trigger** governed by:
 
-- `go trigger`;
-- `go-style dispatch`;
-- `exact go`;
-- `GO_AUTODISPATCH_PROTOCOL`;
+`research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md`
 
-must be interpreted as historical terminology for the current `666` autonomous behavior unless that document is explicitly discussing history.
+Current exact semantics:
 
-Current authoritative protocol:
+- `666` = archive/genesis behavior defined by its own protocol;
+- `go` = maximum-useful-depth recursive shared research -> intelligent live-web knowledge intake -> self-coordination -> implementation/repair -> Ubuntu/VPS testing -> measurement -> analysis -> fusion/distribution -> one bounded out-of-the-box GWT-consistent experiment -> reprioritization -> recurrence.
 
-`research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md`
+Historical documents that say `go` meant `666` remain historical evidence only and must not override the current trigger registry.
 
-Current behavior:
-
-- before Level-0 archive PASS: exhaustive archive assimilation;
-- after Level-0 archive PASS: seeded stochastic emergent research-field spawning and immediate networked research.
-
-No future artifact should introduce `go` as a command.
+The current registry and latest cognitive stack are authoritative for command routing.

@@ -335,11 +335,41 @@ def _needs_int_div(expr: dict, env: dict[str, str], signatures: dict[str, tuple[
     return False
 
 
+def _called_function_names(expr: dict) -> set[str]:
+    kind = expr["k"]
+    if kind == "call":
+        out = {expr["f"]}
+        for arg in expr["a"]:
+            out.update(_called_function_names(arg))
+        return out
+    if kind == "bin":
+        return _called_function_names(expr["l"]) | _called_function_names(expr["r"])
+    return set()
+
+
+def _entry_reachable_functions(ir: dict, entry: str | None) -> list[dict]:
+    if entry is None:
+        return list(ir["functions"])
+    by_name = {f["name"]: f for f in ir["functions"]}
+    if entry not in by_name:
+        raise CompileError(f"UNDEFINED_ENTRY:{entry}")
+    seen: set[str] = set()
+    pending = [entry]
+    while pending:
+        name = pending.pop()
+        if name in seen:
+            continue
+        seen.add(name)
+        pending.extend(sorted(_called_function_names(by_name[name]["body"]) - seen))
+    return [f for f in ir["functions"] if f["name"] in seen]
+
+
 def lower_c(ir: dict, entry: str | None = None) -> str:
     signatures = {f["name"]: ([p["type"] for p in f["params"]], f["return"]) for f in ir["functions"]}
+    emitted_functions = _entry_reachable_functions(ir, entry)
     needs_int_div = any(
         _needs_int_div(function["body"], {p["name"]: p["type"] for p in function["params"]}, signatures)
-        for function in ir["functions"]
+        for function in emitted_functions
     )
     lines = [
         "#include <stdint.h>", "#include <stdbool.h>", "#include <stdio.h>", "#include <stdlib.h>", "#include <limits.h>", "",
@@ -352,11 +382,11 @@ def lower_c(ir: dict, entry: str | None = None) -> str:
             "  return a/b;",
             "}", "",
         ]
-    for function in ir["functions"]:
+    for function in emitted_functions:
         params = ", ".join(f"{c_type(p['type'])} {c_var(p['name'])}" for p in function["params"]) or "void"
         lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params});")
     lines.append("")
-    for function in ir["functions"]:
+    for function in emitted_functions:
         params = ", ".join(f"{c_type(p['type'])} {c_var(p['name'])}" for p in function["params"]) or "void"
         env = {p["name"]: p["type"] for p in function["params"]}
         lines.append(f"static {c_type(function['return'])} {c_fn(function['name'])}({params}) {{ return {c_expr(function['body'], env, signatures)}; }}")
@@ -378,6 +408,7 @@ def lower_c(ir: dict, entry: str | None = None) -> str:
         lines += [
             "", "int main(int argc,char**argv){",
             f"  if(argc!={len(function['params']) + 1}) return 64;",
+            "  (void)argv;",
             f"  {c_type(return_type)} out={call};",
             f"  printf(\"{fmt}\",{cast}out);",
             "  return 0;", "}",

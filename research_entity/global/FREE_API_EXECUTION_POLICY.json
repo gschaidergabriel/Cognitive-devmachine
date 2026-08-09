@@ -11,7 +11,18 @@
     "priority": 100,
     "key_names": ["NVIDIA_API_KEY", "NVCF_API_KEY"],
     "base_url": "https://integrate.api.nvidia.com/v1",
-    "activate_only_when_key_present": true
+    "activate_only_when_key_present": true,
+    "zero_cost_evidence": {
+      "checked_at": "2026-08-09",
+      "claim": "NVIDIA Developer Program members have free access to hosted NIM API endpoints for prototyping; individual endpoints may be rate limited.",
+      "sources": [
+        "https://docs.api.nvidia.com/nim/docs/run-anywhere",
+        "https://docs.api.nvidia.com/nim/docs/product",
+        "https://build.nvidia.com/settings/credits"
+      ],
+      "scope": "development_and_prototyping_only",
+      "counterhypothesis": "A configured credential can belong to a different billing or production context; request execution must still stay on the documented integrate.api.nvidia.com developer endpoint and emit a receipt."
+    }
   },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",

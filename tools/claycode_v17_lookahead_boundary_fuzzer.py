@@ -64,11 +64,13 @@ def tree_contains(node: Any, *, kind: str | None = None, token: str | None = Non
     return False
 
 
-def compile_case(source: str, grammar: str) -> tuple[dict[str, Any] | None, str | None, int]:
+def compile_case(source: str, parser: Any) -> tuple[dict[str, Any] | None, str | None, int]:
     started = time.perf_counter_ns()
     try:
-        row = front.compile_frontend(source, grammar, strict=True)
-        return row, None, time.perf_counter_ns() - started
+        tree = parser.parse(source)
+        ast = front.canonical_node(tree)
+        semantic_hash = sha256_bytes(front.DOMAIN + front.canonical_bytes(ast))
+        return {"canonical_ast": ast, "semantic_hash": semantic_hash}, None, time.perf_counter_ns() - started
     except Exception as exc:
         return None, f"{type(exc).__name__}: {exc}", time.perf_counter_ns() - started
 
@@ -83,6 +85,8 @@ def main() -> int:
 
     g9 = V9.read_text(encoding="utf-8")
     g17 = V17.read_text(encoding="utf-8")
+    parser9 = front.build_parser(g9, strict=True)
+    parser17 = front.build_parser(g17, strict=True)
     rng = random.Random(args.seed)
     failures: list[dict[str, Any]] = []
     durations_ms: list[float] = []
@@ -94,10 +98,10 @@ def main() -> int:
     # Baseline lesion/rescue: reproduce the V9 horizontal-trivia bug, then require V17 rescue.
     tight = "rule Needle.owns(X)\n"
     spaced = "rule Needle.owns (X)\n"
-    v9_t, e9t, d = compile_case(tight, g9); durations_ms.append(d / 1e6)
-    v9_s, e9s, d = compile_case(spaced, g9); durations_ms.append(d / 1e6)
-    v17_t, e17t, d = compile_case(tight, g17); durations_ms.append(d / 1e6)
-    v17_s, e17s, d = compile_case(spaced, g17); durations_ms.append(d / 1e6)
+    v9_t, e9t, d = compile_case(tight, parser9); durations_ms.append(d / 1e6)
+    v9_s, e9s, d = compile_case(spaced, parser9); durations_ms.append(d / 1e6)
+    v17_t, e17t, d = compile_case(tight, parser17); durations_ms.append(d / 1e6)
+    v17_s, e17s, d = compile_case(spaced, parser17); durations_ms.append(d / 1e6)
     v9_bug = bool(v9_t and v9_s and v9_t["semantic_hash"] != v9_s["semantic_hash"])
     v17_rescue = bool(v17_t and v17_s and v17_t["semantic_hash"] == v17_s["semantic_hash"])
     if not v9_bug:
@@ -116,7 +120,7 @@ def main() -> int:
         n = rng.randint(1, 64)
         ws = "".join(rng.choice((" ", "\t")) for _ in range(n))
         source = f"rule {rel}{ws}{rhs}\n"
-        row, err, d = compile_case(source, g17)
+        row, err, d = compile_case(source, parser17)
         durations_ms.append(d / 1e6)
         ok = bool(
             row
@@ -133,7 +137,7 @@ def main() -> int:
         n = rng.randint(1, 64)
         ws = "".join(rng.choice((" ", "\t")) for _ in range(n))
         source = f"rule Needle.owns{ws}(X)\n"
-        row, err, d = compile_case(source, g17)
+        row, err, d = compile_case(source, parser17)
         durations_ms.append(d / 1e6)
         ok = bool(
             row
@@ -152,8 +156,8 @@ def main() -> int:
     ]
     boundary_results = []
     for name, left, right, expect_same in boundary_cases:
-        l, le, d = compile_case(left, g17); durations_ms.append(d / 1e6)
-        r, re, d = compile_case(right, g17); durations_ms.append(d / 1e6)
+        l, le, d = compile_case(left, parser17); durations_ms.append(d / 1e6)
+        r, re, d = compile_case(right, parser17); durations_ms.append(d / 1e6)
         observed_same = bool(l and r and l["semantic_hash"] == r["semantic_hash"])
         passed = observed_same == expect_same
         boundary_results.append({
@@ -164,8 +168,8 @@ def main() -> int:
             fail("EXCLUDED_START_BOUNDARY", name=name, left_error=le, right_error=re)
 
     # Mutation discrimination: the relation label itself must remain semantically visible.
-    owns, oe, d = compile_case("rule Needle.owns X\n", g17); durations_ms.append(d / 1e6)
-    lowers, le, d = compile_case("rule Needle.lowers X\n", g17); durations_ms.append(d / 1e6)
+    owns, oe, d = compile_case("rule Needle.owns X\n", parser17); durations_ms.append(d / 1e6)
+    lowers, le, d = compile_case("rule Needle.lowers X\n", parser17); durations_ms.append(d / 1e6)
     mutation_discriminated = bool(owns and lowers and owns["semantic_hash"] != lowers["semantic_hash"])
     if not mutation_discriminated:
         fail("RELATION_MUTATION_NOT_DISCRIMINATED", owns_error=oe, lowers_error=le)

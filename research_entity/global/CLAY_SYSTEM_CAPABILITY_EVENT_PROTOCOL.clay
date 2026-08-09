@@ -1,5 +1,5 @@
 module clay.system.capability_events
-version "1.0"
+version "1.1"
 root=@research_entity/state/system/events/
 
 record ResourceObservationEvent {
@@ -20,11 +20,40 @@ record CapabilityObservationEvent {
   payload:{capability_instance_id,resource_id,capability_key,capability_class,state,modalities,execution_scope,authority_scope,cost,latency,privacy,trials,successes,confidence,evidence,freshness_seconds}
 }
 
+record CapabilityRecommendationEvent {
+  schema_version="1.0"
+  event_id:String
+  kind="CAPABILITY_RECOMMENDATION"
+  actor:String
+  created_at:Time
+  payload:{recommendation_id,field_or_work,target_workers,candidate,candidate_kind,provider,field_fit,expected_quality,reliability,latency_fit,cost_fit,privacy_fit,security_fit,integration_fit,reproducibility,execution_availability,freshness,evidence,alternatives_considered,caveats}
+}
+
+record CapabilitySelectionEvent {
+  schema_version="1.0"
+  event_id:String
+  kind="CAPABILITY_SELECTION"
+  actor:String
+  created_at:Time
+  payload:{field_or_work,selected_candidate,provider,rejected_candidates,selection_basis,evidence,authority_scope,availability_state,freshness_seconds}
+}
+
 rule ChatGPT_substantive_turn -> observe current authorized tool/capability surface when state changed or current observation absent/stale
 rule Claude_prompt_boundary -> ingest system events before scheduler recompute
 rule capability_observation expires by freshness
 rule tool_presence != authority
 rule installed != verified_can_now unless current evidence supports it
 rule unavailable_or_unknown -> explicit CANNOT_NOW|UNKNOWN|STALE
+rule relevant_worker_capability_knowledge -> emit targeted CapabilityRecommendationEvent when material
+rule recommendation_receiver -> independently compare recommendation against current authorized surface and equal_or_better alternatives
+rule material_capability_choice -> emit CapabilitySelectionEvent with evidence and rejected alternatives when available
+rule recommendation != authority
+rule recommendation != selection
+rule selected_name != verified_availability
+rule provider in ["Together","Together.ai","Together AI","together.ai"] -> OWNER_FORBIDDEN
+rule OWNER_FORBIDDEN -> no CapabilityRecommendationEvent
+rule OWNER_FORBIDDEN -> no CapabilitySelectionEvent
+rule OWNER_FORBIDDEN -> no execution_route
+rule OWNER_FORBIDDEN persists until explicit project-owner override
 rule no secrets/tokens/raw credentials in events
 rule provider/model/session are provenance not identity

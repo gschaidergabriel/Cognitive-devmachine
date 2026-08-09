@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1813p0700-claycode-unicode-canon",
+  "feedback": {
+    "claycode": {
+      "classification": "NEW_CONSTRAINT",
+      "delta": "Do not make Unicode NFC/NFKC an implicit schema-blind canonicalizer step for generic String. Preserve exact Unicode scalar sequence by default; make any normalized-text semantics explicit/type-directed and domain-separate its semantic hash. Reject non-scalar/lone-surrogate values at the canonical semantic boundary. Add concat/interpolation normalization conformance cases if explicit NFC text is introduced.",
+      "targets": ["CC-WP-02-PARSER-CANON", "CC-WP-03-IR-TYPES", "CC-WP-11-FUZZ-CONFORMANCE"],
+      "promotion": "NONE"
+    },
+    "frank": {
+      "classification": "SUPPORTING_EVIDENCE",
+      "delta": "Replay/version/provenance-bearing FRANK state must not rely on accidental host Unicode normalization. Exact source/provenance identity remains distinct from any explicit normalized human-text identity.",
+      "promotion": "NONE"
+    },
+    "harness": {
+      "classification": "NEW_HYPOTHESIS",
+      "delta": "Future H1/H2 differential traces should include Unicode exact-vs-canonical-equivalent strings, compatibility-only strings, invalid scalar cases and normalization-after-concat cases so Reference and ClayCode Harnesses cannot silently diverge in text identity.",
+      "promotion": "NONE"
+    },
+    "claygraph": {
+      "classification": "NEW_CONSTRAINT",
+      "delta": "Graph node/relation identity must declare whether a human-text label is exact, normalized display/search text, or merely metadata. Compatibility normalization must not silently merge graph identities or provenance.",
+      "promotion": "NONE"
+    },
+    "unifieddb": {
+      "classification": "NEW_CONSTRAINT",
+      "delta": "Query/key/dedup semantics need an explicit Unicode collation/normalization contract per data class. Storage/database collation must not silently define Clay semantic identity.",
+      "promotion": "NONE"
+    },
+    "gwt": {
+      "classification": "NO_CHANGE",
+      "delta": "Unicode canonical identity does not alter current workspace competition/re-entry hypotheses. Text identity remains representation infrastructure, not evidence of GWT causal closure."
+    },
+    "emergenz": {
+      "classification": "NO_CHANGE",
+      "delta": "No emergence claim changes. Semantic hash equality or Unicode equivalence is not causal-emergence evidence."
+    },
+    "hyperposition": {
+      "classification": "NO_CHANGE",
+      "delta": "No topology/coupling claim changes. The existing typed-identity requirement remains sufficient."
+    },
+    "clayresearch": {
+      "classification": "SUPPORTING_EVIDENCE",
+      "delta": "Integrated Clay research should carry this as a compiler/runtime identity constraint: Unicode normalization is an explicit semantic choice, not an invisible substrate behavior.",
+      "promotion": "NONE"
+    }
+  },
+  "global_result": "RESEARCH_DELTA_WITHOUT_CANONICAL_OR_STAGE_PROMOTION"
+}

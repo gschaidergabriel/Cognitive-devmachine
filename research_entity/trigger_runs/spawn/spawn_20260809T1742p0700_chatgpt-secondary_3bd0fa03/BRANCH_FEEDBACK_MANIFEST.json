@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1742p0700_chatgpt-secondary_3bd0fa03",
+  "feedback": [
+    {
+      "branch": "claycode",
+      "kind": "NEW_CONSTRAINT",
+      "delta": "Define incremental correctness as equivalence to full recomputation at a coherent sealed semantic epoch. Preserve signed Delta<T>.diff; extend dependency/invalidation semantics to negative/competitive selector domains and selector/plan identity. Prefer compiler/runtime metadata over new language syntax unless an executable counterexample forces semantic expansion."
+    },
+    {
+      "branch": "unifieddb",
+      "kind": "NEW_CONSTRAINT",
+      "delta": "Persistence/replay must retain enough signed multiplicity/derivation, operator/index state, selector/plan identity and epoch/frontier state to reconstruct the same materialized view deterministically."
+    },
+    {
+      "branch": "claygraph",
+      "kind": "NEW_CONSTRAINT",
+      "delta": "Derived selection/activation projections must handle retractions and competitor/partition invalidation; graph-epoch publication must not expose mixed partial state as current."
+    },
+    {
+      "branch": "gwt",
+      "kind": "NEW_CONSTRAINT",
+      "delta": "GWT candidate/workspace selection is a non-monotone selector class. Retraction of the winner must trigger reconsideration of relevant competitors, and selection receipts should pin selector identity plus coherent epoch."
+    },
+    {
+      "branch": "harness",
+      "kind": "NEW_HYPOTHESIS",
+      "delta": "Add a from-scratch differential oracle for incremental execution: same initial state/deltas/selector versions/logical times, compare every architecture-relevant view/state result under full recompute versus incremental mode; include duplicates, retractions, top-k/argmax, aggregates, recursion, selector change, late events and checkpoint recovery."
+    },
+    {
+      "branch": "frank",
+      "kind": "NEW_CONSTRAINT",
+      "delta": "AnswerCapsule/current cognitive-view publication should identify the coherent semantic epoch/derivation context from which it was built; stale mixed-epoch views must not masquerade as current state."
+    },
+    {
+      "branch": "clayresearch",
+      "kind": "SUPPORTING_EVIDENCE",
+      "delta": "Refines KMP-CR-20260809-INCREMENTAL-LOCALITY: locality remains promising, but closure size alone is insufficient; correctness, selector invalidation, maintained operator state, memory and recovery costs are mandatory shadow metrics."
+    },
+    {
+      "branch": "hyperposition",
+      "kind": "NO_CHANGE",
+      "delta": "No distinct higher-order topology mechanism was established. Existing alternative/codependency structures should inherit coherent-epoch/invalidation requirements when incrementally materialized."
+    },
+    {
+      "branch": "emergenz",
+      "kind": "NO_CHANGE",
+      "delta": "No emergence claim changed. Causal/readout analyses should consume coherent sealed state epochs so incremental maintenance artifacts are not mistaken for system effects."
+    }
+  ],
+  "cross_branch_priority": [
+    "claycode",
+    "harness",
+    "unifieddb",
+    "claygraph",
+    "gwt",
+    "frank",
+    "clayresearch"
+  ],
+  "stage_effect": {
+    "BASE_CLAYCODE_RELEASE": "RESEARCH_CONSTRAINT_ONLY",
+    "gate_status_change": "NONE",
+    "reason": "No final ClayCode compiler/runtime execution on the Ubuntu target was established."
+  },
+  "canonical_promotion": "NONE"
+}

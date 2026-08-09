@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "status": "ACTIVE",
   "effective_from": "2026-08-09",
   "next_expected_change": "2026-08-11",
@@ -23,14 +23,17 @@
   "compute": {
     "available_now": [
       "Minisforum 790 Pro",
-      "additional computer connected through Tailscale; capabilities require verification before scheduling specialized workloads"
+      "additional computer connected through Tailscale; capabilities require verification before scheduling specialized workloads",
+      "Hostinger VPS with connected GitHub Actions self-hosted runner; live Clay System Monitor observation on 2026-08-09 reports hostinger-vps online and GitHub Runner online; Ubuntu/Linux remote build-test lane for Frank v0.1; capability event research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json"
     ],
+    "preferred_frank_v0_1_remote_build_test": "hostinger-vps-github-runner",
+    "target_os_for_frank_v0_1": "Ubuntu Linux developer-system semantics",
     "expected_not_yet_available": [
-      "VPS expected around 2026-08-16 with RTX 3090, 24 GB VRAM and about 5 TB storage; verify before use"
+      "separate GPU/storage VPS expected around 2026-08-16 with RTX 3090, 24 GB VRAM and about 5 TB storage; verify before use; do not conflate with the already-online Hostinger GitHub runner"
     ]
   },
-  "routing_rule": "Dispatch only against verified currently available capacity. Planned resources and temporarily unavailable AI workers may receive future queues but not current execution assignments.",
-  "handoff_rule": "When Claude research capacity returns, first ingest canonical deltas/tests/artifacts produced during the ChatGPT-first window, plus the completion receipt/status of the Andreas Harness lane, before assigning new work.",
-  "forecast_rule": "DOOMSDAY forecasting must distinguish AI-worker availability dates from hardware availability dates. The 2026-08-11 next_expected_change refers to Claude research capacity; the expected RTX 3090 VPS date is separately encoded in compute.expected_not_yet_available and must not be conflated with it.",
-  "source": "PROJECT_OWNER_STATEMENT_2026-08-09"
+  "routing_rule": "Dispatch only against verified currently available capacity. For Frank v0.1 remote build/test/benchmark work, prefer the verified Hostinger self-hosted GitHub runner when a compatible authorized workflow exists; preserve Andreas Ubuntu developer-system execution as final release evidence. Planned resources and temporarily unavailable AI workers may receive future queues but not current execution assignments.",
+  "handoff_rule": "When Claude research capacity returns, first ingest canonical deltas/tests/artifacts produced during the ChatGPT-first window, the Hostinger runner capability/work events, plus the completion receipt/status of the Andreas Harness lane, before assigning new work.",
+  "forecast_rule": "DOOMSDAY forecasting must distinguish AI-worker availability dates, the already-online Hostinger GitHub runner, and separately planned GPU/storage hardware availability. The 2026-08-11 next_expected_change refers to Claude research capacity; the expected RTX 3090 VPS date is separately encoded in compute.expected_not_yet_available and must not be conflated with the Hostinger runner.",
+  "source": "PROJECT_OWNER_STATEMENT_AND_LIVE_UI_VERIFICATION_2026-08-09"
 }

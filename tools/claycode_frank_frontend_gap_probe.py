@@ -26,7 +26,7 @@ from typing import Any
 from lark import Lark
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
 DEFAULT_SOURCE = ROOT / "frank_reference/claycode/frank_runtime.clay"
 DEFAULT_PROVENANCE = ROOT / "frank_reference/claycode/frank_runtime.provenance.json"
 
@@ -142,8 +142,6 @@ def main() -> None:
     grammar = grammar_path.read_text(encoding="utf-8")
     source = source_path.read_text(encoding="utf-8")
 
-    # Provenance is checked before parser construction so a stale/drifted mirror cannot
-    # accidentally become evidence for a language change or a false compatibility claim.
     provenance = read_provenance(provenance_path, source_path)
 
     parser = Lark(
@@ -158,8 +156,8 @@ def main() -> None:
     inventory = first_word_inventory(source)
 
     out = {
-        "schema_version": "1.1",
-        "experiment": "ClayCode BASE frontend vs exact provenance-bound FRANK source coverage probe",
+        "schema_version": "1.2",
+        "experiment": "ClayCode BASE V9 frontend vs exact provenance-bound FRANK source coverage probe",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar": {
             "path": str(grammar_path),
@@ -179,10 +177,10 @@ def main() -> None:
         "counterexample": not parsed["accepted"],
         "evidence_class": "HOSTED_PROXY_NONSTRICT" if args.proxy_nonstrict else "STRICT_FRONTEND_PROBE",
         "decision_rule": (
-            "A parse failure on the exact provenance-bound frozen FRANK source is a concrete "
-            "frontend coverage counterexample. It authorizes investigation of the smallest "
-            "compatible syntax/IR or explicit dialect/pre-lowering delta; it does not by itself "
-            "authorize a semantic change or a WP02/WP13 PASS."
+            "A parse failure on the exact provenance-bound frozen FRANK source using the active V9 "
+            "frontend is a concrete coverage counterexample. It authorizes investigation of the "
+            "smallest compatible syntax/IR or explicit dialect/pre-lowering delta; it does not by "
+            "itself authorize a semantic change or a WP02/WP13 PASS."
         ),
         "scope_guard": (
             "This probe tests frontend acceptance only. A successful parse does not prove type/effect, "

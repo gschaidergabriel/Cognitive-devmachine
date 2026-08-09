@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-live-fusion-20260810T0058p0700",
+  "branch":"unifieddb",
+  "status":"NO_CHANGE",
+  "promotion":"NONE",
+  "reason":"Post-cutoff UnifiedDB/WAL packetization did not add an independent new mechanism result beyond the already-fused Hostinger SQLite WAL lineage; later descendants are shared-ancestry summaries/routing artifacts.",
+  "preserved_state":["held-reader checkpoint retention remains observed on Hostinger","single-writer busy behavior remains observed","FULL/NORMAL latency difference remains host-local and non-promotional"],
+  "counterhypothesis":"Representative FRANK traffic or crash/power-loss testing may materially change the durability/performance conclusion.",
+  "ancestry_rule":"Packet/report/branch descendants of the same WAL execution are not independent replication.",
+  "open_blockers":["representative workload","crash/power-loss durability","Andreas-target measurements"]
+}

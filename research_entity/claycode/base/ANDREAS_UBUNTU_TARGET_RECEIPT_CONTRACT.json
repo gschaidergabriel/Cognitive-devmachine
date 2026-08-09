@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "CLAYCODE_BASE_ANDREAS_UBUNTU_TARGET_RECEIPT_V1",
+  "target_host": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "purpose": "Define the minimum evidence shape for host-specific ClayCode BASE acceptance. Hosted CI/proxy receipts cannot satisfy this contract.",
+  "required_top_level": [
+    "schema_version",
+    "target_host",
+    "repository_commit",
+    "host_fingerprint",
+    "compiler_runtime",
+    "work_packages",
+    "applications",
+    "frank_handoff",
+    "unresolved_language_counterexamples",
+    "overall_pass"
+  ],
+  "host_fingerprint_required": [
+    "uname",
+    "architecture",
+    "python_version",
+    "c_compiler_version"
+  ],
+  "required_work_packages": [
+    "CC-WP-02-PARSER-CANON",
+    "CC-WP-03-IR-TYPES",
+    "CC-WP-04-TYPE-EFFECT",
+    "CC-WP-05-EVALUATOR",
+    "CC-WP-06-COMPILER-LOWERING",
+    "CC-WP-07-RUNTIME-ABI-FFI",
+    "CC-WP-08-STDLIB-SDK",
+    "CC-WP-09-CONCURRENCY-MEMORY",
+    "CC-WP-10-GENERAL-APP-SUITE",
+    "CC-WP-11-FUZZ-CONFORMANCE",
+    "CC-WP-12-CORPUS-HELDOUT",
+    "CC-WP-13-HARNESS-HANDOFF"
+  ],
+  "work_package_receipt_rule": "Each work package row must contain pass=true, evidence paths/hashes, exact commands or executable test IDs, and no proxy-only evidence as its sole basis.",
+  "required_applications": [
+    "CLI",
+    "HTTP_WEBSITE",
+    "DB_SERVICE",
+    "CONCURRENT_SERVICE",
+    "GUI_INTERACTIVE",
+    "COMPILER_TOOL",
+    "GPU_ML_NUMERICAL",
+    "SYSTEM_EFFECT_SANDBOX",
+    "FRANK_COMPONENT",
+    "FULL_FRANK_HANDOFF"
+  ],
+  "application_row_required": [
+    "pass",
+    "source_or_program_hash",
+    "semantic_or_ir_hash",
+    "compiler_runtime_version",
+    "target_artifact_hash",
+    "execution_command_or_test_id",
+    "expected",
+    "observed",
+    "negative_or_failure_path",
+    "authority_boundary_preserved"
+  ],
+  "frank_handoff_required": [
+    "pass",
+    "frozen_frank_source_hashes",
+    "claycode_source_hashes",
+    "production_chain_receipts",
+    "semantic_escape_hatches",
+    "h2_h3_handoff_ready"
+  ],
+  "hard_rules": [
+    "target_host must equal ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
+    "every required work package must pass",
+    "all ten applications must pass through the production ClayCode chain",
+    "GUI_INTERACTIVE must execute an actual Ubuntu interactive/event-loop adapter, not only a hosted headless state proxy",
+    "FULL_FRANK_HANDOFF must be the actual frozen FRANK handoff, not only packet_score or another bounded proxy",
+    "unresolved_language_counterexamples must be empty",
+    "model_output never constitutes execution authority",
+    "semantic/effect differential evidence outranks self-consistent hashes",
+    "overall_pass may be true only when every hard rule above is satisfied"
+  ],
+  "expected_receipt_path": "research_entity/claycode/target/ANDREAS_UBUNTU_BASE_ACCEPTANCE.json"
+}

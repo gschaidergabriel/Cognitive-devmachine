@@ -136,7 +136,6 @@ def main() -> int:
     os_release = read_os_release()
     linux = platform.system() == "Linux"
     ubuntu = os_release.get("ID", "").lower() == "ubuntu"
-    # CI is never allowed to self-attest as Andreas' physical developer target.
     not_ci = os.environ.get("GITHUB_ACTIONS", "").lower() != "true" and os.environ.get("CI", "").lower() not in {"1", "true", "yes"}
     target_attested = target_id == EXPECTED_TARGET_ID and linux and ubuntu and not_ci
 
@@ -201,7 +200,7 @@ def main() -> int:
             ("WP02_CANONICALIZER", [sys.executable, "tools/claycode_base_canonicalizer_validation.py"], "CC-WP-02-PARSER-CANON", True, ROOT / "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json"),
             ("WP03_TYPED_IR", [sys.executable, "tools/claycode_wp03_typed_ir_validation.py"], "CC-WP-03-IR-TYPES", True, ROOT / "research_entity/claycode/autonomous/WP03_TYPED_IR_RECEIPT.json"),
             ("WP03_06_PURE_NATIVE_DIFFERENTIAL", [sys.executable, "tools/claycode_base_pure_toolchain_validation.py"], "CC-WP-03..CC-WP-06", True, ROOT / "research_entity/claycode/autonomous/BASE_PURE_TOOLCHAIN_RECEIPT.json"),
-            ("WP05_06_LARGE_INT_DIVISION", [sys.executable, "tools/claycode_large_int_division_regression.py"], "CC-WP-05..CC-WP-06", True, ROOT / "research_entity/claycode/autonomous/LARGE_INT_DIVISION_REGRESSION_RECEIPT.json"),
+            ("WP05_06_LARGE_INT_DIVISION", [sys.executable, "tools/claycode_int_division_regression.py"], "CC-WP-05..CC-WP-06", True, ROOT / "research_entity/claycode/autonomous/BASE_INT_DIVISION_REGRESSION_RECEIPT.json"),
             (
                 "WP04_08_EFFECT_PIPELINE",
                 [sys.executable, "tools/claycode_base_effect_pipeline.py", "--self-test", "--output", str(EFFECT_OUT.relative_to(ROOT))],
@@ -308,7 +307,6 @@ def main() -> int:
         "output": str(args.output.relative_to(ROOT)) if args.output.is_relative_to(ROOT) else str(args.output),
     }, ensure_ascii=False))
 
-    # Exit 0 means only the target-component battery is green. It never means BASE PASS.
     return 0 if target_attested and clean_input and component_steps_pass else 2
 
 

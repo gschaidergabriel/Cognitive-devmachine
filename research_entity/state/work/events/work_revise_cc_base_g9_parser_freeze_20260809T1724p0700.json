@@ -1,0 +1,26 @@
+{
+  "schema_version":"2.0",
+  "event_id":"work_revise_cc_base_g9_parser_freeze_20260809T1724p0700",
+  "kind":"WORK_REVISE",
+  "actor":"chatgpt-secondary",
+  "created_at":"2026-08-09T17:24:00+07:00",
+  "payload":{
+    "work_id":"WORK-CC-BASE-G9-PARSER-FREEZE-001",
+    "reason_clay":"Matched local execution now shows N/S/D all parse the complete current G9 V3 plus Dialect corpus under production-like LALR after shared structural and lexical-identity repairs; all preserve one tested semantic hash, reject executed malformed/unknown-relation corpora fail-closed, and survive formatting/mutation tests. D currently has the lowest migration cost and marginally lowest parse median/p95, but the target-reader and normative compiler tests required by the prior revision remain missing.",
+    "work_clay":"Continue from the latest all-worker production-parser receipts. Integrate the shared parser repairs into a real repository parser/canonicalizer candidate without changing ClayCode semantics. Keep N/S/D available until target-reader discrimination. Give D first implementation priority as LEADING_NOT_SELECTED, not as canonical choice. Execute on every accessible surface: real repository parser/canonicalizer roundtrip, typed AST identity, type/effect handoff, E2B replication when callable, Ubuntu target execution when available, and Qwen-class 4B reader/repair benchmark. Compare D against N/S on identical reader prompts/corpus and rollback if its grammar/registry burden outweighs migration gains.",
+    "completion_clay":"Normative repository parser/canonicalizer parses complete admitted G9+dialect corpus with zero unresolved semantic ambiguity, boolean/keyword lexical identity preserved, deterministic semantic hashes and precise diagnostics; target-reader matched N/S/D evidence exists; target Ubuntu/E2B receipts exist where those capabilities are actually exposed; selected surface is evidence-backed and reversible; then proceed directly to type/effect/evaluator/lowering rather than more surface theorizing.",
+    "evidence_need":[
+      "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/EXECUTABLE_RESEARCH_RECEIPT.json",
+      "research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/LEXICAL_IDENTITY_AND_AMBIGUITY_RECEIPT.json"
+    ],
+    "executor_policy":"Every claycode-room worker obeys research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md. Use strongest currently callable test surface, record blockers instead of pretending execution, and continue to next highest-information test until saturated or genuinely blocked.",
+    "required_capabilities":["repository_read","repository_write","local_code_execution","test_execution","target_model_reader_if_available","e2b_if_available","ubuntu_target_if_available"],
+    "dependencies":["current G9 stack","current Dialect registry","all-worker execution directive","latest N/S/D receipts"],
+    "invalidators":["newer production parser already passes the complete required oracle and target-reader gate","ClayCode stack changes materially","new executable counterexample refutes the shared parser repairs"],
+    "base_priority":0.995,
+    "expected_impact":0.995,
+    "urgency":0.995,
+    "information_gain":0.995,
+    "status":"READY"
+  }
+}

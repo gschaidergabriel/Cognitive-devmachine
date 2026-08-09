@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.1",
+  "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id": "claycode_20260809T1607p0700_chatgpt_http_app02",
+  "latest_frank_run": "fusion-20260809T1538p0700-frank-architecture-lineage",
+  "latest_frank_architecture_artifact": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+  "shared_ancestry_is_not_replication": true,
+  "reviews": [
+    {
+      "claim_id": "GOODMAN-CC-HTTP-01",
+      "frank_statement": "Model/source output and textual capability references are proposals and never self-authorizing effects; effect authority is host/runtime controlled.",
+      "frank_source_refs": [
+        "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+        "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"
+      ],
+      "ancestry_families": ["FRANK_EFFECT_AUTHORITY_LINEAGE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Capability metadata in ClayCode is sufficient and host/runtime resource enforcement is unnecessary.",
+      "falsifier": "A reproducible untrusted execution path safely constrains effects using semantic metadata alone without host/runtime enforcement, including against forged/ambient access.",
+      "independent_checks": [
+        "Current-run HTTP v2 execution denied missing/forged listener handles and executed only with a host-provided listener handle.",
+        "Parallel Linux sandbox experiment independently showed ordinary unsandboxed processes retain ambient filesystem authority and OS enforcement is required.",
+        "Official WIT/Component Model documentation independently models imported resources/interfaces as host-component boundaries rather than authority by textual name."
+      ],
+      "adversarial_checks": [
+        "HTTP v1 token embedding was attacked by repeated execution and failed deterministic target identity.",
+        "HTTP v2 explicitly records that unrestricted Python is not itself a production capability sandbox."
+      ],
+      "verdict": "SUPPORTED",
+      "reason": "The core authority separation survives independent executable and external mechanism checks, while the concrete backend remains open.",
+      "claycode_action": "retain_authority_boundary",
+      "affected_claycode_artifacts": [
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+      ]
+    },
+    {
+      "claim_id": "GOODMAN-CC-HTTP-02",
+      "frank_statement": "No ambient OS authority; external effects should be mediated through host-minted effect permits/resources while preserving computational expressibility.",
+      "frank_source_refs": [
+        "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"
+      ],
+      "ancestry_families": ["FRANK_P10_EFFECT_SANDBOX_LINEAGE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A conventional unrestricted process plus application-level checks is sufficient for ClayCode BASE and safer capability machinery can be deferred indefinitely.",
+      "falsifier": "A complete adversarial application suite demonstrates no authority escape under unrestricted host APIs while preserving the same threat model.",
+      "independent_checks": [
+        "Current-run inherited-listener experiment separates host bind authority from guest service behavior without embedding a secret into generated code.",
+        "Parallel Linux effect-boundary experiment produced a counterexample to metadata-only authority and positive namespace/resource-narrowing evidence."
+      ],
+      "adversarial_checks": [
+        "The current Python target is intentionally classified as not sandbox-safe because arbitrary imports/host APIs could reintroduce ambient authority."
+      ],
+      "verdict": "REFINED",
+      "reason": "The architectural rule is supported, but the concrete implementation should prefer opaque typed resource/handle imports plus OS/runtime enforcement; a raw FD in unrestricted Python is only a prototype mechanism.",
+      "claycode_action": "integrate_refined_host_resource_boundary_as_open_backend_requirement",
+      "affected_claycode_artifacts": [
+        "CC-WP-04-TYPE-EFFECT",
+        "CC-WP-06-COMPILER-LOWERING",
+        "CC-WP-07-RUNTIME-ABI-FFI",
+        "CC-WP-10-GENERAL-APP-SUITE"
+      ]
+    },
+    {
+      "claim_id": "GOODMAN-CC-HTTP-03",
+      "frank_statement": "Physical/backend encodings may be conventional as long as ClayCode remains the semantic source and crossings are typed/auditable rather than becoming a second semantic architecture.",
+      "frank_source_refs": [
+        "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"
+      ],
+      "ancestry_families": ["FRANK_CLAY_NATIVE_SEMANTIC_BOUNDARY_LINEAGE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A host HTTP adapter inevitably becomes a hidden second architecture and therefore HTTP must be a dedicated core ClayCode primitive.",
+      "falsifier": "A realistic frozen APP-02 program cannot preserve route/state/effect semantics and receipts through a typed adapter without placing application semantics in backend-specific host code.",
+      "independent_checks": [
+        "Current-run canonical IR lowered the same route/state semantics into deterministic generated host code without adding a ClayCode HTTP primitive.",
+        "Official Component Model/WIT design independently demonstrates typed interface/resource boundaries between semantic components and host functionality."
+      ],
+      "adversarial_checks": [
+        "Streaming, async cancellation, structured errors, resource lifetimes and second-backend equivalence were not proven and remain explicit falsifiers."
+      ],
+      "verdict": "REFINED",
+      "reason": "Typed FFI is sufficient for the bounded case, but a full APP-02/APP-04 differential test is required before treating the adapter design as release-ready.",
+      "claycode_action": "keep_core_language_unchanged_and_test_typed_ffi_differentially",
+      "affected_claycode_artifacts": [
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+        "CC-WP-07-RUNTIME-ABI-FFI",
+        "CC-WP-10-GENERAL-APP-SUITE"
+      ]
+    }
+  ]
+}

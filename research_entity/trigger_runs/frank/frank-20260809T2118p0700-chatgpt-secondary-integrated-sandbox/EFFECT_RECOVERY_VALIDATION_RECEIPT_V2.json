@@ -1,0 +1,26 @@
+{
+  "schema_version":"frank-h1-effect-recovery-validation-0.2",
+  "run_id":"frank-20260809T2118p0700-chatgpt-secondary-integrated-sandbox",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class":"REMOTE_SANDBOX_DETERMINISTIC_TEST",
+  "owner_evidence_rule_for_this_run":"SANDBOX_SUFFICIENT_FOR_NOW",
+  "refines":"EFFECT_RECOVERY_VALIDATION_RECEIPT.json",
+  "exact_current_artifacts":{
+    "effect_gateway_runtime":{"path":"research_entity/harness/reference/effect_gateway_runtime.py","git_blob_sha":"825bae496048d00748ed1ae4c53ae5acf73d62fd"},
+    "effect_gateway_tests":{"path":"research_entity/harness/reference/test_effect_gateway_runtime.py","git_blob_sha":"660507389bb23c24a3bdf7e27547f080c0d0e260"}
+  },
+  "current_validation":{"combined_tests_passed":135,"combined_tests_failed":0,"compileall":"PASS"},
+  "new_negative_result_and_fix":{
+    "finding":"Absolute temporary sandbox root was persisted in semantic effect state, so semantically identical effects under different roots produced different semantic and trace hashes.",
+    "classification":"HOST_PATH_LEAK_INTO_SEMANTIC_STATE",
+    "resolution":"Persist only normalized relative_path and sandbox:/// logical target_identity; keep host root outside semantic state.",
+    "post_fix_test":"Two distinct temporary roots executing the same logical effect now produce identical semantic_state_hash and trace_root_hash, and neither absolute root appears in the materialized effect value."
+  },
+  "previous_effect_reentry_fix_retained":{
+    "finding":"Broad bounded effect-domain retrieval caused only 23/100 wrapper audit passes as history grew.",
+    "resolution":"Effect outcome re-entry is exact-key addressed by effect_id.",
+    "post_fix":"100/100 under the same stress structure."
+  },
+  "release_claim":"NOT_H1_RELEASE_PASS"
+}

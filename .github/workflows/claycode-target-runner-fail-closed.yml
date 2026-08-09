@@ -1,0 +1,33 @@
+name: ClayCode target runner fail-closed
+on:
+  pull_request:
+    paths:
+      - 'tools/claycode_andreas_ubuntu_acceptance.py'
+      - 'research_entity/claycode/target_receipts/ANDREAS_UBUNTU_HOST_BINDING.template.json'
+      - '.github/workflows/claycode-target-runner-fail-closed.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  generic-ubuntu-must-not-pass:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Fingerprint is observable but not acceptance
+        run: python tools/claycode_andreas_ubuntu_acceptance.py --print-fingerprint > /tmp/fingerprint.json
+      - name: Fake binding must be refused
+        shell: bash
+        run: |
+          cat > /tmp/fake-binding.json <<'JSON'
+          {"host_role":"ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM","machine_id_sha256":"0000000000000000000000000000000000000000000000000000000000000000","approved_by":"NEGATIVE_TEST"}
+          JSON
+          set +e
+          python tools/claycode_andreas_ubuntu_acceptance.py --binding /tmp/fake-binding.json >/tmp/out 2>/tmp/err
+          rc=$?
+          set -e
+          test "$rc" -eq 64
+          grep -q 'TARGET_MACHINE_BINDING_MISMATCH' /tmp/err
+          grep -q 'counts_as_target_acceptance.*false' /tmp/err
+          echo TARGET_IMPERSONATION_REFUSED=PASS

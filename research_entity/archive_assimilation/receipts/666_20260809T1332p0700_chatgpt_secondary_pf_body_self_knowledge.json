@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1332p0700-chatgpt-secondary-pf-body-self-knowledge",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "focus": "historical embodied-state learning plus self-knowledge/capability introspection at frozen head"
+  },
+  "source_refs": [
+    "personality/ego_construct.py@abba90a5767d85abc8a1ac340bae92842dab35c1#blob:d954835220edf9b858fa59eb4fc512f043c63a09",
+    "personality/self_knowledge.py@abba90a5767d85abc8a1ac340bae92842dab35c1#blob:0a1f4d3ec7d47fe35d4f2ff0be855296c3405850"
+  ],
+  "mechanisms": [
+    {
+      "id":"PF-EGO-001",
+      "mechanism":"Persistent body-state mapping",
+      "detail":"EgoConstruct maps whitelisted hardware metrics through stored sensation conditions/formulas into bounded first-person body descriptors. Default and custom mappings persist in titan.db and are reloaded across sessions."
+    },
+    {
+      "id":"PF-EGO-002",
+      "mechanism":"Event-to-affect association",
+      "detail":"Regex event patterns map recent events to persisted affect definitions and reinforce an affective_range state. New mappings can be user-defined and default mappings are seeded idempotently."
+    },
+    {
+      "id":"PF-EGO-003",
+      "mechanism":"Agency assertion memory",
+      "detail":"Autonomous actions are converted into persisted agency assertions tied to resilience-rule labels; recency-weighted confidence over recent assertions determines agency_score."
+    },
+    {
+      "id":"PF-EGO-004",
+      "mechanism":"Continuous auto-training/reinforcement",
+      "detail":"auto_train_from_state repeatedly reinforces embodiment/affect and asserts agency from system metrics, recent events and autonomous actions; already-learned sensations/affects still add +0.002 toward a 0.95 cap."
+    },
+    {
+      "id":"PF-EGO-005",
+      "mechanism":"Output-feedback self-modulation",
+      "detail":"process_own_response adjusts agency, embodiment and affective-range from analysis of Frank's own output; confident output increases agency, verbose output increases embodiment, creative/emotional output increases affective range."
+    },
+    {
+      "id":"PF-SK-001",
+      "mechanism":"Hybrid static/dynamic self-model",
+      "detail":"SelfKnowledge combines hard-coded CORE_IDENTITY/CAPABILITY_MAP declarations with filesystem module discovery, database introspection, localhost service checks and a dynamic core-awareness feature bridge."
+    },
+    {
+      "id":"PF-SK-002",
+      "mechanism":"Visual self-model claims",
+      "detail":"SelfKnowledge carries VCB/self-aware-vision descriptions, error-screenshot semantics and explicit first-person self-recognition claims. These are self-model declarations at this source, not by themselves runtime validation evidence."
+    }
+  ],
+  "negative_results": [
+    {
+      "id":"PF-EGO-FAIL-001",
+      "result":"Repeated activation of already-known sensations or affects mechanically increases embodiment_level/affective_range toward 0.95 without an independent correctness or calibration signal.",
+      "impact":"Frequency can be mistaken for evidence/quality; an online adaptive learner can self-saturate merely because a familiar trigger repeats.",
+      "class":"STATIC_CODE_PROPERTY"
+    },
+    {
+      "id":"PF-EGO-FAIL-002",
+      "result":"Frank's own response analysis can reinforce agency/embodiment/affect, including confidence and verbosity-derived increments.",
+      "impact":"Self-generated output participates in its own state-strengthening loop, creating a Goodhart/self-confirmation path unless separated from externally grounded outcome evidence.",
+      "class":"STATIC_CODE_PROPERTY"
+    },
+    {
+      "id":"PF-EGO-FAIL-003",
+      "result":"Custom sensation parsing falls back to the condition 'cpu > 50' when natural-language parsing fails.",
+      "impact":"An unparsed user mapping may silently bind to the wrong sensor condition instead of failing closed, contaminating learned body semantics.",
+      "class":"STATIC_CODE_PROPERTY"
+    },
+    {
+      "id":"PF-SK-FAIL-001",
+      "result":"CapabilityRegistry._check_module only tests module paths when len(module_path.split('.')) == 2; multi-segment CAPABILITY_MAP entries such as ui.overlay.voice, services.asrs.auto_repair and services.genesis.watchdog deterministically return inactive.",
+      "impact":"The subsystem count and active-capability projection can under-report real capabilities despite the module existing; the advertised 'dynamic capability detection' is structurally incomplete.",
+      "class":"STATIC_CONTROL_FLOW_PROOF"
+    },
+    {
+      "id":"PF-SK-FAIL-002",
+      "result":"CORE_IDENTITY and detailed capability prose contain immutable/hard-coded technical and capability claims while other parts of the same file attempt dynamic discovery.",
+      "impact":"Self-model truth can drift from runtime truth after architecture changes. Static identity, runtime capability evidence and historical narrative need separate authority classes.",
+      "class":"ARCHITECTURE_DRIFT_RISK"
+    },
+    {
+      "id":"PF-SK-FAIL-003",
+      "result":"VCB/self-aware-vision text is embedded as a self-description/capability declaration and should not be treated as proof that the corresponding visual mechanism is healthy, current or calibrated.",
+      "impact":"Prompt/self-model claims can outrun sensor/runtime evidence; current Retina must expose evidence and health receipts rather than inheriting declarations as truth.",
+      "class":"EVIDENCE_CLASSIFICATION_NEGATIVE"
+    }
+  ],
+  "current_inheritance": [
+    {
+      "target":"Adaptive Visual Learner / Retina",
+      "delta":"Reuse the historical separation between raw state, learned mapping and prompt projection, but add provenance tiers, explicit unknown/open-set state, versioned prototypes/classifiers, independent calibration evidence and rollback. Never let repeated familiarity alone strengthen truth/confidence."
+    },
+    {
+      "target":"Adaptive Visual Learner / Retina",
+      "delta":"Historical user-teachable mapping is evidence that personalized online semantic association was already a project pattern. Transfer the interaction pattern, not the old scalar reinforcement rule: malformed or ambiguous teachings must fail closed rather than silently map to a default condition/class."
+    },
+    {
+      "target":"FRANK self/world/body model",
+      "delta":"Separate immutable identity facts, user-configured narrative, discovered capabilities, currently healthy capabilities and inferred subjective projections. Each layer needs explicit provenance/authority and staleness semantics."
+    },
+    {
+      "target":"Harness",
+      "delta":"Regressionize self-reinforcement saturation, malformed mapping fallback, capability-path depth >2, stale hard-coded capability claims and declared-vs-observed vision health."
+    },
+    {
+      "target":"UnifiedDB",
+      "delta":"Persist learned mapping/prototype version, source/trust tier, activation count, calibration status, last-confirmed evidence, supersession/rollback state and a distinct projection record. Do not store projected familiarity as sensor truth."
+    },
+    {
+      "target":"ClayCode",
+      "delta":"Represent identity_fact, runtime_observation, learned_mapping, confidence/calibration, projection and effect/agency outcome as different typed semantics so a self-description cannot silently upgrade into runtime authority."
+    },
+    {
+      "target":"GWT / agency",
+      "delta":"Subjective body/agency projections are useful workspace inputs, but causal credit should come from verified external outcomes/state deltas, not from confident/verbose self-output alone."
+    }
+  ],
+  "cheap_discriminating_tests": [
+    "Feed an unparseable teachable sensation/class mapping and require explicit rejection/clarification; assert no default mapping is persisted.",
+    "Replay the same familiar observation 10,000 times without new labels/outcomes; assert classifier certainty and self/body confidence do not monotonically saturate from exposure count alone.",
+    "Present contradictory trusted labels for one visual prototype; assert conflict/unknown is preserved and no single latest label silently wins.",
+    "Create a real capability at a 3-segment module path and assert discovery reports it correctly; compare declared capability, importability and live health separately.",
+    "Disable the visual backend while leaving self-model text intact; assert FRANK reports vision unavailable rather than repeating the capability declaration.",
+    "Generate high-confidence verbose self-output with no external success receipt; assert agency causal credit does not increase."
+  ],
+  "earned_work": {
+    "new_credit_hours": 0.0,
+    "mapping_candidate": true,
+    "reason":"The shard reveals reusable personalized-mapping/body/self-model mechanisms and concrete failure modes, but overlaps current adaptive-learning/self-state work and requires row-level earned-work dedup before credit."
+  },
+  "level0_effect": {
+    "exact_global_percent_added": 0.0,
+    "reason":"Two valid frozen-head semantic/code units were analyzed, but the Project-Frankenstein recursive tree/history denominator is still unfrozen, so exact global percentage remains 0 by law."
+  },
+  "status":"COMPLETE_SEMANTIC_CODE_SHARD",
+  "created_at":"2026-08-09T13:32:00+07:00"
+}

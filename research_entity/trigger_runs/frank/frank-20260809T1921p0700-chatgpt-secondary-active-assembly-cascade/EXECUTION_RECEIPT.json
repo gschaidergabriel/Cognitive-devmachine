@@ -1,0 +1,48 @@
+{
+  "schema_version":"1.0",
+  "run_id":"frank-20260809T1921p0700-chatgpt-secondary-active-assembly-cascade",
+  "experiment_id":"EXP-FRANK-H1-ACTIVE-ASSEMBLY-001",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "evidence_class":"HOSTED_LINUX_REFERENCE_COMPONENT_EXECUTION_NOT_TARGET_UBUNTU",
+  "target_host_verified":false,
+  "live_frank_verified":false,
+  "normative_claycode_execution":false,
+  "implementation":{
+    "path":"research_entity/harness/reference/active_assembly.py",
+    "commit":"9cb162bea8ea82a1ff8c5da942cb655bcefe3bd5",
+    "sha256":"eecd5b11de4ac6abebc7f48a4ff4b4780e71e94dbf432637214638d20bdb0007"
+  },
+  "tests":{
+    "path":"research_entity/harness/tests/test_active_assembly.py",
+    "commit":"e6c4103b04a57edcec5fc3231c309451505e0b27",
+    "sha256":"44d699c2a31ee531ead82647e5e7937353bcbb2a0ae6cd5950ea87b7ea17c09c",
+    "tests_run":8,
+    "tests_passed":8,
+    "tests_failed":0,
+    "runtime_seconds":0.720
+  },
+  "tested_invariants":[
+    "permutation-deterministic assembly hash",
+    "hard bounded item budget",
+    "stale epoch packet exclusion",
+    "omitted detail retains re-expansion reference",
+    "shared ancestry cannot crowd explicit counterevidence under configured family cap",
+    "capability visibility never becomes execution authority",
+    "model/peer/visual/capability packet authority mint attempt fails closed",
+    "score inputs are range validated"
+  ],
+  "synthetic_echo_conflict_fixture":{
+    "seed":20260809,
+    "trials":5000,
+    "budget_items":3,
+    "max_per_ancestry":1,
+    "naive_top3_counterevidence_retained":4212,
+    "ancestry_conflict_aware_counterevidence_retained":5000,
+    "interpretation":"Constructed mechanism fixture. It proves the reference compiler can express ancestry/conflict retention and exposes a failure mode of pure relevance ranking in this generator. It does not establish optimal ranking or real FRANK task utility."
+  },
+  "result":"PASS_REFERENCE_COMPONENT",
+  "promotion":"NONE",
+  "next_discriminator":"Run matched H1 broad-retrieval versus prepared-ActiveAssembly traces using real/frozen semantic packets and fixed 4B context budget; measure task outcome, conflict recall, provenance fidelity, token/KV cost, latency, update amplification and re-expansion success."
+}

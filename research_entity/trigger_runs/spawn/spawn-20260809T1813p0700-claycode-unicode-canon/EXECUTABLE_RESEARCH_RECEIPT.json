@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1813p0700-claycode-unicode-canon",
+  "experiment_id": "EXP-SPAWN-CC-UNICODE-001",
+  "actor": "chatgpt-secondary",
+  "execution_class": "HOSTED_LOCAL_PYTHON_PROXY",
+  "normative_claycode_execution": false,
+  "ubuntu_target_execution": false,
+  "source": {
+    "path": "research_entity/trigger_runs/spawn/spawn-20260809T1813p0700-claycode-unicode-canon/unicode_canonical_probe.py",
+    "sha256": "918052c5464b8c269cb3a2c86fd46d72405f9487523e06b3639ba7630542383c",
+    "creation_commit": "51d27c53d7b1ff93bc35ac7a418a0059ad4ee4fd"
+  },
+  "runtime": {
+    "language": "Python",
+    "version": "3.13.5",
+    "unicode_database_version": "15.1.0",
+    "hash_algorithm": "SHA-256"
+  },
+  "candidate_policy": {
+    "generic_string": "EXACT_SCALAR_SEQUENCE",
+    "explicit_normalized_text": "NFC",
+    "compatibility_normalization": "NO_IMPLICIT_NFKC",
+    "semantic_hash_preimage": "domain-separated by semantic type and normalization policy",
+    "normalized_value_boundary": "normalize after construction/concatenation at final typed value boundary"
+  },
+  "results": {
+    "canonical_equivalence_pairs_tested": 12665,
+    "canonical_equivalence_failures": 0,
+    "compatibility_only_pairs_tested": 2411,
+    "compatibility_only_failures": 0,
+    "cross_kind_hash_collisions_in_adversarial_samples": 0,
+    "lone_surrogate_cases_tested": 4,
+    "lone_surrogate_cases_rejected": 4,
+    "normalization_concat_counterexamples": 4,
+    "global_nfc_observable_counterexample": {
+      "left": "U+00E9",
+      "right": "U+0065 U+0301",
+      "raw_codepoint_lengths": [1, 2],
+      "nfc_equal": true,
+      "meaning": "implicit NFC would change generic codepoint-sequence equality/length semantics if String exposes exact sequence operations"
+    }
+  },
+  "stdout_sha256": "a81e5bee900cb7d7058bbbf41afecbd92062ae4ba7f6234919b4d7fbde370c03",
+  "verdict": "PASS_TYPED_POLICY_PROXY",
+  "negative_results": [
+    "GLOBAL_IMPLICIT_NFC_IS_NOT_SEMANTICS_NEUTRAL_FOR_GENERIC_STRING",
+    "GLOBAL_IMPLICIT_NFKC_ERASES_COMPATIBILITY_DISTINCTIONS",
+    "NORMALIZE_COMPONENTS_THEN_CONCAT_DOES_NOT_GUARANTEE_NORMALIZED_RESULT"
+  ],
+  "limitations": [
+    "Python runtime uses Unicode Character Database 15.1.0 while current Unicode UAX #15 is version 17.0.0",
+    "This is not execution through the normative ClayCode parser/canonical IR/type-effect/compiler stack",
+    "This is not Ubuntu developer-system target evidence",
+    "The probe establishes semantic counterexamples and a candidate contract, not BASE gate completion"
+  ],
+  "next_discriminating_execution": "Add exact-string and explicit-NFC conformance cases to the normative ClayCode parser/canonicalizer/type/effect/evaluator path, then execute the same corpus on the Ubuntu developer-system target with a pinned Unicode data/version contract."
+}

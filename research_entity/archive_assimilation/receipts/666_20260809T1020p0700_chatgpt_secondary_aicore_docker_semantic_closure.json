@@ -1,0 +1,58 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1020p0700-chatgpt-secondary-aicore-docker-semantic-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"COMPLETE_FOR_AICORE_DOCKER_2_OF_2_FILES",
+  "source_universe":"DRIVE_CLAY/AICORE/docker",
+  "source_folder_id":"1f2JoVoALmiuNjWI04KyBrgokgJg26Iaa",
+  "exact_level0_coverage_credit_percent":0.0,
+  "local_denominator":{"files":2,"folders":0,"files_semantically_closed":2,"coverage_percent":100.0},
+  "files":[
+    {"path":"docker/download-models.sh","bytes":3396,"sha256":"cfeab3984059b5447f0aeca4e54f624ec0d2892fbe60714ba7251056953d69d0"},
+    {"path":"docker/entrypoint.sh","bytes":8173,"sha256":"19fac0ba4b72460f2c0685166b9111851e9e654f99d9eca10a770839250bcc84"}
+  ],
+  "cross_source_confirmation":{"project_frankenstein_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","pf_download_models_blob":"7fc330eeec455450e6666d6ce11aee5068c0439c","pf_entrypoint_blob":"6731198fa92686f663ed3f13b57d6305a8f8665b","finding":"The same model-download and boot-readiness logic is present at the frozen Project-Frankenstein head."},
+  "findings":[
+    {
+      "id":"DOCKER-ARTIFACT-1-UNVERIFIED-MODELS",
+      "severity_for_current_architecture":"P1_CONFIRMED_LINEAGE",
+      "evidence":"download-models.sh skips any existing destination solely on file existence; new files are wget-downloaded to .tmp then mv'd into place. No expected size, digest or signature check is performed.",
+      "required_contract":"Container bootstrap must consume the same content-addressed VerifiedArtifact registry as updater/runtime repair. Existing files must be verified, not trusted because present."
+    },
+    {
+      "id":"DOCKER-ARTIFACT-2-QWEN-IDENTITY-MISLABEL",
+      "severity_for_current_architecture":"P1_DATA_IDENTITY",
+      "evidence":"The Qwen source URL points to bartowski/Qwen2.5-3B-Instruct-GGUF and file Qwen2.5-3B-Instruct-Q4_K_M.gguf, while the destination path is Qwen2.5-3B-Instruct-abliterated.Q4_K_M.gguf.",
+      "effect":"The local filename can assert an 'abliterated' model identity that is not supported by the configured download source/path, contaminating experiment/runtime provenance.",
+      "required_contract":"Model identity is manifest metadata bound to digest, source revision and tokenizer/config identity; filenames are display labels only."
+    },
+    {
+      "id":"DOCKER-BOOT-3-READINESS-NONFATAL",
+      "severity_for_current_architecture":"P1_CONFIRMED_LINEAGE",
+      "evidence":"wait_for_port returns failure after timeout but explicitly says continuing anyway; entrypoint is set -uo pipefail rather than -e, so sequential readiness calls do not abort boot. A running banner is printed afterward.",
+      "effect":"Boot can reach a nominal running state despite mandatory LLM/core readiness failure, matching the historical FRANK boot-order/state-fragility concern.",
+      "required_contract":"Boot is an explicit dependency DAG/state machine. Mandatory readiness failures block downstream activation and prevent RUNNING status; optional services are separately classified."
+    },
+    {
+      "id":"DOCKER-SUPERVISION-4-CRITICAL-CHILD-DEATH",
+      "severity_for_current_architecture":"P1_CONFIRMED_LINEAGE",
+      "evidence":"The final supervisor loop removes exited children and only exits the container when zero child processes remain. It does not distinguish/restart mandatory critical services despite the comment mentioning critical-service death.",
+      "effect":"Core/router/model services can die while the container remains alive and other components continue against a partially collapsed system.",
+      "required_contract":"Every service has typed criticality/dependencies/restart policy. Loss of a mandatory node transitions the organism out of healthy/runnable state and triggers bounded recovery or fail-closed shutdown."
+    }
+  ],
+  "current_architecture_feedback":{
+    "harness":["Acceptance must test cold boot with missing/corrupt/wrong-but-existing models, delayed mandatory services and mid-run critical child death.","RUNNING is a derived invariant state, not a startup print statement."],
+    "claycode":["ModelArtifact and ServiceReadiness must be typed values with digest/dependency semantics."],
+    "claygraph":["Represent boot as dependency edges and readiness transitions so startup order is reproducible and inspectable."],
+    "unifieddb":["Persist boot epoch, artifact manifest and readiness transition log for crash/replay comparison."],
+    "frank":["Identity statements about the active model must come from verified runtime artifact metadata, never inferred from a filename."],
+    "gwt":["Broadcast degraded/not-ready states when mandatory substrate is unavailable; no false global ignition."],
+    "clay":["One-module FRANK must retain explicit internal boot/health gates even after process/module boundaries dissolve."]
+  },
+  "training":{"executed":false,"authorized":false},
+  "next":"Continue exact AICORE sibling closure; add these artifact/boot failures to Harness regression corpus.",
+  "created_at":"2026-08-09T10:20:00+07:00"
+}

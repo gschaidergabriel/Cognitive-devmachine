@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-CC-G9-GRAMMAR-E2B-REPLICATION-20260809",
+  "run_id":"claycode-20260809T1539p0700-chatgpt-parser-compat",
+  "provider":"E2B",
+  "transport":"research_tool_bridge via GitHub Actions",
+  "source_result":"research_entity/runtime/tool_results/cc_g9_parser_e2b_replication_20260809T1539p0700.json",
+  "status":"SUCCESS",
+  "exit_code":0,
+  "observed":{
+    "baseline_current_fail_or_semantic_misparse":5,
+    "candidate_patch_semantic_pass":4,
+    "candidate_patch_remaining_failure":["relation-word form: rule Delta never_implies epistemic_upgrade"],
+    "negative_control_rejected_baseline":true,
+    "negative_control_rejected_candidate":true
+  },
+  "case_results":[
+    {"case":"union","baseline_semantic":false,"candidate_semantic":true},
+    {"case":"comparison","baseline_semantic":false,"candidate_semantic":true},
+    {"case":"method","baseline_semantic":false,"candidate_semantic":true},
+    {"case":"relation","baseline_semantic":false,"candidate_semantic":false},
+    {"case":"if","baseline_parse":true,"baseline_semantic":false,"candidate_semantic":true}
+  ],
+  "replication_result":"The baseline incompatibility replicated independently in E2B for all five tested current constructs. The first compatibility patch did not fully replicate: relation-word syntax remained unresolved because the relation token competes with generic identifier lexing.",
+  "research_delta":"Strengthen H-CC-G9-AMBIG-003. Do not solve open-ended semantic relations by merely accepting arbitrary identifiers as operators. Freeze an explicit relation/predicate declaration or unambiguous surface form, then resolve/type-check it in canonical IR.",
+  "semantic_change_required":false,
+  "falsifier":"A revised parser with explicit operator/predicate declaration or unambiguous relation syntax passes complete current corpus plus ambiguity/mutation negatives and maps to deterministic typed IR without semantic redesign."
+}

@@ -1,240 +1,243 @@
 # Reserved Trigger: `frank`
 
-Research FRANK as one integrated cognitive/runtime architecture and progressively transform the executable Harness toward that target architecture for the Qwen-class 4B cognitive model.
+Research FRANK as one integrated cognitive/runtime architecture and progressively transform the executable GitHub Harness toward the **current evidence-supported realization** of the owner-fixed target architecture for the Clay-native Qwen-class 4B.
 
-Use the Master Research Trigger Protocol, mandatory Interconnected Research Mesh Protocol and:
+Use the Master Research Trigger Protocol, mandatory Interconnected Research Mesh Protocol and these current contracts:
 
 - `research_entity/global/FRANK_TRIGGER_HARNESS_EVOLUTION_DIRECTIVE.md`
+- `research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md`
+- `research_entity/global/FRANK_DUAL_INSTANCE_EMBODIED_STATE_CONTRACT.md`
+- `research_entity/global/FRANK_CHATGPT_MISTRAL_BUILD_CASCADE_PROTOCOL.md`
 - `research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md`
 - `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`
-- current Harness protocol/workspace and live Harness evidence.
+- `research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md`
+- `research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md`
+- current Harness protocol/workspace/live receipts;
+- current registered whole research mesh.
 
-## 0. Trigger meaning — architecture research through executable Harness evolution
+## 0. Trigger meaning
 
-The exact trigger `frank` is architecture-led Harness evolution.
+Exact `frank` means **dynamic whole-mesh architecture synthesis coupled to executable Harness evolution**.
 
-Every material `frank` run MUST research the current FRANK target architecture and then use the Harness as the executable simulation / developmental digital twin of that target. The run must identify a material architecture-to-Harness gap and either implement/test the smallest coherent step that closes it or leave a precise executable work package when the current worker lacks build/execution capability.
+It does not mean replaying a static architecture memo.
 
 Compact law:
 
-`target FRANK architecture + current research + current Harness evidence -> architecture gap -> hypothesis/counterhypothesis -> Harness delta -> test/ablation/replay -> architecture evidence -> next gap`
+`fixed target invariants + newest whole-mesh research + current execution evidence`
+`-> current FRANK realization`
+`-> architecture/Harness gap`
+`-> worker/build/test`
+`-> evidence`
+`-> whole-mesh re-fusion`
+`-> revised current realization/gap`
+`-> next build/test`.
 
-A report-only architecture run is incomplete when an executable discriminating Harness step is feasible.
+A report-only run is incomplete when a useful executable discriminator is available.
 
-The Harness is not a separate permanent architecture. Reference Harness, ClayCode Harness and One-Module/Binary Harness are successive executable approximations of the same target FRANK architecture.
+## 1. Dynamic research resolver — mandatory
 
-## 1. Fixed target architecture — not a hypothesis
+Before the first major architecture/build decision, run or equivalently materialize:
 
-Every `frank` run MUST load and obey `research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md`.
+`python tools/frank_dynamic_research_fusion.py --write`
 
-The project-owner-fixed target is a Clay-native FRANK: the abliterated Qwen-class 4B is full-model adapted so Clay becomes its native generated/deliberative symbolic language; memory, values/vector semantics, state, GWT/Assemblies, Hyperposition, inter-module semantic communication and the architecture source itself are Clay-native.
+This resolver dynamically reads the scientific branch set from `RESEARCH_TRIGGER_REGISTRY.json`, indexes current tracked research evidence, identifies everything changed since the previous fusion cutoff, exposes latest high-value artifacts per branch, and includes current target/Harness/program contracts.
 
-This target itself is NOT an open yes/no research hypothesis. Research evaluates how to realize it, consequences, optimal training/tokenizer/curriculum, representations, safety boundaries, performance, migration and failure modes.
+The generated manifest is an **evidence-addressing index**, not truth. The `frank` worker must read and adjudicate the material it points to.
 
-**Needle is the sole intentionally retained non-Clay semantic subsystem.** It remains fully used as the fast classifier/router. Needle output enters Clay as typed provenance-bound input/proposal and never mints authority by itself.
+If the current execution surface cannot run the local resolver, reproduce its semantics with current-head GitHub enumeration and explicitly record the coverage limitation.
 
-Native code, databases, tensors, vector payloads, KV caches and binary wire formats may implement/encode Clay semantics. They MUST NOT become a second competing semantic architecture. Runtime authority enforcement may be compiled to native code, but its semantic contract is authored in Clay/ClayCode and remains non-self-authorizing.
+### Re-run rule
 
-Digital Retina remains mandatory under the current FRANK contracts.
+Re-run/re-equivalently refresh the resolver whenever a materially informative worker batch, Harness test, branch result or concurrent commit lands during the same `frank` run.
 
-## 2. Harness = executable target simulation for the 4B
+`start_snapshot_only != valid long cascade`.
 
-The Harness is the executable simulation of the target FRANK architecture around the Qwen-class 4B cognitive model.
+## 2. Whole-mesh coverage
 
-The target 4B slot, model-facing state, reader/writer ABI, GWT path, memory path, values/self/world/body/goals, Digital Retina input, Needle bridge, tool/effect boundary, persistence, recovery and re-entry must be shaped as the real target architecture even while deterministic fixtures or proxy readers temporarily occupy the model slot.
+Every material cycle must cover all branches currently registered as `domain_research` or `integrated_research_foundry`; do not hard-code a stale branch count.
 
-Fixture/proxy evidence is allowed for architecture mechanics but MUST be labeled `PROXY` or `SIMULATION`. It must never be promoted to target-4B evidence.
+At the current registry this includes:
 
-Repeated `frank` runs should monotonically reduce measured semantic distance between the executable Harness and the target FRANK architecture.
+`clayresearch · frank · claycode · harness · claygraph · unifieddb · gwt · hyperposition · emergenz`.
 
-Examples of valid convergence:
+Also ingest current Fusion/Hypofusion, Level-0/history when relevant, Needle, Digital Retina/MVC, effect/security/recovery, current capability/work observations and owner-supplied worker results.
 
-- prose-only mechanisms become executable state transitions;
-- missing target state becomes explicit, versioned, replayable state;
-- hidden coupling becomes typed/provenance-bound coupling;
-- placeholder model interfaces become target-shaped 4B interfaces;
-- GWT stages become separately observable and lesionable;
-- ClayGraph/UnifiedDB semantics become executable rather than documentary;
-- authority/effect paths gain deterministic permits/receipts/re-entry;
-- crash/restart and rollback semantics become testable;
-- Reference behavior is reconstructed in ClayCode without semantic loss;
-- multi-process scaffolding moves toward the One-Module/Binary target when evidence supports it.
+Shared ancestry is not independent replication. Preserve refuted, negative, superseded and inaccessible material rather than selecting only supportive reports.
 
-## 3. Mandatory `frank` run cycle
+## 3. Fixed target vs open realization
 
-Each exact `frank` run MUST, to the extent current capabilities permit:
+Every cycle distinguishes owner-fixed target premises from evidence-dependent implementation mechanisms.
 
-1. verify Research Entity identity/canonical state and preserve the Research Entity != Frank authority boundary;
-2. load current target contracts, Ubuntu v0.1 directive, current FRANK architecture artifact(s), Harness workspace/freeze, live Harness claims/receipts and fresh mesh deltas;
-3. run/equivalently materialize the research interconnect preflight;
-4. compute an explicit architecture-to-Harness gap set;
-5. select the highest-information non-duplicated gap or a justified replication/falsification task;
-6. form falsifiable mechanism hypotheses plus counterhypotheses and acceptance criteria;
-7. implement the smallest coherent Harness delta when authorized capability exists;
-8. execute available tests, replay, fault injection, differential checks, ablations or benchmarks;
-9. preserve failures/negative results and rollback/reject semantic regressions;
-10. revise architecture subclaims only where evidence warrants it while preserving owner-fixed premises;
-11. write feedback to all affected branches and leave the next highest-value gap.
+Fixed/current owner target includes:
 
-If implementation/execution cannot be performed in the current worker environment, write a precise repo-native work package for the authorized execution organ and mark the Harness mutation as pending. Never claim a Harness change that was not actually written/executed.
+- Clay-native semantics;
+- Clay-native Qwen-class 4B cognitive core;
+- Ubuntu Linux developer system for v0.1;
+- Digital Retina/adaptive visual-learning direction;
+- retained Needle foreign-semantic boundary;
+- model/cognition never self-mints external effect authority;
+- Research Entity != Frank; Frank self-Harness mutation remains proposal-only;
+- final local-core direction defined in `FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md`.
 
-## 4. Mandatory dynamic mesh coverage
+Open/evidence-dependent realization includes graph/topology mechanism, persistence placement, recurrence controller, memory lifecycle, GWT routing, Hyperposition projection, peer backflow/compression, causal-credit policy, emergence instrumentation, reader rail, physical boundaries, recovery and performance policy.
 
-Before Fusion 1, run or equivalently materialize:
+New valid evidence may revise those open subclaims without reopening fixed owner premises.
 
-`tools/research_interconnect_preflight.py --trigger frank --run-id <run_id>`
+## 4. Current final architecture direction
 
-The current `RESEARCH_TRIGGER_REGISTRY.json` is authoritative for the scientific branch set. A FRANK protocol must not silently preserve a stale hard-coded branch count.
+Every run must load the newest `FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md` before deriving gaps.
 
-FRANK priority is dynamically routed from the current mesh, with deep attention to:
+Current target direction includes:
 
-`clayresearch -> claycode -> harness -> claygraph -> unifieddb -> gwt -> hyperposition -> emergenz -> frank history/runtime evidence`
+`LOCAL_FRANK = ONE_CLAY_BINARY + ONE_LOCAL_UNIFIEDDB + ONE_CLAY_NATIVE_4B`.
 
-All relevant completed and in-progress material must be considered before a major architecture/Harness decision.
+Separate final local services/databases for ClayGraph, GWT, Retina, personality, goal registry or memory are not mandatory target components when their semantics can be preserved in the one-module runtime.
 
-## 5. Mandatory foundation hierarchy
+H1/H2 may retain explicit diagnostic/reference surfaces to make mechanisms measurable and differentially testable before H3 consolidation.
 
-### Clay / integrated architecture
+## 5. Independent cognitive states + peer fabric
 
-Load the newest integrated Clay research, experiments, negative results, Topic/Micro-Packets and branch feedback. It is the primary integrated architecture foundation.
+Do not collapse cognitive instances into one instantaneous state.
 
-### ClayCode
+The primary executable comparison surfaces are the embodied local 4B FRANK and the GitHub Harness. Current research also treats Claude Code, ChatGPT and compatible strong peers as independent cognitive instances/extensions with their own local semantic state.
 
-Deeply ingest the current executable language/runtime state. The target FRANK architecture is authored as ClayCode semantic IR. Until a stable surface syntax exists, the architecture source artifact remains a canonical ClayCode JSON/IR projection such as:
+Strong peers may exchange rich semantic deltas. The local 4B receives compact evidence-preserving cognitive backflow rather than a full peer-state mirror.
 
-`research_entity/trigger_runs/frank/<run_id>/FRANK_ARCHITECTURE.claycode.json`
+Use `FRANK_DUAL_INSTANCE_EMBODIED_STATE_CONTRACT.md` for the detailed state/backflow/tool rules.
 
-Human-readable reports and implementation-language code are downstream projections/targets.
+## 6. No standalone possibility-space store
 
-### Harness
+`possibility space` is shorthand for a current derived cognitive/capability surface, not a persistent second database.
 
-Deeply ingest the current Harness workspace, architecture freeze, live claims, completed receipts, tests, failures and newest commits. Harness execution evidence is the primary way a `frank` run tests whether an architecture subclaim is actually realizable.
+The current surface emerges from:
 
-### ClayGraph
+`UnifiedDB state + local instance state + peer deltas + current capability/resource observations + dependency closure + transient topology + Hyperposition + GWT/Assembly selection`.
 
-Ingest current graph/memory topology, semantic epochs, activation/Assembly semantics, exact anchors, route/admissibility rules and negative results. ClayGraph is associative memory/topology, not automatic truth or automatic total persistence.
+`v_clay_system_possibility_table` and compact projections are derived views over current state.
 
-### UnifiedDB
+The 4B should see a small task-conditioned `ActiveAssembly`, not search the complete raw persistence substrate every turn.
 
-Ingest current logical identity/query/persistence/transaction/retrieval semantics. Semantic/logical unification does not imply mandatory physical database unification. Classify physical stores explicitly and preserve authority/replay/isolation semantics.
+## 7. Claude Code direct communication capability
 
-### GWT
+If an authorized local Claude Code route exists, its availability and capability must enter the current semantic/capability fabric and therefore become visible to the 4B's derived current Assembly.
 
-Preserve causal-stage distinctions: retrieval/activation, candidate set, competition/selection, configured gate/ignition, WorkspaceEpisode, reader projection, reconstruction/uptake, causal use, effect/outcome and re-entry.
+Target FRANK must support a typed direct Claude Code communication/delegation tool in the user/tool surface. Its result is a provenance-bound peer result/evidence object, not automatic truth or effect authority.
 
-### Hyperposition
+The Harness must simulate/test availability, unavailability, stale capability state, request/result identity, cost/latency, failure/recovery and returned semantic-delta ingestion.
 
-Preserve topology/epoch/firebreak semantics and higher-order/n-ary relations through physical lowering. One language must not become one semantic failure domain.
+## 8. ChatGPT sole orchestration of build workers
 
-### Emergenz
+For the owner-directed iterative `frank` build cascade, ChatGPT (`chatgpt-secondary`) is the sole global scheduler/adjudicator.
 
-Use causal-emergence methods as constraints and measurements. Do not label integration/recurrent behavior as emergence without appropriate intervention evidence.
+Load `FRANK_CHATGPT_MISTRAL_BUILD_CASCADE_PROTOCOL.md`.
 
-### FRANK history/runtime evidence
+Mistral and any later owner-supplied workers may deeply research, build code, produce patches, write tests and analyze measurements. They do not recursively coordinate the system or make final architecture decisions.
 
-Treat historical architecture as versioned evidence. Prefer fresh executable/runtime evidence. Shared ancestry across branches is not independent replication.
+ChatGPT reviews every worker result, executes/obtains available validation, draws conclusions, updates the current whole-mesh synthesis and only then issues the next tasks.
 
-## 6. Architecture source contract
+## 9. Mandatory run cycle
 
-`FRANK_ARCHITECTURE.claycode.json` must represent at least:
+Every exact `frank` run should, to current capability limits:
 
-- IR/dialect version and architecture identity;
-- stable semantic module/organ identities;
-- state contracts and typed values;
-- semantic organ boundaries separately from physical process/fault/store boundaries;
-- module dependencies/relation identities;
-- operations/transitions and causal parentage;
-- read/write/invariant/effect/capability closure;
-- proposal class for each transition;
-- MOSAIC/COVE basis and identity witnesses where current Clay requires them;
-- GWT/Assembly/episode/receipt links;
-- ClayGraph entities/relations/projections/activation boundaries;
-- UnifiedDB logical query/transaction roles and physical placement/isolation decisions;
-- persistence/replay/recovery semantics;
-- authority/effect boundaries;
-- Digital Retina / VisualPercept semantics;
-- Needle bridge semantics;
-- target 4B reader/model/runtime identity and ABI;
-- provenance and upstream research dependencies.
+1. verify Research Entity identity and current GitHub head;
+2. resolve dynamic status/program state;
+3. refresh dynamic whole-mesh research input;
+4. read all changed material since prior cutoff and latest material from every registered branch;
+5. synthesize fixed invariants, supported mechanisms, open hypotheses, counterhypotheses, negative/refuted results, blockers and evidence classes;
+6. derive the current FRANK architecture realization;
+7. compute an explicit architecture-to-Harness gap matrix;
+8. choose highest-information nonduplicated gap/discriminator;
+9. preregister hypotheses, falsifiers and acceptance criteria;
+10. dispatch concrete research/build/test tasks to Mistral/other owner-supplied workers when useful, under ChatGPT-only orchestration;
+11. inspect returned patches/results and accept/reject/revise them;
+12. implement the smallest coherent accepted Harness delta when authorized capability exists;
+13. execute available tests, replay, fault injection, differential checks, ablations and benchmarks;
+14. preserve failures and rollback/reject regressions;
+15. ingest the new result into the semantic/research fabric;
+16. refresh whole-mesh research input again;
+17. redraw the current realization/gap ranking from the new evidence;
+18. continue while useful synchronous capacity exists;
+19. leave exact continuation state and next discriminator.
 
-There must be no hidden second semantic architecture in Python/Rust/JSON/SQL. Implementations may compile/lower Clay/ClayCode semantics, but model output or self-representation cannot mint authority.
+Never claim a Harness mutation, target-PC execution or background cascade that did not actually happen.
 
-## 7. Primary research questions
+## 10. Current research laws that must survive stale prompts
 
-- What is the highest-value mismatch between the current executable Harness and the target FRANK architecture?
-- What smallest executable change most increases architecture fidelity or falsifies a major assumption?
-- Which semantic organs are causal mechanisms versus accidental process/database boundaries?
-- Which organs should share one hot runtime and which require independent fault/security boundaries?
-- How should the Qwen-class 4B be full-model trained so Clay becomes its native generated/deliberative language without unacceptable forgetting or authority confusion?
-- Which target-shaped 4B reader/writer representation minimizes reconstruction cost while preserving typed semantics and provenance?
-- How should one Clay semantic world span persistence/query, ClayGraph memory, values/vectors, GWT, Hyperposition and effects without collapsing distinctions?
-- How should Needle remain fully useful as the sole foreign semantic classifier without becoming authority?
-- Which physical stores/engines remain separate and which may be colocated after executable benchmarks?
-- Can associative state reduce explicit retrieval/context reconstruction without corrupting canonical truth?
-- What is the fastest evidence-preserving Ubuntu-only v0.1 convergence path from current Harness to target FRANK?
+Unless newer valid evidence explicitly refines them, preserve:
 
-## 8. Required empirical work
+- `rich persistent state != active cognitive slice`;
+- `system workspace != model-internal workspace != effect authority`;
+- `recurrence != emergence`;
+- `low state delta + high residual pressure != convergence`;
+- GWT focus may inform recurrence but does not alone define its controller;
+- `activation/repetition != truth`;
+- repeated shared ancestry != independent evidence;
+- `replay integrity != selection integrity`;
+- `logical read-only instrumentation != timing noninterference`;
+- H1/H2/H3 equivalence requires semantic-intervention translation/commutation, not output parity alone;
+- effectful compiler paths must separately preserve semantic correctness, resource/current identity and final effect authority/provenance;
+- capability-safe does not imply epistemically safe action;
+- fast cognition does not justify unvalidated fast live-topology self-modification;
+- derived topology/possibility projection is not canonical truth.
 
-Execute feasible discriminating tests rather than only proposing them. Prefer:
+## 11. Required empirical work
 
-- architecture-to-Harness coverage/distance checks;
-- current runtime vs candidate physical partitions;
-- packed/borrowed ABI vs serialization/RPC boundaries;
-- crash/restart/fault-domain injection;
-- operation-scoped versus global consistency/effect revalidation;
-- UnifiedDB specialized/logical/hybrid/consolidated baselines;
-- graph/vector/FTS/exact/activation route equivalence and selection integrity;
+Prefer executed discriminators over architecture prose:
+
+- architecture-to-Harness coverage/distance;
+- bounded Assembly vs raw retrieval/context baselines;
+- peer rich-sync/backflow compression/omission/provider-loss tests;
+- direct Claude Code tool causal-utility/failure tests;
+- current capabilities/body-extension tests;
+- transient topology vs explicit H1/H2 ClayGraph baselines;
+- graph source-echo/ancestry controls;
+- UnifiedDB placement/query/replay/selection-integrity tests;
 - GWT stage-orthogonal lesions;
-- ClayCode parser/validator/roundtrip/property fuzzing;
-- target-shaped 4B reader/writer fixture tests;
-- target or explicitly labeled proxy 4B experiments;
-- full-FT checkpoint retention/semantic-execution tests when authorized/available;
-- Ubuntu runtime latency/RAM/KV/backend/resource decomposition;
-- differential tests across Reference -> ClayCode -> One-Module/Binary approximations.
+- recurrence controller factorials;
+- semantic intervention commuting tests across H1/H2/H3;
+- Emergenz lesion/rescue/shuffle/pairwise/macro controls;
+- observer-effect calibration;
+- Digital Retina/MVC open-set, evidence-floor and adaptive-learning tests;
+- Needle boundary/tamper/bypass tests;
+- ClayCode parser/type/effect/lowering/runtime differentials;
+- crash/restart/idempotency/rollback;
+- target-shaped 4B ABI and later authorized target-4B experiments;
+- Ubuntu latency/RAM/KV/token/update-amplification/resource shadows.
 
-Synthetic/proxy numbers remain synthetic/proxy until target replication.
+Synthetic/proxy evidence remains labeled as such.
 
-## 9. Relationship to `harness`
+## 12. Relationship to `harness`
 
-`frank` and `harness` are complementary, not aliases.
+`frank` = dynamic whole-mesh architecture synthesis + architecture-led Harness evolution.
 
-- `frank`: architecture-led evolution; decide/research the next target architecture step and move/test the Harness accordingly.
-- `harness`: broad executable convergence, integration, validation, fuzzing, replay and release-gating across all Harness work.
+`harness` = broad executable integration, falsification, replay, fuzzing and release-gating across Harness work packages.
 
-Both operate on shared evidence/workspaces and must cross-feed material results.
+They share evidence and workspaces but are not aliases.
 
-## 10. Authority boundary
+## 13. Required outputs
 
-Frank may self-observe, detect problems, hypothesize and propose Harness changes.
+A material `frank` run should leave:
 
-Frank may never directly or indirectly modify or authorize modification of its own Harness.
-
-The Research Entity may independently research, reject/refine, implement and test authorized FRANK Harness changes.
-
-## 11. v0.1 platform scope
-
-Frank v0.1 is built, tested and release-gated on the Ubuntu Linux developer system only. Android/mobile/edge/Windows/macOS/BSD portability is out of current v0.1 scope unless explicitly reopened by the project owner.
-
-## 12. Required outputs
-
-A material `frank` run should write at minimum:
-
-- `INTERCONNECT_MANIFEST.json` covering all relevant registered scientific branches;
-- architecture-to-Harness gap statement/matrix;
-- selected architecture delta and rationale;
+- current research head/cutoff;
+- dynamic branch coverage/interconnect manifest;
+- Whole-Mesh FRANK Synthesis;
+- fixed-vs-open realization map;
+- architecture-to-Harness gap matrix;
+- selected delta/discriminator;
 - hypotheses/counterhypotheses/falsifiers;
-- implementation/work-package receipt;
-- executed test/experiment receipt when capability exists;
-- architecture fidelity effect: `IMPROVED | NO_CHANGE | REGRESSED | UNKNOWN`;
-- explicit `TARGET_4B | PROXY | FIXTURE` evidence label;
-- updated `FRANK_ARCHITECTURE.claycode.json` when architecture evidence materially changes;
+- worker task/result receipts;
+- implementation receipt;
+- executed test/experiment receipts where possible;
+- architecture fidelity result `IMPROVED | NO_CHANGE | REGRESSED | UNKNOWN`;
+- evidence labels `LIVE_PC_FRANK | TARGET_4B | H1 | H2 | H3 | PROXY | FIXTURE | SYNTHETIC`;
+- updated architecture artifact only when evidence warrants it;
 - negative results;
-- branch feedback to all materially affected branches;
-- next highest-value architecture-to-Harness gap;
-- `RUN_MANIFEST.json` and `FINAL_REPORT.md` according to the repo-native run protocol.
+- feedback to affected branches/UnifiedDB work fabric;
+- exact continuation gap;
+- dynamically resolved `FIRST GITHUB FRANK HARNESS` progress in the visible footer.
 
-The long-run convergence target is:
+Long-run convergence target:
 
-`Harness executable semantics ~= frozen target FRANK semantics for the 4B model`
+`GitHub Harness executable semantics ~= current evidence-supported realization of owner-fixed FRANK target semantics`
 
-subject to explicit, measured and provenance-preserved differences until staged acceptance gates close.
+with explicit versioned differences until H1/H2/H3/final acceptance gates close.

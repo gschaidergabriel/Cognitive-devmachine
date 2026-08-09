@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1603p0700-chatgpt-semantic-publication",
+  "latest_frank_run": "fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+  "latest_frank_claycode_architecture_artifact": null,
+  "artifact_absence_note": "Repository search returned no FRANK_ARCHITECTURE.claycode.json; newest fused FRANK target was used provisionally.",
+  "reviews": [
+    {
+      "claim_id": "FRANK-P11-ATOMIC-SEMANTIC-PUBLICATION",
+      "frank_statement": "CURRENT semantic publication is atomic; a failed partial publication must not expose mixed current state across canonical UnifiedDB state and derived ClayGraph.",
+      "frank_source_refs": ["FUSED_FRANK_TARGET_ARCHITECTURE.json:P11_UNIFIEDDB_CLAYGRAPH_PUBLICATION","CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md"],
+      "ancestry_families": ["FRANK_C9_FUSED_OVERLAY","OWNER_SEMANTIC_FABRIC_DIRECTIVE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Generic G9 records/rules cannot encode a safe publication barrier; correctness requires a new language primitive or physical single-store transaction.",
+      "falsifier": "Production compile/crash test exposes mixed CURRENT or requires host-only semantics not representable in ClayCode.",
+      "independent_checks": [
+        "EXP-CC-SEMANTIC-PUBLICATION-BARRIER-20260809: 12/12 fixed + 20000 mutation rounds",
+        "SQLite official atomic-commit documentation: transaction all-or-nothing is an established storage mechanism",
+        "MLIR official conversion framework: legality + rollback supports staged transformations that do not expose invalid intermediate IR"
+      ],
+      "adversarial_checks": ["stale graph source epoch","open projection","open retraction closure","crash after state commit before graph/publish","idempotent replay","graph-derived authority attempt","revoked capability"],
+      "verdict": "REFINED",
+      "reason": "Atomic reader-visible publication is supported in proxy form without requiring physical state/graph co-location. Canonical state may be committed ahead of derived graph while CURRENT readers remain pinned to the prior coherent publication until graph rebuild/validation completes.",
+      "claycode_action": "Freeze SemanticPublicationReceipt + PublishedSemanticEpoch as standard canonical-IR contracts; do not add syntax yet.",
+      "affected_claycode_artifacts": ["future BASE canonical IR","future type/effect checker","future runtime publication gateway"]
+    },
+    {
+      "claim_id": "FRANK-P10-GRAPH-NEVER-AUTHORITY",
+      "frank_statement": "ClayGraph relevance/derived relations never mint effect authority; model output remains proposal-only.",
+      "frank_source_refs": ["FUSED_FRANK_TARGET_ARCHITECTURE.json:P10_EFFECT_AUTHORITY_AND_SANDBOX","RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"],
+      "ancestry_families": ["FRANK_C9_AUTHORITY_LINEAGE","CLAYGRAPH_DERIVED_TOPOLOGY_LINEAGE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A derived graph relation can act as an implicit authorization signal if it appears in the same execution path.",
+      "falsifier": "A legal ClayCode lowering can commit an effect with no independent valid host capability solely because a graph relation is present.",
+      "independent_checks": [
+        "EXP-CC-SEMANTIC-PUBLICATION-BARRIER-20260809 authority cases",
+        "Bytecode Alliance WIT resource/interface model independently supports explicit typed resource handles but does not itself confer application authority"
+      ],
+      "adversarial_checks": ["graph relation only","valid host capability","revoked host capability"],
+      "verdict": "REFINED",
+      "reason": "The run confirms separation in the proxy: graph presence did not affect authority; only a valid host-issued capability did. WIT is only a boundary analogy, not FRANK evidence.",
+      "claycode_action": "Keep AuthoritySignature/CapabilityToken external to graph relevance and require effect gateway validation.",
+      "affected_claycode_artifacts": ["G9 CapabilityToken","future type/effect checker","runtime ABI/FFI"]
+    }
+  ]
+}

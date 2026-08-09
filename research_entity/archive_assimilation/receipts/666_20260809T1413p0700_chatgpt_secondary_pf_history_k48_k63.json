@@ -1,0 +1,38 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1413p0700-chatgpt-secondary-pf-history-k48-k63",
+  "trigger":"666","actor":"chatgpt-secondary","stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","ordinal_range":"k48..k63","count":16,"manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K48_K63_20260809T1412p0700.json"},
+  "race":{"winning_claim_commit":"18dfa1d1170440cdcf1e0a47589732cd86b40ab8","winning_claim_time":"2026-08-09T14:02:14+07:00","competing_claims_seen":0,"result":"CLEAN"},
+  "closure":{"materialized":16,"terminally_dispositioned":16,"uncovered":0,"status":"COMPLETE_FOR_ORDINAL_SHARD","global_level0_gate":"NOT_PASS","global_exact_percent_increment":0.0,"reason":"Combined Level-0 denominator remains NOT_FROZEN."},
+  "high_value_findings":[
+    {"id":"PF-K48-63-PIPELINE-ORDER","evidence":[54,57],"finding":"Tool-tag output sanitization was originally performed before tool dispatch, which disabled legitimate tools; the pipeline was later reordered so dispatch executes before presentation cleanup.","transfer":"Model output -> structured parse -> authority/policy -> execution -> typed result -> presentation sanitization must be explicit; presentation filters cannot consume execution metadata first."},
+    {"id":"PF-K48-63-HIDDEN-COAUTHORS","evidence":[48,52,57],"finding":"Identity governors, regex cleaners, tool-output cleaners, safety prefilters and UI sanitizers materially transform model output and visible consciousness streams.","transfer":"Postprocessors are causal co-authors of behavior and require provenance, ordering tests and collateral-damage metrics rather than being treated as invisible formatting."},
+    {"id":"PF-K48-63-VOICE-ACTUATION","evidence":[51],"finding":"Continuous listening/conversation mode was removed in favor of explicit PTT plus minimum capture duration after reliability/false-trigger concerns.","transfer":"For noisy sensing that can trigger cognition/effects, explicit actuation and minimum evidence windows are a defensible reliability mode."},
+    {"id":"PF-K48-63-VISION-MODES","evidence":[52,53,54],"finding":"Image handling split OCR-only transcription from full generative description and exposed that choice explicitly to the user.","transfer":"Treat extracted text and generative scene interpretation as different evidence classes with different uncertainty/provenance."},
+    {"id":"PF-K48-63-CONTEXT-ENGINEERING","evidence":[59],"finding":"Small-model agent drift was mitigated with plan refresh, large-result scratch offload and goal-based tool filtering. The shown scratch store is module-global despite session-scoped wording.","transfer":"Context engineering can improve bounded-agent focus, but scratch/context stores need explicit per-session namespaces and isolation tests before multi-user/concurrent use."},
+    {"id":"PF-K48-63-REMOTE-INGRESS","evidence":[61],"finding":"Telegram/WhatsApp bridges mapped external users into isolated session IDs but allowed all senders when no whitelist was configured.","transfer":"Remote ingress to an effect-capable chat/tool surface needs explicit authentication/capability scope and fail-closed defaults; session separation alone is not authorization."},
+    {"id":"PF-K48-63-EVIDENCE-NAMING","evidence":[55,56,60,62,63],"finding":"Benchmark prominence changed, bio-inspired names were explicitly demoted to engineering metaphors, repository papers were relabeled non-peer-reviewed technical notes, dead Genesis docs were removed, and architecture docs were reconciled to a new topology.","transfer":"Evidence class, naming semantics, document epoch and active/dead topology are independent metadata dimensions and must survive historical synthesis."
+    }
+  ],
+  "negative_results_preserved":[
+    "Presentation sanitization blocked legitimate tool execution when ordered before dispatch.",
+    "Continuous voice mode was removed after reliability/false-trigger concerns.",
+    "Static browser caching caused client/API mismatch during image-upload changes.",
+    "Internal tool/directive/memory metadata leaked into visible output surfaces.",
+    "A scratchpad described as session-scoped was module-global in the shown implementation and requires isolation verification.",
+    "Remote messaging bridges defaulted to allow-all when whitelist configuration was absent.",
+    "Dead Genesis architecture and outdated model/interface topology persisted in current documentation until cleanup."
+  ],
+  "measurement_boundary":"No source-reported benchmark values, neural parameter counts, latency spikes, fix totals or safety-test results were independently reproduced in this semantic pass.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level earned-work overlap audit was performed."},
+  "next_falsifiers":[
+    "Property-test tool pipeline ordering so sanitizers cannot remove unexecuted structured calls and leftover control tags never reach users.",
+    "Measure false-positive/content-loss rates for each governor/regex/output cleaner independently and in composition.",
+    "Concurrent-session test scratch/context state for cross-user leakage and namespace collision.",
+    "Attempt bridge access with missing whitelist and verify future design fails closed before chat/tool authority is reachable.",
+    "Evaluate OCR-only versus generative description on labeled images while preserving separate evidence/uncertainty fields.",
+    "Version architecture docs against code/service/model epochs and fail CI when active topology claims drift."
+  ],
+  "status":"COMPLETE"
+}

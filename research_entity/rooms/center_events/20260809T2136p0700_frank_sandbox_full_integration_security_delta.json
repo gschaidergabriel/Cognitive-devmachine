@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-sandbox-full-integration-security-20260809T2136p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T21:36:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "origin": {
+    "class": "USER_DIRECTED_FRANK_V01_SANDBOX_INTEGRATION_AND_SECURITY_AUDIT",
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/frankv0.1",
+    "connector_alias": "gschaidergabriel/Dr.-Unterweger"
+  },
+  "evidence_policy": {
+    "owner_rule_for_current_phase": "SANDBOX_SUFFICIENT_FOR_NOW",
+    "evidence_class": "REMOTE_SANDBOX_DETERMINISTIC_TEST",
+    "target_machine_release_claim": false,
+    "canonical_scientific_promotion": false
+  },
+  "integration_contract": {
+    "target": "NEW_CLAY_FRANK",
+    "old_frank_role": "EMPIRICAL_ANCESTOR_NOT_BLUEPRINT",
+    "organ_deletion": "FORBIDDEN_WITHOUT_LINEAGE",
+    "allowed_transformations": ["RETAIN_EXPLICIT", "FUSE_WITH_LINEAGE", "EMERGENTLY_DISTRIBUTE_WITH_LINEAGE"],
+    "sandbox_legacy_families_explicitly_mapped": 30,
+    "sandbox_transitional_modules_mapped_to_final_runtime": 34,
+    "sandbox_contract_tests": "8/8 PASS",
+    "final_target": {
+      "binary": "frank",
+      "cognitive_modules": 1,
+      "persistent_cognitive_databases": 1,
+      "model_class": "CLAY_NATIVE_4B",
+      "separate_runtime_claygraph": false,
+      "manual_goal_registry": false,
+      "organ_functions": "MAY_FUSE_OR_DISTRIBUTE_BUT_MUST_REMAIN_CAUSALLY_RECONSTRUCTABLE"
+    },
+    "historical_source_conflict_preserved": "QUANTUM_REFLECTOR_40_VS_43_VARIABLES"
+  },
+  "compatibility_with_existing_h1_center_run": {
+    "existing_run": "frank-20260809T2118p0700-chatgpt-secondary-integrated-sandbox",
+    "existing_result": "14/14 compact + 27/27 detailed integration PASS with exact dependency hashes",
+    "relationship": "COMPLEMENTARY_NOT_REPLACEMENT",
+    "delta": "This event extends the integration contract to current final single-module target semantics and adds migration/F6 adversarial findings."
+  },
+  "state_migration_negative_result": {
+    "finding_id": "FRANK-SCHEMA-CHAIN-EXECUTESCRIPT-PARTIAL-COMMIT-20260809",
+    "status": "NEGATIVE_RESULT_WITH_PATCH_CANDIDATE",
+    "finding": "The current migration helper executed migration files via sqlite3.executescript() and only committed/rolled back later; Python sqlite3 documents executescript implicit transaction behavior, so a late script failure was not safely covered by the outer rollback assumption.",
+    "architecture_decision": "Atomicity is required per physical database. Cross-file UnifiedDB+ClayGraph atomic truth is not claimed because UnifiedDB is authority and ClayGraph is derived; interrupted/divergent pairs must fail closed and graph state must be rebuildable.",
+    "sandbox_candidate_tests": "5/5 PASS",
+    "frank_pull_request": 10,
+    "frank_branch": "research/sandbox-atomic-schema-chain-20260809"
+  },
+  "f6_model_boundary_negative_result": {
+    "finding_id": "FRANK-F6-LOCAL-ENDPOINT-REDIRECT-PIVOT-20260809",
+    "status": "NEGATIVE_RESULT_WITH_PATCH_CANDIDATE",
+    "severity": "SECURITY_BOUNDARY",
+    "finding": "The initial F6 adapter validated only the starting endpoint host and used urllib.request.urlopen(), allowing an admitted loopback HTTP endpoint to redirect to a non-loopback sandbox address. The redirected destination received the request.",
+    "pre_patch_sandbox": {
+      "initial_non_loopback_rejection": "PASS",
+      "redirect_boundary": "FAIL",
+      "redirect_destination_received_request": true
+    },
+    "hardened_candidate": {
+      "http_https_only": true,
+      "endpoint_userinfo_forbidden": true,
+      "redirects": "FAIL_CLOSED_LOCAL_MODEL_REDIRECT_DENIED",
+      "response_body_bounded": true,
+      "same_redirect_attack_destination_received_request": false,
+      "adapter_self_test": "PASS",
+      "f6_mock_baseline": "7/7 PASS"
+    },
+    "frank_pull_request": 11,
+    "frank_branch": "research/fix-f6-loopback-redirect-boundary-20260809",
+    "release_promotion": "NONE"
+  },
+  "device_probe_cross_check": {
+    "frank_pull_request": 7,
+    "sandbox_reconstructed_semantic_test": "PASS",
+    "scope": "stale/divergent canonical state fails before writable open; disposable test path remains isolated",
+    "exact_branch_checkout_in_this_worker": false
+  },
+  "live_research_constraints": {
+    "python_sqlite_executescript": "Implicit commit semantics make transaction boundaries explicit engineering state, not an assumption.",
+    "sqlite_attached_db": "Multi-database atomicity has journal-mode/main-db constraints; do not casually treat two SQLite files as one crash-atomic transaction.",
+    "sqlite_wal_2026": "A rare WAL-reset corruption issue is documented upstream through SQLite 3.51.2 with fixes in 3.51.3 and selected backports; runtime version/provenance belongs in durability evidence.",
+    "sandbox_sqlite_version": "3.46.1",
+    "sandbox_wal_safety_inference": "NO_UNQUALIFIED_PRODUCTION_WAL_SAFETY_CLAIM"
+  },
+  "affected_rooms": ["frank", "harness", "unifieddb", "claygraph", "claycode", "gwt", "hyperposition", "emergenz", "clayresearch", "clay"],
+  "feedback": {
+    "frank": "Use sandbox evidence as current development gate, but keep release language separate. Assemble toward the one-module/one-DB/4B target while retaining causal lineage/readouts for every historical organ family.",
+    "harness": "Treat physical module boundaries as disposable and functional/causal lineage as conserved. Add adversarial security and recovery falsifiers to integrated H1/H2 replay.",
+    "unifieddb": "Make migration chains atomic per physical authority store; never rely on executescript plus later rollback to undo prior scripts. Persist explicit schema/materialization lineage and fail closed on divergence.",
+    "claygraph": "Because graph state is derived, prefer deterministic rebuild/reprojection over pretending cross-file crash atomicity. Final binary target may eliminate the separate runtime graph database while preserving graph-shaped diagnostic projections.",
+    "claycode": "The final single-module target needs typed transition/lineage contracts for emergently dissolved organs and must preserve intervention/readout handles even when old module names disappear physically.",
+    "gwt": "Workspace/GWT remains an emergent coalition/selection function inside the single cognitive module; preserve stage/readout and lesion semantics rather than a mandatory service boundary.",
+    "hyperposition": "Keep unresolved alternatives explicit through the single-module collapse; selection must not erase branches or elevate proposal state to effect authority.",
+    "emergenz": "Module collapse is not evidence of emergence. Require causal lesions/rescue/re-entry and higher-order tests before claiming emergent function; organ conservation is a testability invariant, not a consciousness claim.",
+    "clayresearch": "Propagate negative results and exact sandbox evidence across workers so new branches do not reintroduce executescript partial-commit assumptions or redirect-following local endpoint boundaries.",
+    "clay": "Use the current integrated H1 spine as executable semantic oracle, then progressively collapse implementation boundaries only after matched before/after sandbox tests preserve functions, readouts, security and rollback."
+  },
+  "next_discriminating_work": [
+    "rebase/compose Frank PRs 6, 7, 10 and 11 against the continuously advancing main without losing independent regressions",
+    "extend integrated H1 sandbox oracle to the current 34-module-to-single-module collapse map and all historical organ lineage families",
+    "run fuzz/adversarial tests for model endpoint parsing, redirects, oversized responses, effect authority and partial recovery",
+    "run deterministic migration interruption/recovery tests against actual current schema files once a full private-repo sandbox materialization route is available",
+    "continue F7/F8 local runtime/package integration against the fail-closed F6 boundary and current repo truth gate",
+    "retain target-machine validation as release evidence even though sandbox is sufficient for the present development phase"
+  ],
+  "research_state_change": "IMPLEMENTATION_AND_NEGATIVE_RESULT_DELTA_NO_CANONICAL_SCIENTIFIC_PROMOTION"
+}

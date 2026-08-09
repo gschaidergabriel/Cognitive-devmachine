@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809_chatgpt_secondary_surface_canon_wasi03_v1",
+  "latest_frank_run": null,
+  "latest_frank_architecture_claycode_artifact": null,
+  "artifact_search_note": "Expected FRANK_ARCHITECTURE.claycode.json path and connector search did not locate a current artifact; current FRANK baseline and owner-fixed directives were used provisionally without fabricating the missing artifact.",
+  "items": [
+    {
+      "claim_id": "GOODMAN-CC-20260809-01",
+      "frank_statement": "Model output and semantic effect intent must remain distinct from execution authority; effects cross an external capability/commit gateway.",
+      "frank_source_refs": ["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md", "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"],
+      "ancestry_families": ["FRANK_CLAYCODE_SHARED_AUTHORITY_LINEAGE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Ambient host/FFI authority is simpler and explicit Clay capability tokens are unnecessary.",
+      "falsifier": "A compiled ClayCode component can safely and audibly obtain all required effects with no explicit capability/host-binding contract while still preventing unauthorized equivalent effects and preserving replay/rollback evidence.",
+      "independent_checks": [
+        "WebAssembly Component Model/WIT defines typed imports/exports and host/component resources but does not itself turn a textual interface name into ambient execution authority.",
+        "Current external component/resource architecture therefore provides an independent implementation analogue for keeping semantic intent separate from host-granted effect access."
+      ],
+      "adversarial_checks": ["Treat a WIT resource handle or imported function name as authority and test whether forged/named resources could bypass the Clay capability gateway."],
+      "verdict": "SUPPORTED",
+      "reason": "Independent host-interface architecture is compatible with and strengthens the separation, while not proving Clay's exact token algebra.",
+      "claycode_action": "Keep CapabilityToken/EffectIntent/commit gateway semantics. Treat WIT/FFI resources as transport/resource identities, never authority by naming alone.",
+      "affected_claycode_artifacts": ["CLAYCODE_G9_FUSION_SPEC_V3.clay", "future runtime ABI/FFI"]
+    },
+    {
+      "claim_id": "GOODMAN-CC-20260809-02",
+      "frank_statement": "State/replay/version and order-sensitive semantics must remain explicit and deterministically identifiable.",
+      "frank_source_refs": ["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md", "research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql", "research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"],
+      "ancestry_families": ["FRANK_STATE_REPLAY_LINEAGE", "UNIFIEDDB_TRANSACTION_LINEAGE", "CLAYGRAPH_RELATION_LINEAGE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "One globally order-insensitive canonicalization is sufficient and simpler for ClayCode semantic identity.",
+      "falsifier": "A globally order-insensitive canonicalizer preserves execution, replay and transaction semantics across ordered ClayCode programs and graph/transaction fixtures.",
+      "independent_checks": [
+        "Local 20,000-case mutation experiment showed every tested ordered-operation swap changed execution while a deliberately over-normalizing hash collided in every case.",
+        "RFC 8785 canonicalization preserves JSON array element order rather than reordering arrays."
+      ],
+      "adversarial_checks": ["Sort/deduplicate ordered operation sequences and compare execution plus semantic hashes."],
+      "verdict": "REFINED",
+      "reason": "Deterministic identity is required, but canonicalization must be type-directed: set-like collections may normalize ordering/duplicates; Ordered sequences must preserve order.",
+      "claycode_action": "Freeze semantic_hash as type-directed canonical meaning and contract_hash as exact provenance-bound instance; never recursively sort all sequences.",
+      "affected_claycode_artifacts": ["canonicalizer", "typed IR", "semantic hashing", "transaction lowering"]
+    },
+    {
+      "claim_id": "GOODMAN-CC-20260809-03",
+      "frank_statement": "ClayCode BASE must express the adaptive Micro Visual Classifier state/update/replay contract.",
+      "frank_source_refs": ["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"],
+      "ancestry_families": ["OWNER_FIXED_ADAPTIVE_VISUAL_REQUIREMENT"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "The requirement forces new dedicated ClayCode syntax or a special learner primitive.",
+      "falsifier": "A frozen H1 adaptive learner fixture cannot be represented and replayed with ordinary ClayCode records, provenance/version fields, transactions, confidence/open-set values, budgets and rollback without an opaque semantic escape hatch.",
+      "independent_checks": [
+        "Current G9 records, Delta, provenance, state/transaction and effect constructs appear structurally sufficient for the required state machine.",
+        "No executable counterexample in this run demonstrated a need for learner-specific syntax."
+      ],
+      "adversarial_checks": ["Attempt to encode candidate/current classifier version, trusted-example tier, open-set result, budget state and atomic promotion/rollback as ordinary typed state; reserve a language change only for a concrete failure."],
+      "verdict": "REFINED",
+      "reason": "The representability requirement stands, but it should currently be satisfied through general-purpose types/runtime rather than a new special-purpose language primitive.",
+      "claycode_action": "Add executable learner-state fixtures to parser/type/effect/evaluator tests; do not expand the semantic core unless H1 parity produces a counterexample.",
+      "affected_claycode_artifacts": ["BASE conformance corpus", "typed IR", "runtime transactions"]
+    }
+  ]
+}

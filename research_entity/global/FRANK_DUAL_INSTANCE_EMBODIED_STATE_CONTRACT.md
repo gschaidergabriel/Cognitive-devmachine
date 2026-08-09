@@ -1,187 +1,238 @@
-# FRANK v0.1 — Dual-Instance Embodied State Contract
+# FRANK v0.1 — Embodied Local State + Peer Cognitive Fabric Contract
 
 **Status:** PROJECT_OWNER_FIXED_ARCHITECTURE_DIRECTIVE  
 **Effective:** 2026-08-09  
 **Scope:** exact `frank` trigger, H1/H2/H3 Harness evolution, target FRANK runtime, UnifiedDB/ClayGraph/GWT/Hyperposition/Emergenz integration  
 **Target host:** Ubuntu Linux developer system
 
-## 0. Fixed instance topology
+## 0. Fixed architecture distinction
 
-FRANK v0.1 has two relevant FRANK instances in the current target architecture:
+For v0.1 there are two primary executable comparison surfaces:
 
-1. `FRANK_PC_4B` — the live/embodied FRANK instance on Andreas' Ubuntu PC whose cognitive core is the target Qwen-class 4B model.
-2. `FRANK_REPO` — the repository-based FRANK instance used for architecture state, executable simulation, development, replay, testing and controlled evolution.
+1. `FRANK_PC_4B` — the embodied/local FRANK runtime on Andreas' Ubuntu PC with the target Clay-native Qwen-class 4B cognitive core.
+2. `FRANK_REPO_HARNESS` — the GitHub-based executable architecture simulation/developmental twin used to build, replay, lesion, measure and evolve the same target architecture.
 
-They are instances of the same FRANK architecture lineage, but they are **not one merged runtime state**.
+In addition, current FRANK research treats high-capability Claude Code, ChatGPT and future compatible cognitive peers as unequal external/peer cognitive instances that may maintain their own local semantic state and contribute rich semantic deltas.
 
-Compact law:
+Therefore:
 
-`same organism/architecture lineage != same instantaneous internal state`
+`same FRANK lineage/organism != one merged instantaneous internal state`
 
-## 1. Per-instance state is mandatory
+and
 
-Each instance owns an independent local state envelope.
+`repo Harness is an executable simulation surface != a mandate to copy all peer state into local 4B`.
 
-Examples include:
+This contract is subordinate to the current owner-fixed `FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md` where wording overlaps.
 
-- local perceptual/input state;
+## 1. Per-instance local state is mandatory
+
+Every active cognitive instance owns an independent local state envelope. Depending on the instance this can include:
+
+- local percept/input state;
 - local GWT candidate/competition/workspace state;
-- local active ClayGraph projection/assembly;
+- local transient ClayGraph/topology/Assembly state;
 - local Hyperposition alternatives/facets;
 - local recurrence/loop dynamics;
 - local model context/KV/transient cognition;
-- local body/resource/runtime state;
+- local resource/body/runtime state;
 - local uncertainty, salience and attention;
 - local pending proposals;
 - local checkpoints and recovery state.
 
-The state of one instance must never be overwritten merely because the other instance has a newer state epoch.
+No peer receives automatic whole-state overwrite authority over another peer.
 
-Analogy fixed by owner: two legs belong to one organism, communicate and are jointly represented, but each leg has its own proprioception, load, position and dynamics. They are not collapsed into one undifferentiated leg-state.
+Owner analogy: two legs belong to one organism and coordinate, but each leg has its own proprioception, load, position and dynamics. Coordination does not collapse the two local states into one mass.
 
-## 2. What may be shared or synchronized
+## 2. Synchronization is semantic, selective and asymmetric
 
-Synchronization is selective and typed, never full-state mirroring.
+Strong peers may synchronize rich semantic information with one another. The local 4B is not required to mirror that complete state.
 
-Permitted shared/synchronized classes include, when their contracts allow it:
+Target pattern:
 
-- architecture/schema/version identities;
-- durable facts explicitly admitted to shared canonical state;
-- immutable event/receipt references;
-- shared human identity and durable goal references;
-- validated model-independent semantic definitions;
-- capability/resource observations that are explicitly global;
-- cross-instance messages;
-- exported observations/proposals/outcomes;
-- shared evidence references;
-- model/graph/code version hashes;
-- explicit reconciliation records.
+`Claude Code <-> ChatGPT = rich semantic peer synchronization`
 
-Synchronization means:
+`strong peers -> local FRANK 4B = evidence-preserving model-sized cognitive backflow`
 
-`instance-local event -> typed export -> provenance/authority checks -> shared/reference plane -> other instance may ingest -> local state transition`
+`local FRANK -> peers = typed local observations/proposals/outcomes/capability changes as policy permits`
 
-It never means:
+Synchronizable units can carry:
 
-`copy entire state A over state B`.
+- packet/event identity and origin;
+- instance identity;
+- causal ancestry;
+- semantic/content fingerprint;
+- valid/observation/logical epoch;
+- provenance and epistemic role;
+- uncertainty/conflict;
+- supersession/retraction lineage;
+- capability/resource observations;
+- world/self/Andreas model deltas;
+- file/artifact/dependency topology deltas;
+- tool/effect/outcome receipts;
+- research/Harness findings;
+- Hyperposition alternatives;
+- privacy/export and authority class.
 
-## 3. Correlation is not state collapse
+Synchronization is never equivalent to copying SQLite pages or cloning a complete transient state.
 
-The architecture may maintain correlations, couplings, semantic links and predictive relationships between the two instances.
+## 3. No persistent standalone possibility-space object
 
-A relation such as:
+The project may use the phrase `possibility space` as a human shorthand, but the target architecture must not introduce a separate manually maintained PossibilitySpace database/module merely because the phrase is useful.
 
-`PC state feature <-> Repo simulation feature`
+The current possibility surface is **derived/emergent**.
 
-is a typed relation with provenance, confidence, epoch and potentially causal/intervention evidence. It does not assert identity of the underlying states.
+Canonical source observations live in UnifiedDB. Current capabilities/resources/work/evidence are represented as typed current state. Transient Clay topology, Hyperposition alternatives, salience, dependency closure and GWT selection dynamically expose what is relevant/reachable now.
 
-Required distinction:
+The current research implementation already expresses this concept as derived views such as `v_clay_system_possibility_table` and compact projections. These are views/projections over current state, not a second source of truth.
+
+Compact law:
+
+`UnifiedDB current semantic state + current local instance state + peer deltas + capability/resource observations + Clay rules`
+`-> transient topology/alternatives`
+`-> bounded current cognitive Assembly`
+`-> GWT`
+`-> 4B`
+
+The projection is disposable/recomputable. UnifiedDB/event lineage remains the reconstructible substrate.
+
+## 4. 4B cognitive compilation
+
+The target local 4B must not scan the entire repository/database/graph on each cognitive step.
+
+Its model-facing input is a compact, current, task-conditioned semantic Assembly compiled from the local instance state and current evidence.
+
+The Assembly may contain pre-correlated/preconnected relations so the 4B does not rediscover already knowable codependencies on every turn, but those relations retain provenance, conflict and uncertainty.
+
+Candidate sources include:
+
+- local durable semantic packets;
+- current input/perception;
+- local dependency closure;
+- transient derived topology;
+- Hyperposition-preserved alternatives;
+- GWT candidates;
+- current capabilities and reachable tools;
+- compact strong-peer cognitive backflow;
+- remote detail references for on-demand re-expansion.
+
+`rich persistent state != active cognitive slice` remains a core design law.
+
+## 5. Claude Code must be cognitively visible as a reachable tool/body extension
+
+If a live, authorized Claude Code route is available to the local FRANK instance, that fact is written as current resource/capability evidence into the semantic fabric.
+
+The local 4B must therefore be able to know, through its current Assembly/capability projection, that it can communicate with Claude Code and what that route can currently do.
+
+The final UI/tool surface should expose a typed direct Claude Code communication/delegation tool to FRANK. The exact transport may evolve, but its semantics must expose at least:
+
+- current availability/freshness;
+- capability scope;
+- authority scope;
+- expected latency/cost/resource consequences;
+- request identity;
+- context/evidence references;
+- returned result/receipt identity;
+- failure/unavailable state;
+- provenance.
+
+Tool presence is not authority. A Claude Code result is evidence/proposal unless the relevant execution receipt establishes an actual local effect.
+
+## 6. ChatGPT and Claude Code write back into the semantic substrate
+
+ChatGPT and Claude Code do not merely send prose summaries to the 4B.
+
+Material outputs should be translated into typed semantic/capability/work/evidence deltas and admitted to the relevant instance UnifiedDB under provenance/authority rules.
+
+Those deltas then participate in the same dynamic derivation as local state.
+
+Therefore:
+
+`peer result -> typed semantic delta -> UnifiedDB/event lineage -> dependency/topology update -> future Assembly`
+
+not
+
+`peer result -> permanent hand-written prompt appendix`.
+
+## 7. Correlation is not state collapse
+
+The architecture may maintain correlation, coupling, semantic links and predictive relations between peer/local packets.
+
+Required distinctions:
 
 `correlated(A,B) != identical(A,B)`
 
 `shared_reference(A,B) != shared_internal_state(A,B)`
 
-`message_from_A_to_B != overwrite_B_with_A`.
+`message_from_A_to_B != overwrite_B_with_A`
 
-## 4. 4B possibility-space projection
+`repeated peer agreement != independent evidence when ancestry is shared`.
 
-The target 4B is not expected to traverse the complete raw repository/UnifiedDB/ClayGraph on every cognitive step.
+Low-confidence semantic matching must remain unresolved/Hyperpositioned rather than silently merged.
 
-Its hot cognitive input should be a compact, already prepared possibility/relevance projection derived from the current local instance state plus justified semantic dependencies/correlations.
+## 8. H1 Harness obligations
 
-This contract preserves the existing project direction of a simpler prepared graph / compressed possibility space for the 4B. Any already-frozen artifact defining that representation outranks this general wording and must be loaded before changing its schema.
+The GitHub H1 Reference Harness must make these semantics executable and measurable. It should support at least:
 
-The projection must remain:
+- local 4B instance identity and local state envelope;
+- repo-Harness simulation identity;
+- strong-peer state/message fixtures for Claude Code and ChatGPT;
+- rich peer-peer semantic sync fixtures;
+- compact peer-to-local backflow fixtures;
+- distinct state/epoch/provenance identity;
+- selective export/import rather than whole-state overwrite;
+- stale/out-of-order/duplicate/conflicting peer messages;
+- disconnect/reconnect/provider-loss behavior;
+- independent and coupled replay;
+- dynamic current capability/resource projection;
+- dynamic bounded Assembly generation for the 4B;
+- direct-Claude-tool availability/unavailability simulation;
+- outcome/re-entry and causal-use receipts;
+- token/context/latency/RAM/update-amplification measurements.
 
-- instance-scoped;
-- epoch-bound;
-- provenance-aware;
-- uncertainty/conflict preserving;
-- sparse/budgeted rather than all-pairs;
-- reconstructible against canonical/shared references;
-- non-authoritative by itself;
-- able to contain already correlated/preconnected candidates so the 4B need not rediscover every relationship on each turn.
+H2 must express equivalent semantics in ClayCode. H3 may remove separate physical ClayGraph/service components when evidence supports it, while preserving the semantic distinctions and measurement handles.
 
-## 5. Shared semantic fabric vs local embodiment
+## 9. Scientific measurements
 
-UnifiedDB/ClayGraph may provide a logically shared semantic fabric, but every FRANK instance consumes it through an instance-specific projection.
+Research and compare:
 
-Therefore:
-
-`shared semantic identity/dependency fabric`
-`+ per-instance local state`
-`+ per-instance projection/activation`
-`+ typed cross-instance messages`
-`= coordinated FRANK without state collapse`.
-
-UnifiedDB canonical facts do not become every instance's transient state.
-ClayGraph global/derived relations do not imply equal activation in both instances.
-GWT episodes are instance-local unless explicitly represented as cross-instance messages/receipts.
-
-## 6. Harness obligation
-
-The GitHub-based H1 Reference Harness must explicitly simulate both instance identities and must be able to demonstrate:
-
-- distinct local state hashes for `FRANK_PC_4B` and `FRANK_REPO`;
-- selective synchronization/export/import paths;
-- no accidental whole-state overwrite;
-- cross-instance message provenance;
-- correlation without identity collapse;
-- different simultaneous local GWT/ClayGraph/Hyperposition states over the same shared durable references;
-- stale/out-of-order message behavior;
+- local/peer state change separately;
+- semantic synchronization selectivity;
+- backflow size vs future task success;
+- omission/catastrophic-forgetting rate from compact backflow;
+- stale peer knowledge rate;
 - conflict/reconciliation behavior;
-- disconnect/reconnect behavior;
-- replay of each instance independently plus replay of their interaction;
-- target-shaped 4B possibility-space projection for the PC instance;
-- repository simulation projection for the Repo instance;
-- measurements of information transfer, synchronization cost, divergence, recovery and causal benefit.
-
-H2 must express the same semantics in ClayCode. H3 may lower physical boundaries but may not erase the semantic distinction between the two instance states if both instances remain part of the operational architecture.
-
-## 7. Scientific measurements
-
-At minimum research/measure:
-
-- per-instance state entropy/change and local loop dynamics;
-- cross-instance mutual information/correlation with provenance caveats;
-- transfer entropy or directed predictive information where statistically justified;
-- message latency and update amplification;
-- stale-message and conflicting-message error rates;
-- synchronization selectivity ratio: exported state / total local state;
-- state-collapse failure tests;
-- lesion of the cross-instance channel;
-- shuffled-message controls;
-- delayed-message controls;
-- duplicate-message controls;
-- rescue/reconciliation tests;
-- task outcome difference between selective exchange and full-state-copy baselines;
-- 4B token/context cost of compressed prepared possibility projection versus raw retrieval/search baselines.
+- cross-instance information transfer with ancestry controls;
+- lesion/shuffle/delay/duplicate controls on peer communication;
+- local behavior after loss of ChatGPT/Claude Code;
+- direct-Claude-tool causal utility and failure recovery;
+- full-state mirror baseline vs structured cognitive-backflow baseline;
+- raw retrieval/search baseline vs derived bounded Assembly;
+- update amplification and hot-read cost;
+- whether local GWT/4B actually use peer backflow causally.
 
 Correlation alone is not causal evidence.
 
-## 8. Authority boundary
+## 10. Authority boundary
 
-Neither instance gains execution authority merely by receiving state or proposals from the other.
+Neither peer cognition nor the local 4B gains external-effect or Harness-mutation authority from semantic connectivity alone.
 
-All existing effect/capability/authority rules remain in force.
+Frank self-observation remains proposal-only for Harness mutation. The separate Research Entity reviews/builds/tests Harness changes.
 
-Frank self-observation remains proposal-only for Harness mutation. The Research Entity owns research/build/test decisions about the Harness.
+## 11. Anti-collapse invariants
 
-## 9. Anti-collapse invariants
+- per-instance transient state remains distinguishable;
+- no whole-state peer overwrite by default;
+- shared durable semantics do not imply shared activation;
+- capability visibility does not imply authority;
+- current cognitive Assembly is derived, bounded and replaceable;
+- no standalone manually maintained PossibilitySpace becomes a second truth store;
+- Claude Code and ChatGPT material returns through typed semantic deltas, not prose-only memory;
+- each GWT episode/result/receipt preserves instance and causal identity;
+- local 4B remains functional under temporary strong-peer loss according to measured degradation/fallback policy;
+- H1/H2/H3 replay preserves which instance observed, inferred, proposed, received and effected.
 
-- `FRANK_PC_4B.local_state != FRANK_REPO.local_state`
-- shared architecture identity does not imply shared transient state
-- shared durable fact does not imply shared activation
-- cross-instance correlation does not imply state identity
-- synchronization is field/event scoped, not whole-state mirroring
-- each GWT episode has an instance identity
-- each local state transition has causal parentage and provenance
-- each imported message is distinguishable from locally generated state
-- one instance may remain operational when the other is stale/disconnected where the architecture permits
-- replay must preserve which instance sensed, inferred, proposed, received and acted
+## 12. `frank` trigger consequence
 
-## 10. `frank` trigger consequence
+Every material exact-`frank` cycle must load the newest relevant research before deriving the current architecture-to-Harness gap.
 
-Every material `frank` architecture-to-Harness cycle must preserve this dual-instance distinction when selecting, implementing and testing the next Harness delta.
-
-A proposed optimization that merges the two local states for convenience is an architecture regression unless explicit new owner direction changes this contract.
+The active realization is regenerated from current evidence each cycle. Owner-fixed invariants remain stable; open implementation mechanisms are allowed to change as new research, negative results and measurements arrive.

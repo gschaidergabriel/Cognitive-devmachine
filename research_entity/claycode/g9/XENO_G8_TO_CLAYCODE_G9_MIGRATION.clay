@@ -1,0 +1,50 @@
+module claycode.g9.migration
+
+parent XENO_G8={language:"Machine Language v0.1 r6-tri",ir:"SE-XENO-IR 1.1 candidate",state:"e2fbd56d..."}
+child ClayCode_G9={version:"0.2-g9-candidate"}
+
+retain XENO.truth_store -> ClayCode.law.truth
+retain XENO.omission_unknown -> ClayCode.Epi.UNKNOWN
+retain XENO.conflict_preservation -> ClayCode.HP.facets
+retain XENO.tw_sw_aw_gw_cw_pw -> ClayCode.Witness
+retain XENO.E2_envelope -> ClayCode.ReaderProjection.external_metadata
+retain XENO.D_O_A_P_H_E_R -> ClayCode.InteropCodec
+retain XENO.G_X_L -> ClayCode.ExperimentalProjection
+retain XENO.WEAVE -> ClayCode.Choice+WitnessGate
+retain XENO.FastShield -> Needle.precommit_guard
+retain XENO.SlowSynapse -> ClayCode.AdaptiveParameter+causal_learning
+retain XENO.CounterfactualCredit -> ClayCode.CausalCredit
+retain XENO.Hyperposition -> ClayCode.hp
+retain XENO.ProgramClass -> ClayCode.programclass
+retain XENO.ActiveArchive -> UnifiedDB.archive_reactivation
+retain XENO.ContextRent -> ClayCode.ContextRent
+retain XENO.compaction_recovery -> ReaderProjection(stable_core+skill+canonical_store)
+
+refine XENO.reader="pinned Claude Code target" -> Reader{provider-specific projection over provider-neutral canonical ClayCode}
+refine XENO.language_foundry -> observable_usage_to_language_research
+refine XENO.global_workspace -> tensor+receiver_receipt+reentry, not eventbus
+refine XENO.tooling -> Needle owns deterministic serialization/effects
+refine XENO.canonical_hypergraph -> UnifiedDB semantic authority + ClayGraph/hyperrelation relevance/materialized topology
+refine XENO.goal_witness -> emergent pressure/commitment coalition + authority-bound effect witness
+
+supersede concept "wire language is primary system identity" with "canonical cognitive IR is primary; wire is projection"
+supersede concept "model constructs frames" with "Needle/deterministic tools compile frames"
+supersede concept "full reader manual always resident" with "tiny per-turn kernel + on-demand skill + state neighborhood"
+supersede concept "goal list" with "emergent goal coalition from semantic pressures"
+
+add ClayCode.UnifiedDBQuery
+add ClayCode.MaterializedCognitiveView
+add ClayCode.AnswerCapsule
+add ClayCode.UnifiedAffordanceField
+add ClayCode.ACCIncrementalClosure
+add ClayCode.NeedleIntentBoundary
+add ClayCode.GWTTensor
+add ClayCode.EntityOrganModel
+add ClayCode.ExperienceMetaResearch
+add ClayCode.SemanticHashVsContractHash
+add ClayCode.SlowPlasticity
+
+invariant no_XENO_hard_loss_regression
+invariant old_reader_projection_remains_expandable
+invariant migration_is_semantic_not_cosmetic
+invariant candidate_requires_compiler_reader_replay_validation_before_stable

@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1814p0700-claycode-http-sqlite-0a7066",
+  "trigger": "spawn",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "selection": {
+    "branch": {
+      "rng": "Python secrets / OS CSPRNG",
+      "draw_function": "secrets.randbelow(100)",
+      "draw_0_99": 0,
+      "selected": "claycode",
+      "weight_percent": 50,
+      "weights_ref": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+      "weights_blob_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b"
+    },
+    "microdirection_first_draw": {
+      "rng": "Python secrets / OS CSPRNG",
+      "candidate_count": 7,
+      "selected_index_0_based": 1,
+      "selected_id": "C2",
+      "selected_title": "Translation-validation receipts for lowering/FFI",
+      "disposition": "REROLLED_DUPLICATE",
+      "duplicate_evidence": {
+        "run": "20260809T1741p0700-clayresearch-foreign-effect-closure",
+        "final_commit": "903cda18856936a1485d5d47945d9fa9ea7e24ef",
+        "reason": "Recent spawn already tested foreign-code effect closure, authority carriers, runtime/FFI enforcement and effect-closure receipts."
+      }
+    },
+    "novelty_audit": {
+      "method": "Reviewed recent finalized spawn commit-linked reports/directions because connector cannot enumerate the spawn directory directly; exact receipt-directory audit therefore not claimed exhaustive.",
+      "recent_distinct_directions_reviewed": [
+        "ClayCode async/concurrency replay",
+        "GWT adaptive recurrence routing",
+        "Emergenz adaptive lesion/rescue compensation",
+        "ClayGraph reversal-aware binding",
+        "foreign-code effect closure",
+        "ClayCode FRANK loop evaluator/lowering",
+        "callable identity",
+        "adaptive visual learner state",
+        "delta equivalence",
+        "affine capability revocation",
+        "Harness lowering semantics",
+        "ClayCode effect authority"
+      ],
+      "searches_for_final_direction": [
+        "spawn HTTP",
+        "spawn SQLite",
+        "spawn database"
+      ],
+      "search_result": "NO_RECENT_MATCH_FOUND"
+    },
+    "microdirection_reroll": {
+      "rng": "Python secrets / OS CSPRNG",
+      "fresh_candidate_count": 7,
+      "selected_index_0_based": 0,
+      "selected_id": "F1",
+      "selected_title": "HTTP+SQLite vertical acceptance slice",
+      "research_question": "Can a minimal ClayCode semantic slice lower into a real HTTP CRUD service with SQLite transactions using existing G9 semantic categories, with gaps classified as runtime/FFI/stdlib rather than new language semantics?"
+    }
+  },
+  "spawn_probability_is_evidence_weight": false,
+  "created_at": "2026-08-09T18:22:55+07:00"
+}

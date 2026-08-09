@@ -1,0 +1,35 @@
+name: RAE Earned Work Finalize V2
+on:
+  push:
+    paths: ['.github/workflows/rae_earned_work_finalize_v2.yml']
+permissions:
+  contents: write
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib,copy
+          r=pathlib.Path('.'); hp=r/'research_entity/forecast/HISTORICAL_EARNED_WORK.json'; h=json.loads(hp.read_text())
+          a=json.loads((r/'research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json').read_text())
+          g=json.loads((r/'research_entity/forecast/earned_work_deltas/20260809T0441p0700_drive_g8_g9_retina.json').read_text())
+          n=json.loads((r/'research_entity/forecast/earned_work_deltas/20260809T1250p0700_pf_new_lineages_reconcile.json').read_text())
+          m=json.loads((r/'research_entity/forecast/earned_work_deltas/666_20260809T0424p0700_pf_memory_persistence_recovery_unique.json').read_text())
+          rows=h.setdefault('evidence_mappings',[]); by={x.get('mapping_id'):x for x in rows}
+          x=by['HEW-PF-ABL-004']; x.update(avoided_future_hours_low=0.0,avoided_future_hours_center=0.0,avoided_future_hours_high=0.0,final_audit_disposition='SCAFFOLD_PROVENANCE_ONLY_ZERO_HOURS',final_audit_ref='research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json')
+          add=[copy.deepcopy(x) for x in g['mappings'] if x.get('mapping_id')=='HEW-DRIVE-RETINA-014']+[copy.deepcopy(x) for x in n['proposed_mappings'] if x.get('mapping_id') in {'HEW-PF-POLICY-PARITY-CANDIDATE','HEW-PF-RUNTIME-CONTEXT-PARITY-CANDIDATE'}]+[copy.deepcopy(x) for x in m['unique_mappings'] if x.get('mapping_id') in {'HEW-PF-MEMFED-009','HEW-PF-MEMREC-010','HEW-PF-MEMMIG-011'}]
+          for x in add:
+            mid=x['mapping_id']; x['final_audit_disposition']='ACCEPTED_EVIDENCE_MAPPED_UNIQUE_REMAINDER'; x['final_audit_ref']='research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json'
+            if mid not in by: rows.append(x); by[mid]=x
+          sums={k:sum(float(x.get('avoided_future_hours_'+k,0) or 0) for x in rows) for k in ('low','center','high')}; exp=a['final_mapped_hours']; assert all(abs(sums[k]-float(exp[k]))<1e-9 for k in sums),(sums,exp)
+          rem=float(h['current_remaining_work_prior']['center_active_hours']); base=100*sums['center']/(sums['center']+rem); assert abs(base-float(a['evidence_mapped_project_baseline_percent']))<0.02,(base,a['evidence_mapped_project_baseline_percent'])
+          h['schema_version']='2.0'; h['status']='FINAL_EVIDENCE_MAPPED_AFTER_LEVEL0_AUDIT'; h['evidence_mapped_avoided_future_hours']={k:round(v,3) for k,v in sums.items()}; h['evidence_mapped_project_baseline_percent']=round(base,2); h['temporary_retention_prior_retired']=True; h['final_audit']={'status':'PASS_CONSERVATIVE_DEDUPED_MAPPING','adjudication':'research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json','machine_audit':'research_entity/forecast/EARNED_WORK_FINAL_AUDIT_20260809.json','delta_index':'research_entity/forecast/EARNED_WORK_DELTA_INDEX_20260809.json','cross_source':'research_entity/archive_assimilation/manifests/666_CROSS_SOURCE_FINAL_RECONCILIATION_20260809T1504p0700.json','mappings_count':len(rows),'downgraded_mapping_ids':['HEW-PF-ABL-004'],'accepted_new_mapping_ids':[x['mapping_id'] for x in add]}; hp.write_text(json.dumps(h,indent=2,ensure_ascii=False)+'\n')
+          PY
+          git config user.name rae-earned-work-finalizer; git config user.email actions@users.noreply.github.com
+          git add research_entity/forecast/HISTORICAL_EARNED_WORK.json; git commit -m '666: finalize evidence-mapped historical earned work v2' || exit 0
+          for i in 1 2 3 4 5 6; do git fetch origin main; git rebase origin/main; git push origin HEAD:main && exit 0; sleep 2; done; exit 1

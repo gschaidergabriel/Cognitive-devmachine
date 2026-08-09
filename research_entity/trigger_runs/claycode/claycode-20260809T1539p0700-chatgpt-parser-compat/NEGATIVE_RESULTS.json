@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1539p0700-chatgpt-parser-compat",
+  "negative_results":[
+    {"id":"NR-CC-G9-GRAMMAR-001","status":"NEGATIVE_RESULT","scope":"CURRENT G9 grammar vs tested CURRENT G9 source constructs","result":"Published grammar rejects union types, comparisons, interface method signatures and relation-word operations in tested snippets, and silently misparses an if-control snippet as generic identifiers/set syntax.","evidence":"EXECUTABLE_RESEARCH_RECEIPT.json","implication":"Do not treat current grammar as release-ready parser contract. Repair parser/canonicalizer before semantic churn.","does_not_prove":"Does not refute G9 semantic concepts or prove no richer production parser exists elsewhere."},
+    {"id":"NR-RAE-INTERCONNECT-001","status":"NEGATIVE_RESULT","scope":"research infrastructure","result":"Mandatory research_interconnect_preflight.py branch-set governance is stale after authoritative trigger rename from clay to clayresearch; its fail-closed equality guard would raise.","evidence":"INTERCONNECT_MANIFEST.json plus checked-in tool/registry comparison","implication":"Future trigger runs need the preflight branch tables normalized to current registry before claiming machine preflight PASS.","does_not_prove":"Does not invalidate branch research evidence already retrieved manually in this run."}
+  ]
+}

@@ -1,118 +1,27 @@
 {
   "status": "PASS",
-  "target_version": "RAE-TARGET-0.2.1+evidence-correction-1",
+  "target_version": "RAE-TARGET-0.2.1+live-evidence-20260809T2226p0700",
   "evidence_class": "LOCAL_CHATGPT_SANDBOX_EXECUTION_EXACT_REPO_BLOBS",
-  "primary_entrypoint": {
-    "path": "research_entity/runtime/target_self_host/rae_target_runtime.py",
-    "blob_sha": "79d70c1a8f9789bf8665e7248e7dc0ea0564aee5"
-  },
-  "current_overlay": {
-    "path": "research_entity/runtime/target_self_host/rae_target_runtime_current.py",
-    "blob_sha": "1d7c81f34f75cdb78b66005b4ef9dd86c1cefd6c"
-  },
-  "mechanism_core": {
-    "path": "research_entity/runtime/target_self_host/rae_target_runtime_v021.py",
-    "blob_sha": "ead81682a50ef80d78723a32cec83f616b499986"
-  },
+  "primary_entrypoint": {"path":"research_entity/runtime/target_self_host/rae_target_runtime.py","blob_sha":"0ffbc73e17a798a05bcd6a103387a6793a96e94b"},
+  "live_overlay": {"path":"research_entity/runtime/target_self_host/rae_target_runtime_live.py","blob_sha":"6fddb25cbeade4af8613f796202fa325313b6a2c"},
+  "correction_overlay": {"path":"research_entity/runtime/target_self_host/rae_target_runtime_current.py","blob_sha":"1d7c81f34f75cdb78b66005b4ef9dd86c1cefd6c"},
+  "mechanism_core": {"path":"research_entity/runtime/target_self_host/rae_target_runtime_v021.py","blob_sha":"ead81682a50ef80d78723a32cec83f616b499986"},
   "contract_sha256": "468c45df8706530e27c1b2ca686a3a77fc57adfe5a556940c2232bb6b9f7de90",
   "contract_blob_sha": "27d2b4812c12f7afe339e80a0d35cd7508b6628e",
   "unified_schema_blob_sha": "08dcf096f971e148c6f63d003277d99f51113f72",
   "claygraph_schema_blob_sha": "44a603ca0d8c18f3c4eb796e369c09cc1d1c7b65",
   "exact_primary_runtime": {
     "status": "PASS",
-    "passed": 36,
-    "checks": [
-      "latest_imports",
-      "aggregate74_only",
-      "technical_identities_40",
-      "unresolved_remainder_unknown",
-      "no_74_slot_completion_claim",
-      "clay_source",
-      "claycode_open",
-      "organs",
-      "perception_authority",
-      "organ_delete_blocked",
-      "hot_path",
-      "known",
-      "emergent_not_manual",
-      "candidate_union",
-      "conflict_block",
-      "mixed_epoch_block",
-      "gwt_stage_guard",
-      "receiver_use",
-      "strong_credit_reentry",
-      "weak_credit_denied",
-      "broken_provenance_denied",
-      "measurement_authority_guard",
-      "unknown_not_zero",
-      "counterfactual_replay",
-      "state_abstain",
-      "controls_required",
-      "functional_only",
-      "adaptive_regime",
-      "overcoupling_tripwire",
-      "control_credit",
-      "semantic_signatures",
-      "measurement_no_authority",
-      "unified_integrity",
-      "unified_fk",
-      "graph_integrity",
-      "graph_fk"
-    ]
+    "passed": 37,
+    "checks": ["latest_imports","aggregate74_only","technical_identities_40","unresolved_remainder_unknown","no_74_slot_completion_claim","clay_source","claycode_open","organs","perception_authority","organ_delete_blocked","hot_path","known","emergent_not_manual","candidate_union","conflict_block","mixed_epoch_block","gwt_stage_guard","receiver_use","strong_credit_reentry","weak_credit_denied","broken_provenance_denied","measurement_authority_guard","unknown_not_zero","counterfactual_replay","state_abstain","controls_required","functional_only","adaptive_regime","overcoupling_tripwire","control_credit","semantic_signatures","measurement_no_authority","unified_integrity","unified_fk","graph_integrity","graph_fk","latest_corrected_composite_imported"]
   },
-  "candidate_example": {
-    "semantic_ref": "state:memory_reentry",
-    "lane": "EMERGENT_NOVEL",
-    "fit": 0.6940000000000001,
-    "novelty": 0.7075,
-    "evidence": 0.8260000000000001,
-    "risk": 0.122,
-    "reason": "higher-order completion",
-    "score": 0.63838,
-    "manual_alternative": false
-  },
-  "hot_path_receipt": {
-    "full_memory_scan": false,
-    "global_graph_rebuild": false,
-    "binding_ids_checked": 1,
-    "materialization_epoch": 2
-  },
-  "strong_reentry_contract": {
-    "allowed_credit": ["DIRECT_RECEIPT", "PATH_SUPPORTED"],
-    "verified_outcome_required": true,
-    "complete_receiver_closure_required": true,
-    "truthful_provenance_required": true,
-    "correlated_only_applied": false,
-    "broken_provenance_applied": false
-  },
-  "latest_evidence_imports": [
-    "955b789cdc891b2968a5387a0871812dd6ee4e3a",
-    "2900ba76748a8fcd932c9fbfb57fe55e822a0aa8",
-    "3bc5735453f805df67a5f5b742bb5ffb83498871"
-  ],
-  "legacy_boundary": {
-    "historical_74": "AGGREGATE_MEASUREMENT_ONLY",
-    "source_resolved_technical_identities": 40,
-    "superseded_aliases_preserved": 1,
-    "numeric_unresolved_remainder": "UNKNOWN",
-    "mapped_primary_slots": 0,
-    "completion_gate": "HOLD_SOURCE_BACKED_74_SLOT_MAPPING",
-    "exact_74_name_or_slot_completeness_claim": false
-  },
-  "frank_v7_external_evidence": {
-    "whole_system_acceptance": "20/20 PASS",
-    "cognitive_lineage_lesion_rescue": "31/31",
-    "technical_lineage_rows_lesion_rescue": "41/41 = 40 source-resolved + 1 superseded alias",
-    "scientific_promotion": "NONE"
-  },
-  "h1_loop_external_evidence": {
-    "loop_tests": "6/6 PASS",
-    "combined_tests": "141/141 PASS",
-    "episodes": 100,
-    "slow_reentry_observed": 100,
-    "replay_hashes_equal": true,
-    "release_claim": "NOT_H1_RELEASE_PASS"
-  },
+  "candidate_example": {"semantic_ref":"state:memory_reentry","lane":"EMERGENT_NOVEL","fit":0.694,"novelty":0.7075,"evidence":0.826,"risk":0.122,"reason":"higher-order completion","score":0.63838,"manual_alternative":false},
+  "hot_path_receipt": {"full_memory_scan":false,"global_graph_rebuild":false,"binding_ids_checked":1,"materialization_epoch":2},
+  "strong_reentry_contract": {"allowed_credit":["DIRECT_RECEIPT","PATH_SUPPORTED"],"verified_outcome_required":true,"complete_receiver_closure_required":true,"truthful_provenance_required":true,"correlated_only_applied":false,"broken_provenance_applied":false},
+  "live_evidence_head": "c41d233f7960f206c0a5969630071abbfa451806",
+  "legacy_boundary": {"historical_74":"AGGREGATE_MEASUREMENT_ONLY","source_resolved_technical_identities":40,"superseded_aliases_preserved":1,"numeric_unresolved_remainder":"UNKNOWN","mapped_primary_slots":0,"completion_gate":"HOLD_SOURCE_BACKED_74_SLOT_MAPPING","exact_74_name_or_slot_completeness_claim":false},
+  "frank_v7_external_evidence": {"whole_system_acceptance":"20/20 PASS","cognitive_lineage_lesion_rescue":"31/31","technical_lineage_rows_lesion_rescue":"41/41 = 40 source-resolved + 1 superseded alias","scientific_promotion":"NONE"},
+  "h1_loop_external_evidence": {"loop_tests":"6/6 PASS","combined_tests":"141/141 PASS","episodes":100,"slow_reentry_observed":100,"replay_hashes_equal":true,"release_claim":"NOT_H1_RELEASE_PASS"},
   "claycode_boundary": "software path available; physical Andreas Ubuntu, WP14 and final release acceptance remain OPEN",
   "claim_boundary": "functional pattern only; no phenomenal-consciousness claim",
   "canonical_promotion": false

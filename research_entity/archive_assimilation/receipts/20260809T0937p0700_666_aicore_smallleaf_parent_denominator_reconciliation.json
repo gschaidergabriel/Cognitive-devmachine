@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "20260809T0937p0700-666-aicore-smallleaf-parent-denominator-reconciliation",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "target_artifacts": [
+    "research_entity/archive_assimilation/manifests/DRIVE_AICORE_SMALL_LEAF_ROOTS_DIRECT_REVALIDATION_20260809T0934p0700.json",
+    "research_entity/archive_assimilation/receipts/20260809T0934p0700_666_aicore_small_leaf_denominators.json"
+  ],
+  "new_parent_evidence_ref": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_REMAINING_26_ROOT_CHILDREN_V3_DIRECT_REVALIDATION.json",
+  "finding": "The historical AICORE direct-root denominator of 50 entries is superseded by current Google_Drive.list_folder(top_k=1000) evidence of 67 direct entries: 37 folders and 30 files. The earlier folder-fetch surface was cutoff-limited for root enumeration.",
+  "effect_on_target_artifacts": "NO_INVALIDATION_OF_FIVE_SUBTREE_IDENTITY_CLOSURES",
+  "reason": "Each of webd, updater, papers, .claude and desktopd was independently direct-listed by its stable Drive folder ID with top_k=1000 and had zero descendant folders. Parent root file-count correction does not change those child identities or their direct child listings.",
+  "supersession_boundary": "Any statement treating 50 as the complete AICORE direct-root denominator is superseded. The five-root aggregate 22-file recursive identity closure remains current unless those stable Drive folders mutate.",
+  "status": "RECONCILED",
+  "created_at": "2026-08-09T09:37:00+07:00"
+}

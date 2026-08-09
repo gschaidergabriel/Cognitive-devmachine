@@ -1,13 +1,10 @@
 {
-  "schema_version": "1.0",
-  "latest_cycle": "ccauto-20260809T105143Z",
-  "cycle_path": "research_entity/claycode/autonomous/cycles/ccauto-20260809T105143Z.json",
-  "needs_review": true,
-  "next_focus": "Production frontend closure — extend/build the real parser and canonical typed IR with the smallest function-definition contract; self-host/roundtrip canonical hashes.",
-  "errors": [
-    "falsifier:RuntimeError:NVIDIA HTTP 404: {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function 'e503b15c-62b0-4d69-b532-a88f0bfa2656': Not found for account 'lqEaewE7DO8HuEcPoSDzIGQS8easeRdrpi4xN5GmrV8'\"}",
-    "judge:RuntimeError:NVIDIA HTTP 404: {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function 'e503b15c-62b0-4d69-b532-a88f0bfa2656': Not found for account 'lqEaewE7DO8HuEcPoSDzIGQS8easeRdrpi4xN5GmrV8'\"}"
-  ],
+  "schema_version": "1.1",
+  "latest_cycle": "ccauto-20260809T105416Z",
+  "cycle_path": "research_entity/claycode/autonomous/cycles/ccauto-20260809T105416Z.json",
+  "needs_review": false,
+  "next_focus": "Obtain the exact Lark conflict diagnostic for D.bnf, apply the pinpointed minimal repair, verify strict‑parser conflict‑free construction, then re‑integrate typed‑function definition/call binding.",
+  "errors": [],
   "provider_discovery": {
     "mistral": {
       "status": "CREDENTIAL_NOT_CONFIGURED"
@@ -15,7 +12,62 @@
     "nvidia": {
       "status": "AVAILABLE",
       "models": 100
+    },
+    "nvidia_executable_pool": {
+      "verified_models": [
+        "nvidia/nemotron-mini-4b-instruct",
+        "z-ai/glm-5.2",
+        "nvidia/nemotron-3-super-120b-a12b",
+        "nvidia/nemotron-3-ultra-550b-a55b",
+        "deepseek-ai/deepseek-v4-flash-0731",
+        "openai/gpt-oss-120b"
+      ],
+      "families": [
+        "deepseek",
+        "glm",
+        "gpt-oss",
+        "nemotron"
+      ],
+      "probes": [
+        {
+          "model": "nvidia/nemotron-3-super-120b-a12b",
+          "status": "SUCCESS",
+          "usage": {
+            "prompt_tokens": 21,
+            "completion_tokens": 16,
+            "total_tokens": 37
+          }
+        },
+        {
+          "model": "nvidia/nemotron-3-ultra-550b-a55b",
+          "status": "SUCCESS",
+          "usage": {
+            "prompt_tokens": 21,
+            "completion_tokens": 14,
+            "total_tokens": 35
+          }
+        },
+        {
+          "model": "deepseek-ai/deepseek-v4-flash-0731",
+          "status": "SUCCESS",
+          "usage": {
+            "prompt_tokens": 9,
+            "completion_tokens": 3,
+            "total_tokens": 12
+          }
+        },
+        {
+          "model": "openai/gpt-oss-120b",
+          "status": "SUCCESS",
+          "usage": {
+            "prompt_tokens": 70,
+            "total_tokens": 86,
+            "completion_tokens": 16,
+            "prompt_tokens_details": null
+          }
+        }
+      ]
     }
   },
-  "instruction": "ChatGPT supervisor: inspect this cycle plus any completed tool_results, cross-check current official provider capabilities when material, then update supervisor state/control only when evidence justifies steering."
+  "instruction": "ChatGPT supervisor: inspect cycle/tool_results, prefer executable evidence, use all materially relevant connected capabilities, then steer control/state only if evidence warrants it. FREE_ONLY; no gate promotion or Frank-Harness modification."
 }

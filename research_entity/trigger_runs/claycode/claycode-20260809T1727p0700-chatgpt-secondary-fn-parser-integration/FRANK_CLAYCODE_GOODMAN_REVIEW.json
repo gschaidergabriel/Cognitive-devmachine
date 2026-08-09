@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.1",
+  "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id": "claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration",
+  "latest_frank_run": "fusion-20260809T1538p0700-frank-architecture-lineage",
+  "latest_frank_architecture_artifact": null,
+  "shared_ancestry_is_not_replication": true,
+  "reviews": [
+    {
+      "claim_id": "GC-FN-01",
+      "frank_statement": "FRANK requires ClayCode to execute reusable typed behavior as part of a general-purpose runtime, but FRANK does not justify a FRANK-specific function primitive.",
+      "frank_source_refs": ["fusion-20260809T1538p0700-frank-architecture-lineage","CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"],
+      "ancestry_families": ["FRANK architecture/BASE requirement family","ClayCode universal-core/function-closure family"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Existing rule/needle/cycle or a separate typed executable dialect can provide deterministic reusable definition->call semantics without adding fn to G9.",
+      "falsifier": "The admitted production compiler executes APP-01..APP-10 and a real FRANK component with equivalent typed call semantics using existing constructs, or target reader/Ubuntu evidence rejects fn integration.",
+      "independent_checks": ["Current-run D+fn local parser/type/binding/lowering experiment: 20,000 cases, 0 differential mismatches; fail-closed negative corpus.","MLIR SymbolTable/SymbolRef design requires unique named symbols in a parent symbol table and explicit symbolic reference.","LLVM function types/calls bind argument types/signatures; WebAssembly validates function instance/type before invocation."],
+      "adversarial_checks": ["Undefined function, arity mismatch, undefined variable, duplicate function, duplicate param, return mismatch, unsupported recursion and untyped parameter all rejected.","Strict-LALR construction tested and failed for baseline D and D+fn, blocking conflict-free promotion.","ClayGraph exact-query negative result applied: no graph fallback for call target."],
+      "verdict": "REFINED",
+      "reason": "Generic exact typed definition/call closure is independently supported as a compiler requirement and locally executable with the candidate; the exact source surface remains unselected and production/Ubuntu evidence is missing.",
+      "claycode_action": "Keep fn only as non-promoted frontend candidate; integrate exact symbol/signature identity in canonical IR/compiler and test against alternatives.",
+      "affected_claycode_artifacts": ["D_LALR_GRAMMAR_CANDIDATE_V3.lark","CANDIDATE_FUNCTION_SURFACE.ebnf","future canonical typed IR/symbol table/type-effect checker"]
+    }
+  ]
+}

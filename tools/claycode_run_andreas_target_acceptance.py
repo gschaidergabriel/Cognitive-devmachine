@@ -3,8 +3,8 @@
 
 The local owner registration is verified first. Only a successful machine-id/host
 fingerprint check is allowed to set the target-id environment consumed by the full
-convergence gate. This prevents a generic Ubuntu CI/container from self-declaring itself
-as the Frank v0.1 release target.
+convergence gate. The hardened ten-application suite is executed on the same verified
+host before the convergence gate. Neither step can self-promote BASE.
 """
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 IDENTITY = ROOT / "tools/claycode_target_host_identity.py"
+APPS = ROOT / "tools/claycode_base_target_application_suite_v2_runner.py"
 GATE = ROOT / "tools/claycode_andreas_ubuntu_target_gate.py"
 TARGET = "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM"
 DEFAULT_REGISTRATION = Path.home() / ".config/claycode/andreas_target_registration.json"
@@ -50,10 +51,24 @@ def main() -> int:
 
     env = dict(os.environ)
     env["CLAYCODE_TARGET_HOST_ID"] = TARGET
+
+    apps = subprocess.run(
+        [sys.executable, str(APPS), "--registration", str(args.registration)],
+        cwd=ROOT,
+        env=env,
+        check=False,
+    )
+
     argv = [sys.executable, str(GATE)]
     if args.output:
         argv += ["--output", str(args.output)]
     gate = subprocess.run(argv, cwd=ROOT, env=env, check=False)
+
+    # FULL_FRANK_HANDOFF intentionally keeps the application suite nonzero until the
+    # production H2/H3 receipt exists. The convergence gate may still run and preserve
+    # all other component evidence, but canonical acceptance succeeds only if both pass.
+    if apps.returncode != 0:
+        return apps.returncode
     return gate.returncode
 
 

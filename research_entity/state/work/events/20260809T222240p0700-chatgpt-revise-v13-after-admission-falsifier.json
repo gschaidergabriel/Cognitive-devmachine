@@ -1,0 +1,14 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-event:20260809T222240p0700:chatgpt:revise-v13-after-admission-falsifier",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T22:22:40+07:00",
+  "payload": {
+    "work_id": "work:frank-v01-v13-schema-admission-reconcile",
+    "reason_clay": "clay{new_sandbox_evidence:{finding:CURRENT_V12_ADMISSION_IS_UNSOUND_FOR_CURRENT_V13_RUNTIME_CONTRACT,current_gate_can_pass_v12_only_without:[dialogue_pending_inputs,dialogue_last_pairs,research_bug_reports],current_gate_can_also_pass:v13_tables_present_but_meta_and_materialization_schema_still_12_0,candidate_contract:{expected:13.0,required_v13_tables:[dialogue_pending_inputs,dialogue_last_pairs,research_bug_reports],v12_only:REJECTED,v13_mislabeled_12:REJECTED,v13_labeled_13:PASS},canonical_db_mutated:false}; source_contracts:[runtime/state/apply_current_schema.py,runtime/state/APPLIED_SCHEMA_MANIFEST_REQUIRED,runtime/state/repo_truth_gate.py,runtime/state/UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql,runtime/bridge/frank_bug_feedback.py]; review_branch:chatgpt/sandbox-whole-frank-20260809}",
+    "work_clay": "clay{remaining_work:[decide_and_document_V13_as_admitted_schema_revision_or_produce_stronger_counterevidence,if_V13_admitted_then_synchronize:APPLIED_SCHEMA_MANIFEST_REQUIRED+repo_truth_gate_EXPECTED_UDB_SCHEMA+repo_truth_gate_REQUIRED_UDB_TABLES+materializer_meta_schema_version+materialization_state_schema_version,run_full_disposable_migration_chain,run_bug_feedback_runtime_and_harness,run_truth_gate_controls:v12_only_FAIL+v13_mislabeled_FAIL+v13_current_PASS,retain_migration_atomicity_and_FK_checks]; forbidden:[canonical_DB_mutation_without_authority,version_bump_without_materialization_metadata_update]}",
+    "completion_clay": "clay{done_if:[one_consistent_admission_contract,disposable_full_chain_PASS,bug_feedback_tables_required_by_gate,meta_and_materialization_schema_agree,stale_or_mislabeled_bodies_fail_closed,current_harness_PASS]; negative_result_to_preserve:current_V12_gate_contract_is_unsound_for_V13_runtime}",
+    "status": "READY"
+  }
+}

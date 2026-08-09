@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1655p0700_chatgpt_lexical_closure",
+  "feedback": [
+    {
+      "branch": "claycode",
+      "delta": "LEXER_PARSER_CLOSURE_REFINEMENT",
+      "finding": "The admitted ref token is not delimiter-closed under literal maximal munch; bare identifiers containing hyphen collide with unspaced minus under longest-match interpretation.",
+      "next": "Implement delimiter-aware Ref lexing, inventory hyphenated identifiers before changing bare-id grammar, then run canonical print/parse property tests over the full admitted corpus."
+    },
+    {
+      "branch": "frank",
+      "delta": "NO_ARCHITECTURE_CHANGE",
+      "finding": "No new FRANK-specific ClayCode primitive is justified. Reliable parse-to-canonical-IR remains a prerequisite for compiling Frank semantics.",
+      "next": "Keep frozen FRANK requirements as downstream application/parser fixtures."
+    },
+    {
+      "branch": "harness",
+      "delta": "NEW_PARSER_ORACLES",
+      "finding": "Add adjacent-ref and a-b versus a - b cases to H2/ClayCode conformance before differential FRANK replay.",
+      "next": "Fail H2 translation if source variants produce unintended canonical-IR divergence or ambiguous parse."
+    },
+    {
+      "branch": "unifieddb",
+      "delta": "NO_SEMANTIC_CHANGE",
+      "finding": "Canonical Ref identity should enter UnifiedDB only after deterministic parsing/canonicalization; parser provenance stays separately receipted.",
+      "next": "Preserve parser/compiler version in provenance when ingesting compiled semantic identities."
+    },
+    {
+      "branch": "claygraph",
+      "delta": "NO_SEMANTIC_CHANGE",
+      "finding": "Graph Ref identity depends on stable parsed semantic identity; lexical spelling or activation does not promote truth.",
+      "next": "Use canonical parsed IDs, not raw token slices, for graph projections."
+    },
+    {
+      "branch": "gwt",
+      "delta": "NO_CHANGE",
+      "finding": "No GWT mechanism or measurement claim changed.",
+      "next": "none"
+    },
+    {
+      "branch": "hyperposition",
+      "delta": "NO_CHANGE",
+      "finding": "No alternative-set or higher-order coupling semantics changed.",
+      "next": "none"
+    },
+    {
+      "branch": "emergenz",
+      "delta": "NO_CHANGE",
+      "finding": "No emergence interpretation changed; parser correctness remains an upstream validity condition.",
+      "next": "none"
+    },
+    {
+      "branch": "clayresearch",
+      "delta": "BASE_IMPLEMENTATION_DIRECTION_REINFORCED",
+      "finding": "The evidence continues to favor implementation and conformance work over semantic reinvention.",
+      "next": "Prioritize CC-WP-02 parser/canonicalizer and executable application proof progression."
+    }
+  ],
+  "promotion": "NONE"
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1709p0700-effect-recovery-abi",
+  "experiment_id":"EXP-CC-EFFECT-RECOVERY-EXACTLY-ONCE-20260809-01",
+  "candidate":"ClayCode runtime ABI stable effect operation identity + explicit delivery/recovery semantics",
+  "source_path":"experiments/effect_exactly_once_probe.py",
+  "source_sha256":"e568c8aa4133774bcf4101d02a9167f93dd240b52db722b0c7563b445a813cf3",
+  "result_sha256":"4e7c2dbb4a0cd368321b43a921a5e4d7e230e0f06856a5cb72cb584f8c4c94f9",
+  "runtime":{"provider":"ChatGPT local container","language":"Python 3","os":"Linux"},
+  "test_corpus":{"worlds":["PREPARED+crash-before-external-effect","PREPARED+external-effect+crash-before-local-DONE"],"local_recovery_strategies":["RETRY","ABSTAIN"],"coordinated_strategy":"REMOTE_IDEMPOTENT_RETRY"},
+  "observed":{"local_retry_exactly_once":"1/2","local_abstain_exactly_once":"1/2","remote_idempotent_retry_exactly_once":"2/2"},
+  "expected_semantic_property":"A recovery contract must not claim DONE or generic exactly-once when identical durable local state is compatible with both effect-not-run and effect-already-run worlds.",
+  "result":"LOCAL_LIFECYCLE_STATE_ALONE_INSUFFICIENT_FOR_GENERIC_EXACTLY_ONCE_EXTERNAL_EFFECTS",
+  "failure_class":"CRASH_WINDOW_EFFECT_COMMIT_UNCERTAINTY",
+  "repair_candidate":"Bind a stable effect_operation_id to request semantic fingerprint and declare delivery/recovery class. Use remote dedupe/idempotency, transactional coupling or queryable reconciliation when available; otherwise surface UNCERTAIN and require explicit recovery policy.",
+  "evidence_class":"LOCAL_SYNTHETIC_RUNTIME_ABI_COMPONENT_EVIDENCE",
+  "external_triangulation":["IETF HTTPAPI Idempotency-Key draft-07 (expired draft, architecture analogue only)","AWS Builders Library idempotent API retry contract","Apache Kafka delivery/transaction semantics"],
+  "limitations":["two-world minimal mechanism model","not production ClayCode compiler/runtime","no E2B execution","no Andreas Ubuntu target execution","does not prove one unique ABI representation"],
+  "affected_work_packages":["CC-WP-04-TYPE-EFFECT","CC-WP-07-RUNTIME-ABI-FFI","CC-WP-09-CONCURRENCY-MEMORY","CC-WP-11-FUZZ-CONFORMANCE","CC-WP-13-HARNESS-HANDOFF"],
+  "language_change_required":"UNRESOLVED; implement as runtime/effect ABI contract first under less-change-more-compile",
+  "promotion":"NONE"
+}

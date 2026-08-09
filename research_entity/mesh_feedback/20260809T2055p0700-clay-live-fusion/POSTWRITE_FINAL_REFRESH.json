@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T2055p0700-clay-live-fusion",
+  "refresh_kind": "POSTWRITE_FINAL_REFRESH",
+  "pre_refresh_feedback_commit": "25a5eac7b6ed0f45d23052b64aa975076fd7c9ca",
+  "observed_concurrent_material": [
+    "60b055a031071cce9124b967ffbcfc07408132ec",
+    "1c8b7ffe8fbe76e0103035589aae528c11e6ce85",
+    "565932ad22b9eca704a6a3434c288e6bf2fbeb92",
+    "5e33557fe22792f385309cebe50f7421349753f2",
+    "800fd7b2730a65510f6882ddf4aeffc8af948cda",
+    "78d6582ba502e0faba338a1bb2e24db8db382160",
+    "22a16757c719dbff735bcdbc7821f5a51200acf4"
+  ],
+  "material_delta": [
+    {
+      "id": "NEGATIVE-REAL-FRANK-FRONTEND-COVERAGE",
+      "evidence_class": "SOURCE_LEVEL_FRONTEND_COVERAGE_COUNTEREXAMPLE",
+      "status": "OPEN_EXECUTION_CONFIRMATION_REQUIRED",
+      "claim": "The exact inspected FRANK ClayCode source contains use/fn/let/require/return forms not represented by the current BASE V5 top-level grammar. Current G9/Dialect corpus acceptance therefore cannot be assumed sufficient for real FRANK frontend coverage.",
+      "evidence_ref": "60b055a031071cce9124b967ffbcfc07408132ec",
+      "counterhypotheses": [
+        "The FRANK source may intentionally be a different admitted dialect lowered before BASE parsing.",
+        "A versioned preprocessing/module-import lowering path may preserve the BASE grammar without widening it.",
+        "The inspected source may not be the exact frozen WP13 production subsystem."
+      ],
+      "promotion": "NONE"
+    },
+    {
+      "id": "DELTA-WP02-V9-REPAIR-PLAN",
+      "evidence_class": "RESEARCH_CANDIDATE_PATCH_NOT_PASS",
+      "claim": "A V9 minimal repair plan now explicitly attempts to satisfy both V5's strict-LALR counterexample and V6's bare Needle.owns corpus regression by separating dotted prefix use from bare dotted qid use.",
+      "evidence_ref": "1c8b7ffe8fbe76e0103035589aae528c11e6ce85",
+      "negative_boundary": "V9 is a patch plan/candidate; exact-main strict LALR+interegular, current corpus, canonical IR and typed semantic receipts remain required."
+    },
+    {
+      "id": "DELTA-H1-CAUSAL-LOOP-REPLAY-ADAPTER",
+      "evidence_class": "LOCAL_COMPONENT_EXECUTION_PLUS_RESEARCH_IMPLEMENTATION",
+      "claim": "A proposal-only H1 causal loop replay adapter now encodes matched BASELINE->LESION->RESCUE and truthful/shuffled/no-reentry comparisons, separates history proxies from validated next-step estimates, and separates provenance origin from attestation layer. Nine local regression tests passed.",
+      "evidence_ref": "5e33557fe22792f385309cebe50f7421349753f2",
+      "promotion_limit": "Andreas Ubuntu H1 causal replay was not executed; candidate causal support from the adapter is not scientific promotion or independent replication."
+    },
+    {
+      "id": "DELTA-ANDREAS-RUNNER-LABEL-DEADLOCK-REPAIR",
+      "evidence_class": "TARGET_TRANSPORT_REPAIR_TOOLING_NOT_ACCEPTANCE",
+      "claim": "A concrete target-runner transport deadlock was localized: an existing self-hosted runner can predate the scoped andreas/claycode/target labels and therefore never match the fail-closed workflow. The selected repair adds only missing custom labels to the exact verified runner while preserving desktop/host/release gates.",
+      "evidence_refs": ["78d6582ba502e0faba338a1bb2e24db8db382160", "800fd7b2730a65510f6882ddf4aeffc8af948cda"],
+      "promotion_limit": "A fresh registered-target execution receipt is still required to show the runner actually comes online and completes closure."
+    },
+    {
+      "id": "NEGATIVE-WORK-EVENT-NOT-EXECUTION",
+      "evidence_class": "COORDINATION_STATE",
+      "claim": "The F5 device/body probe and current-schema harness verification commits are WORK_CREATE/READY events, despite execution-like commit messages. They are not LOCAL_EXECUTION_PRIMARY receipts.",
+      "evidence_refs": ["22a16757c719dbff735bcdbc7821f5a51200acf4", "a0d87bea8ffcb1bcbe58f8bba3d0cf0c644d9613"],
+      "promotion": "NONE"
+    }
+  ],
+  "all_branch_closure": [
+    {"branch":"frank","status":"DELTA","message":"Add the H1 causal loop replay adapter as proposal-only experimental machinery and preserve the real-FRANK frontend coverage counterexample. F5/schema target work remains READY, not executed."},
+    {"branch":"claycode","status":"DELTA","message":"WP02/WP13 now have a real FRANK source-level coverage counterexample in addition to V5/V6 grammar failures. Evaluate V8/V9 versus explicit dialect/pre-lowering on exact selected FRANK sources; no PASS from patch plans or static inspection."},
+    {"branch":"harness","status":"DELTA","message":"Use matched frozen BASELINE/LESION/RESCUE plus truthful/shuffled/no-reentry H1 replays; target-runtime attestation is required for strong causal support. Queue/work-event names do not count as target execution receipts."},
+    {"branch":"unifieddb","status":"DELTA","message":"Project causal-loop replay onto the existing authoritative episodes->predictions->prediction_outcomes->causal_credit_receipts spine; preserve provenance origin separately from attestation layer and avoid a new migration while admitted-schema coordination is unresolved."},
+    {"branch":"claygraph","status":"DELTA","message":"Bind causal-loop intervention traces to exact graph/state epochs; no graph activation or replay agreement becomes causal truth without matched lesion/rescue and verified outcome receipts."},
+    {"branch":"gwt","status":"DELTA","message":"Integrate matched re-entry interventions with receiver-complete episodes; truthful versus shuffled versus absent re-entry is now an explicit causal discriminator, not merely an observational label."},
+    {"branch":"hyperposition","status":"NO_CHANGE","message":"No post-write material changes the already-fused Hyperposition insert repair or n-ary measurement requirements. Preserve source_epoch/graph_epoch and full CLI verification gate."},
+    {"branch":"emergenz","status":"DELTA","message":"The new H1 causal replay adapter provides a better future lesion/rescue substrate but does not repair the v0.2 meter falsification. Strong causal support still requires target-runtime attestation and independent method validation."},
+    {"branch":"clayresearch","status":"DELTA","message":"Preserve a new cross-branch distinction: source-level counterexample is sufficient to reopen coverage, not to select the repair; work-event intent is not execution; local causal-component tests are not target scientific replication."}
+  ],
+  "canonical_scientific_promotion": "NONE",
+  "blocking_facts": [
+    "No durable passing registered-Andreas-Ubuntu FULL_FRANK/BASE14 acceptance receipt has been observed.",
+    "Real FRANK frontend coverage is now an explicit WP02/WP13 open counterexample until exact parser/dialect execution resolves it.",
+    "UnifiedDB emergence meter reliability remains invalidated pending v0.3 method gates.",
+    "H1 causal-loop replay has local component evidence only; target Ubuntu execution remains open."
+  ]
+}

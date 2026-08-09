@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1656p0700-trace-replay-v1",
+  "reread_phase":"SECOND_POST_RUN_LIVE_REREAD",
+  "status":"INTEGRATED",
+  "late_deltas":[
+    {
+      "source_commit":"f2a5011e8abef16fa7527191470dd9c2ed32079c",
+      "source_run":"claycode_20260809T1708p0700_chatgpt_stage_identity_chain",
+      "finding":"ProgramSemanticId should be minted at deterministic canonical typed IR or equivalent verified canonical semantic stage; source/parse identity must remain distinct and non-authoritative.",
+      "decision":"REFINE_SOURCE_CHAIN_COMPOSITION",
+      "integration":"ORACLE_COMPOSITION_CONTRACT_V1_1.json marks SourceChainEvidenceV1 provisional at the semantic-mint boundary and separates source/grammar/canonical-semantic/type-effect/lowering/artifact identities."
+    },
+    {
+      "source_commit":"3caad3c5672e7e95e20885e9d3f6bc598dede8df",
+      "source_run":"claycode_20260809T1709p0700_chatgpt_resource_lifetime_epoch",
+      "finding":"Capability authorization epoch, host-resource generation/lifetime epoch, type identity and handle instance identity are distinct; semantic or graph identity cannot prove a live handle.",
+      "decision":"REFINE_EFFECT_TRACE_REQUIREMENTS",
+      "integration":"ORACLE_COMPOSITION_CONTRACT_V1_1.json adds conditional resource identity layers and stale/ABA/wrong-type handle failure classes."
+    }
+  ],
+  "contradictions_found":false,
+  "important_refinement":"The composite H2 oracle is now explicitly layered: source/contract identity -> canonical typed-IR ProgramSemanticId -> lowering/artifact identity -> runtime state/version/trace identity -> conditional live resource lifetime identity. None of these layers grants authority merely by existing.",
+  "gate_effect":"NONE",
+  "promotion":"NONE"
+}

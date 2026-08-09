@@ -1,0 +1,28 @@
+name: FRANK Receiver-Causal Workspace Episode
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/harness/reference/workspace_episode.py'
+      - 'research_entity/harness/tests/test_workspace_episode.py'
+      - 'research_entity/harness/tests/test_workspace_episode_receipt_identity.py'
+      - '.github/workflows/frank-workspace-episode.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  reference-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run receiver-causal workspace regressions
+        run: >-
+          python -m unittest -v
+          research_entity/harness/tests/test_workspace_episode.py
+          research_entity/harness/tests/test_workspace_episode_receipt_identity.py

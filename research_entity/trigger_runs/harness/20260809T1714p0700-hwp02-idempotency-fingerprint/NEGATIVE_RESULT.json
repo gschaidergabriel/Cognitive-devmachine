@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "negative_result_id": "NR-HARNESS-HWP02-IDEMPOTENCY-FINGERPRINT-20260809",
+  "run_id": "20260809T1714p0700-hwp02-idempotency-fingerprint",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "status": "NEGATIVE_RESULT",
+  "claim": "The current H1 reference StateLedger idempotency replay decision is not demonstrated to bind the full semantic request identity; visible code accepts same idempotency_key + same event_id as replay without comparing changed mutations/event_type/provenance.",
+  "counterexample": {
+    "first": "event_id=e1, key=k1, semantic payload A",
+    "retry": "event_id=e1, key=k1, semantic payload B",
+    "vulnerable_outcome": "IDEMPOTENT_REPLAY of A instead of conflict",
+    "required_outcome": "reject changed semantic request as idempotency conflict while preserving A"
+  },
+  "evidence_refs": [
+    "research_entity/harness/reference_state_ledger.py",
+    "research_entity/harness/probes/hwp02_idempotency_payload_fingerprint_probe.py",
+    "research_entity/trigger_runs/harness/20260809T1714p0700-hwp02-idempotency-fingerprint/EXECUTION_RECEIPT.json"
+  ],
+  "evidence_class": "CURRENT_CODE_REVIEW_PLUS_LOCAL_DETERMINISTIC_SYNTHETIC_MECHANISM_PROBE",
+  "does_not_refute": [
+    "existing deterministic state-root tests within their tested scope",
+    "stale-epoch rejection within its tested scope",
+    "explicit epistemic-state preservation within its tested scope",
+    "snapshot/restore and tamper tests within their tested scope",
+    "the separate pre-lock concurrency-race negative result"
+  ],
+  "repair_constraint": "A replay must prove semantic request equivalence, not merely identifier reuse. At minimum bind event_id, event_type, normalized mutations and provenance (or an equivalent canonical semantic fingerprint). Retry-local execution metadata must not silently redefine semantic identity.",
+  "falsifier": "Execute the actual module with same idempotency key/event_id but changed normalized semantic request; PASS only if the changed retry is deterministically rejected, committed state/epoch remain unchanged and ordinary identical retries still replay successfully.",
+  "promotion": "NONE"
+}

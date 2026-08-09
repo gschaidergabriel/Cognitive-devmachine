@@ -1,0 +1,58 @@
+# ClayCode WP-02 V9 minimal repair patch
+# Actor: chatgpt-secondary
+# Date: 2026-08-09
+# Scope: research candidate / executor patch plan, not PASS evidence.
+#
+# Counterexamples addressed:
+# 1. V5 strict-LALR: optional dotted RHS causes shift/reduce conflict.
+# 2. V6 corpus: required dotted RHS rejects current G9 `rule 4B_need_not_learn Needle.owns`.
+#
+# Apply against current V6-equivalent grammar, then run exact-main strict/corpus/canonical receipts.
+
+--- a/research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark
++++ b/research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark
+@@
+-?term: dotted_relation | prefix_relation | postfix_relation | primary
+-dotted_relation: qid DOT_REL primary
+-prefix_relation: prefix_relop term
++?term: prefix_relation | postfix_relation | primary
++prefix_relation: prefix_relop term | DOTTED_PREFIX_REL primary
+ postfix_relation: primary postfix_relop
+@@
+-NAME: /(?!(module|version|status|parent|import|interface|dialect|law|rule|invariant|class|type|record|tensor|codec|surface|metric|hash|needle|cycle|if|or|iff|requires|in|subset_of|true|false)\b)[A-Za-z_][A-Za-z0-9_-]*/
++NAME: /(?!(module|version|status|parent|import|interface|dialect|law|rule|invariant|class|type|record|tensor|codec|surface|metric|hash|needle|cycle|if|or|iff|requires|in|subset_of|lowers|true|false)\b)[A-Za-z_][A-Za-z0-9_-]*/
+@@
+-DOT_REL.11: ".lowers" | ".owns"
++DOTTED_PREFIX_REL.11: /Needle\.(?:lowers|owns)(?=[ \t]+[^\n;]+)/
+
+--- a/tools/claycode_base_frontend_validation.py
++++ b/tools/claycode_base_frontend_validation.py
+@@
+-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark"
++DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
+@@
+     positive_cases = {
++        "bare_needle_owns_operand": "rule 4B_need_not_learn Needle.owns\n",
+         "if_statement": "cycle(input:Ref){\nif input {\ntrue\n}\n}\n",
+@@
+-        "dotted_relation_missing_object": "rule Needle.lowers\n",
++        "dotted_relation_missing_object": "rule Needle.lowers\n",
+
+--- a/tools/claycode_canonical_ir.py
++++ b/tools/claycode_canonical_ir.py
+@@
+-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark"
++DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
+@@
+     discrimination = {
++        "bare_owns_vs_prefix_owns": (b"rule 4B_need_not_learn Needle.owns\n", b"rule Needle.owns X\n"),
+         "greater_vs_less": (b"rule x>0\n", b"rule x<0\n"),
+
+# Required acceptance after applying:
+# - strict LALR/contextual construction with interegular installed: PASS
+# - exact current G9 V3 + Dialect V3 source acceptance: PASS
+# - bare_needle_owns_operand: ACCEPT
+# - dotted_relation_missing_object (`rule Needle.lowers`): REJECT
+# - all lexical discrimination/equivalence cases: PASS
+# - canonical IR roundtrip and semantic-hash mutation tests: PASS
+# - no CC-WP-02 PASS until exact Ubuntu/current-main receipts are stored.

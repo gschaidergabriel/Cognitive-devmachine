@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1709p0700-effect-recovery-abi",
+  "hypotheses":[
+    {
+      "id":"H-CC-EFFECT-OPID-20260809-01",
+      "status":"OPEN_SUPPORTED_RUN_LOCAL",
+      "claim":"A stable effect_operation_id bound to semantic request fingerprint is necessary for safe cross-retry effect identity and auditability.",
+      "support":"Harness idempotency race + local crash-window probe + independent API/messaging analogues.",
+      "falsifier":"A production ClayCode effect gateway achieves deterministic retry/recovery across duplicate/concurrent/crash cases without a stable operation identity or equivalent mechanism."
+    },
+    {
+      "id":"H-CC-EFFECT-DELIVERY-CLASS-20260809-02",
+      "status":"OPEN_SUPPORTED_RUN_LOCAL",
+      "claim":"ClayCode effect ABI should represent delivery/recovery guarantees explicitly rather than treating REQUESTED..DONE lifecycle as a generic exactly-once guarantee.",
+      "candidate_classes":["AT_MOST_ONCE","AT_LEAST_ONCE","IDEMPOTENT_RETRY_SAFE","RECONCILABLE","TRANSACTIONALLY_COUPLED","UNCERTAIN"],
+      "falsifier":"A smaller existing contract preserves all crash/retry semantics in production without ambiguity or false DONE states."
+    },
+    {
+      "id":"H-CC-EFFECT-ABI-NOT-LANGUAGE-20260809-03",
+      "status":"OPEN",
+      "claim":"The missing mechanism can be implemented in runtime/type-effect ABI without changing core ClayCode surface syntax or universal computational semantics.",
+      "falsifier":"A compiled real application or FRANK component cannot express required recovery guarantees through existing constraint/type/effect mechanisms plus runtime ABI metadata."
+    }
+  ]
+}

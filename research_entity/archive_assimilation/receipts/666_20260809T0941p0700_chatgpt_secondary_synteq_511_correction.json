@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0941p0700-chatgpt-secondary-synteq-511-correction",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "correction_type": "SELF_CORRECTION_AND_SUPERSESSION",
+  "superseded_object": "research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_aicore_synteq_recursive_wave2.json",
+  "superseded_claim": {"synteq_total_units_below_root": 511, "folder_units": 22, "file_units": 489},
+  "authoritative_replacement": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_SYNTEQ_EXACT_RECURSIVE_MANIFEST_V2_DIRECT_ENUMERATION.json",
+  "replacement_claim": {"synteq_total_units_below_root": 519, "folder_units": 22, "file_units": 497},
+  "discriminating_evidence": {
+    "befunde": {"incorrect_old_leaf_files": 1, "v2_direct_enumeration_leaf_files": 8, "delta": 7},
+    "sprachforschung_werkzeuge": {"incorrect_old_leaf_files": 26, "v2_direct_enumeration_leaf_files": 27, "delta": 1},
+    "net_delta_units": 8,
+    "v2_boundary_checks": [
+      "kartei top_k=144/145/150 boundary proof",
+      "rohdaten top_k=100/101/102 boundary proof",
+      "sitzungen top_k=56/57/58 boundary proof"
+    ]
+  },
+  "preserved_valid_results": {
+    "skills_total_units_below_root": 50,
+    "tools_total_units_below_root": 95,
+    "reason": "Both independently match their V2 direct-enumeration manifests."
+  },
+  "aicore_root_correction": {
+    "old_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_DIRECT_DENOMINATOR_20260809T0703p0700.json",
+    "old_direct_entries": 50,
+    "authoritative_v2_manifest": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_ROOT_DIRECT_DENOMINATOR_V2_DIRECT_ENUMERATION.json",
+    "current_direct_entries": 67,
+    "current_folders": 37,
+    "current_files": 30,
+    "verdict": "OLD_50_ENTRY_ROOT_DENOMINATOR_REFUTED_BY_DIRECT_ENUMERATION"
+  },
+  "claim_lifecycle": {
+    "old_511_claim_status": "SUPERSEDED",
+    "new_519_claim_status": "CURRENT_STRUCTURAL_DENOMINATOR",
+    "negative_result_preserved": true
+  },
+  "level0_effect": {"exact_global_percent_added": 0.0, "gate": "NOT_PASS"},
+  "status": "CORRECTED",
+  "created_at": "2026-08-09T09:41:00+07:00"
+}

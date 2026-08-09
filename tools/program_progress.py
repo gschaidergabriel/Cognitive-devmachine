@@ -69,10 +69,10 @@ def package_progress(workspace, field, prefixes, statuses):
     return (100.0 * done / total if total else 0.0), done, total
 
 
-def next_progress(program, stage_id, stage):
+def progress_from_source(program, stage):
     statuses = complete(program)
     if is_done(stage.get("status"), statuses):
-        return {"percent": 100.0, "basis": "stage_pass", "open_weight": 0.0, "eta_override": None}
+        return {"percent": 100.0, "basis": "stage_pass", "open_weight": 0.0, "eta_override": None, "done_weight": 1.0, "total_weight": 1.0}
     source = stage.get("progress_source") or {}
     kind = source.get("kind")
     if kind == "archive_assimilation":
@@ -85,16 +85,37 @@ def next_progress(program, stage_id, stage):
             "open_weight": max(0.0, 100.0 - pct),
             "eta_override": workspace.get("eta") if isinstance(workspace.get("eta"), dict) else None,
             "denominator_state": df.nested(workspace, str(source.get("denominator_state_field", "combined_progress.denominator_state")), "MISSING"),
+            "done_weight": pct,
+            "total_weight": 100.0,
         }
     if kind in {"work_packages", "stage_workspace"}:
         path = ROOT / str(source.get("path", ""))
         if not path.exists():
-            return {"percent": float(source.get("missing_means", 0) or 0), "basis": f"missing:{source.get('path')}", "open_weight": 1.0, "eta_override": None}
+            return {"percent": float(source.get("missing_means", 0) or 0), "basis": f"missing:{source.get('path')}", "open_weight": 1.0, "eta_override": None, "done_weight": 0.0, "total_weight": 0.0}
         pct, done, total = package_progress(load(path), str(source.get("field", "work_packages")), [str(x) for x in source.get("include_prefixes", [])] or None, statuses)
-        return {"percent": pct, "basis": f"{source.get('path')}:{source.get('field', 'work_packages')}", "open_weight": max(0.0, total-done), "eta_override": None}
+        return {"percent": pct, "basis": f"{source.get('path')}:{source.get('field', 'work_packages')}", "open_weight": max(0.0, total-done), "eta_override": None, "done_weight": done, "total_weight": total}
     if kind == "terminal":
-        return {"percent": float(source.get("value", 100) or 100), "basis": "terminal", "open_weight": 0.0, "eta_override": None}
-    return {"percent": 0.0, "basis": f"unsupported:{kind}", "open_weight": 1.0, "eta_override": None}
+        pct = float(source.get("value", 100) or 100)
+        return {"percent": pct, "basis": "terminal", "open_weight": 0.0, "eta_override": None, "done_weight": pct, "total_weight": 100.0}
+    return {"percent": 0.0, "basis": f"unsupported:{kind}", "open_weight": 1.0, "eta_override": None, "done_weight": 0.0, "total_weight": 0.0}
+
+
+def next_progress(program, stage_id, stage):
+    return progress_from_source(program, stage)
+
+
+def milestone_progress(program, stage_id):
+    stage = (program.get("stage_gates") or {}).get(stage_id) or {}
+    p = progress_from_source(program, stage)
+    return {
+        "stage_id": stage_id,
+        "label": stage.get("label", stage_id),
+        "gate_status": str(stage.get("status") or "UNKNOWN"),
+        "percent": round(float(p["percent"]), 1),
+        "basis": p["basis"],
+        "done_weight": round(float(p.get("done_weight", 0.0)), 3),
+        "total_weight": round(float(p.get("total_weight", 0.0)), 3),
+    }
 
 
 def next_eta(stage_id, progress, throughput):
@@ -147,24 +168,13 @@ def fmt_days(value, hours_per_day):
 
 
 def apply_historical_earned_work(doomsday):
-    """Overlay lifetime project earned work onto remaining-scope progress.
-
-    doomsday_forecast.py measures progress inside the *current remaining work model*.
-    This function combines it with evidence-mapped historical work so eight months of
-    FRANK/XENO/ClayCode/GWT work are not represented as zero lifetime project progress.
-    During Level 0 the mapping is explicitly a calibration prior, never exact evidence.
-    """
     earned = load(HISTORICAL_EARNED) if HISTORICAL_EARNED.exists() else {}
     current = max(0.0, min(1.0, float(doomsday.get("progress_percent", 0.0)) / 100.0))
     status = str(earned.get("status", "MISSING"))
-
-    # Preferred post-Level-0 representation: an evidence-mapped project completion
-    # baseline supplied by the historical mapping file.
     mapped = earned.get("evidence_mapped_project_baseline_percent")
     band = None
     basis = "current_remaining_scope_only"
     calibrating = False
-
     if mapped is not None:
         baseline = max(0.0, min(1.0, float(mapped) / 100.0))
         basis = "evidence_mapped_historical_earned_work"
@@ -181,7 +191,6 @@ def apply_historical_earned_work(doomsday):
             calibrating = True
         else:
             baseline = 0.0
-
     overall = baseline + (1.0 - baseline) * current
     result = dict(doomsday)
     result["remaining_scope_progress_percent"] = round(current * 100.0, 1)
@@ -203,6 +212,8 @@ def resolve(program_path=DEFAULT_PROGRAM, throughput_path=DEFAULT_THROUGHPUT, as
     forecast_date = df.parse_iso_date(as_of) if as_of else df.date.today()
     doomsday = apply_historical_earned_work(df.resolve(ROOT, forecast_date))
     cells = int((program.get("progress_semantics") or {}).get("bar_cells", 20))
+    first_harness = milestone_progress(program, "H1_REFERENCE_HARNESS")
+    first_harness["bar"] = bar(first_harness["percent"], cells)
     return {
         "stage_id": stage_id,
         "label": stage.get("label", stage_id),
@@ -211,11 +222,12 @@ def resolve(program_path=DEFAULT_PROGRAM, throughput_path=DEFAULT_THROUGHPUT, as
         "progress_basis": progress["basis"],
         "denominator_state": progress.get("denominator_state"),
         "eta": eta,
+        "first_github_harness": first_harness,
         "doomsday": {**doomsday, "bar": bar(doomsday["progress_percent"], cells)},
     }
 
 
-def render_text(result):
+def render_text(result, trigger=None):
     eta = result["eta"]
     doom = result["doomsday"]
     hpd = float(eta["hours_per_day"])
@@ -226,6 +238,18 @@ def render_text(result):
         f"Progress: {result['bar']} {result['percent']:g}%",
         f"ETA @ {hpd:g}h/day: {fmt_days(eta['low'], hpd)} - {fmt_days(eta['high'], hpd)}",
         f"ETA confidence: {eta['confidence']} ({eta['basis']})",
+    ]
+    if str(trigger or "").strip().lower() == "frank":
+        h = result["first_github_harness"]
+        lines += [
+            "",
+            "FIRST GITHUB FRANK HARNESS",
+            "Target: H1 Reference Harness",
+            f"Progress: {h['bar']} {h['percent']:g}%",
+            f"Gate: {h['gate_status']}",
+            f"Basis: completed H1 work-package weight {h['done_weight']:g}/{h['total_weight']:g}; H1 PASS overrides to 100%",
+        ]
+    lines += [
         "",
         "DOOMSDAY / Clay 0.1 - Chief Developer First Test",
         f"Progress: {doom['bar']} {doom['progress_percent']:g}%",
@@ -247,9 +271,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--as-of")
+    parser.add_argument("--trigger", help="Optional exact trigger name; frank adds the first GitHub Harness milestone block")
     args = parser.parse_args()
     result = resolve(as_of=args.as_of)
-    print(json.dumps(result, default=df.serializable, indent=2) if args.json else render_text(result))
+    print(json.dumps(result, default=df.serializable, indent=2) if args.json else render_text(result, trigger=args.trigger))
 
 
 if __name__ == "__main__":

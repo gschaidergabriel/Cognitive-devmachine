@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1813p0700-claycode-bootstrap-tool-staging",
+  "experiment_id": "EXP-SPAWN-BOOTSTRAP-STAGING-001",
+  "actor": "chatgpt-secondary",
+  "truth_class": "LOCAL_ISOLATED_LINUX_EXECUTION_NOT_TARGET_UBUNTU_ACCEPTANCE",
+  "executed": true,
+  "script": {
+    "path": "research_entity/trigger_runs/spawn/20260809T1813p0700-claycode-bootstrap-tool-staging/bootstrap_stage_probe.py",
+    "local_executed_sha256": "254b791dfe1534d29e511a0f8e1b4d444291a1c33cb3b48f6129d32ba9d9f9e5"
+  },
+  "result_json_sha256": "297a1a6d4cc7b8301a5860f78fdbcfade77162019c47b757fcd6f6ede44086cc",
+  "environment": {
+    "python": "3.13.5",
+    "gcc": "gcc (Debian 14.2.0-19) 14.2.0",
+    "clang": "clang version 17.0.0 (llvm-project revision 10999b6d034fe318f3d56c83bddb6572593a8bb0)",
+    "target_host": false,
+    "note": "Hosted isolated Linux execution; not Andreas' Ubuntu developer system."
+  },
+  "tests": {
+    "same_source_same_gcc_two_directories": {
+      "binary_equal": true,
+      "sha256_a": "a6a13a8fcf5e706450551a98d2b2f8cd809fb6460af8db34ebb7bc69e817d03c",
+      "sha256_b": "a6a13a8fcf5e706450551a98d2b2f8cd809fb6460af8db34ebb7bc69e817d03c"
+    },
+    "gcc_vs_clang": {
+      "binary_equal": false,
+      "gcc_sha256": "a6a13a8fcf5e706450551a98d2b2f8cd809fb6460af8db34ebb7bc69e817d03c",
+      "clang_sha256": "82bd9db4e6a1e0ef07f022f5d564a2bbc10c769e2e4af112eb973e481e428d5b",
+      "semantic_seed": 202608091813,
+      "semantic_cases": 5000,
+      "semantic_output_mismatches": 0
+    },
+    "path_sensitive_build": {
+      "binary_equal": false,
+      "sha256_a": "7f6d335e9b3250f1dda2ff8cf55deda4cbd515eaee94398268c17c0657ad3c93",
+      "sha256_b": "20a11420ad41f805f33f754aad6c2cb219674343529d13507c905d6a521bdd28",
+      "observed_output_a": "/tmp/tmpaa9ktrlv/a/path.c",
+      "observed_output_b": "/tmp/tmpaa9ktrlv/b/path.c"
+    },
+    "path_normalized_build": {
+      "mechanism": "GCC -ffile-prefix-map=<build-root>=/src",
+      "binary_equal": true,
+      "sha256_a": "f79424af59cbf27f621d37abdc452f06d45904dd085c06ca73307fbba13ccf0f",
+      "sha256_b": "f79424af59cbf27f621d37abdc452f06d45904dd085c06ca73307fbba13ccf0f",
+      "observed_output_a": "/src/path.c",
+      "observed_output_b": "/src/path.c"
+    }
+  },
+  "supported_conclusions": [
+    "Byte reproducibility can fail because build-path information is embedded even when source semantics are unchanged.",
+    "Build-environment normalization can restore byte identity for the demonstrated path-sensitive case.",
+    "Different compilers can emit different binaries while agreeing on the bounded tested semantics.",
+    "Therefore reproducibility, semantic differential equivalence and compiler diversity should be separate receipt dimensions."
+  ],
+  "not_proven": [
+    "ClayCode compiler correctness",
+    "ClayCode self-host feasibility",
+    "Ubuntu target-host reproducibility",
+    "DDC/trusting-trust closure",
+    "semantic equivalence beyond the 5000-case arithmetic microtool corpus",
+    "BASE application acceptance"
+  ]
+}

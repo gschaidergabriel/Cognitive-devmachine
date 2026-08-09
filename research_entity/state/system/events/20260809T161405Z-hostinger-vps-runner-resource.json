@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "event_id": "RESOBS-20260809T161405Z-HOSTINGER-VPS-RUNNER",
+  "kind": "RESOURCE_OBSERVATION",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T16:14:05Z",
+  "payload": {
+    "resource_id": "hostinger-vps-github-runner",
+    "resource_class": "BUILD_RUNTIME",
+    "label": "Hostinger VPS GitHub self-hosted runner",
+    "host_or_surface": "Hostinger VPS via GitHub Actions self-hosted runner",
+    "provider": "Hostinger + GitHub Actions",
+    "details": {
+      "target_os": "Ubuntu Linux",
+      "mission_role": "primary remote build/test execution resource for Frank v0.1",
+      "observed_state": "Clay System Monitor showed hostinger-vps online and GitHub Runner online",
+      "routing_rule": "Prefer this verified runner for Frank v0.1 remote build/test/benchmark work when the required workflow exists and authority/dependencies revalidate immediately before effect."
+    },
+    "authority": "Research Entity authorized project build/test execution only; no secrets or raw credentials persisted",
+    "availability_state": "ONLINE_VERIFIED",
+    "evidence_class": "CURRENT_USER_SUPPLIED_LIVE_UI_OBSERVATION_PLUS_CONNECTED_GITHUB_ACTIONS_SURFACE",
+    "evidence_ref": "2026-08-09 live Clay System Monitor screenshot + current GitHub Actions connector capability inspection",
+    "freshness_seconds": 3600
+  }
+}

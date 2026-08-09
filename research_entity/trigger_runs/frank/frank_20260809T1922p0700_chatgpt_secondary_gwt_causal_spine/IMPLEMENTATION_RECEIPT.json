@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "frank_20260809T1922p0700_chatgpt_secondary_gwt_causal_spine",
   "actor": {
     "actor_id": "chatgpt-secondary",
@@ -21,13 +21,20 @@
   "built": [
     {
       "path": "research_entity/harness/reference/workspace_episode.py",
-      "commit": "1a184fc5132d650e858052df0248ccbfff296677",
-      "local_sha256": "fcd80ebfdddfdd357dae755174919f34d09bc3e737b64c71aa5943d8006eb420"
+      "initial_commit": "1a184fc5132d650e858052df0248ccbfff296677",
+      "refusion_commit": "7c78fc891c3075970b232573e2e51256c8fbaa3f",
+      "compatibility_commit": "0cc7bf24e4375f94102b00d1bab345281a7cb5a3",
+      "final_local_sha256": "4b380bc6c32e46619dec74f2e387fe37ad3267c171d97ec030fd596bc2042176"
     },
     {
       "path": "research_entity/harness/tests/test_workspace_episode.py",
       "commit": "9a8f81871248b2429aad6e8fd86d02e2482370a8",
       "local_sha256": "3126c15d0cfc073e6bacededb287ae801c5c18f5e98b424e6eab28a148634016"
+    },
+    {
+      "path": "research_entity/harness/tests/test_workspace_episode_receipt_identity.py",
+      "commit": "847c9181ec897160ced30e0deae59c61ebc3e51e",
+      "local_sha256": "141d9963ec3ccfa14f17fb5b493665d46295813b625ed64f4153bd7c7839bf1f"
     }
   ],
   "implemented_semantics": [
@@ -44,17 +51,36 @@
     "candidate/receiver/re-entry interventions",
     "truthful versus provenance-broken shuffled re-entry",
     "basis epoch + semantic state + version + trace witnesses",
+    "semantic contract identity plus candidate/receiver/intervention input hashes",
     "fail-closed cognitive authority-mint attempt",
-    "hash-chained deterministic stage receipts"
+    "hash-chained deterministic stage receipts",
+    "backwards-compatible default semantic contract for existing BasisWitness callers"
   ],
   "local_validation": {
     "environment": "ChatGPT hosted Linux container; not Andreas target Ubuntu developer PC",
-    "command": "python -m unittest -v /mnt/data/frank_build/tests/test_workspace_episode.py",
-    "tests_total": 17,
-    "tests_passed": 17,
+    "command": "python -m unittest -v /mnt/data/frank_build/tests/test_workspace_episode.py /mnt/data/frank_build/tests/test_workspace_episode_receipt_identity.py",
+    "tests_total": 19,
+    "tests_passed": 19,
     "tests_failed": 0,
     "evidence_class": "LOCAL_CONTAINER_REFERENCE",
-    "initial_negative_result": "First test invocation exposed a test-helper naming collision with unittest.TestCase.run; helper renamed and full suite rerun successfully. This was a test harness defect, not a WorkspaceEpisode semantic failure."
+    "negative_results": [
+      "First test invocation exposed a test-helper naming collision with unittest.TestCase.run; helper renamed and full suite rerun successfully. This was a test harness defect, not a WorkspaceEpisode semantic failure.",
+      "A concurrent update attempt to the existing test file returned HTTP 409/CAS conflict. No overwrite was forced. The re-fusion delta was redesigned as a backwards-compatible module change plus a separate receipt-identity test file."
+    ]
+  },
+  "refusion_delta": {
+    "source": "concurrent Harness receipt-sealed determinism research",
+    "absorbed": [
+      "semantic_contract_hash",
+      "candidate_set_hash",
+      "receiver_policy_hash",
+      "intervention_hash"
+    ],
+    "rejected_or_deferred": [
+      "global physical determinism",
+      "one universal execution/semantic trace hash",
+      "claim that replay alone proves emergence"
+    ]
   },
   "architecture_fidelity": "IMPROVED",
   "scientific_promotion": "NO_PROMOTION",

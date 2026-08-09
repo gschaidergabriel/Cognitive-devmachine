@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1648p0700-loop-runtime",
+  "experiment_id": "EXP-CC-LOOP-RUNTIME-20260809-01",
+  "candidate": "CC-G9-loop-runtime-library-v0.2",
+  "source_hash": "565e184c8fd5884b8dbe823863c0444a9ecd8973c80703feae9bdc0c5c51c610",
+  "semantic_hash": "c7bbfd55ef1b40825d4c0f91b70f32383fc50f0a85bef1592362dcd8ec618bd6",
+  "contract_hash": null,
+  "generated_code_hash": "1bf922d5876015894b4b9aebaf1fe1bc5239534488315b1584ac30c295210070",
+  "lowering_target": "Python host runtime probe",
+  "sandbox_provider": "ChatGPT local execution sandbox",
+  "runtime_language": "Python",
+  "test_corpus": {
+    "positive": ["multirate coupled loops", "productive bounded cycle", "valid capability effect"],
+    "negative": ["budget exhaustion with high residual pressure", "divergent loop", "forged capability"],
+    "mutation": ["replace same-epoch snapshot reads with in-place cross-loop reads"],
+    "fuzz": {"seed": 7, "cases": 250}
+  },
+  "stdout": {
+    "authority_forgery": "REJECTED",
+    "budget_action": "ESCALATE",
+    "counts": {"memory": 8, "perception": 12, "workspace": 6},
+    "divergence_rollback": {"at": 5, "checkpoint": "t0"},
+    "final_class": "STALLED",
+    "final_delta": 0.0,
+    "final_residual": 0.5690308937228293,
+    "fuzz_cases": 250,
+    "inplace_mutant_schedule_dependence": "DETECTED",
+    "productive_cycle": "PASS",
+    "snapshot_permutation_equivalence": "PASS",
+    "valid_effect": "EXECUTED"
+  },
+  "stderr": "",
+  "exit_status": 0,
+  "wall_ms": 958.447,
+  "expected_vs_observed": "Expected: existing G9 record/Delta/cycle/epoch semantics can host a multirate loop runtime without a new core primitive if cross-loop reads are epoch-snapshot coherent and halt reasons are typed. Observed: snapshot lowering was permutation-equivalent; in-place mutation introduced schedule-order dependence; budget exhaustion produced delta=0 with residual=0.569 and therefore required STALLED/ESCALATE rather than successful halt.",
+  "failure_classification": ["RUNTIME_POLICY_COUNTEREXAMPLE", "SCHEDULE_ORDER_MUTATION_FAILURE"],
+  "repair": ["same-epoch snapshot reads for set-like coupled loop updates", "typed budget-exhausted-with-pressure => ESCALATE", "preserve capability gateway outside loop readout"],
+  "affected_hypotheses": ["H-CC-LOOP-001", "H-CC-LOOP-002", "H-CC-LOOP-003"],
+  "learning_changed": {
+    "claycode": "REFINED_RUNTIME_CONTRACT_NO_CORE_SEMANTIC_CHANGE",
+    "frank": "FEEDBACK_PENDING_RUNTIME_INSTRUMENTATION",
+    "claygraph": "EPOCH_SNAPSHOT_COHERENCE_SUPPORTED",
+    "unifieddb": "LOOP_READOUT_PERSISTENCE_FEEDBACK",
+    "gwt": "HALT_CONTINUE_REMAINS_NON_AUTHORITY",
+    "hyperposition": "NO_DIRECT_CHANGE",
+    "emergenz": "RECURRENCE_NOT_EMERGENCE_REAFFIRMED",
+    "clayresearch": "LOOP_OF_LOOPS_REFINED"
+  },
+  "evidence_scope": "Executable host-lowering mechanism probe only; not live FRANK runtime evidence and not BASE gate completion."
+}

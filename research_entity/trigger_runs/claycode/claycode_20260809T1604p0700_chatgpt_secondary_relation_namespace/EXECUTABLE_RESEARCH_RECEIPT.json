@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-CC-G9-RELATION-NAMESPACE-COLLISION-20260809",
+  "run_id": "claycode_20260809T1604p0700_chatgpt_secondary_relation_namespace",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "question": "Does the concurrent @relation sigil candidate coexist backend-neutrally with ClayCode's existing @ref lexical namespace?",
+  "source_basis": [
+    "research_entity/claycode/g9/grammar.ebnf",
+    "research_entity/trigger_runs/claycode/claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil/RELATION_SIGIL_CANDIDATE.ebnf",
+    "research_entity/trigger_runs/claycode/claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil/EXECUTABLE_RESEARCH_RECEIPT.json",
+    "research_entity/trigger_runs/claycode/claycode_20260809T1600p0700_chatgpt_secondary_relation_generic/EXECUTABLE_RESEARCH_RECEIPT.json",
+    "research_entity/trigger_runs/claycode/claycode-20260809T155804p0700-chatgpt-declared-relations/EXECUTABLE_RESEARCH_RECEIPT.json"
+  ],
+  "probe": {"path":"RELATION_NAMESPACE_DISCRIMINATOR.py","sha256":"53e762864e52768f525619a26dd42d6d1234c9c31f2d8c855c3b23ac4d436ccb"},
+  "execution": {
+    "provider":"ChatGPT local Python sandbox",
+    "runtime":"Python 3.13.5",
+    "parser_library":"Lark 1.3.1",
+    "separate_process":true,
+    "exit_status":0,
+    "stdout_sha256":"54a620d2b9c5c74a6594f930513b18550975bd541a6c6654d221a5eabe1ba4db",
+    "stderr_note":"Non-experiment spreadsheet warmup traceback emitted by environment startup; experiment process exit status 0 and JSON stdout valid."
+  },
+  "candidates": {
+    "@relation": {"shares_prefix_with_existing_ref":true,"lalr_contextual":"5/7","lalr_basic":"3/7","earley_dynamic":"7/7","surface_bytes_binary_example":12},
+    "^relation_control": {"shares_prefix_with_existing_ref":false,"lalr_contextual":"7/7","lalr_basic":"7/7","earley_dynamic":"7/7","surface_bytes_binary_example":12},
+    "relation_quoted_call": {"shares_prefix_with_existing_ref":false,"lalr_contextual":"7/7","lalr_basic":"7/7","earley_dynamic":"7/7","surface_bytes_binary_example":23}
+  },
+  "at_relation_failures": {
+    "lalr_contextual":["@foo standalone ref","@research_entity/global/x standalone ref"],
+    "lalr_basic":["@foo standalone ref","@research_entity/global/x standalone ref","x @depends @foo","@depends @foo"],
+    "earley_dynamic":[]
+  },
+  "result":"NEGATIVE_RESULT_FOR_CURRENT_AT_SIGIL_CANDIDATE_AS_BACKEND_NEUTRAL_SURFACE",
+  "interpretation":"The @relation candidate's tested 8/8 relation-only result does not test coexistence with the existing @ref token class. In a combined grammar proxy, acceptance depends on lexer/parser mode and existing references regress under LALR. This is a concrete counterexample to treating the current @relation candidate as a separate backend-neutral lexical namespace without further redesign.",
+  "not_refuted":["sigil-separated relation syntax in general","declared relation registry semantics","generic quoted relation canonical form","a redesigned @relation syntax with provably disjoint lexical form"],
+  "architecture_candidate":"Use a generic typed Relation node/canonical form as semantic identity; optional compact surface sugar must lower to it and must use a lexically disjoint form or prove full-corpus backend-neutral disambiguation.",
+  "counterhypothesis":"A production parser with explicit token priority/lookahead can safely overload @ for both refs and relations with no practical ambiguity or diagnostic cost.",
+  "falsifier":"A real BASE parser generated from the frozen full grammar parses and roundtrips the entire admitted G9+dialect corpus plus adversarial @ref/@relation mixtures identically across supported parser/backends, with stable semantic hashes and no extra repair cost.",
+  "release_effect":"Keep CC-WP-02 OPEN; do not promote @relation candidate. Compare generic canonical Relation node plus declared/disjoint sugar in the full-corpus parser."
+}

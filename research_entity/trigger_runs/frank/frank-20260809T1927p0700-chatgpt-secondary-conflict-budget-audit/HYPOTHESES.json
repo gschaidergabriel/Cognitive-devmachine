@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1927p0700-chatgpt-secondary-conflict-budget-audit",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "hypotheses": [
+    {
+      "id": "H-FRANK-AA-CB-01",
+      "status": "OPEN_SYNTHETIC_COUNTEREXAMPLE_SUPPORTED",
+      "claim": "Unconditional conflict-first reservation can starve otherwise high-value non-conflict evidence when explicit contradiction cardinality approaches the hard ActiveAssembly budget.",
+      "prediction": "On conflict-dense frozen H1 episodes, current conflict-first selection will show a measurable task/critical-evidence or correction-cost penalty versus at least one bounded alternative at matched context.",
+      "counterhypothesis": "Full explicit contradiction visibility is more valuable than the displaced evidence; current policy yields equal or better verified downstream outcomes despite slot pressure.",
+      "falsifier": "Matched frozen/live H1 traces where current policy equals or beats alternatives on task outcome, false certainty, contradiction recall, correction time and cost."
+    },
+    {
+      "id": "H-FRANK-AA-CB-02",
+      "status": "OPEN",
+      "claim": "Conflict allocation should be represented as a typed policy/budget with receipts, not hidden inside absolute pre-ranking priority.",
+      "prediction": "Making policy identity explicit improves replay/differential science and enables safe comparison without changing truth state.",
+      "counterhypothesis": "A fixed conflict-first rule is simpler, deterministic and sufficient; policy parameterization adds unnecessary complexity/Goodhart surface.",
+      "falsifier": "No realistic episode requires alternative allocation, or policy identity adds no useful diagnostic/replay discrimination."
+    },
+    {
+      "id": "H-FRANK-AA-CB-03",
+      "status": "OPEN",
+      "claim": "Claim-group compression or latent Hyperposition representation can preserve contradiction awareness with fewer active slots than materializing every alternative packet.",
+      "prediction": "Grouped alternatives plus selective re-expansion preserve contradiction detection and downstream correction while freeing context for independent task evidence.",
+      "counterhypothesis": "Compression hides provenance/detail and harms local 4B reasoning; explicit alternatives are necessary in the active slice.",
+      "falsifier": "Grouped/latent arms lose contradiction recall, provenance fidelity or correction quality at matched context relative to explicit reservation."
+    },
+    {
+      "id": "H-FRANK-AA-CB-04",
+      "status": "OPEN",
+      "claim": "The optimal conflict allocation is task/episode dependent and may require marginal-utility-aware scheduling rather than one global numeric quota.",
+      "prediction": "Adaptive allocation conditioned on conflict severity, expected utility, uncertainty, re-expansion cost and remaining budget outperforms a fixed percentage across heterogeneous frozen traces.",
+      "counterhypothesis": "Adaptive policy overhead and calibration error erase gains; a simple fixed quota or ordinary diversified retrieval is superior.",
+      "falsifier": "Adaptive allocation fails to improve the matched quality/cost frontier or exhibits instability/false certainty under OOD conflict density."
+    }
+  ],
+  "explicit_non_promotion": "The synthetic 50-percent-style cap arm is a discriminator only and is not selected as FRANK policy."
+}

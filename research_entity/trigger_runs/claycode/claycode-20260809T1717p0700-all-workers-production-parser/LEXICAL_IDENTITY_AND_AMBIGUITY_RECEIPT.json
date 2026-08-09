@@ -1,0 +1,44 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1717p0700-all-workers-production-parser",
+  "experiment_id":"EXP-CC-20260809-LEXICAL-IDENTITY-AMBIGUITY",
+  "evidence_class":"LOCAL_ISOLATED_LINUX_EXECUTION_NOT_TARGET_ACCEPTANCE",
+  "negative_results":[
+    {
+      "id":"NR-CC-PROXY-BOOL-AS-QID-20260809",
+      "finding":"The first production-like LALR proxy parsed false in rule RAE.CLAUDE.endturn_meta_research=false as a qid rather than BOOLEAN.",
+      "impact":"Semantic canonicalization would be wrong despite parse success."
+    },
+    {
+      "id":"NR-CC-PROXY-KEYWORD-IDENTITY-LOSS-20260809",
+      "finding":"The first proxy accepted keyword-like field identifiers such as status/dialect/version/requires through literal alternatives but emitted empty ident nodes, losing lexical identity in the parse tree.",
+      "impact":"Parse closure alone is insufficient for a canonical AST."
+    },
+    {
+      "id":"NR-CC-FULL-AMBIGUITY-EXHAUSTIVE-COST-20260809",
+      "finding":"Whole-program Earley dynamic_complete ambiguity execution exceeded the local sandbox resource envelope and was terminated.",
+      "repair":"Switched to brace-balanced top-level ambiguity checks over the same 86 G9 plus 25 Dialect units."
+    }
+  ],
+  "localized_pre_repair_ambiguity": {
+    "common_to_N_S_D":true,
+    "g9_ambiguity_nodes":5,
+    "dialect_ambiguity_nodes":2,
+    "causes":["reserved words also matching NAME","false matching both BOOLEAN and NAME/qid"]
+  },
+  "repair_candidate": {
+    "mechanism":"Reserve declaration/operator keywords and booleans out of NAME; represent keyword-like identifiers through explicit ident_<keyword> grammar aliases so their semantic names remain reconstructible; preserve BOOLEAN as its own token class.",
+    "semantic_change":false
+  },
+  "post_repair_results": {
+    "N":{"g9_lalr":true,"dialect_lalr":true,"empty_ident_nodes_g9":0,"empty_ident_nodes_dialect":0,"g9_top_level_ambiguity_nodes":0,"dialect_top_level_ambiguity_nodes":0,"grammar_sha256":"fa2435cebbbfa38106ceeace388ce4853340e43bd0dca0d3ba9764cf8ccb31e7"},
+    "S":{"g9_lalr":true,"dialect_lalr":true,"empty_ident_nodes_g9":0,"empty_ident_nodes_dialect":0,"g9_top_level_ambiguity_nodes":0,"dialect_top_level_ambiguity_nodes":0,"grammar_sha256":"a27168558ae95d62470a55aa986a883580de1aff098326d1e1dc08fe955b128e"},
+    "D":{"g9_lalr":true,"dialect_lalr":true,"empty_ident_nodes_g9":0,"empty_ident_nodes_dialect":0,"g9_top_level_ambiguity_nodes":0,"dialect_top_level_ambiguity_nodes":0,"grammar_sha256":"a4a364f449a4ac02641778f6e947ed9811fe9ec7a3acd58ccabb7ffccd92ad5f"}
+  },
+  "post_repair_benchmark": {
+    "N":{"build_median_ms":96.2342,"parse_combined_median_ms":12.2331,"parse_p95_ms":15.4543,"grammar_chars":3473},
+    "S":{"build_median_ms":109.1546,"parse_combined_median_ms":12.5556,"parse_p95_ms":16.0706,"grammar_chars":3627},
+    "D":{"build_median_ms":113.7102,"parse_combined_median_ms":12.1953,"parse_p95_ms":14.2281,"grammar_chars":4166}
+  },
+  "interpretation":"All three relation surfaces survive the stricter lexical-identity repair. D remains the local parse-time/migration leader but has the largest grammar and slowest median parser build. No surface is promoted until target-reader and normative compiler integration evidence exists."
+}

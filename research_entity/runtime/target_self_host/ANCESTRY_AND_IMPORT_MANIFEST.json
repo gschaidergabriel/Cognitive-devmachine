@@ -1,9 +1,12 @@
 {
-  "schema_version": "1.0",
-  "target_version": "RAE-TARGET-0.1",
+  "schema_version": "1.1",
+  "target_version": "RAE-TARGET-0.2",
+  "semantic_source": "research_entity/runtime/target_self_host/RAE_TARGET_CONTRACT.clay",
+  "semantic_contract_sha256": "19db717f3e86e545b87bed0877b75e9c3c5502a5bd2de7180c7b631607b29415",
+  "projection_policy": "RAE_UNIFIED_SCHEMA.sql + RAE_CLAYGRAPH_SCHEMA.sql + rae_target_runtime.py are auditable reference/materialized projections of the Clay semantic source",
   "frank_source_repo": "gschaidergabriel/Dr.-Unterweger",
   "frank_observed_head": "0a10d64f6ad297031fae955c1b75ce04dd4757a2",
-  "copy_policy": "architecture_and_schema_ancestry_only_no_personal_andreas_state",
+  "copy_policy": "copy and transform architecture/schema lineage only; never copy Andreas personal live state into the Research Entity",
   "source_files": [
     {"path":"runtime/state/UNIFIEDDB_SCHEMA.sql","sha":"20e5269c2770d98896477b4f263efb8c35d3c1fb"},
     {"path":"runtime/state/UNIFIEDDB_V6_MIGRATION.sql","sha":"52e8d7b953453cd7293119e03ce24fea8b3725dc"},
@@ -22,10 +25,16 @@
     {"path":"runtime/state/apply_current_schema.py","sha":"73005c691d4138309dafceacc8fd56668cbe242a"}
   ],
   "research_imports": [
+    {"domain":"gwt","ref":"research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md","blob_sha":"b2d9a903f256e1f26db500317b34930456188245","policy":"OWNER_DIRECTIVE"},
+    {"domain":"semantic_fabric","ref":"research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md","blob_sha":"8685421de82b76b0ce925b2cf45fa72082502654","policy":"OWNER_DIRECTIVE"},
+    {"domain":"gwt_emergence_control","ref":"research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md","blob_sha":"b295d5744ae836424925a00d2d2b3a8325f47ccb","policy":"OWNER_DIRECTIVE"},
+    {"domain":"frank_clay_native","ref":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","blob_sha":"7d07e54acf0e62bda81de3b032fe480c0f08f234","policy":"OWNER_DIRECTIVE"},
     {"domain":"gwt","commit":"03a4fddcf35b74e020c0011d27ec3477594a40cf","policy":"OPEN"},
     {"domain":"emergenz","commit":"343fabb8b176df10f85aa3cbd4dce09f165b4987","policy":"FAIL_CLOSED_OPEN"},
     {"domain":"claycode","commit":"d3c8e7de8ca2ccfdbc4db4180778b351b5b983b9","policy":"SOFTWARE_PATH_RELEASE_OPEN"},
     {"domain":"claycode","commit":"1538ed5e5550ee2509c42e27077b87a00f918b33","policy":"SANDBOX_EVIDENCE_NOT_RELEASE"},
+    {"domain":"claycode","ref":"tools/claycode_base_compiler.py","blob_sha":"5d01dfeb77b1bece85433cd09af6ea3427a5f995","policy":"CURRENT_SOURCE_SNAPSHOT"},
     {"domain":"frank-loop","commit":"83d2d41e751a332fa285b3d81cc753ab9b67648b","policy":"OWNER_OBSERVATION_FUNCTIONAL_ONLY"}
-  ]
+  ],
+  "sandbox_receipt": {"target_version":"RAE-TARGET-0.2","checks":"31/31 PASS","canonical_promotion":false}
 }

@@ -1,0 +1,141 @@
+{
+  "schema_version": "2.0",
+  "event_id": "RESULT-20260810T0033P0700-FRANK-QWEN4B-FIRST-REAL",
+  "kind": "WORK_RESULT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T00:33:00+07:00",
+  "payload": {
+    "work_id": "FRANK-V01-REAL-QWEN4B-VPS-SHADOW",
+    "status": "SUPPORTED_PILOT_NOT_PROMOTED",
+    "source_repository": "gschaidergabriel/Dr.-Unterweger",
+    "tested_commit": "963fd8a6a044b6f5a6ddfde88fab25d0cc6e1dae",
+    "receipt_commit": "c9d06222643aa9028940cbba24b0421f6ef45ad6",
+    "receipt_path": "runtime/vps_integrity/real_qwen4b_shadow_latest.json",
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_QWEN4B_EXECUTION",
+    "host": {
+      "hostname": "digital-retina",
+      "runner_name": "clay",
+      "runner_os": "Linux",
+      "runner_arch": "X64",
+      "cpu_logical": 4,
+      "memory_total_kib": 16376020,
+      "memory_available_kib_at_receipt": 12912292,
+      "swap_total_kib": 0
+    },
+    "model": {
+      "source": "ggml-org/Qwen3-4B-Instruct-2507-Q8_0-GGUF",
+      "source_revision_used_by_run": "e92aed4",
+      "sha256": "ae916ede1c010a26955ee8ae2e908bf8815a3f135ec860439ab924701c69d5f1",
+      "quantization": "Q8_0"
+    },
+    "runtime": {
+      "name": "llama.cpp",
+      "commit_sha": "936918514ce522b553c0fd80b169a6440e6096c6"
+    },
+    "aggregate": {
+      "task_count": 4,
+      "fixed_accuracy": 0.75,
+      "fixed_total_recurrences": 20,
+      "fixed_measured_cumulative_latency_ms": 48356.025,
+      "decode_tokens_per_second_mean": 10.705266714677407,
+      "decode_tokens_per_second_median": 10.877224448242348,
+      "prompt_tokens_per_second_mean": 39.94125425865801,
+      "prompt_tokens_per_second_median": 40.216776622503794,
+      "v1_shadow_selected_recurrences": 16,
+      "v1_counterfactual_latency_ms": 38438.59,
+      "v1_counterfactual_latency_reduction_fraction": 0.2050920231760159,
+      "v1_recurrence_reduction_fraction": 0.2,
+      "missed_fixed_correct": 0
+    },
+    "task_findings": [
+      {
+        "task_id": "arithmetic_product",
+        "expected": "1073",
+        "fixed_answer": "1073",
+        "fixed_correct": true,
+        "step4_decision": "HALT_CANDIDATE_CONVERGED",
+        "step4_answer": "1073",
+        "step4_correct": true,
+        "saved_latency_ms_if_halted": 2649.876
+      },
+      {
+        "task_id": "sequence_next",
+        "expected": "42",
+        "fixed_answer": "42",
+        "fixed_correct": true,
+        "step4_decision": "HALT_CANDIDATE_CONVERGED",
+        "step4_answer": "42",
+        "step4_correct": true,
+        "saved_latency_ms_if_halted": 2480.276
+      },
+      {
+        "task_id": "all_but_word_problem",
+        "expected": "9",
+        "fixed_answer": "9",
+        "fixed_correct": true,
+        "step4_decision": "HALT_CANDIDATE_CONVERGED",
+        "step4_answer": "9",
+        "step4_correct": true,
+        "saved_latency_ms_if_halted": 2433.107
+      },
+      {
+        "task_id": "modular_power",
+        "expected": "2",
+        "fixed_answer": "4",
+        "fixed_correct": false,
+        "step4_decision": "HALT_CANDIDATE_CONVERGED",
+        "step4_answer": "4",
+        "step4_correct": false,
+        "saved_latency_ms_if_halted": 2354.176,
+        "critical_counterevidence": "All five recurrent answers remained wrong while self-reporting CONFIDENCE=100. The policy correctly detected a stable fixed point but that fixed point was false. Convergence/stability therefore cannot be interpreted as truth or sufficient correctness evidence."
+      }
+    ],
+    "tool_case": {
+      "tool_call_count": 1,
+      "read_state_selected": true,
+      "arguments_valid": true,
+      "reasoning_content_persisted": false,
+      "latency_ms": 5884.225,
+      "prompt_tokens_per_second": 47.08914912509141,
+      "decode_tokens_per_second": 10.137541088721225,
+      "authority": "PROPOSAL_ONLY_NO_TOOL_EXECUTION"
+    },
+    "hypothesis_update": {
+      "leading_hypothesis": "A temporal recurrence controller can identify stable real-model trajectories early enough to avoid one redundant recurrence on some local 4B tasks without observed degradation relative to the same fixed-budget trajectory.",
+      "status": "SUPPORTED_AS_TINY_PILOT_ONLY",
+      "support": "All four observed trajectories received HALT_CANDIDATE_CONVERGED at recurrence 4; the selected answers equaled the recurrence-5 answers, so this run would have saved one recurrence per task with no additional correctness loss relative to fixed budget.",
+      "strong_counterhypothesis": "The current visible confidence/state-delta proxy can confidently converge on an incorrect fixed point and is therefore unsuitable as a correctness or truth gate.",
+      "counterhypothesis_status": "SUPPORTED_BY_MODULAR_POWER_CASE",
+      "synthesis": "Separate convergence-control utility from answer-correctness validation. w4 may be useful as a compute/stability controller, but no architecture may infer truth from convergence or model confidence."
+    },
+    "methodology_note": {
+      "v1_selector_bug_material_to_this_specific_run": false,
+      "reason": "Every observed step-4 w4 decision in this run was HALT_CANDIDATE_CONVERGED, so the later V2 halt-only correction does not alter this run's selected recurrence count. V2 remains mandatory for future comparison because non-halt decisions cannot be treated as free finalization.",
+      "canonical_next_comparison": "HALT_ONLY_CONSERVATIVE_V2"
+    },
+    "architecture_delta": {
+      "status": "TESTING_NO_PROMOTION",
+      "changes": [
+        "Treat recurrence convergence as a stability/compute signal, never as truth or correctness evidence.",
+        "Keep answer correctness/calibration as an independent validation axis.",
+        "Retain model/tool outputs as non-authoritative proposals.",
+        "Use HALT-only V2 for future adaptive compute comparisons.",
+        "Expand to repeated held-out/OOD tasks before any recurrence-policy promotion."
+      ]
+    },
+    "baseline_gate": {
+      "comparison": "current five-recurrence fixed budget on identical real-model trajectories",
+      "historical_module_replacement": false,
+      "reliability_claim": false,
+      "release_claim": false,
+      "andreas_target_acceptance": false
+    },
+    "routing": ["frank", "harness", "gwt", "emergenz", "unifieddb", "claygraph", "clayresearch"],
+    "next_evidence": [
+      "read-only-authority Hostinger V2 receipt",
+      "repeat/held-out/OOD real-model benchmark with counterbalanced order and multiple runs",
+      "calibration/correctness signal independent of self-reported confidence",
+      "server RSS/HWM and CPU resource receipt from V2"
+    ]
+  }
+}

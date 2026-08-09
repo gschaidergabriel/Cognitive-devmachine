@@ -1,0 +1,54 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1539p0700-chatgpt-parser-compat",
+  "latest_frank_run":null,
+  "latest_frank_architecture_artifact":null,
+  "artifact_discovery_note":"A bounded repository lookup for FRANK_ARCHITECTURE.claycode.json did not locate a current artifact, and a direct provisional path fetch returned 404. No artifact was fabricated; current FRANK/Harness requirements were used provisionally.",
+  "reviews":[
+    {
+      "claim_id":"GOODMAN-CC-001",
+      "frank_statement":"Model/ClayCode effect intent must not itself confer execution authority; irreversible effects remain behind an external capability/commit boundary.",
+      "frank_source_refs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/harness/HARNESS_WORKSPACE.json"],
+      "ancestry_families":["current_FRANK_Clay_safety_contract","Project-Frankenstein_historical_safety_failures"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Typed FFI, child processes or host adapters can reintroduce ambient authority even when the model-facing language separates intent from authority.",
+      "falsifier":"Any generated/compiled ClayCode path can mint, widen, launder or ambiently inherit destructive authority without the required external authorization/witness path.",
+      "independent_checks":[{"ref":"research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json:HEW-PF-SAFETY-005","class":"historical executable failure lineage","result":"Historical approval-bypass/sandbox/capability failures independently justify keeping the external authority boundary as a regression constraint."}],
+      "adversarial_checks":["Require later compiler/FFI fuzzing for destructive-equivalent effects, delegated resource handles and child-process escapes."],
+      "verdict":"SUPPORTED",
+      "reason":"The safety boundary has independent historical failure evidence beyond FRANK<->ClayCode agreement. This supports retaining the boundary, not claiming the current compiler implementation is safe.",
+      "claycode_action":"Retain expressibility != authority and external commit/capability gateway; test it through compiler/FFI adversarial corpus.",
+      "affected_claycode_artifacts":["effect/capability IR","runtime ABI/FFI","type/effect checker"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-002",
+      "frank_statement":"Current ClayCode can serve as the executable architecture language for the frozen FRANK architecture.",
+      "frank_source_refs":["research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md","research_entity/harness/HARNESS_WORKSPACE.json"],
+      "ancestry_families":["FRANK_to_ClayCode_program_requirement"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Current semantic concepts may be adequate, but the admitted parser/toolchain surface is not yet executable enough to carry FRANK without repair.",
+      "falsifier":"A current admitted parser/compiler parses the complete G9 corpus and compiles a frozen real FRANK subsystem with intended state/effect semantics and reproducible receipts.",
+      "independent_checks":[{"ref":"EXECUTABLE_RESEARCH_RECEIPT.json","class":"new discriminating executable experiment","result":"Current published grammar failed or semantically misparsed 5/5 tested current constructs that needed compatibility repair."}],
+      "adversarial_checks":["Do not reinterpret parser failure as semantic refutation; distinguish surface/toolchain defect from semantic inadequacy."],
+      "verdict":"UNRESOLVED",
+      "reason":"The current run found a concrete executable-surface blocker but no evidence that G9 semantic concepts themselves are inadequate. Full FRANK compilation remains unproven.",
+      "claycode_action":"Repair/freeze parser+canonicalizer first; then compile a real FRANK component before claiming architecture-language readiness.",
+      "affected_claycode_artifacts":["grammar/parser","canonical IR","compiler/lowering","FRANK component acceptance"]
+    },
+    {
+      "claim_id":"GOODMAN-CC-003",
+      "frank_statement":"ClayGraph activation/relevance and UnifiedDB semantic state must remain distinct from truth and execution authority.",
+      "frank_source_refs":["research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql","research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql","research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql"],
+      "ancestry_families":["Clay_ClayGraph_UnifiedDB_shared_architecture"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Some graph-derived state could be safely promoted directly if it has sufficient provenance/confidence, reducing system complexity.",
+      "falsifier":"A controlled implementation shows direct graph-derived promotion preserves truth/authority safety and improves outcomes across adversarial/OOD cases without hidden escalation.",
+      "independent_checks":[{"ref":"research_entity/knowledge_micro_packets/claygraph/KMP-ANDROID-R1-FEEDBACK-CLAYGRAPH.md","class":"shared-architecture implementation-path evidence","result":"Android replay scaffolding does not independently validate graph mechanism or authority promotion."}],
+      "adversarial_checks":["Treat current SQL/schema enforcement as implementation of a normative invariant, not independent causal proof that the separation is optimal."],
+      "verdict":"REFINED",
+      "reason":"Retain the separation as a safety/semantic architecture invariant; do not inflate schema agreement into independent scientific evidence about optimality or performance.",
+      "claycode_action":"Keep explicit semantic-state vs derived-activation classes and reject graph-derived effect authority; measure cost/benefit later.",
+      "affected_claycode_artifacts":["GraphDelta","ViewDelta","provenance/authority types","query/effect boundaries"]
+    }
+  ]
+}

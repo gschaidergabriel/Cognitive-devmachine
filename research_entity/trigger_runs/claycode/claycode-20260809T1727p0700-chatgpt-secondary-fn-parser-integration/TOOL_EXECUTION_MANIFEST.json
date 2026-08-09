@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "tools":[
+    {"tool":"GitHub connector","status":"USED","purpose":"canonical boot, branch cross-read, durable writes","evidence_class":"CONNECTED_REMOTE_REPOSITORY"},
+    {"tool":"local container Python/Lark","status":"USED","purpose":"parser/canonical IR/type-binding/lowering differential experiment","runtime":{"python":"3.13.5","platform":"Linux-6.18.35-x86_64-with-glibc2.41"},"evidence_class":"LOCAL_ISOLATED_LINUX_NOT_TARGET_UBUNTU"},
+    {"tool":"web primary-source research","status":"USED","purpose":"independent compiler-symbol/function/call comparison anchors","sources":["MLIR Symbols and Symbol Tables","LLVM Language Reference","WebAssembly 3.0 Core Specification"]},
+    {"tool":"E2B","status":"NOT_CALLABLE_IN_THIS_SESSION","purpose":"preferred ClayCode execution surface","effect":"No E2B claim made."},
+    {"tool":"SandboxAPI","status":"UNAVAILABLE_OR_NOT_SUBSCRIBED","purpose":"optional fallback","effect":"Not used."},
+    {"tool":"target Ubuntu developer host","status":"NOT_CONNECTED_TO_THIS_WORKER","purpose":"release acceptance","effect":"No target-host PASS."},
+    {"tool":"repository checkout/preflight/goodman checker","status":"NOT_EXECUTABLE_LOCALLY","reason":"container git clone blocked by DNS; connector can read/write files but does not expose checkout execution","effect":"current Goodman validator source was fetched and its required schema was reproduced locally; no strong promotion."}
+  ],
+  "container_git_clone":{"status":"FAILED","error":"Could not resolve host: github.com"},
+  "promotion_allowed":false
+}

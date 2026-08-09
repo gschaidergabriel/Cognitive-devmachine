@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1445p0700_chatgpt_secondary_pf_neural_conscience_feedback_lineage",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "gate_status_at_start":"NOT_PASS",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "created_at_local":"2026-08-09T14:45:38+07:00",
+  "stack_epoch":15,
+  "task_id":"L0-PF-NEURAL-CONSCIENCE-FEEDBACK-LINEAGE",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "sources":[
+    "Project-Frankenstein commit 3a264068e5000d7d6212336048b3bf6e8e5e28eb",
+    "Project-Frankenstein commit 475652157d19b9f27625f07c8b9c125a04267b59",
+    "Project-Frankenstein services/neural_conscience.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+  ],
+  "findings":[
+    {"id":"F-NC-001","status":"HISTORICAL_RUNTIME_MECHANISM","summary":"A compact CPU neural thought-quality gate used five named submodules, online accepted/rejected outcomes, rule fallback, bounded consolidation training and SFT stabilization. Frozen code defines FEAT_DIM=42 while a nearby docstring still says 48; preserve the mismatch as stale documentation until a historical runtime receipt resolves it."},
+    {"id":"F-NC-002","status":"NEGATIVE_RESULT_VALUE","summary":"A March 14 audit found a degenerate always-accept pattern: ACC=0 and verdict about 0.9999. The rejection path had not written accepted=false outcomes. The saved training state was 0 negative and 960 positive examples. Repair added negative feedback on three suppression paths, reset the checkpoint and restarted from a small balanced buffer."},
+    {"id":"F-NC-003","status":"REUSABLE_WITH_ADAPTATION","summary":"Frozen code retains 15% rule fallback even after maturity. After 5 consecutive rejects it raises fallback to at least 50%; after 10 it forces full rule fallback. The comment references a historical run with 19 consecutive rejects. This is a reusable collapse circuit-breaker pattern."},
+    {"id":"F-NC-004","status":"REUSABLE_WITH_ADAPTATION","summary":"Training uses a bounded buffer and an 80 ms cycle budget. SFT health checking can restore anchored weights on critical drift, and checkpoints use temporary-file rename semantics."},
+    {"id":"F-NC-005","status":"ARCHITECTURE_RISK","summary":"Code-level inference: all named submodule losses are derived from the same final binary outcome. This weakly identifies the named internal semantics; separate labels, interventions or discrimination tests are required before interpreting the heads as distinct mechanisms."},
+    {"id":"F-NC-006","status":"ANTI_ECHO_CONSTRAINT","summary":"The 0-negative/960-positive incident shows that learned-loop quality depends on complete outcome routing. Current learners need explicit terminal-outcome coverage, label provenance, class-balance telemetry and frozen evaluation before promotion."},
+    {"id":"F-NC-007","status":"AUTHORITY_BOUNDARY","summary":"A learned quality score may guide routing but does not itself authorize effects or establish external truth."}
+  ],
+  "current_frank_mapping":{
+    "reuse":["staged baseline-to-neural blending","nonzero mature fallback","consecutive-failure circuit breaker","bounded consolidation training","persistent outcome buffer","health-triggered weight restore","atomic checkpoint write"],
+    "must_change":["prove every terminal outcome path writes the intended label","track positive/negative support counts","separate mechanism claims from a shared binary teacher","evaluate candidate versus current on frozen data before promotion","keep learned gate below effect authority"]
+  },
+  "branch_feedback":{
+    "frank":"Use learned quality gates only with deterministic fallback, complete outcome receipts and collapse tripwires.",
+    "harness":"Add the 0/960 label-collapse incident and repeated-reject blackout as historical regression tests; mutate feedback edges to verify detection.",
+    "claycode":"Represent terminal outcome identity, label provenance, fallback phase and restore state explicitly.",
+    "unifieddb":"Persist learner label origin, support counts, model version, fallback activation and restore ancestry.",
+    "claygraph":"Separate model verdict edges from downstream outcome evidence and expose missing feedback edges as causal coverage gaps.",
+    "gwt":"If the gate modulates competition, broadcast provenance and fallback state with the signal.",
+    "emergenz":"Do not infer separate named mechanisms from heads trained on one shared binary target without interventions.",
+    "hyperposition":"Preserve alternative explanations for gate scores until causal tests discriminate them.",
+    "clayresearch":"Treat the failure as an anti-echo case where data-routing completeness dominated model architecture."
+  },
+  "contradictions_preserved":["FEAT_DIM=42 in runtime constant versus 48 in stale extractor docstring","named internal modules versus one shared binary training signal"],
+  "exact_coverage_credit":0.0,
+  "coverage_reason":"The Level-0 combined denominator is still NOT_FROZEN; this is a query-directed history/runtime shard, not exhaustive tree/history closure.",
+  "limitations":["Historical checkpoint was not executed in this session; the 0/960 state is commit-recorded evidence.","The weak-identifiability point is a code-derived inference, not a representation-probing measurement."],
+  "promotion_boundary":"Historical implementation and regression-test evidence only; no direct promotion of learned gate scores to independent truth or effect authority."
+}

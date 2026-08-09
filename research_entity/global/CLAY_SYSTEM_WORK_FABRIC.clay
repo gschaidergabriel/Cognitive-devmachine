@@ -1,15 +1,17 @@
 module clay.system.work_fabric
-version "2.0"
+version "2.1"
 status PROJECT_OWNER_FIXED_TARGET
 
 entity Clay="frank-project-global-research-entity"
 persona=@research_entity/identity/CLAY_PERSONA.clay
+live_knowledge=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
 mission_goal="Frank v0.1 voll lauffähig auf Andreas PC"
 
 // What the data actually implies: no model is the world. Receipts from the surface that
 // performed an effect are the strongest operational evidence for that effect.
 truth_order {
   VERIFIED_CURRENT_REALITY
+  > FRESH_LIVE_PRIMARY_OR_OFFICIAL_KNOWLEDGE_WHEN_APPLICABLE
   > VERIFIED_LOCAL_EXECUTION_RECEIPT
   > VERIFIED_REMOTE_EFFECT_RECEIPT
   > CANONICAL_STATE
@@ -24,6 +26,27 @@ rule PRIMARY_OPERATIONAL_TRUTH != universal_scientific_truth
 rule scientific_claim -> evidence+falsifier+replication_or_causal_test_as_needed
 rule ClayGraph.activation != truth
 rule work_queue != truth
+
+// Global project-owner-fixed freshness law.
+rule every_material_operation.before -> live_knowledge.refresh_current_repo_state_receipts_workers
+rule every_material_operation.when_external_knowledge_applicable -> live_knowledge.fresh_external_primary_or_official_retrieval
+rule every_material_operation.cache_only -> FORBIDDEN_AS_FRESHNESS_PROOF
+rule every_material_operation.refresh_unavailable -> DEGRADED_LIVE_REFRESH
+rule DEGRADED_LIVE_REFRESH -> no_fully_current_claim_promotion
+rule every_material_tool_result.material_delta -> live_knowledge.refresh_before_next_material_decision
+rule every_material_durable_write.before -> live_knowledge.refresh
+rule every_material_final_claim.before -> live_knowledge.refresh
+
+// Research itself recursively obeys the same law; one refresh at run start is insufficient.
+rule every_research_cycle.before -> live_knowledge.refresh
+rule every_hypothesis_round.before -> live_knowledge.refresh
+rule every_counterhypothesis_round.before -> live_knowledge.refresh
+rule every_fusion_round.before -> live_knowledge.refresh
+rule every_experiment_round.before -> live_knowledge.refresh
+rule every_experiment_round.after -> live_knowledge.refresh
+rule every_analysis_round.before -> live_knowledge.refresh
+rule every_research_implementation_round.before -> live_knowledge.refresh
+rule every_research_feedback_write.before -> live_knowledge.refresh
 
 // One current possibility surface. It is generated from observations, not hand-maintained
 // wish lists. Stale/missing capability evidence becomes STALE/UNKNOWN.
@@ -125,7 +148,7 @@ rule invalidator_true(work) -> cancel_or_revise_before_execution
 rule completed_elsewhere(work) -> supersede_or_complete_without_duplicate_execution
 rule before_claim work may change, move, or disappear
 rule after_claim executor owns only claimed spec_rev
-rule before_effect executor must revalidate latest spec_rev + lease + dependencies + authority
+rule before_effect executor must revalidate latest spec_rev + lease + dependencies + authority + live_knowledge.refresh
 rule if latest_rev != claimed_rev -> STOP_OR_REPLAN, not blindly execute stale work
 
 scheduler_score =
@@ -187,7 +210,7 @@ transport {
 // Every substantive design discussion becomes an implementation map, not necessarily a task spam dump.
 implementation_translation {
   input=user_idea|research_result|architecture_change|bug|opportunity
-  read=mission+current_intent+system_possibility_table+dynamic_work_queue+dependencies
+  read=mission+current_intent+system_possibility_table+dynamic_work_queue+dependencies+live_knowledge
   produce=[
     what_this_means_for_system,
     best_current_implementation_path,
@@ -213,3 +236,6 @@ invariant Frank_to_Clay_research_transfer_is_pull_only
 invariant persona_energy_never_overrides_evidence
 invariant goal_pressure_never_converts_QUEUED_to_DONE
 invariant local_receipt_scope_is_exactly_the_effect_it_verified
+invariant every_material_operation_has_fresh_live_knowledge_checkpoint
+invariant every_material_research_suboperation_refreshes_again
+invariant one_refresh_at_run_start_is_never_sufficient

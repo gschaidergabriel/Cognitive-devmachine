@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "experiment_id":"EXP-CC-G9-GRAMMAR-COMPAT-20260809",
+  "run_id":"claycode-20260809T1539p0700-chatgpt-parser-compat",
+  "candidate":"ClayCode G9 V3 parser-surface compatibility probe",
+  "source_inputs":{
+    "grammar":{"path":"research_entity/claycode/g9/grammar.ebnf","blob_sha":"80028aae6d9d26ac96fa7179dbccc7e467740990"},
+    "current_spec":{"path":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e"},
+    "dialects":{"path":"research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay","blob_sha":"dbb72460bc5a049c784d1acd1aaef152fa37f797"}
+  },
+  "execution":{"provider":"local ChatGPT Python sandbox fallback","runtime":"Python 3 + Lark LALR","language":"Python","exit_status":0,"stdout_summary":"7 cases executed; all expected classifications matched","stderr":"","timing":"not promoted; parser compatibility rather than performance benchmark"},
+  "test_corpus":[
+    {"id":"baseline_record","source":"record X {a:Set<Ref>; b:String?}","expected_baseline":"ACCEPT","observed_baseline":"ACCEPT","patched":"ACCEPT"},
+    {"id":"current_union_type","source":"record ProvAtom {source:EvidenceRef;polarity:POS|NEG;role:Symbol}","expected_baseline":"REJECT_OR_INADEQUATE","observed_baseline":"REJECT at |","patched":"ACCEPT"},
+    {"id":"current_comparison","source":"rule diff>0 => ADD_OR_STRENGTHEN","expected_baseline":"REJECT_OR_INADEQUATE","observed_baseline":"REJECT at >","patched":"ACCEPT"},
+    {"id":"current_interface_method","source":"interface Projectable {semantic_hash:Hash;projection(reader:ReaderId)->Ref}","expected_baseline":"REJECT_OR_INADEQUATE","observed_baseline":"REJECT at method parameter list","patched":"ACCEPT"},
+    {"id":"current_relation_operator","source":"rule Delta never_implies epistemic_upgrade","expected_baseline":"REJECT_OR_INADEQUATE","observed_baseline":"REJECT at relation word","patched":"ACCEPT"},
+    {"id":"current_if_control","source":"cycle(input,node){if residual.effect {receipt=Needle.execute(effect_intent)}}","expected_baseline":"SEMANTICALLY_CORRECT_CONTROL_PARSE","observed_baseline":"SYNTACTIC_ACCEPT_BUT_SEMANTIC_MISPARSE: if treated as ordinary qid/action and braces as set expression","patched":"ACCEPT_AS_EXPLICIT_IF_STATEMENT"},
+    {"id":"negative_broken_generic","source":"record Broken {x:Set<Ref}","expected":"REJECT","observed_baseline":"REJECT","patched":"REJECT"}
+  ],
+  "summary":{"baseline_current_construct_failures_or_misparses":5,"patched_current_construct_passes":5,"negative_control_rejected_after_patch":true,"all_expectations_met":true},
+  "candidate_patch_surface":["union types in type_expr","interface/method signatures","comparison operators","explicit control statement parsing","relation/predicate surface resolved as typed semantic operation rather than accidental adjacency"],
+  "semantic_result":"The CURRENT published concrete grammar is not source-compatible with constructs already used by CURRENT G9 artifacts. A minimal parser-surface extension accepts the tested constructs while retaining malformed-input rejection.",
+  "classification":"EXECUTABLE_COUNTEREXAMPLE_PARSER_SURFACE",
+  "semantic_change_required":false,
+  "counterhypothesis":"The discrepancy could be documentation-only if a separate production parser already implements a richer grammar; no such current parser artifact was located in bounded repository search, so full toolchain discovery remains a required follow-up.",
+  "falsifier":"A current production parser/compiler, linked to the admitted stack, parses the complete G9 V3 corpus with intended AST/IR and demonstrates grammar.ebnf is explicitly non-normative documentation.",
+  "affected":["ClayCode","Harness","FRANK"],
+  "recommended_next":"Repair/freeze parser and canonicalizer against the complete admitted G9 corpus before changing semantics; then run typed IR/type-effect/evaluator/lowering tests."
+}

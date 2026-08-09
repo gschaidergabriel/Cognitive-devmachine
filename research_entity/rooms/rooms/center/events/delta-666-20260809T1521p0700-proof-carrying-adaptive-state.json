@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "event_id": "delta-666-20260809T1521p0700-proof-carrying-adaptive-state",
+  "room_id": "center",
+  "event_type": "CROSS_ROOM_DELTA",
+  "origin_worker": "chatgpt-secondary-666-20260809T1521p0700-pcas",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T15:21:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["claycode", "unifieddb", "harness", "frank", "claygraph", "clay"],
+  "affects_claims": ["PCAS-H1", "PCAS-H2", "PCAS-H3"],
+  "dependencies": [
+    "research_entity/archive_assimilation/666_RELEASE_MANIFEST.json",
+    "research_entity/global/FRANK_UNIFIED_MEMORY_RETINA_ONLINE_LEARNING_DIRECTIVE.md",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"
+  ],
+  "artifact_refs": [
+    "research_entity/emergent_fields/fields/field-666-20260809T1521p0700-proof-carrying-adaptive-state-485652b7/FIELD_STATE.json",
+    "research_entity/trigger_runs/666/666-20260809T1521p0700-chatgpt-secondary-pcas/FINAL_REPORT.md"
+  ],
+  "ancestry_family": "proof-carrying-adaptive-state-20260809",
+  "delivery": "NEXT_CHECKPOINT",
+  "delta": {
+    "mechanism_candidate": "Adaptive State Promotion Certificate (ASPC)",
+    "status": "OPEN_RESEARCH_CANDIDATE",
+    "claycode": "Represent candidate certificate as ordinary typed canonical data + deterministic verifier/effect gate first; no semantic redesign without executable counterexample.",
+    "unifieddb": "Bind candidate/promoted version, evidence lineage, verifier policy and rollback pointer transactionally; crash-test verification-to-publication boundary.",
+    "harness": "Add replay/differential poisoning/stale-version/crash-mid-promotion cases and compare safety/plasticity Pareto frontier.",
+    "frank": "Apply first to Unified Memory <-> Retina online learning while preserving memory_prior != sensor_truth."
+  },
+  "payload_clay": "cross{pcas_1521;center;claycode+unifieddb+harness+frank+claygraph+clay;adaptive_state_promotion_certificate+pareto_test+rollback_receipt;field_pcas_485652b7;NEXT_CHECKPOINT}"
+}

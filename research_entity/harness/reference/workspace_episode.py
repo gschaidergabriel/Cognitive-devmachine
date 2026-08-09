@@ -55,7 +55,7 @@ class BasisWitness:
     semantic_state_hash: str
     state_version_hash: str
     trace_root_hash: str
-    semantic_contract_hash: str
+    semantic_contract_hash: str = "frank.workspace-contract.v0"
 
     def validate(self) -> None:
         if self.basis_epoch < 0:
@@ -412,8 +412,8 @@ def run_workspace_episode(
             "semantic_state_hash": witness.semantic_state_hash,
             "state_version_hash": witness.state_version_hash,
             "trace_root_hash": witness.trace_root_hash,
-            "semantic_contract_hash": witness.semantic_contract_hash,
         },
+        "semantic_contract_hash": witness.semantic_contract_hash,
         "input_identity": {
             "candidate_set_hash": candidate_set_hash,
             "receiver_policy_hash": receiver_policy_hash,

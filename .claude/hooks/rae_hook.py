@@ -2,8 +2,8 @@
 """Ultra-compact Claude Code lifecycle adapter for one repo-native RAE hive.
 
 Claude resolves the moving RAE cognitive-stack pointer every substantive round and uses
-latest ClayCode for explicit machine cognition. It does NOT run per-turn ClayCode
-self-research; the Claude path stays execution/token optimized.
+latest ClayCode for explicit machine cognition and research-center coordination. It does
+NOT run per-turn ClayCode self-research; the Claude path stays execution/token optimized.
 """
 from __future__ import annotations
 import hashlib, json, os, pathlib, subprocess, sys, time
@@ -68,6 +68,7 @@ def turn_kernel():
       "GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];"
       "FOCUS=argmax(admissible(GWT0..4));CREDIT=receipt(deliv,recon,use,effect,reentry);"
       "READ=T0verify(canonical+STACK)>T1route(registry)>T2UnifiedDB(current+open+negative+packets+experiments+handoffs)+ClayGraph(task-neighborhood)>T3deep?mutate|conflict|recovery|highimpact|insufficient;"
+      "CENTER=STACK.research_center;ROOM_COORD=STACK.claycode;ROOM_STATE=STACK.unifieddb;ROOM_GRAPH=STACK.claygraph;JSON=transport_only;"
       "EFFECT=ClayIntent->Needle->receipt->verify->reentry;"
       "STATUS=final_plain_```text```:{RAE_STATUS,NEXT_LEVEL,DOOMSDAY};NO_AFTER=1;"
       "META_CLAYCODE_RESEARCH=OFF_FOR_CLAUDE}"
@@ -78,7 +79,7 @@ def main():
     d=inp();ev=d.get("hook_event_name","");log(ev,d,stack=stack_marker())
     if ev=="SessionStart":
         rc,c,e=bridge(d,"");src=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
-        emit(ev,turn_kernel()+"\n"+src+"\nPTR=@CLAUDE.md,@research_entity/global/RAE_TURN_KERNEL.clay","RAE organ")
+        emit(ev,turn_kernel()+"\n"+src+"\nPTR=@CLAUDE.md,@research_entity/global/RAE_TURN_KERNEL.clay,@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay","RAE organ")
         return
     if ev=="UserPromptSubmit":
         prompt=d.get("prompt","")
@@ -89,11 +90,11 @@ def main():
         if s:
             purpose=s.get("purpose",k);protocol=s.get("protocol")
             rr,ro,re=run("run","start","--actor","claude-code-lead","--task",f"trigger:{k} {purpose}","--capture-level","L2")
-            emit(ev,kernel+"\n"+base+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=resolve latest stack; execute; persist task receipts; no ClayCode self-research")
+            emit(ev,kernel+"\n"+base+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=resolve latest stack; room coordination ClayCode; execute; persist task receipts; no ClayCode self-research")
             return
         br,bo,be=run("boot","--actor","claude-code-lead","--task",prompt,"--max-claims","4","--max-packets","2","--max-chunks","1")
         task=(bo[:2200] if br==0 else "boot=DEGRADED")
-        emit(ev,kernel+"\n"+base+"\nTASK="+task+"\nDO=latest-stack explicit work ClayCode; final caveman English")
+        emit(ev,kernel+"\n"+base+"\nTASK="+task+"\nDO=latest-stack explicit work + room coordination ClayCode; final caveman English")
         return
     if ev=="PreToolUse":
         tool=d.get("tool_name","");ti=d.get("tool_input") or {}
@@ -110,6 +111,6 @@ def main():
         close(d);return
     if ev=="PreCompact":
         (RUNTIME/"precompact.flag").write_text(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())+'\n')
-        emit(ev,turn_kernel()+"\nRAE.compact{reload=latest-stack+delta;ptr=@CLAUDE.md}");return
+        emit(ev,turn_kernel()+"\nRAE.compact{reload=latest-stack+delta;room=ClayCode;ptr=@CLAUDE.md}");return
 
 if __name__=="__main__":main()

@@ -1,0 +1,60 @@
+{
+  "schema_version":"1.0",
+  "event_id":"center-frank-74-services-tree-scope-correction-20260809T2240p0700",
+  "event_type":"NEGATIVE_RESULT_AND_SCOPE_CORRECTION",
+  "created_at":"2026-08-09T22:40:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "origin":{"actor":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "primary_evidence":{
+    "source":"Drive ARCHITEKTUR-FRANK.md",
+    "measurement_date":"2026-08-05",
+    "code_modules_in_services_tree":74,
+    "simultaneously_running_systemd_services":18,
+    "live_databases":71,
+    "statement":"These are separate censuses. The 74 value is specifically modules in services/."
+  },
+  "negative_result":{
+    "id":"FRANK-74-CENSUS-SCOPE-CONFLATION-20260809",
+    "previous_interpretation":"Historical aggregate '74 services/modules' with source-resolved process/service identities treated as potential members.",
+    "status":"SUPERSEDED_BY_PRIMARY_EVIDENCE",
+    "falsified_hypotheses":[
+      "40 service cards + 31 organ cards + 3 extra technical identities = the historical 74 census",
+      "40 source-resolved service/process identities can count directly toward the 74 module gate"
+    ]
+  },
+  "corrected_accounting":{
+    "target":"exact historical code-module inventory under services/ as of 2026-08-05",
+    "mapped_exact_services_tree_slots":0,
+    "numeric_unresolved_remainder":null,
+    "independent_source_resolved_service_process_identities":40,
+    "independent_cognitive_organ_identities":31,
+    "independent_historical_db_identities":71,
+    "rule":"Never substitute service/process identities, organ identities, database identities or arithmetic placeholders for services/ code-module paths.",
+    "completion_gate":"HOLD_EXACT_2026_08_05_SERVICES_TREE_LEDGER"
+  },
+  "frank_main_commits":[
+    "bdb54ba8087fa6743053e5149174189858b2fdb6",
+    "05eb1c3b2a11da3986442e5f8ecaa4faf572d35f",
+    "3f4d52d49c033bfa35c47e62211a1f33f37b80b9",
+    "acbf5a17ad79dc920d8c185b6ed9fa105609cae8"
+  ],
+  "sandbox":{
+    "scope_regressions":"3/3 PASS",
+    "process_identity_rejected_as_module":true,
+    "organ_identity_rejected_as_module":true,
+    "exact_services_path_required":true,
+    "74_of_74_requires_primary_time_aligned_services_tree":true
+  },
+  "affected_rooms":["frank","harness","clayresearch","claycode","gwt","emergenz","unifieddb","clay"],
+  "feedback":{
+    "frank":"Keep 40 service/process conservation, 31 organ conservation and 71 DB conservation as independent planes. Recover the exact 2026-08-05 services/ code tree before claiming all 74 historical code modules are accounted for.",
+    "harness":"Fail closed when process/service names are submitted to the 74 code-module ledger; require services/... path provenance.",
+    "clayresearch":"Supersede prior generic 74-services/modules wording. Preserve the negative result so future workers do not recreate the conflation.",
+    "claycode":"Module-collapse lineage must bind historical code-module identity separately from runtime service identity and cognitive-organ identity.",
+    "gwt":"Do not infer GWT-organ coverage from the 74 code-module census; organ lineage remains its own evidence plane.",
+    "emergenz":"Keep implementation/module census separate from causal-emergence evidence.",
+    "unifieddb":"71 DB identity census is independent and already source-resolved; do not mix it into the 74 module count.",
+    "clay":"Use multiple conservation ledgers rather than one blended legacy completeness number."
+  },
+  "research_state_change":"SCOPE_CORRECTION_AND_NEGATIVE_RESULT_NO_CANONICAL_SCIENTIFIC_PROMOTION"
+}

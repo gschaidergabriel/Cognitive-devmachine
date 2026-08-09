@@ -40,8 +40,9 @@ type_params: "<" type_expr ("," type_expr)* ">"
 ?type_atom: qid [type_params] ["?"]
 ?expr: term ((operator term) | (infix_relop ["="] term))*
 ?term: dotted_relation | prefix_relation | postfix_relation | primary
-dotted_relation: qid DOT_REL [primary]
-prefix_relation: prefix_relop term
+dotted_relation: qid DOT_REL primary
+prefix_relation: prefix_relop prefix_target
+prefix_target: qid [DOT_REL]
 postfix_relation: primary postfix_relop
 prefix_relop: PREFIX_REL
 postfix_relop: POSTFIX_REL

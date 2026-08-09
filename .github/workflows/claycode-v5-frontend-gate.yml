@@ -7,6 +7,7 @@ on:
       - 'tools/claycode_strict_lalr_probe.py'
       - 'tools/claycode_base_frontend_validation.py'
       - 'tools/claycode_v5_frontend_regression.py'
+      - 'tools/claycode_base_canonicalizer.py'
       - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark'
       - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
       - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
@@ -54,6 +55,11 @@ jobs:
           python tools/claycode_base_frontend_validation.py \
             --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark \
             --output research_entity/claycode/autonomous/BASE_FRONTEND_V5_VALIDATION_RECEIPT.json
+      - name: Prove deterministic literal-safe canonical syntax identity
+        run: |
+          python tools/claycode_base_canonicalizer.py \
+            --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark \
+            --output research_entity/claycode/autonomous/BASE_CANONICAL_SYNTAX_V5_RECEIPT.json
       - name: Commit V5 validation receipts
         run: |
           git config user.name 'claycode-v5-gate'
@@ -61,7 +67,8 @@ jobs:
           git add \
             research_entity/claycode/autonomous/STRICT_LALR_D_V5_RECEIPT.json \
             research_entity/claycode/autonomous/V5_FRONTEND_REGRESSION_RECEIPT.json \
-            research_entity/claycode/autonomous/BASE_FRONTEND_V5_VALIDATION_RECEIPT.json
+            research_entity/claycode/autonomous/BASE_FRONTEND_V5_VALIDATION_RECEIPT.json \
+            research_entity/claycode/autonomous/BASE_CANONICAL_SYNTAX_V5_RECEIPT.json
           git diff --cached --quiet && exit 0
           git commit -m 'ClayCode: record V5 full-corpus frontend receipts'
           for attempt in 1 2 3; do

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1714p0700-hwp02-idempotency-fingerprint",
+  "trigger": "harness",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "h1_gate": "BLOCKED_ON_BASE_CLAYCODE_RELEASE",
+  "coverage_basis": [
+    "research_entity/mesh_feedback/20260809T1703p0700-live-fusion/LIVE_REFRESH_3.json",
+    "research_entity/harness/HARNESS_WORKSPACE.json",
+    "research_entity/harness/reference_state_ledger.py",
+    "post-fusion repository commit reread through 2026-08-09T17:15:56+07:00"
+  ],
+  "peer_coverage": {
+    "clayresearch": "COVERED_BY_LIVE_FUSION_NO_MATERIAL_POST_CLOSURE_DELTA_OBSERVED",
+    "frank": "COVERED_BY_LIVE_FUSION_NO_MATERIAL_POST_CLOSURE_DELTA_OBSERVED",
+    "gwt": "COVERED_BY_LIVE_FUSION_NO_MATERIAL_POST_CLOSURE_DELTA_OBSERVED",
+    "emergenz": "COVERED_BY_LIVE_FUSION_NO_MATERIAL_POST_CLOSURE_DELTA_OBSERVED",
+    "claycode": "COVERED_BY_LIVE_FUSION_PLUS_POST_CLOSURE_SEMANTIC_ID_PROVENANCE_AND_RESOURCE_LIFETIME_DELTAS",
+    "hyperposition": "COVERED_BY_LIVE_FUSION_NO_MATERIAL_POST_CLOSURE_DELTA_OBSERVED",
+    "claygraph": "COVERED_BY_LIVE_FUSION_NO_MATERIAL_POST_CLOSURE_DELTA_OBSERVED",
+    "unifieddb": "COVERED_BY_LIVE_FUSION_RELEVANT_TO_LEDGER_IDENTITY_AND_REPLAY",
+    "harness": "DIRECT_REREAD_OF_WORKSPACE_REFERENCE_LEDGER_PRIOR_HWP02_RUN_AND_LATEST_HARNESS_COMMITS"
+  },
+  "live_worker_decision": {
+    "work_package": "H-WP-02-STATE-LEDGER",
+    "workspace_claim": "chatgpt-secondary-sol-current",
+    "decision": "CONTINUE_EXISTING_CLAIM_AS_FALSIFICATION_REVIEW_WORKER",
+    "duplicate_new_claim": false
+  },
+  "late_delta_relevance": {
+    "program_semantic_id": "REINFORCES_SEPARATION_OF_SEMANTIC_IDENTITY_FROM_SOURCE_EXECUTION_IDENTITY",
+    "resource_lifetime_epoch": "LIVE_RESOURCE_IDENTITY_MUST_NOT_BE_INFERRED_FROM_CANONICAL_STATE_HASH",
+    "turn_trace_envelope": "DEPENDENT_ON_ADJUDICATED_HWP02_IDENTITY_NO_COMPLETION_PROMOTION",
+    "effect_authority": "NO_CHANGE_TO_HWP02_CORE; authority remains external to state identity"
+  },
+  "shared_ancestry_rule": "Harness execution of inherited branch contracts is not independent replication without a discriminating intervention.",
+  "preflight_status": "PASS_FOR_COMPONENT_FALSIFICATION_RUN"
+}

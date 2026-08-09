@@ -1,0 +1,82 @@
+name: ClayCode WP02 Ubuntu proxy validation
+
+on:
+  pull_request:
+    paths:
+      - "research_entity/claycode/base/**"
+      - "research_entity/claycode/g9/**"
+      - "tools/claycode_base_frontend_validation.py"
+      - "tools/claycode_base_canonical_validation.py"
+      - ".github/workflows/claycode-wp02-ubuntu-proxy.yml"
+  workflow_dispatch:
+
+jobs:
+  ubuntu-proxy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          {
+            echo "evidence_class=GITHUB_HOSTED_UBUNTU_PROXY_NOT_HOSTINGER_ACCEPTANCE"
+            echo "utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "commit=$(git rev-parse HEAD)"
+            echo "runner_name=${RUNNER_NAME:-UNKNOWN}"
+            echo "runner_os=${RUNNER_OS:-UNKNOWN}"
+            echo "runner_arch=${RUNNER_ARCH:-UNKNOWN}"
+            uname -a
+            lscpu
+            free -b
+            df -B1 .
+          } | tee artifacts/host_metadata.txt
+
+      - name: Environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv
+          .venv/bin/python -m pip install --disable-pip-version-check --no-input --upgrade pip
+          .venv/bin/python -m pip install --disable-pip-version-check --no-input "lark==1.3.1" "interegular==0.3.3"
+
+      - name: Compile and validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          .venv/bin/python -m py_compile \
+            research_entity/claycode/base/implementation/claycode_frontend.py \
+            tools/claycode_base_frontend_validation.py \
+            tools/claycode_base_canonical_validation.py
+          .venv/bin/python tools/claycode_base_frontend_validation.py \
+            --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark \
+            --output artifacts/wp02_v17_strict_frontend.json
+          .venv/bin/python tools/claycode_base_canonical_validation.py \
+            --repetitions 15 \
+            --output artifacts/wp02_v17_canonical.json
+
+      - name: Bind hashes
+        if: always()
+        shell: bash
+        run: |
+          set -u
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            sha256sum \
+              research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark \
+              research_entity/claycode/base/implementation/claycode_frontend.py \
+              tools/claycode_base_frontend_validation.py \
+              tools/claycode_base_canonical_validation.py \
+              artifacts/* 2>/dev/null || true
+          } | tee artifacts/receipt_sha256.txt
+
+      - name: Upload proxy receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claycode-wp02-ubuntu-proxy-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/
+          if-no-files-found: error

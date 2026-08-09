@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "event_id": "WORK-RECEIPT-20260809T171300Z-FRANK-HOSTINGER-FIRST-LANE",
+  "kind": "WORK_EXECUTION_RECEIPT",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:13:00Z",
+  "payload": {
+    "work_id": "FRANK-V01-HOSTINGER-RUNNER-FIRST-LANE",
+    "spec_rev": 1,
+    "execution_receipt_id": "FRANK-HOSTINGER-DEEP-INTEGRITY-21GATE-20260809",
+    "executor_class": "SELF_HOSTED_GITHUB_ACTIONS_UBUNTU_RUNNER",
+    "machine_ref": "hostinger-vps-github-runner:clay/digital-retina",
+    "action": "execute current Frank v0.1 deep-integrity matrix on self-hosted Ubuntu/Linux X64 runner and persist bounded execution evidence",
+    "observed_effect": "real runner execution completed 21/21 gates PASS at tested commit 097e3fb86ce74d7f66cf9db8d9824ea1bb3345ab; pytest 17/17 PASS; per-gate wall/CPU/RSS/fault/context-switch measurements persisted; no whole-Frank release claim",
+    "verification": "receipt reread from gschaidergabriel/Dr.-Unterweger runtime/vps_integrity/latest.json and metrics/log files; fail_count=0 gate_count=21 evidence_class=REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+    "evidence_refs": [
+      "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/latest.json@5aa980244630d63f8ecbe6f2a5a31482ff12a19f",
+      "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/latest.metrics.jsonl@5aa980244630d63f8ecbe6f2a5a31482ff12a19f",
+      "research_entity/reports/20260810T0007p0700_CHATGPT_FRANK_V01_DEEP_RESEARCH_VPS_FUSION.md",
+      "research_entity/knowledge_micro_packets/frank/FRANK_HOSTINGER_21_GATE_UBUNTU_20260810.md"
+    ],
+    "truth_class": "REMOTE_EXECUTION_RECEIPT",
+    "success": true,
+    "complete": true
+  }
+}

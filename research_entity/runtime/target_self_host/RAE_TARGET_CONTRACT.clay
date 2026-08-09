@@ -1,0 +1,29 @@
+clay target RAE_TARGET_0_1 {
+  ancestry = frank.unifieddb_v13 + frank.claygraph_v8;
+  candidate_surface = union(KNOWN, EMERGENT_NOVEL);
+  emergent_candidate := higher_order_completion(active_semantic_field, evidence_bound_hyperbindings)
+    where provenance_count >= 2
+      and synergy > 0
+      and persistence >= 0.5
+      and false_binding_risk <= 0.35
+      and no_open_conflict;
+
+  gwt_episode := competition -> ignition -> addressability -> delivery
+                 -> receiver_reconstruction -> receiver_use -> local_effect
+                 -> outcome -> provenance_bound_reentry;
+
+  emergence_gate {
+    state_inadequate => ABSTAIN_STATE_INADEQUATE;
+    novelty_only => OPEN;
+    recurrence_only => OPEN;
+    require(receiver_use, truthful_reentry, lesion, rescue, shuffle_control, ood_transfer, macro_control, cost_shadow);
+    output = functional_pattern_only;
+  }
+
+  authority {
+    activation != truth;
+    measured_value != authority;
+    claycode_software_path != release_pass;
+    research_entity != frank_identity;
+  }
+}

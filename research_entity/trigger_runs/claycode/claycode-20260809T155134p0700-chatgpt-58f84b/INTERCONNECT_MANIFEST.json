@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T155134p0700-chatgpt-58f84b",
+  "trigger":"claycode",
+  "registry_revision_source":"research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+  "registered_scientific_branches":["clayresearch","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "coverage":[
+    {"branch":"clayresearch","depth":"current-stack-plus-cross-feedback","refs":["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay","research_entity/knowledge_micro_packets/clay/KMP-ANDROID-R1-FEEDBACK-CLAY.md"]},
+    {"branch":"frank","depth":"deep-requirements","refs":["research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md","research_entity/global/FRANK_FIRST_PRINCIPLES_EMERGENT_COUPLING_LENS.md"]},
+    {"branch":"harness","depth":"deep-current-workspace","refs":["research_entity/harness/HARNESS_WORKSPACE.json"]},
+    {"branch":"claygraph","depth":"deep-substrate","refs":["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"]},
+    {"branch":"unifieddb","depth":"deep-substrate","refs":["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql"]},
+    {"branch":"gwt","depth":"measurement-contract","refs":["research_entity/global/RAE_GWT_MICROKERNEL.clay","research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"]},
+    {"branch":"hyperposition","depth":"measurement-contract","refs":["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"]},
+    {"branch":"emergenz","depth":"cross-feedback-and-gwt-emergence-contract","refs":["research_entity/knowledge_micro_packets/emergenz/KMP-ANDROID-R1-FEEDBACK-EMERGENZ.md","research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"]},
+    {"branch":"claycode","depth":"deep-current","refs":["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","research_entity/claycode/g9/grammar.ebnf","research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"]}
+  ],
+  "preflight_execution":{"status":"BLOCKED_FAIL_CLOSED","tool":"tools/research_interconnect_preflight.py","reason":"Current registry scientific branch is clayresearch while the preflight PRIORITY mapping still hard-codes clay. Its own set-equality guard therefore detects governance drift before normal preflight materialization.","registry_only":["clayresearch"],"preflight_only":["clay"]},
+  "completion_boundary":"Manual coverage records what was actually read; it does not claim the mandatory preflight tool passed. Strong promotion is blocked until the governance drift is repaired and the tool is rerun."
+}

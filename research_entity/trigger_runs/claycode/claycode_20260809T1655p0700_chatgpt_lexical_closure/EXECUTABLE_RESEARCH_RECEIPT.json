@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1655p0700_chatgpt_lexical_closure",
+  "experiment_id": "EXP-CC-LEXICAL-CLOSURE-20260809-01",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "candidate_grammar": "research_entity/claycode/g9/grammar.ebnf@ec2f17077333955cfdabe6c64868d597e7e734e3",
+  "source_probe": "LEXICAL_CLOSURE_PROBE.py",
+  "source_sha256": "d62977c934bee3cbfe3b90c380c1407c52aa1048c2c656086fb666db1b8d5345",
+  "execution_surface": {
+    "provider": "ChatGPT local container",
+    "runtime": "Python 3",
+    "e2b_exposed_to_session": false,
+    "e2b_evidence_claimed": false
+  },
+  "corpus": {
+    "seed": 20260809,
+    "cases_per_family": 10000,
+    "families": ["adjacent_refs", "unspaced_subtraction", "hyphenated_identifier_compatibility"]
+  },
+  "observed": {
+    "ref_overconsume_current": 10000,
+    "ref_candidate_fail": 0,
+    "minus_collision_current": 10000,
+    "minus_candidate_fail": 0,
+    "hyphenated_identifier_current_accept": 10000,
+    "hyphenated_identifier_candidate_accept": 0
+  },
+  "expected_vs_observed": [
+    {
+      "property": "REF token closes before structural list delimiters",
+      "expected": "first adjacent @ref parses independently",
+      "observed": "literal non-whitespace current matcher overconsumed delimiter and following ref in 10000/10000 cases",
+      "classification": "REF_DELIMITER_OVERRUN"
+    },
+    {
+      "property": "unspaced subtraction remains distinguishable from identifiers",
+      "expected": "a-b can lex as identifier, minus, identifier when subtraction is intended",
+      "observed": "current bare identifier class accepted the entire a-b string in 10000/10000 generated cases under longest-match interpretation",
+      "classification": "IDENT_MINUS_LEXICAL_COLLISION"
+    },
+    {
+      "property": "minimal ambiguity repair preserves existing hyphenated bare identifiers",
+      "expected": "candidate should not silently break admitted names",
+      "observed": "removing hyphen from bare identifiers rejects 10000/10000 generated hyphenated names that current grammar accepts",
+      "classification": "BACKCOMPAT_HYPHEN_RISK"
+    }
+  ],
+  "repair_candidates": [
+    {
+      "target": "ref lexical token",
+      "candidate": "delimiter-aware reference token excluding structural punctuation unless escaped/quoted",
+      "result": "0/10000 candidate failures in tested adjacent-ref family",
+      "promotion": "CANDIDATE_LOCAL_REPAIR"
+    },
+    {
+      "target": "bare identifier",
+      "candidate": "exclude hyphen from bare identifier and provide explicit escaped/sigil/quoted symbol form if compatibility requires it",
+      "result": "resolves tested subtraction ambiguity but breaks current hyphenated bare-name acceptance",
+      "promotion": "UNRESOLVED_NOT_PROMOTED"
+    }
+  ],
+  "semantic_scope": "Lexer/parser closure and deterministic source-to-canonical-IR precondition. This experiment does not establish application-level semantic equivalence or live FRANK behavior.",
+  "affected_branches": {
+    "claycode": "DIRECT parser/canonicalizer/type-directed identity precondition",
+    "harness": "add parser/roundtrip regression oracle",
+    "frank": "no architecture semantic change; reliable ClayCode parse is prerequisite",
+    "claygraph": "NO_CHANGE beyond stable parsed Ref identity",
+    "unifieddb": "NO_CHANGE beyond stable parsed Ref identity",
+    "gwt": "NO_CHANGE",
+    "hyperposition": "NO_CHANGE",
+    "emergenz": "NO_CHANGE",
+    "clayresearch": "BASE implementation direction reinforced"
+  },
+  "promotion": "NONE"
+}

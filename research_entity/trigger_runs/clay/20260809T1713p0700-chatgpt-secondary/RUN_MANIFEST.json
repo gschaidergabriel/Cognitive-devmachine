@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1713p0700-chatgpt-secondary",
+  "trigger": "clayresearch",
+  "trigger_kind": "integrated_research_foundry",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "started_at": "2026-08-09T17:13:00+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "identity_boundary": "Research Entity temporary worker; not Frank. Frank is separate research/development subject and Andreas operational entity.",
+  "internal_inputs": [
+    "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/global/RESEARCH_ACTOR_REGISTRY.json",
+    "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+    "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+    "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V2.clay",
+    "research_entity/claycode/g9/grammar.ebnf",
+    "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+    "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+    "research_entity/global/CLAY_SAFE_EFFECT_GEOMETRY_RESEARCH_FOUNDATION.md",
+    "research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json"
+  ],
+  "external_evidence_classes": [
+    "PRIMARY_RESEARCH_PAPERS",
+    "OFFICIAL_COMPILER_DOCUMENTATION",
+    "OFFICIAL_RUNTIME_SECURITY_DOCUMENTATION",
+    "OFFICIAL_OPEN_SOURCE_IMPLEMENTATIONS"
+  ],
+  "external_evidence": [
+    {"ref":"arXiv:2604.21215","topic":"recurrent-depth transformer"},
+    {"ref":"arXiv:2604.07822","topic":"recurrent depth, generalization and overthinking"},
+    {"ref":"arXiv:2605.12466","topic":"adaptive recurrent attractor computation"},
+    {"ref":"arXiv:2203.16684","topic":"DBSP incremental view maintenance"},
+    {"ref":"Feldera/feldera","topic":"practical incremental computation engine"},
+    {"ref":"LLVM MLIR Dialect Conversion documentation","topic":"legality-gated progressive lowering"},
+    {"ref":"Wasmtime/WASI official capability documentation and 2026 advisory","topic":"sandbox/capability boundary and implementation failure mode"},
+    {"ref":"arXiv:2605.26269","topic":"agent security benchmark / provenance-capability controls"},
+    {"ref":"arXiv:2603.12277","topic":"prompt injection as role confusion"},
+    {"ref":"egraphs-good/egg and current e-graph research","topic":"bounded equality saturation"},
+    {"ref":"arXiv:2605.03267","topic":"intervention-based synergistic causality decomposition"}
+  ],
+  "empirical_work": [
+    {"id":"EXP-CR-001","class":"STATIC_CONFORMANCE_RESEARCH_EVIDENCE","result":"Admitted G9 V3 spec uses comparison/conditional/coalescing surface forms absent from admitted grammar; full parser execution still required."},
+    {"id":"EXP-CR-002","class":"SIMULATION_ONLY","result":"5000-node random DAG, 100 single-node updates: incremental descendant recompute matched full recompute 100/100; median operation ratio 0.000893, p90 0.01547."},
+    {"id":"EXP-CR-003","class":"SIMULATION_ONLY","result":"100000 randomized capability delegations: intersection attenuation produced 0 authority amplifications; naive union amplified authority in 93580/100000 cases."}
+  ],
+  "durable_work_events": [
+    "research_entity/state/work/events/20260809T1713p0700_chatgpt_secondary_cc_g9_spec_grammar_conformance_WORK_CREATE.json"
+  ],
+  "limitations": [
+    "No verified local Ubuntu checkout/execution surface was available in this hosted worker; parser/compiler execution is queued, not claimed.",
+    "research_entity/rooms/rooms/clay/ROOM_STATE.json was not present at read time, so same-room live-worker reconciliation could not be fully materialized.",
+    "Synthetic proxy experiments do not promote live UnifiedDB, compiler, Harness, security or FRANK claims.",
+    "No canonical revision/state hash is changed by this run."
+  ],
+  "promotion": "NO_CANONICAL_PROMOTION",
+  "status": "RESEARCH_DELTA_WRITTEN"
+}

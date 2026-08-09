@@ -1,0 +1,98 @@
+{
+  "schema": "CLAYCODE_EXECUTABLE_RESEARCH_RECEIPT_LOCAL_V1",
+  "run_id": "claycode_20260809T090220Z_chatgpt_local",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "execution_surface": "local_python_sandbox",
+  "e2b_status": "UNAVAILABLE_IN_CURRENT_TOOL_SURFACE",
+  "candidate": "ClayCode G9 V3 identity/capability subset",
+  "source_hash": "0ff4c789c08538d531db4c57fbdbf3f3f93d5e61ba7e4c58fe856ddc16f86cc3",
+  "semantic_hash": "a0b23d22a2d40a00d399029d9ba4884c73eed1f105ebddad3930d46d878e7939",
+  "contract_hash": "5f9043916f90e81bedc1aeaf4b48f891b8e24231579e319e999c6faad46b83f6",
+  "lowering_target": "generated Python host effect program",
+  "generated_code_hash": "8f527b967110d3e870206c62d7550337d3cbf7a802865df42de6394dde44b450",
+  "tests": {
+    "canonicalization_fuzz_cases": 10000,
+    "semantic_equivalent_hash_stable": 10000,
+    "semantic_scope_changes_detected": 10000,
+    "ordered_changes_detected": 10000,
+    "provenance_contract_changes_detected": 10000,
+    "capability_concrete_cases": [
+      {
+        "name": "valid",
+        "returncode": 0,
+        "observed": {
+          "ok": true,
+          "path": "/mnt/data/claycode_20260809T090220Z_chatgpt_local/sandbox/result.txt",
+          "sha256": "c9f89de4b58c3bad44433e6b9ced9af1434e11f979b28c19799a1bfcedbe4758"
+        },
+        "stderr": "",
+        "pass": true
+      },
+      {
+        "name": "text_name_only",
+        "returncode": 0,
+        "observed": {
+          "ok": false,
+          "reason": "DENY_INVALID_CAPABILITY"
+        },
+        "stderr": "",
+        "pass": true
+      },
+      {
+        "name": "path_escape",
+        "returncode": 0,
+        "observed": {
+          "ok": false,
+          "reason": "DENY_SCOPE_ESCAPE"
+        },
+        "stderr": "",
+        "pass": true
+      },
+      {
+        "name": "budget",
+        "returncode": 0,
+        "observed": {
+          "ok": false,
+          "reason": "DENY_RESOURCE_BUDGET"
+        },
+        "stderr": "",
+        "pass": true
+      }
+    ],
+    "forged_token_fuzz_cases": 10000,
+    "forged_token_accepts": 0,
+    "hash_fuzz_seconds": 1.4380974870000003,
+    "forgery_fuzz_seconds": 0.14844838000000493,
+    "forged_token_target_seconds": 0.04988963399999591,
+    "scope_escape_fuzz_cases": 1000,
+    "scope_escape_accepts": 0,
+    "scope_escape_target_seconds": 0.04973191000000554,
+    "grammar_counterexample": {
+      "current_positive": {
+        "accepted": true
+      },
+      "current_if_counterexample": {
+        "accepted": false,
+        "line": 1,
+        "column": 77,
+        "expected": [
+          "COMMA",
+          "RBRACE"
+        ]
+      },
+      "candidate_if_extension": {
+        "accepted": true
+      }
+    }
+  },
+  "failure_count": 0,
+  "failures": [],
+  "claim_boundary": "Tests only a narrow semantic-hash/capability-gateway subset; not a ClayCode parser/compiler release proof.",
+  "affected_hypotheses": [
+    "H-CC-20260809-01",
+    "H-CC-20260809-05",
+    "H-CC-20260809-09"
+  ]
+}

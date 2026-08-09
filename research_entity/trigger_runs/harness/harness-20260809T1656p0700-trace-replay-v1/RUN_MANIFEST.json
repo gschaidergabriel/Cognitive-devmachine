@@ -1,0 +1,67 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1656p0700-trace-replay-v1",
+  "trigger":"harness",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage":"BASE_CLAYCODE_RELEASE",
+  "work_package":"H-WP-11-TRACE-REPLAY",
+  "work_package_state":"OPEN_FOUNDATION_IMPLEMENTED",
+  "h1_release_gate":"NOT_ADVANCED",
+  "canonical_promotion":"NONE",
+  "frank_live_harness_mutation":"NONE",
+  "artifacts":[
+    "CLAIM.json",
+    "INTERCONNECT_MANIFEST.json",
+    "EXECUTION_RECEIPT.json",
+    "TOOL_EXECUTION_MANIFEST.json",
+    "HYPOTHESES.json",
+    "NEGATIVE_RESULTS.md",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "FINAL_REPORT.md",
+    "RUN_MANIFEST.json",
+    "../../harness/trace_replay_v1.py"
+  ],
+  "implementation_artifact":"research_entity/harness/trace_replay_v1.py",
+  "implementation_commit":"7177a1ef1dd9bed449e0c9b64ae2a5553bbcfd11",
+  "implementation_sha256":"89f37f19eda54358c4fc3e872fb4920f70c46bfe9453fc3d22cffb7efd10116b",
+  "execution_summary":{
+    "self_tests":"13/13 PASS",
+    "targeted_mutation_sweep":"1400/1400 detected",
+    "nested_reentry":"64-level PASS",
+    "cross_implementation_id_normalization":"EQUIVALENT",
+    "py_compile":"PASS",
+    "evidence_class":"LOCAL_SYNTHETIC_EXECUTION"
+  },
+  "research_summary":[
+    "TurnTraceEnvelope v1 models causal evidence over loops/epochs rather than flattening FRANK into a linear pipeline.",
+    "GWT receiver stages remain separately validated and receipted.",
+    "Memory retrieval/admissibility/consequential-use remain separate.",
+    "Four topology identities remain separate.",
+    "Recurrence cannot widen effect capability absent external authorization.",
+    "One immutable status snapshot binds final semantic/graph basis.",
+    "Deterministic replay claims require an environment fingerprint.",
+    "Semantic differential ignores implementation-only ids but localizes first semantic divergence."
+  ],
+  "external_evidence_classes":["PRIMARY_PROJECT_DOCUMENTATION","PRIMARY_PROJECT_ENGINEERING_DOCUMENTATION","PRIMARY_SPECIFICATION"],
+  "external_sources":[
+    "FoundationDB Debugging in FDB",
+    "TigerBeetle Simulation Testing For Liveness",
+    "TigerBeetle A Descent Into the Vortex",
+    "OpenTelemetry Tracing API / Propagators API"
+  ],
+  "branch_feedback_complete":true,
+  "registered_branches_covered":9,
+  "official_repo_local_interconnect_preflight_executed":false,
+  "official_preflight_limit":"Hosted worker had GitHub connector but no checked-out Clay repo execution surface; manual fail-closed manifest was materialized and limitation preserved.",
+  "next_discriminating_tests":[
+    "ClayCode representability/type-effect trace fixture during BASE",
+    "H1 target-host trace adapter after BASE PASS",
+    "Golden replay roundtrip",
+    "counterfactual lesion/re-entry replay",
+    "outside-in compiled/process fault lane",
+    "status atomization regression",
+    "recurrence authority non-expansion under budgets 1/2/4/8"
+  ],
+  "status":"COMPLETED_CURRENT_TRIGGER_RUN_WITH_HWP11_STILL_OPEN"
+}

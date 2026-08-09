@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "event_id":"cross_room_cc_g9_parser_e2b_refinement_20260809T1555p0700",
+  "room_id":"claycode",
+  "event_type":"CROSS_ROOM_DELTA",
+  "origin_worker":"claycode-20260809T1539p0700-chatgpt-parser-compat",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"claycode",
+  "created_at":"2026-08-09T15:55:04+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms":["claycode","harness","frank","clay"],
+  "affects_claims":["H-CC-G9-PARSER-001","H-CC-G9-SURFACE-002","H-CC-G9-AMBIG-003","H-CC-G9-RELATION-007"],
+  "dependencies":["research_entity/runtime/tool_results/cc_g9_parser_e2b_replication_20260809T1539p0700.json"],
+  "artifact_refs":["research_entity/trigger_runs/claycode/claycode-20260809T1539p0700-chatgpt-parser-compat/E2B_REPLICATION_RECEIPT.json","research_entity/trigger_runs/claycode/claycode-20260809T1539p0700-chatgpt-parser-compat/FINAL_REPORT.md"],
+  "ancestry_family":"e2b_independent_parser_replication_20260809",
+  "delivery":"NEXT_CHECKPOINT",
+  "payload":{"delta_type":"replication+counterevidence","summary":"E2B independently replicated the 5/5 baseline grammar defect. It also falsified full adequacy of the first minimal patch: 4/5 repaired, relation-word syntax still fails due identifier/token ambiguity.","recommended_action":"Freeze an explicit/unambiguous relation-predicate declaration/resolution surface before parser release; do not redesign G9 semantics from this result.","promotion":"none"}
+}

@@ -1,6 +1,6 @@
 module rae.stack.latest
 
-epoch 6
+epoch 7
 entity frank-project-global-research-entity
 
 stack CURRENT {
@@ -28,6 +28,8 @@ stack CURRENT {
 
   gwt=@research_entity/global/RAE_GWT_MICROKERNEL.clay
   turn=@research_entity/global/RAE_TURN_KERNEL.clay
+  research_center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
+  room_schema=@research_entity/rooms/ROOM_DB_SCHEMA.json
   chatgpt_endturn=@research_entity/global/RAE_CHATGPT_CLAYCODE_ENDTURN_PROTOCOL.clay
   hive=@research_entity/global/RAE_HIVE_ENTITY_CONTRACT.md
 }
@@ -36,6 +38,8 @@ rule resolve(CURRENT) every substantive_turn
 rule explicit_cognition uses CURRENT.claycode
 rule state_query uses CURRENT.unifieddb
 rule associative_projection uses CURRENT.claygraph
+rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
+rule room_machine_payload uses CURRENT.claycode
 rule component_upgrade -> bump(epoch) + preserve(parent_ref) + emit(migration_ref) + replay_test
 rule stale_component_detected -> refresh_before_cognition
 rule missing_component -> state(DEGRADED_STALE_STACK) + no_false_latest_claim
@@ -52,6 +56,7 @@ rule candidate != promotion
 rule promote requires evidence+counterhypothesis+matched_budget_replay+semantic_preservation+rollback
 
 invariant all_organs_same_moving_stack
+invariant all_research_center_machine_coordination_uses_latest_claycode
 invariant latest_means_admitted_stack_pointer_not_newest_timestamp
 invariant research_candidate_use_preserves_XENO_G8_hard_control_gates
 invariant critical_control_invariants_preserved_across_candidate_language_updates

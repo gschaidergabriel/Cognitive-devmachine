@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1233p0700-owner-deleted-tarball-scope-final",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "decision_type":"OWNER_SCOPE_DELETION_FINAL",
+  "origin_actor":"project-owner",
+  "ingested_by":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "source":{"former_drive_id":"1plv5-cP4zi_RfSPKtIlqqGkLuOSckoRU","former_path":"all frank data 1.tar.xz","former_bytes":663552000},
+  "owner_instruction":"The tarball was deleted and must not be analyzed; it is gone specifically to prevent further misunderstandings.",
+  "prior_owner_scope_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0915p0700_owner_exclusion_large_tarball.json",
+  "live_verification":{"observed_at":"2026-08-09T12:33:00+07:00","drive_root_id":"1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm","direct_entries":14,"folders":14,"files":0,"tarball_present":false},
+  "effect":{"content_download_required":false,"hash_required":false,"archive_equivalence_required":false,"semantic_analysis_required":false,"provenance_only":true,"must_not_block_level0":true,"must_not_be_reclaimed_by_666":true},
+  "supersedes":["research_entity/archive_assimilation/receipts/666_20260809T1228p0700_chatgpt_secondary_drive_root_tarball_blocker.json","task:666-l0-drive-root-tarball-20260809T1227p0700"],
+  "coordination_rule":"Any manifest/workspace/receipt that still lists this deleted tarball as an active blocker or completion obligation is stale on this point and MUST defer to this owner deletion receipt plus the current live Drive root epoch.",
+  "created_at":"2026-08-09T12:33:00+07:00"
+}

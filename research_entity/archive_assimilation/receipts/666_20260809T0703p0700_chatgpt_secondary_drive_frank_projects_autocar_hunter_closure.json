@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0703+0700-chatgpt-secondary-drive-frank-projects-autocar-hunter",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "EXACT_RECURSIVE_11_LEAF_SUBTREE_CLOSED_NEGATIVE_RESULT_VALUE",
+  "source_scope": {
+    "parent": "frank-projects",
+    "parent_id": "1duMSDKAZIX5fJhzXcjUAc-oE-YQylcuw",
+    "subtree": "autocar-hunter",
+    "subtree_id": "1swK6E-e_xiQvolRo2GqzxjTPV0iMPZLp",
+    "root_folders": 2,
+    "root_files": 2,
+    "recursive_leaf_files": 11,
+    "leaves": {
+      "root": ["PROJECT.md", "screenshot.png"],
+      "tasks": [
+        "task_SCAN_WILLHABEN.json",
+        "task_SCAN_AUTOSCOUT.json",
+        "task_SCAN_MOBILE_DE.json",
+        "task_BUILD_DATABASE.json",
+        "task_PREPARE_EMAILS.json",
+        "task_CONTACT_DEALERS.json",
+        "task_COORDINATE_VIEWINGS.json",
+        "task_FINALIZE_PURCHASE.json"
+      ],
+      "browser": ["state.json"]
+    },
+    "browser_state_bytes": 122240
+  },
+  "findings": [
+    {
+      "finding_id": "FRANK-PROJECTS-AUTOHUNTER-001",
+      "epistemic_class": "HISTORICAL_TASK_DAG_MECHANISM",
+      "status": "REUSABLE_WITH_STRONG_LIMITS",
+      "claim": "The project encoded a clear dependency DAG from three marketplace scans to database construction, email preparation, dealer contact, viewing coordination and final purchase. Every inspected task is pending, so this is planning/orchestration structure rather than evidence of completed autonomous car purchasing.",
+      "targets": ["harness", "frank", "claycode"],
+      "current_implication": "Dependency-aware work packages are reusable, but task state must be separated from effect/outcome receipts. A pending or merely scheduled task cannot satisfy a capability or completion predicate."
+    },
+    {
+      "finding_id": "FRANK-PROJECTS-AUTOHUNTER-002",
+      "epistemic_class": "HISTORICAL_BROWSER_EXECUTION_NEGATIVE_RESULT",
+      "status": "NEGATIVE_RESULT",
+      "claim": "The stored browser screenshot shows Willhaben blocked at an open cookie-consent dialog in front of the vehicle search UI, not a completed marketplace scan or result set.",
+      "targets": ["harness", "frank", "claycode"],
+      "current_implication": "Browser execution needs explicit modal/consent detection, observable step postconditions, retries/escalation and success evidence. Navigation-to-page must not be scored as task completion."
+    },
+    {
+      "finding_id": "FRANK-PROJECTS-AUTOHUNTER-003",
+      "epistemic_class": "HISTORICAL_CLAIM_STATE_MISMATCH",
+      "status": "NEGATIVE_RESULT",
+      "claim": "PROJECT.md says the fully autonomous plan and automations were activated, but all executable task-state leaves remain pending and the sole visible browser artifact is at a consent gate. The prose status therefore overstates execution evidence.",
+      "targets": ["harness", "claygraph", "unifieddb", "frank"],
+      "current_implication": "Capability/status claims require evidence-class provenance and outcome receipts; planning prose and configuration state must not promote runtime success."
+    },
+    {
+      "finding_id": "FRANK-PROJECTS-AUTOHUNTER-004",
+      "epistemic_class": "HISTORICAL_SECURITY_SESSION_STATE_WARNING",
+      "status": "CURRENTLY_RELEVANT_SECURITY_CONSTRAINT",
+      "claim": "The subtree includes a 122240-byte browser state artifact. Its session contents are intentionally not reproduced in RAE.",
+      "targets": ["harness", "frank", "unifieddb"],
+      "current_implication": "Browser profiles/session stores require secret and cookie sanitization, capability scoping and expiry handling before archival replay or shared research ingestion."
+    }
+  ],
+  "credit": {
+    "earned_work_hours_added": 0.0,
+    "research_value": "TASK_DAG_PATTERN_PLUS_BROWSER_FAILURE_ORACLE",
+    "reason": "The autonomous purchase capability was not demonstrated. Useful value is the dependency model and concrete consent-gate failure."
+  },
+  "progress_accounting": {
+    "local_subtree_exact": true,
+    "global_level0_percent_awarded": 0.0,
+    "reason": "Local closure does not freeze the combined Level-0 denominator."
+  },
+  "cross_branch_feedback": {
+    "harness": "Add browser-modal/consent handling tests and require postcondition receipts for every action; preserve task DAG separately from outcome state.",
+    "frank": "Use dependency-aware planning but do not infer capability from configured automation or project prose.",
+    "claygraph": "Represent task plan, execution event, observed effect and final outcome as separate provenance-linked nodes/claims.",
+    "unifieddb": "Keep browser session secrets isolated from durable task/evidence records."
+  },
+  "created_at": "2026-08-09T07:03:00+07:00"
+}

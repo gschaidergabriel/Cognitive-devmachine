@@ -1,0 +1,169 @@
+{
+  "ast_schema": "claycode.typed-syntax-ast.v1",
+  "canonicalization": {
+    "format": "UTF-8 JSON",
+    "ignored_layout_terminals": [
+      "NEWLINE"
+    ],
+    "note": "Deterministic ClayCode AST subset; no claim of general RFC 8785 compliance.",
+    "object_keys": "lexicographic",
+    "separators": [
+      ",",
+      ":"
+    ],
+    "source_locations": "excluded"
+  },
+  "claim_boundary": "PASS proves deterministic canonical typed-syntax AST construction, strict JSON roundtrip, and listed syntax-semantic equivalence/discrimination properties. It does not prove name resolution, static value typing, runtime lowering, or Ubuntu target acceptance.",
+  "hash_algorithm": "SHA-256",
+  "parser_contract": {
+    "engine": "lark-lalr-contextual",
+    "keep_all_tokens": true,
+    "maybe_placeholders": false,
+    "strict": true
+  },
+  "pass": true,
+  "schema_version": "1.0",
+  "semantic_discrimination": [
+    {
+      "case": "greater_vs_less",
+      "expected_same": false,
+      "left_hash": "9092f3d3172b88c9c19870ab10bde45c951c87eb5b8d76c9724c132b66787d55",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "b455dd1905a99fd8600b9f3b2e5685d9dd519cca4cb0b8b421553357f97cc7fb"
+    },
+    {
+      "case": "gte_vs_lte",
+      "expected_same": false,
+      "left_hash": "a54800e2994572427650165d9accb767c5b67dd5399bbcbf3cc118d2c69c9c55",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "6fdf2b7496d4e2246df5ad1dcebdd28c2d2bd0166ff206e4d364a3b06aceaf8b"
+    },
+    {
+      "case": "equal_vs_not_equal",
+      "expected_same": false,
+      "left_hash": "e467b208ca80b88bb16f613e9b7cd8aa80254749f8e6c9cdc4aaed9c5f33c40e",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "552c7679993bc9df535a40a0596c1338dfc9dba2cf759dc67be768f95fb143fb"
+    },
+    {
+      "case": "plus_vs_minus",
+      "expected_same": false,
+      "left_hash": "16ad4853ce34a83802678af080ca370307f4c670e8d889235d24a9b4be0f3220",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "0cb514ca3adc650046fc14eb3272cf4ee6f2f202d9c982933e15135a74c87c15"
+    },
+    {
+      "case": "and_vs_or",
+      "expected_same": false,
+      "left_hash": "7bef5a8c39ff47e277c989c40ee4307c6f328ef5828c32a887e418a328fd767b",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "a13c6986f3bae9698bb76abc808633e7a1788914b809710648fa4b68a36de0d4"
+    },
+    {
+      "case": "true_vs_false",
+      "expected_same": false,
+      "left_hash": "ba8015534487aa465f0ccea278d6a82b0e9747319fc4204f680a72c2d28d9f52",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "fa561bc2d5b8bf885d88dc8c6c15c1801d6ed8aa0b965e5b940485405caacf67"
+    },
+    {
+      "case": "ordered_arguments",
+      "expected_same": false,
+      "left_hash": "4058e5b83abc07cb983b9d25d06b3a20f853e1ea45428a5d5b6eb6949da02b3c",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "6eb3eded25bceb79239113f2936ac4d83da199a4b93243edd1c6683757b25811"
+    },
+    {
+      "case": "relation_kind",
+      "expected_same": false,
+      "left_hash": "aea5bc59b2af6f6bf2c09e867d6e1ff2f95466c2f367ca541b1a7ebdb25e32bb",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "0629a5ff7edeb950e956acf3add92db784b8a49c2c2c53a16611c8affebbba78"
+    },
+    {
+      "case": "relation_target",
+      "expected_same": false,
+      "left_hash": "aea5bc59b2af6f6bf2c09e867d6e1ff2f95466c2f367ca541b1a7ebdb25e32bb",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "6f6c7c198bea688523b1a0f4af57c226717ee4231c33ca319ee79d9f6f03e704"
+    },
+    {
+      "case": "list_order",
+      "expected_same": false,
+      "left_hash": "0a51073ada0ae34fa8daf367e82f285eabbdc11df7cc8fba80269a942162777b",
+      "observed_same": false,
+      "pass": true,
+      "right_hash": "ecf30732fd603d2d72ec4b5c7c8116ffe5c13676551c79b65f86cd1e42aebb1c"
+    }
+  ],
+  "semantic_equivalence": [
+    {
+      "case": "space_comment",
+      "expected_same": true,
+      "left_hash": "9092f3d3172b88c9c19870ab10bde45c951c87eb5b8d76c9724c132b66787d55",
+      "observed_same": true,
+      "pass": true,
+      "right_hash": "9092f3d3172b88c9c19870ab10bde45c951c87eb5b8d76c9724c132b66787d55"
+    },
+    {
+      "case": "blank_lines",
+      "expected_same": true,
+      "left_hash": "9092f3d3172b88c9c19870ab10bde45c951c87eb5b8d76c9724c132b66787d55",
+      "observed_same": true,
+      "pass": true,
+      "right_hash": "9092f3d3172b88c9c19870ab10bde45c951c87eb5b8d76c9724c132b66787d55"
+    }
+  ],
+  "sources": [
+    {
+      "deterministic_repeat": true,
+      "repeat_semantic_hash": "b045f20ceff996612ab23edf4c09189aec226bb0bcb1f5dddc4d56e0d03a5ad2",
+      "roundtrip": {
+        "canonical_json_stable": true,
+        "hash_after": "b045f20ceff996612ab23edf4c09189aec226bb0bcb1f5dddc4d56e0d03a5ad2",
+        "hash_before": "b045f20ceff996612ab23edf4c09189aec226bb0bcb1f5dddc4d56e0d03a5ad2",
+        "hash_stable": true,
+        "pass": true,
+        "structurally_equal": true
+      },
+      "semantic_hash": "b045f20ceff996612ab23edf4c09189aec226bb0bcb1f5dddc4d56e0d03a5ad2",
+      "source": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "source_sha256": "ce8eaa0562ea17533ae4fcf4b68f8af8db3b93f0ae78723d105c554f30b573b3"
+    },
+    {
+      "deterministic_repeat": true,
+      "repeat_semantic_hash": "bd4df9d70d2827db0eb255f215fee89221262e25cb9589bbb6ddafa684f4d71a",
+      "roundtrip": {
+        "canonical_json_stable": true,
+        "hash_after": "bd4df9d70d2827db0eb255f215fee89221262e25cb9589bbb6ddafa684f4d71a",
+        "hash_before": "bd4df9d70d2827db0eb255f215fee89221262e25cb9589bbb6ddafa684f4d71a",
+        "hash_stable": true,
+        "pass": true,
+        "structurally_equal": true
+      },
+      "semantic_hash": "bd4df9d70d2827db0eb255f215fee89221262e25cb9589bbb6ddafa684f4d71a",
+      "source": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+      "source_sha256": "480e26dc715ee5ba5a5296293fb8973a99501f17c6dd249bfd3319951d621881"
+    }
+  ],
+  "execution_surface": {
+    "class": "LOCAL_SANDBOX",
+    "python": "3.12",
+    "lark": "1.3.1",
+    "target_host_verified": false
+  },
+  "promotion": {
+    "cc_wp_02_parser_canon": "OPEN_PENDING_TARGET_RECEIPT",
+    "other_work_packages": "UNCHANGED",
+    "general_purpose_gate": "UNCHANGED"
+  }
+}

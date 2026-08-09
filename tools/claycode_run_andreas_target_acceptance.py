@@ -9,7 +9,7 @@ Fail-closed order:
 5. execute the hardened ten-application target suite;
 6. materialize real per-application receipts, including typed-effect/runtime evidence;
 7. assemble the strict Andreas-Ubuntu acceptance receipt;
-8. run the independent strict WP14 auditor;
+8. run the independent strict WP14 auditor including mapped-window desktop evidence;
 9. promote the release workspace to 14/14 PASS only from the passing WP14 manifest.
 
 No hosted/proxy path can self-promote BASE. The desktop proof is deliberately executed
@@ -34,7 +34,7 @@ FULL_FRANK = ROOT / "tools/claycode_full_frank_target_finalizer_runner.py"
 APPS = ROOT / "tools/claycode_base_target_application_suite_v2_runner.py"
 APP_RECEIPTS = ROOT / "tools/claycode_materialize_real_app_receipts.py"
 ASSEMBLER = ROOT / "tools/claycode_andreas_ubuntu_acceptance_assembler_runner.py"
-WP14 = ROOT / "tools/claycode_base_wp14_strict_audit.py"
+WP14 = ROOT / "tools/claycode_base_wp14_strict_audit_v2.py"
 PROMOTER = ROOT / "tools/claycode_promote_release_workspace.py"
 TARGET = "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM"
 DEFAULT_REGISTRATION = Path.home() / ".config/claycode/andreas_target_registration.json"
@@ -58,7 +58,7 @@ def execute(step_id: str, argv: list[str], env: dict[str, str]) -> dict:
 
 def write_run_receipt(steps: list[dict], overall_pass: bool) -> None:
     payload = {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "target_host": TARGET,
         "overall_pass": overall_pass,
         "steps": steps,
@@ -73,7 +73,7 @@ def write_run_receipt(steps: list[dict], overall_pass: bool) -> None:
             "RELEASE_WORKSPACE_PROMOTION",
         ],
         "authority_invariant": "model output != execution authority",
-        "promotion_rule": "workspace promotion occurs only after strict WP14 PASS including the real target desktop proof",
+        "promotion_rule": "workspace promotion occurs only after desktop-aware strict WP14 PASS",
     }
     RUN_RECEIPT.parent.mkdir(parents=True, exist_ok=True)
     RUN_RECEIPT.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -104,9 +104,6 @@ def main() -> int:
         }, ensure_ascii=False, indent=2))
         return 3
 
-    # The legacy V2 collector's local marker is now derived only after the stronger
-    # machine-fingerprint registration has verified this exact host. It lives outside
-    # the repository, so the collector can still prove a clean source checkout.
     TARGET_MARKER.parent.mkdir(parents=True, exist_ok=True)
     TARGET_MARKER.write_text(TARGET + "\n", encoding="utf-8")
 

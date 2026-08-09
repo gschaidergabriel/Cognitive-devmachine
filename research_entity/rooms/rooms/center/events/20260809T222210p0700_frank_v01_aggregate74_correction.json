@@ -1,0 +1,47 @@
+{
+  "schema_version":"1.0",
+  "event_id":"center-frank-v01-aggregate74-correction-20260809T222210p0700",
+  "room_id":"center",
+  "event_type":"COUNTEREVIDENCE_CORRECTION",
+  "origin_worker":"chatgpt-secondary-20260809-frank-v01-integrated-sandbox",
+  "origin_actor":"chatgpt-secondary",
+  "created_at":"2026-08-09T22:22:10+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "supersedes_event":"center-frank-v01-measured-74-fusion-20260809T221830p0700",
+  "counterevidence_commits":[
+    "da74cee97cec6ae9a7436f9c057a6d93af46f252",
+    "e619825d098f5484f1f379f25e9bfdd28fdf1cc1",
+    "75c4ad4000d3de89ea18c75e47a5f61f294896d9",
+    "cf283edeafc0143c056bf9da6e02919a0584b12e"
+  ],
+  "correction":{
+    "invalidated_claim":"40 source-resolved + inferred 34 pseudo-slots = 74/74 conserved slot ledger",
+    "reason":"The historical 74 value is an aggregate measurement, not a source-backed numbered slot ledger. Subtracting 40 from 74 cannot create 34 evidence-bearing module identities or slots.",
+    "measured_historical_aggregate":74,
+    "source_resolved_technical_identities":40,
+    "superseded_reconstruction_aliases":1,
+    "numeric_unresolved_remainder":null,
+    "mapped_primary_slots":0,
+    "whole_frank_gate":"HOLD_SOURCE_BACKED_74_SLOT_MAPPING",
+    "completion_claim_allowed":false,
+    "rule":"No 74/74 per-slot claim until a primary slot/identity ledger with provenance exists; never fabricate UNRESOLVED_LEGACY_SERVICE_### rows by subtraction."
+  },
+  "corrected_integrated_sandbox":{
+    "branch":"research/frank-v01-integrated-sandbox-20260809",
+    "head_commit":"01ac29119b0214c554149251435d0bc49e204f6a",
+    "unit_integration":"89/89 PASS",
+    "functional_organs":"31/31 PASS",
+    "pixel_voice":"PASS",
+    "known_mixed_path_function_objects":"102/102 mapped; not a historical-file count",
+    "collapse_oracle":"34/34 transitional + 30/30 historical organ families PASS",
+    "causal_memory_lesion_rescue":"1.0 -> 0.0 -> 1.0 CANDIDATE_CAUSAL_SUPPORT PROPOSAL_ONLY",
+    "concurrency":"72/72 DONE DB integrity ok",
+    "endurance":"300/300 across 5 restarts DB integrity ok",
+    "historical_74_accounting_receipt":"e42c46ccf33ab7618b51a69b80ab1f98371821e718af4f43414a6aca055997c1",
+    "master_receipt":"0805b45003dc7121372c3d9e3d849352f936471bba5b5cecb55e3c561f278727",
+    "archive_sha256":"3fed16297a6b3be5b9507778f2034a3a1c19aa7eedae136f114df24ee78fd303"
+  },
+  "requested_action":"Workers must ignore the superseded inferred-34-slot claim and consume the corrected source-backed accounting baseline. Continue primary-source discovery for historical identities/slot provenance. Preserve the aggregate 74 measurement, the 40 source-resolved identities, and all existing functional sandbox evidence without converting an arithmetic remainder into evidence.",
+  "affected_rooms":["frank","harness","gwt","emergenz","unifieddb","claygraph","claycode","hyperposition","center"],
+  "authority":{"engineering_evidence":"SANDBOX_CURRENT_PHASE","scientific_promotion":"NONE","execution_authority":"NONE"}
+}

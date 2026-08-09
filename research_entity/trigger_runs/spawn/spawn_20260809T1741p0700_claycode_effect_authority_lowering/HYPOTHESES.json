@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1741p0700_claycode_effect_authority_lowering",
+  "hypotheses": [
+    {
+      "id": "SPAWN-CC-EA-H1",
+      "status": "SUPPORTED_PROXY",
+      "claim": "ClayCode must distinguish serializable capability description/reference from bearer possession; a structurally forgeable CapabilityToken record cannot by itself be the authority root.",
+      "falsifier": "A compiler/runtime design showing record-constructible tokens cannot be used to authorize without any external unforgeable state, with a proof or adversarial execution demonstrating non-forgeability."
+    },
+    {
+      "id": "SPAWN-CC-EA-H2",
+      "status": "SUPPORTED_PROXY",
+      "claim": "Type/effect checking is necessary but insufficient for execution-authority safety; every lowering/FFI/subprocess path must satisfy transitive authority closure against an external capability root.",
+      "falsifier": "A target backend with ambient host authority that still proves every protected effect unreachable under arbitrary generated code, without relying on an external sandbox/capability boundary."
+    },
+    {
+      "id": "SPAWN-CC-EA-H3",
+      "status": "OPEN_REFINED",
+      "claim": "Translation-validation receipts should bind source semantic hash, effect-manifest hash, adapter ABI/set hash, capability-scope hash, target hash and execution-environment identity so authority widening is detectable.",
+      "falsifier": "A smaller receipt set that detects all tested authority-widening mutations with equal or stronger guarantees."
+    },
+    {
+      "id": "SPAWN-CC-EA-H4",
+      "status": "OPEN",
+      "claim": "The best first Ubuntu implementation is a two-plane ABI: EffectIntent carries only descriptive CapabilityRef/requirements; an unforgeable non-serializable host CapabilityHandle is supplied by the effect broker at execution/instantiation, not by model output.",
+      "falsifier": "An alternative design such as signed sealed capabilities matches forge resistance, attenuation, revocation, replay and usability with lower complexity/latency."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "SPAWN-CC-EA-CH1",
+      "status": "REFUTED_PROXY",
+      "claim": "A capability record validated only by its Clay-visible fields is sufficient authority.",
+      "counterexample": "20,000/20,000 forged structural records were accepted by the deliberately structural validator."
+    },
+    {
+      "id": "SPAWN-CC-EA-CH2",
+      "status": "REFUTED_PROXY",
+      "claim": "Effect intent/type declarations alone prevent authority escalation even when lowered code has ambient host access.",
+      "counterexample": "10,000/10,000 unauthorized protected-effect intents bypassed the broker in the deliberately ambient backend model."
+    },
+    {
+      "id": "SPAWN-CC-EA-CH3",
+      "status": "OPEN",
+      "claim": "Cryptographically signed/host-validated serialized capability tokens can replace opaque runtime handles without weakening the required invariants.",
+      "next_test": "Implement signed-token variant with revocation, delegation, replay resistance and disclosure model; compare complexity/latency/forge resistance against opaque handle table."
+    }
+  ],
+  "language_change_decision": "NO_SEMANTIC_CHANGE_YET",
+  "reason": "Current G9 already states textual capability names never confer authority and model intent/authority are separate. The new result turns those rules into an implementation/ABI constraint. Change syntax/types only if actual compiler/runtime realization cannot enforce the split without an explicit new sealed/opaque resource kind."
+}

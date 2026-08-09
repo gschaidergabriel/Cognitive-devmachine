@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "field_id": "EF-20260809-001-PERCEPTUAL-CACHE-COHERENCE",
+  "name": "Perceptual Cache Coherence",
+  "spawn_seed": {
+    "material": "666|2026-08-09T15:19:20+07:00|04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346|first-post-L0",
+    "sha256": "2a200436312481f4312dd663fc07bb1fa0d90ad5e7c9cb747b0c282965e0ec3f",
+    "integer_prefix64": 3035430779646935540
+  },
+  "spawning_run_id": "666-20260809T1519p0700-FIRST-POST-L0",
+  "created_at": "2026-08-09T15:19:40+07:00",
+  "created_by": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage_at_spawn": "BASE_CLAYCODE_RELEASE",
+  "lens_families": [
+    "distributed systems",
+    "cache coherence",
+    "continual visual memory"
+  ],
+  "local_research_lens": "Treat learned visual familiarity as a versioned non-authoritative cache over current Retina sensor evidence. Cache hits require semantic/perceptual version coherence; mismatch, drift, ambiguity or weak evidence invalidates/forces deeper perception.",
+  "shared_program_connection": "FRANK v0.1 adaptive visual learning; ClayCode BASE must express versioned prototype/classifier state, trusted evidence tiers, open-set decisions, promotion/rollback, resource budgets and replay.",
+  "required_source_connections": [
+    "retina",
+    "claycode",
+    "unifieddb",
+    "claygraph",
+    "frank",
+    "harness"
+  ],
+  "hypotheses": [
+    {
+      "id": "PCC-H1",
+      "status": "SUPPORTED_SYNTHETIC_ONLY",
+      "proposition": "Binding visual-memory cache entries to a perceptual/context epoch can sharply reduce stale false-familiarity fast-path errors under appearance drift while preserving most compute savings.",
+      "falsifier": "Matched-budget replay on real FRANK/Retina traces shows no reduction in false-familiarity or causes unacceptable escalation/latency overhead."
+    },
+    {
+      "id": "PCC-H2",
+      "status": "OPEN",
+      "proposition": "UnifiedDB state epochs plus ClayGraph graph epochs can provide enough version identity to invalidate stale visual familiarity without turning graph activation into sensor truth.",
+      "falsifier": "A concrete H1/H2 trace requires visual-version semantics not representable by current state/graph epoch model."
+    },
+    {
+      "id": "PCC-H3",
+      "status": "OPEN",
+      "proposition": "ClayCode can represent cache-line lifecycle states VALID, SUSPECT, INVALID and REVALIDATING using existing typed state/effect semantics without a language redesign.",
+      "falsifier": "Executable ClayCode counterexample shows existing G9 semantics cannot express deterministic version checks, atomic promotion/rollback or replayable invalidation."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "PCC-C1",
+      "status": "OPEN",
+      "proposition": "A calibrated open-set threshold alone may provide equivalent safety; explicit cache coherence/versioning may add complexity without measurable value."
+    },
+    {
+      "id": "PCC-C2",
+      "status": "OPEN",
+      "proposition": "Perceptual epochs may invalidate too broadly, causing excessive deep Retina calls and erasing the intended compute benefit."
+    }
+  ],
+  "experiment": {
+    "id": "PCC-E1-SYNTHETIC-EPOCH-DRIFT",
+    "class": "SYNTHETIC_SIMULATION",
+    "seeds": 30,
+    "steps_per_seed": 12000,
+    "known_probability": 0.8,
+    "drift_fraction_classes": 0.3,
+    "fast_cost_ratio": 0.05,
+    "threshold": 0.7,
+    "result_ref": "research_entity/emergent_fields/fields/EF-20260809-001-PERCEPTUAL-CACHE-COHERENCE/PCC_E1_RESULTS.json",
+    "code_ref": "research_entity/emergent_fields/fields/EF-20260809-001-PERCEPTUAL-CACHE-COHERENCE/pcc_e1_sim.py",
+    "result_summary": {
+      "naive_false_fast_per_fast_mean": 0.030740429602451682,
+      "coherent_false_fast_per_fast_mean": 0.00008715710788167491,
+      "relative_reduction": 0.9971647400830493,
+      "naive_deep_rate_mean": 0.17821944444444446,
+      "coherent_deep_rate_mean": 0.20212500000000003,
+      "naive_compute_saving_mean": 0.7806915277777777,
+      "coherent_compute_saving_mean": 0.75798125
+    },
+    "epistemic_limit": "Synthetic mechanism test only. Does not establish FRANK hardware/data performance."
+  },
+  "external_research": [
+    {
+      "source": "Bhatnagar et al., ICML 2023, Improved Online Conformal Prediction via Strongly Adaptive Online Learning",
+      "evidence_class": "PEER_REVIEWED_PRIMARY",
+      "relevance": "Online uncertainty sets can adapt under distribution shift; supports adaptive revalidation/abstention research, not the cache-coherence analogy itself."
+    },
+    {
+      "source": "Galashov et al., CoLLAs 2023, Continually learning representations at scale",
+      "evidence_class": "PEER_REVIEWED_PRIMARY",
+      "relevance": "Large pretrained frozen representations can remain competitive in continual-learning benchmarks; supports frozen-backbone/lightweight adaptation prior."
+    }
+  ],
+  "cross_branch_implications": {
+    "retina": "Add perceptual/context version identity to familiarity cache entries; fast path must require version coherence in addition to confidence/open-set gates.",
+    "unifieddb": "Persist classifier/prototype version, perceptual epoch/context hash, invalidation reason and last trusted revalidation receipt.",
+    "claygraph": "Graph activation/salience may point to cached familiar entities but must never satisfy version-coherence or sensor-truth checks by itself.",
+    "claycode": "BASE proof corpus should include a versioned cache invalidation/revalidation program with rollback and deterministic replay before language changes are considered.",
+    "harness": "Add PCC-E2 matched-budget replay: static threshold vs epoch-coherent vs epoch+drift detector on false familiarity, escalation rate, latency and recovery.",
+    "frank": "Treat visual memory as a performance cache over perception, not as perceptual authority."
+  },
+  "lifecycle": "INTEGRATED",
+  "negative_results": [
+    "The synthetic result does not justify a global visual epoch; overly broad invalidation remains a live failure mode.",
+    "The result does not establish that cache coherence beats a well-calibrated open-set threshold on real traces."
+  ],
+  "next_test": "PCC-E2 real H1/Retina replay with per-entity/per-context version scopes and threshold-only baseline.",
+  "promotion": "NOT_REQUESTED"
+}

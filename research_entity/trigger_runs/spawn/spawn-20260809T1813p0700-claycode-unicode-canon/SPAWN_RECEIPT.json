@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1813p0700-claycode-unicode-canon",
+  "trigger": "spawn",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "distribution": {
+    "path": "research_entity/global/SPAWN_RESEARCH_WEIGHTS.json",
+    "blob_sha": "f2bdc70efc852e8da7e416cdefc39db8aee7f73b",
+    "weights_percent": {
+      "claycode": 50,
+      "harness": 10,
+      "frank": 10,
+      "gwt": 6,
+      "emergenz": 6,
+      "hyperposition": 5,
+      "claygraph": 5,
+      "unifieddb": 4,
+      "clayresearch": 4
+    }
+  },
+  "branch_draw": {
+    "rng": "OS_CSPRNG via Python secrets.SystemRandom",
+    "range": "0..99 inclusive",
+    "draw_value": 37,
+    "selected_origin_branch": "claycode",
+    "randomness_is_not_evidence_weight": true
+  },
+  "candidate_microdirections_initial": [
+    "TYPE_TAGGED_CANONICAL_IDENTITY",
+    "TYPED_SIGNATURE_EFFECT_SUMMARY_IDENTITY",
+    "UNICODE_CANONICAL_BOUNDARY",
+    "ADAPTIVE_VISUAL_STATE_VERSION_IDENTITY"
+  ],
+  "microdirection_selection_history": [
+    {
+      "selection": "ADAPTIVE_VISUAL_STATE_VERSION_IDENTITY",
+      "decision": "REROLL_DUPLICATE",
+      "duplicate_evidence": "spawn-20260809T1746p0700-claycode-mvc-state already executed 100000 adaptive learner state transitions and mutation guards"
+    },
+    {
+      "selection": "TYPE_TAGGED_CANONICAL_IDENTITY",
+      "decision": "REROLL_DUPLICATE",
+      "duplicate_evidence": "claycode_20260809T1606p0700_chatgpt_semhash_typedcanon already established type-directed canonical semantic identity with Set/Ordered mutation tests"
+    },
+    {
+      "selection": "UNICODE_CANONICAL_BOUNDARY",
+      "decision": "ACCEPT",
+      "novelty_check": "No matching recent unicode canonical spawn/commit found; current grammar exposes ASCII NAME/REF with Unicode-capable strings"
+    }
+  ],
+  "selected_microdirection": {
+    "id": "UNICODE_CANONICAL_BOUNDARY",
+    "question": "Should ClayCode semantic identity preserve exact Unicode scalar sequences by default and make normalization explicit/type-directed, rather than implicitly applying NFC/NFKC inside the canonicalizer?",
+    "falsifiable_prediction": "A global normalization policy will change observable generic-string semantics or erase compatibility/provenance distinctions, while a domain-separated exact-vs-explicit-NFC policy will preserve the tested invariants without requiring a new FRANK-specific primitive."
+  },
+  "selection_status": "COMPLETE"
+}

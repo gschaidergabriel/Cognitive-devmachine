@@ -1,0 +1,100 @@
+name: Complete Harness H-WP-01 Component
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/harness-hwp01-complete.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  adjudicate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify evidence and patch only H-WP-01
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          run_dir=Path('research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze')
+          workspace_path=Path('research_entity/harness/HARNESS_WORKSPACE.json')
+          ws=json.loads(workspace_path.read_text())
+          wp=ws['work_packages']['H-WP-01-FREEZE-COMPILER']
+          sibling=ws['work_packages']['H-WP-02-STATE-LEDGER']
+          sibling_before=json.dumps(sibling,sort_keys=True)
+          assert wp.get('status') in {'OPEN','CLAIMED'}, wp
+          execution=json.loads((run_dir/'EXECUTION_RECEIPT_CI.json').read_text())
+          preflight=json.loads((run_dir/'PREFLIGHT_RECEIPT_CI.json').read_text())
+          validation=json.loads((run_dir/'VALIDATION_REPORT.json').read_text())
+          freeze=json.loads((run_dir/'REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json').read_text())
+          assert execution['checks']['freeze_verify']['ok'] is True
+          assert execution['checks']['source_locked_build']['ok'] is True
+          assert preflight['harness_preflight']=='PASS' and preflight.get('violations')==[]
+          assert validation['component_decision']=='COMPLETE_HWP01'
+          assert freeze['architecture_semantic_hash']=='b92521a77690fcee8e6e247597e091c1478f790d38f780381d899b1200e85a0f'
+          assert freeze['exact_contract_hash']=='73450c51d1ca84f63556ba3d8adad3eb663ec848b02384e744af9ebd28421540'
+          wp.update({
+            'status':'COMPLETE',
+            'completed_by':'chatgpt-secondary',
+            'completed_at':'2026-08-09T17:59:00+07:00',
+            'completion_run':'harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze',
+            'freeze_ref':str(run_dir/'REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json'),
+            'validation_ref':str(run_dir/'VALIDATION_REPORT.json'),
+            'architecture_semantic_hash':freeze['architecture_semantic_hash'],
+            'exact_contract_hash':freeze['exact_contract_hash'],
+            'completion_scope':'REFERENCE_ARCHITECTURE_FREEZE_COMPONENT_ONLY_H1_RELEASE_NOT_PASS'
+          })
+          assert json.dumps(ws['work_packages']['H-WP-02-STATE-LEDGER'],sort_keys=True)==sibling_before
+          receipts=ws.setdefault('completed_receipts',[])
+          rec={
+            'work_package':'H-WP-01-FREEZE-COMPILER',
+            'run_id':'harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze',
+            'result':'COMPLETE_COMPONENT',
+            'freeze_ref':str(run_dir/'REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json'),
+            'validation_ref':str(run_dir/'VALIDATION_REPORT.json'),
+            'h1_release_gate':'NOT_PASS'
+          }
+          if not any(isinstance(x,dict) and x.get('work_package')=='H-WP-01-FREEZE-COMPILER' for x in receipts):
+              receipts.append(rec)
+          workspace_path.write_text(json.dumps(ws,indent=2,ensure_ascii=False)+'\n')
+          rm_path=run_dir/'RUN_MANIFEST.json'
+          rm=json.loads(rm_path.read_text())
+          rm['status']='COMPLETED_COMPONENT'
+          rm['workspace_write']='PASS'
+          rm['workspace_completion_status']='H-WP-01 COMPLETE / H1 NOT_PASS'
+          rm_path.write_text(json.dumps(rm,indent=2,ensure_ascii=False)+'\n')
+          receipt={
+            'schema_version':'1.0',
+            'run_id':'harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze',
+            'execution_class':'GITHUB_ACTIONS_UBUNTU_REPO_CHECKOUT',
+            'source_commit':os.environ.get('GITHUB_SHA'),
+            'workspace_update':'H-WP-01 OPEN -> COMPLETE',
+            'sibling_hwp02_unchanged':True,
+            'h1_release_gate':'NOT_PASS',
+            'base_gate_bypassed':False,
+            'canonical_promotion':'NONE'
+          }
+          (run_dir/'WORKSPACE_COMPLETION_RECEIPT_CI.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+
+      - name: Persist completion atomically
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research_entity/harness/HARNESS_WORKSPACE.json \
+            research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/RUN_MANIFEST.json \
+            research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/WORKSPACE_COMPLETION_RECEIPT_CI.json
+          git commit -m 'harness: complete H-WP-01 source-locked architecture freeze component'
+          git pull --rebase origin main
+          git push origin HEAD:main

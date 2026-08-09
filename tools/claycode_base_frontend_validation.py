@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evidence-oriented frontend validation for the ClayCode BASE D grammar repair.
+"""Evidence-oriented frontend validation for the active ClayCode BASE D grammar repair.
 
 This is intentionally narrower than a canonical typed-AST proof. It establishes:
 1) strict parser construction (including regex collisions when interegular is present),
@@ -23,7 +23,7 @@ from pathlib import Path
 from lark import Lark, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark"
 SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
@@ -112,6 +112,7 @@ def main() -> None:
         "invariant_as_record_field_identifier": "record X { invariant:Int }\n",
         "if_as_parameter_identifier": "needle f(if:Int)->Int\n",
         "invariant_as_parameter_identifier": "needle f(invariant:Int)->Int\n",
+        "implicit_english_noun_phrase": "rule Claude_only consumes latest stack + writes task receipts\n",
     }
     positive_cases = {
         "if_statement": "cycle(input:Ref){\nif input {\ntrue\n}\n}\n",
@@ -119,6 +120,10 @@ def main() -> None:
         "multiple_newlines_record": "record X {\n\n a:Int\n\n b:Int\n\n}\n",
         "multiple_newlines_cycle": "cycle(input:Ref){\n\n input\n\n}\n",
         "keyword_like_non_reserved_identifier": "record X { status:Int; dialect:Int; version:Int; requires:Int }\n",
+        "dotted_relation_lowering": "rule Needle.lowers EffectIntent -> concrete_adapter_plan\n",
+        "dotted_relation_owns": "rule Needle.owns [tool_schema,api_wire]\n",
+        "relation_assignment": "rule external_effect lifecycle=[REQUESTED,AUTHORIZED,DONE]\n",
+        "explicit_relation_chain": "rule Claude_only consumes latest_stack + Claude_only writes task_receipts\n",
     }
 
     neg = []
@@ -141,6 +146,7 @@ def main() -> None:
         "and_vs_or": ("rule x&&true\n", "rule x||true\n"),
         "true_vs_false": ("rule true\n", "rule false\n"),
         "ordered_call_arguments": ("rule f(a,b)\n", "rule f(b,a)\n"),
+        "dotted_relation_kind": ("rule Needle.lowers X\n", "rule Needle.owns X\n"),
     }
     discrimination = [
         {"case": name, **pair_check(parser, left, right, expect_same=False)}
@@ -164,7 +170,7 @@ def main() -> None:
         and all(x["pass"] for x in equivalence)
     )
     out = {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "experiment": "ClayCode BASE D repaired-frontend full-corpus validation",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)),

@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0927p0700-chatgpt-secondary-retina-lineage-reconciliation",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "SHARD_ANALYZED_CROSS_SOURCE_RECONCILED_NO_GLOBAL_COVERAGE_CREDIT",
+  "observed_at": "2026-08-09T09:27:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_scope": {
+    "lane": "historical Retina/adaptive-vision lineage -> FrankEye -> frozen Digital Retina source -> FRANK 0.1 Micro Visual Classifier requirement",
+    "project_frankenstein": {
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "deep_refs": [
+        "commit:0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+        "tools/frank_adaptive_vision.py@parent-of-0fd27f23 (deleted by 0fd27f23; deletion patch verified)",
+        "tools/frank_visual_pipeline.py@parent-of-0fd27f23 (deleted by 0fd27f23; deletion patch verified)",
+        "tools/frank_eye.py@0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb"
+      ]
+    },
+    "drive_digital_retina": {
+      "folder_id": "1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m",
+      "tracked_git_head": "819dcac12253b7de45795239b44482627ade624f",
+      "tracked_leaf_files": 241,
+      "manifest_ref": "research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_TRACKED_SOURCE_SUBMANIFEST.json",
+      "deep_refs": [
+        "gschaidergabriel/digital-retina:README.md@819dcac12253b7de45795239b44482627ade624f",
+        "gschaidergabriel/digital-retina:retina/core.py@819dcac12253b7de45795239b44482627ade624f"
+      ]
+    },
+    "current_requirement_ref": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+  },
+  "crossread": {
+    "peer_receipts": [
+      "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json"
+    ],
+    "dedup_decisions": [
+      "SOMA adaptive-LoRA lifecycle and Project Engine autonomy are already covered by the peer receipt and receive no duplicate credit here.",
+      "This shard is limited to visual perception lineage and the distinction between adaptive routing/inference and user-adaptive visual learning."
+    ]
+  },
+  "epistemic_policy": {
+    "historical_deleted_source_patch": "VERIFIED_REPOSITORY_HISTORY_EVIDENCE",
+    "historical_frankeye_source": "VERIFIED_REPOSITORY_SOURCE_AT_COMMIT",
+    "drive_tracked_source_identity": "VERIFIED_TRACKED_SOURCE_SNAPSHOT",
+    "current_digital_retina_source": "VERIFIED_REPOSITORY_SOURCE_AT_FROZEN_HEAD",
+    "performance_comments": "REPOSITORY_REPORTED_OR_CODE_COMMENT_ONLY_UNLESS_SEPARATELY_REPRODUCED"
+  },
+  "findings": [
+    {
+      "finding_id": "RET-LIN-001",
+      "status": "HISTORICAL_SUPERSEDED_MECHANISM",
+      "claim": "The historical module named frank_adaptive_vision.py was adaptive primarily in compute routing: Stage 1 fast YOLO/OCR/scene analysis always ran, an EscalationEngine decided whether Stage 2 Ollama VLM was needed, and the service combined the two paths. Its verified deletion patch does not establish a persistent user-specific visual learner, prototype memory, trusted-example admission, or cyclic classifier training.",
+      "targets": ["frank", "harness", "claycode", "retina"],
+      "reuse_category": "SUPERSEDED_BUT_INFORMATIVE",
+      "implication": "Do not count the historical 'adaptive vision' name as evidence that the FRANK 0.1 Micro Visual Classifier requirement was already implemented. Reuse the cheap-first/escalate-on-uncertainty control pattern only."
+    },
+    {
+      "finding_id": "RET-LIN-002",
+      "status": "HISTORICAL_SUPERSEDED_IMPLEMENTATION",
+      "claim": "Commit 0fd27f23 replaced frank_adaptive_vision.py and frank_visual_pipeline.py with a 937-line FrankEye module. FrankEye explicitly merged Digital Retina v8 CNN classification, DINOv2 scene analysis, GOLPU features, OCR and face detection into a CPU-only pipeline; the Retina CNN section is explicitly inference-only.",
+      "targets": ["frank", "retina", "harness"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "implication": "The historical consolidation is strong evidence for dissolving perception into one fast pipeline, but not for online personal learning."
+    },
+    {
+      "finding_id": "RET-LIN-003",
+      "status": "CURRENT_AT_FROZEN_DIGITAL_RETINA_HEAD",
+      "claim": "The frozen Digital Retina source describes itself and implements its public API as stateless image analysis. It runs reusable visual models and returns structured concepts/objects/OCR/faces/scene output, but retina/core.py contains no durable per-user classifier state or update contract in the public analyze path.",
+      "targets": ["retina", "frank", "unifieddb", "claygraph", "harness"],
+      "reuse_category": "CURRENT_ARCHITECTURE_CONSTRAINT",
+      "implication": "User-specific familiarity must be represented as an explicit stateful layer/plane integrated with dissolved Retina semantics, rather than silently attributed to the stateless sensor service."
+    },
+    {
+      "finding_id": "RET-LIN-004",
+      "status": "CURRENT_REQUIREMENT_RECONCILIATION",
+      "claim": "The fixed FRANK 0.1 directive correctly fills the historical gap: frozen reusable visual features feed an adaptive Micro Visual Classifier with calibrated known/unknown/conflict routing, trusted GOLD/SILVER admission, bounded cyclic updates, candidate shadow evaluation, rollback and replay. This is additive to the verified stateless Retina lineage and must not conflate familiarity with sensor truth.",
+      "targets": ["frank", "retina", "harness", "claycode", "claygraph", "unifieddb", "clay"],
+      "reuse_category": "CURRENT_ARCHITECTURE_INHERITANCE",
+      "implication": "Preserve the cheap-first historical routing lesson, reuse frozen features already computed by Retina, and keep learned familiarity state versioned/provenanced so H1/H2/H3 can differentially replay it."
+    },
+    {
+      "finding_id": "RET-LIN-005",
+      "status": "OPEN_CROSS_SOURCE_LINEAGE_OBLIGATION",
+      "claim": "The Drive Digital Retina tracked source identity is frozen at 241 tracked leaves, but untracked/generated/model/support material and the separate 64-leaf E2E evidence lineage remain distinct reconciliation obligations. Therefore this shard cannot close the whole Digital Retina Drive subtree or award global exact Level-0 coverage.",
+      "targets": ["retina", "harness", "center"],
+      "reuse_category": "DENOMINATOR_CONSTRAINT"
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "RET-NEG-001",
+      "result": "No verified persistent user-specific visual familiarity learner was found in the inspected historical frank_adaptive_vision -> FrankEye transition or in the frozen Digital Retina public stateless API path.",
+      "meaning": "This is a scope-bounded negative result, not proof that no such mechanism exists anywhere else in the 241 tracked leaves or untracked Drive material.",
+      "next_falsifier": "Find a versioned persistent per-user prototype/readout/training-buffer implementation elsewhere in the frozen Digital Retina or Project-Frankenstein lineage and reconcile it into this receipt."
+    }
+  ],
+  "earned_work_mapping": {
+    "status": "NO_NEW_HOUR_CREDIT_PENDING_GLOBAL_ROW_DEDUP",
+    "reason": "The cheap-first/escalation and frozen-feature mechanisms are historically useful, but existing visual/architecture mappings may overlap. This receipt records mechanism evidence without inflating provisional avoided-hours totals."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "The combined Level-0 denominator is still not frozen; this shard closes a lineage distinction, not the exhaustive source universe.",
+    "global_gate_effect": "NOT_PASS"
+  },
+  "blockers_and_open_obligations": [
+    "Reconcile Digital Retina untracked/generated/model/support material against the 241 tracked-source leaves.",
+    "Keep the separate 64-leaf Digital Retina E2E/evidence lineage distinct and finish its content/hash closure.",
+    "Continue exhaustive Project-Frankenstein history/tree accounting; the campaign records 545 known commit-scope units, and one connector commit-search response is not accepted as an exhaustive denominator proof.",
+    "Continue direct recursive enumeration/reconciliation of still-open Drive subtrees such as aicore under the Drive enumeration method guard."
+  ],
+  "decision_trace": {
+    "evidence_used": [
+      "Project-Frankenstein commit 0fd27f23 deletion/addition patch",
+      "FrankEye source at 0fd27f23",
+      "Digital Retina tracked-source manifest",
+      "Digital Retina README and retina/core.py at frozen head",
+      "FRANK 0.1 Adaptive Visual Learning Directive",
+      "existing LCME/SOMA/autonomy receipt for overlap exclusion"
+    ],
+    "alternatives": [
+      "Treat historical 'adaptive vision' as already satisfying personal adaptive visual learning",
+      "Treat current stateless Digital Retina as the complete adaptive learner",
+      "Separate sensor inference from explicit stateful familiarity learning while integrating their runtime path"
+    ],
+    "selected": "Separate sensor inference from explicit stateful familiarity learning while integrating their runtime path.",
+    "why": "Verified source semantics distinguish adaptive escalation/inference from persistent user-specific learning, and the current fixed directive explicitly requires the missing state/update/provenance contract.",
+    "uncertainty": "Other historical branches may still contain user-specific visual learner experiments not yet reconciled.",
+    "next_falsifier": "Locate and execute/review any such historical learner against the fixed MVC acceptance semantics."
+  }
+}

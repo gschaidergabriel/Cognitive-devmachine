@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC_WP06_SANDBOX_C11_SEMANTIC_HARDENING_20260809T2155p0700",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T21:55:00+07:00",
+  "evidence_class": "EXECUTABLE_SANDBOX_PRODUCTION_COMPILER_COUNTEREXAMPLES_AND_FIXES",
+  "tool": "tools/claycode_base_compiler.py",
+  "starting_blob_sha": "41401c48b36d3ff69cf373175cb2e1715dc1465e",
+  "intermediate_commits": [
+    "311e33c3c9cbf3ab869ebdbbe9d59f9c94d17e4e",
+    "558149d6372419c8d7f9c17656bf610c703f3267"
+  ],
+  "final_commit": "c86763969b157c797eb66a07644f43172676dd6b",
+  "final_blob_sha": "959e6b1832f9e351a29cadbd8e86bb62c18faa15",
+  "grammar_candidate": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V16_GENERIC_DOTTED_LINEAR_LOOKAHEAD.lark",
+  "grammar_sha256": "e577603d83b8e37a06c7ee98e38e66ed994b01545b99da1378e61a23cf9c0b63",
+  "counterexamples": [
+    {
+      "id": "C11-UNUSED-DIV-HELPER",
+      "observed": "The original lowerer emitted cc_int_div for every program; under -Wall -Wextra -Werror, 8/9 representative non-division programs failed as unused-function.",
+      "fix": "Emit checked integer helpers only when reachable emitted code requires them."
+    },
+    {
+      "id": "C11-UNREACHABLE-STATIC-FUNCTION",
+      "observed": "Programs with an entry plus an unrelated sibling function failed -Werror=unused-function; a zero-argument entry also failed on unused argv.",
+      "fix": "Emit only the transitive call closure reachable from entry, preserve all functions in typed IR, and explicitly mark argv/declared parameters as intentionally usable/unusable at the C boundary."
+    },
+    {
+      "id": "INT64-EVALUATOR-NATIVE-DIVERGENCE",
+      "observed": "Python reference evaluation used unbounded integers while C uses int64_t: INT64_MAX+1, INT64_MIN-1 and large multiplication produced different results.",
+      "fix": "Checked Int64 add/sub/mul/div in both evaluator and emitted C with deterministic overflow/error boundaries."
+    },
+    {
+      "id": "RECURSION-EVALUATOR-C11-DIVERGENCE",
+      "observed": "Direct recursion reached the evaluator recursion guard but GCC -Werror rejected infinite recursion; mutual recursion was also not a defined executable pure-slice contract.",
+      "fix": "Reject recursive call cycles in the current pure-function slice with RECURSIVE_CALL_CYCLE before typed IR release."
+    },
+    {
+      "id": "CLI-TYPED-ARGUMENT-COERCION",
+      "observed": "strtoll/strtod/atoi paths silently accepted or clamped invalid typed input: oversized Int, abc, trailing junk, NaN/Inf and arbitrary Bool integers.",
+      "fix": "Fail-closed typed CLI decoders: Int RC70, Real RC71, Bool RC72."
+    },
+    {
+      "id": "NUMERIC-LITERAL-C11-BOUNDARY",
+      "observed": "Out-of-range Int/Real literals entered IR; INT64_MIN textual lowering triggered GCC -Werror and 1e309 lowered to undeclared C token inf.",
+      "fix": "Reject out-of-range/underflow literals and lower exact INT64_MIN using the C macro."
+    },
+    {
+      "id": "STRING-EQUALITY-POINTER-BUG",
+      "observed": "Reference evaluator compares String contents, while C ==/!= compared pointers; two distinct char arrays containing the same bytes yielded evaluator eq=true/ne=false but native eq=false/ne=true.",
+      "fix": "Lower String equality/inequality through strcmp content comparison."
+    },
+    {
+      "id": "REAL-DIVISION-ZERO-DIVERGENCE",
+      "observed": "Python float division by zero raised while native double division did not share the same deterministic error behavior.",
+      "fix": "Use checked real division helper; +/-0 denominator produces REAL_DIVISION_BY_ZERO / native RC73."
+    }
+  ],
+  "validation": {
+    "combined_targeted_semantic_cli_literal_string_recursion_checks": "37/37 PASS",
+    "random_checked_int64_evaluator_cases": "20000/20000 PASS",
+    "native_c_int64_boundary_cases": "180/180 PASS",
+    "c_compiler_flags": "-std=c11 -O2 -Wall -Wextra -Werror",
+    "specific_error_boundaries": {
+      "INT_DIV_ZERO": 65,
+      "INT_DIV_OVERFLOW": 66,
+      "INT_ADD_OVERFLOW": 67,
+      "INT_SUB_OVERFLOW": 68,
+      "INT_MUL_OVERFLOW": 69,
+      "ARG_INT_INVALID": 70,
+      "ARG_REAL_INVALID": 71,
+      "ARG_BOOL_INVALID": 72,
+      "REAL_DIV_ZERO": 73
+    },
+    "string_distinct_storage_content_equality": "PASS",
+    "direct_and_mutual_recursion_rejection": "PASS",
+    "int64_min_literal_werror_build": "PASS",
+    "nonfinite_and_underflow_real_literal_rejection": "PASS"
+  },
+  "epistemic_limits": {
+    "counts_as_wp06_pass": false,
+    "counts_as_wp02_pass": false,
+    "counts_as_target_acceptance": false,
+    "counts_as_ubuntu_receipt": false,
+    "promotion_allowed": false,
+    "reason": "Executed in ChatGPT sandbox against exact/reconstructed current compiler source and V16 research grammar; physical registered Andreas Ubuntu host and full production suite remain mandatory for BASE acceptance."
+  },
+  "next_falsifiers": [
+    "Run current-main compiler regression suite on clean Ubuntu with V16 strict frontend and lark[interegular]==1.3.1.",
+    "Differential evaluator vs native C across composite multi-function programs, strings, Real arithmetic, boolean operators and checked Int64 boundary corpus.",
+    "Run production provenance-bound FRANK frontend/compiler fixture and WP14 target acceptance without weakening gates."
+  ],
+  "authority_invariant": "model output != execution authority"
+}

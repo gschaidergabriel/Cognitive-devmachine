@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1600p0700_chatgpt_secondary_relation_generic",
+  "hypotheses": [
+    {
+      "id": "H-CC-G9-RELATION-GENERIC-008",
+      "status": "OPEN_SUPPORTED_AT_MICRO_ORACLE_SCOPE",
+      "claim": "A strict generic binary form relation(quoted_relation_id,lhs,rhs) plus a typed RelationId resolver removes relation vocabulary from lexer/operator classification while preserving relation identity and operand order.",
+      "support": ["10/10 current sampled relation forms preserved", "20000/20000 generic-surface fuzz parses preserved relation identity", "0/50000 unknown RelationIds admitted by typed resolver", "relation-name mutation and operand swap changed semantic hash in all 20000 tested cases"],
+      "counterhypothesis": "Declared readable infix relation words resolved through the same typed registry are equally deterministic with lower surface/migration cost.",
+      "falsifier": "Real BASE parser full-corpus tests show generic form causes unstable roundtrip, excessive migration/reader cost, or cannot lower all intended binary relations without semantic escape hatches."
+    },
+    {
+      "id": "H-CC-G9-DUAL-SURFACE-009",
+      "status": "OPEN_SYNTHESIS_CANDIDATE",
+      "claim": "ClayCode should evaluate one typed canonical Relation IR with a strict generic quoted-name form for canonical serialization plus optional declared infix/custom reader surfaces that lower to the same IR, rather than choosing lexer keywords or generic calls as mutually exclusive semantic models.",
+      "support": ["concurrent declared-relation resolver: 8/8 known forms, 0/50000 unknown words admitted", "this run generic form: 10/10 known forms, 0/50000 unknown RelationIds admitted", "MLIR independently separates generic operation syntax from registered custom assembly syntax"],
+      "counterhypothesis": "Maintaining two surfaces creates avoidable complexity; one strict generic surface or one declared infix surface is simpler and measurably better.",
+      "falsifier": "Matched full-parser benchmark shows dual-surface roundtrip/diagnostic/migration complexity exceeds benefit or semantic hashes diverge between surfaces."
+    },
+    {
+      "id": "H-CC-G9-RELATION-NARY-010",
+      "status": "OPEN_CONSTRAINED",
+      "claim": "Binary Relation IR must remain distinct from ClayGraph/Hyperposition n-ary/higher-order relation structures; any shared surface sugar must lower to different typed IR classes where arity/roles differ.",
+      "support": ["ClayGraph schema has explicit hyperrelation identity plus role-bearing members", "Hyperposition contract requires n-ary relation identity, role bindings and pairwise-reduction tests"],
+      "counterhypothesis": "All higher-order relations can be losslessly encoded as ordinary binary Relation nodes with auxiliary structure at lower complexity.",
+      "falsifier": "Matched pairwise-vs-n-ary intervention/replay tests show zero semantic, causal, retrieval or cost advantage to preserving explicit higher-order relation identity."
+    }
+  ]
+}

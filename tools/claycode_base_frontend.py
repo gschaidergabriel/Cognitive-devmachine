@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """ClayCode BASE deterministic parser/canonical frontend.
 
-The parser consumes the frozen BASE D grammar candidate. The canonical AST is deliberately
-syntax-faithful and order-preserving. Type-directed collection normalization belongs to the
-typed IR (CC-WP-03), not this surface frontend.
+The parser consumes the active BASE D grammar repair candidate. The canonical AST is
+syntax-faithful and order-preserving. Type-directed collection normalization belongs to
+the typed IR (CC-WP-03), not this surface frontend.
 """
 from __future__ import annotations
 
@@ -70,8 +70,11 @@ def canonical_bytes(ast: Any) -> bytes:
 
 
 def build_parser(grammar_text: str, *, strict: bool = False) -> Lark:
-    # strict=True is used by the separate build-time LALR gate with pinned interegular.
-    return Lark(grammar_text, parser="lalr", strict=strict)
+    # `keep_all_tokens=True` is a semantic requirement. Without it Lark drops literal
+    # alternatives in rules such as operator: ">=" | ">", yielding identical empty
+    # operator subtrees for semantically different programs. Layout NEWLINE tokens are
+    # filtered by canonical_node; ignored spaces/comments never enter the tree.
+    return Lark(grammar_text, parser="lalr", strict=strict, keep_all_tokens=True)
 
 
 def compile_frontend(source: str, grammar_text: str) -> dict[str, Any]:
@@ -89,7 +92,7 @@ def compile_frontend(source: str, grammar_text: str) -> dict[str, Any]:
     }
     contract_hash = _sha256(json.dumps(contract_payload, sort_keys=True, separators=(",", ":")).encode("utf-8"))
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "frontend_schema": "ClayCodeBaseFrontendAST/v1",
         "source_sha256": source_hash,
         "grammar_sha256": grammar_sha,

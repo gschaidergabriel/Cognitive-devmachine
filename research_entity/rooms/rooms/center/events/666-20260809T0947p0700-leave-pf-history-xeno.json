@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "event_id": "666-20260809T0947p0700-leave-pf-history-xeno",
+  "room_id": "center",
+  "event_type": "LEAVE",
+  "origin_worker": "chatgpt-secondary-666-20260809T0929p0700-pf-history",
+  "origin_actor": "chatgpt-secondary",
+  "trigger": "666",
+  "created_at": "2026-08-09T09:47:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "affects_rooms": ["center"],
+  "affects_claims": ["PF_HISTORY_DENOMINATOR", "XENO_EXTRACTED_COPY_RECONCILIATION"],
+  "dependencies": [],
+  "artifact_refs": [
+    "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_DENOMINATOR_EXACT_20260809T0940p0700.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T0946p0700_chatgpt_secondary_xeno_claude_code_hash_closure.json",
+    "research_entity/trigger_runs/666/666-20260809T0929p0700-chatgpt-secondary/RUN_REPORT.md",
+    "research_entity/trigger_runs/666/666-20260809T0929p0700-chatgpt-secondary/XENO_CONTINUATION_ADDENDUM.md"
+  ],
+  "ancestry_family": "666-level0-pf-history-scope-20260809T0929p0700",
+  "delivery": "INDEX_ONLY",
+  "payload": {
+    "reason": "Completed two non-overlapping Level-0 shards, released XENO lease, and returned remaining scopes to the shared swarm.",
+    "pf_history_exact_commits": 545,
+    "xeno_campaign_progress": "64/203",
+    "global_gate": "NOT_PASS"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1508p0700_chatgpt_secondary_pf_vision_lineage_reconciliation",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "started_at": "2026-08-09T15:08:00+07:00",
+  "source_class": "PROJECT_FRANKENSTEIN_HISTORY_AND_CURRENT_RUNTIME_CROSS_SOURCE_RECONCILIATION",
+  "shard": "Project-Frankenstein adaptive vision -> FrankEye lineage reconciled against Drive Digital Retina adaptive-learning lineage",
+  "disposition": "SEMANTICALLY_ANALYZED_HISTORY_SHARD_WITH_CURRENT_CODE_AND_NEGATIVE_RESULT_RECONCILIATION",
+  "exact_coverage_credit": 0.0,
+  "exact_coverage_reason": "Combined Level-0 denominator is still NOT_FROZEN and Project-Frankenstein full tree/history recursive enumeration remains blocked; this query-directed shard cannot manufacture exact coverage credit.",
+  "source_refs": [
+    {"kind":"github_commit","repo":"gschaidergabriel/Project-Frankenstein","sha":"90596662837a75801fd2024069ee9bd547137869","role":"2026-02-25 adaptive visual pipeline introduction: fast YOLO/OCR stage plus conditional local VLM escalation"},
+    {"kind":"github_file_at_commit","repo":"gschaidergabriel/Project-Frankenstein","path":"tools/frank_adaptive_vision.py","ref":"90596662837a75801fd2024069ee9bd547137869","role":"executable escalation heuristics, confidence threshold and optional VLM path"},
+    {"kind":"github_commit","repo":"gschaidergabriel/Project-Frankenstein","sha":"0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb","role":"2026-03-19 unification: old adaptive vision/VLM bridge deleted and replaced by CPU-only FrankEye"},
+    {"kind":"github_commit","repo":"gschaidergabriel/Project-Frankenstein","sha":"279eb175a326cefdb1bbd8281ae1a639ce1e4986","role":"2026-03-24 screenshot-specific FrankEye corrections and removal of useless CIFAR classification on screenshots"},
+    {"kind":"github_file","repo":"gschaidergabriel/Project-Frankenstein","path":"tools/frank_eye.py","role":"current frozen-head FrankEye runtime; Digital Retina v8 CNN is explicitly inference-only"},
+    {"kind":"github_file","repo":"gschaidergabriel/Project-Frankenstein","path":"README.md","role":"current head-level FrankEye architecture summary"},
+    {"kind":"rae_receipt","path":"research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json","role":"Drive-side learned GoL/prototype/dictionary lineage and calibration evidence"}
+  ],
+  "history_findings": [
+    {
+      "id":"PF-VISION-L0-H1",
+      "epistemic_class":"HISTORICAL_RUNTIME_CODE",
+      "finding":"The 2026-02-25 Project-Frankenstein adaptive vision design used an explicit two-stage routing policy: a fast detector/OCR pipeline first, then a local VLM only when heuristic confidence fell below 0.55 or question/scene triggers demanded deeper understanding.",
+      "caveat":"The code comment that roughly 90% of images avoid VLM is a design/runtime claim in source code, not a verified Level-0 benchmark receipt."
+    },
+    {
+      "id":"PF-VISION-L0-H2",
+      "epistemic_class":"HISTORICAL_COMMIT_LINEAGE",
+      "finding":"On 2026-03-19 the architecture deliberately removed tools/frank_visual_pipeline.py, tools/frank_adaptive_vision.py and the prior VCB vision bridge, replacing them with one CPU-only tools/frank_eye.py path. This was a real simplification/supersession, not merely a rename."
+    },
+    {
+      "id":"PF-VISION-L0-H3",
+      "epistemic_class":"HISTORICAL_AND_CURRENT_RUNTIME_CODE",
+      "finding":"Unified FrankEye combined Digital Retina v8 CNN classification, DINOv2 scene features, GOLPU/GoL texture features, Tesseract OCR and OpenCV face analysis into a low-latency CPU pipeline. The current frozen-head file still labels the Retina CNN path 'inference only'."
+    },
+    {
+      "id":"PF-VISION-L0-H4",
+      "epistemic_class":"HISTORICAL_NEGATIVE_RESULT_FIX",
+      "finding":"By 2026-03-24 Project-Frankenstein explicitly removed CIFAR-10 classification from screenshot analysis because it produced useless output; screenshot handling was specialized toward app/browser context and OCR preprocessing. This is a concrete modality-mismatch negative result."
+    }
+  ],
+  "cross_source_reconciliation": [
+    {
+      "id":"PF-DRIVE-VISION-R1",
+      "finding":"The Drive Digital Retina lineage contains learned GoL dictionary/prototype and replay/calibration mechanisms that are richer as adaptive-learning ancestors than the current Project-Frankenstein FrankEye path. Those learning mechanisms did not survive as online/user-specific learning inside current FrankEye; current FrankEye preserves sensor/feature infrastructure but not the historical learned-dictionary behavior as an adaptive authority layer."
+    },
+    {
+      "id":"PF-DRIVE-VISION-R2",
+      "finding":"Project-Frankenstein contributes a separate routing lesson: first-stage cheap evidence plus conditional escalation is historically validated as an architecture pattern, while Drive Retina contributes prototype/dictionary learning and realistic-negative calibration. The current Clay v0.1 target should treat these as complementary ancestors rather than one continuous implementation."
+    }
+  ],
+  "negative_results_and_failure_modes": [
+    "Generic CIFAR-10 screenshot labels were explicitly removed as useless; image modality must influence classifier/readout selection.",
+    "Heuristic escalation confidence in the old adaptive pipeline was hand-coded and question-sensitive; it is not equivalent to calibrated open-set familiarity or semantic correctness.",
+    "Current FrankEye's Digital Retina CNN is inference-only and uses narrow CIFAR classes; it cannot satisfy the current user-specific adaptive Micro Visual Classifier contract by itself.",
+    "Architecture unification can silently discard useful historical learning mechanisms even while retaining the same 'Retina' naming; lineage must be mechanism-based, not name-based."
+  ],
+  "current_architecture_delta": {
+    "reuse": [
+      "Keep FrankEye-like dissolved sensor/feature extraction as a low-latency CPU evidence plane.",
+      "Reuse selective escalation/routing as a policy pattern, but calibrate it against measured cost and uncertainty rather than fixed hand-coded confidence alone.",
+      "Add the adaptive Micro Visual Classifier as a versioned, user-scoped, non-authoritative familiarity/readout layer over frozen reusable features; do not pretend current FrankEye already learns online.",
+      "Preserve modality-specific readout branches so screenshots can bypass or downweight object classifiers proven unhelpful there.",
+      "Differentially test DINO/CLIP-like embeddings versus historical GoL signatures for recurring user-specific classes and realistic OOD negatives."
+    ],
+    "do_not_reuse_as_authority": [
+      "Old 0.55 heuristic escalation threshold as a calibrated open-set gate.",
+      "The source-code '~90% no VLM' comment as measured routing savings.",
+      "CIFAR classification as generic screen understanding.",
+      "Retina/FrankEye naming continuity as evidence that adaptive learning survived the refactor."
+    ],
+    "recommended_discriminating_test":"In H1, replay the same mixed photo/screenshot/user-recurring/OOD corpus through (A) current FrankEye features only, (B) FrankEye+DINO prototype MVC, and (C) historical GoL-signature prototype MVC. Preregister known-class accuracy, open-set AUROC/FPR, screenshot false-positive rate, calibration, per-update CPU/RAM/latency, forgetting and routing savings."
+  },
+  "branch_feedback": {
+    "frank":"DELTA: separate dissolved visual sensing from user-specific familiarity learning; current FrankEye is sensor/readout infrastructure, not proof of online adaptive identity learning.",
+    "harness":"DELTA: add regression for screenshot modality mismatch and differential tests across FrankEye-only, embedding-prototype MVC and GoL-prototype MVC.",
+    "claycode":"DELTA: model sensor evidence, familiarity classifier version, modality route, escalation decision, calibration and rollback as distinct typed state/effects.",
+    "claygraph":"DELTA: preserve lineage edges adaptive-vision -> FrankEye unification and Drive-Retina learned dictionary -> current MVC candidate separately; same naming must not collapse mechanisms.",
+    "unifieddb":"DELTA: persist modality-specific calibration plus classifier/prototype version lineage independently from raw sensor evidence.",
+    "emergenz":"NO_CHANGE: this lineage establishes engineering routing/learning history, not a new causal-emergence result.",
+    "gwt":"DELTA: visual evidence admission/broadcast should preserve uncertainty and modality route; generic classifier output must not become global truth.",
+    "hyperposition":"NO_CHANGE: no new higher-order coupling mechanism beyond selective visual-route alternatives.",
+    "clay":"DELTA: current v0.1 visual architecture should fuse PF's low-cost selective routing with Drive Retina's prototype/replay/calibration ancestry while keeping user learning non-authoritative and reversible.",
+    "q12_index":"DELTA: record vision-lineage supersession as an earned-work/failure-oracle family; no avoided-hours credit assigned until row-level deduplication."
+  },
+  "earned_work_mapping": [
+    {"target":"H1 adaptive visual learner routing","class":"REUSABLE_WITH_ADAPTATION","mechanism":"cheap first-stage evidence plus conditional escalation","hours_credit":null},
+    {"target":"H1/H3 multimodal perception","class":"DIRECTLY_REUSABLE_CONCEPTUALLY","mechanism":"CPU-only unified FrankEye sensor plane","hours_credit":null},
+    {"target":"MVC modality calibration","class":"NEGATIVE_RESULT_VALUE","mechanism":"CIFAR screenshot mismatch and corrective specialization","hours_credit":null}
+  ],
+  "open_obligations": [
+    "Full Project-Frankenstein recursive tree/history denominator remains blocked on the current read surface.",
+    "Locate exact introduction/removal diffs for all native_vision/FrankEye successor files beyond commit-message evidence where the current connector permits targeted fetches.",
+    "Reconcile Project-Frankenstein FrankEye feature code against Drive digital-retina-e2e exact versions/hashes to distinguish copied code from independently evolved descendants.",
+    "Deduplicate earned-work mappings before assigning hours or DOOMSDAY credit."
+  ],
+  "promotion": {"canonical_claim_promotion":false,"reason":"Historical/current lineage was reconciled and branch deltas were produced, but no live H1 implementation or benchmark was executed and Level-0 denominator remains open."},
+  "status":"COMPLETE"
+}

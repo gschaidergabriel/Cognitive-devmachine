@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T06:49:00+07:00",
+  "actor": "chatgpt-secondary",
+  "trigger": "go",
+  "parent_receipt": "research_entity/trigger_runs/go/go-20260810T0645p0700-runner-scope-tomography/OOB_HOSTINGER_RUNNER_SCOPE_TOMOGRAPHY.json",
+  "new_independent_runtime_evidence": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "c043066697f07669aa91ccd46f39ac823c4b01ae",
+    "workflow_run_id": 31342743140,
+    "evidence_class": "REAL_SELF_HOSTED_RUNNER_READ_ONLY_INTROSPECTION",
+    "runner_config_sha256": "56c4ac23ebaff151f4327c330dc0d288d80e9d78674aa5d4bb54a4cef930289e",
+    "safe_fields": {
+      "agentId": 2,
+      "agentName": "clay",
+      "gitHubUrl": "https://github.com/gschaidergabriel/Dr.-Unterweger",
+      "poolId": 1,
+      "poolName": "Default",
+      "useV2Flow": true,
+      "workFolder": "digitaltransformation"
+    }
+  },
+  "adjudication": "CONFIRMED_REPOSITORY_SCOPED_TO_DR_UNTERWEGER_FOR_ACTIVE_HOSTINGER_RUNNER_INSTANCE",
+  "counterhypothesis_status": "REFUTED_FOR_THIS_RUNNER_INSTANCE: its own non-secret .runner gitHubUrl names Dr.-Unterweger. A completely separate Clay runner elsewhere remains a different hypothesis and is not claimed absent.",
+  "causal_implication": "This active runner cannot be assumed eligible for clay-global-research-entity self-hosted jobs. Native Clay Actions requires a Clay-eligible registration/service or a genuinely shared eligible scope. The existing Dr.-Unterweger bridge may still execute hash-bound Clay test payloads without changing that registration fact.",
+  "architecture_delta": "NO_CHANGE",
+  "promotion": "NONE",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+}

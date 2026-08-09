@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809_chatgpt_secondary_surface_canon_wasi03_v1",
+  "trigger": "claycode",
+  "registered_peer_coverage": {
+    "clay": {"covered": true, "inputs": ["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay", "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md"]},
+    "frank": {"covered": true, "inputs": ["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md", "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"], "frank_architecture_claycode_artifact": null, "artifact_search_status": "NOT_LOCATED_AT_EXPECTED_PATH_OR_CONNECTOR_SEARCH"},
+    "harness": {"covered": true, "inputs": ["research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md", "research_entity/rooms/PROGRAM_STATE.json"]},
+    "claygraph": {"covered": true, "deep_input": true, "inputs": ["research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql", "research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"]},
+    "unifieddb": {"covered": true, "deep_input": true, "inputs": ["research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql"]},
+    "gwt": {"covered": true, "inputs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"]},
+    "hyperposition": {"covered": true, "inputs": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"]},
+    "emergenz": {"covered": true, "inputs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md", "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"]},
+    "claycode": {"covered": true, "inputs": ["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "research_entity/claycode/g9/grammar.ebnf", "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay", "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json", "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"]}
+  },
+  "cross_branch_findings": [
+    "ClayGraph hyperrelation members carry explicit roles and optional ordinal; ordered semantics therefore cannot be globally canonicalized as sets.",
+    "UnifiedDB transaction_ops carry op_no and state epochs; transaction ordering/version identity must remain observable in ClayCode lowering and hashes.",
+    "GWT and Hyperposition readouts require typed replay/intervention receipts but do not currently force dedicated surface syntax; library/schema types are the smaller BASE hypothesis.",
+    "FRANK adaptive visual learner state appears representable using ordinary typed records, provenance, versions, transactions and rollback; no dedicated language primitive is justified without an executable counterexample.",
+    "Harness differential parity remains the downstream falsifier: if frozen H1 semantics cannot be represented without opaque escape, BASE must reopen."
+  ],
+  "promotion_strength": "NO_STRONG_PROMOTION",
+  "reason": "Current run produced implementation-level evidence and a negative result but did not execute the complete application proof suite or target FRANK harness."
+}

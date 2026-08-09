@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1317p0700-chatgpt-secondary-pf-visual-perception-lineage",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-09T13:17:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_universe": "gschaidergabriel/Project-Frankenstein",
+  "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "scope": {
+    "lane": "visual_perception_retina_frankeye_native_vision_lineage",
+    "non_overlap_basis": "Current 666 workspace listed no dedicated Project-Frankenstein visual-perception lineage receipt among provisional semantic shards at selection time.",
+    "coverage_class": "QUERY_DIRECTED_HISTORY_SEMANTIC_SHARD",
+    "exact_coverage_credit": 0.0,
+    "reason_no_exact_credit": "Project-Frankenstein complete tree/history denominator remains unfrozen. This receipt is semantic/history evidence and cannot create exact global coverage credit by itself."
+  },
+  "source_refs": [
+    {
+      "kind": "commit",
+      "sha": "4def0bb4f249e25891f8850f52dfbb8a024b61cf",
+      "meaning": "FrankEye WebUI integration and screenshot auto-analysis"
+    },
+    {
+      "kind": "file_at_ref",
+      "ref": "4def0bb4f249e25891f8850f52dfbb8a024b61cf",
+      "path": "tools/frank_eye.py",
+      "meaning": "FrankEye implementation integrating Digital Retina v8 CNN, DINOv2, GOLPU-derived features, OCR and face detection"
+    },
+    {
+      "kind": "file_at_ref",
+      "ref": "9fcf1f1edcb8db9b7d1a70a54b18ee82eb5187f5",
+      "path": "tools/frank_adaptive_vision.py",
+      "meaning": "Earlier adaptive visual routing pipeline: fast detector stage plus confidence-triggered VLM escalation"
+    },
+    {
+      "kind": "commit",
+      "sha": "0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+      "meaning": "Unified FrankEye introduction; deletes frank_adaptive_vision.py and frank_visual_pipeline.py in favor of FrankEye"
+    },
+    {
+      "kind": "commit",
+      "sha": "6158be8ddde637fbf6b78e820239bf4ee8e8b5ee",
+      "meaning": "v7 migration from FrankEye calls to native_vision and Qwen3.5 native multimodal recommendation"
+    },
+    {
+      "kind": "file_at_ref",
+      "ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "path": "tools/native_vision.py",
+      "meaning": "Frozen-head Qwen3.5-4B multimodal bridge replacing FrankEye"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "PF-VIS-001",
+      "epistemic_class": "VERIFIED_CODE_HISTORY",
+      "status": "CURRENT",
+      "statement": "A historical FrankEye implementation explicitly integrated a saved Digital Retina v8 CNN classifier with HOG/color features, DINOv2 scene features, GOLPU-derived visual features, Tesseract OCR and OpenCV face detection into one CPU-oriented perception pipeline."
+    },
+    {
+      "finding_id": "PF-VIS-002",
+      "epistemic_class": "VERIFIED_CODE_HISTORY",
+      "status": "SUPERSEDED",
+      "statement": "The earlier module named frank_adaptive_vision implemented adaptive computation/routing, not online user-specific visual learning: it ran a fast detector pipeline and escalated low-confidence or semantically demanding cases to a local VLM."
+    },
+    {
+      "finding_id": "PF-VIS-003",
+      "epistemic_class": "VERIFIED_CODE_HISTORY",
+      "status": "SUPERSEDED",
+      "statement": "Commit 0fd27f23 removed frank_adaptive_vision.py and frank_visual_pipeline.py while consolidating vision into FrankEye."
+    },
+    {
+      "finding_id": "PF-VIS-004",
+      "epistemic_class": "VERIFIED_CODE_HISTORY",
+      "status": "CURRENT_AT_FROZEN_HEAD",
+      "statement": "The frozen-head tools/native_vision.py replaces FrankEye with a direct Qwen3.5-4B multimodal llama-server bridge and explicitly states that CNN, DINOv2, ONNX and Tesseract are no longer used in that bridge."
+    },
+    {
+      "finding_id": "PF-VIS-005",
+      "epistemic_class": "VERIFIED_CODE_INSPECTION_NEGATIVE_RESULT",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Within the reviewed frozen-head native_vision.py implementation, no persistent user-specific classifier/prototype memory, trusted-example lineage, online familiarity update, open-set calibration, candidate promotion, rollback or cyclic learner state is implemented. Native multimodal inference therefore does not by itself demonstrate the Clay 0.1 adaptive visual-learning contract."
+    }
+  ],
+  "lineage": [
+    "fast_detector_plus_vlm_escalation (frank_adaptive_vision)",
+    "-> unified engineered perception with Digital Retina v8 inheritance (FrankEye)",
+    "-> direct foundation-model multimodal perception bridge (native_vision at frozen head)"
+  ],
+  "architecture_implications": [
+    {
+      "status": "OPEN",
+      "statement": "Clay 0.1 should distinguish perceptual description from learned familiarity. Native multimodal Qwen output may supply semantic observations, but personal known/unknown/familiarity state requires an explicit learner with provenance, confidence/open-set behavior and rollback semantics."
+    },
+    {
+      "status": "OPEN",
+      "statement": "Historical Digital Retina/FrankEye mechanisms are reusable primarily as a measurement/feature/latency foundation. The old CIFAR-oriented classifier is not equivalent to the required user-specific Micro Visual Classifier and should not be promoted as such without a discriminating test."
+    },
+    {
+      "status": "OPEN",
+      "statement": "A low-cost integration hypothesis is to keep native Qwen multimodal perception as semantic perception while attaching a bounded personal micro-classifier/prototype learner to a stable visual feature surface, with explicit version identity, trusted-example tiers, calibration, promotion and rollback. The feature source remains an empirical choice and must be benchmarked rather than assumed."
+    }
+  ],
+  "negative_results_preserved": [
+    "The historical name 'adaptive vision' must not be interpreted as evidence of online user-specific visual learning; the inspected implementation adapts escalation decisions only.",
+    "The frozen-head native vision bridge contains no inspected evidence of the required personal cyclic visual learner state."
+  ],
+  "earned_work_mapping": {
+    "classification_candidates": [
+      "MEASUREMENT_FOUNDATION",
+      "REUSABLE_WITH_ADAPTATION",
+      "SUPERSEDED_BUT_INFORMATIVE"
+    ],
+    "avoided_future_hours_added": 0.0,
+    "reason": "Row-level mechanism overlap with existing Retina/Drive mappings is not yet reconciled; no duplicate historical-work credit is awarded."
+  },
+  "branch_feedback": {
+    "frank": "Preserve native multimodal perception but do not conflate it with personal learned familiarity.",
+    "harness": "H1/H2/H3 tests need separate receipts for sensor observation versus user-specific familiarity/classifier state transitions.",
+    "claycode": "ClayCode must be able to represent classifier/prototype version, trusted training-example provenance, confidence/open-set result, promotion/rollback and replay/budget semantics if the current adaptive visual-learning directive is retained.",
+    "claygraph": "Visual evidence nodes and learned familiarity/prototype nodes should retain provenance and version links rather than collapsing sensor truth into learned identity.",
+    "unifieddb": "Persist feature-backbone compatibility, classifier/prototype version identity, trusted-example lineage, calibration metadata and rollback/rebuild state separately from raw/native vision observations."
+  },
+  "falsifiers_and_next_tests": [
+    "Search additional Project-Frankenstein history and Drive Retina artifacts for a distinct online personal visual learner that predates or survives the reviewed files; if found, PF-VIS-005 must be narrowed or superseded.",
+    "Benchmark candidate stable visual feature surfaces for same-object/user-specific familiarity under lighting/viewpoint/OOD shifts before selecting the Micro Visual Classifier substrate.",
+    "Differentially replay identical image streams through native perception alone versus native perception plus bounded personal learner to quantify added familiarity accuracy, false-known rate, latency, memory cost and rollback fidelity."
+  ],
+  "blockers": [
+    "Complete Project-Frankenstein frozen tree/history denominator is still not closed by this semantic shard; exact Level-0 PASS remains unavailable until exhaustive accounting and cross-source reconciliation are completed."
+  ],
+  "decision_trace": {
+    "evidence_used": [
+      "historical adaptive-vision source",
+      "FrankEye source and integration commit",
+      "native_vision migration commit",
+      "frozen-head native_vision source"
+    ],
+    "alternative_considered": "Treat the frozen-head native multimodal bridge as already satisfying the adaptive visual-learning requirement.",
+    "result": "Rejected for the reviewed evidence surface because no persistent user-specific learner state or transition logic is present in native_vision.py.",
+    "uncertainty": "Repository-wide absence is not claimed; unreviewed history/Drive artifacts may contain additional learner mechanisms.",
+    "next_falsifier": "Locate and inspect any independent personal visual-learning module/state outside the reviewed lineage."
+  }
+}

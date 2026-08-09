@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0929p0700-chatgpt-secondary-pf-history-scope-expansion",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "lane": "PROJECT_FRANKENSTEIN_HISTORY_SCOPE_BOUNDARY",
+  "source_repository": "gschaidergabriel/Project-Frankenstein",
+  "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "parent_manifest": {
+    "path": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+    "blob_sha_before_read": "9cca0a4d03b8425457891c7a43111642bfed43f6"
+  },
+  "observations": [
+    {
+      "kind": "MANIFEST_LOWER_BOUND_INVALIDATED",
+      "prior_oldest_observed_date": "2026-03-14",
+      "new_earliest_verified_observation": {
+        "sha": "3085d354aaf7a523b9389d6e9deaab1ca990758f",
+        "created_at": "2026-02-20T18:43:57Z",
+        "verification": "GitHub commit fetch"
+      },
+      "meaning": "The previous partial manifest cursor was not a valid lower boundary for the Level-0 Project-Frankenstein history scope."
+    },
+    {
+      "kind": "OLDER_HISTORY_CONTINUITY_CONFIRMED",
+      "sha": "94f8051b3dd986853bcdb2e0006e256b6b9eeb8e",
+      "date": "2026-02-21",
+      "verification": "GitHub commit fetch",
+      "lineage_signals": [
+        "Live Wallpaper removal/deprecation cleanup",
+        "wake-word removal and push-to-talk correction",
+        "persistent cross-session memory clarification",
+        "email capability expansion",
+        "personality/self-knowledge prompt and capability updates"
+      ]
+    },
+    {
+      "kind": "HISTORICAL_ARCHITECTURE_SIGNAL",
+      "sha": "3085d354aaf7a523b9389d6e9deaab1ca990758f",
+      "lineage_signals": [
+        "Consciousness Stream documented as multi-thread daemon with GWT/AST/perception/goals/reflections",
+        "deprecated Live Wallpaper and voice directory references removed",
+        "Genesis and safety architecture documentation expanded"
+      ],
+      "epistemic_note": "Historical repository evidence; current architecture status must be resolved through later lineage, not inferred from this commit alone."
+    }
+  ],
+  "enumeration_attempt": {
+    "github_commit_search_descending": "executed with high requested result limit",
+    "github_commit_search_ascending": "executed; exposed older commits including 2026-02-20",
+    "exactness_result": "NOT_PROVEN",
+    "reason": "The connector commit-search surface does not expose a reproducible complete commit-DAG denominator/pagination proof in this execution context, and ascending/descending result shapes cannot be treated as an exact graph traversal.",
+    "local_git_clone_attempt": "FAILED_EXTERNAL_DNS",
+    "local_git_clone_failure": "Could not resolve host github.com",
+    "rule": "Do not convert search retrieval into exact Level-0 history completion."
+  },
+  "disposition": "SUPERSEDED_LINEAGE_ANALYZED",
+  "research_delta": "PROJECT_FRANKENSTEIN_HISTORY_SCOPE_EXPANDED_BEFORE_2026_03_14",
+  "denominator_state": "OPEN",
+  "exact_tree_enumerated": false,
+  "exact_history_enumerated": false,
+  "exact_coverage_credit_percent": 0.0,
+  "pass_impact": "NO_PASS_CREDIT",
+  "negative_result": {
+    "statement": "Current connector search results are insufficient evidence for an exact full-history denominator.",
+    "value": "Prevents a false Level-0 PASS and identifies the required next enumeration surface."
+  },
+  "next_highest_value_obligations": [
+    "Obtain a reproducible exact Project-Frankenstein commit-DAG/root/count traversal for the frozen Level-0 scope.",
+    "Enumerate the exact frozen-head tree denominator, including generated/vendor/binary disposition classes.",
+    "Reconcile deleted/superseded history against Drive rescue branches after the exact history/tree denominator is frozen."
+  ],
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "ingested_by": "chatgpt-secondary",
+    "adjudicated_by": null,
+    "decision_trace": "Chose Project-Frankenstein history scope because AICore had a very recent recursive revalidation and broad PF exact history/tree remained explicitly open. Verified older commits directly, rejected search-as-denominator, and preserved zero exact-credit."
+  },
+  "created_at": "2026-08-09T09:29:00+07:00"
+}

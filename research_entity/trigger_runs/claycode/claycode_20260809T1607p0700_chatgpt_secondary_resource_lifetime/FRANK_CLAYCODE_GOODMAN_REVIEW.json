@@ -1,0 +1,32 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1607p0700_chatgpt_secondary_resource_lifetime",
+  "latest_frank_run":"20260809T0130p0700-chatgpt-secondary-r5",
+  "latest_frank_architecture":"research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json",
+  "items":[
+    {
+      "claim_id":"GOODMAN-CC-RL-001",
+      "frank_statement":"FRANK C9 requires a typed no-ambient-authority tool/FFI boundary with opaque permits, child-effect closure, current revalidation and typed resource handling.",
+      "frank_source_refs":["research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json","research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/CLAYCODE_ARCHITECTURE_MAPPING.md"],
+      "ancestry_families":["FRANK-C9/CC13 shared architecture lineage","current independent resource-lifetime prototype","WebAssembly Component Model resource/handle specification"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Generic ResourceRef values plus adapter-local conventions are adequate; an explicit ownership/borrow lifetime contract is unnecessary.",
+      "falsifier":"A matched generic-ResourceRef implementation provides equivalent safety, replayability, diagnostics and cross-FFI correctness without hidden adapter semantics.",
+      "independent_checks":[
+        "Current-run executable ResourceTable prototype rejected five unsafe lifetime traces while preserving two valid traces.",
+        "WebAssembly Component Model independently defines resources as lifetime-bearing abstract types with unique owned handles and temporary borrowed handles.",
+        "WebAssembly Component Model concurrency design independently enforces borrow/drop conditions dynamically across async tasks."
+      ],
+      "adversarial_checks":[
+        "Naive generic ResourceRef lowering proxy accepted double-drop, drop-while-borrowed, borrow escape, use-after-move and kind confusion.",
+        "The prototype does not prove Ubuntu target behavior, compiler ergonomics, static diagnostic quality or concurrency performance.",
+        "Ownership does not substitute for capability/effect authorization; collapsing them would violate the external-authority boundary."
+      ],
+      "verdict":"REFINED",
+      "reason":"Independent primary specification plus executable counterexamples support explicit resource-lifetime semantics, but the evidence supports a canonical IR/runtime candidate rather than a mandatory new surface syntax or a completed Ubuntu backend.",
+      "claycode_action":"Keep CapabilityToken/EffectIntent authority semantics unchanged; add ResourceHandle lifetime semantics as OPEN candidate for WP-03/WP-04/WP-07/WP-09 and test in a real evaluator/FFI lowering before promotion.",
+      "affected_claycode_artifacts":["RESOURCE_LIFETIME_CANDIDATE.clay","EXECUTABLE_RESEARCH_RECEIPT.json"]
+    }
+  ],
+  "overall":"PASS_ANTI_ECHO_FOR_LOCAL_RESEARCH_DELTA_NO_PROMOTION"
+}

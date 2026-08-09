@@ -1,0 +1,25 @@
+module clay.entity.naming
+version "1.0"
+status PROJECT_OWNER_FIXED_TARGET
+
+entity_id="frank-project-global-research-entity"
+display_name="Clay"
+legacy_names=["RAE","Research Entity","researcher entity"]
+legacy_namespace="rae_* / research_entity/* paths remain compatibility identifiers"
+
+law HUMAN_ENTITY_NAME = Clay
+law PROVIDER_SESSION_NODE != entity_identity
+law INTERNAL_LEGACY_NAMESPACE != human_display_name
+law EXACT_MESSAGE_CLAY = address_or_invoke_entity
+law EXACT_MESSAGE_CLAY != reserved_scientific_trigger
+law INTEGRATED_FOUNDRY_TRIGGER = clayresearch
+law CLAYCODE_TRIGGER = claycode
+
+rule rename_display_only -> preserve(entity_id,causal_history,state_lineage,repo_home)
+rule no_mass_schema_rename_required
+rule future_human_surface uses "Clay" unless discussing legacy names/migrations
+rule status_heading="CLAY STATUS"
+rule short_commands includes clayresearch and excludes clay
+
+invariant naming_change_does_not_fork_entity
+invariant synthetic_clay_concept != Clay_entity_identity unless context explicitly binds them

@@ -1,0 +1,47 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1604p0700_chatgpt_secondary_relation_namespace",
+  "actor":"chatgpt-secondary",
+  "tools":[
+    {
+      "tool":"GitHub connector",
+      "role":"canonical boot, targeted branch reads, concurrent-worker assimilation, durable run writes, reread verification",
+      "status":"VERIFIED_RW",
+      "evidence":"Run artifacts were created on gschaidergabriel/clay-global-research-entity and EXECUTABLE_RESEARCH_RECEIPT.json was reread successfully after commit."
+    },
+    {
+      "tool":"ChatGPT local Python sandbox",
+      "role":"executable parser/lexer discriminator",
+      "status":"EXECUTED",
+      "runtime":"Python 3.13.5 / Lark 1.3.1",
+      "receipt":"EXECUTABLE_RESEARCH_RECEIPT.json"
+    },
+    {
+      "tool":"web.run",
+      "role":"independent primary-source technical triangulation",
+      "status":"EXECUTED",
+      "sources":["WebAssembly/component-model design/mvp/WIT.md","MLIR Language Reference"]
+    },
+    {
+      "tool":"E2B",
+      "role":"preferred isolated execution provider",
+      "status":"NOT_INVOKED_CREDENTIAL_UNAVAILABLE",
+      "registry_ref":"research_entity/global/EXTERNAL_RESEARCH_TOOL_REGISTRY.json",
+      "registry_status":"ADAPTER_READY_CREDENTIAL_UNAVAILABLE",
+      "fallback":"local sandbox as explicitly allowed by registry"
+    },
+    {
+      "tool":"Judge0",
+      "role":"remote execution fallback",
+      "status":"REGISTRY_RUNTIME_VERIFIED_BUT_NOT_NEEDED_FOR_THIS_RUN",
+      "reason":"Local separate-process execution already produced the discriminating evidence after E2B credential unavailability; no stronger claim depends on remote-provider replication."
+    },
+    {
+      "tool":"research_interconnect_preflight.py",
+      "role":"official interconnect gate",
+      "status":"NOT_EXECUTED",
+      "reason":"Current ChatGPT execution surface has GitHub connector access but no repository checkout on which to run the repository script. Current prior ClayCode runs also preserve a clay->clayresearch normalization regression in that preflight. Manual manifest remains fail-closed and cannot substitute for official PASS."
+    }
+  ],
+  "promotion_effect":"No semantic/current-stack/BASE promotion requested."
+}

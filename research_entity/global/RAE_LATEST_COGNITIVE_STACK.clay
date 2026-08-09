@@ -1,6 +1,6 @@
 module clay.stack.latest
 
-epoch 11
+epoch 12
 entity frank-project-global-research-entity
 display_name Clay
 mission_goal "Frank v0.1 voll lauffähig auf Andreas PC"
@@ -15,6 +15,10 @@ stack CURRENT {
   claycode_skill=@research_entity/claycode/g9/CLAUDE_CODE_SKILL.md
   claycode_grammar=@research_entity/claycode/g9/grammar.ebnf
   claycode_migration=@research_entity/claycode/g9/XENO_G8_TO_CLAYCODE_G9_MIGRATION.clay
+  dynamic_binding_lattice=@research_entity/claycode/g9/CLAYCODE_G9_DYNAMIC_BINDING_LATTICE_CANDIDATE.clay
+
+  semantic_coupling_directive=@research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md
+  gwt_emergence_control_directive=@research_entity/global/CLAY_GWT_EMERGENCE_OBSERVABILITY_CONTROL_DIRECTIVE.md
 
   claygraph_base=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
   claygraph_migrations=[@research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql]
@@ -39,6 +43,8 @@ stack CURRENT {
   dynamic_work_queue=UnifiedDB.v_clay_dynamic_work_queue
 
   gwt=@research_entity/global/RAE_GWT_MICROKERNEL.clay
+  gwt_emergence_readout=@research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md
+  hyperposition_emergence_readout=@research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md
   turn=@research_entity/global/RAE_TURN_KERNEL.clay
   research_center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
   room_schema=@research_entity/rooms/ROOM_DB_SCHEMA.json
@@ -58,6 +64,16 @@ rule associative_projection uses CURRENT.claygraph
 rule planning uses CURRENT.work_fabric + CURRENT.system_possibility_table + CURRENT.dynamic_work_queue
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
+rule every_research_branch uses CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive
+rule ClayCode makes semantic_dependencies_machine_extractable
+rule UnifiedDB maintains canonical_semantic_dependency_fabric incrementally
+rule Hyperposition preserves alternatives_and_higher_order_codependencies
+rule ClayGraph exposes_current_derived_coupling_topology_without_truth_promotion
+rule GWT measures_selection_broadcast_receiver_use_outcome_reentry over current ClayGraph+Hyperposition epoch
+rule Emergenz_research uses intervention+lesion+rescue+shuffle+pairwise_or_macro_controls before causal promotion
+rule steering_learning uses bounded_interventions+causal_credit+rollback; never optimize emergence_scalar_as_goal
+rule normal_hot_read avoids total_memory_search + global_graph_rebuild when prepared semantic state exists
+rule semantic_epoch_publication prevents mixed_partial_current_state
 rule Claude_delegation uses CURRENT.chatgpt_delegation
 rule Claude_local_verified_execution_receipt = primary_operational_truth_for_exact_local_effect
 rule Claude_opinion != truth
@@ -80,6 +96,11 @@ invariant stable_entity_id=frank-project-global-research-entity
 invariant persona_energy!=epistemic_authority
 invariant all_organs_same_moving_stack
 invariant all_research_center_machine_coordination_uses_latest_claycode
+invariant autonomous_semantic_preconnection_is_project_architecture_direction
+invariant semantic_dependency_visibility_does_not_require_manual_duplicate_graph_registration
+invariant GWT_is_emergence_observability_and_intervention_plane_not_emergence_truth_or_single_score
+invariant emergence_control_never_mints_truth_or_execution_authority
+invariant semantic_simultaneity_uses_coherent_epochs_not_zero_physical_time_claims
 invariant Frank_and_Clay_are_separate_entities
 invariant Frank_never_mutates_Clay_repo
 invariant ChatGPT_delegation_results_return_to_shared_Clay_state

@@ -1,6 +1,7 @@
-# Executed source preserved by run claycode-20260809T1648p0700-loop-runtime
-# Exact SHA256: 565e184c8fd5884b8dbe823863c0444a9ecd8973c80703feae9bdc0c5c51c610
-# This compact checked-in form records the executed experiment contract; full stdout/result is in EXECUTABLE_RESEARCH_RECEIPT.json.
+# Compact reproduction for run claycode-20260809T1648p0700-loop-runtime.
+# The executed full-driver SHA256 is recorded in EXECUTABLE_RESEARCH_RECEIPT.json as
+# 565e184c8fd5884b8dbe823863c0444a9ecd8973c80703feae9bdc0c5c51c610.
+# This checked-in compact reproduction is NOT hash-identical to that executed full driver.
 import math, itertools, random
 LOOPS=[
  {'id':'perception','timescale':1,'budget':12,'gain':.55,'input_gain':.35,'couplings':{'memory':.12,'workspace':.05}},

@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"PF-DRIVE-GIT-INDEX-SNAPSHOT-20260312",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","drive_git_folder_id":"1swG9kxp53itTXU8FaC5oxQdVnEaNyeKP","drive_index_file_id":"1PFLaWwIKDGac0kxfhIdfTJZKt-m8MN9Q","anchored_commit":"2ee91c4479eec549de3bec357af69799fad583ad","anchor_time_utc":"2026-03-12T17:15:56Z"},
+  "status":"EXACT_HISTORICAL_TRACKED_TREE_SNAPSHOT_FROZEN_HEAD_DELTA_RECONSTRUCTION_OPEN",
+  "index_proof":{"format":"Git DIRC","version":2,"index_bytes":180858,"tracked_entries":1627,"tracked_content_size_bytes":305824346,"internal_sha1":"ccafb6255da24da0e78d8decbe81c76b61807794","internal_checksum_verified":true,"cache_tree_root_sha":"a306e2c94dfd9f85ad2beed2ba1f2331a26a5cdf","cache_tree_root_entry_count":1627,"cache_tree_root_subtree_count":31,"canonical_entry_set_sha256":"ee2f6106cb495ab13ae4d4a246b856b66c39564d37f0af29879d0f470c4f6bf9","canonical_entry_encoding":"one UTF-8 line per index entry: <mode-octal> <blob-sha1> <size> <path>\\n, sorted in native index order"},
+  "anchor_verification":{"index_mtime_utc":"2026-03-12T17:15:56Z","commit_time_utc":"2026-03-12T17:15:56Z","commit_changed_files":["README.md"],"blob_crosschecks":[{"path":"README.md","blob":"251ba9878eba8a22cc750ae3beb7a3b8b470f2f4","match":true},{"path":"services/consciousness_daemon.py","blob":"7a9ea062dfea1b36d4a3fd280dccc42528840dcf","match":true},{"path":"personality/e_pq.py","blob":"0b7d944b9fbeb15108286997c0f659ffce4cbef7","match":true},{"path":"ui/webui/app.py","blob":"eeb03e0c00cb7c419784c26426566e5c6be08019","match":true}],"assessment":"Exact timestamp equality plus independent blob equality across root/runtime/personality/UI paths anchors the Drive Git index to commit 2ee91c with high confidence. The cache-tree root SHA is preserved as an independent whole-tree identity."},
+  "top_level_path_counts":{"ui":703,"services":440,"writer":79,"tools":63,"data":49,"database":46,"tests":42,"assets":31,"skills":28,"ext":21,"personality":14,"scripts":9,"config":8,"papers":8,"updater":8,"agentic":7,"docs":7,"intelligence":7,"gateway":4,"dist":3},
+  "major_extension_counts":{"png":752,"py":559,"db":90,"md":53,"wav":29,"sh":21,"ogg":18,"js":15,"yaml":14,"ttf":13,"json":11,"css":9,"no_extension":6,"mp3":6},
+  "level0_scope_relation":{"scope_base_inclusive":"e1a8812767668091d146ee958bbc2ebb2743031c","scope_head_inclusive":"abba90a5767d85abc8a1ac340bae92842dab35c1","scope_commit_units":545,"snapshot_role":"exact mid-history tree anchor; not the final frozen head","remaining":"reconstruct exact path/blob delta from 2ee91c through frozen head abba90 using bounded Git segments or exact Git objects, then freeze final head tree"},
+  "connector_findings":{"direct_github_tree_read_unavailable":true,"git_clone_network_unavailable_in_execution_sandbox":true,"drive_git_objects_present_as_loose_objects":true,"drive_git_pack_folder_empty":true,"rule":"Do not substitute capped compare/code-search surfaces for whole-tree enumeration."},
+  "earned_work_hours_added":0,
+  "created_at":"2026-08-09T07:26:00+07:00"
+}

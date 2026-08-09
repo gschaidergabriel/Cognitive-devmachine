@@ -1,0 +1,35 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0950p0700-digital-retina-e2e-independent-hash-crossverify",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "status":"INDEPENDENT_CROSS_VERIFICATION_MATCH",
+  "source_root":"Drive:1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja:digital-retina-e2e",
+  "peer_manifest":"research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_E2E_RAW_CONTENT_IDENTITY_20260809T0930p0700.json",
+  "peer_manifest_commit":"ed9cf4d428a50c35c60f87e731f35a551ed4c38a",
+  "verification_method":"This worker independently direct-fetched the frozen 64-leaf tree, downloaded raw bytes for every leaf, computed SHA-256 locally, then re-read the peer manifest after a concurrent commit race and compared path/Drive-id/byte-count/SHA-256 identities.",
+  "independent_result":{
+    "expected_leaves":64,
+    "raw_downloaded_leaves":64,
+    "missing":0,
+    "total_bytes":16200705,
+    "hash_algorithm":"SHA-256",
+    "hash_matches_peer_manifest":64,
+    "hash_mismatches":0,
+    "subtree_counts":{"root":4,"shots":9,"coverage":18,"freshset":32,"__pycache__":1},
+    "aggregate_tree_hash_method":"sha256(sorted(path + NUL + leaf_sha256 + LF))",
+    "independent_aggregate_tree_sha256":"c187c31855c255e60cbd2d7e856c75eb77cdaf55d16a6baf055739633e8c2def"
+  },
+  "adjudication":{
+    "canonical_action":"KEEP_PEER_MANIFEST_AS_PRIMARY; add this receipt only as independent verification",
+    "new_semantic_findings":0,
+    "new_earned_work_hours":0.0,
+    "exact_global_progress_credit":0.0,
+    "reason":"The peer worker completed the same local shard first. Independent agreement raises identity confidence but must not duplicate semantic or progress credit. Global Level-0 denominator remains separately gated."
+  },
+  "observed_at":"2026-08-09T09:50:00+07:00"
+}

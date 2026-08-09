@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1035p0700-retina-scoped-roots-aggregation-floor-9of26",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "purpose":"Aggregate only disjoint committed Digital Retina frontend/node_modules @scope root closures without mutating the concurrently shared coordinator task.",
+  "base":{"commit":"1bda7a87512540a77ea8a1d96b4f4336b71c8dd7","closed_roots":6,"closed_root_names":["@drizzle-team","@next","@alloc","@tybys","@nolyfill","@rtsao"],"folder_nodes":19,"files":126,"units":145},
+  "additional_disjoint_committed_roots":[
+    {"root":"@humanwhocodes","receipt":"research_entity/archive_assimilation/receipts/666_20260809T1026p0700_digital_retina_node_modules_humanwhocodes_exact_recursive.json","folder_nodes":5,"files":19,"units":24},
+    {"root":"@img","receipt":"research_entity/archive_assimilation/receipts/666_20260809T1031p0700_digital_retina_node_modules_img_exact_recursive.json","folder_nodes":13,"files":26,"units":39},
+    {"root":"@stablelib","receipt":"research_entity/archive_assimilation/receipts/666_20260809T1033p0700_digital_retina_node_modules_stablelib_exact_recursive.json","folder_nodes":2,"files":15,"units":17}
+  ],
+  "aggregation":{"verified_root_floor":9,"expected_direct_roots":26,"remaining_at_most":17,"root_coverage_percent_floor":34.6153846,"closed_folder_nodes_floor":39,"closed_files_floor":186,"closed_units_floor":225,"double_credit_check":"PASS_ALL_NINE_ROOT_NAMES_DISTINCT"},
+  "shared_task_mutation":"NOT_PERFORMED_APPEND_ONLY_TO_AVOID_CONCURRENT_CAS_RACE",
+  "disposition":"NODE_MODULES_VENDOR_SUPPORT_ZERO_SEMANTIC_CREDIT_UNLESS_AUTHORED_SOURCE_EXCEPTION",
+  "global_level0":{"gate":"NOT_PASS","exact_global_percent_added":0.0,"denominator_state":"NOT_FROZEN"},
+  "status":"VERIFIED_SCOPED_ROOT_AGGREGATION_FLOOR",
+  "created_at":"2026-08-09T10:35:00+07:00"
+}

@@ -1,0 +1,53 @@
+name: Clay Mistral FREE_ONLY research runner
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/runtime/mistral_requests/*.json'
+      - 'tools/mistral_inference.py'
+      - 'research_entity/private/API_TOKENS.env'
+      - '.github/workflows/mistral-research.yml'
+
+concurrency:
+  group: clay-mistral-free-only-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  execute-mistral-requests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute pending FREE_ONLY Mistral requests
+        shell: bash
+        run: |
+          shopt -s nullglob
+          for req in research_entity/runtime/mistral_requests/*.json; do
+            rid="$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["request_id"])' "$req")"
+            out="research_entity/runtime/tool_results/${rid}.json"
+            if [ -f "$out" ]; then
+              continue
+            fi
+            python tools/mistral_inference.py --request "$req" >/tmp/mistral-last.json
+          done
+      - name: Commit sanitized Mistral results
+        run: |
+          git config user.name 'clay-mistral-runner'
+          git config user.email 'clay-mistral-runner@users.noreply.github.com'
+          git add research_entity/runtime/tool_results/
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record Mistral FREE_ONLY research results'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

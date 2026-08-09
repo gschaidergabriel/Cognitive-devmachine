@@ -1,0 +1,75 @@
+        return value['n']
+    def ui_event_loop(self,events:list[int])->str:
+        total=sum(events)
+        if os.environ.get('DISPLAY'):
+            try:
+                import tkinter as tk
+                root=tk.Tk(); root.withdraw()
+                value=tk.IntVar(value=self.ui_state['count'])
+                label=tk.Label(root,textvariable=value); label.pack()
+                for x in events:
+                    value.set(value.get()+x); root.update_idletasks(); root.update()
+                rendered=f"count={value.get()}"; root.destroy()
+                self.ui_state['count']=total+self.ui_state['count']; self.ui_state['last_render']=rendered
+                self.ui_backend='tk-x11-event-loop'; return rendered
+            except Exception:
+                self.ui_backend='headless-queue-fallback'
+        import queue
+        q=queue.Queue(); [q.put(x) for x in events]
+        while not q.empty(): self.ui_state['count'] += q.get()
+        self.ui_state['last_render']=f"count={self.ui_state['count']}"
+        return self.ui_state['last_render']
+    def numeric_matmul_checksum(self,n:int)->float:
+        import numpy as np
+        a=np.arange(n*n,dtype=np.float64).reshape(n,n); c=a@a.T; return float(c.sum())
+    def system_probe(self)->str:
+        return subprocess.run(['/usr/bin/uname','-s'],capture_output=True,text=True,check=True).stdout.strip()
+    def compiler_eval_expr(self,text:str)->Any:
+        node=pyast.parse(text,mode='eval')
+        allowed=(pyast.Expression,pyast.Constant,pyast.BinOp,pyast.Add,pyast.Sub,pyast.Mult,pyast.Div,pyast.Mod,pyast.Pow,pyast.UnaryOp,pyast.USub)
+        if any(not isinstance(n,allowed) for n in pyast.walk(node)): raise ValueError('unsafe expression')
+        return eval(compile(node,'<safe-expr>','eval'),{'__builtins__':{}},{})
+
+
+def make_runtime(root:Path, resources:set[str]) -> RuntimeABI:
+    sdk=SDK(root)
+    grants=[CapabilityToken(hashlib.sha256(r.encode()).hexdigest()[:16],r,frozenset({'call','read','write','run'})) for r in resources]
+    rt=RuntimeABI(grants)
+    bindings={
+      'host.file.write':(sdk.file_write,'fs','write'),'host.file.read':(sdk.file_read,'fs','read'),
+      'host.process.echo':(sdk.process_echo,'process','run'),'host.http.roundtrip':(sdk.http_roundtrip,'net','call'),
+      'host.db.transaction':(sdk.db_transaction,'db','write'),'host.concurrent.sum':(sdk.concurrent_sum,'concurrency','call'),
+      'host.concurrent.cancel':(sdk.concurrent_cancel,'concurrency','call'),'host.concurrent.atomic_increment':(sdk.atomic_increment,'concurrency','call'),'host.ui.event_loop':(sdk.ui_event_loop,'ui','call'),
+      'host.numeric.matmul_checksum':(sdk.numeric_matmul_checksum,'numeric','call'),'host.system.probe':(sdk.system_probe,'system','run'),
+      'host.compiler.eval_expr':(sdk.compiler_eval_expr,'compiler','call'),
+    }
+    for n,(f,r,v) in bindings.items():rt.register(n,f,r,v)
+    rt.sdk=sdk
+    return rt
+
+# ---------------------------------------------------------------------------
+# Corpus generator
+# ---------------------------------------------------------------------------
+
+def generate_corpus(seed:int=1,count:int=100,heldout_count:int=32)->dict[str,Any]:
+    import random
+    def build(rng,n,prefix):
+        pos=[]; neg=[]; seen=set()
+        while len(pos)<n:
+            a=rng.randint(-10000,10000); b=rng.randint(-10000,10000); op=rng.choice(['+','-','*'])
+            src=f'module {prefix}{len(pos)}\nfn main() -> Int {{ return {a} {op} {b} }}'
+            h=hashlib.sha256(src.encode()).hexdigest()
+            if h in seen: continue
+            seen.add(h); pos.append({'source':src,'source_sha256':h,'expected':eval(f'{a}{op}{b}')})
+            bad=f'module {prefix}n{len(neg)}\nfn main() -> Int {{ let x : String = {a} return x }}'
+            neg.append({'source':bad,'source_sha256':hashlib.sha256(bad.encode()).hexdigest(),'error':'TYPE_LET_OR_RETURN'})
+        return pos,neg
+    train_rng=random.Random(seed); held_rng=random.Random(seed ^ 0x5A17C0DE)
+    positives,negatives=build(train_rng,count,'train')
+    held_pos,held_neg=build(held_rng,heldout_count,'held')
+    train_hashes={x['source_sha256'] for x in positives+negatives}; held_hashes={x['source_sha256'] for x in held_pos+held_neg}
+    overlap=sorted(train_hashes & held_hashes)
+    payload={'train':{'positives':positives,'negatives':negatives},'heldout':{'positives':held_pos,'negatives':held_neg},'overlap':overlap}
+    raw=json.dumps(payload,sort_keys=True,separators=(',',':'))
+    return {'generator':'semantics-derived-v2-disjoint','seed':seed,'count':count,'heldout_count':heldout_count,'sha256':hashlib.sha256(raw.encode()).hexdigest(),**payload}
+

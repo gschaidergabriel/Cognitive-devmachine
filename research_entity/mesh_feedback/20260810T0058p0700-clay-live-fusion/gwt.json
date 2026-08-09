@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "run_id":"clay-live-fusion-20260810T0058p0700",
+  "branch":"gwt",
+  "status":"DELTA",
+  "promotion":"NONE",
+  "evidence":[{"class":"REAL_MODEL_NEGATIVE_PLUS_IMPLEMENTATION_REFINEMENT","sources":["2e8ea2eb4604345f27d7d3036ac9fec888692325","3357fdcb4fd65ac0b745b663eaebfc32a37fc3f7"],"finding":"A real Qwen3-4B trajectory produced a wrong answer with verbalized confidence 100%; subsequent V2 mapping prevents uncalibrated verbalized confidence from receiving low residual uncertainty or minting HALT_CANDIDATE_CONVERGED evidence."}],
+  "counterhypotheses":["A calibrated probability/logit-derived estimator may support useful low uncertainty without excessive routing; current sample size is too small for controller promotion."],
+  "contradictions_preserved":["Stable/confident model behavior is not correctness; recurrence readout remains proposal-only and not effect authority."],
+  "ancestry_rule":"V1 receipt, confidence synthesis and V2 repair descend from one model-execution lineage and are correlated evidence, not independent replication.",
+  "open_blockers":["Remote V2 receipt absent","Calibration corpus/OOD evaluation absent","Andreas-target recurrence/model benchmark absent"]
+}

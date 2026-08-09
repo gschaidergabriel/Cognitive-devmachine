@@ -4,15 +4,18 @@
 Fail-closed order:
 1. verify the owner-registered target fingerprint;
 2. run exactly one clean-checkout target component collector;
-3. prove the full frozen FRANK H1/H2/H3 handoff;
-4. execute the hardened ten-application target suite;
-5. materialize real per-application receipts, including typed-effect/runtime evidence;
-6. assemble the strict Andreas-Ubuntu acceptance receipt;
-7. run the independent strict WP14 auditor;
-8. promote the release workspace to 14/14 PASS only from the passing WP14 manifest.
+3. execute the real Ubuntu desktop window/event-loop/input/render proof;
+4. prove the full frozen FRANK H1/H2/H3 handoff;
+5. execute the hardened ten-application target suite;
+6. materialize real per-application receipts, including typed-effect/runtime evidence;
+7. assemble the strict Andreas-Ubuntu acceptance receipt;
+8. run the independent strict WP14 auditor;
+9. promote the release workspace to 14/14 PASS only from the passing WP14 manifest.
 
-No hosted/proxy path can self-promote BASE. The command creates evidence/workspace files
-locally; persistence to GitHub remains an explicit repository operation.
+No hosted/proxy path can self-promote BASE. The desktop proof is deliberately executed
+*after* the pristine collector so generated evidence cannot poison its clean-checkout
+attestation, but *before* strict application/WP14 adjudication so GUI acceptance cannot
+bypass the real target desktop requirement.
 """
 from __future__ import annotations
 
@@ -26,6 +29,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 IDENTITY = ROOT / "tools/claycode_target_host_identity.py"
 COLLECTOR = ROOT / "tools/claycode_base_andreas_target_runner_v2.py"
+DESKTOP = ROOT / "tools/claycode_ubuntu_desktop_target_validation_runner.py"
 FULL_FRANK = ROOT / "tools/claycode_full_frank_target_finalizer_runner.py"
 APPS = ROOT / "tools/claycode_base_target_application_suite_v2_runner.py"
 APP_RECEIPTS = ROOT / "tools/claycode_materialize_real_app_receipts.py"
@@ -54,12 +58,22 @@ def execute(step_id: str, argv: list[str], env: dict[str, str]) -> dict:
 
 def write_run_receipt(steps: list[dict], overall_pass: bool) -> None:
     payload = {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "target_host": TARGET,
         "overall_pass": overall_pass,
         "steps": steps,
+        "required_step_ids": [
+            "CLEAN_TARGET_COMPONENT_COLLECTOR",
+            "REAL_UBUNTU_DESKTOP_GUI",
+            "FULL_FRANK_H1_H2_H3",
+            "HARDENED_TEN_APPLICATION_SUITE",
+            "REAL_PER_APPLICATION_RECEIPTS",
+            "STRICT_TARGET_ACCEPTANCE_ASSEMBLY",
+            "WP14_STRICT_INDEPENDENT_AUDIT",
+            "RELEASE_WORKSPACE_PROMOTION",
+        ],
         "authority_invariant": "model output != execution authority",
-        "promotion_rule": "workspace promotion occurs only after strict WP14 PASS",
+        "promotion_rule": "workspace promotion occurs only after strict WP14 PASS including the real target desktop proof",
     }
     RUN_RECEIPT.parent.mkdir(parents=True, exist_ok=True)
     RUN_RECEIPT.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -102,6 +116,7 @@ def main() -> int:
 
     sequence = [
         ("CLEAN_TARGET_COMPONENT_COLLECTOR", [sys.executable, str(COLLECTOR), "--marker", str(TARGET_MARKER)]),
+        ("REAL_UBUNTU_DESKTOP_GUI", [sys.executable, str(DESKTOP), "--registration", str(args.registration)]),
         ("FULL_FRANK_H1_H2_H3", [sys.executable, str(FULL_FRANK), "--registration", str(args.registration)]),
         ("HARDENED_TEN_APPLICATION_SUITE", [sys.executable, str(APPS), "--registration", str(args.registration)]),
         ("REAL_PER_APPLICATION_RECEIPTS", [sys.executable, str(APP_RECEIPTS), "--registration", str(args.registration)]),
@@ -123,6 +138,7 @@ def main() -> int:
         "target_host": TARGET,
         "work_packages": "14/14",
         "applications": "10/10",
+        "desktop_gui": "PASS",
         "workspace": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
         "manifest": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
         "strict_target_receipt": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",

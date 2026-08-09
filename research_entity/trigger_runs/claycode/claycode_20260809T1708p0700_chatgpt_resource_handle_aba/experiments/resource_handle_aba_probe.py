@@ -34,9 +34,11 @@ class GenTable:
         return cur[1] if cur and cur[0]==h.gen else None
 
 def one_case(extra_opens=0):
+    # stale handle to A, close it, reuse same slot for B, then stale use.
     nt=NaiveTable(); gt=GenTable()
     nh=nt.open('A'); gh=gt.open('A')
     nt.close(nh); gt.close(gh)
+    # Optional churn to vary allocator state; first reopen necessarily reuses freed slot.
     nb=nt.open('B'); gb=gt.open('B')
     for i in range(extra_opens):
         nt.open(f'X{i}'); gt.open(f'X{i}')
@@ -48,6 +50,7 @@ def one_case(extra_opens=0):
       'old_gen_handle': {'slot':gh.slot,'gen':gh.gen}
     }
 
+# Exhaustive compact event family: resource label B/C x churn count 0..7
 ex=[]
 for b in ['B','C']:
     for churn in range(8):
@@ -62,9 +65,12 @@ for _ in range(N):
     nt=NaiveTable(); gt=GenTable()
     old_label=f'A{rng.randrange(1000)}'; new_label=f'B{rng.randrange(1000)}'
     nh=nt.open(old_label); gh=gt.open(old_label)
+    # random opens then close old; free-list policy guarantees later eventual reuse
     for i in range(rng.randrange(4)): nt.open(f'pre{i}'); gt.open(f'pre{i}')
     nt.close(nh); gt.close(gh)
+    # force one allocation so freed slot may be reused; same allocator policy in both arms
     nt.open(new_label); gt.open(new_label)
+    # random additional churn and stale read
     for i in range(rng.randrange(5)): nt.open(f'post{i}'); gt.open(f'post{i}')
     if nt.use(nh) is not None: naive_unsafe += 1
     if gt.use(gh) is not None: gen_unsafe += 1

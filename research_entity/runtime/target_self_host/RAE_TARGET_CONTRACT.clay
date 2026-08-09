@@ -1,4 +1,4 @@
-clay target RAE_TARGET_0_2 {
+clay target RAE_TARGET_0_2_1 {
   semantic_source = self;
   implementation_projection = python_reference + sqlite_materialization;
   ancestry = frank.unifieddb_v13 + frank.claygraph_v8;
@@ -75,6 +75,7 @@ clay target RAE_TARGET_0_2 {
                  -> local_causal_use
                  -> joint_outcome
                  -> provenance_bound_reentry
+                 -> causal_credit(DIRECT_RECEIPT | PATH_SUPPORTED)
                  -> persistence_transfer;
 
   observability_plane {
@@ -122,7 +123,7 @@ clay target RAE_TARGET_0_2 {
     recurrence_only => OPEN;
     synergy_only => OPEN;
     graph_density_only => OPEN;
-    require(receiver_use, truthful_reentry, lesion, rescue, shuffle_control, ood_transfer, macro_control, cost_shadow);
+    require(receiver_use, truthful_reentry, strong_causal_credit, lesion, rescue, shuffle_control, ood_transfer, macro_control, cost_shadow);
     output = functional_pattern_only;
   }
 
@@ -145,5 +146,6 @@ clay target RAE_TARGET_0_2 {
     Observability = probes_replay_estimators_evidence_ledger_readout_projector;
     Needle = intentional_non_clay_fast_router;
     DigitalRetina = mandatory_visual_perception_boundary;
+    Voice = typed_observation_input_plus_proposal_output_boundary;
   }
 }

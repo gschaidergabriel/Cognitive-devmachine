@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1711p0700-hwp02-ledger-adjudication",
+  "phase":"POST_RUN_LIVE_REREAD",
+  "observed_main_commit":"df0ed7b024c52f0698ed0e319f2b28cc30ca2537",
+  "observed_finding":"Current Harness oracle composition now separates source/contract identity, canonical typed-IR ProgramSemanticId, lowering/artifact identity, runtime state/version/trace identity and conditional live resource lifetime identity.",
+  "compatibility":"ALIGNS_AND_REFINES",
+  "effect_on_this_run":"The H-WP-02 proposed state identity lattice is retained. StateContentHash remains distinct from SemanticHistoryHash/VersionedStateRoot/ExecutionChainHash/TraceRootHash; live resource identity is an additional downstream layer, not folded into state content identity.",
+  "contradiction":false,
+  "promotion":"NONE",
+  "stage_advance":false
+}

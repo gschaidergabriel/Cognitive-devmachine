@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1656p0700-trace-replay-v1",
+  "reread_phase":"POST_INITIAL_RUN_MANIFEST",
+  "status":"INTEGRATED",
+  "late_deltas":[
+    {
+      "source_commit":"b364f67d7833ae272ef21a871b65a94a52be6e42",
+      "source_run":"harness_20260809T1708p0700_chatgpt_source_chain_oracle",
+      "finding":"H2 differential must bind source->parse->typed IR->lowering->execution->replay evidence; final runtime state equality is insufficient.",
+      "decision":"INTEGRATE_AS_SIBLING_ORACLE",
+      "integration":"ORACLE_COMPOSITION_CONTRACT.json now requires SourceChainEvidenceV1 and TurnTraceEnvelopeV1 together."
+    },
+    {
+      "source_commit":"d53580d0ceea91fffb27a5b4334caedeb4dd3da0",
+      "source_run":"harness_20260809T1703p0700_wp02_lineage_adjudication",
+      "finding":"H-WP-02 has two incompatible ledger lineages; semantic content, state version/history, trace execution and baseline transaction identity must not be conflated.",
+      "decision":"INTEGRATE_IDENTITY_STACK",
+      "integration":"ORACLE_COMPOSITION_CONTRACT.json requires baseline_transaction_root_hash, semantic_content_hash, state_version_hash, trace_root_hash and source_chain_evidence_hash as distinct identities."
+    },
+    {
+      "source_commit":"f72be925b86d70e51cc296a3c0aacd3fe5645a8d",
+      "source_run":"claycode_20260809T1709p0700_chatgpt_resource_lifetime_epoch",
+      "finding":"Semantic identity is distinct from current capability/resource instance lifetime; selection/broadcast/reentry cannot validate stale or wrong resource handles.",
+      "decision":"COMPATIBLE_RETAIN",
+      "integration":"TurnTrace effect-capability receipts remain non-authoritative; future resource-handle epoch identity must be added at the effect/resource boundary rather than folded into semantic truth."
+    }
+  ],
+  "contradictions_found":false,
+  "revision_to_initial_conclusion":"The TurnTraceEnvelope remains valid but is insufficient alone for H2 release equivalence. Release evidence must compose runtime-semantic trace equivalence with compiler/source-chain equivalence and the separated ledger identity stack.",
+  "gate_effect":"NONE",
+  "promotion":"NONE"
+}

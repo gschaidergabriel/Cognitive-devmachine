@@ -16,6 +16,7 @@ SERVICE_DIR="${HOME}/.config/systemd/user"
 SERVICE_FILE="${SERVICE_DIR}/claycode-github-runner.service"
 DOWNLOADS_FILE="${STATE_ROOT}/github_runner_downloads.json"
 DESKTOP_PREFLIGHT_FILE="${STATE_ROOT}/desktop_preflight.json"
+RUNNER_LABEL_PATCH_FILE="${STATE_ROOT}/runner_label_patch.json"
 FAILED_DETAIL_WRITTEN=0
 
 mkdir -p "${STATE_ROOT}"
@@ -29,7 +30,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 path=Path(sys.argv[1]); status=sys.argv[2]; detail=sys.argv[3]
 payload={
-  "schema_version":"1.2",
+  "schema_version":"1.3",
   "status":status,
   "detail":detail,
   "host":socket.gethostname(),
@@ -39,6 +40,7 @@ payload={
   "repo":"gschaidergabriel/clay-global-research-entity",
   "authority_invariant":"model output != execution authority",
   "runner_source_policy":"repository-specific GitHub Actions runner downloads API only when fresh registration is required",
+  "runner_label_policy":"exact local runner may receive only missing scoped custom labels through repository runner-label REST API after local identity verification",
   "desktop_policy":"real Tk mapped-window preflight plus runner-service environment verification",
 }
 path.parent.mkdir(parents=True,exist_ok=True)
@@ -91,8 +93,8 @@ cd "${RUNNER_ROOT}"
 
 # A working existing repository runner does not need a new registration token. Requiring
 # repo-admin registration permission on every restart creates an avoidable transport
-# blocker. The stronger online label check below still proves this runner belongs to the
-# intended repository scope before success is reported.
+# blocker. The stronger exact-runner online/label check below still proves repository
+# scope before success is reported.
 if [[ ! -f .runner ]]; then
   # Use GitHub's repository-specific downloads endpoint, rather than assuming the globally
   # newest actions/runner release has already reached this repository's progressive rollout.
@@ -140,6 +142,21 @@ fi
 
 [[ -f .runner ]] || fail "runner_registration_state_missing"
 [[ -x ./runsvc.sh ]] || fail "runner_service_entrypoint_missing"
+
+# Bind subsequent repository runner API operations to the exact locally configured runner.
+# This prevents a similarly named remote runner from satisfying or receiving mutations.
+readarray -t LOCAL_RUNNER_META < <(python3 - "${RUNNER_ROOT}/.runner" <<'PY'
+import json,re,sys
+p=json.load(open(sys.argv[1],encoding='utf-8'))
+rid=p.get('agentId'); name=str(p.get('agentName') or '')
+assert isinstance(rid,int) and rid > 0, p
+assert re.fullmatch(r'andreas-claycode-[A-Za-z0-9._-]+',name), name
+print(rid); print(name)
+PY
+) || fail "local_runner_metadata_invalid"
+[[ "${#LOCAL_RUNNER_META[@]}" -eq 2 ]] || fail "local_runner_metadata_invalid"
+RUNNER_ID="${LOCAL_RUNNER_META[0]}"
+RUNNER_NAME="${LOCAL_RUNNER_META[1]}"
 
 # APP-05 is a *real desktop* gate. Import the active graphical-session variables into the
 # user systemd manager before launching/restarting the listener. If the shell lacks them,
@@ -237,20 +254,56 @@ assert env.get('DISPLAY') or env.get('WAYLAND_DISPLAY'), {
 print('RUNNER_LISTENER_DESKTOP_ENV=PASS')
 PY
 
+# Existing local runner state may predate the scoped workflow labels. GitHub's supported
+# repair path for an already configured self-hosted runner is its runner-label REST API,
+# not re-running config.sh. Only missing project custom labels may be added here; default
+# or unknown missing labels fail closed instead of being mutated.
 ONLINE_JSON="$(gh api "repos/${REPO}/actions/runners" 2>/dev/null)" || fail "cannot_list_repository_runners"
-python3 - "${ONLINE_JSON}" <<'PY' || fail "no_online_matching_runner"
+MISSING_LABELS="$(python3 - "${ONLINE_JSON}" "${RUNNER_ID}" "${RUNNER_NAME}" <<'PY'
 import json,sys
-payload=json.loads(sys.argv[1]); rows=payload.get('runners') or []; matched=[]
+payload=json.loads(sys.argv[1]); rid=int(sys.argv[2]); expected_name=sys.argv[3]
+rows=payload.get('runners') or []
+matched=[r for r in rows if r.get('id')==rid and str(r.get('name') or '')==expected_name]
+assert len(matched)==1, {'error':'exact_local_runner_not_found','id':rid,'name':expected_name,'runners':rows}
+r=matched[0]
+assert r.get('status')=='online', {'error':'exact_local_runner_not_online','runner':r}
+labels={str(x.get('name') or '').lower() for x in r.get('labels') or []}
+required={'self-hosted','linux','x64','andreas','claycode','target'}
+print(','.join(sorted(required-labels)))
+PY
+)" || fail "exact_local_runner_not_online"
+
+if [[ -n "${MISSING_LABELS}" ]]; then
+  python3 - "${MISSING_LABELS}" <<'PY' > "${RUNNER_LABEL_PATCH_FILE}" || fail "runner_label_patch_payload_invalid"
+import json,sys
+allowed={'andreas','claycode','target'}
+missing={x for x in sys.argv[1].split(',') if x}
+assert missing <= allowed, {'refusing_to_mutate_default_or_unknown_labels':sorted(missing)}
+print(json.dumps({'labels':sorted(missing)}))
+PY
+  gh api --method POST \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    "repos/${REPO}/actions/runners/${RUNNER_ID}/labels" \
+    --input "${RUNNER_LABEL_PATCH_FILE}" >/dev/null \
+    || fail "cannot_add_required_runner_labels"
+fi
+
+ONLINE_JSON="$(gh api "repos/${REPO}/actions/runners" 2>/dev/null)" || fail "cannot_list_repository_runners_after_label_repair"
+python3 - "${ONLINE_JSON}" "${RUNNER_ID}" "${RUNNER_NAME}" <<'PY' || fail "no_online_matching_runner"
+import json,sys
+payload=json.loads(sys.argv[1]); rid=int(sys.argv[2]); expected_name=sys.argv[3]
+rows=payload.get('runners') or []
+matched=[]
 for row in rows:
-    name=str(row.get('name') or '')
     labels={str(x.get('name') or '').lower() for x in row.get('labels') or []}
-    if name.startswith('andreas-claycode-') and row.get('status')=='online' and {'self-hosted','linux','x64','andreas','claycode','target'}.issubset(labels):
-        matched.append({'id':row.get('id'),'name':name,'status':row.get('status'),'busy':row.get('busy'),'version':row.get('version'),'labels':sorted(labels)})
-assert matched, {'error':'no_online_matching_runner','runners':rows}
+    if row.get('id')==rid and str(row.get('name') or '')==expected_name and row.get('status')=='online' and {'self-hosted','linux','x64','andreas','claycode','target'}.issubset(labels):
+        matched.append({'id':row.get('id'),'name':row.get('name'),'status':row.get('status'),'busy':row.get('busy'),'version':row.get('version'),'labels':sorted(labels)})
+assert len(matched)==1, {'error':'no_exact_online_matching_runner','id':rid,'name':expected_name,'runners':rows}
 print(json.dumps({'online_matching_runners':matched},sort_keys=True))
 PY
 
-emit_state "PASS" "runner_online_with_real_desktop_preflight_and_service_environment_verified"
+emit_state "PASS" "runner_online_with_scoped_labels_real_desktop_preflight_and_service_environment_verified"
 trap - EXIT
 
 echo "CLAYCODE_RUNNER_BOOTSTRAP_PASS"

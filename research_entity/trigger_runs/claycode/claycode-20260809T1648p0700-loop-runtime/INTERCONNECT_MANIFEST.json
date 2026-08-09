@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1648p0700-loop-runtime",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "preflight": {
+    "required_tool": "tools/research_interconnect_preflight.py --trigger claycode --run-id claycode-20260809T1648p0700-loop-runtime",
+    "status": "BLOCKED_LOCAL_REPO_UNAVAILABLE",
+    "attempted": true,
+    "blocker": "Local execution sandbox could not resolve github.com, so the repository could not be cloned. This manifest is connector-assembled and must not be treated as a successful tool-produced preflight."
+  },
+  "branches": ["frank","clayresearch","harness","claygraph","unifieddb","gwt","hyperposition","emergenz","claycode"],
+  "deep_inputs": {
+    "frank": [
+      "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FINAL_REPORT.md",
+      "research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md",
+      "research_entity/notes/FRANK_LOOP_OF_LOOPS_RECURRENT_REASONING_TRANSFER_20260809.md"
+    ],
+    "claygraph": [
+      "research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql",
+      "research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"
+    ],
+    "unifieddb": ["research_entity/runtime/RAE_UNIFIEDDB_V7_COGNITIVE_PROCESSOR.sql"],
+    "claycode": [
+      "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+    ],
+    "gwt": ["research_entity/global/RAE_GWT_MICROKERNEL.clay"],
+    "cross_branch_current": ["research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md"]
+  },
+  "coverage_note": "All registered scientific branches were included semantically through the current cross-branch loop-of-loops directive and BASE program state. Because the repository filesystem was unavailable to the execution sandbox, this run does not claim packet-budget equivalence with the authoritative preflight tool."
+}

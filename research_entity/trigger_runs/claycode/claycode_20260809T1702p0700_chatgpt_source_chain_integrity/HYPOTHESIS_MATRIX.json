@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1702p0700_chatgpt_source_chain_integrity",
+  "hypotheses": [
+    {
+      "id": "H-CC-SOURCE-CHAIN-018",
+      "status": "OPEN_SUPPORTED_FOR_TESTED_FIXTURE",
+      "mechanism": "Compiler/gate evidence should require a provenance-linked source_hash -> parser/grammar -> AST_hash -> typed_IR_hash -> semantic_hash -> lowering_version -> artifact_hash -> execution_receipt chain.",
+      "expected": "A deliberately skipped or manually synthesized stage is detectable and cannot be mislabeled end-to-end compiler conformance.",
+      "counterhypothesis": "Separate parser and lowering receipts are sufficient even without a joined ancestry chain.",
+      "falsifier": "A production compiler audit can reconstruct the same unambiguous ancestry and semantic-preservation proof without explicit joined chain identity.",
+      "implication": "Refine CC-WP-02/03/06/11 and APP acceptance receipts; no new core syntax required."
+    },
+    {
+      "id": "H-CC-EMIT-TERMINATOR-019",
+      "status": "OPEN_UNRESOLVED",
+      "mechanism": "ClayCode needs explicit typed control-result/termination semantics; generic emit/event semantics should not be silently lowered as return.",
+      "expected": "Production parser/IR represents whether a branch emits, yields, returns, or continues, and differential lowering preserves it.",
+      "counterhypothesis": "Current ClayCode already normatively defines emit as terminating in a source not loaded by this run.",
+      "falsifier": "A current admitted semantic contract is found that explicitly defines emit as the same terminating operation implemented by the prior Python lowerer.",
+      "implication": "Do not promote return/yield syntax yet; first locate existing universal-core semantics or use an APP/FRANK counterexample."
+    },
+    {
+      "id": "H-CC-NAMED-CYCLE-020",
+      "status": "OPEN_NOT_JUSTIFIED_AS_LANGUAGE_CHANGE",
+      "mechanism": "The prior fixture's cycle name is research-harness metadata unless a real executable program requires callable/exported named cycles.",
+      "expected": "Removing the unreferenced label can make the fixture conform to current cycle header without changing its intended research behavior.",
+      "counterhypothesis": "Named cycles are already a required callable language entity.",
+      "falsifier": "A current admitted program or acceptance exemplar references/exports a cycle by name and cannot be expressed via existing generic declarations.",
+      "implication": "Fix the fixture first; do not add named-cycle syntax solely to rescue a test."
+    }
+  ],
+  "promotion": "NONE"
+}

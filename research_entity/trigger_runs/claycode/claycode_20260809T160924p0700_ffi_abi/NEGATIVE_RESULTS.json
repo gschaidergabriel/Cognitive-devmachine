@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T160924p0700_ffi_abi",
+  "negative_results": [
+    {
+      "id": "NR-CC-FFI-001",
+      "status": "NEGATIVE_RESULT",
+      "statement": "Reusable numeric slot identity alone is insufficient as authoritative FFI resource identity in the tested host-table model.",
+      "observed": {
+        "stale_handle_accepts": 20000,
+        "stale_capability_resource_alias_accepts": 20000,
+        "cross_type_stale_accepts": 10000,
+        "borrow_after_return_accepts": 20000
+      },
+      "scope": "Synthetic local host-table model with deliberate reuse.",
+      "preserve": true
+    },
+    {
+      "id": "NR-CC-PREFLIGHT-001",
+      "status": "NEGATIVE_RESULT_TOOLING",
+      "statement": "Current research_interconnect_preflight.py embeds 'clay' in its fail-closed priority sets while the current trigger registry renamed the integrated foundry branch to 'clayresearch'; therefore its registry-set equality guard is stale.",
+      "scope": "Repository tooling/governance; source-level contradiction observed in current GitHub files. No scientific branch claim.",
+      "next_action": "Repair preflight trigger-name migration, then rerun checker against the current registry.",
+      "preserve": true
+    }
+  ]
+}

@@ -31,39 +31,43 @@ jobs:
           python3 tools/claycode_target_host_identity.py verify --json > /tmp/claycode_identity.json
           identity_rc=$?
           acceptance_rc=97
-          desktop_rc=98
 
           if [ "$identity_rc" -eq 0 ]; then
             python3 -m pip install --user --disable-pip-version-check 'lark[interegular]==1.3.1'
 
-            # IMPORTANT: canonical acceptance runs first from the pristine checkout.
-            # Its first collector deliberately rejects any dirty source tree.  Only after
-            # that complete fail-closed closure attempt may the supplemental real desktop
-            # receipt be generated.
+            # GitHub transport variables are removed only after the registered machine
+            # fingerprint has been verified. The canonical child still independently
+            # checks Ubuntu, local marker/fingerprint, container boundaries, semantics,
+            # real desktop, Full-FRANK, ten apps, strict target assembly and WP14.
             env -u GITHUB_ACTIONS -u CI \
               CLAYCODE_REGISTERED_SELF_HOSTED_ACTIONS=1 \
               python3 tools/claycode_run_andreas_target_acceptance.py
             acceptance_rc=$?
-
-            env -u GITHUB_ACTIONS -u CI \
-              CLAYCODE_REGISTERED_SELF_HOSTED_ACTIONS=1 \
-              python3 tools/claycode_ubuntu_desktop_target_validation.py
-            desktop_rc=$?
           fi
 
-          python3 - "$identity_rc" "$desktop_rc" "$acceptance_rc" <<'PY'
+          python3 - "$identity_rc" "$acceptance_rc" <<'PY'
           import json, platform, subprocess, sys
           from pathlib import Path
 
           identity_rc=int(sys.argv[1])
-          desktop_rc=int(sys.argv[2])
-          acceptance_rc=int(sys.argv[3])
+          acceptance_rc=int(sys.argv[2])
           try:
               identity=json.load(open('/tmp/claycode_identity.json',encoding='utf-8'))
           except Exception as exc:
               identity={'parse_error':type(exc).__name__}
+          desktop={}
+          dp=Path('research_entity/claycode/target/APP05_UBUNTU_DESKTOP.json')
+          if dp.exists():
+              try: desktop=json.loads(dp.read_text(encoding='utf-8'))
+              except Exception as exc: desktop={'parse_error':type(exc).__name__}
+          desktop_pass=(
+              desktop.get('pass') is True
+              and desktop.get('counts_as_target_acceptance') is True
+              and (desktop.get('observed') or {}).get('io_mode')=='TK_REAL_DESKTOP_EVENT_LOOP'
+              and (desktop.get('observed') or {}).get('window_was_mapped') is True
+          )
           payload={
-              'schema_version':'2.1',
+              'schema_version':'2.2',
               'probe':'ANDREAS_SELF_HOSTED_AUTOPROBE',
               'executed_on_self_hosted_runner':True,
               'transport':'GITHUB_ACTIONS_SELF_HOSTED_AFTER_REGISTERED_FINGERPRINT_VERIFY',
@@ -72,14 +76,12 @@ jobs:
               'target_identity_verified':identity_rc==0,
               'acceptance_invoked':identity_rc==0,
               'acceptance_returncode':acceptance_rc,
-              'desktop_gate_invoked':identity_rc==0,
-              'desktop_gate_returncode':desktop_rc,
-              'desktop_gate_pass':desktop_rc==0,
-              'release_pass_claimed':identity_rc==0 and desktop_rc==0 and acceptance_rc==0,
+              'desktop_gate_owned_by_canonical_closure':True,
+              'desktop_gate_pass':desktop_pass,
+              'release_pass_claimed':identity_rc==0 and acceptance_rc==0 and desktop_pass,
               'runner_uname':subprocess.run(['uname','-a'],text=True,capture_output=True).stdout.strip(),
               'python_version':platform.python_version(),
               'authority_invariant':'model output != execution authority',
-              'ordering_invariant':'canonical BASE14 collector started from pristine checkout before supplemental desktop evidence was written',
           }
           Path('research_entity/claycode/target/ANDREAS_SELF_HOSTED_AUTOPROBE.json').write_text(
               json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
@@ -133,6 +135,7 @@ jobs:
           assert manifest['claycode_release_gate_pass'] is True, manifest
           assert manifest.get('promotion_allowed') is True, manifest
           assert manifest.get('failed_work_packages') in ([], None), manifest
+          assert (manifest.get('desktop_gui_independent_audit') or {}).get('pass') is True, manifest
 
           ws=json.load(open('research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json',encoding='utf-8'))
           packages=ws.get('work_packages') or {}

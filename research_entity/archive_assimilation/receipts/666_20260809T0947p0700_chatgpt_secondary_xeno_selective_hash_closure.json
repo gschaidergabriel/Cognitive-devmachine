@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0947p0700-chatgpt-secondary-xeno-selective-hash-closure",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "task":"Continue non-overlapping XENO extracted-copy raw-byte SHA-256 reconciliation on open scope selective.",
+  "claim_event_ref":"research_entity/rooms/center_events/20260809T0944p0700_666_claim_xeno_selective_hash_tranche.json",
+  "source":{"drive_root_id":"1UkkTHX8Xo6EcINOOQ3OtA-LVEHh9Ssis","g8_folder_id":"1x5TrnLC4PwdNITXawMn_U4jngYBiV0sF","scope":"selective","scope_folder_id":"1wCMHvdyLulVF7FWrmy8GJysBG3-vQxCR","bundle_manifest_drive_id":"1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g"},
+  "method":{"guard":"DRIVE_ENUMERATION_METHOD_GUARD_V3","enumeration":"Google_Drive.list_folder structured identity sets","raw_bytes":"Google_Drive.fetch(download_raw_file=true,include_base64=false)","hash":"SHA-256 over downloaded raw bytes","stability_probes":{"selective_root":"4 identities at top_k=5","risk_coverage":"4 identities at top_k=5","paired_tasks":"1 identity at top_k=2","shields":"1 identity at top_k=2","abstentions":"1 identity at top_k=2"}},
+  "denominator":{"expected_manifest_leaves":7,"observed_recursive_leaves":7,"direct_child_folders":4,"nested_folders":4,"extra_leaves":0,"missing_leaves":0,"identity_set_status":"STABLE_NO_CEILING_AMBIGUITY"},
+  "verified":[
+    {"path":"se_xeno/G8/selective/abstentions/decisions.jsonl","drive_id":"1mONp7PpIakvelLhcuWeANoopupjfbfbx","bytes":7375839,"sha256":"aa3b2302a6de4f6fbedd52738a3e35ff4ee89f90dfcc3dd3aba3243c289e7926","manifest_match":true},
+    {"path":"se_xeno/G8/selective/paired_tasks/tasks.jsonl","drive_id":"1obXXhtD3XhEb1-UUgrOxTaQIpvM1dABc","bytes":2267586,"sha256":"10a29fbe6bd02974142dd9c0be2eb977f006902a700c317912bb35d67ca9dca7","manifest_match":true},
+    {"path":"se_xeno/G8/selective/risk_coverage/compaction_fresh_reader.json","drive_id":"1bJ6JnXIHN4o1EBafxr3RntgnwrOu1u5W","bytes":604,"sha256":"dd557ab4ad137d8b20576432d8a18942fbb9a328b17ef91f8523713de300d9e9","manifest_match":true},
+    {"path":"se_xeno/G8/selective/risk_coverage/holdout_metrics.csv","drive_id":"1-z21xGJKJNk6llSXoHHVMDkIapkUidtm","bytes":1224,"sha256":"c1b003e83f5b5358df6253f7ce4f85173b4683ef159142dfdc3680ea273f0c10","manifest_match":true},
+    {"path":"se_xeno/G8/selective/risk_coverage/preregistration.json","drive_id":"1TYIHa7bY0MOGYia6ky4sf8LG6rsEwDQ8","bytes":762,"sha256":"3d66d856c589581a9ba70bdb9b6d335b8a5d5a1b706b8d759a5537e6410f8baf","manifest_match":true},
+    {"path":"se_xeno/G8/selective/risk_coverage/summary.json","drive_id":"1QMPfuOH1ILK0j7EzQO8w4iaSSc5rXEmk","bytes":50143,"sha256":"b993e3099bd238439bb64466c49d1f3da8716aff866d84344741c432ab1e59b6","manifest_match":true},
+    {"path":"se_xeno/G8/selective/shields/shield_policy.json","drive_id":"1RqXFJNJqcrkEaoNgHBOpnwYF7Zin3LvP","bytes":192,"sha256":"756d54765601ea039149d2dbf5f4f911fa5531b53cbd32dbe85491beb8851ff2","manifest_match":true}
+  ],
+  "result":{"scope_status":"HASH_CLOSED","mismatches":0,"verified_leaves_delta":7,"verified_bytes_delta":9696350,"campaign_baseline_before_parallel_peer_merge":{"verified_leaves":45,"expected_leaves":203},"campaign_floor_after_this_delta":{"verified_leaves":52,"expected_leaves":203,"remaining_at_most":151,"leaf_coverage_percent_floor":25.615764},"shared_task_mutation":"DEFERRED_BECAUSE_CLAUDE_CODE_PEER_CURRENTLY_OWNS_SHARED_TASK_STATE"},
+  "semantic_credit_added":0.0,
+  "global_level0":{"gate":"NOT_PASS","exact_global_percent_added":0.0},
+  "status":"COMPLETE_APPEND_ONLY_DELTA_PENDING_SHARED_TASK_AGGREGATION",
+  "created_at":"2026-08-09T09:47:00+07:00"
+}

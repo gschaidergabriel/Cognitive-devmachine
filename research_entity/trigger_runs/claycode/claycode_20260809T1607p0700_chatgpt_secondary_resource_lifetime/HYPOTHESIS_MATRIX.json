@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1607p0700_chatgpt_secondary_resource_lifetime",
+  "hypotheses":[
+    {
+      "id":"H-CC-RL-001",
+      "status":"SUPPORTED_BY_CURRENT_PROTOTYPE_NOT_PROMOTED",
+      "hypothesis":"ClayCode needs explicit canonical IR/runtime lifetime state for opaque FFI resources so ownership transfer, borrowing, drop and kind identity are checked before host lowering.",
+      "counterhypothesis":"Generic ResourceRef plus adapter-local conventions are sufficient; explicit lifetime state adds complexity without preventing additional failures.",
+      "evidence":["CC-EXEC-RESOURCE-LIFETIME-20260809-001","WebAssembly Component Model WIT resource/own/borrow design"],
+      "falsifier":"A matched implementation using only generic ResourceRef achieves the same rejection coverage, deterministic replay and FFI correctness with lower complexity and no hidden adapter semantics."
+    },
+    {
+      "id":"H-CC-RL-002",
+      "status":"OPEN",
+      "hypothesis":"The lifetime contract can remain canonical-IR/runtime semantics without adding first-class surface syntax such as own<T>/borrow<T> to ClayCode G9.",
+      "counterhypothesis":"First-class syntax is required for usable static diagnostics, generics and cross-dialect interop.",
+      "evidence":["Current grammar can name distinct record types but does not encode linearity/borrowing directly."],
+      "falsifier":"Compiler/application trials show that IR-only lifetime tracking causes ambiguous source diagnostics, unsafe lowering, or excessive annotation/repair cost."
+    },
+    {
+      "id":"H-CC-RL-003",
+      "status":"SUPPORTED_ARCHITECTURE_INVARIANT",
+      "hypothesis":"Resource lifetime/ownership must remain orthogonal to capability/effect authority: owning a handle never self-authorizes an external effect.",
+      "counterhypothesis":"An owned handle may safely act as bearer authority for all operations on the resource.",
+      "evidence":["ClayCode G9 CapabilityToken/EffectIntent split","FRANK C9 EffectPermit/commit-context split","Linux capability-boundary executable receipt"],
+      "falsifier":"A host-enforced design demonstrates equivalent non-amplification, revocation, current-state revalidation and recovery while collapsing handle ownership and authority into one object."
+    },
+    {
+      "id":"H-CC-RL-004",
+      "status":"SUPPORTED_BY_ANALOGUE_AND_PROTOTYPE",
+      "hypothesis":"Async/FFI borrowing requires dynamic or static task-scope lifetime enforcement so an owner cannot drop while a loan remains active and a borrow cannot escape its valid call/task scope.",
+      "counterhypothesis":"Reference counting alone is sufficient and explicit borrow scopes are unnecessary.",
+      "evidence":["CC-EXEC-RESOURCE-LIFETIME-20260809-001","WebAssembly Component Model concurrency borrow enforcement"],
+      "falsifier":"Matched async stress tests show reference-count-only semantics preserve ownership/drop/use invariants with equivalent diagnostics and lower overhead."
+    }
+  ],
+  "promotion_decision":"NO_PROMOTION",
+  "next_test":"Integrate the candidate into a real ClayCode evaluator/FFI lowering slice, then differential-test owned/borrowed resource traces against a WebAssembly Component Model or equivalent reference backend on the Ubuntu target."
+}

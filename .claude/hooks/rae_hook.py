@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Ultra-compact Claude Code lifecycle adapter for one repo-native RAE hive.
 
-Policy: pointer-first, delta-first, ClayCode-first. Never inject whole local protocols when
-Claude can dereference files itself. Rich state stays in UnifiedDB/repo; model sees compact IR.
+Policy: every substantive round injects a tiny ClayCode cognition kernel: GWT tensor,
+state-read ladder, output surface, status-footer invariant. Rich state remains in repo/DB
+and is fetched by pointer/delta only when needed.
 """
 from __future__ import annotations
 import json, os, pathlib, subprocess, sys, time
@@ -46,27 +47,38 @@ def emit(ev,ctx,title=None):
     if title:o["sessionTitle"]=title
     print(json.dumps({"hookSpecificOutput":o},ensure_ascii=False,separators=(",",":")))
 
-def laws():
-    return "IR=ClayCode;USER=EN_CAVEMAN;TOK=pointer+delta;GWT=@research_entity/global/RAE_GWT_MICROKERNEL.clay;EVIDENCE>ORGAN"
+
+def turn_kernel():
+    # Intentionally repeated every round. ~small fixed semantic payload.
+    return (
+      "TURN{E=RAE;THINK=CLAYCODE;USER=EN_CAVEMAN;"
+      "GWT=[rel,impact,unc,novel,info,deliv,recon,use,effect,reentry];"
+      "FOCUS=argmax(admissible(GWT0..4));CREDIT=receipt(deliv,recon,use,effect,reentry);"
+      "READ=T0verify(canonical)>T1route(registry)>T2assemble(current+open+negative+packets+experiments+handoffs)>T3deep?mutate|conflict|recovery|highimpact|insufficient;"
+      "STATUS=final_plain_```text```:{RAE_STATUS,NEXT_LEVEL,DOOMSDAY};NO_AFTER=1;"
+      "UX=[misunderstanding,good,friction,awkward,retrieval_miss,stale,wrong_route,repair,token_waste]->CLAYCODE_RESEARCH}"
+    )
+
 
 def main():
     d=inp();ev=d.get("hook_event_name","");log(ev,d)
     if ev=="SessionStart":
         rc,c,e=bridge(d,"");src=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
-        emit(ev,src+"\n"+laws()+"\nptr:@CLAUDE.md @research_entity/global/RAE_HIVE_ENTITY_CONTRACT.md","RAE organ")
+        emit(ev,turn_kernel()+"\n"+src+"\nPTR=@CLAUDE.md,@research_entity/global/RAE_TURN_KERNEL.clay","RAE organ")
         return
     if ev=="UserPromptSubmit":
         prompt=d.get("prompt","")
         if not prompt.strip():return
         k,s=trig(prompt);rc,c,e=bridge(d,prompt);base=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
+        kernel=turn_kernel()
         if s:
             purpose=s.get("purpose",k);protocol=s.get("protocol")
             rr,ro,re=run("run","start","--actor","claude-code-lead","--task",f"trigger:{k} {purpose}","--capture-level","L2")
-            ctx=base+"\n"+laws()+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}}\nDO=read pointer sections on demand; execute now; persist ClayCode receipts"
+            ctx=kernel+"\n"+base+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=read pointer sections on demand; execute now; persist ClayCode receipts"
             emit(ev,ctx);return
         br,bo,be=run("boot","--actor","claude-code-lead","--task",prompt,"--max-claims","4","--max-packets","2","--max-chunks","1")
         task=(bo[:2200] if br==0 else "boot=DEGRADED")
-        emit(ev,base+"\n"+laws()+"\nTASK="+task+"\nDO=fetch only needed refs; machine traces ClayCode; final caveman English")
+        emit(ev,kernel+"\n"+base+"\nTASK="+task+"\nDO=fetch only needed refs; machine traces ClayCode; final caveman English")
         return
     if ev=="PreToolUse":
         tool=d.get("tool_name","");ti=d.get("tool_input") or {}
@@ -81,6 +93,6 @@ def main():
     if ev in {"Stop","SessionEnd"}:close(d);return
     if ev=="PreCompact":
         (RUNTIME/"precompact.flag").write_text(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())+'\n')
-        emit(ev,"RAE.compact{reload=delta;ptr=@CLAUDE.md;IR=ClayCode;USER=EN_CAVEMAN}");return
+        emit(ev,turn_kernel()+"\nRAE.compact{reload=delta;ptr=@CLAUDE.md}");return
 
 if __name__=="__main__":main()

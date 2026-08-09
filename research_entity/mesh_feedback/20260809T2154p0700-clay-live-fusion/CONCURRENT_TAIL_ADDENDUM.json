@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260809T2154p0700-clay-live-fusion",
+  "triggering_concurrent_commits":["04244d7f8bc6a5e4543e29a4168b3cd0c4c6c56a","4aeca959ccf9dc0189b06898509a7bbe07ed4284","7505f252203c626064a88c51271c0b4ba4aa3bd3"],
+  "ancestry_adjudication":"These commits are one implementation/test lineage extending 918fbc85; they strengthen engineering evidence but are not three independent replications.",
+  "evidence_class":"H1_SANDBOX_EFFECT_INTEGRATION_TEST_LINEAGE",
+  "material_delta":"The real sandbox effect gateway is now wired into an H1 effectful runtime test surface. Tests specify same-ledger effect re-entry, semantic/trace recovery equality, after-replace recovery as RECOVERED_COMMITTED_VERIFIED, after-intent recovery as RECOVERED_NOT_APPLIED, and preservation of model/peer authority NONE while only HOST_GATEWAY_ONLY commits the effect.",
+  "limits":"Presence of committed integration tests is not by itself an execution receipt for the final combined suite, not target-Ubuntu evidence, and not H1 release PASS.",
+  "branch_feedback":[
+    {"branch":"frank","status":"DELTA","message":"Treat the effect gateway as integrated H1 reference semantics with explicit same-ledger re-entry/recovery tests; no release promotion."},
+    {"branch":"harness","status":"DELTA","message":"Add the four effectful runtime cases to the integrated regression surface and require an executed receipt before counting them as passed evidence."},
+    {"branch":"unifieddb","status":"DELTA","message":"Effect outcomes and recovery are explicitly required to re-enter the same ledger and preserve semantic/trace recovery identities."},
+    {"branch":"gwt","status":"DELTA","message":"Downstream effect outcome/recovery now has a concrete re-entry test surface for future causal-use closure."},
+    {"branch":"claygraph","status":"DELTA","message":"Expose effect intent/commit/recovery/re-entry edges when executed; tests alone do not mint graph evidence."},
+    {"branch":"claycode","status":"NO_CHANGE","message":"No change to V17 or physical BASE release accounting."},
+    {"branch":"hyperposition","status":"NO_CHANGE","message":"No new Hyperposition-specific scientific result in this concurrent lineage."},
+    {"branch":"emergenz","status":"NO_CHANGE","message":"No new emergence claim; effect re-entry is an intervention/receipt surface only."},
+    {"branch":"clayresearch","status":"DELTA","message":"Record one correlated implementation/test lineage, not independent replication; await executed combined receipt and physical target evidence."}
+  ],
+  "canonical_scientific_promotion":"NONE"
+}

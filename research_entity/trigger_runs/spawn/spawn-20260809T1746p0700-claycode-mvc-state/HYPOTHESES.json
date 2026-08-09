@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1746p0700-claycode-mvc-state",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-MVC-001",
+      "status": "OPEN_SUPPORTED_BY_LOCAL_PROXY",
+      "claim": "The existing ClayCode G9 semantic basis is sufficient to represent the FRANK v0.1 adaptive visual learner control state without a new dedicated language primitive.",
+      "mechanism": "Use ordinary typed/versioned records plus existing epistemic states, epochs, rules, provenance sets and deterministic semantic identity for training examples, classifier versions, candidate/current/LKG state, budgets, open-set outcomes and replay hooks.",
+      "support": ["EXP-SPAWN-MVC-STATE-001: 100000 deterministic proxy transitions", "4/4 targeted guard mutations killed", "current G9 already provides records, Set/Ordered, Epoch, provenance, Delta, capability/effect separation and deterministic identity concepts"],
+      "falsifier": "A normative ClayCode parser/typed-IR/type-effect/evaluator/compiler test demonstrates that one required learner law cannot be expressed or preserved without an escape hatch or a new semantic primitive.",
+      "next_test": "Compile CLAYCODE_MVC_STATE_CANDIDATE.clay through the normative BASE compiler stack and run the proxy corpus against the generated executable semantics."
+    },
+    {
+      "id": "H-SPAWN-MVC-002",
+      "status": "OPEN",
+      "claim": "A generic versioned candidate/current/last-known-good state machine plus feature-backbone compatibility is enough to make adaptive learner promotion and rollback deterministic and replayable across H1 and H2.",
+      "mechanism": "Candidate updates are shadow state; promotion atomically moves current to LKG and candidate to current only after evaluation and backbone-compatibility gates; rollback restores LKG by exact version identity.",
+      "support": ["local semantic proxy transition invariants", "owner-fixed FRANK v0.1 adaptive visual learning directive"],
+      "falsifier": "H1/H2 differential replay finds a required learner transition whose observable semantics cannot be captured by current/candidate/LKG plus explicit event/provenance/version state.",
+      "next_test": "Freeze H1 event/state schema, then differential replay identical promotion/rejection/rollback/backbone-change traces in H2."
+    },
+    {
+      "id": "H-SPAWN-MVC-003",
+      "status": "OPEN_EXTERNAL_MECHANISM_SUPPORT_ONLY",
+      "claim": "Frozen visual features with prototype and/or lightweight linear readout are a credible first implementation family for the user-adaptive visual learner under the v0.1 resource constraints.",
+      "mechanism": "Keep the feature backbone frozen and adapt only compact prototypes or a small linear head, preserving a cheap rollbackable learner surface.",
+      "support": ["CVPR 2024 Frozen Feature Augmentation", "CVPR 2024 LP++", "CVPR 2026 HyCal"],
+      "falsifier": "MVC-E1..E7 on project hardware/data show prototypes/linear readout cannot meet frozen resource, retention, open-set and personalization thresholds while a different bounded learner can.",
+      "next_test": "H1 MVC-0 vs MVC-1 benchmark under frozen acceptance thresholds."
+    },
+    {
+      "id": "H-SPAWN-MVC-004",
+      "status": "OPEN",
+      "claim": "Treating UNKNOWN, AMBIGUOUS and CONFLICT as first-class semantic outcomes rather than coercing them to known classes will reduce unsafe false-familiar routing without preventing personalization gains.",
+      "mechanism": "Open-set/conflict outcomes trigger deeper perception while calibrated KNOWN_HIGH_CONFIDENCE alone may take the familiar fast path; sensor provenance remains attached in all cases.",
+      "support": ["FRANK v0.1 adaptive visual learning directive", "open-world few-shot literature motivating explicit unknown handling"],
+      "falsifier": "Matched H1 tests show explicit open-set states provide no safety/task benefit and materially degrade resource or personalization performance relative to a calibrated alternative under the same false-familiarity ceiling.",
+      "next_test": "MVC-E5 plus MVC-E6 with matched known/unknown lookalikes and routing-cost measurements."
+    }
+  ],
+  "counterhypotheses": [
+    {"id": "CH-SPAWN-MVC-001", "status": "OPEN", "claim": "The generic G9 state basis is insufficient because learner promotion/replay requires dedicated transactional or model-version semantics that cannot be encoded safely through existing records/rules and runtime facilities.", "discriminator": "Normative compiler/type-effect execution of candidate/current/LKG promotion plus crash/replay traces."},
+    {"id": "CH-SPAWN-MVC-002", "status": "OPEN", "claim": "Prototype/linear adaptation will not satisfy Frank-specific open-set and retention requirements under actual user distributions, so a different small learner family will be necessary.", "discriminator": "MVC-E2/E3/E5 under project-specific held-out and sequential-class data."},
+    {"id": "CH-SPAWN-MVC-003", "status": "OPEN", "claim": "Feature-backbone version changes are frequent enough that prototype/readout invalidation and migration cost erase the intended familiarity speedup.", "discriminator": "MVC-E7 plus long-horizon feature-version churn simulation and project-hardware measurement."}
+  ],
+  "promotion": "NONE"
+}

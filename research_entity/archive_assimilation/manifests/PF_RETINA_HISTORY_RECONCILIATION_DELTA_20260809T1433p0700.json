@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "PF_RETINA_HISTORY_RECONCILIATION_DELTA_20260809T1433p0700",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor_id": "chatgpt-secondary",
+  "scope": "Project-Frankenstein Retina/FrankEye frozen-head plus deleted adaptive-vision history, reconciled with Drive Retina lineage and current MVC contract",
+  "exact_coverage_credit": 0.0,
+  "receipts": [
+    "research_entity/archive_assimilation/receipts/666_20260809T1433p0700_chatgpt_secondary_pf_retina_integration_gap.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1438p0700_chatgpt_secondary_pf_deleted_adaptive_vision_lineage.json",
+    "research_entity/archive_assimilation/receipts/666_20260809T1203p0700_chatgpt_secondary_drive_retina_adaptive_learning_lineage.json"
+  ],
+  "project_frankenstein_evidence": {
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "head_files": ["tools/frank_eye.py", "ext/feature_trainer.py"],
+    "history_commit": "0fd27f23e87cd1f0b53ce838347d1cdbcb7bd9bb",
+    "deleted_files_recovered_from_patch": ["tools/frank_adaptive_vision.py", "tools/frank_visual_pipeline.py"]
+  },
+  "reconciled_axes": [
+    {
+      "axis": "adaptive_compute_routing",
+      "historical_source": "deleted Project-Frankenstein frank_adaptive_vision.py",
+      "mechanism": "fast Stage-1 evidence with uncertainty-triggered deep VLM escalation and cheap-path overrides",
+      "current_status": "REUSABLE_WITH_MODERN_CALIBRATION"
+    },
+    {
+      "axis": "local_perception_backbone",
+      "historical_source": "Project-Frankenstein frank_eye.py",
+      "mechanism": "CPU-local Retina CNN + DINOv2 + handcrafted features + OCR + faces + optional GoL dynamics",
+      "current_status": "REUSABLE_WITH_ADAPTATION"
+    },
+    {
+      "axis": "learned_familiarity_memory",
+      "historical_source": "Drive digital-retina learned dictionary lineage",
+      "mechanism": "prototype/centroid/dictionary plus replay/evaluation loop",
+      "current_status": "REUSABLE_WITH_ADAPTATION_AND_PROVENANCE_GATES"
+    },
+    {
+      "axis": "current_user_adaptive_mvc",
+      "historical_source": "current owner-fixed directive",
+      "mechanism": "bounded user-specific learning + open-set confidence + trusted examples + promotion/rollback/versioning/resource budgets",
+      "current_status": "REQUIRED_CURRENT_CONTRACT_NOT_HISTORICALLY_COMPLETE"
+    }
+  ],
+  "semantic_guard": "Do not collapse historical 'Adaptive Visual Pipeline' routing, FrankEye fixed inference, and Drive learned dictionary into one mechanism or count any one of them as already satisfying the current FRANK v0.1 adaptive visual learning contract.",
+  "next_history_queries": [
+    "deleted/superseded visual pipeline commits and measurement receipts",
+    "runtime lineage of external retina_v8.pt weights",
+    "digital-retina-e2e versus PF FrankEye version relationship",
+    "historical escalation-rate/latency/error measurements for the old two-stage visual path"
+  ],
+  "denominator_state": "NOT_FROZEN",
+  "release_gate": "NOT_PASS"
+}

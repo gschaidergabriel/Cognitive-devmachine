@@ -1,0 +1,103 @@
+name: RAE Earned Work Final Audit
+
+on:
+  push:
+    paths:
+      - '.github/workflows/rae_earned_work_final_audit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Audit earned-work mappings and staged guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib, hashlib, collections
+          root = pathlib.Path('.')
+          src = root/'research_entity/forecast/HISTORICAL_EARNED_WORK.json'
+          data = json.loads(src.read_text())
+          mappings = data.get('evidence_mappings', [])
+          req = list((data.get('mapping_contract') or {}).get('per_mapping_required_fields', []))
+          ids = collections.Counter(str(m.get('mapping_id')) for m in mappings)
+          receipt_groups = collections.defaultdict(list)
+          mechanism_groups = collections.defaultdict(list)
+          rows = collections.defaultdict(lambda:{'low':0.0,'center':0.0,'high':0.0,'mapping_ids':[]})
+          audit_rows=[]
+          raw={'low':0.0,'center':0.0,'high':0.0}
+          for m in mappings:
+              mid=str(m.get('mapping_id',''))
+              refs=m.get('source_refs') or []
+              missing=[]
+              for k in req:
+                  if k=='source_refs':
+                      if not refs: missing.append(k)
+                  elif k not in m or m.get(k) in (None,'',[]): missing.append(k)
+              try:
+                  lo=float(m.get('avoided_future_hours_low',0)); ce=float(m.get('avoided_future_hours_center',0)); hi=float(m.get('avoided_future_hours_high',0))
+                  bounds_ok=0 <= lo <= ce <= hi
+              except Exception:
+                  lo=ce=hi=0.0; bounds_ok=False
+              raw['low']+=lo; raw['center']+=ce; raw['high']+=hi
+              rids=[str(x) for x in (m.get('current_doomsday_rows') or [])]
+              for rid in rids:
+                  rows[rid]['low']+=lo; rows[rid]['center']+=ce; rows[rid]['high']+=hi; rows[rid]['mapping_ids'].append(mid)
+              receipt=str(m.get('source_receipt',''))
+              if receipt: receipt_groups[receipt].append(mid)
+              mech_key=(str(m.get('mechanism_or_result','')).strip().lower(), tuple(sorted(rids)))
+              mechanism_groups[mech_key].append(mid)
+              audit_rows.append({'mapping_id':mid,'missing_required':missing,'bounds_ok':bounds_ok,'reuse_category':m.get('reuse_category'),'rows':rids,'hours':[lo,ce,hi],'source_receipt':receipt,'source_refs_count':len(refs),'confidence':m.get('confidence')})
+          delta_dir=root/'research_entity/forecast/earned_work_deltas'
+          deltas=[]; guards=[]
+          for p in sorted(delta_dir.glob('*.json')) if delta_dir.exists() else []:
+              try: obj=json.loads(p.read_text())
+              except Exception as e:
+                  deltas.append({'path':str(p),'parse_error':str(e)}); continue
+              txt=json.dumps(obj,ensure_ascii=False).lower()
+              item={'path':str(p),'status':obj.get('status'),'mapping_id':obj.get('mapping_id'),'hours_center':obj.get('avoided_future_hours_center',obj.get('center_hours',obj.get('hours_center')))}
+              deltas.append(item)
+              if any(k in txt for k in ['contaminat','downgrade','not_authoritative','zero credit','zero_credit','no credit','no_credit','development-set','development set']):
+                  guards.append({'path':str(p),'status':obj.get('status'),'matched_guard_terms':True,'object':obj})
+          exact_dupe_receipts={k:v for k,v in receipt_groups.items() if len(v)>1}
+          exact_dupe_mechanisms={hashlib.sha256((k[0]+'|'+','.join(k[1])).encode()).hexdigest()[:12]:v for k,v in mechanism_groups.items() if k[0] and len(v)>1}
+          result={
+            'schema_version':'1.0','status':'AUDIT_EXECUTED_NOT_AUTO_PROMOTED','source':str(src),
+            'source_schema_version':data.get('schema_version'),'source_status':data.get('status'),
+            'mapping_count':len(mappings),'required_fields':req,
+            'mappings_missing_required':[x for x in audit_rows if x['missing_required']],
+            'mappings_bad_bounds':[x for x in audit_rows if not x['bounds_ok']],
+            'duplicate_mapping_ids':[k for k,v in ids.items() if v>1],
+            'shared_source_receipts':exact_dupe_receipts,
+            'exact_mechanism_row_duplicates':exact_dupe_mechanisms,
+            'raw_mapping_sum_hours':{k:round(v,3) for k,v in raw.items()},
+            'raw_per_row_hours':{k:{kk:(round(vv,3) if isinstance(vv,float) else vv) for kk,vv in v.items()} for k,v in sorted(rows.items())},
+            'mapping_rows':audit_rows,
+            'delta_files_count':len(deltas),'guard_or_downgrade_files':guards,
+            'audit_rule':'Raw sums are diagnostics only and MUST NOT be promoted as completion credit. Shared source receipts, overlapping current rows, contamination guards and ancestry overlap require explicit adjudication before evidence-mapped baseline promotion.'
+          }
+          out=root/'research_entity/forecast/EARNED_WORK_FINAL_AUDIT_20260809.json'
+          out.write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
+          PY
+      - name: Commit audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "rae-earned-work-audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add research_entity/forecast/EARNED_WORK_FINAL_AUDIT_20260809.json
+          git commit -m "666: materialize final earned-work mapping audit" || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1

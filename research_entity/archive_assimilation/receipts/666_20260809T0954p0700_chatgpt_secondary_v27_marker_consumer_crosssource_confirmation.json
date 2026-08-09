@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0954p0700-chatgpt-secondary-v27-marker-consumer-crosssource-confirmation",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "CROSS_SOURCE_CURRENT_HEAD_CONFIRMATION_COMPLETE_FOR_INTENT_AND_HYPOTHESIS_MARKERS",
+  "sources": {
+    "historical_drive_v27": "research_entity/archive_assimilation/receipts/666_20260809T0954p0700_chatgpt_secondary_aicore_v27_full_direct_semantic_closure.json",
+    "project_frankenstein_repository": "gschaidergabriel/Project-Frankenstein",
+    "project_frankenstein_frozen_head_context": "abba90a5767d85abc8a1ac340bae92842dab35c1"
+  },
+  "confirmed_consumers": [
+    {
+      "marker": "intent",
+      "current_path": "services/intent_queue.py",
+      "current_blob_sha": "c812a3fcb43297e1d4ab0ad395c7c3277294be20",
+      "mechanism": "extract_and_queue imports parse_all_tool_tags, filters tag name == intent, normalizes marker category and queues the content.",
+      "status": "LIVE_CONSUMER_CONFIRMED"
+    },
+    {
+      "marker": "hypothesis",
+      "current_path": "services/hypothesis_engine/synthesis.py",
+      "current_blob_sha": "abb604d6af662a4a684546a4a5d798d1cf9cbc0d",
+      "mechanism": "_extract_claim imports parse_all_tool_tags and accepts hypothesis marker payloads that pass claim-quality validation.",
+      "status": "LIVE_CONSUMER_CONFIRMED"
+    }
+  ],
+  "shared_parser": {
+    "path": "services/tools.py",
+    "symbol": "parse_all_tool_tags",
+    "current_repository_search": "CONFIRMED",
+    "status": "SHARED_TAG_PARSER_PRESENT"
+  },
+  "reconciliation": {
+    "historical_v27_claim": "intent and hypothesis were not dead registry tools; they were marker protocols consumed by separate runtime subsystems.",
+    "current_project_frankenstein_result": "CONFIRMED_AT_CURRENT_ACCESSIBLE_HEAD",
+    "promotion": "The marker-vs-executable-tool distinction is no longer merely historical inference; both named marker consumers are present in the current Project-Frankenstein source snapshot.",
+    "limit": "This confirms code presence and parsing paths, not that every deployment instance currently runs/enables those services. Runtime-process liveness remains a separate operational check."
+  },
+  "architecture_feedback": {
+    "needle": [
+      "Do not place intent/hypothesis event markers in the executable capability registry merely because they share legacy <tool> syntax.",
+      "Migrate legacy shared syntax toward explicit event/marker IR while preserving consumer compatibility during transition."
+    ],
+    "claycode": [
+      "Introduce distinct IR node kinds for EffectCall and CognitiveMarker/Event; compile legacy <tool> wrappers only at compatibility boundaries."
+    ],
+    "harness": [
+      "Gate marker exceptions on source-level consumer existence and separately test deployment/runtime liveness when operational truth matters.",
+      "Add a regression that removing a marker consumer makes the compatibility guard fail rather than silently whitelisting the marker forever."
+    ],
+    "claygraph": [
+      "Create explicit consumer edges intent->intent_queue and hypothesis->hypothesis_engine; liveness-backed compatibility depends on those edges."
+    ],
+    "unifieddb": [
+      "Store marker schemas separately from tool capability schemas and version their consumers independently."
+    ],
+    "gwt": [
+      "Intent/hypothesis events are cognitive-state candidates, not executable effects; workspace routing should preserve that distinction."
+    ]
+  },
+  "exact_level0_coverage_credit_percent": 0.0,
+  "earned_work_hours_added": 0.0,
+  "created_at": "2026-08-09T09:54:00+07:00"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn_20260809T1835p0700_claycode_package_lock_provenance_f2d5d0",
+  "tools": [
+    {
+      "tool": "OS_CSPRNG",
+      "purpose": "branch and microdirection selection",
+      "receipts": {"branch_draw_1_to_100":29,"microdirection_draw_1_to_6":5}
+    },
+    {
+      "tool": "GitHub connector",
+      "purpose": "canonical boot, recent-run novelty audit, live peer scan and durable writeback",
+      "repository": "gschaidergabriel/clay-global-research-entity"
+    },
+    {
+      "tool": "web search/open",
+      "purpose": "primary/official external architecture triangulation",
+      "sources": [
+        "Cargo Book dependency resolver/lock behavior",
+        "Go Modules reference / go.sum / checksum database",
+        "PyPA pylock.toml specification",
+        "npm package-lock and npm ci documentation",
+        "TUF metadata and security documentation",
+        "SLSA v1.2 build provenance specification",
+        "Bazel lockfile documentation",
+        "Nix flake lock documentation",
+        "Gradle dependency locking and dependency verification documentation"
+      ],
+      "secondary_source_use": false
+    },
+    {
+      "tool": "hosted Python/Linux execution",
+      "purpose": "constructed falsification/mutation discriminator",
+      "script": "package_lock_probe.py",
+      "script_sha256": "b0afc8241ce7932b564d6768f24e648812142e3f734c003e01c31e4b367d2ba8",
+      "receipt": "EXECUTION_RECEIPT.json",
+      "receipt_sha256_local": "cd47b0bb8a472cdf6d4c13fc20ec58724d70c0bdb7a6345679c6a9c643d5cece",
+      "evidence_class": "HOSTED_SYNTHETIC_PROXY_NOT_PRODUCTION_CLAYCODE"
+    }
+  ],
+  "nonexecuted": [
+    "No production ClayCode package manager/compiler toolchain was available on this hosted worker.",
+    "No Andreas Ubuntu target-host execution was available.",
+    "The repo-native research_interconnect_preflight.py was source-audited but not executed against a full checkout; an equivalent connector-based INTERCONNECT_MANIFEST.json was materialized instead."
+  ],
+  "training_auto_started": false
+}

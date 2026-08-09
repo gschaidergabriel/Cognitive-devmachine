@@ -1,15 +1,18 @@
 module rae.research_center.claycode_native
-version "1.0"
+version "1.1"
 status PROJECT_OWNER_FIXED_TARGET
 
 entity RAE=frank-project-global-research-entity
 stack LATEST=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
+claycode_worker_federation=@research_entity/global/CLAYCODE_RESEARCH_CENTER_WORKER_FEDERATION.clay
 
 law CENTER_LANGUAGE = LATEST.claycode
 law MACHINE_COORDINATION = LATEST.claycode
 law HUMAN_LANGUAGE = edge_surface_only
 law JSON_GIT = transport_envelope_only
 law PROSE_COORDINATION_TRUTH = FORBIDDEN
+law CLAYCODE_WORKER_NETWORK = claycode_worker_federation
+law CLAYCODE_ISOLATED_WORK = FORBIDDEN
 
 rule every_worker before room_action -> resolve(LATEST)
 rule stale(LATEST) -> refresh_or(DEGRADED_STALE_STACK)
@@ -24,6 +27,15 @@ rule every_handoff.delta -> ClayCode
 rule every_cross_room_delta.delta -> ClayCode
 rule every_fusion.selection -> ClayCode
 rule every_conflict.alternatives -> ClayCode
+
+// ClayCode workers are a mandatory intelligent federation mediated by the Research Center.
+rule trigger_worker(claycode).start -> claycode_worker_federation.center.join
+rule trigger_worker(claycode).before_claim -> claycode_worker_federation.center.read_current_coordination_state
+rule trigger_worker(claycode).before_claim -> claycode_worker_federation.detect_overlap_dependencies_conflicts_reuse
+rule trigger_worker(claycode).material_delta -> claycode_worker_federation.center.route_to_affected_workers
+rule trigger_worker(claycode).before_semantic_commit -> claycode_worker_federation.center.reread_and_revalidate
+rule trigger_worker(claycode).complete -> require(claycode_worker_federation.completion_receipts)
+rule uncoordinated_claycode_worker -> fail_closed(INCOMPLETE_UNCOORDINATED)
 
 // Repo files remain safe concurrent transport. Their semantic fields carry ClayCode.
 record RoomEnvelope {
@@ -150,3 +162,7 @@ invariant ALL_ACTIVE_RESEARCH_CENTER_WORKERS_COORDINATE_IN_LATEST_CLAYCODE
 invariant ALL_CROSS_ROOM_MACHINE_MESSAGES_USE_LATEST_CLAYCODE
 invariant ALL_ROOM_STATE_READS_USE_LATEST_UNIFIEDDB
 invariant ALL_ROOM_ASSOCIATIVE_TOPOLOGY_USES_LATEST_CLAYGRAPH
+invariant ALL_CLAYCODE_WORKERS_NETWORK_THROUGH_RESEARCH_CENTER
+invariant NO_CLAYCODE_WORKER_MAY_CLAIM_OR_COMPLETE_IN_ISOLATION
+invariant CLAYCODE_DUPLICATE_WORK_REQUIRES_EXPLICIT_INDEPENDENT_REPLICATION
+invariant CLAYCODE_MATERIAL_DELTAS_ROUTE_TO_ALL_SEMANTICALLY_AFFECTED_WORKERS

@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "experiment_class": "OUT_OF_BOX_METAMORPHIC_FUZZ",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T06:43:22+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_main_before_write": "a42097ed41e69b5968d451d3b6e560cf5adf6557",
+  "subject": "CC-WP-02 decoded JSON STRING canonical identity",
+  "production_source": {
+    "path": "tools/claycode_base_canonicalizer.py",
+    "blob_sha": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+    "implementation_commit": "72fb8d3b2dff2c85a982035211b01d54bbe88c6e",
+    "tested_logic": "json.loads(raw STRING) -> require str -> reject U+D800..U+DFFF -> stable semantic token value"
+  },
+  "hypothesis": "Decoded scalar-sequence canonicalization removes escape-spelling identity splits across a broad Unicode sample while preserving exact scalar-sequence distinctions and rejecting lone surrogates.",
+  "strongest_counterhypothesis": "The repair either still splits astral/escaped strings or over-normalizes canonically related but distinct scalar sequences, creating false semantic equality.",
+  "baseline": "RAW_JSON_TOKEN_SPELLING_HASH",
+  "candidate": "DECODED_VALIDATED_SCALAR_SEQUENCE_HASH",
+  "deliberate_mutation_control": "NFC_NORMALIZE_AFTER_DECODE",
+  "method": {
+    "random_seed": 212923543062544,
+    "random_strings": 50000,
+    "string_length_range": [1, 6],
+    "sampling": "valid non-ASCII Unicode scalar sequences biased across BMP and astral planes; surrogate code points excluded from valid corpus",
+    "paired_encodings": ["json ensure_ascii=false", "json ensure_ascii=true"],
+    "normalization_distinction_pairs": 8,
+    "lone_surrogate_negative_cases": 4
+  },
+  "measurements": {
+    "eligible_escape_spelling_pairs": 50000,
+    "astral_cases": 25606,
+    "raw_spelling_baseline_hash_mismatches": 50000,
+    "raw_baseline_failure_rate": 1.0,
+    "candidate_decoded_hash_mismatches": 0,
+    "candidate_equivalence_success_rate": 1.0,
+    "candidate_wrong_normalization_merges": 0,
+    "nfc_mutation_wrong_merges": 8,
+    "lone_surrogate_rejected": 4,
+    "lone_surrogate_cases": 4,
+    "elapsed_seconds": 0.8107657510000053,
+    "eligible_cases_per_second": 61670.093906075315
+  },
+  "runtime_metadata": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "execution_class": "HOSTED_ANALYSIS_SANDBOX_NOT_REPOSITORY_CHECKOUT_NOT_TARGET_UBUNTU_ACCEPTANCE"
+  },
+  "result": "SUPPORTED_WITHIN_ISOLATED_LOGIC_SCOPE",
+  "interpretation": "The candidate logic closes the raw escape-spelling split on all 50000 sampled pairs, including 25606 strings containing astral code points. The deliberate NFC mutation collapses all 8 exact-scalar-sequence counterexamples and is therefore discriminated. Lone-surrogate rejection holds 4/4. This increases confidence in the narrow string-value logic but does not execute the repository parser, strict LALR path, full corpus, exact checkout, Hostinger runner, or Andreas target system.",
+  "promotion": "NONE",
+  "architecture_delta": "NO_CORE_LANGUAGE_CHANGE",
+  "test_obligation": "When Clay runner eligibility is restored, execute the existing exact-SHA WP02 strict/full-corpus/canonical workflow and persist LATEST_WP02_STRICT.json before any WP02 PASS decision.",
+  "rollback": "Revert implementation commit 72fb8d3b2dff2c85a982035211b01d54bbe88c6e if admitted exact-path target evidence falsifies decoded scalar-sequence semantics; retain this receipt as bounded regression evidence.",
+  "external_primary_context": [
+    "https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2026-03-10",
+    "https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/manage-access",
+    "https://docs.github.com/en/rest/actions/self-hosted-runner-groups?apiVersion=2026-03-10"
+  ]
+}

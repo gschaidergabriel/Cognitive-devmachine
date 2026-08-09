@@ -1,0 +1,67 @@
+{
+  "schema_version":"1.0",
+  "run_id":"666-20260809T1048p0700-chatgpt-secondary",
+  "trigger":"666",
+  "source_receipts":["research_entity/archive_assimilation/receipts/666_20260809T0930p0700_chatgpt_secondary_digital_retina_e2e_raw_identity.json"],
+  "evidence_summary":{
+    "raw_identity":"64/64 leaf files downloaded and SHA-256 resolved; 0 missing; 0 blocked; 16,200,705 bytes",
+    "hard_p12_tuned_strict_pct":87.81362007168458,
+    "fresh_32_strict_pct":72.2466960352423,
+    "strict_tuned_to_fresh_drop_pp":15.56692403644228,
+    "fresh_32_lenient_pct_at_0_20":92.51101321585904,
+    "provenance":"all 32 freshset_baseline cache keys reconcile to SHA-1(raw image)[:16]",
+    "artifact_inconsistencies":["p7_lenient_022.json actually records threshold 0.20","FINAL_REPORT contains a stale unqualified 44.8% sentence despite p12_FINAL.json supporting 87.8136%"],
+    "security":"plaintext Groq API credential fallback exists in evaluator source; secret is not reproduced here; rotate/revoke and require environment-only injection"
+  },
+  "feedback":{
+    "frank":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["treat held-out freshset performance as the primary guard against benchmark-specific visual familiarity claims","separate known/familiar confidence from sensor truth and preserve explicit unknown/conflict routing when strict coverage falls out of distribution","carry classifier/dictionary version and evaluation split identity with every reported visual competence result"],
+      "warning":"87.8% tuned hard-set strict coverage must not be promoted as general visual competence; the observed tuned-to-fresh strict drop is 15.566924 percentage points."
+    },
+    "claycode":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["ensure the language/runtime can express immutable evaluation-split identity, threshold/version metadata and typed known/unknown/conflict results required by the Retina acceptance contract","make secret/config injection an external capability/config concern rather than embedding provider credentials in source"],
+      "warning":"This E2E corpus does not demonstrate a new ClayCode language mechanism; it supplies representation and acceptance constraints only."
+    },
+    "gwt":{
+      "verdict":"NO_CHANGE",
+      "reason":"The corpus measures visual coverage/generalization and provenance, not workspace selection, broadcast, effect or re-entry. Do not reinterpret Retina accuracy as GWT evidence."
+    },
+    "hyperposition":{
+      "verdict":"NO_CHANGE",
+      "reason":"No independent set-valued/higher-order state mechanism is tested by these visual coverage runs."
+    },
+    "emergenz":{
+      "verdict":"NO_CHANGE",
+      "reason":"The tuned-versus-fresh performance delta is a generalization measurement, not evidence of emergence or consciousness."
+    },
+    "claygraph":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["model dataset split, raw-image identity, cache key, evaluator version, threshold and result artifact as explicit provenance nodes/edges","preserve contradictory/stale report statements as superseded assertions rather than overwriting them","prevent benchmark-tuned vocabulary/results from becoming independent evidence nodes through worker repetition"],
+      "warning":"Artifact filenames are not authoritative metadata: p7_lenient_022 is an observed counterexample."
+    },
+    "unifieddb":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["persist classifier/dictionary version, feature/evaluator version, split identity, thresholds and raw-evidence linkage alongside familiarity state","make promotion/rollback decisions reproducible from exact held-out identities rather than mutable filenames or cached summaries"],
+      "warning":"Do not conflate learned familiarity state with sensor evidence or silently reuse tuned-set metrics as held-out state."
+    },
+    "harness":{
+      "verdict":"MATERIAL_DELTA",
+      "mandatory_regression_seeds":["tuned hard-set vs genuinely held-out freshset differential","known/unknown/conflict calibration at frozen thresholds","raw-image hash/cache-key provenance replay","misleading filename vs embedded-threshold mismatch","stale summary sentence vs authoritative result artifact conflict","secret-in-source scan rejecting plaintext provider credential fallbacks"],
+      "warning":"Acceptance must fail if only tuned-set gains are shown without a frozen held-out split and provenance-replay receipt."
+    },
+    "clay":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["carry the Retina generalization tripwire into Clay 0.1 chief-developer acceptance","treat visual-learning state as versioned learned state with explicit evidence/split provenance and rollback semantics"],
+      "warning":"Dissolving Retina into FRANK must not dissolve the distinction between tuned familiarity and held-out perception evidence."
+    },
+    "q12_index":{
+      "verdict":"MATERIAL_DELTA",
+      "use":["record exact E2E identity closure: 64/64 hashes, zero missing/blocked","record tuned hard-set strict 87.8136%, fresh-32 strict 72.2467%, and 15.5669 pp drop as the current generalization caution","record p7 threshold filename mismatch and stale FINAL_REPORT sentence as artifact-quality warnings","record security action without storing the secret value"]
+    }
+  },
+  "anti_echo_rule":"The 64-file corpus is one evidence lineage. Re-analysis by multiple workers or generated caches do not become independent replication. Tuned-set vocabulary selection is part of the same lineage and must not be counted as held-out evidence.",
+  "credit":{"exact_global_level0_percent_added":0.0,"earned_work_hours_added":0.0},
+  "created_at":"2026-08-09T10:49:00+07:00"
+}

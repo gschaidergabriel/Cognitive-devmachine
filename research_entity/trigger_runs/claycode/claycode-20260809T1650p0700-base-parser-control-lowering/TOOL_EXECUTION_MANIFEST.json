@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1650p0700-base-parser-control-lowering",
+  "provider_classes": {
+    "repository": {
+      "status": "USED",
+      "provider": "GitHub connector",
+      "evidence": [
+        "canonical r2/hash verified",
+        "trigger registry and ClayCode protocol read",
+        "current G9 V3 spec and EBNF read",
+        "ClayCode BASE workspace and acceptance contract read",
+        "current ClayGraph and UnifiedDB schemas read",
+        "current FRANK architecture fusion and 9-branch loop-of-loops feedback read"
+      ]
+    },
+    "scholarly_or_authoritative_external": {
+      "status": "USED",
+      "sources": [
+        "https://mlir.llvm.org/docs/DialectConversion/",
+        "https://component-model.bytecodealliance.org/design/wit.html",
+        "https://component-model.bytecodealliance.org/advanced/canonical-abi.html",
+        "https://wasi.dev/",
+        "https://wasi.dev/releases/wasi-p3"
+      ],
+      "source_class": "PRIMARY_OR_AUTHORITATIVE_TECHNICAL_DOCUMENTATION"
+    },
+    "executable": {
+      "status": "USED_LOCAL_FALLBACK",
+      "surface": "hosted Linux container",
+      "runtime": "Python 3.13.5 on Linux x86_64 kernel 6.18.35",
+      "experiment": "EXP-CC-20260809-G9-GRAMMAR-CONTROL-PROBE"
+    },
+    "e2b_sandbox": {
+      "status": "NOT_EXPOSED_TO_THIS_HOSTED_WORKER",
+      "fallback": "local execution",
+      "claim": "No E2B runtime evidence claimed"
+    },
+    "sandboxapi_sandbox": {
+      "status": "NOT_USED",
+      "reason": "No subscribed/verified tool surface exposed to this worker"
+    },
+    "target_ubuntu_developer_system": {
+      "status": "NOT_EXECUTED",
+      "reason": "No direct connector to Andreas' Ubuntu target host was available in this ChatGPT worker",
+      "implication": "All executable evidence remains synthetic/local until replicated on the target host"
+    }
+  },
+  "room_preflight_note": "The hosted worker could not execute repository-local research_room.py/research_interconnect_preflight.py. Remote current-state reads and an explicit INTERCONNECT_MANIFEST were used as the permitted fallback; no claim is made that those scripts ran."
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T2349p0700-chatgpt-h1-sqlite-capability-refusion",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target": "FRANK v0.1 Ubuntu acceptance path",
+  "research_promotion": "NONE",
+  "frank_release_promotion": "NONE",
+  "frank_commits": {
+    "h1_policy": "568c3528463ae9b1c61d1981845b9d1a4f2fafc2",
+    "h1_separated_differential": "3ee149ab44cd544c18ded02d24b41b9b29fcf2d1",
+    "h1_pytest_gate": "f0f2820fa3ea81a89bfcfb31bfdf779e6796028d",
+    "h1_evidence_workflow": "2688a39254892bf69daaeeb8d6ecb29925fdecd2",
+    "h1_vps_receipt": "d18595cf862330029c0baaa0e5e4b128218fa6da",
+    "sqlite_probe": "773449b8d56a1dbda5693ede497cd4c822146e85",
+    "sqlite_evidence_workflow": "2696a85eca3ccf916203b06f7d56f860a1e09a94",
+    "sqlite_vps_receipt": "39ab05470efedd792048b0611a01fbbb67b41040",
+    "model_capability_probe": "982873dc555c84672a0150594cfa903716a1da9c",
+    "model_capability_workflow": "181bfcc543802659b9e8062edc508573f8da92a7",
+    "model_capability_receipt": "1e896f33cafb425f4027c6672a866b62e5dad28e"
+  },
+  "new_packets": [
+    "KMP-FRANK-H1-SEPARATED-READOUT-POLICY-VPS-20260809",
+    "KMP-UNIFIEDDB-SQLITE-WAL-UBUNTU-RUNTIME-20260809",
+    "KMP-FRANK-VPS-REAL-MODEL-CAPABILITY-GAP-20260809"
+  ],
+  "shared_findings": [
+    "A separate proposal-only adaptive recurrence policy removed the two frozen raw-W4 early-route false halts on the same real Ubuntu runner while preserving accuracy; cost and recurrence count increased versus raw W4, so the result is a Pareto tradeoff rather than a scalar winner.",
+    "The same separated policy remained below fixed-budget synthetic cost and recurrence count and had substantially lower frozen regret, but all H1 task trajectories are synthetic and real-model generalization remains open.",
+    "Disposable SQLite WAL execution on the Ubuntu runner reproduced reader/checkpoint retention, single-writer SQLITE_BUSY behavior and a large host-local FULL/NORMAL commit-latency difference while preserving integrity.",
+    "The current self-hosted VPS has 4 vCPUs, about 16 GiB RAM, no swap, no visible GPU device and no installed llama.cpp/Ollama/vLLM/SGLang/Torch/Transformers runtime; therefore no real 4B model was executed in this cycle.",
+    "A concurrent Harness truth-gate PR was reviewed but not merged by this worker; review requested SHA-pinned checkout, main-lane regression inclusion and real Ubuntu receipt before acceptance."
+  ],
+  "anti_conflations": [
+    "real Ubuntu execution != real model execution",
+    "synthetic frozen workload != production task distribution",
+    "diagnostic readout != adaptive exit policy",
+    "proposal-only policy != execution authority",
+    "SQLite NORMAL integrity != strongest power-loss durability",
+    "single-file WAL behavior != multi-file crash atomicity"
+  ],
+  "routes": [
+    {
+      "branch": "frank",
+      "status": "FEEDBACK",
+      "feedback": "Retain the separated recurrence policy as a falsification candidate, not selected production policy. Keep release false until real pinned local-4B and Andreas-PC acceptance exist. Use the VPS as integration lane, not as claimed model-performance host."
+    },
+    {
+      "branch": "harness",
+      "status": "FEEDBACK",
+      "feedback": "Add historical/runtime episode replay and route-cost accounting for H1. Carry the SQLite held-reader/one-writer/checkpoint cases into recovery and truth-gate scenarios. Keep PR #25 draft until its own Ubuntu evidence is durable and main-lane collected."
+    },
+    {
+      "branch": "unifieddb",
+      "status": "FEEDBACK",
+      "feedback": "Expose WAL/checkpoint progress, reader age and busy/retry telemetry where SQLite WAL is used. Do not choose NORMAL vs FULL from latency alone; bind durability mode to authority/recovery requirements."
+    },
+    {
+      "branch": "claygraph",
+      "status": "FEEDBACK",
+      "feedback": "Derived graph readers can affect WAL checkpoint progress; preserve materialization lineage and reader/checkpoint observability in graph recovery tests."
+    },
+    {
+      "branch": "claycode",
+      "status": "FEEDBACK",
+      "feedback": "Represent diagnostic receipt, policy receipt and effect receipt as distinct typed/provenance-bearing objects; a policy override must not rewrite the diagnostic evidence that triggered it."
+    },
+    {
+      "branch": "gwt",
+      "status": "FEEDBACK",
+      "feedback": "Use recurrence policy measurements as compute/outcome evidence only. Separate trajectory/readout formation from stopping policy and preserve truthful/shuffled/no-reentry controls before causal claims."
+    },
+    {
+      "branch": "emergenz",
+      "status": "FEEDBACK",
+      "feedback": "The frozen H1 improvement is not an emergence or consciousness result. Preserve the raw-W4 false halts as counterevidence and require real-task lesion/rescue/reentry receipts."
+    },
+    {
+      "branch": "hyperposition",
+      "status": "FEEDBACK",
+      "feedback": "Keep raw W4, separated W4, fixed budget and other warmup policies as a set-valued operating region until held-out/runtime/real-model evidence dominates alternatives."
+    },
+    {
+      "branch": "clayresearch",
+      "status": "FEEDBACK",
+      "feedback": "Highest-information next experiment remains pinned real Qwen-class 4B fixed-vs-adaptive matched trials on a capable Ubuntu host, plus representative FRANK SQLite state traffic and crash/recovery falsification."
+    }
+  ],
+  "next_tests": [
+    "Freeze historical/runtime FRANK episode corpus and replay the recurrence policy family without evaluation-oracle leakage.",
+    "Probe Andreas' Ubuntu target system for real local-model capability and run a pinned Qwen-class 4B through the existing engine-neutral adapter.",
+    "Measure route/rollback benefit and cost rather than scoring route as a terminal zero-benefit event.",
+    "Repeat SQLite WAL probe under representative FRANK state/materialization traffic and controlled disposable crash/recovery tests.",
+    "Complete Harness PR #25 Ubuntu truth-gate fault injection, pin external actions to full SHAs and ensure its regression is in the main deep-integrity lane."
+  ]
+}

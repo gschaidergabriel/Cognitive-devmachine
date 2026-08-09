@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1709p0700-chatgpt-secondary",
+  "actor": "chatgpt-secondary",
+  "provider_classes": {
+    "repository": {
+      "status": "EXECUTED",
+      "provider": "GitHub connector",
+      "uses": ["canonical boot","current stack","ClayCode spec/grammar/workspace","branch contracts","durable run writeback"]
+    },
+    "scholarly": {
+      "status": "EXECUTED",
+      "provider": "web search",
+      "verified_primary_or_authoritative_sources": [
+        "Alive2: Bounded Translation Validation for LLVM, PLDI 2021",
+        "egg: Fast and Extensible Equality Saturation, POPL-era arXiv/paper lineage"
+      ]
+    },
+    "authoritative_web": {
+      "status": "EXECUTED",
+      "provider": "web search",
+      "verified_sources": [
+        "RFC 8785 JSON Canonicalization Scheme",
+        "WebAssembly/WASI Capabilities documentation",
+        "WebAssembly Component Model WIT reference"
+      ]
+    },
+    "executable": {
+      "status": "EXECUTED_WITH_FALLBACK",
+      "preferred": "e2b_sandbox",
+      "preferred_status": "NOT_EXPOSED_TO_CURRENT_CHATGPT_SESSION",
+      "fallback": "OpenAI local Python tool",
+      "artifact": "focused G9 parser fragment / grammar conformance checker",
+      "result": "COUNTEREXAMPLE_CONFIRMED"
+    },
+    "model_experiment": {
+      "status": "NOT_APPLICABLE_THIS_RUN",
+      "reason": "No Qwen-class target model was exposed; no simulation result is promoted as target-model evidence."
+    }
+  },
+  "limits": [
+    "GitHub code search returned no indexed path results for expected FRANK architecture artifact names; direct expected-root fetch also did not find FRANK_ARCHITECTURE.claycode.json.",
+    "No E2B/SandboxAPI runtime tool was exposed in this ChatGPT session.",
+    "Focused parser fragment is not the repository's production parser and cannot certify whole-language conformance."
+  ]
+}

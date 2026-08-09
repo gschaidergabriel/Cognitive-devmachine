@@ -6,12 +6,13 @@ This is intentionally narrower than a canonical typed-AST proof. It establishes:
 2) full current G9 V3 + Dialect V3 source acceptance,
 3) deterministic parse fingerprints across repeated parses,
 4) explicit negative/positive keyword + newline boundary tests,
-5) lexical-operator/literal discrimination in the parse fingerprint.
+5) lexical-operator/literal discrimination and trivia invariance.
 
-It must not be used to claim CC-WP-02 PASS by itself; typed canonical IR/type semantics
-remain downstream requirements. V9 resolves both the V5 strict-LALR ambiguity and V6's
-current-corpus regression by contextually distinguishing bare Needle.owns from dotted
-Needle.lowers/Needle.owns prefix relations with an explicit same-line argument.
+V17 is the minimal declarative successor to V9. Besides preserving the V5/V6 repair
+obligations, it must close the concrete V9/V10 trivia counterexample where
+`Needle.owns(X)` and `Needle.owns (X)` could acquire different parse semantics.
+It must not be used to claim CC-WP-02 PASS by itself; strict canonical/target evidence
+and downstream typed/effect work remain separate requirements.
 """
 from __future__ import annotations
 
@@ -24,7 +25,7 @@ from pathlib import Path
 from lark import Lark, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
 SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
@@ -109,6 +110,7 @@ def main() -> None:
         "invariant_as_parameter_identifier": "needle f(invariant:Int)->Int\n",
         "implicit_english_noun_phrase": "rule Claude_only consumes latest stack + writes task receipts\n",
         "dotted_relation_missing_object": "rule Needle.lowers\n",
+        "reserved_lowers_call_with_trivia": "rule Needle.lowers (X)\n",
     }
     positive_cases = {
         "bare_needle_owns_operand": "rule 4B_need_not_learn Needle.owns\n",
@@ -119,6 +121,8 @@ def main() -> None:
         "keyword_like_non_reserved_identifier": "record X { status:Int; dialect:Int; version:Int; requires:Int }\n",
         "dotted_relation_lowering": "rule Needle.lowers EffectIntent -> concrete_adapter_plan\n",
         "dotted_relation_owns": "rule Needle.owns [tool_schema,api_wire]\n",
+        "qualified_owns_call_tight": "rule Needle.owns(X)\n",
+        "qualified_owns_call_spaced": "rule Needle.owns (X)\n",
         "relation_assignment": "rule external_effect lifecycle=[REQUESTED,AUTHORIZED,DONE]\n",
         "explicit_relation_chain": "rule Claude_only consumes latest_stack + Claude_only writes task_receipts\n",
     }
@@ -142,6 +146,7 @@ def main() -> None:
         "ordered_call_arguments": ("rule f(a,b)\n", "rule f(b,a)\n"),
         "dotted_relation_kind": ("rule Needle.lowers X\n", "rule Needle.owns X\n"),
         "bare_owns_vs_prefix_owns": ("rule 4B_need_not_learn Needle.owns\n", "rule Needle.owns X\n"),
+        "call_vs_prefix_owns": ("rule Needle.owns(X)\n", "rule Needle.owns X\n"),
     }
     discrimination = [
         {"case": name, **pair_check(parser, left, right, expect_same=False)}
@@ -150,6 +155,8 @@ def main() -> None:
 
     equivalence_sources = {
         "ignored_space_comment": ("rule x>0\n", "rule   x > 0 // comment\n"),
+        "qualified_owns_call_horizontal_trivia": ("rule Needle.owns(X)\n", "rule Needle.owns (X)\n"),
+        "qualified_owns_call_long_horizontal_trivia": ("rule Needle.owns(X)\n", "rule Needle.owns          (X)\n"),
     }
     equivalence = [
         {"case": name, **pair_check(parser, left, right, expect_same=True)}
@@ -164,8 +171,8 @@ def main() -> None:
         and all(x["pass"] for x in equivalence)
     )
     out = {
-        "schema_version": "1.4",
-        "experiment": "ClayCode BASE D repaired-frontend full-corpus validation",
+        "schema_version": "1.5",
+        "experiment": "ClayCode BASE D V17 trivia-safe repaired-frontend full-corpus validation",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)),
         "grammar_sha256": sha256_bytes(grammar.encode("utf-8")),
@@ -180,8 +187,9 @@ def main() -> None:
         "positive_cases": pos,
         "lexical_discrimination_cases": discrimination,
         "lexical_equivalence_cases": equivalence,
+        "v9_trivia_counterexample_guard_present": True,
         "pass": passed,
-        "scope_guard": "PASS proves strict parser construction, exact current G9/Dialect acceptance, deterministic literal-preserving parse fingerprints and listed V5/V6 regression/boundary cases only. It does not close CC-WP-02 without the canonicalizer/differential receipts and does not prove typed IR/type/effect semantics."
+        "scope_guard": "PASS proves strict parser construction, exact current G9/Dialect acceptance, V5/V6 regression obligations and the V9 horizontal-trivia call repair for the selected grammar. It does not close CC-WP-02 without grammar-bound canonicalizer/target receipts and does not prove typed IR/type/effect semantics."
     }
     text = json.dumps(out, ensure_ascii=False, indent=2) + "\n"
     if args.output:

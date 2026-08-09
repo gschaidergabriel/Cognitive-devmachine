@@ -20,6 +20,25 @@ on:
       - 'research_entity/claycode/base/examples/FRANK_GRT_FRAME_V1.clay'
       - 'research_entity/claycode/apps/frank_active_assembly_packet_score_v1.clay'
       - '.github/workflows/claycode-full-frank-cloud-gate.yml'
+  pull_request:
+    paths:
+      - 'tools/claycode_full_frank_cloud_gate.py'
+      - 'tools/claycode_full_frank_active_assembly_validation.py'
+      - 'tools/claycode_wp13_active_assembly_h2.py'
+      - 'tools/claycode_wp13_h3_consolidation.py'
+      - 'tools/claycode_wp13_frank_handoff_validation.py'
+      - 'tools/claycode_base_frank_block_toolchain.py'
+      - 'tools/claycode_structured_backend.py'
+      - 'tools/claycode_base_record_selection.py'
+      - 'tools/claycode_base_effect_pipeline.py'
+      - 'tools/claycode_base_runtime.py'
+      - 'research_entity/harness/reference/active_assembly.py'
+      - 'research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_FULL_V1.clay'
+      - 'research_entity/claycode/base/examples/FRANK_ACTIVE_ASSEMBLY_H2_V1.clay'
+      - 'research_entity/claycode/base/examples/FRANK_GRT_FRAME_V1.clay'
+      - 'research_entity/claycode/apps/frank_active_assembly_packet_score_v1.clay'
+      - '.github/workflows/claycode-full-frank-cloud-gate.yml'
+      - 'research_entity/claycode/diagnostics/**'
 
 permissions:
   contents: write
@@ -46,7 +65,7 @@ jobs:
       - name: Execute all five cloud-safe Full-FRANK semantic routes
         run: python tools/claycode_full_frank_cloud_gate.py || true
       - name: Commit all generated evidence, including failures
-        if: always()
+        if: always() && github.event_name != 'pull_request'
         run: |
           test -f research_entity/claycode/autonomous/FULL_FRANK_CLOUD_SEMANTIC_GATE.json
           git config user.name 'claycode-full-frank-cloud-gate'

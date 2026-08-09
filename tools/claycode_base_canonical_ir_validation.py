@@ -9,6 +9,8 @@ It proves a narrower contract:
 - operator/literal/order/relation mutations are hash-distinguishable.
 
 It does NOT claim typed semantic equivalence, WP03 closure, or CC-WP-02 PASS by itself.
+V9 is the active frontend candidate. maybe_placeholders=False is deliberate: absent optional
+syntax is represented by absence, not Python None nodes inside the canonical tree.
 """
 from __future__ import annotations
 
@@ -22,7 +24,7 @@ from typing import Any
 from lark import Lark, Token, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
 DEFAULT_SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
@@ -136,7 +138,11 @@ def main() -> None:
     ap.add_argument("--grammar", default=str(DEFAULT_GRAMMAR))
     ap.add_argument("--source", action="append", dest="sources")
     ap.add_argument("--output")
-    ap.add_argument("--proxy-nonstrict", action="store_true", help="Disable Lark strict mode only for hosted proxy validation when interegular is unavailable.")
+    ap.add_argument(
+        "--proxy-nonstrict",
+        action="store_true",
+        help="Disable Lark strict mode only for hosted proxy validation when interegular is unavailable.",
+    )
     args = ap.parse_args()
 
     grammar_path = Path(args.grammar)
@@ -149,6 +155,7 @@ def main() -> None:
         strict=not args.proxy_nonstrict,
         start="start",
         keep_all_tokens=True,
+        maybe_placeholders=False,
     )
 
     sources = [source_receipt(parser, path) for path in source_paths]
@@ -165,6 +172,7 @@ def main() -> None:
         pair_case(parser, "true_vs_false", "rule true\n", "rule false\n", False),
         pair_case(parser, "ordered_call_arguments", "rule f(a,b)\n", "rule f(b,a)\n", False),
         pair_case(parser, "dotted_relation_kind", "rule Needle.lowers X\n", "rule Needle.owns X\n", False),
+        pair_case(parser, "bare_owns_vs_prefix_owns", "rule 4B_need_not_learn Needle.owns\n", "rule Needle.owns X\n", False),
     ]
 
     passed = (
@@ -173,13 +181,14 @@ def main() -> None:
         and all(x["pass"] for x in discrimination)
     )
     out = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "experiment": "ClayCode BASE WP02 canonical syntax-IR roundtrip/hash validation",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "ir_schema": IR_SCHEMA,
         "grammar_path": str(grammar_path),
         "grammar_sha256": sha256(grammar.encode("utf-8")),
         "parser_strict": not args.proxy_nonstrict,
+        "maybe_placeholders": False,
         "sources": sources,
         "equivalence_cases": equivalence,
         "mutation_discrimination_cases": discrimination,

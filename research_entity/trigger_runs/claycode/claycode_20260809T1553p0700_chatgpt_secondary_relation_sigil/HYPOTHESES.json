@@ -1,14 +1,14 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"claycode_20260809T1553p0700_chatgpt_secondary_relation_sigil",
   "hypotheses":[
     {
       "id":"H-CC-RELATION-SIGIL-003",
-      "status":"OPEN_SUPPORTED_BY_LOCAL_PROXY",
-      "claim":"Prefixing open semantic relation names with a one-character sigil can eliminate the observed identifier/operator lexical ambiguity while preserving relation identity and requiring no ClayCode semantic redesign.",
-      "evidence":["EXECUTABLE_RESEARCH_RECEIPT.json"],
-      "counterhypothesis":"A declared bare-infix relation design with contextual lexing/resolution provides equal or better stability and lower reader/repair cost without ambiguity.",
-      "falsifier":"Full admitted-corpus parser/roundtrip tests show sigil normalization changes meaning, creates new ambiguity, raises repair/token cost materially, or performs worse than declared bare-infix syntax."
+      "status":"OPEN_SUPPORTED_BY_LOCAL_PROXY_AND_FUZZ",
+      "claim":"A relation sigil with compact @name and quoted @\"arbitrary identity\" forms can eliminate the observed identifier/operator lexical ambiguity, preserve arbitrary relation identity, and remain close to current G9 surface cost without semantic redesign.",
+      "evidence":["EXECUTABLE_RESEARCH_RECEIPT.json","20k deterministic fuzz with zero identity failures"],
+      "counterhypotheses":["strict generic relation(quoted_id,lhs,rhs) is operationally superior despite higher surface cost","declared contextual bare-infix relations outperform both strict lexical candidates"],
+      "falsifier":"Full admitted-corpus parser/roundtrip and reader benchmarks show semantic drift, ambiguity, worse diagnostics/repair, or a material reader/token advantage for a competing candidate."
     },
     {
       "id":"H-CC-DECLARED-RELATION-RESOLVER-004",
@@ -19,18 +19,29 @@
     },
     {
       "id":"H-CC-GENERIC-INFIX-NULL-002",
-      "status":"OPEN_WEAKENED_BY_COUNTEREXAMPLE",
-      "claim":"Allowing arbitrary identifier-as-infix syntax is superior to strict lexical relation marking.",
-      "evidence":[],
-      "counterevidence":["prior E2B relation-word lexer ambiguity","EXP-CC-G9-RELATION-SIGIL-003 fail-fast mutation results"],
-      "falsifier":"A declared contextual-infix implementation parses the complete corpus with stable AST, precise typo diagnostics, equal semantic-hash preservation and lower measured reader/token/repair cost than the sigil candidate."
+      "status":"OPEN_WEAKENED_NOT_REFUTED",
+      "claim":"Allowing bare identifier-like infix relations is superior to lexically explicit relation marking.",
+      "counterevidence":["prior E2B relation-word lexer ambiguity","sigil fail-fast mutation result","strict generic quoted-call candidate also removes relation vocabulary from lexer/operator classification"],
+      "falsifier":"A declared contextual-infix implementation parses the complete corpus with stable AST, precise typo diagnostics, equal semantic-hash preservation and lower measured reader/token/repair cost than both strict candidates."
+    },
+    {
+      "id":"H-CC-RELATION-THREEWAY-005",
+      "status":"OPEN_NEXT_DISCRIMINATING_TEST",
+      "claim":"The production BASE relation surface should be selected by a three-way executable comparison: sigil-hybrid vs strict generic quoted-call vs declared contextual bare-infix, rather than by syntax preference.",
+      "evidence":["sigil 20k local fuzz","generic quoted-call 20k concurrent local fuzz","prior E2B lexical counterexample"],
+      "falsifier":"One candidate fails basic full-corpus semantic preservation before a three-way cost/diagnostic comparison is meaningful."
     }
   ],
   "negative_results":[
     {
       "id":"NR-CC-BARE-OPEN-RELATION-LEXICAL-003",
       "status":"NEGATIVE_RESULT_AT_TESTED_SCOPE",
-      "claim":"The current path of bare open relation words remains unsafe to freeze without an explicit lexical/resolution policy; prior E2B replication already exposed an identifier-vs-relation ambiguity, while the sigil proxy removes it at the tested scope."
+      "claim":"Bare open relation words are not safe to freeze without an explicit lexical+semantic resolution policy; prior E2B replication exposed an identifier-vs-relation ambiguity."
+    },
+    {
+      "id":"NR-CC-RELATION-SYNTAX-WINNER-004",
+      "status":"NEGATIVE_RESULT_NO_WINNER_YET",
+      "claim":"Neither the sigil-hybrid nor the strict generic quoted-call candidate is justified for promotion from local proxy/fuzz evidence alone; full-corpus and reader/repair measurements remain required."
     }
   ]
 }

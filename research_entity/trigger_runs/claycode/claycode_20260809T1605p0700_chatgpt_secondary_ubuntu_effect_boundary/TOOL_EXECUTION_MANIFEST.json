@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1605p0700_chatgpt_secondary_ubuntu_effect_boundary",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "executions":[
+    {"tool":"GitHub","class":"CONNECTED_REPO_READ_WRITE","result":"PASS","notes":"Canonical r2 verified; project target-host directive and ClayCode workspace updates committed; run artifacts committed."},
+    {"tool":"web.run","class":"PRIMARY_SOURCE_RESEARCH","result":"PASS","sources":["Linux kernel Landlock documentation","Linux man-pages mount/user namespace documentation","Ubuntu AppArmor documentation","WebAssembly Component Model/WASI capability and resource-handle specifications"]},
+    {"tool":"local_container","class":"EXECUTABLE_LINUX_RESEARCH","result":"PASS_WITH_NEGATIVE_BACKEND","environment":{"distribution":"Debian GNU/Linux 13 (trixie)","kernel":"Linux 6.18.35 x86_64","compiler":"gcc"},"experiments":["Landlock ABI probe","user+mount namespace/chroot capability-mount probe","unsandboxed ambient-authority baseline"]},
+    {"tool":"E2B","class":"PREFERRED_EXTERNAL_EXECUTION","result":"NOT_EXPOSED_IN_CURRENT_SESSION"},
+    {"tool":"tools/research_interconnect_preflight.py","class":"REPO_PREFLIGHT","result":"BLOCKED_GOVERNANCE_DRIFT","notes":"Current registry branch clayresearch conflicts with preflight priority tables still using clay; fail-closed guard prevents official manifest."},
+    {"tool":"tools/goodman_filter_check.py","class":"ANTI_ECHO_VALIDATOR","result":"NOT_RUN","notes":"No local repository checkout; no strong semantic promotion is claimed by this run. Goodman review is committed for later validator replay."}
+  ],
+  "ubuntu_evidence_boundary":"Local executable evidence is Linux-specific but not from the actual Ubuntu developer system. Final BASE/Harness acceptance requires replication on that Ubuntu target."
+}

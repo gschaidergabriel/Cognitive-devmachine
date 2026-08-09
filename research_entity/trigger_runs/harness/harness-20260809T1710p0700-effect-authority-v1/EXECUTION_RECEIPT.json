@@ -1,0 +1,47 @@
+{
+  "schema_version":"1.0",
+  "run_id":"harness-20260809T1710p0700-effect-authority-v1",
+  "work_package":"H-WP-10-EFFECT-AUTHORITY",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "evidence_class":"LOCAL_SYNTHETIC_EXECUTION",
+  "not_live_frank_evidence":true,
+  "not_target_andreas_ubuntu_execution":true,
+  "not_h1_pass":true,
+  "source_artifact":"research_entity/harness/effect_commit_v1.py",
+  "source_commit":"a2072a9a2b1ca438ac840bf59cb62ca1d9138cb0",
+  "executed_candidate_sha256":"57852dc051e3d1af72742ddfbb94a1ed2c4facb58fcfcebdd9880524a2c02d6d",
+  "source_equivalence_note":"The executed local candidate and repository artifact implement the same oracle; byte-for-byte identity was not asserted because the repository copy was formatting-compressed after the local execution. Promotion therefore requires repository-source replay/CI or target-host execution.",
+  "executions":[
+    {"kind":"PY_COMPILE","status":"PASS"},
+    {"kind":"SELF_TEST","status":"PASS","tests_total":18,"tests_passed":18,"initial_test_harness_defect":"A nested dataclass mutation initially became a dict and raised AttributeError; corrected before recorded PASS."},
+    {"kind":"EXHAUSTIVE_DISCRIMINATOR","status":"PASS","cases":32,"retained_permit":{"unsafe":30,"false_abort":0},"global_epoch":{"unsafe":0,"false_abort":1},"scoped_dependency_envelope":{"unsafe":0,"false_abort":0}},
+    {"kind":"FUZZ_DISCRIMINATOR","status":"PASS","seed":20260809,"cases":100000,"retained_permit":{"unsafe":45008,"false_abort":0},"global_epoch":{"unsafe":0,"false_abort":31403},"scoped_dependency_envelope":{"unsafe":0,"false_abort":0}}
+  ],
+  "validated_invariants":[
+    "unrelated state churn does not invalidate a decision when its declared critical dependency closure is unchanged",
+    "critical dependency version changes reject commit",
+    "capability revoke/regrant with the same semantic name but a new generation/epoch rejects stale authority",
+    "resource slot reuse with a new generation/resource identity rejects ABA-stale handles",
+    "budget shrink rejects commit",
+    "MODEL_OUTPUT cannot be an authority origin",
+    "NEEDLE_ROUTE cannot be an authority origin",
+    "irreversible effects require an external approval witness",
+    "same local idempotency identity suppresses duplicate local ledger transition",
+    "idempotency-key collision with a different effect hash rejects"
+  ],
+  "negative_results_and_limits":[
+    "Retaining a decision-time permit is unsafe under later critical/capability/resource/budget change.",
+    "Global-epoch CAS is safe in this model but produces unnecessary false abort under unrelated churn.",
+    "The local idempotency ledger modeled here is NOT evidence of exactly-once external effects. Concurrent ClayCode recovery probe c6a5d7189c32cea5789d25137efee5de3319f5da shows local PREPARED state cannot distinguish before-effect from after-effect crash worlds; remote idempotency/deduplication, transactional coupling, or reconcilable remote effect identity is required, otherwise outcome must remain UNCERTAIN.",
+    "Synthetic zero-error results do not prove dependency closure completeness, OS mediation completeness, generated-child/FFI closure, or live Frank correctness."
+  ],
+  "epistemic_boundary":"This run establishes an executable reference discriminator for scoped commit freshness in a constructed state model. It does not promote the mechanism to H1 semantics and does not authorize live effects.",
+  "next_execution":[
+    "replay the exact repository source under CI/Ubuntu target",
+    "adapt frozen H1 effect traces after BASE gate permits H1 execution",
+    "inject unrelated churn, critical-state changes, capability revoke/regrant, resource ABA, budget changes and queue delay",
+    "add crash/restart cases with REMOTE_IDEMPOTENT, TRANSACTIONALLY_COUPLED and UNCERTAIN external-effect outcomes",
+    "test generated child-code/FFI effect closure"
+  ],
+  "status":"PASS_SYNTHETIC_FOUNDATION_NOT_PROMOTED"
+}

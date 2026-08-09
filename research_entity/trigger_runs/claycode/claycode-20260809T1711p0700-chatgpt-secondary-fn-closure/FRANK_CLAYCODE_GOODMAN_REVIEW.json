@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.1",
+  "protocol": "research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id": "claycode-20260809T1711p0700-chatgpt-secondary-fn-closure",
+  "latest_frank_run": "fusion-20260809T1538p0700-frank-architecture-lineage",
+  "latest_frank_architecture_artifact": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FINAL_REPORT.md",
+  "shared_ancestry_is_not_replication": true,
+  "reviews": [
+    {
+      "claim_id": "GOODMAN-CC-FN-001",
+      "frank_statement": "FRANK v0.1 needs ClayCode to execute the integrated runtime semantics as a general-purpose compiled/runtime language while preserving external effect authority.",
+      "frank_source_refs": [
+        "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FINAL_REPORT.md",
+        "research_entity/rooms/PROGRAM_STATE.json"
+      ],
+      "ancestry_families": ["FRANK_C9_ARCHITECTURE", "BASE_CLAYCODE_GENERAL_PURPOSE_CONTRACT", "CC14_UNIVERSAL_CORE"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "The current G9 cognition-specific declarations plus Needle/host adapters are sufficient; reusable executable function definitions need not exist in the admitted ClayCode surface.",
+      "falsifier": "A production parser/canonical-IR/compiler build from the current unmodified G9 admitted stack compiles and executes reusable typed function bodies/calls for the mandatory application suite with auditable semantic identity.",
+      "independent_checks": [
+        "WebAssembly Core 3.0 independently separates module function definitions from call/control instructions.",
+        "LLVM LangRef independently defines function definitions/basic blocks and typed call semantics.",
+        "Local executable proxy added an expression-bodied typed function-definition surface and matched a direct reference on 20000 randomized calls with zero differential mismatches."
+      ],
+      "adversarial_checks": [
+        "Current grammar statement alternatives were checked for a general function-definition production; none is present while call expressions are present.",
+        "Undefined function target was rejected by the candidate checker.",
+        "Arity mismatch was rejected by the candidate checker.",
+        "Undefined variable was rejected by the candidate checker.",
+        "No claim was made that the proxy parser is the production G9 parser or that functions alone satisfy BASE."
+      ],
+      "verdict": "REFINED",
+      "reason": "Independent compiler/IR designs and the executable bridge support explicit definition/signature binding, but the evidence does not require a new FRANK-specific or cognitive semantic primitive. The narrow result is a BASE frontend/IR integration gap: the prior universal-core function/call contract is not exposed by the current G9 grammar/dialect surface.",
+      "claycode_action": "implement_candidate_surface_and_canonical_ir_binding_without_core_semantic_promotion",
+      "affected_claycode_artifacts": [
+        "research_entity/claycode/g9/grammar.ebnf",
+        "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+        "future BASE parser/canonical IR/type checker/compiler"
+      ]
+    }
+  ]
+}

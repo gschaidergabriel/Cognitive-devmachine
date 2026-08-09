@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "drive-frank-rettung-20260731-exact-dedup-20260809T0931p0700",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "observed_at": "2026-08-09T09:31:00+07:00",
+  "source_root": {
+    "drive_id": "1zsb18bg0W8Ri8bgqZBkpTNTD-7fPKhT3",
+    "title": "frank-rettung-2026-07-31"
+  },
+  "identity_target_root": {
+    "drive_id": "1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6",
+    "title": "frank-rettung",
+    "existing_semantic_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json"
+  },
+  "enumeration_method": "DIRECT_RECURSIVE_FOLDER_FETCH_PLUS_RAW_FILE_DOWNLOAD_SHA256_AND_BYTE_CMP",
+  "root_child_count": 3,
+  "subfolder_count_excluding_root": 11,
+  "leaf_file_count": 10,
+  "all_leaf_pairs_byte_identical": true,
+  "aggregate_tree_hash_method": "sha256(sorted(path + NUL + leaf_sha256 + LF))",
+  "aggregate_tree_sha256": "69766984f25439c50b3e3a9defdc26c811563c4864ecd182c434f765d43443b9",
+  "leaves": [
+    {"path":"WAS-IST-DAS.md","source_drive_id":"1wxQ5tIDRSxB9FOgnP2XTyfkQuo8GaFmq","target_drive_id":"1fk7QhCkJbFE4UioFodgy_dXUBorLjspl","bytes":1572,"sha256":"84d00790bd0ccb63cfd33fb3d07f9f65cbc3820df1d209f14858689906095a16","cmp":"IDENTICAL"},
+    {"path":"vom-11-mai/personality/e_pq.py","source_drive_id":"1tZzWdfyjUOilewA5HqbhrqifUeUGGnPd","target_drive_id":"16O1yvKulBeGMFBK04jsTI4jAmCP3PhPH","bytes":57075,"sha256":"7d93b3961dede40732ee2ae3dca14d5c36f54b7b45be3277b2ff8e61c0572a6b","cmp":"IDENTICAL"},
+    {"path":"vom-11-mai/services/consciousness_daemon.py","source_drive_id":"1FqFi0zBIRnn5EbVhdEDf7R76hRR-_h0s","target_drive_id":"1lNcBlfabHDEgnHo2JM3i3piYZcoMIIMv","bytes":565210,"sha256":"86dd37c287995ed9b0e0c6d250fca174bf92789e8de21254545ba31ed38d4f74","cmp":"IDENTICAL"},
+    {"path":"vom-11-mai/services/identity_forge.py","source_drive_id":"1XONSyloTwgTPly4pxc8TPPF2W27YGy5g","target_drive_id":"1PwTPb3QQ1vOyX2vfUVxOPyz2zkWr7OJE","bytes":34547,"sha256":"dbc1902dbc89c61adf5af9804cfc5277d22b6cfeded93354f57def10fc3434df","cmp":"IDENTICAL"},
+    {"path":"vom-11-mai/tools/toolboxd.py","source_drive_id":"1Vwwu-NUktxfWiy8T04D9A5jJnjlR4SG3","target_drive_id":"1iiog19bSTr_kuk3-EgKzJKnKaeIIVarn","bytes":99855,"sha256":"e1aab98d9cdc1c0d4ba77cc644d9a0d8d5d76ef6ac6f37527fba74753fd24420","cmp":"IDENTICAL"},
+    {"path":"vom-11-mai/agentic/tools.py","source_drive_id":"1bJGynQptONrX9Gs_QRaUgBsCYbohT0-X","target_drive_id":"1aWyDIgFp7I9S-ibKjr74BxDoQHc5dWvZ","bytes":36684,"sha256":"256fe4e1976032cb9023d56863dbbc717589df04009deb18a412b549fa810ed0","cmp":"IDENTICAL"},
+    {"path":"unversioniert/services/paper_research.py","source_drive_id":"1fAKot2FF63KfSQrZ2CQ_xpj3R9zi4ae1","target_drive_id":"1Ju22HIZ53Rtk015llzEubvBK4ggh6wBt","bytes":20699,"sha256":"4442cb4404ade12f42dceca7a13b339568b5a4e3d6edc8bc7c3e3f42f166c4bd","cmp":"IDENTICAL"},
+    {"path":"unversioniert/services/genesis/sandbox.py","source_drive_id":"16wDroaYpmV2iCZC61VHilALvouyLdDMW","target_drive_id":"1XmEuJNjI40OpywHovNZLIJooSKY1M2nT","bytes":9609,"sha256":"dd0942273bf782c015cc490a4a6502a3e4b1d97cca707ef1db9fcbd7420a6a22","cmp":"IDENTICAL"},
+    {"path":"unversioniert/services/genesis/sensors/self_engineering.py","source_drive_id":"1Oy2Opc51-N790GPI1lf2AmpD22QfsuzQ","target_drive_id":"1W8hS8cu3s6kmJUnTsCi-9creVXRdWqAX","bytes":12776,"sha256":"2e8f737784a2d5e5184ebf9ecee005f4efab8021533f98fb81bb74ac03109eb3","cmp":"IDENTICAL"},
+    {"path":"unversioniert/services/room_content/custom_styles/snake_feel.py","source_drive_id":"1aNj3_bm3IJlGW8pX0GKvE7UDsLWsiksE","target_drive_id":"1dzbP6nOFsvyggFPS1UKGlvbtgVuEjNT7","bytes":1517,"sha256":"99baa180fd9bc4f555bd91a897ab21e71f00e45ecbaa15b4fbff8f07bad52cf7","cmp":"IDENTICAL"}
+  ],
+  "dedup_adjudication": {
+    "identity": "PROVEN_BYTE_IDENTICAL",
+    "semantic_analysis_action": "REUSE_EXISTING_ANALYSIS",
+    "new_semantic_credit": 0,
+    "new_earned_work_hours": 0.0,
+    "provenance_action": "PRESERVE_BOTH_DRIVE_ROOTS_AND_MAP_EACH_LEAF_TO_SHARED_CONTENT_IDENTITY",
+    "level0_effect": "SOURCE_COPY_TERMINALLY_DISPOSED_AS_EXACT_DUPLICATE; does not by itself close whole-Drive Level0 denominator"
+  }
+}

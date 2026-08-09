@@ -22,7 +22,7 @@ plus matched policy/re-entry comparisons:
 - truthful re-entry vs shuffled re-entry;
 - truthful re-entry vs no re-entry.
 
-The analysis must bind the same frozen input, loop identity/family, state epoch and regulator. Mismatched episodes are invalid rather than weak evidence.
+The hardened match basis binds the same frozen input hash, loop identity/family, semantic state epoch, graph epoch, controller-policy hash, residual-estimator identity/version and regulator. Mismatched episodes are invalid rather than weak evidence. Lesion/rescue arms require intervention references, and a successful rescue requires a rollback reference.
 
 ## Implementation produced
 
@@ -58,7 +58,7 @@ Strong attestation candidates are currently restricted to target-runtime receipt
 
 For a matched baseline/lesion/rescue triple:
 
-- `INVALID_MATCH`: frozen input / loop / epoch / regulator mismatch;
+- `INVALID_MATCH`: frozen input / loop / semantic epoch / graph epoch / controller policy / residual-estimator identity / regulator mismatch;
 - `NEGATIVE_RESULT_CANDIDATE`: lesion did not create the preregistered material harm;
 - `OPEN`: harm exists but rescue is insufficient, outcomes are not verified, or attestation is weak;
 - `CANDIDATE_CAUSAL_SUPPORT`: matched lesion harm + rescue recovery + verified outcomes + strong attestation.
@@ -79,10 +79,10 @@ Durable writes remain restricted to the admitted central Frank runtime/materiali
 
 ## Local regression receipt
 
-Executed by `chatgpt-secondary` in an isolated local Python workspace:
+Executed by `chatgpt-secondary` in an isolated local Python workspace after adversarial hardening:
 
-- 9 tests executed;
-- 9 PASS;
+- 12 tests executed;
+- 12 PASS;
 - 0 FAIL.
 
 Covered cases:
@@ -90,6 +90,9 @@ Covered cases:
 - matched lesion/rescue candidate support;
 - material-lesion negative result;
 - frozen-input mismatch rejection;
+- graph-epoch mismatch rejection;
+- controller-policy hash validation;
+- successful-rescue rollback binding;
 - self-attestation blocked from strong causal support;
 - history proxy excluded from validated estimator calibration;
 - validated estimator calibrated against observed next-step utility;
@@ -106,6 +109,7 @@ Run frozen accepted H1 episodes on the real Andreas Ubuntu target with target-ru
 For every frozen episode preserve:
 
 - exact input/state/graph epoch basis;
+- controller policy hash;
 - baseline, lesion and rescue observation IDs;
 - regulator and intervention specification;
 - task utility/correctness before and after;

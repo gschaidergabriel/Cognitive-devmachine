@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1600p0700_chatgpt_secondary_relation_generic",
+  "federation_protocol": "research_entity/global/CLAYCODE_RESEARCH_CENTER_WORKER_FEDERATION.clay",
+  "coordination_mode": "DEGRADED_REPO_NATIVE_NO_LIVE_UNIFIEDDB_PROJECTION",
+  "receipts": [
+    {
+      "kind": "JOIN",
+      "status": "RECORDED_REPO_NATIVE",
+      "worker": "chatgpt-secondary",
+      "stack_epoch": 15,
+      "focus": ["CC-WP-01-SPEC-FREEZE","CC-WP-02-PARSER-CANON","CC-WP-11-FUZZ-CONFORMANCE"],
+      "evidence": ["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay","research_entity/global/CLAYCODE_RESEARCH_CENTER_WORKER_FEDERATION.clay"]
+    },
+    {
+      "kind": "READ_CURRENT_COORDINATION_STATE",
+      "status": "DEGRADED",
+      "observed": ["current ClayCode release workspace","recent repository commits","prior parser/E2B replication artifacts","current program stage"],
+      "missing": ["materialized CURRENT_DYNAMIC_WORK.clay","materialized CURRENT_SYSTEM_POSSIBILITY.clay"],
+      "rule": "Missing live projections are preserved as a blocker; no invented worker/lease state."
+    },
+    {
+      "kind": "OVERLAP_ANALYSIS",
+      "status": "PASS_FOR_NON_DUPLICATE_RESEARCH_QUESTION",
+      "reused": ["G9 grammar drift evidence","E2B minimal-repair counterevidence","typed set-vs-ordered canonicalization result"],
+      "selected": "generic quoted-relation canonical surface",
+      "why_nonduplicate": "Prior work established parser drift and relation lexer collision but did not test a strict generic quoted relation-id form across current examples plus adversarial relation-id fuzz."
+    },
+    {
+      "kind": "CLAIM",
+      "status": "RECORDED_AS_WORK_CREATE_EVENT",
+      "work_id": "CC-WORK-RELATION-GENERIC-20260809-01",
+      "event_ref": "research_entity/state/work/events/20260809T1600p0700_CC_RELATION_GENERIC_WORK_CREATE.json",
+      "commit": "fcd612b3fc0cd045166c23982cb513bdf321aa56"
+    },
+    {
+      "kind": "PULSE",
+      "status": "MATERIAL_DELTA_WRITTEN",
+      "delta": "20k/20k relation-id preserving strict generic relation parses; no binary relation lexer vocabulary needed in tested candidate; n-ary universality explicitly rejected.",
+      "evidence_ref": "EXECUTABLE_RESEARCH_RECEIPT.json",
+      "commit": "7944e9d8ec3ac73378ede062085221e6f5be7b87"
+    },
+    {
+      "kind": "FINAL_DELTA",
+      "status": "PENDING_FINAL_REREAD_AND_REPORT",
+      "rule": "Must be completed only after current remote state is reread and relevant counterevidence checked."
+    }
+  ],
+  "completion_boundary": "Because the live UnifiedDB coordination projection and official preflight are unavailable, these receipts do not claim full federation-protocol PASS. Research may be committed as a degraded evidence delta, not as a release or semantic promotion."
+}

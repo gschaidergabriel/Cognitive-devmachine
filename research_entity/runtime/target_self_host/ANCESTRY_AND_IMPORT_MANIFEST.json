@@ -1,29 +1,29 @@
 {
-  "schema_version": "1.1",
-  "target_version": "RAE-TARGET-0.2",
+  "schema_version": "1.2",
+  "target_version": "RAE-TARGET-0.2.1",
   "semantic_source": "research_entity/runtime/target_self_host/RAE_TARGET_CONTRACT.clay",
-  "semantic_contract_sha256": "19db717f3e86e545b87bed0877b75e9c3c5502a5bd2de7180c7b631607b29415",
-  "projection_policy": "RAE_UNIFIED_SCHEMA.sql + RAE_CLAYGRAPH_SCHEMA.sql + rae_target_runtime.py are auditable reference/materialized projections of the Clay semantic source",
+  "semantic_contract_sha256": "468c45df8706530e27c1b2ca686a3a77fc57adfe5a556940c2232bb6b9f7de90",
+  "projection_policy": "Clay is semantic source; RAE_UNIFIED_SCHEMA.sql, RAE_CLAYGRAPH_SCHEMA.sql and rae_target_runtime_v021.py are auditable executable/materialized projections. rae_target_runtime.py is the compatibility entrypoint.",
+  "runtime_blobs": {
+    "entrypoint": "816c5bd23ba2143ff5165d2a3f7a7d6e0ba9c994",
+    "target_core": "ead81682a50ef80d78723a32cec83f616b499986",
+    "contract": "27d2b4812c12f7afe339e80a0d35cd7508b6628e",
+    "unified_schema": "08dcf096f971e148c6f63d003277d99f51113f72",
+    "claygraph_schema": "44a603ca0d8c18f3c4eb796e369c09cc1d1c7b65"
+  },
   "frank_source_repo": "gschaidergabriel/Dr.-Unterweger",
-  "frank_observed_head": "0a10d64f6ad297031fae955c1b75ce04dd4757a2",
-  "copy_policy": "copy and transform architecture/schema lineage only; never copy Andreas personal live state into the Research Entity",
-  "source_files": [
-    {"path":"runtime/state/UNIFIEDDB_SCHEMA.sql","sha":"20e5269c2770d98896477b4f263efb8c35d3c1fb"},
-    {"path":"runtime/state/UNIFIEDDB_V6_MIGRATION.sql","sha":"52e8d7b953453cd7293119e03ce24fea8b3725dc"},
-    {"path":"runtime/state/UNIFIEDDB_V7_MIGRATION.sql","sha":"71dc8787cd187cfdaa5e1023f511071ab99021e4"},
-    {"path":"runtime/state/UNIFIEDDB_V7_1_HARDENING.sql","sha":"3aab93f169dc1e9370759169e4c3f51e49241522"},
-    {"path":"runtime/state/UNIFIEDDB_V8_CHATGPT_DELEGATION.sql","sha":"7ff2041765708922ca7a75c9862301f4df1a21ac"},
-    {"path":"runtime/state/UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql","sha":"94ad0171ebdfc5025727ff9939bfa81cec09bb48"},
-    {"path":"runtime/state/UNIFIEDDB_V10_DYNAMIC_WORK_REVISIONS.sql","sha":"460f7299655e6e82fda40af8462e393808f11814"},
-    {"path":"runtime/state/UNIFIEDDB_V11_INTEGRITY_HARDENING.sql","sha":"098c269e7342ffbd22f8703ada8c8780a37cd679"},
-    {"path":"runtime/state/UNIFIEDDB_V12_SESSION_SKILLS.sql","sha":"6328247754f5dad4c9bcff49ca82c876c08fe254"},
-    {"path":"runtime/state/UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql","sha":"6b966ed0c99b2740878fe05d5c3eb3f4044e0fd5"},
-    {"path":"runtime/state/CLAYGRAPH_SCHEMA.sql","sha":"f09336d14b87fbee045d99eb19c1efe9610a6929"},
-    {"path":"runtime/state/CLAYGRAPH_V6_MIGRATION.sql","sha":"f782b70cf299f453e001e5d506aa871f8be0212d"},
-    {"path":"runtime/state/CLAYGRAPH_V7_MIGRATION.sql","sha":"5c63af6d680305de728253c939d1cc3b20012680"},
-    {"path":"runtime/state/CLAYGRAPH_V8_EPOCH_RETRACTION.sql","sha":"6ed3bc14ff35c8dc0cbbff07f97de57bb03e1908"},
-    {"path":"runtime/state/apply_current_schema.py","sha":"73005c691d4138309dafceacc8fd56668cbe242a"}
-  ],
+  "frank_schema_ancestry_observed_head": "0a10d64f6ad297031fae955c1b75ce04dd4757a2",
+  "expanded_frank_sandbox_baseline": {
+    "branch": "research/frank-v01-integrated-sandbox-20260809",
+    "head": "d91c45b9a5b9b892953d6be2c57ca1c7dc39b85f",
+    "source_event": "ecba47036c4e5c25be5372c5c291429fdb3a9ca9"
+  },
+  "copy_policy": "Architecture/schema/research-state lineage is transformed into a distinct Research-Entity database. Andreas personal live semantic state is not copied. Frank identity and Research-Entity identity remain distinct.",
+  "frank_schema_chain": {
+    "unified": ["UNIFIEDDB_SCHEMA","V6","V7","V7_1","V8","V9","V10","V11","V12","V13"],
+    "claygraph": ["CLAYGRAPH_SCHEMA","V6","V7","V8"],
+    "loader_blob": "73005c691d4138309dafceacc8fd56668cbe242a"
+  },
   "research_imports": [
     {"domain":"gwt","ref":"research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md","blob_sha":"b2d9a903f256e1f26db500317b34930456188245","policy":"OWNER_DIRECTIVE"},
     {"domain":"semantic_fabric","ref":"research_entity/global/CLAY_SEMANTIC_COUPLING_FABRIC_DIRECTIVE.md","blob_sha":"8685421de82b76b0ce925b2cf45fa72082502654","policy":"OWNER_DIRECTIVE"},
@@ -33,8 +33,22 @@
     {"domain":"emergenz","commit":"343fabb8b176df10f85aa3cbd4dce09f165b4987","policy":"FAIL_CLOSED_OPEN"},
     {"domain":"claycode","commit":"d3c8e7de8ca2ccfdbc4db4180778b351b5b983b9","policy":"SOFTWARE_PATH_RELEASE_OPEN"},
     {"domain":"claycode","commit":"1538ed5e5550ee2509c42e27077b87a00f918b33","policy":"SANDBOX_EVIDENCE_NOT_RELEASE"},
-    {"domain":"claycode","ref":"tools/claycode_base_compiler.py","blob_sha":"5d01dfeb77b1bece85433cd09af6ea3427a5f995","policy":"CURRENT_SOURCE_SNAPSHOT"},
-    {"domain":"frank-loop","commit":"83d2d41e751a332fa285b3d81cc753ab9b67648b","policy":"OWNER_OBSERVATION_FUNCTIONAL_ONLY"}
+    {"domain":"claycode","ref":"tools/claycode_base_compiler.py","blob_sha":"5d01dfeb77b1bece85433cd09af6ea3427a5f995","policy":"CURRENT_PURE_SLICE_SOURCE"},
+    {"domain":"frank_loop","commit":"83d2d41e751a332fa285b3d81cc753ab9b67648b","policy":"OWNER_OBSERVATION_FUNCTIONAL_ONLY"},
+    {"domain":"golden_loop","commit":"158c9d92401a5406615015e7fa4d16942ccc1f57","policy":"OPEN_HIGH_CAUSAL_CLOSURE_NOT_MAX_COUPLING"},
+    {"domain":"retina_voice","commit":"ecba47036c4e5c25be5372c5c291429fdb3a9ca9","policy":"SANDBOX_OBSERVATION_PROPOSAL_AUTHORITY"},
+    {"domain":"causal_credit_fuzz","commit":"eb84cd5aafb7c2e47747ee6270a5e5e10b5a3238","policy":"LOCAL_EXECUTION_PRIMARY_SANDBOX"}
   ],
-  "sandbox_receipt": {"target_version":"RAE-TARGET-0.2","checks":"31/31 PASS","canonical_promotion":false}
+  "legacy_conservation_boundary": {
+    "cognitive_ancestor_organs_exact": 31,
+    "source_resolved_technical_identities_exact": 36,
+    "historical_slots_measured": 74,
+    "unresolved_primary_identities_opaque": 38,
+    "exact_74_name_completeness_claim": false
+  },
+  "sandbox_receipt": {
+    "exact_repo_runtime": "33/33 PASS",
+    "deeper_pre_persistence_runtime": "35/35 PASS",
+    "canonical_promotion": false
+  }
 }

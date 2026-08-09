@@ -1,0 +1,54 @@
+name: ClayCode WP-02 Andreas target one-shot
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/claycode-wp02-andreas-target-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: claycode-wp02-andreas-target-once
+  cancel-in-progress: false
+jobs:
+  wp02-target:
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Verify registered Andreas Ubuntu target
+        run: python3 tools/claycode_target_host_identity.py verify --json
+      - name: Create isolated runtime
+        run: |
+          python3 -m venv "$RUNNER_TEMP/claycode-wp02-venv"
+          "$RUNNER_TEMP/claycode-wp02-venv/bin/python" -m pip install --disable-pip-version-check --quiet 'lark==1.3.1' 'interegular==0.3.3' 'pytest==8.4.2'
+      - name: Unit tests
+        run: "$RUNNER_TEMP/claycode-wp02-venv/bin/pytest" -q tests/test_claycode_typed_ast.py
+      - name: Full current G9 corpus
+        run: |
+          "$RUNNER_TEMP/claycode-wp02-venv/bin/python" tools/claycode_typed_ast.py \
+            --grammar research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark \
+            --source research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay \
+            --source research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay \
+            --output research_entity/claycode/base/BASE_TYPED_AST_RECEIPT_V1_20260809.json
+      - name: Scope target receipt
+        run: |
+          python3 - <<'PY'
+          import json,pathlib,platform
+          p=pathlib.Path('research_entity/claycode/base/BASE_TYPED_AST_RECEIPT_V1_20260809.json')
+          d=json.loads(p.read_text())
+          assert d['pass'] and len(d['sources'])==2
+          assert all(x['roundtrip']['pass'] for x in d['sources'])
+          assert all(x['pass'] for x in d['semantic_discrimination'])
+          assert all(x['pass'] for x in d['semantic_equivalence'])
+          d['execution_surface']={'class':'VERIFIED_ANDREAS_UBUNTU_TARGET','identity_check':'PASS','platform':platform.platform(),'python':platform.python_version()}
+          d['promotion']={'cc_wp_02_parser_canon':'TARGET_EVIDENCE_PASS','other_work_packages':'UNCHANGED','general_purpose_gate':'UNCHANGED'}
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          print('CC_WP_02_TARGET_EVIDENCE_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: claycode-wp02-target-receipt
+          path: research_entity/claycode/base/BASE_TYPED_AST_RECEIPT_V1_20260809.json
+          if-no-files-found: error

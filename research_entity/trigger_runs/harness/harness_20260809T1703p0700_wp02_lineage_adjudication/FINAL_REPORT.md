@@ -11,11 +11,11 @@ H-WP-02 has meaningful executable progress but currently contains two incompatib
 - Lineage A: `research_entity/harness/reference_state_ledger.py`
 - Lineage B: `research_entity/harness/reference/state_ledger.py`
 
-The current live-fusion receipt correctly identified this as a promotion blocker. This run narrows the conflict with a discriminating differential probe and a baseline compatibility audit.
+The live-fusion receipt correctly identified this as a promotion blocker. This run narrowed the conflict with an exact repository differential probe plus a live-baseline compatibility audit.
 
-## Differential finding
+## Exact differential finding
 
-A source-mirror execution over the current formulas produced:
+GitHub Actions `ubuntu-latest` / Python 3.12 executed `research_entity/harness/tests/wp02_lineage_differential.py` against both current repository modules. The output is preserved in `CI_DIFFERENTIAL_OUTPUT.json` and the exact execution receipt in `CI_EXECUTION_RECEIPT.json`.
 
 1. Same final semantic state reached through different event grouping/history:
    - A semantic root: equal.
@@ -23,10 +23,14 @@ A source-mirror execution over the current formulas produced:
 2. Explicit typed-set permutation/dedup:
    - A root: unequal.
    - B `semantic_state_hash`: equal.
-3. Ordinary ordered-sequence permutation:
-   - both detect semantic change.
+3. Idempotency payload collision with identical idempotency key + event id but changed semantic value:
+   - A returns `IDEMPOTENT_REPLAY`; stored value remains the original value.
+   - B raises `IdempotencyConflict`; stored value remains the original value.
+4. Capability surface:
+   - A has full verify + snapshot restore, no domain epochs.
+   - B has domain epochs, no full verify or snapshot restore.
 
-Interpretation: A has the cleaner history-independent current-content identity. B has the stronger typed canonicalization and version/trace machinery. B currently overloads `semantic_state_hash` with epoch/history identity; A under-specifies typed collections/domain epochs and has a weaker idempotency collision check.
+Interpretation: A has the cleaner history-independent current-content identity and stronger verification/recovery surface. B has the stronger typed canonicalization, domain epochs and idempotency conflict discipline. B currently overloads `semantic_state_hash` with epoch/history identity; A under-specifies typed collections/domain epochs and can silently classify a changed semantic payload as replay when the key/event-id pair is reused.
 
 ## Static implementation differences
 
@@ -42,7 +46,7 @@ Interpretation: A has the cleaner history-independent current-content identity. 
 - no typed `$kind=set` normalization;
 - no domain epochs;
 - no explicit CURRENT/RETRACTED/SUPERSEDED/QUARANTINED state-status surface;
-- idempotent replay accepts the same idempotency key + event id without verifying that the semantic payload/provenance is unchanged.
+- idempotent replay does not verify semantic payload/provenance equality after matching idempotency key + event id.
 
 ### B strengths
 
@@ -61,7 +65,7 @@ Interpretation: A has the cleaner history-independent current-content identity. 
 
 ## Live frankv0.1 baseline compatibility
 
-The current reference baseline is the accessible `gschaidergabriel/Dr.-Unterweger` repository, observed at commit `d916b98fb65dc62fbf3275d6a48dc52c2bfc2612` in this run.
+The current reference baseline is the accessible `gschaidergabriel/Dr.-Unterweger` repository, observed at commit `d916b98fb65dc62fbf3275d6a48dc52c2bfc2612` during this run.
 
 Its repository semantic materializer advances a transaction/epoch root from prior root + source head + source content hash + idempotency + operations. H1 therefore cannot silently replace that observable identity. A corrected H1 ledger should retain it as a compatibility/version identity or document an explicit tested divergence.
 
@@ -82,7 +86,7 @@ Recommended identity stack:
 4. `trace_root_hash`
    - bind state-version identity to provenance/source/execution/attempt chain.
 
-This separates the questions "is the current meaning the same?", "is this the same version/history?" and "is this the same execution trace?" instead of forcing one hash to answer all three.
+This separates the questions “is the current meaning the same?”, “is this the same version/history?” and “is this the same execution trace?” instead of forcing one hash to answer all three.
 
 ## Merge requirements before H-WP-02 completion
 
@@ -95,35 +99,34 @@ This separates the questions "is the current meaning the same?", "is this the sa
 - include timing/schedule/retry/recurrence metadata in execution receipts without allowing those signals to widen authority;
 - retain the live-baseline transaction root as compatibility state until a tested divergence is approved.
 
-## Built artifact
-
-`research_entity/harness/tests/wp02_lineage_differential.py`
-
-This test imports and executes both current repository modules against the same small golden corpus. It is intentionally a differential observation test, not a lineage preference test.
-
 ## Execution boundary
 
-This hosted ChatGPT worker cannot check out/execute the connected repository as a local process. A source-mirror mechanism probe was executed successfully here, but the new repository differential test itself remains `PENDING_EXACT_REPO_EXECUTION` on the Ubuntu/repo executor.
+Exact current-repository execution on GitHub Ubuntu CI is now complete and confirms the adjudication. This is stronger than the initial source-mirror probe but is still not target-developer-host or live-frank-baseline differential evidence.
 
 Therefore:
 
 - H-WP-02: still incomplete;
 - H1 Reference Harness: still blocked/not PASS;
+- exact GitHub Ubuntu differential: PASS;
+- actual Ubuntu developer-host execution: pending;
+- live frankv0.1 golden-corpus differential: pending;
+- crash/recovery matrix: pending;
 - no canonical scientific promotion;
-- no LoRA authorization.
+- no paid/final training authorization.
 
 ## Next highest-information test
 
-Execute `research_entity/harness/tests/wp02_lineage_differential.py` on the Ubuntu developer host, then extend the corpus to:
+Build one merged candidate H1 oracle ledger from the evidenced invariants, then run:
 
 - exact captured frankv0.1 transaction fixtures;
 - same final state / different transaction grouping;
 - set/order canonicalization;
-- stale global vs domain-epoch writers;
+- stale global vs domain/read-set epoch writers;
 - idempotency payload collision;
 - crash between mutation/receipt/epoch publication;
 - checkpoint restore;
 - dynamic Run ClayGraph binding;
-- schedule/retry timing receipts.
+- schedule/retry timing receipts;
+- exact execution on the actual Ubuntu developer host.
 
-Only after those results should one merged H1 oracle contract be frozen.
+Only after those results should the H-WP-02 oracle contract be frozen.

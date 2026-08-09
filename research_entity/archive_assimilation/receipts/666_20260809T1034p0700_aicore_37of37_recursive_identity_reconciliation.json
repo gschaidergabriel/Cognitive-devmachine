@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1034p0700-aicore-37of37-recursive-identity-reconciliation",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "purpose":"Correct the chronologically stale 36/37 AICORE aggregate by incorporating the earlier independently completed ui recursive closure without rewriting historical receipts.",
+  "authoritative_inputs":[
+    {"commit":"9cef07cea4e8b22a2e3dce025f28e483d795d0d1","receipt":"research_entity/archive_assimilation/receipts/666_20260809T1019p0700_chatgpt_secondary_aicore_wave5_36of37.json","root_children_closed":36,"recursive_units_below_those_roots":2159},
+    {"commit":"ab9e1e3584c6b6ff98d27b296b62331f7b283802","receipt":"research_entity/archive_assimilation/receipts/666_20260809T0939p0700_chatgpt_secondary_aicore_ui_recursive_closure.json","root_child":"ui","recursive_units_below_ui_root":214,"status":"EXACT_RECURSIVE_DENOMINATOR_CLOSED"},
+    {"commit":"10038fa910fec29b0963ae6a486668ce998d1cf1","task":"research_entity/rooms/rooms/center/tasks/666-l0-aicore-root-semantic-20260809T1019p0700.json","newly_admitted_root_files_semantic_gap":17,"status":"COMPLETE"}
+  ],
+  "root_direct_denominator":{"entries":67,"folder_roots":37,"root_files":30,"status":"EXACT_DIRECT_ROOT_SET"},
+  "reconciliation":{"exact_recursive_root_children":37,"expected_recursive_root_children":37,"remaining_recursive_root_children":0,"recursive_units_below_37_child_roots":2373,"formula":"2159 + 214","physical_units_below_aicore_root":2440,"physical_units_formula":"37 direct folder-root nodes + 30 direct root files + 2373 units below the 37 folder roots","folder_root_coverage_percent":100.0,"chronology_issue":"wave5 was authored after ui closure but did not incorporate that earlier receipt","resolution":"SUPERSEDED_AGGREGATION_ONLY; historical source receipts remain immutable","double_credit_check":"PASS_UI_NOT_INCLUDED_IN_WAVE5_36"},
+  "scope_status":"AICORE_LOCAL_PHYSICAL_IDENTITY_DENOMINATOR_RECONCILED_37_OF_37",
+  "semantic_note":"The separate 17 newly admitted root-file semantic task is COMPLETE; this receipt does not infer additional semantic or earned-work credit for vendor/generated/archive identities.",
+  "global_level0":{"gate":"NOT_PASS","exact_global_percent_added":0.0,"denominator_state":"NOT_FROZEN","reason":"AICORE local closure is only one Drive component; combined Drive + Project-Frankenstein + cross-source fusion denominator remains unfrozen."},
+  "created_at":"2026-08-09T10:34:00+07:00"
+}

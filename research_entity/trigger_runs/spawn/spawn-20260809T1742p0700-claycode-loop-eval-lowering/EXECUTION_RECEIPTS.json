@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-claycode-loop-eval-lowering",
+  "experiments": [
+    {
+      "experiment_id": "EXP-SPAWN-CC-LOOP-EVAL-LOWER-20260809",
+      "evidence_class": "LOCAL_ISOLATED_LINUX_EXECUTION_NOT_TARGET_UBUNTU_ACCEPTANCE",
+      "seed": 202608091742,
+      "randomized_cases": 200000,
+      "oracle_vs_ir_evaluator_mismatches": 0,
+      "oracle_vs_lowered_python_mismatches": 0,
+      "decision_counts": {"ABORT_DIVERGING": 17107, "CONTINUE": 50976, "ESCALATE_STALLED": 80589, "HALT_CANDIDATE_CONVERGED": 41178, "ROLLBACK": 3868, "ROUTE": 6282},
+      "boundary_fixture_results": ["ROUTE", "ESCALATE_STALLED", "HALT_CANDIDATE_CONVERGED", "ESCALATE_STALLED"],
+      "mutation_discriminator_differences": {"drop_residual_halt": 78179, "ignore_budget": 112104, "no_capacity_route": 2615, "no_epoch_guard": 3895},
+      "semantic_hash": "f479c4e85f1326257fcd0337caaa845cdf92daa127cc53205a90a02edfea37b1",
+      "same_semantic_hash_after_canonical_reserialization": true,
+      "semantic_mutation_changes_hash": true,
+      "contract_metadata_changes_exact_contract_hash": true,
+      "contains_external_effect_op": false
+    },
+    {
+      "experiment_id": "EXP-SPAWN-CC-LOOP-NATIVE-LOWER-20260809",
+      "evidence_class": "LOCAL_ISOLATED_LINUX_NATIVE_GCC_NOT_TARGET_UBUNTU_ACCEPTANCE",
+      "compiler": "gcc (Debian 14.2.0-19) 14.2.0",
+      "seed": 202608091743,
+      "randomized_cases": 100000,
+      "mismatches": 0,
+      "effect_ops": 0,
+      "c_source_sha256": "90cad8f964a719697fafb9ea194965d6973eb051e33edc359f1d51b807863de6",
+      "shared_object_sha256": "b86bce0c13dfe428edf9fe9118751564398a41c2f73404520d1ac0d778ad5c59"
+    }
+  ],
+  "limits": [
+    "Both tests bypass the production ClayCode parser/canonicalizer.",
+    "Native C was manually emitted as an independent backend shadow, not produced by the ClayCode compiler.",
+    "No Andreas Ubuntu developer-host execution.",
+    "No target Qwen-class 4B reader.",
+    "Scientific recurrence policy not validated by compiler parity."
+  ]
+}

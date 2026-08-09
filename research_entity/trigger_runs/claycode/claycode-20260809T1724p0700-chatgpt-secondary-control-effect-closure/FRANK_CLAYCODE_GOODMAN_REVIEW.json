@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure",
+  "subject":"FRANK -> ClayCode control/effect closure",
+  "verdict":"REFINED",
+  "frank_derived_assumption":"FRANK requires recurrent control flow plus external capability/effect authority boundaries.",
+  "shared_ancestry_collapse":"FRANK, Harness, GWT, ClayGraph and UnifiedDB project materials share ancestry and are not treated as independent replication.",
+  "independent_checks":[
+    {"source_class":"PRIMARY_SPEC","source":"WebAssembly Core Specification 3.0","finding":"structured block/loop/if/call semantics are validated separately from runtime authority"},
+    {"source_class":"PRIMARY_COMPILER_SPEC","source":"LLVM Language Reference","finding":"function/call control-flow and memory-effect summaries are explicit IR properties; call-site constraints can refine potential effects"},
+    {"source_class":"PRIMARY_RESEARCH","source":"Leijen 2014 Koka row-polymorphic effect types","finding":"potential side effects can be represented in function types and inferred compositionally"}
+  ],
+  "adversarial_check":{
+    "counterhypothesis":"A static effect declaration or transitive function effect summary can itself serve as execution authority, so a separate runtime permit is unnecessary.",
+    "test":"Execute an effectful wrapper with valid static effect closure but without runtime permit.",
+    "result":"REJECTED_BY_CANDIDATE_RUNTIME: EffectDenied; same call succeeds only when external permit contains log.write."
+  },
+  "refinement":"Keep control-flow/effect semantics in canonical typed IR, but separate potential-effect identity from effect authority. Recursion/re-entry may preserve semantic dependency identity; delayed effects require fresh external permit/capability validation.",
+  "promotion":"NONE",
+  "falsifier":"A production ClayCode compiler/runtime on target Ubuntu that safely executes the mandatory app/FRANK suite with no false allow/deny while collapsing effect summary and authority into one mechanism would refute the need for this separation."
+}

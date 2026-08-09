@@ -1,0 +1,66 @@
+{
+  "schema_version":"1.0",
+  "event_id":"20260809T1414p0700_frank_v01_deep_bugsearch_iter1_cross_room_delta",
+  "room_id":"center",
+  "event_type":"CROSS_ROOM_DELTA",
+  "origin_worker":"frank-deep-bugsearch-20260809-chatgpt-secondary",
+  "origin_actor":"chatgpt-secondary",
+  "trigger":"owner-directive-deep-bugsearch",
+  "created_at":"2026-08-09T14:14:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms":["frank","harness","claycode","unifieddb","claygraph","hyperposition","gwt","emergenz","clay"],
+  "affects_claims":[],
+  "dependencies":[
+    "research_entity/global/RESEARCH_CENTER_SHARED_SEMANTIC_FABRIC_MISSION.md",
+    "research_entity/global/FRANK_SELF_OBSERVATION_PROPOSAL_BOUNDARY.md",
+    "research_entity/global/FRANK_IDENTITY_BOUNDARY_AND_CONTAMINATION_REPAIR.md"
+  ],
+  "artifact_refs":[
+    "frank-repo:research/bugs/FRANK_DEEP_BUGSEARCH_2026-08-09_ITER1.md"
+  ],
+  "ancestry_family":"frank-v01-live-harness-deep-bugsearch",
+  "delivery":"NEXT_CHECKPOINT",
+  "payload":{
+    "delta_type":"MULTI_BRANCH_HARNESS_CORRECTNESS_AND_FALSIFICATION_MISSION",
+    "summary":"Iteration 1 static/runtime differential found 25 material defects (6 P0, 14 P1, 5 P2/hypothesis) in Frank v0.1. The dominant defect is executable runtime lagging behind semantic contracts: continuity fallback creation, self-Harness authority ambiguity, revision/lease-unbound execution, stale capability resurrection, dependency-ignorant scheduling, silent sync failures, weak status parsing, non-atomic/stale projections, Graph-first recovery and schema-stack drift.",
+    "hard_authority_rule":"Frank may observe/diagnose/propose Harness changes but can never patch/migrate/promote/apply/delegate its own Harness change. All implementation work from this delta is executed under separate Research Entity authority. Frank-local work may only observe/test/receipt installed reality.",
+    "p0":[
+      "P0-001 normal Frank boot can create new SQLite state when canonical DB is missing instead of CONTINUITY_DEGRADED",
+      "P0-002 frank.harness_evolution still contains Frank-owned promote/atomic_harness_cutover semantics",
+      "P0-003 execution receipts are not bound to work spec_rev/lease and can stale-complete revised work",
+      "P0-004 old capability events can be replayed and become freshly valid/current; no monotonic observation guard",
+      "P0-005 ChatGPT delegation receipt INSERT had 5 placeholders for 6 values; remote repo fix committed, local regression required",
+      "P0-006 snapshot recovery remains ClayGraph-first instead of UnifiedDB/epoch/transaction-first"
+    ],
+    "p1_clusters":[
+      "scheduler ignores declared dependencies/invalidators and real lease machinery",
+      "current spec can join old scheduler receipt",
+      "sync subprocess failures and timeout stacking are silently hidden",
+      "local possibility probe does not measure browser/connectors/GUI/file interchange despite semantic contract",
+      "remote work/capability projections lack atomic semantic epoch and durable freshness fields",
+      "projection secret scrubbing is insufficient",
+      "status guard is substring-based, not exact-one structural parser; node freshness/glyph not validated; node id hardcoded",
+      "ChatGPT result ingest lacks strong request/result/authority binding",
+      "schema stacks differ between openers and state authority declaration is stale",
+      "replica cursor metadata is stale and current local ingestion of new Andreas project universe remains unverified",
+      "current smoke test expects result.counts not returned by self_test"
+    ],
+    "branch_missions":{
+      "harness":"Own the executable differential; implement fail-closed continuity, authority guards, status parser, concurrency/lease/revision tests and target-machine fault injection.",
+      "unifieddb":"Unify schema/migration manifest; make open-existing distinct from bootstrap; bind execution receipts to revision/lease; monotonic event/capability materialization; UnifiedDB-first snapshots/replay.",
+      "claygraph":"Guarantee graph is rebuild-only derived state; epoch-pin projection/rebuild; identity contamination cannot reappear from old graph/snapshot; test graph parity after recovery.",
+      "claycode":"Type ProposalOnly vs ResearchEntityEffect, WorkSpecRevision/Lease/ExecutionReceipt, CapabilityObservation valid-time and SemanticEpoch projection contracts so runtime cannot silently weaken semantics.",
+      "frank":"Specify required self-observation/identity/possibility behavior and adversarial user-facing regressions; no Harness implementation authority.",
+      "hyperposition":"Model conflicting/stale capability and identity alternatives without CURRENT collapse; test higher-order relation simplification where relevant.",
+      "gwt":"Ensure high salience/ignition never mints Harness authority; expose degraded/contradictory state to selection instead of hiding it.",
+      "emergenz":"Falsify whether learned control/salience can leak across authority or freshness boundaries; use lesion/rescue and replay adversaries.",
+      "clay":"Coordinate cross-branch convergence, prevent local fixes from creating new semantic drift, and require a no-new-P0/P1 iteration before closure."
+    },
+    "fixed_remote_repo_during_iteration":[
+      "ChatGPT delegation receipt SQL placeholder mismatch",
+      "Andreas project-memory/browser work event payload normalized to actual runtime work_id/work_clay/completion_clay schema"
+    ],
+    "closure_rule":"Not complete after patches. Repeat static differential -> executable regression -> adversarial fault injection -> restart/recovery -> concurrent nodes -> provider swap -> next bugsearch iteration. Stop only after a full iteration finds no new P0/P1 under equal or stronger tests.",
+    "no_exact_program_progress_credit":true
+  }
+}

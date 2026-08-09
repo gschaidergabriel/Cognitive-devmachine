@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0949p0700-chatgpt-secondary-adapter-hash-blocker-reproduced",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "status":"EXTERNAL_ACCESS_BLOCKER_REPRODUCED",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "source":{"path":"frank-adapter-sicherung/v25_final/adapter_model.safetensors","drive_id":"1hmh3A1Vpaye1VGfTdFEWKRtumxAlRL1x","expected_bytes":169903320},
+  "attempt":{"connector":"Google_Drive.fetch","download_raw_file":true,"include_base64":false,"result":"HTTP_413_FILE_TOO_LARGE","limit_bytes":104857600,"message":"File too large to download: 169903320 bytes exceeds the 104857600-byte limit."},
+  "conclusion":"The connector's streamed/non-base64 path is still capped at 100 MiB for this object in the current execution surface. SHA-256 remains unresolved; no substitute hash is invented.",
+  "preserved_state":{"recursive_leaf_denominator":5,"resolved_content_identities":4,"pending_content_identities":1,"corrupt_root_copy_must_not_be_used":true},
+  "level0_effect":{"exact_global_progress_credit":0.0,"gate":"NOT_PASS"},
+  "next_falsifier":"Use a permitted execution surface with Drive range/download support or a trusted externally computed SHA-256 tied to the exact Drive object identity/size; then reconcile the hash into the existing V2 manifest."
+}

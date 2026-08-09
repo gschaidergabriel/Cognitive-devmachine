@@ -26,7 +26,18 @@ class GateTests(unittest.TestCase):
         self.assertEqual(decide_recurrence(R()).decision, "ESCALATE_STALLED")
 
     def test_valid_low_residual_can_converge(self):
-        self.assertEqual(decide_recurrence(R(residual_pressure=.03, low_delta_streak=3)).decision, "HALT_CANDIDATE_CONVERGED")
+        x = decide_recurrence(R(residual_pressure=.03, low_delta_streak=3))
+        self.assertEqual(x.decision, "HALT_CANDIDATE_CONVERGED")
+        self.assertEqual(x.reason, "low_delta_and_low_residual_with_valid_readout")
+
+    def test_high_delta_low_residual_cannot_mint_convergence(self):
+        x = decide_recurrence(R(state_delta_norm=.20, residual_pressure=.03, low_delta_streak=0))
+        self.assertEqual(x.decision, "CONTINUE")
+        self.assertNotEqual(x.reason, "low_delta_and_low_residual_with_valid_readout")
+
+    def test_single_low_delta_frame_cannot_mint_convergence(self):
+        x = decide_recurrence(R(state_delta_norm=.01, residual_pressure=.03, low_delta_streak=1))
+        self.assertEqual(x.decision, "CONTINUE")
 
     def test_noisy_residual_cannot_mint_convergence(self):
         x = decide_recurrence(R(residual_pressure=.03, residual_uncertainty=.2))

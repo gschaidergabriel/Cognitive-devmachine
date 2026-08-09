@@ -6,6 +6,8 @@ on:
     paths:
       - 'research_entity/runtime/**'
       - 'research_entity/global/FRANKV0_1_*'
+      - 'research_entity/rooms/PROGRAM_STATE.json'
+      - 'research_entity/harness/HARNESS_WORKSPACE.json'
       - '.claude/hooks/rae_hook.py'
       - '.claude/settings.json'
       - '.github/workflows/rae-state-fabric.yml'
@@ -27,6 +29,7 @@ jobs:
           python -m py_compile research_entity/runtime/claude_state_bridge.py
           python -m py_compile .claude/hooks/rae_hook.py
           python -m json.tool .claude/settings.json >/dev/null
+          python -m json.tool research_entity/rooms/PROGRAM_STATE.json >/dev/null
 
       - name: Boot isolated central UnifiedDB and ClayGraph
         run: |

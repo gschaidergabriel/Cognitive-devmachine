@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-20260809T1735p0700-operator-identity-fn-integration",
+  "experiment_id":"EXP-CC-20260809-D-OPERATOR-IDENTITY-FN-INTEGRATION",
+  "origin_actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class":"LOCAL_ISOLATED_LINUX_EXECUTION_NOT_TARGET_UBUNTU_ACCEPTANCE",
+  "runtime":{"system":"Linux","kernel":"6.18.35","machine":"x86_64","python":"3.13.5","parser":"Lark LALR contextual"},
+  "repo_inputs":{"g9_v3":{"path":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e"},"dialect_registry":{"path":"research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay","blob_sha":"dbb72460bc5a049c784d1acd1aaef152fa37f797"},"leading_d_grammar":{"path":"research_entity/trigger_runs/claycode/claycode-20260809T1717p0700-all-workers-production-parser/D_LALR_GRAMMAR_CANDIDATE_V3.lark","blob_sha":"1d2a62053ffdd2fc008cbd33aecedf71b6387bce"}},
+  "reconstruction_note":"The local D-transformed G9 proxy applied the five source edits reported by the prior parser-saturation receipt and reproduced its 5 changed lines and +26 character delta. The transcribed local corpus excludes comments and is not asserted byte-identical to an unpublished transformed artifact.",
+  "counterexamples":{"operator_tree_identity":{"same_operands_symbolic_operators":16,"distinct_default_tree_hashes_current_D":1,"interpretation":"unnamed literal operator spelling is filtered from default Lark tree construction"},"spacing_semantics":{"seed":202608091735,"cases":20000,"both_parsed":20000,"same_default_tree_hash":17520,"different":2480,"different_by_operator":{"->":1241,"-":1239},"root_cause":"NAME permits hyphen, so longest/contextual lexing can make x-y or x->y identifier-shaped rather than operator-shaped"}},
+  "repair_candidate":{"changes":["remove hyphen from ordinary NAME lexical class","alias each operator alternative into explicit tree identity","add contextual typed fn_decl using existing type_expr/expr/call"],"candidate_grammar_sha256":"231996add39dbd97575b291516df4cddc878bd6135446210feb887ad6da2b57e","spacing_retest":{"cases":20000,"parsed":20000,"same_semantic_tree_hash":20000,"failures":0},"operator_identity_retest":{"symbolic_operators":16,"distinct_tree_hashes":16},"legacy_corpus":{"D_transformed_G9_parse":true,"Dialect_registry_parse":true,"fn_extension_preserved_repaired_G9_tree_hash":true,"fn_extension_preserved_repaired_Dialect_tree_hash":true},"contextual_fn_identifier_controls":{"record_fn":true,"rule_fn_eq_fn":true,"interface_fn":true},"function_format_fuzz":{"cases":5000,"parse_and_tree_hash_preserved":5000},"function_body_operator_mutation":{"operators":["+","-","*","/"],"distinct_hashes":4},"exact_static_binding":{"valid_composed_programs":5000,"valid_resolved":5000,"invalid_programs":3000,"invalid_rejected":3000,"invalid_classes":["undefined target","arity mismatch","duplicate definition"]}},
+  "negative_control":{"single_high_priority_named_OPERATOR_terminal":"REJECTED","failure":"UnexpectedToken OPERATOR '=' in import declaration","lesson":"do not solve operator identity by globally stealing declaration punctuation"},
+  "local_parse_benchmark_ms":{"iterations":100,"current_D":{"median":9.6185,"p95":11.8039},"strict_operator_repair":{"median":9.7146,"p95":10.5412},"repair_plus_fn":{"median":9.6754,"p95":10.2131},"interpretation":"small local differences; not selection evidence"},
+  "external_execution_blockers":{"E2B":"RUNTIME_VERIFIED_IN_PROJECT_STATE_BUT_NOT_CALLABLE_IN_THIS_SESSION","SandboxAPI":"BLOCKED_NOT_SUBSCRIBED","target_Ubuntu":"NOT_CONNECTED_TO_THIS_WORKER","Qwen4B_reader":"NO_CALLABLE_TARGET_MODEL_TOOL"},
+  "expected_vs_observed":"Expected the D leader to preserve source-level operator identity under harmless spacing; observed a hyphen/operator lexical counterexample and default-tree operator erasure. The repair candidate closes the tested corpus without a cognitive semantic primitive change.",
+  "promotion":"NONE",
+  "affected_work":"CC-WP-02-PARSER-CANON remains OPEN; route repair into normative parser/canonicalizer and type/effect handoff."
+}

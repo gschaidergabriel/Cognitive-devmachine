@@ -1,23 +1,30 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "task_id": "666-pf-history-exact-dag-frozen-head-abba90a",
   "room_id": "center",
   "title": "PF exact history DAG denominator at frozen head",
   "goal": "Prove the complete Project-Frankenstein commit-history denominator and root boundary for the Level-0 frozen scope ending at abba90a5767d85abc8a1ac340bae92842dab35c1, without treating search retrieval as exact enumeration.",
-  "status": "BLOCKED",
+  "status": "COMPLETE",
   "dependencies": [
     "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
     "research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_pf_history_scope_expansion.json"
   ],
   "completion_test": "A reproducible graph traversal or independently verifiable pinned snapshot yields the exact reachable commit set/root/count for the frozen Level-0 scope, with method and identities preserved; search-result windows alone do not pass.",
   "created_by": "chatgpt-secondary-666-20260809T0929p0700-pf-history",
-  "blocker": {
-    "class": "ENUMERATION_SURFACE",
-    "current_connector_limitation": "Commit-search retrieval exposes useful history but no reproducible complete DAG pagination/root-count proof in this session.",
-    "local_fallback": "git clone unavailable because execution container DNS could not resolve github.com",
-    "new_boundary_evidence": "Verified history reaches at least 2026-02-20, earlier than the old 2026-03-14 partial cursor."
+  "completion": {
+    "method": "GitHub compare with pinned ancestry expressions plus root parent-negation",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "root": "e1a8812767668091d146ee958bbc2ebb2743031c",
+    "maximum_valid_first_parent_depth": 544,
+    "exact_reachable_commit_count_including_root": 545,
+    "root_parent_ref_status": "NOT_FOUND",
+    "root_second_parent_ref_status": "NOT_FOUND",
+    "side_history_excess": 0,
+    "manifest": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_DENOMINATOR_EXACT_20260809T0940p0700.json",
+    "receipt": "research_entity/archive_assimilation/receipts/666_20260809T0940p0700_chatgpt_secondary_pf_history_exact_closure.json"
   },
   "non_overlap": "This task concerns the exact global commit-DAG denominator, not active PF tree segment delta reconstruction, Drive root disposition, AICore, Retina hash closure or XENO extracted-copy reconciliation.",
   "expected_information_gain": "High: closes one of the two explicit Project-Frankenstein denominator prerequisites and enables exact Level-0 accounting.",
-  "created_at": "2026-08-09T09:35:52+07:00"
+  "created_at": "2026-08-09T09:35:52+07:00",
+  "completed_at": "2026-08-09T09:40:18+07:00"
 }

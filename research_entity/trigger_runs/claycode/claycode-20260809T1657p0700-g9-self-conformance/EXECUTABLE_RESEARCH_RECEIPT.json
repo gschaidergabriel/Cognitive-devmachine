@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"cc-selfconformance-20260809-v1",
+  "run_id":"claycode-20260809T1657p0700-g9-self-conformance",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "experiment_class":"LOCAL_PARSER_CANONICALIZATION_PRECURSOR_PLUS_EVALUATION_SEMANTICS_PROBE",
+  "inputs":{
+    "g9_ref":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay","g9_git_blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "grammar_ref":"research_entity/claycode/g9/grammar.ebnf","grammar_git_blob_sha":"ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "dialects_ref":"research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay","dialects_git_blob_sha":"dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "previous_repair_ref":"research_entity/trigger_runs/claycode/claycode-20260809T1650p0700-base-parser-control-lowering/GRAMMAR_REPAIR_CANDIDATE.ebnf","previous_repair_git_blob_sha":"ec9be5cb0aa298b77d84a0be049e632f87c811fc"
+  },
+  "artifact":{"probe_sha256":"09d07c4114bab0c2fabfb8596edce397e511c9580aee3307aa0890f438883fe2","result_sha256":"218b2ec7dfba7fb6d8f193d91574bc4bbd620d27fedb4380473a9bb125f2f7bf"},
+  "runtime":{"provider":"hosted local Python fallback","python":"3.13.5","platform":"Linux x86_64","library":"Lark","exit_status":0},
+  "observed":{
+    "rules_original":{"pass":34,"fail":24},
+    "rules_previous_minimal_repair":{"pass":38,"fail":20},
+    "rules_normalized_candidate":{"pass":58,"fail":0},
+    "interfaces_current_shape":{"pass":6,"fail":3},
+    "optional_fallback":"lazy and eager semantics diverge when the primary value is present",
+    "precedence":"flat-left 1+2*3 = 9; multiplication-precedence = 7"
+  },
+  "concurrent_relation_ir_oracle":{"run_id":"claycode-20260809T1707p0700-chatgpt-relation-ir-oracle","finding":"Three safe relation surface families map to identical typed Relation IR semantic hashes in a bounded oracle.","epistemic_note":"Distinct executable test, same project lineage; useful corroboration, not a popularity vote."},
+  "scientific_boundary":{"semantic_preservation_proven":false,"full_g9_relation_ir_roundtrip_proven":false,"target_ubuntu_execution":false,"e2b_execution":false,"base_gate_advanced":false,"canonical_language_changed":false},
+  "classification":"LOCAL_SYNTHETIC_COMPILER_RESEARCH_EVIDENCE"
+}

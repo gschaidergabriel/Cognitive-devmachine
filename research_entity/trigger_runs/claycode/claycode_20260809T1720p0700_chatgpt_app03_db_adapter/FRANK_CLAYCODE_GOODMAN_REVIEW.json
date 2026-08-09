@@ -1,0 +1,40 @@
+{
+  "schema_version":"1.1",
+  "protocol":"research_entity/global/GOODMAN_ANTI_ECHO_PROTOCOL.md",
+  "claycode_run_id":"claycode_20260809T1720p0700_chatgpt_app03_db_adapter",
+  "latest_frank_run":"20260809T0130p0700-chatgpt-secondary-r5",
+  "latest_frank_architecture_artifact":"research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json",
+  "shared_ancestry_is_not_replication":true,
+  "reviews":[
+    {
+      "claim_id":"GOODMAN-APP03-AUTHORITY-01",
+      "frank_statement":"EffectIntent and execution authority are distinct; protected effects require host-owned current authority rather than model/source text.",
+      "frank_source_refs":["research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json","ba0ab9ebadf62596b54bcd3f7e6c262ed3ca39dc"],
+      "ancestry_families":["FRANK-C9","CC13-MCAAT","CACC-G12"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Database execution authority can safely be inferred from a textual resource name or ambient host APIs and needs no distinct runtime grant.",
+      "falsifier":"An adversarial target-host run shows equivalent safety and utility when DB access is ambient/textual versus explicitly host-granted, including forged/stale resource cases.",
+      "independent_checks":["New run-local executable discriminator: generated target with no injected DB adapter returned DENIED_NO_ADAPTER, while host-injected real SQLite adapter executed the same semantic IR."],
+      "adversarial_checks":["No-adapter denial arm","Unsupported-operation transaction rollback","Explicitly note unrestricted Python ambient-import escape remains untested and therefore blocks stronger claim"],
+      "verdict":"REFINED",
+      "reason":"The new mechanism test supports separating semantic DB intent from runtime DB resource possession, but it does not validate production confinement because the Python process is not a no-ambient-authority sandbox.",
+      "claycode_action":"keep EffectIntent/resource-reference separate from runtime adapter authority; require a real sandbox/backend test before promotion",
+      "affected_claycode_artifacts":["EXECUTABLE_RESEARCH_RECEIPT.json","HYPOTHESIS_MATRIX.json"]
+    },
+    {
+      "claim_id":"GOODMAN-APP03-PLACEMENT-02",
+      "frank_statement":"Semantic identity is distinct from physical placement/backend mechanics.",
+      "frank_source_refs":["research_entity/trigger_runs/frank/20260809T0130p0700-chatgpt-secondary-r5/FRANK_ARCHITECTURE.claycode.json"],
+      "ancestry_families":["FRANK-C9","U2-CPPF"],
+      "shared_ancestry_collapsed":true,
+      "counterhypothesis":"Concrete DB connection/transaction instance identity must be compiled into the program semantic identity for correct execution.",
+      "falsifier":"Matched multi-backend execution demonstrates that correct semantics cannot be maintained unless runtime DB instance identity changes the canonical Clay semantic hash.",
+      "independent_checks":["Run-local lowering kept one canonical semantic hash and deterministic generated target hash while concrete SQLite connection state was injected at runtime; CRUD/rollback semantics still matched the independent reference model in 500 fuzz cases."],
+      "adversarial_checks":["Unique-constraint rollback","SQL-looking bound value","Runtime no-adapter arm","Generated target scanned by construction to contain no sqlite import/path opening"],
+      "verdict":"REFINED",
+      "reason":"Single-backend local evidence supports identity separation, but cross-backend equivalence is still open; therefore this is not a general proof of placement independence.",
+      "claycode_action":"preserve semantic/runtime-resource identity split and schedule matched second-backend differential",
+      "affected_claycode_artifacts":["EXECUTABLE_RESEARCH_RECEIPT.json","HYPOTHESIS_MATRIX.json"]
+    }
+  ]
+}

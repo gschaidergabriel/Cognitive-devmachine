@@ -1,0 +1,36 @@
+name: RAE Level0 Release Sync
+on:
+  push:
+    paths: ['.github/workflows/rae_level0_release_sync.yml']
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          r=pathlib.Path('.')
+          rel=r/'research_entity/archive_assimilation/666_RELEASE_MANIFEST.json'; m=json.loads(rel.read_text())
+          assert m['gate_status']=='PASS' and m['frozen_completion_law']['exact_coverage_percent']==100.0
+          wp=r/'research_entity/archive_assimilation/666_WORKSPACE.json'; w=json.loads(wp.read_text())
+          w['schema_version']='2.0'; w['status']='COMPLETE'; w['gate_status']='PASS'; w['current_phase']='LEVEL0_PASS_RELEASED'; w['release_manifest']='research_entity/archive_assimilation/666_RELEASE_MANIFEST.json'; w['release_audit_receipt']='research_entity/archive_assimilation/receipts/666_20260809T1519p0700_level0_release_audit.json'
+          pf=w.setdefault('project_frankenstein',{}); pf.update(inventory_state='EXACT_HISTORY_AND_FROZEN_HEAD_TREE_CLOSED',manifest_state='FROZEN_COMPLETE',frozen_source_units=873,frozen_commit_units=545,total_atomic_obligations=1418,completed_atomic_obligations=1418,exact_coverage_percent=100.0,tree_surface_blocker={'status':'RESOLVED_BY_REPO_NATIVE_CI_GIT_OBJECT_PROBE','frozen_head_entries':873,'pathset_sha256':'904cbd6bd3f31ffd114e2905a2ff219d1496b9cc26717222dbd8f42991170ef4','path_blob_sha256':'9c7735f5e4fc4fc46e4ed8e4d5fb091a976bd042708d1b78a739f81ed7e076d5'})
+          cs=w.setdefault('cross_source_fusion',{}); cs.update(status='COMPLETE_PASS',total_atomic_obligations=10,completed_atomic_obligations=10,exact_coverage_percent=100.0,unresolved_contradictions=0,manifest='research_entity/archive_assimilation/manifests/666_CROSS_SOURCE_FINAL_RECONCILIATION_20260809T1504p0700.json')
+          cp=w.setdefault('combined_progress',{}); cp.update(denominator_state='FROZEN',formula='7/7 hierarchical exhaustive release predicates PASS; each predicate backed by its own exact subdenominator/audit',total_atomic_obligations=7,completed_atomic_obligations=7,exact_coverage_percent=100.0,rule='Level-0 released only after Drive, PF history, PF tree, cross-source, branch feedback, earned-work and release invariants all PASS.')
+          he=w.setdefault('historical_earned_work',{}); he.update(mapping_state='FINAL_EVIDENCE_MAPPED_AFTER_LEVEL0_AUDIT',mapping_coverage_percent=100.0,mapping_path='research_entity/forecast/HISTORICAL_EARNED_WORK.json',evidence_mapped_avoided_future_hours={'low':45.0,'center':114.0,'high':228.0},evidence_mapped_project_baseline_percent=25.12,global_completion_credit_applied=True,final_audit_receipt='research_entity/archive_assimilation/receipts/666_20260809T1516p0700_earned_work_final_audit.json')
+          w['eta']={'owner_active_hours_per_day':10,'calibrated_low_days':0.0,'calibrated_high_days':0.0,'confidence':'HIGH','basis':'LEVEL0_RELEASE_GATE_PASS'}
+          wp.write_text(json.dumps(w,indent=2,ensure_ascii=False)+'\n')
+          pp=r/'research_entity/rooms/PROGRAM_STATE.json'; p=json.loads(pp.read_text()); gates=p['stage_gates']; l0=gates['L0_ARCHIVE_ASSIMILATION']; l0['status']='PASS'; l0['completed_at']='2026-08-09T15:19:20+07:00'; l0['release_manifest']='research_entity/archive_assimilation/666_RELEASE_MANIFEST.json'; l0['release_audit']='research_entity/archive_assimilation/receipts/666_20260809T1519p0700_level0_release_audit.json'; base=gates['BASE_CLAYCODE_RELEASE']; base['status']='IN_PROGRESS'; base['blocked_by']=[]; p['current_stage']='BASE_CLAYCODE_RELEASE'; p['current_stage_goal']=base.get('completion_law',base.get('label','BASE_CLAYCODE_RELEASE')); p['level0_release']={'status':'PASS','released_at':'2026-08-09T15:19:20+07:00','manifest':'research_entity/archive_assimilation/666_RELEASE_MANIFEST.json','exact_coverage_percent':100.0,'future_666_mode':'SEEDED_STOCHASTIC_RESEARCH_FIELD_GENESIS'}
+          pp.write_text(json.dumps(p,indent=2,ensure_ascii=False)+'\n')
+          PY
+          git config user.name rae-level0-release-sync; git config user.email actions@users.noreply.github.com
+          git add research_entity/archive_assimilation/666_WORKSPACE.json research_entity/rooms/PROGRAM_STATE.json
+          git commit -m '666: sync Level-0 PASS and advance to BASE ClayCode' || exit 0
+          for i in 1 2 3 4 5 6; do git fetch origin main; git rebase origin/main; git push origin HEAD:main && exit 0; sleep 2; done
+          exit 1

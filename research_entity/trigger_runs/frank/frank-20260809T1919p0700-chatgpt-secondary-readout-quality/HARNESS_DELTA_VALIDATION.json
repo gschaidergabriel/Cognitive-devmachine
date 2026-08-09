@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1919p0700-chatgpt-secondary-readout-quality",
+  "evidence_class": "LOCAL_CONTAINER_COMPONENT_VALIDATION_NOT_H1_RELEASE_ACCEPTANCE",
+  "component": "research_entity/harness/reference/loop_dynamics_quality_gate.py",
+  "test": "research_entity/harness/reference/test_loop_dynamics_quality_gate.py",
+  "component_commit": "dc8cb5734aae741f21ffd791f90caf418cdd44b3",
+  "test_commit": "073eebf73177c606daff0148ede28aea7c595505",
+  "unit_tests": {
+    "executed": 9,
+    "passed": 9,
+    "failed": 0,
+    "command": "python -m unittest -v test_loop_dynamics_quality_gate.py",
+    "environment": "LOCAL_CONTAINER_PROXY_NOT_TARGET_UBUNTU"
+  },
+  "property_fuzz": {
+    "seed": 2026080919,
+    "cases": 100000,
+    "violations": 0,
+    "decision_counts": {
+      "ROUTE_READOUT_UNCERTAIN": 87440,
+      "CONTINUE": 9843,
+      "ESCALATE_STALLED": 571,
+      "HALT_MARGINAL": 1108,
+      "HALT_CANDIDATE_CONVERGED": 1038
+    },
+    "checked_invariants": [
+      "no recurrence decision grants external-effect authority",
+      "effect_eligible remains false and effect_gate_required remains true",
+      "stale/over-uncertain/missing-estimator readouts cannot emit HALT_CANDIDATE_CONVERGED",
+      "valid low-delta/high-residual streaks emit ESCALATE_STALLED"
+    ]
+  },
+  "v2_alignment": {
+    "architecture_ref": "research_entity/trigger_runs/frank/frank-20260809T1916p0700-chatgpt-secondary-refreeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE_V2_CANDIDATE.json",
+    "slice": "gwt_loop_controller",
+    "status": "COMPATIBLE_CANDIDATE_EXTENSION",
+    "new_explicit_readout_dimensions": [
+      "residual_estimator_id",
+      "residual_estimator_version",
+      "residual_uncertainty",
+      "measurement_age_cycles"
+    ],
+    "authority": "COMPUTE_ROUTING_PROPOSAL_ONLY"
+  },
+  "release_effect": "NONE",
+  "h1_gate": "NOT_PASS",
+  "promotion_allowed": false,
+  "remaining": [
+    "integrate into the ordinary-code V2 H1 executable spine",
+    "execute Golden Traces with real/frozen H1 state histories",
+    "calibrate estimator uncertainty/freshness thresholds from observed H1 traces",
+    "run target-Ubuntu validation",
+    "compare against event-driven/fixed-budget baselines"
+  ]
+}

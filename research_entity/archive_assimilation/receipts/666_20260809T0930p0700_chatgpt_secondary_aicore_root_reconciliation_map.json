@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0930p0700-chatgpt-secondary-aicore-root-reconciliation-map",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "worker_session_id": "chatgpt-secondary-666-20260809T0930p0700",
+  "canonical_parent": {"revision": 2, "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "root_denominator": {
+    "previous_claim": {"entries": 50, "folders": 37, "files": 13, "status": "REFUTED_AS_EXACT"},
+    "current": {"entries": 67, "folders": 37, "files": 30, "status": "DIRECT_DENOMINATOR_REFROZEN"},
+    "cause": "A prior file enumeration behaved like a document filter and omitted 17 non-document root files. Full parent-scoped child listing exposed all 30 files."
+  },
+  "exact_recursive_subtrees": {
+    "skills": {"units": 50, "folders": 22, "files": 28, "basis": "prior exact closure"},
+    "synteq": {"units": 511, "folders": 22, "files": 489, "basis": "prior exact closure independently replicated"},
+    "tools": {"units": 95, "folders": 7, "files": 88, "basis": "prior exact closure"},
+    ".claude": {"units": 1, "folders": 0, "files": 1},
+    "docker": {"units": 2, "folders": 0, "files": 2},
+    "configs": {"units": 1, "folders": 0, "files": 1},
+    "config": {"units": 10, "folders": 0, "files": 10},
+    "bridges": {"units": 5, "folders": 0, "files": 5},
+    "common": {"units": 2, "folders": 0, "files": 2},
+    ".github": {"units": 3, "folders": 1, "files": 2},
+    "personality": {"units": 13, "folders": 1, "files": 12},
+    "writer": {"units": 3, "folders": 1, "files": 2},
+    "tests": {"units": 43, "folders": 1, "files": 42},
+    "webd": {"units": 2, "folders": 0, "files": 2},
+    "updater": {"units": 8, "folders": 0, "files": 8},
+    "papers": {"units": 9, "folders": 0, "files": 9},
+    "desktopd": {"units": 2, "folders": 0, "files": 2},
+    "router": {"units": 2, "folders": 0, "files": 2},
+    "modeld": {"units": 2, "folders": 0, "files": 2},
+    "docs": {"units": 11, "folders": 0, "files": 11},
+    "scripts": {"id": "1XCKHG-9dDH3fJWnwV3LXHPP9D-DNgIZC", "units": 9, "folders": 0, "files": 9},
+    "needle": {"id": "1riSIrjWxkT_TL1Hgpa_ijY_0w2JuCN6j", "units": 6, "folders": 0, "files": 6},
+    "core": {"id": "10GxbhbCFoplcr-DNICxdtvxoUCuXHHXG", "units": 5, "folders": 0, "files": 5},
+    "gateway": {"id": "13D0b-r17iJs5sSfVUeTHYy1PtUvSViRN", "units": 4, "folders": 0, "files": 4},
+    "gaming": {"id": "1JY2atHQzTx1vMwAHexRbqH2SwCJ-FeQK", "units": 2, "folders": 0, "files": 2},
+    "agentic": {"id": "1aWl2JCpxOHi6_VTCNlw6WQQMYoH3I5PN", "units": 7, "folders": 0, "files": 7},
+    ".next": {"id": "1tyrb6epAHQtor_pdG0SbQBivgWJf1Ptj", "units": 2, "folders": 0, "files": 2},
+    "intelligence": {"id": "1BTgmXdlJUE_W_HXWQn86Ue3h_FcdrpcO", "units": 7, "folders": 0, "files": 7},
+    "ingestd": {"id": "1mEgi9Wkg3dpkpYjb02CDL5H062n8fsAM", "units": 2, "folders": 0, "files": 2}
+  },
+  "exact_root_child_count": 29,
+  "exact_recursive_units_closed_within_those_children": 819,
+  "remaining_root_children": {
+    "konzepte": {"state": "NESTED_OPEN", "observed": "6 root files + child folder text; text has 8 category folders"},
+    "services": {"state": "NESTED_OPEN", "observed": "13 service child folders plus root code; recursive denominator not yet frozen"},
+    "assets": {"state": "LEAF_ONLY_OBSERVED_COUNT_UNFROZEN", "observed": "no child folders found; direct listing is output-truncated and a parent search returned an empty-result inconsistency, so no exact file count is claimed"},
+    "training": {"state": "NESTED_OPEN", "observed": "v26 and v27; v26 further contains abzug and eval"},
+    "wissen": {"state": "NESTED_OPEN", "observed": "altbestand child folder plus databases/code"},
+    "ui": {"state": "NESTED_OPEN", "observed": "6 child folders + 5 direct files"},
+    "ext": {"state": "NESTED_OPEN", "observed": "sovereign + genesis child folders + 10 direct files"},
+    "analysen": {"state": "NESTED_OPEN", "observed": "2026-08-04 + verhalten child folders"}
+  },
+  "remaining_root_child_count": 8,
+  "deterministic_queue": ["assets", "analysen", "ext", "ui", "training", "konzepte", "services", "wissen"],
+  "root_file_semantic_gap": {
+    "previously_visible_document_like_files": 13,
+    "newly_included_non_document_files": 17,
+    "status": "SEMANTIC_RECONCILIATION_REQUIRED"
+  },
+  "identity_corrections": {
+    "scripts": "Parent-scoped lookup resolved current folder id 1XCKHG-9dDH3fJWnwV3LXHPP9D-DNgIZC after a stale/miscopied id returned 404.",
+    "needle": "Parent-scoped lookup resolved current folder id 1riSIrjWxkT_TL1Hgpa_ijY_0w2JuCN6j after a stale/miscopied id returned 404.",
+    "core": "Parent-scoped lookup resolved current folder id 10GxbhbCFoplcr-DNICxdtvxoUCuXHHXG after a stale/miscopied id returned 404."
+  },
+  "level0": {
+    "gate": "NOT_PASS",
+    "exact_global_progress_credit": 0.0,
+    "reason": "Combined Drive + Project-Frankenstein Level-0 denominator remains NOT_FROZEN; this receipt is exact local reconciliation only."
+  },
+  "created_at": "2026-08-09T09:30:00+07:00"
+}

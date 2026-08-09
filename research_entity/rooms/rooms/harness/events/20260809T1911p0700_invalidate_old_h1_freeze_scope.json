@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0",
+  "event_id":"20260809T1911p0700_invalidate_old_h1_freeze_scope",
+  "room_id":"harness",
+  "event_type":"INVALIDATE",
+  "origin_worker":"project-owner-directive-via-chatgpt-secondary",
+  "origin_actor":"PROJECT_OWNER",
+  "trigger":"frank",
+  "created_at":"2026-08-09T19:11:00+07:00",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "affects_rooms":["harness","frank"],
+  "affects_claims":["H-WP-01-FREEZE-COMPILER","REFERENCE_HARNESS_ARCHITECTURE_FREEZE"],
+  "dependencies":[
+    "research_entity/global/FRANK_NORMAL_CODE_FIRST_PARALLEL_H1_DIRECTIVE.md",
+    "research_entity/global/FRANKV0_1_REFERENCE_HARNESS_BASELINE.md"
+  ],
+  "artifact_refs":[
+    "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
+    "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/VALIDATION_REPORT.json"
+  ],
+  "ancestry_family":"PROJECT_OWNER_OPERATING_DIRECTIVE_20260809_NORMAL_CODE_FIRST_CURRENT_TARGET_H1",
+  "delivery":"INTERRUPT_NEXT_SAFE_POINT",
+  "payload":{
+    "invalidation_scope":"The prior H-WP-01 artifact remains valid historical work/evidence but is not sufficient as the current H1 release freeze if it encodes the old frankv0.1-baseline interpretation or omits the newest target architecture.",
+    "required_action":"Recompute/freeze the current evidence-supported new FRANK target architecture as the ordinary-code H1 reference before using H-WP-01 as the current H1 release oracle.",
+    "preserve_credit":"Do not delete prior work. Reuse any still-valid state schemas, modules, tests and receipts after explicit compatibility mapping.",
+    "no_fake_progress":"Do not count stale freeze status as current target-architecture completion merely because the old workspace field says COMPLETE."
+  }
+}

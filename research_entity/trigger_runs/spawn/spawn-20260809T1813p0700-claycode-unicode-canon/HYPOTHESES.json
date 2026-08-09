@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1813p0700-claycode-unicode-canon",
+  "origin_branch": "claycode",
+  "hypotheses": [
+    {
+      "id": "H-SPAWN-CC-UNICODE-001",
+      "status": "OPEN_SUPPORTED_BY_HOSTED_PROXY_AND_PRIMARY_STANDARDS",
+      "claim": "ClayCode generic String semantic identity should preserve the exact Unicode scalar sequence after escape decoding by default; Unicode normalization should be explicit/type-directed rather than an implicit global canonicalizer step.",
+      "mechanism": "Hash a domain-separated typed IR node containing the exact scalar sequence for generic String. When an explicitly normalized text value is requested, normalize the completed value to NFC and include the normalization policy/type in the semantic preimage. Keep exact source/wire bytes in separate contract/provenance identity.",
+      "support": [
+        "EXP-SPAWN-CC-UNICODE-001: 12665 canonical-equivalence pairs and 2411 compatibility-only pairs with zero typed-policy failures",
+        "Global NFC changes observable codepoint-sequence length/equality for U+00E9 versus U+0065 U+0301",
+        "Unicode UAX #15 distinguishes canonical from compatibility equivalence and warns against blind NFKC/NFKD on arbitrary text",
+        "RFC 8785 JCS preserves Unicode string data as-is rather than silently normalizing it"
+      ],
+      "falsifier": "Normative ClayCode semantics explicitly define all generic String operations over canonical equivalence rather than scalar sequence, and the complete compiler/runtime conformance corpus shows global NFC preserves every specified observable behavior and provenance boundary.",
+      "next_test": "Run exact-vs-NFC String corpus through normative parser -> typed canonical IR -> evaluator/compiler -> Ubuntu execution and compare equality, length, substring, concat, hashing and replay receipts."
+    },
+    {
+      "id": "H-SPAWN-CC-UNICODE-002",
+      "status": "OPEN_SUPPORTED_BY_COUNTEREXAMPLE",
+      "claim": "If ClayCode introduces an explicitly normalized text value, normalization must occur at the final typed value boundary after concatenation/construction, not merely once per token or component.",
+      "mechanism": "NFC is not closed under string concatenation; two individually NFC values can concatenate into a non-NFC sequence. The canonicalizer/evaluator must therefore normalize the resulting normalized-text value at semantic operation boundaries or use a normalization-aware concat algorithm.",
+      "support": [
+        "EXP-SPAWN-CC-UNICODE-001 produced 4/4 concrete NFC concatenation counterexamples",
+        "Unicode UAX #15 section on concatenation states normalization forms are not closed under concatenation"
+      ],
+      "falsifier": "A restricted ClayCode normalized-text construction discipline proves by type/effect rules that concatenation cannot create a normalization boundary requiring re-normalization.",
+      "next_test": "Mutation/property test normalized-text concat, interpolation and builder lowering in normative evaluator/compiler."
+    },
+    {
+      "id": "H-SPAWN-CC-UNICODE-003",
+      "status": "OPEN_CURRENT_BASE_MINIMALITY_CANDIDATE",
+      "claim": "For the current BASE release, keeping NAME and REF ASCII while making String Unicode semantics explicit is safer and lower-churn than adding Unicode identifiers now.",
+      "mechanism": "The current D grammar already constrains NAME and REF to ASCII-compatible patterns, so identifier normalization/spoofing does not block the immediate parser freeze. Unicode identifier support can remain a future explicit language/profile decision with its own normalization/security contract.",
+      "support": [
+        "Current D_LALR_GRAMMAR_CANDIDATE_V3.lark NAME and REF regexes are ASCII-restricted",
+        "Unicode UAX #31 recommends an explicit normalization/profile policy when Unicode identifiers are supported",
+        "Current BASE policy is less change, more compile"
+      ],
+      "falsifier": "A mandatory current general-purpose or FRANK application proof requires non-ASCII identifiers and cannot be represented acceptably through strings/ASCII symbols without harmful escape hatches.",
+      "next_test": "Audit BASE application suite source requirements for a real non-ASCII identifier requirement before any grammar expansion."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-SPAWN-CC-UNICODE-001",
+      "status": "COUNTEREVIDENCE_FROM_HOSTED_PROXY",
+      "claim": "Normalize every generic ClayCode String to NFC before semantic hashing/evaluation.",
+      "discriminator": "Compare exact scalar-sequence observables such as length/equality/substrings for canonically equivalent but differently encoded strings.",
+      "result": "Counterexample found: U+00E9 has one code point while U+0065 U+0301 has two, yet NFC collapses them. Global NFC is therefore not semantics-neutral unless generic String semantics are explicitly redefined."
+    },
+    {
+      "id": "CH-SPAWN-CC-UNICODE-002",
+      "status": "REFUTED_FOR_GENERIC_ARBITRARY_TEXT_POLICY",
+      "claim": "Normalize every ClayCode String with NFKC to maximize deduplication and equality stability.",
+      "discriminator": "Test compatibility-only characters whose visual/semantic distinctions may matter.",
+      "result": "2411 BMP compatibility-only cases were identified in the runtime Unicode database; NFKC collapses them while NFC/exact policy preserves the distinction. Unicode UAX #15 explicitly warns against blind NFKC/NFKD on arbitrary text."
+    },
+    {
+      "id": "CH-SPAWN-CC-UNICODE-003",
+      "status": "OPEN",
+      "claim": "ClayCode needs no normalized-text semantic facility at all; all Unicode normalization should remain ordinary application/stdlib behavior.",
+      "discriminator": "Find a current compiler, UnifiedDB, ClayGraph or FRANK identity/query requirement where canonical-equivalent human text must share semantic identity across producers and cannot be safely handled by an explicit stdlib normalization call."
+    }
+  ],
+  "promotion": "NONE",
+  "language_change": "NOT_JUSTIFIED_BY_THIS_RUN"
+}

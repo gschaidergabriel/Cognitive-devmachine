@@ -1,0 +1,129 @@
+                if s.type_hint and not _compatible(s.type_hint,t): ds.append(Diagnostic('error','TYPE_LET',f'{s.value} declared {s.type_hint}, got {t}',fn.name))
+                env[s.value]=_norm_type(s.type_hint) if s.type_hint else t
+            elif s.kind=='require':
+                t=_infer_expr_type(s.expr,env,ds,fn.name)
+                if t not in ('Bool','Any'): ds.append(Diagnostic('error','TYPE_REQUIRE',f'require expects Bool, got {t}',fn.name))
+            elif s.kind=='return':
+                t=_infer_expr_type(s.expr,env,ds,fn.name)
+                if fn.return_type and not _compatible(fn.return_type,t): ds.append(Diagnostic('error','TYPE_RETURN',f'{fn.name} returns {fn.return_type}, got {t}',fn.name))
+            elif s.expr is not None: _infer_expr_type(s.expr,env,ds,fn.name)
+            for e in ([s.expr] if s.expr else []):
+                for x in walk_expr(e):
+                    if x.kind=='call':
+                        name=str(x.value)
+                        if name.startswith('host.'):
+                            eff=name[5:].split('.',1)[0]; effects.add(eff)
+                            if eff not in allowed_effects: ds.append(Diagnostic('error','EFFECT_NOT_DECLARED',f'effect {eff} not allowed for {name}',fn.name))
+            for ch in s.body: check_stmt(ch)
+            for ch in s.else_body: check_stmt(ch)
+        for s in fn.body: check_stmt(s)
+    return CheckResult(not any(d.level=='error' for d in ds), ds, effects)
+
+# ---------------------------------------------------------------------------
+# Reference evaluator
+# ---------------------------------------------------------------------------
+
+class ReturnSignal(Exception):
+    def __init__(self, value): self.value=value
+
+class RequirementFailed(RuntimeError): pass
+
+
+def _get_path(env: dict[str,Any], name: str) -> Any:
+    parts=name.split('.')
+    if parts[0] not in env: raise NameError(parts[0])
+    v=env[parts[0]]
+    for p in parts[1:]:
+        if isinstance(v,dict): v=v[p]
+        else: v=getattr(v,p)
+    return v
+
+BINOPS={'+':lambda a,b:a+b,'-':lambda a,b:a-b,'*':lambda a,b:a*b,'/':lambda a,b:a/b,'%':lambda a,b:a%b,
+        '==':lambda a,b:a==b,'!=':lambda a,b:a!=b,'<':lambda a,b:a<b,'>':lambda a,b:a>b,'<=':lambda a,b:a<=b,'>=':lambda a,b:a>=b,
+        '&&':lambda a,b:bool(a and b),'and':lambda a,b:bool(a and b),'||':lambda a,b:bool(a or b),'or':lambda a,b:bool(a or b),'in':lambda a,b:a in b}
+
+class Evaluator:
+    def __init__(self, runtime:'RuntimeABI'): self.runtime=runtime
+    def expr(self,e:Expr,env:dict[str,Any]):
+        if e.kind=='literal': return e.value
+        if e.kind=='var': return _get_path(env,str(e.value))
+        if e.kind=='list': return [self.expr(x,env) for x in e.args]
+        if e.kind=='unary':
+            v=self.expr(e.args[0],env); return (not v) if e.value in ('!','not') else -v
+        if e.kind=='binary': return BINOPS[e.value](self.expr(e.args[0],env),self.expr(e.args[1],env))
+        if e.kind=='coalesce':
+            try: left=self.expr(e.args[0],env)
+            except NameError: left=None
+            return left if left is not None else self.expr(e.args[1],env)
+        if e.kind=='call':
+            pos=[]; kw={}
+            for k,x in e.args:
+                v=self.expr(x,env)
+                (kw.__setitem__(k,v) if k is not None else pos.append(v))
+            name=str(e.value)
+            if name in PURE_BUILTINS: return getattr(__builtins__,name)(*pos,**kw) if not isinstance(__builtins__,dict) else __builtins__[name](*pos,**kw)
+            if name.startswith('host.'): return self.runtime.call(name,*pos,**kw)
+            if name in env and callable(env[name]): return env[name](*pos,**kw)
+            if name and name[0].isupper(): return self.runtime.record(name,*pos,**kw)
+            return self.runtime.call(name,*pos,**kw)
+        raise RuntimeError(f"unknown expr {e.kind}")
+    def stmt(self,s:Stmt,env:dict[str,Any]):
+        if s.kind in ('let','assign'): env[s.value]=self.expr(s.expr,env); return
+        if s.kind=='require':
+            if not self.expr(s.expr,env): raise RequirementFailed("require failed")
+            return
+        if s.kind=='return': raise ReturnSignal(self.expr(s.expr,env))
+        if s.kind=='expr': self.expr(s.expr,env); return
+        if s.kind=='if':
+            body=s.body if self.expr(s.expr,env) else s.else_body
+            for ch in body:self.stmt(ch,env)
+            return
+        raise RuntimeError(s.kind)
+    def run(self,fn:FunctionIR,args:list[Any],extra_env:dict[str,Any]|None=None):
+        env=dict(extra_env or {})
+        env.update(zip(fn.params,args))
+        try:
+            for s in fn.body:self.stmt(s,env)
+        except ReturnSignal as r:return r.value
+        return None
+
+# ---------------------------------------------------------------------------
+# Compiler/lowering to standalone Python source with explicit runtime ABI calls.
+# ---------------------------------------------------------------------------
+
+class PythonLowerer:
+    def expr(self,e:Expr)->str:
+        if e.kind=='literal': return repr(e.value)
+        if e.kind=='var':
+            p=str(e.value).split('.')
+            code=p[0]
+            for k in p[1:]: code=f"rt.get({code},{k!r})"
+            return code
+        if e.kind=='list': return '['+','.join(self.expr(x) for x in e.args)+']'
+        if e.kind=='unary': return f"({'not ' if e.value in ('!','not') else '-'}{self.expr(e.args[0])})"
+        if e.kind=='binary':
+            op={'&&':'and','||':'or'}.get(e.value,e.value)
+            return f"({self.expr(e.args[0])} {op} {self.expr(e.args[1])})"
+        if e.kind=='coalesce':
+            return f"rt.coalesce(lambda: {self.expr(e.args[0])}, lambda: {self.expr(e.args[1])})"
+        if e.kind=='call':
+            pos=[]; kws=[]
+            for k,x in e.args:
+                (kws.append(f"{k}={self.expr(x)}") if k is not None else pos.append(self.expr(x)))
+            arg=', '.join(pos+kws)
+            name=str(e.value)
+            if name in PURE_BUILTINS: return f"{name}({arg})"
+            if name.startswith('host.'): return f"rt.call({name!r}{', ' if arg else ''}{arg})"
+            if name and name[0].isupper(): return f"rt.record({name!r}{', ' if arg else ''}{arg})"
+            return f"rt.call({name!r}{', ' if arg else ''}{arg})"
+        raise RuntimeError(e.kind)
+    def stmts(self,ss:tuple[Stmt,...],indent=1)->list[str]:
+        pre='    '*indent; out=[]
+        for s in ss:
+            if s.kind in ('let','assign'): out.append(f"{pre}{s.value} = {self.expr(s.expr)}")
+            elif s.kind=='require': out += [f"{pre}if not ({self.expr(s.expr)}):",f"{pre}    raise RuntimeError('require failed')"]
+            elif s.kind=='return': out.append(f"{pre}return {self.expr(s.expr)}")
+            elif s.kind=='expr': out.append(f"{pre}{self.expr(s.expr)}")
+            elif s.kind=='if':
+                out.append(f"{pre}if {self.expr(s.expr)}:")
+                out += self.stmts(s.body,indent+1) or [f"{pre}    pass"]

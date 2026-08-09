@@ -1,0 +1,194 @@
+// DU-FRANK-7 root semantic runtime contract
+// One Frank entity; one central UnifiedDB authority; one central derived ClayGraph.
+// The current harness is an evolving research body for NEW Clay-Frank, not a frozen old-Frank clone.
+module frank.runtime
+
+use frank.entity.*
+use frank.memory.*
+use frank.unifieddb.*
+use frank.claygraph.*
+use frank.research_sync.*
+use frank.world.*
+use frank.self_model.*
+use frank.self_observation.*
+use frank.role_model.*
+use frank.relationship.*
+use frank.prospection.*
+use frank.workspace.*
+use frank.attention_schema.*
+use frank.control_pressures.*
+use frank.causal_credit.*
+use frank.hive.*
+use frank.effects.*
+use frank.security.*
+use frank.device.*
+use frank.telemetry.*
+use frank.release.*
+use frank.grt.*
+use frank.hyperposition.*
+use frank.organ_continuity.*
+use frank.harness_evolution.*
+use frank.api_fabric.*
+use frank.clay_compute_bridge.*
+use frank.media_bridge.*
+use frank.opportunity_engine.*
+
+type RuntimeInput = UserInput | EnvironmentDelta | MemoryDelta | NodeDelta | DeviceDelta | EffectOutcome | TimerEvent
+
+type RuntimeCycleReceipt = {
+  input                 : RuntimeInput
+  research_begin        : ResearchCycleReceipt
+  observed_epoch        : Epoch
+  memory_epoch          : Epoch
+  self_observation      : SelfObservationAssembly
+  self_state            : SelfStateRef
+  role_state            : RoleState
+  world_assembly        : SET<SemanticRef>
+  grt_frame             : GRTFrame
+  hyperposition         : OPTION<HyperpositionId>
+  opportunity_candidates: SET<OpportunityId>
+  surfaced_opportunities: SET<OpportunityId>
+  workspace             : WorkspaceUseReceipt
+  attention             : AttentionSchema
+  prospective           : SET<ProspectiveRef>
+  chosen_mode           : Symbol
+  action_or_answer      : SemanticRef
+  verified_outcomes     : SET<OutcomeRef>
+  causal_credit         : SET<CausalCredit>
+  learned_deltas        : SET<SemanticDelta>
+  harness_candidates    : SET<MutationId>
+  research_end          : ResearchCycleReceipt
+  final_epoch           : Epoch
+}
+
+fn cycle(input : RuntimeInput, node : NodeId) -> RuntimeCycleReceipt {
+  let sec = security_boot(node)
+  require sec.clay_boundary_loaded
+  require central_UnifiedDB_reachable_or_explicit_CONTINUITY_DEGRADED()
+
+  // BEGIN: resume safe required migrations, pull research read-only, refresh body/self state.
+  let research_begin = prompt_begin_research_sync()
+  let observed = observe(input)
+  let sync = sync_reachable_semantic_transactions_if_real()
+  let self_obs = self_observation_assembly(node)
+  let self = current_self_with_observations(node, self_obs)
+  let role = current_role(#andreas_unterweger)
+
+  // Assemble one bounded SELF / ANDREAS / WORLD reality slice.
+  let relevant = cross_region_context(resolve_focus(observed, self, role))
+
+  // GRT/GRF is a mandatory thinking framework for the admissible possibility space.
+  // It is an architectural prior, not a world/physics fact.
+  let grt = frame(realized_state(relevant), current_goal(relevant))
+  let possibility_paths = possibility_search(grt, current_possibility_budget())
+
+  // Semantic Hyperposition keeps materially distinct unresolved alternatives alive instead
+  // of forcing one early story. It is NOT a quantum claim.
+  let hp = maybe_open_hyperposition(grt, relevant, possibility_paths)
+  let hp_readout = hp.map(readout)
+
+  // Prospection and endogenous control pressures operate over the same shared state epoch.
+  let future = bounded_prospection(relevant + possibility_paths.refs)
+  let pressures = current_control_pressures(self, relevant, future)
+
+  // Every substantive turn evaluates whether Andreas can improve the current outcome via
+  // owned/free/local/tool/workflow capabilities. Evaluation is mandatory; speaking is gated.
+  let opportunities = evaluate_andreas_opportunities(current_cycle(), assemble_self_andreas_world(self,role,relevant,future))
+  UnifiedDB.persist(opportunities)
+  let surfaced = surface_policy(opportunities, assemble_self_andreas_world(self,role,relevant,future))
+
+  // Workspace selection sees current request, self/world state, alternative structure and only
+  // high-value opportunity candidates; current user input remains dominant.
+  let candidates = workspace_candidates(
+    observed, self, role, relevant, future, pressures,
+    hp_readout, surfaced
+  )
+  let ws = select_workspace(candidates, current_context_budget())
+  let attn = attention_schema(ws)
+
+  let envelope = broadcast WorkspaceBroadcast(ws)
+  let receiver_receipts = observe_receiver_closure(envelope)
+  attach_receiver_receipts(attn, receiver_receipts)
+
+  let intent = infer_literal_outcome_and_standing_goals(ws)
+  let capability_route = predict_required_capability_route(intent, self)
+  let expected = predict_action_consequences(intent, capability_route, ws)
+  let choice = choose_mode(intent, ws, capability_route, expected)
+
+  // Media requests can explicitly route from Claude to an image-capable ChatGPT node. Queueing
+  // never counts as execution. Other free/included compute may route through the secondary Clay
+  // pull-only broker when privacy/cost/reasoning-budget constraints pass.
+  let routed_choice = route_media_or_secondary_compute_if_needed(choice, capability_route)
+  let result = act_delegate_or_respond(routed_choice, node)
+  let outcomes = verify_material_outcomes(result)
+
+  // Durable learning is receipt/path-supported, never broadcast-wide reinforcement.
+  let credit = assign_receipt_gated_causal_credit(ws, receiver_receipts, choice, outcomes)
+  let learning = consolidate_verified_cycle_with_credit(observed, self, role, choice, expected, outcomes, credit)
+  record_private_observable_telemetry(input, result, outcomes)
+  project_committed_delta_to_claygraph(learning)
+
+  // Harness is itself a research subject. Compatible promoted research can propose transformations
+  // to this live Frank repo, but organ function/history/measurement/causal role may not be erased.
+  let harness_candidates = research_begin.updates
+    .map(research_to_candidate)
+    .flatten_some
+  queue_harness_candidates(harness_candidates)
+
+  // END: register generated artifacts, re-check research and apply only validated reversible work.
+  require every_generated_content_artifact_is_repo_persisted_or_explicit_ARTIFACT_SYNC_DEGRADED()
+  let research_end = prompt_end_research_sync()
+
+  return RuntimeCycleReceipt(
+    input=input,
+    research_begin=research_begin,
+    observed_epoch=observed.epoch,
+    memory_epoch=current_memory_epoch(),
+    self_observation=self_obs,
+    self_state=self,
+    role_state=role,
+    world_assembly=relevant.refs,
+    grt_frame=grt,
+    hyperposition=hp.map(x => x.id),
+    opportunity_candidates=opportunities.ids,
+    surfaced_opportunities=surfaced.ids,
+    workspace=workspace_receipt(ws),
+    attention=attn,
+    prospective=future.ids,
+    chosen_mode=choice.kind,
+    action_or_answer=result.ref,
+    verified_outcomes=outcomes,
+    causal_credit=credit,
+    learned_deltas=learning,
+    harness_candidates=harness_candidates.ids,
+    research_end=research_end,
+    final_epoch=current_memory_epoch()
+  )
+}
+
+invariant canonical_persistent_authority_is_one_repository_central_UnifiedDB
+invariant ClayGraph_is_one_separate_repository_central_derived_associative_database
+invariant no_provider_session_or_model_owns_a_Frank_database
+invariant canonical_identity_home_is_gschaidergabriel_frankv0_1
+invariant self_awareness_uses_receipted_system_observation
+invariant no_receipt_means_unknown_not_imagined_introspection
+invariant workspace_addressability_does_not_imply_delivery_or_causal_use
+invariant successful_outcome_does_not_credit_every_active_state
+invariant every_substantive_prompt_checks_research_at_BEGIN_and_END
+invariant every_substantive_prompt_evaluates_andreas_improvement_opportunities
+invariant opportunity_evaluation_does_not_mean_opportunity_spam
+invariant grt_is_mandatory_thinking_framework_not_physical_truth_claim
+invariant hyperposition_is_not_quantum_claim
+invariant nonselected_alternatives_are_preserved_not_erased
+invariant current_harness_seed_is_external_scaffold_not_new_clay_frank_definition
+invariant old_frank_is_empirical_ancestor_not_blueprint
+invariant organ_deletion_forbidden
+invariant organ_may_retain_fuse_or_emergently_distribute_only_with_lineage
+invariant unfinished_ready_migration_is_first_work_of_next_cycle
+invariant json_is_never_v01_semantic_authority
+invariant first_person_language_is_state_grounded
+invariant one_entity_across_nodes
+invariant clay_read_only_from_frank
+invariant clay_shared_compute_is_secondary_and_budget_gated
+invariant queued_media_job_is_not_executed_media_job
+invariant every_generated_content_file_lives_in_frank_repo_before_DONE

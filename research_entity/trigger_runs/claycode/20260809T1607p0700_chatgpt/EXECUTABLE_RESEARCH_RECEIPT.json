@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809T1607p0700_chatgpt",
+  "actor": "chatgpt-secondary",
+  "execution_surface": {
+    "provider": "OpenAI",
+    "runtime": "local Python sandbox exposed to current ChatGPT worker",
+    "python": "3.13.5",
+    "os": "Linux 6.18.35 x86_64",
+    "parser_library": "lark 1.3.1",
+    "truth_class": "LOCAL_EXECUTION_PRIMARY_WITHIN_SANDBOX_SCOPE"
+  },
+  "e2b": {
+    "required_preference_from_protocol": true,
+    "available_to_this_worker": false,
+    "classification": "NOT_EXPOSED_IN_CURRENT_TOOL_SURFACE",
+    "claim_e2b_evidence": false
+  },
+  "experiments": [
+    {
+      "experiment_id": "CC-EXP-20260809-G9-GRAMMAR-SELF-CONFORMANCE-01",
+      "hypothesis": "The published CURRENT G9 V3 source specimen should parse under the published G9 grammar without semantic reinterpretation.",
+      "claycode_source_hash": "b0639cb7dc13b455a8144423cba42532085ef577112394c522edbe2b71aaf519",
+      "canonical_ir_semantic_hash": null,
+      "contract_instance_hash": null,
+      "compiler_candidate": "run-local Lark transcription of published grammar subset",
+      "original_grammar_hash": "151ce5e0880f674196053f11c4e1948e213509af948925989948432c0cb5d89d",
+      "patched_grammar_hash": "e89b7cebb2ded99b1297982a8b17eabf0241b2f744e32e9916eb0d24cdcb7d12",
+      "test_corpus": [
+        "module claycode.g9.v3",
+        "rule diff>0 => ADD_OR_STRENGTHEN",
+        "rule diff<0 => RETRACT_OR_WEAKEN",
+        "cycle(input,node){ state=normalize(input); if residual.effect { receipt=Needle.execute(effect_intent) } }"
+      ],
+      "expected": "Published grammar accepts syntax already used by CURRENT G9 V3.",
+      "observed_original": {
+        "exit_semantics": "PARSE_FAIL",
+        "error_type": "UnexpectedCharacters",
+        "line": 2,
+        "column": 10,
+        "first_failure": ">"
+      },
+      "repair": "Add comparison operators >,<,>=,<= and if/else block statement to parser grammar; no Clay semantic record/type change required by this test.",
+      "observed_repair": "PARSE_PASS",
+      "failure_classification": "GRAMMAR_SPEC_SELF_INCONSISTENCY",
+      "scientific_class": ["FALSIFICATION","TOOLING_GAIN"],
+      "affected": ["claycode","harness","frank"],
+      "limitations": "Representative exact constructs from CURRENT G9 V3 were tested, not a full-file parser of every grammar production. Full-file conformance remains required before promotion."
+    },
+    {
+      "experiment_id": "CC-EXP-20260809-CAPABILITY-SEED-CHECKER-01",
+      "hypothesis": "A minimal deterministic checker can enforce the CURRENT G9 rule that textual capability names/model output do not confer authority, while valid possession/delegation/freshness/resource/verb constraints do.",
+      "compiler_candidate": "run-local Python capability/effect checker seed",
+      "test_count": 6,
+      "oracle_mismatches": 0,
+      "cases": [
+        {"case":"valid_write","expected":true,"observed":true,"reason":"AUTHORIZED"},
+        {"case":"text_name_only","expected":false,"observed":false,"reason":"NO_POSSESSED_CAPABILITY"},
+        {"case":"expired","expected":false,"observed":false,"reason":"STALE_OR_NOT_YET_VALID"},
+        {"case":"wrong_verb","expected":false,"observed":false,"reason":"VERB_NOT_PERMITTED"},
+        {"case":"wrong_actor","expected":false,"observed":false,"reason":"ACTOR_NOT_DELEGATED"},
+        {"case":"revoked","expected":false,"observed":false,"reason":"REVOKED"}
+      ],
+      "scientific_class": ["TOOLING_GAIN","RISK_COVERAGE_GAIN"],
+      "affected": ["claycode","frank","harness"],
+      "limitations": "Seed checker only. It does not yet implement Witness.aw/cw, nonce/replay, scope predicates, delegation monotonicity proof, or a host capability gateway."
+    }
+  ],
+  "overall_result": "NEW_EXECUTABLE_COUNTEREXAMPLE_PLUS_VALIDATED_CHECKER_SEED"
+}

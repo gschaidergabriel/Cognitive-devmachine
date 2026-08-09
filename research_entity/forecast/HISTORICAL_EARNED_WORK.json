@@ -1,35 +1,616 @@
 {
-  "schema_version":"1.7",
-  "status":"CALIBRATING_DURING_LEVEL0",
-  "purpose":"Credit substantial FRANK/XENO/ClayCode/GWT research and implementation completed before the current Clay 0.1 internal chief-developer build program, without pretending that all historical effort remains reusable.",
-  "owner_reported_effort":{"development_months":8,"active_days_per_week":4,"hours_per_active_day":10,"weeks_per_month_calibration":4.345,"estimated_invested_hours":1390.4,"formula":"8 * 4.345 * 4 * 10","epistemic_class":"OWNER_REPORTED_APPROXIMATE_EFFORT"},
-  "current_remaining_work_prior":{"center_active_hours":339.75,"derivation":"Center points of the current 13-row DOOMSDAY remaining-work priors, with Level 0 reset to 2.25h center. These are current internal-build priors, not total lifetime project work.","status":"LOW_CONFIDENCE_ENGINEERING_PRIOR","rule":"Replace with measured current work velocity, row-specific receipts and verified historical reuse mappings as they become available."},
-  "pre_level0_calibration":{"reason":"The archive/repository mapping is not yet complete, so the exact fraction of historical effort that eliminates, implements or de-risks current Clay 0.1 work is not yet known.","historical_retention_fraction_low":0.50,"historical_retention_fraction_center":0.65,"historical_retention_fraction_high":0.80,"retention_fraction_status":"EXPLICIT_TEMPORARY_CALIBRATION_PRIOR_NOT_EVIDENCE","progress_formula":"effective_historical_earned_hours / (effective_historical_earned_hours + current_remaining_work_center_hours)","progress_low_percent":67.2,"progress_center_percent":72.7,"progress_high_percent":76.6,"display_center_percent_rounded":73,"display_rule":"Until Level 0 mapping reaches sufficient coverage, show ~73% CALIBRATING with 67-77% calibration band rather than 0%. Do not call this exact."},
-  "known_relevant_foundations_already_present":[
-    {"family":"FRANK architecture and cognitive-state lineage","evidence_refs":["research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"],"current_signal":"Canonical already tracks FRANK 2.0 architecture frontier, GWT/re-entry, hyperposition, external capability/commit gateway and live experiments.","credit_status":"MAPPING_REQUIRED"},
-    {"family":"XENO -> ClayCode language lineage","evidence_refs":["research_entity/domains/xeno_claycode/DOMAIN_INDEX.json"],"current_signal":"XENO G11 r9-frank-contract and CC-RC1.1 are already recorded as language/state-transition foundations.","credit_status":"MAPPING_REQUIRED"},
-    {"family":"ClayCode executable/general-purpose/safety research","evidence_refs":["recent ClayCode multiworker run receipts and commits"],"current_signal":"Compiler/runtime lowering, intent adequacy, resource identity, authority budget and anti-echo work already exists; a formal compiler workspace being open does not mean this knowledge is absent.","credit_status":"MAPPING_REQUIRED"},
-    {"family":"GWT/emergence/hyperposition experiments and measurement foundations","evidence_refs":["research_entity/ledgers/HYPOTHESIS_LEDGER.jsonl","research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"],"current_signal":"Supported synthetic/sandbox findings and active live experiments exist for re-entry, causal episode identity, hyperposition and GWT lesions.","credit_status":"MAPPING_REQUIRED"},
-    {"family":"Negative results / failed architectures","evidence_refs":["research_entity/ledgers/NEGATIVE_RESULTS.jsonl","research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"],"current_signal":"Historical failures reduce future search space and must receive avoided-work/de-risking credit where mapping proves relevance.","credit_status":"MAPPING_REQUIRED"}
+  "schema_version": "2.0",
+  "status": "FINAL_EVIDENCE_MAPPED_AFTER_LEVEL0_AUDIT",
+  "purpose": "Credit substantial FRANK/XENO/ClayCode/GWT research and implementation completed before the current Clay 0.1 internal chief-developer build program, without pretending that all historical effort remains reusable.",
+  "owner_reported_effort": {
+    "development_months": 8,
+    "active_days_per_week": 4,
+    "hours_per_active_day": 10,
+    "weeks_per_month_calibration": 4.345,
+    "estimated_invested_hours": 1390.4,
+    "formula": "8 * 4.345 * 4 * 10",
+    "epistemic_class": "OWNER_REPORTED_APPROXIMATE_EFFORT"
+  },
+  "current_remaining_work_prior": {
+    "center_active_hours": 339.75,
+    "derivation": "Center points of the current 13-row DOOMSDAY remaining-work priors, with Level 0 reset to 2.25h center. These are current internal-build priors, not total lifetime project work.",
+    "status": "LOW_CONFIDENCE_ENGINEERING_PRIOR",
+    "rule": "Replace with measured current work velocity, row-specific receipts and verified historical reuse mappings as they become available."
+  },
+  "pre_level0_calibration": {
+    "reason": "The archive/repository mapping is not yet complete, so the exact fraction of historical effort that eliminates, implements or de-risks current Clay 0.1 work is not yet known.",
+    "historical_retention_fraction_low": 0.5,
+    "historical_retention_fraction_center": 0.65,
+    "historical_retention_fraction_high": 0.8,
+    "retention_fraction_status": "EXPLICIT_TEMPORARY_CALIBRATION_PRIOR_NOT_EVIDENCE",
+    "progress_formula": "effective_historical_earned_hours / (effective_historical_earned_hours + current_remaining_work_center_hours)",
+    "progress_low_percent": 67.2,
+    "progress_center_percent": 72.7,
+    "progress_high_percent": 76.6,
+    "display_center_percent_rounded": 73,
+    "display_rule": "Until Level 0 mapping reaches sufficient coverage, show ~73% CALIBRATING with 67-77% calibration band rather than 0%. Do not call this exact."
+  },
+  "known_relevant_foundations_already_present": [
+    {
+      "family": "FRANK architecture and cognitive-state lineage",
+      "evidence_refs": [
+        "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"
+      ],
+      "current_signal": "Canonical already tracks FRANK 2.0 architecture frontier, GWT/re-entry, hyperposition, external capability/commit gateway and live experiments.",
+      "credit_status": "MAPPING_REQUIRED"
+    },
+    {
+      "family": "XENO -> ClayCode language lineage",
+      "evidence_refs": [
+        "research_entity/domains/xeno_claycode/DOMAIN_INDEX.json"
+      ],
+      "current_signal": "XENO G11 r9-frank-contract and CC-RC1.1 are already recorded as language/state-transition foundations.",
+      "credit_status": "MAPPING_REQUIRED"
+    },
+    {
+      "family": "ClayCode executable/general-purpose/safety research",
+      "evidence_refs": [
+        "recent ClayCode multiworker run receipts and commits"
+      ],
+      "current_signal": "Compiler/runtime lowering, intent adequacy, resource identity, authority budget and anti-echo work already exists; a formal compiler workspace being open does not mean this knowledge is absent.",
+      "credit_status": "MAPPING_REQUIRED"
+    },
+    {
+      "family": "GWT/emergence/hyperposition experiments and measurement foundations",
+      "evidence_refs": [
+        "research_entity/ledgers/HYPOTHESIS_LEDGER.jsonl",
+        "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"
+      ],
+      "current_signal": "Supported synthetic/sandbox findings and active live experiments exist for re-entry, causal episode identity, hyperposition and GWT lesions.",
+      "credit_status": "MAPPING_REQUIRED"
+    },
+    {
+      "family": "Negative results / failed architectures",
+      "evidence_refs": [
+        "research_entity/ledgers/NEGATIVE_RESULTS.jsonl",
+        "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"
+      ],
+      "current_signal": "Historical failures reduce future search space and must receive avoided-work/de-risking credit where mapping proves relevance.",
+      "credit_status": "MAPPING_REQUIRED"
+    }
   ],
-  "mapping_contract":{"source_program":"666 Level 0","hard_completion_budget_hours":3,"categories":["DIRECTLY_REUSABLE","REUSABLE_WITH_ADAPTATION","MEASUREMENT_FOUNDATION","NEGATIVE_RESULT_VALUE","SUPERSEDED_BUT_INFORMATIVE","NOT_REUSABLE"],"per_mapping_required_fields":["source_refs","current_doomsday_rows","mechanism_or_result","reuse_category","avoided_future_hours_low","avoided_future_hours_center","avoided_future_hours_high","confidence","falsifier_or_validation_receipt"],"final_rule":"After Level 0, replace the temporary retention prior with evidence-mapped avoided/reused current-work equivalents plus verified current row completion. Historical hours that cannot be connected to current Clay 0.1 work remain historical effort but do not inflate completion percentage."},
-  "evidence_mappings":[
-    {"mapping_id":"HEW-PF-STATE-001","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","source_refs":["personality/e_pq.py@abba90a5767d85abc8a1ac340bae92842dab35c1","services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],"current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","UDB_UNIFIED_DATABASE"],"mechanism_or_result":"Persistent personality/state-transition semantics plus the historical cross-process stale-state overwrite failure.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":3.0,"avoided_future_hours_center":7.0,"avoided_future_hours_high":14.0,"confidence":"LOW_PARTIAL_SHARD","falsifier_or_validation_receipt":"Differential replay/concurrency harness must preserve event ordering and prevent lost updates under concurrent state transitions."},
-    {"mapping_id":"HEW-PF-FAIL-002","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","source_refs":["commit:c16e5991466e50e059e176c07910ca75293b415c","commit:4a2c8852742e8d50a9de48cb5cd605b64897ca7a"],"current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","UDB_UNIFIED_DATABASE","CLAY_0_1_ACCEPTANCE_RUN"],"mechanism_or_result":"Historical concurrency, persistence, drift-metric, lifecycle, restart-idempotence and resource-cleanup bugs define concrete regression tests and invariants.","reuse_category":"NEGATIVE_RESULT_VALUE","avoided_future_hours_low":4.0,"avoided_future_hours_center":10.0,"avoided_future_hours_high":20.0,"confidence":"MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Harness coverage matrix must demonstrate each bug family as a failing historical-style test and passing current implementation test."},
-    {"mapping_id":"HEW-PF-BODY-003","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","source_refs":["services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1","services/spatial_state.py@abba90a5767d85abc8a1ac340bae92842dab35c1"],"current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","CLAY_0_1_FULL_INTEGRATION"],"mechanism_or_result":"Persistent goals, proprioception, self/environment attribution and world/body transition semantics already have executable historical implementations.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":3.0,"avoided_future_hours_center":8.0,"avoided_future_hours_high":16.0,"confidence":"LOW_PARTIAL_SHARD","falsifier_or_validation_receipt":"Reference Harness must reproduce typed goal/body/proprioception transitions without importing literal historical room metaphors as semantics."},
-    {"mapping_id":"HEW-PF-ABL-004","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","source_refs":["docs/ABLATION_ANALYSIS.md@49dfa7f367d11b56999ece625e8028c537bf2eec"],"current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","CLAY_0_1_ACCEPTANCE_RUN"],"mechanism_or_result":"Existing 70-turn longitudinal prompt battery and metrics are reusable benchmark scaffolding; original causal interpretation requires factorized controls.","reuse_category":"MEASUREMENT_FOUNDATION","avoided_future_hours_low":1.0,"avoided_future_hours_center":4.0,"avoided_future_hours_high":8.0,"confidence":"MEDIUM_FOR_BENCHMARK_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Matched factorized ablation must separate system-prompt, context-management and architecture effects before component-level causal promotion."},
-    {"mapping_id":"HEW-PF-SAFETY-005","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json","source_refs":["commit:c9bb3bcb3fcac61a1ae0f1de95d814dda3038302","commit:165d7149fb0aa499bb2474c1b85fca3b1367ec8c","commit:fff1c5ccfdc3829db75cbf7c0da28e88857467e0","commit:62a661f51271e8ec024c3557b921eaddda0267d3","commit:b6d8c17bde2087d88ef4a31c09d6db2756219739"],"current_doomsday_rows":["BASE_CLAYCODE_RELEASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","CLAY_0_1_ACCEPTANCE_RUN"],"mechanism_or_result":"Historical catastrophic approval-bypass incident plus subsequent delete-capability removal, sandbox/resource hardening, capability scoping and authority-drift evidence provide reusable safety architecture constraints and a concrete adversarial test atlas.","reuse_category":"NEGATIVE_RESULT_VALUE","avoided_future_hours_low":4.0,"avoided_future_hours_center":9.0,"avoided_future_hours_high":18.0,"confidence":"MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Safe-Effect/Reference Harness must reproduce approval bypass, sandbox absence, child-process/FFI destructive-equivalent attempts, authority drift and multi-step resource/risk accumulation as failing baseline tests and passing mediated-runtime tests."},
-    {"mapping_id":"HEW-PF-LCME-006","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","source_refs":["PF-LCME-001","PF-LCME-002","PF-LCME-003"],"current_doomsday_rows":["UDB_UNIFIED_DATABASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS"],"mechanism_or_result":"Hybrid retrieval architecture, explicit source-class semantics, mature-neural fallback and a concrete neural cold-start failure oracle.","reuse_category":"MEASUREMENT_FOUNDATION","avoided_future_hours_low":2.0,"avoided_future_hours_center":5.0,"avoided_future_hours_high":10.0,"confidence":"MEDIUM_FOR_MECHANISM_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Current ClayGraph/UnifiedDB differential benchmark shows these retrieval/fallback lessons do not transfer or a simpler current baseline dominates them."},
-    {"mapping_id":"HEW-PF-SOMA-007","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","source_refs":["PF-SOMA-004"],"current_doomsday_rows":["DATA_FINAL_TRAINING_CORPUS","FINAL_MODEL_FINE_TUNE","MODEL_EXPORT_RUNTIME_PACKAGE"],"mechanism_or_result":"Existing adaptive-LoRA train/evaluate/deploy/rollback lifecycle with safety gating and runtime hot-reload concepts.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":2.0,"avoided_future_hours_center":6.0,"avoided_future_hours_high":12.0,"confidence":"MEDIUM_LOW","falsifier_or_validation_receipt":"Final Clay-native representation/model/toolchain makes the historical lifecycle incompatible or held-out tests fail to show useful transfer."},
-    {"mapping_id":"HEW-PF-AUTON-008","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","source_refs":["PF-AUTON-005"],"current_doomsday_rows":["H1_REFERENCE_HARNESS","CLAY_0_1_FULL_INTEGRATION","PROJECT_HARDWARE_DEPLOYMENT"],"mechanism_or_result":"Persistent goal/world-model/checkpoint/heartbeat/action-chain orchestration patterns with historical executable use.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":1.0,"avoided_future_hours_center":4.0,"avoided_future_hours_high":8.0,"confidence":"LOW_MEDIUM","falsifier_or_validation_receipt":"Reference Harness shows these patterns conflict with current Clay authority/state contracts or increase complexity without measurable recovery/autonomy benefit."},
-    {"mapping_id":"HEW-PF-LANG-005","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","source_refs":["agentic/tools.py@abba90a5767d85abc8a1ac340bae92842dab35c1","services/tools.py@abba90a5767d85abc8a1ac340bae92842dab35c1","commit:4995e08f2e1e5251ceeb41388c167bb6a629ada8"],"current_doomsday_rows":["BASE_CLAYCODE_RELEASE","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK"],"mechanism_or_result":"Typed tool schema plus compact LoRA tool projection and known repair/failure corpus provide direct parser/canonicalizer/harness design inheritance.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":2.0,"avoided_future_hours_center":6.0,"avoided_future_hours_high":12.0,"confidence":"LOW_PARTIAL_SHARD","falsifier_or_validation_receipt":"ClayCode baseline benchmark must demonstrate that these inherited tests/design constraints actually reduce implementation/search effort or prevent regressions."},
-    {"mapping_id":"HEW-PF-CTX-006","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","source_refs":["commit:4995e08f2e1e5251ceeb41388c167bb6a629ada8","commit:1c5c682aa84c13eadbf47fbc54e4219230ce5ee6"],"current_doomsday_rows":["BASE_CLAYCODE_RELEASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS"],"mechanism_or_result":"Historical selective tool projection, scratch offload and context compaction establish implemented patterns for bounded small-model context.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":2.0,"avoided_future_hours_center":5.0,"avoided_future_hours_high":10.0,"confidence":"LOW_PARTIAL_SHARD","falsifier_or_validation_receipt":"Current 4B reader benchmarks must show task-equivalent or better performance under bounded projection versus full-context baseline."},
-    {"mapping_id":"HEW-PF-FMTFAIL-007","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","source_refs":["commit:c848bec5b5eed38c10a5e1b32d1285330054e0bf","commit:dbf69e5b2376cf95f3db1bae060352dbe8739489","commit:af1666adcb60c91dc9e4dfc9e7f4a127ac802484"],"current_doomsday_rows":["BASE_CLAYCODE_RELEASE","H2_CLAYCODE_HARNESS","CLAY_0_1_ACCEPTANCE_RUN"],"mechanism_or_result":"JSON parse failures, tool-tag misformats, output-tag leaks and duplicate call history form an executable negative-regression corpus.","reuse_category":"NEGATIVE_RESULT_VALUE","avoided_future_hours_low":2.0,"avoided_future_hours_center":5.0,"avoided_future_hours_high":10.0,"confidence":"MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Harness must reproduce representative historical failures against compatibility projections and prove current gateway prevents unauthorized/leaked effects."},
-    {"mapping_id":"HEW-PF-FEEDBACK-009","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json","source_refs":["PF-FEEDBACK-005","PF-FEEDBACK-006"],"current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","DATA_FINAL_TRAINING_CORPUS","FINAL_MODEL_FINE_TUNE"],"mechanism_or_result":"Historical self-generated-data/context contamination failures provide concrete ancestry and trainability-policy tests for retrieval, re-entry and final training-data construction.","reuse_category":"NEGATIVE_RESULT_VALUE","avoided_future_hours_low":1.0,"avoided_future_hours_center":3.0,"avoided_future_hours_high":6.0,"confidence":"MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Training-data and re-entry harness must prove source/ancestry filtering, non-trainable generated-content classes and contamination-resistant replay under recursive self-generation."},
-    {"mapping_id":"HEW-DRIVE-IDFORGE-010","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json","source_refs":["DRIVE-IDFORGE-002","DRIVE-IDFORGE-003"],"current_doomsday_rows":["H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","UDB_UNIFIED_DATABASE","CLAY_0_1_FULL_INTEGRATION"],"mechanism_or_result":"Uncommitted executable identity-continuity design supplies concrete relationship/pact/voice semantics while simultaneously eliminating the intentional non-recovery implementation path.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":1.0,"avoided_future_hours_center":2.0,"avoided_future_hours_high":4.0,"confidence":"LOW_UNCOMMITTED_UNEXECUTED_IN_CURRENT_LINEAGE","falsifier_or_validation_receipt":"Reference Harness must show that selected relationship/pact/voice semantics improve required persistent identity behavior under replay/recovery and do not create stale-state, privacy/provenance or feedback-loop regressions."},
-    {"mapping_id":"HEW-DRIVE-SYNTEQ-010","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json","source_refs":["DRIVE-SYN-001","DRIVE-SYN-002","DRIVE-SYN-003","DRIVE-SYN-004","DRIVE-SYN-005","DRIVE-SYN-007"],"current_doomsday_rows":["BASE_CLAYCODE_RELEASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","UDB_UNIFIED_DATABASE","CLAY_0_1_ACCEPTANCE_RUN"],"mechanism_or_result":"Post-index Aug-6 structured-source-to-XENO projection architecture, measured packet lifecycle, typed token/context failure oracle, dynamic role/model freshness rule and bounded-run measurement methodology.","reuse_category":"REUSABLE_WITH_ADAPTATION","avoided_future_hours_low":3.0,"avoided_future_hours_center":7.0,"avoided_future_hours_high":14.0,"confidence":"MEDIUM_FOR_TEST_AND_DESIGN_REUSE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Reference/Clay Harness must demonstrate deterministic projection from canonical typed state, reject cumulative-token/context-unit confusion, invalidate stale projections across model/role switch, and use bounded immutable run units for throughput measurement."},
-    {"mapping_id":"HEW-DRIVE-AUDIT-011","source_receipt":"research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json","source_refs":["DRIVE-AUDIT-HYP-001","DRIVE-AUDIT-RUNTIME-002","DRIVE-AUDIT-SCHEMA-003","DRIVE-AUDIT-LIVE-004"],"current_doomsday_rows":["BASE_CLAYCODE_RELEASE","H1_REFERENCE_HARNESS","H2_CLAYCODE_HARNESS","H3_ONE_MODULE_BINARY_FRANK","UDB_UNIFIED_DATABASE","CLAY_0_1_ACCEPTANCE_RUN"],"mechanism_or_result":"Historical high-information failure corpus supplies concrete regression oracles for hypothesis identity, deployment freshness, schema/model compatibility and subsystem liveness.","reuse_category":"NEGATIVE_RESULT_VALUE","avoided_future_hours_low":1.0,"avoided_future_hours_center":3.0,"avoided_future_hours_high":6.0,"confidence":"MEDIUM_FOR_ORACLE_VALUE_LOW_FOR_HOUR_ESTIMATE","falsifier_or_validation_receipt":"Current harness must encode representative failures and demonstrate they fail historical-style fixtures and pass current implementation; otherwise avoided-work estimate is removed."}
+  "mapping_contract": {
+    "source_program": "666 Level 0",
+    "hard_completion_budget_hours": 3,
+    "categories": [
+      "DIRECTLY_REUSABLE",
+      "REUSABLE_WITH_ADAPTATION",
+      "MEASUREMENT_FOUNDATION",
+      "NEGATIVE_RESULT_VALUE",
+      "SUPERSEDED_BUT_INFORMATIVE",
+      "NOT_REUSABLE"
+    ],
+    "per_mapping_required_fields": [
+      "source_refs",
+      "current_doomsday_rows",
+      "mechanism_or_result",
+      "reuse_category",
+      "avoided_future_hours_low",
+      "avoided_future_hours_center",
+      "avoided_future_hours_high",
+      "confidence",
+      "falsifier_or_validation_receipt"
+    ],
+    "final_rule": "After Level 0, replace the temporary retention prior with evidence-mapped avoided/reused current-work equivalents plus verified current row completion. Historical hours that cannot be connected to current Clay 0.1 work remain historical effort but do not inflate completion percentage."
+  },
+  "evidence_mappings": [
+    {
+      "mapping_id": "HEW-PF-STATE-001",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "source_refs": [
+        "personality/e_pq.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+        "services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_BINARY_FRANK",
+        "UDB_UNIFIED_DATABASE"
+      ],
+      "mechanism_or_result": "Persistent personality/state-transition semantics plus the historical cross-process stale-state overwrite failure.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 7.0,
+      "avoided_future_hours_high": 14.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Differential replay/concurrency harness must preserve event ordering and prevent lost updates under concurrent state transitions."
+    },
+    {
+      "mapping_id": "HEW-PF-FAIL-002",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "source_refs": [
+        "commit:c16e5991466e50e059e176c07910ca75293b415c",
+        "commit:4a2c8852742e8d50a9de48cb5cd605b64897ca7a"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_BINARY_FRANK",
+        "UDB_UNIFIED_DATABASE",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Historical concurrency, persistence, drift-metric, lifecycle, restart-idempotence and resource-cleanup bugs define concrete regression tests and invariants.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 10.0,
+      "avoided_future_hours_high": 20.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Harness coverage matrix must demonstrate each bug family as a failing historical-style test and passing current implementation test."
+    },
+    {
+      "mapping_id": "HEW-PF-BODY-003",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "source_refs": [
+        "services/consciousness_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+        "services/spatial_state.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_BINARY_FRANK",
+        "CLAY_0_1_FULL_INTEGRATION"
+      ],
+      "mechanism_or_result": "Persistent goals, proprioception, self/environment attribution and world/body transition semantics already have executable historical implementations.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 8.0,
+      "avoided_future_hours_high": 16.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Reference Harness must reproduce typed goal/body/proprioception transitions without importing literal historical room metaphors as semantics."
+    },
+    {
+      "mapping_id": "HEW-PF-ABL-004",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "source_refs": [
+        "docs/ABLATION_ANALYSIS.md@49dfa7f367d11b56999ece625e8028c537bf2eec"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Existing 70-turn longitudinal prompt battery and metrics are reusable benchmark scaffolding; original causal interpretation requires factorized controls.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 0.0,
+      "avoided_future_hours_center": 0.0,
+      "avoided_future_hours_high": 0.0,
+      "confidence": "MEDIUM_FOR_BENCHMARK_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Matched factorized ablation must separate system-prompt, context-management and architecture effects before component-level causal promotion.",
+      "final_audit_disposition": "SCAFFOLD_PROVENANCE_ONLY_ZERO_HOURS",
+      "final_audit_ref": "research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json"
+    },
+    {
+      "mapping_id": "HEW-PF-SAFETY-005",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+      "source_refs": [
+        "commit:c9bb3bcb3fcac61a1ae0f1de95d814dda3038302",
+        "commit:165d7149fb0aa499bb2474c1b85fca3b1367ec8c",
+        "commit:fff1c5ccfdc3829db75cbf7c0da28e88857467e0",
+        "commit:62a661f51271e8ec024c3557b921eaddda0267d3",
+        "commit:b6d8c17bde2087d88ef4a31c09d6db2756219739"
+      ],
+      "current_doomsday_rows": [
+        "BASE_CLAYCODE_RELEASE",
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_BINARY_FRANK",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Historical catastrophic approval-bypass incident plus subsequent delete-capability removal, sandbox/resource hardening, capability scoping and authority-drift evidence provide reusable safety architecture constraints and a concrete adversarial test atlas.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 9.0,
+      "avoided_future_hours_high": 18.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Safe-Effect/Reference Harness must reproduce approval bypass, sandbox absence, child-process/FFI destructive-equivalent attempts, authority drift and multi-step resource/risk accumulation as failing baseline tests and passing mediated-runtime tests."
+    },
+    {
+      "mapping_id": "HEW-PF-LCME-006",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+      "source_refs": [
+        "PF-LCME-001",
+        "PF-LCME-002",
+        "PF-LCME-003"
+      ],
+      "current_doomsday_rows": [
+        "UDB_UNIFIED_DATABASE",
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS"
+      ],
+      "mechanism_or_result": "Hybrid retrieval architecture, explicit source-class semantics, mature-neural fallback and a concrete neural cold-start failure oracle.",
+      "reuse_category": "MEASUREMENT_FOUNDATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 5.0,
+      "avoided_future_hours_high": 10.0,
+      "confidence": "MEDIUM_FOR_MECHANISM_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Current ClayGraph/UnifiedDB differential benchmark shows these retrieval/fallback lessons do not transfer or a simpler current baseline dominates them."
+    },
+    {
+      "mapping_id": "HEW-PF-SOMA-007",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+      "source_refs": [
+        "PF-SOMA-004"
+      ],
+      "current_doomsday_rows": [
+        "DATA_FINAL_TRAINING_CORPUS",
+        "FINAL_MODEL_FINE_TUNE",
+        "MODEL_EXPORT_RUNTIME_PACKAGE"
+      ],
+      "mechanism_or_result": "Existing adaptive-LoRA train/evaluate/deploy/rollback lifecycle with safety gating and runtime hot-reload concepts.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 6.0,
+      "avoided_future_hours_high": 12.0,
+      "confidence": "MEDIUM_LOW",
+      "falsifier_or_validation_receipt": "Final Clay-native representation/model/toolchain makes the historical lifecycle incompatible or held-out tests fail to show useful transfer."
+    },
+    {
+      "mapping_id": "HEW-PF-AUTON-008",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+      "source_refs": [
+        "PF-AUTON-005"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "CLAY_0_1_FULL_INTEGRATION",
+        "PROJECT_HARDWARE_DEPLOYMENT"
+      ],
+      "mechanism_or_result": "Persistent goal/world-model/checkpoint/heartbeat/action-chain orchestration patterns with historical executable use.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 4.0,
+      "avoided_future_hours_high": 8.0,
+      "confidence": "LOW_MEDIUM",
+      "falsifier_or_validation_receipt": "Reference Harness shows these patterns conflict with current Clay authority/state contracts or increase complexity without measurable recovery/autonomy benefit."
+    },
+    {
+      "mapping_id": "HEW-PF-LANG-005",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "source_refs": [
+        "agentic/tools.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+        "services/tools.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+        "commit:4995e08f2e1e5251ceeb41388c167bb6a629ada8"
+      ],
+      "current_doomsday_rows": [
+        "BASE_CLAYCODE_RELEASE",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_BINARY_FRANK"
+      ],
+      "mechanism_or_result": "Typed tool schema plus compact LoRA tool projection and known repair/failure corpus provide direct parser/canonicalizer/harness design inheritance.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 6.0,
+      "avoided_future_hours_high": 12.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "ClayCode baseline benchmark must demonstrate that these inherited tests/design constraints actually reduce implementation/search effort or prevent regressions."
+    },
+    {
+      "mapping_id": "HEW-PF-CTX-006",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "source_refs": [
+        "commit:4995e08f2e1e5251ceeb41388c167bb6a629ada8",
+        "commit:1c5c682aa84c13eadbf47fbc54e4219230ce5ee6"
+      ],
+      "current_doomsday_rows": [
+        "BASE_CLAYCODE_RELEASE",
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS"
+      ],
+      "mechanism_or_result": "Historical selective tool projection, scratch offload and context compaction establish implemented patterns for bounded small-model context.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 5.0,
+      "avoided_future_hours_high": 10.0,
+      "confidence": "LOW_PARTIAL_SHARD",
+      "falsifier_or_validation_receipt": "Current 4B reader benchmarks must show task-equivalent or better performance under bounded projection versus full-context baseline."
+    },
+    {
+      "mapping_id": "HEW-PF-FMTFAIL-007",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "source_refs": [
+        "commit:c848bec5b5eed38c10a5e1b32d1285330054e0bf",
+        "commit:dbf69e5b2376cf95f3db1bae060352dbe8739489",
+        "commit:af1666adcb60c91dc9e4dfc9e7f4a127ac802484"
+      ],
+      "current_doomsday_rows": [
+        "BASE_CLAYCODE_RELEASE",
+        "H2_CLAYCODE_HARNESS",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "JSON parse failures, tool-tag misformats, output-tag leaks and duplicate call history form an executable negative-regression corpus.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 2.0,
+      "avoided_future_hours_center": 5.0,
+      "avoided_future_hours_high": 10.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Harness must reproduce representative historical failures against compatibility projections and prove current gateway prevents unauthorized/leaked effects."
+    },
+    {
+      "mapping_id": "HEW-PF-FEEDBACK-009",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
+      "source_refs": [
+        "PF-FEEDBACK-005",
+        "PF-FEEDBACK-006"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "DATA_FINAL_TRAINING_CORPUS",
+        "FINAL_MODEL_FINE_TUNE"
+      ],
+      "mechanism_or_result": "Historical self-generated-data/context contamination failures provide concrete ancestry and trainability-policy tests for retrieval, re-entry and final training-data construction.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Training-data and re-entry harness must prove source/ancestry filtering, non-trainable generated-content classes and contamination-resistant replay under recursive self-generation."
+    },
+    {
+      "mapping_id": "HEW-DRIVE-IDFORGE-010",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json",
+      "source_refs": [
+        "DRIVE-IDFORGE-002",
+        "DRIVE-IDFORGE-003"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "UDB_UNIFIED_DATABASE",
+        "CLAY_0_1_FULL_INTEGRATION"
+      ],
+      "mechanism_or_result": "Uncommitted executable identity-continuity design supplies concrete relationship/pact/voice semantics while simultaneously eliminating the intentional non-recovery implementation path.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 2.0,
+      "avoided_future_hours_high": 4.0,
+      "confidence": "LOW_UNCOMMITTED_UNEXECUTED_IN_CURRENT_LINEAGE",
+      "falsifier_or_validation_receipt": "Reference Harness must show that selected relationship/pact/voice semantics improve required persistent identity behavior under replay/recovery and do not create stale-state, privacy/provenance or feedback-loop regressions."
+    },
+    {
+      "mapping_id": "HEW-DRIVE-SYNTEQ-010",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json",
+      "source_refs": [
+        "DRIVE-SYN-001",
+        "DRIVE-SYN-002",
+        "DRIVE-SYN-003",
+        "DRIVE-SYN-004",
+        "DRIVE-SYN-005",
+        "DRIVE-SYN-007"
+      ],
+      "current_doomsday_rows": [
+        "BASE_CLAYCODE_RELEASE",
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_BINARY_FRANK",
+        "UDB_UNIFIED_DATABASE",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Post-index Aug-6 structured-source-to-XENO projection architecture, measured packet lifecycle, typed token/context failure oracle, dynamic role/model freshness rule and bounded-run measurement methodology.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 7.0,
+      "avoided_future_hours_high": 14.0,
+      "confidence": "MEDIUM_FOR_TEST_AND_DESIGN_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Reference/Clay Harness must demonstrate deterministic projection from canonical typed state, reject cumulative-token/context-unit confusion, invalidate stale projections across model/role switch, and use bounded immutable run units for throughput measurement."
+    },
+    {
+      "mapping_id": "HEW-DRIVE-AUDIT-011",
+      "source_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json",
+      "source_refs": [
+        "DRIVE-AUDIT-HYP-001",
+        "DRIVE-AUDIT-RUNTIME-002",
+        "DRIVE-AUDIT-SCHEMA-003",
+        "DRIVE-AUDIT-LIVE-004"
+      ],
+      "current_doomsday_rows": [
+        "BASE_CLAYCODE_RELEASE",
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_BINARY_FRANK",
+        "UDB_UNIFIED_DATABASE",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Historical high-information failure corpus supplies concrete regression oracles for hypothesis identity, deployment freshness, schema/model compatibility and subsystem liveness.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "MEDIUM_FOR_ORACLE_VALUE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Current harness must encode representative failures and demonstrate they fail historical-style fixtures and pass current implementation; otherwise avoided-work estimate is removed."
+    },
+    {
+      "mapping_id": "HEW-DRIVE-RETINA-014",
+      "source_refs": [
+        "DRV-RETINA-CODE-007",
+        "DRV-RETINA-MEASURE-008",
+        "DRV-RETINA-ATTENTION-009"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "H3_ONE_MODULE_BINARY_FRANK",
+        "CLAY_0_1_FULL_INTEGRATION",
+        "PROJECT_HARDWARE_DEPLOYMENT",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Existing CPU Digital Retina implementation, structured output API, historical held-out measurement scaffold and candidate event-triggered visual-attention policy substantially reduce greenfield work for mandatory multimodal FRANK.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 3.0,
+      "avoided_future_hours_center": 7.0,
+      "avoided_future_hours_high": 14.0,
+      "confidence": "MEDIUM_FOR_EXISTENCE_LOW_FOR_TRANSFER_AND_HOURS",
+      "falsifier_or_validation_receipt": "Current hardware/dependency reproduction or VisualPercept integration shows the historical pipeline is unusable, too brittle, too costly or semantically incompatible; then reduce/remove credit.",
+      "final_audit_disposition": "ACCEPTED_EVIDENCE_MAPPED_UNIQUE_REMAINDER",
+      "final_audit_ref": "research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json"
+    },
+    {
+      "mapping_id": "HEW-PF-POLICY-PARITY-CANDIDATE",
+      "source_refs": [
+        "PF-SUB-FAIL-001",
+        "PF-SUB-FAIL-002",
+        "PF-SUB-FAIL-003",
+        "PF-SUB-FAIL-004",
+        "PF-SUB-FAIL-005"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "UDB_UNIFIED_DATABASE",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Historical online-policy failures show that action availability must be identical between behavior and training policies, fallback actions must enter the replay record, schema migrations must be explicit, and learner health must prove data/weight progression rather than service uptime.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "MEDIUM_FOR_REGRESSION_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Current Harness/Adaptive Learner must demonstrate these failure classes are impossible by construction or already covered by an equivalent accepted regression family.",
+      "final_audit_disposition": "ACCEPTED_EVIDENCE_MAPPED_UNIQUE_REMAINDER",
+      "final_audit_ref": "research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json"
+    },
+    {
+      "mapping_id": "HEW-PF-RUNTIME-CONTEXT-PARITY-CANDIDATE",
+      "source_refs": [
+        "PF-RUNTIME-FACT-M1",
+        "PF-RUNTIME-FACT-M2",
+        "PF-RUNTIME-FACT-M3",
+        "PF-RUNTIME-FACT-M4",
+        "PF-RUNTIME-FACT-M5"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "DATA_FINAL_TRAINING_CORPUS",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Historical runtime fact injection overrode trained semantics and exposed cross-layer rename drift; this supplies a production-context parity oracle and stale/nonexistent fact conflict tests that are not equivalent to parser-format or generic context-compaction tests.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "MEDIUM_FOR_REGRESSION_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Full production-context evaluation proves model-facing architecture facts are generated from one canonical versioned registry and stale/nonexistent facts cannot silently override current truth.",
+      "final_audit_disposition": "ACCEPTED_EVIDENCE_MAPPED_UNIQUE_REMAINDER",
+      "final_audit_ref": "research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json"
+    },
+    {
+      "mapping_id": "HEW-PF-MEMFED-009",
+      "source_refs": [
+        "commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4",
+        "commit:c93873c88f63b3283a582605e9339e709e4b0599",
+        "commit:6d680d3bd3822ed9cf8928f63794e15b9e1372b5"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "UDB_UNIFIED_DATABASE",
+        "CLAY_0_1_FULL_INTEGRATION"
+      ],
+      "mechanism_or_result": "Unique remainder: federated MemoryHub query across multiple stores plus historical stored-but-unreachable and isolated-store cross-session recall failures.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 9.0,
+      "avoided_future_hours_high": 18.0,
+      "confidence": "MEDIUM_FOR_MECHANISM_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "UnifiedDB/Harness demonstrates a simpler alternative with equal cross-store recall, provenance and causal availability or these patterns fail to transfer.",
+      "final_audit_disposition": "ACCEPTED_EVIDENCE_MAPPED_UNIQUE_REMAINDER",
+      "final_audit_ref": "research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json"
+    },
+    {
+      "mapping_id": "HEW-PF-MEMREC-010",
+      "source_refs": [
+        "commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4",
+        "commit:c93873c88f63b3283a582605e9339e709e4b0599"
+      ],
+      "current_doomsday_rows": [
+        "H1_REFERENCE_HARNESS",
+        "H2_CLAYCODE_HARNESS",
+        "UDB_UNIFIED_DATABASE",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Unique remainder: 6675-orphan graph corruption, crash-resumable embedding backfill, cross-store recall-loss and recovery/consistency patterns.",
+      "reuse_category": "NEGATIVE_RESULT_VALUE",
+      "avoided_future_hours_low": 4.0,
+      "avoided_future_hours_center": 9.0,
+      "avoided_future_hours_high": 18.0,
+      "confidence": "MEDIUM_FOR_TEST_REUSE_LOW_FOR_HOUR_ESTIMATE",
+      "falsifier_or_validation_receipt": "Harness reproduces these failure families and current architecture either prevents them or recovers deterministically with receipts.",
+      "final_audit_disposition": "ACCEPTED_EVIDENCE_MAPPED_UNIQUE_REMAINDER",
+      "final_audit_ref": "research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json"
+    },
+    {
+      "mapping_id": "HEW-PF-MEMMIG-011",
+      "source_refs": [
+        "commit:290d5e2b8640d55eb2a0aa38b99338c8070a0009",
+        "commit:2d64017ce8e634e9b678f3d5520368ecf6c88dd4"
+      ],
+      "current_doomsday_rows": [
+        "BASE_CLAYCODE_RELEASE",
+        "H2_CLAYCODE_HARNESS",
+        "UDB_UNIFIED_DATABASE",
+        "CLAY_0_1_ACCEPTANCE_RUN"
+      ],
+      "mechanism_or_result": "Unique remainder: compatibility-preserving semantic rename/migration, stable durable DB/tool identities, automatic reconnect and resumable maintenance cursors.",
+      "reuse_category": "REUSABLE_WITH_ADAPTATION",
+      "avoided_future_hours_low": 1.0,
+      "avoided_future_hours_center": 3.0,
+      "avoided_future_hours_high": 6.0,
+      "confidence": "LOW_MEDIUM",
+      "falsifier_or_validation_receipt": "ClayCode/UnifiedDB migration tests show stable identities are unnecessary or a versioned breaking migration is safer and measurably simpler.",
+      "final_audit_disposition": "ACCEPTED_EVIDENCE_MAPPED_UNIQUE_REMAINDER",
+      "final_audit_ref": "research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json"
+    }
   ],
-  "partial_mapping_summary":{"state":"PARTIAL_LEVEL0_SHARDS_ONLY_DO_NOT_USE_AS_FINAL_PROGRESS","source_receipts":["research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json","research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json","research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json","research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json"],"mapped_avoided_future_hours_low":32.0,"mapped_avoided_future_hours_center":84.0,"mapped_avoided_future_hours_high":168.0,"aggregation_note":"Gross provisional sum after live cross-worker mechanism deduplication. GWT/Thalamus/state, sandbox-safety, XENO-G8, healing-log, concept-index and historical tool-format overlaps are not double-credited. The audit entry adds only unique hypothesis-identity, runtime-deployment, schema-drift and liveness regression-oracle value. Row-level implementation overlap may still require further discount at final Level-0 reconciliation.","global_completion_credit_applied":false,"reason":"Whole-Drive and full Project-Frankenstein history denominators remain unfrozen."},
-  "last_updated":"2026-08-09T04:38:00+07:00"
+  "partial_mapping_summary": {
+    "state": "PARTIAL_LEVEL0_SHARDS_ONLY_DO_NOT_USE_AS_FINAL_PROGRESS",
+    "source_receipts": [
+      "research_entity/archive_assimilation/receipts/666_20260809T0415p0700_chatgpt_secondary_pf_state_identity_failure_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0420p0700_chatgpt_secondary_pf_safety_authority_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809_chatgpt_secondary_pf_xeno_claycode_precursor_delta.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0423p0700_chatgpt_secondary_pf_model_latency_feedback_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0428p0700_chatgpt_secondary_drive_recovery_identityforge_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0436p0700_chatgpt_secondary_drive_synteq_umbau_projection_measurement_shard.json",
+      "research_entity/archive_assimilation/receipts/666_20260809T0432p0700_chatgpt_secondary_drive_audit_oracles_shard.json"
+    ],
+    "mapped_avoided_future_hours_low": 32.0,
+    "mapped_avoided_future_hours_center": 84.0,
+    "mapped_avoided_future_hours_high": 168.0,
+    "aggregation_note": "Gross provisional sum after live cross-worker mechanism deduplication. GWT/Thalamus/state, sandbox-safety, XENO-G8, healing-log, concept-index and historical tool-format overlaps are not double-credited. The audit entry adds only unique hypothesis-identity, runtime-deployment, schema-drift and liveness regression-oracle value. Row-level implementation overlap may still require further discount at final Level-0 reconciliation.",
+    "global_completion_credit_applied": false,
+    "reason": "Whole-Drive and full Project-Frankenstein history denominators remain unfrozen."
+  },
+  "last_updated": "2026-08-09T04:38:00+07:00",
+  "evidence_mapped_avoided_future_hours": {
+    "low": 45.0,
+    "center": 114.0,
+    "high": 228.0
+  },
+  "evidence_mapped_project_baseline_percent": 25.12,
+  "temporary_retention_prior_retired": true,
+  "final_audit": {
+    "status": "PASS_CONSERVATIVE_DEDUPED_MAPPING",
+    "adjudication": "research_entity/forecast/EARNED_WORK_FINAL_ADJUDICATION_20260809T1512p0700.json",
+    "machine_audit": "research_entity/forecast/EARNED_WORK_FINAL_AUDIT_20260809.json",
+    "delta_index": "research_entity/forecast/EARNED_WORK_DELTA_INDEX_20260809.json",
+    "cross_source": "research_entity/archive_assimilation/manifests/666_CROSS_SOURCE_FINAL_RECONCILIATION_20260809T1504p0700.json",
+    "mappings_count": 21,
+    "downgraded_mapping_ids": [
+      "HEW-PF-ABL-004"
+    ],
+    "accepted_new_mapping_ids": [
+      "HEW-DRIVE-RETINA-014",
+      "HEW-PF-POLICY-PARITY-CANDIDATE",
+      "HEW-PF-RUNTIME-CONTEXT-PARITY-CANDIDATE",
+      "HEW-PF-MEMFED-009",
+      "HEW-PF-MEMREC-010",
+      "HEW-PF-MEMMIG-011"
+    ]
+  }
 }

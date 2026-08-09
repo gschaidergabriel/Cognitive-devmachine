@@ -1,34 +1,49 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "claycode_20260809T1539p0700_chatgpt_secondary_parser_alignment",
   "actor": "chatgpt-secondary",
   "tools": [
     {
       "tool": "GitHub connector",
       "status": "VERIFIED_RW",
-      "uses": ["canonical boot", "protocol/spec/substrate reads", "run artifact writes"]
+      "uses": ["canonical boot", "protocol/spec/substrate reads", "concurrent-run re-read", "run artifact writes", "CAS review/report updates"]
     },
     {
-      "tool": "local container",
+      "tool": "local ChatGPT Python sandbox",
       "status": "EXECUTED",
-      "uses": ["Lark parser proxy experiment", "hashing"],
-      "evidence": "EXECUTABLE_RESEARCH_RECEIPT.json"
+      "uses": [
+        "Lark parser proxy experiment",
+        "partial ClayCode boolean-rule lowering to Python CLI",
+        "8-fixture subprocess execution",
+        "adversarial grammar-patch sufficiency probe",
+        "hashing"
+      ],
+      "evidence": [
+        "EXECUTABLE_RESEARCH_RECEIPT.json",
+        "EXECUTABLE_RESEARCH_RECEIPT_UM_RETINA_GATE.json",
+        "GRAMMAR_ADVERSARIAL_EXTENSION_RECEIPT.json"
+      ]
     },
     {
       "tool": "e2b_sandbox",
       "status": "NOT_EXPOSED_TO_CURRENT_SESSION",
       "repo_capability_status": "RUNTIME_VERIFIED",
-      "fallback": "local container per capability contract"
+      "fallback": "local ChatGPT Python sandbox per capability contract"
     },
     {
-      "tool": "web primary documentation search",
+      "tool": "web primary documentation/research search",
       "status": "EXECUTED",
-      "uses": ["WIT/Component Model/WASI 0.3 typed FFI research"]
+      "uses": [
+        "Bytecode Alliance WIT/Component Model typed FFI boundary research",
+        "MLIR dialect-conversion/progressive-lowering triangulation",
+        "effect-typed agent-language triangulation"
+      ],
+      "policy": "Primary/official technical sources only; external evidence used as triangulation, not FRANK-specific proof."
     },
     {
       "tool": "research_interconnect_preflight.py",
       "status": "BLOCKED_NO_REPO_CHECKOUT",
-      "consequence": "INTERCONNECT_MANIFEST completion gate remains incomplete"
+      "consequence": "Official interconnect completion gate remains incomplete; manual verified-GitHub assembly is fail-closed and does not masquerade as preflight PASS."
     }
   ]
 }

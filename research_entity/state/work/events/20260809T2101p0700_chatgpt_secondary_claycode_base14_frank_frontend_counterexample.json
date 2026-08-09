@@ -1,0 +1,69 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-base14-frank-frontend-counterexample-20260809T2101p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T21:01:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "title": "Close ClayCode BASE WP02 with strict current corpus plus real-FRANK frontend discriminator",
+    "work_clay": "Re-read newest main and the latest revision of this work before effect. First run the strict current V5 G9/Dialect frontend and canonical-IR validators on the Ubuntu developer host. In the same checkout, obtain the exact frozen FRANK ClayCode source selected for WP13 and run tools/claycode_frank_frontend_gap_probe.py against it. A source-level comparison already shows current Dr.-Unterweger/claycode/frank_runtime.clay uses `use` and `fn` forms not present in V5 statement alternatives, so do not equate G9/Dialect corpus acceptance with FRANK coverage. Confirm the first strict parse failure(s) with exact source/grammar hashes. Then discriminate the smallest compatible bridge: (A) minimal versioned BASE grammar/canonical-IR amendment, or (B) explicit admitted dialect/pre-lowering translation into frozen BASE forms. Select by deterministic roundtrip, semantic-identity preservation, type/effect compatibility, authority closure and smallest regression surface. No silent preprocessing and no untyped escape hatch. After the real FRANK counterexample is closed and WP02 receipts satisfy the existing gate, proceed to WP03 typed IR/types and retain the FRANK fixture as a permanent regression for WP13.",
+    "reason_clay": "New direct evidence: current V5 grammar and current real FRANK runtime source have a frontend surface mismatch. The static counterexample is recorded in research_entity/claycode/base/receipts/CC_WP02_WP13_FRANK_FRONTEND_STATIC_COUNTEREXAMPLE_20260809T2100p0700.json and a dedicated executable probe was authored at commit f766933b778f4a97050881640036059170851156. This is exactly the class of concrete FRANK/compiler counterexample permitted to reopen the minimal frontend realization under the BASE freeze, while semantic redesign remains disallowed unless the discriminator proves it necessary.",
+    "completion_clay": "Current immediate closure requires: strict V5 construction; G9 V3 + Dialect V3 full-corpus parse; deterministic canonical syntax-IR roundtrip/mutation receipt; exact strict FRANK frontend gap probe on the selected frozen subsystem; evidence-backed selection and implementation of either minimal grammar/IR amendment or explicit versioned pre-lowering/dialect translation if needed; rerun of both current corpus and FRANK fixture with zero unexplained parse/canonicalization regression; exact hashes/receipts committed. Only then may WP02 be adjudicated. Parent BASE remains incomplete until original WP01..WP14 contract is satisfied.",
+    "evidence_need": [
+      "STRICT_LALR_REPAIR_RECEIPT",
+      "FULL_CORPUS_FRONTEND_RECEIPT",
+      "CANONICAL_IR_ROUNDTRIP_HASH_RECEIPT",
+      "STRICT_FRANK_FRONTEND_GAP_PROBE_RECEIPT",
+      "FRANK_FRONTEND_BRIDGE_SELECTION_RECEIPT",
+      "FRANK_FRONTEND_REGRESSION_RECEIPT",
+      "TYPE_EFFECT_NEGATIVE_CORPUS_RECEIPT",
+      "EVALUATOR_DIFFERENTIAL_RECEIPT",
+      "TRANSLATION_VALIDATION_RECEIPT",
+      "UBUNTU_RUNTIME_ABI_FFI_RECEIPT",
+      "AUTHORITY_CLOSURE_RECEIPT",
+      "ATOMIC_ASYNC_REPLAY_RECEIPT",
+      "ALL_GENERAL_APPLICATION_UBUNTU_RECEIPTS",
+      "FUZZ_CONFORMANCE_RECEIPT",
+      "HELDOUT_CORPUS_LEAK_AUDIT",
+      "FRANK_PRODUCTION_HANDOFF_RECEIPT",
+      "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST"
+    ],
+    "executor_policy": "Immediate local-build priority on verified Ubuntu/repository checkout. Current capacity state says Claude research capacity is temporarily unavailable until 2026-08-11 and has a separate Andreas Harness lane, so do not claim this revision is executing there now. Any capable local executor must revalidate newest spec revision/dependencies before effect. ChatGPT continues current nonlocal implementation/research contributions and adjudication. Proxy evidence stays proxy; no paid training and no non-Ubuntu v0.1 portability work.",
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "PRODUCTION_CLAYCODE_TOOLCHAIN",
+      "UBUNTU_DEVELOPER_HOST_EXECUTION",
+      "GITHUB_READ_WRITE",
+      "LOCAL_TEST_EXECUTION",
+      "FRANK_REPOSITORY_READ"
+    ],
+    "write_scope": [
+      "research_entity/claycode/",
+      "research_entity/trigger_runs/claycode/",
+      "research_entity/runtime/",
+      "research_entity/state/work/events/",
+      "tools/",
+      "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json"
+    ],
+    "dependencies": [
+      "BASE_CLAYCODE_RELEASE",
+      "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+      "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark",
+      "tools/claycode_base_frontend_validation.py",
+      "tools/claycode_base_canonical_ir_validation.py",
+      "tools/claycode_frank_frontend_gap_probe.py",
+      "research_entity/claycode/base/receipts/CC_WP02_WP13_FRANK_FRONTEND_STATIC_COUNTEREXAMPLE_20260809T2100p0700.json"
+    ],
+    "invalidators": [
+      "BASE acceptance contract is superseded by explicit project-owner directive",
+      "Ubuntu developer system ceases to be Frank v0.1 target host",
+      "selected WP13 frozen FRANK subsystem is formally shown to use a different already-admitted frontend path with equivalent deterministic BASE lowering"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 1.0,
+    "urgency": 1.0,
+    "information_gain": 1.0,
+    "status": "READY"
+  }
+}

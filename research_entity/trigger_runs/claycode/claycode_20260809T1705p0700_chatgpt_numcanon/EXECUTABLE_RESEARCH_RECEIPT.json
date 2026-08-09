@@ -1,0 +1,56 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"CC-NUMCANON-RECEIPT-20260809-01",
+  "run_id":"claycode_20260809T1705p0700_chatgpt_numcanon",
+  "experiment_id":"CC-NUMCANON-LOCAL-20260809-01",
+  "candidate":"G9 typed numeric canonicalization candidate v0.1",
+  "source_artifact":"research_entity/trigger_runs/claycode/claycode_20260809T1705p0700_chatgpt_numcanon/NUMERIC_CANONICALIZATION_PROBE.py",
+  "source_sha256":"fcded33ee460d83d34ccf69f400fe68fefe8f98cb49d67231513fa5faf0577d5",
+  "candidate_contract_hash":"c3167752449b8848ad2f78e9573f8dfbc1108c837ba8754f94e657e8a528f0da",
+  "semantic_property":"Typed numeric semantic identity must be invariant across host serialization/lowering surfaces for the same represented ClayCode value; host presentation bytes must not define semantic identity.",
+  "execution":{
+    "surface":"local container",
+    "provider":"OpenAI hosted execution container",
+    "python":"3.13.5",
+    "node":"v22.16.0",
+    "separate_node_process":true,
+    "exit_status":0,
+    "stderr":""
+  },
+  "corpus":{
+    "seed":20260809,
+    "float64_cases":10000,
+    "float64_generation":"raw 64-bit patterns including signed zero, finite normals/subnormals, infinities and NaNs",
+    "integer_cases":["0","1","-1","9007199254740991","9007199254740992","9007199254740993","9223372036854775807","-9223372036854775808","1000000000000000000000000000123"]
+  },
+  "observed":{
+    "host_native_json_float_string_mismatch_count":204,
+    "typed_candidate_float_token_mismatch_count":0,
+    "typed_candidate_integer_token_mismatch_count":0,
+    "large_integer_value_loss_on_js_number":true,
+    "js_bigint_json_serialization":"TypeError",
+    "python_nan_inf_json":"nonstandard NaN/Infinity tokens when allow_nan default is used",
+    "node_nan_inf_json":"null under JSON.stringify(Number)"
+  },
+  "expected_vs_observed":"Expected host-native formatting divergence and exact typed-token stability. Observed 204 native float presentation mismatches, multiple integer precision counterexamples, and zero candidate-token mismatches on the bounded corpus.",
+  "failure_classification":[
+    "HOST_PRESENTATION_NOT_SEMANTIC_IDENTITY",
+    "TARGET_NUMERIC_RANGE_MUST_BE_CHECKED",
+    "SPECIAL_FLOAT_POLICY_MUST_BE_EXPLICIT"
+  ],
+  "affected_hypotheses":[
+    "H-CC-NUMCANON-20260809-01",
+    "H-CC-INTLOWER-20260809-02",
+    "H-CC-F64SPECIAL-20260809-03",
+    "H0-CC-HOSTJSON-SEMID-20260809-01"
+  ],
+  "affected_branches":["claycode","harness","unifieddb","claygraph","frank","gwt","hyperposition","emergenz","clayresearch"],
+  "evidence_class":"LOCAL_CROSS_RUNTIME_COMPONENT_EXPERIMENT",
+  "promotion":"NONE",
+  "limitations":[
+    "No production G9 parser/canonicalizer/compiler was exercised.",
+    "No Ubuntu developer-system execution receipt was produced.",
+    "The experiment establishes representation-level differences, not cross-backend floating arithmetic equivalence.",
+    "The candidate NaN normalization rule is not promoted for domains where NaN payload/sign may be intentionally observable."
+  ]
+}

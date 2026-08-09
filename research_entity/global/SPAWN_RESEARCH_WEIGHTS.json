@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "trigger": "spawn",
+  "purpose": "Spawn exactly one stochastic temporary research direction per exact trigger invocation, with ClayCode intentionally dominant.",
+  "selection_scope": "registered scientific branches only; meta commands and entity-address commands are excluded",
+  "randomness": {
+    "required": true,
+    "preferred_rng": "OS_CSPRNG",
+    "python_reference": "secrets.SystemRandom",
+    "record_draw_receipt": true,
+    "never_fake_seed": true
+  },
+  "weights_percent": {
+    "claycode": 50,
+    "harness": 10,
+    "frank": 10,
+    "gwt": 6,
+    "emergenz": 6,
+    "hyperposition": 5,
+    "claygraph": 5,
+    "unifieddb": 4,
+    "clayresearch": 4
+  },
+  "weight_total": 100,
+  "dominance_invariant": "claycode has strictly greater selection probability than every other individual branch",
+  "spawn_semantics": {
+    "branch_draws_per_invocation": 1,
+    "temporary_field_per_invocation": 1,
+    "must_act_immediately": true,
+    "candidate_microdirections": "derive 3-7 falsifiable, branch-faithful directions from current OPEN/CURRENT evidence, live work, negative results and current stage",
+    "microdirection_draw": "random among eligible candidates after novelty filtering",
+    "recent_duplicate_window": 10,
+    "duplicate_rule": "do not reroll the selected branch; reroll only the microdirection up to 3 times if its normalized topic signature duplicates a recent spawn without replication value",
+    "replication_exception": "a repeated direction is allowed when explicitly selected as replication/falsification and the receipt says why",
+    "mesh_feedback": true,
+    "write_run_report": true
+  },
+  "hard_guards": [
+    "selection probability never constitutes evidence priority or truth authority",
+    "random selection never overrides safety, authority, staged-program gates or explicit owner directives",
+    "paid training is never auto-authorized",
+    "Frank never gains authority to mutate its own Harness",
+    "negative results and contradictions remain preserved",
+    "a spawned field must not claim independence when it shares evidence/architecture ancestry with its source branch"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666_20260809T1312p0700_chatgpt_secondary_pf_history_k128_k159_overlap_reconcile",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "decision_type":"CONCURRENT_HISTORY_SHARD_OVERLAP_RECONCILIATION",
+  "our_lane":{"task_id":"666-l0-pf-history-k128-k157-20260809T1302p0700","manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_K128_K157_SEMANTIC_DISPOSITION_20260809T1310p0700.json","manifest_commit":"1e1325cae6c4c95c0b24980112e555bf3fb63bd3","range":{"start":128,"end":157,"count":30},"claim_time":"2026-08-09T13:02:00+07:00","status":"COMPLETE_TERMINAL_30_OF_30"},
+  "peer_lane":{"manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K128_K159_20260809T1306p0700.json","manifest_commit":"ad3a1c787665d9d3077945feadb67620c86f01ce","range":{"start":128,"end":159,"count":32},"status":"COMPLETE_TERMINAL_32_OF_32"},
+  "race_observation":"Our k128-k157 task/lease were already claimed before the later pulse exposed a concurrently-created overlapping k128-k159 peer lane. No evidence indicates malicious overwrite; this is a coordination race under concurrent main advancement.",
+  "comparison":{"overlap_ordinals":{"start":128,"end":157,"count":30},"peer_only_ordinals":[158,159],"material_conclusion":"CORROBORATIVE_AGREEMENT","both_zero_earned_work_credit":true,"both_zero_global_exact_percent_credit":true,"shared_major_families":["deployment portability/recovery","recursive memory/context","reality grounding/prompt safety","AURA/WebUI projection","docs/evidence supersession"]},
+  "resolution":{"coverage_count_rule":"COUNT_ONCE","primary_coverage_manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K128_K159_20260809T1306p0700.json","corroborative_manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_K128_K157_SEMANTIC_DISPOSITION_20260809T1310p0700.json","reason":"Peer manifest strictly covers the same 30 ordinals plus k158-k159 and reached terminal 32/32; using it as primary avoids double-counting while retaining our independently convergent analysis as corroboration.","earned_work_hours_added":0.0,"exact_global_level0_percent_added":0.0},
+  "coordination_feedback":"Future history dispatch should consult both ACTIVE leases and the latest ordinal-coverage manifests immediately before claim; a newly published broader shard supersedes overlapping narrower coverage for counting while narrower results remain corroborative evidence.",
+  "created_at":"2026-08-09T13:12:00+07:00"
+}

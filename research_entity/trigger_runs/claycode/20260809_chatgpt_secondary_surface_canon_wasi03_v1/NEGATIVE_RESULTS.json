@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809_chatgpt_secondary_surface_canon_wasi03_v1",
+  "negative_results": [
+    {
+      "id": "N-CC-20260809-01",
+      "status": "NEGATIVE_RESULT_RUN_LOCAL",
+      "proposition_refuted": "ClayCode semantic identity can safely canonicalize all collection-like sequences as unordered/deduplicated values.",
+      "experiment_ref": "CC-LOCAL-20260809-TYPED-CANON-01",
+      "result": "In 20,000/20,000 tested ordered-operation swaps, execution changed. The deliberately over-normalizing canonicalizer nevertheless produced the same semantic hash in 20,000/20,000 cases.",
+      "implication": "Canonicalization must be driven by static collection semantics. Ordered sequences remain order-sensitive; set-like fields may sort/deduplicate; contract/provenance identity remains separate.",
+      "affected_branches": ["claycode", "unifieddb", "claygraph", "harness"],
+      "falsifier_or_scope_limit": "This bounded micro-language experiment does not prove all future ClayCode collection semantics; nested/maps/weighted/multiset forms need their own typed rules and fuzz fixtures."
+    },
+    {
+      "id": "N-CC-20260809-02",
+      "status": "NEGATIVE_RESULT_CURRENT_ARTIFACT",
+      "proposition_refuted": "The current G9 V3 source and current grammar.ebnf are already a self-consistent executable surface pair.",
+      "evidence_refs": ["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "research_entity/claycode/g9/grammar.ebnf"],
+      "result": "Current source uses relational >/<, a POS|NEG field type, a digit-leading 4B_emits identifier and an if statement that the current grammar does not admit.",
+      "implication": "BASE cannot freeze parser/canonicalizer behavior from these two artifacts without first reconciling the surface contract or locating a newer authoritative grammar/parser.",
+      "affected_branches": ["claycode", "harness"],
+      "falsifier_or_scope_limit": "A newer authoritative parser/grammar may exist outside the inspected admitted stack; locating and successfully roundtripping G9 V3 would supersede this artifact-level negative result."
+    }
+  ]
+}

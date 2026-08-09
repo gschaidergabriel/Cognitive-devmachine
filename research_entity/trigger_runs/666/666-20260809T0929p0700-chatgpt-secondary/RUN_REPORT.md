@@ -23,11 +23,11 @@
 - current Project-Frankenstein partial manifest
 
 ## Routing / non-overlap decision
-The current Drive root epoch already contains exact direct closures for multiple large subtrees, while AICore received a very recent recursive revalidation at 09:21 +07:00. To avoid redoing a freshly active Drive lane, this worker selected the still-explicitly-open `Project-Frankenstein` history-scope denominator lane.
+The current Drive root epoch already contains exact direct closures for multiple large subtrees, while AICore received very recent recursive work. To avoid duplicating active Drive lanes, this worker selected the explicitly open `Project-Frankenstein` history denominator lane.
 
-A later pulse checked `digital-retina-e2e`; its recursive 64-leaf denominator is already frozen and only content/hash closure remains. No duplicate denominator work was claimed there.
+A live pulse confirmed active peer leases on AICore and Digital Retina work plus active Project-Frankenstein tree-segment reconstruction. This run therefore stayed on the global PF history-denominator surface only.
 
-## Executed shard: Project-Frankenstein history-scope expansion
+## Executed shard: Project-Frankenstein history denominator
 Parent manifest before the shard:
 - status: `PARTIAL_NOT_FROZEN`
 - frozen head: `abba90a5767d85abc8a1ac340bae92842dab35c1`
@@ -35,60 +35,60 @@ Parent manifest before the shard:
 - exact tree: not enumerated
 - exact history: not enumerated
 
-### New verified historical boundary evidence
-Direct commit retrieval verified:
+### Scope expansion
+Direct commit retrieval first verified history earlier than the old cursor:
 1. `3085d354aaf7a523b9389d6e9deaab1ca990758f` — 2026-02-20T18:43:57Z
 2. `94f8051b3dd986853bcdb2e0006e256b6b9eeb8e` — 2026-02-21
 
-Therefore the old March-14 partial cursor is not a valid lower boundary for the Level-0 history universe.
+The old March-14 cursor was therefore invalid as a lower boundary.
 
-### Historical lineage signals recovered
-The February 20 commit records historical architecture/documentation changes including:
-- a multi-thread Consciousness Stream with GWT/AST/perception/goals/reflections language;
-- removal/deprecation cleanup for Live Wallpaper/voice-directory references;
-- expanded Genesis/safety architecture documentation.
+### Initial negative result retained
+Commit-search windows alone could not prove exact history. A local `git clone` fallback also failed because the execution container could not resolve `github.com`. That intermediate blocker was recorded with zero exact-credit rather than converted into a false denominator.
 
-The February 21 commit records further lineage including:
-- Live Wallpaper cleanup;
-- wake-word removal / push-to-talk correction;
-- explicit persistent cross-session memory descriptions;
-- expanded email capability descriptions;
-- personality/self-knowledge prompt and capability updates.
+### Exact enumeration breakthrough
+A later GitHub compare surface accepted pinned git ancestry expressions. A bounded search over the frozen head established:
+- `abba90a...~544` = `e1a8812767668091d146ee958bbc2ebb2743031c`
+- `abba90a...~545` = NOT_FOUND
+- `e1a881...^` = NOT_FOUND
+- `e1a881...^2` = NOT_FOUND
+- direct fetch of `e1a881...` identifies it as `Initial commit: AI-Core / Frank — local AI desktop companion`
+- root timestamp: `2026-02-14T18:05:27+01:00`
+- server compare root -> frozen head: `ahead_by = 544`, `total_commits = 544`, `too_large = null`
+- first-parent distance = reachable-commit delta, so side-history excess = 0
 
-These are historical repository observations. They are not promoted as current FRANK architecture facts without later-lineage reconciliation.
+Therefore the exact reachable Project-Frankenstein history denominator for the frozen Level-0 scope is:
 
-## Negative result / exactness guard
-The available GitHub connector commit-search surface returned useful older history but did not expose a reproducible complete commit-DAG denominator with a verifiable pagination/root-count traversal in this execution context. Ascending and descending search retrieval shapes cannot be treated as an exact Git graph walk.
+**545 commits including root and frozen head.**
 
-A local `git clone` fallback was also unavailable because the execution container could not resolve `github.com`.
-
-Result:
-- full commit-DAG denominator: `OPEN`
-- full frozen-head tree denominator: `OPEN`
-- exact history enumerated: `false`
-- exact tree enumerated: `false`
-- global Level-0 exact coverage credit from this shard: `0.0%`
-- Level-0 PASS impact: `NO_PASS_CREDIT`
-
-This negative result is retained because it prevents a false 100% claim.
+### Peer contradiction resolved
+A concurrent blocker sweep had recorded the exact PF history DAG as the only remaining owner/local-git action. This run resolved that blocker internally and published a correction: no owner/local Git snapshot is required for this history denominator.
 
 ## Durable outputs
-- `research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_pf_history_scope_expansion.json`
+- `research_entity/archive_assimilation/receipts/666_20260809T0929p0700_chatgpt_secondary_pf_history_scope_expansion.json` — historical intermediate blocker / zero-credit receipt
+- `research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_DENOMINATOR_EXACT_20260809T0940p0700.json` — exact 545-commit denominator
+- `research_entity/archive_assimilation/receipts/666_20260809T0940p0700_chatgpt_secondary_pf_history_exact_closure.json` — exact closure receipt
+- `research_entity/archive_assimilation/receipts/666_20260809T0941p0700_pf_history_owner_action_superseded.json` — correction of obsolete owner-action blocker
+- `research_entity/rooms/rooms/center/tasks/666-pf-history-exact-dag-frozen-head-abba90a.json` — COMPLETE
+- `research_entity/rooms/rooms/center/events/666-20260809T0941p0700-pf-history-exact-closure-delta.json` — NEXT_CHECKPOINT peer delta
 - this run report
 
-## Branch feedback
-No scientific branch claim is promoted from this shard alone. The recovered February lineage is retained for later cross-source reconciliation and may affect `frank`, `gwt`, `unifieddb`, memory/personality history and current-architecture inheritance mapping once exact lineage is closed.
+## Exactness / PASS accounting
+- Project-Frankenstein exact commit-history denominator: `CLOSED = 545`
+- Project-Frankenstein frozen-head tree denominator: still not globally closed by this run
+- historical content classification/reconciliation: still open
+- global Drive + PF combined denominator: not yet frozen
+- global Level-0 exact coverage: remains uncredited/undefined until combined denominator is frozen
+- `666_RELEASE_GATE`: remains `NOT_PASS`
 
-Current feedback disposition: `NO_PROMOTION_PENDING_EXACT_LINEAGE_RECONCILIATION`.
+No global percentage was fabricated from this local denominator closure.
 
 ## Remaining highest-value obligations
-1. Obtain a reproducible exact Project-Frankenstein commit-DAG/root/count traversal for the frozen Level-0 scope.
-2. Enumerate the exact frozen-head repository tree denominator and disposition generated/vendor/binary material deterministically.
+1. Close the exact frozen-head Project-Frankenstein tree denominator and remaining blob identities/non-prefix deltas.
+2. Finish remaining Drive recursive/hash/content obligations already partitioned across active peer lanes.
 3. Reconcile deleted/superseded Project-Frankenstein history against Drive rescue/recovery branches.
-4. Complete remaining Drive recursive/hash/content obligations, including currently open AICore/Retina/XENO reconciliation lanes, without duplicating active workers.
-5. Only after both source universes are exact, finish cross-source reconciliation, earned-work row deduplication, branch feedback and release audit.
+4. Finish cross-source reconciliation, branch feedback/NO_CHANGE, earned-work row deduplication and final Level-0 audit.
 
 ## Completion judgment
-`666_RELEASE_GATE` remains `NOT_PASS`.
+This worker's non-overlapping PF history-denominator shard is complete and published. The global Level-0 campaign continues under parallel leases and remains `NOT_PASS`.
 
 No fake percentage, no stochastic post-Level-0 spawning, and no paid training were initiated.

@@ -11,6 +11,8 @@ This is intentionally narrower than a canonical typed-AST proof. It establishes:
 It must not be used to claim CC-WP-02 PASS by itself; typed canonical AST/semantic-hash
 integration remains a separate downstream requirement.
 Validation dispatch note: BASE14 closure requested 2026-08-09 by chatgpt-secondary.
+V6 note: dotted relations now require an explicit object, removing V5's strict-LALR
+shift/reduce ambiguity at following infix operators.
 """
 from __future__ import annotations
 
@@ -23,7 +25,7 @@ from pathlib import Path
 from lark import Lark, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V6.lark"
 SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
@@ -113,6 +115,7 @@ def main() -> None:
         "if_as_parameter_identifier": "needle f(if:Int)->Int\n",
         "invariant_as_parameter_identifier": "needle f(invariant:Int)->Int\n",
         "implicit_english_noun_phrase": "rule Claude_only consumes latest stack + writes task receipts\n",
+        "dotted_relation_missing_object": "rule Needle.lowers\n",
     }
     positive_cases = {
         "if_statement": "cycle(input:Ref){\nif input {\ntrue\n}\n}\n",
@@ -170,7 +173,7 @@ def main() -> None:
         and all(x["pass"] for x in equivalence)
     )
     out = {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "experiment": "ClayCode BASE D repaired-frontend full-corpus validation",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)),

@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T1424+0700-chatgpt-secondary-pf-soma-safety-failure-lineage-delta",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "DELTA_ANALYZED_CROSSREAD_DEDUPED",
+  "observed_at": "2026-08-09T14:24:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_scope": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "lane": "SOMA implementation failure lineage, deployment safety semantics, transfer to adaptive visual learning",
+    "deep_source_refs": [
+      "commit:78f31e7f1e4fa7109a90f6e32514923ca7428a87",
+      "commit:c16e5991466e50e059e176c07910ca75293b415c",
+      "services/soma/interaction_buffer.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "services/soma/safety_check.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "services/soma/micro_trainer.py@abba90a5767d85abc8a1ac340bae92842dab35c1"
+    ]
+  },
+  "crossread": {
+    "prior_receipt": "research_entity/archive_assimilation/receipts/666_20260809T0421p0700_chatgpt_secondary_pf_lcme_soma_autonomy_shard.json",
+    "dedup_decision": "Prior receipt already preserves the broad SOMA train/evaluate/deploy/rollback lifecycle and historical 18.7-minute repository-reported run. This delta adds only concrete safety/metric/schema/concurrency failure lineage and the frozen-head safety-check implementation gap; no duplicate earned-work hours are awarded."
+  },
+  "epistemic_policy": {
+    "frozen_head_code": "VERIFIED_REPOSITORY_SOURCE",
+    "commit_message_run_metrics": "REPOSITORY_REPORTED_NOT_INDEPENDENTLY_REPRODUCED",
+    "user_feedback": "PREFERENCE_AND_QUALITY_SIGNAL_NOT_SENSOR_GROUND_TRUTH",
+    "transfer_to_visual_learning": "MECHANISM_TRANSFER_HYPOTHESIS_REQUIRES_EXECUTABLE_VALIDATION"
+  },
+  "findings": [
+    {
+      "finding_id": "PF-SOMA-SAFE-DELTA-001",
+      "epistemic_class": "CURRENT_HEAD_CODE_AUDIT",
+      "status": "NEGATIVE_RESULT_CURRENT_AT_FROZEN_HEAD",
+      "claim": "services/soma/safety_check.py documents a third held-out perplexity/performance gate, but the frozen-head implementation does not execute a perplexity or held-out behavioral test. It performs adapter drift, per-layer similarity, optional baseline drift, NaN/Inf and large-weight sanity only.",
+      "implication": "Parameter-space sanity is insufficient as a promotion oracle. Any adaptive visual learner must require held-out semantic behavior tests such as class accuracy, calibration, open-set rejection and regression checks before promotion.",
+      "targets": ["harness", "frank", "claycode"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "PF-SOMA-SAFE-DELTA-002",
+      "epistemic_class": "HISTORICAL_COMMIT_DIFF_EVIDENCE",
+      "status": "NEGATIVE_RESULT_LINEAGE",
+      "claim": "The SOMA audit lineage records failures in score-schema mapping, corrupted timestamp recovery, EMA blending across changed adapter-key sets, near-zero drift handling, large-weight thresholding, model cleanup, background-thread shutdown and probe substring matching.",
+      "implication": "Adaptive learning safety must test schema/version evolution, restart/recovery, concurrency shutdown, candidate-state completeness and metric validity, not only model quality.",
+      "targets": ["harness", "unifieddb", "claycode", "frank"],
+      "reuse_category": "NEGATIVE_RESULT_VALUE"
+    },
+    {
+      "finding_id": "PF-SOMA-SAFE-DELTA-003",
+      "epistemic_class": "CURRENT_HEAD_CODE_EVIDENCE",
+      "status": "REUSABLE_WITH_ADAPTATION",
+      "claim": "SOMA carries explicit feedback and heuristic conversation scores into weighted training loss, while snapshot/EMA/rollback concepts surround deployment.",
+      "constraint": "The source code describes explicit user feedback as ground truth for conversation quality. That terminology must not transfer to perception: user feedback and labels are provenance-bearing supervision signals, while sensor observations and open-set uncertainty remain separate evidence classes.",
+      "targets": ["frank", "harness", "claygraph", "unifieddb"],
+      "reuse_category": "REUSABLE_WITH_ADAPTATION"
+    },
+    {
+      "finding_id": "PF-SOMA-SAFE-DELTA-004",
+      "epistemic_class": "CROSS_DOMAIN_TRANSFER_HYPOTHESIS",
+      "status": "OPEN",
+      "claim": "A strong transferable adaptive-visual lifecycle is: trusted labeled example with provenance/tier -> versioned candidate prototype/classifier update -> offline/held-out semantic tests -> state/weight sanity -> staged promotion -> last-known-good snapshot -> rollback/rebuild on regression.",
+      "falsifier": "A simpler learner without this lifecycle matches or exceeds error rate, calibration, recovery and resource bounds under cold-start, mislabel, OOD, restart and concurrent-update stress tests.",
+      "targets": ["frank", "harness", "claycode", "unifieddb", "claygraph"],
+      "reuse_category": "MEASUREMENT_FOUNDATION"
+    }
+  ],
+  "branch_feedback": {
+    "frank": "Retina/Micro Visual Classifier promotion must separate supervision provenance from sensor truth and expose version identity plus last-known-good rollback.",
+    "harness": "Add failure-injection tests for mislabeled examples, schema/version drift, incomplete candidate state, restart during update, concurrent learner shutdown, OOD/open-set regression and rollback restoration.",
+    "claycode": "Express candidate/promotion/rollback as explicit typed transitions with provenance, version, authority and recovery receipts; never infer successful promotion from parameter drift alone.",
+    "unifieddb": "Persist classifier/prototype version, feature-backbone compatibility, example provenance/tier, calibration/open-set metrics, candidate state and rollback lineage independently from sensor facts.",
+    "claygraph": "Model learned familiarity associations as provenance-bearing hypotheses/weights; activation must not promote a label to sensor truth.",
+    "emergenz": "NO_CHANGE: this delta is adaptation/recovery evidence, not evidence for causal emergence or consciousness."
+  },
+  "earned_work_mapping": {
+    "status": "DEDUPED_NO_NEW_HOURS",
+    "reason": "Broad SOMA lifecycle already received provisional earned-work mapping in prior receipt; this delta strengthens validation requirements rather than adding duplicate reuse credit."
+  },
+  "progress_accounting": {
+    "exact_level0_coverage_awarded_percent": 0.0,
+    "reason": "Combined Drive + Project-Frankenstein exact obligation denominator remains unfrozen.",
+    "project_frankenstein_surface_delta": "GitHub connector now exposes a large bounded commit-history search surface and direct commit diffs, but still exposes no recursive read-tree or exhaustive paginated commit/tree denominator; exact history/tree closure remains unprovable on this surface."
+  },
+  "next_discriminating_test": "In H1/H2 adaptive-visual learner, inject label noise, OOD classes, restart mid-update, schema version change and concurrent shutdown; require semantic held-out gates plus exact rollback restoration before candidate promotion."
+}

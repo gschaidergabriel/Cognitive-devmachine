@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode-20260809T1602p0700-chatgpt-controlflow-precedence-v1",
+  "experiment_id": "CC-LOCAL-20260809-CONTROLFLOW-PRECEDENCE-01",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "source_identity": {
+    "claycode_source_path":"research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "claycode_source_blob_sha":"1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "grammar_path":"research_entity/claycode/g9/grammar.ebnf",
+    "grammar_blob_sha":"ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "compiler_candidate":"run-local-pratt-plus-structured-if-micro-oracle-v1",
+    "canonical_ir_semantic_hash":"NOT_APPLICABLE_FULL_CANONICAL_IR_NOT_YET_FROZEN",
+    "contract_instance":"canonical-parent-r2-04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "lowering":{"target":"Python executable semantic micro-oracle","generated_code_sha256":"b755422612e14376dc8f5d9b69c3c5454fbda522686067e91e2f99f5a9989d21","separate_process":true},
+  "runtime":{"provider":"local_chatgpt_container","language":"Python","fresh_e2b":false,"evidence_class":"LOCAL_EXECUTION_PRIMARY_WITHIN_CHATGPT_CONTAINER"},
+  "test_corpus":{"identity":"seed-20260809-controlflow-precedence-v1","precedence_cases":50000,"controlflow_cases":["if false with effectful branch","if true with effectful branch","false&&effectful_rhs","true||effectful_rhs"],"identifier_cases":["4B_emits","_4B_emits","model4B_emits"],"union_cases":["POS|NEG","ProvExpr|ProvAtom"]},
+  "execution":{"exit_status":0,"stderr":"","stdout_summary":{"structured_if_false":{"result":null,"effects":0},"eager_select_false":{"result":null,"effects":1},"precedence_divergences":22973,"precedence_cases":50000,"precedence_fraction":0.45946,"strict_4B_identifier_ok":false,"strict_model4B_identifier_ok":true,"current_union_POS_NEG_ok":true}},
+  "expected_vs_observed":[
+    {"property":"unselected effectful conditional branch must not execute","expected":"0 effects when condition=false","observed_structured":"0 effects","observed_eager_call_rewrite":"1 effect","classification":"COUNTEREXAMPLE_TO_EAGER_REWRITE"},
+    {"property":"mixed operator chain must have one deterministic meaning","expected":"all conforming evaluators agree","observed":"22973/50000 divergence between flat-left and conventional precedence","classification":"UNFROZEN_OPERATOR_BINDING"},
+    {"property":"current union syntax admitted","expected":"POS|NEG parses as a type union after concurrent fix","observed":"admitted","classification":"PREVIOUS_BLOCKER_RESOLVED"}
+  ],
+  "negative_results":[
+    {"id":"N-CC-20260809-CF-01","result":"ordinary eager select/call lowering is not semantics-preserving for effectful conditional branches"},
+    {"id":"N-CC-20260809-PREC-01","result":"flat left-fold evaluation is not observationally equivalent to conventional arithmetic precedence in 22,973/50,000 generated cases"}
+  ],
+  "repair_candidate":{"controlflow":"structured/lazy conditional node or region in canonical IR; do not eagerly evaluate unselected branches","operator_binding":"versioned precedence/associativity and explicit short-circuit contract mapped to canonical AST","identifier":"prefer semantic-preserving rename model4B_emits or an explicit escaped/sigiled identifier form over global digit-leading bare identifiers","semantic_change_status":"RUN_LOCAL_CANDIDATE_NOT_PROMOTED"},
+  "affected_hypotheses":["H-CC-CF-001","H-CC-PREC-001","H-CC-ID-001","H-CC-20260809-01","H-CC-20260809-02"],
+  "branch_learning":{"claycode":"parser/canonical IR/evaluator freeze requirement narrowed","frank":"effectful conditional paths require non-eager semantics but no FRANK-specific primitive","claygraph":"ordering/roles remain type-aware and explicit","unifieddb":"deterministic replay requires stable AST/evaluation semantics","gwt":"NO_SPECIAL_SYNTAX_DELTA","hyperposition":"NO_SPECIAL_SYNTAX_DELTA","emergenz":"negative-result/intervention discipline satisfied by run-local counterexamples","harness":"H2 differential tests should include unselected-effect and mixed-operator fixtures","clayresearch":"BASE critical path narrowed; no canonical promotion"}
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T06:42:36+07:00",
+  "identity": {
+    "actor_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_main_before_admission": "a09517c7f8b7bd6b7b28341bb7947fe22f332043",
+  "subject": "CC-WP-02 V17 regex-lookahead boundary adversarial exact-source Hostinger replication",
+  "source_repository": "gschaidergabriel/clay-global-research-entity",
+  "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+  "executor_pull_request": 58,
+  "workflow_run_id": 31342551238,
+  "workflow_job_id": 93318605902,
+  "workflow_conclusion": "success",
+  "executor_sha": "66a5a3e58882f9e2d7141d376ded74ac6beedc16",
+  "source_git_blobs": {
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark": "cdeff8095e6703a6889a60093876c8f0cb0a2b8a",
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "tools/claycode_base_frontend.py": "f7ac0d63c0d1f1fe3b8753c8246859340aba02ca",
+    "tools/claycode_v17_lookahead_boundary_fuzzer.py": "5807594cff842aa7a4638e80fbe0bba01b3c0019"
+  },
+  "exact_source_identity_verified_on_runner": true,
+  "runner": {
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "hostname": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "git": "2.43.0",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "strict": true,
+    "repository_permission": "contents:read"
+  },
+  "first_attempt_infrastructure_negative": {
+    "workflow_run_id": 31342519507,
+    "classification": "RUNNER_DEPENDENCY_SETUP_FAILURE_BEFORE_TEST",
+    "cause": "PEP668 externally-managed system Python rejected pip --user",
+    "exact_blob_verification_passed": true,
+    "scientific_test_executed": false,
+    "repair": "isolated /tmp virtual environment; no grammar, frontend, test-case, or semantic change"
+  },
+  "hypothesis": "V17 can hide a semantic boundary instability behind DOTTED_PREFIX_REL lookahead even when strict LALR construction succeeds.",
+  "strongest_counterhypothesis": "The minimal V17 repair is stable on a bounded metamorphic boundary family and reveals no new semantic failure beyond the known V9 call-spacing counterexample.",
+  "experiment": {
+    "class": "BOUNDED_ADVERSARIAL_METAMORPHIC_REPLICATION",
+    "seed": 1729,
+    "prefix_cases": 768,
+    "call_cases": 384,
+    "boundary_pairs": 2,
+    "total_compile_attempts": 1162,
+    "known_v9_counterexample_reproduced": true,
+    "v17_counterexample_rescued": true,
+    "relation_mutation_discriminated": true,
+    "failures": 0,
+    "result_class": "NO_NEW_FAILURE_FOUND",
+    "pass": true
+  },
+  "timing_ms": {
+    "n": 1162,
+    "mean": 0.08048768932874355,
+    "p50": 0.061811,
+    "p95": 0.107721,
+    "p99": 0.132982,
+    "max": 6.568421
+  },
+  "artifact": {
+    "id": 9046259643,
+    "name": "clay-wp02-v17-lookahead-hostinger-31342551238",
+    "size_bytes": 1808,
+    "sha256": "39e211c82a67d0b0fa729e0186830c142ae401973509d1e19a078bbb0fbc9095"
+  },
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXACT_SOURCE_MECHANISM_REPLICATION",
+  "interpretation": "Within this exact-source, strict, self-hosted Ubuntu mechanism test, the bounded lookahead boundary family produced no new failure. This strengthens the V17 repair but does not prove absence of all regex collisions and does not substitute for the full current G9+Dialect/canonical WP02 closure or Andreas target-system acceptance.",
+  "architecture_delta": "NO_CHANGE",
+  "test_delta": [
+    "Retain strict LALR construction plus direct lookahead-boundary metamorphic discrimination.",
+    "Retain the V9 spacing counterexample as a lesion baseline and require V17 rescue.",
+    "Use the working Dr.-Unterweger Hostinger execution bridge only as a bounded remote test transport while Clay-repository runner eligibility remains unavailable.",
+    "Run the complete current-main WP02 strict/full-corpus/canonical suite before any CC-WP-02 PASS decision."
+  ],
+  "counts_as_wp02_pass": false,
+  "promotion_allowed": false,
+  "final_release_boundary": "Not full CC-WP-02 closure and not Andreas final Ubuntu target acceptance.",
+  "authority_invariant": "model output != execution authority",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version":"2.0",
+  "event_id":"chatgpt-secondary-claycode-effect-barrier-ubuntu-20260809T1925p0700",
+  "kind":"WORK_CREATE",
+  "actor":"chatgpt-secondary",
+  "created_at":"2026-08-09T19:25:00+07:00",
+  "payload":{
+    "work_id":"WORK-CLAYCODE-EFFECT-BARRIER-SHORTCIRCUIT-20260809",
+    "goal_ref":"BASE_CLAYCODE_RELEASE",
+    "origin_class":"SPAWN_RESEARCH_DISCRIMINATOR",
+    "title":"Execute ClayCode short-circuit and effect-barrier differential on current Ubuntu target",
+    "work_clay":"From newest main, run research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_effect_optimization_barrier/SHORT_CIRCUIT_REGRESSION_PROBE.py and extend WP11/effect-pipeline regression coverage. If current pure evaluator eagerly evaluates RHS for false&&rhs or true||rhs while lowering/backends short-circuit, fix the smallest authoritative evaluator/compiler path without new syntax. Then run parser/typed-IR/evaluator/native differential, effect pipeline and WP11 suites. Add effect-erasure, duplication, same-resource reorder, disjoint-resource positive control, authority-bypass and denied/revoked vectors. Never relax model-output != execution-authority.",
+    "reason_clay":"Current source inspection shows eager binary operand evaluation in pure evaluator/compiler paths while the newer effect pipeline special-cases &&/|| and lowerings use short-circuit operators. This is a concrete semantic-divergence candidate on the same speculation boundary as effect optimization.",
+    "completion_clay":"Current authoritative evaluator and lowered Ubuntu execution agree on short-circuit divergence/error/effect behavior; effectful translation validation rejects deletion/duplication/conflicting reorder/authority bypass; any partial-order relaxation accepts only proven-disjoint reorder; existing BASE suites remain green; receipts correctly distinguish proxy from Ubuntu acceptance.",
+    "evidence_need":["SHORT_CIRCUIT_DIFFERENTIAL_RECEIPT","EFFECT_OPTIMIZER_MUTATION_RECEIPT","WP11_CONFORMANCE_RECEIPT","UBUNTU_NATIVE_DIFFERENTIAL_RECEIPT"],
+    "executor_policy":"Use newest main and Andreas Ubuntu developer target. Minimal semantic fix only if discriminator fails. Preserve stage gates; no package PASS from this test alone.",
+    "required_capabilities":["REPOSITORY_CHECKOUT","UBUNTU_DEVELOPER_HOST_EXECUTION","NATIVE_COMPILER_EXECUTION","LOCAL_TEST_EXECUTION"],
+    "write_scope":["tools/","research_entity/claycode/","research_entity/trigger_runs/spawn/","research_entity/state/work/events/"],
+    "dependencies":["BASE_CLAYCODE_RELEASE","research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_effect_optimization_barrier/FINAL_REPORT.md"],
+    "base_priority":0.92,
+    "expected_impact":0.86,
+    "urgency":0.82,
+    "information_gain":0.98,
+    "status":"READY"
+  }
+}

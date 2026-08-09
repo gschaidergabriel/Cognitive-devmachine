@@ -1,0 +1,23 @@
+{
+  "design": {
+    "h3_representation": "z = orthonormal_mix([a,b])",
+    "incorrect_low_level_intervention": "z0 := 0 from lesion_t onward",
+    "lesion_t": 6,
+    "semantic_intervention": "a := 0 from lesion_t onward",
+    "semantic_state": ["a", "b"],
+    "steps": 40,
+    "trials": 200
+  },
+  "experiment_id": "EXP-SPAWN-EM-INTERVENTION-EQUIV-001",
+  "interpretation_boundary": "Synthetic proof-of-principle only. Observational equivalence between two implementations does not guarantee intervention equivalence. A semantic intervention must be lowered through the implementation mapping and validated counterfactually before cross-implementation causal readouts are compared.",
+  "summary": {
+    "baseline_equiv_max_abs": {"max": 3.1086244689504383e-15, "mean": 1.7130741269966165e-15, "median": 1.7763568394002505e-15, "sd": 5.106434564602204e-16},
+    "effect_abs_error_naive": {"max": 0.14849238215785776, "mean": 0.041935443499982676, "median": 0.033704866761829766, "sd": 0.0317684050457204},
+    "effect_abs_error_semantic": {"max": 8.881784197001252e-16, "mean": 2.4091189113062405e-16, "median": 1.97758476261356e-16, "sd": 1.9083747084249146e-16},
+    "h1_effect": {"max": 1.0345024181911053, "mean": 0.014267466977142538, "median": 0.04241397549494535, "sd": 0.4080802981206644},
+    "h3_naive_effect": {"max": 1.1044720745350007, "mean": 0.016259726895163428, "median": 0.05184553634977357, "sd": 0.44648664395596954},
+    "h3_semantic_effect": {"max": 1.0345024181911049, "mean": 0.014267466977142523, "median": 0.04241397549494538, "sd": 0.4080802981206641},
+    "naive_lesion_divergence_mean_abs": {"max": 0.2615734380815993, "mean": 0.1592272086992916, "median": 0.155489634431706, "sd": 0.028894838353364975},
+    "semantic_lesion_equiv_max_abs": {"max": 3.1086244689504383e-15, "mean": 9.03443986288721e-16, "median": 7.771561172376096e-16, "sd": 5.126955203625278e-16}
+  }
+}

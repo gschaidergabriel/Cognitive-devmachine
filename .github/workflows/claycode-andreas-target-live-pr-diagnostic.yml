@@ -1,5 +1,7 @@
 name: ClayCode Andreas live PR diagnostic
 
+# Measurement-only trigger: the workflow is intentionally changed by a PR so this
+# already-mainline workflow executes on the registered self-hosted target.
 on:
   pull_request:
     paths:

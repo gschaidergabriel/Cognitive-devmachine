@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "target_id": "DOOMSDAY",
   "label": "DOOMSDAY / Clay 0.1 - Chief Developer First Test",
   "target_class": "INTERNAL_CHIEF_DEVELOPER_FIRST_TEST_CANDIDATE",
@@ -7,8 +7,9 @@
   "forecast_protocol": "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
   "acceptance_contract": "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
   "digital_retina_contract": "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
+  "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
   "historical_earned_work_source": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
-  "target_definition": "First strict-acceptance end-to-end project-hardware build of Clay 0.1: FRANK authored in Clay with mandatory Digital Retina multimodal visual perception, general-purpose ClayCode compiler/runtime, one-module/binary architecture, UnifiedDB, final fully fine-tuned Clay-native model, complete required observability/safety/recovery, zero known P0/P1 defects and all mandatory internal tests passed; ready for the chief developer's first real hands-on test.",
+  "target_definition": "First strict-acceptance end-to-end project-hardware build of Clay 0.1: FRANK authored in Clay with mandatory dissolved Digital Retina multimodal visual perception plus user-adaptive Micro Visual Classifier and bounded autonomous cyclic visual learning, general-purpose ClayCode compiler/runtime, one-module/binary architecture, UnifiedDB, final fully fine-tuned Clay-native model, complete required observability/safety/recovery, zero known P0/P1 defects and all mandatory internal tests passed; ready for the chief developer's first real hands-on test.",
   "owner_hours_per_day_source": "research_entity/rooms/PROGRAM_THROUGHPUT.json:user_active_hours_per_day",
   "capacity_source": "research_entity/rooms/CAPACITY_STATE.json",
   "events_source": "research_entity/forecast/DOOMSDAY_EVENTS.jsonl",
@@ -16,7 +17,7 @@
   "forecast_method": "dependency_graph_low_high_critical_path",
   "rows": {
     "L0_ARCHIVE_ASSIMILATION": {
-      "label": "Level 0: rapid history assimilation + earned-work calibration",
+      "label": "Level 0: rapid history assimilation + earned-work calibration incl. Retina learning lineage",
       "kind": "program_stage",
       "stage_id": "L0_ARCHIVE_ASSIMILATION",
       "dependencies": [],
@@ -25,48 +26,53 @@
       "confidence": "OWNER_FIXED_SLA_FEASIBILITY_UNCALIBRATED"
     },
     "BASE_CLAYCODE_RELEASE": {
-      "label": "ClayCode general-purpose compiler/runtime freeze",
+      "label": "ClayCode general-purpose compiler/runtime freeze incl. adaptive visual learner state expressibility",
       "kind": "program_stage",
       "stage_id": "BASE_CLAYCODE_RELEASE",
       "dependencies": ["L0_ARCHIVE_ASSIMILATION"],
       "prior_days": {"low": 1.0, "high": 4.0},
       "confidence": "LOW_EXISTING_SEMANTICS_IMPLEMENTATION_HEAVY",
-      "required_contract": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+      "required_contract": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+      "cross_cutting_required_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
     },
     "H1_REFERENCE_HARNESS": {
-      "label": "Harness 1: reference multimodal FRANK verification",
+      "label": "Harness 1: reference multimodal FRANK + adaptive visual learner verification",
       "kind": "program_stage",
       "stage_id": "H1_REFERENCE_HARNESS",
       "dependencies": ["BASE_CLAYCODE_RELEASE"],
       "prior_days": {"low": 2.0, "high": 8.0},
-      "confidence": "LOW"
+      "confidence": "LOW",
+      "required_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
     },
     "H2_CLAYCODE_HARNESS": {
-      "label": "Harness 2: same multimodal FRANK semantics in ClayCode",
+      "label": "Harness 2: same multimodal + adaptive visual learning semantics in ClayCode",
       "kind": "program_stage",
       "stage_id": "H2_CLAYCODE_HARNESS",
       "dependencies": ["H1_REFERENCE_HARNESS"],
       "prior_days": {"low": 1.0, "high": 4.0},
-      "confidence": "LOW"
+      "confidence": "LOW",
+      "required_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
     },
     "H3_ONE_MODULE_BINARY_FRANK": {
-      "label": "Harness 3: one-module/binary multimodal FRANK including Digital Retina",
+      "label": "Harness 3: one-module/binary multimodal FRANK incl. dissolved Retina + adaptive visual learner",
       "kind": "program_stage",
       "stage_id": "H3_ONE_MODULE_FRANK",
       "dependencies": ["H2_CLAYCODE_HARNESS"],
       "prior_days": {"low": 3.0, "high": 10.0},
-      "confidence": "VERY_LOW_FIRST_OF_KIND"
+      "confidence": "VERY_LOW_FIRST_OF_KIND",
+      "required_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
     },
     "UDB_UNIFIED_DATABASE": {
-      "label": "UnifiedDB final internal integration",
+      "label": "UnifiedDB final internal integration incl. adaptive visual learner persistence/version/rollback",
       "kind": "program_stage",
       "stage_id": "UDB_UNIFIED_DATABASE",
       "dependencies": ["H3_ONE_MODULE_BINARY_FRANK"],
       "prior_days": {"low": 2.0, "high": 7.0},
-      "confidence": "LOW"
+      "confidence": "LOW",
+      "required_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
     },
     "DATA_FINAL_TRAINING_CORPUS": {
-      "label": "Final Clay 0.1 training + held-out corpus",
+      "label": "Final Clay 0.1 training + held-out corpus incl. familiarity/known/unknown/conflict visual interface",
       "kind": "program_stage",
       "stage_id": "DATA_LORA_TRAINING_DATA",
       "dependencies": ["UDB_UNIFIED_DATABASE"],
@@ -78,7 +84,7 @@
       "kind": "owner_gate",
       "dependencies": ["DATA_FINAL_TRAINING_CORPUS"],
       "prior_days": {"low": 0.0, "high": 0.0},
-      "conditional_assumption": "Forecast assumes immediate owner authorization when the frozen training-data gate is ready; unknown human waiting time is excluded.",
+      "conditional_assumption": "Forecast assumes immediate owner authorization when the frozen training-data gate is ready; unknown human waiting time is excluded. Runtime-bounded Micro Visual Classifier updates are not this final paid/model-training gate.",
       "confidence": "CONDITIONAL"
     },
     "FINAL_MODEL_FINE_TUNE": {
@@ -98,29 +104,31 @@
       "confidence": "LOW"
     },
     "CLAY_0_1_FULL_INTEGRATION": {
-      "label": "Binary + Digital Retina + UnifiedDB + final model developer integration",
+      "label": "Binary + dissolved Retina + adaptive visual learner + UnifiedDB + final model developer integration",
       "kind": "forecast_work",
       "dependencies": ["MODEL_EXPORT_RUNTIME_PACKAGE", "UDB_UNIFIED_DATABASE"],
       "future_workspace": "research_entity/developer_build/CLAY_0_1_INTEGRATION_WORKSPACE.json",
       "prior_days": {"low": 1.0, "high": 4.0},
-      "confidence": "VERY_LOW_FIRST_OF_KIND"
+      "confidence": "VERY_LOW_FIRST_OF_KIND",
+      "required_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
     },
     "PROJECT_HARDWARE_DEPLOYMENT": {
-      "label": "Run exact developer build on verified project hardware",
+      "label": "Run exact developer build on verified project hardware incl. adaptive visual learning overhead/benefit measurement",
       "kind": "forecast_work",
       "dependencies": ["CLAY_0_1_FULL_INTEGRATION"],
       "future_workspace": "research_entity/developer_build/CLAY_0_1_HARDWARE_WORKSPACE.json",
       "prior_days": {"low": 0.5, "high": 3.0},
-      "capacity_strategy": "Try currently ACTIVE project-controlled machines first; expected future hardware is only a forecast assumption until verified active.",
+      "capacity_strategy": "Try currently ACTIVE project-controlled machines first; expected future hardware is only a forecast assumption until verified active. Measure Micro Visual Classifier inference/update CPU, RAM, tail latency, routing savings, forgetting and unknown rejection on the actual target hardware.",
       "confidence": "LOW_HARDWARE_CAPABILITY_NOT_YET_BENCHMARKED"
     },
     "CLAY_0_1_ACCEPTANCE_RUN": {
-      "label": "Strict chief-developer first-test acceptance run",
+      "label": "Strict chief-developer first-test acceptance run incl. adaptive visual learner MVC-E1..E7",
       "kind": "forecast_work",
       "dependencies": ["PROJECT_HARDWARE_DEPLOYMENT"],
       "future_workspace": "research_entity/developer_build/CLAY_0_1_ACCEPTANCE_WORKSPACE.json",
       "prior_days": {"low": 0.5, "high": 2.0},
-      "confidence": "LOW"
+      "confidence": "LOW",
+      "required_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
     }
   },
   "terminal_row": "CLAY_0_1_ACCEPTANCE_RUN",
@@ -128,6 +136,7 @@
     "CLAY_0_1_DEVELOPER_BUILD_MANIFEST.json",
     "CLAY_0_1_BINARY_BUILD_RECEIPT.json",
     "CLAY_0_1_DIGITAL_RETINA_RECEIPT.json",
+    "CLAY_0_1_ADAPTIVE_VISUAL_LEARNING_RECEIPT.json",
     "CLAY_0_1_UNIFIEDDB_RECEIPT.json",
     "CLAY_0_1_FINAL_MODEL_RECEIPT.json",
     "CLAY_0_1_HARNESS_DIFFERENTIAL_RECEIPT.json",

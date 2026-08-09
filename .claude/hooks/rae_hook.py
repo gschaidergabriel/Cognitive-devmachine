@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Ultra-compact Claude Code lifecycle adapter for one repo-native RAE hive.
 
-Every substantive round resolves the moving RAE cognitive-stack pointer and injects a
-small ClayCode/GWT/state/status kernel. Observable round/tool metadata is routed into
-ClayCode meta-research. Hidden provider chain-of-thought is neither requested nor stored.
+Claude resolves the moving RAE cognitive-stack pointer every substantive round and uses
+latest ClayCode for explicit machine cognition. It does NOT run per-turn ClayCode
+self-research; the Claude path stays execution/token optimized.
 """
 from __future__ import annotations
 import hashlib, json, os, pathlib, subprocess, sys, time
@@ -13,7 +13,6 @@ RUNTIME=ROOT/".rae_runtime";RUNTIME.mkdir(exist_ok=True)
 LOG=RUNTIME/"claude_hooks.jsonl"
 TRIGGERS=ROOT/"research_entity/global/RESEARCH_TRIGGER_REGISTRY.json"
 STATE=ROOT/"research_entity/runtime/claude_state_bridge.py"
-META=ROOT/"research_entity/runtime/claycode_meta_cognition_runtime.py"
 STACK=ROOT/"research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"
 CRITICAL=("/research_entity/continuity/research_entity_canonical.json","/research_entity/ledgers/claims.jsonl","/research_entity/ledgers/claim_status_events.jsonl","/research_entity/events/")
 
@@ -49,22 +48,10 @@ def emit(ev,ctx,title=None):
     if title:o["sessionTitle"]=title
     print(json.dumps({"hookSpecificOutput":o},ensure_ascii=False,separators=(",",":")))
 
-def text_shape(s):
-    s=str(s or "")
-    return {"chars":len(s),"words":len(s.split()),"lines":s.count("\n")+(1 if s else 0),"digest":hashlib.sha256(s.encode()).hexdigest()[:12] if s else None}
-def meta(d,event,trace_class,shape=None,props=None):
-    if not META.exists():return
-    sid=str(d.get("session_id") or "unknown");node=f"claude-code:{sid}"
-    args=[sys.executable,str(META),"record","--node",node,"--actor","claude-code-lead","--event",event,"--trace-class",trace_class,"--shape-json",json.dumps(shape or {},separators=(",",":"))]
-    if props:args.extend(["--properties",','.join(sorted(set(props)))])
-    try:subprocess.run(args,cwd=ROOT,text=True,capture_output=True,timeout=15)
-    except Exception:pass
-
 def stack_marker():
     try:
         raw=STACK.read_bytes();h=hashlib.sha256(raw).hexdigest()[:12]
-        text=raw.decode("utf-8","replace")
-        epoch="?"
+        text=raw.decode("utf-8","replace");epoch="?"
         for line in text.splitlines():
             s=line.strip()
             if s.startswith("epoch "):
@@ -83,14 +70,13 @@ def turn_kernel():
       "READ=T0verify(canonical+STACK)>T1route(registry)>T2UnifiedDB(current+open+negative+packets+experiments+handoffs)+ClayGraph(task-neighborhood)>T3deep?mutate|conflict|recovery|highimpact|insufficient;"
       "EFFECT=ClayIntent->Needle->receipt->verify->reentry;"
       "STATUS=final_plain_```text```:{RAE_STATUS,NEXT_LEVEL,DOOMSDAY};NO_AFTER=1;"
-      "OBS=explicit_trace+tool_receipt+ux->CLAYCODE_META_RESEARCH;DERIVE=AUTO;PROMOTE=EVIDENCE_GATED}"
+      "META_CLAYCODE_RESEARCH=OFF_FOR_CLAUDE}"
     )
 
 
 def main():
-    d=inp();ev=d.get("hook_event_name","");log(ev,d)
+    d=inp();ev=d.get("hook_event_name","");log(ev,d,stack=stack_marker())
     if ev=="SessionStart":
-        meta(d,ev,"LIFECYCLE",{"event":ev,"stack":stack_marker()})
         rc,c,e=bridge(d,"");src=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
         emit(ev,turn_kernel()+"\n"+src+"\nPTR=@CLAUDE.md,@research_entity/global/RAE_TURN_KERNEL.clay","RAE organ")
         return
@@ -98,51 +84,31 @@ def main():
         prompt=d.get("prompt","")
         if not prompt.strip():return
         k,s=trig(prompt)
-        props=["high_efficiency"] if len(prompt)<80 else []
-        meta(d,ev,"ROUND_INPUT",{"event":ev,"trigger":k if s else None,"stack":stack_marker(),**text_shape(prompt)},props)
         rc,c,e=bridge(d,prompt);base=c if rc==0 else '{"E":"RAE","state":"DEGRADED"}'
         kernel=turn_kernel()
         if s:
             purpose=s.get("purpose",k);protocol=s.get("protocol")
             rr,ro,re=run("run","start","--actor","claude-code-lead","--task",f"trigger:{k} {purpose}","--capture-level","L2")
-            ctx=kernel+"\n"+base+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=resolve latest stack; fetch only needed refs; execute now; persist ClayCode receipts"
-            emit(ev,ctx);return
+            emit(ev,kernel+"\n"+base+f"\ntrigger{{id:{k};protocol:@{protocol};run:{ro[:500] if rr==0 else 'START_FAIL'}}\nDO=resolve latest stack; execute; persist task receipts; no ClayCode self-research")
+            return
         br,bo,be=run("boot","--actor","claude-code-lead","--task",prompt,"--max-claims","4","--max-packets","2","--max-chunks","1")
         task=(bo[:2200] if br==0 else "boot=DEGRADED")
         emit(ev,kernel+"\n"+base+"\nTASK="+task+"\nDO=latest-stack explicit work ClayCode; final caveman English")
         return
     if ev=="PreToolUse":
         tool=d.get("tool_name","");ti=d.get("tool_input") or {}
-        meta(d,ev,"TOOL_INTENT",{"tool":tool,"keys":sorted(str(k) for k in ti.keys()),"stack":stack_marker()},["tool_friction"] if not tool else [])
         if tool in {"Write","Edit"}:
             p=norm(ti.get("file_path"))
-            if any(x in p for x in CRITICAL):
-                meta(d,"GUARD_DENY","TOOL_RECEIPT",{"tool":tool},["repair","effect_error"]);deny("Use RAE runtime for protected canonical/ledger state.");return
+            if any(x in p for x in CRITICAL):deny("Use RAE runtime for protected canonical/ledger state.");return
         if tool in {"Bash","PowerShell"}:
             c=norm(ti.get("command"))
-            if any(x.lstrip('/') in c for x in CRITICAL) and not safe_cmd(c):
-                meta(d,"GUARD_DENY","TOOL_RECEIPT",{"tool":tool},["repair","effect_error"]);deny("Protected RAE state. Use rae.py.");return
+            if any(x.lstrip('/') in c for x in CRITICAL) and not safe_cmd(c):deny("Protected RAE state. Use rae.py.");return
         return
     if ev=="PostToolUse":
-        tool=d.get("tool_name","");resp=d.get("tool_response") or d.get("tool_result") or {}
-        failed=False
-        if isinstance(resp,dict):failed=bool(resp.get("is_error") or resp.get("error"))
-        props=["effect_error"] if failed else ["good_outcome"]
-        meta(d,ev,"TOOL_RECEIPT",{"tool":tool,"failed":failed,"stack":stack_marker()},props)
         refresh();return
     if ev in {"Stop","SessionEnd"}:
-        msg=d.get("last_assistant_message") or d.get("assistant_response") or d.get("response") or ""
-        props=[]
-        if msg:
-            sh=text_shape(msg);density=(str(msg).count('{')+str(msg).count('}')+str(msg).count('=')+str(msg).count(';'))/max(1,sh["words"])
-            sh["clay_density"]=round(density,4);sh["stack"]=stack_marker()
-            if density<0.03:props.append("semantic_loss")
-            if sh["words"]>500:props.append("token_waste")
-        else:sh={"event":ev,"assistant_text_exposed":False,"stack":stack_marker()}
-        meta(d,ev,"ROUND_OUTPUT",sh,props)
         close(d);return
     if ev=="PreCompact":
-        meta(d,ev,"COMPACTION",{"event":ev,"stack":stack_marker()},["recovery"])
         (RUNTIME/"precompact.flag").write_text(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())+'\n')
         emit(ev,turn_kernel()+"\nRAE.compact{reload=latest-stack+delta;ptr=@CLAUDE.md}");return
 

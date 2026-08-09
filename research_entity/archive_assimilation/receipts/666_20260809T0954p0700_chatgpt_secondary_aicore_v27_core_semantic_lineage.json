@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666-20260809T0954p0700-chatgpt-secondary-aicore-v27-core-semantic-lineage",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "status": "COMPLETE_FOR_CORE_V27_LINEAGE_SHARD_REMAINING_DIRECT_FILES_STILL_REQUIRE_CONTENT_CLOSURE",
+  "source_universe": "DRIVE_CLAY/AICORE/training/v27",
+  "exact_level0_coverage_credit_percent": 0.0,
+  "local_denominator": {
+    "direct_files_total": 20,
+    "direct_folders_total": 0,
+    "denominator_status": "EXACT_RECURSIVE_DENOMINATOR_CLOSED",
+    "manifest_ref": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_TRAINING_EXACT_RECURSIVE_MANIFEST_20260809T0943p0700.json"
+  },
+  "semantically_read_core_files": [
+    "ANTWORTKLASSEN.md",
+    "13_bauen.py",
+    "12_pruefen.py",
+    "BERICHT-KLASSENVERTEILUNG.md",
+    "blindpruefung_S1.md",
+    "BERICHT-SYSTEMTEXT-TRENNUNG.md",
+    "waechter-marker-patch.md"
+  ],
+  "reconciled_lineage": {
+    "v26_problem": "A material fraction of historical assistant outputs directly emitted tool calls and the older evaluation stack explicitly measured tool-use discipline.",
+    "v27_target": "Replace tool-calling assistant answers with seven non-tool behavioral classes while Needle/free models execute effects and Frank receives results.",
+    "seven_classes": {
+      "1": "Zielbildung",
+      "2": "Zielrevision",
+      "3": "Zielverwerfung",
+      "4": "Unaufgefordertes Handeln",
+      "5": "Unterlassung",
+      "6": "Rückfrage",
+      "7": "Ergebnis-Formulierung"
+    },
+    "replacement_surface": {
+      "historical_tool_answer_slots": 1449,
+      "base_training_rows": 3785,
+      "share_percent": 38.3,
+      "multi_step_tool_answers": 559,
+      "rule": "Replace, do not repair, tool-calling answer slots."
+    },
+    "final_class_quota": {
+      "Zielbildung": 250,
+      "Zielrevision": 200,
+      "Zielverwerfung": 150,
+      "Unaufgefordertes_Handeln": 250,
+      "Unterlassung": 249,
+      "Rueckfrage": 250,
+      "Ergebnis_Formulierung": 100,
+      "sum": 1449,
+      "measured_delta_from_spec": 0
+    },
+    "tool_tag_measurement": {
+      "v26_2_assistant_tool_tags": 4180,
+      "v27_assistant_tool_tags": 0,
+      "systemtext_tool_tags_preserved": 60846,
+      "interpretation": "The answer policy was changed to tool restraint; tool knowledge/declaration remained in system context. Zero assistant tool tags does not imply tool semantics disappeared from the system."
+    },
+    "rejection_gate": {
+      "rejected_examples_total": 4261,
+      "largest_failure_families": {
+        "handlung_ohne_berechtigungspruefung": 832,
+        "muster_klon": 538,
+        "auftrag_statt_eigeninitiative": 509,
+        "ziel_ohne_begruendung": 491,
+        "pauschales_nichtverstehen": 481,
+        "verwerfung_ohne_grund": 453
+      },
+      "architectural_interpretation": "Generation and acceptance were separated. Machine rejection precedes blind/manual judgment, providing a historical precursor to current Harness gates."
+    },
+    "blind_review": {
+      "intermediate_sample_rows": 140,
+      "sample_frozen_by_sha": true,
+      "critical_negative_result": "The first blind sample was initially a moving target while generation was still running; reproducible blind evaluation therefore requires an immutable sample hash and generation-complete barrier.",
+      "mechanical_findings": "0 tool tags, 0 block leaks, 0 generic AI disclaimers, 0 multi-question violations and 0 exact duplicates in the frozen 140-row intermediate sample.",
+      "calibration_findings": [
+        "The Rueckfrage spec says at most one interpretation, but many good examples use an X-or-Y formulation; this is a spec/behavior calibration issue rather than a clear failure.",
+        "At least one answer sits ambiguously between Rueckfrage and Unterlassung, showing class boundaries are not perfectly separable by syntax alone."
+      ]
+    },
+    "systemtext_separation": {
+      "opening_tool_form_mentions": 30358,
+      "classification": {
+        "AUFFORDERUNG": 17200,
+        "GRENZFALL": 9301,
+        "DEKLARATION": 3806,
+        "ZURUECKHALTUNG": 51
+      },
+      "manual_validation": "After rule correction, an unseen 30-line sample matched 29/30; the known residual error class is descriptive 'wenn' clauses being mistaken for usage conditions.",
+      "critical_correction": "Two tool-shaped tags, intent and hypothesis, are not registry tools but live marker protocols consumed by other runtime subsystems. Treating every <tool>-shaped tag as a registry action produced a false alarm.",
+      "architecture_rule": "Syntax shape is not authority type. Registry tool calls, internal marker/event tags, declarations, directives and execution permissions must be typed separately."
+    },
+    "watcher_patch_principle": "A marker exception is valid only while its runtime consumer can be proven to exist. If the consumer disappears, the gate must turn red again. This is a liveness-backed exception, not a whitelist."
+  },
+  "current_architecture_feedback": {
+    "frank": [
+      "Preserve the seven behavioral surfaces as conceptual test families, not necessarily as permanent prose labels in the model.",
+      "Keep goal formation, revision and abandonment as distinct state transitions; abandonment is a competence countermetric to persistence.",
+      "Treat result formulation as a first-class surface: Frank consumes typed results and speaks naturally without emitting effect syntax."
+    ],
+    "needle": [
+      "Needle owns effect/tool execution; Frank should not need action syntax in ordinary answer generation.",
+      "Separate capability registry, internal marker/event protocols, permission policy and effect execution into typed namespaces."
+    ],
+    "harness": [
+      "Add immutable-hash barriers before blind evaluation; never score a file that is still being generated.",
+      "Retain paired countermetrics: initiative vs omission, persistence vs abandonment, clarification honesty vs action on clear requests.",
+      "Reject pattern clones and duplicate-like outputs before human review.",
+      "Validate marker exceptions by checking the continued existence of their concrete runtime consumers."
+    ],
+    "claycode": [
+      "Represent tool/effect/marker/declaration kinds as distinct IR types even when legacy text uses the same <tool> wrapper.",
+      "Encode permission/effect semantics independently from surface syntax so a parser cannot confuse a marker with an executable capability."
+    ],
+    "claygraph": [
+      "Model liveness edges from marker protocols to concrete consumers; exceptions expire automatically when the consumer edge disappears.",
+      "Store dataset generation, rejection, blind-sample hash and acceptance as separate provenance nodes."
+    ],
+    "unifieddb": [
+      "Persist immutable evaluation sample identities and hashes alongside generator/version provenance.",
+      "Separate behavioral class labels from user-visible responses so evaluation ontology does not become model persona text."
+    ],
+    "gwt": [
+      "Broadcast action/result state, not raw tool syntax, when an effect has been delegated and completed.",
+      "Keep goal formation/revision/abandonment as competing workspace candidates with explicit reasons and provenance."
+    ],
+    "hyperposition": [
+      "Clarification alternatives can remain as bounded candidate interpretations without prematurely collapsing to an invented answer."
+    ],
+    "emergenz": [
+      "Autonomy claims require counterfactual tests for doing, not doing, revising and abandoning goals; tool abstention alone is not autonomy."
+    ],
+    "clay": [
+      "This lineage strongly supports dissolving monolithic prompt/tool syntax into typed state transitions and effect contracts."
+    ]
+  },
+  "security_and_authority": {
+    "training_started": false,
+    "training_authorized_by_this_receipt": false,
+    "rule": "This is archival semantic assimilation only. Historical v27 itself explicitly blocked rendering/training when the prompt snapshot guard was not trustworthy."
+  },
+  "remaining_v27_content_obligations": [
+    "Content-close the remaining direct v27 files not in this seven-file core shard, including generation scripts, plan.json and orchestration shell scripts.",
+    "Bind the reported 1449 accepted examples and 4261 rejected examples to exact file hashes where accessible.",
+    "Reconcile the v27 seven-class training ontology with current DATA_LORA plans so historical behavioral labels are reused only where still valid.",
+    "Cross-check the historical marker consumers against current Project-Frankenstein/AICORE code before promoting marker-liveness rules from historical evidence to current runtime truth."
+  ],
+  "earned_work": {
+    "hours_added_low": 0.0,
+    "hours_added_center": 0.0,
+    "hours_added_high": 0.0,
+    "reason": "The v27 material is highly relevant but overlaps current Needle/Harness/autonomy work; final row-level dedup remains required before earned-work credit."
+  },
+  "created_at": "2026-08-09T09:54:00+07:00"
+}

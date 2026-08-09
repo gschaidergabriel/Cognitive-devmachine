@@ -1,12 +1,12 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "manifest_id": "DRIVE-DIGITAL-RETINA-TRACKED-SOURCE-20260809T0703p0700",
   "trigger": "666",
   "actor_id": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
   "program_stage": "L0_ARCHIVE_ASSIMILATION",
-  "status": "TRACKED_SOURCE_IDENTITY_FROZEN_LOW_CARDINALITY_WORKING_TREE_RECONCILED_REMAINDER_PENDING",
+  "status": "TRACKED_SOURCE_IDENTITY_FROZEN_RETINA_RAW_HASH_CLOSED_EVAL_FRONTEND_PENDING",
   "source": {
     "drive_folder_title": "digital-retina",
     "drive_folder_id": "1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m",
@@ -35,24 +35,9 @@
     "rule": "Git metadata proves the tracked source snapshot but does not by itself close untracked/generated/model/support artifacts present in the Drive working tree."
   },
   "blob_crosschecks": [
-    {
-      "path": "README.md",
-      "drive_index_blob": "4d3f9b37f4298039b322b1ad9266c58355d056fe",
-      "github_blob": "4d3f9b37f4298039b322b1ad9266c58355d056fe",
-      "match": true
-    },
-    {
-      "path": "tests/test_smoke.py",
-      "drive_index_blob": "d10bf8309b46f0929831205d8f2fee302b47692f",
-      "github_blob": "d10bf8309b46f0929831205d8f2fee302b47692f",
-      "match": true
-    },
-    {
-      "path": "tools/export_clip_l14.py",
-      "drive_index_blob": "d0c878eb04697d65608db9cc04506ec7b1058115",
-      "github_blob": "d0c878eb04697d65608db9cc04506ec7b1058115",
-      "match": true
-    }
+    {"path":"README.md","drive_index_blob":"4d3f9b37f4298039b322b1ad9266c58355d056fe","github_blob":"4d3f9b37f4298039b322b1ad9266c58355d056fe","match":true},
+    {"path":"tests/test_smoke.py","drive_index_blob":"d10bf8309b46f0929831205d8f2fee302b47692f","github_blob":"d10bf8309b46f0929831205d8f2fee302b47692f","match":true},
+    {"path":"tools/export_clip_l14.py","drive_index_blob":"d0c878eb04697d65608db9cc04506ec7b1058115","github_blob":"d0c878eb04697d65608db9cc04506ec7b1058115","match":true}
   ],
   "classification": {
     "tracked_working_source": "EXECUTABLE_HISTORICAL_VISION_SOURCE_SNAPSHOT",
@@ -60,33 +45,47 @@
     "untracked_generated_or_runtime_material": "SEPARATE_RECONCILIATION_OBLIGATION"
   },
   "working_tree_reconciliation": {
-    "receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T1112p0700_DIGITAL_RETINA_LOWCARD_RECONCILIATION.json",
-    "method": "direct list_folder(top_k=1000) plus pinned-Git path existence checks; no sampling",
-    "closed_subtrees": ["deploy", "api", "docs", "tests", "tools"],
-    "tracked_paths_verified": 15,
-    "extra_leaf_paths_dispositioned": 6,
-    "extra_generated_bytecode": 4,
+    "low_cardinality_receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T1112p0700_DIGITAL_RETINA_LOWCARD_RECONCILIATION.json",
+    "retina_raw_blob_receipt_ref": "research_entity/archive_assimilation/receipts/666_20260809T1124p0700_chatgpt_secondary_digital_retina_retina_raw_blob_closure.json",
+    "method": "direct recursive list_folder(top_k=1000), pinned-Git identity checks and raw-byte Git-blob recomputation where closed; no sampling",
+    "closed_subtrees": ["deploy", "api", "docs", "tests", "tools", "retina"],
+    "tracked_paths_verified_low_cardinality": 15,
+    "retina_tracked_paths_raw_verified": 24,
+    "retina_tracked_bytes_raw_verified": 471134,
+    "retina_git_blob_matches": 24,
+    "retina_git_blob_mismatches": 0,
+    "retina_tuple_set_sha256": "07d237a11ec7dcbfef91b4b7cb549eed7ed59eca1d4cc2b6b080fed5bb3ea3e7",
+    "extra_leaf_paths_dispositioned_low_cardinality": 6,
+    "extra_generated_bytecode_low_cardinality": 4,
     "extra_security_sensitive_identity_only": 2,
+    "retina_extra_generated_bytecode": 7,
+    "retina_extra_generated_bytecode_bytes": 86978,
     "secret_content_ingested": false,
     "findings": [
       "deploy contains an untracked secrets/ folder with exactly two .env identities; classified as security-sensitive runtime/deployment support with no research credit and content intentionally not read",
       "api contains an untracked __pycache__/ folder with exactly four CPython 3.12 bytecode leaves; classified generated with no independent research delta",
-      "docs, tests and tools match their tracked path cardinalities with no extra leaves in direct enumeration"
+      "docs, tests and tools match their tracked path cardinalities with no extra leaves in direct enumeration",
+      "retina/ contains exactly 24 tracked source leaves whose raw Drive bytes recompute to all 24 expected Git blob SHA1 identities at the frozen snapshot; zero mismatches",
+      "retina/ contains two generated __pycache__ folders with seven CPython 3.12 bytecode leaves totaling 86978 bytes; generated/no independent research credit"
     ],
-    "remaining_subtrees": ["eval", "frontend", "retina"],
-    "remaining_support_identity": [".git provenance/support tree if exhaustive identity closure requires full enumeration"],
-    "local_status": "FIVE_LOW_CARDINALITY_SUBTREES_IDENTITY_CLOSED"
+    "remaining_subtrees": ["eval", "frontend"],
+    "git_support_identity": {
+      "status": "CLOSED_EXACT_BY_PEER",
+      "denominator_commit": "6962655d861009f4cfd150b483f0753f51ceb58d",
+      "center_delta_commit": "b7a1b8ee012a7776121fbc24c9f16a4ec755738e"
+    },
+    "local_status": "SIX_SOURCE_SUBTREES_IDENTITY_CLOSED_RETINA_RAW_HASH_VERIFIED_EVAL_FRONTEND_PENDING"
   },
   "relation_to_e2e": {
     "e2e_manifest": "research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_E2E_RECURSIVE_DENOMINATOR.json",
     "rule": "The 64-leaf E2E/evidence corpus is a separate lineage from the 241 tracked source leaves. Link it to this commit but do not collapse source and measurement denominators."
   },
   "level0_effect": {
-    "previous_state": "TRACKED_SOURCE_IDENTITY_FROZEN_UNTRACKED_SUPPORT_RECONCILIATION_PENDING",
-    "new_state": "TRACKED_SOURCE_IDENTITY_FROZEN_LOW_CARDINALITY_WORKING_TREE_RECONCILED_REMAINDER_PENDING",
+    "previous_state": "TRACKED_SOURCE_IDENTITY_FROZEN_LOW_CARDINALITY_WORKING_TREE_RECONCILED_REMAINDER_PENDING",
+    "new_state": "TRACKED_SOURCE_IDENTITY_FROZEN_RETINA_RAW_HASH_CLOSED_EVAL_FRONTEND_PENDING",
     "exact_global_progress_credit": 0.0,
-    "reason": "Five bounded source subtrees are now identity-reconciled, but eval/frontend/retina and any required full .git support identity remain open; the combined Level-0 denominator is still not frozen."
+    "reason": "retina/ is now exact raw-byte identity-closed and .git support is peer-closed; eval and frontend remain open and the combined Level-0 denominator is still not frozen."
   },
   "created_at": "2026-08-09T07:03:00+07:00",
-  "updated_at": "2026-08-09T11:15:05+07:00"
+  "updated_at": "2026-08-09T11:24:30+07:00"
 }

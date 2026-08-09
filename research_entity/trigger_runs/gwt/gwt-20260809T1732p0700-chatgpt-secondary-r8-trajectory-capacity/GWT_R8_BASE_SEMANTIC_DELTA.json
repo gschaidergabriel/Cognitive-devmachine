@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "gwt-20260809T1732p0700-chatgpt-secondary-r8-trajectory-capacity",
+  "target": "FRANK LoopDynamicsReadout / GWT recurrence-control semantics",
+  "parent": "FRANK-V0.1-CLAY-NATIVE-LOOP-BASE-BRIDGE",
+  "status": "OPEN_BASE_SEMANTIC_CANDIDATE_NO_PROMOTION",
+  "design_rule": "Extend typed readout semantics using existing ClayCode G9 machinery; add no surface syntax unless real compilation proves a semantic gap.",
+  "fresh_alignment": "Concurrent ClayCode control/effect closure independently reinforced semantic/dependency lineage continuation while runtime effect authority must be freshly validated; R8 therefore carries identity lineage but never effect authority through recurrence.",
+  "proposed_readout": {
+    "name": "LoopDynamicsReadoutR8",
+    "authority": "OBSERVATION_ONLY",
+    "retain_parent_fields": true,
+    "add_or_refine_fields": {
+      "semantic_state_hash": "history-independent current semantic-state identity",
+      "state_version_hash": "semantic event/version/epoch identity",
+      "trace_root_hash": "execution-attempt/retry trace identity bound to version",
+      "step_norm_current": "norm of current semantic-state transition under declared projection",
+      "step_norm_previous": "norm of previous comparable semantic-state transition",
+      "second_order_step_delta": "difference/change in consecutive step magnitudes or typed vector second difference when available",
+      "step_direction_relation": "cosine/orthogonality/sign relation between consecutive typed transition vectors when representation permits",
+      "trajectory_window_ref": "bounded provenance-bound recent trajectory window used by estimator",
+      "state_capacity_profile": {
+        "workspace_capacity": "declared current candidate/workspace budget",
+        "scratchpad_capacity": "model/system working-state capacity exposed to this episode if measurable",
+        "receiver_memory_capacity": "receiver-local usable memory/state budget if measurable",
+        "capacity_saturation": "measured saturation/pressure indicator",
+        "status": "UNKNOWN_ALLOWED"
+      },
+      "flow_estimator_scope": "PAIRWISE|CONDITIONED_MULTIVARIATE|HIGHER_ORDER|UNKNOWN",
+      "estimator_version": "exact estimator identity/version",
+      "basis_identity": "episode/state/topology/dependency/capacity basis required for comparable trajectory features"
+    }
+  },
+  "derived_candidate_laws": [
+    "small_step != convergence",
+    "semantic_equivalence != version_equivalence != trace_equivalence",
+    "required_recurrence_depth is conditional on available state capacity until falsified",
+    "trajectory_geometry is observation, not truth",
+    "pairwise_directed_flow != complete_higher_order_causal_structure",
+    "admission != continuation",
+    "reentry != authority",
+    "semantic_or_dependency_lineage_continuation != runtime_effect_authority_continuation"
+  ],
+  "recurrence_decision": {
+    "retain_variants": ["CONTINUE", "HALT_CANDIDATE_CONVERGED", "ROUTE", "ESCALATE_STALLED", "ABORT_DIVERGING", "ROLLBACK"],
+    "candidate_inputs": [
+      "residual_pressure",
+      "multi-step trajectory geometry",
+      "state capacity profile",
+      "outcome history / marginal verified utility",
+      "resource and instability cost",
+      "semantic/version/trace identity witnesses"
+    ],
+    "authority": "PROPOSAL_UNTIL_EFFECT_GATEWAY"
+  },
+  "base_compile_obligation": "Represent and compile this contract with existing G9 records/types/rules through the real parser -> canonical typed IR -> type/effect -> evaluator/lowering chain; reject syntax expansion unless an executable counterexample remains.",
+  "h1_obligation": "Compare scalar-delta, R7 dual-gate and R8 trajectory-capacity policies under matched compute and frozen outputs; include truthful/shuffled/no re-entry and receiver lesion/rescue controls.",
+  "promotion": "NONE"
+}

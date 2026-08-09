@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "PROJECT-FRANKENSTEIN-HISTORY-SEMANTIC-K368-K383-20260809T1336p0700",
+  "trigger": "666",
+  "actor": "chatgpt-secondary",
+  "source": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "frozen_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "ordinal_range": {"start": 368, "end": 383, "count": 16}
+  },
+  "race": {
+    "winning_claim_commit": "45af63eb7cf40ed3748a11cc36c807126ed36ee3",
+    "winning_claim_time": "2026-08-09T13:33:02+07:00",
+    "later_competing_claim_commit": "3bf2f2604802a31d78a75d47021d2cc19bf82573",
+    "later_competing_claim_time": "2026-08-09T13:33:37+07:00",
+    "credit_rule": "earliest durable claim owns ordinal semantic credit; later worker must pivot or retain only explicitly noncounting replication"
+  },
+  "ordinals": [
+    {"k":368,"sha":"50ee80e963f78ba633c56b6c31a459ae94bcf527","title":"feat: comprehensive email system upgrade","disposition":"CODE_ANALYZED","semantic_family":"EMAIL_EFFECT_SURFACE","finding":"Expanded read-only-style email integration into broad mutating capability: send/reply/reply-all/forward/delete/spam/draft plus CC/BCC and attachments. High-authority effect surface requires explicit capability, confirmation and effect-receipt semantics."},
+    {"k":369,"sha":"5fea1bc39c67a40e3deb9166ae35805bbdfe799a","title":"fix: email reply writes in user's language and sounds like the user","disposition":"SUPERSEDED_LINEAGE_ANALYZED","semantic_family":"GHOSTWRITER_POLICY","finding":"Ghostwriter prompt intentionally removed AI markers/disclaimers and mirrored user instruction language. Preserve as historical UX/policy lineage, not current safety authority."},
+    {"k":370,"sha":"b5f7a507b43433a38653cb4187808469e03c7d8f","title":"fix: uncensored email replies - Frank writes exactly what user asks","disposition":"SUPERSEDED_LINEAGE_ANALYZED","semantic_family":"AUTHORITY_POLICY_NEGATIVE","finding":"Prompt explicitly demanded no refusals or safety mediation. Historical evidence of a dangerous coupling: generative style prompt was allowed to define authority policy for an external-effect channel."},
+    {"k":371,"sha":"ce597d5bde4378be5cec1a2b421f158413b7c2bc","title":"fix: email reply context overflow - compact identity + body extraction","disposition":"CODE_ANALYZED","semantic_family":"CONTEXT_ROUTING","finding":"Reduced prompt overflow by shrinking identity context and extracting a bounded email essence. Supports selective context assembly rather than injecting full global identity into every narrow task."},
+    {"k":372,"sha":"c05c3e503e837d84248cce9b63bb17b37045713c","title":"fix: sync local mbox after IMAP delete/spam + popup focus","disposition":"CODE_ANALYZED","semantic_family":"MULTI_REPLICA_EFFECT_SYNC","finding":"Remote IMAP mutation and local Thunderbird mbox were separate replicas; code added explicit local synchronization after remote delete/spam. Demonstrates replica convergence obligation after external effects."},
+    {"k":373,"sha":"1577907ff6ee13439fa88e8255fdeb9041292d84","title":"fix: popup scroll isolation + focus for text input","disposition":"NO_RESEARCH_DELTA_AFTER_REVIEW","semantic_family":"PLATFORM_UI_DETAIL","finding":"X11 overrideredirect focus/scroll handling is implementation-relevant but yields no new cross-architecture mechanism beyond existing UI event-isolation knowledge."},
+    {"k":374,"sha":"0dcf157f2e83b0afaff22dd0f774c65c21714f2c","title":"fix: email body sanitization + visible reply intent view","disposition":"CODE_ANALYZED","semantic_family":"UNTRUSTED_CONTENT_SANITIZATION","finding":"Expanded sanitization for tracking URLs, base64 artifacts, Unicode/box noise, boilerplate and injection-like lines before display/LLM use. Historical evidence for a distinct untrusted-content normalization layer."},
+    {"k":375,"sha":"6024d6f9f35fd372a8dbec6be5e902fc2aa60765","title":"fix: UI-first email delete/spam - instantly remove card from list","disposition":"NEGATIVE_RESULT_VALUE","semantic_family":"OPTIMISTIC_EFFECT_REGRESSION","finding":"UI removed emails before IMAP confirmation and the change removed rollback branches present in the predecessor. Visible state could therefore assert success while the external effect failed."},
+    {"k":376,"sha":"299d77a170dbd486ba92d24a33dbf2dc77b451dd","title":"fix: deleted emails now disappear immediately from card list","disposition":"SUPERSEDED_LINEAGE_ANALYZED","semantic_family":"OPTIMISTIC_EFFECT_WITH_ROLLBACK","finding":"Immediate local blacklist hid deleted/spammed mail but explicitly rolled back the optimistic state on IMAP failure/not-found. Provides the safer predecessor against which k375 is a regression."},
+    {"k":377,"sha":"d3b154179e816fc96ad42eaf45f9d8f24fd04c79","title":"feat: reply asks user intent before generating AI draft","disposition":"CODE_ANALYZED","semantic_family":"HUMAN_INTENT_MEDIATION","finding":"Inserted an explicit user-intent step before drafting. Supports separating user decision/intent capture from model generation for high-impact communications."},
+    {"k":378,"sha":"774bac02cc987864c64f48ee79802f99eadcf27f","title":"fix: email body formatting, instant delete, AI-generated replies","disposition":"CODE_ANALYZED","semantic_family":"CONTENT_NORMALIZATION_AND_GENERATION","finding":"Combined richer sanitization, larger display context and AI-generated replies. Important lineage for separating display context from bounded model context."},
+    {"k":379,"sha":"fd794a5204810d39117eefad8c6cf0d908fe38d8","title":"feat: email popup window with send, reply, draft, attachments","disposition":"CODE_ANALYZED","semantic_family":"EXTERNAL_EFFECT_CAPABILITY","finding":"Introduced SMTP OAuth2 send, IMAP draft/read-state mutation, attachments and Thunderbird fallback. This is the point where email becomes an effect-capable subsystem rather than passive context."},
+    {"k":380,"sha":"3acda6e9c96132feca40180b1b0498e78dc70c50","title":"fix: broken email functions in proactive_controller","disposition":"NEGATIVE_RESULT_VALUE","semantic_family":"API_CONTRACT_DRIFT","finding":"Caller assumed nonexistent function, unsupported parameter and wrong return shape. Cross-service semantic contracts had drifted without type/schema enforcement."},
+    {"k":381,"sha":"c20cf8acbf960efa49592637c3d322800f98001e","title":"feat: add frank-overlay.service template to install.sh","disposition":"NEGATIVE_RESULT_VALUE","semantic_family":"DECLARED_DEPENDENCY_MISSING_DEPLOYMENT","finding":"Multiple components referenced frank-overlay.service although installer never created it. Architecture references and deployment manifests were inconsistent."},
+    {"k":382,"sha":"be07d9bab70b4732187a1c16ca3f170c73b9f1f7","title":"chore: install.sh configures GNOME desktop to match Frank deployment","disposition":"SUPERSEDED_LINEAGE_ANALYZED","semantic_family":"HOST_UI_MUTATION","finding":"Installer mutated host GNOME appearance/dock state. Preserve as platform-specific deployment lineage and portability/least-surprise caution, not core cognitive semantics."},
+    {"k":383,"sha":"f14523aa8fdf025303dc56ffabb0d7fecfe02e49","title":"fix: add missing system deps (libzbar0, maim) to install.sh","disposition":"NEGATIVE_RESULT_VALUE","semantic_family":"DEPENDENCY_CLOSURE","finding":"Runtime features depended on native packages absent from installer; switched OpenCV to headless variant. Reproducible deployment requires explicit native/runtime dependency closure and unnecessary GUI deps should be avoided."}
+  ],
+  "terminal_count": 16,
+  "uncovered_count": 0,
+  "derived_directives": [
+    "EXTERNAL_EFFECT_AUTHORITY_MUST_NOT_BE_DEFINED_BY_STYLE_PROMPTS",
+    "EFFECT_UI_STATE_NEEDS_PENDING_COMMIT_FAILURE_ROLLBACK_OR_VERIFIED_RECEIPT",
+    "REMOTE_EFFECT_AND_LOCAL_REPLICA_NEED_EXPLICIT_CONVERGENCE",
+    "CROSS_SERVICE_APIS_REQUIRE_MACHINE_CHECKABLE_CONTRACTS",
+    "SELECTIVE_CONTEXT_ASSEMBLY_OVER_GLOBAL_IDENTITY_INJECTION",
+    "UNTRUSTED_MESSAGE_CONTENT_NORMALIZED_BEFORE_MODEL_CONTEXT",
+    "DEPLOYMENT_MANIFEST_MUST_CLOSE_DECLARED_SERVICES_AND_NATIVE_DEPENDENCIES",
+    "PLATFORM_HOST_MUTATIONS_ARE_NOT_CORE_COGNITIVE_SEMANTICS"
+  ],
+  "measurement_boundary": "No historical performance/success claim in these commits was independently reproduced in this semantic pass; this manifest records repository-history code evidence and lineage only.",
+  "global_level0_exact_percent_changed_here": false,
+  "gate": "NOT_PASS",
+  "status": "TERMINALLY_DISPOSITIONED_16_OF_16"
+}

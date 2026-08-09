@@ -1,0 +1,80 @@
+name: 666 PF exact frozen tree audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/666-pf-exact-tree-audit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    if: github.event.head_commit.message == '666 PF: add one-shot exact head-tree audit workflow'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout research entity
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Clone frozen Project-Frankenstein scope
+        run: |
+          git clone --no-checkout https://github.com/gschaidergabriel/Project-Frankenstein.git /tmp/pf
+          cd /tmp/pf
+          git checkout --detach abba90a5767d85abc8a1ac340bae92842dab35c1
+      - name: Materialize exact head tree and commit scope
+        shell: bash
+        run: |
+          mkdir -p research_entity/archive_assimilation/manifests
+          cd /tmp/pf
+          git ls-tree -r -l -z abba90a5767d85abc8a1ac340bae92842dab35c1 > /tmp/pf-tree.z
+          { printf '%s\n' e1a8812767668091d146ee958bbc2ebb2743031c; git rev-list --reverse e1a8812767668091d146ee958bbc2ebb2743031c..abba90a5767d85abc8a1ac340bae92842dab35c1; } > /tmp/pf-commits.txt
+          cd "$GITHUB_WORKSPACE"
+          python - <<'PY'
+          import hashlib, json, os
+          from collections import Counter
+          from pathlib import Path
+          raw=Path('/tmp/pf-tree.z').read_bytes()
+          recs=[]
+          for rec in raw.split(b'\0'):
+              if not rec: continue
+              meta,path=rec.split(b'\t',1)
+              parts=meta.decode().split()
+              mode,typ,obj=parts[:3]
+              size=None if len(parts)<4 or parts[3]=='-' else int(parts[3])
+              p=path.decode('utf-8','surrogateescape')
+              recs.append((mode,typ,obj,size,p))
+          canon=''.join(f'{m} {t} {o} {"-" if s is None else s} {p}\n' for m,t,o,s,p in recs).encode()
+          commits=[x for x in Path('/tmp/pf-commits.txt').read_text().splitlines() if x]
+          top=Counter(p.split('/',1)[0] for *_,p in recs)
+          ext=Counter((p.rsplit('.',1)[-1].lower() if '.' in p.rsplit('/',1)[-1] else 'no_extension') for *_,p in recs)
+          total=sum(s or 0 for *_,s,p in recs)
+          out=Path('research_entity/archive_assimilation/manifests')
+          tree_tsv=out/'PROJECT_FRANKENSTEIN_FROZEN_HEAD_TREE.tsv'
+          tree_tsv.write_text('mode\ttype\tobject\tsize\tpath\n'+''.join(f'{m}\t{t}\t{o}\t{"-" if s is None else s}\t{p}\n' for m,t,o,s,p in recs))
+          (out/'PROJECT_FRANKENSTEIN_LEVEL0_COMMIT_SCOPE.txt').write_text('\n'.join(commits)+'\n')
+          manifest={
+            'schema_version':'1.0','status':'EXACT_FROZEN_HEAD_TREE_AND_COMMIT_SCOPE_MATERIALIZED',
+            'repository':'gschaidergabriel/Project-Frankenstein','head':'abba90a5767d85abc8a1ac340bae92842dab35c1',
+            'base_inclusive':'e1a8812767668091d146ee958bbc2ebb2743031c',
+            'head_tree_entries':len(recs),'head_tree_total_blob_bytes':total,
+            'head_tree_canonical_sha256':hashlib.sha256(canon).hexdigest(),
+            'commit_scope_units':len(commits),'commit_scope_sha256':hashlib.sha256(('\n'.join(commits)+'\n').encode()).hexdigest(),
+            'top_level_counts':dict(sorted(top.items())),'extension_counts':dict(sorted(ext.items())),
+            'tree_artifact':str(tree_tsv),'commit_artifact':str(out/'PROJECT_FRANKENSTEIN_LEVEL0_COMMIT_SCOPE.txt'),
+            'method':'native git ls-tree/rev-list on GitHub Actions at immutable commit; no code-search/compare enumeration used',
+            'generated_by':'one-shot 666 GitHub Actions exact-tree audit'
+          }
+          (out/'PROJECT_FRANKENSTEIN_FROZEN_HEAD_TREE_MANIFEST.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(manifest,indent=2))
+          PY
+      - name: Commit audit artifacts
+        run: |
+          git config user.name 'RAE 666 Audit'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_FROZEN_HEAD_TREE.tsv \
+                  research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_LEVEL0_COMMIT_SCOPE.txt \
+                  research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_FROZEN_HEAD_TREE_MANIFEST.json
+          git commit -m '666 PF: materialize exact frozen head tree and commit scope'
+          git push origin HEAD:main

@@ -1,0 +1,75 @@
+{
+  "schema_version": "frank-peer-fabric-validation-0.1",
+  "run_id": "frank-20260809T2118p0700-chatgpt-secondary-integrated-sandbox",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "evidence_class": "REMOTE_SANDBOX_DETERMINISTIC_TEST",
+  "owner_evidence_rule_for_this_run": "SANDBOX_SUFFICIENT_FOR_NOW",
+  "component_scope": "H1 typed claude_code_peer capability/request/result/backflow integration; not live Claude transport and not H1 package PASS",
+  "artifacts": {
+    "peer_fabric": {"path":"research_entity/harness/reference/claude_peer_fabric.py","git_blob_sha":"f66f7d560f01dc659a68fa01fb925c7790e103f7","sandbox_sha256":"53797d46ebb9c08bbbe2aa1e48a91c2c6309a9bd5538cbcd5f35a06e4a159816","byte_identity_verified":true},
+    "peer_fabric_tests": {"path":"research_entity/harness/reference/test_claude_peer_fabric.py","git_blob_sha":"da681aef4f94f3a4531a65332f1cc426eb5fd371","sandbox_sha256":"cb683825d74228a0b12770eb79aad0d05ab4594cb8a4a0f4257b39b661a01ed9","byte_identity_verified":true},
+    "peer_integrated_runtime": {"path":"research_entity/harness/reference/frank_peer_integrated_runtime.py","git_blob_sha":"980628df6e1d1061abf2499ca66194d16ade4ac4","sandbox_sha256":"38bd4f83fbb1304b36c54366de069c92dfea0a85a6e0d19d7a97fe938ed9dd2b","byte_identity_verified":true},
+    "peer_integrated_tests": {"path":"research_entity/harness/reference/test_frank_peer_integrated_runtime.py","git_blob_sha":"1bfbf6fa775a30150cdb6bd47a2473ddc2ee11c0","sandbox_sha256":"19840eabb00a2f42815ce897c52d90a760d9cb8f5e02a518f6bb8e66d365e372","byte_identity_verified":true}
+  },
+  "direct_claude_contract_tests": {
+    "fresh_visibility": "PASS",
+    "unavailable_or_stale_hidden": "PASS",
+    "request_result_correlation": "PASS",
+    "result_provenance": "PASS",
+    "opinion_not_execution_receipt": "PASS",
+    "verified_execution_receipt_scoped": "PASS",
+    "stale_basis_replan": "PASS",
+    "disconnect_reconnect": "PASS",
+    "duplicate_and_out_of_order": "PASS",
+    "conflict_semantics_no_silent_overwrite": "PASS",
+    "typed_unifieddb_delta_to_later_assembly": "PASS",
+    "raw_peer_prose_not_blindly_mirrored": "PASS",
+    "route_lesion_rescue": "PASS",
+    "context_cost_compaction": "PASS",
+    "required_capability_enforcement": "PASS"
+  },
+  "combined_execution": {
+    "unit_tests": {"passed":59,"failed":0,"wall_seconds":2.120},
+    "compileall": "PASS",
+    "peer_stress": {
+      "cycles":100,
+      "accepted_results":100,
+      "peer_selected_by_gwt":100,
+      "peer_causal_use":100,
+      "persisted_events":500,
+      "final_epoch":500,
+      "wall_seconds":3.9394,
+      "cycles_per_second":25.38,
+      "mean_context_chars_saved":4943.0,
+      "min_context_chars_saved":4943,
+      "max_context_chars_saved":4943,
+      "semantic_state_hash_replay_equal":true,
+      "trace_root_hash_replay_equal":true,
+      "epoch_replay_equal":true
+    }
+  },
+  "semantic_findings": [
+    "Claude capability visibility is dynamic state, not a permanent prompt fact.",
+    "Claude and local FRANK retain separate instance identity; only typed semantic deltas enter the local ledger.",
+    "Peer opinion remains proposal/evidence; only scoped VERIFIED execution receipts establish the exact local effect they name.",
+    "Peer conflict enters CONFLICT semantics and does not overwrite the local CURRENT semantic claim.",
+    "Raw peer prose is hash-addressed but not mirrored into the bounded 4B Assembly; compact backflow carries a detail reference.",
+    "A committed peer delta was demonstrated to influence a later GWT competition/selection/uptake/causal-use path in the same unified ledger.",
+    "Duplicate result idempotency is explicit: semantically duplicate accepted result fingerprints return DUPLICATE_IGNORED.",
+    "The conservative H1 baseline rejects a result when the shared basis epoch advances while the request is in flight; future research may distinguish read-only evidence acceptance from consequential writeback revalidation."
+  ],
+  "negative_results": [
+    {"finding":"First GitHub create of integrated peer test returned HTTP 409 because repository head advanced concurrently.","classification":"EXPECTED_CAS_CONCURRENCY_EVENT","resolution":"re-read target path, confirmed absent, retried against current head; create succeeded; no blind overwrite."}
+  ],
+  "architecture_fidelity": "IMPROVED",
+  "harness_workspace_promotion": "NOT_ATTEMPTED",
+  "release_claim": "NOT_H1_RELEASE_PASS",
+  "limitations": [
+    "Claude results are deterministic fixtures, not a live Claude Code transport invocation.",
+    "Current project capacity says Claude research is temporarily unavailable in a separate lane; no live peer receipt is claimed.",
+    "Latency/cost figures are sandbox proxy values only.",
+    "The strict whole-epoch stale rule may be refined by a later discriminating test for harmless read-only concurrent updates.",
+    "H2 ClayCode equivalent remains gated by BASE ClayCode release."
+  ]
+}

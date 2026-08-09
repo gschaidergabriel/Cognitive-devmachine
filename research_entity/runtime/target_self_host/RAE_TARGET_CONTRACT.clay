@@ -1,29 +1,149 @@
-clay target RAE_TARGET_0_1 {
+clay target RAE_TARGET_0_2 {
+  semantic_source = self;
+  implementation_projection = python_reference + sqlite_materialization;
   ancestry = frank.unifieddb_v13 + frank.claygraph_v8;
-  candidate_surface = union(KNOWN, EMERGENT_NOVEL);
-  emergent_candidate := higher_order_completion(active_semantic_field, evidence_bound_hyperbindings)
+
+  law identity {
+    research_entity != frank_identity;
+    architecture_ancestry != personal_state_copy;
+    activation != truth;
+    graph_relation != causal_truth;
+    measured_value != inferred_claim;
+    inferred_claim != execution_authority;
+    claycode_software_path != release_pass;
+  }
+
+  semantic_fabric {
+    source_delta
+      -> canonical_semantic_identity
+      -> affected_dependency_closure
+      -> hyperposition_facets
+      -> claygraph_projection
+      -> materialized_neighborhoods
+      -> validation
+      -> coherent_epoch_publication;
+
+    hot_path = canonical_cues
+      -> current_materialized_neighborhood
+      -> indexed_relevant_hyperbindings
+      -> candidate_surface
+      -> gwt;
+
+    forbid hot_path.full_memory_scan;
+    forbid hot_path.global_graph_rebuild;
+    forbid mixed_epoch_read;
+    require rollback_recipe;
+  }
+
+  claycode_products {
+    SemanticSignature;
+    DependencySignature;
+    EffectSignature;
+    AuthoritySignature;
+    ProvenanceSignature;
+    HyperpositionSignature;
+    InvalidationSignature;
+    ProjectionRecipe;
+    RebuildRecipe;
+  }
+
+  candidate_surface = union(KNOWN, ANALOGOUS, COUNTERINTUITIVE, EMERGENT_NOVEL);
+
+  known_candidate := current_cue | prepared_materialized_dependency;
+  emergent_candidate := higher_order_completion(active_semantic_field, indexed_evidence_bound_hyperbindings)
     where provenance_count >= 2
       and synergy > 0
       and persistence >= 0.5
       and false_binding_risk <= 0.35
+      and causal_contribution >= 0.25
       and no_open_conflict;
 
-  gwt_episode := competition -> ignition -> addressability -> delivery
-                 -> receiver_reconstruction -> receiver_use -> local_effect
-                 -> outcome -> provenance_bound_reentry;
+  hyperposition {
+    preserve alternatives;
+    preserve incompatibility;
+    preserve higher_order_roles;
+    projection != destructive_collapse;
+  }
+
+  gwt_episode := candidate_interaction
+                 -> competition
+                 -> ignition_selection
+                 -> global_addressability
+                 -> delivery
+                 -> receiver_reconstruction
+                 -> uptake
+                 -> local_causal_use
+                 -> joint_outcome
+                 -> provenance_bound_reentry
+                 -> persistence_transfer;
+
+  observability_plane {
+    authority = read_only_over_cognitive_truth_except_explicit_receipt_writes;
+    require MeasurementReceipt(state_epoch, graph_epoch, episode_id, intervention_id?, estimator_version, source_hashes, result_hash, evidence_status);
+    require EmergenceReadout(
+      integration,
+      interaction,
+      directed_flow,
+      macro_causality,
+      dynamics,
+      topology,
+      control,
+      epistemic,
+      cost_shadow
+    );
+    UNKNOWN != 0;
+  }
+
+  counterfactual_replay {
+    interventions = [
+      candidate_remove,
+      gain_change,
+      ignition_threshold_change,
+      receiver_lesion,
+      reconstruction_corrupt,
+      uptake_disable,
+      causal_use_disable,
+      reentry_disable,
+      reentry_shuffle,
+      topology_shuffle,
+      temporal_shuffle,
+      provenance_shuffle,
+      pairwise_reduction,
+      macro_micro_compare,
+      rescue,
+      frozen_model_output
+    ];
+    promote_only_after matched_control + causal_credit + replay + ood + rollback;
+  }
 
   emergence_gate {
     state_inadequate => ABSTAIN_STATE_INADEQUATE;
     novelty_only => OPEN;
     recurrence_only => OPEN;
+    synergy_only => OPEN;
+    graph_density_only => OPEN;
     require(receiver_use, truthful_reentry, lesion, rescue, shuffle_control, ood_transfer, macro_control, cost_shadow);
     output = functional_pattern_only;
   }
 
-  authority {
-    activation != truth;
-    measured_value != authority;
-    claycode_software_path != release_pass;
-    research_entity != frank_identity;
+  coupling_control {
+    goal = verified_task_gain + useful_transfer + causal_use + recovery;
+    constrain false_binding <= budget;
+    constrain effect_error <= budget;
+    constrain authority_violation == 0;
+    constrain truth_promotion_from_activation == 0;
+    require rollback_available;
+    overcoupling_tripwire := permanent_ignition | synchrony_collapse | dimensional_collapse | hub_collapse;
+    overcoupling_tripwire => inhibit_and_rollback;
+  }
+
+  target_modules {
+    UnifiedDB = canonical_semantic_state_and_dependencies;
+    Hyperposition = unresolved_alternatives_and_higher_order_roles;
+    ClayGraph = derived_active_topology;
+    GWT = competition_broadcast_receiver_use_reentry;
+    Observability = probes_replay_estimators_evidence_ledger_readout_projector;
+    Needle = intentional_non_clay_fast_router;
+    DigitalRetina = mandatory_visual_perception_boundary;
   }
 }

@@ -1,0 +1,48 @@
+name: Harness WP02 lineage differential
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/harness/tests/wp02_lineage_differential.py'
+      - 'research_entity/harness/reference_state_ledger.py'
+      - 'research_entity/harness/reference/state_ledger.py'
+      - '.github/workflows/harness-wp02-lineage-differential.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: harness-wp02-lineage-differential-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  differential:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Execute exact repository differential
+        run: |
+          python research_entity/harness/tests/wp02_lineage_differential.py > /tmp/wp02-lineage-differential.json
+          python -m json.tool /tmp/wp02-lineage-differential.json > /dev/null
+
+      - name: Publish differential receipt
+        run: |
+          cp /tmp/wp02-lineage-differential.json research_entity/trigger_runs/harness/harness_20260809T1703p0700_wp02_lineage_adjudication/CI_DIFFERENTIAL_OUTPUT.json
+          git config user.name 'rae-harness-ci'
+          git config user.email 'rae-harness-ci@users.noreply.github.com'
+          git add research_entity/trigger_runs/harness/harness_20260809T1703p0700_wp02_lineage_adjudication/CI_DIFFERENTIAL_OUTPUT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'harness: record exact WP02 lineage CI differential'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

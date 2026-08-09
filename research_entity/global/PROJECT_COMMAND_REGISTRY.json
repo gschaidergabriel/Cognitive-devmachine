@@ -1,6 +1,10 @@
 {
-  "schema_version": "3.6",
+  "schema_version": "3.7",
   "matching": "trimmed_full_message_case_insensitive_exact",
+  "entity_display_name": "Clay",
+  "legacy_internal_namespace": "RAE",
+  "trigger_renames": {"clay": "clayresearch"},
+  "entity_name_rule": "Exact clay refers to the Clay researcher entity itself, not a reserved scientific command.",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "research_center_protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
   "program_narrative": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
@@ -61,7 +65,7 @@
       "requires_global_coverage_manifest": true,
       "requires_branch_feedback_manifest": true,
       "requires_program_state": true,
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+      "feedback_targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
       "completion_validator": "tools/fusion_research_contract.py",
       "completion_command": "python tools/fusion_research_contract.py research_entity/trigger_runs/fusion/<run_id>"
     },
@@ -75,9 +79,9 @@
       "requires_live_worker_reread": true,
       "requires_branch_feedback_manifest": true,
       "requires_program_state": true,
-      "feedback_targets": ["clay", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"]
+      "feedback_targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"]
     },
-    "clay": {
+    "clayresearch": {
       "protocol": "research_entity/triggers/CLAY_RESEARCH_PROTOCOL.md",
       "kind": "integrated_research_foundry",
       "requires_interconnect_manifest": true,
@@ -103,7 +107,7 @@
       "fixed_target_contract": "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md",
       "clay_native_target_is_open_hypothesis": false,
       "sole_intentional_non_clay_semantic_subsystem": "Needle",
-      "primary_foundation": "clay",
+      "primary_foundation": "clayresearch",
       "primary_architecture_language": "ClayCode semantic IR",
       "deep_secondary_foundation": "claycode",
       "deep_substrate_foundation": "claygraph",
@@ -179,5 +183,5 @@
       "harness_graph_contract": "research_entity/global/HARNESS_CLAYGRAPH_CONTRACT.md"
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Every scientific/research-center trigger reads the dynamic staged program and live center while remaining loyal to its own domain. 666 is the sole autonomous meta-trigger: archive assimilation before Level-0 PASS, emergent stochastic research-field spawning after Level-0 PASS. q12 is the creator-advisor meta-role. Every substantive visible response ends with the dynamic status footer generated from the next unpassed milestone in PROGRAM_STATE.json, including all registered short commands."
+  "rule": "Reserved commands fire only on exact full-message match. Exact clay names the Clay research entity and is not a command. The old clay foundry command is clayresearch. Every scientific/research-center trigger reads the dynamic staged program and live center while remaining loyal to its own domain. 666 is the sole autonomous meta-trigger: archive assimilation before Level-0 PASS, emergent stochastic research-field spawning after Level-0 PASS. q12 is the creator-advisor meta-role. Every substantive visible response ends with the dynamic status footer generated from the next unpassed milestone in PROGRAM_STATE.json, including all registered short commands."
 }

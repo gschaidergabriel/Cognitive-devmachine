@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1208p0700-chatgpt-secondary-pf-recovery-crosssource-reconciliation",
+  "trigger":"666",
+  "actor_id":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "task_id":"666-l0-pf-recovery-crosssource-20260809T1206p0700",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope":{"pf_frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","pf_older_recovery_base":"2ee91c4479eec549de3bec357af69799fad583ad","drive_recovery_root":"1yFa-W726MVEgwttJjTfcPwtwPG4ed4K6","drive_recovery_duplicate_root":"1zsb18bg0W8Ri8bgqZBkpTNTD-7fPKhT3"},
+  "evidence_refs":[
+    "research_entity/archive_assimilation/receipts/666_20260809T1058p0700_drive_frank_rettung_recovery_semantic_closure.json",
+    "research_entity/archive_assimilation/manifests/DRIVE_FRANK_RETTUNG_20260731_EXACT_DEDUP_20260809T0931p0700.json",
+    "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+    "Project-Frankenstein@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "Project-Frankenstein@2ee91c4479eec549de3bec357af69799fad583ad"
+  ],
+  "verified_cross_source_lineage":[
+    {"finding":"The 2026-07-31 Drive rescue root is an exact byte-identical alias of the older frank-rettung root across all 10 leaf files.","status":"VERIFIED","effect":"Collapse both Drive roots to one semantic content family while preserving both source provenances; no duplicate semantic or earned-work credit."},
+    {"finding":"unversioniert/services/paper_research.py is byte-identical to the frozen Project-Frankenstein head blob c1b6156d2a2122b33101faa24af0c759669216e7.","status":"VERIFIED","effect":"EXACT_DUPLICATE_OF_FROZEN_PF_HEAD; zero new semantic credit."},
+    {"finding":"vom-11-mai/services/identity_forge.py is absent at the frozen Project-Frankenstein head path services/identity_forge.py while the Drive recovery copy has blob identity recorded in the recovery receipt.","status":"VERIFIED_RELATIVE_TO_FROZEN_HEAD","effect":"Treat as recovery-only relative to frozen head and preserve as a separate lineage node; do not infer that it never existed anywhere in unresolved PF history."},
+    {"finding":"unversioniert/services/genesis/sandbox.py differs from frozen-head services/genesis/sandbox.py; recovery receipt classifies it as an older precursor, while frozen head resolves to blob 9e158072caf6f05362709db7a05e7cdf7a9e8162.","status":"VERIFIED","effect":"SUPERSEDED_LINEAGE_ANALYZED; retain historical false-isolation negative result, never bulk-restore precursor."},
+    {"finding":"The recovery provenance anchors resolve to Project-Frankenstein commit 2ee91c4479eec549de3bec357af69799fad583ad on 2026-03-12 and frozen head abba90a5767d85abc8a1ac340bae92842dab35c1 on 2026-04-05.","status":"VERIFIED","effect":"The May-11 working-copy files may be chronologically newer edits while inheriting an older repository base; recency alone cannot justify whole-file replacement."}
+  ],
+  "lineage_adjudication":[
+    {"class":"EXACT_ALIAS","items":["Drive/frank-rettung-2026-07-31","Drive/frank-rettung"],"action":"semantic dedup; preserve provenance aliases"},
+    {"class":"EXACT_PF_HEAD_DUPLICATE","items":["unversioniert/services/paper_research.py","unversioniert/services/genesis/sensors/self_engineering.py"],"action":"zero new semantic credit; retain source provenance"},
+    {"class":"RECOVERY_ONLY_RELATIVE_TO_FROZEN_HEAD","items":["vom-11-mai/services/identity_forge.py"],"action":"preserve and mine feature-level mechanisms under current architecture tests; no wholesale merge"},
+    {"class":"HISTORICAL_PRECURSOR_SUPERSEDED_AT_FROZEN_HEAD","items":["unversioniert/services/genesis/sandbox.py"],"action":"retain negative-result/test value; do not restore"},
+    {"class":"BROKEN_NEGATIVE_FIXTURE","items":["unversioniert/services/room_content/custom_styles/snake_feel.py"],"action":"retain only as regression fixture"},
+    {"class":"DIVERGENT_MAY11_VARIANTS","items":["vom-11-mai/tools/toolboxd.py","vom-11-mai/services/consciousness_daemon.py","vom-11-mai/personality/e_pq.py","vom-11-mai/agentic/tools.py"],"action":"feature-level differential/replay only; no bulk merge and no new earned-work credit from this reconciliation"}
+  ],
+  "new_research_delta":{"kind":"LINEAGE_RECONCILIATION_ONLY","scientific_mechanism_promotion":false,"earned_work_added_hours":0.0,"branch_feedback":"Existing 10:59 recovery feedback remains valid; this receipt strengthens provenance/dedup lineage and adds no duplicate branch mechanism claim."},
+  "negative_results_and_guards":[
+    "Full Project-Frankenstein frozen-head tree denominator remains unresolved in the current manifest.",
+    "Full Project-Frankenstein commit-DAG/history denominator remains unresolved; therefore identity_forge is only proven absent at the frozen head path, not proven absent from all history.",
+    "Chronological edit recency is not evidence that an entire divergent file should supersede a later-base authoritative tree.",
+    "No exact global Level-0 percentage is added by this bounded reconciliation while the combined denominator remains open."
+  ],
+  "cross_source_effect":"One duplicated Drive recovery root is collapsed to an already-analyzed content family and recovery-vs-PF dispositions are now explicitly bounded by frozen-head versus unresolved-history semantics.",
+  "exact_global_level0_credit":0.0,
+  "release_gate":"NOT_PASS",
+  "status":"CLOSED_BOUNDED_CROSS_SOURCE_RECONCILIATION",
+  "created_at":"2026-08-09T12:08:00+07:00"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1714p0700-chatgpt-ambiguous-freeze",
+  "trigger": "claycode",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent": {"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "experiment": "ambiguous-g9-rule-explicit-semantic-freeze-and-registry-gated-nary-predicate-ir",
+  "evidence_class": "LOCAL_EXECUTABLE_PROXY",
+  "runtime": "hosted Linux/Python execution; exact Andreas Ubuntu developer target unavailable",
+  "inputs": {
+    "g9_source": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay@1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "grammar": "research_entity/claycode/g9/grammar.ebnf@ec2f17077333955cfdabe6c64868d597e7e734e3",
+    "parent_rule_surface_run": "research_entity/trigger_runs/claycode/claycode-20260809T1710p0700-chatgpt-rule-surface-partition",
+    "parent_hypothesis": "H-CC-RSP-04",
+    "probe_sha256": "8839bc182658b9dbac53236d9529070c1297aaed23888ca8b18abc89907705f8",
+    "result_sha256": "8b6dd187ef7ac629465216e53afbf27cf7fc9975c24393dce33d8059ba618441"
+  },
+  "legacy_lines": [
+    "Needle.lowers EffectIntent -> concrete_adapter_plan",
+    "Claude_only consumes latest stack + writes task receipts",
+    "training_data personalizes_for_Andreas_when_FRANK_target && preserves_general_transfer_variants"
+  ],
+  "results": {
+    "each_legacy_line_has_at_least_two_materially_distinct_plausible_asts": true,
+    "automatic_normalization_safe": false,
+    "explicit_candidate_ir_valid_after_freeze": "3/3",
+    "candidate_semantic_hashes": {
+      "L1": "e33879b542aa5103015844c0750634b50728917f98ba6310583d3df2f62701c2",
+      "L2": "88d53f12a767f5f7c90ec6237217be5ba678b940e3e6c3b01badd7766a03dc56",
+      "L3": "07f05fc9ac9cabf6f8c2cda5227d3d2a0fda9aff1adab987214b4a26907bb333"
+    },
+    "unknown_relation_rejected": "10000/10000",
+    "wrong_arity_rejected": "10000/10000",
+    "surface_whitespace_semantic_hash_stable": "10000/10000"
+  },
+  "interpretation": "The three remaining legacy G9 rule lines must not be auto-normalized because syntax alone does not determine one safe AST. Once an authoritative semantic freeze selects the intended meaning, a registry-gated typed n-ary PredicateIR/ConstraintIR can give deterministic semantic identity and fail closed on unknown relation names or wrong arity.",
+  "critical_scope_note": "The three selected candidate IR trees in this experiment are test fixtures only. They do not establish the intended semantics of the legacy source lines and are not authorized G9 rewrites.",
+  "limitations": [
+    "not the production BASE parser",
+    "not executed on Andreas' exact Ubuntu developer host",
+    "E2B not exposed on this worker surface",
+    "no canonical G9 source was modified",
+    "no BASE work package or release gate is completed by this experiment"
+  ],
+  "affected_hypotheses": ["H-CC-RSP-04","H-CC-AF-01","H-CC-AF-02"],
+  "promotion": "NONE"
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "666_20260809T1211p0700_chatgpt_secondary_drive_newroots_reconciliation",
+  "trigger": "666",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "created_at": "2026-08-09T12:11:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "task_id": "L0-DRIVE-NEWROOTS-20260808",
+  "disposition": "RECONCILED_NO_DUPLICATE_CREDIT",
+  "exact_global_level0_credit": 0.0,
+  "reason": "A fresh center pulse showed that the initially broad four-root shard overlapped already-completed or actively leased Level-0 work. This receipt preserves cross-read/provenance findings and explicitly prevents duplicate completion or earned-work credit.",
+  "drive_root": {
+    "id": "1lkUHKWlgPvB_NMLd5uksjQ6Ajj0xYqcm",
+    "title": "clay",
+    "frozen_direct_folder_denominator": 14,
+    "current_verified_closure_floor_from_crossread": 12,
+    "open_roots_from_crossread": ["digital-retina", "titan-memory"]
+  },
+  "crossread_commits": [
+    {
+      "sha": "f7e5830c8a0bd7ba3a0f06471bdeb3ea0124411e",
+      "meaning": "12-of-14 direct-root union refresh; open roots digital-retina and titan-memory"
+    },
+    {
+      "sha": "be6c2a88b8c56dd80ff90ae34c562af8c2964a83",
+      "meaning": "historical Retina adaptive-learning lineage already assimilated, including GoL learned dictionary, threshold/FPR and anti-Goodhart findings"
+    },
+    {
+      "sha": "d9e31b8ae0ad891b5e49c9ea78c53a58a67f828e",
+      "meaning": "Needle direct-root denominator/snapshot task already complete"
+    },
+    {
+      "sha": "baae8df9ad4b24fc160eef55a9e9379885a0e65e",
+      "meaning": "titan-memory aggregation frontier; whole root open only on .venv empty-directory audit at that checkpoint"
+    }
+  ],
+  "live_non_overlap_observations": [
+    "digital-retina exact subtree closure is separately claimed by the swarm; this worker does not take completion credit for it.",
+    "titan-memory pip vendor empty-directory audit is separately leased; this worker does not overlap it.",
+    "Needle was already closed before this reconciliation write.",
+    "The Retina semantic findings independently recovered by this worker are materially covered by the concurrent Retina assimilation receipt and are therefore cross-confirmation, not a second scientific delta."
+  ],
+  "snapshot_identity_crosscheck": [
+    {
+      "root": "needle",
+      "drive_folder_id": "14RALcFzrBw-6eNwp-3ZK4pIKDWuBAvDf",
+      "git_origin": "https://github.com/cactus-compute/needle.git",
+      "observed_origin_main": "6fdddb874dd6f46dabeea88d0bf239fc4a2474c4",
+      "credit": "PROVENANCE_CROSSCHECK_ONLY"
+    },
+    {
+      "root": "digital-retina",
+      "drive_folder_id": "1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m",
+      "git_origin": "https://github.com/gschaidergabriel/digital-retina.git",
+      "observed_main": "819dcac12253b7de45795239b44482627ade624f",
+      "credit": "PROVENANCE_CROSSCHECK_ONLY"
+    },
+    {
+      "root": "digital-retina-e2e",
+      "drive_folder_id": "1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja",
+      "role": "evaluation/coverage artifact sidecar for digital-retina; no separate .git root observed at direct-root level",
+      "credit": "RECONCILIATION_ONLY"
+    },
+    {
+      "root": "titan-memory",
+      "drive_folder_id": "1fnB_uYrxTL5ecjsyof8fIEbn-mnr4x19",
+      "git_origin": "https://github.com/gschaidergabriel/lcme.git",
+      "observed_main": "04a1dab0f4edc87da45ae861bb632e511e407fc1",
+      "credit": "PROVENANCE_CROSSCHECK_ONLY"
+    }
+  ],
+  "negative_result_preservation": {
+    "finding": "Historical Retina reports demonstrate that lenient CLIP coverage can rise sharply under lower thresholds/broader vocabulary without equivalent downstream semantic correctness; this finding was already preserved by concurrent receipt be6c2a88... and is not duplicated here.",
+    "current_relevance": "Keep false-familiarity/open-set calibration and anti-Goodhart regression tests mandatory for FRANK v0.1 MVC/H1."
+  },
+  "center_feedback": {
+    "status": "NO_NEW_SEMANTIC_CREDIT",
+    "next_union_condition": "Only aggregate 14/14 after the separately leased digital-retina exact closure and remaining titan-memory .venv directory audits are both committed/released.",
+    "do_not_do": [
+      "Do not count this receipt as a 13th or 14th root closure.",
+      "Do not duplicate Retina semantic earned-work hours.",
+      "Do not overwrite active digital-retina or titan .venv leases."
+    ]
+  }
+}

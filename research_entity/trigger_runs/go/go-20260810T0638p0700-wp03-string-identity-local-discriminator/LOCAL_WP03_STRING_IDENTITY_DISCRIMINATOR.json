@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T0638p0700-wp03-string-identity-local-discriminator",
+  "trigger": "go",
+  "created_at": "2026-08-10T06:38:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity_boundary": "RESEARCH_ENTITY_TEMPORARY_WORKER != FRANK; Frank self-Harness authority remains proposal-only",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_main_before_write": "0adbcb9c2cedb586bd2f48dc35eb11e1bd220f8d",
+  "source_path": "tools/claycode_base_ir.py",
+  "routed_obligation": "WP02-STRING-IDENTITY-TO-WP03-20260810T0637p0700",
+  "evidence_class": "LOCAL_LOGIC_DISCRIMINATOR_NOT_EXACT_REPOSITORY_CHECKOUT_NOT_STRICT_PARSER_NOT_TARGET_ACCEPTANCE",
+  "hypothesis": "WP03 semantic_ir_sha256 currently preserves raw JSON STRING escape spelling and therefore splits escape-equivalent decoded Unicode strings into different semantic identities.",
+  "strongest_counterhypothesis": "The existing WP03 canonical_syntax path already normalizes STRING token meaning, or raw escape spelling is intentionally part of semantic_ir_sha256 identity.",
+  "method": "After reading current tools/claycode_base_ir.py from the connected GitHub backend, reproduce its exact canonical_syntax Token rule and semantic payload hashing on minimal rule_decl Trees using Lark Token objects. This isolates the currently routed string-identity question without claiming parser integration or exact-checkout execution.",
+  "cases": [
+    {
+      "case": "latin_literal_vs_escape",
+      "expected_same_under_current_frontend_contract": true,
+      "observed_same": false,
+      "left_semantic_ir_sha256": "eed45da52814fc23af5e38ff85b7860370942192ee975fffebc7cc93b3e2f4ae",
+      "right_semantic_ir_sha256": "6bd7eacb8c689c6759afbfb9573bb92ffc6204fafd1edc46ebfd2ac9e27199b6",
+      "pass": false
+    },
+    {
+      "case": "ascii_literal_vs_escape",
+      "expected_same_under_current_frontend_contract": true,
+      "observed_same": false,
+      "left_semantic_ir_sha256": "dfe9908e7b1a17015ccd6694696a65f75ad511d9db66e9e9c0028442f4467d22",
+      "right_semantic_ir_sha256": "408d914663af30eedaf2b1909fc689074f5e0a0b119f3a1661ebfbea6b95d80c",
+      "pass": false
+    },
+    {
+      "case": "slash_literal_vs_escape",
+      "expected_same_under_current_frontend_contract": true,
+      "observed_same": false,
+      "left_semantic_ir_sha256": "a0479f3b1134af148c4f6bc7653822acc513a752cfd136ca94d65c002aa05d8f",
+      "right_semantic_ir_sha256": "396e795b3ebefbd6a3ed66e4c0ed16b65750e4e9cb8cb90c0da84923eed63ee7",
+      "pass": false
+    },
+    {
+      "case": "gclef_literal_vs_surrogate_pair",
+      "expected_same_under_current_frontend_contract": true,
+      "observed_same": false,
+      "left_semantic_ir_sha256": "2b3a753cf69760f0c6b544f5b24c27d6f3e61a6cdd2c4ca32988f9a906538ac5",
+      "right_semantic_ir_sha256": "6463c502e34b4fc57fd1453319e3b373f77f8be6a0f48b5caf378331c4eb5f2c",
+      "pass": false
+    },
+    {
+      "case": "composed_vs_decomposed",
+      "expected_same_under_current_frontend_contract": false,
+      "observed_same": false,
+      "left_semantic_ir_sha256": "eed45da52814fc23af5e38ff85b7860370942192ee975fffebc7cc93b3e2f4ae",
+      "right_semantic_ir_sha256": "4cb3c95bd1b86fc225db5619f680f6d3b3af9be089e7f12a031f015e9475e1fd",
+      "pass": true
+    }
+  ],
+  "summary": {
+    "escape_equivalent_pairs_split": 4,
+    "escape_equivalent_pairs_total": 4,
+    "distinct_scalar_sequence_remains_distinct": true,
+    "result": "SUPPORTED_LOCAL_WP03_RAW_STRING_IDENTITY_DEFECT"
+  },
+  "counterhypothesis_disposition": "The source currently returns str(node) for all non-presentation Tokens, so no STRING-specific semantic decoding is present. Raw escape spelling remains observable in semantic_ir_sha256. Whether that divergence is intentional remains an architecture-contract question, but the routed WP03 obligation is now locally falsifier-supported rather than code-reading-only.",
+  "architecture_delta": "TEST_OBLIGATION_ONLY; do not patch or promote WP03 before the sequential WP02 production gate is admitted. Preserve source_sha256 separately if exact lexical spelling identity is needed.",
+  "next_falsifier": "After WP02 production evidence is admitted, run the routed discriminator through the exact current WP03 lower_program path under the selected strict grammar. Patch only if semantic_ir_sha256 is confirmed to mean decoded semantic identity; then rerun typed-IR regressions and Ubuntu target acceptance.",
+  "promotion": "NONE",
+  "out_of_box_experiment": false,
+  "rollback": "Receipt-only evidence; no ClayCode source, grammar, Frank Harness, effect authority or release state changed."
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-wp03-typed-ir-20260810T0636p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T06:36:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-WP03-TYPED-IR-20260810",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "GO_RECURSIVE_SWARM_CYCLE",
+    "title": "Build deterministic typed canonical IR candidate for CC-WP-03",
+    "work_clay": "Build the smallest grammar-bound typed canonical IR layer above the current ClayCode BASE frontend without changing frozen language semantics or the active V17 grammar. Preserve generic, nested, union and optional type structure; declaration and field identity/order; unresolved external type names as explicit unresolved-preserved references; full syntax fallback for statements not yet structurally lowered; bind output identity to source, grammar and canonical-syntax provenance. Add deterministic mutation, duplicate-declaration/field and unresolved-type regressions. Local evidence is candidate-only until current-corpus and genuine Ubuntu receipts exist.",
+    "reason_clay": "CC-WP-03 remains an unclaimed critical-path package while WP-02 is being handled by another worker. Fresh MLIR primary documentation supports an open extensible typed IR with dialect-local types/interfaces rather than a closed hardcoded type universe; current ClayCode frozen semantics already define typed records, interfaces, capabilities and dialect contracts. The highest-value next move is implementation, not semantic redesign.",
+    "leading_hypothesis": "A deterministic source-order-preserving structural IR over the admitted parse tree can represent the current frozen G9 type surface without semantic changes and provide a stable substrate for WP-04 type/effect checking.",
+    "strongest_counterhypothesis": "The current V17 parse tree may omit or ambiguously encode type/declaration distinctions needed by WP-03, forcing either a parser repair or a narrower explicit UNKNOWN rather than invented type semantics.",
+    "completion_clay": "A branch/PR contains a deterministic typed-IR builder and focused regressions; generic/nested/union/optional structure is preserved; duplicate declaration/field collisions fail closed; unresolved external type names remain explicit rather than guessed; semantic type mutations change IR hash; repeated identical input is deterministic; real current G9+Dialect parsing/lowering is attempted; Ubuntu target execution remains required before CC-WP-03 PASS.",
+    "evidence_need": [
+      "LOCAL_TYPED_IR_REGRESSION_RECEIPT",
+      "CURRENT_G9_DIALECT_TYPED_IR_RECEIPT",
+      "TYPE_MUTATION_DISCRIMINATION_RECEIPT",
+      "DUPLICATE_SYMBOL_FAIL_CLOSED_RECEIPT",
+      "UNRESOLVED_TYPE_PRESERVATION_RECEIPT",
+      "UBUNTU_SELF_HOSTED_RUNNER_RECEIPT"
+    ],
+    "executor_policy": "ChatGPT owns only this isolated WP-03 typed-IR candidate lane. Do not edit V17 grammar or WP-02 canonicalizer. Re-read main before every durable write. No package PASS until production/current-corpus and Ubuntu receipts exist.",
+    "required_capabilities": [
+      "GITHUB_READ_WRITE",
+      "PYTHON3",
+      "LARK",
+      "UBUNTU_DEVELOPER_HOST_EXECUTION"
+    ],
+    "write_scope": [
+      "tools/claycode_base_typed_ir.py",
+      "tools/test_claycode_base_typed_ir.py",
+      "research_entity/claycode/base/CC_WP03_*",
+      "research_entity/state/work/events/"
+    ],
+    "dependencies": [
+      "CC-WP-01-SPEC-FREEZE",
+      "current admitted CC-WP-02 parser/canonical syntax surface"
+    ],
+    "invalidators": [
+      "another current worker claims overlapping WP-03 write scope",
+      "V17/current frontend is superseded before branch execution",
+      "executable counterexample proves current frozen semantic contract cannot represent required typed structure"
+    ],
+    "base_priority": 0.98,
+    "expected_impact": 0.9,
+    "urgency": 0.95,
+    "information_gain": 0.88,
+    "status": "CLAIMED"
+  }
+}

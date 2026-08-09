@@ -1,0 +1,41 @@
+name: FRANK H1 H-WP-02 Ledger Differential
+
+on:
+  pull_request:
+    paths:
+      - 'tools/frank_h1_state_ledger_differential.py'
+      - 'research_entity/harness/reference_state_ledger.py'
+      - 'research_entity/harness/reference/state_ledger.py'
+      - 'research_entity/harness/reference/oracle_state_ledger.py'
+      - '.github/workflows/frank-h1-ledger-differential.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hwp02-three-lineage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile discriminator
+        run: python -m py_compile tools/frank_h1_state_ledger_differential.py
+      - name: Execute real three-lineage differential
+        run: |
+          python tools/frank_h1_state_ledger_differential.py \
+            --strict-oracle \
+            --output /tmp/HWP02_THREE_LINEAGE_DIFFERENTIAL_RECEIPT.json
+      - name: Show receipt
+        if: always()
+        run: cat /tmp/HWP02_THREE_LINEAGE_DIFFERENTIAL_RECEIPT.json || true
+      - name: Upload receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hwp02-three-lineage-differential-receipt
+          path: /tmp/HWP02_THREE_LINEAGE_DIFFERENTIAL_RECEIPT.json
+          if-no-files-found: warn

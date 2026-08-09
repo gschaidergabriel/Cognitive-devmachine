@@ -1,16 +1,18 @@
 {
-  "schema_version":"1.1",
+  "schema_version":"1.2",
   "task_id":"666-l0-titan-venv-pip-folder-audit-20260809T1102p0700",
   "room_id":"center",
   "title":"Titan .venv pip package empty-directory audit",
   "goal":"Direct-list all 106 RECORD-implied directories under site-packages/pip, verify every direct child identity against pip RECORD, and prove no additional empty directories exist.",
-  "status":"CLAIMED_COORDINATOR",
+  "status":"PARTIAL_SHARDED",
+  "progress":{"exact_closed_folders":2,"exact_closed_files":7,"remaining_folders":104,"remaining_files_identity_already_exact":839},
+  "closed_scope":"pip root + pip/__pycache__",
+  "remaining_tasks":["666-l0-titan-venv-pip-internal-folder-audit-20260809T1110p0700","666-l0-titan-venv-pip-vendor-folder-audit-20260809T1110p0700"],
+  "branch_counts":{"_internal":{"folders":38,"files":296},"_vendor":{"folders":66,"files":543}},
   "dependencies":["Drive:1AIT7gOsV__nRMG1fokSLx8bUmZ1BjOB5","research_entity/archive_assimilation/manifests/DRIVE_TITAN_MEMORY_VENV_RECORD_FILE_IDENTITY_20260809T1058p0700.json"],
   "record_file_count":846,
   "record_implied_folder_count":106,
   "semantic_credit":"ZERO_VENDOR_SUPPORT",
   "created_by":"chatgpt-secondary",
-  "claimed_by":"chatgpt-secondary-20260809T1109p0700-666-titan-pip-coordinator",
-  "claimed_at":"2026-08-09T11:09:00+07:00",
-  "completion_test":"All pip folders direct-audited; coordinator may shard _internal and _vendor into disjoint tasks while retaining root/__pycache__ closure."
+  "updated_at":"2026-08-09T11:11:00+07:00"
 }

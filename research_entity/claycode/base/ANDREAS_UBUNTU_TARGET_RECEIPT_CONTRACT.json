@@ -1,16 +1,22 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "contract_id": "CLAYCODE_BASE_ANDREAS_UBUNTU_TARGET_RECEIPT_V1",
   "target_host": "ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
   "purpose": "Define the minimum evidence shape for host-specific ClayCode BASE acceptance. Hosted CI/proxy receipts cannot satisfy this contract. The consolidated V2 target runner is an evidence collector only; a separate strict adjudication receipt must satisfy this contract before WP14 can pass.",
   "collector_receipt_path": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_V2.json",
   "expected_receipt_path": "research_entity/claycode/target_receipts/ANDREAS_UBUNTU_BASE_ACCEPTANCE_STRICT.json",
+  "wp02_parser_contract": {
+    "selected_grammar_path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark",
+    "required_identity_rule": "At execution time the collector, strict-LALR receipt and full-corpus frontend receipt must all embed the exact SHA-256 of selected_grammar_path, while the active production canonicalizer must identify the same selected_grammar_path. A V7/V10/V13 or other candidate receipt cannot satisfy WP02 unless the acceptance contract is explicitly versioned and changed first.",
+    "executable_slice_separation": "Dedicated WP03/pure-compiler typed-fn evidence may retain its separately versioned grammar contract; it must not be relabeled as WP02 declarative strict evidence."
+  },
   "required_top_level": [
     "schema_version",
     "target_host",
     "repository_commit",
     "host_fingerprint",
     "compiler_runtime",
+    "wp02_parser_contract",
     "work_packages",
     "applications",
     "frank_handoff",
@@ -47,6 +53,7 @@
     "semantic_escape_hatches", "h2_h3_handoff_ready"
   ],
   "additional_required_target_discriminators": [
+    "WP02 strict/full-corpus/canonicalizer evidence is bound to the selected V9 grammar path and exact repository bytes",
     "BASE_RUNTIME_V04_HARDENING_RECEIPT.json pass=true on Andreas Ubuntu",
     "BASE_COMPILER_MAINLINE_RUNTIME_BRIDGE_RECEIPT.json pass=true on Andreas Ubuntu",
     "real application rows must not inherit proxy acceptance flags",
@@ -55,6 +62,7 @@
   "hard_rules": [
     "target_host must equal ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM",
     "collector target host checks must all pass on a clean non-CI non-container checkout",
+    "CC-WP-02-PARSER-CANON must use the selected V9 grammar bytes for strict-LALR and full-corpus evidence and the same V9 path for the active production canonicalizer",
     "every required work package must pass",
     "all ten applications must pass through the production ClayCode chain",
     "GUI_INTERACTIVE must execute an actual Ubuntu interactive/event-loop adapter, not only a hosted headless state proxy",

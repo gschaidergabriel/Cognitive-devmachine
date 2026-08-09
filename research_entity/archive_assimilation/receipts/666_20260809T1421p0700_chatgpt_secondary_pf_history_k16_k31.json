@@ -1,0 +1,37 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1421p0700-chatgpt-secondary-pf-history-k16-k31",
+  "trigger":"666","actor":"chatgpt-secondary","stage":"L0_ARCHIVE_ASSIMILATION",
+  "source":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","ordinal_range":"k16..k31","count":16,"manifest":"research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K16_K31_20260809T1420p0700.json"},
+  "race":{"winning_claim_commit":"55d975ba59091a082930d309a8273835dd06e266","winning_claim_time":"2026-08-09T14:08:19+07:00","competing_claims_seen":0,"result":"CLEAN"},
+  "closure":{"materialized":16,"terminally_dispositioned":16,"uncovered":0,"status":"COMPLETE_FOR_ORDINAL_SHARD","global_level0_gate":"NOT_PASS","global_exact_percent_increment":0.0,"reason":"Combined Level-0 denominator remains NOT_FROZEN."},
+  "high_value_findings":[
+    {"id":"PF-K16-31-TRUTH-AUTHORITY","evidence":[26],"finding":"PROJECT.md was both injected as base-of-truth and automatically rewritten from model-generated update blocks.","transfer":"Model output can propose authoritative-state changes but cannot itself be the commit authority. Ground-truth state needs version/provenance plus explicit policy/approval/validation before mutation."},
+    {"id":"PF-K16-31-AGENT-AUTHORITY","evidence":[24,25],"finding":"The project agent evolved from project-root sandboxed tools to near-unrestricted host shell/filesystem/service access with a tiny destructive-command blacklist.","transfer":"Host-level agents require scoped capabilities, approval classes, receipts and rollback; blocklists are not an authority model."},
+    {"id":"PF-K16-31-UNTRUSTED-CONTEXT","evidence":[17,27],"finding":"Dropped/uploaded files were previewed and injected into Claude context while the project surface also gained file moves/writes.","transfer":"Untrusted file content, user intent, trusted project state and effect authority remain separate typed/provenance channels."},
+    {"id":"PF-K16-31-RENDERING","evidence":[20],"finding":"Assistant markdown was transformed into raw HTML snippets without an explicit escaping stage in the shown renderer.","transfer":"Generated/file-derived content must be escaped or allowlist-sanitized before DOM insertion; formatting is a security boundary."},
+    {"id":"PF-K16-31-TEST-STATE","evidence":[22,23],"finding":"Streaming/tool code was first marked structurally verified only because API credits were unavailable, then a later endpoint fix recorded source-reported end-to-end success.","transfer":"Keep structural review, integration test and live end-to-end test as distinct evidence states with explicit promotion events."},
+    {"id":"PF-K16-31-PROJECT-IDENTITY","evidence":[28],"finding":"Project workspaces explicitly used Claude identity with project-scoped memory/hypotheses rather than pretending to be Frank or inheriting Frank's consciousness/SOMA.","transfer":"Agent role/identity and memory namespace should be explicit per workspace; shared infrastructure does not imply shared entity identity."},
+    {"id":"PF-K16-31-SOURCE-FALLBACK","evidence":[29],"finding":"Dead RSS sources were replaced by different publishers and HNRSS topic aggregations.","transfer":"Fallback availability never erases source identity/authority/bias differences; downstream ranking must preserve source provenance."},
+    {"id":"PF-K16-31-API-CONTRACT","evidence":[22,30,31],"finding":"Request binding and API prefix/proxy ownership repeatedly drifted across FastAPI/WebUI/service boundaries.","transfer":"Request schemas, route prefixes and proxy contracts should be machine-generated or contract-tested end-to-end."
+    }
+  ],
+  "negative_results_preserved":[
+    "The agent sandbox was intentionally removed and replaced with near-full host authority plus a very small command blocklist.",
+    "The model could auto-rewrite the same file treated as its future project ground truth.",
+    "Generated markdown HTML lacked an explicit escaping step in the shown renderer.",
+    "A streaming/tool implementation was initially only structurally verified because live API testing was unavailable.",
+    "API request binding and path-prefix composition produced broken endpoints.",
+    "RSS reliability fallback changed the epistemic source set, not only transport availability."
+  ],
+  "measurement_boundary":"Source-reported end-to-end test success, model/LoRA counts, benchmark, uptime and performance claims were not independently reproduced in this pass.",
+  "earned_work":{"new_hours_quantified":0.0,"reason":"No row-level earned-work overlap audit was performed."},
+  "next_falsifiers":[
+    "Attempt self-referential PROJECT.md updates and verify generated proposals cannot become authoritative without an independently authorized commit path.",
+    "Threat-model host-level tool use by capability class and verify destructive/privileged effects require explicit authority rather than substring filtering.",
+    "Inject adversarial HTML/markdown/file text and verify DOM escaping plus prompt provenance separation.",
+    "Run contract tests for request schemas and route-prefix/proxy composition across WebUI and backing services.",
+    "Compare primary-source versus aggregator fallback effects on source diversity, authority and ranking bias."
+  ],
+  "status":"COMPLETE"
+}

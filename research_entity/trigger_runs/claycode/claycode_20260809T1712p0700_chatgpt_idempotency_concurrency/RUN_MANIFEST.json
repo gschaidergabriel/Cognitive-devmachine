@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1712p0700_chatgpt_idempotency_concurrency",
+  "trigger": "claycode",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "gate_before": "NOT_PASS",
+  "general_purpose_gate_before": "NOT_PASS",
+  "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
+  "target_host_tested": false,
+  "focus": "Test whether the fresh Harness pre-lock idempotency race requires new ClayCode semantics or can be closed by a typed commit-envelope/lowering contract.",
+  "evidence_classes": [
+    "VERIFIED_GITHUB_REPOSITORY_STATE",
+    "LOCAL_EXECUTABLE_SQLITE_CONCURRENCY_PROBE",
+    "PRIMARY_SQLITE_DOCUMENTATION",
+    "EXPIRED_IETF_DRAFT_CONTEXT"
+  ],
+  "e2b_state": "NOT_EXPOSED_IN_THIS_SESSION",
+  "fallback_execution": "LOCAL_CONTAINER",
+  "promotion": "NONE",
+  "gate_advancement": "NONE",
+  "started_at": "2026-08-09T17:12:00+07:00"
+}

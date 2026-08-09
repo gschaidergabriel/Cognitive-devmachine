@@ -16,7 +16,7 @@ from typing import Any
 from lark import Lark, Token, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V5.lark"
 DOMAIN = b"ClayCodeBaseFrontendAST/v1\x00"
 
 

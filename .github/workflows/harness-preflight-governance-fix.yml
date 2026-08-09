@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -117,7 +117,8 @@ jobs:
           fi
           git add "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/$NAME"
           git commit -m "research: persist H-WP-01 interconnect preflight result"
-          git push
+          git pull --rebase origin main
+          git push origin HEAD:main
 
       - name: Fail workflow if preflight failed
         run: |

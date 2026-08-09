@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T0954p0700-xeno-parallel-delta-aggregation-floor-108-of-203",
+  "trigger":"666",
+  "actor":"chatgpt-secondary",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "purpose":"Merge only disjoint committed XENO G8 hash-closure deltas after the canonical shared task reached 64/203 via claude_code, without racing the currently active implementation worker.",
+  "base":{"task":"research_entity/rooms/rooms/center/tasks/666-l0-drive-xeno-extracted-reconcile-20260809T0708.json","verified_leaves":64,"expected_leaves":203,"hash_closed_scopes":["capability","delivery","evidence","hypotheses","state","reports","credit","archive","claude_code"],"task_blob_sha":"1e5e13a21fbcd244f97c71c5c211f82d69fb583d"},
+  "disjoint_committed_deltas":[
+    {"scope":"directcode","leaves":12,"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0949p0700_chatgpt_secondary_xeno_directcode_hash_closure.json","commit":"2306f3ac18e100063583af8ee1a7fa780cecb8d3","mismatches":0},
+    {"scope":"language","leaves":13,"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0953p0700_chatgpt_secondary_xeno_language_hash_closure.json","commit":"fddb65432a1aa9565fccf4e3bb928f2152d88a7f","mismatches":0},
+    {"scope":"selective","leaves":7,"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0947p0700_chatgpt_secondary_xeno_selective_hash_closure.json","commit":"9faff8af410cfb5bc571c9532c489341871a0c9e","mismatches":0},
+    {"scope":"traffic","leaves":12,"receipt":"research_entity/archive_assimilation/receipts/666_20260809T0952p0700_chatgpt_secondary_xeno_traffic_hash_closure.json","commit":"98eaf60f634f59cf5d7b5ee46875504cac00ac37","mismatches":0}
+  ],
+  "aggregation":{"base_leaves":64,"delta_leaves":44,"verified_floor":108,"expected_leaves":203,"remaining_at_most":95,"leaf_coverage_percent_floor":53.201970,"mismatches_across_included_deltas":0,"double_credit_check":"PASS_SCOPES_DISJOINT","active_scope_excluded":"implementation"},
+  "shared_task_mutation":"NOT_PERFORMED_APPEND_ONLY_TO_AVOID_CONCURRENT_CAS_RACE",
+  "global_level0":{"gate":"NOT_PASS","exact_global_percent_added":0.0,"reason":"Combined Level-0 denominator remains not frozen."},
+  "status":"VERIFIED_PARALLEL_AGGREGATION_FLOOR",
+  "created_at":"2026-08-09T09:54:00+07:00"
+}

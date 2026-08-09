@@ -1,0 +1,41 @@
+{
+  "schema_version":"1.0",
+  "manifest_id":"DRIVE-DIGITAL-RETINA-ROOT-COMPOSITE-CLOSURE-20260809T1218p0700",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "source":{"title":"digital-retina","drive_folder_id":"1ckxLW4dxjjxIb3oheTAszjAdqbNU0C3m","git_repository":"gschaidergabriel/digital-retina","git_head":"819dcac12253b7de45795239b44482627ade624f"},
+  "method":{"root_enumeration":"direct Google Drive folder fetch at 2026-08-09T12:17+07:00","root_direct_entries":12,"root_direct_folders":9,"root_direct_files":3,"sampling_used_for_root_denominator":false,"closure_rule":"A direct child is closed only when its tracked source and every observed untracked/generated/vendor/security-support family have a persisted deterministic disposition or exact recursive denominator."},
+  "root_direct_identity":{"folders":["deploy",".git","eval","frontend","retina","api","docs","tests","tools"],"files":["requirements.txt",".gitignore","README.md"],"status":"EXACT_DIRECT_ROOT_IDENTITY_FROZEN"},
+  "partitions":{
+    "TRACKED_SOURCE":{"manifest":"research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_TRACKED_SOURCE_SUBMANIFEST.json","tracked_leaf_paths":241,"closed_subtrees":["deploy","api","docs","tests","tools","retina","eval","frontend"],"root_files":3,"status":"CLOSED_ALL_241_TRACKED_PATHS"},
+    "GIT_SUPPORT":{"manifest":"research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_GIT_SUPPORT_EXACT_RECURSIVE_20260809T1039p0700.json","folder":".git","folders_below_git_root":247,"files_below_git_root":531,"units_below_git_root":778,"units_including_git_root":779,"status":"EXACT_RECURSIVE_STRUCTURAL_DENOMINATOR_CLOSED","semantic_credit":0},
+    "LOW_CARDINALITY_SUPPORT":{"receipt":"research_entity/archive_assimilation/receipts/666_20260809T1112p0700_DIGITAL_RETINA_LOWCARD_RECONCILIATION.json","deploy_secret_identity_only_leaves":2,"api_generated_pyc_leaves":4,"status":"CLOSED_LOCAL_IDENTITY_AND_DISPOSITION","secret_content_ingested":false,"semantic_credit":0},
+    "RETINA_GENERATED_SUPPORT":{"manifest":"research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_RETINA_RAW_BLOB_CLOSURE_20260809T1124.json","generated_pycache_folders":2,"generated_pyc_leaves":7,"generated_pyc_bytes":86978,"status":"CLOSED_GENERATED_RUNTIME_BYTECODE_NO_INDEPENDENT_CREDIT","semantic_credit":0},
+    "FRONTEND_SUPPORT":{"manifest":"research_entity/archive_assimilation/manifests/DRIVE_DIGITAL_RETINA_FRONTEND_SUPPORT_SUBMANIFEST.json","family_obligations":4,"completed_family_obligations":4,"families":["frontend/.env.local","frontend/next-env.d.ts","frontend/.next/**","frontend/node_modules/**"],"status":"CLOSED_BY_DETERMINISTIC_FAMILY_RULES","semantic_credit":0}
+  },
+  "disjointness":{
+    "tracked_vs_git":"Tracked source paths are working-tree Git-index paths; .git/** is provenance support and excluded from tracked source.",
+    "tracked_vs_support":"Low-cardinality, Retina pycache and frontend support paths are explicitly untracked/generated/ignored or security-sensitive extras outside the 241 tracked path set.",
+    "frontend_family_overlap":"frontend/.env.local and next-env.d.ts are individual support files; .next/** and node_modules/** are distinct exact path-prefix families.",
+    "e2e_boundary":"Drive top-level digital-retina-e2e (folder id 1jL8pYLrRdj6n3czq_1JKxj5ZVPbF05Ja) is a sibling source universe and is NOT counted inside this digital-retina root closure.",
+    "status":"NO_UNRESOLVED_DOUBLE_COUNTING_AT_DIGITAL_RETINA_ROOT"
+  },
+  "root_obligations":[
+    {"path":"deploy/","tracked":6,"support":"2 secret identities","status":"CLOSED"},
+    {"path":".git/","support":"779 structural units including .git root","status":"CLOSED_EXACT"},
+    {"path":"eval/","tracked":157,"support":"none observed in reconciled surface","status":"CLOSED"},
+    {"path":"frontend/","tracked":42,"support":"4 deterministic support obligations","status":"CLOSED"},
+    {"path":"retina/","tracked":24,"support":"2 pycache folders / 7 pyc leaves","status":"CLOSED"},
+    {"path":"api/","tracked":4,"support":"4 pyc leaves","status":"CLOSED"},
+    {"path":"docs/","tracked":3,"support":"none","status":"CLOSED"},
+    {"path":"tests/","tracked":1,"support":"none","status":"CLOSED"},
+    {"path":"tools/","tracked":1,"support":"none","status":"CLOSED"},
+    {"path":"requirements.txt","tracked":1,"status":"CLOSED"},
+    {"path":".gitignore","tracked":1,"status":"CLOSED"},
+    {"path":"README.md","tracked":1,"status":"CLOSED"}
+  ],
+  "completion":{"root_direct_obligations_total":12,"root_direct_obligations_completed":12,"digital_retina_root_status":"EXACT_COMPOSITE_ROOT_CLOSED","remaining_digital_retina_root_obligations":[],"scientific_claim_delta":"NONE_FROM_AGGREGATION","semantic_credit":0,"earned_work_hours_added":0.0,"exact_global_level0_percent_added":0.0,"global_reason":"The digital-retina source-local root is now closed, but combined Drive + Project-Frankenstein + cross-source atomic obligations remain globally unfrozen/open."},
+  "status":"EXACT_COMPOSITE_ROOT_CLOSED",
+  "created_at":"2026-08-09T12:18:00+07:00"
+}

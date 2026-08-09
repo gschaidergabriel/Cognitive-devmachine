@@ -1,0 +1,19 @@
+// Frozen executable fixture from gschaidergabriel/Dr.-Unterweger claycode/frank_grt.clay
+// Upstream blob: b9027118e886b8da4110c0801f7d5e1cf9d1c3b9
+module frank.grt
+fn frame(current : RealizedState, goal : OPTION<SemanticRef>) -> GRTFrame {
+  let constraints = current_constraints(current, goal)
+  let M = construct_admissible_possibility_space(current, constraints)
+  return GRTFrame(
+    realized=current,
+    admissible=M,
+    constraints=constraints,
+    generative_map=#frank_transition_model,
+    precedence=current_causal_precedence(),
+    counterfactuals=bounded_counterfactuals(M),
+    observation_surface=current_observation_interfaces(),
+    intervention_surface=current_authorized_interventions(),
+    uncertainty=calibrate_frame_uncertainty(current,M),
+    source_status=THINKING_FRAMEWORK_NOT_WORLD_FACT
+  )
+}

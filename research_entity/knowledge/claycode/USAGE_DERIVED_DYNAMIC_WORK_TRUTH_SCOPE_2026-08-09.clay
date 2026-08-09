@@ -1,0 +1,78 @@
+module claycode.research.usage.dynamic_work_truth_scope_2026_08_09
+status OBSERVATION_TO_RESEARCH_CANDIDATE
+source=[user_corrections,project_master_sources,observable_ClayCode_working_trace,GitHub_receipts]
+
+obs O1 {
+  issue="actor rank was easy to confuse with truth rank"
+  correction="fresh verified local execution receipt is primary operational truth only for the exact local effect it verifies; Claude opinion itself is not truth"
+  implication="ClayCode evidence types need explicit scope, surface and freshness"
+}
+
+obs O2 {
+  issue="mutable todo row cannot safely represent work that changes before execution"
+  correction="stable work id + append-only spec revisions + invalidators + lease + execution receipt"
+  implication="work is a versioned prospective object, not a command frozen at proposal time"
+}
+
+obs O3 {
+  issue="capability catalog was conflated with current ability"
+  correction="resource/capability observations carry CAN_NOW|CAN_DELEGATE|CANNOT_NOW|UNKNOWN|STALE plus authority, freshness, trials and evidence"
+  implication="late capability resolution should be typed and frozen into an execution receipt at claim/effect time"
+}
+
+obs O4 {
+  issue="hosted ChatGPT cannot query local SQLite while Claude can"
+  correction="local UnifiedDB remains operational materialization; secret-scrubbed hash-stable repo projections expose remote work/possibility state"
+  implication="projection must carry derived/non-authoritative marker and source hash"
+}
+
+obs O5 {
+  issue="project goal was previously treated too abstractly"
+  correction="Frank v0.1 has an exact target-machine release definition, so planning must optimize verified closure of real Andreas-PC acceptance gaps rather than repository maturity"
+  implication="goal references should bind to executable acceptance predicates"
+}
+
+obs O6 {
+  issue="positional SQL INSERT in first work runtime produced arity/schema drift risk"
+  correction="superseding runtime uses named-column INSERTs"
+  implication="ClayCode typed-record lowering should prefer named-field schema lowering and compile-time arity/schema checks"
+}
+
+hp H_SCOPE {
+  candidate="evidence{class;surface;scope;freshness;authority;receipt}"
+  claim="explicitly scoped evidence prevents provider/actor identity from accidentally becoming epistemic authority"
+  counter="existing provenance/effect types may already encode this if consistently enforced"
+  test="compare error rate and representation cost on local/remote/research evidence routing fixtures"
+}
+
+hp H_WORKREV {
+  candidate="work{id;rev;goal;deps;invalidators;executor_policy;lease;done_if}"
+  claim="first-class revisioned prospective work reduces stale execution and duplicate work across asynchronous organs"
+  counter="event sourcing convention plus generic records may be sufficient without language syntax"
+  test="replay rapidly changing multi-organ queues with and without typed work revisions"
+}
+
+hp H_CAPFRESH {
+  candidate="cap.resolve(key,now)->CAN_NOW|CAN_DELEGATE|CANNOT_NOW|UNKNOWN|STALE"
+  claim="freshness-aware late binding gives better scheduling under changing organ presence/tools"
+  counter="late binding can reduce reproducibility if capability snapshot is not frozen at claim"
+  test="late-resolve + claim snapshot versus fixed capability list under node/tool churn"
+}
+
+hp H_PROJECTION {
+  candidate="projection{source_hash;epoch;derived:true;authority:false;payload}"
+  claim="typed non-authoritative projections allow remote cognition without flattening source-of-truth hierarchy"
+  counter="ordinary refs plus metadata may be enough"
+  test="measure false truth promotion during remote work replay"
+}
+
+hp H_NAMEDLOWER {
+  candidate="SQL.lower(record)->named_columns"
+  claim="named-field lowering catches schema drift earlier and is safer than positional tuple lowering in evolving UnifiedDB dialects"
+  counter="generated positional SQL with compiler-known schema may be equally safe and shorter"
+  test="schema-evolution mutation suite: add/reorder/nullable columns and compare compile/runtime failures"
+}
+
+research_queue=[H_SCOPE,H_WORKREV,H_CAPFRESH,H_PROJECTION,H_NAMEDLOWER]
+rule observation!=promotion
+rule promote iff evidence+counterhypothesis+matched_budget_replay+semantic_preservation+rollback

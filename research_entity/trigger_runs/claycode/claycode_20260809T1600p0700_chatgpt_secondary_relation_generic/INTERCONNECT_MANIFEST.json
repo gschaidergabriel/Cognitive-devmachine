@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode_20260809T1600p0700_chatgpt_secondary_relation_generic",
+  "trigger": "claycode",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "official_preflight": {
+    "required": "python tools/research_interconnect_preflight.py --trigger claycode --run-id claycode_20260809T1600p0700_chatgpt_secondary_relation_generic",
+    "status": "BLOCKED_NO_REPOSITORY_CHECKOUT_ON_THIS_CHATGPT_EXECUTION_SURFACE",
+    "fallback": "MANUAL_FAIL_CLOSED_FROM_VERIFIED_GITHUB_INPUTS",
+    "completion_gate": "INCOMPLETE_UNTIL_OFFICIAL_PREFLIGHT"
+  },
+  "branches": {
+    "frank": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+        "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
+      ],
+      "finding": "Binary relation canonicalization must preserve sensor/prior/familiarity/authority distinctions; no new FRANK semantic primitive is justified by this parser-surface test."
+    },
+    "clay": {
+      "depth": "CURRENT",
+      "refs": ["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay","research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay"],
+      "finding": "Current stack points to G9 V3 and requires networked ClayCode workers; this run uses repo-native degraded coordination because live UnifiedDB projections are absent."
+    },
+    "harness": {
+      "depth": "CURRENT",
+      "refs": ["research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"],
+      "finding": "No H1/H2/H3 or APP acceptance implication; this is BASE parser/canonicalizer research only."
+    },
+    "claygraph": {
+      "depth": "DEEP",
+      "refs": ["research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"],
+      "finding": "Generic binary relation form may remove lexer ambiguity for ordinary predicates, but ClayGraph hyperrelation identity, typed roles and provenance remain separate typed IR and cannot be flattened into binary syntax."
+    },
+    "unifieddb": {
+      "depth": "DEEP",
+      "refs": ["research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql","research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay"],
+      "finding": "Surface normalization does not imply physical store consolidation; work/state authority remains in versioned semantic state and execution receipts."
+    },
+    "gwt": {
+      "depth": "CURRENT",
+      "refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
+      "finding": "Generic relation syntax must preserve typed causal-stage distinctions; parsing success is not evidence of broadcast/use/outcome/re-entry equivalence or emergence."
+    },
+    "hyperposition": {
+      "depth": "CURRENT",
+      "refs": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "finding": "Counterconstraint: n-ary/higher-order relation identity and role bindings are mandatory; binary relation generic form is not a universal relation model."
+    },
+    "emergenz": {
+      "depth": "CURRENT",
+      "refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md","research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "finding": "No emergence claim follows from parser/canonicalization success; intervention and control semantics remain unchanged."
+    },
+    "claycode": {
+      "depth": "DEEP",
+      "refs": [
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+        "research_entity/claycode/g9/grammar.ebnf",
+        "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+        "research_entity/knowledge_micro_packets/claycode/KMP-CLAYCODE-G9-GRAMMAR-DRIFT-20260809.md"
+      ],
+      "finding": "Prior E2B replication shows relation-word/identifier collision survives a minimal repair. This run tests a nonduplicate strict generic binary relation canonical form rather than another ad-hoc operator patch."
+    }
+  },
+  "coverage": "ALL_REQUIRED_FOUNDATIONS_REFERENCED; OFFICIAL_PREFLIGHT_NOT_EXECUTED"
+}

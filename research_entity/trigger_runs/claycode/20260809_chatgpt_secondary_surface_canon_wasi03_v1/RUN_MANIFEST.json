@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260809_chatgpt_secondary_surface_canon_wasi03_v1",
+  "trigger": "claycode",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_version": "RAE-8.8",
+  "canonical_parent_revision": 2,
+  "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "status": "COMPLETED_RESEARCH_DELTA_NO_CANONICAL_PROMOTION",
+  "purpose": "Test the current ClayCode BASE bottleneck by checking G9 V3 surface/grammar self-consistency, type-directed semantic identity, initial lowering target evidence and cross-branch constraints.",
+  "current_stack": {
+    "claycode": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "grammar": "research_entity/claycode/g9/grammar.ebnf",
+    "dialects": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay"
+  },
+  "required_outputs": [
+    "INTERCONNECT_MANIFEST.json",
+    "TOOL_EXECUTION_MANIFEST.json",
+    "FRANK_CLAYCODE_GOODMAN_REVIEW.json",
+    "EXECUTABLE_RESEARCH_RECEIPT.json",
+    "HYPOTHESES.json",
+    "NEGATIVE_RESULTS.json",
+    "FINAL_REPORT.md"
+  ],
+  "promotion": {
+    "attempted": false,
+    "reason": "Run-local evidence informs BASE implementation but does not by itself satisfy ClayCode release or canonical promotion gates."
+  }
+}

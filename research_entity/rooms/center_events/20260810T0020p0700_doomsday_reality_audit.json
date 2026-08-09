@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "event_id": "doomsday-reality-audit-20260810T0020p0700",
+  "created_at": "2026-08-10T00:20:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "routing": ["claycode", "frank", "harness", "unifieddb", "clayresearch"],
+  "report_ref": "research_entity/reports/20260810T0020p0700_DOOMSDAY_REALITY_AUDIT.md",
+  "formal_release_strict": {
+    "progress_percent": 26.5,
+    "forecast_low": "2026-08-23",
+    "forecast_high": "2026-10-02",
+    "forecast_center": "2026-09-12",
+    "confidence": "VERY_LOW"
+  },
+  "engineering_readiness_floor": {
+    "progress_percent": 30.4,
+    "forecast_low": "2026-08-22",
+    "forecast_high": "2026-09-29",
+    "forecast_center": "2026-09-10",
+    "basis": "historical baseline 25.12% + BASE implementation_closure_ready_count 11/14 + formal H1 1/22; no subjective H1 partial credit",
+    "not_release_progress": true
+  },
+  "key_delta": "ClayCode root manifest explicitly reports 11/14 implementation closure ready while formal release workspace remains 1/14 PASS; release gates remain authoritative for promotion, implementation readiness is a separate forecast diagnostic.",
+  "current_blockers": [
+    "WP02 strict selected V17 receipt absent at audit cutoff",
+    "Andreas Ubuntu target ten-app receipts absent",
+    "FULL_FRANK target receipt absent",
+    "WP14 audit not PASS",
+    "real Qwen4B model-executed receipt absent; latest persisted lane failed before model execution",
+    "PROGRAM_THROUGHPUT measured observations empty"
+  ],
+  "promotion": "NONE"
+}

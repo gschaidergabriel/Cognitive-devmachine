@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260809T1728p0700-effect-closure-lowering",
+  "status": "PASS_WITH_BASE_GATE_OPEN_AND_PREFLIGHT_TOOLING_DRIFT",
+  "checks": [
+    {
+      "check": "canonical_identity_remote_reread",
+      "result": "PASS",
+      "detail": "RAE-8.8 r2 state hash 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346 unchanged after run writes"
+    },
+    {
+      "check": "final_report_remote_reread",
+      "result": "PASS",
+      "detail": "FINAL_REPORT.md blob f13fb0f1633a2790f51462a25c35c297f6bf65d4"
+    },
+    {
+      "check": "executable_receipt_remote_reread",
+      "result": "PASS",
+      "detail": "EXECUTABLE_RESEARCH_RECEIPT.json blob 432c43ae1ff0452cc2f86d8edea9c4a3953b9db1"
+    },
+    {
+      "check": "reproducer_remote_reread",
+      "result": "PASS",
+      "detail": "EXPERIMENT_EFFECT_CLOSURE_LOWERING.py blob c48a583a809354371e4765619e187ba64d70fcb9"
+    },
+    {
+      "check": "frank_architecture_artifact_search",
+      "result": "PASS_ABSENT",
+      "detail": "Repository-wide search for FRANK_ARCHITECTURE.claycode.json returned no result; latest full FRANK architecture fusion was used and Goodman artifact records null explicitly."
+    },
+    {
+      "check": "goodman_review",
+      "result": "PASS_REFINED",
+      "detail": "Shared FRANK/ClayCode ancestry collapsed; new executable discriminating proxy plus primary external anchors, counterhypothesis, falsifier and adversarial checks recorded."
+    },
+    {
+      "check": "executable_proxy",
+      "result": "PASS",
+      "detail": "20,000 random cyclic call graphs produced zero effect-closure reference mismatches; 5,000 interpreter-to-generated-Python executions produced zero output and zero effect-trace mismatches; negative authority/binding tests failed closed."
+    },
+    {
+      "check": "interconnect_preflight",
+      "result": "NEGATIVE_RESULT_TOOLING_DRIFT",
+      "detail": "Current trigger registry uses clayresearch while tools/research_interconnect_preflight.py still enumerates clay and fail-closes on set mismatch. Exact repository-local preflight PASS is not claimed; explicit nine-branch manifest was written."
+    },
+    {
+      "check": "target_ubuntu_execution",
+      "result": "OPEN",
+      "detail": "No execution occurred on Andreas' Ubuntu developer target."
+    },
+    {
+      "check": "e2b_execution",
+      "result": "OPEN_TOOL_NOT_EXPOSED_THIS_WORKER",
+      "detail": "Repository capability is RUNTIME_VERIFIED, but the E2B execution surface was not exposed to this worker."
+    },
+    {
+      "check": "base_general_purpose_gate",
+      "result": "NOT_PASS",
+      "detail": "All 14 ClayCode BASE work packages remain OPEN and no APP-01..APP-10 acceptance proof is passed."
+    },
+    {
+      "check": "scientific_promotion",
+      "result": "NONE",
+      "detail": "Findings remain proxy-supported implementation hypotheses; no canonical scientific claim promotion."
+    }
+  ],
+  "status_footer_resolution": {
+    "next_level": {
+      "stage": "BASE - ClayCode General-Purpose Compiler/Runtime",
+      "progress_percent": 0.0,
+      "eta_days_low": 1.12,
+      "eta_days_high": 4.6666666667,
+      "eta_rendered": "1.1d - 4.7d",
+      "confidence": "LOW_UNTIL_FIRST_RELEASE_PACKAGES_CLOSE",
+      "basis": "bootstrap_stage_priors"
+    },
+    "doomsday": {
+      "historical_baseline_percent": 25.12,
+      "remaining_scope_progress_percent": 0.6622516556,
+      "visible_progress_percent": 25.6,
+      "forecast_low": "2026-08-22",
+      "forecast_high": "2026-10-02",
+      "forecast_center": "2026-09-11",
+      "confidence": "VERY_LOW",
+      "conditional_on_immediate_training_authorization": true,
+      "basis": "13-row dynamic remaining critical path + evidence-mapped historical earned work + current live capabilities/APIs; empty verified event ledger and no located calibrated capability multiplier"
+    }
+  },
+  "promotion": "NONE"
+}

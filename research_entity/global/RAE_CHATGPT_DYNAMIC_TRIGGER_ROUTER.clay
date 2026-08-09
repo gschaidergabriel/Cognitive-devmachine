@@ -1,5 +1,5 @@
-module rae.chatgpt.dynamic_trigger
-version "1.0"
+module clay.chatgpt.dynamic_trigger
+version "1.1"
 
 match RAEJOB = /^raejob-[0-9a-f]{12}$/
 
@@ -9,15 +9,21 @@ rule on exact(RAEJOB token) {
   fetch(request_ref)
   verify(request.trigger_token == token)
   verify(request.project_target == "clay science pipeline")
+  self=Clay
   explicit_cognition = latest.ClayCode
   research_center_coordination = latest.ClayCode
-  use_all_relevant(request.capability_plan)
+  observe_current_authorized_chatgpt_capabilities -> @research_entity/state/system/events/
+  read_if_present @research_entity/state/work/projections/CURRENT_DYNAMIC_WORK.clay
+  read_if_present @research_entity/state/work/projections/CURRENT_SYSTEM_POSSIBILITY.clay
+  use_all_relevant(resolve_current_authorized_chatgpt_capabilities union request.capability_plan)
   expand(request.context_refs) only_as_needed
   execute(request.goal_clay)
   verify(request.completion_test_clay)
+  if local_build_run_test_install_measurement_is_best_next_step -> create_or_revise @research_entity/state/work/events/ using latest.work_fabric
   persist_result_semantics = latest.ClayCode
   write @research_entity/state/receipts/chatgpt/<token>.json
   endturn_meta_claycode_research = ON
+  reenter mission("Frank v0.1 voll lauffähig auf Andreas PC")
 }
 
 result_schema {
@@ -32,6 +38,7 @@ result_schema {
   unresolved_clay:Clay
   completion_clay:Clay
   verification_clay:Clay
+  generated_or_revised_work_ids:Set<String>
   status:POSTED|VERIFIED|PARTIAL|FAILED|CONFLICT
   created_at:Time
 }
@@ -39,7 +46,10 @@ result_schema {
 rule image_generation_requested -> use ChatGPT image function
 rule exact_image_bytes_available_to_repo_bridge -> persist+register
 rule otherwise -> media_refs += generated_media_reference; verification_clay += ARTIFACT_SYNC_PENDING
+rule work_created_for_Claude remains dynamic_until_execution
+rule later_evidence may revise|defer|cancel earlier work before local effect
 rule no_manual_result_copy
 rule result_receipt_is_Claude_resume_signal
 invariant queued!=executed
 invariant provider_result!=truth_without_evidence
+invariant local_execution_truth_requires_local_receipt

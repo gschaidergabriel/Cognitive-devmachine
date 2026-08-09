@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260809T1919p0700-chatgpt-secondary-readout-quality",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": "r2:04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "scientific_promotion": "NONE",
+  "feedback": {
+    "frank": {
+      "effect": "REVISE_CANDIDATE",
+      "delta": "Keep the V2 gwt_loop_controller proposal-only boundary, but make residual estimator identity/version, uncertainty and freshness explicit inputs. Uncertain or stale loop-state readouts must route/escalate rather than mint HALT_CANDIDATE_CONVERGED."
+    },
+    "gwt": {
+      "effect": "REVISE_MEASUREMENT_CONTRACT",
+      "delta": "Recurrence-control readouts require estimator identity/version, uncertainty and observation age at the decision point. A recurrence policy is only as trustworthy as the readout it consumes."
+    },
+    "harness": {
+      "effect": "NEW_EXECUTABLE_COMPONENT_CANDIDATE",
+      "delta": "Added loop_dynamics_quality_gate.py plus unit/property validation. 9/9 unit tests and 100000 randomized invariant checks passed in local container proxy; no H1 release credit is awarded."
+    },
+    "claycode": {
+      "effect": "FEEDBACK_ONLY_NO_LANGUAGE_CHANGE",
+      "delta": "If H1 Golden Traces validate the quality-gated loop contract, ClayCode must represent estimator/version/uncertainty/freshness and proposal-only recurrence receipts. Do not redesign semantics before H1 evidence requires it."
+    },
+    "unifieddb": {
+      "effect": "FEEDBACK_ONLY",
+      "delta": "Replayable loop decisions should bind readout epoch plus estimator/version/uncertainty/freshness metadata. This does not justify a new physical store."
+    },
+    "claygraph": {
+      "effect": "NO_CHANGE",
+      "delta": "Readout quality metadata is observation provenance/validity, not graph activation, relevance or truth promotion."
+    },
+    "hyperposition": {
+      "effect": "REFINE",
+      "delta": "When recurrence readout quality is insufficient, preserve/reopen alternative routes instead of collapsing the trajectory into a convergence claim."
+    },
+    "emergenz": {
+      "effect": "REFINE_CONTROL_VALIDITY",
+      "delta": "Noisy/stale measurement can create false controller conclusions and is therefore a confound/intervention candidate in recurrence and emergence-control studies; matched observation-quality controls belong in causal experiments."
+    },
+    "clayresearch": {
+      "effect": "CROSS_DOMAIN_PATTERN",
+      "delta": "The visual-learning law confidence/familiarity != evidence transfers structurally to recurrence: residual score != validated convergence evidence. Both require calibration/version/freshness/provenance before consequential routing."
+    }
+  },
+  "source_refs": [
+    "research_entity/trigger_runs/frank/frank-20260809T1916p0700-chatgpt-secondary-refreeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE_V2_CANDIDATE.json",
+    "research_entity/trigger_runs/frank/frank-20260809T1916p0700-chatgpt-secondary-refreeze/EXPERIMENT_LOOP_HALT_CONTRACT_SANITY_RESULTS.json",
+    "research_entity/trigger_runs/frank/frank-20260809T1921p0700-chatgpt-secondary-active-assembly-cascade/EXECUTION_RECEIPT.json",
+    "research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md",
+    "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+    "research_entity/trigger_runs/frank/frank-20260809T1919p0700-chatgpt-secondary-readout-quality/EXECUTION_RECEIPT.json",
+    "research_entity/trigger_runs/frank/frank-20260809T1919p0700-chatgpt-secondary-readout-quality/HARNESS_DELTA_VALIDATION.json"
+  ],
+  "promotion_allowed": false
+}

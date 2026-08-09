@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "harness-wp02-20260809-crash-recovery-v01",
+  "work_package": "H-WP-02-STATE-LEDGER",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "target": "H1 Reference Harness state/event ledger",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "evidence_class": "LOCAL_UBUNTU_STYLE_PROCESS_CRASH_SIMULATION",
+  "artifacts": {
+    "ledger": "research_entity/harness/reference_state_ledger.py",
+    "crash_probe": "research_entity/harness/reference_state_ledger_crash_probe.py",
+    "crash_probe_sha256": "84747bf96978f90f519a964140f604d5a91698348a3f8f791ccd71713384027e",
+    "crash_tests": "tests/test_reference_state_ledger_crash_recovery.py",
+    "crash_tests_sha256": "70b20b78ac7ea9cf78f0304335fe0ab2a0c6aadf5779359706be8b91eb79f17c"
+  },
+  "execution": {
+    "command": "PYTHONPATH=. pytest -q tests/test_reference_state_ledger.py tests/test_reference_state_ledger_crash_recovery.py",
+    "result": "11 passed in 5.27s",
+    "environment_class": "ChatGPT local Linux sandbox; Ubuntu-target semantics emulated with SQLite WAL+synchronous FULL; not Andreas project-host evidence",
+    "crash_points": [
+      "AFTER_STATE",
+      "AFTER_EVENT",
+      "AFTER_EPOCH"
+    ],
+    "crash_mechanism": "separate process terminates via os._exit(137) without COMMIT or Python cleanup"
+  },
+  "observed_results": {
+    "partial_state_after_restart": false,
+    "partial_event_after_restart": false,
+    "partial_epoch_after_restart": false,
+    "seed_epoch_preserved": true,
+    "seed_root_hash_preserved": true,
+    "post_restart_verify": "PASS",
+    "retry_after_crash": "COMMITTED_ONCE",
+    "duplicate_retry": "IDEMPOTENT_REPLAY"
+  },
+  "interpretation": "Within this SQLite WAL reference-ledger implementation and tested process-death boundaries, the uncommitted state/event/epoch transaction rolls back atomically and a later retry can commit exactly once. This supports the H1 ledger recovery hypothesis but does not prove power-loss durability, filesystem durability, live frankv0.1 compatibility, or project-host behavior.",
+  "scientific_boundary": {
+    "live_frank_evidence": false,
+    "project_host_evidence": false,
+    "power_loss_evidence": false,
+    "synthetic_harness_evidence": true,
+    "h1_release_pass": false
+  },
+  "remaining_wp02": [
+    "Map/differential-test current frankv0.1 state_epochs/semantic_transactions/snapshots against this reference ledger.",
+    "Run the same crash/restart suite on the Ubuntu developer host and add true process-kill/power-failure-adjacent cases where feasible.",
+    "Connect ledger pre/post semantic hashes to dynamic Run ClayGraph/replay receipts without conflating semantic identity with provenance-chain identity."
+  ]
+}

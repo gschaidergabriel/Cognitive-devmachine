@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+"""Zero-cost provider discovery and policy for Clay/FRANK.
+
+This module never prints secrets and never performs paid calls. Together is a
+hard-denied provider and is intentionally absent from discovery and routing.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import time
+from dataclasses import asdict, dataclass
+from pathlib import Path
+
+
+DENIED_PROVIDERS = frozenset({"together"})
+ZERO_COST_ONLY = True
+
+
+@dataclass(frozen=True)
+class ProviderSpec:
+    provider_id: str
+    key_names: tuple[str, ...]
+    priority: int
+    openai_compatible_base_url: str
+    free_or_prepaid_only: bool = True
+
+
+PROVIDERS = (
+    ProviderSpec("nvidia", ("NVIDIA_API_KEY", "NVCF_API_KEY"), 100,
+                 "https://integrate.api.nvidia.com/v1"),
+    ProviderSpec("groq", ("GROQ_API_KEY",), 80, "https://api.groq.com/openai/v1"),
+    ProviderSpec("cerebras", ("CEREBRAS_API_KEY",), 75,
+                 "https://api.cerebras.ai/v1"),
+    ProviderSpec("gemini", ("GEMINI_API_KEY", "GOOGLE_API_KEY"), 70,
+                 "https://generativelanguage.googleapis.com/v1beta/openai"),
+    ProviderSpec("openrouter", ("OPENROUTER_API_KEY",), 50,
+                 "https://openrouter.ai/api/v1"),
+)
+
+
+def _configured_key_name(spec: ProviderSpec, environ: dict[str, str]) -> str | None:
+    return next((name for name in spec.key_names if environ.get(name, "").strip()), None)
+
+
+def inventory(environ: dict[str, str] | None = None) -> list[dict]:
+    env = os.environ if environ is None else environ
+    rows = []
+    for spec in PROVIDERS:
+        if spec.provider_id in DENIED_PROVIDERS:
+            continue
+        key_name = _configured_key_name(spec, env)
+        row = asdict(spec)
+        row["key_names"] = list(spec.key_names)
+        row.update({
+            "configured": key_name is not None,
+            "configured_via": key_name,
+            "secret_exposed": False,
+            "eligible": bool(key_name and spec.free_or_prepaid_only and ZERO_COST_ONLY),
+        })
+        rows.append(row)
+    return sorted(rows, key=lambda x: (-x["priority"], x["provider_id"]))
+
+
+def route(environ: dict[str, str] | None = None) -> dict:
+    eligible = [row for row in inventory(environ) if row["eligible"]]
+    return {
+        "selected": eligible[0]["provider_id"] if eligible else None,
+        "candidates": [row["provider_id"] for row in eligible],
+        "zero_cost_only": ZERO_COST_ONLY,
+        "denied_providers": sorted(DENIED_PROVIDERS),
+        "reason": "highest_priority_configured_zero_cost_provider" if eligible
+                  else "no_configured_zero_cost_provider",
+    }
+
+
+def receipt() -> dict:
+    return {
+        "schema_version": "1.0",
+        "kind": "FREE_API_CAPABILITY_RECEIPT",
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "inventory": inventory(),
+        "route": route(),
+        "invariants": {
+            "secrets_never_serialized": True,
+            "paid_calls_forbidden": True,
+            "together_access_forbidden": True,
+            "network_probe_performed": False,
+        },
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command", choices=("inventory", "route", "receipt"))
+    parser.add_argument("--write", type=Path)
+    args = parser.parse_args()
+    payload = inventory() if args.command == "inventory" else route() if args.command == "route" else receipt()
+    encoded = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    if args.write:
+        args.write.parent.mkdir(parents=True, exist_ok=True)
+        args.write.write_text(encoded, encoding="utf-8")
+    print(encoded, end="")
+
+
+if __name__ == "__main__":
+    main()

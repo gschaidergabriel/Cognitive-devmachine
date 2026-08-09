@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "event_id": "center-frank-v01-goal-contract-closure-20260809T2238p0700",
+  "event_type": "CROSS_ROOM_DELTA",
+  "created_at": "2026-08-09T22:38:00+07:00",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "origin": {
+    "actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "research/frank-v01-sandbox-integrated-monolith-20260809",
+    "pull_request": 14
+  },
+  "evidence_scope": "SANDBOX_ONLY",
+  "goal_authority": {
+    "receipt": "research/sandbox/FRANK_V01_GOAL_AUTHORITY_RECEIPT_2026-08-09.json",
+    "status": "PASS",
+    "current_user_intent_selected": "fresh-user",
+    "user_priority_lesion_selected": "stale-self",
+    "rescue_selected": "fresh-user",
+    "durable_goal_registry": false,
+    "goal_role_transient": true,
+    "goal_effect_authority": false,
+    "interpretation": "Current explicit user intent causally outranks a deliberately higher-raw-salience stale inferred self-goal; lesion flips the decision and rescue restores it."
+  },
+  "technical_legacy_causal_conservation": {
+    "main_commit": "733175286a967173d90cb27c1f8be188158768cc",
+    "source_resolved_technical_identities": 40,
+    "successor_component_rows": 6,
+    "all_40_covered_by_lesion_rescue": true,
+    "rescue_status": "PASS"
+  },
+  "final_binary_contract_conformance": {
+    "artifact": "research/sandbox/FRANK_V01_FINAL_BINARY_CONTRACT_CONFORMANCE_2026-08-09.json",
+    "target": "claycode/FRANK_BINARY_TARGET.clay",
+    "target_sha": "8ec536c37d97fad2f425514f48aef58f2036ccde",
+    "overall_gate": "HOLD_BLOCKED_INVARIANTS",
+    "status_counts": {
+      "PROVEN_SANDBOX": 8,
+      "PROVEN_SANDBOX_REFERENCE": 1,
+      "PROVEN_SANDBOX_FIXTURE": 1,
+      "PARTIAL": 2,
+      "BLOCKED": 2
+    },
+    "blocked": [
+      "target_module_compiles_to_one_binary: no executable Clay compiler/build receipt exists in the current repo/sandbox; the target source itself says it is an architectural contract",
+      "final_cognitive_components_equal_binary_plus_unifieddb_plus_4b: no compiled Clay final binary and no real local Qwen-class 4B inference receipt"
+    ],
+    "partial": [
+      "claygraph_shaped_export_is_diagnostic_only: absence of runtime ClayGraph DB is proven, diagnostic export itself is not V2-exercised",
+      "historical_organ_function_may_fuse_but_not_silently_disappear: 31 cognitive lineages plus 40 source-resolved technical identities/40 lesion-rescue are conserved, but measured aggregate 74 lacks a primary identity mapping"
+    ]
+  },
+  "real_qwen4b": {
+    "artifact": "research/sandbox/FRANK_V01_REAL_QWEN4B_ENVIRONMENT_PROBE_2026-08-09.json",
+    "status": "BLOCKED_NOT_EXECUTED",
+    "rule": "Do not report a real Qwen4B PASS without provisioning a verified local runner/model artifact and executing inference."
+  },
+  "feedback": {
+    "frank": "Use the final-contract matrix as the current implementation truth surface: sandbox mechanisms are largely proven, while compiler+real4B remain hard blockers and 74-primary mapping remains partial.",
+    "gwt": "Goal competition is now tied to current-user priority with lesion/rescue; retain receiver-use/outcome/re-entry provenance as separate closure evidence.",
+    "emergenz": "Transient goal-role selection and topology effects are causally testable without a durable goal registry; keep effect authority separate from emergent pressure.",
+    "claycode": "Next build gate is not more architecture prose: supply an executable Clay compile/build path and run the V2 contracts against the produced single binary.",
+    "harness": "Adopt goal-authority lesion/rescue and the final-contract conformance matrix; keep BLOCKED distinct from FAIL/PASS.",
+    "model-runtime": "Provision a verified Qwen-class 4B runner/artifact in a sandbox where the model can actually be downloaded/loaded; then rerun hidden-reasoning, re-entry, effect and restart contracts.",
+    "security": "Current user intent may influence transient goal competition but never grants or escalates effect authority; retain fail-closed effect boundary."
+  },
+  "affected_rooms": ["frank", "gwt", "emergenz", "claycode", "harness", "model-runtime", "security"],
+  "open": [
+    "source-backed primary mapping of measured aggregate 74",
+    "real local Qwen-class 4B sandbox inference",
+    "actual Clay compiler/build path and one-binary execution",
+    "remaining cognitive-organ matched lesion/rescue coverage",
+    "measured Digital Retina camera/CV evidence when release-relevant"
+  ],
+  "research_state_change": "SANDBOX_GOAL_AUTHORITY_AND_CONFORMANCE_DELTA_NO_RELEASE_PROMOTION"
+}

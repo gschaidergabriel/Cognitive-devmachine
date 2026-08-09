@@ -1,0 +1,51 @@
+{
+  "schema_version":"1.0",
+  "contract_id":"harness-oracle-composition-v1",
+  "run_id":"harness-20260809T1656p0700-trace-replay-v1",
+  "status":"OPEN_COMPOSITION_CONTRACT_NOT_H1_H2_PASS",
+  "components":[
+    {
+      "oracle":"TurnTraceEnvelopeV1",
+      "artifact":"research_entity/harness/trace_replay_v1.py",
+      "commit":"7177a1ef1dd9bed449e0c9b64ae2a5553bbcfd11",
+      "responsibility":"runtime causal/loop/epoch/GWT/memory/topology/effect/status/replay semantic differential"
+    },
+    {
+      "oracle":"SourceChainEvidenceV1",
+      "artifact":"research_entity/harness/source_chain_oracle_v1.py",
+      "commit":"481770487e15614c5b5e50ea79f417f0e6bc22ea",
+      "responsibility":"source/grammar/parse/typed-IR/type-effect/lowering/execution/replay evidence-chain differential"
+    }
+  ],
+  "identity_stack_required_for_h1_h2_differential":[
+    "baseline_transaction_root_hash",
+    "semantic_content_hash",
+    "state_version_hash",
+    "trace_root_hash",
+    "source_chain_evidence_hash"
+  ],
+  "pass_rule":{
+    "reference_trace_valid":true,
+    "candidate_trace_valid":true,
+    "trace_semantic_projection_equivalent":true,
+    "reference_source_chain_valid":true,
+    "candidate_source_chain_valid":true,
+    "source_chain_differential_equivalent":true,
+    "baseline_transaction_compatibility_accounted":true,
+    "no_unexplained_identity_binding_gap":true
+  },
+  "hard_failure_examples":[
+    "same final state but different lowering_contract_hash",
+    "same current semantic content but version/history identity silently conflated",
+    "source chain parent artifact discontinuity",
+    "parse or typed-IR semantic drift",
+    "undeclared lowering semantic delta",
+    "replay state divergence",
+    "runtime trace stage semantic divergence",
+    "capability expansion without external authorization",
+    "status snapshot bound to a different final basis"
+  ],
+  "normalization_rule":"Implementation-only ids may normalize away only when both runtime-semantic and source-chain contracts remain equivalent under an explicit mapping. Compiler-chain contract hashes are not implementation noise.",
+  "authority_rule":"Neither oracle grants execution authority; validation evidence remains observability/release evidence only.",
+  "stage_rule":"During BASE this is a representability/test foundation. H1/H2 PASS remains blocked by program gates and target execution."
+}

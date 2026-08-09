@@ -3,7 +3,7 @@ module clay.stack.latest
 epoch 15
 entity frank-project-global-research-entity
 display_name Clay
-mission_goal "Frank v0.1 voll lauffähig auf Andreas PC"
+mission_goal "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system"
 
 stack CURRENT {
   identity=@research_entity/global/CLAY_ENTITY_NAMING_CONTRACT.clay
@@ -22,6 +22,7 @@ stack CURRENT {
   research_center_shared_mission=@research_entity/global/RESEARCH_CENTER_SHARED_SEMANTIC_FABRIC_MISSION.md
   frank_self_observation_boundary=@research_entity/global/FRANK_SELF_OBSERVATION_PROPOSAL_BOUNDARY.md
   frank_identity_boundary=@research_entity/global/FRANK_IDENTITY_BOUNDARY_AND_CONTAMINATION_REPAIR.md
+  frank_v0_1_target_host=@research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md
 
   claygraph_base=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
   claygraph_migrations=[@research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql]
@@ -73,7 +74,7 @@ rule system_capability_observation uses CURRENT.capability_events
 rule dynamic_work_transport uses CURRENT.work_events
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
-rule every_research_worker uses CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary
+rule every_research_worker uses CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host
 rule every_substantive_room_run contributes branch_local_shared_mission_delta_or_evidence_backed_NO_CHANGE
 rule ClayCode makes semantic_dependencies_machine_extractable
 rule UnifiedDB maintains canonical_semantic_dependency_fabric incrementally
@@ -91,6 +92,8 @@ rule ambiguous_FRANK_runtime_adaptation_vs_harness_change -> PROPOSAL_ONLY
 rule ResearchEntity independently_reviews_rejects_refines_tests_and_authorizes_FRANK_originated_proposals
 rule FRANK.personal_entity_id = "dr-unterweger-frank-personal-entity"
 rule FRANK.human = "Dr. Andreas Unterweger"
+rule FRANK.v0_1.target_host = UBUNTU_LINUX_DEVELOPER_SYSTEM
+rule FRANK.v0_1.android_mobile_edge = OUT_OF_SCOPE_UNTIL_OWNER_REOPENS
 rule Clay.project_owner.Gabriel != FRANK.human
 rule provider_or_repository_identity cannot_coerce FRANK.human
 rule identity_contamination -> quarantine + dependency_invalidation + projection_rebuild
@@ -100,7 +103,7 @@ rule Claude_opinion != truth
 rule ChatGPT_may_create_revise_cancel_Claude_work_before_execution
 rule work_revision_must_be_revalidated_before_effect
 rule material_discussion -> implementation_translation_from_current_possibility_space
-rule every_material_outcome -> reenter("Frank v0.1 voll lauffähig auf Andreas PC")
+rule every_material_outcome -> reenter("Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system")
 
 observe CHATGPT_EXPLICIT=[plan,state_delta,hypothesis,decision,tool_coord,handoff,experiment,repair,outcome]
 derive CHATGPT_EXPLICIT via CURRENT.chatgpt_endturn -> claycode_meta_candidate
@@ -127,6 +130,8 @@ invariant FRANK_self_observation_and_proposal_generation_is_allowed
 invariant FRANK_direct_or_indirect_self_harness_modification_is_forbidden
 invariant FRANK_self_proposal_authority_never_exceeds_PROPOSAL_ONLY
 invariant FRANK_human_is_Dr_Andreas_Unterweger
+invariant FRANK_v0_1_release_target_is_Ubuntu_Linux_developer_system_only
+invariant Android_mobile_edge_portability_is_not_a_FRANK_v0_1_gate
 invariant Gabriel_and_Andreas_are_distinct_person_entities
 invariant Clay_project_owner_identity_never_overrides_FRANK_personal_human_identity
 invariant graph_association_or_semantic_coupling_never_merges_person_identity

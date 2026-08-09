@@ -211,6 +211,21 @@ def validate(frontend: Frontend, sources: Sequence[tuple[str, str]]) -> dict[str
     return {
         "schema_version": "1.0",
         "ast_schema": SCHEMA,
+        "canonicalization": {
+            "format": "UTF-8 JSON",
+            "object_keys": "lexicographic",
+            "separators": [",", ":"],
+            "source_locations": "excluded",
+            "ignored_layout_terminals": sorted(IGNORABLE_LAYOUT_TERMINALS),
+            "note": "Deterministic ClayCode AST subset; no claim of general RFC 8785 compliance.",
+        },
+        "hash_algorithm": "SHA-256",
+        "parser_contract": {
+            "engine": "lark-lalr-contextual",
+            "strict": True,
+            "keep_all_tokens": True,
+            "maybe_placeholders": False,
+        },
         "sources": source_results,
         "semantic_discrimination": discrimination,
         "semantic_equivalence": equivalence,

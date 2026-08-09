@@ -1,19 +1,45 @@
 from __future__ import annotations
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from typing import Any, Mapping, Iterable
-import hashlib, json, re
+import hashlib, json, math, re
 
 AUTHORITY_NONE = "NONE"
-SCHEMA_VERSION = "h1-needle-runtime-contract-0.2"
+SCHEMA_VERSION = "h1-needle-runtime-contract-0.3"
 
 class NeedleAdapterError(ValueError):
     pass
 
 def canonical_json(v: Any) -> str:
-    return json.dumps(v, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return json.dumps(v, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
 
 def sha256_json(v: Any) -> str:
     return hashlib.sha256(canonical_json(v).encode("utf-8")).hexdigest()
+
+def _reject_duplicate_pairs(pairs):
+    out = {}
+    for key, value in pairs:
+        if key in out:
+            raise NeedleAdapterError(f"duplicate JSON key: {key}")
+        out[key] = value
+    return out
+
+def _reject_nonfinite_constant(value: str):
+    raise NeedleAdapterError(f"non-finite JSON constant: {value}")
+
+def _all_finite(value: Any) -> bool:
+    if isinstance(value, float):
+        return math.isfinite(value)
+    if isinstance(value, dict):
+        return all(_all_finite(k) and _all_finite(v) for k, v in value.items())
+    if isinstance(value, (list, tuple)):
+        return all(_all_finite(x) for x in value)
+    return True
+
+def strict_json_loads(text: str) -> Any:
+    value = json.loads(text, object_pairs_hook=_reject_duplicate_pairs, parse_constant=_reject_nonfinite_constant)
+    if not _all_finite(value):
+        raise NeedleAdapterError("non-finite JSON number")
+    return value
 
 def to_snake_case(name: str) -> str:
     s = re.sub(r"[^a-zA-Z0-9_]+", "_", name)
@@ -88,6 +114,9 @@ def _openai_properties(parameters: Any) -> tuple[dict[str, Any], set[str]]:
             required = []
         if not isinstance(required, list) or not all(isinstance(x, str) for x in required):
             raise NeedleAdapterError("parameters.required must be a string list")
+        unknown_required = set(required) - set(props)
+        if unknown_required:
+            raise NeedleAdapterError(f"required parameters absent from properties: {sorted(unknown_required)}")
         return dict(props), set(required)
     props = {}
     required = set()
@@ -100,7 +129,9 @@ def _openai_properties(parameters: Any) -> tuple[dict[str, Any], set[str]]:
     return props, required
 
 def canonicalize_tools(tools: list[dict[str, Any]], aliases: AliasProfile = DEFAULT_ALIASES) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
-    """Canonicalize schemas to the flat parameter map expected by Needle constrained.py."""
+    """Canonicalize schemas to the flat parameter map expected by current Needle constrained.py."""
+    if not isinstance(tools, list):
+        raise NeedleAdapterError("tools must be a list")
     names = [t.get("name") for t in tools if isinstance(t, dict) and isinstance(t.get("name"), str)]
     aliases.validate(names)
     out = []
@@ -139,6 +170,8 @@ def canonicalize_tools(tools: list[dict[str, Any]], aliases: AliasProfile = DEFA
 
 def assert_complete_encoder_budget(query_token_count: int, tools_token_count: int, max_enc_len: int = 1024, min_headroom: int = 0) -> int:
     total = int(query_token_count) + 1 + int(tools_token_count)
+    if min(query_token_count, tools_token_count, max_enc_len, min_headroom) < 0:
+        raise NeedleAdapterError("token counts and budgets must be non-negative")
     if total + int(min_headroom) > int(max_enc_len):
         raise NeedleAdapterError(f"encoder budget exceeded: total={total}, headroom_required={min_headroom}, max={max_enc_len}")
     return total
@@ -146,17 +179,17 @@ def assert_complete_encoder_budget(query_token_count: int, tools_token_count: in
 def _type_ok(value: Any, spec: Mapping[str, Any]) -> bool:
     t = spec.get("type")
     if t is None:
-        return True
+        return _all_finite(value)
     if isinstance(t, list):
         return any(_type_ok(value, {"type": one}) for one in t)
     if t == "string": return isinstance(value, str)
     if t == "integer": return isinstance(value, int) and not isinstance(value, bool)
-    if t == "number": return isinstance(value, (int, float)) and not isinstance(value, bool)
+    if t == "number": return isinstance(value, (int, float)) and not isinstance(value, bool) and _all_finite(value)
     if t == "boolean": return isinstance(value, bool)
-    if t == "object": return isinstance(value, dict)
-    if t == "array": return isinstance(value, list)
+    if t == "object": return isinstance(value, dict) and _all_finite(value)
+    if t == "array": return isinstance(value, list) and _all_finite(value)
     if t == "null": return value is None
-    return True
+    return False
 
 @dataclass(frozen=True)
 class NeedleDecisionReceipt:
@@ -181,7 +214,7 @@ def validate_output(raw_output: str, needle_tools: list[dict[str, Any]], contrac
     toolset_hash = sha256_json(needle_tools)
     raw_hash = hashlib.sha256(raw_output.encode("utf-8")).hexdigest()
     try:
-        decoded = json.loads(raw_output)
+        decoded = strict_json_loads(raw_output)
     except Exception as e:
         decoded = None
         reasons.append(f"JSON_PARSE:{type(e).__name__}")
@@ -203,9 +236,13 @@ def validate_output(raw_output: str, needle_tools: list[dict[str, Any]], contrac
             unknown, missing = set(args) - set(specs), required - set(args)
             if unknown: reasons.append(f"CALL_{i}_UNKNOWN_ARGS:{','.join(sorted(unknown))}")
             if missing: reasons.append(f"CALL_{i}_MISSING_REQUIRED:{','.join(sorted(missing))}")
+            type_failed = False
             for key, value in args.items():
-                if key in specs and not _type_ok(value, specs[key]): reasons.append(f"CALL_{i}_TYPE:{key}")
-            if unknown or missing or any(r.startswith(f"CALL_{i}_TYPE:") for r in reasons): continue
+                if key in specs and not _type_ok(value, specs[key]):
+                    reasons.append(f"CALL_{i}_TYPE:{key}")
+                    type_failed = True
+            if unknown or missing or type_failed:
+                continue
             frank_name = tc["frank_name"]
             frank_args = {}
             for nk, v in args.items():

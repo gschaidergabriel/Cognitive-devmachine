@@ -1,0 +1,116 @@
+// Candidate ClayCode package/lock/provenance contract.
+// Status: WORKING_CONTRACT — not promoted language semantics.
+// Evidence: external official ecosystem triangulation + hosted synthetic discriminator.
+// Core rule: package identity != trust verdict != build provenance != authority.
+
+record PackageCoordinate {
+  ecosystem: Text
+  namespace: Text
+  name: Text
+}
+
+record PackageRequest {
+  coordinate: PackageCoordinate
+  constraint: Text
+  requested_features: Set<Text>
+  source_policy: Text?
+}
+identity PackageRequestId = semantic_hash(canonical(PackageRequest))
+
+record ResolvedPackageNode {
+  coordinate: PackageCoordinate
+  exact_version_or_revision: Text
+  content_digest: Digest
+  semantic_metadata_digest: Digest?
+}
+
+record ResolvedPackageEdge {
+  parent: PackageCoordinate
+  child: PackageCoordinate
+  relation: Text
+}
+
+record ResolvedPackageGraph {
+  nodes: Set<ResolvedPackageNode>
+  edges: Set<ResolvedPackageEdge>
+}
+identity ResolvedGraphId = semantic_hash(canonical(ResolvedPackageGraph))
+
+record ResolutionReceipt {
+  request_id: PackageRequestId
+  resolver_policy_id: Text
+  resolver_version: Text
+  registry_input_digests: Set<Digest>
+  negative_lookup_receipts: Set<Digest>
+  resolved_graph_id: ResolvedGraphId
+}
+
+rule same_graph_different_resolver_allowed:
+  if A.resolved_graph_id == B.resolved_graph_id
+  then semantic_dependency_identity(A) == semantic_dependency_identity(B)
+  // Resolution provenance may still differ.
+
+record BuildProjection {
+  resolved_graph_id: ResolvedGraphId
+  target_triple: Text
+  enabled_features: Set<Text>
+  active_markers: Set<Text>
+  semantic_build_flags: Set<Text>
+}
+identity BuildProjectionId = semantic_hash(canonical(BuildProjection))
+
+record FetchReceipt {
+  coordinate: PackageCoordinate
+  fetch_locator: Text
+  observed_digest: Digest
+  mirror_identity: Text?
+}
+
+rule mirror_is_transport_not_semantics:
+  verified_same_coordinate_and_content(A, B)
+  && A.fetch_locator != B.fetch_locator
+  -> resolved_semantic_identity_unchanged
+
+record SupplyChainTrustReceipt {
+  resolved_graph_id: ResolvedGraphId
+  trust_policy_id: Text
+  trust_root_id: Text
+  repository_snapshot_id: Text?
+  freshness_epoch: Text?
+  attestations: Set<Digest>
+  yanked_or_revoked: Set<Text>
+  verdict: ACCEPT | WARN | REJECT
+}
+
+rule trust_is_admissibility:
+  trust_change may_change install_or_build_admissibility
+  trust_change != rewrite(ResolvedGraphId)
+
+record BuildProvenanceReceipt {
+  build_projection_id: BuildProjectionId
+  compiler_runtime_id: Text
+  backend_id: Text
+  builder_id: Text
+  resolved_dependency_digests: Set<Digest>
+  invocation_id: Text
+  output_artifact_digest: Digest
+}
+
+rule dependency_never_mints_authority:
+  package_declared_effects != CapabilityAuthority
+  package_present != CapabilityAuthority
+  execution_effect requires external_explicit_capability_grant
+
+rule cache_candidate:
+  semantic_cache_key = semantic_hash(
+    BuildProjectionId,
+    compiler_runtime_semantic_id,
+    backend_semantic_id
+  )
+  // Trust policy gates whether cached artifact may be used;
+  // mutable trust state does not silently rewrite semantic cache identity.
+
+rule language_change_gate:
+  this contract belongs first in module/package/toolchain/receipt layers.
+  no ClayCode core syntax or primitive change is justified
+  unless an executable production ClayCode counterexample proves required.

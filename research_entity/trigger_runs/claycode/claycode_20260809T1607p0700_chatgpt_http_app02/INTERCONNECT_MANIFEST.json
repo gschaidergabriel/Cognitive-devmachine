@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode_20260809T1607p0700_chatgpt_http_app02",
+  "trigger": "claycode",
+  "registry_scientific_branches": [
+    "clayresearch",
+    "gwt",
+    "frank",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness"
+  ],
+  "branch_priority": [
+    "frank",
+    "clayresearch",
+    "harness",
+    "claygraph",
+    "unifieddb",
+    "gwt",
+    "hyperposition",
+    "emergenz",
+    "claycode"
+  ],
+  "preflight": {
+    "official_tool": "tools/research_interconnect_preflight.py",
+    "status": "FAIL_CLOSED_GOVERNANCE_DRIFT",
+    "registry_integrated_branch": "clayresearch",
+    "stale_tool_branch": "clay",
+    "strong_promotion_allowed": false
+  },
+  "special_rules": {
+    "claycode_requires_latest_frank_research_as_primary_feedback": true,
+    "claycode_requires_deep_claygraph_input": true,
+    "claycode_requires_deep_unifieddb_input": true,
+    "claycode_requires_goodman_anti_echo_review": true,
+    "claycode_latest_frank_architecture_artifact": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json"
+  },
+  "branches": [
+    {
+      "branch": "frank",
+      "latest_run": "fusion-20260809T1538p0700-frank-architecture-lineage",
+      "material": [
+        "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FUSED_FRANK_TARGET_ARCHITECTURE.json",
+        "research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md"
+      ],
+      "impact": "Host-minted effect authority, no ambient OS authority, and semantic/runtime distinction constrain HTTP lowering."
+    },
+    {
+      "branch": "clayresearch",
+      "latest_run": "current-stack-epoch-15",
+      "material": ["research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay"],
+      "impact": "Clay/ClayCode remains semantic source; backend encodings must remain derived and auditable."
+    },
+    {
+      "branch": "harness",
+      "latest_run": "current-harness-workspace",
+      "material": ["research_entity/harness/HARNESS_WORKSPACE.json"],
+      "impact": "Effect authority and executable differential evidence remain release constraints; Clay Harness is blocked on ClayCode BASE."
+    },
+    {
+      "branch": "claygraph",
+      "latest_run": "current-runtime-schema-v2",
+      "material": [
+        "research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql",
+        "research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql"
+      ],
+      "impact": "Activation/relevance never authorizes network effects; role/order identities must survive lowering."
+    },
+    {
+      "branch": "unifieddb",
+      "latest_run": "current-runtime-schema",
+      "material": ["research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql"],
+      "impact": "Ordered transaction semantics, idempotency and state/replay identities constrain service-state receipts."
+    },
+    {
+      "branch": "gwt",
+      "latest_run": "current-emergence-readout-contract",
+      "material": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md"],
+      "impact": "HTTP/effect outcomes must remain separable from selection/broadcast/readout evidence."
+    },
+    {
+      "branch": "hyperposition",
+      "latest_run": "current-hyperposition-readout-contract",
+      "material": ["research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "impact": "Semantic, active and physical topology identities must not collapse during backend lowering."
+    },
+    {
+      "branch": "emergenz",
+      "latest_run": "current-emergence-protocol",
+      "material": ["research_entity/triggers/EMERGENCE_RESEARCH_PROTOCOL.md"],
+      "impact": "Service concurrency or complexity is not emergence evidence; intervention semantics remain distinct."
+    },
+    {
+      "branch": "claycode",
+      "latest_run": "concurrent-20260809-base-workers",
+      "material": [
+        "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+        "research_entity/claycode/g9/grammar.ebnf",
+        "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+      ],
+      "impact": "Current stage requires executable application proofs and deterministic compiler/runtime receipts; language changes require concrete counterexamples."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "CC-PREFLIGHT-RENAME-DRIFT-20260809",
+      "status": "OPEN_BLOCKER",
+      "statement": "Registry uses clayresearch while interconnect preflight governance tables still use clay; fail-closed preflight cannot currently complete literally."
+    }
+  ]
+}

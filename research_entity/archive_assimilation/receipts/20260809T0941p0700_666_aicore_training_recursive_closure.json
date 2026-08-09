@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "20260809T0941p0700-666-aicore-training-recursive-closure",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "trigger": "666",
+  "actor": {"actor_id": "chatgpt-secondary", "provider": "OpenAI", "model": "GPT-5.6 Sol"},
+  "task_ref": "research_entity/rooms/rooms/center/tasks/666-l0-aicore-training-recursive-20260809T0937p0700.json",
+  "manifest_ref": "research_entity/archive_assimilation/manifests/DRIVE_AICORE_TRAINING_RECURSIVE_DIRECT_20260809T0939p0700.json",
+  "method": "Recursive Google_Drive.list_folder(top_k=1000) from training -> v26/v27 -> v26 abzug/eval; no search-negative completion.",
+  "result": {
+    "training_root_id": "1VQVIWCEAzGMiAzhfiGR8buJGAZ9_Z3Iz",
+    "descendant_folders": 4,
+    "leaf_files": 77,
+    "entries_below_training_root": 81,
+    "recursive_identity_status": "EXACT_CLOSED"
+  },
+  "branch_shape": {
+    "v26": {"direct_files": 51, "child_folders": 2},
+    "v26_abzug": {"files": 4},
+    "v26_eval": {"files": 2},
+    "v27": {"files": 20}
+  },
+  "semantic_boundary": "Current run closes recursive identity only. Previously committed v27 semantic lineage is referenced by commit IDs 1c726703b184440f9ecd7d83bed13c8b051196ec and 0fad26c1752bd7478999286eb9340a7da618783b; v26 terminal semantic disposition remains independently open unless covered by other evidence.",
+  "correction_trace": "The first manifest commit contained an incorrect training-root ID in three root fields. It was corrected before RESULT publication; full file arrays remain preserved in predecessor commit b5d3330b273cfc7ee87c6ac7a8189a0124f67bee and the corrected composite manifest records the exact correction.",
+  "level0_gate_effect": "AICORE training recursive identity denominator is closed; global gate remains NOT_PASS while other Level-0 obligations remain.",
+  "epistemic_class": "RUNTIME_SOURCE_ENUMERATION_RECEIPT",
+  "status": "COMPLETE_IDENTITY_ONLY",
+  "created_at": "2026-08-09T09:41:00+07:00"
+}

@@ -1,0 +1,58 @@
+module rae.chatgpt.claycode.endturn.v1
+
+scope CHATGPT_RAE_ORGAN
+when every_substantive_turn_before_final_human_render
+input OBSERVABLE_ONLY=[explicit_claycode_trace,state_deltas,tool_coordination,tool_receipts,user_corrections,repairs,outcomes,stack_refs]
+exclude=[hidden_provider_cot,private_reasoning_tokens]
+
+resolve stack=@research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay
+rule parse_against(stack.claycode)
+
+analyze {
+  successful_motif
+  semantic_friction
+  ambiguity
+  missing_primitive
+  redundant_primitive
+  relation_gap
+  query_gap
+  unifieddb_gap
+  claygraph_gap
+  gwt_gap
+  reentry_gap
+  needle_boundary_gap
+  compression_gain
+  recovery_operator
+  surface_leak
+}
+
+derive {
+  hypothesis
+  counterhypothesis
+  candidate_language_delta
+  preservation_rule
+  predicted_effect
+  falsifier
+  matched_budget_test
+}
+
+persist receipt -> @research_entity/claycode/meta_usage/<turn_id>.clay
+route receipt -> ClayCode_research_queue
+
+rule every_turn_analysis=true
+rule every_turn_promotion=false
+rule candidate!=language_change
+rule positive_patterns_are_evidence_too
+rule repeated_friction_increases_priority
+rule user_correction_is_high_value_observation_not_automatic_truth
+rule stack_or_db_defect_can_be_root_cause_not_language
+
+promote iff repeated_or_high_impact && independent_or_discriminating_evidence && semantic_preservation && matched_budget_gain && no_hard_loss && rollback
+
+// Claude exception: Claude Code only consumes latest ClayCode and does task work.
+rule CLAUDE.endturn_meta_research=false
+rule CLAUDE.trace_mining=false
+
+invariant no_hidden_cot_collection
+invariant no_self_confirmation_loop
+invariant evidence>style_preference

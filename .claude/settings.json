@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/rae_hook.py\"",
-            "timeout": 20
+            "timeout": 30
           }
         ]
       }
@@ -18,7 +18,18 @@
           {
             "type": "command",
             "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/rae_hook.py\"",
-            "timeout": 20
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/rae_hook.py\"",
+            "timeout": 30
           }
         ]
       }
@@ -35,6 +46,18 @@
         ]
       }
     ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/rae_hook.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
     "PreCompact": [
       {
         "hooks": [
@@ -46,13 +69,24 @@
         ]
       }
     ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/rae_hook.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
     "SessionEnd": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/rae_hook.py\"",
-            "timeout": 10
+            "timeout": 30
           }
         ]
       }

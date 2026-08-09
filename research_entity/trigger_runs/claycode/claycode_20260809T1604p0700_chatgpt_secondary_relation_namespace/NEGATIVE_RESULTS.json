@@ -1,0 +1,27 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode_20260809T1604p0700_chatgpt_secondary_relation_namespace",
+  "negative_results":[
+    {
+      "id":"NR-CC-G9-AT-RELATION-REF-COLLISION-20260809",
+      "status":"NEGATIVE_RESULT",
+      "claim":"The current @relation candidate creates a separate backend-neutral lexical relation namespace while retaining the existing @ref syntax unchanged.",
+      "result":"REFUTED_FOR_TESTED_COMBINED_GRAMMAR_PROXY",
+      "evidence_ref":"EXECUTABLE_RESEARCH_RECEIPT.json",
+      "observed":"LALR contextual accepted 5/7 combined cases and LALR basic 3/7; Earley dynamic accepted 7/7. Existing standalone @refs and ref operands caused LALR regressions. Non-colliding sigil control and quoted generic relation call were 7/7 across all three modes.",
+      "scope":"This does not refute sigils in general, a redesigned disjoint @ form, declared relation registries, or a generic canonical Relation node.",
+      "next_falsifier":"Real frozen BASE parser full-corpus cross-backend proof with stable roundtrip hashes and no diagnostics/cost regression."
+    },
+    {
+      "id":"NR-CC-G9-RELATION-ONLY-PROXY-SUFFICIENCY-20260809",
+      "status":"NEGATIVE_RESULT",
+      "claim":"A relation-only parser corpus is sufficient to establish compatibility of a new relation token class with the existing ClayCode language.",
+      "result":"REFUTED_BY_CROSS-NAMESPACE_ADVERSARIAL_CASES",
+      "evidence_ref":"EXECUTABLE_RESEARCH_RECEIPT.json",
+      "observed":"The prior @relation run was 8/8 on relation forms but omitted existing @ref coexistence. Adding refs exposed parser-mode-dependent failures.",
+      "scope":"General lesson for CC-WP-02: new token classes must be tested against all overlapping existing lexical classes and mixed-context roundtrips, not only positive feature examples.",
+      "next_falsifier":"A static lexer-overlap checker plus complete corpus mutation suite proves feature-local tests cover all overlapping token classes."
+    }
+  ],
+  "promotion":"NONE"
+}

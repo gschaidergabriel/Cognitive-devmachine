@@ -16,7 +16,7 @@ import random
 from pathlib import Path
 from typing import Any
 
-from claycode_base_compiler import CompileError, infer, parse_program, sha256
+from claycode_base_compiler import CompileError, _trunc_int_div, infer, parse_program, sha256
 
 VERSION = "claycode-base-effect-pipeline-0.1"
 ROOT = Path(__file__).resolve().parents[1]
@@ -154,7 +154,7 @@ def eval_expr(expr: dict, env: dict[str, Any], functions: dict[str, dict], gw: G
         if op == "+": return left + right
         if op == "-": return left - right
         if op == "*": return left * right
-        if op == "/": return int(left / right) if isinstance(left, int) and isinstance(right, int) else left / right
+        if op == "/": return _trunc_int_div(left, right) if isinstance(left, int) and isinstance(right, int) else left / right
         if op == ">": return left > right
         if op == "<": return left < right
         if op == ">=": return left >= right

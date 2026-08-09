@@ -1,0 +1,53 @@
+module rae.stack.latest
+
+epoch 1
+entity frank-project-global-research-entity
+
+// All compatible organs resolve this file at T0 every substantive round.
+// This file is the moving pointer; components may evolve independently.
+
+stack CURRENT {
+  claycode=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC.clay
+  claycode_skill=@research_entity/claycode/g9/CLAUDE_CODE_SKILL.md
+  claycode_grammar=@research_entity/claycode/g9/grammar.ebnf
+  claycode_migration=@research_entity/claycode/g9/XENO_G8_TO_CLAYCODE_G9_MIGRATION.clay
+
+  claygraph_exec=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
+  claygraph_frontier=resolve_latest_validated(branch=claygraph,prefer=CURRENT|PROMOTED_COMPATIBLE,preserve=NEGATIVE_RESULT|REFUTED|SUPERSEDED)
+
+  unifieddb_base=@research_entity/runtime/RAE_UNIFIEDDB_SCHEMA.sql
+  unifieddb_migrations=[
+    @research_entity/runtime/RAE_UNIFIEDDB_V4_HIVEMIND.sql,
+    @research_entity/runtime/RAE_UNIFIEDDB_V5_CLAYCODE_EXPERIENCE_RESEARCH.sql,
+    @research_entity/runtime/RAE_UNIFIEDDB_V6_CLAYCODE_META_COGNITION.sql
+  ]
+  unifieddb_frontier=resolve_latest_validated(branch=unifieddb,prefer=CURRENT|PROMOTED_COMPATIBLE,preserve=NEGATIVE_RESULT|REFUTED|SUPERSEDED)
+
+  gwt=@research_entity/global/RAE_GWT_MICROKERNEL.clay
+  turn=@research_entity/global/RAE_TURN_KERNEL.clay
+  hive=@research_entity/global/RAE_HIVE_ENTITY_CONTRACT.md
+}
+
+rule resolve(CURRENT) every substantive_turn
+rule explicit_cognition uses CURRENT.claycode
+rule state_query uses CURRENT.unifieddb_base + CURRENT.unifieddb_migrations + CURRENT.unifieddb_frontier
+rule associative_projection uses CURRENT.claygraph_exec + CURRENT.claygraph_frontier
+rule component_upgrade -> bump(epoch) + preserve(parent_ref) + emit(migration_ref) + replay_test
+rule stale_component_detected -> refresh_before_cognition
+rule missing_component -> state(DEGRADED_STALE_STACK) + no_false_latest_claim
+rule organ_private_version_pin = FORBIDDEN unless isolated_experiment
+rule provider_specific_projection may_differ
+rule canonical_semantics must_not_fork_by_provider
+
+// Every observable explicit cognition episode becomes ClayCode research evidence.
+observe EXPLICIT=[plan,state_delta,hypothesis,decision,tool_coord,handoff,experiment,repair,outcome]
+derive EXPLICIT -> claycode_meta_candidate
+rule derive_automatic=true
+rule candidate != promotion
+rule promote requires evidence+counterhypothesis+matched_budget_replay+semantic_preservation+rollback
+
+invariant all_organs_same_moving_stack
+invariant latest_means_validated_pointer_not_newest_timestamp
+invariant claygraph_activation!=truth
+invariant unifieddb_logical_unification!=physical_monolith_requirement
+invariant hidden_provider_cot_not_required_or_persisted

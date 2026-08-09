@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "spawn-20260809T1742p0700-claycode-loop-eval-lowering",
+  "evidence_classes": [
+    {"id": "EXP-SPAWN-CC-LOOP-EVAL-LOWER-20260809", "class": "LOCAL_ISOLATED_LINUX_EXECUTION_NOT_TARGET_UBUNTU_ACCEPTANCE", "result": "200000 randomized cases: reference vs IR evaluator 0 mismatches; reference vs generated Python lowering 0 mismatches; four semantic mutants all detected."},
+    {"id": "EXP-SPAWN-CC-LOOP-NATIVE-LOWER-20260809", "class": "LOCAL_ISOLATED_LINUX_NATIVE_GCC_NOT_TARGET_UBUNTU_ACCEPTANCE", "result": "100000 randomized cases: reference vs manually emitted native C/GCC shadow 0 mismatches."},
+    {"id": "INTERNAL-FRANK-LOOP-BRIDGE", "class": "SHARED_PROJECT_RESEARCH_EVIDENCE", "refs": ["commit:56920faa53f9231946e0b331431c2bae1b24c93b", "commit:77c2c0487e73370f34ce722c9298247fbc302e7b"]},
+    {"id": "INTERNAL-GWT-R8", "class": "SHARED_PROJECT_RESEARCH_EVIDENCE", "refs": ["commit:631c126f30331b8f9e682da8d778ebd0623c9d59"]},
+    {"id": "INTERNAL-HARNESS-HWP02", "class": "SHARED_PROJECT_EXECUTABLE_PROXY", "refs": ["commit:89dfb8bf08d9082cfa85bb5f48cf3fac0c3a02fa"]},
+    {"id": "EXTERNAL-MLIR-SCF", "class": "PRIMARY_OFFICIAL_DOCUMENTATION", "url": "https://mlir.llvm.org/docs/Dialects/SCFDialect/", "use": "Independent comparison anchor for typed structured control/lowering; not proof of ClayCode design."},
+    {"id": "EXTERNAL-WASM-CONTROL", "class": "PRIMARY_OFFICIAL_SPECIFICATION", "url": "https://webassembly.github.io/spec/core/valid/instructions.html", "use": "Independent comparison anchor for validated structured control; not proof of ClayCode policy."},
+    {"id": "EXTERNAL-LLVM-LANGREF", "class": "PRIMARY_OFFICIAL_DOCUMENTATION", "url": "https://llvm.org/docs/LangRef.html", "use": "Independent comparison anchor for typed SSA/control lowering; not proof of ClayCode surface."}
+  ],
+  "negative_results": [
+    {"id": "N-SPAWN-MICRO-DUP-001", "result": "async-resource-identity-lifetimes was rejected as a fresh duplicate after repository search exposed current FFI resource identity/TOCTOU/lifetime work; branch draw was retained and only microdirection rerolled."},
+    {"id": "N-SPAWN-CC-NEW-SEMANTIC-001", "result": "No local executable counterexample requiring a new FRANK-specific ClayCode primitive was found."},
+    {"id": "N-SPAWN-CC-PRODUCTION-PASS-001", "result": "Local proxy parity does not close production parser/canonical-IR/compiler or Ubuntu acceptance gates."}
+  ],
+  "hashes": {
+    "proxy_program_semantic_hash": "f479c4e85f1326257fcd0337caaa845cdf92daa127cc53205a90a02edfea37b1",
+    "python_lowered_source_sha256": "c3eb2a99c51173d9b63fd836728eaa11599a8df79886ffcec7a4b2c29d3b4b71",
+    "native_c_source_sha256": "90cad8f964a719697fafb9ea194965d6973eb051e33edc359f1d51b807863de6",
+    "native_shared_object_sha256": "b86bce0c13dfe428edf9fe9118751564398a41c2f73404520d1ac0d778ad5c59"
+  }
+}

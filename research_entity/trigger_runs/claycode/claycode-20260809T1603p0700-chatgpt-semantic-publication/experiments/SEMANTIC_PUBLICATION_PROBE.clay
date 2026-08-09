@@ -1,0 +1,33 @@
+module claycode.g9.semantic_publication_probe
+version "0.1-run-candidate"
+status EXPERIMENT_ONLY
+
+record SemanticPublicationReceipt {
+  tx:Ref
+  state_epoch:Epoch
+  graph_epoch:Epoch
+  state_root:Hash
+  projection_receipt:ReceiptRef
+  projection_closed:Bool
+  retraction_closed:Bool
+  status:PENDING|CURRENT|REJECTED
+}
+
+record PublishedSemanticEpoch {
+  state_epoch:Epoch
+  graph_epoch:Epoch
+  publication_receipt:ReceiptRef
+}
+
+rule state_commit requires writer_authority && base_epoch_match
+rule duplicate_idempotency_key -> replay_same_state_epoch
+rule graph_projection.source_epoch = committed_state_epoch
+rule publish_current requires projection_closed && retraction_closed
+rule publish_current requires graph_projection.source_epoch = committed_state_epoch
+rule reader.current = PublishedSemanticEpoch
+rule crash_before_publish -> reader.current remains previous(PublishedSemanticEpoch)
+rule recovery -> rebuild_graph_from(committed_state_epoch) -> validate -> publish_current
+rule graph.derived_relation cannot_authorize effect
+rule effect.commit requires possession(valid(CapabilityToken))
+invariant state_truth_and_graph_relevance_separate
+invariant semantic_epoch_publication_prevents_mixed_partial_current_state

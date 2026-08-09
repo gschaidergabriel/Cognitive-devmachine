@@ -56,4 +56,10 @@ class EffectRuntimeTests(unittest.TestCase):
         td,l,g=self.make(); p=SandboxWriteProposal('e1','a.txt','one'); q=g.issue_permit(p); g.execute(p,q); p2=SandboxWriteProposal('e1','a.txt','two'); q2=g.issue_permit(p2)
         with self.assertRaises(EffectDenied): g.execute(p2,q2)
         self.assertEqual(Path(td.name,'a.txt').read_text(),'one'); l.close(); td.cleanup()
+    def test_semantic_effect_state_is_independent_of_absolute_sandbox_root(self):
+        states=[]; traces=[]
+        for _ in range(2):
+            with tempfile.TemporaryDirectory() as td:
+                l=StateLedger(); g=SandboxEffectGateway(l,td); p=SandboxWriteProposal('e1','nested/a.txt','same'); g.execute(p,g.issue_permit(p)); states.append(l.semantic_state_hash); traces.append(l.trace_root_hash); self.assertNotIn(str(Path(td).resolve()),str(l.get('effect','e1')['value'])); l.close()
+        self.assertEqual(states[0],states[1]); self.assertEqual(traces[0],traces[1])
 if __name__=='__main__': unittest.main()

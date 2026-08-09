@@ -1,66 +1,21 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "receipt_id": "CLAYCODE-BASE-SEMANTIC-FREEZE-V1-RECEIPT-20260809",
   "work_package": "CC-WP-01-SPEC-FREEZE",
-  "result": "PASS",
+  "result": "SUPERSEDED_NOT_COUNTED",
   "actor": {
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
     "model": "GPT-5.6 Sol"
   },
-  "canonical_parent": {
-    "revision": 2,
-    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  "superseded_receipt_for": "research_entity/claycode/base/CLAYCODE_BASE_SEMANTIC_FREEZE_V1.json",
+  "authoritative_freeze": "research_entity/claycode/base/BASE_SEMANTIC_FREEZE_V1.json",
+  "authoritative_workspace": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+  "reason": "Concurrent repository progress produced a newer G9 semantic-core blob and a separate freeze that was already bound into the release workspace. This earlier receipt's PASS claim is withdrawn to preserve CAS/concurrency correctness and avoid double-counting.",
+  "historical_snapshot_only": {
+    "semantic_core_git_blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
+    "manifest_git_blob_sha_before_supersession": "4f493e7278c9cbed22e0b2355593e28635cb71e4"
   },
-  "manifest": {
-    "path": "research_entity/claycode/base/CLAYCODE_BASE_SEMANTIC_FREEZE_V1.json",
-    "git_blob_sha": "4f493e7278c9cbed22e0b2355593e28635cb71e4"
-  },
-  "verified_sources": [
-    {
-      "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
-      "git_blob_sha": "1a17bba3c835520baff2ac8fa432749ba2165d8e",
-      "verification": "CURRENT_GITHUB_REREAD"
-    },
-    {
-      "path": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
-      "git_blob_sha": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
-      "verification": "CURRENT_GITHUB_REREAD"
-    },
-    {
-      "path": "research_entity/claycode/g9/grammar.ebnf",
-      "git_blob_sha": "ec2f17077333955cfdabe6c64868d597e7e734e3",
-      "verification": "CURRENT_GITHUB_REREAD"
-    },
-    {
-      "path": "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
-      "git_blob_sha": "86d8ec3e3d72261d42b9e017f546bdfe41cffe66",
-      "verification": "CURRENT_GITHUB_REREAD"
-    },
-    {
-      "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V4.lark",
-      "git_blob_sha": "507126993797f8f52c69467410978712e6d495cd",
-      "verification": "CURRENT_GITHUB_REREAD"
-    }
-  ],
-  "checks": {
-    "frozen_manifest_exists": true,
-    "all_declared_source_blob_ids_match_current_github_reads": true,
-    "unresolved_semantic_disputes": 0,
-    "remaining_known_gaps_explicitly_preserved_as_executable_counterexamples": true,
-    "semantic_change_requires_executable_counterexample": true,
-    "model_output_execution_authority_boundary_preserved": true,
-    "proxy_evidence_not_promoted_to_production_evidence": true
-  },
-  "scope": "PASS closes CC-WP-01 only. It does not close parser/canonical IR, type/effect, evaluator, lowering, runtime/FFI, stdlib, concurrency, application, fuzz, corpus, FRANK handoff or final BASE audit gates.",
-  "decision_trace": {
-    "evidence_used": [
-      "current GitHub blob identities for G9 V3, Dialect Registry V3, research grammar, acceptance contract and D repair candidate",
-      "function-definition closure counterexample commit af1a5546acedffbd4e7d2d5ff4734140e5c6c1f8",
-      "current BASE 14-blocker burn-down"
-    ],
-    "alternative_rejected": "Keep WP01 indefinitely OPEN until all compiler integration gaps disappear.",
-    "reason": "The acceptance definition for WP01 is a frozen semantic manifest plus hashes plus unresolved-counterexample ledger. Parser/compiler/runtime gaps are explicitly retained and routed to later gates rather than silently changing semantics.",
-    "next_falsifier": "Any production executable fixture that cannot be represented/lowered under the frozen contract reopens WP01 through the semantic_change_law."
-  }
+  "current_disposition": "WP01 remains PASS only through the authoritative concurrent BASE_SEMANTIC_FREEZE_V1.json already referenced by CLAYCODE_RELEASE_WORKSPACE.json.",
+  "scope_guard": "This receipt contributes zero additional completion credit."
 }

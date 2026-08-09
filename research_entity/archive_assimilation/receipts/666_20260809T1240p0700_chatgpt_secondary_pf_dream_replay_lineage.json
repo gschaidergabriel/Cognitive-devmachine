@@ -1,0 +1,59 @@
+{
+  "schema_version":"1.0",
+  "receipt_id":"666-20260809T1240p0700-chatgpt-secondary-pf-dream-replay-lineage",
+  "trigger":"666",
+  "program_stage":"L0_ARCHIVE_ASSIMILATION",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "scope":{"repository":"gschaidergabriel/Project-Frankenstein","frozen_head":"abba90a5767d85abc8a1ac340bae92842dab35c1","focus":"dream/replay/synthesis/consolidation historical lineage; watchdog boot-stability explicitly excluded because peer leased"},
+  "source_refs":[
+    "services/dream_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "commit:662957eeaf1ca94c107137d8341dd3073b6b0301",
+    "commit:2232a60e616b923c3e421b0430b0f001a1e98613",
+    "commit:07f8e26a296cf5bdcd4add14ee42ab501d09422b",
+    "commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986",
+    "commit:cfa7062ba62bc9d83fffada29dcc03a75c4f4050"
+  ],
+  "chronology":[
+    {"date":"2026-02-24","ref":"commit:662957eeaf1ca94c107137d8341dd3073b6b0301","event":"Dream Daemon introduced as 60min/day, three-phase Replay/Synthesis/Consolidation process with persisted interrupt/resume, initial 45min idle and 20h cooldown."},
+    {"date":"2026-02-26","ref":"commit:2232a60e616b923c3e421b0430b0f001a1e98613","event":"Cross-process E-PQ stale-singleton failure diagnosed: dream/consciousness homeostasis writes could be overwritten by stale core state; DB refresh-before-event and delta guards added."},
+    {"date":"2026-03-13","ref":"commit:07f8e26a296cf5bdcd4add14ee42ab501d09422b","event":"5h idle audit found only one dream session had ever completed and memory consolidation was always zero; cooldown/idle detection and keyword+Titan FTS consolidation were repaired."},
+    {"date":"2026-03-24","ref":"commit:279eb175a326cefdb1bbd8281ae1a639ce1e4986","event":"Hippocampus neural retrieval training attached to consolidation phase, making dream time an explicit low-priority cyclic learner slot."},
+    {"date":"2026-04-05","ref":"commit:cfa7062ba62bc9d83fffada29dcc03a75c4f4050","event":"Project Engine v3 introduced a separate project-agent Dream Cycle: nightly prune/learn/re-strategize/journal; related concept but not implementation-identical to Dream Daemon."}
+  ],
+  "frozen_head_mechanism":{"budget_sec_per_24h":3600,"phases":["replay","synthesis","consolidation"],"current_idle_threshold_sec":1200,"current_cooldown_sec":21600,"cpu_threshold_percent":30,"interrupt_resume":"PERSISTED_PHASE_AND_STEP_STATE","consolidation_steps":["dream reflections","E-PQ homeostasis","memory consolidation"],"hypothesis_output":"dream_hypotheses candidates with active/confirmed/refuted/modified states","memory_path":"replay-field keyword extraction -> Titan FTS -> matching node metadata boost + reflection matching","learner_slot":"Hippocampus train_cycle attached to consolidation"},
+  "documentation_drift":{"finding":"Frozen-head module docstring still describes 45min idle + 20h cooldown while executable constants are 20min idle + 6h cooldown.","classification":"OPERABILITY_AND_PROVENANCE_DRIFT","required_current_rule":"Runtime constants/config and versioned receipts must be authoritative; documentation must be generated/validated against executable configuration."},
+  "negative_results":[
+    {"id":"PF-DREAM-FAIL-001","evidence":"commit:07f8e26a296cf5bdcd4add14ee42ab501d09422b","result":"Only one dream session ever completed before cooldown/idle-detection fix.","lesson":"Existence of a daemon/phase state machine is not evidence that cyclic consolidation actually executes."},
+    {"id":"PF-DREAM-FAIL-002","evidence":"commit:07f8e26a296cf5bdcd4add14ee42ab501d09422b","result":"Dream memory consolidation always produced zero before keyword extraction + Titan FTS repair.","lesson":"Phase completion counters must not be used as semantic-effect proxies; require changed-object/effect receipts."},
+    {"id":"PF-DREAM-FAIL-003","evidence":"commit:2232a60e616b923c3e421b0430b0f001a1e98613","result":"Dream homeostasis could be overwritten by stale cross-process E-PQ singleton state, erasing hours of accumulated personality change.","lesson":"Background learning/state normalization requires authoritative versioned writes, conflict detection and replay-safe transactions."},
+    {"id":"PF-DREAM-FAIL-004","evidence":"services/dream_daemon.py@abba90a5767d85abc8a1ac340bae92842dab35c1","result":"LLM dream outputs need aggressive malformed/truncated JSON and unclosed-think repair fallbacks.","lesson":"Generative consolidation output is untrusted input, not a schema-authoritative state transition."}
+  ],
+  "current_inheritance":[
+    {"target":"H1/H2/H3 Harness","inherit":"Bounded low-priority cyclic worker; persisted phase/step checkpoint; immediate user-activity interruption; resource gate; exact resume; regressionize never-runs, no-op consolidation, malformed-output and lost-update failures."},
+    {"target":"UnifiedDB","inherit":"Represent replay/consolidation as versioned event transactions with source-object provenance, expected-version/CAS semantics, effect receipts, rollback and idempotent resume. Never permit stale local singleton state to overwrite newer authoritative state."},
+    {"target":"Adaptive Visual Learner","inherit":"Historical evidence supports a bounded cyclic background learning slot. Visual examples still obey current GOLD/SILVER provenance, shadow evaluation, open-set negatives, atomic promotion and rollback; self-generated dream output is not training truth."},
+    {"target":"GWT/Research Entity","inherit":"Dream-synthesized hypotheses are candidate claims only. They require ordinary evidence/replay/falsification before broadcast authority or canonical integration."},
+    {"target":"ClayCode runtime","inherit":"Make cyclic jobs first-class resumable state machines with explicit budget/resource/effect types rather than hidden daemon conventions."}
+  ],
+  "reject_or_adapt":[
+    "Do not inherit keyword-match memory confidence boosts as epistemic confidence.",
+    "Do not inherit direct E-PQ homeostasis mutation without authority/version/provenance checks.",
+    "Do not treat successful phase completion as successful consolidation.",
+    "Do not promote LLM-generated dream hypotheses/reflections to truth or learner GOLD/SILVER data.",
+    "Do not silently assume user-idle when sensing fails; use explicit degraded/fail-safe policy.",
+    "Do not conflate Project Engine v3 Dream Cycle with the older Dream Daemon solely by shared naming."
+  ],
+  "cheap_discriminating_tests":[
+    "Interrupt at every persisted phase/step boundary, restart process, assert exactly-once effects and identical terminal state.",
+    "Inject concurrent foreground state update during consolidation and assert stale writer cannot overwrite newer version.",
+    "Run cyclic learner with deliberately no matching memories and require NO_EFFECT receipt rather than success-by-phase-complete.",
+    "Feed malformed/truncated/self-contradictory synthesis JSON and require candidate quarantine, not canonical mutation.",
+    "Force idle-sensor failure and assert declared degraded policy rather than accidental background execution.",
+    "For adaptive visual learning, attempt BRONZE/self-generated example promotion and require rejection before candidate training."
+  ],
+  "earned_work":{"new_credit_hours":0.0,"mapping_candidate":true,"reason":"Material reusable mechanism and negative-result value identified, but row-level historical earned-work dedup/audit is still incomplete; avoid double credit against existing memory/state/LCME/autonomy mappings."},
+  "level0_effect":{"exact_global_percent_added":0.0,"reason":"PF exact tree/history denominator remains unfrozen because the current execution surface lacks recursive read-tree/archive/clone access. This lineage receipt is valid semantic/history evidence but not repository-wide denominator closure."},
+  "status":"COMPLETE_SEMANTIC_LINEAGE_SHARD",
+  "created_at":"2026-08-09T12:40:00+07:00"
+}

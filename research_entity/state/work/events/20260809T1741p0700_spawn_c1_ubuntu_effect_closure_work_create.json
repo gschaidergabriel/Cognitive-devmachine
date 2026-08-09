@@ -1,0 +1,96 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create:WORK-SPAWN-C1-UBUNTU-EFFECT-CLOSURE-20260809:20260809T1741p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T17:41:00+07:00",
+  "payload": {
+    "work_id": "WORK-SPAWN-C1-UBUNTU-EFFECT-CLOSURE-20260809",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "SPAWN_RESEARCH_TARGET_HOST_DISCRIMINATION",
+    "title": "Validate ClayCode foreign-effect closure on Andreas Ubuntu host",
+    "work_clay": {
+      "origin_run": "research_entity/trigger_runs/spawn/20260809T1741p0700-clayresearch-foreign-effect-closure/",
+      "goal": "On the actual Ubuntu developer system, test and minimally prototype a fail-closed Foreign Effect Closure Gate for ClayCode child execution without changing ClayCode semantics unless a concrete representation counterexample is found.",
+      "required_surfaces": [
+        "Python subprocess",
+        "Bash subprocess",
+        "native compiled child",
+        "WASM/WASI child when current toolchain is available",
+        "typed FFI/host adapter path"
+      ],
+      "required_authority_carriers": [
+        "inherited/preopened file descriptors",
+        "post-launch SCM_RIGHTS descriptor transfer",
+        "connected sockets/IPC endpoints",
+        "Linux permitted/effective/inheritable/ambient/bounding capabilities",
+        "uid/gid and exec privilege transitions",
+        "environment credentials/secrets",
+        "host/WASI preopens and imports",
+        "process/signal/ptrace channels where relevant",
+        "CPU/RAM/PID/IO/network resource budgets"
+      ],
+      "candidate_enforcement_layers": [
+        "explicit FD allowlist plus close_range/CLOEXEC hygiene",
+        "capability/credential drop plus no_new_privs",
+        "Landlock feature/ABI probing and supported restrictions",
+        "seccomp syscall filtering as a layer, never standalone sandbox proof",
+        "cgroup v2 resource budgets",
+        "IPC/network namespace or broker restrictions where required",
+        "explicit WASI/WIT/preopen/network grants only"
+      ],
+      "hard_rule": "EffectiveEffects(child) must be a subset of parent-granted effects plus separately receipted external grants; any required restriction lacking target-host enforcement coverage must fail closed rather than silently downgrade."
+    },
+    "reason_clay": {
+      "why_now": "BASE_CLAYCODE_RELEASE is active and CC-WP-07 Runtime/ABI/FFI, CC-WP-10 general app suite and CC-WP-11 fuzz/conformance are still open. Hosted execution found concrete inherited-FD and SCM_RIGHTS counterexamples but could not establish target-host Landlock/enforcement truth.",
+      "evidence": [
+        "research_entity/trigger_runs/spawn/20260809T1741p0700-clayresearch-foreign-effect-closure/EXPERIMENT_RECEIPT.json",
+        "research_entity/trigger_runs/spawn/20260809T1741p0700-clayresearch-foreign-effect-closure/HYPOTHESES.json"
+      ]
+    },
+    "completion_clay": {
+      "must_execute_on": "Andreas Ubuntu developer system",
+      "required_outputs": [
+        "exact host/kernel/Landlock/seccomp/cgroup/WASI capability observation",
+        "executed inherited-FD and SCM_RIGHTS baseline plus mediated variants",
+        "nested child/FFI authority-escalation matrix",
+        "resource-bound tests",
+        "matched ordinary utility checks for representative BASE applications",
+        "effect-closure coverage receipt with parent contract hash, child hash, admitted handles, policy hash, host feature coverage, resource budgets, unsupported atoms and external grants",
+        "negative results preserved",
+        "decision whether existing ClayCode G9 semantics can represent the complete contract"
+      ],
+      "pass_condition": "No undeclared effect is reached in the declared test matrix, required enforcement atoms are actually covered on the target host, and ordinary utility remains acceptable under explicit grants. A language change is allowed only if a concrete G9 representation counterexample is produced."
+    },
+    "evidence_need": [
+      "LOCAL_EXECUTION_PRIMARY receipt from the Ubuntu developer host",
+      "exact kernel/runtime feature probe",
+      "probe/tool hashes",
+      "policy/coverage hash",
+      "observed expected-vs-actual outcomes"
+    ],
+    "executor_policy": {
+      "prefer": "claude-code-lead",
+      "class": "LOCAL_REPO_BUILD_EXECUTION_ORGAN",
+      "reason": "Only the local organ can establish current Ubuntu target-host enforcement truth."
+    },
+    "required_capabilities": ["tool:git", "tool:python3"],
+    "write_scope": [
+      "research_entity/trigger_runs/spawn/20260809T1741p0700-clayresearch-foreign-effect-closure/",
+      "research_entity/state/work/events/"
+    ],
+    "dependencies": [
+      "BASE_CLAYCODE_RELEASE active",
+      "latest work specification must be revalidated before effect"
+    ],
+    "invalidators": [
+      "An equal-or-stronger Ubuntu target-host effect-closure execution receipt already completes the same matrix",
+      "Owner changes the Frank v0.1 target host or cancels BASE work"
+    ],
+    "base_priority": 0.9,
+    "expected_impact": 0.95,
+    "urgency": 0.8,
+    "information_gain": 0.95,
+    "status": "READY"
+  }
+}

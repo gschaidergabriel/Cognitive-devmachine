@@ -7,11 +7,16 @@ traces are intentionally not returned/persisted; only final text and usage metad
 this adapter.
 """
 from __future__ import annotations
-import json, urllib.error, urllib.request
+import argparse, hashlib, json, re, urllib.error, urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
-from rae_secret_loader import get_secret
+from rae_secret_loader import get_secret, secret_source
 
+ROOT=Path(__file__).resolve().parents[1]
+RESULTS=ROOT/"research_entity/runtime/tool_results"
 BASE="https://api.mistral.ai/v1"
+ID_RE=re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$")
 class FreeOnlyViolation(RuntimeError): pass
 class RateLimited(RuntimeError): pass
 
@@ -72,6 +77,30 @@ def embeddings(inputs:list[str]|str,*,model:str="mistral-embed")->dict[str,Any]:
 
 def capabilities()->dict[str,Any]:
     models=list_models()
-    return {"provider":"Mistral","free_only":True,"models":[{"id":m.get("id"),"capabilities":m.get("capabilities") or {},"max_context_length":m.get("max_context_length")} for m in models],"implemented_adapter_modes":["models","chat_reasoning","structured_json","multi_completion","prompt_cache","fim","embeddings"],"discovery_only_until_account_free_verified":["batch","ocr","vision","classification","conversations","hosted_tools/connectors"]}
+    return {"provider":"Mistral","free_only":True,"credential_source":secret_source("MISTRAL_API_KEY"),"credential_value_exposed":False,"models":[{"id":m.get("id"),"capabilities":m.get("capabilities") or {},"max_context_length":m.get("max_context_length")} for m in models],"implemented_adapter_modes":["models","chat_reasoning","structured_json","multi_completion","prompt_cache","fim","embeddings"],"discovery_only_until_account_free_verified":["batch","ocr","vision","classification","conversations","hosted_tools/connectors"]}
 
-if __name__=="__main__": print(json.dumps(capabilities(),ensure_ascii=False,indent=2))
+
+def process_request(path:Path)->dict[str,Any]:
+    req=json.loads(path.read_text(encoding="utf-8")); rid=str(req.get("request_id") or path.stem)
+    if not ID_RE.fullmatch(rid):raise ValueError("invalid request_id")
+    mode=str(req.get("mode") or "models")
+    env={"schema_version":"1.0","request_id":rid,"tool":"mistral_inference","request_sha256":hashlib.sha256(path.read_bytes()).hexdigest(),"processed_at":datetime.now(timezone.utc).isoformat(),"free_only":True}
+    try:
+        if mode=="models": env["result"]=capabilities()
+        elif mode=="chat": env["result"]=chat(str(req.get("prompt") or ""),model=str(req.get("model") or "mistral-small-latest"),system=str(req.get("system")) if req.get("system") else None,max_tokens=int(req.get("max_tokens") or 1024),temperature=float(req.get("temperature") or 0.05),reasoning_effort=str(req.get("reasoning_effort") or "high"),n=int(req.get("n") or 1),json_mode=bool(req.get("json_mode",False)),prompt_cache_key=str(req.get("prompt_cache_key") or "clay-research-v1"))
+        elif mode=="fim": env["result"]=fim(str(req.get("prefix") or ""),suffix=str(req.get("suffix") or ""),model=str(req.get("model") or "codestral-latest"),max_tokens=int(req.get("max_tokens") or 1024))
+        elif mode=="embeddings": env["result"]=embeddings(req.get("input") or [],model=str(req.get("model") or "mistral-embed"))
+        else: raise ValueError(f"unsupported mode: {mode}")
+        env["status"]="SUCCESS"
+    except Exception as exc:
+        env["status"]="FAILED"; env["error_type"]=type(exc).__name__; env["error"]=str(exc)[:2000]
+    RESULTS.mkdir(parents=True,exist_ok=True); out=RESULTS/f"{rid}.json"; out.write_text(json.dumps(env,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    return {"request_id":rid,"status":env["status"],"result_path":str(out.relative_to(ROOT))}
+
+
+def main()->None:
+    ap=argparse.ArgumentParser(); ap.add_argument("--request"); ap.add_argument("--capabilities",action="store_true"); a=ap.parse_args()
+    if a.request: print(json.dumps(process_request(Path(a.request)),ensure_ascii=False,indent=2))
+    else: print(json.dumps(capabilities(),ensure_ascii=False,indent=2))
+
+if __name__=="__main__": main()

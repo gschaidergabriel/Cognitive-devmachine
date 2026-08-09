@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "PROJECT_FRANKENSTEIN_HISTORY_DENOMINATOR_EXACT_20260809T0940p0700",
+  "program_stage": "L0_ARCHIVE_ASSIMILATION",
+  "source_repository": "gschaidergabriel/Project-Frankenstein",
+  "frozen_head_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+  "root_sha": "e1a8812767668091d146ee958bbc2ebb2743031c",
+  "root_created_at": "2026-02-14T18:05:27+01:00",
+  "root_message_prefix": "Initial commit: AI-Core / Frank — local AI desktop companion",
+  "enumeration_method": {
+    "kind": "PINNED_FIRST_PARENT_BOUNDARY_PLUS_SERVER_COMPARE_REACHABILITY",
+    "head_ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "maximum_valid_first_parent_depth": 544,
+    "boundary_proof": {
+      "head_tilde_544": {
+        "status": "VALID",
+        "resolved_sha": "e1a8812767668091d146ee958bbc2ebb2743031c",
+        "ahead_by": 544,
+        "total_commits": 544,
+        "too_large": null
+      },
+      "head_tilde_545": {
+        "status": "NOT_FOUND"
+      },
+      "root_parent_1": {
+        "ref": "e1a8812767668091d146ee958bbc2ebb2743031c^",
+        "status": "NOT_FOUND"
+      },
+      "root_parent_2": {
+        "ref": "e1a8812767668091d146ee958bbc2ebb2743031c^2",
+        "status": "NOT_FOUND"
+      }
+    },
+    "reachability_proof": {
+      "base": "e1a8812767668091d146ee958bbc2ebb2743031c",
+      "head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "ahead_by": 544,
+      "total_commits": 544,
+      "merge_base_equals_root": true,
+      "side_history_excess_over_first_parent_distance": 0
+    },
+    "interpretation": "The frozen head is exactly 544 first-parent steps after a verified parentless root, and the server-side reachable-commit count beyond that root is also exactly 544. Therefore the complete reachable commit-history denominator for this frozen scope is 545 commits including root and head."
+  },
+  "exact_history_commit_count": 545,
+  "exact_history_enumerated": true,
+  "exact_history_root_proven": true,
+  "search_window_not_used_as_denominator": true,
+  "prior_partial_cursor_invalidated": {
+    "prior_oldest_observed_date": "2026-03-14",
+    "actual_root_date": "2026-02-14T18:05:27+01:00",
+    "status": "SUPERSEDED"
+  },
+  "scope_note": "This closes only the Project-Frankenstein commit-history denominator for the frozen Level-0 repository scope. It does not by itself close the frozen-head tree denominator, historical content classification, deleted-state reconciliation, Drive reconciliation, or the global Level-0 release gate.",
+  "global_level0_exact_coverage_credit_percent": 0.0,
+  "pass_impact": "HISTORY_DENOMINATOR_CLOSED_ONLY",
+  "provenance": {
+    "origin_actor": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "canonical_parent_revision": 2,
+    "canonical_parent_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "created_at": "2026-08-09T09:40:18+07:00"
+  }
+}

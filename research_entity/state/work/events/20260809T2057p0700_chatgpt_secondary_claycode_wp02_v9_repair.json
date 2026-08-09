@@ -1,0 +1,47 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-wp02-v9-repair-20260809T2057p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-09T20:57:21+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "title": "Close ClayCode BASE: repair WP-02 frontend first, then resume ordered BASE chain",
+    "work_clay": "Before continuing WP-03+, revalidate WP-02 against newest main. V5 has a reproducible strict-LALR shift/reduce conflict from optional dotted-relation RHS. V6 removes that ambiguity but breaks current G9 source `rule 4B_need_not_learn Needle.owns` because DOT_REL now requires an object. Use the locally discriminated V9 strategy: lex Needle.lowers/Needle.owns as a prefix relation only when an explicit same-line argument follows; preserve bare Needle.owns as qid; reserve/reject bare Needle.lowers to retain the current negative fixture. Run exact strict parser construction with interegular installed, exact current G9 V3 + Dialect V3 corpus, all positive/negative/hash discrimination cases, and canonical-IR self-tests. If receipts pass, integrate the smallest production patch and continue WP-03. Do not promote WP-02 from proxy evidence alone.",
+    "reason_clay": "Fresh executable counterevidence invalidated the active V6 frontend path on a current canonical G9 sentence. Local Lark 1.3.1 proxy testing of the V9 lexical-disambiguation strategy passed full reconstructed G9/Dialect parse, boundary cases, semantic-hash equivalence/discrimination and canonical roundtrip; strict parser-state analysis reached only the unavailable interegular dependency, not GrammarError. Exact Ubuntu/current-source strict receipt is still required.",
+    "completion_clay": "WP-02 may close only when newest-main exact sources pass strict LALR/contextual construction with regex collision checking, exact G9 V3 + Dialect V3 acceptance, `4B_need_not_learn Needle.owns` acceptance, bare `Needle.lowers` rejection, deterministic parse/canonical semantic hashes, mutation discrimination and canonical roundtrip. Then resume WP-03 IR/types without semantic redesign unless a new executable counterexample appears.",
+    "evidence_need": [
+      "STRICT_LALR_REPAIR_RECEIPT_ON_EXACT_MAIN",
+      "FULL_CURRENT_G9_DIALECT_CORPUS_RECEIPT",
+      "BARE_NEEDLE_OWNS_REGRESSION_RECEIPT",
+      "BARE_NEEDLE_LOWERS_NEGATIVE_RECEIPT",
+      "CANONICAL_IR_ROUNDTRIP_HASH_RECEIPT"
+    ],
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "GITHUB_READ_WRITE",
+      "LOCAL_TEST_EXECUTION",
+      "PRODUCTION_CLAYCODE_TOOLCHAIN",
+      "UBUNTU_DEVELOPER_HOST_EXECUTION"
+    ],
+    "write_scope": [
+      "research_entity/claycode/base/",
+      "tools/claycode_base_frontend_validation.py",
+      "tools/claycode_canonical_ir.py",
+      "research_entity/state/work/events/"
+    ],
+    "dependencies": [
+      "BASE_CLAYCODE_RELEASE",
+      "CC-WP-01-SPEC-FREEZE"
+    ],
+    "invalidators": [
+      "A newer exact-main frontend candidate already proves all WP-02 acceptance receipts without the V6 regression",
+      "Project owner supersedes the BASE ClayCode release gate"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 1.0,
+    "urgency": 1.0,
+    "information_gain": 1.0,
+    "status": "READY"
+  }
+}

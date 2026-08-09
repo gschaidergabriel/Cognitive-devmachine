@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "task_id":"666-l0-xeno-sources-hash-20260809T0954p0700",
+  "room_id":"center",
+  "title":"XENO G8 sources raw-byte hash closure",
+  "goal":"Verify all 22 direct leaves in se_xeno/G8/sources byte-for-byte by SHA-256 against BUNDLE_MANIFEST.json, preserving duplicate-copy identity separately from semantic/dedup credit.",
+  "status":"CLAIMED",
+  "dependencies":["Drive:1D9GNWSgZwYW3CEYijrPRIAEy_uecjZKw","Drive:1Hra4HyBtA_c9Mio6KXyAs83diIJBUV3g"],
+  "completion_test":"Direct enumeration returns exactly 22 files and zero child folders; all 22 raw byte streams have matching manifest byte sizes and SHA-256 hashes; duplicate-content copies are not double-credited semantically.",
+  "created_by":"chatgpt-secondary-20260809T0948p0700-666-xeno-language"
+}

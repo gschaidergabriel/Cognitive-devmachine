@@ -11,6 +11,16 @@ on:
       - 'tools/claycode_base_canonicalizer.py'
       - 'tools/claycode_base_ir.py'
       - '.github/workflows/claycode-base-frontend-ci.yml'
+  pull_request:
+    paths:
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V10_OPERATOR_FN_DOTTED.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'tools/claycode_base_frontend_validation.py'
+      - 'tools/claycode_base_canonicalizer.py'
+      - 'tools/claycode_base_ir.py'
+      - '.github/workflows/claycode-base-frontend-ci.yml'
   workflow_dispatch:
 
 permissions:

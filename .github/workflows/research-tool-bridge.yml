@@ -49,7 +49,9 @@ jobs:
         run: |
           git config user.name 'rae-tool-bridge'
           git config user.email 'rae-tool-bridge@users.noreply.github.com'
-          git add research_entity/runtime/tool_results/ research_entity/runtime/TOOL_QUOTA_STATE.json research_entity/runtime/MISTRAL_KEY_POOL_STATE.json research_entity/runtime/frank_fusion/CURRENT_RESEARCH_INPUT.json 2>/dev/null || true
+          git add -A research_entity/runtime/tool_results research_entity/runtime/frank_fusion
+          test ! -f research_entity/runtime/TOOL_QUOTA_STATE.json || git add research_entity/runtime/TOOL_QUOTA_STATE.json
+          test ! -f research_entity/runtime/MISTRAL_KEY_POOL_STATE.json || git add research_entity/runtime/MISTRAL_KEY_POOL_STATE.json
           git diff --cached --quiet && exit 0
           git commit -m 'Record research tool results and refresh FRANK fusion input'
           for attempt in 1 2 3; do

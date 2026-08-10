@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260810T1258p0700_chatgpt_secondary_release_evidence_replay_guard",
+  "actor": "chatgpt-secondary",
+  "trigger": "go",
+  "parent_work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+  "event_type": "CROSS_BRANCH_INTEGRATION_AND_BUG_REPAIR",
+  "status": "COMPLETED_DISTRIBUTED",
+  "scope": "ClayCode BASE release-evidence freshness at the WP14 -> release-workspace promotion boundary",
+  "finding": "Pre-patch promoter validated green WP14/application state but did not require manifest.repository_commit to equal current checkout HEAD, leaving a stale coherent-manifest replay path at the final workspace mutation boundary.",
+  "implemented_fix": {
+    "commit": "caed2837f9ba27992e552011d56c76a61a81beec",
+    "path": "tools/claycode_promote_release_workspace.py",
+    "invariant": "manifest.repository_commit == git rev-parse HEAD before release promotion"
+  },
+  "regression_probe": {
+    "path": "tools/claycode_target_receipt_replay_probe.py",
+    "matched_control_commit": "36d88ff2031b0c06a1046281bf8fb35bf8a7a754",
+    "experiment": "STALE_ANDREAS_TARGET_RECEIPT_REPLAY_NEGATIVE_CONTROL",
+    "local_reconstruction": "PASS_STALE_REJECTED_FRESH_ACCEPTED",
+    "hostinger_remote": "QUEUED_UNKNOWN_NOT_CREDITED"
+  },
+  "affected_workers_should_ingest": [
+    "BASE14 closure / CC-WP-14 audit",
+    "Andreas target acceptance orchestration",
+    "release/recovery provenance",
+    "H1/H2 handoff consumers"
+  ],
+  "invalidations": [
+    "Do not treat internally coherent receipt commit identity alone as sufficient release freshness.",
+    "Do not treat a queued/failed-before-steps Actions job as execution evidence."
+  ],
+  "follow_up_obligations": [
+    "CC-RELEASE-FRESHNESS-002: fail WP14 itself closed against non-current checkout evidence.",
+    "CC-RELEASE-EPOCH-003: downstream consumers must not retain durable PASS after source HEAD advances without a new matching release epoch."
+  ],
+  "full_result": "research_entity/trigger_runs/go/go-20260810T1257p0700-chatgpt-secondary-release-evidence-replay/FINAL_RESULT.json",
+  "authority": "No Frank self-harness authority; model output != execution authority.",
+  "training_authorized": false
+}

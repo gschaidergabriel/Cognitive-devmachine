@@ -1,0 +1,39 @@
+module clay.unifieddb.state_witness_candidate
+
+status CANDIDATE_NOT_PROMOTED
+scope self.root / Frank v0.1 UnifiedDB -> ClayGraph -> GWT -> Needle/effect read-use continuity
+
+record StateWitness {
+  selected_head_hash : Hash
+  frank_state_commitment : Hash
+  semantic_content_root : Hash
+  unified_epoch : Integer
+  materialization_pair_digest : Hash
+  actual_unified_schema_fingerprint : Hash
+  graph_epoch : Option<Integer>
+  graph_source_semantic_root : Option<Hash>
+  graph_projection_root : Option<Hash>
+  query_or_candidate_universe_hash : Option<Hash>
+  observed_at : Time
+}
+
+record SelectionWitness {
+  state : StateWitness
+  candidate_universe_hash : Hash
+  selection_policy_hash : Hash
+  ordered_result_refs_hash : Hash
+  scorer_identity : TypedIdentity
+  admissibility_receipt : ReceiptRef
+}
+
+rule read_only_observation may_return STALE(StateWitness) only_if staleness_is_explicit
+rule model_reasoning preserves originating StateWitness
+rule GWT_candidate preserves StateWitness + SelectionWitness
+rule ClayGraph_result requires graph_source_semantic_root == state.semantic_content_root when represented_as_current
+rule state_mutation requires revalidate(current_selected_head == witness.selected_head_hash)
+rule effect_reservation requires revalidate(current_selected_head == witness.selected_head_hash)
+rule provider_precommit requires existing_execution_generation_fence + current_selected_head_validation
+rule state_turnover_between_read_and_effect -> REBASE_OR_REJECT
+rule rebase -> new_query + new_candidate_universe + new_SelectionWitness
+rule retrieval_rank|activation|salience|witness_presence cannot_mint truth|SELF|effect_authority
+rule witness_without_exact_materialization_and_publication_evidence -> DEGRADED_WITNESS

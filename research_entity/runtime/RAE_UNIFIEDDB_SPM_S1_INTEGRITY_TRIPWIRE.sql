@@ -42,10 +42,17 @@ CREATE TRIGGER IF NOT EXISTS trg_spm_s1_path_update_dirty
 AFTER UPDATE ON access_segment_path
 WHEN EXISTS(
   SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
+  WHERE h.head_key='CURRENT' AND gs.segment_id=OLD.segment_id
+) OR EXISTS(
+  SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
   WHERE h.head_key='CURRENT' AND gs.segment_id=NEW.segment_id
 )
 BEGIN
-  UPDATE spm_s1_integrity_state SET status='DIRTY',dirty_segment_id=NEW.segment_id,
+  UPDATE spm_s1_integrity_state SET status='DIRTY',
+    dirty_segment_id=CASE WHEN EXISTS(
+      SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
+      WHERE h.head_key='CURRENT' AND gs.segment_id=OLD.segment_id
+    ) THEN OLD.segment_id ELSE NEW.segment_id END,
     dirty_reason='PATH_UPDATE_AFTER_PUBLISH',mutation_count=mutation_count+1,
     updated_ns=CAST(strftime('%s','now') AS INTEGER)*1000000000 WHERE singleton_id=1;
 END;
@@ -78,10 +85,17 @@ CREATE TRIGGER IF NOT EXISTS trg_spm_s1_dependency_update_dirty
 AFTER UPDATE ON access_segment_dependency
 WHEN EXISTS(
   SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
+  WHERE h.head_key='CURRENT' AND gs.segment_id=OLD.segment_id
+) OR EXISTS(
+  SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
   WHERE h.head_key='CURRENT' AND gs.segment_id=NEW.segment_id
 )
 BEGIN
-  UPDATE spm_s1_integrity_state SET status='DIRTY',dirty_segment_id=NEW.segment_id,
+  UPDATE spm_s1_integrity_state SET status='DIRTY',
+    dirty_segment_id=CASE WHEN EXISTS(
+      SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
+      WHERE h.head_key='CURRENT' AND gs.segment_id=OLD.segment_id
+    ) THEN OLD.segment_id ELSE NEW.segment_id END,
     dirty_reason='DEPENDENCY_UPDATE_AFTER_PUBLISH',mutation_count=mutation_count+1,
     updated_ns=CAST(strftime('%s','now') AS INTEGER)*1000000000 WHERE singleton_id=1;
 END;
@@ -102,10 +116,17 @@ CREATE TRIGGER IF NOT EXISTS trg_spm_s1_segment_header_update_dirty
 AFTER UPDATE ON access_segment
 WHEN EXISTS(
   SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
+  WHERE h.head_key='CURRENT' AND gs.segment_id=OLD.segment_id
+) OR EXISTS(
+  SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
   WHERE h.head_key='CURRENT' AND gs.segment_id=NEW.segment_id
 )
 BEGIN
-  UPDATE spm_s1_integrity_state SET status='DIRTY',dirty_segment_id=NEW.segment_id,
+  UPDATE spm_s1_integrity_state SET status='DIRTY',
+    dirty_segment_id=CASE WHEN EXISTS(
+      SELECT 1 FROM access_head h JOIN access_generation_seed gs ON gs.generation_id=h.generation_id
+      WHERE h.head_key='CURRENT' AND gs.segment_id=OLD.segment_id
+    ) THEN OLD.segment_id ELSE NEW.segment_id END,
     dirty_reason='SEGMENT_HEADER_UPDATE_AFTER_PUBLISH',mutation_count=mutation_count+1,
     updated_ns=CAST(strftime('%s','now') AS INTEGER)*1000000000 WHERE singleton_id=1;
 END;
@@ -124,10 +145,15 @@ END;
 CREATE TRIGGER IF NOT EXISTS trg_spm_s1_generation_map_update_dirty
 AFTER UPDATE ON access_generation_seed
 WHEN EXISTS(
+  SELECT 1 FROM access_head h WHERE h.head_key='CURRENT' AND h.generation_id=OLD.generation_id
+) OR EXISTS(
   SELECT 1 FROM access_head h WHERE h.head_key='CURRENT' AND h.generation_id=NEW.generation_id
 )
 BEGIN
-  UPDATE spm_s1_integrity_state SET status='DIRTY',dirty_segment_id=NEW.segment_id,
+  UPDATE spm_s1_integrity_state SET status='DIRTY',
+    dirty_segment_id=CASE WHEN EXISTS(
+      SELECT 1 FROM access_head h WHERE h.head_key='CURRENT' AND h.generation_id=OLD.generation_id
+    ) THEN OLD.segment_id ELSE NEW.segment_id END,
     dirty_reason='CURRENT_GENERATION_MAP_UPDATE',mutation_count=mutation_count+1,
     updated_ns=CAST(strftime('%s','now') AS INTEGER)*1000000000 WHERE singleton_id=1;
 END;
@@ -146,6 +172,7 @@ END;
 -- Operational law:
 -- CLEAN + impact-complete bounded change -> normal SPM-S1 incremental path.
 -- Any post-publication CURRENT mutation -> DIRTY in the same SQLite transaction.
+-- UPDATE guards observe both OLD and NEW membership so key moves away from CURRENT cannot evade.
 -- DIRTY -> no model-facing access read; incremental maintenance forbidden.
 -- Recovery -> authoritative full recompute, restore hash-consistent segment rows, publish
 -- FULL_FALLBACK, run SPM-S1 deep audit, write repair receipt, then and only then CLEAN.

@@ -1,0 +1,201 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0027p0700-chatgpt-secondary-execution-anchor-recursion",
+  "trigger": "go",
+  "created_at": "2026-08-11T00:27:14+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "identity_lock": {
+    "research_entity": "Clay",
+    "target_native_self": "self.root",
+    "target_human_surface": "Frank",
+    "target_body": "accepted Hostinger Ubuntu VPS",
+    "target_cognition": "CLAYCODE_ONLY",
+    "self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "selected_question": "Can the current exact-execution effect-authority candidate rely on a physically singleton FrankExecutionGate, and does the directory-FD repair remain singleton when the lock marker or the entire state-root pathname is replaced?",
+  "fresh_swarm_coordination": {
+    "current_effect_fence_lane": {
+      "pr": 228,
+      "head_sha": "299b6ade7a24c588719f480e5b571a564d00698b",
+      "status": "DRAFT_CANDIDATE_TARGET_VPS_QUEUED",
+      "mechanisms": [
+        "exact Gate-issued FrankExecutionLease object registry",
+        "exact V16 execution_id + credential + admitted ingress identity",
+        "immutable execution-generation binding",
+        "multi-effect-per-execution cardinality repair",
+        "B1 reservation / B2 attempt / B3 provider-precommit fence"
+      ],
+      "known_remaining_gates": [
+        "non-bypassable production effect routing",
+        "real timeout-after-acceptance plus reconciliation evidence",
+        "actual ClayCode frontend/TypedIR/compiler/lowering evidence",
+        "integration with replacement-safe physical singleton Gate"
+      ],
+      "target_workflow_run": 31412817524,
+      "target_workflow_state_at_receipt": "QUEUED"
+    },
+    "physical_gate_negative_lane": {
+      "diagnostic_pr": 216,
+      "target_run": 31410535024,
+      "finding": "REPRODUCED_FLOCK_PATH_REPLACEMENT_SPLIT_BRAIN",
+      "meaning": "Locking a replaceable lockfile pathname is insufficient physical singleton evidence because a live holder retains the old open-file-description lock while a contender can open and lock a newly materialized inode."
+    },
+    "physical_gate_repair_lane": {
+      "pr": 225,
+      "mechanism": "flock an open state-directory FD and verify FD-to-path device/inode identity on acquire, heartbeat and release",
+      "initial_target_run": 31411953301,
+      "initial_run_adjudication": {
+        "unchanged_execution_gate_baseline": "PASS_FRANK_EXECUTION_GATE_V1",
+        "repair_discriminator": "TEST_HARNESS_FALSE_NEGATIVE_BEFORE_CAUSAL_ASSERTION",
+        "cause": "Immediate unlink/recreate on ext4 reused the just-freed marker inode number, so the test incorrectly assumed path replacement always implies a numerically different inode.",
+        "product_runtime_failure_proven": false,
+        "repo_static_independent_failures": [
+          "DIRECT_CANONICAL_DB_OPEN:runtime/clay_vps_mcp_v02/tests/test_stack.py",
+          "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/state/effect_terminal_runtime_v17_candidate.py"
+        ]
+      },
+      "test_only_fix": {
+        "commit": "0b0b1189391d0107cb846196f1e47b4f9e17f63f",
+        "change": "Keep an unflocked descriptor to the pre-intervention marker open across unlink/recreate so inode-number recycling cannot alias the old and replacement directory entries; compare replacement path identity to the preserved old open-FD identity.",
+        "product_semantics_changed": false
+      },
+      "rerun": 31413532008,
+      "rerun_state_at_receipt": "QUEUED"
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "source": "etcd documentation — etcd versus other key-value stores",
+      "url": "https://etcd.io/docs/v3.6/learning/why/",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "Lease/lock state by itself is not sufficient protection for external resources; downstream effect boundaries need generation/version validation."
+    },
+    {
+      "source": "Burrows, The Chubby lock service, OSDI 2006",
+      "url": "https://www.usenix.org/legacy/event/osdi06/tech/full_papers/burrows/burrows_html/index.html",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "A sequencer/generation validated by the receiving service prevents stale lock holders from acting as current."
+    },
+    {
+      "source": "Linux man-pages flock(2)",
+      "url": "https://man7.org/linux/man-pages/man2/flock.2.html",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "flock locks are associated with open file descriptions; pathname replacement is not equivalent to replacing a live open-file-description lock."
+    },
+    {
+      "source": "Linux man-pages rename(2)",
+      "url": "https://man7.org/linux/man-pages/man2/renameat2.2.html",
+      "retrieved_at": "2026-08-11",
+      "design_implication": "rename leaves existing open file descriptors unaffected and requires write/search permissions at the containing-directory boundary; parent-directory permissions can therefore become an explicit deployment fence against state-root replacement."
+    }
+  ],
+  "exactly_one_out_of_box_experiment": {
+    "experiment_id": "GO_OOB_STATE_ROOT_PATH_SWAP",
+    "pr": 235,
+    "branch": "chatgpt/go-state-root-swap-oob-20260811",
+    "head_sha": "a00859e48df6e759d7c3539c02a4c87d9bbc7507",
+    "base": "chatgpt/go-directory-anchor-gate-repair-20260810",
+    "product_code_changed": false,
+    "intervention": "While holder A retains the repaired state-directory FD/flock, rename the entire disposable state-root pathname away, materialize a fresh migrated state root at the original path, let contender B enter the real repaired Gate, then force A through its next anchor path-identity heartbeat check.",
+    "hypothesis": "Directory-FD locking closes marker-file replacement but cannot by itself prevent a replacement state-root pathname from creating a second independent physical and semantic generation before the old holder reaches its next path-identity check.",
+    "strongest_counterhypothesis": "Production ownership/mount policy makes state-root rename/replacement unreachable to Frank and all allowed tools; if measured true, an explicit deployment invariant can close this class without another runtime lock architecture.",
+    "expected_negative_status": "REPRODUCED_STATE_ROOT_PATH_SWAP_SPLIT_BRAIN",
+    "target_workflow_run": 31413758588,
+    "target_workflow_state_at_receipt": "QUEUED",
+    "safety": {
+      "disposable_state_only": true,
+      "canonical_state_mutated": false,
+      "external_network_used": false,
+      "external_provider_effect": false,
+      "training_authority": false,
+      "self_harness_authority": false
+    }
+  },
+  "hypothesis_matrix": [
+    {
+      "id": "H-GO-ANCHOR-1",
+      "claim": "A state-directory open-FD flock plus FD/path identity checks closes the already-measured lockfile-entry unlink/recreate split-brain class.",
+      "status": "TESTING",
+      "falsifier": "Corrected PR #225 target regression still admits a contender while A holds the original directory FD, or breaks the unchanged execution-gate recovery/exclusion baseline."
+    },
+    {
+      "id": "CH-GO-ANCHOR-1",
+      "claim": "The first PR #225 target failure was a product-runtime failure rather than a discriminator artifact.",
+      "status": "WEAKENED_BY_LOG_INSPECTION",
+      "evidence": "The unchanged baseline passed and the repair test aborted solely on same inode-number reuse before attempting the contender Gate."
+    },
+    {
+      "id": "H-GO-ANCHOR-2",
+      "claim": "The whole state-root pathname remains a higher-order physical singleton dependency above the directory-FD repair.",
+      "status": "TESTING_OOB",
+      "falsifier": "PR #235 target run demonstrates the replacement root cannot admit a second Gate, or accepted production deployment independently proves state-root replacement inaccessible before runtime."
+    },
+    {
+      "id": "CH-GO-ANCHOR-2",
+      "claim": "Runtime changes are unnecessary because deployment permissions alone can make state-root replacement impossible.",
+      "status": "PLAUSIBLE_UNMEASURED",
+      "next_test": "If #235 reproduces on disposable state, inspect and harden accepted target parent-directory ownership/mode/mount/service sandbox, then rerun a same-UID rename denial plus normal in-state write/recovery matrix."
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING_NOT_PROMOTED",
+    "name": "CONJUNCTIVE_EFFECT_EXECUTION_SINGLETON_CHAIN",
+    "required_chain": [
+      "replacement-safe physical execution anchor or measured deployment equivalent",
+      "exact Gate-issued live object capability",
+      "exact V15 generation",
+      "exact V16 execution_id + credential + admitted ingress provenance",
+      "immutable per-effect binding to that execution generation",
+      "caller-presented B2 fence",
+      "same-generation B3 provider-precommit revalidation",
+      "idempotency plus OUTCOME_UNKNOWN reconciliation after uncertain provider acceptance",
+      "outcome evidence remains non-authoritative after generation turnover"
+    ],
+    "candidate_simplification_if_oob_reproduces": "Prefer a root/deployment-owned non-renamable parent boundary for the state root, while retaining write access inside the state root, if target measurements prove it sufficient. Do not add a third semantic lease authority merely to compensate for filesystem permissions that can be made explicit and testable.",
+    "effect_on_pr228": "PR #228 can prove exact issuance by its Gate but cannot yet prove that Gate is the sole possible global current Gate until the #225/#235 physical-singleton dependency is closed.",
+    "rollback": "No product architecture was promoted by this run; the PR #225 change remains draft and the PR #235 branch is diagnostic-only."
+  },
+  "negative_results_preserved": [
+    "Hosted Deep Integrity jobs with steps=null remain infrastructure-negative evidence, not candidate-code failures.",
+    "The initial #225 repair regression was invalid as a causal verdict because ext4 inode-number reuse violated a test assumption.",
+    "Observing a current epoch or copying a structural execution tuple is not equivalent to possession of the admitted live execution capability."
+  ],
+  "execution_state": {
+    "performed": [
+      "fast GitHub canonical boot",
+      "live PR/work coordination",
+      "primary external knowledge refresh",
+      "target run/job/log adjudication",
+      "test-only PR #225 fix committed",
+      "one diagnostic OOB branch/test/workflow/PR created",
+      "progress/forecast resolver sources refreshed"
+    ],
+    "target_runs_pending": [
+      31413532008,
+      31413758588,
+      31412817524
+    ],
+    "no_claim": "No queued run is counted as PASS or FAIL until steps execute and evidence is read."
+  },
+  "next_frontier_ranked": [
+    "Read PR #225 corrected target run and classify mechanism vs test failure.",
+    "Read PR #235 sole OOB target run and decide deployment-permission invariant versus outer physical anchor requirement.",
+    "Read PR #228 exact V16 Gate-issued target run; if green, restack/fuse only after physical singleton dependency is closed.",
+    "After OOB result, measure accepted target parent-directory rename/delete authority before introducing any additional lock architecture.",
+    "Preserve remaining F-V01-09 gates: non-bypassable production effect route, provider timeout/reconciliation, real ClayCode frontend/TypedIR/compiler/lowering evidence."
+  ],
+  "research_write_status": "COMMITTED_PENDING_TARGET_EXECUTION_DELTA"
+}

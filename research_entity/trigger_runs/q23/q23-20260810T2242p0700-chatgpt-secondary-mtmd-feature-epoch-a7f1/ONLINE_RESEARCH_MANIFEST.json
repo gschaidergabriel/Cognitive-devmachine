@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "retrieved_on": "2026-08-10",
+  "source_policy": "PRIMARY_OR_OFFICIAL_TECHNICAL_ONLY",
+  "sources": [
+    {
+      "id": "EXT-QWEN35-4B-CARD",
+      "class": "OFFICIAL_MODEL",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-4B",
+      "finding": "Official Qwen3.5-4B describes a 4B language model with a Vision Encoder, hidden dimension 2560 and native multimodal use.",
+      "architecture_effect": "Confirms the target family already includes deep vision; second heavy semantic visual stack is not automatically justified."
+    },
+    {
+      "id": "EXT-QWEN35-4B-CONFIG",
+      "class": "OFFICIAL_MODEL",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-4B/raw/main/config.json",
+      "finding": "Exact current 4B config has text hidden_size 2560; vision depth 24, hidden_size 1024, out_hidden_size 2560, patch_size 16, spatial_merge_size 2, temporal_patch_size 2, deepstack_visual_indexes empty; text uses interleaved M-RoPE parameters.",
+      "architecture_effect": "Use exact 4B config rather than generic library defaults; projected visual output matches language input dimension; no 4B DeepStack tap is required for the first baseline."
+    },
+    {
+      "id": "EXT-QWEN35-4B-PREPROCESS",
+      "class": "OFFICIAL_MODEL",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/preprocessor_config.json",
+      "finding": "Current image preprocessing uses patch_size 16, temporal_patch_size 2 and merge_size 2 with dynamic sizing.",
+      "architecture_effect": "Preprocessor identity and token-budget policy are causal feature-epoch inputs."
+    },
+    {
+      "id": "EXT-QWEN35-4B-WEIGHTS",
+      "class": "OFFICIAL_MODEL",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/model.safetensors.index.json",
+      "finding": "Official safetensors metadata reports total_size 9,319,737,856 bytes while the model card labels the language model as 4B.",
+      "architecture_effect": "Resource accounting must use complete deployed text+vision artifacts/runtime footprint rather than nominal language-model parameter label."
+    },
+    {
+      "id": "EXT-LLAMACPP-MTMD-H",
+      "class": "PRIMARY_GITHUB_PROJECT",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/master/tools/mtmd/mtmd.h",
+      "finding": "mtmd_get_output_embd/mtmd_batch_get_output_embd expose output float embeddings sized llama_model_n_embd_inp(model) times media-token count; mtmd APIs include experimental surfaces and batch/context ownership constraints.",
+      "architecture_effect": "Provides a concrete projected visual-token buffer for MVC-Q0 without a second encode; runtime version must be provenance-bound."
+    },
+    {
+      "id": "EXT-LLAMACPP-SERVER-CONTEXT",
+      "class": "PRIMARY_GITHUB_PROJECT",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/master/tools/server/server-context.cpp",
+      "finding": "Current server process_mtmd_chunk obtains embd via mtmd_batch_get_output_embd and immediately passes the same pointer to mtmd_helper_decode_image_chunk after mtmd_batch_encode.",
+      "architecture_effect": "Identifies the minimal pre-decode hook for shared-buffer MVC gating."
+    },
+    {
+      "id": "EXT-QWEN3-VL-EMBEDDING",
+      "class": "PRIMARY_GITHUB_PROJECT",
+      "url": "https://github.com/QwenLM/Qwen3-VL-Embedding",
+      "finding": "Qwen's dedicated multimodal embedding family uses explicit embedding architecture/training and extracts a final semantic representation for retrieval rather than treating a base generative VLM buffer as automatically calibrated embedding space.",
+      "architecture_effect": "Keeps the strongest counterhypothesis alive: raw projected Qwen3.5 visual tokens may need a tiny trained projection or dedicated lightweight baseline for open-set calibration."
+    },
+    {
+      "id": "EXT-LLAMACPP-ISSUE-19929",
+      "class": "ISSUE_OR_FAILURE",
+      "url": "https://github.com/ggml-org/llama.cpp/issues/19929",
+      "finding": "A closed Qwen3.5 issue documented image correctness depending on batch/ubatch settings in larger variants.",
+      "architecture_effect": "Treat batch/ubatch as mandatory target-regression metadata; do not infer the exact 4B target is affected until reproduced."
+    },
+    {
+      "id": "EXT-LLAMACPP-ISSUE-21272",
+      "class": "ISSUE_OR_FAILURE",
+      "url": "https://github.com/ggml-org/llama.cpp/issues/21272",
+      "finding": "A closed issue documented a Qwen3.5 vision-projector CUDA/Flash-Attention CPU fallback with roughly order-of-magnitude image-encode regression on that build/hardware.",
+      "architecture_effect": "Backend/runtime commit enters resource receipts and FeatureEpoch until invariance/performance are demonstrated."
+    },
+    {
+      "id": "EXT-LLAMACPP-ISSUE-22582",
+      "class": "ISSUE_OR_FAILURE",
+      "url": "https://github.com/ggml-org/llama.cpp/issues/22582",
+      "finding": "A closed-as-not-planned report observed very slow MTMD image encoding in llama-server versus CLI for Qwen3.5-9B on one setup.",
+      "architecture_effect": "Benchmark the exact server path, not only CLI or theoretical vision cost."
+    },
+    {
+      "id": "EXT-LLAMACPP-ISSUE-25717",
+      "class": "ISSUE_OR_FAILURE",
+      "url": "https://github.com/ggml-org/llama.cpp/issues/25717",
+      "finding": "A recent Qwen3.5 multimodal issue reports M-RoPE/CUDA illegal-memory-access sensitivity to attention/cache/prompt-order conditions on a larger variant.",
+      "architecture_effect": "Adds image-first vs long-text-before-image and runtime configuration to exact 4B acceptance regression matrix; no transfer claim without reproduction."
+    },
+    {
+      "id": "EXT-GUI-HISTORY-PRUNING-2603.26041",
+      "class": "PRIMARY_PAPER",
+      "url": "https://arxiv.org/abs/2603.26041",
+      "finding": "Historical GUI screenshot study reports that background/spatial structure can carry transition information and that aggressive semantic pruning can discard useful context; recency-weighted compression is useful.",
+      "architecture_effect": "ROI-only is not sufficient as a default claim; retain full-frame structural anchor evidence and compare ROI vs ROI+context."
+    },
+    {
+      "id": "EXT-GUIPRUNER-2602.23235",
+      "class": "PRIMARY_PAPER",
+      "url": "https://arxiv.org/abs/2602.23235",
+      "finding": "GUIPruner reports benefits from temporal-adaptive resolution plus structure-aware pruning while preserving global layout.",
+      "architecture_effect": "Supports a global-low-detail + local-high-detail experiment rather than blind changed-region cropping."
+    },
+    {
+      "id": "EXT-AGMEM-2606.14106",
+      "class": "PRIMARY_PAPER",
+      "url": "https://arxiv.org/abs/2606.14106",
+      "finding": "Failure-mode study reports full-image visual memory can worsen action-level/grounding failures and proposes action-grounded local visual memory.",
+      "architecture_effect": "Strengthens QNDRF action/outcome-linked crop memory as a candidate but requires Frank-specific matched tests."
+    },
+    {
+      "id": "EXT-REVISION-2605.11212",
+      "class": "PRIMARY_PAPER",
+      "url": "https://arxiv.org/abs/2605.11212",
+      "finding": "ReVision reports temporal screenshot redundancy reduction can cut visual-token usage while preserving/improving benchmark performance in its setting.",
+      "architecture_effect": "Supports testing temporal redundancy suppression, but deterministic tile/hash gating remains the cheaper Frank baseline."
+    }
+  ],
+  "counterevidence_policy": "Issue reports and external papers are transfer-risk evidence only until reproduced on the exact Frank 4B target; no architecture promotion from source count or benchmark rank."
+}

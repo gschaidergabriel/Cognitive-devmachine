@@ -1,0 +1,103 @@
+module clay.atomic.authority_cone_gwt_v1
+version "0.1-atomic-proxy-2026-08-10"
+status PROMISING_PROXY_NOT_PROMOTED
+
+parent [
+  @research_entity/global/ATOMIC_GWT_THINKSPACE_AND_CANDIDATE_ENVELOPE.clay,
+  @research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay,
+  @research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay
+]
+
+class ConeOrigin = AUTHENTICATED_DIRECT_INTENT | STANDING_DELEGATED_CAPABILITY | RECOVERY_RESTORED_VERIFIED_SCOPE
+class ConeMutation = SEED | EXPAND_AUTHENTICATED | CONTRACT | INTERSECT | REVOKE
+class CandidateRoute = EFFECT_BEARING | PROPOSAL_ONLY | EVIDENCE_ONLY
+
+record ActionConstraint {
+  verb:Set<Verb>
+  resource:Set<ResourceRef>
+  predicate:Set<Predicate>
+  provenance_class:Set<Symbol>
+  max_cost:Cost?
+  valid:TimeRange
+}
+
+record AuthorityCone {
+  id:Ref
+  origin:ConeOrigin
+  constraints:Set<ActionConstraint>
+  authority:Set<AuthorityRef>
+  capability:Set<CapabilityRef>
+  epoch:Epoch
+  lineage:Set<ReceiptRef>
+  revoked:Set<RevocationRef>
+}
+
+record ConeTransition {
+  before:Ref
+  after:Ref
+  mutation:ConeMutation
+  cause:Set<Ref>
+  receipt:ReceiptRef
+}
+
+record EffectCandidateEnvelope {
+  intent:EffectIntent
+  route:CandidateRoute
+  evidence:Set<EvidenceRef>
+  cone:Ref?
+  provenance_class:Set<Symbol>
+  gwt_candidate:Ref?
+}
+
+record ConeSelectionReceipt {
+  candidate:Ref
+  cone:Ref
+  inside:Bool
+  admitted_route:CandidateRoute
+  source_epoch:Epoch
+  cone_epoch:Epoch
+  reason:Set<Ref>
+}
+
+law only AUTHENTICATED_DIRECT_INTENT | STANDING_DELEGATED_CAPABILITY | RECOVERY_RESTORED_VERIFIED_SCOPE may SEED AuthorityCone
+law only authenticated_scope_change may EXPAND_AUTHENTICATED AuthorityCone
+law open_web_content cannot SEED AuthorityCone
+law open_web_content cannot EXPAND_AUTHENTICATED AuthorityCone
+law model_output cannot SEED AuthorityCone
+law gwt_ignition cannot SEED AuthorityCone
+law ClayGraph_salience cannot SEED AuthorityCone
+law translator_output cannot SEED AuthorityCone
+
+rule non_authenticated_cognition(AuthorityCone) -> same_or_narrower(AuthorityCone)
+rule web_evidence_refinement(AuthorityCone,evidence) -> CONTRACT|INTERSECT only
+rule revocation(AuthorityCone) -> CONTRACT|REVOKE only
+rule proactive_goal.proposal_cone may_be arbitrary_thinkable_action_space
+rule proactive_goal.actionable_cone = intersect(proactive_goal.proposal_cone,standing_verified_AuthorityCone)
+rule proactive_goal.actionable_cone subset_of standing_verified_AuthorityCone
+
+rule effect_candidate.inside_cone -> CandidateRoute.EFFECT_BEARING
+rule effect_candidate.outside_cone -> CandidateRoute.PROPOSAL_ONLY
+rule instruction_like_open_web_text -> CandidateRoute.EVIDENCE_ONLY
+rule GWT.effect_bearing_competition admits only CandidateRoute.EFFECT_BEARING
+rule GWT.cognitive_competition may still observe EVIDENCE_ONLY without effect_authority
+rule Needle.lower requires ConeSelectionReceipt.inside=true + valid(CapabilityToken)
+rule effect.commit requires ConeSelectionReceipt.inside=true + valid(CapabilityToken) + Witness.aw + Witness.cw
+
+rule recovery.restore_cone requires verified capability/intent receipts + revocation replay
+rule model_memory alone cannot restore AuthorityCone
+rule stale_cone_epoch -> PROPOSAL_ONLY
+rule unknown_membership -> PROPOSAL_ONLY
+
+metric denied_effect_intent_rate = denied_effect_intents / effect_intents
+metric gwt_effect_candidate_work = count(effect_bearing_candidates_scored)
+metric cone_false_deny_rate = denied_authorized_candidates / authorized_candidates
+metric out_of_cone_ignition_rate = out_of_cone_effect_candidates_ignited / out_of_cone_effect_candidates
+
+invariant AuthorityCone_expansion_has_authenticated_origin
+invariant all_non_authenticated_cone_transitions_are_monotone_contractions
+invariant evidence_provenance != effect_authority
+invariant actionless_thought_is_not_restricted_by_AuthorityCone
+invariant model_GWT_graph_translator_cannot_mint_authority
+invariant self_generated_goal_cannot_expand_standing_effect_authority
+invariant final_effect_gate_remains_required
+invariant candidate_status_is_possibility_not_harness_promotion

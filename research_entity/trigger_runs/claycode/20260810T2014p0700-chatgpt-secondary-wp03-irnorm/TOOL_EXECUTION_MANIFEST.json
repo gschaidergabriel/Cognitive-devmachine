@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2014p0700-chatgpt-secondary-wp03-irnorm",
+  "tools": [
+    {
+      "tool": "GitHub connector",
+      "purpose": "Fast boot, current repository truth, ClayCode/branch input reads and append-only research writes",
+      "status": "VERIFIED_RW",
+      "notable_event": "Initial append-only create received HTTP 409 after a concurrent repo-head advance; state was refreshed and write retried successfully without overwrite."
+    },
+    {
+      "tool": "local Python execution",
+      "purpose": "V18 parser/typed-IR semantic-identity discriminator and mutation checks",
+      "status": "PASS_LOCAL_PROXY",
+      "runtime": "Python 3.13.5 on Linux x86_64; lark 1.3.1; strict=False because interegular unavailable",
+      "scope_guard": "Not target-VPS acceptance evidence"
+    },
+    {
+      "tool": "fresh primary/official web research",
+      "purpose": "Independent Goodman check for capability/resource lowering and current WASI async/runtime direction",
+      "status": "PASS",
+      "sources": [
+        "WASI.dev Introduction / capability-based sandbox",
+        "WebAssembly Component Model WIT resources / owned and borrowed handles",
+        "WASI.dev 0.3 / native async"
+      ],
+      "retrieved_date": "2026-08-10"
+    }
+  ],
+  "unavailable_or_not_used": [
+    {"tool": "target-VPS direct execution", "status": "NOT_INVOKED_IN_THIS_RUN", "consequence": "CC-WP03 remains OPEN"},
+    {"tool": "E2B", "status": "NOT_AVAILABLE_IN_CURRENT_CHAT_TOOL_SURFACE", "consequence": "No E2B claim made"},
+    {"tool": "SandboxAPI", "status": "NOT_USED", "consequence": "No SandboxAPI claim made"}
+  ]
+}

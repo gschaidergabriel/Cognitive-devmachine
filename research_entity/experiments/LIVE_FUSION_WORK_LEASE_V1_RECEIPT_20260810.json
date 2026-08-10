@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-LIVE-FUSION-WORK-LEASE-20260810",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "status": "SIMULATION_AND_LOCAL_EXECUTION_CANDIDATE_NOT_PROMOTED",
+  "parent_live_fusion_candidate": "PR #156",
+  "coordination_delta": "After discovering PR #156, duplicate ACK/reentry work was abandoned. This candidate retains only one-active-work lease, fence epoch, stale-spec and idempotent-effect protections.",
+  "hypothesis": "Lease/fencing adds incremental collision and retry safety beyond PR #156 plus current work-spec revalidation.",
+  "counterhypothesis": "PR #156 plus mandatory refresh/revalidation is sufficient and lease/fencing cost has no net benefit.",
+  "out_of_box_experiment_count": 1,
+  "synthetic_combined_result_mean": {
+    "matched_seeds": 500,
+    "tasks_per_seed": 1000,
+    "baseline_duplicate_effect_fraction": 0.1760524428,
+    "combined_candidate_duplicate_effect_fraction": 0.0,
+    "baseline_stale_effects_per_task": 0.05642,
+    "combined_candidate_stale_effects_per_task": 0.0,
+    "baseline_valid_task_completion": 0.9243652043,
+    "combined_candidate_valid_task_completion": 0.9971158898,
+    "baseline_transport_deliveries_per_task": 14.990784,
+    "combined_candidate_transport_deliveries_per_task": 4.20053
+  },
+  "synthetic_warning": "These values are assumption-bound simulation outputs, not production measurements. Zero duplicate/stale outcomes follow from the modeled fail-closed/idempotent laws and must be falsified on real execution.",
+  "local_execution": {
+    "command": "python3 -m unittest -v test_live_fusion_work_lease_v1.py",
+    "result": "5 tests passed in 0.036s",
+    "covered": [
+      "two SQLite connections cannot hold one live work lease simultaneously",
+      "lease expiry failover increments fence epoch",
+      "old holder cannot commit after failover",
+      "stale spec revision fails closed",
+      "same effect and result replay is idempotent",
+      "same effect key with different result is rejected",
+      "restart preserves fence head and effect receipt"
+    ]
+  },
+  "required_remote_tests": [
+    "parent PR #156 integration",
+    "crash after effect before receipt",
+    "crash after lease acquisition",
+    "late old-holder commit",
+    "spec revision during active lease",
+    "concurrent claim contention",
+    "restart replay",
+    "latency CPU RAM SQLite busy and write amplification",
+    "Hostinger Ubuntu differential"
+  ],
+  "promotion_rule": "No promotion until incremental benefit over PR #156 plus current revalidation is measured. NO_BENEFIT, KEEP_ISOLATED and REFUTED are valid outcomes."
+}

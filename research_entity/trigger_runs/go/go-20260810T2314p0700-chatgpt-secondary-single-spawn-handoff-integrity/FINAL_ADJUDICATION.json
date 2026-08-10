@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "adjudication_id": "GO-20260810T2314+0700-FINAL-ADJUDICATION",
   "parent_receipt": "RESEARCH_RECEIPT.json",
   "actor_id": "chatgpt-secondary",
@@ -25,35 +25,46 @@
     "result": "SUPPORTED",
     "no_additional_oob_experiments_counted": true
   },
-  "static_integrity_blocker": {
-    "classification": "CONFIRMED_FALSE_POSITIVE_IN_PRODUCTION_AUTHORITY_HEURISTIC",
-    "historical_patch_pr": 184,
-    "historical_patch_status": "CLOSED_STALE_AFTER_EVIDENCE",
-    "historical_vps_run": 31407655919,
-    "historical_synthetic_merge_sha": "9564005d2df362d44b9d930e6c0fc2f7939b1246",
-    "historical_result": "PASS repo_static_integrity_audit",
-    "historical_metrics": {
-      "elapsed_seconds": 0.05,
-      "max_rss_kib": 13312,
-      "exit_status": 0
+  "static_integrity_adjudication": {
+    "original_false_positive": {
+      "status": "DISCRIMINATED",
+      "path": "runtime/clay_vps_mcp_v02/tests/test_stack.py",
+      "cause": "whole-file production-authority heuristic combined unrelated TemporaryDirectory fixture tokens",
+      "historical_patch_pr": 184,
+      "historical_patch_status": "CLOSED_STALE_AFTER_EVIDENCE",
+      "historical_vps_run": 31407655919,
+      "historical_synthetic_merge_sha": "9564005d2df362d44b9d930e6c0fc2f7939b1246",
+      "historical_result": "PASS repo_static_integrity_audit",
+      "historical_metrics": {
+        "elapsed_seconds": 0.05,
+        "max_rss_kib": 13312,
+        "exit_status": 0
+      }
     },
-    "current_revalidation_pr": 192,
-    "current_revalidation_head": "cea47f193110544e45ae575c9ae69eb0f9098b48",
-    "current_revalidation_run": 31408466106,
-    "run_status_at_adjudication": "QUEUED",
-    "latest_main_observed": "f2ec9ae063352a95eca3123f650b66304a195c3f",
-    "latest_main_delta_after_pr_base": "deletes redundant tests/effect_reentry_v17_schema_guard_probe.py only; no new runtime authority surface in that commit",
-    "merge_policy": "DO_NOT_MERGE_CURRENT_REVALIDATION_UNTIL_RUN_PASSES_AND_CURRENT_MAIN_IS_RECHECKED"
+    "current_head_revalidation": {
+      "pr": 192,
+      "status": "CLOSED_NO_MERGE",
+      "head": "cea47f193110544e45ae575c9ae69eb0f9098b48",
+      "vps_run": 31408466106,
+      "synthetic_merge_sha": "2ac936b9e14d420c2eb40de7eacbbe2909b377d8",
+      "original_false_positive_reappeared": false,
+      "result": "FAIL_CURRENT_REPOSITORY_INTEGRITY",
+      "exact_failure": "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR:runtime/state/effect_terminal_runtime_v17_candidate.py",
+      "interpretation": "the repaired heuristic no longer falsely flags the runtime test and instead exposes a newly landed V17 candidate runtime that executes schema DDL outside an explicit migrator",
+      "latest_main_observed_after_run": "21249166f7bff4407ee17e4918358574ec8db848",
+      "collision_note": "main is actively advancing the same V17 causal/effect lane; no competing patch was opened from this GO cycle"
+    },
+    "current_repository_integrity": "BLOCKED_ON_V17_CANDIDATE_SCHEMA_AUTHORITY"
   },
   "stale_work_policy_observed": true,
-  "stale_prs_closed_without_credit": [131,146,154,167,180,184],
+  "stale_prs_closed_without_credit": [131,146,154,167,180,184,192],
   "next_critical_frontier": [
-    "finish current-head static-integrity revalidation PR 192",
+    "resolve V17 candidate schema authority so candidate DDL is isolated in an explicit migrator or otherwise satisfies the current production integrity contract",
     "build real network server/transport for token ingress without bypassing V16 continuity",
     "select and verify production ingress/TLS termination on target VPS",
     "carry BUSY versus HANDOFF_REQUIRED/task-switch semantics across clients and peer-AI bridges without active-content leakage",
     "complete current effect/outcome/re-entry provider evidence and fencing"
   ],
   "training_authorized": false,
-  "final_status": "GO_CYCLE_HANDOFF_WITH_CURRENT_REVALIDATION_QUEUED"
+  "final_status": "GO_CYCLE_COMPLETE_WITH_V17_INTEGRITY_BLOCKER_EXPOSED"
 }

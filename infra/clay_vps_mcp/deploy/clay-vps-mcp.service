@@ -1,0 +1,37 @@
+[Unit]
+Description=Clay VPS MCP controlled executor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=clay-mcp
+Group=clay-mcp
+WorkingDirectory=/opt/clay-vps-mcp
+EnvironmentFile=/etc/clay-vps-mcp.env
+ExecStart=/opt/clay-vps-mcp/.venv/bin/clay-vps-mcp
+Restart=always
+RestartSec=3
+TimeoutStopSec=20
+UMask=0077
+
+# MCP itself never gets root capabilities.
+NoNewPrivileges=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictSUIDSGID=true
+LockPersonality=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/clay-vps-mcp /srv/clay-mcp/workspace /srv/models /opt/frank /opt/clay
+
+[Install]
+WantedBy=multi-user.target

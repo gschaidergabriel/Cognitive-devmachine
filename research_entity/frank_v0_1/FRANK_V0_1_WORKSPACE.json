@@ -89,13 +89,23 @@
             "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json"
           ]
         },
+        "presence_execution_generation_effect_fence": {
+          "status": "OPEN",
+          "evidence": [
+            "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json",
+            "gschaidergabriel/Dr.-Unterweger:run/31407119970",
+            "gschaidergabriel/Dr.-Unterweger:run/31406222052",
+            "gschaidergabriel/Dr.-Unterweger:run/31406521132"
+          ],
+          "note": "Fresh-main V14 still admits stale first attempt, stale same-key retry and an internal caller presenting no session/client/epoch/execution lease into COMMITTING. Required repair is a ClayCode-semantic, caller-bound, immutable execution-generation fence at reservation + begin/retry + provider-precommit; generation turnover defaults uncertain effects to reconciliation, while outcome evidence remains admissible."
+        },
         "current_source_lifecycle_crash_replay": {
           "status": "OPEN",
           "note": "Prior target-VPS lifecycle substrate passed on blob 9c318ce7; exact current effect-authority blob a28d47f0 still requires lifecycle rerun before current-source credit."
         },
         "current_claycode_frontend_typed_ir": {
           "status": "OPEN",
-          "note": "Frontend/TypedIR discriminator was extended to the new authority declarations in target commit 0f51bced; current exact-source receipt pending."
+          "note": "Frontend/TypedIR discriminator was extended to the new authority declarations in target commit 0f51bced; current exact-source receipt pending. Current WP04 diagnostics also expose missing claycode_base_frontend packaging on the exact-main bundle."
         },
         "real_provider_unknown_outcome_reconciliation": {
           "status": "OPEN",
@@ -111,9 +121,10 @@
         "gschaidergabriel/Dr.-Unterweger@b53420100cfeefef0f6135ce1ccb0ee28f2c5e9f",
         "gschaidergabriel/Dr.-Unterweger@af4eab1754539df31e98505bcdfdac2950daf970",
         "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
-        "gschaidergabriel/Dr.-Unterweger@dc2568ff863c4d7c4696c2d14c62db406f9fecb4"
+        "gschaidergabriel/Dr.-Unterweger@dc2568ff863c4d7c4696c2d14c62db406f9fecb4",
+        "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json"
       ],
-      "blocker": "Owner-fixed policy matrix is target-VPS PASS, but finished gate still needs exact-current-source lifecycle/frontend/TypedIR evidence, a real provider uncertainty/reconciliation path, and verified outcome -> provenance re-entry -> DONE/terminal receipt."
+      "blocker": "Owner-fixed policy matrix is target-VPS PASS, but fresh-main evidence shows the persisted V14 effect lifecycle is not bound to the exact admitted execution generation. Finished gate requires a ClayCode-semantic caller-bound immutable reservation/attempt/provider-precommit fence plus exact-current lifecycle/frontend/TypedIR evidence, a real provider uncertainty/reconciliation path, and verified outcome -> provenance re-entry -> DONE/terminal receipt."
     },
     "F-V01-10-PROACTIVE-AGENCY-WEB": {
       "status": "OPEN",
@@ -154,5 +165,5 @@
   },
   "completion_contract": "research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md",
   "terminal_receipt": "SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json",
-  "last_updated": "2026-08-10T21:18:00+07:00"
+  "last_updated": "2026-08-10T23:15:00+07:00"
 }

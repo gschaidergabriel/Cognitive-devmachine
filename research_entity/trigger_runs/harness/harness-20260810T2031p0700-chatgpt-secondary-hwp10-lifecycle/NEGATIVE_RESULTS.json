@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2031p0700-chatgpt-secondary-hwp10-lifecycle",
+  "negative_results": [
+    {
+      "id": "N-HWP10-L2-001",
+      "status": "SUPPORTED_COUNTEREXAMPLE",
+      "claim_refuted": "An in-memory used-confirmation nonce set is sufficient for Harness effect authority.",
+      "result": "False for restart/recovery semantics. Durable confirmation consumption must share an atomic canonical transaction with effect reservation.",
+      "architecture_effect": "Implemented SQLite-backed confirmation_consumptions + effects transaction in H1 reference."
+    },
+    {
+      "id": "N-HWP10-L2-002",
+      "status": "BOUNDARY_RESULT",
+      "claim_refuted": "Atomic local confirmation consumption implies exactly-once external effect execution.",
+      "result": "False in the general external-effect case. After an external attempt begins, a crash/timeout can leave outcome unknown; retry is only classified safe when a downstream idempotency contract/key exists, otherwise reconciliation is required.",
+      "architecture_effect": "Added COMMITTING/OUTCOME_UNKNOWN and SAFE_TO_RETRY_SAME_IDEMPOTENCY_KEY versus RECONCILE_REQUIRED recovery classes."
+    },
+    {
+      "id": "N-HWP10-L2-003",
+      "status": "IMPLEMENTATION_DEFECT_FIXED",
+      "claim_refuted": "Using sqlite3.Connection as a context manager closes read connections.",
+      "result": "The first deep prototype emitted ResourceWarning under warnings-as-errors because the context manager controls transaction completion but does not itself provide the required explicit close behavior for this usage.",
+      "architecture_effect": "Read paths now use explicit contextlib.closing/new connection per operation; 40/40 suite subsequently passed."
+    },
+    {
+      "id": "N-HWP10-L2-004",
+      "status": "TEST_DEFECT_FIXED",
+      "claim_refuted": "Every initially generated item in the 500-case mutation corpus was a true policy mutation.",
+      "result": "One Boolean mutation branch could reproduce the original value and therefore generated a no-op case. The test, not the authority implementation, was wrong.",
+      "architecture_effect": "Mutation corpus repaired to guarantee semantic request-hash changes before asserting rejection."
+    },
+    {
+      "id": "N-HWP10-L2-005",
+      "status": "NO_BENEFIT_OR_WINNER",
+      "claim_refuted": "WAL should be promoted as the obvious H1 effect-lifecycle SQLite mode based on local speed.",
+      "result": "Randomized local DELETE-vs-WAL measurements were mixed and noisy; one WAL run had a very large p99 outlier. No robust backend winner was established.",
+      "architecture_effect": "NO_CHANGE; retain explicit reference configuration and defer backend selection to matched target-VPS correctness/recovery/performance testing."
+    },
+    {
+      "id": "N-HWP10-L2-006",
+      "status": "SECURITY_OBSERVABILITY_RESULT",
+      "claim_refuted": "SQLite PRAGMA integrity_check is sufficient evidence for semantic effect-trace integrity.",
+      "result": "False. A test modified event payload content while SQLite integrity_check remained ok; independent event-hash verification detected the semantic tamper.",
+      "architecture_effect": "Keep physical database integrity and semantic event/trace integrity as separate mandatory checks."
+    }
+  ],
+  "epistemic_note": "These results are H1 local implementation/falsification evidence. They do not promote production, target-VPS, distributed exactly-once, or broad security claims."
+}

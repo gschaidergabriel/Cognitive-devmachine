@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2031p0700-chatgpt-secondary-hwp10-lifecycle",
+  "evidence_class": "LOCAL_MICROBENCHMARK",
+  "promotion_scope": "LOCAL_ONLY_NOT_TARGET_VPS",
+  "environment": {
+    "python": "3.13.5",
+    "linux_kernel": "6.18.35",
+    "machine": "x86_64",
+    "sqlite": "3.46.1",
+    "cpu_model": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logical_cpu_count": 5,
+    "mem_total_kb": 6219544,
+    "filesystem": "ext4"
+  },
+  "primary_measurement": {
+    "configuration": "SQLite rollback journal DELETE; synchronous=FULL",
+    "gate_validation_iterations": 5000,
+    "durable_reservation_iterations": 300,
+    "full_lifecycle_iterations": 200,
+    "gate_validate_ms": {"p50": 0.0155, "p90": 0.0163, "p95": 0.0173, "p99": 0.0613},
+    "durable_reserve_ms": {"p50": 2.3978, "p90": 6.8092, "p95": 8.3243, "p99": 11.6994},
+    "three_transition_lifecycle_ms": {"p50": 6.5558, "p90": 10.4684, "p95": 13.4594, "p99": 18.5098},
+    "three_transition_definition": "begin_attempt + verified record_outcome + record_reentry",
+    "database_bytes_after_primary_run": 790528,
+    "confirmation_rows": 300,
+    "sqlite_integrity_check": "ok"
+  },
+  "backend_comparison": {
+    "method": "randomized order, seed 20260810, three independent n=120 runs per journal mode, synchronous=FULL",
+    "DELETE_runs_ms": [
+      {"p50": 2.6005015, "p95": 8.44556545, "p99": 11.95165171},
+      {"p50": 5.093691, "p95": 19.3407007, "p99": 33.74280283},
+      {"p50": 3.7721945, "p95": 17.9466514, "p99": 22.53972443}
+    ],
+    "WAL_runs_ms": [
+      {"p50": 4.039938, "p95": 14.08248285, "p99": 21.81286585},
+      {"p50": 3.645265, "p95": 13.1243301, "p99": 19.07525626},
+      {"p50": 6.8507455, "p95": 28.08654755, "p99": 354.17228244}
+    ],
+    "median_of_run_quantiles_ms": {
+      "DELETE": {"p50": 3.7721945, "p95": 17.9466514, "p99": 22.53972443},
+      "WAL": {"p50": 4.039938, "p95": 14.08248285, "p99": 21.81286585}
+    },
+    "decision": "NO_CHANGE",
+    "reason": "mixed/noisy local results with a large WAL tail outlier; insufficient evidence to select a final backend before matched target-VPS workload and recovery tests"
+  },
+  "interpretation": [
+    "pure authority validation is negligible relative to durable reservation in this local environment",
+    "durability has measurable millisecond-scale cost and must remain in the resource shadow",
+    "local journal-mode microbenchmarks are not a basis for architecture promotion",
+    "target-VPS matched cold/warm/concurrency/crash measurements remain mandatory"
+  ]
+}

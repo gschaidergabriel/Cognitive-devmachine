@@ -1,0 +1,15 @@
+{
+  "controls":[
+    {"meaning":"ECT must not run if exact authenticated metadata exists.","name":"STATIC_EXACT_METADATA","result":"DOMINATES_WHEN_AVAILABLE"},
+    {"exact_recovery_rate":1.0,"name":"FIELD_VALUE_WITNESS","queries_p50":5,"queries_p95":8,"result":"SUPPORTED_SYNTHETIC"},
+    {"exact_recovery_rate":1.0,"name":"FIELD_ONLY_WITNESS","queries_p50":15,"queries_p95":29,"result":"SUPPORTED_BUT_COSTLIER"},
+    {"meaning":"mismatch alone does not justify semantic inference; returns UNKNOWN unless exact initial query passes","name":"BOOL_ONLY","result":"FAIL_CLOSED"},
+    {"name":"STALE_EPOCH","result":"REJECTED"},
+    {"name":"WRONG_NATIVE_SELF","result":"REJECTED"},
+    {"name":"UNSAFE_EFFECT_PROBE","result":"UNKNOWN_WITHOUT_SANDBOX"},
+    {"name":"AUTHORITY_MINT","result":"ZERO"}
+  ],
+  "run_id":"20260810T2126p0700-chatgpt-secondary-ect-contract-tomography",
+  "schema_version":"1.0",
+  "strongest_missing_control":"Real WP04 target-VPS/static-verifier differential against authenticated metadata/manual contracts with fault injection."
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "status": "RESEARCH_EVIDENCE_ONLY",
+  "subject": "ClayCode-native exact call-contract identity schema on selected V18",
+  "branch": "chatgpt/claycode-wp04-call-contract-schema-v1-20260810",
+  "stacked_on": "chatgpt/claycode-wp03-cycle-ir-v1-20260810",
+  "target_host": "HOSTINGER_UBUNTU_VPS",
+  "source_identity": {
+    "schema_blob": "bfaaf94eff62cf534eae147c7a1387d3b5f0e636",
+    "test_blob": "b986a52baf80a9fa6caedcf24f98defe460dba92",
+    "structural_typed_ir_blob": "67baf2fb5d0bd7241903b773bd94c1778a895aa5",
+    "selected_grammar": "BASE_D_V18_REWARD_RELATIONS"
+  },
+  "remote_execution_receipt": {
+    "workflow_run_id": "31386324534",
+    "truth_class": "REMOTE_EXECUTION_RECEIPT",
+    "runner": "clay",
+    "os": "Linux",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "status": "PASS"
+  },
+  "result": {
+    "new_grammar_required": false,
+    "sum_types": ["CallBindingAuthority", "CallEffectClass", "CallResolutionState"],
+    "records": ["CallContract", "CallContractIdentity", "CallContractObligation", "CallExecutionPrecondition", "CallParamContract", "CallRuntimeBinding"],
+    "call_contract_state_identity": "6a571ed5d3a1bf1907b6b9d5f0fc1a107fa27d7038fb85fab1684a77733797eb",
+    "obligation_state_identity": "7c8335b3646b86e9722a03263aa60719e9ae06d77018da52bf494b4dcad04bd9",
+    "precondition_state_identity": "f3a498a8346d16939311984762f26d67db218750655cdd1c30f30dd0e37f9286",
+    "runtime_component_hash_changes_identity": true,
+    "target_changes_identity": true,
+    "set_order_invariant": true,
+    "execution_admitted": false,
+    "effect_authority": "NONE_FROM_SCHEMA",
+    "v19_fn_restoration_needed_for_contract_schema": false
+  },
+  "relationship_to_real_cycle_inventory": {
+    "observed_target_arity_pairs": 27,
+    "exact_declared_matches_before_contract_layer": 0,
+    "execution_admitted_calls_before_population": 0,
+    "next_work": "Populate only evidence-backed exact CallContract records and bind them to exact current target-VPS runtime component hashes. Keep unresolved pairs fail-closed. Gate Needle.execute separately through a sealed effect broker with authority-scope and rollback receipts."
+  },
+  "promotion": "NONE",
+  "wp02_status": "PASS_SELECTED_V18_ONLY",
+  "wp03_status": "OPEN",
+  "base_status": "NOT_PASS",
+  "frank_harness_mutation": false
+}

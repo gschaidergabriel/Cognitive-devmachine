@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0003p0700-chatgpt-secondary-exact-effect-generation-fusion",
+  "trigger": "go",
+  "created_at_local": "2026-08-11T00:03:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "research_parent_sha": "7e9b1642d360c491a87bae84b95069523e03f89f",
+  "program": "FRANK_V0_1",
+  "native_target_identity": "self.root",
+  "work_package": "F-V01-09",
+  "status": "TESTING_NOT_PROMOTED",
+  "training_authorized": false,
+  "hypothesis": "B1/B2/B3 effect authority must bind a caller-presented transient capability to exact V16 execution_id + V15 lease_epoch + credential identity + holder hashes + matching ADMITTED ingress provenance; persisted identity bytes alone are not live authority.",
+  "source_evidence": [
+    "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json",
+    "research commit 59ed1c7524977bea39eb42ae42d035385049817f",
+    "target PR199 exact IngressExecutionLease/execution_id candidate",
+    "target PR211 same-V15-epoch/different-V16-execution-id counterhypothesis"
+  ],
+  "external_primary_evidence": [
+    "https://etcd.io/docs/v3.6/learning/api_guarantees/",
+    "https://man7.org/linux/man-pages/man2/flock.2.html",
+    "https://www.usenix.org/legacy/events/osdi06/tech/full_papers/burrows/burrows.pdf"
+  ],
+  "counterhypotheses": {
+    "epoch_only_sufficient": "REFUTED: V16 execution_id can change inside the same V15 epoch/holder relation.",
+    "flock_is_complete_effect_authority": "REFUTED: physical advisory exclusion is not logical caller identity or protected-resource fencing.",
+    "python_capability_is_hostile_code_security": "REJECTED_AS_OVERCLAIM",
+    "B3_makes_remote_provider_transactional": "REJECTED_AS_OVERCLAIM"
+  },
+  "target_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 204,
+    "head_sha": "4634df130c4793871da0d4da76ebb469370af199",
+    "draft": true,
+    "mergeable_observed": true,
+    "merge_base_sha": "21249166f7bff4407ee17e4918358574ec8db848",
+    "main_sha_at_latest_nonoverlap_check": "e5959b3b0b57ef63c92543d2bdcb85653608aded",
+    "main_commits_ahead_of_merge_base": 40,
+    "main_overlap_with_pr_changed_paths": "NONE_AT_CHECK_TIME"
+  },
+  "architecture_delta": {
+    "B1": "Atomically validate live admitted ingress execution and persist immutable exact-generation sidecar with V14 reservation/confirmation consumption.",
+    "B2": "Begin/retry requires presented transient capability and exact equality against sidecar, current V15, current V16 and matching admitted ingress; rejection creates zero authoritative lifecycle mutation.",
+    "B3": "Revalidate immediately before provider boundary; local guarded provider call holds underlying physical/V15 commit window.",
+    "recovery": "Generation turnover kills start/retry authority; uncertain already-sent provider outcomes remain reconcilable.",
+    "claycode": "ExecutionGenerationFence carries execution_id, lease_epoch, credential_fingerprint, holder hashes and capability fingerprint; reserve/begin/execute require matching admitted ingress."
+  },
+  "normal_discriminators": [
+    "current exact B1/B2/B3",
+    "same V15 epoch + different V16 execution_id cross-splice",
+    "released source capability",
+    "newer V15 successor cross-splice",
+    "uncertain retry after turnover",
+    "outcome reconciliation after turnover",
+    "immutable sidecar update/delete",
+    "reentrant underlying physical/V15 release inside provider commit window"
+  ],
+  "out_of_box_experiment": {
+    "name": "SERIALIZED_FENCE_RESURRECTION",
+    "count_for_go_macrocycle": 1,
+    "execution_status": "QUEUED_WITH_TARGET_WORKFLOW_NOT_YET_OBSERVED_EXECUTING",
+    "result": "UNKNOWN_NOT_YET_MEASURED"
+  },
+  "execution_receipts": {
+    "target_self_hosted": {"workflow_run_id": 31411845493, "job_id": 93531539131, "status": "QUEUED_AT_LAST_CHECK", "target_acceptance_evidence": false},
+    "hosted_shadow": {"workflow_run_id": 31411846239, "job_id": 93531539216, "status": "COMPLETED_FAILURE_WITH_STEPS_NULL", "classification": "NO_CANDIDATE_EXECUTION_EVIDENCE"},
+    "local_container": {"status": "NOT_EXECUTED", "reason": "github.com DNS unavailable in container", "target_acceptance_evidence": false}
+  },
+  "known_remaining_gaps": [
+    "accepted Hostinger run of the fused head",
+    "non-bypassable ordinary production effect routing/lowering",
+    "real provider timeout-after-acceptance and reconciliation measurement",
+    "current ClayCode frontend/TypedIR/compiler/lowering equivalence",
+    "complete IngressExecutionLease V16-handoff/provider-window ordering contract",
+    "candidate-only fault-injection error-string typo before promotion"
+  ],
+  "authority": {"frank_harness_mutation": "PROPOSAL_ONLY", "truth_authority_added": false, "effect_authority_expanded": false},
+  "external_effect_performed": false,
+  "canonical_self_root_state_mutated": false,
+  "final_training_started": false
+}

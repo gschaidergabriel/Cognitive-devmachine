@@ -1,0 +1,218 @@
+{
+  "receipt_version": "GO_RESEARCH_RECEIPT_V1",
+  "run_id": "go-20260810T2350p0700-chatgpt-secondary-effect-capability-fence",
+  "trigger": "go",
+  "created_at_local": "2026-08-10T23:50:00+07:00",
+  "created_at_utc": "2026-08-10T16:50:00Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "persistent_entity": "frank-project-global-research-entity",
+  "research_entity_display_name": "Clay",
+  "research_subject": "self.root",
+  "human_surface_name": "Frank",
+  "identity_boundary": {
+    "worker_is_clay_temporary_organ": true,
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "program": {
+    "active_stage": "FRANK_V0_1",
+    "target_host": "accepted Hostinger Ubuntu VPS",
+    "training_authorized": false,
+    "work_package": "F-V01-09",
+    "topic": "caller-bound effect authority across execution-generation turnover"
+  },
+  "fresh_internal_evidence": [
+    {
+      "kind": "prior_adjudication",
+      "path": "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json",
+      "claim": "V14 admits stale first-start, stale retry and unbound effect attempts into COMMITTING; selected successor requires caller-bound immutable execution-generation authority at reservation, begin/retry and provider-precommit."
+    },
+    {
+      "kind": "target_repo_candidate",
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 204,
+      "branch": "chatgpt/go-caller-bound-effect-fence-fresh-main-20260810-2326",
+      "head_observed": "d7759b63c8a8ecf4995f577fc9cbf459c40cc8ab",
+      "status": "DRAFT_TESTING",
+      "mechanism": [
+        "immutable effect_execution_generation_fences sidecar",
+        "transient ExecutionGenerationFence",
+        "B1 atomic live-generation reservation binding",
+        "B2 live presented capability equals reservation binding equals current generation",
+        "B3 provider precommit generation revalidation",
+        "provider commit window serializes execution release across final B3 check plus provider callback",
+        "post-turnover outcome reconciliation remains observation authority, not retry authority",
+        "ClayCode caller-bound semantic contract is present but compiler/lowering promotion remains unproven"
+      ]
+    }
+  ],
+  "external_primary_evidence": [
+    {
+      "source": "Mike Burrows, The Chubby lock service for loosely-coupled distributed systems, OSDI 2006",
+      "url": "https://research.google/pubs/the-chubby-lock-service-for-loosely-coupled-distributed-systems/",
+      "retrieved_at_utc": "2026-08-10T16:46:00Z",
+      "relevance": "Downstream protected operations use an opaque sequencer carrying lock generation rather than mere observation of current lock state; supports explicit fencing at the effect boundary."
+    },
+    {
+      "source": "IETF HTTPAPI draft-ietf-httpapi-idempotency-key-header-07",
+      "url": "https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/07/",
+      "retrieved_at_utc": "2026-08-10T16:46:00Z",
+      "relevance": "POST timeout can leave outcome uncertain; idempotency identifies repeated requests but does not itself establish current execution ownership."
+    },
+    {
+      "source": "AWS Builders Library, Making retries safe with idempotent APIs",
+      "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+      "retrieved_at_utc": "2026-08-10T16:46:00Z",
+      "relevance": "Timeout after a possibly accepted effect requires idempotent retry semantics or reconciliation; supports separating outcome recovery from execution authority."
+    },
+    {
+      "source": "Linux man-pages flock(2) and fork(2)",
+      "urls": [
+        "https://man7.org/linux/man-pages/man2/flock.2.html",
+        "https://man7.org/linux/man-pages/man2/fork.2.html"
+      ],
+      "retrieved_at_utc": "2026-08-10T16:46:00Z",
+      "relevance": "flock locks are attached to open file descriptions and are inherited through fork. No current repository fork/multiprocessing/process-pool runtime path was found, so process-incarnation hardening is retained as a conditional future release obligation rather than added now."
+    }
+  ],
+  "hypothesis": {
+    "id": "H_EFFECT_CAPABILITY",
+    "statement": "A sufficient Frank effect fence requires possession of a live Gate-issued execution capability, immutable reservation binding to that capability generation, and a final provider-precommit recheck; equality of caller-supplied epoch/session/client values is insufficient.",
+    "prediction": "A caller with copied generation scalars but no live lease/flock can pass the legacy V16.1 raw-field fence, while a Gate-issued exact-object successor rejects copied/constructed lease objects."
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH_RAW_GENERATION_TUPLE_SUFFICIENT",
+    "statement": "Matching current lease_epoch plus holder session/client is sufficient internal execution authority because only trusted Frank runtime code can call the lifecycle API.",
+    "falsifier": "Present a copied tuple from a legitimate current holder through a structurally separate caller that does not possess the live lease object or physical flock handle."
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_worker": 1,
+    "name": "GO_OOB_EXECUTION_CAPABILITY_TUPLE_CLONE",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 202,
+    "tested_sha": "22ec5207fd759d500ad4172ca2ba7176a9cbfc7a",
+    "workflow_run_id": 31409613216,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "status": "PASS_NEGATIVE_EVIDENCE",
+    "result_class": "REPRODUCED_EXECUTION_TUPLE_CLONE_PIGGYBACK",
+    "observations": {
+      "copied_caller_has_live_lease_object": false,
+      "copied_caller_has_physical_flock_handle": false,
+      "copied_tuple_start_admitted": true,
+      "copied_tuple_retry_admitted": true,
+      "start_final_state": "COMMITTING",
+      "retry_final_state": "COMMITTING",
+      "provider_commit_fence_present": false,
+      "reservation_binding_update_accepted_inside_rolled_back_probe": true,
+      "external_network_used": false,
+      "external_effect_performed": false,
+      "canonical_state_mutated": false
+    },
+    "artifact": {
+      "github_artifact_id": 9071223036,
+      "zip_sha256": "fc6b6ffc06db55f705f74802c6f1fd1dce7350de1a5ffe85e309cf1a6e2e345d"
+    },
+    "interpretation": "The legacy V16.1 candidate checks equality of copied generation data, not possession of a live execution capability. Counterhypothesis CH_RAW_GENERATION_TUPLE_SUFFICIENT is refuted for the tested internal-caller model."
+  },
+  "negative_results_and_infra": [
+    {
+      "item": "PR 198 V16.1 raw-field port",
+      "classification": "REFUTED_AS_SUFFICIENT_EFFECT_CAPABILITY_FENCE",
+      "reason": "Exact target-compatible OOB run 31409613216 admitted copied tuple start and retry, lacked B3 provider fence, and allowed binding update in rolled-back probe. Preserve as comparison/negative evidence."
+    },
+    {
+      "item": "PR 197 snapshot rollback generation discriminator",
+      "workflow_run_id": 31409091336,
+      "classification": "INFRA_FAILURE_NO_SCIENTIFIC_RESULT",
+      "reason": "Workflow removed checkout credentials and then attempted git fetch origin main; failed before experiment. Do not treat failure as rollback evidence."
+    },
+    {
+      "item": "PR 204 GitHub-hosted shadow run 31410622849",
+      "classification": "PRE_EXECUTION_INFRA_FAILURE_NO_MECHANISM_RESULT",
+      "reason": "Job completed failure with no steps and no retrievable log blob."
+    }
+  ],
+  "new_adversarial_finding": {
+    "id": "B0_GATE_ISSUANCE_FORGERY",
+    "affected_candidate": "PR 204",
+    "observation": "At head e04b88cfcd0f3dc24f9afc829046464b281a0811 and still at d7759b63c8a8ecf4995f577fc9cbf459c40cc8ab, FrankExecutionLease.__init__ is public and derive_execution_generation_fence accepts any live-looking FrankExecutionLease instance. No exact-object issuance proof ties the object to successful FrankExecutionGate.acquire plus canonical flock ownership.",
+    "risk": "A copied or manually constructed same-field FrankExecutionLease can mint a new process-local secret/fingerprint despite never being Gate-issued; V15 tuple equality then cannot distinguish it from the legitimate holder.",
+    "status": "REPAIR_CANDIDATE_TESTING"
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 217,
+    "branch": "chatgpt/go-effect-fence-gate-issued-fresh-v2-20260810",
+    "head": "4f0f3e18e9ca139d92eaf8e4afdd1466ab4bc771",
+    "delta": [
+      "process-local weak exact-object registry populated only after FrankExecutionGate physical flock plus V15 semantic acquisition succeeds",
+      "unregister on release while preserving PR204 provider-commit critical section",
+      "derive_execution_generation_fence requires exact registered Gate-issued object",
+      "ExecutionGenerationFence.assert_live revalidates exact Gate-issued object identity",
+      "trusted ingress unwrap remains valid only through its registered nested lease",
+      "normal invariant test rejects copy.copy(real lease) and manually constructed same-field lease backed by another unlocked file",
+      "parent B1/B2/B3, provider-release serialization, immutable binding, reconciliation and parent serialized-fence OOB remain required"
+    ],
+    "target_workflow_run_id": 31410890028,
+    "target_workflow_state_at_receipt": "QUEUED",
+    "promotion": "NOT_CLAIMED"
+  },
+  "counterevidence_and_limits": [
+    "The exact-object WeakSet registry is a trusted-runtime discipline, not a hostile Python introspection security boundary.",
+    "Linux flock and the registry can both be inherited across fork. No current repository runtime path using multiprocessing, os.fork, ProcessPoolExecutor or uvicorn workers was found. If a forking execution path is introduced, add process-incarnation or at-fork invalidation and a corresponding regression before release.",
+    "PR204 has added a provider commit critical section after the initial B3 design, closing a distinct check-then-release TOCTOU class. This is complementary to Gate-issued object identity and must be preserved.",
+    "ClayCode static contract text is not compiler/lowering evidence. F-V01-09 cannot close until the strict caller-bound path is the ordinary compiled/lowered effect route and the legacy unbound V14 production attempt path is unreachable."
+  ],
+  "baseline_and_comparison": {
+    "original_effect_lifecycle": "V14 historical/current baseline remains measurement owner until successor is proven",
+    "raw_tuple_candidate": "V16.1 / PR198 is now retained as negative comparison",
+    "strong_candidate": "PR204 plus PR217 Gate-issued hardening if target execution is green",
+    "simpler_candidate": "PR199 migration-free ingress-proof design remains a useful Pareto comparator; do not assume the sidecar is superior without matched integrity/tamper/resource evidence"
+  },
+  "work_impacts": [
+    {
+      "work_package": "F-V01-09",
+      "action": "KEEP_IN_PROGRESS",
+      "next_falsifier": "Execute PR217 target VPS workflow and require physical-gate baseline plus Gate-issued copy/constructor rejection plus complete parent B1/B2/B3/reconciliation matrix."
+    },
+    {
+      "work_package": "F-V01-09",
+      "action": "CLAYCODE_GATE_REMAINS",
+      "next_falsifier": "Demonstrate actual ClayCode compiler/type-effect/lowering path requires the strict execution capability and cannot reach legacy unbound begin/retry/provider execution."
+    },
+    {
+      "work_package": "F-V01-13_or_recovery_lane",
+      "action": "RETAIN_CONDITIONAL_TEST_OBLIGATION",
+      "next_falsifier": "Rerun corrected snapshot-rollback generation discriminator; if production can restore older UnifiedDB snapshots, prove non-rollback incarnation/revision fencing before execution resumes."
+    }
+  ],
+  "executed_vs_queued": {
+    "executed": [
+      "PR202 GO_OOB_EXECUTION_CAPABILITY_TUPLE_CLONE on self-hosted Linux/X64 run 31409613216",
+      "GitHub reviews/comments on PR198 and PR204",
+      "PR217 code/test/workflow candidate authored on a branch"
+    ],
+    "queued": [
+      "PR217 target self-hosted workflow run 31410890028",
+      "latest PR204 target self-hosted workflow at receipt time"
+    ],
+    "not_executed_or_not_claimed": [
+      "no external provider effect",
+      "no canonical Frank state mutation",
+      "no main-branch product promotion",
+      "no whole Frank v0.1 acceptance",
+      "no paid/final training authorization",
+      "no Frank self-Harness mutation"
+    ]
+  },
+  "evidence_class": "MIXED_VERIFIED_TARGET_NEGATIVE_EVIDENCE_PLUS_TESTING_SUCCESSOR",
+  "final_synthesis": "The executed target-compatible evidence changes the architecture decision: an execution generation is not sufficient when represented only as caller-copyable scalars. The effect boundary needs a non-transferable live execution capability, immutable birth-generation binding, final provider-boundary revalidation, and reconciliation-only recovery after uncertain provider contact. PR204 supplies most of that causal chain and has independently added release serialization across provider commit. Its remaining B0 object-issuance gap is isolated by PR217. No promotion is justified until PR217 executes green on the target lane and the same contract is proven through actual ClayCode lowering with legacy unbound product paths unreachable."
+}

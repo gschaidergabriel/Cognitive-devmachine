@@ -1,0 +1,35 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-omnisource-v10-revise-after-remote-20260810T1710p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T17:10:00+07:00",
+  "payload": {
+    "work_id": "WORK-OMNISOURCE-LIVE-FUSION-REENTRY-V1-20260810",
+    "work_clay": "Continue the owner-fixed omnisource live-fusion/research-reentry implementation from the revised UnifiedDB V10 candidate. Local mechanism tests and exact-byte self-hosted Linux tests now support source coverage, semantic stale rejection, provenance preservation, contradiction preservation, restart closure and current-work revision credit binding against the existing V9 v_clay_current_work_specs authority. Do not promote V10 yet. Next discriminate the remaining real coordination layer: replay actual current repo work/feedback/dependency events; integrate or reject useful mechanisms from divergent live-fusion candidates such as exact plan/lease-bound ACK identity and evidence-gated dependency-only interrupt power; inject stale/missing dependency projections, duplicate/late events, work-revision churn and crash/restart; compare against V9/manual and simpler routing baselines. Multi-connection WAL release stress must use a SQLite version/configuration not affected by the documented WAL-reset bug or explicitly remain blocked.",
+    "reason_clay": "Fresh evidence changed the plan twice. First, current ClayCode supervisor evidence showed that a technically successful execution can be stale relative to a newer work revision, so V10 added work-spec/repo-head/component binding. Second, V9 already exposes authoritative v_clay_current_work_specs, so V10 now cross-checks current-work credit against that existing authority rather than minting a second work truth. Current exact-byte self-hosted run 31377648344 passes both the V10 core and V9-current-spec integration falsifier. Divergent V2 and dependency-evidence-gate branches add useful unpromoted candidates for plan/lease ACK and hard-vs-soft dependency evidence. The remaining uncertainty is real-repo routing/correctness/resource behavior, not basic record persistence.",
+    "completion_clay": "Current-repo replay report uses current work revisions and exact source/component identities; V10 is compared against V9/manual and simpler routing baselines; actual branch/work/dependency events are replayed; stale/missing dependency projection, duplicate event, late/causal reorder, work-revision churn and crash/restart faults are executed; dependency-only INTERRUPT authority requires current hard witness rather than ClayGraph/associative evidence alone; delivery/ACK binds exact event/payload/current plan/current lease where that transport path is selected; false materiality, affected-branch recall, false interrupts, stale-work credit, latency and CPU/RAM/I/O/network/context costs are measured; SQLite multi-connection WAL release safety is either verified on a fixed family/configuration or remains an explicit blocker; candidate receives SUPPORTED/REVISE/REFUTED/NO_CHANGE; V10/adaptive routing remain unpromoted until all applicable gates pass.",
+    "executor_policy": "Refresh main head, latest work revision, component hashes, current V9 work projection and current runner/storage capability immediately before every material effect. Do not displace WORK-CLAYCODE-BASE14-CLOSE-20260809 on the same scarce executor. Preserve prior PASS and FAIL receipts as ancestry; never inherit a receipt across changed work revision or component identity without revalidation. No paid training and no Frank self-Harness authority.",
+    "dependencies": [
+      "research_entity/runtime/RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FUSION.sql",
+      "research_entity/runtime/RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql",
+      "research_entity/global/CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE.clay",
+      "research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay",
+      "research_entity/claycode/supervisor/STEERING_20260810T1644P0700.json",
+      "research_entity/experiments/omnisource_v10_v9_workrev_integration_test.py",
+      "remote-candidate:chatgpt/live-fusion-reentry-v2-current-main-20260810",
+      "remote-candidate:chatgpt/live-fusion-evidence-gated-v15-v3-current-main-20260810"
+    ],
+    "invalidators": [
+      "A newer owner-fixed live-fusion/reentry directive supersedes this work",
+      "A newer verified current-main implementation already closes the same real-repo replay/fault/resource matrix",
+      "Current BASE critical-path work requires the same only available executor and has higher mission priority",
+      "Evidence shows V10 creates a second semantic/work authority rather than remaining a projection/persistence layer"
+    ],
+    "base_priority": 0.58,
+    "expected_impact": 0.95,
+    "urgency": 0.74,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

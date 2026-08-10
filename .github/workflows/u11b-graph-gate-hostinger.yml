@@ -10,6 +10,14 @@ on:
       - 'research_entity/runtime/semantic_access_generation_builder_v11.py'
       - 'research_entity/runtime/test_semantic_access_v11b_graph_gate.py'
       - 'research_entity/runtime/u11b_graph_gate_hostinger_probe.py'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/u11b-graph-gate-hostinger.yml'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V11B_GRAPH_PLAN_BINDINGS.sql'
+      - 'research_entity/runtime/semantic_access_generation_builder_v11.py'
+      - 'research_entity/runtime/test_semantic_access_v11b_graph_gate.py'
+      - 'research_entity/runtime/u11b_graph_gate_hostinger_probe.py'
   workflow_dispatch:
 
 permissions:
@@ -24,9 +32,10 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 10
     steps:
-      - name: Checkout exact Clay candidate
+      - name: Checkout exact Clay candidate head
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           clean: true
           persist-credentials: true
@@ -35,7 +44,7 @@ jobs:
         shell: bash
         env:
           RUN_ID: ${{ github.run_id }}
-          SOURCE_SHA: ${{ github.sha }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           cd research_entity/runtime
@@ -45,7 +54,7 @@ jobs:
         shell: bash
         env:
           RUN_ID: ${{ github.run_id }}
-          SOURCE_SHA: ${{ github.sha }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           TARGET_BRANCH: chatgpt/go-u11b-minimal-current-main-20260810
         run: |
           set -euo pipefail

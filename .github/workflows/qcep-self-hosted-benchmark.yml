@@ -8,10 +8,17 @@ on:
       - 'research_entity/harness/reference/test_query_conditioned_evidence_projection.py'
       - 'research_entity/harness/reference/benchmark_query_conditioned_evidence_projection.py'
       - '.github/workflows/qcep-self-hosted-benchmark.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/test_query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/benchmark_query_conditioned_evidence_projection.py'
+      - '.github/workflows/qcep-self-hosted-benchmark.yml'
   workflow_dispatch:
 
 concurrency:
-  group: qcep-self-hosted-benchmark
+  group: qcep-self-hosted-benchmark-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -67,7 +74,7 @@ jobs:
           if-no-files-found: error
 
   persist:
-    if: always()
+    if: ${{ always() && github.event_name == 'push' }}
     needs: benchmark
     runs-on: ubuntu-latest
     timeout-minutes: 10

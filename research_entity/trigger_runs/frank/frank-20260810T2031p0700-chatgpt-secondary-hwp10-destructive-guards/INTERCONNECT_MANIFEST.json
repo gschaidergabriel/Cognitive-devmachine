@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "frank-20260810T2031p0700-chatgpt-secondary-hwp10-destructive-guards",
+  "trigger": "frank",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity": "Clay",
+  "research_subject": "self.root / Frank",
+  "source_refresh": {
+    "github": "VERIFIED_RW",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "note": "Owner-fixed 2026-08-10 target directives supersede the older hashed canonical checkpoint where they differ."
+  },
+  "primary_delta": {
+    "work_package": "H-WP-10-EFFECT-AUTHORITY",
+    "branch": "frank/hwp10-destructive-guards-20260810",
+    "pull_request": 182,
+    "classification": "EXECUTABLE_HARNESS_CONTRACT_DISCRIMINATOR",
+    "promotion": "NONE"
+  },
+  "evidence": {
+    "local_tests": "19/19 PASS",
+    "local_evidence_class": "LOCAL_DETERMINISTIC_FIXTURE",
+    "target_vps": "NOT_RUN",
+    "pr_identity_guard": "ZERO_STEP_FAILURE_UNKNOWN_CONTROL_PLANE",
+    "release_gate": "NOT_PASS"
+  },
+  "affected_branches": [
+    "harness:H-WP-10-EFFECT-AUTHORITY",
+    "harness:H-WP-13-RECOVERY",
+    "harness:H-WP-14-FUZZ-ADVERSARIAL",
+    "claycode:CC-WP-04-TYPE-EFFECT",
+    "h2:CLAY_HARNESS_DIFFERENTIAL"
+  ],
+  "nonduplicate_replan": {
+    "aborted_target": "CC-WP-03 receipt-bound V18 FrontendArtifact -> TypedIR bridge",
+    "reason": "Fresh main already contained a stronger bridge/residual-semantics candidate; duplicate write aborted."
+  },
+  "architecture_fidelity": "UNKNOWN",
+  "next_falsifier": "Execute exact PR bytes on accepted Hostinger Ubuntu and extend through durable nonce/confirmation consumption, crash/restart, reservation/permit/commit/outcome/reentry, then reproduce in H2 ClayCode differential.",
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_change_authority": "INDEPENDENT_RESEARCH_BUILD_TEST",
+    "training_authorization": false
+  }
+}

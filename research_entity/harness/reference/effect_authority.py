@@ -60,6 +60,8 @@ class EffectRequest:
     owner_fixed_one_shot_recovery: bool = False
     security_subeffect_deny: bool = False
     physical_subeffect_deny: bool = False
+    irreversibility_warning: bool = False
+    rollback_state_known: bool = False
     # Untrusted cognitive/salience signals are recorded only to prove they do not confer authority.
     translator_claims_authority: bool = False
     model_confidence: float = 0.0
@@ -165,9 +167,10 @@ class EffectAuthorityGate:
             )
 
         if kind == "DELETE_ACCOUNT":
+            guard_ok = req.explicit_target and req.irreversibility_warning
             return GateResult(
-                EffectDecision.REQUIRE_CONFIRMATION if req.explicit_target else EffectDecision.DENY,
-                "delete-account target explicit" if req.explicit_target else "delete-account target unresolved",
+                EffectDecision.REQUIRE_CONFIRMATION if guard_ok else EffectDecision.DENY,
+                "delete-account guard complete" if guard_ok else "delete-account guard incomplete",
                 h,
             )
 
@@ -180,7 +183,7 @@ class EffectAuthorityGate:
             )
 
         if kind == "MASS_DELETE":
-            guard_ok = req.exact_scope and req.count_preview and (req.rollback_available or req.no_backup_disclosed)
+            guard_ok = req.exact_scope and req.count_preview and req.rollback_state_known
             return GateResult(
                 EffectDecision.REQUIRE_CONFIRMATION if guard_ok else EffectDecision.DENY,
                 "mass-delete guard complete" if guard_ok else "mass-delete guard incomplete",

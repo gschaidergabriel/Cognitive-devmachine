@@ -1,0 +1,62 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-single-active-presence-physical-liveness-20260810T2210p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T22:10:00+07:00",
+  "payload": {
+    "work_id": "WORK-FRANK-V01-SINGLE-ACTIVE-PHYSICAL-LIVENESS-20260810",
+    "goal_ref": "FRANK_V0_1",
+    "origin_class": "GO_COUNTERHYPOTHESIS_AFTER_CONCURRENT_V15_FUSION",
+    "title": "Falsify TTL-only single-presence against live-but-expired holder overlap",
+    "work_clay": "On the accepted one-host Ubuntu target, run a two-process discriminator against the current canonical frank_presence_runtime V15. Process A acquires the Frank presence lease, remains alive and deliberately stops heartbeating while continuing a bounded inert cognition-loop surrogate past expires_at. Process B attempts acquisition after expiry. Measure whether both processes can remain execution-capable concurrently. Repeat with every consequential action/effect boundary fenced by current lease_epoch. Compare current SQLite TTL+fencing baseline against a minimal Linux exclusive flock held for the whole active execution plus short UnifiedDB transactions/generation receipts. Preserve process IDs, monotonic timing, lease epochs, DB rows, CPU/RAM, overlap interval, crash/restart behavior and exact source/build hashes. Do not promote the physical-lock candidate unless it eliminates overlap without unacceptable recovery/latency cost.",
+    "hypothesis": "Current V15 lease_epoch fencing is sufficient only if every continuing cognition/tool/effect path revalidates the active epoch before acting; otherwise a live-but-expired holder can overlap a successor.",
+    "strongest_counterhypothesis": "The existing heartbeat/expiry/fencing discipline already guarantees effective single-active Frank because all material execution paths are or will be epoch-gated; an OS flock adds no measurable safety and only harms recovery/composability.",
+    "cheapest_discriminator": "Two real Linux processes; A stays alive past TTL without heartbeat, B acquires after expiry; record concurrent execution window and attempt a harmless fenced state/effect surrogate from A after B owns the newer epoch.",
+    "required_controls": [
+      "CURRENT_V15_TTL_FENCING",
+      "CURRENT_V15_WITH_PER_STEP_EPOCH_REVALIDATION",
+      "LINUX_FLOCK_PLUS_V15_SEMANTIC_RECEIPTS",
+      "PROCESS_A_CLEAN_RELEASE",
+      "PROCESS_A_CRASH",
+      "STALE_RELEASE_AND_STALE_EFFECT_ATTEMPT"
+    ],
+    "acceptance": [
+      "exactly one execution-capable Frank holder under declared semantics",
+      "stale holder cannot perform admitted state mutation or consequential effect",
+      "crash recovery returns to availability without manual DB repair",
+      "no raw token or active caller secret leaks",
+      "latency/resource/recovery cost measured",
+      "rollback path preserved"
+    ],
+    "dependencies": [
+      "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V15_SINGLE_INSTANCE_PRESENCE.sql",
+      "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_presence_runtime.py",
+      "gschaidergabriel/Dr.-Unterweger:tests/frank_single_instance_presence_gate.py",
+      "research_entity/global/FRANK_V0_1_SINGLE_ACTIVE_SPAWN_AND_THIRD_PARTY_TOKEN_DIRECTIVE.md"
+    ],
+    "invalidators": [
+      "A newer current-source target receipt already executes this exact live-holder overlap matrix",
+      "Owner changes max_active_spawn(self.root)=1",
+      "Target becomes multi-host before this one-host discriminator executes"
+    ],
+    "required_capabilities": [
+      "ACCEPTED_TARGET_VPS",
+      "LINUX_PROCESS_CONTROL",
+      "PYTHON",
+      "SQLITE",
+      "TARGET_REPO_READ_WRITE",
+      "RESOURCE_MEASUREMENT"
+    ],
+    "write_scope": [
+      "gschaidergabriel/Dr.-Unterweger:tests/",
+      "gschaidergabriel/Dr.-Unterweger:runtime/",
+      "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/"
+    ],
+    "base_priority": 0.86,
+    "expected_impact": 0.95,
+    "urgency": 0.93,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

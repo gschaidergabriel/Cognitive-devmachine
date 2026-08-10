@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Build a machine-readable cross-trigger research-center manifest.
 
-Peer membership is derived from RESEARCH_TRIGGER_REGISTRY.json. Explicit priority
-orders are fail-closed governance: every priority must cover the exact current peer set.
+The authoritative peer branch set is derived from RESEARCH_TRIGGER_REGISTRY.json.
+Every domain_research/integrated_research_foundry branch is a peer member. The
+Harness branch is therefore not an isolated utility: it participates in the same
+coverage, contradiction, provenance and write-back mesh as the scientific branches.
 """
 from __future__ import annotations
 
@@ -25,16 +27,17 @@ MANDATORY_POLICY = "research_entity/global/MANDATORY_ACTIVE_KNOWLEDGE.json"
 
 def _registered_scientific_branches() -> list[str]:
     data = json.loads(REGISTRY.read_text(encoding="utf-8"))
-    return [
-        name
-        for name, spec in (data.get("triggers") or {}).items()
-        if (spec or {}).get("kind") in {"domain_research", "integrated_research_foundry"}
-    ]
+    out: list[str] = []
+    for name, spec in (data.get("triggers") or {}).items():
+        if (spec or {}).get("kind") in {"domain_research", "integrated_research_foundry"}:
+            out.append(name)
+    return out
 
 
 BRANCHES = _registered_scientific_branches()
 
-# Depth differs by trigger; inclusion may not. q23 is a first-class domain peer.
+# Explicit priority is governance: depth differs by trigger, inclusion does not.
+# Any registry change not represented here is intentionally fail-closed.
 PRIORITY: dict[str, list[str]] = {
     "fusion": ["clayresearch", "frank", "q23", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
     "clayresearch": ["clayresearch", "frank", "claycode", "harness", "q23", "claygraph", "unifieddb", "gwt", "emergenz", "hyperposition"],
@@ -170,10 +173,10 @@ def _meta(path: Path) -> dict[str, Any]:
             return obj if isinstance(obj, dict) else {}
         except json.JSONDecodeError:
             return {}
-    match = META_RE.search(text)
-    if match:
+    m = META_RE.search(text)
+    if m:
         try:
-            obj = json.loads(match.group(1))
+            obj = json.loads(m.group(1))
             return obj if isinstance(obj, dict) else {}
         except json.JSONDecodeError:
             pass
@@ -210,7 +213,15 @@ def _material_score(path: Path) -> tuple[int, int, str, str]:
     status = _status(meta)
     status_score = 4 if status in ACTIVE_STATUSES else (1 if status in HISTORIC_STATUSES else 2)
     category = _material_category(path)
-    category_score = {"contradiction": 7, "negative": 7, "experiment": 6, "architecture": 5, "feedback": 5, "hypothesis": 4, "general": 2}[category]
+    category_score = {
+        "contradiction": 7,
+        "negative": 7,
+        "experiment": 6,
+        "architecture": 5,
+        "feedback": 5,
+        "hypothesis": 4,
+        "general": 2,
+    }[category]
     stamp = str(meta.get("updated_at") or meta.get("created_at") or meta.get("run_id") or "")
     return status_score, category_score, stamp, _rel(path)
 
@@ -248,10 +259,12 @@ def _artifacts(run: Path) -> list[str]:
 def _material_candidates(base: Path, branch: str) -> list[Path]:
     if not base.exists():
         return []
-    out = [
-        p for p in base.rglob("*")
-        if p.is_file() and p.suffix.lower() in {".md", ".json", ".jsonl"} and _matches_branch(p, branch)
-    ]
+    out: list[Path] = []
+    for p in base.rglob("*"):
+        if not p.is_file() or p.suffix.lower() not in {".md", ".json", ".jsonl"}:
+            continue
+        if _matches_branch(p, branch):
+            out.append(p)
     out.sort(key=_material_score, reverse=True)
     return out
 
@@ -263,6 +276,7 @@ def _mandatory_material(base: Path, branch: str) -> list[Path]:
         data = json.loads(MANDATORY_ACTIVE_KNOWLEDGE.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return []
+
     base_resolved = base.resolve()
     out: list[Path] = []
     for rel in ((data.get("branches") or {}).get(branch) or []):
@@ -271,8 +285,11 @@ def _mandatory_material(base: Path, branch: str) -> list[Path]:
             p.relative_to(base_resolved)
         except ValueError:
             continue
-        if p.is_file() and p.suffix.lower() in {".md", ".json", ".jsonl"} and _matches_branch(p, branch):
-            out.append(p)
+        if not p.is_file() or p.suffix.lower() not in {".md", ".json", ".jsonl"}:
+            continue
+        if not _matches_branch(p, branch):
+            continue
+        out.append(p)
     return out
 
 
@@ -280,10 +297,12 @@ def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], in
     candidates = _material_candidates(base, branch)
     if not candidates or limit <= 0:
         return [], len(candidates), {}
+
     selected: list[Path] = []
     seen: set[Path] = set()
     category_counts: dict[str, int] = {}
     candidate_set = set(candidates)
+
     for p in _mandatory_material(base, branch):
         if len(selected) >= limit:
             break
@@ -293,15 +312,19 @@ def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], in
         seen.add(p)
         cat = _material_category(p)
         category_counts[cat] = category_counts.get(cat, 0) + 1
+
     for category in ("negative", "contradiction", "experiment", "architecture", "hypothesis", "feedback", "general"):
         for p in candidates:
             if len(selected) >= limit:
                 break
-            if p in seen or _material_category(p) != category or category_counts.get(category, 0) >= 3:
+            if p in seen or _material_category(p) != category:
+                continue
+            if category_counts.get(category, 0) >= 3:
                 continue
             selected.append(p)
             seen.add(p)
             category_counts[category] = category_counts.get(category, 0) + 1
+
     for p in candidates:
         if len(selected) >= limit:
             break
@@ -311,16 +334,50 @@ def _select_material(base: Path, branch: str, limit: int) -> tuple[list[str], in
         seen.add(p)
         cat = _material_category(p)
         category_counts[cat] = category_counts.get(cat, 0) + 1
+
     return [_rel(p) for p in selected], len(candidates), category_counts
 
 
 def _run_depth(trigger: str, branch: str, base_depth: int) -> int:
     run_depth = max(1, base_depth)
+    deep = {
+        ("frank", "clayresearch"): 3,
+        ("frank", "claycode"): 4,
+        ("frank", "q23"): 4,
+        ("frank", "claygraph"): 4,
+        ("frank", "unifieddb"): 4,
+        ("frank", "harness"): 4,
+        ("claycode", "frank"): 4,
+        ("claycode", "clayresearch"): 3,
+        ("claycode", "q23"): 3,
+        ("claycode", "claygraph"): 4,
+        ("claycode", "unifieddb"): 3,
+        ("claycode", "harness"): 4,
+        ("q23", "frank"): 5,
+        ("q23", "harness"): 5,
+        ("q23", "claygraph"): 5,
+        ("q23", "unifieddb"): 5,
+        ("q23", "gwt"): 5,
+        ("hyperposition", "q23"): 3,
+        ("hyperposition", "claygraph"): 4,
+        ("hyperposition", "unifieddb"): 3,
+        ("hyperposition", "harness"): 3,
+        ("gwt", "q23"): 4,
+        ("gwt", "claygraph"): 4,
+        ("gwt", "unifieddb"): 3,
+        ("gwt", "harness"): 4,
+        ("claygraph", "q23"): 4,
+        ("claygraph", "unifieddb"): 4,
+        ("claygraph", "harness"): 4,
+        ("unifieddb", "q23"): 4,
+        ("unifieddb", "claygraph"): 4,
+        ("unifieddb", "frank"): 4,
+        ("unifieddb", "claycode"): 4,
+        ("unifieddb", "harness"): 4,
+    }
     if trigger == "harness":
         return max(run_depth, 6)
-    if trigger == "q23" and branch in {"frank", "harness", "claygraph", "unifieddb", "gwt"}:
-        return max(run_depth, 5)
-    return run_depth
+    return max(run_depth, deep.get((trigger, branch), run_depth))
 
 
 def _packet_budget(trigger: str, branch: str) -> tuple[int, int]:
@@ -328,10 +385,10 @@ def _packet_budget(trigger: str, branch: str) -> tuple[int, int]:
 
 
 def _latest_artifact(branches: list[dict[str, Any]], branch: str, suffix: str) -> str | None:
-    for item in branches:
-        if item.get("branch") != branch:
+    for b in branches:
+        if b.get("branch") != branch:
             continue
-        for run in item.get("runs", []):
+        for run in b.get("runs", []):
             for artifact in run.get("artifacts", []):
                 if artifact.endswith(suffix):
                     return artifact
@@ -341,29 +398,39 @@ def _latest_artifact(branches: list[dict[str, Any]], branch: str, suffix: str) -
 def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict[str, Any]:
     if trigger not in PRIORITY:
         raise ValueError(f"unknown connected trigger: {trigger}")
+
     branches: list[dict[str, Any]] = []
     coverage_all = trigger in {"fusion", "claygraph", "unifieddb", "harness"}
+
     for rank, branch in enumerate(PRIORITY[trigger], 1):
-        all_runs = _runs(branch, include_incomplete=True)
         if coverage_all:
-            selected_runs = all_runs
+            all_runs = _runs(branch, include_incomplete=True)
             run_depth: int | str = "ALL_DISCOVERED"
         else:
             numeric_depth = _run_depth(trigger, branch, history_per_branch)
-            selected_runs = all_runs[:numeric_depth]
+            all_runs = _runs(branch, include_incomplete=True)[:numeric_depth]
             run_depth = numeric_depth
+
         topic_limit, micro_limit = _packet_budget(trigger, branch)
         topics, topic_total, topic_categories = _select_material(TOPIC_PACKETS, branch, topic_limit)
         micros, micro_total, micro_categories = _select_material(MICRO_PACKETS, branch, micro_limit)
-        completed = [r for r in selected_runs if (r / "FINAL_REPORT.md").exists()]
+        completed = [r for r in all_runs if (r / "FINAL_REPORT.md").exists()]
+
         branches.append({
             "branch": branch,
             "priority_rank": rank,
             "run_history_depth": run_depth,
-            "latest_run": selected_runs[0].name if selected_runs else None,
-            "latest_run_complete": bool(selected_runs and (selected_runs[0] / "FINAL_REPORT.md").exists()),
+            "latest_run": all_runs[0].name if all_runs else None,
+            "latest_run_complete": bool(all_runs and (all_runs[0] / "FINAL_REPORT.md").exists()),
             "latest_completed_run": completed[0].name if completed else None,
-            "runs": [{"run_id": r.name, "complete": (r / "FINAL_REPORT.md").exists(), "artifacts": _artifacts(r)} for r in selected_runs],
+            "runs": [
+                {
+                    "run_id": r.name,
+                    "complete": (r / "FINAL_REPORT.md").exists(),
+                    "artifacts": _artifacts(r),
+                }
+                for r in all_runs
+            ],
             "active_knowledge": {
                 "topic_packet_limit": topic_limit,
                 "knowledge_micro_packet_limit": micro_limit,
@@ -379,7 +446,10 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict[str, A
         })
 
     latest_frank_arch = _latest_artifact(branches, "frank", "/FRANK_ARCHITECTURE.claycode.json")
-    latest_claygraph = _latest_artifact(branches, "claygraph", "/CLAYGRAPH_CANDIDATE.claycode.json") or _latest_artifact(branches, "claygraph", "/CLAYGRAPH_SCHEMA.claycode.json")
+    latest_claygraph = (
+        _latest_artifact(branches, "claygraph", "/CLAYGRAPH_CANDIDATE.claycode.json")
+        or _latest_artifact(branches, "claygraph", "/CLAYGRAPH_SCHEMA.claycode.json")
+    )
     latest_unifieddb = _latest_artifact(branches, "unifieddb", "/UNIFIED_DATABASE_ARCHITECTURE.claycode.json")
     latest_harness_release = _latest_artifact(branches, "harness", "/HARNESS_RELEASE_MANIFEST.json")
 
@@ -412,19 +482,42 @@ def build(trigger: str, run_id: str, history_per_branch: int = 2) -> dict[str, A
         },
         "special_rules": {
             "fusion_requires_global_coverage_manifest": trigger == "fusion",
+            "fusion_requires_feedback_receipt_for_every_branch": trigger == "fusion",
+            "frank_requires_latest_clay_architecture_as_primary_foundation": trigger == "frank",
+            "frank_requires_deep_claycode_architecture_input": trigger == "frank",
+            "frank_requires_deep_claygraph_substrate_input": trigger == "frank",
+            "frank_requires_deep_unifieddb_persistence_input": trigger == "frank",
             "frank_requires_harness_execution_feedback": trigger == "frank",
+            "frank_architecture_source_language": "ClayCode semantic IR" if trigger == "frank" else None,
+            "claycode_requires_latest_frank_research_as_primary_feedback": trigger == "claycode",
+            "claycode_requires_deep_claygraph_input": trigger == "claycode",
+            "claycode_requires_unifieddb_contract_input": trigger == "claycode",
             "claycode_requires_harness_execution_feedback": trigger == "claycode",
+            "claycode_requires_goodman_anti_echo_review": trigger == "claycode",
             "claycode_latest_frank_architecture_artifact": latest_frank_arch if trigger in {"claycode", "harness"} else None,
             "claycode_frank_architecture_artifact_missing_must_be_explicit": trigger in {"claycode", "harness"} and latest_frank_arch is None,
-            "latest_claygraph_artifact": latest_claygraph,
-            "latest_unifieddb_artifact": latest_unifieddb,
-            "latest_harness_release_artifact": latest_harness_release,
             "q23_requires_go_global_and_multimodal_mesh_input": trigger == "q23",
+            "q23_requires_harness_frank_claygraph_unifieddb_gwt_input": trigger == "q23",
+            "hyperposition_requires_deep_claygraph_input": trigger == "hyperposition",
+            "hyperposition_requires_unifieddb_topology_input": trigger == "hyperposition",
+            "gwt_requires_deep_claygraph_input": trigger == "gwt",
+            "gwt_requires_unifieddb_snapshot_selection_input": trigger == "gwt",
+            "latest_claygraph_artifact": latest_claygraph if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clayresearch", "unifieddb", "harness", "q23"} else None,
+            "latest_unifieddb_artifact": latest_unifieddb if trigger in {"frank", "claycode", "hyperposition", "gwt", "fusion", "clayresearch", "claygraph", "harness", "q23"} else None,
+            "latest_harness_release_artifact": latest_harness_release,
+            "claygraph_requires_full_mesh_coverage": trigger == "claygraph",
+            "claygraph_requires_iterative_parent_candidate_selection": trigger == "claygraph",
+            "claygraph_requires_unifieddb_boundary_analysis": trigger == "claygraph",
+            "unifieddb_requires_full_mesh_coverage": trigger == "unifieddb",
+            "unifieddb_requires_store_role_inventory": trigger == "unifieddb",
+            "unifieddb_requires_logical_vs_physical_comparison": trigger == "unifieddb",
+            "unifieddb_requires_reversible_migration": trigger == "unifieddb",
+            "clay_is_integrated_master_foundry": trigger == "clayresearch",
             "harness_requires_full_mesh_coverage": trigger == "harness",
             "harness_requires_live_worker_reread": trigger == "harness",
             "harness_must_build_and_execute": trigger == "harness",
-            "harness_must_return_feedback_to_affected_branches": trigger == "harness"
-        }
+            "harness_must_return_feedback_to_affected_branches": trigger == "harness",
+        },
     }
 
 
@@ -435,6 +528,7 @@ def main() -> None:
     ap.add_argument("--history-per-branch", type=int, default=2)
     ap.add_argument("--output")
     args = ap.parse_args()
+
     out = build(args.trigger, args.run_id, args.history_per_branch)
     text = json.dumps(out, ensure_ascii=False, indent=2) + "\n"
     if args.output:

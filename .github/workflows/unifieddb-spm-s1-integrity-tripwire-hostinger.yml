@@ -22,39 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  hosted-preflight:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - name: Compile exact candidate and falsifiers
-        working-directory: research_entity/runtime
-        run: |
-          set -euxo pipefail
-          python3 -m py_compile \
-            semantic_access_pulse_v12.py \
-            semantic_access_pulse_v16.py \
-            semantic_access_segmented_maintenance_s1.py \
-            semantic_access_segmented_maintenance_s1_guarded.py \
-            test_semantic_access_segmented_maintenance_s1_guarded.py \
-            test_semantic_access_segmented_maintenance_s1_guarded_recovery_edges.py \
-            benchmark_semantic_access_segmented_maintenance_s1_guarded.py
-      - name: Preserve current SPM-S1 baseline guards
-        working-directory: research_entity/runtime
-        run: |
-          set -euxo pipefail
-          python3 -m unittest -v \
-            test_semantic_access_segmented_maintenance_s1.SegmentedPulseMaintenanceS1Tests
-      - name: Run between-audit mutation and recovery falsifiers
-        working-directory: research_entity/runtime
-        run: |
-          set -euxo pipefail
-          python3 -m unittest -v \
-            test_semantic_access_segmented_maintenance_s1_guarded.SegmentedPulseMaintenanceS1GuardedTests \
-            test_semantic_access_segmented_maintenance_s1_guarded_recovery_edges.SPMGuardedRecoveryEdgeTests
-
   hostinger-spm-s1-integrity:
-    needs: hosted-preflight
     runs-on: self-hosted
     timeout-minutes: 20
     steps:

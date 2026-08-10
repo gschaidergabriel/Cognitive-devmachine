@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hypofusion-20260810T2322p0700-chatgpt-secondary-frank-v01-screen",
+  "opaque_current_ids": [
+    {"id":"H-G3-001","status":"INACCESSIBLE_DEFINITION","action":"preserve; do not infer semantics"},
+    {"id":"H-G3-003","status":"INACCESSIBLE_DEFINITION","action":"preserve; do not infer semantics"},
+    {"id":"H-G3-005","status":"INACCESSIBLE_DEFINITION","action":"preserve; do not infer semantics"},
+    {"id":"H-G3-006","status":"INACCESSIBLE_DEFINITION","action":"preserve; do not infer semantics"}
+  ],
+  "screened_clusters": [
+    {
+      "cluster_id":"HF-01",
+      "mechanism":"Caller-bound immutable execution-generation fence across reservation, attempt/retry and provider precommit",
+      "prediction":"A stale/unbound caller cannot reach effect-attempt state after generation turnover, even if it knows effect_id or observes a globally current epoch.",
+      "falsifier":"A simpler mechanism using physical serialization plus idempotent provider semantics matches stale-caller, ABA, crash/retry and uncertainty behavior at lower cost without caller-bound generation capability.",
+      "internal_evidence":"Fresh-main V14 negative; stale first attempt, same-key retry and unbound caller reached COMMITTING; strict replication passed 10/10 fence matrix.",
+      "external_class":"DIRECT_SUPPORT + IMPLEMENTATION_PRECEDENT",
+      "screen_result":"STRONGLY_STRENGTHENED_BUT_SCOPE_BOUND"
+    },
+    {
+      "cluster_id":"HF-02",
+      "mechanism":"Open-web content is structurally non-authoritative; authority/control flow is separated from untrusted data flow.",
+      "prediction":"Indirect prompt injection cannot directly mint effect authority when raw web content cannot enter privileged instruction/capability channels.",
+      "falsifier":"Semantic influence through model-visible derived content or memory bypasses structural labels and changes privileged decisions without a detectable taint/provenance path.",
+      "external_class":"DIRECT_SUPPORT + COUNTEREVIDENCE",
+      "screen_result":"STRENGTHENED_AND_TRANSFORMED"
+    },
+    {
+      "cluster_id":"HF-03",
+      "mechanism":"Long-horizon memory needs execution-state/revision structure in addition to semantic similarity retrieval.",
+      "prediction":"State-path/branch-aware memory improves recovery, error isolation and long-horizon task success with bounded active context.",
+      "falsifier":"Semantic RAG plus compact summaries matches success/recovery while using materially lower state-management overhead.",
+      "external_class":"DIRECT_SUPPORT + IMPLEMENTATION_PRECEDENT",
+      "screen_result":"STRENGTHENED_TO_DUAL_PLANE_MEMORY"
+    },
+    {
+      "cluster_id":"HF-04",
+      "mechanism":"Adaptive recurrence should continue only while expected marginal utility exceeds compute/instability cost and unresolved pressure remains material.",
+      "prediction":"Difficulty-/confidence-/stability-aware recurrence beats fixed-depth and always-deep recurrence on outcome-per-cost and failure rate.",
+      "falsifier":"A fixed shallow or fixed-depth policy matches accuracy/recovery across held-out difficulty while being cheaper and more stable.",
+      "external_class":"DIRECT_SUPPORT + COUNTEREVIDENCE",
+      "screen_result":"STRENGTHENED; MORE_LOOPS_IS_BETTER_REFUTED_AS_GENERAL_RULE"
+    },
+    {
+      "cluster_id":"HF-05",
+      "mechanism":"Bandwidth-limited shared workspace with competition/broadcast can improve coordination and cross-modal transfer.",
+      "prediction":"A causally instrumented workspace improves tasks requiring specialist coordination and cross-modal reuse beyond simpler shared-memory/cross-attention baselines.",
+      "falsifier":"Lesioning explicit workspace while preserving equivalent information flow leaves outcome, transfer and coordination unchanged.",
+      "external_class":"PARTIAL_ANALOGUE + DIRECT_SUPPORT_IN_OTHER_DOMAINS",
+      "screen_result":"PLAUSIBLE_NOT_GENERAL; CAUSAL_GWT_TESTS_REQUIRED"
+    },
+    {
+      "cluster_id":"HF-06",
+      "mechanism":"Higher-order Hyperposition/hypergraph relations are useful when an interaction is irreducible to pairwise edges.",
+      "prediction":"Matched-input hypergraph representation improves multi-hop/higher-order tasks without unacceptable latency/memory cost.",
+      "falsifier":"Pairwise graph/factorized representation matches outcomes under identical evidence and budget.",
+      "external_class":"DIRECT_SUPPORT_IN_BOUNDED_TASKS + NULL/BOUNDARY_EVIDENCE",
+      "screen_result":"STRENGTHENED_AS_CONDITIONAL_NOT_DEFAULT"
+    },
+    {
+      "cluster_id":"HF-07",
+      "mechanism":"Authoritative event/state plane plus rebuildable projections improves replay, recovery, provenance and auditability.",
+      "prediction":"Append-only causal/authority events + checkpoints/materialized projections outperform ad hoc mutable state on recovery/replay correctness while meeting latency/resource budgets.",
+      "falsifier":"Simple normalized transactional state with explicit versions matches recovery/provenance and is materially simpler/faster.",
+      "external_class":"IMPLEMENTATION_PRECEDENT + PARTIAL_SUPPORT",
+      "screen_result":"STRENGTHENED_WITH_SIMPLE_SQLITE_BASELINE_REQUIRED"
+    },
+    {
+      "cluster_id":"HF-08",
+      "mechanism":"Typed ClayCode IR/DSL at semantic and effect boundaries improves compliance, verifiability and tool orchestration.",
+      "prediction":"Typed lowering catches semantic/authority errors before execution and improves structured task reliability relative to semantically equivalent JSON/Python/schema baselines.",
+      "falsifier":"Ordinary typed host-language structures or schema-constrained tool calls match correctness/security with lower compiler/runtime complexity.",
+      "external_class":"PARTIAL_ANALOGUE + IMPLEMENTATION_PRECEDENT",
+      "screen_result":"TARGET_PREMISE_RETAINED; IMPLEMENTATION_SCOPE_MUST_BE_MEASURED"
+    },
+    {
+      "cluster_id":"HF-09",
+      "mechanism":"Persistent goals and bounded proactive agency can improve long-horizon behavior, but initiative must not self-reward or preempt active user work.",
+      "prediction":"Persistent hierarchical goals/checkpoints improve task continuity and self-initiated useful work without increasing semantic livelock or goal drift.",
+      "falsifier":"Reactive-only execution with explicit external tasks matches long-horizon utility, or proactive loops increase livelock/cost without verified outcome gains.",
+      "external_class":"PARTIAL_SUPPORT + FAILURE_MODE",
+      "screen_result":"PLAUSIBLE_WITH_STRONG_LIVENESS_AND_REWARD_GATES"
+    }
+  ]
+}

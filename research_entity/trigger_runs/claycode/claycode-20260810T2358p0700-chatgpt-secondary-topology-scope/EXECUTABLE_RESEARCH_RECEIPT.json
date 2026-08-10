@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2358p0700-chatgpt-secondary-topology-scope",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "provider_model": "OpenAI/GPT-5.6 Sol",
+  "target_program": "FRANK_V0_1",
+  "target_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "canonical_parent": "RAE-8.8 r2 / 04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+  "source_artifact": "claycode_topology_scope_checker.py",
+  "source_sha256": "ab0c9b61f07fa7649c7b273ae1c94ea11c8a0502104a130b6de3cfd14353eda0",
+  "candidate": "CC-TOPOLOGY-READ-EFFECT-V1",
+  "canonical_ir_or_semantic_identity": "TopologyScopeCertificate/v1-candidate; semantic hash canonicalizes typed read-plane Set while contract hash retains raw/provenance/closure ancestry",
+  "lowering_target": "Python 3.13.5 executable validator prototype",
+  "generated_code_hash": "ab0c9b61f07fa7649c7b273ae1c94ea11c8a0502104a130b6de3cfd14353eda0",
+  "runtime": {
+    "provider": "local sandbox fallback",
+    "language": "Python",
+    "version": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "machine": "x86_64",
+    "target_vps": false,
+    "e2b": "NOT_AVAILABLE_IN_CURRENT_TOOL_SURFACE"
+  },
+  "test_corpus": "seven deterministic positive/negative topology-scope selftests",
+  "stdout": {
+    "tests": 7,
+    "passed": 7,
+    "active_mutation_rejected": true,
+    "semantic_only_survives_unbound_active_mutation": true,
+    "coordination_mutation_rejected": true,
+    "undeclared_topology_read_rejected": true,
+    "unknown_read_closure_binds_all_and_blocks_exact_rewrite": true,
+    "semantic_hash_set_normalization_preserved": true,
+    "contract_hash_provenance_sensitive": true
+  },
+  "stderr": "",
+  "exit_status": 0,
+  "expected_vs_observed": "MATCH",
+  "semantic_properties_tested": [
+    "bound active topology mutation invalidates an active-dependent certificate",
+    "unbound active/coordination topology mutation does not invalidate a semantic-only certificate",
+    "bound coordination mutation invalidates a coordination-dependent certificate",
+    "observed topology reads absent from declared exact scope are rejected",
+    "incomplete read closure conservatively binds all planes and cannot claim exact rewrite admissibility",
+    "typed Set ordering/duplication does not change semantic hash",
+    "different provenance/raw contract instance changes contract hash"
+  ],
+  "failure_counterexample_classification": "NO_SELFTEST_FAILURE; TARGET_LIVE_VALIDATION_UNRESOLVED",
+  "repair_applied": "New additive TypedIR/type-effect candidate only; frozen V18 grammar untouched; no production compiler or Frank target mutation.",
+  "affected_hypotheses": ["H_HP_TS_01"],
+  "changed_domains": ["ClayCode","Hyperposition","ClayGraph","UnifiedDB","GWT","Frank"],
+  "promotion": "NONE",
+  "authority": {
+    "execution_authority": "NONE",
+    "effect_authority_change": false,
+    "training_authorized": false,
+    "target_self_harness_mutation": false
+  },
+  "limitations": [
+    "The selftests exercise the standalone candidate checker, not the exact current V18/structured frontend -> TypedIR -> WP04 production chain.",
+    "No accepted-target VPS execution or real Frank trace was used.",
+    "Read-effect inference is supplied as observed_reads in the prototype; production static/dynamic dependency extraction remains to be implemented and falsified."
+  ]
+}

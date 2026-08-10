@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "status": "RESEARCH_CANDIDATE_LOCAL_EXECUTION_RECEIPT",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "executed_at_local_date": "2026-08-10",
+  "scope_guard": "Synthetic mechanism benchmark only; not a universal database benchmark and not Frank target-runtime acceptance.",
+  "runtime": {
+    "python": "3.13.5 GCC 14.2.0",
+    "sqlite": "3.46.1",
+    "execution_surface": "ChatGPT local container",
+    "host_hardware": "UNKNOWN"
+  },
+  "workload": {
+    "seed": 260810,
+    "semantic_tokens": 1400,
+    "initial_dependency_edges": 5600,
+    "possibility_rules": 4200,
+    "horizon": 2,
+    "top_k": 10,
+    "mixed_queries": 500,
+    "compositional_stress_queries": 500,
+    "edge_update_trials": 120,
+    "delta_addition_trials": 1000
+  },
+  "query_benchmark": {
+    "NORMAL_DB_DIRECT_mixed": {
+      "p50_ms": 0.0205855,
+      "p95_ms": 0.024847,
+      "recall_at_10": 0.0282,
+      "ndcg_at_10": 0.033567285421327905,
+      "exact_top10_rate": 0.0
+    },
+    "NORMAL_DB_SEMANTIC_CTE_mixed": {
+      "p50_ms": 0.4434,
+      "p95_ms": 0.609868,
+      "recall_at_10": 1.0,
+      "ndcg_at_10": 1.0,
+      "exact_top10_rate": 1.0
+    },
+    "POSSIBILITY_PREPROCESSOR_ANCHORED_mixed": {
+      "p50_ms": 0.079198,
+      "p95_ms": 0.117354,
+      "recall_at_10": 1.0,
+      "ndcg_at_10": 1.0,
+      "exact_top10_rate": 1.0
+    },
+    "NORMAL_DB_SEMANTIC_CTE_compositional_stress": {
+      "p50_ms": 0.4493635,
+      "p95_ms": 0.591751,
+      "recall_at_10": 1.0,
+      "ndcg_at_10": 1.0
+    },
+    "POSSIBILITY_PREPROCESSOR_ANCHORED_compositional_stress": {
+      "p50_ms": 0.077976,
+      "p95_ms": 0.11405,
+      "recall_at_10": 1.0,
+      "ndcg_at_10": 1.0
+    }
+  },
+  "derived_query_comparisons": {
+    "preprocessor_vs_semantic_sql_p50_speedup_mixed": 5.598636019197777,
+    "preprocessor_vs_semantic_sql_p95_speedup_mixed": 5.196825792622476,
+    "preprocessor_vs_direct_db_recall_gain_absolute": 0.9718,
+    "interpretation": "Prepared possibility semantics preserves the exact semantic-closure top-k while reducing hot-read latency; direct row retrieval is faster but fails the compositional possibility task."
+  },
+  "compile_and_memory": {
+    "initial_compile_ms": 48.785632,
+    "estimated_preprocessor_core_bytes": 1278496,
+    "sqlite_page_bytes_after_updates": 925696,
+    "guard": "Python object-size estimate and SQLite page bytes are not equivalent allocator/RSS measures; treat only as rough local footprint signals."
+  },
+  "first_update_implementation": {
+    "sql_insert_p50_ms": 0.004056,
+    "targeted_closure_recompute_p50_ms": 0.0392585,
+    "post_update_exact_top10_rate_vs_sql_oracle": 1.0,
+    "result": "CORRECT_BUT_WRITE_AMPLIFICATION_TOO_HIGH"
+  },
+  "post_web_fusion_delta_iteration": {
+    "targeted_recompute_p50_ms_1000_additions": 0.034326,
+    "exact_delta_add_p50_ms_1000_additions": 0.000741,
+    "exact_delta_add_p95_ms": 0.001151,
+    "delta_vs_recompute_p50_speedup": 46.323886639676104,
+    "delta_vs_recompute_p95_speedup": 53.99826238053867,
+    "exact_after_1000_additions": true,
+    "combined_sql_persistence_plus_delta_p50_ms": 0.0055535,
+    "sql_insert_only_p50_ms_same_combined_trial": 0.004106,
+    "combined_write_overhead_ratio_p50": 1.3525328787140767,
+    "exact_after_combined_updates": true
+  },
+  "web_fusion": [
+    {
+      "source": "SQLite FTS5 official documentation",
+      "url": "https://www.sqlite.org/fts5.html",
+      "use": "Strong direct text-retrieval baseline; FTS ranking retrieves matching rows but does not itself define latent possibility semantics."
+    },
+    {
+      "source": "DBToaster / higher-order delta processing",
+      "url": "https://arxiv.org/abs/1207.0137",
+      "use": "Motivated compiling/materializing higher-order deltas so updates maintain prepared views rather than rebuilding query state."
+    },
+    {
+      "source": "Roaring bitmaps",
+      "url": "https://arxiv.org/abs/1402.6407",
+      "use": "Supports bit-parallel set/intersection direction for prepared semantic closures and rule prerequisite masks."
+    },
+    {
+      "source": "GraphBLAS C++ API specification",
+      "url": "https://graphblas.org/graphblas-api-cpp/",
+      "use": "Supports sparse frontier/matrix-vector formulation for future larger ClayGraph projections rather than all-pairs graph traversal."
+    }
+  ],
+  "hypothesis": "A compiled possibility-preprocessor that shifts semantic closure/composition work to delta time can make Frank hot cognition depend on the prepared relevant neighborhood rather than total memory/search cost.",
+  "strongest_counterhypothesis": "The observed gain is only Python-int bitset specialization on a synthetic bounded-horizon workload; a tuned database/index/query compiler can match or beat it once equivalent semantics, updates, larger horizons, deletions, conflicts and real Frank distributions are included.",
+  "promotion": "NONE",
+  "next_falsifiers": [
+    "Replay real UnifiedDB/ClayGraph records and real Frank retrieval failures instead of synthetic tokens.",
+    "Compare against SQLite FTS5 plus optimized materialized/indexed semantic SQL, not only direct row retrieval.",
+    "Add dependency deletion/revocation with exact support-count delta or prove targeted recompute is acceptable.",
+    "Measure horizons 1..N and dynamic stop rules; fixed 2-hop closure is not a final cognition architecture.",
+    "Preserve Hyperposition conflicts/alternatives and measure false-binding rate, not only recall of positive possibilities.",
+    "Measure RSS/CPU/write amplification/rebuild/recovery on Hostinger Ubuntu and final Andreas Ubuntu target when an eligible execution lane exists."
+  ]
+}

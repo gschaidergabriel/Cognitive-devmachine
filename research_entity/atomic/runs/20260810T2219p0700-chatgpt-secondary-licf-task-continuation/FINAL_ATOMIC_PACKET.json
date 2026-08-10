@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2219p0700-chatgpt-secondary-licf-task-continuation",
+  "candidate":{"id":"ATOMIC-LICF-001","name":"Linear Intent Continuation Fiber","version":"0.1-candidate","novelty_class":"NOVEL_COMBINATION_CANDIDATE","status":"TESTED_PROXY_DOMINATED_NO_PROMOTION"},
+  "problem":"Current canonical V15 presence authority fences holder/lease generations but carries no task identity/epoch/state/consent witness, so the presence substrate alone cannot distinguish old-task material from current-task material while the same valid holder remains active.",
+  "hypothesis":"A non-copyable ClayCode TaskFiber could structurally invalidate stale same-lease task derivations across material boundaries.",
+  "strongest_counterhypothesis":"A conventional nested task fence with task epoch, revision, witness and idempotency provides the same protection with lower cost/complexity.",
+  "experiment":{"local_cases":200000,"seeds":[101,211,307,401,503],"crash_replay_histories":1000,"environment":"Python 3.13.5 / Linux 6.18.35 x86_64","target_vps":false},
+  "results":{"CURRENT_LEASE_ONLY":{"accuracy":0.46146,"false_allows":107708,"crash_replay_stale_rejected":0},"TASK_EPOCH_SIMPLE":{"accuracy":0.768935,"false_allows":46213,"crash_replay_stale_rejected":1000},"CONVENTIONAL_STRONG":{"accuracy":1.0,"false_allows":0,"false_denies":0,"mean_classifier_ns":491.609135,"batch_mean_ns":1014.0225,"wire_bytes":134,"crash_replay_stale_rejected":1000},"LICF_001":{"accuracy":1.0,"false_allows":0,"false_denies":0,"mean_classifier_ns":802.43692,"batch_mean_ns":1504.87318,"wire_bytes":205,"crash_replay_stale_rejected":1000}},
+  "critical_interpretation":"CURRENT_LEASE_ONLY is a proxy of the verified V15 presence surface only. It does not claim that whole Frank currently false-allows every modeled case. The source-grounded conclusion is that task continuity is not represented by V15 and must be supplied/proved elsewhere.",
+  "prior_art":{"classification":"NOVEL_COMBINATION_CANDIDATE","key_analogues":["Chubby lock sequencers/generations","linear logic/session types","Rust ownership/move semantics","durable workflow history/replay"]},
+  "decision":{"architecture_promotion":"NONE","candidate_runtime_status":"REFUTED_BY_STRONG_CONVENTIONAL_BASELINE","durable_research_delta":"TARGET_TEST_OBLIGATION_CREATED","target_issue":"gschaidergabriel/Dr.-Unterweger#150"},
+  "next_falsifier":"On exact current target source, implement or locate one conventional task-continuity fence under the canonical V15/execution authority and prove stale Task-A material cannot cause GWT-use/state/reentry/reward/effect/completion after an authorized A->B switch; then execute on accepted Hostinger Ubuntu VPS and persist a receipt.",
+  "training_authorized":false,
+  "whole_frank_v0_1_acceptance":"NOT_CLAIMED"
+}

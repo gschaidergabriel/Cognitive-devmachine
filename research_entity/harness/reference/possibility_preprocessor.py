@@ -42,6 +42,7 @@ class PossibilityQuery:
     max_candidates: int = 12
     min_completeness: float = 0.66
     min_independent_support: int = 1
+    min_marginal_gain: float = 0.01
 
 
 @dataclass(frozen=True)
@@ -58,6 +59,20 @@ class PossibilityCandidate:
     authority: str = "NONE"
 
 
+@dataclass(frozen=True)
+class GraphEdge:
+    target: str
+    weight: float
+    relation_type: str
+    declared_proof_eligible: bool
+    proof_eligible: bool
+    source_epoch: int | None
+    graph_epoch: int | None
+    evidence_class: str
+    provenance_verified: bool
+    rejection_reason: str | None
+
+
 class StalePossibilityEpoch(ValueError):
     pass
 
@@ -66,13 +81,20 @@ class PossibilityPreprocessor:
     """Disposable query-time possibility compiler over UnifiedDB/ClayGraph projections.
 
     ClayGraph activation and proof satisfaction are deliberately separate. Any current
-    graph edge may improve accessibility/ranking, but only an edge carrying explicit
-    ``proof_eligible=True`` can propagate proof support that satisfies an affordance
-    requirement. This prevents a salient, derived, model-proposed or corrupted edge from
-    turning graph reachability into epistemic or execution authority.
+    graph edge may improve accessibility/ranking, but proof support is admitted only when
+    *all* proof-policy conditions are satisfied: the edge is explicitly declared proof
+    eligible, is bound to the exact current semantic + graph epochs, carries a trusted
+    evidence class, and has verified provenance. This turns ``proof_eligible`` from a
+    model/graph boolean into a fail-closed derived property.
+
+    Expansion is bounded and records an adaptive STOP decision once the remaining frontier
+    cannot deliver material marginal activation/proof gain. This is intentionally a small,
+    deterministic approximation of state-aware reconstructive retrieval: NO_EXPAND is a
+    first-class valid action rather than forcing every query through all allowed hops.
 
     Outputs are query-conditioned context only, never a second canonical store. Shared
-    lineage roots count once for the independence gate.
+    lineage roots count once for the independence gate. Neither activation nor candidate
+    selection grants execution authority.
     """
 
     EDGE_MULTIPLIER = {
@@ -84,20 +106,77 @@ class PossibilityPreprocessor:
         "derived": 0.85,
     }
     REQUIREMENT_WEIGHT = {"rule": 1.45, "cap": 1.20, "constraint": 0.72, "res": 0.85}
+    TRUSTED_PROOF_EVIDENCE = {
+        "VERIFIED",
+        "VALIDATED",
+        "MEASURED",
+        "AUTHORITATIVE",
+        "CANONICAL",
+    }
 
     def __init__(self, *, source_epoch: int, graph_epoch: int, nodes: Iterable[dict[str, Any]], edges: Iterable[dict[str, Any]], affordances: Iterable[dict[str, Any]]):
         self.source_epoch = int(source_epoch)
         self.graph_epoch = int(graph_epoch)
         self.nodes = {str(node["id"]): dict(node) for node in nodes}
-        self.edges: dict[str, list[tuple[str, float, str, bool]]] = defaultdict(list)
+        self.edges: dict[str, list[GraphEdge]] = defaultdict(list)
+        self.proof_edge_audit = Counter()
         for edge in edges:
             source = str(edge["source"])
             target = str(edge["target"])
             weight = float(edge.get("weight", 1.0))
             relation_type = str(edge.get("relation_type", "semantic"))
-            proof_eligible = bool(edge.get("proof_eligible", False))
-            self.edges[source].append((target, weight, relation_type, proof_eligible))
-            self.edges[target].append((source, weight, relation_type, proof_eligible))
+            declared = bool(edge.get("proof_eligible", False))
+            edge_source_epoch = edge.get("source_epoch")
+            edge_graph_epoch = edge.get("graph_epoch")
+            source_epoch = int(edge_source_epoch) if edge_source_epoch is not None else None
+            graph_epoch = int(edge_graph_epoch) if edge_graph_epoch is not None else None
+            evidence_class = str(edge.get("evidence_class", "UNKNOWN")).upper()
+            provenance_verified = edge.get("provenance_verified") is True
+
+            rejection_reason: str | None = None
+            if not declared:
+                rejection_reason = "NOT_DECLARED"
+            elif source_epoch != self.source_epoch:
+                rejection_reason = "STALE_SOURCE_EPOCH"
+            elif graph_epoch != self.graph_epoch:
+                rejection_reason = "STALE_GRAPH_EPOCH"
+            elif not provenance_verified:
+                rejection_reason = "PROVENANCE_UNVERIFIED"
+            elif evidence_class not in self.TRUSTED_PROOF_EVIDENCE:
+                rejection_reason = "EVIDENCE_CLASS_UNTRUSTED"
+
+            admitted = rejection_reason is None
+            self.proof_edge_audit["DECLARED" if declared else "UNDECLARED"] += 1
+            self.proof_edge_audit["ADMITTED" if admitted else "REJECTED"] += 1
+            if rejection_reason:
+                self.proof_edge_audit[rejection_reason] += 1
+
+            fwd = GraphEdge(
+                target,
+                weight,
+                relation_type,
+                declared,
+                admitted,
+                source_epoch,
+                graph_epoch,
+                evidence_class,
+                provenance_verified,
+                rejection_reason,
+            )
+            rev = GraphEdge(
+                source,
+                weight,
+                relation_type,
+                declared,
+                admitted,
+                source_epoch,
+                graph_epoch,
+                evidence_class,
+                provenance_verified,
+                rejection_reason,
+            )
+            self.edges[source].append(fwd)
+            self.edges[target].append(rev)
         self.affordances = {str(a["id"]): dict(a) for a in affordances}
         self.docs = {node_id: _tokens(str(node.get("text") or node.get("label") or node_id)) for node_id, node in self.nodes.items()}
         self.df: Counter[str] = Counter()
@@ -130,34 +209,70 @@ class PossibilityPreprocessor:
             raise ValueError("query_id and text required")
         if query.basis_epoch != self.source_epoch or query.graph_epoch != self.graph_epoch:
             raise StalePossibilityEpoch(f"query epochs source={query.basis_epoch}/graph={query.graph_epoch} current={self.source_epoch}/{self.graph_epoch}")
+        if query.min_marginal_gain < 0:
+            raise ValueError("min_marginal_gain must be non-negative")
 
         seeds = self.lexical_baseline(query.text, query.max_seeds)
         scores = {node_id: self._bm25(query.text, node_id) for node_id in seeds}
         proof_scores = dict(scores)
         frontier = dict(scores)
         proof_frontier = dict(proof_scores)
+        expansion_trace: list[dict[str, Any]] = []
+
         for hop in range(1, query.max_hops + 1):
             decay = 0.62 if hop == 1 else 0.34 / max(1, hop - 1)
             next_frontier: dict[str, float] = {}
             for source, base in frontier.items():
-                for target, weight, relation_type, _proof_eligible in self.edges.get(source, ()):
-                    propagated = base * weight * decay * self.EDGE_MULTIPLIER.get(relation_type, 1.0)
-                    if propagated > next_frontier.get(target, 0.0):
-                        next_frontier[target] = propagated
+                for edge in self.edges.get(source, ()):
+                    propagated = base * edge.weight * decay * self.EDGE_MULTIPLIER.get(edge.relation_type, 1.0)
+                    if propagated > next_frontier.get(edge.target, 0.0):
+                        next_frontier[edge.target] = propagated
+
             next_proof: dict[str, float] = {}
             for source, base in proof_frontier.items():
-                for target, weight, relation_type, proof_eligible in self.edges.get(source, ()):
-                    if not proof_eligible:
+                for edge in self.edges.get(source, ()):
+                    if not edge.proof_eligible:
                         continue
-                    propagated = base * weight * decay * self.EDGE_MULTIPLIER.get(relation_type, 1.0)
-                    if propagated > next_proof.get(target, 0.0):
-                        next_proof[target] = propagated
+                    propagated = base * edge.weight * decay * self.EDGE_MULTIPLIER.get(edge.relation_type, 1.0)
+                    if propagated > next_proof.get(edge.target, 0.0):
+                        next_proof[edge.target] = propagated
+
+            activation_gain = max(
+                (value - scores.get(node_id, 0.0) for node_id, value in next_frontier.items()),
+                default=0.0,
+            )
+            proof_gain = max(
+                (value - proof_scores.get(node_id, 0.0) for node_id, value in next_proof.items()),
+                default=0.0,
+            )
+
             for node_id, value in next_frontier.items():
                 scores[node_id] = max(scores.get(node_id, 0.0), value)
             for node_id, value in next_proof.items():
                 proof_scores[node_id] = max(proof_scores.get(node_id, 0.0), value)
+
+            action = "EXPAND"
+            reason = "MARGINAL_GAIN_MATERIAL"
+            if not next_frontier:
+                action = "STOP"
+                reason = "NO_FRONTIER"
+            elif max(activation_gain, proof_gain) < query.min_marginal_gain:
+                action = "STOP"
+                reason = "MARGINAL_GAIN_BELOW_COST_FLOOR"
+
+            expansion_trace.append({
+                "hop": hop,
+                "action": action,
+                "reason": reason,
+                "activation_frontier": len(next_frontier),
+                "proof_frontier": len(next_proof),
+                "activation_gain": round(max(0.0, activation_gain), 8),
+                "proof_gain": round(max(0.0, proof_gain), 8),
+            })
             frontier = next_frontier
             proof_frontier = next_proof
+            if action == "STOP":
+                break
 
         candidates: list[PossibilityCandidate] = []
         for candidate_id, spec in self.affordances.items():
@@ -195,7 +310,10 @@ class PossibilityPreprocessor:
             "persistent_second_store": False,
             "authority": "NON_AUTHORITATIVE_PREPROCESSOR_CONTEXT",
             "independence_rule": "shared_lineage_root_counts_once",
-            "proof_rule": "graph_activation_does_not_satisfy_requirements_without_explicit_proof_eligible_edge",
+            "proof_rule": "proof edges require declared eligibility + exact source/graph epochs + verified provenance + trusted evidence class",
+            "proof_edge_audit": dict(sorted(self.proof_edge_audit.items())),
+            "expansion_policy": "bounded adaptive expansion with explicit STOP/NO_EXPAND when marginal gain falls below cost floor",
+            "expansion_trace": expansion_trace,
         }
         body["receipt_hash"] = _h(body)
         return body

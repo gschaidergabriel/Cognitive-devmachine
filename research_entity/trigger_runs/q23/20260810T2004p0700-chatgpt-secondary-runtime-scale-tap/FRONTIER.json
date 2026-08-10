@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "frontier": [
+    {"id":"Q23-F-01","question":"What exact target-VPS RAM/swap/GPU/backend state and llama.cpp build are currently available for q23 tests?","class":"DIRECT_TRUTH","status":"OPEN","information_gain":0.98,"mission_impact":0.96,"falsification_value":0.84,"dependency_unblock":0.99},
+    {"id":"Q23-F-02","question":"At fixed visual token counts, what are encode-only p50/p95/p99 and resources for Qwen3.5 0.8B vs 2B vs 4B on the accepted VPS?","class":"EXPERIMENT","status":"BLOCKED_ON_EXECUTION_CAPABILITY_AND_BASE_PRIORITY","information_gain":0.99,"mission_impact":0.93,"falsification_value":0.97,"dependency_unblock":0.92},
+    {"id":"Q23-F-03","question":"Can one libmtmd media embedding buffer be consumed by MVC and then the decoder without a second vision encode and without unsafe copy/lifetime behavior?","class":"IMPLEMENTATION","status":"OPEN","information_gain":0.96,"mission_impact":0.91,"falsification_value":0.94,"dependency_unblock":0.88},
+    {"id":"Q23-F-04","question":"Do raw or tiny-projected Qwen mmproj descriptors beat a dedicated lightweight embedding baseline for user-specific familiarity/open-set routing under total pathway cost?","class":"COUNTERMECHANISM","status":"OPEN","information_gain":0.95,"mission_impact":0.9,"falsification_value":0.98,"dependency_unblock":0.83},
+    {"id":"Q23-F-05","question":"Which ROI/context/token-budget policy minimizes visual tokens without increasing hidden-operation blindness, grounding errors or background-state misses?","class":"PRIMARY_RESEARCH","status":"OPEN","information_gain":0.79,"mission_impact":0.75,"falsification_value":0.82,"dependency_unblock":0.61},
+    {"id":"Q23-F-06","question":"Does perceptual EAP/PAR benefit survive N=0..64 experience-dose, wrong-seed and stale-memory controls versus direct-memory and Qwen-only baselines?","class":"EXPERIENCE_DOSE","status":"OPEN_LATER","information_gain":0.9,"mission_impact":0.82,"falsification_value":0.99,"dependency_unblock":0.58}
+  ],
+  "highest_value_next": "Q23-F-01 then Q23-F-02/Q23-F-03",
+  "route_change_if_blocked": "paper->runtime/target-host execution; feature-quality work waits behind runtime sanity and scale receipts"
+}

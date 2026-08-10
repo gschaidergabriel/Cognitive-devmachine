@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "WP02_VALIDATOR17_DIRECT_HOSTINGER_REPLAY_20260810T0727p0700",
+  "created_at": "2026-08-10T07:27:00+07:00",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity": "Clay",
+  "research_subject": "Frank",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "adjudication": "WP02_VALIDATOR17_DIRECT_HOSTINGER_REPLAY_PASS_NOT_TARGET_PROMOTED",
+  "architecture_delta": "NO_CHANGE",
+  "source_repository": "gschaidergabriel/clay-global-research-entity",
+  "source_revision": "eba2441de9f647b078665789f652a799cc7acb17",
+  "production_parser_revision": "12614c6d8e350da4152c6d54beff5ee7255a4979",
+  "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+  "executor_pr": 72,
+  "workflow": "Clay WP02 Validator17 Hostinger Replay",
+  "workflow_run_id": 31344368852,
+  "workflow_job_id": 93323452194,
+  "workflow_conclusion": "success",
+  "executor_merge_sha": "9f1a0ed95dcb757982486a5dcd7fd2c1243aee24",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXACT_SOURCE_VALIDATOR_DELTA_REPLAY",
+  "source_transport": "EXACT_GIT_BLOB_BOUND_READ_ONLY_EXECUTOR_PR",
+  "executor_permissions": "contents:read",
+  "checkout_persist_credentials": false,
+  "runner": {
+    "name": "clay",
+    "machine": "digital-retina",
+    "os": "Linux",
+    "arch": "X64",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "git": "2.43.0",
+    "lark": "1.3.1",
+    "interegular": "0.3.3"
+  },
+  "source_blobs": {
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "tools/claycode_base_frontend.py": "55728fd20323a364bb5e831989644b65189603d1",
+    "tools/claycode_base_frontend_validation.py": "583b4bb7be385f9aa60b7aa56d4277b8ef170eb4"
+  },
+  "validator": {
+    "schema_version": "1.7",
+    "grammar_sha256": "83abde2348e6a40204e94ed91021a6e2f79a5ad1f0d96b09437214158ac70a64",
+    "production_parser_constructor": "claycode_base_frontend.build_parser",
+    "maybe_placeholders": false,
+    "validator_receipt_sha256": "720083a1702ae4a9f635d8990676b9debb07b58a92815dc169069570c02d713b",
+    "packages_sha256": "4f4664bd9ddbadb0fa69b1258fe1a511ee2e3cae3d22377426ffa6ab7ddcbe0f",
+    "artifact_sha256": "63d1f4335f0c31caa4b836e124472f648b09373d6dbf0a24bbdb83904d0a1bf0",
+    "artifact_id": 9046841025
+  },
+  "checks": {
+    "validator_pass": true,
+    "schema_1_7": true,
+    "production_parser_constructor": true,
+    "maybe_placeholders_false": true,
+    "corpus_none_zero": true,
+    "positive_none_zero": true,
+    "optional_absence_zero": true,
+    "negative_cases": true,
+    "discrimination": true,
+    "equivalence": true
+  },
+  "corpus_receipts": {
+    "g9": {
+      "source_sha256": "14fff9ed3f90a4e2c3b663cab9c4f9230c842b5bec5fa22f51e35e878d7ae4d2",
+      "parse_tree_hash": "1b494a8d5b0180fe6649e65f87fb048650e0fb44f8b49cebbe674f9671f084ad",
+      "repeat_deterministic": true,
+      "none_placeholder_count": 0,
+      "tree_nodes": 960
+    },
+    "dialect": {
+      "source_sha256": "3f09bc1dff65e4a1fe920a6007440627f5d810e66ed312c66c6458e7293f1fbb",
+      "parse_tree_hash": "3a527ae08171475744754cd31027a9cf1cc71dcdf8575521e9c02deab69298dd",
+      "repeat_deterministic": true,
+      "none_placeholder_count": 0,
+      "tree_nodes": 370
+    }
+  },
+  "optional_absence_regressions": {
+    "record_without_typeparams_or_optional_type": 0,
+    "needle_without_params": 0,
+    "record_without_field_default": 0,
+    "simple_module_law": 0
+  },
+  "relation_boundary_results": {
+    "qualified_owns_call_horizontal_trivia": true,
+    "qualified_owns_call_long_horizontal_trivia": true,
+    "qualified_owns_call_tab_trivia": true,
+    "qualified_owns_call_mixed_horizontal_trivia": true,
+    "dotted_lowers_rhs_tab_trivia": true,
+    "dotted_owns_rhs_tab_trivia": true,
+    "call_vs_prefix_owns_discriminated": true,
+    "all_none_placeholder_counts_zero": true
+  },
+  "measurements": {
+    "wall_ms": 584,
+    "user_seconds": 0.55,
+    "system_seconds": 0.03,
+    "max_rss_kb": 31456,
+    "major_page_faults": 0,
+    "minor_page_faults": 5624,
+    "voluntary_context_switches": 1,
+    "involuntary_context_switches": 0,
+    "filesystem_inputs": 0,
+    "filesystem_outputs": 56
+  },
+  "hypothesis_result": {
+    "hypothesis": "The strengthened validator v1.7 will bind production parser construction and explicitly demonstrate that the repaired frontend emits no synthetic None placeholders on the admitted WP02 corpus and boundary fixtures.",
+    "result": "SUPPORTED_ON_REAL_HOSTINGER_EXACT_SOURCE_REPLAY",
+    "strongest_counterhypothesis": "The previous four-gate remote PASS depended on a validator that did not itself enforce the placeholder contract; direct v1.7 replay would reveal residual None-placeholder or relation-boundary failures.",
+    "counterhypothesis_status": "REFUTED_ON_THIS_REMOTE_REPLAY: all v1.7 placeholder, corpus, positive/negative, discrimination and equivalence checks passed. Formal Andreas-target and downstream package acceptance remain separate."
+  },
+  "relation_to_prior_wp02_receipt": {
+    "prior_receipt": "research_entity/claycode/remote_vps/WP02_IMMUTABLE_SINGLE_FLIGHT_CLOSURE_PASS_20260810T0714p0700.json",
+    "prior_clay_commit": "ae97e17656290988a12bbb35391f053fce8fa86e",
+    "effect": "Closes the non-hardware-bound validator-v1.7 replay obligation and repairs the aggregate resource-shadow extraction for this validator delta. It does not replace the broader four-gate closure or satisfy the Andreas target contract."
+  },
+  "counts_as_wp02_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "promotion_allowed": false,
+  "training_authorized": false,
+  "next_obligations": [
+    "Keep CC-WP-02 formally OPEN until the registered Andreas Ubuntu developer-system target receipt contract is satisfied.",
+    "On Andreas target, rerun strict selected-grammar, full admitted corpus, production parser/canonicalizer, placeholder-absence and relation-boundary checks with complete host/resource metadata.",
+    "Continue the non-duplicative BASE frontier with the V7/V16/V17 grammar-fusion discriminator through the production frontend, strict LALR, canonical identity and active typed-IR path only if no current worker has already claimed or completed it.",
+    "Do not create V18 absent a concrete executable counterexample.",
+    "Do not start paid/final training without explicit project-owner authorization."
+  ],
+  "go_oob_budget": {
+    "exactly_one_experiment_already_consumed": true,
+    "experiment": "optional-placeholder / None representation falsifier in the current go lineage",
+    "this_replay_is_oob": false,
+    "no_additional_oob_experiment_added": true
+  },
+  "scope_guard": "PASS is direct Hostinger evidence for validator v1.7 and the production maybe_placeholders=false contract only. It is not CC-WP-02 formal PASS, not Andreas target acceptance, not release/freeze authorization and not training authorization.",
+  "authority_invariant": "model output != execution authority"
+}

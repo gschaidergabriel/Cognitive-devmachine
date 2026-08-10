@@ -1,25 +1,24 @@
 from __future__ import annotations
 
-"""QCEP-0.3.1: query-conditioned ephemeral evidence projection with exact Top-K stop.
+"""QCEP-0.3.2: query/focus-conditioned ephemeral evidence projection with exact Top-K.
 
-This is a research candidate, not a database/truth/effect surface. It compiles a disposable
-per-query navigation projection from one epoch-bound UnifiedDB ledger. Query-conditioned
-edge relevance can change accessibility/rank only. It never mints proof or effect authority.
+Research candidate only: not a database, truth source, proof surface, or effect authority.
+It compiles a disposable per-query navigation projection from one epoch-bound UnifiedDB
+ledger. Ranking/accessibility may change; epistemic/proof/effect authority may not.
 
-Compared with QCEP-0.2, 0.3 adds the same score-bound idea as EAP-EXACT-TOPK-1.5. The proof
-still applies because every transition multiplier is bounded in (0, 1]: edge weight <= 1,
-hop decay <= 1, query relevance <= 1 and hub factor <= 1. Therefore a descendant cannot
-exceed its frontier ancestor. Once K admissible visited candidates have a Kth score strictly
-greater than the best remaining frontier score, no unseen node can enter final Top-K.
-Equal-score frontiers are not stopped, preserving deterministic tie ordering.
+0.3.2 preserves the 0.2/0.3.1 OOD repairs and fixes a U15 integration falsifier:
+a longer query or a requirement identifier must not dilute evidence-bearing edge relevance.
+General query similarity is therefore normalized by LOCAL evidence coverage (saturating after
+two matching semantic tokens), not by total query length. In addition, callers with an
+explicit typed missing facet (U15) may supply ``focus_terms``. Any explicit focus token that
+appears in evidence-bearing edge semantics gives full local relevance. Structural JSON/schema
+keys never count as semantic evidence, so values such as source/target/strength cannot create
+focus signal by themselves.
 
-OOD invariants:
-- query conditioning activates at a source only if at least one ADMISSIBLE outgoing edge has
-  positive query signal; otherwise local edge factor is exactly 1.0;
-- missing labels are UNKNOWN, not counterevidence;
-- structural JSON/schema keys such as source/target/strength never count as semantic signal;
-- only explicitly evidence-bearing fields may contribute query tokens;
-- inadmissible nodes may be observed as negative space but cannot relay or manufacture signal.
+Exact Top-K proof remains valid because every transition multiplier is in (0,1]: edge weight,
+hop decay, relevance and hub factors. A descendant cannot exceed its frontier ancestor. Once
+K admissible visited items have a Kth score strictly greater than the best remaining frontier
+score, unseen nodes cannot enter final Top-K. Equal-score frontiers are not stopped.
 """
 
 from dataclasses import dataclass
@@ -31,7 +30,7 @@ import re
 from typing import Any
 
 _TOKEN_RE = re.compile(r"[\w-]+", re.UNICODE)
-_VERSION = "QCEP-0.3.1-EXACT-TOPK"
+_VERSION = "QCEP-0.3.2-FOCUS-EXACT-TOPK"
 _EPS = 1e-15
 _SEMANTIC_FIELDS = frozenset({
     "text", "label", "description", "query_cue", "cue", "semantic_label",
@@ -55,7 +54,7 @@ def _tokens(value: Any) -> frozenset[str]:
 
 
 def _semantic_tokens(value: Any) -> frozenset[str]:
-    """Tokenize explicit semantic payload values, never container/schema field names."""
+    """Tokenize explicit semantic payload VALUES, never container/schema field names."""
     if isinstance(value, str):
         return _tokens(value)
     if isinstance(value, (list, tuple, set, frozenset)):
@@ -92,10 +91,11 @@ class QueryEvidenceSpec:
     allowed_status: tuple[str, ...] = ("CURRENT",)
     allowed_epistemic: tuple[str, ...] = ("KNOWN",)
     exact_top_k_stop: bool = True
+    focus_terms: tuple[str, ...] = ()
 
 
 class QueryConditionedEvidenceProjector:
-    """Disposable query-conditioned graph projection over one coherent ledger epoch."""
+    """Disposable query/focus-conditioned graph projection over one coherent ledger epoch."""
 
     def __init__(self, ledger: Any):
         self.ledger = ledger
@@ -167,18 +167,42 @@ class QueryConditionedEvidenceProjector:
     def _admissible(row: dict[str, Any] | None, allowed_status: set[str], allowed_epistemic: set[str]) -> bool:
         return bool(row) and str(row.get("status", "")).upper() in allowed_status and str(row.get("epistemic", "")).upper() in allowed_epistemic
 
-    def _edge_query_overlap(self, edge: dict[str, Any], query_tokens: frozenset[str]) -> float:
+    def _edge_evidence_tokens(self, edge: dict[str, Any]) -> frozenset[str]:
         target = self._rows.get(edge["target"], {})
-        evidence_tokens = (
+        return frozenset(
             _tokens(edge["relation"])
             | _semantic_tokens(edge["dependency_value"])
             | _semantic_tokens(target.get("value", {}))
         )
-        overlap = len(query_tokens & evidence_tokens)
-        return min(1.0, overlap / max(1.0, min(4.0, float(len(query_tokens) or 1))))
 
-    def _edge_factor(self, edge: dict[str, Any], query_tokens: frozenset[str], spec: QueryEvidenceSpec, *, conditioning_available: bool) -> tuple[float, float, float]:
-        overlap = self._edge_query_overlap(edge, query_tokens)
+    def _edge_query_overlap(
+        self,
+        edge: dict[str, Any],
+        query_tokens: frozenset[str],
+        focus_tokens: frozenset[str],
+    ) -> float:
+        evidence_tokens = self._edge_evidence_tokens(edge)
+        if not evidence_tokens:
+            return 0.0
+        # Typed missing facets are stronger than generic query wording. Requirement ids that
+        # have no evidence-side match contribute nothing, so they cannot dilute a true facet.
+        if focus_tokens & evidence_tokens:
+            return 1.0
+        overlap = len(query_tokens & evidence_tokens)
+        # Local evidence coverage, not query-length coverage. Two independent semantic-token
+        # matches are sufficient to saturate; a long user query cannot dilute a supported edge.
+        return min(1.0, overlap / max(1.0, min(2.0, float(len(evidence_tokens)))))
+
+    def _edge_factor(
+        self,
+        edge: dict[str, Any],
+        query_tokens: frozenset[str],
+        focus_tokens: frozenset[str],
+        spec: QueryEvidenceSpec,
+        *,
+        conditioning_available: bool,
+    ) -> tuple[float, float, float]:
+        overlap = self._edge_query_overlap(edge, query_tokens, focus_tokens)
         if not conditioning_available:
             return 1.0, overlap, 1.0
         relevance = spec.relevance_floor + (1.0 - spec.relevance_floor) * overlap
@@ -200,6 +224,7 @@ class QueryConditionedEvidenceProjector:
             raise StaleEvidenceProjection(f"basis {spec.basis_epoch}!={self._epoch}")
 
         qtokens = _tokens(spec.query_text)
+        ftokens = frozenset().union(*(_tokens(term) for term in spec.focus_terms)) if spec.focus_terms else frozenset()
         allowed_status = {x.upper() for x in spec.allowed_status}
         allowed_epistemic = {x.upper() for x in spec.allowed_epistemic}
         frontier: list[tuple[float, int, str, str | None, str | None, str | None, float, float]] = []
@@ -232,13 +257,15 @@ class QueryConditionedEvidenceProjector:
                     edges = self._adj.get(ref, ())
                     conditioning_available = any(
                         self._admissible(self._rows.get(edge["target"]), allowed_status, allowed_epistemic)
-                        and self._edge_query_overlap(edge, qtokens) > 0.0
+                        and self._edge_query_overlap(edge, qtokens, ftokens) > 0.0
                         for edge in edges
                     )
                     for edge in edges:
                         if edge["weight"] < spec.min_edge_weight:
                             continue
-                        factor, edge_rel, edge_hub = self._edge_factor(edge, qtokens, spec, conditioning_available=conditioning_available)
+                        factor, edge_rel, edge_hub = self._edge_factor(
+                            edge, qtokens, ftokens, spec, conditioning_available=conditioning_available
+                        )
                         next_score = score * edge["weight"] * spec.hop_decay * factor
                         previous = best.get(edge["target"])
                         if next_score <= 0.0 or (previous is not None and next_score <= previous[0] + _EPS):
@@ -274,15 +301,17 @@ class QueryConditionedEvidenceProjector:
         suppressed.sort(key=lambda x:(-x["activation_score"],x["hop"],x["ref"]))
         selected=selected[:spec.max_items]
         receipt={
-            "schema_version":"1.2","preprocessor_version":_VERSION,"projection_id":spec.projection_id,
+            "schema_version":"1.3","preprocessor_version":_VERSION,"projection_id":spec.projection_id,
             "basis_epoch":self._epoch,"semantic_state_hash":self._state_hash,"query_hash":_hash(spec.query_text),
+            "focus_hash":_hash(tuple(spec.focus_terms)),
             "selected":selected,"suppressed":suppressed[:spec.max_items],"blocked_propagation_refs":sorted(blocked),
             "frontier_expansions":expansions,"frontier_stop_reason":stop_reason,
             "exact_top_k_stop":bool(spec.exact_top_k_stop),"persistent_second_store":False,
-            "projection_kind":"QUERY_CONDITIONED_EPHEMERAL_EVIDENCE_GRAPH","truth_authority":"NONE","effect_authority":"NONE",
-            "proof_rule":"query-conditioned activation changes accessibility only; it never mints proof eligibility",
+            "projection_kind":"QUERY_FOCUS_CONDITIONED_EPHEMERAL_EVIDENCE_GRAPH","truth_authority":"NONE","effect_authority":"NONE",
+            "proof_rule":"query/focus-conditioned activation changes accessibility only; it never mints proof eligibility",
             "missing_edge_semantics_rule":"NO_ADMISSIBLE_LOCAL_QUERY_SIGNAL => EXACT_STATIC_EDGE_FACTOR",
             "semantic_signal_rule":"STRUCTURAL_JSON_KEYS_EXCLUDED_ONLY_EXPLICIT_EVIDENCE_FIELDS_COUNT",
+            "relevance_rule":"TYPED_FOCUS_MATCH_FIRST_ELSE_LOCAL_EVIDENCE_COVERAGE_NOT_QUERY_LENGTH",
             "top_k_proof":"ALL_TRANSITION_MULTIPLIERS_LE_1_DESCENDANT_SCORE_LE_FRONTIER_ANCESTOR",
         }
         receipt["receipt_hash"]=_hash(receipt)

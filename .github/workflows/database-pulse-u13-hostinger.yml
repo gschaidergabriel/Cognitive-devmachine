@@ -1,0 +1,73 @@
+name: Database Pulse U13 Hostinger
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/database-pulse-u13-hostinger.yml'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V10_SEMANTIC_ACCESS_FABRIC.sql'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V11_COHERENT_ACCESS_GENERATIONS.sql'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V12_DATABASE_PULSE.sql'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V13_PULSE_INCREMENTAL_ACCESS.sql'
+      - 'research_entity/runtime/database_pulse_v0.py'
+      - 'research_entity/runtime/pulse_incremental_access_v13.py'
+      - 'research_entity/runtime/test_database_pulse_v0.py'
+      - 'research_entity/runtime/test_database_pulse_incremental_access_v13.py'
+      - 'research_entity/runtime/benchmark_database_pulse_incremental_access_v13.py'
+  workflow_dispatch:
+
+concurrency:
+  group: database-pulse-u13-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hostinger-u13:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture exact runtime metadata
+        run: |
+          set -euxo pipefail
+          mkdir -p artifacts
+          {
+            echo "commit=${GITHUB_SHA}"
+            date -u +"utc=%Y-%m-%dT%H:%M:%SZ"
+            uname -a
+            python3 --version
+            python3 - <<'PY'
+          import platform, sqlite3
+          print('platform=', platform.platform())
+          print('machine=', platform.machine())
+          print('processor=', platform.processor() or 'UNKNOWN')
+          print('sqlite=', sqlite3.sqlite_version)
+          PY
+            command -v lscpu >/dev/null && lscpu || true
+            command -v free >/dev/null && free -h || true
+            df -h .
+          } | tee artifacts/database_pulse_u13_environment.txt
+      - name: Compile Pulse candidate
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 -m py_compile database_pulse_v0.py pulse_incremental_access_v13.py test_database_pulse_incremental_access_v13.py benchmark_database_pulse_incremental_access_v13.py
+      - name: Preserve U12 recovery baseline
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 test_database_pulse_v0.py | tee ../../artifacts/database_pulse_v0_tests.txt
+      - name: Run U13 real-Pulse integration falsifiers
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 test_database_pulse_incremental_access_v13.py | tee ../../artifacts/database_pulse_u13_tests.txt
+      - name: Measure U11 versus U13 update amplification
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 benchmark_database_pulse_incremental_access_v13.py | tee ../../artifacts/database_pulse_u13_benchmark.json
+      - name: Upload exact evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-pulse-u13-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: error

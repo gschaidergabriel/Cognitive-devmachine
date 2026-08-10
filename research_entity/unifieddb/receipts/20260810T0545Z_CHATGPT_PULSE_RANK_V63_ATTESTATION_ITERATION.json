@@ -1,0 +1,176 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CHATGPT-PULSE-RANK-V63-ATTESTATION-20260810T0545Z",
+  "timestamp_utc": "2026-08-10T05:45:00Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "frank_role": "SEPARATE_RESEARCH_SUBJECT",
+  "topic": "UnifiedDB Database Pulse emergent possibility preprocessor physical compiled-rank continuity",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "parent_research": {
+    "pull_request": 146,
+    "branch": "chatgpt/unifieddb-pulse-query-aware-v6-20260810",
+    "role": "provenance-complete V6 physical BUILD/DROP authority plus EAP17.1 query-aware possibility propagation",
+    "dependency_rule": "V6.3 is stacked and is not independently promotable without parent gates."
+  },
+  "candidate": {
+    "pull_request": 160,
+    "branch": "chatgpt/unifieddb-pulse-rank-v6-3-attestation-20260810",
+    "implementation": "PULSE_PROVENANCE_PLUS_ABA_SAFE_ATTESTED_RANK_PATH_V6_3",
+    "status": "TESTING_CANDIDATE_NO_CANONICAL_PROMOTION",
+    "files": [
+      "research_entity/runtime/database_pulse_rank_path_v6_3_attested.py",
+      "research_entity/runtime/test_database_pulse_rank_path_v6_3_attested.py",
+      "tools/database_pulse_rank_path_v6_3_attested_benchmark.py",
+      ".github/workflows/database-pulse-rank-v6-3-attestation.yml"
+    ]
+  },
+  "negative_results_and_rejected_intermediates": [
+    {
+      "candidate": "V6.1 whitespace-normalized sqlite_schema definition hash",
+      "disposition": "SELF_FALSIFIED_CLOSED_PR_154",
+      "falsifier": "SQLite removes IF NOT EXISTS from persisted CREATE INDEX SQL but retains other internal formatting; whitespace-collapse alone therefore produced a different canonical string for a correct parent-built index.",
+      "effect": "Correct parent physical accelerator could be false-classified DEFINITION_DRIFT.",
+      "evidence_class": "LOCAL_SQLITE_MECHANISM_REPRODUCER_NOT_SOURCE_TREE_EXECUTION"
+    },
+    {
+      "candidate": "V6.2 erase-all-unquoted-whitespace lexical identity",
+      "disposition": "REJECTED_BEFORE_PROMOTION",
+      "falsifier": "Removing all inter-token whitespace can collide token boundaries such as `a collate binary` and `acollatebinary`.",
+      "effect": "Different SQL definitions could share the same naive normalized identity.",
+      "evidence_class": "DETERMINISTIC_LEXICAL_FALSIFIER"
+    },
+    {
+      "candidate": "definition hash plus rootpage only",
+      "disposition": "REJECTED_BEFORE_PROMOTION",
+      "falsifier": "DROP -> CREATE of the same definition can reuse a rootpage, so physical ABA cannot be excluded by definition+rootpage alone.",
+      "effect": "An old attestation could survive a physically replaced accelerator.",
+      "evidence_class": "SQLITE_PHYSICAL_IDENTITY_COUNTERHYPOTHESIS"
+    }
+  ],
+  "v6_3_mechanism": {
+    "truth_authority": "StateLedger / UnifiedDB unchanged",
+    "effect_authority": "NONE",
+    "compiled_admission": "INDEXED BY is allowed only when physical_state == ATTESTED",
+    "fallback": "Every non-ATTESTED compiled candidate uses NOT INDEXED score-before-LIMIT immediately.",
+    "attested_identity": [
+      "quote-aware lexical sqlite_schema SQL token hash",
+      "rootpage",
+      "PRAGMA schema_version",
+      "sqlite3 runtime version",
+      "sqlite_source_id()",
+      "platform system/release/machine",
+      "byte order",
+      "latest native V6 material receipt lineage when present",
+      "actor/policy_provenance_ref/policy_decision_hash inherited through parent V6 gate"
+    ],
+    "physical_states": [
+      "ABSENT",
+      "UNATTESTED",
+      "DEFINITION_DRIFT",
+      "PARENT_V6_DRIFT",
+      "SCHEMA_DRIFT",
+      "RUNTIME_DRIFT",
+      "PHYSICAL_DRIFT",
+      "ATTESTED"
+    ],
+    "maintenance_policy": {
+      "ABSENT_compile": "parent V6 BUILD then REINDEX+attest",
+      "UNATTESTED": "REINDEX+attest",
+      "RUNTIME_DRIFT": "REINDEX+attest",
+      "DEFINITION_DRIFT": "parent V6 DROP -> BUILD then attest",
+      "PARENT_V6_DRIFT": "parent V6 DROP -> BUILD then attest",
+      "SCHEMA_DRIFT": "parent V6 DROP -> BUILD then attest",
+      "PHYSICAL_DRIFT": "parent V6 DROP -> BUILD then attest",
+      "ONLINE_desired": "parent V6 DROP"
+    },
+    "recovery": "Attestation REINDEX + first-use attestation-table creation + receipt are one transaction. If a parent BUILD succeeds but attestation fails, the index remains UNATTESTED and cognition stays on the online correctness path."
+  },
+  "falsifier_suite": [
+    "format/case-equivalent SQL identity without token-boundary collision",
+    "quoted literal changes alter definition identity",
+    "real parent-V6-built index is canonical UNATTESTED, not false DEFINITION_DRIFT",
+    "absent BUILD uses parent V6 provenance before attestation",
+    "unattested parent index is never used by compiled cognition",
+    "wrong same-name definition forces parent DROP->BUILD",
+    "same-definition external DROP->CREATE invalidates via schema_version even if rootpage is reused",
+    "parent V6 DROP then external recreate is PARENT_V6_DRIFT",
+    "runtime drift revokes compiled use and uses named REINDEX before reattestation",
+    "injected attestation receipt failure rolls back attestation DDL and preserves semantic/trace roots",
+    "online and attested-compiled rank semantics are identical",
+    "UNKNOWN parent provenance remains rejected before physical effect"
+  ],
+  "benchmark_contract": {
+    "baseline": "parent Pulse rank V6",
+    "candidate": "V6.3 attested rank path",
+    "metrics": [
+      "semantic ranking equivalence",
+      "selection latency p50/p95/p99",
+      "standalone physical attestation guard p50/p95/p99",
+      "V6.3 minus V6 p50 safety-tax microseconds",
+      "V6.3/V6 p50 ratio"
+    ],
+    "rule": "Attestation overhead is a safety cost, never reported as a speed improvement."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite official expression-index documentation",
+      "relevance": "Expression index matching is syntactic rather than general algebraic equivalence."
+    },
+    {
+      "source": "SQLite official stale expression-index documentation",
+      "relevance": "Relevant expression indexes can become stale across CPU architecture, OS, SQLite/library changes; current Pulse expression uses JSON extraction, REAL casts and floating-point arithmetic."
+    },
+    {
+      "source": "SQLite official REINDEX documentation / 3.53 release lineage",
+      "relevance": "Named REINDEX is portable to the observed older runtime; broader expression reindex support exists in newer SQLite."
+    },
+    {
+      "source": "SQLite 3.51.3 WAL-reset corruption fix",
+      "relevance": "Observed Hostinger SQLite 3.45.1 remains unsuitable for concurrent writer/checkpoint promotion claims."
+    }
+  ],
+  "execution_state": {
+    "exact_v6_3_github_hosted": "ADMISSION_OR_INFRA_FAILURE_BEFORE_VISIBLE_STEPS",
+    "exact_v6_3_same_repo_hostinger": "QUEUED_AT_LAST_OBSERVATION",
+    "cross_repo_private_clay_clone": "BLOCKED_PRIVATE_REPO_AUTH_NO_SOURCE_BYTES_EXECUTED",
+    "standalone_hostinger_equivalent_mechanism_probe": "SCHEDULED_NO_DURABLE_RESULT_AT_LAST_OBSERVATION",
+    "exact_source_pass_claimed": false,
+    "andreas_target_acceptance_claimed": false
+  },
+  "coordination": {
+    "s2_aba_safe_event_compaction": "orthogonal; preserve its rule that equal final content does not imply equal touched identity",
+    "eap17_1_counterevidence": "orthogonal parent gate; attestation must not promote relevance-only retrieval claims",
+    "direct_event_execution_plane": "orthogonal execution layer; eventual composition must preserve no-self-churn semantics",
+    "spm_s1": "orthogonal StateProjection integrity/recovery guard",
+    "duplicate_v5_1_pr": "closed rather than creating competing provenance receipt authority"
+  },
+  "strongest_counterhypotheses": [
+    "Per-read attestation queries may cost enough that a simpler online/non-indexed route dominates end-to-end latency.",
+    "schema_version is conservative and unrelated DDL may cause unnecessary full rank-index rebuilds.",
+    "Runtime fingerprinting may over-invalidate on kernel/platform changes that do not change expression-index semantics.",
+    "Single-connection transactional tests do not prove multi-connection schema race or WAL/checkpoint safety.",
+    "Token-safe SQL identity is intentionally stricter than semantic equivalence and may reject harmless alternative DDL spellings.",
+    "Physical accelerator safety does not establish EAP17 retrieval quality, downstream Frank outcome quality, or database superiority."
+  ],
+  "required_next_falsifiers": [
+    "Execute exact PR #160 source bytes and inherited V6 tests on GitHub-hosted and Hostinger Ubuntu lanes.",
+    "Measure V6.3 safety tax at 100/1000/10000 rows and decide whether guard caching or epoch-scoped attestation is required.",
+    "Test unrelated DDL schema_version invalidation and compare safe full rebuild versus a finer physical-generation marker.",
+    "Test multi-connection schema mutation races with fresh physical CAS inside BEGIN IMMEDIATE.",
+    "Repeat WAL writer/checkpoint crash/recovery only on SQLite >=3.51.3 or another verified fixed family.",
+    "Compose only after parent #146 EAP17.1 real/held-out counterevidence and exact-source gates are green."
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "canonical_change": "NO_CHANGE",
+    "proposed_change": "Treat Pulse expression-index acceleration as revocable attested physical capability rather than name-existence fact.",
+    "rollback": "Ignore V6.3 attestation plane and use parent V6/V5 online correctness path; no StateLedger semantic data depends on V6.3."
+  }
+}

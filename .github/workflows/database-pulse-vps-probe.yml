@@ -10,8 +10,11 @@ on:
       - 'research_entity/runtime/test_database_pulse_v0.py'
       - 'research_entity/runtime/database_pulse_candidate_v1.py'
       - 'research_entity/runtime/test_database_pulse_candidate_v1.py'
+      - 'research_entity/runtime/database_pulse_active_field_v2.py'
+      - 'research_entity/runtime/test_database_pulse_active_field_v2.py'
       - 'tools/database_pulse_benchmark.py'
       - 'tools/database_pulse_candidate_v1_falsifier.py'
+      - 'tools/database_pulse_active_field_benchmark.py'
       - '.github/workflows/database-pulse-vps-probe.yml'
 
 permissions:
@@ -33,7 +36,7 @@ jobs:
           clean: true
           persist-credentials: true
 
-      - name: Compile Pulse candidates and falsifier
+      - name: Compile Pulse candidates and falsifiers
         run: |
           set -euo pipefail
           python3 -m py_compile \
@@ -41,8 +44,11 @@ jobs:
             research_entity/runtime/test_database_pulse_v0.py \
             research_entity/runtime/database_pulse_candidate_v1.py \
             research_entity/runtime/test_database_pulse_candidate_v1.py \
+            research_entity/runtime/database_pulse_active_field_v2.py \
+            research_entity/runtime/test_database_pulse_active_field_v2.py \
             tools/database_pulse_benchmark.py \
-            tools/database_pulse_candidate_v1_falsifier.py
+            tools/database_pulse_candidate_v1_falsifier.py \
+            tools/database_pulse_active_field_benchmark.py
 
       - name: Run delta-ingress Pulse falsifiers
         run: |
@@ -55,6 +61,11 @@ jobs:
           set -euo pipefail
           python3 -m unittest -v research_entity.runtime.test_database_pulse_candidate_v1
 
+      - name: Run incremental Active Field differential tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v research_entity.runtime.test_database_pulse_active_field_v2
+
       - name: Run adversarial pre-ranking truncation experiment
         run: |
           set -euo pipefail
@@ -65,7 +76,7 @@ jobs:
             > /tmp/database-pulse-v1-falsifier.stdout
           cat /tmp/database-pulse-v1-falsifier.stdout
 
-      - name: Benchmark delta-driven Pulse
+      - name: Benchmark delta-driven Pulse ingress
         run: |
           set -euo pipefail
           mkdir -p research_entity/benchmarks/database_pulse
@@ -74,6 +85,15 @@ jobs:
             --output research_entity/benchmarks/database_pulse/latest_vps.json \
             > /tmp/database-pulse-benchmark.stdout
           cat /tmp/database-pulse-benchmark.stdout
+
+      - name: Benchmark incremental Pulse Active Field
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_active_field_benchmark.py \
+            --rows 3000 --bounded 64 --repeats 200 --delta-updates 100 \
+            --output research_entity/benchmarks/database_pulse/active_field_v2_vps.json \
+            > /tmp/database-pulse-active-field.stdout
+          cat /tmp/database-pulse-active-field.stdout
 
       - name: Attach real runner metadata and acceptance boundary
         env:
@@ -85,7 +105,6 @@ jobs:
           python3 - <<'PY'
           import json, os, pathlib, platform, socket, sqlite3, subprocess, sys
           from datetime import datetime, timezone
-          meta={}
           def cmd(args):
               try:
                   return subprocess.check_output(args,text=True,stderr=subprocess.STDOUT,timeout=5).strip()
@@ -124,7 +143,7 @@ jobs:
               'filesystem':cmd(['df','-T','.']),
               'kernel':cmd(['uname','-a']),
           }
-          for name in ('latest_vps.json','v1_truncation_falsifier_vps.json'):
+          for name in ('latest_vps.json','v1_truncation_falsifier_vps.json','active_field_v2_vps.json'):
               p=pathlib.Path('research_entity/benchmarks/database_pulse')/name
               x=json.loads(p.read_text(encoding='utf-8'))
               x['execution_metadata']=meta
@@ -138,15 +157,16 @@ jobs:
           set -euo pipefail
           cp research_entity/benchmarks/database_pulse/latest_vps.json /tmp/database-pulse-latest-vps.json
           cp research_entity/benchmarks/database_pulse/v1_truncation_falsifier_vps.json /tmp/database-pulse-v1-falsifier-vps.json
+          cp research_entity/benchmarks/database_pulse/active_field_v2_vps.json /tmp/database-pulse-active-field-v2-vps.json
           git reset --hard HEAD
           git clean -fd
           mkdir -p research_entity/benchmarks/database_pulse
           cp /tmp/database-pulse-latest-vps.json research_entity/benchmarks/database_pulse/latest_vps.json
           cp /tmp/database-pulse-v1-falsifier-vps.json research_entity/benchmarks/database_pulse/v1_truncation_falsifier_vps.json
+          cp /tmp/database-pulse-active-field-v2-vps.json research_entity/benchmarks/database_pulse/active_field_v2_vps.json
           git config user.name 'clay-database-pulse-runner'
           git config user.email 'clay-pulse-runner@users.noreply.github.com'
-          git add research_entity/benchmarks/database_pulse/latest_vps.json \
-            research_entity/benchmarks/database_pulse/v1_truncation_falsifier_vps.json
+          git add research_entity/benchmarks/database_pulse/*.json
           git commit -m 'evidence(frank): persist Database Pulse VPS receipts [skip ci]' || exit 0
           for attempt in 1 2 3 4 5 6; do
             git pull --rebase origin "${GITHUB_REF_NAME}" && \
@@ -163,12 +183,18 @@ jobs:
           import json
           p=json.load(open('research_entity/benchmarks/database_pulse/latest_vps.json',encoding='utf-8'))
           f=json.load(open('research_entity/benchmarks/database_pulse/v1_truncation_falsifier_vps.json',encoding='utf-8'))
-          r=p['results']
+          a=json.load(open('research_entity/benchmarks/database_pulse/active_field_v2_vps.json',encoding='utf-8'))
+          r=p['results']; c=a['correctness']
           assert r['applied_delta_total']==p['configuration']['deltas'], p
           assert r['model_call_total_active']==0, p
           assert r['transaction_fault_rollback_pass'] is True, p
           assert r['fault_retry_applied']==1, p
           assert isinstance(f['pre_ranking_truncation_bug_reproduced'], bool), f
+          assert c['wide_reference_correct'] is True, a
+          assert c['active_field_correct'] is True, a
+          assert c['projection_verify_initial']['pass'] is True, a
+          assert c['projection_verify_final']['pass'] is True, a
+          assert c['all_delta_refreshes_touched_one_ref'] is True, a
           assert p['execution_metadata']['scope']=='REMOTE_PRELIMINARY_DATABASE_PULSE_NOT_ANDREAS_TARGET_ACCEPTANCE'
           print('FRANK_DATABASE_PULSE_VPS_PROBE=PASS')
           PY

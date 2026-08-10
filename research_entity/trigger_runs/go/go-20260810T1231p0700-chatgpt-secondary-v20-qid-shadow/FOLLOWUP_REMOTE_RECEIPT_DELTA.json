@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "parent_run": "go-20260810T1231p0700-chatgpt-secondary-v20-qid-shadow",
+  "created_at_local": "2026-08-10T12:35:00+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "reason": "Mandatory end-refresh exposed a self-hosted Ubuntu WP03 composition receipt after FINAL_SYNTHESIS was written.",
+  "new_evidence": {
+    "receipt": "research_entity/claycode/base/receipts/WP03_V7_V17_MEMBRANE_KEYWORD_IR_HOSTINGER_20260810T1232p0700.json",
+    "commit": "aa4c8a5f68500f7479392afc9a7b262d96c9a227",
+    "evidence_class": "VERIFIED_REMOTE_EXECUTION_SELF_HOSTED_UBUNTU_EXACT_BLOB_RESEARCH_PROXY",
+    "workflow_conclusion": "success",
+    "gates": {
+      "strict_build": true,
+      "strict_full_g9_dialect": true,
+      "relation_boundary": true,
+      "operator_identity": true,
+      "full_typed_ir": true,
+      "keyword_identifiers": true,
+      "authority_none": true
+    },
+    "composition_regression_observed": false,
+    "counts_as_wp03_pass": false,
+    "counts_as_andreas_target_acceptance": false
+  },
+  "adjudication": {
+    "normal_valid_parse_composition": "SUPPORTED_ON_EXACT_TESTED_HOSTINGER_UBUNTU_BYTES",
+    "upstream_v7_optional_relation_conflict": "REPAIRED_ON_TESTED_COMPOSED_BYTES",
+    "downstream_keyword_identifier_bug": "REPAIRED_ON_TESTED_CANDIDATE_BYTES",
+    "alias_token_replay_integrity": "STILL_OPEN_HARDENING_REQUIRED",
+    "why_no_contradiction": "The Ubuntu composition receipt exercises valid grammar-produced ASTs. The later alias-integrity falsifier mutates replay/corrupted canonical AST alias/token agreement, a distinct fail-closed requirement not covered by the composition receipt.",
+    "wp03": "OPEN_CANDIDATE_ONLY",
+    "wp04": "DO_NOT_ADVANCE",
+    "base": "NOT_PASS",
+    "production_promotion": "NONE",
+    "frank_harness_mutation": false
+  },
+  "v20_qid_remote_receipt_at_refresh": "NOT_VISIBLE",
+  "next_falsifier": "Apply alias/token equality hardening on candidate bytes, replay exact grammar/frontend/G9/Dialect on hosted and self-hosted Ubuntu, then retain registered Andreas Ubuntu target acceptance as formal promotion authority.",
+  "research_write": "COMMITTED"
+}

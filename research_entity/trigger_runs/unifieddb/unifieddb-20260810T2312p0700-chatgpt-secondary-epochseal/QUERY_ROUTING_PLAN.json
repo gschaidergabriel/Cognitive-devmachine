@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "architecture_id": "EPOCHSEAL_HYBRID_V1",
+  "routes": [
+    {"intent":"exact_identity_state","source":"canonical semantic_records/state_epochs","consistency":"exact source_epoch","derived_allowed":false,"authority":"AUTHORITATIVE_EXACT"},
+    {"intent":"exact_effect_outcome","source":"effect_outcomes + external provider verification","consistency":"verified provider receipt + source_epoch","derived_allowed":false,"authority":"AUTHORITATIVE_WHEN_VERIFIED"},
+    {"intent":"temporal_replay","source":"semantic_transactions + state_epochs + snapshots","consistency":"ordered epoch chain","derived_allowed":false,"authority":"AUTHORITATIVE_REPLAY"},
+    {"intent":"keyword_association","source":"FTS derived index","consistency":"derived_from_epoch recorded","derived_allowed":true,"authority":"CANDIDATE_ONLY_UNTIL_CANONICAL_RESOLUTION"},
+    {"intent":"vector_association","source":"vector/ANN sidecar or extension","consistency":"index generation + embedding model hash + derived_from_epoch","derived_allowed":true,"authority":"CANDIDATE_ONLY_UNTIL_CANONICAL_RESOLUTION"},
+    {"intent":"graph_association","source":"ClayGraph","consistency":"graph_epoch/derived_from_epoch","derived_allowed":true,"authority":"CANDIDATE_ONLY_UNTIL_CANONICAL_RESOLUTION"},
+    {"intent":"gwt_workspace_assembly","source":"canonical state + bounded derived candidates","consistency":"one declared source_epoch plus candidate provenance","derived_allowed":true,"authority":"SELECTION_NOT_TRUTH"}
+  ],
+  "planner_rules": [
+    "exact-address before associative search when key is known",
+    "never silently mix canonical rows from different source epochs in cognition-critical reads",
+    "if derived_from_epoch < requested source_epoch then mark STALE and either rebuild, canonical-resolve, or downgrade to exploratory",
+    "record result_refs, planner, source_epoch, graph/index epoch, admissibility and result hash",
+    "approximate vector index must declare recall-affecting mode; ANN rank cannot answer truth queries",
+    "provider-side current state outranks stale local mirror for exact external effect verification"
+  ],
+  "cost_policy": "prefer prepared bounded assembly; avoid total-memory scan/global graph rebuild on hot path",
+  "status": "CANDIDATE"
+}

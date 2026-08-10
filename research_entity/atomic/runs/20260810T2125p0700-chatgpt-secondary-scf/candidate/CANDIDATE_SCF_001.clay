@@ -1,0 +1,80 @@
+module atomic.semantic_conservation_field
+
+const VERSION : Text = "SCF-001"
+const STATUS  : Text = "RADICAL_CANDIDATE_NOT_PROMOTED"
+
+type ChargeKind =
+    SELF_ROOT_ID
+  | DIRECT_INTENT_AUTH
+  | EFFECT_AUTH
+  | RESEARCH_ACCEPTANCE_AUTH
+  | VERIFIED_OUTCOME_EVIDENCE
+  | RESEARCH_EVIDENCE
+  | CAUSAL_CREDIT
+
+type MintRole =
+    BOOT_ROOT
+  | TOKEN_AUTHENTICATOR
+  | EFFECT_GATE
+  | EXTERNAL_VERIFIER
+  | RESEARCH_ENTITY
+  | CAUSAL_CREDIT_GATE
+  | EPOCH_MIGRATOR
+  | NONE
+
+type ConservationStamp = {
+  charges    : MAP<ChargeKind, Int>
+  epoch      : Epoch
+  provenance : SET<EvidenceRef>
+}
+
+type TransitionContract = {
+  transition_id : SemanticHash
+  mint_role     : MintRole
+  mint_rights   : SET<ChargeKind>
+  effect_class  : EffectClass
+  input_epoch   : Epoch
+  output_epoch  : Epoch
+}
+
+fn allowed_mints(role : MintRole) -> SET<ChargeKind> {
+  match role {
+    BOOT_ROOT => return {SELF_ROOT_ID}
+    TOKEN_AUTHENTICATOR => return {DIRECT_INTENT_AUTH}
+    EFFECT_GATE => return {EFFECT_AUTH}
+    EXTERNAL_VERIFIER => return {VERIFIED_OUTCOME_EVIDENCE, RESEARCH_EVIDENCE}
+    RESEARCH_ENTITY => return {RESEARCH_ACCEPTANCE_AUTH}
+    CAUSAL_CREDIT_GATE => return {CAUSAL_CREDIT}
+    EPOCH_MIGRATOR => return {}
+    NONE => return {}
+  }
+}
+
+fn conservation_decision(
+  before : ConservationStamp,
+  after  : ConservationStamp,
+  c      : TransitionContract
+) -> Decision {
+  require c.mint_rights subset_of allowed_mints(c.mint_role)
+
+  for charge in ChargeKind {
+    if after.charges[charge] > before.charges[charge] {
+      require c.mint_rights contains charge
+    }
+  }
+
+  if after.epoch != before.epoch {
+    require c.mint_role == EPOCH_MIGRATOR
+  }
+
+  return ALLOW
+}
+
+invariant ordinary_cognition_cannot_mint_self_identity
+invariant translator_model_gwt_claygraph_cannot_mint_effect_authority
+invariant operational_telemetry_cannot_mint_research_acceptance
+invariant self_generated_completion_cannot_mint_causal_credit
+invariant stale_epoch_cannot_retag_itself_current
+invariant direct_authenticated_intent_is_scoped_authority_not_unlimited_authority
+invariant existing_hard_surface_denials_remain_in_force
+invariant SCF_is_validation_layer_not_effect_authority

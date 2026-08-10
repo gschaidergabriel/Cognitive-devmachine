@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:12:00+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "request_mode": "MODIFIED_GO_REQUEST_MAX_3_DEEP_CYCLES_NOT_EXACT_GO_TRIGGER",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "primary_work_package": "CC-WP-02-PARSER-CANON",
+  "dependent_work_package": "CC-WP-03-IR-TYPES",
+  "fresh_evidence": {
+    "wp02_frontend_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "wp02_selected_parse_contract": "Lark build_parser(... maybe_placeholders=False): absent optional is absence, not a synthetic semantic child",
+    "wp03_ir_blob": "1122166ac6f0ee398c4ac497202939f08ba9139f",
+    "wp03_current_parser_construction": "Lark(grammar, parser='lalr', lexer='contextual', strict=strict, start='start', keep_all_tokens=True) with no maybe_placeholders override",
+    "wp03_current_none_semantics": "canonical_syntax(None) returns {\"literal\": null}",
+    "v9_concrete_optional_surface": "codec_decl: 'codec' ident '=' ident [ident]"
+  },
+  "local_discriminating_test": {
+    "evidence_class": "LOCAL_EXACT_LARK_VERSION_STRUCTURAL_DISCRIMINATOR_NOT_TARGET_ACCEPTANCE",
+    "runtime": {"lark": "1.3.1", "python": "3.13", "strict": false},
+    "fixture": "codec F = A",
+    "grammar_shape": "codec_decl with one trailing [] optional matching current V9 contract shape",
+    "maybe_placeholders_true": "codec_decl children end with explicit null placeholder",
+    "maybe_placeholders_false": "codec_decl has no child for the absent optional",
+    "result": "TREE_AND_CANONICAL_SYNTAX_REPRESENTATION_DIFFER",
+    "scope_guard": "This isolates parser-tree representation only. It is not strict Hostinger evidence, not WP02/WP03 PASS and not Andreas target acceptance."
+  },
+  "leading_hypothesis": "After WP02 selects absence-is-absence, WP03 should consume the same parser/canonical scalar contract instead of independently reconstructing Lark defaults; otherwise ClayCode has two semantic parse authorities and generic declarations such as codec/rule/law can mint representation-dependent semantic IR identities.",
+  "strongest_counterhypothesis": "WP03 may intentionally need positional null slots to preserve grammar arity. If so, that arity must be expressed as a typed IR field/schema contract rather than inherited implicitly from Lark's default [] placeholder behavior; otherwise parser-library defaults become semantic authority.",
+  "cross_package_risk": {
+    "class": "SEMANTIC_AUTHORITY_SPLIT",
+    "mechanism": "WP02 and WP03 currently instantiate different optional-child policies",
+    "affected_surfaces": [
+      "codec_decl trailing optional ident",
+      "class_decl/record_decl optional type_params",
+      "needle/cycle/method optional params",
+      "field optional default",
+      "param optional type",
+      "type_atom optional type_params/question-mark",
+      "infix relation optional equals",
+      "call/list/set optional contents"
+    ],
+    "not_all_surfaces_are_equally_at_risk": "Specialized WP03 lowering often searches by Tree kind and may erase the placeholder before semantic_ir_sha256; default/generic lowering preserves canonical_syntax and therefore can expose the split directly."
+  },
+  "architecture_delta_candidate": {
+    "name": "WP03_REUSE_SELECTED_WP02_PARSE_AND_SCALAR_CONTRACT",
+    "status": "CANDIDATE_GATED_ON_WP02_CLOSURE",
+    "preferred_direction": [
+      "Reuse one parser-construction primitive rather than a second Lark configuration.",
+      "Reuse decoded STRING scalar validation/canonical semantics from the selected frontend boundary.",
+      "Represent intentional optional IR fields explicitly in typed IR instead of relying on parser None placeholders."
+    ],
+    "rollback": "No source patch in this cycle; receipt-only obligation until WP02 current-main strict/full-corpus/canonical closure is durable."
+  },
+  "required_falsifiers_after_wp02_gate": [
+    "Matched old-vs-selected parser-mode lower_program comparison over every [] grammar site, including codec F=A as a required generic-lowering witness.",
+    "Prove whether semantic_ir_sha256 changes only where representation policy intentionally changes; classify every hash delta before schema promotion.",
+    "If semantic identity changes, version/migrate the IR identity contract rather than silently accepting hash drift.",
+    "Require escape-equivalent JSON STRING spellings to share decoded scalar semantic identity while source_sha256 preserves lexical provenance; do not silently add NFC normalization.",
+    "Reject unpaired Unicode surrogates before semantic identity is minted.",
+    "Run strict Lark/interegular and current full WP03 validation on the verified Hostinger Ubuntu lane, then later on Andreas' registered Ubuntu target for formal target adjudication."
+  ],
+  "relationship_to_existing_evidence": {
+    "wp02_independent_replication": "67506dfae1e2cee30444709b72504dc839995b8e",
+    "wp03_decoded_scalar_policy_receipt": "ac47fce28cd0c36e070af01ea8b0cd6e41afeb30",
+    "explicit_null_alternative_receipt": "ed82852040571e1029b741225e32d713ae847af5",
+    "adjudication": "EXTENDS_EXISTING_EVIDENCE_WITH_CROSS_PACKAGE_PARSE_CONTRACT_OBLIGATION_NO_DUPLICATE_SOURCE_PATCH"
+  },
+  "architecture_delta": "TEST_OBLIGATION_AND_INTEGRATION_CONTRACT_ONLY",
+  "counts_as_wp02_pass": false,
+  "counts_as_wp03_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

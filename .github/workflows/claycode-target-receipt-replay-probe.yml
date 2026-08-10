@@ -1,0 +1,19 @@
+name: ClayCode target receipt replay guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-target-receipt-replay-probe.yml'
+      - 'tools/claycode_target_receipt_replay_probe.py'
+      - 'tools/claycode_promote_release_workspace.py'
+  workflow_dispatch:
+
+jobs:
+  stale-target-receipt-negative-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute replay negative control
+        run: python3 tools/claycode_target_receipt_replay_probe.py

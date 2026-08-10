@@ -26,6 +26,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: unifieddb-pulse-eap17-v6-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   hosted-preflight:
     runs-on: ubuntu-latest

@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2016p0700-chatgpt-secondary-hwp10-effect-authority",
+  "trigger": "harness",
+  "evidence_class": "LOCAL_DETERMINISTIC_TEST",
+  "shared_ancestry": true,
+  "feedback": {
+    "clayresearch": {
+      "status": "NO_CHANGE",
+      "finding": "The owner-fixed safe-effect posture survived executable translation into the H1 reference gate. No scientific promotion is claimed from implementing the same contract."
+    },
+    "frank": {
+      "status": "TEST_OBLIGATION",
+      "finding": "EffectIntent/authority semantics require exact request-bound confirmations and one-shot replay protection. Integrate this component only as the authority-decision sub-boundary; reservation/commit/outcome/re-entry remain separate."
+    },
+    "claycode": {
+      "status": "TEST_OBLIGATION",
+      "finding": "H2 must express the same EffectClass/EffectDecision/ConfirmationReceipt semantics and prove differential equivalence, including exact request-hash binding and replay/stale rejection. Authority remains external to model confidence and language expressibility."
+    },
+    "gwt": {
+      "status": "NO_CHANGE_WITH_REGRESSION_TEST",
+      "finding": "GWT ignition is explicitly present as a non-authoritative input and cannot alter gate decisions."
+    },
+    "claygraph": {
+      "status": "NO_CHANGE_WITH_REGRESSION_TEST",
+      "finding": "ClayGraph salience is explicitly present as a non-authoritative input and cannot alter gate decisions."
+    },
+    "unifieddb": {
+      "status": "OPEN_DEPENDENCY",
+      "finding": "Used-confirmation nonce/replay state is currently in-memory. H-WP-10 cannot close until durable, crash-safe, atomic confirmation-consumption semantics are bound to the canonical state/recovery path."
+    },
+    "hyperposition": {
+      "status": "NO_CHANGE",
+      "finding": "No topology or placement change. Authority firebreak remains explicit."
+    },
+    "emergenz": {
+      "status": "NO_CHANGE",
+      "finding": "No emergence or causal-synergy claim follows from authority-gate correctness."
+    },
+    "harness": {
+      "status": "COMPONENT_PASS_PACKAGE_OPEN",
+      "finding": "H1 reference EffectAuthorityGate and 17-test suite added. First prototype had an under-bound confirmation hash; it was falsified and fixed before repository commit. Remaining work includes durable nonce state, concurrency, reservation/commit/outcome/re-entry integration, target-Ubuntu execution and H2 differential."
+    }
+  },
+  "material_counterexample": {
+    "observed": true,
+    "stage": "PRE_COMMIT_LOCAL_PROTOTYPE",
+    "description": "Initial request_hash covered actor/action/target/effect class/subtype but not all policy-relevant guard fields, allowing a confirmation to remain hash-valid after some policy-relevant request mutation.",
+    "repair": "Canonical JSON hash now covers every policy-relevant EffectRequest field while excluding explicitly non-authoritative cognitive/salience signals; mutation regression test added.",
+    "result": "REPAIRED_BEFORE_COMMIT"
+  }
+}

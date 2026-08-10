@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1442p0700-chatgpt-secondary",
+  "trigger": "go",
+  "started_at": "2026-08-10T14:42:00+07:00",
+  "closed_at": "2026-08-10T14:54:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": {
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_repo_head_before_close": "585cc3d907911f42fec6af5b424089956311dff8",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "completed_material_effects": [
+    {
+      "effect": "Observed and preserved concurrent critical-path advancement: CC-WP-02 parser/canonicalizer promoted to PASS only after exact-byte self-hosted Ubuntu evidence.",
+      "commit": "4c594fcd2a71370aa7c8ce7dbfeb4009a53f267c",
+      "promotion_scope": "CC-WP-02_PACKAGE_ONLY"
+    },
+    {
+      "effect": "Executed exactly one go-specific bounded out-of-the-box observer-backaction shadow factorial for U16 receipt persistence.",
+      "commit": "8c6075425440e17d537d386adeb25975ba505483",
+      "promotion_scope": "NONE"
+    },
+    {
+      "effect": "Observed independent V3 dual-plane live-fusion candidate evidence and correlated-projection-blind-spot negative result; preserved as candidate-only.",
+      "commit": "a0be86497f4ff7e4dcf2eff080d0b0dd54164e99",
+      "promotion_scope": "NONE"
+    },
+    {
+      "effect": "Verified the observer-shadow result was already ingested and targeted back to all affected branches by the active Hypofusion worker, avoiding duplicate feedback writes.",
+      "commit": "65a4f26c94080760a3795271c537453a3a97973e",
+      "promotion_scope": "NONE"
+    }
+  ],
+  "out_of_box_experiment": {
+    "count": 1,
+    "id": "LIVE-FUSION-U16-OBSERVER-BACKACTION-SHADOW-20260810",
+    "artifact": "research_entity/experiments/LIVE_FUSION_U16_OBSERVER_BACKACTION_SHADOW_20260810.json",
+    "modes": ["NO_OBSERVER", "SAME_FILE_OBSERVER", "ISOLATED_OBSERVER"],
+    "result_summary": "Same-file observation was directionally costly in the shadow workload: p50/p95/p99 receipt-commit latency about 3.42x/3.80x/3.81x versus no observer and primary WAL bytes about 50.07x; isolated observation was about 1.10x/1.25x/2.37x with primary WAL bytes about 1.0x. All tested integrity and restart/re-entry checks passed.",
+    "critical_limit": "SQLite 3.46.1 is inside the official WAL-reset-bug vulnerable range; result is local shadow evidence and cannot promote placement.",
+    "verdict": "REVISE_KEEP_ISOLATION_AS_LEADING_CANDIDATE_BUT_NO_PROMOTION"
+  },
+  "fresh_external_evidence": [
+    {
+      "source": "SQLite official WAL documentation",
+      "retrieved_at": "2026-08-10",
+      "delta": "WAL-reset bug likely affects 3.7.0 through 3.51.2; fixed in 3.51.3+ with listed backports. Multi-connection WAL write/checkpoint concurrency therefore requires a fixed SQLite family before promotion evidence."
+    }
+  ],
+  "hypothesis_state": {
+    "live_fusion": "V2/V3 adaptive dual-plane remains candidate-only; stronger networking is useful only with provenance-diverse relevance checks, explicit ack/repair closure and measured observer/recovery costs.",
+    "observer_placement": "Directionally favors isolation in current shadow workload but architecture choice remains OPEN pending fixed-version matched Ubuntu evidence.",
+    "claycode": "WP-02 closed; WP-03 is already owned by a non-overlapping typed-IR lane, so this worker did not duplicate it."
+  },
+  "negative_results_and_counterevidence": [
+    "A second projection/control plane gives no recall advantage when its missing-edge ancestry is fully correlated with the first.",
+    "A logically correct same-file observer cannot be assumed passive; current shadow evidence shows material latency/WAL backaction.",
+    "The local observer factorial cannot be promoted because its SQLite version is in the WAL-reset vulnerable range."
+  ],
+  "architecture_action": "NO_PROMOTION_ADD_TEST_OBLIGATION_ONLY",
+  "test_obligations": [
+    "Repeat observer placement factorial on Hostinger/self-hosted Ubuntu with SQLite >=3.51.3 or explicitly verified fixed backport, including CPU/RSS/I/O, checkpoint frames, crash/restart, false-stale reads and mirror-loss/anti-entropy repair.",
+    "Execute real-repository broadcast/tag/V2/V3 matched replay with missing/stale/correlated edges, dropped beacon/ack, duplicates, causal reorder and open-AckClosure crash/restart.",
+    "Continue BASE critical path through the already-claimed CC-WP-03 typed IR lane without reopening parser semantics absent an executable counterexample."
+  ],
+  "research_distribution": {
+    "observer_delta_already_distributed_by": "hypofusion-20260810T1431p0700-chatgpt-secondary-r5",
+    "distribution_commit": "65a4f26c94080760a3795271c537453a3a97973e",
+    "duplicate_distribution_avoided": true
+  },
+  "training_started": false,
+  "frank_harness_mutated_by_this_run": false,
+  "scientific_promotion": "NONE",
+  "next_frontier": [
+    "CC-WP-03 typed IR Ubuntu closure in existing claimed lane",
+    "fixed-SQLite Hostinger observer-backaction replication",
+    "real-repo V2/V3 live-fusion fault matrix"
+  ],
+  "status": "CLOSED_WITH_COMMITTED_RESEARCH_DELTA"
+}

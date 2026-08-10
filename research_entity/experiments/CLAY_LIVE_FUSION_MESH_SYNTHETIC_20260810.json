@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-LIVE-FUSION-MESH-DUAL-PROJECTION-20260810",
+  "created_at": "2026-08-10T14:20:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "evidence_class": "SIMULATION_ONLY",
+  "candidate_ref": "research_entity/global/CLAY_LIVE_FUSION_CAUSAL_MESH_CANDIDATE.clay",
+  "goal": "Test whether stronger causal worker networking can reduce broadcast overhead without materially losing affected-branch closure under stale topology, message loss and ack loss.",
+  "hypothesis": "Dual relevance projection (ClayGraph + UnifiedDB) with bounded ack/redelivery, idempotent application and periodic anti-entropy reconciliation preserves affected-branch closure at lower fanout than unconditional nine-branch broadcast.",
+  "counterhypothesis": "Full broadcast is materially more robust; topology staleness makes targeted routing unsafe or reconciliation overhead erases any communication saving.",
+  "branches": ["clay","frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness"],
+  "design": {
+    "seeds": 100,
+    "events_per_seed": 1500,
+    "events_per_arm_total": 150000,
+    "high_impact_event_probability": 0.20,
+    "message_delivery_failure_probability": 0.04,
+    "ack_loss_probability_after_delivery": 0.015,
+    "max_delivery_attempts": 3,
+    "claygraph_projection_true_edge_drop_probability": 0.08,
+    "claygraph_projection_false_edge_add_probability": 0.04,
+    "unifieddb_projection_true_edge_drop_probability": 0.06,
+    "unifieddb_projection_false_edge_add_probability": 0.02,
+    "anti_entropy_period_events": 25,
+    "arms": [
+      "FULL_NINE_BRANCH_BROADCAST",
+      "SINGLE_PROJECTION_TARGETING_NO_ACK",
+      "SINGLE_PROJECTION_TARGETING_ACK",
+      "DUAL_PROJECTION_TARGETING_ACK",
+      "DUAL_PROJECTION_ACK_PLUS_ANTI_ENTROPY_RECONCILIATION"
+    ],
+    "important_model_limit": "Ground-truth affected sets are generated from a fixed synthetic dependency graph derived from current branch-interface structure. This is not a live UnifiedDB/ClayGraph runtime and cannot establish production routing correctness."
+  },
+  "runtime_metadata": {
+    "os": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "architecture": "x86_64",
+    "python": "3.13.5",
+    "logical_cpu_count_observed": 5,
+    "processor_model": "UNKNOWN",
+    "gpu": "UNKNOWN_NOT_USED",
+    "network": "NOT_USED",
+    "repo_commit_for_simulator": "NOT_APPLICABLE_INLINE_SIMULATION",
+    "dirty_state": "NOT_APPLICABLE",
+    "simulation_random_seed_family": "20260810..20260909",
+    "measurement_clock": "Python in-process counters; wall-clock performance not claimed"
+  },
+  "results": {
+    "full_broadcast": {
+      "send_attempts_per_event_mean": 9.0,
+      "affected_receiver_recall_mean": 1.0,
+      "full_event_closure_rate_mean": 1.0,
+      "irrelevant_deliveries_per_event_mean": 1.86376,
+      "irrelevant_deliveries_per_event_approx_95pct_ci_halfwidth": 0.006394
+    },
+    "single_projection_ack": {
+      "affected_receiver_recall_mean": 0.9523758307,
+      "affected_receiver_recall_approx_95pct_ci_halfwidth": 0.0050070741,
+      "conclusion": "COUNTERHYPOTHESIS_PARTIALLY_SUPPORTED: ack/redelivery fixes transport loss but not stale relevance topology."
+    },
+    "dual_projection_ack_hot_path": {
+      "send_attempts_per_event_mean": 7.65254,
+      "affected_receiver_recall_mean": 0.9970346228,
+      "affected_receiver_recall_approx_95pct_ci_halfwidth": 0.0011120837,
+      "full_event_closure_rate_mean": 0.97886,
+      "full_event_closure_rate_approx_95pct_ci_halfwidth": 0.0079208282,
+      "irrelevant_deliveries_per_event_mean": 0.1231666667,
+      "duplicate_deliveries_per_event_mean": 0.1079533333,
+      "duplicate_application_rate": 0.0,
+      "duplicate_application_note": "Idempotent application was modeled by pulse id; duplicates could be delivered but did not re-apply state."
+    },
+    "dual_projection_ack_plus_reconciliation": {
+      "send_attempts_per_event_mean": 8.0341533333,
+      "send_attempts_per_event_approx_95pct_ci_halfwidth": 0.0205036549,
+      "send_attempt_reduction_vs_broadcast_percent": 10.7316296296,
+      "hot_path_affected_receiver_recall_mean": 0.9970270748,
+      "hot_path_affected_receiver_recall_approx_95pct_ci_halfwidth": 0.0011061436,
+      "eventual_affected_receiver_recall_after_reconciliation_mean": 1.0,
+      "unreconciled_missing_after_final_repair": 0,
+      "irrelevant_deliveries_per_event_mean": 0.1235933333,
+      "irrelevant_deliveries_reduction_vs_broadcast_percent": 93.3686025382,
+      "duplicate_deliveries_per_event_mean": 0.10942,
+      "duplicate_application_rate": 0.0,
+      "per_seed_mean_repair_delay_events_mean": 8.3324428584,
+      "maximum_observed_repair_delay_events": 39
+    }
+  },
+  "interpretation": {
+    "supported": [
+      "Single relevance projection is not robust enough under modeled topology staleness.",
+      "Independent dual relevance projections materially reduce modeled topology-miss risk.",
+      "Ack/redelivery addresses transport loss but must be paired with idempotent application.",
+      "Periodic anti-entropy reconciliation can recover residual misses with less modeled fanout than unconditional broadcast."
+    ],
+    "not_supported_or_not_measured": [
+      "No live worker/runtime correctness claim.",
+      "No Ubuntu/Hostinger latency, CPU, RAM, filesystem or Git contention measurement.",
+      "No proof that current UnifiedDB and ClayGraph projections fail independently in production.",
+      "No claim that 25 events is the correct reconciliation period.",
+      "No architecture promotion."
+    ],
+    "decision": "KEEP_AS_RESEARCH_CANDIDATE_AND_BUILD_SMALLEST_EXECUTABLE_COMPANION_TEST",
+    "next_falsifier": "Implement a minimal versioned pulse/ack/replan projection against current dynamic_work_runtime_v2.py and inject stale epochs, duplicate event files, missed sync, crash/restart and conflicting work revisions. Compare against current WorkEvent baseline on the verified Ubuntu runner."
+  },
+  "external_live_evidence_refs": [
+    "Official NATS JetStream documentation: durable consumers, explicit acknowledgement/redelivery, message-id deduplication and double-ack semantics; retrieved 2026-08-10.",
+    "Official Apache Kafka documentation: idempotent producer and transactional semantics; retrieved 2026-08-10.",
+    "Amazon Dynamo paper / Amazon Science: versioning and anti-entropy convergence pattern; retrieved 2026-08-10.",
+    "Primary OpenReview multi-agent coordination papers: task/state-adaptive sparse communication topology; retrieved 2026-08-10."
+  ]
+}

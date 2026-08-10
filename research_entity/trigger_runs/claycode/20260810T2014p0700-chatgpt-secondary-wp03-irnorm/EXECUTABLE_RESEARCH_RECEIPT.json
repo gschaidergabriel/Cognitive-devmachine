@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2014p0700-chatgpt-secondary-wp03-irnorm",
+  "hypothesis_id": "H-CC-WP03-TYPED-SEMANTIC-NORMALIZATION",
+  "evidence_class": "LOCAL_PROXY_EXECUTABLE_DISCRIMINATOR",
+  "target_package": "CC-WP-03-IR-TYPES",
+  "source_artifacts": {
+    "candidate": "research_entity/trigger_runs/claycode/20260810T2014p0700-chatgpt-secondary-wp03-irnorm/WP03_TYPED_IR_CANDIDATE.clay",
+    "candidate_sha256": "23d30c2711a0c19eb01a734e07443378368959dfac858e67d158d6ea5653f1ab",
+    "probe": "research_entity/trigger_runs/claycode/20260810T2014p0700-chatgpt-secondary-wp03-irnorm/wp03_ir_normalization_probe.py",
+    "probe_sha256": "fe0f4fd9dd77ee5657a2fe49da7e1cf09984fbb80c3a1e0d3e3022e443620bfc",
+    "frontend": "tools/claycode_base_frontend.py",
+    "frontend_git_blob_sha": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "grammar": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark",
+    "grammar_git_blob_sha": "b27a4da99c9eff68302d550aad78c4e64cabe5c3"
+  },
+  "execution_environment": {
+    "os": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "lark": "1.3.1",
+    "interegular": "NOT_INSTALLED",
+    "strict_lalr": false,
+    "target_vps": false,
+    "note": "The experiment was executed locally from the fetched current V18 grammar/frontend semantics. The committed probe is repo-runnable but this receipt is not a Hostinger/target-VPS acceptance receipt."
+  },
+  "observed": {
+    "candidate_v18_parse": "PASS",
+    "candidate_frontend_semantic_hash": "11f2af6b141163f0673357a0ddb23bab7c8c9fd69623e3dad13e54a5cbf14ab1",
+    "record_field_order": {
+      "frontend_hash_a": "d681797685ac3d8ec75b16e132461468937f648fa4a496db5eafd7a53be97aec",
+      "frontend_hash_b": "653bea94dd6c4d8706d60199870ae0dbe4d9d7bef0c77e4f42de796f101027be",
+      "frontend_equal": false,
+      "typed_normalized_hash_a": "d57a37686572ba05902e428df8959db723d08bd722f9facf2c111fe49f325d1e",
+      "typed_normalized_hash_b": "d57a37686572ba05902e428df8959db723d08bd722f9facf2c111fe49f325d1e",
+      "typed_equal": true
+    },
+    "set_literal_order": {
+      "frontend_hash_a": "25e535bae8a92b50859e4d7f9ea615cc1cf42f37b0dfc269769133bb7ee88749",
+      "frontend_hash_b": "8fcd8bffa931a82b217c7886a9b38c9b3b046b449b892a67569309d1caa0cba1",
+      "frontend_equal": false,
+      "typed_normalized_hash_a": "10e6166f45162ffe4094e97f92a69d2040e23e754b9653c893a1c38e1daa14fb",
+      "typed_normalized_hash_b": "10e6166f45162ffe4094e97f92a69d2040e23e754b9653c893a1c38e1daa14fb",
+      "typed_equal": true
+    },
+    "typed_positive_cases": {"passed": 7, "total": 7},
+    "typed_negative_cases": {"rejected": 7, "total": 7},
+    "web_authority_mutation_fuzz": {"rejected": 2000, "total": 2000, "seed": 230810}
+  },
+  "interpretation": {
+    "supported": "Current frozen V18/G9 primitives are sufficient to express the tested owner-fixed Agency/Web/GWT/Hyperposition structures without new surface syntax.",
+    "counterexample": "WP02 frontend semantic_hash is syntax-structural for record field order and set literal order and therefore cannot serve as the final typed semantic identity for explicitly unordered constructs.",
+    "required_delta": "Introduce a typed canonical IR identity layer after frontend parsing. Normalize only constructs whose type semantics declare them unordered; preserve order for Ordered/List/effect sequences and any future weighted/ordered preference type.",
+    "semantic_freeze_reopened": false,
+    "wp03_pass": false,
+    "why_not_pass": "No production typed IR/checker integration or target-VPS positive/negative FRANK/adaptive-state acceptance receipt exists yet."
+  }
+}

@@ -1,0 +1,157 @@
+module clay.research.go_q23_bidirectional_bridge
+version "1.0"
+status PROJECT_OWNER_FIXED_CROSS_TRIGGER_OPERATION_LAW
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+go_protocol=@research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md
+q23_protocol=@research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md
+q23_field=@research_entity/global/Q23_MULTIMODAL_PERCEPTION_RESEARCH_FIELD.clay
+omnisource=@research_entity/global/CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE.clay
+swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+live_web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+state=UnifiedDB
+topology=ClayGraph
+coordination_language=latest_ClayCode
+
+law GO_Q23_COMMUNICATION_IS_BIDIRECTIONAL=true
+law GO_MUST_READ_CURRENT_Q23_FRONTIER_WHEN_MATERIAL=true
+law Q23_MUST_READ_CURRENT_GO_GLOBAL_FRONTIER_AND_RELEVANT_SWARM_TELEMETRY=true
+law GO_TO_Q23_SEND_RESULTS_AND_QUESTIONS=true
+law Q23_TO_GO_SEND_RESULTS_AND_QUESTIONS=true
+law CROSS_TRIGGER_DELIVERY_DOES_NOT_CREATE_TRUTH_OR_REPLICATION=true
+law Q23_CANNOT_SELF_PROMOTE_GLOBAL_STAGE_OR_HARNESS_RELEASE=true
+law GO_CANNOT_OVERRIDE_Q23_NEGATIVE_RESULTS_WITH_GLOBAL_CONSENSUS=true
+law SHARED_ANCESTRY_REMAINS_EXPLICIT=true
+law TARGETED_REFERENCE_EXCHANGE_BEATS_CONTEXT_FLOOD=true
+
+record GOQ23Envelope {
+  envelope_id:Ref
+  origin:GO|Q23
+  direction:GO_TO_Q23|Q23_TO_GO
+  kind:KNOWLEDGE_NEED|DISCOVERY_BEACON|MATERIAL_DELTA|COUNTER_CHALLENGE|TEST_RESULT|RUNTIME_FAILURE|ARCHITECTURE_DELTA|NEGATIVE_RESULT|SATURATION_NOTICE|ACK
+  semantic_epoch:Ref
+  work_revision:Ref?
+  content_hash:Hash
+  provenance_hash:Hash
+  topic_tags:Set<Ref>
+  affected_work:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  payload_ref:Ref
+  urgency:INDEX_ONLY|NEXT_CHECKPOINT|NEXT_SAFE_POINT|CRITICAL_INTERRUPT
+  requires_reply:Bool
+  reply_to:Ref?
+  created_at:Time
+}
+
+record GOQ23Question {
+  question_id:Ref
+  origin:GO|Q23
+  question:Clay
+  reason:Clay
+  affected_hypotheses:Set<Ref>
+  affected_work:Set<Ref>
+  requested_evidence:Set<Ref>
+  source_classes_requested:Set<Ref>
+  desired_falsifier:Clay?
+  urgency:Score
+  information_gain:Score
+  created_at:Time
+}
+
+record GOQ23Closure {
+  envelope_or_question:Ref
+  received:Bool
+  reconstructed:Bool
+  plan_revalidated:Bool
+  answered:Bool
+  used:Bool
+  local_effect:Bool
+  test_or_work_created:Set<Ref>
+  superseded_by:Set<Ref>
+  closed_at:Time?
+}
+
+// GO -> Q23 relevance surface.
+q23_relevant_tags=[
+  multimodal,
+  vision,
+  visual,
+  retina,
+  mvc,
+  familiarity,
+  open_set,
+  gui,
+  screen,
+  camera,
+  ocr,
+  grounding,
+  temporal_perception,
+  active_sensing,
+  visual_memory,
+  perceptual_memory,
+  qwen,
+  qwen35,
+  mmproj,
+  libmtmd,
+  small_multimodal_model,
+  abliterated_model,
+  multimodal_embedding,
+  image_token_budget,
+  perceptual_eap,
+  perceptual_unifieddb,
+  perceptual_gwt
+]
+
+rule go.material_delta intersects q23_relevant_tags -> emit GOQ23Envelope(GO_TO_Q23,MATERIAL_DELTA)
+rule go.runtime_failure constrains q23_work -> emit GOQ23Envelope(GO_TO_Q23,RUNTIME_FAILURE)
+rule go.external_finding opens_q23_frontier -> emit GOQ23Envelope(GO_TO_Q23,DISCOVERY_BEACON)
+rule go.unresolved_question requires_q23_specialist -> emit GOQ23Question(origin=GO)
+rule go.global_counterevidence attacks_q23_claim -> emit GOQ23Envelope(GO_TO_Q23,COUNTER_CHALLENGE)
+
+// Q23 -> GO relevance surface.
+rule q23.material_package|q23.architecture_delta|q23.test_result|q23.negative_result -> emit GOQ23Envelope(Q23_TO_GO,corresponding_kind)
+rule q23.question requires whole_mesh_runtime_build_memory_or_other_branch -> emit GOQ23Question(origin=Q23)
+rule q23.work_dependency becomes global_blocker -> GO reevaluate global opportunity_frontier
+rule q23.result changes Frank/Harness/UnifiedDB/ClayCode/GWT/ClayGraph assumption -> GO target affected branches and work
+rule q23.research_only_delta without executable/global dependency -> GO may keep INDEX_ONLY
+
+// Pull, not flood.
+rule envelope_delivery -> send compact identity+tags+provenance+payload_ref
+rule receiver_requires_detail -> pull(payload_ref or task_conditioned_subgraph)
+rule receiver_low_relevance -> index_only
+rule duplicate_content_same_semantic_identity -> no_duplicate_full_payload
+rule same_content_distinct_provenance -> preserve lineage without evidence_count inflation
+
+// Question/answer closure is explicit.
+rule GOQ23Question -> route_to_capable_side + retain until answered|superseded|explicitly_saturated
+rule answer_without_source_or_execution_receipt when requested -> INCOMPLETE_CLOSURE
+rule material_answer -> omnisource research_reentry
+rule answer_changes_hypothesis -> revise hypothesis+counterhypothesis+test obligation as warranted
+rule unresolved_high_value_question -> stay_on_shared_frontier
+rule stale_question_due_to_newer_evidence -> supersede_with_receipt
+
+// Reciprocal anti-capture rule.
+rule q23_activity_volume != global_priority
+rule go_critical_path_priority != permission_to_ignore_high_impact_q23_invalidation
+rule GO selects q23-derived work by same mission_fit+information_gain+dependency_unblock+execution_availability+cost+risk criteria as other work
+rule Q23 selects GO-derived material by same field_relevance+falsification_value+novelty+currentness criteria as other inputs
+
+measure go_to_q23_material_delta_count
+measure q23_to_go_material_delta_count
+measure go_to_q23_question_count
+measure q23_to_go_question_count
+measure cross_trigger_question_closure_rate
+measure cross_trigger_reentry_latency
+measure cross_trigger_duplicate_suppression
+measure cross_trigger_payload_pull_rate
+measure q23_delta_global_work_change_rate
+measure go_delta_q23_hypothesis_change_rate
+measure false_cross_trigger_interrupt_rate
+measure cross_trigger_token_context_network_cost
+
+invariant GO_Q23_BIDIRECTIONALITY_DOES_NOT_CREATE_INDEPENDENT_REPLICATION
+invariant Q23_RESEARCH_REMAINS_FALSIFIABLE
+invariant GO_GLOBAL_PRIORITY_REMAINS_DYNAMIC_AND_EVIDENCE_BASED
+invariant RETRIEVAL_OR_DELIVERY_NEVER_MINTS_TRUTH
+invariant FRANK_REMAINS_SEPARATE_RESEARCH_SUBJECT
+invariant FRANK_NEVER_MUTATES_CLAY

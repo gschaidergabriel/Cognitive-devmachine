@@ -114,7 +114,7 @@ rule gwt.reentry requires observed_outcome_or_state_delta
 // Historical NAcc function is a baseline-gated FUSE candidate, not a promoted biological claim.
 rule reward.material_update requires verified_outcome + causal_credit
 rule reward.self_proposal_or_activity -> exploration_only_until_independent_verified_outcome
-rule reward.value_state preserves typed_dimensions + FAST|MEDIUM|SLOW predictions
+rule reward.value_state preserves typed_dimensions + predictions([FAST,MEDIUM,SLOW])
 rule reward.low_prediction_error + low_residual_pressure != automatic_boredom
 rule reward.low_prediction_error + high_residual_pressure + low_route_diversity -> STAGNATION_CANDIDATE
 rule reward.safety_or_resource_brake cannot_be_silently_averaged_away

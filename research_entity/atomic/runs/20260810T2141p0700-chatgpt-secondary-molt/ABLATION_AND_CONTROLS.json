@@ -1,0 +1,14 @@
+{
+  "controls": {
+    "FORBIDDEN_ROOT_SEMANTIC_FRAME":{"result":"PASS_PROXY","status":"SEMANTIC_REJECTED"},
+    "LOCAL_FS_APPEND_FL":{"detail":{"errno":1,"error":"[Errno 1] Operation not permitted","original_flags":524288,"status":"SETFLAGS_BLOCKED"},"result":"BLOCKED_CAPABILITY"},
+    "NAIVE_EUDI_ODRDW":{"observation":"pwrite offset 0 changed immutable prefix.","result":"FAIL_ISOLATION_LOCAL"},
+    "O_APPEND_ONLY":{"observation":"local os.pwrite on O_APPEND appended; external Linux docs show RWF_NOAPPEND can bypass O_APPEND semantics on newer kernels.","result":"PREFIX_PRESERVED_ON_LOCAL_KERNEL_BUT_NOT_SECURITY_PROMOTED"},
+    "PARTIAL_FINAL_FRAME":{"cuts":451,"failures":0,"result":"PASS_PROXY"},
+    "REPLAY_FRAME":{"result":"PASS_PROXY","status":"CHAIN_REJECTED"},
+    "SIMPLE_APPEND_LOG_RESOURCE_MATCH":{"byte_amplification_ratio":16.43098007393382,"durable_mean_slowdown_ratio":1.105640120819382,"result":"MOLT_COST_NEGATIVE"}
+  },
+  "not_yet_executed":["SPLIT_LAYOUT full matched target benchmark","LOOP_SUBRANGE target control","real power-loss/kill matrix","seccomp broker attack","RWF_NOAPPEND under FS_APPEND_FL on >=6.9","target 6.8 append-inode attack"],
+  "run_id":"atomic-20260810T2141p0700-chatgpt-secondary-molt",
+  "schema_version":"1.0"
+}

@@ -17,7 +17,8 @@ class IncrementalEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
     The canonical ledger is still the only source of truth. This layer only avoids a full
     transient-topology rebuild when the caller can prove that the EAP cache exactly matched
     the ledger immediately before a committed transaction. External/stale writes fall back
-    to the base rebuild path automatically.
+    to the base rebuild path automatically. The reverse dependency map is lazy so ordinary
+    read boot keeps the same topology-build path as base EAP.
     """
 
     def __init__(self, ledger):
@@ -35,11 +36,11 @@ class IncrementalEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
     def _ensure_preprocessor(self) -> None:
         prior_state_hash = self._compiled_state_hash
         super()._ensure_preprocessor()
-        if (
-            self._edge_map_state_hash != self._compiled_state_hash
-            or prior_state_hash != self._compiled_state_hash
-        ):
-            self._rebuild_dependency_edge_map()
+        if prior_state_hash != self._compiled_state_hash:
+            # Full topology rebuild happened. Reverse-map creation is deferred until a
+            # transaction-coupled dependency write actually needs it.
+            self._edges_by_dependency = {}
+            self._edge_map_state_hash = None
 
     def _rebuild_dependency_edge_map(self) -> None:
         by_dependency: dict[
@@ -144,9 +145,15 @@ class IncrementalEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
         if (
             self._compiled_epoch != old_epoch
             or self._compiled_state_hash != old_semantic_state_hash
-            or self._edge_map_state_hash != old_semantic_state_hash
         ):
             return False
+        if any(str(op.get('domain', '')).strip() == 'dependency' for op in ops):
+            if self._edge_map_state_hash != old_semantic_state_hash:
+                # Safe: adjacency is still the pre-commit compiled topology. The ledger has
+                # advanced, but reverse mapping is derived only from this old adjacency.
+                self._rebuild_dependency_edge_map()
+            if self._edge_map_state_hash != old_semantic_state_hash:
+                return False
 
         lexical_dirty = False
         try:
@@ -179,7 +186,8 @@ class IncrementalEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
                 # Dependency-only mutations do not change lexical contents.
                 self._token_index_epoch = self._compiled_epoch
 
-            self._edge_map_state_hash = self._compiled_state_hash
+            if any(str(op.get('domain', '')).strip() == 'dependency' for op in ops):
+                self._edge_map_state_hash = self._compiled_state_hash
             return True
         except Exception:
             self._invalidate()
@@ -189,6 +197,7 @@ class IncrementalEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
         result = super().compile_active_assembly(spec)
         result['incremental_layer_version'] = _INCREMENTAL_LAYER_VERSION
         result['dependency_delta_maintenance'] = True
+        result['reverse_dependency_map_policy'] = 'LAZY_ON_FIRST_DEPENDENCY_WRITE'
         return result
 
 

@@ -1,0 +1,61 @@
+name: Semantic Access Hostinger Benchmark
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/semantic-access-hostinger-benchmark.yml'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V10_SEMANTIC_ACCESS_FABRIC.sql'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V11_COHERENT_ACCESS_GENERATIONS.sql'
+      - 'research_entity/runtime/semantic_retrieval_runtime_v10.py'
+      - 'research_entity/runtime/semantic_retrieval_runtime_v11.py'
+      - 'research_entity/runtime/semantic_access_generation_builder_v11.py'
+      - 'research_entity/runtime/test_semantic_access_v10.py'
+      - 'research_entity/runtime/test_semantic_access_v11.py'
+      - 'research_entity/runtime/benchmark_semantic_retrieval_v10.py'
+      - 'research_entity/runtime/benchmark_semantic_retrieval_v11.py'
+  workflow_dispatch:
+
+jobs:
+  hostinger-semantic-access:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture machine and runtime metadata
+        run: |
+          set -euxo pipefail
+          mkdir -p artifacts
+          {
+            echo "commit=${GITHUB_SHA}"
+            date -u +"utc=%Y-%m-%dT%H:%M:%SZ"
+            uname -a
+            python3 --version
+            python3 - <<'PY'
+          import platform, sqlite3
+          print('platform=', platform.platform())
+          print('machine=', platform.machine())
+          print('processor=', platform.processor() or 'UNKNOWN')
+          print('sqlite=', sqlite3.sqlite_version)
+          PY
+            command -v lscpu >/dev/null && lscpu || true
+            command -v free >/dev/null && free -h || true
+            df -h .
+          } | tee artifacts/hostinger_environment.txt
+      - name: Run semantic access recovery tests
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 test_semantic_access_v10.py
+          python3 test_semantic_access_v11.py
+      - name: Run matched semantic retrieval benchmark
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 benchmark_semantic_retrieval_v11.py | tee ../../artifacts/semantic_retrieval_v11.json
+      - name: Upload benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: semantic-access-hostinger-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: error

@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-LICF-001",
+  "classification":"NOVEL_COMBINATION_CANDIDATE",
+  "confidence":"MEDIUM",
+  "collisions":[
+    {"mechanism":"generation/sequencer checked at protected operation","source":"Burrows 2006 Chubby","collision":"strong; destroys novelty of stale-holder/task generation fencing as a general idea"},
+    {"mechanism":"linear resources/session protocol progression","source":"Wadler 2012 Propositions as Sessions and related linear session-type literature","collision":"strong; destroys novelty of non-copyable protocol continuation as a general idea"},
+    {"mechanism":"unique ownership/move invalidation","source":"Rust ownership documentation","collision":"near analogue; practical language precedent for ownership transfer"},
+    {"mechanism":"durable event history and replay","source":"Temporal protocol documentation","collision":"strong on durable workflow continuity/replay; not specific to Frank semantics"}
+  ],
+  "narrow_surviving_novelty_claim":"No exact prior implementation was established for one ClayCode-native self.root task fiber that threads task continuity through GWT causal use, re-entry, reward, memory, effect attempts and completion while remaining distinct from identity/effect authority. This is only a combination claim and is not promoted by novelty.",
+  "promotion_effect":"Novelty does not rescue a candidate that is dominated by a conventional baseline."
+}

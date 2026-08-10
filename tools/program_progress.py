@@ -100,10 +100,6 @@ def progress_from_source(program, stage):
     return {"percent": 0.0, "basis": f"unsupported:{kind}", "open_weight": 1.0, "eta_override": None, "done_weight": 0.0, "total_weight": 0.0}
 
 
-def next_progress(program, stage_id, stage):
-    return progress_from_source(program, stage)
-
-
 def milestone_progress(program, stage_id):
     stage = (program.get("stage_gates") or {}).get(stage_id) or {}
     p = progress_from_source(program, stage)
@@ -167,17 +163,23 @@ def fmt_days(value, hours_per_day):
     return f"{math.ceil(value)}d"
 
 
-def apply_historical_earned_work(doomsday):
+def apply_historical_earned_work(doomsday, hours_per_day):
     earned = load(HISTORICAL_EARNED) if HISTORICAL_EARNED.exists() else {}
     current = max(0.0, min(1.0, float(doomsday.get("progress_percent", 0.0)) / 100.0))
     status = str(earned.get("status", "MISSING"))
-    mapped = earned.get("evidence_mapped_project_baseline_percent")
     band = None
-    basis = "current_remaining_scope_only"
     calibrating = False
-    if mapped is not None:
-        baseline = max(0.0, min(1.0, float(mapped) / 100.0))
-        basis = "evidence_mapped_historical_earned_work"
+    basis = "current_scope_only"
+    baseline = 0.0
+    historical_equivalent_hours = None
+
+    mapped_hours = earned.get("evidence_mapped_avoided_future_hours")
+    if isinstance(mapped_hours, dict) and mapped_hours.get("center") is not None:
+        historical_equivalent_hours = max(0.0, float(mapped_hours.get("center") or 0.0))
+        current_scope_hours = max(0.0, float(doomsday.get("scope_center_days", 0.0) or 0.0) * float(hours_per_day))
+        denom = historical_equivalent_hours + current_scope_hours
+        baseline = historical_equivalent_hours / denom if denom > 0 else 0.0
+        basis = "dynamic_evidence_mapped_historical_equivalent_hours_over_current_v0_1_scope"
     else:
         cal = earned.get("pre_level0_calibration") or {}
         center = cal.get("progress_center_percent")
@@ -189,12 +191,12 @@ def apply_historical_earned_work(doomsday):
                 band = [float(lo), float(hi)]
             basis = "temporary_historical_retention_calibration_prior"
             calibrating = True
-        else:
-            baseline = 0.0
+
     overall = baseline + (1.0 - baseline) * current
     result = dict(doomsday)
     result["remaining_scope_progress_percent"] = round(current * 100.0, 1)
     result["historical_baseline_percent"] = round(baseline * 100.0, 1)
+    result["historical_equivalent_hours_center"] = historical_equivalent_hours
     result["progress_percent"] = round(overall * 100.0, 1)
     result["historical_progress_basis"] = basis
     result["historical_calibrating"] = calibrating
@@ -207,10 +209,11 @@ def resolve(program_path=DEFAULT_PROGRAM, throughput_path=DEFAULT_THROUGHPUT, as
     program = load(program_path)
     throughput = load(throughput_path) if throughput_path.exists() else {"user_active_hours_per_day": 10}
     stage_id, stage = next_stage(program)
-    progress = next_progress(program, stage_id, stage)
+    progress = progress_from_source(program, stage)
     eta = next_eta(stage_id, progress, throughput)
     forecast_date = df.parse_iso_date(as_of) if as_of else df.date.today()
-    doomsday = apply_historical_earned_work(df.resolve(ROOT, forecast_date))
+    raw_doomsday = df.resolve(ROOT, forecast_date)
+    doomsday = apply_historical_earned_work(raw_doomsday, float(throughput.get("user_active_hours_per_day", 10) or 10))
     cells = int((program.get("progress_semantics") or {}).get("bar_cells", 20))
     first_harness = milestone_progress(program, "H1_REFERENCE_HARNESS")
     first_harness["bar"] = bar(first_harness["percent"], cells)
@@ -233,7 +236,7 @@ def render_text(result, trigger=None):
     hpd = float(eta["hours_per_day"])
     conditional = "yes" if doom["conditional_on_immediate_training_authorization"] else "no"
     lines = [
-        "NEXT LEVEL",
+        "CURRENT MILESTONE",
         f"Stage: {result['label']}",
         f"Progress: {result['bar']} {result['percent']:g}%",
         f"ETA @ {hpd:g}h/day: {fmt_days(eta['low'], hpd)} - {fmt_days(eta['high'], hpd)}",
@@ -244,25 +247,20 @@ def render_text(result, trigger=None):
         lines += [
             "",
             "FIRST GITHUB FRANK HARNESS",
-            "Target: H1 Reference Harness",
+            "Target: H1 Reference Harness on target-VPS semantics",
             f"Progress: {h['bar']} {h['percent']:g}%",
             f"Gate: {h['gate_status']}",
             f"Basis: completed H1 work-package weight {h['done_weight']:g}/{h['total_weight']:g}; H1 PASS overrides to 100%",
         ]
     lines += [
         "",
-        "DOOMSDAY / Clay 0.1 - Chief Developer First Test",
+        "DOOMSDAY / finished self.root v0.1",
         f"Progress: {doom['bar']} {doom['progress_percent']:g}%",
-    ]
-    if doom.get("historical_calibrating") and doom.get("historical_calibration_band_percent"):
-        lo, hi = doom["historical_calibration_band_percent"]
-        lines.append(f"Historical calibration band: {lo:g}% - {hi:g}% (temporary until Level 0 mapping completes)")
-    lines += [
         f"Forecast: {doom['forecast_low']} - {doom['forecast_high']}",
         f"Center: {doom['forecast_center']}",
         f"Confidence: {doom['confidence']}",
         f"Conditional on immediate training authorization when data is ready: {conditional}",
-        f"Forecast basis: {len(doom['rows'])}-row dynamic remaining critical path + historical earned work + live capabilities/APIs",
+        f"Forecast basis: {len(doom['rows'])}-row complete v0.1 critical path + dynamically renormalized historical earned work + live capabilities/capacity",
     ]
     return "\n".join(lines)
 

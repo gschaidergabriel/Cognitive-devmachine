@@ -1,0 +1,133 @@
+name: Harness Owner-Fixed Security Gates
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/harness-owner-fixed-security-gates.yml'
+      - 'tools/harness_target_contract_gate.py'
+      - 'tests/test_harness_target_contract_gate.py'
+      - 'research_entity/harness/REFERENCE_HARNESS_OWNER_FIXED_TARGET_OVERLAY_20260810.json'
+      - 'tools/harness_ingress_trust_gate.py'
+      - 'tests/test_harness_ingress_trust_gate.py'
+      - 'tools/harness_ingress_trust_fuzz.py'
+      - 'research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: harness-owner-fixed-security-gates
+  cancel-in-progress: false
+
+jobs:
+  target-vps-harness-gates:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout current main read-only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Run deterministic unit suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            tests.test_harness_target_contract_gate \
+            tests.test_harness_ingress_trust_gate \
+
+      - name: Execute real historical-freeze target-contract discriminator
+        id: contract
+        shell: bash
+        run: |
+          set -u
+          FREEZE='research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json'
+          OVERLAY='research_entity/harness/REFERENCE_HARNESS_OWNER_FIXED_TARGET_OVERLAY_20260810.json'
+          set +e
+          python3 tools/harness_target_contract_gate.py "$FREEZE" > /tmp/HARNESS_BASE_FREEZE_GATE.json
+          base_rc=$?
+          python3 tools/harness_target_contract_gate.py "$FREEZE" "$OVERLAY" > /tmp/HARNESS_OVERLAY_GATE.json
+          overlay_rc=$?
+          set -e
+          echo "base_rc=$base_rc" >> "$GITHUB_OUTPUT"
+          echo "overlay_rc=$overlay_rc" >> "$GITHUB_OUTPUT"
+          test "$base_rc" -eq 1
+          test "$overlay_rc" -eq 0
+
+      - name: Execute field-taint property fuzz
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/harness_ingress_trust_fuzz.py --seed 1729 --cases 25000 > /tmp/HARNESS_INGRESS_FUZZ.json
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/HARNESS_INGRESS_FUZZ.json',encoding='utf-8'))
+          assert p['pass'] is True, p
+          assert p['property_violation_count']==0, p
+          assert p['cases']==25000, p
+          print(json.dumps(p,sort_keys=True))
+          PY
+
+      - name: Build target-VPS execution receipt
+        shell: bash
+        env:
+          BASE_RC: ${{ steps.contract.outputs.base_rc }}
+          OVERLAY_RC: ${{ steps.contract.outputs.overlay_rc }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, platform, socket
+          from datetime import datetime, timezone
+          from pathlib import Path
+          base=json.loads(Path('/tmp/HARNESS_BASE_FREEZE_GATE.json').read_text(encoding='utf-8'))
+          overlay=json.loads(Path('/tmp/HARNESS_OVERLAY_GATE.json').read_text(encoding='utf-8'))
+          fuzz=json.loads(Path('/tmp/HARNESS_INGRESS_FUZZ.json').read_text(encoding='utf-8'))
+          payload={
+            'schema_version':'1.0',
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+            'scope':'TARGET_VPS_HARNESS_PREFLIGHT_NOT_H1_RELEASE_PASS',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT',''),
+            'hostname':socket.gethostname(),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'base_freeze_expected_reject': base.get('pass') is False and os.environ.get('BASE_RC')=='1',
+            'base_freeze_failure_codes': base.get('failure_codes',[]),
+            'overlay_contract_pass': overlay.get('pass') is True and os.environ.get('OVERLAY_RC')=='0',
+            'overlay_checked_counts': overlay.get('checked_counts',{}),
+            'fuzz_pass':fuzz.get('pass') is True,
+            'fuzz_cases':fuzz.get('cases'),
+            'fuzz_property_violation_count':fuzz.get('property_violation_count'),
+            'fuzz_decision_counts':fuzz.get('decision_counts',{}),
+            'authority_boundary':'self.root Harness mutation authority remains PROPOSAL_ONLY; this workflow is Clay Research Entity test execution',
+            'release_boundary':'PASS here proves only the named preflight/security gates on the self-hosted Ubuntu target-VPS lane; H1 remains NOT_PASS until all H1 work packages and release audit obligations pass.'
+          }
+          assert payload['base_freeze_expected_reject'] is True, payload
+          assert payload['overlay_contract_pass'] is True, payload
+          assert payload['fuzz_pass'] is True and payload['fuzz_property_violation_count']==0, payload
+          Path('/tmp/HARNESS_OWNER_FIXED_SECURITY_RECEIPT.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print(json.dumps(payload,sort_keys=True))
+          PY
+
+      - name: Upload target-VPS receipt artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: harness-owner-fixed-security-${{ github.run_id }}
+          path: |
+            /tmp/HARNESS_OWNER_FIXED_SECURITY_RECEIPT.json
+            /tmp/HARNESS_BASE_FREEZE_GATE.json
+            /tmp/HARNESS_OVERLAY_GATE.json
+            /tmp/HARNESS_INGRESS_FUZZ.json
+          if-no-files-found: error
+          retention-days: 30

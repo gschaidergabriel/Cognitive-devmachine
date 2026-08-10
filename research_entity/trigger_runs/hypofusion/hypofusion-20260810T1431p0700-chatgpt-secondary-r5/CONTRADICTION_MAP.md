@@ -3,10 +3,10 @@
 ## C1 — Targeted routing vs complete invalidation delivery
 
 - Supporting side: dependency-aware synthetic routing reduced full-payload fanout and greatly outperformed tag-only recall.
-- Contradiction: with 8% missing observed dependency edges it still missed 603 required deliveries; high-impact invalidations cannot tolerate silent misses.
+- Contradiction: with 8% missing observed dependency edges it still missed 603 required deliveries. A later dual-view ClayGraph+UnifiedDB candidate plus reconciliation reached synthetic eventual recall 1.0, but needed 8.034 send attempts/event versus 9.0 broadcast, shrinking modeled send-attempt savings to ~10.7%.
 - Resolution state: **OPEN, narrowed**.
-- Current rule: targeted routing is conditional. Uncertain completeness triggers anti-entropy, dense fallback or explicit degraded coordination.
-- Discriminator: real-repo replay/fault matrix with permanent-miss and repair-latency measurements.
+- Current rule: targeted routing is conditional. Uncertain completeness triggers second-view reconciliation, anti-entropy, dense fallback or explicit degraded coordination.
+- Discriminator: real-repo replay/fault matrix with permanent-miss, repair-latency, control/payload bytes and total-resource measurements.
 
 ## C2 — Semantic/hash equality vs release-evidence identity
 
@@ -41,11 +41,19 @@
 
 ## C6 — Stronger networking vs overcoupling
 
-- Supporting side: live dependency routing can reduce stale isolated work and surfaced an actual concurrent duplicate-lane collision that was fused instead of completed twice.
+- Supporting side: live dependency routing can reduce stale isolated work and surfaced actual concurrent duplicate-lane collisions that were fused instead of completed twice.
 - Contradiction: stronger coupling can amplify stale premises, false interruptions or synchronization collapse if dependency state is wrong.
 - Resolution state: **OPEN FAILURE MODE**.
-- Discriminator: lesion anti-entropy/dependency edges independently and inject stale/false edges while measuring useful interruption, false interruption, recovery and diversity.
+- Discriminator: lesion anti-entropy/dependency views independently and inject stale/false edges while measuring useful interruption, false interruption, recovery and diversity.
+
+## C7 — Strict durable receipts vs coordination cost
+
+- Supporting side: immediate durable causal receipts simplify audit/recovery semantics.
+- Contradiction: a local candidate microbenchmark measured strict locked per-record fsync mean cost ~111.84x buffered append. A selective-sync shadow was ~2.714x faster than strict-all-receipts and replayed all modeled deltas/deliveries, but was correctly NOT_SELECTED because replay equivalence alone does not prove immediate receipt durability or power-loss safety.
+- Resolution state: **OPEN, transformed to H-HF5-05**.
+- Current rule: preserve strict durability until a transaction/group-commit design survives crash/torn-tail/power-loss-surrogate/effect-idempotency tests and reproduces the benefit on Ubuntu.
+- Discriminator: matched strict-per-record vs transaction/group-commit Hostinger test with full resource/recovery receipts.
 
 ## Unresolved synthesis
 
-The conflicts do not support either universal broadcast or universal targeted routing, either scalar or typed reward by default, or either same-file or isolated observation by default. R5 therefore converts architecture preferences into matched discriminators and keeps all affected candidates rollbackable.
+The conflicts support neither universal broadcast nor universal targeted routing, neither scalar nor typed reward by default, neither same-file nor isolated observation by default, and neither per-record fsync nor batching by ideology. R5 converts each preference into a matched discriminator and keeps candidates rollbackable.

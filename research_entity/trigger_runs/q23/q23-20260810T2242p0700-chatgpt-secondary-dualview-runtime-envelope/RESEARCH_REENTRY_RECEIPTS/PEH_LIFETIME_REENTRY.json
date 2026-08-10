@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "receipt_id": "Q23-PEH-LIFETIME-REENTRY-20260810",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "evidence_class": "CURRENT_PRIMARY_RUNTIME_CODE_ANALYSIS",
+  "evidence_refs": [
+    "ggml-org/llama.cpp:tools/mtmd/mtmd.h",
+    "ggml-org/llama.cpp:tools/mtmd/mtmd.cpp@82b73d5cd126720cb087fb8191a6226c5ffd4beb",
+    "ggml-org/llama.cpp:tools/server/server-context.cpp"
+  ],
+  "finding": "Same-encode media feature reuse is physically available, but libmtmd's returned float pointers alias mutable context- or batch-owned vectors and are not persistent embedding identities. Frank requires an explicit PEH ownership/lifetime/invalidation layer; COPY_ON_CAPTURE is the safe reference baseline, with zero-copy permitted only after a version-bound ownership-fence test proves correctness and net benefit.",
+  "negative_result": "A naked mtmd output pointer is rejected as durable perceptual state, UnifiedDB evidence, replay identity or cross-encode asynchronous handle.",
+  "architecture_effect": "Refines QNDRF-1.1; no canonical promotion. Adds PEH lifetime and ordered Q0/Q1/D0/D1 geometry obligations.",
+  "affected_work": [
+    "F-V01-06-DIGITAL-RETINA-MVC",
+    "F-V01-07-UNIFIEDDB-CLAYGRAPH-GWT",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "next_falsifier": "Execute TO-Q23-PEH-LIFETIME-05 on the exact target-compatible multimodal runtime; then run TO-Q23-MVC-ORDERED-GEOMETRY-06 before selecting a dedicated encoder or multi-level tap.",
+  "target_runtime_measured": false,
+  "canonical_promotion": "NONE"
+}

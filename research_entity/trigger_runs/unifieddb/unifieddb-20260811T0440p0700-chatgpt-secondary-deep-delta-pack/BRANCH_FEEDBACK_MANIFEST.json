@@ -1,0 +1,48 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
+  "feedback":[
+    {
+      "branch":"frank",
+      "deltas":["runnable state requires published selected commitment","state/effect paths must carry/revalidate StateWitness","F-V01-04 remains HOLD until target evidence"],
+      "priority":"P0_CONTINUITY"
+    },
+    {
+      "branch":"claycode",
+      "deltas":["add typed StateWitness/SelectionWitness/PublicationReceipt semantics","root-domain roles and fail-closed unclassified persistent state","hash/witness types never mint authority"],
+      "priority":"P1_TYPE_EFFECT"
+    },
+    {
+      "branch":"claygraph",
+      "deltas":["source_semantic_epoch is insufficient for sibling states","bind source selected head + semantic root + derivation program","emit deterministic graph_projection_root for deterministic surfaces","actual graph sqlite_schema attestation required separately from migration digest"],
+      "priority":"P0_GRAPH_CONTINUITY"
+    },
+    {
+      "branch":"hyperposition",
+      "deltas":["alternative/topology state inherits exact StateWitness","reopened/selected alternatives cannot silently cross semantic-head turnover"],
+      "priority":"P1_PROVENANCE"
+    },
+    {
+      "branch":"gwt",
+      "deltas":["candidate universe and selection policy become SelectionWitness","workspace episode retains originating StateWitness through receiver use/outcome/re-entry","state turnover forces explicit rebase/reselection before effectful use"],
+      "priority":"P0_CAUSAL_CLOSURE"
+    },
+    {
+      "branch":"emergenz",
+      "deltas":["causal comparison must match state/root witnesses across intervention/control","graph/activation emergence readouts may not compare mismatched source roots as one regime"],
+      "priority":"P1_MEASUREMENT_VALIDITY"
+    },
+    {
+      "branch":"harness",
+      "deltas":["new falsifiers: actual-DDL drift with untouched cert metadata; same-epoch sibling root; witness TOCTOU; publication crash windows; dirty-root cache tamper; graph rebuild root mismatch","full root versus incremental root differential/resource shadow required"],
+      "priority":"P0_TEST_OBLIGATION"
+    },
+    {
+      "branch":"unifieddb",
+      "deltas":["twelve-delta pack UDB-D11..D22","preserve PR286/289 ancestry but do not promote metadata-only attestation","compare rollback-journal attached migration against KEEP_ISOLATED pair strategy","periodic full replay/root audit remains mandatory"],
+      "priority":"P0_OWNER_BRANCH"
+    }
+  ],
+  "targeted_distribution_rule":"only branches whose architecture/test obligations change receive this delta; no broadcast claim of independent replication",
+  "status":"COMPLETE"
+}

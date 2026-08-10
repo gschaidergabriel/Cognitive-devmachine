@@ -72,6 +72,28 @@ class EmergentCascadeTests(unittest.TestCase):
         self.assertIsNone(out['assembly'])
         ledger.close()
 
+    def test_misclassified_low_confidence_alias_is_still_blocked(self):
+        ledger, cascade = self.make(Resolution('component_anchor','EVIDENCE_ALIAS',0.52,('component_anchor',)))
+        out = cascade.retrieve(EmergentCascadeSpec('q','resolver bug',ledger.epoch,max_items=2))
+        self.assertTrue(out['blocked'])
+        self.assertEqual(out['block_reason'],'RESOLUTION_CONFIDENCE_BELOW_CASCADE_GATE')
+        self.assertIsNone(out['assembly'])
+        ledger.close()
+
+    def test_selected_id_missing_from_candidates_is_blocked(self):
+        ledger, cascade = self.make(Resolution('component_anchor','EVIDENCE_ALIAS',0.96,('component_other',)))
+        out = cascade.retrieve(EmergentCascadeSpec('q','inconsistent resolver',ledger.epoch,max_items=2))
+        self.assertTrue(out['blocked'])
+        self.assertEqual(out['block_reason'],'RESOLUTION_SELECTED_ID_NOT_IN_CANDIDATES')
+        self.assertIsNone(out['assembly'])
+        ledger.close()
+
+    def test_invalid_cascade_confidence_threshold_rejected(self):
+        ledger, cascade = self.make(Resolution('component_anchor','EVIDENCE_ALIAS',0.96,('component_anchor',)))
+        with self.assertRaises(ValueError):
+            cascade.retrieve(EmergentCascadeSpec('q','amber relay',ledger.epoch,min_resolution_confidence=1.2))
+        ledger.close()
+
     def test_unbound_logical_id_fails_closed(self):
         ledger, cascade = self.make(Resolution('unknown_component','EVIDENCE_ALIAS',0.99,('unknown_component',)))
         out = cascade.retrieve(EmergentCascadeSpec('q','unknown component',ledger.epoch,max_items=2))

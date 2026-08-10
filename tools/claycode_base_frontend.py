@@ -80,6 +80,10 @@ def build_parser(grammar_text: str, *, strict: bool = False) -> Lark:
         strict=strict,
         start="start",
         keep_all_tokens=True,
+        # ClayCode canonical identity treats an absent optional as absence, not as a
+        # synthetic semantic child. Lark defaults [] optionals to None placeholders;
+        # make the intended tree contract explicit and version-stable.
+        maybe_placeholders=False,
     )
 
 

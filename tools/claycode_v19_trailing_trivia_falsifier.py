@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Bounded semantic-regression falsifier for ClayCode V19 delimiter-normalizable grammar.
+"""Bounded semantic-regression falsifier for both current ClayCode V19 delimiter candidates.
 
 V17 deliberately leaves bare `Needle.owns` on the qid path when horizontal trivia is
-followed by newline/comment/end-of-statement. V19's relation token consumes any trailing
-horizontal whitespace after `Needle.owns`, which can force a missing RHS and reject a
-previously valid bare qid.
+followed by newline/comment/end-of-statement. Both concurrent V19 candidates use relation
+terminals that consume any horizontal whitespace after `Needle.owns`; that can force a
+missing RHS and reject a previously valid bare qid.
 
-This probe compares exact current V17 and V19 grammar bytes under the same Lark runtime.
-It is negative evidence only: REFUTED applies to the exact V19 delimiter token design and
-does not select a replacement grammar or close CC-WP-02/03.
+This probe compares exact current V17 and both V19 grammar bytes under the same Lark
+runtime. It is negative evidence only: REFUTED applies to the exact tested delimiter-token
+designs and does not select a replacement grammar or close CC-WP-02/03.
 """
 from __future__ import annotations
 
@@ -25,7 +25,10 @@ from lark import Lark
 
 ROOT = Path(__file__).resolve().parents[1]
 V17 = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
-V19 = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V19_DELIMITER_NORMALIZABLE.lark"
+CANDIDATES = {
+    "V19_DELIMITER_NORMALIZABLE": ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V19_DELIMITER_NORMALIZABLE.lark",
+    "V19_DELIMITED_NO_LOOKAHEAD": ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V19_DELIMITED_NO_LOOKAHEAD.lark",
+}
 
 
 def pkg(name: str) -> str | None:
@@ -61,7 +64,7 @@ def run_case(p: Lark, source: str) -> dict:
 
 def main() -> int:
     p17 = parser(V17)
-    p19 = parser(V19)
+    candidate_parsers = {name: parser(path) for name, path in CANDIDATES.items()}
 
     regressions = {
         "bare_owns_spaces_before_newline": "rule Needle.owns   \n",
@@ -81,33 +84,41 @@ def main() -> int:
 
     rows = {}
     for name, source in {**regressions, **controls}.items():
-        rows[name] = {
-            "source": source,
-            "v17": run_case(p17, source),
-            "v19": run_case(p19, source),
+        rows[name] = {"source": source, "v17": run_case(p17, source)}
+        for candidate_name, p in candidate_parsers.items():
+            rows[name][candidate_name] = run_case(p, source)
+
+    candidate_results = {}
+    for candidate_name in CANDIDATES:
+        regression_names = [
+            name for name in regressions
+            if rows[name]["v17"]["accepted"] and not rows[name][candidate_name]["accepted"]
+        ]
+        controls_preserved = all(
+            rows[name]["v17"]["accepted"] == rows[name][candidate_name]["accepted"]
+            for name in controls
+        )
+        refuted = bool(regression_names) and controls_preserved
+        candidate_results[candidate_name] = {
+            "result": "REFUTED" if refuted else "UNRESOLVED",
+            "regression_cases": regression_names,
+            "controls_preserved": controls_preserved,
         }
 
-    regression_names = [
-        name for name in regressions
-        if rows[name]["v17"]["accepted"] and not rows[name]["v19"]["accepted"]
-    ]
-    controls_preserved = all(
-        rows[name]["v17"]["accepted"] == rows[name]["v19"]["accepted"]
-        for name in controls
-    )
-    refuted = bool(regression_names) and controls_preserved
-
+    all_refuted = all(x["result"] == "REFUTED" for x in candidate_results.values())
     out = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "experiment": "ClayCode V19 trailing-trivia semantic-regression falsifier",
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "candidate": "V19_DELIMITER_NORMALIZABLE",
         "baseline": "V17_DECLARATIVE_TRIVIA_SAFE",
         "grammar_paths": {
             "v17": str(V17.relative_to(ROOT)),
-            "v19": str(V19.relative_to(ROOT)),
+            **{name: str(path.relative_to(ROOT)) for name, path in CANDIDATES.items()},
         },
-        "grammar_sha256": {"v17": sha256(V17), "v19": sha256(V19)},
+        "grammar_sha256": {
+            "v17": sha256(V17),
+            **{name: sha256(path) for name, path in CANDIDATES.items()},
+        },
         "runtime": {
             "os": platform.platform(),
             "machine": platform.machine(),
@@ -122,24 +133,23 @@ def main() -> int:
             "runner_name": os.environ.get("RUNNER_NAME"),
         },
         "rows": rows,
-        "regression_cases": regression_names,
-        "controls_preserved": controls_preserved,
-        "result": "REFUTED" if refuted else "UNRESOLVED",
+        "candidate_results": candidate_results,
+        "result": "REFUTED_BOTH" if all_refuted else "PARTIAL_OR_UNRESOLVED",
         "interpretation": (
-            "V19 consumes horizontal trivia after bare Needle.owns as a relation token, forcing a missing RHS and rejecting V17-valid bare-qid statements before newline/comment."
-            if refuted
-            else "This bounded probe did not establish the predicted V19 trailing-trivia regression with preserved controls."
+            "Both current V19 delimiter candidates consume horizontal trivia after bare Needle.owns as a relation token, forcing a missing RHS and rejecting V17-valid bare-qid statements before newline/comment while preserving bounded positive controls."
+            if all_refuted
+            else "At least one tested V19 candidate did not reproduce the predicted bounded regression with preserved controls."
         ),
         "promotion": "NONE",
         "architecture_delta": (
-            "NO_CHANGE_KEEP_V17_SELECTED; V19 must not be promoted unless its delimiter token is constrained so bare qid trailing trivia/comment semantics remain equivalent to V17, followed by exact strict/full-corpus/canonical differential replay."
-            if refuted
+            "NO_CHANGE_KEEP_V17_SELECTED; neither current V19 delimiter candidate should be promoted until its relation token excludes end-of-statement/comment trivia while retaining call/relation discrimination, then strict/full-corpus/canonical differential replay is required."
+            if all_refuted
             else "NO_CHANGE_PENDING_MORE_EVIDENCE"
         ),
-        "scope_guard": "REFUTED applies only to exact current V19 delimiter-normalizable token semantics. It does not prove V17 globally optimal, close CC-WP-02/03, or authorize Frank Harness changes.",
+        "scope_guard": "REFUTED applies only to the exact current V19 delimiter-token semantics tested. It does not prove V17 globally optimal, close CC-WP-02/03, or authorize Frank Harness changes.",
     }
     print(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True))
-    return 0 if refuted else 1
+    return 0 if all_refuted else 1
 
 
 if __name__ == "__main__":

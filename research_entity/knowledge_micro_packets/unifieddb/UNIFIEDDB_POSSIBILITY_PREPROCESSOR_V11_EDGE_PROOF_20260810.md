@@ -1,0 +1,18 @@
+<!-- RAE_META
+{"packet_id":"UNIFIEDDB_POSSIBILITY_PREPROCESSOR_V11_EDGE_PROOF_20260810","title":"Possibility preprocessor v1.1 separates graph activation from proof","domains":["unifieddb","claygraph","harness"],"topics":["possibility compiler","edge poisoning","proof eligibility","activation","affordance admissibility","counterevidence"],"epistemic_class":"LOCAL_ADVERSARIAL_COMPONENT_TEST","claim_status_hint":"CANDIDATE","origin_class":"CHATGPT_LOCAL_EXECUTION_AND_REPO_IMPLEMENTATION","origin_actor":"chatgpt-secondary","created_at":"2026-08-10T07:12:00+07:00","updated_at":"2026-08-10T07:12:00+07:00","source_refs":["research_entity/harness/reference/possibility_preprocessor.py","research_entity/harness/test_possibility_preprocessor.py"],"evidence_refs":["git:a9165bb6fac2e30c61c48afb39d62bc2ecb40988","git:7b9429f706c64feffb20a3b24d286910aea176da","local:adversarial-edge-poisoning-run-20260810T0711p0700"],"related_experiment_ids":["UNIFIEDDB_POSSIBILITY_PREPROCESSOR_SYNTHETIC_V1","UNIFIEDDB_EDGE_POISONING_FALSIFIER_V11"],"predecessor_packet_ids":["UNIFIEDDB_POSSIBILITY_PREPROCESSOR_V1_20260810"],"supersedes_packet_ids":[],"confidence":"HIGH_FOR_LOCAL_COMPONENT_MECHANISM_ONLY","verification_required":true,"falsifier_or_next_test":"Replay this poisoning test against real ClayGraph V3 current-head projections and test trusted-but-wrong edges, stale edges, correlated evidence roots, and edge-confidence perturbations on held-out real snapshots."}
+RAE_META -->
+
+### Falsification
+After the v1 synthetic quality gain, an adversarial graph mutation was injected: high-weight edges connected a query-relevant requirement to the requirement set of the wrong affordance. The v1 compiler selected the wrong affordance. This falsifies the stronger interpretation that bounded graph expansion plus completeness alone is robust to graph contamination.
+
+### Fix
+The compiler now maintains two separate propagation fields. `activation` may flow through any supplied graph edge and only affects accessibility/ranking. `proof support` may flow only through edges explicitly marked `proof_eligible=True`. Candidate requirement coverage, completeness and evidence score use the proof field rather than general activation. This preserves the architecture boundary that graph salience/reachability is not semantic or effect authority.
+
+### Measured regression
+The original deterministic 10-query + 400-distractor synthetic fixture remains at required-evidence recall 1.00 and intended-affordance top-1 1.00 for the preprocessor. The earlier flat lexical fixture remains 0.8833 recall / 0.30 top-1. In the new poisoning test, the same untrusted 5x high-weight injected edges no longer change the selected affordance away from the expected candidate. This is one correlated local implementation/test lineage, not independent replication.
+
+### Remaining counterhypothesis
+Explicit proof eligibility can itself be wrong or stale. Therefore v1.1 is not a complete trust solution. Real integration must derive proof eligibility from source evidence/provenance policy and epoch validity rather than accepting an arbitrary boolean from a model-produced graph. Trusted-but-wrong edge lesions and provenance-spoof tests remain mandatory before promotion.
+
+### Canonical boundary
+No canonical scientific promotion. No claim of universal database superiority. UnifiedDB remains semantic authority; ClayGraph and the possibility compiler remain rebuildable/non-authoritative access and preprocessing products.

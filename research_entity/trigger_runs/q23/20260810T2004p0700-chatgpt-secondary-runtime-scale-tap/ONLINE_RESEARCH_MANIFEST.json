@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "retrieval_date": "2026-08-10",
+  "refresh_cycles": 3,
+  "sources": [
+    {"id":"SRC-QWEN35-4B-CONFIG","class":"OFFICIAL_MODEL","ref":"https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/config.json","finding":"4B vision tower depth=24 hidden=1024 intermediate=4096 heads=16 patch=16 merge=2 out=2560."},
+    {"id":"SRC-QWEN35-2B-CONFIG","class":"OFFICIAL_MODEL","ref":"https://huggingface.co/Qwen/Qwen3.5-2B/blob/main/config.json","finding":"2B vision tower matches 4B core geometry: depth=24 hidden=1024 intermediate=4096 heads=16 patch=16 merge=2; out=2048."},
+    {"id":"SRC-QWEN35-08B-CONFIG","class":"OFFICIAL_MODEL","ref":"https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json","finding":"0.8B vision tower is smaller: depth=12 hidden=768 intermediate=3072 heads=12 patch=16 merge=2 out=1024."},
+    {"id":"SRC-TRANSFORMERS-QWEN35","class":"OFFICIAL_RUNTIME","ref":"https://github.com/huggingface/transformers/blob/main/src/transformers/models/qwen3_5/modeling_qwen3_5.py","finding":"get_image_features returns visual pooler_output which is inserted into language-model inputs; physical pre-decoder feature interception exists."},
+    {"id":"SRC-LLAMACPP-MTMD","class":"OFFICIAL_RUNTIME","ref":"https://github.com/ggml-org/llama.cpp/blob/master/tools/mtmd/mtmd.cpp","finding":"libmtmd maintains an aggregated output embedding buffer for encoded media batches."},
+    {"id":"SRC-LLAMACPP-SERVER","class":"OFFICIAL_RUNTIME","ref":"https://github.com/ggml-org/llama.cpp/blob/master/tools/server/server-context.cpp","finding":"llama-server obtains mtmd_batch_get_output_embd and forwards the same media embedding buffer into decoder processing."},
+    {"id":"SRC-LLAMACPP-CLI","class":"OFFICIAL_RUNTIME","ref":"https://github.com/ggml-org/llama.cpp/blob/master/tools/cli/README.md","finding":"dynamic-resolution image-min-tokens/image-max-tokens controls are exposed."},
+    {"id":"SRC-VLM2VEC","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2410.05160","finding":"VLM-derived strong embedding spaces are produced with explicit contrastive embedding adaptation; raw generative features should not be assumed calibrated."},
+    {"id":"SRC-QWEN3VL-EMBED","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2601.04720","finding":"Qwen3-VL embedding models use dedicated multi-stage embedding training, strengthening the raw-feature counterhypothesis."},
+    {"id":"SRC-AQUAUI","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2605.19260","finding":"adaptive quadtree visual-token reduction exploits GUI spatial/temporal redundancy while preserving position structure."},
+    {"id":"SRC-HIST-PRUNE","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2603.26041","finding":"GUI backgrounds can carry state-transition information and recency-weighted history compression is useful; naive ROI removal can lose context."},
+    {"id":"SRC-AGMEM","class":"PRIMARY_PAPER","ref":"https://arxiv.org/abs/2606.14106","finding":"naive full-image visual memory can worsen action-level failures; action-grounded local visual memory is a stronger candidate."},
+    {"id":"SRC-LLAMACPP-19980","class":"ISSUE_OR_FAILURE","ref":"https://github.com/ggml-org/llama.cpp/issues/19980","finding":"reported auto-fit memory accounting can omit mmproj, leading to OOM near VRAM limits."},
+    {"id":"SRC-LLAMACPP-19929","class":"ISSUE_OR_FAILURE","ref":"https://github.com/ggml-org/llama.cpp/issues/19929","finding":"reported Qwen3.5 vision correctness varies with batch/ubatch settings on tested systems."},
+    {"id":"SRC-LLAMACPP-25717","class":"ISSUE_OR_FAILURE","ref":"https://github.com/ggml-org/llama.cpp/issues/25717","finding":"reported recent Qwen3.5 multimodal CUDA/M-RoPE failure matrix depends on runtime flags and prompt/image positioning."},
+    {"id":"SRC-LLAMACPP-21272","class":"ISSUE_OR_FAILURE","ref":"https://github.com/ggml-org/llama.cpp/issues/21272","finding":"reported backend fallback can increase image encoding from sub-second to >10s on one GPU setup, showing runtime build/backend effects are material."}
+  ],
+  "source_ancestry_rule": "Issue reports are failure evidence, not universal truth; reproduce on target VPS before promotion. Official configs/runtime code establish structure, not target performance.",
+  "degraded": false
+}

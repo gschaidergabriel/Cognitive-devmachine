@@ -98,6 +98,11 @@ def upsert_candidates(con: sqlite3.Connection, candidates: Iterable[Candidate]) 
         candidate_version_id = sha256_text(
             f"{c.candidate_id}|{c.source_epoch}|{c.graph_epoch}|{c.derivation_hash}"
         )[:32]
+        # Preserve history but enforce one CURRENT version per logical candidate.
+        con.execute(
+            "UPDATE possibility_candidates SET status='STALE' WHERE candidate_id=? AND status='CURRENT' AND candidate_version_id<>?",
+            (c.candidate_id, candidate_version_id),
+        )
         rows.append((candidate_version_id, c.candidate_id, c.context_signature, c.source_epoch,
                      c.graph_epoch, c.candidate_kind, stable_json(c.semantic_refs),
                      stable_json(c.graph_refs), stable_json(c.hyperposition_refs),
@@ -209,10 +214,20 @@ def compile_packet(con: sqlite3.Connection, context_signature: str, source_epoch
     return packet
 
 
-def read_current_packet(con: sqlite3.Connection, context_signature: str) -> dict[str, Any] | None:
-    row = con.execute("SELECT packet_clay FROM v_current_possibility_packets WHERE context_signature=?",
-                      (context_signature,)).fetchone()
-    return None if row is None else json.loads(row[0])
+def read_current_packet(con: sqlite3.Connection, context_signature: str, *,
+                        expected_source_epoch: int | None = None,
+                        expected_graph_epoch: int | None = None) -> dict[str, Any] | None:
+    row = con.execute(
+        "SELECT packet_clay,source_epoch,graph_epoch FROM v_current_possibility_packets WHERE context_signature=?",
+        (context_signature,),
+    ).fetchone()
+    if row is None:
+        return None
+    if expected_source_epoch is not None and row[1] != expected_source_epoch:
+        return None
+    if expected_graph_epoch is not None and row[2] != expected_graph_epoch:
+        return None
+    return json.loads(row[0])
 
 
 def retire_candidates_by_ref(con: sqlite3.Connection, changed_ref: str) -> list[str]:

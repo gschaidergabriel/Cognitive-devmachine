@@ -1,0 +1,28 @@
+name: ChatGPT Authenticated State Shadow Candidate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/state_auth_shadow.py'
+      - 'research_entity/harness/reference/test_state_auth_shadow.py'
+      - 'research_entity/harness/reference/benchmark_state_auth_shadow.py'
+      - '.github/workflows/chatgpt-auth-shadow-pr.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Unit falsifiers
+        run: python3 -m unittest -v research_entity.harness.reference.test_state_auth_shadow
+      - name: Bounded benchmark
+        run: python3 -m research_entity.harness.reference.benchmark_state_auth_shadow --rows 5000 --updates 12 | tee /tmp/auth-shadow-benchmark.json

@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2031p0700-chatgpt-secondary-hwp10-lifecycle",
+  "work_package": "H-WP-10-EFFECT-AUTHORITY",
+  "evidence_class": "LOCAL_DETERMINISTIC_AND_PROCESS_CRASH_TEST",
+  "result": "PASS_COMPONENT",
+  "tests_passed": 40,
+  "tests_failed": 0,
+  "tests_skipped": 0,
+  "suite": "research_entity/harness/reference/test_effect_lifecycle.py",
+  "implementation": [
+    "research_entity/harness/reference/effect_authority.py",
+    "research_entity/harness/reference/effect_lifecycle.py"
+  ],
+  "local_content_sha256": {
+    "effect_authority.py": "74471cb0c62f28803cdfd97947677c4854420ba129c86bc78ee29a08058442c0",
+    "effect_lifecycle.py": "8b872676f8a8059f0d662e1e691a316daf43f35ca1238bf13ba597a6c54ca8d9",
+    "test_effect_lifecycle.py": "963eebbdd922024371b90c597332c355323770dfe4920a1dfbc76cfda2f75fbb"
+  },
+  "syntax_compile": "PASS_ALL_THREE",
+  "runtime": {
+    "python": "3.13.5",
+    "compiler": "GCC 14.2.0",
+    "os_kernel": "Linux 6.18.35",
+    "architecture": "x86_64",
+    "libc": "glibc 2.41",
+    "sqlite": "3.46.1",
+    "cpu_model": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logical_cpu_count": 5,
+    "mem_total_kb": 6219544,
+    "root_filesystem": "ext4",
+    "machine_class": "UNKNOWN_CONTAINER_OR_VM_CONTEXT",
+    "target_vps": false
+  },
+  "sqlite_reference_configuration": {
+    "journal_mode": "DELETE_ROLLBACK_JOURNAL",
+    "synchronous": "FULL",
+    "busy_timeout_ms": 5000,
+    "foreign_keys": true,
+    "write_transaction": "BEGIN IMMEDIATE",
+    "connection_policy": "new connection per operation; explicit close"
+  },
+  "covered_families": [
+    "default-allow eligible non-destructive authority regression",
+    "pure exact confirmation validation",
+    "receipt hashing",
+    "expiry boundary/future timestamp/invalid time ordering",
+    "nonce and impact-summary validation",
+    "non-authoritative translator/model/GWT/ClayGraph signal isolation",
+    "atomic confirmation consumption + reservation",
+    "durable replay rejection after restart",
+    "fault injection between local reservation writes",
+    "thread concurrency same-nonce serialization",
+    "interprocess same-nonce serialization across 8 processes",
+    "downstream idempotency-key uniqueness",
+    "crash-state recovery classification",
+    "verified/unverified outcome separation",
+    "verified-outcome-only re-entry",
+    "direct-allow reservation path",
+    "SQLite physical integrity",
+    "semantic event-hash/state-chain integrity",
+    "500 deterministic policy-field confirmation mutations",
+    "real Linux process death with os._exit during an uncommitted transaction"
+  ],
+  "strongest_process_crash_result": {
+    "fault": "child os._exit(17) after inserting effect row + confirmation consumption inside uncommitted BEGIN IMMEDIATE transaction",
+    "after_restart_effect_row": "ABSENT",
+    "after_restart_confirmation_consumption_count": 0,
+    "sqlite_integrity_check": "ok",
+    "interpretation": "no partial local authority/reservation became durable from the tested crash point"
+  },
+  "concurrency_result": {
+    "thread_attempts_same_confirmation": 24,
+    "thread_admitted": 1,
+    "process_attempts_same_confirmation": 8,
+    "process_admitted": 1,
+    "scope": "same local SQLite authority store; not a distributed multi-node transaction claim"
+  },
+  "mutation_result": {
+    "policy_relevant_request_mutations": 500,
+    "old_confirmation_admitted": 0,
+    "non_authoritative_signal_hash_test": "translator/model/GWT/ClayGraph signal mutations do not change request authority hash"
+  },
+  "test_harness_repairs_during_run": [
+    "replaced SQLite context-manager-only reads with explicit connection closing after ResourceWarning exposed lifecycle leakage risk",
+    "corrected a no-op fuzz mutation that could set a Boolean to its original value; the test bug was not counted as an implementation failure"
+  ],
+  "limitations": [
+    "not executed on accepted Hostinger target VPS",
+    "no real external tool/provider effect was committed",
+    "no distributed database or multi-node failover was exercised",
+    "rollback branch is represented but not yet fully implemented/exercised",
+    "H2 ClayCode differential not available before BASE handoff"
+  ]
+}

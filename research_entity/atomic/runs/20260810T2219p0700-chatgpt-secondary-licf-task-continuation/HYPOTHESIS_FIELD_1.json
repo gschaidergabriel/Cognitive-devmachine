@@ -1,0 +1,20 @@
+{
+  "schema_version":"1.0",
+  "minimum_families":6,
+  "hypotheses":[
+    {"id":"H01","family":"linear-types","mechanism":"Linear Intent Continuation Fiber; task authority is a non-copyable continuation consumed/reissued at material boundaries","novelty":5,"impact":5,"testability":5},
+    {"id":"H02","family":"distributed-fencing","mechanism":"Nested task_epoch under lease_epoch, checked at every material boundary","novelty":1,"impact":5,"testability":5},
+    {"id":"H03","family":"workflow-history","mechanism":"Durable per-task event history with consent transitions and deterministic replay","novelty":1,"impact":4,"testability":4},
+    {"id":"H04","family":"capability-security","mechanism":"Revocable task capability required by GWT/reentry/effect/state consumers","novelty":2,"impact":5,"testability":4},
+    {"id":"H05","family":"gwt-topology","mechanism":"WorkspaceEpisode task seal; only episodes reconstructed under current seal may cause material use","novelty":3,"impact":4,"testability":4},
+    {"id":"H06","family":"hyperposition","mechanism":"New requests remain unresolved alternatives until a consent determination collapses current-task transition","novelty":4,"impact":3,"testability":3},
+    {"id":"H07","family":"database-mvcc","mechanism":"Task-local MVCC snapshot/revision and compare-and-set on all material commits","novelty":1,"impact":5,"testability":5},
+    {"id":"H08","family":"integrity-lineage","mechanism":"Merkle-linked immutable task ancestry from user consent through completion/reentry","novelty":3,"impact":4,"testability":5},
+    {"id":"H09","family":"actor-concurrency","mechanism":"One current-task actor mailbox; unrelated arrivals become non-executable observations until explicit handoff","novelty":2,"impact":4,"testability":4},
+    {"id":"H10","family":"protocol","mechanism":"Two-phase task handoff PREPARE_SWITCH -> USER_CONSENT -> ACTIVATE_NEW_TASK with rollback on uncertainty","novelty":1,"impact":4,"testability":5},
+    {"id":"H11","family":"typestate","mechanism":"ClayCode typestate makes RUNNING/WAITING_USER/DONE/FAILED/CANCELLED transitions compile-time visible","novelty":2,"impact":4,"testability":3},
+    {"id":"H12","family":"causal-cuts","mechanism":"Task-switch is a non-monotone causal cut; all pre-cut task derivations become non-materializable","novelty":3,"impact":4,"testability":4}
+  ],
+  "selection":"H01",
+  "selection_reason":"Most structurally different from a mutable task row while still executable as a finite discriminator. H02/H07 form the strongest deliberately conventional counterbaseline. H12 overlaps MCM and was not selected to avoid duplicate research."
+}

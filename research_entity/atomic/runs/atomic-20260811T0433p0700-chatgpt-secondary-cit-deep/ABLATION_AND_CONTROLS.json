@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CIT-001",
+  "controls":[
+    {"name":"FULL_LOO","role":"reference safety ceiling","result":"256 exact individual interventions per 256-candidate episode before other overhead"},
+    {"name":"RANDOM_INDIVIDUAL_MATCHED_BUDGET","role":"simple discovery baseline","result":"in accepted sparse regimes, random individual testing found materially fewer true causes at comparable actual total probe budget than CIT+exact confirmation"},
+    {"name":"SHUFFLED_MASK_OUTCOME","role":"chance-fit control","result":"exploratory OMP shuffled controls did not preserve sparse support recovery; no promotion claim uses exact numerical shuffled F1"},
+    {"name":"STALE_REPLAY","role":"fidelity lesion","result":"initial microlesion series: 20% stale snapshots increased ungated mean causal-credit MAE from ~0.0044 gated to ~0.0453 ungated; CIT therefore rejects stale/fidelity-unknown projection rows"},
+    {"name":"DENSE_CAUSES","role":"sparsity falsifier","result":"k=16,N=256,m=80 accepted 0/20 final discriminator runs; fallback median cost 1.3125x full LOO"},
+    {"name":"STRONG_INTERACTION","role":"nonlinearity falsifier","result":"k=8,interaction=1.0 accepted only 1/20; fallback median cost 1.3125x full LOO"},
+    {"name":"COMPLEMENT_AUDIT","role":"missed-cause challenge","result":"preaccepted candidate sets receive complement-only pooled probes; material residual forces fallback"},
+    {"name":"EXACT_CONFIRMATION","role":"safety fence","result":"screen candidates cannot become causal credit; accepted candidates are individually/responsibility confirmed; rejected screens use full exact fallback in reference"}
+  ],
+  "negative_results":[
+    "Unknown sparsity estimated with naive in-sample BIC overfit toward the configured maximum; this method was rejected.",
+    "Cross-validated model-order selection worked in sparse k<=8 synthetic regimes but degraded for k=16; dense regime therefore remains fallback-only.",
+    "Strong nonlinearity removes the efficiency advantage and can make CIT strictly more expensive than full LOO due to sunk screen cost.",
+    "Complement audit reduces but cannot mathematically prove absence of every missed weak cause; exploration floor and exact confirmation are mandatory."
+  ],
+  "kill_signal":"If realistic Frank causal cones are frequently dense/nonlinear enough that fallback dominates, CIT should be removed rather than optimized into a permanent organ."
+}

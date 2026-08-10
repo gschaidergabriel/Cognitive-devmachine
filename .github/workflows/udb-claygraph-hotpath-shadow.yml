@@ -12,6 +12,7 @@ on:
       - 'research_entity/harness/reference/test_unifieddb_query_plane.py'
       - 'research_entity/runtime/RAE_CLAYGRAPH_V3_CURRENT_HOTPATH_CANDIDATE.sql'
       - 'tools/benchmark_udb_claygraph_hotpath.py'
+      - 'tools/benchmark_claygraph_retrieval_accuracy.py'
       - '.github/workflows/udb-claygraph-hotpath-shadow.yml'
   workflow_dispatch:
 
@@ -46,3 +47,8 @@ jobs:
           set -euo pipefail
           python3 tools/benchmark_udb_claygraph_hotpath.py --state-rows 10000 --nodes 1500 --edges 7500 --versions 5 --reps 60 --output /tmp/udb_claygraph_hotpath.json
           cat /tmp/udb_claygraph_hotpath.json
+      - name: ClayGraph retrieval accuracy causal controls
+        run: |
+          set -euo pipefail
+          python3 tools/benchmark_claygraph_retrieval_accuracy.py --cases 300 --noise-docs 1200 --k 5 --seed 41 --output /tmp/claygraph_retrieval_accuracy.json
+          cat /tmp/claygraph_retrieval_accuracy.json

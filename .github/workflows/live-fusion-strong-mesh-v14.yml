@@ -1,0 +1,54 @@
+name: Live Fusion Strong Mesh V14
+
+on:
+  push:
+    paths:
+      - 'research_entity/global/CLAY_LIVE_FUSION_STRONG_MESH_V14.clay'
+      - 'research_entity/runtime/live_fusion_strong_mesh_v14.py'
+      - 'research_entity/runtime/test_live_fusion_strong_mesh_v14.py'
+      - 'research_entity/runtime/benchmark_live_fusion_strong_mesh_v14.py'
+      - 'research_entity/runtime/live_fusion_reentry_v13.py'
+      - '.github/workflows/live-fusion-strong-mesh-v14.yml'
+  pull_request:
+    paths:
+      - 'research_entity/global/CLAY_LIVE_FUSION_STRONG_MESH_V14.clay'
+      - 'research_entity/runtime/live_fusion_strong_mesh_v14.py'
+      - 'research_entity/runtime/test_live_fusion_strong_mesh_v14.py'
+      - 'research_entity/runtime/benchmark_live_fusion_strong_mesh_v14.py'
+      - 'research_entity/runtime/live_fusion_reentry_v13.py'
+      - '.github/workflows/live-fusion-strong-mesh-v14.yml'
+  workflow_dispatch:
+
+jobs:
+  hosted-shadow-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run V1.4 shadow routing tests against exact parent V1.3
+        working-directory: research_entity/runtime
+        run: python -m unittest -v test_live_fusion_strong_mesh_v14.py
+      - name: Run frozen synthetic shadow benchmark
+        working-directory: research_entity/runtime
+        run: python benchmark_live_fusion_strong_mesh_v14.py
+
+  hostinger-shadow-tests:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Observe exact runtime
+        run: |
+          python3 --version
+          uname -a
+      - name: Run V1.4 shadow routing tests against exact parent V1.3
+        working-directory: research_entity/runtime
+        run: python3 -m unittest -v test_live_fusion_strong_mesh_v14.py
+      - name: Run frozen synthetic shadow benchmark
+        working-directory: research_entity/runtime
+        run: python3 benchmark_live_fusion_strong_mesh_v14.py

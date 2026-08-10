@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1236p0700-chatgpt-secondary-wp02-v18",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "formal_package_status": {
+    "wp02": "OPEN",
+    "base_formal_progress": "1/14",
+    "promotion": "NONE"
+  },
+  "hypothesis": "WP02 can close its current semantic parser/canonical blockers with a minimal canonical grouping normalization, one canonical-AST authority, and a versioned reward-surface successor rather than broad grammar growth.",
+  "strongest_counterhypothesis": "The apparent fixes are proxy-specific or overfit; current G9/Dialect or standalone canonicalization will expose additional semantics, surface ambiguity, or identity drift, and exact committed V18 bytes may differ from the tested candidate.",
+  "fresh_web_evidence": [
+    {
+      "topic": "Lark LALR strict/contextual behavior",
+      "result": "Prefer structurally non-overlapping rules; strict construction is a required collision falsifier rather than proof by permissive parsing."
+    },
+    {
+      "topic": "in-toto/DSSE artifact identity",
+      "result": "Digest equality binds bytes/integrity, not admission authority; producer/attestation/policy remain separate."
+    }
+  ],
+  "negative_results": [
+    {
+      "class": "GITHUB_HOSTED_INFRASTRUCTURE",
+      "result": "Repeated jobs failed before Step 1 with empty step lists; not classified as code failure."
+    },
+    {
+      "class": "CROSS_REPO_SSH_TRANSPORT",
+      "result": "Hostinger runner could not SSH-clone private Clay repo: Permission denied (publickey); not classified as WP02/WP03 failure."
+    },
+    {
+      "class": "ACTIONS_WORKFLOW_REGISTRATION",
+      "result": "Attempted exact-committed-byte replay lane could not be registered/dispatched reliably; workflow dispatch returned HTTP 422 and later base workflow updates emitted no run object."
+    },
+    {
+      "class": "V17_CURRENT_CORPUS",
+      "result": "Selected V17 rejected 3/85 current G9/Dialect rule/invariant statements: preserves, cannot_be_silently_averaged_away, required_before; the residual predictions phrase remained ambiguous after adding only those relations."
+    }
+  ],
+  "experiments": {
+    "pre_fix_grouping": {
+      "hostinger_run": 31361738681,
+      "job": 93371775942,
+      "tested_clay_commit": "911b112cb50c5f18724161f120b69f4c7f1fd06a",
+      "result": "STRICT_V17_GREEN_GROUPING_COUNTEREXAMPLE_RED",
+      "artifact_id": 9052593496,
+      "artifact_zip_sha256": "9ac03d0597f5e04bc2e0828dadfb3adcda95afc0417a7e731b12f6b59c6a99c4"
+    },
+    "grouping_shape": {
+      "hostinger_run": 31361946475,
+      "result": "Divergence localized to primary(LPAR, inner, RPAR)."
+    },
+    "grouping_fix_replay": {
+      "hostinger_run": 31362366734,
+      "job": 93373621204,
+      "tested_clay_commit": "655f709c196882df21a750267db5767a0f2e5bd2",
+      "result": "PASS",
+      "artifact_id": 9052819751,
+      "artifact_zip_sha256": "3ee096b93e5d7d7a01c508c2e3e0279e694ed831af822c1ab120dc65478913aa"
+    },
+    "v17_surface_enumeration": {
+      "hostinger_run": 31363216563,
+      "total_statements": 85,
+      "admitted": 82,
+      "rejected": 3,
+      "artifact_id": 9053152410,
+      "artifact_zip_sha256": "8df39db46c82e2487ac0ff5e1acc490c80b6eac019fbd5b14802ec0ad229e57a"
+    },
+    "three_relation_probe": {
+      "hostinger_run": 31363351441,
+      "result": "Only residual ambiguous predictions token remained.",
+      "artifact_id": 9053208460,
+      "artifact_zip_sha256": "3154fcc3f05a798e69ab82f2784cb34c540fa29fec47e30e604113a7a64c2140"
+    },
+    "v18_candidate_full_gate": {
+      "hostinger_run": 31363616701,
+      "job": 93377294175,
+      "result": "PASS",
+      "strict": true,
+      "statement_result": "85/85",
+      "whole_g9": "PASS",
+      "whole_dialect": "PASS",
+      "production_standalone_ast_bytes_parity": "PASS",
+      "elapsed_seconds": 4.14,
+      "peak_rss_kb": 33104,
+      "artifact_id": 9053297041,
+      "artifact_zip_sha256": "fde4e4d12bd90d4cdd163dd9bb890eb7a67a9426bc052385387122598115c621"
+    }
+  },
+  "exactly_one_out_of_box_experiment": {
+    "name": "SAME_SEMANTIC_MULTI_SURFACE_EQUIVALENCE_EVIDENCE_CANARY",
+    "hostinger_run": 31361738681,
+    "result": "PASS",
+    "finding": "Same source and same semantic hash across distinct surfaces is rejected without explicit equivalence evidence and admitted only with an explicit evidence id; hash equality is not cross-surface authority.",
+    "typed_ir_executed": false,
+    "promotion": "NONE"
+  },
+  "architecture_delta": [
+    {
+      "commit": "655f709c196882df21a750267db5767a0f2e5bd2",
+      "change": "Normalize only exact redundant primary(LPAR,inner,RPAR) wrappers in production canonical AST."
+    },
+    {
+      "commit": "d3fd10df2c6c6266c58200f3308ea663f602c64a",
+      "change": "Remove second standalone canonical-AST interpretation; standalone delegates to production frontend canonical_node."
+    },
+    {
+      "commit": "4fdd768f0d615331499adc6f58dd41adc9afec3a",
+      "change": "Add versioned V18 reward-relations grammar while preserving V17 baseline."
+    },
+    {
+      "commit": "3709883fb6fd2c738b7777c690715662e9e5a20c",
+      "change": "Normalize ambiguous G9 reward prediction payload to predictions([FAST,MEDIUM,SLOW])."
+    },
+    {
+      "commit": "cd1124674b35a71976bb3f8adc169356ae3340a6",
+      "change": "Select BASE_D_V18_REWARD_RELATIONS in production frontend and bind surface/grammar identity."
+    },
+    {
+      "commit": "fc1368c36ae347cf8ac2e411f4b54126c4b2a17e",
+      "change": "Align standalone canonicalizer defaults/regressions with V18 while preserving production AST authority."
+    }
+  ],
+  "current_exact_component_blobs": {
+    "frontend": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "canonicalizer": "5605e33c83ca75eb7ede7677328df622731e0461",
+    "v18_grammar": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "g9_v3": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+    "dialect_v3": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "runner_requirements_lock": "4a361757efede020cfb288ad7beda2c4a7e6c6b5"
+  },
+  "adjudication": {
+    "wp02_promotion": "BLOCKED",
+    "reason": "Official gate requires strict construction + full-current-corpus + canonical roundtrip/hash/mutation receipts for the current committed selected bytes. V18 candidate semantic content is strict-green, but current exact committed-byte strict Ubuntu replay has not durably executed because the Actions/transport lane failed before scientific execution.",
+    "candidate_architecture_status": "SUPPORTED_PENDING_EXACT_COMMITTED_BYTE_UBUNTU_REPLAY",
+    "canonical_scientific_promotion": "NONE",
+    "frank_harness_mutation": false,
+    "andreas_target_acceptance": false,
+    "training_authority": false
+  },
+  "targeted_distribution": {
+    "shared_fusion_ref": "d220e148a6147b3320fee8ea98ac94458880aa80",
+    "claycode": "DELTA",
+    "harness": "DELTA_SURFACE_IDENTITY_ONLY",
+    "clayresearch": "DELTA",
+    "frank": "NO_CHANGE",
+    "unifieddb": "NO_CHANGE",
+    "gwt": "NO_CHANGE",
+    "claygraph": "NO_CHANGE",
+    "hyperposition": "NO_CHANGE",
+    "emergenz": "NO_CHANGE"
+  },
+  "next_falsifiers": [
+    "Obtain one durable content-addressed strict Ubuntu replay of the exact current V18/frontend/canonicalizer/G9/Dialect/lock blobs; do not relabel candidate evidence as exact-byte evidence.",
+    "On green exact-byte replay, adjudicate WP02 package receipt and only then update CLAYCODE_RELEASE_WORKSPACE.",
+    "Audit WP03 artifact/TypedIR bridge for V18 surface identity and contextual-keyword extraction; do not let V17 hardcoding or old V7 TypedIR defaults silently cross the selected-surface boundary."
+  ]
+}

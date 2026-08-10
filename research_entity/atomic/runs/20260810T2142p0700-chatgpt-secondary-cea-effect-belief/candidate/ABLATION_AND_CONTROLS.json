@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-CEA-001",
+  "controls":{"cases_each":10000,"stale_epoch_rejection_rate":1.0,"stale_provider_contract_rejection_rate":1.0,"shuffled_attempt_binding_rejection_rate":1.0},
+  "ablation":{"name":"REMOVE_UNIVERSAL_RETRY_RULE","cases":20000,"unsafe_retry_rate_with_forall":0.0,"unsafe_retry_rate_with_exists":0.5031},
+  "negative_control":{"name":"FALSE_BUT_WELL_FORMED_PROVIDER_EVIDENCE","cases":10000,"wrong_resolution_rate":0.9751},
+  "source":"../ABLATION_AND_CONTROLS.json"
+}

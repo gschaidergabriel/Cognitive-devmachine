@@ -2,17 +2,17 @@ from __future__ import annotations
 
 """U16: provenance-bound dependency propagation guard for EAP.
 
-This module does not create a second truth store and does not mutate UnifiedDB.  It derives
+This module does not create a second truth store and does not mutate UnifiedDB. It derives
 an ephemeral latest-write provenance index from StateLedger events and filters only the
 compiled dependency adjacency used by the model-facing EmergentAssemblyPreprocessor.
 
 The guard is deliberately opt-in because historical dependency rows were not required to
-carry an evidence class.  Strict mode is therefore a migration/test surface, not a silent
+carry an evidence class. Strict mode is therefore a migration/test surface, not a silent
 reinterpretation of existing canonical state.
 """
 
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Any, Iterable
 
 from research_entity.harness.reference.state_ledger import StateLedger, h
@@ -56,8 +56,8 @@ class EdgeProofDecision:
 def latest_write_receipts(ledger: StateLedger) -> dict[str, LatestWriteReceipt]:
     """Derive the latest semantic write receipt for every materialized row.
 
-    StateLedger events are canonical append-only history.  ``base_epoch + 1`` is the
-    committed event epoch for a non-idempotent event in this ledger contract.  Replaying in
+    StateLedger events are canonical append-only history. ``base_epoch + 1`` is the
+    committed event epoch for a non-idempotent event in this ledger contract. Replaying in
     event order makes the final entry for a ref the write that produced the current row.
     """
     out: dict[str, LatestWriteReceipt] = {}
@@ -157,12 +157,12 @@ class ProvenanceGuardedEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor
     """EAP with an ephemeral fail-closed dependency propagation filter.
 
     Parent EAP still owns bounded best-first activation, stale-state rejection, node
-    epistemic/status gates and ActiveAssembly materialization.  This subclass adds one
+    epistemic/status gates and ActiveAssembly materialization. This subclass adds one
     independent gate: a dependency row must have a qualifying latest-write provenance
     receipt before the compiled edge can relay activation.
     """
 
-    _GUARD_VERSION = "EAP-PROVENANCE-GUARD-16.0"
+    _GUARD_VERSION = "EAP-PROVENANCE-GUARD-16.1"
 
     def __init__(
         self,
@@ -236,6 +236,10 @@ class ProvenanceGuardedEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor
             ref for ref, decision in self._edge_proof_decisions.items()
             if not decision.admitted
         ))
+        decision_rows = tuple(
+            asdict(self._edge_proof_decisions[ref])
+            for ref in sorted(self._edge_proof_decisions)
+        )
         result["edge_provenance_guard_version"] = self._GUARD_VERSION
         result["edge_provenance_policy"] = {
             "trusted_evidence_classes": tuple(sorted(self.trusted_evidence_classes)),
@@ -243,6 +247,7 @@ class ProvenanceGuardedEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor
             "authority": "PROPAGATION_FILTER_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY",
         }
         result["edge_proof_audit"] = dict(sorted(self._edge_proof_audit.items()))
+        result["edge_proof_decisions"] = decision_rows
         result["blocked_dependency_refs"] = rejected
         result["edge_provenance_receipt_hash"] = h({
             "v": self._GUARD_VERSION,
@@ -251,6 +256,7 @@ class ProvenanceGuardedEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor
             "compiled_index_hash": result["compiled_index_hash"],
             "selection_hash": result["selection_hash"],
             "policy": result["edge_provenance_policy"],
+            "decisions": decision_rows,
             "audit": result["edge_proof_audit"],
             "blocked_dependency_refs": rejected,
         })

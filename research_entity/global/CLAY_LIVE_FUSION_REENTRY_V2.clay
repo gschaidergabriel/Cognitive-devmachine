@@ -1,0 +1,145 @@
+module clay.research.live_fusion_reentry_v2
+version "2.0-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+
+goal="Frank v0.1 voll lauffaehig auf Andreas PC"
+state=UnifiedDB
+topology=ClayGraph
+work=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+dual_time_feedback=@research_entity/notes/FRANK_DUAL_TIME_CAUSAL_FEEDBACK_BRIDGE_20260810.md
+runtime_candidate=@research_entity/runtime/live_fusion_reentry_v2.py
+
+// V2 strengthens the stale V1 branch by binding re-entry to the worker execution basis.
+// A delivery is not "handled" merely because an ACK string exists.
+// ACK identity is bound to exact event, payload, plan revision and lease identity.
+
+law LIVE_FUSION_IS_APPEND_ONLY_CAUSAL_REENTRY=true
+law RAW_EVENTS_ARE_PRESERVED=true
+law TARGETED_DELIVERY_NOT_BROADCAST_SPAM=true
+law EVENT_IDENTITY_OUTRANKS_PAYLOAD_EQUALITY=true
+law CONTENT_ABA_NEVER_ERASES_CAUSAL_IDENTITY=true
+law DELIVERY_IS_AT_LEAST_ONCE=true
+law ACK_IS_IDEMPOTENT_BY_DELIVERY_ID=true
+law ACK_MUST_BIND_EXACT_PAYLOAD_HASH=true
+law ACK_MUST_BIND_DELIVERED_PLAN_REVISION=true
+law ACK_MUST_BIND_DELIVERED_LEASE_ID=true
+law STALE_ACK_NEVER_CLEARS_CURRENT_EFFECT_GUARD=true
+law PLAN_OR_LEASE_CHANGE_REDELIVERS_RELEVANT_UNACKED_EVENT=true
+law HIGH_IMACT_CONFLICT_BLOCKS_ONLY_INTERSECTING_CURRENT_EFFECT_SCOPE=true
+law EXPIRED_OR_OLD_WORKER_LEASE_DOES_NOT_BLOCK_NEW_WORKER_PLAN=true
+law LOW_RELEVANCE_OR_HISTORICAL_ONLY_DELTA_IS_INDEX_ONLY=true
+law OLD_EPOCH_DOES_NOT_IMPLY_INVALID=true
+law ARRIVAL_EPOCH_NEVER_OVERWRITES_CAUSAL_ORIGIN_EPOCH=true
+law DELIVERY_OR_ACK_NEVER_MINTS_TRUTH=true
+law DELIVERY_OR_ACK_NEVER_MINTS_EFFECT_AUTHORITY=true
+
+record LiveFusionDeltaV2 {
+  event_id:Ref
+  source:Ref
+  source_seq:Int
+  source_epoch:Ref
+  causal_origin_epoch:Ref
+  arrival_epoch:Ref?
+  causal_origin_refs:Set<Ref>
+  semantic_keys:Set<Ref>
+  affected_branches:Set<Ref>
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  novelty:NEW|REFINES|CONTRADICTS|CONFIRMS|SUPERSEDES|NO_MATERIAL_CHANGE
+  impact:Score
+  urgency:Score
+  conflict:Bool
+  payload_hash:Hash
+  provenance_refs:Set<Ref>
+  evidence_class:Ref
+  applicability:CURRENT_MATERIAL|HISTORICALLY_VALID_ONLY|UNKNOWN
+}
+
+record WorkerLiveBasisV2 {
+  worker_id:Ref
+  branches:Set<Ref>
+  active_keys:Set<Ref>
+  active_work:Set<Ref>
+  active_claims:Set<Ref>
+  plan_revision:Ref
+  lease_id:Ref
+  lease_epoch:Ref
+  last_checkpoint_seq:Int
+}
+
+record WorkerReentryDeliveryV2 {
+  delivery_id:Ref
+  event_id:Ref
+  worker_id:Ref
+  plan_revision:Ref
+  lease_id:Ref
+  delivery_class:INTERRUPT_NEXT_SAFE_POINT|NEXT_CHECKPOINT|INDEX_ONLY
+  relevance:Score
+  semantic_reason:Clay
+}
+
+record WorkerReentryAckV2 {
+  ack_id:Ref
+  delivery_id:Ref
+  event_id:Ref
+  worker_id:Ref
+  decision:ACCEPT|REPLAN|NO_CHANGE|CONFLICT|DEFER
+  basis_plan_revision:Ref
+  result_plan_revision:Ref
+  lease_id:Ref
+  payload_hash:Hash
+  note:Clay
+}
+
+rule incoming_delta -> preserve_raw_event_identity
+rule same_event_id+same_payload_hash -> transport_dedupe
+rule same_event_id+different_payload_hash -> IDENTITY_COLLISION_FAIL_CLOSED
+rule same_payload_hash+new_event_id -> preserve_as_distinct_event
+rule incoming_delta -> route_against(worker.branch,worker.active_keys,worker.active_work,worker.active_claims)
+rule high_impact_conflict+current_overlap -> INTERRUPT_NEXT_SAFE_POINT
+rule relevant_nonblocking_delta -> NEXT_CHECKPOINT
+rule historical_only_or_no_overlap -> INDEX_ONLY
+rule worker_plan_or_lease_change -> create_new_delivery_identity_for_relevant_existing_events
+rule ack -> verify(delivery_id,event_id,worker_id,payload_hash,basis_plan_revision,lease_id)
+rule stale_worker_basis_at_ack -> reject_ack+require_current_redelivery
+rule ack.REPLAN -> require(result_plan_revision != basis_plan_revision)
+rule worker_before_effect -> query_current_plan_current_lease_pending_interrupts
+rule pending_interrupt_intersects(effect.semantic_keys|effect.work|effect.claims) -> BLOCK_EFFECT
+rule old_plan_or_old_lease_pending_delivery -> historical_delivery_only; never current_effect_blocker
+rule process_restart -> rebuild_from_durable_SQLite_materialization
+rule concurrent_writer -> BEGIN_IMMEDIATE+busy_timeout+primary_key_identity_guards
+
+// This is a transport/materialization candidate, not a second semantic authority.
+// UnifiedDB/current admitted evidence remains semantic authority; ClayGraph remains derived topology.
+invariant LIVE_FUSION_SQLITE_TABLES_ARE_TRANSPORT_MATERIALIZATION_NOT_SEMANTIC_TRUTH_STORE
+invariant ClayGraph_activation!=truth
+invariant Frank_never_mutates_Clay
+invariant ResearchEntity!=Frank
+
+promotion_gate {
+  deterministic_unit_tests=REQUIRED
+  content_ABA_identity_preservation=REQUIRED
+  event_id_payload_collision_fail_closed=REQUIRED
+  stale_ack_rejection=REQUIRED
+  plan_lease_redelivery=REQUIRED
+  effect_scope_guard=REQUIRED
+  crash_restart=REQUIRED
+  concurrent_writer_distinct_events=REQUIRED
+  concurrent_writer_same_event_idempotence=REQUIRED
+  current_main_integration=REQUIRED
+  UnifiedDB_materialization_review=REQUIRED
+  dynamic_work_plan_revision_integration=REQUIRED
+  exact_Ubuntu_runner_receipt=REQUIRED
+  latency_p50_p95_p99=REQUIRED
+  resource_shadow=REQUIRED
+  real_active_worker_feedback_loop=REQUIRED
+}
+
+external_pattern_evidence {
+  Flink="replayable state + checkpoints; exactly-once state does not automatically imply exactly-once external effects"
+  Kafka="idempotent/transactional delivery patterns bind retries to stronger producer identity"
+  NATS_JetStream="consumer ACK/redelivery state supports at-least-once durable re-delivery"
+  SQLite_WAL="same-host readers/writer concurrency; one writer at a time; WAL is not a network-filesystem transport"
+}

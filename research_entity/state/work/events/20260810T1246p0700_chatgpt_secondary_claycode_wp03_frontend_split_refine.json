@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-claycode-wp03-frontend-split-refine-20260810T1246p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T12:46:00+07:00",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+    "reason_clay": "Fresh post-write coordination evidence refines the preceding WP03 split diagnosis. Commit 065cef587853d0c385d8478e824a2c063694014a explicitly separates selected V17 semantics from downstream typed-IR repair and derives typed-fn contextually over V17. Current tools/claycode_wp03_main_port_validation.py likewise uses selected V17 plus an in-memory typed-fn overlay without importing older V7 lexical semantics. Commit 07ab56a2fd6ee58afbe73242ebe857accba2fc8f defines both hosted and self-hosted Hostinger composed-grammar probes. Therefore it is too strong to describe WP03 as simply using V7 production semantics. The remaining risk is narrower: tools/claycode_base_typed_ir.py still exposes an older grammar default/independent reparsing surface, so productive consumers must be audited for silent fallback; and the expected Hostinger composed-research receipt is not currently present at research_entity/claycode/base/receipts/WP03_V7_V17_MEMBRANE_TYPED_IR_HOSTINGER_LATEST.json.",
+    "work_clay": "Preserve the selected-V17 plus contextual typed-fn-overlay direction. Do not replace it with V7. Audit all production/release consumers of claycode_base_typed_ir.py and require explicit grammar/frontend contract input at every acceptance path; treat the module CLI/default as non-authoritative unless receipt-bound. Close the existing GitHub-hosted and Hostinger workflows from current main, persist their exact receipts, and prove same-source V17/overlay semantic equality for frozen G9+Dialect plus boundary fixtures. If no production consumer can silently hit the stale default and the remote receipt closes, downgrade the earlier split finding from WP03 blocker to NON_PRODUCTION_DEBT. Keep the grouping semantic-hash counterexample as an independent WP02 obligation.",
+    "completion_clay": "Inherited BASE14 completion plus: selected V17/typed-fn overlay direction is receipt-bound; all production/release typed-IR consumers pass explicit frontend/grammar identity; no silent older-default path reaches acceptance; current hosted implementation receipt exists where applicable; Hostinger composed V17/typed-IR receipt exists and passes on fresh main; earlier V7/V17 split finding is dispositioned as BLOCKER or NON_PRODUCTION_DEBT from consumer evidence rather than assumption.",
+    "executor_policy": "Fresh evidence supersedes the broad interpretation, not the preserved counterexample. Re-read current main/leases before edits. Reuse existing V17-overlay workflows instead of creating a duplicate grammar experiment. No WP03 PASS until target-relevant receipts are present; GitHub-hosted success alone remains implementation evidence, not Andreas target acceptance.",
+    "dependencies": [
+      "research_entity/claycode/base/WP03_FRONTEND_GRAMMAR_SPLIT_COUNTEREXAMPLE_20260810T1236p0700.md",
+      "tools/claycode_wp03_main_port_validation.py",
+      ".github/workflows/wp03-main-ast-context-port.yml",
+      ".github/workflows/claycode-wp03-v7-v17-membrane-typed-ir.yml",
+      "research_entity/claycode/base/receipts/WP03_V7_V17_MEMBRANE_TYPED_IR_HOSTINGER_LATEST.json"
+    ],
+    "base_priority": 1.0,
+    "expected_impact": 0.97,
+    "urgency": 0.97,
+    "information_gain": 0.92,
+    "status": "READY"
+  }
+}

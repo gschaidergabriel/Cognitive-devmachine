@@ -1,6 +1,16 @@
-name: UnifiedDB U10 self-hosted falsifier
+name: UnifiedDB U10 target-runner falsifier
 
 on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'chatgpt/unifieddb-possibility-preprocessor-20260810'
+    paths:
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V10_POSSIBILITY_PREPROCESSOR.sql'
+      - 'research_entity/runtime/possibility_preprocessor_v1.py'
+      - 'research_entity/runtime/test_possibility_preprocessor_v1.py'
+      - 'research_entity/runtime/benchmark_possibility_preprocessor_v1.py'
+      - '.github/workflows/unifieddb-u10-selfhosted.yml'
   pull_request:
     paths:
       - 'research_entity/runtime/RAE_UNIFIEDDB_V10_POSSIBILITY_PREPROCESSOR.sql'
@@ -8,23 +18,29 @@ on:
       - 'research_entity/runtime/test_possibility_preprocessor_v1.py'
       - 'research_entity/runtime/benchmark_possibility_preprocessor_v1.py'
       - '.github/workflows/unifieddb-u10-selfhosted.yml'
-  workflow_dispatch:
+
+concurrency:
+  group: unifieddb-u10-target-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   u10-ubuntu-selfhosted:
-    runs-on: self-hosted
+    runs-on: [self-hosted, linux, x64, andreas, claycode, target]
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
       - name: Environment receipt
         shell: bash
         run: |
           set -euxo pipefail
           date -u +'%Y-%m-%dT%H:%M:%SZ'
           uname -a
-          (cat /etc/os-release || true)
-          (lscpu || true)
-          (free -h || true)
+          cat /etc/os-release || true
+          lscpu || true
+          free -h || true
           python3 --version
           python3 - <<'PY'
           import sqlite3, platform, os
@@ -48,12 +64,14 @@ jobs:
           python3 - <<'PY'
           import json
           d=json.load(open('/tmp/u10-2500.json'))
-          assert d['methods']['possibility_packet_hot_read']['accuracy_at_1'] == 1.0
-          assert d['methods']['relational_query_time_derivation']['accuracy_at_1'] == 1.0
+          p=d['methods']['possibility_packet_hot_read']
+          r=d['methods']['relational_query_time_derivation']
+          assert p['accuracy_at_1'] == 1.0
+          assert r['accuracy_at_1'] == 1.0
           assert d['update']['selection_equivalent_to_full_rebuild'] is True
-          assert d['methods']['possibility_packet_hot_read']['p50_ms'] < d['methods']['relational_query_time_derivation']['p50_ms']
+          assert p['p50_ms'] < r['p50_ms']
           assert d['update']['targeted_refresh_ms'] < d['update']['full_rebuild_ms']
-          print('U10_GATE_PASS')
+          print('U10_GATE_PASS', json.dumps({'packet_p50_ms':p['p50_ms'],'relational_p50_ms':r['p50_ms'],'targeted_ms':d['update']['targeted_refresh_ms'],'full_ms':d['update']['full_rebuild_ms']}, sort_keys=True))
           PY
       - name: Scaling falsifier
         shell: bash
@@ -67,9 +85,7 @@ jobs:
           import json
           for n in (1000,5000,20000):
               d=json.load(open(f'/tmp/u10-{n}.json'))
-              p=d['methods']['possibility_packet_hot_read']
-              r=d['methods']['relational_query_time_derivation']
-              u=d['update']
+              p=d['methods']['possibility_packet_hot_read']; r=d['methods']['relational_query_time_derivation']; u=d['update']
               print(n, 'packet_p50_ms=',p['p50_ms'],'relational_p50_ms=',r['p50_ms'],'targeted_ms=',u['targeted_refresh_ms'],'full_ms=',u['full_rebuild_ms'])
               assert p['accuracy_at_1']==1.0 and r['accuracy_at_1']==1.0
               assert u['selection_equivalent_to_full_rebuild'] is True

@@ -52,9 +52,31 @@ def _token_value(token: Token) -> Any:
     return raw
 
 
+def _is_redundant_grouping(node: Tree) -> bool:
+    """True only for V17's concrete `( expr )` primary wrapper.
+
+    This intentionally does not generalize over arbitrary `primary` nodes or punctuation.
+    Calls, lists, sets and postfix constructs keep their own semantic structure. The shape
+    was reproduced on the Ubuntu proxy before this normalization was admitted.
+    """
+    if str(node.data) != "primary" or len(node.children) != 3:
+        return False
+    left, _, right = node.children
+    return (
+        isinstance(left, Token)
+        and isinstance(right, Token)
+        and left.type == "LPAR"
+        and right.type == "RPAR"
+        and str(left) == "("
+        and str(right) == ")"
+    )
+
+
 def canonical_node(node: Any) -> Any:
     """Return deterministic, order-preserving canonical AST JSON data."""
     if isinstance(node, Tree):
+        if _is_redundant_grouping(node):
+            return canonical_node(node.children[1])
         children = []
         for child in node.children:
             value = canonical_node(child)

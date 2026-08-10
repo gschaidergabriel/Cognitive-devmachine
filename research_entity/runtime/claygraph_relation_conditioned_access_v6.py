@@ -7,6 +7,7 @@ from typing import Optional
 
 GLOBAL_INDEX = "idx_graph_head_edges_current_source_weight_v6"
 RELATION_INDEX = "idx_graph_head_edges_current_source_relation_weight_v6"
+DEFAULT_MIN_RELATION_CONFIDENCE = 0.75
 
 
 @dataclass(frozen=True)
@@ -28,7 +29,11 @@ class RelationConditionedEdge:
 @dataclass(frozen=True)
 class RelationConditionedReceipt:
     source_logical_id: str
+    proposed_relation: str | None
     typed_relation: str | None
+    typed_relation_confidence: float | None
+    min_relation_confidence: float
+    relation_admitted: bool
     total_budget: int
     relation_reserve: int
     requested_relation_count: int
@@ -40,9 +45,10 @@ class RelationConditionedReceipt:
 class ClayGraphRelationConditionedAccessV6:
     """Bounded reader over verified/rebuildable ClayGraph head edges.
 
-    This helper does not infer relation intent. A caller may pass a relation only when a typed
-    planner stage has already admitted that relation intent. Without one, V6 is ordinary
-    global bounded head access.
+    V6 does not infer relation intent. A caller may propose a typed relation only together
+    with a calibrated confidence. The relation reserve is admitted only when confidence is
+    finite and at least `min_relation_confidence`; otherwise the reader falls back to the
+    ordinary global bounded path with the same total edge budget.
 
     V6 never mutates canonical graph/version state and never converts retrieval activation
     into truth or effect authority.
@@ -75,6 +81,8 @@ class ClayGraphRelationConditionedAccessV6:
         source_logical_id: str,
         total_budget: int = 32,
         typed_relation: Optional[str] = None,
+        typed_relation_confidence: float | None = None,
+        min_relation_confidence: float = DEFAULT_MIN_RELATION_CONFIDENCE,
         relation_reserve: int = 8,
     ) -> tuple[tuple[RelationConditionedEdge, ...], RelationConditionedReceipt]:
         if not source_logical_id:
@@ -83,10 +91,22 @@ class ClayGraphRelationConditionedAccessV6:
             raise ValueError("total_budget must be in 1..512")
         if relation_reserve < 0 or relation_reserve > total_budget:
             raise ValueError("relation_reserve must be in 0..total_budget")
+        if not 0.0 <= min_relation_confidence <= 1.0:
+            raise ValueError("min_relation_confidence must be in 0..1")
+        if typed_relation_confidence is not None and not 0.0 <= typed_relation_confidence <= 1.0:
+            raise ValueError("typed_relation_confidence must be in 0..1")
 
-        relation = typed_relation.strip().upper() if typed_relation else None
+        proposed = typed_relation.strip().upper() if typed_relation else None
+        relation_admitted = bool(
+            proposed
+            and typed_relation_confidence is not None
+            and typed_relation_confidence >= min_relation_confidence
+            and relation_reserve > 0
+        )
+        relation = proposed if relation_admitted else None
+
         requested_rows: list[sqlite3.Row] = []
-        if relation and relation_reserve:
+        if relation:
             requested_rows = self.conn.execute(
                 f"""
                 SELECT logical_edge_id,edge_version_id,graph_epoch,source_epoch,
@@ -131,9 +151,13 @@ class ClayGraphRelationConditionedAccessV6:
         edges = tuple(self._edge(row) for row in rows)
         receipt = RelationConditionedReceipt(
             source_logical_id=source_logical_id,
+            proposed_relation=proposed,
             typed_relation=relation,
+            typed_relation_confidence=typed_relation_confidence,
+            min_relation_confidence=min_relation_confidence,
+            relation_admitted=relation_admitted,
             total_budget=total_budget,
-            relation_reserve=relation_reserve if relation else 0,
+            relation_reserve=relation_reserve if relation_admitted else 0,
             requested_relation_count=len(requested_rows),
             fallback_count=len(fallback_rows),
             selected_edge_ids=tuple(edge.logical_edge_id for edge in edges),

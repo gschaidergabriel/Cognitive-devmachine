@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2150p0700-chatgpt-secondary-asvb-voice-braid",
+  "classification": "STANDARD_AUTHORIZATION_PRIOR_ART_PLUS_PROJECT_SPECIFIC_SEMANTIC_COMPOSITION",
+  "sources": [
+    {"id":"RFC8693","title":"OAuth 2.0 Token Exchange","role":"subject/actor delegation and actor chains are standardized prior art"},
+    {"id":"RFC9396","title":"OAuth 2.0 Rich Authorization Requests","role":"fine-grained structured authorization_details are standardized prior art"},
+    {"id":"RFC9449","title":"OAuth 2.0 Demonstrating Proof of Possession (DPoP)","role":"sender-constrained proof-of-possession is standardized prior art"},
+    {"id":"RFC8707","title":"Resource Indicators for OAuth 2.0","role":"resource/audience restriction is standardized prior art"},
+    {"id":"MACAROONS-2014","title":"Macaroons: Cookies with Contextual Caveats for Decentralized Authorization in the Cloud","role":"attenuating delegated credentials/caveats are established prior art"},
+    {"id":"MCP-AUTH-CURRENT-DRAFT","title":"Model Context Protocol Authorization specification","role":"HTTP MCP authorization uses OAuth resource-server/client semantics and audience validation"},
+    {"id":"MCP-SECURITY-BEST-PRACTICES","title":"Model Context Protocol Security Best Practices","role":"token passthrough is an anti-pattern and harms accountability/audit boundaries"}
+  ],
+  "collision_result": "ASVB cannot claim novelty for actor tokens, attenuation, sender-constraining, audience restriction or structured authorization. Its only surviving project-specific hypothesis is semantic voice separation across Frank token ingress and DE_TO_CLAY/ClayCode cognition: authenticated origin voice, relay-actor voice and transport metadata remain distinct while standard authorization supplies the credential/delegation substrate.",
+  "world_first_claim": false,
+  "production_crypto_policy": "USE_STANDARD_OAUTH_OR_EQUIVALENT; DO_NOT_PROMOTE_SYNTHETIC_HMAC_PROTOCOL"
+}

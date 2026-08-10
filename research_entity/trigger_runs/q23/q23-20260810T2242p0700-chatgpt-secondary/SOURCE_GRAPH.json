@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "nodes":["Qwen3.5-HF-runtime","llama.cpp-libmtmd","Qwen3.5-4B-config","Qwen3.6-official","Gemma4-official","AQuaUI","AGMem","GUI-KV","HistoricalScreenshotPruning","Qwen3-VL-Embedding","VLM2Vec","llama.cpp-issue-24737","llama.cpp-issue-23407","llama.cpp-issue-25854","llama.cpp-issue-25717","QNDRF-1","PAR-1"],
+  "edges":[
+    {"from":"Qwen3.5-HF-runtime","to":"QNDRF-1","relation":"IMPLEMENTS_INTERCEPTION_POINT"},
+    {"from":"llama.cpp-libmtmd","to":"QNDRF-1","relation":"IMPLEMENTS_BUFFER_REUSE_PATH"},
+    {"from":"Qwen3.5-4B-config","to":"QNDRF-1","relation":"CONFIGURES_2560_PROJECTED_WIDTH"},
+    {"from":"Qwen3-VL-Embedding","to":"QNDRF-1","relation":"COUNTEREVIDENCE_RAW_EMBEDDING_CALIBRATION"},
+    {"from":"VLM2Vec","to":"QNDRF-1","relation":"COUNTEREVIDENCE_RAW_EMBEDDING_CALIBRATION"},
+    {"from":"AQuaUI","to":"QNDRF-1","relation":"SUPPORTS_ADAPTIVE_SPATIAL_BUDGET_TEST"},
+    {"from":"AGMem","to":"PAR-1","relation":"SUPPORTS_ACTION_GROUNDED_VISUAL_MEMORY_WITH_FAILURE_CAVEATS"},
+    {"from":"HistoricalScreenshotPruning","to":"QNDRF-1","relation":"COUNTERS_CHANGED_PIXELS_ONLY_ASSUMPTION"},
+    {"from":"GUI-KV","to":"QNDRF-1","relation":"SUPPORTS_TEMPORAL_REDUNDANCY_TEST"},
+    {"from":"llama.cpp-issue-24737","to":"QNDRF-1","relation":"FAILURE_MODE_OF_QWEN35_4B_RUNTIME"},
+    {"from":"llama.cpp-issue-23407","to":"QNDRF-1","relation":"FAILURE_MODE_OF_MULTIMODAL_BACKEND"},
+    {"from":"llama.cpp-issue-25854","to":"QNDRF-1","relation":"FAILURE_MODE_OF_IMAGE_CACHE_RECOVERY"},
+    {"from":"llama.cpp-issue-25717","to":"QNDRF-1","relation":"FAILURE_MODE_OF_MROPE_CACHE_BACKEND"},
+    {"from":"Qwen3.6-official","to":"Qwen3.5-4B-config","relation":"NEWER_FAMILY_WITHOUT_CURRENT_SMALL_DIRECT_SUPERSESSION"},
+    {"from":"Gemma4-official","to":"Qwen3.5-4B-config","relation":"RESOURCE_CHALLENGER"}
+  ]
+}

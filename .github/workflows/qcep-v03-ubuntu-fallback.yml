@@ -9,6 +9,14 @@ on:
       - 'research_entity/harness/reference/benchmark_qcep_exact_topk_v03.py'
       - 'research_entity/harness/reference/benchmark_qcep_u15_exact_topk_v03.py'
       - '.github/workflows/qcep-v03-ubuntu-fallback.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/test_query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/benchmark_qcep_exact_topk_v03.py'
+      - 'research_entity/harness/reference/benchmark_qcep_u15_exact_topk_v03.py'
+      - '.github/workflows/qcep-v03-ubuntu-fallback.yml'
   workflow_dispatch:
 
 concurrency:
@@ -82,7 +90,7 @@ jobs:
           if failed: raise SystemExit('QCEP lesion gate failed: '+','.join(failed))
           PY
       - name: Persist hosted-Ubuntu receipts to candidate branch
-        if: always()
+        if: ${{ always() && github.event_name == 'push' }}
         run: |
           set -euo pipefail
           test -f /tmp/qcep-v03/QCEP_GRAPH.json

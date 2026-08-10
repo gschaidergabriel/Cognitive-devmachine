@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-CEA-001",
+  "controls":{"cases_each":10000,"stale_epoch_rejection_rate":1.0,"stale_provider_contract_rejection_rate":1.0,"shuffled_attempt_binding_rejection_rate":1.0},
+  "universal_retry_ablation":{"cases":20000,"correct_universal_rule_unsafe_retry_rate":0.0,"ablated_any_world_rule_unsafe_retry_rate":0.5031},
+  "shuffled_truth_control":{"cases":10000,"false_but_well_formed_evidence_wrong_resolution_rate":0.9751},
+  "interpretation":{
+    "universal_retry":"The forall-survivors retry law is causally necessary in the adversarial ambiguous-world fixture; replacing it with exists-survivor produced unsafe retry near 50%.",
+    "shuffled_truth":"CEA cannot establish truth from structurally valid but false external evidence; independent observation trust remains a hard boundary."
+  }
+}

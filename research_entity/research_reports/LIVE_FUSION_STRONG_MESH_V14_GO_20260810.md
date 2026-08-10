@@ -40,11 +40,17 @@ The candidate emits `ShadowRouteDecision` containing exact base and candidate ro
 
 Command: `python3 -m unittest -v test_live_fusion_strong_mesh_v14.py`
 
-Result: 10/10 PASS.
+Result: 11/11 PASS.
 
-Coverage includes direct-work preservation, low-signal branch-only demotion, high-impact preservation, cross-branch dependency rescue, stale-projection fail-conservative behavior, worker mismatch fail-closed, historical-only no-upgrade, high-impact hidden dependency interrupt, observable shadow summary and the mandatory OOB lesion/rescue.
+Coverage includes direct-work preservation, low-signal branch-only demotion, high-impact preservation, cross-branch dependency rescue, stale-projection fail-conservative behavior, worker mismatch fail-closed, historical-only no-upgrade, high-impact hidden dependency interrupt, observable shadow summary, the false-current-dependency containment control, and the mandatory OOB lesion/rescue.
 
 The local test harness reconstructed the exact V1.3 scoring formula observed at parent head `668cedc5b8d89df1a77e40bc0aac916986d5f7eb`; compare showed the final fork head added V1.3 tests/workflow/protocol only and did not change `live_fusion_reentry_v13.py`. Full exact-parent import remains a CI gate.
+
+## Strongest counterhypothesis result — false dependency
+
+A deliberately wrong but `current=true` dependency projection can produce a candidate false-positive interrupt. This is an expected negative result, not hidden: dependency membership alone is not truth. The V1.4 safety result is containment: the exact V1.3 route remains `INDEX_ONLY`, the candidate route is shadow-only, and `ShadowRouteDecision.authority` is explicitly `SHADOW_ROUTING_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY`.
+
+This means real false-dependency rate and shadow precision must be measured before any live admission. A current timestamp/epoch alone is insufficient evidence that an edge is causally useful.
 
 ## Synthetic matched routing fixture
 
@@ -60,7 +66,7 @@ The local test harness reconstructed the exact V1.3 scoring formula observed at 
 | Dependency reach upgrades | n/a | 5 |
 | Low-signal demotions | n/a | 2 |
 
-These numbers are intentionally not generalized beyond the fixture.
+These numbers are intentionally not generalized beyond the fixture and do not include the separate adversarial false-edge control.
 
 ## Exactly one GO out-of-box experiment
 
@@ -90,7 +96,7 @@ The design strengthens semantic connectivity without making the physical/active 
 - exact parent V1.3 import/test on CI;
 - current active-worker dependency projection from real UnifiedDB/ClayGraph;
 - real corpus of missed/irrelevant worker re-entry cases;
-- false dependency / stale dependency controls;
+- real false-dependency rate / precision control;
 - active delivery amplification and p50/p95/p99 latency/resource measurements;
 - parent crash/restart/replay invariants preserved;
 - Hostinger Ubuntu receipt;

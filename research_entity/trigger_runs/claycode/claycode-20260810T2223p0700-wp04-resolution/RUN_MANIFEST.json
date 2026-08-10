@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2223p0700-wp04-resolution",
+  "trigger": "claycode",
+  "timestamp_local": "2026-08-10T22:23:21+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "work_package": "CC-WP-04-TYPE-EFFECT",
+  "hypothesis": "Current structural TypedIR does not itself prove imported nominal referential closure for real Frank source because no exact module/export symbol environment is bound in the standalone artifact.",
+  "counterhypothesis": "Referential closure is intentionally a WP04 concern and remaining names may belong to a valid frozen prelude/dialect universe, so no language semantic change is implied.",
+  "target_commits": [
+    "4a42eca4db3a2bf4bd231da77cf6eedab2f2487b",
+    "997ee34443fe2352b5ac8ef2bf0367e47759d0c2",
+    "12c5d458d2c523faf1af6fb15d3b04daa1813e82",
+    "c9e951b314da24b734736edd1dbcfd4a36e6a787",
+    "e99d53e5de3e1d3392979664799aa14265183c05",
+    "15f1d85f2827369b761dece410bc0761f09c326c",
+    "0516bba1d8419a2335e0729110d9cb66648b325d"
+  ],
+  "exact_vps_receipt": "UNVERIFIED_PENDING_RECEIPT",
+  "promotion": "NONE",
+  "semantic_change": "NONE",
+  "architecture_delta": "CANDIDATE_MODULE_SYMBOL_ENVIRONMENT_BEFORE_WP04",
+  "negative_result_preserved": "INTERMEDIATE_STATUS_STRING_MISMATCH_HYPOTHESIS_REFUTED_BY_FRESH_MAIN",
+  "next_falsifier": "Use exact VPS baseline/candidate receipt; if unresolved names remain, bind an explicit frozen prelude/type universe and require zero unresolved names without Unknown-to-Any.",
+  "authority_claim": "NONE"
+}

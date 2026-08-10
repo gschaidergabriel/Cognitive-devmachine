@@ -6,6 +6,8 @@ manifest whose repository_commit is deliberately stale, then invokes the real pr
 promoter against an isolated temporary workspace. Safe behavior is rejection. If the
 promoter accepts the stale manifest, the probe fails and records the replay vulnerability.
 
+PR verification touch: this comment-only change exists solely to force the same negative
+control through a directly observable pull-request GitHub Actions lane after the repair.
 No real release workspace, target receipt, Frank runtime, or authority state is mutated.
 """
 from __future__ import annotations

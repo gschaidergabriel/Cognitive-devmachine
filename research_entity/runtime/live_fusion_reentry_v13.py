@@ -17,6 +17,7 @@ DELIVERY_CHECKPOINT = "NEXT_CHECKPOINT"
 DELIVERY_INDEX = "INDEX_ONLY"
 RESOLUTION_DECISIONS = frozenset({"ACCEPT", "REPLAN", "NO_CHANGE", "CONFLICT", "DEFER"})
 TERMINAL_RESOLUTIONS = frozenset({"ACCEPT", "REPLAN", "NO_CHANGE"})
+ROUTING_VERSION = "v1.3"
 
 
 @dataclass(frozen=True)
@@ -116,6 +117,7 @@ class Delivery:
     delivery_class: str
     relevance: float
     reason: str
+    routing_version: str = ROUTING_VERSION
     authority: str = AUTHORITY
 
 
@@ -190,10 +192,13 @@ class LiveFusionBus(DurableLogBus):
         self.deltas: dict[str, LiveDelta] = {}
         self.workers: dict[str, WorkerView] = {}
         self.deliveries: dict[tuple[str, str], Delivery] = {}
+        self.delivery_history: dict[str, Delivery] = {}
+        self.restored_delivery_ids: set[str] = set()
         self.delivery_acks: dict[str, DeliveryAck] = {}
         self.delivery_ack_by_delivery: dict[str, str] = {}
         self.resolutions: dict[tuple[str, str], list[Resolution]] = {}
         self.resolution_ids: set[str] = set()
+        self.subscription_snapshots: list[SubscriptionSnapshot] = []
         self.payload_provenance: dict[str, set[str]] = {}
         self.max_source_seq: dict[str, int] = {}
         self.event_bus_seq: dict[str, int] = {}
@@ -215,6 +220,7 @@ class LiveFusionBus(DurableLogBus):
             pending_ids = tuple(d.delivery_id for d in self.pending(worker.worker_id, include_index_only=True))
             snapshot = SubscriptionSnapshot(worker.worker_id, worker.subscription_revision, cut, pending_ids)
             if persist:
+                self.subscription_snapshots.append(snapshot)
                 self._append("SUBSCRIPTION_SNAPSHOT_V13", asdict(snapshot))
             return snapshot
 
@@ -288,9 +294,42 @@ class LiveFusionBus(DurableLogBus):
             reason=reason,
         )
         self.deliveries[key] = delivery
+        self.delivery_history[delivery.delivery_id] = delivery
         if persist:
             self._append("DELIVERY_V13", asdict(delivery))
         return delivery
+
+    def _restore_delivery(self, payload: dict) -> Delivery:
+        payload = dict(payload)
+        payload.setdefault("routing_version", ROUTING_VERSION)
+        delivery = Delivery(**payload)
+        delta = self.deltas.get(delivery.event_id)
+        worker = self.workers.get(delivery.worker_id)
+        if not delta:
+            raise ValueError("recorded delivery references unknown event")
+        if not worker or worker.subscription_revision != delivery.subscription_revision:
+            raise ValueError("recorded delivery references unknown/stale subscription")
+        if self.event_bus_seq.get(delivery.event_id) != delivery.bus_seq:
+            raise ValueError("recorded delivery bus_seq mismatch")
+        if delivery.authority != AUTHORITY:
+            raise ValueError("recorded delivery authority mismatch")
+        existing = self.delivery_history.get(delivery.delivery_id)
+        if delivery.delivery_id in self.restored_delivery_ids and existing != delivery:
+            raise ValueError("recorded delivery_id collision")
+        self.restored_delivery_ids.add(delivery.delivery_id)
+        self.delivery_history[delivery.delivery_id] = delivery
+        self.deliveries[(delivery.event_id, delivery.worker_id)] = delivery
+        return delivery
+
+    def _restore_subscription_snapshot(self, payload: dict) -> SubscriptionSnapshot:
+        payload = dict(payload)
+        payload["pending_delivery_ids"] = tuple(payload.get("pending_delivery_ids", ()))
+        snapshot = SubscriptionSnapshot(**payload)
+        worker = self.workers.get(snapshot.worker_id)
+        if not worker or worker.subscription_revision != snapshot.subscription_revision:
+            raise ValueError("snapshot references unknown/stale subscription")
+        self.subscription_snapshots.append(snapshot)
+        return snapshot
 
     def current_delivery(self, event_id: str, worker_id: str) -> Delivery:
         return self.deliveries[(event_id, worker_id)]
@@ -397,11 +436,13 @@ class LiveFusionBus(DurableLogBus):
                 ):
                     payload[name] = tuple(payload.get(name, ()))
                 bus.ingest(LiveDelta(**payload), persist=False)
+            elif kind == "DELIVERY_V13":
+                bus._restore_delivery(payload)
+            elif kind == "SUBSCRIPTION_SNAPSHOT_V13":
+                bus._restore_subscription_snapshot(payload)
             elif kind == "DELIVERY_ACK_V13":
                 bus.ack_delivery(DeliveryAck(**payload), persist=False)
             elif kind == "RESOLUTION_V13":
                 payload["basis_event_ids"] = tuple(payload.get("basis_event_ids", ()))
                 bus.resolve(Resolution(**payload), persist=False)
-            elif kind in {"DELIVERY_V13", "SUBSCRIPTION_SNAPSHOT_V13"}:
-                continue
         return bus

@@ -1,0 +1,191 @@
+{
+  "schema_version": "1.0",
+  "originating_run": "go-20260810T0657+0700-chatgpt-secondary-unifieddb-eap",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "status": "CANDIDATE_TESTING",
+  "effects": [
+    "REVISE",
+    "PERFORMANCE_MEASUREMENT",
+    "ACCURACY_HARDENING",
+    "NEW_EXPERIMENT",
+    "NO_CANONICAL_PROMOTION"
+  ],
+  "primary_delta": "Treat UnifiedDB as canonical transaction/replay/provenance truth and ClayGraph/EAP as a rebuildable model-input possibility preprocessor. Keep exact/packet/FTS/coherent direct routes as cheap first-class paths. After fail-closed natural-language seed resolution, compile only the bounded relational possibility slice required for the current ActiveAssembly; never expose the model to an unbounded database/graph scan and never let graph activation mint truth or effect authority.",
+  "supersedes_or_refines": [
+    {
+      "ref": "research_entity/trigger_runs/claygraph/claygraph-20260808T1701p0700-chatgpt-secondary-r2/FRANK_CLAYGRAPH_FEEDBACK.json",
+      "effect": "REFINE_NOT_REVERSE",
+      "reason": "The earlier result correctly rejected always-on graph retrieval and required resident semantic indexing, adaptive routing, exact fallbacks and assembly certificates. The current EAP work implements the bounded escalation/preprocessor side rather than replacing those cheap routes."
+    }
+  ],
+  "candidate_pipeline": [
+    "S.USER_EVENT / query",
+    "OP.MEMORY_RESOLVE_SEED: U12 evidence-bound fail-closed resolver",
+    "OP.MEMORY_CHEAP_ROUTE: exact/packet/FTS/U11 coherent generation fast path when sufficient",
+    "OP.MEMORY_EAP_COMPILE: compact + incrementally maintained ClayGraph topology, bounded multi-hop possibility compilation",
+    "OP.MEMORY_EAP_EXACT_TOPK: optional score-bound early stop for model-input Top-K mode",
+    "S.ACTIVE_ASSEMBLY + certificate",
+    "M.WORKSPACE_ARBITER / GWT candidate input",
+    "exact/current anchor validation where consequential truth is asserted"
+  ],
+  "module_changes": [
+    {
+      "module": "M.DURABLE_EVENT_STATE / UnifiedDB StateLedger",
+      "change": "NO_AUTHORITY_CHANGE; remains canonical source of truth, transactions, replay, semantic hashes, epochs and full dependency rows."
+    },
+    {
+      "module": "M.MEMORY_FABRIC",
+      "change": "REVISE; add evidence-bound seed resolution plus tiered cheap-route -> EAP escalation. EAP is a pure derived preprocessor, not a persistent second database."
+    },
+    {
+      "module": "ClayGraph derived projection",
+      "change": "REVISE; maintain sparse dependency topology incrementally when an exact caller-owned UnifiedDB transaction delta is available; otherwise discard/rebuild from canonical state."
+    },
+    {
+      "module": "M.COGNITIVE_FRAME_ASSEMBLER",
+      "change": "REVISE; ActiveAssembly certificate records seed-resolution evidence, topology/index revision, selection hash, stop reason, blocked epistemic propagation and fallback availability."
+    },
+    {
+      "module": "M.WORKSPACE_ARBITER / GWT",
+      "change": "NO_AUTHORITY_CHANGE; consumes bounded ActiveAssembly as candidate evidence only. Retrieval salience is not truth, ignition or effect authority."
+    },
+    {
+      "module": "M.CAPABILITY_GATEWAY",
+      "change": "NO_CHANGE; resolver/EAP/model output never authorizes external effects."
+    }
+  ],
+  "proposed_transitions": [
+    {
+      "op": "OP.MEMORY_RESOLVE_SEED",
+      "class": "PURE_TRANSFORM",
+      "input": "natural-language query + source_epoch",
+      "accept": ["EXACT_LOGICAL_ID", "EVIDENCE_ALIAS above independent cascade confidence gate"],
+      "fail_closed": ["AMBIGUOUS", "LOW_CONFIDENCE", "MISS", "selected id absent from candidate set", "logical id not bound to current UnifiedDB ref", "stale epoch"],
+      "authority": false
+    },
+    {
+      "op": "OP.MEMORY_CHEAP_ROUTE",
+      "class": "PURE_TRANSFORM",
+      "routes": ["exact", "packet", "FTS", "U11 coherent-generation fast path"],
+      "escalate_to_eap_only_if": "relation/multi-hop/scatter/uncertainty or assembly obligations require graph closure",
+      "authority": false
+    },
+    {
+      "op": "OP.MEMORY_EAP_COMPILE",
+      "class": "PURE_TRANSFORM",
+      "basis": "exact UnifiedDB semantic epoch/hash",
+      "topology": "derived sparse ClayGraph dependency projection",
+      "bounds": ["max_items", "max_hops", "frontier_budget", "min_edge_weight", "hop_decay"],
+      "epistemic_rule": "inadmissible status/epistemic nodes may be recorded as suppressed/blocked but cannot relay activation",
+      "authority": false
+    },
+    {
+      "op": "OP.MEMORY_EAP_INCREMENTAL_DELTA",
+      "class": "PURE_TRANSFORM_AFTER_VERIFIED_COMMIT",
+      "precondition": "preprocessor epoch/hash exactly matches caller-owned pre-commit state",
+      "effect": "patch changed dependency edge(s) in transient topology and advance cache identity to committed ledger epoch/hash",
+      "fallback": "full rebuild on stale/external/unknown mutation",
+      "authority": false
+    },
+    {
+      "op": "OP.MEMORY_EAP_EXACT_TOPK",
+      "class": "PURE_TRANSFORM_OPTIMIZATION",
+      "precondition": "model-input Top-K mode; monotone edge weight/hop decay constraints hold",
+      "stop": "Kth admissible visited score strictly exceeds best remaining frontier score",
+      "tie_rule": "equal-score frontier is never pruned",
+      "diagnostic_boundary": "complete suppressed/negative-space enumeration requires full traversal mode",
+      "authority": false
+    },
+    {
+      "op": "OP.MEMORY_EAP_COMPACT_CACHE",
+      "class": "RESOURCE_OPTIMIZATION",
+      "effect": "discard raw dependency row bodies from transient Python hot cache after edges are compiled; retain dependency_ref on edges and full canonical rows in StateLedger",
+      "authority": false
+    },
+    {
+      "op": "OP.MEMORY_QUERY_AWARE_GATE",
+      "class": "EXPERIMENT_ONLY_NOT_PROMOTED",
+      "effect": "future calibrated query-conditioned affinity may gate each propagation step",
+      "reason": "fresh 2026 primary research reports accuracy+latency gains over query-blind spreading activation, but dataset dependence and calibration requirements remain",
+      "authority": false
+    }
+  ],
+  "state_contract_delta": {
+    "S.ACTIVE_ASSEMBLY_add": [
+      "source_epoch",
+      "semantic_state_hash",
+      "resolution_class",
+      "resolution_confidence",
+      "resolution_candidates",
+      "seed_ref",
+      "compiled_index_hash",
+      "selection_hash",
+      "frontier_expansions",
+      "frontier_stop_reason",
+      "blocked_propagation_refs",
+      "dependency_delta_maintenance",
+      "compact_cache_version",
+      "fallback_available=true",
+      "persistent_second_store=false",
+      "authority=ASSEMBLY_CONTEXT_ONLY"
+    ]
+  },
+  "evidence": [
+    {
+      "class": "PRIOR_EXECUTED_8B_PROXY",
+      "result": "Historical ClayGraph cycle recorded graph/graph-lexical about 84-87 ms versus SQLite FTS about 0.8-0.9 ms and rejected graph as an always-on hot path."
+    },
+    {
+      "class": "LOCAL_SYNTHETIC_EAP_1_3",
+      "result": "12,000 semantic nodes / 11,760 dependency edges / 240 queries: complete EAP Assembly recall=precision=nDCG@12=1.0; p50 about 92.57 us versus matched staged recursive SQLite model-input path about 104.19 us (~1.126x). Naked recursive SQL refs-only remained faster at about 43.06 us."
+    },
+    {
+      "class": "LOCAL_SYNTHETIC_ACCURACY",
+      "result": "Held-out alias/abstention reconstruction: U12-style fail-closed resolver 33/33 decision-correct versus direct canonical lexical seed 22/33; resolver p50 about 66 us. Repository benchmark against the actual U12 implementation is committed but lacks a runner receipt."
+    },
+    {
+      "class": "LOCAL_ALGORITHM_RECONSTRUCTION_EAP_1_4",
+      "result": "6000 semantic nodes / 5880 dependency edges / 120 structure mutations: full rebuild update+next-query p50 about 8661 us versus incremental about 29.6 us (~292x) with exact selection equality. Current repository end-to-end StateLedger benchmark is committed but not remotely executed in this connector lane."
+    },
+    {
+      "class": "LOCAL_ALGORITHM_RECONSTRUCTION_EAP_1_5",
+      "result": "1800 hot traversals: exact Top-12 equality 100%; median frontier 40 -> 13 (-67.5%); pure traversal p50 about 20.28 -> 11.86 us (~1.71x)."
+    },
+    {
+      "class": "LOCAL_OBJECT_GRAPH_RECONSTRUCTION_EAP_1_6",
+      "result": "12,000 semantic nodes / 11,760 dependency edges: approximate reachable EAP cache 14.98 MiB -> 8.78 MiB by discarding dependency row bodies (~41.4% saved), while canonical dependency rows remain in StateLedger."
+    },
+    {
+      "class": "OUT_OF_BOX_EXPERIMENT",
+      "experiment_id": "EXP-GO-EAP-NEGATIVE-SPACE-001",
+      "result": "Toy adversarial conflict bridge: output-only filtering precision@2=0.5; epistemic propagation gate precision@2=1.0. This is the exactly-one unusual experiment for this go cycle."
+    },
+    {
+      "class": "EXTERNAL_PRIMARY_RESEARCH",
+      "result": "HippoRAG, LightRAG, LazyGraphRAG and 2026 query-aware spreading-activation research support graph-aware, incremental, budgeted and query-conditioned retrieval as useful regimes, but do not prove universal superiority for Clay."
+    },
+    {
+      "class": "NEGATIVE_RUNTIME_EVIDENCE",
+      "result": "Connector-generated push/issue/PR events produced no inspectable GitHub Actions run or persisted EAP receipt; runner execution remains UNKNOWN/BLOCKED_TRIGGER_LANE."
+    }
+  ],
+  "strongest_counterhypothesis": "A simpler exact/FTS/online-SQL/U11 coherent path dominates EAP end-to-end once real natural-language coverage, StateLedger commit cost, process RSS, concurrent writes, recovery and downstream answer quality are counted; EAP should therefore remain conditional escalation rather than replacing cheap database routes.",
+  "discriminating_tests": [
+    "human/external PR through persistent read-only self-hosted EAP probe workflow",
+    "actual reference StateLedger commit + topology maintenance + next Assembly p50/p95/p99 with exact state/trace equivalence",
+    "repo-native Frank held-out natural-language episodes with ground-truth provenance",
+    "matched direct exact/FTS/U11 vs EAP retrieval and final 4B answer/tool-routing quality",
+    "process RSS and cache amplification including rebuild/recovery",
+    "read:nonstructural-write:dependency-write duty-cycle sweep",
+    "query-aware affinity ablation against query-blind EAP with calibrated evidence and separate latency/accuracy accounting"
+  ],
+  "rollback": {
+    "runtime": "disable EAP escalation and use existing exact/packet/FTS/U11/online-SQL routes",
+    "persistence": "no rollback required for canonical data because EAP writes no second truth store",
+    "topology": "discard transient ClayGraph/EAP cache and rebuild from verified StateLedger epoch/hash"
+  },
+  "promotion": "NO_CANONICAL_PROMOTION_UNTIL_REMOTE_AND_REPO_NATIVE_GATES_PASS"
+}

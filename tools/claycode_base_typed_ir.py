@@ -94,16 +94,30 @@ def direct_token_values(node: Any) -> list[str]:
     return out
 
 
+def direct_identifier(node: Any) -> str | None:
+    """Return the grammar-admitted direct `ident` child without value-based keyword filtering.
+
+    V7 deliberately aliases reserved words such as `status` into `ident_status` when they
+    occur in identifier positions. Treating token *values* as globally reserved after parse
+    loses that grammar context and can silently rename or reject valid declarations.
+    """
+    for child in children(node):
+        t = token(child)
+        if t is not None and t[0] == "NAME":
+            return t[1]
+        k = kind(child)
+        if k is not None and k.startswith("ident_"):
+            vals = token_values(child)
+            if len(vals) == 1:
+                return vals[0]
+    return None
+
+
 def first_name(node: Any, *, after: str | None = None) -> str:
+    name = direct_identifier(node)
+    if name:
+        return name
     vals = token_values(node)
-    start = 0
-    if after is not None and after in vals:
-        start = vals.index(after) + 1
-    for value in vals[start:]:
-        if value in KEYWORDS or value in PUNCT:
-            continue
-        if value and (value[0].isalpha() or value[0] == "_"):
-            return value
     raise TypedIRError(f"cannot find declaration name in {vals!r}")
 
 
@@ -143,7 +157,7 @@ def parse_field(node: Any) -> dict[str, Any]:
         colon = vals.index(":")
     except ValueError as exc:
         raise TypedIRError(f"field without type annotation: {vals!r}") from exc
-    name = next((v for v in vals[:colon] if v not in KEYWORDS and v not in PUNCT), None)
+    name = direct_identifier(node)
     if not name:
         raise TypedIRError(f"field without name: {vals!r}")
     end = vals.index("=", colon + 1) if "=" in vals[colon + 1:] else len(vals)
@@ -162,7 +176,7 @@ def parse_typed_param(node: Any) -> dict[str, str]:
         colon = vals.index(":")
     except ValueError as exc:
         raise TypedIRError(f"typed parameter without ':' in {vals!r}") from exc
-    name = next((v for v in vals[:colon] if v not in KEYWORDS and v not in PUNCT), None)
+    name = direct_identifier(node)
     typ = type_text(vals[colon + 1:])
     if not name or not typ:
         raise TypedIRError(f"invalid typed parameter: {vals!r}")
@@ -204,18 +218,19 @@ def parse_record_like(node: Any, decl_kind: str) -> dict[str, Any]:
     methods = []
     for m in (x for x in walk(node) if kind(x) == "method_sig"):
         mv = token_values(m)
-        mname = next((v for v in mv if v not in KEYWORDS and v not in PUNCT), None)
+        mname = direct_identifier(m)
         if not mname:
             raise TypedIRError(f"method without name: {mv!r}")
         params = []
         for p in (x for x in walk(m) if kind(x) == "param"):
             pv = token_values(p)
+            pname = direct_identifier(p)
             if ":" in pv:
                 c = pv.index(":")
-                params.append({"name": pv[0], "type": type_text(pv[c + 1:])})
+                params.append({"name": pname or "", "type": type_text(pv[c + 1:])})
             else:
                 # Existing semantic registry permits untyped interface params; preserve explicitly.
-                params.append({"name": pv[0] if pv else "", "type": "OpaqueParam"})
+                params.append({"name": pname or "", "type": "OpaqueParam"})
         try:
             a = mv.index("->")
             returns = type_text(mv[a + 1:])

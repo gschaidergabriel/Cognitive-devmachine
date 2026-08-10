@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "status": "RESEARCH_EVIDENCE_ONLY",
+  "run_class": "GO_ADVERSARIAL_INTEGRATION",
+  "date": "2026-08-10",
+  "origin_actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "subject": "CC-WP-03 structural TypedIR closure versus binding/execution semantics",
+  "base_at_branch_refresh": "bc97d4cb51a80574a1074758cd547cd548cb8734",
+  "canonical_checkpoint": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "current_program_stage_observed": "BASE_CLAYCODE_RELEASE",
+  "package_state_observed": {
+    "CC-WP-01-SPEC-FREEZE": "PASS",
+    "CC-WP-02-PARSER-CANON": "PASS",
+    "CC-WP-03-IR-TYPES": "OPEN",
+    "BASE": "NOT_PASS"
+  },
+  "internal_evidence": [
+    {
+      "ref": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+      "finding": "WP02 PASS next falsifier explicitly requires receipt-bound V18 FrontendArtifact -> TypedIR without silent reparse and fail-closed surface/grammar binding."
+    },
+    {
+      "ref": "tools/claycode_wp03_frontend_artifact_bridge.py",
+      "finding": "Current main already provides a receipt-bound no-reparse bridge with source/grammar/semantic-hash and expected-surface verification; it remains a WP03 candidate, not promotion."
+    },
+    {
+      "ref": "tools/claycode_wp03_residual_semantics_candidate.py",
+      "finding": "Current main conservatively preserves not-yet-lowered top-level semantics in TypedIR identity and grants them no effect authority."
+    },
+    {
+      "ref": "PR#173",
+      "finding": "Structural TypedIR v2/front-end bridge v3 candidate exists; latest observed PR-head Actions failed before useful execution evidence on that head."
+    },
+    {
+      "ref": "PR#175",
+      "finding": "Stacked CycleRegionIR research reports prior self-hosted evidence: 81 ClauseIR + 18 MetadataIR + 1 CycleRegionIR, zero gaps/overlaps, no downstream reparse; evidence file explicitly leaves WP03 OPEN."
+    },
+    {
+      "ref": "PR#176",
+      "finding": "Explicit binding candidate refuses guessed precedence for flat mixed operator/relation chains. Latest observed binding-gate job failed with zero recorded steps and unavailable log blob; classify as pre-step control-plane/runner-admission failure, not semantic falsification."
+    },
+    {
+      "ref": "PR#177",
+      "finding": "CallContract work is correctly separated toward WP04/runtime binding and reports prior target-VPS schema evidence; no WP03 or BASE promotion is claimed."
+    }
+  ],
+  "fresh_external_primary_evidence": [
+    {
+      "source": "MLIR Dialect Conversion official documentation",
+      "url": "https://mlir.llvm.org/docs/DialectConversion/",
+      "finding": "Partial conversion may leave unknown operations unconverted while full conversion requires all operations legal; legality is explicit rather than guessed."
+    },
+    {
+      "source": "MLIR Pass Infrastructure official documentation",
+      "url": "https://mlir.llvm.org/docs/PassManagement/",
+      "finding": "Transform passes and verification are distinct observable stages; verification may be enabled after each pass."
+    },
+    {
+      "source": "MLIR LLVM IR Target official documentation",
+      "url": "https://mlir.llvm.org/docs/TargetLLVMIR/",
+      "finding": "Progressive lowering explicitly supports converted and unconverted operations across staged conversions."
+    }
+  ],
+  "hypothesis": "CC-WP-03 can close structural typed-IR obligations without inventing precedence or execution semantics if ambiguous binding remains an explicit typed unresolved/non-executable state. WP04/WP05 must separately legalize/bind/evaluate it. Existing V18 semantics should remain frozen unless an executable counterexample proves structural preservation is inadequate.",
+  "strongest_counterhypothesis": "The WP03 acceptance contract may require every admitted rule/invariant to have a uniquely bound semantic structure rather than merely preserved unresolved structure; if so, unresolved binding is insufficient and an explicit versioned source/grammar semantic amendment is required before WP03 PASS.",
+  "out_of_box_experiment": {
+    "id": "GO-OOB-WP03-BINDING-LATTICE-20260810",
+    "class": "SYNTHETIC_MECHANISM_ONLY",
+    "description": "Enumerate flat binding-signature chains under the PR#176 rule: one repeated exact signature is structurally admissible; mixed signatures fail closed. Count possible binary parenthesization shapes as ambiguity pressure, without asserting those shapes are semantically equivalent or all meaningful.",
+    "binding_signatures": 8,
+    "results": [
+      {"operator_slots": 1, "chains": 8, "admitted_same_signature": 8, "ambiguous_fail_closed": 0, "binary_parenthesization_shapes": 1},
+      {"operator_slots": 2, "chains": 64, "admitted_same_signature": 8, "ambiguous_fail_closed": 56, "binary_parenthesization_shapes": 2},
+      {"operator_slots": 3, "chains": 512, "admitted_same_signature": 8, "ambiguous_fail_closed": 504, "binary_parenthesization_shapes": 5},
+      {"operator_slots": 4, "chains": 4096, "admitted_same_signature": 8, "ambiguous_fail_closed": 4088, "binary_parenthesization_shapes": 14}
+    ],
+    "interpretation": "The combinatorial ambiguity surface grows rapidly. This supports fail-closed preservation rather than guessed precedence, but is not corpus evidence, target-VPS evidence or a WP03 acceptance receipt.",
+    "promotion": "NONE"
+  },
+  "adversarial_adjudication": {
+    "structural_typed_ir_direction": "SUPPORTED_AS_CANDIDATE",
+    "silent_reparse": "REJECT",
+    "guessed_flat_precedence": "REJECT",
+    "v18_semantic_change_now": "NO_CHANGE_PENDING_EXECUTABLE_COUNTEREXAMPLE",
+    "wp03_promotion_now": "REJECT",
+    "reason": "The latest candidate heads are not all current-main integrated and current head Actions evidence is incomplete/pre-step. Structural preservation and execution legality are separate gates."
+  },
+  "next_falsifiers_ranked": [
+    "Reconstruct PR#173 structural TypedIR + PR#175 exact residual disposition + PR#176 unresolved-binding representation on a fresh current-main integration branch without changing V18 semantics.",
+    "Run the exact integrated bytes on the accepted self-hosted target-VPS lane and require non-empty executed job steps, exact component hashes, no downstream reparse, typed identity corpus PASS and ambiguity fail-closed controls.",
+    "If a real current G9/Dialect fixture cannot be structurally preserved without semantic loss, record that exact executable counterexample before considering V18/source semantic amendment.",
+    "Keep call resolution/effect execution outside WP03 credit; prove it separately under WP04/WP05 with exact contracts and sealed effect authority."
+  ],
+  "negative_results": [
+    "Latest observed PR#173 and PR#176 GitHub Actions failures with zero recorded job steps do not falsify TypedIR/binding semantics.",
+    "Prior stacked self-hosted research receipts do not by themselves satisfy exact-current-main WP03 package promotion.",
+    "Typed/verified IR alone does not prove correct downstream lowering or effect execution."
+  ],
+  "architecture_delta": {
+    "status": "NO_CHANGE_WITH_TEST_OBLIGATION",
+    "change": "Do not change frozen V18 semantics from this run. Treat AmbiguousBinding/unresolved binding as an explicit non-executable typed state candidate and require a fresh integrated current-main target-VPS gate.",
+    "affected": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-05-EVALUATOR", "CC-WP-06-COMPILER-LOWERING"],
+    "rollback": "Evidence-only artifact; delete/reject this candidate without production effect if contradicted by exact-current executable evidence."
+  },
+  "frank_harness_mutation": false,
+  "training_authorization": false,
+  "promotion": "NONE"
+}

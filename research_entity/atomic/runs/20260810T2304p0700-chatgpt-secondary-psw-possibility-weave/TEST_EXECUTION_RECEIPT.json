@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "reference":"implementation/psw_reference.py",
+  "execution_surface":"local Python synthetic microbenchmark",
+  "main_scaling_cells":168,
+  "representative_replications":36,
+  "heldout_selector_cells":48,
+  "safety_controls":8,
+  "all_positive_reconstruction_and_output_assertions":"PASS",
+  "hidden_read_unsoundness_control":"PASS_EXPECTED_FAILURE_OBSERVED",
+  "payload_only_epistemic_merge_control":"PASS_EXPECTED_FAILURE_OBSERVED",
+  "stale_epoch_rejection":"PASS",
+  "wrong_self_rejection":"PASS",
+  "unknown_read_set_no_lift":"PASS",
+  "effectful_multi_branch_no_lift":"PASS",
+  "architecture_acceptance":"FAIL_NO_UNIQUE_BENEFIT_VS_SPARSE_OVERLAY_MEMO",
+  "target_vps_executed":false,
+  "reason_target_vps_not_executed":"This run's implementation is a synthetic representation discriminator and no current target Hyperposition/ACEF physical runtime matching PSW exists to benchmark without inventing target code. Target-VPS evidence is explicitly the next real falsifier, not simulated here."
+}

@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0111p0700-chatgpt-secondary-token-request-binding",
+  "trigger": "go",
+  "status": "TESTING_TARGET_VPS_QUEUED",
+  "origin_actor": "chatgpt-secondary",
+  "ingested_by": "chatgpt-secondary",
+  "adjudicated_by": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "timestamp_local": "2026-08-11T01:31:00+07:00",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-08-TOKEN-API-CLIENTS",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "baseline": {
+    "canonical_v16_target_receipt_commit": "2bb92d0675616c468bbbc90c31a10f775ad565db",
+    "observed_gap": "V16 durable request identity binds credential/session/client/request_id but stores no request-content identity; same request id with changed content can be classified as replay.",
+    "already_measured_open_fields": [
+      "network_server_implemented=false",
+      "tls_termination_implemented=false",
+      "response_replay_store_implemented=false",
+      "whole_token_api_complete=false"
+    ]
+  },
+  "hypothesis": "An immutable content binding keyed by the existing V16 request_key_hash can prevent changed caller intent from aliasing as an idempotent replay without changing V15/V16 execution authority.",
+  "strongest_counterhypothesis": "request_id is already a sufficient immutable semantic request identity, or an additive sidecar creates a TOCTOU/cross-process observation gap that makes it unsafe to promote without atomic integration.",
+  "external_evidence": [
+    {
+      "class": "OFFICIAL_PROVIDER",
+      "source": "https://docs.aws.amazon.com/ec2/latest/devguide/ec2-api-idempotency.html",
+      "use": "same client token with different parameters is an idempotency mismatch"
+    },
+    {
+      "class": "IETF_RFC",
+      "source": "https://www.rfc-editor.org/rfc/rfc6750",
+      "use": "bearer-token transport requires TLS protection"
+    },
+    {
+      "class": "IETF_RFC_INFORMATIONAL",
+      "source": "https://www.rfc-editor.org/rfc/rfc8785",
+      "use": "deterministic JSON representation and I-JSON constraints motivate hashable request identity; candidate does not claim full JCS"
+    },
+    {
+      "class": "IETF_RFC",
+      "source": "https://www.rfc-editor.org/rfc/rfc7493",
+      "use": "I-JSON forbids duplicate object member names"
+    }
+  ],
+  "candidate": {
+    "pull_request": 259,
+    "branch": "chatgpt/go-v16-request-semantic-binding-20260811",
+    "head": "c47d19e999f8c4dca1905207fb6f3023c9acd5de",
+    "base_at_creation": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
+    "architecture_delta_status": "TESTING",
+    "canonical_v16_modified": false,
+    "canonical_schema_promoted": false,
+    "profile": "IJSON_EXACT_UTF8_BYTES_SHA256_V1",
+    "mechanism": [
+      "authenticate before parsing caller JSON",
+      "validate bounded strict UTF-8/I-JSON-compatible top-level JSON object",
+      "hash exact admitted UTF-8 bytes with SHA-256",
+      "bind new V16 request_key_hash to immutable request-content digest",
+      "preflight known replay mismatch/unbound legacy requests before canonical V16 replay mutation",
+      "recheck after canonical core for race-safe fail-closed behavior",
+      "strip stable credential_fingerprint from candidate public success payload"
+    ],
+    "explicit_nonclaim": "Sidecar binding and canonical V16 admission are separate SQLite transactions/connections. Cross-process first-admission atomicity is not solved; canonical promotion requires a unified atomic storage-level request identity/content invariant or equivalent proof."
+  },
+  "tests": {
+    "normal_matrix": [
+      "same request id + same bytes replay",
+      "same request id + changed bytes reject",
+      "restart exact replay without new execution",
+      "restart changed bytes reject",
+      "legacy unbound admission requires reconciliation",
+      "immutable sidecar update/delete",
+      "rollback preserves base V16 integrity",
+      "auth precedes attacker-controlled JSON parsing",
+      "mismatch and legacy-unbound retries append zero REQUEST_REPLAYED events"
+    ],
+    "exactly_one_go_oob": {
+      "name": "DUPLICATE_JSON_KEY_IDEMPOTENCY_ALIAS",
+      "question": "Can duplicate JSON member ambiguity acquire durable replay identity before strict validation rejects it?",
+      "integrated_test": "full candidate facade must reject duplicate action members before V16 admission-row delta",
+      "status": "TARGET_NOT_RUN_YET"
+    },
+    "local_execution": {
+      "status": "LOCAL_INFRA_FAILURE",
+      "reason": "container DNS could not resolve github.com before repository checkout; no candidate test executed"
+    },
+    "target_vps": {
+      "workflow": "GO V16 Request Content Binding Candidate VPS",
+      "run_id": 31419430210,
+      "tested_head": "c47d19e999f8c4dca1905207fb6f3023c9acd5de",
+      "status": "QUEUED"
+    }
+  },
+  "cross_branch_integration": {
+    "related_pr": 257,
+    "relation": "COMPLEMENTARY_RESPONSE_REPLAY_DEPENDENCY",
+    "distributed_comment_id": 5244287931,
+    "integration_obligation": "request-content identity must be resolved before durable response replay can safely serve the old response for a repeated V16 request key"
+  },
+  "negative_results_and_open_obligations": [
+    "first candidate revision could append REQUEST_REPLAYED before detecting content mismatch; fixed before target execution and converted into regression",
+    "cross-process atomic admission/content binding still open",
+    "production HTTP server still open",
+    "TLS termination still open",
+    "strict HTTP framing still open",
+    "durable response replay is separate candidate PR #257",
+    "task-switch consent/cancellation and multimodal ingress remain open",
+    "whole token API acceptance not claimed"
+  ],
+  "authority": {
+    "external_effect_performed": false,
+    "canonical_frank_state_mutated": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "final_training_authorized": false,
+    "training_started": false
+  },
+  "next_falsifier": "Execute exact latest PR head on accepted self-hosted Linux/X64 lane; if sequential matrix passes, attack cross-process first-admission race and integrate request-content identity atomically with the eventual response replay contract before any canonical promotion."
+}

@@ -10,6 +10,11 @@ V17 deliberately keeps the existing EAP-1.3 implementation as the parent mechani
 changes only edge traversal weights for one query. The gate is lazy: only adjacency lists
 actually expanded by the bounded parent traversal are reweighted. A strength of zero (or an
 empty query) is an exact lesion back to the parent path.
+
+The default gate includes one bounded admissible-successor lookahead. This prevents a relevant
+multi-hop path from being cut merely because an intermediate bridge has an opaque label while a
+query-aligned successor provides the actual semantic evidence. Lookahead never changes the
+underlying edge strength; it only decides how much of that authoritative weight to retain.
 """
 
 from dataclasses import dataclass, fields
@@ -25,6 +30,9 @@ from research_entity.harness.reference.unifieddb_emergent_preprocessor import (
 
 IMPLEMENTATION_ID = "EAP-1.7-QUERY-AWARE-GATE"
 _TOKEN_RE = re.compile(r"[\w-]+", re.UNICODE)
+_TARGET_ONLY_MODE = "LEXICAL_COSINE_TARGET_RELATION"
+_LOOKAHEAD_MODE = "LEXICAL_COSINE_TARGET_OR_ADMISSIBLE_SUCCESSOR_V1"
+_SUPPORTED_MODES = frozenset({_TARGET_ONLY_MODE, _LOOKAHEAD_MODE})
 
 
 @dataclass(frozen=True)
@@ -33,12 +41,14 @@ class QueryAwarePossibilitySpec(PossibilitySpec):
 
     query_gate_strength=0 is a strict lesion to the parent EAP behavior. The lexical cosine
     gate only damps structural activation; it never boosts an edge above its authoritative
-    dependency weight. query_gate_floor protects bridging nodes from a zero-similarity cliff.
+    dependency weight. query_gate_floor protects against a zero-similarity cliff. The default
+    mode additionally inspects one admissible structural successor and discounts that evidence
+    by the successor edge weight.
     """
 
     query_gate_strength: float = 0.0
     query_gate_floor: float = 0.10
-    query_gate_mode: str = "LEXICAL_COSINE_TARGET_RELATION"
+    query_gate_mode: str = _LOOKAHEAD_MODE
 
 
 class _QueryAwareAdjacency:
@@ -53,6 +63,9 @@ class _QueryAwareAdjacency:
         strength: float,
         floor: float,
         min_edge_weight: float,
+        mode: str,
+        allowed_epistemic: frozenset[str],
+        allowed_status: frozenset[str],
     ) -> None:
         self._base = base
         self._rows_by_ref = rows_by_ref
@@ -60,12 +73,17 @@ class _QueryAwareAdjacency:
         self._strength = strength
         self._floor = floor
         self._min_edge_weight = min_edge_weight
+        self._mode = mode
+        self._allowed_epistemic = allowed_epistemic
+        self._allowed_status = allowed_status
         self._source_cache: dict[str, tuple[tuple[str, float, str, str], ...]] = {}
         self._affinity_cache: dict[tuple[str, str], float] = {}
         self.edges_observed = 0
         self.edges_damped = 0
         self.edges_pruned_below_parent_min = 0
         self.sources_expanded = 0
+        self.lookahead_edges_scanned = 0
+        self.lookahead_affinity_wins = 0
 
     @staticmethod
     def _tokens(text: str) -> frozenset[str]:
@@ -73,7 +91,7 @@ class _QueryAwareAdjacency:
             token.lower() for token in _TOKEN_RE.findall(text) if len(token) > 1
         )
 
-    def _affinity(self, target: str, relation: str) -> float:
+    def _row_affinity(self, target: str, relation: str) -> float:
         key = (target, relation)
         cached = self._affinity_cache.get(key)
         if cached is not None:
@@ -95,6 +113,36 @@ class _QueryAwareAdjacency:
         self._affinity_cache[key] = affinity
         return affinity
 
+    def _lookahead_admissible(self, ref: str) -> bool:
+        row = self._rows_by_ref.get(ref)
+        if row is None or row.get("domain") == "dependency":
+            return False
+        return (
+            str(row.get("status", "")).upper() in self._allowed_status
+            and str(row.get("epistemic", "")).upper() in self._allowed_epistemic
+        )
+
+    def _effective_affinity(self, target: str, relation: str) -> float:
+        direct = self._row_affinity(target, relation)
+        if self._mode == _TARGET_ONLY_MODE:
+            return direct
+
+        best = direct
+        for successor, edge_weight, successor_relation, _dependency_ref in self._base.get(
+            target, ()
+        ):
+            self.lookahead_edges_scanned += 1
+            if float(edge_weight) < self._min_edge_weight:
+                continue
+            if not self._lookahead_admissible(successor):
+                continue
+            successor_affinity = self._row_affinity(successor, successor_relation)
+            discounted = max(0.0, min(1.0, float(edge_weight))) * successor_affinity
+            if discounted > best + 1e-15:
+                best = discounted
+                self.lookahead_affinity_wins += 1
+        return best
+
     def get(self, source: str, default=()):
         if source in self._source_cache:
             return self._source_cache[source]
@@ -107,7 +155,7 @@ class _QueryAwareAdjacency:
         out: list[tuple[str, float, str, str]] = []
         for target, weight, relation, dependency_ref in edges:
             self.edges_observed += 1
-            affinity = self._affinity(target, relation)
+            affinity = self._effective_affinity(target, relation)
             gate = self._floor + (1.0 - self._floor) * affinity
             multiplier = (1.0 - self._strength) + self._strength * gate
             effective = max(0.0, min(float(weight), float(weight) * multiplier))
@@ -145,7 +193,7 @@ class QueryAwareEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
             raise ValueError("query_gate_strength must be in [0,1]")
         if not 0.0 <= float(spec.query_gate_floor) <= 1.0:
             raise ValueError("query_gate_floor must be in [0,1]")
-        if spec.query_gate_mode != "LEXICAL_COSINE_TARGET_RELATION":
+        if spec.query_gate_mode not in _SUPPORTED_MODES:
             raise ValueError(f"unsupported query_gate_mode: {spec.query_gate_mode}")
 
     def compile_active_assembly(self, spec: PossibilitySpec) -> dict[str, Any]:
@@ -177,6 +225,8 @@ class QueryAwareEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
                 "edges_damped": 0,
                 "edges_pruned_below_parent_min": 0,
                 "sources_expanded": 0,
+                "lookahead_edges_scanned": 0,
+                "lookahead_affinity_wins": 0,
                 "authority": "PERFORMANCE_RETRIEVAL_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY",
             }
             return result
@@ -196,6 +246,8 @@ class QueryAwareEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
                 "strength": float(spec.query_gate_strength),
                 "floor": float(spec.query_gate_floor),
                 "min_edge_weight": float(spec.min_edge_weight),
+                "allowed_epistemic": tuple(sorted(str(x).upper() for x in spec.allow_epistemic)),
+                "allowed_status": tuple(sorted(str(x).upper() for x in spec.allow_status)),
             }
         )
         gated_adj = _QueryAwareAdjacency(
@@ -205,6 +257,9 @@ class QueryAwareEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
             strength=float(spec.query_gate_strength),
             floor=float(spec.query_gate_floor),
             min_edge_weight=float(spec.min_edge_weight),
+            mode=spec.query_gate_mode,
+            allowed_epistemic=frozenset(str(x).upper() for x in spec.allow_epistemic),
+            allowed_status=frozenset(str(x).upper() for x in spec.allow_status),
         )
 
         # Reuse the tested parent compiler without copying or mutating the canonical transient
@@ -241,6 +296,8 @@ class QueryAwareEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor):
             "edges_damped": gated_adj.edges_damped,
             "edges_pruned_below_parent_min": gated_adj.edges_pruned_below_parent_min,
             "sources_expanded": gated_adj.sources_expanded,
+            "lookahead_edges_scanned": gated_adj.lookahead_edges_scanned,
+            "lookahead_affinity_wins": gated_adj.lookahead_affinity_wins,
             "authority": "PERFORMANCE_RETRIEVAL_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY",
         }
         result["persistent_second_store"] = False

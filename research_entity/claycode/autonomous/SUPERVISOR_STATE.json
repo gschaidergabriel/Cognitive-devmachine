@@ -1,14 +1,15 @@
 {
-  "schema_version": "2.2",
+  "schema_version": "2.3",
   "status": "ACTIVE",
   "last_reviewed_cycle": "ccauto-20260809T105416Z",
-  "current_focus": "consume the newly completed receipt-bound V18 WP03 production bridge evidence, then close the 100-node/10-class residual semantic disposition obligation through executable WP04 legality and WP05 consumption/fail-closed tests before any WP03 package PASS or WP06 advance",
+  "current_focus": "close the 100-node/10-class residual semantic disposition obligation through executable WP04 legality and WP05 consumption/fail-closed tests, with every material execution bound at effect time to the latest relevant work revision and exact component hashes before any WP03 package PASS or WP06 advance",
   "free_only": true,
   "provider_cooldowns": {},
   "blocked_capabilities": {
     "mistral_runtime": "CREDENTIAL_NOT_CONFIGURED_IN_AUTONOMOUS_RUNNER",
     "andreas_target_execution": "REGISTERED_ANDREAS_UBUNTU_TARGET_RECEIPT_NOT_YET_COMMITTED",
     "wp03_package_pass": "BLOCKED_ON_EXECUTABLE_DOWNSTREAM_DISPOSITION_AND_CONSUMPTION_OF_ALL_10_RESIDUAL_SEMANTIC_CLASSES",
+    "wp03_current_work_revision_binding": "EVERY_MATERIAL_WP04_WP05_RECEIPT_MUST_BIND_LATEST_RELEVANT_WORK_REVISION_AT_EFFECT_TIME; STALE_EXECUTION_RECEIPTS_DIAGNOSTIC_ONLY",
     "wp06_selected_grammar_replay": "DEFER_UNTIL_CC_WP03_PACKAGE_CLOSURE",
     "base_release": "ANDREAS_UBUNTU_APPLICATION_FULL_FRANK_WP14_ACCEPTANCE_PENDING"
   },
@@ -35,21 +36,23 @@
     {"cycle": "ccauto-20260809T105416Z", "families": ["nemotron", "deepseek", "glm", "gpt-oss"], "status": "MULTI_FAMILY_SUCCESS", "note": "Research-support pool verified; agreement does not count as executable replication."}
   ],
   "high_information_targets": [
+    "before every material WP04/WP05 effect, resolve and bind the latest relevant work event/spec revision, current repo head and exact component hashes; quarantine older receipts as STALE_EXECUTION_RECEIPT with diagnostic-only credit",
     "materialize a complete residual-class disposition matrix with exactly LOWERED_AND_VALIDATED, EXPLICITLY_DEFERRED_FAIL_CLOSED, or REJECTED_WITH_REASON for every class",
     "execute rule_decl and invariant_decl legality/type/effect tests first with semantic mutation, tamper, unsupported-class and no-authority-minting controls",
     "prove evaluator/lowering consumes only validated/lowered semantics and fails closed on deferred or unsupported opaque semantics with zero implicit execution",
     "extend executable disposition to dialect_decl, import_decl, module_decl, version_decl, cycle_decl, status_decl, parent_decl and tensor_decl without assuming all are executable operations",
-    "rerun exact-current V18 G9/Dialect identity/provenance/type/effect/evaluator gates only after all ten classes have dispositions",
+    "rerun exact-current V18 G9/Dialect identity/provenance/type/effect/evaluator gates only after all ten classes have dispositions and only under the latest controlling work revision",
     "only then adjudicate CC-WP-03; only after CC-WP-03 closure proceed to WP06 evaluator/native-C hardening",
     "run formal application/FULL_FRANK/WP14 acceptance only on registered Andreas Ubuntu developer system"
   ],
   "steering_notes": [
-    "The previously pending WP03 receipt-bound bridge execution is now materially completed on self-hosted Ubuntu; downstream_parser_calls=0 and tamper regression is green on the narrow bridge scope.",
-    "The declaration-only TypedIR baseline is executable-falsified on four tested semantic collision pairs, so preserving residual semantics is justified on the tested scope.",
+    "The WP03 receipt-bound bridge execution remains materially completed on self-hosted Ubuntu; downstream_parser_calls=0 and tamper regression is green on the narrow bridge scope.",
+    "The declaration-only TypedIR baseline remains executable-falsified on four tested semantic collision pairs; preserving residual semantics is justified on the tested scope.",
     "Residual preservation is not semantic execution: 100 nodes across 10 classes remain non-authoritative and must be explicitly lowered, fail-closed deferred, or rejected.",
-    "Official MLIR conversion guidance supports explicit legality and partial/full conversion boundaries as an implementation analogue only; Clay executable evidence remains authoritative.",
-    "Harness/ClayGraph/UnifiedDB cross-branch deltas reinforce content-addressed identity, ancestry collapse and fail-closed durability boundaries; none independently promotes ClayCode semantics.",
-    "FREE_ONLY remains mandatory, no paid fallback or receipt inheritance across changed hashes is allowed, no BASE PASS may come from model consensus, and Frank's Harness must not be modified."
+    "New cross-branch control counterexample 0bc5178f14bedffaf8c3c92caf877969de9c2943 shows a self-hosted replay workflow can be successfully launched while bound to an older work revision. Therefore success on stale work semantics cannot close current ClayCode work.",
+    "Current-revision binding is a provenance/control guard, not a ClayCode semantic promotion. A stale receipt is preserved as negative/diagnostic evidence and cannot receive WP03/BASE/current-work credit.",
+    "Harness/ClayGraph/UnifiedDB cross-branch deltas reinforce exact identity, ancestry collapse and fail-closed behavior; none independently promotes ClayCode semantics.",
+    "FREE_ONLY remains mandatory, no paid fallback or receipt inheritance across changed hashes/superseded work revisions is allowed, no BASE PASS may come from model consensus, and Frank's Harness must not be modified."
   ],
-  "steering_ref": "research_entity/claycode/supervisor/STEERING_20260810T1546P0700.json"
+  "steering_ref": "research_entity/claycode/supervisor/STEERING_20260810T1644P0700.json"
 }

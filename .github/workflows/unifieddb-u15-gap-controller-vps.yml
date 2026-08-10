@@ -1,0 +1,112 @@
+name: UnifiedDB U15 Gap Controller VPS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unifieddb-u15-gap-controller-vps.yml'
+      - 'research_entity/runtime/semantic_gap_controller_v15.py'
+      - 'research_entity/runtime/test_semantic_gap_controller_v15.py'
+      - 'research_entity/runtime/benchmark_semantic_gap_controller_v15.py'
+
+concurrency:
+  group: unifieddb-u15-gap-controller-vps
+  cancel-in-progress: false
+
+jobs:
+  test-and-benchmark:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+      - name: Compile and test
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/semantic_gap_controller_v15.py \
+            research_entity/runtime/test_semantic_gap_controller_v15.py \
+            research_entity/runtime/benchmark_semantic_gap_controller_v15.py
+          python3 -m unittest -v research_entity.runtime.test_semantic_gap_controller_v15
+      - name: Benchmark
+        run: |
+          set -euo pipefail
+          python3 -m research_entity.runtime.benchmark_semantic_gap_controller_v15 > /tmp/U15_GAP_BENCHMARK.json
+          python3 - <<'PY'
+          import json, os, platform, socket
+          from datetime import datetime, timezone
+          from pathlib import Path
+          b=json.loads(Path('/tmp/U15_GAP_BENCHMARK.json').read_text())
+          a=b['aggregate']
+          receipt={
+            'schema_version':'1.0',
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION_OF_SYNTHETIC_MECHANISM_FIXTURE',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'benchmark':b,
+            'acceptance':{
+              'gap_recall_not_worse':a['gap_mean_recall'] >= a['fixed_depth2_mean_recall'],
+              'gap_precision_higher':a['gap_mean_precision'] > a['fixed_depth2_mean_precision'],
+              'gap_context_smaller':a['gap_mean_context_items'] < a['fixed_depth2_mean_context_items'],
+            },
+            'scope_guard':'Synthetic typed-gap mechanism only; not universal database superiority or final Andreas target acceptance.'
+          }
+          Path('/tmp/U15_GAP_VPS_RECEIPT.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(receipt['acceptance'],sort_keys=True))
+          assert all(receipt['acceptance'].values())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unifieddb-u15-gap-${{ github.run_id }}
+          path: /tmp/U15_GAP_VPS_RECEIPT.json
+          if-no-files-found: error
+
+  persist-receipt:
+    if: always()
+    needs: test-and-benchmark
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: unifieddb-u15-gap-${{ github.run_id }}
+          path: /tmp/u15
+      - name: Persist immutable receipt
+        env:
+          TESTED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path('/tmp/u15/U15_GAP_VPS_RECEIPT.json'); x=json.loads(p.read_text())
+          assert x['github_sha']==os.environ['TESTED_SHA']
+          root=Path('research_entity/state/system/unifieddb_u15_gap_benchmark'); root.mkdir(parents=True,exist_ok=True)
+          (root/'LATEST.json').write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          (root/f"{x['github_run_id']}.json").write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-u15-benchmark'
+          git config user.email 'clay-u15-benchmark@users.noreply.github.com'
+          git add research_entity/state/system/unifieddb_u15_gap_benchmark/
+          git commit -m "evidence(unifieddb): persist U15 gap VPS benchmark ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*2))
+          done
+          exit 1

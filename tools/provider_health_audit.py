@@ -31,6 +31,7 @@ import exa_search  # noqa: E402
 import e2b_sandbox  # noqa: E402
 import judge0_execute  # noqa: E402
 import piston_execute  # noqa: E402
+import sandboxapi_sandbox  # noqa: E402
 import huggingface_inference  # noqa: E402
 
 OUT = ROOT / "research_entity" / "runtime" / "PROVIDER_HEALTH.json"
@@ -46,10 +47,14 @@ PROVIDERS: list[tuple[str, str, Callable[[], dict[str, Any]], str]] = [
     ("e2b_sandbox", "E2B", e2b_sandbox.smoke_test, "research_entity/runtime/e2b_verification.json"),
     ("judge0_execute", "Judge0", judge0_execute.smoke_test, "research_entity/runtime/judge0_verification.json"),
     ("piston_execute", "Piston", piston_execute.smoke_test, "research_entity/runtime/piston_verification.json"),
+    ("sandboxapi_sandbox", "SandboxAPI via RapidAPI", sandboxapi_sandbox.smoke_test, "research_entity/runtime/sandboxapi_verification.json"),
     ("huggingface_inference", "Hugging Face Inference Providers", huggingface_inference.smoke_test, "research_entity/runtime/huggingface_verification.json"),
 ]
 
-SECRET_NAMES = ["OPENALEX_API_KEY", "TAVILY_API_KEY", "EXA_API_KEY", "E2B_API_KEY", "HF_TOKEN", "SEMANTIC_SCHOLAR_API_KEY", "JUDGE0_API_KEY"]
+SECRET_NAMES = [
+    "OPENALEX_API_KEY", "TAVILY_API_KEY", "EXA_API_KEY", "E2B_API_KEY", "HF_TOKEN",
+    "SEMANTIC_SCHOLAR_API_KEY", "JUDGE0_API_KEY", "PISTON_API_TOKEN", "RAPIDAPI_KEY",
+]
 
 
 def _redact(text: str) -> str:

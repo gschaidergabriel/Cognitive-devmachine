@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-SPL-001",
+  "classification":"NOVEL_COMBINATION_CANDIDATE_ONLY_BEFORE_BENCHMARK; NO_UNIQUE_ARCHITECTURE_BENEFIT_AFTER_PROXY",
+  "collisions":[
+    {"mechanism":"per-output generator/validator separation","collision":"translation validation (Pnueli/Siegel/Shtrichman; TVOC)","severity":"DIRECT_COMPONENT_COLLISION"},
+    {"mechanism":"forward/backward consistency","collision":"bidirectional transformations / lens laws","severity":"DIRECT_COMPONENT_COLLISION"},
+    {"mechanism":"partial observation combination/intersection","collision":"reduced product of abstract domains / iterated observation exchange","severity":"CLOSE_MATHEMATICAL_COLLISION"},
+    {"mechanism":"multiple independent checker implementations","collision":"N-version programming","severity":"DIRECT_COMPONENT_COLLISION"},
+    {"mechanism":"meaning-preserving source mutations to reveal MT bugs","collision":"metamorphic machine-translation testing","severity":"DIRECT_COMPONENT_COLLISION"},
+    {"mechanism":"target formal-language admissibility","collision":"constrained decoding such as PICARD","severity":"BASELINE_COLLISION"}
+  ],
+  "non_collision_scope":"The exact Frank-specific composition of bounded hard-field German partial oracles, ClayCode hard projection, UNKNOWN-as-erasure and ExpressionState noninterference was not found as an exact named package in the searched scope. This is insufficient for a mechanism-novelty claim and the benchmark did not establish unique benefit.",
+  "world_first_claim":false,
+  "promotion":false
+}

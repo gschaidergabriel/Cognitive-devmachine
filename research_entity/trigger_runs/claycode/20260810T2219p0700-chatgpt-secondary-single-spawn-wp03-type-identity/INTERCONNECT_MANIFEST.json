@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2219p0700-chatgpt-secondary-single-spawn-wp03-type-identity",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program": "FRANK_V0_1",
+  "persistent_entity": "Clay",
+  "research_subject": "self.root / Frank",
+  "owner_contract": "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+  "inputs": {
+    "frank": "Owner-fixed single-spawn/global-busy semantics require one lease state machine, monotonically increasing lease_epoch, caller/session provenance, stale-epoch fencing and no token-as-identity collapse.",
+    "clayresearch": "Current unified program keeps F-V01-02 TypedIR OPEN and requires executable discrimination rather than reopening frozen semantics without a counterexample.",
+    "claygraph": "Recent lineage evidence requires semantic identity, entity identity, graph epoch and lineage to remain distinct; equal content must not collapse SELF identity.",
+    "unifieddb": "Canonical mutable state uses transaction/epoch/replay identity; the single-spawn directive explicitly names short BEGIN IMMEDIATE + compare-and-set + COMMIT as a storage candidate.",
+    "gwt": "Workspace selection/ignition remains cognition/proposal and cannot mint lease/effect authority.",
+    "hyperposition": "No new alternative semantic primitive is promoted; unresolved runtime-binding alternatives remain explicit.",
+    "emergenz": "No emergence claim follows from lease recurrence, concurrency exclusion or added type declarations.",
+    "harness": "Stale/zombie epoch and simultaneous-acquire tests are mandatory recovery/authority falsifiers; self.root does not authorize its own Harness mutation.",
+    "q23": "No visual-path change; token/client/peer ingress remains external provenance rather than SELF identity.",
+    "concurrent_claycode_wp04": "Current target-VPS effect-contract corroboration independently constrains the downstream effect boundary to explicit EffectIntent + Capability + NodeId + EffectAttempt rather than a one-argument cognitive shortcut."
+  },
+  "new_wp03_finding": {
+    "status": "IMPLEMENTATION_GAP_REPRODUCIBLE_BY_SOURCE_AND_TARGET_PROBE_QUEUED",
+    "finding": "V18 admits type/class declarations, while the current production TypedIR builder materializes only record/interface/fn declarations. Consequently a local type/class declaration can be omitted from typed semantic identity and a referenced local nominal can be classified EXTERNAL_NOMINAL.",
+    "strongest_falsifier": "A target execution showing the baseline TypedIR hash changes for a mutation confined to the RHS of a V18 type/class declaration would refute the reported semantic-identity blindness.",
+    "candidate": "tools/claycode_wp03_type_decl_candidate.py",
+    "probe": "tools/claycode_wp03_single_spawn_probe.py",
+    "target_workflow": ".github/workflows/claycode-wp03-single-spawn-probe.yml"
+  },
+  "boundary_separation": {
+    "wp03": "Preserve already-admitted type/class declaration semantics and local nominal identity in typed IR.",
+    "wp04_wp09": "Atomic compare-and-set, authenticated capability binding, effect authorization and execution fencing remain separate runtime/type-effect obligations.",
+    "language_surface": "NO_CHANGE",
+    "reason": "The counterexample is loss of semantics already accepted by the existing V18 grammar, not absence of a required surface construct."
+  },
+  "distributed_delta": {
+    "claycode": "Do not promote WP03 until type/class declarations affect typed semantic identity and are classified as local declarations; keep atomic CAS outside descriptive TypedIR authority.",
+    "frank": "Single-spawn lease types must remain exact local semantics and must not be weakened into external/opaque guessed types merely to compile.",
+    "unifieddb": "Lease epoch/state identity remains authoritative mutable state; SQLite is a host reference/storage candidate, not ClayCode semantic authority.",
+    "harness": "Preserve simultaneous two-client, stale-epoch, zombie-holder, restart/recovery and same-holder execution falsifiers.",
+    "gwt": "No workspace/Needle output can supply or infer lease/effect authority fields.",
+    "claygraph": "Project lease/type/runtime dependencies diagnostically without making graph activation or topology authoritative."
+  },
+  "external_primary_input": {
+    "sqlite_transaction": "https://www.sqlite.org/lang_transaction.html",
+    "sqlite_isolation": "https://www.sqlite.org/isolation.html",
+    "finding": "SQLite serializes writers and BEGIN IMMEDIATE begins a write transaction immediately; this is an implementation control for short lease acquisition, not proof of ClayCode support."
+  },
+  "duplicate_work_check": {
+    "go_single_spawn_receipt": "4f288762e2329f6bd00a24d23791e116970b5a23",
+    "concurrent_wp04_report": "334587a7ff3d0e33dc00b583fcf8d928415b0d01",
+    "relationship": "CROSS_LAYER_REFINEMENT_NOT_DUPLICATE",
+    "reason": "The go lane tests runtime presence/execution exclusion and the concurrent WP04 lane tests effect CallContract binding. This lane tests the earlier compiler invariant: whether existing V18 local type/class semantics survive into typed semantic identity."
+  },
+  "promotion": "NONE_PENDING_EXACT_TARGET_VPS_RECEIPT"
+}

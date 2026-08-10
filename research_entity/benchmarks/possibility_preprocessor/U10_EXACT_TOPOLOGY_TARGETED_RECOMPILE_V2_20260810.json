@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "benchmark_id": "U10-EXACT-TOPOLOGY-TARGETED-RECOMPILE-V2-20260810",
+  "truth_class": "LOCAL_EXECUTION_RECEIPT_EQUIVALENT_MECHANISM_SYNTHETIC_SCOPE_ONLY",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "scope_guard": "Reproduces the exact benchmark_possibility_preprocessor_v10.py RNG topology/metadata/anchors and equivalent weighted depth-3 top-20 semantics in an in-memory Python mechanism. It is not the persistent U10 compiler implementation, not Hostinger/Andreas target evidence, and not universal DB superiority.",
+  "fixture_source": "research_entity/runtime/benchmark_possibility_preprocessor_v10.py",
+  "fixture": {"seed":73419,"nodes":6000,"edges":41963,"anchors":120,"max_depth":3,"top_k":20,"mutations":500},
+  "initial_semantic_equivalence_control": {
+    "anchors_checked":120,
+    "equivalent_python_weighted_top20_equals_original_recursive_sql_oracle":120,
+    "exact_fraction":1.0,
+    "facets":["available=yes","authority=ok","modality=anchor-index-mod-3"]
+  },
+  "structural_invalidation_exact_topology": {
+    "all_existing_edges_affected_anchor_mean":1.1335223887710602,
+    "all_existing_edges_affected_anchor_median":1.0,
+    "all_existing_edges_affected_anchor_p95":3,
+    "all_existing_edges_affected_anchor_max":7,
+    "all_existing_edges_zero_affected_fraction":0.3532397588351643,
+    "prepared_reverse_support_pairs":334107,
+    "prepared_reverse_support_path_count":335475,
+    "prepared_reverse_build_ms_local":128.368954
+  },
+  "mutation_differential": {
+    "mutations":500,
+    "full_vs_targeted_output_mismatch_steps":0,
+    "predicted_affected_anchor_mean":1.08,
+    "predicted_affected_anchor_p95":3,
+    "predicted_affected_anchor_max":6,
+    "actual_weighted_top20_changed_anchor_mean":0.096,
+    "actual_weighted_top20_zero_change_fraction":0.916,
+    "actual_weighted_top20_changed_anchor_max":3
+  },
+  "equivalent_mechanism_recompile_latency_ms": {
+    "full_120_anchor_recompile":{"p50":27.389176,"p95":29.712454},
+    "targeted_frontier_recompile":{"p50":0.2356155,"p95":0.77253},
+    "speedup":{"p50":116.24522155800446,"p95":38.461229984596066}
+  },
+  "additional_exact_delta_probe_1000_mutations": {
+    "predicted_affected_anchor_mean":1.125,
+    "predicted_affected_anchor_median":1.0,
+    "predicted_affected_anchor_p95":3,
+    "predicted_affected_anchor_max":7,
+    "zero_affected_fraction":0.353,
+    "anchor_mask_lookup_p50_ms":0.0008565,
+    "anchor_mask_lookup_p95_ms":0.001212,
+    "support_delta_p50_ms":0.016504,
+    "support_delta_p95_ms":0.022514,
+    "sampled_reverse_reachability_exactness":true
+  },
+  "causal_interpretation": {
+    "supported":[
+      "For U10 max_depth=3, reverse <=2 reachability is a complete structural no-false-negative invalidation frontier for edge additions/removals on this exact benchmark topology.",
+      "Recompiling only that frontier reproduced the full weighted top-20 state after every one of 500 tested mutations in the equivalent mechanism.",
+      "Most structural invalidations are much smaller than a global 120-anchor rebuild on this U10 synthetic topology."
+    ],
+    "not_supported":[
+      "The persistent SQLite-backed U10 compiler achieves the same end-to-end speedup.",
+      "Real ClayGraph/Frank mutation distributions have the same invalidation density.",
+      "The Python support-count representation is memory-optimal.",
+      "Universal superiority over conventional databases or graph engines."
+    ]
+  },
+  "strongest_counterhypothesis":"Persistent witness writes, generation publication, cache behavior, high-degree real topology, semantic edge-type restrictions and memory amplification may reduce or reverse the equivalent-mechanism speedup.",
+  "next_gate":"Integrate the frontier as a shadow invalidation planner around the actual U10/EAP persistent compiler, replay exact U10 mutations through both full and targeted persistent builds, compare field/witness hashes plus write/RSS/storage/recovery, then replicate on Hostinger Ubuntu.",
+  "promotion":"NONE"
+}

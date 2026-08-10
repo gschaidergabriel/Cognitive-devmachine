@@ -14,6 +14,31 @@ permissions:
   contents: read
 
 jobs:
+  unicode-hosted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Compile V13 runtime and falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/semantic_retrieval_runtime_v13.py \
+            research_entity/runtime/test_semantic_access_v13.py \
+            research_entity/runtime/test_semantic_access_v13_unicode.py \
+            tools/unifieddb_v13_unicode_benchmark.py
+      - name: Run V13 snapshot and Unicode tests
+        run: |
+          set -euo pipefail
+          cd research_entity/runtime
+          python3 -m unittest -v test_semantic_access_v13.py test_semantic_access_v13_unicode.py
+      - name: Run normalization collision ablation
+        run: |
+          set -euo pipefail
+          python3 tools/unifieddb_v13_unicode_benchmark.py
+
   unicode-vps:
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 10

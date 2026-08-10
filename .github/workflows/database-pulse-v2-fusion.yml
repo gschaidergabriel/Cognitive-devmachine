@@ -1,0 +1,76 @@
+name: Database Pulse V2 Fusion
+
+on:
+  push:
+    branches:
+      - chatgpt/unifieddb-database-pulse-v2-fusion-20260810
+    paths:
+      - 'research_entity/runtime/database_pulse_candidate_v2.py'
+      - 'research_entity/runtime/test_database_pulse_candidate_v2.py'
+      - 'tools/database_pulse_v2_benchmark.py'
+      - '.github/workflows/database-pulse-v2-fusion.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_candidate_v2.py'
+      - 'research_entity/runtime/test_database_pulse_candidate_v2.py'
+      - 'tools/database_pulse_v2_benchmark.py'
+      - '.github/workflows/database-pulse-v2-fusion.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile research_entity/runtime/database_pulse_candidate_v2.py research_entity/runtime/test_database_pulse_candidate_v2.py tools/database_pulse_v2_benchmark.py
+      - name: V2 discriminating tests
+        run: python -m unittest research_entity.runtime.test_database_pulse_candidate_v2 -v
+      - name: Differential smoke benchmark
+        run: python tools/database_pulse_v2_benchmark.py --rows 100,1000 --repeat 3 --output /tmp/database-pulse-v2-hosted.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v2-hosted
+          path: /tmp/database-pulse-v2-hosted.json
+
+  hostinger-ubuntu-reference:
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Runtime metadata
+        run: |
+          mkdir -p /tmp/database-pulse-v2
+          uname -a | tee /tmp/database-pulse-v2/uname.txt
+          python3 --version | tee /tmp/database-pulse-v2/python.txt
+          python3 - <<'PY' | tee /tmp/database-pulse-v2/runtime.json
+          import json, os, platform, sqlite3
+          print(json.dumps({
+            'runner_name': os.environ.get('RUNNER_NAME'),
+            'runner_os': os.environ.get('RUNNER_OS'),
+            'runner_arch': os.environ.get('RUNNER_ARCH'),
+            'platform': platform.platform(),
+            'machine': platform.machine(),
+            'python': platform.python_version(),
+            'sqlite': sqlite3.sqlite_version,
+          }, indent=2))
+          PY
+      - name: Compile
+        run: python3 -m py_compile research_entity/runtime/database_pulse_candidate_v2.py research_entity/runtime/test_database_pulse_candidate_v2.py tools/database_pulse_v2_benchmark.py
+      - name: V2 discriminating tests
+        run: python3 -m unittest research_entity.runtime.test_database_pulse_candidate_v2 -v
+      - name: VPS differential benchmark
+        run: python3 tools/database_pulse_v2_benchmark.py --rows 100,1000,10000 --repeat 7 --output /tmp/database-pulse-v2/benchmark.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v2-hostinger
+          path: /tmp/database-pulse-v2/

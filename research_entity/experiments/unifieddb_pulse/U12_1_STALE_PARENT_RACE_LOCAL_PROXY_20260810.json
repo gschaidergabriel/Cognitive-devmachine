@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "U12.1-STALE-PARENT-RACE-LOCAL-PROXY-20260810",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "evidence_class": "VERIFIED_LOCAL_EXECUTION_PROXY_FOR_SQLITE_CONCURRENCY_INVARIANT_ONLY",
+  "scope": "Minimal SQLite reproduction of the U12 stale-parent publication sequence; not full repository U12 execution and not Andreas target acceptance.",
+  "environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "sequence": [
+    "stale writer reads head g1 before write transaction",
+    "winner acquires write transaction, supersedes g1, publishes g2 CURRENT and head=g2",
+    "stale writer acquires write transaction using stale parent g1, creates verified g3, attempts g3 CURRENT and head=g3"
+  ],
+  "arms": {
+    "without_single_current_guard": {
+      "error": null,
+      "current_generations": ["g2", "g3"],
+      "head": "g3",
+      "result": "STALE_PUBLISHER_OVERWROTE_NEWER_HEAD_AND_LEFT_TWO_CURRENT_GENERATIONS"
+    },
+    "with_partial_unique_single_current_guard": {
+      "error": "sqlite3.IntegrityError: UNIQUE constraint failed: access_generation.status",
+      "current_generations": ["g2"],
+      "head": "g2",
+      "result": "STALE_TRANSACTION_ROLLED_BACK_WINNER_LAST_KNOWN_GOOD_PRESERVED"
+    }
+  },
+  "hypothesis": "A database-level unique CURRENT invariant closes the stale-parent TOCTOU publication window as defense in depth.",
+  "counterhypothesis": "SQLite write serialization alone prevents stale-parent publication corruption.",
+  "counterhypothesis_result": "REFUTED_IN_MINIMAL_SQLITE_REPRODUCTION",
+  "limitations": [
+    "Does not execute semantic_access_pulse_v12.py itself.",
+    "Does not measure multi-process Hostinger behavior yet.",
+    "Does not replace explicit post-lock parent/head compare-and-swap as a preferred runtime invariant.",
+    "Projection remains non-authoritative derived context state."
+  ],
+  "next_falsifier": "Run test_semantic_access_pulse_v12_1.py with two connections on the self-hosted Ubuntu/Hostinger lane, then fold explicit CAS plus unique-CURRENT into the current segmented Pulse line if it passes."
+}

@@ -9,12 +9,14 @@ live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
 swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
 web_fabric=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
 work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
-runtime_candidate=@research_entity/runtime/live_fusion_reentry_v1.py
+runtime_candidate=@research_entity/runtime/live_fusion_reentry_v13.py
+durability_parent=@research_entity/runtime/live_fusion_reentry_v1.py
 dual_time_feedback=@research_entity/notes/FRANK_DUAL_TIME_CAUSAL_FEEDBACK_BRIDGE_20260810.md
 
 // Live fusion is a causal re-entry transport, not broadcast chat. The v1.3 candidate
 // separates transport receipt from semantic resolution and versions worker subscriptions
 // so a stale INDEX_ONLY decision cannot survive a material worker/work-profile change.
+// V1.3 composes over the V1 crash-safe append/replay lane instead of overwriting it.
 
 law LIVE_FUSION_IS_APPEND_ONLY_CAUSAL_REENTRY=true
 law RAW_EVENTS_ARE_PRESERVED=true
@@ -154,9 +156,6 @@ rule duplicate_redelivery -> idempotent_by(delivery_id)
 rule source_out_of_order -> retain_event+mark_late; never silently discard
 rule backpressure -> prioritize INTERRUPT then NEXT_CHECKPOINT; INDEX_ONLY may lag
 
-// Keep Database Pulse and worker-knowledge Pulse distinct. UnifiedDB/ClayGraph projection
-// maintenance may compress safe physical work, but coordination cannot erase causal identity
-// merely because final content bytes/fingerprints match.
 invariant DATABASE_PULSE_EFFECTIVIZATION != WORKER_KNOWLEDGE_REENTRY
 invariant RAW_EVENT_IDENTITY != EFFECTIVIZED_PROJECTION_IDENTITY
 invariant CONTENT_ABA_NEVER_ERASES_CAUSAL_REENTRY

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "CC-20260810-G9-FRANK-EFFECT-BOUNDARY-001",
+  "status": "CANDIDATE_TESTING",
+  "program": "FRANK_V0_1",
+  "affected_components": [
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "F-V01-03-COGNITIVE-LOOP-CORE",
+    "F-V01-07-NEEDLE-TRANSLATOR",
+    "F-V01-09-EFFECT-AUTHORITY",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+  ],
+  "source_problem": "Current G9 V3 cycle directly calls Needle.execute(effect_intent), but the exact current Frank target API requires a typed authority/lifecycle pipeline and execute(intent, capability, node, attempt). G9 V3 and target EffectIntent field shapes are also non-identical.",
+  "proposed_change": "Implement a deterministic typed Needle boundary adapter/lowering between cognitive EffectIntent and the current Frank effect runtime. Do not change ClayCode language semantics unless that implementation path is later falsified by an executable counterexample.",
+  "required_adapter_obligations": [
+    "Consume cognitive intent as proposal only.",
+    "Resolve exact action, target and payload from current typed semantic state; missing material data fails closed or degrades to proposal.",
+    "Obtain authenticated actor/current credential scope from trusted runtime context, never from model text or GWT salience.",
+    "Resolve opaque capability from current trusted capability state; no structural or textual capability forgery.",
+    "Construct the exact current EffectRequest and evaluate decide_effect/authorize_effect.",
+    "Create and persist an exact EffectReservationReceipt before any external attempt.",
+    "Create EffectAttempt bound to authorization, reservation, node, idempotency and current capability.",
+    "Invoke exact frank.effects.execute(intent, capability, node, attempt).",
+    "Independently verify outcome; preserve OUTCOME_UNKNOWN and reconciliation semantics.",
+    "Re-enter only verified/provenance-bound outcome state before DONE."
+  ],
+  "forbidden_shortcuts": [
+    "No direct Needle.execute(effect_intent) runtime binding.",
+    "No model-minted AUTHENTICATED_USER, capability, EffectAuthorization, reservation or EffectAttempt.",
+    "No fuzzy target/signature resolution.",
+    "No stale contract/component/binary/state/lease receipt inheritance.",
+    "No conversion of API token presence into unlimited effect authority."
+  ],
+  "strongest_counterhypothesis": "An existing exact current hidden adapter already performs these steps and the G9 V3 line is documentation shorthand only.",
+  "discriminating_test": "Find or implement the exact typed adapter, bind it to current target source/component/binary/state/lease identities, then run positive and negative target-VPS tests covering actor/capability forgery, stale epochs, confirmation replay, reservation atomicity, idempotent retry vs reconciliation, execute arity/type mismatch, independent verification and provenance re-entry.",
+  "rollback": "Keep current target frank.effects implementation and G9 V3 source unchanged until the adapter passes. Candidate artifacts can be deleted without runtime effect.",
+  "semantic_language_change": "NOT_JUSTIFIED_CURRENTLY",
+  "promotion": "NONE"
+}

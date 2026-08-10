@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "parent_run": "go-20260810T2254p0700-chatgpt-secondary-selfroot-live-coordination",
+  "created_at": "2026-08-11T00:15:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "evidence_backpressure": {
+    "effect_pr_204": {
+      "run_id": 31411845493,
+      "state_when_last_observed": "QUEUED",
+      "credit": "NONE_UNTIL_EXECUTED",
+      "current_candidate_boundary": "exact V16 execution generation plus live transient capability; guarded local provider window; remote timeout/reconciliation remains separate"
+    },
+    "structured_frontend_pr_220": {
+      "pr_state": "CLOSED_WITHOUT_MERGE",
+      "run_id": 31411221071,
+      "run_state_when_last_observed": "QUEUED",
+      "credit": "NONE_UNTIL_EXECUTED",
+      "frontier_shift": "grammar ambiguity/constructor compatibility repairs subsequently landed on main through independent current-main commits; old queued PR run is ancestry, not current acceptance"
+    }
+  },
+  "provenance_tooling": {
+    "github_native_attestation": {
+      "status": "BLOCKED_CURRENT_REPOSITORY_CONFIGURATION",
+      "evidence": "target run 31410923373 returned HTTP 403: Feature not available for user-owned private repositories"
+    },
+    "cosign_installer_probe": {
+      "pr": "gschaidergabriel/Dr.-Unterweger#229",
+      "branch": "chatgpt/go-cosign-installer-capability-20260811",
+      "status": "CREATED_NOT_EXECUTED_NOT_CREDITED",
+      "scope": "official Sigstore installer capability/version/digest only on self-hosted Linux runner",
+      "installer_commit": "6f9f17788090df1f26f669e9d70d6ae9567deba6",
+      "installer_release": "v4.1.2",
+      "expected_default_cosign": "3.0.6",
+      "privacy_bounds": [
+        "no signing",
+        "no OIDC request",
+        "no transparency-log upload",
+        "no Frank binary",
+        "no trusted builder pin",
+        "no production identity acceptance"
+      ],
+      "interpretation": "tool availability can be measured independently, but production trust/privacy policy remains owner-governed"
+    }
+  },
+  "coordination": {
+    "no_additional_out_of_box_experiment": true,
+    "stale_or_closed_queue_result_is_not_pass": true,
+    "no_duplicate_structured_frontend_patch": true,
+    "no_duplicate_effect_govern_runtime": true
+  },
+  "next_frontier": [
+    "Ingest PR #204 only when its latest current-head target run actually executes.",
+    "Treat old PR #220 queued run as ancestry unless it executes against the exact closed revision; current main grammar/frontend evidence still needs target acceptance on current ancestry.",
+    "If PR #229 executes, classify only installer capability; do not infer Sigstore production trust.",
+    "F-V01-01 cannot reach production ALLOW until owner-governed builder/signing policy, real verifier, artifact digest/source provenance, admitted recovery-verified state lineage, and exclusive lease all verify conjunctively.",
+    "Paid/final model training remains NOT_STARTED and owner-authorized only."
+  ]
+}

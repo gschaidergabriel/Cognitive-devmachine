@@ -1,5 +1,5 @@
 module clay.research.live_fusion_reentry
-version "1.0-candidate"
+version "1.1-candidate"
 status RESEARCH_CANDIDATE_NOT_PROMOTED
 
 goal="Frank v0.1 voll lauffaehig auf Andreas PC"
@@ -10,6 +10,7 @@ swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
 web_fabric=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
 work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
 runtime_candidate=@research_entity/runtime/live_fusion_reentry_v1.py
+dual_time_feedback=@research_entity/notes/FRANK_DUAL_TIME_CAUSAL_FEEDBACK_BRIDGE_20260810.md
 
 // Problem: current protocols require repeated refresh + targeted distribution, but the
 // transport contract does not yet make knowledge-delta delivery, acknowledgement and
@@ -27,12 +28,18 @@ law ORDINARY_RELEVANT_DELTA_REENTERS_AT_NEXT_CHECKPOINT=true
 law LOW_RELEVANCE_DELTA_IS_INDEX_ONLY=true
 law ROUTING_SCORE_IS_COORDINATION_SUPPORT_NOT_TRUTH=true
 law WORKER_ACK_IS_NOT_AGREEMENT_AND_NOT_EVIDENCE_PROMOTION=true
+law OLD_EPOCH_DOES_NOT_IMPLY_STALE_OR_INVALID=true
+law ARRIVAL_EPOCH_NEVER_OVERWRITES_ORIGIN_EPOCH=true
+law TEMPORAL_AGE_AND_CURRENT_APPLICABILITY_ARE_SEPARATE=true
 
 record LiveFusionDelta {
   event_id:Ref
   source:Ref
   source_seq:Int
   source_epoch:Ref
+  causal_origin_epoch:Ref?
+  arrival_epoch:Ref?
+  causal_origin_refs:Set<Ref>
   observed_at:Time
   semantic_keys:Set<Ref>
   affected_branches:Set<Ref>
@@ -45,6 +52,7 @@ record LiveFusionDelta {
   payload_hash:Hash
   provenance_refs:Set<Ref>
   evidence_class:Ref
+  applicability:CURRENT_MATERIAL|HISTORICALLY_VALID_ONLY|UNKNOWN
 }
 
 record WorkerReentryDelivery {
@@ -72,6 +80,9 @@ rule incoming_material_delta -> compare_exact_event_id_for_transport_dedupe
 rule exact_event_id_duplicate -> do_not_redeliver_duplicate
 rule same_payload_hash_with_new_event_id_or_epoch -> preserve_as_distinct_event
 rule same_payload_hash_with_new_record_or_version_or_provenance_identity -> preserve_as_distinct_event
+rule incoming_material_delta -> preserve(causal_origin_epoch,arrival_epoch,causal_origin_refs)
+rule late_or_out_of_order_event -> retain_and_route_by_semantic_relevance; never reject_by_age_alone
+rule historically_valid_but_currently_expired -> preserve_history_and_index; do_not_force_current_plan_mutation
 rule incoming_material_delta -> fuse_against_current_UnifiedDB+recent_receipts+open_conflicts
 rule incoming_material_delta -> ClayGraph.project(semantic_dependencies,current_work,current_claims)
 rule route_score uses semantic_overlap+active_work_overlap+impact+urgency+conflict
@@ -96,6 +107,8 @@ rule backpressure -> prioritize INTERRUPT then NEXT_CHECKPOINT; INDEX_ONLY may l
 // merely because final content bytes/fingerprints match.
 invariant DATABASE_PULSE_EFFECTIVIZATION != WORKER_KNOWLEDGE_REENTRY
 invariant CONTENT_ABA_NEVER_ERASES_CAUSAL_REENTRY
+invariant ARRIVAL_TIME != CAUSAL_ORIGIN
+invariant LATE != INVALID
 invariant DELIVERY_ACK_DOES_NOT_MINT_TRUTH
 invariant ROUTER_NEVER_MINTS_EFFECT_AUTHORITY
 invariant FRANK_REMAINS_SEPARATE_RESEARCH_SUBJECT
@@ -112,6 +125,7 @@ promotion_gate {
   append_only_replay=PASS
   exact_event_id_dedupe=PASS
   content_ABA_identity_preservation=PASS
+  late_valid_event_preservation=PASS
   high_impact_conflict_effect_guard=PASS
   ack_idempotence=PASS
   crash_restart_replay=REQUIRED

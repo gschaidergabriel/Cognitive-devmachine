@@ -79,7 +79,8 @@ class DatabasePulseRuntimeV5(DatabasePulseRuntime):
             basis_epoch=basis_epoch,
             economics_without_horizon=policy.economics_without_horizon,
             pulse_history=policy.pulse_history)
-        receipt=self.rank_path.apply_maintenance(plan)
+        receipt=self.rank_path.apply_maintenance(
+            plan,actor=actor,policy_provenance_ref=policy.provenance_ref)
         return PulseRankMaintenanceV5(actor=actor,policy_provenance_ref=policy.provenance_ref,
                                       plan=plan,receipt=receipt)
 

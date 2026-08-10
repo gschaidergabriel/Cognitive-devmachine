@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "nodes": ["QNDRF_FEATURE_TAP","PAR_EAP","VSTG_TRANSITION_MEMORY","VISUAL_ALIAS_CONFLICT","TASK_PERCEPT_SEPARATION","HYBRID_STATE_FINGERPRINT","ACTION_GROUNDED_CROP_MEMORY","POST_ACTION_VERIFICATION"],
+  "relations": [
+    {"a":"QNDRF_FEATURE_TAP","b":"VSTG_TRANSITION_MEMORY","type":"SUPPLIES_VERSIONED_VISUAL_STATE_EVIDENCE"},
+    {"a":"PAR_EAP","b":"VSTG_TRANSITION_MEMORY","type":"SUPPLIES_BOUNDED_RETRIEVAL_ASSEMBLY"},
+    {"a":"ACTION_GROUNDED_CROP_MEMORY","b":"VSTG_TRANSITION_MEMORY","type":"REFINES_TRANSITION_EVIDENCE_STORAGE"},
+    {"a":"TASK_PERCEPT_SEPARATION","b":"VSTG_TRANSITION_MEMORY","type":"PREVENTS_SCREEN_EQ_PROGRESS_CONFUSION"},
+    {"a":"VISUAL_ALIAS_CONFLICT","b":"VSTG_TRANSITION_MEMORY","type":"ANTI_CONFIRMATION_ABSTENTION_GATE"},
+    {"a":"HYBRID_STATE_FINGERPRINT","b":"VISUAL_ALIAS_CONFLICT","type":"CANDIDATE_ALIAS_REDUCTION"},
+    {"a":"POST_ACTION_VERIFICATION","b":"VSTG_TRANSITION_MEMORY","type":"ADMITS_ONLY_VERIFIED_OUTCOME_EDGES"}
+  ],
+  "synthesis": "VSTG is only coherent if it composes existing QNDRF/PAR evidence and Frank authority/re-entry semantics. It must not become a separate execution KG. Canonical transitions live in UnifiedDB; ClayGraph is rebuildable topology; EAP retrieves context; current sensor evidence and deterministic effect authority remain dominant.",
+  "promotion_state": "CANDIDATE_ONLY"
+}

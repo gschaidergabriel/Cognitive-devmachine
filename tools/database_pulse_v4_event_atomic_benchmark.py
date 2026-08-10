@@ -171,6 +171,7 @@ def benchmark(rows: int, repeat: int, catchup_batch: int) -> dict:
             reentry_mode="NO_REENTRY",
             now="apply-big",
         ))
+        big_source_epoch_after = int(runtime._state()["source_epoch"])
 
         # Many separate transactions exercise bounded event-wise catch-up and source epochs.
         event_epochs: list[int] = []
@@ -240,10 +241,7 @@ def benchmark(rows: int, repeat: int, catchup_batch: int) -> dict:
             "bootstrap": {
                 "backlog": 0,
                 "bridge_mode": bootstrap["bootstrap_mode"],
-                "u12_source_epoch": int(runtime.con.execute(
-                    "SELECT source_epoch FROM frank_database_pulse_checkpoints "
-                    "WHERE pulse_index=0 LIMIT 1"
-                ).fetchone()[0]) if False else initial_epoch,
+                "u12_source_epoch": initial_epoch,
                 "ledger_epoch": initial_epoch,
             },
             "first_cognitive_pulse_ms": round(first_ms, 6),
@@ -262,10 +260,9 @@ def benchmark(rows: int, repeat: int, catchup_batch: int) -> dict:
                 "pulse_ms": round(big_ms, 6),
                 "applied_delta_count": big.applied_delta_count,
                 "memory_update_observed_count": big.memory_update_observed_count,
-                "source_epoch_after": int(runtime.con.execute(
-                    "SELECT source_epoch FROM frank_database_pulse_state WHERE singleton_id=1"
-                ).fetchone()[0]),
+                "source_epoch_after": big_source_epoch_after,
                 "event_epoch": big_epoch,
+                "event_boundary_pass": big_source_epoch_after == big_epoch,
             },
             "many_event_catchup": {
                 "event_count": many_count,
@@ -299,7 +296,7 @@ def main() -> None:
     repeat=max(1,min(30,a.repeat)); batch=max(4,min(512,a.catchup_batch))
     results=[benchmark(n,repeat,batch) for n in sizes]
     payload={
-        "schema_version":"1.0",
+        "schema_version":"1.1",
         "benchmark_class":"CLAY_SELF_USE_ENGINEERING_DIFFERENTIAL",
         "implementation":"database_pulse_runtime_v4_event_atomic",
         "results":results,

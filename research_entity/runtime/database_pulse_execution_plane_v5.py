@@ -35,6 +35,10 @@ Integrity has two layers:
   are pending, and periodically on idle Pulses. Between full audits, no global-integrity claim is
   made; selected context still receives use-boundary verification.
 
+State and receipt hashes form an acyclic provenance graph: Pulse state binds the semantic basis,
+source cursor and cognitive assembly hash; the receipt then binds the completed post-state hash.
+No state hash depends on a receipt hash that itself depends on that state hash.
+
 This is a research candidate, not a promoted Harness component and never effect authority.
 """
 
@@ -180,7 +184,7 @@ class DatabasePulseExecutionPlaneV5(DatabasePulseV0):
                 "last_source_event_seq": int(cursor),
                 "semantic_state_hash": self.ledger.semantic_state_hash,
                 "last_focus_refs": [],
-                "last_cognitive_receipt_hash": None,
+                "last_cognitive_assembly_hash": None,
                 "integrity": "MIGRATION_OR_BOOTSTRAP_NO_GLOBAL_CLAIM",
             }
             material = self._material_from_mapping(old)
@@ -245,8 +249,6 @@ class DatabasePulseExecutionPlaneV5(DatabasePulseV0):
                 raise PulseIntegrityError("V5 source_epoch is ahead of StateLedger")
             return
 
-        # Explicit compatibility adoption: preserve existing U12 source_epoch and derive the
-        # corresponding authoritative event boundary. No historical Pulse credit is invented.
         source_epoch = int(state["source_epoch"])
         if source_epoch > self.ledger.epoch:
             raise PulseIntegrityError("legacy U12 source_epoch is ahead of StateLedger")
@@ -346,7 +348,8 @@ class DatabasePulseExecutionPlaneV5(DatabasePulseV0):
             if isinstance(body, dict) and body.get("implementation") == IMPLEMENTATION_ID \
                     and body.get("invocation_id") == invocation_id:
                 supplied = body.get("receipt_hash")
-                plain = dict(body); plain.pop("receipt_hash", None)
+                plain = dict(body)
+                plain.pop("receipt_hash", None)
                 if not isinstance(supplied, str) or h(plain) != supplied:
                     raise PulseIntegrityError("existing V5 receipt hash mismatch")
                 return body
@@ -364,7 +367,8 @@ class DatabasePulseExecutionPlaneV5(DatabasePulseV0):
             if isinstance(body, dict) and body.get("implementation") == IMPLEMENTATION_ID \
                     and body.get("mode") == "COGNITIVE":
                 supplied = body.get("receipt_hash")
-                plain = dict(body); plain.pop("receipt_hash", None)
+                plain = dict(body)
+                plain.pop("receipt_hash", None)
                 if not isinstance(supplied, str) or h(plain) != supplied:
                     raise PulseIntegrityError("latest V5 cognitive receipt hash mismatch")
                 return body
@@ -454,7 +458,11 @@ class DatabasePulseExecutionPlaneV5(DatabasePulseV0):
                 "last_source_event_seq": cursor_after,
                 "semantic_state_hash": semantic_hash,
                 "last_focus_refs": list(focus_refs),
-                "last_cognitive_receipt_hash": None,
+                "last_cognitive_assembly_hash": (
+                    assembly_hash
+                    if mode == "COGNITIVE"
+                    else old_body.get("last_cognitive_assembly_hash")
+                ),
                 "integrity": integrity_mode,
                 "focus_guard_passed": focus_guard_passed,
                 "physical_rank_mode": physical_rank_mode,
@@ -483,7 +491,7 @@ class DatabasePulseExecutionPlaneV5(DatabasePulseV0):
                 "effect_count": 0,
             }
             receipt_body: dict[str, Any] = {
-                "schema_version": "5.0-research",
+                "schema_version": "5.1-research",
                 "implementation": IMPLEMENTATION_ID,
                 "pulse_contract": PULSE_CONTRACT,
                 "mode": mode,
@@ -516,14 +524,6 @@ class DatabasePulseExecutionPlaneV5(DatabasePulseV0):
                 "authority": "ASSEMBLY_CONTEXT_ONLY_NO_EFFECT_AUTHORITY",
                 "effect_authority": "NONE",
             }
-            receipt_body["receipt_hash"] = h(receipt_body)
-            state_body["last_cognitive_receipt_hash"] = (
-                receipt_body["receipt_hash"] if mode == "COGNITIVE" else old_body.get("last_cognitive_receipt_hash")
-            )
-            material["state_clay"] = _json(state_body)
-            post_hash = _sha(_json(material))
-            receipt_body["post_state_hash"] = post_hash
-            receipt_body.pop("receipt_hash", None)
             receipt_body["receipt_hash"] = h(receipt_body)
             receipt_clay = _json(receipt_body)
 

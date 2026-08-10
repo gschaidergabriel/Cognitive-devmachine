@@ -1,0 +1,83 @@
+name: UnifiedDB V16.1 Integrity Hostinger
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/unifieddb-v16-1-integrity-hostinger.yml'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V12_SEGMENTED_PULSE_GENERATIONS.sql'
+      - 'research_entity/runtime/semantic_access_pulse_v12.py'
+      - 'research_entity/runtime/test_semantic_access_pulse_v12.py'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V16_1_SEGMENT_INTEGRITY.sql'
+      - 'research_entity/runtime/semantic_access_pulse_v16_1_integrity.py'
+      - 'research_entity/runtime/test_semantic_access_pulse_v16_1_integrity.py'
+      - 'tools/benchmark_unifieddb_v16_1_integrity.py'
+  workflow_dispatch:
+
+concurrency:
+  group: unifieddb-v16-1-integrity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hostinger-v16-1-integrity:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture exact runtime metadata
+        run: |
+          set -euxo pipefail
+          mkdir -p artifacts
+          {
+            echo "commit=${GITHUB_SHA}"
+            date -u +"utc=%Y-%m-%dT%H:%M:%SZ"
+            uname -a
+            python3 --version
+            python3 - <<'PY'
+          import platform, sqlite3
+          print('platform=', platform.platform())
+          print('machine=', platform.machine())
+          print('processor=', platform.processor() or 'UNKNOWN')
+          print('sqlite=', sqlite3.sqlite_version)
+          PY
+            command -v lscpu >/dev/null && lscpu || true
+            command -v free >/dev/null && free -h || true
+            df -h .
+          } | tee artifacts/unifieddb_v16_1_environment.txt
+      - name: Compile base and integrity candidate
+        run: |
+          set -euxo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/semantic_access_pulse_v12.py \
+            research_entity/runtime/semantic_access_pulse_v16_1_integrity.py \
+            research_entity/runtime/test_semantic_access_pulse_v16_1_integrity.py \
+            tools/benchmark_unifieddb_v16_1_integrity.py
+      - name: Preserve V16 base differential/recovery baseline
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 test_semantic_access_pulse_v12.py 2>&1 | tee ../../artifacts/unifieddb_v16_base_tests.txt
+      - name: Run V16.1 tamper and recovery falsifiers
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 test_semantic_access_pulse_v16_1_integrity.py 2>&1 | tee ../../artifacts/unifieddb_v16_1_integrity_tests.txt
+      - name: Measure integrity overhead and repair
+        run: |
+          set -euxo pipefail
+          if command -v /usr/bin/time >/dev/null; then
+            /usr/bin/time -v python3 tools/benchmark_unifieddb_v16_1_integrity.py \
+              > artifacts/unifieddb_v16_1_benchmark.json \
+              2> artifacts/unifieddb_v16_1_time.txt
+          else
+            python3 tools/benchmark_unifieddb_v16_1_integrity.py \
+              | tee artifacts/unifieddb_v16_1_benchmark.json
+            echo 'GNU time unavailable' > artifacts/unifieddb_v16_1_time.txt
+          fi
+          cat artifacts/unifieddb_v16_1_benchmark.json
+          cat artifacts/unifieddb_v16_1_time.txt
+      - name: Upload exact evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-v16-1-integrity-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: error

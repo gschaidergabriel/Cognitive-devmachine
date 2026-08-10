@@ -1,0 +1,94 @@
+name: UnifiedDB Merkle Root Shadow Benchmark
+
+on:
+  push:
+    branches:
+      - research/unifieddb-merkle-root-shadow-20260810
+    paths:
+      - '.github/workflows/unifieddb-merkle-root-shadow-benchmark.yml'
+      - 'research_entity/experiments/unifieddb_state_root_v2/**'
+      - 'research_entity/harness/reference/state_ledger.py'
+  pull_request:
+    paths:
+      - '.github/workflows/unifieddb-merkle-root-shadow-benchmark.yml'
+      - 'research_entity/experiments/unifieddb_state_root_v2/**'
+      - 'research_entity/harness/reference/state_ledger.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unifieddb-merkle-shadow-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  merkle-shadow:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+
+      - name: Runner metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,platform,socket,sqlite3
+          print(json.dumps({
+            'hostname':socket.gethostname(),
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'sqlite':sqlite3.sqlite_version,
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+          },sort_keys=True))
+          PY
+
+      - name: Falsification tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research_entity/experiments/unifieddb_state_root_v2
+          python3 -m unittest -v test_merkle_treap_shadow.py
+
+      - name: Root-maintenance benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 research_entity/experiments/unifieddb_state_root_v2/benchmark_merkle_treap_shadow.py \
+            --sizes 1000,5000,20000,50000 \
+            --updates 500 \
+            --repeats 5 \
+            --output /tmp/UNIFIEDDB_MERKLE_ROOT_SHADOW_BENCHMARK.json
+
+      - name: Evidence sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/UNIFIEDDB_MERKLE_ROOT_SHADOW_BENCHMARK.json',encoding='utf-8'))
+          assert p['benchmark']=='UNIFIEDDB_STATE_ROOT_V2_MERKLE_SHADOW'
+          assert p['promotion_gate']['canonical_hash_changed'] is False
+          for row in p['results']:
+              assert row['current_exact_root']['streaming_equals_legacy'] is True, row
+              assert row['merkle_shadow']['rebuild_verified'] is True, row
+              assert row['merkle_shadow']['order_independent_rebuild'] is True, row
+              assert row['hash_maintenance_speedup_p50_x'] > 1.0, row
+          print('UNIFIEDDB_MERKLE_SHADOW=MEASURED_NONCANONICAL')
+          print(json.dumps([{ 
+              'rows':r['rows_initial'],
+              'exact_p50_us':r['current_exact_root']['latency_us']['p50'],
+              'shadow_update_p50_us':r['merkle_shadow']['incremental_latency_us']['p50'],
+              'speedup_x':r['hash_maintenance_speedup_p50_x'],
+              'rebuild_us':r['merkle_shadow']['rebuild_verification_us'],
+              'max_depth':r['merkle_shadow']['path_depth_max'],
+          } for r in p['results']],sort_keys=True))
+          PY

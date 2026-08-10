@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS semantic_access_seed_invalidations_v13(
   seed_id TEXT NOT NULL,
   previous_generation_id TEXT NOT NULL,
   invalidation_class TEXT NOT NULL CHECK(invalidation_class IN ('EXACT_DEPENDENCY','PARTIAL_CAPTURE','GLOBAL_BARRIER')),
-  created_at TEXT NOT NULL
+  delta_admitted_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_semantic_access_seed_invalid_v13_seed
 ON semantic_access_seed_invalidations_v13(seed_id,source_epoch DESC,graph_epoch DESC);
@@ -65,13 +65,15 @@ ON semantic_access_seed_promotions_v13(seed_id,source_epoch DESC,graph_epoch DES
 
 -- The existing U12 Pulse marks each admitted delta applied inside the SAME transaction as the
 -- state/receipt/checkpoint. This trigger therefore invalidates affected U13 read heads atomically.
+-- Global barriers can be encoded either by typed changed_ref prefixes or by reason_class, so a
+-- malformed/non-canonical ref cannot accidentally preserve a semantically stale head.
 CREATE TRIGGER IF NOT EXISTS trg_pulse_invalidate_semantic_access_v13
 AFTER UPDATE OF applied_pulse_id ON frank_database_pulse_delta_queue
 WHEN OLD.applied_pulse_id IS NULL AND NEW.applied_pulse_id IS NOT NULL
 BEGIN
   INSERT OR IGNORE INTO semantic_access_seed_invalidations_v13(
     invalidation_id,pulse_id,delta_id,changed_ref,reason_class,source_epoch,graph_epoch,
-    seed_id,previous_generation_id,invalidation_class,created_at
+    seed_id,previous_generation_id,invalidation_class,delta_admitted_at
   )
   SELECT
     'u13:' || NEW.delta_id || ':' || h.seed_id,
@@ -80,7 +82,11 @@ BEGIN
     CASE
       WHEN NEW.changed_ref GLOB 'GLOBAL:*' OR NEW.changed_ref GLOB 'POLICY:*'
         OR NEW.changed_ref GLOB 'COMPILER:*' OR NEW.changed_ref GLOB 'GRAPH_SCHEMA:*'
-        OR NEW.changed_ref GLOB 'AUTHORITY_SCHEMA:*' THEN 'GLOBAL_BARRIER'
+        OR NEW.changed_ref GLOB 'AUTHORITY_SCHEMA:*'
+        OR UPPER(NEW.reason_class) IN (
+          'GLOBAL_BARRIER','POLICY_CHANGE','COMPILER_CHANGE','GRAPH_SCHEMA_CHANGE',
+          'AUTHORITY_SCHEMA_CHANGE','DERIVATION_CHANGE'
+        ) THEN 'GLOBAL_BARRIER'
       WHEN h.dependency_capture='PARTIAL' THEN 'PARTIAL_CAPTURE'
       ELSE 'EXACT_DEPENDENCY'
     END,
@@ -91,6 +97,10 @@ BEGIN
     OR NEW.changed_ref GLOB 'GLOBAL:*' OR NEW.changed_ref GLOB 'POLICY:*'
     OR NEW.changed_ref GLOB 'COMPILER:*' OR NEW.changed_ref GLOB 'GRAPH_SCHEMA:*'
     OR NEW.changed_ref GLOB 'AUTHORITY_SCHEMA:*'
+    OR UPPER(NEW.reason_class) IN (
+      'GLOBAL_BARRIER','POLICY_CHANGE','COMPILER_CHANGE','GRAPH_SCHEMA_CHANGE',
+      'AUTHORITY_SCHEMA_CHANGE','DERIVATION_CHANGE'
+    )
     OR EXISTS(
       SELECT 1 FROM semantic_access_seed_dependencies_v13 d
       WHERE d.generation_id=h.generation_id AND d.seed_id=h.seed_id
@@ -125,9 +135,10 @@ WHERE s.singleton_id=1 AND s.status IN ('PULSING','PAUSED','DEGRADED')
 -- 2. U13 reuses U11 immutable path rows; it does not create another path truth store.
 -- 3. COMPLETE heads survive unrelated global epoch increments iff no admitted Pulse delta matches
 --    one of their declared dependencies. PARTIAL heads conservatively stale on every applied delta.
--- 4. Global policy/compiler/schema barriers stale all heads.
+-- 4. Global policy/compiler/schema/derivation barriers stale all heads by ref OR reason class.
 -- 5. Invalidation is coupled to U12 delta acknowledgement and rolls back with a failed Pulse.
 -- 6. STALE heads never appear in the hot view; callers must fall back/rebuild.
 -- 7. A seed-generation promotion is valid only after explicit runtime verification against the
---    current U12 Pulse source/graph epochs and non-empty U11 path membership.
+--    current U12 Pulse source/graph epochs, dependency certificate and non-empty U11 membership.
 -- 8. Rank/reachability remain non-authoritative context; proof/effect authority is unchanged.
+-- 9. Invalidation receipt time is the source delta admission time; U12 pulse_id binds execution.

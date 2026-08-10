@@ -1,0 +1,161 @@
+{
+  "schema": "clay.unifieddb.emergent_preprocessor_integration.v1",
+  "receipt_id": "20260810_CHATGPT_PULSE_EMERGENT_PREPROCESSOR_INTEGRATION_V1",
+  "created_at": "2026-08-10T05:40:00Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "scope": "UnifiedDB + Database Pulse + Evidence Coalition + EAP/ClayGraph + projection maintenance integration",
+  "architecture_hypothesis": {
+    "statement": "The winning Frank workload architecture is not a monolithic replacement database. It is an authoritative event/state plane plus a disposable model-input compiler that assembles the smallest sufficient provenance-bound evidence/possibility coalition and selectively deepens explicit gaps.",
+    "layers": [
+      {
+        "order": 0,
+        "name": "AUTHORITATIVE_STATE_EVENT_PLANE",
+        "mechanism": "UnifiedDB/StateLedger",
+        "law": "semantic/logical state, epochs, provenance, transactions, replay and raw event identity remain authoritative here; conventional physical indexes are allowed when Pareto-best"
+      },
+      {
+        "order": 1,
+        "name": "NONSEMANTIC_PULSE_EXECUTION_PLANE",
+        "candidate": "PR_143_DATABASE_PULSE_V6_X",
+        "law": "consume complete authoritative StateLedger events and persist Pulse cursor/state/receipts without writing endogenous DATABASE_PULSE semantic events or pulse:* semantic rows",
+        "integration_boundary": "raw StateLedger event cursor may not be replaced by effectivized projection deltas"
+      },
+      {
+        "order": 2,
+        "name": "ABA_SAFE_PROJECTION_MAINTENANCE",
+        "candidate": "PR_150_S2_ABA_SAFE",
+        "law": "read-free event batches may reduce derived publication work only when final-state safety is explicit; equal final content never erases touched record/version/provenance identity; union all impacted seeds"
+      },
+      {
+        "order": 3,
+        "name": "PHYSICAL_RANK_LIFECYCLE_AUDIT",
+        "candidate": "PR_146_DATABASE_PULSE_RANK_V6",
+        "law": "rank index BUILD/DROP stays outside cognition reads, uses physical+semantic CAS and same-transaction provenance-complete audit including actor, policy_provenance_ref, policy_decision_hash and monotonic audit sequence"
+      },
+      {
+        "order": 4,
+        "name": "EVIDENCE_COALITION_COMPILER",
+        "candidate": "PR_141_REAL_CLAIM_COALITION_V2_1",
+        "law": "explicit CURRENT/OPEN/REFUTED/SUPERSEDED or support/blocker facets receive separate coalition slots; requested evidence classes do not compete destructively in one undifferentiated global rank; residual budget may use ordinary rank"
+      },
+      {
+        "order": 5,
+        "name": "SUFFICIENCY_GATED_QUERY_AWARE_DEEPENING",
+        "candidate": "PR_146_EAP_1_7_1_SAFE_PLUS_QCEP_LINEAGE",
+        "law": "run typed sufficiency first; only explicit remaining gaps may trigger query/focus-conditioned ClayGraph/EAP deepening; explicit REFUTES/COUNTEREVIDENCE/CONTRADICTS edges are protected from relevance pruning; unsupported negation or zero corpus overlap falls back exactly to parent retrieval; conflict/revoked nodes remain negative space and cannot close the gap"
+      },
+      {
+        "order": 6,
+        "name": "MODEL_INPUT_CAPSULE",
+        "law": "emit the smallest sufficient provenance-bound coalition with missing facets, alternatives and counterevidence; STOP when sufficient; ABSTAIN or route to a stronger conventional/dense/graph/tool retriever when insufficient; never pad merely to fill k"
+      }
+    ]
+  },
+  "current_candidate_heads_observed": {
+    "pulse_execution_pr_143": "d1d9f60b0780530a70b31288f6d783bf4f6189e9",
+    "rank_eap_pr_146": "363b6340ed8d957393549bd0ee7f25293514e0c9",
+    "s2_aba_pr_150": "b32518556c5a368dc811bc6efd82c982e03ff994",
+    "real_claim_coalition_pr_141": "2a07d310c85b7d0f7b67485b7a26db40cd979c0e"
+  },
+  "fusion_findings": [
+    {
+      "finding": "Semantic observer backaction and retrieval/projection optimization are distinct problems.",
+      "consequence": "PR143 and PR146 are complementary rather than substitutes: PR143 removes endogenous Pulse semantic self-churn; PR146 hardens rank lifecycle and query-aware derived retrieval."
+    },
+    {
+      "finding": "Content equality is weaker than causal/version identity.",
+      "consequence": "S2 must remain downstream of raw event consumption and must conservatively invalidate every touched logical identity across A->B->A content-ABA chains."
+    },
+    {
+      "finding": "Global Top-K is the wrong primary abstraction for queries requiring multiple epistemic facets.",
+      "consequence": "Compile required Evidence Coalition slots before global truncation; graph deepening should target unsatisfied typed gaps rather than simply expanding high-score neighborhoods."
+    },
+    {
+      "finding": "Query-aware graph traversal can create confirmation bias if relevance damping erases explicit counterevidence.",
+      "consequence": "EAP-1.7.1-SAFE protects typed counter-relations at parent weight and falls back conservatively on unsupported negation/zero lexical overlap."
+    },
+    {
+      "finding": "Accuracy gains from semantic preprocessing must not be misattributed to a storage engine comparison.",
+      "consequence": "Matched SQLite/PostgreSQL/pgvector/graph-native competitors must receive the same semantics; only execution-layer speed can then be compared as an engine effect."
+    }
+  ],
+  "new_counterhypotheses_and_obligations": [
+    {
+      "id": "PHYSICAL_OBSERVER_BACKACTION_SAME_SQLITE",
+      "counterhypothesis": "Although PR143 removes semantic observer backaction, idle/catch-up Pulse execution receipts and checkpoints still share ledger.conn / the same SQLite file and may create writer-lock, WAL or checkpoint interference for authoritative StateLedger writers.",
+      "test": "Matched same-file versus physically isolated execution-plane competition test on a WAL-reset-fixed SQLite family; record authoritative writer p50/p95/p99, SQLITE_BUSY/retry rate, WAL bytes, checkpoint latency and Pulse latency.",
+      "status": "ROUTED_TO_PR_143_REVIEW_4893939019"
+    },
+    {
+      "id": "PULSE_V6_SELECTED_IMPLEMENTATION_ID",
+      "counterhypothesis": "Downstream integration can bind the wrong execution semantics because PR143 body selects V6.1 while V6.4 source describes itself as preferred performance candidate.",
+      "test": "Explicitly disposition V6.2/V6.3/V6.4 and pin one exact implementation ID before cross-branch matched integration.",
+      "status": "ROUTED_TO_PR_143_REVIEW_4893939019"
+    },
+    {
+      "id": "PROTECTED_COUNTEREVIDENCE_NEGATIVE_SPACE",
+      "counterhypothesis": "Protecting a REFUTES edge from query damping could accidentally become an epistemic bypass if its target is CONFLICT/REVOKED.",
+      "test": "Protected counter-relation must preserve only parent edge weight while parent negative-space still suppresses/blocks target and downstream propagation.",
+      "status": "ROUTED_TO_PR_146_REVIEW_4893928350"
+    }
+  ],
+  "execution_truth": {
+    "github_hosted_research_pr_jobs": "OBSERVED_FAILING_BEFORE_VISIBLE_STEPS; not classified as Python failures",
+    "hostinger_same_repo_jobs": "QUEUED at latest observation across current Pulse/EAP/S2 lanes",
+    "cross_repo_https_private_clone": "FAILED_NO_CREDENTIALS",
+    "cross_repo_runner_ssh_private_clone": "FAILED_PERMISSION_DENIED_PUBLICKEY",
+    "observed_hostinger": {
+      "host": "digital-retina",
+      "python": "3.12.3",
+      "sqlite": "3.45.1",
+      "linux": "6.8.0-117-generic x86_64"
+    },
+    "sqlite_multiwriter_gate": "BLOCKED_ON_OBSERVED_3_45_1; require 3.51.3+ or documented fixed backport family before WAL concurrency promotion"
+  },
+  "external_evidence_refresh": [
+    {
+      "source": "SQLite WAL documentation / WAL-reset bug",
+      "retrieved": "2026-08-10",
+      "use": "concurrency safety gate only"
+    },
+    {
+      "source": "Query-Aware Flow Diffusion for Graph-Based RAG with Retrieval Guarantees, arXiv:2605.18775",
+      "retrieved": "2026-08-10",
+      "use": "supports testing query-conditioned traversal, not Clay validation"
+    },
+    {
+      "source": "Query-Aware Spreading Activation for Multi-Hop Retrieval over Knowledge Graphs, arXiv:2606.30133",
+      "retrieved": "2026-08-10",
+      "use": "supports bounded query-aware gating and latency/quality ablations, not Clay validation"
+    },
+    {
+      "source": "PAGE-RAG, arXiv:2607.19301",
+      "retrieved": "2026-08-10",
+      "use": "supports treating graph as a projection/navigation skeleton rather than an independent truth source"
+    }
+  ],
+  "promotion_vector": {
+    "semantic_provenance_integrity": "REQUIRED_NO_REGRESSION",
+    "retrieval_completeness_by_declared_facet": "REQUIRED_NO_REGRESSION_AND_ONE_MATERIAL_STRICT_WIN",
+    "counterevidence_recall": "REQUIRED_NO_REGRESSION",
+    "context_tokens_for_equal_sufficiency": "MEASURE",
+    "downstream_model_decision_quality_equal_context_budget": "MEASURE",
+    "hot_latency_p50_p95_p99": "MEASURE",
+    "build_update_invalidation_cost": "MEASURE",
+    "authoritative_writer_interference": "MEASURE",
+    "crash_restart_replay_equivalence": "REQUIRED",
+    "held_out_ood_ambiguity_negation": "REQUIRED",
+    "sqlite_postgres_pgvector_graph_native_matched_semantics": "REQUIRED_BEFORE_BROAD_SUPERIORITY_CLAIM",
+    "andreas_ubuntu_target": "FINAL_ACCEPTANCE_REQUIRED"
+  },
+  "architecture_decision": {
+    "status": "CANDIDATE_INTEGRATION_CONTRACT_CREATED_NO_CANONICAL_PROMOTION",
+    "selected_direction": "AUTHORITATIVE_EVENT_PLANE_PLUS_DISPOSABLE_SUFFICIENCY_GATED_MODEL_INPUT_COMPILER",
+    "rejected_direction": "MONOLITHIC_CUSTOM_DATABASE_THAT_REPLACES_CONVENTIONAL_STORAGE_FOR_IDEOLOGICAL_REASONS",
+    "reason": "Current evidence supports semantic preprocessing, bounded projection and observer-isolated execution; it does not support universal storage-engine replacement."
+  },
+  "authority": "RESEARCH_EVIDENCE_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY"
+}

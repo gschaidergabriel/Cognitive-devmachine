@@ -1,0 +1,53 @@
+module clay.unifieddb.publication_barrier_candidate
+
+status CANDIDATE_NOT_PROMOTED
+scope authoritative self.root semantic-state publication and recovery
+
+state PublicationReceipt {
+  tx_id : TxId
+  parent_selected_head : Hash
+  new_state_commitment : Hash
+  execution_id : ExecutionId
+  lease_epoch : Integer
+  state : PREPARED | PUBLISHED | QUARANTINED
+  prepared_at : Time
+  published_at : Option<Time>
+}
+
+fn prepare(authoritative_mutation,current_witness,execution_binding) -> PublicationReceipt {
+  require current_witness.selected_head_hash == ExternalSelectedHead.current
+  require execution_binding == CurrentExecutionGeneration
+  atomic UnifiedDB BEGIN_IMMEDIATE {
+    apply authoritative_mutation
+    new_commitment = recompute_dirty_hierarchical_commitment()
+    append immutable PublicationReceipt(
+      parent_selected_head=ExternalSelectedHead.current,
+      new_state_commitment=new_commitment,
+      execution_id=execution_binding.execution_id,
+      lease_epoch=execution_binding.lease_epoch,
+      state=PREPARED)
+  }
+}
+
+fn publish(receipt) {
+  require receipt.state == PREPARED
+  external_compare_and_swap_selected_head(receipt.parent_selected_head, receipt.new_state_commitment)
+  atomic UnifiedDB BEGIN_IMMEDIATE {
+    require recompute_or_verify_current_commitment() == receipt.new_state_commitment
+    mark receipt PUBLISHED
+  }
+}
+
+recovery_rule db=PREPARED + selector=parent + db_commitment=new -> resume_external_CAS
+recovery_rule db=PREPARED + selector=new + db_commitment=new -> finalize_PUBLISHED
+recovery_rule db=old + selector=new -> FAIL_CLOSED_STATE_ROLLBACK
+recovery_rule db=new + selector=unrelated -> FAIL_CLOSED_DIVERGENT_AUTHORITY
+recovery_rule db=PUBLISHED + selector=new + commitment=new -> RUNNABLE
+recovery_rule db+selector both rolled_back_together -> OUTER_FAILURE_DOMAIN_LIMITATION_NOT_SOLVED
+
+rule PublicationReceipt belongs ROOT_PUBLICATION_META domain
+rule ROOT_PUBLICATION_META excluded_from semantic_content_root_it_records
+rule publication_receipt != SELF
+rule selected_head != effect_authority
+rule PREPARED != runnable_current_state
+rule controlled_restore(old_payload) -> new_child_of_current_selected_head; never resurrect historical head

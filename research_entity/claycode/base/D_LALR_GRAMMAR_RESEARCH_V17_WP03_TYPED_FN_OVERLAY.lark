@@ -12,7 +12,7 @@ start: NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
 module_decl: "module" qid
 version_decl: "version" STRING
 status_decl: "status" qid
-parent_decl: list
+parent_decl: "parent" list
 import_decl: "import" ident "=" REF
 interface_decl: "interface" ident interface_block
 dialect_decl: "dialect" ident dialect_block

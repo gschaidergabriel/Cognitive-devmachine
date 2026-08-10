@@ -1,0 +1,125 @@
+name: ClayCode WP02 V18 Exact Current Bytes Hostinger
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-wp02-v18-exact-current-hostinger.yml'
+      - 'tools/claycode_base_frontend.py'
+      - 'tools/claycode_base_canonicalizer.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hostinger-exact-current:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify exact selected component blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          check_blob() {
+            local path="$1" expected="$2" observed
+            observed="$(git rev-parse "HEAD:${path}")"
+            printf '%s %s\n' "$path" "$observed"
+            test "$observed" = "$expected"
+          }
+          check_blob tools/claycode_base_frontend.py 31598f85a27ade2d98466606af6bdf5a8473cc8d
+          check_blob tools/claycode_base_canonicalizer.py 5605e33c83ca75eb7ede7677328df622731e0461
+          check_blob research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark b27a4da99c9eff68302d550aad78c4e64cabe5c3
+          check_blob research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay a2b856d1362e8ce2420338f1bd705a49a86c2c7d
+          check_blob research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay dbb72460bc5a049c784d1acd1aaef152fa37f797
+          check_blob research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt 4a361757efede020cfb288ad7beda2c4a7e6c6b5
+
+      - name: Build hash-locked isolated parser environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV="/tmp/clay-wp02-v18-exact-${GITHUB_RUN_ID}"
+          python3 -m venv "$VENV"
+          "$VENV/bin/pip" install --disable-pip-version-check --require-hashes --only-binary=:all: -r research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt
+
+      - name: Execute strict current-corpus canonical gate and persist receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV="/tmp/clay-wp02-v18-exact-${GITHUB_RUN_ID}"
+          RECEIPT_TMP="/tmp/wp02_v18_exact_${GITHUB_RUN_ID}.json"
+          TIME_TMP="/tmp/wp02_v18_exact_${GITHUB_RUN_ID}.time"
+          /usr/bin/time -v "$VENV/bin/python" tools/claycode_base_canonicalizer.py --output "$RECEIPT_TMP" >/tmp/wp02_v18_exact_stdout.json 2>"$TIME_TMP"
+          "$VENV/bin/python" - <<'PY'
+          import json, os, pathlib, platform, subprocess, sys
+
+          root = pathlib.Path('.')
+          inner_path = pathlib.Path('/tmp') / f"wp02_v18_exact_{os.environ['GITHUB_RUN_ID']}.json"
+          time_path = pathlib.Path('/tmp') / f"wp02_v18_exact_{os.environ['GITHUB_RUN_ID']}.time"
+          inner = json.loads(inner_path.read_text())
+          if not inner.get('pass'):
+              raise SystemExit('strict canonicalizer receipt not PASS')
+
+          expected = {
+              'tools/claycode_base_frontend.py': '31598f85a27ade2d98466606af6bdf5a8473cc8d',
+              'tools/claycode_base_canonicalizer.py': '5605e33c83ca75eb7ede7677328df622731e0461',
+              'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark': 'b27a4da99c9eff68302d550aad78c4e64cabe5c3',
+              'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay': 'a2b856d1362e8ce2420338f1bd705a49a86c2c7d',
+              'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay': 'dbb72460bc5a049c784d1acd1aaef152fa37f797',
+              'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt': '4a361757efede020cfb288ad7beda2c4a7e6c6b5',
+          }
+          observed = {}
+          for path in expected:
+              observed[path] = subprocess.check_output(['git','rev-parse',f'HEAD:{path}'], text=True).strip()
+          if observed != expected:
+              raise SystemExit(f'blob identity drift: {observed!r}')
+
+          pip_freeze = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'], text=True).splitlines()
+          receipt = {
+              'schema_version': '1.0',
+              'receipt_id': f"WP02-V18-EXACT-CURRENT-HOSTINGER-{os.environ['GITHUB_RUN_ID']}",
+              'truth_class': 'VERIFIED_REMOTE_EXECUTION_EXACT_SELECTED_BYTES_HOSTINGER_UBUNTU_LANE',
+              'tested_commit': os.environ['GITHUB_SHA'],
+              'run_id': os.environ['GITHUB_RUN_ID'],
+              'runner_name': os.environ.get('RUNNER_NAME','UNKNOWN'),
+              'runner_os': os.environ.get('RUNNER_OS','UNKNOWN'),
+              'runner_arch': os.environ.get('RUNNER_ARCH','UNKNOWN'),
+              'platform': platform.platform(),
+              'python': sys.version,
+              'dependencies': pip_freeze,
+              'expected_component_blobs': expected,
+              'observed_component_blobs': observed,
+              'strict_current_corpus_receipt': inner,
+              'resource_time_v': time_path.read_text(errors='replace'),
+              'result': 'PASS',
+              'scope_guard': 'This verifies the exact selected WP02 V18/frontend/canonicalizer/G9/Dialect/dependency-lock bytes on the Hostinger self-hosted Linux/X64 lane. It is bounded CC-WP-02 evidence, not CC-WP-03+, H1/H2/H3, Andreas-target, or final release evidence.',
+              'promotion': 'WP02_ADJUDICATION_REQUIRED_NOT_AUTO_PROMOTED',
+          }
+          out = root / 'research_entity/claycode/base/receipts/WP02_V18_EXACT_CURRENT_BYTES_HOSTINGER_LATEST.json'
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          PY
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/claycode/base/receipts/WP02_V18_EXACT_CURRENT_BYTES_HOSTINGER_LATEST.json
+          git commit -m 'evidence(claycode): record WP02 V18 exact-byte Hostinger receipt' || true
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase origin/main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort || true
+            sleep 2
+          done
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        shell: bash
+        run: rm -rf "/tmp/clay-wp02-v18-exact-${GITHUB_RUN_ID}" /tmp/wp02_v18_exact_${GITHUB_RUN_ID}.json /tmp/wp02_v18_exact_${GITHUB_RUN_ID}.time /tmp/wp02_v18_exact_stdout.json

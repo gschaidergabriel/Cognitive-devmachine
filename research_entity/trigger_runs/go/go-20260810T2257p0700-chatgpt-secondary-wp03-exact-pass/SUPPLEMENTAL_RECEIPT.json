@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2257p0700-chatgpt-secondary-wp03-exact-pass",
+  "parent_run": "go-20260810T2242p0700-chatgpt-secondary-selfroot-replay-wp03",
+  "trigger": "go",
+  "status": "SUPPLEMENTAL_DURABLE_EVIDENCE",
+  "timestamp_local": "2026-08-10T22:57:41+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "organ_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_parent_head_before_write": "78d6ca6fa40820058c67b7092ca1d5d303c083eb",
+  "program_guard": {
+    "program": "frank-v0.1-only",
+    "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "workspace_status_change": "NONE",
+    "automatic_promotion_forbidden": true,
+    "training_authorized": false
+  },
+  "target_vps_component_result": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 153,
+    "branch": "clay/wp03-exact-bundle-on-selfroot-20260810",
+    "workflow_run_id": 31405641849,
+    "workflow_job_id": 93511171074,
+    "tested_sha_manifest": "5dc9ab2e59006f8826757e03d5d6c5e30e550dc1",
+    "workflow_head_sha": "7dfa03c2b7e4ee24576b68e0e0a15cd3fe4961ea",
+    "runner_name": "clay",
+    "hostname": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "repository_permission": "contents:read",
+    "checkout_persist_credentials": false,
+    "status": "PASS_COVERAGE_ONLY",
+    "wp03_status": "OPEN_PENDING_PACKAGE_ADJUDICATION",
+    "scope": "EXACT_ONCE_RESIDUAL_DISPOSITION_AND_CONSUMPTION_COVERAGE_ONLY",
+    "residual_count": 100,
+    "disposition": {
+      "clause_ir": 81,
+      "metadata_ir": 18,
+      "cycle_wp05_deferred": 1,
+      "gaps": 0,
+      "overlaps": 0,
+      "rejected": 0
+    },
+    "consumer": {
+      "clause_registry": 81,
+      "metadata_registry": 18,
+      "implicit_execution_count": 0
+    },
+    "falsifiers": {
+      "authority_tamper": "REJECTED",
+      "cycle_promotion": "REJECTED",
+      "missing_cycle": "REJECTED",
+      "overlap": "REJECTED",
+      "stale_revision": "REJECTED"
+    },
+    "parser_calls_after_frontend_artifact_creation": 0,
+    "authority": {
+      "effect": "NONE",
+      "truth": "NONE",
+      "runtime_execution": "NONE"
+    },
+    "frank_harness_mutation": false,
+    "typed_ir_sha256": "28d4a5fa00d9852c608d513ad5fe358763ca8fc6a035c0678a454eb8bb9bc661",
+    "typed_ir_artifact_sha256": "6a1ea17a2334b41f3d32e0297c5187e07b65617c59b31f93ea5a397cf387da42",
+    "coverage_receipt_sha256": "47378acd0210a876ab312010a80cc3c898a279c59d34153db993cc047f88912e",
+    "clause_receipt_sha256": "82f65063260c8683b625da83ef23fb3d7cbd76e6b27411b1fa57fb7b5bf63064",
+    "metadata_receipt_sha256": "1ab880626a9349c00abc4ae97497e7dac57371f676f076c23953c46fb9f2c3df",
+    "measurement": {
+      "user_seconds": 0.86,
+      "system_seconds": 0.07,
+      "wall_seconds": 0.93,
+      "cpu_percent": 99,
+      "max_rss_kib": 30848,
+      "major_page_faults": 0,
+      "minor_page_faults": 5367,
+      "voluntary_context_switches": 1,
+      "involuntary_context_switches": 4,
+      "swaps": 0,
+      "filesystem_inputs": 0,
+      "filesystem_outputs": 1000,
+      "exit_status": 0
+    },
+    "exact_work_revision": {
+      "frontend_git_blob": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+      "grammar_git_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+      "requirements_lock_git_blob": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+      "typed_ir_git_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+      "g9_v3_git_blob": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+      "dialect_v3_git_blob": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+      "supervisor_git_blob": "2873b02f92d764c63e11e88370f4704333b48d64",
+      "residual_builder_git_blob": "b6f4dec5856f5b5e1774ed75ca71f6ae284fd665",
+      "steering_ref": "000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt",
+      "steering_git_blob": "3204b0f02fb3bd2a84bf4a6380c14f8354fb27e9"
+    },
+    "artifact": {
+      "artifact_id": 9069663899,
+      "artifact_digest": "sha256:36b55d3101ae944386a4dfdb2c7b79642fb6fbc8499801b0e161cdb70436a1a4",
+      "size_bytes": 5112,
+      "expires_at": "2026-09-09T15:54:38Z"
+    }
+  },
+  "negative_result_chain": [
+    {
+      "attempt": 1,
+      "result": "FAIL_PACKAGING_MISSING_SOURCE",
+      "first_falsifier": "missing CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "disposition": "REPAIRED_BY_SYNCING_EXACT_DECLARED_G9_AND_DIALECT_SOURCES"
+    },
+    {
+      "attempt": 2,
+      "result": "FAIL_TYPED_IR_RESERVED_IDENTIFIER",
+      "first_falsifier": "TypedIRError field without name ['status', ':', 'Symbol']",
+      "disposition": "REPAIRED_BY_SYNCING_ALREADY_CURRENT_SHARED_CLAY_TYPED_IR_DIRECT_IDENTIFIER_IMPLEMENTATION"
+    },
+    {
+      "attempt": 3,
+      "result": "PASS_COVERAGE_ONLY",
+      "disposition": "SUPPORTED_COMPONENT_DIRECTION_PENDING_PACKAGE_ADJUDICATION"
+    }
+  ],
+  "deduplication": {
+    "historical_pr_123": "CLOSED_WITHOUT_MERGE",
+    "reason": "identity/source/security edits superseded by #124; orthogonal compiler evidence reproduced on #153",
+    "oob_experiment_count_this_go_remains": 1
+  },
+  "promotion_limits": {
+    "typed_ir_package_pass": false,
+    "type_effect_pass": false,
+    "evaluator_pass": false,
+    "compiler_lowering_pass": false,
+    "runtime_execution_pass": false,
+    "whole_frank_v0_1_acceptance": false,
+    "training_authorization": false
+  },
+  "next_falsifier": "Adjudicate the exact WP03 package against the current F-V01-02 promotion contract, then continue to type/effect checker without converting coverage evidence into authority or runtime claims."
+}

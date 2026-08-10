@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2158p0700-chatgpt-secondary-live-coordination",
+  "delta_id": "EFFECT_PRESENCE_INTEGRATION_DELTA",
+  "created_at": "2026-08-10T23:00:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "research_repo_head_before_write": "24e1ba42d3c33b69f976179d7ad03729b48d3821",
+  "subject": "F-V01-08 token/execution presence -> F-V01-09 effect authority cross-organ fence",
+  "negative_baseline": {
+    "ancestry_pr": 147,
+    "self_hosted_run": 31403006334,
+    "runner": "clay/digital-retina Linux X64",
+    "result": "REPRODUCED_STALE_EFFECT_ATTEMPT_AFTER_PRESENCE_TAKEOVER",
+    "sequence": "holder A epoch N reserves V14 effect; A expires; holder B acquires N+1; old A reservation still admitted RESERVED->COMMITTING",
+    "external_network": false,
+    "external_effect": false,
+    "claim_limit": "integration-admission gap only; not proof of real provider bypass"
+  },
+  "hypothesis": "Every new/retry provider attempt must present a trusted execution fence derived from the admitted self.root execution lease, match an immutable reservation binding, match the current unexpired canonical V15 generation, and be rechecked immediately before provider commit.",
+  "counterhypothesis": "The one-host FrankExecutionGate may already serialize every practical provider path, making persisted generation fencing redundant if all production/recovery/provider paths provably retain the same physical+semantic lease. This remains unproven across persisted crash/retry state.",
+  "candidate_adjudication": {
+    "pr_157": {
+      "disposition": "CLOSED_EVIDENCE_ONLY",
+      "self_hosted_run": 31404574070,
+      "evidence": [
+        "stale takeover fenced",
+        "successor cannot adopt predecessor reservation",
+        "pre-provider holder-change fenced",
+        "reservation+confirmation+binding fault atomicity passed",
+        "historical V14 crash/replay/idempotency checks passed on exact branch bytes",
+        "WP04 production effect contract passed",
+        "SQLite integrity ok and no external network/effect"
+      ],
+      "not_selected_reason": "wrapper/sidecar implementation superseded; stale rejection should not write authoritative effect state"
+    },
+    "pr_160": {
+      "disposition": "OPEN_REPLICATION_ONLY_DO_NOT_MERGE",
+      "tested_sha": "5cd64d05161a39ff7f9186d91e23caa49dbc20ed",
+      "self_hosted_run": 31404984503,
+      "mechanism_evidence": {
+        "compile": "PASS",
+        "fence_matrix": "10_OF_10_PASS",
+        "migration_atomicity": "PASS",
+        "deep_integrity": "12_OF_12_PASS",
+        "external_effect": false
+      },
+      "overall_run": "FAIL_CLOSED",
+      "non_mechanism_failures": [
+        "contemporaneous TELEMETRY_MIGRATOR_INVARIANT_MISSING in repo static audit",
+        "runner environment missing pytest module"
+      ],
+      "strongest_reusable_delta": "begin/retry must explicitly present current execution fence; possession of effect_id is not execution authority",
+      "not_selected_reason": "PR explicitly de-promoted itself to replication/adversarial comparison; V16.1 migration collides with newer execution-continuity sequencing and Python provider boundary lacked selected canonical integration"
+    },
+    "pr_156": {
+      "disposition": "CURRENT_STRONGEST_CANONICAL_INTEGRATION_PATTERN_NOT_PROMOTED",
+      "observed_head": "86641daf7b12606eb74a9898bb5339c332f2b4da",
+      "strengths": [
+        "patches canonical EffectLifecycleRuntime",
+        "IngressExecutionLease derives fence only from admitted FrankExecutionLease",
+        "raw session/client holder refs are hashed in persistence",
+        "expiry equality fails closed",
+        "provider_commit_fence performs final reservation/current-holder recheck",
+        "outcome observation/reconciliation remains available after holder turnover"
+      ],
+      "open_blockers": [
+        "begin_attempt and retry must require presented current execution fence and atomically compare presented->stored->current",
+        "successor V14 conservation test still expects stale RELEASED receipt instead of canonical IDLE/LEASE_RELEASED",
+        "preserve untouched original V14 process-death archaeology distinctly from modified successor tests",
+        "rebase/port into current V16 execution-continuity migration sequence without second schema authority",
+        "effect-presence binding must be immutable against UPDATE/DELETE/rebind",
+        "rerun exact current WP04 signature/type-effect contract after API changes",
+        "prove admitted FrankExecutionLease remains physically/semantically held through reserve/start/final pre-provider boundary",
+        "exact-head self-hosted conservation run still required"
+      ]
+    },
+    "pr_168": {
+      "disposition": "ADVERSARIAL_EVIDENCE_ONLY_STACK_ON_PR156",
+      "head": "64487423c3db3e586d84cfd6da2e9602a59e8d6b",
+      "base": "86641daf7b12606eb74a9898bb5339c332f2b4da",
+      "self_hosted_run": 31406260515,
+      "result": "PASS_ABA_SAME_HOLDER_RESURRECTION_FENCED",
+      "evidence": "same session_ref/client_ref release+reacquire N->N+1 did not resurrect N heartbeat/release/effect reservation; fresh N+1 reservation/attempt admitted; old reservation stayed RESERVED/no attempt_id; SQLite/FK clean; no network/effect/canonical mutation",
+      "interpretation": "lease_epoch is functioning as generation/anti-ABA discriminator on exact tested bytes",
+      "merge_authority": "NONE_INDEPENDENT_OF_PR156"
+    }
+  },
+  "duplicate_work_disposition": {
+    "closed_without_merge": [147, 163],
+    "reason": "retain #147 negative ancestry and #163 simple alternative-baseline idea, but do not create parallel active implementation authority"
+  },
+  "adjacent_authority_provenance_blocker": {
+    "status": "OPEN_SEPARATE_BLOCKER",
+    "evidence": "current value-level EffectRequest can structurally claim authenticated/scoped fields; presence fencing must not mint EffectAuthorization or Capability",
+    "required_falsifier": "malicious/untrusted ClayCode construction/call to authorize_effect must fail at WP04 type/effect/runtime authority boundary while trusted runtime builder succeeds",
+    "effect_presence_credit": "NONE_FOR_AUTHORITY_PROVENANCE"
+  },
+  "promotion_gate": [
+    "exact selected current-main target-VPS run",
+    "current-holder positive control",
+    "A->B stale start denied",
+    "successor cannot steal predecessor reservation",
+    "presented execution fence required at begin/retry",
+    "final pre-provider fence after COMMITTING",
+    "expired/IDLE/RECOVERING/missing presence fail closed",
+    "already-started uncertain outcome remains reconcilable without granting new effect authority",
+    "immutable binding mutation rejection",
+    "original V14 archaeology + successor conservation",
+    "migration atomicity/static/deep/full relevant regressions",
+    "current WP04 type/effect replay",
+    "token ingress fence derived only from retained admitted FrankExecutionLease",
+    "separate authority-provenance blocker resolved"
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_REQUIREMENT_NOT_PROMOTED_IMPLEMENTATION",
+    "requirement": "Effect execution generation must be causal and immutable across reserve/start/retry/pre-provider boundaries; outcome reconciliation is evidence, not effect authority.",
+    "selected_implementation": "NONE_YET",
+    "strongest_pattern": "PR156 + explicit presented-fence law from PR160 + exact adversarial obligations from PR157/PR168",
+    "main_merge_claimed": false
+  },
+  "oob_accounting": {
+    "new_oob_in_this_delta": false,
+    "parent_run_exactly_one_oob": "IDENTITY_AUTHORITY_BRANCH_TOPOLOGY_COLLISION_REDUCTION",
+    "note": "PR168 is another worker/run's explicitly scoped adversarial OOB evidence and does not alter this run's OOB count"
+  },
+  "safety": {
+    "external_effect_performed_by_this_delta": false,
+    "training_authorized": false,
+    "self_harness_authority": "PROPOSAL_ONLY",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "research_write_result": "COMMITTED"
+}

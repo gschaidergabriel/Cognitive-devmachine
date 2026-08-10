@@ -1,0 +1,122 @@
+name: QCEP V03 Exact TopK Self Hosted
+
+on:
+  push:
+    branches: ['research/qcep-exact-topk-v03-20260810']
+    paths:
+      - 'research_entity/harness/reference/query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/test_query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/benchmark_qcep_exact_topk_v03.py'
+      - '.github/workflows/qcep-v03-self-hosted.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/test_query_conditioned_evidence_projection.py'
+      - 'research_entity/harness/reference/benchmark_qcep_exact_topk_v03.py'
+      - '.github/workflows/qcep-v03-self-hosted.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: qcep-v03-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+      - name: Compile exact pinned candidate
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 -m py_compile \
+            research_entity/harness/reference/query_conditioned_evidence_projection.py \
+            research_entity/harness/reference/test_query_conditioned_evidence_projection.py \
+            research_entity/harness/reference/benchmark_qcep_exact_topk_v03.py \
+            research_entity/harness/reference/unifieddb_emergent_exact_topk.py \
+            research_entity/harness/reference/unifieddb_emergent_preprocessor.py
+      - name: Run QCEP invariants
+        run: python3 -m unittest -v research_entity.harness.reference.test_query_conditioned_evidence_projection
+      - name: Run three-way exact Top-K differential
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/qcep-v03
+          python3 -m research_entity.harness.reference.benchmark_qcep_exact_topk_v03 > /tmp/qcep-v03/QCEP_V03.json
+      - name: Enforce candidate gate and attach metadata
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,platform,socket
+          from datetime import datetime,timezone
+          from pathlib import Path
+          p=Path('/tmp/qcep-v03/QCEP_V03.json'); x=json.loads(p.read_text())
+          x['execution_metadata']={
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'github_sha':os.environ['GITHUB_SHA'],
+            'github_run_id':os.environ['GITHUB_RUN_ID'],
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+          }
+          p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(x['candidate_gate'],indent=2,sort_keys=True))
+          if not x['candidate_gate']['promote_for_u15_falsifier']:
+              raise SystemExit('QCEP-0.3 lesion gate failed')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qcep-v03-${{ github.run_id }}
+          path: /tmp/qcep-v03/QCEP_V03.json
+          if-no-files-found: error
+
+  persist:
+    if: ${{ always() && github.event_name == 'push' }}
+    needs: benchmark
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: qcep-v03-${{ github.run_id }}
+          path: /tmp/qcep-v03
+      - name: Persist tested receipt
+        env:
+          TESTED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path('/tmp/qcep-v03/QCEP_V03.json'); x=json.loads(p.read_text())
+          assert x['execution_metadata']['github_sha']==os.environ['TESTED_SHA']
+          out=Path('research_entity/experiments/unifieddb_qcep_v03'); out.mkdir(parents=True,exist_ok=True)
+          (out/'LATEST.json').write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          (out/(x['execution_metadata']['github_run_id']+'.json')).write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-qcep-benchmark'
+          git config user.email 'clay-qcep-benchmark@users.noreply.github.com'
+          git add research_entity/experiments/unifieddb_qcep_v03/
+          git commit -m "evidence(unifieddb): persist QCEP-0.3 Hostinger receipt [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && exit 0
+            sleep $((attempt*2))
+          done
+          exit 1

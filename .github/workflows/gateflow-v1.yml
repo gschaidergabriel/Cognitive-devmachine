@@ -24,5 +24,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install pytest
-      - run: python tools/gateflow.py research_entity/gateflow/GATEFLOW_V1_STATE.json
+      - name: Validate GateFlow state and current conversion window
+        run: >-
+          python tools/gateflow.py
+          research_entity/gateflow/GATEFLOW_V1_STATE.json
+          --conversion-events research_entity/gateflow/GATEFLOW_V1_CONVERSION_WINDOW_2026-08-11.json
       - run: pytest -q tests/test_gateflow.py

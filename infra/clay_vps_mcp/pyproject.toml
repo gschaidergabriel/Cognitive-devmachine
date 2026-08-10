@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "clay-vps-mcp"
+version = "0.1.0"
+description = "Controlled non-destructive VPS MCP executor for Clay/Frank research"
+requires-python = ">=3.10"
+dependencies = [
+  "mcp[cli]>=2.0,<3",
+  "httpx>=0.28,<1",
+  "uvicorn>=0.35,<1",
+]
+
+[project.scripts]
+clay-vps-mcp = "clay_vps_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["clay_vps_mcp"]

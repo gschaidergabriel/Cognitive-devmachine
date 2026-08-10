@@ -1,0 +1,11 @@
+{
+  "baselines":["NAIVE_EUDI_ODRDW","SPLIT_LAYOUT","SIMPLE_APPEND_LOG","LOOP_SUBRANGE_PROJECTION","O_APPEND_ONLY_ABLATION"],
+  "candidate_id":"ATOMIC-CANDIDATE-MOLT-001",
+  "claim":"Ordinary state evolution can preserve immutable root/model prefix in one inode if updates are append-only lineage frames mediated by a capability-separated broker and kernel-enforced append-only inode semantics.",
+  "hard_fail":["any ordinary broker primitive rewrites prefix","cognitive runtime receives general write fd","partial/corrupt frame fabricates state","storage/recovery cost not justified vs split","requires CAP_LINUX_IMMUTABLE in ordinary broker"],
+  "local_tests":["naive O_RDWR prefix attack","O_APPEND positional pwrite negative control","every-byte cut of final frame","random bit corruption","forbidden root semantic frame","replay frame","durable latency/bytes benchmark","restart continuity"],
+  "run_id":"atomic-20260810T2141p0700-chatgpt-secondary-molt",
+  "schema_version":"1.0",
+  "success_gate":"Zero prefix mutation under adversarial ordinary broker surface + zero fabricated state + bounded resource/recovery cost + at least one measured benefit over split.",
+  "target_vps_next":["set FS_APPEND_FL or equivalent under provisioning authority","drop CAP_LINUX_IMMUTABLE from broker","attempt O_WRONLY/O_RDWR nonappend open","attempt pwrite/pwritev2 RWF_NOAPPEND/ftruncate/fallocate/io_uring positioned write","verify root hash and exact tail growth","run real process kill at durability boundaries","compare split and loop-subrange controls"]
+}

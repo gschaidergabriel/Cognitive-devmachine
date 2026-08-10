@@ -282,6 +282,7 @@ def build_typed_ir_v2(units: list[typed.SourceUnit]) -> dict[str, Any]:
         "opaque_unlowered_semantics": remaining_opaque,
         "invariants": {
             **base["invariants"],
+            "source_identity_equals_semantic_identity": "FORBIDDEN",
             "closed_sum_type_variants_are_unique": "REQUIRED",
             "typed_state_identity_includes_all_fields": "REQUIRED",
             "epoch_version_resource_identity_may_be_dropped": "FORBIDDEN",

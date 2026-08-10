@@ -1,0 +1,139 @@
+module clay.research.live_fusion_mesh_v3_dual_plane
+version "0.3-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+parent=@research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+state=UnifiedDB
+topology=ClayGraph
+coordination_language=latest_ClayCode
+
+// Research origin: 2026-08-10 exact-go continuation with live-web refresh and matched synthetic replay.
+// Purpose: stronger networking through a dense low-cost control plane plus sparse full-payload data plane.
+// This strengthens observability/recovery, not truth, authority, or independent evidence.
+
+record ImpactBeacon {
+  beacon_id:Ref
+  delta_id:Ref
+  content_hash:Hash
+  semantic_epoch:Ref
+  kind:NEW|REFINES|CONFIRMS|CONTRADICTS|SUPERSEDES|NO_MATERIAL_CHANGE
+  origin_branch:Ref
+  semantic_tags:Set<Ref>
+  affected_work_refs:Set<Ref>
+  affected_claim_refs:Set<Ref>
+  causal_predecessor_roots:Set<Ref>
+  invalidation_priority:Score
+  payload_ref:Ref
+  created_at:Time
+}
+
+record BranchImpactAck {
+  beacon_id:Ref
+  branch:Ref
+  verdict:AFFECTED|NOT_AFFECTED|UNKNOWN|STALE
+  basis:RAW_CURRENT_WORK|UNIFIEDDB_CURRENT|CLAYGRAPH_CURRENT|LOCAL_DEPENDENCY_INDEX|MULTI_SOURCE
+  basis_epoch:Ref
+  basis_hash:Hash
+  requested_payload:Bool
+  safe_to_continue:Bool
+  observed_at:Time
+}
+
+record AckClosure {
+  delta_id:Ref
+  required_branches:Set<Ref>
+  acked_branches:Set<Ref>
+  unknown_or_stale:Set<Ref>
+  affected_declared:Set<Ref>
+  missing_ack:Set<Ref>
+  deadline:Time
+  closure_state:OPEN|CLOSED|DEGRADED|TIMED_OUT
+}
+
+// Dual plane: all registered branches can cheaply see material impact metadata,
+// while expensive payloads still follow relevance/dependency routing.
+rule material_delta and kind!=NO_MATERIAL_CHANGE -> emit one deduplicated ImpactBeacon to all registered branches
+rule NO_MATERIAL_CHANGE -> DIGEST_ONLY unless explicit affected_work|affected_claim changes
+rule branch receives ImpactBeacon -> evaluate relevance against freshest available local/raw work + UnifiedDB + ClayGraph surfaces
+rule branch relevance evaluation -> emit BranchImpactAck
+rule BranchImpactAck.verdict=AFFECTED -> request_or_receive FULL_REF if not already delivered
+rule BranchImpactAck.verdict=NOT_AFFECTED -> no full payload by default
+rule BranchImpactAck.verdict in [UNKNOWN,STALE] -> request repair; high_impact_invalidation may conservatively receive FULL_REF
+
+// Data plane retains v2 adaptive route selection.
+rule full_payload_route begins_from parent.RoutePlan
+rule central_route_targets union locally_declared_AFFECTED -> FULL_REF
+rule semantic_duplicate -> no duplicate FULL_REF
+rule receiver_needs_details -> pull(payload_ref) from canonical state
+
+// Stronger networking must not depend on one projection ancestry.
+rule critical_invalidation relevance_check prefers MULTI_SOURCE basis
+rule MULTI_SOURCE requires at least two materially distinct provenance paths when available
+rule ClayGraph projection + projection derived from same exact source ancestry != independent_check
+rule raw current work/event refs are preferred cross-check against stale derived ClayGraph edges
+rule correlated_projection_blindness -> explicit risk flag + no perfect-recall claim
+
+// Ack semantics are delivery/recovery semantics only, never epistemic quorum.
+rule ack_count != evidence_strength
+rule AFFECTED_ack != truth
+rule NOT_AFFECTED_ack may_be_wrong_if local state stale
+rule shared_ancestry_acks != independent_replication
+rule BranchImpactAck never expands effect authority
+
+// High-impact contradictions are latency-sensitive; ordinary deltas may checkpoint-batch.
+rule kind in [CONTRADICTS,SUPERSEDES] and invalidation_priority high -> immediate_beacon + bounded_ack_deadline
+rule high_impact_missing_ack at deadline -> DEGRADED_COORDINATION + conservative repair/fanout decision before dependent next effect
+rule ordinary_material_delta -> beacon may_batch_within declared freshness budget
+rule freshness_budget never overrides causal_predecessor requirement for material effect
+
+// Anti-entropy remains the backstop for silent gaps and crash/restart.
+rule ack_epoch_gap|basis_hash_mismatch|missing_predecessor -> ANTI_ENTROPY_REPAIR
+rule crash_restart -> replay unclosed AckClosure + deduplicate by delta_id/content_hash + revalidate work before effect
+rule repair_failure -> DEGRADED_COORDINATION + no_global_nonoverlap_claim
+rule stale_epoch -> never silently treated CURRENT
+
+measure relevant_branch_recall_pre_repair
+measure relevant_branch_recall_post_repair
+measure perfect_event_recall
+measure full_payloads_per_delta
+measure beacon_bytes_per_delta
+measure weighted_network_cost
+measure ack_latency_p50_p95_p99
+measure missing_ack_rate
+measure false_affected_ack_rate
+measure false_not_affected_ack_rate
+measure stale_or_unknown_ack_rate
+measure duplicate_payload_suppression
+measure repair_latency
+measure permanent_miss_rate
+measure correlated_projection_failure_rate
+measure CPU_RAM_IO_network_cost
+
+promotion requires {
+  matched_real_repo_replay broadcast_vs_tag_only_vs_v2_vs_v3;
+  raw_current_work_and_derived_projection_cross_check;
+  missing_dependency_edge_fault_injection;
+  correlated_missing_dependency_fault_injection;
+  stale_epoch_fault_injection;
+  duplicate_delta_fault_injection;
+  out_of_order_causal_predecessor_fault_injection;
+  dropped_beacon_or_ack_fault_injection;
+  crash_restart_ack_closure_recovery;
+  exact provenance/resource/latency receipts;
+  v3 Pareto_improves_or_materially_improves_recall_recovery_without_unacceptable_cost;
+  rollback_to_v2_or_current_owner_fixed_mesh;
+}
+
+// Fresh primary evidence informing the candidate:
+// OSDI 2025 Picsou/C3B: precise acknowledgment and targeted retransmission can reduce cross-cluster communication overhead.
+// arXiv 2603.27775 Enzyme (2026): production IVM benefits from cost-based refresh strategy selection rather than one fixed incremental policy.
+// OSDI 2025 T2C: silent semantic failures require explicit runtime semantic checking, not transport-success assumptions alone.
+
+invariant stronger_mesh_connectivity_does_not_mint_truth
+invariant compact_global_control_plane_does_not_authorize_effects
+invariant delivery!=reconstruction!=use!=effect!=causal_credit
+invariant correlated_blind_spots_remain_possible_and_measured
+invariant candidate_not_promoted_from_simulation_only
+invariant Frank_remains_separate_research_subject
+invariant Frank_never_mutates_Clay

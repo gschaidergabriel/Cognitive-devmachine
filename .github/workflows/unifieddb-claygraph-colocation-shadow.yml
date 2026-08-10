@@ -1,0 +1,36 @@
+name: UnifiedDB ClayGraph Colocation Shadow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/experiments/unifieddb_claygraph_colocation/**'
+      - '.github/workflows/unifieddb-claygraph-colocation-shadow.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  colocation-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Compile and invariants
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research_entity/experiments/unifieddb_claygraph_colocation/benchmark_colocation_v1.py
+          python3 -m unittest research_entity.experiments.unifieddb_claygraph_colocation.test_colocation_v1 -v
+      - name: Matched co-location benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          python3 research_entity/experiments/unifieddb_claygraph_colocation/benchmark_colocation_v1.py --transactions 1000 --output artifacts/colocation_v1.json
+          cat artifacts/colocation_v1.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unifieddb-claygraph-colocation-${{ github.sha }}
+          path: artifacts/colocation_v1.json
+          if-no-files-found: error

@@ -1,0 +1,14 @@
+{
+  "schema_version":"1.0",
+  "run_id":"atomic-20260810T2141p0700-chatgpt-secondary-molt",
+  "search_dimensions":["state geometry","topology","temporal order","persistence lifetime","selection rule","broadcast/nonbroadcast","reentry geometry","local/global boundary","uncertainty","causal credit","memory addressing","resource allocation","module boundaries","representation density","self-reference locality","experimentability","failure containment"],
+  "candidate_regions":[
+    {"name":"MOLT","sparsity":"HIGH","gain":"HIGH","falsifiability":"HIGH","compression":"MEDIUM_NEGATIVE_CURRENTLY","implementation_feasibility":"MEDIUM","hidden_boundary_cost":"MEDIUM","selected":true},
+    {"name":"split signed manifest","sparsity":"LOW","gain":"HIGH","falsifiability":"HIGH","implementation_feasibility":"HIGH","selected":false},
+    {"name":"loop subrange view","sparsity":"LOW_MEDIUM","gain":"MEDIUM_HIGH","falsifiability":"HIGH","implementation_feasibility":"MEDIUM","selected":false},
+    {"name":"fs-verity plus external state","sparsity":"LOW","gain":"HIGH_SECURITY","one_image_goal":"FAIL","selected":false},
+    {"name":"ephemeral overlay merge","sparsity":"MEDIUM","recovery_risk":"HIGH","selected":false}
+  ],
+  "alien_departure":"MOLT dissolves the mutable-state region itself. State is not a place that can be overwritten; it is a forward-only time coordinate whose only ordinary physical operation is extension.",
+  "rejected_as_not_atomic":["add more byte-range checks inside O_RDWR writer","add another hash after write","ordinary WAL in separate file","another LLM/scheduler/database service"]
+}

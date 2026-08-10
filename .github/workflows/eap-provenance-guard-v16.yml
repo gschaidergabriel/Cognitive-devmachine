@@ -6,6 +6,7 @@ on:
     paths:
       - 'research_entity/runtime/eap_dependency_provenance_guard_v16.py'
       - 'research_entity/runtime/test_eap_dependency_provenance_guard_v16.py'
+      - 'research_entity/runtime/test_eap_dependency_provenance_receipt_v16.py'
       - 'tools/eap_dependency_provenance_guard_v16_benchmark.py'
       - '.github/workflows/eap-provenance-guard-v16.yml'
   workflow_dispatch:
@@ -39,9 +40,13 @@ jobs:
             research_entity/harness/reference/unifieddb_emergent_preprocessor.py \
             research_entity/runtime/eap_dependency_provenance_guard_v16.py \
             research_entity/runtime/test_eap_dependency_provenance_guard_v16.py \
+            research_entity/runtime/test_eap_dependency_provenance_receipt_v16.py \
             tools/eap_dependency_provenance_guard_v16_benchmark.py
-      - name: Run trusted-but-wrong provenance falsifiers
-        run: python3 -m unittest -v research_entity.runtime.test_eap_dependency_provenance_guard_v16
+      - name: Run provenance falsifiers and receipt-binding regressions
+        run: |
+          python3 -m unittest -v \
+            research_entity.runtime.test_eap_dependency_provenance_guard_v16 \
+            research_entity.runtime.test_eap_dependency_provenance_receipt_v16
       - name: Benchmark baseline EAP vs provenance-guarded EAP
         run: |
           mkdir -p research_entity/benchmarks/eap_provenance_guard_v16

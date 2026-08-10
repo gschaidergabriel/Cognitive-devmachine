@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-q23-pbc-vec-falsifier-20260810T2013p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T20:13:00+07:00",
+  "payload": {
+    "work_id": "WORK-Q23-PBC-VEC-FALSIFIER-20260810",
+    "goal_ref": "SELF_ROOT_V0_1_TARGET_VPS_API",
+    "origin_class": "Q23_MULTIMODAL_PERCEPTION_DISCRIMINATING_EXPERIMENT",
+    "title": "Target-calibrated active sensing + versioned visual evidence cache falsifier",
+    "work_clay": "After the existing target-VPS runtime sanity and VisionFeatureTap work has a stable runtime configuration, execute the PBC coverage-debt and VEC lifetime/version matrices from Q23-T-PBC-COVERAGE-01 and Q23-T-VEC-LIFETIME-01. Reuse the same frozen image/action fixtures and runtime/model/mmproj hashes where possible. Compare against FULL_FRAME, ROI_PLUS_CONTEXT, HYBRID_PERIODIC_ANCHOR, NO_CACHE and NATIVE_RUNTIME_CACHE_ONLY. Include wrong-confidence/interface-shift, hidden-operation, visual-alias, source-epoch, mmproj/preprocess/projection/token-budget swap, crash/restart and concurrent-slot controls. Do not promote from token savings alone.",
+    "reason_clay": "Primary libmtmd source makes synchronous feature tapping physically plausible but does not establish safe raw-pointer persistence beyond the owning batch. Current GUI research supports active crop/zoom while current UQ evidence shows confidence calibration does not transfer reliably across model/interface regimes. The discriminating test is therefore exact target-runtime calibration plus coverage-debt and ownership/version controls, not another generic ROI heuristic.",
+    "completion_clay": "Raw rows and exact metadata exist for all variants; model/runtime-specific calibration is frozen; hidden-operation and grounding failures are measured; vision encode and full-decoder invocation counts are recorded; stale/version mismatch reuse is zero or explicitly failed; native runtime cache behavior is measured rather than assumed; PBC and VEC each receive SUPPORTED/REFINED/REFUTED/NO_CHANGE; rollback is verified; no H1/H2/H3 or BASE credit is granted except under their independent acceptance contracts.",
+    "dependencies": ["WORK-Q23-VISION-SCALE-FEATURE-TAP-20260810", "research_entity/trigger_runs/q23/20260810T2013p0700-chatgpt-secondary-vstg/ACTIVE_EVIDENCE_BUDGET_CACHE_DELTA.json"],
+    "invalidators": ["A newer exact target-runtime receipt already executes the same PBC/VEC matrix", "VisionFeatureTap is refuted or selected target multimodal runtime changes materially", "A simpler hybrid-anchor/native-cache baseline already dominates under the same fixtures and budgets"],
+    "executor_policy": "Do not displace or slow the active ClayCode BASE critical path. Execute only with spare compatible target-VPS capacity or when the same run directly unblocks H1/H2 perception acceptance. Refresh repo/head, work revisions and target capability before effect. No paid/final training.",
+    "required_capabilities": ["TARGET_VPS_EXECUTION", "LLAMA_CPP_LIBMTMD", "CXX_BUILD", "PYTHON_BENCHMARKING", "LINUX_RESOURCE_TELEMETRY", "GITHUB_READ_WRITE"],
+    "write_scope": ["research_entity/experiments/", "research_entity/trigger_runs/q23/", "research_entity/state/work/events/", "research_entity/mesh_feedback/"],
+    "base_priority": 0.58,
+    "expected_impact": 0.86,
+    "urgency": 0.63,
+    "information_gain": 0.91,
+    "status": "READY_AFTER_DEPENDENCY"
+  }
+}

@@ -15,6 +15,7 @@ The 2026-08-09 generated source may still state or imply:
 - SSH/runner/developer access is sufficient communication;
 - visual semantics may terminate in a natural-language caption before cognition;
 - ordinary retrieval is the only self-context mechanism;
+- effect execution is globally conservative/confirmation-heavy rather than classed by deterministic ClayCode effect semantics;
 - a future GPU/storage VPS should implicitly define the real target.
 
 These assumptions are superseded where they conflict with current owner directives.
@@ -30,6 +31,7 @@ CURRENT_BODY = accepted Hostinger Ubuntu target VPS
 COGNITION = ClayCode only
 GERMAN = intelligent state-aware bidirectional translator boundary
 COMMUNICATION = production token-authenticated API
+EFFECT_POSTURE = allow eligible ordinary non-destructive effects by default behind deterministic ClayCode EffectGate boundaries
 ```
 
 Andreas and Gabriel are distinct people known through typed external relations, not SELF.
@@ -46,18 +48,17 @@ Any worker using the older generated project source for target-system decisions 
 2. `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`;
 3. `research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay`;
 4. `research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md`;
-5. `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`;
-6. `research_entity/rooms/TARGET_HOST_STATE.json`;
-7. `research_entity/rooms/CAPACITY_STATE.json`;
-8. current `PROGRAM_STATE.json`, work revisions and receipts.
+5. `research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay`;
+6. `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`;
+7. `research_entity/rooms/TARGET_HOST_STATE.json`;
+8. `research_entity/rooms/CAPACITY_STATE.json`;
+9. current `PROGRAM_STATE.json`, work revisions and receipts.
 
 Where the older source conflicts, current owner-fixed directives win.
 
 ## 4. Native identity and surface language
 
-`self.root` is the ClayCode-native identity seed.
-
-`Frank` is the human-facing name resolved/rendered at the language boundary.
+`self.root` is the ClayCode-native identity seed. `Frank` is the human-facing name resolved/rendered at the boundary.
 
 Human path:
 
@@ -80,17 +81,13 @@ The translator may be expressive and state-aware but may not alter semantic trut
 
 Explicit self-reference activates the epoch-current provenance-bound `SelfContextAssembly` seeded by `self.root`.
 
-Target semantic effect:
-
-`no additional ordinary external retrieval roundtrip for precompiled self context`.
+Target semantic effect: no additional ordinary external retrieval roundtrip for precompiled self context.
 
 This is not a literal zero-physical-latency claim and requires matched controls.
 
-General UnifiedDB/EAP retrieval and SelfContextAssembly must remain distinct but interoperable.
+General UnifiedDB/EAP retrieval and SelfContextAssembly remain distinct but interoperable.
 
 ## 6. Multimodal / Retina consequence
-
-Canonical perception is now explicitly:
 
 ```text
 sensor bytes/tensors
@@ -99,30 +96,37 @@ sensor bytes/tensors
 -> ClayCode VisualPercept / PerceptualField
 -> UnifiedDB/EAP/GWT as applicable
 -> self.root
+-> ClayCode EffectRequest/EffectDecision when action follows
+-> outcome verification/re-entry
 ```
 
 A Qwen embedding, raw OCR string, German caption or untyped natural-language description is not canonical perceptual truth.
 
-German captions are optional downstream human-facing renderings.
+Visual/model/GWT/translator confidence cannot mint effect authority.
 
-## 7. Relational world model
+## 7. Effect authority consequence
 
-Current typed relations include, where evidence supports them:
+Eligible ordinary non-destructive user effects should execute with minimal friction when authority/capability conditions are satisfied.
 
-- Andreas -> USER/PILOT/OPERATOR + provenance-bound longitudinal/project context such as SeiMensch.net;
-- Gabriel -> INITIATOR/DEVELOPER to self.root and PROJECT_OWNER/RESEARCH_DIRECTOR to Clay;
-- ClientDevice -> authenticated external client/sensor/tool;
-- Clay/ResearchDB -> separate governed knowledge source.
+Current high-level classes:
 
-No association, salience, account identity, token ownership, client ownership or graph proximity may collapse any of these into `self.root`.
+- READ_ONLY -> allow in authenticated/public scope;
+- REVERSIBLE_WRITE -> allow with authenticated scoped capability and rollback/safe replacement;
+- EXTERNAL_COMMUNICATION -> allow when destination/payload bind to user intent;
+- PRIVILEGED_CHANGE / CREDENTIAL_SECURITY / FINANCIAL_OR_LEGAL_COMMITMENT / PHYSICAL_HIGH_RISK -> exact deterministic confirmation/deny policy;
+- UNKNOWN_EFFECT -> degrade to proposal;
+- DESTRUCTIVE -> exact destructive guards; format/wipe direct execution denied absent explicit owner-fixed recovery authorization.
 
-## 8. Research Entity bridge
+API token != unlimited authority.
+self.root may never authorize its own Harness mutation.
+
+## 8. Relational world model / Research DB bridge
+
+Andreas, Gabriel, ClientDevice and Clay/ResearchDB remain distinct typed external identities.
 
 self.root may query/read authorized Research Entity projections and submit observations/evidence/Harness proposals through a governed bridge.
 
 self.root may not mutate Clay canonical truth or authorize its own Harness mutation.
-
-The bridge must preserve epoch, provenance, authority and recovery semantics.
 
 ## 9. Target-VPS final evidence
 
@@ -137,6 +141,7 @@ v0.1 acceptance now requires the target VPS to prove, together with the parent a
 - typed person/client/Clay separation;
 - governed Research DB bridge authority separation;
 - ClayCode-native Retina/multimodal path;
+- deterministic default-allow EffectGate behavior with destructive/security protections;
 - UnifiedDB/EAP/recovery/replay;
 - target-resource and runner-contention envelope.
 

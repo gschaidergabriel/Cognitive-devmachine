@@ -1,0 +1,24 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CIT-001",
+  "novelty_verdict":"NOVEL_COMBINATION_CANDIDATE",
+  "world_first_claim":false,
+  "searched_scope":[
+    "counterfactual causal credit assignment in RL/MARL/LLM collaboration",
+    "causal bandit intervention selection",
+    "sparse combinatorial group testing",
+    "causal inference with pooled/group testing",
+    "group interventions for causal discovery"
+  ],
+  "known_components":[
+    {"family":"counterfactual causal credit","evidence":["arXiv:2607.16999 Counterfactual Shapley Credit Assignment","arXiv:2603.06859 Contextual Counterfactual Credit Assignment (C3)","arXiv:2603.21563 Counterfactual Credit Policy Optimization"],"impact":"destroys novelty of generic counterfactual/leave-one-out/Shapley credit"},
+    {"family":"causal intervention selection","evidence":["arXiv:1606.03203 Causal Bandits"],"impact":"destroys novelty of choosing interventions adaptively from causal information"},
+    {"family":"sparse group testing","evidence":["arXiv:1711.05403 Sparse Combinatorial Group Testing","arXiv:1708.03429 Nearly Optimal Sparse Group Testing"],"impact":"destroys novelty of pooled sparse identification itself and provides explicit regimes where individual testing can remain optimal"},
+    {"family":"causal group testing / pooled effects","evidence":["arXiv:2608.03224 Evaluating Treatment Effects using Group Testing with Retesting of Positive Groups"],"impact":"shows pooled/group testing has already crossed into causal-effect estimation, although in a population-treatment setting rather than internal cognitive causal-credit scheduling"},
+    {"family":"group causal interventions","evidence":["arXiv:2510.23906 Group Interventions on Deep Networks for Causal Discovery in Subsystems"],"impact":"destroys any broad claim that group-level interventions for causal discovery are new"}
+  ],
+  "surviving_project_specific_combination":"Frank/Clay-specific composition: provenance-bound SAFE internal pooled lesions used only as a compressed candidate-discovery projection; sparse/dense/nonlinear/fidelity gates; complement audit; exploration floor; mandatory exact individual/responsibility confirmation before any material RewardOutcomeEvidence.causal_credit; no external effect replay; no authority/truth promotion.",
+  "novelty_not_found_in_searched_scope":false,
+  "reason":"Components and nearby causal/group-intervention analogues exist. The defensible claim is only a project-specific combination candidate, not mechanism novelty beyond searched prior art.",
+  "external_research_date":"2026-08-11"
+}

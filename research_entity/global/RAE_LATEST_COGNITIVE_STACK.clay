@@ -1,6 +1,6 @@
 module clay.stack.latest
 
-epoch 17
+epoch 18
 entity frank-project-global-research-entity
 display_name Clay
 mission_goal "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system"
@@ -26,6 +26,8 @@ stack CURRENT {
   frank_v0_1_target_host=@research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md
   frank_loop_of_loops=@research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md
   frank_loop_of_loops_mesh_feedback=@research_entity/mesh_feedback/20260809T1647p0700-frank-loop-of-loops/BRANCH_FEEDBACK_MANIFEST.json
+  frank_reward_state=@research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay
+  frank_reward_state_mesh_feedback=@research_entity/mesh_feedback/20260810T1220p0700-frank-reward-state/BRANCH_FEEDBACK_MANIFEST.json
 
   claygraph_base=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
   claygraph_migrations=[@research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql]
@@ -82,9 +84,15 @@ rule system_capability_observation uses CURRENT.capability_events
 rule dynamic_work_transport uses CURRENT.work_events
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
-rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host + CURRENT.frank_loop_of_loops + CURRENT.frank_loop_of_loops_mesh_feedback
+rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host + CURRENT.frank_loop_of_loops + CURRENT.frank_loop_of_loops_mesh_feedback + CURRENT.frank_reward_state + CURRENT.frank_reward_state_mesh_feedback
 rule every_registered_branch ingests CURRENT.frank_loop_of_loops as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
+rule every_registered_branch ingests CURRENT.frank_reward_state_mesh_feedback as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
 rule FRANK_whole_system research_model = HIERARCHICAL_MULTISCALE_RECURRENT_LOOP_OF_LOOPS until evidence refines_or_refutes
+rule FRANK_reward_state research_model = CURRENT.frank_reward_state until matched_baseline_and_lesion_evidence promotes_refines_or_refutes
+rule material_reward_learning requires verified_outcome + causal_credit + RewardPlasticityReceipt
+rule self_generated_activity_or_self_acceptance != material_reward_without_independent_verified_outcome
+rule low_prediction_error + low_unresolved_pressure != automatic_boredom
+rule low_prediction_error + high_unresolved_pressure -> STAGNATION_CANDIDATE
 rule loop_dynamics distinguishes CONVERGING_FIXED_POINT|PRODUCTIVE_LIMIT_CYCLE|STALLED|DIVERGING_OR_OVERTHINKING|CHAOTIC_OR_UNCLASSIFIED
 rule low_state_delta + high_unresolved_pressure -> STALLED; never automatic_CONVERGED
 rule recurrence != emergence
@@ -169,3 +177,6 @@ invariant ChatGPT_delegation_results_return_to_shared_Clay_state
 invariant latest_means_admitted_stack_pointer_not_newest_timestamp
 invariant claygraph_activation!=truth
 invariant hidden_provider_cot_not_required_or_persisted
+invariant reward_state_is_baseline_gated_not_promoted_by_shared_distribution
+invariant reward_control_never_mints_truth_or_execution_authority
+invariant self_generated_activity_cannot_mint_material_reward

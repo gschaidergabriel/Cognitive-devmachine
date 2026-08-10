@@ -1,4 +1,5 @@
 from __future__ import annotations
+import json
 from dataclasses import dataclass, asdict
 from typing import Any, Iterable
 
@@ -38,9 +39,19 @@ class UnifiedDBQueryPlane:
 
     This is deliberately not a second store. Every read is derived from the ledger at
     one semantic epoch and returns a provenance/hash-bearing receipt.
+
+    Query predicates are pushed into SQLite so selective cognitive reads do not
+    materialize and JSON-decode the complete state. Receipt, ordering, epoch and
+    authority semantics remain unchanged.
     """
     def __init__(self, ledger: StateLedger):
         self.ledger = ledger
+
+    @staticmethod
+    def _append_in(clauses: list[str], params: list[Any], column: str, values: tuple[str, ...]):
+        if values:
+            clauses.append(f"{column} IN ({','.join('?' for _ in values)})")
+            params.extend(values)
 
     def query(self, spec: QuerySpec) -> QueryReceipt:
         if not spec.query_id.strip():
@@ -50,24 +61,47 @@ class UnifiedDBQueryPlane:
         basis = self.ledger.epoch
         if spec.basis_epoch is not None and int(spec.basis_epoch) != basis:
             raise StaleEpoch(f'query basis {spec.basis_epoch}!={basis}')
-        rows = []
-        domains = set(spec.domains)
-        keys = set(spec.keys)
-        statuses = {x.upper() for x in spec.statuses}
-        epistemic = {x.upper() for x in spec.epistemic}
-        for row in self.ledger.materialized():
-            if domains and row['domain'] not in domains:
-                continue
-            if keys and row['key'] not in keys:
-                continue
-            if row['status'].upper() not in statuses:
-                continue
-            if row['epistemic'].upper() not in epistemic:
-                continue
-            rows.append(row)
-        rows.sort(key=lambda x: (x['domain'], x['key'], x['domain_epoch'], x['semantic_hash']))
-        truncated = len(rows) > spec.limit
-        chosen = rows[:spec.limit]
+
+        # Preserve the public contract of the old Python-filter implementation:
+        # duplicate filters are semantically sets, status/epistemic are case-insensitive,
+        # and an empty status or epistemic set admits no rows.
+        domains = tuple(sorted(set(spec.domains)))
+        keys = tuple(sorted(set(spec.keys)))
+        statuses = tuple(sorted({x.upper() for x in spec.statuses}))
+        epistemic = tuple(sorted({x.upper() for x in spec.epistemic}))
+
+        chosen: list[dict[str, Any]] = []
+        truncated = False
+        if statuses and epistemic:
+            clauses: list[str] = []
+            params: list[Any] = []
+            self._append_in(clauses, params, 'domain', domains)
+            self._append_in(clauses, params, 'k', keys)
+            self._append_in(clauses, params, 'status', statuses)
+            self._append_in(clauses, params, 'epistemic', epistemic)
+
+            sql = (
+                'SELECT domain,k,value_json,epistemic,status,domain_epoch,semantic_hash '
+                'FROM state'
+            )
+            if clauses:
+                sql += ' WHERE ' + ' AND '.join(clauses)
+            sql += ' ORDER BY domain,k,domain_epoch,semantic_hash LIMIT ?'
+            params.append(spec.limit + 1)
+
+            raw = self.ledger.conn.execute(sql, params).fetchall()
+            truncated = len(raw) > spec.limit
+            for r in raw[:spec.limit]:
+                chosen.append({
+                    'domain': r[0],
+                    'key': r[1],
+                    'value': json.loads(r[2]) if r[2] is not None else None,
+                    'epistemic': r[3],
+                    'status': r[4],
+                    'domain_epoch': int(r[5]),
+                    'semantic_hash': r[6],
+                })
+
         qbody = asdict(spec)
         qbody['basis_epoch'] = basis
         return QueryReceipt(

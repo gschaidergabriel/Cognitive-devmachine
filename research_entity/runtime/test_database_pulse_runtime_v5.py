@@ -58,6 +58,11 @@ class DatabasePulseRuntimeV5Tests(unittest.TestCase):
                           committed_at="2026-08-10T02:20:02Z")
         m=r.maintain_rank_index(basis_epoch=l.epoch,policy=p,actor="clay-maintenance-test")
         self.assertEqual(m.receipt.status,"BUILT");self.assertTrue(r.rank_path.index_exists())
+        self.assertEqual(m.receipt.actor,"clay-maintenance-test")
+        self.assertEqual(m.receipt.policy_provenance_ref,p.provenance_ref)
+        physical=r.rank_path.maintenance_receipts()
+        self.assertEqual(physical[-1]["actor"],"clay-maintenance-test")
+        self.assertEqual(physical[-1]["policy_provenance_ref"],p.provenance_ref)
         second=r.run_pulse(PulseSpec("p2",basis_epoch=l.epoch,source_domains=("memory",),max_candidates=32,max_focus=1),
                            committed_at="2026-08-10T02:20:03Z")
         self.assertEqual(first.focus_refs,second.focus_refs)

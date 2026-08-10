@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
   "deltas":[
     {"rank":1,"id":"UDB-D11-ACTUAL-SCHEMA-ATTEST","delta":"pair materialization uses migration-chain digest AND independently recomputed actual sqlite_schema fingerprint","why":"metadata-only certificate bypass reproduced","status":"REQUIRED_NEXT"},
@@ -13,8 +13,18 @@
     {"rank":9,"id":"UDB-D19-DELTA-CHAIN-CHECKPOINT","delta":"append-only transaction/event delta chain for fast audit, periodically anchored by full semantic commitment","why":"separates cheap mutation integrity from expensive full-state audit","status":"EXPERIMENT"},
     {"rank":10,"id":"UDB-D20-MULTIDB-ROLLBACK-JOURNAL-MIGRATION","delta":"evaluate SQLite ATTACH single-transaction/super-journal for atomic UnifiedDB+ClayGraph schema migration during deliberate rollback-journal mode","why":"official SQLite semantics provide multi-file transaction atomicity outside WAL; local crash-before-commit proxy supported","status":"EXPERIMENT_NOT_DEFAULT"},
     {"rank":11,"id":"UDB-D21-SCHEMA-DRIFT-HARDENING","delta":"evaluate trusted_schema=OFF / defensive connection settings where compatible","why":"reduce unsafe schema/application-defined behavior surface without treating it as authority","status":"TARGET_COMPATIBILITY_TEST"},
-    {"rank":12,"id":"UDB-D22-ROOT-CHANGESET-ACCELERATOR","delta":"evaluate SQLite Session extension or central-writer dirty-table journal as an optional changed-row accelerator","why":"can avoid full-table scans but target feature availability and PK coverage are unverified","status":"OPTIONAL_EXPERIMENT"}
+    {"rank":12,"id":"UDB-D22-ROOT-CHANGESET-ACCELERATOR","delta":"evaluate SQLite Session extension or central-writer dirty-table journal as an optional changed-row accelerator","why":"current system SQLite reports ENABLE_SESSION but the target-PASS private 3.53.4 preflight build does not expose ENABLE_SESSION in Python compile_options; accelerator cannot be assumed portable across the selected storage runtime","status":"OPTIONAL_EXPERIMENT_FEATURE_GATED"},
+    {"rank":13,"id":"UDB-D23-STORAGE-RUNTIME-CAPABILITY-CONTRACT","delta":"bind accepted SQLite runtime to an explicit required compile-feature vector plus sqlite_version/source_id/library identity, not version alone","why":"target preflight proved a fixed 3.53.4 runtime can pass V16/WAL smoke while exposing a materially different compile-option vector from system 3.45.1","status":"REQUIRED_BEFORE_RUNTIME_SWAP"},
+    {"rank":14,"id":"UDB-D24-SEMANTIC-VS-PHYSICAL-IDENTITY-SPLIT","delta":"keep SQLite version/source-id/compile-feature receipt in materialization/runtime commitment, outside semantic content identity, so a safe storage-engine upgrade need not change Frank semantic state while still invalidating incompatible physical assumptions","why":"target fixed-runtime preflight changes physical runtime identity/capabilities without intentionally changing logical Frank state","status":"REQUIRED_DESIGN"}
   ],
+  "live_refresh_20260811T0453p0700":{
+    "pr288_target_run":31434825206,
+    "result":"PASS_PRIVATE_SQLITE_35304_PYTHON_RUNTIME_PREFLIGHT",
+    "observed":{"runner":"clay/digital-retina","python":"3.12.3","baseline_sqlite":"3.45.1","private_sqlite":"3.53.4","private_source_id":"2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc","v16_ingress":"PASS","wal_smoke":"PASS","system_install":false,"whole_frank_acceptance":false},
+    "feature_delta":"system compile options include ENABLE_SESSION; private 3.53.4 Python runtime compile options observed in this preflight do not",
+    "pr286_exact_head_target_gate":"CANCELLED_NOT_PASS",
+    "pr289_exact_head_target_gate":"CANCELLED_NOT_PASS"
+  },
   "do_not_conflate":[
     "migration-chain digest with actual materialization fingerprint",
     "semantic root with selected continuation authority",
@@ -22,7 +32,9 @@
     "graph CURRENT status with correct source root",
     "query provenance with selection provenance",
     "state witness with effect authority",
-    "incremental cached roots with independent truth"
+    "incremental cached roots with independent truth",
+    "SQLite fixed version with equivalent compile-feature vector",
+    "semantic state identity with physical storage-runtime identity"
   ],
-  "status":"COMPLETE"
+  "status":"COMPLETE_LIVE_REFRESHED"
 }

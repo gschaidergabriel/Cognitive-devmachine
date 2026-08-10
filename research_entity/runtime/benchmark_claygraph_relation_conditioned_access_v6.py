@@ -22,6 +22,7 @@ RELATIONS = (
 PER_RELATION = 32
 TOTAL_BUDGET = 32
 RELATION_RESERVE = 8
+MIN_RELATION_CONFIDENCE = 0.75
 
 SCHEMA = """
 CREATE TABLE graph_head_edges(
@@ -76,7 +77,6 @@ def build_fixture():
     truth = {}
     for r in range(ROOTS):
         source = f"root_{r:04d}"
-        all_edges = []
         bases = {rel: rng.uniform(0.55, 0.99) for rel in RELATIONS}
         for rel in RELATIONS:
             relation_edges = []
@@ -88,11 +88,10 @@ def build_fixture():
             truth[(source, rel)] = relation_edges[0][0]
             for target, weight in relation_edges:
                 edge_id = f"edge:{target}"
-                all_edges.append((
+                rows.append((
                     edge_id, edge_id + ":v1", 4, 7, source, target, rel, weight, 0.9,
                     "{}", "{}", "ASSOCIATIVE", "CURRENT", "t",
                 ))
-        rows.extend(all_edges)
     c.executemany("INSERT INTO graph_head_edges VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", rows)
     c.commit()
     return c, truth, len(rows)
@@ -102,6 +101,7 @@ def evaluate(access, truth, queries, mode):
     lat = []
     hits = 0
     relation_precision = []
+    identical_to_global = 0
     for source, relation in queries:
         started = time.perf_counter_ns()
         if mode == "global":
@@ -112,6 +112,7 @@ def evaluate(access, truth, queries, mode):
                 source_logical_id=source,
                 total_budget=TOTAL_BUDGET,
                 typed_relation=typed,
+                typed_relation_confidence=1.0 if typed else None,
                 relation_reserve=6,
             )
         elif mode == "relation":
@@ -119,7 +120,25 @@ def evaluate(access, truth, queries, mode):
                 source_logical_id=source,
                 total_budget=TOTAL_BUDGET,
                 typed_relation=relation,
+                typed_relation_confidence=1.0,
+                min_relation_confidence=MIN_RELATION_CONFIDENCE,
                 relation_reserve=RELATION_RESERVE,
+            )
+        elif mode == "wrong_low_confidence":
+            wrong = next(rel for rel in RELATIONS if rel != relation)
+            edges, receipt = access.query(
+                source_logical_id=source,
+                total_budget=TOTAL_BUDGET,
+                typed_relation=wrong,
+                typed_relation_confidence=0.30,
+                min_relation_confidence=MIN_RELATION_CONFIDENCE,
+                relation_reserve=RELATION_RESERVE,
+            )
+            global_edges, _ = access.query(source_logical_id=source, total_budget=TOTAL_BUDGET)
+            identical_to_global += int(
+                tuple(e.logical_edge_id for e in edges)
+                == tuple(e.logical_edge_id for e in global_edges)
+                and not receipt.relation_admitted
             )
         else:
             raise AssertionError(mode)
@@ -127,11 +146,14 @@ def evaluate(access, truth, queries, mode):
         target = truth[(source, relation)]
         hits += int(target in {edge.target_logical_id for edge in edges})
         relation_precision.append(sum(edge.relation_type == relation for edge in edges) / max(1, len(edges)))
-    return {
+    result = {
         "recall_at_32": hits / len(queries),
         "mean_query_relation_precision_at_32": statistics.fmean(relation_precision),
         "latency": timing(lat),
     }
+    if mode == "wrong_low_confidence":
+        result["exact_global_fallback_rate"] = identical_to_global / len(queries)
+    return result
 
 
 def main():
@@ -142,8 +164,9 @@ def main():
     global_result = evaluate(access, truth, queries, "global")
     counter_result = evaluate(access, truth, queries, "counter_only")
     relation_result = evaluate(access, truth, queries, "relation")
+    false_intent_result = evaluate(access, truth, queries, "wrong_low_confidence")
     result = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "benchmark": "CLAYGRAPH_V6_RELATION_CONDITIONED_FIXED_BUDGET",
         "evidence_class": "SYNTHETIC_ADVERSARIAL_MECHANISM",
         "environment": {
@@ -159,10 +182,15 @@ def main():
             "out_degree": len(RELATIONS) * PER_RELATION,
             "queries": len(queries),
         },
-        "budget": {"total": TOTAL_BUDGET, "relation_reserve": RELATION_RESERVE},
+        "budget": {
+            "total": TOTAL_BUDGET,
+            "relation_reserve": RELATION_RESERVE,
+            "min_relation_confidence": MIN_RELATION_CONFIDENCE,
+        },
         "global_top_weight": global_result,
         "counter_only_reserve": counter_result,
-        "query_relation_reserve": relation_result,
+        "query_relation_reserve_high_confidence": relation_result,
+        "wrong_relation_low_confidence_control": false_intent_result,
         "delta_relation_vs_global": {
             "recall_points": relation_result["recall_at_32"] - global_result["recall_at_32"],
             "relation_precision_points": (
@@ -175,15 +203,18 @@ def main():
         },
         "limitations": [
             "Synthetic high-degree relation-intent workload; it does not establish live Clay/Frank accuracy.",
-            "Typed relation intent is assumed correct and is supplied by the benchmark; planner calibration is a separate gate.",
+            "High-confidence typed relation intent is assumed correct in the positive lane; planner calibration is a separate real/OOD gate.",
+            "The low-confidence false-intent control only proves fail-conservative fallback below the configured threshold.",
             "A conventional database can implement the same two indexes and application-level typed relation selection.",
-            "Promotion requires real-contract/held-out graph queries and false-relation-intent controls.",
+            "Promotion requires real-contract/held-out graph queries and calibrated false-positive relation-intent controls.",
         ],
     }
     result["pass"] = bool(
         relation_result["recall_at_32"] > global_result["recall_at_32"]
         and relation_result["recall_at_32"] >= counter_result["recall_at_32"]
         and relation_result["recall_at_32"] == 1.0
+        and false_intent_result["exact_global_fallback_rate"] == 1.0
+        and false_intent_result["recall_at_32"] == global_result["recall_at_32"]
     )
     print(json.dumps(result, indent=2, sort_keys=True))
     c.close()

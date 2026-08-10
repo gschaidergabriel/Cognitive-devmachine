@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "run_id": "hypofusion-20260810T1223p0700-chatgpt-secondary-r4",
   "trigger": "hypofusion",
   "origin_actor": "chatgpt-secondary",
@@ -15,6 +15,8 @@
   "late_arrival_refreshes": 1,
   "late_arrival_refresh_receipt": "LATE_ARRIVAL_REFRESH_1.json",
   "absorbed_scientific_cutoff_head": "05b5f5dd02ce5b76a6ac576311b866d1ea38170a",
+  "hard_close_receipt": "HARD_CLOSE_RECEIPT.json",
+  "hard_close_commit": "128f12ee1d6cbe39270f3b7cef2441e2c8864fa8",
   "phases": {
     "H0_BOOT_AND_LIVE_FREEZE": "PASS",
     "H1_REACHABLE_HYPOTHESIS_COVERAGE": "PASS_DELTA_INHERITED_HISTORY_97PCT",
@@ -25,7 +27,8 @@
     "H6_WHOLE_MESH_FUSION": "PASS",
     "H7_BRANCH_FEEDBACK": "PASS_WRITTEN",
     "H8_MANDATORY_LATE_REFRESH": "PASS",
-    "H9_POST_WRITE_REREAD": "PASS"
+    "H9_POST_WRITE_REREAD": "PASS",
+    "H10_FINITE_HARD_CLOSE": "PASS"
   },
   "required_artifacts": [
     "INTERCONNECT_MANIFEST.json",
@@ -42,10 +45,10 @@
   ],
   "final_report_commit": "69357d2a74b3c8761c091d32b8138da365546bc6",
   "completion_estimate_percent": 97,
-  "completion_boundary": "Reachable post-R3 delta plus one mandatory late-arrival refresh screened; inherited historically inaccessible records remain INACCESSIBLE; commits after the finite absorbed cutoff are deferred to the next run.",
+  "completion_boundary": "Reachable post-R3 delta plus one mandatory late-arrival refresh screened; inherited historically inaccessible records remain INACCESSIBLE; explicitly listed commits after the finite absorbed cutoff are deferred to the next run.",
   "scientific_promotion": "NONE",
   "canonical_revision_change": "NONE",
   "frank_harness_mutation": false,
   "training_authorized": false,
-  "durable_write_state": "COMMITTED_REREAD_VERIFIED_PENDING_HARD_CLOSE_RECEIPT"
+  "durable_write_state": "COMMITTED_REREAD_VERIFIED_HARD_CLOSED"
 }

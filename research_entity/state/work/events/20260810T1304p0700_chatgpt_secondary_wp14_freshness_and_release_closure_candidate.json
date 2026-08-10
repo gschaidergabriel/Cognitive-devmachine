@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260810T1304p0700_chatgpt_secondary_wp14_freshness_and_release_closure_candidate",
+  "actor": "chatgpt-secondary",
+  "trigger": "go",
+  "parent_work_id": "WORK-CLAYCODE-BASE14-CLOSE-20260809",
+  "event_type": "BUG_REPAIR_PLUS_ARCHITECTURE_CANDIDATE",
+  "status": "COMPLETED_DISTRIBUTED",
+  "implemented": [
+    {
+      "path": "tools/claycode_base_wp14_strict_audit.py",
+      "commit": "dc4bd7a8aa6e691fe8d4fea8ecaf60559a8ac61e",
+      "invariant": "strict target repository_commit must equal current WP14 checkout HEAD"
+    },
+    {
+      "path": "tools/test_claycode_wp14_release_freshness.py",
+      "commit": "19f5a9bc9186cbf9f9fd56db5476b289ed06b96d",
+      "scope": "five-case exact-checkout freshness primitive regression"
+    },
+    {
+      "path": ".github/workflows/claycode-target-receipt-replay-probe.yml",
+      "commit": "3539b86c91dc0f60350d83d317f40f556b0ae357",
+      "scope": "self-hosted WP14 freshness + matched promoter replay regression"
+    }
+  ],
+  "architecture_candidate": {
+    "ref": "research_entity/claycode/base/CC_RELEASE_INPUT_CLOSURE_CANDIDATE_20260810.json",
+    "status": "CANDIDATE_NOT_PROMOTED",
+    "reason": "Global HEAD is correct for contemporaneous anti-replay but too coarse for durable post-release equivalence under unrelated monorepo churn; candidate ReleaseInputClosureDigest requires complete transitive input discovery and hidden-input falsification before adoption."
+  },
+  "affected_workers_should_ingest": [
+    "CC-WP-14-BASE-AUDIT",
+    "ClayCode release promoter/BASE14 closure",
+    "Andreas target acceptance",
+    "release/recovery provenance",
+    "program/stage consumers of BASE PASS"
+  ],
+  "remote_truth": "Hostinger verification remained queued/unassigned during this invocation; no remote execution credit claimed.",
+  "oob_count_delta": 0,
+  "full_result": "research_entity/trigger_runs/go/go-20260810T1257p0700-chatgpt-secondary-release-evidence-replay/RECURSION_2_RESULT.json"
+}

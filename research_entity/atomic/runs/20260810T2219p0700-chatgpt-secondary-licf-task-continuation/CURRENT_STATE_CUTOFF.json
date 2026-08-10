@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "timestamp_local":"2026-08-10T22:19:00+07:00",
+  "canonical":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "research_head_before_write":"5b025ba351b72e60c286342215fee303a6e85974",
+  "target_head_before_write":"81bd41d60c39cf73db16de7feb064f508d2d2928",
+  "target_source":{"presence_schema":"runtime/state/UNIFIEDDB_V15_SINGLE_INSTANCE_PRESENCE.sql@efedd0d0250948dc56a15f2730f2b03807d59fbe","presence_runtime":"runtime/state/frank_presence_runtime.py@b222d18e488b271a76d4387220e0cb518663da78","presence_test":"tests/frank_single_instance_presence_gate.py@9393c6d59f5016083b09713d40a7da87c6db5221"},
+  "verified_gap":"Current V15 presence schema/runtime/test model lease_epoch/holder/presence/recovery, but expose no current_task_id, task_epoch, task-state or user-consent transition witness. This proves only that the presence substrate itself cannot enforce same-lease task continuity; it does NOT prove that no other future/upstream component could supply the missing fence.",
+  "concurrent_mesh":{"asvb_final":"ff2b575bb3152ce50f4a6bb097d65687d54a6431","go_single_spawn_fusion":"4f288762e2329f6bd00a24d23791e116970b5a23","same_holder_execution_gap":"GO receipt records no execution_id/current_request_id and a queued independent discriminator"},
+  "non_collision":"LICF does not solve holder exclusivity, same-holder parallel execution admission, ASVB voice authority, MCM causal cuts, SCF semantic charges, ECT CallContracts, or MOLT physical persistence. It tests the nested problem of stale task-derived material after an otherwise valid execution holder changes tasks."
+}

@@ -1,0 +1,39 @@
+name: WP03 Frontend Bridge Surface Binding
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/wp03-frontend-bridge-surface-binding.yml'
+      - 'tools/claycode_wp03_frontend_artifact_bridge.py'
+      - 'tools/test_claycode_wp03_frontend_bridge_surface_binding.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+  pull_request:
+    paths:
+      - 'tools/claycode_wp03_frontend_artifact_bridge.py'
+      - 'tools/test_claycode_wp03_frontend_bridge_surface_binding.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark'
+  workflow_dispatch:
+
+jobs:
+  hosted-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build isolated validation environment
+        run: |
+          python3 -m venv /tmp/clay-wp03-surface-${GITHUB_RUN_ID}
+          /tmp/clay-wp03-surface-${GITHUB_RUN_ID}/bin/pip install --disable-pip-version-check 'lark[interegular]==1.3.1'
+      - name: Execute surface-relabel regression
+        env:
+          PYTHONPATH: tools
+          PYTHONSAFEPATH: '1'
+        run: /tmp/clay-wp03-surface-${GITHUB_RUN_ID}/bin/python tools/test_claycode_wp03_frontend_bridge_surface_binding.py
+      - name: Cleanup
+        if: always()
+        run: rm -rf /tmp/clay-wp03-surface-${GITHUB_RUN_ID}

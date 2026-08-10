@@ -1,0 +1,87 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260810T2322p0700-chatgpt-secondary-frank-v01-screen",
+  "counterhypotheses":[
+    {
+      "id":"CH-01",
+      "against":"HF-01",
+      "claim":"Physical single-execution serialization plus provider idempotency is sufficient; caller-bound generation capabilities add no safety benefit.",
+      "support":"Production paths may continuously retain a physical gate; many providers support idempotent requests.",
+      "counterevidence":"Frank fresh-main permits unbound/stale callers into COMMITTING; distributed systems literature uses fencing values specifically to reject delayed old writers.",
+      "discriminator":"Run matched B1/B2/B3 stale-caller + ABA + crash/timeout-after-acceptance matrix with (A) physical gate+idempotency only and (B) immutable caller-bound generation fence. Compare duplicate/provider-attempt safety, recovery and overhead.",
+      "state":"OPEN_BUT_WEAKENED"
+    },
+    {
+      "id":"CH-02",
+      "against":"HF-02",
+      "claim":"Structural IFC/taint labels fully solve indirect prompt injection and provenance problems.",
+      "support":"CaMeL/Fides demonstrate deterministic policy enforcement for important classes.",
+      "counterevidence":"NeuroTaint argues semantic transformation and persistent influence can escape traditional taint abstractions; AgentSys reduces exposure by context isolation rather than labels alone.",
+      "discriminator":"Adversarial web->memory->later-action tests with paraphrase/semantic transformation under structural labels only vs labels+isolation+semantic provenance audit.",
+      "state":"WEAKENED"
+    },
+    {
+      "id":"CH-03",
+      "against":"HF-03",
+      "claim":"Semantic retrieval + summarization is enough; execution-state trees/event logs are unnecessary complexity.",
+      "support":"Simple RAG is cheaper and broadly applicable.",
+      "counterevidence":"MAGE reports better long-horizon success and lower token use than semantic-memory baselines; ESAA shows replay/audit benefits from event sourcing.",
+      "discriminator":"Same long-horizon corpus and failures: semantic-RAG-only vs execution-state-path+semantic memory. Measure task success, stale-state errors, recovery, tokens, DB I/O and repair locality.",
+      "state":"OPEN"
+    },
+    {
+      "id":"CH-04",
+      "against":"HF-04",
+      "claim":"Deeper recurrence monotonically improves reasoning and should run until a fixed high budget.",
+      "support":"Multiple recurrent-depth systems gain accuracy with extra compute.",
+      "counterevidence":"Adaptive allocation achieves equal quality with less compute; Parcae exposes stability requirements; When Shallow Wins shows depth/correctness non-monotonicity and silent failures.",
+      "discriminator":"Fixed-shallow vs fixed-deep vs adaptive-stop on matched seeds; report outcome, calibration, state-delta/residual-pressure, loop regime, latency and tokens.",
+      "state":"REFUTED_AS_GENERAL_RULE"
+    },
+    {
+      "id":"CH-05",
+      "against":"HF-05",
+      "claim":"Explicit GWT is unnecessary; equivalent recurrent/shared-memory information flow yields the same utility.",
+      "support":"Structured partner models can emerge in generic recurrent agents when task pressure requires them.",
+      "counterevidence":"Shared workspace and cross-modal global-workspace studies show gains over specific ablations.",
+      "discriminator":"Matched topology/control tasks: explicit candidate competition+broadcast vs shared recurrent memory vs simple cross-attention; lesion receiver-use/re-entry while preserving parameter and information budgets.",
+      "state":"OPEN_HIGH_VALUE"
+    },
+    {
+      "id":"CH-06",
+      "against":"HF-06",
+      "claim":"Pairwise graphs are sufficient; higher-order Hyperposition adds representational and runtime overhead without outcome gain.",
+      "support":"Many tasks remain solvable with pairwise graphs; HKVM-RAG shows structured support does not always convert to answer-F1.",
+      "counterevidence":"Multiple 2026 hypergraph systems beat matched pairwise baselines on higher-order tasks.",
+      "discriminator":"Detect candidate irreducible interaction sets; compare pairwise, factorized and hyperedge variants at identical evidence/compute. Promote hyperedges only if utility gain exceeds overhead.",
+      "state":"OPEN_CONDITIONAL"
+    },
+    {
+      "id":"CH-07",
+      "against":"HF-07",
+      "claim":"A simple transactional SQLite schema with explicit versions and checkpoints is sufficient; append-only event sourcing/projections are over-engineering.",
+      "support":"Frank v0.1 is a single target instance and may not need distributed-system complexity.",
+      "counterevidence":"Current effect/identity/recovery requirements need replay, causal provenance and stale-generation rejection; event-sourced agent designs provide direct precedent.",
+      "discriminator":"Replay/crash/rebuild benchmark on identical workloads: normalized mutable state vs append-only events+snapshots+projections. Measure correctness, recovery time, storage amplification, write latency and query latency.",
+      "state":"OPEN_HIGH_VALUE"
+    },
+    {
+      "id":"CH-08",
+      "against":"HF-08",
+      "claim":"ClayCode-specific typed cognition is not needed for reliability; ordinary typed host-language structs and schema-constrained calls are simpler and equally safe.",
+      "support":"Structured tool schemas and direct hidden-state routing can work without a custom language runtime.",
+      "counterevidence":"Typed workflow and DSL studies show compliance/reasoning benefits in bounded settings; project owner fixes ClayCode-only cognition as target premise.",
+      "discriminator":"Within owner-fixed ClayCode target, compare lowering/runtime implementations: full typed semantic IR vs minimal schema facade on identical semantics. Measure caught authority/type errors, execution correctness, compiler/runtime complexity and latency.",
+      "state":"IMPLEMENTATION_ALTERNATIVE_ONLY"
+    },
+    {
+      "id":"CH-09",
+      "against":"HF-09",
+      "claim":"Reactive-only agents are safer and equally useful; proactive self-generated goals mostly create drift/livelock.",
+      "support":"Long-horizon autonomous systems exhibit semantic livelock and goal drift risks.",
+      "counterevidence":"Persistent hierarchical goals and goal-evolving agents improve bounded long-horizon tasks; owner-fixed target requires proactive substrate.",
+      "discriminator":"Reactive vs bounded-proactive matched workload with admitted goal checkpoints. Score useful verified outcomes, user interruption compliance, idle correctness, livelock, token/tool cost and false self-reward.",
+      "state":"OPEN_IMPLEMENTATION_BOUNDARY"
+    }
+  ]
+}

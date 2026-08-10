@@ -1,95 +1,276 @@
-# UnifiedDB — Deeper Delta Run
+# UnifiedDB — Deeper Delta Run, Extended
 
 Run: `unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas`
 
-Status: **COMPLETE / RESEARCH DELTAS COMMITTED / PROMOTION HOLD**
+Status: **COMPLETE_EXTENDED_DEEP / RESEARCH DELTAS COMMITTED / PROMOTION HOLD**
 
 ## Executive result
 
-The previous UnifiedDB continuity model was directionally correct but still bundled several different properties. This deeper run separates them and finds a new confirmed design gap in the active V17 V3 lane.
+The earlier UnifiedDB model correctly separated canonical semantic authority from derived ClayGraph state, but it still compressed several different correctness claims into too few certificates. The deeper run now resolves UnifiedDB continuity into independently falsifiable layers:
 
-The strongest new result is **temporal causal provenance**: a support graph can be perfectly referentially consistent and still be causally false if it is minted after the effect already happened. PR #280's current learning matrix does exactly that: it verifies the effect outcome first, then creates attention, receiver-use, prediction, prediction outcome, causal credit and exact-outcome support, and finally expects learning re-entry to succeed. The candidate therefore closes free-string/cross-row identity gaps but does not yet prove that GWT/receiver use preceded and contributed to the action.
+1. storage/build safety;
+2. executable migration-source identity;
+3. live materialized `sqlite_schema` identity;
+4. authoritative dynamic semantic-root/lineage identity;
+5. derived dynamic projection identity/freshness;
+6. explicit temporal read/replay identity;
+7. selection/query-plan identity;
+8. consistent snapshot/recovery-image identity;
+9. external rollback-domain-independent recovery floor;
+10. execution/effect causal and recovery authority;
+11. stable historical closure identity.
 
-This conflicts with the Frank causal-chain contract, whose semantic order is Workspace/receiver use/local effect -> verified outcome -> causal credit -> admitted learning -> provenance-bound re-entry.
+The most important correction is architectural: **a single symmetric UnifiedDB↔ClayGraph pair certificate is too strong in one direction and too weak in another.** It is too strong because a rebuildable ClayGraph source/schema evolution can make `open_unified()` fail even when canonical UnifiedDB is unchanged and healthy. It is too weak because a schema-compatible ClayGraph can still be dynamically stale, derived from the wrong semantic root, or expose stale rows through current views. Authority dependencies must therefore be acyclic: Graph/index state may depend on canonical UnifiedDB identity, but canonical UnifiedDB availability must not depend on rebuildable derived state.
 
-## New delta A — EffectIntent before effect execution
+A second blocking correction is replay semantics: **`CURRENT_TIMESTAMP` is an undeclared input to canonical reads.** The current semantic and graph views use ambient time. A local negative control showed identical database bytes returning a record before a short expiry and not returning it after wall-clock advancement. The evolving PR #286 independently added a stronger deterministic probe showing that Python-style ISO timestamp text (`T` and offset) and SQLite `CURRENT_TIMESTAMP` text can also disagree under raw lexical comparison even when SQLite's datetime parser identifies the represented instant correctly. Exact replay therefore requires both canonical timestamp representation and an explicit `as_of_valid_time` bound into query/assembly receipts.
 
-Introduce an immutable pre-action `EffectIntent/DecisionReceipt` rather than trying to infer intent from post-hoc support rows. Preallocate the effect id and bind it to exact current execution generation, GWT cycle/episode, prediction, receiver-use/local-effect receipt, action/target/request hash and effect class. The effect reservation consumes this receipt.
+A third blocking correction is snapshot identity: **a main `.sqlite` file is not necessarily the database state.** In WAL mode a commit can be durable in the WAL before checkpointing into the main file. A local negative control committed one row, copied only the main file while the WAL remained non-empty, and the copy contained zero rows. Snapshot identity must therefore describe a transactionally consistent logical image and the method by which it was produced, not just file hashes.
 
-Required negative: `POST_HOC_SUPPORT_MINT` — execute an effect without pre-action support, then mint otherwise valid exact-effect/exact-outcome support afterwards. Re-entry must reject with zero terminal mutation.
+## Delta A — pre-action EffectIntent / temporal causal provenance
 
-## New delta B — origin executor != recovery executor
+Relationally coherent causal support can still be post-hoc. The active V17 V3 learning test records the verified outcome and then constructs attention, receiver-use, prediction, prediction outcome, causal credit and exact-outcome support before expecting learning re-entry to succeed.
 
-Current V17 V3 correctly strengthens immutable origin execution-generation ancestry, but crash recovery creates a different authority question: who may reconcile/terminalize the effect *now*?
+Introduce immutable pre-action `EffectIntent/DecisionReceipt` with preallocated effect id, exact current execution generation, GWT cycle/episode, prediction commitment, receiver-use/local-effect receipt and action/target/request identity. The reservation consumes that receipt.
+
+Required falsifier: `POST_HOC_SUPPORT_MINT` must reject with zero terminal mutation.
+
+## Delta B — origin execution != reconciler execution
+
+Effect origin identity proves who reserved/attempted an effect; crash recovery asks who is authorized to reconcile it now. These are different identities.
 
 Required split:
-- origin execution/epoch = immutable provenance of reservation/attempt;
-- reconciler execution/epoch = exact current execution authorized to perform recovery/re-entry/DONE;
-- successor reconciliation requires explicit recovery assignment/admission;
-- stale origin and unrelated successor must fail closed.
+- immutable origin execution/epoch;
+- current reconciler execution/epoch;
+- explicit recovery assignment for successor completion;
+- stale origin and unrelated successor fail closed.
 
-This closes a gap that cannot be solved by simply demanding the original execution remain BUSY forever.
+## Delta C — historical terminal validity must be monotonic
 
-## New delta C — historical DONE must remain historically valid
+A historical DONE chain must not become invalid because an admitted semantic record later becomes SUPERSEDED rather than CURRENT. Freeze validity-at-admission in an immutable closure witness. Ordinary semantic evolution changes current belief state; corruption/revocation creates separate quarantine evidence.
 
-PR #280 revalidates learning delta support using `semantic_records.status='CURRENT'`. That couples old terminal validity to later belief-state evolution. A later normal supersession can make a previously valid terminal chain fail verification.
+## Delta D — live schema attestation != migration-source identity
 
-Freeze validity-at-admission in an immutable closure receipt containing exact effect/attempt/outcome, pre-action decision receipt, origin and reconciler execution bindings, causal support, semantic record/epoch or typed NO_LEARNING mode, contract/schema identity and durable order references. Ordinary semantic supersession changes current truth state but must not silently rewrite historical effect completion.
+The U12 source-chain digest binds the expected executable migration program. It does not by itself prove that the physical database still has exactly that schema after certification.
 
-Explicit corruption/revocation is separate quarantine evidence.
+PR #286 now carries a dedicated disposable negative probe that adds a rogue schema object and deletes a required view while preserving certificate metadata. This is the correct falsifier class.
 
-## New delta D — support retention must be bounded
+Candidate: `LiveSchemaAttestationV1` over normalized `sqlite_schema` objects, kept separate from source-chain identity. Source identity answers *what code should have built this*. Live-schema identity answers *what is actually here now*.
 
-If terminal verification forever joins live GWT/prediction/semantic rows, old DONE receipts become dependent on indefinite row retention and mutable projection status. The immutable closure receipt should be sufficient for stable historical audit, with compact hashes/identity references and explicit retention rules.
+## Delta E — authority direction must be acyclic
 
-## New delta E — DELETE mode creates an atomic multi-file option
+The symmetric pair digest currently includes both UnifiedDB and ClayGraph chains. A Graph-only expected source-chain change can alter the pair digest and reject `open_unified()` even when UnifiedDB is unchanged and healthy.
 
-The target's safe current-system profile is SQLite rollback journal `DELETE` + `synchronous=FULL`. Official SQLite documentation states that transactions across ATTACHed databases are atomic when the main database is not memory and WAL is not used; SQLite uses a super-journal for multi-file rollback-journal commits.
+Correct dependency direction:
 
-Therefore safe DELETE mode creates a previously underused candidate: atomically commit one authoritative UnifiedDB semantic epoch together with a bounded ClayGraph projection batch/watermark. ClayGraph remains derived and cannot mint truth.
+`UnifiedDB storage/build -> UnifiedDB source schema -> UnifiedDB live schema -> semantic root/lineage`
 
-Local synthetic proxy (Python SQLite 3.46.1, N=300) observed application rollback across both attached files correctly and measured attached transaction p50/p95/p99 ~20.08/49.69/73.22 ms versus two separate commits ~13.56/34.05/48.35 ms. The attached path was ~1.48x slower at p50 in this environment. This is not target durability/performance evidence; it demonstrates why target A/B measurement is mandatory.
+then derived:
 
-## New delta F — fixed WAL is not automatically a better UnifiedDB architecture
+`semantic root/lineage -> Graph/index source identity -> projection/index admission -> selection`
 
-PR #288 tests a private fixed SQLite 3.53.4 WAL-capable runtime. That may improve reader/writer concurrency and remove the WAL-reset release blocker, but WAL does not provide crash-atomic transactions across multiple attached database files. If WAL wins, Graph must remain asynchronously projected with explicit freshness/quarantine/rebuild semantics.
+Never the reverse.
 
-Thus compare:
+`open_unified()` must not require current ClayGraph identity. `open_pair()` may gate Graph use; Graph failure quarantines/rebuilds the projection while canonical reads remain available unless the exact requested operation semantically requires Graph.
 
-A. system SQLite + DELETE/FULL + bounded atomic ATTACH projection;
-B. private fixed SQLite + WAL + asynchronous Graph freshness gate.
+## Delta F — StateProjectionCertificateV1
 
-Choose by correctness first, then p50/p95/p99, concurrency, recovery time, write amplification, fsync/I/O, RSS/CPU and Graph lag.
+Schema compatibility is not dynamic projection freshness. The current ClayGraph schema carries `source_semantic_epoch`, but the evolving R1C probe shows two problems:
+- global graph materialization status can become STALE while current graph views remain visible;
+- epoch-only source identity cannot distinguish different semantic roots/sibling lineages at the same epoch.
 
-## New delta G — Graph freshness is not schema-pair identity
+Add an authoritative projection admission receipt in UnifiedDB:
+- projection receipt id;
+- exact semantic epoch + semantic root/selected-lineage identity;
+- graph epoch;
+- derivation contract hash;
+- materializer identity/code hash;
+- graph content digest;
+- lag class;
+- admission state (`CANDIDATE|ADMITTED|STALE|RETRACTED|REBUILD_REQUIRED`).
 
-The U12 scope correction is retained:
-- schema/migration pair current;
-- dynamic ClayGraph payload current;
-- UnifiedDB semantic lineage current;
-are distinct predicates.
+ClayGraph may mirror the receipt but cannot self-admit.
 
-External rollback authority may bind the canonical schema pair identity, but it must not make a particular dynamic Graph payload authoritative. A stale Graph should be rebuildable from admitted UnifiedDB.
+Truth-critical Graph reads require an exact admitted root unless the query contract explicitly permits a canonical fallback. Exploratory reads may admit bounded lag only when the lag policy is recorded.
 
-## Current external/target state
+## Delta G — ReplayClockV1 and canonical timestamp encoding
 
-- system SQLite patch provenance on the accepted target found no direct WAL-code/amalgamation backport evidence in Ubuntu `3.45.1-1ubuntu2.7`; system-WAL release blocker remains;
-- current-system DELETE/FULL storage safety has component target evidence, but fused PR #286 still needs its exact current target run;
-- private SQLite 3.53.4 PR #288 target preflight is queued at this run's observation point;
-- V17 V3 PR #280 target causal-support gate is queued at this run's observation point;
-- the persisted V17 bound-reentry target receipt proves the narrower simplified candidate only and must not be promoted into V3 causal-closure proof.
+Replay-critical predicates must not read a fresh wall clock implicitly.
+
+Contract:
+- every query/assembly receives explicit `as_of_valid_time` and semantic epoch/root;
+- a live-now cognition cycle resolves now once and persists that value in the query/assembly receipt;
+- replay reuses the captured value;
+- timestamp storage uses one canonical machine representation (candidate: integer UTC epoch at defined precision, or one canonical UTC text encoding);
+- never compare mixed timestamp encodings as raw TEXT.
+
+Required falsifiers:
+- `BYTE_STABLE_TIME_SHIFT`: same durable bytes + same receipt -> identical result after real time advances;
+- `MIXED_TIMESTAMP_ENCODING`: equal instants in supported input forms canonicalize to one ordering/equality result.
+
+## Delta H — SnapshotManifestV2
+
+Current snapshot rows contain hashes/cursors but do not fully specify how a consistent image was obtained. SQLite WAL is part of persistent state; committed changes may not yet be in the main file.
+
+Candidate manifest fields:
+- snapshot id and method;
+- SQLite version/source id/compile-options digest;
+- journal mode, synchronous, page size;
+- materialization pair identity + live schema digests;
+- semantic epoch/root + transaction cursor;
+- projection receipt identity;
+- hashes of consistent UnifiedDB/ClayGraph images;
+- WAL bundle hashes if the method intentionally uses a WAL bundle;
+- external floor generation/ref;
+- restore verification receipt.
+
+Initial allowed methods:
+- Online Backup API;
+- `VACUUM INTO`;
+- explicitly quiescent rollback-journal bundle;
+- explicitly complete WAL bundle.
+
+A raw main-file hash is evidence about that file, not sufficient evidence of the logical database state.
+
+## Delta I — CanonicalRootChainV1
+
+`state_epochs.root_hash` exists, but a root field is not yet a root protocol. Define a canonical, domain-separated construction, for example:
+
+`SHA256('FRANK_SEMANTIC_ROOT_V1' || parent_root || epoch || tx_receipt_hash || ordered_typed_op_digests || authority_scope_digest || provenance_digest)`
+
+Properties:
+- canonical byte encoding;
+- ordered, typed operations;
+- no ambient wall clock;
+- no Graph activation/rank/unadmitted derived payload;
+- same parent + same commitments => identical replay root;
+- any semantic mutation => different root;
+- admission performs parent epoch/root compare-and-swap.
+
+Required negative: `SAME_EPOCH_SIBLING_ROOT` and transplanted-root replay.
+
+This gives semantic-lineage selection a real dynamic state identity instead of relying on epoch labels plus opaque supplied strings.
+
+## Delta J — SelectionReceiptV2
+
+Authenticated records do not imply authenticated selection. Prior U2 evidence already separated replay integrity from selection integrity: manipulated selection structure changed naive selected membership while source records remained authentic.
+
+Current query receipts should be extended with:
+- semantic root and explicit as-of time;
+- projection/index identity and content digest;
+- candidate-universe hash;
+- normalized query digest;
+- retrieval operator/ranker identity;
+- filter policy digest;
+- ordered candidate digest/count;
+- selected refs digest;
+- score-trace digest;
+- admissibility digest;
+- final selection receipt hash.
+
+Emergent retrieval, Graph ranking, FTS and vectors all produce candidates; none directly mint semantic authority.
+
+## Delta K — DerivedIndexHealthV1
+
+Derived indexes need the same source-root/rebuild discipline as ClayGraph.
+
+For FTS5, SQLite supplies explicit `integrity-check` and `rebuild` operations; local SQLite exposed the primitive successfully. A product receipt should bind source semantic root, builder/index code digest, content digest, health state and rebuild receipt. Target compile capability must still be verified.
+
+For vector and other indexes use the same abstract contract even when the implementation-specific checker differs.
+
+## Delta L — SQLiteDefensiveOpenV1
+
+SQLite documents `trusted_schema=OFF` as the safer posture when schema content must not gain unintended application-function authority. The local scripting binding supports the pragma.
+
+Candidate normal-open hardening:
+- `trusted_schema=OFF`;
+- extension loading stays disabled;
+- verify `writable_schema` remains off;
+- where the deployed binding exposes it, evaluate `SQLITE_DBCONFIG_DEFENSIVE`;
+- regression-test every persistent Frank view/trigger/function under the hardened setting.
+
+This does not replace live-schema attestation; it reduces what a modified schema can do.
+
+## Delta M — DELETE+ATTACH is a real architecture, not just a fallback
+
+Official SQLite semantics make multi-database transactions atomic as a set when the main database is file-backed and journal mode is not WAL. Therefore target-safe `DELETE + FULL` opens a genuine candidate:
+
+**SYSTEM_SAFE_DELETE**
+- canonical UnifiedDB main;
+- ClayGraph attached;
+- bounded semantic-head + projection-admission/batch transaction;
+- cross-file atomicity supplied by rollback-journal/super-journal semantics;
+- expected cost: more writer serialization/fsync/lock scope.
+
+Local proxy measured attached p50 ~1.48x two separate transactions, so this must compete on target rather than be assumed superior.
+
+## Delta N — fixed WAL requires a different recovery protocol
+
+A fixed WAL runtime may win concurrency/latency, but SQLite explicitly does not make multi-ATTACH WAL updates atomic across files.
+
+**PRIVATE_FIXED_WAL** therefore needs:
+- canonical UnifiedDB commit;
+- durable projection outbox/intent;
+- async ClayGraph materialization;
+- StateProjectionCertificate admission;
+- replay/rebuild until convergence;
+- explicit Graph lag policy.
+
+The semantic contract stays identical across DELETE and WAL physical lowerings.
+
+## Delta O — snapshot/replay, projection/replay and selection/replay are separate tests
+
+A restored DB can be byte-valid but semantically stale. A Graph can be perfectly rebuildable yet influence the wrong selected facts. A selection can be correctly recomputed over a stale root. Therefore the final continuity gate is conjunctive:
+
+`storage_safe`
+`∧ unified_source_schema_admitted`
+`∧ unified_live_schema_admitted`
+`∧ selected_semantic_root_admitted`
+`∧ external_floor_ok`
+`∧ authorized_current_or_recovery_execution`
+`∧ explicit_replay_clock`
+`∧ snapshot_or_live_state_consistent`
+`∧ graph/index_projection_admitted_if_used`
+`∧ selection_receipt_valid_if_selection_used`
+`∧ effect causal/terminal closure valid`
+
+No existing single receipt proves this conjunction.
+
+## Architecture comparison retained
+
+The run now keeps six physical/logical alternatives rather than prematurely selecting one:
+1. specialized baseline;
+2. logically unified API over specialized stores;
+3. canonical UnifiedDB + durable outbox + async derived stores;
+4. DELETE/FULL + bounded ATTACH atomic projection;
+5. private fixed WAL + async projection admission;
+6. physical monolith benchmark.
+
+Historical U2 mechanism evidence is retained: same-process specialized and monolith mixed reads were close in the tested cache-hot workload; JSON/service boundaries cost more; monolith writes were cheaper than canonical+outbox; unsynchronized two-store recovery tore frequently; outbox replay converged; trusted selection structure mattered independently of authentic records. None of those synthetic measurements establishes the target winner.
+
+## New implementation/research output
+
+- PR #286 continues as the fused runtime-candidate lane and now contains multiple deeper negative probes: live-schema drift, authority-direction coupling, R1C Graph freshness and temporal replay semantics.
+- PR #293 is a research-only adversarial layer created on top of #286. It intentionally carries no runtime promotion authority and explores additional replay/snapshot/security/index primitives.
+- The shared run now contains protocol-shaped JSON companions for architecture, store roles, query routing and migration, plus `REPLAY_SNAPSHOT_SELECTION_DELTAS.json`.
+
+## Target evidence boundary
+
+The prior target storage component proves the conservative SQLite 3.45.1 DELETE/FULL behavior and forced-WAL rejection on the accepted self-hosted lane. The rapidly advancing #286 head repeatedly superseded/cancelled queued jobs during this run; a cancelled or queued job is not evidence for the newest head.
+
+Therefore do not promote #286, the new temporal/schema/freshness probes, PR #293, the ATTACH profile, trusted-schema hardening, SnapshotManifestV2, CanonicalRootChainV1 or SelectionReceiptV2 from this run alone.
+
+## Highest-information next work
+
+1. stabilize one #286 candidate head long enough to execute all storage-pair + live-schema + authority-direction + R1C-freshness + temporal probes on the accepted target;
+2. turn the currently diagnostic negative probes into repair PRs only after each failure scope is confirmed;
+3. implement ReplayClockV1 in SHADOW and demand byte-stable replay equivalence;
+4. implement CanonicalRootChainV1 shadow roots and run sibling/transplant/replay discriminators;
+5. implement SnapshotManifestV2 with Online Backup/VACUUM INTO disposable restores and external-floor rejection;
+6. implement StateProjectionCertificateV1 plus exact-root/fallback query routing;
+7. implement SelectionReceiptV2 and repeat trusted-vs-manipulated selector tests;
+8. A/B exact-target SYSTEM_SAFE_DELETE+ATTACH against PRIVATE_FIXED_WAL+outbox under identical semantic workloads;
+9. compose all passing layers into one crash/restart/rollback/rebuild/query-replay receipt before F-V01-04 can close.
 
 ## Promotion boundary
 
-`HOLD`.
-
-F-V01-04 remains OPEN. No whole Frank v0.1 acceptance changes.
-
-Highest-information next target work:
-1. run/falsify PR #280 V3, adding `POST_HOC_SUPPORT_MINT` and origin-vs-reconciler recovery matrix before promotion;
-2. add `DELTA_SUPERSEDED_AFTER_DONE` to prove terminal historical validity is monotonic;
-3. finish PR #286 and PR #288 target gates;
-4. A/B DELETE+ATTACH atomic projection vs fixed-WAL async Graph on exact current target;
-5. compose selected semantic head + external rollback authority + schema/Graph freshness + current recovery execution + temporal effect closure into one crash/restart/replay receipt.
-
-No canonical migration, external effect, Frank/self.root Harness mutation authority or final training authorization follows from this run.
+**HOLD.** F-V01-04 remains OPEN. No whole Frank v0.1 acceptance, canonical DB migration, external provider effect, Frank/self.root Harness mutation authority or final training authorization follows from this run.

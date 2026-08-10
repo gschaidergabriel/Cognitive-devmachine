@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0026p0700-chatgpt-secondary-fork-capability-shadow",
+  "trigger": "go",
+  "created_at": "2026-08-11T00:26:23+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank v0.1"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "FRANK_V0_1",
+  "selected_work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "identity_lock": {
+    "research_entity": "Clay",
+    "target_native_self": "self.root",
+    "target_human_surface": "Frank",
+    "target_body": "accepted Hostinger Ubuntu VPS",
+    "target_cognition": "CLAYCODE_ONLY",
+    "self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "fresh_frontier": {
+    "parent_candidate_pr": "gschaidergabriel/Dr.-Unterweger#228",
+    "parent_head": "299b6ade7a24c588719f480e5b571a564d00698b",
+    "parent_status": "DRAFT_CANDIDATE_NOT_PROMOTED",
+    "parent_target_workflow": {
+      "run_id": 31412817524,
+      "job_id": 93534688306,
+      "observed_status": "QUEUED",
+      "conclusion": null
+    },
+    "parent_mechanism": "Gate-issued exact-object FrankExecutionLease registry + exact V15/V16 execution fence + immutable multi-effect reservation binding",
+    "known_remaining_parent_gates": [
+      "non-bypassable production effect routing",
+      "real provider timeout-after-acceptance reconciliation evidence",
+      "actual ClayCode frontend/TypedIR/compiler/lowering evidence"
+    ]
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Linux fork(2) manual",
+      "retrieved_at": "2026-08-11T00:20:00+07:00",
+      "fact": "After fork, child file descriptors refer to the same open file descriptions as the corresponding parent descriptors; flock/open-file-description lock state is inherited."
+    },
+    {
+      "source": "Linux flock(2) manual",
+      "retrieved_at": "2026-08-11T00:20:00+07:00",
+      "fact": "flock locks are associated with an open file description and duplicate descriptors created by fork refer to the same lock."
+    },
+    {
+      "source": "Python os.register_at_fork documentation",
+      "retrieved_at": "2026-08-11T00:20:00+07:00",
+      "fact": "Python exposes after-in-child fork callbacks for resetting process-local runtime state after fork."
+    },
+    {
+      "source": "etcd locking and disaster-recovery documentation",
+      "retrieved_at": "2026-08-11T00:18:00+07:00",
+      "fact": "External resources need validated fencing/version identity beyond lock possession, and restored snapshots can require revision/incarnation invalidation semantics."
+    }
+  ],
+  "leading_hypothesis": "PR #228 exact-object Gate issuance is not process-incarnation-safe: Linux fork may clone the WeakSet/WeakKeyDictionary capability state while inheriting the same flock-backed open file description, allowing a child to appear to own the same transient effect execution capability without a fresh Gate acquisition.",
+  "strongest_counterhypothesis": "Existing exact V15/V16 admission, ingress ownership, object identity and provider-commit checks already invalidate a forked child before effect B2/B3, so the copied process-local state is insufficient for effect authority.",
+  "go_oob_experiment": {
+    "name": "FORKED_CAPABILITY_SHADOW",
+    "count_for_this_go_macrocycle": 1,
+    "status": "TARGET_VPS_NOT_EXECUTED",
+    "target_pr": "gschaidergabriel/Dr.-Unterweger#233",
+    "target_head": "979bfdf8050a718af7ec8ca55a045580d386e55e",
+    "target_base": "gschaidergabriel/Dr.-Unterweger#228",
+    "test_path": "tests/frank_effect_forked_capability_shadow_oob.py",
+    "workflow_path": ".github/workflows/frank-effect-forked-capability-shadow-oob-vps.yml",
+    "design": [
+      "acquire a real Gate-issued V15 lease on disposable state",
+      "admit exact V16 ingress and derive parent fence",
+      "reserve one reversible synthetic effect",
+      "fork exactly once without a child Gate acquisition",
+      "in child test inherited gate-issued registry, fence mint/assert, B2, B3 and synthetic guarded-provider boundary",
+      "in parent verify its original fence remains live and inspect resulting effect state"
+    ],
+    "safety": {
+      "external_network_used": false,
+      "external_effect_performed": false,
+      "canonical_state_mutation": false,
+      "provider_callback": "SYNTHETIC_ONLY"
+    }
+  },
+  "executed_local_mechanism_control": {
+    "status": "REPRODUCED_PRIMITIVES_NOT_FULL_FRANK_PATH",
+    "scope": "local Linux/Python mechanism control only; not target Frank B2/B3 receipt",
+    "observations": {
+      "same_object_in_weakset_after_fork": true,
+      "weakkey_secret_survives_fork": true,
+      "inherited_fd_lock_recheck": "ACCEPTED",
+      "new_open_file_description_lock": "BLOCKED:EAGAIN",
+      "parent_lock_remained_held": true
+    },
+    "interpretation": "The exact-object registry and process-local secret are not intrinsically fork-exclusive. Exact target runtime discrimination remains required before claiming the Frank effect path is vulnerable."
+  },
+  "architecture_delta": {
+    "name": "PROCESS_INCARNATION_BOUND_EXECUTION_CAPABILITY",
+    "status": "CANDIDATE_NOT_PROMOTED",
+    "affected_components": [
+      "FrankExecutionGate",
+      "ExecutionGenerationFence",
+      "IngressExecutionLease",
+      "effect reservation B1",
+      "effect attempt/retry B2",
+      "provider precommit B3",
+      "F-V01-09 effect authority",
+      "F-V01-13 security/recovery/observability"
+    ],
+    "candidate_rules_if_target_oob_reproduces": [
+      "A Gate-issued execution capability is valid only in the process incarnation that issued it.",
+      "Forked children inherit no effect execution authority from parent process-local registries, secrets or inherited file descriptors.",
+      "At-fork child handling must invalidate/reseed transient capability state without unlocking the parent's shared flock open-file-description.",
+      "B1/B2/B3 must fail closed when current process incarnation differs from the issuing capability incarnation.",
+      "Durable reservation provenance remains evidence only and cannot reconstruct transient execution authority.",
+      "Outcome observation/reconciliation remains allowed after process-generation loss because evidence is not effect authority."
+    ],
+    "implementation_note": "PID alone is insufficient as a durable identity because PID reuse exists. Prefer an opaque process-incarnation nonce reseeded after fork and checked together with process identity; exact mechanism must be tested for restart/fork/recovery semantics.",
+    "rollback": "Do not alter PR #228 product semantics unless the exact target discriminator reproduces or another independent mechanism proves the same failure."
+  },
+  "executed_vs_pending": {
+    "executed": [
+      "current Clay/Frank repo-state refresh",
+      "fresh primary-source research",
+      "local Linux fork/flock/WeakSet/WeakKeyDictionary primitive control",
+      "diagnostic test/workflow implementation on target-repo branch",
+      "draft adversarial PR #233 creation"
+    ],
+    "pending": [
+      "PR #233 exact target-VPS execution",
+      "PR #228 queued target-VPS workflow conclusion",
+      "process-incarnation repair only if discriminator supports it",
+      "non-bypassable production effect facade/lowering path",
+      "real provider timeout-after-acceptance reconciliation",
+      "actual ClayCode frontend/TypedIR/compiler/lowering evidence"
+    ]
+  },
+  "current_adjudication": {
+    "claim": "Exact Python object identity plus process-local weak registries are not sufficient evidence of process-incarnation-exclusive authority across fork.",
+    "support": "SUPPORTED_AT_PRIMITIVE_MECHANISM_LEVEL",
+    "frank_effect_path_claim": "UNKNOWN_PENDING_TARGET_OOB",
+    "pr228_promotion": "BLOCKED_PENDING_EXISTING_GATES_AND_FORK_DISCRIMINATOR",
+    "no_main_merge": true,
+    "no_training_authorization": true
+  },
+  "next_frontier": [
+    "Execute PR #233 on the accepted self-hosted Linux/X64 lane and retain exact environment/blob/resource evidence.",
+    "If reproduced, repair with process-incarnation-bound capability plus safe after-fork invalidation, then rerun parent normal matrix, fork discriminator, stale-generation tests and recovery controls.",
+    "If refuted, preserve the negative result and continue the pre-existing F-V01-09 gates: production non-bypassability, real provider reconciliation and ClayCode frontend/TypedIR/lowering evidence.",
+    "Cross-route the fork/process-incarnation result to F-V01-13 because the same primitive affects crash/restart/fork/recovery assumptions."
+  ]
+}

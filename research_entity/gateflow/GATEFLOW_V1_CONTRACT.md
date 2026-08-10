@@ -1,6 +1,7 @@
 # CLAY GATEFLOW v1
 
-Status: ACTIVE_CONTROL_PLANE_CANDIDATE
+Status: ACTIVE_CONTROL_PLANE_CANDIDATE  
+Revision: 1.1  
 Scope: Clay research/program coordination only. This contract does not modify Frank's Harness, cognition, effect authority, or owner-fixed acceptance semantics.
 
 ## Purpose
@@ -84,11 +85,13 @@ Leases coordinate work; they do not grant Frank runtime authority.
 
 Normal states:
 
-`DISCOVERED -> REPRODUCED -> REPAIR_CANDIDATE -> LOCAL_VERIFIED -> TARGET_VERIFIED -> FRESH_MAIN_VERIFIED -> INTEGRATION_VERIFIED -> RECEIPT_READY -> ADMITTED -> WORKSPACE_CREDITED`
+`DISCOVERED -> REPRODUCED -> REPAIR_CANDIDATE -> LOCAL_VERIFIED -> TARGET_VERIFIED -> FRESH_MAIN_VERIFIED -> INTEGRATION_VERIFIED -> PRODUCT_MAIN_MERGED -> RECEIPT_READY -> ADMITTED -> WORKSPACE_CREDITED`
 
 Side states:
 
 `NEGATIVE_EVIDENCE`, `INFRA_FAILURE`, `HARNESS_FAILURE`, `STALE_BASE`, `DUPLICATE`, `SUPERSEDED`, `BLOCKED_EXTERNAL`.
+
+`PRODUCT_MAIN_MERGED` is deliberately separate from `WORKSPACE_CREDITED`. A real repair may be on the target repository's `main` and still contribute zero formal Frank-v0.1 gate weight until the required exact-current receipt is adjudicated and the canonical workspace explicitly records that credit.
 
 Only `WORKSPACE_CREDITED` contributes accepted gate weight. Negative evidence contributes risk-retired value when it meets the risk rules above.
 
@@ -113,11 +116,44 @@ Freshness is semantic, not merely branch age.
 - `AMBER`: relevant dependency changed; rerun cheap exact-source/local checks before target scheduling.
 - `RED`: contract/schema/authority/runtime dependency changed; target scheduling or promotion must stop until rebased/re-adjudicated.
 
-A candidate may not become `RECEIPT_READY` while `RED`.
+A candidate may not become `RECEIPT_READY`, `ADMITTED`, or `WORKSPACE_CREDITED` while `RED`.
 
 ## Promotion train
 
 Target-VPS jobs are treated as a scarce serialized validation resource. GateFlow SHOULD batch only promotion-ready candidates with non-conflicting dependency cones against a fresh-main snapshot. Cheap/static/exact-source checks run before Target-VPS scheduling. Every Target result remains bound to exact SHA/artifact identity.
+
+## Conversion telemetry — v1.1
+
+GateFlow v1.1 makes the research-to-product path measurable instead of inferring it from commit volume.
+
+A conversion event may record stage timestamps and exact source references. Machine checks enforce:
+
+- stage timestamps may not move backward;
+- a `PRODUCT_MAIN_MERGED` or later event must carry the exact product-main SHA;
+- a `RECEIPT_READY` or later event must carry the receipt reference;
+- a `WORKSPACE_CREDITED` event must carry both the workspace-credit reference and positive credited weight;
+- an observed later stage may not coexist with an earlier declared `current_stage`;
+- incomplete observation windows may report observed fractions but MUST NOT report population conversion rates.
+
+The current conversion window is stored separately from the durable GateFlow frontier so rapid product movement can be measured without rewriting owner-fixed program state.
+
+`observed_conversion_pipeline_depth_index` is a process-flow diagnostic only. It is NOT Frank product progress, technical completion percentage, or DOOMSDAY probability.
+
+## Formal progress versus technical/process evidence
+
+GateFlow MUST keep three notions separate:
+
+1. `formal workspace credit`: only adjudicated `WORKSPACE_CREDITED` weight;
+2. `conversion/process depth`: where observed evidence currently sits in the research -> target -> main -> receipt -> workspace pipeline;
+3. `risk retired`: evidence-weighted removal/blocking of concrete failure modes.
+
+No composite may silently collapse these into one "percent complete" number.
+
+## Critical-path scheduling — v1.1
+
+`research_entity/gateflow/CRITICAL_PATH_V1.json` materializes a coordination-only dependency-wave view derived from the current Frank v0.1 contract.
+
+The waves prioritize scarce promotion/Target-VPS capacity; they do not ban parallel later-wave research. Earlier-wave P0/P1, identity, authority, recovery or dependency-cone blockers outrank raw novelty. Under promotion pressure, workers should prefer rebase/adjudication/receipt/workspace re-entry over spawning semantically duplicate implementations.
 
 ## WIP and stop-the-line rules
 
@@ -143,13 +179,17 @@ At minimum:
 - accepted gate weight / worker-hour
 - risk retired units
 - risk retired / 1M tokens
+- observed conversion pipeline depth, explicitly labelled non-product-progress
+- target-verified -> product-main merge latency
+- product-main merge -> workspace-credit latency
 - evidence-to-admission latency
-- promotion conversion rate
+- promotion conversion rate only for a complete population window
 - stale evidence rate
 - duplicate/superseded work ratio
 - target queue yield
 - median WIP age
 - fresh-main survival rate
+- workspace staleness relative to observed product-main head
 - E2E causal-chain coverage
 
 ## Non-authority boundary

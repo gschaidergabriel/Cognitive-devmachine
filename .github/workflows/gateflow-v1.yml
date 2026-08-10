@@ -6,14 +6,18 @@ on:
       - 'research_entity/gateflow/**'
       - 'research_entity/rooms/PROGRAM_THROUGHPUT.json'
       - 'tools/gateflow.py'
+      - 'tools/gateflow_window_metrics.py'
       - 'tests/test_gateflow.py'
+      - 'tests/test_gateflow_window_metrics.py'
   push:
     branches: [main]
     paths:
       - 'research_entity/gateflow/**'
       - 'research_entity/rooms/PROGRAM_THROUGHPUT.json'
       - 'tools/gateflow.py'
+      - 'tools/gateflow_window_metrics.py'
       - 'tests/test_gateflow.py'
+      - 'tests/test_gateflow_window_metrics.py'
 
 jobs:
   validate:
@@ -24,5 +28,13 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install pytest
-      - run: python tools/gateflow.py research_entity/gateflow/GATEFLOW_V1_STATE.json
-      - run: pytest -q tests/test_gateflow.py
+      - name: Validate GateFlow state and current conversion window
+        run: >-
+          python tools/gateflow.py
+          research_entity/gateflow/GATEFLOW_V1_STATE.json
+          --conversion-events research_entity/gateflow/GATEFLOW_V1_CONVERSION_WINDOW_2026-08-11.json
+      - name: Compile strict optional window metrics
+        run: >-
+          python tools/gateflow_window_metrics.py
+          research_entity/gateflow/GATEFLOW_V1_CONVERSION_WINDOW_2026-08-11.json
+      - run: pytest -q tests/test_gateflow.py tests/test_gateflow_window_metrics.py

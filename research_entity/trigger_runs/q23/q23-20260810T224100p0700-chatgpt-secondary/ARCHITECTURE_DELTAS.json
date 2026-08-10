@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "architecture_deltas": [
+    {
+      "id": "AD-Q23-QNDRF-1.1-REPRESENTATION-LIFETIMES",
+      "status": "CANDIDATE_TESTING_REQUIRED",
+      "parent": "QNDRF-1",
+      "affected_component": "F-V01-06-DIGITAL-RETINA-MVC",
+      "preserved_historical_functions": [
+        "sensor ingress/provenance",
+        "temporal continuity/change detection",
+        "familiarity/open-set routing",
+        "active sensing",
+        "before/after action verification",
+        "PerceptualField/GWT/re-entry observability",
+        "recovery/replay/version lineage"
+      ],
+      "mechanism": {
+        "hot_path": [
+          "capture(source,time,epoch)",
+          "deterministic frame/tile delta",
+          "selected ROI + token budget",
+          "one Qwen3.5/libmtmd encode",
+          "public projected visual-token grid + decoder positions",
+          "MVC descriptor/readout",
+          "KNOWN_HIGH_CONFIDENCE -> typed perceptual delta when policy permits",
+          "UNKNOWN/AMBIGUOUS/CONFLICT/action-critical -> reuse same encoded buffer in Qwen semantic decode",
+          "typed PerceptualField -> GWT/effect proposal -> verified outcome/re-entry"
+        ],
+        "feature_ladder": [
+          "F0 projected mtmd token-grid descriptor (default experiment)",
+          "F1 Qwen3.5 pre-merger vision hidden-state descriptor (research-only reference tap; not default runtime)",
+          "F2 MobileCLIP2-S0 independent tiny encoder baseline",
+          "F3 DINOv3 ViT-S/16 dense-feature adversarial baseline"
+        ],
+        "spatial_descriptor_candidate": "Normalize public decoder x/y positions; compute global mean+variance and coarse 2x2/3x3 token-grid pooled descriptors; compare rather than assume.",
+        "state_lifetimes": {
+          "L0_SENSOR_IDENTITY": "persistent compact frame/source/ROI/hash/delta/provenance identity",
+          "L1_MVC_STATE": "persistent compact versioned descriptor/prototypes/calibration/evidence tiers",
+          "L2_RAW_MTMD_EMBEDDINGS": "ephemeral same-cycle buffer by default; permitted to feed MVC and semantic decode; not canonical durable truth",
+          "L3_LLAMA_RUNTIME_MEDIA_STATE": "optional rebuildable version-bound performance cache/checkpoint; never semantic authority"
+        },
+        "identity_binding": [
+          "source/frame/ROI content identity",
+          "preprocess/dynamic-resolution/token-budget identity",
+          "model family/revision/quantization",
+          "mmproj/vision revision/hash",
+          "libmtmd/runtime ABI/version",
+          "descriptor algorithm/version",
+          "MVC calibration/prototype version",
+          "LLM continuation/recurrent-state epoch where L3 is used"
+        ]
+      },
+      "expected_benefit": [
+        "avoid duplicate Qwen image encoding during same-cycle escalation",
+        "avoid persisting high-volume raw embedding tensors as semantic state",
+        "make stale-feature/version mismatch fail observable",
+        "permit exact/lightweight MVC comparison without committing to private model hooks",
+        "keep server cache an optimization that can be discarded/rebuilt"
+      ],
+      "strongest_counterhypothesis": "A tiny independent image encoder is sufficiently cheap and much better calibrated that Qwen feature reuse loses total Pareto value; or the representation/lifetime typing costs more complexity than it saves.",
+      "matched_baseline": ["FULL_QWEN","existing QNDRF-1","MobileCLIP2-S0 MVC","DINOv3-S/16 MVC"],
+      "rollback": "Revert to QNDRF-1/current dissolved perception baseline; disable L3 cache reuse; keep raw Qwen encode->semantic decode and existing MVC baseline independently recoverable.",
+      "promotion_gate": "No promotion until target-runtime matched evidence on user-specific held-out/open-set GUI fixtures and restart/resource tests."
+    }
+  ]
+}

@@ -2,6 +2,8 @@ from __future__ import annotations
 import copy, hashlib, json, sqlite3, time
 from pathlib import Path
 
+from .state_root_stream import semantic_state_hash_streaming
+
 class LedgerError(RuntimeError): pass
 class StaleEpoch(LedgerError): pass
 class IdempotencyConflict(LedgerError): pass
@@ -71,8 +73,20 @@ class StateLedger:
         for r in self.conn.execute('SELECT domain,k,value_json,epistemic,status,domain_epoch,semantic_hash FROM state ORDER BY domain,k'):
             out.append({'domain':r[0],'key':r[1],'value':json.loads(r[2]) if r[2] is not None else None,'epistemic':r[3],'status':r[4],'domain_epoch':int(r[5]),'semantic_hash':r[6]})
         return out
-    def _roots(self):
+    def _roots_legacy(self):
+        """Reference implementation of the historical root contract for differential tests."""
         s=h({'global_epoch':self.epoch,'domain_epochs':self.domain_epochs(),'state':self.materialized(),'semantic_chain_hash':self._m('semantic_chain_hash')})
+        return s,h({'semantic_state_hash':s,'execution_chain_hash':self._m('execution_chain_hash')})
+    def _roots(self):
+        # Preserve the exact historical SHA-256 contract while avoiding full value decode /
+        # Python materialization / canonical re-encoding. State value_json is already cjson().
+        s=semantic_state_hash_streaming(
+            conn=self.conn,
+            global_epoch=self.epoch,
+            domain_epochs_json=cjson(self.domain_epochs()),
+            semantic_chain_hash_json=cjson(self._m('semantic_chain_hash')),
+            encode_json_scalar=cjson,
+        )
         return s,h({'semantic_state_hash':s,'execution_chain_hash':self._m('execution_chain_hash')})
     def _norm_ops(self,ops):
         out=[]

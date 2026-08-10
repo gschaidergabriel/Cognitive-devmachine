@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260810T1624p0700",
+  "experiments":[
+    {
+      "id":"EXP-FUSION-POSTHOC-FANOUT-001",
+      "evidence_class":"DERIVED_FROM_REAL_REPO_BRANCH_FEEDBACK_POSTHOC",
+      "status":"DIAGNOSTIC_ONLY",
+      "source":"research_entity/mesh_feedback/20260810T1556p0700-clay-live-fusion/manifest.json",
+      "observed":{"registered_branches":9,"branches_with_material_delta":4,"branches_no_change":5,"broadcast_full_payloads":9,"oracle_targeted_full_payloads":4,"oracle_payload_reduction_vs_broadcast":0.5555555556},
+      "interpretation":"The latest real fusion event was sparse enough that perfect targeting could reduce full payload fanout by 55.6%. This is an oracle lower-bound, not evidence that the adaptive candidate would have selected the same four branches.",
+      "blocker":"The 15:56 durable record does not itself establish the candidate pre-route BranchDependencyIndex, RoutePlan and FusionReceipt chain, so candidate recall and route-cost error cannot be scored from this event alone."
+    }
+  ],
+  "real_repo_replay_verdict":"NOT_YET_ADJUDICATED"
+}

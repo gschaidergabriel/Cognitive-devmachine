@@ -1,0 +1,24 @@
+[Unit]
+Description=Create consistent versioned UnifiedDB snapshot(s)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=clay-mcp
+Group=clay-mcp
+WorkingDirectory=/opt/clay-vps-mcp/current
+EnvironmentFile=/etc/clay-vps-mcp.env
+ExecStart=/opt/clay-vps-mcp/current/.venv/bin/clay-unifieddb-backup --reason PERIODIC
+UMask=0077
+
+NoNewPrivileges=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictSUIDSGID=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/opt/clay-vps-mcp /opt/frank /opt/clay /srv/clay-mcp/workspace
+ReadWritePaths=/srv/unifieddb-backups /srv/clay-history /var/lib/clay-vps-mcp

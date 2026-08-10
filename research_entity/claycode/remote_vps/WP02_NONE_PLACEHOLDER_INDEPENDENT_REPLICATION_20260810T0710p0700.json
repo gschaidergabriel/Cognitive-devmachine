@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:10:40+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "identity_boundary": "RESEARCH_ENTITY_TEMPORARY_WORKER != FRANK; Frank self-Harness authority remains proposal-only",
+  "hypothesis": "The four prior V9/V17 discriminator failures were caused by absent optional parse placeholders reaching the production frontend canonicalizer, not by unintended V17 semantic drift.",
+  "strongest_counterhypothesis": "After suppressing or safely ignoring absent optional placeholders, V9 and V17 still differ on admitted G9/Dialect or neutral record/needle semantics outside the intended Needle.owns horizontal-trivia repair.",
+  "candidate_tested": {
+    "kind": "MINIMAL_DIAGNOSTIC_CANDIDATE_NOT_SELECTED_FOR_MAIN",
+    "clay_branch": "fix/wp02-frontend-none-child-20260810",
+    "clay_commit": "7a6f858136e29a6a695f42f4fe061c1a48f5dc92",
+    "frontend_blob": "da38dbe882ebefbe4b575090c0aedfe02addbbaf",
+    "mechanism": "canonical_node(None) -> None"
+  },
+  "exact_source_identity": {
+    "V9_git_blob": "cdeff8095e6703a6889a60093876c8f0cb0a2b8a",
+    "V17_git_blob": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "G9_git_blob": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "Dialect_git_blob": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "requirements_lock_git_blob": "4a361757efede020cfb288ad7beda2c4a7e6c6b5"
+  },
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "diagnostic_pr": 62,
+    "diagnostic_pr_merged": false,
+    "workflow_run_id": 31343562675,
+    "workflow_job_id": 93321205622,
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "machine": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "workflow_conclusion": "success"
+  },
+  "measurement": {
+    "elapsed_ms_for_semantic_falsifier": 3449.478901,
+    "cases": {
+      "g9": {"v9": "0fe309fb87849a7685d9a8e1d610f0c9b8f1eaca36d225871fe67677d2ca9bcf", "v17": "0fe309fb87849a7685d9a8e1d610f0c9b8f1eaca36d225871fe67677d2ca9bcf", "equal": true},
+      "dialect": {"v9": "a596ff3eeac4e62202f787454a1b626c9aed11d37b2c8634352fd14f891cfdc6", "v17": "a596ff3eeac4e62202f787454a1b626c9aed11d37b2c8634352fd14f891cfdc6", "equal": true},
+      "ordinary_record": {"v9": "67c32b0c1f2977808e9c1864479895973cdbe3651b92aa21b4b7976eed5c5a2a", "v17": "67c32b0c1f2977808e9c1864479895973cdbe3651b92aa21b4b7976eed5c5a2a", "equal": true},
+      "ordinary_needle": {"v9": "9a133f75120d14c2d080a2acf0cea19b43361d075e59155352107a9f38621c50", "v17": "9a133f75120d14c2d080a2acf0cea19b43361d075e59155352107a9f38621c50", "equal": true}
+    },
+    "intended_repair": {
+      "v9_tight": "4e8a79891a260a5c3bbd9833d7c684016c34ec4a77668398dd169a973d4eda2e",
+      "v9_spaced": "d4cfd95754726d47914a6aa197bf63f50a441b8024bf6817bc29b89921a7d0b1",
+      "v17_tight": "4e8a79891a260a5c3bbd9833d7c684016c34ec4a77668398dd169a973d4eda2e",
+      "v17_spaced": "4e8a79891a260a5c3bbd9833d7c684016c34ec4a77668398dd169a973d4eda2e",
+      "preserved": true
+    }
+  },
+  "result": "SUPPORTED_ROOT_CAUSE_ABSENT_OPTIONAL_PLACEHOLDERS_NOT_V17_SEMANTIC_DRIFT",
+  "counterhypothesis_status": "REFUTED_ON_TESTED_G9_DIALECT_RECORD_NEEDLE_CASES",
+  "current_main_reconciliation": {
+    "current_frontend_blob_observed": "55728fd20323a364bb5e831989644b65189603d1",
+    "current_main_mechanism": "Lark build_parser(... maybe_placeholders=False)",
+    "relation_to_candidate": "Current main fixes the same root cause at parser-tree construction and is preferred over the later canonical_node(None) diagnostic candidate.",
+    "independent_main_evidence_ref": "research_entity/mesh_feedback/20260810T0700p0700-clay-live-fusion/claycode_final_refresh.json",
+    "diagnostic_candidate_disposition": "NOT_SELECTED_REDUNDANT"
+  },
+  "architecture_delta": "NO_CHANGE_CURRENT_MAIN_ALREADY_CONTAINS_STRONGER_REPAIR",
+  "test_obligations": [
+    "Complete the repaired current-main WP02 strict/full-corpus/canonical closure receipt on the verified Ubuntu lane.",
+    "Preserve an absent-optional regression so future Lark/default changes cannot reintroduce None placeholders into semantic identity.",
+    "Keep failed-component aggregate receipts in an always-run path so benchmark failures remain durable data."
+  ],
+  "counts_as_wp02_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "promotion": "NONE_FROM_THIS_RECEIPT",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "rollback": "Diagnostic PR 62 closed unmerged; no Frank Harness or Clay main semantic code was changed by this worker's candidate.",
+  "authority_invariant": "model output != execution authority"
+}

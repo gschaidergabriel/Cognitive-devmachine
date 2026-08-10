@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "UDB-POSSIBILITY-LOCAL-NEGATIVE-20260810-A",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "execution_class": "LOCAL_CHATGPT_PYTHON_SYNTHETIC_FIXTURE_NOT_TARGET_HOST",
+  "status": "NEGATIVE_RESULT_WITH_CONFIRMATORY_OPTIMIZATION",
+  "question": "Does query-time adaptive deepening or eager Python facet materialization improve the compiled possibility preprocessor on a relational/hyperbinding synthetic workload?",
+  "fixed_depth2": {
+    "mean_recall_at_10": 1.0,
+    "p50_ms": 1.2304,
+    "p95_ms": 1.4779
+  },
+  "adaptive_depth3": {
+    "mean_recall_at_10": 1.0,
+    "p50_ms": 2.3117,
+    "p95_ms": 2.5370,
+    "depth3_used_fraction": 0.5,
+    "decision": "NOT_SELECTED_ON_THIS_WORKLOAD"
+  },
+  "facet_iteration": {
+    "recursive_sql_facet_p50_us_initial": 150.74,
+    "compiled_python_set_decode_p50_us": 279.58,
+    "set_decode_speed_ratio_vs_sql": 0.54,
+    "recursive_sql_facet_p50_us_rerun": 148.551,
+    "compiled_direct_bit_test_p50_us": 61.787,
+    "direct_bit_speedup_vs_sql_p50": 2.4042,
+    "recursive_sql_no_facet_p50_us": 145.3765,
+    "compiled_no_facet_p50_us": 42.949,
+    "compiled_no_facet_speedup_vs_sql_p50": 3.3849
+  },
+  "coherence_observation": "Compiling an anchor while the graph fixture was still mutating broke exact equivalence; rebuilding only after the graph epoch was complete restored equivalence. A compiled possibility field must therefore derive from an immutable/coherent graph epoch or be invalidated and recompiled.",
+  "fusion": {
+    "architecture_delta": "NO_NEW_RUNTIME_CODE_REQUIRED: current possibility_preprocessor_v10 already represents DENSE_BITSET_LE as a Python integer and intersects bitsets without expanding full member sets. Preserve that shape.",
+    "default_policy": "Do not deepen traversal merely because more hops are available. Deepen only when unresolved pressure or a query-class discriminator predicts information gain sufficient to pay the latency/instability cost.",
+    "facet_policy": "Keep dynamic facets after structural possibility compilation and apply them with compact ordinal encodings/direct bit operations; avoid full Python set reconstruction on the hot path.",
+    "epoch_policy": "Graph/source/field generations must be coherent and immutable for the lifetime of a compiled field read; mixed-generation access fails closed."
+  },
+  "strongest_counterhypothesis": "A held-out workload with decisive evidence beyond depth 2, sparse lexical anchors, or different graph branching may benefit from adaptive deepening; this negative result is workload-specific and must not disable configurable deeper compilation globally.",
+  "limitations": [
+    "Synthetic model-authored fixture; not real Clay corpus.",
+    "Local ChatGPT Python environment; not Hostinger or Andreas Ubuntu target.",
+    "The candidate scoring/ground truth are partially algorithm-coupled, so accuracy values are not independent superiority evidence.",
+    "No concurrent writer/load benchmark in this experiment."
+  ],
+  "next_falsifier": "Run a held-out real-corpus/OOD slice stratified by required graph distance and compare fixed depth, intent-gated deepening and recursive SQL while measuring counterevidence recall, p50/p95/p99, build/update amortization and stale-generation rejection."
+}

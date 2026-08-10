@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:09:00+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "question": "Does current Lark primary documentation support the current Clay frontend repair maybe_placeholders=False as the direct control for absent [] optional parse-tree children?",
+  "sources": [
+    {
+      "evidence_class": "T0_OFFICIAL_DOCUMENTATION",
+      "title": "Lark API Reference",
+      "url": "https://lark-parser.readthedocs.io/en/stable/classes.html",
+      "retrieved_at": "2026-08-10T07:08:00+07:00",
+      "finding": "Lark documents maybe_placeholders=True as the default. In that mode an unmatched [] optional returns None; when False, [] behaves like ? and returns no value."
+    },
+    {
+      "evidence_class": "T0_OFFICIAL_DOCUMENTATION",
+      "title": "Lark Tree Construction Reference",
+      "url": "https://lark-parser.readthedocs.io/en/stable/tree_construction.html",
+      "retrieved_at": "2026-08-10T07:08:00+07:00",
+      "finding": "The tree-construction reference distinguishes item? (no child when absent) from [item] with default placeholders (None when absent), and states that maybe_placeholders=False makes [] behave like the non-placeholder optional form."
+    }
+  ],
+  "repo_evidence": {
+    "repair_commit": "12614c6d8e350da4152c6d54beff5ee7255a4979",
+    "repaired_frontend_git_blob": "55728fd20323a364bb5e831989644b65189603d1",
+    "delta": "Lark build_parser sets maybe_placeholders=False"
+  },
+  "fusion": {
+    "supports_hypothesis": "YES",
+    "hypothesis": "The stale frontend's default optional-placeholder behavior explains NoneType entering canonicalization; explicit placeholder suppression is the direct library-supported repair for a semantic contract in which absent optionals are absent AST children.",
+    "strongest_counterhypothesis": "The repair may still collapse meaningful optional semantics or V17 may still cause unrelated grammar drift; only matched strict corpus replay, optional-semantic discrimination, and the Needle.owns lesion/rescue can falsify this.",
+    "architecture_delta": "NO_CHANGE",
+    "promotion": "NONE",
+    "next_falsifier": "Fresh strict hash-locked Hostinger replay of the repaired frontend, followed by formal Andreas Ubuntu target adjudication before CC-WP-02 promotion."
+  },
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

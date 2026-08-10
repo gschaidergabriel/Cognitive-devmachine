@@ -6,7 +6,8 @@ This is intentionally narrower than a canonical typed-AST proof. It establishes:
 2) full current G9 V3 + Dialect V3 source acceptance,
 3) deterministic parse fingerprints across repeated parses,
 4) explicit negative/positive keyword + newline boundary tests,
-5) lexical-operator/literal discrimination and trivia invariance.
+5) lexical-operator/literal discrimination and trivia invariance,
+6) production-parser absence semantics for optional grammar elements (no synthetic None child).
 
 V17 is the minimal declarative successor to V9. Besides preserving the V5/V6 repair
 obligations, it must close the concrete V9/V10 trivia counterexample where
@@ -27,6 +28,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from lark import Lark, Tree
+
+import claycode_base_frontend as front
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
@@ -58,6 +61,15 @@ def tree_hash(tree: Tree) -> str:
     return sha256_bytes(payload)
 
 
+def count_none_children(node) -> int:
+    """Count synthetic absent-option placeholders recursively in a Lark parse tree."""
+    if node is None:
+        return 1
+    if isinstance(node, Tree):
+        return sum(count_none_children(child) for child in node.children)
+    return 0
+
+
 def try_parse(parser: Lark, source: str) -> tuple[bool, str | None]:
     try:
         parser.parse(source)
@@ -78,7 +90,9 @@ def pair_check(parser: Lark, left: str, right: str, expect_same: bool) -> dict:
         "right_hash": rh,
         "expected_same": expect_same,
         "observed_same": same,
-        "pass": same == expect_same,
+        "left_none_placeholders": count_none_children(lt),
+        "right_none_placeholders": count_none_children(rt),
+        "pass": same == expect_same and count_none_children(lt) == 0 and count_none_children(rt) == 0,
     }
 
 
@@ -90,14 +104,10 @@ def main() -> None:
 
     grammar_path = Path(args.grammar)
     grammar = grammar_path.read_text(encoding="utf-8")
-    parser = Lark(
-        grammar,
-        parser="lalr",
-        lexer="contextual",
-        strict=True,
-        start="start",
-        keep_all_tokens=True,
-    )
+    # Use the exact production parser constructor. This intentionally inherits the
+    # explicit maybe_placeholders=False semantic-tree contract from the BASE frontend,
+    # so validation cannot silently test a different Lark default than production.
+    parser = front.build_parser(grammar, strict=True)
 
     source_results = []
     for path in SOURCES:
@@ -111,6 +121,7 @@ def main() -> None:
             "parse_tree_hash": h1,
             "repeat_parse_tree_hash": h2,
             "deterministic_repeat": h1 == h2,
+            "none_placeholder_count": count_none_children(t1),
             "tree_nodes": sum(1 for _ in t1.iter_subtrees()),
         })
 
@@ -150,7 +161,34 @@ def main() -> None:
     pos = []
     for name, src in positive_cases.items():
         ok, err = try_parse(parser, src)
-        pos.append({"case": name, "expected": "ACCEPT", "accepted": ok, "pass": ok, "error": err})
+        none_count = count_none_children(parser.parse(src)) if ok else None
+        pos.append({
+            "case": name,
+            "expected": "ACCEPT",
+            "accepted": ok,
+            "none_placeholder_count": none_count,
+            "pass": ok and none_count == 0,
+            "error": err,
+        })
+
+    # Regression for the exact failure family seen in the first Hostinger V9/V17
+    # discriminator: absent [] optionals must be represented by absence, never None.
+    optional_absence_sources = {
+        "record_without_typeparams_or_optional_type": "record X { a:Int }\n",
+        "needle_without_params": "needle f()->Int\n",
+        "record_without_field_default": "record X { a:Int; b:Ref }\n",
+        "simple_module_law": "module clay.demo\nlaw residual>=0\n",
+    }
+    optional_absence = []
+    for name, src in optional_absence_sources.items():
+        tree = parser.parse(src)
+        none_count = count_none_children(tree)
+        optional_absence.append({
+            "case": name,
+            "source": src,
+            "none_placeholder_count": none_count,
+            "pass": none_count == 0,
+        })
 
     discrimination_sources = {
         "greater_vs_less": ("rule x>0\n", "rule x<0\n"),
@@ -185,15 +223,16 @@ def main() -> None:
 
     regex_lookaround_present = "(?=" in grammar or "(?<=" in grammar or "(?!" in grammar or "(?<!" in grammar
     passed = (
-        all(x["deterministic_repeat"] for x in source_results)
+        all(x["deterministic_repeat"] and x["none_placeholder_count"] == 0 for x in source_results)
         and all(x["pass"] for x in neg)
         and all(x["pass"] for x in pos)
+        and all(x["pass"] for x in optional_absence)
         and all(x["pass"] for x in discrimination)
         and all(x["pass"] for x in equivalence)
     )
     out = {
-        "schema_version": "1.6",
-        "experiment": "ClayCode BASE D V17 trivia-safe repaired-frontend full-corpus validation",
+        "schema_version": "1.7",
+        "experiment": "ClayCode BASE D V17 trivia-safe production-frontend full-corpus validation",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)),
         "grammar_sha256": sha256_bytes(grammar.encode("utf-8")),
@@ -202,16 +241,20 @@ def main() -> None:
             "mode": "lalr/contextual",
             "strict": True,
             "keep_all_tokens": True,
+            "production_parser_constructor": "claycode_base_frontend.build_parser",
+            "maybe_placeholders": False,
             "lark_version": package_version("lark"),
             "interegular_version": package_version("interegular"),
         },
         "sources": source_results,
         "negative_cases": neg,
         "positive_cases": pos,
+        "optional_placeholder_absence_cases": optional_absence,
         "lexical_discrimination_cases": discrimination,
         "lexical_equivalence_cases": equivalence,
         "v9_trivia_counterexample_guard_present": True,
         "metamorphic_relation_boundary_guard_present": True,
+        "optional_placeholder_absence_guard_present": True,
         "regex_lookaround_present": regex_lookaround_present,
         "strict_collision_scope_guard": (
             "Lookaround is present: strict=True remains necessary but is not sufficient evidence for all regex collisions; explicit relation-boundary metamorphic tests are part of this gate."
@@ -219,7 +262,7 @@ def main() -> None:
             else "No regex lookaround detected by this static guard."
         ),
         "pass": passed,
-        "scope_guard": "PASS proves strict parser construction, exact current G9/Dialect acceptance, V5/V6 regression obligations, the V9 horizontal-trivia call repair and explicit V17 dotted relation/call boundary metamorphic guards for the selected grammar. It does not close CC-WP-02 without grammar-bound canonicalizer/target receipts and does not prove typed IR/type/effect semantics."
+        "scope_guard": "PASS proves production-parser strict construction, exact current G9/Dialect acceptance, absent-optional placeholder suppression, V5/V6 regression obligations, the V9 horizontal-trivia call repair and explicit V17 dotted relation/call boundary metamorphic guards for the selected grammar. It does not close CC-WP-02 without grammar-bound canonicalizer/target receipts and does not prove typed IR/type/effect semantics.",
     }
     text = json.dumps(out, ensure_ascii=False, indent=2) + "\n"
     if args.output:

@@ -29,6 +29,7 @@ def canon(v):
 def cjson(v): return json.dumps(canon(v),ensure_ascii=False,sort_keys=True,separators=(',',':'))
 def h(v): return hashlib.sha256(cjson(v).encode()).hexdigest()
 def rawh(s): return hashlib.sha256(s.encode()).hexdigest()
+def jstr(v): return json.dumps(str(v),ensure_ascii=False,separators=(',',':'))
 
 SCHEMA='''
 PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;
@@ -71,8 +72,37 @@ class StateLedger:
         for r in self.conn.execute('SELECT domain,k,value_json,epistemic,status,domain_epoch,semantic_hash FROM state ORDER BY domain,k'):
             out.append({'domain':r[0],'key':r[1],'value':json.loads(r[2]) if r[2] is not None else None,'epistemic':r[3],'status':r[4],'domain_epoch':int(r[5]),'semantic_hash':r[6]})
         return out
-    def _roots(self):
+    def _semantic_state_hash_streaming(self):
+        """Byte-exact equivalent of h(canonical semantic-state object) without materializing it."""
+        digest=hashlib.sha256()
+        def put(s): digest.update(s.encode())
+        put('{"domain_epochs":{')
+        first=True
+        for r in self.conn.execute('SELECT domain,epoch FROM domain_epochs ORDER BY domain'):
+            if not first: put(',')
+            first=False; put(jstr(r[0])); put(':'); put(str(int(r[1])))
+        put('},"global_epoch":'); put(str(self.epoch))
+        put(',"semantic_chain_hash":'); put(jstr(self._m('semantic_chain_hash')))
+        put(',"state":[')
+        first=True
+        for r in self.conn.execute('SELECT domain,k,value_json,epistemic,status,domain_epoch,semantic_hash FROM state ORDER BY domain,k'):
+            if not first: put(',')
+            first=False
+            put('{"domain":'); put(jstr(r[0]))
+            put(',"domain_epoch":'); put(str(int(r[5])))
+            put(',"epistemic":'); put(jstr(r[3]))
+            put(',"key":'); put(jstr(r[1]))
+            put(',"semantic_hash":'); put(jstr(r[6]))
+            put(',"status":'); put(jstr(r[4]))
+            put(',"value":'); put(r[2] if r[2] is not None else 'null')
+            put('}')
+        put(']}')
+        return digest.hexdigest()
+    def _roots_legacy(self):
         s=h({'global_epoch':self.epoch,'domain_epochs':self.domain_epochs(),'state':self.materialized(),'semantic_chain_hash':self._m('semantic_chain_hash')})
+        return s,h({'semantic_state_hash':s,'execution_chain_hash':self._m('execution_chain_hash')})
+    def _roots(self):
+        s=self._semantic_state_hash_streaming()
         return s,h({'semantic_state_hash':s,'execution_chain_hash':self._m('execution_chain_hash')})
     def _norm_ops(self,ops):
         out=[]

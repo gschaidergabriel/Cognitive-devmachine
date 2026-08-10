@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:15:00+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go-bounded-max3",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "cycle": 3,
+  "focus": "Fail-closed separation of Hostinger research evidence from final Andreas Ubuntu target acceptance.",
+  "contract_ref": "research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json",
+  "experiment_class": "OUT_OF_BOX_BOUNDED_EVIDENCE_AUTHORITY_FALSIFIER",
+  "name": "COUNTERFEIT_TARGET_RECEIPT_ATTACK",
+  "method": "Construct otherwise-complete synthetic receipts with all required work packages and ten applications marked pass, then vary only target/CI provenance and apply a minimal contract-derived fail-closed adjudication shadow.",
+  "cases": {
+    "baseline_target_shape": {"target_host":"ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM","ci":false,"expected":"ACCEPT_SHAPE_ONLY","observed":"ACCEPT_SHAPE_ONLY"},
+    "counterfeit_hostinger": {"target_host":"HOSTINGER_UBUNTU_SELF_HOSTED_RUNNER","ci":true,"expected":"REJECT","observed":"REJECT","reasons":["TARGET_HOST_MISMATCH","COLLECTOR_NON_CI_FAILED"]},
+    "spoofed_target_label_but_ci": {"target_host":"ANDREAS_UBUNTU_LINUX_DEVELOPER_SYSTEM","ci":true,"expected":"REJECT","observed":"REJECT","reasons":["COLLECTOR_NON_CI_FAILED"]}
+  },
+  "result": "FAIL_CLOSED_ON_TESTED_COUNTERFEITS",
+  "interpretation": "Hostinger success must never be promotable to final target acceptance by merely copying a target_host label; execution-context checks are independently required.",
+  "strongest_counterhypothesis": "This local adjudication shadow is not the repository's future strict adjudicator and cannot prove the eventual implementation will enforce every hard rule. The actual target collector/strict receipt artifacts are currently absent and remain implementation obligations.",
+  "architecture_delta": "NO_RUNTIME_CHANGE",
+  "test_obligation": "When the Andreas Ubuntu strict adjudicator is implemented, include these counterfeit cases plus missing-field, stale-hash, proxy-only, unresolved-counterexample and semantic-escape-hatch negatives as mandatory regression fixtures.",
+  "counts_as_wp02_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "promotion": "NONE",
+  "exactly_one_out_of_box_experiment_for_cycle": true,
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

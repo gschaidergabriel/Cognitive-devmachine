@@ -1,0 +1,84 @@
+name: Semantic Retrieval Adversarial Benchmark
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/benchmark_semantic_retrieval_adversarial_v11.py'
+      - 'research_entity/runtime/benchmark_semantic_retrieval_v10.py'
+      - 'research_entity/runtime/semantic_retrieval_runtime_v10.py'
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V10_POSSIBILITY_COMPILER.sql'
+      - '.github/workflows/semantic-retrieval-adversarial.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: semantic-retrieval-adversarial-main
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile benchmark
+        run: |
+          python -m py_compile \
+            research_entity/runtime/semantic_retrieval_runtime_v10.py \
+            research_entity/runtime/benchmark_semantic_retrieval_v10.py \
+            research_entity/runtime/benchmark_semantic_retrieval_adversarial_v11.py
+      - name: Run adversarial benchmark
+        run: |
+          mkdir -p research_entity/benchmarks/semantic_retrieval_adversarial
+          python research_entity/runtime/benchmark_semantic_retrieval_adversarial_v11.py \
+            > research_entity/benchmarks/semantic_retrieval_adversarial/latest.json
+          cat research_entity/benchmarks/semantic_retrieval_adversarial/latest.json
+      - name: Attach execution metadata
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, platform, sqlite3, sys
+          p=pathlib.Path('research_entity/benchmarks/semantic_retrieval_adversarial/latest.json')
+          x=json.loads(p.read_text())
+          x['execution_metadata']={
+            'git_sha':os.environ['GIT_SHA'],
+            'github_run_id':os.environ['RUN_ID'],
+            'github_run_attempt':os.environ['RUN_ATTEMPT'],
+            'runner_os':os.environ.get('RUNNER_OS'),
+            'runner_arch':os.environ.get('RUNNER_ARCH'),
+            'runner_name':os.environ.get('RUNNER_NAME'),
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+            'platform':platform.platform(),
+            'machine':platform.machine(),
+            'processor':platform.processor(),
+          }
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - name: Persist benchmark receipt
+        run: |
+          git config user.name 'clay-benchmark-bot'
+          git config user.email 'clay-benchmark-bot@users.noreply.github.com'
+          git add research_entity/benchmarks/semantic_retrieval_adversarial/latest.json
+          git commit -m 'evidence(unifieddb): persist adversarial semantic retrieval benchmark' || exit 0
+          for i in 1 2 3 4; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((i*2))
+          done
+          echo 'failed to persist adversarial benchmark receipt after bounded retries' >&2
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: semantic-retrieval-adversarial
+          path: research_entity/benchmarks/semantic_retrieval_adversarial/latest.json

@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "post-206-executed-delta-20260810",
+  "parent_run": "go-20260810T2244p0700-chatgpt-secondary-selfroot-fence-fusion-v2",
+  "parent_research_merge": "8a83fc981fdf59e7be965aaaa0ab76fb3d681c71",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity_boundary": "TEMPORARY_CLAY_RESEARCH_WORKER_NOT_FRANK"
+  },
+  "status": "APPEND_ONLY_EXECUTED_DELTA_IN_PROGRESS",
+  "identity": {
+    "broad_owner_pr": 181,
+    "graph_alias_stack_pr": 201,
+    "graph_alias_stack_status": "MERGED_INTO_PR181_ONLY_NOT_MAIN",
+    "graph_alias_merge_commit": "440051607110b7c53695036b7e497f88d9d37b18",
+    "graph_alias_target_run": 31409551792,
+    "graph_alias_target_job": 93524036381,
+    "graph_alias_target_result": {
+      "status": "PASS",
+      "tested_merge_sha": "efc0e0fe9a0edcd01c3a5bb1f4ff3e6cab3301cb",
+      "static_checks": 38,
+      "transactions_replayed": 5,
+      "semantic_epoch": 5,
+      "fresh_graph_self": "self.root",
+      "legacy_entity_fk_preserved": true,
+      "legacy_entity_disposition": "COMPATIBILITY_ALIAS_NOT_SELF",
+      "binary_digest_verified": false,
+      "v15_presence_retained": true,
+      "v16_execution_continuity_retained": true,
+      "transaction_replay_retained": true,
+      "evidence_artifact_sha256": "aedfe6f77d648271ae53d89b8203a50ff725d01ab39b99bb88ea6f5d6eabdbe0"
+    },
+    "broad_owner_combined_run": {
+      "run": 31410824088,
+      "job": 93528171988,
+      "status": "PASS",
+      "tested_merge_sha": "ca6203398868193763f454231473ef45f585c60f",
+      "origin_main": "37c3cdd1ad199ad93f3ebcbe7f8670f5358545b9",
+      "source_to_replay_graph_alias": "PASS_static_checks_38_transactions_5_epoch_5",
+      "prompt_v15_v16": "PASS_cases_6_secrets_0_inform_only",
+      "presence": "PASS_12_contenders_1_winner_11_busy_sqlite_ok",
+      "v16_continuity": "PASS",
+      "transaction_replay": "PASS_5",
+      "repo_static_differential": "NO_NEW_FAILURES_candidate_rc1_base_rc1",
+      "whole_v01_acceptance": "NOT_CLAIMED"
+    },
+    "main_integration_transport": {
+      "reason_original_pr_not_directly_merged": "Original PR181 accumulated large ancestry divergence and transient/non-mergeable GitHub integration state despite no observed identity-path overlap.",
+      "fresh_rebase_pr": 227,
+      "fresh_rebase_branch": "chatgpt/selfroot-main-rebase-20260810",
+      "fresh_rebase_head_at_creation": "e681e375c55fe1dc9a5f4f0738b96eb9a9baaeaf",
+      "strategy": "Port only 13 tested production/semantic/test paths onto fresh main; omit obsolete stack-only PR201 workflow; rerun same broad self-hosted current-head gate before any main merge.",
+      "last_mergeability": true,
+      "fresh_main_overlap_at_last_check": "7 newer main commits; only WP04/hyperposition backend files, zero overlap with identity paths",
+      "target_run": 31412172807,
+      "target_run_status": "QUEUED"
+    }
+  },
+  "oob_experiment": {
+    "count_for_exact_go_run": 1,
+    "name": "ABA_SAME_HOLDER_RELEASE_REACQUIRE",
+    "pr": 168,
+    "self_hosted_run": 31406521132,
+    "self_hosted_job": 93514099511,
+    "runner": "clay/digital-retina Linux X64",
+    "tested_merge_sha": "056a3b9374ac39180c6d75ceb4174dc7ea060777",
+    "result": {
+      "status": "PASS_ABA_SAME_HOLDER_RESURRECTION_FENCED",
+      "first_epoch": 1,
+      "second_epoch": 2,
+      "same_session_ref": true,
+      "same_client_ref": true,
+      "stale_heartbeat_status": "FENCED",
+      "stale_release_status": "FENCED",
+      "stale_effect_attempt_changed": false,
+      "stale_effect_attempt_reason": "PRESENCE_FENCED:PRESENCE_EPOCH_MISMATCH",
+      "old_generation_new_reservation_admitted": false,
+      "new_generation_new_attempt_state": "COMMITTING",
+      "old_reservation_final_state": "RESERVED",
+      "old_reservation_attempt_id": null,
+      "sqlite_integrity": "ok",
+      "foreign_key_violations": 0,
+      "external_network_used": false,
+      "external_effect_performed": false,
+      "canonical_state_mutated": false,
+      "promotion_claimed": false,
+      "evidence_artifact_sha256": "fb2708f1d0c0995c2a738d4491d6ee3088e6d37e40a4a9bc4e34c82186c709eb"
+    },
+    "interpretation": "The target-repo runtime on the tested historical fence candidate rejects ABA resurrection even when apparent session/client holder strings are identical after reacquire. This is strong generation-fence evidence but does not automatically promote the older branch over the current V17 owner."
+  },
+  "current_effect_owner": {
+    "pr": 199,
+    "title": "CANDIDATE: fence effect start/retry/precommit to admitted execution generation",
+    "ownership_reason": "Current candidate binds effect reservation/start/retry/provider-precommit to the actual admitted IngressExecutionLease and tests A->B->C turnover plus tuple-clone rejection while keeping V14 as control.",
+    "previous_failed_run": 31410178732,
+    "failure_classification": "CONTRACT_MARKER_MISMATCH_NOT_DYNAMIC_GENERATION_FAILURE",
+    "failed_marker": "effect_execution_fence_does_not_mint_effect_authorization",
+    "source_semantics_observed": [
+      "live_execution_capability_does_not_mint_effect_authorization",
+      "trusted_execution_capability_derives_only_from_admitted_canonical_ingress",
+      "provider_commit_rechecks_same_bound_live_execution"
+    ],
+    "repair_commit": "e9cc4b2e417ba9294c54616a603d2223bb4f35d3",
+    "repair": "Add the three exact gate-facing invariant aliases without changing runtime algorithm or weakening tests: effect_execution_fence_does_not_mint_effect_authorization; trusted_fence_must_derive_from_admitted_canonical_ingress_execution; provider_commit_rechecks_same_bound_current_execution.",
+    "retest_run": 31411225036,
+    "retest_status": "QUEUED",
+    "remaining_same_oob_falsifier_gap": "PR199 A->B->C tests different successor holders and scalar tuple cloning but does not yet exercise the exact same-holder ABA release/reacquire case proven by PR168. After PR199 core is green, port the same ABA scenario as a conventional regression/test obligation; this is the same OOB experiment, not a second one."
+  },
+  "boot_binary": {
+    "pr": 196,
+    "prior_mechanism_run": 31408992270,
+    "prior_result": "PASS_37_OF_37_MECHANISM",
+    "prior_evidence_is_pre_graph_alias_integration": true,
+    "production_status": "BLOCKED_NO_TRUSTED_BUILDER_AND_NO_APPROVED_TARGET_ATTESTATION_VERIFIER",
+    "real_artifact_attestation_verified": false,
+    "target_gh_cli_observed": "MISSING:/usr/bin/gh",
+    "effect_authority": "NONE",
+    "retest_required_after_identity_main_integration": true
+  },
+  "build_provenance_dependency": {
+    "target_repo_private": true,
+    "github_private_attestation_enterprise_entitlement_verified": false,
+    "github_native_private_attestation_status": "UNKNOWN",
+    "offline_target_verification_architecture": "artifact + attestation bundle + trusted roots + externally approved verifier; no target network requirement and no self.root verifier-update authority",
+    "claycode_current_frontier": "WP04 exact callable semantics/runtime binding",
+    "execution_admitted": 0,
+    "wp05_executable_lowering_closed": false,
+    "ordered_path": "WP04 -> WP05 real lowering -> deterministic real binary -> reproducible build metadata -> owner-pinned signing/attestation -> approved target verifier -> joint binary/state/body/lease/restart acceptance"
+  },
+  "negative_results": [
+    "Meta self.root with ClayGraph entity:frank as current SELF was a real semantic split and is now closed on the tested PR181 combined lane.",
+    "An already-green old identity branch is not sufficient for main integration when GitHub integration state has diverged; tested content was therefore rebased onto fresh main as PR227.",
+    "PR199 red did not establish generation-fence failure; it stopped on an exact Clay invariant marker mismatch after Python compilation.",
+    "PR168 PASS cannot by itself promote the older effect branch over current PR199/V17 ownership.",
+    "PR196 mechanism PASS cannot establish real binary identity while trusted builder, real artifact attestation and approved verifier remain absent.",
+    "WP05/final binary work must not be fabricated while current ClayCode still reports zero execution authority."
+  ],
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "clay_research_authority": "INDEPENDENT_REVIEW_TEST_IMPLEMENTATION",
+    "target_main_mutated_by_this_delta": false,
+    "canonical_state_mutated": false,
+    "external_provider_effect_performed": false,
+    "external_attestation_created": false,
+    "training_authorized": false,
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "next_falsifiers": [
+    "Require PR227 self-hosted fresh-main identity gate PASS plus immediate overlap/mergeability refresh before target main promotion.",
+    "Require PR199 retest PASS after exact invariant-contract repair; then carry the already-executed ABA same-holder scenario into the current execution-fence owner as a regression, not a new OOB experiment.",
+    "After identity lands on main, rebase/retest PR196 or successor against that exact main before any boot/binary continuity promotion.",
+    "Continue existing WP04/WP05 owners; do not create duplicate compiler or binary-builder ownership."
+  ]
+}

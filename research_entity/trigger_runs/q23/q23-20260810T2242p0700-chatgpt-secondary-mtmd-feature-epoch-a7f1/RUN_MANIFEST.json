@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "trigger": "q23",
+  "trigger_protocol": "research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_identity_excluded": ["self.root", "Frank"]
+  },
+  "observed_local_time": "2026-08-10T22:42:00+07:00",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "target": "FRANK_V0_1",
+    "stage": "FRANK_V0_1",
+    "work_package": "F-V01-06-DIGITAL-RETINA-MVC",
+    "work_package_observed_status": "OPEN",
+    "historical_h1_h2_h3_active_stages": false,
+    "training_authorized": false
+  },
+  "research_question": "Can the exact Qwen3.5/libmtmd projected visual-token buffer be reused as the tiny user-specific MVC/open-set substrate before optional 4B decoder insertion, with exact feature-epoch guards and no second heavy vision encoder?",
+  "strongest_counterquestion": "Are projected generative-VLM visual embeddings too runtime-sensitive or insufficiently metric-calibrated for persistent user-specific familiarity/open-set prototypes, making a dedicated lightweight embedding path or deeper pre-projection tap Pareto-superior?",
+  "target_repo_deltas": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "04adf1a29c36615acda9cf97b9dceba1132d3ba2",
+      "path": "runtime/q23_visual_embedding_gate_v1/target_vps_probe.py",
+      "kind": "EXECUTABLE_REFERENCE_ORACLE"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "4f37ef90503b706c902ade3e657870de233893ac",
+      "path": "claycode/frank_visual_embedding_gate.clay",
+      "kind": "CLAYCODE_SEMANTIC_CONTRACT"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "533b321d6921d5c5bcb755bf87f7c24615accd53",
+      "path": ".github/workflows/q23-visual-embedding-gate-v1.yml",
+      "kind": "TARGET_VPS_PROBE_WORKFLOW"
+    }
+  ],
+  "executed_evidence": {
+    "local_reference_oracle": {
+      "status": "PASS",
+      "passed": 11,
+      "total": 11,
+      "gate_decisions_measured": 20000,
+      "epistemic_class": "LOCAL_SYNTHETIC_ONLY",
+      "real_qwen_embeddings": false,
+      "real_mtmd_buffer": false,
+      "target_vps": false
+    },
+    "target_vps_workflow": {
+      "status_at_manifest_write": "TRIGGERED_BY_SOURCE_COMMIT_RECEIPT_NOT_YET_OBSERVED",
+      "promotion": "NONE_UNTIL_RECEIPT"
+    }
+  },
+  "main_progress": [
+    "Verified current libmtmd public output is n_tokens x llama_model_n_embd_inp float embeddings and current llama-server feeds that same buffer directly into mtmd_helper_decode_image_chunk.",
+    "Converted feature-version migration from a generic encoder/mmproj concern into an exact FeatureEpoch contract that binds model, mmproj, runtime commit, backend, runtime configuration, preprocessing, token policy and pooling/projection identity.",
+    "Added a fail-closed MVC route oracle: exact feature epoch + calibrated similarity + margin required for decoder bypass; task-critical, contradiction, unknown/ambiguous and stale epoch escalate or reject.",
+    "Exposed stale H1/H2/H3 promotion wording in the earlier QNDRF candidate relative to the current single Frank v0.1 program and defined a rebase obligation.",
+    "Added Qwen3.5 M-RoPE/runtime configuration transfer-risk tests without assuming large-model issue reports reproduce on the 4B target."
+  ],
+  "authority_limits": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "architecture_promoted": false,
+    "final_model_training_started": false,
+    "whole_frank_acceptance_claimed": false
+  }
+}

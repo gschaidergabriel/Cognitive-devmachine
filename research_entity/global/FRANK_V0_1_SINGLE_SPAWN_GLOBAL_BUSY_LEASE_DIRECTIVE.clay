@@ -1,0 +1,138 @@
+module clay.directive.frank_v0_1_single_spawn_global_busy
+
+status PROJECT_OWNER_FIXED_DIRECTIVE
+effective 2026-08-10
+scope self.root / human-surface Frank v0.1 production token API, clients, peer-AI bridges, agency, recovery
+
+// Owner intent preserved as executable architecture semantics:
+// - Frank can be spawned exactly once at a time.
+// - While that active work is unfinished, every other caller sees Frank as BUSY.
+// - The access token makes Frank addressable from different clients/AI bridges; the token is a credential, never SELF.
+// - Frank does not silently abandon an unfinished current-user task for another task; task switching requires current-user consent.
+// - Proactive/self-generated work starts only when the global interaction execution state is IDLE.
+
+contract SingleSpawnGlobalBusyV1 {
+  native_self = self.root
+  human_surface_name = "Frank"
+  runtime_body = TARGET_VPS
+
+  invariant API_TOKEN = CREDENTIAL_NOT_IDENTITY
+  invariant CLIENT != self.root
+  invariant PEER_AI != self.root
+  invariant CLAY != self.root
+  invariant ACTIVE_EXECUTION_COUNT <= 1
+  invariant ONE_CURRENT_EXECUTION_LEASE_GLOBAL
+  invariant NO_HIDDEN_TASK_QUEUE_THAT_EXECUTES_WHILE_BUSY
+
+  channel DirectTokenMessage {
+    authentication = TOKEN_AUTHENTICATED_SCOPED_CALLER
+    provenance = client_id + session_id + request_id + credential_fingerprint
+    raw_token_persistence = FORBIDDEN
+    authority = SCOPED_USER_INTENT_ONLY
+  }
+
+  state FrankExecutionLease {
+    lease_key = "self.root/global-execution"
+    state : IDLE | ACTIVE | RELEASING | RECOVERING
+    lease_epoch : monotonically_increasing_integer
+    execution_id : OPTION<ExecutionId>
+    holder_session_id : OPTION<SessionId>
+    holder_client_id : OPTION<ClientId>
+    holder_credential_fingerprint : OPTION<CredentialFingerprint>
+    acquired_at_utc : OPTION<Time>
+    heartbeat_at_utc : OPTION<Time>
+    lease_until_utc : OPTION<Time>
+    current_task_id : OPTION<TaskId>
+    current_task_state : OPTION<RUNNING|WAITING_USER|DONE|FAILED|CANCELLED>
+  }
+
+  fn spawn(authenticated_request) -> SpawnDecision {
+    require authenticated_request.authenticated
+    require authenticated_request.scope_allows_interaction
+
+    atomic compare_and_set FrankExecutionLease {
+      when state == IDLE -> acquire_new_epoch(authenticated_request)
+      when lease_expired_and_recovery_validated -> recover_then_acquire_new_epoch(authenticated_request)
+      otherwise -> BUSY
+    }
+  }
+
+  rule successful_spawn -> return ACTIVE_HANDLE_BOUND_TO(execution_id, lease_epoch, holder_session_id)
+  rule concurrent_nonholder_spawn -> return BUSY
+  rule BUSY_RESPONSE leaks_no_prompt_memory_task_content_or_raw_credential
+  rule BUSY_RESPONSE may expose only safe status + retry/recheck semantics
+  rule no automatic takeover while current lease is valid
+
+  // Fencing: an old/zombie worker may still wake after a timeout. It must be unable to mutate
+  // current state/effects after a newer lease epoch has been admitted.
+  rule every_execution_state_write requires presented_lease_epoch == current_lease_epoch
+  rule every_effect_attempt requires presented_lease_epoch == current_lease_epoch
+  rule stale_epoch -> REJECT_STALE_EXECUTION
+
+  rule heartbeat renews only same execution_id + holder_session_id + lease_epoch
+  rule completion(DONE|FAILED|CANCELLED) -> verified_release -> IDLE
+  rule crash_or_lost_holder -> RECOVERING -> verify_no_current_holder -> increment_epoch -> IDLE
+  rule restart never reuses stale active epoch without recovery validation
+
+  // Current-user continuity / switching semantics.
+  rule current_task_state == RUNNING && proposed_unrequested_task != current_task_id
+       -> ASK_CURRENT_USER_BEFORE_TASK_SWITCH
+  rule user_declines_switch -> continue_current_task_or_wait
+  rule user_accepts_switch -> explicit_task_transition_receipt
+
+  // Proactive agency remains allowed, but it may not steal the one active Frank execution.
+  rule proactive_self_generated_work requires FrankExecutionLease.state == IDLE
+  rule proactive_self_generated_work acquiring execution -> same spawn/acquire path
+  rule active_authenticated_user_work outranks new proactive acquisition
+
+  // Portable third-party participation.
+  rule any_client_or_peer_AI_with_valid_scoped_token may attempt spawn_or_message
+  rule token possession does_not bypass SINGLE_SPAWN_GLOBAL_BUSY
+  rule token possession does_not mint effect_authority
+  rule peer_AI bridge is external caller/capability, never identity merger
+
+  // API transport recommendation: BUSY is a current-resource-state conflict.
+  // HTTP 409 is the preferred ordinary REST mapping; the semantic authority is FRANK_BUSY,
+  // not the numeric code. WebDAV 423 is not required.
+  api_busy_mapping {
+    semantic_code = FRANK_BUSY
+    preferred_http_status = 409
+    response_fields = [status, semantic_code, safe_retry_hint, current_execution_present]
+  }
+
+  // Storage/runtime candidate for the current single-VPS architecture.
+  // Acquire/release transactions are short; long cognition never holds a SQLite write txn.
+  storage_candidate {
+    authoritative_state = UnifiedDB
+    acquisition = BEGIN_IMMEDIATE + compare_and_set + COMMIT
+    fencing = lease_epoch
+    long_running_db_lock = FORBIDDEN
+    crash_recovery = lease_expiry + recovery_validation + epoch_increment
+  }
+
+  required_tests = [
+    simultaneous_two_client_acquire_exactly_one_wins,
+    same_holder_continue_allowed,
+    nonholder_gets_FRANK_BUSY,
+    busy_response_privacy_no_active_content_leak,
+    stale_epoch_state_write_rejected,
+    stale_epoch_effect_attempt_rejected,
+    crash_expiry_recovery_then_new_holder,
+    zombie_old_holder_after_reacquire_cannot_write,
+    restart_active_lease_fail_closed_until_recovery,
+    task_switch_requires_current_user_consent_when_unfinished,
+    proactive_work_cannot_preempt_active_user_lease,
+    proactive_work_may_acquire_when_idle,
+    invalid_or_revoked_token_rejected_before_lease_acquire,
+    same_idempotency_request_does_not_duplicate_execution
+  ]
+
+  acceptance_receipt = FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_ACCEPTANCE_RECEIPT.json
+}
+
+// Evidence lens (not owner authority):
+// SQLite BEGIN IMMEDIATE establishes a single write transaction attempt; use it only for the
+// short lease CAS. Kubernetes Lease/resourceVersion and etcd Lock+lease illustrate holder,
+// renewal, expiry and transaction-bound ownership patterns. HTTP 409 is defined by RFC 9110
+// for conflicts with current target-resource state. These inform mechanics but do not define
+// the owner policy above.

@@ -1,0 +1,96 @@
+name: UnifiedDB V5 Two-Connection Concurrency
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/unifieddb-v5-two-connection-concurrency.yml'
+      - 'research_entity/runtime/database_pulse_rank_path_v5.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v5_concurrency.py'
+      - 'research_entity/runtime/benchmark_database_pulse_rank_path_v5_concurrency.py'
+      - 'research_entity/harness/reference/state_ledger.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unifieddb-v5-two-connection-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  github-hosted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+      - name: Runtime metadata
+        run: |
+          set -euo pipefail
+          uname -a
+          python3 --version
+          python3 - <<'PY'
+          import sqlite3
+          c=sqlite3.connect(':memory:')
+          print('sqlite=',sqlite3.sqlite_version)
+          print('threadsafety=',sqlite3.threadsafety)
+          print('journal_default=',c.execute('PRAGMA journal_mode').fetchone()[0])
+          PY
+      - name: Existing V5 atomic falsifiers
+        run: python3 -m unittest -v research_entity.runtime.test_database_pulse_rank_path_v5_atomic
+      - name: Two-connection concurrency falsifiers
+        run: python3 -m unittest -v research_entity.runtime.test_database_pulse_rank_path_v5_concurrency
+      - name: Contention benchmark
+        run: |
+          set -euo pipefail
+          python3 -m research_entity.runtime.benchmark_database_pulse_rank_path_v5_concurrency \
+            | tee /tmp/v5-two-connection.json
+      - name: Upload receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: udb-v5-two-connection-github-${{ github.run_id }}
+          path: /tmp/v5-two-connection.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  hostinger-self-hosted:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+      - name: Runtime metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          uname -a
+          python3 --version
+          python3 - <<'PY'
+          import sqlite3
+          print('sqlite=',sqlite3.sqlite_version)
+          print('threadsafety=',sqlite3.threadsafety)
+          PY
+      - name: Two-connection correctness and stress
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_rank_path_v5_concurrency
+          python3 -m research_entity.runtime.benchmark_database_pulse_rank_path_v5_concurrency \
+            | tee /tmp/v5-two-connection.json
+      - name: Upload receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: udb-v5-two-connection-hostinger-${{ github.run_id }}
+          path: /tmp/v5-two-connection.json
+          if-no-files-found: warn
+          retention-days: 30

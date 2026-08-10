@@ -16,6 +16,10 @@ V17 adds one mandatory semantic-trivia guard to V9: `Needle.owns(X)` and
 `Needle.owns (X)` must canonicalize identically while `Needle.owns X` remains a distinct
 prefix relation.
 
+The canonicalizer MUST use the exact production parser constructor. In particular,
+production sets maybe_placeholders=False, so absent [] optionals are semantic absence and
+must never become synthetic `None` children in canonical syntax identity.
+
 STRING tokens are canonicalized by their decoded JSON Unicode scalar sequence rather than
 by escape spelling. Thus `"é"` and `"\\u00e9"` share syntax identity, while `"é"` and the
 distinct scalar sequence `"e\\u0301"` remain different. Unpaired surrogates are rejected.
@@ -31,6 +35,8 @@ from pathlib import Path
 from typing import Any
 
 from lark import Lark, Token, Tree
+
+import claycode_base_frontend as front
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
@@ -88,8 +94,18 @@ def canonical_node(node: Any) -> Any | None:
                 children.append(cooked)
         return {"kind": str(node.data), "children": children}
     if node is None:
-        return {"literal": None}
-    return {"literal": str(node)}
+        raise CanonicalizationError(
+            "unexpected None parse child: production maybe_placeholders=False contract drifted"
+        )
+    raise CanonicalizationError(f"unsupported parse node: {type(node)!r}")
+
+
+def count_none_children(node: Any) -> int:
+    if node is None:
+        return 1
+    if isinstance(node, Tree):
+        return sum(count_none_children(child) for child in node.children)
+    return 0
 
 
 def semantic_hash(payload: Any, grammar_sha256: str) -> str:
@@ -99,6 +115,10 @@ def semantic_hash(payload: Any, grammar_sha256: str) -> str:
 
 def parse_canonical(parser: Lark, source: str, grammar_sha256: str) -> tuple[Any, str]:
     tree = parser.parse(source)
+    if count_none_children(tree) != 0:
+        raise CanonicalizationError(
+            "synthetic optional placeholder detected: canonicalizer must match production absence semantics"
+        )
     payload = canonical_node(tree)
     return payload, semantic_hash(payload, grammar_sha256)
 
@@ -149,14 +169,7 @@ def main() -> None:
     grammar = grammar_path.read_text(encoding="utf-8")
     grammar_sha = sha256_bytes(grammar.encode("utf-8"))
     strict = not args.relaxed_parser_for_test
-    parser = Lark(
-        grammar,
-        parser="lalr",
-        lexer="contextual",
-        strict=strict,
-        start="start",
-        keep_all_tokens=True,
-    )
+    parser = front.build_parser(grammar, strict=strict)
 
     source_paths = [Path(x) for x in args.sources] if args.sources else list(DEFAULT_SOURCES)
     rows = []
@@ -228,6 +241,31 @@ def main() -> None:
         for name, (left, right) in equivalent_cases.items()
     ]
 
+    optional_absence_sources = {
+        "record_without_typeparams_or_defaults": "record X { a:Int }\n",
+        "needle_without_params": "needle f()->Int\n",
+        "record_without_field_defaults": "record X { a:Int; b:Ref }\n",
+        "module_without_optional_grammar_elements": "module clay.demo\nlaw residual>=0\n",
+    }
+    optional_absence = []
+    for name, source in optional_absence_sources.items():
+        tree = parser.parse(source)
+        none_count = count_none_children(tree)
+        try:
+            parse_canonical(parser, source, grammar_sha)
+            canonical_ok = True
+            error = None
+        except CanonicalizationError as exc:
+            canonical_ok = False
+            error = str(exc)
+        optional_absence.append({
+            "case": name,
+            "none_placeholder_count": none_count,
+            "canonicalized": canonical_ok,
+            "pass": none_count == 0 and canonical_ok,
+            "error": error,
+        })
+
     invalid_cases = {
         "unpaired_surrogate_rejected": 'rule label="\\ud800"\n',
     }
@@ -244,25 +282,35 @@ def main() -> None:
         overall
         and all(x["pass"] for x in distinct)
         and all(x["pass"] for x in equivalent)
+        and all(x["pass"] for x in optional_absence)
         and all(x["pass"] for x in invalid)
     )
     receipt = {
-        "schema_version": "1.5",
+        "schema_version": "1.6",
         "experiment": "ClayCode BASE deterministic V17 trivia-safe grammar-bound syntax canonicalization",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)) if grammar_path.is_relative_to(ROOT) else str(grammar_path),
         "grammar_sha256": grammar_sha,
         "canonical_schema": CANON_SCHEMA,
-        "runtime": {"parser": "lark", "mode": "lalr/contextual", "strict": strict, "keep_all_tokens": True},
-        "canonicalizer": "semantic-token tree->sorted compact JSON; NEWLINE/semicolon block separators dropped; STRING tokens use decoded validated Unicode scalar sequences; semantic hash bound to grammar SHA-256",
+        "runtime": {
+            "parser": "lark",
+            "mode": "lalr/contextual",
+            "strict": strict,
+            "keep_all_tokens": True,
+            "production_parser_constructor": "claycode_base_frontend.build_parser",
+            "maybe_placeholders": False,
+        },
+        "canonicalizer": "production-parser semantic-token tree->sorted compact JSON; absent optionals are absence; NEWLINE/semicolon block separators dropped; STRING tokens use decoded validated Unicode scalar sequences; semantic hash bound to grammar SHA-256",
         "sources": rows,
         "semantic_surface_discrimination": distinct,
         "layout_equivalence": equivalent,
+        "optional_placeholder_absence": optional_absence,
         "invalid_semantic_values": invalid,
         "v9_trivia_counterexample_guard_present": True,
         "string_escape_identity_guard_present": True,
+        "optional_placeholder_absence_guard_present": True,
         "pass": overall,
-        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia and decoded-string identity for the listed admitted sources and regression/mutation pairs. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04) or substitute for Hostinger/Andreas target receipts.",
+        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia, decoded-string identity and production-parser absent-optional semantics for the listed admitted sources and regression/mutation pairs. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04) or substitute for Hostinger/Andreas target receipts.",
     }
     rendered = json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
     if args.output:

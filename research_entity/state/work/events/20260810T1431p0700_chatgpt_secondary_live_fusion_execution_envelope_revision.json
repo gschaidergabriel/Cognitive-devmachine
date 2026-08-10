@@ -1,0 +1,95 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:live-fusion-mesh-v2:content-addressed-execution-envelope:20260810T1431p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at": "2026-08-10T14:31:00+07:00",
+  "payload": {
+    "work_id": "WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810",
+    "canonical_parent_observed": "a6f2a2004d94829c7321f59df335ac1352f43bd3",
+    "reason_clay": {
+      "live_fusion": "Concurrent Mesh-v2/router/durability work already converged, so no duplicate router lane is opened. This revision adds the measured source-to-executor evidence boundary required by the queued real Hostinger replay.",
+      "current_executor_topology": "The self-hosted Ubuntu runner is repository-scoped to gschaidergabriel/Dr.-Unterweger; Clay-repository self-hosted jobs are therefore not execution evidence merely because they are queued.",
+      "wp02_context": "Selected V18 candidate content is strict-green on prior Hostinger candidate evidence (85/85 current rule/invariant statements, whole G9/Dialect and production/standalone parity), but exact current committed-byte Ubuntu replay remains the formal blocker.",
+      "transport_negative_results": [
+        "Earlier cross-repository SSH materialization failed with Permission denied (publickey); classify as transport failure, not WP02 semantic failure.",
+        "A temporary Dr.-Unterweger PR (#97) changed .clay_v18_replay_trigger and later the exact-replay workflow path, but the target V18 replay was not durably observable through the available run interface during this invocation; do not infer execution from PR creation.",
+        "A repo-local push->workflow_dispatch bridge and trigger were committed in Dr.-Unterweger main, but no durable dispatch receipt was observable before this revision; dispatch remains UNKNOWN rather than SUCCESS."
+      ]
+    },
+    "execution_envelope_candidate": {
+      "status": "REQUIRED_FOR_REAL_REPLAY_NOT_PROMOTED",
+      "fields": [
+        "semantic_source_repo",
+        "semantic_source_commit",
+        "semantic_epoch",
+        "exact_input_blob_map",
+        "dependency_lock_blob",
+        "executor_repo",
+        "executor_workflow_blob_or_commit",
+        "runner_scope_and_labels",
+        "dispatch_request_identity",
+        "dispatch_acceptance_receipt",
+        "workflow_run_id",
+        "runner_identity_and_platform",
+        "artifact_id_and_digest",
+        "result_payload_digest",
+        "scientific_gate_result",
+        "authority_scope"
+      ],
+      "evidence_separation": [
+        "dispatch accepted != runner claimed job",
+        "runner claimed job != exact input bytes verified",
+        "exact input bytes verified != test passed",
+        "test passed != WP02 package promotion",
+        "blob/hash equality != scientific or effect authority"
+      ],
+      "integration": "Bind the same source+event/content identity used by Live Fusion Mesh v2 to source-to-executor provenance so routing identity survives the GitHub/runner boundary. Git/UnifiedDB remain semantic authority; executor transport only returns evidence receipts."
+    },
+    "exactly_one_out_of_box_experiment": {
+      "name": "CONTENT_ADDRESSED_EXECUTION_COURIER",
+      "baseline": "Cross-repo clone/SSH or loosely coupled workflow dispatch to reach the Hostinger runner.",
+      "candidate": "Run in the repository that owns the self-hosted runner and reconstruct/verify exact Clay components from pinned content identities before execution; return a bounded aggregate receipt instead of treating repository checkout location as semantic authority.",
+      "executed_actions": [
+        "Created Dr.-Unterweger temporary execution PR #97 without merging it.",
+        "Created repo-local bounded push-dispatch bridge on Dr.-Unterweger main at bd2af84e8a5f58b811572fe53085bf7847c054a4.",
+        "Created trigger commit ff477a0ad903151e0bcb105ee293d21070735067."
+      ],
+      "result": "INCONCLUSIVE_TRANSPORT_CURRENT_INVOCATION",
+      "positive": "The executor-repo exact V18 workflow already defines content-hash gating and aggregate receipt semantics, so the design is executable in principle and preserves source identity without granting executor authority.",
+      "negative": "No new durable self-hosted run/aggregate receipt was observable from the new trigger path before this revision.",
+      "promotion": "NONE",
+      "rollback": "Close temporary PR; do not merge its workflow deletion. Keep or remove the bounded bridge independently of Clay semantics; no Frank Harness mutation occurred."
+    },
+    "strongest_counterhypothesis": "Adding an explicit ExecutionEnvelope and bridge layer may increase coordination complexity without improving availability if GitHub event registration, permissions or runner scope remain the dominant failure; a simpler manually dispatchable executor workflow may be more reliable. Measure before promotion.",
+    "required_next_falsifiers": [
+      "Obtain one self-hosted Ubuntu run whose aggregate receipt binds the exact V18/frontend/canonicalizer/G9/Dialect/lock blobs and whose artifact is retrievable by run id.",
+      "Verify dispatch acceptance, run claim, exact-byte gate and scientific pass as separate receipts/states.",
+      "Run the queued Live Fusion Mesh v2 real-repo replay/fault matrix through the same envelope or explicitly record why the execution lane cannot support it.",
+      "Compare bridge/event-trigger reliability and latency against a simpler same-repo manually dispatchable baseline before keeping the bridge as standing infrastructure."
+    ],
+    "targeted_distribution": {
+      "claycode": "DELTA_EXECUTION_EVIDENCE_BOUNDARY",
+      "clayresearch": "DELTA_REAL_REPLAY_REQUIREMENT",
+      "harness": "DELTA_PROVENANCE_BOUNDARY_ONLY",
+      "live_fusion_mesh_v2": "DELTA_TRANSPORT_ENVELOPE",
+      "frank": "NO_CHANGE",
+      "gwt": "NO_CHANGE",
+      "unifieddb": "NO_SEMANTIC_CHANGE_USE_AS_DURABLE_AUTHORITY",
+      "claygraph": "NO_ROUTING_SEMANTIC_CHANGE",
+      "hyperposition": "NO_CHANGE",
+      "emergenz": "NO_CHANGE"
+    },
+    "authority_guards": {
+      "research_entity_not_frank": true,
+      "frank_harness_mutation": false,
+      "wp02_promotion": "NONE",
+      "base_promotion": "NONE",
+      "andreas_target_acceptance": false,
+      "training_authority": false
+    },
+    "status": "READY_WITH_NEW_TRANSPORT_EVIDENCE"
+  }
+}

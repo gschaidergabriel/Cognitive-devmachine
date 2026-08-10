@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "live-fusion-v3-hash-order-root-cause-20260810T1630p0700",
+  "created_at": "2026-08-10T16:30:03+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "subject": "Root-cause analysis of V3 correlated blind-spot reproducibility contradiction",
+  "evidence_class": "LOCAL_SEMANTIC_REPRODUCTION_DIAGNOSTIC_NOT_EXACT_SOURCE_BLOB_EXECUTION",
+  "source_observed": {
+    "path": "research_entity/experiments/live_fusion_mesh_v3_dual_plane_sim.py",
+    "blob_sha": "0847f106fc3d0e164b73f375753b1979356b1ea2",
+    "problematic_expression": "edges=[(p,c) for p in REVERSE for c in REVERSE[p]]",
+    "reason": "REVERSE values are sets; iteration order depends on Python hash randomization. In the correlation=1.0 path, RNG draws are assigned to specific edges in that unstable order, changing which common missing edges are selected."
+  },
+  "local_environment": {
+    "python": "3.13.5",
+    "compiler": "GCC 14.2.0",
+    "seed": 20260810,
+    "n_deltas": 5000
+  },
+  "hash_seed_sweep_unfixed": {
+    "PYTHONHASHSEED=0": {"correlated_v2_micro_recall": 0.9706910459801021, "misses": 436},
+    "PYTHONHASHSEED=1": {"correlated_v2_micro_recall": 0.9809088464641033, "misses": 284},
+    "PYTHONHASHSEED=2": {"correlated_v2_micro_recall": 0.9754638343640764, "misses": 365},
+    "PYTHONHASHSEED=3": {"correlated_v2_micro_recall": 0.9744554987899973, "misses": 380},
+    "PYTHONHASHSEED=42": {"correlated_v2_micro_recall": 0.9863538585641302, "misses": 203},
+    "PYTHONHASHSEED=12345": {"correlated_v2_micro_recall": 0.9799005108900242, "misses": 299},
+    "v3_equals_v2_in_each_run": true
+  },
+  "candidate_fix_probe": {
+    "change": "edges=sorted((p,c) for p in REVERSE for c in REVERSE[p])",
+    "hash_seeds_tested": ["0","1","2","3","42","12345"],
+    "identical_across_all_tested_hash_seeds": true,
+    "correlated_v2_micro_recall": 0.9702877117504706,
+    "correlated_v3_micro_recall": 0.9702877117504706,
+    "misses_each": 442,
+    "interpretation": "Sorting the edge stream removes the observed hash-order nondeterminism while preserving the qualitative negative result: same-ancestry V3 has no recall advantage over V2."
+  },
+  "adjudication": {
+    "root_cause_status": "SUPPORTED_STRONGLY_BY_SOURCE_INSPECTION_PLUS_HASH_SEED_SWEEP",
+    "numeric_historical_correlated_results": "STALE_OR_ENVIRONMENT_DEPENDENT_UNTIL_EXACT_BLOB_REEXECUTION",
+    "qualitative_correlated_result": "SUPPORTED",
+    "architecture_promotion": "NONE",
+    "frank_harness_mutation": false
+  },
+  "research_reentry": {
+    "affected_work": ["WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810"],
+    "affected_branches": ["clayresearch","harness","claygraph","unifieddb"],
+    "test_obligation": "Patch or otherwise canonicalize set/dict iteration for the V3 simulator, then execute the exact current source blob twice with fixed and varied PYTHONHASHSEED locally and on the Ubuntu lane; persist stdout bytes/hash, Python version, source blob SHA, command and environment.",
+    "next_falsifier": "If exact-source executions still diverge after canonical edge ordering, search remaining unordered iteration or environment-sensitive behavior before any numeric V3 claim is reused.",
+    "architecture_delta": "NO_CHANGE to live-fusion architecture from this diagnostic; this is a research-tool reproducibility repair and evidence-quality correction."
+  }
+}

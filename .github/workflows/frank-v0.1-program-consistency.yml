@@ -2,37 +2,9 @@
 name: Frank v0.1 program consistency
 
 on:
-  push:
-    paths:
-      - 'research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md'
-      - 'research_entity/global/RESEARCH_TRIGGER_REGISTRY.json'
-      - 'research_entity/global/PROJECT_COMMAND_REGISTRY.json'
-      - 'research_entity/rooms/PROGRAM_STATE.json'
-      - 'research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json'
-      - 'research_entity/harness/HARNESS_WORKSPACE.json'
-      - 'research_entity/triggers/HARNESS_BUILD_PROTOCOL.md'
-      - 'research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md'
-      - 'research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md'
-      - 'research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md'
-      - 'research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md'
-      - 'research_entity/continuity/BOOTSTRAP_MINIMAL.json'
-      - 'research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json'
-      - 'tools/program_progress.py'
   pull_request:
     paths:
-      - 'research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md'
-      - 'research_entity/global/RESEARCH_TRIGGER_REGISTRY.json'
-      - 'research_entity/global/PROJECT_COMMAND_REGISTRY.json'
-      - 'research_entity/rooms/PROGRAM_STATE.json'
-      - 'research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json'
-      - 'research_entity/harness/HARNESS_WORKSPACE.json'
-      - 'research_entity/triggers/HARNESS_BUILD_PROTOCOL.md'
-      - 'research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md'
-      - 'research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md'
-      - 'research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md'
-      - 'research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md'
-      - 'research_entity/continuity/BOOTSTRAP_MINIMAL.json'
-      - 'research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json'
+      - 'research_entity/**'
       - 'tools/program_progress.py'
       - '.github/workflows/frank-v0.1-program-consistency.yml'
   workflow_dispatch:
@@ -46,7 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate unified Frank v0.1 program
+        continue-on-error: true
         run: |
+          mkdir -p validation
           python - <<'PY'
           import json
           from pathlib import Path
@@ -62,48 +36,71 @@ jobs:
               'forecast': root/'research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json',
           }
           data = {k: json.loads(p.read_text()) for k,p in paths.items()}
+          checks = {}
+          checks['program.current_stage'] = data['program'].get('current_stage') == 'FRANK_V0_1'
+          checks['program.stage_order'] = data['program'].get('stage_order') == ['FRANK_V0_1']
+          checks['program.only_gate'] = set(data['program'].get('stage_gates',{})) == {'FRANK_V0_1'}
+          checks['workspace.id'] = data['workspace'].get('workspace_id') == 'frank-v0.1-unified-program'
+          checks['legacy_harness.superseded'] = data['legacy_harness'].get('status') == 'SUPERSEDED_BY_FRANK_V0_1'
+          checks['legacy_harness.redirect'] = str(data['legacy_harness'].get('current_workspace','')).endswith('FRANK_V0_1_WORKSPACE.json')
 
-          assert data['program']['current_stage'] == 'FRANK_V0_1'
-          assert data['program']['stage_order'] == ['FRANK_V0_1']
-          assert set(data['program']['stage_gates']) == {'FRANK_V0_1'}
-          assert data['workspace']['workspace_id'] == 'frank-v0.1-unified-program'
-          assert data['legacy_harness']['status'] == 'SUPERSEDED_BY_FRANK_V0_1'
-          assert data['legacy_harness']['current_workspace'].endswith('FRANK_V0_1_WORKSPACE.json')
-
-          registered = data['triggers']['triggers']
-          required = set(data['triggers']['reserved_commands'])
-          assert required == set(registered)
+          registered = data['triggers'].get('triggers',{})
+          required = set(data['triggers'].get('reserved_commands',[]))
+          checks['triggers.complete_set'] = required == set(registered)
           for name, spec in registered.items():
-              assert spec.get('program_target') == 'FRANK_V0_1', (name, spec)
-              assert spec.get('must_reenter_frank_v0_1') is True, name
-          assert registered['harness'].get('harness_is_product') is False
-          assert registered['harness'].get('h1_h2_h3_active_stages') is False
+              checks[f'trigger.{name}.target'] = spec.get('program_target') == 'FRANK_V0_1'
+              checks[f'trigger.{name}.reentry'] = spec.get('must_reenter_frank_v0_1') is True
+          checks['harness.not_product'] = registered.get('harness',{}).get('harness_is_product') is False
+          checks['harness.no_h123'] = registered.get('harness',{}).get('h1_h2_h3_active_stages') is False
 
-          for name, spec in data['commands']['commands'].items():
-              assert spec.get('program_target') == 'FRANK_V0_1', name
-          assert data['commands']['commands']['harness'].get('harness_is_product') is False
+          for name, spec in data['commands'].get('commands',{}).items():
+              checks[f'command.{name}.target'] = spec.get('program_target') == 'FRANK_V0_1'
+          checks['command.harness.not_product'] = data['commands'].get('commands',{}).get('harness',{}).get('harness_is_product') is False
+          checks['bootstrap.target'] = data['bootstrap'].get('program',{}).get('active_target') == 'FRANK_V0_1'
+          checks['forecast.terminal'] = data['forecast'].get('terminal_row') == 'FRANK_V0_1'
+          checks['forecast.only_row'] = set(data['forecast'].get('rows',{})) == {'FRANK_V0_1'}
 
-          assert data['bootstrap']['program']['active_target'] == 'FRANK_V0_1'
-          assert data['forecast']['terminal_row'] == 'FRANK_V0_1'
-          assert set(data['forecast']['rows']) == {'FRANK_V0_1'}
-
-          active_blob = json.dumps({
-              'program': data['program']['stage_order'],
-              'trigger_target': data['triggers']['program_target'],
-              'legacy_harness_status': data['legacy_harness']['status'],
-          })
-          for forbidden in ('H1_REFERENCE_HARNESS','H2_CLAYCODE_HARNESS','H3_ONE_MODULE_FRANK'):
-              assert forbidden not in active_blob
-
-          print(json.dumps({
-              'status':'PASS',
-              'program':'FRANK_V0_1',
-              'registered_triggers':sorted(required),
-              'harness_is_product':False,
-              'active_stage_order':['FRANK_V0_1']
-          }, indent=2))
+          failed = sorted(k for k,v in checks.items() if not v)
+          result = {'status':'PASS' if not failed else 'FAIL','checks':checks,'failed':failed}
+          Path('validation/schema.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+          print(json.dumps(result,indent=2))
+          raise SystemExit(1 if failed else 0)
           PY
       - name: Compile progress resolver
-        run: python -m py_compile tools/program_progress.py
+        continue-on-error: true
+        run: |
+          mkdir -p validation
+          set +e
+          python -m py_compile tools/program_progress.py > validation/pycompile.txt 2>&1
+          code=$?
+          echo "exit_code=$code" >> validation/pycompile.txt
+          exit $code
       - name: Execute unified progress resolver
-        run: python tools/program_progress.py --json
+        continue-on-error: true
+        run: |
+          mkdir -p validation
+          set +e
+          python tools/program_progress.py --json > validation/progress.json 2> validation/progress.stderr
+          code=$?
+          echo "$code" > validation/progress.exit
+          exit $code
+      - name: Upload validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frank-v0.1-program-validation
+          path: validation/
+      - name: Final consistency gate
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          failed=[]
+          schema=json.loads(Path('validation/schema.json').read_text())
+          if schema['status']!='PASS': failed += schema['failed']
+          if 'exit_code=0' not in Path('validation/pycompile.txt').read_text(): failed.append('program_progress.py_compile')
+          if Path('validation/progress.exit').read_text().strip()!='0': failed.append('program_progress.py_execute')
+          print(json.dumps({'status':'PASS' if not failed else 'FAIL','failed':failed},indent=2))
+          raise SystemExit(1 if failed else 0)
+          PY

@@ -1,0 +1,49 @@
+name: ChatGPT Authenticated State Shadow Candidate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/state_auth_shadow.py'
+      - 'research_entity/harness/reference/test_state_auth_shadow.py'
+      - 'research_entity/harness/reference/benchmark_state_auth_shadow.py'
+      - '.github/workflows/chatgpt-auth-shadow-pr.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Run falsifiers and bounded benchmark with receipts
+        shell: bash
+        run: |
+          set +e
+          python3 -m unittest -v research_entity.harness.reference.test_state_auth_shadow > /tmp/auth-shadow-tests.log 2>&1
+          test_rc=$?
+          python3 -m research_entity.harness.reference.benchmark_state_auth_shadow --rows 5000 --updates 12 > /tmp/auth-shadow-benchmark.json 2> /tmp/auth-shadow-benchmark.err
+          bench_rc=$?
+          printf '{"test_rc":%d,"benchmark_rc":%d}\n' "$test_rc" "$bench_rc" > /tmp/auth-shadow-status.json
+          cat /tmp/auth-shadow-tests.log
+          cat /tmp/auth-shadow-benchmark.err
+          cat /tmp/auth-shadow-benchmark.json
+          exit $(( test_rc != 0 || bench_rc != 0 ))
+      - name: Upload bounded diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auth-shadow-diagnostics-${{ github.run_id }}
+          path: |
+            /tmp/auth-shadow-tests.log
+            /tmp/auth-shadow-benchmark.json
+            /tmp/auth-shadow-benchmark.err
+            /tmp/auth-shadow-status.json
+          if-no-files-found: warn
+          retention-days: 14

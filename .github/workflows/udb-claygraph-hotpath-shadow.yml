@@ -4,6 +4,15 @@ on:
   push:
     branches:
       - chatgpt/udb-claygraph-hotpath-20260810
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'research_entity/harness/reference/unifieddb_query_plane.py'
+      - 'research_entity/harness/reference/test_unifieddb_query_plane.py'
+      - 'research_entity/runtime/RAE_CLAYGRAPH_V3_CURRENT_HOTPATH_CANDIDATE.sql'
+      - 'tools/benchmark_udb_claygraph_hotpath.py'
+      - '.github/workflows/udb-claygraph-hotpath-shadow.yml'
   workflow_dispatch:
 
 permissions:

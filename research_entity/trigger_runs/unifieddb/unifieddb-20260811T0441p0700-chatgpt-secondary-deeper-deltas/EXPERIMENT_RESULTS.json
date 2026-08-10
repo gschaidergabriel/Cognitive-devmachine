@@ -1,27 +1,71 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
   "results": [
     {
       "id": "V17_POST_HOC_SUPPORT_ORDERING_STATIC",
       "evidence_class": "STATIC_IMPLEMENTATION_AND_TEST_ORDER_AUDIT",
       "status": "CONFIRMED_DESIGN_GAP_TARGET_REPLICATION_NOT_REQUIRED_TO_OBSERVE_ORDER",
-      "finding": "PR #280 learning matrix calls verified effect record_outcome before insert_support; insert_support then creates attention, receiver-use, prediction, prediction outcome, causal credit and exact-outcome support, after which learning re-entry is expected to succeed. Current constraints therefore establish relational exact-outcome coherence but not pre-action causal ancestry.",
-      "required_falsifier": "POST_HOC_SUPPORT_MINT must be rejected with zero V17 terminal mutation."
+      "finding": "PR #280 learning matrix records verified outcome before creating the support chain; relational exact-outcome coherence does not prove pre-action causal ancestry.",
+      "required_falsifier": "POST_HOC_SUPPORT_MINT rejects with zero terminal mutation."
     },
     {
       "id": "V17_ORIGIN_VS_RECONCILER_AUTHORITY_STATIC",
       "evidence_class": "STATIC_RUNTIME_DIFF_AUDIT",
       "status": "OPEN_GAP",
-      "finding": "PR #280 persists/revalidates the origin effect execution-generation fence, but finish_done(effect_id) has no explicit current reconciler execution identity or recovery-assignment argument. Crash takeover authority is therefore not separately represented at this layer.",
+      "finding": "Origin effect execution identity and current recovery/reconciler authority are distinct and not yet fully represented.",
       "required_falsifier": "stale origin vs authorized successor vs unrelated successor recovery matrix"
     },
     {
       "id": "V17_TERMINAL_VALIDITY_NON_MONOTONIC_STATIC",
       "evidence_class": "STATIC_RUNTIME_DIFF_AUDIT",
       "status": "OPEN_GAP",
-      "finding": "PR #280 rechecks semantic_records.status='CURRENT' when validating delta admission. Ordinary later semantic supersession can potentially invalidate an otherwise historically valid DONE chain. Freeze validity-at-admission in an immutable closure receipt and test supersession-after-DONE.",
-      "required_falsifier": "DELTA_SUPERSEDED_AFTER_DONE leaves historical terminal receipt valid while current semantic state advances"
+      "finding": "Rechecking current semantic status during historical DONE audit can make valid history depend on later normal semantic supersession.",
+      "required_falsifier": "DELTA_SUPERSEDED_AFTER_DONE preserves historical closure validity"
+    },
+    {
+      "id": "PR286_LIVE_SCHEMA_ATTESTATION_SCOPE",
+      "evidence_class": "CURRENT_CANDIDATE_DISPOSABLE_NEGATIVE_PROBE_PRESENT_NOT_TARGET_PROMOTED",
+      "status": "GAP_PROBE_ADDED_BY_PARALLEL_WORKER",
+      "finding": "U12 source-chain certificate can remain CURRENT while real sqlite_schema changes. Dedicated probe adds/drops physical schema objects without changing certificate metadata and is designed to show current open still accepts until live-schema attestation is added.",
+      "required_delta": "separate normalized live sqlite_schema digest from migration-source digest"
+    },
+    {
+      "id": "PR286_AUTHORITY_DIRECTION_COUPLING",
+      "evidence_class": "CURRENT_CANDIDATE_DISPOSABLE_CODEPATH_PROBE_PRESENT_NOT_TARGET_PROMOTED",
+      "status": "NEW_ARCHITECTURE_GAP",
+      "finding": "The symmetric pair digest makes open_unified() depend on the expected ClayGraph source chain. A rebuildable derived-store schema evolution can therefore make canonical UnifiedDB unavailable even when UnifiedDB itself is unchanged and healthy.",
+      "required_delta": "acyclic authority: UnifiedDB admission independent of ClayGraph; Graph admission depends on UnifiedDB, never reverse"
+    },
+    {
+      "id": "PR286_R1C_GRAPH_FRESHNESS_SCOPE",
+      "evidence_class": "CURRENT_CANDIDATE_DISPOSABLE_SCHEMA_SEMANTICS_PROBE_PRESENT_NOT_TARGET_PROMOTED",
+      "status": "NEW_ARCHITECTURE_GAP",
+      "finding": "Graph materialization status can be STALE while current graph views remain visible, and source identity is epoch-only without exact semantic root/lineage binding.",
+      "required_delta": "StateProjectionCertificateV1 + read gating on exact root/derivation/freshness state"
+    },
+    {
+      "id": "PR286_TEMPORAL_TEXT_ORDER_AND_REPLAY_CLOCK",
+      "evidence_class": "CURRENT_CANDIDATE_DETERMINISTIC_TEMPORAL_FALSIFIER_PRESENT_NOT_TARGET_PROMOTED",
+      "status": "NEW_ARCHITECTURE_GAP",
+      "finding": "Replay-critical current views compare TEXT valid_to with CURRENT_TIMESTAMP. Python-style ISO timestamps with T/offset and SQLite timestamp text are not safely ordered by raw lexical comparison, and query_receipts have no explicit as-of clock identity.",
+      "required_delta": "canonical timestamp encoding + typed comparison + ReplayClockV1 explicit as_of in query receipts"
+    },
+    {
+      "id": "LOCAL_BYTE_STABLE_WALLCLOCK_REPLAY",
+      "evidence_class": "LOCAL_SYNTHETIC_NEGATIVE_CONTROL",
+      "status": "GAP_REPRODUCED",
+      "environment": {"python":"3.13.5","sqlite":"3.46.1"},
+      "observation": {"before_current_count":1,"after_current_count":0,"database_sha256_unchanged":true},
+      "finding": "Identical durable bytes can yield a different current-result set solely because ambient wall clock advanced."
+    },
+    {
+      "id": "LOCAL_WAL_MAIN_FILE_ONLY_SNAPSHOT",
+      "evidence_class": "LOCAL_SYNTHETIC_NEGATIVE_CONTROL",
+      "status": "GAP_REPRODUCED",
+      "environment": {"python":"3.13.5","sqlite":"3.46.1"},
+      "observation": {"source_committed_rows":1,"main_file_only_copy_rows":0,"wal_bytes":4152},
+      "finding": "Committed state can live only in WAL; a raw .sqlite file hash/copy is not a complete snapshot identity."
     },
     {
       "id": "LOCAL_SQLITE_ATTACHED_DELETE_FULL_PROXY",
@@ -32,31 +76,34 @@
       "two_separate_transactions_us": {"p50": 13555.464, "p95": 34051.195, "p99": 48347.125},
       "attached_p50_ratio_vs_separate": 1.4813,
       "rollback_atomic_observed": true,
-      "interpretation": "Single-connection ATTACH rollback worked atomically under an injected application rollback, but the super-journal style path was slower in this local filesystem proxy. This is not target crash/power-loss evidence and does not decide the storage profile."
+      "interpretation": "ATTACH rollback behavior works in the local proxy but costs more. Official SQLite gives cross-file atomicity for file-backed non-WAL transactions; target crash/performance A/B is still required."
+    },
+    {
+      "id": "LOCAL_TRUSTED_SCHEMA_OFF_AND_FTS5_HEALTH_PRIMITIVES",
+      "evidence_class": "LOCAL_SYNTHETIC_CAPABILITY_PROBE",
+      "status": "PASS_MECHANISM_ONLY",
+      "environment": {"python":"3.13.5","sqlite":"3.46.1"},
+      "observation": {"trusted_schema_default":1,"trusted_schema_after_off":0,"fts5_integrity_check":true},
+      "finding": "Candidate hardening/index-health primitives are available locally; exact target compile/runtime capability must still be probed."
+    },
+    {
+      "id": "U2_REPLAY_SELECTION_PRIOR",
+      "evidence_class": "PRIOR_RUNTIME_MECHANISM_TEST",
+      "status": "RETAINED_PRIOR",
+      "finding": "In 1200 constructed trials unsynchronized two-store updates tore 533 times; canonical+outbox had 0 final mismatches after replay. In 700 selection tests authentic records plus manipulated structure changed naive selection in 516 cases, while trusted-structure reselection recovered 700/700.",
+      "meaning": "Replay integrity and selection integrity are independent obligations."
     },
     {
       "id": "TARGET_SYSTEM_SQLITE_WAL_BACKPORT_PROVENANCE",
       "evidence_class": "ACCEPTED_TARGET_VPS_SOURCE_PATCHSET_PROBE_FROM_SHARED_GO_RUN",
       "status": "NO_DIRECT_WAL_FIX_BACKPORT_EVIDENCE",
-      "finding": "Ubuntu libsqlite3 3.45.1-1ubuntu2.7 patch series did not alter src/wal.c or target WAL/amalgamation files in the shared target probe; system WAL release blocker remains active."
+      "finding": "Ubuntu libsqlite3 3.45.1-1ubuntu2.7 patch series did not provide promoted direct WAL-fix provenance in the shared probe; system WAL release blocker remains active."
     },
     {
       "id": "TARGET_STORAGE_DELETE_PROFILE",
       "evidence_class": "ACCEPTED_TARGET_VPS_COMPONENT_CANDIDATE_FROM_PRIOR_UNIFIEDDB_RUN",
-      "status": "PASS_COMPONENT_HOLD_COMPOSED_CURRENT_MAIN",
-      "finding": "DELETE + synchronous FULL passed the storage safety candidate and forced WAL failed closed on target SQLite 3.45.1; fused PR #286 target workflow remains queued in this run."
-    },
-    {
-      "id": "TARGET_PRIVATE_SQLITE_3534_PROFILE",
-      "evidence_class": "QUEUED_TARGET_PREFLIGHT",
-      "status": "UNKNOWN_NOT_EXECUTED",
-      "finding": "PR #288 will prove exact staged library source-id/loader binding and V16/WAL regressions; queued means no promotion evidence."
-    },
-    {
-      "id": "TARGET_V17_V3_CAUSAL_SUPPORT",
-      "evidence_class": "QUEUED_TARGET_GATE",
-      "status": "UNKNOWN_NOT_EXECUTED",
-      "finding": "PR #280 V3 target gate is queued. Existing persisted V17 bound-reentry target receipt applies to the narrower simplified candidate and must not be upgraded to V3 causal-closure proof."
+      "status": "PASS_COMPONENT_HOLD_COMPOSED_CURRENT_HEAD",
+      "finding": "DELETE + FULL storage safety and forced-WAL fail-closed have target component evidence. The rapidly advancing fused #286 head still requires exact-head executed target evidence."
     }
   ],
   "promotion": "HOLD"

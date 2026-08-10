@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "run_id": "atomic-20260810T2141p0700-chatgpt-secondary-molt",
+  "retrieved_at": "2026-08-10T21:3x-21:4x+07:00",
+  "sources": [
+    {"source":"Linux man-pages chattr(1)","class":"OFFICIAL_TECHNICAL","finding":"FS append-only attribute permits write opens only in append mode; set/clear requires superuser or CAP_LINUX_IMMUTABLE.","url":"https://man7.org/linux/man-pages/man1/chattr.1.html"},
+    {"source":"Linux man-pages ioctl_iflags(2)","class":"OFFICIAL_TECHNICAL","finding":"FS_APPEND_FL restricts opens to O_APPEND even for superuser; changing flag requires CAP_LINUX_IMMUTABLE.","url":"https://man7.org/linux/man-pages/man2/ioctl_iflags.2.html"},
+    {"source":"Linux man-pages readv/pwritev2(2)","class":"OFFICIAL_TECHNICAL","finding":"RWF_NOAPPEND exists since Linux 6.9 and can ignore O_APPEND for pwritev2; O_APPEND alone is not a future-proof confinement boundary.","url":"https://man7.org/linux/man-pages/man2/readv.2.html"},
+    {"source":"Linux kernel Landlock documentation","class":"OFFICIAL_TECHNICAL","finding":"Landlock controls file/open/truncate rights but is inode/path-hierarchy oriented and does not create byte-range write isolation; already-open FDs have important semantics.","url":"https://www.kernel.org/doc/html/latest/userspace-api/landlock.html"},
+    {"source":"Linux kernel fs-verity documentation","class":"OFFICIAL_TECHNICAL","finding":"verity files are read-only; this strongly protects immutable whole files but conflicts with a same-inode mutable tail.","url":"https://www.kernel.org/doc/html/latest/filesystems/fsverity.html"},
+    {"source":"util-linux losetup(8)","class":"OFFICIAL_TECHNICAL","finding":"loop devices can expose a backing file at an offset with a size limit, forming a conventional kernel subrange-view alternative.","url":"https://man7.org/linux/man-pages/man8/losetup.8.html"},
+    {"source":"RFC 9162 Certificate Transparency v2","class":"PRIMARY_STANDARD","finding":"Append-only Merkle logs and consistency proofs are established prior art; MOLT cannot claim novelty for append-only cryptographic history.","url":"https://www.rfc-editor.org/rfc/rfc9162.html"},
+    {"source":"codenotary/immudb official repository","class":"PRIMARY_IMPLEMENTATION","finding":"Immutable databases with cryptographically linked append history are established; generic immutable/append-only DB semantics are prior art.","url":"https://github.com/codenotary/immudb"},
+    {"source":"SHED Self Hosted Executable Database package documentation (already in EUDI prior-art map)","class":"PRIMARY_IMPLEMENTATION","finding":"Executable plus appended mutable KV store is known; physical self-contained executable persistence is not novel by itself.","url":"https://docs.rs/shed/latest/shed/"}
+  ],
+  "destructive_findings": [
+    "O_APPEND alone rejected as security boundary because newer Linux exposes RWF_NOAPPEND.",
+    "Hash-chain/append-only history novelty collapses to known analogues.",
+    "fs-verity cannot directly protect only an immutable prefix of a writable same file.",
+    "Split layout remains the strongest simplicity/least-privilege control."
+  ],
+  "surviving_transfer": "Combine kernel inode append-only enforcement + no-write-fd cognitive runtime + typed broker + root-bound epoch lineage + external repack authority, then test against loop-subrange and split controls."
+}

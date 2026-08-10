@@ -1,19 +1,28 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
   "program": "FRANK_V0_1",
-  "affected_work_packages": ["F-V01-03","F-V01-04","F-V01-05","F-V01-09","F-V01-11","F-V01-13"],
+  "affected_work_packages": ["F-V01-01","F-V01-03","F-V01-04","F-V01-05","F-V01-07","F-V01-09","F-V01-10","F-V01-11","F-V01-13"],
   "new_deltas": [
-    "V17 V3 relational support is not yet temporal causal ancestry: current learning test creates the support chain after verified effect outcome.",
+    "V17 V3 relational support is not yet temporal causal ancestry: current learning test can construct support after verified effect outcome.",
     "Crash recovery needs dual execution provenance: immutable origin execution plus explicit current reconciler/recovery execution.",
-    "Historical DONE validity should freeze validity-at-admission; ordinary later semantic supersession must not silently invalidate a terminal receipt.",
-    "Current safe DELETE+FULL profile creates an optional SQLite ATTACH atomic cross-file commit mechanism; fixed WAL profile does not provide cross-file crash atomicity.",
-    "Graph schema compatibility, Graph payload freshness and UnifiedDB semantic rollback continuity are distinct gates."
+    "Historical DONE validity should freeze validity-at-admission; later semantic supersession must not silently invalidate terminal history.",
+    "U12 migration/source compatibility is not live sqlite_schema identity; live materialization must be attested separately.",
+    "The symmetric U12 pair digest creates a wrong-way availability dependency: rebuildable ClayGraph source evolution can block open_unified(). Canonical authority must not depend on derived-store availability.",
+    "Graph freshness is a dynamic projection admission problem: exact source semantic root/lineage + derivation receipt + status gate are required; epoch alone is insufficient.",
+    "Replay-critical CURRENT_TIMESTAMP is an implicit non-durable input; identical DB bytes can yield different results at a later wall clock. Add explicit ReplayClock/as_of semantics.",
+    "Mixed Python ISO timestamps and SQLite CURRENT_TIMESTAMP raw TEXT comparison can misclassify validity. Canonicalize time representation and compare typed time values.",
+    "Current snapshots hash filenames but do not specify consistent snapshot construction. In WAL, committed state may exist outside the main file. Introduce SnapshotManifestV2 and restore verification.",
+    "state_epochs.root_hash needs a deterministic canonical construction/replay law; opaque caller-supplied text is insufficient for sibling/transplant discrimination.",
+    "query_receipts need SelectionReceiptV2 candidate-universe/index/ranker/filter/score provenance; authentic records do not imply authentic selection.",
+    "Derived FTS/vector/Graph indexes need source-root, builder identity, health and rebuild receipts; index presence/rank never upgrades truth.",
+    "Current safe DELETE+FULL profile creates an optional SQLite ATTACH atomic cross-file commit mechanism; fixed WAL profile requires canonical outbox/replay for cross-file Graph coherence.",
+    "Normal SQLite open should evaluate trusted_schema=OFF and defensive-mode hardening without breaking required Frank schema behavior."
   ],
-  "acceptance_effect": "NO_PASS_CHANGE",
-  "F_V01_04": "OPEN",
+  "acceptance_effect": "NO_PASS_CHANGE_MORE_BLOCKING_INVARIANTS_EXPOSED",
+  "F_V01_04": "OPEN_DEEPER_REPLAY_SNAPSHOT_ROOT_SELECTION_GATES",
   "F_V01_09": "IN_PROGRESS_OPEN_TERMINAL_CAUSAL_AND_CRASH_RECOVERY_OBLIGATIONS",
-  "F_V01_13": "IN_PROGRESS_STORAGE_PROFILE_AND_EXTERNAL_ROLLBACK_AUTHORITY_OPEN",
+  "F_V01_13": "IN_PROGRESS_STORAGE_PROFILE_SNAPSHOT_AND_EXTERNAL_ROLLBACK_AUTHORITY_OPEN",
   "training_authorized": false,
   "self_harness_authority_changed": false
 }

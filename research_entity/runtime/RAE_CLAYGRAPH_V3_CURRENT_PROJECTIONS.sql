@@ -4,11 +4,25 @@ PRAGMA foreign_keys=ON;
 -- Version logs + graph_epochs remain source-of-truth. Head tables are derived acceleration only.
 -- Heads deliberately retain tombstones/non-CURRENT latest versions so out-of-order older arrivals
 -- can never resurrect a logically retired edge/node.
+-- Promotion gate: v_graph_projection_ambiguous_*_epochs must be empty and fast/legacy views must
+-- compare equal on the target dataset before graph_current_projection_receipts.verified_equal=1.
 
 CREATE INDEX IF NOT EXISTS idx_graph_nodes_logical_epoch_v3
   ON graph_nodes(logical_id, graph_epoch DESC);
 CREATE INDEX IF NOT EXISTS idx_graph_edges_logical_epoch_v3
   ON graph_edges(logical_edge_id, graph_epoch DESC);
+
+CREATE VIEW IF NOT EXISTS v_graph_projection_ambiguous_node_epochs AS
+SELECT logical_id,graph_epoch,COUNT(*) AS version_count
+FROM graph_nodes
+GROUP BY logical_id,graph_epoch
+HAVING COUNT(*)>1;
+
+CREATE VIEW IF NOT EXISTS v_graph_projection_ambiguous_edge_epochs AS
+SELECT logical_edge_id,graph_epoch,COUNT(*) AS version_count
+FROM graph_edges
+GROUP BY logical_edge_id,graph_epoch
+HAVING COUNT(*)>1;
 
 CREATE TABLE IF NOT EXISTS graph_head_nodes(
   logical_id TEXT PRIMARY KEY,
@@ -142,4 +156,5 @@ BEGIN
 END;
 
 -- Rebuild recipe (transactional): clear head tables and repopulate latest version regardless status.
--- Runtime then verifies v_graph_current_*_fast == legacy v_latest_graph_* before writing receipt.
+-- Runtime then verifies ambiguity views are empty and v_graph_current_*_fast == legacy
+-- v_latest_graph_* before writing a verified projection receipt or admitting this migration.

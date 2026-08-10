@@ -1,0 +1,80 @@
+name: Database Pulse Reference
+
+on:
+  push:
+    branches:
+      - main
+      - chatgpt/unifieddb-database-pulse-20260810
+    paths:
+      - 'research_entity/harness/reference/database_pulse.py'
+      - 'research_entity/harness/reference/test_database_pulse.py'
+      - 'research_entity/harness/reference/state_ledger.py'
+      - 'tools/database_pulse_benchmark.py'
+      - '.github/workflows/database-pulse-reference.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/database_pulse.py'
+      - 'research_entity/harness/reference/test_database_pulse.py'
+      - 'research_entity/harness/reference/state_ledger.py'
+      - 'tools/database_pulse_benchmark.py'
+      - '.github/workflows/database-pulse-reference.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile research_entity/harness/reference/state_ledger.py research_entity/harness/reference/database_pulse.py research_entity/harness/reference/test_database_pulse.py tools/database_pulse_benchmark.py
+      - name: Unit and continuity tests
+        run: python -m unittest research_entity.harness.reference.test_database_pulse -v
+      - name: Small hosted benchmark smoke test
+        run: python tools/database_pulse_benchmark.py --rows 100,1000 --repeat 3 --output /tmp/database-pulse-hosted.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-hosted
+          path: /tmp/database-pulse-hosted.json
+
+  hostinger-ubuntu-reference:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Runtime metadata
+        run: |
+          uname -a
+          python3 --version
+          python3 - <<'PY'
+          import json, os, platform, sqlite3
+          print(json.dumps({
+            'runner_name': os.environ.get('RUNNER_NAME'),
+            'runner_os': os.environ.get('RUNNER_OS'),
+            'runner_arch': os.environ.get('RUNNER_ARCH'),
+            'platform': platform.platform(),
+            'machine': platform.machine(),
+            'python': platform.python_version(),
+            'sqlite': sqlite3.sqlite_version,
+          }, indent=2))
+          PY
+      - name: Compile
+        run: python3 -m py_compile research_entity/harness/reference/state_ledger.py research_entity/harness/reference/database_pulse.py research_entity/harness/reference/test_database_pulse.py tools/database_pulse_benchmark.py
+      - name: Unit and continuity tests
+        run: python3 -m unittest research_entity.harness.reference.test_database_pulse -v
+      - name: VPS scaling benchmark
+        run: |
+          mkdir -p /tmp/database-pulse
+          python3 tools/database_pulse_benchmark.py --rows 100,1000,10000 --repeat 10 --output /tmp/database-pulse/vps.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-hostinger-vps
+          path: /tmp/database-pulse/vps.json

@@ -54,6 +54,8 @@ def _token_value(token: Token) -> Any:
 
 def canonical_node(node: Any) -> Any:
     """Return deterministic, order-preserving canonical AST JSON data."""
+    if node is None:
+        return None
     if isinstance(node, Tree):
         children = []
         for child in node.children:

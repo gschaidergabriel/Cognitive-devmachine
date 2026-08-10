@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "U16-SEGMENTED-PULSE-LOCAL-ITERATION-20260810T0027Z",
+  "truth_class": "LOCAL_TOOL_CONTAINER_SYNTHETIC_ENGINEERING_SCOPE_ONLY",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "candidate": "UNIFIEDDB_V16_SEGMENTED_PULSE_MAINTENANCE",
+  "lineage": {
+    "renumber_record_commit": "2634f92ef027c5b2b355c0c35dd48af22a1a7d6a",
+    "audit_complete_runtime_commit": "6de6c6b85a465e048ef0b27e3c76ddb34dcb1b89",
+    "repo_deep_audit_test_commit": "89e2fc81bc2be98c1e7395fc2ed0b0a7c2044e7b",
+    "benchmark_wrapper_commit": "c6dd5c721c4b2cf913978cadc48aad3a6016cc81",
+    "hostinger_gate_commit": "5a11f0124fa41fe7354af7bd331d5ff0564a57a0"
+  },
+  "local_test_evidence": {
+    "provisional_segmented_guards": {"passed": 7, "total": 7},
+    "audit_equivalent_local_prototype": {
+      "passed": 1,
+      "total": 1,
+      "behavior": "clean generation accepted; direct physical path-weight corruption detected by recomputed content hash"
+    },
+    "important_boundary": "The exact repo V16 subclass plus its new deep-audit test had not yet received a remote execution receipt at the time this local receipt was written. Hostinger CI is the next verification gate."
+  },
+  "benchmark": {
+    "fixture": {
+      "seeds": 1200,
+      "clusters": 60,
+      "paths_per_seed": 20,
+      "current_paths": 24000,
+      "local_events": 12,
+      "query_repeats": 500
+    },
+    "bootstrap": {
+      "segmented_ms": 314.721,
+      "full_generation_ms": 110.248,
+      "interpretation": "Segmented bootstrap is materially slower in this locality-friendly synthetic fixture."
+    },
+    "local_update": {
+      "segmented_p50_ms": 23.942,
+      "segmented_p95_ms": 30.895,
+      "full_generation_p50_ms": 109.093,
+      "full_generation_p95_ms": 146.237,
+      "median_update_speedup": 4.534,
+      "exact_snapshot_fraction": 1.0
+    },
+    "recovery": {
+      "unknown_topology_add_mode": "FULL_FALLBACK",
+      "injected_failure_preserved_last_known_good": true
+    },
+    "storage_after_14_generations": {
+      "full_generation_path_rows": 336000,
+      "segmented_path_rows": 28800,
+      "segmented_generation_map_rows": 16800,
+      "segments": 1440
+    },
+    "read_microtiming_ms": {
+      "segmented_p50": 0.0178,
+      "segmented_p95": 0.0210,
+      "full_generation_p50": 0.0212,
+      "full_generation_p95": 0.0263,
+      "interpretation": "Do not promote from this microdifference; the mechanism is primarily an update/write-amplification candidate."
+    }
+  },
+  "environment": {
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "machine": "x86_64",
+    "python": "3.13.5",
+    "sqlite": "3.46.1"
+  },
+  "negative_results_and_repairs": [
+    "First segmented prototype was slower than full-copy maintenance because a global per-pulse safety hash and N-query segment verification accidentally destroyed locality; those hot-path O(N) checks were removed in favor of immutable segment identities plus slower audits.",
+    "The first content-id design hashed per-path dependency sets while persistence retained only the segment-wide dependency union, making exact deep reconstruction impossible. V16 changes content identity to the exact persisted physical representation and adds a slow corruption audit.",
+    "Bootstrap remains slower than the simple full-generation baseline in the measured synthetic fixture; V16 is therefore not a universal replacement and should be used only when measured update locality amortizes the extra bookkeeping."
+  ],
+  "authority": "NON_AUTHORITATIVE_REBUILDABLE_ACCESS_PROJECTION",
+  "promotion": "CANDIDATE_ONLY",
+  "limitations": [
+    "Synthetic clustered topology is deliberately locality-friendly; real Frank/Clay dependency fan-out is not measured here.",
+    "Path compilation is deterministic Python proxy work; downstream GWT/model/tool outcome quality is not measured.",
+    "The comparator is full generation copying, not every conventional database design.",
+    "An exact indexed SQLite/B-tree path remains the proper latency floor when a resolved key is already known.",
+    "Remote Hostinger and final Andreas Ubuntu target execution remain required before promotion."
+  ],
+  "next_falsifiers": [
+    "Hostinger exact-commit execution of the V16 subclass, 8 guards and benchmark.",
+    "Real Frank/Clay write-locality and reverse-dependency fan-out traces.",
+    "Peak RSS, storage/write amplification, segment GC and rollback retention sweeps.",
+    "Concurrent writer and crash/restart corruption recovery.",
+    "Downstream context quality and cognitive/task outcomes against strong SQLite/FTS/EAP/ActiveField baselines."
+  ]
+}

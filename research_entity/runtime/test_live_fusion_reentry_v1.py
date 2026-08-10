@@ -30,7 +30,15 @@ class LiveFusionReentryTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
-    def delta(self, event_id: str, seq: int, payload: dict, *, conflict: bool = True):
+    def delta(
+        self,
+        event_id: str,
+        seq: int,
+        payload: dict,
+        *,
+        conflict: bool = True,
+        applicability: str = "UNKNOWN",
+    ):
         return LiveDelta(
             event_id=event_id,
             source="github-main",
@@ -44,6 +52,10 @@ class LiveFusionReentryTests(unittest.TestCase):
             conflict=conflict,
             payload=payload,
             provenance_refs=(f"commit:{seq}",),
+            causal_origin_epoch=f"origin-{seq}",
+            arrival_epoch="arrival-current",
+            causal_origin_refs=(f"origin-receipt:{seq}",),
+            applicability=applicability,
         )
 
     def test_exact_event_id_is_deduped(self):
@@ -110,12 +122,34 @@ class LiveFusionReentryTests(unittest.TestCase):
             [d.event_id for d in replay.pending("unifieddb-worker")],
             ["evt-2"],
         )
+        self.assertEqual(replay.deltas["evt-2"].causal_origin_epoch, "origin-6")
+        self.assertEqual(replay.deltas["evt-2"].arrival_epoch, "arrival-current")
 
-    def test_out_of_order_source_event_is_retained_as_late(self):
+    def test_out_of_order_source_event_is_retained_and_routed_as_late(self):
         self.bus.ingest(self.delta("evt-10", 10, {"value": 10}, conflict=False))
         status = self.bus.ingest(self.delta("evt-9", 9, {"value": 9}, conflict=False))
         self.assertEqual(status, "INGESTED_LATE")
         self.assertIn("evt-9", self.bus.deltas)
+        self.assertIn("evt-9", [d.event_id for d in self.bus.pending("unifieddb-worker")])
+        self.assertEqual(self.bus.deltas["evt-9"].causal_origin_epoch, "origin-9")
+        self.assertEqual(self.bus.deltas["evt-9"].arrival_epoch, "arrival-current")
+
+    def test_historically_valid_only_is_preserved_without_plan_churn(self):
+        self.bus.ingest(
+            self.delta(
+                "evt-history",
+                11,
+                {"late_outcome": "verified"},
+                conflict=True,
+                applicability="HISTORICALLY_VALID_ONLY",
+            )
+        )
+        self.assertEqual(self.bus.pending("unifieddb-worker"), [])
+        indexed = self.bus.pending("unifieddb-worker", include_index_only=True)
+        self.assertEqual([d.event_id for d in indexed], ["evt-history"])
+        allowed, blockers = self.bus.effect_guard("unifieddb-worker", ("pulse",))
+        self.assertTrue(allowed)
+        self.assertEqual(blockers, [])
 
 
 if __name__ == "__main__":

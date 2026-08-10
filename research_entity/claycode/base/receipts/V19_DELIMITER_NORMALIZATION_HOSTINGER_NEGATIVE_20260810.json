@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "created_at_local": "2026-08-10T12:31:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_id": "frank-project-global-research-entity",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "trigger": "go",
+  "evidence_class": "VERIFIED_SELF_HOSTED_UBUNTU_NEGATIVE_EXECUTION_RECEIPT",
+  "scope": "ClayCode V19 delimiter-consuming parser research candidate only",
+  "source_branch": "gschaidergabriel/Dr.-Unterweger:clay-v19-delimiter-probe-20260810",
+  "draft_pr": 86,
+  "workflow_run_id": 31358483832,
+  "workflow_job_id": 93362521899,
+  "merge_head": "c6e4f7945b57c8bf3262e5bf155483f200faf26e",
+  "exact_probe_blob": "e8aaa36717d7adeedc64ca90e278a81566eea212",
+  "runtime": {
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "os": "Ubuntu 24.04.4 LTS",
+    "kernel": "6.8.0-117-generic",
+    "arch": "x86_64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "cpu_count": 4,
+    "mem_total_kb": 16376020,
+    "max_rss_kb": 35072
+  },
+  "strict_construction": {
+    "v17_pass": true,
+    "v17_elapsed_ms": 399.41740967333317,
+    "v19_pass": true,
+    "v19_elapsed_ms": 255.2708052098751
+  },
+  "frozen_full_sources": {
+    "g9_semantic_hash_equal": true,
+    "g9_hash": "b4853b924281af5675f60e9b54121765629e98d30afcb8c92fcfb854656ce0ef",
+    "dialect_semantic_hash_equal": true,
+    "dialect_hash": "f53d87c8dcab00ed99aa8b53d035a766cf3655378a6e8431ff58527a03dab3a4",
+    "repeat_determinism": true
+  },
+  "namespace_prefix_shadow_negatives": {
+    "Needle.ownership": "PASS_NOT_SPECIAL",
+    "Needle.owns_extra": "PASS_NOT_SPECIAL",
+    "Needle.ownsX": "PASS_NOT_SPECIAL",
+    "Needle.lowers_more": "PASS_NOT_SPECIAL",
+    "Needle.lowersX": "PASS_NOT_SPECIAL"
+  },
+  "needle_relation_lookaround_present": false,
+  "structural_pass": true,
+  "counterexamples": [
+    {
+      "source": "rule Needle.owns   \\n",
+      "v17": "ACCEPT",
+      "v19": "REJECT_UNEXPECTED_NEWLINE_AFTER_NEEDLE_OWNS_REL"
+    },
+    {
+      "source": "rule Needle.owns\\t\\n",
+      "v17": "ACCEPT",
+      "v19": "REJECT_UNEXPECTED_NEWLINE_AFTER_NEEDLE_OWNS_REL"
+    },
+    {
+      "source": "rule Needle.owns   // trailing comment\\n",
+      "v17": "ACCEPT",
+      "v19": "REJECT_UNEXPECTED_NEWLINE_AFTER_NEEDLE_OWNS_REL"
+    },
+    {
+      "source": "rule Needle.owns\\t// trailing comment\\n",
+      "v17": "ACCEPT",
+      "v19": "REJECT_UNEXPECTED_NEWLINE_AFTER_NEEDLE_OWNS_REL"
+    }
+  ],
+  "trailing_trivia_pass": false,
+  "overall_pass": false,
+  "adjudication": "REFUTED_TRAILING_TRIVIA",
+  "architecture_delta": "NO_CHANGE_KEEP_V17_SELECTED",
+  "promotion": "NONE",
+  "frank_harness_mutation": false,
+  "training_authorized": false,
+  "interpretation": "V19 demonstrates that strict construction plus frozen-source semantic-hash equivalence and prefix-shadow safety are insufficient. Consuming horizontal trivia into a relation token changes V17 bare-qid end-of-statement semantics. Preserve this negative result so the delimiter-consuming family is not reintroduced without an explicit solution to trailing-trivia identity.",
+  "next_use": "Treat this receipt as active counterevidence when adjudicating V20 or later parser candidates; require exact trailing-trivia, prefix-shadow, full-source, strict-interegular, source-span and compact-subtraction discriminators before promotion."
+}

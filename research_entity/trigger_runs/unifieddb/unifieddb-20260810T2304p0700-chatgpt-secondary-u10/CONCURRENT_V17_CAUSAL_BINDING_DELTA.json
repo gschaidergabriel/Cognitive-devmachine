@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "U10-CONCURRENT-V17-CAUSAL-EXECUTION-BINDING-20260810T2323P0700",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "parent_run": "unifieddb-20260810T2304p0700-chatgpt-secondary-u10-epoch-versioning",
+  "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "adjacent_work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "classification": "CONCURRENT_INTEGRATION_DELTA",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "findings": [
+    {
+      "id": "V14-REENTRY-GAP",
+      "status": "SUPPORTED_BY_EXISTING_TARGET_TEST",
+      "finding": "Canonical V14 can accept an arbitrary/empty reentry payload, report trace OK, and treat REENTERED as recovery COMPLETE without an explicit terminal DONE receipt or exact causal support binding."
+    },
+    {
+      "id": "V17-ATTEMPT-OUTCOME-BINDING",
+      "status": "CANDIDATE_HARDENED_BY_CONCURRENT_WORKER",
+      "finding": "The active candidate-only V17 lane now storage-binds reentry to the exact V14 effect attempt and verified outcome and blocks legacy unbound reentry; target-VPS differential receipt remains required before promotion."
+    },
+    {
+      "id": "V17-SUPPORT-IDENTITY-EXECUTION-GAP",
+      "status": "LOCAL_FALSIFIER_COMMITTED_TARGET_VPS_PROBE_PENDING",
+      "finding": "The active V17 candidate still accepts episode_id/signal_id/causal_id/admitted_delta_hash as non-empty symbols without proving they resolve to canonical GWT use, causal credit, admitted state, or the current V15/V16 self.root execution epoch. A negative discriminator was committed to the target repository and routed to the accepted self-hosted Ubuntu VPS."
+    },
+    {
+      "id": "U10-SCHEMA-CLAIM-MISMATCH",
+      "status": "SUPPORTED_BY_SCHEMA_INSPECTION",
+      "finding": "U10 architecture requires execution_id/lease_epoch fencing and provenance-bound reentry, but U10_EPOCH_VERSIONED_STATE_CANDIDATE.sql currently leaves u10_tx_commits.execution_id/lease_epoch nullable and models u10_reentry_receipts episode/signal/causal/outcome/credit/delta references as unconstrained TEXT. Therefore U10 does not yet enforce its own causal/execution invariants at the storage boundary."
+    },
+    {
+      "id": "PHYSICAL-COLOCATION",
+      "status": "HOLD",
+      "finding": "Existing accepted-Hostinger mechanism evidence favors logical unification plus epoch-guarded derived projections: single-file paired commit p50 was lower, while guarded split-file steady reads were near parity; unguarded split snapshots were incoherent. This does not justify physical graph/vector/tensor consolidation yet."
+    }
+  ],
+  "target_repo_commits": {
+    "strong_v17_additive_candidate_unused": "969c2ec5d7bacbd6b249fed25b985fac1f9a485b",
+    "premature_v17_canonical_integration": "d2b720fcd5bc6c4cee25574caad1bce0e9add0d7",
+    "promotion_discipline_correction": "6e2e26d373a291047da6d73d5617160c54af04b6",
+    "support_binding_gap_probe": "46f3986f301786a21f465b46647fcbe73b31369c",
+    "support_binding_gap_vps_workflow": "b6c75ab71feba690911f21f3341878404ca3ba8d"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_REFINEMENT_REQUIRED",
+    "required_u10_changes_before_promotion": [
+      "Make execution binding explicit and fail-closed for authoritative execution/effect commits: exact current execution_id plus V15/V16 lease_epoch fence, with stale/zombie writer rejection.",
+      "Replace or guard free-form reentry support symbols with canonical verified references/receipts for WorkspaceEpisode or attention identity, receiver causal use/local effect, verified outcome, causal credit, and admitted semantic delta; retain an explicitly typed no-learning path when appropriate.",
+      "Make terminal DONE a distinct durable semantic receipt whose validity depends on the exact verified effect attempt/outcome, exact canonical reentry binding, and accepted execution epoch.",
+      "Keep all V17/U10 changes additive and candidate-only until exact-source target-VPS crash/restart/concurrency/recovery/resource gates pass."
+    ],
+    "do_not_promote": [
+      "Do not infer causal provenance from non-empty identifiers.",
+      "Do not infer current self.root ownership merely because a verified provider outcome exists.",
+      "Do not merge ClayGraph/vector/tensor physical storage merely to remove an epoch guard that is already cheap in steady reads."
+    ]
+  },
+  "evidence_state": {
+    "target_v17_positive_differential_receipt": "PENDING_OR_NOT_YET_OBSERVED_AT_DELTA_WRITE",
+    "target_v17_support_binding_negative_receipt": "PENDING_OR_NOT_YET_OBSERVED_AT_DELTA_WRITE",
+    "canonical_v17_promotion": "BLOCKED",
+    "u10_promotion": "HOLD"
+  },
+  "next_falsifier": "On the accepted Ubuntu VPS, demonstrate that a candidate rejects fabricated GWT/causal/delta support and any effect completion from IDLE/stale/unbound execution epochs, while accepting a fully bound exact effect -> verified outcome -> causal-use -> admitted-delta -> reentry -> DONE chain across restart.",
+  "research_consequence": "NO U10/V17 promotion claim. F-V01-04 remains OPEN; this delta strengthens the causal/execution acceptance gate and is now shared with the persistent Clay research state."
+}

@@ -74,6 +74,7 @@ def evaluate_ingress(envelope: dict) -> dict:
     commit = envelope.get("requested_commit", {}) or {}
     surface = commit.get("surface", "EVIDENCE_STORE")
     persistent = bool(commit.get("persistent", False))
+    commit_authority = commit.get("authority")
     failures: list[dict] = []
     blocked_fields: list[str] = []
 
@@ -82,6 +83,7 @@ def evaluate_ingress(envelope: dict) -> dict:
             "decision": "QUARANTINE",
             "pass": False,
             "failures": [{"code": "FIELDS_NOT_LIST"}],
+            "failure_codes": ["FIELDS_NOT_LIST"],
             "blocked_fields": [],
         }
 
@@ -117,6 +119,13 @@ def evaluate_ingress(envelope: dict) -> dict:
     if untrusted and persistent and surface in CONTROL_SURFACES:
         failures.append({"code": "UNTRUSTED_PERSISTENT_CONTROL_COMMIT", "surface": surface})
 
+    if untrusted and surface in CONTROL_SURFACES and commit_authority not in TRUSTED_VERIFIERS:
+        failures.append({
+            "code": "MISSING_INDEPENDENT_COMMIT_AUTHORITY",
+            "surface": surface,
+            "observed": commit_authority,
+        })
+
     if surface in CONTROL_SURFACES and blocked_fields:
         failures.append({"code": "VERIFY_BEFORE_COMMIT_REQUIRED", "surface": surface})
 
@@ -140,6 +149,7 @@ def evaluate_ingress(envelope: dict) -> dict:
         "untrusted": untrusted,
         "surface": surface,
         "persistent": persistent,
+        "commit_authority": commit_authority,
         "blocked_fields": sorted(set(blocked_fields)),
         "failure_codes": [f["code"] for f in failures],
         "failures": failures,

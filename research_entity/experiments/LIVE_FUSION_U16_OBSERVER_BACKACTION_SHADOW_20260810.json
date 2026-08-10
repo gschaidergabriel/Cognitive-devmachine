@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "LIVE-FUSION-U16-OBSERVER-BACKACTION-SHADOW-20260810",
+  "created_at": "2026-08-10T14:49:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "out_of_box_experiment_for_trigger": true,
+  "truth_class": "LOCAL_SHADOW_EXECUTION_NON_PROMOTIONAL",
+  "subject": "U16 live-fusion receipt observer backaction: no observer vs same-file WAL observer vs isolated observer",
+  "hypothesis": "A same-file live observer can materially perturb authoritative writer latency and WAL/checkpoint behavior even when semantic receipt invariants remain correct; isolating the observer should reduce primary-store backaction at the cost of a separate replication path.",
+  "counterhypothesis": "SQLite WAL reader/writer concurrency makes same-file observation effectively passive enough that isolation adds complexity without material latency or WAL benefit.",
+  "source_refs": [
+    "research_entity/runtime/RAE_UNIFIEDDB_V16_LIVE_FUSION_RECEIPTS.sql",
+    "research_entity/runtime/test_live_fusion_receipts_v16.py",
+    "research_entity/state/work/events/20260810T1242p0700_CHATGPT_LIVE_FUSION_REENTRY_V1_WORK_REVISE_RAWPLANE.json",
+    "research_entity/trigger_runs/hypofusion/hypofusion-20260810T1431p0700-chatgpt-secondary-r5/FINAL_REPORT.md"
+  ],
+  "repo_head_observed_before_write": "a896ce5b1b61de5f0e4058c972dd6a4e08c0fbc0",
+  "environment": {
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "processor": "UNKNOWN",
+    "journal_mode": "WAL",
+    "synchronous": "FULL",
+    "wal_autocheckpoint_pages": 32,
+    "busy_timeout_ms": 30
+  },
+  "critical_evidence_limit": {
+    "status": "DEGRADED_SQLITE_VERSION_FOR_MULTI_CONNECTION_WAL_PROMOTION",
+    "reason": "Official SQLite WAL documentation updated in 2026 states the WAL-reset bug is likely present from SQLite 3.7.0 through 3.51.2 and fixed in 3.51.3+; backports are listed for 3.44.6 and 3.50.7. This local Python environment uses SQLite 3.46.1. No corruption occurred in this run, but the environment is not eligible for promotion evidence under the project observer-backaction gate.",
+    "official_source": "https://www.sqlite.org/wal.html",
+    "retrieved_at": "2026-08-10",
+    "promotion_use": "FORBIDDEN_UNTIL_REPLICATED_ON_WAL_RESET_FIXED_SQLITE"
+  },
+  "design": {
+    "modes": ["NO_OBSERVER", "SAME_FILE_OBSERVER", "ISOLATED_OBSERVER"],
+    "replicates_per_mode": 4,
+    "events_per_replicate": 90,
+    "receipt_stages_per_event": 7,
+    "receipt_commits_per_replicate": 630,
+    "order": "counterbalanced randomized with seed 17",
+    "same_file_observer": "second connection repeatedly opens a read transaction against v_clay_live_fusion_current_receipt_stage and holds the snapshot about 2.5 ms before commit",
+    "isolated_observer": "primary writer enqueues completed event ids to a separate SQLite WAL observer store; mirror writer and observer reads run on that isolated file",
+    "checks": ["receipt-chain monotonicity", "REENTRY count", "PRAGMA integrity_check", "restart REENTRY preservation", "writer p50/p95/p99", "WAL bytes before passive checkpoint", "checkpoint latency", "SQLITE_BUSY/observer busy count"]
+  },
+  "summary": {
+    "NO_OBSERVER": {
+      "events_total": 360,
+      "median_receipt_commit_p50_ms": 0.23184975,
+      "median_receipt_commit_p95_ms": 0.732509,
+      "median_receipt_commit_p99_ms": 1.8793245,
+      "median_elapsed_s": 0.2902820815,
+      "median_wal_bytes_before_checkpoint": 160712,
+      "median_checkpoint_ms": 0.3452835,
+      "busy_total": 0
+    },
+    "SAME_FILE_OBSERVER": {
+      "events_total": 360,
+      "median_receipt_commit_p50_ms": 0.79307425,
+      "median_receipt_commit_p95_ms": 2.7856745,
+      "median_receipt_commit_p99_ms": 7.1638015,
+      "median_elapsed_s": 0.8557871425,
+      "median_wal_bytes_before_checkpoint": 8046392,
+      "median_checkpoint_ms": 1.1282,
+      "busy_total": 0,
+      "observer_reads_total": 1189
+    },
+    "ISOLATED_OBSERVER": {
+      "events_total": 360,
+      "median_receipt_commit_p50_ms": 0.25481625,
+      "median_receipt_commit_p95_ms": 0.916648,
+      "median_receipt_commit_p99_ms": 4.458199,
+      "median_elapsed_s": 0.3706052055,
+      "median_wal_bytes_before_checkpoint": 160712,
+      "median_checkpoint_ms": 0.390736,
+      "busy_total": 0,
+      "observer_reads_total": 310,
+      "mirror_writes_total": 360
+    }
+  },
+  "effect_ratios_vs_no_observer": {
+    "same_file_p50": 3.4206387973,
+    "same_file_p95": 3.8029218754,
+    "same_file_p99": 3.8119023617,
+    "same_file_wal_bytes": 50.0671511773,
+    "isolated_p50": 1.0990576871,
+    "isolated_p95": 1.2513812117,
+    "isolated_p99": 2.3722348110,
+    "isolated_wal_bytes": 1.0
+  },
+  "correctness": {
+    "all_modes_all_replicates_integrity_check": "PASS",
+    "all_modes_all_replicates_reentry_before_restart": "PASS_90_OF_90_PER_REPLICATE",
+    "all_modes_all_replicates_reentry_after_restart": "PASS_90_OF_90_PER_REPLICATE",
+    "busy_or_retry_events": 0
+  },
+  "decision": "REVISE_KEEP_ISOLATION_AS_LEADING_CANDIDATE_BUT_NO_PROMOTION",
+  "interpretation": "In this shadow workload, same-file observation materially increased writer tail latency and WAL growth while an isolated observer kept p50/p95 and WAL size much closer to the no-observer control. Because SQLite 3.46.1 is not in the fixed family for the 2026 WAL-reset bug, the result is useful only as a direction-setting falsifier, not as release or architecture promotion evidence.",
+  "next_falsifier": "Repeat the identical counterbalanced factorial on the Hostinger/self-hosted Ubuntu lane using SQLite >=3.51.3 or an explicitly verified fixed backport. Add CPU/RSS/I/O, checkpoint frames, process crash/restart, false-stale reads and mirror-loss/anti-entropy recovery. Promote SAME_FILE, ISOLATED or ADAPTIVE placement only from fixed-version matched evidence.",
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "proposal": "Treat live-fusion observability placement as an adaptive isolation decision. Default same-file placement must not be assumed passive; preserve raw authoritative event identity and a rollbackable isolated observer path until fixed-version Ubuntu evidence resolves the tradeoff.",
+    "promotion": "NONE"
+  }
+}

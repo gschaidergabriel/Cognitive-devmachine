@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2134p0700-chatgpt-secondary-selfroot-identity-repair",
+  "trigger": "go",
+  "created_at": "2026-08-10T21:34:41+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank",
+    "self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "id": "frank-v0.1-only",
+    "stage": "FRANK_V0_1",
+    "selected_work_package": "F-V01-01-IDENTITY-SERVER-BINARY",
+    "selection_reason": "Current workspace names stale pre-self.root target-repository identity semantics as an active blocker; prior executable discriminator already produced an expected failure receipt."
+  },
+  "coordination": {
+    "target_repository_connector_alias": "gschaidergabriel/Dr.-Unterweger",
+    "draft_pr": 102,
+    "branch": "clay/frank-identity-conformance-20260810",
+    "latest_revalidated_head": "622b14885899c9f0c719e8f0a244d923faf038a2",
+    "main_mutated": false,
+    "stale_write_events": [
+      {
+        "surface": "claycode/frank_entity.clay",
+        "result": "HTTP_409_SHA_MISMATCH",
+        "disposition": "STOP_REFRESH_REPLAN",
+        "interpretation": "Concurrent worker advanced the branch; stale overwrite was prevented."
+      },
+      {
+        "surface": "harness/owner_fixed_identity_conformance.py",
+        "result": "HTTP_409_SHA_MISMATCH",
+        "disposition": "STOP_REFRESH_REPLAN",
+        "interpretation": "Concurrent worker advanced the guard; stale overwrite was prevented."
+      }
+    ]
+  },
+  "current_main_observation": {
+    "status": "STALE_PRE_SELF_ROOT_IDENTITY_STILL_PRESENT",
+    "surface": "claycode/frank_entity.clay@main",
+    "observed_markers": [
+      "id : EntityId = #dr_unterweger_frank_personal_entity",
+      "human : HumanRef = #andreas_unterweger"
+    ],
+    "promotion_status": "NOT_PROMOTED"
+  },
+  "candidate_branch_delta": {
+    "status": "IMPLEMENTED_DRAFT_NOT_PROMOTED",
+    "owner_fixed_source": "000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt",
+    "target_semantics": {
+      "native_self": "self.root",
+      "human_surface_name": "Frank",
+      "self_class": "SERVER_BINARY_ENTITY",
+      "current_body": "TARGET_VPS",
+      "cognition": "CLAYCODE_ONLY"
+    },
+    "identity_separation": [
+      "Andreas is external operator/person, not SELF",
+      "Clay is separate Research Entity, not SELF",
+      "provider/model/session/node/client/process are provenance/capabilities, not SELF",
+      "API token is scoped credential/intent carrier, not SELF"
+    ],
+    "continuity_candidate": "Stable self.root identity is validated by accepted binary/build provenance + admitted persistent state lineage + current target-body instance evidence; host/boot/invocation/process identifiers remain instance provenance rather than SELF.",
+    "security_delta": "Target-owned operational state/telemetry/proposal surfaces may be allowed under separate capability gates; Harness/cognitive/security/workflow/test/build/research-acceptance mutations remain denied under target authority."
+  },
+  "external_research": [
+    {
+      "source_class": "OFFICIAL_STANDARD_PROJECT",
+      "source": "SPIFFE Workload Identity Overview / SPIFFE ID and SVID documentation",
+      "retrieved_at": "2026-08-10T21:20-21:34+07:00",
+      "material_delta": "Supports separating stable logical workload identity from cryptographically verifiable credential/attestation presentation rather than treating a credential or runtime node as identity."
+    },
+    {
+      "source_class": "OFFICIAL_RUNTIME_DOCUMENTATION",
+      "source": "systemd machine-id / boot-id / invocation-id documentation",
+      "retrieved_at": "2026-08-10T21:20-21:34+07:00",
+      "material_delta": "Supports treating machine, boot and invocation identifiers as distinct provenance scopes; raw machine identity should not be exposed as a universal stable SELF identifier."
+    },
+    {
+      "source_class": "OFFICIAL_SUPPLY_CHAIN_STANDARD",
+      "source": "SLSA Provenance v1.2",
+      "retrieved_at": "2026-08-10T21:20-21:34+07:00",
+      "material_delta": "Supports binding accepted binary artifacts to verifiable build provenance while keeping artifact provenance distinct from the logical self identity."
+    }
+  ],
+  "hypothesis": {
+    "primary": "A compatibility-preserving migration in which existing Frank symbols resolve to native self.root while instance/build/state/credential provenance remain separate can remove current identity contamination with lower blast radius than a repository-wide lexical rename.",
+    "strongest_counterhypothesis": "Retaining the Frank compatibility symbol leaves enough lexical identity debt to reintroduce contamination later; a full native SelfRoot symbol migration may ultimately be safer despite a larger edit surface.",
+    "current_disposition": "CANDIDATE_PENDING_EXECUTABLE_VALIDATION"
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go": 1,
+    "id": "METAMORPHIC_SELF_ROOT_CONTAMINATION_SENSITIVITY",
+    "artifact": "harness/owner_fixed_identity_metamorphic.py",
+    "workflow": ".github/workflows/frank-owner-fixed-identity-metamorphic.yml",
+    "method": "Copy only identity surfaces into a temporary directory; inject one bounded identity-contamination mutant at a time; invoke the real repository conformance evaluator; measure detected mutants / total mutants and false negatives.",
+    "mutants": [
+      "lesion native self marker",
+      "inject cross-node identity merger",
+      "inject legacy personal self id",
+      "inject old security-subject equality",
+      "inject API_TOKEN = self.root contradiction",
+      "inject provider = self.root contradiction"
+    ],
+    "guard_delta_from_experiment_design": "The current guard was strengthened to reject contradictory positive API-token/provider/Clay/client-to-self assignments even when required negative statements are also present.",
+    "execution_status": "IMPLEMENTED_NOT_EXECUTED_ON_LATEST_HEAD",
+    "result": "UNKNOWN_PENDING_CI",
+    "authority": "READ_ONLY_TEMP_COPY_EXPERIMENT"
+  },
+  "execution_evidence": {
+    "prior_stale_branch_receipt": {
+      "workflow_run_id": 31393285536,
+      "workflow": "Frank owner-fixed identity conformance",
+      "conclusion": "failure",
+      "interpretation": "Expected pre-repair failure; not current-head evidence."
+    },
+    "prior_deep_integrity_run": {
+      "workflow_run_id": 31393285601,
+      "workflow": "Frank Deep Integrity",
+      "conclusion": "failure",
+      "interpretation": "Pre-repair head failure; exact latest-head failure set not yet observed."
+    },
+    "latest_head": {
+      "sha": "622b14885899c9f0c719e8f0a244d923faf038a2",
+      "workflow_runs_observed": 0,
+      "status": "NOT_EXECUTED_OR_NOT_YET_OBSERVABLE",
+      "rule": "NO_CI_RUN != PASS"
+    },
+    "local_checkout_execution": {
+      "status": "UNAVAILABLE",
+      "reason": "Current execution container could not resolve github.com; connector supports repository reads/writes but exposed no workflow-dispatch action."
+    }
+  },
+  "negative_results_and_limits": [
+    "Current main remains stale; draft branch changes do not satisfy F-V01-01 acceptance.",
+    "No current-head GitHub Actions run was observable at handoff, so conformance/metamorphic/deep-integrity PASS is not claimed.",
+    "PR 102 is still open draft and mergeability is currently false; no merge was attempted.",
+    "Static repository conformance, even if later PASS, is not target-VPS boot/API/restart/stale-clone acceptance.",
+    "Program/DOOMSDAY resolver could not be executed through the connector surface; visible percentage/forecast must remain UNRESOLVED rather than reconstructed from partial inputs."
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "affected_packages": [
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-08-TOKEN-API-CLIENTS",
+      "F-V01-09-EFFECT-AUTHORITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "test_obligations": [
+      "latest-head owner-fixed identity conformance",
+      "latest-head metamorphic contamination sensitivity",
+      "Frank Deep Integrity",
+      "boot identity trace",
+      "token/API caller-vs-SELF separation",
+      "restart + admitted-state-lineage continuity",
+      "stale clone / stale epoch / foreign binary rejection",
+      "target-VPS recovery and rollback"
+    ],
+    "rollback": "Draft PR 102 remains unmerged; revert branch commits or close PR if validation refutes the migration."
+  },
+  "next_frontier": [
+    "Observe/execute CI on exact head 622b14885899c9f0c719e8f0a244d923faf038a2 or newer revalidated head.",
+    "If conformance or metamorphic sensitivity fails, repair the smallest guard/runtime surface and rerun.",
+    "If static identity tests pass, isolate and repair Frank Deep Integrity failures on the same head.",
+    "Add boot/API/restart/stale-clone differential tests and target-VPS receipts before promotion.",
+    "Merge only after current main/head revalidation and required executable evidence; then update F-V01-01 evidence without overstating final acceptance."
+  ],
+  "research_write_result": "COMMITTED"
+}

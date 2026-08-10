@@ -9,9 +9,11 @@ truth, proof eligibility, or execution authority.
 
 Motivation: a static graph can drift into high-degree or lexically generic neighborhoods.
 This projector therefore combines bounded best-first traversal with query-conditioned edge
-relevance and a mild hub penalty. Relevance has a non-zero floor so missing edge labels do
-not hard-delete potentially useful paths. Inadmissible nodes remain observable as suppressed
-negative space and cannot relay activation.
+relevance and a mild hub penalty. Query conditioning is activated only when at least one
+ADMISSIBLE outgoing edge carries positive query signal. If local edge semantics are absent,
+that source falls back to the original static edge weighting exactly: missing labels are
+UNKNOWN, not negative evidence. Inadmissible nodes remain observable as suppressed negative
+space and cannot relay activation or manufacture the presence of query signal.
 """
 
 from dataclasses import dataclass
@@ -23,7 +25,7 @@ import re
 from typing import Any
 
 _TOKEN_RE = re.compile(r"[\w-]+", re.UNICODE)
-_VERSION = "QCEP-0.1"
+_VERSION = "QCEP-0.2"
 
 
 def _canon(value: Any) -> str:
@@ -130,13 +132,30 @@ class QueryConditionedEvidenceProjector:
         self._epoch = epoch
         self._state_hash = state_hash
 
-    def _edge_query_factor(self, edge: dict[str, Any], query_tokens: frozenset[str], spec: QueryEvidenceSpec) -> tuple[float, float, float]:
+    def _edge_query_overlap(self, edge: dict[str, Any], query_tokens: frozenset[str]) -> float:
         target = self._rows.get(edge["target"], {})
-        evidence_tokens = _tokens(edge["relation"]) | _tokens(edge["dependency_value"]) | _tokens(target.get("key", "")) | _tokens(target.get("value", ""))
+        evidence_tokens = (
+            _tokens(edge["relation"])
+            | _tokens(edge["dependency_value"])
+            | _tokens(target.get("key", ""))
+            | _tokens(target.get("value", ""))
+        )
         overlap = len(query_tokens & evidence_tokens)
-        # Saturate early. A few matching relation/constraint terms should guide traversal,
-        # not create pseudo-probabilities or overwhelm explicit edge confidence.
-        normalized = min(1.0, overlap / max(1.0, min(4.0, float(len(query_tokens) or 1))))
+        return min(1.0, overlap / max(1.0, min(4.0, float(len(query_tokens) or 1))))
+
+    def _edge_query_factor(
+        self,
+        edge: dict[str, Any],
+        query_tokens: frozenset[str],
+        spec: QueryEvidenceSpec,
+        *,
+        conditioning_available: bool,
+    ) -> tuple[float, float, float]:
+        normalized = self._edge_query_overlap(edge, query_tokens)
+        if not conditioning_available:
+            # Critical OOD rule: missing local relation semantics are UNKNOWN, not a reason
+            # to down-rank. Preserve the original EAP/static traversal exactly here.
+            return 1.0, normalized, 1.0
         relevance = spec.relevance_floor + (1.0 - spec.relevance_floor) * normalized
         hub = self._out_degree.get(edge["target"], 0)
         hub_factor = 1.0 / (1.0 + spec.hub_penalty * math.log1p(hub))
@@ -181,10 +200,28 @@ class QueryConditionedEvidenceProjector:
             if not admissible:
                 blocked.add(ref)
                 continue
-            for edge in self._adj.get(ref, ()):
+
+            edges = self._adj.get(ref, ())
+            # Query conditioning becomes active only if an admissible candidate edge at
+            # THIS source carries positive signal. A CONFLICT/REVOKED target may be exposed
+            # as suppressed evidence, but cannot cause unrelated viable edges to be penalized.
+            conditioning_available = False
+            for edge in edges:
+                target = self._rows.get(edge["target"], {})
+                target_admissible = (
+                    str(target.get("status", "")).upper() in allowed_status
+                    and str(target.get("epistemic", "")).upper() in allowed_epistemic
+                )
+                if target_admissible and self._edge_query_overlap(edge, qtokens) > 0.0:
+                    conditioning_available = True
+                    break
+
+            for edge in edges:
                 if edge["weight"] < spec.min_edge_weight:
                     continue
-                factor, edge_rel, edge_hub = self._edge_query_factor(edge, qtokens, spec)
+                factor, edge_rel, edge_hub = self._edge_query_factor(
+                    edge, qtokens, spec, conditioning_available=conditioning_available
+                )
                 next_score = score * edge["weight"] * spec.hop_decay * factor
                 if next_score <= 0.0:
                     continue
@@ -234,6 +271,7 @@ class QueryConditionedEvidenceProjector:
             "truth_authority": "NONE",
             "effect_authority": "NONE",
             "proof_rule": "query-conditioned activation changes accessibility only; it never mints proof eligibility",
+            "missing_edge_semantics_rule": "NO_ADMISSIBLE_LOCAL_QUERY_SIGNAL => EXACT_STATIC_EDGE_FACTOR",
         }
         receipt["receipt_hash"] = _hash(receipt)
         return receipt

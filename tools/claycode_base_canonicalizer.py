@@ -17,11 +17,12 @@ CRITICAL PARITY LAW: canonical AST semantics have one active implementation only
 own grammar-bound canonical-syntax envelope/hash, but it may not independently reinterpret
 parser nodes. That prevents production-vs-standalone semantic drift.
 
-V17 mandatory semantic-trivia guards include `Needle.owns(X)` == `Needle.owns (X)` while
-`Needle.owns X` remains a distinct prefix relation. Redundant expression grouping is also
-surface syntax: `x>0`, `(x>0)`, `((x>0))`, and a grouped call must retain production AST
-identity. Calls/lists/sets/operators remain structurally preserved by the production
-canonicalizer.
+V18 inherits V17's mandatory semantic-trivia guards: `Needle.owns(X)` ==
+`Needle.owns (X)` while `Needle.owns X` remains a distinct prefix relation. Redundant
+expression grouping is also surface syntax: `x>0`, `(x>0)`, `((x>0))`, and a grouped call
+must retain production AST identity. V18 additionally admits only the measured current-G9
+reward relations `preserves`, `required_before`, and `cannot_be_silently_averaged_away`.
+Calls/lists/sets/operators remain structurally preserved by the production canonicalizer.
 
 The canonicalizer MUST use the exact production parser constructor. In particular,
 production sets maybe_placeholders=False, so absent [] optionals are semantic absence and
@@ -45,7 +46,7 @@ from lark import Lark, Tree
 import claycode_base_frontend as front
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
+DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark"
 DEFAULT_SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
@@ -190,6 +191,8 @@ def main() -> None:
         ),
         "optional_type": ("record X { a:Int }\n", "record X { a:Int? }\n"),
         "string_exact_scalar_sequence": ('rule label="é"\n', 'rule label="e\\u0301"\n'),
+        "preserves_vs_requires": ("rule a preserves b\n", "rule a requires b\n"),
+        "required_before_vs_requires": ("rule a required_before b\n", "rule a requires b\n"),
     }
     distinct = [
         {"case": name, **pair_receipt(parser, grammar_sha, left, right, expect_same=False)}
@@ -220,6 +223,16 @@ def main() -> None:
         {"case": name, **pair_receipt(parser, grammar_sha, left, right, expect_same=True)}
         for name, (left, right) in equivalent_cases.items()
     ]
+
+    postfix_reward_guards = []
+    for name, source in {
+        "cannot_be_silently_averaged_away": "rule brake cannot_be_silently_averaged_away\n",
+    }.items():
+        try:
+            _, h = parse_canonical(parser, source, grammar_sha)
+            postfix_reward_guards.append({"case": name, "semantic_hash": h, "pass": True, "error": None})
+        except Exception as exc:
+            postfix_reward_guards.append({"case": name, "semantic_hash": None, "pass": False, "error": str(exc)})
 
     optional_absence_sources = {
         "record_without_typeparams_or_defaults": "record X { a:Int }\n",
@@ -262,12 +275,13 @@ def main() -> None:
         overall
         and all(x["pass"] for x in distinct)
         and all(x["pass"] for x in equivalent)
+        and all(x["pass"] for x in postfix_reward_guards)
         and all(x["pass"] for x in optional_absence)
         and all(x["pass"] for x in invalid)
     )
     receipt = {
-        "schema_version": "1.7",
-        "experiment": "ClayCode BASE deterministic V17 grammar-bound syntax canonicalization with production-AST parity",
+        "schema_version": "1.8",
+        "experiment": "ClayCode BASE deterministic V18 grammar-bound syntax canonicalization with production-AST parity",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)) if grammar_path.is_relative_to(ROOT) else str(grammar_path),
         "grammar_sha256": grammar_sha,
@@ -285,15 +299,17 @@ def main() -> None:
         "sources": rows,
         "semantic_surface_discrimination": distinct,
         "layout_equivalence": equivalent,
+        "postfix_reward_guards": postfix_reward_guards,
         "optional_placeholder_absence": optional_absence,
         "invalid_semantic_values": invalid,
-        "v9_trivia_counterexample_guard_present": True,
+        "v17_trivia_counterexample_guard_present": True,
+        "v18_reward_relation_guards_present": True,
         "grouping_equivalence_guard_present": True,
         "production_ast_single_authority": True,
         "string_escape_identity_guard_present": True,
         "optional_placeholder_absence_guard_present": True,
         "pass": overall,
-        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia, redundant-grouping, decoded-string identity and production-parser absent-optional semantics for the listed admitted sources and regression/mutation pairs while sharing the production canonical-AST implementation. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04) or substitute for Hostinger/Andreas target receipts.",
+        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia, redundant-grouping, current reward-relation, decoded-string identity and production-parser absent-optional semantics for the listed admitted sources and regression/mutation pairs while sharing the production canonical-AST implementation. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04) or substitute for Hostinger/Andreas target receipts.",
     }
     rendered = json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
     if args.output:

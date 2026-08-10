@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "self-root-entity-graph-alias-20260810",
+  "run_id": "go-20260810T2244p0700-chatgpt-secondary-selfroot-fence-fusion",
+  "status": "TESTING_CANDIDATE",
+  "actor": "chatgpt-secondary",
+  "target_pr": 185,
+  "target_pr_head": "ef12ae6104df192074bdefb7817edbfce149c0cb",
+  "problem": {
+    "observed_backing_semantics": [
+      "historical frank_state_runtime_impl defined PERSONAL_ENTITY_ID=dr-unterweger-frank-personal-entity",
+      "historical frank_state_runtime_impl separately defined FRANK=entity:frank",
+      "the prior closed PR124 public wrapper overrode PERSONAL_ENTITY_ID to self.root but did not override FRANK",
+      "the backing graph projector classifies the entity equal to FRANK as region SELF"
+    ],
+    "conflict_with_owner_contract": "Owner-fixed source says NATIVE_SELF=self.root and Frank is the human-surface translation name for self.root, not a second internal SELF.",
+    "failure_mode": "A system could stamp meta/materialization identity as self.root while still projecting entity:frank as the current ClayGraph SELF node. This creates a causal meta-vs-graph identity split even though superficial identity tests pass."
+  },
+  "strongest_counterhypothesis": "entity:frank is merely an implementation alias and leaving it as the graph SELF semantic_ref has no semantic consequence once meta.entity_id=self.root.",
+  "counterhypothesis_status": "NOT_ACCEPTED_WITHOUT_CAUSAL_ALIAS_BOUNDARY",
+  "reason": "ClayGraph region SELF participates in current semantic topology. Marking entity:frank as current SELF gives the alias an active semantic role rather than a passive compatibility role.",
+  "candidate_repair": {
+    "public_state_runtime": [
+      "override PERSONAL_ENTITY_ID to self.root",
+      "override FRANK semantic entity key to self.root",
+      "retain LEGACY_FRANK_SEMANTIC_REF=entity:frank only as ancestry metadata"
+    ],
+    "public_materializer": [
+      "reconcile self.root into entities as ACTIVE server_binary_entity with human-surface label Frank",
+      "if legacy entity:frank exists, keep its primary key so historical foreign keys remain valid",
+      "demote legacy entity:frank to entity_type=compatibility_alias and status=COMPATIBILITY_ALIAS",
+      "stamp legacy_frank_semantic_ref metadata",
+      "rebuild ClayGraph through public state runtime so current FRANK semantic key is self.root"
+    ],
+    "deletion_or_primary_key_rewrite": "FORBIDDEN_IN_CANDIDATE",
+    "why": "semantic_records and relationship_beliefs contain foreign keys to entities(entity_id); deleting or renaming the historical row without a complete FK migration would create avoidable continuity risk"
+  },
+  "new_discriminating_tests": [
+    {
+      "name": "fresh_runtime_single_self_root_graph",
+      "expected": "disposable fresh state has exactly one CURRENT region=SELF ClayGraph node and semantic_ref=self.root; no entity:frank current SELF node exists"
+    },
+    {
+      "name": "legacy_alias_fk_preserving_reconciliation",
+      "expected": "a disposable legacy entity:frank with an FK-bound semantic record survives materializer reconciliation, becomes compatibility alias, self.root becomes ACTIVE current entity, and PRAGMA foreign_key_check remains empty"
+    }
+  ],
+  "promotion_gate": "Both tests must pass in current-main PR merge context and a full disposable repo semantic replay must preserve self.root identity/graph closure before this delta can be promoted.",
+  "rollback": "Remove FRANK=self.root public override and alias reconciliation commits from draft PR185; no canonical state or main branch is mutated by this research delta.",
+  "authority": {
+    "frank_self_harness": "PROPOSAL_ONLY",
+    "clay_research_entity": "independent test/implementation authority",
+    "canonical_state_mutated": false,
+    "external_effect_performed": false
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "package_id":"Q23-PKG-003-QWEN3VL-CONTROL-MECHANISMS",
+  "run_id":"q23-20260810T1737p0700",
+  "observed_at":"2026-08-10T17:37:00+07:00",
+  "topic":"GUI_SCREEN_UNDERSTANDING_AND_VISUAL_TOKEN_CONTROL",
+  "source_class":"OFFICIAL_MODEL_REPOSITORY",
+  "source_refs":["https://github.com/QwenLM/Qwen3-VL"],
+  "finding":"Qwen3-VL's official implementation/research surface explicitly targets visual agents, computer-use grounding, OCR, spatial perception, video understanding and controllable visual token budgets. These capabilities support researching Retina as active temporal/control fabric around native VLM perception instead of duplicating semantic recognition modules.",
+  "why_interesting_for_target_architecture":"It opens a denser architecture question: which historical Retina OCR/object/grounding functions can be causally replaced by native model capabilities while preserving temporal continuity, provenance, active sensing and action verification outside model authority.",
+  "fusion_result":"REFINES",
+  "hypothesis_created_or_revised":["H-Q23-004","H-Q23-005","H-Q23-006","H-Q23-008"],
+  "architecture_delta_candidates":["AD-Q23-003"],
+  "test_obligations":["TO-Q23-004","TO-Q23-005"],
+  "swarm_targets":["frank","harness","gwt","emergenz","claycode"],
+  "confidence":0.91,
+  "falsifier":"Frank-specific matched experiments show standalone Retina semantic modules materially outperform native-Qwen paths under the same resource and recovery constraints."
+}

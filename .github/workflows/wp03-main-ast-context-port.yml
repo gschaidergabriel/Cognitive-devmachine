@@ -35,6 +35,8 @@ jobs:
           def swap(old: str, new: str, label: str) -> None:
               global text
               if new in text:
+                  if old in text and old != new:
+                      raise SystemExit(f'CAS_AMBIGUOUS {label}: old and new blocks both present')
                   print(label + ': already_patched')
                   return
               n = text.count(old)
@@ -43,16 +45,22 @@ jobs:
               text = text.replace(old, new, 1)
               print(label + ': patched')
 
-          old = '''def first_name(node: Any, *, after: str | None = None) -> str:\n    vals = token_values(node)\n    start = 0\n    if after is not None and after in vals:\n        start = vals.index(after) + 1\n    for value in vals[start:]:\n        if value in KEYWORDS or value in PUNCT:\n            continue\n        if value and (value[0].isalpha() or value[0] == "_"):\n            return value\n    raise TypedIRError(f"cannot find declaration name in {vals!r}")\n'''
-          new = '''def direct_identifier(node: Any) -> str | None:\n    """Return a direct grammar-admitted identifier and fail closed on alias corruption."""\n    for child in children(node):\n        t = token(child)\n        if t is not None and t[0] == "NAME":\n            return t[1]\n        k = kind(child)\n        if k is not None and k.startswith("ident_"):\n            vals = token_values(child)\n            expected = k.removeprefix("ident_")\n            if len(vals) != 1:\n                raise TypedIRError(f"malformed {k} identifier node: expected one token, got {vals!r}")\n            if vals[0] != expected:\n                raise TypedIRError(\n                    f"identifier alias/token mismatch: {k} requires {expected!r}, got {vals[0]!r}"\n                )\n            return vals[0]\n    return None\n\n\ndef first_name(node: Any, *, after: str | None = None) -> str:\n    name = direct_identifier(node)\n    if name:\n        return name\n    vals = token_values(node)\n    raise TypedIRError(f"cannot find declaration name in {vals!r}")\n'''
-          swap(old, new, 'direct_identifier')
+          old_first = '''def first_name(node: Any, *, after: str | None = None) -> str:\n    vals = token_values(node)\n    start = 0\n    if after is not None and after in vals:\n        start = vals.index(after) + 1\n    for value in vals[start:]:\n        if value in KEYWORDS or value in PUNCT:\n            continue\n        if value and (value[0].isalpha() or value[0] == "_"):\n            return value\n    raise TypedIRError(f"cannot find declaration name in {vals!r}")\n'''
+          new_first = '''def direct_identifier(node: Any) -> str | None:\n    """Return a direct grammar-admitted identifier and fail closed on alias corruption."""\n    for child in children(node):\n        t = token(child)\n        if t is not None and t[0] == "NAME":\n            return t[1]\n        k = kind(child)\n        if k is not None and k.startswith("ident_"):\n            vals = token_values(child)\n            expected = k.removeprefix("ident_")\n            if len(vals) != 1:\n                raise TypedIRError(f"malformed {k} identifier node: expected one token, got {vals!r}")\n            if vals[0] != expected:\n                raise TypedIRError(\n                    f"identifier alias/token mismatch: {k} requires {expected!r}, got {vals[0]!r}"\n                )\n            return vals[0]\n    return None\n\n\ndef first_name(node: Any, *, after: str | None = None) -> str:\n    name = direct_identifier(node)\n    if name:\n        return name\n    vals = token_values(node)\n    raise TypedIRError(f"cannot find declaration name in {vals!r}")\n'''
+          swap(old_first, new_first, 'direct_identifier')
 
-          swap('''    name = next((v for v in vals[:colon] if v not in KEYWORDS and v not in PUNCT), None)\n''',
-               '''    name = direct_identifier(node)\n''', 'field_name')
-          swap('''    name = next((v for v in vals[:colon] if v not in KEYWORDS and v not in PUNCT), None)\n''',
-               '''    name = direct_identifier(node)\n''', 'typed_param_name')
-          swap('''        mname = next((v for v in mv if v not in KEYWORDS and v not in PUNCT), None)\n''',
-               '''        mname = direct_identifier(m)\n''', 'method_name')
+          old_field = '''def parse_field(node: Any) -> dict[str, Any]:\n    vals = token_values(node)\n    try:\n        colon = vals.index(":")\n    except ValueError as exc:\n        raise TypedIRError(f"field without type annotation: {vals!r}") from exc\n    name = next((v for v in vals[:colon] if v not in KEYWORDS and v not in PUNCT), None)\n'''
+          new_field = '''def parse_field(node: Any) -> dict[str, Any]:\n    vals = token_values(node)\n    try:\n        colon = vals.index(":")\n    except ValueError as exc:\n        raise TypedIRError(f"field without type annotation: {vals!r}") from exc\n    name = direct_identifier(node)\n'''
+          swap(old_field, new_field, 'field_name')
+
+          old_typed = '''def parse_typed_param(node: Any) -> dict[str, str]:\n    vals = token_values(node)\n    try:\n        colon = vals.index(":")\n    except ValueError as exc:\n        raise TypedIRError(f"typed parameter without ':' in {vals!r}") from exc\n    name = next((v for v in vals[:colon] if v not in KEYWORDS and v not in PUNCT), None)\n'''
+          new_typed = '''def parse_typed_param(node: Any) -> dict[str, str]:\n    vals = token_values(node)\n    try:\n        colon = vals.index(":")\n    except ValueError as exc:\n        raise TypedIRError(f"typed parameter without ':' in {vals!r}") from exc\n    name = direct_identifier(node)\n'''
+          swap(old_typed, new_typed, 'typed_param_name')
+
+          old_method = '''    for m in (x for x in walk(node) if kind(x) == "method_sig"):\n        mv = token_values(m)\n        mname = next((v for v in mv if v not in KEYWORDS and v not in PUNCT), None)\n        if not mname:\n'''
+          new_method = '''    for m in (x for x in walk(node) if kind(x) == "method_sig"):\n        mv = token_values(m)\n        mname = direct_identifier(m)\n        if not mname:\n'''
+          swap(old_method, new_method, 'method_name')
+
           old_params = '''        for p in (x for x in walk(m) if kind(x) == "param"):\n            pv = token_values(p)\n            if ":" in pv:\n                c = pv.index(":")\n                params.append({"name": pv[0], "type": type_text(pv[c + 1:])})\n            else:\n                # Existing semantic registry permits untyped interface params; preserve explicitly.\n                params.append({"name": pv[0] if pv else "", "type": "OpaqueParam"})\n'''
           new_params = '''        for p in (x for x in walk(m) if kind(x) == "param"):\n            pv = token_values(p)\n            pname = direct_identifier(p)\n            if ":" in pv:\n                c = pv.index(":")\n                params.append({"name": pname or "", "type": type_text(pv[c + 1:])})\n            else:\n                # Existing semantic registry permits untyped interface params; preserve explicitly.\n                params.append({"name": pname or "", "type": "OpaqueParam"})\n'''
           swap(old_params, new_params, 'method_params')
@@ -80,7 +88,7 @@ jobs:
       - name: Persist hosted implementation receipt and commit only after gates pass
         run: |
           python3 - <<'PY'
-          import hashlib, json, os, pathlib, platform
+          import hashlib, json, os, pathlib
           root=pathlib.Path('.')
           alias=json.loads(pathlib.Path('/tmp/wp03_alias.json').read_text())
           main=json.loads(pathlib.Path('/tmp/wp03_main.json').read_text())

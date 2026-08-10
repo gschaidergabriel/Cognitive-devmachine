@@ -15,6 +15,19 @@ on:
       - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
       - 'research_entity/claycode/autonomous/SUPERVISOR_STATE.json'
       - '.github/workflows/wp03-rule-invariant-clause-ir-v1.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/claycode_wp03_rule_invariant_clause_ir_v1.py'
+      - 'tools/test_claycode_wp03_rule_invariant_clause_ir_v1.py'
+      - 'tools/claycode_wp03_residual_semantics_candidate.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - 'research_entity/claycode/autonomous/SUPERVISOR_STATE.json'
+      - '.github/workflows/wp03-rule-invariant-clause-ir-v1.yml'
   workflow_dispatch:
 
 permissions:

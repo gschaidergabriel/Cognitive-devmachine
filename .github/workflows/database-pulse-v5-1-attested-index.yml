@@ -1,0 +1,129 @@
+name: Database Pulse V5.1 Attested Index
+
+on:
+  push:
+    branches:
+      - chatgpt/pulse-rank-v5-1-attested-index-20260810
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_path_v5_1_attested.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v5_1_attested.py'
+      - 'tools/database_pulse_rank_path_v5_1_attested_benchmark.py'
+      - '.github/workflows/database-pulse-v5-1-attested-index.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_path_v5_1_attested.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v5_1_attested.py'
+      - 'tools/database_pulse_rank_path_v5_1_attested_benchmark.py'
+      - '.github/workflows/database-pulse-v5-1-attested-index.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-falsifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile candidate
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v5_1_attested.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5_1_attested.py \
+            tools/database_pulse_rank_path_v5_1_attested_benchmark.py
+      - name: Run inherited and attestation falsifiers
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_rank_path_v5_1_attested
+      - name: Matched V5 vs V5.1 benchmark
+        run: |
+          set -euo pipefail
+          python tools/database_pulse_rank_path_v5_1_attested_benchmark.py \
+            --rows 100,1000 --repeat 100 \
+            --output /tmp/database-pulse-v5-1-attested-hosted.json
+      - name: Enforce correctness gates
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/database-pulse-v5-1-attested-hosted.json',encoding='utf-8'))
+          assert p['pass'] is True, p
+          for r in p['results']:
+              assert r['semantic_equivalence'] is True, r
+              assert r['legacy_unattested_fails_online'] is True, r
+          print('DATABASE_PULSE_V5_1_ATTESTED_HOSTED_GATES=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v5-1-attested-hosted
+          path: /tmp/database-pulse-v5-1-attested-hosted.json
+
+  hostinger-falsifier:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Capture exact runtime metadata
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/database-pulse-v5-1-attested
+          uname -a | tee /tmp/database-pulse-v5-1-attested/uname.txt
+          python3 - <<'PY' | tee /tmp/database-pulse-v5-1-attested/runtime.json
+          import json, os, platform, sqlite3
+          print(json.dumps({
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+            'scope':'REMOTE_PRELIMINARY_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'machine':platform.machine(),
+            'python':platform.python_version(),
+            'sqlite':sqlite3.sqlite_version,
+          }, indent=2))
+          PY
+      - name: Compile and run falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v5_1_attested.py \
+            research_entity/runtime/test_database_pulse_rank_path_v5_1_attested.py \
+            tools/database_pulse_rank_path_v5_1_attested_benchmark.py
+          /usr/bin/time -v python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_rank_path_v5_1_attested \
+            2>&1 | tee /tmp/database-pulse-v5-1-attested/tests.txt
+      - name: Matched benchmark
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v python3 tools/database_pulse_rank_path_v5_1_attested_benchmark.py \
+            --rows 100,1000,10000 --repeat 300 \
+            --output /tmp/database-pulse-v5-1-attested/benchmark.json \
+            2>&1 | tee /tmp/database-pulse-v5-1-attested/benchmark-time.txt
+      - name: Enforce Hostinger correctness gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee /tmp/database-pulse-v5-1-attested/gates.txt
+          import json
+          p=json.load(open('/tmp/database-pulse-v5-1-attested/benchmark.json',encoding='utf-8'))
+          assert p['pass'] is True, p
+          print('DATABASE_PULSE_V5_1_ATTESTED_HOSTINGER_GATES=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v5-1-attested-hostinger
+          path: /tmp/database-pulse-v5-1-attested/

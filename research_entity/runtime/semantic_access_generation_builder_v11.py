@@ -11,6 +11,10 @@ from dataclasses import dataclass
 import sqlite3
 
 
+class SemanticAccessBusyError(RuntimeError):
+    """No semantic-access mutation started because another SQLite writer owns the DB."""
+
+
 @dataclass(frozen=True)
 class Path:
     seed_id: str
@@ -33,7 +37,15 @@ def _table_exists(con: sqlite3.Connection, name: str) -> bool:
 def _begin_owned_write(con: sqlite3.Connection, operation: str) -> None:
     if con.in_transaction:
         raise ValueError(f'{operation} requires a clean transaction boundary')
-    con.execute('BEGIN IMMEDIATE')
+    try:
+        con.execute('BEGIN IMMEDIATE')
+    except sqlite3.OperationalError as exc:
+        code = getattr(exc, 'sqlite_errorcode', None)
+        if code is not None and (int(code) & 0xFF) == sqlite3.SQLITE_BUSY:
+            raise SemanticAccessBusyError(
+                f'{operation} busy before mutation; safe to retry from fresh state'
+            ) from exc
+        raise
 
 
 def _graph_v4_present(con: sqlite3.Connection) -> bool:

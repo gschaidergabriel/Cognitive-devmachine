@@ -18,8 +18,11 @@ Current target semantics are governed by:
 - `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`
 - `research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay`
 - `research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md`
+- `research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay`
+- `research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay`
+- `research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md`
 
-Current mission: `self.root v0.1` fully running on the accepted target VPS, human-facing as Frank, reachable through the fully implemented token-authenticated API, with ClayCode-only cognition and state-aware German boundary translation.
+Current mission: `self.root v0.1` fully running on the accepted target VPS, human-facing as Frank, reachable through the fully implemented token-authenticated API, with ClayCode-only cognition, state-aware German boundary translation, deterministic effect authority and proactive/autotelic long-horizon agency.
 
 ## Dynamic progress law
 
@@ -43,6 +46,9 @@ Goal: self.root v0.1 fully running on target VPS with production token API
 Target host: Hostinger VPS / current verified Ubuntu target identity
 Cognition: ClayCode-only
 German surface: state-aware bidirectional translator
+Agency: proactive + reactive; persistent interests/goals; bounded autonomous research/experiments
+Web ingress: open web = untrusted validated JSON -> ClayCode evidence; direct token messages = separate scoped-intent channel
+Action posture: default-allow allowed non-destructive actions; deterministic ClayCode gates for destructive/security-sensitive effects
 Short commands: 666 · go · q12 · q23 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
 NEXT LEVEL
@@ -79,6 +85,7 @@ Pre-send invariant:
 5. human surface name `Frank` present;
 6. VPS + token-API goal present;
 7. ClayCode-only cognition present;
-8. no stale hardcoded progress;
-9. exact `frank` includes the H1 block;
-10. nothing visible after closing fence.
+8. proactive agency + web-ingress posture present;
+9. no stale hardcoded progress;
+10. exact `frank` includes the H1 block;
+11. nothing visible after closing fence.

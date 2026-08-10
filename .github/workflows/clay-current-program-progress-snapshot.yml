@@ -1,0 +1,64 @@
+name: Clay Current Program Progress Snapshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clay-current-program-progress-snapshot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clay-current-program-progress-snapshot
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+      - name: Resolve current repository state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/program_progress.py --json --as-of 2026-08-10 > /tmp/current_program_progress.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/current_program_progress.json'))
+          print(json.dumps({
+            'stage_id':x['stage_id'],
+            'percent':x['percent'],
+            'eta':x['eta'],
+            'doomsday':{
+              'progress_percent':x['doomsday']['progress_percent'],
+              'forecast_low':x['doomsday']['forecast_low'],
+              'forecast_high':x['doomsday']['forecast_high'],
+              'forecast_center':x['doomsday']['forecast_center'],
+              'confidence':x['doomsday']['confidence'],
+              'conditional_on_immediate_training_authorization':x['doomsday']['conditional_on_immediate_training_authorization'],
+              'historical_progress_basis':x['doomsday'].get('historical_progress_basis')
+            }
+          },sort_keys=True))
+          PY
+      - name: Persist snapshot
+        shell: bash
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/rooms/progress_snapshots
+          cp /tmp/current_program_progress.json "research_entity/rooms/progress_snapshots/PROGRAM_PROGRESS_${RUN_ID}.json"
+          cp /tmp/current_program_progress.json research_entity/rooms/CURRENT_PROGRAM_PROGRESS.json
+          git config user.name 'clay-program-progress-resolver'
+          git config user.email 'clay-program-progress-resolver@users.noreply.github.com'
+          git add research_entity/rooms/progress_snapshots/ research_entity/rooms/CURRENT_PROGRAM_PROGRESS.json
+          git commit -m "evidence(status): persist current program progress ${RUN_ID} [skip ci]"
+          for n in 1 2 3 4 5 6; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep $((n*2)); done
+          exit 1

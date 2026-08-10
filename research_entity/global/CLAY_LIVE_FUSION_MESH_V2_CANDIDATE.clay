@@ -1,0 +1,164 @@
+module clay.research.live_fusion_mesh_v2
+version "0.1-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+parent_mesh=@research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md
+parent_swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+parent_web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+state=UnifiedDB
+topology=ClayGraph
+coordination_language=latest_ClayCode
+
+// Research origin: 2026-08-10 exact-go live-fusion cycle.
+// This candidate strengthens targeted distribution without treating connectivity as evidence.
+// It is intentionally additive and rollbackable; it does not supersede owner-fixed protocols.
+
+record KnowledgeDeltaV2 {
+  delta_id:Ref
+  content_hash:Hash
+  semantic_epoch:Ref
+  origin_actor:Ref
+  origin_branch:Ref
+  kind:NEW|REFINES|CONFIRMS|CONTRADICTS|SUPERSEDES|NO_MATERIAL_CHANGE
+  semantic_tags:Set<Ref>
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  causal_predecessors:Set<Ref>
+  evidence_refs:Set<Ref>
+  truth_class:Ref
+  payload_ref:Ref
+  invalidation_priority:Score
+  created_at:Time
+}
+
+record BranchDependencyIndex {
+  branch:Ref
+  current_work:Set<Ref>
+  current_claims:Set<Ref>
+  semantic_tags:Set<Ref>
+  dependency_refs:Set<Ref>
+  invalidator_refs:Set<Ref>
+  projection_epoch:Ref
+  projection_hash:Hash
+}
+
+record RouteDecision {
+  delta:Ref
+  target_branch:Ref
+  reason:DIRECT_SEMANTIC|DIRECT_WORK|CAUSAL_DEPENDENT|CONFLICT_INTERRUPT|ANTI_ENTROPY_REPAIR|INDEX_ONLY
+  payload_mode:FULL_REF|DIGEST_ONLY|NONE
+  urgency:NEXT_SAFE_POINT|NEXT_CHECKPOINT|INDEX_ONLY
+  dependency_path:Set<Ref>
+  route_epoch:Ref
+}
+
+record AntiEntropyDigest {
+  digest_id:Ref
+  semantic_epoch:Ref
+  delta_hashes:Set<Hash>
+  changed_claims:Set<Ref>
+  changed_work:Set<Ref>
+  dependency_projection_hash:Hash
+  source_projection_hash:Hash
+  created_at:Time
+}
+
+record FusionReceipt {
+  delta:Ref
+  branch:Ref
+  route_reason:Ref
+  delivered:Bool
+  reconstructed:Bool
+  plan_revalidated:Bool
+  used:Bool
+  local_effect:Bool
+  interrupted_before_effect:Bool
+  ack_epoch:Ref
+  dependency_projection_hash:Hash
+  observed_at:Time
+}
+
+// Differential/live-fusion principle: move semantic deltas through the current dependency graph
+// rather than re-broadcasting complete branch state on every update.
+rule material_delta -> canonicalize(KnowledgeDeltaV2)
+rule material_delta -> content_hash_deduplicate_preserve_distinct_provenance
+rule material_delta -> resolve_current(BranchDependencyIndex for all registered peer branches)
+rule material_delta -> origin_branch receives FULL_REF
+rule material_delta -> route DIRECT_SEMANTIC to branches whose current semantic/work surface matches
+rule material_delta -> route DIRECT_WORK to branches with explicitly affected_work|affected_claims
+
+// Invalidations propagate by causal dependency, not only vocabulary overlap.
+rule delta.kind in [CONTRADICTS,SUPERSEDES] -> traverse_current_dependency_dependents
+rule dependency_traversal -> continue while affected_current_work_exists and marginal_route_value>coordination_cost
+rule high_impact_invalidation -> CONFLICT_INTERRUPT at next safe point
+rule REFines_dependency_premise -> traverse_only_current_direct_dependents unless evidence justifies deeper invalidation
+rule NO_MATERIAL_CHANGE -> origin receipt + INDEX_ONLY elsewhere
+
+// Payload minimization: route references/deltas, not duplicated global context.
+rule route_relevant -> FULL_REF payload reference + minimal provenance envelope
+rule low_relevance -> DIGEST_ONLY or INDEX_ONLY
+rule receiver_needs_details -> pull(payload_ref) from canonical state
+rule semantic_duplicate -> no duplicate full payload delivery
+
+// Anti-entropy makes dependency-index incompleteness observable instead of silently stale.
+rule branch_checkpoint -> compare(local dependency/work hash, current AntiEntropyDigest)
+rule ack_epoch_gap|projection_hash_mismatch|missing_predecessor -> request ANTI_ENTROPY_REPAIR
+rule ANTI_ENTROPY_REPAIR -> rehydrate missing delta refs + rebuild affected dependency projection + revalidate plan
+rule repair_failure -> DEGRADED_COORDINATION + no_global_nonoverlap_claim
+rule stale_projection -> never silently treated CURRENT
+
+// Causal ordering is weaker than total ordering: only declared predecessors must be seen before
+// a dependent delta is consumed for a material effect.
+rule delta.causal_predecessors missing -> hold_material_use + request_repair
+rule independent_deltas may_arrive_out_of_order=true
+rule total_global_order_not_required=true
+
+// Current work remains revisioned and must be revalidated before effect.
+rule material_delta_received -> revalidate(latest work spec_rev,dependencies,invalidators,authority)
+rule invalidated_work -> interrupt_before_next_effect
+rule ordinary_relevant_delta -> ingest_at_next_checkpoint
+rule network_delivery != use
+rule use != effect
+rule effect != causal_credit
+
+// Measurement contract for candidate evaluation.
+measure relevant_branch_recall
+measure full_payload_fanout_per_delta
+measure digest_control_overhead
+measure missed_invalidation_count
+measure invalidation_delivery_latency
+measure stale_window_until_repair
+measure duplicate_payload_suppression
+measure false_interrupt_rate
+measure receiver_reconstruction_rate
+measure plan_revalidation_rate
+measure projection_repair_success_rate
+measure CPU_RAM_IO_network_cost
+
+promotion requires {
+  synthetic_replay beats broadcast_and_tag_only_on_declared_metric_vector;
+  real_repo_worker_replay;
+  stale_projection_fault_injection;
+  missing_dependency_edge_fault_injection;
+  duplicate_delta_fault_injection;
+  crash_restart_recovery;
+  exact provenance receipts;
+  no evidence-strength inflation;
+  rollback_to_current_mesh_protocol;
+}
+
+// Research evidence informing this candidate:
+// - McSherry et al., Differential Dataflow, CIDR 2013: incremental changes + nested iteration.
+// - Murray et al., Naiad: A Timely Dataflow System, SOSP 2013: cyclic dataflow with logical timestamps.
+// - Budiu et al., DBSP, PVLDB 2023 / extended 2025: general incremental view maintenance over rich/recursive queries.
+// - Dotted Version Vectors: compact causal tracking for optimistic replication.
+
+invariant connectivity_does_not_mint_truth
+invariant repeated_distribution_does_not_create_independent_replication
+invariant provenance_survives_deduplication
+invariant branch_relevance_routing_never_expands_effect_authority
+invariant Frank_remains_separate_research_subject
+invariant Frank_never_mutates_Clay
+invariant candidate_not_promoted_without_real_replay_and_recovery_evidence

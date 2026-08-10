@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "work_translation": [
+    {
+      "work_package": "F-V01-06-DIGITAL-RETINA-MVC",
+      "action": "ADD_TEST_OBLIGATIONS_WITHOUT_MARKING_PROGRESS_PASS",
+      "tests": ["T-Q23-FEATURE-LADDER-01","T-Q23-ZERO-REENCODE-01","T-Q23-CACHE-LIFETIME-01","T-Q23-HYBRID-RESTART-01","T-Q23-TRANSFORM-INVARIANCE-01"],
+      "architecture_candidate": "AD-Q23-QNDRF-1.1-REPRESENTATION-LIFETIMES",
+      "status_effect": "REMAINS_OPEN",
+      "progress_credit": 0,
+      "next_capability_dependency": "instrumented target Qwen3.5-4B + matching mmproj/libmtmd lane with user-specific visual fixtures"
+    },
+    {
+      "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "action": "ADD_SEMANTIC_BOUNDARY_TEST",
+      "obligation": "Verify L0/L1 typed perceptual state survives replay/restart while L2 raw embedding and L3 runtime cache may be discarded/rebuilt without changing canonical semantic truth.",
+      "status_effect": "NO_PROGRESS_CREDIT"
+    },
+    {
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "action": "ADD_STALE_VISUAL_STATE_TEST",
+      "obligation": "Reject mismatched model/mmproj/preprocess/descriptor/recurrent-state identities and prove fail-observable recovery rather than silent reuse.",
+      "status_effect": "NO_PROGRESS_CREDIT"
+    }
+  ]
+}

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+import fcntl
 import hashlib
 import json
+import os
 from pathlib import Path
 from typing import Iterable
 
@@ -12,6 +14,7 @@ DELIVERY_INDEX = "INDEX_ONLY"
 ACK_DECISIONS = frozenset({"ACCEPT", "REPLAN", "NO_CHANGE", "CONFLICT", "DEFER"})
 APPLICABILITY = frozenset({"CURRENT_MATERIAL", "HISTORICALLY_VALID_ONLY", "UNKNOWN"})
 AUTHORITY = "COORDINATION_SIGNAL_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY"
+LOG_SCHEMA_VERSION = "1.1"
 
 
 def _stable(value) -> str:
@@ -20,6 +23,19 @@ def _stable(value) -> str:
 
 def _digest(value) -> str:
     return hashlib.sha256(_stable(value).encode("utf-8")).hexdigest()
+
+
+def _record(kind: str, payload: dict) -> dict:
+    body = {"kind": kind, "payload": payload}
+    return {
+        "schema_version": LOG_SCHEMA_VERSION,
+        **body,
+        "record_hash": _digest(body),
+    }
+
+
+def _semantic_ack(ack: "Ack") -> tuple[str, str, str]:
+    return ack.decision, ack.plan_revision, ack.note
 
 
 @dataclass(frozen=True)
@@ -112,6 +128,10 @@ class LiveFusionBus:
     Delivery is intentionally at-least-once. event_id dedupe + idempotent ACKs make replay safe.
     Payload equality never erases a newer logical event, preserving ABA/provenance identity.
     Source order/arrival age never overwrites causal origin; late events remain routable.
+
+    The JSONL transport is an Ubuntu-local durability reference lane, not final UnifiedDB
+    authority. Linux advisory file locking serializes concurrent writers and fsync makes every
+    completed record durable before the caller receives success.
     """
 
     def __init__(self, log_path: str | Path | None = None):
@@ -122,13 +142,28 @@ class LiveFusionBus:
         self.acks: dict[tuple[str, str], Ack] = {}
         self.payload_provenance: dict[str, set[str]] = {}
         self.max_source_seq: dict[str, int] = {}
+        self.recovery_events: list[dict] = []
 
     def _append(self, kind: str, payload: dict) -> None:
         if not self.log_path:
             return
         self.log_path.parent.mkdir(parents=True, exist_ok=True)
-        with self.log_path.open("a", encoding="utf-8") as fh:
-            fh.write(_stable({"kind": kind, "payload": payload}) + "\n")
+        data = (_stable(_record(kind, payload)) + "\n").encode("utf-8")
+        fd = os.open(self.log_path, os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o600)
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX)
+            offset = 0
+            while offset < len(data):
+                written = os.write(fd, data[offset:])
+                if written <= 0:
+                    raise OSError("short append write")
+                offset += written
+            os.fsync(fd)
+        finally:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_UN)
+            finally:
+                os.close(fd)
 
     def register_worker(self, worker: WorkerView, *, persist: bool = True) -> None:
         if not worker.worker_id:
@@ -207,7 +242,7 @@ class LiveFusionBus:
         key = (ack.event_id, ack.worker_id)
         existing = self.acks.get(key)
         if existing:
-            if existing == ack:
+            if _semantic_ack(existing) == _semantic_ack(ack):
                 return "ACK_IDEMPOTENT"
             raise ValueError("conflicting ACK for event/worker")
         self.acks[key] = ack
@@ -244,16 +279,60 @@ class LiveFusionBus:
                 blockers.append(delta.event_id)
         return not blockers, sorted(blockers)
 
+    @staticmethod
+    def _decode_log(path: Path) -> tuple[list[dict], list[dict]]:
+        rows: list[dict] = []
+        recovery: list[dict] = []
+        if not path.exists():
+            return rows, recovery
+        raw = path.read_bytes()
+        if not raw:
+            return rows, recovery
+        parts = raw.splitlines(keepends=True)
+        for index, piece in enumerate(parts):
+            is_last = index == len(parts) - 1
+            complete = piece.endswith(b"\n")
+            candidate = piece.rstrip(b"\r\n")
+            if not candidate:
+                continue
+            if not complete and is_last:
+                recovery.append(
+                    {
+                        "kind": "TORN_TAIL_IGNORED",
+                        "byte_count": len(piece),
+                        "record_index": index,
+                    }
+                )
+                continue
+            try:
+                row = json.loads(candidate.decode("utf-8"))
+            except Exception as exc:
+                if is_last:
+                    recovery.append(
+                        {
+                            "kind": "INVALID_TAIL_IGNORED",
+                            "byte_count": len(piece),
+                            "record_index": index,
+                            "error": type(exc).__name__,
+                        }
+                    )
+                    continue
+                raise ValueError(f"corrupt interior log record {index}") from exc
+            expected = row.get("record_hash")
+            if expected:
+                actual = _digest({"kind": row.get("kind"), "payload": row.get("payload")})
+                if expected != actual:
+                    raise ValueError(f"record hash mismatch at {index}")
+            rows.append(row)
+        return rows, recovery
+
     @classmethod
     def replay(cls, log_path: str | Path) -> "LiveFusionBus":
         bus = cls(log_path)
         path = Path(log_path)
-        if not path.exists():
-            return bus
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if not line.strip():
-                continue
-            row = json.loads(line)
+        rows, recovery = cls._decode_log(path)
+        bus.recovery_events.extend(recovery)
+        for row in rows:
             kind, payload = row["kind"], row["payload"]
             if kind == "WORKER_REGISTER":
                 payload["branches"] = tuple(payload["branches"])

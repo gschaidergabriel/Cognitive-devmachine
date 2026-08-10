@@ -69,8 +69,28 @@ class MerkleTreapStateShadow:
     def map_root(self)->bytes:return self._d(self.root)
     def node_count(self)->int:return self._s(self.root)
     def rebuild(self,rows:Iterable[tuple[str,str,str]])->bytes:
-        self.root=None
-        for d,k,r in rows:self.update_hash(domain=d,key=k,row_hash_hex=r)
+        """Deterministic O(N log N) sort + O(N) Cartesian-tree rebuild/recovery path."""
+        entries=[]
+        for d,k,r in rows:
+            kh=key_digest(d,k); entries.append((kh,bytes.fromhex(r),priority_of(kh)))
+        entries.sort(key=lambda x:x[0])
+        stack=[]
+        for kh,row_hash,priority in entries:
+            n=Node(kh,row_hash,priority); last=None
+            while stack and priority<stack[-1].priority:last=stack.pop()
+            n.left=last
+            if stack:stack[-1].right=n
+            stack.append(n)
+        self.root=stack[0] if stack else None
+        if self.root is not None:
+            todo=[(self.root,False)]
+            while todo:
+                n,visited=todo.pop()
+                if visited:self._fix(n)
+                else:
+                    todo.append((n,True))
+                    if n.right is not None:todo.append((n.right,False))
+                    if n.left is not None:todo.append((n.left,False))
         return self.map_root()
     def committed_root(self,*,global_epoch:int,domain_epochs_hash_hex:str,semantic_chain_hash_hex:str)->bytes:
         meta=H(b'CLAY_MERKLE_TREAP_META_V1\0'+int(global_epoch).to_bytes(8,'big')+bytes.fromhex(domain_epochs_hash_hex)+bytes.fromhex(semantic_chain_hash_hex))

@@ -1,53 +1,26 @@
-# FRANK v0.1 — Ubuntu Target Host Directive
+# FRANK v0.1 — Superseded Ubuntu Developer-System Target Host Directive
 
-**Status:** PROJECT_OWNER_FIXED_DIRECTIVE
+**Status:** SUPERSEDED_BY_PROJECT_OWNER_DIRECTIVE_2026-08-10
 **Scope:** Frank v0.1 / Clay 0.1 staged build program
-**Effective:** 2026-08-09
+**Originally effective:** 2026-08-09
+**Superseded by:** `research_entity/global/FRANK_V0_1_VPS_TARGET_HOST_DIRECTIVE.md`
 
-## Fixed target
+## Supersession
 
-Frank v0.1 is built, researched, compiled, executed, benchmarked, integrated and release-gated for exactly one operative target host:
+The former exclusive Frank v0.1 target of **Ubuntu Linux on Andreas' developer system** is no longer the v0.1 release/acceptance target.
 
-**Ubuntu Linux on the developer system.**
+The project owner clarified on 2026-08-10 that **everything else in the Frank/Clay v0.1 programme remains unchanged; only the target system changes**.
 
-## Explicit out-of-scope targets for v0.1
+The authoritative target is now the persistent VPS defined in:
 
-The following are not current Frank v0.1 research targets, implementation targets, portability gates or release gates:
+`research_entity/global/FRANK_V0_1_VPS_TARGET_HOST_DIRECTIVE.md`
 
-- Android
-- mobile platforms
-- generic edge-device deployment
-- Windows
-- macOS
-- BSD
-- cross-platform portability work that is not required to make Frank v0.1 run correctly on the Ubuntu developer system
+All references in older programme/workspace/acceptance material to:
 
-They may be reconsidered only after a new explicit project-owner directive.
+- `Ubuntu developer system`;
+- `Andreas PC` as v0.1 target;
+- `UBUNTU_LINUX_DEVELOPER_SYSTEM` as target-host identity;
 
-## Research and implementation law
+must be interpreted as the historical predecessor target and are superseded for v0.1 target-host semantics by the VPS directive.
 
-For every current branch (`clayresearch`, `frank`, `claycode`, `harness`, `gwt`, `emergenz`, `hyperposition`, `claygraph`, `unifieddb`):
-
-1. optimize current architecture and implementation decisions for the Ubuntu developer system;
-2. use Ubuntu/Linux-native execution, filesystem, process, IPC, sandbox, GPU/accelerator, packaging and service semantics as the concrete v0.1 environment;
-3. do not spend current research budget on Android/mobile/edge portability;
-4. do not block BASE/H1/H2/H3/UDB/DATA progression on non-Ubuntu portability;
-5. preserve semantic abstractions only where they are useful for correctness, testing, safety or future optional portability, but do not turn future portability into current work;
-6. any prior document mentioning Android/mobile/edge as a v0.1 target is superseded by this directive for the v0.1 program scope.
-
-## ClayCode consequence
-
-ClayCode BASE remains a general-purpose language/runtime, but the first compiler/runtime release path and all mandatory Frank v0.1 acceptance execution are targeted and validated on Ubuntu Linux. Additional backends are optional research only after the Ubuntu v0.1 path is complete or the owner explicitly reopens portability work.
-
-## Harness consequence
-
-H1, H2 and H3 acceptance evidence must be reproducible on the Ubuntu developer system. No Android/mobile/edge harness is required for Frank v0.1 PASS.
-
-## Priority consequence
-
-When a choice exists between:
-
-- improving Ubuntu v0.1 correctness/performance/integration, and
-- enabling another operating system or mobile/edge target,
-
-Ubuntu v0.1 work wins unless the other work is strictly necessary for the Ubuntu implementation itself.
+This supersession does **not** reopen or redesign architecture, ClayCode, H1/H2/H3, UnifiedDB, training, Retina, GWT, Harness or other scientific/implementation contracts. It changes only the concrete v0.1 target host and its deployment/acceptance surface.

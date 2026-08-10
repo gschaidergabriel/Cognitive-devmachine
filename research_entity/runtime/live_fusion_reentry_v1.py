@@ -10,6 +10,7 @@ DELIVERY_INTERRUPT = "INTERRUPT_NEXT_SAFE_POINT"
 DELIVERY_CHECKPOINT = "NEXT_CHECKPOINT"
 DELIVERY_INDEX = "INDEX_ONLY"
 ACK_DECISIONS = frozenset({"ACCEPT", "REPLAN", "NO_CHANGE", "CONFLICT", "DEFER"})
+APPLICABILITY = frozenset({"CURRENT_MATERIAL", "HISTORICALLY_VALID_ONLY", "UNKNOWN"})
 AUTHORITY = "COORDINATION_SIGNAL_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY"
 
 
@@ -36,6 +37,10 @@ class LiveDelta:
     payload: dict
     provenance_refs: tuple[str, ...] = ()
     payload_hash: str = ""
+    causal_origin_epoch: str = ""
+    arrival_epoch: str = ""
+    causal_origin_refs: tuple[str, ...] = ()
+    applicability: str = "UNKNOWN"
 
     def normalized(self) -> "LiveDelta":
         if not self.event_id:
@@ -48,6 +53,8 @@ class LiveDelta:
             raise ValueError("at least one semantic key or branch required")
         if not 0.0 <= self.impact <= 1.0 or not 0.0 <= self.urgency <= 1.0:
             raise ValueError("impact/urgency must be within [0,1]")
+        if self.applicability not in APPLICABILITY:
+            raise ValueError("invalid applicability")
         ph = self.payload_hash or _digest(self.payload)
         return LiveDelta(
             event_id=self.event_id,
@@ -63,6 +70,10 @@ class LiveDelta:
             payload=self.payload,
             provenance_refs=tuple(sorted(set(self.provenance_refs))),
             payload_hash=ph,
+            causal_origin_epoch=self.causal_origin_epoch or self.source_epoch,
+            arrival_epoch=self.arrival_epoch,
+            causal_origin_refs=tuple(sorted(set(self.causal_origin_refs))),
+            applicability=self.applicability,
         )
 
 
@@ -100,6 +111,7 @@ class LiveFusionBus:
 
     Delivery is intentionally at-least-once. event_id dedupe + idempotent ACKs make replay safe.
     Payload equality never erases a newer logical event, preserving ABA/provenance identity.
+    Source order/arrival age never overwrites causal origin; late events remain routable.
     """
 
     def __init__(self, log_path: str | Path | None = None):
@@ -155,7 +167,8 @@ class LiveFusionBus:
         score = min(1.0, 0.45 * overlap + 0.35 * delta.impact + 0.20 * delta.urgency)
         reason = (
             f"branch_overlap={sorted(branch_overlap)} key_overlap={sorted(key_overlap)} "
-            f"impact={delta.impact:.2f} urgency={delta.urgency:.2f}"
+            f"impact={delta.impact:.2f} urgency={delta.urgency:.2f} "
+            f"applicability={delta.applicability}"
         )
         return score, reason
 
@@ -165,7 +178,7 @@ class LiveFusionBus:
         if existing:
             return existing
         relevance, reason = self._score(delta, worker)
-        if relevance == 0.0:
+        if relevance == 0.0 or delta.applicability == "HISTORICALLY_VALID_ONLY":
             delivery_class = DELIVERY_INDEX
         elif delta.conflict and delta.impact >= 0.70 and relevance >= 0.45:
             delivery_class = DELIVERY_INTERRUPT
@@ -250,6 +263,7 @@ class LiveFusionBus:
                 payload["semantic_keys"] = tuple(payload["semantic_keys"])
                 payload["affected_branches"] = tuple(payload["affected_branches"])
                 payload["provenance_refs"] = tuple(payload.get("provenance_refs", ()))
+                payload["causal_origin_refs"] = tuple(payload.get("causal_origin_refs", ()))
                 bus.ingest(LiveDelta(**payload), persist=False)
             elif kind == "ACK":
                 bus.ack(Ack(**payload), persist=False)

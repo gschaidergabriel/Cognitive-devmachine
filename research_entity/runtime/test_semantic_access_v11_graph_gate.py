@@ -28,6 +28,7 @@ class U11ClayGraphVerificationGateTests(unittest.TestCase):
         self.con.execute(
             "INSERT INTO semantic_query_seeds VALUES('sv','s','shared semantic state','seed-logical','ALIAS',1.0,'{}',7,9,'CURRENT','t','t')"
         )
+        self.con.commit()
 
     def tearDown(self):
         self.con.close()
@@ -66,6 +67,7 @@ class U11ClayGraphVerificationGateTests(unittest.TestCase):
                ) VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
             (f'receipt-{plan_id}',plan_id,9,topology,1,invalid,stale,missing_counter,'{}',passed,'t'),
         )
+        self.con.commit()
 
     @staticmethod
     def path(record='record-a', target='target-a'):
@@ -121,6 +123,7 @@ class U11ClayGraphVerificationGateTests(unittest.TestCase):
         self.add_plan()
         self.stage()
         self.con.execute("UPDATE graph_semantic_access_plans SET status='SUPERSEDED' WHERE plan_id='p1'")
+        self.con.commit()
         with self.assertRaisesRegex(ValueError, 'stale or no longer VERIFIED'):
             verify_generation(self.con, 'g1', verification_clay='{}', verified_at='t')
         self.assertEqual(
@@ -139,6 +142,7 @@ class U11ClayGraphVerificationGateTests(unittest.TestCase):
         verify_generation(self.con, 'g2', verification_clay='{}', verified_at='t')
 
         self.con.execute("UPDATE graph_epochs SET status='SUPERSEDED' WHERE graph_epoch=9")
+        self.con.commit()
         with self.assertRaisesRegex(ValueError, 'graph epoch became stale'):
             publish_generation(self.con, 'g2', published_at='t2')
 
@@ -151,6 +155,14 @@ class U11ClayGraphVerificationGateTests(unittest.TestCase):
             self.con.execute("SELECT status FROM semantic_access_generations WHERE generation_id='g1'").fetchone()[0],
             'CURRENT',
         )
+
+    def test_open_foreign_transaction_fails_closed(self):
+        self.add_plan()
+        self.con.execute("UPDATE semantic_query_seeds SET confidence=0.9 WHERE seed_id='s'")
+        with self.assertRaisesRegex(ValueError, 'clean transaction boundary'):
+            self.stage()
+        self.con.rollback()
+        self.assertEqual(self.con.execute("SELECT COUNT(*) FROM semantic_access_generations").fetchone()[0], 0)
 
 
 if __name__ == '__main__':

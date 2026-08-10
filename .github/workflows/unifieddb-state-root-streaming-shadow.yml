@@ -1,0 +1,47 @@
+name: UnifiedDB State Root Streaming Shadow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/state_ledger.py'
+      - 'research_entity/harness/reference/state_root_stream.py'
+      - 'research_entity/harness/reference/test_state_root_stream.py'
+      - 'tools/benchmark_stateledger_roots.py'
+      - '.github/workflows/unifieddb-state-root-streaming-shadow.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unifieddb-state-root-streaming-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ubuntu-equivalence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Runtime metadata
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import platform, sqlite3, sys
+          print('python=', sys.version)
+          print('sqlite=', sqlite3.sqlite_version)
+          print('platform=', platform.platform())
+          print('machine=', platform.machine())
+          print('processor=', platform.processor() or 'UNKNOWN')
+          PY
+      - name: Root equivalence, replay and snapshot tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest research_entity.harness.reference.test_state_root_stream -v
+          python3 -m unittest research_entity.harness.reference.test_unifieddb_query_plane -v
+      - name: Matched root benchmark
+        run: |
+          set -euo pipefail
+          python3 tools/benchmark_stateledger_roots.py --sizes 1000,10000,50000 --reps 5 --output /tmp/stateledger_roots.json
+          cat /tmp/stateledger_roots.json

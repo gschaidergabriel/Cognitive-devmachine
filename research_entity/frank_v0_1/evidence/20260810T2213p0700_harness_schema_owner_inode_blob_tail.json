@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "F-V01-HARNESS-SCHEMA-OWNER-INODE-BLOB-TAIL-20260810T2213P0700",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program": "FRANK_V0_1",
+  "target": "self.root / Frank v0.1 on accepted Hostinger Ubuntu VPS",
+  "parent_evidence": "research_entity/frank_v0_1/evidence/20260810T2150p0700_harness_sqlite_schema_owner_ci_transport.json",
+  "delta_class": "FRANK_V0_1_SECURITY_TEST_DELTA_PLUS_RUNTIME_REPAIR_CANDIDATE",
+  "affected_work_packages": [
+    "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+    "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "latest_target_baseline": {
+    "source": "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/latest.log",
+    "hostname": "digital-retina",
+    "runner": "clay",
+    "tested_commit": "6b4bc71b0a1d0a264ad8b402488fc57887157daa",
+    "repo_static_integrity": "FAIL",
+    "failure_scope": "seven noncanonical executescript owners rejected by old blanket static rule",
+    "broad_observed_integrity": "PASS outside repo_static_integrity in the persisted log, including compile, transaction census/replay, deep integrity v11, migration atomicity, device gate, causal re-entry and other shown regression families",
+    "interpretation": "Main Hostinger test execution is functioning; this receipt isolates the old static schema-owner policy as the observed failure."
+  },
+  "candidate": {
+    "target_repo": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 122,
+    "branch": "clay/frank-v01-static-schema-owner-audit-v2-20260810",
+    "promotion": "NONE",
+    "reason": "No candidate-bound self-hosted target receipt has been observed."
+  },
+  "reviewed_noncanonical_schema_owners": {
+    "runtime/vps_unifieddb/clay_colocation_v1_probe.py": {"class":"DISPOSABLE_PROBE","blob_sha":"53df110524ebdca502fe5528e8844da80450e43b"},
+    "runtime/vps_integrity/clay_spm_s1_tripwire_probe.py": {"class":"DISPOSABLE_PROBE","blob_sha":"34b9b33cc1eb39227f2763ede41389f8b45f073b"},
+    "runtime/vps_integrity/clay_udb_auth_shadow_probe.py": {"class":"IN_MEMORY_MECHANISM_PROBE","blob_sha":"24dd0bb53770359b6dc77e94dc86c83b826b0da2"},
+    "runtime/vps_integrity/clay_udb_graph_hotpath_probe.py": {"class":"IN_MEMORY_MECHANISM_PROBE","blob_sha":"a2ee3f5cec1ed56071e918d12890f3c7df1400e1"},
+    "runtime/vps_integrity/clay_udb_streaming_root_probe.py": {"class":"IN_MEMORY_MECHANISM_PROBE","blob_sha":"4d245f240cd8a226724e6a85c725d433e3230b60"},
+    "runtime/temporal_entity_pulse_v1/target_vps_probe.py": {"class":"DISPOSABLE_PROBE","blob_sha":"6a723aef12dbef9805b51d5cc1ad475782f81eb7"},
+    "runtime/clay_vps_mcp_v02/clay_vps_mcp/telemetry.py": {"class":"DEDICATED_TELEMETRY_DB","candidate_blob_sha":"05133afb5e46d8e7f15580a2ac29361d5136ac7f"}
+  },
+  "stale_owner_policy": {
+    "removed_preapproval": "runtime/frank_effect_lifecycle_v1/target_vps_probe.py",
+    "rule": "If executescript reappears in an inactive or previously reviewed owner, it is UNCLASSIFIED until re-reviewed.",
+    "review_drift_rule": "Any byte change in a reviewed active owner causes SCHEMA_OWNER_BLOB_DRIFT in the full audit until its exact Git blob is reviewed and rebound."
+  },
+  "telemetry_runtime_authority_hardening": [
+    "production/environment-selected telemetry DB paths must be absolute and resolve below /srv/frank-telemetry",
+    "explicit constructor paths are test-fixture-only and must resolve below the OS temporary root",
+    "FRANK_UNIFIED.sqlite and FRANK_CLAYGRAPH.sqlite basenames are denied",
+    "resolved symlink/traversal escapes are rejected",
+    "existing DB target must be a regular file",
+    "existing DB target must have st_nlink == 1; hardlink aliases are rejected before schema execution",
+    "existing DB target dev/inode is snapshotted before sqlite3.connect",
+    "after sqlite3.connect and before any PRAGMA/executescript, regular/single-link status is revalidated and dev/inode must match the pre-open snapshot",
+    "file disappearance after open is rejected",
+    "file replacement between path check and SQLite open is rejected before TelemetryStore executes SCHEMA"
+  ],
+  "deployment_defense_in_depth": {
+    "existing_systemd": ["ProtectSystem=strict","ReadWritePaths=/srv/frank-telemetry"],
+    "interpretation": "The current unit already constrains writes at the OS layer; candidate source-level guards make the runtime contract fail closed even under alternate launch paths or later deployment-policy drift."
+  },
+  "local_semantic_reproduction": {
+    "schema_owner_audit_regressions": {"count":14,"pass":14},
+    "telemetry_runtime_path_inode_race_regressions": {"count":13,"pass":13},
+    "targeted_total": {"count":27,"pass":27,"fail":0},
+    "race_falsifier": {
+      "method": "replace an existing SQLite file at the same pathname inside a monkeypatched sqlite3.connect between pre-open snapshot and returned connection",
+      "expected_failure": "TELEMETRY_PATH_CHANGED_DURING_OPEN",
+      "result": "PASS",
+      "protected_original_db_postcondition": "original inode retained only the pre-existing protected table; no telemetry schema was executed against it"
+    },
+    "hardlink_falsifier": {
+      "method": "create two names for one protected SQLite inode and open the alias as telemetry",
+      "expected_failure": "TELEMETRY_PATH_HARDLINK_FORBIDDEN",
+      "result": "PASS",
+      "protected_original_db_postcondition": "no telemetry schema added"
+    },
+    "property_fuzz": {
+      "seed": 4815162342,
+      "cases": 50000,
+      "accepted": 23083,
+      "blocked": 26917,
+      "property_violations": 0,
+      "mutation": "REMOVE_ROOT_OWNERSHIP_CHECK_KEEP_CANONICAL_BASENAME_DENY",
+      "mutation_violations": 22980,
+      "first_mutation_violation": {"case":1,"mode":"production_environment","path":"/tmp/telemetry-537999457.sqlite3"}
+    },
+    "evidence_class": "LOCAL_DETERMINISTIC_SEMANTIC_REPRODUCTION_PLUS_DIRECT_GITHUB_SOURCE_BINDING_NOT_TARGET_ACCEPTANCE"
+  },
+  "ci_transport_state": {
+    "pull_request_lane": "FALSIFIED_AS_SEMANTIC_TEST_INSTRUMENT_BY_ZERO_DEPENDENCY_PRINTF_SENTINEL_FAILURE",
+    "branch_push_sentinel_receipt": "NOT_OBSERVED",
+    "candidate_target_vps_receipt": "NOT_OBSERVED",
+    "rule": "Do not infer candidate source failure from current red pull_request jobs and do not infer target pass from absent branch receipts."
+  },
+  "identity_dependency": {
+    "separate_lane": "Dr.-Unterweger PR #102",
+    "rule": "This candidate does not duplicate self.root identity migration. Security/DB/effect evidence must be replayed after identity integration before terminal Frank v0.1 acceptance."
+  },
+  "strongest_counterhypotheses": [
+    "Moving all equivalent-mechanism probes outside runtime may be simpler than maintaining a reviewed noncanonical schema-owner registry.",
+    "Source-level telemetry ownership checks may provide little incremental security under the currently hardened systemd unit; value must be justified as alternate-launch/deployment-drift defense in depth.",
+    "Exact Git blob pinning can create review friction and false blocks when benign probe code changes; that cost should be compared against a structured schema-owner manifest with semantic/static checks."
+  ],
+  "residual_risks": [
+    "Path/inode pre/post validation narrows but does not constitute a formal proof against every adversarial filesystem race; OS namespace and permissions remain part of the trust boundary.",
+    "The candidate branch is behind a rapidly moving main and requires rebase/review before any merge.",
+    "No exact candidate-bound Hostinger receipt has been persisted."
+  ],
+  "promotion": "NOT_PROMOTED"
+}

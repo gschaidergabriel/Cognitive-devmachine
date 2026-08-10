@@ -94,6 +94,16 @@ class StrongMeshV14Tests(unittest.TestCase):
         self.assertEqual(row.candidate_class, DELIVERY_CHECKPOINT)
         self.assertEqual(row.change, "UPGRADED_DEPENDENCY_REACH")
 
+    def test_false_current_dependency_is_contained_to_shadow_plane(self):
+        # Strongest counterhypothesis control: a current but wrong graph edge can create a
+        # candidate false positive. V1.4 containment keeps V1.3 live routing unchanged.
+        d = self.delta("false-edge", claims=("CLAIM-WRONG",), impact=0.9, urgency=0.8, conflict=True)
+        w = self.worker()
+        row = self.router.plan(d, w, self.projection(claims=("CLAIM-WRONG",)))
+        self.assertEqual(row.base_class, DELIVERY_INDEX)
+        self.assertEqual(row.candidate_class, DELIVERY_INTERRUPT)
+        self.assertEqual(row.authority, "SHADOW_ROUTING_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY")
+
     def test_stale_projection_cannot_upgrade(self):
         d = self.delta("stale-hidden", work=("WP-X",), impact=0.9, urgency=0.8, conflict=True)
         w = self.worker()

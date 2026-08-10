@@ -4,7 +4,7 @@ import os
 import tempfile
 import unittest
 
-from semantic_access_pulse_v12 import PulsePlan, VERSIONS if False else PulsePlan
+from semantic_access_pulse_v12 import PulsePlan
 from semantic_access_segmented_maintenance_s1 import SegmentedPulseMaintenanceS1
 from semantic_access_segmented_maintenance_s1_guarded import (
     SPMIntegrityError,

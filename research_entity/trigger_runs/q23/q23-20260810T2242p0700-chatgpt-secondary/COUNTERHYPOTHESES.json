@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "counterhypotheses":[
+    {"id":"CH-Q23-ZC-001","attacks":"H-Q23-ZC-001","claim":"Qwen projected features are poorly calibrated for user-specific instance/layout familiarity; a dedicated lightweight embedding encoder is Pareto-superior despite duplicate vision work.","discriminator":"Same fixtures/seeds/resources; compare raw Qwen, tiny projection, dedicated embedder on open-set calibration + total path latency/RAM/VRAM."},
+    {"id":"CH-Q23-SP-002","attacks":"H-Q23-SP-002","claim":"Coarse spatial pooling removes the small-text/local semantic cues that distinguish visually similar GUI states.","discriminator":"Near-neighbor UI, small OCR, same-layout-different-content and shifted-layout held-out sets."},
+    {"id":"CH-Q23-ROI-003","attacks":"H-Q23-ROI-003","claim":"Cropping/temporal compression hides globally relevant static context often enough that full-frame processing is safer and equal or better under Frank's actual task distribution.","discriminator":"Modal-outside-ROI, hidden operation, slow drift, background state-transition and action-verification fixtures."},
+    {"id":"CH-Q23-PAR-004","attacks":"H-Q23-PAR-004","claim":"Pre-decode associative memory priming amplifies false familiarity and confirmation bias; simpler post-decode direct retrieval is safer and equally efficient.","discriminator":"Wrong-high-confidence seed, shuffled seed/topology, stale layout, changed identity, no-EAP and direct-memory controls."},
+    {"id":"CH-Q23-RECOVERY-005","attacks":"H-Q23-RECOVERY-005","claim":"Runtime cache/media-state limitations create too much hidden divergence for safe replay; the only robust policy is always re-encode visual evidence after restart.","discriminator":"Restart/replay equivalence and stale-state rejection with/without retained compact media descriptors."}
+  ]
+}

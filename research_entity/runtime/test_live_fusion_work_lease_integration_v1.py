@@ -58,44 +58,55 @@ class LiveFusionLeaseIntegrationTests(unittest.TestCase):
         )
         self.assertTrue(bus.effect_guard("worker-a", effect_work=("work-1",))[0])
 
-        stale = leases.commit_effect(
+        stale = leases.reserve_effect(
             effect_key="effect:work-1",
             lease=lease,
             current_spec_rev=2,
-            result={"ok": True},
-            success=True,
+            request={"operation": "write"},
             now=1,
         )
-        self.assertEqual(stale, {"accepted": False, "reason": "STALE_SPEC_REV"})
+        self.assertEqual(stale, {"reserved": False, "reason": "STALE_SPEC_REV"})
 
         leases.release(lease, now=2)
         fresh = leases.claim(work_id="work-1", spec_rev=2, holder="worker-a", ttl_s=30, now=3)
         self.assertIsNotNone(fresh)
-        committed = leases.commit_effect(
+        reserved = leases.reserve_effect(
             effect_key="effect:work-1",
             lease=fresh,
             current_spec_rev=2,
-            result={"ok": True},
-            success=True,
+            request={"operation": "write"},
             now=4,
         )
-        self.assertEqual(committed["reason"], "COMMITTED")
-
-    def test_new_holder_fences_late_old_holder_after_expiry(self):
-        leases = WorkLeaseFenceStore()
-        old = leases.claim(work_id="work-2", spec_rev=1, holder="worker-a", ttl_s=5, now=0)
-        new = leases.claim(work_id="work-2", spec_rev=2, holder="worker-b", ttl_s=5, now=6)
-        self.assertEqual(new.fence_epoch, old.fence_epoch + 1)
-        late = leases.commit_effect(
-            effect_key="effect:late-old-holder",
-            lease=old,
-            current_spec_rev=1,
+        self.assertEqual(reserved, {"reserved": True, "reason": "RESERVED"})
+        finalized = leases.finalize_effect(
+            effect_key="effect:work-1",
+            lease=fresh,
             result={"ok": True},
             success=True,
+            now=5,
+        )
+        self.assertEqual(finalized["reason"], "FINALIZED")
+
+    def test_new_holder_cannot_repeat_reserved_effect_after_expiry(self):
+        leases = WorkLeaseFenceStore()
+        old = leases.claim(work_id="work-2", spec_rev=1, holder="worker-a", ttl_s=5, now=0)
+        self.assertTrue(leases.reserve_effect(
+            effect_key="effect:once",
+            lease=old,
+            current_spec_rev=1,
+            request={"operation": "send"},
+            now=1,
+        )["reserved"])
+        new = leases.claim(work_id="work-2", spec_rev=2, holder="worker-b", ttl_s=5, now=6)
+        self.assertEqual(new.fence_epoch, old.fence_epoch + 1)
+        retry = leases.reserve_effect(
+            effect_key="effect:once",
+            lease=new,
+            current_spec_rev=2,
+            request={"operation": "send"},
             now=7,
         )
-        self.assertFalse(late["accepted"])
-        self.assertIn(late["reason"], {"LEASE_INACTIVE", "FENCED"})
+        self.assertEqual(retry, {"reserved": False, "reason": "RECOVERY_REQUIRED"})
 
 
 if __name__ == "__main__":

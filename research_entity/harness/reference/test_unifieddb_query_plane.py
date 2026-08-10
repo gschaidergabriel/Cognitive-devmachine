@@ -29,4 +29,16 @@ class UDBTests(unittest.TestCase):
         l,p=self.make(); p.transact(event_id='cap',idem='cap',base_epoch=l.epoch,event_type='CAP',writer='t',ops=[{'op':'SET','domain':'capability','key':'claude','value':{'state':'CAN_NOW'},'epistemic':'KNOWN','status':'CURRENT'}]); v=p.capability_view(); self.assertTrue(v['derived']); self.assertFalse(v['persistent_second_store']); self.assertEqual(v['authority'],'NON_AUTHORITATIVE_PROJECTION'); self.assertEqual(len(v['items']),1); l.close()
     def test_transaction_idempotency_reuses_ledger_contract(self):
         l,p=self.make(); base=l.epoch; kw=dict(event_id='idem',idem='idem',base_epoch=base,event_type='X',writer='t',ops=[{'op':'SET','domain':'semantic','key':'i','value':1,'epistemic':'KNOWN','status':'CURRENT'}]); a=p.transact(**kw); b=p.transact(**kw); self.assertEqual(a['status'],'COMMITTED'); self.assertEqual(b['status'],'ALREADY_COMMITTED'); l.close()
+    def test_query_filters_order_and_truncation(self):
+        l,p=self.make(); p.transact(event_id='more',idem='more',base_epoch=l.epoch,event_type='X',writer='t',ops=[
+            {'op':'SET','domain':'alpha','key':'b','value':2,'epistemic':'KNOWN','status':'CURRENT'},
+            {'op':'SET','domain':'alpha','key':'a','value':1,'epistemic':'KNOWN','status':'CURRENT'},
+            {'op':'SET','domain':'beta','key':'a','value':3,'epistemic':'KNOWN','status':'CURRENT'},
+        ])
+        r=p.query(QuerySpec('filtered',domains=('alpha',),keys=('a','b'),statuses=('current','CURRENT'),epistemic=('known','KNOWN'),limit=1,basis_epoch=l.epoch))
+        self.assertEqual([(x['domain'],x['key']) for x in r.rows],[('alpha','a')]); self.assertTrue(r.truncated); l.close()
+    def test_empty_status_or_epistemic_filter_admits_nothing(self):
+        l,p=self.make(); a=p.query(QuerySpec('empty-status',statuses=(),basis_epoch=l.epoch)); b=p.query(QuerySpec('empty-epi',epistemic=(),basis_epoch=l.epoch)); self.assertEqual(a.rows,()); self.assertEqual(b.rows,()); self.assertFalse(a.truncated); self.assertFalse(b.truncated); l.close()
+    def test_query_value_shape_matches_materialized_contract(self):
+        l,p=self.make(); r=p.query(QuerySpec('shape',domains=('semantic',),keys=('known',),basis_epoch=l.epoch)); self.assertEqual(len(r.rows),1); row=r.rows[0]; self.assertEqual(row['value'],{'v':1}); self.assertEqual(row['epistemic'],'KNOWN'); self.assertEqual(row['status'],'CURRENT'); self.assertIsInstance(row['domain_epoch'],int); self.assertTrue(row['semantic_hash']); l.close()
 if __name__=='__main__': unittest.main()

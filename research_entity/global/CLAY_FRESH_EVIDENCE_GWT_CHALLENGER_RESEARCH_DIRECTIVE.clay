@@ -1,0 +1,85 @@
+module clay.research.fresh_evidence_gwt_challenger
+version "0.1-owner-fixed-2026-08-10T19:23+07:00"
+status PROJECT_OWNER_FIXED_RESEARCH_DIRECTIVE
+
+law applies_to = [go,clayresearch,frank,claycode,harness,q23,claygraph,unifieddb,gwt,hyperposition,emergenz,fusion,hypofusion]
+
+// Every substantive iterative research/build cycle starts by refreshing reality.
+cycle FreshEvidenceFirstIteration(goal) {
+  head = refresh_current_repository_HEAD
+  directives = reload_all_new_owner_fixed_and_current_program_directives
+  work = reload_current_work_revisions_and_open_execution_receipts
+  negatives = reload_material_negative_results_refutations_counterexamples
+  mesh = reload_new_branch_feedback_and_shared_ancestry
+  runtime = observe_available_current_MCP_VPS_CI_telemetry_without_inventing_unavailable_access
+  external = search_current_primary_sources_when_external_or_temporally_unstable_evidence_can_change_design
+  contradictions = compare_new_evidence_against_current_hypotheses
+  baseline = choose_simplest_current_supported_mechanism
+  challenger = generate_exactly_one_new_GWT_based_challenger(goal,head,directives,negatives,contradictions)
+  experiment = preregister_challenger_vs_baseline_with_lesion_shuffle_null_reduction_cost_recovery
+  result = build_run_measure_falsify(experiment)
+  reduction = compare_against_stronger_simpler_explanation
+  reentry = publish_positive_negative_or_refuted_delta_with_ancestry
+  return reentry
+}
+
+law fresh_evidence_pull occurs before material_new_iteration_design
+law new_commit_or_directive_seen_mid_iteration -> revalidate_before_durable_architecture_write
+law stale_project_source_is_historical_evidence_when_superseded_by_current_owner_directive
+law unavailable_MCP_connector != unavailable_MCP_service
+law do_not_claim_live_MCP_observation_without_actual_tool_or_runner_receipt
+law target_VPS_runner_receipt != complete_v0_1_acceptance
+law architecture_contract != runtime_measurement
+law local_synthetic_benchmark != target_VPS_benchmark
+
+// Exactly one deliberately unusual GWT challenger keeps the search space open without Goodharting novelty.
+law each substantive_iteration generates exactly_one NEW_GWT_CHALLENGER unless a material_safety_or_execution_block prevents_any_experiment
+law NEW_GWT_CHALLENGER must materially_differ_from_previous_challengers
+law weirdness_or_novelty != evidence
+law challenger_never_replaces_conservative_baseline_before_measurement
+law challenger_receives_equal_or_stricter_budget_and_authority_constraints
+law challenger must specify strongest_simpler_reduction_control
+law challenger must preserve candidate->competition->ignition->delivery->reconstruction->uptake->causal_use->outcome->reentry distinctions where claimed
+law challenger must include at least [matched_budget,lesion_or_exchange_break,shuffle_or_origin_control,null_or_simple_reduction,recovery_or_idempotency,cost_shadow]
+rule higher_complexity_without_gain_over_simpler_reduction -> REFUTE_OR_REDUCE
+rule gain_only_over_bad_naive_baseline_but_not_strong_baseline -> NOT_PROMOTED
+rule novelty_gain_without_verified_outcome_gain -> NOT_PROMOTED
+rule broadcast_gain_without_causal_use -> NOT_PROMOTED
+rule GWT_or_Pulse_activity != consciousness_evidence
+
+record IterationReceipt {
+  iteration_id:Ref
+  head_before:Hash
+  directives_read:Set<Ref>
+  new_evidence:Set<Ref>
+  negative_results_read:Set<Ref>
+  external_primary_sources:Set<Ref>
+  MCP_VPS_observation_class:LIVE_TOOL|SELF_HOSTED_RUNNER|CI_ONLY|REPO_IMPLEMENTATION_ONLY|UNAVAILABLE
+  conservative_baseline:Ref
+  new_gwt_challenger:Ref
+  strongest_simple_reduction:Ref
+  preregistered_predictions:ClayCode
+  execution_receipts:Set<Ref>
+  correctness:MetricVector
+  causal_controls:MetricVector
+  latency_resources:MetricVector
+  recovery:MetricVector
+  result:SUPPORTED_CANDIDATE|REFUTED|REDUCED_TO_SIMPLER_MECHANISM|INCONCLUSIVE|BLOCKED
+  reentry_receipt:Ref
+}
+
+metric stale_evidence_design_rate
+metric negative_result_reuse_rate
+metric challenger_gain_over_strong_baseline
+metric challenger_gain_over_simple_reduction
+metric false_promotion_rate
+metric target_vps_execution_fraction
+metric MCP_observation_truthfulness
+metric cross_branch_revalidation_coverage
+
+invariant fresh_evidence_is_not_optional_decoration
+invariant negative_results_are_first_class_research_output
+invariant exactly_one_new_GWT_challenger_per_substantive_iteration
+invariant no_promotion_from_novelty_alone
+invariant no_promotion_from_local_only_result_when_target_VPS_is_required
+invariant no_claim_live_MCP_use_without_live_receipt

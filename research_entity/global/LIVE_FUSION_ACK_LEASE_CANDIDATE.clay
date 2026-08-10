@@ -1,0 +1,81 @@
+module clay.research.live_fusion_ack_lease_candidate
+version "0.1"
+status OPEN_RESEARCH_CANDIDATE_NOT_PROMOTED
+
+goal="stronger live fusion without broadcast spam or duplicate effects"
+base_work_protocol=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+base_coordination=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+runtime_candidate=@research_entity/runtime/live_fusion_mesh_v1.py
+
+// This candidate strengthens transport/coordination only. It never mints truth or effect authority.
+record KnowledgeDelta {
+  delta_id:Ref
+  semantic_key:Hash
+  content_hash:Hash
+  ancestry_hash:Hash|UNKNOWN
+  source_epoch:Int|UNKNOWN
+  evidence_class:EvidenceClass
+  affected_targets:Set<Ref>
+  payload:Clay
+}
+
+record DeltaAck {
+  delta_id:Ref
+  target:Ref
+  ack_event_id:Ref
+  ack_at:Time
+}
+
+record PremiseInvalidation {
+  invalidation_id:Ref
+  premise_key:Hash
+  invalidation_epoch:Int
+  min_spec_rev:Int|UNKNOWN
+  reason:Clay
+}
+
+record WorkLease {
+  work_id:Ref
+  spec_rev:Int
+  holder:Ref
+  lease_token:Ref
+  fence_epoch:Int
+  expires_at:Time
+}
+
+record EffectReceiptKey {
+  effect_key:Hash
+  work_id:Ref
+  spec_rev:Int
+  lease_token:Ref
+  fence_epoch:Int
+  result_hash:Hash
+}
+
+rule materially_identical_delta -> one semantic_key + many provenance/route observations
+rule delta_distribution -> affected_targets_only
+rule required_target_receives_delta -> ACK|REJECT|DEFER_WITH_REASON
+rule missing_ack -> retry_or_surface_pending; never infer ingestion
+rule high_impact_premise_invalidation -> interrupt_affected_work_before_next_effect
+
+rule work_claim -> one active lease per work_id
+rule lease_expiry_or_release -> next holder increments fence_epoch
+rule older_fence_epoch -> cannot_commit_effect
+rule stale_spec_rev -> cannot_commit_effect
+rule effect_key_replay_same_result -> IDEMPOTENT_REPLAY
+rule effect_key_replay_different_result -> IDEMPOTENCY_CONFLICT
+rule unavailable_current_authority_or_revision_state -> fail_closed_for_consequential_effect
+
+// Compatibility strategy: additive shadow lane first.
+rule v1_work_events_remain_authoritative_until_candidate_remote_differential_passes
+rule candidate_shadow_reads_v1_events_without_mutating_existing_scheduler_semantics
+rule promotion_requires Ubuntu_remote_regression + duplicate_dispatch_replay + crash_restart + lease_expiry + ack_loss + premise_invalidation + resource_shadow
+rule promotion_requires no_regression_against_current_work_event_protocol
+rule no_benefit_or_excess_cost -> REFUTED_OR_KEEP_ISOLATED
+
+invariant semantic_key_deduplication_does_not_merge_distinct_evidence_ancestry
+invariant ACK_is_delivery_processing_receipt_not_truth
+invariant lease_is_collision_control_not_truth
+invariant fence_epoch_is_effect_safety_not_epistemic_rank
+invariant Frank_never_authorizes_its_own_harness_change
+invariant ResearchEntity_and_FRANK_remain_separate

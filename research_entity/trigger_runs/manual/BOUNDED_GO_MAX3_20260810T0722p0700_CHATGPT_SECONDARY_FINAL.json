@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:22:24+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "request_mode": "MODIFIED_GO_REQUEST_MAX_3_DEEP_CYCLES_NOT_EXACT_GO_TRIGGER",
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "primary_goal": "Frank v0.1 voll lauffaehig auf Andreas PC",
+  "cycles_completed": 3,
+  "cycle_1": {
+    "question": "Why did the first Hostinger WP02 full-closure run fail despite correct infrastructure/blob identity?",
+    "leading_hypothesis": "The V9/V17 semantic mismatch is caused by Lark synthetic None placeholders for absent [] optionals rather than a grammar-semantic regression.",
+    "strongest_counterhypothesis": "V17 changes neutral semantics independently of parser placeholder representation.",
+    "evidence": [
+      "commit 467900cc2b283191356b253e2aab3e48355b92c0 first scientific Hostinger failure",
+      "commit 12614c6d8e350da4152c6d54beff5ee7255a4979 canonical frontend maybe_placeholders=False repair",
+      "tools/claycode_base_frontend.py blob 55728fd20323a364bb5e831989644b65189603d1"
+    ],
+    "adjudication": "PLACEHOLDER_CAUSE_STRONGLY_SUPPORTED",
+    "architecture_delta": "NO_LANGUAGE_SEMANTIC_CHANGE; bind absent optional semantics to omission at production frontend boundary"
+  },
+  "cycle_2": {
+    "question": "Does the repaired current frontend eliminate the scientific mismatch on the real Hostinger Ubuntu lane?",
+    "leading_hypothesis": "With the exact repaired frontend blob, neutral V9/V17 fixtures converge while the intended spaced-call boundary remains discriminated.",
+    "strongest_counterhypothesis": "The repair only hides the mismatch locally or introduces a new target-host divergence.",
+    "evidence": [
+      "commit 6d180c094c3f0b0c4f98ede3a1f4f6e6cbfdf9bb Hostinger falsifier adjudication",
+      "commit 67506dfae1e2cee30444709b72504dc839995b8e independent Hostinger replication",
+      "commit 752ff418b6edf877cb01da56da9c908cba8b6678 fusion"
+    ],
+    "adjudication": "REPAIRED_FRONTEND_SUPPORTED_ON_HOSTINGER_FOR_TESTED_FIXTURES",
+    "negative_result_preserved": "A workflow can fail because a deliberately stale expectation requires the old bug to reproduce; workflow conclusion alone is not the scientific verdict."
+  },
+  "cycle_3": {
+    "question": "Can a complete WP02 closure execute without branch-churn cancellation and with immutable source identity?",
+    "out_of_box_experiment": "Treat CI concurrency policy itself as a controlled scientific variable and isolate a single-flight immutable run.",
+    "implementation": {
+      "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+      "pull_request": 66,
+      "workflow_commit": "0595f769c6773d01616e74791caaebf22ff0f21f",
+      "run_id": 31343808739,
+      "job_id": 93321887528,
+      "executor_snapshot": "1a8c3d785a4d79cc2b8edece6d54878bbe7b78de",
+      "clay_source_revision": "12614c6d8e350da4152c6d54beff5ee7255a4979",
+      "source_transport": "IMMUTABLE_GIT_COMMIT_EXACT_BLOB_BUNDLE",
+      "concurrency": "unique github.run_id group; cancel-in-progress=false"
+    },
+    "host": {
+      "runner_name": "clay",
+      "hostname": "digital-retina",
+      "os": "Linux",
+      "arch": "X64",
+      "kernel": "6.8.0-117-generic",
+      "cpu": "AMD EPYC 9354P 32-Core Processor",
+      "assigned_cpu_threads": 4,
+      "mem_total_kb": 16376020,
+      "virtualization": "kvm",
+      "python": "3.12.3",
+      "lark": "1.3.1",
+      "interegular": "0.3.3"
+    },
+    "source_blob_verification": "10/10 exact git blobs matched before execution",
+    "checks": {
+      "discriminator": {"pass": true, "rc": 0, "wall_ms": 5705},
+      "strict_lalr": {"pass": true, "rc": 0, "wall_ms": 1014},
+      "full_frontend": {"pass": true, "rc": 0, "wall_ms": 794},
+      "canonicalizer": {"pass": true, "rc": 0, "wall_ms": 599}
+    },
+    "receipt_artifact": {
+      "artifact_id": 9046651093,
+      "artifact_sha256": "a833d73b909f228b9a5239e11eb0e7e6cf7c0fcb5d9689b65025eb5057d165f3"
+    },
+    "adjudication": "IMMUTABLE_HOSTINGER_WP02_CLOSURE_GREEN_FOR_EXACT_TESTED_SOURCE_REVISION",
+    "counts_as_wp02_pass": false,
+    "counts_as_andreas_target_acceptance": false,
+    "promotion_allowed": false,
+    "reason_no_promotion": "The run intentionally tested exact source revision 12614c6d...; main subsequently strengthened production-parser placeholder validation and formal package promotion remains receipt-gated."
+  },
+  "out_of_box_experiments": [
+    {
+      "id": "OOB-1-UNICODE-IDENTITY",
+      "question": "Should canonical Unicode equivalents be silently NFC-normalized in ClayCode semantic identity?",
+      "result": "NO_CHANGE",
+      "evidence": "Current canonicalizer intentionally equates JSON escape spellings after scalar decoding, rejects unpaired surrogates, but keeps composed vs decomposed codepoint sequences distinct.",
+      "disposition": "Preserve explicit codepoint-sequence identity unless a future versioned language contract adopts Unicode normalization."
+    },
+    {
+      "id": "OOB-2-FAILURE-SIGN-INVERSION",
+      "question": "Can a nominal CI failure be positive scientific evidence?",
+      "result": "SUPPORTED",
+      "evidence": "The repaired Hostinger falsifier failed its stale bug-reproduction expectation because the old placeholder mismatch no longer reproduced.",
+      "disposition": "Separate workflow success/failure from hypothesis adjudication and retain raw receipts."
+    },
+    {
+      "id": "OOB-3-CI-CONCURRENCY-AS-EXPERIMENTAL-VARIABLE",
+      "question": "Was same-branch cancellation contaminating scientific execution?",
+      "result": "SUPPORTED",
+      "evidence": "Normal current-main closure runs were cancelled under shared concurrency while the unique immutable run completed all gates successfully.",
+      "disposition": "Use immutable single-flight lanes for expensive scientific closure runs; do not infer scientific failure from superseded/cancelled jobs."
+    }
+  ],
+  "fresh_post_run_main_delta": {
+    "commit": "eba2441de9f647b078665789f652a799cc7acb17",
+    "change": "WP02 validation now calls the production frontend constructor and explicitly proves zero synthetic None placeholders across full sources, positive cases, mutation pairs, and four optional-absence fixtures.",
+    "consequence": "Re-run the strengthened latest-main validation immutably before any current-main WP02 promotion claim."
+  },
+  "wp03_deep_adjudication": {
+    "initial_hypothesis": "WP03 has a second production parser authority with Lark defaults that diverges from WP02.",
+    "counterevidence": "The active typed canonical IR implementation tools/claycode_base_typed_ir.py imports claycode_base_frontend and compile_sources calls front.compile_frontend, so the active typed IR path already inherits the selected frontend parser/scalar contract.",
+    "adjudication": "PARSER_AUTHORITY_SPLIT_PARTIALLY_REFUTED_FOR_ACTIVE_TYPED_IR_PATH",
+    "legacy_risk": "tools/claycode_base_ir.py still constructs Lark directly and should not be promoted as production authority without lineage adjudication.",
+    "real_current_divergence": "Active typed IR defaults to D_LALR_GRAMMAR_REPAIR_CANDIDATE_V7_OPERATOR_FN.lark while WP02 selected V17 declarative trivia-safe semantics for closure. V17 deliberately excludes V7 typed-fn/operator-alias deltas.",
+    "existing_fusion_candidate": {
+      "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V16_GENERIC_DOTTED_LINEAR_LOOKAHEAD.lark",
+      "git_blob": "97edbe25defdc6f7641e5e1ecf3f29558a58abfa",
+      "purpose": "Integrates V7 typed functions/exact operator identity with the conflict-free dotted-prefix strategy and was explicitly created to close WP02/WP03 cross-stage grammar drift.",
+      "existing_sandbox_receipt": "commit 8b9f2fef441c027502f68d7b8156bb6a3c5d5ed3: 69/69 pass and near-linear whitespace scaling, but strict interegular dependency was absent so it is not target evidence."
+    },
+    "next_discriminating_test": "On a fresh exact current-main snapshot, compare V7 vs V16 vs V17 through production frontend + strict construction + full current corpus + canonical identity + active typed IR; require typed-fn/operator mutation discrimination and V17 trivia-call invariance in one immutable Hostinger run. Do not invent V18 unless that experiment exposes an executable counterexample requiring it."
+  },
+  "rejected_or_rolled_back_work": {
+    "pr66_post_success_wp03_transport_attempt": "REJECTED_AS_EXACT_SOURCE_EVIDENCE",
+    "reason": "A later branch-only staged WP03 source file had git blob 7e2add28... rather than authoritative Clay tools/claycode_base_ir.py blob 1122166a..., so it was not run/admitted as exact-source evidence.",
+    "cleanup": "PR 66 closed unmerged after preserving the successful immutable WP02 run and explicit rejection note."
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "change": "No new language semantics promoted. Establish immutable scientific execution as the preferred closure lane and focus next ClayCode integration work on the already-existing V16 grammar fusion candidate rather than duplicating parser implementations.",
+    "strongest_counterhypothesis": "Keeping V7 typed/compiler grammar and V17 declarative grammar separate may be intentional and safer than fusion if one combined grammar cannot preserve all semantic identities and strict lexical boundaries.",
+    "falsifier": "Matched V7/V16/V17 production-frontend, strict, canonical, active typed-IR and mutation suite on immutable Ubuntu source.",
+    "rollback": "No canonical grammar/work-package status changed by this run."
+  },
+  "next_frontier": [
+    "Refresh exact latest-main blobs after commit eba2441d and run strengthened WP02 v1.7 validation immutably on Hostinger.",
+    "Only after a green receipt review decide whether CC-WP-02 satisfies its formal package acceptance contract; keep Andreas target acceptance separate.",
+    "Execute the V7/V16/V17 fused-grammar discriminator through active tools/claycode_base_typed_ir.py on Hostinger.",
+    "If V16 wins without regression, version the grammar/IR contract and update dependent WP03 tests; otherwise preserve split grammars with an explicit boundary contract.",
+    "Do not start paid/final training without project-owner authorization."
+  ],
+  "research_write": "COMMITTED",
+  "package_promotions": [],
+  "frank_harness_mutation": "NONE",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant": "model output != execution authority"
+}

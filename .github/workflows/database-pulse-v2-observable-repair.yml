@@ -1,0 +1,96 @@
+name: Database Pulse V2 Observable Repair
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/database-pulse-v2-observable-repair.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: database-pulse-v2-observable-repair-main
+  cancel-in-progress: false
+
+jobs:
+  repair-and-verify:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Apply exact observable-semantics repair
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          runtime=Path('research_entity/runtime/database_pulse_runtime_v2.py')
+          tests=Path('research_entity/runtime/test_database_pulse_runtime_v2.py')
+          r=runtime.read_text(encoding='utf-8')
+          old='        state_transition_delta = 2 + model_hypothesis_delta\n'
+          new=(
+            '        # state_transition_count is reserved for admitted KNOWN semantic-domain mutations.\n'
+            '        # Pulse receipts/metrics are observability bookkeeping and an optional model output\n'
+            '        # remains an UNKNOWN hypothesis, so neither is counted as a semantic transition.\n'
+            '        state_transition_delta = 0\n'
+          )
+          if r.count(old)!=1:
+              raise SystemExit(f'expected exactly one runtime metric site, found {r.count(old)}')
+          runtime.write_text(r.replace(old,new),encoding='utf-8')
+
+          t=tests.read_text(encoding='utf-8')
+          old_assert='            self.assertGreaterEqual(r.state_transition_count, 2)\n'
+          if t.count(old_assert)!=1:
+              raise SystemExit(f'expected exactly one idle assertion, found {t.count(old_assert)}')
+          t=t.replace(old_assert,'            self.assertEqual(r.state_transition_count, 0)\n')
+          old_model='            self.assertEqual(r.model_call_count,1)\n            self.assertEqual(r.effect_count,0)\n'
+          new_model=(
+            '            self.assertEqual(r.model_call_count,1)\n'
+            '            self.assertEqual(r.hypothesis_count,1)\n'
+            '            self.assertEqual(r.state_transition_count,0)\n'
+            '            self.assertEqual(r.effect_count,0)\n'
+          )
+          if t.count(old_model)!=1:
+              raise SystemExit(f'expected exactly one model assertion site, found {t.count(old_model)}')
+          tests.write_text(t.replace(old_model,new_model),encoding='utf-8')
+          PY
+
+      - name: Compile repaired Pulse stack
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_candidate_v1.py \
+            research_entity/runtime/database_pulse_active_field_v2.py \
+            research_entity/runtime/database_pulse_runtime_v2.py \
+            research_entity/runtime/test_database_pulse_candidate_v1.py \
+            research_entity/runtime/test_database_pulse_active_field_v2.py \
+            research_entity/runtime/test_database_pulse_runtime_v2.py
+
+      - name: Run matched Pulse test suites
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_candidate_v1 \
+            research_entity.runtime.test_database_pulse_active_field_v2 \
+            research_entity.runtime.test_database_pulse_runtime_v2
+
+      - name: Remove one-shot workflow and persist verified repair
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/database-pulse-v2-observable-repair.yml
+          git config user.name 'clay-pulse-v2-repair-runner'
+          git config user.email 'clay-pulse-v2-repair-runner@users.noreply.github.com'
+          git add research_entity/runtime/database_pulse_runtime_v2.py research_entity/runtime/test_database_pulse_runtime_v2.py
+          git commit -m 'fix(frank): separate Pulse V2 state transitions from bookkeeping [skip ci]'
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 3))
+          done
+          echo 'verified repair could not be rebased/pushed safely' >&2
+          exit 1

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "inbound_used": [
+    {
+      "ref": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+      "kind": "MATERIAL_DELTA",
+      "effect": "Bound VSTG experiments to the existing Qwen/libmtmd feature-tap and target-runtime sanity lane instead of duplicating feature reuse research."
+    }
+  ],
+  "outbound": [
+    {
+      "envelope_id": "Q23TOGO-VSTG-20260810-01",
+      "direction": "Q23_TO_GO",
+      "kind": "ARCHITECTURE_DELTA",
+      "topic_tags": ["multimodal","gui","visual_memory","claygraph","unifieddb","eap","task_state","action_verification"],
+      "summary": "Candidate VSTG-1 stores verified visual state-action-outcome transitions canonically in UnifiedDB and projects them into ClayGraph for retrieval; retrieved transitions remain context/proposals only and require current-evidence matching plus post-action verification.",
+      "urgency": "NEXT_SAFE_POINT",
+      "requires_reply": false
+    },
+    {
+      "envelope_id": "Q23TOGO-VSTG-20260810-02",
+      "direction": "Q23_TO_GO",
+      "kind": "COUNTER_CHALLENGE",
+      "topic_tags": ["visual_aliasing","hidden_state","confirmation_bias","memory"],
+      "summary": "High-confidence visual familiarity is insufficient state identity when identical/near-identical screens encode different task/hidden states. Add VISUAL_ALIAS_CONFLICT abstention and stale/hidden-operation fixtures to H1/H2/H3.",
+      "urgency": "NEXT_CHECKPOINT",
+      "requires_reply": false
+    },
+    {
+      "envelope_id": "Q23TOGO-VSTG-20260810-03",
+      "direction": "Q23_TO_GO",
+      "kind": "TEST_RESULT",
+      "topic_tags": ["task_state","effect_receipt","causal_reentry"],
+      "summary": "No runtime result yet; research translation adds a mandatory invariant test: screenshot similarity or retrieved memory cannot advance task progress without verified action/outcome receipts.",
+      "urgency": "NEXT_SAFE_POINT",
+      "requires_reply": false
+    }
+  ],
+  "knowledge_needs": [
+    {
+      "question_id": "Q23-KN-VSTG-GO-01",
+      "question": "Which existing H1/Frank state records already encode task/subgoal progress separately from PerceptualField, and can they host the transition-bound task-state invariant without any ClayCode semantic amendment?",
+      "reason": "Prefer reuse of frozen semantics; only an executable expressibility failure should reopen BASE semantics.",
+      "requested_evidence": ["current Frank architecture mapping","H1 state schemas","ClayCode frozen IR expressibility test"],
+      "urgency": 0.78,
+      "information_gain": 0.84
+    },
+    {
+      "question_id": "Q23-KN-VSTG-GO-02",
+      "question": "Can the target-VPS q23 feature-tap lane emit reproducible pre/post visual feature identities and effect receipts suitable for building VSTG offline replay fixtures without delaying BASE critical-path work?",
+      "reason": "Would convert the transition candidate from literature-grounded design into target-runtime falsification data.",
+      "requested_evidence": ["feature tap receipt schema","effect/outcome receipt IDs","target-VPS execution availability"],
+      "urgency": 0.71,
+      "information_gain": 0.9
+    }
+  ],
+  "closure_status": "OUTBOUND_WRITTEN; NO_BACKGROUND_WORK_CLAIMED"
+}

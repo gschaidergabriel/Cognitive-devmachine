@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2158p0700-chatgpt-secondary-presence-interrupt",
+  "trigger": "go",
+  "entity_id": "frank-project-global-research-entity",
+  "display_name": "Clay",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "mission": "Frank v0.1 fully operational as self.root on the accepted Hostinger Ubuntu VPS through the token API",
+    "training_authorized": false
+  },
+  "identity_boundary": {
+    "clay_is_not_frank": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "coordination": {
+    "duplicate_work_avoided": [
+      "self.root state-authority migration already covered by active parallel lanes",
+      "canonical V15 single-instance presence already landed during the run",
+      "duplicate frank_spawn_state/frank_spawn_runtime path was removed by parallel workers",
+      "interactive-idle handoff is owned by target PR 146",
+      "token ingress/pre-emit fencing is owned by target PR 143",
+      "presence-to-effect fencing discriminator is owned by target PR 147",
+      "expiry/recovery and same-holder execution concurrency have independent active lanes"
+    ]
+  },
+  "hypothesis": "A BUSY caller can request interruption without creating a second Frank presence if the request is an epoch-bound receipt on the one canonical presence lease, and only the exact current holder may acknowledge or decline it.",
+  "counterhypothesis": "A separate spawn/interrupt state machine or an interrupt request not bound to the observed lease epoch can create split-brain or retarget a stale user intent to a successor holder.",
+  "out_of_box_experiment": {
+    "count_for_this_go": 1,
+    "name": "DUAL_TRUTH_SPLIT_BRAIN_AMPLIFICATION",
+    "mechanism": "Construct independent canonical-looking presence and spawn singleton states and drive contradictory initial states through both gates.",
+    "result": "COUNTEREXAMPLE_CONFIRMED",
+    "observations": [
+      "presence BUSY plus spawn IDLE permits contradictory BUSY versus ACQUIRED results",
+      "presence IDLE plus spawn ACTIVE permits the inverse contradiction",
+      "one canonical singleton truth is required"
+    ],
+    "promotion": "supports removal of duplicate spawn authority; novelty alone did not promote architecture"
+  },
+  "fresh_external_evidence": [
+    {
+      "class": "T0_PRIMARY_OFFICIAL",
+      "source": "Kubernetes Lease / coordinated leader election documentation",
+      "finding": "shared Lease identity, renewal/TTL and concurrency control are used to coordinate one active leader/holder",
+      "use": "cross-check for one canonical presence/lease plus fencing design"
+    }
+  ],
+  "target_repo_findings": [
+    "V15 frank_presence_lease is the canonical BUSY/IDLE substrate with lease_epoch fencing and public surface_location.",
+    "A transient independent frank_spawn_state path would have created a second singleton truth and was removed on main.",
+    "Current wall-clock expiry/recovery semantics remain under separate falsification and are not promoted by this run.",
+    "Hosted Frank Deep Integrity has a known pre-step runner failure class; the dedicated self-hosted target-VPS lane is the relevant execution evidence."
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "target_pr": 140,
+    "title": "epoch-bound BUSY interrupt handshake",
+    "branch": "chatgpt/go-presence-interrupt-handshake-20260810",
+    "candidate_head_observed": "852518134cb3ea2e6d687dfc5840ae3bbeb425a8",
+    "properties": [
+      "PRESENCE_INTERRUPT_V1 is independently namespaced and does not claim global UnifiedDB V16",
+      "frank_presence_lease remains sole BUSY/IDLE authority",
+      "request_yield requires the lease_epoch observed in the prior BUSY receipt",
+      "holder transition before request yields STALE rather than retargeting",
+      "requester session/client refs are persisted as hashes only",
+      "only the exact current holder and epoch may ACK or DECLINE",
+      "ACK never transfers presence; explicit safe-point release and normal re-acquire remain required",
+      "human return while autonomous is classified USER_RETURN_WHILE_AUTONOMOUS"
+    ],
+    "canonical_db_mutated": false,
+    "main_merged": false,
+    "effect_authority_added": false,
+    "self_harness_authority_added": false
+  },
+  "tests": {
+    "local_deterministic": {
+      "status": "PASS",
+      "covered": [
+        "BUSY location and epoch projection",
+        "duplicate request idempotency",
+        "non-holder resolution fencing",
+        "holder ACK without takeover",
+        "stale intent blocked across lease transition",
+        "autonomous user-return classification",
+        "single canonical presence row",
+        "SQLite integrity"
+      ]
+    },
+    "target_vps": {
+      "workflow": "Frank presence interrupt handshake VPS",
+      "observed_run_id": 31403919442,
+      "status_at_receipt_write": "QUEUED",
+      "promotion_allowed": false
+    },
+    "hosted_deep_integrity": {
+      "status": "INFRASTRUCTURE_CONFOUNDED",
+      "evidence": "independent target PR 135 changes only runner selector to self-hosted Linux/X64 and its Frank Deep Integrity run 31402352367 succeeds; hosted failures can occur before Step 1"
+    }
+  },
+  "negative_results_and_open_risks": [
+    "No target-VPS PASS exists yet for PR 140; candidate remains TESTING.",
+    "Global presence expiry/recovery semantics remain unsettled; a wall-clock jump counterexample exists in another GO lane.",
+    "Token transport/TLS, cancellation, execution-id serialization and presence-to-effect fencing are outside PR 140 and remain separate gates.",
+    "Interactive-to-autonomous user-idle handoff is complementary work in PR 146 and must later compose without duplicate authority."
+  ],
+  "next_frontier": [
+    "obtain exact target-VPS receipt for PR 140",
+    "compose BUSY interrupt API projection with canonical token ingress after both lanes pass",
+    "compose interrupt ACK with safe-point release and PR 146 idle/handoff semantics",
+    "require presence/effect fencing closure before consequential provider commit",
+    "retain no-auto-takeover and fail-closed stale-epoch behavior"
+  ],
+  "research_result": "DURABLE_DELTA_WRITTEN_CANDIDATE_NOT_PROMOTED"
+}

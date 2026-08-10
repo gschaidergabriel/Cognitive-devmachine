@@ -1,0 +1,80 @@
+name: Fusion 2244 contract self-test
+
+on:
+  push:
+    branches:
+      - chatgpt/fusion-20260810T2244p0700
+  pull_request:
+    paths:
+      - tools/fusion_research_contract.py
+      - research_entity/trigger_runs/fusion/fusion-20260810T2244p0700-chatgpt-secondary-whole-mesh/**
+      - .github/workflows/fusion-2244-contract-selftest.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate-fusion-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate complete fusion run and missing-branch mutants
+        shell: bash
+        run: |
+          set -euo pipefail
+          RUN_DIR='research_entity/trigger_runs/fusion/fusion-20260810T2244p0700-chatgpt-secondary-whole-mesh'
+          python3 tools/fusion_research_contract.py "$RUN_DIR" | tee /tmp/fusion-pass.json
+          python3 - "$RUN_DIR" <<'PY'
+          import copy
+          import json
+          import shutil
+          import subprocess
+          import sys
+          import tempfile
+          from pathlib import Path
+
+          run_dir = Path(sys.argv[1])
+          registry = json.loads(Path('research_entity/global/RESEARCH_TRIGGER_REGISTRY.json').read_text())
+          kinds = {
+              'domain_research',
+              'domain_build_research',
+              'integrated_research_foundry',
+              'integrated_frank_v0_1_research_foundry',
+              'whole_target_architecture_build',
+              'direct_frank_v0_1_validation_repair',
+              'multimodal_perception_research',
+          }
+          explicit = [
+              n for n,s in registry['triggers'].items()
+              if isinstance(s,dict) and s.get('scientific_branch') is True
+          ]
+          branches = explicit or [
+              n for n,s in registry['triggers'].items()
+              if isinstance(s,dict)
+              and s.get('must_reenter_frank_v0_1') is True
+              and s.get('kind') in kinds
+          ]
+          expected = {
+              'q23','clayresearch','gwt','frank','emergenz',
+              'claycode','hyperposition','claygraph','unifieddb','harness'
+          }
+          assert set(branches) == expected, (branches, expected)
+
+          for missing in branches:
+              with tempfile.TemporaryDirectory() as td:
+                  mutant = Path(td) / 'run'
+                  shutil.copytree(run_dir, mutant)
+                  p = mutant / 'GLOBAL_COVERAGE_MANIFEST.json'
+                  obj = json.loads(p.read_text())
+                  obj['branches'].pop(missing, None)
+                  p.write_text(json.dumps(obj, indent=2) + '\n')
+                  cp = subprocess.run(
+                      [sys.executable, 'tools/fusion_research_contract.py', str(mutant)],
+                      text=True, capture_output=True
+                  )
+                  if cp.returncode == 0:
+                      raise SystemExit(f'missing-branch mutant unexpectedly passed: {missing}\n{cp.stdout}')
+          print(json.dumps({'status':'PASS','branch_count':len(branches),'missing_branch_mutants_rejected':len(branches)}, sort_keys=True))
+          PY

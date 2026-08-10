@@ -1,0 +1,37 @@
+name: WP03 V18 Full Residual Bridge PR Gate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/wp03-v18-full-residual-bridge-pr.yml'
+      - 'tools/test_claycode_wp03_residual_bridge.py'
+      - 'tools/claycode_wp03_residual_semantics_candidate.py'
+      - 'tools/claycode_wp03_frontend_artifact_bridge.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+
+permissions:
+  contents: read
+
+jobs:
+  full-residual-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build locked parser environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv /tmp/clay-wp03-full
+          /tmp/clay-wp03-full/bin/pip install --disable-pip-version-check --no-input --require-hashes --only-binary=:all: -r research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt
+      - name: Execute full artifact bridge and tamper discriminator
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=tools PYTHONSAFEPATH=1 /usr/bin/time -v /tmp/clay-wp03-full/bin/python tools/test_claycode_wp03_residual_bridge.py

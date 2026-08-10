@@ -1,0 +1,69 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:clay-live-fusion-reentry-v1:durability-mesh-convergence:20260810T1426p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T07:26:35Z",
+  "payload": {
+    "work_id": "CLAY-LIVE-FUSION-REENTRY-V1",
+    "reason_clay": {
+      "live_fusion": "Concurrent main advanced during this run with CLAY_LIVE_FUSION_MESH_V2_CANDIDATE plus LIVE_FUSION_ROUTER_CONVERGENCE_20260810; duplicate semantic router lanes are therefore fused rather than continued independently.",
+      "role_split": "Mesh v2 is the semantic control-plane candidate for dependency-index, anti-entropy, causal predecessor, invalidation and payload-mode semantics. PR156 remains the durable worker re-entry/ACK/effect-guard transport candidate.",
+      "pr156_head": "50109d5005088cfdb98b03f4554c75c573163246",
+      "durability_delta": [
+        "Linux advisory file locking serializes concurrent JSONL writers.",
+        "fsync occurs before append success returns.",
+        "records carry integrity hashes.",
+        "replay quarantines a torn final tail while failing closed on interior corruption/hash mismatch.",
+        "ACK retries are tested as transport-id independent semantic idempotence candidate."
+      ],
+      "local_candidate_test": {
+        "status": "PASS_LOCAL_CANDIDATE_ONLY",
+        "tests": 10,
+        "includes": ["4-process concurrent writers", "real process exit with torn tail", "ACK retry with changed transport ack id"],
+        "not_target_truth": true
+      },
+      "new_counterevidence": "Main convergence requires same source+event identity with conflicting content hash to fail closed. PR156 still needs to absorb/verify that falsifier before promotion.",
+      "cross_worker_convergence_ref": "01873cf911902720a12647a91be90412636bacc5"
+    },
+    "completion_clay": {
+      "deterministic_reference_test_cases": "10_LOCAL_PASS_PLUS_CURRENT_HEAD_UBUNTU_REQUIRED",
+      "exact_event_id_dedupe": "PASS_LOCAL_CANDIDATE",
+      "identity_conflicting_content_fail_closed": "REQUIRED",
+      "content_ABA_identity_preservation": "PASS_LOCAL_CANDIDATE",
+      "late_valid_event_preservation": "PASS_LOCAL_CANDIDATE",
+      "historically_valid_only_no_plan_churn": "PASS_LOCAL_CANDIDATE",
+      "high_impact_conflict_effect_guard": "PASS_LOCAL_CANDIDATE",
+      "semantic_ack_retry_idempotence": "PASS_LOCAL_CANDIDATE",
+      "append_only_replay": "PASS_LOCAL_CANDIDATE",
+      "real_process_crash_torn_tail_recovery": "PASS_LOCAL_CANDIDATE_HOSTINGER_REQUIRED",
+      "concurrent_writer_race": "PASS_LOCAL_CANDIDATE_HOSTINGER_REQUIRED",
+      "hostinger_ubuntu_receipt": "PASS_REQUIRED",
+      "active_worker_delivery_ack_roundtrip": "REQUIRED",
+      "unifieddb_materialization": "REQUIRED",
+      "mesh_v2_dependency_index_anti_entropy_boundary": "REQUIRED",
+      "raw_event_cursor_vs_effectivized_projection_differential": "REQUIRED",
+      "authoritative_writer_observer_backaction_p50_p95_p99_busy_wal": "REQUIRED",
+      "latency_resource_benchmark": "REQUIRED",
+      "git_fallback_replay_equivalence": "REQUIRED"
+    },
+    "dependencies": [
+      "PR156 head remains current and unrefuted",
+      "mesh-v2/router convergence remains candidate not canonical promotion",
+      "Git work events + UnifiedDB remain durable semantic authority",
+      "identity lock and exact source/provenance survive routing"
+    ],
+    "invalidators": [
+      "Hostinger/current-head tests expose durability or replay defect",
+      "dependency-aware routing misses a required recipient",
+      "identity conflict is silently deduped",
+      "targeted mesh fails fallback replay equivalence",
+      "coordination cost dominates measurable latency/amplification benefit"
+    ],
+    "base_priority": 0.98,
+    "expected_impact": 0.98,
+    "urgency": 0.94,
+    "information_gain": 0.96,
+    "status": "READY"
+  }
+}

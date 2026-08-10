@@ -1,0 +1,47 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:clay-live-fusion-reentry-v1:replay-version-guard:20260810T1433p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T14:33:00+07:00",
+  "payload": {
+    "work_id": "CLAY-LIVE-FUSION-REENTRY-V1",
+    "reason_clay": {
+      "fresh_head": "PR156 head dbbb4472dff132c9d20ea2d728e4186dfde1424d was re-read after concurrent live-fusion commits landed.",
+      "resolved_review_findings": [
+        "V1.3 now fails closed when one event_id is reused with different event content.",
+        "V1.3 now requires subscription_revision changes for worker profile changes and re-routes unresolved history under the new subscription revision."
+      ],
+      "remaining_blocker": "V1.3 replay re-registers workers and re-ingests deltas through the current routing implementation while ignoring recorded DELIVERY_V13 and SUBSCRIPTION_SNAPSHOT_V13 records. A later routing/scoring change can therefore reinterpret historical delivery/pending/effect-guard state.",
+      "review_receipt": "PR156 review_id 4894555972",
+      "mesh_rule": "Do not open a parallel router. Fold this into the existing PR156 durability/replay lane and the broader Live Fusion Mesh v2 real-replay gate."
+    },
+    "completion_clay": {
+      "historical_delivery_replay": "PASS_REQUIRED",
+      "routing_version_binding": "PASS_REQUIRED",
+      "explicit_migration_semantics_if_recomputed": "PASS_REQUIRED",
+      "cross_version_regression": "Create log under routing version A; replay under changed routing version B; recorded historical DELIVERY/INTERRUPT/INDEX state must remain exact unless an explicit migration event supersedes it.",
+      "event_identity_conflict_fail_closed": "CURRENT_HEAD_IMPLEMENTED_TESTED_LOCALLY_BY_CODE_TEST_ARTIFACT_ONLY_NOT_HOSTINGER_PROMOTION",
+      "subscription_revision_reroute": "CURRENT_HEAD_IMPLEMENTED_TESTED_LOCALLY_BY_CODE_TEST_ARTIFACT_ONLY_NOT_HOSTINGER_PROMOTION",
+      "hostinger_ubuntu_receipt": "STILL_REQUIRED",
+      "unifieddb_materialization": "STILL_REQUIRED",
+      "active_worker_delivery_ack_roundtrip": "STILL_REQUIRED",
+      "latency_resource_benchmark": "STILL_REQUIRED"
+    },
+    "dependencies": [
+      "PR156 remains the single live-fusion re-entry integration lane",
+      "Live Fusion Mesh v2 remains CANDIDATE_NOT_PROMOTED",
+      "Git/UnifiedDB remain durable semantic authority",
+      "current identity/authority boundaries remain unchanged"
+    ],
+    "invalidators": [
+      "A newer PR156 revision demonstrates version-stable historical replay with a reproducible test",
+      "The design explicitly reclassifies replay as versioned re-execution and removes any historical-equivalence claim with safe migration semantics"
+    ],
+    "base_priority": 0.96,
+    "expected_impact": 0.96,
+    "urgency": 0.93,
+    "information_gain": 0.92,
+    "status": "READY"
+  }
+}

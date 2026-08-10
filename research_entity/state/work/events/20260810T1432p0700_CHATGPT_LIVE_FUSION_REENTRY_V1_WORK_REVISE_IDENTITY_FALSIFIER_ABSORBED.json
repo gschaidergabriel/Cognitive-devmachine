@@ -1,0 +1,36 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:clay-live-fusion-reentry-v1:identity-falsifier-absorbed:20260810T1432p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T07:32:00Z",
+  "payload": {
+    "work_id": "CLAY-LIVE-FUSION-REENTRY-V1",
+    "reason_clay": {
+      "cross_worker_falsifier": "LIVE_FUSION_ROUTER_CONVERGENCE_20260810 requires same source/event identity with conflicting content to fail closed.",
+      "absorbed_in_pr156": {
+        "runtime_commit": "a49d81c3bbd9b19cfa18d8fa056924ae45ca1c44",
+        "test_commit": "d1f6fe1d70d7770dc31251a5e2e70b0367da1146",
+        "local_candidate_tests": "11/11 PASS"
+      },
+      "mesh_feedback": "63b48a9c253095c367971bf92237b0b322bda71f"
+    },
+    "completion_clay": {
+      "identity_conflicting_content_fail_closed": "PASS_LOCAL_CANDIDATE_HOSTINGER_REQUIRED",
+      "concurrent_writer_race": "PASS_LOCAL_CANDIDATE_HOSTINGER_REQUIRED",
+      "real_process_crash_torn_tail_recovery": "PASS_LOCAL_CANDIDATE_HOSTINGER_REQUIRED",
+      "semantic_ack_retry_idempotence": "PASS_LOCAL_CANDIDATE_HOSTINGER_REQUIRED",
+      "hostinger_ubuntu_receipt": "PASS_REQUIRED",
+      "active_worker_delivery_ack_roundtrip": "REQUIRED",
+      "unifieddb_materialization": "REQUIRED",
+      "mesh_v2_dependency_index_anti_entropy_boundary": "REQUIRED",
+      "latency_resource_observer_backaction": "REQUIRED",
+      "git_fallback_replay_equivalence": "REQUIRED"
+    },
+    "base_priority": 0.98,
+    "expected_impact": 0.98,
+    "urgency": 0.94,
+    "information_gain": 0.96,
+    "status": "READY"
+  }
+}

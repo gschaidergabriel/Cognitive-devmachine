@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "counterhypotheses": [
+    {
+      "counterhypothesis_id": "Q23-CH-VSTG-PARTIAL-OBSERVABILITY-01",
+      "attacks": ["Q23-H-VSTG-01"],
+      "claim": "Desktop GUI transition memory is dominated by partial observability, asynchronous rendering, occlusion and visually aliased states; retrieved historical transitions therefore increase stale-state and wrong-action risk unless current observed deltas and task state revalidate them.",
+      "evidence": ["Desktop-Delta Bench arXiv:2607.26041","Naive Visual Memory is Not Enough arXiv:2606.14106"],
+      "prediction": "VSTG_VISUAL_ONLY will show materially higher stale/wrong transition acceptance than VSTG_TASK_BOUND and may fail to beat QWEN_ONLY on held-out/hidden-operation fixtures.",
+      "status": "OPEN_HIGH_PRIORITY"
+    },
+    {
+      "counterhypothesis_id": "Q23-CH-HYBRID-STRUCTURE-CAPTURE-01",
+      "attacks": ["Q23-H-HYBRID-STATE-FINGERPRINT-01"],
+      "claim": "Adding DOM/accessibility/window metadata can reduce pixel aliasing but can also capture state belief toward stale or conflicting structure; hybrid metadata is evidence with source-specific reliability, never privileged truth.",
+      "evidence": ["Do GUI Agents Believe Their Eyes? arXiv:2607.04334"],
+      "prediction": "HYBRID_FINGERPRINT may outperform visual-only in clean cases but fail under pixel-vs-structure conflict unless disagreement is preserved and escalated.",
+      "status": "OPEN_HIGH_PRIORITY"
+    },
+    {
+      "counterhypothesis_id": "Q23-CH-TRANSITION-PRETRAINING-NOT-MEMORY-01",
+      "attacks": ["Q23-H-VSTG-01"],
+      "claim": "Benefits from visual state-transition pretraining do not imply that explicit runtime transition memory will help Frank; learned dynamics and retrieval-time graphs may have different error/cost profiles.",
+      "evidence": ["Scaling GUI Agents with Visual State Transitions arXiv:2607.24112"],
+      "prediction": "Explicit VSTG may add no benefit once Qwen already captures enough dynamics; QWEN_ONLY can dominate under equal compute and context.",
+      "status": "OPEN"
+    },
+    {
+      "counterhypothesis_id": "Q23-CH-DIRECT-MEMORY-DOMINATES-01",
+      "attacks": ["Q23-H-VSTG-01"],
+      "claim": "Simple exact/direct memory keyed by verified current state and task may achieve the same recurrence benefit with lower coupling and failure surface than EAP plus transition topology.",
+      "evidence": ["Q23_FRANK_EXPERIENCE_DOSE_RESPONSE_CONTRACT_20260810","Q23_RETINA_EAP_PERCEPTUAL_RETRIEVAL_FUSION_CANDIDATE_20260810"],
+      "prediction": "DIRECT_MEMORY_N matches or exceeds VSTG_TASK_BOUND on correctness/latency/token cost at the same N.",
+      "status": "OPEN"
+    }
+  ]
+}

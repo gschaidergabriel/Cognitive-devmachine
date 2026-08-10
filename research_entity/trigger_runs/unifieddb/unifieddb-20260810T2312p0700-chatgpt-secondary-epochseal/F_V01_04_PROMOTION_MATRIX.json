@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "matrix_id": "F-V01-04-UNIFIEDDB-PROMOTION-20260810",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "status": "IN_PROGRESS_NOT_PASS",
+  "architecture_candidate": "EPOCHSEAL_HYBRID_V17_2_1",
+  "supported_target_vps": {
+    "epoch_state_replay_continuity": {
+      "status": "SUPPORTED_TARGET_VPS_COMPONENT",
+      "evidence": "TARGET_VPS_RECEIPT.json",
+      "result": "11/11 continuity checks PASS; final epoch 300"
+    },
+    "wal_fail_closed_storage": {
+      "status": "SUPPORTED_TARGET_VPS_COMPONENT",
+      "evidence": "WAL_SCHEMA_TARGET_VPS_RECEIPT.json",
+      "result": "SQLite 3.45.1 selects DELETE+FULL; adversarial WAL open fails closed"
+    },
+    "exact_schema_materialization_fingerprint": {
+      "status": "SUPPORTED_TARGET_VPS_COMPONENT",
+      "evidence": "WAL_SCHEMA_TARGET_VPS_RECEIPT.json",
+      "result": "partial/stale UnifiedDB or ClayGraph schema materializations fail closed and explicit migration repairs them"
+    },
+    "claycode_reentry_gated_effect_semantics": {
+      "status": "SUPPORTED_TARGET_VPS_COMPONENT",
+      "evidence": "WP04_REENTRY_GATED_EFFECTS_TARGET_VPS_RECEIPT.json",
+      "result": "current WP04 type/effect/trust diagnostic PASS for exact reentry-gated frank.effects source"
+    },
+    "causal_outcome_evidence_closure": {
+      "status": "SUPPORTED_TARGET_VPS_COMPONENT",
+      "evidence": "V17_2_CAUSAL_RUNTIME_TARGET_VPS_RECEIPT.json",
+      "result": "atomic exact outcome evidence; wrong prediction subject and unrelated semantic delta rejected; closed valid chain reaches DONE"
+    },
+    "crash_restart_atomicity": {
+      "status": "SUPPORTED_TARGET_VPS_COMPONENT",
+      "evidence": "V17_2_CAUSAL_RUNTIME_TARGET_VPS_RECEIPT.json",
+      "result": "forced crashes after effect update and after evidence insert both rollback without half-state; retry yields one exact evidence receipt"
+    },
+    "premature_done_and_stale_lease": {
+      "status": "SUPPORTED_TARGET_VPS_COMPONENT",
+      "evidence": "V17_2_CAUSAL_RUNTIME_TARGET_VPS_RECEIPT.json",
+      "result": "terminal half-commit remains OUTCOME_SUCCEEDED; stale reentry rejected; DONE visible only after authoritative REENTERED"
+    }
+  },
+  "supported_simulation_only": {
+    "provider_timeout_after_acceptance_reconciliation": {
+      "status": "SUPPORTED_SIMULATION_ONLY",
+      "evidence": "V17_2_CAUSAL_RUNTIME_TARGET_VPS_RECEIPT.json",
+      "result": "deterministic oracle: one provider write, one reconciliation, no pre-reconcile causal support, exact evidence receipt then reentry->DONE",
+      "hard_limit": "no real external provider effect performed"
+    }
+  },
+  "active_target_gate": {
+    "multiprocess_contention": {
+      "status": "TEST_IMPLEMENTED_TARGET_VPS_EXECUTION_NOT_YET_PROMOTED",
+      "target_branch": "gschaidergabriel/Dr.-Unterweger:clay/unifieddb-v17-1-subject-delta-splice-20260810",
+      "test": "tests/effect_reentry_v17_2_concurrency_gate_v2.py",
+      "workflow": ".github/workflows/frank-v17-2-concurrency-vps.yml",
+      "workers": {"outcome": 12, "support": 12, "reentry": 12},
+      "required_result": "exactly one outcome mutation/evidence receipt/support chain/reentry transition; staged terminal not DONE; final trace/integrity PASS under DELETE+FULL"
+    }
+  },
+  "open_hard_gates": {
+    "real_provider_reconciliation": {
+      "status": "OPEN",
+      "requirement": "real external provider timeout-after-acceptance or equivalent uncertainty -> provider reconciliation -> exact persisted outcome evidence -> same causal support -> admitted semantic delta -> canonical reentry -> DONE, without duplicate external write"
+    },
+    "canonical_production_migration": {
+      "status": "NOT_PERFORMED",
+      "requirement": "fresh target backup/LKG + exact current schema/head reconciliation + reversible coordinated migration; no silent mixed-schema or WAL-unsafe production open"
+    },
+    "multiprocess_contention": {
+      "status": "OPEN_UNTIL_TARGET_RECEIPT",
+      "requirement": "self-hosted accepted-VPS execution of deterministic contention discriminator"
+    }
+  },
+  "preserved_negative_results": [
+    "N-UNIFIEDDB-V17-1-OUTCOME-EVIDENCE-COLUMN-MISSING",
+    "N-UNIFIEDDB-V17-PREMATURE-DONE-HALF-COMMIT",
+    "N-UNIFIEDDB-PAIR-SCHEMA-DIVERGENCE-OPEN",
+    "N-UNIFIEDDB-CLAYCODE-VERIFIED-DIRECT-DONE"
+  ],
+  "promotion_decision": "HOLD_F_V01_04_PASS",
+  "reason": "Target-VPS evidence strongly supports the current continuity/causal/recovery/storage mechanisms, but real provider boundary evidence, target multiprocess contention evidence, and coordinated production migration are still missing.",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

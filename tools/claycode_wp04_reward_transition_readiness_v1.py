@@ -38,6 +38,17 @@ def _regex(pattern: str) -> Callable[[str], bool]:
     return lambda text: bool(rx.search(text))
 
 
+def _exact_state_assignment(symbol: str) -> Callable[[str], bool]:
+    # Require the state symbol itself on the assignment LHS; a later receipt/control boolean
+    # assignment on the same line must not accidentally count as the state transition.
+    escaped = re.escape(symbol)
+    rx = re.compile(
+        rf"(?m)^\s*(?:rule|fn)\s+(?:{escaped}(?:\s*\[|\s*\(|\s*<-|\s*=)|[A-Za-z0-9_.\[\],]+\.{escaped}\s*<-)[^\n]*$",
+        re.IGNORECASE,
+    )
+    return lambda text: bool(rx.search(text))
+
+
 OBLIGATIONS = (
     Obligation("material_admission", "ADMISSION", "verified outcome + causal-credit admission predicate", _definition("material_reward_admitted")),
     Obligation("material_learning_weight", "ADMISSION", "deterministic material learning weight", _definition("material_learning_weight")),
@@ -50,16 +61,16 @@ OBLIGATIONS = (
     Obligation("robust_mix", "PHASIC", "exact robust horizon mixing operator", _definition("robust_mix")),
     Obligation("clamp01", "STDLIB", "exact clamp01 semantics or explicitly bound stdlib contract", _definition("clamp01")),
     Obligation("exploration_nudge", "CONTROL", "deterministic exploration-nudge function, not only an upper bound", _definition("exploration_nudge")),
-    Obligation("tonic_transition", "STATE_TRANSITION", "exact tonic state transition", _regex(r"^\s*(?:rule|fn)\s+[^\n]*tonic[^\n]*(?:<-|=)[^\n]+$")),
-    Obligation("habituation_transition", "STATE_TRANSITION", "exact habituation update and recovery transition", _regex(r"^\s*(?:rule|fn)\s+habituation(?:_transition|_update|\s*\()[^\n]*(?:<-|=)[^\n]+$")),
-    Obligation("opponent_transition", "STATE_TRANSITION", "exact opponent-process state transition", _regex(r"^\s*(?:rule|fn)\s+opponent(?:_process)?(?:_transition|_update|\s*\()[^\n]*(?:<-|=)[^\n]+$")),
-    Obligation("admitted_events_transition", "STATE_TRANSITION", "exact admitted_events counter transition", _regex(r"^\s*(?:rule|fn)\s+[^\n]*admitted_events[^\n]*(?:<-|next|increment|\+\s*1)[^\n]*$")),
-    Obligation("last_phasic_transition", "STATE_TRANSITION", "exact last_phasic state transition", _regex(r"^\s*(?:rule|fn)\s+[^\n]*last_phasic[^\n]*(?:<-|=)[^\n]+$")),
-    Obligation("state_epoch_transition", "STATE_IDENTITY", "post-update state_epoch successor/increment rule", _regex(r"^\s*(?:rule|fn)\s+[^\n]*state_epoch[^\n]*(?:<-|next_epoch|successor|increment|\+\s*1)[^\n]*$")),
+    Obligation("tonic_transition", "STATE_TRANSITION", "exact tonic state transition", _exact_state_assignment("tonic")),
+    Obligation("habituation_transition", "STATE_TRANSITION", "exact habituation update transition", _exact_state_assignment("habituation")),
+    Obligation("opponent_transition", "STATE_TRANSITION", "exact opponent-process state transition", _exact_state_assignment("opponent")),
+    Obligation("admitted_events_transition", "STATE_TRANSITION", "exact admitted_events counter transition", _regex(r"^\s*(?:rule|fn)\s+[^\n]*admitted_events\s*(?:<-|=)[^\n]*(?:\+\s*1|next|increment)[^\n]*$")),
+    Obligation("last_phasic_transition", "STATE_TRANSITION", "exact last_phasic state transition", _exact_state_assignment("last_phasic")),
+    Obligation("state_epoch_transition", "STATE_IDENTITY", "post-update state_epoch successor/increment rule", _regex(r"^\s*(?:rule|fn)\s+[^\n]*state_epoch\s*(?:<-|=)[^\n]*(?:next_epoch|successor|increment|\+\s*1)[^\n]*$")),
     Obligation("veto_threshold", "CONTROL", "numerically or externally bound safety veto threshold", _definition("veto_threshold")),
     Obligation("brake_threshold", "CONTROL", "numerically or externally bound resource brake threshold", _definition("brake_threshold")),
     Obligation("receipt_projection", "RECEIPT", "deterministic RewardPlasticityReceipt construction/projection", _regex(r"^\s*(?:rule|fn)\s+(?:reward_plasticity_receipt|build_reward_plasticity_receipt|receipt_projection)\b")),
-    Obligation("receipt_provenance", "RECEIPT", "exact provenance construction for RewardPlasticityReceipt", _regex(r"^\s*(?:rule|fn)\s+[^\n]*provenance[^\n]*(?:<-|=)[^\n]+$")),
+    Obligation("receipt_provenance", "RECEIPT", "exact provenance construction for RewardPlasticityReceipt", _exact_state_assignment("provenance")),
 )
 
 

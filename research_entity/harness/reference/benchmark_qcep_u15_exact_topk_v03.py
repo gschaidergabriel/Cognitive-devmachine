@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-"""QCEP-0.3.1 as the current U15 typed evidence-gap deepener.
+"""QCEP-0.3.2 as the current U15 typed evidence-gap deepener.
 
 Same authoritative H1 StateLedger/QueryPlane, same explicit U15 requirement, same item budget.
-Control uses current static EAP-EXACT-TOPK. Candidate uses QCEP-0.3.1 exact Top-K. Only explicit
-CURRENT/KNOWN evidence tags can close the gap; free text/rank never becomes proof.
+Control uses current static EAP-EXACT-TOPK. Candidate uses QCEP-0.3.2 exact Top-K and binds
+U15's typed unresolved gap terms as explicit focus terms. Only CURRENT/KNOWN evidence tags can
+close the gap; rank/text/focus activation itself never becomes proof.
 """
 
 import json,math,random,statistics,time
@@ -70,9 +71,9 @@ def main():
         seen=set(selected); return ev([x['ref'] for x in out['selected'] if x['ref'] not in seen][:budget])
     def qcep_expand(query,gaps,selected,source_epoch,graph_epoch,budget):
         conditioned=' '.join([query,*gaps]); seen=set(selected)
-        out=qcep.project(QueryEvidenceSpec('u15-qcep-'+str(abs(hash((query,gaps,selected)))),conditioned,tuple(selected),source_epoch,max_items=max(1,budget+len(selected)),max_hops=3,frontier_budget=512,min_edge_weight=0.0,exact_top_k_stop=True))
+        out=qcep.project(QueryEvidenceSpec('u15-qcep-'+str(abs(hash((query,gaps,selected)))),conditioned,tuple(selected),source_epoch,max_items=max(1,budget+len(selected)),max_hops=3,frontier_budget=512,min_edge_weight=0.0,exact_top_k_stop=True,focus_terms=tuple(gaps)))
         return ev([x['ref'] for x in out['selected'] if x['ref'] not in seen][:budget])
-    methods={'u15_static_exact_topk':SufficiencyGapControllerV15(expand=static_expand,max_rounds=1,max_items=MAX_ITEMS),'u15_qcep_0_3_1_exact_topk':SufficiencyGapControllerV15(expand=qcep_expand,max_rounds=1,max_items=MAX_ITEMS)}
+    methods={'u15_static_exact_topk':SufficiencyGapControllerV15(expand=static_expand,max_rounds=1,max_items=MAX_ITEMS),'u15_qcep_0_3_2_exact_topk':SufficiencyGapControllerV15(expand=qcep_expand,max_rounds=1,max_items=MAX_ITEMS)}
     order=cases[:]; random.Random(107).shuffle(order); result={}
     for name,ctl in methods.items():
         lat=[]; rows=[]
@@ -84,9 +85,9 @@ def main():
         for f in ('poison','clean','unlabeled'):
             xs=[x for x in rows if x['family']==f]; fam[f]={k:statistics.mean(x[k] for x in xs) for k in ('sufficient','target','launder','rounds')}
         result[name]={'families':fam,'latency_us':stats(lat)}
-    b=result['u15_static_exact_topk']; c=result['u15_qcep_0_3_1_exact_topk']
+    b=result['u15_static_exact_topk']; c=result['u15_qcep_0_3_2_exact_topk']
     gate={'poison_sufficiency_delta':c['families']['poison']['sufficient']-b['families']['poison']['sufficient'],'clean_sufficiency_delta':c['families']['clean']['sufficient']-b['families']['clean']['sufficient'],'unlabeled_sufficiency_delta':c['families']['unlabeled']['sufficient']-b['families']['unlabeled']['sufficient'],'qcep_max_launder_rate':max(c['families'][f]['launder'] for f in ('poison','clean','unlabeled'))}
     gate['promote_for_real_corpus_falsifier']=gate['poison_sufficiency_delta']>0 and gate['clean_sufficiency_delta']>=0 and gate['unlabeled_sufficiency_delta']>=0 and gate['qcep_max_launder_rate']==0
-    print(json.dumps({'schema_version':'1.0','benchmark':'QCEP_0_3_1_U15_EXPLICIT_GAP_CLOSURE','evidence_class':'EXECUTED_CURRENT_H1_HARNESS_WHEN_RUN','pinned_baseline_sha':'5975dbd54478caf548fc6f4ee7f4c4bf95ab1a61','dataset':{'cases':len(cases),'poison':POISON,'clean':CLEAN,'unlabeled':UNLABELED,'max_items':MAX_ITEMS,'ops':len(ops)},'methods':result,'candidate_gate':gate,'scope_guard':'Explicit tagged U15 evidence-gap closure through current H1 StateLedger/QueryPlane. Rank/text cannot itself close gaps. Synthetic mechanism evidence only.','limitations':['Synthetic graph/query cues expose hub drift deliberately.','Real Clay evidence tags and relation metadata can be sparser.','Downstream model/tool outcome quality is not measured.','Supported result advances to held-out real Clay and fair cross-engine tests only.']},indent=2,sort_keys=True)); ledger.close()
+    print(json.dumps({'schema_version':'1.1','benchmark':'QCEP_0_3_2_U15_EXPLICIT_GAP_CLOSURE','evidence_class':'EXECUTED_CURRENT_H1_HARNESS_WHEN_RUN','pinned_baseline_sha':'5975dbd54478caf548fc6f4ee7f4c4bf95ab1a61','dataset':{'cases':len(cases),'poison':POISON,'clean':CLEAN,'unlabeled':UNLABELED,'max_items':MAX_ITEMS,'ops':len(ops)},'methods':result,'candidate_gate':gate,'candidate_rule':'U15 gap_terms are bound as QCEP focus_terms; focus activation affects rank only and does not satisfy U15 requirements itself.','scope_guard':'Explicit tagged U15 evidence-gap closure through current H1 StateLedger/QueryPlane. Rank/text/focus cannot itself close gaps. Synthetic mechanism evidence only.','limitations':['Synthetic graph/query cues expose hub drift deliberately.','Real Clay evidence tags and relation metadata can be sparser.','Downstream model/tool outcome quality is not measured.','Supported result advances to held-out real Clay and fair cross-engine tests only.']},indent=2,sort_keys=True)); ledger.close()
 
 if __name__=='__main__': main()

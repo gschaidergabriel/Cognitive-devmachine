@@ -2,13 +2,13 @@
   "schema_version": "1.0",
   "run_id": "go-20260811T0111p0700-chatgpt-secondary-token-request-binding",
   "trigger": "go",
-  "status": "TESTING_TARGET_VPS_QUEUED",
+  "status": "SUPPORTED_CANDIDATE_NOT_PROMOTED",
   "origin_actor": "chatgpt-secondary",
   "ingested_by": "chatgpt-secondary",
   "adjudicated_by": "chatgpt-secondary",
   "provider": "OpenAI",
   "model": "GPT-5.6 Sol",
-  "timestamp_local": "2026-08-11T01:31:00+07:00",
+  "timestamp_local": "2026-08-11T01:34:00+07:00",
   "program": "FRANK_V0_1",
   "component": "F-V01-08-TOKEN-API-CLIENTS",
   "target_repository": "gschaidergabriel/Dr.-Unterweger",
@@ -51,7 +51,9 @@
     "branch": "chatgpt/go-v16-request-semantic-binding-20260811",
     "head": "c47d19e999f8c4dca1905207fb6f3023c9acd5de",
     "base_at_creation": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
-    "architecture_delta_status": "TESTING",
+    "target_tested_merge_ref": "071da3843b7ba71896d2d64aa4440524721d8ee7",
+    "target_tested_merge_base": "c82d40a5859784a52d700c5e85c251839cc47c30",
+    "architecture_delta_status": "SUPPORTED_CANDIDATE",
     "canonical_v16_modified": false,
     "canonical_schema_promoted": false,
     "profile": "IJSON_EXACT_UTF8_BYTES_SHA256_V1",
@@ -67,22 +69,31 @@
     "explicit_nonclaim": "Sidecar binding and canonical V16 admission are separate SQLite transactions/connections. Cross-process first-admission atomicity is not solved; canonical promotion requires a unified atomic storage-level request identity/content invariant or equivalent proof."
   },
   "tests": {
-    "normal_matrix": [
-      "same request id + same bytes replay",
-      "same request id + changed bytes reject",
-      "restart exact replay without new execution",
-      "restart changed bytes reject",
-      "legacy unbound admission requires reconciliation",
-      "immutable sidecar update/delete",
-      "rollback preserves base V16 integrity",
-      "auth precedes attacker-controlled JSON parsing",
-      "mismatch and legacy-unbound retries append zero REQUEST_REPLAYED events"
-    ],
+    "normal_matrix": {
+      "same_request_same_content_replay": true,
+      "same_request_changed_content_rejected": true,
+      "durable_restart_same_content_replay": true,
+      "durable_restart_changed_content_rejected": true,
+      "legacy_unbound_replay_requires_reconciliation": true,
+      "binding_update_immutable": true,
+      "binding_delete_immutable": true,
+      "candidate_rollback_preserves_base_v16": true,
+      "sqlite_integrity_after_rollback": "ok",
+      "foreign_key_violations_after_rollback": 0,
+      "public_credential_fingerprint_removed_by_candidate_facade": true,
+      "auth_precedes_json_parse": true,
+      "exact_replay_event_delta": 1,
+      "mismatched_payload_replay_event_delta": 0,
+      "legacy_unbound_replay_event_delta": 0,
+      "repo_static_integrity": "PASS"
+    },
     "exactly_one_go_oob": {
       "name": "DUPLICATE_JSON_KEY_IDEMPOTENCY_ALIAS",
       "question": "Can duplicate JSON member ambiguity acquire durable replay identity before strict validation rejects it?",
-      "integrated_test": "full candidate facade must reject duplicate action members before V16 admission-row delta",
-      "status": "TARGET_NOT_RUN_YET"
+      "full_candidate_facade_exercised": true,
+      "duplicate_member_rejected_before_admission": true,
+      "admission_row_delta": 0,
+      "status": "PASS"
     },
     "local_execution": {
       "status": "LOCAL_INFRA_FAILURE",
@@ -91,8 +102,35 @@
     "target_vps": {
       "workflow": "GO V16 Request Content Binding Candidate VPS",
       "run_id": 31419430210,
-      "tested_head": "c47d19e999f8c4dca1905207fb6f3023c9acd5de",
-      "status": "QUEUED"
+      "job_id": 93556334241,
+      "status": "PASS",
+      "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_CANDIDATE_DIFFERENTIAL",
+      "runner_name": "clay",
+      "hostname": "digital-retina",
+      "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+      "python": "3.12.3",
+      "repository_permission": "contents:read",
+      "checkout_persist_credentials": false,
+      "repo_write_attempted": false,
+      "tested_merge_ref": "071da3843b7ba71896d2d64aa4440524721d8ee7",
+      "candidate_head_in_merge": "c47d19e999f8c4dca1905207fb6f3023c9acd5de",
+      "base_in_merge": "c82d40a5859784a52d700c5e85c251839cc47c30",
+      "artifact_id": 9074816115,
+      "artifact_sha256": "a5ac660994e9d74d206a20185a3789799171b185183acd723a2ae45de96dbf98",
+      "result_sha256": "b629d6f9f477eaa76f9af5522906d906bbaa640f37f7c513818ba6ce4a695fcb",
+      "elapsed_seconds_main_matrix": 0.20,
+      "user_cpu_seconds_main_matrix": 0.13,
+      "system_cpu_seconds_main_matrix": 0.03,
+      "max_rss_kib_main_matrix": 25212,
+      "major_page_faults": 0,
+      "minor_page_faults": 3946,
+      "voluntary_context_switches": 135,
+      "involuntary_context_switches": 4,
+      "filesystem_inputs": 0,
+      "filesystem_outputs": 7896,
+      "socket_messages_sent": 0,
+      "socket_messages_received": 0,
+      "exit_status": 0
     }
   },
   "cross_branch_integration": {
@@ -103,7 +141,7 @@
   },
   "negative_results_and_open_obligations": [
     "first candidate revision could append REQUEST_REPLAYED before detecting content mismatch; fixed before target execution and converted into regression",
-    "cross-process atomic admission/content binding still open",
+    "cross-process atomic admission/content binding still open and is the next highest-value falsifier",
     "production HTTP server still open",
     "TLS termination still open",
     "strict HTTP framing still open",
@@ -118,5 +156,6 @@
     "final_training_authorized": false,
     "training_started": false
   },
-  "next_falsifier": "Execute exact latest PR head on accepted self-hosted Linux/X64 lane; if sequential matrix passes, attack cross-process first-admission race and integrate request-content identity atomically with the eventual response replay contract before any canonical promotion."
+  "promotion": "NO_PROMOTION_SUPPORTED_CANDIDATE_ONLY",
+  "next_falsifier": "Attack the cross-process first-admission race and integrate request-content identity atomically with the eventual response replay contract before any canonical promotion. Then implement/test production network/TLS/framing and end-to-end response transport on the accepted target VPS."
 }

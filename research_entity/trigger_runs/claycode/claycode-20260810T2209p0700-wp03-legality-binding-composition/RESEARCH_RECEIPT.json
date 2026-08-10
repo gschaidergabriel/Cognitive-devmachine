@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2209p0700-wp03-legality-binding-composition",
+  "trigger": "claycode",
+  "status": "PASS_BOUNDED_RESEARCH_DELTA",
+  "promotion": "NONE",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","role":"RESEARCH_ENTITY_TEMPORARY_WORKER"},
+  "identity_boundary": {"research_entity":"Clay","research_subject":"self.root / Frank","worker_is_frank":false,"frank_harness_mutation_authority":"NONE"},
+  "program": {"program_id":"FRANK_V0_1","work_package":"F-V01-02-CLAYCODE-COMPILER-RUNTIME","frontier":"WP03_RULE_INVARIANT_RESIDUAL_SEMANTIC_BINDING","wp03_status":"OPEN","wp04_status":"OPEN"},
+  "question": "Does PR193 structural rule/invariant legality safely imply semantic binding for all 81 real V18 G9+Dialect clauses?",
+  "hypothesis": "PR193 can structurally admit the full finite rule/invariant residual envelope, but mixed flat V18 binding remains a separate fail-closed obligation before WP05 semantic consumption.",
+  "strongest_counterhypothesis": "The structural gate either rejects real current clauses or accidentally washes the previously measured 17 mixed-binding ambiguities into evaluator-consumable semantics.",
+  "target_vps_receipt": {
+    "repository":"gschaidergabriel/Dr.-Unterweger",
+    "pull_request":129,
+    "workflow":"Clay WP03 Legality Binding Composition VPS",
+    "workflow_run_id":31401853522,
+    "job_id":93498512228,
+    "runner_name":"clay",
+    "machine_name":"digital-retina",
+    "runner_version":"2.336.0",
+    "os_labels":["self-hosted","Linux","X64"],
+    "result":"PASS"
+  },
+  "content_addressed_components": {
+    "frontend_blob":"31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "grammar_blob":"b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "base_typed_ir_blob":"e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "residual_blob":"d7f4c9b475466c813ae85716e9c57d7ee9f99512",
+    "g9_blob":"a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+    "dialect_blob":"dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "structural_legality_blob":"f8d7189f93223c37bcac751a1fee1c0d9c1869ff",
+    "explicit_binding_blob":"ba2ff133e769fbd56db2121db10fe64fa526eaeb",
+    "composition_blob":"4d7ed55d5815da43bb1d2b83e036723f1b62f20c",
+    "test_blob":"aef8cb1b8a0a70a7e457f1f92ce9d30398c7bc27"
+  },
+  "measurements": {
+    "residual_total":100,
+    "target_rule_invariant_total":81,
+    "rule_decl":67,
+    "invariant_decl":14,
+    "structural_lowered":81,
+    "structural_rejected":0,
+    "non_target_deferred":19,
+    "binding_explicit":64,
+    "binding_ambiguous":17,
+    "semantic_consumer_admitted":64,
+    "binding_unresolved_after_structural_gate":17,
+    "execution_admitted":0,
+    "effect_authority":"NONE",
+    "truth_authority":"NONE",
+    "typed_ir_sha256":"28d4a5fa00d9852c608d513ad5fe358763ca8fc6a035c0678a454eb8bb9bc661",
+    "structural_receipt_sha256":"8b800a9338bbb884aac8d135563a9d325ed507dbea5a3ec95cabd6dd3df72fd2",
+    "binding_bundle_sha256":"b5e545408914a095dbd6b5de3900e7c6ed5c0ed465e909e2f74f9fa4d74fec0a",
+    "composition_sha256":"0770ee68e938bd462fa00853ac91fc2e5391fa7e95709022b855733db6fead5c"
+  },
+  "adversarial_controls": {
+    "authority_tamper":"REJECTED_FAIL_CLOSED",
+    "ambiguous_semantic_consumption":"REJECTED_FAIL_CLOSED",
+    "forged_row_status_without_receipt":"REJECTED_BY_RECEIPT_BOUNDARY_POLICY"
+  },
+  "finding": "PR193 is validated as a complete structural legality gate over the 81 current rule/invariant residuals, not as sufficient semantic binding authority. All 81 are structurally admissible; 64 are explicitly bound and may enter data-only symbolic semantics; 17 mixed flat chains remain denied until grouping or independently frozen precedence resolves them.",
+  "negative_evidence": [
+    "Structural legality alone is insufficient to establish semantic binding.",
+    "The prior 17-clause mixed-binding frontier survives intact after PR193; structural legalization does not erase it.",
+    "No rule/invariant clause gains call execution, truth authority or effect authority from this composition."
+  ],
+  "next_falsifier": "Resolve the 17 exact mixed-binding clauses by explicit source grouping or separately frozen precedence semantics, then replay the same content-addressed composition and require 81 semantic-consumer-admitted with zero execution/effect/truth authority before declaring this residual class semantically closed.",
+  "research_write": "COMMITTED_TO_CANDIDATE_BRANCH"
+}

@@ -1,0 +1,86 @@
+name: WP03 legality binding composition v1
+
+on:
+  pull_request:
+    branches: ['claycode/wp03-rule-invariant-legality-v1-20260810']
+    paths:
+      - '.github/workflows/wp03-legality-binding-composition-v1.yml'
+      - 'tools/claycode_wp03_rule_invariant_binding_gate_v1.py'
+      - 'tools/claycode_wp03_legality_binding_composition_v1.py'
+      - 'tools/test_claycode_wp03_legality_binding_composition_v1.py'
+      - 'tools/claycode_wp04_rule_invariant_legality_v1.py'
+      - 'tools/claycode_wp03_residual_semantics_candidate.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FRONTEND_BLOB: 31598f85a27ade2d98466606af6bdf5a8473cc8d
+      BASE_TYPED_IR_BLOB: e8525ee10f5fe4b8d40db79f0d8264a5231eea63
+      RESIDUAL_BLOB: d7f4c9b475466c813ae85716e9c57d7ee9f99512
+      GRAMMAR_BLOB: b27a4da99c9eff68302d550aad78c4e64cabe5c3
+      G9_BLOB: a2b856d1362e8ce2420338f1bd705a49a86c2c7d
+      DIALECT_BLOB: dbb72460bc5a049c784d1acd1aaef152fa37f797
+      STRUCTURAL_BLOB: f8d7189f93223c37bcac751a1fee1c0d9c1869ff
+      BINDING_BLOB: ba2ff133e769fbd56db2121db10fe64fa526eaeb
+      COMPOSITION_BLOB: 4d7ed55d5815da43bb1d2b83e036723f1b62f20c
+      TEST_BLOB: aef8cb1b8a0a70a7e457f1f92ce9d30398c7bc27
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install exact parser dependencies
+        run: python -m pip install 'lark==1.3.1' 'interegular==0.3.3'
+      - name: Bind exact component bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object tools/claycode_base_frontend.py)" = "$FRONTEND_BLOB"
+          test "$(git hash-object tools/claycode_base_typed_ir.py)" = "$BASE_TYPED_IR_BLOB"
+          test "$(git hash-object tools/claycode_wp03_residual_semantics_candidate.py)" = "$RESIDUAL_BLOB"
+          test "$(git hash-object research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark)" = "$GRAMMAR_BLOB"
+          test "$(git hash-object research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay)" = "$G9_BLOB"
+          test "$(git hash-object research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay)" = "$DIALECT_BLOB"
+          test "$(git hash-object tools/claycode_wp04_rule_invariant_legality_v1.py)" = "$STRUCTURAL_BLOB"
+          test "$(git hash-object tools/claycode_wp03_rule_invariant_binding_gate_v1.py)" = "$BINDING_BLOB"
+          test "$(git hash-object tools/claycode_wp03_legality_binding_composition_v1.py)" = "$COMPOSITION_BLOB"
+          test "$(git hash-object tools/test_claycode_wp03_legality_binding_composition_v1.py)" = "$TEST_BLOB"
+          echo CLAY_WP03_COMPOSITION_BLOBS=PASS
+      - name: Execute real V18 residual composition
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/tools" PYTHONSAFEPATH=1
+          python -m py_compile tools/claycode_wp03_rule_invariant_binding_gate_v1.py tools/claycode_wp03_legality_binding_composition_v1.py tools/test_claycode_wp03_legality_binding_composition_v1.py
+          python tools/test_claycode_wp03_legality_binding_composition_v1.py | tee /tmp/clay-wp03-composition.json
+          python - /tmp/clay-wp03-composition.json <<'PY'
+          import json,sys
+          x=json.load(open(sys.argv[1]))
+          assert x['status']=='PASS_COMPOSITION_FAIL_CLOSED',x
+          assert x['residual_total']==100 and x['target_rule_invariant_total']==81,x
+          assert x['rule_decl']==67 and x['invariant_decl']==14,x
+          assert x['binding_explicit']==64 and x['binding_ambiguous']==17,x
+          assert x['execution_admitted']==0,x
+          assert x['effect_authority']==x['truth_authority']=='NONE',x
+          assert x['promotion']=='NONE',x
+          print('CLAY_WP03_REAL_LEGALITY_BINDING_COMPOSITION=PASS')
+          print('STRUCTURAL_LOWERED='+str(x['structural_lowered']))
+          print('STRUCTURAL_REJECTED='+str(x['structural_rejected']))
+          print('SEMANTIC_CONSUMER_ADMITTED='+str(x['semantic_consumer_admitted']))
+          print('BINDING_UNRESOLVED_AFTER_STRUCTURAL_GATE='+str(x['binding_unresolved_after_structural_gate']))
+          print('COMPOSITION_SHA256='+x['composition_sha256'])
+          PY

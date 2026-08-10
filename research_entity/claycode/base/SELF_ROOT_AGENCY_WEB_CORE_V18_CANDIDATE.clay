@@ -1,10 +1,11 @@
 module self.root.agency_web_core.v18
-version "0.1-owner-lowering-candidate"
+version "0.2-owner-lowering-candidate"
 status CURRENT_RESEARCH_CANDIDATE
 
 import owner=@research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay
 
-// Closed sums lower owner `symbol` declarations without introducing new core syntax.
+// Closed sums lower owner `symbol` declarations and inline finite unions without introducing
+// new core syntax. The two *State aliases below name anonymous owner field unions only.
 type GoalOrigin = AUTHENTICATED_USER|SELF_GENERATED|RESEARCH_BRIDGE|RECOVERY|STANDING_CONTRACT
 type GoalState = CANDIDATE|TRIAL|ACTIVE|DORMANT|BLOCKED|COMPLETED|RETIRED|REJECTED
 type InterestSource = INFORMATION_GAIN|COMPETENCE_PROGRESS|CONTROLLABILITY_GAIN|NOVELTY|UNRESOLVED_PRESSURE|CROSS_GOAL_REUSE|PERSON_PROJECT_RELEVANCE|WORLD_CHANGE
@@ -12,6 +13,9 @@ type InitiativeReason = OPEN_LOOP|OPPORTUNITY|IDLE_CAPACITY|STAGNATION_ESCAPE|PE
 type GoalHorizon = FAST|MEDIUM|SLOW|OPEN_ENDED
 type IngressAuthority = AUTHENTICATED_DIRECT_MESSAGE|UNTRUSTED_EXTERNAL_DATA|TRUSTED_INTERNAL_STATE
 type WebPayloadKind = FACT_CLAIM|QUOTE|CODE|LINK|METADATA|DATASET_ROW|INSTRUCTION_LIKE_TEXT|UNKNOWN
+type ExperimentRisk = READ_ONLY|SANDBOX_REVERSIBLE|EXTERNAL_REVERSIBLE|PRIVILEGED|DESTRUCTIVE
+type ResearchQuestionState = CANDIDATE|ACTIVE|RESOLVED|DORMANT
+type SelfInitiatedExperimentState = CANDIDATE|APPROVED_BY_POLICY|RUNNING|COMPLETE|FAILED|BLOCKED
 
 record InterestTrace {
   interest_id:Ref
@@ -78,16 +82,15 @@ record InitiativePulse {
   provenance:Set<Ref>
 }
 
-record GoalCheckpoint {
-  goal_id:Ref
-  state:GoalState
-  progress_summary:ClayCode
-  unresolved:Set<ClayCode>
-  next_affordances:Set<ClayCode>
-  wake_conditions:Set<ClayCode>
-  evidence:Set<Ref>
-  state_epoch:Epoch
-  created_at:Time
+record ActionReadiness {
+  goal:Ref
+  best_action:ClayCode?
+  expected_progress:Real
+  expected_information_gain:Real
+  expected_cost:Real
+  uncertainty:Real
+  effect_decision:EffectDecision
+  marginal_value_of_more_thought:Real
 }
 
 record UntrustedWebJsonEnvelope {
@@ -121,6 +124,46 @@ record WebEvidenceClay {
   authority:IngressAuthority
   instruction_authority:Symbol
   effect_authority:Symbol
+}
+
+record ResearchQuestion {
+  question_id:Ref
+  origin_goal:Ref?
+  origin_interest:Ref?
+  query:ClayCode
+  expected_information_gain:Real
+  expected_goal_impact:Real
+  counterevidence_needed:Bool
+  budget:ResourceBudget
+  state:ResearchQuestionState
+}
+
+record SelfInitiatedExperiment {
+  experiment_id:Ref
+  origin_goal:Ref
+  hypothesis:ClayCode
+  strongest_counterhypothesis:ClayCode
+  discriminator:ClayCode
+  baseline:Ref?
+  intervention:ClayCode
+  expected_information_gain:Real
+  risk:ExperimentRisk
+  budget:ResourceBudget
+  rollback:RollbackPlan?
+  state:SelfInitiatedExperimentState
+  provenance:Set<Ref>
+}
+
+record GoalCheckpoint {
+  goal_id:Ref
+  state:GoalState
+  progress_summary:ClayCode
+  unresolved:Set<ClayCode>
+  next_affordances:Set<ClayCode>
+  wake_conditions:Set<ClayCode>
+  evidence:Set<Ref>
+  state_epoch:Epoch
+  created_at:Time
 }
 
 // Refinement bounds from the owner directive are preserved as explicit invariants because
@@ -159,8 +202,23 @@ invariant AutotelicGoal.expected_external_utility <= 1
 
 invariant InitiativePulse.amplitude >= 0
 invariant InitiativePulse.amplitude <= 0.12
+invariant ActionReadiness.expected_progress >= -1
+invariant ActionReadiness.expected_progress <= 1
+invariant ActionReadiness.expected_information_gain >= 0
+invariant ActionReadiness.expected_information_gain <= 1
+invariant ActionReadiness.expected_cost >= 0
+invariant ActionReadiness.uncertainty >= 0
+invariant ActionReadiness.uncertainty <= 1
+invariant ActionReadiness.marginal_value_of_more_thought >= -1
+invariant ActionReadiness.marginal_value_of_more_thought <= 1
 invariant UntrustedWebJsonEnvelope.parser_confidence >= 0
 invariant UntrustedWebJsonEnvelope.parser_confidence <= 1
+invariant ResearchQuestion.expected_information_gain >= 0
+invariant ResearchQuestion.expected_information_gain <= 1
+invariant ResearchQuestion.expected_goal_impact >= 0
+invariant ResearchQuestion.expected_goal_impact <= 1
+invariant SelfInitiatedExperiment.expected_information_gain >= 0
+invariant SelfInitiatedExperiment.expected_information_gain <= 1
 
 // Authority separation is not a default-value convenience; it is a semantic invariant.
 invariant UntrustedWebJsonEnvelope.authority = UNTRUSTED_EXTERNAL_DATA
@@ -175,5 +233,7 @@ rule InitiativePulse never_implies command
 rule InitiativePulse never_implies material_reward
 rule WebEvidenceClay never_implies instruction_authority
 rule WebEvidenceClay never_implies effect_authority
+rule ResearchQuestion never_implies fact
+rule SelfInitiatedExperiment never_implies experiment_success
 rule AUTHENTICATED_DIRECT_MESSAGE != UNTRUSTED_EXTERNAL_DATA
 rule UNTRUSTED_EXTERNAL_DATA never_implies AUTHENTICATED_DIRECT_MESSAGE

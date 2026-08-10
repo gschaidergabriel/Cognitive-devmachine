@@ -81,13 +81,30 @@ def main() -> int:
         "contract_semantic_hash": a["state_identity_sha256"],
         "runtime_component_hash": "hash:component-a",
         "current_work_revision": "work-rev:current",
+        "target_binary_build_hash": "hash:self-root-binary-a",
+        "state_lineage_epoch": "state-epoch:41",
+        "instance_lease_ref": "lease:self-root-current",
+        "instance_lease_epoch": "lease-epoch:9",
         "effect_authority": "RUNTIME_BROKER_ONLY",
     }
     p = typed_v2.typed_state_identity(ir, "CallExecutionPrecondition", precondition)
+    changed_binary = copy.deepcopy(precondition)
+    changed_binary["target_binary_build_hash"] = "hash:self-root-binary-b"
+    p_binary = typed_v2.typed_state_identity(ir, "CallExecutionPrecondition", changed_binary)
+    assert p_binary["state_identity_sha256"] != p["state_identity_sha256"]
+    changed_lineage = copy.deepcopy(precondition)
+    changed_lineage["state_lineage_epoch"] = "state-epoch:42"
+    p_lineage = typed_v2.typed_state_identity(ir, "CallExecutionPrecondition", changed_lineage)
+    assert p_lineage["state_identity_sha256"] != p["state_identity_sha256"]
+    changed_lease = copy.deepcopy(precondition)
+    changed_lease["instance_lease_epoch"] = "lease-epoch:10"
+    p_lease = typed_v2.typed_state_identity(ir, "CallExecutionPrecondition", changed_lease)
+    assert p_lease["state_identity_sha256"] != p["state_identity_sha256"]
+    assert "api_token" not in precondition
 
     report = {
         "status": "PASS",
-        "scope": "WP04_CLAYCODE_NATIVE_CALL_CONTRACT_SCHEMA_V1",
+        "scope": "WP04_CLAYCODE_NATIVE_CALL_CONTRACT_SCHEMA_V1_1_SELF_ROOT_INSTANCE_BOUND",
         "selected_grammar": "BASE_D_V18_REWARD_RELATIONS",
         "new_grammar_required": False,
         "sum_types": sorted(expected_sums),
@@ -98,10 +115,14 @@ def main() -> int:
         "target_changes_identity": True,
         "obligation_state_identity": o["state_identity_sha256"],
         "precondition_state_identity": p["state_identity_sha256"],
+        "target_binary_build_hash_changes_precondition_identity": True,
+        "state_lineage_epoch_changes_precondition_identity": True,
+        "instance_lease_epoch_changes_precondition_identity": True,
+        "api_token_in_identity": False,
         "execution_admitted": False,
         "effect_authority": "NONE_FROM_SCHEMA",
         "v19_fn_restoration_needed_for_contract_schema": False,
-        "remaining_blocker": "POPULATE_EXACT_EVIDENCE_BACKED_CALL_CONTRACTS_AND_BIND_CURRENT_TARGET_VPS_RUNTIME_COMPONENTS",
+        "remaining_blocker": "POPULATE_EXACT_EVIDENCE_BACKED_CALL_CONTRACTS_AND_BIND_CURRENT_TARGET_VPS_BINARY_STATE_LEASE_RUNTIME_COMPONENTS",
         "promotion": "NONE",
         "wp03_status": "OPEN",
     }

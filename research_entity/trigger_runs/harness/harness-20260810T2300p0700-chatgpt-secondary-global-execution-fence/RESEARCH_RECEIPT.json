@@ -1,0 +1,336 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2300p0700-chatgpt-secondary-global-execution-fence",
+  "trigger": "harness",
+  "created_at": "2026-08-10T23:00:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank",
+    "self_harness_authority": "PROPOSAL_ONLY_FOR_TARGET; RESEARCH_ENTITY_INDEPENDENTLY_TESTS_AND_ADJUDICATES"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "target_repository": "gschaidergabriel/frankv0.1",
+  "connector_alias": "gschaidergabriel/Dr.-Unterweger",
+  "owner_fixed_law": {
+    "source": "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "required": [
+      "ACTIVE_EXECUTION_COUNT <= 1",
+      "new execution only from IDLE or after lease_expired_and_recovery_validated",
+      "stale execution epochs cannot write state or effects",
+      "every effect attempt must be fenced to the current execution lease epoch",
+      "proactive work cannot preempt active user execution",
+      "token authenticates scoped caller but never becomes SELF or lease authority"
+    ]
+  },
+  "selected_gap": "The current Frank v0.1 stack had separately implemented physical one-host exclusion, V15 semantic presence, V14 effect lifecycle and token/API execution semantics, but had not proven that one exact admitted execution identity remains causally bound through crash/recovery and every consequential effect transition.",
+  "hypothesis": {
+    "primary": "Frank v0.1 requires four distinct but composable fencing layers: physical process exclusion, semantic presence epoch, caller-bound opaque execution provenance, and immutable effect-attempt/provider-commit fencing. Treating any earlier layer as sufficient for a later layer permits measurable authority gaps.",
+    "strongest_counterhypotheses": [
+      "The physical FrankExecutionGate already makes V15 same-holder reentry and effect epoch binding irrelevant because every production path stays under one flock for the whole execution.",
+      "A globally current V15 lease_epoch is sufficient effect provenance; explicit caller session/client/execution identity adds no discriminating safety value.",
+      "Kernel release of flock plus elapsed V15 TTL is adequate recovery evidence, so explicit RECOVERING/validated-recovery receipts are unnecessary.",
+      "The stale effect reservation counterexample is only a direct internal-runtime artifact and cannot survive composition with the legitimate successor FrankExecutionGate holder."
+    ]
+  },
+  "executed_baselines_and_falsifiers": [
+    {
+      "id": "SAME_HOLDER_V15_DOUBLE_ACQUIRE",
+      "pr": 138,
+      "workflow_run_id": 31402465294,
+      "job_id": 93500553103,
+      "runner": "clay / digital-retina / self-hosted Linux X64",
+      "result": "REPRODUCED",
+      "measurements": {
+        "acquired_count": 2,
+        "busy_count": 0,
+        "lease_epochs": [1],
+        "first_reason": "IDLE_TO_BUSY",
+        "second_reason": "SAME_HOLDER_RENEWED"
+      },
+      "interpretation": "V15 alone provides holder continuity/exclusion against different holders, not proof of ACTIVE_EXECUTION_COUNT<=1 for distinct same-holder requests.",
+      "limit": "Does not prove production double cognition while the physical FrankExecutionGate is universally held."
+    },
+    {
+      "id": "UNVALIDATED_EXPIRED_TAKEOVER",
+      "pr": 141,
+      "workflow_run_id": 31402614265,
+      "job_id": 93501041272,
+      "tested_merge_sha": "3e39e2915e4b513c7a8b827474cd26aaf1dc0491",
+      "artifact_id": 9068787537,
+      "artifact_digest": "sha256:a1487e760f38257cf5256ecbd151243c09ee412ccc62072558d7fd92829110b3",
+      "runner": "clay / digital-retina / self-hosted Linux X64",
+      "result": "FAIL_UNVALIDATED_EXPIRED_TAKEOVER_REPRODUCED",
+      "measurements": {
+        "old_epoch": 1,
+        "new_epoch": 2,
+        "presence_events": ["ACQUIRED", "EXPIRED_TAKEOVER"],
+        "recovery_operation_called": false,
+        "sqlite_integrity": "ok"
+      },
+      "interpretation": "Current expiry path can transfer holder/epoch after TTL without an explicit validated recovery sequence, contradicting the owner-fixed recovery-before-new-epoch law."
+    },
+    {
+      "id": "STALE_EFFECT_AFTER_PRESENCE_TAKEOVER",
+      "pr": 147,
+      "workflow_run_id": 31403006334,
+      "job_id": 93502376059,
+      "tested_merge_sha": "bb958fdfb4de6f5c4db5e2beaa06ec91ee0e7849",
+      "artifact_id": 9068440036,
+      "artifact_digest": "sha256:e34be3f3f4e6fbe5eb61ef9445944dac6493cf38de51b784ba7a129d2e50f8ea",
+      "runner": "clay / digital-retina / kernel 6.8.0-117-generic / Python 3.12.3",
+      "result": "REPRODUCED_STALE_EFFECT_ATTEMPT_AFTER_PRESENCE_TAKEOVER",
+      "measurements": {
+        "presence_epoch_at_reservation": 1,
+        "current_presence_epoch": 2,
+        "effect_schema_has_presence_binding": false,
+        "stale_attempt_admitted": true,
+        "stale_effect_state_after_takeover": "COMMITTING",
+        "sqlite_integrity": "ok",
+        "foreign_key_violations": 0
+      },
+      "interpretation": "Original V14 effect reservation/attempt state was not bound to originating execution generation."
+    },
+    {
+      "id": "GLOBAL_EXECUTION_FENCE_COMPOSITION_MATRIX",
+      "pr": 158,
+      "workflow_run_id": 31405217525,
+      "job_id": 93509808370,
+      "tested_pr_merge_sha": "f1505bcc3f37590d21f0e30f1e91bc956e22f9e5",
+      "artifact_id": 9069328705,
+      "artifact_digest": "sha256:f5f1f57206d05ce4a92fff6874d0663da56f8027fca1a3d0d3fe3849d2b70455",
+      "runner": "clay / digital-retina / Linux X64 / kernel 6.8.0-117-generic / Python 3.12.3",
+      "matrix_step": "PASS_REPRODUCED_GLOBAL_EXECUTION_FENCE_MATRIX_GAPS",
+      "physical_gate_control": "PASS_FRANK_EXECUTION_GATE_V1",
+      "measurements": {
+        "semantic_same_holder_second_process": "ACQUIRED:SAME_HOLDER_RENEWED:same_epoch",
+        "physical_same_holder_second_process": "BUSY:PHYSICAL_EXECUTION_ALREADY_ACTIVE",
+        "crash_old_epoch": 1,
+        "successor_epoch": 2,
+        "recovery_events": ["ACQUIRED", "EXPIRED_TAKEOVER"],
+        "successor_admitted_without_recovery_receipt": true,
+        "successor_started_precrash_predecessor_reservation": true,
+        "predecessor_effect_final_state": "COMMITTING",
+        "effect_schema_has_execution_epoch_binding": false,
+        "sqlite_integrity": "ok",
+        "foreign_key_violations": 0,
+        "external_network_used": false,
+        "external_effect_performed": false,
+        "canonical_state_mutated": false
+      },
+      "independent_static_audit_result": {
+        "status": "FAIL_ORTHOGONAL",
+        "finding": "DIRECT_CANONICAL_DB_OPEN:runtime/clay_vps_mcp_v02/tests/test_stack.py",
+        "credit": "NO_GLOBAL_FENCE_DEFECT_CREDIT",
+        "reason": "PR158 changed no telemetry/test_stack production file; matrix and physical control executed before the unrelated static audit and passed."
+      },
+      "interpretation": "The previously separate gaps compose in one causal path: legitimate successor B can acquire after unvalidated expiry and start predecessor A's reserved effect, while the physical gate correctly protects only the live-holder interval."
+    },
+    {
+      "id": "PR147_EPOCH_ONLY_CALLER_PIGGYBACK",
+      "pr": 169,
+      "base_pr": 147,
+      "workflow_run_id": 31406222052,
+      "job_id": 93513093367,
+      "tested_pr_merge_sha": "f02504e21841d17c679a6516147011116fc17143",
+      "artifact_id": 9069839340,
+      "artifact_digest": "sha256:fdfd7d723415efb6804bd007a0baa1fdf1ff8333190d0a403ff5d66d703aa42a",
+      "runner": "clay / digital-retina / Linux X64 / kernel 6.8.0-117-generic / Python 3.12.3",
+      "result": "REPRODUCED_PR147_EPOCH_ONLY_CALLER_PIGGYBACK",
+      "measurements": {
+        "legitimate_holder_epoch": 1,
+        "legitimate_holder_kind": "HUMAN_DIRECT",
+        "rogue_caller_presented_session_ref": false,
+        "rogue_caller_presented_client_ref": false,
+        "rogue_caller_presented_lease_epoch": false,
+        "rogue_caller_presented_execution_lease_object": false,
+        "reservation_admitted": true,
+        "reservation_bound_epoch": 1,
+        "attempt_admitted": true,
+        "final_effect_state": "COMMITTING",
+        "sqlite_integrity": "ok",
+        "foreign_key_violations": 0
+      },
+      "interpretation": "Observing/binding whichever global epoch is current is insufficient caller provenance. PR147 Phase-2 epoch-only repair is refuted as the selected production effect-fence design. This is an internal trusted-runtime caller-binding counterexample, not an unauthenticated network exploit claim."
+    }
+  ],
+  "positive_rescue_evidence": {
+    "physical_execution_gate": {
+      "status": "SUPPORTED_WITH_SCOPE_LIMIT",
+      "evidence": ["PR158 matrix physical control", "current tests/frank_execution_gate_v1.py"],
+      "supported": [
+        "A live cooperating holder retaining flock causes a competing process to receive BUSY even under a forward logical-clock jump.",
+        "Separate FrankExecutionGate instances in the same process are also physically excluded while the first flock is held.",
+        "Kernel process teardown releases the physical flock."
+      ],
+      "not_supported": [
+        "flock alone is semantic effect authority",
+        "flock proves every production path is gated",
+        "flock supplies validated semantic recovery after process death",
+        "flock binds precrash effect reservations to the successor execution"
+      ]
+    }
+  },
+  "repair_candidate_adjudication": {
+    "PR147_PHASE2_EPOCH_ONLY": {
+      "status": "REFUTED_FOR_PROMOTION",
+      "strengths": ["minimal migration blast radius", "stale epoch comparison at begin/retry"],
+      "fatal_counterevidence": "PR169 demonstrates caller piggyback: no presented execution provenance is required."
+    },
+    "PR157_V17_PRESENCE_BOUND_WRAPPER": {
+      "status": "SUPPORTED_MECHANISM_NOT_SELECTED",
+      "workflow_run_id": 31405145464,
+      "job_id": 93510443313,
+      "tested_merge_sha": "e0496f9220776a3ed1da73951d82cfd0d6c238da",
+      "artifact_id": 9069536562,
+      "artifact_digest": "sha256:d01df1a3edba78949e140c6dba5cc331794bf461eeb5113273e40287ed171033",
+      "measured": [
+        "V17 presence-bound candidate PASS",
+        "stale holder fenced",
+        "successor cannot adopt foreign reservation",
+        "pre-provider holder-change fence PASS",
+        "confirmation+reservation+fence fault atomicity PASS",
+        "historical V14 lifecycle baseline PASS",
+        "current ClayCode production effect-contract discriminator PASS",
+        "SQLite integrity ok / FK 0"
+      ],
+      "selection_reason": "Closed to avoid a third parallel production runtime/schema path. Strongest reusable contribution is explicit provider-precommit TOCTOU discriminator."
+    },
+    "PR160_V16_1_STRICT_PRESENTED_FENCE": {
+      "status": "SUPPORTED_REPLICATION_NOT_SELECTED",
+      "workflow_run_id": 31404984503,
+      "job_id": 93509014643,
+      "tested_sha": "5cd64d05161a39ff7f9186d91e23caa49dbc20ed",
+      "artifact_id": 9069653206,
+      "artifact_digest": "sha256:ef7ace230fd51a2751a75a4563f74d36e70a7666b8225b8bad6d5a3bd24f40be",
+      "measured": {
+        "effect_fence_checks": "10/10 PASS",
+        "schema_migration_atomicity": "PASS",
+        "deep_integrity_regression": "PASS",
+        "static_audit": "FAIL_INDEPENDENT_TELEMETRY_MIGRATOR_INVARIANT",
+        "full_pytest": "NOT_EXECUTED_ENVIRONMENT_MISSING_PYTEST"
+      },
+      "reusable_contribution": "Require caller-presented epoch/session/client fence on reservation, first attempt and retry; compare presented -> immutable reservation binding -> current V15 in one trusted transition.",
+      "nonselection_reason": "Closed as replication/adversarial lane to avoid third implementation; migration naming/current-main sequence and pre-provider runtime check were inferior to a fused owner lane."
+    },
+    "PR156_CANONICAL_INTEGRATION_OWNER": {
+      "status": "SELECTED_ACTIVE_OWNER_NOT_YET_PROMOTED",
+      "observed_head": "86641daf7b12606eb74a9898bb5339c332f2b4da",
+      "strengths": [
+        "patches canonical EffectLifecycleRuntime instead of leaving an ordinary unbound parallel production runtime",
+        "token ingress derives PresenceFence from the already-admitted FrankExecutionLease rather than token/user fields",
+        "reservation atomically validates current V15 holder and persists hashed holder refs plus epoch",
+        "outcome observation/reconciliation remains possible after holder turnover without minting new effect authority",
+        "current head has expiry-at-equality handling",
+        "current head has provider_commit_fence() for final COMMITTING/current-holder recheck"
+      ],
+      "remaining_promotion_blockers": [
+        "begin_attempt and uncertain retry must require the caller-presented current execution fence, not infer authority only from effect_id + stored/current singleton",
+        "effect->execution/presence fence persistence must be immutable against UPDATE/DELETE/rebinding or equivalent non-bypassable mutation",
+        "real process-death V14 crash-atomicity archaeology baseline must remain semantically equivalent and separately identifiable after API changes",
+        "stale rejected epochs must not gain authoritative effect-state write authority merely to record rejection telemetry",
+        "rebase/materialize against current main migration sequence after canonical V16 execution-continuity work",
+        "replay exact current WP04 signature/type-effect checks after semantic reserve/begin/execute API changes",
+        "prove the token/API path retains the admitted FrankExecutionLease through reserve -> begin -> pre-provider commit",
+        "exact-head self-hosted target-VPS evidence required before merge/promotion",
+        "presence/execution fence must remain provenance/fencing and must never mint EffectAuthorization or Capability"
+      ]
+    }
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_REQUIRED_FUSION_CANDIDATE",
+    "name": "ONE_GLOBAL_EXECUTION_CAPABILITY_WITH_IMMUTABLE_EFFECT_FENCE",
+    "planes": [
+      {
+        "plane": "PHYSICAL_EXCLUSION",
+        "mechanism": "FrankExecutionGate / kernel flock on accepted single-host v0.1 target",
+        "purpose": "prevent simultaneous cooperating process execution while holder is alive",
+        "authority": "DEFENSE_IN_DEPTH_NOT_SEMANTIC_IDENTITY_OR_EFFECT_AUTHORITY"
+      },
+      {
+        "plane": "SEMANTIC_PRESENCE_GENERATION",
+        "mechanism": "V15+ canonical presence state / monotonic lease_epoch",
+        "purpose": "durable current generation, holder, busy/idle/recovering state",
+        "authority": "EXECUTION_STATE_NOT_EFFECT_AUTHORIZATION"
+      },
+      {
+        "plane": "OPAQUE_EXECUTION_PROVENANCE",
+        "mechanism": "trusted FrankExecutionLease-derived execution fence carrying current epoch plus holder/session/client and future exact execution/request identity",
+        "purpose": "prove the caller of a state/effect transition is the admitted execution, not merely an observer of global current state",
+        "authority": "FENCING_PROVENANCE_ONLY"
+      },
+      {
+        "plane": "EFFECT_COMMIT_FENCE",
+        "mechanism": "immutable effect_id -> originating execution fence binding plus presented-fence revalidation at reserve, first attempt, retry and immediately before provider emission",
+        "purpose": "prevent stale/predecessor/successor/rogue internal execution from stealing or replaying another execution's effect authority",
+        "authority": "MUST_COMPOSE_WITH_EXISTING_EFFECT_AUTHORIZATION_AND_CAPABILITY; NEVER_MINT_THEM"
+      }
+    ],
+    "required_transition_law": [
+      "admitted execution -> opaque execution lease/fence",
+      "reserve(effect, authorization, presented_execution_fence) -> atomically validate presented fence == current canonical execution and persist immutable binding",
+      "begin_attempt(effect, presented_execution_fence) -> compare presented fence == immutable reservation fence == current canonical execution",
+      "retry(effect, presented_execution_fence) -> same triple comparison; stale uncertain work becomes reconciliation, not retry",
+      "provider_precommit(effect_attempt, presented_execution_fence) -> final current-fence recheck immediately before external emission",
+      "outcome observation/reconciliation may continue after turnover as evidence; it may not authorize a new provider attempt",
+      "stale/rejected execution cannot write authoritative effect/state just because rejection occurred; trusted current telemetry plane may record security evidence separately"
+    ],
+    "recovery_law": [
+      "process death may release physical flock but does not itself validate semantic recovery",
+      "expired/crashed active epoch -> RECOVERING, not direct successor acquisition",
+      "validated recovery proves no current valid holder/effect execution remains and records recovery provenance",
+      "only after recovery validation may epoch advance/clear to IDLE and a new execution acquire",
+      "precrash reservations remain fenced to old execution; successor needs fresh authorization/reservation unless an explicitly safe evidence-only reconciliation rule applies"
+    ],
+    "same_holder_law": "same session/client/holder identity is not automatically same execution. Reentry may reuse an execution only for the same logical admitted request/continuation identity; a distinct request cannot become a second active cognition merely because holder tuple matches."
+  },
+  "counterhypothesis_results": {
+    "physical_gate_makes_semantic_fence_irrelevant": "REFUTED_PARTIALLY: physical gate protects live overlap but PR158 proves crash/release + successor path can still consume predecessor effect without semantic effect fence.",
+    "global_epoch_alone_is_sufficient_caller_provenance": "REFUTED_BY_PR169.",
+    "ttl_plus_kernel_unlock_is_validated_recovery": "REFUTED_AGAINST_OWNER_FIXED_LAW_BY_PR141_AND_PR158.",
+    "stale_effect_gap_disappears_when_successor_uses_physical_gate": "REFUTED_BY_PR158: legitimate successor physical holder still moved predecessor reservation to COMMITTING."
+  },
+  "next_falsifiers_ranked": [
+    "Fuse the selected #156 canonical lane with #160 caller-presented begin/retry fence and #157 provider-precommit discriminator, then execute exact-current-main target-VPS causal matrix.",
+    "Invert PR169: an unbound internal caller presenting no execution lease must be rejected at reservation and attempt without authoritative effect-state mutation.",
+    "Invert PR141/PR158 recovery row: expired/crashed epoch must enter RECOVERING and cannot create successor epoch until an explicit validated recovery receipt exists.",
+    "Run real-process-death crash atomicity after fused fence API: reservation + confirmation + immutable effect-fence row must all rollback at the historical fault point, preserving original baseline identity.",
+    "Attempt UPDATE/DELETE/rebind of persisted effect fence and require deterministic rejection; verify rebuild/replay reconstructs identical immutable binding.",
+    "Provider-bound sandbox/no-op TOCTOU: begin under epoch N, change holder to N+1 before provider call, require precommit rejection with zero external emission while outcome reconciliation remains permitted for already-started attempts.",
+    "Production route census: prove every consequential token/API/proactive effect start obtains and retains the one FrankExecutionLease-derived fence and no ordinary legacy/unbound effect entry route is reachable.",
+    "Rerun self-hosted Deep Integrity + schema atomicity + available full test suite on exact candidate merge SHA; distinguish missing test dependencies from executed regressions.",
+    "Only after fused effect/recovery/execution fencing is current-main green, continue whole boot/restart/stale-clone/token/API identity-contamination acceptance."
+  ],
+  "negative_results_preserved": [
+    "V15 semantic same-holder renewal is not by itself a global active-execution proof.",
+    "TTL expiry currently performs unvalidated successor takeover.",
+    "Original V14 effect lifecycle permits stale predecessor reservation to enter COMMITTING after takeover.",
+    "PR147 epoch-only repair remains caller-unbound and is refuted by target-VPS piggyback counterexample.",
+    "GitHub-hosted pre-step red checks remain non-evidence for Frank code failure under prior harness receipt until test execution is proven.",
+    "Independent telemetry/static-integrity failures are preserved and not misattributed to effect-fence candidates.",
+    "Missing pytest on a runner is an environment limitation, not an executed pytest regression."
+  ],
+  "affected_frank_v0_1_packages": {
+    "F-V01-08-TOKEN-API-CLIENTS": "execution lease provenance must flow from authenticated ingress through full request/effect lifetime",
+    "F-V01-09-EFFECT-AUTHORITY": "new/retry/provider-commit effects require immutable caller-bound current execution fence while authorization remains separate",
+    "F-V01-10-PROACTIVE-AGENCY-WEB": "proactive acquisition must use the same global execution gate and may not preempt current user execution",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY": "validated recovery before successor epoch; stale rejection telemetry separated from stale write authority",
+    "F-V01-16-END-TO-END-ACCEPTANCE": "release acceptance must compose single execution, recovery, effect fencing and provider-bound TOCTOU evidence on exact current target VPS"
+  },
+  "limits": [
+    "No real external provider effect was executed in these new discriminators.",
+    "No claim that an unauthenticated network client can directly call internal effect lifecycle APIs.",
+    "No claim that the physical FrankExecutionGate fails while a cooperating live process retains flock.",
+    "No whole Frank v0.1 PASS or work-package PASS is promoted solely from these bounded results.",
+    "Current Clay FRANK_V0_1_WORKSPACE.json is older than these runs; visible program percentage must not be advanced from this receipt without the normal workspace/progress resolver update.",
+    "No paid/final training authorization is implied or granted."
+  ],
+  "research_write_result": "COMMITTED"
+}

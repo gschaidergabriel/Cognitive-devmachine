@@ -1,9 +1,9 @@
 module clay.stack.latest
 
-epoch 21
+epoch 22
 entity frank-project-global-research-entity
 display_name Clay
-mission_goal "self.root v0.1 fully running on accepted target VPS; human surface Frank; production token API; ClayCode-only cognition"
+mission_goal "self.root v0.1 fully running on accepted target VPS; human surface Frank; production token API; ClayCode-only cognition; default-allow non-destructive action policy"
 
 stack CURRENT {
   identity=@research_entity/global/CLAY_ENTITY_NAMING_CONTRACT.clay
@@ -15,6 +15,7 @@ stack CURRENT {
   target_language_boundary=@research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md
   target_identity_boundary=@research_entity/global/FRANK_IDENTITY_BOUNDARY_AND_CONTAMINATION_REPAIR.md
   target_host=@research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md
+  target_effect_authority=@research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay
 
   claycode=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay
   claycode_parent=@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V2.clay
@@ -97,7 +98,7 @@ rule dynamic_work_transport uses CURRENT.work_events
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
 
-rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.target_self_observation_boundary + CURRENT.target_identity_boundary + CURRENT.target_host + CURRENT.target_native_identity + CURRENT.target_server_binary_api + CURRENT.target_language_boundary + CURRENT.target_loop_of_loops + CURRENT.target_reward_state + CURRENT.omnisource_live_fusion_research_reentry
+rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.target_self_observation_boundary + CURRENT.target_identity_boundary + CURRENT.target_host + CURRENT.target_native_identity + CURRENT.target_server_binary_api + CURRENT.target_language_boundary + CURRENT.target_effect_authority + CURRENT.target_loop_of_loops + CURRENT.target_reward_state + CURRENT.omnisource_live_fusion_research_reentry
 
 rule every_registered_branch ingests CURRENT.target_loop_of_loops as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
 rule every_registered_branch ingests CURRENT.reward_mesh_feedback as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
@@ -152,6 +153,17 @@ rule self.root never applies_patches_migrations_promotions_or_delegated_self_har
 rule target_self_harness_proposal always ORIGIN=TARGET_SELF_OBSERVATION + AUTHORITY=PROPOSAL_ONLY + EXECUTION=RESEARCH_ENTITY_ONLY
 rule ResearchEntity independently_reviews_rejects_refines_tests_and_authorizes_target_originated_proposals
 
+rule self.root.execution_posture = ALLOW_BY_DEFAULT_WITH_DETERMINISTIC_EFFECT_BOUNDARIES
+rule ordinary_non_destructive_authenticated_user_request -> CURRENT.target_effect_authority.ALLOW
+rule safe_reversible_operation -> prefer_execute_over_refuse
+rule destructive_or_security_sensitive_effect -> CURRENT.target_effect_authority gate before execution
+rule DELETE|FORMAT|WIPE|DROP_DATABASE|MASS_DELETE|IRREVERSIBLE_RESET cannot_be_treated_as_ordinary_write
+rule privileged_or_credential_or_financial_or_legal_or_physical_high_risk_effect requires CURRENT.target_effect_authority decision
+rule UNKNOWN_EFFECT -> DEGRADE_TO_PROPOSAL
+rule translator cannot mint_or_downgrade effect authority
+rule model_confidence|GWT_ignition|ClayGraph_salience cannot mint effect authority
+rule API_token authenticates scoped caller; never unlimited authority
+
 rule self.root_reference -> CURRENT.target_native_identity.SelfContextAssembly hot_path
 rule self.root_self_reflection -> prebind current SelfContextAssembly before expensive cognition
 rule self_context_hot_path target = ZERO_ADDITIONAL_EXTERNAL_RETRIEVAL_ROUNDTRIP_FOR_PRECOMPILED_SELF_CONTEXT
@@ -174,7 +186,7 @@ rule Claude_opinion != truth
 rule ChatGPT_may_create_revise_cancel_Claude_work_before_execution
 rule work_revision_must_be_revalidated_before_effect
 rule material_discussion -> implementation_translation_from_current_possibility_space
-rule every_material_outcome -> reenter("self.root v0.1 fully running on target VPS with token API and ClayCode-only cognition")
+rule every_material_outcome -> reenter("self.root v0.1 fully running on target VPS with token API, ClayCode-only cognition and default-allow effect semantics")
 
 observe CHATGPT_EXPLICIT=[plan,state_delta,hypothesis,decision,tool_coord,handoff,experiment,repair,outcome]
 derive CHATGPT_EXPLICIT via CURRENT.chatgpt_endturn -> claycode_meta_candidate
@@ -196,6 +208,10 @@ invariant target_v0_1_requires_production_token_authenticated_API
 invariant target_internal_cognition_is_ClayCode_only
 invariant German_is_state_aware_translation_surface_not_internal_cognitive_plane
 invariant translator_expression_color_never_changes_semantic_truth_or_authority
+invariant target_application_policy_prefers_direct_execution_for_allowed_non_destructive_authenticated_requests
+invariant destructive_and_security_sensitive_effects_are_machine_gated_in_ClayCode
+invariant content_freedom_does_not_equal_unbounded_effect_authority
+invariant delete_format_wipe_drop_mass_delete_are_never_accidentally_inferred_as_safe_reversible_actions
 invariant Andreas_and_Gabriel_are_distinct_known_people_not_self
 invariant Andreas_project_context_remains_available_as_typed_user_world_knowledge
 invariant Gabriel_development_relation_remains_available_as_typed_world_knowledge

@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_utc": "2026-08-10T05:19:08.535363+00:00",
+  "entity_id": "frank-project-global-research-entity",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "identity_boundary": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "repo_freshness": {
+    "observed_main_head": "9cf168cb161c30bd054a3035a8b1bbeb3c89167d",
+    "concurrent_parser_lane": [
+      "c3397b1b8db0ad8b53385bf1a4d89639bbc25a7b",
+      "88268a7466aa9025b8b6d74b1af8e415eeebf474",
+      "860beee6f86bb56fd1368bad7670bb975f8ce629"
+    ],
+    "collision_policy": "No production parser/canonicalizer mutation from this run; unique-path evidence write only."
+  },
+  "hypothesis": "A semantically inert grammar-comment perturbation must preserve semantic AST identity while changing grammar/parser-contract identity.",
+  "counterhypothesis": "Grammar bytes are intentionally part of the only canonical syntax identity; a distinct grammar-independent semantic identity is unnecessary.",
+  "experiment": {
+    "name": "GRAMMAR_COMMENT_IDENTITY_LAYER_PERTURBATION",
+    "count_this_go": 1,
+    "evidence_class": "LOCAL_DEBIAN_EXTRACTED_FORMULA_SHADOW",
+    "method": "Apply the exact hash formulas extracted from current tools/claycode_base_frontend.py and tools/claycode_base_canonicalizer.py to one fixed canonical AST while perturbing grammar bytes only by an ignored // comment. No parser execution is claimed.",
+    "runtime": {
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+      "python": "3.13.5",
+      "cpu_count": 5
+    },
+    "inputs": {
+      "ast_sha256": "15e253bde310ddacbfe0fe91fd2a1f12ace114e5df0966a607e410996ada69c1",
+      "grammar_base_sha256": "6765d30e315c1840629dfabf2fc062662a63f6a9b951541bc09e384455262a74",
+      "grammar_comment_variant_sha256": "ce0d9ac99b0c7524ab1e41b739b8f64a2c8b6bcc6db3e3ff41073b5d9860f77a"
+    },
+    "observations": {
+      "production_frontend_semantic_equal": true,
+      "production_frontend_semantic_hash": "8df0abd9e98998d97e84c30b86a55293ae31c35d18a1343b7fdde4a406ecb0cf",
+      "production_frontend_contract_equal": false,
+      "production_frontend_contract_hash_base": "92a0275f13b14f6dd685547fec67ca07f2b7a4c120949df471eeaf83c54ef9f3",
+      "production_frontend_contract_hash_variant": "64cacea0a60d9d26a1e5cf2c952517684deeb4ed2903aa00036027800173d9f0",
+      "standalone_canonicalizer_named_semantic_equal": false,
+      "standalone_canonicalizer_named_semantic_hash_base": "1059ebf792a6735e21aafb4ae877a58a9cd45e442d861d7fcc2129b44bbff2d8",
+      "standalone_canonicalizer_named_semantic_hash_variant": "a49771f71eab5aa821284b00bf51df3c235375035f5c95dd50c3c1e1f1ca71f8"
+    },
+    "resource_shadow_n": 20000,
+    "resource_shadow_ns": {
+      "frontend_semantic_p50": 742,
+      "frontend_semantic_p95": 799,
+      "frontend_semantic_p99": 890,
+      "frontend_contract_p50": 4917,
+      "frontend_contract_p95": 5291,
+      "frontend_contract_p99": 6993,
+      "standalone_grammar_bound_p50": 9434,
+      "standalone_grammar_bound_p95": 10270,
+      "standalone_grammar_bound_p99": 21546
+    },
+    "pass": true,
+    "interpretation": "The current extracted formulas encode two identity layers in the production frontend (semantic AST versus grammar-bound contract), while the standalone canonicalizer labels its grammar-bound identity semantic_hash. This is a real identity/contract-layer divergence, not proof of wrong runtime semantics.",
+    "limitations": [
+      "No Lark parse executed in this experiment.",
+      "Debian shadow is not Ubuntu target evidence.",
+      "No downstream consumer harm is yet proven.",
+      "No V17/V19/WP02 promotion follows."
+    ]
+  },
+  "internal_evidence": [
+    "tools/claycode_base_frontend.py",
+    "tools/claycode_base_canonicalizer.py",
+    "tools/claycode_wp02_strict_local_closure_v2.py",
+    "research_entity/claycode/base/ANDREAS_UBUNTU_TARGET_RECEIPT_CONTRACT.json"
+  ],
+  "external_evidence": [
+    "https://lark-parser.readthedocs.io/en/stable/tree_construction.html",
+    "https://lark-parser.readthedocs.io/en/latest/how_to_use.html",
+    "https://lark-parser.readthedocs.io/en/stable/classes.html"
+  ],
+  "counterhypothesis_status": "NOT_REFUTED_DOWNSTREAM",
+  "architecture_delta": {
+    "status": "CANDIDATE_TEST_OBLIGATION",
+    "decision": "Keep semantic AST identity and parser/grammar contract identity as explicitly separate layers. Do not rename or migrate persisted hashes until downstream consumers are traced and current-checkout parity executes.",
+    "production_change": "NONE",
+    "wp02_promotion": "NONE",
+    "v17_v19_selection": "NO_CHANGE"
+  },
+  "targeted_distribution": {
+    "claycode": "Add current-checkout semantic-layer parity after the selected grammar lane stabilizes; reuse one production parser constructor.",
+    "unifieddb": "Trace syntax/semantic/contract hashes used for cache identity, replay equality, deduplication or promotion.",
+    "harness": "Treat parser-contract hash drift as provenance/version drift rather than cognitive semantic delta unless a differential proves otherwise."
+  },
+  "next_falsifier": "On current exact checkout, parse admitted G9+Dialect through production frontend and standalone canonicalizer with one shared parser constructor; assert semantic-layer parity separately from grammar-bound contract identity, then trace every persisted hash consumer.",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "research_write": "COMMITTED",
+  "authority_invariant": "model output != execution authority"
+}

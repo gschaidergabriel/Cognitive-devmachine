@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2125p0700-eudi-e1e5-falsification",
+  "timestamp": "2026-08-10T21:25:00+07:00",
+  "organ": "chatgpt-secondary / OpenAI / GPT-5.6 Sol",
+  "target": "FRANK_V0_1",
+  "result_class": "FRANK_V0_1_ARCHITECTURE_DELTA",
+  "research_family": "EUDI — Executable Unified Database Image",
+  "directive": "research_entity/global/SELF_ROOT_EXECUTABLE_UNIFIED_DATABASE_IMAGE_RESEARCH_DIRECTIVE.md",
+  "production_mutation": "NONE",
+  "architecture_promotion": "NONE",
+  "training_authorized": false,
+  "experiments": {
+    "EUDI_E1_E3_LOCAL": {
+      "evidence_class": "LOCAL_LINUX_MECHANISM_PROBE",
+      "status": "PASS_BOUNDED",
+      "kernel": "6.18.35",
+      "machine": "x86_64",
+      "observations": {
+        "direct_self_open_errno": 26,
+        "expected_errno": "ETXTBSY",
+        "sealed_memfd_fexecve_handoff": "PASS",
+        "detached_original_image_write": "PASS",
+        "restart_state_lineage": ["0->1", "1->2"],
+        "immutable_runtime_sha256_preserved": true,
+        "split_state_control": "PASS"
+      },
+      "interpretation": "Rejects only the narrow counterhypothesis that Linux ETXTBSY makes detached one-image mutation mechanically impossible."
+    },
+    "EUDI_E1_E3_HOSTINGER": {
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "status": "PASS_BOUNDED",
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pull_request": 119,
+      "candidate_head_sha": "ce62153c4d8243e346fead9cb9ad96ae84649675",
+      "github_pr_merge_sha_executed": "204c0d62924c725fe3a503b6563a03ba6501df79",
+      "workflow_run_id": 31397800061,
+      "job_id": 93484929070,
+      "host": {
+        "runner": "clay",
+        "hostname": "digital-retina",
+        "user": "frankrunner",
+        "kernel": "6.8.0-117-generic",
+        "machine": "x86_64",
+        "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+        "python": "3.12.3"
+      },
+      "observations": {
+        "direct_self_open_etxtbsy_all": true,
+        "sealed_memfd_fexecve_handoff": "PASS",
+        "detached_write_pass_all": true,
+        "restart_lineage_pass": true,
+        "state_counter_after_second_start": 2,
+        "immutable_sha256_before": "9cfec366d62bdbfec236beb59a0ba6a9554c8dce6041009151ab0c55fecb0fd7",
+        "immutable_sha256_after": "9cfec366d62bdbfec236beb59a0ba6a9554c8dce6041009151ab0c55fecb0fd7",
+        "immutable_identity_preserved": true,
+        "split_control": "PASS"
+      },
+      "interpretation": "Target-VPS replication supports H-EUDI-03 only as a boot/handoff mechanism. It is not evidence for crash safety, security equivalence, model efficiency, causal equivalence or release promotion."
+    },
+    "EUDI_E5_LOCAL_REGION_ISOLATION": {
+      "evidence_class": "LOCAL_LINUX_UNPRIVILEGED_PERMISSION_DISCRIMINATOR",
+      "status": "COUNTEREVIDENCE",
+      "uid_under_test": 65534,
+      "observations": {
+        "eudi_state_write_succeeded": true,
+        "eudi_same_odrdw_capability_modified_immutable_prefix": true,
+        "eudi_immutable_hash_changed": true,
+        "split_state_write_succeeded": true,
+        "split_root_odrdw_succeeded": false,
+        "split_root_odrdw_errno": 13,
+        "split_root_odrdw_error": "EACCES"
+      },
+      "interpretation": "A writable single inode provides no ordinary POSIX byte-range immutability boundary. The same unprivileged O_RDWR capability needed for state can alter root bytes, whereas split files can allow state writes while denying O_RDWR on immutable root. EUDI therefore requires an additional confinement/integrity mechanism and must prove that it recovers or exceeds this lost OS-level isolation. Hash checking alone is detection, not prevention."
+    }
+  },
+  "hypothesis_updates": {
+    "H-EUDI-03": "SUPPORTED_AS_MECHANISM_ON_LOCAL_AND_TARGET_VPS; NOT_ARCHITECTURE_PASS",
+    "H-EUDI-05": "COUNTEREVIDENCE_AGAINST_NAIVE_SINGLE_WRITABLE_INODE",
+    "H-EUDI-04": "OPEN",
+    "H-EUDI-02": "OPEN",
+    "H-EUDI-07": "OPEN",
+    "H-EUDI-08": "OPEN",
+    "H-EUDI-09": "OPEN"
+  },
+  "negative_controls_and_caveats": [
+    "PR 119 also triggered Frank Deep Integrity run 31397800393 with conclusion FAILURE; exact job log was unavailable through the connector at inspection time, so no causal attribution is made to EUDI.",
+    "The E1/E3 probe uses a tiny synthetic ELF/state image, not the real Frank model/runtime/database.",
+    "The E5 permission result demonstrates an OS isolation deficit, not impossibility of compensation by another sandbox or file-layout mechanism."
+  ],
+  "next_falsifiers": [
+    "EUDI-E5 target-VPS subregion attack plus candidate confinement mechanisms",
+    "EUDI-E4 kill-at-every-durability-boundary crash matrix",
+    "EUDI-E2 embedded aligned GGUF differential against external-file control",
+    "EUDI-E8 corruption blast-radius and recovery attack",
+    "EUDI-E9 causal differential against split layout"
+  ],
+  "final_status": "FALSIFICATION_STARTED_WITH_MIXED_EVIDENCE"
+}

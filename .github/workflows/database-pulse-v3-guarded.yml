@@ -1,0 +1,135 @@
+name: Database Pulse V3 Guarded
+
+on:
+  push:
+    branches:
+      - chatgpt/unifieddb-pulse-v3-u12-active-field-20260810
+    paths:
+      - 'research_entity/runtime/database_pulse_runtime_v3.py'
+      - 'research_entity/runtime/database_pulse_runtime_v3_guarded.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v3.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v3_guarded.py'
+      - 'tools/database_pulse_v3_guarded_benchmark.py'
+      - '.github/workflows/database-pulse-v3-guarded.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_runtime_v3.py'
+      - 'research_entity/runtime/database_pulse_runtime_v3_guarded.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v3.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v3_guarded.py'
+      - 'tools/database_pulse_v3_guarded_benchmark.py'
+      - '.github/workflows/database-pulse-v3-guarded.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile V3 fusion
+        run: |
+          python -m py_compile \
+            research_entity/runtime/database_pulse_runtime_v3.py \
+            research_entity/runtime/database_pulse_runtime_v3_guarded.py \
+            research_entity/runtime/test_database_pulse_runtime_v3.py \
+            research_entity/runtime/test_database_pulse_runtime_v3_guarded.py \
+            tools/database_pulse_v3_guarded_benchmark.py
+      - name: Differential and adversarial tests
+        run: |
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_runtime_v3 \
+            research_entity.runtime.test_database_pulse_runtime_v3_guarded
+      - name: Hosted smoke benchmark
+        run: |
+          python tools/database_pulse_v3_guarded_benchmark.py \
+            --rows 100,1000 --repeat 3 --batch 512 \
+            --output /tmp/database-pulse-v3-guarded-hosted.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v3-guarded-hosted
+          path: /tmp/database-pulse-v3-guarded-hosted.json
+
+  hostinger-ubuntu-reference:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Capture target-lane metadata
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/database-pulse-v3-guarded
+          uname -a | tee /tmp/database-pulse-v3-guarded/uname.txt
+          python3 --version | tee /tmp/database-pulse-v3-guarded/python.txt
+          python3 - <<'PY' | tee /tmp/database-pulse-v3-guarded/runtime.json
+          import json, os, pathlib, platform, sqlite3
+          cpu='UNKNOWN'
+          try:
+              for line in pathlib.Path('/proc/cpuinfo').read_text(errors='replace').splitlines():
+                  if line.lower().startswith('model name'):
+                      cpu=line.split(':',1)[1].strip(); break
+          except Exception:
+              pass
+          print(json.dumps({
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+            'scope':'REMOTE_PRELIMINARY_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'machine':platform.machine(),
+            'python':platform.python_version(),
+            'sqlite':sqlite3.sqlite_version,
+            'cpu_model':cpu,
+          }, indent=2))
+          PY
+      - name: Compile V3 fusion
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_runtime_v3.py \
+            research_entity/runtime/database_pulse_runtime_v3_guarded.py \
+            research_entity/runtime/test_database_pulse_runtime_v3.py \
+            research_entity/runtime/test_database_pulse_runtime_v3_guarded.py \
+            tools/database_pulse_v3_guarded_benchmark.py
+      - name: Differential and adversarial tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_runtime_v3 \
+            research_entity.runtime.test_database_pulse_runtime_v3_guarded
+      - name: VPS scaling and catch-up benchmark
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_v3_guarded_benchmark.py \
+            --rows 100,1000,10000 --repeat 7 --batch 512 \
+            --output /tmp/database-pulse-v3-guarded/benchmark.json
+      - name: Enforce narrow safety gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/database-pulse-v3-guarded/benchmark.json',encoding='utf-8'))
+          for r in p['results']:
+              assert r['prepared_query_survived_idle'] is True, r
+              assert r['late_salience_target_selected'] is True, r
+              assert r['single_delta_applied']==1, r
+              assert r['single_delta_memory_update_observed']==1, r
+              assert r['final_backlog']==0, r
+          print('DATABASE_PULSE_V3_GUARDED_NARROW_GATES=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v3-guarded-hostinger
+          path: /tmp/database-pulse-v3-guarded/

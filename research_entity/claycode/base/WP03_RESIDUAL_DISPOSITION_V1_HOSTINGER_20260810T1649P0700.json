@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "WP03_RESIDUAL_DISPOSITION_V1_HOSTINGER_20260810T1649P0700",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "canonical_parent_before_write": "f496ee19deee6f2bef3aab7ba0374bc6ffec005d",
+  "subject": "CC-WP-03 residual semantic downstream disposition safety baseline",
+  "prior_evidence": {
+    "wp02_v18_status": "PASS_PACKAGE_ONLY",
+    "wp03_bridge_v2_status": "PASS_NARROW_PRODUCTION_BRIDGE_ONLY",
+    "wp03_residual_inventory_total": 100,
+    "wp03_residual_inventory_classes": 10,
+    "dominant_classes": {
+      "rule_decl": 67,
+      "invariant_decl": 14
+    }
+  },
+  "hypothesis": "Before class-specific WP04/WP05 semantics are proven, every preserved WP03 residual must carry an explicit fail-closed disposition so downstream evaluator/lowering code cannot mistake presence for legality or execution authority.",
+  "strongest_counterhypothesis": "Universal deferral is safe but may be unnecessarily conservative; metadata and declarative constraint classes may be safely LOWERED_AND_VALIDATED earlier once class-specific verification and consumption receipts exist.",
+  "candidate": {
+    "pull_request": 168,
+    "branch": "chatgpt/go-wp03-residual-disposition-v1-20260810",
+    "status": "TESTING_NOT_PROMOTED",
+    "known_inventory_status": "EXPLICITLY_DEFERRED_FAIL_CLOSED",
+    "unknown_future_class_status": "REJECTED_WITH_REASON",
+    "evaluator_admission": "DENY_UNLESS_LOWERED_AND_VALIDATED",
+    "effect_authority": "NONE"
+  },
+  "local_deterministic_proxy": {
+    "environment": "Debian GNU/Linux 13, Python 3.13.5",
+    "exact_inventory_no_drop_fail_closed": "PASS",
+    "semantic_mutation_discriminated": "PASS",
+    "authority_tamper_rejected": "PASS",
+    "elapsed_seconds": 0.66,
+    "max_rss_kb": 111124,
+    "acceptance_class": "PROXY_ONLY_NOT_UBUNTU"
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_macro_cycle": 1,
+    "name": "SEMANTIC_CONFETTI",
+    "seed": 20260810,
+    "intervention": "permute all 100 measured residual fixture nodes and inject one novel future_decl",
+    "result": "PASS",
+    "known_deferred": 100,
+    "unknown_rejected": 1,
+    "evaluator_admitted": false,
+    "effect_authority_minted": false,
+    "evidence_scope": "SYNTHETIC_MECHANISM_FALSIFIER_ONLY"
+  },
+  "hosted_github_ci": {
+    "run_id": 31376165562,
+    "job_id": 93415766152,
+    "result": "INFRASTRUCTURE_FAILURE_PRE_STEP",
+    "steps_observed": 0,
+    "log_blob": "ABSENT_404",
+    "interpretation": "Not counted against candidate semantics because no test step executed."
+  },
+  "self_hosted_ubuntu": {
+    "execution_repository": "gschaidergabriel/Dr.-Unterweger",
+    "receipt_commit": "ebb75a3045051183037504bee3db0168e693e9b4",
+    "github_run_id": "31376398250",
+    "evidence_class": "REAL_SELF_HOSTED_UBUNTU_CONTENT_ADDRESSED_WP03_RESIDUAL_DISPOSITION_V1",
+    "runner": "clay@digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "pass": true,
+    "typed_ir_sha256": "28d4a5fa00d9852c608d513ad5fe358763ca8fc6a035c0678a454eb8bb9bc661",
+    "typed_ir_artifact_sha256": "34245a3f9b3079ed89d99432b18addb6a895ee09559ca4bbc48f2c9b29976c98",
+    "disposition_receipt_sha256": "fb26327ca4539b81e5fb20377cacb637c744ddc1177801518b3df1f2a3cd62b9",
+    "parser_calls_after_frontend_artifact_creation": 0,
+    "observed_total": 100,
+    "observed_kind_count": 10,
+    "explicitly_deferred_fail_closed": 100,
+    "lowered_and_validated": 0,
+    "rejected_with_reason": 0,
+    "evaluator_admitted": false,
+    "effect_authority": "NONE",
+    "elapsed_seconds": 0.85,
+    "max_rss_kb": 30720
+  },
+  "fresh_external_primary_evidence": {
+    "sources": [
+      "MLIR Interfaces documentation",
+      "MLIR Operation Definition Specification verification ordering",
+      "LLVM Language Reference verifier behavior"
+    ],
+    "fusion": "Current compiler practice supports explicit semantic interfaces/verifiers and rejecting malformed or unverified IR before later transformations. This supports the fail-closed control boundary but does not validate ClayCode-specific rule semantics."
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "change": "Introduce explicit residual disposition receipts between WP03 preservation and WP04/WP05 semantic/evaluator consumption.",
+    "expected_effect": "Prevent preserved opaque semantics from being silently dropped, implicitly executed, or mistaken for authority.",
+    "rollback": "Do not merge PR 168; existing bridge v2 remains the last known good WP03 production boundary.",
+    "promotion": "NONE"
+  },
+  "next_falsifier": {
+    "priority": ["rule_decl", "invariant_decl"],
+    "reason": "81 of 100 residual nodes and highest semantic/effect risk",
+    "required": [
+      "class-specific checker contract",
+      "positive valid examples",
+      "semantic mutation negatives",
+      "unsupported form fail-closed negatives",
+      "no-authority-minting receipt",
+      "WP05 evaluator/lowering consumption proof",
+      "exact current V18 provenance"
+    ]
+  },
+  "wp03_status": "OPEN",
+  "base_release": "NOT_PASS",
+  "frank_harness_mutation": false,
+  "training_authorized": false,
+  "authority": "NONE"
+}

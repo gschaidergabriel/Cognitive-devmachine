@@ -47,7 +47,17 @@ jobs:
             tools/possibility_preprocessor_benchmark.py \
             tools/claygraph_query.py tools/claygraph_build.py
       - name: Run proof/stale/adaptive-stop falsifiers
-        run: python -m pytest -q research_entity/harness/test_possibility_preprocessor.py
+        run: |
+          python - <<'PY'
+          from research_entity.harness import test_possibility_preprocessor as t
+          tests = [(name, fn) for name, fn in sorted(vars(t).items()) if name.startswith('test_') and callable(fn)]
+          if not tests:
+              raise SystemExit('no possibility-preprocessor tests discovered')
+          for name, fn in tests:
+              fn()
+              print(f'PASS {name}')
+          print(f'TEST_COUNT={len(tests)}')
+          PY
       - name: Build fair SQLite source plane
         run: python tools/build_source_db.py --db research_sources/sources.db
       - name: Run possibility benchmark

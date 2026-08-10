@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T1737p0700",
+  "hypotheses": [
+    {
+      "id": "H-Q23-001",
+      "claim": "The Qwen3.5 vision/mmproj representation can serve as the single deep visual backbone for Frank, feeding both MVC familiarity routing and semantic decode escalation, eliminating a duplicate heavy Retina encoder.",
+      "status": "OPEN_TESTING_REQUIRED",
+      "falsifier": "A matched dedicated lightweight feature encoder materially dominates Qwen feature reuse on open-set/familiarity calibration or total task/resource Pareto performance.",
+      "test": "WORK-QNDRF-H1-DIFFERENTIAL-20260810"
+    },
+    {
+      "id": "H-Q23-002",
+      "claim": "Raw generative Qwen vision representations will need a tiny learned projection/readout for stable user-specific familiarity/open-set geometry, but not a second heavy semantic vision encoder.",
+      "status": "OPEN_STRENGTHENED_BY_EXTERNAL_EVIDENCE",
+      "evidence": "Qwen's own Qwen3-VL-Embedding family uses an explicit embedding/retrieval objective and dedicated embedding model path rather than claiming arbitrary base-VLM hidden states are already calibrated retrieval vectors.",
+      "falsifier": "Raw pooled Qwen3.5 mmproj descriptors match or beat projected/dedicated embeddings on held-out familiar/near-neighbor unknown fixtures under equal total budget."
+    },
+    {
+      "id": "H-Q23-003",
+      "claim": "Vision-encode-only plus MVC can safely bypass the 4B language decoder on a material fraction of recurring visual states.",
+      "status": "OPEN",
+      "falsifier": "Decoder bypass rate is too low to save material cost, or bypass increases false familiarity/task failures beyond tolerance."
+    },
+    {
+      "id": "H-Q23-004",
+      "claim": "Delta-guided ROI plus adaptive image-token budgets reduce visual-cycle cost while preserving GUI grounding and task success better than full-frame deep decode every cycle.",
+      "status": "OPEN",
+      "falsifier": "ROI/context loss causes enough off-ROI modal, layout or small-text failures that matched full-frame processing is Pareto-superior."
+    },
+    {
+      "id": "H-Q23-005",
+      "claim": "A hybrid of event/change processing plus periodic/on-demand full anchors is more robust than pure change-only visual sensing.",
+      "status": "OPEN",
+      "falsifier": "Anchors add measurable resource cost without reducing stale-state, hidden-context or recovery failures."
+    },
+    {
+      "id": "H-Q23-006",
+      "claim": "Action/outcome-linked visual crops plus compact typed state outperform repeated full-screenshot history for Frank's action verification and future retrieval under equal context budget.",
+      "status": "OPEN",
+      "falsifier": "Local memory repeatedly misses global context needed for correct later decisions and cannot be rescued cheaply by anchor retrieval."
+    },
+    {
+      "id": "H-Q23-007",
+      "claim": "User-named visual entities can be learned more sample-efficiently by binding MVC visual prototypes to textual/name anchors in the same Qwen multimodal semantic space, while keeping sensor evidence separate from semantic labels.",
+      "status": "NEW",
+      "origin": "Interaction between Qwen native multimodality, Qwen3-VL unified multimodal embedding research, and Frank's GOLD user-label learning path.",
+      "falsifier": "Text-anchor binding worsens instance-level discrimination/open-set calibration or causes semantic similarity to masquerade as visual identity."
+    },
+    {
+      "id": "H-Q23-008",
+      "claim": "After a deterministic pixel/tile change gate, temporal distance in pooled Qwen visual features can estimate semantic-change magnitude and control whether full semantic decode is necessary.",
+      "status": "NEW",
+      "falsifier": "Feature distance is unstable across benign crop/resolution/antialiasing changes or fails to separate semantically meaningful from irrelevant visual changes."
+    },
+    {
+      "id": "H-Q23-009",
+      "claim": "Abliteration can leave low-level visual representation behavior mostly stable while still changing end-to-end visual decisions through the text/semantic decoder; therefore mmproj-level MVC compatibility and end-to-end visual action competence must be tested as separate layers.",
+      "status": "NEW_REFINED",
+      "falsifier": "Matched hashes/feature probes show the visual representation itself changes materially across the compared model export or the decoder change has no measurable visual-decision effect."
+    }
+  ]
+}

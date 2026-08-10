@@ -133,6 +133,11 @@ class LiveFusionReentryTests(unittest.TestCase):
         self.assertEqual(len(self.bus.deltas), 1)
         self.assertEqual(len(self.bus.pending("unifieddb-worker")), 1)
 
+    def test_same_event_id_with_conflicting_content_fails_closed(self):
+        self.bus.ingest(self.delta("evt-conflict", 13, {"value": "A"}, conflict=False))
+        with self.assertRaisesRegex(ValueError, "event identity conflict"):
+            self.bus.ingest(self.delta("evt-conflict", 13, {"value": "B"}, conflict=False))
+
     def test_content_aba_does_not_cancel_causal_identity(self):
         self.bus.ingest(self.delta("evt-1", 1, {"value": "A"}, conflict=False))
         self.bus.ingest(self.delta("evt-2", 2, {"value": "A"}, conflict=False))

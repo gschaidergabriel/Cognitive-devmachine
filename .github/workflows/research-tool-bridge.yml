@@ -6,6 +6,10 @@ on:
     paths:
       - 'research_entity/runtime/tool_requests/*.json'
       - 'tools/research_tool_bridge.py'
+      - 'tools/e2b_sandbox.py'
+      - 'tools/judge0_execute.py'
+      - 'tools/piston_execute.py'
+      - 'tools/sandboxapi_sandbox.py'
       - 'tools/groq_inference.py'
       - 'tools/mistral_inference.py'
       - 'tools/frank_dynamic_research_fusion.py'
@@ -37,7 +41,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check --quiet ddgs e2b
 
       - name: Validate bridge and worker adapters
-        run: python -m py_compile tools/research_tool_bridge.py tools/mistral_inference.py tools/frank_dynamic_research_fusion.py
+        run: python -m py_compile tools/research_tool_bridge.py tools/e2b_sandbox.py tools/judge0_execute.py tools/piston_execute.py tools/sandboxapi_sandbox.py tools/mistral_inference.py tools/frank_dynamic_research_fusion.py
 
       - name: Refresh dynamic FRANK research input
         run: python tools/frank_dynamic_research_fusion.py --write > /tmp/frank-fusion-summary.json

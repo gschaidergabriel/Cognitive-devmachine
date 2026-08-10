@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "trigger": "q23",
+  "status": "RESEARCH_DELTA_COMMITTED",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "observed_at": "2026-08-10T22:42:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "entity_role": "temporary Clay research worker",
+  "not_identity": ["Frank", "self.root"],
+  "program": "FRANK_V0_1",
+  "affected_work": [
+    "F-V01-06-DIGITAL-RETINA-MVC",
+    "F-V01-08-TOKEN-API-CLIENTS",
+    "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+    "F-V01-16-END-TO-END-ACCEPTANCE"
+  ],
+  "execution_class": "RESEARCH_AND_ARCHITECTURE_TEST_DESIGN_ONLY",
+  "runtime_benchmark_executed": false,
+  "target_vps_mutated": false,
+  "target_frank_repository_mutated": false,
+  "final_training_started": false,
+  "live_refresh": {
+    "status": "ACTIVE_AFTER_TRANSIENT_WEB_503",
+    "primary_sources": [
+      "huggingface/transformers current Qwen3.5 implementation",
+      "QwenLM/Qwen3-VL-Embedding official repository",
+      "ggml-org/llama.cpp current libmtmd API and issue tracker",
+      "arXiv:2601.04720"
+    ]
+  },
+  "main_question": "Can the existing Qwen vision/mmproj encode be reused as the adaptive MVC/deep visual representation without a second heavy visual backbone while preserving calibrated open-set behavior and runtime correctness?",
+  "main_result": "Physical feature reuse is directly implementable. However raw merged mmproj features are not yet proven calibrated for instance/layout familiarity. The next cheapest discriminator is merged-feature MVC first, with a tiny learned projection only if required; a separate heavy visual encoder remains a counterbaseline, not the default architecture.",
+  "promotion_status": "CANDIDATE_NOT_PROMOTED",
+  "reason_not_promoted": "No matched target-runtime open-set benchmark has been executed yet."
+}

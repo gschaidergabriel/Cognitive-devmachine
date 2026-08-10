@@ -1,11 +1,16 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "PROMOTION_PRESSURE",
-  "generated_at": "2026-08-11T00:45:00+07:00",
+  "generated_at": "2026-08-11T00:58:00+07:00",
   "workspace_snapshot": {
     "path": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
     "last_updated": "2026-08-10T23:15:00+07:00",
     "formal_progress_percent": 3.0357142857
+  },
+  "target_snapshot": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "main_sha": "25328c0f1924c98b197dfaf1205060667e9a21d8",
+    "observed_at": "2026-08-11T00:58:00+07:00"
   },
   "primary_objectives": [
     "accepted_gate_weight_delta_per_1m_tokens",
@@ -13,9 +18,10 @@
     "risk_retired_per_1m_tokens"
   ],
   "wip_policy": {
-    "max_implementation_owners_per_subcheck": 1,
-    "max_falsifiers_per_subcheck": 1,
-    "max_promotion_owners_per_subcheck": 1,
+    "max_implementation_owners_per_lease_scope": 1,
+    "max_falsifiers_per_lease_scope": 1,
+    "max_promotion_owners_per_lease_scope": 1,
+    "lease_scope_rule": "A subcheck may contain multiple independent semantic/failure-domain lease scopes, but each scope has at most one owner per role.",
     "exploration_never_globally_disabled": true,
     "promotion_pressure_allocation": {
       "promotion_min_fraction": 0.60,
@@ -28,68 +34,91 @@
     {
       "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
       "subcheck": "typed_ir",
+      "lease_scope": "F02.typed_ir.nominal_resolution",
       "semantic_surface": "WP03 structured frontend -> TypedIR / declaration-aware nominal resolution",
+      "dependency_cone": ["claycode_grammar", "structured_frontend", "typed_ir", "constructor_compat", "frank_effects_surface"],
       "implementation_owner": "gschaidergabriel/Dr.-Unterweger#237",
       "head_sha": "dcf28123e35d5e67e7e3d43c265f13786c21edb0",
       "base_sha": "45afc72401b403d50c88f951ff58821f0f8a5d0e",
       "state": "STALE_BASE",
       "freshness": "RED",
-      "reason": "Dr.-Unterweger#236 merged after #237 was cut; combined fresh-main substrate must be rerun before promotion.",
-      "next_required_event": "rebase declaration-aware alias repair onto post-#236 main and run exact Target-VPS structured frontend -> TypedIR matrix"
+      "reason": "#236 generic-angle/relational-token repair merged after #237 was cut, and target main advanced further. Alias repair must be replayed on the combined current parser/frontend substrate.",
+      "next_required_event": "fresh-main rebase, exact strict frontend/TypedIR regression, then Target-VPS adjudication"
     },
     {
       "work_package": "F-V01-09-EFFECT-AUTHORITY",
       "subcheck": "presence_execution_generation_effect_fence",
-      "semantic_surface": "exact V16 Gate-issued effect capability / process-incarnation fence",
-      "implementation_owner": "gschaidergabriel/Dr.-Unterweger#238",
-      "falsifier_lineage": ["gschaidergabriel/Dr.-Unterweger#233", "gschaidergabriel/Dr.-Unterweger#239"],
-      "head_sha": "4e5240364dda454a298d76efdf6d647314245f11",
+      "lease_scope": "F09.effect_fence.v6_fresh_main_fusion",
+      "semantic_surface": "exact V16 effect sidecar fused onto current Gate process-incarnation primitive",
+      "dependency_cone": ["frank_execution_gate", "v15_presence", "v16_ingress", "effect_sidecar", "provider_commit_window", "claycode_effect_contract"],
+      "implementation_owner": "branch:chatgpt/go-effect-fence-v6-fresh-main-20260811",
+      "base_sha": "25328c0f1924c98b197dfaf1205060667e9a21d8",
       "state": "REPAIR_CANDIDATE",
-      "freshness": "AMBER",
-      "reason": "Exact Target-VPS fork counterexample falsified process-local WeakSet/WeakKey capability as sufficient; v5 binds Gate-issued lease to process incarnation and awaits exact target validation.",
-      "next_required_event": "Target-VPS v5 regression; if PASS, fresh-main integration plus remaining replacement/rollback boundaries"
+      "freshness": "GREEN",
+      "reason": "#241 promoted process-incarnation fencing into current Gate main. #244 detected overlap with the old v5 lineage and reset the v6 fusion branch to exact current main instead of silently merging divergent Gate semantics.",
+      "next_required_event": "apply only effect-sidecar semantics onto current Gate primitive, run exact-current B1/B2/B3 + fork + multi-effect + ClayCode matrix, then Target-VPS promotion adjudication"
     },
     {
       "work_package": "F-V01-09-EFFECT-AUTHORITY",
       "subcheck": "presence_execution_generation_effect_fence",
-      "semantic_surface": "physical singleton state-root anchor",
-      "implementation_owner": "gschaidergabriel/Dr.-Unterweger#225",
-      "falsifier": "gschaidergabriel/Dr.-Unterweger#235",
-      "state": "NEGATIVE_EVIDENCE",
-      "freshness": "AMBER",
-      "reason": "Lockfile replacement was already falsified; directory-anchor repair has a separate state-root pathname-swap counterexample lane.",
-      "next_required_event": "adjudicate state-root swap result and select deployment invariant or external immutable anchor before promotion"
+      "lease_scope": "F09.physical_anchor.core_replacement_and_fork",
+      "semantic_surface": "replacement-safe directory anchor + process-incarnation execution lease",
+      "dependency_cone": ["frank_execution_gate", "linux_flock", "state_directory_anchor", "process_incarnation", "v15_presence"],
+      "promotion_owner": "main:c7dbfac70a00d54acaf5477e011f15fc4bb38769",
+      "state": "FRESH_MAIN_VERIFIED",
+      "freshness": "GREEN",
+      "reason": "Target-verified directory-anchor replacement repair (#225 -> main 4b5874c) and target-verified fork process-incarnation repair (#241 -> main c7dbfac) are now in target main.",
+      "next_required_event": "retain as accepted substrate while testing distinct descendant-FD/recovery-liveness failure domains; do not reopen retired split-brain/fork-authority risks without new causal evidence"
+    },
+    {
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "subcheck": "security_recovery",
+      "lease_scope": "F13.execution_anchor.descendant_fd_liveness",
+      "semantic_surface": "physical anchor lifetime across fork/exec descriptor inheritance",
+      "dependency_cone": ["frank_execution_gate", "subprocess_policy", "fd_inheritance", "linux_flock", "crash_recovery"],
+      "falsifier": "gschaidergabriel/Dr.-Unterweger#242 + #243",
+      "state": "LOCAL_VERIFIED",
+      "freshness": "GREEN",
+      "reason": "Local bounded mechanism evidence shows explicit pass_fds can preserve the flock-backed open-file-description after the original holder exits; exact Frank Target-VPS discriminators remain pending.",
+      "next_required_event": "execute #242/#243 on accepted Target-VPS; if reachable, choose measured non-leak invariant or bounded external/brokered lock ownership before recovery promotion"
     },
     {
       "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
-      "subcheck": "recovery_generation_monotonicity",
+      "subcheck": "state_continuity",
+      "lease_scope": "F04.recovery.external_generation_floor",
       "semantic_surface": "snapshot rollback / execution-generation resurrection",
+      "dependency_cone": ["unifieddb", "v15_epoch", "execution_generation", "backup_restore", "external_generation_floor"],
       "implementation_owner": "gschaidergabriel/Dr.-Unterweger#240",
+      "head_sha": "28086c6432f72944d4b9a08b7650324dc71fece2",
       "state": "REPAIR_CANDIDATE",
-      "freshness": "GREEN",
-      "reason": "Target evidence reproduced rollback resurrection; candidate external write-ahead generation floor explicitly limits claim to snapshots that do not roll back the external anchor.",
-      "next_required_event": "normal Target-VPS regression, then integrate with physical singleton and restore policy; keep whole-VM rollback explicit"
+      "freshness": "AMBER",
+      "reason": "External write-ahead generation floor directly answers the reproduced rollback-resurrection defect, but current Gate/process-incarnation main advanced after the original base and combined recovery semantics still need exact-current replay.",
+      "next_required_event": "Target-VPS recovery regression, then fresh-main integration with current execution Gate and explicit whole-VM rollback failure-domain decision"
     },
     {
       "work_package": "F-V01-01-IDENTITY-SERVER-BINARY",
       "subcheck": "self_root_identity_continuity",
-      "semantic_surface": "fresh-main self.root identity/replay boundary",
+      "lease_scope": "F01.self_root.identity_replay_boot",
+      "semantic_surface": "self.root identity/replay boundary + boot continuity",
+      "dependency_cone": ["self_root_identity", "state_lineage", "boot_continuity", "graph_alias", "target_binary_trust"],
       "implementation_owner": "gschaidergabriel/Dr.-Unterweger#227",
       "promotion_owner": "gschaidergabriel/Dr.-Unterweger#231",
-      "state": "FRESH_MAIN_VERIFICATION_PENDING",
-      "freshness": "AMBER",
-      "reason": "Identity/replay candidate is a fresh-main content rebase; boot continuity is stacked and must be revalidated after any identity/main movement.",
-      "next_required_event": "exact fresh-main target run and overlap/mergeability check; keep binary trust/attestation as separate external blocker"
+      "state": "STALE_BASE",
+      "freshness": "RED",
+      "reason": "Identity/boot stacks predate multiple current-main runtime integrations; terminal identity evidence must bind the exact current product identity, not an older branch snapshot.",
+      "next_required_event": "refresh overlap/dependency cone against target main 25328c0, rebase only if semantically affected, then exact current Target-VPS source->replay/boot regression; keep binary trust as explicit external blocker"
     },
     {
       "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
-      "subcheck": "storage_safety",
-      "semantic_surface": "SQLite WAL safety + schema materialization fingerprint",
+      "subcheck": "state_continuity",
+      "lease_scope": "F04.sqlite.storage_safety",
+      "semantic_surface": "SQLite WAL safety + executable schema materialization fingerprint",
+      "dependency_cone": ["unifieddb_sqlite_open", "wal_policy", "schema_fingerprint", "claygraph_materialization", "recovery"],
       "implementation_owner": "gschaidergabriel/Dr.-Unterweger#222",
       "state": "TARGET_VERIFICATION_PENDING",
       "freshness": "AMBER",
-      "reason": "Candidate fails closed on affected/unproven WAL builds and divergent schema materializations; target execution/adjudication remains required.",
-      "next_required_event": "run/read target receipt and map resulting evidence to explicit F-V01-04 subcheck credit"
+      "reason": "Storage candidate remains independently relevant, but current target main has moved. Promotion requires exact-current Target-VPS receipt and mapping into F04 rather than relying on older candidate evidence.",
+      "next_required_event": "freshness check against current storage paths, exact target receipt, then explicit F04 admission proposal"
     }
   ],
   "risk_events": [
@@ -98,20 +127,22 @@
       "work_package": "F-V01-09-EFFECT-AUTHORITY",
       "severity": "P1",
       "evidence_class": "TARGET_VPS",
-      "disposition": "PROMOTION_BLOCKED",
-      "unique_failure_domain": "process fork inherits process-local capability registry/secret and inherited flock-backed fd",
-      "evidence": ["gschaidergabriel/Dr.-Unterweger#233", "target run 31413734864"],
-      "risk_units": 3.0
+      "disposition": "RETIRED",
+      "residual_open": false,
+      "unique_failure_domain": "fork child inherits process-local Gate-issued capability state and can exercise effect authority",
+      "evidence": ["target run 31413734864", "gschaidergabriel/Dr.-Unterweger#241", "target main c7dbfac70a00d54acaf5477e011f15fc4bb38769"],
+      "risk_units": 5.0
     },
     {
       "risk_id": "RISK-EXECUTION-LOCKFILE-REPLACEMENT-SPLIT-BRAIN",
       "work_package": "F-V01-09-EFFECT-AUTHORITY",
       "severity": "P1",
       "evidence_class": "TARGET_VPS",
-      "disposition": "PROMOTION_BLOCKED",
+      "disposition": "RETIRED",
+      "residual_open": false,
       "unique_failure_domain": "flocked lockfile pathname unlink/recreate permits second physical lock object",
-      "evidence": ["gschaidergabriel/Dr.-Unterweger#216", "target run 31410535024"],
-      "risk_units": 3.0
+      "evidence": ["target run 31410535024", "gschaidergabriel/Dr.-Unterweger#225", "target main 4b5874cbc54cc94212f1e6cf8c6ca253739a27ca"],
+      "risk_units": 5.0
     },
     {
       "risk_id": "RISK-UNIFIEDDB-SNAPSHOT-GENERATION-RESURRECTION",
@@ -119,8 +150,9 @@
       "severity": "P1",
       "evidence_class": "TARGET_VPS",
       "disposition": "PROMOTION_BLOCKED",
-      "unique_failure_domain": "older valid DB snapshot restores prior DB-local execution generation and revives stale capability",
-      "evidence": ["gschaidergabriel/Dr.-Unterweger#207", "target run 31409921422"],
+      "residual_open": true,
+      "unique_failure_domain": "older valid UnifiedDB snapshot restores prior DB-local execution generation and revives stale capability",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger#207", "target run 31409921422", "repair candidate #240"],
       "risk_units": 3.0
     },
     {
@@ -129,17 +161,53 @@
       "severity": "P2",
       "evidence_class": "TARGET_VPS",
       "disposition": "RETIRED",
-      "unique_failure_domain": "generic angle brackets and relational operators had competing lexical token identities",
+      "residual_open": false,
+      "unique_failure_domain": "generic angle brackets and relational operators use competing lexical token identities on real Frank surface",
       "evidence": ["gschaidergabriel/Dr.-Unterweger#230", "gschaidergabriel/Dr.-Unterweger#236"],
       "risk_units": 3.0
+    },
+    {
+      "risk_id": "RISK-STATE-ROOT-PATH-SWAP-SPLIT-BRAIN",
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "severity": "P1",
+      "evidence_class": "MECHANISM_ONLY",
+      "disposition": "OPEN",
+      "residual_open": true,
+      "unique_failure_domain": "entire state-root pathname replacement may create a second directory anchor before old holder detects path replacement",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger#235"],
+      "risk_units": 0.0
+    },
+    {
+      "risk_id": "RISK-EXPLICIT-PASS-FDS-GHOST-ANCHOR",
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "severity": "P2",
+      "evidence_class": "LOCAL_EXECUTABLE",
+      "disposition": "OPEN",
+      "residual_open": true,
+      "unique_failure_domain": "trusted subprocess explicit pass_fds can preserve physical execution-anchor lock after original holder crash",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger#242 local bounded micro-replica"],
+      "risk_units": 0.0
+    },
+    {
+      "risk_id": "RISK-FORK-ORPHAN-PHYSICAL-LOCK-LIMBO",
+      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "severity": "P2",
+      "evidence_class": "MECHANISM_ONLY",
+      "disposition": "OPEN",
+      "residual_open": true,
+      "unique_failure_domain": "fork child retains duplicate flock-backed descriptor and may extend physical exclusion after issuer hard exit",
+      "evidence": ["gschaidergabriel/Dr.-Unterweger#243"],
+      "risk_units": 0.0
     }
   ],
   "metrics": {
     "generated_repo_text_tokens": null,
-    "generated_repo_text_tokens_method": "must be materialized per window; commit-derived estimates remain explicitly proxy-only",
+    "generated_repo_text_tokens_method": "must be materialized per measurement window; commit-derived estimates remain proxy-only",
     "accepted_gate_weight_delta": 0.0,
-    "risk_retired_units_current_snapshot": 12.0,
+    "risk_retired_units_current_snapshot": 16.0,
+    "fully_retired_risk_units_current_snapshot": 13.0,
+    "promotion_block_risk_units_current_snapshot": 3.0,
     "risk_retired_per_1m_tokens": null,
-    "note": "No denominator is fabricated. Populate per-window generated_repo_text_tokens before calculating normalized rates."
+    "note": "Risk numerator is live, denominator is intentionally null until exact current-window token telemetry is materialized. Retired and promotion-blocked contributions are separately visible to prevent semantic laundering."
   }
 }

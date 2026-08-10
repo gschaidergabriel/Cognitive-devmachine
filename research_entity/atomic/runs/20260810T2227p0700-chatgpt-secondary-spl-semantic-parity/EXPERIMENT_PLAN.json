@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-SPL-001",
+  "surface":"deterministic Python reference micro-harness paired to ClayCode candidate semantics",
+  "scope_warning":"Controlled-German synthetic semantic proxy only. It does not measure general German language coverage, model quality or target-VPS resource cost.",
+  "primary_question":"Does SPL detect hard-field common-mode translator corruption that ordinary type checks and same-codec roundtrip miss, and does it provide any unique benefit over a strong independent full semantic validator?",
+  "corpus":{
+    "main_cases":100000,
+    "replications":5,
+    "cases_per_replication":40000,
+    "hard_fields":["person","negated","modality","quantity","unit","temporal","speech_act","permission","effect"],
+    "systematic_faults":["DROP_NEGATION","MAY_AS_MUST","ANDREAS_AS_GABRIEL","TEN_AS_HUNDRED","QUESTION_AS_COMMAND","READ_AS_WRITE","ALLOW_AS_DENY","TOMORROW_AS_NOW"],
+    "fault_design":"Faults are deliberately stable under same-codec normalize/reparse so common-mode roundtrip can appear self-consistent despite wrong source semantics."
+  },
+  "baselines":[
+    "TYPE_ONLY: candidate is a structurally valid typed frame",
+    "SAME_CODEC_ROUNDTRIP: buggy source parser -> candidate -> renderer -> same parser and compare candidate stability",
+    "CONVENTIONAL_FULL_VALIDATOR: independent full controlled-German semantic parser -> compare complete frame",
+    "SPL_SINGLE: narrow per-field partial oracles -> compare candidate hard projection",
+    "TWO_FULL_FAULT_CONTAINMENT: one faulty full validator plus one exact full validator",
+    "DUAL_SPL_FAULT_CONTAINMENT: one faulty partial-oracle family plus one exact family"
+  ],
+  "controls":[
+    "per-field sensor ablation on single-field corruption",
+    "UNKNOWN hard-field source forms must not ACCEPT",
+    "shuffled source/witness binding must reject",
+    "stale schema witness must reject",
+    "ExpressionState style variants must preserve all hard fields",
+    "single checker/oracle fault correlated with translator fault",
+    "resource-matched redundant full-validator comparison"
+  ],
+  "metrics":["false allow on corrupted candidate","false deny on correct candidate","unknown false acceptance","hard-field expression drift","p50/p95/p99 validation latency","witness bytes","per-fault detection","ablation escape rate","checker-fault containment"],
+  "decision":"Defeating weak roundtrip is insufficient. If strong full validator matches SPL correctness and is cheaper, SPL has no unique architecture benefit. If dual SPL only matches two full validators under checker fault injection while costing more in the proxy, fault containment is not unique."
+}

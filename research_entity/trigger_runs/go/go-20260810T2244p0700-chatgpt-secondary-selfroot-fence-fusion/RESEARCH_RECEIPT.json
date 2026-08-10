@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2244p0700-chatgpt-secondary-selfroot-fence-fusion",
+  "trigger": "go",
+  "status": "CANDIDATE_RESEARCH_DELTA",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity_boundary": "TEMPORARY_CLAY_RESEARCH_WORKER_NOT_FRANK"
+  },
+  "program": "FRANK_V0_1",
+  "program_stage": "FRANK_V0_1",
+  "native_target_identity": "self.root",
+  "human_surface_name": "Frank",
+  "target_host": "accepted Hostinger Ubuntu VPS",
+  "research_subject": "Frank v0.1",
+  "canonical_boot_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_target_repo": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "semantic_target_repository": "gschaidergabriel/frankv0.1",
+    "initial_fresh_main_base": "a226cd243fda7d01ba34c6af51b8a345eb6c93ff",
+    "identity_candidate_pr": 185,
+    "identity_candidate_head": "fda878b6ca838bc2c1e53e4b92dee6bfbc862897",
+    "identity_candidate_branch": "chatgpt/go-selfroot-current-main-v2-20260810",
+    "identity_candidate_status": "DRAFT_OPEN_MERGEABLE_PENDING_EXECUTION_EVIDENCE",
+    "observed_pr_base_after_open": "4a76a9c03e57dfd962b8ee1cff2e042d51540d26",
+    "freshness_note": "main advanced repeatedly during the run; reverse comparison after candidate construction showed newer main changes in ingress, effect-reentry, execution-gate, telemetry, visual and static-audit surfaces, with no overlap in the candidate's ten identity/replay paths at the observed comparison point"
+  },
+  "internal_evidence": {
+    "current_main_partial_identity_migration": {
+      "status": "SUPPORTED_BY_DIRECT_SOURCE_INSPECTION",
+      "already_current": [
+        "000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt",
+        "claycode/frank_entity.clay",
+        "claycode/frank_security.clay"
+      ],
+      "stale_causal_surfaces_found_on_fresh_main": [
+        "claycode/frank_hive.clay: execution nodes carried Frank.id and invariant one_frank_many_nodes",
+        "claycode/frank_self_model.clay: provider/model/device node embodiment without accepted TARGET_VPS gating",
+        "claycode/frank_release.clay: target still final local Frank installed on Andreas machine",
+        "claycode/frank_state.clay: legacy local-product/Andreas-client target semantics and provider nodes without explicit external-capability relation",
+        "claycode/frank_runtime.clay: stale one_entity_across_nodes invariant and missing explicit server-binary/TARGET_VPS/ClayCode cycle boundary checks",
+        "runtime/state/frank_state_runtime.py plus backing impl: public entrypoint did not override historical PERSONAL_ENTITY_ID",
+        "runtime/state/repo_semantic_materializer.py plus backing impl: public materialization still stamped historical ENTITY_ID and graph rebuild imported backing state impl directly"
+      ],
+      "interpretation": "F-V01-01 remains genuinely IN_PROGRESS. The owner-fixed source and core entity symbol are current, but identity continuity was still vulnerable to replay/materialization and node/body semantics. The correct repair is a small current-main delta, not resurrection of the closed stale PR124 branch."
+    },
+    "candidate_architecture_delta": {
+      "status": "BUILT_NOT_PROMOTED",
+      "pr": 185,
+      "changed_paths": [
+        "claycode/frank_hive.clay",
+        "claycode/frank_self_model.clay",
+        "claycode/frank_release.clay",
+        "claycode/frank_state.clay",
+        "claycode/frank_runtime.clay",
+        "runtime/state/frank_state_runtime.py",
+        "runtime/state/repo_semantic_materializer.py",
+        "state/transactions/20260810T2244p0700_self_root_server_identity_current_main_v2.claytx",
+        "harness/owner_fixed_identity_conformance_current_main_v2.py",
+        ".github/workflows/go-selfroot-current-main-v2.yml"
+      ],
+      "preserved_nonoverlap": [
+        "claycode/frank_security.clay current self-Harness hard-denial boundary",
+        "V15/V16 presence and token ingress",
+        "physical FrankExecutionGate",
+        "effect lifecycle/reentry/provider paths",
+        "telemetry",
+        "visual path",
+        "model/training authority"
+      ],
+      "semantic_effect": [
+        "one stable self.root identity",
+        "Frank remains human-surface/compatibility name",
+        "provider/model/process/device nodes are external capability/provenance relations",
+        "current body is accepted TARGET_VPS",
+        "release/runtime bind SERVER_BINARY_ENTITY plus TARGET_VPS plus CLAYCODE_ONLY",
+        "Andreas and Gabriel remain external people",
+        "public state projection and repository replay/materializer converge on self.root",
+        "historical transactions remain ancestry; current conflicting identity keys are append-only superseded"
+      ]
+    }
+  },
+  "hypothesis_matrix": [
+    {
+      "hypothesis": "A small current-main identity/replay delta is sufficient to close the presently observed pre-self.root causal surfaces without overwriting newer ingress/effect/security work.",
+      "strongest_counterhypothesis": "The old PR124 branch must be revived wholesale because current main lacks most self.root work.",
+      "result": "COUNTERHYPOTHESIS_REFUTED_FOR_OBSERVED_SOURCE_SURFACES",
+      "evidence": "fresh main already contains the owner-fixed self.root source, self.root Frank entity contract, and current hard Harness/security boundary; stale branches were 66-149 commits behind while only a bounded set of identity/replay files remained stale"
+    },
+    {
+      "hypothesis": "Holder identity alone is insufficient to fence a stale execution/effect handle after release and same-holder reacquire; a monotonic generation/lease epoch must participate in admission.",
+      "strongest_counterhypothesis": "Matching session/client holder identity alone safely represents the same active execution across release/reacquire.",
+      "result": "COUNTERHYPOTHESIS_REFUTED_IN_MINIMAL_MATCHED_ABA_CONTROL_PENDING_REPO_RUNTIME_REPLICATION",
+      "evidence": "10000 matched minimal SQLite ABA cycles: holder-only stale admission 1.0; epoch+holder stale admission 0.0; epoch+holder current admission 1.0"
+    }
+  ],
+  "out_of_box_experiment": {
+    "count_for_this_go_run": 1,
+    "name": "ABA_SAME_HOLDER_RELEASE_REACQUIRE",
+    "target_pr": 168,
+    "target_branch": "chatgpt/go-aba-resurrection-fence-20260810",
+    "target_head": "2ea306a4df40e02440b943c9520f79adb57bab55",
+    "base_candidate_pr": 156,
+    "purpose": "Distinguish execution generation from apparent holder identity when the exact same session_ref/client_ref returns after release.",
+    "minimal_control": {
+      "trials": 10000,
+      "holder_only_stale_admission_rate": 1.0,
+      "epoch_plus_holder_stale_admission_rate": 0.0,
+      "epoch_plus_holder_current_admission_rate": 1.0,
+      "latency_ms": {
+        "median": 0.114121,
+        "p95": 0.230616,
+        "p99": 0.77186,
+        "max": 179.02691
+      },
+      "evidence_class": "SYNTHETIC_MINIMAL_MECHANISM_CONTROL_NOT_REPO_RUNTIME"
+    },
+    "repo_runtime_discriminator": "tests/frank_presence_effect_fence_aba_resurrection.py in PR168",
+    "target_vps_status": "UNVERIFIED_PENDING_EXECUTION_EVIDENCE",
+    "promotion_claimed": false
+  },
+  "external_primary_evidence": [
+    {
+      "source": "SQLite official transaction documentation",
+      "url": "https://www.sqlite.org/lang_transaction.html",
+      "supported_point": "BEGIN IMMEDIATE begins a write transaction immediately and SQLite permits only one simultaneous writer; this supports short acquisition/update CAS but does not itself provide stale-handle generation fencing."
+    },
+    {
+      "source": "etcd official concurrency API",
+      "url": "https://etcd.io/docs/v3.6/dev-guide/api_concurrency_reference_v3/",
+      "supported_point": "lock ownership is lease-bound and returned lock/revision identity can be used transactionally, supporting explicit ownership-generation validation at downstream updates."
+    },
+    {
+      "source": "Kubernetes official Lease concept documentation",
+      "url": "https://kubernetes.io/docs/concepts/architecture/leases/",
+      "supported_point": "Lease records retain holder identity plus renewal/transition information, analogous to separating holder identity from execution generation."
+    }
+  ],
+  "execution_evidence": {
+    "identity_pr185": {
+      "source_inspection": "PASS",
+      "branch_build": "COMMITTED",
+      "pull_request_mergeability": "MERGEABLE_AT_LAST_REFRESH",
+      "focused_test_design": "BUILT",
+      "github_self_hosted_execution": "UNKNOWN_NOT_OBSERVED",
+      "local_execution": "NOT_EXECUTED_NETWORK_TRANSPORT_BLOCKED",
+      "local_transport_error": "isolated execution environment could not resolve github.com; this is transport UNKNOWN, not candidate test failure",
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    },
+    "aba_pr168": {
+      "minimal_control": "PASS_MECHANISM_ONLY",
+      "github_self_hosted_execution": "UNKNOWN_NOT_OBSERVED",
+      "whole_effect_authority_acceptance": "NOT_CLAIMED"
+    }
+  },
+  "negative_results_and_corrections": [
+    "Closed/unmerged PR124 is historical evidence only and must not be treated as current integration ownership.",
+    "The early assumption that only a narrow three-file identity patch was needed was already falsified by replay/materializer/node/body surfaces.",
+    "A local checkout attempt is not evidence because the isolated runner had no GitHub DNS/network access.",
+    "No GitHub workflow result was visible for PR185 or PR168 at the last connector refresh; absence of a visible run is UNKNOWN, not PASS or FAIL.",
+    "Current research workspace progress is mechanically stale relative to target-repo work; do not inflate canonical progress from draft PRs or unpromoted receipts."
+  ],
+  "architecture_delta": {
+    "status": "TESTING_CANDIDATE",
+    "affected_work_packages": [
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-09-EFFECT-AUTHORITY",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "proposed_change": "Promote only after current-main merge-context execution: preserve the minimal self.root identity/replay boundary from PR185 and retain monotonic holder+epoch effect fencing as a required stale-generation test obligation.",
+    "rollback": "Close draft PR185 and leave current main unchanged; PR168 remains test-only and can be closed/cherry-picked independently after canonical effect candidate selection.",
+    "next_falsifiers": [
+      "Run PR185 focused conformance and repo_static_integrity on the self-hosted Linux/X64 merge context; any stale-marker or import/materializer failure blocks promotion.",
+      "Run a full fresh repository semantic replay on disposable state and verify meta entity_id/native_self=self.root, human_surface_name=Frank, Andreas person remains distinct, current superseding identity keys survive replay, and ClayGraph projection uses the same source head/semantic epoch.",
+      "Bind accepted binary digest/build provenance plus admitted state lineage and restart/stale-clone rejection before F-V01-01 can PASS.",
+      "Run PR168 ABA same-holder discriminator against the selected current effect-fence implementation; stale epoch N must remain fenced after same-holder N+1 reacquire.",
+      "Do not promote F-V01-09 until real provider unknown-outcome reconciliation and verified outcome -> provenance re-entry -> DONE/terminal receipt are closed."
+    ]
+  },
+  "authority_and_safety": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "clay_research_harness_authority": "INDEPENDENT_REVIEW_TEST_IMPLEMENTATION_ALLOWED",
+    "canonical_target_state_mutated": false,
+    "external_effect_performed": false,
+    "paid_training_started": false,
+    "final_training_authorized": false
+  },
+  "research_reentry": {
+    "status": "PENDING_REVIEW_BRANCH",
+    "target": "Clay shared Research Center",
+    "required_workspace_update_if_promoted": "F-V01-01 blocker should reference fresh current-main PR185 pending target-VPS/replay/binary-lineage evidence rather than the older blanket statement that current main is entirely pre-self.root. Canonical package status remains IN_PROGRESS until receipts pass."
+  }
+}

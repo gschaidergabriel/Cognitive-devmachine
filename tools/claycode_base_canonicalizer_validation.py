@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
-"""Executable validation for the production BASE surface canonicalizer."""
+"""Executable validation for the production BASE surface canonicalizer.
+
+The receipt now also couples the production frontend to the standalone syntax canonicalizer
+through an executable cross-parity tripwire. This prevents two individually green validators
+from hiding different parser-construction semantics.
+"""
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 from lark.exceptions import UnexpectedInput
@@ -14,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # by the production frontend. Candidate-specific strict/full-corpus gates remain separate.
 GRAMMAR = front.DEFAULT_GRAMMAR
 OUT = ROOT / "research_entity/claycode/autonomous/BASE_CANONICALIZER_RECEIPT.json"
+PARITY_OUT = ROOT / "research_entity/claycode/autonomous/BASE_CROSS_CANON_PARITY_RECEIPT.json"
 
 
 def run() -> dict:
@@ -82,13 +90,50 @@ def run() -> dict:
     except front.CanonicalizationError as exc:
         result("lone_surrogate_rejected", True, str(exc))
 
+    # Cross-path closure: execute the standalone canonicalizer through its real CLI, compare
+    # its full-corpus canonical hashes against the same canonicalizer fed by the production
+    # parser constructor, and require its bounded placeholder lesion/rescue tripwire to pass.
+    if PARITY_OUT.exists():
+        PARITY_OUT.unlink()
+    cp = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "tools/claycode_wp02_cross_canonicalizer_parity.py"),
+            "--grammar",
+            str(GRAMMAR),
+            "--output",
+            str(PARITY_OUT),
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+        timeout=240,
+    )
+    parity = json.loads(PARITY_OUT.read_text(encoding="utf-8")) if PARITY_OUT.exists() else {}
+    result(
+        "standalone_production_parser_contract_cross_parity",
+        cp.returncode == 0 and parity.get("pass") is True and parity.get("parser_contract_bound") is True,
+        {
+            "returncode": cp.returncode,
+            "receipt": str(PARITY_OUT.relative_to(ROOT)),
+            "receipt_exists": PARITY_OUT.exists(),
+            "parser_contract_bound": parity.get("parser_contract_bound"),
+            "mutation_tripwire_pass": (parity.get("out_of_box_experiment") or {}).get("pass") if isinstance(parity.get("out_of_box_experiment"), dict) else None,
+            "stdout_tail": cp.stdout[-1000:],
+            "stderr_tail": cp.stderr[-1000:],
+        },
+    )
+
     failures = [x["name"] for x in checks if not x["pass"]]
     return {
-        "schema_version": "1.2",
-        "scope": "PRODUCTION_BASE_SURFACE_PARSER_CANONICALIZER_ACTIVE_GRAMMAR",
+        "schema_version": "1.3",
+        "scope": "PRODUCTION_BASE_SURFACE_PARSER_CANONICALIZER_ACTIVE_GRAMMAR_WITH_CROSS_PATH_PARITY",
         "grammar": str(GRAMMAR.relative_to(ROOT)),
         "checks": checks,
         "v9_trivia_counterexample_guard_present": True,
+        "cross_canonicalizer_parser_contract_guard_present": True,
+        "cross_canonicalizer_receipt": str(PARITY_OUT.relative_to(ROOT)),
         "passed": len(checks) - len(failures),
         "total": len(checks),
         "failures": failures,
@@ -96,7 +141,8 @@ def run() -> dict:
         "limitations": [
             "typed collection Set/Ordered normalization belongs to CC-WP-03 typed IR",
             "strict LALR conflict freedom is proven by the separate strict frontend/target gate",
-            "this receipt alone does not promote CC-WP-02 until full admitted G9+Dialect and strict grammar-bound receipts also pass"
+            "this receipt alone does not promote CC-WP-02 until full admitted G9+Dialect and strict grammar-bound receipts also pass",
+            "the mutation tripwire is a bounded parser-contract falsifier, not evidence that all future parser-construction drift is impossible"
         ]
     }
 

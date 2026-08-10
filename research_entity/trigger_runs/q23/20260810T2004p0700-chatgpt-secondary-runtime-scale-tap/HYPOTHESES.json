@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "hypotheses": [
+    {
+      "hypothesis_id": "Q23-H-VISION-SCALE-01",
+      "status": "OPEN",
+      "claim": "Qwen3.5 model scale and deep-vision encode cost are partially decoupled: 2B and 4B share essentially the same 24-layer, hidden-1024 vision tower, so moving 4B->2B should primarily reduce language-side cost rather than deep-vision encode cost; 0.8B is the first current Qwen3.5 size in this comparison with a materially smaller 12-layer hidden-768 vision tower.",
+      "why_it_matters": "On the accepted target VPS, visual encode may dominate recurring GUI perception. A smaller text model does not guarantee proportionally cheaper perception.",
+      "strongest_counterhypothesis": "Backend scheduling, projector/output width, quantization and memory traffic dominate enough that architecture-level config similarity does not predict measured vision latency; 2B may still be materially faster end-to-end.",
+      "falsifier": "Matched target-VPS image-token workloads show 2B vision-encode latency/resource cost materially lower than 4B beyond declared tolerance, or 0.8B does not materially reduce deep-vision cost despite its smaller tower.",
+      "cheapest_discriminating_test": "Run identical frozen image fixtures at fixed image token budgets through Qwen3.5 0.8B/2B/4B mmproj with decoder disabled, recording encode p50/p95/p99, CPU/RSS, bytes moved, exact build/model/mmproj hashes and backend flags.",
+      "expected_signature_if_true": "2B~=4B for encode-only cost within a narrow band; 0.8B materially lower. Decoder-inclusive cost separates 2B from 4B more strongly.",
+      "expected_signature_if_false": "Encode-only measurements scale strongly with total model size or backend-specific effects dominate the tower geometry.",
+      "confidence": 0.78,
+      "uncertainty": 0.22,
+      "affected_components": ["DigitalRetina","QwenRuntime","MVC","Harness","TargetVPS"]
+    },
+    {
+      "hypothesis_id": "Q23-H-FEATURE-TAP-01",
+      "status": "OPEN",
+      "claim": "libmtmd can support a zero-second-vision-pass decoder-bypass architecture by exposing the already-computed media embedding buffer to a bounded MVC/readout before optionally feeding the same buffer to llama_decode, provided buffer lifetime/version/provenance are explicitly bound.",
+      "why_it_matters": "This is the physical hinge required for QNDRF-style one-encode reuse without a second heavy visual encoder.",
+      "strongest_counterhypothesis": "The exposed token embedding buffer is unstable or poorly suited for familiarity/open-set geometry, and integrating a tap introduces copies/synchronization or lifetime hazards that erase the benefit.",
+      "falsifier": "A minimal patched/runtime harness cannot reuse one encoded buffer for both MVC readout and later decode without re-encode, or reuse causes semantic/output mismatch, unsafe lifetime behavior, or material copy overhead.",
+      "cheapest_discriminating_test": "Instrument mtmd_batch_encode -> mtmd_batch_get_output_embd -> deterministic descriptor/MVC -> optional mtmd_helper_decode_image_chunk on the same chunk; count actual encode invocations and hash/copy the buffer only where required for provenance.",
+      "confidence": 0.86,
+      "uncertainty": 0.14,
+      "affected_components": ["llama.cpp","libmtmd","MVC","DigitalRetina","H1","H3"]
+    },
+    {
+      "hypothesis_id": "Q23-H-RUNTIME-CONFOUND-01",
+      "status": "OPEN",
+      "claim": "Current llama.cpp multimodal runtime configuration is a first-class causal variable for Frank visual correctness and latency; build hash, batch/ubatch, flash-attention, KV layout, mmproj offload and VRAM-fit state must be frozen and tested rather than treated as neutral infrastructure.",
+      "why_it_matters": "Recent primary issue evidence reports Qwen3.5 multimodal CUDA failures, batch-dependent irrelevant/blank vision responses, mmproj memory-fit omissions and severe CPU fallback regressions.",
+      "strongest_counterhypothesis": "Those failures are hardware/model-size-specific and do not reproduce on the accepted target VPS or selected 0.8B/2B/4B runtime lane.",
+      "falsifier": "Matched target-VPS matrix across relevant flags/builds shows no material correctness, crash or latency variation beyond noise.",
+      "cheapest_discriminating_test": "Before feature-quality claims, run a runtime sanity matrix with fixed images and known visual questions plus encode-only receipts across candidate llama.cpp build/flag combinations.",
+      "confidence": 0.92,
+      "uncertainty": 0.08,
+      "affected_components": ["llama.cpp","Harness","Recovery","BenchmarkMetadata"]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "2.0",
+  "event_id": "20260810T1220p0700-chatgpt-secondary-frank-reward-state",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T12:20:00+07:00",
+  "payload": {
+    "work_id": "WORK-FRANK-REWARD-STATE-SUCCESSOR-20260810",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "RESEARCH_ARCHITECTURE_DELTA",
+    "title": "Baseline and integrate typed multi-timescale FRANK reward-state successor",
+    "work_clay": "Reconstruct exact historical NAcc callers/state/version semantics; benchmark historical NAcc; compare scalar, historical, typed, typed+multitimescale and simpler outcome-credit+homeostasis successors; integrate the winning baseline-gated reward update between causal_credit and slow plasticity/reentry in H2/H3.",
+    "reason_clay": "Current loop contract requires slow reward/personality/homeostasis updates, while G9 main cycle currently jumps causal_credit->reentry. Fresh 2024/2025 evidence makes one homogeneous scalar RPE a weak default. Local deterministic successor probe passed 9/9 research invariants but is not runtime evidence.",
+    "completion_clay": "Complete only with H1 historical baseline/caller coverage, matched long-horizon replay, scalar-vs-typed-vs-simpler comparisons, lesion/rescue, self-reward poisoning controls, shuffled/broken-credit controls, OOD reversal, restart/recovery, target-Ubuntu resource receipts, H2 differential semantics and explicit promotion/rejection receipt.",
+    "evidence_need": [
+      "historical NAcc exact baseline/caller coverage",
+      "matched replay and long-horizon factorial lesions",
+      "scalar vs typed vs typed+multitimescale vs simpler baseline",
+      "target-Ubuntu latency/resource/recovery receipts",
+      "self-reward poisoning and safety/resource conflict controls"
+    ],
+    "executor_policy": "Research Entity owns implementation/effect. Frank self-observation may propose only. Revalidate latest work revision and baseline before any Harness effect.",
+    "required_capabilities": ["GitHub", "Ubuntu test runner", "Python", "ClayCode compiler when BASE gate permits"],
+    "write_scope": [
+      "research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay",
+      "research_entity/experiments/frank_reward_state_reference.py",
+      "research_entity/experiments/test_frank_reward_state_reference.py",
+      "research_entity/harness",
+      "future H2/H3 reward-state implementation"
+    ],
+    "dependencies": [
+      "FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT",
+      "H-WP-00-ARCHAEOLOGY-INGEST",
+      "H1_REFERENCE_HARNESS for executable original baseline",
+      "BASE_CLAYCODE_RELEASE for H2 compiled integration"
+    ],
+    "invalidators": [
+      "historical NAcc caller archaeology shows materially different semantics",
+      "simpler outcome-credit+homeostasis baseline dominates typed candidate",
+      "typed/multitimescale candidate causes correctness/recovery/resource regression",
+      "new evidence invalidates current reward representation assumptions"
+    ],
+    "base_priority": 0.91,
+    "expected_impact": 0.95,
+    "urgency": 0.82,
+    "information_gain": 0.93,
+    "status": "READY"
+  }
+}

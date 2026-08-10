@@ -1,0 +1,194 @@
+name: FRANK Database Pulse V2 VPS Probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_candidate_v1.py'
+      - 'research_entity/runtime/test_database_pulse_candidate_v1.py'
+      - 'research_entity/runtime/database_pulse_active_field_v2.py'
+      - 'research_entity/runtime/test_database_pulse_active_field_v2.py'
+      - 'research_entity/runtime/database_pulse_runtime_v2.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v2.py'
+      - 'tools/database_pulse_candidate_v1_falsifier.py'
+      - 'tools/database_pulse_active_field_benchmark.py'
+      - 'tools/database_pulse_runtime_v2_benchmark.py'
+      - '.github/workflows/database-pulse-v2-vps-probe.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: frank-database-pulse-v2-vps-main
+  cancel-in-progress: true
+
+jobs:
+  pulse-v2-vps:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Compile fused Pulse v2
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_candidate_v1.py \
+            research_entity/runtime/test_database_pulse_candidate_v1.py \
+            research_entity/runtime/database_pulse_active_field_v2.py \
+            research_entity/runtime/test_database_pulse_active_field_v2.py \
+            research_entity/runtime/database_pulse_runtime_v2.py \
+            research_entity/runtime/test_database_pulse_runtime_v2.py \
+            tools/database_pulse_candidate_v1_falsifier.py \
+            tools/database_pulse_active_field_benchmark.py \
+            tools/database_pulse_runtime_v2_benchmark.py
+
+      - name: Run semantic Pulse v1 controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v research_entity.runtime.test_database_pulse_candidate_v1
+
+      - name: Run Active Field differential tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v research_entity.runtime.test_database_pulse_active_field_v2
+
+      - name: Run fused Pulse v2 tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v research_entity.runtime.test_database_pulse_runtime_v2
+
+      - name: Reproduce v1 counterexample
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_candidate_v1_falsifier.py \
+            --low-rows 180 --bounded 64 \
+            --output research_entity/benchmarks/database_pulse/v1_truncation_falsifier_v2run.json
+
+      - name: Benchmark Active Field
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_active_field_benchmark.py \
+            --rows 3000 --bounded 64 --repeats 200 --delta-updates 100 \
+            --output research_entity/benchmarks/database_pulse/active_field_v2_v2run.json
+
+      - name: Benchmark v1 versus fused v2
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_runtime_v2_benchmark.py \
+            --rows 180 --pulses 100 --candidate-budget 64 \
+            --output research_entity/benchmarks/database_pulse/runtime_v2_vps.json
+
+      - name: Attach runner metadata
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, platform, socket, sqlite3, subprocess, sys
+          from datetime import datetime, timezone
+          def cmd(args):
+              try:
+                  return subprocess.check_output(args,text=True,stderr=subprocess.STDOUT,timeout=5).strip()
+              except Exception as exc:
+                  return f'UNKNOWN:{type(exc).__name__}'
+          cpu='UNKNOWN'; mem='UNKNOWN'
+          try:
+              for line in pathlib.Path('/proc/cpuinfo').read_text(errors='replace').splitlines():
+                  if line.lower().startswith('model name'):
+                      cpu=line.split(':',1)[1].strip(); break
+          except Exception: pass
+          try:
+              for line in pathlib.Path('/proc/meminfo').read_text(errors='replace').splitlines():
+                  if line.startswith('MemTotal:'):
+                      mem=line.split(':',1)[1].strip(); break
+          except Exception: pass
+          meta={
+              'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+              'scope':'REMOTE_PRELIMINARY_DATABASE_PULSE_NOT_ANDREAS_TARGET_ACCEPTANCE',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'git_sha':os.environ.get('GIT_SHA',''),
+              'github_run_id':os.environ.get('RUN_ID',''),
+              'github_run_attempt':os.environ.get('RUN_ATTEMPT',''),
+              'hostname':socket.gethostname(),
+              'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+              'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+              'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+              'platform':platform.platform(),
+              'python':sys.version,
+              'sqlite':sqlite3.sqlite_version,
+              'cpu_model':cpu,
+              'mem_total':mem,
+              'filesystem':cmd(['df','-T','.']),
+              'kernel':cmd(['uname','-a']),
+          }
+          base=pathlib.Path('research_entity/benchmarks/database_pulse')
+          for name in ('v1_truncation_falsifier_v2run.json','active_field_v2_v2run.json','runtime_v2_vps.json'):
+              p=base/name; x=json.loads(p.read_text(encoding='utf-8'))
+              x['execution_metadata']=meta
+              x['release_boundary']='Remote Hostinger evidence only; not final Andreas Ubuntu target acceptance.'
+              p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+
+      - name: Enforce fused v2 gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          base='research_entity/benchmarks/database_pulse/'
+          f=json.load(open(base+'v1_truncation_falsifier_v2run.json',encoding='utf-8'))
+          a=json.load(open(base+'active_field_v2_v2run.json',encoding='utf-8'))
+          v=json.load(open(base+'runtime_v2_vps.json',encoding='utf-8'))
+          assert f['pre_ranking_truncation_bug_reproduced'] is True, f
+          assert a['correctness']['wide_reference_correct'] is True, a
+          assert a['correctness']['active_field_correct'] is True, a
+          assert a['correctness']['projection_verify_initial']['pass'] is True, a
+          assert a['correctness']['projection_verify_final']['pass'] is True, a
+          assert a['correctness']['all_delta_refreshes_touched_one_ref'] is True, a
+          assert v['comparison']['v2_correctness_improved'] is True, v
+          assert v['comparison']['both_zero_model_tool_effect'] is True, v
+          assert v['comparison']['both_replay_roots_pass'] is True, v
+          assert v['v2_incremental_active_field']['focus_accuracy'] == 1.0, v
+          print('FRANK_DATABASE_PULSE_V2_VPS=PASS')
+          PY
+
+      - name: Persist fused v2 receipts
+        run: |
+          set -euo pipefail
+          base=research_entity/benchmarks/database_pulse
+          cp "$base/v1_truncation_falsifier_v2run.json" /tmp/
+          cp "$base/active_field_v2_v2run.json" /tmp/
+          cp "$base/runtime_v2_vps.json" /tmp/
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p "$base"
+          cp /tmp/v1_truncation_falsifier_v2run.json "$base/"
+          cp /tmp/active_field_v2_v2run.json "$base/"
+          cp /tmp/runtime_v2_vps.json "$base/"
+          git config user.name 'clay-database-pulse-v2-runner'
+          git config user.email 'clay-pulse-v2-runner@users.noreply.github.com'
+          git add "$base/v1_truncation_falsifier_v2run.json" \
+                  "$base/active_field_v2_v2run.json" \
+                  "$base/runtime_v2_vps.json"
+          git commit -m 'evidence(frank): persist fused Database Pulse v2 VPS receipts [skip ci]' || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frank-database-pulse-v2-vps
+          path: research_entity/benchmarks/database_pulse/*v2*.json

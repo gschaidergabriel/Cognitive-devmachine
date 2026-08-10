@@ -305,7 +305,7 @@ class DatabasePulseRuntimeV4(DatabasePulseRuntime):
             conflicts_present=selection.conflicts_present, unknown_present=selection.unknown_present,
             pulse_count=1, state_transition_count=0, graph_change=0,
             hypothesis_count=int(model_output is not None), memory_update=0,
-            reentry_count=trueful_reentry if False else truthful_reentry,
+            reentry_count=truthful_reentry,
             model_call_count=model_call_delta, tool_call_count=0, effect_count=0,
             schema_fingerprint=self.schema_fingerprint, receipt_hash=body["receipt_hash"],
         )

@@ -65,6 +65,22 @@ class QCEP03Tests(unittest.TestCase):
         self.assertEqual(by['semantic:a']['edge_hub_factor'],1.0)
         self.assertEqual(out['semantic_signal_rule'],'STRUCTURAL_JSON_KEYS_EXCLUDED_ONLY_EXPLICIT_EVIDENCE_FIELDS_COUNT')
 
+    def test_typed_focus_is_not_diluted_by_long_query_or_requirement_id(self):
+        rows=[
+            row('semantic','root',{'text':'anchor'}),row('semantic','needed',{'text':'neutral'}),row('semantic','hub',{'text':'generic'}),
+            row('dependency','rn',{'source':'semantic:root','target':'semantic:needed','strength':.72,'relation_type':'SUPPORTS','query_cue':'target evidence'}),
+            row('dependency','rh',{'source':'semantic:root','target':'semantic:hub','strength':.99,'relation_type':'RELATED','query_cue':'generic association'}),
+        ]
+        for j in range(12):
+            rows.append(row('semantic',f'd{j}',{'text':'generic'}))
+            rows.append(row('dependency',f'hd{j}',{'source':'semantic:hub','target':f'semantic:d{j}','strength':.98,'relation_type':'RELATED','query_cue':'generic association'}))
+        p=QueryConditionedEvidenceProjector(Ledger(rows))
+        out=p.project(QueryEvidenceSpec('focus','need target evidence with many unrelated words and target_requirement',('semantic:root',),1,max_items=3,max_hops=1,focus_terms=('target','target_requirement')))
+        by={x['ref']:x for x in out['selected']}
+        self.assertEqual(by['semantic:needed']['edge_query_relevance'],1.0)
+        self.assertGreater(by['semantic:needed']['activation_score'],by['semantic:hub']['activation_score'])
+        self.assertEqual(out['relevance_rule'],'TYPED_FOCUS_MATCH_FIRST_ELSE_LOCAL_EVIDENCE_COVERAGE_NOT_QUERY_LENGTH')
+
     def test_stale_epoch_and_determinism(self):
         p=QueryConditionedEvidenceProjector(Ledger(self.fixture()))
         with self.assertRaises(StaleEvidenceProjection): p.project(QueryEvidenceSpec('stale','zircon',('semantic:root',),2))

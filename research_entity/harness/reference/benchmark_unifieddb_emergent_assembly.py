@@ -2,6 +2,7 @@ from __future__ import annotations
 import hashlib,json,math,random,sqlite3,statistics,time
 from .unifieddb_emergent_preprocessor import EmergentAssemblyPreprocessor,PossibilitySpec
 N_CLUSTERS=240; CLUSTER_SIZE=50; K=12; MAX_HOPS=3; HOP_DECAY=0.88
+BENCHMARK_REVISION='EAP-VPS-1'
 
 def h(v): return hashlib.sha256(json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 class SyntheticLedger:
@@ -71,5 +72,5 @@ def main():
             t=time.perf_counter_ns(); got=fn(s); ts.append((time.perf_counter_ns()-t)/1000); qs.append(quality(got,truth[s]))
         res[name]={'recall_at_12':statistics.mean(x[0] for x in qs),'precision_at_12':statistics.mean(x[1] for x in qs),'ndcg_at_12':statistics.mean(x[2] for x in qs),'latency_us':{'p50':percentile(ts,.5),'p95':percentile(ts,.95),'p99':percentile(ts,.99),'mean':statistics.mean(ts),'min':min(ts),'max':max(ts)}}
     e=res['eap_hot_assembly']['latency_us']['p50']; st=res['recursive_sql_staged_assembly']['latency_us']['p50']; rr=res['recursive_sql_refs_only']['latency_us']['p50']; res['eap_hot_assembly']['speedup_vs_recursive_sql_staged_p50']=st/e; res['eap_hot_assembly']['relative_to_sql_refs_only_p50']=rr/e
-    print(json.dumps({'schema_version':'1.0','benchmark':'EAP_SYNTHETIC_MULTI_HOP_MODEL_INPUT','evidence_class':'SYNTHETIC_EXECUTED_TEST','scope_guard':'Bounded model-facing multi-hop semantic retrieval mechanics only; not universal database superiority.','dataset':{'semantic_nodes':N_CLUSTERS*CLUSTER_SIZE,'dependency_edges':N_CLUSTERS*(CLUSTER_SIZE-1),'queries':len(seeds),'k':K,'max_hops':MAX_HOPS},'preprocessor':{'version':first['preprocessor_version'],'cold_build_plus_first_query_us':cold,'compiled_index_hash':first['compiled_index_hash'],'lexical_index_policy':'LAZY_ON_QUERY_TEXT'},'methods':res,'out_of_box_experiment':negative_space()},indent=2,sort_keys=True))
+    print(json.dumps({'schema_version':'1.0','benchmark':'EAP_SYNTHETIC_MULTI_HOP_MODEL_INPUT','benchmark_revision':BENCHMARK_REVISION,'evidence_class':'SYNTHETIC_EXECUTED_TEST','scope_guard':'Bounded model-facing multi-hop semantic retrieval mechanics only; not universal database superiority.','dataset':{'semantic_nodes':N_CLUSTERS*CLUSTER_SIZE,'dependency_edges':N_CLUSTERS*(CLUSTER_SIZE-1),'queries':len(seeds),'k':K,'max_hops':MAX_HOPS},'preprocessor':{'version':first['preprocessor_version'],'cold_build_plus_first_query_us':cold,'compiled_index_hash':first['compiled_index_hash'],'lexical_index_policy':'LAZY_ON_QUERY_TEXT'},'methods':res,'out_of_box_experiment':negative_space()},indent=2,sort_keys=True))
 if __name__=='__main__': main()

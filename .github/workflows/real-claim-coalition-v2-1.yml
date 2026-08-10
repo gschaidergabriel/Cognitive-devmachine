@@ -1,0 +1,100 @@
+name: Real Claim Coalition V2.1 Fair SQL
+
+on:
+  push:
+    branches: ['research/unifieddb-real-claims-preprocessor-20260810']
+    paths:
+      - 'research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1.py'
+      - 'research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1_1.py'
+      - 'research_entity/harness/reference/benchmark_real_claim_evidence_coalition_v2.py'
+      - 'research_entity/harness/reference/benchmark_real_claim_coalition_fair_sql_v2_1.py'
+      - 'research_entity/ledgers/CLAIMS.jsonl'
+      - 'research_entity/ledgers/CLAIM_STATUS_EVENTS.jsonl'
+      - '.github/workflows/real-claim-coalition-v2-1.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: real-claim-coalition-v2-1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hosted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Execute fair V2.1
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/real-claim-v21
+          python -m py_compile \
+            research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1.py \
+            research_entity/harness/reference/benchmark_real_claim_topology_preprocessor_v1_1.py \
+            research_entity/harness/reference/benchmark_real_claim_evidence_coalition_v2.py \
+            research_entity/harness/reference/benchmark_real_claim_coalition_fair_sql_v2_1.py
+          python -m research_entity.harness.reference.benchmark_real_claim_coalition_fair_sql_v2_1 \
+            --iterations 5000 --output /tmp/real-claim-v21/RESULT.json > /tmp/real-claim-v21/stdout.json
+          python - <<'PY'
+          import json,os,platform,sqlite3,sys
+          from datetime import datetime,timezone
+          from pathlib import Path
+          p=Path('/tmp/real-claim-v21/RESULT.json');x=json.loads(p.read_text())
+          x['execution_metadata']['runner_evidence_class']='REAL_GITHUB_HOSTED_UBUNTU_NOT_HOSTINGER_NOT_TARGET'
+          x['execution_metadata']['github_sha']=os.environ['GITHUB_SHA'];x['execution_metadata']['github_run_id']=os.environ['GITHUB_RUN_ID']
+          x['execution_metadata']['created_at']=datetime.now(timezone.utc).isoformat();x['execution_metadata']['runner_platform']=platform.platform();x['execution_metadata']['runner_python']=sys.version;x['execution_metadata']['runner_sqlite']=sqlite3.sqlite_version
+          p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(x['candidate_gate'],indent=2,sort_keys=True))
+          if not x['candidate_gate']['advance_to_larger_cross_engine_falsifier']: raise SystemExit('V2.1 fair SQL gate failed')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-claim-v21-hosted-${{ github.run_id }}
+          path: /tmp/real-claim-v21/RESULT.json
+          if-no-files-found: error
+      - name: Persist hosted V2.1 receipt
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/experiments/unifieddb_real_claim_coalition_v2_1
+          cp /tmp/real-claim-v21/RESULT.json research_entity/experiments/unifieddb_real_claim_coalition_v2_1/LATEST_HOSTED.json
+          git config user.name clay-real-claims-benchmark
+          git config user.email clay-real-claims-benchmark@users.noreply.github.com
+          git add research_entity/experiments/unifieddb_real_claim_coalition_v2_1/
+          git commit -m 'evidence(unifieddb): persist fair SQL V2.1 hosted receipt [skip ci]' || exit 0
+          for a in 1 2 3 4; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && exit 0; sleep $((a*2)); done
+          exit 1
+
+  self-hosted:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true, persist-credentials: false}
+      - name: Execute same fair V2.1 on Hostinger
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/real-claim-v21-self
+          python3 -m research_entity.harness.reference.benchmark_real_claim_coalition_fair_sql_v2_1 \
+            --iterations 5000 --output /tmp/real-claim-v21-self/RESULT.json > /tmp/real-claim-v21-self/stdout.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/real-claim-v21-self/RESULT.json').read_text())
+          print(json.dumps(x['candidate_gate'],indent=2,sort_keys=True))
+          if not x['candidate_gate']['advance_to_larger_cross_engine_falsifier']: raise SystemExit('V2.1 fair SQL gate failed on self-hosted')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-claim-v21-self-${{ github.run_id }}
+          path: /tmp/real-claim-v21-self/RESULT.json
+          if-no-files-found: error

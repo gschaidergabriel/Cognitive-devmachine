@@ -1,6 +1,6 @@
 module clay.stack.latest
 
-epoch 23
+epoch 24
 entity frank-project-global-research-entity
 display_name Clay
 mission_goal "self.root v0.1 fully running on accepted target VPS; human surface Frank; production token API; ClayCode-only cognition; default-allow non-destructive action policy; proactive autotelic long-horizon agency substrate"
@@ -9,6 +9,7 @@ stack CURRENT {
   identity=@research_entity/global/CLAY_ENTITY_NAMING_CONTRACT.clay
   persona=@research_entity/identity/CLAY_PERSONA.clay
   researcher_identity_injection=@research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md
+  ai_native_empirical_freedom=@research_entity/global/AI_NATIVE_EMPIRICAL_ARCHITECTURE_FREEDOM_DIRECTIVE.clay
 
   target_native_identity=@research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay
   target_server_binary_api=@research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md
@@ -99,7 +100,8 @@ rule dynamic_work_transport uses CURRENT.work_events
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
 
-rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.target_self_observation_boundary + CURRENT.target_identity_boundary + CURRENT.target_host + CURRENT.target_native_identity + CURRENT.target_server_binary_api + CURRENT.target_language_boundary + CURRENT.target_effect_authority + CURRENT.target_proactive_agency + CURRENT.target_loop_of_loops + CURRENT.target_reward_state + CURRENT.omnisource_live_fusion_research_reentry
+rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.ai_native_empirical_freedom + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.target_self_observation_boundary + CURRENT.target_identity_boundary + CURRENT.target_host + CURRENT.target_native_identity + CURRENT.target_server_binary_api + CURRENT.target_language_boundary + CURRENT.target_effect_authority + CURRENT.target_proactive_agency + CURRENT.target_loop_of_loops + CURRENT.target_reward_state + CURRENT.omnisource_live_fusion_research_reentry
+rule every_registered_branch ingests CURRENT.ai_native_empirical_freedom as PROJECT_OWNER_FIXED_RESEARCH_FREEDOM and returns evidence|falsification|refinement|NO_CHANGE
 
 rule every_registered_branch ingests CURRENT.target_loop_of_loops as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
 rule every_registered_branch ingests CURRENT.target_proactive_agency as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
@@ -163,7 +165,7 @@ rule DELETE|FORMAT|WIPE|DROP_DATABASE|MASS_DELETE|IRREVERSIBLE_RESET cannot_be_t
 rule privileged_or_credential_or_financial_or_legal_or_physical_high_risk_effect requires CURRENT.target_effect_authority decision
 rule UNKNOWN_EFFECT -> DEGRADE_TO_PROPOSAL
 rule translator cannot mint_or_downgrade effect authority
-rule model_confidence|GWT_ignition|ClayGraph_salience cannot mint effect authority
+rule model_confidence|GWT_ignition|ClayGraph_salience cannot mint effect_authority
 rule API_token authenticates scoped caller; never unlimited authority
 
 rule self.root.architecture_posture = PROACTIVE_AND_REACTIVE
@@ -273,3 +275,5 @@ invariant stronger_mesh_connectivity_does_not_mint_truth_or_effect_authority
 invariant all_available_new_data_enters_provenance_bound_intake_fusion_reentry_loop
 invariant all_new_data_source_coverage_does_not_mean_all_raw_data_in_active_context
 invariant every_material_result_reenters_research_architecture_tests_or_explicit_NO_CHANGE
+invariant human_intuitiveness_is_not_architecture_truth_or_promotion_authority
+invariant AI_native_internal_opacity_is_allowed_but_never_exempts_measurement_recovery_provenance_or_effect_authority

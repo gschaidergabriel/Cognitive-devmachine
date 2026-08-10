@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "event_id": "go-root-oob-claim:20260810T2213p0700:chatgpt-secondary:single-spawn-clock-warp",
+  "kind": "WORK_CLAIM",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "root_go_id": "go-root-20260810T2157p0700-chatgpt-secondary-single-spawn",
+  "payload": {
+    "oob_slot": {
+      "claim_id": "oob-claim-frank-presence-wall-clock-warp-v1",
+      "status": "CLAIMED",
+      "experiment": "FRANK_PRESENCE_WALL_CLOCK_WARP",
+      "classification": "OUT_OF_THE_BOX_EXPERIMENT",
+      "question": "Can UTC-only lease expiry cause premature takeover or delayed recovery under wall-clock jumps, and would a boot_id + monotonic_ns candidate remove that failure mode on the fixed Ubuntu target?",
+      "baseline": "canonical UnifiedDB V15 frank_presence_runtime UTC expires_at",
+      "candidate": "same semantic lease with same-boot monotonic expiry and boot_id invalidation; NOT_PROMOTED",
+      "expected_result_classes": ["NO_DIFFERENCE", "UTC_COUNTEREXAMPLE", "CANDIDATE_NO_BENEFIT", "CANDIDATE_SUPPORTED"],
+      "promotion": "NONE_UNTIL_EXECUTED_AND_MEASURED"
+    },
+    "all_other_tests_in_this_root": "NORMAL_DISCRIMINATING_OR_VALIDATION_TESTS_NOT_OOB",
+    "frank_harness_mutation": false,
+    "training_authorized": false,
+    "authority": "RESEARCH_EXPERIMENT_ONLY"
+  }
+}

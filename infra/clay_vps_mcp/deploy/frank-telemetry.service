@@ -1,0 +1,37 @@
+[Unit]
+Description=Frank bounded telemetry ingest service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=clay-mcp
+Group=clay-mcp
+WorkingDirectory=/opt/clay-vps-mcp/current
+EnvironmentFile=/etc/clay-vps-mcp.env
+ExecStart=/opt/clay-vps-mcp/current/.venv/bin/clay-frank-telemetry
+Restart=always
+RestartSec=3
+TimeoutStopSec=20
+UMask=0077
+
+NoNewPrivileges=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictSUIDSGID=true
+LockPersonality=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+ProtectHome=true
+ProtectSystem=strict
+ReadOnlyPaths=/opt/clay-vps-mcp /srv/models /opt/frank /opt/clay
+ReadWritePaths=/srv/frank-telemetry
+
+[Install]
+WantedBy=multi-user.target

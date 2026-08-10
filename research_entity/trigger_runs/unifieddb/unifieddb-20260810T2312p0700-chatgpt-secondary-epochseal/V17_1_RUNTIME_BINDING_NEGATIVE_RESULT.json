@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "negative_result_id": "N-UNIFIEDDB-V17-1-OUTCOME-EVIDENCE-COLUMN-MISSING",
+  "status": "CONFIRMED_TARGET_VPS_MERGE_DISCRIMINATOR",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "adjacent_component": "F-V01-09-EFFECT-AUTHORITY",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_pr": 206,
+  "github_run_id": "31409887143",
+  "job_id": "93525117342",
+  "tested_merge_sha": "de3cc541fd058d70ed2df6391ff0ae7a2f020a0b",
+  "artifact_id": "9071122301",
+  "artifact_sha256": "50ff60f941ce632306fd2691a15b370bae2253b1b66b388d7f341e33738c1fec",
+  "executor": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "repository_permission": "contents:read",
+    "checkout_persist_credentials": false
+  },
+  "observed": {
+    "surface_status": "V17_1_SUBJECT_DELTA_SPLICE_REJECTED",
+    "actual_rejection": "OperationalError:no such column: e.outcome_evidence_clay",
+    "support_receipt_inserted": false,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "external_effect_performed": false,
+    "canonical_database_mutated": false
+  },
+  "adjudication": "NEGATIVE_RESULT_NOT_CAUSAL_CLOSURE_SUCCESS",
+  "reason": "V17.1 causal-support validation references effect_reservations.outcome_evidence_clay, but the authoritative V14 effect_reservations schema persists outcome_verified/outcome_success/outcome_hash/outcome_at and has no outcome_evidence_clay column. The runtime record_outcome input contains evidence but V14 stores only its hash. Therefore the target-VPS rejection does not demonstrate cross-splice prevention; it demonstrates a schema/runtime binding defect.",
+  "required_architecture_delta": [
+    "persist exact verified outcome evidence as a first-class receipt atomically with outcome state",
+    "bind causal support to that receipt rather than an invented effect_reservations column",
+    "test prediction-subject identity independently from cycle/provider/credit identity",
+    "require independently explicit semantic-delta source provenance before effect delta admission"
+  ],
+  "candidate_repair": "target PR #206 V17.2 causal-evidence closure candidate",
+  "promotion": "ACTIVE_NEGATIVE_RESULT; V17.1_NOT_PROMOTABLE"
+}

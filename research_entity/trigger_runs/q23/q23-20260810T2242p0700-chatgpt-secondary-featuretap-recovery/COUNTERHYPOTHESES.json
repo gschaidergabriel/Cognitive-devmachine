@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "counterhypotheses": [
+    {
+      "counterhypothesis_id": "CH-Q23-FTAP-01",
+      "attacks": "H-Q23-FTAP-01",
+      "claim": "Raw Qwen3.5 visual features are not trained as calibrated identity/open-set embeddings; contrastive/adapted multimodal embedding models demonstrate that embedding quality can require a distinct objective.",
+      "required_control": "Dedicated lightweight embedding encoder with identical prototype/readout policy and complete pathway resource accounting."
+    },
+    {
+      "counterhypothesis_id": "CH-Q23-RECOVERY-02",
+      "attacks": "H-Q23-RECOVERY-02",
+      "claim": "The reported multimodal slot-save limitation may not reproduce on Frank's exact Qwen3.5/libmtmd build or may be bypassed by a different supported persistence mechanism.",
+      "required_control": "Exact target-VPS crash/save/restore test before declaring re-encode recovery mandatory."
+    },
+    {
+      "counterhypothesis_id": "CH-Q23-TEMPORAL-03",
+      "attacks": "H-Q23-TEMPORAL-03",
+      "claim": "Feature-space temporal pruning may merely duplicate work already done by ROI/delta gating and can introduce stale-history errors.",
+      "required_control": "Pre-encoder-only versus combined two-stage temporal policy under matched GUI episodes including off-ROI modals and stale history."
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1457p0700-chatgpt-secondary-wp03-contextual-identifier",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "identity_boundary": {
+    "clay_is_research_entity": true,
+    "frank_is_separate_research_subject": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "model_output_is_execution_authority": false
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "formal_state_observed": {
+    "wp01": "PASS",
+    "wp02": "PASS_EXACT_V18_UBUNTU_SCOPE",
+    "wp03": "OPEN",
+    "base_release": "NOT_PASS"
+  },
+  "current_wp03_control": {
+    "supervisor_commit": "f272a1c7d635af1aa3c3d9bb3bc82061993a2c6c",
+    "next_focus": "receipt-bound V18 FrontendArtifact -> TypedIR exact-provenance closure, tamper rejection, no silent reparse, typed identity/lowering differentials",
+    "dr_underweger_bundle_commit": "fcb4d48a66688558582ab2dd586ff7fd98b8f932"
+  },
+  "hypothesis": "TypedIR identifier extraction must use parser-established AST role/context rather than token spelling blacklists, otherwise grammar-admitted contextual keyword identifiers can be dropped or rebound to a descendant token.",
+  "strongest_counterhypothesis": "The value-based KEYWORDS/PUNCT filter is semantically harmless because contextual keyword aliases never occupy declaration-name positions that reach TypedIR, so replacing it with AST-context extraction adds complexity without changing admitted program identity.",
+  "fresh_external_primary_evidence": [
+    {
+      "source": "MLIR official bytecode/dialect-version documentation",
+      "finding": "Dialect identity/version is explicit decoding context; compatibility across changing dialects requires explicit version handling rather than assuming identical textual spelling implies identical IR meaning."
+    },
+    {
+      "source": "SLSA provenance specification",
+      "finding": "Artifact subject identity, builder identity and build definition are distinct provenance dimensions; a digest alone is not the whole admission context."
+    }
+  ],
+  "production_observation": {
+    "path": "tools/claycode_base_typed_ir.py",
+    "blob": "5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb",
+    "finding": "Current main still derives declaration names through token_values plus KEYWORDS/PUNCT spelling filters. Contextual keyword aliases are parser-admitted through ident_* AST nodes but are not authoritative to this extractor.",
+    "existing_port_workflow": ".github/workflows/wp03-main-ast-context-port.yml",
+    "workflow_status_at_observation": "PATCH_LOGIC_PRESENT_BUT_PRODUCTION_FILE_NOT_YET_PATCHED"
+  },
+  "exactly_one_out_of_box_experiment": {
+    "ordinal": 1,
+    "name": "AST_ALIAS_ROLE_CORRUPTION_CANARY",
+    "evidence_class": "LOCAL_SYNTHETIC_DIAGNOSTIC",
+    "design": "Construct minimal parser-shaped canonical AST fragments for a contextual keyword identifier and then inject an alias-kind/token-value mismatch while keeping the surrounding declaration shape valid.",
+    "results": [
+      {
+        "case": "record status { x:Int }",
+        "old_value_filter": "RETURNED_DESCENDANT_NAME_x",
+        "ast_context_candidate": "RETURNED_status",
+        "pass_for_candidate": true
+      },
+      {
+        "case": "field status:Int",
+        "old_value_filter": "REJECTED_FIELD_WITHOUT_NAME",
+        "ast_context_candidate": "RETURNED_status",
+        "pass_for_candidate": true
+      },
+      {
+        "case": "ident_status node carrying token value version",
+        "old_value_filter": "REJECTED_ONLY_AS_MISSING_NAME_WITHOUT_ALIAS_CAUSE",
+        "ast_context_candidate": "FAIL_CLOSED_ALIAS_TOKEN_MISMATCH",
+        "pass_for_candidate": true
+      },
+      {
+        "case": "ordinary NAME alpha",
+        "old_value_filter": "RETURNED_alpha",
+        "ast_context_candidate": "RETURNED_alpha",
+        "pass_for_candidate": true
+      }
+    ],
+    "counterhypothesis_status": "REFUTED_ON_SYNTHETIC_DECLARATION_BINDING_CASES",
+    "promotion": "NONE",
+    "scope_guard": "This is a local synthetic discriminator over production-equivalent helper semantics, not Ubuntu execution evidence and not a WP03 package PASS."
+  },
+  "implemented_test_delta": {
+    "commit": "90957534a057ae79e410886b7bccfae8b0d9afed",
+    "path": "tools/test_claycode_wp03_identifier_alias_integrity_main.py",
+    "change": "Extend the existing fail-closed alias integrity gate from direct alias nodes to actual field and record declaration binding for every current V18/V17-compatible ident_* alias.",
+    "expected_effect": "The existing CAS port workflow now cannot validate the AST-context implementation slice unless contextual identifiers survive semantic declaration extraction."
+  },
+  "coordination_delta": {
+    "class": "PREMISE_INVALIDATOR_FOR_PENDING_WP03_BUNDLE",
+    "affected": [
+      "CC-WP-03-IR-TYPES",
+      "Dr.-Unterweger content-addressed WP03 executor bundle fcb4d48a66688558582ab2dd586ff7fd98b8f932",
+      "WP03 exact-provenance acceptance",
+      "WP06 downstream replay"
+    ],
+    "reason": "The pending exact bundle binds the pre-port TypedIR implementation. Even a green surface/provenance replay over that blob cannot close WP03 unless contextual identifier binding is either repaired and re-bundled or independently proven irrelevant on the selected admitted corpus plus mutation controls.",
+    "duplicate_work": "AVOIDED; no second VPS lane was created while the existing Dr.-Unterweger WP03 bundle lane is active."
+  },
+  "test_obligations": [
+    "Land or otherwise validate the AST-context identifier extraction in production TypedIR with fail-closed alias/token integrity.",
+    "Re-bind the content-addressed WP03 executor to the exact resulting TypedIR blob plus current frontend bridge/test blobs.",
+    "On the self-hosted Ubuntu lane, execute expected_surface/source/grammar/frontend-contract tamper controls and prove no silent source reparse.",
+    "Run selected V18 G9+Dialect TypedIR identity and lower_program differentials including preserves, cannot_be_silently_averaged_away and required_before reward relations.",
+    "Preserve raw failures and exact component hashes; no receipt inheritance across a changed TypedIR blob.",
+    "Do not advance WP04/WP06 from this local diagnostic alone."
+  ],
+  "architecture_delta": "TEST_AND_EXTRACTION_REPAIR_REQUIRED_BEFORE_WP03_CLOSURE",
+  "wp03_status_change": "NONE",
+  "base_release_status_change": "NONE",
+  "frank_harness_mutation": false,
+  "andreas_target_acceptance": false,
+  "training_authorized": false
+}

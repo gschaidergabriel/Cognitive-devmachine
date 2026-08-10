@@ -62,6 +62,14 @@ def parse_ok(parser: Lark, source: str) -> tuple[bool, str | None]:
         return False, f"{type(exc).__name__}: {exc}"
 
 
+def display_path(path: Path) -> str:
+    """Render repo-relative paths when possible, otherwise preserve the exact path."""
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", type=Path, default=DEFAULT_OUT)
@@ -194,7 +202,7 @@ def main() -> int:
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({"pass": passed, "strict": strict, "failed_checks": failed, "output": str(args.output.relative_to(ROOT))}, ensure_ascii=False))
+    print(json.dumps({"pass": passed, "strict": strict, "failed_checks": failed, "output": display_path(args.output)}, ensure_ascii=False))
     return 0 if passed else 2
 
 

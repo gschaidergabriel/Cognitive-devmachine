@@ -1,0 +1,201 @@
+name: Database Pulse V4.1 Event Atomic
+
+on:
+  push:
+    branches:
+      - chatgpt/unifieddb-pulse-v4-u12-rank-index-20260810
+    paths:
+      - 'research_entity/runtime/database_pulse_runtime_v4.py'
+      - 'research_entity/runtime/database_pulse_runtime_v4_event_atomic.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v4.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v4_event_atomic.py'
+      - 'research_entity/runtime/database_pulse_rank_index_v3.py'
+      - 'research_entity/runtime/test_database_pulse_rank_index_v3.py'
+      - 'tools/database_pulse_rank_index_v3_randomized_falsifier.py'
+      - 'tools/database_pulse_v4_event_atomic_benchmark.py'
+      - '.github/workflows/database-pulse-v4-event-atomic.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_runtime_v4.py'
+      - 'research_entity/runtime/database_pulse_runtime_v4_event_atomic.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v4.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v4_event_atomic.py'
+      - 'research_entity/runtime/database_pulse_rank_index_v3.py'
+      - 'research_entity/runtime/test_database_pulse_rank_index_v3.py'
+      - 'tools/database_pulse_rank_index_v3_randomized_falsifier.py'
+      - 'tools/database_pulse_v4_event_atomic_benchmark.py'
+      - '.github/workflows/database-pulse-v4-event-atomic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile current Pulse stack
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            research_entity/runtime/database_pulse_runtime_v4.py \
+            research_entity/runtime/database_pulse_runtime_v4_event_atomic.py \
+            research_entity/runtime/test_database_pulse_runtime_v4.py \
+            research_entity/runtime/test_database_pulse_runtime_v4_event_atomic.py \
+            research_entity/runtime/database_pulse_rank_index_v3.py \
+            research_entity/runtime/test_database_pulse_rank_index_v3.py \
+            tools/database_pulse_rank_index_v3_randomized_falsifier.py \
+            tools/database_pulse_v4_event_atomic_benchmark.py
+      - name: Event-atomic and rank-index unit/adversarial tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_index_v3 \
+            research_entity.runtime.test_database_pulse_runtime_v4_event_atomic
+      - name: Randomized rank differential smoke falsifier
+        run: |
+          set -euo pipefail
+          python tools/database_pulse_rank_index_v3_randomized_falsifier.py \
+            --seeds 3 --initial-keys 96 --steps 40 --budget 32 \
+            --output /tmp/rank-index-randomized-hosted.json
+      - name: Event-atomic benchmark smoke
+        run: |
+          set -euo pipefail
+          python tools/database_pulse_v4_event_atomic_benchmark.py \
+            --rows 100,1000 --repeat 3 --catchup-batch 16 \
+            --output /tmp/database-pulse-v4-event-atomic-hosted.json
+      - name: Enforce hosted narrow gates
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          rank=json.load(open('/tmp/rank-index-randomized-hosted.json',encoding='utf-8'))
+          assert rank['pass'] is True, rank
+          bench=json.load(open('/tmp/database-pulse-v4-event-atomic-hosted.json',encoding='utf-8'))
+          for r in bench['results']:
+              assert r['bootstrap']['backlog']==0, r
+              assert r['idle_invariants']['semantic_root_pass'] is True, r
+              assert r['idle_invariants']['prepared_query_receipt_survived'] is True, r
+              assert r['idle_invariants']['late_salience_target_selected'] is True, r
+              b=r['one_big_atomic_event']
+              assert b['bridge_admitted_deltas']==1 and b['backlog_before_pulse']==1, r
+              assert b['applied_delta_count']==1 and b['memory_update_observed_count']==180, r
+              assert b['event_boundary_pass'] is True, r
+              m=r['many_event_catchup']
+              assert m['cognition_blocked_before_catchup'] is True, r
+              assert m['event_boundary_pass'] is True and m['final_backlog']==0, r
+              assert r['rank_index_verify']['pass'] is True, r
+          print('DATABASE_PULSE_V4_EVENT_ATOMIC_HOSTED_GATES=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v4-event-atomic-hosted
+          path: |
+            /tmp/rank-index-randomized-hosted.json
+            /tmp/database-pulse-v4-event-atomic-hosted.json
+
+  hostinger-ubuntu-reference:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Capture Ubuntu lane metadata
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/database-pulse-v4-event-atomic
+          uname -a | tee /tmp/database-pulse-v4-event-atomic/uname.txt
+          python3 --version | tee /tmp/database-pulse-v4-event-atomic/python.txt
+          python3 - <<'PY' | tee /tmp/database-pulse-v4-event-atomic/runtime.json
+          import json, os, pathlib, platform, sqlite3
+          cpu='UNKNOWN'; mem='UNKNOWN'
+          try:
+              for line in pathlib.Path('/proc/cpuinfo').read_text(errors='replace').splitlines():
+                  if line.lower().startswith('model name'):
+                      cpu=line.split(':',1)[1].strip(); break
+          except Exception:
+              pass
+          try:
+              mem=next(x for x in pathlib.Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemTotal:'))
+          except Exception:
+              pass
+          print(json.dumps({
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+            'scope':'REMOTE_PRELIMINARY_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'machine':platform.machine(),
+            'python':platform.python_version(),
+            'sqlite':sqlite3.sqlite_version,
+            'cpu_model':cpu,
+            'memory':mem,
+          }, indent=2))
+          PY
+      - name: Compile current Pulse stack
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_runtime_v4.py \
+            research_entity/runtime/database_pulse_runtime_v4_event_atomic.py \
+            research_entity/runtime/test_database_pulse_runtime_v4.py \
+            research_entity/runtime/test_database_pulse_runtime_v4_event_atomic.py \
+            research_entity/runtime/database_pulse_rank_index_v3.py \
+            research_entity/runtime/test_database_pulse_rank_index_v3.py \
+            tools/database_pulse_rank_index_v3_randomized_falsifier.py \
+            tools/database_pulse_v4_event_atomic_benchmark.py
+      - name: Event-atomic and rank-index unit/adversarial tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_index_v3 \
+            research_entity.runtime.test_database_pulse_runtime_v4_event_atomic
+      - name: Full randomized rank-index differential falsifier
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_rank_index_v3_randomized_falsifier.py \
+            --seeds 12 --initial-keys 180 --steps 120 --budget 64 \
+            --output /tmp/database-pulse-v4-event-atomic/rank-index-randomized.json
+      - name: VPS event-atomic scaling benchmark
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_v4_event_atomic_benchmark.py \
+            --rows 100,1000,10000 --repeat 7 --catchup-batch 32 \
+            --output /tmp/database-pulse-v4-event-atomic/benchmark.json
+      - name: Enforce event-atomic safety gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee /tmp/database-pulse-v4-event-atomic/gates.txt
+          import json
+          rank=json.load(open('/tmp/database-pulse-v4-event-atomic/rank-index-randomized.json',encoding='utf-8'))
+          assert rank['pass'] is True, rank
+          bench=json.load(open('/tmp/database-pulse-v4-event-atomic/benchmark.json',encoding='utf-8'))
+          for r in bench['results']:
+              assert r['bootstrap']['backlog']==0, r
+              assert r['idle_invariants']['semantic_root_pass'] is True, r
+              assert r['idle_invariants']['prepared_query_receipt_survived'] is True, r
+              assert r['idle_invariants']['late_salience_target_selected'] is True, r
+              b=r['one_big_atomic_event']
+              assert b['bridge_events_consumed']==1 and b['bridge_admitted_deltas']==1, r
+              assert b['backlog_before_pulse']==1 and b['applied_delta_count']==1, r
+              assert b['memory_update_observed_count']==180 and b['event_boundary_pass'] is True, r
+              m=r['many_event_catchup']
+              assert m['cognition_blocked_before_catchup'] is True, r
+              assert m['event_boundary_pass'] is True and m['final_backlog']==0, r
+              assert r['rank_index_verify']['pass'] is True, r
+          print('DATABASE_PULSE_V4_EVENT_ATOMIC_HOSTINGER_GATES=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v4-event-atomic-hostinger
+          path: /tmp/database-pulse-v4-event-atomic/

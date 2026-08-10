@@ -1,0 +1,66 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-qwen-native-retina-fusion-benchmark-20260810T1716p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T17:16:00+07:00",
+  "payload": {
+    "work_id": "WORK-QNDRF-H1-DIFFERENTIAL-20260810",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "ARCHITECTURE_SIMPLIFICATION_AND_DISCRIMINATING_EXPERIMENT",
+    "title": "Test Qwen-native vision-feature reuse against separate Retina feature backbone",
+    "work_clay": "Implement an H1-grade matched visual benchmark around the current Qwen3.5-4B abliterated Q4_K_M + mmproj lane. Capture the libmtmd image embedding buffer before LLM decode, derive deterministic pooled MVC-Q0 descriptors and optionally a bounded MVC-Q1 linear projection/readout, then compare FULL_QWEN, current dedicated-feature MVC baseline, QNDRF feature reuse, QNDRF ROI/token-budget and action-grounded-memory variants. On escalation, prove whether the already-computed mtmd embeddings can be passed into the same Qwen decode without rerunning visual encoding. Preserve exact source/model/mmproj hashes, image token counts, frame/ROI identity, latency, CPU/GPU/RAM/VRAM, false-familiarity/open-set metrics, task/action outcome correctness and crash/replay receipts.",
+    "reason_clay": "Fresh primary evidence shows Qwen3.5-4B is already natively multimodal; Transformers exposes get_image_features before text decoding; llama.cpp libmtmd exposes encoded media embeddings and current llama-server feeds that same embedding buffer into the LLM. This creates a plausible simplification: Retina can remain sensor/change/temporal/provenance/routing control while Qwen's own vision tower becomes the single deep visual feature backbone. Counterevidence from multimodal embedding research means raw generative-VLM features cannot be assumed to be good prototype/open-set embeddings, so a matched dedicated-feature baseline is mandatory.",
+    "completion_clay": "A reproducible report and raw rows compare all frozen variants on identical screenshot/crop/action fixtures. The report separately measures mmproj encode cost and 4B decode cost, proves or falsifies zero-duplicate visual encoding on escalation, reports familiar/unknown/ambiguous/conflict calibration, measures ROI/context failure modes including off-ROI modal changes and small-text OCR, performs stale feature-version and crash/restart tests, and gives SUPPORTED, REVISE, REFUTED or NO_CHANGE disposition for deleting a separate heavy visual backbone. No H1/H2/H3 or BASE release credit is granted merely from implementing the benchmark.",
+    "evidence_need": [
+      "CURRENT_QWEN35_4B_MODEL_HASH",
+      "CURRENT_ABLITERATED_MODEL_HASH",
+      "CURRENT_MMPROJ_HASH",
+      "LLAMA_CPP_COMMIT_AND_LIBMTMD_API_RECEIPT",
+      "MATCHED_FULL_FRAME_AND_ROI_FIXTURES",
+      "MMPROJ_ENCODE_TIMING_ROWS",
+      "LLM_PROMPT_AND_DECODE_TIMING_ROWS",
+      "VISUAL_TOKEN_COUNTS",
+      "MVC_QWEN_FEATURE_OPEN_SET_ROWS",
+      "DEDICATED_FEATURE_BASELINE_ROWS",
+      "ACTION_BEFORE_AFTER_VERIFICATION_ROWS",
+      "STALE_FEATURE_VERSION_REJECTION_RECEIPT",
+      "CRASH_RESTART_REPLAY_RECEIPT",
+      "RESOURCE_SHADOW_CPU_GPU_RAM_VRAM"
+    ],
+    "executor_policy": "Run only on a currently verified compatible machine. Prefer project hardware capable of the existing Qwen3.5-4B + mmproj runtime; Hostinger CPU-only evidence may validate code paths but must not be mistaken for target performance. Do not displace the BASE ClayCode critical path unless this benchmark directly unblocks H1 planning and spare capacity is unavailable. Refresh canonical/head, active work, model/runtime versions and official llama.cpp multimodal API before effect. No paid training. No model promotion from generic benchmarks alone.",
+    "required_capabilities": [
+      "REPOSITORY_CHECKOUT",
+      "GITHUB_READ_WRITE",
+      "LOCAL_TEST_EXECUTION",
+      "QWEN35_4B_MULTIMODAL_RUNTIME",
+      "LLAMA_CPP_LIBMTMD",
+      "IMAGE_CAPTURE_OR_FROZEN_SCREENSHOT_FIXTURES",
+      "RESOURCE_PROFILING"
+    ],
+    "write_scope": [
+      "research_entity/retina/",
+      "research_entity/experiments/",
+      "research_entity/harness/",
+      "research_entity/state/work/events/",
+      "research_entity/mesh_feedback/"
+    ],
+    "dependencies": [
+      "research_entity/retina/QWEN_NATIVE_DISSOLVED_RETINA_FUSION_CANDIDATE_20260810.md",
+      "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
+      "research_entity/global/FRANK_DISSOLVED_PERCEPTION_DIRECTIVE.md",
+      "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
+      "research_entity/retina/RETINA_MICRO_VISUAL_CLASSIFIER.md"
+    ],
+    "invalidators": [
+      "A newer owner-fixed visual architecture explicitly supersedes dissolved perception or MVC requirements",
+      "A newer execution receipt already proves the same Qwen-feature-reuse differential on the current model/mmproj/runtime",
+      "Current Frank model/runtime no longer uses a Qwen3.5 multimodal path compatible with libmtmd feature interception"
+    ],
+    "base_priority": 0.72,
+    "expected_impact": 0.94,
+    "urgency": 0.70,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "refresh_mode":"DEGRADED_LIVE_REFRESH_PRIMARY_SOURCES_AVAILABLE",
+  "sources":[
+    {"class":"OFFICIAL_RUNTIME","ref":"huggingface/transformers:src/transformers/models/qwen3_5/modeling_qwen3_5.py","finding":"Qwen3.5 get_image_features returns visual pooler_output before language decoding; exact physical feature interception exists."},
+    {"class":"OFFICIAL_RUNTIME","ref":"ggml-org/llama.cpp:tools/mtmd/mtmd.h","finding":"libmtmd exposes mtmd_encode_chunk/mtmd_get_output_embd and batch encode/get_output_embd APIs plus image token budgets."},
+    {"class":"OFFICIAL_RUNTIME","ref":"ggml-org/llama.cpp:tools/server/server-context.cpp + mtmd-helper.cpp","finding":"Server passes the exact encoded media embedding pointer into llama_decode, enabling a synchronous readout in the encode-to-decode gap."},
+    {"class":"OFFICIAL_MODEL","ref":"Qwen/Qwen3.5-4B config/preprocessor","finding":"Text/vision projected width 2560; vision patch 16 and spatial merge 2 support current buffer-size/token-grid calculations."},
+    {"class":"OFFICIAL_MODEL","ref":"QwenLM/Qwen3.6 README current 2026-08-10","finding":"Current open Qwen3.6 sizes are 27B and 35B-A3B; Qwen3.5 remains the Qwen family with current 4B/2B/0.8B releases."},
+    {"class":"OFFICIAL_MODEL","ref":"Google DeepMind Gemma 4 model card","finding":"Gemma 4 E4B is multimodal but official parameter accounting is 4.5B effective and 8B total including embeddings; not an automatic strict <=4B replacement."},
+    {"class":"PRIMARY_PAPER","ref":"AQuaUI arXiv:2605.19260","finding":"Adaptive spatial token reduction supports testing content-aware visual-token budgets for GUI screenshots."},
+    {"class":"PRIMARY_PAPER","ref":"Naive Visual Memory is Not Enough / AGMem arXiv:2606.14106","finding":"Action-grounded crops can outperform naive full-image history and expose hidden-operation/grounding failure modes."},
+    {"class":"PRIMARY_PAPER","ref":"GUI-KV arXiv:2510.00536","finding":"GUI temporal redundancy can be compressed in visual KV/history under measured task constraints."},
+    {"class":"PRIMARY_PAPER","ref":"Rethinking Token Pruning for Historical Screenshots arXiv:2603.26041","finding":"Static/background screenshot regions can encode state-transition information; changed-region-only pruning is unsafe as an assumption."},
+    {"class":"PRIMARY_PAPER","ref":"Qwen3-VL-Embedding and Reranker arXiv:2601.04720","finding":"Strong multimodal embeddings use explicit embedding/contrastive training, strengthening the raw-feature calibration counterhypothesis."},
+    {"class":"PRIMARY_PAPER","ref":"VLM2Vec arXiv:2410.05160","finding":"Generative VLMs can become strong embedding models after contrastive adaptation; raw generative features remain an unproven open-set metric."},
+    {"class":"ISSUE_OR_FAILURE","ref":"ggml-org/llama.cpp#24737","finding":"Reported Qwen3.5-4B GGUF block-count/load failure on a fine-tuned/converted path."},
+    {"class":"ISSUE_OR_FAILURE","ref":"ggml-org/llama.cpp#23407","finding":"Reported Qwen3.5-4B multimodal CUDA failure on Jetson Thor."},
+    {"class":"ISSUE_OR_FAILURE","ref":"ggml-org/llama.cpp#25854/#19466","finding":"Image-containing multimodal slot save/restore remains a current recovery/cache gap; repeated image prefill can recur across restarts."},
+    {"class":"ISSUE_OR_FAILURE","ref":"ggml-org/llama.cpp#25717","finding":"Reported Qwen3.5 multimodal M-RoPE/CUDA crash matrix demonstrates backend/position/cache configuration sensitivity."}
+  ],
+  "source_policy":"Primary/official implementation and research evidence used for material claims; issue reports are failure evidence, not universal proof.",
+  "high_level_result":"Current evidence supports a zero-copy Qwen-feature reuse experiment but increases the burden on open-set calibration and recovery testing; no architecture promotion is justified yet."
+}

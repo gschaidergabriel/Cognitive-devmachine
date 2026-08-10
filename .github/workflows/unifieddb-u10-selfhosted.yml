@@ -1,0 +1,79 @@
+name: UnifiedDB U10 self-hosted falsifier
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V10_POSSIBILITY_PREPROCESSOR.sql'
+      - 'research_entity/runtime/possibility_preprocessor_v1.py'
+      - 'research_entity/runtime/test_possibility_preprocessor_v1.py'
+      - 'research_entity/runtime/benchmark_possibility_preprocessor_v1.py'
+      - '.github/workflows/unifieddb-u10-selfhosted.yml'
+  workflow_dispatch:
+
+jobs:
+  u10-ubuntu-selfhosted:
+    runs-on: self-hosted
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Environment receipt
+        shell: bash
+        run: |
+          set -euxo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ'
+          uname -a
+          (cat /etc/os-release || true)
+          (lscpu || true)
+          (free -h || true)
+          python3 --version
+          python3 - <<'PY'
+          import sqlite3, platform, os
+          print('sqlite', sqlite3.sqlite_version)
+          print('python_platform', platform.platform())
+          print('cpu_count', os.cpu_count())
+          PY
+      - name: Compile and invariant tests
+        shell: bash
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 -m py_compile possibility_preprocessor_v1.py benchmark_possibility_preprocessor_v1.py test_possibility_preprocessor_v1.py
+          python3 test_possibility_preprocessor_v1.py
+      - name: Differential benchmark 2500
+        shell: bash
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 benchmark_possibility_preprocessor_v1.py --seed 20260810 --resources 2500 --reps 5 | tee /tmp/u10-2500.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/u10-2500.json'))
+          assert d['methods']['possibility_packet_hot_read']['accuracy_at_1'] == 1.0
+          assert d['methods']['relational_query_time_derivation']['accuracy_at_1'] == 1.0
+          assert d['update']['selection_equivalent_to_full_rebuild'] is True
+          assert d['methods']['possibility_packet_hot_read']['p50_ms'] < d['methods']['relational_query_time_derivation']['p50_ms']
+          assert d['update']['targeted_refresh_ms'] < d['update']['full_rebuild_ms']
+          print('U10_GATE_PASS')
+          PY
+      - name: Scaling falsifier
+        shell: bash
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          for n in 1000 5000 20000; do
+            python3 benchmark_possibility_preprocessor_v1.py --seed 20260820 --resources "$n" --reps 3 > "/tmp/u10-${n}.json"
+          done
+          python3 - <<'PY'
+          import json
+          for n in (1000,5000,20000):
+              d=json.load(open(f'/tmp/u10-{n}.json'))
+              p=d['methods']['possibility_packet_hot_read']
+              r=d['methods']['relational_query_time_derivation']
+              u=d['update']
+              print(n, 'packet_p50_ms=',p['p50_ms'],'relational_p50_ms=',r['p50_ms'],'targeted_ms=',u['targeted_refresh_ms'],'full_ms=',u['full_rebuild_ms'])
+              assert p['accuracy_at_1']==1.0 and r['accuracy_at_1']==1.0
+              assert u['selection_equivalent_to_full_rebuild'] is True
+              assert p['p50_ms'] < r['p50_ms']
+              assert u['targeted_refresh_ms'] < u['full_rebuild_ms']
+          print('U10_SCALE_GATE_PASS')
+          PY

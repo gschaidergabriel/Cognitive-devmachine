@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1223p0700-chatgpt-sol-wp03-alias-integrity",
+  "origin_actor": "chatgpt-sol-current",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "status": "MATERIAL_TEST_OBLIGATION_DISTRIBUTED_NOT_PROMOTED",
+  "receipt": "research_entity/trigger_runs/go/go-20260810T1223p0700-chatgpt-sol-wp03-alias-integrity/FINAL_SYNTHESIS.json",
+  "affected_branches": {
+    "claycode/wp03-pr145": {
+      "delta": "AST-context identifier extraction is the correct direction, but current direct_identifier fails open on ident_* alias/token mismatches. Harden candidate-only bytes by requiring exact alias-suffix/token equality and exactly one token before returning a reserved-word identifier.",
+      "status": "HARDENING_OBLIGATION"
+    },
+    "unifieddb/replay": {
+      "delta": "Treat canonical AST branch identity and contained literal identity as jointly integrity-relevant during replay/cache/promotion paths; do not rely on token text alone.",
+      "status": "TRACE_OBLIGATION"
+    },
+    "harness": {
+      "delta": "A malformed/replayed parser AST must not silently become a different typed symbol. This remains parser/IR provenance integrity, not Frank cognitive-state authority.",
+      "status": "INVARIANT"
+    }
+  },
+  "measured_falsifier": {
+    "valid_aliases": "24/24 accepted",
+    "mismatched_alias_token_pairs_current_candidate": "24/24 accepted (fail-open)",
+    "hardened_shadow": "24/24 valid accepted; 24/24 mismatches rejected"
+  },
+  "counterevidence_preserved": [
+    "The malformed alias/token pairs are synthetic canonical-AST mutations, not outputs observed from the trusted current Lark parser.",
+    "Therefore this is a fail-closed replay/integrity hardening obligation, not evidence that valid source parsing is semantically wrong.",
+    "No Hostinger or registered Andreas Ubuntu receipt was claimed from this local falsifier.",
+    "No parser selection, WP03 promotion, WP04 advancement or Frank Harness mutation follows automatically."
+  ],
+  "next_falsifier": "Patch PR145 candidate only; run all 24 matching aliases plus mismatch/zero-token/multi-token mutations and full frozen G9+Dialect under the selected exact grammar/frontend provenance, then materialize Ubuntu receipts.",
+  "canonical_promotion": "NONE",
+  "authority_invariant": "model output != execution authority"
+}

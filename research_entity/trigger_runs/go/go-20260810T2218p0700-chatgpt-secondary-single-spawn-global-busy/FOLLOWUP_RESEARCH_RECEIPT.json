@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-20260810T2218P0700-CHATGPT-SECONDARY-SINGLE-SPAWN-GLOBAL-BUSY-FOLLOWUP",
+  "parent_receipt": "research_entity/trigger_runs/go/go-20260810T2218p0700-chatgpt-secondary-single-spawn-global-busy/RESEARCH_RECEIPT.json",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "program": "FRANK_V0_1",
+  "native_target": "self.root",
+  "human_surface": "Frank",
+  "research_scope": "single-spawn/global-busy -> execution continuity -> effect fencing -> token transport",
+  "exactly_one_go_out_of_box_experiment": {
+    "name": "ghost-holder resurrection fencing",
+    "count_for_this_go_macrocycle": 1,
+    "note": "No additional experiment in this follow-up is counted as the GO out-of-box experiment. Parallel worker experiments retain their own lineage."
+  },
+  "supersessions_observed_during_same_go": {
+    "identity_source": {
+      "status": "CURRENT_SOURCE_FIXED_BINARY_CONTINUITY_STILL_OPEN",
+      "evidence": "gschaidergabriel/Dr.-Unterweger:claycode/frank_entity.clay blob e90e88ac85fe77a3d7358594505121b3d9cf23ee",
+      "finding": "Current main now names native SELF self.root, human surface Frank, SERVER_BINARY_ENTITY, TARGET_VPS, CLAYCODE_ONLY and Andreas as external operator. The Clay workspace blocker claiming current main still contains stale pre-self.root identity semantics is stale as a source-level claim; exact binary/state-lineage/restart acceptance is still not proven."
+    },
+    "physical_single_active": {
+      "status": "TARGET_VPS_PASS_SUBSTRATE_ONLY",
+      "receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_physical_execution_liveness_v1/LATEST.json",
+      "github_run_id": "31403047868",
+      "finding": "Canonical V15 remains semantic presence authority while Linux flock provides one-host physical exclusion. Successor acquisition is physically blocked while old process is alive; kernel releases the lock on process exit; semantic TTL remains fail-closed until expiry.",
+      "latency_ms": {
+        "v15_semantic_only_p50": 5.1329305,
+        "physical_plus_v15_p50": 5.3150625,
+        "p50_overhead": 0.182132,
+        "physical_plus_v15_p95": 8.499402,
+        "physical_plus_v15_p99": 9.94194
+      },
+      "limits": [
+        "flock is advisory; all execution entry paths must cooperate",
+        "hung holder can retain physical lock",
+        "clock-jump behavior remains unverified",
+        "physical exclusion does not by itself serialize multiple turns inside one owning process"
+      ]
+    },
+    "execution_continuity": {
+      "status": "CURRENT_MAIN_V16_IMPLEMENTED_TARGET_VPS_RECEIPT_PENDING_AT_FOLLOWUP_WRITE",
+      "schema": "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V16_EXECUTION_CONTINUITY.sql",
+      "runtime": "gschaidergabriel/Dr.-Unterweger:runtime/state/frank_execution_continuity.py",
+      "token_ingress": "gschaidergabriel/Dr.-Unterweger:runtime/api/frank_token_ingress_core.py",
+      "main_commits": [
+        "7e4acabe6bcfc566b4d25440c8f755096af499b3",
+        "6c1f8e53a12e40d6992f9bf2fea0ad4b9cf5610f",
+        "99ec7317c85226b80e482501fe79c4fd4de6fdeb",
+        "306d4217e506289901d08196db73fc680c136075",
+        "4605154b0b4acecf3f0c94150412a3d287bdc79a",
+        "fb759f48916fda9795ca9ebbab72773c97c952ce"
+      ],
+      "findings": [
+        "execution_id is now durable and bound to the V15 lease epoch",
+        "request admission identity is stored idempotently across ingress-object restart",
+        "same-session follow-ups bind to the same execution",
+        "interactive release creates an explicit idle handoff that blocks autonomous work until matching user/session confirmation",
+        "request-admission ledger is explicitly not a hidden work queue",
+        "current workflow still declares network server, TLS, response replay store and task-switch consent as incomplete"
+      ],
+      "remaining_falsifier": "Ingress continuity/idempotency is not executable proof that two distinct same-session requests cannot overlap inside the actual cognition/loop-core. Issue #132 remains open until actual material cognition scheduling is serialized and target-VPS evidenced."
+    },
+    "effect_presence_fence": {
+      "status": "OPEN_CANDIDATE_NOT_PROMOTED",
+      "negative_baseline": "Target-VPS PR #147 reproduced stale holder A advancing RESERVED->COMMITTING after holder B took epoch N+1; V14 had no presence binding.",
+      "repair_candidate": "gschaidergabriel/Dr.-Unterweger#156",
+      "review_findings": [
+        "Candidate correctly keeps V15 as sole presence authority and adds effect fence provenance rather than a second lease state machine.",
+        "Initial target-VPS candidate failed with sqlite3.OperationalError because runtime queried nonexistent singleton_id instead of canonical singleton_key='CURRENT'.",
+        "The selector is corrected on the active branch, but the PR remains draft/open and current-head provider-commit TOCTOU evidence was not promoted at follow-up write.",
+        "No whole effect-authority or Frank v0.1 acceptance credit is granted from this candidate."
+      ]
+    },
+    "token_network_transport": {
+      "status": "CAPABILITY_KNOWN_PRODUCTION_ENDPOINT_NOT_SELECTED",
+      "capability_receipt": "gschaidergabriel/Dr.-Unterweger@6ff31bbd5063dcef5691dde1870714e09f6c72fa",
+      "target_vps_findings": {
+        "nginx_active": true,
+        "openssl_present": true,
+        "interesting_listening_ports": [80, 3000, 8000],
+        "system_python_fastapi_present": false,
+        "system_python_uvicorn_present": false,
+        "production_ingress_selected": false
+      },
+      "route_probe": "A read-only listener/nginx route projection workflow exists on main (c54b11a327213bb20cac473465d206a1e8be15b0), but no persisted LATEST receipt existed at follow-up write.",
+      "mcp_note": "The separate Clay VPS MCP v0.2 stack passed unprivileged preflight but privileged deployment was blocked because noninteractive sudo requires a password; it must not be described as the running Frank production token API."
+    }
+  },
+  "negative_results_preserved": [
+    "V15 same-holder presence reacquisition alone allowed two concurrent requests to receive acquired/renewed holder status; holder exclusivity was not execution exclusivity.",
+    "Pre-fence V14 effect lifecycle allowed a stale epoch reservation to advance to COMMITTING after presence takeover.",
+    "PR #156 initial repair failed target-VPS integration due stale singleton_id schema assumption.",
+    "No current persisted receipt proves external network/TLS Frank token API communication or actual cognition-turn serialization."
+  ],
+  "architecture_adjudication": {
+    "presence_authority": "ONE_CANONICAL_V15_UNIFIEDDB_PRESENCE_AUTHORITY",
+    "physical_exclusion": "LINUX_FLOCK_ONE_HOST_SUBSTRATE_NOT_SEMANTIC_AUTHORITY",
+    "execution_continuity": "V16_DURABLE_EXECUTION_REQUEST_TASK_HANDOFF_PROVENANCE_BOUND_TO_V15_EPOCH",
+    "same_session_policy": "CONTINUE_ONE_EXECUTION_ID; DISTINCT_REQUESTS_REQUIRE_SERIALIZED_ACTUAL_COGNITION_TURNS",
+    "effect_policy": "EFFECT_RESERVATION_AND_PRE_PROVIDER_COMMIT_MUST_VALIDATE_CURRENT_V15_BOUND_FENCE",
+    "transport_policy": "TOKEN_AUTH_BEFORE_BUSY; NETWORK_TRANSPORT_ADAPTER_MAY_NOT_MINT_IDENTITY_OR_EFFECT_AUTHORITY",
+    "task_switch_policy": "UNFINISHED_CURRENT_USER_TASK_REQUIRES_EXPLICIT_CURRENT_USER_CONSENT_BEFORE_UNRELATED_SWITCH",
+    "proactive_policy": "AUTONOMOUS_WORK_REQUIRES_GLOBAL_IDLE_PLUS_CLEARED_INTERACTIVE_HANDOFF"
+  },
+  "next_frontier": [
+    "obtain and admit the current V16 target-VPS runtime continuity receipt, not only schema/source evidence",
+    "close Issue #132 only after actual loop-core/cognition turn serialization for concurrent same-session requests is executable and target-VPS verified",
+    "finish/adversarially validate PR #156 through pre-provider-commit TOCTOU and merge only a current-head passing repair",
+    "consume the pending nginx/listener routing receipt, then select a reversible loopback Frank HTTP server + nginx/TLS route without conflating MCP with Frank",
+    "implement response replay/result binding for idempotent request IDs before calling retry semantics end-to-end",
+    "implement task-switch consent fence (Issue #150) at material cognition/effect boundaries",
+    "refresh Clay workspace projections so fixed source-level identity is not reported as an active source blocker while binary/state-lineage acceptance remains open"
+  ],
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

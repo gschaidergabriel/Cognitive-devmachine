@@ -21,6 +21,7 @@ def _fixture(
     *,
     conflict_relevant_bridge: bool = False,
     opaque_relevant_bridge: bool = False,
+    include_counterevidence: bool = False,
 ) -> StateLedger:
     ledger = StateLedger()
     bridge_text = "connector intermediate" if opaque_relevant_bridge else "alpha pathway bridge"
@@ -61,6 +62,28 @@ def _fixture(
             "value": {"source": "memory:noise_bridge", "target": "memory:noise_target", "strength": 0.99},
         },
     ]
+    if include_counterevidence:
+        ops.extend(
+            [
+                {
+                    "op": "SET",
+                    "domain": "memory",
+                    "key": "refuter",
+                    "value": {"text": "orthogonal anomaly datum"},
+                },
+                {
+                    "op": "SET",
+                    "domain": "dependency",
+                    "key": "seed_refuter",
+                    "value": {
+                        "source": "memory:seed",
+                        "target": "memory:refuter",
+                        "strength": 0.92,
+                        "relation_type": "REFUTES",
+                    },
+                },
+            ]
+        )
     ledger.append_event(
         event_id="fixture",
         idem="fixture",
@@ -73,13 +96,13 @@ def _fixture(
     return ledger
 
 
-def _base_spec(ledger: StateLedger, *, query: str = "alpha target") -> PossibilitySpec:
+def _base_spec(ledger: StateLedger, *, query: str = "alpha target", max_items: int = 3) -> PossibilitySpec:
     return PossibilitySpec(
         assembly_id="a",
         seed_refs=("memory:seed",),
         query_text=query,
         allowed_domains=("memory",),
-        max_items=3,
+        max_items=max_items,
         max_hops=2,
         frontier_budget=32,
         min_edge_weight=0.30,
@@ -96,13 +119,17 @@ def _query_spec(
     strength: float = 0.85,
     floor: float = 0.10,
     mode: str = LOOKAHEAD_MODE,
+    max_items: int = 3,
+    protected_counter_relations: tuple[str, ...] = ("REFUTES", "COUNTEREVIDENCE", "CONTRADICTS"),
+    failback_on_negation: bool = True,
+    failback_on_zero_corpus_overlap: bool = True,
 ) -> QueryAwarePossibilitySpec:
     return QueryAwarePossibilitySpec(
         assembly_id="a",
         seed_refs=("memory:seed",),
         query_text=query,
         allowed_domains=("memory",),
-        max_items=3,
+        max_items=max_items,
         max_hops=2,
         frontier_budget=32,
         min_edge_weight=0.30,
@@ -112,6 +139,9 @@ def _query_spec(
         query_gate_strength=strength,
         query_gate_floor=floor,
         query_gate_mode=mode,
+        protected_counter_relations=protected_counter_relations,
+        failback_on_negation=failback_on_negation,
+        failback_on_zero_corpus_overlap=failback_on_zero_corpus_overlap,
     )
 
 
@@ -142,25 +172,70 @@ class QueryAwareGateV17Tests(unittest.TestCase):
     def test_target_only_ablation_fails_opaque_bridge_but_lookahead_recovers_it(self):
         ledger = _fixture(opaque_relevant_bridge=True)
         pre = QueryAwareEmergentAssemblyPreprocessor(ledger)
-        target_only = pre.compile_active_assembly(
-            _query_spec(ledger, mode=TARGET_ONLY_MODE)
-        )
-        lookahead = pre.compile_active_assembly(
-            _query_spec(ledger, mode=LOOKAHEAD_MODE)
-        )
+        target_only = pre.compile_active_assembly(_query_spec(ledger, mode=TARGET_ONLY_MODE))
+        lookahead = pre.compile_active_assembly(_query_spec(ledger, mode=LOOKAHEAD_MODE))
         target_only_refs = [x["ref"] for x in target_only["selected"]]
         lookahead_refs = [x["ref"] for x in lookahead["selected"]]
         self.assertNotIn("memory:alpha_target", target_only_refs)
-        self.assertEqual(
-            lookahead_refs,
-            ["memory:seed", "memory:alpha_bridge", "memory:alpha_target"],
-        )
+        self.assertEqual(lookahead_refs, ["memory:seed", "memory:alpha_bridge", "memory:alpha_target"])
         self.assertEqual(target_only["query_gate"]["lookahead_edges_scanned"], 0)
         self.assertGreater(lookahead["query_gate"]["lookahead_edges_scanned"], 0)
         self.assertGreater(lookahead["query_gate"]["lookahead_affinity_wins"], 0)
-        self.assertNotEqual(
-            target_only["query_gate_manifest_hash"],
-            lookahead["query_gate_manifest_hash"],
+        self.assertNotEqual(target_only["query_gate_manifest_hash"], lookahead["query_gate_manifest_hash"])
+
+    def test_protected_refutes_edge_cannot_be_silently_erased_by_query_gate(self):
+        ledger = _fixture(include_counterevidence=True)
+        pre = QueryAwareEmergentAssemblyPreprocessor(ledger)
+        protected = pre.compile_active_assembly(_query_spec(ledger, max_items=4, mode=TARGET_ONLY_MODE))
+        unprotected = pre.compile_active_assembly(
+            _query_spec(
+                ledger,
+                max_items=4,
+                mode=TARGET_ONLY_MODE,
+                protected_counter_relations=(),
+            )
+        )
+        protected_refs = [x["ref"] for x in protected["selected"]]
+        unprotected_refs = [x["ref"] for x in unprotected["selected"]]
+        self.assertIn("memory:refuter", protected_refs)
+        self.assertNotIn("memory:refuter", unprotected_refs)
+        refuter = next(x for x in protected["selected"] if x["ref"] == "memory:refuter")
+        self.assertEqual(refuter["relation_type"], "REFUTES")
+        self.assertAlmostEqual(refuter["activation_score"], 0.92 * 0.88)
+        self.assertGreaterEqual(protected["query_gate"]["protected_counter_edges_preserved"], 1)
+
+    def test_false_query_with_no_corpus_overlap_falls_back_exactly_to_parent(self):
+        ledger = _fixture()
+        query = "zxqv completelyabsent"
+        parent = EmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+            _base_spec(ledger, query=query)
+        )
+        candidate = QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+            _query_spec(ledger, query=query, strength=1.0)
+        )
+        self.assertEqual(parent["selection_hash"], candidate["selection_hash"])
+        self.assertEqual(parent["compiled_index_hash"], candidate["compiled_index_hash"])
+        self.assertEqual(parent["selected"], candidate["selected"])
+        self.assertFalse(candidate["query_gate"]["enabled"])
+        self.assertEqual(
+            candidate["query_gate"]["reason"],
+            "NO_CORPUS_QUERY_OVERLAP_PARENT_FALLBACK",
+        )
+
+    def test_negated_query_falls_back_exactly_to_parent_until_negation_is_typed(self):
+        ledger = _fixture()
+        query = "alpha target not valid"
+        parent = EmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+            _base_spec(ledger, query=query)
+        )
+        candidate = QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+            _query_spec(ledger, query=query, strength=1.0)
+        )
+        self.assertEqual(parent["selection_hash"], candidate["selection_hash"])
+        self.assertEqual(parent["selected"], candidate["selected"])
+        self.assertEqual(
+            candidate["query_gate"]["reason"],
+            "NEGATION_UNSUPPORTED_PARENT_FALLBACK",
         )
 
     def test_zero_strength_is_exact_parent_lesion_for_selection_hash(self):
@@ -177,9 +252,7 @@ class QueryAwareGateV17Tests(unittest.TestCase):
 
     def test_empty_query_is_parent_lesion_even_when_strength_nonzero(self):
         ledger = _fixture()
-        parent = EmergentAssemblyPreprocessor(ledger).compile_active_assembly(
-            _base_spec(ledger, query="")
-        )
+        parent = EmergentAssemblyPreprocessor(ledger).compile_active_assembly(_base_spec(ledger, query=""))
         candidate = QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
             _query_spec(ledger, query="", strength=1.0)
         )
@@ -231,6 +304,10 @@ class QueryAwareGateV17Tests(unittest.TestCase):
         with self.assertRaises(ValueError):
             QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
                 _query_spec(ledger, mode="UNSUPPORTED")
+            )
+        with self.assertRaises(ValueError):
+            QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+                _query_spec(ledger, protected_counter_relations=("REFUTES", ""))
             )
 
 

@@ -13,16 +13,24 @@ from research_entity.runtime.eap_query_aware_gate_v17 import (
     QueryAwarePossibilitySpec,
 )
 
+TARGET_ONLY_MODE = "LEXICAL_COSINE_TARGET_RELATION"
+LOOKAHEAD_MODE = "LEXICAL_COSINE_TARGET_OR_ADMISSIBLE_SUCCESSOR_V1"
 
-def _fixture(*, conflict_relevant_bridge: bool = False) -> StateLedger:
+
+def _fixture(
+    *,
+    conflict_relevant_bridge: bool = False,
+    opaque_relevant_bridge: bool = False,
+) -> StateLedger:
     ledger = StateLedger()
+    bridge_text = "connector intermediate" if opaque_relevant_bridge else "alpha pathway bridge"
     ops = [
         {"op": "SET", "domain": "memory", "key": "seed", "value": {"text": "router root"}},
         {
             "op": "SET",
             "domain": "memory",
             "key": "alpha_bridge",
-            "value": {"text": "alpha pathway bridge"},
+            "value": {"text": bridge_text},
             "epistemic": "CONFLICT" if conflict_relevant_bridge else "KNOWN",
         },
         {"op": "SET", "domain": "memory", "key": "alpha_target", "value": {"text": "alpha target evidence"}},
@@ -87,6 +95,7 @@ def _query_spec(
     query: str = "alpha target",
     strength: float = 0.85,
     floor: float = 0.10,
+    mode: str = LOOKAHEAD_MODE,
 ) -> QueryAwarePossibilitySpec:
     return QueryAwarePossibilitySpec(
         assembly_id="a",
@@ -102,6 +111,7 @@ def _query_spec(
         basis_epoch=ledger.epoch,
         query_gate_strength=strength,
         query_gate_floor=floor,
+        query_gate_mode=mode,
     )
 
 
@@ -128,6 +138,30 @@ class QueryAwareGateV17Tests(unittest.TestCase):
         self.assertFalse(candidate["persistent_second_store"])
         self.assertEqual(candidate["authority"], "ASSEMBLY_CONTEXT_ONLY")
         self.assertTrue(all(x["authority"] == "CONTEXT_ONLY" for x in candidate["selected"]))
+
+    def test_target_only_ablation_fails_opaque_bridge_but_lookahead_recovers_it(self):
+        ledger = _fixture(opaque_relevant_bridge=True)
+        pre = QueryAwareEmergentAssemblyPreprocessor(ledger)
+        target_only = pre.compile_active_assembly(
+            _query_spec(ledger, mode=TARGET_ONLY_MODE)
+        )
+        lookahead = pre.compile_active_assembly(
+            _query_spec(ledger, mode=LOOKAHEAD_MODE)
+        )
+        target_only_refs = [x["ref"] for x in target_only["selected"]]
+        lookahead_refs = [x["ref"] for x in lookahead["selected"]]
+        self.assertNotIn("memory:alpha_target", target_only_refs)
+        self.assertEqual(
+            lookahead_refs,
+            ["memory:seed", "memory:alpha_bridge", "memory:alpha_target"],
+        )
+        self.assertEqual(target_only["query_gate"]["lookahead_edges_scanned"], 0)
+        self.assertGreater(lookahead["query_gate"]["lookahead_edges_scanned"], 0)
+        self.assertGreater(lookahead["query_gate"]["lookahead_affinity_wins"], 0)
+        self.assertNotEqual(
+            target_only["query_gate_manifest_hash"],
+            lookahead["query_gate_manifest_hash"],
+        )
 
     def test_zero_strength_is_exact_parent_lesion_for_selection_hash(self):
         ledger = _fixture()
@@ -163,7 +197,7 @@ class QueryAwareGateV17Tests(unittest.TestCase):
         self.assertEqual(noise["selected"][1]["ref"], "memory:noise_bridge")
 
     def test_epistemic_negative_space_still_blocks_query_relevant_bridge(self):
-        ledger = _fixture(conflict_relevant_bridge=True)
+        ledger = _fixture(conflict_relevant_bridge=True, opaque_relevant_bridge=True)
         candidate = QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
             _query_spec(ledger)
         )
@@ -193,6 +227,10 @@ class QueryAwareGateV17Tests(unittest.TestCase):
         with self.assertRaises(ValueError):
             QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
                 _query_spec(ledger, floor=-0.01)
+            )
+        with self.assertRaises(ValueError):
+            QueryAwareEmergentAssemblyPreprocessor(ledger).compile_active_assembly(
+                _query_spec(ledger, mode="UNSUPPORTED")
             )
 
 

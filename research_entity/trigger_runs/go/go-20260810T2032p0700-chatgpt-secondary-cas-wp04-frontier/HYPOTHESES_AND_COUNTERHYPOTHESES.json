@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2032p0700-chatgpt-secondary-cas-wp04-frontier",
+  "hypotheses": [
+    {
+      "id":"H-GO-WP03-NOREPARSE-01",
+      "claim":"WP03 can consume the receipt-bound V18 FrontendArtifact and form typed semantic/state identities without reparsing source or reopening ClayCode surface syntax.",
+      "status":"SUPPORTED_IMPLEMENTATION_DIRECTION_NOT_PACKAGE_PASS",
+      "support":["WP02 V18 acceptance receipt","current receipt-bound V18 bridge","target-VPS typed-state measurement workflow 31392402946"],
+      "strongest_counterhypothesis":"Full owner-directive fidelity or downstream WP04 consumption exposes a missing primitive or semantic mismatch that current typed-state fixtures do not cover.",
+      "falsifier":"Production self.root/GWT/Hyperposition/ClayGraph/UnifiedDB directive fixtures fail exact typed lowering or downstream consumption without an untyped escape hatch."
+    },
+    {
+      "id":"H-GO-WP04-EXPLICIT-CALL-CONTRACT-02",
+      "claim":"WP04 should remain fail-closed with explicit target+arity CallContract obligations and should admit a call only after an independently justified exact signature plus current runtime binding exists.",
+      "status":"SUPPORTED_BY_NEGATIVE_RESULT",
+      "support":["target-VPS call constraint workflow 31392404848","PR#178 CallContract schema","current G9/Dialect source inspection"],
+      "strongest_counterhypothesis":"Caller equality constraints and target-name semantics are sufficient to infer safe concrete signatures without an independent declaration.",
+      "falsifier":"A matched suite shows inference from caller constraints/name semantics uniquely recovers independently held-out declared signatures with zero false contracts and no effect/authority leakage; until then inference remains forbidden."
+    },
+    {
+      "id":"H-GO-BACKEND-SEPARATION-03",
+      "claim":"Clay semantic/type/effect authority should remain backend-neutral; MLIR/WIT/WASI may implement lowering/runtime handles but must not become the source of Clay semantic or effect authority.",
+      "status":"SUPPORTED_AS_ARCHITECTURE_BOUNDARY",
+      "support":["MLIR extensible typed dialect model","WIT owned/borrowed resource handles","Wasmtime security history"],
+      "strongest_counterhypothesis":"Delegating capability enforcement entirely to a mature sandbox backend materially simplifies Clay without loss of safety or observability.",
+      "falsifier":"End-to-end adversarial differential demonstrates backend-only enforcement dominates ClayCode deterministic effect gates across stale/revoked/forged/cross-version capabilities and recovery while preserving semantic receipts."
+    }
+  ],
+  "negative_results": [
+    {
+      "id":"N-GO-WP04-SIGNATURE-SOURCE-01",
+      "finding":"No independently authoritative concrete signature was found in the checked current G9, DialectRegistry, Reward successor or historical NAcc lineage for the high-leverage unresolved global calls. Call sites and historical roles are insufficient to populate current exact CallContracts.",
+      "consequence":"Keep obligations UNRESOLVED_SIGNATURE; do not invent concrete types."
+    },
+    {
+      "id":"N-GO-DUPLICATE-BRIDGE-02",
+      "finding":"A parallel local WP03 bridge implementation became duplicate before merge because a concurrent worker committed a stronger current bridge/validation path.",
+      "consequence":"Do not merge duplicate code; retain only the bounded local contract experiment as same-ancestry supporting evidence."
+    }
+  ]
+}

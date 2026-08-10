@@ -1,5 +1,5 @@
 module clay.call_contract
-version "1.0-candidate"
+version "1.1-candidate"
 status RESEARCH_CANDIDATE_NOT_PROMOTED
 
 type CallEffectClass=PURE|READ_STATE|DERIVED_STATE|RESEARCH_ONLY|EXTERNAL_EFFECT
@@ -50,6 +50,10 @@ record CallExecutionPrecondition {
   contract_semantic_hash:Hash
   runtime_component_hash:Hash
   current_work_revision:Version
+  target_binary_build_hash:Hash
+  state_lineage_epoch:Epoch
+  instance_lease_ref:Ref
+  instance_lease_epoch:Epoch
   effect_authority:CallBindingAuthority
 }
 
@@ -60,6 +64,8 @@ invariant rule_text_is_executable_signature=false
 invariant unresolved_call_executes=false
 invariant contract_without_current_runtime_binding_executes=false
 invariant external_effect_without_sealed_binding_executes=false
+invariant call_execution_without_current_binary_state_lineage_and_instance_lease_executes=false
+invariant api_token_is_call_or_self_identity=false
 invariant call_contract_mints_truth_authority=false
 invariant call_contract_mints_effect_authority=false
 invariant runtime_broker_authority_is_separate_from_contract_semantics=true

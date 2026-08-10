@@ -67,6 +67,29 @@ class SPMGuardedRecoveryEdgeTests(unittest.TestCase):
         self.assertEqual(state["dirty_reason"], "ACCESS_HEAD_INCOHERENT")
         x.close()
 
+    def test_dependency_key_move_away_from_current_is_caught_on_old_membership(self):
+        x = self.make()
+        head = x.head_basis()
+        assert head is not None
+        segment = self.segment_for(x, head[2], "seed:2:0")
+        x.con.execute(
+            "INSERT INTO access_segment(segment_id,seed_id,segment_hash,path_count,created_ns) VALUES(?,?,?,?,?)",
+            ("seg-unused-test", "unused", "unused-hash", 1, 0),
+        )
+        x.con.execute(
+            "UPDATE access_segment_dependency SET segment_id='seg-unused-test' "
+            "WHERE segment_id=? AND dependency_logical_id='cluster:2'",
+            (segment,),
+        )
+        x.con.commit()
+        state = x.integrity_state()
+        self.assertEqual(state["status"], "DIRTY")
+        self.assertEqual(state["dirty_reason"], "DEPENDENCY_UPDATE_AFTER_PUBLISH")
+        self.assertEqual(state["dirty_segment_id"], segment)
+        with self.assertRaises(SPMIntegrityError):
+            x.query("seed:2:0")
+        x.close()
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

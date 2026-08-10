@@ -1,0 +1,85 @@
+{
+  "schema_version":"1.0",
+  "researched_at":"2026-08-10T22:29:00+07:00",
+  "technical_source_policy":"primary/author/institution/arXiv sources; search snippets used only for discovery",
+  "sources":[
+    {
+      "topic":"translation validation",
+      "title":"Translation Validation for Synchronous Languages",
+      "authors":"Pnueli, Siegel, Shtrichman",
+      "venue":"ICALP 1998",
+      "source":"NYU author archive",
+      "finding":"Per-translation automated validation is an established alternative to proving a translator correct globally. This directly collides with any claim that per-message translation validation itself is novel."
+    },
+    {
+      "topic":"translation validation",
+      "title":"TVOC: A Translation Validator for Optimizing Compilers",
+      "authors":"Barrett, Fang, Goldberg, Hu, Pnueli, Zuck",
+      "venue":"CAV 2005",
+      "source":"Stanford author publication page",
+      "finding":"Checking source/target equivalence for each compiler run is established and automated with formal verification conditions. Generator-versus-validator separation is known prior art."
+    },
+    {
+      "topic":"reduced product / observation exchange",
+      "title":"The reduced product of abstract domains and the combination of decision procedures",
+      "authors":"Patrick Cousot, Radhia Cousot, Laurent Mauborgne",
+      "venue":"FoSSaCS 2011",
+      "source":"Patrick Cousot author page",
+      "finding":"Independent abstract components can be combined by iterated pairwise reduction/exchange of observations. New components can be added by defining observation exchanges. This is a close mathematical collision with a lattice/intersection of partial semantic oracles."
+    },
+    {
+      "topic":"bidirectional transformations",
+      "title":"Towards a Complete Picture of Lens Laws",
+      "authors":"Keisuke Nakano",
+      "source":"arXiv:1910.10421",
+      "finding":"Forward/backward transformations linked by consistency laws are established. Round-trip consistency/lens-law framing is not novel."
+    },
+    {
+      "topic":"bidirectional transformations",
+      "title":"Synthesizing Symmetric Lenses",
+      "authors":"Miltner et al.",
+      "source":"arXiv:1810.11527",
+      "finding":"Symmetric lenses propagate information in both directions and explicitly handle information present on only one side. This collides with generic bidirectional-information claims."
+    },
+    {
+      "topic":"constrained formal decoding",
+      "title":"PICARD: Parsing Incrementally for Constrained Auto-Regressive Decoding from Language Models",
+      "authors":"Scholak, Schucher, Bahdanau",
+      "source":"arXiv:2109.05093",
+      "finding":"Incremental parsing can reject inadmissible target-language tokens during generation. Grammar/formal-language validity is a strong conventional baseline but does not by itself establish source semantic fidelity."
+    },
+    {
+      "topic":"metamorphic machine-translation testing",
+      "title":"Structure-Invariant Testing for Machine Translation",
+      "authors":"He, Meister, Su",
+      "source":"arXiv:1907.08710",
+      "finding":"Meaning-preserving source mutations plus output-structure relations are established as metamorphic MT testing. Metamorphic boundary adversaries are prior art, not candidate novelty."
+    },
+    {
+      "topic":"metamorphic machine-translation testing",
+      "title":"Word Closure-Based Metamorphic Testing for Machine Translation",
+      "authors":"Xie, Jin, Chen, Cheung",
+      "source":"arXiv:2312.12056",
+      "finding":"Fine-grained source/output semantic relation comparison for MT error detection is established and improves violation-identification F1 over prior metamorphic comparators in that paper."
+    },
+    {
+      "topic":"design diversity / common-mode failure",
+      "title":"Analysis of faults in an N-version software experiment",
+      "authors":"Brilliant, Knight, Leveson",
+      "venue":"IEEE TSE 1990",
+      "source":"NASA NTRS record 19900041359",
+      "finding":"27 independently prepared versions exhibited more coincident failures than expected under statistical independence; equivalent and different logical errors produced correlated failures. Independence of diverse translator/checker implementations must not be assumed."
+    }
+  ],
+  "collision_summary":{
+    "translation_validation":"KNOWN",
+    "round_trip_lens_consistency":"KNOWN",
+    "metamorphic_translation_testing":"KNOWN",
+    "N_version_diverse_checkers":"KNOWN_AND_CORRELATION_LIMITED",
+    "reduced_product_of_partial_observations":"KNOWN_NEAR_EQUIVALENT_MATHEMATICAL_PATTERN",
+    "formal_output_constraint":"KNOWN",
+    "surviving_candidate_scope":"Project-specific composition only: tiny bounded German hard-field partial oracles + exact typed Clay hard projection + UNKNOWN-as-erasure + per-message admission witness + ExpressionState hard-field noninterference under Frank's codec-not-mind and ClayCode-only constraints."
+  },
+  "strongest_external_countermechanism":"A conventional independent semantic parser/validator, combined with constrained typed Clay output and explicit ambiguity handling, may achieve equal or stronger safety with less architecture. It must be the strongest benchmark baseline.",
+  "novelty_ceiling":"NOVEL_COMBINATION_CANDIDATE at most unless later broader search and matched implementation evidence justify a stronger class"
+}

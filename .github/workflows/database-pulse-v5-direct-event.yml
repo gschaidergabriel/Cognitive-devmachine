@@ -1,0 +1,178 @@
+name: Database Pulse V5 Direct Event
+
+on:
+  push:
+    branches:
+      - chatgpt/unifieddb-pulse-v5-direct-event-plane-20260810
+    paths:
+      - 'research_entity/runtime/database_pulse_execution_plane_v5.py'
+      - 'research_entity/runtime/test_database_pulse_execution_plane_v5.py'
+      - 'research_entity/runtime/test_database_pulse_execution_plane_v5_source_boundaries.py'
+      - 'tools/database_pulse_v5_direct_event_benchmark.py'
+      - '.github/workflows/database-pulse-v5-direct-event.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_execution_plane_v5.py'
+      - 'research_entity/runtime/test_database_pulse_execution_plane_v5.py'
+      - 'research_entity/runtime/test_database_pulse_execution_plane_v5_source_boundaries.py'
+      - 'tools/database_pulse_v5_direct_event_benchmark.py'
+      - '.github/workflows/database-pulse-v5-direct-event.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile Pulse V5
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            research_entity/runtime/database_pulse_execution_plane_v5.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v5.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v5_source_boundaries.py \
+            tools/database_pulse_v5_direct_event_benchmark.py
+      - name: V5 direct-event adversarial tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_execution_plane_v5 \
+            research_entity.runtime.test_database_pulse_execution_plane_v5_source_boundaries
+      - name: Re-run inherited rank and focus-guard falsifiers
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v4 \
+            research_entity.runtime.test_auth_shadow_focus_guard
+      - name: V5 differential smoke benchmark
+        run: |
+          set -euo pipefail
+          python tools/database_pulse_v5_direct_event_benchmark.py \
+            --rows 100,1000 --repeat 3 --catchup-batch 8 \
+            --output /tmp/database-pulse-v5-hosted.json
+      - name: Enforce hosted V5 gates
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/database-pulse-v5-hosted.json',encoding='utf-8'))
+          for r in p['results']:
+              assert r['h1_no_semantic_self_churn'] is True, r
+              assert r['h2_query_receipt_survives'] is True, r
+              assert r['h3_one_transaction_one_source_event'] is True, r
+              assert r['h4_event_boundary_hash_pass'] is True, r
+              v5=r['direct_event_execution_pulse_v5']
+              assert v5['u12_duplicate_delta_rows']==0, r
+              assert v5['many_event_catchup']['final_backlog']==0, r
+          print('DATABASE_PULSE_V5_HOSTED_GATES=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v5-hosted
+          path: /tmp/database-pulse-v5-hosted.json
+
+  hostinger-ubuntu-reference:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Capture Ubuntu execution metadata
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/database-pulse-v5
+          uname -a | tee /tmp/database-pulse-v5/uname.txt
+          python3 --version | tee /tmp/database-pulse-v5/python.txt
+          python3 - <<'PY' | tee /tmp/database-pulse-v5/runtime.json
+          import json, os, pathlib, platform, sqlite3
+          cpu='UNKNOWN'; mem='UNKNOWN'
+          try:
+              for line in pathlib.Path('/proc/cpuinfo').read_text(errors='replace').splitlines():
+                  if line.lower().startswith('model name'):
+                      cpu=line.split(':',1)[1].strip(); break
+          except Exception: pass
+          try:
+              mem=next(x for x in pathlib.Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemTotal:'))
+          except Exception: pass
+          print(json.dumps({
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+            'scope':'REMOTE_PRELIMINARY_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'machine':platform.machine(),
+            'python':platform.python_version(),
+            'sqlite':sqlite3.sqlite_version,
+            'cpu_model':cpu,
+            'memory':mem,
+          },indent=2))
+          PY
+      - name: Compile Pulse V5
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_execution_plane_v5.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v5.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v5_source_boundaries.py \
+            tools/database_pulse_v5_direct_event_benchmark.py
+      - name: V5 direct-event adversarial tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_execution_plane_v5 \
+            research_entity.runtime.test_database_pulse_execution_plane_v5_source_boundaries
+      - name: Inherited rank/auth falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v4 \
+            research_entity.runtime.test_auth_shadow_focus_guard
+      - name: Randomized authoritative-rank falsifier
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_rank_index_v3_randomized_falsifier.py \
+            --seeds 12 --initial-keys 180 --steps 120 --budget 64 \
+            --output /tmp/database-pulse-v5/rank-randomized.json
+      - name: V5 matched differential and scaling benchmark
+        run: |
+          set -euo pipefail
+          python3 tools/database_pulse_v5_direct_event_benchmark.py \
+            --rows 100,1000,10000 --repeat 7 --catchup-batch 16 \
+            --output /tmp/database-pulse-v5/benchmark.json
+      - name: Enforce Hostinger V5 gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee /tmp/database-pulse-v5/gates.txt
+          import json
+          rank=json.load(open('/tmp/database-pulse-v5/rank-randomized.json',encoding='utf-8'))
+          assert rank['pass'] is True, rank
+          p=json.load(open('/tmp/database-pulse-v5/benchmark.json',encoding='utf-8'))
+          for r in p['results']:
+              assert r['h1_no_semantic_self_churn'] is True, r
+              assert r['h2_query_receipt_survives'] is True, r
+              assert r['h3_one_transaction_one_source_event'] is True, r
+              assert r['h4_event_boundary_hash_pass'] is True, r
+              v5=r['direct_event_execution_pulse_v5']
+              assert v5['u12_duplicate_delta_rows']==0, r
+              assert v5['one_big_event']['source_event_count']==1, r
+              assert v5['one_big_event']['memory_update_observed_count']==180, r
+              assert v5['many_event_catchup']['event_boundary_hash_pass'] is True, r
+              assert v5['many_event_catchup']['final_backlog']==0, r
+          print('DATABASE_PULSE_V5_HOSTINGER_GATES=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v5-hostinger
+          path: /tmp/database-pulse-v5/

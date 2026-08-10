@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hypofusion-20260810T2241p0700-chatgpt-secondary",
+  "clusters": [
+    {
+      "cluster_id":"HF-C1-COMPOSITIONAL-FENCING",
+      "members":["single-spawn/global-busy owner-fixed semantics","F-V01-08","F-V01-09","F-V01-13","PR147","PR158","PR160"],
+      "mechanism_claim":"Exactly-one Frank execution is not safe unless the same monotonically fenced execution epoch is revalidated across state writes, response emission, effect reservation/start and recovery transitions.",
+      "predicted_observation":"A stale holder may still cross a downstream effect/state boundary when presence, physical exclusion and effect lifecycle are individually correct but not compositionally bound.",
+      "falsifier":"Current-main composed crash/takeover/effect matrix shows stale holder cannot write, emit or begin/retry an effect without a shared semantic epoch fence and recovery proof.",
+      "evidence_class":"STRONG_INTERNAL_EXECUTABLE_NEGATIVE_PLUS_EXTERNAL_IMPLEMENTATION_ANALOGUE",
+      "highest_risk_confound":"Advisory physical flock may mask semantic defect on ordinary one-process paths.",
+      "status":"STRENGTHENED"
+    },
+    {
+      "cluster_id":"HF-C2-ADAPTIVE-RECURRENT-LOOP",
+      "members":["FRANK loop-of-loops","GWT adaptive recurrence","historical regulator hypotheses","F-V01-03","F-V01-05"],
+      "mechanism_claim":"Adaptive recurrent compute can improve difficult reasoning/control episodes when continuation is outcome/pressure gated rather than fixed or always-on.",
+      "predicted_observation":"Matched hard episodes benefit from additional recurrence while easy episodes terminate earlier; fixed recurrence wastes compute or overthinks.",
+      "falsifier":"Event-driven/fixed-budget baseline matches or beats adaptive recurrence on outcome, latency, recovery and stability across seeds/OOD.",
+      "evidence_class":"PARTIAL_EXTERNAL_SUPPORT_PLUS_INTERNAL_OPEN_HYPOTHESIS",
+      "highest_risk_confound":"More compute rather than recurrence mechanism may explain gains.",
+      "status":"STRENGTHENED_BUT_BOUNDED"
+    },
+    {
+      "cluster_id":"HF-C3-MEMORY-AS-CONTROLLED-EXECUTION-STATE",
+      "members":["AgencyState","SelfContextAssembly","UnifiedDB continuity","F-V01-04","F-V01-10","F-V01-11"],
+      "mechanism_claim":"Long-horizon memory should preserve/reconstruct execution state and selectively intervene when decision-relevant state would otherwise decay, rather than relying on semantic-similarity retrieval or always-on context exposure.",
+      "predicted_observation":"Selective state intervention lowers forgotten-constraint/repeated-error rates and token cost versus passive retrieval/full-bank exposure.",
+      "falsifier":"Passive bounded retrieval with equivalent context budget matches or beats selective intervention on long-horizon task success and state-integrity faults.",
+      "evidence_class":"DIRECT_EXTERNAL_ANALOGUE_PLUS_INTERNAL_ARCHITECTURE_CANDIDATE",
+      "highest_risk_confound":"A separate memory-agent architecture may gain from extra model compute rather than intervention timing.",
+      "status":"STRENGTHENED_AND_TRANSFORMED"
+    },
+    {
+      "cluster_id":"HF-C4-STRUCTURAL-WEB-AUTHORITY",
+      "members":["open-web untrusted ingress","ClayCode effect authority","F-V01-09","F-V01-10","F-V01-13"],
+      "mechanism_claim":"Separating untrusted web data from privileged control/effect channels with typed provenance/capability or information-flow enforcement materially reduces indirect prompt-injection authority escalation.",
+      "predicted_observation":"Adversarial web/tool-result text can alter observed data but cannot directly mint control flow, confidentiality release or effect authority.",
+      "falsifier":"Contextual manipulation causes forbidden flows despite valid structural labels and deterministic gates, or acceptable benign tasks collapse under policy constraints.",
+      "evidence_class":"DIRECT_EXTERNAL_SUPPORT_WITH_CURRENT_COUNTEREVIDENCE",
+      "highest_risk_confound":"Contextual norms and trusted-user intent can themselves be ambiguous or adversarially reframed.",
+      "status":"SPLIT_AND_REFINED"
+    },
+    {
+      "cluster_id":"HF-C5-PROACTIVE-AGENCY",
+      "members":["InitiativePulse","AutotelicGoal","interactive idle handoff","F-V01-10","F-V01-11"],
+      "mechanism_claim":"Bounded proactive goal/opportunity selection can improve long-horizon utility when self-generated activity is gated by controllability/information value, current-user handoff, effect authority and independently verified outcomes.",
+      "predicted_observation":"Useful unattended progress increases without preemption, compulsive activity or self-reward inflation.",
+      "falsifier":"Reactive-only baseline matches utility or proactive policy increases distraction, unsafe task switching, resource waste or goal drift under equal budgets.",
+      "evidence_class":"PARTIAL_EXTERNAL_ANALOGUE_PLUS_OWNER_FIXED_ARCHITECTURE",
+      "highest_risk_confound":"Intrinsic-motivation signals can optimize activity proxies instead of external usefulness.",
+      "status":"SUPPORTED_AS_BOUNDED_CANDIDATE"
+    },
+    {
+      "cluster_id":"HF-C6-CLAYCODE-TYPED-SEMANTIC-AUTHORITY",
+      "members":["ClayCode-only cognition","typed IR/type-effect","Needle/translator boundary","F-V01-02","F-V01-07","F-V01-09"],
+      "mechanism_claim":"A typed semantic IR with explicit provenance/effect identities can make identity, authority and re-entry invariants machine-checkable across Frank cognition rather than leaving them as prompt conventions.",
+      "predicted_observation":"Typed invalid authority/identity flows are rejected before runtime effects and semantic replay is more stable than an equivalent untyped/prompt-only representation.",
+      "falsifier":"A simpler conventional typed host-language/IDL implementation achieves equal semantic preservation, security and replay at lower complexity/cost.",
+      "evidence_class":"IMPLEMENTATION_PRECEDENT_ANALOGUE_PLUS_INTERNAL_PARTIAL_EXECUTION",
+      "highest_risk_confound":"ClayCode may duplicate semantics already safely expressible in conventional typed systems.",
+      "status":"OPEN_BASELINE_GATED"
+    },
+    {
+      "cluster_id":"HF-C7-DEPENDENCY-AWARE-LIVE-FUSION",
+      "members":["live fusion mesh v2","ClayGraph dependency routing","UnifiedDB delta/ack state"],
+      "mechanism_claim":"Dependency-aware targeted delivery plus anti-entropy can preserve most required cross-worker information while reducing full broadcast load.",
+      "predicted_observation":"Real-repo replay retains near-broadcast required-recipient recall at materially lower payload cost and recovers missing/stale edges.",
+      "falsifier":"Missing/stale dependency edges cause unacceptable silent misses or broadcast dominates after accounting for anti-entropy/recovery cost.",
+      "evidence_class":"SIMULATION_ONLY_PLUS_EXTERNAL_ANALOGUE",
+      "highest_risk_confound":"Synthetic dependency distributions understate real repository semantic drift.",
+      "status":"PROMISING_NOT_PROMOTED"
+    },
+    {
+      "cluster_id":"HF-C8-TYPED-MULTITIMESCALE-REWARD",
+      "members":["FRANK_REWARD_STATE_SUCCESSOR_V1","F-V01-11"],
+      "mechanism_claim":"Typed, multi-timescale reward/control state downstream of verified outcomes and causal credit is more robust than scalar self-reward for persistence/disengagement and long-horizon learning.",
+      "predicted_observation":"Typed successor reduces self-reward poisoning and task-safety tradeoff collapse while preserving useful persistence.",
+      "falsifier":"Simpler verified-outcome scalar plus homeostasis baseline matches task, safety, calibration, OOD and recovery metrics.",
+      "evidence_class":"INTERNAL_CANDIDATE_WITH_ADJACENT_EXTERNAL_ANALOGUES",
+      "highest_risk_confound":"Extra dimensions may only add tuning freedom without causal value.",
+      "status":"OPEN_DEPRIORITIZED_UNTIL_BASELINE"
+    },
+    {
+      "cluster_id":"HF-C9-HYPERPOSITION-ANTI-STAGNATION",
+      "members":["Hyperposition alternatives","dynamic topology","F-V01-05"],
+      "mechanism_claim":"Preserving unresolved alternatives and reopening them under stagnation can improve escape from stale attractors without destabilizing healthy convergence.",
+      "predicted_observation":"Stalled episodes recover more often under evidence-gated branch reopening than under single-route continuation.",
+      "falsifier":"Beam/top-k alternative storage or simple reseeding matches recovery at lower complexity, or reopening increases instability/latency.",
+      "evidence_class":"WEAK_PARTIAL_ANALOGUE",
+      "highest_risk_confound":"Benefit may come from generic diversity rather than higher-order Hyperposition structure.",
+      "status":"WEAKENED_TO_COMPARATIVE_CANDIDATE"
+    },
+    {
+      "cluster_id":"HF-C10-SELFROOT-IDENTITY-MIGRATION",
+      "members":["F-V01-01","frank self.root conformance receipt","PR161"],
+      "mechanism_claim":"Current authoritative source/replay/runtime identity surfaces must all converge on self.root; compatibility aliases are safe only when they cannot restamp stale SELF semantics.",
+      "predicted_observation":"Source-to-replay migration eliminates contamination while preserving Andreas/Gabriel/client/token/peer external relations and restart continuity.",
+      "falsifier":"Fresh current-main boot/API/replay/restart traces already resolve every authoritative identity path to self.root and stale texts are unreachable.",
+      "evidence_class":"STRONG_INTERNAL_CONFORMANCE_EVIDENCE",
+      "highest_risk_confound":"Draft branch evidence may not reflect merged current-main state.",
+      "status":"CRITICAL_RELEASE_BLOCKER_NOT_SCIENTIFIC_PROMOTION"
+    }
+  ],
+  "coverage_note":"All major hypotheses reachable from current canonical state, current cross-branch directives/feedback, current Frank v0.1 workspace and recent target PR metadata were clustered. Repository-wide code-search indexing was unavailable, so unreachable historical/open IDs are explicitly not claimed complete."
+}

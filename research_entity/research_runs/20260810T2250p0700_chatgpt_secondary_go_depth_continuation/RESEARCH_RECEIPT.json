@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2250p0700-chatgpt-secondary-go-depth-continuation",
+  "created_at": "2026-08-10T22:50:00+07:00",
+  "trigger": "none",
+  "continuation_mode": "USER_REQUESTED_DEEP_REPEAT_OF_PRIOR_GO",
+  "user_message_semantics": "nochmal aber länger und tiefer maximale token zahl",
+  "command_law_note": "This is not classified as exact reserved command go because the complete trimmed user message was not exactly go.",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank",
+    "target_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "active_target": "FRANK_V0_1",
+    "native_identity": "self.root",
+    "human_surface_name": "Frank",
+    "current_body": "accepted Hostinger Ubuntu VPS",
+    "training_authorized": false
+  },
+  "deep_fusion_summary": {
+    "primary_result": "The previous coarse identity blocker has decomposed into multiple executable subproblems. Surface self.root identity is substantially improved on main, while the current critical frontier moved through state-lineage/replay, single-execution continuity, token ingress, effect fencing, and ClayCode authority-provenance/type-effect closure.",
+    "truth_law": "QUEUED != EXECUTED != PASS; branch-local PASS != current-main PASS; static PASS != target-VPS acceptance; model agreement != promotion."
+  },
+  "identity_and_state_lineage": {
+    "supported_progress": [
+      "Current main contains 000_SELF_ROOT_V01_OWNER_FIXED_SOURCE.txt.",
+      "Current main claycode/frank_entity.clay maps canonical entity id to #self_root, native_self to self.root, human surface to Frank, self class SERVER_BINARY_ENTITY, body TARGET_VPS and cognition CLAYCODE_ONLY while Andreas remains an external operator.",
+      "PR124 current-main identity candidate previously produced exact-head owner-fixed conformance plus differential Deep Integrity evidence without introducing new static failures.",
+      "The direct SQLite self.root migration path explored by a parallel state-lineage worker was removed before promotion; repository transaction plus deterministic repository replay became the simpler candidate path."
+    ],
+    "remaining_or_recent_gap": "Deep state-authority/runtime/materialization surfaces were independently observed carrying stale pre-self.root semantics. Current-main revalidation is still required because the target repository advances continuously.",
+    "negative_result": "A stacked direct-migrator adversarial diagnostic became stale before execution because upstream removed the direct migrator. The failed run is classified STALE_TEST_SNAPSHOT, not scientific evidence. The architectural lesson is retained: do not maintain two independent semantic identity-migration paths."
+  },
+  "single_instance_and_token_ingress": {
+    "progress": [
+      "V15 singleton Frank/self.root presence with monotonic lease_epoch and holder/session/client provenance exists on main.",
+      "A physical Linux FrankExecutionGate using flock plus V15 semantic presence exists as the standard one-host execution gate.",
+      "A framework-independent bearer token ingress core exists on main. Credential configuration stores token SHA-256 digests and fixed credential/client/holder/scope principals; raw bearer values are transient; every admitted interaction routes through FrankExecutionGate.",
+      "Recent main commits added V16 execution continuity/idle-handoff schema and same-session continuation/idempotency work."
+    ],
+    "negative_evidence": [
+      "V15 holder identity alone did not imply at-most-one concurrent execution for two different request ids under the same holder; this motivated the physical FrankExecutionGate and later execution-continuity work.",
+      "Wall-clock lease expiry alone is not accepted as sufficient semantic recovery proof. Production takeover must remain bound to explicit recovery/continuity rules."
+    ]
+  },
+  "effect_presence_fencing": {
+    "baseline_counterexample": {
+      "source": "PR147 target-VPS causal discriminator",
+      "sequence": "holder A owns V15 epoch N -> A reserves V14 effect -> B later owns epoch N+1 -> stale A reservation calls EffectLifecycleRuntime.begin_attempt",
+      "observed": "stale reservation entered COMMITTING because current V14 reservation/attempt path carried no V15 presence binding",
+      "classification": "SUPPORTED_CROSS_COMPONENT_INTEGRATION_GAP",
+      "not_claimed": "No real external provider effect was executed; this is semantic/persistence fencing evidence."
+    },
+    "candidate_comparison": {
+      "PR156": {
+        "role": "ChatGPT repair candidate",
+        "design_strengths": [
+          "PresenceFence is part of core ClayCode EffectReservationReceipt/EffectAttempt semantics.",
+          "Token IngressExecutionLease can derive the transient fence only from the already-admitted execution lease, not user input.",
+          "Reservation and begin_attempt revalidate current exact holder+epoch; retry is fenced; outcome observation/reconciliation remains possible after ownership change.",
+          "ClayCode execute rechecks immediately before runtime_effect to expose the external-commit TOCTOU obligation."
+        ],
+        "execution": "First full VPS run failed on an implementation mismatch: runtime queried nonexistent singleton_id; actual V15 key is singleton_key='CURRENT'. The branch was corrected afterward but is substantially behind current main and therefore is not a merge candidate without a fresh port/replay.",
+        "status": "USEFUL_DESIGN_EVIDENCE_NOT_CURRENT_MAIN_PROMOTION"
+      },
+      "PR157": {
+        "role": "Parallel V17 additive presence-bound effect-start candidate",
+        "strengths": ["Second current-presence check before provider execution", "preserves historical V14 baseline as directly executable archaeology", "additive Clay semantic module"],
+        "concern": "The historical compatibility facade still exposes an unfenced effect_authority_reserve path while production use is constrained by invariants/comments. Unless unreachability from production is mechanically enforced, this remains a potential bypass surface.",
+        "status": "RESEARCH/ARCHAEOLOGY_VALUE_HIGH; RELEASE_MECHANISM_REQUIRES_BYPASS_PROOF"
+      },
+      "PR160": {
+        "role": "Parallel V16.1 fail-closed effect execution fence candidate",
+        "strengths": [
+          "Explicitly presence-bound new reservations.",
+          "Missing/unbound/wrong/stale/expired fences fail closed for starting or retrying attempts.",
+          "Successor holder cannot steal predecessor reservation.",
+          "Same-holder same-epoch renewal remains valid.",
+          "Outcome/reconciliation remains observable after attempt start.",
+          "Comprehensive causal matrix and current ClayCode effect updates."
+        ],
+        "target_vps_evidence": "One observed VPS run reported fence runtime 10/10 PASS, SQLite integrity PASS, foreign-key PASS, schema atomicity PASS and deep-regression PASS. The overall workflow was red only because repo-static detected an orthogonal telemetry-migration invariant on that stale branch baseline and pytest was unavailable on the runner. Therefore mechanism evidence is strong but branch promotion is not earned.",
+        "status": "BEST_CURRENT_MECHANISM_EVIDENCE_NOT_CURRENT_MAIN_MERGE_CANDIDATE"
+      }
+    },
+    "fusion_decision": "Do not merge any of PR156/157/160 as-is because all diverged substantially behind rapidly advancing main. Port the best fail-closed mechanism to a fresh main head, preserve PR156's ingress-derived fence and explicit outcome-vs-execution distinction, preserve PR160's adversarial matrix, and retain historical V14 as a test fixture rather than a reachable production bypass.",
+    "external_mechanism_support": [
+      "Kafka producer fencing supports generation-based rejection of older producers after a newer incarnation becomes current.",
+      "PostgreSQL advisory-lock documentation reinforces that advisory locks require application-level correctness and do not themselves mediate all resource effects.",
+      "The design inference for Frank is that flock/presence is necessary but effect admission must verify the fence at the protected consequence boundary."
+    ]
+  },
+  "authority_provenance_and_claycode_wp04": {
+    "source_discriminator": "Current authority_provenance_gap_probe compares an intended authenticated reversible-write EffectRequest with a directly constructed structurally identical EffectRequest. The hypothesis is that value-level request fields alone do not encode trusted origin.",
+    "epistemic_status": "SOURCE_DISCRIMINATOR_PRESENT; TARGET_VPS_PERSISTED_RECEIPT_NOT_OBSERVED_IN_THIS RUN; PRODUCTION_EXPLOIT_NOT_CLAIMED",
+    "counterhypothesis": "The real ClayCode type/effect/module boundary can prevent untrusted modules from constructing trusted authority values or invoking authorize_effect even if the raw data shape is forgeable.",
+    "current_wp04_progress": [
+      "Main now contains a conservative indirect/reference checker that treats acquisition of an effectful function value such as authorize_effect as requiring the same restricted-effect admission as a direct call.",
+      "Main contains content-addressed transitive module dependency-closure hashing so trust can be bound to all semantically reachable source bytes rather than only root module names/hashes.",
+      "An adversarial follow-up demonstrates the indirect reference gate can reject a fixture that aliases authorize_effect, while separately exposing that source-only root trust can survive dependency drift until closure pinning is enforced by policy.",
+      "Recent main commits further add indirect-call/dependency-closure followup CI; WP04 remains OPEN and no whole-package promotion is claimed."
+    ],
+    "external_design_evidence": [
+      "WASI capability-based sandboxing follows no ambient authority and explicit host grants.",
+      "Rust module privacy demonstrates construction/use can be made inaccessible outside trusted module scope.",
+      "Object-capability research treats authority as possession/reachability of protected capabilities rather than forgeable scalar claims."
+    ],
+    "architecture_delta_candidate": "For WP04, authentication/capability provenance should enter effect authorization as opaque trusted-runtime-minted values or equivalent module/type/effect protected capabilities. Public request values may describe intent but must not self-assert AUTHENTICATED_USER/scoped capability as authority. Exact trusted module/dependency closure and restricted-effect call/reference admission must be mechanically checked. Existing frozen semantics should be reused if they can express this; semantic amendment requires an executable counterexample showing they cannot."
+  },
+  "swarm_coordination_evidence": {
+    "duplicate_suppression": [
+      "PR130 stacked direct-migrator diagnostic closed after upstream removed the direct migration architecture.",
+      "PR145 static presence-to-effect audit closed after stronger independent PR147 produced a direct causal VPS test.",
+      "PR156 intentionally stopped additional writes when PR157/PR160 appeared; candidates were compared instead of blindly competing."
+    ],
+    "stale_work_law_observed": "Multiple candidate branches became tens of commits behind main during this run. Branch-local success was not credited as current-work completion."
+  },
+  "external_sources": [
+    {"class": "PRIMARY/OFFICIAL", "source": "WASI.dev capability-based sandbox documentation", "role": "no ambient authority / explicit capabilities"},
+    {"class": "OFFICIAL_LANGUAGE_REFERENCE", "source": "Rust Reference visibility/privacy", "role": "module-level construction/use restriction"},
+    {"class": "PRIMARY_RESEARCH", "source": "Abstract Data Types in Object-Capability Systems, ECOOP 2016", "role": "opaque types/object-capability authority design"},
+    {"class": "OFFICIAL_SYSTEM_DOCUMENTATION", "source": "Kafka producer fencing documentation", "role": "generation-based stale actor fencing"},
+    {"class": "OFFICIAL_DB_DOCUMENTATION", "source": "PostgreSQL advisory lock documentation", "role": "locks require application-level protected-resource mediation"}
+  ],
+  "negative_results_and_limits": [
+    "No current-main effect-fence repair has been promoted in this run.",
+    "No branch-local pass is treated as final Frank v0.1 acceptance.",
+    "No real external provider effect was executed during the effect-fence diagnostics discussed here.",
+    "No paid/final training was started or authorized.",
+    "The Clay program-progress resolver was not executed through this connector surface; visible percent/ETA/forecast must remain UNRESOLVED.",
+    "Main advanced repeatedly during the run, so all next work must refresh the exact target head before effect."
+  ],
+  "next_frontier_ranked": [
+    "Fresh-main fusion/port of fail-closed presence->effect fencing, using the PR147 counterexample as the mandatory red baseline and PR160's matrix as the strongest current test corpus.",
+    "Make the production effect path unable to call an unfenced historical V14 reservation/start facade; retain V14 only as measurable archaeology/test baseline.",
+    "Bind trusted effect PresenceFence derivation to the admitted FrankExecutionLease/token ingress path; never accept holder/epoch from user request payload.",
+    "Close the semantic/provider-commit TOCTOU boundary or explicitly document the strongest achievable single-host fence if provider APIs cannot consume fencing tokens.",
+    "WP04 malicious-module acceptance test: untrusted module must fail to construct/mint authenticated authority or directly/indirectly invoke MINT_EFFECT_AUTHORIZATION; trusted exact-content/dependency-closure module must pass.",
+    "Pin transitive dependency-closure hashes in the trust policy and reject drift; classify currently unresolved host/prelude calls fail-closed rather than assuming purity.",
+    "Continue state-lineage repository-only replay and boot/recovery/stale-clone receipts on current main.",
+    "Recompute all priorities after the next current-main/VPS receipts because repository velocity is high."
+  ],
+  "research_write_result": "COMMITTED"
+}

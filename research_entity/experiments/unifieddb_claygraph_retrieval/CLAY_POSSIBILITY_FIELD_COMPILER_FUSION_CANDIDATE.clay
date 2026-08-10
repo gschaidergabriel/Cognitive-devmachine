@@ -1,0 +1,190 @@
+// CLAY POSSIBILITY FIELD COMPILER · FUSION CANDIDATE
+// Status: RESEARCH_CANDIDATE · NOT_CANONICAL · NOT_EFFECT_AUTHORITY
+// Purpose: make UnifiedDB+ClayGraph model-facing access behave as a bounded semantic
+//          possibility preprocessor/context compiler rather than a generic database query API.
+// Physical persistence/index engines remain implementation details and may stay conventional.
+
+entity PossibilityFieldCompilerCandidate {
+  identity: CLAY_RESEARCH_MECHANISM
+  authority: CONTEXT_ONLY_NO_EFFECT_AUTHORITY
+
+  semantic_authority {
+    source_state: UnifiedDB
+    topology: ClayGraph.DERIVED_REBUILDABLE
+    access_generations: UnifiedDB.SemanticAccessGenerations
+    note: "Neither graph activation, semantic seed resolution, ranking, route reachability nor compilation promotes truth or effect authority."
+  }
+
+  cycle_basis CyclePin {
+    cycle_id: Id
+    generation_id: SemanticGenerationId
+    source_epoch: Epoch
+    graph_epoch: Epoch
+    derivation_hash: Hash
+    law: "One cognitive cycle reads one coherent published generation; mixed-generation assembly is rejected."
+  }
+
+  query_input PossibilityIntent {
+    query_id: Id
+    natural_text: Text
+    typed_seed?: SemanticSeedId
+    requested_target?: LogicalId
+    constraints?: RouteConstraints
+    max_context_items: Int
+  }
+
+  entity_resolution Resolution {
+    classes: [EXACT_LOGICAL_ID, EVIDENCE_ALIAS, AMBIGUOUS, LOW_CONFIDENCE, MISS]
+    graph_anchor_allowed: [EXACT_LOGICAL_ID, EVIDENCE_ALIAS]
+    fail_closed: [AMBIGUOUS, LOW_CONFIDENCE, MISS]
+    law: "Resolution may select an existing evidence-bound identity; it may not mint identity, truth or authority."
+  }
+
+  compiled_field SemanticField {
+    generation_id: SemanticGenerationId
+    seed_id: SemanticSeedId
+    refs: [RecordRef]
+    proof: [EvidenceRef]
+    sufficient: Bool
+    verified: Bool
+    source_epoch: Epoch
+    graph_epoch: Epoch
+  }
+
+  compositional_frontier PossibilityFrontier {
+    input_edges: [CapabilityEdge]
+    routes: ParetoSet<PossibilityRoute>
+    source_epoch: Epoch
+    graph_epoch: Epoch
+    approximate: Bool
+    beam_per_node?: Int
+    hub_penalty?: Real
+
+    composition {
+      cost: SUM
+      latency: SUM
+      reliability: PRODUCT
+      authority: MIN
+      fresh: AND
+      local: AND
+      lineages: UNION
+    }
+
+    law: "Composition never upgrades authority, freshness, locality, evidence independence or epistemic status."
+    law: "Approximate frontiers remain explicitly approximate; they are not promoted without matched exhaustive/held-out evidence."
+  }
+
+  assembly PossibilityCapsule {
+    mode: [
+      COMPILED_SUFFICIENT,
+      COMPILED_COMPOSITIONAL,
+      ENTITY_RESOLVED_GRAPH_FALLBACK,
+      HYBRID_FALLBACK,
+      LEXICAL_FALLBACK,
+      ABSTAIN
+    ]
+    selected: [Possibility]
+    alternatives: [Possibility]
+    counterevidence: [EvidenceRef]
+    conflicts: [EvidenceRef]
+    unknowns: [EvidenceRef]
+    suppressed: [SuppressedPossibility]
+    source_epoch: Epoch
+    graph_epoch: Epoch
+    generation_id?: SemanticGenerationId
+    resolution_class: ResolutionClass
+    receipt_hash: Hash
+    authority: CONTEXT_ONLY_NO_EFFECT_AUTHORITY
+  }
+
+  compile(query: PossibilityIntent, pin: CyclePin) -> PossibilityCapsule {
+    require pin.source_epoch == UnifiedDB.current_cycle_basis
+    require ClayGraph.projection_verified_equal(pin.graph_epoch, pin.source_epoch)
+    require ClayGraph.ambiguous_heads(pin.graph_epoch) == 0
+
+    resolution = resolve_existing_identity(query.natural_text, query.typed_seed, pin.source_epoch)
+    field = semantic_generation_lookup(resolution, pin)
+
+    if field.verified && field.sufficient && !field.refs.empty {
+      // Causal result already measured on current Clay semantic-family stress:
+      // do not pad a complete field merely because a top-k budget has spare slots.
+      return capsule(mode=COMPILED_SUFFICIENT, selected=field.refs)
+    }
+
+    if query.requested_target.present && resolution.graph_anchor_allowed {
+      frontier = compile_or_read_frontier(pin, query.constraints)
+      route = frontier.best(resolution.logical_id, query.requested_target, query.constraints)
+      if route.present {
+        return capsule(mode=COMPILED_COMPOSITIONAL, selected=[route], alternatives=frontier.pareto_alternatives)
+      }
+    }
+
+    if resolution.graph_anchor_allowed {
+      graph_context = evidence_bound_graph_fallback(resolution.logical_id, query.natural_text, pin)
+      if graph_context.sufficient {
+        return capsule(mode=ENTITY_RESOLVED_GRAPH_FALLBACK, selected=graph_context.refs)
+      }
+    }
+
+    fallback = measured_conventional_fallback(query, pin)
+    if fallback.refs.present {
+      return capsule(mode=fallback.mode, selected=fallback.refs)
+    }
+    return capsule(mode=ABSTAIN, selected=[])
+  }
+
+  sufficiency_stop {
+    rule: "A VERIFIED/CURRENT epoch-coherent compiled field that already reconstructs the required semantic family stops retrieval."
+    forbidden: "Pad spare top-k slots with unrelated lexical hits after sufficiency is proven."
+    fallback_condition: "Missing, empty, stale, unverified, ambiguous or insufficient compiled field."
+  }
+
+  invalidation {
+    on_source_epoch_change: invalidate_affected_semantic_generations_and_frontiers
+    on_graph_epoch_change: invalidate_affected_graph_dependent_generations_and_frontiers
+    on_entity_resolution_change: invalidate_affected_alias_and_anchor_projections
+    strategy: TARGETED_DEPENDENCY_INVALIDATION
+    forbidden: EAGER_GLOBAL_COMBINATORIAL_CLOSURE
+  }
+
+  resource_control {
+    frontier_default: EXHAUSTIVE_BOUNDED_UNTIL_REAL_GATE
+    experimental_candidate: { beam_per_node: 16, hub_penalty: MEASURED_CONFIG }
+    promotion_rule: "Approximate energy-bounded frontier must match exhaustive/held-out feasible-hit and best-route acceptance while materially improving build/update/resource cost."
+  }
+
+  recovery {
+    last_known_good: SemanticAccessHead.CURRENT
+    publish: ATOMIC_GENERATION_HEAD_SWAP
+    failed_or_empty_generation: KEEP_LAST_KNOWN_GOOD
+    stale_or_ambiguous_graph: FAIL_CLOSED_TO_CONVENTIONAL_FALLBACK_OR_ABSTAIN
+  }
+
+  evidence_fusion {
+    real_clay_semantic_stress: "4db7fe3d46e73896c03fdd29a7ec7b508205842e"
+    coherent_generations: "69febf0808aec8197e69edc49ae2b01c32f49682"
+    sufficiency_runtime: "492a75bcb105fb0f4470c2d8c4d7f4448bde189d"
+    cycle_pin: "f02ea048440994d0888ea91cc72e2e283d191c93"
+    epoch_bound_graph_assembly: "f69f05be0f4f3f2a82dd5cc90c9804fdbcc4a3b5"
+    entity_resolved_graph_fallback: "dbbe57f3bf6e21e58beaeb5c5137cbcce6fe7814"
+    alias_ood_control: "3171d844a91cf0a20fadb64bef078923bbec6260"
+    compositional_frontier: "f110e980faf8ba6bf7627a3b8cc610c4f3232b0e"
+    compositional_stress: "9019e44ddaff6c48a77d507e2224be1438caa581"
+  }
+
+  promotion_gates [
+    HELD_OUT_REAL_NATURAL_LANGUAGE_ANCHOR_RESOLUTION,
+    REAL_CAPABILITY_ROUTE_FIXTURES,
+    STALE_NOISY_CONTRADICTORY_GRAPH_INJECTION,
+    ENTITY_ALIAS_MISSPELLING_PRONOUN_AMBIGUITY,
+    MATCHED_FTS5_DENSE_LATE_INTERACTION_GRAPH_DATABASE_BASELINES,
+    BUILD_UPDATE_INVALIDATION_MEMORY_IO_COST,
+    DOWNSTREAM_ANSWER_TASK_AND_TOKEN_CONTEXT_QUALITY,
+    HOSTINGER_UBUNTU_REPLICATION,
+    ANDREAS_TARGET_ACCEPTANCE
+  ]
+
+  strongest_counterhypothesis: "Observed gains are mostly materialization/caching plus benchmark-aligned semantic anchors; a well-tuned conventional or dense/late-interaction/graph retrieval stack may match quality with lower update complexity, and stale/noisy real topology may erase the gain."
+
+  canonical_promotion: NONE
+}

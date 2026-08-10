@@ -7,7 +7,9 @@ on:
     paths:
       - '.github/workflows/unifieddb-eap-vps-benchmark.yml'
       - 'research_entity/harness/reference/unifieddb_emergent_preprocessor.py'
+      - 'research_entity/harness/reference/unifieddb_emergent_cascade.py'
       - 'research_entity/harness/reference/test_unifieddb_emergent_assembly.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_cascade.py'
       - 'research_entity/harness/reference/benchmark_unifieddb_emergent_assembly.py'
       - 'research_entity/harness/reference/unifieddb_query_plane.py'
       - 'research_entity/harness/reference/state_ledger.py'
@@ -31,13 +33,14 @@ jobs:
           clean: true
           persist-credentials: false
 
-      - name: Run UnifiedDB query and EAP regression suites
+      - name: Run UnifiedDB query, EAP and fail-closed cascade regression suites
         shell: bash
         run: |
           set -euo pipefail
           python3 -m unittest -v \
             research_entity.harness.reference.test_unifieddb_query_plane \
-            research_entity.harness.reference.test_unifieddb_emergent_assembly
+            research_entity.harness.reference.test_unifieddb_emergent_assembly \
+            research_entity.harness.reference.test_unifieddb_emergent_cascade
 
       - name: Run EAP model-input benchmark
         shell: bash
@@ -54,7 +57,7 @@ jobs:
           staged=bench['methods']['recursive_sql_staged_assembly']
           oob=bench['out_of_box_experiment']
           payload={
-              'schema_version':'1.0',
+              'schema_version':'1.1',
               'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
               'scope':'UNIFIEDDB_EAP_MODEL_INPUT_PRELIMINARY_NOT_ANDREAS_TARGET_ACCEPTANCE',
               'created_at':datetime.now(timezone.utc).isoformat(),
@@ -67,14 +70,16 @@ jobs:
               'hostname':socket.gethostname(),
               'platform':platform.platform(),
               'python':platform.python_version(),
+              'regression_suites':['unifieddb_query_plane','emergent_assembly','fail_closed_emergent_cascade'],
               'benchmark':bench,
               'acceptance':{
                   'retrieval_quality_exact': eap['recall_at_12']==1.0 and eap['precision_at_12']==1.0 and eap['ndcg_at_12']==1.0,
                   'faster_than_staged_sql_p50': eap['latency_us']['p50'] < staged['latency_us']['p50'],
                   'speedup_vs_staged_sql_p50': eap['speedup_vs_recursive_sql_staged_p50'],
                   'negative_space_improves_precision': oob['gated_precision_at_2'] > oob['ungated_precision_at_2'],
+                  'fail_closed_nl_seed_gate_regression': True,
               },
-              'scope_guard':'A pass proves only this bounded synthetic model-input benchmark on this self-hosted Ubuntu runner; it is not universal database superiority or final Andreas target acceptance.',
+              'scope_guard':'A pass proves only this bounded synthetic model-input benchmark and regression set on this self-hosted Ubuntu runner; it is not universal database superiority or final Andreas target acceptance.',
               'authority_invariant':'model output != execution authority',
           }
           Path('/tmp/UNIFIEDDB_EAP_VPS_RECEIPT.json').write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
@@ -124,9 +129,11 @@ jobs:
           from pathlib import Path
           source=Path('/tmp/unifieddb-eap/UNIFIEDDB_EAP_VPS_RECEIPT.json')
           data=json.loads(source.read_text(encoding='utf-8'))
+          assert data['schema_version']=='1.1'
           assert data['evidence_class']=='REAL_SELF_HOSTED_UBUNTU_EXECUTION'
           assert data['github_sha']==os.environ['TESTED_SHA']
           assert data['authority_invariant']=='model output != execution authority'
+          assert 'fail_closed_emergent_cascade' in data['regression_suites']
           root=Path('research_entity/state/system/unifieddb_eap_benchmark')
           root.mkdir(parents=True,exist_ok=True)
           (root/'LATEST.json').write_text(json.dumps(data,indent=2,sort_keys=True)+'\n',encoding='utf-8')

@@ -1,0 +1,23 @@
+{
+  "schema": "clay.fallback_receipt_accuracy.local.v1",
+  "execution_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "operations": 20000,
+  "state_space": ["LEXICAL_ONLY", "GRAPH_ONLY", "HYBRID", "MISS"],
+  "legacy_mode_accuracy": 0.75,
+  "candidate_mode_and_channel_accuracy": 1.0,
+  "candidate_latency": {
+    "LEXICAL_ONLY": {"p50_us": 6.357, "p95_us": 8.746},
+    "GRAPH_ONLY": {"p50_us": 6.470, "p95_us": 7.310},
+    "HYBRID": {"p50_us": 8.225, "p95_us": 8.980},
+    "MISS": {"p50_us": 6.202, "p95_us": 9.064}
+  },
+  "bug": "Legacy U11 labels a graph-only fallback as LEXICAL_FALLBACK because one non-empty ranking loses channel identity.",
+  "candidate": "RetrievalResult.fallback_channels plus GRAPH_FALLBACK mode for graph-only retrieval.",
+  "scope": "Receipt/provenance classification accuracy only; no claim that retrieval relevance improved.",
+  "promotion": "CANDIDATE_ONLY"
+}

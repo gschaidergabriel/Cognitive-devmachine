@@ -1,30 +1,33 @@
 # Fusion report — fusion-20260810T1624p0700
 
-## Fusion 2 — reconciled current result
+## Final reconciled synthesis
 
-During this fusion the moving stack advanced to epoch 20 and the project owner fixed `CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE` as the current global operating law. Therefore OmniSource intake and mandatory `ResearchReentryReceipt` closure are no longer an architecture candidate of this run: they are the active source-coverage/research-feedback contract. This fusion does not create a second competing live-fusion architecture.
+The moving project state changed materially during this fusion. Stack epoch 20 owner-fixes `CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE` as the global operation law: newly observed available data enters provenance-bound intake, material semantic deltas must return through explicit research re-entry, contradictions/negative evidence survive, and network exposure never becomes truth. This fusion makes no competing architecture and no additional canonical scientific promotion.
 
-`CLAY_LIVE_FUSION_MESH_V2_CANDIDATE` remains an unpromoted adaptive routing shadow. `CLAY_LIVE_FUSION_RESEARCH_BACKPROP_V3_CANDIDATE` remains unpromoted and is useful only where it adds non-duplicate testable mechanisms such as source-cursor gap detection, stranded-delta/broken-feedback-loop detection, coherent crash/restart replay and external-effect idempotency boundaries.
+The first executable implementation candidate now exists as `RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FUSION.sql`. Its local SQLite test passed all 19 declared source classes, stale/unverified promotion gating, distinct-provenance duplicate retention, contradiction preservation and a specific close/restart reentry path. It processed 5000 observation+assessment pairs in 0.170692 s (29292.5 pair/s; insert+assessment p50 0.024416 ms, p95 0.043054 ms; database 4,468,736 bytes). Two independent material contradictions intentionally left without reentry stayed visibly pending, which is the correct fail-observable behavior. The temporal-braid experiment found one false stale promotion under arrival-order latest-wins and zero under epoch-aware eligibility. This is useful local candidate evidence only; V10 is not promoted and V9 remains rollback baseline.
 
-## New Fusion result — observability gate
+## Routing observability result
 
-A real-repository routing replay is not scientifically adjudicating unless each replayed delta preserves or reproducibly reconstructs the pre-route dependency projection/hash, RoutePlan, causal predecessor state, receiver delivery/reconstruction/use/effect closure, ResearchReentryReceipt/result re-entry, payload/resource costs and repair/rollback state. Post-hoc branch outcomes are ground-truth/oracle material only; they are not evidence that a candidate routing policy predicted or delivered the same set.
+The 15:56 real fusion event still yields only a post-hoc oracle: 4 of 9 branches had material deltas, so a perfect targeter would use 4 rather than 9 full payloads, a theoretical 55.6% reduction. That does not score V2 routing prediction.
 
-At the 15:56 real fusion event, 4 of 9 registered branches received a material delta and 5 recorded `NO_CHANGE`. A perfect post-hoc oracle targeter would therefore use 4 rather than 9 full payload deliveries, a 55.6% theoretical reduction versus broadcast. This is `DIAGNOSTIC_ONLY`; V2 recall and route-cost error remain unmeasured on that event.
+A more important defect was found in the newly committed Hostinger replay harness before promotion claims could rely on it. The original workflow checked the older 16:25 work revision and the experiment hard-coded `spec_rev=2`, despite owner-fixed OmniSource plus later observability revisions. The script also derives expected branch labels from current artifacts, reports aggregate routing metrics, and does not actually execute the complete receiver delivery -> reconstruction -> use/effect -> ResearchReentryReceipt chain. Several fault rows are in-memory test assertions rather than independently verified operational fault receipts. Therefore a green old workflow run is stale diagnostic evidence, not current-work completion.
 
-## Cross-branch synthesis
+The work specification and workflow were repaired fail-closed. The current 16:42 revision requires effect-time resolution of the latest work revision, binds the receipt to its current spec/event id, treats older receipts as `STALE_EXECUTION_RECEIPT`, distinguishes oracle labels and simulated faults from operational receipts, and forces `REVISE` when promotion-grade pre-route or receiver/reentry observability is absent. At the bounded cutoff of this fusion, no verified current-spec Hostinger execution receipt had yet been observed.
 
-Primary incremental/differential computation literature supports maintaining changing computations and selecting update strategy according to locality and cost; it supports keeping targeted, dense and digest/full-refresh alternatives rather than hard-coding one mode. This is external analogue, not proof of Clay performance. Concurrent Hypofusion R6 adds an independent implementation precedent from MLIR: preserving unknown/residual operations and proving their legality/executability are distinct obligations. That strengthens the current ClayCode WP03 -> WP04/WP05 gate without selecting MLIR's architecture for Clay.
+## Cross-branch / external synthesis
+
+Primary incremental-computation literature supports incremental/differential maintenance and cost-sensitive switching between update strategies; this supports retaining targeted, dense and digest/full-refresh alternatives, not hard-coding one routing ideology. External analogy does not prove Clay performance. Concurrent Hypofusion R6 also supplies an independent MLIR implementation precedent that preservation and legality/executability are separate obligations, strengthening the ClayCode WP03 -> WP04/WP05 disposition gate without prescribing MLIR architecture.
 
 ## Current critical path
 
-BASE ClayCode remains `NOT_PASS`. WP01 and WP02 are PASS; WP03 and later packages remain OPEN. The 15:56 WP03 bridge evidence is narrow: tested residual semantic identity is preserved and tamper checks pass, but WP04/WP05 still require a per-class disposition/legality/use matrix so preserved `rule_decl`, `invariant_decl` and other residual classes cannot silently become stranded meaning or unauthorized semantics.
+BASE ClayCode remains `NOT_PASS`: WP01 and WP02 are PASS, WP03 and later packages are OPEN. The WP03 bridge preserves tested residual semantic identity, but WP04/WP05 still need explicit per-class validate/lower/consume/defer/reject dispositions, especially for `rule_decl` and `invariant_decl`, so preserved meaning cannot become stranded or silently authoritative.
 
-## Promotion / work decision
+## Decisions
 
-- OmniSource live intake + mandatory research re-entry: **OWNER-FIXED ACTIVE GLOBAL OPERATION LAW**.
-- Live Fusion Mesh V2 adaptive routing: **CANDIDATE_NOT_PROMOTED**.
+- Owner-fixed OmniSource intake + mandatory research re-entry: **ACTIVE GLOBAL OPERATION LAW**.
+- UnifiedDB V10 OmniSource persistence/projection: **CANDIDATE_TESTING; LOCAL PASS; NOT PROMOTED**.
+- Live Fusion Mesh V2 routing: **CANDIDATE_NOT_PROMOTED**.
 - Live Fusion Research Backprop V3: **CANDIDATE_NOT_PROMOTED; SUPPLEMENTAL NON-DUPLICATE MECHANISMS ONLY**.
 - Additional canonical promotion by this fusion: **NONE**.
-- Replay work: rebased on OmniSource and revised with the observability-first adjudication gate in `20260810T1635p0700_chatgpt_secondary_live_fusion_omnisource_observability_merge.json`.
-- Next discriminating evidence: representative OmniSource source/reentry replay plus matched current-routing vs V2 shadow vs non-duplicate V3 fault mechanisms, with source gaps, stale/missing dependency state, duplicate/reorder, high-centrality invalidation, crash/restart, exact-vs-shadow authority and full resource receipts.
+- Hostinger current-spec replay: **REQUIRED; NO VERIFIED CURRENT-SPEC RECEIPT OBSERVED AT CUTOFF**.
+- BASE ClayCode priority: unchanged; fusion implementation/replay should use spare capacity unless it directly improves shared-state reliability.

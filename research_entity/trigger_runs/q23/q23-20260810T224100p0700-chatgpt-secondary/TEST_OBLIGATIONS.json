@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "tests": [
+    {
+      "id": "T-Q23-FEATURE-LADDER-01",
+      "priority": "P0_FOR_F_V01_06",
+      "purpose": "Determine which visual representation is actually Pareto-best for MVC familiarity/open-set routing.",
+      "variants": [
+        "Q35_PROJECTED_GLOBAL_MEAN",
+        "Q35_PROJECTED_MEAN_VAR",
+        "Q35_PROJECTED_SPATIAL_2X2",
+        "Q35_PROJECTED_SPATIAL_3X3",
+        "Q35_PREMERGER_REFERENCE_TAP",
+        "MOBILECLIP2_S0",
+        "DINOV3_VITS16"
+      ],
+      "head_control": "Run MVC-0 prototypes on all variants first; then identical-capacity MVC-1 linear heads where dimensions permit. Do not let head capacity confound backbone comparison.",
+      "fixtures": [
+        "same app/layout repeated across days",
+        "visually similar unseen app/window",
+        "same state shifted/resized",
+        "theme/color perturbation",
+        "small-text/OCR critical state",
+        "modal/notification overlay",
+        "same crop in changed global background",
+        "partial occlusion",
+        "known state with contradictory changed attribute"
+      ],
+      "metrics": [
+        "false-familiarity rate",
+        "unknown AUROC/AUPR",
+        "FPR95",
+        "ECE/Brier/calibration",
+        "known recall/precision/F1",
+        "safe decoder-bypass rate",
+        "downstream task/action success",
+        "encode p50/p95/p99",
+        "peak RAM/VRAM",
+        "CPU/GPU utilization",
+        "bytes moved",
+        "energy where available"
+      ],
+      "promotion_rule": "No representation wins on top-1 accuracy alone. False familiarity, calibration, downstream task outcome and total duplicate-encode cost are hard dimensions."
+    },
+    {
+      "id": "T-Q23-ZERO-REENCODE-01",
+      "priority": "P0_FOR_QNDRF",
+      "purpose": "Prove that the exact image embedding buffer consumed by MVC can be passed into semantic decode without a second image encode on the Frank target path.",
+      "variants": ["encode_then_decode_normal","encode_once_mvc_then_mtmd_helper_decode_precomputed"],
+      "required_receipts": ["encode-call count","embedding hash/sample digest","semantic output equivalence/tolerance","latency/resource trace"],
+      "falsifier": "Any hidden re-encode, embedding mutation incompatibility or semantic mismatch outside frozen tolerance."
+    },
+    {
+      "id": "T-Q23-CACHE-LIFETIME-01",
+      "priority": "P1",
+      "purpose": "Test whether four visual-state lifetimes reduce stale/cache errors and state amplification.",
+      "variants": ["NO_CACHE","ONE_DURABLE_RAW_EMBEDDING_CACHE","L0_L1_L2_SPLIT","L0_L1_L2_PLUS_L3_RUNTIME_CACHE"],
+      "cases": [
+        "exact same frame",
+        "irrelevant one-pixel change",
+        "changed ROI",
+        "same ROI from different full frame",
+        "token-budget/preprocess change",
+        "mmproj revision swap",
+        "model/quantization swap",
+        "runtime ABI change",
+        "process restart",
+        "stale descriptor",
+        "stale LLM recurrent state"
+      ],
+      "metrics": ["false cache hit","miss rate","restart recovery","state bytes on disk/RAM","latency saved","rebuild success","semantic outcome equivalence"]
+    },
+    {
+      "id": "T-Q23-HYBRID-RESTART-01",
+      "priority": "P1",
+      "purpose": "Verify Qwen3.5 recurrent continuation state cannot be accidentally treated as equivalent merely because visual embeddings match.",
+      "paired_runs": ["uninterrupted","checkpoint/restore"],
+      "controls": ["same media/same prompt","same media/different preceding text","changed media","mmproj swap","quant/model swap"],
+      "metrics": ["next-token/logit equivalence where accessible","task-output equivalence","state restore success","replay latency","failure classification"]
+    },
+    {
+      "id": "T-Q23-TRANSFORM-INVARIANCE-01",
+      "priority": "P1",
+      "purpose": "Prevent spatial-pyramid MVC from overfitting absolute screen location.",
+      "transforms": ["translation","window resize","DPI scale","theme change","minor crop","blur/compression","subpixel text-render variation"],
+      "compare": ["global mean","spatial pyramid","MobileCLIP2-S0","DINOv3-S/16"],
+      "failure": "A method that improves same-layout identity but materially increases false unfamiliar/familiar outcomes under harmless transformations is rejected or gated by transform-aware normalization."
+    }
+  ]
+}

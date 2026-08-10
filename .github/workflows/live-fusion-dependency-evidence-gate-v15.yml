@@ -1,0 +1,38 @@
+name: Live Fusion Dependency Evidence Gate V15
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research_entity/runtime/live_fusion_dependency_evidence_gate_v15.py'
+      - 'research_entity/runtime/test_live_fusion_dependency_evidence_gate_v15.py'
+      - 'research_entity/runtime/benchmark_live_fusion_dependency_evidence_gate_v15.py'
+      - 'research_entity/global/CLAY_LIVE_FUSION_DEPENDENCY_EVIDENCE_GATE_V15_CANDIDATE.clay'
+      - 'research_entity/research_reports/LIVE_FUSION_DEPENDENCY_EVIDENCE_GATE_V15_GO_20260810.md'
+      - '.github/workflows/live-fusion-dependency-evidence-gate-v15.yml'
+
+jobs:
+  mechanism-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Capture environment
+        run: |
+          python --version
+          uname -a
+          git rev-parse HEAD
+          git status --porcelain
+      - name: Run falsifiers
+        working-directory: research_entity/runtime
+        run: python -m unittest -v test_live_fusion_dependency_evidence_gate_v15.py
+      - name: Run synthetic mechanism benchmark
+        working-directory: research_entity/runtime
+        run: python benchmark_live_fusion_dependency_evidence_gate_v15.py | tee /tmp/live-fusion-v15-benchmark.json
+      - name: Upload benchmark receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-fusion-v15-benchmark
+          path: /tmp/live-fusion-v15-benchmark.json

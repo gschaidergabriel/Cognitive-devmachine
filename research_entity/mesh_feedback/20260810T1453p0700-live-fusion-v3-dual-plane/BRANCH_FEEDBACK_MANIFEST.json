@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-live-fusion-v3-dual-plane-20260810T1455p0700",
+  "created_at": "2026-08-10T14:55:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "epistemic_status": "SYNTHETIC_SUPPORTED_CANDIDATE_WITH_CORRELATED_BLIND_SPOT_NOT_PROMOTED",
+  "source_refs": [
+    "e2a452306292ef83e5ebd58820c83819b136ad55",
+    "e0e1ad53c46ddb85616a6280b729da06ba55baf8",
+    "3486851c20cdd517aee5362c36466e9ac212f6da",
+    "PR156 head lineage through cc30ea26de3ce2b535f15fe6b0871caae8555590"
+  ],
+  "fusion": {
+    "semantic_control_plane": "V3 cheap global ImpactBeacon/AckClosure candidate over V2 dependency-aware payload routing",
+    "transport_reentry_plane": "PR156 durable append/replay + DeliveryAck + exact terminal Resolution",
+    "truth_boundary": "Neither beacon count, delivery ACK nor shared-ancestry second projection creates epistemic authority.",
+    "critical_counterhypothesis": "If ClayGraph/UnifiedDB/local dependency surfaces share the same missing-edge ancestry, dual-plane checks can fail together and V3 only adds cost."
+  },
+  "branches": {
+    "clayresearch": {
+      "receipt": "DELTA",
+      "delta": "Promote real-repo V2-vs-V3 A/B with correlated-blind-spot lane to the live-fusion frontier; simulation alone cannot select V3."
+    },
+    "unifieddb": {
+      "receipt": "DELTA",
+      "delta": "Persist ImpactBeacon, BranchImpactAck, AckClosure, route decision refs, router/transport versions and source ancestry. A second projection counts as distinct redundancy only when provenance paths are materially distinct."
+    },
+    "claygraph": {
+      "receipt": "DELTA",
+      "delta": "Expose dependency projection epoch/hash and ancestry so correlated missing-edge risk is measurable; stale/unknown must trigger repair rather than a false NOT_AFFECTED."
+    },
+    "harness": {
+      "receipt": "DELTA",
+      "delta": "Add independent-vs-correlated missing-edge injection, dropped beacon/ACK, stale epoch, crash/restart AckClosure replay and PR156 router-version mismatch to promotion tests."
+    },
+    "claycode": {
+      "receipt": "DELTA",
+      "delta": "Typed runtime must express ImpactBeacon/BranchImpactAck/AckClosure and provenance-path identity without introducing a hidden Python semantic control plane."
+    },
+    "gwt": {"receipt": "NO_CHANGE", "delta": "BranchImpactAck remains coordination evidence; it is not workspace reconstruction/use."},
+    "frank": {"receipt": "NO_CHANGE", "delta": "No Frank Harness mutation or target acceptance follows."},
+    "emergenz": {"receipt": "NO_CHANGE", "delta": "Higher recall/connectivity is not emergence evidence."},
+    "hyperposition": {"receipt": "NO_CHANGE", "delta": "No alternative-collapse rule is changed."}
+  },
+  "next_real_test": "Replay actual current repo/work deltas through broadcast, tag-only, V2 and V3 with controlled independent/correlated dependency omissions; then carry the selected target set unchanged through PR156 and verify exact Delivery -> worker ingest -> Ack -> Resolution closure.",
+  "research_write_result": "TARGETED_DISTRIBUTION_COMMITTED",
+  "canonical_promotion": "NONE",
+  "frank_harness_mutation": false
+}

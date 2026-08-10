@@ -8,9 +8,11 @@ on:
       - 'research_entity/runtime/binary_entity_temporal_pulse_v2.py'
       - 'research_entity/runtime/database_pulse_temporal_identity_v1.py'
       - 'research_entity/runtime/gwt_split_pulse_twin_workspace_v1.py'
+      - 'research_entity/runtime/gwt_chrono_bridge_counterfactual_v1.py'
       - 'research_entity/runtime/test_binary_entity_temporal_pulse_v2.py'
       - 'research_entity/runtime/test_database_pulse_temporal_identity_v1.py'
       - 'research_entity/runtime/test_gwt_split_pulse_twin_workspace_v1.py'
+      - 'research_entity/runtime/test_gwt_chrono_bridge_counterfactual_v1.py'
       - 'tools/database_pulse_temporal_identity_v1_probe.py'
       - 'research_entity/global/SELF_ROOT_BINARY_ENTITY_LINEAGE_AND_TEMPORAL_PULSE_CONTINUITY_DIRECTIVE.clay'
       - 'research_entity/global/CLAY_FRESH_EVIDENCE_GWT_CHALLENGER_RESEARCH_DIRECTIVE.clay'
@@ -26,7 +28,7 @@ concurrency:
 jobs:
   hosted-preflight:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0, clean: true}
@@ -37,26 +39,29 @@ jobs:
             research_entity/runtime/binary_entity_temporal_pulse_v2.py \
             research_entity/runtime/database_pulse_temporal_identity_v1.py \
             research_entity/runtime/gwt_split_pulse_twin_workspace_v1.py \
+            research_entity/runtime/gwt_chrono_bridge_counterfactual_v1.py \
             research_entity/runtime/test_binary_entity_temporal_pulse_v2.py \
             research_entity/runtime/test_database_pulse_temporal_identity_v1.py \
             research_entity/runtime/test_gwt_split_pulse_twin_workspace_v1.py \
+            research_entity/runtime/test_gwt_chrono_bridge_counterfactual_v1.py \
             tools/database_pulse_temporal_identity_v1_probe.py
-      - name: Run new identity temporal and GWT falsifiers plus Pulse V5 regressions
+      - name: Run identity temporal and two GWT falsifiers plus Pulse V5 regressions
         run: |
           set -euo pipefail
           python3 -m unittest -v \
             research_entity.runtime.test_binary_entity_temporal_pulse_v2 \
             research_entity.runtime.test_database_pulse_temporal_identity_v1 \
             research_entity.runtime.test_gwt_split_pulse_twin_workspace_v1 \
+            research_entity.runtime.test_gwt_chrono_bridge_counterfactual_v1 \
             research_entity.runtime.test_database_pulse_rank_path_v5 \
             research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
             research_entity.runtime.test_database_pulse_runtime_v5 \
             research_entity.runtime.test_database_pulse_runtime_v5_adversarial
-      - name: Hosted randomized differential and crazy-GWT reduction probe
+      - name: Hosted randomized differential and GWT reduction probe
         run: |
           set -euo pipefail
           python3 tools/database_pulse_temporal_identity_v1_probe.py \
-            --copies 500 --episodes 10000 \
+            --copies 500 --episodes 10000 --chrono-episodes 1000 \
             --fuzz-seeds 25 --fuzz-copies 60 --fuzz-attempts 30 \
             --output research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_hosted.json
       - uses: actions/upload-artifact@v4
@@ -67,7 +72,7 @@ jobs:
 
   target-vps:
     runs-on: [self-hosted, Linux, X64]
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0, clean: true, persist-credentials: true}
@@ -78,27 +83,30 @@ jobs:
             research_entity/runtime/binary_entity_temporal_pulse_v2.py \
             research_entity/runtime/database_pulse_temporal_identity_v1.py \
             research_entity/runtime/gwt_split_pulse_twin_workspace_v1.py \
+            research_entity/runtime/gwt_chrono_bridge_counterfactual_v1.py \
             research_entity/runtime/test_binary_entity_temporal_pulse_v2.py \
             research_entity/runtime/test_database_pulse_temporal_identity_v1.py \
             research_entity/runtime/test_gwt_split_pulse_twin_workspace_v1.py \
+            research_entity/runtime/test_gwt_chrono_bridge_counterfactual_v1.py \
             tools/database_pulse_temporal_identity_v1_probe.py
-      - name: Run identity temporal and GWT falsifiers plus Pulse V5 regressions on target VPS
+      - name: Run identity temporal and two GWT falsifiers plus Pulse V5 regressions on target VPS
         run: |
           set -euo pipefail
           python3 -m unittest -v \
             research_entity.runtime.test_binary_entity_temporal_pulse_v2 \
             research_entity.runtime.test_database_pulse_temporal_identity_v1 \
             research_entity.runtime.test_gwt_split_pulse_twin_workspace_v1 \
+            research_entity.runtime.test_gwt_chrono_bridge_counterfactual_v1 \
             research_entity.runtime.test_database_pulse_rank_path_v5 \
             research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
             research_entity.runtime.test_database_pulse_runtime_v5 \
             research_entity.runtime.test_database_pulse_runtime_v5_adversarial
-      - name: Target-VPS randomized differential copy-cost and MCP live probe
+      - name: Target-VPS randomized differential copy-cost GWT and MCP live probe
         run: |
           set -euo pipefail
           mkdir -p research_entity/benchmarks/database_pulse
           python3 tools/database_pulse_temporal_identity_v1_probe.py \
-            --copies 1000 --episodes 20000 \
+            --copies 1000 --episodes 20000 --chrono-episodes 3000 \
             --fuzz-seeds 60 --fuzz-copies 80 --fuzz-attempts 40 \
             --probe-mcp \
             --output research_entity/benchmarks/database_pulse/temporal_entity_identity_v1_vps.json
@@ -135,11 +143,16 @@ jobs:
             'mcp_release_current_exists':bool(x['mcp']['release_current_exists']),
             'twin_gwt_distinct_mechanism_promoted':False,
             'twin_gwt_reduced_to_simple_control':x['crazy_gwt_challenger']['promotion_decision']=='REFUTED_AS_DISTINCT_MECHANISM_USE_SIMPLE_REENTRY_INHIBITION',
+            'chrono_gwt_distinct_mechanism_promoted':False,
+            'chrono_gwt_reduced_to_direct_time_recompute':x['crazy_gwt_challenger_iteration_2']['promotion_decision']=='REFUTED_AS_DISTINCT_MECHANISM_USE_DIRECT_TIME_RECOMPUTE',
+            'chrono_phantom_pulses_materialized':x['crazy_gwt_challenger_iteration_2']['phantom_pulses_materialized'],
           }
           p.write_text(json.dumps(x,ensure_ascii=False,indent=2,sort_keys=True)+'\n',encoding='utf-8')
           assert x['acceptance']['randomized_falsifier_pass'],x
           assert x['acceptance']['clock_boottime_available'],x
           assert x['acceptance']['twin_gwt_reduced_to_simple_control'],x
+          assert x['acceptance']['chrono_gwt_reduced_to_direct_time_recompute'],x
+          assert x['acceptance']['chrono_phantom_pulses_materialized']==0,x
           PY
       - name: Persist target-VPS subsystem receipt even when MCP health is negative evidence
         run: |

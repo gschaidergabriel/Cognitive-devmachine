@@ -23,16 +23,34 @@ SOURCES = [
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
 ]
 SUPERVISOR = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"
+FRONTEND = ROOT / "tools/claycode_base_frontend.py"
+TYPED_IR = ROOT / "tools/claycode_base_typed_ir.py"
+RESIDUAL = ROOT / "tools/claycode_wp03_residual_semantics_candidate.py"
 
 
 def git(*args: str) -> str:
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
 
 
+def blob(path: Path) -> str:
+    return git("hash-object", str(path.relative_to(ROOT)))
+
+
 def current_work_revision() -> dict[str, str]:
+    supervisor = json.loads(SUPERVISOR.read_text(encoding="utf-8"))
+    steering_ref = supervisor.get("steering_ref")
+    assert isinstance(steering_ref, str) and steering_ref
+    steering = ROOT / steering_ref
+    assert steering.is_file(), steering
     return {
         "repo_head": git("rev-parse", "HEAD"),
-        "supervisor_blob_sha": git("hash-object", str(SUPERVISOR.relative_to(ROOT))),
+        "supervisor_blob_sha": blob(SUPERVISOR),
+        "steering_ref": steering_ref,
+        "steering_blob_sha": blob(steering),
+        "frontend_blob_sha": blob(FRONTEND),
+        "grammar_blob_sha": blob(GRAMMAR),
+        "typed_ir_blob_sha": blob(TYPED_IR),
+        "residual_builder_blob_sha": blob(RESIDUAL),
     }
 
 
@@ -156,10 +174,19 @@ def test_stale_work_revision_fails_closed() -> None:
     ir = real_typed_ir()
     work = current_work_revision()
     receipt = clause.lower_bundle(ir, work_revision=work)
-    stale = dict(work)
-    stale["repo_head"] = "0" * 40
-    expect_error(lambda: clause.validate_bundle(receipt, expected_work_revision=stale), "STALE_EXECUTION_RECEIPT")
-    expect_error(lambda: clause.consume_declarative_clauses(receipt, expected_work_revision=stale), "STALE_EXECUTION_RECEIPT")
+    for field in ("repo_head", "supervisor_blob_sha", "grammar_blob_sha", "residual_builder_blob_sha"):
+        stale = dict(work)
+        stale[field] = "0" * 40
+        expect_error(lambda stale=stale: clause.validate_bundle(receipt, expected_work_revision=stale), "STALE_EXECUTION_RECEIPT")
+        expect_error(lambda stale=stale: clause.consume_declarative_clauses(receipt, expected_work_revision=stale), "STALE_EXECUTION_RECEIPT")
+
+
+def test_missing_component_binding_fails_closed() -> None:
+    ir = real_typed_ir()
+    work = current_work_revision()
+    bad = dict(work)
+    bad.pop("typed_ir_blob_sha")
+    expect_error(lambda: clause.lower_bundle(ir, work_revision=bad), "missing exact bindings")
 
 
 def test_authority_tamper_fails_closed() -> None:
@@ -186,6 +213,7 @@ def main() -> int:
     test_semantic_mutation_changes_identity()
     test_relation_tamper_fails_closed()
     test_stale_work_revision_fails_closed()
+    test_missing_component_binding_fails_closed()
     test_authority_tamper_fails_closed()
     test_unsupported_class_remains_outside_clause_lowerer()
     print(json.dumps({
@@ -194,7 +222,8 @@ def main() -> int:
         "summary": summary,
         "semantic_mutation_identity": "PASS",
         "relation_tamper": "REJECTED",
-        "stale_work_revision": "REJECTED",
+        "stale_work_or_component_revision": "REJECTED",
+        "missing_component_binding": "REJECTED",
         "authority_tamper": "REJECTED",
         "unsupported_class": "DEFERRED_FAIL_CLOSED",
         "wp03_promotion": "NONE",

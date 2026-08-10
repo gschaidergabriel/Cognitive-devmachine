@@ -1,0 +1,95 @@
+module atomic.licf.v1
+version "0.1-candidate"
+status TESTED_PROXY_NOT_PROMOTED
+
+// Linear Intent Continuation Fiber (LICF)
+// A task continuation is a semantic linear resource, not identity or effect authority.
+
+class TaskState = RUNNING | WAITING_USER | DONE | FAILED | CANCELLED | TRANSITION_UNCERTAIN
+class MaterialClass = STATE_WRITE | GWT_CAUSAL_USE | REENTRY | MEMORY_ADMISSION | REWARD_ADMISSION | EFFECT_ATTEMPT | TASK_COMPLETION
+
+record TaskFiber {
+  self_identity: ResourceIdentity = self.root
+  execution_lease_epoch: Epoch
+  task_id: TaskId
+  task_epoch: Epoch
+  material_revision: Revision
+  task_state: TaskState
+  user_binding: PrincipalRef
+  consent_witness: EvidenceRef
+  predecessor_hash: Hash?
+  fiber_hash: Hash
+  semantic_epoch: Epoch
+}
+
+record TaskBorrow {
+  fiber_hash: Hash
+  task_id: TaskId
+  task_epoch: Epoch
+  purpose: Symbol
+  provenance: ProvenanceSet
+}
+
+record TaskTransitionWitness {
+  from_fiber: Hash
+  from_task: TaskId
+  to_task: TaskId
+  user: PrincipalRef
+  consent: EvidenceRef
+  request_id: RequestId
+  semantic_epoch: Epoch
+}
+
+record MaterializationPermit {
+  material_class: MaterialClass
+  fiber_hash: Hash
+  execution_lease_epoch: Epoch
+  task_epoch: Epoch
+  material_revision: Revision
+  request_id: RequestId
+  provenance: ProvenanceSet
+}
+
+rule TaskFiber != SELF
+rule TaskFiber != EFFECT_AUTHORITY
+rule TaskBorrow never_mints_authority
+rule GWT_IGNITION never_mints_TaskFiber
+rule API_TOKEN never_mints_TaskFiber
+rule PEER_AI never_mints_TaskFiber
+
+rule speculative_cognition may_borrow current TaskFiber without_consumption
+rule material_boundary requires exact_current TaskFiber + exact execution_lease_epoch
+rule material_boundary requires exact task_id + task_epoch + material_revision
+rule material_boundary requires nonreplayed request_id
+rule accepted_material_boundary consumes_current_fiber_and_mints_exactly_one_successor
+rule stale_fiber -> reject_materialization
+rule stale_task_epoch -> reject_materialization
+rule stale_execution_lease_epoch -> reject_materialization
+
+rule unrelated_task_switch while RUNNING|WAITING_USER requires current_user TaskTransitionWitness
+rule valid_switch consumes old_fiber and mints new_task_epoch
+rule switch_without_consent -> reject
+rule unknown_or_ambiguous_consent -> WAITING_USER
+rule proactive_task_mint requires global_execution_state == IDLE
+rule proactive_work cannot_preempt RUNNING|WAITING_USER
+rule crash_during_switch -> TRANSITION_UNCERTAIN until durable witness/head reconciliation
+
+rule GWT_candidate may carry TaskBorrow
+rule GWT_reconstructed_use causing_material_change requires MaterializationPermit
+rule verified_outcome_reentry must reference current-or-historical exact task fiber according_to admitted outcome lineage
+rule task_switch invalidates material use of all prior task borrows even_when execution_lease_epoch unchanged
+
+metric stale_task_false_allow_rate
+metric valid_task_false_deny_rate
+metric task_switch_consent_violation_rate
+metric crash_replay_stale_rejection_rate
+metric validation_latency
+metric metadata_wire_bytes
+metric static_boundary_coverage
+
+baseline CURRENT_V15_PRESENCE_ONLY = execution_lease_epoch_only_for_this_discriminator
+baseline TASK_EPOCH_SIMPLE = execution_lease_epoch + task_id + task_epoch + switch_consent
+baseline CONVENTIONAL_STRONG = TASK_EPOCH_SIMPLE + material_revision + consent_witness + idempotency
+
+acceptance requires LICF unique_benefit_over CONVENTIONAL_STRONG
+fallback if_no_unique_benefit = do_not_promote_LICF_and_preserve_task_fencing_test_obligation

@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2013p0700-chatgpt-secondary-vstg",
+  "hypotheses": [
+    {
+      "hypothesis_id": "Q23-H-VSTG-01",
+      "claim": "A provenance-bound Visual State Transition Graph represented as canonical UnifiedDB transition records plus derived ClayGraph topology can reduce repeated full Qwen GUI reasoning by retrieving previously verified state-action-outcome transitions from current visual/task evidence.",
+      "why_it_matters": "This could turn Frank experience into executable perceptual structure while preserving the one-module and single-semantic-architecture constraints.",
+      "strongest_counterhypothesis": "GUI states are too partially observable and visually aliased for transition reuse; graph retrieval will increase stale/incorrect action proposals and hidden-operation blindness.",
+      "falsifier": "Matched held-out GUI episodes show no net task/latency/token benefit, or wrong-action/stale-state rates exceed QWEN_ONLY/PAR baselines after alias and mismatch gates.",
+      "cheapest_discriminating_test": "Offline replay over frozen pre-action/action/post-action episodes comparing QWEN_ONLY, PAR_EAP, VSTG_VISUAL_ONLY and VSTG_TASK_BOUND without permitting real effects.",
+      "expected_signature_if_true": "Fewer full decoder calls/tokens and equal-or-better task-state/action correctness; transition retrieval precision rises with verified experience dose; wrong-seed controls collapse benefit.",
+      "expected_signature_if_false": "High visual alias conflict, stale transition reuse, little decoder-call reduction, or benefit disappears when direct-memory baseline is matched.",
+      "affected_components": ["DigitalRetina","MVC","UnifiedDB","ClayGraph","EAP","GWT","Harness","FrankLoopCore"],
+      "status": "OPEN",
+      "confidence": 0.64
+    },
+    {
+      "hypothesis_id": "Q23-H-VISUAL-ALIAS-GATE-01",
+      "claim": "When one high-confidence visual fingerprint maps to multiple incompatible task states, next actions or verified outcomes, an explicit VISUAL_ALIAS_CONFLICT gate can make transition memory safer than naive nearest-state reuse by forcing task-state binding, active sensing or full semantic escalation.",
+      "strongest_counterhypothesis": "Alias conflicts are too frequent or too difficult to detect from available context, so the gate degenerates into near-constant escalation and eliminates the efficiency benefit.",
+      "falsifier": "Conflict gate recall is low on hidden-state fixtures or escalation rate becomes high enough that VSTG no longer beats QWEN_ONLY/PAR on total pathway cost.",
+      "cheapest_discriminating_test": "Construct paired screenshots with same/near-same visual state but different task/subgoal/history/outcome semantics and measure conflict detection and safe abstention.",
+      "affected_components": ["MVC","PerceptualField","TaskState","UnifiedDB","ClayGraph","GWT"],
+      "status": "OPEN",
+      "confidence": 0.73
+    },
+    {
+      "hypothesis_id": "Q23-H-TASK-PERCEPT-SEPARATION-01",
+      "claim": "Persistent task/progress state should remain semantically separate from transient PerceptualField state, and only verified action/outcome receipts may advance task state; visual similarity alone must never imply task progress.",
+      "strongest_counterhypothesis": "Existing Frank self/world/goal state already provides sufficient separation, making a dedicated transition test invariant useful but not an architecture delta.",
+      "falsifier": "Current H1/H2 state model already enforces equivalent semantics and differential tests show no additional failures captured by the explicit invariant.",
+      "cheapest_discriminating_test": "Replay stale/repeated screenshots after failed/no-op actions and assert task-state non-advancement until verified outcome.",
+      "affected_components": ["TaskState","PerceptualField","GWT","CausalCredit","Harness"],
+      "status": "OPEN",
+      "confidence": 0.81
+    },
+    {
+      "hypothesis_id": "Q23-H-HYBRID-STATE-FINGERPRINT-01",
+      "claim": "Where available, binding Qwen/MVC visual fingerprints to deterministic app/window/URL/accessibility/source metadata will reduce state aliasing versus pixels/features alone without creating a second semantic authority channel.",
+      "strongest_counterhypothesis": "Nonvisual metadata is brittle, unavailable across many surfaces, privacy-sensitive or overfits specific applications; visual-only plus task-state context may be Pareto-superior.",
+      "falsifier": "Hybrid metadata fails to reduce alias errors or adds enough coupling/latency/failure modes to lose under equal-budget cross-application testing.",
+      "cheapest_discriminating_test": "Compare VISUAL_ONLY versus HYBRID_FINGERPRINT on visually identical/near-identical but semantically distinct UI states, with metadata removed/shuffled as controls.",
+      "affected_components": ["DigitalRetina","PerceptualMemorySeed","UnifiedDB","ClayGraph","Harness"],
+      "status": "OPEN",
+      "confidence": 0.58
+    }
+  ]
+}

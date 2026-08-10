@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "run_id":"Q23-20260810T2013P0700-GPT56SOL-01",
+  "tests":[
+    {"id":"T-Q23-PEH-001","priority":"P0_Q23","variants":["FULL_QWEN","STOCK_LLAMA_RECURRENCE","PEH_Q0","PEH_Q1","DEDICATED_LIGHT_ENCODER"],"fixtures":"matched recurring GUI/action episodes","metrics":["mtmd_encode_count","sensor_to_state_p50_p95_p99","sensor_to_correct_action_p50_p95_p99","bytes_copied","RAM_VRAM_peak","false_familiar","unknown_rejection","semantic_equivalence","restart_replay"],"controls":["stale handle","mmproj hash mismatch","ROI hash mismatch","token-geometry mismatch","post-action changed frame"]},
+    {"id":"T-Q23-Q0Q1-002","priority":"P0_Q23","variants":["raw pooled Qwen prototypes","tiny learned projection over frozen Qwen features","dedicated light embedding baseline"],"fixtures":["exact recurrence","state variant","near-neighbor unknown","novel entity","conflicting/stale"],"metrics":["balanced_accuracy","AUROC_open_set","AUPR","ECE","false_familiar","latency","RAM_VRAM"]},
+    {"id":"T-Q23-CONFIG-003","priority":"P1_Q23","matrix":["n_batch","n_ubatch","mmproj offload","backend/device","flash attention","parallel/KV mode"],"rule":"exact Qwen3.5-4B target lane only; external issues are hypothesis generators, not proof","metrics":["visual correctness","determinism","encode count","crash","OOM","latency"]},
+    {"id":"T-Q23-PAR-004","priority":"P1_AFTER_EPISODES","contract":"research_entity/retina/Q23_FRANK_EXPERIENCE_DOSE_RESPONSE_CONTRACT_20260810.md","dose":[0,1,2,4,8,16,32,64],"variants":["QWEN_ONLY","DIRECT_MEMORY_N","PAR_EAP_N","PAR_ACTIVE_N","SHAM_N"],"faults":["wrong seed","stale epoch/hash","shuffled graph","contradictory memory"],"promotion":"forbidden without full effect curve"}
+  ]
+}

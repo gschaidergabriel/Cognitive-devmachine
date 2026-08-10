@@ -24,6 +24,7 @@ class IncrementalEAPTests(unittest.TestCase):
 
     def test_dependency_add_is_incremental_and_visible(self):
         ledger, plane = self.make()
+        self.assertIsNone(plane.preprocessor._edge_map_state_hash)
         before_hash = plane.preprocessor._compiled_index_hash
         out = plane.transact(
             event_id='inc-add', idem='inc-add', base_epoch=ledger.epoch,
@@ -33,10 +34,12 @@ class IncrementalEAPTests(unittest.TestCase):
         )
         self.assertEqual(out['status'],'COMMITTED')
         self.assertEqual(plane.preprocessor._compiled_epoch,ledger.epoch)
+        self.assertEqual(plane.preprocessor._edge_map_state_hash,ledger.semantic_state_hash)
         self.assertNotEqual(before_hash,plane.preprocessor._compiled_index_hash)
         assembly = plane.compile_active_assembly(PossibilitySpec('after',seed_refs=('semantic:a',),basis_epoch=ledger.epoch,max_items=4,max_hops=2,min_edge_weight=0.0))
         self.assertEqual([x['ref'] for x in assembly['selected']],['semantic:a','semantic:b','semantic:c'])
         self.assertEqual(assembly['incremental_layer_version'],'EAP-INCREMENTAL-1.4')
+        self.assertEqual(assembly['reverse_dependency_map_policy'],'LAZY_ON_FIRST_DEPENDENCY_WRITE')
         ledger.close()
 
     def test_dependency_retraction_removes_edge_without_rebuild_claim(self):
@@ -78,7 +81,7 @@ class IncrementalEAPTests(unittest.TestCase):
             self.assertEqual(len(plane.preprocessor._adj['semantic:a']),1)
         ledger.close()
 
-    def test_external_write_causes_safe_rebuild_on_next_compile(self):
+    def test_external_write_causes_safe_rebuild_then_lazy_map_rebind(self):
         ledger, plane = self.make()
         old_hash = plane.preprocessor._compiled_index_hash
         ledger.append_event(
@@ -91,6 +94,13 @@ class IncrementalEAPTests(unittest.TestCase):
         assembly = plane.compile_active_assembly(PossibilitySpec('after-external',seed_refs=('semantic:a',),basis_epoch=ledger.epoch,max_items=4,max_hops=2,min_edge_weight=0.0))
         self.assertEqual([x['ref'] for x in assembly['selected']],['semantic:a','semantic:b','semantic:c'])
         self.assertNotEqual(old_hash,plane.preprocessor._compiled_index_hash)
+        self.assertIsNone(plane.preprocessor._edge_map_state_hash)
+        plane.transact(
+            event_id='after-rebuild-dep', idem='after-rebuild-dep', base_epoch=ledger.epoch,
+            event_type='AFTER_REBUILD_DEP', writer='test', ops=[
+                {'op':'SET','domain':'dependency','key':'ab','value':{'source':'semantic:a','target':'semantic:b','strength':0.95},'epistemic':'KNOWN','status':'CURRENT'},
+            ]
+        )
         self.assertEqual(plane.preprocessor._edge_map_state_hash,ledger.semantic_state_hash)
         ledger.close()
 

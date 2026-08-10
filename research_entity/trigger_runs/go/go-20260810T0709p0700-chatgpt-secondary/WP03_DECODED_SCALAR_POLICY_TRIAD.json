@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:09:00+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "entity_role": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "canonical_parent": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-03-IR-TYPES",
+  "fresh_main_before_write": "c5afb574fac9f0410f748b9f4d53a2501ebac3d9",
+  "source_path": "tools/claycode_base_ir.py",
+  "upstream_receipt": "research_entity/trigger_runs/go/go-20260810T0638p0700-wp03-string-identity-local-discriminator/LOCAL_WP03_STRING_IDENTITY_DISCRIMINATOR.json",
+  "leading_hypothesis": "WP03 semantic identity should decode JSON STRING escape spelling to the same Unicode scalar sequence while preserving source spelling separately and without silently adding Unicode normalization policy.",
+  "strongest_counterhypothesis": "Raw spelling should remain part of semantic_ir_sha256, or NFC normalization should be applied at this boundary so canonically equivalent scalar sequences collapse as well.",
+  "external_primary_evidence": [
+    {"source":"RFC 8259 sections 8.2-8.3","url":"https://www.rfc-editor.org/rfc/rfc8259","finding":"Unicode JSON string content is independent of escape spelling; unpaired UTF-16 surrogates are not interoperable."},
+    {"source":"Unicode Standard Annex #15 revision 57","url":"https://www.unicode.org/reports/tr15/","finding":"NFC/NFD are explicit normalization policies; normalization is distinct from decoding and not mandatory for every process."}
+  ],
+  "experiment": {
+    "class": "BOUNDED_OUT_OF_BOX_SEMANTIC_IDENTITY_POLICY_TRIAD",
+    "policies": ["RAW_JSON_TOKEN_SPELLING","DECODED_UNICODE_SCALAR_SEQUENCE","DECODED_PLUS_NFC"],
+    "expected_contract": {"escape_equivalent_pairs_same":true,"composed_vs_decomposed_same":false,"unpaired_surrogate_admitted":false},
+    "observed": {
+      "RAW_JSON_TOKEN_SPELLING": {"escape_equivalent_pairs_same":"0/4","composed_vs_decomposed_same":false,"contract_checks_passed":"1/5"},
+      "DECODED_UNICODE_SCALAR_SEQUENCE": {"escape_equivalent_pairs_same":"4/4","composed_vs_decomposed_same":false,"contract_checks_passed":"5/5"},
+      "DECODED_PLUS_NFC": {"escape_equivalent_pairs_same":"4/4","composed_vs_decomposed_same":true,"contract_checks_passed":"4/5"}
+    },
+    "surrogate_probe": {"json_decoder_can_materialize_lone_surrogate":true,"required_boundary":"retain explicit Unicode scalar validation before semantic admission"},
+    "result": "DECODED_SCALAR_SEQUENCE_DOMINATES_THE_TWO_TESTED_ALTERNATIVES_UNDER_CURRENT_PROJECT_CONTRACT"
+  },
+  "interpretation": "The minimal candidate is semantic STRING decoding plus scalar validation, not NFC normalization. Exact lexical spelling remains available through source_sha256. Prefer sharing the already-tested WP02 STRING decoder/canonical semantic primitive over duplicating JSON token semantics in WP03.",
+  "architecture_delta": "TESTING_CANDIDATE_ONLY_DO_NOT_PATCH_BEFORE_WP02_SEQUENTIAL_GATE",
+  "test_delta": [
+    "After WP02 current-main closure, run the identity triad through exact lower_program under the selected strict grammar.",
+    "Require semantic_ir_sha256 equality for escape-equivalent decoded scalar sequences.",
+    "Keep precomposed/decomposed scalar sequences distinct unless a future explicit normalization contract is admitted.",
+    "Reject unpaired surrogates before semantic identity is minted; preserve source_sha256 for lexical/provenance identity."
+  ],
+  "promotion":"NONE",
+  "counts_as_wp03_pass":false,
+  "counts_as_andreas_target_acceptance":false,
+  "out_of_box_experiment_count_for_this_go_cycle":1,
+  "rollback":"Receipt-only research delta; no ClayCode source, Frank Harness, release gate or effect authority changed.",
+  "training":"NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "authority_invariant":"model output != execution authority"
+}

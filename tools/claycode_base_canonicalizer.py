@@ -12,18 +12,24 @@ The JSON serialization below is a project-local ClayCode syntax-identity envelop
 deterministic compact key-sorted serialization, but it does not claim RFC 8785/JCS
 conformance; grammar binding and ClayCode's own syntax contract remain authoritative.
 
-V17 adds one mandatory semantic-trivia guard to V9: `Needle.owns(X)` and
-`Needle.owns (X)` must canonicalize identically while `Needle.owns X` remains a distinct
-prefix relation.
+CRITICAL PARITY LAW: canonical AST semantics have one active implementation only:
+``claycode_base_frontend.canonical_node``. This standalone tool may wrap that AST in its
+own grammar-bound canonical-syntax envelope/hash, but it may not independently reinterpret
+parser nodes. That prevents production-vs-standalone semantic drift.
+
+V17 mandatory semantic-trivia guards include `Needle.owns(X)` == `Needle.owns (X)` while
+`Needle.owns X` remains a distinct prefix relation. Redundant expression grouping is also
+surface syntax: `x>0`, `(x>0)`, `((x>0))`, and a grouped call must retain production AST
+identity. Calls/lists/sets/operators remain structurally preserved by the production
+canonicalizer.
 
 The canonicalizer MUST use the exact production parser constructor. In particular,
 production sets maybe_placeholders=False, so absent [] optionals are semantic absence and
 must never become synthetic `None` children in canonical syntax identity.
 
-STRING tokens are canonicalized by their decoded JSON Unicode scalar sequence rather than
-by escape spelling. Thus `"é"` and `"\\u00e9"` share syntax identity, while `"é"` and the
-distinct scalar sequence `"e\\u0301"` remain different. Unpaired surrogates are rejected.
-This matches the production BASE frontend's existing string-identity contract.
+STRING tokens inherit production canonicalization: decoded JSON Unicode scalar sequence,
+not escape spelling. Thus `"é"` and `"\\u00e9"` share syntax identity, while `"é"` and
+`"e\\u0301"` remain different. Unpaired surrogates are rejected.
 """
 from __future__ import annotations
 
@@ -34,7 +40,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from lark import Lark, Token, Tree
+from lark import Lark, Tree
 
 import claycode_base_frontend as front
 
@@ -45,7 +51,6 @@ DEFAULT_SOURCES = [
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
 ]
 CANON_SCHEMA = "claycode-base-canonical-syntax/2"
-PRESENTATION_TOKENS = {"NEWLINE", "SEMICOLON"}
 
 
 class CanonicalizationError(ValueError):
@@ -60,44 +65,16 @@ def stable_json(value: Any) -> bytes:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
-def _validate_scalar_string(value: str) -> None:
-    bad = [ord(ch) for ch in value if 0xD800 <= ord(ch) <= 0xDFFF]
-    if bad:
-        raise CanonicalizationError(f"invalid Unicode surrogate scalar(s): {[hex(x) for x in bad[:8]]}")
-
-
-def _token_value(token: Token) -> Any:
-    raw = str(token)
-    if str(token.type) == "STRING":
-        try:
-            value = json.loads(raw)
-        except Exception as exc:
-            raise CanonicalizationError(f"invalid escaped string: {exc}") from exc
-        if not isinstance(value, str):
-            raise CanonicalizationError("STRING token did not decode to str")
-        _validate_scalar_string(value)
-        return value
-    return raw
-
-
 def canonical_node(node: Any) -> Any | None:
-    """Return deterministic syntax identity, dropping equivalent layout separators only."""
-    if isinstance(node, Token):
-        if str(node.type) in PRESENTATION_TOKENS:
-            return None
-        return {"token": str(node.type), "value": _token_value(node)}
-    if isinstance(node, Tree):
-        children = []
-        for child in node.children:
-            cooked = canonical_node(child)
-            if cooked is not None:
-                children.append(cooked)
-        return {"kind": str(node.data), "children": children}
+    """Use the production frontend as the sole canonical-AST semantic authority."""
     if node is None:
         raise CanonicalizationError(
             "unexpected None parse child: production maybe_placeholders=False contract drifted"
         )
-    raise CanonicalizationError(f"unsupported parse node: {type(node)!r}")
+    try:
+        return front.canonical_node(node)
+    except front.CanonicalizationError as exc:
+        raise CanonicalizationError(str(exc)) from exc
 
 
 def count_none_children(node: Any) -> int:
@@ -233,6 +210,9 @@ def main() -> None:
             "rule Needle.owns(X)\n",
             "rule Needle.owns          (X)\n",
         ),
+        "single_redundant_group": ("rule x>0\n", "rule (x>0)\n"),
+        "nested_redundant_group": ("rule x>0\n", "rule ((x>0))\n"),
+        "grouped_call": ("rule Needle.owns(X)\n", "rule (Needle.owns(X))\n"),
         "string_escape_spelling": ('rule label="é"\n', 'rule label="\\u00e9"\n'),
         "string_surrogate_pair_escape_spelling": ('rule label="𝄞"\n', 'rule label="\\ud834\\udd1e"\n'),
     }
@@ -286,8 +266,8 @@ def main() -> None:
         and all(x["pass"] for x in invalid)
     )
     receipt = {
-        "schema_version": "1.6",
-        "experiment": "ClayCode BASE deterministic V17 trivia-safe grammar-bound syntax canonicalization",
+        "schema_version": "1.7",
+        "experiment": "ClayCode BASE deterministic V17 grammar-bound syntax canonicalization with production-AST parity",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "grammar_path": str(grammar_path.relative_to(ROOT)) if grammar_path.is_relative_to(ROOT) else str(grammar_path),
         "grammar_sha256": grammar_sha,
@@ -298,19 +278,22 @@ def main() -> None:
             "strict": strict,
             "keep_all_tokens": True,
             "production_parser_constructor": "claycode_base_frontend.build_parser",
+            "production_canonical_ast_constructor": "claycode_base_frontend.canonical_node",
             "maybe_placeholders": False,
         },
-        "canonicalizer": "production-parser semantic-token tree->sorted compact JSON; absent optionals are absence; NEWLINE/semicolon block separators dropped; STRING tokens use decoded validated Unicode scalar sequences; semantic hash bound to grammar SHA-256",
+        "canonicalizer": "production frontend canonical AST -> grammar-bound sorted compact JSON envelope; standalone tool does not reinterpret parser nodes",
         "sources": rows,
         "semantic_surface_discrimination": distinct,
         "layout_equivalence": equivalent,
         "optional_placeholder_absence": optional_absence,
         "invalid_semantic_values": invalid,
         "v9_trivia_counterexample_guard_present": True,
+        "grouping_equivalence_guard_present": True,
+        "production_ast_single_authority": True,
         "string_escape_identity_guard_present": True,
         "optional_placeholder_absence_guard_present": True,
         "pass": overall,
-        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia, decoded-string identity and production-parser absent-optional semantics for the listed admitted sources and regression/mutation pairs. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04) or substitute for Hostinger/Andreas target receipts.",
+        "scope_guard": "PASS proves deterministic selected-grammar layout/trivia, redundant-grouping, decoded-string identity and production-parser absent-optional semantics for the listed admitted sources and regression/mutation pairs while sharing the production canonical-AST implementation. A relaxed-parser run is sandbox evidence only. This is CC-WP-02 evidence and does not prove typed IR/type/effect semantics (CC-WP-03/04) or substitute for Hostinger/Andreas target receipts.",
     }
     rendered = json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
     if args.output:

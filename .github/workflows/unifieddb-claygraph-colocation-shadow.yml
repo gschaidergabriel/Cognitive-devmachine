@@ -35,6 +35,7 @@ jobs:
           python3 -m py_compile research_entity/experiments/unifieddb_claygraph_colocation/benchmark_colocation_v1.py
           python3 -m py_compile research_entity/experiments/unifieddb_claygraph_colocation/build_colocated_database_v1.py
           python3 -m py_compile research_entity/experiments/unifieddb_claygraph_colocation/benchmark_snapshot_coherence_v1.py
+          python3 -m py_compile research_entity/experiments/unifieddb_claygraph_colocation/benchmark_cross_store_epoch_guard_v1.py
           python3 -m unittest research_entity.experiments.unifieddb_claygraph_colocation.test_colocation_v1 -v
       - name: Matched co-location benchmark
         run: |
@@ -47,6 +48,11 @@ jobs:
           set -euo pipefail
           python3 research_entity/experiments/unifieddb_claygraph_colocation/benchmark_snapshot_coherence_v1.py --trials 100 --output artifacts/snapshot_coherence_v1.json
           cat artifacts/snapshot_coherence_v1.json
+      - name: Guarded two-store counterbaseline
+        run: |
+          set -euo pipefail
+          python3 research_entity/experiments/unifieddb_claygraph_colocation/benchmark_cross_store_epoch_guard_v1.py --trials 100 --steady-reads 5000 --output artifacts/cross_store_epoch_guard_v1.json
+          cat artifacts/cross_store_epoch_guard_v1.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

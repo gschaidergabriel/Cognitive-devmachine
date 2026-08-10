@@ -51,24 +51,24 @@ for c in claims:
             break
 
 reverse=defaultdict(set)
-for child,premises in deps.items():
-    for premise in premises:
+for child in sorted(deps):
+    for premise in sorted(deps[child]):
         reverse[premise].add(child)
 
 observed_reverse=defaultdict(set)
-for premise,children in reverse.items():
-    for child in children:
+for premise in sorted(reverse):
+    for child in sorted(reverse[premise]):
         if random.random()>MISSING_OBSERVED_EDGE_RATE:
             observed_reverse[premise].add(child)
 
 def reach(start,graph,depth):
     seen=set(start)
-    q=deque((x,0) for x in start)
+    q=deque((x,0) for x in sorted(start))
     while q:
         x,d=q.popleft()
         if d>=depth:
             continue
-        for y in graph.get(x,set()):
+        for y in sorted(graph.get(x,set())):
             if y not in seen:
                 seen.add(y)
                 q.append((y,d+1))
@@ -117,7 +117,7 @@ results={m:{"deliveries":0,"required":0,"tp":0,"missed":0,"redundant":0,"perfect
 for _ in range(N):
     c=random.choice(claims)
     kind=pick_kind()
-    delta_tags={random.choice(tuple(c["tags"]))}
+    delta_tags={random.choice(sorted(c["tags"]))}
     if random.random()<0.35:
         delta_tags.add(random.choice(ALL_TAGS))
     required=truth(c["id"],delta_tags,kind)
@@ -144,7 +144,7 @@ for c in claims:
     affected={CLAIM[x]["branch"] for x in reach({c["id"]},reverse,3)}|{c["branch"]}
     semantic=semantic_branches(c["tags"])|{c["branch"]}
     scores.append((len(affected)-len(semantic),len(affected),c))
-scores.sort(reverse=True,key=lambda x:(x[0],x[1]))
+scores.sort(reverse=True,key=lambda x:(x[0],x[1],x[2]["id"]))
 central=scores[0][2]
 oob_tags=set(central["tags"])
 oob_required=truth(central["id"],oob_tags,"CONTRADICTS")

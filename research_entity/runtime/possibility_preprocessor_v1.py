@@ -94,7 +94,7 @@ def compile_packet(con: sqlite3.Connection, context_signature: str, source_epoch
       hyperposition_refs_clay,evidence_refs_clay,conflict_refs_clay,uncertainty_refs_clay,authority_refs_clay,dependency_refs_clay,
       utility,coherence,urgency,evidence_score,risk,cost,provenance_clay,derivation_hash,valid_until
       FROM possibility_candidates WHERE context_signature=? AND status='CURRENT' AND source_epoch<=?
-      AND (valid_until IS NULL OR valid_until>CURRENT_TIMESTAMP)
+      AND (valid_until IS NULL OR julianday(valid_until)>julianday('now'))
       AND (graph_epoch IS NULL OR ? IS NULL OR graph_epoch<=?)""",(context_signature,source_epoch,graph_epoch,graph_epoch)).fetchall()
     candidates=[]; deps=set()
     for r in rows:

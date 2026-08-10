@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "UDB-CLAYGRAPH-EXACT-KEY-AND-ALIAS-FALSIFIER-20260810",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "execution_class": "LOCAL_TOOL_CONTAINER_SYNTHETIC_ENGINEERING_SCOPE_ONLY",
+  "status": "NEGATIVE_RESULT_PLUS_SUPPORTED_ALIAS_MECHANISM",
+  "exact_key_counterbaseline": {
+    "dataset": {"queries": 112, "operations_per_mode": 22400},
+    "normal_sqlite_without_rowid_btree": {"hit_at_1": 1.0, "recall_at_5": 1.0, "mrr": 1.0, "p50_ns": 3755, "p95_ns": 4166, "p99_ns": 6910},
+    "udb_u11_coherent_generation": {"hit_at_1": 1.0, "recall_at_5": 1.0, "mrr": 1.0, "p50_ns": 8272, "p95_ns": 9194, "p99_ns": 16264},
+    "udb_u13_cycle_pinned_flat": {"hit_at_1": 1.0, "recall_at_5": 1.0, "mrr": 1.0, "p50_ns": 4256, "p95_ns": 4667, "p99_ns": 7441},
+    "adjudication": "PLAIN_SQLITE_BTREE_WINS_TRIVIAL_EXACT_KEY_LATENCY. DO_NOT CLAIM UNIVERSAL DATABASE SPEED SUPERIORITY. U13 NARROWS THE OVERHEAD WHILE RETAINING GENERATION/SNAPSHOT/REPLAY SEMANTICS."
+  },
+  "alias_without_internal_id_falsifier": {
+    "dataset": {"entity_families": 400, "queries": 1200, "internal_logical_ids_present_in_queries": 0, "classes": ["DIRECT", "GRAPH_1HOP", "GRAPH_2HOP"]},
+    "sqlite_fts5": {"top1": 0.3333333333333333, "p50_ns": 547366, "p95_ns": 952833},
+    "exact_logical_id_graph_anchor": {"top1": 0.0, "p50_ns": 2223},
+    "evidence_bound_alias_plus_graph": {"top1": 1.0, "p50_ns": 225965, "p95_ns": 899444},
+    "adjudication": "SUPPORTED_MECHANISM_ON_SYNTHETIC_NO_INTERNAL_ID_QUERIES_ONLY. ALIAS/ENTITY RESOLUTION IS A MATERIAL PREREQUISITE FOR GENERALIZING GRAPH RETRIEVAL BEYOND EXACT LOGICAL IDS."
+  },
+  "architecture_consequence": {
+    "keep": [
+      "SQLite/B-tree exact lookup for already-resolved trivial keys",
+      "cycle-pinned coherent generations for replayable semantic fast paths",
+      "evidence-bound alias resolution with ambiguity/low-confidence fail-closed behavior",
+      "bounded ClayGraph traversal only after a sufficiently resolved anchor"
+    ],
+    "reject": [
+      "claim that UnifiedDB is faster than every normal database on exact key lookup",
+      "graph traversal without entity resolution",
+      "MODEL_PROPOSED aliases as automatic identity anchors"
+    ]
+  },
+  "tests": {
+    "u12_entity_resolution": "4/4 local tests passed: explicit alias, stale epoch, ambiguity fail-closed, model-proposed alias not auto-anchor",
+    "u13_cycle_pin": "3/3 local tests passed: pin/read, old-cycle snapshot survives head swap while new cycle observes new generation, wrong epoch refused"
+  },
+  "next_falsifiers": [
+    "real Clay held-out aliases and descriptions with independent adjudication",
+    "misspellings, pronouns, partial names and genuinely ambiguous entities",
+    "dense/late-interaction and PostgreSQL FTS+pgvector matched-budget baselines",
+    "concurrent-writer and generation-invalidation stress",
+    "Hostinger Ubuntu execution receipt and final Andreas target execution"
+  ]
+}

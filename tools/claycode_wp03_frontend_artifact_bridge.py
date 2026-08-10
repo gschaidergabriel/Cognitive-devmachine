@@ -13,6 +13,12 @@ against the exact source and grammar bytes, rejects ambiguous same-source multi-
 inputs, calls the existing `build_typed_ir()` without reparsing, and emits a separate
 provenance-bound TypedIR artifact hash.
 
+Current frontend contract v1 predates explicit surface binding: its hash covers schema,
+grammar and semantic AST identity but not the surface label. Until a surface-bound frontend
+contract revision is promoted, every bridge unit must therefore pin `expected_surface` in
+the receipt-bound manifest. Relabeling an otherwise valid artifact then fails closed before
+typed IR is built.
+
 It is an adapter/interface repair, not a language-semantics change and not a WP03 PASS by
 itself. Model output never grants execution authority.
 """
@@ -74,13 +80,16 @@ def require_hex_sha(name: str, value: Any) -> str:
 
 
 def verify_frontend_unit(spec: dict[str, Any]) -> tuple[typed.SourceUnit, dict[str, Any]]:
-    for key in ("artifact", "source", "grammar"):
+    for key in ("artifact", "source", "grammar", "expected_surface"):
         if not spec.get(key):
             raise FrontendBindingError(f"unit missing required {key!r}")
 
     artifact_path = resolve_path(str(spec["artifact"]))
     source_path = resolve_path(str(spec["source"]))
     grammar_path = resolve_path(str(spec["grammar"]))
+    expected_surface = str(spec["expected_surface"])
+    if not expected_surface:
+        raise FrontendBindingError("expected_surface must be a non-empty string")
     for path in (artifact_path, source_path, grammar_path):
         if not path.is_file():
             raise FrontendBindingError(f"required file missing: {path}")
@@ -104,6 +113,11 @@ def verify_frontend_unit(spec: dict[str, Any]) -> tuple[typed.SourceUnit, dict[s
         raise FrontendBindingError(
             f"unsupported frontend schema {schema!r}; explicit migration/adapter required"
         )
+    surface = str(doc["surface"])
+    if surface != expected_surface:
+        raise FrontendBindingError(
+            f"frontend surface mismatch: manifest expected {expected_surface!r}, artifact claims {surface!r}"
+        )
 
     source_bytes = source_path.read_bytes()
     grammar_bytes = grammar_path.read_bytes()
@@ -119,6 +133,8 @@ def verify_frontend_unit(spec: dict[str, Any]) -> tuple[typed.SourceUnit, dict[s
     if require_hex_sha("semantic_hash", doc["semantic_hash"]) != semantic_hash:
         raise FrontendBindingError(f"frontend semantic hash mismatch for {artifact_path}")
 
+    # Legacy frontend v1 contract intentionally reconstructed exactly. Its omission of
+    # surface is compensated above by the independently receipt-bound expected_surface pin.
     contract_payload = {
         "frontend_schema": schema,
         "grammar_sha256": grammar_sha,
@@ -133,7 +149,8 @@ def verify_frontend_unit(spec: dict[str, Any]) -> tuple[typed.SourceUnit, dict[s
         "source": str(source_path.relative_to(ROOT)) if source_path.is_relative_to(ROOT) else str(source_path),
         "grammar": str(grammar_path.relative_to(ROOT)) if grammar_path.is_relative_to(ROOT) else str(grammar_path),
         "frontend_schema": schema,
-        "surface": str(doc["surface"]),
+        "surface": surface,
+        "expected_surface": expected_surface,
         "source_sha256": source_sha,
         "grammar_sha256": grammar_sha,
         "frontend_semantic_hash": semantic_hash,
@@ -186,11 +203,12 @@ def compile_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         "typed_ir_artifact_sha256": artifact_hash,
         "identity_semantics": {
             "typed_ir_sha256": "semantic IR identity; excludes source/provenance by design",
-            "typed_ir_artifact_sha256": "binds semantic IR to exact frontend/source/grammar contracts",
+            "typed_ir_artifact_sha256": "binds semantic IR to exact frontend/source/grammar/surface contracts",
         },
         "invariants": {
             "silent_reparse": "FORBIDDEN",
             "implicit_frontend_dispatch": "FORBIDDEN",
+            "unbound_surface_relabel": "FORBIDDEN",
             "same_source_cross_surface_ambiguity": "FAIL_CLOSED_WITHOUT_EQUIVALENCE_RECEIPT",
             "frontend_artifact_mints_authority": "FORBIDDEN",
             "model_output_execution_authority": "FORBIDDEN",

@@ -11,9 +11,7 @@ from .unifieddb_emergent_incremental import (
     IncrementalEmergentAssemblyPreprocessor,
     IncrementalUnifiedDBEmergentPlane,
 )
-from .unifieddb_emergent_exact_topk import (
-    ExactTopKAssemblyMixin,
-)
+from .unifieddb_emergent_exact_topk import ExactTopKAssemblyMixin
 
 _COMPACT_VERSION = 'EAP-COMPACT-CACHE-1.6'
 
@@ -26,6 +24,19 @@ class CompactSemanticCacheMixin:
     remains the source for full dependency values. This candidate removes a redundant
     Python-object copy without changing graph topology or selected row materialization.
     """
+
+    def _refresh_compiled_identity(self) -> None:
+        self._compiled_epoch = self.ledger.epoch
+        self._compiled_state_hash = self.ledger.semantic_state_hash
+        self._compiled_index_hash = h({
+            'version': _COMPACT_VERSION,
+            'basis_epoch': self._compiled_epoch,
+            'semantic_state_hash': self._compiled_state_hash,
+            'materializable_node_count': len(self._rows_by_ref),
+            'edge_count': self._edge_count,
+            'dependency_row_cache': 'DISCARDED_AFTER_COMPILE',
+            'lexical_index': 'LAZY',
+        })
 
     def _ensure_preprocessor(self) -> None:
         basis = self.ledger.epoch
@@ -80,17 +91,7 @@ class CompactSemanticCacheMixin:
         self._edge_count = edge_count
         self._token_index = {}
         self._token_index_epoch = None
-        self._compiled_epoch = self.ledger.epoch
-        self._compiled_state_hash = self.ledger.semantic_state_hash
-        self._compiled_index_hash = h({
-            'version': _COMPACT_VERSION,
-            'basis_epoch': self._compiled_epoch,
-            'semantic_state_hash': self._compiled_state_hash,
-            'materializable_node_count': len(self._rows_by_ref),
-            'edge_count': self._edge_count,
-            'dependency_row_cache': 'DISCARDED_AFTER_COMPILE',
-            'lexical_index': 'LAZY',
-        })
+        self._refresh_compiled_identity()
 
     def compile_active_assembly(self, spec):
         result = super().compile_active_assembly(spec)
@@ -145,15 +146,7 @@ class CompactIncrementalEmergentAssemblyPreprocessor(
                 if key and self._rows_by_ref.pop(f'dependency:{key}', None) is not None:
                     removed_dependency_cache = True
         if removed_dependency_cache:
-            self._compiled_index_hash = h({
-                'version': _COMPACT_VERSION,
-                'basis_epoch': self._compiled_epoch,
-                'semantic_state_hash': self._compiled_state_hash,
-                'materializable_node_count': len(self._rows_by_ref),
-                'edge_count': self._edge_count,
-                'dependency_row_cache': 'DISCARDED_AFTER_COMPILE',
-                'lexical_index': 'LAZY',
-            })
+            self._refresh_compiled_identity()
         return True
 
 

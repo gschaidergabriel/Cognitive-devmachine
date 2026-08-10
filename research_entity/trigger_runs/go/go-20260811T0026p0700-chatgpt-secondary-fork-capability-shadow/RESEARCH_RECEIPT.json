@@ -1,8 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "go-20260811T0026p0700-chatgpt-secondary-fork-capability-shadow",
   "trigger": "go",
   "created_at": "2026-08-11T00:26:23+07:00",
+  "updated_at": "2026-08-11T00:33:00+07:00",
   "actor": {
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
@@ -17,6 +18,7 @@
   },
   "program_stage": "FRANK_V0_1",
   "selected_work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "cross_routed_work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
   "identity_lock": {
     "research_entity": "Clay",
     "target_native_self": "self.root",
@@ -27,16 +29,31 @@
   },
   "fresh_frontier": {
     "parent_candidate_pr": "gschaidergabriel/Dr.-Unterweger#228",
-    "parent_head": "299b6ade7a24c588719f480e5b571a564d00698b",
+    "parent_head": "04af8213564b75f3c6963c8087815ea6152b2e69",
     "parent_status": "DRAFT_CANDIDATE_NOT_PROMOTED",
-    "parent_target_workflow": {
-      "run_id": 31412817524,
-      "job_id": 93534688306,
+    "matched_parent_baseline": {
+      "head": "395e1d4becd9e7100fd9d3ca4f5b539d890c1cb2",
+      "workflow_run_id": 31414302723,
+      "job_id": 93539536396,
+      "conclusion": "SUCCESS",
+      "passed_steps": [
+        "physical execution-gate baseline",
+        "exact V16 B1/B2/B3 matrix",
+        "Gate-issued exact-V16 multi-effect matrix",
+        "ClayCode semantic contract check"
+      ],
+      "fork_oob_step": "SKIPPED_TEST_NOT_PRESENT_ON_THAT_HEAD"
+    },
+    "current_target_workflow": {
+      "run_id": 31414520326,
+      "job_id": 93540243580,
       "observed_status": "QUEUED",
-      "conclusion": null
+      "conclusion": null,
+      "head_contains_fork_oob_test": true
     },
     "parent_mechanism": "Gate-issued exact-object FrankExecutionLease registry + exact V15/V16 execution fence + immutable multi-effect reservation binding",
     "known_remaining_parent_gates": [
+      "fork/process-incarnation discriminator result",
       "non-bypassable production effect routing",
       "real provider timeout-after-acceptance reconciliation evidence",
       "actual ClayCode frontend/TypedIR/compiler/lowering evidence"
@@ -69,12 +86,17 @@
   "go_oob_experiment": {
     "name": "FORKED_CAPABILITY_SHADOW",
     "count_for_this_go_macrocycle": 1,
-    "status": "TARGET_VPS_NOT_EXECUTED",
-    "target_pr": "gschaidergabriel/Dr.-Unterweger#233",
-    "target_head": "979bfdf8050a718af7ec8ca55a045580d386e55e",
-    "target_base": "gschaidergabriel/Dr.-Unterweger#228",
+    "status": "TARGET_VPS_QUEUED",
+    "active_target_pr": "gschaidergabriel/Dr.-Unterweger#228",
+    "active_target_head": "04af8213564b75f3c6963c8087815ea6152b2e69",
+    "target_workflow_run": 31414520326,
+    "target_job": 93540243580,
     "test_path": "tests/frank_effect_forked_capability_shadow_oob.py",
-    "workflow_path": ".github/workflows/frank-effect-forked-capability-shadow-oob-vps.yml",
+    "workflow_path": ".github/workflows/frank-effect-exact-v16-gate-v4-vps.yml",
+    "superseded_transport_prs": [
+      "gschaidergabriel/Dr.-Unterweger#233",
+      "gschaidergabriel/Dr.-Unterweger#239"
+    ],
     "design": [
       "acquire a real Gate-issued V15 lease on disposable state",
       "admit exact V16 ingress and derive parent fence",
@@ -124,19 +146,20 @@
       "Outcome observation/reconciliation remains allowed after process-generation loss because evidence is not effect authority."
     ],
     "implementation_note": "PID alone is insufficient as a durable identity because PID reuse exists. Prefer an opaque process-incarnation nonce reseeded after fork and checked together with process identity; exact mechanism must be tested for restart/fork/recovery semantics.",
-    "rollback": "Do not alter PR #228 product semantics unless the exact target discriminator reproduces or another independent mechanism proves the same failure."
+    "rollback": "Do not alter product semantics unless the exact target discriminator reproduces or another independent mechanism proves the same failure."
   },
   "executed_vs_pending": {
     "executed": [
       "current Clay/Frank repo-state refresh",
       "fresh primary-source research",
       "local Linux fork/flock/WeakSet/WeakKeyDictionary primitive control",
-      "diagnostic test/workflow implementation on target-repo branch",
-      "draft adversarial PR #233 creation"
+      "matched target-VPS #228 normal baseline run 31414302723 PASS",
+      "diagnostic test implementation on exact #228 candidate",
+      "self-hosted target workflow run 31414520326 successfully queued",
+      "superseded diagnostic transport PRs closed without merge"
     ],
     "pending": [
-      "PR #233 exact target-VPS execution",
-      "PR #228 queued target-VPS workflow conclusion",
+      "run 31414520326 exact fork discriminator conclusion",
       "process-incarnation repair only if discriminator supports it",
       "non-bypassable production effect facade/lowering path",
       "real provider timeout-after-acceptance reconciliation",
@@ -147,12 +170,13 @@
     "claim": "Exact Python object identity plus process-local weak registries are not sufficient evidence of process-incarnation-exclusive authority across fork.",
     "support": "SUPPORTED_AT_PRIMITIVE_MECHANISM_LEVEL",
     "frank_effect_path_claim": "UNKNOWN_PENDING_TARGET_OOB",
+    "pr228_normal_baseline": "TARGET_VPS_PASS_ON_PRE_OOB_HEAD",
     "pr228_promotion": "BLOCKED_PENDING_EXISTING_GATES_AND_FORK_DISCRIMINATOR",
     "no_main_merge": true,
     "no_training_authorization": true
   },
   "next_frontier": [
-    "Execute PR #233 on the accepted self-hosted Linux/X64 lane and retain exact environment/blob/resource evidence.",
+    "Adjudicate queued run 31414520326 when target evidence exists; do not infer outcome from local primitive evidence.",
     "If reproduced, repair with process-incarnation-bound capability plus safe after-fork invalidation, then rerun parent normal matrix, fork discriminator, stale-generation tests and recovery controls.",
     "If refuted, preserve the negative result and continue the pre-existing F-V01-09 gates: production non-bypassability, real provider reconciliation and ClayCode frontend/TypedIR/lowering evidence.",
     "Cross-route the fork/process-incarnation result to F-V01-13 because the same primitive affects crash/restart/fork/recovery assumptions."

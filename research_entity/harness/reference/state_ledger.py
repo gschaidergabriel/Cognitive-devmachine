@@ -35,6 +35,8 @@ PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;
 CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY,v TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS domain_epochs(domain TEXT PRIMARY KEY,epoch INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS state(domain TEXT NOT NULL,k TEXT NOT NULL,value_json TEXT,epistemic TEXT NOT NULL,status TEXT NOT NULL,domain_epoch INTEGER NOT NULL,semantic_hash TEXT NOT NULL,PRIMARY KEY(domain,k));
+CREATE INDEX IF NOT EXISTS idx_state_current_order ON state(domain,k,epistemic) WHERE status='CURRENT';
+CREATE INDEX IF NOT EXISTS idx_state_key_current ON state(k,domain,epistemic) WHERE status='CURRENT';
 CREATE TABLE IF NOT EXISTS events(seq INTEGER PRIMARY KEY AUTOINCREMENT,event_id TEXT UNIQUE NOT NULL,idem TEXT UNIQUE NOT NULL,base_epoch INTEGER NOT NULL,epoch INTEGER UNIQUE NOT NULL,event_type TEXT NOT NULL,writer TEXT NOT NULL,ops_json TEXT NOT NULL,provenance_json TEXT NOT NULL,source_json TEXT NOT NULL,execution_json TEXT NOT NULL,semantic_event_hash TEXT NOT NULL,semantic_chain_hash TEXT NOT NULL,execution_chain_hash TEXT NOT NULL,semantic_state_hash TEXT NOT NULL,trace_root_hash TEXT NOT NULL,committed_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS snapshots(id TEXT PRIMARY KEY,epoch INTEGER NOT NULL,semantic_state_hash TEXT NOT NULL,trace_root_hash TEXT NOT NULL,state_json TEXT NOT NULL,domain_epochs_json TEXT NOT NULL,semantic_chain_hash TEXT NOT NULL,execution_chain_hash TEXT NOT NULL,created_at TEXT NOT NULL);
 '''

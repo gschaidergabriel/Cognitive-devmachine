@@ -1,0 +1,97 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260810T2322p0700-chatgpt-secondary-frank-v01-screen",
+  "transformed_hypotheses":[
+    {
+      "id":"HF2-01-TRIPLE-FENCE",
+      "source_clusters":["HF-01","HF-02"],
+      "claim":"Frank effects should use three orthogonal gates: effect authorization, immutable caller-bound execution-generation capability, and provider idempotency/outcome reconciliation. None substitutes for another.",
+      "changed":"External fencing/capability evidence plus current V14 failure turns generation binding from a local patch into a cross-boundary invariant.",
+      "falsifier":"A two-gate alternative matches all stale/ABA/retry/unknown-outcome tests with lower cost.",
+      "highest_information_test":"B1 reservation/B2 attempt/B3 provider-precommit factorial with generation turnover before each boundary and timeout-after-provider-acceptance.",
+      "affected":["F-V01-08","F-V01-09","F-V01-13","claycode","unifieddb","harness"],
+      "state":"TESTING_CANDIDATE"
+    },
+    {
+      "id":"HF2-02-DUAL-SECURITY-PROVENANCE",
+      "source_clusters":["HF-02","HF-03"],
+      "claim":"Use hard structural non-authority/capability isolation for privileged effects and a separate semantic provenance/audit plane for untrusted influence through memory and derived summaries.",
+      "changed":"Fides/CaMeL support enforcement while NeuroTaint/AgentSys expose the limits of label-only semantic influence tracking.",
+      "falsifier":"Structural isolation alone matches adaptive semantic-influence attacks and audit attribution.",
+      "highest_information_test":"Web->worker->validated-summary->memory->later-effect adversarial chain with paraphrase, delayed reuse and cross-session persistence.",
+      "affected":["F-V01-04","F-V01-09","F-V01-10","F-V01-13","unifieddb","claygraph"],
+      "state":"CANDIDATE"
+    },
+    {
+      "id":"HF2-03-EXECUTION-STATE-MEMORY",
+      "source_clusters":["HF-03","HF-07"],
+      "claim":"UnifiedDB should separate authoritative execution-state/event lineage from semantic associative memory; active context is assembled from current state path plus bounded relevant semantic evidence.",
+      "changed":"MAGE/ESAA make execution-state structure a stronger mechanism than generic semantic memory while preserving semantic retrieval as a complementary plane.",
+      "falsifier":"Semantic-only retrieval/summaries match long-horizon success, repair locality, replay and cost.",
+      "highest_information_test":"Long-horizon branch/revise/recovery benchmark with injected erroneous intermediate state and context pressure.",
+      "affected":["F-V01-03","F-V01-04","F-V01-11","unifieddb","claygraph"],
+      "state":"CANDIDATE"
+    },
+    {
+      "id":"HF2-04-ADAPTIVE-LOOP-CONTROLLER",
+      "source_clusters":["HF-04","HF-05","HF-09"],
+      "claim":"Frank recurrence should be governed by a typed adaptive controller using unresolved pressure, predicted outcome gain, uncertainty, stability/livelock signals and cost; convergence is not the sole valid regime.",
+      "changed":"Adaptive-compute and loop-stability evidence strengthens selective recurrence while negative depth results reject fixed deep looping as a general policy.",
+      "falsifier":"Fixed shallow/deep recurrence dominates adaptive control across held-out difficulty and recovery conditions.",
+      "highest_information_test":"Matched fixed-1/fixed-K/adaptive controller with truthful/shuffled/no-reentry controls and semantic-livelock injections.",
+      "affected":["F-V01-03","F-V01-05","F-V01-10","F-V01-11","gwt","emergenz","harness"],
+      "state":"CANDIDATE_HIGH_PRIORITY"
+    },
+    {
+      "id":"HF2-05-GWT-MUST-EARN-ITS-BROADCAST",
+      "source_clusters":["HF-05"],
+      "claim":"Keep GWT as a causally testable bounded broadcast mechanism only if competition/broadcast/receiver-use/re-entry yields utility beyond shared recurrent memory or simple cross-attention under matched budgets.",
+      "changed":"External workspace successes are real but domain-bounded, and emergent recurrent representations provide a simpler countermechanism.",
+      "falsifier":"No outcome/transfer/coordination loss under GWT lesion with information preserved through a simpler route.",
+      "highest_information_test":"Three-way matched GWT vs shared-memory vs cross-attention ablation with receiver-use and re-entry receipts.",
+      "affected":["F-V01-03","F-V01-05","gwt","emergenz"],
+      "state":"CANDIDATE_TEST_REQUIRED"
+    },
+    {
+      "id":"HF2-06-PAIRWISE-FIRST-HYPERPOSITION",
+      "source_clusters":["HF-06"],
+      "claim":"Hyperposition should default to pairwise/factorized relations and promote a hyperedge only when measured interaction information or task evidence shows irreducible higher-order value.",
+      "changed":"Hypergraph gains are bounded and task-dependent; Hotpot-like nulls reject universal higher-order promotion.",
+      "falsifier":"Always-on hypergraphs dominate pairwise-first across workloads including simple pairwise tasks without material overhead.",
+      "highest_information_test":"Synthetic factorial interactions of order 2/3/4 plus real multi-hop tasks, identical evidence and fixed resource budget.",
+      "affected":["F-V01-04","F-V01-05","hyperposition","claygraph","unifieddb"],
+      "state":"CANDIDATE_HIGH_PRIORITY"
+    },
+    {
+      "id":"HF2-07-EVENTS-SNAPSHOTS-PROJECTIONS",
+      "source_clusters":["HF-07","HF-03"],
+      "claim":"For authority/identity/effect/goal transitions, store immutable causal events with monotonic epochs and snapshots; derive ClayGraph/query projections rebuildably. Use direct mutable tables only for non-authoritative caches where replay is not required.",
+      "changed":"Transforms 'UnifiedDB as one database' into a selective event-sourced authority core plus materialized projections, avoiding universal event-sourcing overhead.",
+      "falsifier":"Simple mutable transaction tables pass identical replay/recovery/provenance tests with lower cost.",
+      "highest_information_test":"Crash at every transition boundary + rebuild from snapshot/event tail; compare state equivalence and recovery time.",
+      "affected":["F-V01-01","F-V01-04","F-V01-09","F-V01-10","F-V01-11","F-V01-13","unifieddb","claygraph"],
+      "state":"CANDIDATE"
+    },
+    {
+      "id":"HF2-08-TYPED-HARD-BOUNDARIES",
+      "source_clusters":["HF-08","HF-01","HF-02"],
+      "claim":"Within owner-fixed ClayCode-only cognition, prioritize rich static/effect typing on identity, provenance, execution-generation and authority boundaries; permit aggressively compiled/minimal internal representations where the same typed semantics are preserved.",
+      "changed":"External typed-workflow evidence supports typed boundaries, while hidden-state/schema results argue against symbolic overhead on every low-risk internal microdecision.",
+      "falsifier":"A uniformly rich typed runtime outperforms selective boundary typing without latency/resource penalty, or minimal schema lowering catches the same semantic faults.",
+      "highest_information_test":"Mutation suite injecting type/authority/provenance mismatches across hard vs soft fields; compare compile catch rate, runtime catch rate, latency and code size.",
+      "affected":["F-V01-02","F-V01-03","F-V01-07","F-V01-09","claycode","harness"],
+      "state":"CANDIDATE"
+    },
+    {
+      "id":"HF2-09-BOUNDED-PROACTIVE-LIVENESS",
+      "source_clusters":["HF-09","HF-04"],
+      "claim":"Proactive agency requires persistent goals plus an independent liveness/progress predicate; initiative is suspended on semantic livelock, unresolved user ownership or poor verified-outcome-per-cost.",
+      "changed":"Long-horizon agency support is retained but paired with an explicit 'idle is valid' and livelock monitor.",
+      "falsifier":"Liveness gating suppresses useful proactive work more than it prevents drift/livelock under matched workloads.",
+      "highest_information_test":"Reactive vs proactive vs proactive+liveness across idle opportunity tasks, active-user interruption, dead-end loops and restart recovery.",
+      "affected":["F-V01-10","F-V01-11","F-V01-13","emergenz","gwt"],
+      "state":"CANDIDATE"
+    }
+  ],
+  "promotion_rule":"No transformed hypothesis is promoted by literature match alone; target-VPS or exact executable evidence plus matched simpler baseline and recovery controls are required."
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-wp02-immutable-bridge-queue-20260810T0723p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T07:23:00+07:00",
+  "fresh_main_parent": "bd509047697de24329949c3073c82053a5a3ab6e",
+  "payload": {
+    "work_id": "WORK-CLAYCODE-WP02-STRICT-CLOSURE-IMMUTABLE-BRIDGE-20260810",
+    "program_stage": "BASE_CLAYCODE_RELEASE",
+    "work_package": "CC-WP-02-PARSER-CANON",
+    "status": "BLOCKED_ON_CURRENT_SELF_HOSTED_QUEUE_OR_RUNNER_AVAILABILITY",
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "evidence_pr": 70,
+    "evidence_pr_state": "OPEN_DRAFT_DO_NOT_MERGE",
+    "evidence_branch": "clay-wp02-immutable-closure-20260810",
+    "evidence_head": "54ae9362dab6f34da5d22c64d4b93c685d8a9d32",
+    "workflow_run_id": 31344175111,
+    "workflow_job_id": 93322899422,
+    "workflow_status_observed": "QUEUED",
+    "source_transport": "IMMUTABLE_EXACT_GIT_BLOB_SNAPSHOT_WITH_PRE_EXECUTION_HASH_GATES",
+    "source_blobs": {
+      "V9": "cdeff8095e6703a6889a60093876c8f0cb0a2b8a",
+      "V17": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+      "dependency_lock": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+      "G9": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+      "Dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+      "frontend": "55728fd20323a364bb5e831989644b65189603d1",
+      "strict_probe": "e050b922acefe554ba4d6de19c4324952d45e803",
+      "frontend_validation": "031c08d42b3fe01376a83424f39cc6dc140b4adb",
+      "canonicalizer": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+      "discriminator": "8f2f9c317aa1f43488d20c05bc915f2ca60dfd74"
+    },
+    "prior_bridge": {
+      "pr": 58,
+      "state": "CLOSED_UNMERGED",
+      "reason_for_supersession": "Concurrent synchronization and diagnostic workflow amplification repeatedly canceled/staled closure runs. Scientific mechanism evidence remains retained; transport topology is superseded by isolated PR70."
+    },
+    "known_supported_delta": "Production frontend build_parser(... maybe_placeholders=False) is independently supported on exact Hostinger matched fixtures and preserves the intended V17 Needle.owns spacing repair; broad V17 semantic-drift hypothesis is refuted on matched G9/Dialect/record/needle fixtures.",
+    "remaining_gate": "Execute PR70 immutable closure: V9/V17 strict discriminator + strict LALR + full G9/Dialect frontend validation + grammar-bound canonicalizer on Hostinger; after a green proxy closure, formal CC-WP-02 still requires the registered Andreas Ubuntu developer-system target receipt.",
+    "duplicate_work_guard": "Do not create another WP02 runner bridge while PR70/run 31344175111 remains valid. Do not reopen PR58 for the same closure question. Consume PR70 result or establish runner-unavailability evidence instead.",
+    "promotion": "NONE",
+    "counts_as_wp02_pass": false,
+    "counts_as_andreas_target_acceptance": false,
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+    "authority_invariant": "model output != execution authority"
+  }
+}

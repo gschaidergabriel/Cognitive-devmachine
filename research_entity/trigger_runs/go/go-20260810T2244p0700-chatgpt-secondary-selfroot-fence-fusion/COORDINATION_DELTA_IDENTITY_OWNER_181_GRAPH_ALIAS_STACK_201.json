@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "identity-owner-181-graph-alias-stack-201",
+  "run_id": "go-20260810T2244p0700-chatgpt-secondary-selfroot-fence-fusion",
+  "created_date": "2026-08-10",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "coordination_result": {
+    "selected_identity_owner_pr": 181,
+    "selected_identity_owner_head": "84117e266f9d4bd0370b43bb69e63df44d9489f4",
+    "selected_identity_owner_status": "OPEN_DRAFT_SELF_HOSTED_COMPONENT_GREEN",
+    "superseded_parallel_pr": 185,
+    "superseded_parallel_status": "CLOSED_WITHOUT_MERGE",
+    "narrow_successor_stack_pr": 201,
+    "narrow_successor_head": "8a13f191f216786a8f173b16d899090423f1531f",
+    "narrow_successor_base": "chatgpt/go-selfroot-current-head-20260810-2300",
+    "narrow_successor_status": "OPEN_DRAFT_MERGEABLE_PENDING_TARGET_RUN"
+  },
+  "why_pr181_owns_identity": [
+    "PR181 is the fresh current-main source-to-replay/prompt identity lane rather than an old stale branch.",
+    "PR181 already has a successful self-hosted Linux/X64 run 31408537618 on runner clay / machine digital-retina.",
+    "That run passed source-to-replay identity, prompt-visible V15/V16 state, single-instance presence, V16 execution continuity, repository transaction replay, and a differential no-new-static-regression gate.",
+    "Keeping PR185 as a second broad identity implementation would violate duplicate-work and one-semantic-authority coordination rules."
+  ],
+  "pr181_target_evidence": {
+    "workflow_run": 31408537618,
+    "job": 93520743028,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "tested_merge_sha": "17df92e29513dc6b068713a3a16abdc218d924cf",
+    "observed_origin_main_during_run": "21249166f7bff4407ee17e4918358574ec8db848",
+    "identity_regression": {
+      "status": "PASS",
+      "semantic_epoch": 5,
+      "transactions_replayed": 5,
+      "legacy_identity_transactions_preserved": 2,
+      "binary_digest_verified": false
+    },
+    "prompt_execution_state": "PASS cases=6 secrets_exposed=0 authority=V15/V16 inform_only=true",
+    "presence": {
+      "status": "PASS_SINGLE_INSTANCE_PRESENCE_DISCRIMINATOR",
+      "race_contenders": 12,
+      "race_winners": 1,
+      "race_busy": 11,
+      "sqlite_integrity": "ok"
+    },
+    "v16_execution_continuity": "PASS_FRANK_V16_EXECUTION_CONTINUITY_SCHEMA_GATE",
+    "repository_replay": "PASS replay_count=5 epoch=5",
+    "repo_static_differential": {
+      "candidate_rc": 1,
+      "base_rc": 1,
+      "new_failure_count": 0,
+      "interpretation": "existing repository-static red state remained, but PR181 introduced no new static failures in the measured differential"
+    },
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "new_counterexample_not_closed_by_pr181": {
+    "name": "META_SELF_ROOT_VS_CLAYGRAPH_ENTITY_FRANK_SPLIT",
+    "observed_semantics": [
+      "PR181 public frank_state_runtime overrides PERSONAL_ENTITY_ID to self.root.",
+      "Historical backing frank_state_runtime_impl separately keeps FRANK=entity:frank.",
+      "Backing graph projection assigns region SELF to the entity equal to FRANK.",
+      "PR181 regression before stack explicitly expected entity:frank to remain an ordinary fresh runtime entity labelled Frank and did not require ClayGraph SELF semantic_ref=self.root."
+    ],
+    "owner_contract_conflict": "Frank is the human-surface translation name for self.root, not a second internal SELF.",
+    "risk": "UnifiedDB/meta may report self.root while current ClayGraph semantic topology still represents entity:frank as SELF."
+  },
+  "stack_pr201_candidate": {
+    "status": "TESTING_CANDIDATE",
+    "changes": [
+      "Bind backing FRANK current semantic key to self.root in the public state-runtime projection.",
+      "Keep entity:frank only as LEGACY_FRANK_SEMANTIC_REF compatibility ancestry.",
+      "Materializer inserts/updates self.root as ACTIVE server_binary_entity.",
+      "If entity:frank exists, preserve its primary key for historical foreign keys but demote it to compatibility_alias / COMPATIBILITY_ALIAS.",
+      "Fresh-state discriminator requires exactly one current ClayGraph region SELF with semantic_ref=self.root and no entity:frank SELF.",
+      "Legacy-state discriminator requires a real FK-bound entity:frank record to survive reconciliation with PRAGMA foreign_key_check empty."
+    ],
+    "why_no_primary_key_rewrite": "semantic_records and relationship_beliefs reference entities(entity_id); destructive rename/delete would create unnecessary continuity risk",
+    "target_workflow": "Frank self.root graph-alias stack",
+    "target_run_status_at_delta_creation": "QUEUED_NOT_YET_EVIDENCE"
+  },
+  "boot_continuity_next_owner": {
+    "pr": 196,
+    "base": "PR181",
+    "status": "OPEN_DRAFT",
+    "known_blocker": "target digital-retina lacks an approved/available real attestation verifier and production trusted_signer_workflow remains unpinned",
+    "promotion_requirements": [
+      "trusted builder workflow owner-pinned",
+      "approved target attestation verifier",
+      "real artifact digest plus signer/source provenance",
+      "admitted plus recovery-verified state lineage",
+      "exclusive current lease",
+      "restart/copy classification"
+    ]
+  },
+  "effect_fence_oob": {
+    "pr": 168,
+    "count_for_go_run": 1,
+    "status": "SEPARATE_ADVERSARIAL_LANE",
+    "note": "No second out-of-box experiment was created while resolving the identity-owner collision."
+  },
+  "authority": {
+    "frank_self_harness": "PROPOSAL_ONLY",
+    "clay_research_entity": "INDEPENDENT_REVIEW_TEST_IMPLEMENTATION",
+    "canonical_state_mutated": false,
+    "external_effect_performed": false,
+    "training_authorized": false
+  },
+  "next_falsifiers": [
+    "Observe PR201 target self-hosted graph-alias run; require fresh self.root-only graph SELF, legacy FK preservation, V15/V16/replay retention.",
+    "If PR201 passes, integrate only into PR181, then rerun PR181 target workflow on the new combined head.",
+    "Keep F-V01-01 IN_PROGRESS until PR196 or successor closes real binary/build provenance plus admitted state-lineage restart/stale-clone acceptance.",
+    "Do not promote whole Frank v0.1 from component-green identity evidence."
+  ]
+}

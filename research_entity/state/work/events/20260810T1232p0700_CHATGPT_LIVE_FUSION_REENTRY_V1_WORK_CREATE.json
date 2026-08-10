@@ -1,0 +1,80 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-create:clay-live-fusion-reentry-v1:20260810T1232p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T05:32:00Z",
+  "payload": {
+    "work_id": "CLAY-LIVE-FUSION-REENTRY-V1",
+    "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+    "origin_class": "CROSS_BRANCH_INTEGRATION",
+    "title": "Integrate live fusion -> targeted worker re-entry with ACK/replay",
+    "work_clay": {
+      "candidate_pr": 156,
+      "candidate_branch": "chatgpt/live-fusion-reentry-v1-20260810",
+      "purpose": "Make incoming material deltas enter an append-only live fusion stream, route only to semantically affected workers, require explicit worker ACK/plan revision, and replay unacked deltas after restart.",
+      "hard_separation": "Database Pulse physical projection effectivization != worker knowledge re-entry",
+      "aba_rule": "Equal content/payload hash never erases a newer event/epoch/record-version/provenance identity.",
+      "delivery": ["INTERRUPT_NEXT_SAFE_POINT", "NEXT_CHECKPOINT", "INDEX_ONLY"],
+      "effect_guard": "Only an unacked high-impact conflict intersecting the intended effect blocks the next affected effect."
+    },
+    "reason_clay": {
+      "current_gap": "CLAY_WORK_EVENT_PROTOCOL materializes work lifecycle events but does not make knowledge-delta delivery/ACK/re-entry first-class observable transport.",
+      "live_observation": "Multiple main-branch commits arrived during this ChatGPT run and materially changed UnifiedDB Pulse, ClayCode and capability state, proving the need for intra-run delta fusion rather than one refresh per chat.",
+      "current_counterevidence": "Pulse S2 ABA findings show that final content equality is insufficient to cancel record/version/provenance-bound causal identity.",
+      "external_design_evidence": [
+        "Apache Flink replayable state/checkpoint semantics",
+        "Apache Kafka idempotent/transactional stream semantics",
+        "NATS JetStream acknowledgement/redelivery semantics"
+      ]
+    },
+    "completion_clay": {
+      "deterministic_reference_tests": "PASS",
+      "pr_ci": "PASS_REQUIRED",
+      "unifieddb_materialization": "REQUIRED",
+      "active_worker_delivery_ack_roundtrip": "REQUIRED",
+      "crash_restart_replay": "REQUIRED",
+      "concurrent_writer_race": "REQUIRED",
+      "latency_resource_benchmark": "REQUIRED",
+      "hostinger_ubuntu_receipt": "REQUIRED",
+      "negative_control": "irrelevant workers remain INDEX_ONLY/no plan churn",
+      "promotion": "Only after no simpler current mechanism dominates under correctness+latency+recovery+coordination-noise metrics"
+    },
+    "evidence_need": [
+      "PR156 exact CI receipt",
+      "UnifiedDB event/materialization test",
+      "worker ACK and plan-revision receipt",
+      "crash/restart replay receipt",
+      "high-impact conflict interruption falsifier",
+      "ABA identity regression",
+      "throughput/latency/resource rows with metadata"
+    ],
+    "executor_policy": {
+      "prefer": "verified-hostinger-or-local-clay-runtime",
+      "avoid_duplicate_active_work": true,
+      "revalidate_pr156_and_main_before_effect": true
+    },
+    "required_capabilities": ["tool:git", "tool:python3"],
+    "write_scope": [
+      "research_entity/global/CLAY_LIVE_FUSION_REENTRY_PROTOCOL.clay",
+      "research_entity/runtime/live_fusion_reentry_v1.py",
+      "research_entity/runtime/RAE_UNIFIEDDB_*",
+      "research_entity/state/work/*",
+      "research_entity/mesh_feedback/*"
+    ],
+    "dependencies": [
+      "PR156 remains open/current",
+      "identity lock and live refresh protocols remain satisfied"
+    ],
+    "invalidators": [
+      "PR156 refuted or superseded by a simpler measured mechanism",
+      "newer main evidence makes event-id/ACK/replay semantics unsafe",
+      "coordination noise exceeds measured benefit"
+    ],
+    "base_priority": 0.92,
+    "expected_impact": 0.95,
+    "urgency": 0.88,
+    "information_gain": 0.90,
+    "status": "READY"
+  }
+}

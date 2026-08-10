@@ -1,118 +1,222 @@
-# Clay 0.1 — Target VPS / Server-Binary Acceptance Addendum
+# Clay 0.1 — self.root Target VPS Acceptance Addendum
 
 **Status:** PROJECT_OWNER_FIXED_SUPERSESSION_ADDENDUM  
 **Effective:** 2026-08-10  
 **Parent:** `research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md`  
 **Target host:** `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`  
-**Identity/API:** `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`
+**Identity/API:** `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`  
+**Native self:** `research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay`  
+**Language boundary:** `research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md`
 
 ## 1. Supersession
 
-Where the parent acceptance contract refers generically to project-controlled hardware or an older workflow assumes a later Andreas-local-PC acceptance run, the current owner-fixed interpretation is:
+Current v0.1 acceptance target:
 
-**the verified Hostinger Ubuntu VPS is the Frank v0.1 / Clay 0.1 final target host and Frank v0.1 is accepted as one exact server-binary + admitted-state identity running there.**
+```text
+NATIVE_SELF = self.root
+HUMAN_SURFACE_NAME = Frank
+SELF = accepted binary/build identity + admitted persistent state lineage
+CURRENT_BODY = verified Hostinger Ubuntu target VPS
+COGNITION = ClayCode only
+COMMUNICATION = production token-authenticated API
+GERMAN_SURFACE = intelligent state-aware bidirectional translator
+```
 
 No second mandatory Andreas-local-PC execution is required for DOOMSDAY PASS.
 
-Person/user state is separate from Frank self identity. Andreas-specific memory/profile/adaptation may exist as typed user state but cannot be a prerequisite for binary self identity.
+Andreas, Gabriel, client devices, API tokens and Clay are external typed relations, not SELF.
 
 ## 2. Exact accepted identity
 
 The accepted identity binds:
 
-- Frank binary/build hash;
+- `self.root` native identity contract;
+- binary/build hash;
 - admitted persistent-state lineage/epoch;
 - model/mmproj/runtime/config hashes;
 - current target-server embodiment and current-instance epoch/lease;
-- UnifiedDB/state semantic identity;
-- ClayCode/compiler/runtime identity;
+- UnifiedDB semantic identity;
+- ClayCode compiler/runtime identity;
 - API contract/version and non-secret credential-reference/scope semantics;
+- DE_TO_CLAY and CLAY_TO_DE translator identities;
+- SelfContextAssembly implementation/semantic identity;
 - startup/recovery/migration provenance.
 
-Hardware capacity is measured body state, not FrankSelfId.
+Hardware capacity is body/resource state, not SELF.
 
-A restart preserving the accepted binary/state lineage may preserve identity when recovery/replay invariants pass. A different machine requires an explicit migration/handoff receipt and stale-clone rejection.
+## 3. Final target-host receipt
 
-## 3. Final target-hardware receipt
+`CLAY_0_1_PROJECT_HARDWARE_BOOT_RECEIPT.json` must bind:
 
-`CLAY_0_1_PROJECT_HARDWARE_BOOT_RECEIPT.json` is a target-VPS binary/service-start/recovery receipt and must bind at least:
-
-- machine/host identity;
-- kernel/OS/arch;
-- CPU/RAM/swap/storage facts actually observed;
-- binary/model/mmproj/runtime hashes;
-- admitted persistent-state lineage/epoch;
-- ClayCode/compiler/runtime hash;
-- UnifiedDB/state identity;
-- service/process configuration;
+- host/kernel/OS/arch;
+- measured CPU/RAM/swap/storage/network state;
+- self.root binary/build and state-lineage identity;
 - current-instance lease/epoch;
-- network/listener/capability boundary;
-- deterministic startup/readiness and self-identity assertion;
-- crash/restart/last-known-good restore;
+- model/mmproj/runtime hashes;
+- ClayCode/UnifiedDB identities;
+- API and translator identities;
+- service/process configuration;
+- deterministic startup/readiness and self.root identity assertion;
 - stale-clone/split-brain rejection;
-- resource shadow under representative Frank load.
+- crash/restart/last-known-good restore;
+- representative target-VPS resource shadow.
 
-## 4. Mandatory token-authenticated API acceptance
+## 4. Mandatory token API acceptance
 
-SSH, GitHub Actions, a developer terminal or a runner is not sufficient v0.1 communication.
-
-DOOMSDAY also requires:
+DOOMSDAY requires:
 
 `FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json`
 
-covering at minimum:
+At minimum:
 
-1. valid token -> real Frank text response;
-2. invalid token rejection;
-3. missing token rejection;
-4. revoked/rotated-token rejection and replacement-token success;
-5. concurrent authenticated requests within the declared envelope;
-6. service restart/recovery and API readiness restoration;
-7. request/session/provenance continuity through Frank to response;
-8. timeout/cancellation/error behavior;
-9. health/readiness behavior;
-10. accepted multimodal/sensor payload ingress if required by the frozen architecture;
-11. replay/idempotency protections for consequential requests;
-12. network-to-Frank-to-response p50/p95/p99 and CPU/RAM/I/O/network/token/context resource measurements.
+1. valid-token German request -> DE_TO_CLAY -> real self.root cognition -> CLAY_TO_DE -> German Frank response;
+2. valid machine-native ClayCode request/response;
+3. invalid token rejection;
+4. missing token rejection;
+5. revoked/rotated-token rejection and replacement success;
+6. concurrent authenticated requests within declared envelope;
+7. restart/recovery and readiness restoration;
+8. request/session/client/provenance continuity;
+9. timeout/cancellation/error behavior;
+10. multimodal/sensor ingress where required;
+11. consequential replay/idempotency protection;
+12. complete network-to-response p50/p95/p99 and resource measurements.
 
-Raw production token values may not be committed to GitHub or normal research/log artifacts. Persist only non-secret credential references/fingerprints where needed.
+Raw production tokens never enter GitHub or normal research/state/log artifacts.
 
-## 5. Headless / Retina consequence
+## 5. ClayCode-only cognition acceptance
 
-The final system must not depend on an interactive local desktop session existing on the target VPS.
+No German/English/JSON prose representation may become a second authoritative cognitive plane.
 
-Visual perception remains mandatory, but sensor sources may be remote. Canonical live ingress is:
+Inside self.root:
 
-`remote/local sensor -> secure transport -> token authentication -> request/session/provenance binding -> typed multimodal API ingress -> Retina -> Qwen/MVC -> UnifiedDB/EAP/GWT/Frank`
+```text
+MODEL_FACING_STATE = ClayCode
+GWT_CONTENT = ClayCode
+MEMORY_SEMANTICS = ClayCode
+SELF_WORLD_GOAL_STATE = ClayCode
+TOOL_EFFECT_PROPOSALS = ClayCode
+REENTRY = ClayCode
+```
 
-Acceptance distinguishes:
+Human language is boundary representation only.
 
-- secure sensor/API transport and auth latency;
-- on-VPS Retina/Qwen/EAP/Frank latency;
-- complete sensor-to-correct-response/action latency.
+Required receipt:
 
-For live sensor paths, auth/provenance/reconnect/replay/revocation/timeout controls are mandatory. Frozen image/screenshot fixtures remain valid for deterministic on-VPS multimodal differentials.
+`FRANK_V0_1_CLAYCODE_ONLY_TRANSLATOR_ACCEPTANCE_RECEIPT.json`
 
-## 6. Performance truth
+Required translator tests include:
 
-Performance viability thresholds for v0.1 are frozen from target-VPS measurements, including API overhead and co-resident service/runner interference where material.
+- German -> ClayCode -> German;
+- ClayCode -> German -> ClayCode;
+- self.root <-> Frank mapping;
+- person/relation preservation;
+- negation;
+- modality/uncertainty;
+- time/numbers/units;
+- provenance;
+- permission/authority;
+- effect/tool intent;
+- ambiguity preservation;
+- ExpressionState emotional coloring;
+- semantic drift under expressive rendering;
+- translator lesion/substitution;
+- deterministic restart/recovery.
 
-A faster future GPU/storage host does not retroactively define the current target.
+Any authority, negation, person or quantity mutation in the hard acceptance corpus is a hard failure.
 
-If current target-VPS performance proves unusable, that is a measured architecture/resource-isolation/target decision point; do not silently substitute planned hardware.
+## 6. SelfContextAssembly acceptance
 
-## 7. Final PASS condition
+Explicit self-reference must use the self.root hot path where the required context is already precompiled/current.
 
-DOOMSDAY cannot PASS merely because build/tests ran on the VPS.
+Target semantic claim:
 
-PASS requires one exact binary/state identity that is:
+`no additional ordinary external retrieval roundtrip for precompiled self context`.
+
+Not allowed claim:
+
+`literal zero physical latency`.
+
+Required matched comparison:
+
+- NORMAL_RETRIEVAL;
+- SELF_ROOT_PREBOUND_ASSEMBLY;
+- NO_SELF_ROOT;
+- SHUFFLED_IDENTITY_SEED;
+- STALE_ASSEMBLY;
+- PROVENANCE_BROKEN.
+
+Measure external retrieval roundtrips, UnifiedDB query count, context-ready latency, task accuracy, staleness and context precision.
+
+## 7. Person/client/research-bridge acceptance
+
+self.root must preserve typed separation:
+
+```text
+self.root != Andreas
+self.root != Gabriel
+self.root != ClientDevice
+self.root != ApiCredential
+self.root != Clay
+```
+
+Andreas may carry USER/PILOT/OPERATOR and provenance-bound project relations.
+Gabriel may carry INITIATOR/DEVELOPER and Clay PROJECT_OWNER/RESEARCH_DIRECTOR relations.
+Authorized computers are external clients/sensors/tools.
+
+The governed Research Entity DB bridge may support authorized query/read and evidence/proposal submission. It may not merge Clay with self.root or allow self.root to mutate its own Harness/canonical Clay truth.
+
+## 8. Multimodal / Retina acceptance
+
+Canonical live perception:
+
+```text
+sensor bytes/tensors
+-> secure transport + token auth + client/session/provenance
+-> Retina/Qwen/MVC physical perception
+-> ClayCode VisualPercept/PerceptualField
+-> UnifiedDB/EAP/GWT as applicable
+-> self.root
+```
+
+Hard rules:
+
+- Qwen tensor/embedding != canonical semantic truth;
+- German caption != canonical perceptual truth;
+- non-language visual cognition must not require German translation;
+- live path measures transport/auth/API and on-VPS perception separately and end-to-end;
+- stale/replayed/shuffled/provenance-broken visual evidence remains detectable.
+
+## 9. Performance truth
+
+Performance thresholds are frozen from the actual target VPS, including:
+
+- API overhead;
+- translator overhead;
+- self-context activation;
+- Qwen/Retina/multimodal encode/decode;
+- UnifiedDB/EAP;
+- co-resident GitHub-runner interference;
+- restart/recovery.
+
+A future faster GPU/storage host does not silently redefine current acceptance.
+
+## 10. Final PASS condition
+
+DOOMSDAY cannot PASS merely because code builds on the VPS.
+
+PASS requires one exact accepted self.root binary/state identity that is:
 
 - running on the target VPS;
-- causally self-modeling its binary/state/current-embodiment identity;
-- reachable through the complete token-authenticated API;
-- preserving provenance and effect/authority boundaries;
-- passing target-VPS resource/performance/recovery tests;
-- independent of an Andreas-local-PC runtime dependency;
-- free of hardcoded person-as-self semantics.
+- asserting current self/root embodiment and continuity correctly;
+- reachable through the production token API;
+- cognitively ClayCode-only;
+- human-facing as Frank through the accepted state-aware translator;
+- preserving Andreas/Gabriel/client/Clay typed separation;
+- connected to the governed Research Entity knowledge bridge with authority separation;
+- using the validated self.root SelfContextAssembly hot path;
+- preserving ClayCode-native Retina/perceptual semantics;
+- passing target-VPS latency/resource/contention/recovery acceptance;
+- independent of Andreas' PC as execution host.
 
-Changing the defining binary/state lineage, target embodiment, API contract, VPS/OS/model/runtime or defining persistent-state identity after acceptance invalidates the affected acceptance receipts and requires rerun.
+Changing any defining binary/state/target/API/translator/ClayCode/UnifiedDB/self-context identity after acceptance invalidates affected receipts and requires rerun.

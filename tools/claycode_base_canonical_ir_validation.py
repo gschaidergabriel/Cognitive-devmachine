@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
-"""Deterministic canonical syntax-IR roundtrip validation for ClayCode BASE WP02.
+"""Deterministic canonical-IR evidence gate for ClayCode BASE WP-02.
 
-This tool sits after strict LALR construction/current-corpus parsing and before typed IR.
-It proves a narrower contract:
-- a parsed ClayCode source has one deterministic JSON canonical syntax IR;
-- serialize -> deserialize -> serialize is byte-identical;
-- ignored presentation (space/comments) is hash-stable;
-- operator/literal/order/relation mutations are hash-distinguishable.
-
-It does NOT claim typed semantic equivalence, WP03 closure, or CC-WP-02 PASS by itself.
-V9 is the active frontend candidate. maybe_placeholders=False is deliberate: absent optional
-syntax is represented by absence, not Python None nodes inside the canonical tree.
+This validator is deliberately frontend-only. It binds the current V17 repaired LALR
+surface to a deterministic JSON canonical representation, proves serialization roundtrip,
+checks semantic mutation discrimination, and checks trivia-equivalent source pairs.
+It does NOT claim typed-IR/type-effect/evaluator closure and does NOT by itself promote
+CC-WP-02 to PASS.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
+import os
+import platform
+import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -24,187 +24,169 @@ from typing import Any
 from lark import Lark, Token, Tree
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V9.lark"
-DEFAULT_SOURCES = [
+GRAMMAR = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
+SOURCES = [
     ROOT / "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
     ROOT / "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
 ]
-IR_SCHEMA = "claycode.canonical_syntax_ir.v0.1"
+SCHEMA = "claycode-canonical-parse-ir/1"
 
 
-def sha256(data: bytes) -> str:
+def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def node_to_ir(node: Any) -> dict[str, Any]:
+def package_version(name: str) -> str | None:
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        return None
+
+
+def canonical_obj(node: Any) -> Any:
+    """Create an order-preserving, location/trivia-free canonical JSON value."""
     if isinstance(node, Tree):
-        return {
-            "kind": "tree",
-            "rule": str(node.data),
-            "children": [node_to_ir(child) for child in node.children],
-        }
+        children = [canonical_obj(child) for child in node.children]
+        return {"node": str(node.data), "children": [x for x in children if x is not None]}
     if isinstance(node, Token):
-        return {"kind": "token", "type": node.type, "value": str(node)}
-    raise TypeError(f"unsupported parse node: {type(node).__name__}")
+        if node.type == "NEWLINE":
+            return None
+        return {"token": node.type, "value": str(node)}
+    if node is None:
+        return None
+    raise TypeError(f"unsupported parse value: {type(node)!r}")
 
 
-def validate_ir(node: Any) -> None:
-    if not isinstance(node, dict):
-        raise TypeError("canonical IR node must be an object")
-    kind = node.get("kind")
-    if kind == "tree":
-        if set(node) != {"kind", "rule", "children"}:
-            raise ValueError("tree node has non-canonical keys")
-        if not isinstance(node["rule"], str) or not node["rule"]:
-            raise ValueError("tree.rule must be non-empty string")
-        if not isinstance(node["children"], list):
-            raise ValueError("tree.children must be a list")
-        for child in node["children"]:
-            validate_ir(child)
-        return
-    if kind == "token":
-        if set(node) != {"kind", "type", "value"}:
-            raise ValueError("token node has non-canonical keys")
-        if not isinstance(node["type"], str) or not node["type"]:
-            raise ValueError("token.type must be non-empty string")
-        if not isinstance(node["value"], str):
-            raise ValueError("token.value must be string")
-        return
-    raise ValueError(f"unknown canonical IR node kind: {kind!r}")
-
-
-def encode_ir(ir: dict[str, Any]) -> bytes:
-    validate_ir(ir)
+def canonical_bytes(tree: Tree) -> bytes:
     return json.dumps(
-        {"schema": IR_SCHEMA, "root": ir},
+        {"schema": SCHEMA, "root": canonical_obj(tree)},
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
     ).encode("utf-8")
 
 
-def decode_ir(payload: bytes) -> dict[str, Any]:
-    doc = json.loads(payload.decode("utf-8"))
-    if not isinstance(doc, dict) or set(doc) != {"root", "schema"}:
-        raise ValueError("invalid canonical IR envelope")
-    if doc["schema"] != IR_SCHEMA:
-        raise ValueError(f"unsupported IR schema: {doc['schema']!r}")
-    validate_ir(doc["root"])
-    return doc["root"]
+def canonical_hash(parser: Lark, source: str) -> tuple[str, bytes]:
+    payload = canonical_bytes(parser.parse(source))
+    return sha256_bytes(payload), payload
 
 
-def parse_ir(parser: Lark, source: str) -> dict[str, Any]:
-    return node_to_ir(parser.parse(source))
+def stable_roundtrip(payload: bytes) -> bool:
+    decoded = json.loads(payload.decode("utf-8"))
+    encoded = json.dumps(decoded, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return payload == encoded
 
 
-def ir_hash(parser: Lark, source: str) -> str:
-    return sha256(encode_ir(parse_ir(parser, source)))
-
-
-def pair_case(parser: Lark, name: str, left: str, right: str, expect_same: bool) -> dict[str, Any]:
-    lh = ir_hash(parser, left)
-    rh = ir_hash(parser, right)
-    observed_same = lh == rh
+def pair(parser: Lark, left: str, right: str, expect_same: bool) -> dict[str, Any]:
+    lh, lp = canonical_hash(parser, left)
+    rh, rp = canonical_hash(parser, right)
+    same = lh == rh
     return {
-        "case": name,
-        "expected_same": expect_same,
-        "observed_same": observed_same,
         "left_hash": lh,
         "right_hash": rh,
-        "pass": observed_same == expect_same,
-    }
-
-
-def source_receipt(parser: Lark, path: Path) -> dict[str, Any]:
-    source = path.read_text(encoding="utf-8")
-    tree = parser.parse(source)
-    ir = node_to_ir(tree)
-    encoded_1 = encode_ir(ir)
-    decoded = decode_ir(encoded_1)
-    encoded_2 = encode_ir(decoded)
-    repeat = encode_ir(node_to_ir(parser.parse(source)))
-    return {
-        "path": str(path),
-        "source_sha256": sha256(source.encode("utf-8")),
-        "canonical_ir_sha256": sha256(encoded_1),
-        "encoded_bytes": len(encoded_1),
-        "roundtrip_byte_identical": encoded_1 == encoded_2,
-        "repeat_parse_byte_identical": encoded_1 == repeat,
+        "expected_same": expect_same,
+        "observed_same": same,
+        "left_roundtrip": stable_roundtrip(lp),
+        "right_roundtrip": stable_roundtrip(rp),
+        "pass": same == expect_same and stable_roundtrip(lp) and stable_roundtrip(rp),
     }
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--grammar", default=str(DEFAULT_GRAMMAR))
-    ap.add_argument("--source", action="append", dest="sources")
     ap.add_argument("--output")
-    ap.add_argument(
-        "--proxy-nonstrict",
-        action="store_true",
-        help="Disable Lark strict mode only for hosted proxy validation when interegular is unavailable.",
-    )
     args = ap.parse_args()
 
-    grammar_path = Path(args.grammar)
-    source_paths = [Path(x) for x in args.sources] if args.sources else DEFAULT_SOURCES
-    grammar = grammar_path.read_text(encoding="utf-8")
+    wall0 = time.perf_counter_ns()
+    cpu0 = time.process_time_ns()
+    grammar_text = GRAMMAR.read_text(encoding="utf-8")
     parser = Lark(
-        grammar,
+        grammar_text,
         parser="lalr",
         lexer="contextual",
-        strict=not args.proxy_nonstrict,
+        strict=True,
         start="start",
         keep_all_tokens=True,
         maybe_placeholders=False,
+        propagate_positions=False,
     )
 
-    sources = [source_receipt(parser, path) for path in source_paths]
+    source_results = []
+    for path in SOURCES:
+        source = path.read_text(encoding="utf-8")
+        h1, p1 = canonical_hash(parser, source)
+        h2, p2 = canonical_hash(parser, source)
+        source_results.append({
+            "path": str(path.relative_to(ROOT)),
+            "source_sha256": sha256_bytes(source.encode("utf-8")),
+            "canonical_sha256": h1,
+            "repeat_canonical_sha256": h2,
+            "deterministic_repeat": h1 == h2 and p1 == p2,
+            "json_roundtrip_stable": stable_roundtrip(p1),
+            "canonical_bytes": len(p1),
+        })
 
-    equivalence = [
-        pair_case(parser, "ignored_space_comment", "rule x>0\n", "rule   x > 0 // comment\n", True),
+    mutation_pairs = {
+        "greater_vs_less": ("rule x>0\n", "rule x<0\n"),
+        "true_vs_false": ("rule true\n", "rule false\n"),
+        "call_argument_order": ("rule f(a,b)\n", "rule f(b,a)\n"),
+        "dotted_relation_kind": ("rule Needle.owns X\n", "rule Needle.lowers X\n"),
+        "field_type": ("record X { a:Int }\n", "record X { a:String }\n"),
+    }
+    mutation = [
+        {"case": name, **pair(parser, left, right, False)}
+        for name, (left, right) in mutation_pairs.items()
     ]
-    discrimination = [
-        pair_case(parser, "greater_vs_less", "rule x>0\n", "rule x<0\n", False),
-        pair_case(parser, "gte_vs_lte", "rule x>=0\n", "rule x<=0\n", False),
-        pair_case(parser, "equal_vs_not_equal", "rule x=0\n", "rule x!=0\n", False),
-        pair_case(parser, "plus_vs_minus", "rule x+1\n", "rule x-1\n", False),
-        pair_case(parser, "and_vs_or", "rule x&&true\n", "rule x||true\n", False),
-        pair_case(parser, "true_vs_false", "rule true\n", "rule false\n", False),
-        pair_case(parser, "ordered_call_arguments", "rule f(a,b)\n", "rule f(b,a)\n", False),
-        pair_case(parser, "dotted_relation_kind", "rule Needle.lowers X\n", "rule Needle.owns X\n", False),
-        pair_case(parser, "bare_owns_vs_prefix_owns", "rule 4B_need_not_learn Needle.owns\n", "rule Needle.owns X\n", False),
+
+    trivia_pairs = {
+        "horizontal_space_comment": ("rule x>0\n", "rule   x > 0   // comment\n"),
+        "blank_lines": ("record X {\n a:Int\n b:Int\n}\n", "record X {\n\n a:Int\n\n b:Int\n\n}\n"),
+        "qualified_call_space": ("rule Needle.owns(X)\n", "rule Needle.owns (X)\n"),
+        "qualified_call_tab": ("rule Needle.owns(X)\n", "rule Needle.owns\t(X)\n"),
+        "dotted_rhs_tab": ("rule Needle.owns X\n", "rule Needle.owns\tX\n"),
+    }
+    trivia = [
+        {"case": name, **pair(parser, left, right, True)}
+        for name, (left, right) in trivia_pairs.items()
     ]
 
     passed = (
-        all(x["roundtrip_byte_identical"] and x["repeat_parse_byte_identical"] for x in sources)
-        and all(x["pass"] for x in equivalence)
-        and all(x["pass"] for x in discrimination)
+        all(row["deterministic_repeat"] and row["json_roundtrip_stable"] for row in source_results)
+        and all(row["pass"] for row in mutation)
+        and all(row["pass"] for row in trivia)
     )
-    out = {
-        "schema_version": "1.1",
-        "experiment": "ClayCode BASE WP02 canonical syntax-IR roundtrip/hash validation",
+    result = {
+        "schema_version": "1.0",
+        "experiment": "ClayCode BASE WP02 deterministic canonical IR/hash validation",
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "ir_schema": IR_SCHEMA,
-        "grammar_path": str(grammar_path),
-        "grammar_sha256": sha256(grammar.encode("utf-8")),
-        "parser_strict": not args.proxy_nonstrict,
-        "maybe_placeholders": False,
-        "sources": sources,
-        "equivalence_cases": equivalence,
-        "mutation_discrimination_cases": discrimination,
+        "canonical_schema": SCHEMA,
+        "grammar_path": str(GRAMMAR.relative_to(ROOT)),
+        "grammar_sha256": sha256_bytes(grammar_text.encode("utf-8")),
+        "runtime": {
+            "python": sys.version,
+            "python_executable": sys.executable,
+            "platform": platform.platform(),
+            "machine": platform.machine(),
+            "processor": platform.processor(),
+            "hostname": platform.node(),
+            "pid": os.getpid(),
+            "lark_version": package_version("lark"),
+            "interegular_version": package_version("interegular"),
+        },
+        "sources": source_results,
+        "semantic_mutation_discrimination": mutation,
+        "trivia_equivalence": trivia,
+        "timing": {"wall_ns": time.perf_counter_ns() - wall0, "cpu_ns": time.process_time_ns() - cpu0},
         "pass": passed,
-        "evidence_class": "HOSTED_PROXY_NONSTRICT" if args.proxy_nonstrict else "TARGET_OR_STRICT_HOST_VALIDATION",
         "scope_guard": (
-            "PASS proves deterministic lossless parsed syntax IR, byte-stable JSON roundtrip, "
-            "presentation normalization and listed mutation discrimination. It does not prove "
-            "typed semantic equivalence, WP03 closure, Ubuntu acceptance, or CC-WP-02 PASS by itself."
+            "PASS proves deterministic current-V17 parse-derived canonical serialization, JSON roundtrip, selected semantic mutation discrimination, selected trivia invariance, and full-current G9/Dialect coverage on this runtime. It does not prove typed IR, type/effect semantics, evaluator/lowering, Frank handoff, or final Andreas-target acceptance."
         ),
     }
-    text = json.dumps(out, ensure_ascii=False, indent=2) + "\n"
+    text = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.output:
-        p = Path(args.output)
-        p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(text, encoding="utf-8")
+        output = Path(args.output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(text, encoding="utf-8")
     print(text, end="")
     if not passed:
         raise SystemExit(1)

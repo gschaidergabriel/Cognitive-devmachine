@@ -3,10 +3,13 @@ from __future__ import annotations
 
 """Deterministic engineering benchmark for EAP-1.7 query-aware propagation.
 
-The fixture intentionally separates structural strength from query relevance. It measures
-whether the opt-in query gate recovers the intended two-hop target under a fixed top-3 budget,
-while reporting (not optimizing against) the extra latency. This is mechanism evidence only,
-not a claim about general RAG or final Frank answer quality.
+Two matched cohorts are built:
+- labeled bridge: the relevant intermediate node itself contains the query token;
+- opaque bridge: only its one-hop successor contains the query token.
+
+The benchmark compares the EAP-1.3 parent, the V17 target-only gate ablation, and the default
+bounded one-successor lookahead. It is mechanism evidence only, not a claim about general RAG
+or final Frank answer/tool quality.
 """
 
 import argparse
@@ -31,6 +34,9 @@ from research_entity.runtime.eap_query_aware_gate_v17 import (  # noqa: E402
     QueryAwarePossibilitySpec,
 )
 
+TARGET_ONLY_MODE = "LEXICAL_COSINE_TARGET_RELATION"
+LOOKAHEAD_MODE = "LEXICAL_COSINE_TARGET_OR_ADMISSIBLE_SUCCESSOR_V1"
+
 
 def percentile(values: list[float], q: float) -> float:
     xs = sorted(values)
@@ -45,40 +51,44 @@ def percentile(values: list[float], q: float) -> float:
     return xs[lo] * (1.0 - frac) + xs[hi] * frac
 
 
-def build_fixture(cases: int) -> tuple[StateLedger, list[dict[str, str]]]:
+def build_fixture(cases_per_cohort: int) -> tuple[StateLedger, list[dict[str, str]]]:
     ledger = StateLedger()
     ops: list[dict] = []
     specs: list[dict[str, str]] = []
-    for i in range(cases):
-        token = f"topic{i}"
-        seed = f"memory:seed_{i}"
-        rel_bridge = f"memory:rel_bridge_{i}"
-        rel_target = f"memory:rel_target_{i}"
-        noise_bridge = f"memory:noise_bridge_{i}"
-        noise_target = f"memory:noise_target_{i}"
-        specs.append(
-            {
-                "query": f"{token} target",
-                "seed": seed,
-                "rel_bridge": rel_bridge,
-                "rel_target": rel_target,
-                "noise_bridge": noise_bridge,
-                "noise_target": noise_target,
-            }
-        )
-        ops.extend(
-            [
-                {"op": "SET", "domain": "memory", "key": f"seed_{i}", "value": {"text": "router root"}},
-                {"op": "SET", "domain": "memory", "key": f"rel_bridge_{i}", "value": {"text": f"{token} pathway bridge"}},
-                {"op": "SET", "domain": "memory", "key": f"rel_target_{i}", "value": {"text": f"{token} target evidence"}},
-                {"op": "SET", "domain": "memory", "key": f"noise_bridge_{i}", "value": {"text": "unrelated noise branch"}},
-                {"op": "SET", "domain": "memory", "key": f"noise_target_{i}", "value": {"text": "unrelated noise target"}},
-                {"op": "SET", "domain": "dependency", "key": f"sa_{i}", "value": {"source": seed, "target": rel_bridge, "strength": 0.90}},
-                {"op": "SET", "domain": "dependency", "key": f"at_{i}", "value": {"source": rel_bridge, "target": rel_target, "strength": 0.90}},
-                {"op": "SET", "domain": "dependency", "key": f"sn_{i}", "value": {"source": seed, "target": noise_bridge, "strength": 0.99}},
-                {"op": "SET", "domain": "dependency", "key": f"nt_{i}", "value": {"source": noise_bridge, "target": noise_target, "strength": 0.99}},
-            ]
-        )
+    for cohort, opaque in (("labeled", False), ("opaque", True)):
+        for i in range(cases_per_cohort):
+            token = f"{cohort}topic{i}"
+            stem = f"{cohort}_{i}"
+            seed = f"memory:seed_{stem}"
+            rel_bridge = f"memory:rel_bridge_{stem}"
+            rel_target = f"memory:rel_target_{stem}"
+            noise_bridge = f"memory:noise_bridge_{stem}"
+            noise_target = f"memory:noise_target_{stem}"
+            specs.append(
+                {
+                    "cohort": cohort,
+                    "query": f"{token} target",
+                    "seed": seed,
+                    "rel_bridge": rel_bridge,
+                    "rel_target": rel_target,
+                    "noise_bridge": noise_bridge,
+                    "noise_target": noise_target,
+                }
+            )
+            bridge_text = "connector intermediate" if opaque else f"{token} pathway bridge"
+            ops.extend(
+                [
+                    {"op": "SET", "domain": "memory", "key": f"seed_{stem}", "value": {"text": "router root"}},
+                    {"op": "SET", "domain": "memory", "key": f"rel_bridge_{stem}", "value": {"text": bridge_text}},
+                    {"op": "SET", "domain": "memory", "key": f"rel_target_{stem}", "value": {"text": f"{token} target evidence"}},
+                    {"op": "SET", "domain": "memory", "key": f"noise_bridge_{stem}", "value": {"text": "unrelated noise branch"}},
+                    {"op": "SET", "domain": "memory", "key": f"noise_target_{stem}", "value": {"text": "unrelated noise target"}},
+                    {"op": "SET", "domain": "dependency", "key": f"sa_{stem}", "value": {"source": seed, "target": rel_bridge, "strength": 0.90}},
+                    {"op": "SET", "domain": "dependency", "key": f"at_{stem}", "value": {"source": rel_bridge, "target": rel_target, "strength": 0.90}},
+                    {"op": "SET", "domain": "dependency", "key": f"sn_{stem}", "value": {"source": seed, "target": noise_bridge, "strength": 0.99}},
+                    {"op": "SET", "domain": "dependency", "key": f"nt_{stem}", "value": {"source": noise_bridge, "target": noise_target, "strength": 0.99}},
+                ]
+            )
     ledger.append_event(
         event_id="benchmark-fixture",
         idem="benchmark-fixture",
@@ -107,12 +117,18 @@ def parent_spec(ledger: StateLedger, case: dict[str, str], assembly_id: str) -> 
     )
 
 
-def candidate_spec(ledger: StateLedger, case: dict[str, str], assembly_id: str) -> QueryAwarePossibilitySpec:
+def candidate_spec(
+    ledger: StateLedger,
+    case: dict[str, str],
+    assembly_id: str,
+    mode: str,
+) -> QueryAwarePossibilitySpec:
     return QueryAwarePossibilitySpec(
         **{
             **parent_spec(ledger, case, assembly_id).__dict__,
             "query_gate_strength": 0.85,
             "query_gate_floor": 0.10,
+            "query_gate_mode": mode,
         }
     )
 
@@ -137,105 +153,122 @@ def summarize_latency(values: list[float]) -> dict[str, float]:
     }
 
 
-def run(cases: int, repeats: int) -> dict:
-    ledger, fixture = build_fixture(cases)
+def run(cases_per_cohort: int, repeats: int) -> dict:
+    ledger, fixture = build_fixture(cases_per_cohort)
     parent = EmergentAssemblyPreprocessor(ledger)
-    candidate = QueryAwareEmergentAssemblyPreprocessor(ledger)
-
-    # Warm both topology compilers before measuring hot assembly calls.
+    query_pre = QueryAwareEmergentAssemblyPreprocessor(ledger)
     parent.compile_active_assembly(parent_spec(ledger, fixture[0], "warm-parent"))
-    candidate.compile_active_assembly(candidate_spec(ledger, fixture[0], "warm-candidate"))
+    for mode in (TARGET_ONLY_MODE, LOOKAHEAD_MODE):
+        query_pre.compile_active_assembly(candidate_spec(ledger, fixture[0], f"warm-{mode}", mode))
 
-    parent_lat: list[float] = []
-    candidate_lat: list[float] = []
-    parent_hits = 0
-    candidate_hits = 0
-    exact_branch_recoveries = 0
-    gate_edges_observed = 0
-    gate_edges_pruned = 0
-    candidate_expansions: list[int] = []
-    parent_expansions: list[int] = []
+    modes = ("parent", "target_only", "lookahead")
+    latency: dict[str, list[float]] = {mode: [] for mode in modes}
+    hit: dict[str, dict[str, int]] = {
+        mode: {"labeled": 0, "opaque": 0} for mode in modes
+    }
+    exact: dict[str, dict[str, int]] = {
+        mode: {"labeled": 0, "opaque": 0} for mode in modes
+    }
+    work = {
+        "target_only_edges_observed": 0,
+        "lookahead_edges_observed": 0,
+        "lookahead_edges_scanned": 0,
+        "lookahead_affinity_wins": 0,
+        "lookahead_edges_pruned_below_parent_min": 0,
+    }
 
     for i, case in enumerate(fixture):
+        cohort = case["cohort"]
         p, p_lat = timed(
-            lambda c=case, n=i: parent.compile_active_assembly(
-                parent_spec(ledger, c, f"p-{n}")
+            lambda c=case, n=i: parent.compile_active_assembly(parent_spec(ledger, c, f"p-{n}")),
+            repeats,
+        )
+        t, t_lat = timed(
+            lambda c=case, n=i: query_pre.compile_active_assembly(
+                candidate_spec(ledger, c, f"t-{n}", TARGET_ONLY_MODE)
             ),
             repeats,
         )
         q, q_lat = timed(
-            lambda c=case, n=i: candidate.compile_active_assembly(
-                candidate_spec(ledger, c, f"q-{n}")
+            lambda c=case, n=i: query_pre.compile_active_assembly(
+                candidate_spec(ledger, c, f"q-{n}", LOOKAHEAD_MODE)
             ),
             repeats,
         )
-        parent_lat.extend(p_lat)
-        candidate_lat.extend(q_lat)
-        p_refs = [x["ref"] for x in p["selected"]]
-        q_refs = [x["ref"] for x in q["selected"]]
-        parent_hits += int(case["rel_target"] in p_refs)
-        candidate_hits += int(case["rel_target"] in q_refs)
-        exact_branch_recoveries += int(
-            q_refs == [case["seed"], case["rel_bridge"], case["rel_target"]]
-        )
-        gate_edges_observed += int(q["query_gate"]["edges_observed"])
-        gate_edges_pruned += int(q["query_gate"]["edges_pruned_below_parent_min"])
-        candidate_expansions.append(int(q["frontier_expansions"]))
-        parent_expansions.append(int(p["frontier_expansions"]))
+        latency["parent"].extend(p_lat)
+        latency["target_only"].extend(t_lat)
+        latency["lookahead"].extend(q_lat)
+        results = {"parent": p, "target_only": t, "lookahead": q}
+        expected_exact = [case["seed"], case["rel_bridge"], case["rel_target"]]
+        for mode, result in results.items():
+            refs = [x["ref"] for x in result["selected"]]
+            hit[mode][cohort] += int(case["rel_target"] in refs)
+            exact[mode][cohort] += int(refs == expected_exact)
+        work["target_only_edges_observed"] += int(t["query_gate"]["edges_observed"])
+        work["lookahead_edges_observed"] += int(q["query_gate"]["edges_observed"])
+        work["lookahead_edges_scanned"] += int(q["query_gate"]["lookahead_edges_scanned"])
+        work["lookahead_affinity_wins"] += int(q["query_gate"]["lookahead_affinity_wins"])
+        work["lookahead_edges_pruned_below_parent_min"] += int(q["query_gate"]["edges_pruned_below_parent_min"])
 
-    parent_hit_rate = parent_hits / cases
-    candidate_hit_rate = candidate_hits / cases
-    out = {
-        "schema_version": "1.0",
+    quality: dict[str, dict[str, float]] = {}
+    for mode in modes:
+        quality[mode] = {}
+        for cohort in ("labeled", "opaque"):
+            quality[mode][f"{cohort}_target_hit_at_3"] = hit[mode][cohort] / cases_per_cohort
+            quality[mode][f"{cohort}_exact_branch_rate"] = exact[mode][cohort] / cases_per_cohort
+
+    lat_summary = {mode: summarize_latency(latency[mode]) for mode in modes}
+    lat_summary["target_only_p50_over_parent"] = round(
+        statistics.median(latency["target_only"]) / max(1e-12, statistics.median(latency["parent"])), 4
+    )
+    lat_summary["lookahead_p50_over_parent"] = round(
+        statistics.median(latency["lookahead"]) / max(1e-12, statistics.median(latency["parent"])), 4
+    )
+    lat_summary["lookahead_p50_over_target_only"] = round(
+        statistics.median(latency["lookahead"]) / max(1e-12, statistics.median(latency["target_only"])), 4
+    )
+
+    target_only_opaque = quality["target_only"]["opaque_target_hit_at_3"]
+    lookahead_opaque = quality["lookahead"]["opaque_target_hit_at_3"]
+    lookahead_labeled = quality["lookahead"]["labeled_target_hit_at_3"]
+    supported = (
+        lookahead_opaque > target_only_opaque
+        and lookahead_opaque == 1.0
+        and lookahead_labeled == 1.0
+    )
+    return {
+        "schema_version": "2.0",
         "benchmark_class": "SYNTHETIC_DISCRIMINATING_MECHANISM_TEST",
         "implementation": IMPLEMENTATION_ID,
-        "cases": cases,
+        "cases_per_cohort": cases_per_cohort,
+        "total_cases": len(fixture),
         "repeats_per_case": repeats,
-        "fixture_nodes": cases * 5,
-        "fixture_dependencies": cases * 4,
-        "quality": {
-            "parent_relevant_target_hit_at_3": parent_hit_rate,
-            "query_aware_relevant_target_hit_at_3": candidate_hit_rate,
-            "delta_hit_at_3": candidate_hit_rate - parent_hit_rate,
-            "query_aware_exact_relevant_branch_rate": exact_branch_recoveries / cases,
-        },
-        "latency": {
-            "parent": summarize_latency(parent_lat),
-            "query_aware": summarize_latency(candidate_lat),
-            "p50_ratio_query_aware_over_parent": round(
-                statistics.median(candidate_lat) / max(1e-12, statistics.median(parent_lat)), 4
-            ),
-        },
-        "work": {
-            "parent_frontier_expansions_p50": statistics.median(parent_expansions),
-            "query_aware_frontier_expansions_p50": statistics.median(candidate_expansions),
-            "query_gate_edges_observed_total": gate_edges_observed,
-            "query_gate_edges_pruned_below_parent_min_total": gate_edges_pruned,
-        },
+        "fixture_nodes": len(fixture) * 5,
+        "fixture_dependencies": len(fixture) * 4,
+        "quality": quality,
+        "latency": lat_summary,
+        "work": work,
         "semantic_contract": {
             "persistent_second_store": False,
             "truth_authority": False,
             "effect_authority": False,
             "lesion": "query_gate_strength=0",
+            "lookahead_depth": 1,
         },
+        "discriminating_result": "SUPPORTED_ON_FIXTURE" if supported else "NOT_SUPPORTED_ON_FIXTURE",
         "limitations": [
-            "Synthetic graph intentionally favors a query-conditioned discriminator; it is not independent real-corpus evidence.",
+            "Both cohorts are synthetic and deliberately discriminating; this is not independent real-corpus evidence.",
             "Lexical cosine is a dependency-free proxy for a semantic gate, not an embedding model.",
+            "The one-successor lookahead can increase edge inspections; held-out benefit/resource tradeoff is still unmeasured.",
             "Hot assembly latency excludes initial StateLedger construction and first topology compilation.",
             "Target-hit@3 is retrieval mechanism quality only; downstream Frank answer/tool-routing quality remains unmeasured.",
         ],
     }
-    out["discriminating_result"] = (
-        "SUPPORTED_ON_FIXTURE"
-        if candidate_hit_rate > parent_hit_rate and candidate_hit_rate == 1.0
-        else "NOT_SUPPORTED_ON_FIXTURE"
-    )
-    return out
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--cases", type=int, default=64)
+    ap.add_argument("--cases", type=int, default=64, help="cases per cohort")
     ap.add_argument("--repeats", type=int, default=5)
     ap.add_argument("--output")
     args = ap.parse_args()

@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-omnisource-v10-go-20260810T1650p0700",
+  "trigger": "go",
+  "created_at": "2026-08-10T16:50:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "subject": "Omnisource V10 live-fusion/reentry candidate revised by live work-revision evidence",
+  "status": "OPEN_CROSS_BRANCH_RESEARCH_CANDIDATE",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "hypothesis": "Provenance-bound all-source intake plus semantic epoch gates, current-work revision binding and explicit reentry closure can reduce stale/correlated research-state errors without granting ingestion, graph activation or delivery truth/authority.",
+  "strongest_counterhypothesis": "The layer may add more storage, latency, false materiality and coordination cost than it removes; V9/manual or simpler routing may dominate on real repo workloads.",
+  "fresh_internal_evidence": {
+    "ref": "research_entity/claycode/supervisor/STEERING_20260810T1644P0700.json",
+    "finding": "A technically successful self-hosted execution can be bound to an older work revision. Stale executions must remain diagnostic-only for current-work credit.",
+    "effect_on_candidate": "V10 revised to bind work_id/spec_rev/repo_head/execution_start/component hashes and separate current_work_credit_eligible from semantic promotion eligibility."
+  },
+  "fresh_external_evidence": [
+    {"ref":"arXiv:2603.27775","role":"cost-based incremental/full refresh selection"},
+    {"ref":"arXiv:2606.07795","role":"IVM update complexity varies with query/semiring structure"},
+    {"ref":"arXiv:2502.20534","role":"late/lost distributed data motivates time-consistent checkpoint recovery"},
+    {"ref":"arXiv:2501.09225","role":"incremental provenance can support localized rollback"},
+    {"ref":"arXiv:2304.07458","role":"counterevidence: small graph deltas can propagate globally"}
+  ],
+  "local_evidence": {
+    "class": "LOCAL_SANDBOX_SQLITE_CANDIDATE_TEST",
+    "pass": true,
+    "checks": "11/11",
+    "source_classes": "19/19",
+    "stale_semantic_promotion_gate": "PASS",
+    "stale_work_current_credit_gate": "PASS",
+    "missing_component_binding_gate": "PASS",
+    "stale_work_diagnostic_preserved_after_restart": 1,
+    "current_work_credit_receipt_preserved_after_restart": 1,
+    "duplicate_content_distinct_provenance": "2/2 preserved",
+    "specific_material_reentry": "pending 1 -> 0 and remains CLOSED after restart",
+    "contradictions_preserved": 2,
+    "revised_performance_5000_pairs": {"elapsed_s":0.228376,"pairs_per_s":21893.7,"p50_ms":0.033665,"p95_ms":0.068912,"db_bytes":4870144},
+    "pre_workrev_guard_pairs_per_s": 29292.5,
+    "performance_interpretation": "Stronger guard has observable overhead in the same general sandbox lane; not yet a formal matched causal microbenchmark.",
+    "promotion": "NONE"
+  },
+  "negative_result": {
+    "class": "TEST_HARNESS_FAILURE",
+    "result": "Initial checkpoint insert arity mismatch",
+    "repair": "Corrected and rerun from scratch",
+    "architecture_credit": "NONE_FROM_FAILED_ATTEMPT"
+  },
+  "out_of_box_experiment": {
+    "count": 1,
+    "name": "temporal_braid_fault",
+    "baseline": "arrival-order latest-wins",
+    "candidate": "epoch-aware promotion eligibility",
+    "baseline_false_stale_promotions": 1,
+    "candidate_false_stale_promotions": 0,
+    "final_state_both": "REFINED",
+    "interpretation": "Same final state can hide transient stale causal corruption."
+  },
+  "branches": {
+    "clayresearch": {"delta":"Track source coverage, material reentry closure, stale-work credit rejection, false materiality and resource overhead as joint research metrics.","next_test":"Real repo replay vs V9/manual refresh."},
+    "frank": {"delta":"Frank telemetry is an input source only; stale or repeated Frank-originated proposals cannot gain Harness authority through fusion.","next_test":"Replay a Frank self-observation Harness proposal through V10 and verify PROPOSAL_ONLY authority."},
+    "gwt": {"delta":"Persist delivered/reconstructed/plan-revalidated/used/effect distinctions for research deltas; exposure is not causal uptake.","next_test":"Use irrelevant/shuffled research deltas as uptake controls."},
+    "emergenz": {"delta":"More sources/coupling are not emergence evidence; monitor consensus collapse and stale-cascade amplification.","next_test":"Lesion high-centrality source and routing edge separately."},
+    "claycode": {"delta":"V10 records plus current-work binding are concrete WP03 typed-IR/type-effect expressibility targets; no semantic redesign without executable gap.","next_test":"Compile minimal V10 record/reentry program once WP03 path is executable."},
+    "hyperposition": {"delta":"Preserve conflicting evidence histories and route/refresh alternatives; arrival order is not epistemic order.","next_test":"Compare same final state with different provenance histories."},
+    "claygraph": {"delta":"No new truth graph needed; existing invalidation/receiver/projection receipts remain routing/observability plane.","next_test":"Missing-edge/stale-projection replay with repair and branch-recall measurements."},
+    "unifieddb": {"delta":"V10 is TESTING with semantic+work revision guards, provenance preservation, reentry receipts and restart checkpoints; V9 remains rollback/promoted baseline.","next_test":"Self-hosted Ubuntu + actual repository replay/fault matrix."},
+    "harness": {"delta":"Runtime/failure/recovery evidence can enter V10 but only current-spec exact-bound receipts may receive current Harness work credit.","next_test":"Feed H1 failure/recovery trace through V10 and verify regression/work closure without authority inflation."}
+  },
+  "global_controls": [
+    "source coverage != raw context flood",
+    "ingestion != truth",
+    "delivery != causal credit",
+    "distribution != independent replication",
+    "contradictions survive fusion",
+    "stale semantic evidence non-promotable",
+    "stale work execution diagnostic-only for current-work credit",
+    "adaptive routing v2 remains CANDIDATE_NOT_PROMOTED",
+    "V10 remains TESTING; V9 rollback baseline",
+    "Frank remains separate research subject and never mutates Clay"
+  ],
+  "remote_validation": {
+    "workflow": ".github/workflows/omnisource-live-fusion-v1-hostinger.yml",
+    "receipt_expected": "research_entity/experiments/OMNISOURCE_LIVE_FUSION_V1_SELFHOSTED_RECEIPT.json",
+    "current_observation": "NO_VERIFIED_RECEIPT_OBSERVED_DURING_THIS_GO_RUN",
+    "epistemic_status": "NOT_EXECUTED_CLAIM"
+  },
+  "research_write_result": "EXPLICIT_FEEDBACK_TO_ALL_9_REGISTERED_BRANCHES",
+  "next_frontier": [
+    "Actual current-repo replay with work-revision churn and missing/stale graph dependencies",
+    "Self-hosted receipt if and only if workflow actually returns one",
+    "Matched V9/manual vs V10 cost/correctness benchmark",
+    "Do not displace the BASE ClayCode critical path",
+    "No V10/adaptive-mesh promotion until remote/current-repo/recovery gates close"
+  ]
+}

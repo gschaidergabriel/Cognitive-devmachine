@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "run_id": "Q23-20260810T2013P0700-GPT56SOL-01",
+  "retrieved_on": "2026-08-10",
+  "sources": [
+    {"id":"EXT-QWEN-CONFIG","class":"OFFICIAL_MODEL","url":"https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/config.json","finding":"Vision config depth=24 hidden_size=1024 out_hidden_size=2560 patch_size=16 spatial_merge_size=2 and deepstack_visual_indexes=[] in current 4B config."},
+    {"id":"EXT-LLAMA-SERVER","class":"PRIMARY_GITHUB_PROJECT","url":"https://github.com/ggml-org/llama.cpp/blob/master/tools/server/server-context.cpp","finding":"server process_mtmd_chunk retrieves mtmd_batch_get_output_embd and passes that embedding buffer into mtmd_helper_decode_image_chunk; this is a real encode/decode seam."},
+    {"id":"EXT-LLAMA-20755","class":"ISSUE_OR_FAILURE","url":"https://github.com/ggml-org/llama.cpp/issues/20755","finding":"Closed issue reports Qwen3.5 multi-turn images being reprocessed on later turns, motivating explicit encode-reuse measurement rather than cache assumptions."},
+    {"id":"EXT-QWEN-EMB","class":"PRIMARY_PAPER","url":"https://arxiv.org/abs/2601.04720","finding":"Qwen3-VL-Embedding uses multi-stage contrastive pretraining and reranker distillation, counterevidence to assuming raw generative VLM features are already calibrated embeddings."},
+    {"id":"EXT-VLM2VEC","class":"PRIMARY_PAPER","url":"https://arxiv.org/abs/2410.05160","finding":"VLM2Vec explicitly trains VLMs with contrastive objectives for multimodal embedding behavior; supports retaining a learned/tuned readout counterbaseline."},
+    {"id":"EXT-AQUAUI","class":"PRIMARY_PAPER","url":"https://arxiv.org/abs/2605.19260","finding":"Adaptive spatial visual-token reduction plus temporal continuity can reduce GUI-agent token/latency cost; supports ROI/token-budget experiments, not a fixed Frank threshold."},
+    {"id":"EXT-HISTORY-PRUNE","class":"PRIMARY_PAPER","url":"https://arxiv.org/abs/2603.26041","finding":"Historical GUI screenshot pruning work indicates static/background spatial structure and recency can matter; supports ROI+context and periodic-anchor controls."},
+    {"id":"EXT-AGMEM","class":"PRIMARY_PAPER","url":"https://arxiv.org/abs/2606.14106","finding":"Action-grounded local visual memory is reported to outperform naive full-image memory in GUI agents; supports Frank action-linked crop-memory experiments."}
+  ],
+  "promotion_rule":"External findings refine hypotheses/tests only; none is target-runtime proof."
+}

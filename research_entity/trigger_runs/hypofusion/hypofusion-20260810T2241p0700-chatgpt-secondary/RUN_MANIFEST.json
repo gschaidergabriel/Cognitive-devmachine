@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260810T2241p0700-chatgpt-secondary",
+  "trigger":"hypofusion",
+  "started_at":"2026-08-10T22:41:00+07:00",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","identity":"RESEARCH_ENTITY_TEMPORARY_WORKER"},
+  "canonical_parent":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "program":{"id":"frank-v0.1-only","stage":"FRANK_V0_1","training_authorized":false},
+  "branch":"clay/hypofusion-20260810T2241p0700",
+  "artifacts":[
+    "INTERCONNECT_MANIFEST.json",
+    "HYPOTHESIS_COVERAGE_MATRIX.json",
+    "EXTERNAL_EVIDENCE_LEDGER.md",
+    "COUNTERHYPOTHESIS_MATRIX.json",
+    "FUSION2_HYPOTHESES.json",
+    "CONTRADICTION_MAP.md",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "RUN_MANIFEST.json",
+    "FINAL_REPORT.md"
+  ],
+  "experiments_executed":[],
+  "external_live_research":true,
+  "external_primary_sources_used":["arXiv:2503.18813","arXiv:2505.23643","arXiv:2605.17634","arXiv:2606.06090","arXiv:2607.08716","arXiv:2502.05171","ICLR/OpenReview recurrent Sokoban planning","ICLR/OpenReview empowerment causal learning","official Kubernetes Lease docs"],
+  "top_transformed_hypotheses":["HF2-001-EXECUTION-EPOCH-SPINE","HF2-002-SELECTIVE-STATE-INTERVENTION","HF2-003-CONTEXTUAL-INTEGRITY-EFFECT-GATE","HF2-004-ADAPTIVE-RECURRENCE-AS-COMPUTE-POLICY","HF2-005-CLAYCODE-VS-SIMPLER-TYPED-BASELINE"],
+  "completion":{"status":"PARTIAL_BY_PROTOCOL","reason":"Major current/reachable hypothesis clusters and all registered trigger feedback were covered, but GitHub code-search indexing returned no results for canonical hypothesis IDs and no local native repository-wide resolver was available. Therefore complete enumeration of every reachable historical/current OPEN hypothesis cannot be honestly certified."},
+  "research_write_result":"COMMITTED_TO_DEDICATED_BRANCH",
+  "main_mutated":false,
+  "target_runtime_mutated":false,
+  "paid_training_started":false,
+  "identity_lock":"Clay temporary worker != self.root/Frank"
+}

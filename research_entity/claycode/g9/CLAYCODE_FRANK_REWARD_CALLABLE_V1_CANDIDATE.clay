@@ -1,0 +1,30 @@
+module claycode.frank_reward_callable.v1
+version "0.1-explicit-callable-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+parent [@research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay,@research_entity/claycode/g9/CLAYCODE_CALL_CONTRACT_SCHEMA_V1_CANDIDATE.clay]
+
+// This file is an explicit architecture candidate, not a recovered historical signature.
+// The preceding evidence-gap run found no independently declared exact signature for the
+// measured frank_reward.update/1 call. We therefore specify exactly one callable surface
+// here rather than inferring a signature from target names, caller-side equality constraints,
+// or record-name resemblance. Promotion still requires executable current-byte validation.
+
+interface frank_reward {
+  update(evidence:RewardOutcomeEvidence) -> RewardPlasticityReceipt
+}
+
+// Call-effect semantics remain explicit and separate from declaration matching.
+// DERIVED_STATE means an internal typed state/plasticity derivation. It is not an external
+// effect and it never mints execution/truth authority. Persistence is admitted only by the
+// downstream slow-plasticity/re-entry gates already present in the G9/reward contracts.
+rule call_effect(frank_reward.update,1)=DERIVED_STATE
+rule call_binding_authority(frank_reward.update,1)=NONE
+rule call_execution_admitted(frank_reward.update,1)=false
+rule call_truth_authority(frank_reward.update,1)=NONE
+
+invariant exact_target_arity_identity_required
+invariant basename_or_suffix_resolution_forbidden
+invariant unresolved_signature_execution_forbidden
+invariant explicit_callable_candidate_is_not_runtime_binding
+invariant explicit_callable_candidate_is_not_effect_authority
+invariant explicit_callable_candidate_is_not_truth_authority

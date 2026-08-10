@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2128p0700-chatgpt-secondary-wp04-explicit-reward-contract",
+  "trigger": "claycode",
+  "status": "PASS_BOUNDED_RESEARCH_DELTA",
+  "promotion": "NONE",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "research_subject": "self.root / Frank",
+    "worker_is_frank": false,
+    "frank_harness_mutation_authority": "PROPOSAL_ONLY_UNDER_FRANK_AUTHORITY"
+  },
+  "program": {
+    "program_id": "FRANK_V0_1",
+    "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "compiler_frontier": "WP04_CALL_CONTRACTS",
+    "wp03_status": "OPEN",
+    "wp04_status": "OPEN"
+  },
+  "question": "Can one measured unresolved G9 call be closed by an explicit versioned ClayCode callable-interface candidate without inventing a signature from call sites or admitting execution authority?",
+  "hypothesis": "An independently authored exact interface for frank_reward.update/1 can reduce unresolved call signatures by exactly one while preserving zero execution, zero truth/effect authority and deterministic typed constraint anchoring.",
+  "strongest_counterhypothesis": "The explicit interface either fails to match the measured exact target+arity, creates incompatible type-equality anchors, relies on dynamic Any/Unknown/Dynamic escape, or accidentally admits execution/binding/truth authority.",
+  "architecture_delta": {
+    "candidate_source": "research_entity/claycode/g9/CLAYCODE_FRANK_REWARD_CALLABLE_V1_CANDIDATE.clay",
+    "call_identity": "frank_reward.update/1",
+    "params": [
+      {
+        "name": "evidence",
+        "type": "RewardOutcomeEvidence"
+      }
+    ],
+    "returns": "RewardPlasticityReceipt",
+    "effect_class": "DERIVED_STATE",
+    "binding_authority": "NONE",
+    "execution_admitted": false,
+    "truth_authority": "NONE",
+    "contract_semantic_hash": "999283fef30bb709b5247fa002a9dfb513843daee4a22442e476bcb6522617a4",
+    "status": "TARGET_VPS_VALIDATED_RESEARCH_CANDIDATE_NOT_PROMOTED"
+  },
+  "source_bytes": {
+    "explicit_callable_blob": "484b8b1bb640c8866f21bb399c5d24dab0f3def4",
+    "explicit_anchor_blob": "6e74fb98924ee3318457fc2bce4004299cbefed7",
+    "explicit_test_blob": "daab75da3127f159fc71a4f1d9399fb2c3a12e0f",
+    "structural_typed_ir_blob": "67baf2fb5d0bd7241903b773bd94c1778a895aa5",
+    "cycle_ir_blob": "9c374ebcdabfee08fdbc4f1ee0009122f9e33470",
+    "call_constraint_blob": "fd1c1797a7e1052727540e3bee8cdb5b25738f3a",
+    "grammar_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3"
+  },
+  "target_vps_receipt": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 118,
+    "head_commit": "a92463dc1abd6bc6827fdce8b96bdff9c27c74a4",
+    "pull_request_merge_commit_executed": "a25bc220fcccda611e20a9e6bcaca7c912214fe2",
+    "workflow": "Clay WP04 Explicit Reward Contract VPS",
+    "workflow_run_id": 31398319718,
+    "job_id": 93486682158,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_version": "2.336.0",
+    "os_labels": ["self-hosted", "Linux", "X64"],
+    "git_version": "2.43.0",
+    "python_dependencies": {
+      "lark": "1.3.1",
+      "interegular": "0.3.3"
+    },
+    "result": "PASS"
+  },
+  "measurements": {
+    "call_site_occurrences": 27,
+    "unique_target_arities": 27,
+    "baseline_exact_declared_matches": 0,
+    "candidate_exact_declared_matches": 1,
+    "baseline_unresolved_signatures": 26,
+    "candidate_unresolved_signatures": 25,
+    "effect_boundary_missing_signatures": 1,
+    "concrete_anchor_nodes": 2,
+    "anchored_type_equality_components": 2,
+    "unanchored_type_equality_components": 35,
+    "conflicting_components": 0,
+    "execution_admitted_calls": 0,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "determinism": "PASS",
+    "dynamic_escape_control": "REJECTED_FAIL_CLOSED",
+    "execution_without_binding_control": "REJECTED_FAIL_CLOSED",
+    "candidate_typed_ir_sha256": "02ab372c762e5c617a80ab3e8e62975474eae42467207135e4eeecf8b24f6f01",
+    "candidate_constraint_graph_sha256": "62d549a239be2d4c3228c9fe0759535d9ebc425304cd4ef4be083d0810cbff49",
+    "anchor_report_sha256": "5d5a64b8c7ed5cd7a21824455421cb5f01be1c5b234285b57b9d32918733ba19"
+  },
+  "counterevidence_and_negative_results": [
+    {
+      "finding": "No independently declared exact signature for frank_reward.update/1 existed in the previously searched G9/Dialect/reward-successor/call-contract sources.",
+      "consequence": "The new signature is explicitly classified as an architecture research candidate, not recovered historical truth."
+    },
+    {
+      "finding": "The first target-VPS replay attempts failed before semantic execution because the mirrored test blob and workflow expected blob diverged.",
+      "consequence": "The content-address gate remained strict; the mirror was repaired to byte identity and the successful run used explicit_test_blob=daab75da3127f159fc71a4f1d9399fb2c3a12e0f. No failed run was hidden or reclassified as semantic PASS."
+    }
+  ],
+  "authority_and_safety": {
+    "signature_inference_from_call_sites": "FORBIDDEN",
+    "fuzzy_or_suffix_resolution": "FORBIDDEN",
+    "any_unknown_dynamic_escape": "FORBIDDEN",
+    "runtime_binding_created": false,
+    "execution_authority_created": false,
+    "truth_authority_created": false,
+    "external_effect_boundary_modified": false,
+    "needle_execute_status": "UNCHANGED_EFFECT_BOUNDARY_SIGNATURE_MISSING",
+    "frank_harness_mutated": false,
+    "training_authorized": false
+  },
+  "interconnect": {
+    "upstream": [
+      "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay",
+      "research_entity/claycode/g9/CLAYCODE_CALL_CONTRACT_SCHEMA_V1_CANDIDATE.clay",
+      "tools/claycode_wp04_call_constraint_inference_v1.py"
+    ],
+    "affected": [
+      "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "F-V01-03-COGNITIVE-LOOP-CORE",
+      "F-V01-11-MEMORY-REWARD-GOALS"
+    ],
+    "anti_echo": "The target-VPS result validates only this explicitly authored exact callable candidate and its constraint anchoring. It does not independently validate reward learning quality, runtime execution, GWT causal credit, WP03/WP04 closure, or Frank v0.1 acceptance."
+  },
+  "next_falsifier": "Bind frank_reward.update/1 to an exact current target runtime component identity only if such a component exists, then execute a non-authoritative evaluator differential with matched RewardOutcomeEvidence fixtures. If no exact runtime component exists, keep execution closed and author the evaluator/runtime implementation as a separate candidate rather than pretending the interface is executable.",
+  "research_write": "COMMITTED_TO_CANDIDATE_BRANCH"
+}

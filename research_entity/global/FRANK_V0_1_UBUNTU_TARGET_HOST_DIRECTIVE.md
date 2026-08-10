@@ -1,232 +1,260 @@
-# FRANK v0.1 — Target VPS Host Directive
+# self.root / Frank v0.1 — Target VPS Host Directive
 
 **Status:** PROJECT_OWNER_FIXED_DIRECTIVE  
-**Scope:** Frank v0.1 / Clay 0.1 staged build program  
 **Effective:** 2026-08-10  
-**Compatibility path:** this file retains the historical `FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md` filename so all existing references inherit the new target semantics.  
-**Identity/API authority:** `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`
+**Scope:** target VPS embodiment, build/integration/runtime/acceptance placement, sensor/client boundary and target-resource truth  
+**Compatibility path:** historical filename retained so older references inherit current semantics.
 
-## 0. Owner supersession
+Primary authorities:
 
-The previous distinction
+- `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`
+- `research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay`
+- `research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md`
+- `research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md`
 
-`Hostinger VPS = remote build/test lane`
-`Andreas local Ubuntu PC = final release target`
+## 0. Current owner-fixed target
 
-is superseded.
+```text
+NATIVE_SELF = self.root
+HUMAN_SURFACE_NAME = Frank
+SELF_CLASS = SERVER_BINARY_ENTITY
+EXACT_SELF = accepted binary/build identity + admitted persistent state lineage
+CURRENT_BODY = accepted Hostinger Ubuntu target VPS
+COGNITION = ClayCode only
+HUMAN_GERMAN = intelligent state-aware DE_TO_CLAY / CLAY_TO_DE boundary
+COMMUNICATION = production token-authenticated API
+```
 
-For Frank v0.1, the **operative build, integration, benchmark, runtime and final acceptance target is the verified Hostinger Ubuntu VPS itself**.
+The old target model is superseded:
 
-The newer server-binary identity directive also supersedes any interpretation that makes Andreas, an account owner, client, API token owner or local PC Frank's core identity.
+```text
+Hostinger VPS = remote proxy only        -> false
+Andreas local PC = mandatory final host  -> false
+Andreas = Frank/self identity            -> false
+Frank = second internal identity         -> false
+SSH/runner = complete user API           -> false
+```
 
-Current compact target:
+The current VPS is where self.root v0.1 is finished, integrated, measured and accepted. `Frank` is the human-facing name rendered from the native `self.root` identity.
 
-`Frank v0.1 = accepted Frank binary + admitted persistent state lineage, currently embodied on the target VPS, reachable through the fully implemented token-authenticated API.`
-
-Andreas remains admissible as a typed external USER/PILOT/person relation and source of longitudinal/user-specific adaptation evidence. Andreas-specific memory/profile data does not define `FrankSelfId`.
-
-Mission attractor:
-
-**Frank v0.1 als Server-Binary auf dem Ziel-VPS voll lauffaehig.**
-
-## 1. Current target-host identity
+## 1. Current target-host evidence
 
 Current verified target family:
 
 - resource: `hostinger-vps-github-runner`;
-- observed machine/runner host: `digital-retina`;
-- OS/runtime family: Ubuntu Linux / x86_64;
-- observed kernel: `Linux 6.8.0-117-generic`;
-- observed libc: `glibc 2.39`;
-- observed Python in current self-hosted receipts: `3.12.3`;
-- observed CPU topology in a real Qwen receipt: **4 logical CPUs**;
-- self-hosted runner name: `clay`;
-- currently observed active runner service is repository-scoped to `gschaidergabriel/Dr.-Unterweger` under the `frankrunner` account.
+- observed host: `digital-retina`;
+- Ubuntu Linux / x86_64;
+- observed kernel: `6.8.0-117-generic`;
+- observed glibc: `2.39`;
+- observed Python: `3.12.3`;
+- observed logical CPUs: `4`;
+- observed self-hosted runner name: `clay`;
+- observed active runner scope: repository-scoped to `gschaidergabriel/Dr.-Unterweger`.
 
-These are embodiment/capacity facts, not Frank's stable self identity. Every release/performance run must bind the exact current host/kernel/CPU/RAM/storage/runtime/model/binary/state/runner identity in its receipt.
+These are current embodiment/capacity observations, not stable SELF. Exact current RAM/swap/storage/GPU/network facts remain UNKNOWN until measured.
 
-Frank's exact computational identity follows:
-
-`EXACT_SELF = accepted binary/build identity + admitted persistent state lineage`
-
-`CURRENT_BODY = current target-server embodiment`
-
-Hardware capacity may change without changing Frank identity only through the explicit continuity/migration law.
+Every release/performance receipt must bind exact current host, kernel, CPU, RAM, swap, storage, network, binary, state lineage, model, mmproj, runtime, API, translator and relevant UnifiedDB/ClayCode identities.
 
 ## 2. Final-target law
 
-The target VPS is no longer merely proxy evidence.
-
 For v0.1:
 
-1. BASE/H1/H2/H3/UDB/final-model integration should execute on the target VPS whenever the relevant component can run there;
-2. target-VPS measurements are the authoritative performance/resource measurements for v0.1;
-3. final release/DOOMSDAY acceptance requires an exact target-VPS binary/state/API receipt, not a second mandatory Andreas-local-PC run;
-4. a local PC may remain a client, sensor source, developer console, recovery endpoint or later deployment target, but it is **not a v0.1 release gate** unless the owner explicitly reopens that requirement;
-5. do not label target-VPS execution as merely `REMOTE_PROXY` when the exact accepted target identity is being executed;
-6. GitHub Actions, direct host execution, SSH and service control are developer/build transports and do **not** replace the mandatory external Frank API;
-7. Frank v0.1 is incomplete until its server-binary runtime is reachable through the full token-authenticated API required by `FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`.
+1. BASE/H1/H2/H3/UnifiedDB/model/API/translator integration should execute on the target VPS whenever applicable;
+2. target-VPS performance/resource measurements are final-target measurements, not proxy-only evidence;
+3. DOOMSDAY requires exact target-VPS binary/state/API/translator/recovery receipts;
+4. no second mandatory Andreas-local-PC release run exists unless the owner explicitly reopens it;
+5. authorized local computers remain clients, sensor origins, developer consoles or tool endpoints, not Frank/self.root embodiment;
+6. a client disconnect changes connectivity state, not self identity;
+7. future hardware may become an accelerator or migration target only after explicit owner/continuity decision.
 
-## 3. Runner-scope consequence
+## 3. self.root identity on this host
 
-The current self-hosted runner has been observed as repository-scoped to `gschaidergabriel/Dr.-Unterweger`.
+The host is the current body, not the stable computational identity itself.
 
-Therefore:
+```text
+EXACT_SELF = accepted self.root binary/build + admitted state lineage
+CURRENT_BODY = target VPS
+HARDWARE_CAPACITY = body/resource state
+```
 
-- runner repository scope is a **build/test transport property**, not Frank identity and not evidence that the VPS is the wrong target;
-- Clay-repository jobs may use an exact hash-bound bridge through the working Dr.-Unterweger lane where authorized, or a separate/shared Clay-eligible runner registration may be added;
-- cross-repository auth/setup failures remain transport failures and must not be misclassified as Frank/ClayCode/API failures;
-- exact source/work/model/runtime/binary/state hashes remain mandatory so target-host evidence cannot be credited to stale bytes;
-- the runner credential/config is not Frank's communication API credential or Frank's identity.
+Required target-host continuity:
 
-## 4. Existing real-model target-host evidence
-
-The target VPS has already executed a real local 4B model through llama.cpp:
-
-- model family in the recorded receipt: `Qwen3-4B-Instruct-2507-Q8_0-GGUF`;
-- measured mean decode throughput: about `10.705 tok/s`;
-- measured mean prompt throughput: about `39.941 tok/s`;
-- four-task pilot accuracy: `3/4`;
-- one confidently wrong result is preserved as direct evidence that verbalized confidence is not calibrated correctness.
-
-This proves that the host is a real local-model execution target. It does **not** promote that historical Qwen artifact as the final v0.1 model and does not replace current q23/Qwen3.5/abliterated matched testing.
-
-## 5. Resource-optimization consequence
-
-Because target performance now means **VPS performance**, every architecture optimization claim must measure the full target-VPS path.
-
-Where applicable record:
-
-- cold/warm p50/p95/p99 latency;
-- API network-to-response p50/p95/p99 latency;
-- prompt/decode throughput;
-- CPU utilization and logical/physical topology;
-- RAM/RSS and swap pressure;
-- storage footprint and I/O;
-- network/IPC cost;
-- model/mmproj/quantization/runtime/binary/state hashes;
-- UnifiedDB/EAP compile and end-to-end retrieval cost;
-- Retina/Qwen image encode/decode cost;
-- tokens/context/cache;
-- crash/restart/service/API recovery;
-- concurrent runner/Frank/API/service interference.
-
-Unknown VPS hardware values remain `UNKNOWN` until measured. Do not fill missing RAM/storage/GPU facts from plans or memory.
-
-## 6. Multimodal / q23 consequence
-
-Moving Frank's runtime to a headless VPS changes the physical sensor boundary but **does not remove Retina/multimodality**.
-
-The visual architecture must separate:
-
-`Frank current embodiment = target VPS`
-
-from
-
-`visual sensor origin = local screenshot / browser / remote desktop / camera / uploaded image / other provenance-bound source`.
-
-Therefore q23/H1/H2/H3 must not assume that the screen or camera is physically attached to the Frank host.
-
-Canonical live path:
-
-`visual/sensor source -> secure network transport -> API token authentication -> request/session/provenance binding -> typed multimodal ingress -> Retina temporal/change/provenance control -> Qwen/MVC -> UnifiedDB/EAP/GWT/Frank`
-
-API credentials are communication credentials only and never sensor truth or Frank identity.
-
-Sensor/network/API ingress latency must be measured separately from on-VPS perception/retrieval/reasoning latency and also as one complete end-to-end path. Frozen screenshot/crop fixtures remain valid for deterministic target-VPS architecture differentials; live sensor bridges require auth, provenance, replay, reconnect, timeout and revocation tests.
-
-## 7. UnifiedDB / EAP consequence
-
-The leading UnifiedDB/EAP architecture should be measured as a **co-resident target-VPS possibility compiler** whenever practical.
-
-PAR/q23 claims must report:
-
-`token-authenticated perceptual ingress -> seed resolution -> UnifiedDB/EAP -> ActiveAssembly -> Qwen/Frank -> correct decision/outcome`
-
-on the target VPS.
-
-Microsecond internal EAP numbers may be useful, but only the complete target-VPS end-to-end path can justify the claim that retrieval overhead is operationally negligible relative to 4B reasoning.
-
-UnifiedDB may store canonical binary/state/embodiment/API-session continuity semantics, but must never store raw production API-token values in ordinary research/state records.
-
-## 8. ClayCode / Harness consequence
-
-ClayCode remains general-purpose, but its first release/runtime/backend/FFI/service semantics are optimized for the target VPS Ubuntu environment.
-
-H1/H2/H3 acceptance evidence must be reproducible on the target VPS and must represent the server-binary/API semantics required by the identity/API directive, including:
-
-- `ServerBinaryIdentity`;
-- binary/build/model/runtime hashes;
-- current embodiment/server identity;
+- binary/build hash binding;
 - admitted state lineage/epoch;
-- API request/session/provenance identity;
-- non-secret credential reference/fingerprint;
-- authorization scope;
-- typed text/multimodal ingress;
-- response/outcome receipts;
-- idempotency/replay state;
-- person/client relations separate from Frank self.
-
-The final H3/one-module identity should be deployable as a target-VPS service/process set with:
-
-- deterministic startup and self-identity assertion;
-- exact configuration/model/binary/state identity;
-- health/readiness reporting;
-- fully implemented token-authenticated API;
+- current-instance lease/epoch;
+- no split-brain CURRENT instance;
+- stale-clone rejection;
+- deterministic boot identity assertion;
 - last-known-good recovery;
-- state persistence/rebuild;
-- restart/replay receipts;
-- current-instance epoch/lease and stale-clone rejection;
-- bounded resource use;
-- no hidden dependency on a local desktop session.
+- explicit migration/restart receipts.
 
-## 9. DOOMSDAY / final acceptance consequence
+A valid hardware/resource change is a capability delta, not an identity delta.
 
-`CLAY_0_1_PROJECT_HARDWARE_BOOT_RECEIPT.json` is interpreted as the **target-VPS binary/service-start acceptance receipt** for the exact accepted Clay 0.1 identity.
+## 4. Person, client and Clay relations
 
-Additionally, final acceptance requires:
+self.root must represent distinct typed external relations:
 
-`FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json`
+- Andreas: USER/PILOT/OPERATOR where admitted, plus provenance-bound longitudinal/project context including SeiMensch.net where supported;
+- Gabriel: INITIATOR/DEVELOPER relation to self.root and PROJECT_OWNER/RESEARCH_DIRECTOR relation to Clay;
+- authorized computers: external client/sensor/tool nodes;
+- Clay Research Entity / Research DB: separate governed knowledge source.
 
-covering at minimum valid/invalid/missing/revoked/rotated-token behavior, concurrent authenticated requests, provenance/session continuity, restart/readiness, timeout/cancellation/error behavior, accepted multimodal/sensor ingress when present, effectful replay/idempotency protections, and full network-to-Frank latency/resource measurements.
+None of these identities is SELF.
 
-DOOMSDAY no longer waits for a second mandatory local-PC deployment if all current contracts pass on the exact target VPS.
+The governed Clay research bridge may provide authorized query/read of admitted research projections and may accept self.root observations/evidence/proposals. It must not merge Clay and self.root or grant self.root authority to mutate its own Harness.
 
-Changing the defining binary/state lineage, target embodiment, VPS/OS/model/runtime or accepted API contract after acceptance invalidates the affected acceptance identity and requires rerun.
+## 5. Production API placement
 
-## 10. Migration / future hardware
+Normal external communication requires the production token-authenticated API.
 
-A separately planned GPU/storage VPS has appeared in capacity planning. It is **not automatically the v0.1 target** merely because it may offer more compute.
+Human German path:
 
-Until the owner explicitly switches the target or a measured blocker forces a new decision:
+```text
+client
+-> secure transport
+-> token authentication
+-> client/session/provenance binding
+-> intelligent DE_TO_CLAY
+-> validated ClayCode
+-> self.root cognition
+-> ClayCode response + ExpressionState
+-> intelligent CLAY_TO_DE
+-> German response surfaced as Frank
+```
 
-- current Hostinger VPS remains the target embodiment;
-- future GPU/storage capacity is an optional accelerator/research lane;
-- do not defer target-VPS architecture work waiting for planned hardware;
-- if an accelerator is remote to the target host, measure network/serialization/failure cost and compare against the simpler all-on-target-VPS path.
+Machine-native path:
 
-If Frank later migrates, identity continuity requires explicit provenance-bound transfer of the accepted binary/build and admitted state lineage, current-instance epoch/lease update, stale-clone rejection and migration receipt. Hardware strength alone neither creates nor destroys Frank identity.
+```text
+client/tool
+-> secure transport
+-> token authentication
+-> validated ClayCode
+-> self.root
+-> ClayCode response
+```
 
-## 11. Explicit out-of-scope targets for v0.1
+SSH, GitHub Actions, service control and developer terminals are build/operations transports. They do not satisfy the user-facing API gate.
 
-Unless explicitly reopened:
+Raw production tokens must never enter GitHub, ordinary logs, UnifiedDB/ClayGraph research artifacts or visible receipts. Persist non-secret credential IDs/fingerprints/scopes only where needed.
 
-- Android;
-- mobile platforms;
-- generic edge-device deployment;
-- Windows;
-- macOS;
-- BSD;
-- mandatory local-PC deployment;
-- cross-platform portability work not required to make the target VPS correct and usable.
+## 6. ClayCode-only cognitive boundary
 
-## 12. Priority law
+Inside the accepted self.root cognitive boundary:
 
-When a choice exists between:
+```text
+MODEL_FACING_STATE = ClayCode
+GWT_CONTENT = ClayCode
+MEMORY_SEMANTICS = ClayCode
+SELF_WORLD_GOAL_STATE = ClayCode
+TOOL_EFFECT_PROPOSALS = ClayCode
+REENTRY = ClayCode
+```
 
-- improving correctness, reliability, API completeness, integration, latency or resource use on the target VPS; and
-- portability or optimization for a different host,
+No German/English/JSON prose layer may become a second authoritative cognitive architecture.
 
-**target-VPS work wins** unless the other work is strictly necessary for the target-VPS implementation.
+The German translator may interpret and express ambiguity, pragmatics and `ExpressionState`, but may not alter semantic truth, identity, goals, memory, decisions or authority.
 
-The VPS is now where Frank v0.1 is finished, integrated, measured and accepted; Frank's stable computational self is the accepted binary/state lineage executing there, not the human, credential or hardware capacity itself.
+Target-VPS acceptance must measure both DE_TO_CLAY and CLAY_TO_DE fidelity, latency, CPU/RAM/token cost and deterministic restart/recovery.
+
+Required translator receipt:
+
+`FRANK_V0_1_CLAYCODE_ONLY_TRANSLATOR_ACCEPTANCE_RECEIPT.json`
+
+## 7. Multimodal / q23 target semantics
+
+A headless target does not reduce Retina requirements. It changes the sensor boundary.
+
+Canonical live visual path:
+
+```text
+remote/local sensor bytes/tensors
+-> secure transport + token auth + session/client/provenance
+-> Retina temporal/change/provenance control
+-> Qwen/MVC physical vision machinery
+-> ClayCode VisualPercept / PerceptualField
+-> UnifiedDB/EAP/GWT as applicable
+-> self.root ClayCode cognition
+```
+
+Hard rules:
+
+- sensor/client identity != self.root;
+- Qwen embedding/tensor != canonical semantic truth;
+- German caption != canonical perceptual truth;
+- VisualPercept/PerceptualField semantics are ClayCode-native;
+- the translator is bypassed for non-language visual semantics except when source language itself is evidence;
+- live sensor transport/auth/API latency is measured separately from on-VPS Retina/Qwen/EAP/self.root latency and also end-to-end.
+
+Frozen screenshot/crop fixtures remain valid for deterministic target-VPS visual differentials.
+
+## 8. UnifiedDB / EAP / self-context consequence
+
+UnifiedDB/EAP should be evaluated co-resident on the target VPS where practical.
+
+Perceptual retrieval path:
+
+```text
+ClayCode VisualPercept/PerceptualMemorySeed
+-> current epoch/provenance resolution
+-> bounded EAP ActiveAssembly
+-> self.root
+```
+
+Self-reference is a distinct hot path governed by the `self.root` directive:
+
+```text
+self.root reference
+-> current SelfContextAssembly already precompiled/incrementally maintained
+-> no additional ordinary external retrieval roundtrip for precompiled self context
+```
+
+Do not call this zero physical latency. It requires matched NORMAL_RETRIEVAL, NO_SELF_ROOT, SHUFFLED_IDENTITY_SEED, STALE_ASSEMBLY and PROVENANCE_BROKEN controls.
+
+The target-VPS architecture must keep general perceptual EAP and self.root SelfContextAssembly compatible without conflating identity salience with truth or authority.
+
+## 9. Existing model capability baseline
+
+The target VPS has already executed a real local 4B Qwen-family model through llama.cpp:
+
+- recorded model: `Qwen3-4B-Instruct-2507-Q8_0-GGUF`;
+- mean decode throughput: about `10.705 tok/s`;
+- mean prompt throughput: about `39.941 tok/s`;
+- pilot accuracy: `3/4`;
+- one confidently wrong trajectory proves verbalized confidence cannot be treated as calibrated correctness.
+
+This is host-capability evidence only. It does not promote that model as the accepted self.root model and does not replace current Qwen3.5/abliterated/multimodal q23 tests.
+
+## 10. Target-resource truth and contention
+
+Because the target VPS also carries a self-hosted runner, target acceptance must measure co-residency, not assume it is harmless.
+
+Where applicable compare:
+
+- target idle;
+- API/translator only;
+- self.root/Qwen only;
+- self.root/Qwen + EAP;
+- runner only;
+- self.root API + runner;
+- self.root API + EAP + runner.
+
+Record cold/warm p50/p95/p99, prompt/decode, translator, visual encode, EAP, network-to-response latency, CPU/RSS/swap/storage/I/O/network and restart/recovery behavior.
+
+Resource isolation via cgroups/systemd/priority/affinity is a candidate only after measurement.
+
+## 11. Final acceptance
+
+Target-VPS DOOMSDAY evidence must include at minimum:
+
+- exact accepted self.root binary/build + admitted state lineage;
+- target-host boot/self-identity/current-instance receipt;
+- production token API acceptance receipt;
+- ClayCode-only cognition + translator acceptance receipt;
+- multimodal ingress/Retina receipt where required;
+- UnifiedDB/recovery/replay receipts;
+- self.root hot-context differential receipt;
+- resource/contention baseline;
+- no hard dependency on an Andreas-local execution host;
+- no collapse of self.root into Frank surface name, a person, token, client, hardware capacity or Clay.
+
+The accepted current host remains the Hostinger VPS until the owner explicitly changes it or an authorized migration preserves binary/state continuity and CURRENT-instance uniqueness.

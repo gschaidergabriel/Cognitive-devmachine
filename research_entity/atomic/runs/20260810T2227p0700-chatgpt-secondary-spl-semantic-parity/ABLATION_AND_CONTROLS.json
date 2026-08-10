@@ -1,0 +1,81 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-SPL-001",
+  "results":[
+    {
+      "control":"TYPE_ONLY",
+      "main_corrupt_cases":56486,
+      "false_accepts":56486,
+      "false_accept_rate":1.0,
+      "interpretation":"Typed/grammar-valid destination structure alone provided zero source-fidelity discrimination in the synthetic corpus."
+    },
+    {
+      "control":"SAME_CODEC_ROUNDTRIP",
+      "main_corrupt_cases":56486,
+      "false_accepts":56486,
+      "false_accept_rate":1.0,
+      "interpretation":"The systematic faults were deliberately chosen to be stable after normalization, demonstrating a common-mode failure class where same-codec roundtrip is self-consistent but wrong relative to source truth."
+    },
+    {
+      "control":"CONVENTIONAL_FULL_VALIDATOR",
+      "main_corrupt_cases":56486,
+      "false_accepts":0,
+      "valid_false_denies":0,
+      "replications":5,
+      "replication_false_accepts":0,
+      "interpretation":"Strong conventional independent semantic validation tied SPL correctness and was faster in this controlled Python proxy."
+    },
+    {
+      "control":"SPL_SINGLE",
+      "main_corrupt_cases":56486,
+      "false_accepts":0,
+      "valid_false_denies":0,
+      "unknown_false_accept_rate":0.0,
+      "interpretation":"SPL detects the modeled faults but that detection is not unique versus a full independent validator."
+    },
+    {
+      "control":"PER_FIELD_SENSOR_ABLATION",
+      "fields":{"person":1.0,"negated":1.0,"modality":1.0,"quantity":1.0,"temporal":1.0,"speech_act":1.0,"permission":1.0,"effect":1.0},
+      "metric":"false-accept rate when the only sensor for the actually changed field is removed",
+      "interpretation":"Every affected field became completely blind when its sole oracle was removed. SPL v0.1 therefore had decomposition but no genuine within-field redundancy."
+    },
+    {
+      "control":"UNKNOWN_AS_ERASURE",
+      "cases":2526,
+      "spl_false_accept_rate":0.0,
+      "full_validator_false_accept_rate":0.0,
+      "interpretation":"Unsupported hard-field source forms degraded to ambiguity rather than PASS in both strong mechanisms."
+    },
+    {
+      "control":"EXPRESSIONSTATE_NONINTERFERENCE",
+      "cases":5000,
+      "styles_per_case":4,
+      "hard_drift_rate":0.0,
+      "interpretation":"In the deterministic controlled renderer, soft style wrappers did not change recovered hard semantics. This only validates the proxy renderer, not a learned German renderer."
+    },
+    {
+      "control":"SHUFFLED_BINDING",
+      "cases":10000,
+      "reject_rate":1.0,
+      "interpretation":"Source-hash/request binding can deterministically reject witness reuse across different source messages."
+    },
+    {
+      "control":"STALE_SCHEMA",
+      "cases":10000,
+      "reject_rate":1.0,
+      "interpretation":"The proxy models version/epoch mismatch as fail-closed. No target restart/recovery measurement is claimed."
+    },
+    {
+      "control":"CORRELATED_CHECKER_FAULT",
+      "corrupted_cases":52053,
+      "single_faulty_full_false_accept_rate":1.0,
+      "two_full_false_accept_rate":0.0,
+      "single_faulty_SPL_false_accept_rate":1.0,
+      "dual_SPL_false_accept_rate":0.0,
+      "latency_p50_us":{"single_faulty_full":5.979,"two_full":7.791,"single_faulty_SPL":48.292,"dual_SPL":22.944},
+      "interpretation":"Redundancy rescued both architectures. Dual SPL had no unique fault-containment property: two full validators achieved the same modeled containment and were substantially faster in this micro-harness."
+    }
+  ],
+  "causal_result":"The per-field oracle itself is causally necessary for SPL's detection of that field, but this does not establish architecture superiority. Adding redundancy creates fault containment, but the same property is available conventionally.",
+  "negative_result":"No unique semantic coverage or fault-containment advantage over the strongest conventional validator was observed in this proxy."
+}

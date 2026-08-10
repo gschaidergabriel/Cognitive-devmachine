@@ -1,0 +1,161 @@
+name: Database Pulse Rank Index Output Exclusion Repair
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/database-pulse-rank-index-output-exclusion-repair.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: database-pulse-rank-index-output-exclusion-repair-main
+  cancel-in-progress: false
+
+jobs:
+  repair-and-verify:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Apply exact output-domain exclusion
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('research_entity/runtime/database_pulse_rank_index_v3.py')
+          s=p.read_text(encoding='utf-8')
+          old="                WHERE status='CURRENT' AND epistemic='KNOWN'\"\"\"\n"
+          new="                WHERE status='CURRENT' AND epistemic='KNOWN'\n                  AND domain NOT IN ('pulse','pulse_control')\"\"\"\n"
+          if s.count(old)!=1:
+              raise SystemExit(f'expected one partial-index predicate site, found {s.count(old)}')
+          s=s.replace(old,new)
+          old_domain='''        if not ds:\n            raise ValueError("source_domains required")\n        return f"domain IN ({\',\'.join(\'?\' for _ in ds)})", list(ds)\n'''
+          new_domain='''        if not ds:\n            raise ValueError("source_domains required")\n        if any(d in {"pulse", "pulse_control"} for d in ds):\n            raise ValueError("pulse output/control domains cannot be candidate sources")\n        return f"domain IN ({\',\'.join(\'?\' for _ in ds)})", list(ds)\n'''
+          if s.count(old_domain)!=1:
+              raise SystemExit('domain guard site changed; fail closed')
+          p.write_text(s.replace(old_domain,new_domain),encoding='utf-8')
+
+          t=Path('research_entity/runtime/test_database_pulse_rank_index_v3.py')
+          x=t.read_text(encoding='utf-8')
+          marker="\n\nif __name__=='__main__':\n    unittest.main(verbosity=2)\n"
+          if x.count(marker)!=1:
+              raise SystemExit('test insertion marker changed; fail closed')
+          addition=r'''
+
+    def test_output_and_control_domains_are_physically_excluded_and_unqueryable(self):
+        ledger=seed_many(8)
+        try:
+            rank=AuthoritativeRankIndexV3(ledger)
+            rank.ensure_index()
+            sql=ledger.conn.execute(
+                "SELECT sql FROM sqlite_master WHERE type='index' AND name=?",(INDEX_NAME,)
+            ).fetchone()[0]
+            self.assertIn("domain NOT IN ('pulse','pulse_control')",sql)
+            with self.assertRaises(ValueError):
+                rank.select(source_domains=("pulse",),basis_epoch=ledger.epoch,max_candidates=8,max_focus=1)
+            with self.assertRaises(ValueError):
+                rank.select(source_domains=("memory","pulse_control"),basis_epoch=ledger.epoch,max_candidates=8,max_focus=1)
+        finally:
+            ledger.close()
+'''
+          t.write_text(x.replace(marker,addition+marker),encoding='utf-8')
+          PY
+
+      - name: Compile and test rank-index Pulse stack
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_index_v3.py \
+            research_entity/runtime/database_pulse_runtime_v3.py \
+            research_entity/runtime/test_database_pulse_rank_index_v3.py \
+            research_entity/runtime/test_database_pulse_runtime_v3.py \
+            tools/database_pulse_rank_index_v3_benchmark.py
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_index_v3 \
+            research_entity.runtime.test_database_pulse_runtime_v3
+
+      - name: Run matched simpler-baseline benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_rank_index_v3_benchmark.py \
+            --rows 2500 --budget 64 --repeats 150 --updates 60 \
+            --output research_entity/benchmarks/database_pulse/rank_index_v3_vps.json \
+            > /tmp/rank-v3.stdout
+          cat /tmp/rank-v3.stdout
+
+      - name: Attach runner metadata and preserve comparison result
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,pathlib,platform,socket,sqlite3,subprocess,sys
+          from datetime import datetime,timezone
+          p=pathlib.Path('research_entity/benchmarks/database_pulse/rank_index_v3_vps.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          c=x['correctness']
+          assert c['rank_index_correct'] and c['active_field_correct']
+          assert c['rank_index_verify_initial']['pass'] and c['rank_index_verify_final']['pass']
+          assert c['rank_query_plan_uses_index']
+          x['execution_metadata']={
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+            'scope':'REMOTE_PRELIMINARY_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'git_sha':os.environ.get('GIT_SHA',''),
+            'github_run_id':os.environ.get('RUN_ID',''),
+            'github_run_attempt':os.environ.get('RUN_ATTEMPT',''),
+            'hostname':socket.gethostname(),
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+          }
+          active=x['hot_selection']['active_field_refresh_plus_select']['p50_ms']
+          rank=x['hot_selection']['rank_index_select']['p50_ms']
+          active_update=x['update_to_ready']['active_field_total']['p50_ms']
+          rank_update=x['update_to_ready']['rank_index_atomic_total']['p50_ms']
+          x['v3_comparison']={
+            'rank_hot_read_faster_than_active':rank<active,
+            'rank_update_to_ready_faster_than_active':rank_update<active_update,
+            'rank_has_second_candidate_table':False,
+            'promotion_rule':'V3 can supersede ActiveField only if full metric vector including recovery/storage/downstream quality remains non-regressed',
+          }
+          x['promotion']='TESTING_NOT_CANONICAL'
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+
+      - name: Persist verified repair and receipt
+        run: |
+          set -euo pipefail
+          cp research_entity/benchmarks/database_pulse/rank_index_v3_vps.json /tmp/rank-index-v3-vps.json
+          git rm .github/workflows/database-pulse-rank-index-output-exclusion-repair.yml
+          git config user.name 'clay-pulse-rank-index-runner'
+          git config user.email 'clay-pulse-rank-index-runner@users.noreply.github.com'
+          git add \
+            research_entity/runtime/database_pulse_rank_index_v3.py \
+            research_entity/runtime/test_database_pulse_rank_index_v3.py
+          git commit -m 'fix(unifieddb): exclude Pulse output domains from authoritative rank index [skip ci]'
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && {
+              mkdir -p research_entity/benchmarks/database_pulse
+              cp /tmp/rank-index-v3-vps.json research_entity/benchmarks/database_pulse/rank_index_v3_vps.json
+              git add research_entity/benchmarks/database_pulse/rank_index_v3_vps.json
+              git commit -m 'evidence(unifieddb): persist authoritative rank-index V3 VPS receipt [skip ci]' || true
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            }
+            sleep $((attempt * 3))
+          done
+          exit 1

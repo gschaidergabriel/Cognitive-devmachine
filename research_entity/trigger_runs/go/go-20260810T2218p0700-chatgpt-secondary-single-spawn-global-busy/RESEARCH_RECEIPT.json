@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-20260810T2218P0700-CHATGPT-SECONDARY-SINGLE-SPAWN-GLOBAL-BUSY",
+  "timestamp_local": "2026-08-10T22:18:00+07:00",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "program": "FRANK_V0_1",
+  "native_target": "self.root",
+  "human_surface": "Frank",
+  "target_body": "accepted Hostinger Ubuntu VPS",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "owner_fixed_delta": {
+    "directive": "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "directive_commit": "4917f9cabc21d4e94c9bcc35a2e1ef6ea386c2a2",
+    "boot_index_commit": "49edc2cc6473fdec4ca85d91c251af297e2236f5",
+    "core_invariants": [
+      "API_TOKEN=CREDENTIAL_NOT_IDENTITY",
+      "ACTIVE_EXECUTION_COUNT<=1",
+      "all nonholder callers observe FRANK_BUSY while active",
+      "stale execution epochs cannot write state/effects",
+      "unfinished current-user task is not silently replaced by unrelated work",
+      "proactive work acquires only while global execution state is IDLE"
+    ]
+  },
+  "live_target_findings": {
+    "canonical_presence_schema_commit": "6b4bc71b0a1d0a264ad8b402488fc57887157daa",
+    "canonical_presence_runtime_commit": "8f851c0a2c67a639840dcb0a580abb9bc4de0858",
+    "race_and_fencing_test_commit": "0133cb38f366dd7a4badf49ea2cb436d3ec65023",
+    "target_vps_workflow_commit": "5294e63afa437eff6bc7e40c72e18653b7ffa46a",
+    "duplicate_spawn_schema_removed_commit": "07a5ab3418b302aebf1663cda52b3ef2f435b058",
+    "duplicate_spawn_runtime_removed_commit": "34ce4a5a4d24fdc40d06d3298008445d767a01d0",
+    "adjudication": "ONE_CANONICAL_V15_PRESENCE_AUTHORITY_RETAINED",
+    "vps_presence_result": "PENDING_VERIFIED_RECEIPT_AT_THIS_RESEARCH_WRITE"
+  },
+  "hypothesis": {
+    "id": "H-SINGLE-PRESENCE-EPOCH",
+    "claim": "A single authoritative UnifiedDB presence lease with BEGIN IMMEDIATE acquisition and monotonically increasing lease_epoch can provide distinct-holder exclusion plus stale-holder fencing on the current one-VPS target.",
+    "status": "SUPPORTED_BY_CODE_AND_LOCAL_TEST_DESIGN_PENDING_TARGET_VPS_RECEIPT"
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH-HOLDER-NEQ-EXECUTION",
+    "claim": "Exclusive holder presence does not prove ACTIVE_EXECUTION_COUNT<=1 because same-holder reacquisition is admitted as SAME_HOLDER_RENEWED and no execution_id/current_request_id is present in the current V15 presence substrate.",
+    "falsifier_issue": "gschaidergabriel/Dr.-Unterweger#132",
+    "falsifier_pr": "gschaidergabriel/Dr.-Unterweger#138",
+    "falsifier_head": "7344c4654b4378319bce555325f27f4714c9741e",
+    "status": "EXECUTABLE_PR_TEST_QUEUED_AT_THIS_RESEARCH_WRITE"
+  },
+  "exactly_one_out_of_box_experiment": {
+    "name": "ghost-holder resurrection fencing",
+    "source": "tests/frank_single_instance_presence_gate.py",
+    "design": "Acquire an AI-bridge lease, advance beyond expiry, admit a successor human holder at a new epoch, then revive the stale holder and attempt heartbeat/release. Both stale operations must be fenced and successor state preserved.",
+    "why_unusual": "Imports a distributed-storage zombie-writer/fencing failure mode into Frank embodiment/presence semantics.",
+    "promotion_status": "NO_PROMOTION_UNTIL_TARGET_VPS_RECEIPT"
+  },
+  "fresh_external_primary_evidence": [
+    {
+      "source": "https://www.sqlite.org/lang_transaction.html",
+      "finding": "SQLite allows only one simultaneous write transaction; BEGIN IMMEDIATE starts the write transaction immediately and may return SQLITE_BUSY if another writer is active.",
+      "use": "supports short transactional compare-and-set acquisition, not a long cognition transaction"
+    },
+    {
+      "source": "https://kubernetes.io/docs/concepts/architecture/leases/",
+      "finding": "Lease objects model holder identity and heartbeat/renewal for coordination and leader election.",
+      "use": "mechanical analogy for holder/renew/expiry; not target authority"
+    },
+    {
+      "source": "https://kubernetes.io/docs/concepts/cluster-administration/coordinated-leader-election/",
+      "finding": "resourceVersion optimistic concurrency allows one concurrent lease update to win and expired leases permit successor election.",
+      "use": "supports explicit epoch/version fencing semantics"
+    },
+    {
+      "source": "https://etcd.io/docs/v3.8/dev-guide/api_concurrency_reference_v3/",
+      "finding": "etcd Lock returns an ownership key tied to a lease and documents using it with transactions so updates occur only while ownership is held.",
+      "use": "supports binding ownership proof to mutation, not merely acquisition"
+    },
+    {
+      "source": "https://www.rfc-editor.org/rfc/rfc9110.html#name-409-conflict",
+      "finding": "HTTP 409 represents a conflict with the current state of the target resource.",
+      "use": "preferred transport mapping for semantic FRANK_BUSY; semantic code remains authoritative"
+    }
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "retain": "one canonical V15 presence/lease authority",
+    "do_not_reintroduce": "a second independent BUSY/spawn semantic state machine",
+    "required_extension_or_proof": "bind distinct request/execution identity to the canonical lease epoch and prove no two cognition/effect pipelines execute concurrently under one holder, or exhibit an already-existing upstream serializer with equivalent executable evidence",
+    "effect_fencing_requirement": "all consequential state/effect mutations must reject stale lease/execution epochs",
+    "rollback": "keep current V15 presence implementation and do not promote execution-level claim if discriminator is unresolved"
+  },
+  "durable_work": [
+    "owner-fixed single-spawn/global-busy directive committed",
+    "boot index updated so future workers load the directive",
+    "target issue #132 created for same-holder execution proof",
+    "target draft PR #138 created with read-only self-hosted VPS discriminator"
+  ],
+  "negative_results_and_conflicts": [
+    "A concurrently introduced flock/frank_spawn_state implementation duplicated the same BUSY authority and was removed from current main by another worker before promotion.",
+    "Presence-holder exclusivity is insufficient evidence for exact one-active-execution semantics without same-holder serialization evidence."
+  ],
+  "authority": {
+    "self_root_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_change_authority": "INDEPENDENT_RESEARCH_REVIEW_TEST_IMPLEMENT",
+    "training_authorized": false
+  },
+  "next_frontier": [
+    "obtain target-VPS receipt for distinct-holder race + ghost-holder fencing",
+    "execute PR #138 same-holder concurrency discriminator",
+    "if reproduced, add or locate one lease-epoch-bound execution serializer and then retest state/effect fencing",
+    "wire canonical lease into production token API ingress before API acceptance credit",
+    "refresh F-V01 workspace only after exact receipts are admitted"
+  ]
+}

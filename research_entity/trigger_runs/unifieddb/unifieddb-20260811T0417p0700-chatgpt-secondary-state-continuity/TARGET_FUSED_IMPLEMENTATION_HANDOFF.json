@@ -1,13 +1,15 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"unifieddb-20260811T0417p0700-chatgpt-secondary-state-continuity",
   "target_work_package":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
-  "candidate":{"repository":"gschaidergabriel/Dr.-Unterweger","pr":286,"branch":"chatgpt/unifieddb-storage-pair-fused-main-20260811","head_sha":"f90578cb552d8f5488be8a813c4e2d1af6d8d2ae","base_sha":"cfafb4319fa5dacbc6f0b53358d4db0fb04ffa59","mergeable":true,"draft":true},
-  "composition":["SQLite WAL-reset 2026 fail-closed physical storage selection","MaterializationPairCertificate binding exact executable UnifiedDB + ClayGraph schema chains","pre-migration CURRENT->UPDATING invalidation","normal-open rejection of divergent/interrupted pair","current effect execution fence and provider idempotency migrations retained"],
-  "falsifiers":["affected SQLite forced WAL","pair digest tamper while SQLite integrity remains ok","UPDATING interruption marker","ClayGraph executable schema-chain digest tamper","missing pair certificate field","recovery to exact current pair"],
+  "candidate":{"repository":"gschaidergabriel/Dr.-Unterweger","pr":286,"branch":"chatgpt/unifieddb-storage-pair-fused-main-20260811","head_sha":"e345830d566dc2f21fe792ca2d0468489424dcae","mergeable":true,"draft":true},
+  "composition":["SQLite WAL-reset 2026 fail-closed physical storage selection","MaterializationPairCertificate binding exact executable UnifiedDB + ClayGraph schema chains","pre-migration CURRENT->UPDATING invalidation","normal-open rejection of divergent/interrupted pair","current effect execution fence and provider idempotency migrations retained","disposable bootstrap remigration discriminator preserving non-certificate sentinels"],
+  "falsifiers":["affected SQLite forced WAL","pair digest tamper while SQLite integrity remains ok","UPDATING interruption marker","ClayGraph executable schema-chain digest tamper","missing pair certificate field","recovery to exact current pair","repeat migration preserves sentinel state and exact pair certificate"],
   "evidence_ancestry":{"wal_target_pass_pr":278,"wal_target_run":31433580357,"status":"PASS_COMPONENT_TARGET_VPS"},
-  "fresh_fused_target_run":{"run_id":31434110349,"state":"QUEUED_AT_HANDOFF","result":"UNKNOWN_UNTIL_EXECUTED"},
+  "superseded_fused_run":{"run_id":31434110349,"result":"CANCELLED_ZERO_STEP_AFTER_NEW_HEAD","meaning":"NO_TEST_RESULT"},
+  "fresh_fused_target_run":{"run_id":31434324069,"state":"QUEUED_AT_REFRESH","result":"UNKNOWN_UNTIL_EXECUTED"},
+  "current_main_observation":{"main_sha":"2bdeb35d722417a1c2d9b71a3b3ac9125acf46c3","candidate_behind_by":1,"main_delta":"evidence(vps) receipt only; apply_current_schema/migration source not changed by that commit"},
   "promotion":"HOLD",
-  "merge_rule":"Do not merge/promote until the exact fused current-main PR merge candidate executes the target VPS gate successfully; if main or migration source changes, recompute pair identity and rerun.",
+  "merge_rule":"Do not merge/promote until the exact fused current-main integration executes the target VPS gate successfully. Main advanced after the current PR base; despite the observed delta being evidence-only, strict current-state policy keeps promotion HOLD until refreshed integration evidence exists.",
   "authority_note":"Clay research/build candidate only. No Frank/self.root self-Harness authority; no canonical state mutation by disposable tests; no final training authorization."
 }

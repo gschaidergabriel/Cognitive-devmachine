@@ -162,7 +162,7 @@ class ProvenanceGuardedEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor
     receipt before the compiled edge can relay activation.
     """
 
-    _GUARD_VERSION = "EAP-PROVENANCE-GUARD-16.1"
+    _GUARD_VERSION = "EAP-PROVENANCE-GUARD-16.2"
 
     def __init__(
         self,
@@ -214,8 +214,9 @@ class ProvenanceGuardedEmergentAssemblyPreprocessor(EmergentAssemblyPreprocessor
                         require_source=self.require_source,
                     )
                     decisions[dependency_ref] = decision
-                    audit[decision.reason] += 1
                     audit["ADMITTED" if decision.admitted else "REJECTED"] += 1
+                    if not decision.admitted:
+                        audit[decision.reason] += 1
                 if decision.admitted:
                     kept.append((target, weight, relation, dependency_ref))
                     admitted_edges += 1

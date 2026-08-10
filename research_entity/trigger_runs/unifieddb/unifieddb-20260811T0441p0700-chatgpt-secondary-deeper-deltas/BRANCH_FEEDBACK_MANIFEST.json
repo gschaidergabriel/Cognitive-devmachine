@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "feedback": {
+    "unifieddb": ["separate schema-pair identity from Graph freshness","compare DELETE+FULL attached projection with fixed-WAL asynchronous projection","keep rollback floor outside protected rollback domain"],
+    "gwt": ["add durable pre-action ordering so receiver use cannot be reconstructed only after the verified effect outcome"],
+    "claycode": ["type EffectIntent, origin execution, reconciler execution, recovery admission and learning mode"],
+    "claygraph": ["verify source semantic epoch and derivation identity; stale Graph rebuilds or is bypassed"],
+    "harness": ["add post-hoc support, stale-origin takeover, unrelated reconciler, semantic-supersession, same-certificate Graph rollback and attached-commit crash controls"],
+    "frank": ["F-V01-04 remains OPEN; narrower V17 target evidence must not be promoted to V3 causal-closure proof"],
+    "security_recovery": ["separate original effect provenance from current recovery executor provenance"]
+  },
+  "promotion": "NO_AUTOMATIC_PROMOTION"
+}

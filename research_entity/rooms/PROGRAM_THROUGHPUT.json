@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "BOOTSTRAP_CALIBRATION",
   "user_active_hours_per_day": 10,
-  "purpose": "Calibrate next-milestone ETA from real repository production. Explicit token/work-package telemetry outranks priors; priors shrink as measured data accumulates.",
+  "purpose": "Calibrate next-milestone ETA from real repository production and GateFlow conversion. Explicit token/work-package/risk telemetry outranks priors; priors shrink as measured data accumulates.",
   "token_telemetry": {
     "canonical_24h_total_available": false,
     "note": "Project-Frankenstein contains per-call/project trace infrastructure with tokens_in/tokens_out and session aggregation, but an explicit current 24h token total for this RAE program has not yet been located/materialized in the canonical repository. Do not invent one.",
@@ -15,11 +15,29 @@
       "tokens_out",
       "generated_repo_text_tokens",
       "completed_weight",
+      "risk_retired_units",
       "tests_executed",
       "commits",
       "active_worker_hours_or_sessions",
+      "evidence_to_admission_latency_seconds",
+      "promotion_conversion_rate",
+      "stale_evidence_rate",
+      "duplicate_superseded_ratio",
+      "target_queue_yield",
+      "fresh_main_survival_rate",
       "source_refs"
     ]
+  },
+  "gateflow": {
+    "contract": "research_entity/gateflow/GATEFLOW_V1_CONTRACT.md",
+    "state": "research_entity/gateflow/GATEFLOW_V1_STATE.json",
+    "primary_objectives": [
+      "accepted_gate_weight_delta_per_1m_tokens",
+      "accepted_gate_weight_delta_per_worker_hour",
+      "risk_retired_per_1m_tokens"
+    ],
+    "anti_goodhart_rule": "risk_retired_per_1m_tokens is mandatory beside gate-credit throughput. Negative evidence that blocks unsafe/invalid promotion is productive work and must not be optimized away.",
+    "normalization_rule": "Never fabricate token or worker-hour denominators. Emit null until the selected window has measured telemetry or an explicitly labelled proxy."
   },
   "eta_model": {
     "method_order": [
@@ -30,7 +48,8 @@
     ],
     "uncertainty_rule": "Show a range. Never present a point estimate as a deadline. Widen the range for first-of-kind stages, unresolved architecture blockers or missing telemetry.",
     "parallelism_rule": "Observed multiworker throughput may reduce wall-clock ETA only when tasks are actually independent and completion receipts prove parallel progress. Never multiply throughput simply by worker count.",
-    "rework_rule": "Failed/falsified work increases observed cost and must remain in the calibration history rather than being hidden."
+    "rework_rule": "Failed/falsified work increases observed cost and must remain in the calibration history rather than being hidden.",
+    "goodhart_rule": "Do not optimize accepted gate weight alone. Track risk retired in the same window so difficult falsification/safety work remains rewarded."
   },
   "bootstrap_stage_priors": {
     "BASE_CLAYCODE_RELEASE": {
@@ -77,5 +96,5 @@
     }
   },
   "observations": [],
-  "last_updated": "2026-08-09"
+  "last_updated": "2026-08-11"
 }

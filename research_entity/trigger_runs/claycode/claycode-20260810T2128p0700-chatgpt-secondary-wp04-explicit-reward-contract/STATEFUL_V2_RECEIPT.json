@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2128p0700-chatgpt-secondary-wp04-explicit-reward-contract",
+  "subcycle": "WP04_STATEFUL_FRANK_REWARD_CALL_CONTRACT_V2",
+  "status": "PASS_TARGET_VPS_RESEARCH_CANDIDATE",
+  "promotion": "NONE",
+  "problem_discovered": "The V1 exact parameter/return contract is insufficient for execution readiness because RewardPlasticityReceipt depends on pre-existing typed reward state that is not derivable from RewardOutcomeEvidence alone.",
+  "concrete_counterexample_source": "research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay",
+  "state_dependencies": [
+    "prediction_before",
+    "phasic_by_horizon",
+    "tonic_after",
+    "habituation_after"
+  ],
+  "architecture_delta": {
+    "candidate_source": "research_entity/claycode/g9/CLAYCODE_FRANK_REWARD_CALLABLE_V2_STATEFUL_CANDIDATE.clay",
+    "validator": "tools/claycode_wp04_stateful_contract_v2.py",
+    "test": "tools/test_claycode_wp04_stateful_contract_v2.py",
+    "call_identity": "frank_reward.update/1",
+    "receiver_state_type": "FrankRewardReceiverState",
+    "receiver_state_fields": {
+      "by_dimension": "Map<RewardDimension,TypedValueState>",
+      "state_epoch": "Epoch"
+    },
+    "state_access": "MUTATE_RECEIVER_STATE",
+    "state_epoch_field": "state_epoch",
+    "runtime_binding": "NONE",
+    "execution_admitted": false,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE"
+  },
+  "source_bytes": {
+    "v1_callable_blob": "484b8b1bb640c8866f21bb399c5d24dab0f3def4",
+    "v2_callable_blob": "3244cd14f66a48c6b4750b192237807adb44f12a",
+    "v1_anchor_blob": "6e74fb98924ee3318457fc2bce4004299cbefed7",
+    "v2_stateful_validator_blob": "9b2f89cef15034a036c10430fbc6aeddc0867b6c",
+    "v2_test_blob": "58effb556d8e603846f241dc3a8475683bc711cc"
+  },
+  "target_vps_receipt": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 118,
+    "workflow": "Clay WP04 Stateful Reward Contract V2 VPS",
+    "workflow_run_id": 31399115434,
+    "job_id": 93489344435,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_version": "2.336.0",
+    "os_labels": ["self-hosted", "Linux", "X64"],
+    "git_version": "2.43.0",
+    "result": "PASS"
+  },
+  "measurements": {
+    "v1_hidden_receiver_state": "REJECTED_FAIL_CLOSED",
+    "v2_exact_declared_matches": 1,
+    "v2_unresolved_signatures": 25,
+    "effect_boundary_missing_signatures": 1,
+    "receiver_state_type": "FrankRewardReceiverState",
+    "state_access": "MUTATE_RECEIVER_STATE",
+    "state_epoch_field": "state_epoch",
+    "epoch_downgrade_control": "REJECTED_FAIL_CLOSED",
+    "stateless_escape_control": "REJECTED_FAIL_CLOSED",
+    "determinism": "PASS",
+    "runtime_binding": "NONE",
+    "execution_admitted_calls": 0,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "state_contract_semantic_hash": "35926569fcbf06a3f776ba81fd8e20b7d97303166eee65b61b622957a24b3048",
+    "stateful_report_sha256": "5432714df61602ba5c36693549dc820c8fe4409f5f6021f6a07960a1c933334a",
+    "typed_ir_sha256": "f773293c5fe5a69823f74e658e27840ed21465646686c3a9419c5e014e810763",
+    "constraint_graph_sha256": "6deed0c2f88f9532ff6354e8f4f8b1bc7d1a541d12767de21a8e2492c61c6ac8"
+  },
+  "new_blocker": {
+    "class": "EXECUTABLE_SEMANTICS_UNDERSPECIFIED",
+    "description": "A full deterministic evaluator cannot yet be authored from the current reward-successor contract without inventing semantics for bounded_update, bounded_distribution_update, normalize_by_prediction_uncertainty, robust_mix and the exact tonic/habituation transition equations.",
+    "why_execution_remains_closed": "The state shape is now explicit, but the state transition function is not fully executable. Interface validity must not be confused with evaluator/runtime validity."
+  },
+  "supported_partial_semantics": [
+    "material_reward_admitted(e)",
+    "material_learning_weight(e)=clamp01(confidence*causal_credit) when admitted else 0",
+    "SELF_PROPOSAL/ACTIVITY_ONLY/UNVERIFIED cannot mint material reward",
+    "FAST/MEDIUM/SLOW rates = 0.30/0.09/0.02",
+    "phasic mix weights = 0.55/0.30/0.15"
+  ],
+  "next_falsifier": "Specify or recover exact executable transition semantics for the abstract reward update functions, then build a stateful non-authoritative evaluator over explicit FrankRewardReceiverState and run matched target-VPS replay. If exact semantics cannot be recovered, compare multiple explicit candidate equations under historical baseline and held-out loop outcomes rather than silently selecting one.",
+  "anti_echo": "This receipt validates state-contract sufficiency checks only. It does not validate reward-learning quality, the numerical reward transition equations, runtime binding, execution authority, WP04 closure, or Frank v0.1 acceptance.",
+  "research_write": "COMMITTED_TO_CANDIDATE_BRANCH"
+}

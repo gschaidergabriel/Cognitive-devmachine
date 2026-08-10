@@ -7,9 +7,9 @@ Wants=network-online.target
 Type=simple
 User=clay-mcp
 Group=clay-mcp
-WorkingDirectory=/opt/clay-vps-mcp
+WorkingDirectory=/opt/clay-vps-mcp/current
 EnvironmentFile=/etc/clay-vps-mcp.env
-ExecStart=/opt/clay-vps-mcp/.venv/bin/clay-vps-mcp
+ExecStart=/opt/clay-vps-mcp/current/.venv/bin/clay-vps-mcp
 Restart=always
 RestartSec=3
 TimeoutStopSec=20
@@ -31,6 +31,7 @@ ProtectClock=true
 ProtectHostname=true
 ProtectHome=true
 ProtectSystem=strict
+ReadOnlyPaths=/opt/clay-vps-mcp
 ReadWritePaths=/var/lib/clay-vps-mcp /srv/clay-mcp/workspace /srv/models /opt/frank /opt/clay
 
 [Install]

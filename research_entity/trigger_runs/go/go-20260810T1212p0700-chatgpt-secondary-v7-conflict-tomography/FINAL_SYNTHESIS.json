@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1212p0700-chatgpt-secondary-v7-conflict-tomography",
+  "trigger": "go",
+  "created_at": "2026-08-10T12:48:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "program_stage_observed": "BASE_CLAYCODE_RELEASE",
+  "canonical_boot": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "fresh_main_head_before_synthesis_write": "928201dc6776cb8e77fd0d43e3c5973accc6b86b",
+  "material_results": [
+    {
+      "id": "V7_STRICT_CONFLICT_FAMILY",
+      "status": "SUPPORTED_NEGATIVE_RESULT",
+      "evidence_commit": "742c34721e6f94a7145c33e5d638e2b5c8fd80d4",
+      "finding": "Exact V7 typed-fn grammar is strict-LALR blocked before typed-IR lowering by one structural optional-dotted-relation conflict family. Debug localization found six terminals: REQUIRES, SUBSET_OF, OR, IN, IFF and LBRACE, all reducing <dotted_relation : qid DOT_REL>.",
+      "functional_falsifier": "Default shift resolution is observably harmful: `rule Needle.owns requires X` shifts `requires` into the optional dotted-relation RHS and then fails, while `rule Needle.owns X requires Y` succeeds.",
+      "consequence": "Do not classify the historical WP03 red strict run as a typed-IR regression; V7 itself violates the strict frontend contract."
+    },
+    {
+      "id": "SELECTED_V17_VS_V7_SEMANTIC_DRIFT",
+      "status": "SUPPORTED_INTEGRATION_COUNTEREXAMPLE",
+      "shared_evidence_commit": "5d06dee82507c828343fd8c394b4af5c544b6221",
+      "refined_work_commit": "928201dc6776cb8e77fd0d43e3c5973accc6b86b",
+      "findings": [
+        "`rule Needle.owns(X)` is a call under selected V17 but a dotted_relation under V7.",
+        "V17 admits hyphenated identifiers; V7 compact `x-y` semantics treat the same characters as subtraction.",
+        "A contextual typed-fn extension over V17 can keep `fn` usable as an identifier in identifier positions while admitting `fn ...` declarations at statement start."
+      ],
+      "refined_disposition": "The existence of a V7 default is not by itself proof that production WP03 uses V7. The remaining blocker question is whether any target/release consumer can silently hit the independent V7 reparsing default. Acceptance paths must bind explicit frontend/surface/grammar identity; otherwise the split remains a blocker."
+    },
+    {
+      "id": "WP03_AST_CONTEXT_IDENTIFIER_BUG",
+      "status": "SUPPORTED_CANDIDATE_NOT_CURRENT_MAIN_IMPLEMENTATION_AT_LAST_READ",
+      "candidate_commit": "b9728f936a78d8f206149bc384d787fada5897fc",
+      "main_port_workflow_commits": [
+        "b55516c1ad686668e404ad6d054a40b6f697f1f0",
+        "8b77993dfee23b2257074f762476dc398741ff7d"
+      ],
+      "fresh_main_validator_commit": "e3c6a38c038aacb29a97ecd8a3f2cce8824dc7e0",
+      "finding": "Typed-IR name extraction incorrectly treats grammar-admitted keyword spellings such as `status` as globally forbidden names. AST-context extraction is the bounded repair candidate.",
+      "last_verified_main_typed_ir_blob": "5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb",
+      "receipt_status": "No current WP03_MAIN_AST_CONTEXT_HOSTED_LATEST.json was present at last read; workflow definition is not execution evidence."
+    },
+    {
+      "id": "WP02_GROUPING_SEMANTIC_HASH_COUNTEREXAMPLE",
+      "status": "SUPPORTED_COUNTEREXAMPLE_UBUNTU_REPLICATION_REQUIRED",
+      "evidence_commit": "5cdd3b3e10a83b7439d6b11798a9eb2a65822563",
+      "work_revision_commit": "3913464903c50a1fab864d358463544f7d6a8245",
+      "finding": "Current frontend semantic_hash distinguishes `rule x>0` from redundant grouping `rule (x>0)` and nested grouping, despite preserved intended meaning. This is an independent WP02 semantic-canonicalization obligation.",
+      "repair_direction": "Collapse only grammar-generated grouping-only primary(LPAR, expr, RPAR) nodes for semantic identity, retain syntax/provenance elsewhere, bind/version the changed canonical-hash contract, and keep numeric normalization out until typed semantics prove equivalence."
+    },
+    {
+      "id": "WP02_CANONICALIZER_CONSTRUCTOR_PARITY",
+      "status": "HOSTINGER_SUPPORTED_BUT_NOT_FRESH_MAIN_LANDED",
+      "evidence_pr": 153,
+      "validated_head": "5d2e7f904323c792cfdb2af72706391eabda7a99",
+      "collision_stop_commit": "18369fb73572eb4c91161bd97928363170dc3e0f",
+      "finding": "A four-file WP02 candidate coupling standalone canonicalizer construction to the production parser contract passed its remote evidence lane, but an attempted exact current-main rebase was stopped when main advanced by 16 commits. Do not hand-port repeatedly from a stale base."
+    },
+    {
+      "id": "STALE_RELEASE_RECEIPT_FAIL_CLOSED",
+      "status": "IMPLEMENTED_GUARD_EXECUTION_RECEIPT_PENDING_AT_LAST_READ",
+      "implementation_commit": "caed2837f9ba27992e552011d56c76a61a81beec",
+      "finding": "Release promotion now requires manifest repository commit == current checkout HEAD; a coherent old target bundle must not replay into BASE PASS after source drift."
+    },
+    {
+      "id": "REMOTE_RUNNER_TOPOLOGY",
+      "status": "VERIFIED_OPERATIONAL_CONSTRAINT",
+      "finding": "The usable Hostinger self-hosted runner is repository-scoped to gschaidergabriel/Dr.-Unterweger rather than clay-global-research-entity. Clay-repo self-hosted jobs are not valid remote evidence lanes.",
+      "actions": [
+        "Removed two misleading Clay-repo self-hosted WP03 workflows while preserving their test scripts.",
+        "Closed superseded Clay draft PR #152 unmerged.",
+        "Closed stale Dr.-Unterweger executor PR #90 unmerged after its exact Clay pin fell behind fresh main."
+      ],
+      "transport_falsifier": "Dr.-Unterweger PR #90 run 31359318397 reached runner `clay`/machine `digital-retina` but anonymous HTTPS Clay clone failed before science execution; existing SSH runner identity is the verified source-transport pattern."
+    },
+    {
+      "id": "PARALLEL_WP03_REMOTE_CANDIDATE",
+      "status": "REMOTE_PROXY_PASS_CANDIDATE_ONLY",
+      "receipt": "research_entity/claycode/base/receipts/WP03_V7_V17_MEMBRANE_KEYWORD_IR_HOSTINGER_20260810T1232p0700.json",
+      "finding": "A parallel worker obtained a green Hostinger proxy for a V7 typed-fn + V17 relation membrane + AST-context candidate, but that candidate intentionally retains V7 compact-subtraction/NAME semantics and used an older G9 blob than current. It is useful counterevidence but not selected-V17 production acceptance and not formal WP03 PASS."
+    }
+  ],
+  "external_primary_refresh": {
+    "source": "current Lark documentation",
+    "retrieved_on": "2026-08-10",
+    "supported_points": [
+      "LALR strict mode raises on unresolved Shift/Reduce and regex collisions.",
+      "Default Shift/Reduce resolution is shift.",
+      "The contextual lexer uses parser-state expectations to narrow legal terminals.",
+      "keep_all_tokens retains punctuation that normal tree construction would otherwise drop."
+    ]
+  },
+  "out_of_box_experiment": {
+    "count": 1,
+    "name": "PARSER_CONFLICT_EXCISION_TOMOGRAPHY",
+    "status": "COMPLETED",
+    "result": "Removing word-operator identifier aliases eliminates five of six V7 conflicts; eliminating the optional dotted-relation RHS choice eliminates the full conflict family. This localizes the causal structure without promoting a grammar mutation."
+  },
+  "architecture_decision": {
+    "status": "NO_PRODUCTION_PROMOTION_THIS_RUN",
+    "selected_v17": "PRESERVE",
+    "v7": "KEEP_AS_HISTORICAL_OR_EXPLICIT_SEPARATE_SURFACE_ONLY; NEVER_SILENT_REPARSE_FOR_ACCEPTANCE",
+    "wp03_direction": "Source -> receipt-bound explicit frontend artifact -> typed IR; contextual typed-fn extension over selected V17 is the favored bounded candidate unless an explicit multi-surface contract proves otherwise.",
+    "wp02_direction": "Resolve grouping semantic identity and land only fresh-head revalidated canonicalizer parity changes.",
+    "frank_harness": "UNCHANGED",
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+  },
+  "current_hard_gates": [
+    "CC-WP-02 remains OPEN: grouping semantic-hash counterexample plus fresh-main canonicalizer-parity landing/Ubuntu receipt unresolved.",
+    "CC-WP-03 remains OPEN: prove all target/release consumers bind explicit frontend identity; execute fresh-main selected-V17/contextual-fn/AST-context validation and persist exact remote receipts.",
+    "Registered Andreas Ubuntu target acceptance remains mandatory and is not replaced by Hostinger or GitHub-hosted proxy evidence.",
+    "BASE_CLAYCODE_RELEASE remains NOT_PASS until receipt-gated package closure."
+  ],
+  "next_frontier": [
+    "Audit every production/release consumer of claycode_base_typed_ir.py for implicit DEFAULT_GRAMMAR use; disposition V7 default as BLOCKER or NON_PRODUCTION_DEBT from consumer evidence.",
+    "At a short fresh-main merge window, land/revalidate the already supported WP02 parser-constructor parity delta together with the newer grouping semantic-hash regression obligation; do not race a moving parser head.",
+    "Execute and persist fresh-main hosted/real-executor receipts before any WP02/WP03 promotion.",
+    "Keep stale-receipt freshness checks fail-closed through WP14 and later release gates."
+  ],
+  "negative_results_preserved": [
+    "V7 strict grammar is not admissible as-is.",
+    "Whole-dotted-token V18 did not remove the deeper bare-atom/operator ambiguity.",
+    "Clay-repo self-hosted Hostinger workflows are invalid under current repository-scoped runner topology.",
+    "Anonymous HTTPS cross-repo clone on the Hostinger runner is not a usable transport path in the observed configuration.",
+    "A stale exact executor pin is not fresh-main evidence and was closed rather than allowed to consume runner capacity."
+  ],
+  "authority_invariants": [
+    "CLAY != FRANK",
+    "Frank self-observation != Harness mutation authority",
+    "model output != execution authority",
+    "proxy execution != Andreas target acceptance",
+    "workflow definition != execution receipt",
+    "old green receipt != current-source green receipt"
+  ]
+}

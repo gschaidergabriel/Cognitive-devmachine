@@ -1,202 +1,59 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "2.0",
   "target_id": "DOOMSDAY",
-  "label": "DOOMSDAY / finished self.root v0.1",
+  "label": "DOOMSDAY / finished Frank v0.1",
   "target_class": "FINISHED_SELF_ROOT_V0_1",
-  "forecast_protocol": "research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md",
+  "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
   "acceptance_contract": "research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md",
-  "preterminal_developer_acceptance_contract": "research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md",
-  "digital_retina_contract": "research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md",
-  "adaptive_visual_learning_contract": "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
-  "proactive_agency_contract": "research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md",
-  "token_api_identity_contract": "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md",
-  "language_contract": "research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md",
-  "effect_authority_contract": "research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay",
+  "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+  "program_workspace": "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
   "historical_earned_work_source": "research_entity/forecast/HISTORICAL_EARNED_WORK.json",
-  "target_definition": "Finished self.root/Frank v0.1: exact accepted server-binary/state identity on the Hostinger target VPS with production token API, ClayCode-only cognition, state-aware German translation, general-purpose ClayCode runtime, H1/H2/H3 one-module architecture, UnifiedDB, dissolved Digital Retina plus adaptive visual learning, proactive/autotelic long-horizon agency, authority-separated web ingress, deterministic effect authority, final validated Clay-native model, restart/recovery continuity, all mandatory terminal receipts and zero open P0/P1 or mandatory NOT_RUN/FAIL gates.",
-  "owner_hours_per_day_source": "research_entity/rooms/PROGRAM_THROUGHPUT.json:user_active_hours_per_day",
   "capacity_source": "research_entity/rooms/CAPACITY_STATE.json",
   "events_source": "research_entity/forecast/DOOMSDAY_EVENTS.jsonl",
-  "progress_method": "dynamic_historical_equivalent_hours_plus_effort_weighted_complete_v0_1_scope",
-  "forecast_method": "dependency_graph_low_high_critical_path",
+  "target_definition": "Finished self.root / Frank v0.1 on the accepted Hostinger Ubuntu VPS with exact server-binary/state identity, production token API, ClayCode-only cognition, state-aware German translation, UnifiedDB continuity, integrated multimodal Retina/MVC, GWT/loop/re-entry observability, deterministic effect authority, proactive/autotelic agency, authority-separated open-web ingress, final owner-authorized validated model, restart/recovery continuity and all current terminal acceptance receipts.",
+  "progress_method": "unified_frank_v0_1_workspace_plus_historical_earned_work",
+  "forecast_method": "single_target_remaining_scope_range",
   "rows": {
-    "L0_ARCHIVE_ASSIMILATION": {
-      "label": "Level 0: history assimilation + earned-work mapping",
+    "FRANK_V0_1": {
+      "label": "Complete Frank v0.1",
       "kind": "program_stage",
-      "stage_id": "L0_ARCHIVE_ASSIMILATION",
+      "stage_id": "FRANK_V0_1",
       "dependencies": [],
-      "prior_days": {"low": 0.15, "high": 0.30},
-      "hard_wall_clock_hours": 3.0,
-      "confidence": "OWNER_FIXED_SLA_FEASIBILITY_UNCALIBRATED"
-    },
-    "BASE_CLAYCODE_RELEASE": {
-      "label": "ClayCode general-purpose compiler/runtime including v0.1 agency/web-authority expressibility",
-      "kind": "program_stage",
-      "stage_id": "BASE_CLAYCODE_RELEASE",
-      "dependencies": ["L0_ARCHIVE_ASSIMILATION"],
-      "prior_days": {"low": 1.0, "high": 4.0},
-      "confidence": "LOW_EXISTING_SEMANTICS_IMPLEMENTATION_HEAVY",
+      "prior_days": {"low": 10.0, "high": 40.0},
+      "confidence": "VERY_LOW_UNTIL_UNIFIED_V0_1_VELOCITY_IS_MEASURED",
       "required_contracts": [
-        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
-        "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md",
-        "research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md"
-      ]
-    },
-    "H1_REFERENCE_HARNESS": {
-      "label": "Harness 1: reference self.root/Frank behavior including multimodal, agency and authority baselines",
-      "kind": "program_stage",
-      "stage_id": "H1_REFERENCE_HARNESS",
-      "dependencies": ["BASE_CLAYCODE_RELEASE"],
-      "prior_days": {"low": 2.0, "high": 8.0},
-      "confidence": "LOW"
-    },
-    "H2_CLAYCODE_HARNESS": {
-      "label": "Harness 2: reference semantics compiled/executed in ClayCode",
-      "kind": "program_stage",
-      "stage_id": "H2_CLAYCODE_HARNESS",
-      "dependencies": ["H1_REFERENCE_HARNESS"],
-      "prior_days": {"low": 1.0, "high": 4.0},
-      "confidence": "LOW"
-    },
-    "H3_ONE_MODULE_BINARY_FRANK": {
-      "label": "Harness 3: one-module/binary self.root with integrated Retina, agency and effect semantics",
-      "kind": "program_stage",
-      "stage_id": "H3_ONE_MODULE_FRANK",
-      "dependencies": ["H2_CLAYCODE_HARNESS"],
-      "prior_days": {"low": 3.0, "high": 10.0},
-      "confidence": "VERY_LOW_FIRST_OF_KIND"
-    },
-    "UDB_UNIFIED_DATABASE": {
-      "label": "UnifiedDB final semantic-state integration and restart continuity",
-      "kind": "program_stage",
-      "stage_id": "UDB_UNIFIED_DATABASE",
-      "dependencies": ["H3_ONE_MODULE_BINARY_FRANK"],
-      "prior_days": {"low": 2.0, "high": 7.0},
-      "confidence": "LOW"
-    },
-    "DATA_FINAL_TRAINING_CORPUS": {
-      "label": "Final Clay-native training + held-out/eval corpus",
-      "kind": "program_stage",
-      "stage_id": "DATA_LORA_TRAINING_DATA",
-      "dependencies": ["UDB_UNIFIED_DATABASE"],
-      "prior_days": {"low": 1.0, "high": 5.0},
-      "confidence": "LOW"
-    },
-    "OWNER_TRAINING_RELEASE_GATE": {
-      "label": "Owner authorization for final paid/model training",
-      "kind": "owner_gate",
-      "dependencies": ["DATA_FINAL_TRAINING_CORPUS"],
-      "prior_days": {"low": 0.0, "high": 0.0},
-      "conditional_assumption": "Forecast assumes immediate owner authorization when the frozen training-data gate is ready; unknown human waiting time is excluded.",
-      "confidence": "CONDITIONAL"
-    },
-    "FINAL_MODEL_FINE_TUNE": {
-      "label": "Final validated Clay-native model",
-      "kind": "forecast_work",
-      "dependencies": ["OWNER_TRAINING_RELEASE_GATE"],
-      "future_workspace": "research_entity/training/FINAL_MODEL_FINE_TUNE_WORKSPACE.json",
-      "prior_days": {"low": 1.0, "high": 5.0},
-      "confidence": "VERY_LOW_METHOD_NOT_FROZEN"
-    },
-    "MODEL_EXPORT_RUNTIME_PACKAGE": {
-      "label": "Final model export/runtime package bound to self.root binary",
-      "kind": "forecast_work",
-      "dependencies": ["FINAL_MODEL_FINE_TUNE", "H3_ONE_MODULE_BINARY_FRANK"],
-      "future_workspace": "research_entity/developer_build/CLAY_0_1_MODEL_PACKAGE_WORKSPACE.json",
-      "prior_days": {"low": 0.5, "high": 2.0},
-      "confidence": "LOW"
-    },
-    "SELF_ROOT_TOKEN_API": {
-      "label": "Production token-authenticated Frank API and scoped direct-message channel",
-      "kind": "forecast_work",
-      "dependencies": ["H3_ONE_MODULE_BINARY_FRANK"],
-      "future_workspace": "research_entity/developer_build/SELF_ROOT_V0_1_TOKEN_API_WORKSPACE.json",
-      "prior_days": {"low": 0.5, "high": 2.0},
-      "confidence": "LOW_API_ACCEPTANCE_NOT_YET_OBSERVED",
-      "required_receipt": "FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json"
-    },
-    "SELF_ROOT_PROACTIVE_AGENCY_WEB_INGRESS": {
-      "label": "Proactive/autotelic long-horizon agency + authority-separated open-web ingress",
-      "kind": "forecast_work",
-      "dependencies": ["H3_ONE_MODULE_BINARY_FRANK", "UDB_UNIFIED_DATABASE"],
-      "future_workspace": "research_entity/developer_build/SELF_ROOT_V0_1_PROACTIVE_AGENCY_WEB_INGRESS_WORKSPACE.json",
-      "prior_days": {"low": 1.5, "high": 5.0},
-      "confidence": "VERY_LOW_NEW_MANDATORY_CROSS_CUTTING_GATE",
-      "required_contract": "research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md"
-    },
-    "SELF_ROOT_IDENTITY_TRANSLATION_RECOVERY": {
-      "label": "self.root identity hot path + ClayCode-only cognition + state-aware translation + restart recovery",
-      "kind": "forecast_work",
-      "dependencies": ["H3_ONE_MODULE_BINARY_FRANK", "UDB_UNIFIED_DATABASE"],
-      "future_workspace": "research_entity/developer_build/SELF_ROOT_V0_1_IDENTITY_TRANSLATION_RECOVERY_WORKSPACE.json",
-      "prior_days": {"low": 0.5, "high": 2.5},
-      "confidence": "LOW"
-    },
-    "CLAY_0_1_FULL_INTEGRATION": {
-      "label": "Full finished-v0.1 candidate integration",
-      "kind": "forecast_work",
-      "dependencies": [
-        "MODEL_EXPORT_RUNTIME_PACKAGE",
-        "UDB_UNIFIED_DATABASE",
-        "SELF_ROOT_TOKEN_API",
-        "SELF_ROOT_PROACTIVE_AGENCY_WEB_INGRESS",
-        "SELF_ROOT_IDENTITY_TRANSLATION_RECOVERY"
+        "research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md",
+        "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md",
+        "research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md",
+        "research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md",
+        "research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md"
       ],
-      "future_workspace": "research_entity/developer_build/CLAY_0_1_INTEGRATION_WORKSPACE.json",
-      "prior_days": {"low": 1.0, "high": 4.0},
-      "confidence": "VERY_LOW_FIRST_OF_KIND"
-    },
-    "TARGET_VPS_END_TO_END_DEPLOYMENT": {
-      "label": "Exact finished-v0.1 candidate end-to-end on accepted Hostinger target VPS",
-      "kind": "forecast_work",
-      "dependencies": ["CLAY_0_1_FULL_INTEGRATION"],
-      "future_workspace": "research_entity/developer_build/SELF_ROOT_V0_1_TARGET_VPS_WORKSPACE.json",
-      "prior_days": {"low": 0.5, "high": 2.0},
-      "capacity_strategy": "Use the already verified Hostinger target VPS. Planned GPU/storage hardware may accelerate work but is not a mandatory v0.1 target migration.",
-      "confidence": "LOW_TARGET_HOST_AVAILABLE_API_NOT_YET_ACCEPTED"
-    },
-    "V0_1_FULL_ACCEPTANCE_RUN": {
-      "label": "Full v0.1 terminal regression/adversarial/recovery/authority acceptance run",
-      "kind": "forecast_work",
-      "dependencies": ["TARGET_VPS_END_TO_END_DEPLOYMENT"],
-      "future_workspace": "research_entity/developer_build/SELF_ROOT_V0_1_FULL_ACCEPTANCE_WORKSPACE.json",
-      "prior_days": {"low": 1.0, "high": 3.0},
-      "confidence": "LOW",
-      "required_contract": "research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md"
-    },
-    "SELF_ROOT_V0_1_FINISHED": {
-      "label": "Finished self.root / Frank v0.1 terminal acceptance",
-      "kind": "forecast_work",
-      "dependencies": ["V0_1_FULL_ACCEPTANCE_RUN"],
-      "future_workspace": "research_entity/developer_build/SELF_ROOT_V0_1_FINISHED_WORKSPACE.json",
-      "prior_days": {"low": 0.25, "high": 0.75},
-      "confidence": "LOW_TERMINAL_AUDIT",
-      "required_receipt": "SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json"
+      "training_authorization_note": "Final paid/model training remains explicitly owner-authorized. Forecast excludes unknown human waiting time and remains conditional until authorization exists."
     }
   },
-  "terminal_row": "SELF_ROOT_V0_1_FINISHED",
+  "terminal_row": "FRANK_V0_1",
   "acceptance_artifacts": [
-    "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
-    "REFERENCE_HARNESS_RELEASE_MANIFEST.json",
-    "CLAY_HARNESS_RELEASE_MANIFEST.json",
-    "ONE_MODULE_HARNESS_RELEASE_MANIFEST.json",
-    "ONE_MODULE_BINARY_BUILD_RECEIPT.json",
-    "CLAY_0_1_DIGITAL_RETINA_RECEIPT.json",
-    "CLAY_0_1_ADAPTIVE_VISUAL_LEARNING_RECEIPT.json",
-    "CLAY_0_1_UNIFIEDDB_RECEIPT.json",
-    "CLAY_0_1_FINAL_MODEL_RECEIPT.json",
+    "SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json",
     "FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json",
+    "FRANK_V0_1_CLAYCODE_ONLY_TRANSLATOR_ACCEPTANCE_RECEIPT.json",
     "SELF_ROOT_V0_1_PROACTIVE_AGENCY_ACCEPTANCE_RECEIPT.json",
     "SELF_ROOT_V0_1_WEB_INGRESS_SECURITY_ACCEPTANCE_RECEIPT.json",
     "SELF_ROOT_V0_1_LONG_HORIZON_GOAL_RESTART_RECEIPT.json",
     "SELF_ROOT_V0_1_AUTONOMOUS_EXPERIMENT_RECEIPT.json",
     "SELF_ROOT_V0_1_IDENTITY_RECOVERY_RECEIPT.json",
-    "SELF_ROOT_V0_1_CLAYCODE_TRANSLATION_RECEIPT.json",
+    "CLAY_0_1_DIGITAL_RETINA_RECEIPT.json",
+    "CLAY_0_1_ADAPTIVE_VISUAL_LEARNING_RECEIPT.json",
+    "CLAY_0_1_UNIFIEDDB_RECEIPT.json",
     "CLAY_0_1_EFFECT_AUTHORITY_RECEIPT.json",
     "CLAY_0_1_FUZZ_ADVERSARIAL_RECEIPT.json",
     "CLAY_0_1_RECOVERY_RECEIPT.json",
-    "SELF_ROOT_V0_1_TARGET_VPS_END_TO_END_RECEIPT.json",
-    "SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json"
+    "CLAY_0_1_FINAL_MODEL_RECEIPT.json",
+    "SELF_ROOT_V0_1_TARGET_VPS_END_TO_END_RECEIPT.json"
   ],
-  "last_updated": "2026-08-10"
+  "superseded_acceptance_artifacts": [
+    "REFERENCE_HARNESS_RELEASE_MANIFEST.json",
+    "CLAY_HARNESS_RELEASE_MANIFEST.json",
+    "ONE_MODULE_HARNESS_RELEASE_MANIFEST.json"
+  ],
+  "last_updated": "2026-08-10T20:39:00+07:00"
 }

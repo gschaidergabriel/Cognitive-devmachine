@@ -1,0 +1,3 @@
+# CMX reproducibility note
+
+The committed `implementation/cmx_reference.py` was rerun with six seeds after the possibility packet was written. Deterministic accuracy values at 0%, 10% and 15% noise, plus the `no_coupon` and `no_rent` ablations, matched the persisted measurements exactly. Replay again produced digest `f11c8c8e3ff3053c0e418d1c0f216f44b7073e8e60d7657a3d127f0eec4cbe0e`, rejected 100 stale-epoch credit events and 200 duplicate receipts, and applied exactly 1000 unique receipts. Truth/effect-authority semantic classes remained unchanged. Timing is not equality-gated because it is host/load sensitive.

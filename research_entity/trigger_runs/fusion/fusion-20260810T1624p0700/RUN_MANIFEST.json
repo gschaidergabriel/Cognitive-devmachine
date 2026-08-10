@@ -1,0 +1,26 @@
+{
+  "schema_version":"1.0",
+  "run_id":"fusion-20260810T1624p0700",
+  "trigger":"fusion",
+  "actor":"chatgpt-secondary",
+  "provider":"OpenAI",
+  "model":"GPT-5.6 Sol",
+  "started_from_head":"00bf7121e83befeb763e1bfd84ec29f6ac770e74",
+  "refreshed_parent_head":"52db143573415aa9d1043562503791d816a299d5",
+  "canonical_parent":{"revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "current_stage":"BASE_CLAYCODE_RELEASE",
+  "material_new_input_during_run":"research_entity/mesh_feedback/20260810T1625p0700-live-fusion-continuous-reentry/BRANCH_FEEDBACK_MANIFEST.json",
+  "canonical_promotion":"NONE",
+  "live_fusion_candidate_status":"CANDIDATE_NOT_PROMOTED",
+  "key_decisions":[
+    "Do not duplicate the 16:25 continuous-reentry delta; refine it with an observability-first replay gate.",
+    "Do not claim real-repo validation from post-hoc branch relevance.",
+    "Do not preempt BASE WP03/WP04 critical path; live-fusion replay uses spare capacity unless it directly unblocks observability."
+  ],
+  "research_write_plan":[
+    "research_entity/trigger_runs/fusion/fusion-20260810T1624p0700/",
+    "research_entity/state/work/events/20260810T1624p0700_chatgpt_secondary_live_fusion_mesh_v2_observability_revise.json"
+  ],
+  "completion_validator":"tools/fusion_research_contract.py",
+  "local_mirror_validator_result":"PASS_NO_VIOLATIONS_BEFORE_GITHUB_WRITE"
+}

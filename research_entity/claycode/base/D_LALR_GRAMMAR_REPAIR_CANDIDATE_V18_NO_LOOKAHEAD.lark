@@ -45,7 +45,7 @@ cycle_block: "{" _bsep* cycle_stmt (_bsep+ cycle_stmt)* _bsep* "}"
 if_stmt: "if" expr cycle_block
 
 field: ident ":" type_expr ["=" expr]
-method_sig: ident "(" [params] ")" -> type_expr
+method_sig: ident "(" [params] ")" "->" type_expr
 params: param ("," param)*
 param: ident [":" type_expr]
 type_params: "<" type_expr ("," type_expr)* ">"

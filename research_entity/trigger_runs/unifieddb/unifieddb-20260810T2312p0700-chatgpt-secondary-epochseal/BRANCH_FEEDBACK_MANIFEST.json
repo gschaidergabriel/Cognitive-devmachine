@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "feedback":[
+    {"branch":"frank","priority":"P0_COMPONENT","delta":"Adopt EpochSeal candidate as F-V01-04 discriminator; no promotion until target receipt."},
+    {"branch":"claycode","priority":"P0","delta":"Need typed primitives for base_epoch precondition, idempotency key, EpochSeal/root, QueryReceipt, DerivedEpoch, EffectOutcome and ReentryReceipt; lowering must preserve one canonical transaction boundary."},
+    {"branch":"claygraph","priority":"P0","delta":"Every projection/result must expose derived_from_epoch + generation; stale graph can seed candidates but not exact truth."},
+    {"branch":"gwt","priority":"P0","delta":"WorkspaceEpisode assembly must carry one source_epoch and query/selection receipts; mixed-epoch exact assemblies reject/downgrade."},
+    {"branch":"hyperposition","priority":"P1","delta":"Alternatives remain set-valued but each alternative/topology edge needs source/derived epoch and unresolved status."},
+    {"branch":"emergenz","priority":"P1","delta":"Use EpochSeal only as instrumentation; compare interventions within declared snapshots and preserve shuffled/no-reentry controls."},
+    {"branch":"harness","priority":"P0","delta":"Add crash-before-commit, checkpoint/restart, stale writer, idempotency replay, derived-lag, rebuild and timeout-after-provider-acceptance tests."},
+    {"branch":"q23","priority":"P1","delta":"VisualPercept/MVC updates require provenance + admitted source_epoch; feature index remains derived."},
+    {"branch":"effect-authority","priority":"P0","delta":"Close existing open requirement verified provider outcome -> UnifiedDB effect receipt -> provenance re-entry -> DONE."},
+    {"branch":"security-recovery-observability","priority":"P0","delta":"Record exact SQLite version; block vulnerable WAL fast path; last-known-good snapshot must include WAL state or use safe backup API."}
+  ],
+  "negative_result_distribution":["split authoritative stores can diverge","coordinator detection is not atomicity","physical merge not yet justified","WAL safety depends on exact SQLite runtime"],
+  "status":"READY_FOR_MESH_REENTRY"
+}

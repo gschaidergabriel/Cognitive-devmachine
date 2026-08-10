@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2016p0700-chatgpt-secondary-hwp10-effect-authority",
+  "work_package": "H-WP-10-EFFECT-AUTHORITY",
+  "evidence_class": "LOCAL_DETERMINISTIC_TEST",
+  "executed": true,
+  "command": "python3 -m unittest -v test_effect_authority.py",
+  "result": "PASS",
+  "tests_run": 17,
+  "tests_passed": 17,
+  "tests_failed": 0,
+  "duration_seconds_reported_by_unittest": 0.001,
+  "environment": {
+    "os": "Linux",
+    "kernel": "6.18.35",
+    "architecture": "x86_64",
+    "libc": "glibc 2.41",
+    "python": "3.13.5",
+    "container_host": "d3f42c50192c",
+    "target_ubuntu_vps": false,
+    "target_frank_live": false
+  },
+  "source_artifacts": {
+    "implementation": "research_entity/harness/reference/effect_authority.py",
+    "implementation_sha256": "1c4e29705541fe440a45171ea657c75b23a06af131da7255b0d48d77f77f13a4",
+    "tests": "research_entity/harness/reference/test_effect_authority.py",
+    "tests_sha256": "a64c1df2ef0e658b4210a38a324c2c86ff5c1fa33effe03264472459caa61942"
+  },
+  "coverage": [
+    "ordinary read executes without confirmation",
+    "reversible scoped write executes",
+    "external communication executes when destination and payload match authenticated intent",
+    "privileged change requires confirmation",
+    "destructive delete requires complete guard plus exact one-shot confirmation",
+    "incomplete destructive guard fails closed",
+    "format/wipe denied without owner-fixed one-shot recovery protocol",
+    "stale confirmation rejected",
+    "replayed confirmation rejected",
+    "translator cannot mint authority",
+    "model confidence/GWT ignition/ClayGraph salience cannot mint authority",
+    "unknown effect degrades to proposal",
+    "financial/legal commitment requires confirmation",
+    "credential/security policy may deny",
+    "mismatched confirmation rejected",
+    "confirmation hash binds policy-relevant request fields",
+    "eligible non-destructive matrix unnecessary refusal rate = 0"
+  ],
+  "known_limits": [
+    "confirmation nonce replay state is process-local memory only",
+    "no crash/restart durability test",
+    "no reservation/commit/outcome/re-entry integration yet",
+    "no authoritative H1 end-to-end turn execution",
+    "no target Hostinger Ubuntu execution",
+    "no H2 ClayCode equivalent/differential",
+    "no concurrency/race test on confirmation consumption"
+  ],
+  "promotion": "COMPONENT_TEST_PASS_ONLY"
+}

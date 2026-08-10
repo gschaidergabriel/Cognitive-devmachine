@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2203p0700-chatgpt-secondary-real-schema-authority",
+  "status": "REAL_REPAIR_PARTIALLY_TARGET_VERIFIED",
+  "architecture_promotion": false,
+  "affected": [
+    {"branch":"frank","priority":"HIGH","delta":"previous target repo_static_integrity failure closed for tested SHA; live telemetry deployment remains absent"},
+    {"branch":"claycode","priority":"LOW","delta":"no ClayCode grammar change; schema-authority lesson is explicit authority isolation and transactional migration semantics"},
+    {"branch":"unifieddb","priority":"HIGH","delta":"adopt/compare additive known-schema admission, fail-closed unknown schema, row-preserving migration, explicit migration transaction and FTS rebuild semantics"},
+    {"branch":"harness","priority":"HIGH","delta":"retain real regressions: duplicate production schema authority, disposable-probe isolation, legacy row/FTS preservation, forced DDL rollback, pending transaction rejection"},
+    {"branch":"claygraph","priority":"LOW","delta":"NO_CHANGE except any future persistent derived schema must keep explicit migrator authority rather than runtime-local DDL"},
+    {"branch":"gwt","priority":"NONE","delta":"NO_CHANGE"},
+    {"branch":"hyperposition","priority":"NONE","delta":"NO_CHANGE"},
+    {"branch":"emergenz","priority":"NONE","delta":"NO_CHANGE"},
+    {"branch":"q23","priority":"NONE","delta":"NO_CHANGE"},
+    {"branch":"fusion","priority":"HIGH","delta":"do not claim MCP v0.2 live/deployed; source migration tests passed on target tested SHA, live DB absent, system install blocked"},
+    {"branch":"go","priority":"MEDIUM","delta":"current highest-value MCP next step is current-source target preflight plus explicit host privilege admission, not further speculative schema design"}
+  ],
+  "negative_results_preserved": [
+    "live /srv/frank-telemetry/frank_telemetry.sqlite3 absent in real target receipt",
+    "systemwide deploy blocked by noninteractive sudo requirement",
+    "reordered unprivileged target preflight exposed CLAY_MCP_STATE_DIR isolation defect before privilege stage",
+    "first create-if-not-exists migrator design was insufficient for existing tables",
+    "first additive migration composition risked partial commit at executescript transaction boundary"
+  ]
+}

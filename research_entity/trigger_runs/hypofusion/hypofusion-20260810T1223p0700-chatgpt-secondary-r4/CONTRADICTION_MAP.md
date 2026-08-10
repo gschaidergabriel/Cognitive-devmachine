@@ -12,8 +12,8 @@ Outcome/reentry flags alone had no effect without a usable path. **Resolution:**
 ## C4 — GWT stages vs causal workspace
 Presence-only validation rejected just 13.33% of structured causal mutants in the G3 sandbox. **Resolution:** retain directed receipts and live lesions; do not substitute graph integration or stage labels.
 
-## C5 — V20 local fix vs V17 language identity
-V20's word-boundary token handles alphanumeric suffix shadowing but `\b` also fires before `.`, `-` and `?`, which are legal V17 continuations. **Resolution:** exact V20 is not selectable unless the new negative gate fails to find the predicted mismatch and the full semantic differential passes.
+## C5 — Parser simplification vs selected-language conservation
+V18 and V19 are refuted in their tested designs. V20's word-boundary approach has supported counterexamples because `\b` fires before `.`, `-` and `?`, legal V17 continuations. V21 now explicitly separates exact shared tokens from maximal longer qids. **Resolution:** V17 stays selected; V21 is testing-only until strict construction, full V17-normalized semantic identity, metamorphics, source-span/roundtrip and WP03 replay pass.
 
 ## C6 — Independent green paths vs one canonical identity
 WP02 standalone and production paths can pass while using different parser construction semantics. **Resolution:** direct cross-path parity becomes an acceptance test; independent green is insufficient.
@@ -29,5 +29,11 @@ Current neuroscience supports heterogeneous, feature-specific and time/magnitude
 
 ## C10 — Generated intent vs effect authority
 Strict generated syntax can improve validation but cannot establish independent authorization. **Resolution:** preserve external decision/enforcement/capability gateway with replay/freshness/provenance checks.
+
+## C11 — Old outcome vs stale outcome
+Strict current-epoch equality would reject legitimate delayed outcomes, while receipt-time current-state attribution miscredits them. The asynchronous synthetic stress test strongly favors exact origin binding, yet the explicit rebase/transport law did not consistently beat simple verified origin-bound feedback. **Resolution:** make dual-time causal identity a test obligation now; keep complex rebase semantics unpromoted until H1 real traces show incremental value.
+
+## C12 — Bounded WP03 success vs formal stage PASS
+An exact self-hosted Ubuntu composition of V7/V17 membrane + typed-IR keyword fix passed all declared research gates on exact blobs, but it is a staged research composition and the receipt explicitly says it does not count as WP03 or Andreas-target acceptance. **Resolution:** preserve it as positive causal evidence, then rebase minimal deltas onto fresh main and run canonical validators plus registered target acceptance.
 
 No contradiction is resolved by averaging incompatible claims or by worker count.

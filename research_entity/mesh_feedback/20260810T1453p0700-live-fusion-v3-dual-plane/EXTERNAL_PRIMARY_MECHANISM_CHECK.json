@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "check_id": "live-fusion-v3-external-primary-mechanism-check-20260810T1458p0700",
+  "created_at": "2026-08-10T14:58:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "status": "PRIMARY_SOURCES_VERIFIED_BOUNDED_TRANSFER_ONLY",
+  "sources": [
+    {
+      "claim": "Picsou/C3B uses quorum acknowledgements to determine message receipt/loss and reduce retransmission overhead between replicated state machines.",
+      "source": "USENIX OSDI 2025 - Picsou: Enabling Replicated State Machines to Communicate Efficiently",
+      "source_class": "PRIMARY_CONFERENCE",
+      "retrieved_at": "2026-08-10T14:57:00+07:00",
+      "transfer_to_clay": "Supports precise delivery-state/repair accounting as a design analogy; does not validate Clay branch ACK semantics, epistemic quorum, or agent routing quality."
+    },
+    {
+      "claim": "Enzyme is a production incremental-view-maintenance engine using a cost-based optimization layer to select refresh strategies and exploit batching opportunities.",
+      "source": "arXiv:2603.27775 v2 / SIGMOD Companion 2026 - Enzyme: Incremental View Maintenance for Data Engineering",
+      "source_class": "PRIMARY_PREPRINT",
+      "retrieved_at": "2026-08-10T14:57:00+07:00",
+      "transfer_to_clay": "Supports measuring adaptive refresh/batching rather than fixing one refresh cadence; does not validate UnifiedDB/ClayGraph semantics or V3 routing."
+    },
+    {
+      "claim": "T2C derives runtime semantic checkers from tests and detected 15/20 reproduced real-world silent failures across four distributed systems with small runtime overhead.",
+      "source": "USENIX OSDI 2025 - Deriving Semantic Checkers from Tests to Detect Silent Failures in Production Distributed Systems",
+      "source_class": "PRIMARY_CONFERENCE",
+      "retrieved_at": "2026-08-10T14:57:00+07:00",
+      "transfer_to_clay": "Supports explicit semantic runtime checkers such as stale epoch/route/replay invariants; does not prove those checkers are sufficient for Clay or that transport success implies semantic correctness."
+    }
+  ],
+  "counterevidence_and_limits": [
+    "Picsou assumes replicated-state-machine communication and quorum structure; Clay workers are heterogeneous research processes and ACK count must not become evidence strength.",
+    "Enzyme optimizes relational/materialized-view refresh; transfer to live knowledge/worker routing is architectural analogy only and requires Clay-specific cost/consistency measurements.",
+    "T2C reports incomplete detection (15/20 reproduced silent failures), so semantic checkers reduce but do not eliminate silent failure risk.",
+    "None of the three sources provides evidence that V3 dual-plane branch beacons outperform V2 on the actual Clay repository or active workers."
+  ],
+  "architecture_delta": "NO_DIRECT_PROMOTION. Retain precise ACK/repair, cost-based refresh/batching and semantic checker ideas as falsifiable implementation patterns; require actual repo/worker A/B before selecting V3.",
+  "affected_branches": ["clayresearch", "unifieddb", "claygraph", "harness", "claycode"],
+  "frank_harness_mutation": false
+}

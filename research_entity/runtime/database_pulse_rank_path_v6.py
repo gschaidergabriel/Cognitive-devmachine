@@ -13,6 +13,8 @@ Compatibility rule:
 - On the first material V6 maintenance transaction, existing V5 receipts are copied into the V6
   audit plane with literal UNKNOWN provenance and an explicit LEGACY_V5_BACKFILL status.
 - Native V6 BUILD/DROP refuses blank/UNKNOWN actor, policy provenance, or policy decision hash.
+- Every persisted V6 audit row gets a transaction-local monotonic audit_sequence. This keeps
+  repeated physical BUILD/DROP cycles auditable even when the semantic plan is identical.
 
 The V6 audit table, legacy backfill, CREATE/DROP INDEX, root verification, and native receipt are
 committed in one BEGIN IMMEDIATE transaction. Any failure rolls back the entire V6-side effect.
@@ -52,6 +54,7 @@ class RankMaintenanceReceiptV6:
     policy_provenance_ref: str
     policy_decision_hash: str
     provenance_status: str
+    audit_sequence: int | None = None
     authority: str = AUTHORITY
     receipt_id: str | None = None
     legacy_source_receipt_id: str | None = None
@@ -89,6 +92,7 @@ class AdaptiveAuthoritativeRankPathV6(AdaptiveAuthoritativeRankPathV5):
         self.con.execute(
             f"""CREATE TABLE IF NOT EXISTS {MAINTENANCE_LOG_TABLE_V6}(
                 receipt_id TEXT PRIMARY KEY,
+                audit_sequence INTEGER NOT NULL UNIQUE,
                 plan_hash TEXT NOT NULL,
                 basis_epoch INTEGER NOT NULL,
                 action TEXT NOT NULL,
@@ -118,6 +122,17 @@ class AdaptiveAuthoritativeRankPathV6(AdaptiveAuthoritativeRankPathV5):
                 WHERE legacy_source_receipt_id IS NOT NULL"""
         )
 
+    def _next_audit_sequence_no_commit(self) -> int:
+        row = self.con.execute(
+            f"SELECT COALESCE(MAX(audit_sequence),0)+1 FROM {MAINTENANCE_LOG_TABLE_V6}"
+        ).fetchone()
+        if row is None:
+            raise AssertionError("V6 audit sequence query returned no row")
+        value = int(row[0])
+        if value < 1:
+            raise AssertionError("V6 audit sequence must be positive")
+        return value
+
     def _migrate_v5_receipts_no_commit(self) -> int:
         """Backfill V5 audit rows honestly; absence of provenance remains literal UNKNOWN."""
         exists = self.con.execute(
@@ -138,8 +153,10 @@ class AdaptiveAuthoritativeRankPathV6(AdaptiveAuthoritativeRankPathV5):
             ).fetchone()
             if already is not None:
                 continue
+            audit_sequence = self._next_audit_sequence_no_commit()
             body = {
                 "migration": "V5_TO_V6_AUDIT_BACKFILL",
+                "audit_sequence": audit_sequence,
                 "legacy_source_receipt_id": source_receipt_id,
                 "plan_hash": str(row["plan_hash"]),
                 "basis_epoch": int(row["basis_epoch"]),
@@ -148,15 +165,16 @@ class AdaptiveAuthoritativeRankPathV6(AdaptiveAuthoritativeRankPathV5):
             receipt_id = h(body)
             self.con.execute(
                 f"""INSERT INTO {MAINTENANCE_LOG_TABLE_V6}(
-                    receipt_id,plan_hash,basis_epoch,action,status,
+                    receipt_id,audit_sequence,plan_hash,basis_epoch,action,status,
                     index_present_before,index_present_after,
                     semantic_state_hash_before,semantic_state_hash_after,
                     trace_root_hash_before,trace_root_hash_after,
                     actor,policy_provenance_ref,policy_decision_hash,provenance_status,
                     legacy_source_receipt_id,executed_at,authority
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     receipt_id,
+                    audit_sequence,
                     str(row["plan_hash"]),
                     int(row["basis_epoch"]),
                     str(row["action"]),
@@ -183,7 +201,7 @@ class AdaptiveAuthoritativeRankPathV6(AdaptiveAuthoritativeRankPathV5):
         if not self._v6_log_exists():
             return []
         rows = self.con.execute(
-            f"SELECT * FROM {MAINTENANCE_LOG_TABLE_V6} ORDER BY rowid"
+            f"SELECT * FROM {MAINTENANCE_LOG_TABLE_V6} ORDER BY audit_sequence"
         ).fetchall()
         return [dict(row) for row in rows]
 
@@ -266,8 +284,10 @@ class AdaptiveAuthoritativeRankPathV6(AdaptiveAuthoritativeRankPathV5):
                     "physical rank-index maintenance mutated semantic/trace roots"
                 )
 
+            audit_sequence = self._next_audit_sequence_no_commit()
             receipt_body = {
                 "implementation": IMPLEMENTATION_ID,
+                "audit_sequence": audit_sequence,
                 "basis_epoch": plan.basis_epoch,
                 "action": action,
                 "status": status,
@@ -287,15 +307,16 @@ class AdaptiveAuthoritativeRankPathV6(AdaptiveAuthoritativeRankPathV5):
             receipt_id = h(receipt_body)
             self.con.execute(
                 f"""INSERT INTO {MAINTENANCE_LOG_TABLE_V6}(
-                    receipt_id,plan_hash,basis_epoch,action,status,
+                    receipt_id,audit_sequence,plan_hash,basis_epoch,action,status,
                     index_present_before,index_present_after,
                     semantic_state_hash_before,semantic_state_hash_after,
                     trace_root_hash_before,trace_root_hash_after,
                     actor,policy_provenance_ref,policy_decision_hash,provenance_status,
                     legacy_source_receipt_id,executed_at,authority
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?)""",
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?)""",
                 (
                     receipt_id,
+                    audit_sequence,
                     plan.plan_hash,
                     plan.basis_epoch,
                     action,
@@ -330,6 +351,7 @@ class AdaptiveAuthoritativeRankPathV6(AdaptiveAuthoritativeRankPathV5):
                 policy_provenance_ref=policy_provenance_ref,
                 policy_decision_hash=policy_decision_hash,
                 provenance_status=NATIVE_PROVENANCE_STATUS,
+                audit_sequence=audit_sequence,
                 receipt_id=receipt_id,
                 persisted=True,
             )

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "feedback": [
+    {
+      "target": "F-V01-06-DIGITAL-RETINA-MVC",
+      "kind": "ARCHITECTURE_AND_TEST_DELTA",
+      "refs": ["ARCHITECTURE_DELTAS.json","TEST_OBLIGATIONS.json","packages/P-Q23-01_QWEN_FEATURE_INTERFACE.json"],
+      "required_next_effect": "Use merged-Qwen feature reuse as first experiment; retain dedicated lightweight encoder as adversarial baseline; do not mark PASS before target-compatible evidence."
+    },
+    {
+      "target": "F-V01-08-TOKEN-API-CLIENTS",
+      "kind": "MULTIMODAL_RUNTIME_CONTRACT_DELTA",
+      "refs": ["TEST_OBLIGATIONS.json","ONLINE_RESEARCH_MANIFEST.json"],
+      "required_next_effect": "Multimodal ingress receipts must bind preprocessing/runtime compatibility identity and surface DEGRADED/UNKNOWN on encode failure rather than silently accepting corrupted perception."
+    },
+    {
+      "target": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "kind": "RECOVERY_TEST_DELTA",
+      "refs": ["TEST_OBLIGATIONS.json"],
+      "required_next_effect": "Add mmproj OOM/timeout/crash/stale-prototype quarantine and last-known-good full-decode fallback tests."
+    },
+    {
+      "target": "F-V01-16-END-TO-END-ACCEPTANCE",
+      "kind": "ACCEPTANCE_EVIDENCE_DELTA",
+      "refs": ["TEST_OBLIGATIONS.json","ARCHITECTURE_DELTAS.json"],
+      "required_next_effect": "Require visual correctness plus runtime compatibility/recovery evidence; process success or equal image-token count alone is insufficient."
+    },
+    {
+      "target": "GO",
+      "kind": "TARGETED_CROSS_TRIGGER_DELTA",
+      "refs": ["GO_Q23_EXCHANGE.json"],
+      "required_next_effect": "Index and pull when global work touches multimodal runtime, Retina/MVC, token API, recovery or end-to-end acceptance."
+    }
+  ],
+  "workspace_mutation": "NOT_PERFORMED",
+  "reason": "Research produced candidates/test obligations but no target benchmark PASS; additive branch feedback avoids falsely advancing shared completion state."
+}

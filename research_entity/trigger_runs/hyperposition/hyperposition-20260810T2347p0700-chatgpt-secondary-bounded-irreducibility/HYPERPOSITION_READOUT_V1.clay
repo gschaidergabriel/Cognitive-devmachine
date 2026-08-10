@@ -1,0 +1,73 @@
+module clay.hyperposition.readout.v1
+version "0.1-bounded-irreducibility"
+status RESEARCH_CANDIDATE
+
+class ReductionComparator = CLIQUE_PAIRWISE | REIFIED_RELATION_NODE | PAIRWISE_STATE_MACHINE
+class ReductionVerdict = LOSSLESS | LOSSY | BUDGET_EXCEEDED | UNKNOWN
+class TopologyPlane = SEMANTIC | ACTIVE | COORDINATION | PHYSICAL
+
+record AlternativeFacetV1 {
+  id:FacetRef
+  value:SemanticRef
+  context:ContextRef
+  compatibility:Set<FacetRef>
+  exclusion:Set<FacetRef>
+  confidence:Score
+  status:Epi
+  evidence:Set<EvidenceRef>
+}
+
+record HigherOrderRelationV1 {
+  id:HyperId
+  members:Set<SemanticId>
+  roles:Map<SemanticId,Symbol>
+  constraints:Set<Predicate>
+  context:ContextRef
+  source_epoch:Epoch
+  evidence:Set<EvidenceRef>
+}
+
+record TopologyIdentityV1 {
+  semantic:Hash
+  active:Hash
+  coordination:Hash
+  physical:Hash
+  epoch:Epoch
+}
+
+record ReductionBudgetV1 {
+  max_aux_state:Int
+  max_steps:Int
+  max_memory:Bytes
+  max_latency:Duration
+}
+
+record PairwiseReductionReceiptV1 {
+  relation:HyperId
+  comparator:ReductionComparator
+  budget:ReductionBudgetV1
+  verdict:ReductionVerdict
+  prediction_loss:Score
+  intervention_mismatch:Score
+  replay_divergence:Score
+  selection_difference:Score
+  auxiliary_state_cost:Int
+  runtime_cost:Cost
+  evidence:Set<EvidenceRef>
+}
+
+record HyperpositionReadoutV1 {
+  alternatives:Set<FacetRef>
+  higher_order:Set<HyperId>
+  topology:TopologyIdentityV1
+  reductions:Set<ReductionReceiptRef>
+  intervention:Set<InterventionRef>
+  gwt_episode:EpisodeRef?
+  uncertainty:Set<SemanticRef>
+  evidence:Set<EvidenceRef>
+}
+
+invariant semantic_colocation != physical_colocation
+invariant graph_connectivity != causal_use
+invariant higher_order_relation != hypercomputation
+invariant reduction_verdict != truth

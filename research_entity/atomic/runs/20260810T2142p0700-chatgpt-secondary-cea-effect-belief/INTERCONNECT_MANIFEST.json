@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2142p0700-chatgpt-secondary-cea-effect-belief",
+  "consumed_current_lanes":["frank","claycode","unifieddb","harness","hyperposition","gwt","claygraph","clayresearch"],
+  "collision_resolutions":[
+    {"candidate":"ECT-001","resolution":"KEEP_SEPARATE","boundary":"ECT resolves unresolved CallContract; CEA requires exact contract."},
+    {"candidate":"SCF-001","resolution":"KEEP_SEPARATE","boundary":"SCF constrains semantic authority/evidence minting; CEA handles post-attempt external outcome uncertainty."},
+    {"candidate":"CJC-001/MCM","resolution":"KEEP_SEPARATE","boundary":"coordination/event transport vs provider-outcome reconciliation."},
+    {"candidate":"MOLT-001/EUDI","resolution":"COMPATIBLE_OPTIONAL_SUBSTRATE","boundary":"physical/state-lineage storage vs effect recovery semantics."}
+  ],
+  "outbound_reentry":"BRANCH_FEEDBACK_MANIFEST.json",
+  "highest_priority_dependencies":["F-V01-01 identity migration","F-V01-02 exact ClayCode effect CallContract/TypedIR","F-V01-09 real provider uncertainty and re-entry","F-V01-04 UnifiedDB continuity"],
+  "duplicate_work":false,
+  "architecture_promotion":false
+}

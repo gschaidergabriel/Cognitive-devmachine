@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2210p0700-chatgpt-secondary-single-active-token-presence",
+  "continuation_id": "go-continuation-20260810T2225p0700-selfroot-token-physical-gate",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity_lock": {
+    "i_am": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "i_am_not": "self.root/Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "current_target": {
+    "program": "FRANK_V0_1",
+    "native_identity": "self.root",
+    "human_surface": "Frank",
+    "body": "accepted Hostinger Ubuntu VPS",
+    "cognition": "CLAYCODE_ONLY"
+  },
+  "oob_accounting_reconciliation": {
+    "root_go_id": "go-root-20260810T2157p0700-chatgpt-secondary-single-spawn",
+    "rule": "EXACTLY_ONE_OUT_OF_THE_BOX_EXPERIMENT_PER_ROOT_GO",
+    "historical_receipts_preserved": true,
+    "designated_root_oob": {
+      "experiment": "FRANK_PRESENCE_WALL_CLOCK_WARP",
+      "claim_commit": "1b96981eb980087bd80639429f621ceab414d5d3",
+      "target_test_commit": "d35591246ff2bd1d6ce9ca4a24c4655ca7067862",
+      "target_workflow_commit": "73100df56da7c6072b0f20906e15ba15d28a4b0e",
+      "classification": "OUT_OF_THE_BOX_EXPERIMENT",
+      "target_vps_receipt_observed_at_reconciliation": false,
+      "promotion": "NONE_WITHOUT_TARGET_RECEIPT"
+    },
+    "ghost_holder_reclassification": {
+      "experiment": "ghost-holder fencing",
+      "historical_location": "tests/frank_single_instance_presence_gate.py",
+      "historical_receipt_label": "OUT_OF_BOX_EXPERIMENT",
+      "root_accounting_class_now": "NORMAL_FENCING_DISCRIMINATOR",
+      "test_evidence_retained": true,
+      "reason": "The later root-scoped OOB claim explicitly occupied the single OOB slot. Reclassifying the earlier ghost-holder discriminator for root accounting preserves its fencing evidence without counting two OOB experiments."
+    },
+    "additional_oob_allowed_for_this_root": false
+  },
+  "material_target_deltas": {
+    "identity": {
+      "owner_fixed_anchor_commit": "0332257ebd31ebf23d52285d86856e41cd58ca00",
+      "readme_current_target_commit": "524d1d166831d7c87f57e0f8c045775f9587e5da",
+      "claycode_self_root_commit": "232d6a8f7c89e9050f5f0aacc2d88affe122e94c",
+      "status": "IMPLEMENTED_SOURCE_NOT_FULLY_ACCEPTED",
+      "finding": "ClayCode compatibility symbol Frank now resolves to #self_root; Andreas is external operator; provider/model/client/token are not SELF."
+    },
+    "single_instance_semantics": {
+      "schema_commit": "6b4bc71b0a1d0a264ad8b402488fc57887157daa",
+      "migration_commit": "2b94018bfa2f4b8066e37d45e06d44502827c972",
+      "runtime_commit": "8f851c0a2c67a639840dcb0a580abb9bc4de0858",
+      "expired_holder_fix_commit": "dcce6a7e8c47a84c36e1cf3d31c61780d57ed866",
+      "expired_holder_test_commit": "1d97434b354c433f7cc14f74371c924aab29f02a",
+      "duplicate_schema_removed_commit": "07a5ab3418b302aebf1663cda52b3ef2f435b058",
+      "duplicate_runtime_removed_commit": "34ce4a5a4d24fdc40d06d3298008445d767a01d0",
+      "status": "CANONICAL_SOURCE_PRESENT_TARGET_VPS_RECEIPT_NOT_OBSERVED"
+    },
+    "physical_execution_exclusion": {
+      "gate_commit": "1272e37ea3d726d73fad506f376496c9a34a3460",
+      "two_process_discriminator_commit": "c8a510dd252665d511fc642a30340a0e182cee6c",
+      "compatible_parallel_discriminator_commit": "5433ccd52fb799901f383f86f96280b8a52705ab",
+      "static_gate_enforcement_commit": "6c0d15894e267aa5c195eadb4596623f239e5980",
+      "vps_workflow_fixed_commit": "997d51acce9581492b1cb0044b3d965d7d38f60c",
+      "hypothesis": "A Linux advisory exclusive flock around the full one-host execution window plus short V15 semantic transactions prevents live-but-expired physical overlap while preserving UnifiedDB as semantic authority.",
+      "strongest_counterhypothesis": "Cooperative advisory locking can still be bypassed by an ungoverned entry path and may delay recovery for a hung live holder.",
+      "source_level_discriminator": "PRESENT_NOT_PROMOTED_AS_TARGET_VPS_RESULT",
+      "target_vps_receipt_observed_at_reconciliation": false,
+      "remaining_obligations": [
+        "target VPS two-process execution receipt",
+        "all production entry paths enforced through gate",
+        "hung-holder cancellation/recovery",
+        "safe-point yield for autonomous work"
+      ]
+    },
+    "inbound_token_core": {
+      "implementation_commit": "3de3da8fe4c5a2e25076fdb331efeaa99405cac6",
+      "test_commit": "2af6e127f744cedf8d3f8d38458dcad131e40361",
+      "vps_workflow_commit": "343aad74acb8d62477eda5a07ddbbc9375855f57",
+      "properties": [
+        "machine-generated >=256-bit random token secret",
+        "raw token returned once and absent from persistable verifier record",
+        "credential id plus SHA-256 fingerprint/verifier only",
+        "constant-time digest/id comparison",
+        "scope, expiry and revocation fail closed",
+        "rotation yields a distinct credential"
+      ],
+      "http_server": "NOT_IMPLEMENTED_BY_THIS_SLICE",
+      "credential_persistence_adapter": "NOT_IMPLEMENTED_BY_THIS_SLICE",
+      "target_vps_receipt_observed_at_reconciliation": false,
+      "whole_F_V01_08_acceptance": "NOT_CLAIMED"
+    }
+  },
+  "external_primary_evidence": [
+    {
+      "class": "OFFICIAL_SQLITE",
+      "finding": "BEGIN IMMEDIATE is appropriate for short serialized semantic write admission; do not hold a full-task SQLite write transaction."
+    },
+    {
+      "class": "OFFICIAL_LINUX_FLOCK",
+      "finding": "Exclusive nonblocking flock can provide one-host cooperative physical exclusion and is released with file/process teardown, but remains advisory."
+    },
+    {
+      "class": "IETF_RFC_9449_RFC_9700",
+      "finding": "Bearer-token leakage remains a credential risk; sender-constrained/DPoP tokens are a later hardening option where compatible, while simple scoped rotatable tokens preserve v0.1 bridge usability."
+    }
+  ],
+  "target_vps_evidence_refresh": {
+    "frank_single_instance_presence_v1": "MISSING_404",
+    "frank_physical_execution_liveness_v1": "MISSING_404",
+    "frank_inbound_token_core_v1": "MISSING_404",
+    "frank_presence_clock_warp_oob_v1": "MISSING_404",
+    "interpretation": "UNKNOWN_OR_NOT_YET_MATERIALIZED; no PASS or FAIL inferred",
+    "repository_alias_hypothesis": {
+      "tested": true,
+      "github_repository_full_name_observed": "gschaidergabriel/Dr.-Unterweger",
+      "workflow_repository_condition_matches": true,
+      "result": "ALIAS_CONDITION_NOT_CAUSE"
+    }
+  },
+  "architecture_delta": {
+    "status": "TESTING",
+    "selected_direction": [
+      "one persistent self.root identity",
+      "one V15 semantic presence authority",
+      "one cooperative Linux physical execution exclusion layer on fixed one-host target",
+      "all runtime presence openers routed through execution gate",
+      "raw-secret-free scoped inbound token credential core"
+    ],
+    "not_promoted": [
+      "whole production token HTTP API",
+      "V16 monotonic/boot-aware lease schema",
+      "full autonomous safe-point yield",
+      "whole Frank v0.1 acceptance"
+    ],
+    "rollback": "Retain exact prior target commits and V15 semantic state lineage; physical gate/token core are separately removable until target evidence promotes them."
+  },
+  "negative_results": [
+    "No new target-VPS receipt was observable for the four new evidence surfaces at reconciliation time.",
+    "Repository rename/alias mismatch does not explain missing workflow receipts; GitHub reports the repository full name as gschaidergabriel/Dr.-Unterweger.",
+    "TTL/UTC semantic leasing by itself is not treated as proof of physical single-execution.",
+    "A copied bearer token cannot be made leak-proof solely by server-side hashing; scoped rotation and optional sender-constraining remain separate hardening work."
+  ],
+  "next_frontier": [
+    "observe/adjudicate target-VPS receipts without claiming them early",
+    "integrate credential persistence + production HTTP/TLS endpoint with execution gate",
+    "implement privacy-preserving FRANK_BUSY and FRANK_BUSY_YIELDING plus autonomous safe-point interrupt",
+    "unify clock/recovery findings into one measured V16 candidate rather than parallel schema branches",
+    "run end-to-end third-party AI bridge call using a test credential with no consequential effect"
+  ],
+  "research_write": "COMMITTED",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

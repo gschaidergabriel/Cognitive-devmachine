@@ -1,6 +1,8 @@
 // D_LALR_GRAMMAR_RESEARCH_V17_WP03_TYPED_FN_OVERLAY
 // Research-only WP03 shadow derived from the exact selected V17 declarative grammar.
-// Minimal surface delta: reserve `fn` and admit typed single-expression function declarations.
+// Minimal surface delta: admit typed single-expression function declarations while preserving
+// V17's contextual identifier namespace. `fn` remains matchable as NAME in identifier positions;
+// the contextual lexer selects the fn-declaration literal only where the parser expects it.
 // V17 Needle call/prefix/bare-qid membrane, hyphenated NAME semantics and all other rules stay unchanged.
 // Under this candidate compact `a-b` remains a hyphenated identifier; subtraction is written `a - b`.
 // No production/default selection or CC-WP-03 promotion is implied. Strict interegular-enabled Ubuntu,
@@ -10,7 +12,7 @@ start: NEWLINE* statement (NEWLINE+ statement)* NEWLINE*
 module_decl: "module" qid
 version_decl: "version" STRING
 status_decl: "status" qid
-parent_decl: "parent" list
+parent_decl: list
 import_decl: "import" ident "=" REF
 interface_decl: "interface" ident interface_block
 dialect_decl: "dialect" ident dialect_block
@@ -84,7 +86,7 @@ BOOLEAN: "true" | "false"
       | "requires" -> ident_requires
       | "in" -> ident_in
       | "subset_of" -> ident_subset_of
-NAME: /(?!(module|version|status|parent|import|interface|dialect|law|rule|invariant|class|type|record|tensor|codec|surface|metric|hash|needle|cycle|fn|if|or|iff|requires|in|subset_of|lowers|true|false)\b)[A-Za-z_][A-Za-z0-9_-]*/
+NAME: /(?!(module|version|status|parent|import|interface|dialect|law|rule|invariant|class|type|record|tensor|codec|surface|metric|hash|needle|cycle|if|or|iff|requires|in|subset_of|lowers|true|false)\b)[A-Za-z_][A-Za-z0-9_-]*/
 REF: /@[A-Za-z0-9_\.\/-]+/
 _bsep: ";" | NEWLINE
 %import common.ESCAPED_STRING -> STRING

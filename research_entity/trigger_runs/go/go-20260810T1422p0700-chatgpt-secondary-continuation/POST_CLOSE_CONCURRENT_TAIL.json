@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "parent_receipt": "research_entity/trigger_runs/go/go-20260810T1422p0700-chatgpt-secondary-continuation/FINAL_RUN_RECEIPT.json",
+  "created_at": "2026-08-10T08:26:00Z",
+  "reason": "Fresh-head reread after final receipt found a concurrent, earlier-timestamped WP03 production-bridge promotion that was not visible at the preceding read. Preserve the historical final receipt and append this tail rather than rewriting it.",
+  "concurrent_commits": [
+    "f19aaf5759f55a85a1263b56e981ca614150049e",
+    "29dbfa0d015a38b4bd1e0e0dcf50cb1fedb5f7ca"
+  ],
+  "adjudication": {
+    "production_bridge_v2": "PROMOTED_ON_NARROW_SCOPE",
+    "bridge_schema": "ClayCodeTypedIRFrontendBinding/v2-residual-semantics",
+    "ubuntu_run_id": 31369677917,
+    "ubuntu_pass": true,
+    "production_typed_ir_sha256": "28d4a5fa00d9852c608d513ad5fe358763ca8fc6a035c0678a454eb8bb9bc661",
+    "production_typed_ir_artifact_sha256": "89d8f9e7d5b834eda435dad63b6915b07cbf0b3ba8be4b54af4d2825b51c42b4",
+    "wp03_package_status": "OPEN",
+    "base_release_status": "NOT_PASS",
+    "legacy_declaration_only_builder": "PRESERVED_NEGATIVE_BASELINE_NOT_PRODUCTION_ENTRYPOINT"
+  },
+  "remaining_counterhypothesis": "Lossless opaque preservation can still strand meaning if WP04/05 neither validates nor lowers/consumes a preserved semantic class.",
+  "next_falsifier": "Enumerate every preserved top-level semantic class and require an explicit downstream disposition: lowered+validated, intentionally deferred with fail-closed execution, or rejected; prove no silent disappearance and no authority minting.",
+  "frank_harness_mutation": false,
+  "andreas_target_acceptance": false,
+  "training_authorized": false,
+  "authority": "NONE"
+}

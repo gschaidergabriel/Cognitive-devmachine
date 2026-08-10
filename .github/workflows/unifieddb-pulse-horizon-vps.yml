@@ -53,7 +53,7 @@ jobs:
             > /tmp/compile-horizon-v16.stdout
           cat /tmp/compile-horizon-v16.stdout
 
-      - name: Attach runner metadata and enforce conservative gates
+      - name: Attach runner metadata and classify result
         env:
           GIT_SHA: ${{ github.sha }}
           RUN_ID: ${{ github.run_id }}
@@ -61,17 +61,40 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import json,os,pathlib,platform,socket,sqlite3,subprocess,sys
+          import json,math,os,pathlib,platform,socket,sqlite3,subprocess,sys
           from datetime import datetime,timezone
           p=pathlib.Path('research_entity/benchmarks/database_pulse/compile_horizon_v16_vps.json')
           x=json.loads(p.read_text(encoding='utf-8'))
           a=x['aggregate']; total=x['configuration']['scenario_runs']
-          assert a['policy_beats_or_equals_always_online_runs'] >= total*0.50, x
-          assert a['policy_beats_or_equals_always_compile_runs'] >= total*0.50, x
-          assert a['policy_regret_vs_oracle_us_mean'] <= max(
+          numeric=[
+              a['policy_regret_vs_oracle_us_mean'],
               a['always_online_regret_vs_oracle_us_mean'],
               a['always_compile_regret_vs_oracle_us_mean'],
-          ), x
+              a['policy_decision_p50_ns'],
+          ]
+          assert total>0 and all(math.isfinite(float(v)) and float(v)>=0 for v in numeric), x
+          assert 0 <= a['policy_beats_or_equals_always_online_runs'] <= total, x
+          assert 0 <= a['policy_beats_or_equals_always_compile_runs'] <= total, x
+          # Research gate: benchmark/test validity must pass even when the performance
+          # hypothesis is refuted. Promotion classification carries the negative result.
+          dominates_online=(
+              a['policy_regret_vs_oracle_us_mean'] <= a['always_online_regret_vs_oracle_us_mean']
+          )
+          dominates_compile=(
+              a['policy_regret_vs_oracle_us_mean'] <= a['always_compile_regret_vs_oracle_us_mean']
+          )
+          if dominates_online and dominates_compile:
+              promotion='CANDIDATE_ONLY_LIVE_PULSE_TRACE_VALIDATION_REQUIRED'
+              hypothesis='SUPPORTED_ON_SYNTHETIC_REGRET_VECTOR'
+          else:
+              promotion='NO_PROMOTION_NEEDS_BETTER_HORIZON_PREDICTOR'
+              hypothesis='PARTIALLY_REFUTED_ON_SYNTHETIC_REGRET_VECTOR'
+          x['performance_hypothesis']={
+              'status':hypothesis,
+              'lower_mean_regret_than_always_online':dominates_online,
+              'lower_mean_regret_than_always_compile':dominates_compile,
+              'negative_results_are_preserved':True,
+          }
           def cmd(xs):
               try:return subprocess.check_output(xs,text=True,stderr=subprocess.STDOUT,timeout=5).strip()
               except Exception as exc:return f'UNKNOWN:{type(exc).__name__}'
@@ -104,9 +127,10 @@ jobs:
               'mem_total':mem,
               'kernel':cmd(['uname','-a']),
           }
-          x['promotion']='CANDIDATE_ONLY_LIVE_PULSE_TRACE_VALIDATION_REQUIRED'
+          x['promotion']=promotion
           p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-          print('UNIFIEDDB_PULSE_HORIZON_VPS_GATE=PASS')
+          print('UNIFIEDDB_PULSE_HORIZON_VPS_RESEARCH_GATE=PASS')
+          print('PERFORMANCE_HYPOTHESIS='+hypothesis)
           PY
 
       - name: Persist VPS receipt

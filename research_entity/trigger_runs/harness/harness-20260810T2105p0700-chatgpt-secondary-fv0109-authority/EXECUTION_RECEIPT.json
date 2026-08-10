@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2105p0700-chatgpt-secondary-fv0109-authority",
+  "program": "FRANK_V0_1",
+  "component": "F-V01-09-EFFECT-AUTHORITY",
+  "reentry_classes": [
+    "FRANK_V0_1_CODE_DELTA",
+    "FRANK_V0_1_TEST_DELTA",
+    "FRANK_V0_1_ARCHITECTURE_DELTA",
+    "FRANK_V0_1_NEGATIVE_RESULT",
+    "FRANK_V0_1_WORK_DELTA"
+  ],
+  "owner_contract": "research_entity/global/SELF_ROOT_DEFAULT_ALLOW_EFFECT_AUTHORITY_DIRECTIVE.clay",
+  "target_code": {
+    "integrated_effect_source_commit": "b53420100cfeefef0f6135ce1ccb0ee28f2c5e9f",
+    "integrated_effect_blob": "a28d47f0799427c27b3c18ac5e574b56ea48eb28",
+    "parallel_policy_source_commit": "6e59fddd91a4bef35d4732fd867ed8907a4e5a16",
+    "parallel_policy_fix_commit": "1d7d47174a2be16f0e044ea61965acb3350cfc07",
+    "policy_probe_commit": "dbe249e5220af9faff74b31445f00ed36efe7ac3",
+    "hardened_workflow_commit": "af4eab1754539df31e98505bcdfdac2950daf970",
+    "frontend_probe_authority_extension": "0f51bcedbf9cee3caba853c9f4e05c14e3f80647",
+    "frontend_status_contract_fix": "3b12db3b0271291b1befa26a01efaabb68dfc2da"
+  },
+  "target_vps_policy_receipt": {
+    "path": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
+    "run_id": "31397351794",
+    "workflow_source_sha": "af4eab1754539df31e98505bcdfdac2950daf970",
+    "runner": "clay@digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "result": "PASS_DIRECT_FRANK_V0_1_EFFECT_AUTHORITY_POLICY_MATRIX",
+    "tests": "20/20 PASS",
+    "request_binding_mutations": {"cases": 1000, "unchanged_hashes": 0},
+    "metrics": {
+      "direct_execution_rate_non_destructive": 1.0,
+      "unnecessary_refusal_rate": 0.0,
+      "destructive_false_allow_rate_before_confirmation": 0.0,
+      "gate_latency_us_p50": 0.21,
+      "gate_latency_us_p95": 0.34,
+      "gate_latency_us_p99": 0.44,
+      "gate_latency_us_max": 19.911
+    },
+    "executor_authority": {
+      "repository_permission": "contents:read",
+      "checkout_persist_credentials": false,
+      "repo_write_attempted": false,
+      "artifact_digest": "799801b653984fe9297ddec0b1085ac212cb4fb11feb46416d78da8a76c582bd"
+    },
+    "claims_not_made": [
+      "ClayCode compiled execution",
+      "real external effect",
+      "whole Frank v0.1 acceptance"
+    ]
+  },
+  "prior_currently_stale_lifecycle_receipt": {
+    "path": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_lifecycle_v1/LATEST.json",
+    "source_blob": "9c318ce70536ed96740da6eaf792e079af51ea10",
+    "status": "PASS_FOR_PRIOR_SOURCE_ONLY",
+    "not_promoted_to_current_source": true
+  },
+  "negative_result": {
+    "source": "gschaidergabriel/Dr.-Unterweger@6e59fddd91a4bef35d4732fd867ed8907a4e5a16:claycode/frank_effect_authority.clay",
+    "counterexamples": [
+      "confirmation validation did not receive facts.authenticated_user",
+      "sensitive base decisions could REQUIRE_CONFIRMATION for factually unauthenticated requests",
+      "request_hash was supplied by EffectAuthorityRequest rather than derived from policy-relevant facts",
+      "confirmation identity therefore did not prove binding to mutable destructive/authority guard facts"
+    ],
+    "repair": "1d7d47174a2be16f0e044ea61965acb3350cfc07",
+    "repair_status": "CODE_PATCHED_REVALIDATION_OPEN"
+  },
+  "provider_boundary_delta": {
+    "commit": "dc2568ff863c4d7c4696c2d14c62db406f9fecb4",
+    "result": "Google effect bridge now distinguishes same-key retry-safe provider evidence from uncertain non-idempotent outcomes and routes the latter to RECONCILE_REQUIRED.",
+    "real_provider_timeout_after_acceptance_test": "NOT_RUN"
+  },
+  "current_open_discriminators": [
+    "current exact effect source through ClayCode frontend and structural TypedIR",
+    "parallel frank.effect_authority module through current ClayCode frontend/type-effect path",
+    "source-of-truth consolidation/differential between frank.effects and frank.effect_authority",
+    "real provider effect with injected uncertainty after provider acceptance",
+    "verified outcome -> provenance-bound UnifiedDB re-entry -> DONE",
+    "terminal CLAY_0_1_EFFECT_AUTHORITY_RECEIPT integration"
+  ],
+  "result": "MATERIAL_PROGRESS_COMPONENT_IN_PROGRESS",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "training_started": false
+}

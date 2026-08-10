@@ -1,0 +1,67 @@
+name: UnifiedDB Pulse Effectivizer S2 Ubuntu
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unifieddb-pulse-effectivizer-s2-hostinger.yml'
+      - 'research_entity/runtime/semantic_pulse_effectivizer_s2.py'
+      - 'research_entity/runtime/test_semantic_pulse_effectivizer_s2.py'
+      - 'research_entity/runtime/benchmark_semantic_pulse_effectivizer_s2.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hosted-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit tests
+        working-directory: research_entity/runtime
+        run: python3 -m unittest -v test_semantic_pulse_effectivizer_s2.PulseEffectivizerS2Tests
+      - name: Bounded proxy benchmark
+        working-directory: research_entity/runtime
+        run: python3 benchmark_semantic_pulse_effectivizer_s2.py --reps 3 --batch-size 10
+
+  hostinger-probe:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Unit tests
+        working-directory: research_entity/runtime
+        run: python3 -m unittest -v test_semantic_pulse_effectivizer_s2.PulseEffectivizerS2Tests
+      - name: Benchmark and persist exact bounded receipt
+        working-directory: research_entity/runtime
+        run: |
+          python3 benchmark_semantic_pulse_effectivizer_s2.py --reps 3 --batch-size 10 > /tmp/pulse_effectivizer_s2.json
+          python3 - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path('/tmp/pulse_effectivizer_s2.json')
+          d=json.loads(p.read_text())
+          d['receipt_id']='PULSE-EFFECTIVIZER-S2-HOSTINGER-'+os.environ['GITHUB_RUN_ID']
+          d['commit']=os.environ['GITHUB_SHA']
+          d['run_id']=os.environ['GITHUB_RUN_ID']
+          d['runner_name']=os.environ.get('RUNNER_NAME','UNKNOWN')
+          d['truth_class']='VERIFIED_REMOTE_EXECUTION_BOUNDED_MECHANISM_SCOPE_ONLY'
+          d['promotion']='CANDIDATE_ONLY'
+          out=pathlib.Path('../unifieddb/receipts/PULSE_EFFECTIVIZER_S2_HOSTINGER_LATEST.json')
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add ../unifieddb/receipts/PULSE_EFFECTIVIZER_S2_HOSTINGER_LATEST.json
+          git commit -m 'evidence(unifieddb): record Pulse effectivizer S2 Hostinger probe' || exit 0
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep 2
+          done
+          exit 1

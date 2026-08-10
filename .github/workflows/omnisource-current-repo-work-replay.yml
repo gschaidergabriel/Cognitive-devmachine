@@ -1,0 +1,46 @@
+name: Omnisource current-repo work revision replay
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/experiments/omnisource_v10_current_repo_work_replay.py'
+      - 'research_entity/state/work/events/**'
+      - '.github/workflows/omnisource-current-repo-work-replay.yml'
+
+concurrency:
+  group: omnisource-current-repo-work-replay-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Replay current raw work events
+        run: |
+          python research_entity/experiments/omnisource_v10_current_repo_work_replay.py \
+            --work-id WORK-OMNISOURCE-LIVE-FUSION-REENTRY-V1-20260810 \
+            --expect-min-rev 2 \
+            --out research_entity/experiments/OMNISOURCE_V10_CURRENT_REPO_WORK_REPLAY_20260810.json
+      - name: Commit replay report
+        run: |
+          git config user.name 'clay-current-repo-replay'
+          git config user.email 'clay-current-repo-replay@users.noreply.github.com'
+          git add research_entity/experiments/OMNISOURCE_V10_CURRENT_REPO_WORK_REPLAY_20260810.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record current-repo omnisource work revision replay'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

@@ -1,0 +1,60 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-q23-vision-scale-feature-tap-20260810T2004p0700",
+  "kind": "WORK_CREATE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T20:04:00+07:00",
+  "payload": {
+    "work_id": "WORK-Q23-VISION-SCALE-FEATURE-TAP-20260810",
+    "goal_ref": "SELF_ROOT_V0_1_TARGET_VPS_API",
+    "origin_class": "Q23_MULTIMODAL_PERCEPTION_DISCRIMINATING_EXPERIMENT",
+    "title": "Target-VPS Qwen3.5 vision scale + libmtmd feature-tap falsifier",
+    "work_clay": "First refresh exact accepted target-VPS RAM/swap/storage/GPU/backend state, llama.cpp build and available Qwen3.5 0.8B/2B/4B GGUF+mmproj artifacts. Then, only without displacing the active ClayCode BASE critical path, run fixed-image fixed-token encode-only and decoder-inclusive scale measurements. Instrument libmtmd so one encoded media buffer can be observed by a bounded feature descriptor/MVC and optionally passed to decoder processing; count actual vision encode invocations. Compare raw pooled Qwen features, tiny projected Qwen features and a dedicated lightweight embedding baseline under identical familiarity/open-set fixtures. Treat runtime build/flags as causal variables. No architecture promotion from literature or proxy evidence.",
+    "reason_clay": "Fresh official Qwen3.5 configs show 2B and 4B share essentially the same 24-layer hidden-1024 vision tower while 0.8B uses a materially smaller 12-layer hidden-768 tower. Current Transformers/libmtmd code exposes a pre-decoder media-feature boundary, making one-encode reuse executable. Current llama.cpp issue evidence also shows multimodal correctness/latency can depend on runtime configuration. The next high-value falsifier is therefore target-VPS measurement, not more narrative synthesis.",
+    "completion_clay": "Exact target-host resource receipt exists; model/mmproj/runtime hashes are bound; runtime sanity matrix is executed; 0.8B/2B/4B encode-only and full-path raw rows include cold/warm p50/p95/p99 plus CPU/RSS/swap and token counts; feature-tap run proves or refutes one-encode reuse with an invocation counter; raw/projected/dedicated embedding variants are compared on false-familiar, missed-familiar, unknown rejection, calibration, task success and resources; crash/restart/version-swap controls execute; each q23 hypothesis receives SUPPORTED/REFINED/REFUTED/NO_CHANGE; no BASE/H1/H2/H3 credit is granted except from the exact acceptance contract receipts that independently qualify.",
+    "evidence_need": [
+      "TARGET_VPS_RESOURCE_RECEIPT",
+      "LLAMA_CPP_BUILD_HASH_AND_FLAGS",
+      "QWEN35_08B_2B_4B_MODEL_MMPROJ_HASHES",
+      "RUNTIME_SANITY_RAW_ROWS",
+      "ENCODE_ONLY_SCALE_RAW_ROWS",
+      "DECODER_INCLUSIVE_SCALE_RAW_ROWS",
+      "VISION_ENCODE_INVOCATION_COUNTER",
+      "FEATURE_GEOMETRY_OPEN_SET_ROWS",
+      "CRASH_RESTART_VERSION_SWAP_RECEIPTS"
+    ],
+    "executor_policy": "Use a capable non-overlapping worker with accepted target-VPS execution access. Do not displace or slow WORK-CLAYCODE-BASE14-CLOSE-20260809; execute only with spare target capacity or when the same observation directly unblocks a BASE/Harness requirement. Refresh current repo/head, work revisions and target capability before effect. No paid/final training. self.root/Frank has proposal-only Harness authority.",
+    "required_capabilities": [
+      "TARGET_VPS_EXECUTION",
+      "REPOSITORY_CHECKOUT",
+      "GITHUB_READ_WRITE",
+      "CXX_BUILD",
+      "LLAMA_CPP_LIBMTMD",
+      "MODEL_ARTIFACT_ACCESS",
+      "PYTHON_BENCHMARKING",
+      "LINUX_RESOURCE_TELEMETRY"
+    ],
+    "write_scope": [
+      "research_entity/experiments/",
+      "research_entity/trigger_runs/q23/",
+      "research_entity/harness/",
+      "research_entity/state/work/events/",
+      "research_entity/mesh_feedback/"
+    ],
+    "dependencies": [
+      "research_entity/trigger_runs/q23/20260810T2004p0700-chatgpt-secondary-runtime-scale-tap/",
+      "research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md",
+      "research_entity/retina/QWEN_NATIVE_DISSOLVED_RETINA_FUSION_CANDIDATE_20260810.md"
+    ],
+    "invalidators": [
+      "A newer owner-fixed multimodal target directive supersedes QNDRF/Q23 scale assumptions",
+      "A newer exact target-VPS receipt already executes the same scale plus feature-tap matrix",
+      "Current accepted target no longer supports the selected Qwen3.5/libmtmd lane"
+    ],
+    "base_priority": 0.64,
+    "expected_impact": 0.92,
+    "urgency": 0.78,
+    "information_gain": 0.98,
+    "status": "READY"
+  }
+}

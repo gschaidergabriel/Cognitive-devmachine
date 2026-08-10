@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-frank-dual-time-feedback-20260810T1222p0700",
+  "created_at": "2026-08-10T12:22:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_refs": [
+    "research_entity/notes/FRANK_DUAL_TIME_CAUSAL_FEEDBACK_BRIDGE_20260810.md",
+    "research_entity/notes/FRANK_FEEDBACK_INNOVATION_PACKET_REFINEMENT_20260810.md",
+    "research_entity/notes/FRANK_PERFECT_FEEDBACK_LOOP_SYNTHESIS_20260810.md",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"
+  ],
+  "external_evidence": [
+    "arXiv:2607.16999v2 Counterfactual Shapley Credit Assignment",
+    "arXiv:2607.13988 TRACE: Turn-level Reward Assignment via Credit Estimation for Long-Horizon Agents",
+    "arXiv:2601.21482 Delay-Aware and Stable Remote State Estimation",
+    "arXiv:2211.13846v2 Asynchronous Event-Triggered Control for Non-Linear Systems"
+  ],
+  "epistemic_status": "OPEN_CROSS_BRANCH_RESEARCH_REFINEMENT",
+  "architecture_parent": "PRIMARY_REENTRY_VERIFIED_INNOVATION_PACKET",
+  "architecture_refinement": "DUAL_TIME_CAUSAL_FEEDBACK_BRIDGE",
+  "owner_distribution_directive": true,
+  "independent_replication_created_by_distribution": false,
+  "operational_target": "FRANK_V0_1_UBUNTU_LINUX_DEVELOPER_SYSTEM_ONLY",
+  "core_delta": [
+    "OLD_EPOCH != STALE: causal validity and current-state applicability are separate dimensions.",
+    "A late verified outcome must first close its exact origin episode/action/receiver retrospectively; only then can a separately validated consequence be transported into the current semantic epoch.",
+    "Separate retrospective causal closure from forward current-state application.",
+    "Arrival epoch must never overwrite origin epoch; causal identity survives asynchronous delay and out-of-order delivery.",
+    "Durable learning admission must be exactly-once across duplicate receipts and restart.",
+    "Semantically expired evidence may still close history/memory while being blocked from fast current control.",
+    "The synthetic test strongly supports origin binding but does not establish that complex rebasing beats a simpler verified origin-bound update law."
+  ],
+  "synthetic_out_of_box_experiment": {
+    "status": "SYNTHETIC_MECHANISM_TEST_ONLY_NOT_FRANK_RUNTIME_EVIDENCE",
+    "novelty": "Treat Frank feedback as an asynchronous networked-control / delayed-measurement problem with recurring semantic contexts.",
+    "matched_seeds_per_corruption_level": 250,
+    "steps_per_seed": 900,
+    "contexts": 4,
+    "actions": 4,
+    "delay_steps_max": 12,
+    "corruption_levels": [0.0, 0.08, 0.25],
+    "key_results": {
+      "strict_epoch_optimal_rate_corruption0": 0.249342,
+      "receipt_current_optimal_rate_corruption0": 0.313316,
+      "origin_verified_optimal_rate_corruption0": 0.886947,
+      "origin_innovation_raw_optimal_rate_corruption0": 0.888182,
+      "origin_rebased_packet_optimal_rate_corruption0": 0.886987,
+      "receipt_current_miscredit_corruption8": 0.691045,
+      "origin_bound_miscredit_corruption8": 0.074968,
+      "origin_verified_optimal_rate_corruption25": 0.872147,
+      "origin_bound_optimal_rate_corruption25": 0.861871,
+      "origin_rebased_packet_optimal_rate_corruption25": 0.871573
+    },
+    "supported": [
+      "causal origin binding is high-value under delayed out-of-order outcomes",
+      "strict current-epoch equality is invalid for legitimate asynchronous outcomes",
+      "provenance validation helps as corruption rises"
+    ],
+    "not_supported": [
+      "raw origin innovation universally beats simple verified origin-bound outcome feedback",
+      "complex rebasing universally beats simple verified origin-bound outcome feedback"
+    ]
+  },
+  "branches": {
+    "clayresearch": {
+      "receipt": "FEEDBACK",
+      "delta": "Add causal-origin-time versus application-time as a first-class axis in the perfect-loop synthesis and preserve the simpler origin-bound counterhypothesis.",
+      "required_next_test": "A/B causal-origin binding, strict epoch rejection and rebased forward application under matched delay/out-of-order/restart episodes."
+    },
+    "frank": {
+      "receipt": "FEEDBACK",
+      "delta": "Refine the perfected Frank loop so ResponseAnalyzer/outcome feedback closes exact origin episodes before any current-state influence; old valid outcomes are not discarded merely by epoch age.",
+      "required_next_test": "Historical tool/response episodes with delayed outcome reconstruction, exact origin mapping and current relevance classification."
+    },
+    "gwt": {
+      "receipt": "FEEDBACK",
+      "delta": "Late outcome closure alone does not imply workspace re-ignition. Reopen GWT only when the forward-admitted consequence materially changes current residual/uncertainty/goal state.",
+      "required_next_test": "Delayed outcome: retrospective closure only vs closure+reignite vs blind current injection, measuring false/missed ignition and receiver closure."
+    },
+    "emergenz": {
+      "receipt": "FEEDBACK",
+      "delta": "Do not score asynchronous recurrence/activity as emergence; use shuffled arrival-time and origin-identity controls to separate causal delayed closure from temporal correlation.",
+      "required_next_test": "Origin-preserved/time-shuffled/origin-shuffled/no-reentry factorial with outcome and cross-timescale causal readouts."
+    },
+    "claycode": {
+      "receipt": "FEEDBACK",
+      "delta": "Current G9 Delta/IncrementalReceipt/reentry semantics need an executable counterexample test for origin_epoch, arrival_epoch, apply_epoch, retrospective closure, forward transport and exactly-once admission. Change semantics only if current constructs cannot express it cleanly.",
+      "required_next_test": "Compile a minimal delayed-outcome program through current parser/type/effect/evaluator/runtime; require duplicate/out-of-order/restart equivalence."
+    },
+    "hyperposition": {
+      "receipt": "FEEDBACK",
+      "delta": "Late valid evidence can reopen a previously preserved alternative only when it changes the current evidence relation; age alone neither collapses nor reopens a branch.",
+      "required_next_test": "Delayed evidence arriving after branch choice: archive-only vs rebase/reopen vs blind reopen."
+    },
+    "claygraph": {
+      "receipt": "FEEDBACK",
+      "delta": "Project origin_episode -> delayed_outcome -> verification -> retrospective_credit -> forward_rebase/apply edges with distinct epochs and immutable lineage.",
+      "required_next_test": "Reconstruct paths after out-of-order delivery/restart and prove arrival-time topology cannot masquerade as causal-origin topology."
+    },
+    "unifieddb": {
+      "receipt": "FEEDBACK",
+      "delta": "Persist pending effects, origin episode identity, outcome arrival/verification time, retrospective admission, current-epoch rebase receipt and durable-learning idempotency separately.",
+      "required_next_test": "Exactly-once replay with duplicates, out-of-order results, restart between action/outcome and semantically expired but historically valid outcomes."
+    },
+    "harness": {
+      "receipt": "FEEDBACK",
+      "delta": "Extend H1 perfect-loop differential with asynchronous outcome delay/out-of-order/duplicate/restart conditions; compare strict epoch, receipt-current, origin-verified and origin+rebase candidates.",
+      "required_next_test": "Frozen real episodes plus injected delay/out-of-order/duplicate/restart; measure missed/false credit, state contamination, task outcome, recurrence/GWT, replay equivalence, latency and resources."
+    }
+  },
+  "global_controls": [
+    "late != invalid",
+    "arrival time != causal origin",
+    "retrospective truth update != current action authority",
+    "origin binding != credit magnitude",
+    "verified outcome != automatic GWT reignition",
+    "synthetic mechanism evidence != Frank runtime proof",
+    "simpler verified origin-bound feedback remains a live counterhypothesis",
+    "Frank self-harness authority remains proposal-only"
+  ],
+  "research_write_result": "EXPLICIT_FEEDBACK_TO_ALL_9_REGISTERED_BRANCHES",
+  "canonical_promotion": "NOT_ATTEMPTED",
+  "frank_harness_mutation": "NOT_ATTEMPTED"
+}

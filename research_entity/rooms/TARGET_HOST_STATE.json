@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "status": "OWNER_FIXED_CURRENT_TARGET",
+  "effective_from": "2026-08-10",
+  "target_host_id": "HOSTINGER_VPS_DIGITAL_RETINA",
+  "resource_id": "hostinger-vps-github-runner",
+  "mission": "Frank v0.1 voll lauffaehig auf dem Ziel-VPS fuer Andreas",
+  "human_user": "Dr. Andreas Unterweger",
+  "host_identity_observed": {
+    "machine": "digital-retina",
+    "os_family": "Ubuntu Linux",
+    "arch": "x86_64",
+    "kernel": "6.8.0-117-generic",
+    "glibc": "2.39",
+    "python": "3.12.3",
+    "logical_cpus": 4,
+    "runner_name": "clay",
+    "runner_scope": "repository-scoped to gschaidergabriel/Dr.-Unterweger"
+  },
+  "known_unknowns": [
+    "exact current RAM",
+    "swap configuration",
+    "storage capacity and I/O class",
+    "GPU availability on the current target VPS",
+    "current network bandwidth/latency envelope",
+    "steady-state thermal/CPU throttling behavior"
+  ],
+  "existing_real_model_baseline": {
+    "model": "Qwen3-4B-Instruct-2507-Q8_0-GGUF",
+    "decode_tokens_per_second_mean": 10.705266714677407,
+    "prompt_tokens_per_second_mean": 39.94125425865801,
+    "pilot_accuracy": "3/4",
+    "role": "target-host capability baseline only; not final model promotion"
+  },
+  "release_semantics": {
+    "target_vps_is_final_acceptance_host": true,
+    "andreas_local_pc_required_for_v0_1_pass": false,
+    "planned_gpu_storage_vps_is_automatic_target": false,
+    "target_change_requires_owner_override": true
+  },
+  "sensor_semantics": {
+    "compute_host": "target VPS",
+    "visual_sensor_may_be_remote": true,
+    "required_boundary": "provenance-bound authenticated ingress",
+    "latency_rule": "measure sensor transport separately from on-VPS Retina/Qwen/EAP/Frank processing"
+  },
+  "evidence_refs": [
+    "research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md",
+    "research_entity/rooms/CAPACITY_STATE.json",
+    "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",
+    "research_entity/trigger_runs/go/go-20260810T0645p0700-runner-scope-tomography/OOB_HOSTINGER_RUNNER_SCOPE_TOMOGRAPHY.json",
+    "gschaidergabriel/Dr.-Unterweger:runtime/vps_integrity/real_qwen4b_shadow_latest.json"
+  ]
+}

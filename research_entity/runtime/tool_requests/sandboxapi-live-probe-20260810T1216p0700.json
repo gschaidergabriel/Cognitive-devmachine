@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "request_id": "sandboxapi-live-probe-20260810T1216p0700",
+  "tool": "sandboxapi_sandbox",
+  "code": "import os,sys,tempfile\np='/tmp/clay_sandbox_probe.txt'\nopen(p,'w').write('ok')\nprint('CLAY_SANDBOXAPI_OK:' + str(6*7))\nprint('PY=' + sys.version.split()[0])\nprint('TMP_OK=' + str(open(p).read()=='ok'))\nprint('CWD=' + os.getcwd())",
+  "options": {"language": "python3", "timeout": 10},
+  "purpose": "Fresh live verification of SandboxAPI remote execution through the canonical repo-runner bridge, including bounded filesystem write/read and runtime metadata sentinel."
+}

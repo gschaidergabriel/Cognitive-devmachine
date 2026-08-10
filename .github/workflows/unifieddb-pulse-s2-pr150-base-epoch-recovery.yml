@@ -1,0 +1,91 @@
+name: UnifiedDB Pulse S2 PR150 Base-Epoch Recovery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unifieddb-pulse-s2-pr150-base-epoch-recovery.yml'
+      - 'tools/unifieddb_pulse_s2_pr150_base_epoch_recovery_falsifier.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hosted-falsifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: control
+      - uses: actions/checkout@v4
+        with:
+          ref: chatgpt/go-pulse-s2-aba-safe-20260810
+          path: candidate
+      - name: Exact candidate identity
+        run: |
+          git -C candidate rev-parse HEAD
+          sha256sum candidate/research_entity/runtime/semantic_pulse_effectivizer_s2.py
+          sha256sum candidate/research_entity/runtime/semantic_access_pulse_v12.py
+      - name: Base-epoch restart differential
+        run: |
+          python3 control/tools/unifieddb_pulse_s2_pr150_base_epoch_recovery_falsifier.py \
+            --runtime-dir candidate/research_entity/runtime
+
+  hostinger-falsifier:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: control
+      - uses: actions/checkout@v4
+        with:
+          ref: chatgpt/go-pulse-s2-aba-safe-20260810
+          fetch-depth: 0
+          path: candidate
+      - name: Exact candidate and runner identity
+        run: |
+          git -C candidate rev-parse HEAD
+          sha256sum candidate/research_entity/runtime/semantic_pulse_effectivizer_s2.py
+          sha256sum candidate/research_entity/runtime/semantic_access_pulse_v12.py
+          python3 - <<'PY'
+          import json,os,platform,sqlite3,sys
+          print(json.dumps({
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'platform':platform.platform(),
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+          },sort_keys=True))
+          PY
+      - name: Execute falsifier and persist negative evidence only if reproduced
+        run: |
+          python3 control/tools/unifieddb_pulse_s2_pr150_base_epoch_recovery_falsifier.py \
+            --runtime-dir candidate/research_entity/runtime \
+            > /tmp/pulse_s2_base_epoch.json
+          python3 - <<'PY'
+          import json,os,pathlib
+          d=json.loads(pathlib.Path('/tmp/pulse_s2_base_epoch.json').read_text())
+          d['receipt_id']='UNIFIEDDB-PULSE-S2-PR150-BASE-EPOCH-HOSTINGER-'+os.environ['GITHUB_RUN_ID']
+          d['control_commit']=os.environ['GITHUB_SHA']
+          d['run_id']=os.environ['GITHUB_RUN_ID']
+          d['runner_name']=os.environ.get('RUNNER_NAME','UNKNOWN')
+          d['truth_class']='VERIFIED_REMOTE_EXECUTION_NEGATIVE_RECOVERY_DIFFERENTIAL'
+          out=pathlib.Path('control/research_entity/unifieddb/receipts/PULSE_S2_PR150_BASE_EPOCH_RECOVERY_LATEST.json')
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          cd control
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/unifieddb/receipts/PULSE_S2_PR150_BASE_EPOCH_RECOVERY_LATEST.json
+          git commit -m 'evidence(unifieddb): record Pulse S2 PR150 base-epoch recovery falsifier' || exit 0
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep 2
+          done
+          exit 1

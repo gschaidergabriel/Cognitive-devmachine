@@ -161,24 +161,25 @@ def main() -> int:
         same = bool(ok17 and ok19 and t17 is not None and t19 is not None and canonical(t17, v19=False) == canonical(t19, v19=True))
         trailing_rows.append({"source": source, "v17_accept": ok17, "v19_accept": ok19, "normalized_equal": same, "v17_error": e17, "v19_error": e19, "pass": ok17 and ok19 and same})
 
-    regex_lookaround_present = any(x in g19 for x in ("(?=", "(?<=", "(?!", "(?<!"))
-    structural_pass = all(r["pass"] for r in strict_rows) and all(r["semantic_hash_equal"] and r["v17_repeat_equal"] and r["v19_repeat_equal"] for r in source_rows) and all(r["pass"] for r in fixture_rows) and all(r["pass"] for r in shadow_rows) and not regex_lookaround_present
+    needle_lines = [line for line in g19.splitlines() if line.lstrip().startswith(("NEEDLE_OWNS_CALL", "NEEDLE_OWNS_REL", "NEEDLE_LOWERS_REL"))]
+    needle_relation_lookaround_present = any(marker in line for line in needle_lines for marker in ("(?=", "(?<=", "(?!", "(?<!"))
+    structural_pass = all(r["pass"] for r in strict_rows) and all(r["semantic_hash_equal"] and r["v17_repeat_equal"] and r["v19_repeat_equal"] for r in source_rows) and all(r["pass"] for r in fixture_rows) and all(r["pass"] for r in shadow_rows) and not needle_relation_lookaround_present
     trailing_pass = all(r["pass"] for r in trailing_rows)
     passed = structural_pass and trailing_pass
     known_counterexample = structural_pass and not trailing_pass
 
     out = {
-        "schema_version": "1.1", "experiment": "ClayCode V19 delimiter-normalization discriminator",
+        "schema_version": "1.2", "experiment": "ClayCode V19 delimiter-normalization discriminator",
         "created_at": datetime.now(timezone.utc).isoformat(), "evidence_class": "EXECUTABLE_RESEARCH_DISCRIMINATOR",
         "runtime": {"platform": platform.platform(), "machine": platform.machine(), "python": platform.python_version(), "lark": pkg("lark"), "interegular": pkg("interegular"), "cpu_count": os.cpu_count(), "max_rss_kb": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss, "github_sha": os.environ.get("GITHUB_SHA"), "github_run_id": os.environ.get("GITHUB_RUN_ID"), "runner_name": os.environ.get("RUNNER_NAME")},
         "inputs": {"v17_path": str(V17.relative_to(ROOT)), "v17_sha256": sha(g17.encode("utf-8")), "v19_path": str(V19.relative_to(ROOT)), "v19_sha256": sha(g19.encode("utf-8"))},
         "strict_construction": strict_rows, "full_sources": source_rows, "fixtures": fixture_rows,
         "prefix_shadow_negatives": shadow_rows, "trailing_trivia_equivalence": trailing_rows,
-        "regex_lookaround_present": regex_lookaround_present, "structural_pass": structural_pass, "trailing_trivia_pass": trailing_pass,
+        "needle_relation_lookaround_present": needle_relation_lookaround_present, "structural_pass": structural_pass, "trailing_trivia_pass": trailing_pass,
         "pass": passed, "adjudication": "SUPPORTED_RESEARCH_CANDIDATE" if passed else ("REFUTED_TRAILING_TRIVIA" if known_counterexample else "REFUTED_OR_INCOMPLETE"),
         "promotion": "NONE",
         "architecture_delta": "NO_CHANGE_KEEP_V17_SELECTED" if not passed else "TESTING_ONLY",
-        "scope_guard": "A known V17-valid counterexample dominates otherwise-green strict/full-source/hash evidence. PASS still would not close WP02/WP03 or count as Andreas-target acceptance.",
+        "scope_guard": "A known V17-valid counterexample dominates otherwise-green strict/full-source/hash evidence. NAME keyword-reservation lookaround is baseline lexical behavior and is not counted as a Needle relation lookaround. PASS still would not close WP02/WP03 or count as Andreas-target acceptance.",
     }
     print(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if passed else 1

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-dualview-runtime-envelope",
+  "counterhypotheses": [
+    {
+      "id": "CH-Q23-RAW-NOT-EMBEDDING-01",
+      "attacks": ["H-Q23-MERGED-REUSE-01"],
+      "claim": "Generative VLM/mmproj token features are optimized as language-model inputs, not as calibrated global instance/open-set embeddings. A dedicated retrieval/embedding objective may be necessary.",
+      "evidence": "Qwen's official Qwen3-VL-Embedding stack builds a separately trained retrieval model on the Qwen3-VL foundation and obtains the final normalized embedding from the multimodal model's last hidden state, rather than simply declaring raw visual projector tokens to be retrieval embeddings.",
+      "status": "LIVE_AND_MATERIAL"
+    },
+    {
+      "id": "CH-Q23-RUNTIME-DRIFT-02",
+      "attacks": ["H-Q23-MERGED-REUSE-01", "H-Q23-TINY-PROJ-02"],
+      "claim": "Even a good prototype space can become invalid when runtime/preprocessing/backend geometry changes, producing false familiarity or false unknown decisions without weight changes.",
+      "status": "LIVE_AND_MATERIAL"
+    },
+    {
+      "id": "CH-Q23-DUPLICATE-ENCODER-WINS-03",
+      "attacks": ["H-Q23-MERGED-REUSE-01", "H-Q23-TINY-PROJ-02", "H-Q23-DUALVIEW-03"],
+      "claim": "A small dedicated encoder may still be Pareto-superior if it avoids expensive Qwen vision execution on frames that only need familiarity checks, despite duplicating representation machinery.",
+      "status": "MANDATORY_COUNTERBASELINE",
+      "decision_rule": "Keep isolated only if measured total path cost plus open-set quality beats same-encode reuse under target workload."
+    },
+    {
+      "id": "CH-Q23-DUALVIEW-MAINTENANCE-04",
+      "attacks": ["H-Q23-DUALVIEW-03"],
+      "claim": "Exposing pre-merger internals in the target runtime may create a brittle fork/API maintenance burden larger than its accuracy benefit.",
+      "status": "DEFAULT_ASSUMPTION_UNTIL_MERGED_ONLY_FAILS"
+    },
+    {
+      "id": "CH-Q23-CHEAP-GATE-MISSES-05",
+      "attacks": ["H-Q23-CANONICAL-PIXEL-GATE-05"],
+      "claim": "Aggressive unchanged/ROI gating can suppress small but action-critical GUI changes.",
+      "status": "MANDATORY_SAFETY_CONTROL",
+      "required_test": "Pixel/ROI metamorphic suite with cursor-independent tiny text, icon-state, dialog, permission, checkbox, badge and focus changes plus action-critical periodic/uncertainty anchors."
+    }
+  ]
+}

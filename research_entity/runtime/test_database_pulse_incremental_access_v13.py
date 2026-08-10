@@ -3,7 +3,7 @@ from __future__ import annotations
 import sqlite3, unittest
 from pathlib import Path
 from database_pulse_v0 import DatabasePulseV0
-from pulse_incremental_access_v13 import PulseIncrementalSemanticAccessV13
+from pulse_incremental_access_v13 import IncrementalAccessInvariant, PulseIncrementalSemanticAccessV13
 
 HERE=Path(__file__).resolve().parent
 U10=(HERE/'RAE_UNIFIEDDB_V10_SEMANTIC_ACCESS_FABRIC.sql').read_text(encoding='utf-8')
@@ -56,12 +56,29 @@ class DatabasePulseIncrementalAccessV13Tests(unittest.TestCase):
         self.assertEqual(con.execute("SELECT status FROM semantic_access_seed_heads_v13 WHERE seed_id='a'").fetchone()[0],'CURRENT')
         self.assertEqual(con.execute("SELECT count(*) FROM semantic_access_seed_invalidations_v13").fetchone()[0],0)
 
-    def test_global_compiler_barrier_stales_all_heads(self):
+    def test_global_compiler_barrier_stales_all_heads_even_without_ref_prefix(self):
         con,pulse,_=self.make()
-        pulse.admit_delta(delta_id='compiler',changed_ref='COMPILER:v2',reason_class='COMPILER_CHANGE',payload={'v':2},source_epoch=2,graph_epoch=1,now='a'); pulse.pulse(now='p')
+        pulse.admit_delta(delta_id='compiler',changed_ref='odd-noncanonical-ref',reason_class='COMPILER_CHANGE',payload={'v':2},source_epoch=2,graph_epoch=1,now='a'); pulse.pulse(now='p')
         self.assertEqual(con.execute("SELECT count(*) FROM semantic_access_seed_heads_v13 WHERE status='STALE'").fetchone()[0],3)
+        self.assertEqual(con.execute("SELECT count(*) FROM semantic_access_seed_invalidations_v13 WHERE invalidation_class='GLOBAL_BARRIER'").fetchone()[0],3)
 
     def test_unprocessed_future_epoch_never_uses_incremental_fastpath(self):
         _,_,access=self.make(); self.assertEqual(access.query('beta',source_epoch=2,graph_epoch=1).mode,'MISS')
+
+    def test_dependency_version_tamper_breaks_head_certificate(self):
+        con,_,access=self.make(); self.assertTrue(access.verify_seed_head('a')['verified'])
+        con.execute("UPDATE semantic_access_seed_dependencies_v13 SET dependency_version_hash='tampered' WHERE generation_id='g-a-1' AND seed_id='a'"); con.commit()
+        with self.assertRaisesRegex(IncrementalAccessInvariant,'certificate hash mismatch'):
+            access.verify_seed_head('a')
+
+    def test_stage_inside_outer_transaction_uses_savepoint_not_hidden_commit(self):
+        con,_,access=self.make()
+        con.execute("CREATE TABLE caller_state(v TEXT)"); con.execute("INSERT INTO caller_state VALUES('must-rollback')")
+        self.assertTrue(con.in_transaction)
+        access.stage_seed_generation(generation_id='g-a-nested',seed_id='a',derivation_id='nested',derivation_hash='nested-h',paths=[path('nested')],dependencies=[dep('semantic:a')],created_at='nested')
+        self.assertTrue(con.in_transaction)
+        con.rollback()
+        self.assertEqual(con.execute("SELECT count(*) FROM caller_state").fetchone()[0],0)
+        self.assertEqual(con.execute("SELECT count(*) FROM semantic_access_generations WHERE generation_id='g-a-nested'").fetchone()[0],0)
 
 if __name__=='__main__': unittest.main(verbosity=2)

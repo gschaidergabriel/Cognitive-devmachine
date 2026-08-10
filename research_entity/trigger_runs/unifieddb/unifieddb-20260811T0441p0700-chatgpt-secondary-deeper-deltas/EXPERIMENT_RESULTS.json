@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
+  "results": [
+    {
+      "id": "V17_POST_HOC_SUPPORT_ORDERING_STATIC",
+      "evidence_class": "STATIC_IMPLEMENTATION_AND_TEST_ORDER_AUDIT",
+      "status": "CONFIRMED_DESIGN_GAP_TARGET_REPLICATION_NOT_REQUIRED_TO_OBSERVE_ORDER",
+      "finding": "PR #280 learning matrix calls verified effect record_outcome before insert_support; insert_support then creates attention, receiver-use, prediction, prediction outcome, causal credit and exact-outcome support, after which learning re-entry is expected to succeed. Current constraints therefore establish relational exact-outcome coherence but not pre-action causal ancestry.",
+      "required_falsifier": "POST_HOC_SUPPORT_MINT must be rejected with zero V17 terminal mutation."
+    },
+    {
+      "id": "V17_ORIGIN_VS_RECONCILER_AUTHORITY_STATIC",
+      "evidence_class": "STATIC_RUNTIME_DIFF_AUDIT",
+      "status": "OPEN_GAP",
+      "finding": "PR #280 persists/revalidates the origin effect execution-generation fence, but finish_done(effect_id) has no explicit current reconciler execution identity or recovery-assignment argument. Crash takeover authority is therefore not separately represented at this layer.",
+      "required_falsifier": "stale origin vs authorized successor vs unrelated successor recovery matrix"
+    },
+    {
+      "id": "V17_TERMINAL_VALIDITY_NON_MONOTONIC_STATIC",
+      "evidence_class": "STATIC_RUNTIME_DIFF_AUDIT",
+      "status": "OPEN_GAP",
+      "finding": "PR #280 rechecks semantic_records.status='CURRENT' when validating delta admission. Ordinary later semantic supersession can potentially invalidate an otherwise historically valid DONE chain. Freeze validity-at-admission in an immutable closure receipt and test supersession-after-DONE.",
+      "required_falsifier": "DELTA_SUPERSEDED_AFTER_DONE leaves historical terminal receipt valid while current semantic state advances"
+    },
+    {
+      "id": "LOCAL_SQLITE_ATTACHED_DELETE_FULL_PROXY",
+      "evidence_class": "LOCAL_SYNTHETIC_MECHANISM_PERFORMANCE_PROXY",
+      "status": "PASS_MECHANISM_ONLY",
+      "environment": {"python_sqlite": "3.46.1", "n": 300},
+      "attached_transaction_us": {"p50": 20079.338, "p95": 49686.508, "p99": 73220.952},
+      "two_separate_transactions_us": {"p50": 13555.464, "p95": 34051.195, "p99": 48347.125},
+      "attached_p50_ratio_vs_separate": 1.4813,
+      "rollback_atomic_observed": true,
+      "interpretation": "Single-connection ATTACH rollback worked atomically under an injected application rollback, but the super-journal style path was slower in this local filesystem proxy. This is not target crash/power-loss evidence and does not decide the storage profile."
+    },
+    {
+      "id": "TARGET_SYSTEM_SQLITE_WAL_BACKPORT_PROVENANCE",
+      "evidence_class": "ACCEPTED_TARGET_VPS_SOURCE_PATCHSET_PROBE_FROM_SHARED_GO_RUN",
+      "status": "NO_DIRECT_WAL_FIX_BACKPORT_EVIDENCE",
+      "finding": "Ubuntu libsqlite3 3.45.1-1ubuntu2.7 patch series did not alter src/wal.c or target WAL/amalgamation files in the shared target probe; system WAL release blocker remains active."
+    },
+    {
+      "id": "TARGET_STORAGE_DELETE_PROFILE",
+      "evidence_class": "ACCEPTED_TARGET_VPS_COMPONENT_CANDIDATE_FROM_PRIOR_UNIFIEDDB_RUN",
+      "status": "PASS_COMPONENT_HOLD_COMPOSED_CURRENT_MAIN",
+      "finding": "DELETE + synchronous FULL passed the storage safety candidate and forced WAL failed closed on target SQLite 3.45.1; fused PR #286 target workflow remains queued in this run."
+    },
+    {
+      "id": "TARGET_PRIVATE_SQLITE_3534_PROFILE",
+      "evidence_class": "QUEUED_TARGET_PREFLIGHT",
+      "status": "UNKNOWN_NOT_EXECUTED",
+      "finding": "PR #288 will prove exact staged library source-id/loader binding and V16/WAL regressions; queued means no promotion evidence."
+    },
+    {
+      "id": "TARGET_V17_V3_CAUSAL_SUPPORT",
+      "evidence_class": "QUEUED_TARGET_GATE",
+      "status": "UNKNOWN_NOT_EXECUTED",
+      "finding": "PR #280 V3 target gate is queued. Existing persisted V17 bound-reentry target receipt applies to the narrower simplified candidate and must not be upgraded to V3 causal-closure proof."
+    }
+  ],
+  "promotion": "HOLD"
+}

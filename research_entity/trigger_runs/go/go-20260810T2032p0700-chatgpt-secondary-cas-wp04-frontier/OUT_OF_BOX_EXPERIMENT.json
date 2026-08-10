@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "experiment_id":"GO-OOB-PROVENANCE-ISOTOPE-20260810",
+  "run_id":"go-20260810T2032p0700-chatgpt-secondary-cas-wp04-frontier",
+  "kind":"BOUNDED_OUT_OF_BOX_EXPERIMENT",
+  "count_for_this_go_macrocycle":1,
+  "question":"Can two frontend artifacts with identical canonical semantics but different source provenance preserve one semantic identity while contract drift or AST tampering fails closed?",
+  "mechanism":"Construct a minimal FrontendArtifact contract verifier locally. Compare identical canonical AST with distinct source_sha256 values, then mutate grammar binding and canonical AST content independently.",
+  "execution_environment":"current ChatGPT local Python sandbox; proxy only, not target VPS",
+  "result": {
+    "semantic_isotope_same_ast_different_source_provenance":true,
+    "grammar_mismatch_fail_closed":true,
+    "canonical_ast_tamper_fail_closed":true,
+    "passed":true
+  },
+  "local_artifact_hashes": {
+    "bridge_sha256":"9c8f74954faef86bfdfa859bcb56b85264c649a9f0fd4c708f939e381c54af30",
+    "binding_sha256":"69e963e2f190dfeedf47d836893be7319a3130ddfbeedb35bc49b3cd314cc33f",
+    "result_sha256":"f851a671fe0be1d3333aa17baca521b74a35642cb5432283cab42b085749d2c9"
+  },
+  "interpretation":"Supports separating semantic content identity from source/provenance identity while requiring content and grammar binding verification. After the experiment, a concurrent worker's stronger receipt-bound V18 bridge was discovered; therefore this result is same-ancestry convergent evidence, not independent replication and not a reason to merge duplicate code.",
+  "architecture_promotion":"NONE",
+  "rollback":"No target/runtime state was changed by the experiment. The prepared duplicate GitHub commit was not forced onto main after CAS rejection."
+}

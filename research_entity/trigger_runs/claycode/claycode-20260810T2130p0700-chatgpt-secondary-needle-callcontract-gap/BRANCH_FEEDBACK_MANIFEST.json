@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2130p0700-chatgpt-secondary-needle-callcontract-gap",
+  "program": "FRANK_V0_1",
+  "feedback": {
+    "claycode": {
+      "decision": "TEST_DELTA",
+      "finding": "TypedIR/type-effect must not admit the current G9 Needle.execute/1 effect site until exact input/output/effect/runtime-binding evidence is materialized; do not infer a signature from call syntax."
+    },
+    "frank": {
+      "decision": "FAIL_CLOSED_CONSTRAINT",
+      "finding": "The cognitive loop-core effect branch may propose EffectIntent, but current evidence does not justify direct execution of that value as a production Needle call. Preserve proposal/authority/execution separation."
+    },
+    "harness": {
+      "decision": "TEST_OBLIGATION",
+      "finding": "F-V01-09 current-source validation must discriminate EffectIntent, lowered runtime plan, deterministic EffectRequest/EffectDecision authority gate, current binding, execution receipt and verified outcome/re-entry instead of treating one call as an opaque effect step."
+    },
+    "unifieddb": {
+      "decision": "IDENTITY_CONSTRAINT",
+      "finding": "Persist contract semantic identity, current runtime binding identity, authority decision receipt and verified effect receipt as distinct provenance-bound objects; persistence cannot repair a missing contract."
+    },
+    "gwt": {
+      "decision": "NO_MECHANISM_CHANGE_WITH_AUTHORITY_CONSTRAINT",
+      "finding": "Workspace selection/ignition remains non-authoritative; an effect-bearing residual or GWT state cannot supply the missing execution contract or authority."
+    },
+    "claygraph": {
+      "decision": "NO_PROMOTION",
+      "finding": "Topology may expose the missing edge as a blocker relation but must not infer or authorize a replacement edge/signature."
+    },
+    "hyperposition": {
+      "decision": "PRESERVE_ALTERNATIVES",
+      "finding": "Keep at least the V2 EffectPlan path and any discovered current explicit alternative unresolved until an executable discriminating test selects one."
+    },
+    "q23": {
+      "decision": "NO_CHANGE",
+      "finding": "No visual/model mechanism change follows from this effect-call contract gap."
+    },
+    "emergenz": {
+      "decision": "NO_CHANGE",
+      "finding": "No emergence claim follows from a compiler/effect boundary inconsistency."
+    },
+    "clayresearch": {
+      "decision": "COUNTERHYPOTHESIS_SEARCH",
+      "finding": "Search current source/history for an exact authoritative Needle.execute(EffectIntent) or equivalent gated contract before any semantic repair is proposed."
+    }
+  },
+  "architecture_promotion": "NONE",
+  "progress_credit": "NONE",
+  "target_vps_receipt": "PENDING_OBSERVATION",
+  "next_cross_branch_test": "Production effect source -> V18 frontend -> receipt-bound TypedIR -> exact type/effect resolution -> deterministic authority gate -> current runtime binding -> Needle execution -> verified outcome/re-entry on target VPS."
+}

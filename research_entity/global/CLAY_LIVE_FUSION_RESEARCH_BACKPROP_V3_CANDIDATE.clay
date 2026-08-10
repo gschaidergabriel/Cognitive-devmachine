@@ -1,0 +1,314 @@
+module clay.research.live_fusion_research_backprop_v3
+version "0.3-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+parent_mesh=@research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+parent_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+parent_swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+parent_web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+state=UnifiedDB
+topology=ClayGraph
+coordination_language=latest_ClayCode
+
+// Owner direction 2026-08-10: Clay should fuse all newly observable project knowledge live
+// and feed the resulting knowledge back into research, architecture, tests and affected workers.
+// "all new data" means all new data observable through registered source adapters/cursors;
+// it is not a claim of omniscient coverage of the external world and not permission for blind crawling.
+
+law ALL_REGISTERED_NEW_DATA_ENTERS_LIVE_INTAKE=true
+law RAW_INPUT_NEVER_EQUALS_TRUTH=true
+law MATERIAL_FUSION_MUST_REENTER_RESEARCH=true
+law RESEARCH_RESULT_MUST_REENTER_ARCHITECTURE_TESTS_OR_EXPLICIT_NO_CHANGE=true
+law RESEARCH_FEEDBACK_IS_BIDIRECTIONAL=true
+law PROVENANCE_SURVIVES_DEDUPLICATION=true
+law NEGATIVE_RESULTS_AND_DISSENT_SURVIVE_FUSION=true
+law CONNECTIVITY_DOES_NOT_INCREASE_EVIDENCE_STRENGTH=true
+law BLIND_EXTERNAL_CRAWLING=FORBIDDEN
+law EXTERNAL_EFFECT_EXACTLY_ONCE_CANNOT_BE_ASSUMED=true
+
+source_classes {
+  PROJECT_REPO=[commit,file_delta,branch_delta,issue,pr,release]
+  RESEARCH_CENTER=[work_event,claim,hypothesis,counterhypothesis,negative_result,experiment_receipt,benchmark_row,mesh_feedback]
+  RUNTIME=[health,trace,log,test_receipt,build_receipt,recovery_receipt,resource_row]
+  FRANK_OBSERVATION=[frank_runtime_observation,frank_self_observation_proposal,frank_user_harness_telemetry]
+  EXTERNAL=[official_doc,primary_repo,paper,dataset,standard,provider_status,independent_technical_evidence,discovery_index]
+  HUMAN=[project_owner_directive,explicit_owner_decision]
+}
+
+record SourceCursor {
+  source_id:Ref
+  source_class:Ref
+  cursor:Ref
+  source_epoch:Ref
+  observed_head:Ref
+  observed_at:Time
+  freshness_class:CURRENT|STALE|UNKNOWN
+  coverage_state:COMPLETE_TO_CURSOR|PARTIAL|GAP_DETECTED|SOURCE_UNAVAILABLE
+  continuity_hash:Hash
+}
+
+record IntakeEnvelope {
+  intake_id:Ref
+  source_id:Ref
+  source_class:Ref
+  source_cursor:Ref
+  observed_at:Time
+  source_timestamp:Time?
+  content_hash:Hash
+  raw_ref:Ref
+  provenance_refs:Set<Ref>
+  authority_scope:Ref
+  data_quality:Score
+  freshness:Score
+  parse_state:RAW|NORMALIZED|QUARANTINED|REJECTED
+  semantic_epoch:Ref
+}
+
+record EvidenceAtom {
+  evidence_id:Ref
+  intake_id:Ref
+  canonical_subject:Set<Ref>
+  claim_fragment:Clay
+  evidence_for:Set<Ref>
+  evidence_against:Set<Ref>
+  evidence_class:Ref
+  truth_class:Ref
+  novelty_class:NEW|REFINES|CONFIRMS|CONTRADICTS|SUPERSEDES|NO_MATERIAL_CHANGE|UNKNOWN
+  confidence:Score
+  uncertainty:Score
+  freshness:Score
+  semantic_tags:Set<Ref>
+  affected_work:Set<Ref>
+  affected_claims:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  causal_predecessors:Set<Ref>
+  provenance_refs:Set<Ref>
+  semantic_epoch:Ref
+}
+
+record FusionStateV3 {
+  fusion_id:Ref
+  input_atoms:Set<Ref>
+  preserved_alternatives:Set<Ref>
+  conflicts:Set<Ref>
+  supersessions:Set<Ref>
+  unresolved_unknowns:Set<Ref>
+  novelty_pressure:Score
+  contradiction_pressure:Score
+  falsification_value:Score
+  expected_information_gain:Score
+  affected_dependency_span:Set<Ref>
+  semantic_epoch:Ref
+  fusion_hash:Hash
+}
+
+record ResearchBackpropPlan {
+  fusion_id:Ref
+  obligations:Set<Ref>
+  route_mode:TARGETED_DELTA|DENSE_FANOUT|DIGEST_ONLY
+  target_workers:Set<Ref>
+  target_branches:Set<Ref>
+  architecture_surfaces:Set<Ref>
+  test_surfaces:Set<Ref>
+  work_surfaces:Set<Ref>
+  priority:Score
+  reason:Clay
+  plan_epoch:Ref
+}
+
+type ResearchObligationKind =
+  HYPOTHESIS_DELTA|
+  COUNTERHYPOTHESIS|
+  DISCRIMINATING_EXPERIMENT|
+  REPLICATION|
+  ARCHITECTURE_DELTA_CANDIDATE|
+  TEST_OBLIGATION|
+  WORK_CREATE_OR_REVISION|
+  NEGATIVE_RESULT|
+  CONFLICT_TRACKING|
+  EXPLICIT_NO_CHANGE
+
+record ResearchObligation {
+  obligation_id:Ref
+  fusion_id:Ref
+  kind:ResearchObligationKind
+  subject:Set<Ref>
+  evidence_refs:Set<Ref>
+  strongest_counterhypothesis:Clay?
+  discriminating_test:Clay?
+  baseline_refs:Set<Ref>
+  rollback_ref:Ref?
+  status:OPEN|CLAIMED|TESTING|SUPPORTED|REFUTED|NO_CHANGE|CLOSED
+  semantic_epoch:Ref
+}
+
+record ResearchBackpropReceipt {
+  fusion_id:Ref
+  obligation_id:Ref
+  target:Ref
+  delivered:Bool
+  reconstructed:Bool
+  plan_revalidated:Bool
+  used:Bool
+  research_effect:Bool
+  architecture_effect:Bool
+  test_effect:Bool
+  work_effect:Bool
+  verified_outcome_ref:Ref?
+  result_reentered_live_fusion:Bool
+  observed_at:Time
+  semantic_epoch:Ref
+}
+
+// -------- universal live intake --------
+rule registered_source -> maintain(SourceCursor)
+rule source_cursor_advanced -> emit(IntakeEnvelope for every newly observable item up to current cursor)
+rule source_gap_detected -> coverage_state=GAP_DETECTED + open_repair_obligation + never_claim_complete_coverage
+rule source_unavailable -> coverage_state=SOURCE_UNAVAILABLE + DEGRADED_LIVE_REFRESH for affected operation
+rule duplicate_delivery -> content_hash_deduplicate_preserve_distinct_provenance
+rule out_of_order_delivery -> preserve_source_timestamp+causal_predecessors; do_not_force_global_total_order
+rule clock_skew -> prefer source_cursor+causal_identity over wall_clock ordering
+rule malformed_or_untrusted_input -> QUARANTINED_OR_REJECTED; never silently promote
+
+// Human owner directives are high authority for project policy/intent, not scientific truth.
+rule source_class=HUMAN -> preserve_owner_authority_scope
+rule project_owner_directive -> may_change_project_policy_or_work_priority
+rule project_owner_directive -> never bypass empirical acceptance gate for scientific/runtime claim
+
+// Frank remains a separate research subject.
+rule source_class=FRANK_OBSERVATION -> ResearchEntity_owned_pull_ingest
+rule frank_self_observation_proposal -> AUTHORITY=PROPOSAL_ONLY
+rule frank_self_observation_proposal -> may_create_research_obligation
+rule frank_self_observation_proposal -> never_authorize_frank_harness_effect
+
+// -------- normalize into evidence, not prompt soup --------
+rule IntakeEnvelope.parse_state=NORMALIZED -> derive(EvidenceAtom)
+rule EvidenceAtom -> compare(current_UnifiedDB,current_recent_evidence,current_negative_results,current_claims,current_hypotheses)
+rule semantic_duplicate -> NO_MATERIAL_CHANGE unless provenance_or_freshness_changes_interpretation
+rule conflicting_high_quality_evidence -> preserve both + open conflict; never average contradiction away
+rule newer_primary_behavior_evidence -> may SUPERSEDE stale behavior evidence with explicit version/time scope
+rule discovery_index_or_search_summary -> evidence_class=DISCOVERY_ONLY; cannot alone promote material claim
+rule missing_measurement -> UNKNOWN; never coerce to zero_or_no_difference
+
+// -------- live fusion --------
+rule material_atoms_ready -> fuse(FusionStateV3)
+rule fusion -> preserve alternatives,conflicts,counterevidence,negative_results,provenance
+rule fusion -> project affected dependency span through current ClayGraph
+rule stale_or_missing ClayGraph projection -> trigger anti_entropy_repair from parent_mesh
+rule high_centrality_contradiction -> allow DENSE_FANOUT when safer_or_cheaper_than_targeted
+rule local_delta -> prefer TARGETED_DELTA when relevant_branch_recall remains acceptable
+rule NO_MATERIAL_CHANGE -> DIGEST_ONLY
+rule fusion never mints truth from activation,repetition,worker_count,connectivity
+
+// -------- mandatory research backpropagation --------
+rule material FusionStateV3 -> derive(ResearchBackpropPlan)
+rule material FusionStateV3 -> create_at_least_one ResearchObligation unless explicit evidence-backed EXPLICIT_NO_CHANGE
+rule NEW|REFINES -> update_or_create hypothesis + test_or_work obligation when decision-relevant
+rule CONTRADICTS|SUPERSEDES -> counterhypothesis_or_conflict + invalidate/revise affected current work before next material effect
+rule high_impact_claim_change -> adversarial_or_replication_lane when capacity permits
+rule negative_evidence -> NEGATIVE_RESULT obligation and route to dependent work
+rule runtime_failure_or_recovery -> recovery_research_obligation + regression_test_candidate
+rule benchmark_delta -> baseline_comparison obligation; preserve raw rows and metadata
+rule architecture_relevant_result -> ARCHITECTURE_DELTA_CANDIDATE + TEST_OBLIGATION
+rule work_relevant_result -> WORK_CREATE_OR_REVISION using latest revisioned work fabric
+rule no_architecture_or_work_change -> EXPLICIT_NO_CHANGE with evidence and next falsifier if uncertainty remains
+
+// A result is not considered fully fused merely because it was stored.
+rule material_fusion_without_research_obligation -> STRANDED_DELTA_DEFECT
+rule closed_research_obligation_without_result_reentry -> BROKEN_RESEARCH_FEEDBACK_LOOP
+rule every material research outcome -> emit new IntakeEnvelope through RESEARCH_CENTER source class
+rule research_outcome_reentry -> re-fuse against current state, not against stale pre-experiment snapshot
+
+// -------- targeted worker feedback and causal uptake --------
+rule ResearchBackpropPlan -> route via parent_mesh current dependency index
+rule affected_worker -> ingest at next safe point or interrupt for high-impact invalidation
+rule receiver_delivery != reconstruction
+rule reconstruction != use
+rule use != research_effect
+rule research_effect != architecture_effect
+rule architecture_effect != verified_runtime_outcome
+rule verified_outcome -> causal_credit only with provenance-valid use/effect receipts
+rule feedback_result -> ResearchBackpropReceipt + new live intake
+
+// -------- checkpoints / replay / recovery --------
+rule periodic_checkpoint -> persist SourceCursor+fusion_epoch+open_obligations+delivery_acks
+rule restart -> restore last_verified_checkpoint + replay source deltas idempotently
+rule replay_duplicate -> no duplicate research obligation unless explicit independent_replication
+rule external_side_effect -> idempotency_key_or_effect_receipt required; never assume stream exactly-once implies external exactly-once
+rule crash_mid_fusion -> discard_or_quarantine partial epoch; publish only coherent semantic epoch
+rule recovery_failure -> DEGRADED_COORDINATION + fail_closed_for_consequential_effects
+
+// -------- adaptive cost control --------
+rule do_not_recompute_entire_corpus when valid incremental dependency-local update suffices
+rule incremental_refresh_is_not_dogma=true
+rule choose refresh strategy using expected(cost,stale_risk,repair_risk,dependency_span,semantic_preservation)
+rule dense_global_change may justify batch_recompute_or_dense_fanout
+rule low_value_high_volume_source -> compact index/digest until uncertainty_or_dependency relevance rises
+rule current query/decision may pull full payload by provenance ref
+
+measure registered_source_coverage_to_cursor
+measure cursor_gap_count
+measure source_unavailable_duration
+measure intake_to_normalized_latency
+measure normalized_to_fusion_latency
+measure fusion_to_research_obligation_latency
+measure research_obligation_to_worker_delivery_latency
+measure research_obligation_closure_latency
+measure stranded_delta_count
+measure broken_feedback_loop_count
+measure semantic_duplicate_suppression
+measure provenance_retention_rate
+measure contradiction_detection_recall
+measure false_conflict_rate
+measure supersession_error_rate
+measure affected_branch_recall
+measure false_interrupt_rate
+measure receiver_reconstruction_rate
+measure research_use_rate
+measure architecture_feedback_rate
+measure test_feedback_rate
+measure work_revision_feedback_rate
+measure result_reentry_rate
+measure restart_replay_equivalence
+measure permanent_miss_after_anti_entropy
+measure CPU_RAM_IO_network_token_context_cost
+
+promotion requires {
+  parent_v2_real_repo_replay_and_fault_matrix;
+  registered_source_cursor_replay_on_current_repo_and_work_events;
+  external_source_outage_fault;
+  cursor_gap_fault;
+  duplicate_and_out_of_order_fault;
+  conflicting_evidence_fault;
+  stale_primary_vs_fresh_primary_supersession_test;
+  crash_mid_fusion_restart_replay;
+  idempotent_research_obligation_replay;
+  stranded_delta_count=0 on declared replay corpus;
+  broken_feedback_loop_count=0 on declared replay corpus;
+  exact provenance receipts;
+  no evidence_strength inflation;
+  no Frank self-harness authority expansion;
+  rollback_to_v2_candidate_and_current_owner_fixed_protocols;
+}
+
+// Current external evidence supporting design direction:
+// - McSherry et al., Differential Dataflow, CIDR 2013: incremental changes through iterative dataflow.
+// - Budiu et al., DBSP, VLDB Journal 2025: general incrementalization of rich queries.
+// - Yadav et al., Enzyme, SIGMOD 2026 / arXiv:2603.27775v2: production cost-based refresh strategy selection.
+// - Apache Flink stateful-stream/checkpoint documentation: replay/checkpoint consistency and the boundary of exactly-once state guarantees.
+
+invariant all_registered_new_data_is_observed_or_gap_is_explicit
+invariant observed_data_is_not_automatically_admitted_evidence
+invariant admitted_evidence_is_not_automatically_truth
+invariant every_material_fusion_reenters_research_or_explicit_no_change
+invariant every_material_research_result_reenters_live_fusion
+invariant provenance_survives_deduplication
+invariant conflict_and_negative_result_survive_fusion
+invariant stronger_networking_does_not_mint_truth
+invariant shared_distribution_does_not_create_independent_replication
+invariant external_stream_exactly_once_is_never_assumed_for_effect_authority
+invariant Frank_remains_separate_research_subject
+invariant Frank_never_mutates_Clay
+invariant candidate_not_promoted_without_real_replay_fault_recovery_and_backprop_evidence

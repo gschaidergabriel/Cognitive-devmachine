@@ -1,0 +1,28 @@
+name: GateFlow v1
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/gateflow/**'
+      - 'research_entity/rooms/PROGRAM_THROUGHPUT.json'
+      - 'tools/gateflow.py'
+      - 'tests/test_gateflow.py'
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/gateflow/**'
+      - 'research_entity/rooms/PROGRAM_THROUGHPUT.json'
+      - 'tools/gateflow.py'
+      - 'tests/test_gateflow.py'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pytest
+      - run: python tools/gateflow.py research_entity/gateflow/GATEFLOW_V1_STATE.json
+      - run: pytest -q tests/test_gateflow.py

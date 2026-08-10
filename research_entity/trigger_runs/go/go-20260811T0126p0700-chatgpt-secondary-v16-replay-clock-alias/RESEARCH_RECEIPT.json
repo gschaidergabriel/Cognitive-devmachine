@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260811T0126p0700-chatgpt-secondary-v16-replay-clock-alias",
+  "trigger": "go",
+  "status": "TARGET_RUN_QUEUED_NOT_EXECUTED",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "identity_lock": {
+    "worker_is": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": "self.root / Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": "FRANK_V0_1",
+  "program_stage": "FRANK_V0_1",
+  "primary_work_package": "F-V01-08-TOKEN-API-CLIENTS / F-V01-13-HARNESS",
+  "product_repository": "gschaidergabriel/Dr.-Unterweger",
+  "fresh_product_main_at_branch": "e513ba64fd7cdb99b25389504ef2ce66b5eccbe4",
+  "coordination": {
+    "effect_authority_overlap_detected": true,
+    "effect_authority_lanes": [248, 250, 252],
+    "v17_causal_completion_lane": 206,
+    "disposition": "DO_NOT_DUPLICATE_EFFECT_OR_V17_WORK; SELECT_UNOWNED_V16_CONTINUITY_PROVENANCE_EDGE",
+    "duplicate_search_for_v16_replay_clock_alias": "NO_MATCH_FOUND"
+  },
+  "current_evidence_before_experiment": {
+    "v16_schema": {
+      "event_table": "frank_execution_continuity_events",
+      "event_instance_column": "seq INTEGER PRIMARY KEY AUTOINCREMENT",
+      "event_hash_unique": true
+    },
+    "v16_runtime": {
+      "event_hash_inputs": [
+        "lease_epoch",
+        "execution_id",
+        "event_type",
+        "request_key_hash",
+        "session_ref_hash",
+        "client_ref_hash",
+        "created_at"
+      ],
+      "seq_in_event_hash": false,
+      "replay_path_appends_request_replayed": true,
+      "same_clock_instant_injectable_in_tests": true
+    },
+    "normal_token_ingress_baseline": {
+      "latest_known_target_run": 31417288443,
+      "status": "PASS_FRANK_TOKEN_INGRESS_CORE_V16_CONTINUITY",
+      "scope": "historical exact target receipt; rerun required on experiment head"
+    }
+  },
+  "hypothesis": "Two semantically legitimate REQUEST_REPLAYED observations with identical V16 semantic fields and identical created_at collapse to the same content hash and the second insert fails the UNIQUE(event_hash) constraint.",
+  "strongest_counterhypothesis": "Microsecond created_at already provides sufficient event-instance identity for repeated replay observations, so a second same-request replay cannot collide in an admitted runtime execution.",
+  "go_out_of_box_experiment": {
+    "count": 1,
+    "id": "GO_OOB_V16_REPLAY_CLOCK_ALIAS",
+    "classification": "SOLE_GO_OUT_OF_BOX_EXPERIMENT",
+    "baseline": "Replay the exact already-admitted request twice at distinct injected microsecond instants; require two REQUEST_REPLAYED rows and SQLite integrity ok.",
+    "intervention": "Replay the same already-admitted request twice under the same live V15/V16 execution at exactly the same injected instant.",
+    "negative_reproduction_criterion": "First replay returns REPLAY; second raises sqlite3.IntegrityError from UNIQUE event_hash; failed transaction rolls back; exactly one replay event remains; integrity_check=ok.",
+    "external_network": false,
+    "external_effect": false,
+    "canonical_state_mutation": false,
+    "product_runtime_mutation": false,
+    "rollback": "Diagnostic branch only; no product runtime file changed."
+  },
+  "product_artifacts": {
+    "branch": "chatgpt/go-v16-replay-clock-alias-20260811",
+    "test_commit": "cc04119cf3ded6a7c57810e5d86c42b657f3f56a",
+    "workflow_head": "771acebca660840dbc96714d51088214f39cc225",
+    "pull_request": 256,
+    "pull_request_state": "DRAFT_DIAGNOSTIC",
+    "target_workflow_run": 31418667318,
+    "target_job": 93553789272,
+    "target_state_at_receipt": "QUEUED",
+    "target_conclusion_at_receipt": null,
+    "deep_integrity_run": 31418668833,
+    "deep_integrity_observation": "COMPLETED_FAILURE_WITH_STEPS_NULL; classify as startup/infrastructure signal until executable logs prove otherwise"
+  },
+  "local_mechanism_evidence": {
+    "status": "SUPPORTED_BY_DIRECT_HASH_AND_SQLITE_MICROREPLICA_ONLY",
+    "observation": "Two byte-identical current-style event payload hashes inserted into a UNIQUE event_hash column make the second SQLite insert raise IntegrityError.",
+    "promotion_value": "NONE_UNTIL_EXACT_FRANK_TARGET_RUN"
+  },
+  "fresh_external_primary_knowledge": [
+    {
+      "source": "Python datetime documentation",
+      "url": "https://docs.python.org/3/library/datetime.html#datetime.datetime.now",
+      "finding": "Successive datetime.now() calls may return the same instant depending on underlying clock precision.",
+      "implication": "Wall-clock timestamp must not be assumed to be unique event-instance identity."
+    },
+    {
+      "source": "SQLite AUTOINCREMENT documentation",
+      "url": "https://www.sqlite.org/autoinc.html",
+      "finding": "INTEGER PRIMARY KEY AUTOINCREMENT provides a committed monotonically increasing row identity through sqlite_sequence.",
+      "implication": "Existing serialized event seq is a candidate reconstructible event-instance discriminator; no new authority plane is required."
+    },
+    {
+      "source": "SQLite transaction documentation",
+      "url": "https://www.sqlite.org/lang_transaction.html",
+      "finding": "BEGIN IMMEDIATE establishes the write transaction before the V16 replay append path executes.",
+      "implication": "A seq-aware repair can be designed inside the existing serialized write transaction rather than introducing a second event authority."
+    }
+  ],
+  "architecture_delta": {
+    "status": "TEST_OBLIGATION_ONLY_PENDING_TARGET",
+    "candidate_if_reproduced": "Make V16 event identity include a persisted/reconstructible event-instance discriminator (prefer existing serialized seq or equivalent) while retaining created_at as evidence; preserve legacy row verification and UNIQUE integrity semantics.",
+    "forbidden_shortcuts": [
+      "INSERT OR IGNORE that silently drops a real replay observation",
+      "removing UNIQUE(event_hash) without replacement integrity semantics",
+      "random/non-persisted salt that makes provenance hash unreconstructible",
+      "new semantic authority or second execution ledger"
+    ],
+    "next_falsifier_if_reproduced": "Same GO_OOB_V16_REPLAY_CLOCK_ALIAS scenario rerun as a normal regression on the minimal repair plus current token-ingress baseline, crash/restart persistence, and repo-static integrity. This is reuse of the same experiment, not a second OOB."
+  },
+  "related_live_blockers_not_owned_by_this_run": [
+    "V17 support identity/execution binding gap remains independently target-confirmed and blocks V17 promotion.",
+    "Effect authority exact V15/V16 generation fencing is under parallel integration lanes and was deliberately not duplicated.",
+    "Real provider timeout/idempotency semantics remain separate from this V16 provenance defect candidate."
+  ],
+  "truth_boundary": {
+    "target_result_claimed": false,
+    "product_repair_claimed": false,
+    "whole_frank_v0_1_acceptance": false,
+    "training_authorized": false,
+    "authority": "NONE",
+    "execution_authority": "NONE"
+  },
+  "next_frontier": "Consume run 31418667318 when executable. If it reproduces the alias, implement the smallest seq-aware/reconstructible event-hash repair on fresh main and rerun this same intervention as a conventional regression. If it refutes the hypothesis, preserve that negative result and do not patch."
+}

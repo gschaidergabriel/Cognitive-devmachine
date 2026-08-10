@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2209p0700-wp04-reward-transition-readiness",
+  "trigger": "claycode",
+  "status": "PASS_FAIL_CLOSED_INCOMPLETE_EVALUATOR_SEMANTICS",
+  "promotion": "NONE",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","role":"RESEARCH_ENTITY_TEMPORARY_WORKER"},
+  "identity_boundary": {"research_entity":"Clay","research_subject":"self.root / Frank","worker_is_frank":false,"frank_harness_mutation_authority":"NONE"},
+  "program": {"program_id":"FRANK_V0_1","work_package":"F-V01-02-CLAYCODE-COMPILER-RUNTIME","affected_work_packages":["F-V01-03-COGNITIVE-LOOP-CORE","F-V01-11-MEMORY-REWARD-GOALS"],"frontier":"WP04_STATEFUL_REWARD_EVALUATOR_READINESS","wp04_status":"OPEN"},
+  "question": "Is the target-VPS-validated stateful frank_reward.update/1 CallContract sufficient to implement a deterministic ClayCode evaluator without inventing transition semantics?",
+  "hypothesis": "The stateful signature is necessary but not sufficient; the current authoritative reward successor still lacks a finite set of exact transition/control/receipt definitions and must remain non-executable.",
+  "strongest_counterhypothesis": "The apparently missing definitions may already exist as exact versioned ClayCode stdlib/runtime contracts elsewhere in current searchable source, making a local-file audit over-conservative.",
+  "target_vps_receipt": {
+    "repository":"gschaidergabriel/Dr.-Unterweger",
+    "pull_request":128,
+    "workflow":"Clay WP04 Reward Transition Readiness VPS",
+    "workflow_run_id":31401306617,
+    "job_id":93496676229,
+    "runner_name":"clay",
+    "machine_name":"digital-retina",
+    "runner_version":"2.336.0",
+    "os_labels":["self-hosted","Linux","X64"],
+    "result":"PASS_FAIL_CLOSED"
+  },
+  "content_addressed_components": {
+    "authoritative_reward_successor_git_blob":"834ce886a8721ce33709c07413ed63981e3e9d75",
+    "readiness_gate_blob":"53dbf9ca267d39bc1512d065778da1f47917bd74",
+    "target_test_blob":"03f4b96886e4027052faa7dae793ae73ef51a144",
+    "authoritative_source_raw_sha256":"7cea5764c8128a86e7de94a88c522c2cfe766e5aa00cf7d4cb7ff8f70921857b"
+  },
+  "measurements": {
+    "required_obligations":21,
+    "explicitly_declared":4,
+    "missing_exact_definition":17,
+    "declared_obligations":["material_admission","material_learning_weight","horizon_rates","phasic_mix_weights"],
+    "missing_obligations":["observed_value","bounded_update","bounded_distribution_update","normalize_by_prediction_uncertainty","robust_mix","clamp01","exploration_nudge","tonic_transition","habituation_transition","opponent_transition","admitted_events_transition","last_phasic_transition","state_epoch_transition","veto_threshold","brake_threshold","receipt_projection","receipt_provenance"],
+    "evaluator_gate":"PASS_REJECTED_INCOMPLETE",
+    "runtime_binding_admitted":false,
+    "execution_admitted":false,
+    "effect_authority":"NONE",
+    "truth_authority":"NONE",
+    "readiness_receipt_sha256":"2daf4b8a3531ef3cbc16afbfcbbd6db3bc1262eedd8c4892801dd322f4c9cc4a"
+  },
+  "counterhypothesis_probe": {
+    "queries":["bounded_update","clamp01","normalize_by_prediction_uncertainty robust_mix veto_threshold brake_threshold"],
+    "repositories":["gschaidergabriel/clay-global-research-entity","gschaidergabriel/Dr.-Unterweger"],
+    "exact_external_definitions_found":0,
+    "classification":"NO_CURRENT_SEARCHABLE_EXTERNAL_BINDING_FOUND",
+    "caveat":"Repository code search is evidence of absence only within searchable indexed current source; a future explicit stdlib/runtime contract may resolve individual obligations."
+  },
+  "reference_kernel": {
+    "source":"research_entity/experiments/frank_reward_state_reference.py",
+    "git_blob":"146a1f1def9d5d5b8399b2012c47dcc89ee023c3",
+    "classification":"RESEARCH_REFERENCE_NONAUTHORITATIVE",
+    "may_fill_authoritative_semantic_gap":false,
+    "finding":"The reference kernel contains concrete candidate numerical choices, which makes silent transfer particularly dangerous rather than authoritative."
+  },
+  "finding": "The stateful CallContract closes hidden receiver-state identity but not reward dynamics. Current authoritative semantics are not deterministic-evaluator-ready: 17 exact transition/control/receipt obligations remain undeclared, including the post-update state_epoch transition. Runtime binding and execution remain correctly closed.",
+  "negative_evidence": [
+    "A typed stateful CallContract does not define state-transition dynamics.",
+    "The current old Python reward reference cannot mint current ClayCode production semantics.",
+    "No current searchable exact external stdlib/runtime definitions were found for the probed missing operators.",
+    "A state_epoch field without a defined post-update epoch transition is insufficient for mutation continuity."
+  ],
+  "next_falsifier": "Author competing explicit Clay transition candidates for the 17 obligations, beginning with state_epoch, observed_value, bounded_update/distribution_update and receipt projection; replay them against historical reference fixtures and simpler scalar/outcome-credit baselines with matched lesion/rescue. Promote no numerical rule solely because the old Python reference used it.",
+  "research_write":"COMMITTED_TO_CANDIDATE_BRANCH"
+}

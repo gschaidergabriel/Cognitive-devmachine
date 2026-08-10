@@ -1,0 +1,132 @@
+name: Database Pulse v0.1
+
+on:
+  push:
+    branches: ['chatgpt/database-pulse-v01-20260810']
+    paths:
+      - 'research_entity/runtime/RAE_DATABASE_PULSE_V0_1.sql'
+      - 'research_entity/runtime/database_pulse_runtime_v01.py'
+      - 'research_entity/runtime/test_database_pulse_v01.py'
+      - '.github/workflows/database-pulse-v01.yml'
+  pull_request:
+    paths:
+      - 'research_entity/runtime/RAE_DATABASE_PULSE_V0_1.sql'
+      - 'research_entity/runtime/database_pulse_runtime_v01.py'
+      - 'research_entity/runtime/test_database_pulse_v01.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: database-pulse-v01-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ubuntu-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Pulse syntax and safety matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research_entity/runtime/database_pulse_runtime_v01.py
+          cd research_entity/runtime
+          python3 test_database_pulse_v01.py | tee /tmp/database-pulse-tests.txt
+      - name: Adjacent semantic-access regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research_entity/runtime
+          python3 test_semantic_access_v10.py
+          if test -f test_semantic_access_v11.py; then python3 test_semantic_access_v11.py; fi
+      - name: Record environment
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, platform, sqlite3, sys
+          from pathlib import Path
+          Path('/tmp/database-pulse-env.json').write_text(json.dumps({
+            'github_sha': os.environ.get('GITHUB_SHA'),
+            'runner_name': os.environ.get('RUNNER_NAME'),
+            'runner_os': os.environ.get('RUNNER_OS'),
+            'runner_arch': os.environ.get('RUNNER_ARCH'),
+            'platform': platform.platform(),
+            'python': platform.python_version(),
+            'sqlite': sqlite3.sqlite_version,
+            'implementation': sys.implementation.name,
+            'evidence_class': 'GITHUB_HOSTED_UBUNTU_REFERENCE',
+            'authority': 'NO_EFFECT_AUTHORITY',
+          },indent=2,sort_keys=True)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-ubuntu-${{ github.run_id }}
+          path: |
+            /tmp/database-pulse-tests.txt
+            /tmp/database-pulse-env.json
+          if-no-files-found: warn
+
+  hostinger-replication:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Verify read-only checkout authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          extra="$(git config --local --get-all http.https://github.com/.extraheader || true)"
+          test -z "$extra"
+      - name: Run exact Pulse matrix on Hostinger Ubuntu lane
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research_entity/runtime/database_pulse_runtime_v01.py
+          cd research_entity/runtime
+          python3 test_database_pulse_v01.py | tee /tmp/database-pulse-tests-hostinger.txt
+      - name: Adjacent semantic-access regressions on Hostinger
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research_entity/runtime
+          python3 test_semantic_access_v10.py
+          if test -f test_semantic_access_v11.py; then python3 test_semantic_access_v11.py; fi
+      - name: Record real Ubuntu runner metadata
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, platform, socket, sqlite3
+          from pathlib import Path
+          Path('/tmp/database-pulse-env-hostinger.json').write_text(json.dumps({
+            'github_sha': os.environ.get('GITHUB_SHA'),
+            'github_run_id': os.environ.get('GITHUB_RUN_ID'),
+            'hostname': socket.gethostname(),
+            'runner_name': os.environ.get('RUNNER_NAME'),
+            'runner_os': os.environ.get('RUNNER_OS'),
+            'runner_arch': os.environ.get('RUNNER_ARCH'),
+            'platform': platform.platform(),
+            'python': platform.python_version(),
+            'sqlite': sqlite3.sqlite_version,
+            'evidence_class': 'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+            'scope': 'HOSTINGER_REPLICATION_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'authority': 'NO_EFFECT_AUTHORITY',
+          },indent=2,sort_keys=True)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-hostinger-${{ github.run_id }}
+          path: |
+            /tmp/database-pulse-tests-hostinger.txt
+            /tmp/database-pulse-env-hostinger.json
+          if-no-files-found: warn

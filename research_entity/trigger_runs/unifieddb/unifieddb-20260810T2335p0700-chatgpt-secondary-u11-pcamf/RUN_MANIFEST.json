@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.3",
+  "schema_version":"1.4",
   "run_id":"unifieddb-20260810T2335p0700-chatgpt-secondary-u11-pcamf",
   "trigger":"unifieddb","actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol",
   "program":"FRANK_V0_1","work_package":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
@@ -8,6 +8,6 @@
   "result":"U11 PCAMF + RouteValidityCertificate/ShadowRiskSentinel CANDIDATE; receipt lattice strongly supported locally; PKM conditionally supported; incremental projection supported locally; HDC primary exact store rejected; adaptive router HOLD; IID-only route guarantee falsified by same-index shift; revocable scoped accelerator control supported as candidate; Merkle checkpoint candidate",
   "promotion":"HOLD_PENDING_EXACT_SOURCE_TARGET_VPS_TESTS",
   "research_write":"COMMITTED",
-  "github":{"base":"main","pcamf":{"branch":"chatgpt/unifieddb-u11-pcamf-20260810-2335","pull_request":207,"merge_sha":"7e0d3c0b40df33c905df597c59689f462c5bf57b"},"route_validity":{"branch":"chatgpt/unifieddb-u11-rvc-20260810-2350","pull_request":210,"merge_sha":"62cee865b0e560d3911eb0893158666a9cd9fde9"}},
-  "target_vps_executed":false
+  "github":{"base":"main","pcamf":{"branch":"chatgpt/unifieddb-u11-pcamf-20260810-2335","pull_request":207,"merge_sha":"7e0d3c0b40df33c905df597c59689f462c5bf57b"},"route_validity":{"branch":"chatgpt/unifieddb-u11-rvc-20260810-2350","pull_request":210,"merge_sha":"62cee865b0e560d3911eb0893158666a9cd9fde9"},"target_vps_gate":{"branch":"chatgpt/unifieddb-u11-target-vps-gate-20260810","pull_request":211,"merge_sha":"6f47cd00771c30d9e60c56c860c9ffd245146044","workflow":".github/workflows/unifieddb-u11-pcamf-target-vps.yml","probe":"tools/unifieddb_u11_target_vps_probe.py","expected_receipt":"research_entity/benchmarks/unifieddb/u11_pcamf_target_vps.json","receipt_observation_at_run_finalization":"NOT_YET_OBSERVED"}},
+  "target_vps_executed":"UNKNOWN_NOT_YET_PERSISTENTLY_OBSERVED"
 }

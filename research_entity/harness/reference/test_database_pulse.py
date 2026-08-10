@@ -4,8 +4,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from .database_pulse import DatabasePulse, PulseConfig, PulseStateCorrupt
+from .database_pulse import (
+    DatabasePulse,
+    PulseConfig,
+    PulseStateCorrupt,
+    replay_entity_trace,
+)
 from .state_ledger import StateLedger, StaleEpoch
+from .unifieddb_query_plane import QuerySpec, UnifiedDBQueryPlane
 
 
 class DatabasePulseTests(unittest.TestCase):
@@ -22,37 +28,61 @@ class DatabasePulseTests(unittest.TestCase):
         )
         return ledger, DatabasePulse(ledger, config)
 
-    def test_zero_model_pulse_commits_distinct_observables(self):
+    def test_zero_model_pulse_records_execution_without_semantic_churn(self):
         ledger, pulse = self.seeded()
+        epoch_before = ledger.epoch
+        hash_before = ledger.semantic_state_hash
+        trace_before = ledger.trace_root_hash
         out = pulse.run('p1', basis_epoch=ledger.epoch)
-        self.assertEqual(out['commit_status'], 'COMMITTED')
-        self.assertEqual(out['mode'], 'ZERO_MODEL')
+        self.assertEqual(out['commit_status'], 'RECORDED')
+        self.assertEqual(out['mode'], 'ZERO_MODEL_DELTA_AWARE')
         self.assertEqual(out['model_call_count'], 0)
         self.assertEqual(out['tool_call_count'], 0)
         self.assertEqual(out['effect_count'], 0)
         self.assertEqual(out['pulse_state_transition_count'], 1)
+        self.assertEqual(out['semantic_state_transition_count'], 0)
         self.assertEqual(out['pulse_count'], 1)
         self.assertTrue(out['bootstrap'])
         self.assertEqual(out['census_count'], 3)
         self.assertEqual(out['observed_change_count'], 3)
         self.assertEqual(out['memory_update_observed_count'], 1)
-        self.assertEqual(out['authority'], 'OBSERVATION_AND_INTERNAL_STATE_ONLY')
-        self.assertTrue(all(not x['ref'].startswith('pulse_runtime:') for x in out['active_refs']))
+        self.assertEqual(out['authority'], 'OBSERVATION_AND_EXECUTION_RECEIPT_ONLY')
+        self.assertEqual(ledger.epoch, epoch_before)
+        self.assertEqual(ledger.semantic_state_hash, hash_before)
+        self.assertEqual(ledger.trace_root_hash, trace_before)
+        self.assertEqual(out['semantic_epoch_after'], epoch_before)
+        self.assertEqual(out['semantic_state_hash_after'], hash_before)
         ledger.close()
 
-    def test_idle_second_pulse_does_not_self_excite_from_bookkeeping(self):
+    def test_idle_second_pulse_does_not_self_excite_or_advance_semantic_epoch(self):
         ledger, pulse = self.seeded()
+        semantic_epoch = ledger.epoch
         first = pulse.run('p1')
         second = pulse.run('p2')
         self.assertEqual(first['pulse_count'], 1)
         self.assertEqual(second['pulse_count'], 2)
         self.assertFalse(second['bootstrap'])
+        self.assertEqual(second['previous_basis_epoch'], semantic_epoch)
+        self.assertEqual(second['basis_epoch'], semantic_epoch)
+        self.assertEqual(second['delta_event_count'], 0)
         self.assertEqual(second['observed_change_count'], 0)
         refs = [x['ref'] for x in second['active_refs']]
         self.assertIn('goal:open', refs)
         self.assertIn('semantic:conflict', refs)
         self.assertNotIn('memory:known', refs)
-        self.assertTrue(all(not ref.startswith('pulse_runtime:') for ref in refs))
+        self.assertEqual(ledger.epoch, semantic_epoch)
+        ledger.close()
+
+    def test_prepared_semantic_query_receipt_survives_idle_pulse(self):
+        ledger, pulse = self.seeded()
+        plane = UnifiedDBQueryPlane(ledger)
+        receipt = plane.query(QuerySpec('before-pulse', domains=('memory',), basis_epoch=ledger.epoch))
+        semantic_hash = ledger.semantic_state_hash
+        pulse.run('idle')
+        selected = plane.select_for_assembly(receipt)
+        self.assertEqual(ledger.semantic_state_hash, semantic_hash)
+        self.assertEqual(receipt.basis_epoch, ledger.epoch)
+        self.assertEqual([x['key'] for x in selected['selected']], ['known'])
         ledger.close()
 
     def test_incremental_pulse_observes_only_new_source_delta(self):
@@ -64,6 +94,7 @@ class DatabasePulseTests(unittest.TestCase):
             ops=[{'op':'SET','domain':'memory','key':'known','value':{'v':4},'epistemic':'KNOWN','status':'CURRENT'}],
         )
         out = pulse.run('p2')
+        self.assertEqual(out['delta_event_count'], 1)
         self.assertEqual(out['observed_change_count'], 1)
         self.assertEqual(out['memory_update_observed_count'], 1)
         changed = [x for x in out['active_refs'] if x['changed']]
@@ -75,33 +106,38 @@ class DatabasePulseTests(unittest.TestCase):
         first = pulse.run('same')
         epoch_after = ledger.epoch
         second = pulse.run('same')
-        self.assertEqual(second['commit_status'], 'ALREADY_COMMITTED')
+        self.assertEqual(second['commit_status'], 'ALREADY_RECORDED')
         self.assertEqual(second['receipt_hash'], first['receipt_hash'])
-        self.assertEqual(second['commit_epoch'], first['commit_epoch'])
+        self.assertEqual(second['pulse_chain_hash'], first['pulse_chain_hash'])
         self.assertEqual(ledger.epoch, epoch_after)
+        self.assertEqual(pulse.journal.verify_all()['pulse_count'], 1)
         ledger.close()
 
-    def test_stale_basis_fails_closed_without_commit(self):
+    def test_stale_basis_fails_closed_without_receipt(self):
         ledger, pulse = self.seeded()
         before = ledger.epoch
         with self.assertRaises(StaleEpoch):
             pulse.run('stale', basis_epoch=before - 1)
         self.assertEqual(ledger.epoch, before)
+        self.assertEqual(pulse.journal.verify_all()['pulse_count'], 0)
         ledger.close()
 
-    def test_corrupt_head_fails_closed_without_new_pulse_event(self):
-        ledger, _ = self.seeded()
-        ledger.append_event(
-            event_id='corrupt-head', idem='corrupt-head', base_epoch=ledger.epoch,
-            event_type='TEST_CORRUPTION', writer='test',
-            ops=[{'op':'SET','domain':'pulse_runtime','key':'head','value':{'pulse_count':'bad'},'epistemic':'KNOWN','status':'CURRENT'}],
+    def test_corrupt_receipt_chain_fails_closed(self):
+        ledger, pulse = self.seeded()
+        pulse.run('p1')
+        ledger.conn.execute(
+            "UPDATE database_pulse_receipts SET receipt_json='{}' WHERE pulse_id='p1'"
         )
+        ledger.conn.commit()
         before = ledger.epoch
-        pulse = DatabasePulse(ledger)
         with self.assertRaises(PulseStateCorrupt):
             pulse.run('blocked')
         self.assertEqual(ledger.epoch, before)
-        self.assertIsNone(ledger.conn.execute("SELECT 1 FROM events WHERE event_id='database-pulse:blocked'").fetchone())
+        self.assertIsNone(
+            ledger.conn.execute(
+                "SELECT 1 FROM database_pulse_receipts WHERE pulse_id='blocked'"
+            ).fetchone()
+        )
         ledger.close()
 
     def test_persistent_restart_resumes_pulse_count_and_cursor(self):
@@ -109,6 +145,7 @@ class DatabasePulseTests(unittest.TestCase):
             path = str(Path(td) / 'frank.db')
             ledger, pulse = self.seeded(path)
             first = pulse.run('p1')
+            semantic_hash = ledger.semantic_state_hash
             ledger.close()
 
             reopened = StateLedger(path)
@@ -116,34 +153,63 @@ class DatabasePulseTests(unittest.TestCase):
             self.assertEqual(first['pulse_count'], 1)
             self.assertEqual(out['pulse_count'], 2)
             self.assertEqual(out['observed_change_count'], 0)
+            self.assertEqual(reopened.semantic_state_hash, semantic_hash)
             reopened.close()
 
-    def test_replay_preserves_committed_pulse_semantics(self):
+    def test_replay_preserves_semantic_state_and_pulse_receipt_chain(self):
         ledger, pulse = self.seeded()
-        out = pulse.run('p1')
+        pulse.run('p1')
+        ledger.append_event(
+            event_id='delta', idem='delta', base_epoch=ledger.epoch,
+            event_type='DELTA', writer='test',
+            ops=[{'op':'SET','domain':'memory','key':'known','value':{'v':9},'epistemic':'KNOWN','status':'CURRENT'}],
+        )
+        pulse.run('p2')
+        last = pulse.run('p3')
         events = ledger.export_events()
-        expected_hash = ledger.semantic_state_hash
+        receipts = pulse.journal.export_receipts()
+        expected_semantic_hash = ledger.semantic_state_hash
+        expected_chain = pulse.journal.verify_all()['pulse_chain_hash']
         ledger.close()
 
-        replayed = StateLedger.replay(events)
-        self.assertEqual(replayed.semantic_state_hash, expected_hash)
-        head = replayed.get('pulse_runtime', 'head')
-        self.assertEqual(head['value']['last_receipt_hash'], out['receipt_hash'])
-        again = DatabasePulse(replayed).run('p1')
-        self.assertEqual(again['commit_status'], 'ALREADY_COMMITTED')
-        self.assertEqual(again['receipt_hash'], out['receipt_hash'])
+        replayed, replay_pulse = replay_entity_trace(events, receipts)
+        self.assertEqual(replayed.semantic_state_hash, expected_semantic_hash)
+        verify = replay_pulse.journal.verify_all()
+        self.assertEqual(verify['pulse_count'], 3)
+        self.assertEqual(verify['pulse_chain_hash'], expected_chain)
+        again = replay_pulse.run('p3')
+        self.assertEqual(again['commit_status'], 'ALREADY_RECORDED')
+        self.assertEqual(again['receipt_hash'], last['receipt_hash'])
         replayed.close()
 
     def test_bootstrap_is_bounded_and_reports_truncation(self):
-        ledger, pulse = self.seeded(config=PulseConfig(bootstrap_scan_limit=2, max_active_refs=24, max_delta_events=4096))
+        ledger, pulse = self.seeded(
+            config=PulseConfig(bootstrap_scan_limit=2, max_active_refs=24, max_delta_events=4096)
+        )
         out = pulse.run('bounded')
         self.assertTrue(out['bootstrap_truncated'])
         self.assertEqual(out['census_count'], 3)
         self.assertEqual(out['observed_change_count'], 2)
         ledger.close()
 
+    def test_exactly_one_semantic_delta_fits_budget_one(self):
+        ledger, pulse = self.seeded(
+            config=PulseConfig(bootstrap_scan_limit=32, max_active_refs=24, max_delta_events=1)
+        )
+        pulse.run('p1')
+        ledger.append_event(
+            event_id='d1', idem='d1', base_epoch=ledger.epoch, event_type='D', writer='test',
+            ops=[{'op':'SET','domain':'memory','key':'a','value':1,'epistemic':'KNOWN','status':'CURRENT'}],
+        )
+        out = pulse.run('p2')
+        self.assertEqual(out['delta_event_count'], 1)
+        self.assertEqual(out['observed_change_count'], 1)
+        ledger.close()
+
     def test_delta_budget_overflow_requires_explicit_rebootstrap(self):
-        ledger, pulse = self.seeded(config=PulseConfig(bootstrap_scan_limit=32, max_active_refs=24, max_delta_events=1))
+        ledger, pulse = self.seeded(
+            config=PulseConfig(bootstrap_scan_limit=32, max_active_refs=24, max_delta_events=1)
+        )
         pulse.run('p1')
         ledger.append_event(
             event_id='d1', idem='d1', base_epoch=ledger.epoch, event_type='D', writer='test',
@@ -157,6 +223,7 @@ class DatabasePulseTests(unittest.TestCase):
         with self.assertRaises(PulseStateCorrupt):
             pulse.run('p2')
         self.assertEqual(ledger.epoch, before)
+        self.assertEqual(pulse.journal.verify_all()['pulse_count'], 1)
         ledger.close()
 
 

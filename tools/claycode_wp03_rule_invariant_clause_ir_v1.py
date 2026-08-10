@@ -11,8 +11,8 @@ Scope is deliberately narrow:
 - rule/invariant admission does not execute tools, mutate external state or prove truth;
 - unknown residual classes remain outside this lowerer;
 - malformed relation-token tampering fails closed;
-- every material receipt is bound to an explicit current-work revision supplied by the
-  caller so stale successful executions cannot close current work.
+- every material receipt is bound to the current repo/control/compiler component revision so
+  stale successful executions cannot close current work.
 
 This file is a research/build candidate. It does not itself promote WP03/WP04/WP05.
 """
@@ -30,6 +30,16 @@ RECEIPT_DOMAIN = b"ClayCodeDeclarativeClauseReceipt/v1\x00"
 CONSUMER_DOMAIN = b"ClayCodeDeclarativeClauseConsumer/v1\x00"
 
 SUPPORTED_KINDS = {"rule_decl": "RULE", "invariant_decl": "INVARIANT"}
+REQUIRED_WORK_REVISION_FIELDS = (
+    "repo_head",
+    "supervisor_blob_sha",
+    "steering_ref",
+    "steering_blob_sha",
+    "frontend_blob_sha",
+    "grammar_blob_sha",
+    "typed_ir_blob_sha",
+    "residual_builder_blob_sha",
+)
 
 PREFIX_RELATIONS = {"4B_emits", "4B_need_not_learn"}
 DOTTED_PREFIX_RELATIONS = {"Needle.lowers", "Needle.owns"}
@@ -87,6 +97,17 @@ def stable_json(value: Any) -> bytes:
 
 def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def validate_work_revision_shape(work_revision: dict[str, str]) -> None:
+    if not isinstance(work_revision, dict) or not work_revision:
+        raise ClauseIRError("current-work revision binding is required")
+    missing = [
+        field for field in REQUIRED_WORK_REVISION_FIELDS
+        if not isinstance(work_revision.get(field), str) or not work_revision[field]
+    ]
+    if missing:
+        raise ClauseIRError(f"current-work revision missing exact bindings: {missing!r}")
 
 
 def _children(node: Any) -> list[Any]:
@@ -201,7 +222,7 @@ def _semantic_token_class(token_type: str, value: str) -> str:
 
 def _symbol_inventory(tokens: list[dict[str, str]]) -> list[str]:
     values = []
-    for row in tokens[1:]:  # skip declaration keyword
+    for row in tokens[1:]:
         cls = _semantic_token_class(row["token"], row["value"])
         if cls == "SYMBOL":
             values.append(row["value"])
@@ -220,11 +241,7 @@ def lower_clause(residual: dict[str, Any], *, index: int, work_revision: dict[st
         raise ClauseIRError(f"unsupported residual class for declarative ClauseIR: {kind!r}")
     ast = residual.get("canonical_ast")
     expr_children, tokens = _validate_clause_root(kind, ast)
-    if not isinstance(work_revision, dict) or not work_revision:
-        raise ClauseIRError("current-work revision binding is required")
-    for field in ("repo_head", "supervisor_blob_sha"):
-        if not isinstance(work_revision.get(field), str) or not work_revision[field]:
-            raise ClauseIRError(f"current-work revision missing {field}")
+    validate_work_revision_shape(work_revision)
 
     semantic_core = {
         "schema": SCHEMA,
@@ -251,6 +268,7 @@ def lower_clause(residual: dict[str, Any], *, index: int, work_revision: dict[st
 
 
 def lower_bundle(typed_ir: dict[str, Any], *, work_revision: dict[str, str]) -> dict[str, Any]:
+    validate_work_revision_shape(work_revision)
     opaque = typed_ir.get("opaque_unlowered_semantics")
     if not isinstance(opaque, list):
         raise ClauseIRError("TypedIR must contain opaque_unlowered_semantics list")
@@ -293,6 +311,7 @@ def lower_bundle(typed_ir: dict[str, Any], *, work_revision: dict[str, str]) -> 
             "clause_ir_mints_runtime_execution_authority": "FORBIDDEN",
             "unsupported_residual_implicit_execution": "FORBIDDEN",
             "stale_work_revision_credit": "FORBIDDEN",
+            "receipt_reuse_across_component_hash_change": "FORBIDDEN",
         },
         "promotion": "NONE",
         "wp03_status": "OPEN",
@@ -302,21 +321,22 @@ def lower_bundle(typed_ir: dict[str, Any], *, work_revision: dict[str, str]) -> 
 
 
 def validate_bundle(receipt: dict[str, Any], *, expected_work_revision: dict[str, str]) -> None:
+    validate_work_revision_shape(expected_work_revision)
     if receipt.get("schema") != SCHEMA:
         raise ClauseIRError("unexpected ClauseIR receipt schema")
     if receipt.get("work_revision") != expected_work_revision:
-        raise ClauseIRError("STALE_EXECUTION_RECEIPT: work revision mismatch")
+        raise ClauseIRError("STALE_EXECUTION_RECEIPT: work/component revision mismatch")
     clauses = receipt.get("clauses")
     deferred = receipt.get("deferred")
     if not isinstance(clauses, list) or not isinstance(deferred, list):
         raise ClauseIRError("ClauseIR receipt lists missing")
-    for clause in clauses:
-        if clause.get("effect_authority") != "NONE" or clause.get("truth_authority") != "NONE":
+    for item in clauses:
+        if item.get("effect_authority") != "NONE" or item.get("truth_authority") != "NONE":
             raise ClauseIRError("declarative clause attempted to mint authority")
-        if clause.get("legality") != "LOWERED_AND_VALIDATED_FOR_DECLARATIVE_CLAUSE_IR":
+        if item.get("legality") != "LOWERED_AND_VALIDATED_FOR_DECLARATIVE_CLAUSE_IR":
             raise ClauseIRError("clause missing legality receipt")
-        if clause.get("work_revision") != expected_work_revision:
-            raise ClauseIRError("clause bound to stale work revision")
+        if item.get("work_revision") != expected_work_revision:
+            raise ClauseIRError("clause bound to stale work/component revision")
     for row in deferred:
         if row.get("status") != "EXPLICITLY_DEFERRED_FAIL_CLOSED" or row.get("effect_authority") != "NONE":
             raise ClauseIRError("non-clause residual did not remain fail closed")
@@ -332,11 +352,11 @@ def consume_declarative_clauses(
     """
     validate_bundle(receipt, expected_work_revision=expected_work_revision)
     registry = []
-    for clause in receipt["clauses"]:
+    for item in receipt["clauses"]:
         registry.append({
-            "clause_id": clause["clause_id"],
-            "clause_kind": clause["clause_kind"],
-            "clause_semantic_sha256": clause["clause_semantic_sha256"],
+            "clause_id": item["clause_id"],
+            "clause_kind": item["clause_kind"],
+            "clause_semantic_sha256": item["clause_semantic_sha256"],
             "evaluation_boundary": "RUNTIME_PREDICATE_ENVIRONMENT_REQUIRED",
             "effect_authority": "NONE",
             "truth_authority": "NONE",

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "evidence_id": "WP03_RESIDUAL_DISPOSITION_V1_LOCAL_20260810",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_parent_at_branch": "0bc5178f14bedffaf8c3c92caf877969de9c2943",
+  "evidence_class": "LOCAL_DEBIAN_PROXY_EXECUTION_NOT_UBUNTU_ACCEPTANCE",
+  "runtime": {
+    "os": "Debian GNU/Linux 13 (trixie)",
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "user_seconds": 0.95,
+    "system_seconds": 0.04,
+    "elapsed_seconds": 0.66,
+    "max_rss_kb": 111124
+  },
+  "measured_inventory_basis": "research_entity/claycode/base/WP03_OPAQUE_SEMANTIC_CLASS_INVENTORY_20260810T1527P0700.json",
+  "inventory_total": 100,
+  "inventory_classes": 10,
+  "candidate_semantics": {
+    "known_classes": "EXPLICITLY_DEFERRED_FAIL_CLOSED until class-specific WP04/WP05 validation receipt",
+    "unknown_classes": "REJECTED_WITH_REASON",
+    "silent_drop": "FORBIDDEN",
+    "implicit_execution": "FORBIDDEN",
+    "effect_authority": "NONE"
+  },
+  "deterministic_checks": {
+    "exact_inventory_no_drop_fail_closed": "PASS",
+    "semantic_mutation_discriminated": "PASS",
+    "authority_tamper_rejected": "PASS"
+  },
+  "out_of_box_experiment": {
+    "name": "SEMANTIC_CONFETTI",
+    "count_for_this_go_cycle": 1,
+    "seed": 20260810,
+    "intervention": "permute all 100 measured residual nodes and inject one novel future_decl class",
+    "result": "PASS",
+    "observed_total": 101,
+    "known_deferred": 100,
+    "unknown_rejected": 1,
+    "evaluator_admitted": false,
+    "effect_authority_minted": false,
+    "interpretation": "Order/noise did not open the evaluator or silently drop the unknown class in this bounded synthetic mechanism test. This does not prove class semantics or Ubuntu acceptance."
+  },
+  "strongest_counterhypothesis": "A universal fail-closed disposition layer may be correct but too conservative; class-specific validation could safely lower metadata and declarative constraint classes earlier and reduce downstream blockage. V1 therefore remains a control-plane safety baseline, not a semantic endpoint.",
+  "external_primary_design_evidence": [
+    "MLIR interfaces allow generic transformations to query explicit operation/dialect semantics rather than hard-code every operation",
+    "MLIR operation definitions support ordered structural/invariant/interface/custom verification before downstream use",
+    "LLVM runs verifier passes to reject malformed IR before later transformations"
+  ],
+  "promotion": "NONE",
+  "wp03_status": "OPEN",
+  "wp04_status": "OPEN",
+  "wp05_status": "OPEN",
+  "frank_harness_mutation": false,
+  "training_authorized": false
+}

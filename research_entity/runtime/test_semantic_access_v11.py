@@ -14,6 +14,7 @@ class SemanticAccessV11Tests(unittest.TestCase):
         self.con=sqlite3.connect(':memory:')
         self.con.executescript(U10); self.con.executescript(U11)
         self.con.execute("INSERT INTO semantic_query_seeds VALUES('sv','s','shared semantic state','u','ALIAS',1,'{}',7,9,'CURRENT','t','t')")
+        self.con.commit()
         p=[Path('s','r1','u',1,0,1,3,'{}')]
         stage_generation(self.con,generation_id='g1',source_epoch=7,graph_epoch=9,derivation_id='d',derivation_hash='h1',paths=p,created_at='t')
         verify_generation(self.con,'g1',verification_clay='{}',verified_at='t')

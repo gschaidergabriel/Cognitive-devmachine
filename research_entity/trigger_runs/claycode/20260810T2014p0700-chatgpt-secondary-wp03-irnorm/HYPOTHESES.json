@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2014p0700-chatgpt-secondary-wp03-irnorm",
+  "hypotheses": [
+    {
+      "id": "H-CC-WP03-TYPED-SEMANTIC-NORMALIZATION",
+      "claim": "CC-WP03 can close without reopening the BASE surface-semantic freeze by inserting a typed canonical IR layer after V18 parsing that normalizes only type-declared unordered constructs and preserves ordered constructs.",
+      "strongest_counterhypothesis": "A required self.root/GWT/Hyperposition/UnifiedDB/ClayGraph fixture needs a new core syntax or semantic primitive that cannot be represented by the existing V18/G9 records, sum-like symbols, collections, refs, epochs, laws and capability/effect structures.",
+      "falsifier": "A production fixture fails typed lowering without an untyped escape hatch after the minimal typed-IR normalization implementation.",
+      "current_evidence": "Candidate parse PASS; current frontend order-sensitive hash discriminator reproduced; local typed normalization makes record-field and set-literal permutations equal; owner-fixed authority mutations rejected in local proxy.",
+      "status": "SUPPORTED_AS_IMPLEMENTATION_DIRECTION_NOT_PACKAGE_PASS"
+    },
+    {
+      "id": "H-CC-WP03-CAPABILITY-OPAQUE-RUNTIME-IDENTITY",
+      "claim": "ClayCode CapabilityToken semantic identity should lower to an opaque/owned/borrowed runtime resource handle; descriptive serialized capability data remains non-authoritative.",
+      "strongest_counterhypothesis": "Copyable descriptive capability data can safely serve as bearer authority with equivalent forgery/replay/revocation closure.",
+      "falsifier": "Adversarial target-runtime tests demonstrate equal authority closure using only copyable descriptive data.",
+      "current_evidence": "Independent WASI capability sandbox and WIT resource-handle design support explicit granted capability/resource identity; project negative-control lineage also rejects ambient/structural forgery.",
+      "status": "SUPPORTED_DIRECTION_WP07_REALIZATION_PENDING"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0","negative_results":[
+    {"id":"N-U11-1","result":"Naive full-candidate HDC decode exceeded practical experimental budget.","consequence":"HDC must use bounded candidate decode or is rejected for hot path."},
+    {"id":"N-U11-2","result":"HDC/VSA recall materially degrades with superposition load.","consequence":"NOT_SELECTED as exact primary relation store."},
+    {"id":"N-U11-3","result":"Product-key retrieval on deliberately non-product data achieved 0 recall.","consequence":"PKM cannot be universal retrieval; manifold/admissibility gate and fallback mandatory."},
+    {"id":"N-U11-4","result":"Adaptive PKM router at 32k could preserve recall yet be slower than brute scan.","consequence":"Do not activate learned route below measured crossover."},
+    {"id":"N-U11-5","result":"Repeated router sweeps showed timing variance and some false routes under naive threshold calibration.","consequence":"No performance promotion; require target workload calibration, OOD drift test, and fail-safe fallback."},
+    {"id":"N-U11-6","result":"Graph ANN literature contains constructed instances with near-linear search behavior.","consequence":"ANN field is derived accelerator only; adversarial/OOD exact fallback remains mandatory."}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-CEA-001",
+  "counterhypothesis":"A conventional precompiled optimal provider-specific reconciliation machine is sufficient and simpler.",
+  "result":"PARTIALLY_SURVIVES",
+  "evidence":{
+    "known_provider_resolution_rate_compiled":1.0,
+    "known_provider_resolution_rate_cea":1.0,
+    "known_observation_cost_compiled":1.5661958126,
+    "known_observation_cost_cea":1.5661958126,
+    "p50_ns_compiled":3523.2,
+    "p50_ns_cea":4150.0,
+    "ood_resolution_compiled":0.0,
+    "ood_resolution_cea":1.0,
+    "state_amplification_x":2.0431034483
+  },
+  "interpretation":"On known providers the strongest conventional baseline matches CEA correctness and observation cost and is faster. CEA only wins the current synthetic discriminator on declarative OOD provider adaptation. Therefore genericity—not latency or known-provider safety—is the surviving claim."
+}

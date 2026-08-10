@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "deltas": [
+    {
+      "id": "RPD-Q23-01",
+      "type": "NEW_RUNTIME_CODE_FACT",
+      "description": "Qwen3.5 reference vision path explicitly removes Qwen3-VL DeepStack helper structures and returns separate pre-merger and merged outputs. This changes the feature-access frontier for Frank MVC.",
+      "effect": "Adds projected-vs-premerger feature stratum as a controlled variable."
+    },
+    {
+      "id": "RPD-Q23-02",
+      "type": "IMPLEMENTABILITY_UPGRADE",
+      "description": "llama.cpp mtmd helper accepts already-calculated media embeddings for decode; same-cycle one-encode MVC->semantic escalation no longer requires assuming a private decoder hook.",
+      "effect": "Promotes zero-reencode path from conceptual feasibility to P0 executable target test."
+    },
+    {
+      "id": "RPD-Q23-03",
+      "type": "COUNTERBASELINE_STRENGTHENING",
+      "description": "MobileCLIP2-S0 is a concrete very-small independent image encoder; DINOv3-S/16 offers frozen dense patch features. Separate-encoder counterhypothesis is therefore non-strawman and must be measured.",
+      "effect": "Prevents premature Qwen-native fusion promotion."
+    },
+    {
+      "id": "RPD-Q23-04",
+      "type": "ARCHITECTURE_DELTA",
+      "description": "Introduced L0/L1/L2/L3 visual-state lifetime split and exact identity binding between persistent semantic state and optional runtime cache.",
+      "effect": "Creates stale-state/restart/resource falsifiers and avoids raw embedding persistence as default semantic state."
+    },
+    {
+      "id": "RPD-Q23-05",
+      "type": "TEST_OBLIGATION",
+      "description": "Defined feature-ladder, zero-reencode, cache-lifetime, hybrid-restart and transform-invariance tests with matched baselines and failure criteria.",
+      "effect": "Converts unresolved architecture preference into executable decision gates."
+    }
+  ],
+  "explicit_non_progress": [
+    "Qwen3.5-4B being natively multimodal was already present in QNDRF-1 and is not counted as new.",
+    "mtmd_get_output_embd existence was already present in QNDRF-1 and is not counted as new.",
+    "Generic CLIP/DINO comparison was already present; only concrete refreshed counterbaseline selection and revised feature-level matrix are counted."
+  ]
+}

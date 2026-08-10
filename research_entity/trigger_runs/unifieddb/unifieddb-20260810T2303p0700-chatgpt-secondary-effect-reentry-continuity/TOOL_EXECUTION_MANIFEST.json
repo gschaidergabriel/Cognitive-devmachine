@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity",
+  "executions": [
+    {"tool":"GitHub.fetch_file/search/commit","scope":["gschaidergabriel/clay-global-research-entity","gschaidergabriel/Dr.-Unterweger"],"purpose":"canonical boot, current workspace, UnifiedDB schemas, target runtime and receipts","result":"SUCCESS"},
+    {"tool":"web.run","source_policy":"primary/official only","sources":["sqlite.org/foreignkeys.html","sqlite.org/lang_transaction.html","sqlite.org/lang_altertable.html","sqlite.org/atomiccommit.html"],"purpose":"validate additive schema/transaction/rollback design constraints","result":"SUCCESS"},
+    {"tool":"GitHub.create/update/delete file","repository":"gschaidergabriel/Dr.-Unterweger","purpose":"build discriminators, target-VPS workflows and additive V17 SQL guards; remove redundant stale positive probe","result":"SUCCESS","commits":["6701f3420d429e91f33a304c991c78b4552a067b","4a76a9c03e57dfd962b8ee1cff2e042d51540d26","e6f683859d2e9ec5eae9c6316445fc28ebdeafd6","486f6c028c4602b3e5e806cc21b04654f9a00377","f2ec9ae063352a95eca3123f650b66304a195c3f","c9b6f1fa9dd0981a6114edd1c3804e05669f3aff","7a10998e5367072fc39e03da210f2a66b46dec48","21249166f7bff4407ee17e4918358574ec8db848"]},
+    {"tool":"target VPS GitHub Actions self-hosted runner","run_id":"31407772002","tested_sha":"4a76a9c03e57dfd962b8ee1cff2e042d51540d26","purpose":"expected-negative V17 schema-binding discriminator","result":"CONFIRMED_V17_SCHEMA_BINDING_GAP","receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_v17_schema_gap_v1/LATEST.json"},
+    {"tool":"target VPS GitHub Actions self-hosted runner","run_id":"31406627821","tested_sha":"2b3d92287249bc1b374dc9244a3fc76b6f675515","purpose":"baseline V14 effect re-entry provenance discriminator","result":"CONFIRMED_EFFECT_REENTRY_PROVENANCE_GAP","receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_provenance_gap_v1/LATEST.json"},
+    {"tool":"target VPS workflows dispatched","purpose":"V17 corrected candidate, support-identity discriminator, relational cross-splice discriminator","result":"PERSISTED_RECEIPT_NOT_YET_OBSERVED_AT_COMPILATION","runs_or_paths":["frank-effect-reentry-done-v17-candidate-vps","frank-effect-reentry-v17-support-binding-gap-vps","frank-effect-reentry-v17-relational-cross-splice-gap-vps"]}
+  ],
+  "execution_boundary": "No provider-side external effect was performed by these discriminators; target runs are test-state only.",
+  "hidden_chain_of_thought_stored": false
+}

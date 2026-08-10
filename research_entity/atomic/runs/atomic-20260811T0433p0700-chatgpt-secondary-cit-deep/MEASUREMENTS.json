@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CIT-001",
+  "evidence_class":"LOCAL_SYNTHETIC_DISCRIMINATOR_ONLY",
+  "raw_rows":"RAW_MEASUREMENTS.csv",
+  "environment":{"python":"3.13.x","libraries":["numpy","pandas","scikit-learn"],"network":false,"gpu":false},
+  "final_discriminator":{"N_candidates":256,"group_probes":80,"audit_probes_if_preaccepted":16,"stale_probe_rate":0.10,"noise_sigma":0.01,"seeds_per_regime":20},
+  "results":[
+    {"regime":"SPARSE_ADDITIVE","k_nominal":4,"interaction":0.0,"accept_rate":0.90,"median_total_interventions_vs_256_LOO":0.390625,"mean_ratio":0.483008,"median_screen_recall":1.0,"min_final_confirmed_recall":1.0,"mean_random_individual_causes_found_same_actual_budget":1.85,"mean_material_causes":4.0},
+    {"regime":"SPARSE_MODERATE_INTERACTION","k_nominal":8,"interaction":0.25,"accept_rate":0.55,"median_total_interventions_vs_256_LOO":0.416016,"mean_ratio":0.824023,"median_screen_recall":1.0,"min_final_confirmed_recall":1.0,"mean_random_individual_causes_found_same_actual_budget":5.30,"mean_material_causes":7.8},
+    {"regime":"SPARSE_STRONG_INTERACTION","k_nominal":8,"interaction":1.0,"accept_rate":0.05,"median_total_interventions_vs_256_LOO":1.3125,"mean_ratio":1.270508,"median_screen_recall":0.875,"min_final_confirmed_recall":1.0,"mean_random_individual_causes_found_same_actual_budget":7.80,"mean_material_causes":7.9},
+    {"regime":"DENSE_ADDITIVE","k_nominal":16,"interaction":0.0,"accept_rate":0.0,"median_total_interventions_vs_256_LOO":1.3125,"mean_ratio":1.3125,"median_screen_recall":0.1875,"min_final_confirmed_recall":1.0,"mean_random_individual_causes_found_same_actual_budget":16.0,"mean_material_causes":16.0}
+  ],
+  "exploratory_preselection_evidence":{
+    "initial_causal_credit_test":"30 seeds x 5000 episodes: observational activation/correlation median MAE ~0.1181; adaptive fidelity-gated individual microlesion ~0.0057; propensity-corrected ~0.0038. This direction was not selected after prior-art collision and learned-critic counterbaseline.",
+    "strong_conventional_critic":"HistGradientBoosting counterfactual critic over stationary synthetic environment median MAE ~0.0047, matching the first microlesion estimator order and preventing a direct-microlesion architecture claim.",
+    "fidelity_ablation":"with 20% stale shadow snapshots, gated microlesion mean MAE ~0.00443 vs ungated ~0.0453; stale replay is therefore a hard validity boundary in this synthetic family."
+  },
+  "interpretation":"CIT shows a real sparse-regime candidate-discovery envelope, not a universal causal-credit win. Strong interaction or dense causes trigger fallback and can make total intervention cost worse than full LOO. Exact confirmation is what preserves final positive-credit correctness in this reference, not tomography itself.",
+  "nonclaims":["no Frank runtime latency/resource result","no target-VPS execution","no real model-cognition causal validity","no compiler acceptance","no architecture promotion"]
+}

@@ -1,0 +1,163 @@
+name: ATOMIC MOLT target VPS falsifier
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/atomic-molt-target-vps.yml'
+      - 'research_entity/atomic/runs/20260810T2141p0700-chatgpt-secondary-molt/implementation/molt_probe.py'
+      - 'research_entity/atomic/runs/20260810T2141p0700-chatgpt-secondary-molt/implementation/molt_kernel_append_probe.c'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: atomic-molt-target-vps
+  cancel-in-progress: false
+
+jobs:
+  target-vps:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+
+      - name: Run MOLT userspace proxy on target
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/molt-target-${GITHUB_RUN_ID}
+          python3 research_entity/atomic/runs/20260810T2141p0700-chatgpt-secondary-molt/implementation/molt_probe.py \
+            > /tmp/molt-target-${GITHUB_RUN_ID}/local_proxy.json
+
+      - name: Compile kernel append-only attack probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          cc -O2 -Wall -Wextra \
+            research_entity/atomic/runs/20260810T2141p0700-chatgpt-secondary-molt/implementation/molt_kernel_append_probe.c \
+            -o /tmp/molt-kernel-probe-${GITHUB_RUN_ID}
+
+      - name: Attack FS_APPEND_FL binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=/tmp/molt-target-${GITHUB_RUN_ID}
+          img=$(mktemp /tmp/molt-self-root.XXXXXX)
+          python3 - "$img" <<'PY'
+          import sys
+          open(sys.argv[1],'wb').write(b'IMMUTABLE-PREFIX' + b'X'*(4096-len(b'IMMUTABLE-PREFIX')))
+          PY
+
+          flag_status=BLOCKED_CAPABILITY
+          probe_rc=-1
+          cleanup() {
+            sudo -n chattr -a "$img" >/dev/null 2>&1 || true
+            rm -f "$img" /tmp/molt-kernel-probe-${GITHUB_RUN_ID}
+          }
+          trap cleanup EXIT
+
+          if command -v chattr >/dev/null 2>&1 && sudo -n chattr +a "$img" >/tmp/molt-chattr.out 2>/tmp/molt-chattr.err; then
+            flag_status=SET
+            set +e
+            /tmp/molt-kernel-probe-${GITHUB_RUN_ID} "$img" > "$out/kernel_probe.json"
+            probe_rc=$?
+            set -e
+          else
+            printf '{"status":"FS_APPEND_FL_SETUP_BLOCKED","stdout":%s,"stderr":%s}\n' \
+              "$(python3 -c 'import json; print(json.dumps(open("/tmp/molt-chattr.out").read() if __import__("os").path.exists("/tmp/molt-chattr.out") else ""))')" \
+              "$(python3 -c 'import json; print(json.dumps(open("/tmp/molt-chattr.err").read() if __import__("os").path.exists("/tmp/molt-chattr.err") else ""))')" \
+              > "$out/kernel_probe.json"
+          fi
+
+          FLAG_STATUS="$flag_status" PROBE_RC="$probe_rc" OUT="$out" python3 - <<'PY'
+          import json, os, platform, socket, subprocess
+          out=os.environ['OUT']
+          def txt(cmd):
+              try: return subprocess.check_output(cmd, text=True, stderr=subprocess.STDOUT).strip()
+              except Exception as e: return 'UNKNOWN:'+str(e)
+          payload={
+            'schema_version':'1.0',
+            'evidence_class':'REAL_SELF_HOSTED_TARGET_VPS_MOLT_FALSIFIER',
+            'candidate':'ATOMIC-CANDIDATE-MOLT-001',
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+            'hostname':socket.gethostname(),
+            'kernel':platform.release(),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'uid':os.getuid(),
+            'cap_eff':open('/proc/self/status').read().split('CapEff:\t')[1].splitlines()[0] if 'CapEff:\t' in open('/proc/self/status').read() else 'UNKNOWN',
+            'filesystem_tmp':txt(['findmnt','-no','FSTYPE','/tmp']),
+            'fs_append_flag_setup':os.environ['FLAG_STATUS'],
+            'kernel_probe_rc':int(os.environ['PROBE_RC']),
+            'kernel_probe':json.load(open(out+'/kernel_probe.json')),
+            'local_proxy':json.load(open(out+'/local_proxy.json')),
+            'architecture_promotion':'NONE',
+            'production_mutation':'NONE',
+            'scope_guard':'FS_APPEND_FL result is decisive only for this exact target kernel/filesystem/user/capability surface. A blocked setup is capability evidence, not a candidate PASS.'
+          }
+          open(out+'/TARGET_VPS_RECEIPT.json','w').write(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'flag_setup':payload['fs_append_flag_setup'],'probe_rc':payload['kernel_probe_rc'],'kernel':payload['kernel']},sort_keys=True))
+          PY
+
+      - name: Upload target receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: atomic-molt-target-${{ github.run_id }}
+          path: /tmp/molt-target-${{ github.run_id }}/TARGET_VPS_RECEIPT.json
+          if-no-files-found: error
+          retention-days: 30
+
+  persist-receipt:
+    if: always()
+    needs: target-vps
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: atomic-molt-target-${{ github.run_id }}
+          path: /tmp/molt-artifact
+      - name: Validate and persist target receipt
+        shell: bash
+        env:
+          TESTED_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          src=/tmp/molt-artifact/TARGET_VPS_RECEIPT.json
+          python3 - "$src" "$TESTED_SHA" <<'PY'
+          import json,sys
+          p=json.load(open(sys.argv[1]))
+          assert p['schema_version']=='1.0'
+          assert p['candidate']=='ATOMIC-CANDIDATE-MOLT-001'
+          assert p['evidence_class']=='REAL_SELF_HOSTED_TARGET_VPS_MOLT_FALSIFIER'
+          assert p['github_sha']==sys.argv[2]
+          assert p['architecture_promotion']=='NONE'
+          PY
+          d=research_entity/atomic/runs/20260810T2141p0700-chatgpt-secondary-molt
+          cp "$src" "$d/TARGET_VPS_RECEIPT_${RUN_ID}.json"
+          cp "$src" "$d/TARGET_VPS_RECEIPT_LATEST.json"
+          git config user.name clay-ci-receipt-writer
+          git config user.email clay-ci-receipt-writer@users.noreply.github.com
+          git add "$d/TARGET_VPS_RECEIPT_${RUN_ID}.json" "$d/TARGET_VPS_RECEIPT_LATEST.json"
+          git commit -m "ci(atomic): persist MOLT target VPS receipt ${RUN_ID}"
+          git pull --rebase origin main
+          git push origin HEAD:main

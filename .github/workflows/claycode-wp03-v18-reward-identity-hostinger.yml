@@ -28,7 +28,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD:tools/claycode_base_frontend.py)" = 31598f85a27ade2d98466606af6bdf5a8473cc8d
-          test "$(git rev-parse HEAD:tools/claycode_base_typed_ir.py)" = 5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb
+          test "$(git rev-parse HEAD:tools/claycode_base_typed_ir.py)" = e8525ee10f5fe4b8d40db79f0d8264a5231eea63
           test "$(git rev-parse HEAD:research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark)" = b27a4da99c9eff68302d550aad78c4e64cabe5c3
           test "$(git rev-parse HEAD:research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt)" = 4a361757efede020cfb288ad7beda2c4a7e6c6b5
       - name: Build hash-locked parser environment

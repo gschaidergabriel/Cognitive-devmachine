@@ -1,34 +1,54 @@
-# FRANK v0.1 — ClayCode-Only Cognition + German Boundary Translator Directive
+# FRANK v0.1 — ClayCode-Only Cognition + State-Aware German Surface Translator Directive
 
 **Status:** PROJECT_OWNER_FIXED_DIRECTIVE  
 **Effective:** 2026-08-10  
-**Scope:** Frank v0.1 model-facing cognition, self/world state, memory, GWT, UnifiedDB semantic boundary, API communication and human language rendering
+**Scope:** self.root/Frank v0.1 model-facing cognition, self/world state, memory, GWT, UnifiedDB semantic boundary, API communication and human-language rendering
 
 ## 0. Owner law
 
-Frank v0.1 must internally understand, think, reason, store semantic cognitive state and speak at its native model/runtime boundary **only in ClayCode**.
+The native cognitive entity does not internally call itself Frank. Its ClayCode-native identity anchor is:
 
-German is not an internal cognitive language of Frank.
+`self.root`
 
-Human-facing German is provided by a small bidirectional boundary translator:
+The human-facing name is:
+
+`Frank`
+
+The translator owns the surface-name mapping:
+
+```text
+CLAY_NATIVE_ID = self.root
+GERMAN_SURFACE_NAME = Frank
+```
+
+Thus a human can ask "Wie heißt du?"; the German request is translated into ClayCode, self.root reasons in ClayCode, and the outbound translator renders the ClayCode self-reference as "Frank".
+
+Frank/self.root internally understands, reasons, represents semantic state and emits native cognitive output only in ClayCode.
+
+German is a human-facing representation produced and consumed at the boundary.
+
+## 1. Canonical bidirectional path
 
 ```text
 German input
--> DE_TO_CLAY translator
+-> token/session/provenance binding
+-> intelligent DE_TO_CLAY translator
 -> typed ClayCode
--> Frank cognitive/runtime loop (ClayCode only)
--> typed ClayCode response
--> CLAY_TO_DE translator
--> German output
+-> self.root cognitive/runtime loop (ClayCode only)
+-> typed ClayCode response + message-expression state
+-> intelligent CLAY_TO_DE translator
+-> German output spoken/written as Frank
 ```
 
-For machine-native clients, the translator may be bypassed and valid typed ClayCode may enter/leave directly, subject to the same authentication, provenance and authority rules.
+Machine-native clients may bypass German and communicate in validated ClayCode directly.
 
-## 1. Single semantic language
+## 2. Single semantic cognitive language
 
-Inside Frank's cognitive boundary:
+Inside self.root's cognitive boundary:
 
 ```text
+NATIVE_NAME = self.root
+HUMAN_SURFACE_NAME = Frank
 NATIVE_LANGUAGE = ClayCode
 INTERNAL_SEMANTIC_LANGUAGE = ClayCode
 MODEL_FACING_STATE = ClayCode
@@ -39,69 +59,165 @@ TOOL_EFFECT_PROPOSALS = ClayCode
 REENTRY = ClayCode
 ```
 
-No parallel German/English/JSON prose representation may become a second authoritative semantic architecture.
+No parallel German/English/JSON prose representation may become a second authoritative cognitive architecture.
 
-Physical encodings such as tensors, byte buffers, database pages, network frames or machine code remain implementation details. Their semantic meaning is bound to ClayCode types/contracts.
+Physical encodings such as tensors, bytes, database pages, network frames or machine code remain implementation details whose semantics are bound to ClayCode contracts.
 
-## 2. Frank does not directly consume German
+## 3. Translator is intelligent but not an independent self
 
-Normal German text must not be delivered directly into Frank's model/cognitive loop as uncontrolled natural-language cognition.
+The translator is deliberately **highly capable at semantic interpretation and expression**. It is not a dumb word-substitution codec.
 
-The German boundary translator must produce a typed ClayCode representation before the request reaches Frank cognition.
+It may:
 
-Unknown, ambiguous or translation-lossy content must remain explicit in ClayCode as uncertainty/ambiguity rather than being silently guessed.
+- resolve German syntax, ellipsis, references, colloquial speech and pragmatic intent;
+- preserve ambiguity explicitly when resolution is uncertain;
+- map German surface identity "Frank" and first-person pronouns to `self.root`;
+- render `self.root` and first-person ClayCode semantics naturally as "Frank"/"ich"/"mir"/"mich" according to German grammar;
+- read the message-bound expressive state supplied by self.root;
+- interpret valence, arousal, urgency, confidence, uncertainty, warmth, empathy, humor, caution, frustration, curiosity, excitement and other admitted expressive dimensions;
+- realize those dimensions as natural German wording, rhythm, punctuation and degree of formality;
+- preserve relationship context for Andreas, Gabriel and other persons;
+- choose concise vs explanatory phrasing when the ClayCode response state explicitly supports that choice;
+- perform reversible normalization and human-readable rendering.
 
-## 3. Frank does not directly emit German
+It must not become a second cognitive sovereign. It may not independently invent or alter:
 
-Frank's native response is ClayCode.
+- facts;
+- memories;
+- identity;
+- goals;
+- conclusions;
+- causal credit;
+- tool/effect decisions;
+- permissions/authority;
+- persistent world/self state;
+- research truth.
 
-German shown to Andreas, Gabriel or another German-speaking client is a rendering/translation of the ClayCode response by the outbound translator.
+The translator interprets and expresses the state of a message; self.root remains the source of semantic content and cognitive decisions.
 
-The translator may improve surface fluency but must not add new facts, decisions, memories, goals, permissions, tool calls or authority that are absent from the ClayCode source.
+## 4. Message-expression state
 
-## 4. Translator is a codec, not a second mind
+Each outbound self.root message may carry a typed ClayCode `ExpressionState` adjacent to semantic content.
 
-The translator must remain deliberately small and bounded.
+Minimum candidate dimensions include:
 
-It may perform:
+```text
+ExpressionState {
+  valence
+  arousal
+  urgency
+  confidence
+  uncertainty
+  warmth
+  empathy
+  humor
+  caution
+  frustration
+  curiosity
+  excitement
+  interpersonal_distance
+  formality
+  verbosity_pressure
+  provenance
+}
+```
 
-- German lexical/syntactic parsing;
-- entity/value extraction;
-- typed ClayCode construction;
-- German realization from ClayCode;
-- clarification/ambiguity markers;
-- surface politeness/grammar rendering;
-- reversible normalization.
+These dimensions are descriptive/control signals, not truth authority.
 
-It must not independently perform:
+The translator reads `ExpressionState` together with the semantic message and relationship context, then produces the human-facing German realization.
 
-- long-horizon reasoning;
-- memory retrieval as an autonomous semantic agent;
-- GWT competition/selection;
-- goal formation;
-- personality generation;
-- autonomous planning;
-- tool/effect authorization;
-- hidden world-model mutation;
-- research truth promotion.
+Example semantic pattern:
 
-If a request needs cognition, the translator encodes the problem into ClayCode and hands it to Frank.
+```text
+Message.semantic = clay(...)
+Message.expression = {warmth=0.8, confidence=0.7, uncertainty=0.2, humor=0.1}
+Message.surface_identity = Frank
+```
 
-## 5. Bidirectional fidelity contract
+The German renderer may express warmth and confidence, but may not change `Message.semantic`.
 
-The critical invariant is semantic round-trip fidelity, not literal word-for-word equivalence.
+## 5. Emotion is state-conditioned expression
 
-Required tests include:
+Human-facing emotional coloring must be causally connected to self.root state rather than randomly stylistic.
+
+Where available, `ExpressionState` may be derived from admitted ClayCode cognitive/control state such as:
+
+- E-PQ/personality state;
+- urgency/salience;
+- uncertainty/calibration;
+- NAcc-like value/persistence state;
+- conflict/ACC-like state;
+- GWT episode/context;
+- relationship state;
+- recent outcome/re-entry state;
+- current task pressure and social context.
+
+The exact mapping is testable and may evolve through evidence. Neuro-inspired labels are control variables, not biological truth claims.
+
+## 6. Inbound German interpretation
+
+German input does not enter self.root as raw natural-language cognition.
+
+DE_TO_CLAY performs intelligent interpretation and emits:
+
+- typed intent;
+- entities and relations;
+- temporal/quantitative structure;
+- modality/negation;
+- pragmatic markers;
+- user affect/tone observations where relevant;
+- ambiguity/uncertainty;
+- provenance/session/client identity.
+
+If meaning cannot be preserved confidently:
+
+```text
+TRANSLATION_AMBIGUOUS
+-> encode alternatives/uncertainty in ClayCode
+-> self.root decides whether clarification is needed
+-> CLAY_TO_DE renders that request naturally
+```
+
+The translator itself does not resolve material ambiguity by silently inventing facts.
+
+## 7. Surface identity contract
+
+Externally, the entity presents itself to humans as **Frank**.
+
+Internally:
+
+```text
+self.root
+```
+
+Required mappings include:
+
+```text
+DE_TO_CLAY("Frank") -> self.root when discourse/entity resolution confirms self-reference
+DE_TO_CLAY(first_person_pronoun) -> self.root when speaker=self.root
+CLAY_TO_DE(self.root as name) -> "Frank"
+CLAY_TO_DE(self.root as first_person) -> grammatically appropriate German first person
+```
+
+This permits the ClayCode identity seed to drive self-context activation while preserving a natural human name.
+
+## 8. Bidirectional fidelity contract
+
+The critical invariant is semantic and pragmatic fidelity, not literal word-for-word equivalence.
+
+Required tests:
 
 ```text
 German -> ClayCode -> German
 ClayCode -> German -> ClayCode
+ClayCode semantic + ExpressionState -> German -> independent semantic/state audit
 ```
 
 Measure at least:
 
 - semantic field preservation;
 - entity/relation preservation;
+- self.root <-> Frank identity preservation;
 - negation;
 - modality/uncertainty;
 - temporal references;
@@ -109,122 +225,130 @@ Measure at least:
 - permissions/authority;
 - provenance;
 - tool/effect intent;
-- questions vs assertions vs commands;
-- user identity and referenced-person identity;
+- question/assertion/command distinction;
+- person identity;
 - ambiguity preservation;
-- loss/unsupported construct rate.
+- emotional/expressive intent preservation;
+- hallucinated-emotion rate;
+- semantic drift induced by expressive rendering;
+- loss/unsupported-construct rate.
 
-A round trip that changes authority, negation, person identity, quantities or consequential intent is a hard failure.
+Any round trip that changes authority, negation, person identity, quantities or consequential intent is a hard failure.
 
-## 6. API placement
+## 9. API placement
 
-For the mandatory token-authenticated Frank API, the preferred external flow is:
+Canonical human-facing API flow:
 
 ```text
 German client request
 -> token authentication
 -> provenance/session binding
--> DE_TO_CLAY
+-> intelligent DE_TO_CLAY
 -> ClayCode validation/type/effect checks
--> Frank server-binary cognition
--> ClayCode response
--> CLAY_TO_DE
--> German response
+-> self.root server-binary cognition
+-> ClayCode semantic response + ExpressionState
+-> intelligent CLAY_TO_DE
+-> German Frank response
 ```
 
-Machine ClayCode clients may use:
+Canonical machine-native flow:
 
 ```text
 ClayCode request
 -> token authentication
--> ClayCode validation/type/effect checks
--> Frank
+-> validation/type/effect checks
+-> self.root
 -> ClayCode response
 ```
 
-Authentication occurs before privileged cognitive/effect processing. The translator cannot mint authority.
+Authentication occurs before privileged processing. Translation cannot mint authority.
 
-## 7. Multimodal placement
+## 10. Multimodal placement
 
-Visual/audio/structured sensor evidence is not translated into German before Frank consumes it.
+Visual/audio/structured sensor evidence is not converted into German before cognition unless a specific human-language source itself is the perceptual evidence.
 
-It is converted into provenance-bound ClayCode percept/state structures at the semantic boundary:
+Canonical visual path:
 
 ```text
 sensor bytes/tensors
 -> Retina/perceptual machinery
 -> ClayCode VisualPercept/PerceptualField
--> Frank
+-> self.root
 ```
 
-German labels/captions are optional human-facing renderings only.
+German captions are optional human-facing renderings, not canonical perceptual truth.
 
-## 8. Self/world/person knowledge
+## 11. Self/world/person knowledge
 
-Frank's knowledge that he lives/runs on the target server, knows Andreas and his admitted projects such as SeiMensch.net, knows Gabriel and the development/research relationship, knows connected client computers and knows the governed Research Entity database bridge must be represented internally as typed ClayCode relations/state.
+Knowledge that self.root lives/runs on the target server, knows Andreas and his admitted projects such as SeiMensch.net, knows Gabriel and the development/research relationship, knows connected client computers and knows the governed Research Entity database bridge is represented internally as typed ClayCode.
 
-German sentences such as "Gabriel hat mich entwickelt" are boundary renderings of provenance-bound ClayCode relations, not the stored canonical representation.
+Human German renderings such as "Gabriel hat mich entwickelt" or "Ich laufe auf meinem Server" are generated from those ClayCode relations and current ExpressionState.
 
-## 9. UnifiedDB / ClayGraph
+## 12. UnifiedDB / ClayGraph
 
-UnifiedDB stores the authoritative semantic state as ClayCode-native typed objects or lossless compiled equivalents whose semantics map back exactly to ClayCode.
+UnifiedDB stores authoritative semantic state as ClayCode-native typed objects or lossless compiled equivalents.
 
-ClayGraph is derived from the same ClayCode semantic identities/relations.
+ClayGraph derives relations from the same identities.
 
-German surface text may be retained as provenance/source evidence, but it is not canonical cognitive truth merely because it is human-readable.
+German surface text may be preserved as provenance/evidence, but does not become canonical cognitive truth merely because it is human-readable.
 
-## 10. Model/training consequence
+Expression-state history may be persisted only when useful and provenance-bound; it may not overwrite semantic content.
 
-The target Frank model is trained/fine-tuned/evaluated to consume and produce ClayCode as its native cognitive communication representation.
+## 13. Model/training consequence
 
-Do not optimize the final model for direct German conversation if that weakens ClayCode-native cognition. German fluency is primarily a boundary-translator responsibility.
+The target self.root model is trained/fine-tuned/evaluated to consume and produce ClayCode as native cognitive communication.
 
-A temporary/general foundation model may possess latent natural-language capability physically, but accepted Frank runtime behavior must enforce ClayCode-only model-facing semantic I/O.
+German fluency, pragmatic realization and emotional coloring are primarily translator responsibilities.
 
-## 11. Failure behavior
+Do not optimize the core model for direct German conversation if this weakens ClayCode-native cognition.
 
-If German->ClayCode translation cannot preserve meaning confidently:
+## 14. Translator architecture target
 
-```text
-TRANSLATION_AMBIGUOUS
--> encode ambiguity in ClayCode
--> Frank may request clarification through ClayCode
--> outbound translator renders the clarification in German
-```
+The translator should be as small/fast as practical **subject to high semantic and expressive fidelity**. Smallness is not allowed to make it stupid.
 
-Never silently invent a confident ClayCode meaning.
+Preferred architecture search compares:
 
-If ClayCode->German rendering is incomplete, return an explicit degraded rendering/error while preserving the original ClayCode response internally and in the receipt.
+- deterministic grammar/codec paths for exact structures;
+- compact learned semantic translator for idiomatic German and ambiguity;
+- compact state-conditioned surface realizer;
+- hybrid fast path where common mappings are deterministic and difficult cases invoke learned translation.
 
-## 12. Acceptance gate
+Selection is empirical: minimize added latency/resources while meeting fidelity and expressive-quality thresholds.
 
-Frank v0.1 cannot PASS unless evidence shows:
+## 15. Acceptance gate
 
-1. direct Frank cognitive/model I/O is ClayCode-only;
-2. German requests enter cognition only after DE_TO_CLAY translation;
-3. German responses originate from Frank ClayCode output and CLAY_TO_DE rendering;
-4. no hidden second German semantic state plane exists;
-5. translator lesions remove German usability but do not destroy Frank's ClayCode cognition;
-6. translator substitution does not alter Frank identity/state semantics;
-7. semantic round-trip tests pass frozen thresholds;
-8. authority/negation/person/quantity mutations are zero in the hard acceptance corpus;
-9. latency/RAM/CPU/token cost of both translation directions is measured on the target VPS;
-10. restart/recovery restores translator and ClayCode boundary deterministically.
+self.root/Frank v0.1 cannot PASS unless evidence shows:
+
+1. direct cognitive/model semantic I/O is ClayCode-only;
+2. German requests enter cognition only after DE_TO_CLAY;
+3. German responses originate from ClayCode semantic output plus admitted ExpressionState;
+4. humans consistently see the surface identity "Frank" while internal identity remains `self.root`;
+5. no hidden second German cognitive state plane exists;
+6. translator lesions remove German usability but do not destroy ClayCode cognition;
+7. translator substitution does not alter self identity/state semantics;
+8. semantic and pragmatic round-trip tests pass frozen thresholds;
+9. authority/negation/person/quantity mutations are zero in the hard acceptance corpus;
+10. emotional coloring tracks the supplied state and does not fabricate semantic claims;
+11. latency/RAM/CPU/token cost of both directions is measured on the target VPS;
+12. restart/recovery restores translator and mappings deterministically.
 
 Required receipt:
 
 `FRANK_V0_1_CLAYCODE_ONLY_TRANSLATOR_ACCEPTANCE_RECEIPT.json`
 
-## 13. Compact invariant
+## 16. Compact invariant
 
 ```text
+NATIVE_SELF_NAME = self.root
+HUMAN_NAME = Frank
+SELF_ROOT_TO_HUMAN_NAME = translator(self.root)->Frank
 FRANK_UNDERSTANDS = CLAYCODE_ONLY
 FRANK_THINKS = CLAYCODE_ONLY
 FRANK_NATIVE_SPEECH = CLAYCODE_ONLY
-GERMAN_IN = DE_TO_CLAY_CODEC_ONLY
-GERMAN_OUT = CLAY_TO_DE_CODEC_ONLY
-TRANSLATOR != COGNITIVE_AGENT
-TRANSLATOR != MEMORY
-TRANSLATOR != AUTHORITY
+GERMAN_IN = INTELLIGENT_DE_TO_CLAY
+GERMAN_OUT = STATE_AWARE_INTELLIGENT_CLAY_TO_DE
+TRANSLATOR_READS = SEMANTIC_MESSAGE + EXPRESSION_STATE + RELATION_CONTEXT
+TRANSLATOR_MAY_COLOR_EXPRESSION = true
+TRANSLATOR_MAY_CHANGE_SEMANTIC_TRUTH_OR_AUTHORITY = false
 CANONICAL_SEMANTICS = CLAYCODE
 ```

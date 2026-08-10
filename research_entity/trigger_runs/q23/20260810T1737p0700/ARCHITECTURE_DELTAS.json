@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T1737p0700",
+  "deltas": [
+    {
+      "id":"AD-Q23-001",
+      "status":"TESTING_CANDIDATE",
+      "proposed_change":"Make Qwen3.5's native vision/mmproj representation the first-choice shared deep visual representation for both MVC and semantic escalation; keep a dedicated lightweight embedding encoder only as a matched counterbaseline/fallback until evidence decides.",
+      "preserved_functions":["sensor provenance","temporal continuity","change detection","open-set routing","active sensing","action verification","replay/versioning"],
+      "strongest_counterhypothesis":"A dedicated lightweight embedding encoder materially dominates raw/projected Qwen features for instance/layout familiarity and unknown rejection under equal total resource budget.",
+      "test":"TO-Q23-001/002",
+      "rollback":"Retain current dedicated-feature MVC baseline and do not delete its implementation path before H1/H2/H3 evidence."
+    },
+    {
+      "id":"AD-Q23-002",
+      "status":"CANDIDATE",
+      "proposed_change":"Add optional text/name anchor binding to GOLD-labeled visual prototypes so user-named entities can exploit native multimodal representation geometry without turning names or model semantics into sensor truth.",
+      "strongest_counterhypothesis":"Text semantic similarity contaminates instance identity and increases false familiarity.",
+      "test":"TO-Q23-003",
+      "rollback":"Disable text-anchor contribution and preserve visual-only prototypes."
+    },
+    {
+      "id":"AD-Q23-003",
+      "status":"CANDIDATE",
+      "proposed_change":"Use a hierarchical visual-change controller: deterministic pixel/tile change gate -> Qwen feature-space semantic-delta estimate -> full semantic 4B decode only when uncertainty/novelty/conflict/task criticality warrants it -> GWT only when globally useful.",
+      "strongest_counterhypothesis":"Feature distance is not calibrated enough to safely gate semantic decode, especially for small text or subtle state changes.",
+      "test":"TO-Q23-004/005",
+      "rollback":"Use deterministic change gate plus direct semantic decode escalation without feature-distance gating."
+    },
+    {
+      "id":"AD-Q23-004",
+      "status":"CANDIDATE",
+      "proposed_change":"Bind every MVC/prototype/cache artifact to exact model, vision/mmproj, quantization, pooling/projection and runtime-version identity; reject stale feature spaces by default and require explicit migration/rebuild.",
+      "strongest_counterhypothesis":"The extra version boundary adds state/maintenance complexity without material protection because representations remain sufficiently compatible across deployed updates.",
+      "test":"TO-Q23-006/007",
+      "rollback":"Keep simpler current feature-backbone version invalidation semantics if stronger version granularity proves unnecessary."
+    }
+  ],
+  "promotion_rule":"No delta promotes from narrative or generic benchmark evidence. Require matched Frank fixtures, resource shadows, open-set/action correctness, replay/recovery and no simpler dominating baseline."
+}

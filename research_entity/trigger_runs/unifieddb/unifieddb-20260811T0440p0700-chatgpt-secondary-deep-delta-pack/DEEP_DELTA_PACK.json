@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
+  "deltas":[
+    {"rank":1,"id":"UDB-D11-ACTUAL-SCHEMA-ATTEST","delta":"pair materialization uses migration-chain digest AND independently recomputed actual sqlite_schema fingerprint","why":"metadata-only certificate bypass reproduced","status":"REQUIRED_NEXT"},
+    {"rank":2,"id":"UDB-D12-PUBLICATION-BARRIER","delta":"state mutation becomes runnable only after DB PREPARED + external selected-head CAS + DB PUBLISHED closure","why":"root computation alone has no continuation/publication semantics","status":"CANDIDATE"},
+    {"rank":3,"id":"UDB-D13-HIERARCHICAL-ROOT","delta":"typed table/domain commitments with dirty-leaf recomputation + periodic full audit","why":"local 100k-row proxy shows full rehash hot-path cost; incremental 47x faster and root-equivalent in tested case","status":"CANDIDATE"},
+    {"rank":4,"id":"UDB-D14-ROOT-DOMAIN-FIREBREAK","delta":"classify persistent state into root domains and exclude/root-layer publication metadata to avoid recursive self-hashing","why":"self-reference instability reproduced","status":"REQUIRED_DESIGN"},
+    {"rank":5,"id":"UDB-D15-GRAPH-SOURCE-ROOT","delta":"ClayGraph materialization binds exact selected semantic head/root, not numeric unified_epoch alone","why":"same-epoch sibling-root counterexample reproduced","status":"REQUIRED_NEXT"},
+    {"rank":6,"id":"UDB-D16-GRAPH-PROJECTION-ROOT","delta":"deterministic graph surfaces emit graph_projection_root bound to source root + derivation program","why":"derivedness needs reproducible rebuild evidence, not only CURRENT flag","status":"CANDIDATE"},
+    {"rank":7,"id":"UDB-D17-STATE-WITNESS","delta":"every model/GWT/Needle/effect-relevant read carries selected-head/root/graph/materialization witness","why":"prevents silent read-use state turnover","status":"CANDIDATE"},
+    {"rank":8,"id":"UDB-D18-SELECTION-WITNESS","delta":"candidate universe + policy/scorer + ordered refs + StateWitness are hash-bound in query/assembly receipts","why":"selection provenance is distinct from record provenance","status":"CANDIDATE"},
+    {"rank":9,"id":"UDB-D19-DELTA-CHAIN-CHECKPOINT","delta":"append-only transaction/event delta chain for fast audit, periodically anchored by full semantic commitment","why":"separates cheap mutation integrity from expensive full-state audit","status":"EXPERIMENT"},
+    {"rank":10,"id":"UDB-D20-MULTIDB-ROLLBACK-JOURNAL-MIGRATION","delta":"evaluate SQLite ATTACH single-transaction/super-journal for atomic UnifiedDB+ClayGraph schema migration during deliberate rollback-journal mode","why":"official SQLite semantics provide multi-file transaction atomicity outside WAL; local crash-before-commit proxy supported","status":"EXPERIMENT_NOT_DEFAULT"},
+    {"rank":11,"id":"UDB-D21-SCHEMA-DRIFT-HARDENING","delta":"evaluate trusted_schema=OFF / defensive connection settings where compatible","why":"reduce unsafe schema/application-defined behavior surface without treating it as authority","status":"TARGET_COMPATIBILITY_TEST"},
+    {"rank":12,"id":"UDB-D22-ROOT-CHANGESET-ACCELERATOR","delta":"evaluate SQLite Session extension or central-writer dirty-table journal as an optional changed-row accelerator","why":"can avoid full-table scans but target feature availability and PK coverage are unverified","status":"OPTIONAL_EXPERIMENT"}
+  ],
+  "do_not_conflate":[
+    "migration-chain digest with actual materialization fingerprint",
+    "semantic root with selected continuation authority",
+    "unified epoch with semantic state identity",
+    "graph CURRENT status with correct source root",
+    "query provenance with selection provenance",
+    "state witness with effect authority",
+    "incremental cached roots with independent truth"
+  ],
+  "status":"COMPLETE"
+}

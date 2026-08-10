@@ -1,0 +1,41 @@
+name: ClayCode WP03 Residual Semantics Candidate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-wp03-residual-semantics-candidate-hostinger.yml'
+      - 'tools/claycode_wp03_residual_semantics_candidate.py'
+      - 'tools/test_claycode_wp03_residual_semantics_candidate.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hostinger-differential:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 1}
+      - name: Build hash-locked parser environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV=/tmp/clay-wp03-residual-${GITHUB_RUN_ID}
+          python3 -m venv "$VENV"
+          "$VENV/bin/pip" install --disable-pip-version-check --no-input --require-hashes --only-binary=:all: -r research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt
+      - name: Execute baseline-vs-candidate differential
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV=/tmp/clay-wp03-residual-${GITHUB_RUN_ID}
+          PYTHONPATH=tools PYTHONSAFEPATH=1 /usr/bin/time -v "$VENV/bin/python" tools/test_claycode_wp03_residual_semantics_candidate.py
+      - name: Cleanup
+        if: always()
+        run: rm -rf "/tmp/clay-wp03-residual-${GITHUB_RUN_ID}"

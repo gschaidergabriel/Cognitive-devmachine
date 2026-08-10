@@ -1,0 +1,46 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-SPL-001",
+  "counterhypothesis":"The smallest conventional independent semantic parser/validator, composed with typed Clay validation and explicit ambiguity handling, matches SPL hard-field safety while using less complexity/resources; any failure-diversity advantage from SPL can be reproduced with ordinary redundant validators.",
+  "tests":[
+    {
+      "name":"main strong-baseline differential",
+      "cases":100000,
+      "active_corruptions":56486,
+      "full_validator_false_allow":0,
+      "spl_false_allow":0,
+      "full_validator_false_deny":0,
+      "spl_false_deny":0,
+      "full_validator_p50_us":3.044,
+      "spl_p50_us":5.187,
+      "verdict":"SUPPORTS_COUNTERHYPOTHESIS"
+    },
+    {
+      "name":"five independent replications",
+      "cases_total":200000,
+      "result":"0 false allow / 0 false deny for both strong mechanisms in all replications; full validator lower p50 in each run",
+      "verdict":"SUPPORTS_COUNTERHYPOTHESIS"
+    },
+    {
+      "name":"single-validator correlated fault",
+      "activated_corruptions":52053,
+      "single_faulty_full_false_allow_rate":1.0,
+      "single_faulty_SPL_false_allow_rate":1.0,
+      "verdict":"NO_UNIQUE_SINGLE_CHECKER_RESILIENCE"
+    },
+    {
+      "name":"redundant checker rescue",
+      "activated_corruptions":52053,
+      "two_full_false_allow_rate":0.0,
+      "dual_SPL_false_allow_rate":0.0,
+      "two_full_p50_us":7.791,
+      "dual_SPL_p50_us":22.944,
+      "verdict":"STRONGLY_SUPPORTS_COUNTERHYPOTHESIS_IN_PROXY"
+    }
+  ],
+  "overall":"SUPPORTED_IN_SYNTHETIC_PROXY",
+  "candidate_status_after_counterhypothesis":"NO_UNIQUE_BENEFIT_SYNTHETIC",
+  "remaining_uncertainty":"A real German validator may require a second neural/model semantic parser, while narrow hard-field oracles may be materially cheaper. This resource/coverage hypothesis remains unmeasured and is the only current reopen path for an SPL-like decomposition.",
+  "architecture_promotion":false,
+  "durable_action":"Target issue #162 records a conventional-first implementation and test obligation for independent hard-field translation validation."
+}

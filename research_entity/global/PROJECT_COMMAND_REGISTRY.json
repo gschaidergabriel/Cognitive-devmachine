@@ -1,11 +1,9 @@
 {
-  "schema_version": "3.9",
+  "schema_version": "4.0",
   "matching": "trimmed_full_message_case_insensitive_exact",
   "entity_display_name": "Clay",
   "legacy_internal_namespace": "RAE",
-  "trigger_renames": {
-    "clay": "clayresearch"
-  },
+  "trigger_renames": {"clay": "clayresearch"},
   "entity_name_rule": "Exact clay refers to the Clay researcher entity itself, not a reserved scientific command.",
   "authoritative_trigger_registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
   "research_center_protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
@@ -41,6 +39,32 @@
       "post_level0_stochastic_field_spawn": true,
       "paid_training_auto_start_forbidden": true
     },
+    "go": {
+      "protocol": "research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md",
+      "evidence_synthesis": "research_entity/global/GO_SWARM_EVOLUTION_V2_EVIDENCE_SYNTHESIS_20260810.md",
+      "go_q23_bridge": "research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay",
+      "kind": "maximum_depth_telemetry_driven_recursive_swarm_cycle",
+      "requires_program_state": true,
+      "requires_current_repo_refresh": true,
+      "requires_live_worker_reread": true,
+      "requires_swarm_telemetry": true,
+      "requires_current_work_revision_binding": true,
+      "requires_fresh_external_research_every_invocation": true,
+      "requires_repeated_live_external_refresh": true,
+      "requires_multi_source_ecology": true,
+      "requires_source_network_deepening": true,
+      "requires_counterhypothesis_search": true,
+      "requires_progress_delta_each_major_cycle": true,
+      "requires_bidirectional_q23_exchange": true,
+      "requires_targeted_pullable_reentry": true,
+      "requires_swarm_self_evaluation": true,
+      "requires_exactly_one_bounded_out_of_box_experiment": true,
+      "maximum_useful_depth": true,
+      "maximum_useful_visible_output": true,
+      "no_filler_or_raw_token_burn": true,
+      "must_act_immediately": true,
+      "paid_training_auto_start_forbidden": true
+    },
     "q12": {
       "protocol": "research_entity/triggers/Q12_CREATOR_ADVISOR_PROTOCOL.md",
       "profile": "research_entity/advisor/Q12_CREATOR_MODEL_PROFILE.json",
@@ -55,6 +79,8 @@
     "q23": {
       "protocol": "research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md",
       "field": "research_entity/global/Q23_MULTIMODAL_PERCEPTION_RESEARCH_FIELD.clay",
+      "go_q23_bridge": "research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay",
+      "experience_dose_contract": "research_entity/retina/Q23_FRANK_EXPERIENCE_DOSE_RESPONSE_CONTRACT_20260810.md",
       "kind": "maximum_depth_interconnective_multimodal_perception_research",
       "requires_program_state": true,
       "requires_current_repo_refresh": true,
@@ -67,6 +93,8 @@
       "requires_progress_delta_each_major_cycle": true,
       "requires_dense_incremental_fusion": true,
       "requires_network_deepening": true,
+      "requires_bidirectional_go_exchange": true,
+      "experience_claim_requires_dose_response": true,
       "stagnation_requires_route_change": true,
       "maximum_useful_depth": true,
       "must_act_immediately": true,
@@ -220,5 +248,5 @@
       "paid_training_auto_start_forbidden": true
     }
   },
-  "rule": "Reserved commands fire only on exact full-message match. Exact clay names the Clay research entity and is not a command. The old clay foundry command is clayresearch. Every scientific/research-center trigger reads the dynamic staged program and live center while remaining loyal to its own domain. 666 is the phase-sensitive autonomous meta-trigger; q12 is the creator-advisor meta-role; q23 is the maximum-depth interconnective multimodal-perception research trigger with forced progress deltas and repeated live-knowledge fusion. Every substantive visible response ends with the dynamic status footer generated from the next unpassed milestone in PROGRAM_STATE.json, including all registered short commands."
+  "rule": "Reserved commands fire only on exact full-message match. Exact clay names the Clay research entity and is not a command. The old clay foundry command is clayresearch. Exact go is the restored maximum-depth telemetry-driven whole-swarm research/build/test/live-web cycle; q23 is the maximum-depth multimodal perception field and exchanges questions/results bidirectionally with go. Every scientific/research-center trigger reads the dynamic staged program and live center while remaining loyal to its own domain. 666 is the phase-sensitive autonomous genesis trigger; q12 is the creator-advisor meta-role. Every substantive visible response ends with the dynamic status footer generated from the next unpassed milestone in PROGRAM_STATE.json, including all registered short commands."
 }

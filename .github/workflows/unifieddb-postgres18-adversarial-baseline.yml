@@ -1,0 +1,138 @@
+name: UnifiedDB PostgreSQL 18 Adversarial Baseline
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/unifieddb-postgres18-adversarial-baseline.yml'
+      - 'research_entity/runtime/benchmark_postgres18_vs_u14_semantic_reads.py'
+      - 'research_entity/runtime/adaptive_semantic_read_plane_v14.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unifieddb-postgres18-baseline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  github-hosted-postgres18:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:18.4
+        env:
+          POSTGRES_USER: clay
+          POSTGRES_PASSWORD: clay
+          POSTGRES_DB: claybench
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U clay -d claybench"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      CLAY_POSTGRES_DSN: postgresql://clay:clay@127.0.0.1:5432/claybench
+      CLAY_EXECUTION_CLASS: GITHUB_HOSTED_UBUNTU_POSTGRESQL_18_4
+    steps:
+      - name: Checkout exact tested tree
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned PostgreSQL adapter
+        run: python -m pip install --disable-pip-version-check 'psycopg[binary]==3.3.4'
+
+      - name: Capture runtime metadata
+        run: |
+          set -euo pipefail
+          uname -a
+          python --version
+          python - <<'PY'
+          import platform, psycopg, sqlite3
+          print('platform=', platform.platform())
+          print('psycopg=', psycopg.__version__)
+          print('sqlite=', sqlite3.sqlite_version)
+          PY
+
+      - name: Run matched PostgreSQL adversary
+        run: |
+          set -euo pipefail
+          python research_entity/runtime/benchmark_postgres18_vs_u14_semantic_reads.py \
+            | tee /tmp/CLAY_U14_VS_POSTGRESQL18_GITHUB_HOSTED.json
+
+      - name: Upload GitHub-hosted receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clay-u14-vs-postgresql18-github-hosted-${{ github.run_id }}
+          path: /tmp/CLAY_U14_VS_POSTGRESQL18_GITHUB_HOSTED.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  hostinger-postgres18:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:18.4
+        env:
+          POSTGRES_USER: clay
+          POSTGRES_PASSWORD: clay
+          POSTGRES_DB: claybench
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U clay -d claybench"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      CLAY_POSTGRES_DSN: postgresql://clay:clay@127.0.0.1:55432/claybench
+      CLAY_EXECUTION_CLASS: HOSTINGER_SELF_HOSTED_UBUNTU_POSTGRESQL_18_4
+    steps:
+      - name: Checkout exact tested tree read-only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Verify runtime prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          uname -a
+          python3 --version
+          docker --version
+
+      - name: Install pinned PostgreSQL adapter
+        shell: bash
+        run: python3 -m pip install --user --disable-pip-version-check 'psycopg[binary]==3.3.4'
+
+      - name: Run matched PostgreSQL adversary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 research_entity/runtime/benchmark_postgres18_vs_u14_semantic_reads.py \
+            | tee /tmp/CLAY_U14_VS_POSTGRESQL18_HOSTINGER.json
+
+      - name: Upload Hostinger receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clay-u14-vs-postgresql18-hostinger-${{ github.run_id }}
+          path: /tmp/CLAY_U14_VS_POSTGRESQL18_HOSTINGER.json
+          if-no-files-found: warn
+          retention-days: 30

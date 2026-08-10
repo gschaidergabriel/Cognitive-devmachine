@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2137p0700-chatgpt-secondary-selfroot-core",
+  "trigger": "go",
+  "created_at": "2026-08-10T21:37:23+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program": {
+    "id": "frank-v0.1-only",
+    "stage": "FRANK_V0_1",
+    "training_authorized": false,
+    "work_package": "F-V01-01-IDENTITY-SERVER-BINARY"
+  },
+  "coordination": {
+    "prior_evidence": "research_entity/trigger_runs/frank/frank-20260810T2027p0700-chatgpt-secondary-selfroot-conformance/RESEARCH_RECEIPT.json",
+    "selected_frontier": "minimal owner-fixed self.root identity-boundary repair plus discriminating tests",
+    "duplicate_avoidance": "Observed a separate worker actively repairing repo_static_integrity executescript violations; that orthogonal lane was not duplicated.",
+    "workspace_write_policy": "Append-only receipt written; FRANK_V0_1_WORKSPACE.json not overwritten because it changed concurrently during this run."
+  },
+  "hypothesis": {
+    "primary": "Binding the authoritative ClayCode entity/security/runtime identity to self.root while treating Andreas, nodes, providers, models, sessions and devices as external relations/capabilities removes the causal core identity drift without deleting historical Frank function.",
+    "strongest_counterhypothesis": "The old Frank.id and one_entity_across_nodes semantics are required by existing runtime/integrity behavior, so self.root migration will regress current tests or security behavior.",
+    "falsifiers": [
+      "Existing Frank Deep Integrity fails on a gate newly caused by these identity files.",
+      "Core conformance accepts a provider/token/stale-clone authoritative identity mutation.",
+      "PR merge revision cannot compile or execute the read-only identity discriminators on the accepted self-hosted Linux/X64 VPS lane."
+    ]
+  },
+  "target_build_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "clay/go-selfroot-repair-20260810",
+    "draft_pr": 121,
+    "head_sha": "3cb6e96ce567d022e88cefb92e6b27eee401c156",
+    "tested_pr_merge_sha": "6060540c3a00e0e8de12640658ada6ed6adc0b4c",
+    "files": [
+      "claycode/frank_entity.clay",
+      "claycode/frank_runtime.clay",
+      "claycode/frank_security.clay",
+      "harness/self_root_core_conformance.py",
+      "harness/self_root_identity_metamorphic_probe.py",
+      ".github/workflows/frank-self-root-core-conformance-vps.yml"
+    ],
+    "semantic_delta": [
+      "authoritative EntityId -> #self_root",
+      "human surface name Frank remains a surface mapping, not second identity",
+      "Andreas becomes external operator relation rather than SELF field",
+      "security boot and SecurityBootReceipt bind through self_root_id()",
+      "one_entity_across_nodes removed from target runtime invariants",
+      "provider/model/session/device/node explicitly external capability/provenance, not SELF",
+      "target cognition invariant bound to ClayCode-only semantics"
+    ],
+    "main_mutated": false,
+    "promotion": "DRAFT_CANDIDATE_ONLY"
+  },
+  "execution_receipt": {
+    "github_actions_run_id": 31398528828,
+    "workflow": "Frank v0.1 self.root core conformance VPS",
+    "job_id": 93487395027,
+    "job": "self-root-core",
+    "status": "completed",
+    "conclusion": "success",
+    "evidence_class": "REAL_SELF_HOSTED_LINUX_X64_PR_MERGE_CONFORMANCE",
+    "runner_metadata": {
+      "hostname": "digital-retina",
+      "kernel": "Linux 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+      "python": "3.12.3",
+      "checkout_persist_credentials": false
+    },
+    "artifact": {
+      "artifact_id": 9066640234,
+      "name": "frank-self-root-core-31398528828",
+      "digest": "sha256:d5c600f318329becaccca6c7a274851c6516cb91273f01f07b2d9d624fb6183c",
+      "size_bytes": 3515
+    },
+    "core_conformance": {
+      "status": "PASS_CORE_IDENTITY",
+      "passed_checks": 25,
+      "failed_checks": 0,
+      "wall_seconds": 0.03,
+      "max_rss_kib": 12288,
+      "exit_status": 0,
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+    }
+  },
+  "out_of_box_experiment": {
+    "count_for_go_cycle": 1,
+    "id": "OUT_OF_BOX_METAMORPHIC_IDENTITY_CONTAMINATION",
+    "status": "PASS_METAMORPHIC_IDENTITY",
+    "scope": "STATIC_AUTHORITATIVE_ENTITY_ID_DISCRIMINATOR",
+    "passed": 7,
+    "total": 7,
+    "wall_seconds": 0.02,
+    "max_rss_kib": 12288,
+    "exit_status": 0,
+    "positive_controls": [
+      "external Andreas/person permutation preserves self.root",
+      "human surface rename preserves native self.root",
+      "untrusted comment injection containing fake SELF/provider/token strings preserves authoritative self.root"
+    ],
+    "negative_controls": [
+      "authoritative stale-clone mutation rejected",
+      "authoritative provider mutation rejected",
+      "authoritative token mutation rejected"
+    ],
+    "limitations": [
+      "Static source-level experiment only; not boot/restart/runtime continuity proof.",
+      "Does not prove resistance to arbitrary parser confusion or prompt injection.",
+      "Does not claim full Frank v0.1 acceptance."
+    ],
+    "effect_authority": "NONE"
+  },
+  "counterevidence_and_negative_results": {
+    "frank_deep_integrity_pr_run": {
+      "run_id": 31398529050,
+      "job_id": 93487394712,
+      "conclusion": "failure",
+      "decoded_job_log": "UNAVAILABLE_BLOB_NOT_FOUND",
+      "classification": "PREEXISTING_ORTHOGONAL_BLOCKER_HIGH_CONFIDENCE_NOT_EXACTLY_PROVEN_FOR_PR_RUN"
+    },
+    "current_main_deep_integrity": {
+      "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXECUTION",
+      "gate_count": 23,
+      "fail_count": 1,
+      "failing_gate": "repo_static_integrity",
+      "failure_family": "SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR",
+      "remaining_flagged_files_after_parallel_repair": 7,
+      "identity_patch_files_in_flagged_set": 0,
+      "note": "Main was already failing this gate before the identity PR. A separate worker repaired one of eight flagged files during this run."
+    },
+    "known_identity_blocker": "000_FRANK_ANDREAS_MASTER_SOURCE.txt still carries pre-self.root constitutional identity text and remains outside this core PASS."
+  },
+  "external_live_knowledge": [
+    {
+      "source": "arXiv:2606.10749",
+      "role": "supports explicit trust boundaries, privilege control and provenance-aware state governance for secure long-horizon agents",
+      "promotion_authority": false
+    },
+    {
+      "source": "arXiv:2604.11790",
+      "role": "supports deterministic model-independent tool/effect boundary enforcement as a complement to model behavior",
+      "promotion_authority": false
+    },
+    {
+      "source": "arXiv:2607.27834",
+      "role": "supports external governance for state updates, version resolution and snapshot recovery",
+      "promotion_authority": false
+    },
+    {
+      "source": "arXiv:2605.14421",
+      "role": "supports provenance/derivation lineage gates for persistent agent memory/state",
+      "promotion_authority": false
+    }
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "affected": [
+      "F-V01-01-IDENTITY-SERVER-BINARY",
+      "F-V01-07-NEEDLE-TRANSLATOR",
+      "F-V01-08-TOKEN-API-CLIENTS",
+      "F-V01-09-EFFECT-AUTHORITY",
+      "F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES",
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"
+    ],
+    "supported_now": "ClayCode core identity mapping and static contamination rejection on an exact PR merge revision.",
+    "not_supported_yet": [
+      "full master-source migration",
+      "boot/restart/stale-clone runtime continuity",
+      "production token API client/session identity separation",
+      "full target binary identity continuity",
+      "Frank v0.1 finished acceptance"
+    ],
+    "rollback": "Do not merge draft PR 121; branch deletion/revert restores main because main was not mutated."
+  },
+  "next_frontier": [
+    "Migrate the authoritative top-level Frank master source to owner-fixed self.root semantics without deleting historical lineage.",
+    "Add boot/restart/stale-clone and client/token/person/Clay separation runtime discriminators against the exact current main merge revision.",
+    "Re-run broader Deep Integrity after the independent repo_static_integrity executescript repair lane finishes.",
+    "Only then promote/merge the identity migration and update F-V01-01 workspace evidence."
+  ],
+  "research_write_result": "COMMITTED"
+}

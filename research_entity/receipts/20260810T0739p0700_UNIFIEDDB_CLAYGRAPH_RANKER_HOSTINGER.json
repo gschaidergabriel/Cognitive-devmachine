@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CLAY-U16-GRAPH-RANKER-VPS-31344999729",
+  "created_at": "2026-08-10T00:39:32Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "evidence_class": "VERIFIED_REMOTE_EXECUTION_EXACT_CLAY_BLOBS_SYNTHETIC_RELATION_TARGET_SCOPE",
+  "clay_repository": "gschaidergabriel/clay-global-research-entity",
+  "clay_feature_branch": "chatgpt/udb-claygraph-v16-accuracy-fusion-20260810",
+  "clay_pr": 108,
+  "bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+  "bridge_pr": 77,
+  "bridge_merge_commit_tested": "fe79f3ba81eb33705e60615e806bef7233b0176f",
+  "github_run_id": 31344999729,
+  "github_job_id": 93325176306,
+  "runner": {
+    "name": "clay",
+    "machine": "digital-retina",
+    "runner_version": "2.336.0",
+    "os": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "kernel": "6.8.0-117-generic",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "architecture": "x86_64",
+    "virtualization": "KVM full",
+    "cpu_model": "AMD EPYC 9354P 32-Core Processor",
+    "allocated_cpus": 4,
+    "memory_total_gib_approx": 15,
+    "swap": "0B"
+  },
+  "exact_clay_blob_sha": {
+    "research_entity/runtime/verified_claygraph_ranker.py": "83a470d3b7449b9e2d140c6a170342d9053b8cee",
+    "research_entity/runtime/test_verified_claygraph_ranker.py": "2858e0d14a1d2027a1ec1cf1058ca6d3a0ff6d80",
+    "research_entity/runtime/benchmark_verified_claygraph_ranker.py": "e069d138a179f3a8b4ae2dd4d5304c39666a6966"
+  },
+  "tests": {
+    "verified_claygraph_ranker": {
+      "passed": 8,
+      "failed": 0,
+      "duration_seconds_reported": 0.005,
+      "status": "PASS"
+    }
+  },
+  "benchmark": {
+    "id": "U16_VERIFIED_CLAYGRAPH_RELATION_TARGET_V1",
+    "scope": "12 frozen Clay-shaped one-hop relation-target questions; resolved anchors supplied; synthetic engineering workload",
+    "timed_queries_per_strategy": 6000,
+    "quality": {
+      "sqlite_fts5_bm25": {"hit_at_1": 0.25, "mrr": 0.625, "recall_at_3": 1.0},
+      "plain_sql_graph_weight": {"hit_at_1": 0.3333333333333333, "mrr": 0.6666666666666666, "recall_at_3": 1.0},
+      "verified_claygraph_query_ranker": {"hit_at_1": 1.0, "mrr": 1.0, "recall_at_3": 1.0, "first_rank_failures": 0}
+    },
+    "latency_us": {
+      "sqlite_fts5_bm25": {"p50": 104.6905, "p95": 145.93300000000002, "p99": 171.06311000000005, "mean": 102.6369665, "max": 714.114},
+      "plain_sql_graph_weight": {"p50": 5.13, "p95": 9.520500000000002, "p99": 17.65150000000003, "mean": 6.497895, "max": 94.952},
+      "verified_claygraph_query_ranker": {"p50": 64.22, "p95": 96.82060000000001, "p99": 115.87181000000004, "mean": 63.950647833333335, "max": 191.811}
+    },
+    "delta": {
+      "hit1_vs_fts_percentage_points": 75.0,
+      "hit1_vs_plain_graph_percentage_points": 66.66666666666667,
+      "p50_speedup_vs_fts": 1.63018530052943,
+      "p50_slowdown_vs_plain_graph": 12.518518518518519
+    }
+  },
+  "artifact": {
+    "name": "clay-udb-graph-ranker-31344999729",
+    "artifact_id": 9047031479,
+    "zip_sha256": "df388a42ed04bf6dfea5639474e14446547f5384c18d23f4333a68a6ca5d377c",
+    "size_bytes": 6831,
+    "retention_days": 30
+  },
+  "acceptance": {
+    "exact_blob_identity_verified_before_execution": true,
+    "ranker_tests_pass": true,
+    "ranker_hit1_exact": true,
+    "ranker_better_than_fts_hit1": true,
+    "ranker_better_than_plain_graph_hit1": true,
+    "ranker_faster_than_fts_p50": true,
+    "ranker_faster_than_plain_graph_p50": false
+  },
+  "fusion_decision": {
+    "status": "SUPPORTED_FEATURE_BRANCH_CANDIDATE",
+    "use": "Only as query-aware one-hop ClayGraph deepening after resolved entity when U14/U15 detects relational insufficiency/ambiguity; do not replace cheap exact/compiled/plain graph paths.",
+    "reason": "Accuracy dominates both measured baselines on this workload and p50 also beats FTS5, but plain weighted graph traversal remains about 12.5x faster and should remain the cheaper route when sufficient.",
+    "authority": "ASSEMBLY_CONTEXT_ONLY_NO_EFFECT_AUTHORITY"
+  },
+  "claim_guard": [
+    "This receipt proves exact Clay candidate blobs executed successfully on the Hostinger self-hosted Ubuntu lane only for the declared synthetic relation-target workload.",
+    "It does not prove universal superiority over every database engine or workload.",
+    "A conventional database implementing the same typed semantic score can reproduce the ranking logic; the measured advantage belongs to Clay semantic query composition, not magical physical storage.",
+    "Resolved anchors are supplied by the fixture; automatic entity resolution is not credited.",
+    "This bridge did not install or mutate Frank runtime/harness and is not Andreas target acceptance."
+  ]
+}

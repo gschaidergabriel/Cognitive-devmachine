@@ -1,0 +1,32 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:clay-live-fusion-reentry-v1:durability-cost:20260810T1434p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T07:34:00Z",
+  "payload": {
+    "work_id": "CLAY-LIVE-FUSION-REENTRY-V1",
+    "reason_clay": {
+      "new_local_evidence": "Per-record fsync materially increases local append and full-event latency; durability is not free.",
+      "receipt_ref": "8568f7dc22c887225cffd13565a87c3b4aa84cb0",
+      "strict_event_two_workers_local_ms": {"p50": 2.0838105, "p95": 3.47509265, "p99": 12.76099473, "mean": 2.404043884},
+      "shadow_selective_sync_local_ms": {"p50": 0.8279845, "p95": 1.3623713, "p99": 1.77995618, "mean": 0.88573288},
+      "shadow_speedup_mean": 2.7142,
+      "shadow_selection": "NOT_SELECTED because reconstructed replay equivalence is insufficient proof of immediate durable Delivery receipt semantics."
+    },
+    "completion_clay": {
+      "latency_resource_benchmark": "LOCAL_PRELIMINARY_ONLY_HOSTINGER_REQUIRED",
+      "durable_delivery_group_commit_candidate": "OPEN_COUNTERHYPOTHESIS_NOT_SELECTED",
+      "hostinger_ubuntu_receipt": "PASS_REQUIRED",
+      "authoritative_writer_observer_backaction_p50_p95_p99_busy_wal": "REQUIRED",
+      "unifieddb_transaction_or_group_commit_differential": "REQUIRED",
+      "active_worker_delivery_ack_roundtrip": "REQUIRED",
+      "git_fallback_replay_equivalence": "REQUIRED"
+    },
+    "status": "READY",
+    "base_priority": 0.98,
+    "expected_impact": 0.98,
+    "urgency": 0.94,
+    "information_gain": 0.97
+  }
+}

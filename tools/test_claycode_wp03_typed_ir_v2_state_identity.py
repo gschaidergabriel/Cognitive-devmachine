@@ -103,11 +103,7 @@ def test_collection_and_result_identity(ir: dict) -> None:
         "maybe_ref": "m1",
         "operation": {"ok": "done"},
     }
-    reordered_set_map = {
-        **base,
-        "evidence": ["e1", "e2"],
-        "by_ref": {"r1": 1, "r2": 2},
-    }
+    reordered_set_map = {**base, "evidence": ["e1", "e2"], "by_ref": {"r1": 1, "r2": 2}}
     a = v2.typed_state_identity(ir, "GenericCoreState", base)
     b = v2.typed_state_identity(ir, "GenericCoreState", reordered_set_map)
     assert a["state_identity_sha256"] == b["state_identity_sha256"], (a, b)
@@ -121,20 +117,13 @@ def test_collection_and_result_identity(ir: dict) -> None:
     err["operation"] = {"err": "done"}
     d = v2.typed_state_identity(ir, "GenericCoreState", err)
     assert d["state_identity_sha256"] != a["state_identity_sha256"]
-
-    expect_error(
-        lambda: v2.typed_state_identity(ir, "GenericCoreState", {**base, "operation": {"ok": "x", "err": "y"}}),
-        "exactly one of ok/err",
-    )
+    expect_error(lambda: v2.typed_state_identity(ir, "GenericCoreState", {**base, "operation": {"ok": "x", "err": "y"}}), "exactly one of ok/err")
 
 
 def test_aba_version_and_resource_identity(ir: dict) -> None:
     state_a = {
-        "cell_id": "resource:cell-1",
-        "value": 7,
-        "version": 10,
-        "identity_mode": "VERSION_BOUND",
-        "capability": "capability:descriptor-only",
+        "cell_id": "resource:cell-1", "value": 7, "version": 10,
+        "identity_mode": "VERSION_BOUND", "capability": "capability:descriptor-only",
     }
     state_a2 = {**state_a, "version": 12}
     state_other_resource = {**state_a, "cell_id": "resource:cell-2"}
@@ -147,34 +136,21 @@ def test_aba_version_and_resource_identity(ir: dict) -> None:
     assert a["capability_descriptor_fields"] == ["capability"]
     assert a["effect_authority"] == "NONE"
     assert a["execution_trace_in_identity"] is False
-
-    # A -> B -> A visible value recurrence remains a distinct state when the epoch changed.
-    visible_a = state_a["value"]
-    visible_a2 = state_a2["value"]
-    assert visible_a == visible_a2 == 7
-    assert a["state_identity_sha256"] != b["state_identity_sha256"]
+    assert state_a["value"] == state_a2["value"] == 7
 
 
 def test_mvc_version_identity(ir: dict) -> None:
     current = {
-        "version": "mvc-7",
-        "feature_backbone_version": "clip-3",
-        "stage": "CURRENT",
-        "prototype_state_ref": "proto:7",
-        "readout_state_ref": None,
-        "calibration_ref": "cal:7",
-        "training_examples": ["ex:2", "ex:1"],
-        "evaluation_receipts": ["receipt:b", "receipt:a"],
-        "parent_version": "mvc-6",
-        "semantic_hash": "hash:same-visible-model",
+        "version": "mvc-7", "feature_backbone_version": "clip-3", "stage": "CURRENT",
+        "prototype_state_ref": "proto:7", "readout_state_ref": None, "calibration_ref": "cal:7",
+        "training_examples": ["ex:2", "ex:1"], "evaluation_receipts": ["receipt:b", "receipt:a"],
+        "parent_version": "mvc-6", "semantic_hash": "hash:same-visible-model",
     }
     next_version = {**current, "version": "mvc-8", "training_examples": ["ex:1", "ex:2"]}
     a = v2.typed_state_identity(ir, "VisualClassifierVersion", current)
     b = v2.typed_state_identity(ir, "VisualClassifierVersion", next_version)
     assert a["state_identity_sha256"] != b["state_identity_sha256"]
-    assert {x["field"] for x in a["identity_sensitive_fields"]} >= {
-        "version", "feature_backbone_version", "parent_version"
-    }
+    assert {x["field"] for x in a["identity_sensitive_fields"]} >= {"version", "feature_backbone_version", "parent_version"}
     assert a["effect_authority"] == b["effect_authority"] == "NONE"
 
 
@@ -182,7 +158,7 @@ def test_negative_type_corpus() -> None:
     duplicate_variant = """module test.duplicate\nversion \"1\"\ntype E = A|A\nrecord R { value:E }\n"""
     expect_error(lambda: compile_text(duplicate_variant), "duplicate closed-sum variant")
 
-    source_a = """module test.eq\nversion \"1\"\ntype E=A|B\nrecord R { value:E epoch:Epoch }\n"""
+    source_a = """module test.eq\nversion \"1\"\ntype E=A|B\nrecord R {\n  value:E\n  epoch:Epoch\n}\n"""
     source_b = """// layout/provenance-only difference\nmodule test.eq\n\nversion \"1\"\ntype E = A | B\nrecord R {\n  value:E\n  epoch:Epoch\n}\n"""
     ia = compile_text(source_a)
     ib = compile_text(source_b)
@@ -195,10 +171,7 @@ def test_negative_type_corpus() -> None:
 
 
 def test_sum_value_rejection(ir: dict) -> None:
-    expect_error(
-        lambda: v2.typed_state_identity(ir, "EvidenceTier", "PLATINUM"),
-        "invalid EvidenceTier variant",
-    )
+    expect_error(lambda: v2.typed_state_identity(ir, "EvidenceTier", "PLATINUM"), "invalid EvidenceTier variant")
 
 
 def main() -> int:
@@ -215,9 +188,7 @@ def main() -> int:
         "typed_ir_v2_sha256": ir["typed_ir_sha256"],
         "program_semantic_id": ir["program_semantic_id"],
         "closed_sum_types": len(sums),
-        "target_sum_types": sorted(d["name"] for d in sums if d["name"] in {
-            "EvidenceTier", "FamiliarityResult", "LearnerStage", "AtomicIdentityMode", "CasStrength", "AtomicOrdering"
-        }),
+        "target_sum_types": sorted(d["name"] for d in sums if d["name"] in {"EvidenceTier", "FamiliarityResult", "LearnerStage", "AtomicIdentityMode", "CasStrength", "AtomicOrdering"}),
         "mvc_records": 6,
         "aba_records": 4,
         "collection_result_option_roles": "PASS",

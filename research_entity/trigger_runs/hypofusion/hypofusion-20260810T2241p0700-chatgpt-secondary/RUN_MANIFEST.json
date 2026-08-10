@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"hypofusion-20260810T2241p0700-chatgpt-secondary",
   "trigger":"hypofusion",
   "started_at":"2026-08-10T22:41:00+07:00",
@@ -15,6 +15,7 @@
     "FUSION2_HYPOTHESES.json",
     "CONTRADICTION_MAP.md",
     "BRANCH_FEEDBACK_MANIFEST.json",
+    "LATE_ARRIVALS.md",
     "RUN_MANIFEST.json",
     "FINAL_REPORT.md"
   ],
@@ -22,7 +23,11 @@
   "external_live_research":true,
   "external_primary_sources_used":["arXiv:2503.18813","arXiv:2505.23643","arXiv:2605.17634","arXiv:2606.06090","arXiv:2607.08716","arXiv:2502.05171","ICLR/OpenReview recurrent Sokoban planning","ICLR/OpenReview empowerment causal learning","official Kubernetes Lease docs"],
   "top_transformed_hypotheses":["HF2-001-EXECUTION-EPOCH-SPINE","HF2-002-SELECTIVE-STATE-INTERVENTION","HF2-003-CONTEXTUAL-INTEGRITY-EFFECT-GATE","HF2-004-ADAPTIVE-RECURRENCE-AS-COMPUTE-POLICY","HF2-005-CLAYCODE-VS-SIMPLER-TYPED-BASELINE"],
-  "completion":{"status":"PARTIAL_BY_PROTOCOL","reason":"Major current/reachable hypothesis clusters and all registered trigger feedback were covered, but GitHub code-search indexing returned no results for canonical hypothesis IDs and no local native repository-wide resolver was available. Therefore complete enumeration of every reachable historical/current OPEN hypothesis cannot be honestly certified."},
+  "late_arrivals":{
+    "PR157":"Target-VPS V17 presence-bound effect mechanism passed stale-holder, successor-adoption, pre-provider fence, fault-atomicity, historical lifecycle and WP04 checks; implementation closed as duplicate in favor of #160/#156. Strengthens HF2-001 mechanism only.",
+    "PR163":"Closed as duplicate of #156/#160; retained event-payload lease-epoch binding as a simpler-baseline alternative for HF2-001."
+  },
+  "completion":{"status":"PARTIAL_BY_PROTOCOL","reason":"Major current/reachable hypothesis clusters and all registered trigger feedback were covered and close-time worker arrivals were integrated, but GitHub code-search indexing returned no results for canonical hypothesis IDs and no local native repository-wide resolver was available. Therefore complete enumeration of every reachable historical/current OPEN hypothesis cannot be honestly certified."},
   "research_write_result":"COMMITTED_TO_DEDICATED_BRANCH",
   "main_mutated":false,
   "target_runtime_mutated":false,

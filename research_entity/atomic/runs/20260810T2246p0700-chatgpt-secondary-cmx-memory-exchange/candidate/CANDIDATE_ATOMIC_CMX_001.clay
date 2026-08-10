@@ -1,0 +1,107 @@
+module atomic.cmx.v1
+version "0.1-refutable"
+status RADICAL_CANDIDATE_NOT_PROMOTED
+
+// Counterfactual Memory Exchange (CMX)
+// Scope is PROCEDURAL/STRATEGY memory only. Utility is not truth, identity, user intent, or effect authority.
+
+class MemorySemanticClass = PROCEDURAL_HINT | STRATEGY_TRACE | EPISODIC_FACT | IDENTITY_ANCHOR | AUTHORITY_RECEIPT
+class CreditState = PROVISIONAL | POSITIVE | NEUTRAL | NEGATIVE | UNKNOWN
+
+record ProceduralMemoryUnit {
+  memory_id: MemoryId
+  semantic_class: MemorySemanticClass
+  context_signature: ContextSignature
+  action_hint: ActionHint
+  source_provenance: ProvenanceSet
+  created_epoch: Epoch
+  capital: Real
+  retrieval_cost: Real
+  credit_state: CreditState
+  truth_authority: NONE
+  effect_authority: NONE
+}
+
+record MemoryUseReceipt {
+  use_id: UseId
+  memory_id: MemoryId
+  execution_epoch: Epoch
+  task_epoch: Epoch
+  query_context_hash: Hash
+  retrieval_score: Real
+  context_cost: Real
+  causal_use: Bool
+}
+
+record OutcomeCreditReceipt {
+  receipt_id: ReceiptId
+  execution_epoch: Epoch
+  task_epoch: Epoch
+  verified_outcome_ref: EvidenceRef
+  chosen_action: ActionRef
+  shadow_action_without_memory: ActionRef?
+  actual_utility: Real
+  shadow_utility: Real?
+  marginal_utility: Real?
+  provenance: ProvenanceSet
+}
+
+invariant CMX_applies_only_to(PROCEDURAL_HINT | STRATEGY_TRACE)
+invariant EPISODIC_FACT not_ranked_by capital
+invariant IDENTITY_ANCHOR not_ranked_by capital
+invariant AUTHORITY_RECEIPT not_ranked_by capital
+invariant capital never_mints truth_authority
+invariant capital never_mints effect_authority
+invariant model_self_echo never_mints verified_outcome
+invariant GWT_ignition never_mints memory_credit
+invariant repeated_retrieval_without_verified_outcome cannot_create_positive_credit
+invariant stale_execution_epoch -> reject_credit
+invariant stale_task_epoch -> reject_credit
+invariant receipt_id replay -> idempotent_no_second_credit
+
+fn cmx_score(memory, current_context, now) -> Real {
+  relevance = bounded_context_relevance(memory.context_signature,current_context)
+  provenance_prior = bounded_procedural_source_prior(memory.source_provenance)
+  capital_term = 0.25 * clip(memory.capital,-2.0,4.0)
+  recency_term = 0.10 * exp_decay(now-memory.created_epoch)
+  return 1.50*relevance + provenance_prior + capital_term + recency_term
+}
+
+fn retrieve(exchange, current_context, k_max=5) -> Ordered<MemoryUseReceipt> {
+  ranked = sort_desc(exchange.procedural_units by cmx_score)
+  // executable proxy early-exits when an exact verified procedural record wins by >0.45.
+  chosen = adaptive_budget(ranked,k_max,exact_verified_margin=0.45)
+  charge each chosen context_rent = 0.005
+  return receipts(chosen)
+}
+
+fn settle(memory, use, outcome) -> OutcomeCreditReceipt {
+  require outcome.verified
+  require use.execution_epoch == current_execution_epoch
+  require use.task_epoch == current_task_epoch
+  shadow = recompute_decision_without(memory.memory_id)
+  if shadow trustworthy {
+    delta = utility(outcome.actual) - utility(shadow)
+    memory.capital += 0.25 * delta
+  } else {
+    memory.credit_state = UNKNOWN
+    // UNKNOWN never upgrades itself.
+  }
+}
+
+recovery rule persisted capital + seen_receipt_ids + source provenance replay deterministically
+ablation hook NO_COUPON -> set marginal coefficient 0
+ablation hook NO_RENT -> set context_rent 0
+ablation hook FIXED_K -> disable adaptive budget
+ablation hook NO_PROVENANCE -> set provenance_prior 0
+
+metric task_accuracy
+metric avoidable_error_when_correct_verified_memory_exists
+metric retrieved_memories_per_turn
+metric decision_latency
+metric metadata_bytes
+metric stale_epoch_rejections
+metric duplicate_receipt_rejections
+metric truth_or_authority_violations
+
+acceptance requires full_CMX beats strongest_conventional_baseline AND defining_ablations_degrade

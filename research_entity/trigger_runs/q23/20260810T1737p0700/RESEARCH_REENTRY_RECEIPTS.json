@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T1737p0700",
+  "reentry_status":"REPO_VISIBLE_RUNTIME_INGESTION_NOT_VERIFIED",
+  "receipts":[
+    {"id":"RR-Q23-001","object":"Q23 maximum-depth protocol","repo_commit":"8c72286987895d00c0f856cc7c05fc428a5912d9","state":"COMMITTED"},
+    {"id":"RR-Q23-002","object":"Q23 research field v2","repo_commit":"45f13687aa93a2becb22e08eaca428da42b371a1","state":"COMMITTED"},
+    {"id":"RR-Q23-003","object":"Q23 trigger registration","repo_commit":"ef245f783e172be9062ba16ab0896591381a9f3c","state":"COMMITTED"},
+    {"id":"RR-Q23-004","object":"Q23 command registration","repo_commit":"9dbad1a4a0202e83837bf7db1aec57961574c7cc","state":"COMMITTED"},
+    {"id":"RR-Q23-005","object":"Q23 hypotheses/counterhypotheses/frontier/source/fusion/progress packages","state":"COMMITTED_MULTIPLE_REPO_RECEIPTS"},
+    {"id":"RR-Q23-006","object":"Q23 branch feedback","repo_commit":"a9ae98df991370d6ca0a3fb735b32f80768fe657","state":"COMMITTED"}
+  ],
+  "runtime_note":"No claim is made that a live UnifiedDB materializer or ResearchReentryReceipt runtime has already consumed these files during this connector-only session. The repo is the durable handoff surface; runtime ingestion remains to be observed by the next capable synchronization/execution pass.",
+  "next_reentry_obligation":"On the next material q23/frank/harness/fusion run with runtime access, verify these committed objects are indexed/materialized in shared state and emit the normal OmniSource ResearchReentryReceipt."
+}

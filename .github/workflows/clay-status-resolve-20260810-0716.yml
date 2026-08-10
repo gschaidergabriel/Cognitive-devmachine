@@ -1,0 +1,28 @@
+name: Clay Status Resolve 0716
+
+on:
+  push:
+    branches:
+      - clay-status-resolve-20260810-0716
+    paths:
+      - '.github/workflows/clay-status-resolve-20260810-0716.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Resolve current status from repository contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "SNAPSHOT_SHA=$(git rev-parse HEAD)"
+          python3 tools/program_progress.py --json --as-of 2026-08-10

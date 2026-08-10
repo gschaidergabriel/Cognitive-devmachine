@@ -1,0 +1,138 @@
+module frank.research.causal_intervention_tomography.v1
+version "0.1-research-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+
+symbol ProbeSafety = SAFE_INTERNAL | SANDBOX_REVERSIBLE | EXTERNAL_OR_UNSAFE | UNKNOWN
+symbol ProbeValidity = VALID | STALE | FIDELITY_UNKNOWN | PROVENANCE_BROKEN
+symbol ScreenStatus = CANDIDATES_ONLY | ABSTAIN_DENSE | ABSTAIN_NONLINEAR | ABSTAIN_UNCERTAIN | FALLBACK_EXACT
+symbol Confirmation = UNCONFIRMED | INDIVIDUAL_LESION_CONFIRMED | RESPONSIBILITY_WITNESS_CONFIRMED | REFUTED
+
+record CausalProbeAtom {
+  atom_id:Ref
+  episode_id:Ref
+  source_receipts:Set<Ref>
+  gwt_used_receipt:Ref?
+  local_effect_receipt:Ref?
+  safety:ProbeSafety
+  state_epoch:Epoch
+  semantic_epoch:Epoch
+}
+
+record InterventionMask {
+  probe_id:Ref
+  episode_id:Ref
+  atom_ids:Set<Ref>
+  design_family:Symbol
+  inclusion_probability:Real[0,1]
+  snapshot_ref:Ref
+  state_epoch:Epoch
+  semantic_epoch:Epoch
+}
+
+record ProjectionMeasurement {
+  probe_id:Ref
+  mask_ref:Ref
+  metric_id:Ref
+  delta:Real
+  uncertainty:Real>=0
+  validity:ProbeValidity
+  provenance:Set<Ref>
+}
+
+record SparseScreenResult {
+  episode_id:Ref
+  candidate_scores:Map<Ref,Real>
+  candidate_uncertainty:Map<Ref,Real>=0>
+  selected_candidates:Set<Ref>
+  estimated_sparsity:Int>=0
+  validation_residual:Real>=0
+  audit_residual:Real>=0
+  status:ScreenStatus
+  probe_receipts:Set<Ref>
+  version:Ref
+}
+
+record ExactCausalConfirmation {
+  episode_id:Ref
+  atom_id:Ref
+  confirmation:Confirmation
+  causal_credit:Real[0,1]
+  verified_outcome_ref:Ref?
+  witness_ref:Ref
+  provenance:Set<Ref>
+}
+
+rule atom_probe_eligible(a:CausalProbeAtom) iff
+  a.safety in [SAFE_INTERNAL,SANDBOX_REVERSIBLE]
+  && current(a.state_epoch)
+  && current(a.semantic_epoch)
+
+rule external_or_unknown_probe(a) -> FORBID_GROUP_LESION
+rule group_probe never reissues_external_effect
+rule group_probe never mints EffectAuthorization
+rule group_probe never mutates canonical slow_reward_or_personality_or_goal_state
+
+rule measurement_admissible(m:ProjectionMeasurement) iff
+  m.validity=VALID
+  && current(provenance(m))
+
+rule stale_or_fidelity_unknown_or_broken(m) -> reject_from_reconstruction
+
+rule tomography_screen(measurements,atoms,budget) -> SparseScreenResult
+rule tomography_screen optimizes candidate_discovery_per_safe_probe; not reward
+
+rule high_validation_residual -> status=ABSTAIN_NONLINEAR
+rule estimated_sparsity above configured_sparse_envelope -> status=ABSTAIN_DENSE
+rule insufficient_valid_measurements -> status=ABSTAIN_UNCERTAIN
+rule any_abstain -> FALLBACK_EXACT or defer_without_material_learning
+
+// A second complement-only audit challenges the candidate set for missed material causes.
+rule candidate_set_audit lesions only eligible atoms outside selected_candidates
+rule material_audit_delta above noise_bound -> status=FALLBACK_EXACT
+
+// The compressed screen is never a causal witness.
+rule SparseScreenResult.candidate_scores != causal_credit
+rule SparseScreenResult != RewardOutcomeEvidence
+rule SparseScreenResult != truth
+rule SparseScreenResult != identity
+rule SparseScreenResult != user_intent
+rule SparseScreenResult != effect_authority
+
+// Positive material credit requires a separate exact confirmation path.
+rule material_credit_admissible(c:ExactCausalConfirmation) iff
+  c.confirmation in [INDIVIDUAL_LESION_CONFIRMED,RESPONSIBILITY_WITNESS_CONFIRMED]
+  && c.verified_outcome_ref != null
+  && current(c.provenance)
+  && c.causal_credit>0
+
+rule unconfirmed_or_refuted_candidate -> material_learning_weight=0
+rule screen_miss cannot become negative_credit_by_absence
+
+// Prevent permanent starvation from an imperfect sparse screen.
+parameter minimum_uniform_exact_probe_fraction=0.05
+rule exact_probe_scheduler preserves exploration_floor >= minimum_uniform_exact_probe_fraction
+
+// Recovery and observability.
+rule restart invalidates in_memory_probe_design_without persisted version+snapshot+epoch binding
+rule snapshot_mismatch -> ProbeValidity.STALE
+rule reconstruction_version_change -> invalidate_old_screen_for_material_use
+rule raw_projection_rows are preserved even when screen is rejected
+
+// Relation to CARF/strong conventional baseline.
+rule trusted_factorized_dependency_DAG_available -> exact responsibility evaluator remains preferred confirmation
+rule CIT may rank exact tests; CIT never replaces exact responsibility semantics
+
+// Lesion hooks.
+intervention LESION_TOMOGRAPHY -> disable tomography_screen
+intervention LESION_AUDIT -> disable candidate_set_audit
+intervention FORCE_DENSE -> require ABSTAIN_DENSE_or_FALLBACK_EXACT
+intervention FORCE_STALE -> require stale measurements rejected
+intervention SHUFFLE_MASK_OUTCOMES -> require no promotion from chance fit
+
+invariant CIT_IS_PROBE_SCHEDULER_ONLY
+invariant COMPRESSED_ESTIMATE_NEVER_MINTS_MATERIAL_REWARD
+invariant EXTERNAL_EFFECTS_ARE_NEVER_REPLAYED_FOR_TOMOGRAPHY
+invariant STALE_OR_UNKNOWN_FIDELITY_PROBES_ARE_NOT_CAUSAL_EVIDENCE
+invariant EXACT_CONFIRMATION_REQUIRED_FOR_POSITIVE_MATERIAL_CREDIT
+invariant DENSE_NONLINEAR_UNCERTAIN_REGIMES_ABSTAIN_OR_FALL_BACK
+invariant SELF_ROOT_SELF_HARNESS_AUTHORITY_REMAINS_PROPOSAL_ONLY

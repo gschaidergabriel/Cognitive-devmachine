@@ -1,0 +1,18 @@
+{
+  "aggregate": {
+    "ambiguous_abstention_mean": 1.0,
+    "latency_mean_us": 1204.637979,
+    "p95_mean_us": 1732.1052333333332,
+    "top1_mean": 1.0,
+    "top1_min": 1.0
+  },
+  "benchmark": "V12_ENTITY_RESOLVER_PLUS_NL_CLAYGRAPH_ALIAS_OOD_V1",
+  "execution_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "boundary": "Synthetic aliases derived from the entity index; not real-world alias-resolution evidence.",
+  "runs": [
+    {"seed":20260810,"n_alias_queries":1000,"top1":1.0,"resolution_classes":{"EVIDENCE_ALIAS":1000},"ambiguous_control_abstention_rate":1.0,"latency_us":{"mean":1206.941678,"p50":1142.9305,"p95":1723.4872,"p99":1880.90415}},
+    {"seed":20260811,"n_alias_queries":1000,"top1":1.0,"resolution_classes":{"EVIDENCE_ALIAS":1000},"ambiguous_control_abstention_rate":1.0,"latency_us":{"mean":1193.965259,"p50":1151.1985,"p95":1720.43625,"p99":1868.8234}},
+    {"seed":20260812,"n_alias_queries":1000,"top1":1.0,"resolution_classes":{"EVIDENCE_ALIAS":1000},"ambiguous_control_abstention_rate":1.0,"latency_us":{"mean":1213.007,"p50":1147.548,"p95":1752.39225,"p99":2143.52412}}
+  ],
+  "interpretation": "Removing exact logical IDs did not reduce Top-1 on this synthetic alias workload. The ambiguous-alias control always abstained, preserving the fail-closed identity boundary. Real repository aliases, misspellings, pronouns and cross-entity ambiguity remain required falsifiers."
+}

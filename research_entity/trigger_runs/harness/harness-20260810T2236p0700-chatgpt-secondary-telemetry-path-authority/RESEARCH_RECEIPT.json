@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2236p0700-chatgpt-secondary-telemetry-path-authority",
+  "trigger": "harness",
+  "timestamp_local": "2026-08-10T22:36:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "persistent_entity": "Clay",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "identity_boundary": {
+    "frank_native_target": "self.root",
+    "frank_human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "research_entity_harness_authority": "INDEPENDENT_RESEARCH_TEST_IMPLEMENT_WITH_OWNER_FIXED_BOUNDARIES"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_program": "FRANK_V0_1",
+  "selected_gap": "telemetry schema authority and static schema-owner integrity",
+  "coordination": {
+    "identity_lane_duplicate_avoided": true,
+    "live_telemetry_deployment_lane_duplicate_avoided": true,
+    "reason": "current workers already own self.root identity and MCP live-deployment/preflight work; this run constrained itself to path authority plus audit soundness"
+  },
+  "fresh_target_vps_evidence": {
+    "receipt_commit": "f3ee4fdff836ec869dfd0160ce6d66c18c840a24",
+    "receipt_id": "FRANK-V01-TELEMETRY-SCHEMA-AUTHORITY-V1-31403551674",
+    "tested_sha": "8fe4109ce4b4404eee354dfd07e2dd8c262abfd7",
+    "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_LIVE_TELEMETRY_READONLY_SCHEMA_AUTHORITY_V1",
+    "executor": {
+      "runner_name": "clay",
+      "hostname": "digital-retina",
+      "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+      "python": "3.12.3"
+    },
+    "repo_static_integrity": "PASS",
+    "disposable_roundtrip": "PASS",
+    "legacy_in_place_migration": "PASS",
+    "source_authority": "PASS",
+    "live_telemetry_readonly": "LIVE_DB_NOT_FOUND",
+    "overall": "FAIL_TELEMETRY_SCHEMA_AUTHORITY_V1_TARGET",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "hypotheses": [
+    {
+      "id": "H-HARNESS-TELEMETRY-PATH-001",
+      "claim": "Separating telemetry DDL into a migrator is insufficient if TelemetryStore can direct that migrator to an arbitrary environment-selected SQLite path.",
+      "status": "SUPPORTED_BY_SOURCE_AND_LOCAL_MECHANISM_FALSIFIER"
+    },
+    {
+      "id": "H-HARNESS-SCHEMA-OWNER-002",
+      "claim": "Presence-marker classification of disposable executescript owners is not mutation-sensitive; a probe can retain a harmless :memory: marker while adding persistent foreign-DB DDL.",
+      "status": "SUPPORTED_BY_LOCAL_METAMORPHIC_FALSIFIER"
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "claim": "Dedicated migrator placement plus current static audit already prevents arbitrary-file telemetry schema effects.",
+      "result": "REFUTED_AT_SOURCE_CONTRACT_LEVEL; current main TelemetryStore opens path or FRANK_TELEMETRY_DB directly before invoking apply_telemetry_schema"
+    },
+    {
+      "claim": "The disposable-owner marker check is sufficient because allowlisted probes are known to be temporary.",
+      "result": "REFUTED_BY_MUTATION_CONSTRUCTION; marker presence is not causally bound to the connection receiving executescript"
+    }
+  ],
+  "executed_tests": [
+    {
+      "test": "current marker-classifier metamorphic surrogate",
+      "environment": "local Python isolated mechanism",
+      "mutation": "allowlisted probe retains sqlite3.connect(':memory:') and adds persistent /tmp SQLite executescript",
+      "result": "FAIL_OPEN_DETECTED",
+      "details": "current disposable_probe_is_isolated logic returns accepted with no failure for the synthetic mutant",
+      "evidence_class": "LOCAL_ISOLATED_MECHANISM_SURROGATE"
+    },
+    {
+      "test": "candidate telemetry path-authority regression",
+      "environment": "local isolated Python package surrogate",
+      "result": "PASS_4_OF_4",
+      "checks": [
+        "environment redirect rejected",
+        "canonical basename rejected",
+        "existing hardlink alias rejected",
+        "explicit temp fixture roundtrip remained valid"
+      ],
+      "evidence_class": "LOCAL_ISOLATED_MECHANISM_SURROGATE_NOT_FULL_REPO"
+    }
+  ],
+  "candidate_repair": {
+    "pull_request": 137,
+    "branch": "chatgpt/harness-current-main-static-integrity-20260810",
+    "status": "DRAFT_TESTING_NOT_PROMOTED",
+    "changes": [
+      "bind production telemetry path to /srv/frank-telemetry",
+      "preserve explicit temp-only constructor fixture path",
+      "reject relative paths, canonical DB basenames, root escapes, non-regular files and existing hardlinks",
+      "revalidate opened SQLite inode before schema migration",
+      "retain dedicated telemetry_schema_migrator as DDL authority",
+      "pin disposable executescript owners to reviewed Git blob identities",
+      "require reviewed guarded telemetry store identity and path-authority invariants in repo_static_integrity_audit",
+      "add stdlib path-authority regression and metamorphic schema-owner mutation discriminator"
+    ]
+  },
+  "ci_state": {
+    "hosted": "UNRESOLVED_LOW_CONFIDENCE",
+    "reason": "GitHub job conclusions returned failure while step summaries were empty and log blob fetch returned 404; checkout pinning changed queue behavior, so these runs are not promoted as code-level evidence",
+    "target_self_hosted": "QUEUED_NOT_EXECUTED_AT_RECEIPT_TIME",
+    "target_pass_claimed": false
+  },
+  "negative_results_and_blockers": [
+    "Fresh accepted-target telemetry authority gate still fails because /srv/frank-telemetry/frank_telemetry.sqlite3 is absent.",
+    "Candidate path-authority/audit repair has no accepted-target VPS pass yet.",
+    "PR 137 was cut from a fast-moving earlier main snapshot and must not be merged without fresh-main rebase/revalidation.",
+    "Hosted CI metadata/log transport was insufficient for causal step attribution during this run."
+  ],
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "affected_components": [
+      "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "runtime/clay_vps_mcp_v02/clay_vps_mcp/telemetry.py",
+      "tests/repo_static_integrity_audit.py"
+    ],
+    "expected_effect": "prevent telemetry schema authority from being redirected onto foreign/canonical SQLite files and make noncanonical schema-owner exemptions fail closed on source drift",
+    "rollback": "discard PR 137; retain current main migrator separation and static audit",
+    "promotion_gate": "fresh-main rebase plus focused and full accepted-target Hostinger regression PASS"
+  },
+  "next_falsifier": "After the concurrent MCP live-telemetry deployment lane settles, rebase the minimal path-authority plus drift-sensitive audit repair onto fresh main and execute path regression, schema-owner metamorphic mutation, repo_static_integrity, Deep Integrity, and full regression on the accepted Hostinger runner.",
+  "result": "MATERIAL_HARNESS_DELTA_RECORDED_WITHOUT_PROMOTION"
+}

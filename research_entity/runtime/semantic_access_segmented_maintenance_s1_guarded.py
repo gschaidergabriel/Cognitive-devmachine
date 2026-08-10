@@ -29,7 +29,10 @@ class SegmentedPulseMaintenanceS1Guarded(SegmentedPulseMaintenanceS1):
         schema = Path(__file__).with_name("RAE_UNIFIEDDB_SPM_S1_INTEGRITY_TRIPWIRE.sql")
         self.con.executescript(schema.read_text(encoding="utf-8"))
         # Existing DB migration is fail-closed: never assume pre-tripwire content was intact.
-        if self._head():
+        raw_head = self.con.execute(
+            "SELECT 1 FROM access_head WHERE head_key='CURRENT'"
+        ).fetchone()
+        if raw_head:
             try:
                 self.audit_current_generation()
             except PulseInvariantError:
@@ -175,6 +178,13 @@ class SegmentedPulseMaintenanceS1Guarded(SegmentedPulseMaintenanceS1):
             raise SPMIntegrityError(
                 f"SPM-S1 projection DIRTY: {state['dirty_reason']} segment={state['dirty_segment_id']}"
             )
+        raw_head = self.con.execute(
+            "SELECT generation_id,source_epoch,graph_epoch,generation_hash FROM access_head WHERE head_key='CURRENT'"
+        ).fetchone()
+        coherent_head = self._head()
+        if raw_head is not None and coherent_head is None:
+            self._set_dirty(None, "ACCESS_HEAD_INCOHERENT")
+            raise SPMIntegrityError("SPM-S1 access_head is present but incoherent")
         return super().query(seed_id, limit)
 
     def apply_pulse(
@@ -197,7 +207,20 @@ class SegmentedPulseMaintenanceS1Guarded(SegmentedPulseMaintenanceS1):
             if receipt.mode != "FULL_FALLBACK":
                 raise SPMIntegrityError("DIRTY projection escaped without FULL_FALLBACK")
             audit = self.audit_current_generation()
+            quarantined_generation_id = None
+            if (
+                before["dirty_reason"] is not None
+                and str(before["dirty_reason"]).startswith("CURRENT_GENERATION_MAP_")
+                and receipt.previous_generation_id
+            ):
+                quarantined_generation_id = receipt.previous_generation_id
             with self.con:
+                if quarantined_generation_id is not None:
+                    self.con.execute(
+                        "UPDATE access_generation SET status='QUARANTINED' "
+                        "WHERE generation_id=? AND status='SUPERSEDED'",
+                        (quarantined_generation_id,),
+                    )
                 self.con.execute(
                     "INSERT INTO spm_s1_integrity_repair_receipt VALUES(?,?,?,?,?,?,?)",
                     (
@@ -206,7 +229,11 @@ class SegmentedPulseMaintenanceS1Guarded(SegmentedPulseMaintenanceS1):
                         before["dirty_reason"],
                         receipt.generation_id,
                         "FULL_FALLBACK",
-                        _stable({"audit": audit, "pulse_receipt": receipt.__dict__}),
+                        _stable({
+                            "audit": audit,
+                            "pulse_receipt": receipt.__dict__,
+                            "quarantined_previous_generation_id": quarantined_generation_id,
+                        }),
                         time.time_ns(),
                     ),
                 )

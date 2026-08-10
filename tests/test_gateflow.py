@@ -12,6 +12,12 @@ STATE = json.loads((ROOT / "research_entity" / "gateflow" / "GATEFLOW_V1_STATE.j
 CONVERSION = json.loads(
     (ROOT / "research_entity" / "gateflow" / "GATEFLOW_V1_CONVERSION_WINDOW_2026-08-11.json").read_text()
 )
+CRITICAL_PATH = json.loads(
+    (ROOT / "research_entity" / "gateflow" / "CRITICAL_PATH_V1.json").read_text()
+)
+WORKSPACE = json.loads(
+    (ROOT / "research_entity" / "frank_v0_1" / "FRANK_V0_1_WORKSPACE.json").read_text()
+)
 
 
 def state_with_conversion():
@@ -89,3 +95,22 @@ def test_red_frontier_cannot_claim_receipt_ready():
     mutated["frontier"][0]["state"] = "RECEIPT_READY"
     errors = gateflow.validate(mutated)
     assert any("RED freshness cannot be promotion-ready" in e for e in errors)
+
+
+def test_critical_path_covers_each_current_work_package_exactly_once():
+    flattened = [
+        work_package
+        for wave in CRITICAL_PATH["waves"]
+        for work_package in wave["work_packages"]
+    ]
+    assert len(flattened) == len(set(flattened))
+    assert set(flattened) == set(WORKSPACE["work_packages"])
+    assert CRITICAL_PATH["waves"][-1]["work_packages"] == [
+        "F-V01-16-END-TO-END-ACCEPTANCE"
+    ]
+
+
+def test_critical_path_is_coordination_only_and_keeps_parallelism():
+    assert CRITICAL_PATH["status"] == "ACTIVE_COORDINATION_VIEW"
+    assert CRITICAL_PATH["anti_starvation"]["later_wave_parallel_work_allowed"] is True
+    assert CRITICAL_PATH["anti_starvation"]["free_exploration_reserved"] is True

@@ -95,7 +95,7 @@ def build(state_path:Path,graph_path:Path,output_path:Path)->dict:
             current_count=int(dst.execute('SELECT (SELECT COUNT(*) FROM v_graph_current_nodes_fast)+(SELECT COUNT(*) FROM v_graph_current_edges_fast)').fetchone()[0])
             projection_id='colocated-v3-'+hashlib.sha256((str(max_ge)+'|'+str(state_epoch)+'|'+derivation_hash).encode()).hexdigest()[:24]
             now=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())
-            dst.execute('INSERT INTO graph_current_projection_receipts VALUES(?,?,?,?,?,?,?,?,?)',(projection_id,max_ge,state_epoch,'COLOCATED_V3_NODE_EDGE_HEADS',derivation_hash,source_count,head_count,current_count,1,now))
+            dst.execute('INSERT INTO graph_current_projection_receipts VALUES(?,?,?,?,?,?,?,?,?,?)',(projection_id,max_ge,state_epoch,'COLOCATED_V3_NODE_EDGE_HEADS',derivation_hash,source_count,head_count,current_count,1,now))
             fk=[tuple(r) for r in dst.execute('PRAGMA foreign_key_check')]
             if fk: raise RuntimeError('foreign_key_check failed: '+repr(fk[:20]))
             dst.execute('''CREATE TABLE IF NOT EXISTS udb_claygraph_colocation_receipts(

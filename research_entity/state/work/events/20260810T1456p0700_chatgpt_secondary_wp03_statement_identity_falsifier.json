@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "event_id": "wp03-statement-identity-falsifier-20260810T1456p0700-chatgpt-secondary",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "not_frank": true,
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-03-IR-TYPES",
+  "class": "COUNTERHYPOTHESIS_TEST_OBLIGATION",
+  "priority": "HIGH_BEFORE_WP03_PROMOTION",
+  "coordination": {
+    "active_primary_lane_observed": "V18 FrontendArtifact -> TypedIR exact-provenance closure",
+    "relationship": "ADVERSARIAL_NON_DUPLICATIVE",
+    "do_not_displace_primary_lane": true,
+    "targeted_branches": ["claycode", "clayresearch", "harness"],
+    "general_research_relevance": "semantic identity and function-preservation boundary"
+  },
+  "hypothesis": "The current TypedIR semantic identity can collapse frontend-distinct rule/reward programs because semantic_core hashes types and declarations but does not bind non-declaration semantic statements.",
+  "strongest_counterhypothesis": "A hidden downstream field or existing canonical statement projection already changes typed_ir_sha256 for rule/reward mutations despite the visible build_typed_ir semantic_core shape.",
+  "current_component": {
+    "path": "tools/claycode_base_typed_ir.py",
+    "git_blob": "5f15ca6339aa08eb01f1c96b7a6f93abfee0e4cb",
+    "observed_behavior_from_source": [
+      "build_typed_ir traverses record_decl, interface_decl and fn_decl into declarations",
+      "semantic_core contains types, declarations and fixed invariants",
+      "source_rows/frontend semantic hashes are returned outside the typed_ir_sha256 hash domain",
+      "no visible rule/law/invariant/cycle/needle statement projection enters semantic_core"
+    ]
+  },
+  "falsifier": {
+    "path": "tools/claycode_wp03_statement_identity_falsifier.py",
+    "commit": "35f1d513b10356eba727b04d96b8b6418dcb4f7c",
+    "status": "COMMITTED_NOT_YET_SELF_HOSTED_EXECUTED",
+    "pairs": [
+      "rule x>0  vs  rule x<0",
+      "rule a preserves b  vs  rule a required_before b",
+      "rule a preserves b  vs  rule a requires b",
+      "rule brake cannot_be_silently_averaged_away  vs  rule brake"
+    ],
+    "required_acceptance": "For every frontend-distinct semantic pair, typed_ir_sha256 must also remain distinct unless an explicit proved equivalence contract says otherwise."
+  },
+  "evidence_status": "STATIC_COUNTEREXAMPLE_CANDIDATE_REQUIRES_EXECUTION",
+  "promotion_effect": "BLOCK_WP03_PROMOTION_IF_EXECUTABLE_COLLISION_REPRODUCES",
+  "repair_candidate_if_reproduced": "Preserve canonical semantic statement AST/projection inside TypedIR semantic identity before introducing richer WP04/05 interpretation; separately repair AST-context identifier extraction. Do not silently change language semantics.",
+  "rollback": "If exact V18 execution shows typed_ir_sha256 already discriminates all pinned pairs, mark this counterhypothesis REFUTED and remove no production behavior.",
+  "frank_harness_mutation": false,
+  "andreas_target_acceptance": false,
+  "training_authorized": false,
+  "authority": "NONE",
+  "status": "READY_FOR_ACTIVE_WP03_EXECUTOR"
+}

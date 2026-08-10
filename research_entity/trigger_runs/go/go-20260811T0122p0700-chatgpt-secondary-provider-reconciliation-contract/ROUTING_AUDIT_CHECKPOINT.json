@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "parent_run": "go-20260811T0122p0700-chatgpt-secondary-provider-reconciliation-contract",
+  "recorded_at": "2026-08-11T02:18:00+07:00",
+  "work_package": "F-V01-09-EFFECT-AUTHORITY",
+  "classification": "NORMAL_STATIC_ROUTING_AUDIT_NOT_OOB",
+  "diagnostic_branch": "chatgpt/go-effect-route-inventory-20260811",
+  "repository": "gschaidergabriel/Dr.-Unterweger",
+  "diagnostic": "diagnostics/frank_effect_route_inventory.py",
+  "workflow": ".github/workflows/frank-effect-route-inventory.yml",
+  "question": "Which current production-runtime source locations can initiate network/process/filesystem/destructive effects, and which require direct follow-up before ordinary production routing can be called non-bypassable?",
+  "scope": [
+    "runtime Python only",
+    "network/process/destructive/mutating filesystem high-signal calls",
+    "compiler/tooling separated from API/state/other runtime",
+    "SQLite/internal persistence intentionally excluded from this first inventory to avoid conflating UnifiedDB state mutation with external effect authority"
+  ],
+  "authority_claim": "NONE",
+  "non_bypassable_routing_claim": false,
+  "promotion": "NONE",
+  "go_oob_experiment_added": false,
+  "single_go_oob_remains": "ACK_BLACKHOLE_AFTER_PROVIDER_COMMIT",
+  "next_adjudication": "Inspect exact workflow inventory rows; classify each production external/destructive site as mediated effect path, internal/recovery mechanism, explicitly authorized installer/tooling, or bypass candidate. Do not promote until every material bypass candidate is closed or justified."
+}

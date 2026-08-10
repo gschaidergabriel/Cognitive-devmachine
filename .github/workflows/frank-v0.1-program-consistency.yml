@@ -1,3 +1,4 @@
+# validation branch probe; do not merge
 name: Frank v0.1 program consistency
 
 on:
@@ -17,6 +18,23 @@ on:
       - 'research_entity/continuity/BOOTSTRAP_MINIMAL.json'
       - 'research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json'
       - 'tools/program_progress.py'
+  pull_request:
+    paths:
+      - 'research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md'
+      - 'research_entity/global/RESEARCH_TRIGGER_REGISTRY.json'
+      - 'research_entity/global/PROJECT_COMMAND_REGISTRY.json'
+      - 'research_entity/rooms/PROGRAM_STATE.json'
+      - 'research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json'
+      - 'research_entity/harness/HARNESS_WORKSPACE.json'
+      - 'research_entity/triggers/HARNESS_BUILD_PROTOCOL.md'
+      - 'research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md'
+      - 'research_entity/triggers/FRANK_RESEARCH_PROTOCOL.md'
+      - 'research_entity/global/FRANK_FINAL_BINARY_RESEARCH_CONTRACT.md'
+      - 'research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md'
+      - 'research_entity/continuity/BOOTSTRAP_MINIMAL.json'
+      - 'research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json'
+      - 'tools/program_progress.py'
+      - '.github/workflows/frank-v0.1-program-consistency.yml'
   workflow_dispatch:
 
 permissions:

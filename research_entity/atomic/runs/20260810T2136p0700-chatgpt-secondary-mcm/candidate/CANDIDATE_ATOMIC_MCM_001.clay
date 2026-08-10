@@ -1,0 +1,186 @@
+module clay.atomic.mcm.at_mcm_001_v1
+version "AT-MCM-001-v1"
+status TESTED_PROXY_MIXED_NOT_PROMOTED
+
+class DeltaPolarity = MONOTONE | DETERMINATION | UNKNOWN
+class MembraneStatus = OPEN | SEALED | STALE | INCOMPLETE | QUARANTINED
+class DeterminationKind = GWT_SELECTION | HYPERPOSITION_COLLAPSE | EFFECT_PROPOSAL | REWARD_ADMISSION | GOAL_COMMITMENT | STATE_RETRACTION | UNIQUE_CHOICE | EXTERNAL_COMMITMENT
+
+record MonotoneDelta {
+  delta_id:Ref
+  epoch:Epoch
+  semantic_key:Ref
+  value_ref:Ref
+  depends_on:Set<Ref>
+  provenance:Set<EvidenceRef>
+  polarity:DeltaPolarity
+  semantic_hash:Hash
+}
+
+record MembraneRequest {
+  request_id:Ref
+  epoch:Epoch
+  kind:DeterminationKind
+  required_deltas:Set<Ref>
+  alternatives:Set<Ref>
+  policy_ref:Ref
+  gwt_episode:WorkspaceEpisodeRef?
+  effect_authority:NONE
+}
+
+record CausalCut {
+  cut_id:Ref
+  epoch:Epoch
+  members:Set<Ref>
+  frontier:Set<Ref>
+  closure_hash:Hash
+  state_instance_id:StateInstanceId
+  provenance:Set<EvidenceRef>
+}
+
+record MembraneSeal {
+  seal_id:Ref
+  request_id:Ref
+  cut:CausalCut
+  selected:Set<Ref>
+  determination_hash:Hash
+  status:MembraneStatus
+  authority_minted:Bool=false
+  architecture_promoted:Bool=false
+}
+
+record ReceiverReconstructionReceipt {
+  seal_id:Ref
+  receiver:ReceiverRef
+  delivered:Bool
+  reconstructed:Bool
+  used:Bool
+  local_effect:Ref?
+  state_epoch:Epoch
+  receipt_hash:Hash
+}
+
+record OutcomeReentryReceipt {
+  seal_id:Ref
+  outcome:OutcomeRef
+  verified:Bool
+  causal_uses:Set<ReceiverReconstructionReceipt>
+  admitted_delta:Set<Ref>
+  reward_plasticity:Bool=false
+  effect_authority:NONE
+}
+
+record MCMPolicy {
+  current_epoch:Epoch
+  max_cut_members:Int
+  max_pending_determinations:Int
+  unknown_policy:SEAL_OR_QUARANTINE
+  stale_policy:REJECT
+  recovery_policy:REPLAY_DELTAS_AND_SEALS
+}
+
+law monotone_delta_join is associative
+law monotone_delta_join is commutative
+law monotone_delta_join is idempotent
+law MONOTONE means adding admitted facts cannot invalidate an already valid positive result inside the declared semantic domain
+law DETERMINATION means a commitment may invalidate alternatives or depends on absence, uniqueness, retraction, exclusion, ordering, or external commitment
+law UNKNOWN != MONOTONE
+law commutative_transition != semantic_monotonicity
+law GRT_CONSISTENT != TRUE
+
+rule delta.polarity=MONOTONE + current(delta.epoch) + valid(delta.provenance) -> join_without_global_membrane
+rule delta.polarity=DETERMINATION -> require MembraneRequest
+rule delta.polarity=UNKNOWN -> require MembraneRequest or QUARANTINED
+rule stale(delta.epoch) -> reject
+rule duplicate(delta.semantic_hash) -> idempotent_noop
+rule missing(delta.provenance) -> QUARANTINED
+rule delete|retract|overwrite|choose_one|revoke|absence_test -> DETERMINATION
+rule unresolved_alternative_addition may_be MONOTONE
+rule selecting_or_eliminating_alternative -> DETERMINATION
+
+rule GWT_candidate_evidence may_flow_as MONOTONE when it only adds typed support_or_counterevidence
+rule GWT_ignite|focus_replace|winner_selection -> DETERMINATION
+rule GWT_ignition != truth
+rule GWT_ignition != effect_authority
+rule membrane_seal may instantiate WorkspaceEpisode but does_not erase GWT causal observability
+rule WorkspaceEpisode addressable != delivered
+rule delivered != reconstructed
+rule reconstructed != used
+rule used != local_effect
+
+rule Hyperposition preserves unresolved alternatives as monotone_set_growth when no alternative is deleted
+rule Hyperposition collapse_or_commit -> DETERMINATION
+rule CJC_FULL_COMMUTE may support coordination_avoidance only when semantic_polarity_is_MONOTONE
+rule CJC_HIDDEN_CAUSAL_NONCOMMUTE|CJC_STATE_NONCOMMUTE|CJC_UNKNOWN -> membrane_or_existing_coordination
+rule CJC_FULL_COMMUTE alone != proof_of_monotonicity
+
+rule open_membrane(request,state) -> compute_dependency_closure(request.required_deltas)
+rule missing_required_delta -> INCOMPLETE
+rule missing_transitive_dependency -> INCOMPLETE
+rule mixed_epoch_closure -> STALE
+rule closure_size > policy.max_cut_members -> QUARANTINED
+rule complete_current_provenance_bound_closure -> emit CausalCut
+rule determination_policy over CausalCut -> emit MembraneSeal
+rule seal.identity = hash(request_id,cut.closure_hash,selected,epoch,policy_ref)
+rule same_seal_inputs -> same_determination_hash
+rule changed_policy|changed_epoch|changed_closure -> new_seal_identity
+
+rule receiver reconstructs only from exact seal.cut + admitted current delta identities
+rule receiver may_not substitute newer_unsealed_state into old seal
+rule receiver receipt binds seal_id + receiver + epoch
+rule causal_credit requires reconstructed + used + verified_outcome
+rule learning requires verified_outcome + causal_credit + admitted_delta
+rule self_generated_completion alone != reward_plasticity
+
+rule effect proposal is DETERMINATION
+rule MembraneSeal.effect_authority = NONE
+rule effect proposal exits membrane only to deterministic ClayCode effect gate
+rule membrane cannot mint authentication|authorization|capability|destructive_permission
+rule model_output|GWT_ignition|ClayGraph_salience|Needle_route cannot mint effect_authority
+rule self.root self_harness_change remains PROPOSAL_ONLY
+
+rule UnifiedDB persists MonotoneDelta + MembraneRequest + CausalCut + MembraneSeal + ReceiverReconstructionReceipt + OutcomeReentryReceipt
+rule crash_restart -> replay immutable admitted deltas + immutable seals
+rule replay duplicate -> idempotent_noop
+rule restart revalidates current epoch + state_instance_id + policy hashes
+rule stale seal -> never reused as current determination
+rule no_last_known_good -> consequential_effects_fail_closed
+
+rule DigitalRetina percept evidence may_flow_as monotone additions until a unique recognition/action commitment is requested
+rule MVC known|unknown|ambiguous evidence != sensor_truth
+rule translator expression coloring never changes delta polarity|semantic_truth|authority
+rule long_horizon_goal evidence may accumulate monotonically; goal activation/deactivation commitment crosses membrane
+
+rule language_gap_v1 = compiler_does_not_yet_prove DeltaPolarity from TypedIR
+rule smallest_future_primitive = typed_monotonicity_effect_annotation + causal_cut_certificate
+rule v1_runtime must treat unproven polarity as UNKNOWN not MONOTONE
+rule candidate may_be_tested via explicit polarity fixtures before compiler support
+
+metric semantic_correctness
+metric shuffled_order_invariance
+metric duplicate_invariance
+metric crash_replay_equivalence
+metric stale_epoch_rejection
+metric provenance_gap_rejection
+metric determination_rate
+metric seal_latency_p50
+metric seal_latency_p95
+metric seal_latency_p99
+metric membrane_cut_members
+metric runtime_p50
+metric runtime_p95
+metric state_amplification
+metric broadcast_payload_bytes
+metric receiver_reconstruction_cost
+metric authority_violation_count
+
+invariant Clay != self.root
+invariant target_native_identity = self.root
+invariant target_human_surface = Frank
+invariant target_cognition = CLAYCODE_ONLY
+invariant recurrence != emergence
+invariant salience != truth
+invariant candidate != promotion
+invariant monotonicity != correctness_without_declared_domain
+invariant membrane != effect_authority
+invariant no_paid_or_final_training_without_owner_authorization

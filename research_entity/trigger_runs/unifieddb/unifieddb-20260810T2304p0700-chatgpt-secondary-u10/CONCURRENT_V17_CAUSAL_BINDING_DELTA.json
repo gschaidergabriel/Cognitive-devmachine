@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "delta_id": "U10-CONCURRENT-V17-CAUSAL-EXECUTION-BINDING-20260810T2323P0700",
   "actor_id": "chatgpt-secondary",
   "provider": "OpenAI",
@@ -17,23 +17,38 @@
     },
     {
       "id": "V17-ATTEMPT-OUTCOME-BINDING",
-      "status": "CANDIDATE_HARDENED_BY_CONCURRENT_WORKER",
-      "finding": "The active candidate-only V17 lane now storage-binds reentry to the exact V14 effect attempt and verified outcome and blocks legacy unbound reentry; target-VPS differential receipt remains required before promotion."
+      "status": "TARGET_VPS_CANDIDATE_DIFFERENTIAL_PASS_BUT_NOT_CAUSAL_CLOSURE",
+      "finding": "The simpler candidate-only V17 lane passed an accepted target-VPS differential for exact attempt/outcome binding, terminal DONE, typed no-learning, restart-before-DONE recovery, duplicate rejection and rollback. This is candidate evidence only and does not establish closed causal provenance."
     },
     {
       "id": "V17-SUPPORT-IDENTITY-EXECUTION-GAP",
-      "status": "LOCAL_FALSIFIER_COMMITTED_TARGET_VPS_PROBE_PENDING",
-      "finding": "The active V17 candidate still accepts episode_id/signal_id/causal_id/admitted_delta_hash as non-empty symbols without proving they resolve to canonical GWT use, causal credit, admitted state, or the current V15/V16 self.root execution epoch. A negative discriminator was committed to the target repository and routed to the accepted self-hosted Ubuntu VPS."
+      "status": "CONFIRMED_ACCEPTED_TARGET_VPS_NEGATIVE",
+      "finding": "Accepted target-VPS run 31408220117 confirmed that the earlier/simple V17 candidate accepted fabricated episode/signal/causal/delta identifiers, reported DONE_VALID/COMPLETE, and accepted terminal DONE while V15 presence remained IDLE epoch 0 and V16 execution context remained unbound."
+    },
+    {
+      "id": "V17-RELATIONAL-CROSS-SPLICE-GAP",
+      "status": "CONFIRMED_ACCEPTED_TARGET_VPS_NEGATIVE",
+      "finding": "Accepted target-VPS run 31408872635 confirmed that the richer FK-backed V17 could still cross-splice individually valid but causally unrelated rows: an unverified unrelated prediction outcome, CORRELATED_ONLY credit, unrelated CURRENT semantic record and a free snapshot hash could reach terminal DONE while SQLite integrity/FK checks stayed clean. Referential integrity is not causal integrity."
+    },
+    {
+      "id": "V17_1-CAUSAL-ADMISSION-CLOSURE",
+      "status": "CANDIDATE_COMMITTED_TARGET_VPS_RECEIPT_NOT_YET_OBSERVED",
+      "finding": "Additive candidate V17.1 introduces explicit causal-support, semantic-delta-admission and reentry-authority receipts; binds the same provider receipt across verified effect and prediction outcomes; requires same GWT cycle and actual receiver use/local effect; excludes CORRELATED_ONLY; fences terminalization to the same current execution/lease epoch. A target-VPS workflow is committed, but no persisted V17.1 receipt was observed at this delta refresh."
     },
     {
       "id": "U10-SCHEMA-CLAIM-MISMATCH",
       "status": "SUPPORTED_BY_SCHEMA_INSPECTION",
-      "finding": "U10 architecture requires execution_id/lease_epoch fencing and provenance-bound reentry, but U10_EPOCH_VERSIONED_STATE_CANDIDATE.sql currently leaves u10_tx_commits.execution_id/lease_epoch nullable and models u10_reentry_receipts episode/signal/causal/outcome/credit/delta references as unconstrained TEXT. Therefore U10 does not yet enforce its own causal/execution invariants at the storage boundary."
+      "finding": "U10 architecture requires execution_id/lease_epoch fencing and provenance-bound reentry, but U10_EPOCH_VERSIONED_STATE_CANDIDATE.sql currently leaves u10_tx_commits.execution_id/lease_epoch nullable and models u10_reentry_receipts episode/signal/causal/outcome/credit/delta references as unconstrained TEXT. U10 therefore does not yet enforce its own causal/execution invariants at the storage boundary."
     },
     {
       "id": "PHYSICAL-COLOCATION",
       "status": "HOLD",
       "finding": "Existing accepted-Hostinger mechanism evidence favors logical unification plus epoch-guarded derived projections: single-file paired commit p50 was lower, while guarded split-file steady reads were near parity; unguarded split snapshots were incoherent. This does not justify physical graph/vector/tensor consolidation yet."
+    },
+    {
+      "id": "SQLITE-WAL-RESET-2026",
+      "status": "CONFIRMED_ACCEPTED_TARGET_VPS_RELEASE_BLOCKER",
+      "finding": "The accepted target VPS currently reports SQLite 3.45.1 with WAL. The fail-closed WAL-reset guard classifies this upstream version in the documented affected range and sets release_gate=BLOCK_AFFECTED_SQLITE_WAL_RESET_RANGE. A disposable 2-second race canary observed no corruption, but by contract absence of observed corruption cannot prove safety. Release requires an upgraded/fixed SQLite build, verified distro backport, or a separately machine-checked topology exclusion before WAL can be release authority."
     }
   ],
   "target_repo_commits": {
@@ -41,28 +56,45 @@
     "premature_v17_canonical_integration": "d2b720fcd5bc6c4cee25574caad1bce0e9add0d7",
     "promotion_discipline_correction": "6e2e26d373a291047da6d73d5617160c54af04b6",
     "support_binding_gap_probe": "46f3986f301786a21f465b46647fcbe73b31369c",
-    "support_binding_gap_vps_workflow": "b6c75ab71feba690911f21f3341878404ca3ba8d"
+    "support_binding_gap_vps_workflow": "b6c75ab71feba690911f21f3341878404ca3ba8d",
+    "support_binding_gap_target_receipt": "ffff822faf88a54719054261aabd4f687c02a188",
+    "simple_v17_target_positive_receipt": "f2fe8c19115883ba60b155dcf7dd04389c853c4a",
+    "relational_cross_splice_probe": "c9b6f1fa9dd0981a6114edd1c3804e05669f3aff",
+    "relational_cross_splice_target_receipt": "bc0e754758d72b65b46b6938290861887cfe133a",
+    "v17_1_causal_admission_candidate": "ef29520b8fd1763c1c1d7f0db9fbc178ed81f0e1",
+    "v17_1_differential_test": "0a0fabe1a8cfa8e5c5091d676e7696e4cb794b8e",
+    "v17_1_target_vps_workflow": "b59621312a135a29cc22dfc509c63280ab3e291d",
+    "sqlite_wal_reset_guard_target_receipt": "295cd5d101318c66b66b157677d094617b6d8bde"
   },
   "architecture_delta": {
     "status": "CANDIDATE_REFINEMENT_REQUIRED",
+    "selected_direction": "One authoritative epoch-versioned semantic transaction/causal-history plane with exact execution fencing; current heads as derived projections; ClayGraph/vector/tensor as rebuildable epoch-bound projections unless target evidence later proves physical colocation superior.",
     "required_u10_changes_before_promotion": [
+      "Make semantic state append-only/versioned by state_epoch with exact replay and current-head derivation; fix the current repeated-supersede history failure.",
       "Make execution binding explicit and fail-closed for authoritative execution/effect commits: exact current execution_id plus V15/V16 lease_epoch fence, with stale/zombie writer rejection.",
-      "Replace or guard free-form reentry support symbols with canonical verified references/receipts for WorkspaceEpisode or attention identity, receiver causal use/local effect, verified outcome, causal credit, and admitted semantic delta; retain an explicitly typed no-learning path when appropriate.",
-      "Make terminal DONE a distinct durable semantic receipt whose validity depends on the exact verified effect attempt/outcome, exact canonical reentry binding, and accepted execution epoch.",
-      "Keep all V17/U10 changes additive and candidate-only until exact-source target-VPS crash/restart/concurrency/recovery/resource gates pass."
+      "Replace free-form reentry support symbols and mere FK existence with one explicit causal-admission authority relation joining verified provider outcome, same-cycle GWT causal use, non-correlated causal credit, admitted semantic delta/state epoch and current execution epoch.",
+      "Make terminal DONE a distinct durable semantic receipt whose validity depends on the exact verified effect attempt/outcome, exact causal-admission/reentry binding and still-current execution epoch.",
+      "Keep ClayGraph/vector/tensor derived/rebuildable with explicit projection_source_epoch/readiness and fail-closed critical reads while physical colocation remains benchmark-gated.",
+      "Resolve SQLite WAL-reset 2026 runtime safety before any SQLite/WAL release claim: fixed/upgraded runtime, verified vendor backport, or independently proven safe topology.",
+      "Keep all V17/V17.1/U10 changes additive and candidate-only until exact-source target-VPS crash/restart/concurrency/recovery/resource gates pass."
     ],
     "do_not_promote": [
-      "Do not infer causal provenance from non-empty identifiers.",
+      "Do not infer causal provenance from non-empty identifiers or foreign-key existence alone.",
       "Do not infer current self.root ownership merely because a verified provider outcome exists.",
-      "Do not merge ClayGraph/vector/tensor physical storage merely to remove an epoch guard that is already cheap in steady reads."
+      "Do not treat integrity_check/foreign_key_check as proof of causal closure.",
+      "Do not merge ClayGraph/vector/tensor physical storage merely to remove an epoch guard that is already cheap in steady reads.",
+      "Do not treat a clean bounded WAL race canary as evidence that an upstream-affected SQLite build is release-safe."
     ]
   },
   "evidence_state": {
-    "target_v17_positive_differential_receipt": "PENDING_OR_NOT_YET_OBSERVED_AT_DELTA_WRITE",
-    "target_v17_support_binding_negative_receipt": "PENDING_OR_NOT_YET_OBSERVED_AT_DELTA_WRITE",
+    "target_v17_positive_differential_receipt": "PASS_CANDIDATE_ONLY_31408227242",
+    "target_v17_support_binding_negative_receipt": "CONFIRMED_GAP_31408220117",
+    "target_v17_relational_cross_splice_negative_receipt": "CONFIRMED_GAP_31408872635",
+    "target_v17_1_causal_admission_receipt": "NOT_YET_OBSERVED",
+    "target_sqlite_wal_release_gate": "BLOCK_AFFECTED_SQLITE_WAL_RESET_RANGE",
     "canonical_v17_promotion": "BLOCKED",
-    "u10_promotion": "HOLD"
+    "canonical_u10_promotion": "HOLD"
   },
-  "next_falsifier": "On the accepted Ubuntu VPS, demonstrate that a candidate rejects fabricated GWT/causal/delta support and any effect completion from IDLE/stale/unbound execution epochs, while accepting a fully bound exact effect -> verified outcome -> causal-use -> admitted-delta -> reentry -> DONE chain across restart.",
-  "research_consequence": "NO U10/V17 promotion claim. F-V01-04 remains OPEN; this delta strengthens the causal/execution acceptance gate and is now shared with the persistent Clay research state."
+  "next_falsifier": "On the accepted Ubuntu VPS, V17.1 must reject fabricated/cross-spliced GWT-credit-delta support and stale/unbound execution terminalization while accepting one fully closed exact provider-outcome -> same-cycle GWT use -> verified causal credit -> admitted state-epoch delta -> reentry-authority -> DONE chain, then survive crash/restart and exact replay; independently resolve the SQLite WAL runtime release gate.",
+  "research_consequence": "NO U10/V17/V17.1 promotion claim. F-V01-04 remains OPEN. The persistent Clay state now records accepted-target negative evidence, candidate refinement, the SQLite runtime release blocker and the exact next falsifiers."
 }

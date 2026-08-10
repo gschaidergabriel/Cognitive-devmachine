@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0",
+  "run_id":"q23-20260810T2242p0700-chatgpt-secondary",
+  "frontier":[
+    {"id":"Q23-FR-001","question":"On the exact target VPS, does synchronous zero-copy Qwen feature gating produce a Pareto gain over full decode and a dedicated lightweight embedder?","priority":1,"class":"EXPERIMENT","status":"OPEN","dependency":"exact target-VPS model/mmproj/runtime/resource identities"},
+    {"id":"Q23-FR-002","question":"Can Qwen3.5-4B raw or tiny-projected features meet calibrated user-specific open-set familiarity requirements?","priority":2,"class":"COUNTERMECHANISM","status":"OPEN"},
+    {"id":"Q23-FR-003","question":"Does image-containing llama.cpp restart/cache/replay preserve or explicitly reject multimodal state under current target runtime?","priority":3,"class":"RECOVERY","status":"OPEN"},
+    {"id":"Q23-FR-004","question":"Which ROI+context+anchor policy minimizes visual cost without hiding static/background state transitions?","priority":4,"class":"EXPERIMENT","status":"OPEN"},
+    {"id":"Q23-FR-005","question":"After MVC calibration is proven, does compact visual-seed PAR/EAP improve task/context efficiency without wrong-memory amplification?","priority":5,"class":"EXPERIMENT","status":"BLOCKED_ON_Q23-FR-002"},
+    {"id":"Q23-FR-006","question":"Does Gemma 4 E4B dominate Qwen3.5-4B under the declared Frank model-size/resource budget?","priority":6,"class":"EQUAL_BUDGET_COMPETITOR","status":"OPEN_LOW_PRIORITY"}
+  ],
+  "closed_or_narrowed":[
+    {"question":"Does Qwen3.6 currently provide an official <=4B direct replacement?","result":"NO in current official open model set; 27B and 35B-A3B are listed.","disposition":"ALTERNATIVE_ELIMINATED_FOR_CURRENT_SMALL_MODEL_PATH"}
+  ]
+}

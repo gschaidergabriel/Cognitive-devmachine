@@ -1,10 +1,11 @@
 {
-  "schema_version": "1.6",
+  "schema_version": "1.7",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
-  "owner_directive": "Exploit all currently free Mistral, NVIDIA, Clay repository and ChatGPT-supervisor capabilities to accelerate ClayCode BASE research in evidence-bearing cycles. Never create paid usage automatically.",
-  "target_stage": "BASE_CLAYCODE_RELEASE",
+  "owner_directive": "Exploit all currently free Mistral, NVIDIA, Clay repository and ChatGPT-supervisor capabilities to accelerate the ClayCode compiler/runtime component of Frank v0.1 in evidence-bearing cycles. Never create paid usage automatically.",
+  "target_stage": "FRANK_V0_1",
+  "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
   "target_host": "UBUNTU_LINUX_DEVELOPER_SYSTEM",
   "cycle_policy": {
     "github_cycle_cron": "13 * * * *",
@@ -19,7 +20,7 @@
     "automatic_subscription_upgrade": false
   },
   "research_loop": [
-    "REFRESH_CURRENT_BASE_GATE_AND_RECENT_EVIDENCE",
+    "REFRESH_CURRENT_FRANK_V0_1_GATE_AND_CLAYCODE_COMPONENT_EVIDENCE",
     "HARVEST_PROVIDER_MODELS_AND_CAPABILITIES",
     "SELECT_NON_REDUNDANT_MODEL_FAMILIES",
     "RETRIEVE_AND_RERANK_RELEVANT_CLAYCODE_EVIDENCE",
@@ -31,6 +32,7 @@
     "RUN_OR_QUEUE_SAFE_SANDBOX_ORACLES",
     "PRESERVE_NEGATIVE_RESULTS",
     "WRITE_CYCLE_RECEIPT_AND_SUPERVISOR_INBOX",
+    "REENTER_RESULT_INTO_FRANK_V0_1_WORK_SURFACE",
     "SELECT_NEXT_HIGHEST_INFORMATION_TARGET"
   ],
   "model_role_policy": {
@@ -54,7 +56,8 @@
     "model_output_is_candidate_not_truth",
     "model_output_never_mints_capability_or_execution_authority",
     "autonomous_cycle_may_write_research_receipts_and_requests",
-    "autonomous_cycle_may_not_mark_BASE_work_packages_PASS",
+    "autonomous_cycle_may_not_mark_legacy_BASE_work_packages_PASS",
+    "autonomous_cycle_may_not_mark_FRANK_V0_1_complete",
     "autonomous_cycle_may_not_promote_canonical_semantics",
     "autonomous_cycle_may_not_modify_FRANK_harness",
     "semantic_change_requires_executable_counterexample_and_supervisor_review",
@@ -72,59 +75,58 @@
     ]
   },
   "priority_order": [
-    "CC-WP-02-PARSER-CANON",
-    "CC-WP-06-COMPILER-LOWERING",
-    "CC-WP-13-HARNESS-HANDOFF",
-    "CC-WP-10-GENERAL-APP-SUITE",
-    "CC-WP-14-BASE-AUDIT",
-    "CC-WP-03-IR-TYPES",
-    "CC-WP-04-TYPE-EFFECT",
-    "CC-WP-05-EVALUATOR",
-    "CC-WP-07-RUNTIME-ABI-FFI",
-    "CC-WP-08-STDLIB-SDK",
-    "CC-WP-09-CONCURRENCY-MEMORY",
-    "CC-WP-11-FUZZ-CONFORMANCE",
-    "CC-WP-12-CORPUS-HELDOUT"
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-03-IR-TYPES",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-04-TYPE-EFFECT",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-05-EVALUATOR",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-06-COMPILER-LOWERING",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-07-RUNTIME-ABI-FFI",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-08-STDLIB-SDK",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-09-CONCURRENCY-MEMORY",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-10-GENERAL-APP-SUITE",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-11-FUZZ-CONFORMANCE",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-12-CORPUS-HELDOUT",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
+    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
   ],
-  "current_focus": "Keep executable-selected V18 fixed and advance the exact CallContract/type/effect/runtime-binding frontier. The exact real G9 V18 CycleIR has 23 ordered top-level operations, two structured if regions and 100/100 residual structural disposition with zero opaque residuals, but 27 observed unique target+arity pairs have 0 exact declared matches, leaving 26 unresolved signatures plus one missing Needle.execute effect-boundary signature. Before every material execution resolve the latest controlling work revision, exact current repo head, V18/frontend/TypedIR/CycleIR/evaluator/runtime component hashes, self.root binary/state lineage and current-instance lease; stale receipts are diagnostic-only. Materialize only evidence-backed exact CallContract records keyed by exact target, arity, typed params, explicit return and effect class; forbid suffix/fuzzy/name-similarity resolution and Any/Unknown/Dynamic escape hatches. Execute non-effect contracts first with positive, wrong-arity, wrong-type, wrong-return, ambiguous-target and stale component/work/binary/state/lease controls. Gate Needle.execute separately behind explicit EXTERNAL_EFFECT semantics, sealed runtime binding, deterministic EffectGate authority scope and rollback/recovery. Component PASS never implies WP03/WP04/WP05/BASE PASS. Proceed to WP06 only after executable current package closure. Final BASE/FULL_FRANK/DOOMSDAY acceptance remains Ubuntu-only on the owner-fixed Hostinger target VPS. FREE_ONLY, no paid fallback, no canonical semantic promotion without executable counterevidence plus review, no receipt inheritance across changed hashes or superseded work revisions, and do not modify Frank's Harness.",
+  "current_focus": "Treat FRANK_V0_1 as the only active program and ClayCode as component F-V01-02. Keep executable-selected V18 fixed and advance the exact CallContract/type/effect/runtime-binding frontier. The exact real G9 V18 CycleIR has 23 ordered top-level operations, two structured if regions and 100/100 residual structural disposition with zero opaque residuals, but 27 observed unique target+arity pairs have 0 exact declared matches, leaving 26 unresolved signatures plus one missing Needle.execute effect-boundary signature. Before every material execution resolve the latest controlling work revision, exact current repo head, V18/frontend/TypedIR/CycleIR/evaluator/runtime component hashes, self.root binary/state lineage and current-instance lease; stale receipts are diagnostic-only. Materialize only evidence-backed exact CallContract records keyed by exact target, arity, typed params, explicit return and effect class; forbid suffix/fuzzy/name-similarity resolution and Any/Unknown/Dynamic escape hatches. Execute non-effect contracts first with positive and negative differential controls. Gate Needle.execute separately behind explicit EXTERNAL_EFFECT semantics, sealed runtime binding, deterministic EffectGate scope and rollback/recovery. Legacy CC-WP component PASS never implies Frank v0.1 PASS. Every material result must re-enter the unified Frank v0.1 work/test/negative-result surface. Final finished-v0.1 acceptance remains Ubuntu-only on the owner-fixed Hostinger target VPS. FREE_ONLY, no paid fallback, no canonical semantic promotion without executable counterevidence plus review, no receipt inheritance across changed hashes or superseded work revisions, and do not modify Frank's Harness.",
   "supervisor_last_steer": {
-    "reason": "Supervisor/control drift was detected: SUPERVISOR_STATE and SUPERVISOR_INBOX had already advanced to executable-selected V18 plus exact CallContract/runtime-binding closure, while this control file still directed V17 replay and an obsolete Andreas-local final acceptance path. The control surface is synchronized to the already-evidenced current frontier; this is a steering consistency repair, not a new semantic promotion.",
+    "reason": "Project-wide owner-fixed program state now makes FRANK_V0_1 the only active release stage and explicitly demotes BASE_CLAYCODE_RELEASE to historical/component evidence. The autonomous ClayCode control still targeted BASE directly. This steering repairs target/re-entry drift while preserving all current executable ClayCode evidence and the V18 call-contract frontier.",
     "evidence_priority": [
+      "FRANK_V0_1 owner directive and unified workspace precedence over historical stage labels",
       "exact current work revision and component/binary/state/lease identity before every execution",
       "exact evidence-backed CallContract population for observed V18 target+arity pairs",
       "non-effect call positive/type/arity/return/ambiguity/staleness differentials",
       "Needle.execute explicit EXTERNAL_EFFECT boundary plus sealed runtime binding and deterministic EffectGate decision",
       "physical adapter/FFI identity separated from ClayCode semantic contract identity",
-      "WP05 evaluator admission only for exact current contract+binding+binary/state/lease pairs",
-      "exact-current V18 G9/Dialect provenance/evaluator replay after call/type/effect/runtime closure",
-      "package-level WP03/WP04/WP05 adjudication without component-PASS inheritance",
-      "WP06 only after executable package closure",
-      "final BASE/FULL_FRANK/DOOMSDAY acceptance on owner-fixed Hostinger Ubuntu target VPS"
+      "evaluator admission only for exact current contract+binding+binary/state/lease pairs",
+      "FRANK_V0_1 re-entry for every material result",
+      "real Frank v0.1 component compile/execute after current typed/effect/evaluator closure",
+      "final finished Frank v0.1 acceptance on owner-fixed Hostinger Ubuntu target VPS"
     ],
     "required_next_actions": [
       "resolve latest controlling work revision, repo head and exact V18/frontend/TypedIR/CycleIR/evaluator/runtime hashes before each material execution",
       "materialize exact typed CallContract records only where repository/runtime evidence supports target, arity, params, return and effect class",
       "run non-effect contracts through positive and wrong-arity/wrong-type/wrong-return/ambiguous-target/stale-component/stale-work/stale-binary-state/stale-lease controls",
       "keep unresolved signatures fail-closed; never use suffix/fuzzy/name-similarity or dynamic escape hatches",
-      "treat Needle.execute as a separate EXTERNAL_EFFECT boundary requiring sealed current runtime binding, exact authority scope, deterministic EffectGate decision and rollback/recovery receipts",
-      "prove implementation/runtime adapter identity drift invalidates execution credit without silently changing ClayCode semantic contract identity",
-      "adjudicate WP03/WP04/WP05 only after exact executable current closure; component PASS is insufficient",
-      "advance to WP06 only after those package gates are current and executable",
-      "perform final Ubuntu-only BASE/FULL_FRANK/DOOMSDAY acceptance on the owner-fixed Hostinger target VPS"
+      "treat Needle.execute as a separate EXTERNAL_EFFECT boundary requiring sealed current runtime binding, exact scope, deterministic EffectGate decision and rollback/recovery receipts",
+      "map each material result into the unified FRANK_V0_1 work/test/negative-result surface",
+      "adjudicate WP03/WP04/WP05 only after exact executable current closure; component PASS is insufficient for Frank v0.1 completion",
+      "advance to lowering/runtime only after those component gates are current and executable",
+      "compile and execute real Frank v0.1 components on the owner-fixed Ubuntu target VPS"
     ],
     "do_not_infer": [
-      "package or BASE PASS from model-family agreement or component PASS",
+      "Frank v0.1 PASS from model-family agreement or component PASS",
       "independent replication from shared V18/Clay/ChatGPT/project ancestry",
-      "canonical semantic authority from WIT/MLIR analogies, ClayGraph salience, model confidence, GWT ignition or API tokens",
+      "canonical semantic authority from external analogies, ClayGraph salience, model confidence, GWT ignition or API tokens",
       "execution authority from a CallContract alone",
       "receipt validity across changed component hashes, superseded work revisions, stale binary/state lineage or stale leases",
       "need to reopen V18 or select V19 while the current typed-contract/FFI path remains unfalsified",
-      "need for an Andreas-local final-host run unless the owner explicitly reopens that requirement"
+      "BASE_CLAYCODE_RELEASE as an independent active program stage"
     ]
   },
   "supervisor": {
     "actor": "chatgpt-secondary",
-    "responsibility": "observe cycle receipts, detect drift/redundancy/provider-correlation, change focus/model roles/quotas, demand stronger falsifiers, and route high-information experiments",
+    "responsibility": "observe cycle receipts, detect drift/redundancy/provider-correlation, change focus/model roles/quotas, demand stronger falsifiers, route high-information experiments, and enforce FRANK_V0_1 re-entry",
     "inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
     "state": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"
   }

@@ -1,0 +1,157 @@
+module clay.research.omnisource_live_fusion_research_reentry
+version "1.0"
+status PROJECT_OWNER_FIXED_GLOBAL_OPERATION_LAW
+owner_instruction_date "2026-08-10T16:25:00+07:00"
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+identity_guard=@research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md
+live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+live_web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+mesh=@research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md
+adaptive_mesh_candidate=@research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+work_fabric=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+research_center=@research_entity/global/RESEARCH_CENTER_CLAYCODE_NATIVE_PROTOCOL.clay
+state=UnifiedDB
+topology=ClayGraph
+coordination_language=latest_ClayCode
+
+// Owner-fixed operating direction:
+// all newly observed available data enters one provenance-bound intake/fusion/research-reentry loop.
+// This is a source-coverage and feedback law, not an evidence-strength or architecture-promotion shortcut.
+
+law ALL_AVAILABLE_NEW_DATA_IS_INGESTION_CANDIDATE=true
+law EVERY_OBSERVATION_RETAINS_PROVENANCE_TIME_AND_CONTENT_IDENTITY=true
+law RAW_OBSERVATION_NEVER_AUTO_PROMOTES_TO_TRUTH=true
+law MATERIAL_SEMANTIC_DELTA_REQUIRES_RESEARCH_REENTRY=true
+law NO_MATERIAL_CHANGE_REQUIRES_LIGHTWEIGHT_RECEIPT=true
+law COUNTEREVIDENCE_AND_NEGATIVE_RESULTS_SURVIVE_FUSION=true
+law RESEARCH_RESULTS_FLOW_BACK_TO_ARCHITECTURE_TESTS_AND_WORK=true
+law TARGETED_RELEVANCE_ROUTING_OVER_GLOBAL_CONTEXT_FLOOD=true
+law FRESHNESS_IS_RECURSIVE_NOT_RUN_START_ONLY=true
+law CANDIDATE_ROUTING_MECHANISMS_REMAIN_EVIDENCE_GATED=true
+
+record OmniSourceObservation {
+  observation_id:Ref
+  source_class:REPO_STATE|WORK_EVENT|WORKER_RESULT|RUNTIME_RECEIPT|BENCHMARK_ROW|TEST_FAILURE|NEGATIVE_RESULT|USER_DIRECTIVE|USER_OBSERVATION|UPLOADED_SOURCE|EXTERNAL_PRIMARY|EXTERNAL_OFFICIAL|EXTERNAL_TECHNICAL|PROVIDER_CAPABILITY|FRANK_TELEMETRY|UNIFIEDDB_DELTA|CLAYGRAPH_DELTA|EXPERIMENT_OUTPUT|OTHER_PROVENANCE_BOUND
+  source_ref:Ref
+  source_actor:Ref?
+  source_time:Time?
+  observed_at:Time
+  semantic_epoch:Ref?
+  content_hash:Hash
+  raw_payload_ref:Ref
+  provenance_hash:Hash
+  freshness:Score?
+  confidence:Score?
+}
+
+record FusionAssessment {
+  observation_id:Ref
+  compared_against_epoch:Ref
+  novelty_class:NEW|REFINES|CONFIRMS|CONTRADICTS|SUPERSEDES|NO_MATERIAL_CHANGE|DUPLICATE
+  materiality:Score
+  uncertainty:Score
+  affected_claims:Set<Ref>
+  affected_hypotheses:Set<Ref>
+  affected_work:Set<Ref>
+  affected_components:Set<Ref>
+  evidence_for:Set<Ref>
+  evidence_against:Set<Ref>
+  strongest_counterhypothesis:Ref?
+  semantic_delta_ref:Ref?
+}
+
+record ResearchReentryReceipt {
+  receipt_id:Ref
+  observation_id:Ref
+  semantic_delta_ref:Ref?
+  fused_epoch:Ref
+  evidence_updates:Set<Ref>
+  claim_updates:Set<Ref>
+  hypothesis_created_or_revised:Set<Ref>
+  counterhypothesis_created_or_revised:Set<Ref>
+  experiment_created_or_revised:Set<Ref>
+  work_created_or_revised:Set<Ref>
+  architecture_delta_candidates:Set<Ref>
+  test_obligations:Set<Ref>
+  negative_results:Set<Ref>
+  branch_feedback_targets:Set<Ref>
+  no_change_reason:Clay?
+  next_falsifier:Clay?
+  rollback_or_recovery_impact:Clay?
+  completed_at:Time
+}
+
+// Intake: every newly observed available source gets identity before interpretation.
+rule new_available_observation -> canonicalize(OmniSourceObservation)
+rule new_available_observation -> persist_or_reference_raw_payload_without_context_flood
+rule same_content_hash+same_semantic_identity -> deduplicate_preserve_distinct_provenance
+rule source_missing_provenance -> quarantine_from_promotion + keep_as_unverified_intake
+rule stale_or_unknown_epoch -> mark_stale_or_UNKNOWN; never_guess_current
+
+// Fusion: compare every admissible observation to the current shared state, not chat memory alone.
+rule OmniSourceObservation -> refresh_current(UnifiedDB+ClayGraph+current_work+claims+hypotheses+negative_results+receipts)
+rule OmniSourceObservation -> derive(FusionAssessment)
+rule contradiction -> preserve_both_sides + derive_strongest_counterhypothesis + open_or_revise_discriminating_test
+rule supersession -> invalidate_or_revise_affected_current_work_before_next_material_effect
+rule negative_result -> preserve_as_active_architecture_knowledge
+rule duplicate -> lightweight_receipt_only
+rule NO_MATERIAL_CHANGE -> lightweight_receipt_only
+
+// Research re-entry is mandatory for every material semantic delta.
+rule FusionAssessment.materiality is material -> create(ResearchReentryReceipt)
+rule material_delta -> update_evidence_graph_as_supported_by_provenance
+rule material_delta -> create_or_revise_claims_hypotheses_counterhypotheses_as_warranted
+rule material_delta -> create_or_revise_cheapest_discriminating_experiment_when_uncertainty_remains_material
+rule material_delta -> map_against_current_system_possibility_table_and_dynamic_work
+rule material_delta -> create_or_revise_architecture_delta_or_test_obligation_or_work_or_explicit_NO_CHANGE
+rule material_delta -> route_targeted_feedback_to_affected_branches_and_workers
+rule high_impact_invalidation -> interrupt_affected_work_at_next_safe_point
+rule research_reentry_complete iff ResearchReentryReceipt exists and required targeted feedback is addressable
+
+// Research is itself an input source: findings recursively become the next live-fusion input.
+rule experiment_result|benchmark_result|runtime_failure|recovery_receipt|worker_result -> new_available_observation
+rule external_evidence_delta -> new_available_observation
+rule user_material_direction_or_observation -> new_available_observation
+rule architecture_test_result -> new_available_observation
+rule ResearchReentryReceipt.material_next_question -> live_refresh + next_research_cycle_if_expected_value_positive
+
+// Routing mechanism remains replaceable. V2 adaptive mesh is a candidate until real replay/recovery evidence passes.
+rule routing_policy = current_promoted_mesh unless evidence_promotes(adaptive_mesh_candidate)
+rule adaptive_mesh_candidate may_shadow_evaluate_on_current_deltas=true
+rule candidate_visibility_or_owner_desire_for_more_connectivity != promotion_evidence
+rule dense_global_invalidation may_use_dense_fanout_when_safer_or_cheaper
+rule ordinary_local_delta prefers dependency_and_semantic_targeting
+rule low_relevance_data remains indexed_and_pullable_not_broadcast
+
+// Required measurements for the all-source feedback loop.
+measure source_coverage_by_class
+measure ingestion_to_assessment_latency
+measure assessment_to_reentry_latency
+measure material_delta_reentry_closure_rate
+measure contradiction_detection_rate
+measure counterevidence_retention_rate
+measure stale_epoch_rejection_rate
+measure duplicate_suppression_rate
+measure false_materiality_rate
+measure missed_material_delta_rate
+measure affected_branch_recall
+measure false_interrupt_rate
+measure research_to_architecture_feedback_rate
+measure research_to_test_obligation_rate
+measure research_to_work_revision_rate
+measure recovery_feedback_closure_rate
+measure CPU_RAM_IO_network_token_context_cost
+
+invariant all_new_data_source_coverage_does_not_mean_all_raw_data_in_active_context
+invariant ingestion_does_not_mint_truth
+invariant fusion_does_not_average_contradictions_away
+invariant repeated_or_multiworker_distribution_does_not_create_independent_replication
+invariant ClayGraph_activation_never_mints_truth_or_effect_authority
+invariant UnifiedDB_persistence_never_mints_truth_or_effect_authority
+invariant research_feedback_never_bypasses_original_baseline_or_release_gates
+invariant Frank_remains_separate_research_subject
+invariant Frank_self_harness_authority_is_PROPOSAL_ONLY
+invariant Frank_never_mutates_Clay
+invariant every_material_result_returns_to_research_architecture_tests_or_explicit_NO_CHANGE

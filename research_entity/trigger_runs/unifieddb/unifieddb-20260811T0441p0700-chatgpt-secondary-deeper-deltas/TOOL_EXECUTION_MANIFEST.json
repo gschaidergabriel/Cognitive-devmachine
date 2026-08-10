@@ -1,15 +1,33 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas",
   "executed": [
     "fresh GitHub commit search on research and target repositories",
-    "fresh PR status/workflow inspection for #280/#286/#288/#281",
+    "fresh PR status/workflow inspection for #280/#286/#288/#281/#293",
     "static diff audit of PR #280 V17 schema/runtime/learning matrix",
-    "static diff audit of PR #286 storage + materialization-pair composition",
-    "official SQLite ATTACH/atomic-commit/super-journal research",
-    "official W3C PROV ordering/validity research",
-    "local synthetic SQLite ATTACH rollback-journal benchmark"
+    "static diff audit of evolving PR #286 storage/materialization/schema-drift/authority-direction/freshness/temporal probes",
+    "official SQLite ATTACH atomic multi-database transaction research",
+    "official SQLite WAL persistent-state and multi-ATTACH limitation research",
+    "official SQLite Online Backup and VACUUM INTO snapshot research",
+    "official SQLite sqlite_schema materialization research",
+    "official SQLite deterministic date/time research",
+    "official SQLite trusted_schema application security research",
+    "official SQLite FTS5 integrity-check/rebuild research",
+    "official W3C PROV ordering/validity research from earlier phase",
+    "local synthetic SQLite ATTACH rollback-journal mechanism check",
+    "local byte-stable wall-clock replay negative control",
+    "local WAL main-file-only snapshot-loss negative control",
+    "local trusted_schema=OFF and FTS5 integrity primitive checks",
+    "research-only adversarial PR #293 created on top of #286; no runtime promotion claim"
   ],
+  "local_deep_results": {
+    "environment": {"python":"3.13.5","sqlite":"3.46.1","platform":"Linux-6.18.35-x86_64-with-glibc2.41"},
+    "byte_stable_wallclock_replay": {"before":1,"after":0,"database_sha_unchanged":true},
+    "wal_main_file_only_copy": {"source_committed_rows":1,"copied_rows":0,"wal_bytes":4152},
+    "attach_delete_commit_rollback": {"final_counts":[1,1]},
+    "trusted_schema": {"default":1,"after_off":0},
+    "fts5_integrity_check": "PASS_LOCAL"
+  },
   "target_evidence_consumed": [
     "runtime/vps_unifieddb/frank_effect_reentry_done_v17_candidate/runs/31432536019/RECEIPT.json",
     "PR#278 storage safety target receipt via prior UnifiedDB run",
@@ -17,13 +35,14 @@
     "PR#274 Ubuntu SQLite patch provenance target PASS via shared GO receipt",
     "PR#270 V16 durable event-instance sequence target PASS via shared GO receipt"
   ],
-  "queued_not_promoted": [
-    "PR#280 V17 execution + canonical support binding target gate",
-    "PR#286 fused storage + materialization-pair target gate",
-    "PR#288 private SQLite 3.53.4 target preflight"
+  "current_non_evidence": [
+    "PR#286 newest target runs repeatedly cancelled/superseded as the rapidly advancing head changed; cancelled/queued runs are not test results",
+    "PR#293 target workflow result not observed; research branch remains diagnostic only",
+    "private fixed SQLite profile remains unpromoted until exact target loader/source-id/regression evidence passes"
   ],
   "capability_limits": [
-    "No accepted-target shell was directly available in this worker; queued GitHub self-hosted workflows are not treated as executed evidence.",
-    "Local benchmark is mechanism/performance-proxy evidence only, not target durability evidence."
+    "No direct accepted-target shell was used by this worker; GitHub self-hosted results are accepted only after executed job evidence exists.",
+    "Local mechanism tests are not target durability/performance evidence.",
+    "The live-schema and replay-clock gaps were independently discovered by parallel workers on #286 during this run; later shared-branch probes are treated as convergence, not sole ownership."
   ]
 }

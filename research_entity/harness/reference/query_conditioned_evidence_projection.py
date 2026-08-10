@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-"""QCEP-0.3: query-conditioned ephemeral evidence projection with exact Top-K stop.
+"""QCEP-0.3.1: query-conditioned ephemeral evidence projection with exact Top-K stop.
 
 This is a research candidate, not a database/truth/effect surface. It compiles a disposable
 per-query navigation projection from one epoch-bound UnifiedDB ledger. Query-conditioned
@@ -13,10 +13,13 @@ exceed its frontier ancestor. Once K admissible visited candidates have a Kth sc
 greater than the best remaining frontier score, no unseen node can enter final Top-K.
 Equal-score frontiers are not stopped, preserving deterministic tie ordering.
 
-OOD invariant retained from 0.2: query conditioning activates at a source only if at least
-one ADMISSIBLE outgoing edge has positive query signal. Otherwise the local edge factor is
-exactly 1.0. Missing labels are UNKNOWN, not counterevidence. Inadmissible nodes can be
-observed as suppressed negative space but cannot relay activation or manufacture query signal.
+OOD invariants:
+- query conditioning activates at a source only if at least one ADMISSIBLE outgoing edge has
+  positive query signal; otherwise local edge factor is exactly 1.0;
+- missing labels are UNKNOWN, not counterevidence;
+- structural JSON/schema keys such as source/target/strength never count as semantic signal;
+- only explicitly evidence-bearing fields may contribute query tokens;
+- inadmissible nodes may be observed as negative space but cannot relay or manufacture signal.
 """
 
 from dataclasses import dataclass
@@ -28,8 +31,13 @@ import re
 from typing import Any
 
 _TOKEN_RE = re.compile(r"[\w-]+", re.UNICODE)
-_VERSION = "QCEP-0.3-EXACT-TOPK"
+_VERSION = "QCEP-0.3.1-EXACT-TOPK"
 _EPS = 1e-15
+_SEMANTIC_FIELDS = frozenset({
+    "text", "label", "description", "query_cue", "cue", "semantic_label",
+    "tags", "evidence_tags", "purpose", "constraint", "constraints",
+    "predicate", "reason", "meaning", "summary",
+})
 
 
 def _canon(value: Any) -> str:
@@ -42,8 +50,26 @@ def _hash(value: Any) -> str:
 
 def _tokens(value: Any) -> frozenset[str]:
     if not isinstance(value, str):
-        value = _canon(value)
+        value = str(value)
     return frozenset(t.lower() for t in _TOKEN_RE.findall(value) if len(t) > 1)
+
+
+def _semantic_tokens(value: Any) -> frozenset[str]:
+    """Tokenize explicit semantic payload values, never container/schema field names."""
+    if isinstance(value, str):
+        return _tokens(value)
+    if isinstance(value, (list, tuple, set, frozenset)):
+        out: set[str] = set()
+        for item in value:
+            out.update(_semantic_tokens(item))
+        return frozenset(out)
+    if isinstance(value, dict):
+        out: set[str] = set()
+        for key in _SEMANTIC_FIELDS:
+            if key in value:
+                out.update(_semantic_tokens(value[key]))
+        return frozenset(out)
+    return frozenset()
 
 
 class StaleEvidenceProjection(ValueError):
@@ -145,9 +171,8 @@ class QueryConditionedEvidenceProjector:
         target = self._rows.get(edge["target"], {})
         evidence_tokens = (
             _tokens(edge["relation"])
-            | _tokens(edge["dependency_value"])
-            | _tokens(target.get("key", ""))
-            | _tokens(target.get("value", ""))
+            | _semantic_tokens(edge["dependency_value"])
+            | _semantic_tokens(target.get("value", {}))
         )
         overlap = len(query_tokens & evidence_tokens)
         return min(1.0, overlap / max(1.0, min(4.0, float(len(query_tokens) or 1))))
@@ -249,7 +274,7 @@ class QueryConditionedEvidenceProjector:
         suppressed.sort(key=lambda x:(-x["activation_score"],x["hop"],x["ref"]))
         selected=selected[:spec.max_items]
         receipt={
-            "schema_version":"1.1","preprocessor_version":_VERSION,"projection_id":spec.projection_id,
+            "schema_version":"1.2","preprocessor_version":_VERSION,"projection_id":spec.projection_id,
             "basis_epoch":self._epoch,"semantic_state_hash":self._state_hash,"query_hash":_hash(spec.query_text),
             "selected":selected,"suppressed":suppressed[:spec.max_items],"blocked_propagation_refs":sorted(blocked),
             "frontier_expansions":expansions,"frontier_stop_reason":stop_reason,
@@ -257,6 +282,7 @@ class QueryConditionedEvidenceProjector:
             "projection_kind":"QUERY_CONDITIONED_EPHEMERAL_EVIDENCE_GRAPH","truth_authority":"NONE","effect_authority":"NONE",
             "proof_rule":"query-conditioned activation changes accessibility only; it never mints proof eligibility",
             "missing_edge_semantics_rule":"NO_ADMISSIBLE_LOCAL_QUERY_SIGNAL => EXACT_STATIC_EDGE_FACTOR",
+            "semantic_signal_rule":"STRUCTURAL_JSON_KEYS_EXCLUDED_ONLY_EXPLICIT_EVIDENCE_FIELDS_COUNT",
             "top_k_proof":"ALL_TRANSITION_MULTIPLIERS_LE_1_DESCENDANT_SCORE_LE_FRONTIER_ANCESTOR",
         }
         receipt["receipt_hash"]=_hash(receipt)

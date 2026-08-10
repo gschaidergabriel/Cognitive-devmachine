@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:35:00+07:00",
+  "entity_id": "frank-project-global-research-entity",
+  "identity": {
+    "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_frank": false,
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "fresh_state_findings": {
+    "wp02": "Selected V17 has complete Hostinger Ubuntu proxy closure but remains formally OPEN pending the registered Andreas Ubuntu developer-system target receipt.",
+    "wp03_upstream": "Original V7 typed-fn grammar independently reproduces a strict LALR shift/reduce conflict at optional dotted_relation.",
+    "wp03_downstream": "Current-main typed IR loses grammar-admitted reserved-word identifiers by value-based keyword filtering; the AST-context candidate preserves them.",
+    "runner_topology": "The active Hostinger self-hosted runner is repository-scoped to gschaidergabriel/Dr.-Unterweger; Clay-repo self-hosted jobs are not a valid execution lane under the observed configuration."
+  },
+  "live_external_knowledge": {
+    "retrieval_date": "2026-08-10",
+    "sources": [
+      "https://lark-parser.readthedocs.io/en/stable/grammar.html",
+      "https://lark-parser.readthedocs.io/en/latest/how_to_use.html",
+      "https://lark-parser.readthedocs.io/en/latest/parsers.html"
+    ],
+    "supported_points": [
+      "Lark strict=True raises on unresolved LALR shift/reduce and regex collisions.",
+      "Rule priorities are a documented LALR collision-resolution mechanism.",
+      "Lark advises avoiding rules that match the same sequence where possible; terminal priority should be a last resort.",
+      "The contextual lexer narrows terminal choices from parser state, so grammar structure remains a primary ambiguity-control surface."
+    ],
+    "architecture_effect": "Prefer the minimum structural repair that preserves the already-selected V17 relation membrane over broad lexer novelty without an executable counterexample."
+  },
+  "hypothesis": "The WP03 blockers are separable: preserve V7 typed-fn/operator semantics, replace only its optional dotted relation with the selected V17 relation membrane, and use AST context rather than token value to extract grammar-admitted identifiers.",
+  "strongest_counterhypothesis": "The two repairs interact and either reintroduce a strict grammar conflict, break frozen G9/Dialect or Needle boundaries, collapse + and - identity, destabilize typed semantic IDs, or accidentally mint declaration authority.",
+  "baseline_and_counterevidence": {
+    "wp03_keyword_hostinger_run": 31357959269,
+    "wp03_keyword_artifact": 9051344889,
+    "wp03_keyword_result": {
+      "candidate_pass": true,
+      "full_g9_dialect_nonstrict_typed_ir_pass": true,
+      "keyword_identifier_regression_pass": true,
+      "full_declaration_count": 25,
+      "upstream_strict_v7_observed_pass": false,
+      "upstream_error": "GrammarError: Shift/Reduce conflict for terminal IFF in dotted_relation"
+    },
+    "v19_negative_result": "Exact current V19 delimiter-consuming no-lookahead design was refuted by V17-valid bare-qid trailing-trivia/comment statement-boundary cases; production V17 remained selected."
+  },
+  "build_and_execution": {
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "stacked_pr": 88,
+    "base_branch": "clay-wp03-keyword-ident-candidate-20260810",
+    "head_branch": "clay-wp03-v7-v17-membrane-20260810",
+    "changed_files": 2,
+    "workflow_run_id": 31358920312,
+    "workflow_conclusion": "success",
+    "artifact_id": 9051613361,
+    "artifact_digest": "sha256:1816fbc0ea5f386ab3889314b67d0d301f64a8c711f16d6eea8bb836afa115e2",
+    "receipt": "research_entity/claycode/base/receipts/WP03_V7_V17_MEMBRANE_KEYWORD_IR_HOSTINGER_20260810T1232p0700.json",
+    "exact_input_blobs": {
+      "grammar": "ca0b8c8202edbdc6edd2f53e5eb60ca3ef416e1b",
+      "frontend": "55728fd20323a364bb5e831989644b65189603d1",
+      "typed_ir_candidate": "1234ab634dff60197ea45d4a52969c5ea442746a",
+      "g9": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+      "dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797"
+    },
+    "remote_gates": {
+      "strict_build": true,
+      "strict_full_g9_dialect": true,
+      "relation_boundary": true,
+      "operator_identity": true,
+      "full_typed_ir": true,
+      "keyword_identifiers": true,
+      "authority_none": true
+    },
+    "errors": [],
+    "full_declaration_count": 25,
+    "full_program_semantic_id": "clayir:3c7d2867ea17b195d8d2f4af87e14d7e4bd4480277f2b646aa00986a08729c20",
+    "strict_build_ms": 383.7593998759985
+  },
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "name": "SEMANTIC_HASH_VS_SOURCE_SPAN_DUAL_RAIL",
+    "intent": "Test whether parser semantic identity can remain trivia-invariant while precise diagnostic/source provenance lives in a separate span sidecar.",
+    "probe": "tools/claycode_v19_source_span_sidecar_probe.py",
+    "initial_workflow_commit": "f0f3155dd49467829b10bbd4dbb3bbfde22244b7",
+    "adjudication": "NOT_PROMOTED_SUPERSEDED_AS_V19_ARGUMENT",
+    "reason": "Stronger concurrent statement-boundary counterevidence refuted exact V19 before this could support V19; the source-span separation remains a future frontend diagnostic test obligation independent of V19.",
+    "rollback": "Deleted the wrong-scope Clay-repo self-hosted workflow after runner-scope discovery; retained only the reversible probe as reproducible research material.",
+    "workflow_cleanup_commit": "eb74245c301a821aae460496177b9801f8da33dc"
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_COMPOSED_RESEARCH_CANDIDATE_NO_PRODUCTION_PROMOTION",
+    "wp02_parser": "KEEP_V17_SELECTED",
+    "wp03_grammar": "PORT_MINIMUM_V7_TYPED_FN_PLUS_V17_RELATION_MEMBRANE_CANDIDATE_TO_FRESH_MAIN",
+    "wp03_typed_ir": "PORT_AST_CONTEXT_IDENTIFIER_EXTRACTION_CANDIDATE_TO_FRESH_MAIN",
+    "wp04": "DO_NOT_ADVANCE_UNTIL_CANONICAL_WP03_REPLAY",
+    "base": "NOT_PASS",
+    "frank_harness_mutation": false
+  },
+  "targeted_distribution": {
+    "clay_pr_145_review_comment": 4893891029,
+    "clay_pr_145_followup_comment": 5236298646,
+    "message": "Do not merge stale draft as-is; port only the minimal supported AST-context delta to fresh main and replay canonical validation with exact provenance."
+  },
+  "negative_results_preserved": [
+    "V18 whole-prefix design was not namespace-safe and had strict conflict evidence.",
+    "V19 delimiter-consuming design repaired prefix shadow but broke V17-valid statement-boundary trivia/comment semantics.",
+    "A self-hosted job declared in the Clay repository is not evidence of Hostinger execution while the runner remains repository-scoped to Dr.-Unterweger.",
+    "A green Hostinger research composition does not equal formal WP03 PASS or Andreas target acceptance."
+  ],
+  "next_frontier": [
+    "Rebase/port only the two minimum supported WP03 deltas onto fresh Clay main.",
+    "Run canonical WP03 validation plus differential equivalence under the selected exact grammar/frontend/typed-IR provenance.",
+    "Add source-span/diagnostic provenance tests as a separate non-semantic rail before WP04 precise diagnostics depend on it.",
+    "Require registered Andreas Ubuntu target evidence before formal promotion where the acceptance contract requires it.",
+    "After canonical WP03 closure, move to the smallest WP04 type/effect falsifier; do not reopen broad parser redesign without a new executable counterexample."
+  ],
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "research_write": "COMMITTED",
+  "authority_invariant": "model output != execution authority"
+}

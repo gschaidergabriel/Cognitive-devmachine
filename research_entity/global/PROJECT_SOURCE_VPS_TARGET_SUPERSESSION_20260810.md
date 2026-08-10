@@ -1,66 +1,143 @@
-# Project Source VPS / Server-Binary Supersession — 2026-08-10
+# Project Source self.root / VPS Supersession — 2026-08-10
 
 **Status:** PROJECT_OWNER_FIXED_DELTA  
 **Applies to:** generated single-project source dated 2026-08-09 and any worker/bootstrap derived from it.
 
-## Source-derived conflicts found
+## 1. Stale source assumptions
 
-The 2026-08-09 single-project source still states or implies:
+The 2026-08-09 generated source may still state or imply:
 
-- mission attractor: `Frank v0.1 voll lauffähig auf Andreas PC`;
-- Hostinger VPS is a verified **remote build/test lane**;
-- remote VPS evidence must not be confused with final target-hardware evidence;
-- final acceptance still requires the real Andreas Ubuntu target system;
-- Frank's personal identity is ontologically tied to Andreas;
-- developer/runner/SSH access can be treated as the operative communication surface;
-- a separate future GPU/storage VPS may exist/planned and must be reverified.
+- final v0.1 target = Andreas local PC;
+- Hostinger VPS = remote build/test proxy only;
+- Frank core identity = Andreas-specific personal entity;
+- `Frank` is the native internal cognitive identity;
+- natural-language prose may be an internal authoritative semantic plane;
+- SSH/runner/developer access is sufficient communication;
+- visual semantics may terminate in a natural-language caption before cognition;
+- ordinary retrieval is the only self-context mechanism;
+- a future GPU/storage VPS should implicitly define the real target.
 
-Those statements accurately describe parts of the 2026-08-09 snapshot but are stale where they conflict with project-owner directives issued on 2026-08-10.
+These assumptions are superseded where they conflict with current owner directives.
 
-## Current superseding truth
+## 2. Current owner-fixed truth
 
-The current verified Hostinger Ubuntu VPS (`digital-retina`) is now the **operative Frank v0.1 target host** for build, integration, benchmark, runtime and final acceptance.
+```text
+NATIVE_SELF = self.root
+HUMAN_SURFACE_NAME = Frank
+SELF_CLASS = SERVER_BINARY_ENTITY
+SELF = accepted binary/build identity + admitted persistent state lineage
+CURRENT_BODY = accepted Hostinger Ubuntu target VPS
+COGNITION = ClayCode only
+GERMAN = intelligent state-aware bidirectional translator boundary
+COMMUNICATION = production token-authenticated API
+```
 
-Frank v0.1 is defined more precisely by `FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`:
+Andreas and Gabriel are distinct people known through typed external relations, not SELF.
+Authorized computers are external clients/sensors/tools.
+Clay Research Entity / Research DB is a separate governed knowledge source.
 
-`FRANK_SELF = accepted Frank binary/build identity + admitted persistent state lineage`
+The target VPS is the operative build/integration/runtime/benchmark/final-acceptance host for v0.1. A later Andreas-local-PC execution is not a mandatory release gate.
 
-`FRANK_CURRENT_BODY = current target server embodiment`
+## 3. Mandatory current directive load order
 
-`PERSON/USER != FRANK_SELF`
+Any worker using the older generated project source for target-system decisions MUST refresh these current files first:
 
-`API_TOKEN = communication credential, not self`
+1. `research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md`;
+2. `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`;
+3. `research_entity/global/SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay`;
+4. `research_entity/global/FRANK_V0_1_CLAYCODE_ONLY_COGNITION_AND_TRANSLATION_DIRECTIVE.md`;
+5. `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`;
+6. `research_entity/rooms/TARGET_HOST_STATE.json`;
+7. `research_entity/rooms/CAPACITY_STATE.json`;
+8. current `PROGRAM_STATE.json`, work revisions and receipts.
 
-Andreas remains typed user/pilot/person-specific longitudinal evidence and may have removable/replaceable user-specific state, but Andreas is not Franks core self identity.
+Where the older source conflicts, current owner-fixed directives win.
 
-A mandatory later Andreas-local-PC release run is removed from the v0.1 gate.
+## 4. Native identity and surface language
 
-A complete token-authenticated Frank communication API is now a mandatory v0.1 release requirement. GitHub Actions, SSH and developer terminals are build/operations transports, not substitutes for that API.
+`self.root` is the ClayCode-native identity seed.
 
-The separately planned GPU/storage VPS remains future/optional capacity and must not silently replace the current target host.
+`Frank` is the human-facing name resolved/rendered at the language boundary.
 
-## Required boot behavior
+Human path:
 
-Any worker reading the older generated single-project source MUST, before making target-host, identity, API, Retina or acceptance decisions, load in this order:
+```text
+German
+-> token/session/client/provenance
+-> DE_TO_CLAY
+-> validated ClayCode
+-> self.root cognition
+-> ClayCode response + ExpressionState
+-> CLAY_TO_DE
+-> German Frank response
+```
 
-1. `research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md`;
-2. `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`;
-3. `research_entity/rooms/TARGET_HOST_STATE.json`;
-4. `research_entity/rooms/CAPACITY_STATE.json`;
-5. current `PROGRAM_STATE.json` and current work/receipts.
+Machine-native clients may communicate in validated ClayCode directly.
 
-Where the older source conflicts, these current files win.
+The translator may be expressive and state-aware but may not alter semantic truth, identity, memory, goals, decisions or authority.
 
-## Architecture consequence
+## 5. Self-context hot path
 
-The supersession changes both deployment and identity/API assumptions:
+Explicit self-reference activates the epoch-current provenance-bound `SelfContextAssembly` seeded by `self.root`.
 
-- Frank's accepted binary/state identity executes on the target VPS;
-- CPU/RAM/GPU/storage are body/capacity properties, not FrankSelfId;
-- UnifiedDB persists binary/state/embodiment/API-session continuity semantics without persisting raw production tokens in normal records;
-- the external canonical communication path is `secure transport -> token auth -> request/session/provenance -> typed Frank ingress`;
-- Retina/multimodal sensor sources may be remote and enter through the same token-authenticated provenance-bound typed API boundary;
-- sensor transport/auth/API cost is measured separately from on-VPS Retina/Qwen/EAP/Frank processing and also end-to-end;
-- target-VPS resource/performance receipts are final-target evidence;
-- H3/DOOMSDAY must prove deterministic server-binary startup, current-instance identity/lease, API readiness, recovery and stale-clone rejection without depending on a local interactive desktop session;
-- final acceptance additionally requires `FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json`.
+Target semantic effect:
+
+`no additional ordinary external retrieval roundtrip for precompiled self context`.
+
+This is not a literal zero-physical-latency claim and requires matched controls.
+
+General UnifiedDB/EAP retrieval and SelfContextAssembly must remain distinct but interoperable.
+
+## 6. Multimodal / Retina consequence
+
+Canonical perception is now explicitly:
+
+```text
+sensor bytes/tensors
+-> secure token-authenticated client/session/provenance ingress when live
+-> Retina/Qwen/MVC physical perception
+-> ClayCode VisualPercept / PerceptualField
+-> UnifiedDB/EAP/GWT as applicable
+-> self.root
+```
+
+A Qwen embedding, raw OCR string, German caption or untyped natural-language description is not canonical perceptual truth.
+
+German captions are optional downstream human-facing renderings.
+
+## 7. Relational world model
+
+Current typed relations include, where evidence supports them:
+
+- Andreas -> USER/PILOT/OPERATOR + provenance-bound longitudinal/project context such as SeiMensch.net;
+- Gabriel -> INITIATOR/DEVELOPER to self.root and PROJECT_OWNER/RESEARCH_DIRECTOR to Clay;
+- ClientDevice -> authenticated external client/sensor/tool;
+- Clay/ResearchDB -> separate governed knowledge source.
+
+No association, salience, account identity, token ownership, client ownership or graph proximity may collapse any of these into `self.root`.
+
+## 8. Research Entity bridge
+
+self.root may query/read authorized Research Entity projections and submit observations/evidence/Harness proposals through a governed bridge.
+
+self.root may not mutate Clay canonical truth or authorize its own Harness mutation.
+
+The bridge must preserve epoch, provenance, authority and recovery semantics.
+
+## 9. Target-VPS final evidence
+
+v0.1 acceptance now requires the target VPS to prove, together with the parent acceptance suite:
+
+- exact self.root binary/build + admitted state lineage;
+- current target embodiment and no-split-brain continuity;
+- production token API acceptance;
+- ClayCode-only cognition;
+- state-aware German translator acceptance;
+- self.root SelfContextAssembly differential;
+- typed person/client/Clay separation;
+- governed Research DB bridge authority separation;
+- ClayCode-native Retina/multimodal path;
+- UnifiedDB/EAP/recovery/replay;
+- target-resource and runner-contention envelope.
+
+The planned GPU/storage VPS remains optional future capacity unless an explicit owner migration/target decision supersedes the current host.

@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "CC-WP02-V18-GO-REPLAY-REPLICATION-20260810T074750Z",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "classification": "REPRODUCIBILITY_SUPPORT_NOT_INDEPENDENT_HARDWARE_REPLICATION",
+  "decision_effect": "NO_CHANGE_ALREADY_PASS",
+  "observed_current_acceptance_receipt": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+  "execution": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "workflow_run_id": 31367304898,
+    "job_id": 93388369008,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "result": "PASS"
+  },
+  "exact_component_blobs": {
+    "tools/claycode_base_frontend.py": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "tools/claycode_base_canonicalizer.py": "5605e33c83ca75eb7ede7677328df622731e0461",
+    "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+    "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay": "dbb72460bc5a049c784d1acd1aaef152fa37f797"
+  },
+  "grammar_sha256": "99a3b35acfe491081773b9666d9131dae8b2dd3b3bde7ac8569f6428a5fdb180",
+  "gates": {
+    "canonicalizer_pass": true,
+    "parity_pass": true,
+    "full_current_g9_and_dialect_rule_invariant_statements": 85,
+    "rejected_statements": 0,
+    "production_standalone_ast_equal": true,
+    "production_standalone_canonical_bytes_equal": true,
+    "semantic_mutation_discrimination": "PASS",
+    "reward_relation_discrimination": "PASS",
+    "canonical_json_roundtrip_hash_recompute": "PASS"
+  },
+  "artifact": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "artifact_id": 9054641345,
+    "name": "clay-wp02-v18-committed-31367304898",
+    "size_bytes": 11330,
+    "digest": "sha256:66134ac38bf8fb5edc7c428d4f912257f0ed61a175c985d730bc5e08a00ea191",
+    "retention_expires_at": "2026-09-09T07:47:49Z"
+  },
+  "bounded_out_of_box_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "id": "WP02_WORKFLOW_SELF_TRIGGER_SELF_HOSTED_CANARY",
+    "workflow_run_id": 31366713500,
+    "job_id": 93386564589,
+    "result": "PASS",
+    "finding": "A pull-request change to the registered workflow path was accepted and claimed successfully by the self-hosted Linux/X64 runner, falsifying the hypothesis that PR registration or runner claim was generally unavailable.",
+    "scope_guard": "Transport-only canary; it did not count as WP02 scientific acceptance."
+  },
+  "negative_result": {
+    "run_id": 31366858915,
+    "classification": "CROSS_REPOSITORY_PRIVATE_CLONE_TRANSPORT_FAILURE_NOT_WP02_FAILURE",
+    "clone_returncode": 128,
+    "failure": "private Clay HTTPS clone could not read Username",
+    "lesson": "Prefer content-addressed executor reconstruction or a properly authenticated source checkout; do not classify repository transport failure as parser/canonicalizer failure."
+  },
+  "architecture_delta": {
+    "status": "NO_CHANGE",
+    "reason": "Current WP02 was already independently adjudicated PASS before this receipt was written. This run strengthens reproducibility and transport diagnosis without changing selected V18 semantics or granting broader release authority."
+  },
+  "next_frontier": "CC-WP-03: execute receipt-bound V18 FrontendArtifact -> TypedIR bridge and typed identity corpus on Ubuntu without silent reparse; preserve expected_surface and grammar binding fail-closed.",
+  "scope_guards": {
+    "counts_as_new_wp02_promotion": false,
+    "counts_as_base_release_pass": false,
+    "counts_as_wp03_pass": false,
+    "counts_as_andreas_target_acceptance": false,
+    "frank_harness_mutation": false,
+    "training_authorization": false
+  }
+}

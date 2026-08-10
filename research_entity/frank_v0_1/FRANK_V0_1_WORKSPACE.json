@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "workspace_id": "frank-v0.1-unified-program",
   "status": "ACTIVE",
   "owner_directive": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
@@ -71,9 +71,49 @@
       "goal": "Production token-authenticated API on target VPS with scoped caller intent, client/session provenance, health/readiness, concurrency, cancellation, idempotency and multimodal ingress."
     },
     "F-V01-09-EFFECT-AUTHORITY": {
-      "status": "OPEN",
+      "status": "IN_PROGRESS",
       "weight": 1.0,
-      "goal": "Default-allow authenticated non-destructive action path plus deterministic ClayCode gates for destructive/security-sensitive effects, verified outcomes and replay protection."
+      "goal": "Default-allow authenticated non-destructive action path plus deterministic ClayCode gates for destructive/security-sensitive effects, verified outcomes and replay protection.",
+      "subchecks": {
+        "owner_policy_semantics_and_target_vps_matrix": {
+          "status": "PASS",
+          "evidence": [
+            "gschaidergabriel/Dr.-Unterweger@b53420100cfeefef0f6135ce1ccb0ee28f2c5e9f",
+            "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json"
+          ]
+        },
+        "receipt_writer_authority_isolation": {
+          "status": "PASS",
+          "evidence": [
+            "gschaidergabriel/Dr.-Unterweger@af4eab1754539df31e98505bcdfdac2950daf970",
+            "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json"
+          ]
+        },
+        "current_source_lifecycle_crash_replay": {
+          "status": "OPEN",
+          "note": "Prior target-VPS lifecycle substrate passed on blob 9c318ce7; exact current effect-authority blob a28d47f0 still requires lifecycle rerun before current-source credit."
+        },
+        "current_claycode_frontend_typed_ir": {
+          "status": "OPEN",
+          "note": "Frontend/TypedIR discriminator was extended to the new authority declarations in target commit 0f51bced; current exact-source receipt pending."
+        },
+        "real_provider_unknown_outcome_reconciliation": {
+          "status": "OPEN",
+          "note": "Google effect bridge now carries uncertainty/idempotency rules, but no real provider write timeout-after-acceptance/reconciliation receipt is promoted."
+        },
+        "verified_outcome_reentry_done_and_terminal_receipt": {
+          "status": "OPEN",
+          "note": "Still requires verified provider outcome -> provenance-bound UnifiedDB re-entry -> DONE and final CLAY_0_1_EFFECT_AUTHORITY_RECEIPT integration."
+        }
+      },
+      "current_evidence": [
+        "gschaidergabriel/Dr.-Unterweger@dbe249e5220af9faff74b31445f00ed36efe7ac3",
+        "gschaidergabriel/Dr.-Unterweger@b53420100cfeefef0f6135ce1ccb0ee28f2c5e9f",
+        "gschaidergabriel/Dr.-Unterweger@af4eab1754539df31e98505bcdfdac2950daf970",
+        "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
+        "gschaidergabriel/Dr.-Unterweger@dc2568ff863c4d7c4696c2d14c62db406f9fecb4"
+      ],
+      "blocker": "Owner-fixed policy matrix is target-VPS PASS, but finished gate still needs exact-current-source lifecycle/frontend/TypedIR evidence, a real provider uncertainty/reconciliation path, and verified outcome -> provenance re-entry -> DONE/terminal receipt."
     },
     "F-V01-10-PROACTIVE-AGENCY-WEB": {
       "status": "OPEN",
@@ -114,5 +154,5 @@
   },
   "completion_contract": "research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md",
   "terminal_receipt": "SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_RECEIPT.json",
-  "last_updated": "2026-08-10T20:39:00+07:00"
+  "last_updated": "2026-08-10T21:18:00+07:00"
 }

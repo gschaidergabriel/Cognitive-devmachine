@@ -1,0 +1,62 @@
+{
+  "diagnostic_alternatives_are_non_authoritative": [
+    {"arity": 1, "diagnostic_only": true, "target": "Shadow.verify"},
+    {"arity": 5, "diagnostic_only": true, "target": "Shadow.verify"}
+  ],
+  "needle_execute_production_authority_changed": false,
+  "negative_controls": {
+    "cases": [
+      {"case": "suffix_shadow", "error": "no exact target+arity CallContract", "pass": true},
+      {"case": "wrong_arity", "error": "no exact target+arity CallContract", "pass": true},
+      {"case": "wrong_arg_type", "error": "argument type mismatch: site=('Bytes',) contract=('String',)", "pass": true},
+      {"case": "dynamic_param", "error": "parameter types must be explicit/concrete", "pass": true},
+      {"case": "dynamic_return", "error": "return type must be explicit/concrete", "pass": true},
+      {"case": "duplicate_exact_contract", "error": "ambiguous exact CallContract identity", "pass": true},
+      {"case": "stale_work_revision", "error": "stale/mismatched work revision", "pass": true},
+      {"case": "effect_missing_scope", "error": "external effect lacks explicit authority scope", "pass": true},
+      {"case": "effect_missing_rollback", "error": "external effect lacks rollback/recovery reference", "pass": true},
+      {"case": "non_effect_authority_metadata", "error": "non-effect contract carries effect authority/rollback metadata", "pass": true}
+    ],
+    "passed": 10,
+    "total": 10
+  },
+  "pass": true,
+  "positive_external_effect": {
+    "admitted": true,
+    "arity": 1,
+    "contract_semantic_hash": "05aa6809f8bce1bf8a70e8388094f6c94a6550bd93b7cab857e06eb41a90c7df",
+    "effect_authority_minted_by_resolver": false,
+    "effect_class": "EXTERNAL_EFFECT",
+    "runtime_component_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "target": "clay.test.effect"
+  },
+  "positive_non_effect": {
+    "admitted": true,
+    "arity": 1,
+    "contract_semantic_hash": "1ba8a453a94a3c1aa8dd47531e79099ab85efee8c347472d5e2621fc2a2a042c",
+    "effect_authority_minted_by_resolver": false,
+    "effect_class": "PURE",
+    "runtime_component_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "target": "clay.test.echo"
+  },
+  "production_contracts_invented": false,
+  "real_g9_unresolved_fail_closed": {"passed": 27, "total": 27},
+  "result_sha256": "038ecad1166ca44954fa5fc9458ad857bb063d14fa4906bcffd002cef420a34b",
+  "schema_version": "1.0",
+  "scope": "Mechanism validation only; production G9 CallContracts and target-VPS bindings remain required.",
+  "test": "CC_BASE_EXACT_CALLCONTRACT_RUNTIME_BINDING",
+  "execution_environment": {
+    "os": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "target_vps": false,
+    "execution_class": "LOCAL_PROXY_EXECUTABLE_DISCRIMINATOR"
+  },
+  "artifact_sha256": {
+    "probe": "04edb28929b98390d6a0f778912ea80ebfcef5a8faca027733a1d898d9015351",
+    "validation": "5104b57f09e581a4dbd8df8c085a322ba6b5a02e7a0b66db70f0f4895046a6c9"
+  },
+  "deterministic_rerun": {
+    "same_output": true,
+    "serialized_result_file_sha256": "89d993496f86306aa499177a2d79f2c00979b46c5edcaf7dde65453c86ae2acc"
+  }
+}

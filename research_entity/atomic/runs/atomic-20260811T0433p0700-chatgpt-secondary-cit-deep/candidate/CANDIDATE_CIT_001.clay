@@ -57,7 +57,9 @@ record ExactCausalConfirmation {
   atom_id:Ref
   confirmation:Confirmation
   causal_credit:Real[0,1]
-  verified_outcome_ref:Ref?
+  exact_effect_id:Ref?
+  exact_attempt_id:Ref?
+  verified_outcome_hash:Ref?
   witness_ref:Ref
   provenance:Set<Ref>
 }
@@ -98,13 +100,18 @@ rule SparseScreenResult != identity
 rule SparseScreenResult != user_intent
 rule SparseScreenResult != effect_authority
 
-// Positive material credit requires a separate exact confirmation path.
+// Positive material credit requires a separate exact confirmation path, bound to the exact
+// verified outcome identity rather than merely a same-effect/same-cycle proxy.
 rule material_credit_admissible(c:ExactCausalConfirmation) iff
   c.confirmation in [INDIVIDUAL_LESION_CONFIRMED,RESPONSIBILITY_WITNESS_CONFIRMED]
-  && c.verified_outcome_ref != null
+  && c.exact_effect_id != null
+  && c.exact_attempt_id != null
+  && c.verified_outcome_hash != null
+  && exact_verified_outcome_support(c.exact_effect_id,c.exact_attempt_id,c.verified_outcome_hash)
   && current(c.provenance)
   && c.causal_credit>0
 
+rule confirmation_against_other_same_effect_outcome != material_credit_admissible
 rule unconfirmed_or_refuted_candidate -> material_learning_weight=0
 rule screen_miss cannot become negative_credit_by_absence
 
@@ -112,15 +119,16 @@ rule screen_miss cannot become negative_credit_by_absence
 parameter minimum_uniform_exact_probe_fraction=0.05
 rule exact_probe_scheduler preserves exploration_floor >= minimum_uniform_exact_probe_fraction
 
+// Prefer simpler exact testing when current causal topology already ranks candidates well.
+rule trusted_factorized_dependency_DAG_available -> exact responsibility evaluator remains preferred confirmation
+rule calibrated_high_quality_candidate_prior_available -> prefer prior_guided_exact_tests over tomography_screen
+rule CIT may rank exact tests; CIT never replaces exact responsibility semantics
+
 // Recovery and observability.
 rule restart invalidates in_memory_probe_design_without persisted version+snapshot+epoch binding
 rule snapshot_mismatch -> ProbeValidity.STALE
 rule reconstruction_version_change -> invalidate_old_screen_for_material_use
 rule raw_projection_rows are preserved even when screen is rejected
-
-// Relation to CARF/strong conventional baseline.
-rule trusted_factorized_dependency_DAG_available -> exact responsibility evaluator remains preferred confirmation
-rule CIT may rank exact tests; CIT never replaces exact responsibility semantics
 
 // Lesion hooks.
 intervention LESION_TOMOGRAPHY -> disable tomography_screen
@@ -134,5 +142,6 @@ invariant COMPRESSED_ESTIMATE_NEVER_MINTS_MATERIAL_REWARD
 invariant EXTERNAL_EFFECTS_ARE_NEVER_REPLAYED_FOR_TOMOGRAPHY
 invariant STALE_OR_UNKNOWN_FIDELITY_PROBES_ARE_NOT_CAUSAL_EVIDENCE
 invariant EXACT_CONFIRMATION_REQUIRED_FOR_POSITIVE_MATERIAL_CREDIT
+invariant EXACT_CONFIRMATION_BINDS_EXACT_VERIFIED_OUTCOME_IDENTITY
 invariant DENSE_NONLINEAR_UNCERTAIN_REGIMES_ABSTAIN_OR_FALL_BACK
 invariant SELF_ROOT_SELF_HARNESS_AUTHORITY_REMAINS_PROPOSAL_ONLY

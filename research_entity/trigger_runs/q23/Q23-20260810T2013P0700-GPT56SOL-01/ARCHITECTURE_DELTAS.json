@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "Q23-20260810T2013P0700-GPT56SOL-01",
+  "architecture_deltas": [
+    {
+      "delta_id": "AD-Q23-PEH-001",
+      "status": "CANDIDATE",
+      "target_components": ["DigitalRetina lineage", "libmtmd runtime integration", "MVC", "PerceptualField", "H1/H2/H3"],
+      "proposed_change": "Add a first-class PerceptualEmbeddingHandle (PEH) owned by the one-module perception runtime. After mtmd vision encoding, bind the output to frame_id, source_epoch, ROI hash, visual-token geometry, model hash, mmproj hash, processor/runtime build, backend/device and observed_at. MVC may read the handle. If semantic escalation is required and compatibility remains valid, the same handle feeds decode without a second vision encode. Invalidate/rebuild on stale frame, changed ROI/tokenization, model/mmproj/runtime incompatibility or failed restart provenance.",
+      "preserved_historical_functions": ["sensor provenance", "temporal continuity", "change gating", "familiarity/open-set routing", "semantic escalation", "recovery/replay lineage"],
+      "expected_benefit": "Makes the existing QNDRF one-encode/zero-or-one-decode claim executable and measurable; exposes exact encode reuse rather than relying on opaque server cache behavior.",
+      "strongest_counterhypothesis": "PEH retention/copy cost and lifetime complexity dominate savings; direct decode or dedicated light encoder remains simpler/Pareto-superior.",
+      "discriminating_test": "FULL_QWEN vs stock server recurrence vs PEH encode->MVC->optional delayed decode vs dedicated-light-encoder baseline on matched GUI episodes.",
+      "metric_vector": ["vision_encode_count/observation", "sensor_to_state_p50_p95_p99", "sensor_to_correct_action_p50_p95_p99", "bytes_copied", "RAM/VRAM_peak", "false_familiar", "unknown_rejection", "semantic_equivalence", "restart_replay_equivalence"],
+      "rollback": "Remove PEH path and retain existing QNDRF/full-Qwen or dedicated MVC baseline; no canonical promotion until H1-H3 differential evidence.",
+      "promotion": "FORBIDDEN_FROM_THIS_RESEARCH_RUN_ALONE"
+    }
+  ]
+}

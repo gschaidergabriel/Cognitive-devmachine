@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 V17 = ROOT / "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark"
 SURFACE = "BASE_D_V17_DECLARATIVE_TRIVIA_SAFE"
 
+# Fresh-main diagnostic PR trigger only: no semantic or production delta.
+
 
 def rejects(fn) -> tuple[bool, str | None]:
     try:

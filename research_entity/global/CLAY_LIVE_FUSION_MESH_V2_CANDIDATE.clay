@@ -1,5 +1,5 @@
 module clay.research.live_fusion_mesh_v2
-version "0.1-candidate"
+version "0.2-candidate"
 status CANDIDATE_NOT_PROMOTED
 
 goal="Frank v0.1 voll lauffähig auf Andreas PC"
@@ -44,10 +44,23 @@ record BranchDependencyIndex {
   projection_hash:Hash
 }
 
+record RoutePlan {
+  delta:Ref
+  mode:TARGETED_DELTA|DENSE_FANOUT|DIGEST_ONLY
+  predicted_affected_fraction:Score
+  predicted_targeted_cost:Score
+  predicted_dense_cost:Score
+  predicted_repair_cost:Score
+  confidence:Score
+  reason:Clay
+  route_epoch:Ref
+}
+
 record RouteDecision {
   delta:Ref
   target_branch:Ref
-  reason:DIRECT_SEMANTIC|DIRECT_WORK|CAUSAL_DEPENDENT|CONFLICT_INTERRUPT|ANTI_ENTROPY_REPAIR|INDEX_ONLY
+  route_plan:Ref
+  reason:DIRECT_SEMANTIC|DIRECT_WORK|CAUSAL_DEPENDENT|CONFLICT_INTERRUPT|ANTI_ENTROPY_REPAIR|DENSE_FANOUT|INDEX_ONLY
   payload_mode:FULL_REF|DIGEST_ONLY|NONE
   urgency:NEXT_SAFE_POINT|NEXT_CHECKPOINT|INDEX_ONLY
   dependency_path:Set<Ref>
@@ -81,20 +94,27 @@ record FusionReceipt {
 }
 
 // Differential/live-fusion principle: move semantic deltas through the current dependency graph
-// rather than re-broadcasting complete branch state on every update.
+// when locality exists; do not dogmatically incrementalize dense/global invalidations.
 rule material_delta -> canonicalize(KnowledgeDeltaV2)
 rule material_delta -> content_hash_deduplicate_preserve_distinct_provenance
 rule material_delta -> resolve_current(BranchDependencyIndex for all registered peer branches)
-rule material_delta -> origin_branch receives FULL_REF
-rule material_delta -> route DIRECT_SEMANTIC to branches whose current semantic/work surface matches
-rule material_delta -> route DIRECT_WORK to branches with explicitly affected_work|affected_claims
+rule material_delta -> estimate(RoutePlan from dependency_span+semantic_span+payload_size+repair_risk+current_load)
+rule RoutePlan.mode = argmin_expected_cost_subject_to(relevant_branch_recall,stale_risk,authority,provenance)
+rule low_confidence_route_cost_estimate -> prefer safer mode + record uncertainty
+
+rule TARGETED_DELTA -> origin_branch receives FULL_REF
+rule TARGETED_DELTA -> route DIRECT_SEMANTIC to branches whose current semantic/work surface matches
+rule TARGETED_DELTA -> route DIRECT_WORK to branches with explicitly affected_work|affected_claims
+rule DENSE_FANOUT -> route one deduplicated FULL_REF envelope to all currently affected/registered branches
+rule DIGEST_ONLY -> origin receipt + compact digest/index update elsewhere
 
 // Invalidations propagate by causal dependency, not only vocabulary overlap.
 rule delta.kind in [CONTRADICTS,SUPERSEDES] -> traverse_current_dependency_dependents
 rule dependency_traversal -> continue while affected_current_work_exists and marginal_route_value>coordination_cost
+rule dependency_span_becomes_dense -> reconsider RoutePlan and allow DENSE_FANOUT
 rule high_impact_invalidation -> CONFLICT_INTERRUPT at next safe point
 rule REFines_dependency_premise -> traverse_only_current_direct_dependents unless evidence justifies deeper invalidation
-rule NO_MATERIAL_CHANGE -> origin receipt + INDEX_ONLY elsewhere
+rule NO_MATERIAL_CHANGE -> DIGEST_ONLY
 
 // Payload minimization: route references/deltas, not duplicated global context.
 rule route_relevant -> FULL_REF payload reference + minimal provenance envelope
@@ -127,6 +147,8 @@ rule effect != causal_credit
 measure relevant_branch_recall
 measure full_payload_fanout_per_delta
 measure digest_control_overhead
+measure route_mode_switch_rate
+measure route_cost_prediction_error
 measure missed_invalidation_count
 measure invalidation_delivery_latency
 measure stale_window_until_repair
@@ -139,6 +161,7 @@ measure CPU_RAM_IO_network_cost
 
 promotion requires {
   synthetic_replay beats broadcast_and_tag_only_on_declared_metric_vector;
+  adaptive_route_plan beats fixed_targeted_on_dense_invalidation_cases;
   real_repo_worker_replay;
   stale_projection_fault_injection;
   missing_dependency_edge_fault_injection;
@@ -153,12 +176,15 @@ promotion requires {
 // - McSherry et al., Differential Dataflow, CIDR 2013: incremental changes + nested iteration.
 // - Murray et al., Naiad: A Timely Dataflow System, SOSP 2013: cyclic dataflow with logical timestamps.
 // - Budiu et al., DBSP, PVLDB 2023 / extended 2025: general incremental view maintenance over rich/recursive queries.
+// - Yadav et al., Enzyme, arXiv:2603.27775 (2026): cost-based incremental refresh strategy selection in production pipelines.
+// - Yu et al., Layph, arXiv:2304.07458: small graph changes can propagate globally; constrain propagation where possible.
 // - Dotted Version Vectors: compact causal tracking for optimistic replication.
 
 invariant connectivity_does_not_mint_truth
 invariant repeated_distribution_does_not_create_independent_replication
 invariant provenance_survives_deduplication
 invariant branch_relevance_routing_never_expands_effect_authority
+invariant targeted_delta_is_not_dogma_when_dense_fanout_is_safer_or_cheaper
 invariant Frank_remains_separate_research_subject
 invariant Frank_never_mutates_Clay
 invariant candidate_not_promoted_without_real_replay_and_recovery_evidence

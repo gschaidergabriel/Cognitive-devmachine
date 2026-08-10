@@ -1,0 +1,120 @@
+name: Database Pulse Rank V6.3 Attestation
+
+on:
+  push:
+    branches: [chatgpt/unifieddb-pulse-rank-v6-3-attestation-20260810]
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v6_3_attested.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6_3_attested.py'
+      - 'tools/database_pulse_rank_path_v6_3_attested_benchmark.py'
+      - '.github/workflows/database-pulse-rank-v6-3-attestation.yml'
+  pull_request:
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v6_3_attested.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6_3_attested.py'
+      - 'tools/database_pulse_rank_path_v6_3_attested_benchmark.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-falsifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile exact stacked candidate
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v6.py \
+            research_entity/runtime/database_pulse_rank_path_v6_3_attested.py \
+            research_entity/runtime/test_database_pulse_rank_path_v6_3_attested.py \
+            tools/database_pulse_rank_path_v6_3_attested_benchmark.py
+      - name: Run inherited V5/V6 plus V6.3 adversarial tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_rank_path_v6 \
+            research_entity.runtime.test_database_pulse_rank_path_v6_3_attested
+      - name: Matched V6 versus V6.3 benchmark
+        run: |
+          set -euo pipefail
+          python tools/database_pulse_rank_path_v6_3_attested_benchmark.py \
+            --rows 100,1000 --repetitions 100 --output /tmp/pulse-rank-v63-hosted.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/pulse-rank-v63-hosted.json',encoding='utf-8'))
+          assert p['pass'] is True,p
+          print('PULSE_RANK_V63_HOSTED=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pulse-rank-v63-hosted
+          path: /tmp/pulse-rank-v63-hosted.json
+
+  hostinger-falsifier:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Capture exact environment
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/pulse-rank-v63
+          uname -a | tee /tmp/pulse-rank-v63/uname.txt
+          python3 - <<'PY' | tee /tmp/pulse-rank-v63/runtime.json
+          import json,os,platform,sqlite3
+          print(json.dumps({
+            'evidence_class':'EXACT_BRANCH_SELF_HOSTED_UBUNTU_EXECUTION',
+            'scope':'REMOTE_PRELIMINARY_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'platform':platform.platform(),
+            'machine':platform.machine(),
+            'python':platform.python_version(),
+            'sqlite':sqlite3.sqlite_version,
+          },indent=2))
+          PY
+      - name: Exact V6/V6.3 tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v6.py \
+            research_entity/runtime/database_pulse_rank_path_v6_3_attested.py \
+            research_entity/runtime/test_database_pulse_rank_path_v6_3_attested.py \
+            tools/database_pulse_rank_path_v6_3_attested_benchmark.py
+          /usr/bin/time -v python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v6 \
+            research_entity.runtime.test_database_pulse_rank_path_v6_3_attested \
+            2>&1 | tee /tmp/pulse-rank-v63/tests.txt
+      - name: Exact matched benchmark
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v python3 tools/database_pulse_rank_path_v6_3_attested_benchmark.py \
+            --rows 100,1000,10000 --repetitions 300 --output /tmp/pulse-rank-v63/benchmark.json \
+            2>&1 | tee /tmp/pulse-rank-v63/benchmark-time.txt
+          python3 - <<'PY' | tee /tmp/pulse-rank-v63/gate.txt
+          import json
+          p=json.load(open('/tmp/pulse-rank-v63/benchmark.json',encoding='utf-8'))
+          assert p['pass'] is True,p
+          print('PULSE_RANK_V63_HOSTINGER=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pulse-rank-v63-hostinger
+          path: /tmp/pulse-rank-v63/

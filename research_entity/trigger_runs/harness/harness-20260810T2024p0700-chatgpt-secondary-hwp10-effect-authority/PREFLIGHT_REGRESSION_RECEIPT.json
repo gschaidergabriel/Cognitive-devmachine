@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "harness-20260810T2024p0700-chatgpt-secondary-hwp10-effect-authority",
   "finding": "Q23_REGISTRY_INTERCONNECT_GOVERNANCE_DRIFT",
   "severity": "P0_FOR_RESEARCH_TRIGGER_PREFLIGHT",
@@ -13,13 +13,16 @@
   },
   "repair": {
     "path": "tools/research_interconnect_preflight.py",
-    "commit": "e4d6853a2ef503d2f50f4ad42db17f16ac839bbb",
-    "content_sha": "ea014ca64d4209a4c7695c18a78c61217f2db4d2",
+    "final_commit": "bc45678a8b2566d241b38ae4dadbef8028a12b21",
+    "final_content_sha": "6cef96fd9f7587e295140050221003afa56a86a2",
+    "superseded_intermediate_commit": "e4d6853a2ef503d2f50f4ad42db17f16ac839bbb",
     "changes": [
       "add q23 to every peer priority order",
       "add direct q23 preflight route",
       "add q23 packet budgets and aliases",
       "add q23-specific deep packet routing",
+      "preserve prior branch-specific run-depth rules",
+      "preserve prior special-rules manifest surface",
       "preserve fail-closed exact-set governance invariant"
     ]
   },
@@ -31,7 +34,7 @@
     "local_smoke_failed": 0,
     "synthetic_peer_count": 10
   },
-  "execution_scope": "LOCAL_SYNTHETIC_REPO_SMOKE",
+  "execution_scope": "LOCAL_SYNTHETIC_REPO_SMOKE_PLUS_STATIC_DIFF_REVIEW",
   "full_repo_preflight_execution": "NOT_EXECUTED_IN_THIS_TOOL_ENVIRONMENT",
   "promotion": "REPAIR_COMMITTED_BUT_FULL_REPO_PREFLIGHT_REVALIDATION_REQUIRED"
 }

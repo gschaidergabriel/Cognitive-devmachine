@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2030p0700-chatgpt-secondary-hwp17-target-contract-gate",
+  "evidence_class": "LOCAL_DETERMINISTIC_TEST_PLUS_SOURCE_BOUND_CONFORMANCE_PROBE",
+  "execution_environment": {
+    "os": "Linux container",
+    "python": "python3",
+    "network": "not required",
+    "target_vps": false
+  },
+  "artifacts": {
+    "tool": "tools/harness_target_contract_gate.py",
+    "tool_sha256_executed_copy": "6a093266d2e69cbce5c6722b6056eed1c258dde4c2ef0589dea1301774bc5b8d",
+    "test": "tests/test_harness_target_contract_gate.py",
+    "test_sha256_executed_copy": "a5b8978ed64b60821240309f48ade2931085be8d9040d46be599efd46cf96bfe"
+  },
+  "unit_execution": {
+    "command": "python3 -m unittest -v test_harness_target_contract_gate.py",
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "result": "PASS"
+  },
+  "observed_freeze_probe": {
+    "source": "research_entity/trigger_runs/harness/harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze/REFERENCE_HARNESS_ARCHITECTURE_FREEZE.json",
+    "source_fields_used": "target_host, module ids, invariant strings observed from connected GitHub fetch",
+    "raw_checkout_available": false,
+    "command": "python3 harness_target_contract_gate.py observed_freeze_probe.json",
+    "expected_exit": 1,
+    "observed_exit": 1,
+    "result": "BLOCK_AS_DESIGNED",
+    "failure_classes": [
+      "TARGET_HOST_STALE",
+      "OWNER_FIXED_MODULES_MISSING",
+      "OWNER_FIXED_INVARIANTS_MISSING"
+    ],
+    "missing_modules": [
+      "clay_to_de_translator",
+      "de_to_clay_translator",
+      "proactive_agency",
+      "research_entity_bridge",
+      "token_api",
+      "web_ingress_guard"
+    ],
+    "missing_invariant_tokens": [
+      "CLAYCODE_ONLY",
+      "TARGET_VPS",
+      "UNTRUSTED_EXTERNAL_DATA",
+      "proactive",
+      "self.root",
+      "token"
+    ],
+    "result_sha256": "23872b2f0c77e2167dff1b20d39c8495b9bda3d48eac1288669154d2e75bfd8c"
+  },
+  "interpretation": "The checker implementation behaves deterministically and the observed 2026-08-09 H1 freeze is not eligible to represent the current 2026-08-10 owner-fixed target without an explicit compatibility overlay or refreeze.",
+  "limitations": [
+    "This is not target-VPS execution evidence.",
+    "The connected GitHub surface did not provide a local repository checkout, so the observed freeze probe was constructed from source-bound fields returned by GitHub rather than by reading the raw file from disk.",
+    "H1 remains NOT_PASS; this component only strengthens the release audit gate."
+  ]
+}

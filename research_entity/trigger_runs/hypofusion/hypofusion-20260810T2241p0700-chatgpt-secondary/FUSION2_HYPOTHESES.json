@@ -1,0 +1,74 @@
+{
+  "schema_version":"1.0",
+  "run_id":"hypofusion-20260810T2241p0700-chatgpt-secondary",
+  "transformed_hypotheses":[
+    {
+      "id":"HF2-001-EXECUTION-EPOCH-SPINE",
+      "source_clusters":["HF-C1","HF-C3","HF-C4","HF-C10"],
+      "changed_mechanism":"Treat execution epoch + provenance + recovery state as a cross-layer causal spine that is revalidated at every consequential boundary (state write, response emit, effect reserve/start, replay/reentry), not as a presence-only field.",
+      "counterhypothesis":"Physical exclusion plus local subsystem checks are sufficient and cross-layer fencing only harms liveness.",
+      "falsifier":"Composed current-main crash/takeover/replay/effect matrix passes without shared epoch propagation or shows equivalent safety with materially simpler mechanism.",
+      "highest_information_test":"PR158-style composed execution/recovery/effect test extended through UnifiedDB replay and response emission, then inverted after the minimal repair.",
+      "affected_packages":["F-V01-01","F-V01-04","F-V01-08","F-V01-09","F-V01-13"],
+      "priority":1,
+      "status":"NEW_TRANSFORMED_HYPOTHESIS"
+    },
+    {
+      "id":"HF2-002-SELECTIVE-STATE-INTERVENTION",
+      "source_clusters":["HF-C2","HF-C3","HF-C5"],
+      "changed_mechanism":"Unify memory reactivation and adaptive recurrence as selective state intervention: intervene only when a provenance-bound state item is predicted to change the next decision or reduce unresolved pressure; otherwise emit null intervention.",
+      "counterhypothesis":"Passive retrieval plus ordinary GWT attention is sufficient; explicit intervention policy adds cost and wrong reminders.",
+      "falsifier":"Equal-budget passive retrieval matches selective intervention on long-horizon success, forgotten constraints, repeated errors, latency and token cost.",
+      "highest_information_test":"Frozen long-horizon episodes with three arms: bounded passive retrieval, always-on memory, selective intervention with null option; record next-action causal-use receipts.",
+      "affected_packages":["F-V01-03","F-V01-04","F-V01-05","F-V01-10","F-V01-11"],
+      "priority":2,
+      "status":"NEW_TRANSFORMED_HYPOTHESIS"
+    },
+    {
+      "id":"HF2-003-CONTEXTUAL-INTEGRITY-EFFECT-GATE",
+      "source_clusters":["HF-C4","HF-C6"],
+      "changed_mechanism":"Retain structural untrusted-data separation but extend the security model from payload class to contextual flow: sender/recipient/purpose/data-class/integrity provenance must remain explicit inputs to deterministic effect policy.",
+      "counterhypothesis":"Simple trusted/untrusted taint plus capability checks already covers the meaningful attack surface.",
+      "falsifier":"Context-manipulation attacks do not increase forbidden-flow rate over ordinary instruction-like attacks, or richer contextual labels cause unacceptable benign denial without security gain.",
+      "highest_information_test":"Adversarial norm/recipient/purpose substitution matrix across web, tool-result and direct-token channels with fixed effects and benign controls.",
+      "affected_packages":["F-V01-02","F-V01-07","F-V01-08","F-V01-09","F-V01-10","F-V01-13"],
+      "priority":3,
+      "status":"NEW_TRANSFORMED_HYPOTHESIS"
+    },
+    {
+      "id":"HF2-004-ADAPTIVE-RECURRENCE-AS-COMPUTE-POLICY",
+      "source_clusters":["HF-C2","HF-C8"],
+      "changed_mechanism":"Evaluate GWT/recurrent continuation as an adaptive compute policy driven by unresolved pressure and expected marginal verified outcome gain, not as a claim that recurrence itself is emergence or intelligence.",
+      "counterhypothesis":"Fixed-depth or event-driven execution is Pareto-superior once compute is equalized.",
+      "falsifier":"Adaptive recurrence fails to beat matched fixed/event baselines on hard/easy stratified outcomes after latency/token/recovery cost.",
+      "highest_information_test":"Three-arm matched replay with equal maximum compute, randomized arm order, lesions of GWT ignition and historical regulators, and hard/easy task strata.",
+      "affected_packages":["F-V01-03","F-V01-05","F-V01-11"],
+      "priority":4,
+      "status":"REFINED_EXISTING_HYPOTHESIS"
+    },
+    {
+      "id":"HF2-005-CLAYCODE-VS-SIMPLER-TYPED-BASELINE",
+      "source_clusters":["HF-C6"],
+      "changed_mechanism":"ClayCode earns architectural authority only where it measurably prevents semantic duplication/drift or enables cross-layer machine-checkable invariants better than a simpler typed host-language/IDL baseline.",
+      "counterhypothesis":"Conventional typed code plus schema/version/provenance checks is sufficient and cheaper.",
+      "falsifier":"Simpler baseline matches invalid-flow rejection, replay equivalence and change safety with lower complexity/resource cost.",
+      "highest_information_test":"Implement the same presence-bound effect receipt and identity-replay invariant in ClayCode and a minimal typed baseline, then mutation-test both.",
+      "affected_packages":["F-V01-02","F-V01-04","F-V01-07","F-V01-09"],
+      "priority":5,
+      "status":"STRONGER_BASELINE_REQUIREMENT"
+    },
+    {
+      "id":"HF2-006-HYPERPOSITION-MINIMALITY-GATE",
+      "source_clusters":["HF-C9"],
+      "changed_mechanism":"Hyperposition is reduced to a testable alternative-management mechanism and must beat beam/top-k/reseed baselines before any higher-order topology becomes required v0.1 architecture.",
+      "counterhypothesis":"Generic diversity preservation is the whole benefit.",
+      "falsifier":"Beam/top-k/reseed matches stagnation escape and OOD recovery at lower complexity/cost.",
+      "highest_information_test":"Matched stalled-episode factorial with equal alternative count and memory budget.",
+      "affected_packages":["F-V01-05"],
+      "priority":8,
+      "status":"DOWNGRADED_COMPARATIVE_CANDIDATE"
+    }
+  ],
+  "architecture_delta_summary":"Prioritize cross-layer execution fencing and selective state intervention; strengthen contextual information-flow testing; keep adaptive recurrence bounded by compute baselines; impose simpler-baseline gates on ClayCode, typed reward and Hyperposition.",
+  "no_training_change":true
+}

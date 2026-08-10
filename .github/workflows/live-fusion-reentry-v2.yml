@@ -1,0 +1,38 @@
+name: Live Fusion Reentry V2
+
+on:
+  pull_request:
+    paths:
+      - 'research_entity/global/CLAY_LIVE_FUSION_REENTRY_V2.clay'
+      - 'research_entity/runtime/live_fusion_reentry_v2.py'
+      - 'research_entity/runtime/test_live_fusion_reentry_v2.py'
+      - '.github/workflows/live-fusion-reentry-v2.yml'
+  workflow_dispatch:
+
+jobs:
+  hosted-reference-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run V2 live-fusion reentry falsifiers
+        working-directory: research_entity/runtime
+        run: python -W error::ResourceWarning -m unittest -v test_live_fusion_reentry_v2.py
+
+  self-hosted-reference-tests:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Observe exact runtime
+        run: |
+          python3 --version
+          uname -a
+      - name: Run V2 live-fusion reentry falsifiers
+        working-directory: research_entity/runtime
+        run: python3 -W error::ResourceWarning -m unittest -v test_live_fusion_reentry_v2.py

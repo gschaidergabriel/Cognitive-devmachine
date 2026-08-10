@@ -1,11 +1,22 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "OWNER_FIXED_CURRENT_TARGET",
   "effective_from": "2026-08-10",
   "target_host_id": "HOSTINGER_VPS_DIGITAL_RETINA",
   "resource_id": "hostinger-vps-github-runner",
-  "mission": "Frank v0.1 voll lauffaehig auf dem Ziel-VPS fuer Andreas",
-  "human_user": "Dr. Andreas Unterweger",
+  "mission": "Frank v0.1 als Server-Binary auf dem Ziel-VPS voll lauffaehig",
+  "identity_semantics": {
+    "identity_class": "SERVER_BINARY_ENTITY",
+    "exact_self": "accepted Frank binary/build identity + admitted persistent state lineage",
+    "current_body": "current target VPS embodiment",
+    "person_is_self": false,
+    "api_credential_is_self": false,
+    "hardware_capacity_is_self": false,
+    "directive": "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md"
+  },
+  "person_relations": {
+    "Dr. Andreas Unterweger": ["USER", "PILOT", "LONGITUDINAL_EVIDENCE_SOURCE"]
+  },
   "host_identity_observed": {
     "machine": "digital-retina",
     "os_family": "Ubuntu Linux",
@@ -23,7 +34,11 @@
     "storage capacity and I/O class",
     "GPU availability on the current target VPS",
     "current network bandwidth/latency envelope",
-    "steady-state thermal/CPU throttling behavior"
+    "steady-state thermal/CPU throttling behavior",
+    "accepted final Frank binary hash",
+    "accepted final persistent-state lineage/epoch",
+    "production API listener/TLS identity",
+    "accepted production API credential fingerprint/scope set"
   ],
   "existing_real_model_baseline": {
     "model": "Qwen3-4B-Instruct-2507-Q8_0-GGUF",
@@ -32,19 +47,29 @@
     "pilot_accuracy": "3/4",
     "role": "target-host capability baseline only; not final model promotion"
   },
+  "api_semantics": {
+    "full_token_authenticated_api_required": true,
+    "developer_ssh_or_runner_is_sufficient_api": false,
+    "raw_production_tokens_may_enter_repo_or_normal_logs": false,
+    "required_acceptance_receipt": "FRANK_V0_1_TARGET_VPS_TOKEN_API_ACCEPTANCE_RECEIPT.json",
+    "acceptance_status": "NOT_OBSERVED",
+    "required_ingress": "secure transport -> API token auth -> request/session/provenance binding -> typed Frank ingress"
+  },
   "release_semantics": {
     "target_vps_is_final_acceptance_host": true,
     "andreas_local_pc_required_for_v0_1_pass": false,
     "planned_gpu_storage_vps_is_automatic_target": false,
-    "target_change_requires_owner_override": true
+    "target_change_requires_owner_override": true,
+    "binary_state_api_acceptance_required": true
   },
   "sensor_semantics": {
     "compute_host": "target VPS",
     "visual_sensor_may_be_remote": true,
-    "required_boundary": "provenance-bound authenticated ingress",
-    "latency_rule": "measure sensor transport separately from on-VPS Retina/Qwen/EAP/Frank processing"
+    "required_boundary": "token-authenticated provenance-bound typed API ingress",
+    "latency_rule": "measure secure transport/auth/session/ingress separately from on-VPS Retina/Qwen/EAP/Frank processing and also end-to-end"
   },
   "evidence_refs": [
+    "research_entity/global/FRANK_V0_1_SERVER_BINARY_IDENTITY_AND_API_DIRECTIVE.md",
     "research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md",
     "research_entity/rooms/CAPACITY_STATE.json",
     "research_entity/state/system/events/20260809T161406Z-hostinger-vps-runner-capability.json",

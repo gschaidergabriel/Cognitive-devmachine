@@ -1,0 +1,22 @@
+{
+  "schema_version":"1.0",
+  "candidate":"ATOMIC-CANDIDATE-CEA-001",
+  "evidence_class":"SYNTHETIC_DETERMINISTIC_PROXY",
+  "external_effect_performed":false,
+  "authority_minted":false,
+  "replication_seeds":[1101,1102,1103,1104,1105],
+  "cases_per_seed":30000,
+  "cases_total":150000,
+  "summary_mean":{
+    "scalar":{"resolution_rate":0.154,"resolved_correctness":1.0,"unsafe_retry_rate":0.0,"known_resolution_rate":0.1630431252,"ood_resolution_rate":0.1265764547,"known_mean_observation_cost_units":0.9797264265,"decision_latency_ns_p50":949.2,"decision_latency_ns_p95":1155.8,"decision_latency_ns_p99":1338.0},
+    "static":{"resolution_rate":0.7519733333,"resolved_correctness":1.0,"unsafe_retry_rate":0.0,"known_resolution_rate":1.0,"ood_resolution_rate":0.0,"known_mean_observation_cost_units":2.3723122143,"decision_latency_ns_p50":1294.0,"decision_latency_ns_p95":1464.0,"decision_latency_ns_p99":1666.8},
+    "compiled":{"resolution_rate":0.7519733333,"resolved_correctness":1.0,"unsafe_retry_rate":0.0,"known_resolution_rate":1.0,"ood_resolution_rate":0.0,"known_mean_observation_cost_units":1.5661958126,"decision_latency_ns_p50":3523.2,"decision_latency_ns_p95":4586.8,"decision_latency_ns_p99":4897.0},
+    "cea":{"resolution_rate":1.0,"resolved_correctness":1.0,"unsafe_retry_rate":0.0,"known_resolution_rate":1.0,"ood_resolution_rate":1.0,"known_mean_observation_cost_units":1.5661958126,"decision_latency_ns_p50":4150.0,"decision_latency_ns_p95":4641.0,"decision_latency_ns_p99":5167.6}
+  },
+  "negative_controls":{"cases_each":10000,"stale_epoch_rejection_rate":1.0,"stale_provider_contract_rejection_rate":1.0,"shuffled_attempt_binding_rejection_rate":1.0},
+  "universal_retry_ablation":{"cases":20000,"correct_universal_rule_unsafe_retry_rate":0.0,"ablated_any_world_rule_unsafe_retry_rate":0.5031},
+  "shuffled_truth_control":{"cases":10000,"false_but_well_formed_evidence_wrong_resolution_rate":0.9751,"interpretation":"Binding and provenance do not prove provider truth; independently trustworthy observation evidence remains required."},
+  "state_shadow":{"scalar_bytes":116,"cea_bytes":237,"amplification_x":2.0431034483},
+  "process_resource_shadow":{"user_time_seconds":2.95,"system_time_seconds":0.05,"wall_seconds":2.65,"max_rss_kbytes":116816,"note":"local Python full instrumentation run; not target VPS/native ClayCode"},
+  "interpretation":"CEA is not a latency win. The strongest conventional compiled provider-specific control matches known-provider correctness and observation cost and is faster. The surviving proxy benefit is generic declarative OOD provider resolution."
+}

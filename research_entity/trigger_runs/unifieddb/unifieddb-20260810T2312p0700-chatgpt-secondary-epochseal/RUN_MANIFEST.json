@@ -1,0 +1,19 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "trigger":"unifieddb",
+  "started_local":"2026-08-10T23:03:00+07:00",
+  "material_write_local":"2026-08-10T23:12:00+07:00",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","identity":"RESEARCH_ENTITY_TEMPORARY_WORKER","target_identity":false},
+  "canonical":{"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346","verified_before_write":true},
+  "research_repo_base_commit":"dbd8f5f2669f1fc5ee93202a6b9afe8b794d8266",
+  "research_branch":"clay/unifieddb-20260810t2312-epochseal",
+  "target_repo":{"repository":"gschaidergabriel/Dr.-Unterweger","base_main":"79a19dcbdcbb2e19bfa77a3e9b92cea27349fe3d","candidate_branch":"clay/unifieddb-epochseal-v1-20260810","pr":182,"head_sha":"91ea8194912c8483c240c723da980850c5cafff0"},
+  "program":{"id":"frank-v0.1-only","stage":"FRANK_V0_1","component":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY","workspace_status_at_boot":"OPEN","training_authorized":false},
+  "hypothesis":"A single authoritative epoch-sealed semantic store plus rebuildable epoch-bound associative sidecars can improve hot-path latency and state consistency over split authoritative stores without accepting the common-mode failure radius of universal physical consolidation.",
+  "counterhypothesis":"Physical consolidation or PostgreSQL+pgvector may dominate once target concurrency/vector scale/recovery costs are measured; the hybrid may add stale-index complexity without enough benefit.",
+  "result":"LOCAL_SUPPORT_FOR_HYBRID; TARGET_PROMOTION_HOLD",
+  "external_delta":"SQLite 2026 WAL-reset bug makes exact runtime version a correctness gate.",
+  "owner_gates_respected":["no paid/final training","no main merge","no self-authorized Frank Harness mutation"],
+  "required_artifacts_complete":true
+}

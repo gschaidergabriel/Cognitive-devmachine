@@ -1,0 +1,73 @@
+name: WP03 Statement Identity Falsifier VPS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/wp03-statement-identity-falsifier-vps.yml'
+      - 'tools/claycode_wp03_statement_identity_falsifier.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wp03-statement-identity-falsifier-vps
+  cancel-in-progress: false
+
+jobs:
+  falsify:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+      - name: Execute exact-current diagnostic
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v -o /tmp/wp03-statement-identity.time \
+            python3 tools/claycode_wp03_statement_identity_falsifier.py \
+            > /tmp/wp03-statement-identity.json
+          cat /tmp/wp03-statement-identity.json
+      - name: Persist negative-or-clean receipt
+        env:
+          OUT: research_entity/claycode/base/receipts/WP03_STATEMENT_IDENTITY_FALSIFIER_${{ github.run_id }}.json
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, platform, socket
+          from datetime import datetime, timezone
+          from pathlib import Path
+          result=json.loads(Path('/tmp/wp03-statement-identity.json').read_text())
+          result['created_at']=datetime.now(timezone.utc).isoformat()
+          result['github_sha']=os.environ['GITHUB_SHA']
+          result['github_run_id']=os.environ['GITHUB_RUN_ID']
+          result['runner']={
+            'name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+            'os':os.environ.get('RUNNER_OS','UNKNOWN'),
+            'arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+          }
+          result['resource_shadow_time_v']=Path('/tmp/wp03-statement-identity.time').read_text(errors='replace')
+          result['evidence_class']='REAL_SELF_HOSTED_UBUNTU_CURRENT_COMPONENT_DIAGNOSTIC'
+          result['blocks_wp03_promotion']=not result['wp03_identity_gate_pass']
+          p=Path(os.environ['OUT']); p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'classification':result['classification'],'collision_count':result['collision_count'],'blocks_wp03_promotion':result['blocks_wp03_promotion']},sort_keys=True))
+          PY
+          git config user.name 'clay-wp03-falsifier'
+          git config user.email 'clay-wp03-falsifier@users.noreply.github.com'
+          git add "$OUT"
+          git commit -m "evidence(wp03): persist statement identity falsifier ${GITHUB_RUN_ID} [skip ci]"
+          for n in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((n*2))
+          done
+          exit 1

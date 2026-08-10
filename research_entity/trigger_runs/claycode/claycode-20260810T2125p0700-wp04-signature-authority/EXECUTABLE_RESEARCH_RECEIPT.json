@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2125p0700-wp04-signature-authority",
+  "status": "SUPPORTED_CANDIDATE_NO_WP04_PROMOTION",
+  "evidence_class": [
+    "LOCAL_EXECUTABLE_MECHANISM_TEST",
+    "CONTENT_ADDRESSED_TARGET_VPS_MECHANISM_TEST",
+    "CONTENT_ADDRESSED_TARGET_VPS_REAL_CONTRACT_DIFFERENTIAL",
+    "FAIL_CLOSED_STALE_REVISION_NEGATIVE_RESULT"
+  ],
+  "target_vps": {
+    "provider_lane": "Hostinger Ubuntu self-hosted GitHub Actions runner",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "runner_version": "2.336.0",
+    "git_version": "2.43.0"
+  },
+  "static_signature_admission": {
+    "research_pr": 191,
+    "target_vps_pr": 113,
+    "workflow_run": 31397569012,
+    "probe_git_blob": "40490cbaa35e35032815c3ade9b2e35ffd32bdd5",
+    "test_git_blob": "4a0bb652de5a3963a94836bfd97182bb69c8e621",
+    "tests": 11,
+    "result": "PASS",
+    "execution_admitted_calls": 0,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE"
+  },
+  "first_explicit_real_contract": {
+    "research_pr": 188,
+    "target_vps_pr": 118,
+    "target": "frank_reward.update/1",
+    "params": [
+      {
+        "name": "evidence",
+        "type": "RewardOutcomeEvidence"
+      }
+    ],
+    "returns": "RewardPlasticityReceipt",
+    "effect_class": "DERIVED_STATE",
+    "candidate_source_git_blob": "484b8b1bb640c8866f21bb399c5d24dab0f3def4",
+    "anchor_tool_git_blob": "6e74fb98924ee3318457fc2bce4004299cbefed7",
+    "anchor_test_git_blob": "48dcf7e5a56923673abef51ee05502b75be9d26e",
+    "first_attempt": {
+      "workflow_run": 31397756769,
+      "result": "FAIL_CLOSED",
+      "reason": "stale test-blob pin prevented analyzer execution"
+    },
+    "transport_repair_commit": "7beea9b6c7bca528236dd1e3154ef659567414ea",
+    "successful_workflow_run": 31397986926,
+    "successful_job": 93485553651,
+    "result": "PASS",
+    "baseline_exact_declared_matches": 0,
+    "candidate_exact_declared_matches": 1,
+    "baseline_unresolved_signatures": 26,
+    "candidate_unresolved_signatures": 25,
+    "effect_boundary_missing_signatures": 1,
+    "concrete_anchor_nodes": 2,
+    "anchored_components": 2,
+    "unanchored_components": 35,
+    "conflicting_components": 0,
+    "contract_semantic_hash": "999283fef30bb709b5247fa002a9dfb513843daee4a22442e476bcb6522617a4",
+    "candidate_typed_ir_sha256": "02ab372c762e5c617a80ab3e8e62975474eae42467207135e4eeecf8b24f6f01",
+    "candidate_constraint_graph_sha256": "62d549a239be2d4c3228c9fe0759535d9ebc425304cd4ef4be083d0810cbff49",
+    "anchor_report_sha256": "5d5a64b8c7ed5cd7a21824455421cb5f01be1c5b234285b57b9d32918733ba19",
+    "determinism": "PASS",
+    "dynamic_escape": "REJECTED_FAIL_CLOSED",
+    "execution_without_binding": "REJECTED_FAIL_CLOSED",
+    "execution_admitted_calls": 0,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE"
+  },
+  "frontier_after_receipt": {
+    "exact_declared_ordinary_signatures": 1,
+    "unresolved_ordinary_signatures": 25,
+    "unresolved_effect_boundary_signatures": 1,
+    "total_unresolved_signature_obligations": 26,
+    "needle_execute_1": "EFFECT_BOUNDARY_SIGNATURE_MISSING",
+    "wp03": "OPEN",
+    "wp04": "OPEN",
+    "frank_v0_1": "IN_PROGRESS"
+  },
+  "negative_results": [
+    "Runtime/source annotations are not sufficient semantic authority to invent Clay parameter or return types.",
+    "Stale content-address pins must stop the run before analysis; the first PR118 run did so correctly.",
+    "A single exact callable contract does not imply execution admission, effect authority, truth authority, WP04 completion, or Frank-v0.1 acceptance."
+  ],
+  "next_falsifier": "Bind the exact explicit frank_reward.update/1 semantic contract to a current runtime/binary/lease identity through the separate admission gate without executing the call; if no exact current runtime export exists, remain non-executable. Then choose the next explicit callable from architecture evidence, not caller-side constraints."
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2125p0700-wp04-signature-authority",
+  "review": "FRANK_CLAYCODE_GOODMAN_STYLE",
+  "criteria": [
+    {
+      "criterion": "exact_symbol_identity",
+      "status": "PASS",
+      "basis": "target+arity and qualified symbol are exact; suffix/basename matching rejected"
+    },
+    {
+      "criterion": "semantic_type_authority",
+      "status": "PASS_WITH_BOUNDARY",
+      "basis": "Clay types must be explicitly authored before static/runtime compatibility validation; runtime source cannot mint them"
+    },
+    {
+      "criterion": "source_revision_identity",
+      "status": "PASS",
+      "basis": "source/test/tool blobs are content-addressed; stale test blob caused fail-closed target-VPS run"
+    },
+    {
+      "criterion": "runtime_identity_separation",
+      "status": "PASS_AT_MECHANISM_LEVEL",
+      "basis": "semantic contract, source artifact, runtime/binary binding, lease/effect identity are separate layers"
+    },
+    {
+      "criterion": "execution_authority_separation",
+      "status": "PASS",
+      "basis": "all successful receipts retain execution_admitted_calls=0 and NONE truth/effect authority"
+    },
+    {
+      "criterion": "effect_boundary",
+      "status": "OPEN",
+      "basis": "Needle.execute/1 remains EFFECT_BOUNDARY_SIGNATURE_MISSING and is not covered by ordinary DERIVED_STATE anchoring"
+    },
+    {
+      "criterion": "whole_program_acceptance",
+      "status": "BLOCKED",
+      "basis": "WP03 and WP04 remain open; generic Frank Deep Integrity remains separately red/unresolved"
+    },
+    {
+      "criterion": "negative_result_preservation",
+      "status": "PASS",
+      "basis": "stale pin failure and rejected runtime-semantic-authority hypothesis are preserved as active evidence"
+    }
+  ],
+  "strongest_failure_mode": "An apparently exact runtime/source signature may still be semantically wrong if the annotation-to-Clay mapping is treated as implicit authority rather than checked against an explicit Clay contract.",
+  "strongest_countermeasure": "Require explicit versioned Clay callable semantics first; then validate exact source bytes/symbol/arity; then validate current runtime/binary/lease/effect binding; only downstream authority may admit execution.",
+  "verdict": "SUPPORTED_MECHANISM_AND_ONE_REAL_EXPLICIT_CONTRACT_TARGET_VPS_PASS_NO_WP04_PROMOTION",
+  "promotion": "NONE"
+}

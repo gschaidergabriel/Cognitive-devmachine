@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2125p0700-wp04-signature-authority",
+  "trigger": "claycode",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "program": "FRANK_V0_1",
+  "native_target": "self.root",
+  "human_surface": "Frank",
+  "target_host": "Hostinger Ubuntu VPS",
+  "assembly_policy": "TASK_RELEVANT_ONLY",
+  "assembled_inputs": [
+    {
+      "domain": "claycode",
+      "ref": "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json",
+      "relevance": "WP03 typed IR open; WP04 type/effect checker open"
+    },
+    {
+      "domain": "claycode",
+      "ref": "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json",
+      "relevance": "current call-contract authority and execution-boundary invariants"
+    },
+    {
+      "domain": "claycode",
+      "ref": "research_entity/claycode/g9/CLAYCODE_CALL_CONTRACT_SCHEMA_V1_CANDIDATE.clay",
+      "relevance": "typed exact call-contract candidate semantics"
+    },
+    {
+      "domain": "frank",
+      "ref": "research_entity/mesh_feedback/20260810T2054p0700-clay-live-fusion/frank.json",
+      "relevance": "artifact/copy/runtime-lease/temporal-trajectory identity separation"
+    },
+    {
+      "domain": "unifieddb",
+      "ref": "research_entity/mesh_feedback/20260810T2054p0700-clay-live-fusion/unifieddb.json",
+      "relevance": "temporal identity and atomic receipt semantics"
+    },
+    {
+      "domain": "claygraph",
+      "ref": "research_entity/mesh_feedback/20260810T2054p0700-clay-live-fusion/claygraph.json",
+      "relevance": "lineage topology must not collapse equal artifact digests into identity"
+    },
+    {
+      "domain": "gwt",
+      "ref": "research_entity/mesh_feedback/20260810T2054p0700-clay-live-fusion/gwt.json",
+      "relevance": "negative evidence against unnecessary extra mechanisms"
+    },
+    {
+      "domain": "emergenz",
+      "ref": "research_entity/mesh_feedback/20260810T2054p0700-clay-live-fusion/emergenz.json",
+      "relevance": "extra dynamical structure alone is not evidence of utility"
+    },
+    {
+      "domain": "hyperposition",
+      "ref": "research_entity/mesh_feedback/20260810T2054p0700-clay-live-fusion/hyperposition.json",
+      "relevance": "NO_CHANGE absent executable counterexample"
+    },
+    {
+      "domain": "clayresearch",
+      "ref": "research_entity/mesh_feedback/20260810T2054p0700-clay-live-fusion/clayresearch.json",
+      "relevance": "exact evidence-backed CallContract discovery named high-value discriminator"
+    },
+    {
+      "domain": "parallel_worker",
+      "ref": "pull/188",
+      "relevance": "explicit authored Clay callable candidate frank_reward.update/1"
+    },
+    {
+      "domain": "parallel_worker",
+      "ref": "pull/189",
+      "relevance": "separate semantic-contract to runtime/binary/lease/effect-binding admission layer"
+    }
+  ],
+  "coordination_result": {
+    "duplicate_work_detected": false,
+    "complementary_pipeline": [
+      "explicit Clay callable specification (PR188)",
+      "static exact source/signature compatibility validation (PR191 / Dr PR113)",
+      "runtime/binary/lease/effect binding validation (PR189 / Dr PR111)",
+      "execution remains deferred to downstream WP05 authority gates"
+    ],
+    "shared_ancestry_note": "These lanes share current ClayCode ancestry and are complementary mechanism evidence, not independent scientific replications."
+  },
+  "authority_boundaries": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "runtime_source_mints_clay_semantics": false,
+    "call_contract_mints_execution_authority": false,
+    "call_contract_mints_truth_authority": false,
+    "call_contract_mints_effect_authority": false
+  }
+}

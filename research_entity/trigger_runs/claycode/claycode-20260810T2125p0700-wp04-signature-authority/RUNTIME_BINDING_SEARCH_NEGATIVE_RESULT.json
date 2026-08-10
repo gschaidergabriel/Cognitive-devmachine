@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2125p0700-wp04-signature-authority",
+  "status": "NEGATIVE_RESULT",
+  "question": "Does the current searchable Frank target repository already expose an exact runtime component for the validated Clay semantic contract frank_reward.update/1?",
+  "repository": "gschaidergabriel/Dr.-Unterweger",
+  "searches": [
+    {
+      "query": "frank_reward.update",
+      "matches": 0
+    },
+    {
+      "query": "frank_reward",
+      "matches": 0
+    },
+    {
+      "query": "RewardOutcomeEvidence",
+      "matches": 0
+    },
+    {
+      "query": "RewardPlasticityReceipt",
+      "matches": 0
+    }
+  ],
+  "adjudication": {
+    "exact_runtime_export": "NOT_FOUND_IN_SEARCHABLE_CURRENT_REPOSITORY_SOURCE",
+    "runtime_binding": "UNVERIFIED_NOT_CREATED",
+    "execution_admitted": false,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE"
+  },
+  "limits": "Repository code search is evidence about searchable source, not proof that no opaque binary/export exists anywhere on the host. Therefore absence is classified NOT_FOUND_IN_SEARCHABLE_CURRENT_REPOSITORY_SOURCE, not universal nonexistence.",
+  "architecture_consequence": "Do not fabricate a binding. If a current exact runtime export is later produced or discovered, bind it through the separate runtime/binary/lease gate. Otherwise implement the runtime component as a separate candidate and validate it against the explicit Clay contract before any execution admission.",
+  "promotion": "NONE"
+}

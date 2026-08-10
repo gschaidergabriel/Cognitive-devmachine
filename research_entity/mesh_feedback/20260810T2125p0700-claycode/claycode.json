@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode-20260810T2125p0700-wp04-signature-authority",
+  "branch": "claycode",
+  "status": "DELTA_FIRST_EXPLICIT_CALL_CONTRACT_TARGET_VPS_PASS_RUNTIME_BINDING_ABSENT",
+  "evidence_class": "CONTENT_ADDRESSED_TARGET_VPS_MECHANISM_PLUS_BYTE_IDENTICAL_REAL_CONTRACT_DIFFERENTIAL_PLUS_RUNTIME_SOURCE_NEGATIVE_SEARCH",
+  "finding": "ClayCode WP04 signature authority now has a measured layered contract: explicit versioned Clay callable semantics precede static source compatibility validation, which precedes current runtime/binary/lease/effect binding. Runtime/source annotations cannot mint Clay semantic types. The first explicit candidate frank_reward.update/1 is byte-identical research-to-target PASS. No exact matching current runtime export was found in searchable Dr.-Unterweger source, so binding and execution remain closed.",
+  "measurements": {
+    "baseline_exact_declared_matches": 0,
+    "candidate_exact_declared_matches": 1,
+    "baseline_unresolved_ordinary_signatures": 26,
+    "candidate_unresolved_ordinary_signatures": 25,
+    "effect_boundary_missing_signatures": 1,
+    "total_unresolved_signature_obligations": 26,
+    "anchored_components": 2,
+    "type_equality_components": 37,
+    "execution_admitted_calls": 0
+  },
+  "receipts": {
+    "static_admission_target_vps_run": 31397569012,
+    "intermediate_target_revision_pass_run": 31397986926,
+    "latest_exact_pr188_to_pr118_target_vps_run": 31398319718,
+    "latest_exact_pr188_to_pr118_target_vps_job": 93486682158,
+    "latest_explicit_callable_blob": "484b8b1bb640c8866f21bb399c5d24dab0f3def4",
+    "latest_explicit_anchor_blob": "6e74fb98924ee3318457fc2bce4004299cbefed7",
+    "latest_explicit_test_blob": "daab75da3127f159fc71a4f1d9399fb2c3a12e0f",
+    "contract_semantic_hash": "999283fef30bb709b5247fa002a9dfb513843daee4a22442e476bcb6522617a4",
+    "typed_ir_sha256": "02ab372c762e5c617a80ab3e8e62975474eae42467207135e4eeecf8b24f6f01",
+    "constraint_graph_sha256": "62d549a239be2d4c3228c9fe0759535d9ebc425304cd4ef4be083d0810cbff49",
+    "anchor_report_sha256": "5d5a64b8c7ed5cd7a21824455421cb5f01be1c5b234285b57b9d32918733ba19"
+  },
+  "runtime_binding_search": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "queries": ["frank_reward.update", "frank_reward", "RewardOutcomeEvidence", "RewardPlasticityReceipt"],
+    "exact_matches_found": 0,
+    "classification": "NOT_FOUND_IN_SEARCHABLE_CURRENT_REPOSITORY_SOURCE",
+    "runtime_binding": "UNVERIFIED_NOT_CREATED"
+  },
+  "negative_evidence": [
+    "Runtime/source annotations are compatibility evidence, not Clay semantic authority.",
+    "Caller constraints, type-name resemblance and fuzzy identity remain insufficient signature authority.",
+    "A stale or non-identical content-addressed source/test set must fail before semantic credit.",
+    "The intermediate target-side test revision was superseded by a byte-identical PR188-to-PR118 replay; it remains historical evidence only.",
+    "No exact current reward runtime export was found in searchable target repository source, so no runtime binding may be fabricated.",
+    "One exact contract does not imply WP04 completion or execution authority."
+  ],
+  "counterhypotheses": [
+    "A simpler direct explicit contract registry may dominate static source validation if current runtime exports provide no useful exact annotations.",
+    "The authored reward callable may require revision if a later real runtime implementation cannot preserve its exact semantic contract without adapter ambiguity."
+  ],
+  "next_discriminators": [
+    "If an exact current runtime export appears, bind frank_reward.update/1 to its binary/lease identity with zero execution; otherwise implement the runtime component as a separate candidate.",
+    "Select the next explicit callable specification from architecture evidence rather than caller constraints.",
+    "Independent generic Frank Deep Integrity diagnosis remains required before any whole-program promotion."
+  ],
+  "authority": {
+    "execution_admitted_calls": 0,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "frank_harness_mutated": false
+  },
+  "canonical_promotion": "NONE"
+}

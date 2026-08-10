@@ -42,7 +42,12 @@ def main() -> int:
         frontend = front.compile_frontend(source_text, grammar_text, strict=False)
         artifact.write_text(json.dumps(frontend, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         manifest_doc = {
-            "units": [{"artifact": str(artifact), "source": str(source), "grammar": str(grammar)}]
+            "units": [{
+                "artifact": str(artifact),
+                "source": str(source),
+                "grammar": str(grammar),
+                "expected_surface": str(frontend["surface"]),
+            }]
         }
         manifest.write_text(json.dumps(manifest_doc, indent=2) + "\n", encoding="utf-8")
 
@@ -63,6 +68,7 @@ def main() -> int:
             {"name": "grammar_hash_bound", "pass": binding["grammar_sha256"] == frontend["grammar_sha256"]},
             {"name": "frontend_semantic_hash_bound", "pass": binding["frontend_semantic_hash"] == frontend["semantic_hash"]},
             {"name": "frontend_contract_hash_bound", "pass": binding["frontend_contract_hash"] == frontend["contract_hash"]},
+            {"name": "surface_pin_bound", "pass": binding["surface"] == frontend["surface"] == binding["expected_surface"]},
             {"name": "artifact_hash_present", "pass": len(result.get("typed_ir_artifact_sha256", "")) == 64},
             {"name": "semantic_and_artifact_identity_separate", "pass": result["typed_ir_artifact_sha256"] != result["typed_ir"]["typed_ir_sha256"]},
         ]
@@ -84,23 +90,33 @@ def main() -> int:
         checks.append(expect_binding_error(lambda: bridge.compile_manifest(manifest_doc), "contract_tamper_rejected"))
         artifact.write_text(json.dumps(frontend, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-        # Same source bytes through two explicitly different surface identities are ambiguous
-        # until an equivalence receipt exists, even if both AST hashes happen to match.
+        # Same source bytes through two explicitly different, independently pinned surface
+        # identities are ambiguous until an equivalence receipt exists, even if AST hashes match.
         second = copy.deepcopy(frontend)
         second["surface"] = str(frontend["surface"]) + "_ALTERNATE"
         artifact2 = d / "frontend-alternate.json"
         artifact2.write_text(json.dumps(second, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         ambiguous = {
             "units": [
-                {"artifact": str(artifact), "source": str(source), "grammar": str(grammar)},
-                {"artifact": str(artifact2), "source": str(source), "grammar": str(grammar)},
+                {
+                    "artifact": str(artifact),
+                    "source": str(source),
+                    "grammar": str(grammar),
+                    "expected_surface": str(frontend["surface"]),
+                },
+                {
+                    "artifact": str(artifact2),
+                    "source": str(source),
+                    "grammar": str(grammar),
+                    "expected_surface": str(second["surface"]),
+                },
             ]
         }
         checks.append(expect_binding_error(lambda: bridge.compile_manifest(ambiguous), "cross_surface_same_source_ambiguity_rejected"))
 
     failures = [x for x in checks if not x.get("pass")]
     report = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "test": "WP03_FRONTEND_ARTIFACT_BRIDGE_REGRESSION",
         "grammar": str(GRAMMAR.relative_to(ROOT)),
         "checks": checks,

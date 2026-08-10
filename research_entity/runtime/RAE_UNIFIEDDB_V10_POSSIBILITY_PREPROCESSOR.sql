@@ -141,12 +141,13 @@ WITH ranked AS (
            ORDER BY source_epoch DESC, COALESCE(graph_epoch,-1) DESC, materialized_at DESC, packet_id DESC
          ) AS rn
   FROM possibility_packets p
-  WHERE status='CURRENT' AND (valid_until IS NULL OR valid_until > CURRENT_TIMESTAMP)
+  WHERE status='CURRENT' AND (valid_until IS NULL OR julianday(valid_until) > julianday('now'))
 )
 SELECT * FROM ranked WHERE rn=1;
 
 CREATE VIEW IF NOT EXISTS v_current_possibility_candidates AS
-SELECT * FROM possibility_candidates WHERE status='CURRENT' AND (valid_until IS NULL OR valid_until > CURRENT_TIMESTAMP);
+SELECT * FROM possibility_candidates
+WHERE status='CURRENT' AND (valid_until IS NULL OR julianday(valid_until) > julianday('now'));
 
 -- Runtime invariants:
 -- 1. hot read = canonical cue/signature -> current packet; no eager whole-memory scan or whole-graph rebuild;
@@ -159,4 +160,4 @@ SELECT * FROM possibility_candidates WHERE status='CURRENT' AND (valid_until IS 
 -- 8. promotion requires differential equivalence to full recompute plus latency/accuracy/update-amplification evidence;
 -- 9. standing materialization is adaptive: hot/cheap-to-maintain contexts may be STANDING; cold/high-maintenance contexts remain LAZY/HYBRID;
 -- 10. top-k is family-factorized: multiple bindings of one possibility family cannot crowd out distinct alternatives;
--- 11. expired candidates are excluded before packet selection; freshness is not inferred from semantic similarity alone.
+-- 11. expired candidates are excluded before packet selection; freshness is parsed as time, never inferred from string order or semantic similarity.

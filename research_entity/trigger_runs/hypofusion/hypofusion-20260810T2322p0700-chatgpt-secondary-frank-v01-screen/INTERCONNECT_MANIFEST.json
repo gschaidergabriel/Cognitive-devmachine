@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "run_id": "hypofusion-20260810T2322p0700-chatgpt-secondary-frank-v01-screen",
+  "trigger": "hypofusion",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol","identity":"RESEARCH_ENTITY_TEMPORARY_WORKER"},
+  "target": "self.root / human-surface Frank v0.1",
+  "canonical": {"entity_version":"RAE-8.8","revision":2,"state_hash":"04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"},
+  "live_cutoff": "2026-08-10T23:22:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "current_workspace_observed_at": "2026-08-10T23:15:00+07:00",
+  "active_canonical_hypothesis_ids": ["H-G3-001","H-G3-003","H-G3-005","H-G3-006"],
+  "active_experiment_ids": ["EXP-LIVE-GWT-LESION","EXP-LIVE-XENO-CLAY-FACTORIAL","EXP-LIVE-HYPERPOSITION-BACKEND","EXP-FORMAL-RC11"],
+  "critical_negative_result_ids": ["N-G3-001","N-G3-002","N-G3-003","N-G3-005","N-G3-006","N-G3-007"],
+  "current_crosscutting_evidence": [
+    "research_entity/trigger_runs/harness/harness-20260810T2315p0700-chatgpt-secondary-effect-fence-deep-adjudication/RESEARCH_RECEIPT.json",
+    "research_entity/trigger_runs/frank/frank-20260810T2027p0700-chatgpt-secondary-selfroot-conformance/RESEARCH_RECEIPT.json",
+    "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json"
+  ],
+  "scientific_branch_feedback_targets": ["frank","gwt","emergenz","claycode","hyperposition","claygraph","unifieddb","harness","q23","atomic","clayresearch","spawn","go","666","q12","dump","fusion"],
+  "limitations": [
+    "Connected GitHub code search did not resolve definitions for H-G3-* IDs; IDs are preserved as opaque current hypotheses and explicitly marked inaccessible rather than guessed.",
+    "No target-VPS experiment was executed in this hypofusion invocation; existing runtime receipts were screened as internal evidence.",
+    "Research artifacts are written to a dedicated branch and are not canonical until promoted/merged under normal project review."
+  ]
+}

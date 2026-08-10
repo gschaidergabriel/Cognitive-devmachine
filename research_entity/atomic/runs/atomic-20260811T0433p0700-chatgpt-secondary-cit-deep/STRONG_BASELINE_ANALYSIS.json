@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CIT-001",
+  "question":"Can a normal prior/dependency score plus individual lesions dominate CIT without pooled interventions?",
+  "synthetic_setup":{"N":256,"true_material_causes":4,"individual_probe_budget":124,"score_model":"noncauses ~ N(0,1); causes receive +signal_sd mean shift","replications":20000},
+  "results":[
+    {"signal_sd":0.0,"mean_cause_recall":0.48755,"full_cause_recall_rate":0.05455},
+    {"signal_sd":0.5,"mean_cause_recall":0.676913,"full_cause_recall_rate":0.20685},
+    {"signal_sd":1.0,"mean_cause_recall":0.828412,"full_cause_recall_rate":0.46780},
+    {"signal_sd":1.5,"mean_cause_recall":0.925588,"full_cause_recall_rate":0.73135},
+    {"signal_sd":2.0,"mean_cause_recall":0.974413,"full_cause_recall_rate":0.90150},
+    {"signal_sd":2.5,"mean_cause_recall":0.992138,"full_cause_recall_rate":0.96900}
+  ],
+  "interpretation":"A sufficiently informative conventional dependency/prior score largely erases CIT's sparse-search advantage. At about a two-standard-deviation cause/noncause score separation, top-124 individual testing already achieves about 90.15% full support recovery in this simple model, comparable to the 18/20 sparse-additive CIT screen-accept rate before fallback. Therefore CIT should not run when trusted current dependency/receipt structure already provides a high-quality candidate ranking.",
+  "routing_delta":"Prefer direct exact responsibility/individual lesions when trusted current causal topology is narrow or prior ranking quality is calibrated high. Consider CIT only when the candidate cone is large and prior ranking quality is low/unknown but sparse/additive screening assumptions are supported.",
+  "evidence_class":"LOCAL_SYNTHETIC_COUNTERHYPOTHESIS_DISCRIMINATOR_ONLY"
+}

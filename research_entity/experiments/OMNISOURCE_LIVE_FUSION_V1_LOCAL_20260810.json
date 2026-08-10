@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T1636p0700-omnisource-v10-local",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "goal_ref": "FRANK_V0_1_ANDREAS_PC",
+  "candidate": "research_entity/runtime/RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FUSION.sql",
+  "test": "research_entity/experiments/omnisource_live_fusion_v1_test.py",
+  "evidence_class": "LOCAL_SANDBOX_SQLITE_CANDIDATE_TEST",
+  "promotion_scope": "NONE_FROM_LOCAL_TEST_ALONE",
+  "hypothesis": "A provenance-bound all-source intake with explicit epoch/promotion gating and mandatory material re-entry can preserve contradictions and provenance while preventing stale observations from silently affecting current research state.",
+  "strongest_counterhypothesis": "A universal intake/re-entry layer adds storage/context/coordination overhead and false materiality; simpler arrival-order or tag-only processing may be sufficient, and adaptive routing may not justify its complexity on real repo workloads.",
+  "fresh_external_evidence": [
+    {
+      "ref": "arXiv:2603.27775",
+      "title": "Enzyme: Incremental View Maintenance for Data Engineering",
+      "retrieved_on": "2026-08-10",
+      "delta": "Cost-based refresh selection supports adaptive incremental/full strategies rather than dogmatic incrementality."
+    },
+    {
+      "ref": "arXiv:2606.07795",
+      "title": "The Role of Semirings in Incremental View Maintenance",
+      "retrieved_on": "2026-08-10",
+      "delta": "New June-2026 results show update complexity depends on query/semiring structure; some classes admit constant amortized update time while others have conditional lower bounds."
+    },
+    {
+      "ref": "arXiv:2502.20534",
+      "title": "Consistent Distributed Reactive Programming with Retroactive Computation",
+      "retrieved_on": "2026-08-10",
+      "delta": "Late/lost distributed source data can require retroactive recovery; checkpoint time-consistency motivates explicit epoch/checkpoint handling."
+    },
+    {
+      "ref": "arXiv:2501.09225",
+      "title": "Provenance Guided Rollback Suggestions",
+      "retrieved_on": "2026-08-10",
+      "delta": "Incremental provenance can localize failing changes and support rollback, strengthening the case for preserving provenance through live fusion."
+    },
+    {
+      "ref": "arXiv:2304.07458",
+      "title": "Layph: Making Change Propagation Constraint in Incremental Graph Processing by Layering Graph",
+      "retrieved_on": "2026-08-10",
+      "delta": "Counterevidence against naive locality: small graph changes may propagate globally, so dense invalidation remains a valid route."
+    }
+  ],
+  "test_harness_debug": {
+    "initial_attempt": "FAILED_TEST_HARNESS",
+    "failure": "checkpoint insert supplied 7 values for an 8-column table",
+    "disposition": "TEST_FIXED_AND_RERUN_FROM_SCRATCH",
+    "architecture_credit": "NONE_FROM_FAILED_ATTEMPT"
+  },
+  "result": {
+    "pass": true,
+    "source_class_coverage": {"covered": 19, "total": 19},
+    "stale_promotion_gate_ok": true,
+    "duplicate_provenance": {"observations": 2, "distinct_provenance": 2},
+    "material_reentry_specific": {
+      "pending_before_close": 1,
+      "pending_after_close": 0,
+      "pending_after_restart": 0,
+      "closed_receipt_state_after_restart": "CLOSED"
+    },
+    "other_material_pending_after_restart": 2,
+    "other_material_pending_interpretation": "Two independent material contradiction assessments were intentionally left without reentry receipts; the pending view correctly keeps them OPEN instead of hiding them.",
+    "contradiction_rows_preserved": 2,
+    "restart_checkpoint": {
+      "semantic_epoch": 141,
+      "health_state": "HEALTHY",
+      "last_reentry_receipt_id": "r-open"
+    },
+    "performance": {
+      "n_observation_plus_assessment_pairs": 5000,
+      "elapsed_s": 0.170692,
+      "rows_per_s_pair_rate": 29292.5,
+      "insert_assess_ms_p50": 0.024416,
+      "insert_assess_ms_p95": 0.043054,
+      "sqlite_db_bytes": 4468736
+    }
+  },
+  "out_of_box_experiment": {
+    "count": 1,
+    "name": "temporal_braid_fault",
+    "design": "Interleave a current claim, a later-arriving but older-epoch contradiction, a same-epoch duplicate-provenance observation, a restart boundary and a fresh supersession.",
+    "baseline": "arrival-order latest-wins",
+    "candidate": "epoch-aware promotion eligibility",
+    "baseline_false_stale_promotions": 1,
+    "candidate_false_stale_promotions": 0,
+    "baseline_final": "REFINED",
+    "candidate_final": "REFINED",
+    "interpretation": "Final state equality hides a transient causal error: arrival-order processing temporarily promotes stale evidence; epoch-aware gating stores it without granting current-state authority.",
+    "promotion_effect": "NONE; bounded local evidence only"
+  },
+  "runtime_metadata": {
+    "os": "Linux 6.18.35 x86_64 glibc 2.41",
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "logical_cpu_count": 5,
+    "processor_model": "UNKNOWN",
+    "ram_total_bytes": 6368813056,
+    "target_host": "NOT_ANDREAS_UBUNTU_TARGET",
+    "hostinger_vps": "NOT_EXECUTED_IN_THIS_RECEIPT"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTING",
+    "unifieddb": "Add V10 persistence/projection surfaces for OmniSourceObservation, FusionAssessment, ResearchReentryReceipt, branch receipts and recovery checkpoints.",
+    "claygraph": "No new truth-bearing graph schema added; current graph invalidation/receiver surfaces remain derived routing/observability mechanisms.",
+    "adaptive_mesh_v2": "REMAINS_CANDIDATE_NOT_PROMOTED",
+    "rollback": "Do not include V10 migration in promoted stack; existing UnifiedDB V9 remains rollback baseline until remote/current-repo replay passes."
+  },
+  "next_falsifier": "Run the same candidate on the authorized self-hosted Ubuntu runner and then replay actual current work/feedback/dependency events with missing-edge, stale-epoch, duplicate, causal-reorder and crash/restart faults; compare against simpler broadcast/tag-only/arrival-order baselines with latency/resource/recall shadows.",
+  "research_reentry": "WRITE_REMOTE_TEST_AND_REAL_REPO_REPLAY_OBLIGATIONS; NO_ARCHITECTURE_PROMOTION"
+}

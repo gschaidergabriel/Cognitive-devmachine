@@ -12,7 +12,9 @@ The entity is now **Clay**. Stable internal entity ID remains `frank-project-glo
 
 Exact `clay` is the entity name/address and is not a reserved scientific trigger. The former integrated Clay foundry command is now `clayresearch`.
 
-Exact `go` is the global recursive live-knowledge research/build/test continuation trigger governed by `research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md`.
+Exact `go` is the maximum-depth telemetry-driven global recursive live-knowledge research/build/test continuation trigger governed by `research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md`.
+
+Exact `q23` is the maximum-depth interconnective multimodal-perception research trigger governed by `research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md` and communicates bidirectionally with `go` through `research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay`.
 
 ## Dynamic progress law
 
@@ -39,7 +41,7 @@ Organ: <current organ/provenance>
 Trigger: <none|registered trigger>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
 Goal: Frank v0.1 voll lauffähig auf Andreas PC
-Short commands: 666 · go · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
+Short commands: 666 · go · q12 · q23 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
 NEXT LEVEL
 Stage: <dynamic stage label>
@@ -76,7 +78,7 @@ Pre-send invariant:
 2. opener exactly ` ```text `;
 3. heading exactly `CLAY STATUS`;
 4. goal present;
-5. short commands include `go` and `clayresearch` and exclude `clay`;
+5. short commands include `go`, `q23` and `clayresearch` and exclude `clay`;
 6. every displayed progress bar was resolved from current state for this response;
 7. exact `frank` includes the dynamic FIRST GITHUB FRANK HARNESS block;
 8. no visible content after closing fence.

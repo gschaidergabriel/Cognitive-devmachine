@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "retrieved_at": "2026-08-10T21:44:00+07:00",
+  "instruction_authority": "NONE",
+  "sources": [
+    {"class":"OFFICIAL_EXTERNAL","title":"AWS Builders Library — Making retries safe with idempotent APIs","finding":"A timeout can leave the caller unsure whether a mutating operation happened; blind retry can duplicate side effects; reconciliation or a service-level idempotent contract is required. Client request identity must have semantic meaning and server recording/mutation must be atomic."},
+    {"class":"PRIMARY_EXTERNAL","title":"ExoFlow: A Universal Workflow System for Exactly-Once DAGs (OSDI 2023)","finding":"Recovery semantics can be decoupled from execution and selected as a separate layer; exactly-once recovery has workload-specific tradeoffs."},
+    {"class":"PRIMARY_EXTERNAL","title":"Automated Verification of Idempotence for Stateful Serverless Applications / Flux (OSDI 2023)","finding":"Retry-based fault tolerance depends on idempotence; stateful functions can violate it, motivating executable verification rather than assumption."},
+    {"class":"PRIMARY_EXTERNAL","title":"Conformant Planning via Heuristic Forward Search","finding":"Belief space can be represented as sets of possible worlds and actions can be required to succeed across all worlds."},
+    {"class":"PRIMARY_EXTERNAL","title":"Beliefs In Multiagent Planning: From One Agent to Many (ICAPS 2015)","finding":"Partially observable planning commonly models belief as a set of states regarded as possible; observations/actions prune or transform that set."},
+    {"class":"PRIMARY_EXTERNAL","title":"Structured Possibilistic Planning Using Decision Diagrams (AAAI 2014)","finding":"Finite qualitative belief spaces can support planning under partial observability without requiring precise probabilities."}
+  ],
+  "counterevidence": [
+    "Possible-world/belief-state planning is established prior art.",
+    "Idempotency/reconciliation and exactly-once workflow recovery are established systems techniques.",
+    "A provider-specific state machine can encode the same decision tree and may be faster."
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.1",
+  "experiment_id": "QCEP-LOCAL-STRUCTURAL-OOD-20260810",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "execution_class": "LOCAL_STRUCTURAL_REPRODUCTION_NOT_EXACT_BRANCH_EXECUTION_NOT_TARGET_HOST",
+  "status": "NEGATIVE_RESULT_THEN_REPAIRED_CANDIDATE_PENDING_CURRENT_MAIN_CI",
+  "question": "Can query-conditioned edge relevance suppress high-weight generic hub drift without harming clean or unlabeled/OOD graph traversal?",
+  "fixture": {
+    "families": ["poisoned_high_weight_hub", "clean", "unlabeled_ood"],
+    "truth_shape": "root plus three-hop relevant chain",
+    "k": 4,
+    "negative_space_control": "CONFLICT path may be observed but may not relay"
+  },
+  "baseline_eap_like_static": {
+    "poisoned_high_weight_hub": {"recall": 0.25, "precision": 0.25, "chain_complete": 0.0},
+    "clean": {"recall": 1.0, "precision": 1.0, "chain_complete": 1.0},
+    "unlabeled_ood": {"recall": 1.0, "precision": 1.0, "chain_complete": 1.0}
+  },
+  "qcep_0_1": {
+    "poisoned_high_weight_hub": {"recall": 1.0, "precision": 1.0, "chain_complete": 1.0},
+    "clean": {"recall": 1.0, "precision": 1.0, "chain_complete": 1.0},
+    "unlabeled_ood": {"recall": 0.75, "precision": 0.75, "chain_complete": 0.0},
+    "adjudication": "REFUTED_FOR_PROMOTION: missing edge semantics were incorrectly treated as negative evidence."
+  },
+  "qcep_0_2_structural_reproduction": {
+    "poisoned_high_weight_hub": {"recall": 1.0, "precision": 1.0, "chain_complete": 1.0},
+    "clean": {"recall": 1.0, "precision": 1.0, "chain_complete": 1.0},
+    "unlabeled_ood": {"recall": 1.0, "precision": 1.0, "chain_complete": 1.0},
+    "rule": "Enable query conditioning only when at least one ADMISSIBLE outgoing edge at the current source has positive query signal; otherwise use exact static edge factor. Inadmissible targets cannot manufacture conditioning pressure.",
+    "status": "SUPPORTED_ONLY_IN_LOCAL_STRUCTURAL_REPRODUCTION_PENDING_EXACT_CURRENT_MAIN_SELF_HOSTED_EXECUTION"
+  },
+  "causal_interpretation": {
+    "supported": [
+      "Unconditional semantic downweighting can create an OOD recall regression when relation labels are absent.",
+      "Treating absent admissible local edge semantics as UNKNOWN rather than counterevidence removes that regression in the structural reproduction while retaining the poisoned-hub benefit."
+    ],
+    "not_supported": [
+      "Exact current-main branch implementation pass.",
+      "Self-hosted Ubuntu pass.",
+      "Real Clay corpus generalization.",
+      "Universal superiority over databases, graph engines, vector search, or RAG systems.",
+      "Downstream Frank answer/action quality improvement."
+    ]
+  },
+  "branch_candidate": {
+    "branch": "research/qcep-u15-currentmain-20260810",
+    "implementation_version": "QCEP-0.2",
+    "regression_test": "test_missing_admissible_edge_semantics_fall_back_to_static_weight",
+    "promotion_state": "BLOCKED_ON_EXACT_CURRENT_MAIN_CI_AND_REAL_CORPUS_FALSIFIER"
+  },
+  "next_falsifiers": [
+    "Run exact current-main branch unit tests and poison/clean/unlabeled differential on self-hosted Ubuntu.",
+    "Run QCEP as the current U15 typed evidence-gap expander under a matched item budget.",
+    "Run held-out current Clay relation families with independently adjudicated relevance.",
+    "Inject stale, ambiguous, CONFLICT and high-degree-hub edges and require fail-closed/no-laundering behavior.",
+    "Compare matched-budget PostgreSQL/pgvector or graph-engine baselines before broader superiority claims."
+  ]
+}

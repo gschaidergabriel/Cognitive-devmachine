@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "ADAPTIVE-READ-PLANE-V14-LOCAL-20260810",
+  "execution_class": "LOCAL_CHATGPT_PYTHON_ROUTING_TEST_NOT_TARGET_HOST",
+  "origin_actor": "chatgpt-secondary",
+  "implementation": "research_entity/runtime/adaptive_semantic_read_plane_v14.py",
+  "test_source": "research_entity/runtime/test_adaptive_semantic_read_plane_v14.py",
+  "tests_passed": 5,
+  "tests_total": 5,
+  "verified_behaviors": [
+    "exact indexed lookup short-circuits more expensive mechanisms",
+    "verified semantic field uses sufficiency-stop and never lexical padding",
+    "entity alias resolution precedes ClayGraph traversal",
+    "compositional Pareto frontier precedes dynamic graph lookup when requested",
+    "unknown query falls back to conventional retrieval"
+  ],
+  "authority": "ASSEMBLY_CONTEXT_ONLY",
+  "promotion": "CANDIDATE_ONLY",
+  "next_test": "Wire V14 to current real UnifiedDB/ClayGraph snapshot, then run held-out alias/OOD/stale/conflict/concurrent-writer suites and self-hosted Ubuntu benchmark."
+}

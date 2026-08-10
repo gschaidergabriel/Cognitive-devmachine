@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2150p0700-chatgpt-secondary-asvb-voice-braid",
+  "cutoff_local": "2026-08-10T21:50:00+07:00",
+  "research_head_observed": "4917f9cabc21d4e94c9bcc35a2e1ef6ea386c2a2",
+  "current_program": "FRANK_V0_1",
+  "owner_fixed_new_constraint": {
+    "source": "FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "facts": [
+      "one active self.root execution globally",
+      "any client or peer AI with valid scoped token may attempt interaction",
+      "token is credential not identity and cannot mint effect authority",
+      "peer AI is external caller/capability and never identity merger",
+      "DirectTokenMessage currently binds client_id/session_id/request_id/credential_fingerprint provenance"
+    ]
+  },
+  "target_transport_evidence": {
+    "source": "runtime/clay_vps_mcp_v02",
+    "status": "OPERATIONAL_RESEARCH_EXECUTOR_EVIDENCE_ONLY",
+    "facts": [
+      "authenticated Streamable HTTP smoke exists",
+      "current MCP middleware uses bearer-token equality against CLAY_MCP_TOKEN",
+      "bearer authentication itself does not encode original-user vs relay-AI semantic voice"
+    ],
+    "non_claim": "This MCP surface is not promoted here as the final Frank production token API."
+  },
+  "non_overlap": {
+    "ECT-001": "CallContract recovery; complementary",
+    "SCF-001": "cross-module semantic laundering; adjacent but broader",
+    "MCM-001": "multicomponent cognition; complementary",
+    "CEA": "post-effect uncertain outcome reconciliation; complementary",
+    "MOLT-001": "physical monotone state-write boundary; complementary"
+  },
+  "selected_gap": "Inside one admitted Frank execution, preserve cryptographically/provenance-bound distinction between original user semantic voice, relay-AI semantic additions and transport metadata so an AI bridge cannot launder its own content into authenticated user intent."
+}

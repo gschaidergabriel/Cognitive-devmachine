@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "outbound": [
+    {
+      "kind": "MATERIAL_DELTA",
+      "direction": "Q23_TO_GO",
+      "topic_tags": ["multimodal", "qwen35", "retina", "mvc", "libmtmd", "recovery"],
+      "payload": "QNDRF refined with same-pass pre/post-merger VisualFeatureTap; dedicated lightweight encoder remains counterbaseline.",
+      "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+      "urgency": "NEXT_CHECKPOINT"
+    },
+    {
+      "kind": "RUNTIME_FAILURE",
+      "direction": "Q23_TO_GO",
+      "topic_tags": ["multimodal", "recovery", "llama.cpp"],
+      "payload": "Do not assume durable multimodal slot/KV recovery. Exact target-VPS Qwen3.5 persistence test required; re-encode fallback is current safe architecture candidate.",
+      "affected_work": ["F-V01-13-SECURITY-RECOVERY-OBSERVABILITY", "F-V01-06-DIGITAL-RETINA-MVC"],
+      "urgency": "NEXT_SAFE_POINT"
+    },
+    {
+      "kind": "KNOWLEDGE_NEED",
+      "direction": "Q23_TO_GO",
+      "topic_tags": ["runtime", "vps", "qwen35", "mmproj"],
+      "payload": "Need exact accepted-VPS availability of Qwen3.5-4B + mmproj and current llama.cpp build to execute T-Q23-FTAP-01/T-Q23-RECOVERY-03.",
+      "requires_reply": true,
+      "urgency": "NEXT_CHECKPOINT"
+    }
+  ],
+  "closure_status": "OUTBOUND_RECORDED_RESEARCH_CENTER_TRANSPORT_NOT_EXECUTED_BY_THIS_TOOL_SURFACE"
+}

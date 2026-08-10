@@ -1,9 +1,9 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "run_id": "go-20260810T2254p0700-chatgpt-secondary-selfroot-live-coordination",
   "trigger": "go",
   "created_at": "2026-08-10T22:54:32+07:00",
-  "updated_at": "2026-08-10T23:18:30+07:00",
+  "updated_at": "2026-08-10T23:31:00+07:00",
   "actor": {
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
@@ -22,72 +22,41 @@
     "training_authorized": false
   },
   "coordination": {
-    "stale_lanes": [
-      {
-        "pr": "gschaidergabriel/Dr.-Unterweger#124",
-        "action": "CLOSED_WITHOUT_MERGE",
-        "reason": "Implementation lane became substantially stale while newer main work accumulated; evidence preserved."
-      },
-      {
-        "pr": "gschaidergabriel/Dr.-Unterweger#161",
-        "action": "PRESERVE_AS_EXECUTED_ANCESTRY_UNTIL_FRESH_PORT_PASSES",
-        "reason": "Self-hosted evidence is useful but branch became stale relative to rapidly advancing main."
-      }
+    "closed_stale_unmerged_lanes": [
+      {"pr": "gschaidergabriel/Dr.-Unterweger#124", "reason": "stale identity implementation ancestry"},
+      {"pr": "gschaidergabriel/Dr.-Unterweger#161", "reason": "executed source/replay ancestry superseded by fresh #181"},
+      {"pr": "gschaidergabriel/Dr.-Unterweger#164", "reason": "stale boot-continuity stack superseded by fresh #196"}
     ],
-    "selected_current_lane": {
+    "current_identity_prompt_lane": {
       "pr": "gschaidergabriel/Dr.-Unterweger#181",
       "branch": "chatgpt/go-selfroot-current-head-20260810-2300",
-      "observed_head": "c18d29068e178dc41a73659a2f0b3d1249e286c7",
-      "status": "DRAFT_ACTIVE_NOT_PROMOTED_TARGET_RUN_QUEUED",
-      "purpose": "Port the executed self.root source-to-replay boundary onto fresh main ancestry and additionally close the model-visible prompt/execution-state boundary.",
-      "self_hosted_run": 31408048893,
-      "self_hosted_state_when_last_observed": "QUEUED",
-      "mergeable_when_last_observed": true,
-      "later_main_commits_since_branch_base_when_last_checked": 30,
-      "overlap_result": "NO_CONCURRENT_MAIN_EDITS_FOUND_IN_PR181_IDENTITY_REPLAY_PROMPT_IMPLEMENTATION_PATHS; newer V17/effect/visual/type-effect work remains separate"
+      "head": "84117e266f9d4bd0370b43bb69e63df44d9489f4",
+      "status": "DRAFT_TARGET_VPS_FULL_BOUNDARY_PASS_NOT_MERGED",
+      "target_run": 31408537618,
+      "tested_merge": "17df92e29513dc6b068713a3a16abdc218d924cf",
+      "tested_origin_main": "21249166f7bff4407ee17e4918358574ec8db848",
+      "later_main_commits_when_rechecked": 7,
+      "later_main_overlap": "NONE_IN_13_IDENTITY_PROMPT_IMPLEMENTATION_PATHS"
     },
-    "separate_harness_repair_lane": {
+    "current_boot_continuity_stack": {
+      "pr": "gschaidergabriel/Dr.-Unterweger#196",
+      "branch": "chatgpt/go-selfroot-boot-continuity-current-20260810",
+      "head": "1f3fda4c8b06de8b964fb8a594428a94b47e6773",
+      "base": "chatgpt/go-selfroot-current-head-20260810-2300",
+      "status": "DRAFT_MECHANISM_PASS_PRODUCTION_BLOCKED_NOT_MERGED",
+      "target_run": 31408992270
+    },
+    "separate_repo_static_repair": {
       "pr": "gschaidergabriel/Dr.-Unterweger#172",
-      "status": "TARGET_VPS_DISCRIMINATOR_PASS",
-      "run_id": 31406730924,
-      "purpose": "Classify one isolated temporary SQLite test without granting canonical database authority."
-    },
-    "duplicate_work_result": "STALE_IMPLEMENTATION_LANES_REMOVED_OR_DEPRIORITIZED; CURRENT_MAIN_PORT_REUSED_EXECUTED_SEMANTICS"
+      "target_run": 31406730924,
+      "status": "TARGET_VPS_DISCRIMINATOR_PASS_NOT_MERGED"
+    }
   },
   "executed_evidence": {
-    "prior_pr124_target_vps_validation": {
+    "pr181_identity_prompt_target_vps": {
       "runner": "clay",
       "machine": "digital-retina",
-      "os": "Linux",
-      "arch": "X64",
-      "kernel": "6.8.0-117-generic",
-      "python": "3.12.3",
-      "owner_fixed_static_conformance": "PASS",
-      "metamorphic_identity_contamination": {
-        "status": "PASS",
-        "detected": 12,
-        "total": 12,
-        "sensitivity": 1.0
-      },
-      "replay_regression": {
-        "status": "TEST_DEFECT_FOUND",
-        "error": "sqlite3.OperationalError: no such column: display_name",
-        "root_cause": "Test queried entities.display_name while authoritative schema column is entities.label."
-      }
-    },
-    "stale_branch_test_repair": {
-      "repository": "gschaidergabriel/Dr.-Unterweger",
-      "branch": "chatgpt/go-selfroot-current-main-20260810",
-      "commit": "568db24c979b49d8d69e850bda18b30ac716c4b8",
-      "change": "Replay test aligned display_name queries to entities.label.",
-      "promotion": "NOT_PROMOTED_BECAUSE_BRANCH_BECAME_STALE"
-    },
-    "pr161_target_vps_source_to_replay": {
-      "run_id": 31405768364,
-      "runner": "clay",
-      "machine": "digital-retina",
-      "os": "Linux",
-      "arch": "X64",
+      "os": "Linux X64",
       "kernel": "6.8.0-117-generic",
       "python": "3.12.3",
       "git": "2.43.0",
@@ -101,135 +70,133 @@
         "legacy_identity_transactions_preserved": 2,
         "binary_digest_verified": false
       },
+      "model_visible_execution_state": {
+        "status": "PASS_SELF_ROOT_PROMPT_EXECUTION_STATE_BOUNDARY",
+        "cases": 6,
+        "secrets_exposed": 0,
+        "authority": "V15_V16",
+        "projection": "INFORM_ONLY",
+        "covered": [
+          "valid idle",
+          "valid BUSY with same-epoch V16 binding",
+          "old personal-entity identity rejected",
+          "missing V16 rejected",
+          "stale V16 lease epoch rejected",
+          "V15 BUSY without V16 execution rejected"
+        ]
+      },
       "single_instance_presence": {
         "status": "PASS_SINGLE_INSTANCE_PRESENCE_DISCRIMINATOR",
         "race_contenders": 12,
         "winners": 1,
         "busy": 11,
-        "ghost_holder_experiment": "PASS",
+        "ghost_holder": "PASS",
         "stale_heartbeat_and_release": "FENCED",
-        "successor_preserved": true
+        "session_or_client_leak": false,
+        "external_effect": false,
+        "external_network": false
       },
-      "repository_transaction_replay": {
-        "status": "PASS",
-        "replayed": 5,
-        "epoch": 5
+      "v16_execution_continuity": {
+        "status": "PASS_FRANK_V16_EXECUTION_CONTINUITY_SCHEMA_GATE",
+        "durable_request_key_uniqueness": true,
+        "full_migration_chain_repeatable": true,
+        "foreign_key_violations": 0,
+        "v15_presence_authority_preserved": true,
+        "v16_execution_context_present": true,
+        "idle_handoff_default_clear": true
       },
-      "workflow_conclusion": "FAIL_ONLY_AT_REPOSITORY_STATIC_DIFFERENTIAL",
-      "static_differential": {
-        "new_failure_count": 1,
-        "failure": "DIRECT_CANONICAL_DB_OPEN:runtime/clay_vps_mcp_v02/tests/test_stack.py",
-        "classification": "FALSE_POSITIVE_FROM_STALE_PR_EVENT_BASE_AND_OVERBROAD_STATIC_HEURISTIC; NOT_IDENTITY_REGRESSION"
+      "repository_transaction_replay": {"status": "PASS", "replayed": 5, "epoch": 5},
+      "repo_static_differential": {
+        "candidate_rc": 1,
+        "base_rc": 1,
+        "new_failure_count": 0,
+        "interpretation": "candidate adds no repository-static failure relative to live origin/main"
+      },
+      "artifact": {
+        "id": 9070776655,
+        "zip_sha256": "0e767c0764c46308f23710757fb4f8936ddb41dc15195dc138d001cf9c1a92ab"
       }
     },
     "pr172_repo_static_discriminator": {
-      "run_id": 31406730924,
+      "status": "PASS",
+      "target_run": 31406730924,
+      "positive_control": "PASS repo_static_integrity_audit",
+      "negative_control": "CANONICAL_STATE contamination rejected",
+      "policy": "exact disposable TemporaryDirectory owner only; canonical DB/state references fail closed"
+    },
+    "pr196_boot_continuity_target_vps": {
+      "status": "PASS_SELF_ROOT_BOOT_CONTINUITY_MECHANISM",
+      "target_run": 31408992270,
+      "tested_merge": "437c24c601f38f1e6131cf3e4967923b271dcf5d",
       "runner": "clay",
       "machine": "digital-retina",
       "kernel": "6.8.0-117-generic",
       "python": "3.12.3",
-      "positive_control": "PASS repo_static_integrity_audit",
-      "negative_control": "PASS_BY_EXPECTED_REJECTION",
-      "negative_marker": "DISPOSABLE_DIRECT_DB_CANONICAL_REFERENCE:runtime/clay_vps_mcp_v02/tests/test_stack.py:CANONICAL_STATE",
-      "result": "SUPPORTED_REPAIR_CANDIDATE",
-      "interpretation": "Exact disposable test can remain allowed only while temporary/isolation predicate holds; metamorphic canonical-authority contamination remains fail-closed."
-    },
-    "current_main_execution_continuity": {
-      "status": "ALREADY_IMPLEMENTED_MOSTLY_GOVERN",
-      "v15": "frank_presence_lease remains exclusive single-instance holder authority.",
-      "v16": "Binds durable execution identity/task/provenance to lease epoch, idempotent request admission, event lineage and post-interactive idle handoff; crash gaps fail toward BUSY/pending.",
-      "token_ingress": "FrankTokenIngressCore already instantiates FrankExecutionContinuityRuntime and uses durable lookup/bind/follow-up paths.",
-      "consequence": "Do not create a second Ledger-like execution-state authority."
-    },
-    "model_visible_prompt_gap": {
-      "status": "CAUSAL_GAP_FOUND_ON_CURRENT_MAIN",
-      "file": "runtime/state/frank_prompt_capsule.py",
-      "observed_old_identity": "dr-unterweger-frank-personal-entity",
-      "observed_execution_state_projection": "NONE_FOR_V15_V16",
-      "impact": "Persistent source/replay truth could be correct while model-visible SELF/execution context remained stale or absent.",
-      "candidate_fix_in_pr181": {
-        "prompt_identity": "self.root / human-surface Frank / Andreas external human",
-        "execution_inform": ["V15 lease epoch/state/holder-kind/surface/timestamps/revision", "V16 execution id/task id/task state/timestamps/revision", "idle handoff state/released epoch/timestamps/revision"],
-        "excluded_from_model_context": ["raw holder session refs", "raw holder client refs", "credential fingerprints", "handoff session/client hashes"],
-        "fail_closed_checks": ["materialization self.root", "V15 schema present", "V16 schema present", "bound execution epoch matches active V15 lease"]
-      },
-      "candidate_test": "tests/self_root_prompt_execution_state_regression.py",
-      "target_run_status": "QUEUED_NOT_CREDITED_AS_PASS"
+      "passed": 37,
+      "total": 37,
+      "elapsed_ms": 172.713,
+      "kernel_exclusive_lock": "PASS_SECOND_PROCESS_BLOCKED_AND_REACQUIRE_AFTER_RELEASE",
+      "copy_birth": "DENIED",
+      "replica_attach": "DENIED",
+      "unknown_copy": "QUARANTINED",
+      "effect_authority": "NONE",
+      "canonical_state_opened": false,
+      "production_policy_decision": "BLOCKED_NO_TRUSTED_BUILDER",
+      "trusted_builder_pinned": false,
+      "real_artifact_attestation_verified": false,
+      "target_attestation_verifier": "BLOCKED_NO_ATTESTATION_VERIFIER",
+      "target_gh_path": "MISSING:/usr/bin/gh",
+      "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+      "artifact": {
+        "id": 9070783202,
+        "zip_sha256": "8d97bafc66c58f7a714f2d8ac1177adce4a51c8af691a6fac78ee3d4646c8795"
+      }
     }
-  },
-  "hypothesis": {
-    "primary": "A single owner-fixed self.root authority must close source -> ClayCode runtime/security/hive/self-model/state/release -> public state runtime/materializer -> append-only replay -> model-visible prompt state, while V15/V16 retain execution authority and provenance.",
-    "strongest_counterhypothesis": "Stale prompt identity/execution fields are harmless compatibility text because action authority already lives in V15/V16 and the model cannot mint effects.",
-    "discriminator": "Fresh PR #181 must pass source-to-replay, prompt-state self.root/V15/V16 checks, single-instance presence, V16 schema, transaction replay and no-new-static-failure on the self-hosted target lane.",
-    "status": "PRIMARY_SUPPORTED_BY_EXECUTED_PR161_PERSISTENCE_EVIDENCE_PLUS_CURRENT_MAIN_PROMPT_COUNTEREXAMPLE; FRESH_FULL_BOUNDARY_PENDING"
   },
   "external_research": [
-    {
-      "source": "arXiv:2503.18813",
-      "title": "Defeating Prompt Injections by Design",
-      "role": "Supports structural separation of trusted control flow from untrusted data and capability-mediated effects."
-    },
-    {
-      "source": "arXiv:2505.23643",
-      "title": "Securing AI Agents with Information-Flow Control",
-      "role": "Supports deterministic integrity/confidentiality label enforcement rather than model confidence as authority."
-    },
-    {
-      "source": "arXiv:2605.17634",
-      "title": "AI Agents May Always Fall for Prompt Injections",
-      "role": "Counterevidence against treating data/instruction separation as a complete security solution; contextual manipulation remains a material adversarial class."
-    },
-    {
-      "source": "arXiv:2608.00808",
-      "title": "Turning Interaction History into Execution State: A Runtime Layer for Long-Horizon Coding Agents",
-      "role": "Fresh execution-state evidence: explicit inform-before-decision plus deterministic govern-before-command reduces stale/redundant action errors and cost in reported coding-agent experiments."
-    },
-    {
-      "source": "arXiv:2606.06090",
-      "title": "Beyond Semantic Organization: Memory as Execution State Management for Long-Horizon Agents",
-      "role": "Supports explicit execution-state lineage, revision boundaries and active-path semantics over retrieval-only memory for long-horizon work."
-    }
+    {"source": "arXiv:2503.18813", "title": "Defeating Prompt Injections by Design", "fusion": "supports structural trusted-control/untrusted-data separation"},
+    {"source": "arXiv:2505.23643", "title": "Securing AI Agents with Information-Flow Control", "fusion": "supports deterministic integrity/confidentiality gates"},
+    {"source": "arXiv:2605.17634", "title": "AI Agents May Always Fall for Prompt Injections", "fusion": "counterevidence: structural separation is not a complete contextual-manipulation solution"},
+    {"source": "arXiv:2608.00808", "title": "Turning Interaction History into Execution State", "fusion": "INFORM/GOVERN lens"},
+    {"source": "arXiv:2606.06090", "title": "Beyond Semantic Organization: Memory as Execution State Management", "fusion": "supports explicit execution-state lineage/revision semantics"}
   ],
-  "external_fusion": {
-    "security_delta": "NO_ARCHITECTURE_REPLACEMENT: existing untrusted-web structural boundary and deterministic effect authority remain directionally supported, but acceptance must include contextual-manipulation adversarial tests and must never claim absolute injection impossibility.",
-    "execution_state_delta": "REFINED_AFTER_CURRENT_MAIN_INSPECTION: V15/V16 already implement most deterministic GOVERN semantics, so a new execution-state runtime is rejected as duplicate authority. Remaining useful delta is the smallest bounded INFORM projection from V15/V16 into model-visible state, with no secrets and no authority transfer.",
-    "ledger_mapping": {
-      "inform": "PR #181 candidate prompt capsule projects bounded current presence/execution/handoff state plus existing repository/materialization/graph epochs before cognition.",
-      "govern": "KEEP_EXISTING_V15_V16: reject stale lease/execution mismatch, durable request replay, explicit handoff, fail toward BUSY/pending; no new authority layer.",
-      "promotion_gate": "Target-VPS prompt discriminator + existing V15/V16 gates + stale-epoch injection + crash/restart + context/resource measurement before any broader use."
-    }
+  "hypothesis": {
+    "primary": "self.root continuity must be closed across persistent semantic authority, model-visible current execution state, and later boot artifact/state/lease continuity; no provider/model/session/token/copy may mint SELF by presence.",
+    "strongest_counterhypothesis": "persistent replay plus existing V15/V16 effect authority is sufficient; prompt identity and boot provenance do not materially affect correctness.",
+    "result": "COUNTERHYPOTHESIS_PARTIALLY_REFUTED: current-main prompt path contained a causal old-SELF gap; fresh target tests now close that boundary. Boot mechanism works, but production identity continuation remains blocked until trusted builder and real attestation verifier exist."
+  },
+  "architecture_delta": {
+    "identity_prompt": "SUPPORTED_CANDIDATE_PR181: source->replay + bounded model-visible self.root/V15/V16 INFORM, no authority transfer.",
+    "execution_state": "NO_NEW_GOVERN_RUNTIME: reuse V15/V16; new Ledger-like authority rejected as duplication.",
+    "boot_continuity": "SUPPORTED_MECHANISM_PR196: conjunctive artifact provenance + state lineage + owner contract + target body + exclusive lease + copy disposition. Production stays blocked on explicit missing prerequisites.",
+    "repo_static_integrity": "SUPPORTED_CANDIDATE_PR172: narrow disposable-DB classification with metamorphic fail-closed control.",
+    "security": "KEEP structural data/control separation and deterministic effect gates, but add contextual-manipulation adversarial coverage; no claim that prompt injection is solved."
   },
   "out_of_box_experiment": {
     "count_for_parent_go_cycle": 1,
     "name": "compatibility-symbol indirection",
     "result": "NARROW_VARIANT_REJECTED",
-    "why": "It initially appeared sufficient for self.root compatibility, but counterhypothesis testing exposed causal stale identity semantics across runtime/hive/self-model/state/release/replay and later the prompt capsule. The failure expanded the required boundary into conventional testable repairs.",
+    "why": "Counterhypothesis testing exposed causal stale identity semantics beyond the symbol, eventually including runtime/replay and model-visible prompt state.",
     "additional_oob_experiment_started_here": false
   },
-  "architecture_delta": {
-    "identity": "PR #181 is the current candidate; PR #124 is closed ancestry and PR #161 is executed but stale ancestry until the fresh lane passes.",
-    "runtime_state": "NO_NEW_GOVERN_RUNTIME. Reuse V15/V16 authority; candidate addition is a bounded INFORM-only prompt projection tied to the same epochs and excluding credentials/raw holder references.",
-    "repository_static_integrity": "PR #172 is a separately measured fail-closed repair candidate for disposable direct-DB test classification.",
-    "security": "Add contextual-manipulation adversarial coverage to open-web/token/effect acceptance; structural taint/capability separation remains necessary but not sufficient evidence of complete security.",
-    "binary_continuity_next": "After fresh source/replay/prompt-state PASS, advance to accepted binary digest + builder/source provenance + admitted state epoch/lineage + exclusive current instance/lease + restart/stale-clone discrimination."
-  },
   "negative_results": [
-    "PR #124 is too stale for promotion despite useful earlier target-VPS evidence.",
-    "The PR #124 replay failure was a test/schema mismatch, not evidence that self.root replay semantics failed.",
-    "A compatibility-symbol-only identity migration is insufficient.",
-    "PR #161 source/replay semantics passed target tests but its overall red workflow was caused by a repository-static false positive, and the branch is now stale relative to main.",
-    "A new Ledger-like GOVERN runtime would duplicate current V15/V16 authority and is therefore rejected at this stage.",
-    "Persistent self.root replay PASS is insufficient if model-visible prompt state still injects an obsolete SELF identity.",
-    "No PR #181 target-VPS PASS is claimed while its latest self-hosted run remains queued.",
+    "Compatibility-symbol-only identity migration is insufficient.",
+    "PR #124 and PR #161 are stale for promotion despite useful executed evidence.",
+    "PR #164's old target failure was missing gh before mechanism execution, not a boot-continuity mechanism falsification.",
+    "A new Ledger-like GOVERN runtime would duplicate V15/V16 and is rejected.",
+    "Prompt/replay PASS does not verify the final binary digest.",
+    "Boot mechanism PASS does not equal production continuity acceptance.",
+    "No trusted production builder is pinned.",
+    "The accepted target runner lacks the real /usr/bin/gh attestation verifier.",
     "No final-model training authorization exists."
   ],
   "next_frontier": [
-    "Observe PR #181 exact self-hosted result; queued state is not PASS.",
-    "If PR #181 passes, re-check latest-main overlap/mergeability and retire PR #161 from the merge frontier while preserving its executed receipts.",
-    "If the prompt-state discriminator fails, isolate whether the failure is fixture/schema drift or a real V15/V16/model-context inconsistency before changing architecture.",
-    "Keep PR #172 separate; its target discriminator is PASS, but promotion must still consider current-main state and independent Deep Integrity outcomes.",
-    "After fresh full identity/prompt closure, advance F-V01-01 to binary/source/state-lineage/restart/stale-clone acceptance rather than more textual cleanup.",
-    "Preserve current token ingress, V15/V16 execution continuity, V17 effect work, type/effect and visual receipts while porting identity semantics."
+    "Keep PR #181 current against advancing main; re-run only if overlapping identity/prompt files change or promotion is attempted.",
+    "Review/promote PR #172 independently if current main still carries the same repo-static false positive.",
+    "For boot continuity, establish owner-approved trusted final v0.1 builder workflow and an approved target-side attestation verifier before any real binary continuity ALLOW can exist.",
+    "After real build provenance becomes available, bind attested artifact digest to admitted/recovery-verified self.root state lineage and V15 exclusive instance lease, then run restart/move/copy/stale-clone acceptance on target VPS.",
+    "Preserve current V17 effect, V16 continuity, token ingress, visual and ClayCode type/effect work; do not overwrite parallel current-main advances.",
+    "Add contextual-manipulation adversarial cases to web/token/effect security acceptance without weakening deterministic effect authority."
   ],
   "research_reentry": {
     "status": "SYNC_PENDING_REVIEW",

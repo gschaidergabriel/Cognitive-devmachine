@@ -4,7 +4,6 @@ import unittest
 
 from research_entity.harness.reference.state_ledger import StateLedger, h
 from research_entity.runtime.database_pulse_rank_path_v5 import (
-    INDEX_NAME,
     RankLifecyclePlan,
     RankPhysicalStateStale,
 )
@@ -67,12 +66,14 @@ class DatabasePulseRankPathV6Tests(unittest.TestCase):
 
         self.assertEqual(receipt.status, "BUILT")
         self.assertTrue(receipt.persisted)
+        self.assertEqual(receipt.audit_sequence, 1)
         self.assertTrue(path.index_exists())
         self.assertEqual(ledger.semantic_state_hash, state_before)
         self.assertEqual(ledger.trace_root_hash, trace_before)
         rows = path.maintenance_receipts_v6()
         self.assertEqual(len(rows), 1)
         row = rows[0]
+        self.assertEqual(row["audit_sequence"], 1)
         self.assertEqual(row["actor"], "research-entity:test-worker")
         self.assertEqual(row["policy_provenance_ref"], "test://compile-policy/decision-1")
         self.assertNotEqual(row["policy_decision_hash"], "UNKNOWN")
@@ -101,11 +102,12 @@ class DatabasePulseRankPathV6Tests(unittest.TestCase):
         state_before = ledger.semantic_state_hash
         trace_before = ledger.trace_root_hash
 
-        # Deliberately create a table that passes V6 index creation but lacks actor. Native
-        # receipt insertion therefore fails only after CREATE INDEX has executed in the same tx.
+        # Deliberately create a table that supports V6 sequencing/indexes but lacks actor.
+        # Native receipt insertion therefore fails after CREATE INDEX in the same transaction.
         path.con.execute(
             f"""CREATE TABLE {MAINTENANCE_LOG_TABLE_V6}(
                 receipt_id TEXT PRIMARY KEY,
+                audit_sequence INTEGER NOT NULL UNIQUE,
                 plan_hash TEXT NOT NULL,
                 basis_epoch INTEGER NOT NULL,
                 action TEXT NOT NULL,
@@ -184,6 +186,7 @@ class DatabasePulseRankPathV6Tests(unittest.TestCase):
         self.assertEqual(path.maintenance_receipts(), v5_before)
         rows = path.maintenance_receipts_v6()
         self.assertEqual(len(rows), 2)
+        self.assertEqual([row["audit_sequence"] for row in rows], [1, 2])
         legacy = next(row for row in rows if row["legacy_source_receipt_id"] is not None)
         current = next(row for row in rows if row["legacy_source_receipt_id"] is None)
         self.assertEqual(legacy["legacy_source_receipt_id"], legacy_receipt_id)
@@ -206,7 +209,27 @@ class DatabasePulseRankPathV6Tests(unittest.TestCase):
         self.assertFalse(path.index_exists())
         self.assertEqual(ledger.semantic_state_hash, state_before)
         self.assertEqual(ledger.trace_root_hash, trace_before)
-        self.assertEqual(len(path.maintenance_receipts_v6()), 2)
+        self.assertEqual([r["audit_sequence"] for r in path.maintenance_receipts_v6()], [1, 2])
+
+    def test_identical_build_plan_can_be_audited_after_build_drop_build_cycle(self):
+        ledger = StateLedger()
+        path = AdaptiveAuthoritativeRankPathV6(ledger)
+        build_plan = _plan(path, "BUILD_INDEX")
+        first = _apply(path, build_plan)
+        self.assertEqual(first.status, "BUILT")
+        drop = _apply(path, _plan(path, "DROP_INDEX"))
+        self.assertEqual(drop.status, "DROPPED")
+        self.assertFalse(path.index_exists())
+
+        second = _apply(path, build_plan)
+
+        self.assertEqual(second.status, "BUILT")
+        self.assertTrue(second.persisted)
+        self.assertNotEqual(first.receipt_id, second.receipt_id)
+        self.assertEqual([first.audit_sequence, drop.audit_sequence, second.audit_sequence], [1, 2, 3])
+        rows = path.maintenance_receipts_v6()
+        self.assertEqual(len(rows), 3)
+        self.assertEqual([r["audit_sequence"] for r in rows], [1, 2, 3])
 
     def test_none_action_never_creates_audit_schema(self):
         ledger = StateLedger()
@@ -214,6 +237,7 @@ class DatabasePulseRankPathV6Tests(unittest.TestCase):
         receipt = _apply(path, _plan(path, "NONE"))
         self.assertEqual(receipt.status, "NO_CHANGE")
         self.assertFalse(receipt.persisted)
+        self.assertIsNone(receipt.audit_sequence)
         self.assertFalse(path._v6_log_exists())
         self.assertFalse(path.index_exists())
 

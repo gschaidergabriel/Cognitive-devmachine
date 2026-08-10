@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "run_id": "atomic-20260810T2141p0700-chatgpt-secondary-molt",
+  "refresh_cutoff_commit": "24263035dbf3c73aeb3ecd763e605d99b21e2430",
+  "fresh_adjacent_candidates": {
+    "ATOMIC-MCM-001": {
+      "relationship": "COMPLEMENTARY_WITH_EXPLICIT_BOUNDARY",
+      "evidence": "MCM's integration manifest explicitly names MOLT as a possible persistence backend for append-only typed frames and states that storage layout never defines semantic polarity.",
+      "effect_on_molt": "No collision; MOLT must not infer MONOTONE/DETERMINATION semantics from physical append geometry."
+    },
+    "CEA-001": {
+      "relationship": "ORTHOGONAL",
+      "evidence": "CEA addresses uncertain provider-outcome reconciliation; its strongest conventional control still partially survives.",
+      "effect_on_molt": "Provider reconciliation receipts may become MOLT state deltas only after their normal authority/provenance admission; no storage-layer authority change."
+    }
+  },
+  "final_collision_result": "NO_NEW_DUPLICATE_MECHANISM_FOUND",
+  "architecture_promotion": "NONE",
+  "target_vps_receipt_at_refresh": "NOT_YET_OBSERVED_IN_REPOSITORY",
+  "scope_guard": "The target workflow definition is committed; absence of a persisted target receipt at this refresh is not a PASS or FAIL result."
+}

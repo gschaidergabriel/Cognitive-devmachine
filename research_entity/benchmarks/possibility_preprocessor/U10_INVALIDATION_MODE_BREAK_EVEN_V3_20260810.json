@@ -1,0 +1,42 @@
+{
+  "schema_version":"1.0",
+  "benchmark_id":"U10-INVALIDATION-MODE-BREAK-EVEN-V3-20260810",
+  "truth_class":"LOCAL_EXECUTION_RECEIPT_EXACT_U10_TOPOLOGY_SYNTHETIC_SCOPE_ONLY",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "fixture":{"seed":73419,"nodes":6000,"edges":41963,"anchors":120,"mutations":2000,"horizon":2},
+  "fairness":"Both modes consumed the same deterministic mutation sequence and returned identical affected-anchor counts. BFS maintained only adjacency/reverse adjacency; prepared mode maintained the exact support-count reverse<=2 index plus anchor bitmask.",
+  "on_demand_bfs_ms":{
+    "lookup_p50":0.007421,
+    "lookup_p95":0.012249,
+    "adjacency_update_p50":0.000491,
+    "adjacency_update_p95":0.000901,
+    "total_p50":0.007892,
+    "total_p95":0.012929
+  },
+  "prepared_support_mask_ms":{
+    "lookup_p50":0.000601,
+    "lookup_p95":0.000921,
+    "support_update_p50":0.012919,
+    "support_update_p95":0.025879,
+    "total_p50":0.01355,
+    "total_p95":0.02656
+  },
+  "prepared_total_over_bfs_total_p50_ratio":1.7169285352255448,
+  "affected_anchor_mean":1.0865,
+  "prepared_build_ms_prior_exact_fixture_probe":128.368954,
+  "prepared_memory_shadow_prior_fixture":{
+    "support_pairs":334107,
+    "support_dict_plus_mask_python_object_estimate_bytes":36477456,
+    "guard":"Approximate Python object-size shadow, not process RSS or production representation."
+  },
+  "break_even":{
+    "excluding_build_amortization_reads_per_mutation":1.8222873900293257,
+    "including_128_368954ms_build_amortized_over_1000_mutations_reads_per_mutation":20.64322096774194,
+    "interpretation":"Prepared-mask latency can only dominate this BFS path if enough repeated lookups reuse each maintained graph version; memory budget and rebuild frequency can raise the break-even further."
+  },
+  "negative_result":"PREPARED_MASK_NOT_DEFAULT_FOR_CURRENT_SINGLE_INVALIDATION_READ_U10_SYNTHETIC_REGIME",
+  "selected_current_candidate":"ON_DEMAND_BFS",
+  "retained_alternative":"PREPARED_MASK_WHEN_MEASURED_REUSE_AND_MEMORY_BUDGET_CROSS_BREAK_EVEN",
+  "architecture_rule":"Select invalidation representation from measured full maintenance plus build-amortization plus memory shadow, never from lookup latency alone.",
+  "promotion":"NONE"
+}

@@ -6,6 +6,7 @@ PRAGMA foreign_keys=ON;
 CREATE TABLE IF NOT EXISTS possibility_candidates(
   candidate_version_id TEXT PRIMARY KEY,
   candidate_id TEXT NOT NULL,
+  family_id TEXT NOT NULL,
   context_signature TEXT NOT NULL,
   source_epoch INTEGER NOT NULL,
   graph_epoch INTEGER,
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS possibility_candidates(
   cost REAL NOT NULL DEFAULT 0.0,
   provenance_clay TEXT NOT NULL,
   derivation_hash TEXT NOT NULL,
+  valid_until TEXT,
   status TEXT NOT NULL CHECK(status IN ('CURRENT','STALE','SUPPRESSED','REVOKED','CANDIDATE')),
   materialized_at TEXT NOT NULL
 );
@@ -33,6 +35,8 @@ CREATE INDEX IF NOT EXISTS idx_possibility_candidate_sig
 ON possibility_candidates(context_signature,status,source_epoch DESC,graph_epoch DESC);
 CREATE INDEX IF NOT EXISTS idx_possibility_candidate_logical
 ON possibility_candidates(candidate_id,source_epoch DESC,graph_epoch DESC,status);
+CREATE INDEX IF NOT EXISTS idx_possibility_candidate_family
+ON possibility_candidates(context_signature,family_id,status,source_epoch DESC,graph_epoch DESC);
 
 CREATE TABLE IF NOT EXISTS possibility_candidate_members(
   candidate_version_id TEXT NOT NULL REFERENCES possibility_candidates(candidate_version_id) ON DELETE CASCADE,
@@ -61,6 +65,7 @@ CREATE TABLE IF NOT EXISTS possibility_packets(
   packet_clay TEXT NOT NULL,
   packet_hash TEXT NOT NULL,
   candidate_count INTEGER NOT NULL,
+  family_count INTEGER NOT NULL DEFAULT 0,
   valid_until TEXT,
   status TEXT NOT NULL CHECK(status IN ('CURRENT','STALE','SUPERSEDED','INVALID')),
   materialized_at TEXT NOT NULL
@@ -141,7 +146,7 @@ WITH ranked AS (
 SELECT * FROM ranked WHERE rn=1;
 
 CREATE VIEW IF NOT EXISTS v_current_possibility_candidates AS
-SELECT * FROM possibility_candidates WHERE status='CURRENT';
+SELECT * FROM possibility_candidates WHERE status='CURRENT' AND (valid_until IS NULL OR valid_until > CURRENT_TIMESTAMP);
 
 -- Runtime invariants:
 -- 1. hot read = canonical cue/signature -> current packet; no eager whole-memory scan or whole-graph rebuild;
@@ -151,5 +156,7 @@ SELECT * FROM possibility_candidates WHERE status='CURRENT';
 -- 5. writes/re-entry invalidate only packets whose dependency members intersect the changed semantic closure;
 -- 6. stale/mixed epochs fail closed to the previous coherent packet or explicit cold fallback;
 -- 7. cold fallback retrieval remains allowed for missing/unknown/exploratory contexts;
--- 8. promotion requires differential equivalence to full recompute plus latency/accuracy/update-amplification evidence.
--- 9. standing materialization is adaptive: hot/cheap-to-maintain contexts may be STANDING; cold/high-maintenance contexts remain LAZY/HYBRID.
+-- 8. promotion requires differential equivalence to full recompute plus latency/accuracy/update-amplification evidence;
+-- 9. standing materialization is adaptive: hot/cheap-to-maintain contexts may be STANDING; cold/high-maintenance contexts remain LAZY/HYBRID;
+-- 10. top-k is family-factorized: multiple bindings of one possibility family cannot crowd out distinct alternatives;
+-- 11. expired candidates are excluded before packet selection; freshness is not inferred from semantic similarity alone.

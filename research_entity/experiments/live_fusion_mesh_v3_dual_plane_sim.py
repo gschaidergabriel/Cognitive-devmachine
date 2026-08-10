@@ -117,7 +117,9 @@ def pick_kind(rng):
 
 def run(correlation):
     rng=random.Random(SEED)
-    edges=[(p,c) for p in REVERSE for c in REVERSE[p]]
+    # Canonicalize the edge stream before assigning RNG draws. REVERSE values are sets;
+    # unsorted iteration made the correlated fault selection depend on PYTHONHASHSEED.
+    edges=sorted((p,c) for p in REVERSE for c in REVERSE[p])
     common=set()
     for edge in edges:
         if rng.random()<min(CENTRAL_MISSING,LOCAL_MISSING)*correlation:

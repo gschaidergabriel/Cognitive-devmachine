@@ -1,5 +1,5 @@
 module clay.research.live_fusion_reentry
-version "1.1-candidate"
+version "1.2-candidate"
 status RESEARCH_CANDIDATE_NOT_PROMOTED
 
 goal="Frank v0.1 voll lauffaehig auf Andreas PC"
@@ -18,6 +18,8 @@ dual_time_feedback=@research_entity/notes/FRANK_DUAL_TIME_CAUSAL_FEEDBACK_BRIDGE
 
 law LIVE_FUSION_IS_APPEND_ONLY_CAUSAL_REENTRY=true
 law RAW_EVENTS_ARE_PRESERVED=true
+law RAW_AUTHORITATIVE_EVENT_CURSOR_IS_REENTRY_INPUT=true
+law EFFECTIVIZED_PROJECTION_DELTA_MAY_NOT_REPLACE_RAW_EVENT_CURSOR=true
 law TARGETED_DELIVERY_NOT_BROADCAST_SPAM=true
 law DELIVERY_IS_AT_LEAST_ONCE=true
 law ACK_IS_IDEMPOTENT=true
@@ -106,6 +108,7 @@ rule backpressure -> prioritize INTERRUPT then NEXT_CHECKPOINT; INDEX_ONLY may l
 // maintenance may compress safe physical work, but coordination cannot erase causal identity
 // merely because final content bytes/fingerprints match.
 invariant DATABASE_PULSE_EFFECTIVIZATION != WORKER_KNOWLEDGE_REENTRY
+invariant RAW_EVENT_IDENTITY != EFFECTIVIZED_PROJECTION_IDENTITY
 invariant CONTENT_ABA_NEVER_ERASES_CAUSAL_REENTRY
 invariant ARRIVAL_TIME != CAUSAL_ORIGIN
 invariant LATE != INVALID
@@ -128,6 +131,8 @@ promotion_gate {
   late_valid_event_preservation=PASS
   high_impact_conflict_effect_guard=PASS
   ack_idempotence=PASS
+  raw_event_cursor_vs_effectivized_projection_differential=REQUIRED
+  authoritative_writer_observer_backaction_p50_p95_p99_busy_wal=REQUIRED
   crash_restart_replay=REQUIRED
   concurrent_writer_race=REQUIRED
   UnifiedDB_materialization=REQUIRED

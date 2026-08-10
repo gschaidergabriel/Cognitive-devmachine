@@ -6,9 +6,10 @@ segments survive unrelated global source-epoch increments after U12 has atomical
 corresponding delta stream.
 """
 from __future__ import annotations
+from contextlib import contextmanager
 from dataclasses import dataclass
 import hashlib, json, re, sqlite3, time
-from typing import Iterable, Sequence
+from typing import Iterable, Iterator, Sequence
 
 _TOKEN_RE=re.compile(r"[a-z0-9]+",re.I)
 def normalize_key(text:str)->str:
@@ -28,6 +29,23 @@ class RetrievalResult:
     refs:tuple[str,...]; mode:str; seed_id:str|None; generation_id:str|None; pulse_id:str|None
     source_epoch:int; graph_epoch:int; latency_ns:int
 
+@contextmanager
+def _atomic(con:sqlite3.Connection,name:str)->Iterator[None]:
+    """Commit only U13-owned top-level work; preserve an outer caller transaction via SAVEPOINT."""
+    nested=con.in_transaction
+    if nested: con.execute(f"SAVEPOINT {name}")
+    else: con.execute("BEGIN IMMEDIATE")
+    try:
+        yield
+        if nested: con.execute(f"RELEASE SAVEPOINT {name}")
+        else: con.commit()
+    except Exception:
+        if nested:
+            con.execute(f"ROLLBACK TO SAVEPOINT {name}")
+            con.execute(f"RELEASE SAVEPOINT {name}")
+        else: con.rollback()
+        raise
+
 class PulseIncrementalSemanticAccessV13:
     def __init__(self,con:sqlite3.Connection): self.con=con
 
@@ -40,6 +58,31 @@ class PulseIncrementalSemanticAccessV13:
         row=self.con.execute("SELECT pulse_id FROM frank_database_pulse_receipts ORDER BY pulse_index DESC LIMIT 1").fetchone()
         return row[0] if row else None
 
+    def _dependency_certificate(self,generation_id:str,seed_id:str)->list[tuple[str,str,str|None,int]]:
+        return [tuple(r) for r in self.con.execute("""SELECT dependency_ref,dependency_kind,
+          dependency_version_hash,proof_eligible FROM semantic_access_seed_dependencies_v13
+          WHERE generation_id=? AND seed_id=? ORDER BY dependency_ref,dependency_kind""",
+          (generation_id,seed_id)).fetchall()]
+
+    def _head_hash(self,*,seed_id:str,generation_id:str,source_epoch:int,graph_epoch:int,
+                   derivation_hash:str,dependency_capture:str)->str:
+        return _h({'seed_id':seed_id,'generation_id':generation_id,'source_epoch':source_epoch,
+                   'graph_epoch':graph_epoch,'derivation_hash':derivation_hash,
+                   'dependency_capture':dependency_capture,
+                   'dependencies':self._dependency_certificate(generation_id,seed_id)})
+
+    def verify_seed_head(self,seed_id:str)->dict:
+        h=self.con.execute("""SELECT generation_id,dependency_capture,installed_source_epoch,
+          installed_graph_epoch,head_hash,status FROM semantic_access_seed_heads_v13 WHERE seed_id=?""",
+          (seed_id,)).fetchone()
+        if not h: raise IncrementalAccessInvariant('seed head missing')
+        g=self.con.execute("SELECT derivation_hash FROM semantic_access_generations WHERE generation_id=?",(h[0],)).fetchone()
+        if not g: raise IncrementalAccessInvariant('seed generation missing')
+        actual=self._head_hash(seed_id=seed_id,generation_id=h[0],source_epoch=int(h[2]),
+                               graph_epoch=int(h[3]),derivation_hash=g[0],dependency_capture=h[1])
+        if actual!=h[4]: raise IncrementalAccessInvariant('seed head dependency certificate hash mismatch')
+        return {'seed_id':seed_id,'generation_id':h[0],'status':h[5],'head_hash':actual,'verified':True}
+
     def stage_seed_generation(self,*,generation_id:str,seed_id:str,derivation_id:str,derivation_hash:str,
                               paths:Iterable[dict],dependencies:Iterable[dict],dependency_capture:str='COMPLETE',
                               created_at:str='t')->dict:
@@ -51,8 +94,7 @@ class PulseIncrementalSemanticAccessV13:
             raise IncrementalAccessInvariant('COMPLETE dependency capture requires dependencies')
         seed=self.con.execute("SELECT 1 FROM semantic_query_seeds WHERE seed_id=? AND status='CURRENT'",(seed_id,)).fetchone()
         if not seed: raise IncrementalAccessInvariant('seed is not CURRENT')
-        if self.con.in_transaction: self.con.commit()
-        with self.con:
+        with _atomic(self.con,'u13_stage'):
             self.con.execute("INSERT INTO semantic_access_generations VALUES(?,?,?,?,?,1,?,'{}','STAGING',?,NULL,NULL)",
                              (generation_id,source_epoch,graph_epoch,derivation_id,derivation_hash,len(path_rows),created_at))
             self.con.executemany("INSERT INTO semantic_access_projection_v11 VALUES(?,?,?,?,?,?,?,?,?)",[
@@ -75,12 +117,12 @@ class PulseIncrementalSemanticAccessV13:
         if int(g[0])!=source_epoch or int(g[1])!=graph_epoch: raise IncrementalAccessInvariant('generation does not match current Pulse epochs')
         n=self.con.execute("SELECT count(*) FROM semantic_access_projection_v11 WHERE generation_id=? AND seed_id=?",(generation_id,seed_id)).fetchone()[0]
         if n<=0: raise IncrementalAccessInvariant('generation has no paths for seed')
-        deps=self.con.execute("SELECT dependency_ref FROM semantic_access_seed_dependencies_v13 WHERE generation_id=? AND seed_id=? ORDER BY dependency_ref",(generation_id,seed_id)).fetchall()
+        deps=self._dependency_certificate(generation_id,seed_id)
         if dependency_capture=='COMPLETE' and not deps: raise IncrementalAccessInvariant('COMPLETE head has no declared dependencies')
         pulse_id=self._latest_pulse_id()
-        head_hash=_h({'seed_id':seed_id,'generation_id':generation_id,'source_epoch':source_epoch,'graph_epoch':graph_epoch,
-                      'derivation_hash':g[2],'dependency_capture':dependency_capture,'dependencies':[r[0] for r in deps]})
-        with self.con:
+        head_hash=self._head_hash(seed_id=seed_id,generation_id=generation_id,source_epoch=source_epoch,
+                                  graph_epoch=graph_epoch,derivation_hash=g[2],dependency_capture=dependency_capture)
+        with _atomic(self.con,'u13_install'):
             self.con.execute("""INSERT INTO semantic_access_seed_heads_v13 VALUES(?,?,?,'CURRENT',?,?,?,?,?,?,?)
                 ON CONFLICT(seed_id) DO UPDATE SET generation_id=excluded.generation_id,dependency_capture=excluded.dependency_capture,
                 status='CURRENT',installed_source_epoch=excluded.installed_source_epoch,installed_graph_epoch=excluded.installed_graph_epoch,

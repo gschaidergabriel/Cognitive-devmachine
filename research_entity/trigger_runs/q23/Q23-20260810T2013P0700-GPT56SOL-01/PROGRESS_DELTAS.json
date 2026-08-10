@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "run_id":"Q23-20260810T2013P0700-GPT56SOL-01",
+  "deltas":[
+    {"id":"RPD-Q23-001","kind":"IMPLEMENTATION_FACT","description":"Current llama.cpp exposes an mtmd encoded-embedding seam before image-chunk decode, making one-encode reuse physically testable.","impact":"high"},
+    {"id":"RPD-Q23-002","kind":"ARCHITECTURE_DELTA","description":"Introduced PEH candidate to make embedding lifetime/reuse explicit, versioned, provenance-bound and falsifiable.","impact":"high"},
+    {"id":"RPD-Q23-003","kind":"NEW_COUNTERHYPOTHESIS","description":"Dedicated light embedding encoder remains viable because strong VLM embedding systems use explicit embedding objectives; raw Qwen geometry is not assumed calibrated.","impact":"high"},
+    {"id":"RPD-Q23-004","kind":"ALTERNATIVE_ELIMINATED","description":"Current Qwen3.5-4B config does not expose enabled DeepStack visual indexes; a free standard multi-level tap is not available as assumed route.","impact":"medium"},
+    {"id":"RPD-Q23-005","kind":"TEST_DELTA","description":"Runtime batch/ubatch/offload/backend configuration added to semantic-correctness benchmark metadata and differential matrix.","impact":"medium"},
+    {"id":"RPD-Q23-006","kind":"WORK_DELTA","description":"PAR/EAP memory-benefit lane is explicitly blocked from promotion until independent Frank experience-dose fixtures can produce N=0..64 curves and direct-memory controls.","impact":"high"}
+  ]
+}

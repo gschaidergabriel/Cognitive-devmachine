@@ -1,0 +1,159 @@
+module clay.unifieddb.hybrid_context_retrieval_v1
+
+status TESTING_CANDIDATE
+semantic_authority UnifiedDB
+associative_projection ClayGraph
+lexical_accelerator SQLite_FTS5_OPTIONAL
+
+invariant UnifiedDB.record != ClayGraph.activation
+invariant lexical_match != truth
+invariant graph_neighbor != relevance_truth
+invariant graph_activation != execution_authority
+invariant stale_or_wrong_epoch_record -> reject
+invariant every_returned_item preserves semantic_record_id + source_epoch + provenance
+invariant plane_crossing UnifiedDB_to_ClayGraph requires explicit graph_semantic_binding
+invariant no_implicit_record_id_equals_graph_logical_id
+invariant retrieval_failure degrades_explicitly; never invents missing state
+
+input Query {
+  query_text
+  intent_clay
+  required_scope?
+  source_epoch
+  graph_epoch
+  top_k
+  lexical_seed_budget
+  graph_hop_budget
+  graph_candidate_budget
+}
+
+stage STRUCTURED_EXACT {
+  source = UnifiedDB.v_current_semantic_records
+  match = exact(record_key|record_kind|scope) when query/intention permits
+  output = ExactSeed[]
+}
+
+stage LEXICAL_SEED {
+  capability_gate = SQLite.compile_option(ENABLE_FTS5)
+  if available {
+    source = UnifiedDB.semantic_current_fts
+    rank = BM25(record_key_high_weight,payload_normal_weight)
+    limit = lexical_seed_budget
+  }
+  else {
+    fallback = STRUCTURED_EXACT + bounded_prefix_lookup
+    state = DEGRADED_NO_FTS5
+  }
+  output = LexicalSeed[semantic_record_id,lexical_rank]
+}
+
+stage BIND_TO_GRAPH {
+  source = ClayGraph.v_latest_graph_semantic_bindings
+  require binding.source_epoch <= Query.source_epoch
+  require binding.graph_epoch <= Query.graph_epoch
+  preserve binding_class + confidence + provenance_clay
+  output = GraphSeed[]
+}
+
+stage BOUNDED_RELATIONAL_EXPANSION {
+  source = ClayGraph.v_latest_graph_edges
+  depth <= graph_hop_budget
+  candidates <= graph_candidate_budget
+  require admissibility_clay passes current policy
+  preserve path(edge_version_id,relation_type,weight,confidence,provenance_clay,causal_class)
+  never eager_global_closure
+  output = GraphCandidate[]
+}
+
+stage RECONSTRUCT_CANONICAL {
+  graph candidates -> latest explicit binding -> UnifiedDB semantic_record_id
+  load canonical CURRENT semantic record from Query.source_epoch-compatible state
+  reject missing|stale|invalid binding or semantic record
+  output = CanonicalCandidate[]
+}
+
+stage SELECT_CONTEXT {
+  score_vector = [
+    exactness,
+    lexical_rank,
+    graph_path_strength,
+    path_confidence,
+    evidence_quality,
+    freshness,
+    contradiction_pressure,
+    provenance_completeness,
+    token_cost
+  ]
+  rule = pareto_then_bounded_selector
+  rule no_single_emergence_or_activation_scalar
+  output top_k ContextItem[] + SuppressedItem[]
+}
+
+output QueryReceipt {
+  query_kind = HYBRID_CONTEXT_V1
+  source_epoch
+  graph_epoch
+  planner_clay
+  exact_seed_refs
+  lexical_seed_refs
+  graph_binding_refs
+  graph_path_refs
+  selected_semantic_refs
+  suppressed_refs
+  contradiction_refs
+  admissibility_clay
+  result_hash
+}
+
+hypothesis H_HYBRID_1 =
+  "Structured exact + FTS lexical seeds + bounded graph expansion improves multi-hop/context recall at a fixed context budget while preserving exact-fact and version correctness."
+
+counterhypothesis CH_HYBRID_1 =
+  "Graph expansion injects related-but-wrong neighbors, reducing precision/calibration enough that flat structured/lexical retrieval is better."
+
+required_tests = [
+  SINGLE_HOP_FACT,
+  MULTIHOP_ASSOCIATION,
+  TEMPORAL_VERSION_REPLAY,
+  STALE_CURRENT_MARKER,
+  CONTRADICTION_PAIR,
+  NEGATIVE_RESULT_RETRIEVAL,
+  NO_GRAPH_BINDING,
+  NO_FTS5_CAPABILITY,
+  OOD_QUERY,
+  LARGE_HISTORY_SCALE,
+  CRASH_REBUILD_FTS,
+  GRAPH_REBUILD_EQUIVALENCE
+]
+
+required_metrics = [
+  recall_at_k,
+  precision_at_k,
+  MRR,
+  nDCG,
+  exact_fact_retention,
+  multi_hop_recall,
+  stale_leak_rate,
+  provenance_completeness,
+  contradiction_surface_rate,
+  p50_latency,
+  p95_latency,
+  p99_latency,
+  token_context_bytes,
+  sqlite_pages_or_rss,
+  rebuild_time,
+  recovery_success
+]
+
+promotion_gate =
+  real_ground_truth_suite
+  + matched_context_budget
+  + baseline(flat_structured_and_fts)
+  + baseline(current_ClayGraph)
+  + held_out_queries
+  + stale/version adversarial cases
+  + recovery/rebuild
+  + no_material_exact_fact_regression
+  + no_authority_boundary_regression
+
+rollback = drop_optional_fts_index + disable_hybrid_selector + use_preexisting_UnifiedDB_and_ClayGraph_views

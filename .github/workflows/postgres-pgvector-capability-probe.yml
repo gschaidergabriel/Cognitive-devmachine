@@ -1,0 +1,31 @@
+name: PostgreSQL pgvector Baseline Capability Probe
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/unifieddb/POSTGRES_PGVECTOR_MATCHED_BASELINE_PROFILE.md'
+      - 'tools/probe_postgres_pgvector_baseline_capability.sh'
+      - '.github/workflows/postgres-pgvector-capability-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: self-hosted
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Read-only capability probe
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          bash tools/probe_postgres_pgvector_baseline_capability.sh | tee artifacts/postgres_pgvector_capability.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: postgres-pgvector-capability-${{ github.sha }}
+          path: artifacts/postgres_pgvector_capability.json
+          if-no-files-found: error

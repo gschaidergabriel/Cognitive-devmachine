@@ -1,0 +1,32 @@
+{
+  "schema_version": "2.0",
+  "event_id": "chatgpt-secondary-live-fusion-mesh-v3-real-replay-revise-20260810T1444p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T14:44:00+07:00",
+  "payload": {
+    "work_id": "WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810",
+    "title": "Real-replay and fault-test adaptive live fusion mesh V2 vs V3 dual-plane",
+    "work_clay": "Replay current repository work events, branch feedback and dependency projections through broadcast, tag-only, CLAY_LIVE_FUSION_MESH_V2_CANDIDATE and CLAY_LIVE_FUSION_MESH_V3_DUAL_PLANE_CANDIDATE. V3 emits compact ImpactBeacon control-plane metadata to all branches for material deltas, obtains BranchImpactAck from freshest distinct relevance surfaces where available, and keeps full payload sparse. Measure relevant-branch recall pre/post repair, full-payload bytes, beacon/ack bytes, invalidation/ack latency, stale window, false AFFECTED/NOT_AFFECTED, UNKNOWN/STALE rate, repair success and CPU/RAM/I/O. Inject missing central dependency edges, correlated missing edges across projections, stale epochs, duplicate deltas, dropped beacon/acks, out-of-order causal predecessors and crash/restart with open AckClosure. Do not promote from synthetic evidence.",
+    "reason_clay": "A new 5,000-delta matched synthetic extension improved recall from 0.963040 for V2 to 0.996230 for V3 while weighted network cost stayed 3.175708 versus 9.0 broadcast under the declared beacon-cost model. The exactly-one adversarial correlated-blind-spot experiment removed the V3 recall advantage entirely, proving that projection ancestry/provenance diversity is a required real test rather than an assumption. Fresh OSDI 2025 Picsou evidence motivates precise acknowledgement/targeted resend semantics; Enzyme 2026 motivates cost-based strategy selection. Real-repo execution remains the promotion gate.",
+    "completion_clay": "Real-repo report contains exact repo/commit/epoch hashes and raw matched rows for broadcast/tag-only/V2/V3; proves whether secondary relevance checks are provenance-distinct; executes missing-edge, correlated-edge, stale-epoch, duplicate, dropped beacon/ack, causal reorder and crash/restart faults; records pre/post-repair recall, permanent misses, ack latency, false relevance verdicts and exact resource/network costs; returns SUPPORTED, REFUTED, REVISE or NO_CHANGE; sends targeted branch feedback; grants no BASE or Frank Harness promotion credit by itself.",
+    "executor_policy": "Use first non-overlapping worker with repository checkout plus local Python/SQLite/ClayGraph capability. Refresh head/current spec_rev before effect. Do not displace the BASE ClayCode critical path on the same executor; run only with spare capacity or when directly useful to work-state projection reliability. Treat a second projection derived from the same source ancestry as correlated, not independent. No paid training and no Frank self-Harness authority.",
+    "dependencies": [
+      "research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay",
+      "research_entity/global/CLAY_LIVE_FUSION_MESH_V3_DUAL_PLANE_CANDIDATE.clay",
+      "research_entity/experiments/live_fusion_mesh_v3_dual_plane_sim.py",
+      "research_entity/experiments/LIVE_FUSION_MESH_V3_DUAL_PLANE_SYNTHETIC_20260810.md",
+      "research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay"
+    ],
+    "invalidators": [
+      "A newer owner-fixed mesh protocol explicitly supersedes V2/V3",
+      "A newer real execution receipt already performs the same matched V2/V3 replay and fault matrix",
+      "Current repo state proves no materially distinct relevance source exists for V3 and the dual plane cannot be tested as specified"
+    ],
+    "base_priority": 0.64,
+    "expected_impact": 0.91,
+    "urgency": 0.72,
+    "information_gain": 0.99,
+    "status": "READY"
+  }
+}

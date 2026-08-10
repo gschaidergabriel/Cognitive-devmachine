@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-live-fusion-u16-20260810T1438p0700",
+  "created_at": "2026-08-10T14:38:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "status": "CANDIDATE_DELTA_DISTRIBUTED_NOT_PROMOTED",
+  "subject": "U16 durable live-fusion event/route/receipt/anti-entropy persistence",
+  "source_commits": [
+    "3b94c9630b373bbff0adab894e1cf5baaa02943c",
+    "a05cf25a6ad389c49b6310928f44e285cc85fa7d",
+    "4ae8bdabf531a4c6b67dc25e0f73a2abab6030cd"
+  ],
+  "source_refs": [
+    "research_entity/runtime/RAE_UNIFIEDDB_V16_LIVE_FUSION_RECEIPTS.sql",
+    "research_entity/runtime/test_live_fusion_receipts_v16.py",
+    ".github/workflows/live-fusion-u16-receipts-vps.yml",
+    "research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay",
+    "research_entity/trigger_runs/hypofusion/hypofusion-20260810T1431p0700-chatgpt-secondary-r5/CONTRADICTION_MAP.md"
+  ],
+  "global_delta": "Make live-fusion causal uptake durable rather than infer it from transport. Persist source+event+content identity, route-plan mode, exact target projection epoch/hash, monotone DELIVERED->RECONSTRUCTED->PLAN_REVALIDATED->USED->LOCAL_EFFECT->VERIFIED_OUTCOME->REENTRY receipts, and anti-entropy checkpoint state. TARGETED_DELTA fails closed on stale/incomplete projection; DENSE_FANOUT remains the safer fallback. Receipt existence never mints truth, causal credit or effect authority.",
+  "local_validation": {
+    "class": "LOCAL_SCHEMA_MECHANISM_VALIDATION_ONLY",
+    "result": "PASS",
+    "checks": [
+      "conflicting source+event identity rejected",
+      "exact event replay can be idempotent",
+      "stale targeted projection rejected",
+      "dense fallback remains available",
+      "receipt stage gap rejected",
+      "complete seven-stage chain reaches REENTRY"
+    ],
+    "limit": "Not clean-checkout GitHub execution, not Hostinger evidence, not Andreas-target acceptance."
+  },
+  "ubuntu_lane": {
+    "workflow": ".github/workflows/live-fusion-u16-receipts-vps.yml",
+    "status_at_feedback_write": "TRIGGERED_OR_QUEUED_UNVERIFIED",
+    "acceptance": [
+      "all U16 unit invariants pass on self-hosted Linux/X64",
+      "restart preserves REENTRY stage",
+      "SQLite integrity_check=ok",
+      "exact tested SHA recorded in durable receipt"
+    ]
+  },
+  "targeted_branch_feedback": {
+    "unifieddb": {
+      "delta": "Treat U16 as an additive candidate persistence surface for mesh-v2 events/routes/receipts/anti-entropy. Do not silently promote it into canonical storage until same-file-vs-isolated observer backaction and crash/recovery are measured.",
+      "next_test": "Run no-observer vs same-UnifiedDB vs isolated-observer matched WAL/load test; measure p50/p95/p99 write latency, busy/retry, WAL/checkpoint growth, RSS/I/O and recovery."
+    },
+    "harness": {
+      "delta": "Bind real live-fusion runtime delivery/replan/recovery actions to U16 stages so stale-work interruption can be proven instead of inferred.",
+      "next_test": "Crash after a simulated external effect but before semantic effect receipt; replay must produce zero duplicate effect while leaving the receipt gap observable."
+    },
+    "claygraph": {
+      "delta": "Every TARGETED_DELTA route decision now carries the exact branch projection epoch/hash used for routing; stale/missing projection cannot silently count as current topology.",
+      "next_test": "Inject missing and false dependency edges; compare permanent miss, false interrupt, repair latency and dense-fallback frequency."
+    },
+    "gwt": {
+      "delta": "Reuse the strict causal-observability separation: addressability/delivery are not reconstruction/use; use is not local effect; verified outcome precedes provenance-bound re-entry.",
+      "next_test": "Verify that a delivered-but-never-used delta cannot receive downstream causal credit or learning authority."
+    },
+    "claycode": {
+      "delta": "No BASE semantic redesign is requested. U16 supplies a concrete future executable counterexample surface for typed event identity, route plans, receipt stages and anti-entropy state once parser/IR packages are ready.",
+      "next_test": "After current parser/IR closure, encode the U16 records in frozen Clay semantics and lower them without a second semantic architecture."
+    },
+    "frank": {
+      "delta": "Frank remains the research subject. U16 may carry Harness invalidation/re-entry evidence around Frank, but cannot grant Frank self-Harness mutation authority.",
+      "next_test": "Replay a Frank-related invalidator through active work and verify replan before effect while authority remains proposal-only."
+    },
+    "clayresearch": {
+      "delta": "Promote stronger networking as measured causal closure, not message density. Preserve C1/C4/C6 counterhypotheses: missing edges, observer backaction and overcoupling remain open failure modes.",
+      "next_test": "Adjudicate U16 only after real Ubuntu receipt plus fault matrix and matched observer-backaction results."
+    }
+  },
+  "not_routed_as_material_delta": {
+    "hyperposition": "No new Hyperposition mechanism beyond already-distributed recipient-set uncertainty; existing branch feedback remains sufficient.",
+    "emergenz": "No new emergence claim; U16 is persistence/observability infrastructure and connectivity still does not imply emergence."
+  },
+  "research_write_result": "TARGETED_DELTA_TO_7_AFFECTED_BRANCHES_WITH_EXPLICIT_NO_MATERIAL_CHANGE_FOR_2",
+  "promotion": "NONE"
+}

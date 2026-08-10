@@ -176,7 +176,10 @@ class LiveFusionBus:
 
     def ingest(self, delta: LiveDelta, *, persist: bool = True) -> str:
         delta = delta.normalized()
-        if delta.event_id in self.deltas:
+        existing = self.deltas.get(delta.event_id)
+        if existing:
+            if existing.source != delta.source or existing.payload_hash != delta.payload_hash:
+                raise ValueError("event identity conflict: same event_id with different source/content")
             return "DEDUPED_EVENT_ID"
         prev = self.max_source_seq.get(delta.source)
         if prev is not None and delta.source_seq < prev:

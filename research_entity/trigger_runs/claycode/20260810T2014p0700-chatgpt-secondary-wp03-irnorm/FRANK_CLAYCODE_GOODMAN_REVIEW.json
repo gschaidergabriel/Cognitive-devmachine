@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2014p0700-chatgpt-secondary-wp03-irnorm",
+  "latest_frank_run": null,
+  "latest_frank_architecture_artifact": null,
+  "review_items": [
+    {
+      "claim_id": "GOODMAN-WP03-AGENCY-EXPRESSIBILITY",
+      "frank_statement": "self.root requires persistent AgencyState/InterestTrace/AutotelicGoal/InitiativePulse plus authority-separated open-web evidence and authenticated direct messages.",
+      "frank_source_refs": ["research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay"],
+      "ancestry_families": ["OWNER_FIXED_SELF_ROOT_AGENCY_WEB_INGRESS_20260810"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "The frozen BASE-D V18 surface or G9 primitives cannot represent the new target types without a semantic-language amendment.",
+      "falsifier": "A required owner-fixed state/authority relation fails to parse or cannot be represented as records/symbol sums/sets/maps/refs plus typed checker laws without an untyped escape hatch.",
+      "independent_checks": [
+        "Current-run executable V18 parser reconstruction accepted WP03_TYPED_IR_CANDIDATE.clay using existing record/type/Set/Map/Ref primitives.",
+        "Current-run mutation checks rejected InitiativePulse amplitude escalation and open-web effect-authority escalation in the candidate typed validator."
+      ],
+      "adversarial_checks": [
+        "Range syntax such as Real[0,1] is not required as new surface syntax; bounds can be represented as typed checker laws over Real fields.",
+        "Current frontend semantic_hash remains syntax-structural and changes under record-field/set-literal reordering, so parseability alone is insufficient for typed semantic identity."
+      ],
+      "verdict": "REFINED",
+      "reason": "The owner-fixed requirements are expressible without reopening the semantic freeze, but WP03 must add a typed canonical IR layer whose semantic identity normalizes explicitly unordered constructs and binds constraints separately from surface parse shape.",
+      "claycode_action": "Implement typed IR normalization/checking behind V18; do not change surface grammar unless a later executable counterexample requires it.",
+      "affected_claycode_artifacts": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT"]
+    },
+    {
+      "claim_id": "GOODMAN-WP03-CAPABILITY-HANDLE",
+      "frank_statement": "Descriptive capability data must not itself mint effect authority; target effects require deterministic authority separation.",
+      "frank_source_refs": ["research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay", "research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay"],
+      "ancestry_families": ["G9_CAPABILITY_BEARING_EFFECTS", "OWNER_FIXED_EFFECT_AUTHORITY"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "A copyable serialized CapabilityToken record is sufficient as the runtime bearer and no opaque host resource identity is needed.",
+      "falsifier": "A target runtime demonstrates authority closure, revocation and anti-forgery using only copyable descriptive data under adversarial forgery/replay tests.",
+      "independent_checks": [
+        "WASI official documentation: applications execute in a capability-based sandbox and start without ambient authority; host grants capabilities explicitly.",
+        "WebAssembly Component Model WIT resource documentation: resources are handles to host/component entities, with owned and borrowed handle semantics."
+      ],
+      "adversarial_checks": ["Candidate validator explicitly rejects COPYABLE_TEXT as CapabilityToken runtime representation."],
+      "verdict": "SUPPORTED",
+      "reason": "Independent capability/runtime design supports lowering ClayCode capability identity to opaque/owned/borrowed host resources rather than treating descriptive text as bearer authority.",
+      "claycode_action": "Keep semantic CapabilityToken record, but require opaque ResourceRef/handle realization at runtime/FFI; exact ownership/borrow semantics remain WP07 lowering design, not a WP01 surface-language amendment.",
+      "affected_claycode_artifacts": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-07-RUNTIME-ABI-FFI"]
+    },
+    {
+      "claim_id": "GOODMAN-WP03-GWT-HP-TYPES",
+      "frank_statement": "ClayCode BASE must represent GWT measurement/intervention receipts and Hyperposition higher-order relation/topology/coupling semantics.",
+      "frank_source_refs": ["research_entity/global/GWT_EMERGENCE_READOUT_CONTRACT.md", "research_entity/global/HYPERPOSITION_EMERGENCE_READOUT_CONTRACT.md"],
+      "ancestry_families": ["PROJECT_GWT_EMERGENCE_CONTRACT", "PROJECT_HYPERPOSITION_READOUT_CONTRACT"],
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "These concepts require new syntax or should remain host-language-only observability metadata.",
+      "falsifier": "A required GWT/Hyperposition fixture cannot be represented in typed canonical IR using existing records, refs, sets, enums and explicit epoch/provenance fields.",
+      "independent_checks": ["Current-run candidate parsed HyperRelation and MeasurementReceipt structures under V18 without grammar amendment."],
+      "adversarial_checks": ["Exact final readout schema and higher-order relation reduction semantics were not production-tested in this run."],
+      "verdict": "UNRESOLVED",
+      "reason": "Representability is supported at the structural level, but production typed-IR/checker and H1/H2 differential evidence are still absent.",
+      "claycode_action": "Include representative HyperRelation/MeasurementReceipt fixtures in WP03 positive/negative corpus and defer promotion until production receipts exist.",
+      "affected_claycode_artifacts": ["CC-WP-03-IR-TYPES", "CC-WP-11-FUZZ-CONFORMANCE"]
+    }
+  ]
+}

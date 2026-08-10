@@ -1,0 +1,9 @@
+{
+  "schema_version":"1.0",
+  "evidence_class":"LOCAL_SYNTHETIC_PROXY_NOT_TARGET_VPS",
+  "host":{"kernel":"Linux 6.18.35 x86_64","virtualization":"KVM","cpu":"AMD EPYC 9V74","logical_cpus":5,"ram":"5.9 GiB","swap":"0","compiler":"g++ 14.2.0","python":"3.13.5"},
+  "build":{"flags":"-O3 -march=native -std=c++20"},
+  "zero_copy":{"dim":2560,"warmup":5,"reps":40,"source_sha256":"c02b000f8d677e72e6376a8da4f084d70d8892f48b28873260bb6b7b5330fd84","binary_sha256":"dfcb6e17279f3cce47b5cf5737dafb4ef1cc0aa894e54b7d7dd4d1b9e4408795","interpretation":"Measures memory traversal/copy and pooling overhead only; no model inference, classifier accuracy or target-host performance claim."},
+  "spatial_pool":{"dim":2560,"descriptor":"global_mean_plus_2x2_quadrant_means","descriptor_floats":12800,"descriptor_bytes":51200,"warmup":5,"reps":40,"source_sha256":"95fa0989046dd806a9daca7a88cfeb452f98a3bd12627b12a9bca72c97897780","interpretation":"Measures direct spatial pooling overhead/footprint only; no claim that descriptor is semantically sufficient."},
+  "promotion_rule":"These rows can justify a target-VPS falsifier and memory-copy architecture constraint, not runtime/model promotion."
+}

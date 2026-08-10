@@ -1,0 +1,71 @@
+module clay.call_contract
+version "1.1-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+
+type CallEffectClass=PURE|READ_STATE|DERIVED_STATE|RESEARCH_ONLY|EXTERNAL_EFFECT
+type CallResolutionState=UNRESOLVED_SIGNATURE|DECLARED_SIGNATURE_EXACT_NONEXECUTABLE_UNTIL_BINDING|EFFECT_BOUNDARY_SIGNATURE_MISSING|BOUND_CURRENT_RUNTIME
+type CallBindingAuthority=NONE|RUNTIME_BROKER_ONLY
+
+record CallParamContract {
+  name:Symbol
+  type_name:Symbol
+}
+
+record CallRuntimeBinding {
+  binding_id:ResourceRef
+  component_hash:Hash
+  sealed:Bool
+  authority_scope_ref:Ref?
+  rollback_ref:Ref?
+}
+
+record CallContractIdentity {
+  target:Symbol
+  arity:Int
+}
+
+record CallContract {
+  identity:CallContractIdentity
+  params:Ordered<CallParamContract>
+  returns:Symbol
+  effect_class:CallEffectClass
+  evidence_refs:Set<EvidenceRef>
+  runtime_binding:CallRuntimeBinding?
+  binding_authority:CallBindingAuthority
+}
+
+record CallContractObligation {
+  identity:CallContractIdentity
+  occurrences:Int
+  resolution_state:CallResolutionState
+  same_basename_candidates:Set<Symbol>
+  type_name_resemblance:Symbol?
+  effect_boundary:Bool
+  sealed_runtime_binding_required:Bool
+  execution_admitted:Bool
+}
+
+record CallExecutionPrecondition {
+  contract_identity:CallContractIdentity
+  contract_semantic_hash:Hash
+  runtime_component_hash:Hash
+  current_work_revision:Version
+  target_binary_build_hash:Hash
+  state_lineage_epoch:Epoch
+  instance_lease_ref:Ref
+  instance_lease_epoch:Epoch
+  effect_authority:CallBindingAuthority
+}
+
+invariant call_target_and_arity_are_exact_identity=true
+invariant basename_or_suffix_match_is_signature=false
+invariant type_name_resemblance_is_constructor_contract=false
+invariant rule_text_is_executable_signature=false
+invariant unresolved_call_executes=false
+invariant contract_without_current_runtime_binding_executes=false
+invariant external_effect_without_sealed_binding_executes=false
+invariant call_execution_without_current_binary_state_lineage_and_instance_lease_executes=false
+invariant api_token_is_call_or_self_identity=false
+invariant call_contract_mints_truth_authority=false
+invariant call_contract_mints_effect_authority=false
+invariant runtime_broker_authority_is_separate_from_contract_semantics=true

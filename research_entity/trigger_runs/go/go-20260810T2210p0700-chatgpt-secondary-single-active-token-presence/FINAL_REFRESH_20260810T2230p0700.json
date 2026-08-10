@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2210p0700-chatgpt-secondary-single-active-token-presence",
+  "refresh_id": "go-final-refresh-20260810T2230p0700",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "identity_lock": {
+    "i_am": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "i_am_not": "self.root/Frank"
+  },
+  "fresh_target_vps_evidence": {
+    "physical_execution_liveness": {
+      "receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_physical_execution_liveness_v1/LATEST.json",
+      "receipt_id": "FRANK-V01-PHYSICAL-EXECUTION-LIVENESS-V1-31403047868",
+      "tested_sha": "997d51acce9581492b1cb0044b3d965d7d38f60c",
+      "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_TWO_PROCESS_SINGLE_ACTIVE_PHYSICAL_LIVENESS_TEST",
+      "status": "PASS_PHYSICAL_EXECUTION_LIVENESS_DISCRIMINATOR",
+      "baseline_counterexample": {
+        "V15_semantic_only_live_expired_overlap": true,
+        "old_process_alive_after_successor_acquired": true,
+        "old_semantic_release_fenced": true
+      },
+      "candidate_result": {
+        "linux_flock_plus_V15_blocks_live_expired_successor": true,
+        "semantic_authority_remains": "UNIFIEDDB_V15",
+        "physical_lock_is_semantic_authority": false,
+        "crash_releases_kernel_lock": true,
+        "semantic_recovery_before_ttl": "BUSY_FAIL_CLOSED",
+        "semantic_recovery_after_ttl": "ACQUIRED_WITHOUT_MANUAL_DB_REPAIR"
+      },
+      "latency": {
+        "n": 40,
+        "semantic_only_p50_ms": 5.1329305,
+        "physical_plus_semantic_p50_ms": 5.3150625,
+        "observed_p50_overhead_ms": 0.18213200000000018,
+        "interpretation": "small observed target-run overhead; do not infer p95/p99 superiority from this small paired shadow alone"
+      },
+      "resource": {
+        "elapsed_seconds": 1.12,
+        "max_rss_kb": 27164,
+        "exit_status": 0
+      },
+      "architecture_interpretation": "SUPPORTED_ONE_HOST_PHYSICAL_EXCLUSION_MECHANISM; whole Frank/token API acceptance not implied",
+      "remaining_risks": [
+        "flock is advisory and requires all active execution entry paths to cooperate",
+        "hung live holder retains physical lock until cancellation/kill",
+        "semantic crash recovery remains fail-closed until TTL",
+        "clock source/restart semantics require separate resolution"
+      ]
+    },
+    "clock_warp_root_oob": {
+      "receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_presence_clock_warp_oob_v1/LATEST.json",
+      "receipt_id": "FRANK-PRESENCE-CLOCK-WARP-OOB-V1-31402601396",
+      "tested_sha": "73100df56da7c6072b0f20906e15ba15d28a4b0e",
+      "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_CLOCK_WARP_MECHANISM_COUNTEREXAMPLE",
+      "root_go_id": "go-root-20260810T2157p0700-chatgpt-secondary-single-spawn",
+      "experiment_class": "OUT_OF_THE_BOX_EXPERIMENT",
+      "status": "COUNTEREXAMPLE_CONFIRMED_UTC_ONLY_LEASE_CLOCK_WARP",
+      "observed_with_injected_modeled_wall_steps": {
+        "forward_plus_3600s_premature_takeover": true,
+        "backward_minus_3600s_delayed_recovery": true
+      },
+      "candidate_boot_monotonic": {
+        "same_boot_forward_wall_jump_does_not_expire": true,
+        "same_boot_ttl_elapsed_expires": true,
+        "boot_change_invalidates": true,
+        "target_boot_id_present": true,
+        "monotonic_clock_non_adjustable": true
+      },
+      "promotion": "CANDIDATE_FOR_MEASURED_V16_DESIGN_NOT_PROMOTED",
+      "architecture_interpretation": "UTC expires_at alone is not robust enough to be the sole liveness clock; candidate requires measured design/integration rather than immediate schema promotion"
+    }
+  },
+  "concurrent_ingress_fusion": {
+    "detected": true,
+    "duplicate_build_action": "NONE",
+    "ingress_core_commit": "64b7082cc5923597b6a58c6798c14581a061d964",
+    "ingress_test_commit": "aa046f22a7fde27d411e76f2fdafa7b47c89e793",
+    "ingress_workflow_commit": "15821e0885571d1df0efd55932113155d1a671ff",
+    "canonical_token_fusion_commit": "f21fdc72a315b6254db76ef5fb54b9379f9e1188",
+    "fused_test_commit": "3a642d64272859857719de630fdecbd2eebcb1f0",
+    "finding": "Concurrent worker built framework-independent token-auth ingress over FrankExecutionGate and then refactored it to reuse the canonical frank_inbound_token primitive instead of retaining duplicate token semantics.",
+    "security_properties_visible_in_source_tests": [
+      "authentication precedes BUSY oracle",
+      "unknown/revoked/expired collapse to public invalid-bearer class",
+      "insufficient scope remains distinct 403 class",
+      "caller cannot choose fixed principal holder_kind/client_id",
+      "BUSY response omits holder/location/session/client/lease/fingerprint",
+      "raw tokens absent from UnifiedDB and public payloads",
+      "private digest-file loader rejects raw token/secret fields"
+    ],
+    "target_vps_receipt_observed_at_refresh": false,
+    "still_open": [
+      "network HTTP server/adapter",
+      "TLS termination",
+      "durable execution_id binding beyond current V15 fields",
+      "credential persistence/rotation management service",
+      "autonomous safe-point yield / FRANK_BUSY_YIELDING",
+      "whole production token API acceptance"
+    ]
+  },
+  "oob_accounting": {
+    "exact_root_count": 1,
+    "designated_oob": "FRANK_PRESENCE_WALL_CLOCK_WARP",
+    "ghost_holder_fencing": "NORMAL_FENCING_DISCRIMINATOR_FOR_ROOT_ACCOUNTING",
+    "additional_oob_allowed": false
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_PARTIAL",
+    "promote_as_current_one_host_direction": [
+      "FrankExecutionGate physical flock around complete active execution",
+      "UnifiedDB V15 remains semantic presence/fencing authority",
+      "all production presence entry paths must pass FrankExecutionGate",
+      "canonical frank_inbound_token primitive for high-entropy scoped credentials"
+    ],
+    "do_not_promote_yet": [
+      "UTC-only lease liveness",
+      "boot_id+monotonic V16 candidate before integration/recovery tests",
+      "whole token ingress until its target VPS receipt lands",
+      "whole Frank v0.1"
+    ]
+  },
+  "next_falsifiers": [
+    "target-VPS receipt for fused token-ingress core",
+    "hung-holder cancellation/kill and restart recovery under physical lock",
+    "safe-point yield from ACTIVE_AUTONOMOUS to waiting authenticated external caller",
+    "measured V16 boot_id+monotonic design with reboot, wall-step, crash and migration controls",
+    "real loopback/network HTTP adapter test with test credential before public exposure",
+    "TLS and production secret-management deployment without raw-token logging"
+  ],
+  "research_write": "COMMITTED",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

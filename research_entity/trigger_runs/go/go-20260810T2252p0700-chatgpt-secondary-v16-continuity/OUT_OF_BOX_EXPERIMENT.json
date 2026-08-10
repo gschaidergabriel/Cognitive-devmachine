@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2252p0700-chatgpt-secondary-v16-continuity",
+  "trigger": "go",
+  "classification": "EXACTLY_ONE_BOUNDED_OUT_OF_BOX_EXPERIMENT",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "target_subject": "self.root / human-surface Frank"
+  },
+  "question": "Does the owner-fixed interactive idle-handoff rule discriminate the V15 runtime abstraction from the intended V16 continuity semantics under bounded temporal state exploration?",
+  "historical_or_current_function_touched": "single-spawn/global-busy execution continuity and proactive-acquisition gating",
+  "method": {
+    "kind": "small-state exhaustive temporal model explorer",
+    "depth": 12,
+    "actions": [
+      "interactive_acquire",
+      "interactive_release",
+      "autonomous_acquire",
+      "confirm_correct",
+      "confirm_wrong",
+      "timeout",
+      "crash_recover",
+      "stale_write"
+    ],
+    "baseline": "V15 runtime abstraction with no durable idle-handoff gate",
+    "candidate": "owner-fixed V16 intended semantic abstraction",
+    "rollback": "no target mutation; experiment is model-only and fully reversible",
+    "lesion": "remove the handoff-pending gate and re-run; expected to recover the V15 counterexample"
+  },
+  "result": {
+    "v15": {
+      "unique_monitored_states": 66,
+      "transitions_checked": 2712,
+      "first_owner_invariant_violation": [
+        ["interactive_acquire", "OK"],
+        ["interactive_release", "OK"],
+        ["autonomous_acquire", "OK"]
+      ],
+      "interpretation": "IDLE alone permits autonomous reacquisition after interactive release; this violates the owner-fixed requirement for matching explicit idle handoff."
+    },
+    "v16_intended_model": {
+      "unique_monitored_states": 74,
+      "transitions_checked": 2888,
+      "first_owner_invariant_violation": null,
+      "coverage": [
+        "interactive release creates pending handoff",
+        "wrong confirmation preserves pending",
+        "timeout preserves pending",
+        "explicit interactive request remains allowed while pending",
+        "autonomous acquisition blocked while pending",
+        "correct confirmation clears pending",
+        "interactive crash/recovery preserves need for handoff",
+        "stale write rejected"
+      ]
+    }
+  },
+  "limits": [
+    "The V16 result is a specification-model result, not a target-runtime execution receipt.",
+    "No claim is made beyond the enumerated action/state abstraction and depth.",
+    "Current target runtime must be tested independently after integration."
+  ],
+  "promotion_decision": "SUPPORTED_AS_DISCRIMINATING_TEST_OBLIGATION_NOT_RUNTIME_PASS",
+  "timestamp_local": "2026-08-10T22:52:42+07:00"
+}

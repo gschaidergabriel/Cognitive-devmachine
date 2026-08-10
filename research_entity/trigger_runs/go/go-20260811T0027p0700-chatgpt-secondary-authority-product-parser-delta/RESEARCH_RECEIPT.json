@@ -1,0 +1,216 @@
+{
+  "receipt_version": "GO_RESEARCH_RECEIPT_V1",
+  "run_id": "go-20260811T0027p0700-chatgpt-secondary-authority-product-parser-delta",
+  "created_at_local": "2026-08-11T00:27:00+07:00",
+  "created_at_utc": "2026-08-10T17:27:00Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "persistent_entity": "frank-project-global-research-entity",
+  "research_entity_display_name": "Clay",
+  "research_subject": "self.root",
+  "human_surface_name": "Frank",
+  "program_stage": "FRANK_V0_1",
+  "work_packages": ["F-V01-09", "F-V01-02"],
+  "authority_boundary": {
+    "worker_is_frank": false,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "training_authorized": false
+  },
+  "parent_receipt": "research_entity/trigger_runs/go/go-20260810T2350p0700-chatgpt-secondary-effect-capability-fence/RESEARCH_RECEIPT.json",
+  "new_verified_target_evidence": [
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "candidate_pr": 204,
+      "observed_via_stacked_pr": 228,
+      "workflow_run_id": 31412277302,
+      "runner_class": "self-hosted Linux X64 accepted target lane",
+      "classification": "MECHANISM_PASS_WRAPPER_ASSERTION_FAILURE",
+      "mechanism_status": "PASS_IMMUTABLE_EXACT_V15_V16_EFFECT_FENCE_V1",
+      "verified_controls": [
+        "B1 exact V15/V16 reservation binding PASS",
+        "B2 current attempt PASS",
+        "B3 provider precommit PASS",
+        "provider release during commit window blocked",
+        "same-epoch new V16 execution_id cannot adopt old effect",
+        "stale source after turnover fenced with zero authoritative mutation",
+        "successor cross-splice fenced with zero authoritative mutation",
+        "uncertain retry after turnover fenced",
+        "outcome reconciliation after turnover PASS",
+        "successor fresh effect PASS",
+        "binding UPDATE and DELETE blocked",
+        "SQLite integrity ok; zero FK violations",
+        "serialized public fence does not resurrect live authority"
+      ],
+      "external_effect_performed": false,
+      "external_network_used": false,
+      "canonical_state_mutated": false,
+      "wrapper_failure": "workflow assertion expected obsolete PASS_CALLER_BOUND... status instead of PASS_IMMUTABLE_EXACT_V15_V16_EFFECT_FENCE_V1",
+      "interpretation": "Exact V15+V16 caller-bound B1/B2/B3 mechanism passed the executed matrix; the job conclusion itself is not the scientific classification."
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "candidate_pr": 217,
+      "workflow_run_id": 31410890028,
+      "classification": "PARTIAL_PASS_THEN_SCHEMA_CARDINALITY_COUNTEREXAMPLE",
+      "verified_controls": [
+        "physical execution-gate baseline PASS",
+        "exact Gate-issued object-identity invariant PASS"
+      ],
+      "counterexample": "effect_execution_generation_fences.binding_hash UNIQUE rejects second/third effect reserved under the same execution because binding_hash correctly identifies shared execution-generation provenance",
+      "architectural_correction": "effect_id is the unique per-effect row identity; binding_hash must be non-unique and indexable; immutable update/delete triggers remain"
+    }
+  ],
+  "new_physical_singleton_counterevidence": {
+    "diagnostic_pr": 216,
+    "workflow_run_id": 31410535024,
+    "result": "REPRODUCED_FLOCK_PATH_REPLACEMENT_SPLIT_BRAIN",
+    "mechanism": "current lockfile-path FrankExecutionGate flocks an open file description for .self_root_execution.lock; unlink/recreate gives a contender a different inode/open-file-description and therefore an independent flock while holder A remains alive",
+    "impact": "Gate-issued object identity is necessary but not sufficient for global singleton execution if two legitimate Gate acquisitions can coexist on replacement-created lock objects",
+    "repair_candidate_pr": 225,
+    "repair": "anchor actual flock to the state-directory FD; retain compatibility marker only for observability; verify directory FD/path dev+inode on acquire/heartbeat/release",
+    "repair_target_run": 31411953301,
+    "repair_run_classification": "TEST_ORACLE_FAILURE_NO_MECHANISM_RESULT",
+    "repair_run_detail": "unchanged gate baseline passed; discriminator aborted before contender because ext4 immediately reused the just-freed marker inode number, invalidating an st_ino-inequality oracle",
+    "next_test_fix": "hold an FD to the old marker inode across unlink/recreate so inode reuse cannot occur; compare old-fd fstat identity with recreated path and only then execute contender"
+  },
+  "current_effect_candidate_stack": {
+    "parent_pr": 204,
+    "active_stack_pr": 228,
+    "active_stack_head_after_wrapper_fix": "299b6ade7a24c588719f480e5b571a564d00698b",
+    "queued_target_run": 31412817524,
+    "stack_additions": [
+      "exact FrankExecutionLease object registry populated only after successful physical flock + V15 Gate acquire",
+      "exact nested Gate-issued object required beneath admitted IngressExecutionLease for fence minting and liveness",
+      "binding_hash non-unique to permit one execution generation to bind many effects",
+      "normal exact-V16 matrix tests copied and manually constructed same-field nested lease rejection plus three-effects-one-binding cardinality"
+    ],
+    "promotion": "NOT_CLAIMED",
+    "global_limit": "cannot establish global singleton until replacement-safe physical gate repair such as PR225 is independently green"
+  },
+  "pareto_counterhypothesis": {
+    "candidate_pr": 199,
+    "name": "migration-free RESERVED-event execution binding",
+    "target_run": 31411225036,
+    "target_run_state_at_receipt": "QUEUED",
+    "advantages": [
+      "no new table or migration",
+      "binding stored in existing hash-bound RESERVED lifecycle event",
+      "one execution naturally binds arbitrarily many effects without a sidecar cardinality constraint",
+      "current V15/V16 and matching ADMITTED ingress checked inside reservation transaction",
+      "stale start/retry and successor adoption have explicit tests",
+      "event payload tamper changes event hash and is rejected"
+    ],
+    "measured_or_code_visible_disadvantages": [
+      "accepts any live-looking IngressExecutionLease class instance; no exact Gate-issued nested-object proof",
+      "provider_commit_fence explicitly states the check and real provider call are not one non-bypassable atomic/serialized authority path",
+      "target workflow has not executed yet on current head, so no target PASS exists",
+      "hash-bound event storage and sidecar immutable triggers have different independent-writer/query/recovery tradeoffs that still require matched measurement"
+    ],
+    "decision": "KEEP_AS_SIMPLER_COMPARATOR_NOT_DOMINATED_OR_PROMOTED",
+    "future_pareto_test": "On fresh main, compare event-binding and sidecar-binding with the same replacement-safe gate, exact Gate-issued object, exact V16 ingress, provider commit window, tamper/independent-writer probes, recovery and resource/query metrics. If sidecar gives no measurable integrity/query/recovery gain, prefer/fuse the simpler event representation."
+  },
+  "claycode_counterexample": {
+    "diagnostic_pr": 230,
+    "workflow_run_id": 31412533868,
+    "workflow_conclusion": "success",
+    "scientific_classification": "COUNTEREXAMPLE_OR_STRUCTURED_FRONTEND_GAP",
+    "strict_lalr_construction": "PASS",
+    "full_real_frank_effects_to_structured_frontend": "FAIL",
+    "error": "Unexpected token Token('REL_OP','<') at line 50 column 39",
+    "cause_hypothesis": "FRANK_STRUCTURED_V1.lark gives REL_OP terminal priority .8 while generic type_params use literal angle brackets; the contextual lexer emits REL_OP for SET<EvidenceRef> even when parser state expects a type-parameter '<'",
+    "promotion": "NONE"
+  },
+  "claycode_repair_candidate": {
+    "pr": 236,
+    "branch": "chatgpt/go-claycode-relop-generic-fix-20260811",
+    "head": "f1ff6f8d5e701c211a4ee66664b119c708a464ad",
+    "delta": "remove forced .8 priority from REL_OP and let the existing contextual LALR lexer distinguish generic angle brackets from relation operators without adding syntax",
+    "normal_regression": [
+      "strict LALR construction",
+      "SET<EvidenceRef> parses",
+      "x < y parses",
+      "x > y parses",
+      "complete current real claycode/frank_effects.clay strict structured parse",
+      "authority NONE; execution_authority NONE; promotion NONE"
+    ],
+    "queued_target_run": 31413773769,
+    "promotion": "NOT_CLAIMED"
+  },
+  "cross_branch_authority_product_hypothesis": {
+    "statement": "Safe effect emission is a conjunction of orthogonal proofs, not one scalar authority token.",
+    "dimensions": [
+      "request/intent provenance and per-call EffectAuthorization",
+      "replacement-safe physical singleton execution",
+      "exact Gate-issued live physical lease object",
+      "exact admitted V16 execution_id + lease_epoch + credential/holder relation",
+      "immutable effect reservation/attempt binding to that execution generation",
+      "provider-precommit revalidation serialized with provider invocation",
+      "post-contact outcome observation/reconciliation kept separate from retry/execution authority"
+    ],
+    "strong_counterhypothesis": "A separate RequestProvenanceCertificate may be redundant if existing EffectAuthorization already proves all policy-relevant request origin/intent constraints.",
+    "cheapest_discriminator": "Attempt to construct a policy-plausible EffectRequest from an internal/untrusted path and reach trusted authorization/effect execution without the checked ingress/TypedIR provenance path. Promote an additional provenance certificate requirement only if this confused-deputy path is real."
+  },
+  "fresh_main_integration_truth": {
+    "main_runtime": [
+      "token ingress + V15 presence + V16 durable execution identity already exist",
+      "main effect_lifecycle_runtime remains V14 and does not require execution identity for reservation/begin/retry",
+      "main frank_execution_gate still uses replaceable lockfile-path flock",
+      "main claycode/frank_effects.clay lacks the exact ExecutionGenerationFence semantics present in PR204"
+    ],
+    "integration_rule": "Do not directly merge stale/divergent PR204/228 into main. Reconstruct the minimal proven authority product on fresh main after target evidence, preserving newer WP04, UnifiedDB V17/V17.1/V17.2 and integrity work."
+  },
+  "external_primary_evidence_refresh": [
+    {
+      "source": "Linux man-pages flock(2)",
+      "url": "https://man7.org/linux/man-pages/man2/flock.2.html",
+      "retrieved_at_utc": "2026-08-10T17:25:00Z",
+      "supports": "flock locks are associated with open file descriptions; duplicate descriptors from fork/dup refer to the same lock; separate opens of the same underlying file are treated independently; advisory lock is not downstream effect authority"
+    },
+    {
+      "source": "Mike Burrows, The Chubby lock service for loosely-coupled distributed systems, OSDI 2006",
+      "url": "https://www.usenix.org/legacy/event/osdi06/tech/full_papers/burrows/burrows_html/index.html",
+      "retrieved_at_utc": "2026-08-10T17:25:00Z",
+      "supports": "a lock holder can obtain an opaque sequencer containing lock generation and pass it to protected downstream services, which reject stale sequencers; this separates lock acquisition from protected-operation fencing"
+    },
+    {
+      "source": "IETF HTTPAPI Idempotency-Key draft-07",
+      "url": "https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-idempotency-key-header-07",
+      "retrieved_at_utc": "2026-08-10T17:25:00Z",
+      "supports": "POST timeout leaves outcome uncertain; idempotency identifies safe duplicate/retry semantics but is not proof of current execution ownership"
+    }
+  ],
+  "executed_vs_queued": {
+    "executed": [
+      "PR202 tuple-clone OOB negative evidence (single OOB for this worker; no additional OOB created)",
+      "PR204 exact-V15/V16 parent mechanism matrix within run 31412277302",
+      "PR217 Gate-issued normal invariant within run 31410890028",
+      "PR216 physical lockfile-replacement split-brain diagnostic",
+      "PR225 baseline before invalid inode-reuse oracle",
+      "PR230 real Frank structured frontend diagnostic"
+    ],
+    "queued_not_results": [
+      "PR228 exact-V16 Gate-issued + multi-effect target run 31412817524",
+      "PR236 generic-angle/REL_OP target run 31413773769",
+      "PR199 simpler migration-free comparator target run 31411225036"
+    ]
+  },
+  "negative_and_no_result_discipline": [
+    "A workflow success is not a semantic PASS when its diagnostic payload says pass=false/promotion=NONE.",
+    "A workflow failure is not a mechanism failure when the wrapper assertion is stale or the test oracle fails before intervention.",
+    "GitHub-hosted jobs returning steps=null and no log blob are PRE_EXECUTION_INFRA_FAILURE and provide no mechanism evidence.",
+    "Queued workflow state is not evidence."
+  ],
+  "next_frontier": [
+    "Adjudicate PR228 target result without changing its queued head unless a real mechanism failure requires it.",
+    "Adjudicate PR236 strict parser result and follow only the next concrete counterexample; no speculative language expansion.",
+    "Retest PR225 with an old-marker FD held across unlink/recreate; only then judge directory-anchor physical singleton repair.",
+    "Run PR199 target comparator and measure against the same stronger B0/B3/physical-singleton conditions before choosing sidecar versus event binding.",
+    "On fresh main, build a differential authority-product integration rather than merging divergent candidate histories wholesale.",
+    "Keep real provider timeout-after-possible-acceptance/reconciliation and ClayCode TypedIR/lowering as explicit F-V01-09 closure gates."
+  ],
+  "evidence_class": "MIXED_VERIFIED_TARGET_MECHANISM_PASS_PLUS_TARGET_COUNTEREXAMPLES_PLUS_QUEUED_REPAIR_CANDIDATES",
+  "promotion": "NONE",
+  "final_synthesis": "The research moved F-V01-09 from a single 'lease epoch' concept to an evidence-separated authority product. Exact V15/V16 B1/B2/B3 works in the executed parent matrix, but global correctness additionally depends on a replacement-safe physical singleton and exact Gate-issued physical capability. The simpler migration-free event binding remains a legitimate Pareto comparator because it avoids schema/cardinality cost, but it presently lacks the strongest Gate-issued and provider-commit serialization guarantees. In parallel, ClayCode's structured frontend has a concrete lexical blocker rather than a semantic reason to redesign the language; PR236 applies the smallest compile-first repair. No release, whole-Frank acceptance, main product promotion or training authorization is justified by these results yet."
+}

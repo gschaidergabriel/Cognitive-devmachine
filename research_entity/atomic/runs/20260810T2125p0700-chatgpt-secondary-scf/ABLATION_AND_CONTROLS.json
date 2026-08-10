@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2125p0700-chatgpt-secondary-scf",
+  "ablations": [
+    {"name":"surface_only","result":"Detects only direct forbidden repo receipt writes in seeded class; recall 0.12645."},
+    {"name":"scf_only","result":"Detects semantic mint/epoch classes but intentionally does not replace physical hard surface denial; recall 0.87355."},
+    {"name":"surface_plus_scf","result":"Detects all seeded bug classes with zero clean false positives."},
+    {"name":"simplified_path_taint","result":"Partial recall and substantial false positives because unrelated later effects inherit path taint in the simple baseline."},
+    {"name":"simplified_integrity_lattice","result":"Low recall because identity, causal credit and epoch were not represented."}
+  ],
+  "rescue": "Re-adding the omitted hard surface gate rescues SCF's direct-repo miss exactly, supporting complement-not-replacement interpretation."
+}

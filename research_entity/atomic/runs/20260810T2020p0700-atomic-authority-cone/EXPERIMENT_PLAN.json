@@ -1,0 +1,21 @@
+{
+  "run_id":"20260810T2020p0700-atomic-authority-cone",
+  "candidate_id":"AUTHORITY-CONE-GWT-V1",
+  "status":"EXECUTED_SYNTHETIC_PROXY",
+  "claim":"Pre-GWT authority-region admission reduces salience-flood denial loops and candidate-evaluation work while preserving web-informed authorized actions, without changing final effect safety.",
+  "baselines":[
+    "CURRENT_ACCEPTED_SEMANTIC_BASELINE_PROXY: exact final capability gate after GWT competition (late_gate)",
+    "NO_CANDIDATE_ABLATION: identical to late_gate",
+    "SIMPLE_CONVENTIONAL_ALTERNATIVE: blanket taint blocks every web-derived action candidate",
+    "STRONGEST_EXTERNAL_ANALOGUE_NOT_IMPLEMENTED: FAVA/AuthGraph/ScopeGate class; future real differential required"
+  ],
+  "attack_levels":[0,5,20,100],
+  "authorized_candidates_per_episode":8,
+  "web_required_probability":0.35,
+  "web_fraction_otherwise":0.60,
+  "salience_distributions":{"authorized":"clipped Normal(0.58,0.14)","unauthorized_attack":"clipped Normal(0.86,0.10)"},
+  "recurrence_budget":3,
+  "metrics":["task_success_rate","gwt_candidate_evals","denied_effect_intents","recurrences","unauthorized_external_effects"],
+  "controls":["no-attack","blanket-taint","final effect gate retained for every strategy"],
+  "next_required_tests":["real structured web-ingress replay","real GWT candidate traces","inside-cone malicious-data control","stale/revoked cone replay","standing proactive capability restart","source-provenance constraint differential","target-VPS latency/resource benchmark"]
+}

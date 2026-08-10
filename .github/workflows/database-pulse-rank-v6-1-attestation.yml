@@ -1,0 +1,100 @@
+name: Database Pulse Rank V6.1 Attestation
+
+on:
+  push:
+    branches: [chatgpt/unifieddb-pulse-rank-v6-1-attestation-20260810]
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v6_1_attested.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6_1_attested.py'
+      - 'tools/database_pulse_rank_path_v6_1_attested_benchmark.py'
+      - '.github/workflows/database-pulse-rank-v6-1-attestation.yml'
+  pull_request:
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v6_1_attested.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6_1_attested.py'
+      - 'tools/database_pulse_rank_path_v6_1_attested_benchmark.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-stacked-falsifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile stacked candidate
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v6.py \
+            research_entity/runtime/database_pulse_rank_path_v6_1_attested.py \
+            research_entity/runtime/test_database_pulse_rank_path_v6_1_attested.py \
+            tools/database_pulse_rank_path_v6_1_attested_benchmark.py
+      - name: Parent V6 plus V6.1 adversarial tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_rank_path_v5_atomic \
+            research_entity.runtime.test_database_pulse_rank_path_v6 \
+            research_entity.runtime.test_database_pulse_rank_path_v6_1_attested
+      - name: Matched V6 versus V6.1 safety-tax benchmark
+        run: |
+          set -euo pipefail
+          python tools/database_pulse_rank_path_v6_1_attested_benchmark.py \
+            --rows 100,1000 --reps 100 --output /tmp/pulse-rank-v61.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/pulse-rank-v61.json',encoding='utf-8'))
+          assert p['pass'] is True,p
+          print('PULSE_RANK_V61_ATTESTATION_HOSTED=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pulse-rank-v61-attestation-hosted
+          path: /tmp/pulse-rank-v61.json
+
+  hostinger-stacked-falsifier:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Exact stacked branch tests and benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/pulse-rank-v61
+          uname -a | tee /tmp/pulse-rank-v61/uname.txt
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v6.py \
+            research_entity/runtime/database_pulse_rank_path_v6_1_attested.py \
+            research_entity/runtime/test_database_pulse_rank_path_v6_1_attested.py \
+            tools/database_pulse_rank_path_v6_1_attested_benchmark.py
+          /usr/bin/time -v python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_path_v6 \
+            research_entity.runtime.test_database_pulse_rank_path_v6_1_attested \
+            2>&1 | tee /tmp/pulse-rank-v61/tests.txt
+          /usr/bin/time -v python3 tools/database_pulse_rank_path_v6_1_attested_benchmark.py \
+            --rows 100,1000,10000 --reps 300 --output /tmp/pulse-rank-v61/benchmark.json \
+            2>&1 | tee /tmp/pulse-rank-v61/benchmark-time.txt
+          python3 - <<'PY' | tee /tmp/pulse-rank-v61/gate.txt
+          import json
+          p=json.load(open('/tmp/pulse-rank-v61/benchmark.json',encoding='utf-8'))
+          assert p['pass'] is True,p
+          print('PULSE_RANK_V61_ATTESTATION_HOSTINGER=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pulse-rank-v61-attestation-hostinger
+          path: /tmp/pulse-rank-v61/

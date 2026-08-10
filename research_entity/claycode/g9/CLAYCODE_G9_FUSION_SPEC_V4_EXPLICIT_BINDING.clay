@@ -1,14 +1,15 @@
 module claycode.g9.v4
 version "0.6-g9-explicit-binding-candidate"
-parent [@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay,@research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay]
+parent [@research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay,@research_entity/claycode/g9/DIALECT_REGISTRY_V4_EXPLICIT_BINDING.clay]
 status CURRENT_RESEARCH_CANDIDATE
 
-// G9 V4: V3 semantics with only the measured mixed-flat rule bindings made explicit.
-// No global precedence table is introduced. Parentheses resolve exactly the 17 rule clauses
-// rejected by the WP03 explicit-binding diagnostic; all other V3 rule/invariant text remains
-// unchanged. This is a candidate until exact-current differential/evaluator evidence passes.
+// G9 V4: V3 semantics with only the 16 measured G9 mixed-flat rule bindings made explicit.
+// No global precedence table is introduced. Parentheses resolve exactly those clauses while
+// all other V3 rule/invariant text remains unchanged. The 17th measured ambiguity belongs to
+// the Dialect Registry and is handled in its separate V4 candidate.
+// Candidate only until exact-current differential/evaluator evidence passes.
 
-import dialects=@research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay
+import dialects=@research_entity/claycode/g9/DIALECT_REGISTRY_V4_EXPLICIT_BINDING.clay
 import frank_reward=@research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay
 
 // ---------- CORE / DELTA CALCULUS ----------
@@ -237,8 +238,3 @@ invariant material_reward_requires_verified_outcome_and_causal_credit
 invariant self_generated_activity_cannot_mint_material_reward
 invariant reward_control_never_mints_truth_or_execution_authority
 invariant slow_reward_personality_memory_plasticity_is_receipted_before_reentry
-
-// ---------- DIALECT EXTENSION CONTRACT ----------
-// V3 registry rule copied here only to make the measured cross-file mixed binding explicit in
-// the V4 package corpus without mutating the immutable registry baseline.
-rule dialect_extension requires (interface_conformance + semantic_hash_compatibility + rollback)

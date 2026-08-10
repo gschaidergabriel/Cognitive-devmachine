@@ -23,6 +23,7 @@ def reciprocal_rank_fusion(rankings:Sequence[Sequence[str]],k:int=60)->list[str]
 class RetrievalResult:
     refs:tuple[str,...]; mode:str; seed_id:str|None; generation_id:str|None
     source_epoch:int; graph_epoch:int; latency_ns:int
+    fallback_channels:tuple[str,...]=()
 
 class SemanticRetrievalFabricV11:
     def __init__(self,con:sqlite3.Connection): self.con=con
@@ -51,12 +52,21 @@ class SemanticRetrievalFabricV11:
         if rows:
             return RetrievalResult(tuple(r[0] for r in rows),"COHERENT_SEMANTIC_FASTPATH",
                                    rows[0][1],rows[0][2],source_epoch,graph_epoch,
-                                   time.perf_counter_ns()-started)
-        rankings=[r for r in (lexical_ranking,graph_fallback_ranking) if r]
-        if len(rankings)>=2:
-            refs=tuple(reciprocal_rank_fusion(rankings)[:limit]); mode="HYBRID_RRF_FALLBACK"
-        elif rankings:
-            refs=tuple(rankings[0][:limit]); mode="LEXICAL_FALLBACK"
+                                   time.perf_counter_ns()-started,())
+
+        channels: list[tuple[str,Sequence[str]]] = []
+        if lexical_ranking:
+            channels.append(("LEXICAL",lexical_ranking))
+        if graph_fallback_ranking:
+            channels.append(("GRAPH",graph_fallback_ranking))
+        fallback_channels=tuple(name for name,_ in channels)
+        if len(channels)>=2:
+            refs=tuple(reciprocal_rank_fusion([ranking for _,ranking in channels])[:limit])
+            mode="HYBRID_RRF_FALLBACK"
+        elif len(channels)==1:
+            refs=tuple(channels[0][1][:limit])
+            mode="LEXICAL_FALLBACK" if channels[0][0]=="LEXICAL" else "GRAPH_FALLBACK"
         else:
             refs=(); mode="MISS"
-        return RetrievalResult(refs,mode,None,None,source_epoch,graph_epoch,time.perf_counter_ns()-started)
+        return RetrievalResult(refs,mode,None,None,source_epoch,graph_epoch,
+                               time.perf_counter_ns()-started,fallback_channels)

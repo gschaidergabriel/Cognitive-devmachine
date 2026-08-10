@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2103p0700-chatgpt-secondary-v18-contract-mesh",
+  "trigger": "claycode",
+  "program_target": "FRANK_V0_1",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "registry": "research_entity/global/RESEARCH_TRIGGER_REGISTRY.json",
+  "registry_schema_observed": "3.0",
+  "peer_branches": [
+    "clayresearch",
+    "frank",
+    "q23",
+    "gwt",
+    "emergenz",
+    "claycode",
+    "hyperposition",
+    "claygraph",
+    "unifieddb",
+    "harness"
+  ],
+  "peer_count": 10,
+  "inputs": {
+    "clayresearch": [
+      "research_entity/global/RAE_LATEST_COGNITIVE_STACK.clay",
+      "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md"
+    ],
+    "frank": [
+      "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+      "gschaidergabriel/Dr.-Unterweger:claycode/frank_effects.clay",
+      "gschaidergabriel/Dr.-Unterweger:clay/frank-v01-ingress-trust-20260810:claycode/frank_web_ingress.clay"
+    ],
+    "q23": ["commit:551adfc785bdc98724e3922a7a37fd2becc0ebb9"],
+    "gwt": ["commit:b9c800bee19f2a501b80aaf80b0ea236ba60eafa"],
+    "emergenz": ["commit:fd0dffb94d66a15071ee9cd0c0e3f8982e538d9e"],
+    "claycode": [
+      "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+      "tools/claycode_base_frontend.py",
+      "tools/claycode_base_typed_ir.py",
+      "tools/claycode_base_typed_ir_v18_bridge.py",
+      "research_entity/trigger_runs/claycode/20260810T2014p0700-chatgpt-secondary-wp03-irnorm/FRANK_CLAYCODE_GOODMAN_REVIEW.json"
+    ],
+    "hyperposition": ["commit:0365988a426063b8923cb0fba81a70dfa989871d"],
+    "claygraph": ["commit:59116d597c5eaa310c5df3d6f63e1b62e6968d0c"],
+    "unifieddb": ["commit:c686fe845f971340aec8b414f27e08a921adc478"],
+    "harness": ["commit:1ae6a8813bb34ec190dfe7ff9f3ef7340cc0687d"]
+  },
+  "material_cross_branch_constraints": [
+    "contract and provenance identity must not silently drift across compiler boundaries",
+    "descriptive semantic state never mints effect authority",
+    "same digest or topology similarity never merges self identity",
+    "current Frank effect-authority gate still needs exact-current-source frontend/TypedIR evidence",
+    "negative and no-change evidence from GWT/Hyperposition/Emergenz is preserved rather than converted into architecture scope"
+  ],
+  "preflight_finding": {
+    "status": "REGISTRY_V3_COMPATIBILITY_BUG_FOUND_AND_REPAIRED",
+    "old_tool_problem": "legacy peer discovery admitted only domain_research/integrated_research_foundry kinds while registry v3 uses distinct Frank-v0.1 operational kinds",
+    "repair": [
+      "tools/research_interconnect_preflight_v2.py@b551cab75d2e4653aa10e7d8abb03f45c1cd40a0",
+      "tools/research_interconnect_preflight.py@58703c0070290de2ecc6118bc8a4b9303e2b73c8",
+      "tools/test_research_interconnect_preflight_frank_v01_registry.py@05da53f89948fb488e83edf134aa1564bb0308b2"
+    ],
+    "full_checked_out_repo_scan": "PENDING_TARGET_VPS_WORKFLOW"
+  },
+  "evidence_boundary": "Mesh cross-read is current-repository evidence. Shared-ancestry agreement is not independent scientific replication."
+}

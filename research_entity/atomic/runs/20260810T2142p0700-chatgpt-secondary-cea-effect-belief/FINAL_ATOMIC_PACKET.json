@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "run_id":"20260810T2142p0700-chatgpt-secondary-cea-effect-belief",
+  "candidate_id":"ATOMIC-CANDIDATE-CEA-001",
+  "name":"Counterfactual Effect Antichain",
+  "version":"0.1.0",
+  "status":"SUPPORTED_SYNTHETIC_PROXY_RETEST",
+  "architecture_promotion":false,
+  "central_result":"CEA matched perfect resolved correctness in a 150k synthetic proxy, matched the strongest conventional compiled machine on known-provider correctness/observation cost, and uniquely resolved a declaratively specified OOD provider without code changes, at the cost of higher Python decision latency and ~2.04x serialized recovery-state bytes.",
+  "measurements":{
+    "cases_total":150000,
+    "cea_resolution_rate":1.0,
+    "cea_correctness":1.0,
+    "cea_ood_resolution":1.0,
+    "compiled_known_resolution":1.0,
+    "compiled_ood_resolution":0.0,
+    "known_observation_cost_equal":1.5661958126,
+    "p50_ns_cea":4150.0,
+    "p50_ns_compiled":3523.2,
+    "p50_ns_scalar":949.2,
+    "state_amplification_x":2.0431034483,
+    "universal_rule_ablation_unsafe_retry_rate":0.5031,
+    "false_evidence_wrong_resolution_rate":0.9751
+  },
+  "counterhypothesis":"PARTIALLY_SURVIVES: precompiled conventional machine is simpler/faster and equivalent on known providers.",
+  "novelty":"NOVEL_COMBINATION_CANDIDATE",
+  "next_falsifier":"On a harmless reversible provider fixture on the accepted target VPS, inject a timeout after request dispatch but before durable local outcome, then compare CEA vs a conventional provider-specific reconciler under exact current request/auth/reservation/provider-contract identities. Measure duplicate effects, unresolved rate, provider reads, p50/p95/p99, CPU/RAM, crash/restart, stale evidence rejection, and verified outcome -> UnifiedDB re-entry -> DONE.",
+  "authority":{"minted":false,"external_effect_performed":false,"training":false},
+  "mesh_reentry":"BRANCH_FEEDBACK_MANIFEST.json"
+}

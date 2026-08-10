@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "LIVE-FUSION-MESH-LOCAL-EXEC-20260810",
+  "created_at": "2026-08-10T14:20:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "truth_class": "LOCAL_EXECUTION_PRIMARY_FOR_STAGED_PROTOTYPE_ONLY",
+  "scope_warning": "This receipt verifies the locally staged prototype behavior only. It is not a clean-checkout execution of GitHub commit cb40f8c5c3befab79a4550e91708006753513853 or test commit 9d86a40294da22963977add159cda57d804fe5f1, and it is not Ubuntu/Hostinger release evidence.",
+  "candidate_ref": "research_entity/global/CLAY_LIVE_FUSION_CAUSAL_MESH_CANDIDATE.clay",
+  "committed_runtime_ref": "research_entity/runtime/live_fusion_mesh_runtime.py",
+  "committed_test_ref": "research_entity/runtime/tests/test_live_fusion_mesh_runtime.py",
+  "staged_files": {
+    "runtime_sha256": "c2f638b0be91458fa70e730cf5ef0ec88382227b1f26b9b95fa1937550b2ae8e",
+    "runtime_bytes": 10136,
+    "test_sha256": "73e25da9f74bf65345c3c590ae576872e4912cee34f57ae8c860865574fe2c81",
+    "test_bytes": 2094,
+    "difference_note": "The staged runtime used a temporary default DB-root expression suitable for /tmp. Core publish/ack/replan/reconcile logic was the basis for the committed companion; clean-checkout verification remains queued."
+  },
+  "environment": {
+    "kernel": "Linux 6.18.35",
+    "architecture": "x86_64",
+    "container_host": "062f5e029fa4",
+    "python": "3.13.5",
+    "logical_cpu_count_observed": 5,
+    "gpu": "UNKNOWN_NOT_USED",
+    "network": "NOT_USED",
+    "database": "temporary local SQLite"
+  },
+  "executed_checks": [
+    {
+      "check": "python3 -m py_compile staged runtime",
+      "result": "PASS"
+    },
+    {
+      "check": "functional scenario: dual projection union, idempotent duplicate publish, ack, replan receipt, reconciliation adds missing targets, repair convergence",
+      "result": "PASS"
+    },
+    {
+      "check": "fail-closed invalid state assertions in staged functional test",
+      "result": "PASS"
+    }
+  ],
+  "microbenchmark": {
+    "pulses": 1000,
+    "targets_per_pulse_nominal": 4,
+    "publish_ms": {"p50": 1.697218, "p95": 5.89240945, "p99": 8.45604938, "max": 15.82919},
+    "mark_attempt_plus_ack_ms": {"p50": 2.5608375, "p95": 6.4627656, "p99": 10.30276622, "max": 33.050392},
+    "reconcile_ms": {"p50": 1.3490025, "p95": 2.41791305, "p99": 7.28955106, "max": 20.513387},
+    "sqlite_file_bytes_after_run": 1409024,
+    "limitations": "Single local container, commit-per-operation SQLite behavior, no competing workers, no Git transport, no production UnifiedDB schema contention, no Hostinger runner. Latencies are development evidence only."
+  },
+  "decision": "LOCAL_BUILD_TEST_SUPPORTS_CONTINUING_TO_CLEAN_CHECKOUT_UBUNTU_FALSIFIER",
+  "next_work_ref": "WORK-LIVE-FUSION-MESH-RUNTIME-20260810"
+}

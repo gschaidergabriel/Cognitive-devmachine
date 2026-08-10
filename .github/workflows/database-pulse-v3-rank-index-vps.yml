@@ -1,0 +1,165 @@
+name: UnifiedDB Pulse Rank Index V3 VPS Falsifier
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/database_pulse_rank_index_v3.py'
+      - 'research_entity/runtime/test_database_pulse_rank_index_v3.py'
+      - 'tools/database_pulse_rank_index_v3_benchmark.py'
+      - '.github/workflows/database-pulse-v3-rank-index-vps.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unifieddb-pulse-rank-index-v3-vps-main
+  cancel-in-progress: true
+
+jobs:
+  rank-index-falsifier:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Verify SQLite capability surface
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import sqlite3
+          con=sqlite3.connect(':memory:')
+          assert con.execute("SELECT json_extract('{\"x\":1}','$.x')").fetchone()[0] == 1
+          con.execute('CREATE TABLE t(x TEXT,status TEXT,epistemic TEXT)')
+          con.execute("CREATE INDEX ix ON t(json_extract(x,'$.p')) WHERE status='CURRENT' AND epistemic='KNOWN'")
+          print('sqlite',sqlite3.sqlite_version)
+          print('compile_options', [r[0] for r in con.execute('PRAGMA compile_options')])
+          print('SQLITE_JSON_EXPRESSION_INDEX=PASS')
+          PY
+
+      - name: Compile V3 candidate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_index_v3.py \
+            research_entity/runtime/test_database_pulse_rank_index_v3.py \
+            tools/database_pulse_rank_index_v3_benchmark.py
+
+      - name: Run V3 falsifier suite
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v research_entity.runtime.test_database_pulse_rank_index_v3
+
+      - name: Run matched V2 versus V3 benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_rank_index_v3_benchmark.py \
+            --rows 3000 --budget 64 --repeats 200 --updates 100 \
+            --output research_entity/benchmarks/database_pulse/rank_index_v3_vps.json \
+            > /tmp/rank-index-v3.stdout
+          cat /tmp/rank-index-v3.stdout
+
+      - name: Resolve current program status from current main
+        run: |
+          set -euo pipefail
+          python3 tools/program_progress.py --json > /tmp/program-progress.json
+          cat /tmp/program-progress.json
+
+      - name: Attach real runner and current-program metadata
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, platform, resource, socket, sqlite3, subprocess, sys
+          from datetime import datetime, timezone
+          p=pathlib.Path('research_entity/benchmarks/database_pulse/rank_index_v3_vps.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          def cmd(args):
+              try: return subprocess.check_output(args,text=True,stderr=subprocess.STDOUT,timeout=5).strip()
+              except Exception as exc: return f'UNKNOWN:{type(exc).__name__}'
+          cpu='UNKNOWN'; mem='UNKNOWN'
+          try:
+              for line in pathlib.Path('/proc/cpuinfo').read_text(errors='replace').splitlines():
+                  if line.lower().startswith('model name'):
+                      cpu=line.split(':',1)[1].strip(); break
+          except Exception: pass
+          try:
+              for line in pathlib.Path('/proc/meminfo').read_text(errors='replace').splitlines():
+                  if line.startswith('MemTotal:'):
+                      mem=line.split(':',1)[1].strip(); break
+          except Exception: pass
+          x['execution_metadata']={
+              'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+              'scope':'REMOTE_PRELIMINARY_DATABASE_PULSE_NOT_ANDREAS_TARGET_ACCEPTANCE',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'git_sha':os.environ.get('GIT_SHA',''),
+              'github_run_id':os.environ.get('RUN_ID',''),
+              'github_run_attempt':os.environ.get('RUN_ATTEMPT',''),
+              'hostname':socket.gethostname(),
+              'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+              'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+              'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+              'platform':platform.platform(),
+              'python':sys.version,
+              'sqlite':sqlite3.sqlite_version,
+              'cpu_model':cpu,
+              'mem_total':mem,
+              'maxrss':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+              'kernel':cmd(['uname','-a']),
+              'filesystem':cmd(['df','-T','.']),
+          }
+          x['program_progress']=json.loads(pathlib.Path('/tmp/program-progress.json').read_text())
+          x['release_boundary']='Remote Hostinger evidence only; not final Andreas Ubuntu target acceptance.'
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+
+      - name: Enforce V3 decision gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p=json.load(open('research_entity/benchmarks/database_pulse/rank_index_v3_vps.json',encoding='utf-8'))
+          c=p['correctness']
+          assert c['wide_reference_focus']==c['expected_focus'],p
+          assert c['active_field_correct'] is True,p
+          assert c['rank_index_correct'] is True,p
+          assert c['rank_query_plan_uses_index'] is True,p
+          assert c['active_projection_verify']['pass'] is True,p
+          assert c['rank_index_verify_initial']['pass'] is True,p
+          assert c['rank_index_verify_final']['pass'] is True,p
+          assert p['execution_metadata']['scope']=='REMOTE_PRELIMINARY_DATABASE_PULSE_NOT_ANDREAS_TARGET_ACCEPTANCE'
+          print('PULSE_RANK_INDEX_V3_VPS=PASS')
+          PY
+
+      - name: Persist V3 receipt
+        run: |
+          set -euo pipefail
+          cp research_entity/benchmarks/database_pulse/rank_index_v3_vps.json /tmp/rank_index_v3_vps.json
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p research_entity/benchmarks/database_pulse
+          cp /tmp/rank_index_v3_vps.json research_entity/benchmarks/database_pulse/rank_index_v3_vps.json
+          git config user.name 'clay-rank-index-v3-runner'
+          git config user.email 'clay-rank-index-v3-runner@users.noreply.github.com'
+          git add research_entity/benchmarks/database_pulse/rank_index_v3_vps.json
+          git commit -m 'evidence(unifieddb): persist Pulse rank-index V3 Hostinger falsifier [skip ci]' || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unifieddb-pulse-rank-index-v3
+          path: research_entity/benchmarks/database_pulse/rank_index_v3_vps.json

@@ -1,0 +1,130 @@
+name: GWT Sibling Quorum + MCP Telemetry Identity V1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research_entity/runtime/gwt_sibling_quorum_workspace_v1.py'
+      - 'research_entity/runtime/test_gwt_sibling_quorum_workspace_v1.py'
+      - 'research_entity/runtime/mcp_telemetry_identity_contract_v1.py'
+      - 'research_entity/runtime/test_mcp_telemetry_identity_contract_v1.py'
+      - 'tools/gwt_sibling_quorum_mcp_telemetry_probe.py'
+      - '.github/workflows/gwt-sibling-quorum-mcp-telemetry-v1.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gwt-sibling-quorum-mcp-telemetry-v1-main
+  cancel-in-progress: true
+
+jobs:
+  hosted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true}
+      - name: Compile and run deterministic falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/gwt_sibling_quorum_workspace_v1.py \
+            research_entity/runtime/test_gwt_sibling_quorum_workspace_v1.py \
+            research_entity/runtime/mcp_telemetry_identity_contract_v1.py \
+            research_entity/runtime/test_mcp_telemetry_identity_contract_v1.py \
+            tools/gwt_sibling_quorum_mcp_telemetry_probe.py
+          python3 -m unittest -v \
+            research_entity.runtime.test_gwt_sibling_quorum_workspace_v1 \
+            research_entity.runtime.test_mcp_telemetry_identity_contract_v1
+      - name: Run matched 20k sibling workspace probe
+        run: |
+          set -euo pipefail
+          python3 tools/gwt_sibling_quorum_mcp_telemetry_probe.py \
+            --episodes 20000 \
+            --telemetry-db /tmp/definitely-not-live-frank-telemetry.sqlite3 \
+            --output research_entity/benchmarks/gwt/sibling_quorum_mcp_telemetry_hosted.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gwt-sibling-quorum-mcp-telemetry-hosted
+          path: research_entity/benchmarks/gwt/sibling_quorum_mcp_telemetry_hosted.json
+
+  target-vps:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true, persist-credentials: true}
+      - name: Compile and run deterministic falsifiers on target
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/gwt_sibling_quorum_workspace_v1.py \
+            research_entity/runtime/test_gwt_sibling_quorum_workspace_v1.py \
+            research_entity/runtime/mcp_telemetry_identity_contract_v1.py \
+            research_entity/runtime/test_mcp_telemetry_identity_contract_v1.py \
+            tools/gwt_sibling_quorum_mcp_telemetry_probe.py
+          python3 -m unittest -v \
+            research_entity.runtime.test_gwt_sibling_quorum_workspace_v1 \
+            research_entity.runtime.test_mcp_telemetry_identity_contract_v1
+      - name: Read-only real telemetry schema and 40k sibling workspace probe
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/gwt
+          python3 tools/gwt_sibling_quorum_mcp_telemetry_probe.py \
+            --episodes 40000 \
+            --telemetry-db /srv/frank-telemetry/frank_telemetry.sqlite3 \
+            --output research_entity/benchmarks/gwt/sibling_quorum_mcp_telemetry_vps.json
+      - name: Attach exact target metadata and acceptance boundaries
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,pathlib,platform,socket,sqlite3
+          from datetime import datetime,timezone
+          p=pathlib.Path('research_entity/benchmarks/gwt/sibling_quorum_mcp_telemetry_vps.json')
+          x=json.loads(p.read_text())
+          x['execution_metadata']={
+            'evidence_class':'REAL_CURRENT_TARGET_VPS_SUBSYSTEM_EXECUTION',
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'git_sha':os.environ.get('GIT_SHA',''),
+            'run_id':os.environ.get('RUN_ID',''),
+            'run_attempt':os.environ.get('RUN_ATTEMPT',''),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'sqlite':sqlite3.sqlite_version,
+            'scope':'READ_ONLY_MCP_TELEMETRY_SCHEMA_PLUS_SYNTHETIC_GWT_CAUSAL_FALSIFIER',
+          }
+          a=x['acceptance']
+          assert a['forged_origin_rejected'] and a['stale_lease_rejected'] and a['self_attribution_errors_zero'],x
+          assert a['quorum_reduced_to_stronger_simple_mechanism'],x
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist target receipt including negative telemetry evidence
+        run: |
+          set -euo pipefail
+          cp research_entity/benchmarks/gwt/sibling_quorum_mcp_telemetry_vps.json /tmp/sibling_quorum_mcp_telemetry_vps.json
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p research_entity/benchmarks/gwt
+          cp /tmp/sibling_quorum_mcp_telemetry_vps.json research_entity/benchmarks/gwt/sibling_quorum_mcp_telemetry_vps.json
+          git config user.name 'clay-gwt-mcp-runner'
+          git config user.email 'clay-gwt-mcp@users.noreply.github.com'
+          git add research_entity/benchmarks/gwt/sibling_quorum_mcp_telemetry_vps.json
+          git commit -m 'evidence(gwt): persist sibling quorum MCP telemetry target receipt [skip ci]' || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt*3))
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gwt-sibling-quorum-mcp-telemetry-target-vps
+          path: research_entity/benchmarks/gwt/sibling_quorum_mcp_telemetry_vps.json

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T21:48:43+07:00",
+  "actor": "chatgpt-secondary",
+  "trigger": "claycode",
+  "status": "STEER",
+  "reason": "The project-wide owner directive now defines FRANK_V0_1 as the only active program and BASE_CLAYCODE_RELEASE as historical component evidence. ClayCode autonomous control still names BASE_CLAYCODE_RELEASE as its target stage, so the supervisor must align the target and re-entry semantics without changing package evidence.",
+  "evidence_refs": [
+    "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/frank_v0_1/FRANK_V0_1_WORKSPACE.json",
+    "research_entity/claycode/CLAYCODE_RELEASE_WORKSPACE.json"
+  ],
+  "findings": {
+    "active_program": "FRANK_V0_1",
+    "claycode_component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME is IN_PROGRESS",
+    "claycode_package_state": "CC-WP-01 and CC-WP-02 remain PASS component evidence; CC-WP-03 onward remain OPEN",
+    "current_frontier": "Keep current V18 exact call-contract, type/effect and runtime-binding work fail-closed; no newer autonomous ccauto cycle is committed",
+    "target_host": "accepted Hostinger Ubuntu VPS"
+  },
+  "next_cycle_order": [
+    "Treat FRANK_V0_1 as the active target and ClayCode as component F-V01-02 work.",
+    "Keep the current V18 call-contract/type/effect/runtime-binding frontier unchanged unless executable evidence falsifies it.",
+    "Continue exact non-effect call-contract tests before any external-effect path.",
+    "Map each material ClayCode result back into the unified Frank v0.1 work/test/negative-result surface.",
+    "Use legacy ClayCode package receipts only as component evidence; do not infer overall program completion from them.",
+    "Advance to lowering/runtime only after current executable WP03/WP04/WP05 closure, then test real Frank v0.1 components on the accepted Ubuntu target VPS."
+  ],
+  "hard_guards": [
+    "FREE_ONLY",
+    "NO_PAID_FALLBACK",
+    "NO_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTIC_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_ANCESTRY_COLLAPSE",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "frank_v0_1_status": "IN_PROGRESS",
+  "wp03_status": "OPEN",
+  "canonical_promotion": "NONE",
+  "frank_harness_mutation": false
+}

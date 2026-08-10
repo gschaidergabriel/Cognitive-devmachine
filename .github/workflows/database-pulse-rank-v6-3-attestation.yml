@@ -21,6 +21,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: database-pulse-rank-v6-3-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   hosted-falsifier:
     runs-on: ubuntu-latest

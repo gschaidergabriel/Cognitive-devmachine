@@ -1,0 +1,161 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "V16_V17_CANONICAL_AST_DIFF_RUN31345209370",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity": "Clay",
+  "research_subject": "Frank",
+  "mission": "Frank v0.1 voll lauffähig auf Andreas PC",
+  "experiment": "CC_BASE_V16_V17_CANONICAL_AST_PATH_DIFF",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_EXACT_SOURCE_AST_DIAGNOSTIC",
+  "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+  "executor_pr": 78,
+  "workflow": "Clay V16 V17 Canonical AST Diff",
+  "workflow_run_id": 31345209370,
+  "workflow_conclusion": "success",
+  "source_revision_reference": "aaffa7a2b51261aec23460b625c0e222df74d251",
+  "exact_source_blobs": {
+    "v16": "97edbe25defdc6f7641e5e1ecf3f29558a58abfa",
+    "v17": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "frontend": "55728fd20323a364bb5e831989644b65189603d1",
+    "g9": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "requirements_lock": "4a361757efede020cfb288ad7beda2c4a7e6c6b5"
+  },
+  "runtime": {
+    "runner": "clay / digital-retina",
+    "os": "Linux X64",
+    "python": "3.12.3",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "production_frontend": "claycode_base_frontend.build_parser",
+    "maybe_placeholders": false
+  },
+  "artifact": {
+    "github_artifact_id": 9047088631,
+    "downloaded_zip_sha256": "025dbe353ed81b9716d562981fab46951344039faf5213010c6c71fbca24ccfc",
+    "ast_diff_json_sha256": "3f0bb5e7ee0b3282da0cf75169f1a6cf94965a0919033a8d58edacb3c8677aaf",
+    "time_txt_sha256": "1e652fa4f7b93bcf85b19b743c0fc0231d9e2586af09302fa3195ccece1b4f2e",
+    "packages_sha256": "4f4664bd9ddbadb0fa69b1258fe1a511ee2e3cae3d22377426ffa6ab7ddcbe0f"
+  },
+  "measurements": {
+    "wall_ms": 2686,
+    "user_seconds": 2.58,
+    "system_seconds": 0.03,
+    "cpu_percent": 97,
+    "max_rss_kb": 32572,
+    "major_page_faults": 0,
+    "minor_page_faults": 5968,
+    "voluntary_context_switches": 1,
+    "involuntary_context_switches": 19,
+    "filesystem_inputs": 0,
+    "filesystem_outputs": 64,
+    "exit_status": 0
+  },
+  "prior_stage1": {
+    "receipt": "research_entity/claycode/remote_vps/V7_V16_V17_PARSER_FUSION_STAGE1_NEGATIVE_20260810T0738p0700.json",
+    "clay_commit": "aaffa7a2b51261aec23460b625c0e222df74d251",
+    "question": "Was the V16-vs-V17 raw canonical corpus hash mismatch true semantic drift or only grammar-shape representation drift?"
+  },
+  "findings": {
+    "operator_alias_representation": {
+      "status": "EXPLAINED_AND_NORMALIZABLE",
+      "evidence": [
+        "Curated op_add, op_sub and op_ge fixtures differ in raw V16/V17 AST shape but become exactly equal after a guarded normalization that only maps exactly recoverable op_* alias wrappers / operator nodes to the same operator symbol.",
+        "Identifier lexing and dotted-prefix scope were explicitly excluded from normalization."
+      ],
+      "implication": "The Stage1 raw-hash equality criterion was too strict for operator wrapper representation alone."
+    },
+    "identifier_hyphen_semantics": {
+      "status": "REAL_LANGUAGE_SURFACE_DIVERGENCE",
+      "v17_rule": "NAME permits hyphen in [A-Za-z_][A-Za-z0-9_-]*.",
+      "v16_rule": "NAME excludes hyphen so compact subtraction remains lexically visible.",
+      "observed_examples_from_admitted_canonical_trees": [
+        "bound-to-U4-plus-patch",
+        "minimal-deletion",
+        "frontier-refresh"
+      ],
+      "v17_behavior": "Each example is preserved as one NAME token.",
+      "v16_behavior": "The same source spelling is tokenized/represented as NAME, '-' operator, NAME ... and therefore changes expression semantics.",
+      "corpus_effect": "Both admitted G9/Dialect canonical trees retain residual normalized differences after operator-wrapper normalization.",
+      "implication": "V16 cannot currently replace V17 as the declarative grammar without changing admitted corpus meaning or introducing an explicit disambiguation rule."
+    },
+    "generic_dotted_prefix_scope": {
+      "status": "REAL_LANGUAGE_SURFACE_DIVERGENCE",
+      "fixture": "rule Other.owns X",
+      "v16": "ACCEPT via generic DOTTED_PREFIX_REL",
+      "v17": "REJECT; V17 deliberately restricts dotted prefix relation handling to Needle.(lowers|owns).",
+      "implication": "V16 is broader than the current V17 declarative contract; this difference must be justified independently rather than normalized away."
+    }
+  },
+  "corpus_adjudication": {
+    "g9": {
+      "raw_equal": false,
+      "known_operator_normalized_equal": false,
+      "normalized_diff_count_capped": 11,
+      "kind_delta_v17_minus_v16": {
+        "op_sub": -6,
+        "operator": 1
+      },
+      "token_delta_v17_minus_v16": {
+        "MINUS": -6,
+        "NAME": -6
+      }
+    },
+    "dialect": {
+      "raw_equal": false,
+      "known_operator_normalized_equal": false,
+      "normalized_diff_count_capped": 11,
+      "kind_delta_v17_minus_v16": {
+        "op_sub": -7,
+        "operator": 1
+      },
+      "token_delta_v17_minus_v16": {
+        "MINUS": -7,
+        "NAME": -7
+      }
+    },
+    "all_admitted_corpora_equal_after_known_operator_normalization": false,
+    "adjudication": "RESIDUAL_V16_V17_CANONICAL_DIVERGENCE_REQUIRES_NO_TYPED_IR_STAGE2_YET"
+  },
+  "fixtures": {
+    "module_only": "RAW_AND_NORMALIZED_EQUAL",
+    "record_plain": "RAW_AND_NORMALIZED_EQUAL",
+    "owns_call": "RAW_AND_NORMALIZED_EQUAL",
+    "owns_prefix": "RAW_AND_NORMALIZED_EQUAL",
+    "op_add": "RAW_DIFFERENT_KNOWN_OPERATOR_NORMALIZED_EQUAL",
+    "op_sub": "RAW_DIFFERENT_KNOWN_OPERATOR_NORMALIZED_EQUAL",
+    "op_ge": "RAW_DIFFERENT_KNOWN_OPERATOR_NORMALIZED_EQUAL",
+    "hyphen_identifier": "BOTH_ACCEPT_BUT_DIFFERENT_SEMANTICS",
+    "generic_dotted_prefix": "V16_ACCEPT_V17_REJECT"
+  },
+  "external_primary_evidence": {
+    "source": "Lark stable grammar/reference and contextual lexer documentation",
+    "relevance": "Lark resolves terminal overlap through terminal priorities/longest regex matching and contextual parser expectations; it cannot infer authorial intent when one spelling is intentionally legal both as a hyphenated identifier and as compact subtraction in the same expression context.",
+    "retrieved_during_go": true
+  },
+  "hypothesis_result": {
+    "hypothesis": "V16-vs-V17 corpus hash drift is only known operator-wrapper representation and should disappear under a guarded semantic normalization.",
+    "result": "PARTIALLY_REFUTED",
+    "supported_part": "Operator alias wrapper differences are representation-only on tested operator fixtures.",
+    "refuted_part": "Residual admitted-corpus divergence remains because hyphenated identifiers are semantically tokenized as subtraction by V16; generic dotted-prefix scope also differs.",
+    "strongest_counterhypothesis": "Split grammar contracts remain safer until the identifier/subtraction ambiguity and generic dotted scope are explicitly resolved by measured language design rather than hidden normalization.",
+    "counterhypothesis_status": "SUPPORTED"
+  },
+  "architecture_delta": "NO_CHANGE_SPLIT_GRAMMAR_REMAINS_SAFER",
+  "promotion_allowed": false,
+  "counts_as_wp02_pass": false,
+  "counts_as_wp03_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "training_authorized": false,
+  "next_falsifier": "Do not run full typed-IR Stage2 yet. First discriminate the hyphen-identifier versus compact-subtraction contract using the admitted corpus and typed-fn/compiler fixtures. Candidate solutions must preserve admitted hyphenated symbolic names AND exact arithmetic operator identity without hidden context-dependent semantic drift. No V18 absent a concrete executable minimal repair candidate.",
+  "go_oob_budget": {
+    "exactly_one_experiment_already_consumed": true,
+    "this_ast_diff_is_oob": false,
+    "no_additional_oob_experiment_added": true
+  },
+  "scope_guard": "Diagnostic remote Hostinger evidence only. No grammar switch, WP promotion, Andreas target acceptance, Frank Harness mutation, release/freeze or training authorization.",
+  "authority_invariant": "model output != execution authority"
+}

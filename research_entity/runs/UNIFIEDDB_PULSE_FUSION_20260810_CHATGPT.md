@@ -88,7 +88,7 @@ Mechanism:
 
 Trusted evidence classes are currently a test policy (`VERIFIED`, `VALIDATED`, `MEASURED`, `AUTHORITATIVE`, `CANONICAL`) and require real project migration/admission study before any canonical promotion.
 
-## 6. Adversarial result and bugs found
+## 6. Adversarial result, negative result, repair
 
 Synthetic adversarial workload:
 
@@ -96,22 +96,39 @@ Synthetic adversarial workload:
 - 60 high-weight `MODEL_INFERRED` poison dependencies (20% poisoned families);
 - 1500 one-hop queries.
 
-Real Hostinger v16.2 mechanism-snapshot receipt (`Dr.-Unterweger`, runner `clay`, host `digital-retina`, Ubuntu/Linux 6.8, Python 3.12.3):
+Real Hostinger v16.2 mechanism-snapshot execution (`Dr.-Unterweger`, runner `clay`, host `digital-retina`, Ubuntu/Linux 6.8, Python 3.12.3) established the safety effect but also exposed an unacceptable hot-path implementation cost:
 
 - baseline target recall: 0.80;
 - provenance-guard target recall: 1.00;
 - baseline poison-query errors: 300;
 - guard poison-query errors: 0;
-- guard audit: 300 admitted / 60 rejected / 60 untrusted evidence-class rejections.
+- guard audit: 300 admitted / 60 rejected / 60 untrusted evidence-class rejections;
+- v16.2 receipt hot p50 was ~8.41 ms in the first receipt and ~9.49 ms in the later matched v16.3 process comparison.
 
 Two implementation/test bugs were found rather than hidden:
 
 1. Audit bug: admitted edges were initially double-counted because `reason=ADMITTED` and the admitted-status counter used the same key. Fixed by counting status once and only adding reason counters for rejected edges.
-2. v16.2 probe hot-path result was unacceptable (~8.41 ms p50 versus ~30 us baseline). Review showed two sources:
-   - the v16.2 implementation reserialized/rehashed the entire decision manifest per query;
-   - the self-contained probe recomputed a whole-Python-state hash per query, unlike real `StateLedger` which stores the semantic state hash in SQLite metadata.
+2. v16.2 reserialized/rehashed the entire decision manifest on every query. The self-contained probe also recomputed a whole-Python-state hash per query, unlike real `StateLedger` which stores its semantic-state hash in SQLite metadata.
 
-U16.3 moves full decision-manifest serialization/hashing to epoch/rebuild time and only binds the cached manifest hash on hot queries. A matched Hostinger rerun was triggered through the verified `Dr.-Unterweger` self-hosted lane because Clay-repo Actions admission remains degraded/unproven. Until its receipt appears, v16.3 performance remains TESTING.
+### U16.3 real Hostinger mechanism result
+
+U16.3 moved full decision-manifest hashing to epoch/rebuild time and kept only its cached manifest hash in per-query receipts. A second real self-hosted Hostinger run (`github run 31345102652`) passed all falsifiers and preserved the safety benefit while removing the dominant receipt cost:
+
+- baseline target recall: **0.80**;
+- U16.3 target recall: **1.00**;
+- baseline poison-query errors: **300**;
+- U16.3 poison-query errors: **0**;
+- baseline hot p50: **6.99 us**;
+- U16.3 hot p50: **12.14 us**;
+- baseline hot p95: **18.18 us**;
+- U16.3 hot p95: **28.03 us**;
+- baseline cold compile: **8.179 ms**;
+- U16.3 cold compile: **12.599 ms**;
+- old v16.2 receipt path in the same v16.3 process shape: **9.487 ms p50**;
+- audit: **300 admitted / 60 rejected / 60 `EVIDENCE_CLASS_UNTRUSTED`**;
+- provenance-sensitive receipt binding, expired/missing/source-receipt fail-closed checks: PASS.
+
+Interpretation: U16.3 is now a strong **mechanism-level Ubuntu PASS** for this synthetic poisoning class. It is still not source-tree execution against latest Clay `main`, not real-corpus evidence, not a real provenance migration result, and not Andreas-target acceptance.
 
 ## 7. Simpler SQLite counterbaseline must remain first-class
 
@@ -137,6 +154,8 @@ U16 provenance maintenance should be plugged into the same economics contract ra
 - hot-query savings/cost versus direct online provenance lookup;
 - quality delta under poisoning/staleness;
 - memory/RSS amplification.
+
+The U16.3 Hostinger receipt makes this tradeoff concrete for its synthetic workload: approximately +4.42 ms one-time cold compilation versus +5.15 us median hot-query cost relative to the minimal baseline, before any real-project provenance-index optimization. Those values are workload/implementation specific and must not be generalized.
 
 ## 9. Required next discriminating experiments
 

@@ -1,0 +1,74 @@
+name: UnifiedDB V16 Route Telemetry
+
+on:
+  push:
+    branches:
+      - research/unifieddb-v16-route-telemetry-20260810
+    paths:
+      - '.github/workflows/unifieddb-v16-route-telemetry.yml'
+      - 'research_entity/runtime/measured_adaptive_read_plane_v16.py'
+      - 'research_entity/runtime/test_measured_adaptive_read_plane_v16.py'
+      - 'research_entity/runtime/benchmark_measured_adaptive_read_plane_v16.py'
+      - 'research_entity/runtime/adaptive_semantic_read_plane_v14.py'
+  pull_request:
+    paths:
+      - '.github/workflows/unifieddb-v16-route-telemetry.yml'
+      - 'research_entity/runtime/measured_adaptive_read_plane_v16.py'
+      - 'research_entity/runtime/test_measured_adaptive_read_plane_v16.py'
+      - 'research_entity/runtime/benchmark_measured_adaptive_read_plane_v16.py'
+      - 'research_entity/runtime/adaptive_semantic_read_plane_v14.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unifieddb-v16-route-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  route-telemetry:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+
+      - name: Differential falsification tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v research_entity.runtime.test_measured_adaptive_read_plane_v16
+
+      - name: Measure equivalence and overhead
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m research_entity.runtime.benchmark_measured_adaptive_read_plane_v16 \
+            | tee /tmp/U16_ROUTE_TELEMETRY.json
+
+      - name: Evidence gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/U16_ROUTE_TELEMETRY.json',encoding='utf-8'))
+          assert p['semantic_mismatches_vs_v14'] == 0, p
+          assert p['requests'] >= 30000, p
+          assert p['attempts_by_query_class']['COMPILED']['mean_attempts_per_query'] == 1.0, p
+          assert p['attempts_by_query_class']['GRAPH']['mean_attempts_per_query'] >= 3.0, p
+          print('U16_ROUTE_TELEMETRY=MEASURED_SEMANTICALLY_EQUIVALENT')
+          print(json.dumps({
+            'requests':p['requests'],
+            'mismatches':p['semantic_mismatches_vs_v14'],
+            'v14_p50_ns':p['v14_latency']['p50_ns'],
+            'v16_p50_ns':p['v16_latency']['p50_ns'],
+            'overhead_p50_ns':p['telemetry_overhead_p50_ns'],
+            'attempts_by_query_class':p['attempts_by_query_class'],
+            'route_profile':p['route_profile'],
+          },sort_keys=True))
+          PY

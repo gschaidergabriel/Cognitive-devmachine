@@ -1,0 +1,88 @@
+name: UnifiedDB Pulse V12.1 Concurrency Guard
+
+on:
+  push:
+    branches: ['chatgpt/unifieddb-pulse-v12-concurrency-guard-20260810']
+    paths:
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V12_1_PULSE_CONCURRENCY_GUARD.sql'
+      - 'research_entity/runtime/semantic_access_pulse_v12_1.py'
+      - 'research_entity/runtime/test_semantic_access_pulse_v12_1.py'
+      - '.github/workflows/unifieddb-pulse-v12-1-concurrency.yml'
+  pull_request:
+    paths:
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V12_1_PULSE_CONCURRENCY_GUARD.sql'
+      - 'research_entity/runtime/semantic_access_pulse_v12_1.py'
+      - 'research_entity/runtime/test_semantic_access_pulse_v12_1.py'
+
+permissions:
+  contents: read
+
+jobs:
+  ubuntu-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run U12 and U12.1 recovery/concurrency guards
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 test_semantic_access_pulse_v12.py
+          python3 test_semantic_access_pulse_v12_1.py
+      - name: Run bounded U12 differential benchmark
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 benchmark_semantic_access_pulse_v12.py --seeds 240 --clusters 24 --paths 12 --events 4 --query-repeats 80 > /tmp/u12-1-benchmark.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unifieddb-pulse-v12-1-ubuntu-${{ github.run_id }}
+          path: /tmp/u12-1-benchmark.json
+          if-no-files-found: warn
+
+  hostinger-replication:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+          persist-credentials: false
+      - name: Verify read-only checkout authority
+        run: |
+          set -euo pipefail
+          test -z "$(git config --local --get-all http.https://github.com/.extraheader || true)"
+      - name: Run exact U12/U12.1 matrix on self-hosted Ubuntu
+        working-directory: research_entity/runtime
+        run: |
+          set -euxo pipefail
+          python3 test_semantic_access_pulse_v12.py
+          python3 test_semantic_access_pulse_v12_1.py
+      - name: Capture bounded machine metadata
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json,os,platform,socket,sqlite3
+          open('/tmp/u12-1-env.json','w').write(json.dumps({
+            'github_sha':os.environ.get('GITHUB_SHA'),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'runner_name':os.environ.get('RUNNER_NAME'),
+            'runner_os':os.environ.get('RUNNER_OS'),
+            'runner_arch':os.environ.get('RUNNER_ARCH'),
+            'hostname':socket.gethostname(),
+            'platform':platform.platform(),
+            'python':platform.python_version(),
+            'sqlite':sqlite3.sqlite_version,
+            'scope':'REAL_SELF_HOSTED_UBUNTU_REPLICATION_NOT_ANDREAS_TARGET_ACCEPTANCE',
+            'authority':'NO_EFFECT_AUTHORITY'
+          },indent=2,sort_keys=True)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unifieddb-pulse-v12-1-hostinger-${{ github.run_id }}
+          path: /tmp/u12-1-env.json
+          if-no-files-found: warn

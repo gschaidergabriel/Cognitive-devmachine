@@ -1,0 +1,166 @@
+name: Database Pulse V6 Direct Event
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research_entity/runtime/database_pulse_execution_plane_v6.py'
+      - 'research_entity/runtime/test_database_pulse_execution_plane_v6.py'
+      - 'tools/database_pulse_v6_benchmark.py'
+      - '.github/workflows/database-pulse-v6-direct-event.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: database-pulse-v6-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hosted-v6:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true}
+      - name: Runtime metadata
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,platform,sqlite3,sys
+          from research_entity.runtime.database_pulse_execution_plane_v6 import DatabasePulseExecutionPlaneV6
+          print(json.dumps({
+            'python':sys.version,
+            'sqlite':sqlite3.sqlite_version,
+            'platform':platform.platform(),
+            'wal_multiwriter_gate':DatabasePulseExecutionPlaneV6.sqlite_wal_multiwriter_safety(),
+          },indent=2))
+          PY
+      - name: Compile V5/V6 stack
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v5.py \
+            research_entity/runtime/database_pulse_runtime_v5.py \
+            research_entity/runtime/database_pulse_execution_plane_v6.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6.py \
+            tools/database_pulse_v6_benchmark.py
+      - name: Run V6 adversarial suite and inherited V5 rank falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_execution_plane_v6 \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5_adversarial
+      - name: Matched V5 versus V6 benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_v6_benchmark.py \
+            --rows 100,1000 --repeats 6 \
+            --output research_entity/benchmarks/database_pulse/pulse_v6_hosted.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v6-hosted
+          path: research_entity/benchmarks/database_pulse/pulse_v6_hosted.json
+
+  hostinger-v6:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true}
+      - name: Compile exact candidate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_path_v5.py \
+            research_entity/runtime/database_pulse_runtime_v5.py \
+            research_entity/runtime/database_pulse_execution_plane_v6.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6.py \
+            tools/database_pulse_v6_benchmark.py
+      - name: Run V6 and inherited current-main falsifiers
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_execution_plane_v6 \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5 \
+            research_entity.runtime.test_database_pulse_runtime_v5_adversarial \
+            research_entity.runtime.test_auth_shadow_focus_guard
+      - name: Matched scaling benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_v6_benchmark.py \
+            --rows 100,1000,5000 --repeats 12 \
+            --output research_entity/benchmarks/database_pulse/pulse_v6_hostinger.json
+      - name: Attach execution metadata and program progress
+        env:
+          GIT_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          python3 tools/program_progress.py --json > /tmp/program-progress.json
+          python3 - <<'PY'
+          import json,os,pathlib,platform,resource,socket,sqlite3,subprocess,sys
+          from datetime import datetime,timezone
+          from research_entity.runtime.database_pulse_execution_plane_v6 import DatabasePulseExecutionPlaneV6
+          p=pathlib.Path('research_entity/benchmarks/database_pulse/pulse_v6_hostinger.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          def cmd(args):
+              try:return subprocess.check_output(args,text=True,stderr=subprocess.STDOUT,timeout=5).strip()
+              except Exception as exc:return f'UNKNOWN:{type(exc).__name__}'
+          cpu='UNKNOWN';mem='UNKNOWN'
+          try:
+              for line in pathlib.Path('/proc/cpuinfo').read_text(errors='replace').splitlines():
+                  if line.lower().startswith('model name'):
+                      cpu=line.split(':',1)[1].strip();break
+          except Exception:pass
+          try:
+              for line in pathlib.Path('/proc/meminfo').read_text(errors='replace').splitlines():
+                  if line.startswith('MemTotal:'):
+                      mem=line.split(':',1)[1].strip();break
+          except Exception:pass
+          x['execution_metadata']={
+              'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
+              'scope':'REMOTE_PRELIMINARY_PULSE_V6_NOT_ANDREAS_TARGET_ACCEPTANCE',
+              'created_at':datetime.now(timezone.utc).isoformat(),
+              'git_sha':os.environ.get('GIT_SHA',''),
+              'github_run_id':os.environ.get('RUN_ID',''),
+              'github_run_attempt':os.environ.get('RUN_ATTEMPT',''),
+              'hostname':socket.gethostname(),
+              'runner_name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+              'runner_os':os.environ.get('RUNNER_OS','UNKNOWN'),
+              'runner_arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+              'platform':platform.platform(),
+              'python':sys.version,
+              'sqlite':sqlite3.sqlite_version,
+              'cpu_model':cpu,
+              'mem_total':mem,
+              'maxrss':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+              'kernel':cmd(['uname','-a']),
+              'filesystem':cmd(['df','-T','.']),
+              'wal_multiwriter_gate':DatabasePulseExecutionPlaneV6.sqlite_wal_multiwriter_safety(),
+          }
+          x['program_progress']=json.loads(pathlib.Path('/tmp/program-progress.json').read_text())
+          p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+      - name: WAL multiwriter release gate
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from research_entity.runtime.database_pulse_execution_plane_v6 import DatabasePulseExecutionPlaneV6
+          gate=DatabasePulseExecutionPlaneV6.sqlite_wal_multiwriter_safety()
+          print(gate)
+          if not gate['wal_reset_bug_fixed_family']:
+              raise SystemExit('BLOCKED_RELEASE_GATE: SQLite WAL-reset fix family required for multiwriter acceptance')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: database-pulse-v6-hostinger
+          path: research_entity/benchmarks/database_pulse/pulse_v6_hostinger.json

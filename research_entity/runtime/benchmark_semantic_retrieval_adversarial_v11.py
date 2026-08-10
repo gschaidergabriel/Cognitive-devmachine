@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Adversarial benchmark for the Clay U10/V10 semantic possibility fast path.
+"""Adversarial benchmark for coherent Clay U11 semantic possibility access.
 
 Purpose:
-- challenge the materialized semantic-access path with a stronger conventional SQLite
-  competitor than flat FTS/BM25;
+- challenge U11 with a stronger conventional SQLite competitor than flat FTS/BM25;
 - keep the comparison inside one deterministic synthetic assistant-retrieval workload;
-- measure accuracy and latency, plus an explicit stale-epoch fast-path lesion.
+- require coherent-generation semantics and an explicit stale-epoch fail-closed lesion.
 
 This is an engineering proxy only. It must never be reported as universal database
 superiority or as live-FRANK cognitive performance.
@@ -16,6 +15,7 @@ import json
 import os
 import sqlite3
 import tempfile
+from pathlib import Path
 
 from benchmark_semantic_retrieval_v10 import (
     TOPICS,
@@ -26,7 +26,12 @@ from benchmark_semantic_retrieval_v10 import (
     hybrid_v1,
     norm,
 )
-from semantic_retrieval_runtime_v10 import SemanticRetrievalFabric
+from semantic_retrieval_runtime_v11 import SemanticRetrievalFabricV11
+
+HERE = Path(__file__).resolve().parent
+U11_SCHEMA = (HERE / "RAE_UNIFIEDDB_V11_COHERENT_ACCESS_GENERATIONS.sql").read_text(
+    encoding="utf-8"
+)
 
 
 def _dedup(xs: list[str], k: int) -> list[str]:
@@ -40,17 +45,14 @@ def _dedup(xs: list[str], k: int) -> list[str]:
 
 
 def sqlite_online_semantic(con: sqlite3.Connection, query: str, k: int = 5) -> list[str]:
-    """Strong online SQL baseline without semantic_access_projection.
+    """Strong online SQL baseline without semantic-access materialization.
 
     It resolves an exact alias/topic when possible. Otherwise it derives a topic online
-    from ordinary FTS5 results, current-status metadata and epistemic authority, then
-    follows ordinary relational edges. Nothing is precompiled per query seed.
+    from ordinary FTS5 results, CURRENT metadata and epistemic authority, then follows
+    ordinary relational edges. No per-seed semantic access projection is consumed.
     """
     key = norm(query)
-    topic_row = con.execute(
-        "SELECT topic FROM aliases WHERE alias=?",
-        (key,),
-    ).fetchone()
+    topic_row = con.execute("SELECT topic FROM aliases WHERE alias=?", (key,)).fetchone()
     topic = str(topic_row[0]) if topic_row else (key if key in TOPICS else None)
 
     if topic is None:
@@ -66,9 +68,11 @@ def sqlite_online_semantic(con: sqlite3.Connection, query: str, k: int = 5) -> l
             ).fetchall()
             votes: dict[str, float] = {}
             for t, bm, ep, updated in rows:
-                # Authority dominates; lexical rank and recency break ties. This is a
-                # deliberately strong conventional metadata-aware SQL retrieval baseline.
-                score = authority(ep) * 1000.0 + max(0.0, -float(bm)) + float(updated) * 0.001
+                score = (
+                    authority(ep) * 1000.0
+                    + max(0.0, -float(bm))
+                    + float(updated) * 0.001
+                )
                 votes[str(t)] = max(votes.get(str(t), float("-inf")), score)
             if votes:
                 topic = min(votes, key=lambda t: (-votes[t], t))
@@ -77,7 +81,7 @@ def sqlite_online_semantic(con: sqlite3.Connection, query: str, k: int = 5) -> l
         return fts_meta(con, query, k)
 
     canonical = con.execute(
-        """SELECT record_id,epistemic_class,updated_seq FROM records
+        """SELECT record_id FROM records
            WHERE topic=? AND status='CURRENT'
            ORDER BY CASE epistemic_class
                       WHEN 'PROJECT_OWNER_FIXED' THEN 3
@@ -102,31 +106,82 @@ def sqlite_online_semantic(con: sqlite3.Connection, query: str, k: int = 5) -> l
     return _dedup(prefix + related + lexical, k)
 
 
+def install_coherent_generation(con: sqlite3.Connection) -> None:
+    con.executescript(U11_SCHEMA)
+    seed_count = con.execute(
+        "SELECT count(*) FROM semantic_query_seeds WHERE status='CURRENT'"
+    ).fetchone()[0]
+    path_count = con.execute(
+        "SELECT count(*) FROM semantic_access_projection WHERE status='CURRENT'"
+    ).fetchone()[0]
+    con.execute(
+        "INSERT INTO semantic_access_generations VALUES"
+        "('adv-g1',1,1,'adv-v11','adv-hash',?,?, '{}','CURRENT','t','t','t')",
+        (seed_count, path_count),
+    )
+    con.execute(
+        """INSERT INTO semantic_access_projection_v11
+           SELECT 'adv-g1',seed_id,target_record_id,target_logical_id,path_rank,hop_count,
+                  path_weight,authority_rank,path_clay
+           FROM semantic_access_projection WHERE status='CURRENT'"""
+    )
+    con.execute(
+        "INSERT INTO semantic_access_head VALUES"
+        "('CURRENT','adv-g1',1,1,'adv-hash','t')"
+    )
+    con.commit()
+
+
 def main() -> None:
     with tempfile.TemporaryDirectory() as td:
         db = os.path.join(td, "bench.sqlite")
         con, target, queries, rows, storage = build_db(db)
-        fabric = SemanticRetrievalFabric(con)
+        install_coherent_generation(con)
+        fabric = SemanticRetrievalFabricV11(con)
 
-        def v2(query: str, k: int) -> list[str]:
-            fast = fabric.query_seed(query, source_epoch=1, graph_epoch=1, limit=k)
+        def u11(query: str, k: int) -> list[str]:
+            fast = fabric.query(query, source_epoch=1, graph_epoch=1, limit=k)
             return list(fast.refs) if fast.refs else fts_meta(con, query, k)
 
         results = [
-            assess("sqlite_fts5_current_authority", lambda q, k: fts_meta(con, q, k), queries, target),
-            assess("udb_claygraph_v1_query_time", lambda q, k: hybrid_v1(con, q, k), queries, target),
-            assess("sqlite_online_semantic_adversary", lambda q, k: sqlite_online_semantic(con, q, k), queries, target),
-            assess("udb_claygraph_v2_materialized", v2, queries, target),
+            assess(
+                "sqlite_fts5_current_authority",
+                lambda q, k: fts_meta(con, q, k),
+                queries,
+                target,
+                repeats=100,
+            ),
+            assess(
+                "udb_claygraph_v1_query_time",
+                lambda q, k: hybrid_v1(con, q, k),
+                queries,
+                target,
+                repeats=100,
+            ),
+            assess(
+                "sqlite_online_semantic_adversary",
+                lambda q, k: sqlite_online_semantic(con, q, k),
+                queries,
+                target,
+                repeats=100,
+            ),
+            assess(
+                "udb_claygraph_v11_coherent_generation",
+                u11,
+                queries,
+                target,
+                repeats=100,
+            ),
         ]
 
         stale_fastpath_accepts = 0
         for q, _ in queries:
-            stale = fabric.query_seed(q, source_epoch=2, graph_epoch=2, limit=5)
-            stale_fastpath_accepts += int(stale.mode == "SEMANTIC_SEED_FASTPATH")
+            stale = fabric.query(q, source_epoch=2, graph_epoch=2, limit=5)
+            stale_fastpath_accepts += int(stale.mode == "COHERENT_SEMANTIC_FASTPATH")
 
         by_name = {r["name"]: r for r in results}
         adv = by_name["sqlite_online_semantic_adversary"]
-        cand = by_name["udb_claygraph_v2_materialized"]
+        cand = by_name["udb_claygraph_v11_coherent_generation"]
         speedup_p50 = (
             adv["latency_ns"]["p50"] / cand["latency_ns"]["p50"]
             if cand["latency_ns"]["p50"]
@@ -138,12 +193,18 @@ def main() -> None:
             "mrr": cand["mrr"] - adv["mrr"],
         }
 
-        con.execute("PRAGMA wal_checkpoint(TRUNCATE)")
-        con.close()
         out = {
-            "schema": "clay.semantic_retrieval_adversarial_benchmark.v1",
-            "scope": "synthetic deterministic assistant semantic retrieval; engineering proxy; not universal database superiority",
-            "dataset": {"rows": rows, "queries": len(queries), "topics": len(TOPICS), "noise_rows": 4000},
+            "schema": "clay.semantic_retrieval_adversarial_benchmark.v2",
+            "scope": (
+                "synthetic deterministic assistant semantic retrieval; engineering proxy; "
+                "not universal database superiority"
+            ),
+            "dataset": {
+                "rows": rows,
+                "queries": len(queries),
+                "topics": len(TOPICS),
+                "noise_rows": 4000,
+            },
             "projection": storage,
             "results": results,
             "candidate_vs_online_sql": {
@@ -161,8 +222,11 @@ def main() -> None:
                 "The online SQL adversary is strong for this schema but does not represent every database, vector engine, graph database, or learned retriever.",
                 "The benchmark measures retrieval of a canonical target, not downstream answer quality.",
                 "Materialization build/update cost must be amortized and separately measured under realistic write rates.",
+                "Typed/normalized seed coverage can advantage U11; held-out paraphrases and repo-native counterevidence remain mandatory.",
             ],
         }
+        con.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        con.close()
         print(json.dumps(out, indent=2, sort_keys=True))
 
 

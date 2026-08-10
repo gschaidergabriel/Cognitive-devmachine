@@ -20,6 +20,8 @@ law SHADOW_DECISION_NEVER_MINTS_TRUTH_OR_EFFECT_AUTHORITY=true
 law CLAYGRAPH_DEPENDENCY_PROJECTION_IS_DERIVED_REBUILDABLE_AND_NONAUTHORITATIVE=true
 law DEPENDENCY_UPGRADE_REQUIRES_CURRENT_EPOCH_BOUND_PROJECTION=true
 law STALE_DEPENDENCY_PROJECTION_CANNOT_UPGRADE_LIVE_RELEVANCE=true
+law CURRENT_BUT_FALSE_DEPENDENCY_MAY_CREATE_SHADOW_FALSE_POSITIVE=true
+law FALSE_DEPENDENCY_MUST_REMAIN_CONTAINED_FROM_V13_LIVE_ROUTING=true
 law EXPLICIT_DIRECT_WORK_CLAIM_KEY_ROUTES_REMAIN_FIRST_CLASS=true
 law HIDDEN_CROSS_BRANCH_DEPENDENCY_MAY_UPGRADE_INDEX_ONLY_TO_ACTIVE_DELIVERY=true
 law LOW_IMPACT_LOW_URGENCY_BRANCH_ONLY_CHATTER_MAY_SHADOW_DEMOTE_TO_INDEX_ONLY=true
@@ -63,14 +65,15 @@ rule current_worker_subscription + current_ClayGraph_epoch -> derive WorkerDepen
 rule dependency_projection -> bind(worker_id,graph_epoch,state_hash,provenance_refs)
 rule wrong_worker_projection -> FAIL_CLOSED
 rule stale_projection -> preserve_for_diagnostics + ignore_for_upgrade
+rule current_false_projection -> permit_shadow_false_positive_for_measurement + never_mutate_V13_live_route
 rule delta + worker + projection -> compute(base_V13_route,candidate_V14_route)
 rule direct_work_or_claim -> never_demote_merely_for_sparse_topology
 rule hidden_dependency + material_delta -> candidate_active_delivery
 rule hidden_dependency + high_impact_conflict -> candidate_interrupt_if_threshold_met
 rule branch_only + low_impact + low_urgency + nonconflict -> candidate_INDEX_ONLY
 rule candidate_route -> durable_shadow_receipt
-rule shadow_receipts -> compare(required_reach,missed_invalidations,active_delivery_density,interrupt_precision,latency,resource_cost)
-rule live_admission -> require_no_critical_recall_regression + bounded_noise + current_projection_integrity + rollback
+rule shadow_receipts -> compare(required_reach,missed_invalidations,false_dependency_rate,active_delivery_density,interrupt_precision,latency,resource_cost)
+rule live_admission -> require_no_critical_recall_regression + bounded_false_dependency_rate + bounded_noise + current_projection_integrity + rollback
 
 // Exactly one bounded GO out-of-box experiment for this cycle:
 // lesion all direct branch/key/work/claim overlap for one adjudicated dependency, then rescue
@@ -95,10 +98,11 @@ promotion_gate {
   local_shadow_unit_tests=PASS
   synthetic_hidden_dependency_lesion_rescue=PASS
   synthetic_matched_fixture=PASS
+  false_dependency_shadow_containment=PASS_LOCAL
   exact_parent_V13_import_on_CI=REQUIRED
   active_worker_dependency_projection=REQUIRED
   real_cross_branch_missed_dependency_corpus=REQUIRED
-  false_dependency_control=REQUIRED
+  real_false_dependency_rate=REQUIRED
   stale_epoch_control=PASS_LOCAL
   latency_p50_p95_p99=REQUIRED
   active_delivery_amplification=REQUIRED

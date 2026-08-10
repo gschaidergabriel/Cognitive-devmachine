@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "created_at_local": "2026-08-10T12:38:00+07:00",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER_NOT_FRANK",
+  "scope": "Current executable reference-Harness UnifiedDB/replay/query/preprocessor/cache identity consumers versus ClayCode parser/canonical identity layers",
+  "question": "Do current UnifiedDB/cache/replay consumers conflate ClayCode production semantic_hash, ClayCode grammar-bound contract_hash, or standalone grammar-bound canonical syntax hash?",
+  "evidence": {
+    "claycode_identity_layer_prior": {
+      "source": "research_entity/trigger_runs/go/go-20260810T1219p0700-chatgpt-secondary-wp02-identity-layer/FINAL_SYNTHESIS.json",
+      "finding": "Production frontend semantic_hash and contract_hash are distinct identity layers; standalone canonicalizer's grammar-bound hash must not be assumed equivalent to either by name alone."
+    },
+    "state_ledger": {
+      "path": "research_entity/harness/reference/state_ledger.py",
+      "blob_sha": "dae99d37b78db4c758854af8506025b09a69e31f",
+      "findings": [
+        "State rows store a ledger-local semantic_hash computed from {domain,key,value,epistemic,status}.",
+        "semantic_event_hash, semantic_chain_hash and semantic_state_hash are derived from normalized ledger events/state, not from ClayCode parser receipts.",
+        "Replay exports semantic operations/events and calls append_event again, reconstructing ledger-local identity.",
+        "Snapshots bind epoch, semantic_state_hash, trace_root_hash and chain hashes inside the ledger namespace."
+      ],
+      "imports_claycode_frontend_or_canonicalizer": false
+    },
+    "query_plane": {
+      "path": "research_entity/harness/reference/unifieddb_query_plane.py",
+      "blob_sha": "aea2bd04a5d3bc40f856d58bb0d66470ef729633",
+      "findings": [
+        "QueryReceipt.semantic_state_hash is ledger.semantic_state_hash.",
+        "row_hashes are ledger row semantic_hash values.",
+        "selection freshness rejects if ledger epoch/state hash changed.",
+        "No parser/canonicalizer identity interpretation exists in this executable plane."
+      ],
+      "imports_claycode_frontend_or_canonicalizer": false
+    },
+    "emergent_preprocessor": {
+      "path": "research_entity/harness/reference/unifieddb_emergent_preprocessor.py",
+      "findings": [
+        "Compiled identity is version + basis_epoch + ledger.semantic_state_hash + topology counts.",
+        "Selected source_semantic_hash is copied from the ledger row semantic_hash.",
+        "selection_hash is derived from ledger state/index identity, assembly parameters and selected ledger row hashes."
+      ],
+      "imports_claycode_frontend_or_canonicalizer": false
+    },
+    "compact_cache": {
+      "path": "research_entity/harness/reference/unifieddb_emergent_compact.py",
+      "blob_sha": "fb7096d36bcd13b5d11b170239e65673975aae8f",
+      "findings": [
+        "Cache reuse is guarded by ledger epoch + ledger.semantic_state_hash.",
+        "compiled_index_hash is a separately versioned EAP-COMPACT-CACHE identity over ledger state and cache topology metadata.",
+        "Recent incremental-refresh fix explicitly refreshes this identity after relevant cache changes."
+      ],
+      "imports_claycode_frontend_or_canonicalizer": false
+    }
+  },
+  "search_limitations": {
+    "github_connector_code_index": "UNRELIABLE_FOR_THIS_PRIVATE_REPOSITORY_IN_THIS_RUN",
+    "evidence": "Direct searches for known strings such as semantic_hash and canonical_syntax_sha256 returned zero results even though fetched current files contain semantic_hash.",
+    "consequence": "No global absence claim is made from search-index misses; conclusion is scoped to directly inspected current executable reference-Harness paths."
+  },
+  "counterhypothesis": {
+    "claim": "UnifiedDB/replay/cache currently treats a ClayCode parser/canonicalizer hash as its semantic identity key, so the WP02 parser repair requires a persisted hash migration.",
+    "status": "NOT_SUPPORTED_IN_DIRECTLY_INSPECTED_CURRENT_EXECUTABLE_PATHS",
+    "reason": "All inspected runtime identity consumers use ledger-local/versioned identities and do not import or interpret the ClayCode parser/canonicalizer identity generators."
+  },
+  "architecture_decision": {
+    "status": "NO_MIGRATION_NO_CHANGE",
+    "decision": "Do not rename, rewrite or migrate UnifiedDB persisted identities as part of the WP02 placeholder repair. Preserve explicit identity namespaces/layers.",
+    "required_contract": [
+      "ClayCode source identity",
+      "ClayCode semantic AST identity",
+      "ClayCode parser/grammar contract identity",
+      "UnifiedDB ledger row identity",
+      "UnifiedDB semantic state identity",
+      "derived preprocessor/cache identity"
+    ],
+    "future_ingestion_rule": "If a ClayCode identity is persisted inside a UnifiedDB row value, bind it with an explicit typed namespace/version field; the ledger may hash that row as data but must not reinterpret the embedded digest as ledger semantic identity.",
+    "rollback": "No runtime or persisted data change was made by this trace."
+  },
+  "remaining_uncertainty": [
+    "Uninspected historical/archived or future ingestion utilities could still contain stringly-typed hash-field coupling.",
+    "The private-repo code search index was not trustworthy enough to prove repository-wide absence.",
+    "Formal release should add an executable namespace-confusion regression if/when ClayCode artifacts are first persisted into UnifiedDB."
+  ],
+  "test_obligation": {
+    "status": "CREATED_AS_ARCHITECTURE_OBLIGATION_NOT_IMPLEMENTED_IN_THIS_RUN",
+    "name": "CLAYCODE_TO_UNIFIEDDB_IDENTITY_NAMESPACE_CONFUSION_GUARD",
+    "falsifier": "Persist two ClayCode artifacts with equal semantic AST identity but different grammar/contract identity and verify UnifiedDB stores/replays both typed identities without changing or aliasing ledger row/state identity semantics; then invert the case with equal contract bytes but a semantic mutation and require semantic distinction.",
+    "timing": "Implement when the first production ClayCode-artifact ingestion boundary is active; do not add speculative coupling before that boundary exists."
+  },
+  "gate_impact": {
+    "WP02": "NO_PROMOTION",
+    "UnifiedDB": "NO_CANONICAL_CHANGE",
+    "training": "NOT_AUTHORIZED_NOT_ATTEMPTED"
+  },
+  "out_of_box_experiment_count_increment": 0,
+  "authority_invariant": "model output != execution authority"
+}

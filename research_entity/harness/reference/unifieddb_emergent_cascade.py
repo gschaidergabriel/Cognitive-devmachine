@@ -17,6 +17,7 @@ class EmergentCascadeSpec:
     frontier_budget: int = 512
     min_edge_weight: float = 0.05
     hop_decay: float = 0.88
+    min_resolution_confidence: float = 0.80
     allow_epistemic: tuple[str, ...] = ('KNOWN',)
     allow_status: tuple[str, ...] = ('CURRENT',)
     allowed_domains: tuple[str, ...] = ()
@@ -29,7 +30,9 @@ class FailClosedEmergentRetrievalCascade:
     Resolver ambiguity/low confidence/miss never starts graph propagation. The resolver is
     injected deliberately so U12 can evolve independently from the EAP traversal engine.
     `logical_to_ref` binds a resolver logical id to the canonical UnifiedDB row identity;
-    failing that binding is also fail-closed.
+    failing that binding is also fail-closed. Graph ignition re-checks resolver confidence
+    and candidate consistency so a faulty/incompatible resolver cannot open EAP by class
+    label alone.
     """
 
     _ACCEPTED_RESOLUTION_CLASSES = {'EXACT_LOGICAL_ID', 'EVIDENCE_ALIAS'}
@@ -48,6 +51,8 @@ class FailClosedEmergentRetrievalCascade:
     def retrieve(self, spec: EmergentCascadeSpec) -> dict[str, Any]:
         if not spec.query_id.strip():
             raise ValueError('query_id required')
+        if not 0.0 <= spec.min_resolution_confidence <= 1.0:
+            raise ValueError('invalid min_resolution_confidence')
         if spec.source_epoch != self.preprocessor.ledger.epoch:
             raise StaleEpoch(
                 f'cascade source epoch {spec.source_epoch}!={self.preprocessor.ledger.epoch}'
@@ -56,7 +61,7 @@ class FailClosedEmergentRetrievalCascade:
         resolution = self.resolver.resolve(spec.text, source_epoch=spec.source_epoch)
         resolution_class = str(getattr(resolution, 'resolution_class', 'MISS'))
         logical_id = getattr(resolution, 'logical_id', None)
-        candidates = tuple(getattr(resolution, 'candidates', ()) or ())
+        candidates = tuple(str(value) for value in (getattr(resolution, 'candidates', ()) or ()))
         confidence = float(getattr(resolution, 'confidence', 0.0) or 0.0)
         resolution_latency_ns = int(getattr(resolution, 'latency_ns', 0) or 0)
 
@@ -71,12 +76,35 @@ class FailClosedEmergentRetrievalCascade:
                 block_reason='RESOLUTION_NOT_ADMITTED',
             )
 
-        seed_ref = self.logical_to_ref(str(logical_id))
+        logical_id = str(logical_id)
+        required_confidence = 0.99 if resolution_class == 'EXACT_LOGICAL_ID' else spec.min_resolution_confidence
+        if confidence < required_confidence:
+            return self._blocked_receipt(
+                spec,
+                resolution_class=resolution_class,
+                logical_id=logical_id,
+                candidates=candidates,
+                confidence=confidence,
+                resolution_latency_ns=resolution_latency_ns,
+                block_reason='RESOLUTION_CONFIDENCE_BELOW_CASCADE_GATE',
+            )
+        if candidates and logical_id not in candidates:
+            return self._blocked_receipt(
+                spec,
+                resolution_class=resolution_class,
+                logical_id=logical_id,
+                candidates=candidates,
+                confidence=confidence,
+                resolution_latency_ns=resolution_latency_ns,
+                block_reason='RESOLUTION_SELECTED_ID_NOT_IN_CANDIDATES',
+            )
+
+        seed_ref = self.logical_to_ref(logical_id)
         if not seed_ref:
             return self._blocked_receipt(
                 spec,
                 resolution_class=resolution_class,
-                logical_id=str(logical_id),
+                logical_id=logical_id,
                 candidates=candidates,
                 confidence=confidence,
                 resolution_latency_ns=resolution_latency_ns,
@@ -104,9 +132,10 @@ class FailClosedEmergentRetrievalCascade:
             'source_epoch': spec.source_epoch,
             'text': spec.text,
             'resolution_class': resolution_class,
-            'logical_id': str(logical_id),
+            'logical_id': logical_id,
             'resolution_candidates': candidates,
             'resolution_confidence': confidence,
+            'min_resolution_confidence': spec.min_resolution_confidence,
             'seed_ref': seed_ref,
             'assembly_selection_hash': assembly['selection_hash'],
         })
@@ -118,7 +147,8 @@ class FailClosedEmergentRetrievalCascade:
             'resolution_confidence': confidence,
             'resolution_candidates': candidates,
             'resolution_latency_ns': resolution_latency_ns,
-            'logical_id': str(logical_id),
+            'min_resolution_confidence': spec.min_resolution_confidence,
+            'logical_id': logical_id,
             'seed_ref': seed_ref,
             'assembly': assembly,
             'blocked': False,
@@ -149,6 +179,7 @@ class FailClosedEmergentRetrievalCascade:
             'logical_id': logical_id,
             'resolution_candidates': candidates,
             'resolution_confidence': confidence,
+            'min_resolution_confidence': spec.min_resolution_confidence,
             'block_reason': block_reason,
         })
         return {
@@ -159,6 +190,7 @@ class FailClosedEmergentRetrievalCascade:
             'resolution_confidence': confidence,
             'resolution_candidates': candidates,
             'resolution_latency_ns': resolution_latency_ns,
+            'min_resolution_confidence': spec.min_resolution_confidence,
             'logical_id': logical_id,
             'seed_ref': None,
             'assembly': None,

@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "WP02_SELECTED_GRAMMAR_FULL_CLOSURE_HOSTINGER_20260810T0727p0700",
+  "created_at": "2026-08-10T07:27:21+07:00",
+  "actor_id": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program_stage": "BASE_CLAYCODE_RELEASE",
+  "work_package": "CC-WP-02-PARSER-CANON",
+  "identity_boundary": "RESEARCH_ENTITY_TEMPORARY_WORKER != FRANK; Frank self-Harness authority remains proposal-only",
+  "evidence_class": "REAL_SELF_HOSTED_UBUNTU_HASH_BOUND_FULL_SELECTED_GRAMMAR_CLOSURE",
+  "executor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "draft_pr": 74,
+    "branch_head": "8e1841b3741964f8198ff40fe309f15ac765823e",
+    "workflow_run_id": 31344470808,
+    "workflow_job_id": 93323728306,
+    "workflow_conclusion": "success",
+    "runner_version": "2.336.0",
+    "runner_name": "clay",
+    "runner_group": "Default",
+    "node": "digital-retina"
+  },
+  "host": {
+    "os": "Ubuntu 24.04.4 LTS",
+    "kernel": "6.8.0-117-generic",
+    "architecture": "x86_64",
+    "python": "3.12.3",
+    "git": "2.43.0",
+    "lark": "1.3.1",
+    "interegular": "0.3.3",
+    "cpu_logical": 4,
+    "memory_total_kib": 16376020
+  },
+  "selected_grammar": {
+    "path": "research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V17_DECLARATIVE_TRIVIA_SAFE.lark",
+    "sha256": "83abde2348e6a40204e94ed91021a6e2f79a5ad1f0d96b09437214158ac70a64",
+    "git_blob": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a"
+  },
+  "exact_source_blobs": {
+    "v9": "cdeff8095e6703a6889a60093876c8f0cb0a2b8a",
+    "v17": "c3619e3168fdce9115bc7b9ab55425e7b02e0c2a",
+    "g9": "93cb0dd666f3498c85805d97cdae84850734d3ed",
+    "dialect": "dbb72460bc5a049c784d1acd1aaef152fa37f797",
+    "requirements_lock": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+    "target_contract": "81035bc03a221353dd8a6c0e91a7af8acc7ded28",
+    "production_frontend": "55728fd20323a364bb5e831989644b65189603d1",
+    "selection_discriminator": "8f2f9c317aa1f43488d20c05bc915f2ca60dfd74",
+    "strict_probe": "e050b922acefe554ba4d6de19c4324952d45e803",
+    "frontend_validation": "583b4bb7be385f9aa60b7aa56d4277b8ef170eb4",
+    "canonicalizer": "582e91135aa4d01d4b6ec7b854a10b9075e52bd4",
+    "production_canonicalizer_validation": "6bc6443c6e69b18684600cf3aec1a87d7596ffef",
+    "declaration_ir": "1122166ac6f0ee398c4ac497202939f08ba9139f",
+    "original_closure_driver_impl": "32f3d114fe4ff07eb63c7679db407d3f882addd5",
+    "path_contract_adapter": "aa9af5130e1f9a64db378d672a09e2f55a9baeaa"
+  },
+  "path_adapter_scope": "Non-semantic harness adapter only: convert child --grammar arguments to absolute paths under the exact-source root; original closure implementation remains byte-identical and is invoked unchanged otherwise.",
+  "aggregate": {
+    "receipt_id": "LOCAL_WP02_SELECTED_GRAMMAR_CLOSURE",
+    "schema_version": "2.1",
+    "pass": true,
+    "driver_returncode": 0,
+    "failed": [],
+    "repository_dirty": false,
+    "contract_sha256": "bcd8cff11bdb4c31b1cb2b3bc1c8b21f33e0eb57b3764722f139c534277dd0ca"
+  },
+  "components": [
+    {
+      "name": "selection_discriminator",
+      "semantic_pass": true,
+      "elapsed_ms": 4960.748,
+      "user_cpu_s": 4.925432,
+      "system_cpu_s": 0.034635,
+      "minor_faults": 6854,
+      "maxrss_cumulative_platform_units": 36480,
+      "receipt_sha256": "dbe7f541fdd598b1cad0fad17fb6a1ae2b20fe7da68a9c7256f1ac4b92c88e8d"
+    },
+    {
+      "name": "strict_lalr",
+      "semantic_pass": true,
+      "elapsed_ms": 864.283,
+      "user_cpu_s": 0.830132,
+      "system_cpu_s": 0.033681,
+      "minor_faults": 5570,
+      "receipt_sha256": "4dc4fae30cafdc927b178085f58b7c13b5ec04ac9792ce5f31e2d8cfb441fb06",
+      "strict_build_ok": true,
+      "conflict_diagnostics": [],
+      "regex_lookaround_present": true,
+      "scope_guard": "Strict construction alone is partial collision evidence with lookaround; explicit metamorphic boundary checks are required and passed in the frontend/discriminator gates."
+    },
+    {
+      "name": "frontend_full_corpus",
+      "semantic_pass": true,
+      "elapsed_ms": 593.715,
+      "user_cpu_s": 0.562206,
+      "system_cpu_s": 0.031002,
+      "minor_faults": 5602,
+      "receipt_sha256": "4ccbc639015f2c06432a02cf04c54276cb06e694264433670f98ca1e9ac71fd7",
+      "optional_placeholder_absence_guard": true
+    },
+    {
+      "name": "canonical_syntax",
+      "semantic_pass": true,
+      "elapsed_ms": 577.783,
+      "user_cpu_s": 0.553257,
+      "system_cpu_s": 0.02401,
+      "minor_faults": 5147,
+      "receipt_sha256": "4bf042282e3395c02440e4b1a663518babb767206e90facebfb613895b76a6b1"
+    },
+    {
+      "name": "decl_ir_g9",
+      "semantic_pass": true,
+      "elapsed_ms": 647.889,
+      "user_cpu_s": 0.620407,
+      "system_cpu_s": 0.025762,
+      "receipt_sha256": "1a827811ead8c2f95890afa73e38496cf877dbd17d7e0a4e68f77daa646e8186"
+    },
+    {
+      "name": "decl_ir_dialect",
+      "semantic_pass": true,
+      "elapsed_ms": 579.139,
+      "user_cpu_s": 0.547976,
+      "system_cpu_s": 0.029864,
+      "receipt_sha256": "75352f1e458cd80c8f4ef5e8c25846b76d7381d56a256a481e460972fb2ed9fa"
+    },
+    {
+      "name": "production_canonicalizer",
+      "semantic_pass": true,
+      "passed_checks": 14,
+      "total_checks": 14,
+      "failures": [],
+      "elapsed_ms": 5139.65,
+      "user_cpu_s": 5.100598,
+      "system_cpu_s": 0.038071,
+      "minor_faults": 5745,
+      "receipt_sha256": "314257384dc659c175aa78ab2f50d0eae2faf1a61f17e617b9821d6b6e21c5b9"
+    }
+  ],
+  "scientific_adjudication": "PASS_HOSTINGER_LOCAL_STRICT_SELECTED_WP02_CLOSURE",
+  "wp02_release_adjudication": "REMAINS_OPEN_UNTIL_CONTRACT_REQUIRED_ANDREAS_UBUNTU_TARGET_RECEIPT",
+  "counts_as_wp02_release_pass": false,
+  "counts_as_andreas_target_acceptance": false,
+  "scope_guard": "This receipt proves the selected WP02 grammar/canonical frontend closure on the verified Hostinger Ubuntu lane with exact hash-bound sources. It does not substitute for the real Andreas Ubuntu developer-system target receipt, application suite, FULL_FRANK handoff or WP14 acceptance.",
+  "architecture_delta": "NO_CHANGE",
+  "frank_harness_mutation": "NONE",
+  "training": "NOT_AUTHORIZED_NOT_ATTEMPTED",
+  "next_falsifier": "Execute the same contract-selected WP02 grammar/canonical receipt on the real Andreas Ubuntu target system; only that target evidence may satisfy the stated package-release gate."
+}

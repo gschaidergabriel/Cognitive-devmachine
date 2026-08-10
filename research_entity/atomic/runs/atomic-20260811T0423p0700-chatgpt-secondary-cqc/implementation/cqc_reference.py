@@ -10,6 +10,7 @@ G,M,D=6,4,4
 NORMAL=[f"n{i}" for i in range(4)]
 INTERVENTIONS=["LESION","REENTRY_SHUFFLE","STALE_EPOCH","AUTHORITY_BREAK"]
 ACTIONS=NORMAL+INTERVENTIONS
+ACTION_ID={a:i for i,a in enumerate(ACTIONS)}
 STATES=[(g,m,d) for g in range(G) for m in range(M) for d in range(D)]
 IDX={s:i for i,s in enumerate(STATES)}
 LABEL={IDX[s]:s[0] for s in STATES}
@@ -28,7 +29,7 @@ for s in STATES:
     g,m,d=s
     for a in ACTIONS:
         ng,nm=canon_next(g,m,a)
-        nd=(d+(hash(a)%D))%D
+        nd=(d+(ACTION_ID[a]%D))%D
         TRANS[(IDX[s],a)]=IDX[(ng,nm,nd)]
 
 def refine(action_subset):

@@ -1,0 +1,32 @@
+name: U11 Graph Verification Gate Test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V11B_GRAPH_PLAN_BINDINGS.sql'
+      - 'research_entity/runtime/semantic_access_generation_builder_v11.py'
+      - 'research_entity/runtime/test_semantic_access_v11_graph_gate.py'
+      - '.github/workflows/u11-graph-verification-gate-test.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  u11-graph-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Run legacy U11 compatibility tests
+        working-directory: research_entity/runtime
+        run: python test_semantic_access_v11.py -v
+      - name: Run integrated ClayGraph verification gate tests
+        working-directory: research_entity/runtime
+        run: python test_semantic_access_v11_graph_gate.py -v

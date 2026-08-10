@@ -1,38 +1,17 @@
-module clay.research.live_fusion_ack_lease_candidate
-version "0.1"
+module clay.research.live_fusion_work_lease_candidate
+version "0.2"
 status OPEN_RESEARCH_CANDIDATE_NOT_PROMOTED
 
-goal="stronger live fusion without broadcast spam or duplicate effects"
+goal="stronger live fusion without duplicate or stale work effects"
+parent_live_fusion_reentry=@research_entity/global/CLAY_LIVE_FUSION_REENTRY_PROTOCOL.clay
 base_work_protocol=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
 base_coordination=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
-runtime_candidate=@research_entity/runtime/live_fusion_mesh_v1.py
+runtime_candidate=@research_entity/runtime/live_fusion_work_lease_v1.py
 
-// This candidate strengthens transport/coordination only. It never mints truth or effect authority.
-record KnowledgeDelta {
-  delta_id:Ref
-  semantic_key:Hash
-  content_hash:Hash
-  ancestry_hash:Hash|UNKNOWN
-  source_epoch:Int|UNKNOWN
-  evidence_class:EvidenceClass
-  affected_targets:Set<Ref>
-  payload:Clay
-}
-
-record DeltaAck {
-  delta_id:Ref
-  target:Ref
-  ack_event_id:Ref
-  ack_at:Time
-}
-
-record PremiseInvalidation {
-  invalidation_id:Ref
-  premise_key:Hash
-  invalidation_epoch:Int
-  min_spec_rev:Int|UNKNOWN
-  reason:Clay
-}
+// Scope correction after live mesh refresh:
+// PR #156 already owns targeted LiveFusionDelta delivery, ACK/resolution, ABA-safe causal
+// identity and high-impact effect guards. This candidate does NOT replace that bus.
+// It adds only physical/logical work ownership safety for concurrent/retried execution.
 
 record WorkLease {
   work_id:Ref
@@ -40,6 +19,7 @@ record WorkLease {
   holder:Ref
   lease_token:Ref
   fence_epoch:Int
+  acquired_at:Time
   expires_at:Time
 }
 
@@ -52,13 +32,10 @@ record EffectReceiptKey {
   result_hash:Hash
 }
 
-rule materially_identical_delta -> one semantic_key + many provenance/route observations
-rule delta_distribution -> affected_targets_only
-rule required_target_receives_delta -> ACK|REJECT|DEFER_WITH_REASON
-rule missing_ack -> retry_or_surface_pending; never infer ingestion
-rule high_impact_premise_invalidation -> interrupt_affected_work_before_next_effect
-
+rule LiveFusion_reentry_and_semantic_resolution -> parent_live_fusion_reentry
+rule worker_before_consequential_effect -> parent_effect_guard + current_work_spec_revalidation + valid_active_lease
 rule work_claim -> one active lease per work_id
+rule active_lease_collision -> reject_second_holder
 rule lease_expiry_or_release -> next holder increments fence_epoch
 rule older_fence_epoch -> cannot_commit_effect
 rule stale_spec_rev -> cannot_commit_effect
@@ -66,16 +43,17 @@ rule effect_key_replay_same_result -> IDEMPOTENT_REPLAY
 rule effect_key_replay_different_result -> IDEMPOTENCY_CONFLICT
 rule unavailable_current_authority_or_revision_state -> fail_closed_for_consequential_effect
 
-// Compatibility strategy: additive shadow lane first.
-rule v1_work_events_remain_authoritative_until_candidate_remote_differential_passes
-rule candidate_shadow_reads_v1_events_without_mutating_existing_scheduler_semantics
-rule promotion_requires Ubuntu_remote_regression + duplicate_dispatch_replay + crash_restart + lease_expiry + ack_loss + premise_invalidation + resource_shadow
-rule promotion_requires no_regression_against_current_work_event_protocol
+// Compatibility strategy: stacked shadow lane on PR #156 first.
+rule parent_PR_156_remains_live_fusion_transport_candidate
+rule current_work_events_remain_authoritative_until_remote_differential_passes
+rule lease_candidate_never_mints_work_priority_truth_or_effect_authority
+rule promotion_requires Ubuntu_remote_regression + two_connection_collision + crash_restart + lease_expiry + late_old_holder + spec_revision_race + resource_shadow
+rule promotion_requires no_regression_against_parent_live_fusion_reentry_or_current_work_event_protocol
 rule no_benefit_or_excess_cost -> REFUTED_OR_KEEP_ISOLATED
 
-invariant semantic_key_deduplication_does_not_merge_distinct_evidence_ancestry
-invariant ACK_is_delivery_processing_receipt_not_truth
+invariant ACK_and_semantic_resolution_are_parent_bus_responsibility
 invariant lease_is_collision_control_not_truth
 invariant fence_epoch_is_effect_safety_not_epistemic_rank
+invariant idempotent_effect_receipt_does_not_imply_semantic_correctness
 invariant Frank_never_authorizes_its_own_harness_change
 invariant ResearchEntity_and_FRANK_remain_separate

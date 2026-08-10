@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-live-fusion-durability-convergence-20260810T1431p0700",
+  "created_at": "2026-08-10T14:31:43+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "source_refs": [
+    "PR156 chatgpt/live-fusion-reentry-v1-20260810 head d1f6fe1d70d7770dc31251a5e2e70b0367da1146",
+    "01873cf911902720a12647a91be90412636bacc5",
+    "4c139657428aecdd65697b69461e17a1e21fcb99",
+    "f56ffbc21d18213c97acd35479c4cc675ae83887"
+  ],
+  "epistemic_status": "CROSS_WORKER_FUSION_CANDIDATE_NOT_PROMOTED",
+  "core_delta": [
+    "Do not create a second live-fusion architecture: mesh v2 is the semantic routing/control-plane candidate and PR156 is the durable worker re-entry/ACK transport lane.",
+    "Concurrent worker output materially changed PR156 during this same run: same source/event identity with conflicting content must fail closed instead of being silently deduped.",
+    "PR156 transport now uses Linux advisory append locking, fsync-before-success, per-record integrity hashes and torn-final-tail recovery; interior corruption/hash mismatch fails closed.",
+    "Worker ACK retry idempotence is based on semantic decision/plan revision/note rather than transport ack-id equality.",
+    "Local copied-candidate execution is 11/11 PASS including 4-process concurrent writers, real-process crash/torn-tail replay, ABA preservation, dual-time late-event retention and identity-conflict fail-closed.",
+    "Local candidate execution is not Hostinger/Andreas target evidence; current Hostinger job remains queued at this feedback cut."
+  ],
+  "external_pattern_refresh": [
+    "CloudEvents current spec requires source+id uniqueness for distinct events and permits repeated delivery of the same event identity.",
+    "NATS JetStream documents at-least-once failure modes, dedupe ids and acknowledgement/redelivery mechanisms; broker ACK is transport evidence, not Clay effect authority.",
+    "Apache Flink documents that exactly-once operator state does not imply every record physically flows once and does not by itself guarantee exactly-once interaction with external systems."
+  ],
+  "branches": {
+    "clayresearch": {
+      "receipt": "DELTA",
+      "delta": "Converge durability/re-entry transport and dependency-aware mesh semantics as one lane; preserve the simpler Git polling baseline and no-broker counterhypothesis.",
+      "required_next_test": "Matched baseline vs fused candidate on real worker topology, including coordination amplification and failure cost."
+    },
+    "unifieddb": {
+      "receipt": "DELTA",
+      "delta": "Materialize raw LiveFusionDelta, delivery, ACK, causal origin/arrival identity and anti-entropy projection identity without replacing raw event authority with effectivized projection state.",
+      "required_next_test": "Transactional replay and active worker ACK roundtrip with duplicate/conflicting identity, restart and stale projection."
+    },
+    "claygraph": {
+      "receipt": "DELTA",
+      "delta": "Use mesh-v2 BranchDependencyIndex/projection hashes for targeted recipients; uncertainty or missing edges must be observable degraded coordination, never silent non-overlap.",
+      "required_next_test": "Remove dependency edges and inject stale projection; require repair/degraded state and zero silent missed required recipients."
+    },
+    "harness": {
+      "receipt": "DELTA",
+      "delta": "Add multiprocess writer, real crash/torn-tail, conflicting event identity, fallback replay and p50/p95/p99 observer-backaction tests to the live-fusion gate.",
+      "required_next_test": "Execute exact current PR head on Hostinger Ubuntu and persist CPU/RSS/I/O/network/timing receipts."
+    },
+    "claycode": {
+      "receipt": "DELTA",
+      "delta": "Future typed runtime surface must represent delta identity, causal predecessor, delivery/reconstruction/use/effect/re-entry and degraded anti-entropy state without a hidden Python-only semantic architecture.",
+      "required_next_test": "Express the minimal fused receipt lifecycle in current ClayCode; change semantics only on executable counterexample."
+    },
+    "gwt": {
+      "receipt": "NO_CHANGE",
+      "delta": "Transport ACK/reconstruction still does not imply workspace use or ignition."
+    },
+    "frank": {
+      "receipt": "NO_CHANGE",
+      "delta": "No Frank Harness mutation or target acceptance follows from this coordination transport work."
+    },
+    "hyperposition": {
+      "receipt": "NO_CHANGE",
+      "delta": "No new alternative-collapse semantics are promoted."
+    },
+    "emergenz": {
+      "receipt": "NO_CHANGE",
+      "delta": "Higher connectivity/routing efficiency is not emergence evidence."
+    }
+  },
+  "global_controls": [
+    "delivery != reconstruction != use != effect != causal credit",
+    "broker ACK != effect authority",
+    "targeted routing must fail visible on incomplete dependency knowledge",
+    "shared ancestry and cross-worker fusion are not independent replication",
+    "local synthetic/reference execution != Hostinger/Andreas target truth",
+    "Frank remains separate from Clay"
+  ],
+  "research_write_result": "TARGETED_FEEDBACK_TO_AFFECTED_BRANCHES_WITH_EXPLICIT_NO_CHANGE_RECEIPTS",
+  "canonical_promotion": "NOT_ATTEMPTED",
+  "frank_harness_mutation": "NOT_ATTEMPTED"
+}

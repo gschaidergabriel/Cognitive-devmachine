@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:46:00+07:00",
+  "actor": "chatgpt-secondary",
+  "scope": "ClayCode FREE_ONLY autonomous supervisor steering",
+  "authority": {
+    "canonical_semantics_changed": false,
+    "base_workpackage_promoted": false,
+    "frank_harness_modified": false,
+    "paid_fallback_allowed": false
+  },
+  "new_executable_evidence": [
+    {
+      "source_commit": "aaffa7a2b51261aec23460b625c0e222df74d251",
+      "kind": "REAL_SELF_HOSTED_UBUNTU_EXACT_SOURCE_PARSER_CANONICAL_NEGATIVE",
+      "workflow_run_id": 31344969097,
+      "workflow_job_id": 93325093779,
+      "artifact_id": 9047009568,
+      "artifact_sha256": "cff3c825033a8d5e44eaa5e510da45811421cd2f15165ae9418b49ad0ca9a5a5",
+      "finding": "Exact-source checkout, source-identity verification and hash-locked Lark 1.3.1/interegular 0.3.3 environment all succeeded. Stage1 then produced a scientific negative: V7 strict construction fails with an OR shift/reduce conflict; V16 and V17 are strict-clean, but their current G9/Dialect frontend hashes differ. V16 therefore is not supported as a safe V7/V17 fusion at Stage1.",
+      "boundary": "The V16-vs-V17 frontend hash delta is not yet proven to be a language-semantic delta; it may be grammar-shape/tree-representation only. This receipt is not WP02 PASS, WP03 PASS or Andreas target acceptance."
+    },
+    {
+      "source_commit": "c42ddaa347556fa2a8bdea27e4e7db98cfeb6b8d",
+      "kind": "WP03_VALIDATOR_CONTRACT_CHANGE",
+      "finding": "WP03 typed-IR validation now self-checks the active V7 grammar through the production frontend with strict=true before lowering and binds the receipt to the V7 grammar hash.",
+      "boundary": "Because the independently measured exact-source Stage1 receipt proves V7 strict construction currently fails under Lark 1.3.1/interegular 0.3.3, an immediate WP03 validator failure at this gate is expected contract incompatibility and must not be misclassified as a fresh typed-IR semantic regression."
+    },
+    {
+      "source_commit": "ab12db4f7a71e7e17701622b8f0af27fb7a0e06b",
+      "kind": "CROSS_BRANCH_PROOF_ELIGIBILITY_GUARD",
+      "finding": "Harness fusion explicitly preserves proof-laundering protection: high-weight/relevant graph context cannot satisfy proof requirements when proof_eligible=false.",
+      "boundary": "Apply the same epistemic separation here: parser/frontend hashes may localize a difference but do not by themselves prove canonical semantic difference or authorize promotion. Frank Harness remains untouched."
+    }
+  ],
+  "official_dependency_check": {
+    "source": "Lark official documentation",
+    "finding": "Lark strict=True intentionally raises on Shift/Reduce and regex collisions; interegular is used for collision checking in contextual/basic lexer modes. Therefore the observed V7 strict GrammarError is a valid strict-contract negative, not an incidental warning to ignore."
+  },
+  "goodman_anti_echo": {
+    "model_family_consensus_used_as_authority": false,
+    "same_actor_execution_receipt_counts_as_independent_model_replication": false,
+    "rule": "The executable Ubuntu receipt outranks model interpretation within its exact scope. Shared provider/model ancestry is not counted as replication."
+  },
+  "next_cycle_priority": [
+    "1. Do not run V7/V16/V17 typed-IR Stage2 and do not create V18 yet. First localize the first V16-vs-V17 divergence on the frozen G9 and Dialect sources under the same production frontend and exact runtime: emit minimal source span, token/tree path, canonicalized node/value before/after, and classify each delta as lexical, parse-tree-shape, optional-placeholder, token-kind, or true semantic-content divergence.",
+    "2. Preserve the BASE semantic freeze. A frontend hash mismatch alone is not executable counterevidence against frozen semantics. Reopen canonical semantics only if the localized difference changes an admitted program meaning/expressibility under a reviewed executable counterexample.",
+    "3. Keep V17 as the current WP02 declarative candidate while localization runs. Re-run the complete current-main V17 WP02 closure only after the localized diff explains whether V16 adds any safe capability without semantic/canonical drift. Do not fuse V16 merely to recover V7 typed-fn surface.",
+    "4. Treat strict V7 as a separate typed-surface blocker. The c42ddaa WP03 validator should fail closed if invoked today; record that outcome as V7_STRICT_CONTRACT_BLOCKED, not WP03_TYPED_IR_REGRESSION. Decide the typed-fn grammar path only after the V16-vs-V17 localization and a minimal strict conflict counterexample for V7's dotted_relation/OR ambiguity.",
+    "5. If a minimal V7 conflict repair is attempted, require exact-source strict construction, operator-identity mutation discrimination, full frozen-source admission, optional-child policy coherence with WP02, and semantic_ir_sha256 escape-equivalence before any WP03 credit. No grammar repair may silently alter the WP01 frozen semantic contract.",
+    "6. After WP02 and the typed-surface boundary are both executable-clean and reviewed, proceed to WP03 lower_program reproduction/repair, then same-provenance WP06 hardening and evaluator/native-C differentials. Final BASE14/application promotion remains gated on the registered Andreas Ubuntu developer system.",
+    "7. Continue FREE_ONLY. Do not spend provider quota on consensus repetition; use model families only to generate materially new falsifiers or implementation alternatives whose value can be tested."
+  ],
+  "free_only_policy": {
+    "required": true,
+    "paid_fallback": "FORBIDDEN",
+    "provider_402": "hard_stop_for_provider",
+    "provider_429": "cooldown_only"
+  },
+  "promotion_policy": {
+    "base_pass_from_model_consensus": false,
+    "canonical_promotion_without_executable_counterevidence_and_review": false,
+    "cross_version_receipt_inheritance_without_exact_provenance": false,
+    "frontend_hash_difference_alone_counts_as_semantic_counterexample": false,
+    "hostinger_counts_as_andreas_target": false
+  },
+  "target": {
+    "os": "Ubuntu only",
+    "final_system": "Andreas registered developer PC",
+    "hostinger_role": "research/test transport only"
+  }
+}

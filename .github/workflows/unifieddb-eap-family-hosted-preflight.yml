@@ -18,14 +18,14 @@ on:
       - '.github/workflows/unifieddb-eap-family-hosted-preflight.yml'
 
 jobs:
-  hosted-preflight:
+  syntax:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
           clean: true
-      - name: Exact branch tests
+      - name: Compile exact branch files
         shell: bash
         run: |
           set -euxo pipefail
@@ -35,11 +35,33 @@ jobs:
             research_entity/harness/reference/unifieddb_emergent_family_factorized.py \
             research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py \
             research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py
-          python3 -m research_entity.harness.reference.test_unifieddb_emergent_family_factorized
-      - name: Multiplicity evidence
+
+  boundary-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Run family-factorization boundaries
         shell: bash
         run: |
           set -euxo pipefail
+          git rev-parse HEAD
+          python3 -m research_entity.harness.reference.test_unifieddb_emergent_family_factorized
+
+  multiplicity-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+      - name: Run multiplicity evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git rev-parse HEAD
           python3 -m research_entity.harness.reference.benchmark_unifieddb_emergent_family_factorized | tee /tmp/eap-family.json
           python3 - <<'PY'
           import json

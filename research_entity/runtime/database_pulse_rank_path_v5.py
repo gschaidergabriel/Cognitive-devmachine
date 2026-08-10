@@ -15,6 +15,10 @@ ONLINE. V5 makes the lifecycle explicit:
   committed atomically with a non-authoritative physical maintenance receipt. A receipt-write
   failure therefore rolls the schema change back as well.
 
+Maintenance provenance (actor + policy provenance ref) is persisted in that same SQLite
+transaction. Existing V5 maintenance logs are migrated additively inside the maintenance
+transaction so legacy rows remain explicit UNKNOWN_LEGACY rather than being silently invented.
+
 This controller has performance-routing authority only. StateLedger remains semantic authority.
 """
 
@@ -33,6 +37,9 @@ from research_entity.runtime.semantic_compile_horizon_estimator_v16 import (
 IMPLEMENTATION_ID="PULSE_TWO_PHASE_AUTHORITATIVE_RANK_PATH_V5"
 FORBIDDEN_SOURCE_DOMAINS={"pulse","pulse_control"}
 MAINTENANCE_LOG_TABLE="pulse_rank_maintenance_receipts_v5"
+LEGACY_MAINTENANCE_PROVENANCE="UNKNOWN_LEGACY_V5"
+DIRECT_MAINTENANCE_ACTOR="UNKNOWN_DIRECT_V5_CALLER"
+DIRECT_POLICY_PROVENANCE="UNKNOWN_DIRECT_V5_POLICY"
 
 
 class RankPhysicalStateStale(RuntimeError):
@@ -66,6 +73,8 @@ class RankMaintenanceReceipt:
     trace_root_hash_before:str
     trace_root_hash_after:str
     plan_hash:str
+    actor:str=DIRECT_MAINTENANCE_ACTOR
+    policy_provenance_ref:str=DIRECT_POLICY_PROVENANCE
     authority:str="PHYSICAL_INDEX_MAINTENANCE_ONLY_NO_SEMANTIC_AUTHORITY"
     receipt_id:str|None=None
     persisted:bool=False
@@ -114,6 +123,15 @@ class AdaptiveAuthoritativeRankPathV5:
     def _domain_clause(domains:tuple[str,...])->tuple[str,list[Any]]:
         return f"domain IN ({','.join('?' for _ in domains)})",list(domains)
 
+    @staticmethod
+    def _provenance(value:str,field:str)->str:
+        if not isinstance(value,str) or not value.strip():
+            raise ValueError(f"{field} required")
+        value=value.strip()
+        if len(value)>2048:
+            raise ValueError(f"{field} too long")
+        return value
+
     def plan_lifecycle(self,*,basis_epoch:int,economics_without_horizon:CompileEconomics,
                        pulse_history:Iterable[EpochReadLifetime],**horizon_kwargs)->RankLifecyclePlan:
         if basis_epoch!=self.ledger.epoch:
@@ -140,7 +158,12 @@ class AdaptiveAuthoritativeRankPathV5:
             "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",(MAINTENANCE_LOG_TABLE,)
         ).fetchone() is not None
 
+    def _maintenance_log_columns(self)->set[str]:
+        if not self._maintenance_log_exists():return set()
+        return {str(r[1]) for r in self.con.execute(f"PRAGMA table_info({MAINTENANCE_LOG_TABLE})")}
+
     def _create_maintenance_log_no_commit(self)->None:
+        legacy=LEGACY_MAINTENANCE_PROVENANCE.replace("'","''")
         self.con.execute(f"""CREATE TABLE IF NOT EXISTS {MAINTENANCE_LOG_TABLE}(
             receipt_id TEXT PRIMARY KEY,
             plan_hash TEXT NOT NULL UNIQUE,
@@ -154,8 +177,23 @@ class AdaptiveAuthoritativeRankPathV5:
             trace_root_hash_before TEXT NOT NULL,
             trace_root_hash_after TEXT NOT NULL,
             executed_at TEXT NOT NULL,
-            authority TEXT NOT NULL
+            authority TEXT NOT NULL,
+            actor TEXT NOT NULL DEFAULT '{legacy}',
+            policy_provenance_ref TEXT NOT NULL DEFAULT '{legacy}'
         )""")
+        # Backward-compatible V5 migration. SQLite ADD COLUMN changes sqlite_schema rather than
+        # rewriting ordinary row content for these constant-default columns. Running it inside
+        # the same BEGIN IMMEDIATE as the physical action keeps migration + DDL + receipt atomic.
+        cols=self._maintenance_log_columns()
+        if "actor" not in cols:
+            self.con.execute(
+                f"ALTER TABLE {MAINTENANCE_LOG_TABLE} ADD COLUMN actor TEXT NOT NULL DEFAULT '{legacy}'"
+            )
+            cols.add("actor")
+        if "policy_provenance_ref" not in cols:
+            self.con.execute(
+                f"ALTER TABLE {MAINTENANCE_LOG_TABLE} ADD COLUMN policy_provenance_ref TEXT NOT NULL DEFAULT '{legacy}'"
+            )
 
     def _create_index_no_commit(self)->None:
         self.con.execute(f"""CREATE INDEX IF NOT EXISTS {INDEX_NAME}
@@ -177,7 +215,10 @@ class AdaptiveAuthoritativeRankPathV5:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    def apply_maintenance(self,plan:RankLifecyclePlan)->RankMaintenanceReceipt:
+    def apply_maintenance(self,plan:RankLifecyclePlan,*,actor:str=DIRECT_MAINTENANCE_ACTOR,
+                          policy_provenance_ref:str=DIRECT_POLICY_PROVENANCE)->RankMaintenanceReceipt:
+        actor=self._provenance(actor,"maintenance actor")
+        policy_provenance_ref=self._provenance(policy_provenance_ref,"policy_provenance_ref")
         if plan.basis_epoch!=self.ledger.epoch or plan.semantic_state_hash!=self.ledger.semantic_state_hash:
             raise StaleEpoch("rank maintenance plan no longer matches authoritative ledger")
         before=self.index_exists()
@@ -193,12 +234,12 @@ class AdaptiveAuthoritativeRankPathV5:
                 index_present_before=before,index_present_after=before,
                 semantic_state_hash_before=state_before,semantic_state_hash_after=state_before,
                 trace_root_hash_before=trace_before,trace_root_hash_after=trace_before,
-                plan_hash=plan.plan_hash)
+                plan_hash=plan.plan_hash,actor=actor,policy_provenance_ref=policy_provenance_ref)
         if action not in {"BUILD_INDEX","DROP_INDEX"}:
             raise ValueError(f"unsupported maintenance action: {action}")
 
-        # SQLite DDL participates in transactions. Material schema mutation and its durable
-        # physical receipt therefore either commit together or roll back together.
+        # SQLite DDL participates in transactions. Material schema mutation, additive log
+        # migration and durable physical receipt therefore either commit together or roll back.
         try:
             self.con.execute("BEGIN IMMEDIATE")
             if plan.basis_epoch!=self.ledger.epoch or plan.semantic_state_hash!=self.ledger.semantic_state_hash:
@@ -220,31 +261,33 @@ class AdaptiveAuthoritativeRankPathV5:
                 "index_present_before":tx_before,"index_present_after":after,
                 "semantic_state_hash_before":state_before,"semantic_state_hash_after":state_after,
                 "trace_root_hash_before":trace_before,"trace_root_hash_after":trace_after,
-                "plan_hash":plan.plan_hash,
+                "plan_hash":plan.plan_hash,"actor":actor,
+                "policy_provenance_ref":policy_provenance_ref,
                 "authority":"PHYSICAL_INDEX_MAINTENANCE_ONLY_NO_SEMANTIC_AUTHORITY",
             }
             receipt_id=h(receipt_body)
             self.con.execute(f"""INSERT INTO {MAINTENANCE_LOG_TABLE}(
                 receipt_id,plan_hash,basis_epoch,action,status,index_present_before,index_present_after,
                 semantic_state_hash_before,semantic_state_hash_after,trace_root_hash_before,
-                trace_root_hash_after,executed_at,authority
-            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?)""",
+                trace_root_hash_after,executed_at,authority,actor,policy_provenance_ref
+            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?,?,?)""",
                 (receipt_id,plan.plan_hash,plan.basis_epoch,action,status,int(tx_before),int(after),
                  state_before,state_after,trace_before,trace_after,
-                 "PHYSICAL_INDEX_MAINTENANCE_ONLY_NO_SEMANTIC_AUTHORITY"))
+                 "PHYSICAL_INDEX_MAINTENANCE_ONLY_NO_SEMANTIC_AUTHORITY",actor,policy_provenance_ref))
             self.con.commit()
             return RankMaintenanceReceipt(
                 basis_epoch=plan.basis_epoch,action=action,status=status,
                 index_present_before=tx_before,index_present_after=after,
                 semantic_state_hash_before=state_before,semantic_state_hash_after=state_after,
                 trace_root_hash_before=trace_before,trace_root_hash_after=trace_after,
-                plan_hash=plan.plan_hash,receipt_id=receipt_id,persisted=True)
+                plan_hash=plan.plan_hash,actor=actor,policy_provenance_ref=policy_provenance_ref,
+                receipt_id=receipt_id,persisted=True)
         except (StaleEpoch,RankPhysicalStateStale):
             self.con.rollback();raise
         except Exception:
             self.con.rollback()
-            # The transaction rollback is itself the safety result: build/drop and receipt
-            # cannot diverge. A retry must replan and reobserve the physical state.
+            # The transaction rollback is itself the safety result: migration/build/drop and
+            # receipt cannot diverge. A retry must replan and reobserve the physical state.
             after=self.index_exists()
             state_after=self.ledger.semantic_state_hash; trace_after=self.ledger.trace_root_hash
             if (state_before,trace_before)!=(state_after,trace_after):
@@ -254,7 +297,8 @@ class AdaptiveAuthoritativeRankPathV5:
                 index_present_before=before,index_present_after=after,
                 semantic_state_hash_before=state_before,semantic_state_hash_after=state_after,
                 trace_root_hash_before=trace_before,trace_root_hash_after=trace_after,
-                plan_hash=plan.plan_hash,persisted=False)
+                plan_hash=plan.plan_hash,actor=actor,policy_provenance_ref=policy_provenance_ref,
+                persisted=False)
 
     def _rows(self,domains:tuple[str,...],limit:int,*,use_index:bool):
         clause,args=self._domain_clause(domains)

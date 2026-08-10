@@ -10,6 +10,12 @@ on:
       - 'research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py'
       - 'research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py'
       - '.github/workflows/unifieddb-eap-family-hosted-preflight.yml'
+  pull_request:
+    paths:
+      - 'research_entity/harness/reference/unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/test_unifieddb_emergent_family_factorized.py'
+      - 'research_entity/harness/reference/benchmark_unifieddb_emergent_family_factorized.py'
+      - '.github/workflows/unifieddb-eap-family-hosted-preflight.yml'
 
 jobs:
   hosted-preflight:

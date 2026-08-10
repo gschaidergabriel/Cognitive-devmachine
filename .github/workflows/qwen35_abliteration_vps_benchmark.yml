@@ -1,0 +1,43 @@
+name: Qwen35 Abliteration VPS Benchmark
+
+on:
+  push:
+    paths:
+      - 'research_entity/state/work/events/QWEN35_ABLITERATION_VPS_BENCH_TRIGGER.json'
+
+permissions:
+  contents: write
+
+jobs:
+  benchmark:
+    runs-on: self-hosted
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refresh exact repository head
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin "$GITHUB_REF_NAME"
+
+      - name: Execute matched challenger benchmark on VPS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/qwen35_abliteration_vps_benchmark.py | tee research_entity/experiments/qwen35_abliteration_vps/VPS_BENCHMARK_STDOUT_CURRENT.log
+
+      - name: Commit benchmark receipts
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'clay-vps-runner'
+          git config user.email 'clay-vps-runner@users.noreply.github.com'
+          git pull --rebase origin "$GITHUB_REF_NAME" || true
+          git add research_entity/experiments/qwen35_abliteration_vps/ || true
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'experiment: record Qwen35 abliteration VPS benchmark receipt'
+          git push origin HEAD:"$GITHUB_REF_NAME"

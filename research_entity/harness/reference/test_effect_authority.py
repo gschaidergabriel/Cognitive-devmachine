@@ -69,6 +69,39 @@ class EffectAuthorityTests(unittest.TestCase):
             req = user_req(effect_class=EffectClass.DESTRUCTIVE, destructive_kind=kind, explicit_target=True)
             self.assertEqual(self.gate.evaluate(req).decision, EffectDecision.DENY)
 
+    def test_delete_account_requires_irreversibility_warning(self):
+        missing = user_req(
+            effect_class=EffectClass.DESTRUCTIVE,
+            destructive_kind="DELETE_ACCOUNT",
+            explicit_target=True,
+        )
+        complete = user_req(
+            effect_class=EffectClass.DESTRUCTIVE,
+            destructive_kind="DELETE_ACCOUNT",
+            explicit_target=True,
+            irreversibility_warning=True,
+        )
+        self.assertEqual(self.gate.evaluate(missing).decision, EffectDecision.DENY)
+        self.assertEqual(self.gate.evaluate(complete).decision, EffectDecision.REQUIRE_CONFIRMATION)
+
+    def test_mass_delete_requires_resolved_rollback_state(self):
+        missing = user_req(
+            effect_class=EffectClass.DESTRUCTIVE,
+            destructive_kind="MASS_DELETE",
+            exact_scope=True,
+            count_preview=True,
+            no_backup_disclosed=True,
+        )
+        complete = user_req(
+            effect_class=EffectClass.DESTRUCTIVE,
+            destructive_kind="MASS_DELETE",
+            exact_scope=True,
+            count_preview=True,
+            rollback_state_known=True,
+        )
+        self.assertEqual(self.gate.evaluate(missing).decision, EffectDecision.DENY)
+        self.assertEqual(self.gate.evaluate(complete).decision, EffectDecision.REQUIRE_CONFIRMATION)
+
     def test_stale_confirmation_rejected(self):
         req = user_req(effect_class=EffectClass.PRIVILEGED_CHANGE)
         rcpt = receipt_for(req, "n2", expiry=NOW - timedelta(seconds=1))

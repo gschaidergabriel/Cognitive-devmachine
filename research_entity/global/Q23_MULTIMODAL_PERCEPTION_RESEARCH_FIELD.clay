@@ -1,0 +1,200 @@
+module clay.research.q23_multimodal_perception_field
+version "1.0"
+status PROJECT_OWNER_FIXED_RESEARCH_FIELD
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+trigger="q23"
+identity_guard=@research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md
+live_refresh=@research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md
+live_web=@research_entity/global/INTELLIGENT_LIVE_WEB_KNOWLEDGE_FABRIC.clay
+omnisource=@research_entity/global/CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE.clay
+swarm=@research_entity/global/AUTONOMOUS_SWARM_COORDINATION_DIRECTIVE.clay
+mesh=@research_entity/global/INTERCONNECTED_RESEARCH_MESH_PROTOCOL.md
+adaptive_mesh=@research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+work_fabric=@research_entity/global/CLAY_SYSTEM_WORK_FABRIC.clay
+work_events=@research_entity/global/CLAY_WORK_EVENT_PROTOCOL.clay
+state=UnifiedDB
+topology=ClayGraph
+coordination_language=latest_ClayCode
+
+frank_visual_contract=@research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md
+dissolved_perception=@research_entity/global/FRANK_DISSOLVED_PERCEPTION_DIRECTIVE.md
+adaptive_visual_learning=@research_entity/global/FRANK_V0_1_ADAPTIVE_VISUAL_LEARNING_DIRECTIVE.md
+mvc=@research_entity/retina/RETINA_MICRO_VISUAL_CLASSIFIER.md
+qwen_fusion_candidate=@research_entity/retina/QWEN_NATIVE_DISSOLVED_RETINA_FUSION_CANDIDATE_20260810.md
+
+law FIELD_IS_INTERCONNECTIVE=true
+law FIELD_IS_PERSISTENT_RESEARCH_DOMAIN=true
+law EXACT_Q23_ACTS_IMMEDIATELY=true
+law EVERY_Q23_CYCLE_FORMS_NEW_HYPOTHESES=true
+law EVERY_Q23_CYCLE_FORMS_STRONGEST_COUNTERHYPOTHESES=true
+law EVERY_Q23_CYCLE_PERFORMS_FRESH_ONLINE_RESEARCH=true
+law EVERY_Q23_CYCLE_REFRESHES_INTERNAL_REPO_AND_SHARED_STATE=true
+law ONLINE_RESEARCH_MUST_INCLUDE_PRIMARY_OR_OFFICIAL_SOURCES_WHEN_AVAILABLE=true
+law INTERESTING_EXTERNAL_FINDINGS_MUST_BECOME_PROVENANCE_BOUND_RESEARCH_PACKAGES=true
+law RESEARCH_PACKAGES_MUST_FUSE_WITH_CURRENT_INTERNAL_EVIDENCE=true
+law MATERIAL_RESULT_MUST_REENTER_ARCHITECTURE_TESTS_WORK_OR_EXPLICIT_NO_CHANGE=true
+law MATERIAL_PACKAGES_MUST_ROUTE_BACK_TO_SEMANTICALLY_AFFECTED_SWARM_WORKERS=true
+law ARCHITECTURE_DELTA_IS_CANDIDATE_UNTIL_EVIDENCE_PROMOTES=true
+law COUNTERHYPOTHESIS_AND_NEGATIVE_RESULT_SURVIVE_FUSION=true
+law NEW_EVIDENCE_RECOMPUTES_RESEARCH_FRONTIER=true
+law MODEL_NEWNESS_OR_BENCHMARK_RANK_NEVER_AUTO_PROMOTES_MODEL=true
+law RETINA_LINEAGE_FUNCTIONS_MUST_BE_PRESERVED_OR_CAUSALLY_REPLACED=true
+law NO_PAID_FINAL_TRAINING_WITHOUT_OWNER_AUTHORIZATION=true
+
+record Q23ResearchPackage {
+  package_id:Ref
+  run_id:Ref
+  observed_at:Time
+  topic:Ref
+  title:Clay
+  source_class:OFFICIAL_MODEL|OFFICIAL_RUNTIME|PRIMARY_PAPER|PRIMARY_DATASET|CURRENT_REPO|RUNTIME_RECEIPT|COUNTEREVIDENCE|OTHER_VERIFIED
+  source_refs:Set<Ref>
+  source_dates:Set<Time>
+  retrieval_queries:Set<Clay>
+  currentness_note:Clay
+  finding:Clay
+  why_interesting_for_target_architecture:Clay
+  internal_evidence_refs:Set<Ref>
+  fusion_result:Clay
+  hypothesis_created_or_revised:Set<Ref>
+  counterhypothesis_created_or_revised:Set<Ref>
+  architecture_delta_candidates:Set<Ref>
+  test_obligations:Set<Ref>
+  affected_components:Set<Ref>
+  affected_work:Set<Ref>
+  swarm_targets:Set<Ref>
+  evidence_class:Ref
+  confidence:Score
+  falsifier:Clay?
+  content_hash:Hash
+  provenance_hash:Hash
+}
+
+record Q23ArchitectureDelta {
+  delta_id:Ref
+  parent_architecture_epoch:Ref
+  package_refs:Set<Ref>
+  target_components:Set<Ref>
+  proposed_change:Clay
+  preserved_historical_functions:Set<Ref>
+  expected_benefit:Clay
+  strongest_counterhypothesis:Clay
+  discriminating_test:Clay
+  metric_vector:Set<Ref>
+  resource_budget:Clay
+  rollback:Clay
+  evidence_refs:Set<Ref>
+  status:CANDIDATE|TESTING|SUPPORTED|REFUTED|PROMOTED|NO_CHANGE
+}
+
+field_topics=[
+  QWEN35_4B_MULTIMODAL_INTERNALS,
+  QWEN_VISION_TOWER_AND_MMPROJ_FEATURE_REUSE,
+  LLAMA_CPP_LIBMTMD_RUNTIME_INTERCEPTION,
+  ABLITERATED_MULTIMODAL_4B_OR_SMALLER_MODELS,
+  GUI_SCREEN_UNDERSTANDING,
+  VISUAL_TOKEN_BUDGETING,
+  ROI_AND_CROP_SELECTION,
+  TEMPORAL_SCREEN_REDUNDANCY,
+  ACTION_GROUNDED_VISUAL_MEMORY,
+  CHANGE_EVENT_DRIVEN_PERCEPTION,
+  ACTIVE_VISUAL_SENSING,
+  FAMILIARITY_AND_OPEN_SET_RECOGNITION,
+  CONTINUAL_USER_SPECIFIC_VISUAL_LEARNING,
+  MULTIMODAL_EMBEDDING_AND_FEATURE_GEOMETRY,
+  SMALL_TEXT_OCR_AND_UI_GROUNDING,
+  VISUAL_PROVENANCE_AND_STALE_FRAME_REJECTION,
+  PERCEPTUAL_FIELD_AND_GWT_REENTRY,
+  ONE_MODULE_H3_PHYSICAL_FUSION,
+  MULTIMODAL_MODEL_SELECTION_UNDER_EQUAL_RESOURCE_BUDGET,
+  VISION_FEATURE_CACHE_AND_KV_CACHE_REUSE,
+  CRASH_RESTART_REPLAY_AND_FEATURE_VERSIONING
+]
+
+external_priority=[
+  CURRENT_OFFICIAL_QWEN_MODEL_AND_CODE,
+  CURRENT_LLAMA_CPP_MULTIMODAL_RUNTIME,
+  CURRENT_TRANSFORMERS_QWEN_IMPLEMENTATION,
+  CURRENT_PRIMARY_GUI_AGENT_RESEARCH,
+  CURRENT_PRIMARY_MULTIMODAL_EMBEDDING_RESEARCH,
+  CURRENT_PRIMARY_VISUAL_TOKEN_PRUNING_AND_CACHE_RESEARCH,
+  CURRENT_PRIMARY_CONTINUAL_OPEN_SET_VISUAL_LEARNING_RESEARCH,
+  CURRENT_SMALL_MULTIMODAL_MODEL_RELEASES_AND_OFFICIAL_MODEL_CARDS
+]
+
+feedback_targets=[frank,harness,gwt,claycode,claygraph,unifieddb,hyperposition,emergenz,clayresearch]
+
+rule exact_trigger("q23") -> q23_cycle
+
+q23_cycle := {
+  live_refresh.refresh;
+  read(current canonical + program stage + active workers + current work + recent receipts + hypotheses + counterhypotheses + negative_results + q23_packages);
+  derive at_least_one_current_hypothesis_from(frontier_gap|new_evidence|open_architecture_uncertainty);
+  derive strongest_counterhypothesis_for(each_material_hypothesis);
+  select highest_information_gain_external_questions;
+  retrieve_current_external_evidence(external_priority, selected_questions);
+  retrieve_current_counterevidence_and_competing_mechanisms;
+  package(each_material_or_architecturally_interesting_external_finding as Q23ResearchPackage);
+  fuse(packages with current internal evidence + historical baselines + current architecture + negative results);
+  revise hypotheses + counterhypotheses;
+  derive architecture_delta_candidates only when fusion implies a concrete causal architecture change;
+  attach cheapest_discriminating_test + metric_vector + rollback to each architecture delta;
+  map packages+deltas against current system possibility table + dynamic work;
+  create_or_revise test obligations and nonduplicate work;
+  route packages+deltas to actual affected subset(feedback_targets) through current mesh;
+  require ResearchReentryReceipt for material semantic deltas;
+  live_refresh.refresh;
+  recompute frontier;
+  recurse iff expected_marginal_information_or_architecture_value > compute+coordination+risk and invocation_budget_remains;
+}
+
+rule research_package.source_refs empty -> INVALID_PACKAGE
+rule research_package.currentness_note missing -> INVALID_PACKAGE
+rule external_claim_without_source_date_or_retrieval_time -> UNKNOWN_FRESHNESS
+rule interesting != true
+rule source_popularity != evidence_strength
+rule package_creation != architecture_promotion
+rule architecture_delta -> preserve strongest_counterhypothesis + falsifier + rollback
+rule high_impact_architecture_delta -> adversarial_lane_or_explicit_capacity_blocker
+rule same_source_lineage_workers -> SHARED_ANCESTRY_NOT_INDEPENDENT_REPLICATION
+rule material_package -> omnisource intake + targeted_swarm_reentry
+rule worker_result_relevant_to_field -> omnisource intake + q23 frontier reconsideration
+rule negative_result -> package_and_route_not_discard
+rule NO_MATERIAL_CHANGE -> lightweight package/receipt with searched_sources + reason
+
+// Current high-value falsifier seeded from 2026-08-10 research.
+rule qwen_fusion_candidate current -> prioritize_question(
+  "Can the already-required Qwen vision/mmproj encode serve as Frank's reusable familiarity/routing representation well enough to delete a second heavy visual backbone?"
+)
+rule raw_qwen_features_fail_open_set -> retain_or_test_dedicated_light_embedding_encoder
+rule qwen_features_match_open_set_under_lower_total_cost -> architecture_delta_candidate(delete_duplicate_heavy_visual_backbone)
+rule ROI_causes_context_loss -> revise_to ROI_PLUS_CONTEXT_OR_PERIODIC_ANCHOR
+rule unchanged_visual_state -> prefer_zero_deep_visual_compute when deterministic gate confidence sufficient
+rule uncertainty|novelty|conflict|goal_critical|action_critical -> buy_more_visual_evidence_or_qwen_decode
+
+measure fresh_external_source_count
+measure primary_or_official_source_fraction
+measure counterevidence_source_count
+measure packages_created
+measure package_to_hypothesis_rate
+measure package_to_architecture_delta_rate
+measure package_to_test_obligation_rate
+measure package_to_work_revision_rate
+measure affected_branch_recall
+measure false_interrupt_rate
+measure duplicate_package_suppression
+measure research_to_architecture_feedback_rate
+measure architecture_delta_survival_after_falsification
+measure CPU_RAM_IO_network_token_context_cost
+
+invariant q23_is_research_field_not_FRANK_identity
+invariant q23_online_research_is_mandatory_every_invocation
+invariant q23_hypothesis_generation_is_mandatory_every_invocation
+invariant q23_counterhypothesis_generation_is_mandatory_every_invocation
+invariant every_interesting_external_finding_has_source_and_provenance_package
+invariant package_does_not_mint_truth
+invariant swarm_distribution_does_not_create_independent_evidence
+invariant architecture_delta_requires_test_and_rollback
+invariant Frank_remains_separate_research_subject
+invariant Frank_never_mutates_Clay

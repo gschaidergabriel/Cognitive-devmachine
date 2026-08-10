@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "live-fusion-local-durability-cost-20260810T1434p0700",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "evidence_class": "LOCAL_CANDIDATE_EXECUTION_NOT_TARGET_OR_HOSTINGER_TRUTH",
+  "candidate_ref": "PR156 head lineage through d1f6fe1d70d7770dc31251a5e2e70b0367da1146",
+  "environment": {
+    "machine": "ChatGPT local Python execution container",
+    "os": "Linux-like container runtime",
+    "storage": "temporary local filesystem",
+    "exact_hardware": "UNKNOWN",
+    "filesystem": "UNKNOWN",
+    "power_loss_durability": "NOT_MEASURED",
+    "hostinger_equivalence": false,
+    "andreas_target_equivalence": false
+  },
+  "experiment_1_append_cost": {
+    "n": 300,
+    "payload_bytes_approx": 1024,
+    "strict_locked_fsync_ms": {
+      "p50": 0.676895,
+      "p95": 1.41115425,
+      "p99": 3.86734845,
+      "mean": 0.829963987
+    },
+    "legacy_buffered_append_ms": {
+      "p50": 0.006214,
+      "p95": 0.0079315,
+      "p99": 0.02598014,
+      "mean": 0.007420977
+    },
+    "mean_cost_ratio": 111.8403,
+    "interpretation": "Per-record fsync is materially more expensive than the old buffered append in this local environment; the absolute candidate median remains sub-millisecond for this microbenchmark."
+  },
+  "exactly_one_out_of_box_experiment": {
+    "name": "DERIVED_DELIVERY_SELECTIVE_SYNC_SHADOW",
+    "hypothesis": "Because replay regenerates Delivery from durable worker registration + durable delta identity, derived Delivery records might be group-committed rather than individually fsynced without losing replay equivalence, reducing coordination latency.",
+    "strongest_counterhypothesis": "A delivery receipt is itself required causal/audit evidence; weakening immediate durability can create an unobservable delivered-but-not-durable window and violate the current protocol even if later replay reconstructs routing state.",
+    "n_events": 250,
+    "workers_per_event": 2,
+    "strict_all_records_fsync_ms": {
+      "p50": 2.0838105,
+      "p95": 3.47509265,
+      "p99": 12.76099473,
+      "mean": 2.404043884
+    },
+    "shadow_delivery_not_individually_fsynced_ms": {
+      "p50": 0.8279845,
+      "p95": 1.3623713,
+      "p99": 1.77995618,
+      "mean": 0.88573288
+    },
+    "mean_speedup": 2.7142,
+    "replay_check": {
+      "deltas": "250/250",
+      "deliveries": "500/500"
+    },
+    "selection": "NOT_SELECTED",
+    "reason": "Replay equivalence alone does not prove immediate delivery-receipt durability or power-loss safety. Keep strict semantics until UnifiedDB transaction/group-commit design can preserve the receipt contract and reproduce the speedup under crash/power-loss/fault injection."
+  },
+  "external_primary_pattern_checks": [
+    {
+      "source": "CloudEvents current core specification",
+      "url": "https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md",
+      "finding": "Producer must keep source+id unique per distinct event; repeated delivery may reuse the same id. This supports fail-closed treatment of conflicting content under one claimed event identity as a Clay-level integrity extension rather than silently accepting conflict."
+    },
+    {
+      "source": "Apache Flink CheckpointingMode documentation",
+      "url": "https://nightlies.apache.org/flink/flink-docs-stable/api/java/org/apache/flink/streaming/api/CheckpointingMode.html",
+      "finding": "Exactly-once operator state does not mean records physically flow once and does not by itself guarantee exactly-once effects in external systems."
+    },
+    {
+      "source": "NATS JetStream documentation",
+      "url": "https://docs.nats.io/nats-concepts/jetstream",
+      "finding": "JetStream describes at-least-once failure modes, publication-id deduplication and acknowledgement mechanisms; any broker remains an accelerator, not Clay truth/effect authority."
+    }
+  ],
+  "architecture_delta": "NO_PROMOTION. Preserve strict reference durability now; research UnifiedDB-transaction/group-commit placement for derived delivery receipts as a separate falsifiable optimization.",
+  "next_falsifiers": [
+    "Run strict PR156 current head on Hostinger Ubuntu and record p50/p95/p99 plus CPU/RSS/I/O.",
+    "Compare per-record fsync vs transaction/group-commit while preserving a durable causal delivery receipt under process crash and host/power-loss surrogate fault injection.",
+    "Measure observer backaction on the authoritative raw event writer under busy WAL/write load.",
+    "Require 100% Git/raw-event fallback replay equivalence before any broker or batching optimization."
+  ],
+  "canonical_promotion": "NONE",
+  "frank_harness_mutation": false
+}

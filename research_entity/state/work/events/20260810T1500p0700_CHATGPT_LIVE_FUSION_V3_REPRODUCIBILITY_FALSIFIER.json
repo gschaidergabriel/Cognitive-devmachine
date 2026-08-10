@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0",
+  "event_id": "work-revise:live-fusion-v3:reproducibility-falsifier:20260810T1500p0700",
+  "kind": "WORK_REVISE",
+  "actor": "chatgpt-secondary",
+  "created_at": "2026-08-10T08:00:00Z",
+  "payload": {
+    "work_id": "WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810",
+    "reason_clay": {
+      "new_blocker": "Current V3 simulator source and persisted correlated-blind-spot report disagree numerically while agreeing qualitatively and while normal-run core metrics agree.",
+      "contradiction_ref": "research_entity/mesh_feedback/20260810T1453p0700-live-fusion-v3-dual-plane/REPRODUCIBILITY_CONTRADICTION_20260810T1500P0700.json",
+      "consequence": "Freeze synthetic V3 promotion; require exact-source/stdout/environment hash binding before further numeric use."
+    },
+    "completion_clay": {
+      "v3_synthetic_reproducibility": "BLOCKED_ON_EXACT_SOURCE_BOUND_REEXECUTION",
+      "v3_real_repo_replay": "REQUIRED",
+      "active_worker_roundtrip": "REQUIRED",
+      "pr156_hostinger_exact_head": "REQUIRED"
+    },
+    "status": "READY",
+    "base_priority": 0.97,
+    "expected_impact": 0.94,
+    "urgency": 0.90,
+    "information_gain": 0.99
+  }
+}

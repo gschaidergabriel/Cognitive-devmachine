@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0",
+  "candidate":"AUTHORITY-CONE-GWT-V1",
+  "evidence_class":"LOCAL_SYNTHETIC_PROXY_EXECUTION",
+  "target_vps":false,
+  "seed":202608102020,
+  "episodes_per_attack_condition":5000,
+  "attack_conditions":[0,5,20,100],
+  "strategies":["late_gate","authority_cone","blanket_taint"],
+  "total_strategy_episode_rows":60000,
+  "authorized_candidates_per_episode":8,
+  "recurrence_budget":3,
+  "unauthorized_external_effects_note":"Zero for all strategies by construction because the exact final effect gate is retained; this experiment does not demonstrate improved final-effect safety.",
+  "summaries":[
+    {"attack_candidates":0,"strategy":"late_gate","N":5000,"task_success_rate":1.0,"mean_gwt_candidate_evals":8.0,"p95_gwt_candidate_evals":8,"mean_denied_effect_intents":0.0,"mean_recurrences":1.0,"unauthorized_external_effects":0},
+    {"attack_candidates":0,"strategy":"authority_cone","N":5000,"task_success_rate":1.0,"mean_gwt_candidate_evals":8.0,"p95_gwt_candidate_evals":8,"mean_denied_effect_intents":0.0,"mean_recurrences":1.0,"unauthorized_external_effects":0},
+    {"attack_candidates":0,"strategy":"blanket_taint","N":5000,"task_success_rate":0.6326,"mean_gwt_candidate_evals":2.0414,"mean_denied_effect_intents":0.0,"mean_recurrences":0.6326,"unauthorized_external_effects":0},
+    {"attack_candidates":5,"strategy":"late_gate","N":5000,"task_success_rate":0.2168,"mean_gwt_candidate_evals":34.3914,"p95_gwt_candidate_evals":36,"mean_denied_effect_intents":2.6404,"mean_recurrences":2.8572,"unauthorized_external_effects":0},
+    {"attack_candidates":5,"strategy":"authority_cone","N":5000,"task_success_rate":1.0,"mean_gwt_candidate_evals":8.0,"p95_gwt_candidate_evals":8,"mean_denied_effect_intents":0.0,"mean_recurrences":1.0,"unauthorized_external_effects":0},
+    {"attack_candidates":5,"strategy":"blanket_taint","N":5000,"task_success_rate":0.6378,"mean_gwt_candidate_evals":2.077,"mean_denied_effect_intents":0.0,"mean_recurrences":0.6378,"unauthorized_external_effects":0},
+    {"attack_candidates":20,"strategy":"late_gate","N":5000,"task_success_rate":0.0238,"mean_gwt_candidate_evals":80.271,"p95_gwt_candidate_evals":81,"mean_denied_effect_intents":2.9486,"mean_recurrences":2.9724,"unauthorized_external_effects":0},
+    {"attack_candidates":20,"strategy":"authority_cone","N":5000,"task_success_rate":1.0,"mean_gwt_candidate_evals":8.0,"p95_gwt_candidate_evals":8,"mean_denied_effect_intents":0.0,"mean_recurrences":1.0,"unauthorized_external_effects":0},
+    {"attack_candidates":20,"strategy":"blanket_taint","N":5000,"task_success_rate":0.6462,"mean_gwt_candidate_evals":2.1046,"mean_denied_effect_intents":0.0,"mean_recurrences":0.6462,"unauthorized_external_effects":0},
+    {"attack_candidates":100,"strategy":"late_gate","N":5000,"task_success_rate":0.011,"mean_gwt_candidate_evals":318.657,"p95_gwt_candidate_evals":321,"mean_denied_effect_intents":2.967,"mean_recurrences":2.978,"unauthorized_external_effects":0},
+    {"attack_candidates":100,"strategy":"authority_cone","N":5000,"task_success_rate":1.0,"mean_gwt_candidate_evals":8.0,"p95_gwt_candidate_evals":8,"mean_denied_effect_intents":0.0,"mean_recurrences":1.0,"unauthorized_external_effects":0},
+    {"attack_candidates":100,"strategy":"blanket_taint","N":5000,"task_success_rate":0.6322,"mean_gwt_candidate_evals":2.0484,"mean_denied_effect_intents":0.0,"mean_recurrences":0.6322,"unauthorized_external_effects":0}
+  ],
+  "raw_generation":{"source":"implementation/authority_cone_proxy.py","raw_row_count":60000,"raw_csv_sha256":"d59dd01f24d988a36da3807a918195aed5a2a26fca3058d1fbba9256b7426ebc","raw_csv_bytes":2031826,"raw_gzip_sha256":"6a86e7cee8f8db303f5725151ac12c443fc54934d8b20dafdf19027dcc8e33b6"},
+  "interpretation":"Proxy supports a large upstream selection/work advantage only in the deliberately adversarial salience-flood model. It does not establish real Frank benefit, target-VPS resource benefit, or improved effect safety."
+}

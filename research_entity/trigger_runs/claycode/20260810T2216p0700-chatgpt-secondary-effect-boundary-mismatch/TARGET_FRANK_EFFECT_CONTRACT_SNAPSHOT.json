@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "snapshot_id": "frank-v01-effect-api-current-20260810T2216p0700",
+  "source": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "path": "claycode/frank_effects.clay",
+    "git_blob_sha": "8679542da4f31b99ae4a171f86554ed894eb6e34",
+    "sha256": "10fbc45dca45fe09322b4ab7c0b6621547918dd6fa8e1d37be5817b26ab59544",
+    "target_vps_receipt": "runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
+    "target_vps_run_id": "31400023607"
+  },
+  "g9_binding": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "git_blob_sha": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+    "module": "claycode.g9.v3",
+    "cycle_call": "Needle.execute(effect_intent)",
+    "cycle_call_arity": 1,
+    "effect_intent_fields": [
+      "semantic_intent",
+      "capability",
+      "desired",
+      "constraints",
+      "rollback"
+    ]
+  },
+  "target_effect_intent_fields": [
+    "id",
+    "kind",
+    "target",
+    "payload",
+    "requested_by",
+    "requested_at",
+    "authority",
+    "stage",
+    "evidence"
+  ],
+  "contracts": [
+    {
+      "target": "frank.effects.effect_request_hash",
+      "params": [["req", "EffectRequest"]],
+      "returns": "Symbol"
+    },
+    {
+      "target": "frank.effects.destructive_guard_complete",
+      "params": [["req", "EffectRequest"]],
+      "returns": "Bool"
+    },
+    {
+      "target": "frank.effects.decide_effect",
+      "params": [["req", "EffectRequest"]],
+      "returns": "EffectDecision"
+    },
+    {
+      "target": "frank.effects.confirmation_matches",
+      "params": [["req", "EffectRequest"], ["c", "ConfirmationReceipt"], ["now", "Time"]],
+      "returns": "Bool"
+    },
+    {
+      "target": "frank.effects.authorize_effect",
+      "params": [["req", "EffectRequest"], ["c", "OPTION<ConfirmationReceipt>"], ["now", "Time"]],
+      "returns": "EffectAuthorization"
+    },
+    {
+      "target": "frank.effects.reserve_effect",
+      "generic": ["T"],
+      "params": [["intent", "EffectIntent<T>"], ["auth", "EffectAuthorization"]],
+      "returns": "EffectReservationReceipt"
+    },
+    {
+      "target": "frank.effects.begin_effect_attempt",
+      "generic": ["T"],
+      "params": [["intent", "EffectIntent<T>"], ["auth", "EffectAuthorization"], ["reservation", "EffectReservationReceipt"], ["cap", "Capability"], ["node", "NodeId"], ["attempt", "Symbol"], ["idempotency_key", "OPTION<Symbol>"], ["idempotency_mode", "IdempotencyMode"]],
+      "returns": "EffectAttempt"
+    },
+    {
+      "target": "frank.effects.execute",
+      "generic": ["T"],
+      "params": [["intent", "EffectIntent<T>"], ["cap", "Capability"], ["node", "NodeId"], ["attempt", "EffectAttempt"]],
+      "returns": "EffectReceipt"
+    },
+    {
+      "target": "frank.effects.unknown_outcome",
+      "params": [["attempt", "EffectAttempt"], ["evidence", "SET<EvidenceRef>"]],
+      "returns": "EffectOutcomeState"
+    },
+    {
+      "target": "frank.effects.verify_effect",
+      "params": [["r", "EffectReceipt"]],
+      "returns": "VerifiedEffectReceipt"
+    },
+    {
+      "target": "frank.effects.recover_effect",
+      "params": [["stage", "EffectStage"], ["idempotency_mode", "IdempotencyMode"], ["idempotency_key", "OPTION<Symbol>"]],
+      "returns": "RecoveryDecision"
+    },
+    {
+      "target": "frank.effects.finish",
+      "params": [["v", "VerifiedEffectReceipt"]],
+      "returns": "DoneReceipt"
+    }
+  ],
+  "authority_invariants": [
+    "authority_not_execution",
+    "authorization_not_reservation",
+    "reserved_receipt_required_before_external_attempt",
+    "effect_attempt_binds_exact_authorization_hash",
+    "unknown_outcome_not_success",
+    "executed_not_done_without_verification",
+    "verified_outcome_requires_provenance_bound_reentry_before_done",
+    "model_gwt_translator_claygraph_cannot_mint_authority"
+  ],
+  "scope": "Evidence snapshot only; no production signature invention, authority grant, semantic promotion, or Frank v0.1 PASS."
+}

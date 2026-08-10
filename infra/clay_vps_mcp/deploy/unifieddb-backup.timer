@@ -1,0 +1,13 @@
+[Unit]
+Description=Periodic UnifiedDB snapshots every 15 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=15min
+AccuracySec=1min
+Persistent=true
+RandomizedDelaySec=30s
+Unit=unifieddb-backup.service
+
+[Install]
+WantedBy=timers.target

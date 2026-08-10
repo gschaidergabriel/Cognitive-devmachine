@@ -7,6 +7,16 @@ on:
       - 'research_entity/harness/reference/**'
       - 'research_entity/runtime/semantic_entity_resolver_v12.py'
       - 'research_entity/runtime/RAE_UNIFIEDDB_V12_ENTITY_RESOLUTION.sql'
+      - 'research_entity/runtime/benchmark_unifieddb_real_contract_retrieval_v1.py'
+      - 'research_entity/benchmarks/unifieddb_real_contract_v1/**'
+      - 'research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md'
+      - 'research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md'
+      - 'research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md'
+      - 'research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md'
+      - 'research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md'
+      - 'research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md'
+      - 'research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md'
+      - 'research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md'
       - '.github/workflows/unifieddb-eap-pr-probe.yml'
       - 'research_entity/state/system/unifieddb_eap_pr_probe/**'
 
@@ -124,6 +134,13 @@ jobs:
           assert summary['exact_topk']['frontier_reduction']>0.0
           PY
 
+      - name: Run real Clay contract retrieval accuracy gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 research_entity/runtime/benchmark_unifieddb_real_contract_retrieval_v1.py \
+            | tee /tmp/unifieddb-real-contract.json
+
       - name: Upload PR probe evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -136,5 +153,6 @@ jobs:
             /tmp/eap-e2e.json
             /tmp/eap-exact-topk.json
             /tmp/eap-pr-summary.json
+            /tmp/unifieddb-real-contract.json
           if-no-files-found: warn
           retention-days: 30

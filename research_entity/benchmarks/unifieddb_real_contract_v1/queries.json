@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "UNIFIEDDB_REAL_CLAY_CONTRACT_RETRIEVAL_V1",
+  "class": "MANUALLY_ADJUDICATED_CURRENT_REPO_CONTRACTS",
+  "notes": [
+    "Expected targets are current owner-fixed Clay/Frank contracts, not generated benchmark facts.",
+    "The retrieval implementations must not read expected_path or expected_heading_contains while ranking.",
+    "Queries intentionally include English/German paraphrases and cross-contract reference questions.",
+    "This suite measures retrieval of governing contract evidence, not final model answer quality."
+  ],
+  "queries": [
+    {"id":"identity-authority-de","language":"de","query":"Wer darf Franks Harness tatsächlich verändern, nachdem Frank nur einen Vorschlag gemacht hat?","expected_path":"research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md","expected_heading_contains":"Authority boundary"},
+    {"id":"identity-self-harness-de","language":"de","query":"Kann Frank wegen eigener Selbstbeobachtung sein eigenes Harness selbst ändern oder autorisieren?","expected_path":"research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md","expected_heading_contains":"Authority boundary"},
+    {"id":"identity-room-en","language":"en","query":"Does entering the frank room make the research worker become Frank?","expected_path":"research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md","expected_heading_contains":"Absolute separation"},
+    {"id":"identity-human-boundary-en","language":"en","query":"What is Andreas' operational interface and who is the research interface?","expected_path":"research_entity/global/RESEARCH_ENTITY_EVERY_TURN_IDENTITY_INJECTION.md","expected_heading_contains":"Human-facing boundary"},
+
+    {"id":"ubuntu-target-de","language":"de","query":"Welches Betriebssystem ist der operative Release-Target für Frank v0.1?","expected_path":"research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md","expected_heading_contains":"Fixed target"},
+    {"id":"ubuntu-android-de","language":"de","query":"Muss Android oder Mobile vor Frank v0.1 als Portabilitäts-Gate unterstützt werden?","expected_path":"research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md","expected_heading_contains":"Explicit out-of-scope targets"},
+    {"id":"ubuntu-other-os-en","language":"en","query":"Are Windows macOS or BSD release gates for Frank v0.1?","expected_path":"research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md","expected_heading_contains":"Explicit out-of-scope targets"},
+    {"id":"ubuntu-claycode-en","language":"en","query":"What operating system must the first ClayCode compiler/runtime release path validate on?","expected_path":"research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md","expected_heading_contains":"ClayCode consequence"},
+
+    {"id":"native-needle-de","language":"de","query":"Welche Komponente ist die einzige absichtlich nicht-Clay semantische Ausnahme?","expected_path":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","expected_heading_contains":"Sole intentional semantic foreign body"},
+    {"id":"native-needle-authority-en","language":"en","query":"May Needle mint execution authority just because it is retained inside the Clay-native architecture?","expected_path":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","expected_heading_contains":"Sole intentional semantic foreign body"},
+    {"id":"native-hidden-arch-de","language":"de","query":"Darf neben Clay eine zweite unabhängige semantische Architektur in Python Rust JSON oder SQL entstehen?","expected_path":"research_entity/global/FRANK_CLAY_NATIVE_CONTRACT.md","expected_heading_contains":"No hidden second architecture"},
+    {"id":"native-retina-link-en","language":"en","query":"Which referenced contract makes Digital Retina a mandatory multimodal extension of the Clay-native architecture?","expected_path":"research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md"},
+
+    {"id":"retina-optional-de","language":"de","query":"Ist die visuelle Wahrnehmung durch Digital Retina in Frank v0.1 optional?","expected_path":"research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md","expected_heading_contains":"Fixed target"},
+    {"id":"retina-learner-de","language":"de","query":"Muss der kleine benutzerspezifische visuelle Lerner in v0.1 vorhanden sein und zyklisch begrenzt aktualisiert werden?","expected_path":"research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md","expected_heading_contains":"Adaptive user-specific visual learning"},
+    {"id":"retina-bronze-en","language":"en","query":"Can a BRONZE self-prediction directly become positive training truth for the visual learner?","expected_path":"research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md","expected_heading_contains":"Adaptive user-specific visual learning"},
+    {"id":"retina-authority-de","language":"de","query":"Darf ein Bildmodell oder Micro Visual Classifier unmittelbar Ausführungsautorität erzeugen?","expected_path":"research_entity/global/FRANK_DIGITAL_RETINA_MULTIMODAL_CONTRACT.md","expected_heading_contains":"Clay-native boundary"},
+
+    {"id":"baseline-before-replace-de","language":"de","query":"Was muss vor dem Ersetzen Verschmelzen oder Auflösen eines historischen Frank-Organs gemessen werden?","expected_path":"research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md","expected_heading_contains":"Absolute baseline law"},
+    {"id":"baseline-archaeology-en","language":"en","query":"What baseline class is required when the exact historical executable can no longer be run?","expected_path":"research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md","expected_heading_contains":"Absolute baseline law"},
+    {"id":"baseline-retrieval-metrics-de","language":"de","query":"Welche Genauigkeitsmetriken sind für Retrieval und Memory vorgeschrieben, etwa Recall MRR nDCG Provenienz und Staleness?","expected_path":"research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md","expected_heading_contains":"Accuracy / functional correctness"},
+    {"id":"baseline-one-run-en","language":"en","query":"Does one successful run establish reliability or may one lucky run be treated as proof?","expected_path":"research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md","expected_heading_contains":"Hard invariants"},
+    {"id":"baseline-from-loop-ref-en","language":"en","query":"The loop-core directive says historical organs must be reconstructed before dissolution; which governing contract defines the required original baseline package?","expected_path":"research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md"},
+
+    {"id":"refresh-once-de","language":"de","query":"Reicht eine einzige Websuche am Anfang eines langen Forschungsruns aus?","expected_path":"research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md","expected_heading_contains":"Research-inside-research law"},
+    {"id":"refresh-code-en","language":"en","query":"Before a material code patch, what freshness cycle must be followed instead of a long blind patch chain?","expected_path":"research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md","expected_heading_contains":"Code / build / debugging law"},
+    {"id":"refresh-external-de","language":"de","query":"Was ist zu tun, wenn aktuelle externe Informationen die nächste materielle Entscheidung verändern können?","expected_path":"research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md","expected_heading_contains":"External-source rule"},
+    {"id":"refresh-from-go-ref-en","language":"en","query":"Which governing protocol requires every material go subcycle to refresh current state and says one web refresh at run start is insufficient?","expected_path":"research_entity/global/LIVE_KNOWLEDGE_REFRESH_PROTOCOL.md"},
+
+    {"id":"loop-stalled-de","language":"de","query":"Wie wird ein Zustand klassifiziert, wenn sich der State kaum ändert aber der ungelöste Fehlerdruck hoch bleibt?","expected_path":"research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md","expected_heading_contains":"Mandatory dynamical distinction"},
+    {"id":"loop-fixedpoint-en","language":"en","query":"Must every useful recurrent process be forced to converge to a fixed point?","expected_path":"research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md","expected_heading_contains":"Mandatory dynamical distinction"},
+    {"id":"loop-needle-location-de","language":"de","query":"Wo sitzt Needle in der Zielarchitektur des vollständigen Frank Loop-Core?","expected_path":"research_entity/global/FRANK_LOOP_OF_LOOPS_RESEARCH_DIRECTIVE.md","expected_heading_contains":"Owner-fixed target"},
+    {"id":"loop-baseline-link-de","language":"de","query":"Welcher verlinkte Vertrag bestimmt die Messdimensionen bevor ein historisches Organ in den einen Loop-Core überführt wird?","expected_path":"research_entity/global/FRANK_ORGAN_MODULE_BASELINE_BENCHMARK_CONTRACT.md"},
+
+    {"id":"go-exact-trigger-en","language":"en","query":"What exact complete message triggers maximum useful recursive Clay research build and VPS testing?","expected_path":"research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md","expected_heading_contains":"Meaning"},
+    {"id":"go-oob-de","language":"de","query":"Wie viele ungewöhnliche Out-of-the-box Experimente versucht jeder exakte go Makrozyklus?","expected_path":"research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md","expected_heading_contains":"Mandatory out-of-the-box experiment"},
+    {"id":"go-queued-en","language":"en","query":"Does QUEUED mean a test was executed and passed?","expected_path":"research_entity/triggers/GO_RECURSIVE_SWARM_CYCLE_PROTOCOL.md","expected_heading_contains":"Research -> implementation -> execution"}
+  ]
+}

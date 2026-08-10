@@ -2,8 +2,9 @@
 """Receipt-bound V18 FrontendArtifact -> existing ClayCode BASE TypedIR bridge.
 
 CC-WP-03 integration slice. The bridge consumes the exact canonical WP02 artifact and
-never reparses source. It fail-closes on frontend schema/surface/grammar/semantic-hash
-drift, then delegates typed declaration construction to the existing WP03 builder.
+never reparses source. It fail-closes on frontend schema/surface/grammar/semantic-hash/
+contract-hash drift, then delegates typed declaration construction to the existing WP03
+builder.
 
 Semantic program identity remains content-derived. Runtime/state instance identity is a
 separate epoch/version-bound identity so equal semantic value cannot silently authorize a
@@ -52,6 +53,19 @@ def validate_frontend_artifact(artifact: dict[str, Any]) -> dict[str, Any]:
     recomputed = sha256(front.DOMAIN + front.canonical_bytes(ast))
     if artifact.get("semantic_hash") != recomputed:
         raise V18BridgeError("frontend semantic_hash mismatch/tamper")
+
+    expected_contract = sha256(
+        stable_json(
+            {
+                "frontend_schema": EXPECTED_FRONTEND_SCHEMA,
+                "grammar_sha256": EXPECTED_GRAMMAR_SHA256,
+                "semantic_hash": recomputed,
+            }
+        )
+    )
+    if artifact.get("contract_hash") != expected_contract:
+        raise V18BridgeError("frontend contract_hash mismatch/tamper")
+
     source_sha = artifact.get("source_sha256")
     if not isinstance(source_sha, str) or len(source_sha) != 64:
         raise V18BridgeError("source_sha256 missing/invalid")
@@ -61,7 +75,7 @@ def validate_frontend_artifact(artifact: dict[str, Any]) -> dict[str, Any]:
         "grammar_sha256": EXPECTED_GRAMMAR_SHA256,
         "source_sha256": source_sha,
         "semantic_hash": recomputed,
-        "contract_hash": artifact.get("contract_hash"),
+        "contract_hash": expected_contract,
     }
 
 

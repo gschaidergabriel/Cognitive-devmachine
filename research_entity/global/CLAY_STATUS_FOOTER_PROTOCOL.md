@@ -28,6 +28,10 @@ This adds a live milestone block for the first complete GitHub-based FRANK Harne
 
 All bars use the current configured bar-cell count and fill proportionally from their current calculated percentage.
 
+## Target-host law
+
+The sole Frank v0.1 target host is the persistent VPS according to `research_entity/global/FRANK_V0_1_VPS_TARGET_HOST_DIRECTIVE.md`. Older status/footer text naming Andreas' PC as the v0.1 goal is superseded.
+
 Required base form:
 
 ```text
@@ -38,7 +42,7 @@ Canonical: <revision/hash>
 Organ: <current organ/provenance>
 Trigger: <none|registered trigger>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
-Goal: Frank v0.1 voll lauffähig auf Andreas PC
+Goal: Frank v0.1 voll lauffähig 24/7 auf dem VPS mit authentifizierter API
 Short commands: 666 · go · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
 NEXT LEVEL
@@ -75,7 +79,7 @@ Pre-send invariant:
 1. one final fenced text block;
 2. opener exactly ` ```text `;
 3. heading exactly `CLAY STATUS`;
-4. goal present;
+4. goal present and VPS-targeted;
 5. short commands include `go` and `clayresearch` and exclude `clay`;
 6. every displayed progress bar was resolved from current state for this response;
 7. exact `frank` includes the dynamic FIRST GITHUB FRANK HARNESS block;

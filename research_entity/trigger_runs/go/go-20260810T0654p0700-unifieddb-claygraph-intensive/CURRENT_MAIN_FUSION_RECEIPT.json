@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T07:33:00+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "focus": ["UnifiedDB", "ClayGraph"],
+  "canonical_promotion": "NONE",
+  "evidence_classes": [
+    "LOCAL_SYNTHETIC_EXECUTION",
+    "REPOSITORY_CURRENT_MAIN_FUSION",
+    "PRIMARY_WEB_RESEARCH"
+  ],
+  "scope_guard": "Claims are Frank/Clay-workload-specific candidates. No universal physical-database superiority is claimed.",
+  "core_falsifications": {
+    "universal_database_superiority": "REFUTED",
+    "same_semantics_generic_relational_accuracy": "IDENTICAL on measured synthetic graph-policy control",
+    "exact_key_always_through_clay_layer": "REFUTED by current-main ordinary indexed lookup floor",
+    "always_materialize_graph_head": "REFUTED by V16 compile-amortization fusion",
+    "out_of_box_epoch_sealed_capsule": "NO_BENEFIT_NOT_SELECTED"
+  },
+  "measured_local_results": {
+    "unifieddb_query_plane": {
+      "rows": 8000,
+      "queries": 120,
+      "equivalence_checks": 20,
+      "mismatches": 0,
+      "legacy_full_materialization_p50_us": 20129.2,
+      "sql_pushdown_p50_us": 119.6,
+      "speedup_p50": 168.4
+    },
+    "claygraph_v3_partial_rebuild_falsifier": {
+      "source_rows": 127584,
+      "logical_heads": 38400,
+      "stale_resurrected_paths": 516,
+      "bug": "V3 latest semantic-access view selects MAX(graph_epoch) only among CURRENT rows, allowing a newer QUARANTINED/SUPERSEDED version to revive an older CURRENT version.",
+      "strict_semantics": "newest version per (seed,target) first; expose only if newest status is CURRENT",
+      "strict_query_p50_us": 6709.521,
+      "derived_head_p50_us": 21.9675,
+      "strict_to_head_speedup_p50": 305.4294,
+      "top12_queries": 400,
+      "strict_vs_head_top12_mismatches": 0
+    },
+    "claygraph_head_write_tradeoff": {
+      "v3_insert_us_per_row": 5.3882,
+      "pruned_head_insert_us_per_row": 13.3547,
+      "write_overhead_ratio": 2.4785,
+      "head_rebuild_us": 200754.0,
+      "redundant_index_prune_write_improvement_ratio": 1.213
+    },
+    "sqlite_write_serialization_microbenchmark": {
+      "iterations_each": 500,
+      "uncontended_begin_immediate_plus_rollback_p50_us": 4.276,
+      "uncontended_p95_us": 4.677,
+      "busy_begin_immediate_fail_p50_us": 2.283,
+      "busy_p95_us": 2.61445,
+      "busy_sqlite_errorcode": 5,
+      "scope": "SQLite lock-gate microbenchmark only; not full Frank latency"
+    }
+  },
+  "current_main_fusion": {
+    "u16_compile_amortization": {
+      "build_cost_us": 200754.0,
+      "online_strict_query_us": 6709.521,
+      "compiled_head_query_us": 21.9675,
+      "raw_break_even_reads": 30.0190495672,
+      "safety_factor": 1.2,
+      "guarded_break_even_reads": 36.0228594807,
+      "decision_at_36_reads": "ONLINE_STRICT",
+      "decision_at_37_reads": "COMPILE_HEAD"
+    },
+    "architecture": "Canonical UnifiedDB + rebuildable ClayGraph + cheapest validated read primitive + epoch/provenance-bound model-facing possibility/context field.",
+    "graph_head_law": "Strict correctness is always available; derived head compilation is permitted only after strict/head full-row equality, zero same-epoch ambiguity, and positive guarded amortization."
+  },
+  "new_current_main_candidate": {
+    "branch": "chatgpt/go-u11b-verified-generation-current-main-20260810",
+    "files": [
+      "research_entity/runtime/RAE_UNIFIEDDB_V11B_GRAPH_PLAN_BINDINGS.sql",
+      "research_entity/runtime/semantic_access_generation_builder_v11.py",
+      "research_entity/runtime/test_semantic_access_v11.py",
+      "research_entity/runtime/test_semantic_access_v11_graph_gate.py",
+      "research_entity/runtime/claygraph_semantic_head_compile_gate_v16.py",
+      "research_entity/runtime/test_claygraph_semantic_head_compile_gate_v16.py"
+    ],
+    "u11b_invariants": [
+      "generation paths covered by explicit VERIFIED ClayGraph plans",
+      "clean passed verification receipt required",
+      "source/graph epoch and topology hash bound durably",
+      "stage/verify/publish use owned BEGIN IMMEDIATE serialization boundaries",
+      "verify and publish revalidate graph-plan bindings",
+      "graph/plan drift quarantines candidate and preserves last-known-good",
+      "SQLITE_BUSY is classified before mutation as safe for policy-layer retry from fresh state"
+    ],
+    "local_logic_falsifiers": {
+      "graph_gate_cases": 7,
+      "graph_gate_passed": 7,
+      "busy_two_connection_case_added_to_repository_test": true,
+      "exact_ubuntu_ci_pass": false,
+      "ci_note": "Earlier stale-branch GitHub-hosted workflow failed before exposing executable steps/logs; treated as infrastructure-red, not code evidence."
+    }
+  },
+  "web_fusion": {
+    "sqlite_transaction_result": "BEGIN IMMEDIATE starts a write transaction immediately and prevents a second concurrent writer from entering the verification-to-publication gap; it can return SQLITE_BUSY under contention.",
+    "sqlite_busy_policy_result": "Do not silently replace the connection-wide busy handler inside the semantic builder; classify busy fail-closed and leave bounded retry/backoff to the continuity layer.",
+    "graphrunner_result": "External primary research supports separating traversal planning, verification and execution; it is mechanism-direction evidence, not Clay-specific proof."
+  },
+  "out_of_box_experiment": {
+    "name": "epoch-sealed neighbor capsule",
+    "result": "NO_BENEFIT_NOT_SELECTED",
+    "speedup_p50": 1.07,
+    "reason": "insufficient gain for extra storage/build/invalidation/recovery surface"
+  },
+  "remaining_promotion_gates": [
+    "Exact repository tests on a clean checkout/runner for current-main candidate",
+    "Held-out real Clay natural-language retrieval including misspellings/pronouns/genuine ambiguity",
+    "Full-row strict-vs-head equality on real ClayGraph corpus with ambiguity_count=0",
+    "Concurrent writer + crash/restart/replay tests with durability settings representative of target Ubuntu",
+    "Read/write/invalidation mix proving V16 compile decision positive on real workload",
+    "Frank downstream answer/tool-route/calibration/token-context outcome measurements",
+    "Hostinger/Ubuntu and final Andreas Ubuntu acceptance receipts"
+  ]
+}

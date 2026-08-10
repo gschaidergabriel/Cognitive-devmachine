@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "feedback_id": "mesh-feedback-live-fusion-continuous-reentry-20260810T1625p0700",
+  "created_at": "2026-08-10T16:25:00+07:00",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "subject": "Continuous live fusion of new data with explicit research re-entry",
+  "status": "OPEN_CROSS_BRANCH_RESEARCH_CANDIDATE",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "basis": {
+    "current_candidate": "research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay",
+    "current_candidate_status": "CANDIDATE_NOT_PROMOTED",
+    "current_real_replay_work": "WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810",
+    "repo_observation": "No verified real-repo execution receipt was established in this turn; candidate remains unpromoted.",
+    "evidence_class": "CURRENT_REPO_STATE_PLUS_LIVE_PRIMARY_RESEARCH"
+  },
+  "live_external_research": [
+    {
+      "ref": "arXiv:2603.27775 / SIGMOD Companion 2026",
+      "title": "Enzyme: Incremental View Maintenance for Data Engineering",
+      "finding": "Production-scale incremental maintenance benefits from cost-based strategy selection rather than assuming one refresh strategy is always best.",
+      "clay_implication": "Strengthens RoutePlan as an adaptive cost/recall/risk decision. Do not dogmatically force TARGETED_DELTA when dense/global refresh is cheaper or safer."
+    },
+    {
+      "ref": "DOI:10.1145/3769760",
+      "title": "Approximate Query Processing under Updates",
+      "finding": "Bounded approximation can reduce incremental update cost for some aggregation workloads.",
+      "clay_implication": "Permit approximation only in non-authoritative priority/telemetry shadows. Canonical evidence, provenance, causal identity, effect authority and research-state mutation remain exact/fail-closed."
+    },
+    {
+      "ref": "arXiv:2607.19679",
+      "title": "Benchmarking the Full Pipeline of Materialized-View-Based Query Rewriting",
+      "finding": "End-to-end behavior depends on interactions among candidate enumeration, selection and rewriting; isolated stage wins can regress the full pipeline.",
+      "clay_implication": "Benchmark the full live-fusion chain source->normalize->delta->fuse->route->receiver reconstruct/use->research reentry, with stage ablations and end-to-end outcome/resource metrics."
+    },
+    {
+      "ref": "arXiv:2606.07795",
+      "title": "The Role of Semirings in Incremental View Maintenance",
+      "finding": "Incremental-maintenance complexity depends on the algebra used, including provenance-related semirings.",
+      "clay_implication": "Research a provenance-preserving delta algebra for UnifiedDB/ClayGraph projections, but do not reopen BASE ClayCode semantics unless an executable counterexample requires it."
+    }
+  ],
+  "research_delta": {
+    "name": "CONTINUOUS_LIVE_FUSION_REENTRY_V1",
+    "kind": "REFINES",
+    "summary": "Treat every admitted new internal or external observation as a provenance-bound delta that is fused against current research state, routed by current dependency topology, and required to produce explicit re-entry into hypotheses, counterhypotheses, experiments, tests, architecture/work, negative results or evidence-backed NO_CHANGE.",
+    "all_new_data_semantics": "All new data means all newly observed data from currently authorized/connected source adapters and runtime/repository evidence streams within declared freshness/SLO scope. It does not mean exhaustive crawling of the entire internet or unverifiable universal completeness.",
+    "dual_lane": {
+      "EXACT_RESEARCH_STATE": "Canonical evidence/provenance/causal/effect/research mutation lane. No approximate truth. Missing/stale evidence remains UNKNOWN or DEGRADED.",
+      "APPROXIMATE_PRIORITY_SHADOW": "Optional bounded sketches/approximation for prioritization, anomaly ranking, route-cost estimation and candidate triage only. Cannot mint truth, causal credit, authority or canonical state."
+    },
+    "required_reentry_receipt": [
+      "source_observation_id",
+      "knowledge_delta_id",
+      "fusion_epoch",
+      "affected_claims_work_branches",
+      "route_plan",
+      "receiver_delivery_reconstruction_use",
+      "research_effect_type",
+      "resulting_hypothesis_test_architecture_work_or_NO_CHANGE_ref",
+      "provenance_and_truth_class",
+      "rollback_or_repair_ref"
+    ],
+    "research_effect_types": [
+      "HYPOTHESIS_CREATE_OR_REVISE",
+      "COUNTERHYPOTHESIS_CREATE_OR_REVISE",
+      "EXPERIMENT_OR_TEST_OBLIGATION",
+      "ARCHITECTURE_DELTA_CANDIDATE",
+      "WORK_CREATE_OR_REVISE",
+      "NEGATIVE_RESULT",
+      "NO_CHANGE_WITH_EVIDENCE"
+    ]
+  },
+  "new_test_obligations": [
+    "LIVE_SOURCE_BURST_REPLAY",
+    "SOURCE_DROPOUT_AND_RECOVERY",
+    "CONTRADICTORY_SOURCE_PAIR",
+    "DUPLICATE_AND_OUT_OF_ORDER_SOURCE_EVENTS",
+    "STALE_SOURCE_TIMESTAMP_AND_STALE_PROJECTION",
+    "HIGH_CENTRALITY_GLOBAL_INVALIDATION",
+    "APPROXIMATE_PRIORITY_SHADOW_LESION",
+    "EXACT_VS_SHADOW_AUTHORITY_BOUNDARY",
+    "END_TO_END_PIPELINE_STAGE_ABLATION",
+    "CRASH_RESTART_WITH_UNACKNOWLEDGED_REENTRY_RECEIPT"
+  ],
+  "promotion_guard": "This delta refines research/test obligations only. It does not promote CLAY_LIVE_FUSION_MESH_V2_CANDIDATE and grants no BASE ClayCode acceptance credit.",
+  "branches": {
+    "clayresearch": "Every material new datum must terminate in an explicit research re-entry effect or evidence-backed NO_CHANGE, not a stranded report.",
+    "frank": "Frank-related live evidence may alter research priorities and Harness proposals only through Research Entity authority; Frank self-Harness authority remains proposal-only.",
+    "gwt": "Measure delta delivered/reconstructed/used/research-effect separately; mere exposure is not causal uptake.",
+    "emergenz": "Test whether stronger fusion causes overcoupling, synchrony collapse, false interrupts or self-reinforcing evidence loops; connectivity remains non-evidence.",
+    "claycode": "Represent exact research-state and shadow-priority lanes with typed authority separation using current semantics first; reopen semantics only for executable counterexamples.",
+    "hyperposition": "Keep competing route plans and unresolved interpretations live until evidence selects; approximate shadow may rank but not collapse canonical alternatives.",
+    "claygraph": "Use current derived dependency topology for targeted propagation, while exposing stale/missing-edge uncertainty and forcing anti-entropy repair.",
+    "unifieddb": "Persist source observation, canonical delta, fusion/reentry receipts and exact-vs-shadow lane identity transactionally with coherent semantic epochs.",
+    "harness": "Extend real replay to the full source-to-research-reentry pipeline and execute fault/ablation matrix before architectural promotion."
+  },
+  "global_controls": [
+    "new_data_volume != evidence_strength",
+    "connectivity != truth",
+    "delivery != reconstruction != use != research_effect",
+    "approximate_priority != approximate_truth",
+    "shared_distribution != independent_replication",
+    "stale_or_missing_source != zero",
+    "candidate != promotion",
+    "Frank remains separate research subject and never mutates Clay"
+  ],
+  "research_write_result": "DURABLE_CROSS_BRANCH_FEEDBACK_CREATED"
+}

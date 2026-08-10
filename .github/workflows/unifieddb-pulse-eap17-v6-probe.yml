@@ -2,6 +2,17 @@ name: UnifiedDB Pulse EAP17 V6 probe
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'chatgpt/unifieddb-pulse-query-aware-v6-20260810'
+    paths:
+      - 'research_entity/runtime/eap_query_aware_gate_v17.py'
+      - 'research_entity/runtime/test_eap_query_aware_gate_v17.py'
+      - 'research_entity/runtime/database_pulse_rank_path_v6.py'
+      - 'research_entity/runtime/test_database_pulse_rank_path_v6.py'
+      - 'tools/eap_query_aware_gate_v17_benchmark.py'
+      - 'tools/run_unifieddb_pulse_eap17_v6_probe.sh'
+      - '.github/workflows/unifieddb-pulse-eap17-v6-probe.yml'
   pull_request:
     paths:
       - 'research_entity/runtime/eap_query_aware_gate_v17.py'
@@ -9,13 +20,14 @@ on:
       - 'research_entity/runtime/database_pulse_rank_path_v6.py'
       - 'research_entity/runtime/test_database_pulse_rank_path_v6.py'
       - 'tools/eap_query_aware_gate_v17_benchmark.py'
+      - 'tools/run_unifieddb_pulse_eap17_v6_probe.sh'
       - '.github/workflows/unifieddb-pulse-eap17-v6-probe.yml'
 
 permissions:
   contents: read
 
 jobs:
-  ubuntu-reference:
+  hosted-preflight:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -23,59 +35,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Runtime metadata
-        run: |
-          python - <<'PY'
-          import json, os, platform, sqlite3, sys
-          print(json.dumps({
-              'runner_os': os.environ.get('RUNNER_OS'),
-              'runner_arch': os.environ.get('RUNNER_ARCH'),
-              'platform': platform.platform(),
-              'python': sys.version,
-              'sqlite': sqlite3.sqlite_version,
-          }, indent=2))
-          PY
-      - name: Compile new modules
-        run: |
-          python -m py_compile \
-            research_entity/runtime/eap_query_aware_gate_v17.py \
-            research_entity/runtime/database_pulse_rank_path_v6.py \
-            tools/eap_query_aware_gate_v17_benchmark.py
-      - name: Query-aware EAP adversarial tests
-        run: python -m unittest -v research_entity.runtime.test_eap_query_aware_gate_v17
-      - name: Pulse V6 provenance and rollback adversarial tests
-        run: python -m unittest -v research_entity.runtime.test_database_pulse_rank_path_v6
-      - name: Existing parent EAP regression tests when present
-        shell: bash
-        run: |
-          shopt -s nullglob
-          files=(research_entity/harness/reference/test*unifieddb*preprocessor*.py research_entity/runtime/test*emergent*preprocessor*.py)
-          if ((${#files[@]})); then
-            python -m unittest -v "${files[@]}"
-          else
-            echo 'No matching parent EAP unittest file in this checkout; new tests include exact parent lesion checks.'
-          fi
-      - name: EAP query-aware discriminating benchmark
-        run: |
-          mkdir -p research_entity/benchmarks/database_pulse
-          python tools/eap_query_aware_gate_v17_benchmark.py \
-            --cases 64 \
-            --repeats 7 \
-            --output research_entity/benchmarks/database_pulse/eap_query_aware_gate_v17_ubuntu.json
-      - name: SQLite integrity smoke
-        run: |
-          python - <<'PY'
-          from research_entity.harness.reference.state_ledger import StateLedger
-          from research_entity.runtime.database_pulse_rank_path_v6 import AdaptiveAuthoritativeRankPathV6
-          ledger = StateLedger()
-          path = AdaptiveAuthoritativeRankPathV6(ledger)
-          assert ledger.conn.execute('PRAGMA quick_check').fetchone()[0] == 'ok'
-          assert ledger.conn.execute('PRAGMA foreign_key_check').fetchall() == []
-          assert path.maintenance_receipts_v6() == []
-          print('quick_check=ok foreign_key_check=0 v6_receipts=0')
-          PY
+      - name: EAP17 V6 full probe
+        run: bash tools/run_unifieddb_pulse_eap17_v6_probe.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: unifieddb-pulse-eap17-v6-ubuntu
-          path: research_entity/benchmarks/database_pulse/eap_query_aware_gate_v17_ubuntu.json
+          name: unifieddb-pulse-eap17-v6-hosted
+          path: research_entity/benchmarks/database_pulse/eap_query_aware_gate_v17_*.json
+          if-no-files-found: error
+
+  hostinger-probe:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: EAP17 V6 full probe
+        run: bash tools/run_unifieddb_pulse_eap17_v6_probe.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unifieddb-pulse-eap17-v6-hostinger
+          path: research_entity/benchmarks/database_pulse/eap_query_aware_gate_v17_*.json
           if-no-files-found: error

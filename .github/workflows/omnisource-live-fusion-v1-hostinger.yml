@@ -1,0 +1,108 @@
+name: Clay omnisource live-fusion V1 self-hosted validation
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/runtime/RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FUSION.sql'
+      - 'research_entity/experiments/omnisource_live_fusion_v1_test.py'
+      - '.github/workflows/omnisource-live-fusion-v1-hostinger.yml'
+
+concurrency:
+  group: clay-omnisource-live-fusion-v1-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  validate-self-hosted:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run deterministic SQLite candidate test
+        id: candidate
+        shell: bash
+        run: |
+          set +e
+          python3 research_entity/experiments/omnisource_live_fusion_v1_test.py \
+            --perf-n 10000 \
+            --out /tmp/omnisource-result.json
+          rc=$?
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Record fail-observable self-hosted receipt
+        shell: bash
+        env:
+          TEST_RC: ${{ steps.candidate.outputs.rc }}
+          RUNNER_NAME_VALUE: ${{ runner.name }}
+          RUNNER_OS_VALUE: ${{ runner.os }}
+          RUNNER_ARCH_VALUE: ${{ runner.arch }}
+          GH_RUN_ID: ${{ github.run_id }}
+          GH_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GH_SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import json, os, platform, sqlite3, subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+          raw_path=Path('/tmp/omnisource-result.json')
+          try:
+              raw=json.loads(raw_path.read_text())
+          except Exception as e:
+              raw={'pass':False,'parse_error':repr(e)}
+          rc=int(os.environ.get('TEST_RC','99'))
+          status='PASS' if rc==0 and raw.get('pass') is True else 'FAIL'
+          receipt={
+            'schema_version':'1.0',
+            'receipt_id':f"omnisource-live-fusion-v1-selfhosted-{os.environ.get('GH_RUN_ID')}-{os.environ.get('GH_RUN_ATTEMPT')}",
+            'evidence_class':'REMOTE_EXECUTION_RECEIPT',
+            'status':status,
+            'test_exit_code':rc,
+            'repository_commit':os.environ.get('GH_SHA'),
+            'workflow_run_id':os.environ.get('GH_RUN_ID'),
+            'workflow_run_attempt':os.environ.get('GH_RUN_ATTEMPT'),
+            'runner':{
+              'name':os.environ.get('RUNNER_NAME_VALUE'),
+              'os':os.environ.get('RUNNER_OS_VALUE'),
+              'arch':os.environ.get('RUNNER_ARCH_VALUE'),
+              'platform':platform.platform(),
+              'python':platform.python_version(),
+              'sqlite':sqlite3.sqlite_version,
+            },
+            'candidate':'research_entity/runtime/RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FUSION.sql',
+            'test':'research_entity/experiments/omnisource_live_fusion_v1_test.py',
+            'result':raw,
+            'promotion_scope':'NONE_AUTOMATIC; remote candidate evidence only',
+            'observed_at':datetime.now(timezone.utc).isoformat(),
+          }
+          out=Path('research_entity/experiments/OMNISOURCE_LIVE_FUSION_V1_SELFHOSTED_RECEIPT.json')
+          out.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+
+      - name: Commit receipt
+        shell: bash
+        run: |
+          git config user.name 'clay-selfhosted-receipt'
+          git config user.email 'clay-selfhosted-receipt@users.noreply.github.com'
+          git add research_entity/experiments/OMNISOURCE_LIVE_FUSION_V1_SELFHOSTED_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record self-hosted omnisource live-fusion V1 receipt'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1
+
+      - name: Enforce candidate test verdict
+        if: always()
+        shell: bash
+        env:
+          TEST_RC: ${{ steps.candidate.outputs.rc }}
+        run: |
+          test "$TEST_RC" = "0"

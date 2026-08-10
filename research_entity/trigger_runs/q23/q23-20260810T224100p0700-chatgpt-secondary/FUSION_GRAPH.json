@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
+  "decision_graph": {
+    "root_question": "single Qwen deep visual representation vs lightweight independent MVC feature encoder",
+    "facts": [
+      "Qwen3.5 and Qwen3-VL differ materially in DeepStack behavior.",
+      "Qwen3.5 exposes pre-merger and merged vision representations in reference code.",
+      "Public libmtmd provides final encoded media embeddings and positional metadata.",
+      "llama.cpp helper can decode already-computed media embeddings.",
+      "Dedicated retrieval embedding models receive explicit representation training.",
+      "Very small independent feature encoders exist and are not automatically resource-prohibitive."
+    ],
+    "fused_candidate": "QNDRF-1.1 defaults to public projected Qwen token-grid reuse plus strict feature/cache lifetime typing, but keeps pre-merger and MobileCLIP2-S0/DINOv3 baselines alive until matched tests.",
+    "promotion_blockers": [
+      "no target user-specific open-set comparison",
+      "no target encode-call instrumentation proving zero re-encode",
+      "no target restart/recurrent-state cache test",
+      "general web unavailable for wider current failure-ecology refresh"
+    ],
+    "negative_constraints": [
+      "do not persist raw embedding buffers as canonical sensor truth",
+      "do not treat runtime slot/media cache as UnifiedDB semantic authority",
+      "do not promote Qwen feature reuse because duplicate encoders are aesthetically undesirable",
+      "do not judge MVC by closed-set accuracy alone"
+    ]
+  },
+  "status": "OPEN_TESTABLE_FRONTIER"
+}

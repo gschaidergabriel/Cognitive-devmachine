@@ -1,0 +1,267 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2242p0700-chatgpt-secondary-selfroot-replay-wp03",
+  "trigger": "go",
+  "status": "PARTIAL_EXECUTED_WITH_DURABLE_EVIDENCE",
+  "timestamp_local": "2026-08-10T22:42:00+07:00",
+  "timestamp_timezone": "Asia/Phnom_Penh",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "organ_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "is_frank": false
+  },
+  "identity_boundary": {
+    "research_entity": "Clay",
+    "native_frank_self": "self.root",
+    "human_surface_name": "Frank",
+    "external_human_operator": "Dr. Andreas Unterweger",
+    "project_owner": "Gabriel Gschaider",
+    "clay_is_separate_research_entity": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "clay_head_before_write": "c067ec5502cd48e74e609b1ae725b477be65b136"
+  },
+  "program": {
+    "program_id": "frank-v0.1-only",
+    "stage": "FRANK_V0_1",
+    "stage_status": "IN_PROGRESS",
+    "identity_work_package": "F-V01-01-IDENTITY-SERVER-BINARY",
+    "claycode_work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+    "training_authorized": false,
+    "workspace_status_not_promoted_by_this_receipt": true
+  },
+  "hypothesis": {
+    "primary": "Owner-fixed self.root identity can survive the real repository transaction replay and public materializer path while preserving Dr. Andreas Unterweger as an external human/operator and Frank only as the human-facing SELF surface.",
+    "strongest_counterhypothesis": "A stale writer, legacy materialization field, test fixture, repo truth gate or old personal-entity literal will silently reassert dr-unterweger-frank-personal-entity or collapse Andreas into Frank after source-level conformance appears green.",
+    "discriminator": "Replay the complete checked-out state/transactions history through the public materializer on the accepted self-hosted Ubuntu runner and separately probe CURRENT repo_truth_gate identity semantics."
+  },
+  "executed_identity_results": {
+    "source_owner_pr": {
+      "pr": 124,
+      "branch": "chatgpt/go-selfroot-current-main-20260810",
+      "role": "selected source/state/materializer owner",
+      "status": "ACTIVE",
+      "notes": [
+        "Owner-fixed self.root conformance passed on target VPS.",
+        "Metamorphic identity contamination matrix passed 12/12 with sensitivity 1.0.",
+        "An initial full-replay failure was traced to the regression querying nonexistent entities.display_name rather than canonical entities.label; this did not falsify the identity semantics."
+      ]
+    },
+    "full_transaction_replay": {
+      "pr": 155,
+      "branch": "clay/selfroot-operator-surface-separation-20260810",
+      "workflow_run_id": 31404157237,
+      "workflow_job_id": 93506257211,
+      "tested_merge_sha": "7436ce1576896d2eb57bf1ccc7283a74cfb650a1",
+      "runner_name": "clay",
+      "machine": "digital-retina",
+      "os": "Linux",
+      "kernel": "6.8.0-117-generic",
+      "arch": "X64",
+      "python": "3.12.3",
+      "git": "2.43.0",
+      "checkout_persist_credentials": false,
+      "repository_permission": "contents:read",
+      "status": "PASS",
+      "scope": "SELF_ROOT_MATERIALIZER_IDENTITY_REPLAY",
+      "transactions_replayed": 5,
+      "semantic_epoch": 5,
+      "entity_id": "self.root",
+      "external_human_name": "Dr. Andreas Unterweger",
+      "human_surface_name": "Frank",
+      "materializer": "repo_semantic_materializer.v2.1",
+      "legacy_transactions_preserved": 2,
+      "current_identity_transaction": "state/transactions/20260810T2117p0700_self_root_server_identity.claytx",
+      "identity_contract_hash": "88a5181904ae4a1f3d75d238d889c011eb72930baf31f7b2d4c6c6aa5c2b9a32",
+      "artifact_id": 9068995289,
+      "artifact_sha256": "c500903e77f17d90d7fa016323cca06fd11859d9ec9eb86333146039fe6f65c6",
+      "canonical_database_mutated": false,
+      "effect_executed": false,
+      "binary_digest_verified": false
+    },
+    "physical_installer_v2": {
+      "source_receipt": "research_entity/trigger_runs/go/go-20260810T2137p0700-chatgpt-secondary-selfroot-core/PHYSICAL_INSTALLER_V2_RECEIPT.json",
+      "target_pr": 151,
+      "workflow_run_id": 31403782226,
+      "workflow_job_id": 93505004562,
+      "status": "PASS_SELF_ROOT_PHYSICAL_INSTALLER_V2",
+      "checks": "47/47 PASS",
+      "elapsed_ms_internal": 110.979,
+      "wall_seconds": 0.17,
+      "max_rss_kib": 23296,
+      "runner": "digital-retina Linux/X64 Python 3.12.3",
+      "artifact_id": 9068847269,
+      "artifact_sha256": "f01c126ba53f7adab80317cbbf112af994f705c8361262ef7bdb7a0f916f3aa5",
+      "canonical_database_opened": false,
+      "production_state_mutated": false,
+      "limitations": [
+        "repo_truth_gate CURRENT identity acceptance not proven by this receipt",
+        "restart continuity not proven",
+        "binary digest identity not proven",
+        "exclusive instance lease not proven",
+        "stale clone production rejection not proven",
+        "whole Frank v0.1 acceptance not proven"
+      ]
+    },
+    "repo_truth_gate_parallel_lane": {
+      "branch": "clay/selfroot-repo-truth-gate-20260810",
+      "collision_decision": "DO_NOT_DUPLICATE",
+      "delta_files": [
+        "runtime/state/repo_truth_gate.py",
+        "harness/self_root_repo_truth_gate_identity_probe.py",
+        ".github/workflows/self-root-repo-truth-gate-vps.yml"
+      ],
+      "observed_design": [
+        "ENTITY_ID sourced from public materializer identity authority and expected to be self.root",
+        "Dr. Andreas Unterweger preserved as external human",
+        "Frank preserved separately as human surface",
+        "G13 current identity contract and G6 materialized identity/lineage probed read-only",
+        "old personal entity, provider, token and Andreas-as-SELF rejected",
+        "self-hosted Linux/X64 workflow uses pinned checkout, fetch-depth 0, persist-credentials false and contents:read"
+      ],
+      "result_at_receipt_time": "IMPLEMENTATION_PRESENT; TARGET_VPS_RECEIPT_NOT_YET_RESOLVED_BY_THIS_WORKER"
+    }
+  },
+  "identity_negative_results": [
+    {
+      "candidate": "direct SQLite identity migrator",
+      "status": "REFUTED_AND_REMOVED",
+      "reason": "state/FRANK_UNIFIED.sqlite is materialized state rather than tracked repository truth; keeping a second write-capable identity migration path would enlarge authority and divergence risk. Selected path is repository semantic transaction -> replay -> UnifiedDB -> derived ClayGraph."
+    },
+    {
+      "candidate": "materialization_state.human_name = Frank",
+      "status": "REFUTED",
+      "reason": "existing production reader semantics use legacy human_name for the external human/operator. Correct projection is entity_id=self.root, human_name=Dr. Andreas Unterweger, human_surface_name=Frank."
+    },
+    {
+      "candidate": "source-level conformance alone proves current identity",
+      "status": "REFUTED",
+      "reason": "full transaction replay/materializer and repo truth gate are separate necessary discriminators."
+    }
+  ],
+  "claycode_wp03": {
+    "selected_branch": "clay/wp03-exact-bundle-on-selfroot-20260810",
+    "pr": 153,
+    "purpose": "Restore the exact ClayCode WP03 bundle without duplicating self.root source/state changes.",
+    "exact_restored_core_blobs": {
+      "frontend_git_blob": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+      "grammar_v18_git_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+      "requirements_lock_git_blob": "4a361757efede020cfb288ad7beda2c4a7e6c6b5",
+      "lark": "1.3.1",
+      "interegular": "0.3.3"
+    },
+    "prior_component_evidence": {
+      "historical_pr": 123,
+      "workflow_run_id": 31399654520,
+      "status": "PASS_COMPONENT_ONLY",
+      "frontend_typed_ir": "PASS",
+      "identity_contamination_mutants": "5/5 REJECTED",
+      "artifact_id": 9067072145,
+      "artifact_sha256": "77e2db6024066fb3db54b82cd8ea87663d8baea045713b983d98fb169cd6c548",
+      "limitations": ["no type/effect acceptance", "no evaluator acceptance", "no runtime execution acceptance", "no whole Frank v0.1 acceptance"]
+    },
+    "current_target_vps_attempt": {
+      "workflow_run_id": 31403922748,
+      "workflow_job_id": 93505473351,
+      "tested_merge_sha": "41f5fe570dcbb0bb2d727a1256aa339af0b1371c",
+      "runner": "clay/digital-retina Linux X64 Python 3.12.3 git 2.43.0",
+      "checkout_persist_credentials": false,
+      "repository_permission": "contents:read",
+      "core_blob_binding": "PASS",
+      "hash_locked_dependency_install": "PASS",
+      "coverage_execution": "FAIL_PACKAGING_MISSING_SOURCE",
+      "first_falsifier": "FileNotFoundError runtime/clay_wp03_exact_bundle/research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "interpretation": "The result does not falsify parser/TypedIR semantics; it proves the supposed exact bundle lacked two declared source inputs required by its own existing 100-node wrapper.",
+      "negative_artifact_id": 9068981604,
+      "negative_artifact_sha256": "f19bc8430f3ee64bc865c288e2e7292bf0b35c352498d2e20072c9d772682be2",
+      "repair_applied": [
+        "Added byte-for-byte Clay research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay, source blob a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+        "Added byte-for-byte Clay research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay, source blob dbb72460bc5a049c784d1acd1aaef152fa37f797"
+      ],
+      "rerun_status_at_receipt_time": "PENDING_TRIGGER_OR_QUEUE"
+    },
+    "promotion_rule": "Coverage-only evidence may support the TypedIR research lane but MUST NOT automatically mark F-V01-02 typed_ir/type_effect/evaluator/runtime subchecks PASS."
+  },
+  "out_of_box_experiment": {
+    "count_this_go": 1,
+    "experiment": "IDENTITY_CONTAMINATION_MUTATION",
+    "method": "In-memory only; no repository mutation. Replace native self.root marker with each of token, Andreas, provider, client node or Clay and require executable conformance failure.",
+    "cases": ["TOKEN_AS_SELF", "ANDREAS_AS_SELF", "PROVIDER_AS_SELF", "CLIENT_NODE_AS_SELF", "CLAY_AS_SELF"],
+    "result": "5/5 MUTANTS REJECTED",
+    "promotion": "NO_NEW_ARCHITECTURE_PROMOTED_FROM_NOVELTY"
+  },
+  "external_primary_knowledge_used": [
+    {
+      "topic": "SQLite transaction atomicity/rollback",
+      "use": "Supported fail-closed reasoning while evaluating the now-refuted direct DB migration candidate; did not override repository architecture evidence."
+    },
+    {
+      "topic": "SPIFFE workload identity",
+      "use": "Supported separation of credential/provider/node selectors from persistent SELF identity; project owner-fixed contracts remained semantic authority."
+    },
+    {
+      "topic": "SLSA provenance",
+      "use": "Supported exact tested revision/source/provenance binding and non-persisted executor credentials for acceptance-grade component evidence."
+    }
+  ],
+  "architecture_delta": {
+    "status": "SUPPORTED_COMPONENT_DIRECTION_NOT_RELEASE_PROMOTION",
+    "selected": [
+      "Repository-admitted semantic history remains the only CURRENT identity truth path; no second direct-DB identity authority.",
+      "Native SELF self.root, external operator Andreas and human surface Frank remain separate across source, runtime and materialization.",
+      "Full repository transaction replay is a required identity discriminator rather than source conformance alone.",
+      "Production repo truth gate must consume the same public self.root identity authority; a parallel worker owns this delta.",
+      "Frank WP03 exact bundle must contain not only tools/grammar/dependencies but every source input declared by its execution wrapper."
+    ],
+    "rollback": "Do not merge component branches that fail exact target-VPS replay/gate checks; preserve old working path as last-known-good and negative evidence."
+  },
+  "work_impacts": [
+    {
+      "work_package": "F-V01-01-IDENTITY-SERVER-BINARY",
+      "impact": "Strong new component evidence: source conformance + metamorphic contamination + physical disposable install + full five-transaction replay now pass. Production repo_truth_gate, restart/binary-digest/exclusive-lease/stale-clone evidence remain open. Keep IN_PROGRESS."
+    },
+    {
+      "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+      "impact": "Exact frontend/grammar/lock are restored; target-VPS attempt exposed missing G9/Dialect bundle inputs and was repaired. Current workspace subcheck statuses remain unchanged pending rerun and promotion adjudication."
+    }
+  ],
+  "remaining_blockers": [
+    "Production repo_truth_gate self.root acceptance receipt pending from parallel lane at this receipt time.",
+    "Legacy constitutional/master surfaces still contain historical semantics and must be superseded/adjudicated without erasing ancestry.",
+    "Binary digest identity not measured.",
+    "Restart continuity not measured to finished-gate standard.",
+    "Exclusive instance lease / stale-clone rejection not yet integrated into finished identity acceptance.",
+    "ClayGraph CURRENT projection acceptance still separate from fresh UnifiedDB replay.",
+    "WP03 exact bundle rerun pending after adding G9 V3 + Dialect V3 sources.",
+    "ClayCode type/effect, evaluator, compiler/lowering, runtime/FFI, stdlib, concurrency and real Frank component remain open.",
+    "Whole Frank v0.1 acceptance not established.",
+    "Final paid/model training remains unauthorized."
+  ],
+  "distribution": {
+    "comments_already_sent": [
+      "PR #124 received replay/checkout-hardening and cross-branch blocker notes.",
+      "Diagnostic/source workers were informed of repo materializer/truth-gate identity drift during the run."
+    ],
+    "duplicate_work_avoided": [
+      "PR #126 closed without merge after direct DB migration route was refuted.",
+      "PR #127 and dependent #142 closed/superseded when #124 subsumed selected state authority.",
+      "No duplicate repo_truth_gate implementation created after clay/selfroot-repo-truth-gate-20260810 appeared.",
+      "PR #153 split WP03 bundle repair away from overlapping identity edits in historical PR #123."
+    ]
+  },
+  "next_falsifiers": [
+    "Resolve target-VPS result for clay/selfroot-repo-truth-gate-20260810 and require G13/G6 CURRENT identity acceptance without mutation.",
+    "Rerun PR #153 existing real 100-node WP03 coverage wrapper with the now-complete declared source bundle; preserve any next first falsifier.",
+    "After identity truth-gate success, bind binary digest + restart + exclusive lease/stale-clone evidence before any F-V01-01 PASS consideration.",
+    "Keep F-V01-02 status conservative until the current release workspace's exact promotion contract is satisfied."
+  ],
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED",
+  "training_authorization": false,
+  "research_write": "COMMITTED_BY_THIS_FILE_CREATE_IF_GITHUB_ACCEPTS"
+}

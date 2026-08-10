@@ -7,6 +7,8 @@ on:
     paths:
       - 'research_entity/runtime/database_pulse_rank_index_v3.py'
       - 'research_entity/runtime/test_database_pulse_rank_index_v3.py'
+      - 'research_entity/runtime/database_pulse_runtime_v3.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v3.py'
       - 'tools/database_pulse_rank_index_v3_benchmark.py'
       - 'tools/database_pulse_rank_index_v3_randomized_falsifier.py'
       - '.github/workflows/database-pulse-v3-hosted-preflight.yml'
@@ -29,14 +31,19 @@ jobs:
           clean: true
           persist-credentials: true
 
-      - name: Compile and test rank-index candidate
+      - name: Compile and test rank-index plus Runtime V3
         run: |
           set -euo pipefail
-          python3 -m py_compile research_entity/runtime/database_pulse_rank_index_v3.py \
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_rank_index_v3.py \
             research_entity/runtime/test_database_pulse_rank_index_v3.py \
+            research_entity/runtime/database_pulse_runtime_v3.py \
+            research_entity/runtime/test_database_pulse_runtime_v3.py \
             tools/database_pulse_rank_index_v3_benchmark.py \
             tools/database_pulse_rank_index_v3_randomized_falsifier.py
-          python3 -m unittest -v research_entity.runtime.test_database_pulse_rank_index_v3
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_index_v3 \
+            research_entity.runtime.test_database_pulse_runtime_v3
 
       - name: Randomized differential falsifier
         run: |
@@ -89,7 +96,7 @@ jobs:
           assert c['rank_query_plan_uses_index'] is True,bench
           assert c['rank_index_verify_initial']['pass'] is True,bench
           assert c['rank_index_verify_final']['pass'] is True,bench
-          print('PULSE_RANK_INDEX_V3_HOSTED_PREFLIGHT=PASS')
+          print('PULSE_RUNTIME_V3_HOSTED_PREFLIGHT=PASS')
           PY
 
       - name: Persist auxiliary receipts
@@ -106,7 +113,7 @@ jobs:
           git config user.name 'clay-rank-index-v3-hosted'
           git config user.email 'clay-rank-index-v3-hosted@users.noreply.github.com'
           git add "$base/rank_index_v3_randomized_hosted.json" "$base/rank_index_v3_hosted.json"
-          git commit -m 'evidence(unifieddb): persist Pulse rank-index V3 hosted preflight [skip ci]' || exit 0
+          git commit -m 'evidence(unifieddb): persist Pulse Runtime V3 hosted preflight [skip ci]' || exit 0
           for attempt in 1 2 3 4 5 6; do
             git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
             sleep $((attempt*2))

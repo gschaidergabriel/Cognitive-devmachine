@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260810T2020p0700-chatgpt-secondary-call-negative-space",
+  "trigger": "go",
+  "actor": "chatgpt-secondary",
+  "status": "MATERIAL_RESEARCH_DELTA_COMMITTED_NO_PROMOTION",
+  "parent_head_observed_before_write": "4a66717694880114aefcd7bbba8021edff847ea5",
+  "current_stage": "BASE_CLAYCODE_RELEASE",
+  "critical_path": "CC-WP-03/WP04/WP05 exact V18 CallContract + type/effect/runtime-binding closure",
+  "repo_evidence_refs": [
+    "46574ca60508460150bb3074e328437953f1b3d8",
+    "93a3616f1ff26492da84a331bdda91623be8596f",
+    "cf5ba8a0383ea8459f705677738bea4736d02e6f",
+    "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay"
+  ],
+  "external_primary_analogies": [
+    {
+      "source": "https://component-model.bytecodealliance.org/design/wit.html",
+      "use": "typed interface/function contracts remain distinct from component behavior/implementation",
+      "semantic_authority": "NONE"
+    },
+    {
+      "source": "https://component-model.bytecodealliance.org/design/why-component-model.html",
+      "use": "interface signature and canonical ABI separation supports contract-vs-physical-binding architecture analogy",
+      "semantic_authority": "NONE"
+    },
+    {
+      "source": "https://mlir.llvm.org/docs/DialectConversion/",
+      "use": "explicit legality and type conversion support fail-closed admission analogy",
+      "semantic_authority": "NONE"
+    }
+  ],
+  "hypothesis": "Exact target+arity identity should remain a hard resolver precondition; convenience suffix/name-only resolution can create false execution admission when exact contracts are absent.",
+  "strongest_counterhypothesis": "A convenience resolver could be safe if it only proposes alternatives and never grants evaluator/effect admission without a later exact typed contract and current runtime-binding proof.",
+  "out_of_box_experiment": {
+    "id": "GO_OOB_CALL_BINDING_NEGATIVE_SPACE",
+    "code_commit": "477a37e77d5330fd1e990f34ad82faeee83541cf",
+    "result_commit": "c06ced078d37b0ed8fca0c8b1db4a7e4e1e8f631",
+    "basis": "27 real G9 V3 target+arity identities; 26 ordinary unresolved identities perturbed; Needle.execute excluded from ordinary resolver lane and kept as separate effect boundary",
+    "trials": 1000,
+    "seed": 20260810,
+    "false_admissions_per_trial": {
+      "strict_exact_target_plus_arity": 0,
+      "suffix_first_same_arity": 26,
+      "target_only_ignores_arity": 26
+    },
+    "truth_class": "LOCAL_SYNTHETIC_ADVERSARIAL_RESEARCH_PROXY",
+    "limitation": "The shadow declarations are generated adversarial perturbations, not claims that those declarations exist in the current repository.",
+    "effect_authority": "NONE"
+  },
+  "architecture_delta": {
+    "status": "TEST_OBLIGATION_REINFORCED",
+    "change": "Keep NO_FUZZY_CALL_RESOLUTION as an executable negative suite requirement and add namespace-shadow plus wrong-arity adversarial fixtures when the real CallContract resolver is materialized.",
+    "no_change": [
+      "V18 remains selected",
+      "V19 remains reserve-only",
+      "WP03 remains OPEN",
+      "BASE remains NOT_PASS",
+      "Needle.execute remains separately gated by EXTERNAL_EFFECT + sealed current runtime broker binding + deterministic EffectGate + rollback/recovery"
+    ]
+  },
+  "consumer_branches": {
+    "claycode": "Add namespace-shadow/wrong-arity negatives to exact CallContract resolver/evaluator admission suite.",
+    "harness": "Carry the resolver negatives into H1/H2 differential fixtures without mutating Frank Harness authority boundaries.",
+    "unifieddb": "Persist exact call identity separately from aliases/graph associations/runtime binding identities.",
+    "claygraph": "Alias/salience edges may propose candidates but must not resolve executable signature identity.",
+    "gwt": "Workspace salience cannot turn a candidate call alias into executable binding authority.",
+    "hyperposition": "Preserve ambiguous alternative bindings explicitly rather than collapsing by similarity.",
+    "emergenz": "No emergence claim; only resolver-control evidence.",
+    "frank": "No Harness mutation and no execution-authority change."
+  },
+  "execution_receipts": {
+    "local_experiment": "PASS_RESEARCH_PROXY",
+    "github_ci_for_new_commits": "NO_RUN_OBSERVED",
+    "target_vps_for_new_experiment": "NOT_EXECUTED",
+    "work_revision_credit": "NONE_RESEARCH_ONLY_NO_LEASE_CLAIM"
+  },
+  "promotion": "NONE",
+  "wp03_status": "OPEN",
+  "base_status": "NOT_PASS",
+  "frank_harness_mutation": false
+}

@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "queue-authority-wp04-delta-20260810",
+  "parent_run": "go-20260810T2244p0700-chatgpt-secondary-selfroot-fence-fusion-v2",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "status": "APPEND_ONLY_CURRENT_DELTA",
+  "target_ci_transport": {
+    "runner_offline_hypothesis": "REFUTED",
+    "evidence": {
+      "later_pr": 230,
+      "workflow_run": 31412533868,
+      "job": 93533766667,
+      "result": "SUCCESS",
+      "runner": "clay",
+      "machine": "digital-retina"
+    },
+    "current_queued_jobs": [
+      {
+        "pr": 227,
+        "workflow_run": 31412172807,
+        "job": 93532605851,
+        "purpose": "fresh-main self.root identity/replay/prompt/graph integration"
+      },
+      {
+        "pr": 199,
+        "workflow_run": 31411225036,
+        "job": 93529502493,
+        "purpose": "current V17 execution-generation effect-fence retest after contract-marker repair"
+      },
+      {
+        "pr": 231,
+        "workflow_run": 31412973946,
+        "job": 93535065467,
+        "purpose": "revalidate 37/37 boot-continuity mechanism on fresh identity rebase"
+      }
+    ],
+    "classification": "SCHEDULER_OR_ROUTING_UNKNOWN_NOT_RUNNER_OFFLINE",
+    "available_connector_actions": "No workflow cancel/runner-admin/explicit dispatch action is available in the connected GitHub surface for this turn.",
+    "decision": "Do not manufacture additional CI branches/jobs merely to shake the queue. Preserve queued status as UNKNOWN execution evidence."
+  },
+  "fresh_identity_rebase": {
+    "pr": 227,
+    "branch": "chatgpt/selfroot-main-rebase-20260810",
+    "head": "e681e375c55fe1dc9a5f4f0738b96eb9a9baaeaf",
+    "changed_files": 13,
+    "mergeable_last_observed": true,
+    "latest_observed_base_sha": "1327777991bf814c7bbbe119688d0740388c3971",
+    "latest_overlap_check": {
+      "newer_main_commits": 8,
+      "identity_path_overlap": 0,
+      "newer_main_change_class": "WP04 exact types/registry/hyperposition/backend only"
+    },
+    "hosted_deep_integrity": {
+      "run": 31412172698,
+      "job": 93532604932,
+      "result": "FAIL_WITH_NO_STEP_STRUCTURE_OR_LOG_OUTPUT",
+      "classification": "KNOWN_HOSTED_STARTUP_FAILURE_PATTERN_NOT_CODE_NEGATIVE_EVIDENCE"
+    },
+    "self_hosted_gate": "QUEUED_REQUIRED_BEFORE_MAIN_PROMOTION"
+  },
+  "fresh_boot_rebase": {
+    "pr": 231,
+    "branch": "chatgpt/selfroot-boot-on-main-rebase-20260810",
+    "base": "chatgpt/selfroot-main-rebase-20260810",
+    "mergeable_last_observed": true,
+    "changed_files": 4,
+    "ported_semantics": "Same boot contract/runtime/probe as previously 37/37-green PR196; workflow targeting changed only to the fresh identity rebase branch.",
+    "production_policy": {
+      "trusted_signer_workflow": null,
+      "real_artifact_attestation_verified": false,
+      "canonical_state_opened": false,
+      "effect_authority": "NONE",
+      "whole_v01_acceptance": "NOT_CLAIMED"
+    },
+    "self_hosted_gate": "QUEUED"
+  },
+  "new_boot_authority_counterhypothesis": {
+    "question": "Would pinning a trusted signer in the current Python candidate accidentally let caller-constructed BuildVerification/StateLineage/LeaseReceipt values mint production boot admission without the evaluator itself obtaining verifier/state/lease evidence?",
+    "observed_candidate_surface": [
+      "BuildVerification, StateLineage and LeaseReceipt are ordinary public Python dataclasses in the current candidate runtime.",
+      "evaluate_boot_continuity consumes those data objects and checks their fields.",
+      "The disposable probe itself constructs synthetic LeaseReceipt/StateLineage values to exercise the pure mechanism matrix.",
+      "Current production policy has trusted_signer_workflow=None, so the evaluator returns BLOCKED_NO_TRUSTED_BUILDER before any positive admission is reachable."
+    ],
+    "current_safety_status": "SAFE_BY_EARLY_BLOCKER_NOT_YET_PRODUCTION_EVIDENCE_BINDING",
+    "promotion_risk": "After a future real signer pin, plain caller-supplied booleans/strings must not become authority merely because they match policy fields.",
+    "required_future_boundary": "A production boot-admit path must itself obtain/bind cryptographic verifier output, canonical admitted/recovery-verified state lineage, and an actually held current kernel/host lease, or consume an equivalent compiler-enforced opaque ClayCode capability. Plain dataclass construction must not mint this authority.",
+    "required_tests_before_signer_pin": [
+      "forged BuildVerification with cryptographically_verified=true is rejected unless produced by the trusted verifier/binder path",
+      "forged StateLineage admitted/recovery booleans are rejected unless loaded/validated from canonical state by the trusted binder",
+      "forged LeaseReceipt held/current booleans are rejected unless tied to the currently held kernel lock/lease generation",
+      "test-mode evidence injection remains impossible on production path",
+      "missing trusted evidence binder remains fail-closed even if a signer workflow has been configured"
+    ],
+    "architecture_delta_status": "TEST_OBLIGATION_BLOCKING_PRODUCTION_PROMOTION_NOT_IMPLEMENTED_IN_THIS_RUN",
+    "reason_not_mutated_now": "Current production is already blocked on no trusted builder; the existing 37/37 mechanism revalidation is queued and should remain byte-comparable. Hardening belongs before the first real signer pin, not as an unmeasured mid-queue rewrite."
+  },
+  "wp04_structured_surface_delta": {
+    "target_pr": 230,
+    "workflow_run": 31412533868,
+    "job": 93533766667,
+    "runner": "clay/digital-retina",
+    "result": "PASS",
+    "scope": "strict LALR plus full current frank.effects structured surface into current TypedIR using the reconstructed WP03 frontend/substrate already on main",
+    "pr_change_size": "read-only diagnostic trigger only; 1 file, 5 lines",
+    "what_it_supports": [
+      "current full frank.effects syntax can traverse the strict parser/structured-surface diagnostic into TypedIR on the target runner",
+      "the target runner is alive and capable of executing current WP04 diagnostic work"
+    ],
+    "what_it_does_not_support": [
+      "no WP04 package promotion",
+      "no runtime/effect execution authority",
+      "no model-output execution",
+      "no WP05 executable lowering closure",
+      "no final binary claim"
+    ],
+    "current_claycode_execution_admitted": 0,
+    "wp05_status": "NOT_CLOSED"
+  },
+  "authority": {
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "canonical_target_state_mutated": false,
+    "target_main_merged_by_this_delta": false,
+    "external_effect_performed": false,
+    "trusted_builder_pinned": false,
+    "training_authorized": false
+  }
+}

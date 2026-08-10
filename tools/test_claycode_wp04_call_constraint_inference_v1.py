@@ -32,6 +32,24 @@ def obligation_map(graph: dict) -> dict[tuple[str, int], dict]:
     return {(x["identity"]["target"], x["identity"]["arity"]): x for x in graph["obligations"]}
 
 
+def first_call(node: object) -> dict:
+    if isinstance(node, dict):
+        if node.get("kind") == "call":
+            return node
+        for child in node.get("children", []):
+            try:
+                return first_call(child)
+            except LookupError:
+                pass
+    elif isinstance(node, list):
+        for child in node:
+            try:
+                return first_call(child)
+            except LookupError:
+                pass
+    raise LookupError("no call node")
+
+
 def main() -> int:
     ir, graph = build()
     s = graph["summary"]
@@ -96,9 +114,9 @@ def main() -> int:
     _, graph2 = build()
     assert graph2["constraint_graph_sha256"] == graph["constraint_graph_sha256"]
     mutated_cycle = copy.deepcopy(cycle)
-    # Change the first call target in the first op AST without inventing authority.
     first_op = mutated_cycle["region"]["ops"][0]
-    target_qid = next(x for x in first_op["rhs_ast"]["children"] if isinstance(x, dict) and x.get("kind") == "call")["children"][0]
+    call = first_call(first_op["rhs_ast"])
+    target_qid = next(x for x in call["children"] if isinstance(x, dict) and x.get("kind") == "qid")
     target_qid["children"][0]["value"] = "resolve_latest_mutant"
     mutated = constraints.collect_calls(mutated_cycle, ir)
     assert mutated["constraint_graph_sha256"] != graph["constraint_graph_sha256"]

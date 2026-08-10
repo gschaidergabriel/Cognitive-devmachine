@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "edges": [
+    {"from":"Qwen3.5-4B","to":"Transformers Qwen3_5VisionModel","relation":"IMPLEMENTS"},
+    {"from":"Qwen3_5VisionModel","to":"pre_merger_last_hidden_state","relation":"EXPOSES"},
+    {"from":"Qwen3_5VisionModel","to":"post_merger_pooler_output","relation":"EXPOSES"},
+    {"from":"post_merger_pooler_output","to":"language_model_inputs","relation":"FEEDS"},
+    {"from":"libmtmd encode","to":"mtmd_get_output_embd","relation":"EXPOSES"},
+    {"from":"mtmd_get_output_embd","to":"llama_decode","relation":"REUSED_BY"},
+    {"from":"mtmd media id","to":"KV cache tracking","relation":"CACHE_HINT"},
+    {"from":"mtmd chunk serialization","to":"raw media recovery","relation":"DOES_NOT_PRESERVE"},
+    {"from":"llama.cpp issue 19466","to":"multimodal slot save assumption","relation":"COUNTEREVIDENCE"},
+    {"from":"contrastive multimodal embedding research","to":"raw Qwen feature calibration","relation":"COUNTERHYPOTHESIS"},
+    {"from":"GUI temporal pruning research","to":"two_stage_temporal_policy","relation":"MOTIVATES_TEST"}
+  ]
+}

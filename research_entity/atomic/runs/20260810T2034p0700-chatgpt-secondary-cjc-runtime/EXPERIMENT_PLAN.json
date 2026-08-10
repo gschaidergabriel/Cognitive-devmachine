@@ -1,0 +1,29 @@
+{
+  "baselines": [
+    "exhaustive counterfactual truth-table replay",
+    "current-state-only commutator",
+    "conservative read/write conflict graph",
+    "leave-one-out replay for credit",
+    "null: separate CCF + CPD"
+  ],
+  "candidate": "ATOMIC-CANDIDATE-CJC-001",
+  "claim": "CJC detects masked order-dependence missed by current-state commutativity and can compress exhaustive lesion-order comparison into one sparse symbolic pass on an exact eligible transition subset.",
+  "controls": [
+    "stale epoch",
+    "opaque boundary",
+    "degree/term overflow",
+    "effectful boundary",
+    "shuffled/invalid semantics via adapter tests"
+  ],
+  "promotion_gate": "no promotion from local synthetic proxy; direct current Frank-v0.1 trace coverage + native/target-VPS resource/recovery evidence required",
+  "rollback": "append-only possibility; no accepted runtime/Harness/authority mutation",
+  "schema_version": "1.0",
+  "tests": [
+    "deterministic unit tests",
+    "randomized differential",
+    "20k pair benchmark",
+    "context scaling 0..8",
+    "five-seed 25k replication",
+    "direct Frank-v0.1 coordination-gate tests"
+  ]
+}

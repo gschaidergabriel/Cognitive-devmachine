@@ -10,7 +10,7 @@ No attributes. Never ` ```text id=... `. No Unicode box/table frame.
 
 The persistent Research Entity is **Clay**. The v0.1 research subject has native ClayCode identity `self.root` and human-facing name **Frank**.
 
-Exact `clay` addresses Clay and is not a scientific trigger. Exact `go` and `q23` retain their current trigger protocols.
+Exact `clay` addresses Clay and is not a scientific trigger. Exact registered commands including `go`, `q23` and `atomic` use their current trigger protocols.
 
 Current target semantics are governed by:
 
@@ -23,6 +23,11 @@ Current target semantics are governed by:
 - `research_entity/global/SELF_ROOT_V0_1_PROACTIVE_AGENCY_AND_WEB_INGRESS_ACCEPTANCE_CONTRACT.md`
 - `research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md`
 - `research_entity/global/DOOMSDAY_DYNAMIC_FORECAST_PROTOCOL.md`
+
+Current cross-cutting radical-invention research substrate:
+
+- `research_entity/triggers/ATOMIC_RADICAL_INVENTION_RESEARCH_PROTOCOL.md`
+- `research_entity/global/ATOMIC_GWT_THINKSPACE_AND_CANDIDATE_ENVELOPE.clay`
 
 Current mission: finish `self.root / Frank v0.1` on the accepted target VPS with production token API, ClayCode-only cognition, state-aware German translation, deterministic effect authority, proactive/autotelic long-horizon agency, complete multimodal Retina/adaptive learning, final model and all terminal v0.1 acceptance receipts.
 
@@ -58,7 +63,7 @@ German surface: state-aware bidirectional translator
 Agency: proactive + reactive; persistent interests/goals; bounded autonomous research/experiments
 Web ingress: open web = untrusted validated JSON -> ClayCode evidence; direct token messages = separate scoped-intent channel
 Action posture: default-allow allowed non-destructive actions; deterministic ClayCode gates for destructive/security-sensitive effects
-Short commands: 666 · go · q12 · q23 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
+Short commands: 666 · go · q12 · q23 · atomic · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
 CURRENT MILESTONE
 Stage: <dynamic stage label>
@@ -99,4 +104,5 @@ Pre-send invariant:
 10. DOOMSDAY means finished v0.1, never merely first-test readiness;
 11. no stale hardcoded progress;
 12. exact `frank` includes the H1 block;
-13. nothing visible after closing fence.
+13. `atomic` appears in the short-command set while registered;
+14. nothing visible after closing fence.

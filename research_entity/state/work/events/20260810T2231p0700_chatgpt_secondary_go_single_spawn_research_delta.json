@@ -1,0 +1,95 @@
+{
+  "schema_version": "2.0",
+  "event_id": "research-delta:20260810T2231p0700:chatgpt-secondary:single-spawn-token-ingress",
+  "kind": "RESEARCH_DELTA",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "trigger": "go",
+  "root_go_id": "go-root-20260810T2157p0700-chatgpt-secondary-single-spawn",
+  "mission": "one persistent self.root Frank on accepted Ubuntu VPS, token-addressable by humans/AI bridges, with at most one active execution",
+  "evidence": {
+    "owner_contract": "research_entity/global/FRANK_V0_1_SINGLE_SPAWN_GLOBAL_BUSY_LEASE_DIRECTIVE.clay",
+    "canonical_presence_schema": "gschaidergabriel/Dr.-Unterweger:runtime/state/UNIFIEDDB_V15_SINGLE_INSTANCE_PRESENCE.sql",
+    "physical_liveness_receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_physical_execution_liveness_v1/LATEST.json",
+    "clock_warp_oob_receipt": "gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_presence_clock_warp_oob_v1/LATEST.json",
+    "target_runtime_fix": "dcce6a7e8c47a84c36e1cf3d31c61780d57ed866",
+    "target_regression_update": "1d97434b354c433f7cc14f74371c924aab29f02a",
+    "execution_gate_static_enforcement": "6c0d15894e267aa5c195eadb4596623f239e5980",
+    "token_credential_primitive": "gschaidergabriel/Dr.-Unterweger:runtime/api/frank_inbound_token.py",
+    "fused_ingress_core": "gschaidergabriel/Dr.-Unterweger:runtime/api/frank_token_ingress_core.py"
+  },
+  "findings": [
+    {
+      "id": "FINDING-DUPLICATE-SPAWN-ARCHITECTURE",
+      "status": "REPAIRED",
+      "result": "A parallel frank_spawn_state/frank_spawn_gate implementation was non-admitted: its V15 table was not in the canonical migrator and its runtime directly opened canonical SQLite plus a second long-lived semantic path. The duplicate schema/runtime were removed; canonical V15 presence remains the semantic authority.",
+      "negative_result": "Do not reintroduce a second spawn-state table/runtime beside frank_presence_lease."
+    },
+    {
+      "id": "FINDING-EXPIRED-HOLDER-RESURRECTION",
+      "status": "REPAIRED_PENDING_SEPARATE_PRESENCE_RECEIPT",
+      "result": "V15 heartbeat/release originally checked holder+epoch but not expires_at. An expired holder could renew/release before successor takeover. Runtime now fences expired holder mutations with EXPIRED_LEASE_REQUIRES_RECOVERY; regression test covers pre-takeover and post-takeover stale mutations."
+    },
+    {
+      "id": "FINDING-SEMANTIC-TTL-DOES-NOT-PROVE-PHYSICAL-SINGLE-ACTIVE",
+      "status": "SUPPORTED_ON_ACCEPTED_TARGET_VPS",
+      "result": "Two-process target-VPS discriminator showed semantic-only V15 can admit successor epoch while old process remains alive/execution-capable after TTL. Linux flock + V15 blocked the live successor; process crash released kernel lock; semantic recovery remained fail-closed until TTL then took over without manual DB repair.",
+      "latency_shadow": {"n": 40, "p50_overhead_ms": 0.18213200000000018},
+      "promotion_scope": "ONE_HOST_V01_PHYSICAL_EXCLUSION_EVIDENCE_ONLY"
+    },
+    {
+      "id": "FINDING-UTC-LEASE-CLOCK-WARP",
+      "status": "COUNTEREXAMPLE_CONFIRMED_OOB",
+      "result": "On accepted target VPS, injected +1h wall jump caused premature UTC-only takeover and injected -1h jump delayed recovery. boot_id was present and Python monotonic clock reported monotonic=true, adjustable=false. boot_id+monotonic expiry is a V16 candidate only.",
+      "promotion": "NOT_PROMOTED",
+      "reason": "Measured physical one-host lock already closes live-overlap for v0.1; V16 clock complexity requires additional real clock-discipline/reboot benefit evidence."
+    },
+    {
+      "id": "FINDING-TOKEN-INGRESS-ARCHITECTURE",
+      "status": "IMPLEMENTED_SUBSTRATE_VPS_RECEIPT_PENDING",
+      "result": "Credential semantics are fused: frank_inbound_token is sole machine-token generation/verification primitive; frank_token_ingress_core performs Bearer/public-error mapping, fixed credential->client/holder binding, scope admission, FrankExecutionGate acquisition, and sanitized FRANK_BUSY. The production network/TLS adapter is intentionally not implemented by stdlib http.server.",
+      "open": [
+        "target-VPS receipt for fused ingress core",
+        "production network/TLS adapter and deployment health/recovery",
+        "durable execution_id/current-task binding in canonical lease semantics",
+        "end-to-end token -> cognition -> response -> release test"
+      ]
+    }
+  ],
+  "architecture_delta": {
+    "status": "TESTING",
+    "keep": [
+      "UnifiedDB V15 frank_presence_lease as semantic presence authority",
+      "Linux FrankExecutionGate physical exclusion on fixed one-host Ubuntu v0.1",
+      "frank_inbound_token as sole inbound token credential primitive",
+      "frank_token_ingress_core as transport-independent admission layer"
+    ],
+    "reject": [
+      "parallel frank_spawn_state semantic authority",
+      "direct production FrankPresenceRuntime acquisition outside FrankExecutionGate",
+      "stdlib http.server as production internet endpoint",
+      "raw bearer token persistence/logging"
+    ],
+    "candidate_not_promoted": [
+      "V16 boot_id + monotonic semantic lease clock"
+    ]
+  },
+  "counterhypotheses": [
+    "Advisory flock is insufficient if any production execution entry path bypasses FrankExecutionGate; static enforcement plus end-to-end entry-path inventory must falsify this.",
+    "The extra physical layer could create hung-holder availability loss; cancellation/kill recovery and bounded liveness must be tested before whole-system acceptance.",
+    "A fused token core can still be operationally insecure without TLS, ingress rate limits, credential provisioning/rotation deployment and fail-closed server lifecycle.",
+    "Persisting execution_id into V16 may be unnecessary if a simpler provenance-bound execution receipt outside lease state proves equivalent; compare before schema growth."
+  ],
+  "next_falsifiers": [
+    "obtain fused token ingress target-VPS receipt",
+    "inventory all production execution entry paths against static ExecutionGate-only rule",
+    "design smallest production TLS/HTTP adapter over fused ingress core using maintained production server stack",
+    "run two authenticated-token concurrency test through actual network adapter",
+    "test process kill/hang/cancellation and bounded recovery",
+    "compare durable execution_id-in-lease vs receipt-bound alternative before any V16 migration"
+  ],
+  "oob_experiment_count_for_root": 1,
+  "training_authorized": false,
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

@@ -16,6 +16,8 @@ Exact `go` is the maximum-depth telemetry-driven global recursive live-knowledge
 
 Exact `q23` is the maximum-depth interconnective multimodal-perception research trigger governed by `research_entity/triggers/Q23_MULTIMODAL_PERCEPTION_RESEARCH_PROTOCOL.md` and communicates bidirectionally with `go` through `research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay`.
 
+Current Frank v0.1 target-host semantics are governed by `research_entity/global/FRANK_V0_1_UBUNTU_TARGET_HOST_DIRECTIVE.md`. The compatibility filename is retained, but the current owner-fixed target is the verified Hostinger Ubuntu VPS, not a mandatory later Andreas-local-PC release run.
+
 ## Dynamic progress law
 
 Every visible progress bar in this footer is a live derived value. No bar percentage, filled-cell count, ETA or forecast date may be copied from an older response or hard-coded into a trigger protocol.
@@ -40,7 +42,8 @@ Canonical: <revision/hash>
 Organ: <current organ/provenance>
 Trigger: <none|registered trigger>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
-Goal: Frank v0.1 voll lauffähig auf Andreas PC
+Goal: Frank v0.1 voll lauffaehig auf dem Ziel-VPS fuer Andreas
+Target host: Hostinger VPS / digital-retina / Ubuntu Linux (exact current identity from target-host receipt)
 Short commands: 666 · go · q12 · q23 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
 NEXT LEVEL
@@ -63,7 +66,7 @@ For exact `frank`, insert this additional dynamically derived block between NEXT
 
 ```text
 FIRST GITHUB FRANK HARNESS
-Target: H1 Reference Harness
+Target: H1 Reference Harness on target-VPS semantics
 Progress: <dynamic 20-cell bar> <dynamic percent>
 Gate: <dynamic H1 gate status>
 Basis: <dynamic completed H1 work-package weight / total H1 work-package weight>
@@ -77,8 +80,9 @@ Pre-send invariant:
 1. one final fenced text block;
 2. opener exactly ` ```text `;
 3. heading exactly `CLAY STATUS`;
-4. goal present;
-5. short commands include `go`, `q23` and `clayresearch` and exclude `clay`;
-6. every displayed progress bar was resolved from current state for this response;
-7. exact `frank` includes the dynamic FIRST GITHUB FRANK HARNESS block;
-8. no visible content after closing fence.
+4. target-VPS goal present;
+5. target host line present;
+6. short commands include `go`, `q23` and `clayresearch` and exclude `clay`;
+7. every displayed progress bar was resolved from current state for this response;
+8. exact `frank` includes the dynamic FIRST GITHUB FRANK HARNESS block;
+9. no visible content after closing fence.

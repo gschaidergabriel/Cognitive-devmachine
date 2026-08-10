@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "architecture_id": "EPOCHSEAL_HYBRID_V1",
+  "status": "CANDIDATE_TESTING",
+  "program_component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "semantic_authority": "ClayCode typed semantics",
+  "canonical_store": {
+    "engine_candidate": "SQLite single canonical file for v0.1 discriminator",
+    "tables": ["semantic_transactions","state_epochs","semantic_records","query_receipts","effect_outcomes","reentry_receipts"],
+    "write_protocol": "BEGIN IMMEDIATE -> verify base_epoch/idempotency -> write tx -> seal next epoch/root -> write typed state -> COMMIT",
+    "durability": "synchronous=FULL",
+    "wal_policy": "WAL only when runtime SQLite contains documented 2026 WAL-reset fix; otherwise rollback-journal fallback until patched runtime is verified",
+    "truth_rule": "canonical exact state/event/effect receipts only"
+  },
+  "derived_plane": {
+    "members": ["ClayGraph","FTS","vector/ANN","activation/materialized projections"],
+    "required_fields": ["derived_from_epoch","generation","status","source_identity"],
+    "stale_policy": "STALE output may seed associative candidates but cannot answer authoritative exact-state queries",
+    "rebuildability": "must rebuild from canonical truth or declare independent external authority"
+  },
+  "snapshot_contract": {
+    "source_epoch": "mandatory for cognition-critical reads",
+    "query_receipt": "mandatory for planner/selection provenance",
+    "mixed_epoch_read": "reject or explicitly downgrade to exploratory",
+    "checkpoint_identity": "epoch + root_hash + schema/build/runtime identity"
+  },
+  "effect_reentry_contract": {
+    "provider_outcome": "must be independently verified",
+    "effect_outcome": "request_hash + provider_status + source_epoch",
+    "reentry": "effect_id + admitted_epoch + provenance_hash",
+    "authority": "retrieval/GWT/model/Needle cannot mint effect authority"
+  },
+  "comparison_status": {
+    "specialized_stores": "baseline; crash divergence observed locally",
+    "logical_unified_split": "detects but does not eliminate cross-store partial commit",
+    "canonical_plus_rebuildable_sidecar": "current preferred candidate",
+    "physical_consolidation": "fast and atomic locally but larger common-mode failure radius; HOLD pending VPS/recovery evidence",
+    "postgres_plus_pgvector": "external strong comparator; NOT_TESTED_ON_TARGET"
+  },
+  "rollback": "single feature gate returns reads/writes to prior current Frank source; candidate branch is not main",
+  "promotion_gate": ["target VPS SQLite version receipt","target crash/restart test","current-source integration","query equivalence","resource p50/p95/p99","derived rebuild","effect outcome -> reentry receipt","rollback test"],
+  "whole_frank_acceptance_claimed": false
+}

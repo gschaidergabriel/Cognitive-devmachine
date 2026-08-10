@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T1737p0700",
+  "claims": [
+    {"id":"C-Q23-A","claim":"Qwen3.5-4B already contains a native vision encoder, so a second heavy semantic visual stack requires positive differential evidence rather than architectural default.","state":"SUPPORTED_AS_ARCHITECTURE_PRIOR_NOT_PROMOTED","supports":["SRC-Q23-QWEN35-CARD","SRC-Q23-QWEN35-CONFIG","I-QNDRF"],"counter":["CH-Q23-001"]},
+    {"id":"C-Q23-B","claim":"Native Qwen representation reuse is physically plausible, but familiarity/open-set quality remains an empirical question.","state":"OPEN_TESTING","supports":["E-TRANSFORMERS-Q35","I-QNDRF"],"counter":["E-QWEN3VL-EMBED","CH-Q23-001"]},
+    {"id":"C-Q23-C","claim":"The likely minimal target is Retina as temporal/provenance/control fabric plus one native Qwen deep vision core plus tiny adaptive readout.","state":"CANDIDATE","supports":["C-Q23-A","H-Q23-002","H-Q23-003","H-Q23-004"],"counter":["CH-Q23-001","CH-Q23-003","CH-Q23-004"]},
+    {"id":"C-Q23-D","claim":"Text labels may become useful multimodal prototype anchors for user-specific visual concepts, but sensor evidence must remain separate and false-familiarity must be measured.","state":"NEW_HYPOTHESIS","supports":["E-QWEN3VL-EMBED","H-Q23-007"],"counter":["CH-Q23-007"]},
+    {"id":"C-Q23-E","claim":"Visual-change control should become hierarchical: deterministic pixel change -> feature semantic delta -> optional language-semantic decode -> GWT only if globally useful.","state":"NEW_ARCHITECTURE_REFINEMENT_CANDIDATE","supports":["H-Q23-004","H-Q23-008","I-QNDRF"],"counter":["CH-Q23-004","CH-Q23-008"]}
+  ],
+  "interaction_edges": [
+    {"from":["QWEN_NATIVE_VISION","MVC_OPEN_SET"],"to":"H-Q23-001","relation":"FEATURE_REUSE"},
+    {"from":["QWEN_NATIVE_VISION","QWEN_EMBEDDING_OBJECTIVE"],"to":"H-Q23-002","relation":"TINY_PROJECTION_HYPOTHESIS"},
+    {"from":["GOLD_USER_LABELS","UNIFIED_MULTIMODAL_SPACE"],"to":"H-Q23-007","relation":"TEXT_VISUAL_ANCHOR_BINDING"},
+    {"from":["DETERMINISTIC_CHANGE_GATE","QWEN_FEATURE_DISTANCE"],"to":"H-Q23-008","relation":"SEMANTIC_CHANGE_CONTROL"},
+    {"from":["ABLITERATED_TEXT_DECODER","UNCHANGED_OR_VERSIONED_VISION_PATH"],"to":"H-Q23-009","relation":"LAYER_SEPARATED_COMPATIBILITY_TEST"}
+  ],
+  "dense_fusion_result": "QNDRF direction strengthened but split into separable representation, calibration, temporal-control, semantic-decode and end-to-end action hypotheses. No architecture promotion without matched executable evidence."
+}

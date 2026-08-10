@@ -2,8 +2,9 @@
   "schema_version": "1.0",
   "run_id": "q23-20260810T224100p0700-chatgpt-secondary",
   "trigger": "q23",
-  "status": "MATERIAL_RESEARCH_DELTA_COMMITTED",
+  "status": "COMPLETED_MATERIAL_RESEARCH_DELTA_COMMITTED",
   "started_at_local": "2026-08-10T22:41:00+07:00",
+  "closed_at_local": "2026-08-10T23:03:21+07:00",
   "actor": {
     "actor_id": "chatgpt-secondary",
     "provider": "OpenAI",
@@ -23,7 +24,7 @@
     "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
   },
   "program": "FRANK_V0_1",
-  "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC"],
+  "affected_work": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-04-UNIFIEDDB-STATE-CONTINUITY", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
   "live_refresh": {
     "mode": "DEGRADED_LIVE_REFRESH",
     "general_web_search": "FAILED_503_DURING_RUN",
@@ -37,6 +38,26 @@
     "MobileCLIP2-S0 is elevated to a concrete mandatory lightweight counterbaseline; DINOv3 ViT-S/16 remains a dense-feature adversarial baseline.",
     "Feature-level discrimination is revised from Qwen-vs-separate-encoder to projected-grid vs pre-merger-grid vs lightweight-independent-encoder under identical user-specific open-set fixtures."
   ],
+  "artifacts": [
+    "FRONTIER.json",
+    "HYPOTHESES.json",
+    "COUNTERHYPOTHESES.json",
+    "ONLINE_RESEARCH_MANIFEST.json",
+    "SOURCE_GRAPH.json",
+    "FUSION_GRAPH.json",
+    "PROGRESS_DELTAS.json",
+    "packages/Q23-PKG-REPRESENTATION-STRATA.json",
+    "packages/Q23-PKG-LIGHTWEIGHT-COUNTERBASELINES.json",
+    "ARCHITECTURE_DELTAS.json",
+    "TEST_OBLIGATIONS.json",
+    "EXPERIENCE_DOSE_RESULTS.json",
+    "GO_Q23_EXCHANGE.json",
+    "BRANCH_FEEDBACK_MANIFEST.json",
+    "RESEARCH_REENTRY_RECEIPTS.json",
+    "WORK_TRANSLATION.json",
+    "FINAL_SYNTHESIS.md"
+  ],
   "promotion_state": "CANDIDATE_ONLY",
-  "training_started": false
+  "training_started": false,
+  "stop_reason": "Highest-value next recurrence requires an instrumented target Qwen3.5-4B/mmproj runtime lane; further same-lineage source reading has lower information gain."
 }

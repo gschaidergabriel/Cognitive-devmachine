@@ -1,0 +1,72 @@
+{
+  "schema_version":"1.0",
+  "run_id":"claycode-deep-cycle-20260810T2230p0700",
+  "branch":"claycode",
+  "status":"DELTA_MULTI_FRONTIER_TARGET_EVIDENCE_WITH_OPEN_GATES",
+  "program":"FRANK_V0_1",
+  "canonical_promotion":"NONE",
+  "finding":"The current ClayCode frontier is no longer one generic TypedIR/CallContract blocker. Executable evidence splits it into at least four distinct obligations: rule/invariant structural legality versus binding, type/class semantic identity, stateful reward transition completeness, and cognitive-to-effect authority adaptation. Conflating these layers would create false semantic or execution authority.",
+  "frontiers": {
+    "wp03_rule_invariant": {
+      "evidence_class":"CONTENT_ADDRESSED_TARGET_VPS_PASS",
+      "target_run":31401853522,
+      "inventory_run":31402793485,
+      "residual_total":100,
+      "rule_invariant_total":81,
+      "structural_legal":81,
+      "structural_rejected":0,
+      "semantically_bound":64,
+      "binding_ambiguous":17,
+      "ambiguous_operator_signature_families":15,
+      "invariant_ambiguities":0,
+      "interpretation":"PR193 is complete structural legality for the current rule/invariant corpus but cannot alone authorize WP05 semantics. The 17 mixed flat rule chains require explicit grouping or independently frozen precedence semantics."
+    },
+    "wp03_type_class_identity": {
+      "evidence_class":"SOURCE_COUNTEREXAMPLE_PLUS_EXECUTABLE_CANDIDATE_TARGET_RECEIPT_PENDING",
+      "candidate_commit":"26b2fcf160dbad6d99a58d39d4ae5257982db851",
+      "probe_commit":"b948f501d63639418f8eadd99538572e69d2ee87",
+      "finding":"Current production TypedIR omits already-parsed V18 type/class declarations from semantic declarations/identity, permitting local nominals to appear EXTERNAL_NOMINAL and type/class RHS mutations to be hash-invisible.",
+      "surface_change":"NONE_JUSTIFIED",
+      "target_status":"PENDING_UNKNOWN"
+    },
+    "wp04_reward_stateful_evaluator": {
+      "evidence_class":"CONTENT_ADDRESSED_TARGET_VPS_FAIL_CLOSED_PASS",
+      "target_run":31401306617,
+      "required_transition_control_receipt_obligations":21,
+      "explicitly_declared":4,
+      "missing_exact_definitions":17,
+      "readiness_receipt_sha256":"2daf4b8a3531ef3cbc16afbfcbbd6db3bc1262eedd8c4892801dd322f4c9cc4a",
+      "runtime_binding_admitted":false,
+      "execution_admitted":false,
+      "interpretation":"Stateful CallContract V2 fixes receiver/epoch identity exposure but does not define deterministic reward dynamics. The historical executable Python reward kernel is research evidence only and cannot fill the 17 gaps silently."
+    },
+    "wp04_effect_boundary": {
+      "evidence_class":"CURRENT_SOURCE_PLUS_REAL_SELF_HOSTED_TARGET_EFFECT_CONTRACT",
+      "target_contract_run":31402743514,
+      "current_execute_signature":"execute<T>(EffectIntent<T>, Capability, NodeId, EffectAttempt) -> EffectReceipt",
+      "g9_direct_call":"Needle.execute(effect_intent)",
+      "g9_direct_arity":1,
+      "one_argument_target_execute_contract_present":false,
+      "classification":"INCOMPATIBLE_FAIL_CLOSED",
+      "required_architecture":"TYPED_NEEDLE_BOUNDARY_ADAPTER_WITH_TRUSTED_RUNTIME_AUTHORITY_PROVENANCE",
+      "surface_semantic_change":"NOT_JUSTIFIED",
+      "adapter_provenance_probe":"PENDING_SEPARATE_TARGET_VALIDATION"
+    }
+  },
+  "cross_layer_invariants": [
+    "STRUCTURAL_AST_LEGALITY_NEVER_IMPLIES_SEMANTIC_BINDING",
+    "TYPED_DECLARATION_IDENTITY_NEVER_IMPLIES_RUNTIME_ATOMICITY",
+    "STATEFUL_CALL_SIGNATURE_NEVER_IMPLIES_STATE_TRANSITION_DEFINITION",
+    "COGNITIVE_EFFECT_INTENT_NEVER_MINTS_CAPABILITY_AUTHORIZATION_RESERVATION_OR_ATTEMPT_AUTHORITY",
+    "HOST_REFERENCE_IMPLEMENTATION_NEVER_MINTS_CLAYCODE_SEMANTICS",
+    "TARGET_VPS_MECHANISM_PASS_NEVER_IMPLIES_WHOLE_FRANK_V0_1_ACCEPTANCE"
+  ],
+  "highest_value_next_discriminators": [
+    "Group the exact 17 ambiguous rule clauses explicitly and compare against any proposed narrow precedence lattice; require zero non-target semantic drift.",
+    "Obtain exact target receipt for type/class TypedIR candidate, then integrate minimal declaration materialization and rerun full G9/Dialect/current Frank declarations.",
+    "Specify competing reward transition candidates for the 17 missing evaluator obligations, with state_epoch and receipt construction first; run matched historical-reference and simpler-baseline lesion/rescue.",
+    "Build and target-test the typed Needle boundary adapter, sourcing actor/capability/authorization/reservation/attempt only from trusted runtime state and rejecting forged cognitive provenance."
+  ],
+  "authority":{"execution_admitted":0,"effect_authority":"NONE","truth_authority":"NONE","frank_harness_mutated":false,"training_authorized":false},
+  "research_write":"COMMITTED_TO_CANDIDATE_BRANCH"
+}

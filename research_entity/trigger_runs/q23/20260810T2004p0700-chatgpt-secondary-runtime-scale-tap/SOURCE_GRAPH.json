@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2004p0700-chatgpt-secondary-runtime-scale-tap",
+  "nodes": ["QWEN35_4B_CONFIG","QWEN35_2B_CONFIG","QWEN35_08B_CONFIG","TRANSFORMERS_QWEN35","LLAMACPP_MTMD","LLAMACPP_SERVER","VLM2VEC","QWEN3VL_EMBED","AQUAUI","HIST_PRUNE","AGMEM","LLAMACPP_RUNTIME_FAILURES","QNDRF1","PAR1","TARGET_VPS"],
+  "edges": [
+    {"from":"QWEN35_4B_CONFIG","to":"QWEN35_2B_CONFIG","relation":"COMPARES_ARCHITECTURE","result":"same core 24x1024 vision tower; different LM/output width"},
+    {"from":"QWEN35_2B_CONFIG","to":"QWEN35_08B_CONFIG","relation":"COMPARES_ARCHITECTURE","result":"0.8B reduces vision depth and width"},
+    {"from":"TRANSFORMERS_QWEN35","to":"QNDRF1","relation":"IMPLEMENTS_INTERCEPTION_POINT","result":"pre-decoder image feature surface exists"},
+    {"from":"LLAMACPP_MTMD","to":"QNDRF1","relation":"IMPLEMENTS_BUFFER","result":"encoded media embeddings exist before decode"},
+    {"from":"LLAMACPP_SERVER","to":"QNDRF1","relation":"IMPLEMENTS_REUSE_PATH","result":"server forwards mtmd buffer into decoder"},
+    {"from":"VLM2VEC","to":"QNDRF1","relation":"COUNTEREVIDENCE","result":"embedding quality benefits from explicit embedding adaptation"},
+    {"from":"QWEN3VL_EMBED","to":"QNDRF1","relation":"COUNTEREVIDENCE","result":"Qwen embedding line uses dedicated multi-stage embedding training"},
+    {"from":"AQUAUI","to":"QNDRF1","relation":"REFINES","result":"structure-preserving adaptive token reduction candidate"},
+    {"from":"HIST_PRUNE","to":"QNDRF1","relation":"COUNTEREVIDENCE","result":"background/layout can matter; ROI-only is unsafe default"},
+    {"from":"AGMEM","to":"PAR1","relation":"REFINES","result":"action-grounded crop memory preferred over naive full-image memory candidate"},
+    {"from":"LLAMACPP_RUNTIME_FAILURES","to":"TARGET_VPS","relation":"TEST_OBLIGATION","result":"runtime/build flags must be measured as causal variables"},
+    {"from":"TARGET_VPS","to":"QNDRF1","relation":"RESOURCE_CONSTRAINT","result":"4 logical CPUs verified; current GPU/RAM exact state remains UNKNOWN"}
+  ]
+}

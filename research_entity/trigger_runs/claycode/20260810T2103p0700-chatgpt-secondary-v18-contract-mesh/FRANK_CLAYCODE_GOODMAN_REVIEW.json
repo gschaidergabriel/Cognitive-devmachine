@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2103p0700-chatgpt-secondary-v18-contract-mesh",
+  "items": [
+    {
+      "claim_id": "GOODMAN-V18-CONTRACT-BINDING",
+      "imported_claim": "FrontendArtifact interpretation is receipt-bound to the selected frontend schema, grammar and canonical semantic identity.",
+      "ancestry": "ClayCode WP02/WP03 shared implementation lineage",
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "Rechecking semantic_hash and grammar identity is enough; frontend contract_hash need not be validated at the TypedIR bridge.",
+      "discriminator": "Mutate only contract_hash while preserving the exact accepted canonical AST, semantic_hash, grammar and surface.",
+      "observed": "The pre-fix bridge accepted the altered receipt; the repaired bridge rejects it deterministically.",
+      "verdict": "SUPPORTED_IMPLEMENTATION_REPAIR",
+      "epistemic_limit": "This proves an integrity gap in the bridge contract, not independent evidence that the larger Frank architecture is correct."
+    },
+    {
+      "claim_id": "GOODMAN-REGISTRY-V3-MESH",
+      "imported_claim": "Every ClayCode material run must join the current Frank-v0.1 research mesh.",
+      "ancestry": "Project governance / owner-fixed Frank-v0.1-only program",
+      "shared_ancestry_collapsed": true,
+      "counterhypothesis": "The legacy domain_research/integrated_research_foundry kind filter remains sufficient after registry schema 3.0.",
+      "discriminator": "Apply the legacy filter to the current registry and compare its peer set with the current ten operational Frank-v0.1 branch lenses.",
+      "observed": "Current operational kinds include domain_build_research, whole_target_architecture_build, multimodal_perception_research, integrated_frank_v0_1_research_foundry and direct_frank_v0_1_validation_repair; legacy filtering omits them and trips the existing fail-closed exact-set invariant.",
+      "verdict": "REFUTED_LEGACY_FILTER_REPAIRED",
+      "epistemic_limit": "Peer connectivity improves information flow only; it does not increase evidential strength."
+    },
+    {
+      "claim_id": "GOODMAN-NO-SYNTAX-CHURN",
+      "imported_claim": "Current Frank v0.1 authority/provenance requirements require new ClayCode surface syntax.",
+      "counterhypothesis": "Existing V18/G9 constructs are adequate; the current failures are implementation/receipt/type-effect enforcement gaps.",
+      "evidence": [
+        "WP03 prior V18 TypedIR run parsed the owner-fixed agency/ingress structures without grammar amendment",
+        "current target frank_effects.clay already represents opaque Capability, effect stages, outcome uncertainty and recovery",
+        "current target ingress candidate represents field trust and authority separation with existing ClayCode forms",
+        "current run repaired both observed failures without grammar or language semantic changes"
+      ],
+      "verdict": "NO_SEMANTIC_CHANGE_SUPPORTED_FOR_THIS_RUN",
+      "next_falsifier": "A real Frank v0.1 component fails the production type/effect/lowering path because a required invariant cannot be expressed or enforced under the frozen semantics."
+    }
+  ],
+  "overall": "IMPLEMENT_AND_MEASURE; DO_NOT PROMOTE AGREEMENT FROM SHARED ANCESTRY"
+}

@@ -206,3 +206,5 @@ def main():
 
 if __name__=="__main__":
     main()
+
+# Workflow retrigger marker: 2026-08-10T16:36+07:00; no semantic change.

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "architecture_deltas": [
+    {
+      "delta_id": "AD-Q23-QNDRF-FTAP-02",
+      "status": "CANDIDATE",
+      "target_components": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "proposed_change": "Refine QNDRF into Capture -> cryptographic source/ROI identity + perception epoch -> cheap unchanged/change gate -> one Qwen3.5 vision forward -> VisualFeatureTap{pre_merger,post_merger,grid,model/mmproj/version} -> calibrated MVC/open-set readout -> optional structured temporal pruning/EAP context -> on escalation reuse post-merger embeddings for semantic decode -> PerceptualField/GWT/outcome/re-entry.",
+      "preserved_historical_functions": ["sensor ingress/provenance", "temporal continuity", "change detection", "ROI/token control", "familiarity/open-set routing", "active sensing", "action verification", "recovery/replay lineage"],
+      "expected_benefit": "Test two feature geometries from one expensive visual pass; avoid a second heavy visual encoder when Qwen taps are sufficient; keep recovery and provenance independent of fragile runtime caches.",
+      "strongest_counterhypothesis": "Dedicated lightweight embeddings dominate Qwen taps on open-set calibration and complete pathway cost; feature taps or temporal pruning add coupling without useful benefit.",
+      "discriminating_test": "Matched target-VPS four-way benchmark: Qwen pre-merger, Qwen post-merger, tiny projected Qwen tap, dedicated lightweight embedding baseline; add restart/replay and temporal-policy factorial controls.",
+      "rollback": "Retain current QNDRF candidate with dedicated lightweight backbone option; disable pre-merger tap/temporal stage and re-encode visual evidence after restart.",
+      "authority_note": "Feature similarity, cache identity and memory activation remain context/routing evidence only and never mint sensor truth or effect authority."
+    }
+  ]
+}

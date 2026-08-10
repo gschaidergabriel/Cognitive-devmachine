@@ -1,0 +1,14 @@
+{
+  "package_id": "P-Q23-03_VISUAL_RUNTIME_COMPATIBILITY_ENVELOPE",
+  "status": "TEST_AND_RECOVERY_PACKAGE",
+  "finding": "Multimodal representation correctness cannot be versioned by model/mmproj alone. Current failure evidence motivates binding MVC/prototype state to runtime, preprocessor, backend, token-budget, batch semantics and canonicalization identity.",
+  "evidence_refs": [
+    "ggml-org/llama.cpp#25717",
+    "ggml-org/llama.cpp#19929",
+    "ggml-org/llama.cpp#22785",
+    "ggml-org/llama.cpp#19980",
+    "ggml-org/llama.cpp#20870"
+  ],
+  "produces": ["H-Q23-COMPAT-ENVELOPE-04","TO-Q23-VISUAL-COMPAT-02","TO-Q23-MM-RUNTIME-RECOVERY-04"],
+  "target_rule": "Exact Frank target runtime must reproduce visual correctness/resource/recovery measurements before prototype compatibility is credited."
+}

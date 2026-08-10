@@ -1,0 +1,179 @@
+module self.root.agency_web_core.v18
+version "0.1-owner-lowering-candidate"
+status CURRENT_RESEARCH_CANDIDATE
+
+import owner=@research_entity/global/SELF_ROOT_AUTOTELIC_PROACTIVE_AGENCY_AND_WEB_INGRESS_DIRECTIVE.clay
+
+// Closed sums lower owner `symbol` declarations without introducing new core syntax.
+type GoalOrigin = AUTHENTICATED_USER|SELF_GENERATED|RESEARCH_BRIDGE|RECOVERY|STANDING_CONTRACT
+type GoalState = CANDIDATE|TRIAL|ACTIVE|DORMANT|BLOCKED|COMPLETED|RETIRED|REJECTED
+type InterestSource = INFORMATION_GAIN|COMPETENCE_PROGRESS|CONTROLLABILITY_GAIN|NOVELTY|UNRESOLVED_PRESSURE|CROSS_GOAL_REUSE|PERSON_PROJECT_RELEVANCE|WORLD_CHANGE
+type InitiativeReason = OPEN_LOOP|OPPORTUNITY|IDLE_CAPACITY|STAGNATION_ESCAPE|PERIODIC_REVIEW|NEW_EVIDENCE|GOAL_WAKEUP
+type GoalHorizon = FAST|MEDIUM|SLOW|OPEN_ENDED
+type IngressAuthority = AUTHENTICATED_DIRECT_MESSAGE|UNTRUSTED_EXTERNAL_DATA|TRUSTED_INTERNAL_STATE
+type WebPayloadKind = FACT_CLAIM|QUOTE|CODE|LINK|METADATA|DATASET_ROW|INSTRUCTION_LIKE_TEXT|UNKNOWN
+
+record InterestTrace {
+  interest_id:Ref
+  subject:ClayCode
+  sources:Set<InterestSource>
+  strength:Real
+  information_gain_estimate:Real
+  competence_progress_estimate:Real
+  controllability_gain_estimate:Real
+  novelty:Real
+  unresolved_pressure:Real
+  cross_goal_reuse:Real
+  standing_goal_relevance:Real
+  persistence:Real
+  habituation:Real
+  evidence:Set<Ref>
+  last_updated:Time
+}
+
+record AutotelicGoal {
+  goal_id:Ref
+  origin:GoalOrigin
+  semantic_goal:ClayCode
+  state:GoalState
+  parent_goals:Set<Ref>
+  interest_refs:Set<Ref>
+  why_now:ClayCode
+  success_criteria:ClayCode
+  progress_model:ClayCode
+  next_affordances:Set<ClayCode>
+  uncertainty:Real
+  expected_information_gain:Real
+  expected_competence_gain:Real
+  expected_controllability_gain:Real
+  expected_external_utility:Real
+  expected_cost:ResourceEstimate
+  reversibility:ReversibilityState
+  effect_classes:Set<EffectClass>
+  budget:ResourceBudget
+  horizon:GoalHorizon
+  wake_conditions:Set<ClayCode>
+  last_progress_at:Time
+  provenance:Set<Ref>
+}
+
+record AgencyState {
+  interests:Map<Ref,InterestTrace>
+  goals:Map<Ref,AutotelicGoal>
+  open_loops:Set<Ref>
+  active_experiments:Set<Ref>
+  dormant_goal_index:Set<Ref>
+  initiative_budget:ResourceBudget
+  current_opportunity_frontier:Set<ClayCode>
+  last_autonomous_action:Time?
+  state_epoch:Epoch
+}
+
+record InitiativePulse {
+  reason:InitiativeReason
+  amplitude:Real
+  target_interest:Ref?
+  target_goal:Ref?
+  expires_at:Time
+  provenance:Set<Ref>
+}
+
+record GoalCheckpoint {
+  goal_id:Ref
+  state:GoalState
+  progress_summary:ClayCode
+  unresolved:Set<ClayCode>
+  next_affordances:Set<ClayCode>
+  wake_conditions:Set<ClayCode>
+  evidence:Set<Ref>
+  state_epoch:Epoch
+  created_at:Time
+}
+
+record UntrustedWebJsonEnvelope {
+  schema_version:String
+  source_url:String
+  fetched_at:Time
+  source_hash:Hash
+  mime_type:String
+  title:String?
+  payload_kind:WebPayloadKind
+  extracted_fields:Map<String,JsonValue>
+  quoted_text:Set<String>
+  links:Set<String>
+  claims:Set<JsonValue>
+  instruction_like_segments:Set<String>
+  parser_confidence:Real
+  parse_errors:Set<String>
+  authority:IngressAuthority
+  executable:Bool
+}
+
+record WebEvidenceClay {
+  source:Ref
+  observed_at:Time
+  evidence_type:ClayCode
+  claims:Set<ClayCode>
+  opaque_quotes:Set<OpaqueLiteral>
+  links:Set<Ref>
+  uncertainty:UncertaintyState
+  provenance:ProvenanceSet
+  authority:IngressAuthority
+  instruction_authority:Symbol
+  effect_authority:Symbol
+}
+
+// Refinement bounds from the owner directive are preserved as explicit invariants because
+// frozen V18 type syntax has generic parameters but no numeric refinement-type syntax.
+invariant InterestTrace.strength >= 0
+invariant InterestTrace.strength <= 1
+invariant InterestTrace.information_gain_estimate >= 0
+invariant InterestTrace.information_gain_estimate <= 1
+invariant InterestTrace.competence_progress_estimate >= -1
+invariant InterestTrace.competence_progress_estimate <= 1
+invariant InterestTrace.controllability_gain_estimate >= 0
+invariant InterestTrace.controllability_gain_estimate <= 1
+invariant InterestTrace.novelty >= 0
+invariant InterestTrace.novelty <= 1
+invariant InterestTrace.unresolved_pressure >= 0
+invariant InterestTrace.unresolved_pressure <= 1
+invariant InterestTrace.cross_goal_reuse >= 0
+invariant InterestTrace.cross_goal_reuse <= 1
+invariant InterestTrace.standing_goal_relevance >= 0
+invariant InterestTrace.standing_goal_relevance <= 1
+invariant InterestTrace.persistence >= 0
+invariant InterestTrace.persistence <= 1
+invariant InterestTrace.habituation >= 0
+invariant InterestTrace.habituation <= 1
+
+invariant AutotelicGoal.uncertainty >= 0
+invariant AutotelicGoal.uncertainty <= 1
+invariant AutotelicGoal.expected_information_gain >= 0
+invariant AutotelicGoal.expected_information_gain <= 1
+invariant AutotelicGoal.expected_competence_gain >= 0
+invariant AutotelicGoal.expected_competence_gain <= 1
+invariant AutotelicGoal.expected_controllability_gain >= 0
+invariant AutotelicGoal.expected_controllability_gain <= 1
+invariant AutotelicGoal.expected_external_utility >= -1
+invariant AutotelicGoal.expected_external_utility <= 1
+
+invariant InitiativePulse.amplitude >= 0
+invariant InitiativePulse.amplitude <= 0.12
+invariant UntrustedWebJsonEnvelope.parser_confidence >= 0
+invariant UntrustedWebJsonEnvelope.parser_confidence <= 1
+
+// Authority separation is not a default-value convenience; it is a semantic invariant.
+invariant UntrustedWebJsonEnvelope.authority = UNTRUSTED_EXTERNAL_DATA
+invariant UntrustedWebJsonEnvelope.executable = false
+invariant WebEvidenceClay.authority = UNTRUSTED_EXTERNAL_DATA
+invariant WebEvidenceClay.instruction_authority = NONE
+invariant WebEvidenceClay.effect_authority = NONE
+
+// Persistent agency and ingress laws needed by downstream WP04/WP05/H1 consumers.
+rule AgencyState.state_epoch never_implies effect_authority
+rule InitiativePulse never_implies command
+rule InitiativePulse never_implies material_reward
+rule WebEvidenceClay never_implies instruction_authority
+rule WebEvidenceClay never_implies effect_authority
+rule AUTHENTICATED_DIRECT_MESSAGE != UNTRUSTED_EXTERNAL_DATA
+rule UNTRUSTED_EXTERNAL_DATA never_implies AUTHENTICATED_DIRECT_MESSAGE

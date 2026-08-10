@@ -8,204 +8,264 @@ import math
 from pathlib import Path
 import platform
 import random
+import re
 import sqlite3
 import statistics
 import sys
 import time
+import unicodedata
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from research_entity.harness.reference.cognitive_retrieval import (
-    CognitiveQueryIntent,
-    CognitiveRetrievalIndex,
-    GraphEdge,
+from research_entity.runtime.verified_claygraph_ranker import VerifiedClayGraphRanker
+
+_STOP = set(
+    ('the a an is are was were be been being of to and or in on at for from by with as it '
+     'this that what which who how does do where when after before into same actually der die '
+     'das ein eine einer einem einen ist sind war waren sein wird werden von zu und oder im in '
+     'am für aus mit als es dies diese dieser was welcher welche welches wer wie wo wann tatsächlich').split()
 )
 
 
-class FixtureLedger:
-    def __init__(self, fixture: dict):
-        self.epoch = 1
-        self.semantic_state_hash = 'fixture:' + fixture['benchmark_id']
-        self._rows = []
-        self._events = []
-        for i, r in enumerate(fixture['records']):
-            domain, key = r['record_ref'].split(':', 1)
-            self._rows.append({
-                'domain': domain,
-                'key': key,
-                'value': {
-                    'title': r['title'],
-                    'text': r['text'],
-                    'provenance_weight': r.get('provenance_weight', 1.0),
-                },
-                'epistemic': r['epistemic'],
-                'status': r['status'],
-                'domain_epoch': 1,
-                'semantic_hash': f'fixture-sem-{i:04d}',
-            })
-            self._events.append({
-                'event_id': f'fixture-event-{i:04d}',
-                'writer': 'benchmark-fixture',
-                'committed_at': '2026-08-10T00:00:00Z',
-                'provenance': {'evidence_class': fixture['evidence_class']},
-                'source': {'benchmark_id': fixture['benchmark_id']},
-                'ops': [{'domain': domain, 'key': key}],
-            })
-
-    def materialized(self):
-        return [dict(x) for x in self._rows]
-
-    def export_events(self):
-        return [dict(x) for x in self._events]
+def _norm(value):
+    text = unicodedata.normalize('NFKC', str(value)).casefold().replace('v0.1', 'v0_1')
+    text = re.sub(r'[_/:\-]+', ' ', text)
+    text = re.sub(r'[^\w]+', ' ', text, flags=re.UNICODE)
+    return ' '.join(text.split())
 
 
-class FixturePlane:
-    def __init__(self, ledger):
-        self.ledger = ledger
+def _tokens(value):
+    return [x for x in _norm(value).split() if len(x) > 1 and x not in _STOP and not x.isdigit()]
 
 
-def load_fixture(path: Path):
-    if path.suffix == '.b64':
-        return json.loads(gzip.decompress(base64.b64decode(path.read_text())).decode())
-    return json.loads(path.read_text())
+def _variants(term):
+    out = {term}
+    for suffix in ('ing', 'ed', 'es', 's', 'en', 'ern', 'ungen', 'ung', 'ieren', 'ier', 'ly'):
+        if len(term) > len(suffix) + 3 and term.endswith(suffix):
+            out.add(term[:-len(suffix)])
+    return out
 
 
-def build_index(fixture: dict):
-    ledger = FixtureLedger(fixture)
-    edges = [GraphEdge(**e) for e in fixture['edges']]
-    return CognitiveRetrievalIndex(
-        FixturePlane(ledger),
-        graph_edges=edges,
-        alias_groups=fixture['alias_groups'],
-    )
+class FixtureEngine:
+    """Conventional FTS baseline + verified graph callback for the frozen holdout."""
 
+    def __init__(self, fixture):
+        self.fixture = fixture
+        self.records = {r['record_ref']: r for r in fixture['records']}
+        self.alias = {}
+        for group in fixture['alias_groups']:
+            terms = {_norm(x) for x in group if _norm(x)}
+            for term in terms:
+                self.alias.setdefault(term, set()).update(terms - {term})
 
-def dcg_at_5(got, relevant):
-    rel = set(relevant)
-    return sum((1 if x in rel else 0) / math.log2(i + 2) for i, x in enumerate(got[:5]))
-
-
-def score_queries(index, fixture, *, graph_enabled: bool):
-    rows = []
-    for q in fixture['queries']:
-        intent = CognitiveQueryIntent(
-            query_id=q['query_id'],
-            text=q['text'],
-            semantic_hints=tuple(q['semantic_hints']),
-            anchor_refs=tuple(q['anchor_refs']) if graph_enabled else (),
-            target_mode=q['target_mode'] if graph_enabled else 'DIRECT',
-            basis_epoch=1,
-            limit=5,
+        self.fts = sqlite3.connect(':memory:')
+        self.fts.row_factory = sqlite3.Row
+        self.fts.execute(
+            "CREATE VIRTUAL TABLE docs USING fts5("
+            "ref UNINDEXED,key_text,body_text,tokenize='unicode61 remove_diacritics 2')"
         )
-        receipt = index.query(intent)
-        got = [r.record_ref for r in receipt.results]
-        relevant = set(q['relevant'])
-        rank = next((i + 1 for i, x in enumerate(got) if x in relevant), None)
+        self.fts.execute("INSERT INTO docs(docs,rank) VALUES('rank','bm25(0.0,3.0,1.0)')")
+        for row in fixture['records']:
+            self.fts.execute(
+                'INSERT INTO docs VALUES(?,?,?)',
+                (row['record_ref'], row['record_ref'].replace(':', ' '), row['title'] + ' ' + row['text']),
+            )
+        self.fts.commit()
+
+        self.graph = sqlite3.connect(':memory:')
+        self.graph.row_factory = sqlite3.Row
+        self.graph.executescript('''
+          CREATE TABLE graph_epochs(graph_epoch INTEGER,source_epoch INTEGER,status TEXT);
+          CREATE TABLE graph_head_edges(logical_edge_id TEXT,graph_epoch INTEGER);
+          CREATE TABLE graph_current_projection_receipts(
+            graph_epoch INTEGER,source_epoch INTEGER,verified_equal INTEGER,created_at TEXT
+          );
+          CREATE TABLE amb(logical_edge_id TEXT,graph_epoch INTEGER,version_count INTEGER);
+          CREATE VIEW v_graph_projection_ambiguous_edge_epochs AS SELECT * FROM amb;
+          CREATE TABLE heads(
+            logical_edge_id TEXT,source_logical_id TEXT,target_logical_id TEXT,
+            relation_type TEXT,weight REAL,confidence REAL,graph_epoch INTEGER
+          );
+          CREATE VIEW v_graph_current_edges_fast AS SELECT * FROM heads;
+        ''')
+        self.graph.execute("INSERT INTO graph_epochs VALUES(1,1,'CURRENT')")
+        self.graph.execute(
+            "INSERT INTO graph_current_projection_receipts VALUES(1,1,1,'fixture')"
+        )
+        for i, edge in enumerate(fixture['edges']):
+            edge_id = f'e{i:03d}'
+            self.graph.execute('INSERT INTO graph_head_edges VALUES(?,1)', (edge_id,))
+            self.graph.execute(
+                'INSERT INTO heads VALUES(?,?,?,?,?,?,1)',
+                (edge_id, edge['source_ref'], edge['target_ref'], edge['relation_type'],
+                 edge['weight'], edge.get('confidence')),
+            )
+
+        self.ranker = VerifiedClayGraphRanker(
+            self.graph,
+            text_for_ref=lambda ref, epoch: (
+                self.records.get(ref, {}).get('title', '') + ' '
+                + self.records.get(ref, {}).get('text', '')
+            ),
+            admissible_ref=lambda ref, epoch: (
+                self.records.get(ref, {}).get('status') == 'CURRENT'
+                and self.records.get(ref, {}).get('epistemic') == 'KNOWN'
+            ),
+        )
+
+    def _expand(self, text):
+        out = set(_tokens(text))
+        for term in list(out):
+            for variant in _variants(term):
+                out.add(variant)
+                out.update(self.alias.get(variant, ()))
+        return sorted(out)
+
+    def direct(self, query, limit=5):
+        terms = self._expand(query['text'] + ' ' + ' '.join(query['semantic_hints']))
+        if not terms:
+            return []
+        expression = ' OR '.join('"' + x.replace('"', '') + '"' for x in terms)
+        rows = self.fts.execute(
+            'SELECT ref FROM docs WHERE docs MATCH ? ORDER BY rank LIMIT 64',
+            (expression,),
+        )
+        return [
+            row['ref'] for row in rows
+            if self.records[row['ref']]['status'] == 'CURRENT'
+            and self.records[row['ref']]['epistemic'] == 'KNOWN'
+        ][:limit]
+
+    def combined(self, query, limit=5):
+        if query['target_mode'] != 'CONNECTED_TARGET':
+            return self.direct(query, limit), []
+        ranked = self.ranker.rank(
+            query['anchor_refs'][0],
+            query['text'] + ' ' + ' '.join(query['semantic_hints']),
+            1,
+            1,
+            limit,
+        )
+        return [x.ref for x in ranked], [
+            {
+                'ref': x.ref,
+                'score': x.score,
+                'edge_ref': x.edge_ref,
+                'direction': x.direction,
+                'relation_type': x.relation_type,
+            }
+            for x in ranked
+        ]
+
+    def close(self):
+        self.fts.close()
+        self.graph.close()
+
+
+def _score(fixture, engine, *, combined):
+    rows = []
+    for query in fixture['queries']:
+        if combined:
+            got, paths = engine.combined(query)
+        else:
+            got, paths = engine.direct(query), []
+        relevant = set(query['relevant'])
+        rank = next((i + 1 for i, ref in enumerate(got) if ref in relevant), None)
         ideal = sum(1 / math.log2(i + 2) for i in range(min(len(relevant), 5)))
+        dcg = sum(
+            (1 if ref in relevant else 0) / math.log2(i + 2)
+            for i, ref in enumerate(got[:5])
+        )
         rows.append({
-            'query_id': q['query_id'],
+            'query_id': query['query_id'],
+            'mode': query['target_mode'],
             'rank': rank,
             'top5': got,
-            'hit1': bool(rank == 1),
+            'paths': paths,
+            'hit1': rank == 1,
             'rr': 0.0 if rank is None else 1.0 / rank,
-            'recall3': len(relevant.intersection(got[:3])) / len(relevant),
-            'ndcg5': 0.0 if not ideal else dcg_at_5(got, relevant) / ideal,
-            'graph_used': receipt.graph_used,
-            'top_score_receipt': receipt.results[0].score_receipt if receipt.results else None,
+            'recall3': len(relevant & set(got[:3])) / len(relevant),
+            'ndcg5': 0.0 if not ideal else dcg / ideal,
         })
     return rows
 
 
-def summarize(rows):
+def _summary(rows):
     return {
         'n': len(rows),
-        'hit1': statistics.mean(r['hit1'] for r in rows),
-        'mrr': statistics.mean(r['rr'] for r in rows),
-        'recall3': statistics.mean(r['recall3'] for r in rows),
-        'ndcg5': statistics.mean(r['ndcg5'] for r in rows),
+        'hit1': statistics.mean(x['hit1'] for x in rows),
+        'mrr': statistics.mean(x['rr'] for x in rows),
+        'recall3': statistics.mean(x['recall3'] for x in rows),
+        'ndcg5': statistics.mean(x['ndcg5'] for x in rows),
         'failures': [
-            {'query_id': r['query_id'], 'rank': r['rank'], 'top5': r['top5']}
-            for r in rows if not r['hit1']
+            {'query_id': x['query_id'], 'rank': x['rank'], 'top5': x['top5']}
+            for x in rows if not x['hit1']
         ],
     }
 
 
-def quantile(xs, p):
-    xs = sorted(xs)
-    pos = (len(xs) - 1) * p
+def _quantile(samples, p):
+    values = sorted(samples)
+    pos = (len(values) - 1) * p
     lo = int(pos)
-    hi = min(lo + 1, len(xs) - 1)
-    f = pos - lo
-    return xs[lo] * (1 - f) + xs[hi] * f
+    hi = min(lo + 1, len(values) - 1)
+    frac = pos - lo
+    return values[lo] * (1 - frac) + values[hi] * frac
 
 
-def latency(index, fixture, *, graph_enabled: bool, repetitions: int):
+def _latency(fixture, engine, *, combined, repetitions):
     jobs = fixture['queries'] * repetitions
-    random.Random(20260810).shuffle(jobs)
+    random.Random(20260810 + (1 if combined else 0)).shuffle(jobs)
     samples = []
-    for q in jobs:
-        intent = CognitiveQueryIntent(
-            query_id=q['query_id'],
-            text=q['text'],
-            semantic_hints=tuple(q['semantic_hints']),
-            anchor_refs=tuple(q['anchor_refs']) if graph_enabled else (),
-            target_mode=q['target_mode'] if graph_enabled else 'DIRECT',
-            basis_epoch=1,
-            limit=5,
-        )
-        t0 = time.perf_counter_ns()
-        index.query(intent)
-        samples.append((time.perf_counter_ns() - t0) / 1e6)
+    for query in jobs:
+        started = time.perf_counter_ns()
+        engine.combined(query) if combined else engine.direct(query)
+        samples.append((time.perf_counter_ns() - started) / 1e6)
     return {
         'n': len(samples),
-        'p50_ms': quantile(samples, 0.50),
-        'p95_ms': quantile(samples, 0.95),
-        'p99_ms': quantile(samples, 0.99),
+        'p50_ms': _quantile(samples, 0.50),
+        'p95_ms': _quantile(samples, 0.95),
+        'p99_ms': _quantile(samples, 0.99),
         'mean_ms': statistics.mean(samples),
         'max_ms': max(samples),
     }
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         '--fixture',
-        default=str(Path(__file__).with_name('udb_claygraph_cognitive_retrieval_v7_fixture.json.gz.b64')),
+        default=str(Path(__file__).with_name(
+            'udb_claygraph_cognitive_retrieval_v7_fixture.json.gz.b64')),
     )
-    ap.add_argument('--repetitions', type=int, default=50)
-    ap.add_argument('--noise-rows', type=int, default=0)
-    ap.add_argument('--out')
-    args = ap.parse_args()
-    fixture = load_fixture(Path(args.fixture))
-    if args.noise_rows:
-        for i in range(args.noise_rows):
-            fixture['records'].append({
-                'record_ref': f'noise:item{i:06d}',
-                'title': f'Noise item {i}',
-                'text': f'synthetic unrelated benchmark payload shard {i} alpha beta gamma storage queue worker metric',
-                'epistemic': 'KNOWN',
-                'status': 'CURRENT',
-                'provenance_weight': 0.5,
-            })
-    idx = build_index(fixture)
+    parser.add_argument('--repetitions', type=int, default=50)
+    parser.add_argument('--out')
+    args = parser.parse_args()
+    path = Path(args.fixture)
+    fixture = (
+        json.loads(gzip.decompress(base64.b64decode(path.read_text())).decode())
+        if path.suffix == '.b64' else json.loads(path.read_text())
+    )
 
-    t0 = time.perf_counter_ns()
-    q0 = fixture['queries'][0]
-    idx.query(CognitiveQueryIntent(
-        q0['query_id'], q0['text'], tuple(q0['semantic_hints']),
-        tuple(q0['anchor_refs']), q0['target_mode'], limit=5, basis_epoch=1,
-    ))
-    first_query_ms = (time.perf_counter_ns() - t0) / 1e6
+    started = time.perf_counter_ns()
+    engine = FixtureEngine(fixture)
+    build_ms = (time.perf_counter_ns() - started) / 1e6
 
-    direct_rows = score_queries(idx, fixture, graph_enabled=False)
-    graph_rows = score_queries(idx, fixture, graph_enabled=True)
-    direct = summarize(direct_rows)
-    graph = summarize(graph_rows)
+    baseline_rows = _score(fixture, engine, combined=False)
+    candidate_rows = _score(fixture, engine, combined=True)
+    baseline = _summary(baseline_rows)
+    candidate = _summary(candidate_rows)
+    connected_baseline = _summary([
+        x for x in baseline_rows if x['mode'] == 'CONNECTED_TARGET'
+    ])
+    connected_candidate = _summary([
+        x for x in candidate_rows if x['mode'] == 'CONNECTED_TARGET'
+    ])
 
     result = {
-        'schema_version': '1.0',
+        'schema_version': '2.0',
         'benchmark_id': fixture['benchmark_id'],
         'evidence_class': fixture['evidence_class'],
         'claim_boundary': fixture['claim_boundary'],
@@ -219,21 +279,29 @@ def main():
             'records': len(fixture['records']),
             'edges': len(fixture['edges']),
             'queries': len(fixture['queries']),
-            'synthetic_noise_rows': args.noise_rows,
+            'connected_target_queries': len([
+                q for q in fixture['queries'] if q['target_mode'] == 'CONNECTED_TARGET'
+            ]),
         },
-        'first_query_including_index_build_ms': first_query_ms,
-        'baseline_direct_no_graph': direct,
-        'candidate_typed_anchor_graph': graph,
+        'projection_build_ms': build_ms,
+        'baseline_direct_all': baseline,
+        'candidate_v14_plus_verified_claygraph_all': candidate,
+        'connected_target_baseline': connected_baseline,
+        'connected_target_candidate': connected_candidate,
         'delta': {
-            'hit1_percentage_points': (graph['hit1'] - direct['hit1']) * 100.0,
-            'mrr_percentage_points': (graph['mrr'] - direct['mrr']) * 100.0,
-            'recall3_percentage_points': (graph['recall3'] - direct['recall3']) * 100.0,
-            'ndcg5_percentage_points': (graph['ndcg5'] - direct['ndcg5']) * 100.0,
+            'all_hit1_percentage_points': (candidate['hit1'] - baseline['hit1']) * 100.0,
+            'connected_hit1_percentage_points': (
+                connected_candidate['hit1'] - connected_baseline['hit1']
+            ) * 100.0,
         },
-        'latency_direct': latency(idx, fixture, graph_enabled=False, repetitions=args.repetitions),
-        'latency_graph': latency(idx, fixture, graph_enabled=True, repetitions=args.repetitions),
+        'baseline_query_rows': baseline_rows,
+        'candidate_query_rows': candidate_rows,
+        'latency_baseline': _latency(
+            fixture, engine, combined=False, repetitions=args.repetitions),
+        'latency_candidate': _latency(
+            fixture, engine, combined=True, repetitions=args.repetitions),
     }
-    idx.close()
+    engine.close()
     text = json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True)
     if args.out:
         Path(args.out).write_text(text)

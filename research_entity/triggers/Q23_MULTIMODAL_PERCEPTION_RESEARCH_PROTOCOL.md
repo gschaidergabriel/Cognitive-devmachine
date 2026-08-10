@@ -1,30 +1,32 @@
-# Q23 — Maximum-Depth Interconnective Multimodal Perception Research Protocol
+# Q23 — Maximum-Depth Interconnective Multimodal Perception Research Protocol v2.1
 
 **Status:** PROJECT-OWNER FIXED EXACT TRIGGER  
 **Exact trigger:** `q23`  
 **Matching:** complete trimmed message, case-insensitive  
-**Field:** `research_entity/global/Q23_MULTIMODAL_PERCEPTION_RESEARCH_FIELD.clay`
+**Field:** `research_entity/global/Q23_MULTIMODAL_PERCEPTION_RESEARCH_FIELD.clay`  
+**GO bridge:** `research_entity/global/GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay`
 
 ## 0. Meaning
 
 Exact `q23` starts the persistent interconnective research field for Frank's multimodal perception architecture and drives it for the **maximum useful synchronous depth available in the current invocation/tool/capability budget**.
 
-The field researches how a natively multimodal <=4B Frank model should fuse with the historical Digital Retina lineage, adaptive user-specific visual learning, temporal GUI perception, visual memory, GWT/re-entry and the one-module H3 architecture.
+The field researches how a natively multimodal <=4B Frank model should fuse with the historical Digital Retina lineage, adaptive user-specific visual learning, temporal GUI perception, visual memory, UnifiedDB/EAP retrieval, GWT/re-entry and the one-module H3 architecture.
 
-`q23` is not a one-shot answer, not a generic model-news search and not a fixed checklist. It is a recursively expanding research process whose frontier is rewritten by every meaningful internal or external observation.
+`q23` is not a one-shot answer, not a generic model-news search and not a fixed checklist. Its frontier is rewritten by every meaningful internal/external observation and by bidirectional questions/results from the whole-system `go` loop.
 
 Compact law:
 
-`fresh internal state + fresh external knowledge`
+`fresh internal state + GO/global frontier + q23 frontier + fresh external knowledge`
 ` -> hypotheses + strongest counterhypotheses`
-` -> graph expansion + source/citation/repo traversal`
+` -> source/code/citation/project network expansion`
 ` -> dense evidence fusion`
 ` -> falsifier / experiment / architecture delta`
-` -> research re-entry + swarm routing`
+` -> GO<->q23 question/result exchange`
+` -> targeted swarm research re-entry`
 ` -> changed frontier`
 ` -> deeper next cycle`
 
-The trigger should stop only when the current invocation budget/capability is exhausted, an authority/safety gate blocks the next action, or every reachable next branch has lower expected information/architecture value than its cost/noise after deliberate route-changing attempts.
+The trigger stops only when the current invocation/capability budget is exhausted, an authority/safety gate blocks the next action, or every reachable next branch has lower expected information/architecture value than its cost/noise after deliberate route-changing attempts.
 
 ## 1. Maximum-useful-depth contract
 
@@ -36,45 +38,97 @@ Mandatory behavior:
 2. continue recursively inside the same invocation while productive work remains;
 3. never stop merely because one plausible answer has been found;
 4. actively search for a stronger mechanism, contradiction, null explanation or cheaper architecture;
-5. use new evidence to generate new questions rather than only to answer old ones;
-6. traverse references, repositories, implementation links, papers, model cards, runtime code and related mechanisms when each hop has expected value;
-7. refresh live knowledge repeatedly during the run, not just once at the beginning;
+5. use new evidence to generate new questions rather than only answer old ones;
+6. traverse references, repositories, implementation links, papers, journals/conference sources, model cards, runtime code, issue/failure evidence and competing projects when each hop has expected value;
+7. refresh live knowledge repeatedly during the run;
 8. re-read current repo/shared state after material new evidence, worker results or writes;
-9. preserve only reproducible decision traces and evidence; never persist hidden chain-of-thought.
+9. preserve only reproducible decision traces and evidence; never persist hidden chain-of-thought;
+10. use a comprehensive visible final synthesis when there is material content rather than artificially compressing the research.
 
 `maximum depth != infinite repetition`.
 
-Repeated query/result patterns with no novelty must trigger a route change, not blind continuation.
+Repeated query/result patterns with no novelty trigger a route change.
 
 ## 2. Hard progress law
 
 Every major q23 research cycle MUST create a measurable `ResearchProgressDelta`.
 
-A valid progress delta is at least one of:
+Valid progress includes at least one of:
 
-- a genuinely new falsifiable hypothesis;
-- a materially revised hypothesis with changed prediction/falsifier;
-- a new strongest counterhypothesis;
-- a contradiction exposed or resolved;
-- a new primary/official evidence package;
-- a new implementation/runtime fact;
-- a new causal architecture delta candidate;
-- a new discriminating experiment/test obligation;
-- a work revision/new nonduplicate work item;
-- a negative result that closes/narrows a branch;
-- a source-network expansion that opens a materially new research direction;
-- a quantified uncertainty reduction;
-- an evidence-backed NO_CHANGE that eliminates a plausible alternative.
+- genuinely new falsifiable hypothesis;
+- materially revised hypothesis with changed prediction/falsifier;
+- new strongest counterhypothesis;
+- contradiction exposed/resolved;
+- new primary/official/journal/GitHub/implementation evidence package;
+- new runtime/code fact;
+- new causal architecture delta candidate;
+- new discriminating experiment/test obligation;
+- work revision/new nonduplicate work item;
+- negative result closing/narrowing a branch;
+- source-network expansion opening a material new direction;
+- quantified uncertainty reduction;
+- evidence-backed `NO_CHANGE` eliminating a plausible alternative;
+- GO<->q23 question closure that changes a hypothesis/test/work decision.
 
-Merely rephrasing an existing idea, adding another source with the same ancestry, or increasing confidence without new evidence is NOT progress.
+Rephrasing an existing idea, adding same-ancestry sources, or increasing confidence without new evidence is NOT progress.
 
-If a cycle produces no valid progress delta:
+If no valid progress delta appears:
 
-`NO_PROGRESS -> change research route -> change source class or abstraction level -> search strongest countermechanism -> retry`.
+`NO_PROGRESS -> change research route -> change source class/abstraction -> search strongest countermechanism -> request whole-mesh GO input if useful -> retry`.
 
-Only after deliberate route changes fail may the branch be marked locally saturated.
+Only then may the branch be marked locally saturated.
 
-## 3. Mandatory hypothesis accumulation
+## 3. Bidirectional GO integration is mandatory
+
+q23 is a specialist research field, not a silo.
+
+Before major work, q23 reads current relevant:
+
+- GO/global work frontier;
+- current staged critical path;
+- SwarmTelemetrySnapshot where available;
+- recent whole-mesh material deltas;
+- open GO->q23 KnowledgeNeeds/CounterChallenges;
+- runtime/build failures that constrain q23 hypotheses;
+- q23's own hypotheses/packages/tests.
+
+### q23 -> GO
+
+For every material q23 package/delta/result, emit through `GO_Q23_BIDIRECTIONAL_RESEARCH_BRIDGE.clay` when globally relevant:
+
+- hypotheses/counterhypotheses;
+- architecture deltas;
+- runtime/model constraints;
+- test obligations/results;
+- negative results;
+- UnifiedDB/EAP/perception interactions;
+- Frank/Harness/ClayCode/GWT/ClayGraph implications;
+- specialist `KnowledgeNeed` questions requiring whole-mesh capability.
+
+### GO -> q23
+
+q23 ingests material GO findings/questions involving:
+
+- multimodal models / <=4B alternatives / abliteration;
+- Qwen/mmproj/libmtmd/runtime behavior;
+- Retina/MVC/GUI/OCR/grounding;
+- visual memory/open-set/continual learning;
+- UnifiedDB/EAP perceptual retrieval;
+- active sensing/GWT/re-entry;
+- relevant external papers/projects/issues;
+- executable failures/benchmarks.
+
+The bridge exchanges **questions as well as answers** and tracks closure.
+
+Rules:
+
+- q23 activity volume != global priority;
+- GO critical-path pressure != permission to ignore high-impact q23 invalidation;
+- shared ancestry is not replication;
+- cross-trigger payloads are compact refs/digests with pull-on-demand details;
+- q23 never self-promotes global stage/Harness/release credit.
+
+## 4. Mandatory hypothesis accumulation
 
 Every material q23 cycle forms new hypotheses from at least one of:
 
@@ -83,68 +137,50 @@ Every material q23 cycle forms new hypotheses from at least one of:
 - surprising external findings;
 - runtime implementation affordances;
 - negative results;
-- cross-domain analogies with a testable transfer mechanism;
-- interaction between two previously separate research packages;
-- newly visible dependency paths in ClayGraph/UnifiedDB/work state.
+- cross-domain analogies with testable transfer;
+- interaction between previously separate packages;
+- newly visible dependency paths in ClayGraph/UnifiedDB/work state;
+- GO whole-mesh questions/constraints;
+- Frank experience-dose behavior.
 
 For every material hypothesis retain:
 
-- stable hypothesis id;
+- stable id;
 - parent hypothesis/package lineage;
 - exact claim;
 - why it matters;
 - strongest counterhypothesis;
 - falsifier;
 - cheapest discriminating test;
-- expected evidence signature under both sides;
+- expected signatures under both sides;
 - affected architecture/work;
 - confidence/uncertainty;
 - status OPEN / TESTING / SUPPORTED / REFINED / REFUTED / SUPERSEDED.
 
-Hypotheses accumulate as a graph, not a flat list. New hypotheses may compose, split, contradict or subsume older ones. Refuted hypotheses remain searchable evidence.
+Hypotheses accumulate as a graph. Refuted hypotheses remain searchable evidence.
 
-## 4. Recursive network-deepening algorithm
+## 5. Recursive network-deepening algorithm
 
 q23 MUST progressively deepen into the reachable knowledge network where useful.
 
-For every high-value seed question:
-
 ### Layer A — direct current truth
 
-Read current:
-
-- canonical Clay/Frank state;
-- current model/runtime code and model cards;
-- current Harness/benchmark receipts;
-- active work/worker results;
-- current Retina/MVC contracts and historical lineage.
+Read current canonical Clay/Frank state, Qwen/model/runtime code, Harness receipts, active work/worker results, GO/global deltas and Retina/MVC lineage.
 
 ### Layer B — primary mechanism neighborhood
 
-Follow direct implementation and research neighbors:
+Follow source files/functions/APIs, model configs/processors, multimodal encode/decode paths, primary papers/datasets, official release/model collections.
 
-- referenced source files/functions/APIs;
-- model architecture/config/processor code;
-- runtime multimodal encode/decode paths;
-- primary papers/datasets;
-- official release notes and model collections.
+### Layer C — publication/citation/reference expansion
 
-### Layer C — citation/reference expansion
+Follow useful citations/references, newer/superseding work, peer-reviewed journal/conference versions, benchmarks and datasets.
 
-From material findings, follow references that can answer:
+### Layer D — implementation/project ecology
 
-- where the mechanism originated;
-- what competing mechanism exists;
-- what known failure mode invalidates it;
-- how it behaves under small-model/resource constraints;
-- whether a newer implementation supersedes the finding.
-
-### Layer D — lateral countermechanisms
-
-Search adjacent fields for mechanisms that may beat the current design, for example:
+Search GitHub/other primary projects and competing implementations for:
 
 - multimodal embedding/retrieval;
-- GUI agents and visual token pruning;
+- GUI agents/token pruning;
 - temporal/event vision;
 - continual/open-set learning;
 - representation calibration;
@@ -152,138 +188,141 @@ Search adjacent fields for mechanisms that may beat the current design, for exam
 - visual memory/compression;
 - cache reuse;
 - robotics/action verification;
-- uncertainty/calibration and OOD detection.
+- uncertainty/OOD;
+- agent memory/retrieval architectures that may alter Retina/EAP design.
 
-### Layer E — Frank-specific grounding
+### Layer E — failure/countermechanism ecology
 
-Every promising external mechanism must be mapped back onto:
+Search issues, negative results, OOD failures, stale-memory/confirmation-bias cases, resource regressions and simpler baselines.
+
+### Layer F — Frank-specific grounding
+
+Every promising external mechanism maps back to:
 
 - Digital Retina lineage functions;
 - current Qwen <=4B runtime;
 - MVC familiarity/open-set semantics;
 - PerceptualField/GWT/re-entry;
+- UnifiedDB/EAP/ClayGraph;
 - ClayCode expressibility;
-- UnifiedDB/ClayGraph state/provenance;
 - H1/H2/H3 executable comparison;
-- Ubuntu resource/latency/recovery constraints.
+- Ubuntu resource/latency/recovery constraints;
+- Frank experience dose when memory benefit is claimed.
 
-The field is not allowed to deepen forever in literature without repeatedly returning to executable Frank consequences.
+q23 cannot remain in literature indefinitely without returning to executable Frank consequences.
 
-## 5. Dense live-fusion law
+## 6. Dense live-fusion law
 
-q23 performs **continuous fusion during research**, not a single synthesis at the end.
-
-After every material package or cluster of tightly related packages:
+After every material package/cluster:
 
 1. deduplicate by content/source lineage;
-2. compare against existing hypotheses, counterhypotheses and negative results;
+2. compare against existing hypotheses/counterhypotheses/negative results;
 3. update support/conflict edges;
-4. detect contradictions and hidden dependency changes;
-5. derive new cross-package hypotheses where two findings interact;
-6. recompute the highest-information frontier;
-7. route only relevant semantic deltas to affected branches/workers;
-8. refresh current internal state before the next major decision.
+4. detect contradictions/hidden dependency changes;
+5. derive cross-package hypotheses;
+6. recompute highest-information frontier;
+7. route relevant deltas/questions to GO and affected branches;
+8. refresh current internal state before next major decision.
 
-Fusion density should increase over time: later cycles should use more of the relevant accumulated graph, not repeatedly restart from a shallow prompt summary.
+Fusion density should increase over time. Rich knowledge remains external to active context; retrieve task-conditioned subgraphs instead of dumping everything.
 
-Rich persistent knowledge remains external to active context; retrieve task-conditioned subgraphs instead of dumping everything into the model context.
+## 7. Live knowledge requirement
 
-## 6. Live knowledge requirement
+Every material q23 invocation performs fresh external retrieval.
 
-Every material q23 invocation performs fresh external retrieval during the invocation.
+Fresh checkpoints are required:
 
-One initial search is insufficient for a long run.
+- before first material adjudication;
+- after architecture-affecting finding;
+- after contradiction changes direction;
+- before promotion/rejection of high-impact candidate;
+- when current model/runtime/version may have changed;
+- before final synthesis if direction materially changed.
 
-Fresh retrieval checkpoints are required:
+Source ecology follows the global live-web fabric: official/current, primary research/arXiv, peer-reviewed publisher sources where relevant, primary GitHub/competing projects, datasets/benchmarks, issues/failure evidence and independent counterevidence.
 
-- before the first material hypothesis adjudication;
-- after a new architecture-affecting external finding;
-- after a contradiction changes the search direction;
-- before promoting/rejecting a high-impact architecture candidate;
-- when a current model/runtime/version assumption may have changed;
-- before final synthesis if the run materially changed direction.
+If general web fails but primary repos remain observable, continue in `DEGRADED_LIVE_REFRESH` and record limitation.
 
-Preferred evidence order:
-
-1. current official runtime/model observation;
-2. official repositories/docs/model cards;
-3. primary papers/datasets;
-4. independent technical replication/benchmark;
-5. discovery sources only as pointers.
-
-If general web access fails but current primary repositories remain directly observable, continue in `DEGRADED_LIVE_REFRESH` and record the limitation. Never convert a failed search into an invented current claim.
-
-## 7. Mandatory per-cycle procedure
+## 8. Mandatory per-cycle procedure
 
 Each major cycle executes:
 
 1. `REFRESH_INTERNAL` — canonical/head/program/work/workers/receipts/hypotheses/negative results/q23 packages;
-2. `FRONTIER_MAP` — unresolved high-value questions + dependency graph + duplication check;
-3. `HYPOTHESIS_EXPANSION` — create at least one genuinely new or materially revised falsifiable hypothesis;
-4. `COUNTERHYPOTHESIS` — formulate the strongest useful competing explanation/mechanism;
-5. `LIVE_EXTERNAL_REFRESH` — retrieve current primary/official evidence for the highest-value frontier;
-6. `NETWORK_DEEPEN` — follow useful source/code/citation/mechanism edges beyond the first result;
-7. `COUNTEREVIDENCE_SEARCH` — actively search failure modes and alternatives;
-8. `PACKAGE` — create provenance-bound Q23ResearchPackage objects;
-9. `DENSE_FUSION` — fuse new packages with accumulated internal/external graph;
-10. `DELTA_EXTRACTION` — require a valid ResearchProgressDelta;
-11. `ARCHITECTURE_TRANSLATION` — create/revise Q23ArchitectureDelta when causal architecture implications exist;
-12. `FALSIFIER` — attach cheapest discriminating test, metrics, controls and rollback;
-13. `WORK_TRANSLATION` — create/revise nonduplicate dynamic work/test obligations when executable;
-14. `SWARM_REENTRY` — targeted feedback to affected branches plus OmniSource ResearchReentryReceipt semantics;
-15. `REFRESH_INTERNAL_AGAIN` — observe concurrent/new state;
-16. `FRONTIER_RECOMPUTE` — score next branches by information gain, mission impact, falsification value, novelty, dependency-unblock value, cost and collision risk;
-17. `RECURSE` — continue at maximum useful depth.
+2. `READ_GO_BRIDGE` — current GO questions/deltas/telemetry/critical-path constraints relevant to q23;
+3. `FRONTIER_MAP` — unresolved questions + dependency graph + duplication check;
+4. `HYPOTHESIS_EXPANSION`;
+5. `COUNTERHYPOTHESIS`;
+6. `LIVE_EXTERNAL_REFRESH` across relevant source ecology;
+7. `NETWORK_DEEPEN` through source/code/citation/project/failure edges;
+8. `COUNTEREVIDENCE_SEARCH`;
+9. `PACKAGE` provenance-bound Q23ResearchPackage;
+10. `DENSE_FUSION` with accumulated internal/external graph;
+11. `DELTA_EXTRACTION` require valid ResearchProgressDelta;
+12. `ARCHITECTURE_TRANSLATION` if causal implication exists;
+13. `FALSIFIER` attach test/metrics/controls/rollback;
+14. `EXPERIENCE_DOSE_BINDING` when memory/experience claim is involved;
+15. `WORK_TRANSLATION` create/revise nonduplicate work/tests;
+16. `GO_Q23_REENTRY` send material deltas/questions and answer inbound ones;
+17. `SWARM_REENTRY` targeted feedback + OmniSource receipts;
+18. `REFRESH_INTERNAL_AGAIN`;
+19. `FRONTIER_RECOMPUTE`;
+20. `RECURSE`.
 
-## 8. Anti-stagnation and route-changing
+## 9. Frank experience-dose law
 
-q23 MUST detect shallow loops.
+Any q23 claim that "Frank has experience" or that prior Frank experience improves visual/perceptual/retrieval/reasoning behavior MUST use:
 
-Stagnation indicators include:
+`research_entity/retina/Q23_FRANK_EXPERIENCE_DOSE_RESPONSE_CONTRACT_20260810.md`.
 
-- same query family returns same source ancestry;
-- same hypothesis is merely reworded;
-- fusion graph gains nodes but no new edges/contradictions/tests;
-- architecture implication remains unchanged across repeated cycles;
-- source count rises while uncertainty does not fall;
-- workers duplicate the same evidence lineage;
-- retrieval repeatedly confirms only the current favorite mechanism.
+Mandatory separation:
 
-On stagnation choose one or more route changes:
+- `N=0`: no admissible target-relevant Frank episodic experience;
+- increasing independent experience doses, default `N={0,1,2,4,8,16,32,64}` and extend geometrically if useful;
+- Qwen pretrained knowledge held constant and **not counted** as Frank experience;
+- one data point = one independent provenance-bound Frank episode with observed evidence/context + verified outcome, not repeated frames;
+- `SHAM_N` irrelevant memory volume control;
+- exact recurrence, state variant, relational transfer, novel entity and conflicting experience regimes where fixtures permit.
 
-- switch from supporting evidence to adversarial search;
-- move from paper to implementation/runtime source;
-- move from model-level to representation/feature-level analysis;
-- move from static image to temporal/action loop;
-- search a competing architecture under the same budget;
-- search known failure cases/OOD/open-set evidence;
-- inspect older historical Retina mechanisms for lost causal function;
-- inspect newer releases/implementations for supersession;
-- derive a synthetic falsifier/fixture that separates mechanisms;
-- descend into a referenced code/API path;
-- ascend to a cross-branch interaction with GWT/UnifiedDB/ClayGraph/Needle/recovery.
+Required outputs:
 
-## 9. Architecture attractor and current key question
+- full effect curve `Delta(N)`;
+- `N_onset`;
+- `N_robust`;
+- `N_90` saturation estimate when identifiable;
+- `N_harm` if extra/stale/conflicting experience reverses benefit;
+- direct-memory vs EAP/PAR causal comparison at the same N.
+
+A binary familiar/unfamiliar comparison alone is insufficient to claim an experience effect.
+
+## 10. Anti-stagnation and route-changing
+
+Stagnation indicators:
+
+- same query/source ancestry;
+- hypothesis only reworded;
+- graph gains nodes but no causal/test edges;
+- architecture implication unchanged repeatedly;
+- source count rises without uncertainty reduction;
+- workers duplicate same evidence lineage;
+- retrieval confirms only favorite mechanism.
+
+Route changes include supporting->adversarial, paper->runtime, model->feature level, static->temporal/action loop, competing architecture, OOD/failure search, historical Retina archaeology, newer releases, synthetic falsifier, code/API descent, cross-branch ascent, or whole-mesh GO KnowledgeNeed.
+
+## 11. Current architecture attractor
 
 Current high-information question:
 
-> Can the already-required Qwen multimodal vision encoding become Frank's single deep visual representation, reused both by the tiny familiarity/open-set learner and by semantic decode on escalation, while Retina survives as temporal/provenance/control fabric rather than a duplicate visual-intelligence stack?
+> Can the already-required Qwen multimodal vision encoding become Frank's single deep visual representation, reused by the tiny familiarity/open-set learner and semantic decode on escalation, while Retina survives as temporal/provenance/control fabric rather than duplicate visual-intelligence stack?
 
 Primary competing hypothesis:
 
-> Raw generative-VLM visual representations are not sufficiently stable/calibrated for user-specific instance/layout familiarity and open-set routing; a separate *lightweight* embedding encoder remains Pareto-superior even though a second heavy semantic visual stack is unnecessary.
+> Raw generative-VLM visual representations are insufficiently calibrated for user-specific instance/layout familiarity/open-set routing; a separate *lightweight* embedding encoder remains Pareto-superior even though a second heavy semantic visual stack is unnecessary.
 
-Neither is presumed true.
+The Perceptual Assembly Reflex (PAR-1) is an additional user-proposed candidate: visual evidence may seed UnifiedDB/EAP ActiveAssembly before/alongside full decode. It remains falsifiable and requires experience-dose, wrong-seed, stale, shuffled-topology, direct-memory and Qwen-only controls.
 
-The current QNDRF candidate is research input, not architecture truth.
+## 12. Required run artifacts
 
-## 10. Required run artifacts
-
-Each material q23 run creates under:
-
-`research_entity/trigger_runs/q23/<run_id>/`
-
-at minimum:
+Each material q23 run creates under `research_entity/trigger_runs/q23/<run_id>/` where applicable:
 
 - `RUN_MANIFEST.json`
 - `FRONTIER.json`
@@ -293,103 +332,66 @@ at minimum:
 - `SOURCE_GRAPH.json`
 - `FUSION_GRAPH.json`
 - `PROGRESS_DELTAS.json`
-- `packages/<package_id>.json|md`
+- `packages/`
 - `ARCHITECTURE_DELTAS.json`
 - `TEST_OBLIGATIONS.json`
+- `EXPERIENCE_DOSE_RESULTS.json` when applicable
+- `GO_Q23_EXCHANGE.json`
 - `BRANCH_FEEDBACK_MANIFEST.json`
 - `RESEARCH_REENTRY_RECEIPTS.json`
 - `FINAL_SYNTHESIS.md`
 
-If a run finds no promotable architecture change it still must preserve new/refuted hypotheses, eliminated alternatives, narrowed uncertainty and searched source graph. A content-free `NO_CHANGE` is invalid.
+A content-free `NO_CHANGE` is invalid.
 
-## 11. Research package minimum contract
+## 13. Research package minimum contract
 
-Every package contains or references:
+Every package retains package/run ID, observed time, direct sources, publication/update/version date when available, retrieval/discovery path, source class/ancestry, finding, Frank relevance, internal comparison, fusion disposition, hypothesis/counterhypothesis effect, architecture delta/test, affected work/branches, confidence/uncertainty, and content/provenance identity.
 
-- package/run ID;
-- observed/retrieved time;
-- topic/title;
-- direct source references;
-- publication/update/model/runtime version date when available;
-- retrieval query/discovery path and parent source edge;
-- source/evidence class and ancestry;
-- concise finding;
-- why it matters for Frank;
-- internal evidence compared against;
-- fusion result: SUPPORTS / REFINES / CONTRADICTS / SUPERSEDES / ALTERNATIVE / NO_CHANGE;
-- hypothesis/counterhypothesis effect;
-- candidate architecture delta, if any;
-- cheapest discriminating experiment/test;
-- affected components/work/branches;
-- confidence and unresolved uncertainty;
-- content/provenance identity.
+Interesting does not mean true. Packaging never promotes architecture.
 
-Interesting does not mean true. Packaging never promotes architecture by itself.
+## 14. Swarm semantics
 
-## 12. Swarm semantics
+q23 is fully interconnected with Clay:
 
-q23 is fully interconnected with the current Clay research mesh.
-
-- read current swarm blackboard before claiming work;
-- reuse current worker findings rather than duplicate them;
-- route material packages/deltas by semantic relevance;
-- high-impact claims create/reuse an adversarial lane when capacity permits;
+- read current blackboard before work;
+- reuse worker findings rather than duplicate;
+- route packages/deltas/questions by relevance;
+- high-impact claims create/reuse adversarial lane;
 - shared ancestry is not independent replication;
-- a result invalidating active work interrupts it at the next safe point;
-- low-relevance payload remains indexed/pullable, not broadcast spam;
-- incoming worker/package deltas immediately reopen frontier scoring where relevant;
-- q23 may seed work across `frank`, `harness`, `gwt`, `claycode`, `claygraph`, `unifieddb`, `hyperposition`, `emergenz`, `clayresearch` while remaining its own multimodal-perception research field.
+- invalidating result interrupts affected work at next safe point;
+- low relevance payload remains indexed/pullable;
+- incoming worker/GO deltas reopen frontier scoring;
+- q23 may seed work across `frank`, `harness`, `gwt`, `claycode`, `claygraph`, `unifieddb`, `hyperposition`, `emergenz`, `clayresearch` but stays its own domain.
 
-## 13. Architecture feedback law
+## 15. Architecture feedback law
 
 q23 MUST NOT terminate at literature synthesis.
 
-Every material run must create or revise architecture/test/work knowledge unless the evidence explicitly closes a branch.
+Architecture deltas require evidence refs, preserved historical functions, proposed mechanism, expected benefit, strongest counterhypothesis, discriminating test, matched baseline, metrics/resources, rollback and explicit status.
 
-Architecture deltas require:
+No promotion from narrative alone.
 
-- evidence/package refs;
-- affected current/historical functions;
-- proposed mechanism;
-- expected benefit;
-- strongest counterhypothesis;
-- discriminating test;
-- matched baseline;
-- metrics/resources;
-- rollback;
-- status CANDIDATE / TESTING / SUPPORTED / REFUTED / PROMOTED / NO_CHANGE.
+## 16. Stopping law
 
-No architecture promotion occurs merely because q23 generated a compelling narrative.
-
-## 14. Stopping law
-
-q23 continues while any reachable branch has meaningful expected value and synchronous capability remains.
-
-Allowed stopping reasons:
+Allowed stop reasons:
 
 - invocation/tool/context budget exhausted;
-- required external/runtime capability unavailable after reasonable fallback;
-- owner/authority/safety gate reached;
-- all currently reachable branches locally saturated after deliberate route changes;
-- next work would only repeat existing evidence/noise.
+- required external/runtime capability unavailable after fallback;
+- owner/authority/safety gate;
+- all reachable branches saturated after route changes;
+- next work only repeats evidence/noise.
 
-Before stopping, q23 records:
+Before stopping record advances, hypothesis changes, architecture/work/test deltas, GO exchange state, unresolved frontier, next falsifier and required capability.
 
-- what advanced;
-- which hypotheses were added/refined/refuted;
-- architecture/work/test deltas;
-- remaining unresolved frontier;
-- next highest-value falsifier;
-- capability/blocker needed for the next depth layer.
+Never promise background work not executed.
 
-It must never promise background/asynchronous continuation that did not execute.
-
-## 15. Authority and safety
+## 17. Authority and safety
 
 - Clay Research Entity researches/builds/tests Frank; it is not Frank.
-- Frank self-Harness authority remains proposal-only.
+- Frank self-Harness authority is proposal-only.
 - Model/visual prediction never mints effect authority.
 - Familiarity/confidence never becomes sensor truth.
-- Abliterated-model preference never bypasses deterministic effect/authority gates.
+- Retrieved memory/EAP activation never becomes observed truth.
+- Abliterated-model preference never bypasses deterministic gates.
 - No paid/final training starts automatically.
 - No hidden chain-of-thought is stored; reproducible evidence/decision traces are stored instead.

@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "run_id": "harness-20260810T2031p0700-chatgpt-secondary-hwp10-lifecycle",
+  "continuation": 2,
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program_interpretation": "FRANK_V0_1_ONLY",
+  "owner_supersession": "research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "research_entity_identity": "Clay",
+  "target_identity": "self.root / human-surface Frank",
+  "target_self_harness_authority": "PROPOSAL_ONLY",
+  "research_entity_harness_authority": "IMPLEMENT_TEST_AUTHORIZE",
+  "result": "MATERIAL_DIRECT_FRANK_V0_1_CODE_TEST_ARCHITECTURE_AND_NEGATIVE_RESULT_DELTA",
+  "promotion": "NO_WHOLE_FRANK_V0_1_PROMOTION",
+  "direct_target_deltas": [
+    {
+      "path": "claycode/frank_effects.clay",
+      "delta": "Canonical effect authority and lifecycle now separate authorization, atomic reservation, external attempt, uncertain outcome, verification and re-entry. Confirmation validation is pure; optional confirmation consumption is required to be atomic with durable reservation. EffectAttempt now carries authorization and reservation hashes. A discovered request-hash/authorization-hash identity bug was repaired so the attempt binds semantic_hash(auth), not auth.request_hash."
+    },
+    {
+      "path": "claycode/frank_effect_authority.clay",
+      "delta": "Collapsed a duplicate standalone authority experiment into a thin compatibility facade over canonical frank.effects; no second EffectClass/EffectDecision/request/confirmation type system remains intended."
+    },
+    {
+      "path": "claycode/frank_security.clay",
+      "delta": "Self-repo mutation authority is now surface-classified. Operational state/effect queue/telemetry/self-observation proposals may be capability-gated target writes; Harness/cognitive/security/workflow/test/build/documentation-policy/research-or-acceptance-receipt surfaces are hard denied; unknown repo surfaces fail closed."
+    },
+    {
+      "path": "protocols/GOOGLE_EFFECT_BRIDGE.md",
+      "delta": "External-provider retry semantics now distinguish stable idempotency keys from verified provider same-key retry safety; unknown provider outcomes require reconciliation unless the exact provider operation proves same-key retry safety."
+    },
+    {
+      "path": "runtime/state/UNIFIEDDB_V14_EFFECT_LIFECYCLE.sql",
+      "delta": "Added canonical UnifiedDB V14 tables for effect reservations, one-shot confirmation consumptions and append-only lifecycle events with request/authorization/idempotency/outcome/re-entry identity."
+    },
+    {
+      "path": "runtime/state/apply_current_schema.py",
+      "delta": "V14 is appended to the explicit Research-Entity-only migration chain. Normal runtime opens existing state only and never implicitly migrates/creates schema."
+    },
+    {
+      "path": "runtime/state/effect_lifecycle_runtime.py",
+      "delta": "Implemented atomic BEGIN IMMEDIATE confirmation-consumption + reservation in the existing canonical UnifiedDB; begin-attempt/outcome/re-entry/trace verification/recovery; added executable retry_uncertain_attempt only for verified same-key-safe effects and reconcile_uncertain_outcome for independently observed provider outcomes."
+    },
+    {
+      "path": "tests/effect_lifecycle_v14_gate.py",
+      "delta": "Test-mode canonical UnifiedDB gate covers migration idempotence, atomic reservation, fault rollback, restart replay, real child-process death, same-confirmation concurrency, non-idempotent retry denial + reconciliation, idempotent retry + verification, re-entry, semantic tamper and no implicit schema creation."
+    },
+    {
+      "path": "tests/effect_provider_failure_window_gate.py",
+      "delta": "Loopback provider experiment commits an effect then intentionally loses the HTTP response. Same-key-safe retry produces one provider resource; non-idempotent effect is reconciled without blind retry; negative control blind non-idempotent retry produces two resources."
+    },
+    {
+      "path": "runtime/frank_harness_sovereignty_v1/target_vps_probe.py",
+      "delta": "Actual tracked target repository is classified into operational, protected and unknown mutation surfaces with fail-closed unknown semantics and adversarial path tests."
+    }
+  ],
+  "target_vps_receipts_already_observed": [
+    {
+      "path": "runtime/vps_unifieddb/frank_effect_authority_v1/LATEST.json",
+      "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_FRANK_V0_1_EFFECT_AUTHORITY_V1",
+      "summary": "20/20 owner-fixed policy tests PASS; direct eligible non-destructive execution rate 1.0; destructive false-allow before confirmation 0; request-binding mutations 1000 with 0 unchanged; executor read-only; no external effect; ClayCode compiled execution not claimed."
+    },
+    {
+      "path": "runtime/vps_unifieddb/frank_effect_lifecycle_v1/LATEST.json",
+      "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_FRANK_V0_1_EFFECT_LIFECYCLE_V1",
+      "summary": "64 concurrent same-nonce attempts admitted exactly one reservation; real process crash before commit left zero partial effect/confirmation rows; uncertain non-idempotent and same-key-safe recovery classes preserved; semantic tamper detected although SQLite integrity remained ok; durable reservation approximately 2 ms p50 in repeated observed runs."
+    },
+    {
+      "path": "runtime/vps_unifieddb/frank_harness_sovereignty_v1/LATEST.json",
+      "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_FRANK_V0_1_SELF_HARNESS_SOVEREIGNTY_V1",
+      "summary": "547 tracked files classified; 12 operationally allowed tracked surfaces, 418 protected, 117 unknown/fail-closed; 10,000 adversarial protected path variants produced zero false allows; self-write of acceptance receipt DENY_HARD. Production classifier wiring not claimed."
+    }
+  ],
+  "fresh_current_head_local_reproduction": {
+    "source": "fresh shallow clone of current public target repository main, followed by git pull --ff-only after material concurrent updates",
+    "evidence_class": "LOCAL_INDEPENDENT_REPO_REPRODUCTION_NOT_TARGET_VPS",
+    "selected_gates_executed": [
+      "tests/repo_static_integrity_audit.py",
+      "tests/effect_lifecycle_v14_gate.py",
+      "tests/effect_provider_failure_window_gate.py",
+      "runtime/frank_effect_authority_v1/target_vps_probe.py",
+      "runtime/frank_effect_lifecycle_v1/target_vps_probe.py",
+      "runtime/frank_effect_lifecycle_v1/claycode_frontend_probe.py",
+      "runtime/frank_harness_sovereignty_v1/target_vps_probe.py"
+    ],
+    "result": "ALL_SELECTED_PROCESSES_EXITED_SUCCESSFULLY",
+    "claycode_frontend": "PASS",
+    "claycode_structural_typed_ir": "PASS",
+    "repo_static_integrity": "PASS_ON_REFRESHED_LOCAL_HEAD",
+    "limit": "This local reproduction does not upgrade missing current target-VPS V14/provider receipts or prove executable ClayCode lowering/FFI."
+  },
+  "new_negative_results_and_counterexamples": [
+    {
+      "id": "N-FV01-EFFECT-ATOMIC-001",
+      "finding": "Validation/consumption split was initially wrong: confirmation could be consumed before a durable reservation. Crash could burn authority without a startable reservation.",
+      "repair": "authorize_effect became pure validation; reserve_effect owns atomic consumption + reservation."
+    },
+    {
+      "id": "N-FV01-EFFECT-HASH-002",
+      "finding": "EffectAttempt.authorization_hash was initially populated with auth.request_hash. This confuses request identity with exact authorization identity.",
+      "repair": "Attempt now binds semantic_hash(auth); explicit invariant effect_attempt_binds_exact_authorization_hash."
+    },
+    {
+      "id": "N-FV01-EFFECT-UNKNOWN-DEADEND-003",
+      "finding": "Runtime could label OUTCOME_UNKNOWN as retry-safe/reconcile-required but offered no executable transition to retry or reconciliation.",
+      "repair": "Added retry_uncertain_attempt and reconcile_uncertain_outcome with conservative gates."
+    },
+    {
+      "id": "N-FV01-EFFECT-BLIND-RETRY-004",
+      "finding": "Loopback negative-control provider commits a non-idempotent write, loses response, and a blind retry creates a duplicate resource.",
+      "architecture_effect": "Non-idempotent uncertain effects remain RECONCILE_REQUIRED; automatic retry is denied."
+    },
+    {
+      "id": "N-FV01-STATIC-005",
+      "finding": "Initial lifecycle probe used sqlite3.executescript outside the canonical schema migrator and caused repo_static_integrity failure.",
+      "repair": "Probe-local schema uses individual execute statements; only apply_current_schema.py retains schema-script authority. Refreshed local current-head static audit passes."
+    },
+    {
+      "id": "N-FV01-AUTHORITY-DUPLICATE-006",
+      "finding": "Standalone frank.effect_authority risked becoming a second semantic authority architecture alongside frank.effects.",
+      "repair": "Collapsed to compatibility facade; canonical semantics remain frank.effects."
+    },
+    {
+      "id": "N-FV01-CONFIRMATION-PROVENANCE-007",
+      "finding": "Current canonical confirmation/authorization semantics still require review for complete binding of every owner-fixed confirmation field, especially impact summary and exact confirmation-receipt hash carried into atomic reservation.",
+      "status": "OPEN_NOT_SILENTLY_FILLED",
+      "next_test": "Require exact receipt identity and full confirmation field fidelity through frontend/TypedIR/runtime persistence before production migration."
+    }
+  ],
+  "external_research_fusion": [
+    "OWASP agentic guidance supports independent execution gates, exact approval binding, replay resistance and least privilege for high-impact effects.",
+    "SQLite official transaction/atomic-commit/isolation documentation supports local durable atomic reservation semantics but not arbitrary remote exactly-once effects.",
+    "AWS idempotent-API engineering guidance supports explicit client-token/provider-idempotency semantics and reconciliation after ambiguous transport outcomes.",
+    "The expired IETF Idempotency-Key draft is retained only as historical design precedent, not current normative authority."
+  ],
+  "current_open_gates": [
+    "fresh accepted-target-VPS receipt for current V14 canonical UnifiedDB implementation after latest runtime/retry/hash changes",
+    "fresh accepted-target-VPS provider failure-window receipt after latest runtime changes",
+    "current deep-integrity receipt whose tested SHA postdates the static-integrity repair",
+    "complete confirmation receipt fidelity including impact summary and exact receipt hash lineage into reservation",
+    "ClayCode executable lowering/FFI binding from atomic_effect_reservation_with_optional_confirmation_consumption to the existing canonical UnifiedDB runtime",
+    "production write-path wiring of FrankRepoMutationSurface classifier; current sovereignty receipt proves reference classifier/repo census only",
+    "real capability-specific provider/tool idempotency and reconciliation evidence; loopback provider is synthetic mechanism evidence",
+    "production canonical UnifiedDB migration remains intentionally NOT performed",
+    "full effect resource/permit/reservation/commit/outcome/re-entry integration in finished Frank v0.1 end-to-end path",
+    "whole Frank v0.1 terminal acceptance remains NOT_CLAIMED"
+  ],
+  "architecture_conclusion": "Effect authority must be represented as a five-boundary causal chain rather than one ALLOW boolean: policy authorization -> atomic local reservation/one-shot confirmation consumption -> external attempt -> outcome certainty/reconciliation -> provenance-bound re-entry. Each boundary has a distinct receipt/hash/recovery rule and none may be inferred from model text, GWT ignition, ClayGraph salience or prior local success.",
+  "research_reentry": "DIRECT_FRANK_V0_1_CODE_DELTA + TEST_DELTA + ARCHITECTURE_DELTA + NEGATIVE_RESULTS + OPEN_TEST_OBLIGATIONS",
+  "training": "NOT_AUTHORIZED_NOT_STARTED"
+}

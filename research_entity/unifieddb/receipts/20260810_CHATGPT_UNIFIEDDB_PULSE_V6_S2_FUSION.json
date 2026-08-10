@@ -1,0 +1,119 @@
+{
+  "schema": "clay.unifieddb.pulse_fusion_receipt.v1",
+  "receipt_id": "20260810_CHATGPT_UNIFIEDDB_PULSE_V6_S2_FUSION",
+  "created_at": "2026-08-10T05:27:00Z",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "entity_boundary": {
+    "worker_role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "worker_is_not": "FRANK",
+    "frank": "SEPARATE_RESEARCH_SUBJECT_AND_ANDREAS_OPERATIONAL_ENTITY"
+  },
+  "scope": "UnifiedDB / Database Pulse / emergent possibility preprocessor / ClayGraph integration",
+  "evidence": {
+    "v5_provenance_candidate": {
+      "pull_request": 144,
+      "branch": "chatgpt/unifieddb-pulse-v5-provenance-20260810",
+      "head_observed": "584783d7d4b24c1110e54a9ce6514126fe799fd4",
+      "status": "CLOSED_SUPERSEDED_NOT_MERGED",
+      "implemented": [
+        "actor + policy provenance in physical maintenance receipt",
+        "same-transaction legacy additive migration",
+        "same-transaction BUILD/DROP + receipt rollback",
+        "legacy unknown provenance remains explicit"
+      ],
+      "local_mechanism_execution": "PASS for additive ALTER + CREATE INDEX + INSERT commit and malformed-schema rollback on SQLite 3.46.1",
+      "remote_exact_execution": "BLOCKED_BY_PRIVATE_CROSS_REPO_AUTH; HTTPS had no credentials and runner SSH identity was unauthorized",
+      "superseded_by": 146
+    },
+    "v6_provenance_eap17_candidate": {
+      "pull_request": 146,
+      "branch": "chatgpt/unifieddb-pulse-query-aware-v6-20260810",
+      "head_observed": "dd99037e214d7597bc0a2fdbdf5df6e4f2a210a8",
+      "status": "DRAFT_CANDIDATE_NOT_PROMOTED",
+      "provenance_delta": [
+        "separate V6 physical audit plane",
+        "actor",
+        "policy_provenance_ref",
+        "policy_decision_hash",
+        "monotonic audit_sequence",
+        "native UNKNOWN rejection",
+        "honest V5 backfill without rewriting V5"
+      ],
+      "retrieval_delta": "EAP-1.7 query-aware lazy edge damping with bounded one-successor lookahead over the disposable epoch-bound EAP topology",
+      "counterhypothesis": "query-conditioned lexical damping can suppress explicit refuting/counterevidence edges with low lexical overlap and create confirmation-biased context",
+      "counterhypothesis_action": "PR review 4893889073 requests explicit REFUTES/COUNTEREVIDENCE/CONTRADICTS and false-query/negation controls before promotion",
+      "exact_hostinger_status": "QUEUED_AT_LAST_OBSERVATION"
+    },
+    "s2_aba_safe_candidate": {
+      "pull_request": 150,
+      "branch": "chatgpt/go-pulse-s2-aba-safe-20260810",
+      "head_observed_before_ci_trigger": "7e8bc6a08d0f2f851195e7ceb6991052af6a61ab",
+      "ci_trigger_commit": "b32518556c5a368dc811bc6efd82c982e03ff994",
+      "status": "DRAFT_CANDIDATE_NOT_PROMOTED",
+      "falsifier": "A->B->A content fingerprints can be equal while version/record identity changed; cancelling all invalidation can reuse stale SPM segments",
+      "candidate_rule": "net-zero remains a content-level diagnostic only; every touched logical identity remains invalidated and all batch impact seeds are unioned",
+      "proxy_tradeoff_from_pr": {
+        "generation_map_row_reduction": 0.90,
+        "prior_distinct_seed_recompute_reduction": 0.21375,
+        "aba_safe_distinct_seed_recompute_reduction": 0.18,
+        "note": "prior approximately 10.2x proxy latency result must be remeasured; no Frank/UnifiedDB whole-system speedup claim"
+      },
+      "exact_hostinger_status": "QUEUED_AT_LAST_OBSERVATION"
+    },
+    "execution_infrastructure": {
+      "github_hosted_pr_jobs": "FAILING_WITH_ZERO_EXECUTED_STEPS in observed V5/V6/S2 lanes; not interpreted as Python/test failure",
+      "hostinger_runner": "digital-retina",
+      "observed_python": "3.12.3",
+      "observed_sqlite": "3.45.1",
+      "observed_linux": "6.8.0-117-generic x86_64 glibc2.39",
+      "cross_repo_https": "FAILED_NO_PRIVATE_REPO_CREDENTIALS",
+      "cross_repo_ssh": "FAILED_PERMISSION_DENIED_PUBLICKEY",
+      "same_repo_self_hosted": "RUNNER LANE EXISTS; jobs queued behind current work at last observation"
+    }
+  },
+  "fresh_external_evidence": [
+    {
+      "source": "https://www.sqlite.org/wal.html",
+      "retrieved": "2026-08-10",
+      "finding": "WAL-reset corruption bug affects SQLite 3.7.0 through 3.51.2 under multi-connection concurrent write/checkpoint timing; fixed in 3.51.3 with selected backports. Observed runner SQLite 3.45.1 therefore remains concurrency-promotion blocked."
+    },
+    {
+      "source": "https://www.sqlite.org/releaselog/3_51_3.html",
+      "retrieved": "2026-08-10",
+      "finding": "3.51.3 explicitly fixes the WAL-reset database-corruption bug."
+    },
+    {
+      "source": "arXiv:2606.30133",
+      "retrieved": "2026-08-10",
+      "finding": "Query-aware spreading activation reports quality and retrieval-latency gains over query-blind graph traversal on studied multi-hop QA datasets; this supports testing query-aware EAP but does not validate Clay-specific implementation."
+    },
+    {
+      "source": "arXiv:2605.18775",
+      "retrieved": "2026-08-10",
+      "finding": "Query-aware flow diffusion motivates query-conditioned graph traversal and bounded retrieved-subgraph computation."
+    },
+    {
+      "source": "arXiv:2607.19301",
+      "retrieved": "2026-08-10",
+      "finding": "Projection-aware adaptive GraphRAG treats graphs as navigation skeletons rather than independent truth sources; direction is compatible with UnifiedDB truth + disposable ClayGraph/EAP projection boundary."
+    }
+  ],
+  "architecture_decision": {
+    "v5_pr144": "NOT_SELECTED_SUPERSEDED",
+    "v6_pr146": "TESTING_CANDIDATE",
+    "s2_pr150": "TESTING_CANDIDATE",
+    "canonical_change": "NO_CHANGE",
+    "reason": "V6 dominates the narrower V5 audit migration on provenance completeness and lineage; S2 ABA-safe corrects an identity-level invalidation flaw. Both still require exact execution and adversarial controls."
+  },
+  "required_next_falsifiers": [
+    "Run exact V6 tests + benchmark on same-repo Hostinger lane and preserve exact SHA/environment receipt",
+    "Add and run explicit counterevidence/refutation + false-query/negation EAP17 controls",
+    "Run exact S2 ABA regression + bounded benchmark, then compare final SPM bytes/hashes against sequential publication",
+    "Run crash/restart and real Pulse replay for S2 before selection",
+    "Upgrade or isolate SQLite before any multi-connection WAL concurrency promotion; do not promote concurrency evidence from SQLite 3.45.1",
+    "Measure downstream cognition/task quality and resource cost; retrieval proxy gains alone do not establish UnifiedDB/Frank superiority"
+  ],
+  "authority": "RESEARCH_EVIDENCE_ONLY_NO_TRUTH_OR_EFFECT_AUTHORITY"
+}

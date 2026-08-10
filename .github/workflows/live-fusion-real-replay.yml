@@ -1,0 +1,70 @@
+name: Clay live-fusion real repo replay
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research_entity/experiments/live_fusion_mesh_v2_real_replay.py'
+      - '.github/workflows/live-fusion-real-replay.yml'
+
+concurrency:
+  group: clay-live-fusion-real-replay-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  real-replay:
+    runs-on: [self-hosted, linux]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Revalidate live-fusion candidate and work revision
+        shell: bash
+        run: |
+          test -f research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+          grep -q 'CANDIDATE_NOT_PROMOTED' research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+          test -f research_entity/state/work/events/20260810T1625p0700_chatgpt_secondary_live_fusion_mesh_v2_revise.json
+          grep -q 'WORK-LIVE-FUSION-MESH-V2-REAL-REPLAY-20260810' research_entity/state/work/events/20260810T1625p0700_chatgpt_secondary_live_fusion_mesh_v2_revise.json
+
+      - name: Compile replay experiment
+        run: python3 -m py_compile research_entity/experiments/live_fusion_mesh_v2_real_replay.py
+
+      - name: Execute real repo replay and fault matrix
+        run: |
+          python3 research_entity/experiments/live_fusion_mesh_v2_real_replay.py --repo-root . --write | tee /tmp/live-fusion-real-replay.json
+
+      - name: Validate result and receipt
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=Path('research_entity/experiments/results/LIVE_FUSION_MESH_V2_REAL_REPLAY_LATEST.json')
+          x=json.loads(r.read_text())
+          assert x['promotion_authority']=='NONE'
+          assert x['verdict'] in {'SUPPORTED_AS_RESEARCH_CANDIDATE_NOT_PROMOTED','REVISE','REFUTED','NO_CHANGE'}
+          assert len(x['faults']) >= 10
+          receipts=list(Path('research_entity/state/work/events').glob('*live_fusion_mesh_v2_real_replay_WORK_EXECUTION_RECEIPT.json'))
+          assert receipts, 'execution receipt missing'
+          print(json.dumps({'verdict':x['verdict'],'summary':x['summary'],'receipt':str(receipts[-1])},indent=2))
+          PY
+
+      - name: Commit execution evidence
+        shell: bash
+        run: |
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/experiments/results/LIVE_FUSION_MESH_V2_REAL_REPLAY_LATEST.json
+          git add research_entity/state/work/events/*live_fusion_mesh_v2_real_replay_WORK_EXECUTION_RECEIPT.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record live fusion real-replay execution receipt'
+          for attempt in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1

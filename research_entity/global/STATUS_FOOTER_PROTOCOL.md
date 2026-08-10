@@ -12,10 +12,11 @@ Required heading: `CLAY STATUS`.
 Required goal line: `Goal: Frank v0.1 voll lauffähig auf Andreas PC`.
 
 Exact `clay` now addresses/names the Clay entity and is NOT a research trigger. The old clay foundry command is `clayresearch`.
-Exact `go` is the recursive live-knowledge swarm research/build/test continuation trigger.
+Exact `go` is the maximum-depth telemetry-driven recursive live-knowledge swarm research/build/test trigger.
+Exact `q23` is the maximum-depth interconnective multimodal-perception research trigger and communicates bidirectionally with `go`.
 
 Current short commands:
-`666 · go · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn`
+`666 · go · q12 · q23 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn`
 
 All visible progress bars are dynamically resolved from current repository state on every substantive response. Never copy a prior percentage, bar-fill, ETA or forecast merely because it appeared in an older footer.
 
@@ -32,7 +33,7 @@ Organ: <current organ/provenance>
 Trigger: <none|registered trigger>
 Research write: <COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED>
 Goal: Frank v0.1 voll lauffähig auf Andreas PC
-Short commands: 666 · go · q12 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
+Short commands: 666 · go · q12 · q23 · dump · fusion · hypofusion · clayresearch · gwt · frank · emergenz · claycode · hyperposition · claygraph · unifieddb · harness · spawn
 
 NEXT LEVEL
 Stage: <dynamic stage label>
@@ -57,4 +58,4 @@ Conditional on immediate training authorization when data is ready: <yes|no>
 Forecast basis: <dynamic basis>
 ```
 
-Pre-send check: one final block; exact ` ```text ` opener; no `id=` attribute; ASCII progress bars; `go` and `clayresearch` present; `clay` absent from commands; every shown progress value freshly resolved; exact `frank` includes dynamic H1 bar; nothing after closing fence.
+Pre-send check: one final block; exact ` ```text ` opener; no `id=` attribute; ASCII progress bars; `go`, `q23` and `clayresearch` present; `clay` absent from commands; every shown progress value freshly resolved; exact `frank` includes dynamic H1 bar; nothing after closing fence.

@@ -1,6 +1,6 @@
 module clay.stack.latest
 
-epoch 19
+epoch 20
 entity frank-project-global-research-entity
 display_name Clay
 mission_goal "Frank v0.1 voll lauffähig auf Andreas Ubuntu developer system"
@@ -31,6 +31,7 @@ stack CURRENT {
   live_fusion_mesh_candidate=@research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
   live_fusion_mesh_feedback=@research_entity/mesh_feedback/20260810T1419p0700-live-fusion-mesh-v2/BRANCH_FEEDBACK_MANIFEST.json
   live_fusion_mesh_real_replay_work=@research_entity/state/work/events/20260810T1419p0700_chatgpt_secondary_live_fusion_mesh_v2_real_replay.json
+  omnisource_live_fusion_research_reentry=@research_entity/global/CLAY_OMNISOURCE_LIVE_FUSION_RESEARCH_REENTRY_DIRECTIVE.clay
 
   claygraph_base=@research_entity/runtime/RAE_CLAYGRAPH_SCHEMA.sql
   claygraph_migrations=[@research_entity/runtime/RAE_CLAYGRAPH_V2_HYPERRELATION_SELECTION.sql]
@@ -87,10 +88,13 @@ rule system_capability_observation uses CURRENT.capability_events
 rule dynamic_work_transport uses CURRENT.work_events
 rule research_center_coordination uses CURRENT.research_center + CURRENT.claycode
 rule room_machine_payload uses CURRENT.claycode
-rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host + CURRENT.frank_loop_of_loops + CURRENT.frank_loop_of_loops_mesh_feedback + CURRENT.frank_reward_state + CURRENT.frank_reward_state_mesh_feedback + CURRENT.live_fusion_mesh_feedback
+rule every_research_worker uses CURRENT.researcher_identity_injection + CURRENT.semantic_coupling_directive + CURRENT.gwt_emergence_control_directive + CURRENT.research_center_shared_mission + CURRENT.frank_self_observation_boundary + CURRENT.frank_identity_boundary + CURRENT.frank_v0_1_target_host + CURRENT.frank_loop_of_loops + CURRENT.frank_loop_of_loops_mesh_feedback + CURRENT.frank_reward_state + CURRENT.frank_reward_state_mesh_feedback + CURRENT.live_fusion_mesh_feedback + CURRENT.omnisource_live_fusion_research_reentry
 rule every_registered_branch ingests CURRENT.frank_loop_of_loops as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
 rule every_registered_branch ingests CURRENT.frank_reward_state_mesh_feedback as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
 rule every_registered_branch ingests CURRENT.live_fusion_mesh_feedback as OPEN_SHARED_RESEARCH_CONTEXT and returns evidence|falsification|refinement|NO_CHANGE
+rule every_registered_branch obeys CURRENT.omnisource_live_fusion_research_reentry for all newly observed available data
+rule every_new_available_observation -> CURRENT.omnisource_live_fusion_research_reentry
+rule material_semantic_delta -> require ResearchReentryReceipt before research_reentry_complete
 rule CURRENT.live_fusion_mesh_candidate status = CANDIDATE_NOT_PROMOTED until real_repo_replay+fault_injection+recovery evidence supports promotion
 rule live_fusion_mesh_real_replay_work remains revisioned_work_not_execution_receipt
 rule FRANK_whole_system research_model = HIERARCHICAL_MULTISCALE_RECURRENT_LOOP_OF_LOOPS until evidence refines_or_refutes
@@ -188,3 +192,6 @@ invariant reward_control_never_mints_truth_or_execution_authority
 invariant self_generated_activity_cannot_mint_material_reward
 invariant live_fusion_candidate_visibility_does_not_equal_architecture_promotion
 invariant stronger_mesh_connectivity_does_not_mint_truth_or_effect_authority
+invariant all_available_new_data_enters_provenance_bound_intake_fusion_reentry_loop
+invariant all_new_data_source_coverage_does_not_mean_all_raw_data_in_active_context
+invariant every_material_result_reenters_research_architecture_tests_or_explicit_NO_CHANGE

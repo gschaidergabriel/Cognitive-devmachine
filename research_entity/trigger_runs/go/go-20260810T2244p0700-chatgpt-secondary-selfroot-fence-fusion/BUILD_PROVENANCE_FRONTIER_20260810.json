@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "delta_id": "build-provenance-frontier-20260810",
+  "run_id": "go-20260810T2244p0700-chatgpt-secondary-selfroot-fence-fusion",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "status": "BLOCKED_ORDERED_FRONTIER",
+  "target_repository": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "visibility": "private",
+    "repository_owner_kind": "User",
+    "default_branch": "main"
+  },
+  "current_boot_continuity_evidence": {
+    "pr": 196,
+    "workflow_run": 31408992270,
+    "job": 93522215770,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "result": "PASS_SELF_ROOT_BOOT_CONTINUITY_MECHANISM",
+    "checks_passed": 37,
+    "checks_total": 37,
+    "real_artifact_attestation_verified": false,
+    "trusted_builder_pinned": false,
+    "production_policy_decision": "BLOCKED_NO_TRUSTED_BUILDER",
+    "target_attestation_verifier": "BLOCKED_NO_ATTESTATION_VERIFIER",
+    "observed_target_gh_cli": "MISSING:/usr/bin/gh",
+    "canonical_state_opened": false,
+    "effect_authority": "NONE",
+    "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+  },
+  "external_primary_platform_evidence": [
+    {
+      "source": "GitHub Docs / actions/attest",
+      "url": "https://github.com/actions/attest",
+      "finding": "GitHub artifact attestations are available for all public repositories, but private/internal repositories require GitHub Enterprise Cloud. Current actions/attest v4 requires id-token:write and attestations:write; artifact-metadata:write is required for storage records."
+    },
+    {
+      "source": "GitHub Docs security features",
+      "url": "https://docs.github.com/en/code-security/getting-started/github-security-features",
+      "finding": "GitHub Free/Pro/Team expose artifact attestations only for public repositories; private/internal use requires GitHub Enterprise Cloud."
+    },
+    {
+      "source": "GitHub Docs artifact attestation verification",
+      "url": "https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations",
+      "finding": "Attestations provide value only when the produced artifact is verified; binary verification is normally performed with gh attestation verify, and offline verification is separately supported."
+    },
+    {
+      "source": "GitHub Enterprise Cloud attestation concepts",
+      "url": "https://docs.github.com/en/enterprise-cloud@latest/actions/concepts/security/artifact-attestations",
+      "finding": "Private repository attestations use GitHub's private Sigstore instance rather than the public transparency log."
+    }
+  ],
+  "account_capability": {
+    "repository_is_private": true,
+    "enterprise_cloud_plan_verified": false,
+    "github_artifact_attestation_available_for_this_repo": "UNKNOWN_UNTIL_ACCOUNT_PLAN_OR_LIVE_CAPABILITY_IS_VERIFIED",
+    "reason": "Connected repository/profile metadata does not expose a verified Enterprise Cloud entitlement. Do not infer feature availability from repository admin permission."
+  },
+  "claycode_dependency_frontier": {
+    "current_observed_stage": "WP04_CALLABLE_SEMANTICS_AND_RUNTIME_BINDING",
+    "execution_admitted": 0,
+    "wp05_executable_lowering_closed": false,
+    "current_active_research": [
+      "Clay PR188: first explicit reward callable contract plus required receiver state, still runtime binding NONE and execution admitted 0",
+      "Clay PR189: exact semantic-contract to runtime/binary/lease/effect-binding admission gate; explicitly non-executable until WP05",
+      "Clay PR191: exact static signature admission oracle; exact contract validation does not mint execution"
+    ],
+    "historical_whole_sandbox_binary_result": "Actual Clay compiler/build path and final single-binary composition remained blocked; sandbox/reference mechanism evidence is not a real final binary."
+  },
+  "ordered_critical_path": [
+    "Close remaining WP04 exact callable semantics/runtime-binding obligations without inventing signatures.",
+    "Reach WP05 and prove actual executable lowering/runtime semantics under current authority boundaries.",
+    "Produce deterministic real Frank v0.1 binary bytes from the selected ClayCode source/build graph.",
+    "Bind reproducible build/source/compiler/runtime metadata to those exact bytes.",
+    "Select and owner-pin an attestation/trusted-builder mechanism only after real builder bytes exist and repository/account capability is verified.",
+    "Provision/approve a real target verifier; /usr/bin/gh is currently absent on digital-retina and no substitute is yet authorized.",
+    "Verify real artifact digest + signer/source provenance + admitted/recovery-verified state lineage + exclusive current lease + restart/copy disposition together.",
+    "Only then consider F-V01-01 binary SELF acceptance; whole Frank v0.1 remains separate."
+  ],
+  "rejected_premature_actions": [
+    "Do not pin a fictional trusted_signer_workflow before owner/account/build evidence exists.",
+    "Do not add actions/attest to a private repository assuming the feature is available.",
+    "Do not treat a synthetic fake-gh mechanism probe as real cryptographic verification.",
+    "Do not attest sandbox/reference Python artifacts as if they were the final Frank server binary.",
+    "Do not install or trust a verifier on TARGET_VPS without an explicit approved provenance/update policy."
+  ],
+  "next_falsifiers": [
+    "Verify GitHub Enterprise Cloud / artifact-attestation capability for the private repository through an authoritative account/capability surface or a fail-closed non-production capability probe.",
+    "After WP05 produces a deterministic real binary candidate, compare GitHub-native attestation with an independently managed signing/verifier option under confidentiality, key-management, offline-verification and recovery constraints.",
+    "Require the selected verifier to reject wrong repository/source-ref/signer-workflow/digest and stale/revoked build identity on the accepted target VPS."
+  ],
+  "authority": {
+    "owner_pin_required_for_trusted_builder": true,
+    "frank_self_harness_authority": "PROPOSAL_ONLY",
+    "canonical_state_mutated": false,
+    "external_attestation_created": false,
+    "external_effect_performed": false,
+    "training_authorized": false
+  }
+}

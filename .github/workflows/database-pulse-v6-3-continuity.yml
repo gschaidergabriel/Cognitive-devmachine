@@ -1,0 +1,65 @@
+name: Database Pulse V6.3 Continuity
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research_entity/runtime/database_pulse_execution_plane_v6*.py'
+      - 'research_entity/runtime/test_database_pulse_execution_plane_v6*.py'
+      - '.github/workflows/database-pulse-v6-3-continuity.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  hosted-v6-3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile V6.3 chain
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            research_entity/runtime/database_pulse_execution_plane_v6.py \
+            research_entity/runtime/database_pulse_execution_plane_v6_1.py \
+            research_entity/runtime/database_pulse_execution_plane_v6_2.py \
+            research_entity/runtime/database_pulse_execution_plane_v6_3.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6_1.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6_3.py
+      - name: Run V6.3 continuity falsifiers
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            research_entity.runtime.test_database_pulse_execution_plane_v6 \
+            research_entity.runtime.test_database_pulse_execution_plane_v6_1 \
+            research_entity.runtime.test_database_pulse_execution_plane_v6_3
+
+  hostinger-v6-3:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, clean: true}
+      - name: Compile and run V6.3 exact candidate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research_entity/runtime/database_pulse_execution_plane_v6.py \
+            research_entity/runtime/database_pulse_execution_plane_v6_1.py \
+            research_entity/runtime/database_pulse_execution_plane_v6_2.py \
+            research_entity/runtime/database_pulse_execution_plane_v6_3.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6_1.py \
+            research_entity/runtime/test_database_pulse_execution_plane_v6_3.py
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_execution_plane_v6 \
+            research_entity.runtime.test_database_pulse_execution_plane_v6_1 \
+            research_entity.runtime.test_database_pulse_execution_plane_v6_3 \
+            research_entity.runtime.test_database_pulse_rank_path_v5 \
+            research_entity.runtime.test_auth_shadow_focus_guard

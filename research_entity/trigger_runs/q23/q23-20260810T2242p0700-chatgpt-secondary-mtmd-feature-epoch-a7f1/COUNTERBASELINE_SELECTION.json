@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
+  "decision": "KEEP_MULTIPLE_LIGHT_BASELINES_UNTIL_MEASURED",
+  "rule": "The counterbaseline must be small enough to represent a plausible permanent MVC feature path. A second billion-parameter VLM is not a fair Micro Visual Classifier baseline.",
+  "candidates": [
+    {
+      "id": "D0-HISTORICAL-DINOV2-SMALL-INT8",
+      "source": "Drive:digital-retina/retina/vision/frank_eye.py",
+      "status": "HISTORICAL_REUSE_BASELINE",
+      "observed_role": "DINOv2 ONNX INT8 produced CLS+256 patch-token scene/spatial features and attention-crop support in the original Retina lineage.",
+      "reason": "Best ancestry-preserving dedicated-feature baseline; must be re-executed before replacement claims.",
+      "unknowns": ["exact current weight hash/size", "current target latency/RSS", "user-specific open-set performance"]
+    },
+    {
+      "id": "D1-MOBILECLIP2-S0-IMAGE",
+      "source": "https://github.com/apple/ml-mobileclip",
+      "status": "FRESH_LIGHT_EXTERNAL_BASELINE",
+      "observed_image_encoder_params_m": 11.4,
+      "observed_text_encoder_params_m": 63.4,
+      "usage_for_q23": "Use image encoder only for prototype/familiarity features unless text alignment is explicitly required; text class features may be precomputed separately.",
+      "reason": "Provides a genuinely small current image embedding counterbaseline rather than another VLM.",
+      "transfer_warning": "Published latency/accuracy numbers are not Frank target receipts; remeasure on exact target hardware/runtime."
+    },
+    {
+      "id": "D2-DINOV3-VITS16",
+      "source": "https://github.com/facebookresearch/dinov3",
+      "status": "FRESH_DENSE_FEATURE_BASELINE",
+      "observed_params_m": 21,
+      "observed_patch_size": 16,
+      "reason": "Current official dense-feature backbone explicitly supports frozen kNN/logistic/linear downstream use and is a direct modern comparator to historical DINOv2.",
+      "constraints": ["model access/license gate must be satisfied", "target runtime cost unknown"]
+    },
+    {
+      "id": "D3-QWEN3-VL-EMBEDDING-2B",
+      "source": "https://github.com/QwenLM/Qwen3-VL-Embedding",
+      "status": "NON_MICRO_UPPER_BOUND_ONLY",
+      "observed_params_b": 2,
+      "reason": "Useful scientific evidence that dedicated embedding behavior is explicitly trained, but too heavy to serve as the default permanent MVC counterbaseline for Frank v0.1."
+    }
+  ],
+  "matched_test_order": [
+    "QNDRF-Q0 raw/projected Qwen shared-buffer prototype",
+    "QNDRF-Q1 tiny learned projection over frozen shared Qwen features",
+    "D0 historical DINOv2-Small INT8 reproduction",
+    "D1 MobileCLIP2-S0 image-only if operationally available",
+    "D2 DINOv3 ViT-S/16 if D0/D1 leave material uncertainty",
+    "D3 2B embedding VLM only as a research upper bound, not permanent micro-path candidate"
+  ],
+  "promotion_metric": "full sensor->verified-outcome Pareto vector: task/open-set/action-verification correctness + cold/warm latency + CPU/RAM/VRAM + bytes moved + state growth + restart/version compatibility. No classifier-only promotion."
+}

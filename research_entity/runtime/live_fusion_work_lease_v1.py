@@ -28,15 +28,18 @@ CREATE TABLE IF NOT EXISTS work_leases(
 );
 CREATE INDEX IF NOT EXISTS idx_work_leases_active
   ON work_leases(work_id,expires_at,released_at);
-CREATE TABLE IF NOT EXISTS work_effect_receipts(
+CREATE TABLE IF NOT EXISTS work_effect_intents(
   effect_key TEXT PRIMARY KEY,
   work_id TEXT NOT NULL,
   spec_rev INTEGER NOT NULL,
   lease_token TEXT NOT NULL,
   fence_epoch INTEGER NOT NULL,
-  result_hash TEXT NOT NULL,
-  success INTEGER NOT NULL,
-  created_at REAL NOT NULL
+  request_hash TEXT NOT NULL,
+  state TEXT NOT NULL CHECK(state IN ('RESERVED','FINALIZED')),
+  result_hash TEXT,
+  success INTEGER,
+  reserved_at REAL NOT NULL,
+  finalized_at REAL
 );
 '''
 
@@ -61,11 +64,13 @@ class WorkLease:
 
 
 class WorkLeaseFenceStore:
-    """Lease/fencing extension for the PR #156 LiveFusion re-entry bus.
+    """Lease/fencing + durable effect reservation extension for PR #156 LiveFusion.
 
-    Knowledge routing and semantic resolution remain in LiveFusionBus. This store only guards
-    concurrent/retried work effects. A lease never grants truth or effect authority; callers
-    must still perform current Clay authority, effect-guard and live-refresh checks.
+    Call reserve_effect *before* a consequential external effect. Only a newly RESERVED key
+    may be executed. If a process dies after reservation, replay returns RECOVERY_REQUIRED
+    rather than permission to execute again. finalize_effect records the verified outcome.
+    This store never grants truth/effect authority; callers still need Clay authority and the
+    parent LiveFusion effect guard.
     """
 
     def __init__(self, db_path: str | Path | None = None):
@@ -81,6 +86,19 @@ class WorkLeaseFenceStore:
     def _begin_immediate(self):
         self.db.execute("BEGIN IMMEDIATE")
 
+    def _validate_live_lease(self, lease: WorkLease, current_spec_rev: int, ts: float):
+        if lease.spec_rev != current_spec_rev:
+            return "STALE_SPEC_REV"
+        row = self.db.execute("SELECT * FROM work_leases WHERE lease_token=?", (lease.token,)).fetchone()
+        if not row or row["released_at"] is not None or row["expires_at"] <= ts:
+            return "LEASE_INACTIVE"
+        head = self.db.execute(
+            "SELECT fence_epoch FROM work_lease_heads WHERE work_id=?", (lease.work_id,)
+        ).fetchone()
+        if not head or int(head["fence_epoch"]) != lease.fence_epoch:
+            return "FENCED"
+        return None
+
     def claim(self, *, work_id: str, spec_rev: int, holder: str, ttl_s: float = 30.0,
               now: Optional[float] = None) -> Optional[WorkLease]:
         ts = time.time() if now is None else now
@@ -89,13 +107,11 @@ class WorkLeaseFenceStore:
         self._begin_immediate()
         try:
             self.db.execute(
-                "INSERT OR IGNORE INTO work_lease_heads(work_id,fence_epoch) VALUES(?,0)",
-                (work_id,),
+                "INSERT OR IGNORE INTO work_lease_heads(work_id,fence_epoch) VALUES(?,0)", (work_id,)
             )
             active = self.db.execute(
                 "SELECT lease_token FROM work_leases WHERE work_id=? AND released_at IS NULL "
-                "AND expires_at>? ORDER BY fence_epoch DESC LIMIT 1",
-                (work_id, ts),
+                "AND expires_at>? ORDER BY fence_epoch DESC LIMIT 1", (work_id, ts)
             ).fetchone()
             if active:
                 self.db.execute("ROLLBACK")
@@ -134,46 +150,74 @@ class WorkLeaseFenceStore:
                 self.db.execute("ROLLBACK")
             raise
 
-    def commit_effect(self, *, effect_key: str, lease: WorkLease, current_spec_rev: int,
-                      result, success: bool, now: Optional[float] = None) -> dict:
+    def reserve_effect(self, *, effect_key: str, lease: WorkLease, current_spec_rev: int,
+                       request, now: Optional[float] = None) -> dict:
         ts = time.time() if now is None else now
         if not effect_key:
             raise ValueError("effect_key required")
+        request_hash = _digest(request)
         self._begin_immediate()
         try:
-            if lease.spec_rev != current_spec_rev:
-                self.db.execute("ROLLBACK")
-                return {"accepted": False, "reason": "STALE_SPEC_REV"}
-            row = self.db.execute(
-                "SELECT * FROM work_leases WHERE lease_token=?", (lease.token,)
-            ).fetchone()
-            if not row or row["released_at"] is not None or row["expires_at"] <= ts:
-                self.db.execute("ROLLBACK")
-                return {"accepted": False, "reason": "LEASE_INACTIVE"}
-            head = self.db.execute(
-                "SELECT fence_epoch FROM work_lease_heads WHERE work_id=?", (lease.work_id,)
-            ).fetchone()
-            if not head or int(head["fence_epoch"]) != lease.fence_epoch:
-                self.db.execute("ROLLBACK")
-                return {"accepted": False, "reason": "FENCED"}
-            result_hash = _digest(result)
             prior = self.db.execute(
-                "SELECT result_hash,success FROM work_effect_receipts WHERE effect_key=?", (effect_key,)
+                "SELECT * FROM work_effect_intents WHERE effect_key=?", (effect_key,)
             ).fetchone()
             if prior:
-                if prior["result_hash"] != result_hash or bool(prior["success"]) != bool(success):
+                same_request = prior["request_hash"] == request_hash and prior["work_id"] == lease.work_id
+                if not same_request:
                     self.db.execute("ROLLBACK")
-                    return {"accepted": False, "reason": "IDEMPOTENCY_CONFLICT"}
+                    return {"reserved": False, "reason": "IDEMPOTENCY_CONFLICT"}
+                reason = "RECOVERY_REQUIRED" if prior["state"] == "RESERVED" else "ALREADY_FINALIZED"
                 self.db.execute("ROLLBACK")
-                return {"accepted": True, "duplicate": True, "reason": "IDEMPOTENT_REPLAY"}
+                return {"reserved": False, "reason": reason}
+            reason = self._validate_live_lease(lease, current_spec_rev, ts)
+            if reason:
+                self.db.execute("ROLLBACK")
+                return {"reserved": False, "reason": reason}
             self.db.execute(
-                "INSERT INTO work_effect_receipts VALUES(?,?,?,?,?,?,?,?)",
-                (effect_key, lease.work_id, lease.spec_rev, lease.token, lease.fence_epoch,
-                 result_hash, 1 if success else 0, ts),
+                "INSERT INTO work_effect_intents VALUES(?,?,?,?,?,?,'RESERVED',NULL,NULL,?,NULL)",
+                (effect_key, lease.work_id, lease.spec_rev, lease.token, lease.fence_epoch, request_hash, ts),
             )
             self.db.execute("COMMIT")
-            return {"accepted": True, "duplicate": False, "reason": "COMMITTED"}
+            return {"reserved": True, "reason": "RESERVED"}
         except Exception:
             if self.db.in_transaction:
                 self.db.execute("ROLLBACK")
             raise
+
+    def finalize_effect(self, *, effect_key: str, lease: WorkLease, result, success: bool,
+                        now: Optional[float] = None) -> dict:
+        ts = time.time() if now is None else now
+        result_hash = _digest(result)
+        self._begin_immediate()
+        try:
+            prior = self.db.execute(
+                "SELECT * FROM work_effect_intents WHERE effect_key=?", (effect_key,)
+            ).fetchone()
+            if not prior:
+                self.db.execute("ROLLBACK")
+                return {"accepted": False, "reason": "NO_RESERVATION"}
+            if prior["lease_token"] != lease.token or int(prior["fence_epoch"]) != lease.fence_epoch:
+                self.db.execute("ROLLBACK")
+                return {"accepted": False, "reason": "RESERVATION_OWNER_MISMATCH"}
+            if prior["state"] == "FINALIZED":
+                same = prior["result_hash"] == result_hash and bool(prior["success"]) == bool(success)
+                self.db.execute("ROLLBACK")
+                return ({"accepted": True, "duplicate": True, "reason": "IDEMPOTENT_REPLAY"}
+                        if same else {"accepted": False, "reason": "IDEMPOTENCY_CONFLICT"})
+            self.db.execute(
+                "UPDATE work_effect_intents SET state='FINALIZED',result_hash=?,success=?,finalized_at=? "
+                "WHERE effect_key=?",
+                (result_hash, 1 if success else 0, ts, effect_key),
+            )
+            self.db.execute("COMMIT")
+            return {"accepted": True, "duplicate": False, "reason": "FINALIZED"}
+        except Exception:
+            if self.db.in_transaction:
+                self.db.execute("ROLLBACK")
+            raise
+
+    def effect_state(self, effect_key: str):
+        row = self.db.execute(
+            "SELECT * FROM work_effect_intents WHERE effect_key=?", (effect_key,)
+        ).fetchone()
+        return dict(row) if row else None

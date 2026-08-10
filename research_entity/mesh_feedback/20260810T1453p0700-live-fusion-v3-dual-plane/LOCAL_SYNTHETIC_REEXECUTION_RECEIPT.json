@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "live-fusion-v3-dual-plane-local-reexecution-20260810T1453p0700",
+  "created_at": "2026-08-10T14:53:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "source_candidate_commit": "e2a452306292ef83e5ebd58820c83819b136ad55",
+  "source_simulator_commit": "e0e1ad53c46ddb85616a6280b729da06ba55baf8",
+  "evidence_class": "LOCAL_SYNTHETIC_LOGIC_REEXECUTION_NOT_REAL_WORKER_OR_TARGET_EVIDENCE",
+  "parameters": {
+    "seed": 20260810,
+    "n_deltas": 5000,
+    "branches": 9,
+    "central_dependency_edge_missing_rate": 0.08,
+    "local_shadow_missing_rate": 0.08,
+    "beacon_relative_cost_unit": 0.03
+  },
+  "normal_independent_shadow": {
+    "broadcast": {"micro_recall": 1.0, "perfect_event_recall": 1.0, "weighted_network_cost_per_delta": 9.0},
+    "tag_only": {"micro_recall": 0.590076747004174, "perfect_event_recall": 0.6206, "weighted_network_cost_per_delta": 1.753},
+    "v2": {"micro_recall": 0.9630402585162245, "perfect_event_recall": 0.9246, "weighted_network_cost_per_delta": 2.861, "missed_required_branch_deliveries": 549},
+    "v3_dual_plane": {"micro_recall": 0.9962299717247879, "perfect_event_recall": 0.9888, "weighted_network_cost_per_delta": 3.175708, "missed_required_branch_deliveries": 56, "beacon_per_delta": 7.2036}
+  },
+  "fully_correlated_projection_blind_spot": {
+    "purpose": "Falsify the assumption that a second routing projection helps when both projections share the same missing-edge ancestry.",
+    "v2": {"micro_recall": 0.9725732723850498, "perfect_event_recall": 0.9398, "weighted_network_cost_per_delta": 2.8936, "missed_required_branch_deliveries": 408},
+    "v3_dual_plane": {"micro_recall": 0.9725732723850498, "perfect_event_recall": 0.9398, "weighted_network_cost_per_delta": 3.10987, "missed_required_branch_deliveries": 408},
+    "finding": "NO_RECALL_BENEFIT_WHEN_CONTROL_PLANES_SHARE_THE_SAME_MISSING_EDGE_ANCESTRY"
+  },
+  "derived_comparisons": {
+    "normal_v3_vs_v2_micro_recall_absolute_points": 3.31897132085634,
+    "normal_v3_vs_v2_weighted_cost_increase_percent": 10.9999300943726,
+    "normal_v3_vs_broadcast_weighted_cost_reduction_percent": 64.7143555555556,
+    "normal_v3_missed_delivery_reduction_vs_v2_percent": 89.799635701275,
+    "correlated_v3_vs_v2_micro_recall_gain": 0.0
+  },
+  "decision": "CONTINUE_AS_CANDIDATE_NOT_PROMOTED",
+  "architecture_delta": "V3 dual-plane beaconing is worth real-repo A/B only if branch-local/raw cross-checks have materially distinct provenance. Correlated derived projections must not count as independent redundancy; measure correlated_projection_failure_rate and preserve V2 rollback.",
+  "next_falsifiers": [
+    "matched real repository replay broadcast vs tag-only vs V2 vs V3",
+    "correlated and independent missing-edge fault injection using actual UnifiedDB/ClayGraph/current-work surfaces",
+    "dropped beacon/ACK and stale epoch recovery",
+    "p50/p95/p99 ACK latency plus network/CPU/RSS/I/O",
+    "PR156 exact route-target transport identity and replay-version binding",
+    "real active worker ACK closure roundtrip"
+  ],
+  "canonical_promotion": "NONE",
+  "frank_harness_mutation": false
+}

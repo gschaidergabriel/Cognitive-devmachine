@@ -1,5 +1,5 @@
 {
-  "schema_version":"1.0",
+  "schema_version":"1.1",
   "run_id":"unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity",
   "experiments":[
     {
@@ -25,21 +25,49 @@
       "external_effect_performed":false
     },
     {
-      "id":"E3_V17_CANONICAL_ATTEMPT_OUTCOME_SQL_GUARDS",
-      "class":"IMPLEMENTATION_DELTA",
-      "status":"BUILT_NOT_YET_PROMOTED",
-      "commits":["e6f683859d2e9ec5eae9c6316445fc28ebdeafd6","486f6c028c4602b3e5e806cc21b04654f9a00377"],
-      "result":"Added storage-level exact effect/attempt/verified-outcome guard and exact REENTERED-hash prerequisite for DONE while preserving additive rollback surface.",
-      "target_positive_receipt":"NOT_YET_OBSERVED_AT_RUN_COMPILATION"
+      "id":"E3_V17_LOCAL_BOUND_REENTRY_DONE_DIFFERENTIAL",
+      "class":"DIRECT_TARGET_VPS_CANDIDATE_DIFFERENTIAL",
+      "status":"PASS_CANDIDATE_ONLY",
+      "receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_done_v17_candidate/LATEST.json",
+      "run_id":"31408227242",
+      "tested_sha":"486f6c028c4602b3e5e806cc21b04654f9a00377",
+      "implementation_commits":["e6f683859d2e9ec5eae9c6316445fc28ebdeafd6","486f6c028c4602b3e5e806cc21b04654f9a00377"],
+      "result":{
+        "exact_effect_attempt_outcome_and_causal_identity_required":true,
+        "wrong_attempt_rejected":true,
+        "wrong_verified_outcome_hash_rejected":true,
+        "legacy_unbound_reentry_disabled":true,
+        "reentered_not_complete_before_done":true,
+        "restart_between_reentry_and_done_recovers_nonterminal_state":true,
+        "terminal_done_receipt_required_for_complete":true,
+        "duplicate_done_rejected":true,
+        "rollback_preserved_v14_v16":true,
+        "candidate_tables_removed_by_rollback":true
+      },
+      "resource_shadow":{"wall_seconds":0.14,"max_rss_kib":24320,"exit_status":0},
+      "canonical_database_migrated":false,
+      "external_effect_performed":false,
+      "promotion":"CANDIDATE_PASSES_LOCAL_DIFFERENTIAL_ONLY"
     },
     {
       "id":"E4_V17_SUPPORT_AND_EXECUTION_IDENTITY",
-      "class":"EXPECTED_NEGATIVE_DISCRIMINATOR",
-      "status":"TEST_COMMITTED_TARGET_GATE_DISPATCHED",
-      "test_commit":"46f3986f301786a21f465b46647fcbe73b31369c",
-      "workflow_commit":"b6c75ab71feba690911f21f3341878404ca3ba8d",
-      "local_source_claim":"Simple candidate can accept fabricated support IDs and DONE with no V15/V16 current execution; target receipt pending.",
-      "target_receipt":"NOT_YET_OBSERVED_AT_RUN_COMPILATION"
+      "class":"DIRECT_TARGET_VPS_EXPECTED_NEGATIVE",
+      "status":"CONFIRMED_GAP",
+      "receipt":"gschaidergabriel/Dr.-Unterweger:runtime/vps_unifieddb/frank_effect_reentry_v17_support_binding_gap_v1/LATEST.json",
+      "run_id":"31408220117",
+      "tested_sha":"b6c75ab71feba690911f21f3341878404ca3ba8d",
+      "result":{
+        "fabricated_support_identifiers_accepted":true,
+        "terminal_done_accepted_with_presence_idle_epoch_0":true,
+        "terminal_done_accepted_without_execution_context":true,
+        "candidate_self_verifier_reports_done_valid":true,
+        "candidate_recovery_reports_complete":true,
+        "canonical_gwt_causal_delta_rows_absent":true
+      },
+      "resource_shadow":{"wall_seconds":0.12,"max_rss_kib":24320,"exit_status":0},
+      "canonical_database_migrated":false,
+      "external_effect_performed":false,
+      "promotion":"BLOCKS_SIMPLE_V17_PROMOTION"
     },
     {
       "id":"E5_RICH_V17_RELATIONAL_CROSS_SPLICE",
@@ -48,27 +76,27 @@
       "test_commits":["c9b6f1fa9dd0981a6114edd1c3804e05669f3aff","7a10998e5367072fc39e03da210f2a66b46dec48"],
       "workflow_commit":"21249166f7bff4407ee17e4918358574ec8db848",
       "hypothesis":"Richer V17 may accept a cross-spliced set of individually valid but causally unrelated GWT/credit/semantic/snapshot identities and reach DONE.",
-      "target_receipt":"NOT_YET_OBSERVED_AT_RUN_COMPILATION"
+      "target_receipt":"NOT_YET_OBSERVED_AT_THIS_REFRESH"
     }
   ],
   "mandatory_dimensions": {
-    "semantic_correctness":"E1/E2 FAIL; E3 candidate hardening; E4/E5 pending target discrimination",
-    "exact_replay_snapshot_consistency":"PARTIAL; restart semantics exist in adjacent candidate tests, full crash/replay gate pending",
-    "temporal_provenance_correctness":"FAIL baseline; improved candidate; causal cross-splice still unresolved",
+    "semantic_correctness":"Baseline FAIL; local V17 layer PASS; simple V17 support/execution closure FAIL; richer causal closure still testing.",
+    "exact_replay_snapshot_consistency":"PARTIAL: candidate restart between re-entry/DONE passes; hard-crash/snapshot replay still open.",
+    "temporal_provenance_correctness":"PARTIAL: exact attempt/outcome passes but current execution/support causal chain fails in simple V17.",
     "query_result_equivalence":"NOT_MEASURED_THIS_SUBCYCLE",
     "graph_vector_fts_retrieval_quality":"NOT_APPLICABLE_TO_EFFECT_TERMINALIZATION_SUBCYCLE",
-    "selection_integrity":"PARTIAL: receiver used/local_effect checked by rich V17; cross-chain integrity pending",
-    "transaction_effect_atomicity":"CANDIDATE: rich V17 supports same-transaction binding+DONE+REENTERED; target evidence pending",
-    "latency_p50_p95_p99":"UNKNOWN: only single-run wall/resource shadows available; distributions required before promotion",
+    "selection_integrity":"PARTIAL: rich candidate checks receiver used/local_effect; relational cross-splice target gate pending.",
+    "transaction_effect_atomicity":"PARTIAL_CANDIDATE; full richer V17 atomic gate from parallel worker is also in flight.",
+    "latency_p50_p95_p99":"UNKNOWN: only single-run wall/resource shadows; distributions required before promotion.",
     "write_read_amplification":"UNKNOWN",
-    "memory_storage_footprint":"PARTIAL: single-run RSS captured; persistent amplification not yet measured",
+    "memory_storage_footprint":"PARTIAL: max RSS 23.9-24.3 MiB across these small discriminators; persistent amplification unknown.",
     "concurrency_lock_contention":"NOT_MEASURED_THIS_SUBCYCLE",
     "crash_recovery_rebuild":"PARTIAL/PENDING",
-    "migration_rollback_safety":"DESIGN_SUPPORTED: additive candidate kept outside canonical chain; target rollback gate pending",
-    "ipc_serialization_savings":"NOT_MEASURED; no physical-consolidation promotion",
-    "common_mode_failure_radius":"QUALITATIVE: physical consolidation remains HOLD",
+    "migration_rollback_safety":"Candidate rollback PASS for simple V17; richer candidate/canonical migration remains HOLD.",
+    "ipc_serialization_savings":"NOT_MEASURED; no physical-consolidation promotion.",
+    "common_mode_failure_radius":"QUALITATIVE: physical consolidation remains HOLD.",
     "edge_energy_thermal":"NOT_APPLICABLE_FOR_CURRENT_V0_1_ACCEPTED_VPS_TARGET",
     "model_token_context_cost":"NOT_MEASURED_THIS_SUBCYCLE"
   },
-  "scientific_disposition":"No full V17 or UnifiedDB promotion. Preserve both negative target receipts and continue with exact target positive + crash/concurrency/relational-causal gates."
+  "scientific_disposition":"KEEP V17 NONCANONICAL. Promote neither simple nor rich V17 yet. The correct next discriminator is relational causal closure plus exact execution generation, followed by hard-crash/concurrency/latency measurement and end-to-end provider evidence."
 }

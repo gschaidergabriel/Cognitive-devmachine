@@ -1,0 +1,229 @@
+name: ClayCode WP02 V18 Exact Byte VPS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/claycode-wp02-v18-exact-byte-vps-20260810.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: claycode-wp02-v18-exact-byte-vps
+  cancel-in-progress: false
+
+jobs:
+  exact-byte-replay:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    env:
+      GRAMMAR: research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark
+      LOCK: research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+
+      - name: Bind trigger SHA and exact component blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 - <<'PY'
+          import json, os, subprocess
+          expected = {
+            'tools/claycode_base_frontend.py': '31598f85a27ade2d98466606af6bdf5a8473cc8d',
+            'tools/claycode_base_canonicalizer.py': '5605e33c83ca75eb7ede7677328df622731e0461',
+            'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark': 'b27a4da99c9eff68302d550aad78c4e64cabe5c3',
+            'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay': 'a2b856d1362e8ce2420338f1bd705a49a86c2c7d',
+            'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay': 'dbb72460bc5a049c784d1acd1aaef152fa37f797',
+            'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt': '4a361757efede020cfb288ad7beda2c4a7e6c6b5',
+          }
+          sha=os.environ['GITHUB_SHA']
+          observed={p: subprocess.check_output(['git','rev-parse',f'{sha}:{p}'], text=True).strip() for p in expected}
+          mismatches={p:{'expected':expected[p],'observed':observed[p]} for p in expected if expected[p] != observed[p]}
+          out={'trigger_sha':sha,'expected':expected,'observed':observed,'mismatches':mismatches,'pass':not mismatches}
+          open('/tmp/wp02-blobs.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(out,sort_keys=True))
+          assert not mismatches, mismatches
+          PY
+
+      - name: Verify runner dependency lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import importlib.metadata, json, pathlib, platform, subprocess
+          versions={x:importlib.metadata.version(x) for x in ('lark','interegular')}
+          assert versions == {'lark':'1.3.1','interegular':'0.3.3'}, versions
+          out={
+            'versions':versions,
+            'python':platform.python_version(),
+            'platform':platform.platform(),
+            'git':subprocess.check_output(['git','--version'],text=True).strip(),
+            'lock_sha256':__import__('hashlib').sha256(pathlib.Path('research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt').read_bytes()).hexdigest(),
+          }
+          pathlib.Path('/tmp/wp02-runtime.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(out,sort_keys=True))
+          PY
+
+      - name: Strict full-corpus production-parser replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v -o /tmp/wp02-frontend.time \
+            python3 tools/claycode_base_frontend_validation.py \
+              --grammar "$GRAMMAR" \
+              --output /tmp/wp02-frontend.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/wp02-frontend.json'))
+          assert x['pass'] is True
+          assert all(r['deterministic_repeat'] and r['none_placeholder_count']==0 for r in x['sources'])
+          print(json.dumps({'pass':x['pass'],'grammar_sha256':x['grammar_sha256'],'sources':[(r['path'],r['source_sha256']) for r in x['sources']]},sort_keys=True))
+          PY
+
+      - name: Deterministic canonical syntax replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v -o /tmp/wp02-canonical.time \
+            python3 tools/claycode_base_canonicalizer.py \
+              --grammar "$GRAMMAR" \
+              --output /tmp/wp02-canonical.json
+          PYTHONPATH=tools python3 - <<'PY'
+          import json
+          from pathlib import Path
+          import claycode_base_frontend as front
+          import claycode_base_canonicalizer as canon
+          import claycode_base_canonicalizer_validation as cv
+          grammar=Path('research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark').resolve()
+          assert front.DEFAULT_GRAMMAR.resolve() == grammar
+          assert canon.DEFAULT_GRAMMAR.resolve() == grammar
+          probe=front.compile_frontend('rule a preserves b\n', grammar.read_text(), strict=True)
+          assert probe['surface'] == 'BASE_D_V18_REWARD_RELATIONS'
+          can=json.load(open('/tmp/wp02-canonical.json'))
+          assert can['pass'] is True
+          active=cv.run()
+          assert active['pass'] is True
+          Path('/tmp/wp02-active-canonical-validation.json').write_text(json.dumps(active,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'canonical_pass':can['pass'],'active_validation_pass':active['pass'],'surface':probe['surface']},sort_keys=True))
+          PY
+
+      - name: Out-of-box component-addressed moving-main canary
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --quiet origin main
+          python3 - <<'PY'
+          import json, os, subprocess
+          tested=os.environ['GITHUB_SHA']
+          current=subprocess.check_output(['git','rev-parse','origin/main'],text=True).strip()
+          paths=[
+            'tools/claycode_base_frontend.py',
+            'tools/claycode_base_canonicalizer.py',
+            'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark',
+            'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay',
+            'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay',
+            'research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt',
+          ]
+          def blobs(ref):
+            return {p:subprocess.check_output(['git','rev-parse',f'{ref}:{p}'],text=True).strip() for p in paths}
+          a,b=blobs(tested),blobs('origin/main')
+          same=a==b
+          verdict=('INCONCLUSIVE_NO_HEAD_MOVEMENT' if current==tested else ('COMPONENT_SCOPE_TRANSFER_CANDIDATE' if same else 'NOT_TRANSFERABLE_COMPONENT_CHANGED'))
+          out={'experiment':'COMPONENT_ADDRESSED_MOVING_MAIN_CANARY','tested_sha':tested,'observed_origin_main':current,'head_moved':current!=tested,'component_blobs_unchanged':same,'verdict':verdict,'tested_blobs':a,'current_blobs':b,'promotion_authority':'NONE'}
+          open('/tmp/wp02-oob.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(out,sort_keys=True))
+          PY
+
+      - name: Build and persist exact-byte receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          export RECEIPT="research_entity/claycode/remote_vps/WP02_V18_EXACT_BYTE_REPLAY_${GITHUB_RUN_ID}.json"
+          python3 - <<'PY'
+          import json, os, platform, socket, subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+          def load(p): return json.loads(Path(p).read_text())
+          blobs=load('/tmp/wp02-blobs.json')
+          runtime=load('/tmp/wp02-runtime.json')
+          frontend=load('/tmp/wp02-frontend.json')
+          canonical=load('/tmp/wp02-canonical.json')
+          active=load('/tmp/wp02-active-canonical-validation.json')
+          oob=load('/tmp/wp02-oob.json')
+          cpu='UNKNOWN'
+          try:
+            for line in Path('/proc/cpuinfo').read_text(errors='replace').splitlines():
+              if line.lower().startswith('model name'):
+                cpu=line.split(':',1)[1].strip(); break
+          except Exception: pass
+          mem='UNKNOWN'
+          try: mem=Path('/proc/meminfo').read_text(errors='replace').splitlines()[0]
+          except Exception: pass
+          receipt={
+            'schema_version':'1.0',
+            'receipt_id':f"WP02_V18_EXACT_BYTE_REPLAY_{os.environ['GITHUB_RUN_ID']}",
+            'created_at':datetime.now(timezone.utc).isoformat(),
+            'trigger':'go',
+            'origin_actor':'chatgpt-secondary',
+            'provider':'OpenAI',
+            'model':'GPT-5.6 Sol',
+            'research_entity':'Clay',
+            'research_subject':'Frank',
+            'evidence_class':'REAL_SELF_HOSTED_UBUNTU_CONTENT_ADDRESSED_EXACT_COMMITTED_BYTE_REPLAY',
+            'github_sha':os.environ['GITHUB_SHA'],
+            'github_run_id':os.environ['GITHUB_RUN_ID'],
+            'runner':{
+              'name':os.environ.get('RUNNER_NAME','UNKNOWN'),
+              'os':os.environ.get('RUNNER_OS','UNKNOWN'),
+              'arch':os.environ.get('RUNNER_ARCH','UNKNOWN'),
+              'hostname':socket.gethostname(),
+              'platform':platform.platform(),
+              'python':platform.python_version(),
+              'cpu':cpu,
+              'mem_total':mem,
+            },
+            'component_blob_binding':blobs,
+            'dependency_runtime':runtime,
+            'frontend_receipt':frontend,
+            'canonical_receipt':canonical,
+            'active_canonical_validation':active,
+            'resource_shadow_files':{
+              'frontend_time_v':'/tmp/wp02-frontend.time',
+              'canonical_time_v':'/tmp/wp02-canonical.time',
+              'frontend_time_v_text':Path('/tmp/wp02-frontend.time').read_text(errors='replace'),
+              'canonical_time_v_text':Path('/tmp/wp02-canonical.time').read_text(errors='replace'),
+            },
+            'exactly_one_out_of_box_experiment':oob,
+            'hypothesis':'The exact current V18 production parser/canonicalizer/G9/Dialect/lock bytes pass strict full-corpus and canonical identity replay on the real self-hosted Ubuntu lane.',
+            'strongest_counterhypothesis':'The prior green V18 candidate depended on non-committed or mismatched bytes; exact committed production bytes will fail strict parsing, full corpus, canonical parity, or dependency reproducibility.',
+            'counterhypothesis_status':'REFUTED_ON_THIS_SCOPE' if blobs['pass'] and frontend['pass'] and canonical['pass'] and active['pass'] else 'NOT_REFUTED',
+            'acceptance':{
+              'exact_blob_match':blobs['pass'],
+              'strict_full_corpus':frontend['pass'],
+              'canonical_roundtrip_and_mutation':canonical['pass'],
+              'active_production_canonical_validation':active['pass'],
+              'runner_dependency_versions_exact':runtime['versions']=={'lark':'1.3.1','interegular':'0.3.3'},
+            },
+            'scope_guard':'This closes the current non-hardware-specific Hostinger exact-byte WP02 replay blocker only if all acceptance booleans are true. It is not Andreas-target acceptance, not BASE release PASS by itself, not WP03/04 evidence, and grants no effect/training authority.',
+            'frank_harness_mutation':False,
+            'training_authorized':False,
+          }
+          assert all(receipt['acceptance'].values()), receipt['acceptance']
+          p=Path(os.environ['RECEIPT']); p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'receipt':str(p),'acceptance':receipt['acceptance'],'oob':oob['verdict']},sort_keys=True))
+          PY
+          git config user.name 'clay-wp02-v18-replay'
+          git config user.email 'clay-wp02-v18-replay@users.noreply.github.com'
+          git add "$RECEIPT"
+          git commit -m "evidence(wp02): persist V18 exact-byte Ubuntu replay ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt*2))
+          done
+          exit 1

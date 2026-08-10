@@ -1,69 +1,22 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "purpose": "Conservative path-to-gate candidate mapping. A match means review/evidence may be required; it never grants PASS.",
   "rules": [
-    {
-      "rule_id": "F01-IDENTITY-RUNTIME",
-      "patterns": ["runtime/identity/**", "tests/self_root*", "tests/*identity*", "claycode/*identity*"],
-      "work_package": "F-V01-01-IDENTITY-SERVER-BINARY",
-      "subcheck": "self_root_identity_continuity",
-      "missing_evidence_template": ["exact-current source/replay identity regression", "accepted Target-VPS continuity receipt", "fresh-main overlap/regression check"]
-    },
-    {
-      "rule_id": "F02-CLAYCODE-TYPED-IR",
-      "patterns": ["claycode/**", "runtime/claycode/**", "tools/*claycode*", "tests/*claycode*", "tests/*typed_ir*"],
-      "work_package": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-      "subcheck": "typed_ir",
-      "missing_evidence_template": ["strict parser/frontend exact-source run", "TypedIR adversarial/canonicalization suite", "fresh-main Target-VPS Frank-surface replay"]
-    },
-    {
-      "rule_id": "F04-UNIFIEDDB",
-      "patterns": ["runtime/vps_unifieddb/**", "runtime/*unifieddb*", "unifieddb/**", "tests/*unifieddb*", "tests/*recovery*"],
-      "work_package": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
-      "subcheck": "state_continuity",
-      "missing_evidence_template": ["crash/restart/replay receipt", "snapshot/restore generation test", "SQLite integrity/FK/schema fingerprint receipt", "fresh-main Target-VPS run"]
-    },
-    {
-      "rule_id": "F06-RETINA",
-      "patterns": ["retina/**", "runtime/*retina*", "runtime/*visual*", "tests/*retina*", "tests/*visual*", "mvc/**"],
-      "work_package": "F-V01-06-DIGITAL-RETINA-MVC",
-      "subcheck": "retina_mvc",
-      "missing_evidence_template": ["provenance/open-set controls", "adaptive update + rollback receipt", "Target-VPS resource measurement"]
-    },
-    {
-      "rule_id": "F08-TOKEN-API",
-      "patterns": ["api/**", "runtime/*token*", "runtime/*ingress*", "tests/*token*", "tests/*ingress*", "tests/*cancel*"],
-      "work_package": "F-V01-08-TOKEN-API-CLIENTS",
-      "subcheck": "token_api",
-      "missing_evidence_template": ["auth/session provenance", "idempotency/replay", "cancellation/recovery", "Target-VPS production-path receipt"]
-    },
-    {
-      "rule_id": "F09-EFFECT-AUTHORITY",
-      "patterns": ["runtime/*effect*", "runtime/*execution*", "tests/*effect*", "tests/*execution_gate*", "claycode/*effect*"],
-      "work_package": "F-V01-09-EFFECT-AUTHORITY",
-      "subcheck": "presence_execution_generation_effect_fence",
-      "missing_evidence_template": ["exact current execution-generation binding", "fork/descriptor/replacement/rollback falsifiers", "B1/B2/B3 provider-precommit gate", "fresh-main Target-VPS receipt"]
-    },
-    {
-      "rule_id": "F10-AGENCY-WEB",
-      "patterns": ["runtime/*agency*", "runtime/*web*", "tests/*agency*", "tests/*web_ingress*"],
-      "work_package": "F-V01-10-PROACTIVE-AGENCY-WEB",
-      "subcheck": "agency_web",
-      "missing_evidence_template": ["bounded autonomous research receipt", "web non-authority/adversarial injection matrix", "restart-persistent goal/heartbeat receipt"]
-    },
-    {
-      "rule_id": "F11-MEMORY-REWARD",
-      "patterns": ["runtime/*reward*", "runtime/*memory*", "claycode/*reward*", "tests/*reward*", "tests/*memory*"],
-      "work_package": "F-V01-11-MEMORY-REWARD-GOALS",
-      "subcheck": "memory_reward_goals",
-      "missing_evidence_template": ["deterministic transition semantics", "verified outcome -> causal credit", "restart-persistent goal/memory receipt"]
-    },
-    {
-      "rule_id": "F13-SECURITY-RECOVERY",
-      "patterns": ["security/**", "runtime/*recovery*", "runtime/*quarantine*", "tests/*security*", "tests/*rollback*", "tests/*recovery*"],
-      "work_package": "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
-      "subcheck": "security_recovery",
-      "missing_evidence_template": ["crash/restart/rollback matrix", "stale-state rejection", "prompt/tool-result injection suite", "reproducible telemetry receipt"]
-    }
+    {"rule_id":"F01-IDENTITY-RUNTIME","patterns":["runtime/identity/**","runtime/*boot*","tests/self_root*","tests/*identity*","tests/*boot*","claycode/*identity*"],"work_package":"F-V01-01-IDENTITY-SERVER-BINARY","subcheck":"self_root_identity_continuity","missing_evidence_template":["exact-current source/replay identity regression","accepted Target-VPS continuity receipt","fresh-main overlap/regression check","binary/build trust evidence when affected"]},
+    {"rule_id":"F02-CLAYCODE-TYPED-IR","patterns":["claycode/**","runtime/claycode/**","tools/*claycode*","tests/*claycode*","tests/*typed_ir*"],"work_package":"F-V01-02-CLAYCODE-COMPILER-RUNTIME","subcheck":"typed_ir","missing_evidence_template":["strict parser/frontend exact-source run","TypedIR adversarial/canonicalization suite","fresh-main Target-VPS Frank-surface replay"]},
+    {"rule_id":"F03-COGNITIVE-LOOP","patterns":["runtime/*loop*","runtime/*cognitive*","loop/**","tests/*loop*","tests/*cognitive*"],"work_package":"F-V01-03-COGNITIVE-LOOP-CORE","subcheck":"cognitive_loop_core","missing_evidence_template":["full observation->decision->effect/outcome->reentry cycle","causal credit/reward update","restart/provenance replay","Target-VPS loop receipt"]},
+    {"rule_id":"F04-UNIFIEDDB","patterns":["runtime/vps_unifieddb/**","runtime/*unifieddb*","unifieddb/**","tests/*unifieddb*","tests/*recovery*"],"work_package":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY","subcheck":"state_continuity","missing_evidence_template":["crash/restart/replay receipt","snapshot/restore generation test","SQLite integrity/FK/schema fingerprint receipt","fresh-main Target-VPS run"]},
+    {"rule_id":"F05-GWT-HYPERPOSITION","patterns":["gwt/**","hyperposition/**","claygraph/**","runtime/*gwt*","runtime/*hyperposition*","tests/*gwt*","tests/*hyperposition*"],"work_package":"F-V01-05-GWT-HYPERPOSITION-TOPOLOGY","subcheck":"gwt_hyperposition","missing_evidence_template":["causal intervention/ablation","counterevidence/alternative preservation","no truth/authority promotion","integration with live loop"]},
+    {"rule_id":"F06-RETINA","patterns":["retina/**","runtime/*retina*","runtime/*visual*","tests/*retina*","tests/*visual*","mvc/**"],"work_package":"F-V01-06-DIGITAL-RETINA-MVC","subcheck":"retina_mvc","missing_evidence_template":["provenance/open-set controls","adaptive update + rollback receipt","Target-VPS resource measurement"]},
+    {"rule_id":"F07-NEEDLE-TRANSLATOR","patterns":["needle/**","translator/**","runtime/*needle*","runtime/*translator*","tests/*needle*","tests/*translator*"],"work_package":"F-V01-07-NEEDLE-TRANSLATOR","subcheck":"needle_translator","missing_evidence_template":["German<->Clay hard-field roundtrip","self.root<->Frank identity preservation","authority-drift adversarial suite","Needle effect-boundary binding"]},
+    {"rule_id":"F08-TOKEN-API","patterns":["api/**","runtime/*token*","runtime/*ingress*","tests/*token*","tests/*ingress*","tests/*cancel*"],"work_package":"F-V01-08-TOKEN-API-CLIENTS","subcheck":"token_api","missing_evidence_template":["auth/session provenance","idempotency/replay","cancellation/recovery","Target-VPS production-path receipt"]},
+    {"rule_id":"F09-EFFECT-AUTHORITY","patterns":["runtime/*effect*","runtime/*execution*","tests/*effect*","tests/*execution_gate*","claycode/*effect*"],"work_package":"F-V01-09-EFFECT-AUTHORITY","subcheck":"presence_execution_generation_effect_fence","missing_evidence_template":["exact current execution-generation binding","fork/descriptor/replacement/rollback falsifiers","B1/B2/B3 provider-precommit gate","fresh-main Target-VPS receipt"]},
+    {"rule_id":"F10-AGENCY-WEB","patterns":["runtime/*agency*","runtime/*web*","tests/*agency*","tests/*web_ingress*"],"work_package":"F-V01-10-PROACTIVE-AGENCY-WEB","subcheck":"agency_web","missing_evidence_template":["bounded autonomous research receipt","web non-authority/adversarial injection matrix","restart-persistent goal/heartbeat receipt"]},
+    {"rule_id":"F11-MEMORY-REWARD","patterns":["runtime/*reward*","runtime/*memory*","claycode/*reward*","tests/*reward*","tests/*memory*","goals/**"],"work_package":"F-V01-11-MEMORY-REWARD-GOALS","subcheck":"memory_reward_goals","missing_evidence_template":["deterministic transition semantics","verified outcome -> causal credit","restart-persistent goal/memory receipt"]},
+    {"rule_id":"F12-TOOLS-PEERS-BODY","patterns":["runtime/*peer*","runtime/*capability*","runtime/*body*","peers/**","body/**","tests/*capability*","tests/*peer*"],"work_package":"F-V01-12-TOOLS-PEERS-BODY-CAPABILITIES","subcheck":"tools_peers_body","missing_evidence_template":["typed capability inventory","presence-does-not-mint-authority control","revocation/staleness handling","real connected-client/tool receipt"]},
+    {"rule_id":"F13-SECURITY-RECOVERY","patterns":["security/**","runtime/*recovery*","runtime/*quarantine*","tests/*security*","tests/*rollback*","tests/*recovery*"],"work_package":"F-V01-13-SECURITY-RECOVERY-OBSERVABILITY","subcheck":"security_recovery","missing_evidence_template":["crash/restart/rollback matrix","stale-state rejection","prompt/tool-result injection suite","reproducible telemetry receipt"]},
+    {"rule_id":"F14-TRAINING-DATA","patterns":["training/data/**","datasets/**","eval/**","heldout/**","tests/*dataset*","tests/*heldout*"],"work_package":"F-V01-14-TRAINING-DATA-HELDOUT","subcheck":"training_data_heldout","missing_evidence_template":["frozen corpus identity/hash","held-out leakage check","Clay-native schema validation","owner authorization boundary preserved"]},
+    {"rule_id":"F15-FINAL-MODEL","patterns":["models/**","training/final/**","runtime/*model*","tests/*model_acceptance*"],"work_package":"F-V01-15-FINAL-MODEL","subcheck":"final_model","missing_evidence_template":["explicit owner training authorization if required","final model identity/hash","held-out acceptance","integration into exact Frank runtime"]},
+    {"rule_id":"F16-END-TO-END","patterns":["acceptance/**","tests/e2e/**","tests/*end_to_end*","tests/*finished*","SELF_ROOT_V0_1_FINISHED*"],"work_package":"F-V01-16-END-TO-END-ACCEPTANCE","subcheck":"end_to_end","missing_evidence_template":["same-identity full Target-VPS run","all mandatory terminal receipts","no open P0/P1","final regression/resource/adversarial acceptance"]}
   ]
 }

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "parent_run_id": "go-20260810T2156p0700-chatgpt-secondary-single-spawn-recovery",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "subject": "F-V01-08-TOKEN-API-CLIENTS",
+  "status": "CURRENT_SOURCE_GAP_WITH_TARGET_ISSUE",
+  "current_target_commits": [
+    "3de3da8fe4c5a2e25076fdb331efeaa99405cac6",
+    "2af6e127f744cedf8d3f8d38458dcad131e40361",
+    "64b7082cc5923597b6a58c6798c14581a061d964",
+    "aa046f22a7fde27d411e76f2fdafa7b47c89e793",
+    "15821e0885571d1df0efd55932113155d1a671ff"
+  ],
+  "supported_current_properties": [
+    "raw bearer secret not persisted by credential core",
+    "credential hash/id/scopes separated from self.root identity",
+    "revocation/expiry/scope fail closed in primitive token core",
+    "token ingress authenticates before exposing BUSY state",
+    "fixed credential principal controls client_id/holder_kind",
+    "all admitted token interactions route through FrankExecutionGate",
+    "BUSY payload is privacy bounded",
+    "network HTTP/TLS server is not yet implemented in this evidence",
+    "durable execution identity is explicitly not yet bound in V15"
+  ],
+  "material_gap": {
+    "id": "TOKEN_REQUEST_IDEMPOTENCY_EXECUTION_BINDING_V1",
+    "finding": "FrankTokenIngressCore validates and echoes request_id but does not use it to resolve an existing active or terminal execution. Each successful admission creates a fresh random execution_id; exact same logical transport replay while the first execution is active therefore falls through to physical BUSY instead of idempotent same execution/result.",
+    "owner_fixed_requirement": "same authenticated credential + same session + same request_id -> idempotent_same_lease_or_same_result",
+    "target_issue": 152,
+    "evidence_class": "CURRENT_SOURCE_INSPECTION_PLUS_EXISTING_TEST_EXPECTATIONS",
+    "runtime_falsifier_pending": true
+  },
+  "required_next_test": [
+    "admit C/S/R and hold execution",
+    "retry exact C/S/R while active",
+    "require same stable execution/lease identity without second physical execution",
+    "send C/S/R2 while active and require FRANK_BUSY",
+    "release to terminal then retry C/S/R and require deterministic terminal replay rather than a second task execution"
+  ],
+  "authority_boundary": "Transport idempotency may identify/replay execution receipts but must not mint truth, state-write, or effect authority; effect idempotency and current lease-epoch fencing remain separate deterministic gates.",
+  "whole_token_api_acceptance": "NOT_CLAIMED",
+  "whole_frank_v0_1_acceptance": "NOT_CLAIMED"
+}

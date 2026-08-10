@@ -4,11 +4,15 @@
 **Owner instruction date:** 2026-08-10
 **Scope:** Clay / Research Entity, Frank v0.1 deployment, VPS infrastructure, Harness, MCP/execution tooling, API access, monitoring and acceptance
 
-## New target
+## Exact target
 
-The deployment target is a **finished Frank running on the VPS continuously (24/7) and reachable through an authenticated API token** so authorized systems can communicate with Frank programmatically.
+The sole Frank v0.1 target host is the **persistent VPS**. The former Andreas-PC/Ubuntu-developer-system target is superseded.
 
-Where older target-host wording requires Frank v0.1 to exist only on Andreas' Ubuntu developer system, this directive supersedes that exclusivity. Andreas' Ubuntu system remains a valid development/acceptance/client surface, but the VPS becomes a first-class persistent Frank runtime/deployment target.
+The finished Frank must run on the VPS continuously (24/7) and be reachable through an authenticated API token so authorized systems can communicate with Frank programmatically.
+
+Andreas' PC is not a v0.1 release or acceptance target. It may still be used as an ordinary client/development access point where useful.
+
+Everything else in the current Frank/Clay v0.1 programme remains unchanged except this concrete target-host replacement. The authoritative target-host contract is `research_entity/global/FRANK_V0_1_VPS_TARGET_HOST_DIRECTIVE.md`.
 
 ## Research Entity VPS authority
 

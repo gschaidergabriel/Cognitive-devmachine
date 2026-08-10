@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260810T2216p0700-chatgpt-secondary-effect-boundary-mismatch",
+  "trigger": "claycode",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "program": "FRANK_V0_1",
+  "status": "SUPPORTED_DELTA_WITH_NEW_TARGET_VPS_PROBES_PENDING",
+  "verified_current_evidence": [
+    {
+      "class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_CLAYCODE_WP04_EFFECT_CONTRACT_DISCRIMINATOR",
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "receipt_commit": "73724172ffd444ac09427bc64ed1e71ff112f0bf",
+      "github_run_id": "31402743514",
+      "source_sha256": "10fbc45dca45fe09322b4ab7c0b6621547918dd6fa8e1d37be5817b26ab59544",
+      "result": "PASS_CURRENT_PRODUCTION_EFFECT_CONTRACT",
+      "resolved_execution_signature": "execute<T>(EffectIntent<T>, Capability, NodeId, EffectAttempt) -> EffectReceipt",
+      "one_argument_execute_contract_present": false,
+      "external_effect_performed": false
+    },
+    {
+      "class": "CURRENT_GITHUB_SOURCE",
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "path": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+      "git_blob_sha": "a2b856d1362e8ce2420338f1bd705a49a86c2c7d",
+      "result": "G9_V3_CYCLE_DIRECT_CALLS_NEEDLE_EXECUTE_EFFECT_INTENT_ARITY_1_AND_SEPARATELY_DECLares_LOWERING"
+    }
+  ],
+  "new_artifacts": [
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "commit": "3b3a6580875432efa7f371134ae6732a488f1939",
+      "artifact": "TARGET_FRANK_EFFECT_CONTRACT_SNAPSHOT.json",
+      "status": "COMMITTED"
+    },
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "commit": "0003239b14a1ec0070012d8784f71229fe73e9a8",
+      "artifact": "claycode_effect_boundary_compatibility_probe.py",
+      "status": "COMMITTED_TARGET_VPS_RECEIPT_PENDING"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "f81f28cd8c1481c082446b678e7527b7348cb13b",
+      "artifact": "runtime/frank_effect_authority_v1/authority_provenance_gap_probe.py",
+      "status": "COMMITTED_TARGET_VPS_RECEIPT_PENDING"
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "fbc908ef80cb1aecaa34e7e34a250c067a1cb4f5",
+      "artifact": ".github/workflows/frank-effect-authority-provenance-gap.yml",
+      "status": "COMMITTED_TARGET_VPS_RECEIPT_PENDING"
+    }
+  ],
+  "supported_result": "The current G9 V3 one-argument effect execution shorthand is not a valid current production Frank v0.1 call contract. The production target requires explicit request/authorization/reservation/attempt/capability/node state before execute and independent verification after it.",
+  "candidate_result_not_yet_promoted": "EffectRequest authority facts are value-level structural fields in current source/oracle; a new target-VPS probe tests whether trusted and directly constructed requests are provenance-indistinguishable. No runtime exploit or production-authority bypass is claimed until exact module/type-effect/runtime reachability is tested.",
+  "semantic_language_change": "NOT_JUSTIFIED",
+  "architecture_delta": "CANDIDATE_TYPED_NEEDLE_BOUNDARY_ADAPTER",
+  "external_effect_performed_by_this_run": false,
+  "wp04_promotion": false,
+  "whole_frank_v0_1_acceptance": false,
+  "training_authorized": false,
+  "promotion": "NONE"
+}

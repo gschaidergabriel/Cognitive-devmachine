@@ -1,4 +1,4 @@
-name: UnifiedDB Pulse Rank Index V3 VPS Falsifier
+name: UnifiedDB Pulse Runtime V3 Hostinger Falsifier
 
 on:
   workflow_dispatch:
@@ -7,18 +7,21 @@ on:
     paths:
       - 'research_entity/runtime/database_pulse_rank_index_v3.py'
       - 'research_entity/runtime/test_database_pulse_rank_index_v3.py'
+      - 'research_entity/runtime/database_pulse_runtime_v3.py'
+      - 'research_entity/runtime/test_database_pulse_runtime_v3.py'
       - 'tools/database_pulse_rank_index_v3_benchmark.py'
+      - 'tools/database_pulse_rank_index_v3_randomized_falsifier.py'
       - '.github/workflows/database-pulse-v3-rank-index-vps.yml'
 
 permissions:
   contents: write
 
 concurrency:
-  group: unifieddb-pulse-rank-index-v3-vps-main
+  group: unifieddb-pulse-runtime-v3-vps-main
   cancel-in-progress: true
 
 jobs:
-  rank-index-falsifier:
+  runtime-v3-falsifier:
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     steps:
@@ -42,36 +45,46 @@ jobs:
           print('SQLITE_JSON_EXPRESSION_INDEX=PASS')
           PY
 
-      - name: Compile V3 candidate
+      - name: Compile V3 stack
         run: |
           set -euo pipefail
           python3 -m py_compile \
             research_entity/runtime/database_pulse_rank_index_v3.py \
             research_entity/runtime/test_database_pulse_rank_index_v3.py \
-            tools/database_pulse_rank_index_v3_benchmark.py
+            research_entity/runtime/database_pulse_runtime_v3.py \
+            research_entity/runtime/test_database_pulse_runtime_v3.py \
+            tools/database_pulse_rank_index_v3_benchmark.py \
+            tools/database_pulse_rank_index_v3_randomized_falsifier.py
 
-      - name: Run V3 falsifier suite
+      - name: Run V3 rank-index and runtime falsifiers
         run: |
           set -euo pipefail
-          python3 -m unittest -v research_entity.runtime.test_database_pulse_rank_index_v3
+          python3 -m unittest -v \
+            research_entity.runtime.test_database_pulse_rank_index_v3 \
+            research_entity.runtime.test_database_pulse_runtime_v3
+
+      - name: Run randomized differential falsifier
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/benchmarks/database_pulse
+          python3 tools/database_pulse_rank_index_v3_randomized_falsifier.py \
+            --seeds 12 --initial-keys 180 --steps 120 --budget 64 \
+            --output research_entity/benchmarks/database_pulse/rank_index_v3_randomized_vps.json
 
       - name: Run matched V2 versus V3 benchmark
         run: |
           set -euo pipefail
-          mkdir -p research_entity/benchmarks/database_pulse
           python3 tools/database_pulse_rank_index_v3_benchmark.py \
             --rows 3000 --budget 64 --repeats 200 --updates 100 \
-            --output research_entity/benchmarks/database_pulse/rank_index_v3_vps.json \
-            > /tmp/rank-index-v3.stdout
-          cat /tmp/rank-index-v3.stdout
+            --output research_entity/benchmarks/database_pulse/rank_index_v3_vps.json
 
-      - name: Resolve current program status from current main
+      - name: Resolve current program status
         run: |
           set -euo pipefail
           python3 tools/program_progress.py --json > /tmp/program-progress.json
           cat /tmp/program-progress.json
 
-      - name: Attach real runner and current-program metadata
+      - name: Attach Hostinger metadata
         env:
           GIT_SHA: ${{ github.sha }}
           RUN_ID: ${{ github.run_id }}
@@ -81,8 +94,7 @@ jobs:
           python3 - <<'PY'
           import json, os, pathlib, platform, resource, socket, sqlite3, subprocess, sys
           from datetime import datetime, timezone
-          p=pathlib.Path('research_entity/benchmarks/database_pulse/rank_index_v3_vps.json')
-          x=json.loads(p.read_text(encoding='utf-8'))
+          base=pathlib.Path('research_entity/benchmarks/database_pulse')
           def cmd(args):
               try: return subprocess.check_output(args,text=True,stderr=subprocess.STDOUT,timeout=5).strip()
               except Exception as exc: return f'UNKNOWN:{type(exc).__name__}'
@@ -97,7 +109,7 @@ jobs:
                   if line.startswith('MemTotal:'):
                       mem=line.split(':',1)[1].strip(); break
           except Exception: pass
-          x['execution_metadata']={
+          meta={
               'evidence_class':'REAL_SELF_HOSTED_UBUNTU_EXECUTION',
               'scope':'REMOTE_PRELIMINARY_DATABASE_PULSE_NOT_ANDREAS_TARGET_ACCEPTANCE',
               'created_at':datetime.now(timezone.utc).isoformat(),
@@ -117,9 +129,11 @@ jobs:
               'kernel':cmd(['uname','-a']),
               'filesystem':cmd(['df','-T','.']),
           }
-          x['program_progress']=json.loads(pathlib.Path('/tmp/program-progress.json').read_text())
-          x['release_boundary']='Remote Hostinger evidence only; not final Andreas Ubuntu target acceptance.'
-          p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          for name in ('rank_index_v3_randomized_vps.json','rank_index_v3_vps.json'):
+              p=base/name; x=json.loads(p.read_text(encoding='utf-8')); x['execution_metadata']=meta
+              x['program_progress']=json.loads(pathlib.Path('/tmp/program-progress.json').read_text())
+              x['release_boundary']='Remote Hostinger evidence only; not final Andreas Ubuntu target acceptance.'
+              p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
           PY
 
       - name: Enforce V3 decision gates
@@ -127,8 +141,11 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import json
-          p=json.load(open('research_entity/benchmarks/database_pulse/rank_index_v3_vps.json',encoding='utf-8'))
+          base='research_entity/benchmarks/database_pulse/'
+          rnd=json.load(open(base+'rank_index_v3_randomized_vps.json',encoding='utf-8'))
+          p=json.load(open(base+'rank_index_v3_vps.json',encoding='utf-8'))
           c=p['correctness']
+          assert rnd['pass'] is True,rnd
           assert c['wide_reference_focus']==c['expected_focus'],p
           assert c['active_field_correct'] is True,p
           assert c['rank_index_correct'] is True,p
@@ -137,21 +154,24 @@ jobs:
           assert c['rank_index_verify_initial']['pass'] is True,p
           assert c['rank_index_verify_final']['pass'] is True,p
           assert p['execution_metadata']['scope']=='REMOTE_PRELIMINARY_DATABASE_PULSE_NOT_ANDREAS_TARGET_ACCEPTANCE'
-          print('PULSE_RANK_INDEX_V3_VPS=PASS')
+          print('PULSE_RUNTIME_V3_HOSTINGER=PASS')
           PY
 
-      - name: Persist V3 receipt
+      - name: Persist Hostinger receipts
         run: |
           set -euo pipefail
-          cp research_entity/benchmarks/database_pulse/rank_index_v3_vps.json /tmp/rank_index_v3_vps.json
+          base=research_entity/benchmarks/database_pulse
+          cp "$base/rank_index_v3_randomized_vps.json" /tmp/
+          cp "$base/rank_index_v3_vps.json" /tmp/
           git reset --hard HEAD
           git clean -fd
-          mkdir -p research_entity/benchmarks/database_pulse
-          cp /tmp/rank_index_v3_vps.json research_entity/benchmarks/database_pulse/rank_index_v3_vps.json
-          git config user.name 'clay-rank-index-v3-runner'
-          git config user.email 'clay-rank-index-v3-runner@users.noreply.github.com'
-          git add research_entity/benchmarks/database_pulse/rank_index_v3_vps.json
-          git commit -m 'evidence(unifieddb): persist Pulse rank-index V3 Hostinger falsifier [skip ci]' || exit 0
+          mkdir -p "$base"
+          cp /tmp/rank_index_v3_randomized_vps.json "$base/"
+          cp /tmp/rank_index_v3_vps.json "$base/"
+          git config user.name 'clay-pulse-runtime-v3-runner'
+          git config user.email 'clay-pulse-v3-runner@users.noreply.github.com'
+          git add "$base/rank_index_v3_randomized_vps.json" "$base/rank_index_v3_vps.json"
+          git commit -m 'evidence(frank): persist Pulse Runtime V3 Hostinger falsifier [skip ci]' || exit 0
           for attempt in 1 2 3 4 5 6; do
             git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
             sleep $((attempt*3))
@@ -161,5 +181,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: unifieddb-pulse-rank-index-v3
-          path: research_entity/benchmarks/database_pulse/rank_index_v3_vps.json
+          name: frank-pulse-runtime-v3-hostinger
+          path: research_entity/benchmarks/database_pulse/*v3*vps.json

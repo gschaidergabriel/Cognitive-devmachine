@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "run_id": "q23-20260810T1737p0700",
+  "retrieved_at": "2026-08-10T17:37:00+07:00",
+  "freshness": "LIVE_CURRENT_PRIMARY_SOURCE_REFRESH",
+  "queries": [
+    "Qwen3.5-4B official multimodal model card",
+    "Qwen3.5-4B config vision encoder patch size merge size",
+    "Qwen3-VL official 4B visual agent architecture",
+    "Qwen3-VL-Embedding official multimodal embedding architecture"
+  ],
+  "sources": [
+    {
+      "id": "SRC-Q23-QWEN35-CONFIG",
+      "class": "OFFICIAL_MODEL",
+      "ref": "https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/config.json",
+      "finding": "Qwen3.5-4B exposes image/video tokens and a 24-layer vision encoder with hidden size 1024, output hidden size 2560, patch size 16 and spatial merge size 2."
+    },
+    {
+      "id": "SRC-Q23-QWEN35-CARD",
+      "class": "OFFICIAL_MODEL",
+      "ref": "https://huggingface.co/Qwen/Qwen3.5-4B",
+      "finding": "Official model card describes Qwen3.5-4B as a 4B causal language model with Vision Encoder and image-text-to-text usage."
+    },
+    {
+      "id": "SRC-Q23-QWEN3VL",
+      "class": "OFFICIAL_MODEL_REPOSITORY",
+      "ref": "https://github.com/QwenLM/Qwen3-VL",
+      "finding": "Qwen3-VL exposes visual-agent, spatial grounding, OCR, video and token-budget capabilities, supporting direct study of native multimodal control rather than assuming an external semantic Retina stack."
+    },
+    {
+      "id": "SRC-Q23-QWEN3VL-EMBED",
+      "class": "OFFICIAL_MODEL_REPOSITORY",
+      "ref": "https://github.com/QwenLM/Qwen3-VL-Embedding",
+      "finding": "Qwen provides a dedicated multimodal embedding/reranking family with an explicit retrieval representation objective and unified text/image/screenshot/video space; this is counterevidence to assuming raw base-VLM visual states are automatically calibrated familiarity embeddings."
+    },
+    {
+      "id": "SRC-Q23-TRANSFORMERS-QWEN35",
+      "class": "OFFICIAL_RUNTIME_IMPLEMENTATION",
+      "ref": "https://github.com/huggingface/transformers/blob/main/src/transformers/models/qwen3_5/modeling_qwen3_5.py",
+      "finding": "Current Transformers implementation exposes a distinct vision path before language-model generation, preserving a physical interception surface for representation experiments."
+    }
+  ],
+  "counterevidence_search": true,
+  "general_web_status": "AVAILABLE_ON_RETRY",
+  "primary_repo_status": "AVAILABLE",
+  "material_result": "STRENGTHENS_QNDRF_BUT_PRESERVES_DEDICATED_LIGHT_EMBEDDING_COUNTERBASELINE"
+}

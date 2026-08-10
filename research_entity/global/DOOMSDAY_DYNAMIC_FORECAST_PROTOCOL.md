@@ -1,88 +1,82 @@
-# DOOMSDAY Dynamic Forecast Protocol — Clay 0.1 Chief-Developer First Test
+# DOOMSDAY Dynamic Forecast Protocol — Finished self.root / Frank v0.1
 
-**Status:** PROJECT_OWNER_FIXED_FORECAST_METHOD
-**Target:** `Clay 0.1`
-**Display name:** `DOOMSDAY` (internal joke)
-**Acceptance contract:** `research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md`
+**Status:** PROJECT_OWNER_FIXED_FORECAST_METHOD  
+**Target:** finished `self.root / Frank v0.1`  
+**Display name:** `DOOMSDAY`  
+**Terminal acceptance contract:** `research_entity/global/SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md`  
+**Pre-terminal developer-test contract:** `research_entity/global/CLAY_0_1_CHIEF_DEVELOPER_ACCEPTANCE_CONTRACT.md`
 
-## 0. Target definition
+## 0. Owner-fixed target definition
 
-DOOMSDAY is **not a public or production release**.
+DOOMSDAY means **v0.1 is finished**.
 
-It is the moment when the first complete Clay 0.1 system is good enough that the chief developer may begin the first real internal hands-on test under the strict acceptance contract.
+It does not mean merely:
 
-Required system identity:
+- ready for a first developer test;
+- integrated enough for hands-on evaluation;
+- one binary exists;
+- a model has been trained;
+- the current milestone passed.
 
-`Clay-programmed FRANK architecture`
-`+ frozen ClayCode semantics/runtime`
-`+ one-module/binary distilled executable architecture`
-`+ UnifiedDB`
-`+ final fully fine-tuned Clay-native model`
-`+ real project-controlled hardware boot`
-`+ complete required observability/replay/recovery/safety instrumentation`
-`+ strict internal acceptance suite PASS`
-`= Clay 0.1 ready for chief-developer first test`
+The historical chief-developer-first-test gate is now a pre-terminal validation milestone. It may provide evidence toward DOOMSDAY but cannot itself make DOOMSDAY PASS.
 
-A Reference Harness, Clay Harness, binary without the final model, fine-tuned model without the real architecture, or integrated system with skipped mandatory tests is not DOOMSDAY.
+Terminal identity and required gates are defined by `SELF_ROOT_V0_1_FINISHED_ACCEPTANCE_CONTRACT.md`.
 
-## 1. "Perfect" means contract-perfect for first internal test
+## 1. Finished-v0.1 content
 
-Absolute absence of every possible future bug cannot be proven. Therefore "perfect" for DOOMSDAY is operationally defined by the Chief Developer Acceptance Contract:
+At minimum the same accepted target-VPS identity must contain and pass:
 
-- zero known P0/P1 defects;
-- zero unresolved architecture-contract violations;
-- zero skipped mandatory tests;
-- no fake/mock path on defining Clay 0.1 behavior;
-- required H1/H2/H3 differential continuity passes;
-- UnifiedDB/state/replay/recovery invariants pass;
-- effect-authority/safety invariants pass;
-- required GWT/Hyperposition observability exists and is self-consistent;
-- required fuzz/property/adversarial/race/concurrency/crash/recovery thresholds pass;
-- final fully fine-tuned model is really integrated;
-- exact accepted identity boots reproducibly on project-controlled hardware.
+- `self.root` server-binary/state-lineage identity, human-facing as Frank;
+- accepted Hostinger Ubuntu target VPS embodiment;
+- production token-authenticated API;
+- ClayCode-only cognition;
+- state-aware German <-> ClayCode translator;
+- general-purpose ClayCode compiler/runtime;
+- H1/H2/H3 continuity and one-module/binary architecture;
+- UnifiedDB + derived ClayGraph;
+- Digital Retina multimodal perception + adaptive Micro Visual Classifier;
+- proactive/autotelic persistent long-horizon agency;
+- authority-separated open-web JSON -> ClayCode ingress;
+- deterministic default-allow non-destructive effect authority;
+- final validated Clay-native model;
+- restart/recovery/rollback/state-lineage continuity;
+- complete mandatory differential/fuzz/adversarial/replay/resource/target-VPS evidence;
+- zero open P0/P1 and zero mandatory NOT_RUN/FAIL gates.
 
-This is an internal developer acceptance milestone, not a shipping milestone.
+## 2. Dynamic progress principle
 
-## 2. No fixed DOOMSDAY date
+DOOMSDAY progress is not a count of files or stages. It is an effort-weighted estimate of **verified completed work toward the current complete v0.1 contract**.
 
-The repository never stores one authoritative fixed DOOMSDAY date.
+Two evidence classes contribute:
 
-Every status calculation recomputes it from a current critical-path table, current evidence, measured throughput, capabilities/APIs, hardware availability, verified jumps/blockers and historical earned work.
+1. evidence-mapped historical earned work;
+2. verified completion within the current complete critical-path scope.
 
-## 3. Historical earned work is first-class
+Scope discovery may move the percentage backward. That is correct: adding a newly owner-fixed mandatory v0.1 capability increases the denominator until equivalent historical/current work is mapped to it.
 
-The project did not begin when the current release workspaces were created.
+## 3. Dynamic historical earned-work renormalization
 
-Owner-reported historical investment:
+The evidence-mapped historical hours are stable evidence; the **percentage represented by them is not static** when the target scope changes.
 
-`~8 months * 4 active days/week * 10 h/day ~= 1,390 h`
+After Level 0 use:
 
-That history includes FRANK architecture development, XENO, ClayCode, GWT/emergence work, experiments, measurements, failed approaches and negative results.
+`historical_equivalent_hours = HISTORICAL_EARNED_WORK.evidence_mapped_avoided_future_hours.center`
 
-Therefore DOOMSDAY progress has two layers:
+`current_scope_hours = current DOOMSDAY effort scope converted using configured owner hours/day`
 
-1. **historical earned work** — prior work that demonstrably eliminates, implements or de-risks current Clay 0.1 work;
-2. **current remaining scope progress** — progress through the present critical-path workstreams.
+`historical_baseline = historical_equivalent_hours / (historical_equivalent_hours + current_scope_hours)`
 
-Canonical historical mapping:
+Then:
 
-`research_entity/forecast/HISTORICAL_EARNED_WORK.json`
+`overall_progress = historical_baseline + (1 - historical_baseline) * current_scope_progress`
 
-During Level 0, while exact mapping is incomplete, a clearly labeled temporary calibration prior may be used. It must never be called exact. Once Level 0 finishes, evidence-mapped reusable/avoided current-work equivalents replace that prior.
+Do not reuse an old stored baseline percentage after the critical-path denominator changes.
 
-Historical hours with no demonstrated connection to current Clay 0.1 remain valuable history but do not inflate completion.
+The stored `evidence_mapped_project_baseline_percent` is historical audit output for the scope at the time it was computed, not an eternal denominator.
 
-## 4. Level 0 is a 3-hour calibration/assimilation sprint
+## 4. Current critical-path families
 
-Level 0 has a hard active wall-clock ceiling of **3 hours**.
-
-Its purpose is not to redo eight months of work. It rapidly inventories/deduplicates/extracts the 400 MB Drive archive plus Project-Frankenstein, reconstructs lineage, integrates missing knowledge and maps historical earned work onto the current Clay 0.1 path.
-
-The 3-hour SLA changes throughput architecture, not evidence standards.
-
-## 5. Required critical-path workstreams
-
-At minimum every forecast evaluates:
+The forecast model must represent all current mandatory v0.1 work, including at minimum:
 
 1. `L0_ARCHIVE_ASSIMILATION`
 2. `BASE_CLAYCODE_RELEASE`
@@ -94,146 +88,110 @@ At minimum every forecast evaluates:
 8. `OWNER_TRAINING_RELEASE_GATE`
 9. `FINAL_MODEL_FINE_TUNE`
 10. `MODEL_EXPORT_RUNTIME_PACKAGE`
-11. `CLAY_0_1_FULL_INTEGRATION`
-12. `PROJECT_HARDWARE_DEPLOYMENT`
-13. `CLAY_0_1_ACCEPTANCE_RUN`
+11. `SELF_ROOT_TOKEN_API`
+12. `SELF_ROOT_PROACTIVE_AGENCY_WEB_INGRESS`
+13. `SELF_ROOT_IDENTITY_TRANSLATION_RECOVERY`
+14. `CLAY_0_1_FULL_INTEGRATION`
+15. `TARGET_VPS_END_TO_END_DEPLOYMENT`
+16. `V0_1_FULL_ACCEPTANCE_RUN`
+17. `SELF_ROOT_V0_1_FINISHED`
 
-These names are implementation workstreams, not public-release stages. Rows may change when evidence proves the real critical path changed.
+Rows may be decomposed/fused when evidence shows a better dependency model, but mandatory semantics may not disappear.
 
-Canonical row model:
-`research_entity/forecast/DOOMSDAY_FORECAST_MODEL.json`
+## 5. Forecast evidence inputs
 
-## 6. Dynamic evidence inputs
-
-Read each forecast from current state including:
+Every resolution reads current:
 
 - `PROGRAM_STATE.json`;
-- current workspaces/test receipts;
-- `666_WORKSPACE.json`;
+- stage/workspace/test receipts;
 - `HISTORICAL_EARNED_WORK.json`;
 - throughput state;
-- capacity/hardware state;
-- ClayCode/Harness/UnifiedDB evidence;
-- final training/eval/model evidence when available;
-- developer-acceptance evidence;
+- capacity/target-VPS state;
+- ClayCode/Harness/UnifiedDB/Retina/model evidence;
+- token-API evidence;
+- proactive-agency/Web-ingress evidence;
+- identity/translation/recovery evidence;
+- effect-authority evidence;
 - `DOOMSDAY_EVENTS.jsonl`;
-- external tool registry;
-- every `*_RESEARCH_CAPABILITY.json` extension;
-- capability-impact rules.
+- current external capability registry and calibrated impacts.
 
-## 7. Remaining-effort derivation
+Old target semantics never override newer owner-fixed v0.1 requirements.
 
-Priority order per row:
+## 6. Remaining-effort priority
+
+Per row use, in order:
 
 1. measured same-row remaining effort/throughput;
-2. evidence-mapped historical work that eliminates/de-risks this row;
-3. measured analogous project throughput;
-4. calibrated current-stage ETA;
-5. explicit engineering prior.
+2. verified work-package/subcheck completion;
+3. evidence-mapped historical work explicitly connected to that row;
+4. measured analogous project throughput;
+5. calibrated engineering prior.
 
-Never prefer an old prior over newer measured evidence.
+A claimed/in-progress task is not completed work.
 
-The row priors represent **remaining work from the current state**, not total lifetime project effort.
+## 7. Dependency graph and forecast
 
-## 8. APIs/tools and technological jumps
+Compute earliest finish through the current precedence graph. Independent work may overlap. Dependency cycles fail closed.
 
-Every forecast automatically scans the external tool registry and capability-extension files.
+The terminal row is `SELF_ROOT_V0_1_FINISHED`.
 
-A new API is immediately visible but forecast-neutral until runtime verification and a relevant benchmark/receipt exist.
+`V0_1_FULL_ACCEPTANCE_RUN` is necessary but not terminal until the exact finished-v0.1 receipt resolves PASS.
 
-States:
+## 8. Target VPS and capacity
 
-- `ACTIVE_CALIBRATED`
-- `ACTIVE_UNCALIBRATED`
-- `POTENTIAL_UNVERIFIED`
-- `NO_DIRECT_PATH_IMPACT`
+The accepted Hostinger Ubuntu VPS is the final v0.1 body/acceptance host until superseded by the owner.
 
-Same-row provider speedups do not blindly multiply. By default use the strongest single verified factor unless a joint benchmark proves a combined factor.
+Planned additional GPU/storage capacity may accelerate work but does not delay DOOMSDAY merely because it is not yet available, and it does not silently change target identity.
 
-Verified discontinuous jumps may accelerate or eliminate work; verified blockers/rework may push the date later. All must preserve receipts and affected rows.
+The final token API is distinct from GitHub Actions/SSH/developer transport.
 
-## 9. Capacity and hardware
+## 9. Training authorization
 
-Capacity is time-dependent.
+Final paid/model training never begins automatically. Before owner authorization, forecast dates remain conditional on immediate authorization when frozen training data is ready. Unknown human waiting time is not invented.
 
-- only currently verified available resources count as current throughput;
-- future hardware is an explicit forecast assumption until active;
-- effective parallelism comes from completed independent work, not raw worker count;
-- owner cadence defaults to 10 active collaboration hours/day.
+## 10. Milestone progress versus DOOMSDAY progress
 
-The chief-developer target requires a final acceptance boot on project-controlled hardware, but the forecast may account for future verified capacity when its date is known.
+`CURRENT MILESTONE` is a strict local gate percentage derived from the current stage/workspace.
 
-## 10. Dependency / critical path
+`DOOMSDAY` is the global finished-v0.1 percentage derived from the complete dynamic scope plus renormalized historical earned work.
 
-Compute earliest finish through the precedence graph rather than blindly summing all work.
+The two bars intentionally answer different questions and must not be substituted for one another.
 
-Independent preparatory work may overlap. Cycles fail closed.
+## 11. Compact output
 
-The terminal row remains the strict `CLAY_0_1_ACCEPTANCE_RUN` defined by the Chief Developer Acceptance Contract.
+Use:
 
-## 11. Training authorization
+`CURRENT MILESTONE`
+`Stage: ...`
+`Progress: [....................] N%`
 
-Final paid/model training never starts automatically.
+and separately:
 
-Before owner authorization the forecast is explicitly conditional on immediate authorization when the frozen data/eval gate becomes ready. Unknown human waiting time is not invented.
-
-## 12. Fine-tuning method neutrality
-
-Clay 0.1 requires the final validated fully fine-tuned Clay-native model. The exact method may be LoRA/QLoRA, adapter merge, staged tuning, full fine-tuning, distillation+tuning or a future method if it passes the frozen acceptance/eval contract.
-
-## 13. Dynamic DOOMSDAY progress
-
-DOOMSDAY progress is **earned-work + remaining-scope progress**, not a simple count of current workspaces.
-
-During historical calibration:
-
-`overall = historical_calibration + (1 - historical_calibration) * current_remaining_scope_progress`
-
-After Level 0:
-
-`historical_calibration` is replaced with evidence-mapped earned work.
-
-Display a calibration band while mapping is incomplete. Scope discovery may move progress backward. Verified jumps may move it forward discontinuously.
-
-NEXT LEVEL remains a separate strict local gate percentage.
-
-## 14. Forecast outputs
-
-Compact output includes:
-
-`DOOMSDAY / Clay 0.1 — chief-developer first test`
-`Progress: [........] N%`
-`Calibration band: X-Y%` when applicable
+`DOOMSDAY / finished self.root v0.1`
+`Progress: [....................] N%`
 `Forecast: YYYY-MM-DD - YYYY-MM-DD`
 `Center: YYYY-MM-DD`
 `Confidence: ...`
 `Conditional on training authorization: yes|no`
-`Basis: dynamic critical path + historical earned work + live APIs/capacity`
+`Basis: complete current v0.1 critical path + dynamically renormalized historical earned work + measured capabilities/capacity`
 
-## 15. Mandatory regression tests
+## 12. Mandatory regression properties
 
-Forecast changes must test at minimum:
+The resolver must prove at minimum:
 
-- baseline;
-- historical earned-work calibration is reflected and not labeled exact;
-- partial current progress increases overall progress from the earned-work baseline;
-- verified accelerator;
-- unverified accelerator rejection;
-- blocker/rework;
-- auto-discovered APIs;
-- calibrated vs uncalibrated API effect;
-- no blind API multiplier multiplication;
-- future hardware parsing;
-- owner authorization;
-- completed future workspace;
-- verified elimination;
-- measured throughput outranks prior;
-- new dependency can lower progress/delay forecast;
-- dependency cycles fail closed;
-- acceptance target remains internal chief-developer test, not public release.
+- current-milestone and DOOMSDAY bars are independent;
+- a newly mandatory unfinished v0.1 row can lower DOOMSDAY percentage;
+- mapped historical equivalent hours stay fixed while their percentage renormalizes when scope changes;
+- verified completion moves progress upward;
+- in-progress/claimed work is not falsely completed;
+- verified accelerators/blockers affect forecast correctly;
+- unverified capability claims do not affect completion;
+- target VPS is used as final acceptance host;
+- token API cannot be replaced by SSH/GitHub transport;
+- proactive-agency/Web-ingress gates are mandatory;
+- final terminal row is `SELF_ROOT_V0_1_FINISHED`;
+- chief-developer-first-test readiness alone cannot produce DOOMSDAY PASS.
 
-## 16. Epistemic rule
+## 13. Epistemic rule
 
-DOOMSDAY is a dynamic engineering forecast, not a promise.
-
-The project is in an endgame/consolidation phase only to the extent supported by the historical earned-work mapping and current test evidence. The forecast must become more accurate as Level 0 and subsequent Harness work turn that history into executable evidence.
+DOOMSDAY is a dynamic engineering forecast, not a promise. The bar represents the best current evidence-based estimate of how much of the **finished v0.1 contract** has been earned. It must change when the contract, evidence or measured work state changes.

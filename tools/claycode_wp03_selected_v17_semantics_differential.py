@@ -8,6 +8,7 @@ C) the research V7 typed-fn + V17 relation-membrane composition.
 
 The goal is to detect cross-version semantic inheritance, especially compact `x-y` and
 hyphenated identifiers, before WP03 binds typed IR to a grammar that differs from WP02.
+PR-observability probe: no semantic test change from main.
 """
 from __future__ import annotations
 

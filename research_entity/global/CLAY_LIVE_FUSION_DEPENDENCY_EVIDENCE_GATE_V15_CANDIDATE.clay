@@ -1,0 +1,78 @@
+module clay.research.live_fusion_dependency_evidence_gate_v15
+version "0.15-shadow-candidate"
+status CANDIDATE_NOT_PROMOTED
+
+goal="Frank v0.1 voll lauffähig auf Andreas PC"
+parent_transport_candidate=PR156
+parent_strong_mesh_candidate=PR166
+parent_live_fusion_mesh=@research_entity/global/CLAY_LIVE_FUSION_MESH_V2_CANDIDATE.clay
+state_authority=UnifiedDB
+dependency_projection=ClayGraph
+
+// Narrow delta: a current dependency projection is not automatically a causal-trust witness.
+// Stronger networking should increase causal reach without allowing associative graph edges to
+// acquire blocking/effect authority merely by being current or highly activated.
+
+record DependencyWitnessV15 {
+  worker_id:Ref
+  scope_id:Ref
+  witness_class:DECLARED_WORK_DEPENDENCY|VERIFIED_CAUSAL|REPLAY_CONFIRMED|AUTHORITATIVE_REFERENCE|ASSOCIATIVE_ONLY|HEURISTIC|EMBEDDING_NEIGHBOR|LEXICAL|UNKNOWN
+  current:Bool
+  provenance_refs:Set<Ref>
+}
+
+record EvidenceGatedRouteV15 {
+  event_id:Ref
+  worker_id:Ref
+  parent_class:INDEX_ONLY|NEXT_CHECKPOINT|INTERRUPT_NEXT_SAFE_POINT
+  gated_class:INDEX_ONLY|NEXT_CHECKPOINT|INTERRUPT_NEXT_SAFE_POINT
+  hard_witness_count:Int
+  soft_witness_count:Int
+  stale_witness_count:Int
+  verification_required:Bool
+  projection_accepted:Bool
+  authority:Ref
+}
+
+rule direct_route -> preserve(parent_route)
+rule dependency_only + stale_projection -> reject_dependency_upgrade + request_repair_if_material
+rule dependency_only + worker_projection_mismatch -> fail_closed
+rule dependency_only + proposed_interrupt + current_hard_witness -> retain_interrupt
+rule dependency_only + proposed_interrupt + no_current_hard_witness -> NEXT_CHECKPOINT + verification_required
+rule dependency_only + soft_or_unknown_witness -> may_increase_visibility_but_never_mint_blocking_authority
+rule verified_reconciliation_may_promote_soft_witness_to_hard only with provenance_bound_evidence
+rule ClayGraph_activation != truth
+rule delivery != reconstruction != use != effect
+rule routing != causal_credit
+rule witness != effect_authority
+rule candidate remains SHADOW_ONLY until real_repo_replay+fault+resource+recovery evidence
+
+measure false_interrupt_rate
+measure true_interrupt_recall
+measure checkpoint_verification_load
+measure verification_resolution_latency
+measure stale_witness_rejection
+measure false_dependency_edge_recovery
+measure active_delivery_amplification
+measure CPU_RAM_IO_network_cost
+
+promotion requires {
+  current_main_integration;
+  matched_real_repository_replay;
+  false_dependency_edge_fault_injection;
+  stale_projection_fault_injection;
+  missing_dependency_edge_fault_injection;
+  duplicate_and_out_of_order_replay;
+  crash_restart_recovery;
+  parent_PR156_transport_semantics_preserved;
+  PR165_lease_fencing_composition_test;
+  PR166_dependency_reach_benefit_retained_or_explained;
+  Hostinger_Ubuntu_execution_receipt;
+  rollback;
+}
+
+invariant stronger_connectivity_does_not_mint_truth
+invariant associative_dependency_does_not_mint_blocking_authority
+invariant direct_verified_conflict_is_not_weakened_by_missing_graph_witness
+invariant Frank_remains_separate_research_subject
+invariant Frank_self_harness_authority=PROPOSAL_ONLY

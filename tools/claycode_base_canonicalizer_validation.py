@@ -31,11 +31,15 @@ def run() -> dict:
     def result(name, ok, detail=None):
         checks.append({"name": name, "pass": bool(ok), "detail": detail})
 
+    # Layout/comments must not alter semantic identity.
     a = front.compile_frontend("module clay.demo\nlaw residual >= 0\n", grammar)
     b = front.compile_frontend("// ignored comment\nmodule   clay.demo\n\nlaw residual>=0\n", grammar)
     result("layout_comment_semantic_equivalence", a["semantic_hash"] == b["semantic_hash"], {"a": a["semantic_hash"], "b": b["semantic_hash"]})
     result("source_identity_remains_exact", a["source_sha256"] != b["source_sha256"])
 
+    # V17 repair invariant: horizontal trivia before a call parenthesis cannot change a
+    # qualified `owns` call into a dotted-prefix relation. The prefix relation remains a
+    # semantically distinct program.
     owns_call_tight = front.compile_frontend("rule Needle.owns(X)\n", grammar)
     owns_call_spaced = front.compile_frontend("rule Needle.owns (X)\n", grammar)
     owns_call_long = front.compile_frontend("rule Needle.owns          (X)\n", grammar)
@@ -47,6 +51,7 @@ def run() -> dict:
     )
     result("qualified_owns_call_distinct_from_prefix_relation", owns_call_tight["semantic_hash"] != owns_prefix["semantic_hash"])
 
+    # Semantic operator/order mutations must remain distinguishable in this surface AST.
     gt = front.compile_frontend("module clay.demo\nlaw residual > 0\n", grammar)
     lt = front.compile_frontend("module clay.demo\nlaw residual < 0\n", grammar)
     result("operator_mutation_discriminated", a["semantic_hash"] != gt["semantic_hash"] and gt["semantic_hash"] != lt["semantic_hash"])
@@ -54,16 +59,19 @@ def run() -> dict:
     ordered_b = front.compile_frontend("module clay.demo\nrule external_effect lifecycle=[AUTHORIZED,REQUESTED,EXECUTED]\n", grammar)
     result("ordered_sequence_mutation_discriminated", ordered_a["semantic_hash"] != ordered_b["semantic_hash"])
 
+    # Generic String identity is exact after escape decoding: escape spelling can vary, scalar sequence cannot.
     literal = front.compile_frontend('module clay.demo\nrule label="é"\n', grammar)
     escaped = front.compile_frontend('module clay.demo\nrule label="\\u00e9"\n', grammar)
     decomposed = front.compile_frontend('module clay.demo\nrule label="e\\u0301"\n', grammar)
     result("string_escape_equivalence", literal["semantic_hash"] == escaped["semantic_hash"])
     result("string_exact_scalar_identity", literal["semantic_hash"] != decomposed["semantic_hash"])
 
+    # Canonical serialization must be byte-stable.
     again = front.compile_frontend("module clay.demo\nlaw residual >= 0\n", grammar)
     result("repeat_determinism", a["semantic_hash"] == again["semantic_hash"] and a["contract_hash"] == again["contract_hash"])
     result("canonical_json_repeat_determinism", front.canonical_bytes(a["canonical_ast"]) == front.canonical_bytes(again["canonical_ast"]))
 
+    # Invalid syntax / reserved-keyword misuse must reject.
     for name, source in {
         "reserved_if_identifier_rejected": "module clay.demo\nsurface if\n",
         "dangling_operator_rejected": "module clay.demo\nlaw residual >=\n",
@@ -75,12 +83,16 @@ def run() -> dict:
         except UnexpectedInput as exc:
             result(name, True, type(exc).__name__)
 
+    # Lone surrogate is syntactically escaped JSON but is not a Unicode scalar value.
     try:
         front.compile_frontend('module clay.demo\nrule label="\\ud800"\n', grammar)
         result("lone_surrogate_rejected", False, "unexpected_accept")
     except front.CanonicalizationError as exc:
         result("lone_surrogate_rejected", True, str(exc))
 
+    # Cross-path closure: execute the standalone canonicalizer through its real CLI, compare
+    # its full-corpus canonical hashes against the same canonicalizer fed by the production
+    # parser constructor, and require its bounded placeholder lesion/rescue tripwire to pass.
     if PARITY_OUT.exists():
         PARITY_OUT.unlink()
     cp = subprocess.run(

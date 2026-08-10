@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "run_id": "q23-20260810T2242p0700-chatgpt-secondary-mtmd-feature-epoch-a7f1",
   "hypotheses": [
     {
@@ -76,6 +76,36 @@
       "status": "OPEN",
       "confidence": 0.91,
       "uncertainty": 0.18
+    },
+    {
+      "hypothesis_id": "H-Q23-DUAL-SCALE-GUI-01",
+      "parent_hypotheses": ["H-QNDRF-03", "H-QNDRF-05"],
+      "claim": "For GUI/screen perception, Frank should test a dual-scale evidence policy that preserves a cheap global structural anchor while purchasing high-detail Qwen encoding only for changed/action-relevant regions, rather than defaulting to ROI-only deep perception.",
+      "why_it_matters": "Static background/layout and off-ROI modal state can remain causally relevant even when the changed crop is local; preserving a cheap global anchor can reduce hidden-context failures without paying full deep-frame cost.",
+      "strongest_counterhypothesis": "ROI-only plus prior PerceptualField/world state is sufficient and any global anchor adds redundant pixels/tokens/latency with no measurable outcome gain.",
+      "falsifier": "Matched GUI episodes compare ROI_ONLY, GLOBAL_HASH_PLUS_ROI, LOW_DETAIL_GLOBAL_PLUS_ROI and FULL_FRAME under context swaps, off-ROI modal changes and misleading memory priors.",
+      "cheapest_discriminating_test": "Use deterministic full-frame tile/hash structural summary plus ROI deep encode before testing learned/global low-resolution visual tokens.",
+      "expected_signature_if_true": "Global+ROI materially reduces off-ROI/grounding failures at substantially lower total cost than full-frame deep decode.",
+      "expected_signature_if_false": "ROI-only has equivalent task/action correctness and open-set safety at lower cost.",
+      "affected_components": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-03-COGNITIVE-LOOP-CORE"],
+      "status": "OPEN",
+      "confidence": 0.76,
+      "uncertainty": 0.43
+    },
+    {
+      "hypothesis_id": "H-Q23-DETERMINISTIC-CHANGE-FIRST-01",
+      "parent_hypotheses": ["H-QNDRF-03"],
+      "claim": "A deterministic frame/tile hash and bounded pixel-delta gate should remain the first temporal-compression baseline before learned visual-token pruning because it is cheap, provenance-transparent and easy to replay; learned pruning earns inclusion only if it materially improves total verified-outcome cost.",
+      "why_it_matters": "Temporal redundancy is real, but a learned selector creates another model/version/failure surface that may be unnecessary for v0.1.",
+      "strongest_counterhypothesis": "Deterministic pixel/tile change is too sensitive to animations/noise and too ignorant of semantic relevance, causing excess deep-vision triggers that a small learned selector suppresses safely.",
+      "falsifier": "Replay animation/noise/UI-motion episodes and compare deterministic gate, learned temporal selector and hybrid gate for false-trigger/missed-change rates, sensor-to-action cost and recovery/replay fidelity.",
+      "cheapest_discriminating_test": "Implement tile hash + pixel-delta oracle with explicit semantic-miss fixtures before any learned temporal model.",
+      "expected_signature_if_true": "Deterministic or hybrid gate is Pareto-competitive on Frank fixtures and avoids another learned dependency.",
+      "expected_signature_if_false": "Learned selector provides large verified cost reduction without increasing missed consequential changes or recovery complexity.",
+      "affected_components": ["F-V01-06-DIGITAL-RETINA-MVC", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+      "status": "OPEN",
+      "confidence": 0.88,
+      "uncertainty": 0.29
     }
   ]
 }

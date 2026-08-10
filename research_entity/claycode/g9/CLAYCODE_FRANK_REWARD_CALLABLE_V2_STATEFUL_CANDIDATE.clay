@@ -1,0 +1,36 @@
+module claycode.frank_reward_callable.v2
+version "0.2-stateful-call-candidate"
+status RESEARCH_CANDIDATE_NOT_PROMOTED
+parent [@research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay,@research_entity/claycode/g9/CLAYCODE_CALL_CONTRACT_SCHEMA_V1_CANDIDATE.clay,@research_entity/claycode/g9/CLAYCODE_FRANK_REWARD_CALLABLE_V1_CANDIDATE.clay]
+
+// Concrete counterexample to a param/return-only contract:
+// RewardPlasticityReceipt contains prediction_before/phasic/tonic/habituation outputs whose
+// values depend on pre-existing reward state. The receiver state must therefore be typed and
+// epoch-bound at the semantic boundary rather than hidden inside conventional runtime code.
+record FrankRewardReceiverState {
+  by_dimension:Map<RewardDimension,TypedValueState>
+  state_epoch:Epoch
+}
+
+interface frank_reward {
+  update(evidence:RewardOutcomeEvidence) -> RewardPlasticityReceipt
+}
+
+rule call_effect(frank_reward.update,1)=DERIVED_STATE
+rule call_binding_authority(frank_reward.update,1)=NONE
+rule call_execution_admitted(frank_reward.update,1)=false
+rule call_truth_authority(frank_reward.update,1)=NONE
+
+rule call_receiver_state_type(frank_reward.update,1)=FrankRewardReceiverState
+rule call_state_access(frank_reward.update,1)=MUTATE_RECEIVER_STATE
+rule call_state_epoch_field(frank_reward.update,1)=state_epoch
+
+invariant state_dependent_callable_requires_typed_receiver_state
+invariant receiver_state_epoch_is_semantic_identity
+invariant stale_receiver_state_epoch_executes=false
+invariant hidden_semantic_receiver_state_in_python_rust_json_sql=false
+invariant stateful_callable_contract_is_not_runtime_binding
+invariant stateful_callable_contract_mints_execution_authority=false
+invariant stateful_callable_contract_mints_truth_authority=false
+invariant exact_target_arity_identity_required
+invariant basename_or_suffix_resolution_forbidden

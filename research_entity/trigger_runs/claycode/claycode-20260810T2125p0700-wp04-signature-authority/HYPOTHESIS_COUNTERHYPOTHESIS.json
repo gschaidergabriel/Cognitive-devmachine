@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2125p0700-wp04-signature-authority",
+  "question": "Can current runtime/source signature information authoritatively close ClayCode WP04 CallContract obligations without inventing semantic types?",
+  "hypothesis": {
+    "id": "H_RUNTIME_SIGNATURE_DISCOVERY",
+    "claim": "Version-pinned runtime/source signatures can directly originate exact Clay CallContracts for some unresolved calls.",
+    "status": "REFUTED_AS_STATED_REFINED"
+  },
+  "strongest_counterhypothesis": {
+    "id": "CH_SEMANTIC_AUTHORITY_PRECEDES_BINDING",
+    "claim": "Runtime/source annotations can validate compatibility with a prior explicit Clay semantic contract, but cannot safely originate Clay parameter/return semantics because annotation-to-Clay mapping would itself become an undeclared semantic authority.",
+    "status": "SUPPORTED"
+  },
+  "discriminating_test": {
+    "mechanism": "static AST-only exact-signature admission probe",
+    "positive_control": "exact qualified symbol + exact source SHA256 + complete annotations + explicit annotation-to-Clay map + explicit expected Clay params/return",
+    "negative_controls": [
+      "stale source SHA256",
+      "wrong arity",
+      "missing annotation",
+      "unmapped annotation",
+      "variadic callable",
+      "defaulted parameter",
+      "suffix-only symbol resolution",
+      "runtime annotation mapping that disagrees with explicit Clay parameter contract",
+      "runtime return annotation that disagrees with explicit Clay return contract"
+    ],
+    "local_result": "PASS_11_OF_11",
+    "target_vps_result": "PASS",
+    "target_vps_run": 31397569012,
+    "execution_admitted": 0,
+    "truth_authority": "NONE",
+    "effect_authority": "NONE"
+  },
+  "adjudication": {
+    "runtime_source_role": "COMPATIBILITY_AND_BINDING_ORACLE_ONLY",
+    "clay_semantic_authority": "EXPLICIT_VERSIONED_CLAY_CALLABLE_SPECIFICATION",
+    "runtime_binding_authority": "SEPARATE_CURRENT_RUNTIME_BINARY_LEASE_BINDING_GATE",
+    "execution_authority": "DOWNSTREAM_ONLY",
+    "signature_inference_from_callers": "FORBIDDEN",
+    "fuzzy_or_suffix_identity": "FORBIDDEN"
+  },
+  "parallel_evidence": {
+    "explicit_semantic_contract": {
+      "pr": 188,
+      "target": "frank_reward.update/1",
+      "signature": "RewardOutcomeEvidence -> RewardPlasticityReceipt",
+      "effect_class": "DERIVED_STATE"
+    },
+    "runtime_binding_gate": {
+      "pr": 189,
+      "target_vps_pr": 111,
+      "target_vps_run": 31397529960,
+      "status": "MECHANISM_PASS_NONEXECUTABLE"
+    }
+  },
+  "architecture_delta": {
+    "status": "SUPPORTED_CANDIDATE_NO_PROMOTION",
+    "pipeline": [
+      "explicit versioned Clay callable semantics",
+      "static exact source-byte and symbol compatibility validation",
+      "current runtime/binary/lease/effect binding validation",
+      "downstream execution admission"
+    ],
+    "v18_semantics_changed": false,
+    "wp03_promoted": false,
+    "wp04_promoted": false,
+    "frank_v0_1_promoted": false
+  }
+}

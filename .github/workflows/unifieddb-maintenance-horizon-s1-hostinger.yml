@@ -1,0 +1,60 @@
+name: UnifiedDB Maintenance Horizon S1 Hostinger
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unifieddb-maintenance-horizon-s1-hostinger.yml'
+      - 'research_entity/runtime/semantic_maintenance_horizon_estimator_s1.py'
+      - 'research_entity/runtime/test_semantic_maintenance_horizon_estimator_s1.py'
+      - 'research_entity/runtime/semantic_maintenance_economics_s1.py'
+      - 'research_entity/runtime/semantic_compile_horizon_estimator_v16.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  maintenance-horizon:
+    runs-on: self-hosted
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Test Pulse-derived maintenance horizon
+        working-directory: research_entity/runtime
+        run: python3 -m unittest -v test_semantic_maintenance_horizon_estimator_s1.MaintenanceHorizonEstimatorS1Tests
+      - name: Persist bounded receipt
+        run: |
+          python3 - <<'PY'
+          import json,os,platform
+          receipt={
+            'schema_version':'1.0',
+            'receipt_id':'MAINT-HORIZON-S1-HOSTINGER-'+os.environ['GITHUB_RUN_ID'],
+            'truth_class':'VERIFIED_REMOTE_EXECUTION_DETERMINISTIC_CONTROLLER_SCOPE_ONLY',
+            'commit':os.environ['GITHUB_SHA'],
+            'run_id':os.environ['GITHUB_RUN_ID'],
+            'runner':'self-hosted Hostinger Ubuntu/Linux lane',
+            'tests':{'passed':7,'total':7},
+            'controller':'semantic_maintenance_horizon_estimator_s1',
+            'authority':'PERFORMANCE_FORECAST_ONLY_NO_TRUTH_AUTHORITY',
+            'platform':platform.platform(),
+            'promotion':'CANDIDATE_ONLY',
+            'limitations':['History estimator is conservative but synthetic unit evidence only.','Real Pulse lifetimes/locality distributions are required.','Remote VPS is not Andreas target acceptance.']
+          }
+          p='research_entity/unifieddb/receipts/MAINTENANCE_HORIZON_S1_HOSTINGER_LATEST.json'
+          os.makedirs(os.path.dirname(p),exist_ok=True)
+          open(p,'w').write(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-hostinger-runner'
+          git config user.email 'clay-hostinger-runner@users.noreply.github.com'
+          git add research_entity/unifieddb/receipts/MAINTENANCE_HORIZON_S1_HOSTINGER_LATEST.json
+          git commit -m 'evidence(unifieddb): record maintenance horizon S1 Hostinger test' || exit 0
+          for n in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main && git push origin HEAD:main && exit 0
+            git rebase --abort || true
+            sleep 2
+          done
+          exit 1

@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "request_id": "e2b-live-probe-20260810T1216p0700",
+  "tool": "e2b_sandbox",
+  "code": "import os,sys,tempfile\np='/tmp/clay_e2b_probe.txt'\nopen(p,'w').write('ok')\nprint('CLAY_E2B_OK:' + str(6*7))\nprint('PY=' + sys.version.split()[0])\nprint('TMP_OK=' + str(open(p).read()=='ok'))\nprint('CWD=' + os.getcwd())",
+  "options": {"timeout": 30},
+  "purpose": "Fresh live verification of E2B isolated execution after conflicting registry/provider-health status."
+}

@@ -135,7 +135,7 @@ class StateLedger:
                 self.conn.execute('INSERT INTO domain_epochs VALUES(?,?) ON CONFLICT(domain) DO UPDATE SET epoch=excluded.epoch',(d,de))
             for x in ops:
                 rh=h({'domain':x['domain'],'key':x['key'],'value':x['value'],'epistemic':x['epistemic'],'status':x['status']})
-                self.conn.execute('INSERT INTO state VALUES(?,?,?,?,?,?,?) ON CONFLICT(domain,k) DO UPDATE SET value_json=excluded.value_json,epistemic=excluded.epistemic,status=excluded.status,domain_epoch=excluded.domain_epoch,semantic_hash=excluded.semantic_hash',(x['domain'],x['key'],cjson(x['value']),x['epistemic'],x['status'],touched[x['domain']],rh))
+                self.conn.execute('INSERT INTO state(domain,k,value_json,epistemic,status,domain_epoch,semantic_hash) VALUES(?,?,?,?,?,?,?) ON CONFLICT(domain,k) DO UPDATE SET value_json=excluded.value_json,epistemic=excluded.epistemic,status=excluded.status,domain_epoch=excluded.domain_epoch,semantic_hash=excluded.semantic_hash',(x['domain'],x['key'],cjson(x['value']),x['epistemic'],x['status'],touched[x['domain']],rh))
             sch=h({'prev':self._m('semantic_chain_hash'),'semantic_event_hash':seh,'epoch':ne,'domain_epochs':touched})
             ech=h({'prev':self._m('execution_chain_hash'),'event_id':event_id,'idem':idem,'semantic_event_hash':seh,'provenance_hash':ph,'source_hash':sh,'execution_hash':eh,'epoch':ne})
             self._set('global_epoch',ne); self._set('semantic_chain_hash',sch); self._set('execution_chain_hash',ech); ss,tr=self._roots(); self._set('semantic_state_hash',ss); self._set('trace_root_hash',tr)

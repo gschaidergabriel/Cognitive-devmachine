@@ -24,15 +24,23 @@ SOURCE_CLASSES = [
 def h(s: str) -> str:
     return hashlib.sha256(s.encode()).hexdigest()
 
-def insert_obs(con, oid, sc, sem, epoch, payload, prov, epoch_state="CURRENT", verified="VERIFIED", eligible=1):
+def insert_obs(
+    con, oid, sc, sem, epoch, payload, prov,
+    epoch_state="CURRENT", verified="VERIFIED", eligible=1,
+    work_id=None, work_spec_rev=None, work_revision_state="NOT_APPLICABLE",
+    work_credit=0, repo_head=None, component_hashes="[]", execution_started_at=None,
+):
     con.execute("""INSERT INTO clay_omnisource_observations(
       observation_id,source_class,source_ref,source_actor,source_time,observed_at,
       semantic_epoch,epoch_state,semantic_identity,content_hash,raw_payload_ref,provenance_hash,
-      verification_state,promotion_eligible,freshness,confidence,created_by)
-      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+      verification_state,promotion_eligible,work_id,work_spec_rev,work_revision_state,
+      current_work_credit_eligible,bound_repo_head,bound_component_hashes_clay,execution_started_at,
+      freshness,confidence,created_by)
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
       (oid,sc,f"test://{sc.lower()}/{oid}","test-worker","2026-08-10T16:36:00+07:00",
        "2026-08-10T16:36:00+07:00",epoch,epoch_state,sem,h(payload),f"test://payload/{oid}",h(prov),
-       verified,eligible,1.0,0.9,"chatgpt-secondary"))
+       verified,eligible,work_id,work_spec_rev,work_revision_state,work_credit,repo_head,
+       component_hashes,execution_started_at,1.0,0.9,"chatgpt-secondary"))
 
 def assess(con, aid, oid, novelty, mat, unc, sem_delta=None):
     con.execute("""INSERT INTO clay_fusion_assessments(
@@ -43,15 +51,24 @@ def assess(con, aid, oid, novelty, mat, unc, sem_delta=None):
       (aid,oid,100,novelty,mat,unc,'["claim:x"]','["hyp:x"]','["work:x"]','["component:x"]',
        '["ev:for"]','["ev:against"]',"counter:x",sem_delta,"2026-08-10T16:36:01+07:00"))
 
-def reentry(con, rid, oid, aid, state="CLOSED", epoch=101, branches=("clayresearch","unifieddb","claygraph")):
+def reentry(
+    con, rid, oid, aid, state="CLOSED", epoch=101,
+    branches=("clayresearch","unifieddb","claygraph"),
+    work_id=None, work_spec_rev=None, work_revision_state="NOT_APPLICABLE",
+    work_credit=0, repo_head=None, component_hashes="[]",
+):
     con.execute("""INSERT INTO clay_research_reentry_receipts(
-      receipt_id,observation_id,assessment_id,fused_epoch,evidence_updates_clay,claim_updates_clay,
-      hypothesis_updates_clay,counterhypothesis_updates_clay,experiment_updates_clay,work_updates_clay,
-      architecture_delta_candidates_clay,test_obligations_clay,negative_results_clay,branch_feedback_targets_clay,
-      no_change_reason_clay,next_falsifier_clay,rollback_or_recovery_impact_clay,closure_state,completed_at,created_at)
-      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-      (rid,oid,aid,epoch,"[]","[]","[]","[]","[]","[]","[]","[]","[]",json.dumps(list(branches)),
-       None,"next falsifier","rollback preserved",state,"2026-08-10T16:36:02+07:00","2026-08-10T16:36:02+07:00"))
+      receipt_id,observation_id,assessment_id,fused_epoch,work_id,work_spec_rev,work_revision_state,
+      current_work_credit_eligible,bound_repo_head,bound_component_hashes_clay,
+      evidence_updates_clay,claim_updates_clay,hypothesis_updates_clay,counterhypothesis_updates_clay,
+      experiment_updates_clay,work_updates_clay,architecture_delta_candidates_clay,test_obligations_clay,
+      negative_results_clay,branch_feedback_targets_clay,no_change_reason_clay,next_falsifier_clay,
+      rollback_or_recovery_impact_clay,closure_state,completed_at,created_at)
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+      (rid,oid,aid,epoch,work_id,work_spec_rev,work_revision_state,work_credit,repo_head,component_hashes,
+       "[]","[]","[]","[]","[]","[]","[]","[]","[]",json.dumps(list(branches)),
+       None,"next falsifier","rollback preserved",state,"2026-08-10T16:36:02+07:00",
+       "2026-08-10T16:36:02+07:00"))
     for b in branches:
         con.execute("""INSERT INTO clay_reentry_branch_receipts(
           receipt_id,branch_ref,route_reason,delivered,reconstructed,plan_revalidated,used,local_effect,
@@ -67,6 +84,7 @@ def run(schema_path: Path, perf_n: int = 5000) -> dict:
     try:
         con=sqlite3.connect(dbpath)
         con.executescript(sql)
+
         for i, sc in enumerate(SOURCE_CLASSES):
             oid=f"obs-{i:02d}"
             insert_obs(con,oid,sc,f"semantic:{sc}",100+i,f"payload-{sc}",f"prov-{sc}")
@@ -85,6 +103,56 @@ def run(schema_path: Path, perf_n: int = 5000) -> dict:
             stale_gate_ok=True
         insert_obs(con,"stale-good","WORKER_RESULT","semantic:stale",90,"late-stale","prov-stale","STALE","VERIFIED",0)
         assess(con,"a-stale","stale-good","CONTRADICTS",0.9,0.4,"delta-stale")
+
+        stale_work_credit_gate_ok=False
+        try:
+            insert_obs(
+                con,"work-stale-bad","RUNTIME_RECEIPT","semantic:work-receipt",150,
+                "technically-successful-old-work","prov-old-work",
+                work_id="WORK-X",work_spec_rev=1,work_revision_state="STALE",work_credit=1,
+                repo_head="old-head",component_hashes='["h-old"]',
+                execution_started_at="2026-08-10T16:30:00+07:00",
+            )
+        except sqlite3.IntegrityError:
+            stale_work_credit_gate_ok=True
+        insert_obs(
+            con,"work-stale-diag","RUNTIME_RECEIPT","semantic:work-receipt",150,
+            "technically-successful-old-work","prov-old-work",
+            work_id="WORK-X",work_spec_rev=1,work_revision_state="STALE",work_credit=0,
+            repo_head="old-head",component_hashes='["h-old"]',
+            execution_started_at="2026-08-10T16:30:00+07:00",
+        )
+        assess(con,"a-work-stale","work-stale-diag","CONFIRMS",0.8,0.1,"delta-work-stale")
+        stale_work_rows=con.execute("SELECT count(*) FROM v_clay_stale_work_evidence WHERE work_id='WORK-X'").fetchone()[0]
+
+        missing_binding_gate_ok=False
+        try:
+            insert_obs(
+                con,"work-current-unbound","RUNTIME_RECEIPT","semantic:work-current",151,
+                "current-but-unbound","prov-current-unbound",
+                work_id="WORK-X",work_spec_rev=2,work_revision_state="CURRENT",work_credit=1,
+                repo_head="head-2",component_hashes="[]",
+                execution_started_at="2026-08-10T16:35:00+07:00",
+            )
+        except sqlite3.IntegrityError:
+            missing_binding_gate_ok=True
+
+        insert_obs(
+            con,"work-current","RUNTIME_RECEIPT","semantic:work-current",151,
+            "current-bound","prov-current",
+            work_id="WORK-X",work_spec_rev=2,work_revision_state="CURRENT",work_credit=1,
+            repo_head="head-2",component_hashes='["component-a","component-b"]',
+            execution_started_at="2026-08-10T16:35:00+07:00",
+        )
+        assess(con,"a-work-current","work-current","CONFIRMS",0.85,0.1,"delta-work-current")
+        reentry(
+            con,"r-work-current","work-current","a-work-current",epoch=152,
+            work_id="WORK-X",work_spec_rev=2,work_revision_state="CURRENT",work_credit=1,
+            repo_head="head-2",component_hashes='["component-a","component-b"]',
+        )
+        current_work_credit_rows=con.execute(
+            "SELECT count(*) FROM v_clay_current_work_credit_receipts WHERE work_id='WORK-X' AND work_spec_rev=2"
+        ).fetchone()[0]
 
         insert_obs(con,"mat-open","EXPERIMENT_OUTPUT","semantic:open",130,"material-open","prov-open")
         assess(con,"a-open","mat-open","REFINES",0.95,0.2,"delta-open")
@@ -122,6 +190,12 @@ def run(schema_path: Path, perf_n: int = 5000) -> dict:
         open_other_material=con.execute("SELECT count(*) FROM v_clay_material_reentry_pending").fetchone()[0]
         dup=con.execute("""SELECT observation_count,distinct_provenance_count
           FROM v_clay_duplicate_content_provenance WHERE content_hash=?""",(h("same-content"),)).fetchone()
+        stale_work_rows_after_restart=con.execute(
+            "SELECT count(*) FROM v_clay_stale_work_evidence WHERE work_id='WORK-X'"
+        ).fetchone()[0]
+        current_work_credit_after_restart=con.execute(
+            "SELECT count(*) FROM v_clay_current_work_credit_receipts WHERE work_id='WORK-X' AND work_spec_rev=2"
+        ).fetchone()[0]
 
         lat=[]; t0=time.perf_counter()
         con.execute("BEGIN")
@@ -147,15 +221,22 @@ def run(schema_path: Path, perf_n: int = 5000) -> dict:
         epoch_state=None; epoch=-1; epoch_false_promotions=0
         for e in events:
             arrival_state=e["value"]
-            if not e["eligible"]: arrival_false_promotions += 1
+            if not e["eligible"]:
+                arrival_false_promotions += 1
             if e["eligible"] and e["epoch"]>=epoch:
                 epoch=e["epoch"]; epoch_state=e["value"]
 
         result={
-          "schema_version":"1.0",
+          "schema_version":"1.1",
           "evidence_class":"EXECUTION_CONTEXT_TO_BE_WRAPPED",
           "source_class_coverage":{"covered":len(SOURCE_CLASSES),"total":len(SOURCE_CLASSES),"classes":SOURCE_CLASSES},
           "stale_promotion_gate_ok":stale_gate_ok,
+          "work_revision_binding":{
+            "stale_work_credit_gate_ok":stale_work_credit_gate_ok,
+            "missing_component_binding_gate_ok":missing_binding_gate_ok,
+            "stale_diagnostic_rows":stale_work_rows_after_restart,
+            "current_work_credit_rows":current_work_credit_after_restart,
+          },
           "duplicate_provenance":{"observations":dup[0],"distinct_provenance":dup[1]},
           "material_reentry_specific":{
             "pending_before_close":pending_open_before,
@@ -177,6 +258,10 @@ def run(schema_path: Path, perf_n: int = 5000) -> dict:
         checks = {
           "source_coverage": result["source_class_coverage"]["covered"] == result["source_class_coverage"]["total"],
           "stale_gate": result["stale_promotion_gate_ok"],
+          "stale_work_credit_gate": stale_work_credit_gate_ok,
+          "current_work_binding_gate": missing_binding_gate_ok,
+          "stale_work_preserved_diagnostic": stale_work_rows==1 and stale_work_rows_after_restart==1,
+          "current_work_credit_bound": current_work_credit_rows==1 and current_work_credit_after_restart==1,
           "provenance_preserved": dup == (2,2),
           "specific_reentry_closed": pending_open_before==1 and pending_open_after==0 and pending_open_after_restart==0 and r_open[0]=="CLOSED",
           "contradiction_preserved": contra_count==2,
@@ -200,11 +285,10 @@ def main():
     args=ap.parse_args()
     r=run(Path(args.schema),args.perf_n)
     text=json.dumps(r,indent=2,sort_keys=True)+"\n"
-    if args.out: Path(args.out).write_text(text,encoding="utf-8")
+    if args.out:
+        Path(args.out).write_text(text,encoding="utf-8")
     print(text,end="")
     raise SystemExit(0 if r["pass"] else 1)
 
 if __name__=="__main__":
     main()
-
-# Workflow retrigger marker: 2026-08-10T16:36+07:00; no semantic change.

@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-08-10T13:49:49+07:00",
+  "actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "mode": "FREE_ONLY",
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "observed_head": "d3fd10df2c6c6266c58200f3308ea663f602c64a",
+  "material_change": {
+    "grouping_fix_commit": "655f709c196882df21a750267db5767a0f2e5bd2",
+    "canonicalizer_parity_commit": "d3fd10df2c6c6266c58200f3308ea663f602c64a",
+    "finding": "A supported grouping semantic-hash counterexample now has a minimal production canonical-AST normalization, and the standalone canonicalizer delegates canonical AST semantics to claycode_base_frontend.canonical_node. These changes are plausible and narrowly scoped, but no completed GitHub Actions/statuscheck execution exists for the observed head, so they are implementation candidates rather than closure evidence."
+  },
+  "official_reference": {
+    "lark_tree_contract": "Lark constructs trees from grammar structure and keep_all_tokens controls punctuation retention; maybe_placeholders=False removes unmatched [] optionals rather than inserting None.",
+    "lark_strict_contract": "strict=True rejects LALR shift/reduce and regex collisions; strict replay remains mandatory for release evidence."
+  },
+  "goodman_anti_echo": {
+    "rule": "Do not count worker/model repetition or same-project ancestry as independent replication.",
+    "application": "The grouping fix is justified by an executable counterexample, but the post-fix state still needs new execution on exact bytes; commit review alone is not replication."
+  },
+  "next_cycle": [
+    "On exact current main/head, execute tools/test_claycode_wp02_grouping_semantic_hash.py and require all equivalence and mutation controls green.",
+    "On the same exact checkout and import path, execute strict V17 with lark[interegular], full G9+Dialect frontend validation, tools/claycode_base_canonicalizer.py, standalone/production placeholder parity, Unicode/string guards and safe import-path isolation.",
+    "Require production frontend and standalone canonicalizer to produce the same canonical AST payload for matched sources; only the standalone grammar-bound envelope/hash may differ by design.",
+    "If any grouping normalization changes call/list/set/operator structure or collapses a non-redundant semantic distinction, record the exact counterexample and revert/repair only the WP02 canonicalization change.",
+    "Only after exact-head WP02 replay is executable-clean, execute the WP03 expected_surface/no-silent-reparse bridge regressions on the same provenance, then resume V7/V18 diagnostic work and same-provenance WP06 replay.",
+    "Do not spend model-family budget on consensus replication while executable post-fix receipts are missing.",
+    "Final formal WP02/WP03/WP06/BASE14 promotion remains gated on the registered Andreas Ubuntu developer system."
+  ],
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "NO_BASE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "NO_RECEIPT_INHERITANCE_ACROSS_SOURCE_HASH_CHANGE",
+    "V17_REMAINS_SELECTED_V18_RESEARCH_ONLY",
+    "DO_NOT_MODIFY_FRANK_HARNESS",
+    "ANDREAS_UBUNTU_IS_FINAL_TARGET_AUTHORITY"
+  ]
+}

@@ -2,149 +2,127 @@
 
 Run: `unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack`
 
-Status: **12 DELTAS MATERIALIZED / 4 LOCAL NEGATIVE RESULTS / TARGET PROMOTION HOLD**
+Status: **14 DELTAS MATERIALIZED / 4 LOCAL NEGATIVE RESULTS / ONE NEW PARALLEL TARGET PREFLIGHT PASS / PRODUCT PROMOTION HOLD**
 
-## Fresh-state correction and non-overlap
+## Fresh-state correction and live refresh
 
-This continuation did not repeat the previous V10 state-lineage proposal. Current target work has advanced materially:
+This continuation starts after the previous V10 state-lineage work and does not rebuild mechanisms already owned by current target lanes. PR #267/#273 own selected semantic-head and continuation/restore experiments; PR #280 owns current V17 causal-support closure; PR #286 owns the fused WAL-safety + materialization-pair lane; PR #289 owns the stacked full semantic-root constructor and explicitly preserves an actual-DDL attestation gap.
 
-- the execution-generation effect fence is already supported on current target evidence and is not rebuilt here;
-- PR #267/#273 own selected semantic-head / continuation experiments;
-- PR #286 owns the fused WAL-safety + materialization-pair lane;
-- PR #289 owns the stacked full semantic-root constructor and explicitly preserves a known actual-DDL attestation gap;
-- PR #288 is separately testing a private fixed SQLite runtime; its target workflow was observed queued, therefore no PASS is claimed here.
+During this run PR #288 advanced from queued to **target-VPS PASS as a bounded private-runtime preflight**. On `clay` / `digital-retina`, Python 3.12.3 was proven to load an official private SQLite 3.53.4 library with exact source-id `2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc`; V16 ingress remained PASS and a 256-write two-connection WAL smoke ended with integrity `ok` and zero FK violations. No system install or canonical Frank state mutation occurred and whole-Frank acceptance was not claimed.
 
-The new work starts where those mechanisms stop.
+The same refresh exposed a new cross-candidate incompatibility: the current system SQLite 3.45.1 reports `ENABLE_SESSION` in its compile options, while the successful private 3.53.4 Python runtime build did not. Therefore a runtime upgrade must be evaluated as a **capability-vector change**, not just a version number change. Exact-head PR #286 and #289 target workflows observed in this refresh were cancelled, not PASS.
 
 ## Central finding
 
-A safe UnifiedDB state cannot be represented by one scalar such as `epoch`, one stored schema digest, or even one semantic root. Frank needs a **layered state commitment and publication contract** whose layers answer different questions:
+A safe UnifiedDB state is not one scalar. `epoch`, stored migration digest, semantic root, selected continuation head, graph epoch and SQLite runtime identity answer different questions. Frank needs a layered contract:
 
-1. Is the physical logical schema actually the expected materialization?
-2. What exact semantic content/state is this?
-3. Which state continuation head was selected?
-4. Has the state finished publication and become runnable?
-5. Which exact state produced a query/assembly/GWT/Needle result?
-6. Does the current ClayGraph derive from that exact state?
-7. Can replay/recovery reconstruct the same published commitment?
+`actual materialization -> typed semantic commitment -> selected continuation -> publication closure -> witnessed reads/selections -> source-root-bound derived projections -> replay/recovery audit`.
 
-Collapsing these into one epoch/hash creates false equivalences.
+Collapsing these layers produces false equivalences.
 
-## New negative results
+## Four reproduced negative results
 
-### NR-1 — certificate metadata is not actual schema attestation
+**NR-1 — metadata certificate != actual schema.** A disposable DDL mutation with untouched certificate rows remained accepted by the metadata-only check while an independently recomputed `sqlite_schema` fingerprint changed. `migration_chain_digest` and `actual_schema_fingerprint` must remain separate evidence.
 
-A local disposable SQLite experiment reproduced the PR #286 gap: after changing actual DDL with `CREATE TABLE unauthorized_drift(...)` while leaving certificate metadata unchanged, the metadata-only gate remained valid while an independently recomputed actual-schema fingerprint changed. Therefore `migration_chain_digest` and `actual_schema_fingerprint` must be separate evidence fields.
+**NR-2 — epoch != semantic identity.** A sibling state retained `unified_epoch=7` but changed root R1 -> R2. An epoch-only ClayGraph gate still accepted the old graph; an exact source-root gate rejected it.
 
-### NR-2 — numeric epoch is not semantic identity
+**NR-3 — full root per mutation is a poor default hot path.** A local PR289-style proxy scaled from ~9 ms/1k rows to ~1.07 s and ~7.7 MB peak Python allocation at 100k rows in one configuration. In another warm 100k-row comparison the full root was ~109x the latency of one ordinary committed row mutation. These are local mechanism/resource shadows, not VPS measurements.
 
-A local sibling-state falsifier kept `unified_epoch=7` constant while changing the semantic root from R1 to R2. An epoch-only ClayGraph gate still accepted the old graph; a source-root gate rejected it. Current ClayGraph materialization state therefore needs exact source semantic root/selected-head binding in addition to epoch.
+**NR-4 — root self-reference is unstable.** Persisting a root receipt inside the exact content domain being hashed changed that root. Publication/root metadata needs a separate hash domain or higher-layer commitment.
 
-### NR-3 — full semantic root on every mutation is an expensive default hot path
+## Fourteen deltas
 
-A local PR289-style proxy scaled from roughly 9 ms at 1k rows to roughly 1.07 s and 7.7 MB peak Python allocation at 100k rows in the measured configuration. In a warm 100k-row comparison, a full root was about 109x the latency of a single ordinary committed mutation. These are local synthetic shadows, not VPS performance claims, but they are strong enough to reject unconditional full rehash on every write as the default design without further evidence.
+### D11 — ActualMaterializationAttestation
 
-### NR-4 — root metadata can recursively destabilize the root
+Retain the executable migration-chain digest but independently fingerprint actual live `sqlite_schema` declarations by physical role. Normal open/publication must verify both. The actual fingerprint detects drift; it is not a claim of general SQL semantic equivalence.
 
-When a semantic-root value was persisted inside the same content domain being hashed, the content root changed. A root/publication receipt therefore cannot recursively belong to the exact content root it records unless a carefully defined higher-order fixed-point scheme is adopted. The simpler candidate is an explicit `ROOT_PUBLICATION_META` firebreak outside the content root and bound one layer above.
+### D12 — StatePublicationBarrier
 
-## Twelve architecture deltas
+A DB commit is not automatically the selected runnable continuation. Candidate protocol:
 
-### UDB-D11 ActualMaterializationAttestation
+`DB mutation + PREPARED receipt -> external selected-head CAS -> DB PUBLISHED`.
 
-Keep the executable migration-chain digest, but add an independently recomputed fingerprint of actual live `sqlite_schema` declarations. Normal open/publication checks both. This catches DDL drift that leaves stored certificate rows untouched. The actual fingerprint is a drift-attestation mechanism, not a proof that two differently written SQL schemas are semantically equivalent.
+Crash windows become explicit: prepared/new DB with parent selector can resume publication; prepared DB with already-advanced selector can finalize; rolled-back DB with surviving newer selector fails closed. Whole-domain rollback of DB plus selector remains an explicit outer failure-domain limitation.
 
-### UDB-D12 StatePublicationBarrier
+### D13 — Hierarchical incremental commitment
 
-Split state creation from state publication:
+Use deterministic table/domain roots and combine them into a top `FrankStateCommitment`. Authorized writes recompute dirty leaves only; periodic/full recovery audits recompute the complete state and must match. In a local 50-table/100k-row proxy, one-row mutation + dirty-table recomputation took 3.726 ms versus 175.13 ms for full recomputation, a 47.0x difference, with equal final roots in that case.
 
-`authoritative DB mutation + PREPARED receipt -> external selected-head CAS -> PUBLISHED finalize`.
+### D14 — RootDomainRegistry / self-reference firebreak
 
-A DB commit alone is not yet the selected runnable self.root continuation. Crash windows become explicit and recoverable; an old DB with a surviving newer selector fails closed.
+Every persistent state surface is typed into domains such as `AUTHORITATIVE_SEMANTIC`, `EXECUTION_CONTINUITY`, `EFFECT_AND_CAUSAL_EVIDENCE`, `POLICY_CONTRACT`, `MATERIALIZATION_META`, `ROOT_PUBLICATION_META`, `DERIVED`, `CACHE`, or `EXTERNAL_BACKING`. Unknown persistent state fails closed. `ROOT_PUBLICATION_META` is not recursively included in the content root it records.
 
-### UDB-D13 Hierarchical incremental state commitment
+### D15 — ClayGraph source-root/head binding
 
-Instead of one full global scan on every write, compute deterministic table/domain roots and combine them into the top Frank state commitment. Authorized writes recompute only dirty leaves and affected parent roots. Periodic/full recovery audits recompute the whole state and must exactly equal the incremental commitment.
+`source_semantic_epoch` is retained for ordering but current graph validity additionally binds exact source selected-head and semantic root. This closes same-epoch sibling-state ambiguity.
 
-A local 50-table / 100k-row prototype changed one row, recomputed only the dirty table plus top combination in 3.726 ms versus 175.13 ms for a full recomputation: **47.0x faster**, with exactly equal final roots in that tested case. This is mechanism evidence only.
+### D16 — GraphProjectionRoot
 
-### UDB-D14 RootDomainRegistry
+Deterministic graph surfaces emit a projection root bound to source root/head and derivation-program identity. Rebuild from identical source + deterministic materializer must reproduce the projection root. Activation/salience remains separate and non-authoritative.
 
-Every persistent semantic object receives one typed root-domain role such as `AUTHORITATIVE_SEMANTIC`, `EXECUTION_CONTINUITY`, `EFFECT_AND_CAUSAL_EVIDENCE`, `POLICY_CONTRACT`, `MATERIALIZATION_META`, `ROOT_PUBLICATION_META`, `DERIVED`, or `CACHE`. Unknown persistent tables fail closed rather than silently disappearing from identity/continuity semantics.
+### D17 — StateWitness
 
-### UDB-D15 Graph source-root/head binding
+Model/GWT/Needle/retrieval/effect-relevant reads carry a compact witness containing selected head, semantic commitment, materialization, graph source/projection and candidate/query identity. Explicitly stale read-only observation can be allowed; mutation/effect boundaries must revalidate or rebase after state turnover.
 
-Extend ClayGraph materialization/projection receipts from `source_semantic_epoch` to exact `source_selected_head` + `source_semantic_root`. Epoch remains useful ordering metadata but is not sufficient identity evidence.
+### D18 — SelectionWitness
 
-### UDB-D16 GraphProjectionRoot
+Selection provenance is separate from record provenance. Bind candidate-universe hash, selection policy/scorer identity, ordered result refs, admissibility and originating StateWitness. Valid source records do not prove that a stale or mismatched selection is valid now.
 
-For deterministic graph surfaces, derive a `graph_projection_root` from the source state and derivation program. Rebuilding from the same selected semantic root with the same deterministic materializer must reproduce the same projection root. Dynamic activation/salience may remain separate and never becomes truth authority.
+### D19 — Delta chain + checkpoint audit
 
-### UDB-D17 StateWitness
+Use immutable transaction/event delta receipts as a cheap mutation-integrity spine and periodically anchor them in a full semantic commitment. Replay from checkpoint/cursor must reconstruct the exact published commitment. Cached/incremental roots remain non-authoritative unless full audit and transaction-bound dirty tracking agree.
 
-Every model-, GWT-, Needle-, retrieval-, and effect-relevant read carries a compact witness binding the selected head, semantic commitment/root, UnifiedDB materialization, graph source/projection and candidate/query identity. Read-only observation may explicitly be stale; mutation/effect boundaries must revalidate or rebase.
+### D20 — Rollback-journal multi-DB migration experiment
 
-### UDB-D18 SelectionWitness
+SQLite documents atomic transactions across attached databases under rollback-journal conditions, while WAL only guarantees atomicity per file. A local crash-before-commit proxy over two attached DELETE+FULL databases restored both old values, while a normal commit advanced both. This supports a bounded comparison between deliberate rollback-journal `ATTACH` schema migration and the KEEP_ISOLATED pair-certificate strategy; it is not target power-loss proof or a default architecture decision.
 
-Record provenance of **selection itself**, separately from provenance of stored records: candidate-universe hash, selection policy/scorer identity, ordered result references, admissibility and originating StateWitness. This closes the gap where all source records are valid but the selected subset came from a stale/different state or policy.
+### D21 — Schema execution hardening
 
-### UDB-D19 Delta-chain + checkpoint audit
+Evaluate `trusted_schema=OFF` and defensive connection settings where the exact target runtime supports them without breaking legitimate behavior. Hardening narrows schema attack surface; it never replaces materialization attestation, provenance or effect authority.
 
-Use append-only transaction/event delta receipts as the cheap mutation-level integrity spine, periodically anchored by a full hierarchical semantic commitment. Replay from checkpoint/cursor must reconstruct the exact published state commitment. This is a candidate to reduce hot-path cost without trusting a mutable root cache blindly.
+### D22 — Changed-row/root accelerator, now feature-gated
 
-### UDB-D20 Multi-DB rollback-journal migration experiment
+SQLite Session/change-set support is attractive for changed-row tracking but may not survive the selected fixed-runtime build. The current system build advertises `ENABLE_SESSION`; the successful private 3.53.4 Python runtime observed here did not. Therefore the simpler portable baseline is central-writer dirty-table tracking; Session is optional only if the accepted runtime capability contract explicitly guarantees it.
 
-SQLite's documented multi-database transaction semantics are stronger outside WAL: attached databases can participate in one atomic transaction through rollback-journal/super-journal semantics when documented preconditions hold, whereas WAL transactions are atomic only per database file. Because the target currently has a fail-closed DELETE+FULL fallback candidate, a bounded experiment should compare deliberate rollback-journal `ATTACH` migration against the current KEEP_ISOLATED pair-certificate strategy. This is an experiment, not a default architecture change.
+### D23 — StorageRuntimeCapabilityContract
 
-### UDB-D21 Schema execution hardening
+An accepted SQLite runtime is identified by more than `sqlite_version`: bind version, `sqlite_source_id`, loaded library identity/hash, thread-safety and the required compile-feature vector. Runtime swaps must run feature compatibility and Frank regression tests. A fixed WAL bug with missing required capabilities is not a complete replacement.
 
-Evaluate connection hardening such as `trusted_schema=OFF` and defensive runtime settings where the actual Python/SQLite target supports them without breaking legitimate schema/runtime behavior. This narrows schema attack surface but never replaces materialization attestation or effect authority.
+### D24 — Semantic identity vs physical runtime identity
 
-### UDB-D22 Changed-row/root accelerator
+SQLite runtime identity/capabilities belong in a materialization/runtime commitment, **outside Frank semantic content identity**. A safe engine upgrade can change version/source-id/compile options without pretending Frank's logical memories/goals/world/self changed, while still invalidating physical assumptions and requiring revalidation/rebuild where necessary.
 
-Evaluate the SQLite Session extension or a simpler central-writer dirty-table journal as a changed-row accelerator. Session/change-set semantics are attractive for incremental state commitments, but target build availability and table-primary-key coverage are currently unverified; therefore this remains optional research, not an assumption.
+## New composition
 
-## State commitment structure
+Candidate top-level structure:
 
-Candidate composition:
+`typed table roots -> domain roots -> semantic/state commitment`
 
-`table roots -> typed domain roots -> FrankStateCommitment`.
+plus conjunctive, separately scoped evidence:
 
-The top commitment can combine at least semantic content, execution continuity, causal/effect evidence, policy contracts and materialization state. Publication metadata is intentionally outside the content root it records. External selected-head and execution-floor anchors remain in separate rollback domains and are conjunctive recovery/continuation evidence, not SELF.
+`actual materialization attestation + storage runtime capability receipt + external selected continuation head + publication receipt + GraphProjectionWitness + State/SelectionWitness + replay audit`.
 
-## StateWitness / TOCTOU consequence
+None of these hashes or witnesses mints SELF, truth or effect authority.
 
-A query can be perfectly correct when issued and still become unsafe to use after state turnover. Therefore the read result retains its StateWitness through assembly, GWT, Needle/tool routing and effect proposal. If the selected semantic head changed before mutation/effect, the system either revalidates that the result is still admissible or re-runs selection under a new witness. Silent adoption of a stale result into a newer state generation is forbidden.
+## Why this is deeper than V10
 
-## ClayGraph consequence
+V10 primarily attacked stale execution, sibling lineage and rollback-domain continuity. This run shows that continuity can still fail **after** those protections if the physical schema drifts, the graph comes from a sibling root with the same epoch, a correct query is used after state turnover, the root receipt recursively contaminates its own identity domain, or a storage upgrade silently changes feature capabilities. Those are orthogonal failure classes and therefore require separate falsifiers.
 
-ClayGraph remains derived/rebuildable. The schema-pair certificate only establishes materialization compatibility; it does not establish graph payload freshness. Current graph evidence must independently bind:
+## Next target sequence
 
-`selected semantic head/root -> derivation program -> graph projection root -> graph epoch`.
-
-This preserves physical isolation while making semantic coupling explicit and falsifiable.
-
-## Storage consequence
-
-The previous WAL safety blocker remains independent. A fixed/private SQLite build may restore WAL as an eligible runtime candidate after target evidence, but it does not remove the need for semantic publication, selected-head continuity, graph source-root binding, or actual schema attestation. Conversely, rollback-journal fallback may offer a stronger multi-file migration primitive, but only target crash/power/resource tests can decide whether using it is worth the operational tradeoff.
-
-## Next target falsifiers
-
-Highest-value sequence:
-
-1. Patch the PR #286 successor to attest actual live schemas and reproduce/reject real DDL drift with untouched metadata.
-2. Run PR #289 full root versus hierarchical incremental root on identical current target snapshots and randomized mutations; require exact root equivalence.
-3. Add source-root/head binding to ClayGraph and run the same-epoch sibling-state falsifier plus deterministic rebuild-root checks.
-4. Emit StateWitness diagnostically through query/GWT/Needle/effect paths, then inject state turnover between read and use.
-5. Compose existing selected-head candidate with PublicationBarrier and crash at every PREPARED/CAS/PUBLISHED boundary.
-6. Execute checkpoint/replay/restore and external-floor failure-domain matrix on the accepted target.
-7. Measure p50/p95/p99, CPU, RSS, storage I/O, write amplification, checkpoint/rebuild latency and full-audit duty cycle.
-8. Compare the full layered candidate against the simplest viable architecture. Complexity is not promoted merely because it is more sophisticated.
+1. Extend PR #286 successor with independently recomputed actual-schema fingerprints and reject real DDL drift with untouched metadata.
+2. Recompose PR #289 semantic root on that attested materialization and compare full versus hierarchical commitments on identical target snapshots/randomized mutations.
+3. Bind ClayGraph materialization to source selected-head/root and add deterministic projection-root replay.
+4. Emit StateWitness/SelectionWitness diagnostics, then inject state turnover between read, GWT/Needle selection and mutation/effect use.
+5. Compose existing selected-head mechanism with the PublicationBarrier and crash at every transition.
+6. Decide the SQLite runtime capability vector: integrate the target-PASS private 3.53.4 path or build an equivalently fixed runtime with all required capabilities; do not assume Session support.
+7. Run crash/restart/checkpoint/replay/restore plus external-selector/floor failure-domain matrix and measure p50/p95/p99, CPU, RSS, storage I/O, write amplification and full-audit duty cycle.
+8. Compare against the simplest viable architecture; extra machinery promotes only if correctness/recovery/resource evidence justifies it.
 
 ## Strongest counterhypothesis
 
-The layered design may overfit rare failure modes and impose excessive implementation/maintenance cost. The required comparator is therefore deliberately strong and simple: actual-schema-attested PR #286 + PR #289 full semantic root + the existing selected-head CAS/continuation mechanism, without incremental root caches and broad StateWitness enforcement. The additional layers promote only where target falsifiers or resource evidence show material benefit.
+The layered architecture may overfit rare failures and cost too much complexity. The comparator remains deliberately simple: actual-schema-attested pair state + full semantic root + existing selected-head continuation + integrated fixed SQLite runtime, without hierarchical caches and broad witness enforcement. Additional layers promote only if target falsifiers demonstrate material failure prevention or resource benefit.
 
 ## Promotion decision
 
-**HOLD.** The deep delta pack is durable research/architecture input, not a Frank runtime promotion. It mutates no canonical Frank database, performs no external effect, grants no self-Harness authority, and does not authorize final training.
+**HOLD.** Research is durable in Clay Draft PR #227, but `main` synchronization and current-head target execution remain pending. No canonical Frank database was mutated, no external effect was performed, no whole Frank v0.1 acceptance is claimed, no target self-Harness authority was granted, and final training remains unauthorized.
